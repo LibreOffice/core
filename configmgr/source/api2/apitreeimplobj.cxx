@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitreeimplobj.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dg $ $Date: 2000-11-13 12:14:15 $
+ *  last change: $Author: jb $ $Date: 2000-11-13 13:26:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,7 @@ ApiTreeImpl::ApiTreeImpl(UnoInterface* pInstance, Tree const& aTree, ApiTreeImpl
 , m_aTree(aTree)
 , m_rProvider(rParentTree.getProvider())
 , m_pParentTree(0)
-, m_aNotifier(new NotifierImpl())
+, m_aNotifier(new NotifierImpl(aTree))
 {
     init(&rParentTree);
 }
@@ -114,7 +114,7 @@ ApiTreeImpl::ApiTreeImpl(UnoInterface* pInstance, ApiProvider& rProvider, Tree c
 , m_aTree(aTree)
 , m_rProvider(rProvider)
 , m_pParentTree(0)
-, m_aNotifier(new NotifierImpl())
+, m_aNotifier(new NotifierImpl(aTree))
 {
     OSL_ENSURE(!pParentTree || &rProvider == &pParentTree->m_rProvider,"WARNING: Parent tree has a different provider - trouble may be ahead");
     init(pParentTree);
@@ -197,7 +197,7 @@ void ApiTreeImpl::implDisposeTree()
 {
     OSL_ENSURE(m_pParentTree == 0,"WARNING: Disposing a tree that still has a parent tree set");
 
-    NotifierImpl::MultiContainer& aContainer = m_aNotifier->m_aListeners;
+    NotifierImpl::SpecialContainer& aContainer = m_aNotifier->m_aListeners;
     if (aContainer.beginDisposing())
     {
         using configuration::NodeIDList;
@@ -217,7 +217,7 @@ void ApiTreeImpl::implDisposeTree()
             rFactory.revokeElement( *it );
         }
 
-        aContainer.notifyDisposing( EventObject(getUnoInstance()) );
+        aContainer.notifyDisposing();
 
         OSL_ASSERT(!aContainer.isDisposed());
 
@@ -245,7 +245,7 @@ void ApiTreeImpl::implDisposeNode(NodeRef const& aNode, UnoInterface* pInstance)
 
     NodeID aNodeID(m_aTree,aNode);
 
-    if (m_aNotifier->disposeNodeHelper( aNodeID,EventObject(pInstance)))
+    if (m_aNotifier->m_aListeners.disposeOne(aNodeID.toIndex()) )
     {
         getFactory().revokeElement(aNodeID);
     }

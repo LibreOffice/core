@@ -2,9 +2,9 @@
  *
  *  $RCSfile: noderef.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-10 12:17:22 $
+ *  last change: $Author: jb $ $Date: 2000-11-13 13:26:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -357,6 +357,14 @@ bool Tree::isEmpty() const
 }
 //-----------------------------------------------------------------------------
 
+NodeOffset Tree::getContainedNodeCount() const
+{
+    OSL_PRECOND(m_pImpl, "ERROR: Configuration: Counting nodes requires a valid Tree");
+
+    return m_pImpl ? m_pImpl->nodeCount() : 0;
+}
+//-----------------------------------------------------------------------------
+
 bool Tree::isValidNode(NodeRef const& aNode) const
 {
     OSL_PRECOND(m_pImpl, "ERROR: Configuration: Tree operation requires a valid Tree");
@@ -671,6 +679,18 @@ size_t NodeID::hashCode() const
 }
 //-----------------------------------------------------------------------------
 
+NodeOffset NodeID::toIndex() const
+{
+    NodeOffset n = m_nNode;
+    if (m_pTree)
+    {
+        OSL_ENSURE(m_pTree->isValidNode(n),"Cannot produce valid Index for NodeID");
+
+        n -= m_pTree->root();
+    }
+    return n;
+}
+
 //-----------------------------------------------------------------------------
 // Free functions
 //-----------------------------------------------------------------------------
@@ -832,6 +852,49 @@ void getAllChildrenHelper(NodeID const& aNode, NodeIDList& aList)
 }
 //-----------------------------------------------------------------------------
 
+NodeID getParentHelper(NodeID const& aNode)
+{
+    if (TreeImpl* pImpl = TreeImplHelper::tree(aNode))
+    {
+        if (NodeOffset const nNode = TreeImplHelper::offset(aNode))
+        {
+            if (NodeOffset nParent = pImpl->parent(nNode))
+            {
+                return NodeID(pImpl,nParent);
+            }
+        }
+    }
+    return NodeID(0,0);
+}
+//-----------------------------------------------------------------------------
+
+NodeID findNeighbor(NodeID const& aNode, NodeOffset nNeighbor)
+{
+    if (TreeImpl* pImpl = TreeImplHelper::tree(aNode))
+    {
+        if (pImpl->isValidNode(nNeighbor))
+        {
+            return NodeID(pImpl,nNeighbor);
+        }
+    }
+    return NodeID(0,0);
+}
+
+//-----------------------------------------------------------------------------
+NodeID findNodeFromIndex(NodeID const& aNode, NodeOffset nIndex)
+{
+    if (TreeImpl* pImpl = TreeImplHelper::tree(aNode))
+    {
+        NodeOffset nNode = nIndex + pImpl->root();
+        if (pImpl->isValidNode(nNode))
+        {
+            return NodeID(pImpl,nNode);
+        }
+    }
+    return NodeID(0,0);
+}
+
+//-----------------------------------------------------------------------------
 bool isSimpleValue(Tree const& aTree, NodeRef const& aNode)
 {
     OSL_PRECOND( !aNode.isValid() || !aTree.isEmpty(), "ERROR: Configuration: Tree operation requires a valid Tree");

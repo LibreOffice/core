@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apinotifierimpl.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-07 14:34:32 $
+ *  last change: $Author: jb $ $Date: 2000-11-13 13:26:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,20 +95,6 @@ namespace internal
     using configuration::NodeVisitor;
 
     /// helper for adding a Listener to all children of a node
-    template <class Listener>
-    class AddListener :  public NodeVisitor
-    {
-        Reference<Listener> m_xListener;
-        Notifier    m_aNotifier;
-    public:
-        AddListener(Notifier const& aNotifier, Reference<Listener> const& xListener)
-            : m_xListener(xListener)
-            , m_aNotifier(aNotifier)
-        {}
-
-        virtual Result handle(NodeRef const& aNode); // NodeVisitor
-    };
-
     /// helper for adding a Listener to a named child of a node
     template <class Listener>
     class AddListenerByName :  public NodeVisitor
@@ -121,21 +107,6 @@ namespace internal
             : m_xListener(xListener)
             , m_aNotifier(aNotifier)
             , m_aName(aName)
-        {}
-
-        virtual Result handle(NodeRef const& aNode); // NodeVisitor
-    };
-
-    /// helper for removing a Listener from all children of a node
-    template <class Listener>
-    class RemoveListener :  public NodeVisitor
-    {
-        Reference<Listener> m_xListener;
-        Notifier    m_aNotifier;
-    public:
-        RemoveListener(Notifier const& aNotifier, Reference<Listener> const& xListener)
-            : m_xListener(xListener)
-            , m_aNotifier(aNotifier)
         {}
 
         virtual Result handle(NodeRef const& aNode); // NodeVisitor
@@ -158,39 +129,26 @@ namespace internal
         virtual Result handle(NodeRef const& aNode); // NodeVisitor
     };
 
-    /// add a Listener to a node
-    template <class Listener>
-    NodeVisitor::Result AddListener<Listener>::handle(NodeRef const& aNode)
-    {
-        m_aNotifier.add(aNode, m_xListener);
-        return CONTINUE;
-    }
     /// add a Listener to a named node
     template <class Listener>
     NodeVisitor::Result AddListenerByName<Listener>::handle(NodeRef const& aNode)
     {
         if (aNode.getName() == m_aName)
         {
-            m_aNotifier.add(aNode, m_xListener);
+            m_aNotifier.addForOne(aNode, m_xListener);
             return DONE;
         }
         else
             return CONTINUE;
     }
-    /// remove a Listener from a node
-    template <class Listener>
-    NodeVisitor::Result RemoveListener<Listener>::handle(NodeRef const& aNode)
-    {
-        m_aNotifier.remove(aNode, m_xListener);
-        return CONTINUE;
-    }
+
     /// remove a Listener from a named node
     template <class Listener>
     NodeVisitor::Result RemoveListenerByName<Listener>::handle(NodeRef const& aNode)
     {
         if (aNode.getName() == m_aName)
         {
-            m_aNotifier.remove(aNode, m_xListener);
+            m_aNotifier.removeForOne(aNode, m_xListener);
             return DONE;
         }
         else
@@ -233,23 +191,25 @@ bool genericAddChildListener(NodeGroupInfoAccess& rNode, const Reference< Listen
     using configuration::NodeVisitor;
     using configuration::validateNodeName;
 
-    GuardedNodeAccess           aGuardedNode( rNode );      // guard access to children
-    GuardedNotifier             aGuardedNotifier( rNode );  // guard the notifier
-
-    Tree        aTree( aGuardedNode->getTree() );
-    NodeRef     aNode( aGuardedNode->getNode() );
-
     if (sName.getLength() != 0)
     {
+        GuardedNodeAccess           aGuardedNode( rNode );      // guard access to children
+        GuardedNotifier             aGuardedNotifier( rNode );  // guard the notifier
+
+        Tree        aTree( aGuardedNode->getTree() );
+        NodeRef     aNode( aGuardedNode->getNode() );
+
         internal::AddListenerByName<Listener> aAdder( *aGuardedNotifier, xListener, validateNodeName(sName,aTree,aNode));
+
         NodeVisitor::Result eFound = aTree.dispatchToChildren( aNode, aAdder );
 
         return (eFound == NodeVisitor::DONE); // ok if NodeRef was found
     }
     else
     {
-        internal::AddListener<Listener> aAdder( *aGuardedNotifier,xListener);
-        aTree.dispatchToChildren( aNode, aAdder );
+        GuardedNotifier  aGuardedNotifier( rNode ); // guard the notifier
+
+        aGuardedNotifier->addForAll(rNode.getNode(), xListener);
 
         return true; // always ok, as we addreess no specific NodeRef
     }
@@ -276,6 +236,12 @@ bool genericRemoveChildListener(NodeGroupInfoAccess& rNode, const Reference< Lis
 
     if (sName.getLength() != 0)
     {
+        GuardedNodeAccess           aGuardedNode( rNode );      // guard access to children
+        GuardedNotifier             aGuardedNotifier( rNode );  // guard the notifier
+
+        Tree        aTree( aGuardedNode->getTree() );
+        NodeRef     aNode( aGuardedNode->getNode() );
+
         internal::RemoveListenerByName<Listener> aRemover( *aGuardedNotifier, xListener, validateNodeName(sName,aTree,aNode) );
         NodeVisitor::Result eFound = aTree.dispatchToChildren( aNode, aRemover );
 
@@ -283,8 +249,9 @@ bool genericRemoveChildListener(NodeGroupInfoAccess& rNode, const Reference< Lis
     }
     else
     {
-        internal::RemoveListener<Listener> aRemover( *aGuardedNotifier, xListener) ;
-        aTree.dispatchToChildren( aNode, aRemover );
+        GuardedNotifier  aGuardedNotifier( rNode ); // guard the notifier
+
+        aGuardedNotifier->removeForAll(rNode.getNode(), xListener);
 
         return true; // always ok, as we addreess no specific NodeRef
     }

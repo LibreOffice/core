@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confignotifier.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-10 12:22:55 $
+ *  last change: $Author: jb $ $Date: 2000-11-13 13:26:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,10 +171,14 @@ namespace configmgr
             /// Add a <type scope='com::sun::star::util'>XChangesListener</type> observing <var>aNode</var> and its descendants.
             void add(NodeRef const& aNode, uno::Reference< css::util::XChangesListener > const& xListener) const;
 
-            /// Add a <type scope='com::sun::star::beans'>XPropertyChangeListener</type> observing <var>aNode</var>.
-            void add(NodeRef const& aNode, uno::Reference< css::beans::XPropertyChangeListener > const& xListener) const;
-            /// Add a <type scope='com::sun::star::beans'>XVetoableChangeListener</type> constraining <var>aNode</var>.
-            void add(NodeRef const& aNode, uno::Reference< css::beans::XVetoableChangeListener > const& xListener) const;
+            /// Add a <type scope='com::sun::star::beans'>XPropertyChangeListener</type> observing all children of <var>aNode</var>.
+            void addForAll(NodeRef const& aNode, uno::Reference< css::beans::XPropertyChangeListener > const& xListener) const;
+            /// Add a <type scope='com::sun::star::beans'>XPropertyChangeListener</type> observing only <var>aNode</var>.
+            void addForOne(NodeRef const& aNode, uno::Reference< css::beans::XPropertyChangeListener > const& xListener) const;
+            /// Add a <type scope='com::sun::star::beans'>XVetoableChangeListener</type> constraining all children of <var>aNode</var>.
+            void addForAll(NodeRef const& aNode, uno::Reference< css::beans::XVetoableChangeListener > const& xListener) const;
+            /// Add a <type scope='com::sun::star::beans'>XVetoableChangeListener</type> constraining only <var>aNode</var>.
+            void addForOne(NodeRef const& aNode, uno::Reference< css::beans::XVetoableChangeListener > const& xListener) const;
 
             /** Add a <type scope='com::sun::star::beans'>XPropertiesChangeListener</type>
                 observing all properties of <var>aNode</var>.
@@ -196,10 +200,16 @@ namespace configmgr
             void remove(NodeRef const& aNode, uno::Reference< css::util::XChangesListener > const& xListener) const;
 
             /// Remove a <type scope='com::sun::star::beans'>XPropertyChangeListener</type> observing <var>aNode</var>.
-            void remove(NodeRef const& aNode, uno::Reference< css::beans::XPropertyChangeListener > const& xListener) const;
+            void removeForAll(NodeRef const& aNode, uno::Reference< css::beans::XPropertyChangeListener > const& xListener) const;
+            /// Remove a <type scope='com::sun::star::beans'>XPropertyChangeListener</type> observing <var>aNode</var>.
+            void removeForOne(NodeRef const& aNode, uno::Reference< css::beans::XPropertyChangeListener > const& xListener) const;
+            /// Remove a <type scope='com::sun::star::beans'>XVetoableChangeListener</type> constraining <var>aNode</var>.
+            void removeForAll(NodeRef const& aNode, uno::Reference< css::beans::XVetoableChangeListener > const& xListener) const;
+            /// Remove a <type scope='com::sun::star::beans'>XVetoableChangeListener</type> constraining <var>aNode</var>.
+            void removeForOne(NodeRef const& aNode, uno::Reference< css::beans::XVetoableChangeListener > const& xListener) const;
+
             /// Remove a <type scope='com::sun::star::beans'>XVetoableChangeListener</type> constraining <var>aNode</var>.
             void remove(NodeRef const& aNode, uno::Reference< css::beans::XVetoableChangeListener > const& xListener) const;
-
             /** Remove a <type scope='com::sun::star::beans'>XPropertiesChangeListener</type>
                 observing any properties of <var>aNode</var>.
             */

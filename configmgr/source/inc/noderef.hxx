@@ -2,9 +2,9 @@
  *
  *  $RCSfile: noderef.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-10 12:19:02 $
+ *  last change: $Author: jb $ $Date: 2000-11-13 13:26:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,6 +208,9 @@ namespace configmgr
             /// checks, if this represents an real tree
             bool isEmpty() const;
 
+            /// retrieves the number of immediately contained nodes
+            NodeOffset getContainedNodeCount() const;
+
             /// checks whether the node <var>aNode</var> is a valid node in this tree.
             bool isValidNode(NodeRef const& aNode) const;
 
@@ -318,6 +321,8 @@ namespace configmgr
             friend bool operator < (NodeID const& lhs, NodeID const& rhs);
             // hashing
             size_t hashCode() const;
+            // use as index - returns a value in the range 0..rTree.getContainedNodes() for the tree used to construct this
+            NodeOffset toIndex() const;
         private:
             friend class TreeImplHelper;
             TreeImpl*   m_pTree;
@@ -420,6 +425,9 @@ namespace configmgr
 
         void getAllContainedNodes(Tree const& aTree, NodeIDList& aList);
         void getAllChildrenHelper(NodeID const& aNode, NodeIDList& aList);
+        NodeID getParentHelper(NodeID const& aNode);
+        NodeID findNeighbor(NodeID const& aNode, NodeOffset nIndex);
+        NodeID findNodeFromIndex(NodeID const& aNode, NodeOffset nIndex);
 
     //-------------------------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: notifierimpl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-10 12:22:55 $
+ *  last change: $Author: jb $ $Date: 2000-11-13 13:26:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,9 @@ namespace configmgr
             mutable osl::Mutex m_aMutex;
         public:
             typedef configuration::NodeID Key;
+            typedef configuration::NodeID NodeID;
+            typedef configuration::NodeIDList NodeIDList;
+            typedef configuration::NodeOffset NodeOffset;
 
             struct KeyHash
             {
@@ -102,22 +105,36 @@ namespace configmgr
             {
                 bool operator() (const Key& lhs,const Key& rhs) const {return lhs == rhs;}
             };
-            typedef MultiListenerContainer <Key,KeyHash,KeyEq> MultiContainer;
+            struct KeyToIndex
+            {
+                configuration::NodeID aRootNodeID;
+
+                KeyToIndex( configuration::Tree const& aTree ) : aRootNodeID(aTree,aTree.getRootNode()) {}
+                KeyToIndex( configuration::NodeID const& aID ) : aRootNodeID(aID) {}
+                bool findKeysForIndex(NodeOffset nNode, NodeIDList& aList)
+                {
+                    aList.clear();
+                    configuration::getAllChildrenHelper(configuration::findNodeFromIndex(aRootNodeID,nNode), aList);
+                    return !aList.empty();
+                }
+                NodeOffset findIndexForKey(NodeID const& aNode)
+                {
+                    return configuration::getParentHelper(aNode).toIndex();
+                }
+            };
+            typedef SpecialListenerContainer <Key,KeyHash,KeyEq,KeyToIndex> SpecialContainer;
 
         public:
-            MultiContainer m_aListeners;
+            SpecialContainer m_aListeners;
 
         public:
             /// construct this around the given Implementation, for the given tree
-            NotifierImpl();
+            explicit
+            NotifierImpl(configuration::Tree const& aTree);
             ~NotifierImpl();
 
             /// retrieve the mutex that is used by this
             osl::Mutex& mutex() const { return m_aMutex; }
-
-            /// dispose the given node, notifying listeners and sublisteners
-            //  (really bad style to put this here - should move to apinotifierimpl.cxx :-( )
-            bool disposeNodeHelper(Key const& aNode, css::lang::EventObject const& aEvt) const;
 
             /// Add a <type scope='com::sun::star::lang'>XEventListener</type> observing <var>aNode</var>.
             void add(Key const& aNode, uno::Reference< css::lang::XEventListener > const& xListener)
@@ -125,7 +142,7 @@ namespace configmgr
                 OSL_PRECOND(xListener.is(), "ERROR: Unexpected NULL listener");
 
                 // ignore the names for now
-                m_aListeners.addListener(aNode,xListener.get());
+                m_aListeners.addListener(aNode.toIndex(),getCppuType(&xListener),xListener.get());
             }
 
             /// Add a <type scope='com::sun::star::container'>XContainerListener</type> observing <var>aNode</var>.
@@ -134,7 +151,7 @@ namespace configmgr
                 OSL_PRECOND(xListener.is(), "ERROR: Unexpected NULL listener");
 
                 // ignore the names for now
-                m_aListeners.addListener(aNode,xListener.get());
+                m_aListeners.addListener(aNode.toIndex(),getCppuType(&xListener),xListener.get());
             }
 
             /// Add a <type scope='com::sun::star::util'>XChangesListener</type> observing <var>aNode</var> and its descendants.
@@ -143,24 +160,40 @@ namespace configmgr
                 OSL_PRECOND(xListener.is(), "ERROR: Unexpected NULL listener");
 
                 // ignore the names for now
-                m_aListeners.addListener(aNode,xListener.get());
+                m_aListeners.addListener(aNode.toIndex(),getCppuType(&xListener),xListener.get());
             }
 
             /// Add a <type scope='com::sun::star::beans'>XPropertyChangeListener</type> observing <var>aNode</var>.
-            void add(Key const& aNode, uno::Reference< css::beans::XPropertyChangeListener > const& xListener)
+            void addNamed(Key const& aNode, uno::Reference< css::beans::XPropertyChangeListener > const& xListener)
             {
                 OSL_PRECOND(xListener.is(), "ERROR: Unexpected NULL listener");
 
                 // ignore the names for now
-                m_aListeners.addListener(aNode,xListener.get());
+                m_aListeners.addSpecialListener(aNode,xListener.get());
+            }
+            /// Add a <type scope='com::sun::star::beans'>XPropertyChangeListener</type> observing <var>aNode</var>.
+            void addForAll(Key const& aNode, uno::Reference< css::beans::XPropertyChangeListener > const& xListener)
+            {
+                OSL_PRECOND(xListener.is(), "ERROR: Unexpected NULL listener");
+
+                // ignore the names for now
+                m_aListeners.addListener(aNode.toIndex(),getCppuType(&xListener),xListener.get());
             }
             /// Add a <type scope='com::sun::star::beans'>XVetoableChangeListener</type> constraining <var>aNode</var>.
-            void add(Key const& aNode, uno::Reference< css::beans::XVetoableChangeListener > const& xListener)
+            void addNamed(Key const& aNode, uno::Reference< css::beans::XVetoableChangeListener > const& xListener)
             {
                 OSL_PRECOND(xListener.is(), "ERROR: Unexpected NULL listener");
 
                 // ignore the names for now
-                m_aListeners.addListener(aNode,xListener.get());
+                m_aListeners.addSpecialListener(aNode,xListener.get());
+            }
+            /// Add a <type scope='com::sun::star::beans'>XVetoableChangeListener</type> constraining <var>aNode</var>.
+            void addForAll(Key const& aNode, uno::Reference< css::beans::XVetoableChangeListener > const& xListener)
+            {
+                OSL_PRECOND(xListener.is(), "ERROR: Unexpected NULL listener");
+
+                // ignore the names for now
+                m_aListeners.addListener(aNode.toIndex(),getCppuType(&xListener),xListener.get());
             }
 
             /** Add a <type scope='com::sun::star::beans'>XPropertiesChangeListener</type>
@@ -171,7 +204,7 @@ namespace configmgr
                 OSL_PRECOND(xListener.is(), "ERROR: Unexpected NULL listener");
 
                 // ignore the names for now
-                m_aListeners.addListener(aNode,xListener.get());
+                m_aListeners.addListener(aNode.toIndex(),getCppuType(&xListener),xListener.get());
             }
 
             /** Add a <type scope='com::sun::star::beans'>XPropertiesChangeListener</type>
@@ -192,35 +225,48 @@ namespace configmgr
             void remove(Key const& aNode, uno::Reference< css::lang::XEventListener > const& xListener)
             {
                 // ignore the names for now
-                m_aListeners.removeListener(aNode,xListener.get());
+                m_aListeners.removeListener(aNode.toIndex(),getCppuType(&xListener),xListener.get());
             }
 
             /// Remove a <type scope='com::sun::star::container'>XContainerListener</type> observing <var>aNode</var>.
             void remove(Key const& aNode, uno::Reference< css::container::XContainerListener > const& xListener)
             {
                 // ignore the names for now
-                m_aListeners.removeListener(aNode,xListener.get());
+                m_aListeners.removeListener(aNode.toIndex(),getCppuType(&xListener),xListener.get());
             }
 
             /// Remove a <type scope='com::sun::star::util'>XChangesListener</type> observing <var>aNode</var> and its descendants.
             void remove(Key const& aNode, uno::Reference< css::util::XChangesListener > const& xListener)
             {
                 // ignore the names for now
-                m_aListeners.removeListener(aNode,xListener.get());
+                m_aListeners.removeListener(aNode.toIndex(),getCppuType(&xListener),xListener.get());
             }
 
             /// Remove a <type scope='com::sun::star::beans'>XPropertyChangeListener</type> observing <var>aNode</var>.
-            void remove(Key const& aNode, uno::Reference< css::beans::XPropertyChangeListener > const& xListener)
+            void removeNamed(Key const& aNode, uno::Reference< css::beans::XPropertyChangeListener > const& xListener)
             {
                 // ignore the names for now
-                m_aListeners.removeListener(aNode,xListener.get());
+                m_aListeners.removeSpecialListener(aNode,xListener.get());
+            }
+            /// Remove a <type scope='com::sun::star::beans'>XPropertyChangeListener</type> observing <var>aNode</var>.
+            void removeForAll(Key const& aNode, uno::Reference< css::beans::XPropertyChangeListener > const& xListener)
+            {
+                // ignore the names for now
+                m_aListeners.removeListener(aNode.toIndex(),getCppuType(&xListener),xListener.get());
             }
             /// Remove a <type scope='com::sun::star::beans'>XVetoableChangeListener</type> constraining <var>aNode</var>.
-            void remove(Key const& aNode, uno::Reference< css::beans::XVetoableChangeListener > const& xListener)
+            void removeNamed(Key const& aNode, uno::Reference< css::beans::XVetoableChangeListener > const& xListener)
             {
                 // ignore the names for now
-                m_aListeners.removeListener(aNode,xListener.get());
+                m_aListeners.removeSpecialListener(aNode,xListener.get());
             }
+            /// Remove a <type scope='com::sun::star::beans'>XVetoableChangeListener</type> constraining <var>aNode</var>.
+            void removeForAll(Key const& aNode, uno::Reference< css::beans::XVetoableChangeListener > const& xListener)
+            {
+                // ignore the names for now
+                m_aListeners.removeListener(aNode.toIndex(),getCppuType(&xListener),xListener.get());
+            }
+
 
             /** Remove a <type scope='com::sun::star::beans'>XPropertiesChangeListener</type>
                 observing any properties of <var>aNode</var>.
@@ -228,7 +274,7 @@ namespace configmgr
             void remove(Key const& aNode, uno::Reference< css::beans::XPropertiesChangeListener > const& xListener)
             {
                 // ignore the names for now
-                m_aListeners.removeListener(aNode,xListener.get());
+                m_aListeners.removeListener(aNode.toIndex(),getCppuType(&xListener),xListener.get());
             }
         // ---------------------------------------------------------------------------------------------------
         };

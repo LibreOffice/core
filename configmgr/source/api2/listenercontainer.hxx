@@ -2,9 +2,9 @@
  *
  *  $RCSfile: listenercontainer.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-10 12:22:55 $
+ *  last change: $Author: jb $ $Date: 2000-11-13 13:26:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,9 @@ namespace configmgr
         namespace uno       = css::uno;
         namespace lang      = css::lang;
 
+        typedef uno::Type                       UnoType;
+        typedef uno::XInterface                 UnoInterface;
+        typedef uno::Reference<uno::XInterface> UnoInterfaceRef;
 //-----------------------------------------------------------------------------
         typedef cppu::OInterfaceContainerHelper ListenerContainer;
 
@@ -128,10 +131,39 @@ namespace configmgr
             uno::Reference<Listener> m_xNext;
         };
 //-----------------------------------------------------------------------------
-
-        template <class Key_, class KeyHash_, class KeyEq_>
-        class MultiListenerContainer
+        class DisposeNotifier
         {
+            typedef uno::Reference< lang::XEventListener > Listener;
+            typedef std::vector< Listener > Listeners;
+            lang::EventObject aEvent;
+            Listeners aListeners;
+        public:
+            explicit
+            DisposeNotifier(UnoInterfaceRef const& aInterface) : aEvent(aInterface) {}
+
+            void appendAndClearContainer(ListenerContainer* pContainer);
+            void notify();
+        };
+//-----------------------------------------------------------------------------
+        template <class Key_, class KeyHash_, class KeyEq_, class KeyToIndex_>
+        class SpecialListenerContainer
+        {
+        public:
+            typedef cppu::OMultiTypeInterfaceContainerHelper    BasicContainerHelper;
+            struct BasicContainerInfo
+            {
+                UnoInterface*           pInterface;
+                BasicContainerHelper*   pContainer;
+                BasicContainerInfo() : pInterface(0), pContainer(0) {}
+            };
+            typedef std::vector<BasicContainerInfo>         BasicContainerHelperArray;
+            typedef BasicContainerHelperArray::size_type    Index;
+
+            typedef Key_ Key;
+            typedef cppu::OMultiTypeInterfaceContainerHelperVar< Key_,KeyHash_,KeyEq_ > SpecialContainerHelper;
+            typedef cppu::OBroadcastHelperVar< SpecialContainerHelper, Key >            SpecialBroadcastHelper;
+            typedef std::vector<Key> KeyList;
+
         public:
             /**
              * Create a container of interface containers.
@@ -140,19 +172,21 @@ namespace configmgr
              *                  The lifetime must be longer than the lifetime
              *                  of this object.
              */
-            MultiListenerContainer(osl::Mutex& rMutex)
-            : m_aBroadcastHelper(rMutex)
+            SpecialListenerContainer(osl::Mutex& rMutex, Index nCount, KeyToIndex_ aMapper)
+            : m_aSpecialHelper(rMutex)
+            , m_aContainers(nCount)
             , m_bDisposeLock(false)
+            , m_aMapper(aMapper)
             {}
 
-            ~MultiListenerContainer()
+            ~SpecialListenerContainer()
             {
                 OSL_ENSURE(isDisposed(), "ERROR: Object was not disposed properly");
                 if (m_bDisposeLock) mutex().release();
             }
         public:
             /// get the mutex thatthis object uses
-            osl::Mutex& mutex() const { return m_aBroadcastHelper.rMutex; }
+            osl::Mutex& mutex() const { return m_aSpecialHelper.rMutex; }
 
             /**
              * check whether this is disposed or still alive
@@ -172,11 +206,69 @@ namespace configmgr
             /// return whether the object is completely disposed
             bool isDisposed()volatile  const throw();
 
+            /// return whether the object is present in this container
+            bool isAvailable(Index nIndex)  const throw()
+            {
+                osl::MutexGuard aGuard(mutex());
+                return nIndex < m_aContainers.size() && m_aContainers[nIndex].pInterface;
+            }
+
+            Index getSize() const
+            {
+                osl::MutexGuard aGuard(mutex());
+                return m_aContainers.size();
+            }
+
+            /// return the interface associated with an index
+            void setObjectAt(Index nIndex, UnoInterface* pInterface)
+            {
+                osl::MutexGuard aGuard(mutex());
+                OSL_ENSHURE( !isDisposed(), "object is disposed" );
+
+                if (isAlive())
+                {
+                    OSL_ENSURE( nIndex < m_aContainers.size(), " Invalid Index into Notifier");
+                    OSL_ENSURE( pInterface, "Invalid NULL Interface passed into Notifier");
+
+                    if ( nIndex < m_aContainers.size() && pInterface != NULL)
+                    {
+                        OSL_ENSURE( m_aContainers[nIndex].pInterface == NULL, "Interface already set");
+                        if (m_aContainers[nIndex].pInterface == NULL)
+                            m_aContainers[nIndex].pInterface = pInterface;
+                    }
+                }
+            }
+
+
+            /// return the interface associated with an index
+            UnoInterfaceRef getObjectAt(Index nIndex) const
+            {
+                osl::MutexGuard aGuard(mutex());
+                UnoInterfaceRef aRet( nIndex < m_aContainers.size() ? m_aContainers[nIndex].pInterface : 0 );
+                return xRet;
+            }
+
+            /// return the interface associated with an index
+            UnoInterfaceRef getObjectForKey(Key const& aKey ) const
+            {
+                osl::MutexGuard aGuard(mutex());
+                Index nIndex = m_aMapper.findIndexForKey(aKey);
+                UnoInterfaceRef xRet( nIndex < m_aContainers.size() ? m_aContainers[nIndex].pInterface : 0 );
+                return xRet;
+            }
+
             /**
              * Call disposing on all object in all the containers that
              * support XEventListener. Then clear the container.
              */
-            void dispose( const lang::EventObject & rEvt ) throw(uno::RuntimeException);
+            bool disposeAll() throw(uno::RuntimeException);
+
+            /**
+             * Call disposing on all object in all the container for anIndex
+             * and in the containers for the associated indices
+             * support XEventListener. Then clear the container.
+             */
+            bool disposeOne( Index anIndex ) throw(uno::RuntimeException);
 
             /**
              * Start disposing this object, leave the mutex locked for dispose processing
@@ -196,28 +288,72 @@ namespace configmgr
              * @return <FALSE/>
              *      if disposing had already been started before
              */
-            void notifyDisposing( const lang::EventObject & rEvt ) throw(uno::RuntimeException);
+            void notifyDisposing() throw(uno::RuntimeException);
 
             /// mark the end of the dispose processing
             void endDisposing() throw();
 
         public:
             /**
-             * Return the container created under this key.
+             * Return the specuial container created under this key.
              * @return the container created under this key. If the container
              *          was not created, null was returned.
              */
-            ListenerContainer *  getContainer( const Key_ & aKey) const
-            { return m_aBroadcastHelper.aLC.getContainer(aKey); }
+            ListenerContainer *  getSpecialContainer( const Key_ & aKey) const
+            { return m_aSpecialHelper.aLC.getContainer(aKey); }
 
             /**
-             * Insert an element in the container specified with the key. The position is not specified.
+             * Return the containerhelper created under this index.
+             * @return the container helper created under this key. If the container helper
+             *  was not created, null was returned.
+             */
+            BasicContainerHelper *  getContainerHelper( Index nIndex) const
+            {
+                osl::MutexGuard aGuard(mutex());
+                return (nIndex < m_aContainers.size()) ? m_aContainers[nIndex].pContainer : 0 );
+            }
+            /**
+             * Return the container for the given type created under this index.
+             * @return the container created under this key. If the container
+             *          was not created, null was returned.
+             */
+            ListenerContainer *  getContainer( Index nIndex, const UnoType & aType) const
+            {
+                osl::MutexGuard aGuard(mutex());
+                BasicContainerHelper* pContainer = (nIndex < m_aContainers.size()) ? m_aContainers[nIndex].pContainer : 0 );
+
+                return pContainer ? pContainer->getContainer(aType) : 0;
+            }
+
+            /**
+             * Insert an element in the container specified with the index and type. The position is not specified.
+             * The interface at the given index must be set already.
              * @param aKey      the id of the container.
              * @param xListener the added interface. It is allowed to insert null or
              *                  the same pointer more than once.
              * @return the new count of elements in the container (or 0 if the object is ready being disposed).
              */
-            sal_Int32 addListener( const Key_& aKey, uno::Reference< lang::XEventListener > const& xListener) throw(uno::RuntimeException);
+            sal_Int32 addListener( Index nIndex, const UnoType& aType, uno::Reference< lang::XEventListener > const& xListener) throw(uno::RuntimeException);
+
+            /**
+             * Remove an element from the container specified with the index and type.
+             * It uses the equal definition of uno objects to remove the interfaces.
+             * @param aKey      the id of the container.
+             * @param xListener the removed interface.
+             * @return the new count of elements in the container (or 0 if the object is ready being disposed).
+             */
+            sal_Int32 removeListener( Index nIndex, const UnoType& aType, uno::Reference< lang::XEventListener > const& xListener) throw(uno::RuntimeException);
+
+
+            /**
+             * Insert an element in the special container specified with the key. The position is not specified.
+             * The interface at the given index must be set already.
+             * @param aKey      the id of the container.
+             * @param xListener the added interface. It is allowed to insert null or
+             *                  the same pointer more than once.
+             * @return the new count of elements in the container (or 0 if the object is ready being disposed).
+             */
+            sal_Int32 addSpecialListener( const Key_& aKey, uno::Reference< lang::XEventListener > const& xListener) throw(uno::RuntimeException);
 
             /**
              * Remove an element from the container specified with the key.
@@ -226,71 +362,102 @@ namespace configmgr
              * @param xListener the removed interface.
              * @return the new count of elements in the container (or 0 if the object is ready being disposed).
              */
-            sal_Int32 removeListener( const Key_& aKey, uno::Reference< lang::XEventListener > const& xListener) throw(uno::RuntimeException);
+            sal_Int32 removeSpecialListener( const Key_& aKey, uno::Reference< lang::XEventListener > const& xListener) throw(uno::RuntimeException);
 
-        public:
-            typedef Key_        Key;
-            typedef KeyHash_    KeyHash;
-            typedef KeyEq_      KeyEq;
-            typedef cppu::OMultiTypeInterfaceContainerHelperVar< Key_, KeyHash_, KeyEq_ >   ContainerHelper;
-            typedef cppu::OBroadcastHelperVar< ContainerHelper, Key >                           BroadcastHelper;
         private:
-            BroadcastHelper m_aBroadcastHelper;
+            void implFillDisposer(DisposeNotifier& aNotifier, Index nIndex);
+
+            SpecialBroadcastHelper      m_aSpecialHelper;
+            BasicContainerHelperArray   m_aContainers;
+            KeyToIndex_                 m_aMapper;
             bool m_bDisposeLock;
         };
 //-----------------------------------------------------------------------------
 
 /////////////////////////////////////////////////////////////////////////////////////////////
-        template <class Key_, class KeyHash_, class KeyEq_>
-        bool MultiListenerContainer<Key_,KeyHash_,KeyEq_>::checkAlive(uno::XInterface* pObject) volatile const throw(lang::DisposedException)
+        template <class Key_, class KeyHash_, class KeyEq_, class KeyToIndex_>
+        bool SpecialListenerContainer<Key_,KeyHash_,KeyEq_, KeyToIndex_>::checkAlive(uno::XInterface* pObject) volatile const throw(lang::DisposedException)
         {
-            bool bAlive = !m_aBroadcastHelper.bInDispose;
-            if (m_aBroadcastHelper.bDisposed)
+            bool bAlive = !m_aSpecialHelper.bInDispose;
+            if (m_aSpecialHelper.bDisposed)
             {
                 throw lang::DisposedException(OUString(RTL_CONSTASCII_USTRINGPARAM("The object has already been disposed")),pObject);
             }
             return bAlive;
         }
 //-----------------------------------------------------------------------------
-        template <class Key_, class KeyHash_, class KeyEq_>
+        template <class Key_, class KeyHash_, class KeyEq_, class KeyToIndex_>
         inline
-        bool MultiListenerContainer<Key_,KeyHash_,KeyEq_>::isAlive() volatile const throw()
+        bool SpecialListenerContainer<Key_,KeyHash_,KeyEq_, KeyToIndex_>::isAlive() volatile const throw()
         {
-            return !m_aBroadcastHelper.bInDispose && !m_aBroadcastHelper.bDisposed;
+            return !m_aSpecialHelper.bInDispose && !m_aSpecialHelper.bDisposed;
         }
 //-----------------------------------------------------------------------------
-        template <class Key_, class KeyHash_, class KeyEq_>
+        template <class Key_, class KeyHash_, class KeyEq_, class KeyToIndex_>
         inline
-        bool MultiListenerContainer<Key_,KeyHash_,KeyEq_>::isDisposing() volatile const throw()
+        bool SpecialListenerContainer<Key_,KeyHash_,KeyEq_, KeyToIndex_>::isDisposing() volatile const throw()
         {
-            return !!m_aBroadcastHelper.bInDispose;
+            return !!m_aSpecialHelper.bInDispose;
         }
 //-----------------------------------------------------------------------------
-        template <class Key_, class KeyHash_, class KeyEq_>
+        template <class Key_, class KeyHash_, class KeyEq_, class KeyToIndex_>
         inline
-        bool MultiListenerContainer<Key_,KeyHash_,KeyEq_>::isDisposed() volatile const throw()
+        bool SpecialListenerContainer<Key_,KeyHash_,KeyEq_, KeyToIndex_>::isDisposed() volatile const throw()
         {
-            return !!m_aBroadcastHelper.bDisposed;
+            return !!m_aSpecialHelper.bDisposed;
         }
 //-----------------------------------------------------------------------------
-        template <class Key_, class KeyHash_, class KeyEq_>
-        void MultiListenerContainer<Key_,KeyHash_,KeyEq_>::dispose(const lang::EventObject & rEvt) throw(uno::RuntimeException)
+        template <class Key_, class KeyHash_, class KeyEq_, class KeyToIndex_>
+        bool SpecialListenerContainer<Key_,KeyHash_,KeyEq_, KeyToIndex_>::disposeAll() throw(uno::RuntimeException)
         {
             if (beginDisposing())
             {
-                notifyDisposing( rEvt );
+                notifyDisposing();
                 endDisposing();
+                return true;
             }
+            else
+                return false;
         }
 //-----------------------------------------------------------------------------
-        template <class Key_, class KeyHash_, class KeyEq_>
-        bool MultiListenerContainer<Key_,KeyHash_,KeyEq_>::beginDisposing() throw()
+        template <class Key_, class KeyHash_, class KeyEq_, class KeyToIndex_>
+        bool SpecialListenerContainer<Key_,KeyHash_,KeyEq_, KeyToIndex_>::disposeOne(Index nIndex) throw(uno::RuntimeException)
+        {
+            OSL_ENSURE(!isDisposed(),"Object is already disposed in toto");
+
+            osl::ClearableMutexGuard aGuard(mutex());
+
+            if (isAlive())
+            {
+                if (nIndex < m_aContainers.size())
+                {
+                    if (UnoInterface* pObject = m_aContainers[nIndex].pInterface)
+                    {
+                        DisposeNotifier aNotifier(pObject);
+
+                        implFillDisposer(aNotifier, nIndex);
+                        m_aContainers[nIndex].pInterface = 0;
+                        delete m_aContainers[nIndex].pContainer;
+
+                        aGuard.clear();
+
+                        aNotifier.notify();
+                    }
+                }
+                return true;
+            }
+            else
+                return false;
+        }
+//-----------------------------------------------------------------------------
+        template <class Key_, class KeyHash_, class KeyEq_, class KeyToIndex_>
+        bool SpecialListenerContainer<Key_,KeyHash_,KeyEq_, KeyToIndex_>::beginDisposing() throw()
         {
             osl::MutexGuard aGuard( mutex() );
             if (isAlive())
             {
                 mutex().acquire();
-                m_aBroadcastHelper.bInDispose = sal_True;
+                m_aSpecialHelper.bInDispose = sal_True;
                 m_bDisposeLock = true;
 
                 return true;
@@ -298,24 +465,50 @@ namespace configmgr
             return false;
         }
 //-----------------------------------------------------------------------------
-        template <class Key_, class KeyHash_, class KeyEq_>
-        void MultiListenerContainer<Key_,KeyHash_,KeyEq_>::notifyDisposing(const lang::EventObject & rEvt) throw(uno::RuntimeException)
+        template <class Key_, class KeyHash_, class KeyEq_, class KeyToIndex_>
+        void SpecialListenerContainer<Key_,KeyHash_,KeyEq_, KeyToIndex_>::notifyDisposing() throw(uno::RuntimeException)
         {
             OSL_ENSURE(isDisposing(),"Disposing isn't in progress on this object");
             OSL_ENSURE(m_bDisposeLock,"Duplicate call for dispose notification or disposing is not taking place");
 
             if (m_bDisposeLock)
             {
-                OSL_ASSERT(m_aBroadcastHelper.bInDispose);
+                OSL_ASSERT(m_aSpecialHelper.bInDispose);
+
+                lang::EventObject aBaseEvt;
+                std::vector<DisposeNotifier> aNotifiers;
+
+                if (Index size = m_aContainers.size())
+                {
+                    aNotifiers.reserve(m_aContainers.size());
+
+                    aBaseEvt.Source = m_aContainers[0].pInterface;
+                    for(Index ix = 0; ix < size; ++ix)
+                    {
+                        if (m_aContainers[ix].pInterface)
+                        {
+                            aNotifiers.push_back(DisposeNotifier(m_aContainers[ix].pInterface));
+                            implFillDisposer(aNotifiers.back(), ix);
+                            m_aContainers[ix].pInterface = 0;
+                            delete m_aContainers[ix].pContainer;
+                        }
+                    }
+                }
+
                 m_bDisposeLock = false;
                 mutex().release();
 
-                m_aBroadcastHelper.aLC.disposeAndClear( rEvt );
+                for(Index jx = 0, count = aNotifiers.size(); jx < count; ++jx)
+                {
+                    aNotifiers[jx].notify();
+                }
+                // in case we missed something
+                m_aSpecialHelper.aLC.disposeAndClear( aBaseEvt );
             }
         }
 //-----------------------------------------------------------------------------
-        template <class Key_, class KeyHash_, class KeyEq_>
-        void MultiListenerContainer<Key_,KeyHash_,KeyEq_>::endDisposing() throw()
+        template <class Key_, class KeyHash_, class KeyEq_, class KeyToIndex_>
+        void SpecialListenerContainer<Key_,KeyHash_,KeyEq_, KeyToIndex_>::endDisposing() throw()
         {
             OSL_ENSURE(isDisposing(),"Disposing isn't in progress on this object");
 
@@ -323,8 +516,8 @@ namespace configmgr
             {
                 OSL_ENSURE(!m_bDisposeLock,"Did you forget to notify ?");
 
-                m_aBroadcastHelper.bDisposed = sal_True;
-                m_aBroadcastHelper.bInDispose = sal_False;
+                m_aSpecialHelper.bDisposed = sal_True;
+                m_aSpecialHelper.bInDispose = sal_False;
 
                 if (m_bDisposeLock)
                 {
@@ -334,32 +527,120 @@ namespace configmgr
             }
         }
 //-----------------------------------------------------------------------------
-        template <class Key_, class KeyHash_, class KeyEq_>
-        sal_Int32 MultiListenerContainer<Key_,KeyHash_,KeyEq_>::addListener( const Key_& aKey, const uno::Reference< lang::XEventListener > & xListener ) throw(uno::RuntimeException)
+        template <class Key_, class KeyHash_, class KeyEq_, class KeyToIndex_>
+        sal_Int32 SpecialListenerContainer<Key_,KeyHash_,KeyEq_, KeyToIndex_>::addListener( Index nIndex, const UnoType& aType, const uno::Reference< lang::XEventListener > & xListener ) throw(uno::RuntimeException)
         {
             osl::MutexGuard aGuard( mutex() );
             OSL_ENSHURE( !isDisposing(), "do not add listeners in the dispose call" );
             OSL_ENSHURE( !isDisposed(), "object is disposed" );
 
             if ( isAlive() )
-                return m_aBroadcastHelper.aLC.addInterface(aKey,xListener);
+            {
+                if ( nIndex < m_aContainers.size() && m_aContainers[nIndex].pInterface  )
+                {
+                    if (m_aContainers[nIndex].pContainer == 0)
+                        m_aContainers[nIndex].pContainer = new BasicContainerHelper(mutex());
 
-            else
-                return 0;
+                    return m_aContainers[nIndex].pContainer->addInterface(aType,xListener);
+                }
+                OSL_ENSURE(false, "Invalid index or interface not set");
+            }
+            return 0;
+        }
+//-----------------------------------------------------------------------------
+        template <class Key_, class KeyHash_, class KeyEq_, class KeyToIndex_>
+        sal_Int32 SpecialListenerContainer<Key_,KeyHash_,KeyEq_, KeyToIndex_>::addSpecialListener( const Key_& aKey, const uno::Reference< lang::XEventListener > & xListener ) throw(uno::RuntimeException)
+        {
+            osl::MutexGuard aGuard( mutex() );
+            OSL_ENSHURE( !isDisposing(), "do not add listeners in the dispose call" );
+            OSL_ENSHURE( !isDisposed(), "object is disposed" );
+
+            if ( isAlive() )
+            {
+                Index nIndex = m_aMapper.findIndexForKey(aKey);
+                if ( nIndex < m_aContainers.size() && m_aContainers[nIndex].pInterface  )
+                {
+                    return m_aSpecialHelper.aLC.addInterface(aKey,xListener);
+                }
+                OSL_ENSURE(false, "Invalid index or interface not set");
+            }
+            return 0;
         }
 //-----------------------------------------------------------------------------
 
-        template <class Key_, class KeyHash_, class KeyEq_>
-        sal_Int32 MultiListenerContainer<Key_,KeyHash_,KeyEq_>::removeListener( const Key_& aKey, const uno::Reference< lang::XEventListener > & xListener ) throw(uno::RuntimeException)
+        template <class Key_, class KeyHash_, class KeyEq_, class KeyToIndex_>
+        sal_Int32 SpecialListenerContainer<Key_,KeyHash_,KeyEq_, KeyToIndex_>::removeListener( Index nIndex, const UnoType& aType, const uno::Reference< lang::XEventListener > & xListener ) throw(uno::RuntimeException)
         {
             osl::MutexGuard aGuard( mutex() );
             OSL_ENSHURE( !isDisposed(), "object is disposed" );
 
             if ( isAlive() )
-                m_aBroadcastHelper.aLC.removeInterface(aKey, xListener );
+            {
+                if ( nIndex < m_aContainers.size() && m_aContainers[nIndex].pContainer  )
+                {
+                    return m_aContainers[nIndex].pContainer->addInterface(aType,xListener);
+                }
+            }
+            return 0;
+        }
+//-----------------------------------------------------------------------------
+
+        template <class Key_, class KeyHash_, class KeyEq_, class KeyToIndex_>
+        sal_Int32 SpecialListenerContainer<Key_,KeyHash_,KeyEq_, KeyToIndex_>::removeSpecialListener( const Key_& aKey, const uno::Reference< lang::XEventListener > & xListener ) throw(uno::RuntimeException)
+        {
+            osl::MutexGuard aGuard( mutex() );
+            OSL_ENSHURE( !isDisposed(), "object is disposed" );
+
+            if ( isAlive() )
+                return m_aSpecialHelper.aLC.removeInterface(aKey, xListener );
 
             else
                 return 0;
+        }
+//-----------------------------------------------------------------------------
+    // relation function. Uses KeyToIndex
+/*      template <class Key_, class KeyHash_, class KeyEq_, class KeyToIndex_>
+        SpecialListenerContainer<Key_,KeyHash_,KeyEq_, KeyToIndex_>::Index
+            SpecialListenerContainer<Key_,KeyHash_,KeyEq_, KeyToIndex_>::findIndexForKey(Key const& aKey)
+        {
+            m_aMapper.findIndexForKey(aKey);
+        }
+//-----------------------------------------------------------------------------
+    // relation function. Uses KeyToIndex
+        template <class Key_, class KeyHash_, class KeyEq_, class KeyToIndex_>
+        bool SpecialListenerContainer<Key_,KeyHash_,KeyEq_, KeyToIndex_>::findKeysForIndex(Index nIndex, KeyList & aKeys)
+        {
+            aKeys.clear();
+            m_aMapper.findKeysForIndex(nIndex,aKeys);
+            return !aKeys.empty();
+        }
+*///-----------------------------------------------------------------------------
+    // relation function. Uses KeyToIndex
+        template <class Key_, class KeyHash_, class KeyEq_, class KeyToIndex_>
+        void SpecialListenerContainer<Key_,KeyHash_,KeyEq_, KeyToIndex_>::implFillDisposer(DisposeNotifier& aNotifier, Index nIndex)
+        {
+            if (BasicContainerHelper* pMultiContainer = m_aContainers[nIndex].pContainer)
+            {
+                uno::Sequence< UnoType > aTypes(pMultiContainer->getContainedTypes());
+                for (sal_Int32 ix = 0; ix < aTypes.getLength(); ++ix)
+                {
+                    ListenerContainer* pContainer = pMultiContainer->getContainer(aTypes[ix]);
+                    OSL_ENSURE(pContainer,"No container, but the type ?");
+                    if (pContainer)
+                        aNotifier.appendAndClearContainer(pContainer);
+                }
+            }
+            KeyList aKeys;
+            if (m_aMapper.findKeysForIndex(nIndex,aKeys))
+            {
+                for(KeyList::iterator it = aKeys.begin(); it != aKeys.end(); ++it)
+                {
+                    if (ListenerContainer* pContainer = m_aSpecialHelper.aLC.getContainer(*it))
+                    {
+                        aNotifier.appendAndClearContainer(pContainer);
+                    }
+                }
+            }
         }
 //-----------------------------------------------------------------------------
 
