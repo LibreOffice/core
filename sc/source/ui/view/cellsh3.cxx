@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh3.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 10:14:06 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 12:59:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -797,14 +797,38 @@ void ScCellShell::Execute( SfxRequest& rReq )
             break;
 
         case FID_MERGE_ON:
+        case FID_MERGE_OFF:
+        case FID_MERGE_TOGGLE:
+        {
+            if ( !GetViewData()->GetDocument()->GetChangeTrack() )
             {
-                if ( !GetViewData()->GetDocument()->GetChangeTrack() )
+                // test whether to merge or to split
+                bool bMerge = false;
+                switch( nSlot )
                 {
+                    case FID_MERGE_ON:
+                        bMerge = true;
+                    break;
+                    case FID_MERGE_OFF:
+                        bMerge = false;
+                    break;
+                    case FID_MERGE_TOGGLE:
+                    {
+                        SfxPoolItem* pItem = 0;
+                        if( rBindings.QueryState( nSlot, pItem ) >= SFX_ITEM_DEFAULT )
+                            bMerge = !static_cast< SfxBoolItem* >( pItem )->GetValue();
+                    }
+                    break;
+                }
+
+                if( bMerge )
+                {
+                    // merge - check if to move contents of covered cells
                     BOOL bMoveContents = FALSE;
                     BOOL bApi = rReq.IsAPI();
                     const SfxPoolItem* pItem;
                     if ( pReqArgs &&
-                        pReqArgs->GetItemState(FID_MERGE_ON, TRUE, &pItem) == SFX_ITEM_SET )
+                        pReqArgs->GetItemState(nSlot, TRUE, &pItem) == SFX_ITEM_SET )
                     {
                         DBG_ASSERT(pItem && pItem->ISA(SfxBoolItem), "falsches Item");
                         bMoveContents = ((const SfxBoolItem*)pItem)->GetValue();
@@ -813,21 +837,24 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     if (pTabViewShell->MergeCells( bApi, bMoveContents ))
                     {
                         if (!bApi && bMoveContents)             // "ja" im Dialog geklickt
-                        {
-                            rReq.AppendItem( SfxBoolItem( FID_MERGE_ON, bMoveContents ) );
-                        }
+                            rReq.AppendItem( SfxBoolItem( nSlot, bMoveContents ) );
+                        rBindings.Invalidate( nSlot );
                         rReq.Done();
                     }
                 }
+                else
+                {
+                    // split cells
+                    if (pTabViewShell->RemoveMerge())
+                    {
+                        rBindings.Invalidate( nSlot );
+                        rReq.Done();
+                    }
+                }
+                break;
             }
-            break;
-        case FID_MERGE_OFF:
-            if ( !GetViewData()->GetDocument()->GetChangeTrack() )
-            {
-                if (pTabViewShell->RemoveMerge())
-                    rReq.Done();
-            }
-            break;
+        }
+        break;
 
         case SID_AUTOFORMAT:
             {
