@@ -2,9 +2,9 @@
  *
  *  $RCSfile: introspection.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 12:00:42 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:59:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1695,7 +1695,8 @@ size_t TypeProviderAccessCache_Impl::operator()(const hashTypeProviderKey_Impl &
 
     // XOR with full 32 bit values
     sal_Int32 nId32 = 0;
-    for( sal_Int32 i = 0 ; i < nCount32 ; i++ )
+    sal_Int32 i;
+    for( i = 0 ; i < nCount32 ; i++ )
         nId32 ^= *(pBytesAsInt32Array++);
 
     // XOR with remaining byte values
