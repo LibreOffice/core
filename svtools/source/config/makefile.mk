@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.44 $
+#   $Revision: 1.45 $
 #
-#   last change: $Author: kz $ $Date: 2004-01-28 19:06:06 $
+#   last change: $Author: hr $ $Date: 2004-02-03 20:47:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -102,7 +102,6 @@ SLOFILES = \
     $(SLO)$/syslocaleoptions.obj        \
     $(SLO)$/cacheoptions.obj			\
     $(SLO)$/regoptions.obj				\
-    $(SLO)$/accessibilityoptions.obj	\
     $(SLO)$/cmdoptions.obj				\
     $(SLO)$/extendedsecurityoptions.obj \
     $(SLO)$/sourceviewconfig.obj		\
@@ -116,10 +115,15 @@ EXCEPTIONSFILES = \
     $(SLO)$/pathoptions.obj
 
 # --- heavyconfig.lib Files --------------------------------------------------------
-
+DEPOBJFILES=$(LIB1OBJFILES)
 LIB1TARGET= $(SLB)$/$(TARGET1).lib
 
 LIB1OBJFILES=  \
+    $(SLO)$/accessibilityoptions.obj	\
+    $(SLO)$/fontsubstconfig.obj				\
+    $(SLO)$/misccfg.obj				\
+    $(SLO)$/apearcfg.obj				\
+    $(SLO)$/fltrcfg.obj				\
         $(SLO)$/languageoptions.obj     \
         $(SLO)$/ctloptions.obj          \
         $(SLO)$/cjkoptions.obj          \
