@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleOutlineView.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: thb $ $Date: 2002-06-13 18:50:10 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 17:04:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,7 @@ public:
                             const ::com::sun::star::uno::Reference<
                             ::com::sun::star::frame::XController>& rxController,
                             const ::com::sun::star::uno::Reference<
-                            ::drafts::com::sun::star::accessibility::XAccessible>& rxParent);
+                            ::com::sun::star::accessibility::XAccessible>& rxParent);
 
     virtual ~AccessibleOutlineView  (void);
 
@@ -116,7 +116,7 @@ public:
         getAccessibleChildCount (void)
         throw (::com::sun::star::uno::RuntimeException);
 
-    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible> SAL_CALL
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible> SAL_CALL
         getAccessibleChild (long nIndex)
         throw (::com::sun::star::uno::RuntimeException);
 
@@ -125,13 +125,13 @@ public:
     virtual void SAL_CALL
         addEventListener (
             const ::com::sun::star::uno::Reference<
-                ::drafts::com::sun::star::accessibility::XAccessibleEventListener >& xListener)
+                ::com::sun::star::accessibility::XAccessibleEventListener >& xListener)
         throw (::com::sun::star::uno::RuntimeException);
 
     virtual void SAL_CALL
         removeEventListener (
             const ::com::sun::star::uno::Reference<
-                ::drafts::com::sun::star::accessibility::XAccessibleEventListener >& xListener)
+                ::com::sun::star::accessibility::XAccessibleEventListener >& xListener)
         throw (::com::sun::star::uno::RuntimeException);
 
     //=====  XServiceInfo  ====================================================
@@ -158,7 +158,7 @@ public:
 protected:
 
     // overridden, as we hold the listeners ourselves
-    virtual void FireEvent (const ::drafts::com::sun::star::accessibility::AccessibleEventObject& aEvent);
+    virtual void FireEvent (const ::com::sun::star::accessibility::AccessibleEventObject& aEvent);
 
     // overridden to detect focus changes
     virtual void Activated (void);
