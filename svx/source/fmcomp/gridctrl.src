@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridctrl.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-08 17:47:57 $
+ *  last change: $Author: obo $ $Date: 2001-02-09 21:48:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -412,7 +412,7 @@ Menu RID_SVXMNU_COLS
                         Text[ dutch ] = "Patroonveld";
                         Text[ chinese_simplified ] = "ÑÚÂëÇø";
                         Text[ greek ] = "Êáëõììİíï ğåäßï";
-                        Text[ korean ] = "ÆĞÅÏ ÇÊµå";
+                        Text[ korean ] = "¸¶½ºÅ©µÈ ÇÊµå";
                         Text[ arabic ] = "ÍŞá ãõŞäøóÚ";
                         Text[ turkish ] = "Maskelenmiş alan";
                     };
@@ -435,7 +435,7 @@ Menu RID_SVXMNU_COLS
                         Text[ polish ] = "Formatowane pole";
                         Text[ portuguese_brazilian ] = "Formatted Field";
                         Text[ japanese ] = "‘®İ’è‚³‚ê‚½Ì¨°ÙÄŞ";
-                        Text[ korean ] = "¼­½ÄÀÌ µÈ ÇÊµå";
+                        Text[ korean ] = "Æ÷¸ËµÈ ÇÊµå";
                         Text[ chinese_simplified ] = "¸ñÊ½»¯µÄÇøÓò";
                         Text[ chinese_traditional ] = "®æ¦¡¤ÆªºÄæ¦ì";
                         Text[ arabic ] = "ÍŞá ãõäÓøóŞ";
