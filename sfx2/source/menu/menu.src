@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-28 12:18:29 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 19:24:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,7 @@ String STR_MENU_CFGITEM
     TEXT[ greek ] = "Μενού";
     TEXT[ korean ] = "Έή΄Ί";
     TEXT[ turkish ] = "Mφnό";
+    TEXT[ catalan ] = "Menϊ";
 };
 
 Menu MN_CLIPBOARDFUNCS
@@ -122,6 +123,7 @@ Menu MN_CLIPBOARDFUNCS
             Text[ greek ] = "~Αποκοπή";
             Text[ korean ] = "ΐί¶σ ³»±β(~T)";
             Text[ turkish ] = "Kes";
+            Text[ catalan ] = "C~ortar";
         };
         MenuItem
         {
@@ -151,6 +153,7 @@ Menu MN_CLIPBOARDFUNCS
             Text[ greek ] = "Αντι~γραφή";
             Text[ korean ] = "ΊΉ»η(~C)";
             Text[ turkish ] = "Kopyala";
+            Text[ catalan ] = "~Copiar";
         };
         MenuItem
         {
@@ -180,6 +183,7 @@ Menu MN_CLIPBOARDFUNCS
             Text[ greek ] = "Επ~ικόλληση";
             Text[ korean ] = "ΊΩΏ© ³Φ±β(~P)";
             Text[ turkish ] = "Yapύώtύr";
+            Text[ catalan ] = "~Pegar";
         };
     };
 };
