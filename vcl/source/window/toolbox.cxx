@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mt $ $Date: 2001-04-20 07:34:29 $
+ *  last change: $Author: th $ $Date: 2001-07-03 14:02:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2608,7 +2608,7 @@ void ToolBox::ImplDrawItem( USHORT nPos, BOOL bHighlight, BOOL bPaint )
         Font    aOldFont = GetFont();
         Color   aOldTextColor = GetTextColor();
 
-        SetFont( rStyleSettings.GetAppFont() );
+        SetZoomedPointFont( rStyleSettings.GetAppFont() );
         SetLineColor( Color( COL_BLACK ) );
         SetFillColor( rStyleSettings.GetFieldColor() );
         SetTextColor( rStyleSettings.GetFieldTextColor() );
