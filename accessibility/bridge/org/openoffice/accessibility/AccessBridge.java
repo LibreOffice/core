@@ -64,6 +64,7 @@ import com.sun.star.awt.XTopWindow;
 import com.sun.star.awt.XTopWindowListener;
 import com.sun.star.awt.XWindow;
 import com.sun.star.comp.loader.FactoryHelper;
+import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XInitialization;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XSingleServiceFactory;
@@ -176,7 +177,7 @@ public class AccessBridge {
     }
 
     static public class _AccessBridge implements XTopWindowListener,
-        XInitialization {
+        XInitialization, XComponent {
         static final String _serviceName = "com.sun.star.accessibility.AccessBridge";
         XComponentContext xComponentContext;
 
@@ -251,6 +252,28 @@ public class AccessBridge {
         }
 
         public void disposing(com.sun.star.lang.EventObject event) {
+        }
+
+        /*
+        * XComponent
+        */
+
+        public void addEventListener(com.sun.star.lang.XEventListener listener) {
+        }
+
+        public void removeEventListener(com.sun.star.lang.XEventListener listener) {
+        }
+
+        public void dispose() {
+            try {
+                java.awt.Toolkit.getDefaultToolkit().getSystemEventQueue().invokeAndWait(
+                    new Runnable() {
+                        public void run() {
+                        }
+                    } );
+            } catch (java.lang.InterruptedException e) {
+            } catch (java.lang.reflect.InvocationTargetException e) {
+            }
         }
     }
 }
