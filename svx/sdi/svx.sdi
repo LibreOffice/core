@@ -5541,7 +5541,7 @@ SfxUInt32Item InsertGalleryPic SID_GALLERY_FORMATS
 
 //--------------------------------------------------------------------------
 SfxBoolItem InsertGraphic SID_INSERT_GRAPHIC
-(SfxStringItem FileName SID_INSERT_GRAPHIC,SfxStringItem FilterName FN_PARAM_FILTER,SfxBoolItem Link FN_PARAM_1)
+(SfxStringItem FileName SID_INSERT_GRAPHIC,SfxStringItem FilterName FN_PARAM_FILTER,SfxBoolItem AsLink FN_PARAM_1,SfxStringItem Style FN_PARAM_2)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -5772,7 +5772,7 @@ SfxVoidItem InsertSound SID_INSERT_SOUND
 
 //--------------------------------------------------------------------------
 SfxVoidItem InsertSymbol SID_CHARMAP
-(SvxFontItem aFont SID_CHARMAP,SfxStringItem aString SID_ATTR_SPECIALCHAR)
+(SvxFontItem Font SID_CHARMAP, SfxStringItem Symbols SID_ATTR_SPECIALCHAR)
 [
     /* flags: */
     AutoUpdate = FALSE,
