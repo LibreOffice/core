@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmload.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2000-09-28 11:27:18 $
+ *  last change: $Author: as $ $Date: 2000-11-28 14:37:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,17 +62,47 @@
 #ifndef _SFX_FRMLOAD_HXX
 #define _SFX_FRMLOAD_HXX
 
-#ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HDL_
-#include <com/sun/star/lang/XInitialization.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XLOADEVENTLISTENER_HPP_
+#include <com/sun/star/frame/XLoadEventListener.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_FRAME_XFRAMELOADER_HPP_
-#include <com/sun/star/frame/XFrameLoader.hpp>
-#endif
+#ifdef TF_FILTER//MUSTFILTER
+    #ifndef _RTL_USTRING_
+    #include <rtl/ustring>
+    #endif
 
-#ifndef _COM_SUN_STAR_FRAME_XEXTENDEDFILTERDETECTION_HPP_
-#include <com/sun/star/frame/XExtendedFilterDetection.hpp>
-#endif
+    #ifndef __SGI_STL_HASH_MAP
+    #include <stl/hash_map>
+    #endif
+
+    #ifndef __SGI_STL_ITERATOR
+    #include <stl/iterator>
+    #endif
+
+    #ifndef _TOOLS_DEBUG_HXX
+    #include <tools/debug.hxx>
+    #endif
+
+    #ifndef _COM_SUN_STAR_FRAME_XSYNCHRONOUSFRAMELOADER_HPP_
+    #include <com/sun/star/frame/XSynchronousFrameLoader.hpp>
+    #endif
+
+    #ifndef _COM_SUN_STAR_DOCUMENT_XEXTENDEDFILTERDETECTION_HPP_
+    #include <com/sun/star/document/XExtendedFilterDetection.hpp>
+    #endif
+#else
+    #ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HDL_
+    #include <com/sun/star/lang/XInitialization.hpp>
+    #endif
+
+    #ifndef _COM_SUN_STAR_FRAME_XFRAMELOADER_HPP_
+    #include <com/sun/star/frame/XFrameLoader.hpp>
+    #endif
+
+    #ifndef _COM_SUN_STAR_FRAME_XEXTENDEDFILTERDETECTION_HPP_
+    #include <com/sun/star/frame/XExtendedFilterDetection.hpp>
+    #endif
+#endif//MUSTFILTER
 
 #ifndef _COM_SUN_STAR_UNO_EXCEPTION_HPP_
 #include <com/sun/star/uno/Exception.hpp>
@@ -137,6 +167,75 @@ namespace com
 #define SEQUENCE ::com::sun::star::uno::Sequence
 #define RUNTIME_EXCEPTION ::com::sun::star::uno::RuntimeException
 
+#ifdef TF_FILTER//MUSTFILTER
+// Hash code function for calculation of map key.
+struct TStringHashFunction
+{
+    size_t operator()(const ::rtl::OUString& sString) const
+    {
+        return sString.hashCode();
+    }
+};
+
+// Declaration of string hash table for substitution of filter names.
+typedef ::std::hash_map<    ::rtl::OUString                     ,
+                            ::rtl::OUString                     ,
+                            TStringHashFunction                 ,
+                            ::std::equal_to< ::rtl::OUString >  >   TFilterNames;
+
+typedef TFilterNames::const_iterator    TConstConverterIterator;
+
+class SfxFrameLoader : public ::cppu::WeakImplHelper2< ::com::sun::star::frame::XSynchronousFrameLoader, ::com::sun::star::document::XExtendedFilterDetection  >
+{
+    REFERENCE < ::com::sun::star::frame::XFrame > xFrame;
+    REFERENCE < ::com::sun::star::frame::XLoadEventListener > xListener;
+    LoadEnvironment_Impl*   pLoader;
+    SfxFilterMatcher*       pMatcher;
+    String                  aFilterName;
+    SfxMedium*              pMedium;
+    sal_Bool                bLoadDone;
+    sal_Bool                bLoadState;
+    TFilterNames            aConverterOld2New;
+    TFilterNames            aConverterNew2Old;
+
+    DECL_LINK( LoadDone_Impl, void* );
+    void impl_initFilterHashOld2New( TFilterNames& aHash );
+    void impl_initFilterHashNew2Old( TFilterNames& aHash );
+    ::rtl::OUString impl_getNewFilterName( const ::rtl::OUString& sOldName );
+    ::rtl::OUString impl_getOldFilterName( const ::rtl::OUString& sNewName );
+
+public:
+                            SfxFrameLoader( const REFERENCE < ::com::sun::star::lang::XMultiServiceFactory >& xFactory );
+    virtual                 ~SfxFrameLoader();
+
+    void                    SetFilterName( const ::rtl::OUString& rFilterName )
+                            { aFilterName = rFilterName; }
+    String                  GetFilterName() const
+                            { return aFilterName; }
+
+    //----------------------------------------------------------------------------------
+    // XSynchronousFrameLoader
+    //----------------------------------------------------------------------------------
+    virtual sal_Bool SAL_CALL load( const SEQUENCE< ::com::sun::star::beans::PropertyValue >& lDescriptor, const REFERENCE< ::com::sun::star::frame::XFrame >& xFrame ) throw( RUNTIME_EXCEPTION );
+    virtual void SAL_CALL cancel() throw( RUNTIME_EXCEPTION );
+
+    //----------------------------------------------------------------------------------
+    // XExtendedFilterDetect
+    //----------------------------------------------------------------------------------
+    virtual ::rtl::OUString SAL_CALL detect( SEQUENCE< ::com::sun::star::beans::PropertyValue >& lDescriptor ) throw( RUNTIME_EXCEPTION );
+    // Muss noch bleiben, wegen "MISSING ORDINAL NUMBER" aus OFA!
+    virtual ::rtl::OUString SAL_CALL detect( const ::rtl::OUString& sURL, const SEQUENCE< ::com::sun::star::beans::PropertyValue >& aArgumentlist ) throw( RUNTIME_EXCEPTION )
+    {
+        DBG_ERROR( "Obsolete function!\n");
+        return ::rtl::OUString();
+    }
+
+protected:
+    virtual SfxObjectFactory&   GetFactory()=0;
+};
+
+#else//MUSTFILTER
+
 class SfxFrameLoader : public ::cppu::WeakImplHelper3< ::com::sun::star::frame::XFrameLoader, ::com::sun::star::lang::XInitialization, ::com::sun::star::frame::XExtendedFilterDetection  >
 {
     REFERENCE < ::com::sun::star::frame::XFrame > xFrame;
@@ -162,18 +261,21 @@ public:
                                     const ::rtl::OUString& aURL,
                                     const SEQUENCE < ::com::sun::star::beans::PropertyValue >& aArgs,
                                     const REFERENCE < ::com::sun::star::frame::XLoadEventListener >& aListener) throw( RUNTIME_EXCEPTION );
+
     virtual void SAL_CALL   cancel() throw( RUNTIME_EXCEPTION );
 
     // XInitialization
     virtual void SAL_CALL   initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments )
                 throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 
-    // XExtendedFilterDetect
+    // XExtendedFilterDetection
     virtual ::rtl::OUString SAL_CALL detect( const ::rtl::OUString& sURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgumentlist ) throw(::com::sun::star::uno::RuntimeException);
 
 protected:
     virtual SfxObjectFactory&   GetFactory()=0;
 };
+
+#endif//MUSTFILTER
 
 class SfxFrameLoader_Impl : public SfxFrameLoader, public ::com::sun::star::lang::XServiceInfo
 {
