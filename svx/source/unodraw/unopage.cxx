@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-19 09:13:49 $
+ *  last change: $Author: cl $ $Date: 2001-03-30 12:18:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,6 +219,9 @@ void SAL_CALL SvxDrawPage::add( const Reference< drawing::XShape >& xShape )
 
     SvxShape* pShape = SvxShape::getImplementation( xShape );
 
+    if( NULL == pShape )
+        return;
+
     SdrObject *pObj = pShape->GetSdrObject();
 
     if(!pObj)
@@ -231,7 +234,9 @@ void SAL_CALL SvxDrawPage::add( const Reference< drawing::XShape >& xShape )
         pPage->InsertObject( pObj );
     }
     else
-        throw uno::RuntimeException();
+    {
+        return;
+    }
 
     if(pObj == NULL)
         return;
