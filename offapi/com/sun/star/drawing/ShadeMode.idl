@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ShadeMode.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-02 15:12:23 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 19:19:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@
 // DocMerge from xml: enum com::sun::star::drawing::ShadeMode
 /** The <type>ShadeMode</type> determines the quality of displaying the object.
  */
-enum ShadeMode
+published enum ShadeMode
 {
     //-------------------------------------------------------------------------
 
