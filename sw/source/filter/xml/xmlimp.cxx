@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: dvo $ $Date: 2001-05-02 16:26:26 $
+ *  last change: $Author: mtg $ $Date: 2001-05-03 20:08:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,6 +151,9 @@
 
 #ifndef _FORBIDDEN_CHARACTERS_ENUM_HXX
 #include <ForbiddenCharactersEnum.hxx>
+#endif
+#ifndef _XMLOFF_XMLUCONV_HXX
+#include <xmloff/xmluconv.hxx>
 #endif
 
 
@@ -917,6 +920,16 @@ void SwXMLImport::SetConfigurationSettings(const uno::Sequence < PropertyValue >
                         }
                     }
                 }
+            }
+            else if (pValue->Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "PrinterSetup" ) ) )
+            {
+                OUString aString;
+                pValue->Value >>= aString;
+                Sequence < sal_Int8 > aSequence;
+                SvXMLUnitConverter::decodeBase64 ( aSequence, aString );
+                Any aAny;
+                aAny <<= aSequence;
+                xPropSet->setPropertyValue ( pValue->Name, aAny );
             }
             else
                 xPropSet->setPropertyValue ( pValue->Name, pValue->Value);

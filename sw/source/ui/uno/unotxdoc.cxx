@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: os $ $Date: 2001-05-02 12:38:52 $
+ *  last change: $Author: mtg $ $Date: 2001-05-03 20:09:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2067,6 +2067,43 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName,
             }
         }
         break;
+        case WID_DOC_PRINTER_SETUP:
+        {
+            Sequence < sal_Int8 > aSequence;
+            if ( aValue >>= aSequence )
+            {
+                sal_uInt32 nSize = aSequence.getLength();
+                SvMemoryStream aStream;
+                aStream.Write ( aSequence.getArray(), nSize );
+                aStream.Flush();
+                aStream.Seek ( STREAM_SEEK_TO_BEGIN );
+                static sal_uInt16 __READONLY_DATA nRange[] =
+                {
+                    FN_PARAM_ADDPRINTER, FN_PARAM_ADDPRINTER,
+                    SID_HTML_MODE,  SID_HTML_MODE,
+                    SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
+                    SID_PRINTER_CHANGESTODOC, SID_PRINTER_CHANGESTODOC,
+                    0
+                };
+                SwDoc * pDoc = pDocShell->GetDoc();
+                SfxItemSet *pItemSet = new SfxItemSet( pDoc->GetAttrPool(), nRange );
+                SfxPrinter *pPrinter = SfxPrinter::Create ( aStream, pItemSet );
+
+                pDoc->_SetPrt( pPrinter );
+
+                if ( !pPrinter->IsOriginal() )
+                {
+                    pDocShell->UpdateFontList();
+                    SdrModel * pDrawModel = pDoc->GetDrawModel();
+                    if ( pDrawModel )
+                        pDrawModel->SetRefDevice( pPrinter );
+                    pDoc->SetOLEPrtNotifyPending();
+                }
+            }
+            else
+                throw IllegalArgumentException();
+        }
+        break;
         case WID_DOC_IS_KERN_ASIAN_PUNCTUATION:
         {
             sal_Bool bIsKern = *(sal_Bool*)aValue.getValue();
@@ -2390,6 +2427,20 @@ Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
         {
             const SwDBData& rData = pDocShell->GetDoc()->GetDBDesc();
             aAny <<= rData.nCommandType;
+        }
+        break;
+        case WID_DOC_PRINTER_SETUP:
+        {
+            SfxPrinter *pPrinter = pDocShell->GetDoc()->GetPrt ( sal_False );
+            if (pPrinter)
+            {
+                SvMemoryStream aStream;
+                pPrinter->Store( aStream );
+                sal_uInt32 nSize = aStream.GetSize();
+                Sequence < sal_Int8 > aSequence ( nSize );
+                memcpy ( aSequence.getArray(), aStream.GetData(), nSize );
+                aAny <<= aSequence;
+            }
         }
         break;
         default:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: os $ $Date: 2001-05-02 12:36:50 $
+ *  last change: $Author: mtg $ $Date: 2001-05-03 20:05:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1831,7 +1831,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_CURRENT_DATABASE_DATA_SOURCE),  WID_DOC_CURRENT_DATABASE_DATA_SOURCE, &::getCppuType((const OUString*)0),   PROPERTY_NONE,   0},
                     { SW_PROP_NAME(UNO_NAME_CURRENT_DATABASE_COMMAND),      WID_DOC_CURRENT_DATABASE_COMMAND, &::getCppuType((const OUString*)0),   PROPERTY_NONE,   0},
                     { SW_PROP_NAME(UNO_NAME_CURRENT_DATABASE_COMMAND_TYPE), WID_DOC_CURRENT_DATABASE_COMMAND_TYPE, &::getCppuType((const sal_Int16*)0), PROPERTY_NONE,   0},
-
+                    { SW_PROP_NAME(UNO_NAME_PRINTER_SETUP),                 WID_DOC_PRINTER_SETUP, &::getCppuType((const uno::Sequence < sal_Int8 > *)0),   PROPERTY_NONE,   0},
                     {0,0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aDocMap_Impl;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: dvo $ $Date: 2001-04-20 15:20:51 $
+ *  last change: $Author: mtg $ $Date: 2001-05-03 20:08:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -562,7 +562,7 @@ void SwXMLExport::GetViewSettings(com::sun::star::uno::Sequence<com::sun::star::
 }
 #undef NUM_EXPORTED_VIEW_SETTINGS
 
-#define NUM_EXPORTED_CONFIGURATION_SETTINGS 14
+#define NUM_EXPORTED_CONFIGURATION_SETTINGS 15
 void SwXMLExport::GetConfigurationSettings(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps)
 {
     Reference < XPropertySet > xPropSet = Reference<XPropertySet>(GetModel(), UNO_QUERY);
@@ -571,19 +571,20 @@ void SwXMLExport::GetConfigurationSettings(com::sun::star::uno::Sequence<com::su
         aProps.realloc ( NUM_EXPORTED_CONFIGURATION_SETTINGS );
         PropertyValue *pValue = aProps.getArray();
         sal_Int32 nIndex = 0;
-        OUString sLinkUpdateMode ( RTL_CONSTASCII_USTRINGPARAM ( "LinkUpdateMode" ) );
-        OUString sFieldAutoUpdate ( RTL_CONSTASCII_USTRINGPARAM ( "FieldAutoUpdate" ) );
-        OUString sChartAutoUpdate ( RTL_CONSTASCII_USTRINGPARAM ( "ChartAutoUpdate" ) );
-        OUString sAddParaTableSpacing ( RTL_CONSTASCII_USTRINGPARAM ( "AddParaTableSpacing" ) );
-        OUString sAddParaTableSpacingAtStart ( RTL_CONSTASCII_USTRINGPARAM ( "AddParaTableSpacingAtStart" ) );
-        OUString sPrinterName ( RTL_CONSTASCII_USTRINGPARAM ( "PrinterName" ) );
-        OUString sIsKernAsianPunctuation ( RTL_CONSTASCII_USTRINGPARAM ( "IsKernAsianPunctuation" ) );
-        OUString sCharacterCompressionType ( RTL_CONSTASCII_USTRINGPARAM ( "CharacterCompressionType" ) );
-        OUString sApplyUserData ( RTL_CONSTASCII_USTRINGPARAM ( "ApplyUserData" ) );
-        OUString sSaveGlobalDocumentLinks ( RTL_CONSTASCII_USTRINGPARAM ( "SaveGlobalDocumentLinks" ) );
-        OUString sCurrentDatabaseDataSource ( RTL_CONSTASCII_USTRINGPARAM ( "CurrentDatabaseDataSource" ) );
-        OUString sCurrentDatabaseCommand ( RTL_CONSTASCII_USTRINGPARAM ( "CurrentDatabaseCommand" ) );
-        OUString sCurrentDatabaseCommandType ( RTL_CONSTASCII_USTRINGPARAM ( "CurrentDatabaseCommandType" ) );
+        const OUString sLinkUpdateMode ( RTL_CONSTASCII_USTRINGPARAM ( "LinkUpdateMode" ) );
+        const OUString sFieldAutoUpdate ( RTL_CONSTASCII_USTRINGPARAM ( "FieldAutoUpdate" ) );
+        const OUString sChartAutoUpdate ( RTL_CONSTASCII_USTRINGPARAM ( "ChartAutoUpdate" ) );
+        const OUString sAddParaTableSpacing ( RTL_CONSTASCII_USTRINGPARAM ( "AddParaTableSpacing" ) );
+        const OUString sAddParaTableSpacingAtStart ( RTL_CONSTASCII_USTRINGPARAM ( "AddParaTableSpacingAtStart" ) );
+        const OUString sPrinterName ( RTL_CONSTASCII_USTRINGPARAM ( "PrinterName" ) );
+        const OUString sPrinterSetup ( RTL_CONSTASCII_USTRINGPARAM ( "PrinterSetup" ) );
+        const OUString sIsKernAsianPunctuation ( RTL_CONSTASCII_USTRINGPARAM ( "IsKernAsianPunctuation" ) );
+        const OUString sCharacterCompressionType ( RTL_CONSTASCII_USTRINGPARAM ( "CharacterCompressionType" ) );
+        const OUString sApplyUserData ( RTL_CONSTASCII_USTRINGPARAM ( "ApplyUserData" ) );
+        const OUString sSaveGlobalDocumentLinks ( RTL_CONSTASCII_USTRINGPARAM ( "SaveGlobalDocumentLinks" ) );
+        const OUString sCurrentDatabaseDataSource ( RTL_CONSTASCII_USTRINGPARAM ( "CurrentDatabaseDataSource" ) );
+        const OUString sCurrentDatabaseCommand ( RTL_CONSTASCII_USTRINGPARAM ( "CurrentDatabaseCommand" ) );
+        const OUString sCurrentDatabaseCommandType ( RTL_CONSTASCII_USTRINGPARAM ( "CurrentDatabaseCommandType" ) );
 
         pValue[nIndex].Name = sLinkUpdateMode;
         pValue[nIndex++].Value = xPropSet->getPropertyValue ( sLinkUpdateMode );
@@ -602,6 +603,14 @@ void SwXMLExport::GetConfigurationSettings(com::sun::star::uno::Sequence<com::su
 
         pValue[nIndex].Name = sPrinterName;
         pValue[nIndex++].Value = xPropSet->getPropertyValue ( sPrinterName );
+
+        pValue[nIndex].Name = sPrinterSetup;
+        Sequence < sal_Int8 > aSequence;
+        xPropSet->getPropertyValue ( sPrinterSetup ) >>= aSequence;
+        OUStringBuffer aBuffer;
+        SvXMLUnitConverter::encodeBase64 ( aBuffer, aSequence );
+        OUString aString = aBuffer.makeStringAndClear();
+        pValue[nIndex++].Value <<= aString;
 
         pValue[nIndex].Name = sIsKernAsianPunctuation;
         pValue[nIndex++].Value = xPropSet->getPropertyValue ( sIsKernAsianPunctuation );
