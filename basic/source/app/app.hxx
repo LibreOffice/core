@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: gh $ $Date: 2002-05-29 07:27:13 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 11:45:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,6 +140,7 @@ virtual BOOL Close();               // Schliessen
     AutoTimer aLineNum;             // Zeigt die Zeilennummer an
 virtual void Resize();
 virtual void Move();
+virtual void GetFocus();
     void LoadLibrary();
     void SaveLibrary();
     BOOL bIsAutoRun;
