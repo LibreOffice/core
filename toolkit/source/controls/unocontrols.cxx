@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrols.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:03:22 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 10:52:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,6 +148,31 @@
 using namespace ::com::sun::star;
 using namespace ::toolkit;
 
+
+//  ----------------------------------------------------
+//  helper
+//  ----------------------------------------------------
+
+static void lcl_knitImageComponents( const uno::Reference< awt::XControlModel >& _rxModel,
+                                const uno::Reference< awt::XWindowPeer >& _rxPeer,
+                                bool _bAdd )
+{
+    uno::Reference< awt::XImageProducer > xProducer( _rxModel, uno::UNO_QUERY );
+    if ( xProducer.is() )
+    {
+        uno::Reference< awt::XImageConsumer > xConsumer( _rxPeer, uno::UNO_QUERY );
+        if ( xConsumer.is() )
+        {
+            if ( _bAdd )
+            {
+                xProducer->addConsumer( xConsumer );
+                xProducer->startProduction();
+            }
+            else
+                xProducer->removeConsumer( xConsumer );
+        }
+    }
+}
 
 //  ----------------------------------------------------
 //  class UnoControlEditModel
@@ -686,14 +711,34 @@ void UnoButtonControl::dispose() throw(uno::RuntimeException)
     UnoControl::dispose();
 }
 
+sal_Bool SAL_CALL UnoButtonControl::setModel(const uno::Reference< awt::XControlModel >& _rModel) throw ( uno::RuntimeException )
+{
+    // remove the peer as image consumer from the model
+    lcl_knitImageComponents( getModel(), getPeer(), false );
+
+    sal_Bool bReturn = UnoControlBase::setModel( _rModel );
+
+    // add the peer as image consumer to the model
+    lcl_knitImageComponents( getModel(), getPeer(), true );
+
+    return bReturn;
+}
+
 void UnoButtonControl::createPeer( const uno::Reference< awt::XToolkit > & rxToolkit, const uno::Reference< awt::XWindowPeer >  & rParentPeer ) throw(uno::RuntimeException)
 {
-    UnoControl::createPeer( rxToolkit, rParentPeer );
+    uno::Reference< awt::XImageProducer > xProducer( getModel(), uno::UNO_QUERY );
 
+    // remove the peer as image consumer from the model
+    lcl_knitImageComponents( getModel(), getPeer(), false );
+
+    UnoControl::createPeer( rxToolkit, rParentPeer );
     uno::Reference < awt::XButton > xButton( getPeer(), uno::UNO_QUERY );
     xButton->setActionCommand( maActionCommand );
     if ( maActionListeners.getLength() )
         xButton->addActionListener( &maActionListeners );
+
+    // add the peer as image consumer to the model
+    lcl_knitImageComponents( getModel(), getPeer(), true );
 }
 
 void UnoButtonControl::ImplSetPeerProperty( const ::rtl::OUString& rPropName, const uno::Any& rVal )
@@ -706,9 +751,7 @@ void UnoButtonControl::ImplSetPeerProperty( const ::rtl::OUString& rPropName, co
 
         if ( xImgProd.is() && xImgCons.is() )
         {
-            xImgProd->addConsumer( xImgCons );
             xImgProd->startProduction();
-            xImgProd->removeConsumer( xImgCons );
         }
     }
     else
@@ -924,13 +967,35 @@ void UnoImageControlControl::ImplSetPeerProperty( const ::rtl::OUString& rPropNa
 
         if ( xImgProd.is() && xImgCons.is() )
         {
-            xImgProd->addConsumer( xImgCons );
             xImgProd->startProduction();
-            xImgProd->removeConsumer( xImgCons );
         }
     }
     else
         UnoControl::ImplSetPeerProperty( rPropName, rVal );
+}
+
+sal_Bool SAL_CALL UnoImageControlControl::setModel(const uno::Reference< awt::XControlModel >& _rModel) throw ( uno::RuntimeException )
+{
+    // remove the peer as image consumer from the model
+    lcl_knitImageComponents( getModel(), getPeer(), false );
+
+    sal_Bool bReturn = UnoControlBase::setModel( _rModel );
+
+    // add the peer as image consumer to the model
+    lcl_knitImageComponents( getModel(), getPeer(), true );
+
+    return bReturn;
+}
+
+void UnoImageControlControl::createPeer( const uno::Reference< awt::XToolkit > & rxToolkit, const uno::Reference< awt::XWindowPeer >  & rParentPeer ) throw(uno::RuntimeException)
+{
+    // remove the peer as image consumer from the model
+    lcl_knitImageComponents( getModel(), getPeer(), false );
+
+    UnoControlBase::createPeer( rxToolkit, rParentPeer );
+
+    // add the peer as image consumer to the model
+    lcl_knitImageComponents( getModel(), getPeer(), true );
 }
 
 //  ----------------------------------------------------
