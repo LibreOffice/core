@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabopdlg.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 07:07:51 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 08:45:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,8 @@
  //
  // $Workfile:   tabopdlg.src  $
  //   $Author: kz $
- //     $Date: 2001-05-10 07:07:51 $
- // $Revision: 1.7 $
+ //     $Date: 2001-05-17 08:45:23 $
+ // $Revision: 1.8 $
  //  $Logfile:   T:/sc/source/ui/src/tabopdlg.srv  $
  //----------------------------------------------------------------------------
 
@@ -146,7 +146,7 @@ ModelessDialog RID_SCDLG_TABOP
         QuickHelpText [ portuguese ] = "Afastar" ;
     QuickHelpText[ russian ] = "”ÏÂÌ¸¯ËÚ¸";
         QuickHelpText[ polish ] = "Pomniejsz";
-        QuickHelpText[ japanese ] = "èkè¨";
+        QuickHelpText[ japanese ] = "èkè¨!";
         QuickHelpText[ chinese_simplified ] = "Àı–°/∑≈¥Û";
         QuickHelpText[ chinese_traditional ] = "¡Y§p";
         QuickHelpText[ arabic ] = " ’€Ì—";
@@ -211,7 +211,7 @@ ModelessDialog RID_SCDLG_TABOP
         QuickHelpText [ portuguese ] = "Afastar" ;
     QuickHelpText[ russian ] = "”ÏÂÌ¸¯ËÚ¸";
         QuickHelpText[ polish ] = "Pomniejsz";
-        QuickHelpText[ japanese ] = "èkè¨";
+        QuickHelpText[ japanese ] = "èkè¨!";
         QuickHelpText[ chinese_simplified ] = "Àı–°";
         QuickHelpText[ chinese_traditional ] = "¡Y§p";
         QuickHelpText[ arabic ] = " ’€Ì—";
@@ -276,7 +276,7 @@ ModelessDialog RID_SCDLG_TABOP
         QuickHelpText [ portuguese ] = "Afastar" ;
     QuickHelpText[ russian ] = "”ÏÂÌ¸¯ËÚ¸";
         QuickHelpText[ polish ] = "Pomniejsz";
-        QuickHelpText[ japanese ] = "èkè¨";
+        QuickHelpText[ japanese ] = "èkè¨!";
         QuickHelpText[ chinese_simplified ] = "Àı–°";
         QuickHelpText[ chinese_traditional ] = "¡Y§p";
         QuickHelpText[ arabic ] = " ’€Ì—";
@@ -296,7 +296,7 @@ ModelessDialog RID_SCDLG_TABOP
         Text [ ENGLISH ] = "Variables" ;
         Text [ norwegian ] = "Variabler" ;
         Text [ italian ] = "Dati" ;
-        Text [ portuguese_brazilian ] = "Vari·veis" ;
+        Text [ portuguese_brazilian ] = "Vari?veis" ;
         Text [ portuguese ] = "Definir vari·veis" ;
         Text [ finnish ] = "Asetukset" ;
         Text [ danish ] = "Forudindstillinger" ;
@@ -307,7 +307,7 @@ ModelessDialog RID_SCDLG_TABOP
         Text [ english_us ] = "Settings" ;
         Text[ chinese_simplified ] = "‘§÷√";
         Text[ russian ] = "Õ‡ÒÚÓÈÍË";
-        Text[ polish ] = "Ustawienia domyúlne";
+        Text[ polish ] = "Ustawienia domy?lne";
         Text[ japanese ] = "ä˘íËíl";
         Text[ chinese_traditional ] = "πw∏m";
         Text[ arabic ] = "≈⁄œ«œ«  «› —«÷Ì…";
