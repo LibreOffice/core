@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbfindex.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:15:57 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 15:13:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,6 +189,8 @@ ModalDialog DLG_DBASE_INDEXES
         Text[ hebrew ] = "‮טבלה‬";
         Text[ hindi ] = "~सारणी";
         Text[ slovak ] = "~Tabuľka";
+        Text[ hungarian ] = "~Tábla";
+        Text[ slovenian ] = "~Tabela";
     };
     ComboBox CB_TABLES
     {
@@ -230,6 +232,8 @@ ModalDialog DLG_DBASE_INDEXES
         Text[ hebrew ] = "‮השמה‬";
         Text[ hindi ] = "निर्दिष्ट करना";
         Text[ slovak ] = "Priradenie";
+        Text[ hungarian ] = "Hozzárendelés";
+        Text[ slovenian ] = "Dodelitev";
     };
     FixedText FT_TABLEINDEXES
     {
@@ -246,7 +250,7 @@ ModalDialog DLG_DBASE_INDEXES
         Text[ spanish ] = "�ndices de ta~bla";
         Text[ finnish ] = "T~auluindeksit:";
         Text[ italian ] = "Indici t~abella";
-        Text[ danish ] = "T~abelindeks";
+        Text[ danish ] = "~Tabelindeks";
         Text[ swedish ] = "T~abellindex";
         Text[ polish ] = "Indeksy t~abeli";
         Text[ portuguese_brazilian ] = "~�ndices de tabelas";
@@ -262,6 +266,8 @@ ModalDialog DLG_DBASE_INDEXES
         Text[ hebrew ] = "‮מפתחות מטבלה‬";
         Text[ hindi ] = "~सारणी अनुक्रमणी";
         Text[ slovak ] = "Indexy t~abuľky";
+        Text[ hungarian ] = "Tá~blaindexek";
+        Text[ slovenian ] = "Kazala t~abel";
     };
     ListBox LB_TABLEINDEXES
     {
@@ -286,7 +292,7 @@ ModalDialog DLG_DBASE_INDEXES
         Text[ spanish ] = "�ndices lib~res";
         Text[ finnish ] = "~Vapaat indeksit:";
         Text[ italian ] = "Indici li~beri";
-        Text[ danish ] = "~Frit indeks";
+        Text[ danish ] = "~Frig�r indeks";
         Text[ swedish ] = "~Fria index";
         Text[ polish ] = "~Wolne indeksy";
         Text[ portuguese_brazilian ] = "�ndices ~livres";
@@ -302,6 +308,8 @@ ModalDialog DLG_DBASE_INDEXES
         Text[ hebrew ] = "‮מפתחות חופשיים‬";
         Text[ hindi ] = "~मुक्त अनुक्रमणी";
         Text[ slovak ] = "~Voľné indexy";
+        Text[ hungarian ] = "~Szabad indexek";
+        Text[ slovenian ] = "P~rosta kazala";
     };
     ListBox LB_FREEINDEXES
     {
@@ -407,11 +415,23 @@ ModalDialog DLG_DBASE_INDEXES
     Text[ hebrew ] = "Indizes";
     Text[ hindi ] = "अनुक्रमणी";
     Text[ slovak ] = "Indexy";
+    Text[ hungarian ] = "Indexek";
+    Text[ slovenian ] = "Kazala";
 };
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.30.72.1  2003/12/16 11:05:08  hr
+ *  #111934#: join CWS ooo111fix1
+ *
+ *  Revision 1.30.34.1  2003/11/24 13:10:08  ihi
+ *  OOo 1.1.1 merge
+ *
+ *  Revision 1.30  2003/07/17 12:15:57  hr
+ *  INTEGRATION: CWS mergerc3 (1.29.6); FILE MERGED
+ *  2003/07/16 17:11:08 ihi 1.29.6.1: rc-3 merge all languages
+ *
  *  Revision 1.29.6.1  2003/07/16 17:11:08  ihi
  *  rc-3 merge all languages
  *
@@ -538,6 +558,7 @@ ModalDialog DLG_DBASE_INDEXES
  *
  *  Revision 1.0 26.09.00 17:03:30  fs
  ************************************************************************/
+
 
 
 
