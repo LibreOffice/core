@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futext.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: dl $ $Date: 2001-10-05 06:51:11 $
+ *  last change: $Author: aw $ $Date: 2001-11-20 11:25:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1166,7 +1166,22 @@ BOOL FuText::RestoreDefaultText()
                         pPage->SetObjText( pTextObj, pInternalOutl, ePresObjKind, aString );
 
                         if( pOldPara )
-                            pTextObj->SetVerticalWriting( bVertical );
+                        {
+                            //pTextObj->SetVerticalWriting( bVertical );
+                            //
+                            // #94826# Here, only the vertical flag for the
+                            // OutlinerParaObjects needs to be changed. The
+                            // AutoGrowWidth/Height items still exist in the
+                            // not changed object.
+                            if(pTextObj
+                                && pTextObj->GetOutlinerParaObject()
+                                && pTextObj->GetOutlinerParaObject()->IsVertical() != bVertical)
+                            {
+                                Rectangle aObjectRect = pTextObj->GetSnapRect();
+                                pTextObj->GetOutlinerParaObject()->SetVertical(bVertical);
+                                pTextObj->SetSnapRect(aObjectRect);
+                            }
+                        }
 
                         SdrOutliner* pOutliner = pView->GetTextEditOutliner();
                         pTextObj->SetTextEditOutliner( NULL );  // to make stylesheet settings work
