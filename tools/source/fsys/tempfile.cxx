@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tempfile.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hro $ $Date: 2001-07-27 08:08:46 $
+ *  last change: $Author: hro $ $Date: 2002-07-08 09:01:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,9 @@ String GetSystemTempDir_Impl()
 {
     char sBuf[_MAX_PATH];
     const char *pDir = TempDirImpl(sBuf);
-    ::rtl::OUString aTmp = ::rtl::OUString::createFromAscii( pDir );
+
+    ::rtl::OString aTmpA( pDir );
+    ::rtl::OUString aTmp = ::rtl::OStringToOUString( aTmpA, osl_getThreadTextEncoding() );
     rtl::OUString aRet;
     FileBase::getFileURLFromSystemPath( aTmp, aRet );
     String aName = aRet;
