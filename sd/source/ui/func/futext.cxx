@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futext.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: aw $ $Date: 2001-08-24 15:46:48 $
+ *  last change: $Author: dl $ $Date: 2001-10-05 06:51:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,52 +265,48 @@ void FuText::DoExecute ()
     pView->SetEditMode(SDREDITMODE_EDIT);
 
     SdrViewEvent aVEvt;
+    MouseEvent aMEvt(pWindow->GetPointerPosPixel());
 
-    if (nSlotId == SID_TEXTEDIT || pViewShell->GetFrameView()->IsQuickEdit())
+    if (nSlotId == SID_TEXTEDIT)
     {
-        MouseEvent aMEvt(pWindow->GetPointerPosPixel());
+        // Try to select an object
+        SdrPageView* pPV = pView->GetPageViewPvNum(0);
+        SdrViewEvent aVEvt;
+        SdrHitKind eHit = pView->PickAnything(aMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
+        pView->MarkObj(aVEvt.pRootObj, pPV);
 
-        if (nSlotId == SID_TEXTEDIT)
+        if (aVEvt.pObj && aVEvt.pObj->ISA(SdrTextObj))
         {
-            // Try to select an object
-            SdrPageView* pPV = pView->GetPageViewPvNum(0);
-            SdrViewEvent aVEvt;
-            SdrHitKind eHit = pView->PickAnything(aMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
-            pView->MarkObj(aVEvt.pRootObj, pPV);
-
-            if (aVEvt.pObj && aVEvt.pObj->ISA(SdrTextObj))
-            {
-                pTextObj = (SdrTextObj*) aVEvt.pObj;
-            }
+            pTextObj = (SdrTextObj*) aVEvt.pObj;
         }
-        else if (pView->HasMarkedObj())
-        {
-            const SdrMarkList& rMarkList = pView->GetMarkList();
-
-            if (rMarkList.GetMarkCount() == 1)
-            {
-                SdrObject* pObj = rMarkList.GetMark(0)->GetObj();
-
-                if (pObj->ISA(SdrTextObj))
-                {
-                    pTextObj = (SdrTextObj*) pObj;
-                }
-            }
-        }
-
-        BOOL bQuickDrag = TRUE;
-
-        const SfxItemSet* pArgs = rRequest.GetArgs();
-
-        if (pArgs &&
-            (UINT16) ((SfxUInt16Item&) pArgs->Get(SID_TEXTEDIT)).GetValue() == 2)
-        {
-            // Selection by doubleclick -> don't allow QuickDrag
-            bQuickDrag = FALSE;
-        }
-
-        SetInEditMode(aMEvt, bQuickDrag);
     }
+    else if (pView->HasMarkedObj())
+    {
+        const SdrMarkList& rMarkList = pView->GetMarkList();
+
+        if (rMarkList.GetMarkCount() == 1)
+        {
+            SdrObject* pObj = rMarkList.GetMark(0)->GetObj();
+
+            if (pObj->ISA(SdrTextObj))
+            {
+                pTextObj = (SdrTextObj*) pObj;
+            }
+        }
+    }
+
+    BOOL bQuickDrag = TRUE;
+
+    const SfxItemSet* pArgs = rRequest.GetArgs();
+
+    if (pArgs &&
+        (UINT16) ((SfxUInt16Item&) pArgs->Get(SID_TEXTEDIT)).GetValue() == 2)
+    {
+        // Selection by doubleclick -> don't allow QuickDrag
+        bQuickDrag = FALSE;
+    }
+
+    SetInEditMode(aMEvt, bQuickDrag);
 }
 
 /*************************************************************************
