@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lngopt.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tl $ $Date: 2000-11-22 15:56:01 $
+ *  last change: $Author: tl $ $Date: 2000-11-28 03:12:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,7 @@ using namespace com::sun::star::registry;
 
 static const char cLocaleDelim = '-';
 
-static INT16 CfgLocaleStrToLanguage( const OUString &rCfgLocaleStr )
+INT16 CfgLocaleStrToLanguage( const OUString &rCfgLocaleStr )
 {
     INT16 nRes = LANGUAGE_NONE;
     if (rCfgLocaleStr.getLength())
@@ -135,7 +135,7 @@ static INT16 CfgLocaleStrToLanguage( const OUString &rCfgLocaleStr )
 }
 
 
-static const OUString LanguageToCfgLocaleStr( INT16 nLanguage )
+const OUString LanguageToCfgLocaleStr( INT16 nLanguage )
 {
     static const OUString aLocaleDelim( cLocaleDelim );
     OUString aRes;
@@ -153,7 +153,7 @@ static const OUString LanguageToCfgLocaleStr( INT16 nLanguage )
 }
 
 
-static INT16 CfgAnyToLanguage( const Any &rVal )
+INT16 CfgAnyToLanguage( const Any &rVal )
 {
     OUString aTmp;
     rVal >>= aTmp;
@@ -164,77 +164,7 @@ static INT16 CfgAnyToLanguage( const Any &rVal )
 ///////////////////////////////////////////////////////////////////////////
 
 
-static void GetSeqLangSvcList( const Any &rVal )
-{
-    Reference< XNameAccess > xNameAcc;
-    rVal >>= xNameAcc;
-    if (xNameAcc.is())
-    {
-        const Sequence< OUString > aNames( xNameAcc->getElementNames() );
-        INT32 nLen = aNames.getLength();
-        if (nLen)
-        {
-            const OUString *pName = aNames.getConstArray();
-            for (INT32 i = 0;  i < nLen;  ++i)
-            {
-                Any aTmp( xNameAcc->getByName( pName[i] ) );
-                if (aTmp.hasValue())
-                {
-                    Sequence< OUString > aSvcNames;
-                    aTmp >>= aSvcNames;
-
-                    INT32 nSvcs = aSvcNames.getLength();
-                    if (nSvcs)
-                    {
-                        const OUString *pSvcName = aSvcNames.getConstArray();
-                        for (INT32 j = 0;  j < nSvcs;  ++j)
-                        {
-                            OUString aImplName( pSvcName[i] );
-
-                            // TL TODO: services needs to be set when new
-                            // configuration dialogue is available
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
-
-static void GetSeqLangSvc( const Any &rVal )
-{
-    Reference< XNameAccess > xNameAcc;
-    rVal >>= xNameAcc;
-    if (xNameAcc.is())
-    {
-        const Sequence< OUString > aNames( xNameAcc->getElementNames() );
-        INT32 nLen = aNames.getLength();
-        if (nLen)
-        {
-            const OUString *pName = aNames.getConstArray();
-            for (INT32 i = 0;  i < nLen;  ++i)
-            {
-                Any aTmp( xNameAcc->getByName( pName[i] ) );
-                if (aTmp.hasValue())
-                {
-                    OUString aImplName;
-                    aTmp >>= aImplName;
-
-                    // TL TODO: service needs to be set when new
-                    // configuration dialogue is available
-                }
-            }
-        }
-    }
-}
-
-
-///////////////////////////////////////////////////////////////////////////
-
-
-LinguOptions::LinguOptionsData::LinguOptionsData() :
-    ConfigItem( A2OU("Office.Linguistic") )
+LinguOptionsData::LinguOptionsData()
 {
     // get initial language to use (in case that it is not set later)
     nDefaultLanguage = ::GetSystemLanguage();
@@ -271,104 +201,138 @@ LinguOptions::LinguOptionsData::LinguOptionsData() :
     bIsStdSpell             =
     bIsStdThes              =
     bIsStdHyph              = FALSE;
+    bIsModified             = FALSE;
+
+    aSaveTimer.SetTimeout( 10000 );
+    aSaveTimer.SetTimeoutHdl( LINK( this, LinguOptionsData, TimeOut ));
 
     LoadConfig();
 }
 
 
-Sequence< OUString > LinguOptions::LinguOptionsData::GetPropertyNames()
+Sequence< OUString > GetPropertyNames( INT16 nCfgItem )
 {
-    static const char * aPropNames[] =
+    static const char * aPropNames1[] =
     {
-        "General/DefaultLocale",                        //  0
-        "General/DictionaryList/ActiveDictionaries",    //  1
-        "General/DictionaryList/IsUseDictionaryList",   //  2
-        "General/IsIgnoreControlCharacters",            //  3
-        "General/IsGermanPreReform",                    //  4
-        "SpellChecking/IsSpellUpperCase",               //  5
-        "SpellChecking/IsSpellWithDigits",              //  6
-        "SpellChecking/IsSpellCapitalization",          //  7
-        "SpellChecking/IsSpellAuto",                    //  8
-        "SpellChecking/IsSpellSpecial",                 //  9
-        "SpellChecking/IsSpellInAllLocales",            // 10
-        "SpellChecking/IsHideMarkings",                 // 11
-        "SpellChecking/IsReverseDirection",             // 12
-        "Hyphenation/MinLeading",                       // 13
-        "Hyphenation/MinTrailing",                      // 14
-        "Hyphenation/MinWordLength",                    // 15
-        "Hyphenation/IsHyphSpecial",                    // 16
-        "Hyphenation/IsHyphAuto",                       // 17
-        "ExternalLinguistic/OtherLinguIndex",           // 18
-        "ExternalLinguistic/IsUseStandardSpellChecker", // 19
-        "ExternalLinguistic/IsUseStandardHyphenator",   // 20
-        "ExternalLinguistic/IsUseStandardThesaurus",    // 21
-        "ServiceManager/SpellCheckerList",              // 22
-        "ServiceManager/ThesaurusList",                 // 23
-        "ServiceManager/HyphenatorList",                // 24
-        "General/DefaultLocale_CJK",                    // 25
-        "General/DefaultLocale_CTL"                     // 26
+        "DefaultLocale",                        //  0
+        "DictionaryList/ActiveDictionaries",    //  1
+        "DictionaryList/IsUseDictionaryList",   //  2
+        "IsIgnoreControlCharacters",            //  3
+        "IsGermanPreReform",                    //  4
+        "DefaultLocale_CJK",                    //  5
+        "DefaultLocale_CTL",                        //  6
+        0
     };
 
-    INT32 nCount =  sizeof(aPropNames) / sizeof(aPropNames[0]);
-    Sequence< OUString > aNames( nCount );
-    OUString *pNames = aNames.getArray();
-    for(INT32 i = 0;  i < nCount;  ++i)
+    static const char * aPropNames2[] =
     {
-        pNames[i] = A2OU( aPropNames[i] );
+        "IsSpellUpperCase",             //  5
+        "IsSpellWithDigits",                //  6
+        "IsSpellCapitalization",            //  7
+        "IsSpellAuto",                  //  8
+        "IsSpellSpecial",                   //  9
+        "IsSpellInAllLocales",          // 10
+        "IsHideMarkings",                   // 11
+        "IsReverseDirection",               // 12
+        0
+    };
+
+    static const char * aPropNames3[] =
+    {
+        "MinLeading",                       // 13
+        "MinTrailing",                      // 14
+        "MinWordLength",                    // 15
+        "IsHyphSpecial",                    // 16
+        "IsHyphAuto",                       // 17
+        0
+    };
+
+    static const char * aPropNames4[] =
+    {
+        "OtherLinguIndex",           // 18
+        "IsUseStandardSpellChecker",    // 19
+        "IsUseStandardHyphenator",  // 20
+        "IsUseStandardThesaurus",   // 21
+        0
+    };
+
+    static const char** aPropNames[ 4 ] = {
+            aPropNames1, aPropNames2, aPropNames3, aPropNames4 };
+
+    const char** ppPropName = aPropNames[ nCfgItem ];
+
+    Sequence< OUString > aNames( 10 );
+    OUString *pNames = aNames.getArray();
+    for( INT32 i = 0; *ppPropName;  ++i, ++ppPropName )
+    {
+        pNames[i] = A2OU( *ppPropName );
     }
+    aNames.realloc( i );
     return aNames;
 }
 
+static const char* aRootNames[ 4 ] = {
+                "Office.Linguistic/General",
+                "Office.Linguistic/SpellChecking",
+                "Office.Linguistic/Hyphenation",
+                "Office.Linguistic/ExternalLinguistic" };
 
-BOOL LinguOptions::LinguOptionsData::LoadConfig()
+
+
+BOOL LinguOptionsData::LoadConfig()
 {
     BOOL bRes = FALSE;
 
-    Sequence< OUString > aNames = GetPropertyNames();
-    INT32 nProps = aNames.getLength();
-    const Sequence< Any > aValues = GetProperties( aNames );
-    EnableNotification( aNames );
-
-    if (nProps  &&  aValues.getLength() == nProps)
+    for( INT16 nCfgItem = 0; nCfgItem < 4; ++nCfgItem )
     {
-        const Any *pValue = aValues.getConstArray();
-        for (INT32 i = 0;  i < nProps;  ++i)
+        Sequence< OUString > aNames = GetPropertyNames( nCfgItem );
+        INT32 nProps = aNames.getLength();
+
+        LinguOptConfig aCfg( String::CreateFromAscii( aRootNames[ nCfgItem ]));
+
+        const Sequence< Any > aValues = aCfg.GetProperties( aNames );
+
+        if (nProps  &&  aValues.getLength() == nProps)
         {
-            const Any &rVal = pValue[i];
-            if (rVal.hasValue())
+            const Any *pValue = aValues.getConstArray();
+            INT16 nCfgOff = 10 * nCfgItem;
+            for (INT32 i = 0;  i < nProps;  ++i)
             {
-                switch (i)
-                {
-                    case  0: nDefaultLanguage = CfgAnyToLanguage( rVal );   break;
-                    case  1: rVal >>= aActiveDics;  break;
-                    case  2: rVal >>= bIsUseDictionaryList; break;
-                    case  3: rVal >>= bIsIgnoreControlCharacters;   break;
-                    case  4: rVal >>= bIsGermanPreReform;   break;
-                    case  5: rVal >>= bIsSpellUpperCase;    break;
-                    case  6: rVal >>= bIsSpellWithDigits;   break;
-                    case  7: rVal >>= bIsSpellCapitalization;   break;
-                    case  8: rVal >>= bIsSpellAuto; break;
-                    case  9: rVal >>= bIsSpellSpecial;  break;
-                    case 10: rVal >>= bIsSpellInAllLanguages;   break;
-                    case 11: rVal >>= bIsSpellHideMarkings; break;
-                    case 12: rVal >>= bIsSpellReverse;  break;
-                    case 13: rVal >>= nHyphMinLeading;  break;
-                    case 14: rVal >>= nHyphMinTrailing; break;
-                    case 15: rVal >>= nHyphMinWordLength;   break;
-                    case 16: rVal >>= bIsHyphSpecial;   break;
-                    case 17: rVal >>= bIsHyphAuto;  break;
-                    case 18: rVal >>= nOtherIndex;  break;
-                    case 19: rVal >>= bIsStdSpell;  break;
-                    case 20: rVal >>= bIsStdHyph;   break;
-                    case 21: rVal >>= bIsStdThes;   break;
-                    case 22: GetSeqLangSvcList( rVal ); break;
-                    case 23: GetSeqLangSvcList( rVal ); break;
-                    case 24: GetSeqLangSvc( rVal ); break;
-                    case 25: nDefaultLanguage_CJK = CfgAnyToLanguage( rVal );   break;
-                    case 26: nDefaultLanguage_CTL = CfgAnyToLanguage( rVal );   break;
-                    default:
-                        DBG_ERROR( "unexpected case" );
-                }
+                const Any &rVal = pValue[i];
+                if( rVal.hasValue() )
+                    switch ( i + nCfgOff )
+                    {
+                        case  0: nDefaultLanguage = CfgAnyToLanguage( rVal );   break;
+                        case  1: rVal >>= aActiveDics;  break;
+                        case  2: rVal >>= bIsUseDictionaryList; break;
+                        case  3: rVal >>= bIsIgnoreControlCharacters;   break;
+                        case  4: rVal >>= bIsGermanPreReform;   break;
+                        case  5: nDefaultLanguage_CJK = CfgAnyToLanguage( rVal );   break;
+                        case  6: nDefaultLanguage_CTL = CfgAnyToLanguage( rVal );   break;
+
+                        case 10: rVal >>= bIsSpellUpperCase;    break;
+                        case 11: rVal >>= bIsSpellWithDigits;   break;
+                        case 12: rVal >>= bIsSpellCapitalization;   break;
+                        case 13: rVal >>= bIsSpellAuto; break;
+                        case 14: rVal >>= bIsSpellSpecial;  break;
+                        case 15: rVal >>= bIsSpellInAllLanguages;   break;
+                        case 16: rVal >>= bIsSpellHideMarkings; break;
+                        case 17: rVal >>= bIsSpellReverse;  break;
+
+                        case 20: rVal >>= nHyphMinLeading;  break;
+                        case 21: rVal >>= nHyphMinTrailing; break;
+                        case 22: rVal >>= nHyphMinWordLength;   break;
+                        case 23: rVal >>= bIsHyphSpecial;   break;
+                        case 24: rVal >>= bIsHyphAuto;  break;
+
+                        case 30: rVal >>= nOtherIndex;  break;
+                        case 31: rVal >>= bIsStdSpell;  break;
+                        case 32: rVal >>= bIsStdHyph;   break;
+                        case 33: rVal >>= bIsStdThes;   break;
+
+                        default:
+                            DBG_ERROR( "unexpected case" );
+                    }
             }
         }
 
@@ -380,72 +344,85 @@ BOOL LinguOptions::LinguOptionsData::LoadConfig()
 }
 
 
-BOOL LinguOptions::LinguOptionsData::SaveConfig()
+BOOL LinguOptionsData::SaveConfig()
 {
-    const Sequence< OUString > aNames = GetPropertyNames();
-    INT32 nProps = aNames.getLength();
-    Sequence< Any > aValues( aNames.getLength() );
-    Any *pValue = aValues.getArray();
+    if( !bIsModified )
+        return TRUE;
 
+    BOOL bRet = FALSE;
     const Type &rBOOL     = ::getBooleanCppuType();
     const Type &rINT16    = ::getCppuType( (INT16 *) NULL );
 
-    for (INT32 i = 0;  i < nProps;  ++i)
+    for( INT16 nCfgItem = 0; nCfgItem < 4; ++nCfgItem )
     {
-        Any &rVal = pValue[i];
-        switch (i)
+        const Sequence< OUString > aNames = GetPropertyNames( nCfgItem );
+        INT32 nProps = aNames.getLength();
+        Sequence< Any > aValues( aNames.getLength() );
+        Any *pValue = aValues.getArray();
+
+         switch( nCfgItem )
         {
-            case  0:
+        case 0:
             {
                 OUString aTmp( LanguageToCfgLocaleStr( nDefaultLanguage ) );
-                rVal = makeAny( aTmp );
-                break;
+                *pValue++ = makeAny( aTmp );
+                *pValue++ = makeAny( aActiveDics );
+                pValue->setValue( &bIsUseDictionaryList, rBOOL );
+                ++pValue;
+                pValue->setValue( &bIsIgnoreControlCharacters, rBOOL );
+                ++pValue;
+                pValue->setValue( &bIsGermanPreReform, rBOOL );
+                ++pValue;
+
+                aTmp = LanguageToCfgLocaleStr( nDefaultLanguage_CJK );
+                *pValue++ = makeAny( aTmp );
+
+                aTmp = LanguageToCfgLocaleStr( nDefaultLanguage_CTL );
+                *pValue++ = makeAny( aTmp );
             }
-            case  1: rVal = makeAny( aActiveDics ); break;
-            case  2: rVal.setValue( &bIsUseDictionaryList, rBOOL ); break;
-            case  3: rVal.setValue( &bIsIgnoreControlCharacters, rBOOL );   break;
-            case  4: rVal.setValue( &bIsGermanPreReform, rBOOL );   break;
-            case  5: rVal.setValue( &bIsSpellUpperCase, rBOOL );    break;
-            case  6: rVal.setValue( &bIsSpellWithDigits, rBOOL );   break;
-            case  7: rVal.setValue( &bIsSpellCapitalization, rBOOL );   break;
-            case  8: rVal.setValue( &bIsSpellAuto, rBOOL ); break;
-            case  9: rVal.setValue( &bIsSpellSpecial, rBOOL );  break;
-            case 10: rVal.setValue( &bIsSpellInAllLanguages, rBOOL );   break;
-            case 11: rVal.setValue( &bIsSpellHideMarkings, rBOOL ); break;
-            case 12: rVal.setValue( &bIsSpellReverse, rBOOL );  break;
-            case 13: rVal.setValue( &nHyphMinLeading, rINT16 ); break;
-            case 14: rVal.setValue( &nHyphMinTrailing, rINT16 );    break;
-            case 15: rVal.setValue( &nHyphMinWordLength, rINT16 );  break;
-            case 16: rVal.setValue( &bIsHyphSpecial, rBOOL );   break;
-            case 17: rVal.setValue( &bIsHyphAuto, rBOOL );  break;
-            case 18: rVal.setValue( &nOtherIndex, rINT16 ); break;
-            case 19: rVal.setValue( &bIsStdSpell, rBOOL );  break;
-            case 20: rVal.setValue( &bIsStdHyph, rBOOL );   break;
-            case 21: rVal.setValue( &bIsStdThes, rBOOL );   break;
-            case 22: break;
-            case 23: break;
-            case 24: break;
-            case 25:
-            {
-                OUString aTmp( LanguageToCfgLocaleStr( nDefaultLanguage_CJK ) );
-                rVal = makeAny( aTmp );
-                break;
-            }
-            case 26:
-            {
-                OUString aTmp( LanguageToCfgLocaleStr( nDefaultLanguage_CTL ) );
-                rVal = makeAny( aTmp );
-                break;
-            }
-            default:
-                DBG_ERROR( "unexpected case" );
+            break;
+        case 1:
+            pValue->setValue( &bIsSpellUpperCase, rBOOL );      ++pValue;
+            pValue->setValue( &bIsSpellWithDigits, rBOOL );     ++pValue;
+            pValue->setValue( &bIsSpellCapitalization, rBOOL ); ++pValue;
+            pValue->setValue( &bIsSpellAuto, rBOOL );           ++pValue;
+            pValue->setValue( &bIsSpellSpecial, rBOOL );        ++pValue;
+            pValue->setValue( &bIsSpellInAllLanguages, rBOOL ); ++pValue;
+            pValue->setValue( &bIsSpellHideMarkings, rBOOL );   ++pValue;
+            pValue->setValue( &bIsSpellReverse, rBOOL );        ++pValue;
+            break;
+        case 2:
+            pValue->setValue( &nHyphMinLeading, rINT16 );   ++pValue;
+            pValue->setValue( &nHyphMinTrailing, rINT16 );  ++pValue;
+            pValue->setValue( &nHyphMinWordLength, rINT16 );++pValue;
+            pValue->setValue( &bIsHyphSpecial, rBOOL );     ++pValue;
+            pValue->setValue( &bIsHyphAuto, rBOOL );        ++pValue;
+            break;
+        case 3:
+            pValue->setValue( &nOtherIndex, rINT16 );       ++pValue;
+            pValue->setValue( &bIsStdSpell, rBOOL );        ++pValue;
+            pValue->setValue( &bIsStdHyph, rBOOL );         ++pValue;
+            pValue->setValue( &bIsStdThes, rBOOL );         ++pValue;
+            break;
         }
+
+        LinguOptConfig aCfg( String::CreateFromAscii( aRootNames[ nCfgItem ]));
+        bRet |= aCfg.PutProperties( aNames, aValues );
     }
 
-    return PutProperties( aNames, aValues );
+    if( bRet )
+        bIsModified = FALSE;
+
+    return bRet;
 }
 
+IMPL_LINK( LinguOptionsData, TimeOut, Timer*, p )
+{
+    SaveConfig();
+    return 0;
+}
 
+/*
 void LinguOptions::LinguOptionsData::Notify( const Sequence< OUString >& rPropertyNames )
 {
     DBG_ERROR("properties have been changed");
@@ -456,12 +433,12 @@ void LinguOptions::LinguOptionsData::Commit()
 {
     SaveConfig();
 }
-
+*/
 
 ///////////////////////////////////////////////////////////////////////////
 
 // static member intialization
-LinguOptions::LinguOptionsData *    LinguOptions::pData = NULL;
+LinguOptionsData *  LinguOptions::pData = NULL;
 
 
 LinguOptions::LinguOptions()
@@ -590,7 +567,7 @@ BOOL LinguOptions::SetValue( Any &rOld, const Any &rVal, INT32 nWID )
     }
 
     if (bRes)
-        pData->SetCfgItemModified();
+        pData->SetModified();
 
     return bRes;
 }
@@ -735,7 +712,7 @@ void LinguOptions::SetCfgActiveDictionaries(
         }
         pData->aActiveDics.realloc( nLen );
 
-        pData->SetCfgItemModified();
+        pData->SetModified();
     }
 }
 

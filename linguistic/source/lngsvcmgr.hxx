@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lngsvcmgr.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-11-17 12:37:40 $
+ *  last change: $Author: tl $ $Date: 2000-11-28 03:13:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,8 @@
 #include <com/sun/star/linguistic2/XLinguServiceManager.hpp>
 #endif
 
+#include <vcl/timer.hxx>
+
 #include "misc.hxx"
 #include "defs.hxx"
 
@@ -133,7 +135,10 @@ class LngSvcMgr :
     SvcInfoArray *                                      pHyphSvcs;
     SvcInfoArray *                                      pThesSvcs;
 
+    Timer aSaveTimer;
+
     BOOL bDisposing;
+    BOOL bIsModified;
 
     // disallow copy-constructor and assignment-operator for now
     LngSvcMgr(const LngSvcMgr &);
@@ -150,6 +155,8 @@ class LngSvcMgr :
     void    SetCfgServiceLists( SpellCheckerDispatcher &rSpellDsp );
     void    SetCfgServiceLists( HyphenatorDispatcher &rHyphDsp );
     void    SetCfgServiceLists( ThesaurusDispatcher &rThesDsp );
+
+    DECL_LINK( TimeOut, Timer* );
 
 public:
     LngSvcMgr();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lngopt.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tl $ $Date: 2000-11-22 15:56:01 $
+ *  last change: $Author: tl $ $Date: 2000-11-28 03:12:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,7 @@
 #include <tools/solar.h>
 #endif
 
+#include <vcl/timer.hxx>
 #include <svtools/itemprop.hxx>
 
 #include "misc.hxx"
@@ -115,73 +116,93 @@ namespace com { namespace sun { namespace star {
 }}};
 
 ///////////////////////////////////////////////////////////////////////////
+
+INT16 CfgLocaleStrToLanguage( const rtl::OUString &rCfgLocaleStr );
+const rtl::OUString LanguageToCfgLocaleStr( INT16 nLanguage );
+INT16 CfgAnyToLanguage( const com::sun::star::uno::Any &rVal );
+
+///////////////////////////////////////////////////////////////////////////
 // LinguOptions
 // This class represents all Linguistik relevant options.
 //
 
+class LinguOptConfig : public utl::ConfigItem
+{
+public:
+    LinguOptConfig( const String& rPath ) :
+        ConfigItem( rPath )
+    {}
+    ConfigItem::GetProperties;
+    ConfigItem::PutProperties;
+};
+
+
+
+struct LinguOptionsData
+{
+    Timer aSaveTimer;
+    ::vos::ORefCount    aRefCount;  // number of objects of this class
+
+    ::com::sun::star::uno::Sequence< rtl::OUString >    aActiveDics;
+
+    // Hyphenator service specific options
+    INT16   nHyphMinLeading,
+            nHyphMinTrailing,
+            nHyphMinWordLength;
+
+    // OtherLingu service specific option
+    INT16   nOtherIndex;                    // index of foreign Linguistik to use
+
+    // misc options (non-service specific)
+    INT16   nDefaultLanguage;
+    INT16   nDefaultLanguage_CJK;
+    INT16   nDefaultLanguage_CTL;
+
+    // spelling options (non-service specific)
+    BOOL    bIsSpellSpecial;
+    BOOL    bIsSpellInAllLanguages;
+    BOOL    bIsSpellAuto;
+    BOOL    bIsSpellHideMarkings;
+    BOOL    bIsSpellReverse;
+
+    // hyphenation options (non-service specific)
+    BOOL    bIsHyphSpecial;
+    BOOL    bIsHyphAuto;
+
+    // common to SpellChecker, Hyphenator and Thesaurus service
+    BOOL    bIsGermanPreReform;
+    BOOL    bIsUseDictionaryList;
+    BOOL    bIsIgnoreControlCharacters;
+
+    // SpellChecker service specific options
+    BOOL    bIsSpellWithDigits,
+            bIsSpellUpperCase,
+            bIsSpellCapitalization;
+
+    // OtherLingu service specific options
+    BOOL    bIsStdSpell;
+    BOOL    bIsStdHyph; // TRUE if foreign Hyphenator should not be used
+    BOOL    bIsStdThes; // TRUE if foreign SpellChecker should not be used
+
+    BOOL    bIsModified;    // TRUE if data is changed
+
+    LinguOptionsData();
+
+    BOOL    LoadConfig();
+    BOOL    SaveConfig();
+
+    DECL_LINK( TimeOut, Timer* );
+/*      virtual void        Notify( const com::sun::star::uno::Sequence<
+                                    rtl::OUString >& rPropertyNames );
+    virtual void        Commit();
+*/
+    inline void         SetModified()
+        { bIsModified = TRUE; aSaveTimer.Start(); }
+};
+
+
 class LinguOptions
 {
-    class LinguOptionsData : public utl::ConfigItem
-    {
-        com::sun::star::uno::Sequence< rtl::OUString > GetPropertyNames();
-
-    public:
-        ::vos::ORefCount    aRefCount;  // number of objects of this class
-
-        ::com::sun::star::uno::Sequence< rtl::OUString >    aActiveDics;
-
-        // Hyphenator service specific options
-        INT16   nHyphMinLeading,
-                nHyphMinTrailing,
-                nHyphMinWordLength;
-
-        // OtherLingu service specific option
-        INT16   nOtherIndex;                    // index of foreign Linguistik to use
-
-        // misc options (non-service specific)
-        INT16   nDefaultLanguage;
-        INT16   nDefaultLanguage_CJK;
-        INT16   nDefaultLanguage_CTL;
-
-        // spelling options (non-service specific)
-        BOOL    bIsSpellSpecial;
-        BOOL    bIsSpellInAllLanguages;
-        BOOL    bIsSpellAuto;
-        BOOL    bIsSpellHideMarkings;
-        BOOL    bIsSpellReverse;
-
-        // hyphenation options (non-service specific)
-        BOOL    bIsHyphSpecial;
-        BOOL    bIsHyphAuto;
-
-        // common to SpellChecker, Hyphenator and Thesaurus service
-        BOOL    bIsGermanPreReform;
-        BOOL    bIsUseDictionaryList;
-        BOOL    bIsIgnoreControlCharacters;
-
-        // SpellChecker service specific options
-        BOOL    bIsSpellWithDigits,
-                bIsSpellUpperCase,
-                bIsSpellCapitalization;
-
-        // OtherLingu service specific options
-        BOOL    bIsStdSpell;
-        BOOL    bIsStdHyph; // TRUE if foreign Hyphenator should not be used
-        BOOL    bIsStdThes; // TRUE if foreign SpellChecker should not be used
-
-        LinguOptionsData();
-
-        BOOL    LoadConfig();
-        BOOL    SaveConfig();
-
-        // ConfigItem
-        virtual void        Notify( const com::sun::star::uno::Sequence<
-                                        rtl::OUString >& rPropertyNames );
-        virtual void        Commit();
-
-        inline void         SetCfgItemModified()    { SetModified(); }
-    };
-
     static LinguOptionsData        *pData;
 
 
