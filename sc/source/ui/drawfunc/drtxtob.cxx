@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drtxtob.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: cl $ $Date: 2002-04-25 10:49:01 $
+ *  last change: $Author: nn $ $Date: 2002-08-19 14:39:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -684,19 +684,19 @@ void __EXPORT ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
                 aNewAttr.Put( (const SvxCrossedOutItem&)aEditAttr.Get( EE_CHAR_STRIKEOUT ) );
                 break;
 
-            case SID_ATTR_PARA_ADJUST_LEFT:
+            case SID_ALIGNLEFT:
                 aNewAttr.Put( SvxAdjustItem( SVX_ADJUST_LEFT, EE_PARA_JUST ) );
                 break;
 
-            case SID_ATTR_PARA_ADJUST_CENTER:
+            case SID_ALIGNCENTERHOR:
                 aNewAttr.Put( SvxAdjustItem( SVX_ADJUST_CENTER, EE_PARA_JUST ) );
                 break;
 
-            case SID_ATTR_PARA_ADJUST_RIGHT:
+            case SID_ALIGNRIGHT:
                 aNewAttr.Put( SvxAdjustItem( SVX_ADJUST_RIGHT, EE_PARA_JUST ) );
                 break;
 
-            case SID_ATTR_PARA_ADJUST_BLOCK:
+            case SID_ALIGNBLOCK:
                 aNewAttr.Put( SvxAdjustItem( SVX_ADJUST_BLOCK, EE_PARA_JUST ) );
                 break;
 
@@ -845,16 +845,16 @@ void __EXPORT ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
     switch( eAdj )
     {
         case SVX_ADJUST_LEFT:
-            rDestSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_LEFT, TRUE ) );
+            rDestSet.Put( SfxBoolItem( SID_ALIGNLEFT, TRUE ) );
             break;
         case SVX_ADJUST_CENTER:
-            rDestSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_CENTER, TRUE ) );
+            rDestSet.Put( SfxBoolItem( SID_ALIGNCENTERHOR, TRUE ) );
             break;
         case SVX_ADJUST_RIGHT:
-            rDestSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_RIGHT, TRUE ) );
+            rDestSet.Put( SfxBoolItem( SID_ALIGNRIGHT, TRUE ) );
             break;
         case SVX_ADJUST_BLOCK:
-            rDestSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_BLOCK, TRUE ) );
+            rDestSet.Put( SfxBoolItem( SID_ALIGNBLOCK, TRUE ) );
             break;
     }
 

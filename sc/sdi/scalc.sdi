@@ -297,8 +297,8 @@ SfxVoidItem AlignBlock SID_ALIGNBLOCK
     Synchron;
 
     /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
     StatusBarConfig = FALSE,
     ToolBoxConfig = TRUE,
     GroupId = GID_FORMAT;
@@ -323,7 +323,7 @@ SfxVoidItem AlignBottom SID_ALIGNBOTTOM
 
     /* config: */
     AccelConfig = TRUE,
-    MenuConfig = FALSE,
+    MenuConfig = TRUE,
     StatusBarConfig = FALSE,
     ToolBoxConfig = TRUE,
     GroupId = GID_FORMAT;
@@ -350,8 +350,8 @@ SfxVoidItem AlignHorizontalCenter SID_ALIGNCENTERHOR
     SlotType = SfxStringItem
 
     /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
     StatusBarConfig = FALSE,
     ToolBoxConfig = TRUE,
     GroupId = GID_FORMAT;
@@ -400,8 +400,8 @@ SfxVoidItem AlignRight SID_ALIGNRIGHT
     Synchron;
 
     /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
     StatusBarConfig = FALSE,
     ToolBoxConfig = TRUE,
     GroupId = GID_FORMAT;
@@ -425,8 +425,8 @@ SfxVoidItem AlignTop SID_ALIGNTOP
     Synchron;
 
     /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
     StatusBarConfig = FALSE,
     ToolBoxConfig = TRUE,
     GroupId = GID_FORMAT;
@@ -450,8 +450,8 @@ SfxVoidItem AlignVCenter SID_ALIGNCENTERVER
     Synchron;
 
     /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
     StatusBarConfig = FALSE,
     ToolBoxConfig = TRUE,
     GroupId = GID_FORMAT;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objdraw.src,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: obo $ $Date: 2002-08-05 20:28:45 $
+ *  last change: $Author: nn $ $Date: 2002-08-19 14:39:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,22 +247,104 @@
             {\
                 MenuItem\
                 {\
-                    ITEM_FORMAT_ATTR_PARA_ADJUST_LEFT\
+                    Identifier = SID_ALIGNLEFT ; \
+                    HelpID = SID_ATTR_PARA_ADJUST_LEFT ; \
                     RadioCheck = TRUE ; \
+                    Text = "~Links" ; \
+                    Text [ English ] = "~Left" ; \
+                    Text [ norwegian ] = "~Left" ; \
+                    Text [ italian ] = "Sinistra" ; \
+                    Text [ portuguese_brazilian ] = "~Esquerda" ; \
+                    Text [ portuguese ] = "~Esquerda" ; \
+                    Text [ finnish ] = "~Vasen:" ; \
+                    Text [ danish ] = "~Venstre" ; \
+                    Text [ french ] = "¿ ~gauche" ; \
+                    Text [ swedish ] = "~V‰nster" ; \
+                    Text [ dutch ] = "~Links" ; \
+                    Text [ spanish ] = "~Izquierda" ; \
+                    Text [ english_us ] = "~Left" ;\
+                    Text[ chinese_simplified ] = "Â∑¶(~L)"; \
+                    Text[ russian ] = "—ÎÂ‚‡";  \
+                    Text[ polish ] = "Do l~ewej";   \
+                    Text[ japanese ] = "Â∑¶ÊèÉ„Åà(~L)"; \
+                    Text[ chinese_traditional ] = "Â∑¶(~L)";    \
+                    Text[ arabic ] = "Ì”«—";    \
+                    Text[ dutch ] = "~Links";   \
+                    Text[ chinese_simplified ] = "Â∑¶(~L)"; \
+                    Text[ greek ] = "¡~ÒÈÛÙÂÒ‹";    \
+                    Text[ korean ] = "ÏôºÏ™Ω(~L)";  \
+                    Text[ turkish ] = "S~ola";  \
+                    Text[ language_user1 ] = " ";   \
+                    Text[ catalan ] = "~Esquerra";  \
+                    Text[ thai ] = "~‡∏ã‡πâ‡∏≤‡∏¢"; \
                 };\
                 MenuItem\
                 {\
-                    ITEM_FORMAT_ATTR_PARA_ADJUST_RIGHT\
+                    Identifier = SID_ALIGNRIGHT ; \
+                    HelpID = SID_ATTR_PARA_ADJUST_RIGHT ; \
                     RadioCheck = TRUE ; \
+                    Text = "~Rechts" ; \
+                    Text [ English ] = "~Right" ; \
+                    Text [ norwegian ] = "~Right" ; \
+                    Text [ italian ] = "Destra" ; \
+                    Text [ portuguese_brazilian ] = "~Direita" ; \
+                    Text [ portuguese ] = "~Direita" ; \
+                    Text [ finnish ] = "~Oikea" ; \
+                    Text [ danish ] = "H~¯jre" ; \
+                    Text [ french ] = "¿ ~droite" ; \
+                    Text [ swedish ] = "Hˆge~r" ; \
+                    Text [ dutch ] = "~Rechts" ; \
+                    Text [ spanish ] = "Derecha" ; \
+                    Text [ english_us ] = "~Right" ;\
+                    Text[ chinese_simplified ] = "Âè≥(~R)"; \
+                    Text[ russian ] = "—Ô‡‚‡"; \
+                    Text[ polish ] = "Do prawej";   \
+                    Text[ japanese ] = "Âè≥ÊèÉ„Åà(~R)"; \
+                    Text[ chinese_traditional ] = "Âè≥(~R)";    \
+                    Text[ arabic ] = "Ì„Ì‰";    \
+                    Text[ dutch ] = "~Rechts";  \
+                    Text[ chinese_simplified ] = "Âè≥(~R)"; \
+                    Text[ greek ] = "ƒÂ~ÓÈ‹";   \
+                    Text[ korean ] = "Ïò§Î•∏Ï™Ω(~R)";   \
+                    Text[ turkish ] = "S~aa";  \
+                    Text[ catalan ] = "~Dreta"; \
+                    Text[ thai ] = "~‡∏Ç‡∏ß‡∏≤"; \
                 };\
                 MenuItem\
                 {\
-                    ITEM_FORMAT_ATTR_PARA_ADJUST_CENTER\
+                    Identifier = SID_ALIGNCENTERHOR ; \
+                    HelpID = SID_ATTR_PARA_ADJUST_CENTER ; \
                     RadioCheck = TRUE ; \
+                    Text = "~Zentriert" ; \
+                    Text [ English ] = "~Centered" ; \
+                    Text [ norwegian ] = "~Centered" ; \
+                    Text [ italian ] = "~Centrato" ; \
+                    Text [ portuguese_brazilian ] = "~Centralizado" ; \
+                    Text [ portuguese ] = "~Centrado" ; \
+                    Text [ finnish ] = "~Keskitetty" ; \
+                    Text [ danish ] = "~Centreret" ; \
+                    Text [ french ] = "~CentrÈ" ; \
+                    Text [ swedish ] = "~Centrerat" ; \
+                    Text [ dutch ] = "~Gecentreerd" ; \
+                    Text [ spanish ] = "~Centrado" ; \
+                    Text [ english_us ] = "~Centered" ;\
+                    Text[ chinese_simplified ] = "Â±Ö‰∏≠(~C)";  \
+                    Text[ russian ] = "œÓ ˆÂÌÚÛ";  \
+                    Text[ polish ] = "~Do úrodka";  \
+                    Text[ japanese ] = "‰∏≠Â§ÆÊèÉ„Åà(~C)";  \
+                    Text[ chinese_traditional ] = "ÁΩÆ‰∏≠(~C)"; \
+                    Text[ arabic ] = " Ê”Ìÿ";   \
+                    Text[ dutch ] = "~Gecentreerd"; \
+                    Text[ chinese_simplified ] = "Â±Ö‰∏≠(~C)";  \
+                    Text[ greek ] = " ÂÌÙÒ·ÒÈ~ÛÏ›Ì·";   \
+                    Text[ korean ] = "Í∞ÄÏö¥Îç∞(~C)";   \
+                    Text[ turkish ] = "Ortala"; \
+                    Text[ catalan ] = "~Centrat";   \
+                    Text[ thai ] = "~‡∏ï‡∏£‡∏á‡∏Å‡∏•‡∏≤‡∏á";\
                 };\
                 MenuItem\
                 {\
-                    Identifier = SID_ATTR_PARA_ADJUST_BLOCK ; \
+                    Identifier = SID_ALIGNBLOCK ; \
                     HelpID = SID_ATTR_PARA_ADJUST_BLOCK ; \
                     RadioCheck = TRUE ; \
                     Text = "~Blocksatz" ; \
@@ -1143,28 +1225,28 @@ ToolBox RID_TEXT_TOOLBOX
          //---------------------------------------------
         ToolBoxItem
         {
-            Identifier = SID_ATTR_PARA_ADJUST_LEFT ;
+            Identifier = SID_ALIGNLEFT ;
             HelpId = SID_ATTR_PARA_ADJUST_LEFT ;
             RadioCheck = TRUE ;
             AutoCheck = TRUE ;
         };
         ToolBoxItem
         {
-            Identifier = SID_ATTR_PARA_ADJUST_CENTER ;
+            Identifier = SID_ALIGNCENTERHOR ;
             HelpId = SID_ATTR_PARA_ADJUST_CENTER ;
             RadioCheck = TRUE ;
             AutoCheck = TRUE ;
         };
         ToolBoxItem
         {
-            Identifier = SID_ATTR_PARA_ADJUST_RIGHT ;
+            Identifier = SID_ALIGNRIGHT ;
             HelpId = SID_ATTR_PARA_ADJUST_RIGHT ;
             RadioCheck = TRUE ;
             AutoCheck = TRUE ;
         };
         ToolBoxItem
         {
-            Identifier = SID_ATTR_PARA_ADJUST_BLOCK ;
+            Identifier = SID_ALIGNBLOCK ;
             HelpId = SID_ATTR_PARA_ADJUST_BLOCK ;
             RadioCheck = TRUE ;
             AutoCheck = TRUE ;

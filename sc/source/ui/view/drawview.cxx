@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawview.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: sab $ $Date: 2002-06-13 12:18:00 $
+ *  last change: $Author: nn $ $Date: 2002-08-19 14:39:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -311,10 +311,10 @@ void ScDrawView::InvalidateDrawTextAttrs()
     rBindings.Invalidate( SID_ULINE_VAL_DOUBLE );
     rBindings.Invalidate( SID_ULINE_VAL_DOTTED );
     rBindings.Invalidate( SID_ATTR_CHAR_COLOR );
-    rBindings.Invalidate( SID_ATTR_PARA_ADJUST_LEFT );
-    rBindings.Invalidate( SID_ATTR_PARA_ADJUST_CENTER );
-    rBindings.Invalidate( SID_ATTR_PARA_ADJUST_RIGHT );
-    rBindings.Invalidate( SID_ATTR_PARA_ADJUST_BLOCK );
+    rBindings.Invalidate( SID_ALIGNLEFT );
+    rBindings.Invalidate( SID_ALIGNCENTERHOR );
+    rBindings.Invalidate( SID_ALIGNRIGHT );
+    rBindings.Invalidate( SID_ALIGNBLOCK );
     rBindings.Invalidate( SID_ATTR_PARA_LINESPACE_10 );
     rBindings.Invalidate( SID_ATTR_PARA_LINESPACE_15 );
     rBindings.Invalidate( SID_ATTR_PARA_LINESPACE_20 );

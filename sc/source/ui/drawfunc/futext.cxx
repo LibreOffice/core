@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futext.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: aw $ $Date: 2002-07-18 09:57:13 $
+ *  last change: $Author: nn $ $Date: 2002-08-19 14:39:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,10 +106,10 @@ void lcl_InvalidateAttribs( SfxBindings& rBindings )
     rBindings.Invalidate( SID_ATTR_CHAR_COLOR );
     rBindings.Invalidate( SID_ATTR_CHAR_FONT );
     rBindings.Invalidate( SID_ATTR_CHAR_FONTHEIGHT );
-    rBindings.Invalidate( SID_ATTR_PARA_ADJUST_LEFT );
-    rBindings.Invalidate( SID_ATTR_PARA_ADJUST_CENTER );
-    rBindings.Invalidate( SID_ATTR_PARA_ADJUST_RIGHT );
-    rBindings.Invalidate( SID_ATTR_PARA_ADJUST_BLOCK );
+    rBindings.Invalidate( SID_ALIGNLEFT );
+    rBindings.Invalidate( SID_ALIGNCENTERHOR );
+    rBindings.Invalidate( SID_ALIGNRIGHT );
+    rBindings.Invalidate( SID_ALIGNBLOCK );
     rBindings.Invalidate( SID_ATTR_PARA_LINESPACE_10 );
     rBindings.Invalidate( SID_ATTR_PARA_LINESPACE_15 );
     rBindings.Invalidate( SID_ATTR_PARA_LINESPACE_20 );
