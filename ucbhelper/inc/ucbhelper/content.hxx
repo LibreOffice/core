@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kso $ $Date: 2002-04-09 11:49:27 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 12:33:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,9 @@
 #endif
 #ifndef _COM_SUN_STAR_UCB_COMMANDABORTEDEXCEPTION_HPP_
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_IO_XSTREAM_HPP_
+#include <com/sun/star/io/XStream.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
 #include <com/sun/star/uno/Reference.hxx>
@@ -781,6 +784,19 @@ public:
       */
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
     openStream()
+        throw( ::com::sun::star::ucb::CommandAbortedException,
+               ::com::sun::star::uno::RuntimeException,
+               ::com::sun::star::uno::Exception );
+    /**
+      * This methods gives read/write access to the content stream of a content (i.e
+      * the content of a file located at the local file system).
+      * Internally it executes the command "open" at the content.
+      *
+      * @return an implementation of the interface XStream, which can
+      *         be used to read/write the content's data.
+      */
+    ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >
+    openWriteableStream()
         throw( ::com::sun::star::ucb::CommandAbortedException,
                ::com::sun::star::uno::RuntimeException,
                ::com::sun::star::uno::Exception );
