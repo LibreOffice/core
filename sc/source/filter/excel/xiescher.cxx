@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xiescher.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:21:59 $
+ *  last change: $Author: obo $ $Date: 2003-10-21 08:48:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -430,8 +430,8 @@ void XclImpEscherNote::Apply( ScfProgressBar& rProgress )
 
 // ----------------------------------------------------------------------------
 
-XclImpCtrlLinkHelper::XclImpCtrlLinkHelper( ScDocument& rDoc ) :
-    mrDoc( rDoc )
+XclImpCtrlLinkHelper::XclImpCtrlLinkHelper( XclCtrlBindMode eBindMode ) :
+    meBindMode( eBindMode )
 {
 }
 
@@ -461,43 +461,6 @@ void XclImpCtrlLinkHelper::ReadSrcRangeFormula( XclImpStream& rStrm )
         mpSrcRange.reset( aRangeList.Remove( static_cast< sal_uInt32 >( 0 ) ) );
 }
 
-void XclImpCtrlLinkHelper::InsertStringList( Reference< XPropertySet >& rxPropSet ) const
-{
-    if( mpSrcRange.get() )
-    {
-        Sequence< OUString > aStringList;
-        // Excel uses only first column
-        sal_uInt16 nScCol = mpSrcRange->aStart.Col();
-        sal_uInt16 nScRow1 = mpSrcRange->aStart.Row();
-        sal_uInt16 nScRow2 = mpSrcRange->aEnd.Row();
-        sal_uInt16 nScTab = mpSrcRange->aStart.Tab();
-        String aCellText;
-        aStringList.realloc( nScRow2 - nScRow1 + 1 );
-        sal_Int32 nSeqIndex = 0;
-
-        for( sal_uInt16 nScRow = nScRow1; nScRow <= nScRow2; ++nScRow, ++nSeqIndex )
-        {
-            mrDoc.GetString( nScCol, nScRow, nScTab, aCellText );
-            aStringList[ nSeqIndex ] = aCellText;
-        }
-        ::setPropValue( rxPropSet, CREATE_OUSTRING( "StringItemList" ), aStringList );
-    }
-}
-
-void XclImpCtrlLinkHelper::InsertLinkTag( Reference< XPropertySet >& rxPropSet ) const
-{
-    ::setPropString( rxPropSet, CREATE_OUSTRING( "Tag" ),
-        XclTools::GetCtrlLinkTag( mrDoc, mpCellLink.get(), mpSrcRange.get() ) );
-}
-
-String XclImpCtrlLinkHelper::GetString( sal_Int16 nPos ) const
-{
-    String aString;
-    if( mpSrcRange.get() && (nPos >= 0) )
-        mrDoc.GetString( mpSrcRange->aStart.Col(), mpSrcRange->aStart.Row() + nPos, mpSrcRange->aStart.Tab(), aString );
-    return aString;
-}
-
 
 // ----------------------------------------------------------------------------
 
@@ -505,7 +468,7 @@ TYPEINIT1( XclImpEscherTbxCtrl, XclImpEscherTxo );
 
 XclImpEscherTbxCtrl::XclImpEscherTbxCtrl( XclImpEscherObj& rSrcObj, sal_uInt16 nCtrlType ) :
     XclImpEscherTxo( rSrcObj ),
-    maLinkHelper( GetDoc() ),
+    XclImpCtrlLinkHelper( xlBindPosition ),
     mnProgressSeg( SCF_INV_SEGMENT ),
     mnCtrlType( nCtrlType ),
     mnState( EXC_OBJ_CBLS_STATE_UNCHECK ),
@@ -528,7 +491,7 @@ void XclImpEscherTbxCtrl::ReadCbls( XclImpStream& rStrm )
 
 void XclImpEscherTbxCtrl::ReadCblsFmla( XclImpStream& rStrm )
 {
-    maLinkHelper.ReadCellLinkFormula( rStrm );
+    ReadCellLinkFormula( rStrm );
 }
 
 void XclImpEscherTbxCtrl::ReadLbsData( XclImpStream& rStrm )
@@ -539,7 +502,7 @@ void XclImpEscherTbxCtrl::ReadLbsData( XclImpStream& rStrm )
     {
         // read the address of the data source range
         rStrm.PushPosition();
-        maLinkHelper.ReadSrcRangeFormula( rStrm );
+        ReadSrcRangeFormula( rStrm );
         rStrm.PopPosition();
         rStrm.Ignore( nSubSize );
     }
@@ -580,7 +543,7 @@ OUString XclImpEscherTbxCtrl::GetServiceName() const
         case EXC_OBJ_CMO_LABEL:         return LCL_CREATE_NAME( "FixedText" );
         case EXC_OBJ_CMO_LISTBOX:       return LCL_CREATE_NAME( "ListBox" );
         case EXC_OBJ_CMO_GROUPBOX:      return LCL_CREATE_NAME( "GroupBox" );
-        case EXC_OBJ_CMO_COMBOBOX:      return LCL_CREATE_NAME( "ComboBox" );
+        case EXC_OBJ_CMO_COMBOBOX:      return LCL_CREATE_NAME( "ListBox" );    // it's a dropdown listbox
     }
     DBG_ERRORFILE( "XclImpEscherTbxCtrl::GetServiceName - unknown control type" );
     return OUString();
@@ -618,7 +581,8 @@ void XclImpEscherTbxCtrl::SetProperties( Reference< XPropertySet >& rxPropSet ) 
             case EXC_OBJ_CBLS_STATE_CHECK:      nApiState = 1;  break;
             case EXC_OBJ_CBLS_STATE_TRI:        nApiState = (mnCtrlType == EXC_OBJ_CMO_CHECKBOX) ? 2 : 1;   break;
         }
-        ::setPropBool( rxPropSet, CREATE_OUSTRING( "TriState" ), nApiState == 2 );
+        if( mnCtrlType == EXC_OBJ_CMO_CHECKBOX )
+            ::setPropBool( rxPropSet, CREATE_OUSTRING( "TriState" ), nApiState == 2 );
         ::setPropValue( rxPropSet, CREATE_OUSTRING( "DefaultState" ), nApiState );
     }
 
@@ -652,8 +616,7 @@ void XclImpEscherTbxCtrl::SetProperties( Reference< XPropertySet >& rxPropSet ) 
     // listbox/combobox contents
     if( (mnCtrlType == EXC_OBJ_CMO_LISTBOX) || (mnCtrlType == EXC_OBJ_CMO_COMBOBOX) )
     {
-        // string list
-        maLinkHelper.InsertStringList( rxPropSet );
+        Sequence< sal_Int16 > aSelection;
 
         switch( mnCtrlType )
         {
@@ -664,7 +627,6 @@ void XclImpEscherTbxCtrl::SetProperties( Reference< XPropertySet >& rxPropSet ) 
                 ::setPropBool( rxPropSet, CREATE_OUSTRING( "MultiSelection" ), bMultiSel );
 
                 // selection
-                Sequence< sal_Int16 > aSelection;
                 if( bMultiSel )
                 {
                     aSelection.realloc( static_cast< sal_Int32 >( maMultiSel.size() ) );
@@ -678,25 +640,28 @@ void XclImpEscherTbxCtrl::SetProperties( Reference< XPropertySet >& rxPropSet ) 
                     aSelection.realloc( 1 );
                     aSelection[ 0 ] = mnSelEntry - 1;
                 }
-                if( aSelection.getLength() )
-                    ::setPropValue( rxPropSet, CREATE_OUSTRING( "DefaultSelection" ), aSelection );
             }
             break;
 
             case EXC_OBJ_CMO_COMBOBOX:
+            {
                 // dropdown button
                 ::setPropBool( rxPropSet, CREATE_OUSTRING( "Dropdown" ), true );
                 // dropdown line count
                 ::setPropValue( rxPropSet, CREATE_OUSTRING( "LineCount" ), mnLineCount );
-                // text content
-                ::setPropString( rxPropSet, CREATE_OUSTRING( "DefaultText" ),
-                    maLinkHelper.GetString( mnSelEntry - 1 ) );
+                // selection
+                if( mnSelEntry > 0 )
+                {
+                    aSelection.realloc( 1 );
+                    aSelection[ 0 ] = mnSelEntry - 1;
+                }
+            }
             break;
         }
-    }
 
-    // link range address
-    maLinkHelper.InsertLinkTag( rxPropSet );
+        if( !GetCellLink() && aSelection.getLength() )
+            ::setPropValue( rxPropSet, CREATE_OUSTRING( "DefaultSelection" ), aSelection );
+    }
 }
 
 void XclImpEscherTbxCtrl::InitProgress( ScfProgressBar& rProgress )
@@ -732,7 +697,7 @@ TYPEINIT1( XclImpEscherOle, XclImpEscherObj );
 
 XclImpEscherOle::XclImpEscherOle( XclImpEscherObj& rSrcObj ):
     XclImpEscherObj( rSrcObj ),
-    maLinkHelper( GetDoc() ),
+    XclImpCtrlLinkHelper( xlBindContent ),
     mnCtrlStrmPos( 0 ),
     mnBlipId( 0 ),
     mnProgressSeg( SCF_INV_SEGMENT ),
@@ -825,7 +790,7 @@ void XclImpEscherOle::ReadPictFmla( XclImpStream& rStrm, sal_uInt16 nRecSize )
                 if( nDataSize )
                 {
                     rStrm.PushPosition();
-                    maLinkHelper.ReadCellLinkFormula( rStrm );
+                    ReadCellLinkFormula( rStrm );
                     rStrm.PopPosition();
                     rStrm.Ignore( nDataSize );
                 }
@@ -834,7 +799,7 @@ void XclImpEscherOle::ReadPictFmla( XclImpStream& rStrm, sal_uInt16 nRecSize )
                 if( nDataSize )
                 {
                     rStrm.PushPosition();
-                    maLinkHelper.ReadSrcRangeFormula( rStrm );
+                    ReadSrcRangeFormula( rStrm );
                     rStrm.PopPosition();
                     rStrm.Ignore( nDataSize );
                 }
@@ -856,12 +821,6 @@ void XclImpEscherOle::ReadPictFmla( XclImpStream& rStrm, sal_uInt16 nRecSize )
         sprintf( aBuf, "%08X", nStorageId );    // #100211# - checked
         maStorageName.AppendAscii( aBuf );
     }
-}
-
-void XclImpEscherOle::SetProperties( Reference< XPropertySet >& rxPropSet ) const
-{
-    maLinkHelper.InsertStringList( rxPropSet );
-    maLinkHelper.InsertLinkTag( rxPropSet );
 }
 
 void XclImpEscherOle::InitProgress( ScfProgressBar& rProgress )
