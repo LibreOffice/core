@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.95 $
+ *  $Revision: 1.96 $
  *
- *  last change: $Author: sj $ $Date: 2002-10-22 12:44:42 $
+ *  last change: $Author: sj $ $Date: 2002-11-05 15:58:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,6 @@
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
 #endif
-
-#ifndef SVX_LIGHT
 
 #include <math.h>
 
@@ -275,13 +273,12 @@
 #ifndef _UNTOOLS_UCBSTREAMHELPER_HXX
 #include <unotools/ucbstreamhelper.hxx>
 #endif
-#ifndef SVX_LIGHT
+
 #ifndef _EMBOBJ_HXX
 #include <so3/embobj.hxx>
 #endif
 #ifndef _IPOBJ_HXX
 #include <so3/ipobj.hxx>
-#endif
 #endif
 #include <vcl/virdev.hxx>
 #include <algorithm>
@@ -1937,8 +1934,6 @@ SdrObject* SdrPowerPointImport::ImportOLE( long nOLEId, const Graphic& rGraf, co
         }
     }
 
-#ifndef SVX_LIGHT
-
     PPTOleEntry* pOe;
     for ( pOe = (PPTOleEntry*)((SdrPowerPointImport*)this)->aOleObjectList.First(); pOe;
             pOe = (PPTOleEntry*)((SdrPowerPointImport*)this)->aOleObjectList.Next() )
@@ -2057,8 +2052,6 @@ SdrObject* SdrPowerPointImport::ImportOLE( long nOLEId, const Graphic& rGraf, co
             }
         }
     }
-#endif
-
     rStCtrl.Seek( nOldPos );
 
     return pRet;
@@ -2095,7 +2088,6 @@ SvMemoryStream* SdrPowerPointImport::ImportExOleObjStg( UINT32 nPersistPtr, UINT
 
 void SdrPowerPointImport::SeekOle( SfxObjectShell* pShell, sal_uInt32 nFilterOptions )
 {
-#ifndef SVX_LIGHT
     if ( pShell )
     {
         DffRecordHeader*    pHd;
@@ -2246,7 +2238,6 @@ void SdrPowerPointImport::SeekOle( SfxObjectShell* pShell, sal_uInt32 nFilterOpt
         }
         rStCtrl.Seek( nOldPos );
     }
-#endif
 }
 
 void SdrPowerPointImport::SetStarDraw()
@@ -3767,11 +3758,8 @@ BOOL PPTExtParaProv::GetGraphic( UINT32 nInstance, Graphic& rGraph ) const
         }
     }
     if ( bRetValue )
-    {
         rGraph = pPtr->aBuGra;
-        return TRUE;
-    }
-    return FALSE;
+    return bRetValue;
 }
 
 PPTExtParaProv::PPTExtParaProv( SdrPowerPointImport& rMan, SvStream& rSt, const DffRecordHeader* pHd ) :
@@ -5255,16 +5243,19 @@ PPTStyleTextPropReader::PPTStyleTextPropReader( SvStream& rIn, SdrPowerPointImpo
         UINT16  nStringLen = aString.Len();
 
         DffRecordHeader aTextHd;
-
+#ifdef DBG_EXTRACT_BUDATA
+        sal_uInt16 nParaCount = 0;
+#endif
         rTextHeader.SeekToContent( rIn );
         if ( rMan.SeekToRec( rIn, PPT_PST_StyleTextPropAtom, rTextHeader.GetRecEndFilePos(), &aTextHd ) )
             bTextPropAtom = sal_True;
         while ( nCharAnzRead <= nStringLen )
         {
             PPTParaPropSet aParaPropSet;
-
             ImplPPTParaPropSet& aSet = *aParaPropSet.pParaSet;
-
+#ifdef DBG_EXTRACT_BUDATA
+            aSet.mpArry[ PPT_ParaAttr_DontKnow3 ] = ++nParaCount;
+#endif
             if ( bTextPropAtom )
             {
                 rIn >> nCharCount
@@ -5413,6 +5404,7 @@ PPTStyleTextPropReader::PPTStyleTextPropReader( SvStream& rIn, SdrPowerPointImpo
         while ( nCharAnzRead < nStringLen )
         {
             PPTCharPropSet aCharPropSet( nCurrentPara );
+
             if ( bTextPropAtom )
             {
                 rIn >> nDummy16;
@@ -6658,6 +6650,26 @@ void PPTFieldEntry::SetDateTime( UINT32 nVal )
     }
 }
 
+#ifdef DBG_EXTRACT_BUDATA
+ByteString Implgethex( sal_uInt32 nHex, sal_Int32 nBytes )
+{
+    ByteString aHexString;
+    sal_Int32 nBitsLeft = nBytes << 3;
+    while( nBitsLeft )
+    {
+        sal_uInt32 nNumb = ( nHex << ( 32 - nBitsLeft ) ) >> 28;
+        if ( nNumb > 9 )
+            nNumb += 'A' - 10;
+        else
+            nNumb += '0';
+        aHexString+=(sal_Char)nNumb;
+        nBitsLeft -= 4;
+    }
+    aHexString += ' ';
+    return aHexString;
+}
+#endif
+
 //  -----------------------------------------------------------------------
 
 PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport, PptSlidePersistEntry& rPersistEntry, DffObjData* pObjData ) :
@@ -6879,9 +6891,80 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                     {
                         PPTTextRulerInterpreter aTextRulerInterpreter( nTextRulerAtomOfs, rSdrPowerPointImport,
                                                                         aClientTextBoxHd, rIn );
+
                         PPTStyleTextPropReader aStyleTextPropReader( rIn, rSdrPowerPointImport, aClientTextBoxHd,
                                                                         aTextRulerInterpreter, aExtParaHd );
-                        UINT32 nParagraphs = mpImplTextObj->mnParagraphCount = aStyleTextPropReader.aParaPropList.Count();
+                        sal_uInt32 nParagraphs = mpImplTextObj->mnParagraphCount = aStyleTextPropReader.aParaPropList.Count();
+
+#ifdef DBG_EXTRACT_BUDATA
+
+                        // testcode
+                        sal_uInt32 nExtParaPos = ( aExtParaHd.nRecType == PPT_PST_ExtendedParagraphAtom ) ? aExtParaHd.nFilePos + 8 : 0;
+                        if ( nExtParaPos )
+                        {
+                            sal_uInt32 i, nOldPos = rIn.Tell();
+                            rIn.Seek( nExtParaPos );
+                            sal_Char nLineBreak = 0xa;
+                            SvFileStream aFileStream( String( ByteString( "d:\\numberings.txt" ), RTL_TEXTENCODING_UTF8 ), STREAM_WRITE );
+                            aFileStream.Seek( STREAM_SEEK_TO_END );
+
+                            if ( nParagraphs )
+                            {
+                                ByteString aParaEntries( "ParagraphEntryCount:" );
+                                PPTParaPropSet* pSet = (PPTParaPropSet*)aStyleTextPropReader.aParaPropList.GetObject( nParagraphs - 1 );
+                                aParaEntries.Append( Implgethex( pSet->pParaSet->mpArry[ PPT_ParaAttr_DontKnow3 ], 2 ) );
+                                aFileStream.Write( aParaEntries.GetBuffer(), aParaEntries.Len() );
+                                aFileStream << nLineBreak;
+                            }
+                            sal_uInt32 nCharCount = aStyleTextPropReader.aCharPropList.Count();
+                            while ( rIn.Tell() < aExtParaHd.GetRecEndFilePos() )
+                            {
+                                ByteString aHex;
+
+                                sal_uInt32 nBuFlags, nNumberingType, nDontKnow1, nDontKnow2;
+                                sal_uInt16 nBuInstance, nBuStart;
+
+                                rIn >> nBuFlags;
+                                aHex.Append( Implgethex( nBuFlags, 4 ) );
+                                if ( nBuFlags & 0x800000 )
+                                {
+                                    rIn >> nBuInstance;
+                                    aHex.Append( Implgethex( nBuInstance, 2 ) );
+                                }
+                                if ( nBuFlags & 0x01000000 )
+                                {
+                                    rIn >> nNumberingType;
+                                    aHex.Append( Implgethex( nNumberingType, 4 ) );
+                                }
+                                if ( nBuFlags & 0x02000000 )
+                                {
+                                    rIn >> nBuStart;
+                                    aHex.Append( Implgethex( nBuStart, 2 ) );
+                                }
+                                rIn >> nDontKnow1
+                                    >> nDontKnow2;
+
+                                aHex.Append( Implgethex( nDontKnow1, 4 ) );
+                                aHex.Append( Implgethex( nDontKnow2, 4 ) );
+                                aFileStream.Write( aHex.GetBuffer(), aHex.Len() );
+                                aFileStream << nLineBreak;
+                            }
+                            for ( i = 0; i < nParagraphs; i++ )
+                            {
+                                ByteString aBuFlag;
+                                PPTParaPropSet* pSet = (PPTParaPropSet*)aStyleTextPropReader.aParaPropList.GetObject( i );
+                                aBuFlag.Append( Implgethex( pSet->pParaSet->mnAttrSet & 0xf, 1 ) );
+                                aBuFlag.Append( Implgethex( pSet->pParaSet->mpArry[ PPT_ParaAttr_BulletOn ], 1 ) );
+                                aFileStream.Write( aBuFlag.GetBuffer(), aBuFlag.Len() );
+                                aFileStream << nLineBreak;
+                            }
+                            aFileStream << nLineBreak;
+                            aFileStream << nLineBreak;
+                            rIn.Seek( nOldPos );
+                        }
+
+#endif
+
                         if ( nParagraphs )
                         {
                             // the language settings will be merged into the list of PPTCharPropSet
@@ -7281,7 +7364,4 @@ PPTTextObj& PPTTextObj::operator=( PPTTextObj& rTextObj )
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-
-#endif // SVX_LIGHT
-
 
