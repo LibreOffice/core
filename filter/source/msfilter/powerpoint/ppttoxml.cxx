@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ppttoxml.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sj $ $Date: 2002-03-07 17:54:56 $
+ *  last change: $Author: hr $ $Date: 2002-04-30 13:35:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,6 @@ PptToXml::~PptToXml()
 
 sal_Bool PptToXml::filter( const SEQ( NMSP_BEANS::PropertyValue )& aDescriptor,
                             REF( NMSP_SAX::XDocumentHandler ) xHandler )
-    throw( NMSP_UNO::RuntimeException )
 {
     xHdl = xHandler;
 
