@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.hxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 08:51:28 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 19:38:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,12 @@
 #ifndef _DRAWDOC_HXX
 #define _DRAWDOC_HXX
 
+#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
+#include <com/sun/star/lang/Locale.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_WRITINGMODE_HPP_
+#include <com/sun/star/text/WritingMode.hpp>
+#endif
 #ifndef _COM_SUN_STAR_FRAME_XMODEL_HDL_
 #include <com/sun/star/frame/XModel.hdl>
 #endif
@@ -131,10 +137,12 @@ namespace com
     }
 }
 
-namespace sd {
-class FrameView;
-class Outliner;
-}
+namespace sd
+{
+    class FrameView;
+    class Outliner;
+};
+
 
 class Timer;
 class SfxObjectShell;
@@ -156,7 +164,8 @@ struct SpellCallbackInfo;
 struct StyleRequestData;
 class SdDrawDocument;
 
-namespace sd {
+namespace sd
+{
 #ifndef SV_DECL_DRAW_DOC_SHELL_DEFINED
 #define SV_DECL_DRAW_DOC_SHELL_DEFINED
 SV_DECL_REF(DrawDocShell)
@@ -202,6 +211,29 @@ public:
     virtual void Redo();
 };
 
+namespace sd
+{
+    struct PresentationSettings
+    {
+        rtl::OUString maPresPage;
+        sal_Bool mbAll;
+        sal_Bool mbEndless;
+        sal_Bool mbCustomShow;
+        sal_Bool mbManual;
+        sal_Bool mbMouseVisible;
+        sal_Bool mbMouseAsPen;
+        sal_Bool mbLockedPages;
+        sal_Bool mbAlwaysOnTop;
+        sal_Bool mbFullScreen;
+        sal_Bool mbAnimationAllowed;
+        sal_Int32 mnPauseTimeout;
+        sal_Bool mbShowPauseLogo;
+        sal_Bool mbStartWithNavigator;
+
+        PresentationSettings();
+        PresentationSettings( const PresentationSettings& r );
+    };
+}
 
 // ------------------
 // - SdDrawDocument -
@@ -211,7 +243,6 @@ class SdDrawDocument
     : public FmFormModel
 {
 private:
-
     ::sd::Outliner* pOutliner;          // local outliner for outline mode
     ::sd::Outliner* pInternalOutliner;  // internal outliner for creation of text objects
     Timer*              pWorkStartupTimer;
@@ -227,27 +258,14 @@ private:
     BOOL                bInitialOnlineSpellingEnabled;
     String              aBookmarkFile;
     ::sd::DrawDocShellRef   xBookmarkDocShRef;
-    String              aPresPage;
+
+    sd::PresentationSettings maPresentationSettings;
     BOOL                bNewOrLoadCompleted;
-    BOOL                bPresAll;
-    BOOL                bPresEndless;
-    BOOL                bPresManual;
-    BOOL                bPresMouseVisible;
-    BOOL                bPresMouseAsPen;
-    BOOL                bStartPresWithNavigator;
-    BOOL                bAnimationAllowed;
-    BOOL                bPresLockedPages;
-    BOOL                bPresAlwaysOnTop;
-    BOOL                bPresFullScreen;
-    ULONG               nPresPause;
-    BOOL                bPresShowLogo;
+
     BOOL                bOnlineSpell;
     BOOL                bHideSpell;
-    BOOL                bCustomShow;
     BOOL                bSummationOfParagraphs;
     bool                mbStartWithPresentation;        // is set to true when starting with command line parameter -start
-
-    ULONG               nPresFirstPage;
     LanguageType        eLanguage;
     LanguageType        eLanguageCJK;
     LanguageType        eLanguageCTL;
@@ -421,47 +439,8 @@ public:
 
     USHORT              GetMasterPageUserCount(SdrPage* pMaster) const;
 
-    void                SetPresPage( const String& rPresPage ) { aPresPage = rPresPage; }
-    const String&       GetPresPage() const { return aPresPage; }
-
-    void                SetPresAll(BOOL bNewPresAll);
-    BOOL                GetPresAll() const       { return bPresAll; }
-
-    SD_DLLPUBLIC void   SetPresEndless(BOOL bNewPresEndless);
-    BOOL                GetPresEndless() const   { return bPresEndless; }
-
-    void                SetPresManual(BOOL bNewPresManual);
-    BOOL                GetPresManual() const        { return bPresManual; }
-
-    void                SetPresMouseVisible(BOOL bNewPresMouseVisible);
-    BOOL                GetPresMouseVisible() const { return bPresMouseVisible; }
-
-    void                SetPresMouseAsPen(BOOL bNewPresMouseAsPen);
-    BOOL                GetPresMouseAsPen() const    { return bPresMouseAsPen; }
-
-    void                SetPresFirstPage (ULONG nNewFirstPage);
-    ULONG               GetPresFirstPage() const { return nPresFirstPage; }
-
-    void                SetStartPresWithNavigator (BOOL bStart);
-    BOOL                GetStartPresWithNavigator() const { return bStartPresWithNavigator; }
-
-    void                SetAnimationAllowed (BOOL bAllowed) { bAnimationAllowed = bAllowed; }
-    BOOL                IsAnimationAllowed() const { return bAnimationAllowed; }
-
-    void                SetPresPause( ULONG nSecondsToWait ) { nPresPause = nSecondsToWait; }
-    ULONG               GetPresPause() const { return nPresPause; }
-
-    void                SetPresShowLogo( BOOL bShowLogo ) { bPresShowLogo = bShowLogo; }
-    BOOL                IsPresShowLogo() const { return bPresShowLogo; }
-
-    void                SetPresLockedPages (BOOL bLock);
-    BOOL                GetPresLockedPages() const { return bPresLockedPages; }
-
-    void                SetPresAlwaysOnTop (BOOL bOnTop);
-    BOOL                GetPresAlwaysOnTop() const { return bPresAlwaysOnTop; }
-
-    void                SetPresFullScreen (BOOL bNewFullScreen);
-    BOOL                GetPresFullScreen() const { return bPresFullScreen; }
+    const sd::PresentationSettings& getPresentationSettings() const { return maPresentationSettings; }
+    sd::PresentationSettings& getPresentationSettings() { return maPresentationSettings; }
 
        void                SetSummationOfParagraphs( BOOL bOn = TRUE ) { bSummationOfParagraphs = bOn; }
     const BOOL          IsSummationOfParagraphs() const { return bSummationOfParagraphs; }
@@ -505,9 +484,6 @@ public:
 
     List*               GetFrameViewList() const { return pFrameViewList; }
     SD_DLLPUBLIC List*  GetCustomShowList(BOOL bCreate = FALSE);
-
-    void                SetCustomShow(BOOL bCustShow) { bCustomShow = bCustShow; }
-    BOOL                IsCustomShow() const { return bCustomShow; }
 
     void                NbcSetChanged(sal_Bool bFlag = sal_True);
 
