@@ -2,9 +2,9 @@
  *
  *  $RCSfile: readline.c,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 17:12:52 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 11:35:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -316,8 +316,13 @@ oslFileError SAL_CALL osl_readLine(oslFileHandle Handle, sal_Sequence** ppSeq)
         }
         else if (0 == nread)
         {
-            MakeSequenceFreeBuffer(ppSeq, &line_buffer, line_buffer.m_Size);
-            return osl_File_E_None;
+            /* EOF */
+            nread = line_buffer.m_Size;
+            MakeSequenceFreeBuffer(ppSeq, &line_buffer, nread);
+            if (0 < nread)
+                return osl_File_E_None;
+            else
+                return osl_File_E_AGAIN;
         }
 
         /* scan buffer for line end */
