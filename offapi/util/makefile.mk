@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: mtg $ $Date: 2000-11-08 17:27:26 $
+#   last change: $Author: hr $ $Date: 2000-11-13 18:09:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,9 +64,7 @@ PRJ=..
 PRJPCH=
 
 PRJNAME=offapi
-TARGET=applicat
-
-#use_starjar=true
+TARGET=offapi_db
 
 
 # --- Settings -----------------------------------------------------
@@ -119,13 +117,4 @@ UNOIDLDBFILES= \
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
-
-# --- Targets ------------------------------------------------------
-
-$(UCR)$/applicat.rdb:: $(UNOIDLDBFILES)
-    +regmerge $@ / $(UNOIDLDBFILES)
-    touch $@
-
-
-
 
