@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdlayer.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2002-03-11 15:31:00 $
+ *  last change: $Author: aw $ $Date: 2002-03-11 15:34:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -567,7 +567,7 @@ SdrLayerID SdrLayerAdmin::GetUniqueLayerID() const
     sal_Int32 j;
     for (j=0; j<GetLayerCount(); j++)
     {
-        aSet.Set(GetLayer(j)->GetID());
+        aSet.Set(GetLayer((sal_uInt16)j)->GetID());
     }
     SdrLayerID i;
     if (!bDown)
