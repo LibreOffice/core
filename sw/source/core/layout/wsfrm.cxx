@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wsfrm.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 14:30:39 $
+ *  last change: $Author: vg $ $Date: 2005-02-22 08:20:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2800,7 +2800,7 @@ void SwLayoutFrm::ChgLowersProp( const Size& rOldSize )
                IsSctFrm() ) )
                // <--
     {
-        // Determine page frame the body frame belongs to.
+        // Determine page frame the body frame resp. the section frame belongs to.
         SwPageFrm *pPage = FindPageFrm();
         // Determine last lower by traveling through them using <GetNext()>.
         // During travel check each section frame, if it will be sized to
@@ -2850,14 +2850,13 @@ void SwLayoutFrm::ChgLowersProp( const Size& rOldSize )
                     pLowerFrm = pTableFrm;
                 }
             }
-            // Check, if variable size of body frame has grown
+            // Check, if variable size of body frame resp. section frame has grown
             // OD 28.10.2002 #97265# - correct check, if variable size has grown.
-            //SwTwips nOldHeight = bVert ? rOldSize.Height() : rOldSize.Width();
             SwTwips nOldHeight = bVert ? rOldSize.Width() : rOldSize.Height();
             if( nOldHeight < (Prt().*fnRect->fnGetHeight)() )
             {
-                // If variable size of body frame has grown, only found last lower
-                // and the position of the its next have to be invalidated.
+                // If variable size of body|section frame has grown, only found
+                // last lower and the position of the its next have to be invalidated.
                 pLowerFrm->_InvalidateAll();
                 pLowerFrm->InvalidatePage( pPage );
                 if( !pLowerFrm->IsFlowFrm() ||
@@ -2865,21 +2864,12 @@ void SwLayoutFrm::ChgLowersProp( const Size& rOldSize )
                     pLowerFrm->InvalidateNextPos( TRUE );
                 if ( pLowerFrm->IsTxtFrm() )
                     ((SwCntntFrm*)pLowerFrm)->Prepare( PREP_ADJUST_FRM );
-                if ( pLowerFrm->IsInSct() )
-                {
-                    pLowerFrm = pLowerFrm->FindSctFrm();
-                    if( IsAnLower( pLowerFrm ) )
-                    {
-                        pLowerFrm->_InvalidateSize();
-                        pLowerFrm->InvalidatePage( pPage );
-                    }
-                }
             }
             else
             {
-                // variable size of body frame has shrinked. Thus, invalidate
-                // all lowers not matching the new body size and the dedicated
-                // new last lower.
+                // variable size of body|section frame has shrinked. Thus,
+                // invalidate all lowers not matching the new body|section size
+                // and the dedicated new last lower.
                 if( bVert )
                 {
                     SwTwips nBot = Frm().Left() + Prt().Left();
@@ -2906,17 +2896,25 @@ void SwLayoutFrm::ChgLowersProp( const Size& rOldSize )
                     pLowerFrm->InvalidatePage( pPage );
                     if ( pLowerFrm->IsTxtFrm() )
                         ((SwCntntFrm*)pLowerFrm)->Prepare( PREP_ADJUST_FRM );
-                    if ( pLowerFrm->IsInSct() )
-                    {
-                        pLowerFrm = pLowerFrm->FindSctFrm();
-                        if( IsAnLower( pLowerFrm ) )
-                        {
-                            pLowerFrm->_InvalidateSize();
-                            pLowerFrm->InvalidatePage( pPage );
-                        }
-                    }
                 }
             }
+            // --> OD 2005-01-31 #i41694# - improvement by removing duplicates
+            if ( pLowerFrm )
+            {
+                if ( pLowerFrm->IsInSct() )
+                {
+                    // --> OD 2005-01-31 #i41694# - follow-up of issue #i10826#:
+                    // No invalidation of section frame, if it's the this.
+                    SwFrm* pSectFrm = pLowerFrm->FindSctFrm();
+                    if( pSectFrm != this && IsAnLower( pSectFrm ) )
+                    {
+                        pSectFrm->_InvalidateSize();
+                        pSectFrm->InvalidatePage( pPage );
+                    }
+                    // <--
+                }
+            }
+            // <--
         }
         return;
     } // end of { special case }
