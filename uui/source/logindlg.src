@@ -2,9 +2,9 @@
  *
  *  $RCSfile: logindlg.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-01 16:59:56 $
+ *  last change: $Author: obo $ $Date: 2001-03-09 20:15:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,7 +125,7 @@ ModalDialog DLG_UUI_LOGIN
         Text [ dutch ] = "Vermeld hier de gebruiker en het wachtwoord voor %1." ;
         Text[ chinese_simplified ] = "ΗλΔϊΤΪ΄ΛΞª %1 ΚδΘλΚΉΣΓΓϋΊΝΓάΒλ΅£";
         Text[ russian ] = "Ββεδθςε, οξζΰλσιρςΰ, θμÿ οξλόηξβΰςελÿ θ οΰπξλό δλÿ %1.";
-        Text[ polish ] = "Wpisz uΏytkownika i has³o dla %1.";
+        Text[ polish ] = "Wpisz nazwκ uΏytkownika i has³o dla %1.";
         Text[ japanese ] = "‚±‚±‚Ι %1 ‚ΜΥ°»ή°–Ό‚ΖΚί½ά°Δή‚π“ό—Ν‚µ‚Δ‚­‚Ύ‚³‚ΆB";
         Text[ chinese_traditional ] = "½Π¬° %1 Ώι¤J¨Ο¥Ξ¦W©M±K½X΅C";
         Text[ greek ] = "Παρακαλώ εισάγετε εδώ το όνομα του χρήστη και τον κωδικό πρόσβασης για το %1.";
@@ -193,7 +193,7 @@ ModalDialog DLG_UUI_LOGIN
         Text [ portuguese ] = "~Nome do utilizador" ;
         Text[ chinese_simplified ] = "ΚΉΣΓΓϋ(~U)";
         Text[ russian ] = "Θμÿ οξλόηξβΰςελÿ";
-        Text[ polish ] = "UΏytkownik";
+        Text[ polish ] = "Nazwa uΏytkownika";
         Text[ japanese ] = "Υ°»ή°–Ό(~U)";
         Text[ chinese_traditional ] = "¨Ο¥Ξ¦W(~U)";
         Text[ greek ] = "Όνομα χρήστη";
@@ -377,7 +377,7 @@ ModalDialog DLG_UUI_LOGIN
     Text [ portuguese ] = "Requere-se nome de utilizador e senha" ;
     Text[ chinese_simplified ] = "ÒªΗσΚδΘλΚΉΣΓΓϋΊΝΓάΒλ";
     Text[ russian ] = "Νεξαυξδθμϋ θμÿ οξλόηξβΰςελÿ θ οΰπξλό";
-    Text[ polish ] = "NaleΏy podaζ uΏytkownika i has³o.";
+    Text[ polish ] = "NaleΏy podaζ nazwκ uΏytkownika i has³o.";
     Text[ japanese ] = "Υ°»ή°–Ό‚ΖΚί½ά°Δή‚ª•K—v";
     Text[ chinese_traditional ] = "½ΠΏι¤J¨Ο¥Ξ¦W©M±K½X";
     Text[ greek ] = "Απαιτείται το όνομα του χρήστη και ο κωδικός πρόσβασης";
