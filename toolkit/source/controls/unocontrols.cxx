@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrols.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: mt $ $Date: 2001-08-10 09:57:11 $
+ *  last change: $Author: mt $ $Date: 2001-08-10 10:03:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2795,7 +2795,7 @@ sal_Int16 UnoListBoxControl::getDropDownLineCount() throw(uno::RuntimeException)
 
 sal_Bool UnoListBoxControl::isMutipleMode() throw(uno::RuntimeException)
 {
-    return ImplGetPropertyValue_BOOL( BASEPROPERTY_STRINGITEMLIST );
+    return ImplGetPropertyValue_BOOL( BASEPROPERTY_MULTISELECTION );
 }
 
 void UnoListBoxControl::setMultipleMode( sal_Bool bMulti ) throw(uno::RuntimeException)
