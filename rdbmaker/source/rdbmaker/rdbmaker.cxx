@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rdbmaker.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-13 12:45:16 $
+ *  last change: $Author: tbe $ $Date: 2001-05-11 09:02:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,13 +136,13 @@ void initFilterTypes(RdbOptions* pOptions)
     if (pOptions->isValid("-FT"))
     {
         OString fOption(pOptions->getOption("-FT"));
-        sal_uInt32 count = fOption.getTokenCount(';');
-
         sal_Bool ret = sal_False;
-        for (sal_uInt32 i = 0; i < count; i++)
+        sal_Int32 nIndex = 0;
+        do
         {
-            filterTypes.insert( fOption.getToken(i, ';').replace('.', '/') );
+            filterTypes.insert( fOption.getToken( 0, ';', nIndex ).replace('.', '/') );
         }
+        while ( nIndex >= 0 );
     }
     if (pOptions->isValid("-F"))
     {
@@ -253,13 +253,12 @@ OString createFileName(const OString& path)
     token = '\\';
 #endif
 
-    sal_Int32 count = fileName.getTokenCount(token) - 1;
-
     OStringBuffer nameBuffer( path.getLength() );
 
-    for (int i=0; i < count; i++)
+    sal_Int32 nIndex = 0;
+    do
     {
-        nameBuffer.append(fileName.getToken(i, token).getStr());
+        nameBuffer.append(fileName.getToken( 0, token, nIndex ).getStr());
 
         if (nameBuffer.getLength() == 0 || OString(".") == nameBuffer.getStr())
         {
@@ -282,6 +281,7 @@ OString createFileName(const OString& path)
 
         nameBuffer.append(token);
     }
+    while ( nIndex >= 0 );
 
     return fileName;
 }
@@ -459,15 +459,14 @@ int _cdecl main( int argc, char * argv[] )
         if (options.isValid("-T"))
         {
             OString tOption(options.getOption("-T"));
-            sal_uInt32 count = tOption.getTokenCount(';');
-
             OString typeName, tmpName;
             sal_Bool ret = sal_False;
-            for (sal_uInt32 i = 0; i < count; i++)
+            sal_Int32 nIndex = 0;
+            do
             {
-                typeName = tOption.getToken(i, ';');
-
-                tmpName = typeName.getToken(typeName.getTokenCount('.') - 1, '.');
+                typeName = tOption.getToken( 0, ';', nIndex);
+                sal_Int32 lastIndex = typeName.lastIndexOf('.');
+                tmpName = typeName.copy( lastIndex+1 );
                 if (tmpName == "*")
                 {
                     if (bootReg.getLength())
@@ -511,6 +510,7 @@ int _cdecl main( int argc, char * argv[] )
                     exit(99);
                 }
             }
+            while ( nIndex >= 0 );
         } else
         if (options.isValid("-X"))
         {
