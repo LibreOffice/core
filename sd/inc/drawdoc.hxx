@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: cl $ $Date: 2001-12-18 15:02:32 $
+ *  last change: $Author: cl $ $Date: 2002-01-18 15:29:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -435,6 +435,8 @@ public:
     void        MakeUniqueLayerNames();
 
     void    UpdateAllLinks();
+
+    void CheckMasterPages();
 };
 
 

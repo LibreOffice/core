@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc2.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dl $ $Date: 2001-11-16 14:50:59 $
+ *  last change: $Author: cl $ $Date: 2002-01-18 15:33:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1380,5 +1380,147 @@ List* SdDrawDocument::GetDeletedPresObjList()
     return pDeletedPresObjList;
 }
 
+/** this method enforces that the masterpages are in the currect order,
+    that is at position 1 is a PK_STANDARD masterpage followed by a
+    PK_NOTES masterpage and so on. #
+*/
+void SdDrawDocument::CheckMasterPages()
+{
+//  RemoveMasterPage(2); // code to test the creation of notes pages
 
+    USHORT nMaxPages = GetMasterPageCount();
 
+    // we need at least a handout master and one master page
+    if( nMaxPages < 2 )
+    {
+        DBG_ERROR("not enough master pages inside document");
+        return;
+    }
+
+    SdPage* pPage = NULL;
+    SdPage* pNotesPage = NULL;
+
+    USHORT nPage;
+
+    // first see if the page order is correct
+    for( nPage = 1; nPage < nMaxPages; nPage++ )
+    {
+        pPage = static_cast<SdPage*> (GetMasterPage( nPage ));
+        // if an odd page is not a standard page or an even page is not a notes page
+        if( ((1 == (nPage & 1)) && (pPage->GetPageKind() != PK_STANDARD) ) ||
+            ((0 == (nPage & 1)) && (pPage->GetPageKind() != PK_NOTES) ) )
+            break; // then we have a fatal error
+    }
+
+    if( nPage < nMaxPages )
+    {
+        // there is a fatal error in the master page order,
+        // we need to repair the document
+        sal_Bool bChanged = sal_False;
+
+        nPage = 1;
+        while( nPage < nMaxPages )
+        {
+            pPage = static_cast<SdPage*> (GetMasterPage( nPage ));
+            if( pPage->GetPageKind() != PK_STANDARD )
+            {
+                bChanged = sal_True;
+                USHORT nFound = nPage + 1;
+                while( nFound < nMaxPages )
+                {
+                    pPage = static_cast<SdPage*>(GetMasterPage( nFound ));
+                    if( PK_STANDARD == pPage->GetPageKind() )
+                    {
+                        MoveMasterPage( nFound, nPage );
+                        pPage->SetInserted(sal_True);
+                        break;
+
+                    }
+
+                    nFound++;
+                }
+
+                // if we don't have any more standard pages, were done
+                if( nMaxPages == nFound )
+                    break;
+            }
+
+            nPage++;
+
+            if( nPage < nMaxPages )
+                pNotesPage = static_cast<SdPage*>(GetMasterPage( nPage ));
+            else
+                pNotesPage = NULL;
+
+            if( (NULL == pNotesPage) || (pNotesPage->GetPageKind() != PK_NOTES) || ( pPage->GetLayoutName() != pNotesPage->GetLayoutName() ) )
+            {
+                bChanged = sal_True;
+
+                USHORT nFound = nPage + 1;
+                while( nFound < nMaxPages )
+                {
+                    pNotesPage = static_cast<SdPage*>(GetMasterPage( nFound ));
+                    if( (PK_NOTES == pNotesPage->GetPageKind()) && ( pPage->GetLayoutName() == pNotesPage->GetLayoutName() ) )
+                    {
+                        MoveMasterPage( nFound, nPage );
+                        pNotesPage->SetInserted(sal_True);
+                        break;
+                    }
+
+                    nFound++;
+                }
+
+                // looks like we lost a notes page
+                if( nMaxPages == nFound )
+                {
+                    // so create one
+
+                    // first find a reference notes page for size
+                    SdPage* pRefNotesPage = NULL;
+                    nFound = 0;
+                    while( nFound < nMaxPages )
+                    {
+                        pRefNotesPage = static_cast<SdPage*>(GetMasterPage( nFound ));
+                        if( PK_NOTES == pRefNotesPage->GetPageKind() )
+                            break;
+                        nFound++;
+                    }
+                    if( nFound == nMaxPages )
+                        pRefNotesPage = NULL;
+
+                    SdPage* pNotesPage = static_cast<SdPage*>(AllocPage(sal_True));
+                    pNotesPage->SetPageKind(PK_NOTES);
+                    if( pRefNotesPage )
+                    {
+                        pNotesPage->SetSize( pRefNotesPage->GetSize() );
+                        pNotesPage->SetBorder( pRefNotesPage->GetLftBorder(),
+                                                pRefNotesPage->GetUppBorder(),
+                                                pRefNotesPage->GetRgtBorder(),
+                                                pRefNotesPage->GetLwrBorder() );
+                    }
+                    InsertMasterPage(pNotesPage,  nPage );
+                    pNotesPage->SetLayoutName( pPage->GetLayoutName() );
+                    pNotesPage->SetAutoLayout(AUTOLAYOUT_NOTES, sal_True, sal_True);
+                    nMaxPages++;
+                }
+            }
+
+            nPage++;
+        }
+
+        // now remove all remaining and unused non PK_STANDARD slides
+        while( nPage < nMaxPages )
+        {
+            bChanged = sal_True;
+
+            RemoveMasterPage( nPage );
+            nMaxPages--;
+        }
+
+        if( bChanged )
+        {
+            DBG_ERROR( "master pages where in a wrong order" );
+            RecalcPageNums( sal_True);
+        }
+    }
+}

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: cl $ $Date: 2002-01-09 14:40:05 $
+ *  last change: $Author: cl $ $Date: 2002-01-18 15:36:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1290,6 +1290,8 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
     else if (eMode == DOC_LOADED)
     {
             // Dokument wurde geladen:
+
+        CheckMasterPages();
 
 #ifndef SVX_LIGHT
         if ( GetMasterSdPageCount(PK_STANDARD) > 1 )
