@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bc.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hro $ $Date: 2001-07-27 07:54:21 $
+ *  last change: $Author: kso $ $Date: 2001-07-27 13:28:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -472,7 +472,7 @@ BaseContent::execute( const Command& aCommand,
 
 
     // This is the only function allowed to throw an exception
-    m_pMyShell->endTask( CommandId,m_aUncPath );
+    endTask( CommandId );
 
     return aAny;
 }
@@ -985,8 +985,7 @@ BaseContent::setPropertyValues(
 
             try
             {
-                m_pMyShell->endTask( nMyCommandIdentifier,
-                                     m_aUncPath );
+                endTask( nMyCommandIdentifier );
             }
             catch( const Exception& e )
             {
@@ -1262,6 +1261,18 @@ void SAL_CALL BaseContent::insert( sal_Int32 nMyCommandIdentifier,
 
     vos::OGuard aGuard( m_aMutex );
     m_nState = FullFeatured;
+}
+
+
+
+void SAL_CALL BaseContent::endTask( sal_Int32 CommandId )
+{
+    rtl::OUString aRedirectedPath;
+    if ( !m_pMyShell->uncheckMountPoint( m_aUncPath, aRedirectedPath ) )
+        aRedirectedPath = m_aUncPath;
+
+    // This is the only function allowed to throw an exception
+    m_pMyShell->endTask( CommandId,aRedirectedPath );
 }
 
 

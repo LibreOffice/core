@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bc.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: abi $ $Date: 2001-07-09 11:50:39 $
+ *  last change: $Author: kso $ $Date: 2001-07-27 13:28:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -433,6 +433,8 @@ namespace fileaccess {
         insert( sal_Int32 nMyCommandIdentifier,
                 const com::sun::star::ucb::InsertCommandArgument& aInsertArgument )
             throw();
+
+        void SAL_CALL endTask( sal_Int32 CommandId );
 
         friend class ContentEventNotifier;
     };
