@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-01 11:43:12 $
+ *  last change: $Author: aw $ $Date: 2000-11-17 10:12:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -525,15 +525,18 @@ SdrObject *SvxDrawPage::_CreateSdrObject( const Reference< drawing::XShape > & x
 //----------------------------------------------------------------------
 void SvxDrawPage::GetTypeAndInventor( sal_uInt16& rType, sal_uInt32& rInventor, const OUString& aName ) const throw()
 {
-    rType = aSdrShapeIdentifierMap.getId( aName );
+    sal_uInt32 nTempType = aSdrShapeIdentifierMap.getId( aName );
 
-    if(rType & E3D_INVENTOR_FLAG)
+    if(nTempType & E3D_INVENTOR_FLAG)
     {
         rInventor = E3dInventor;
-        rType &= ~E3D_INVENTOR_FLAG;
+        rType = (sal_uInt16)(nTempType & ~E3D_INVENTOR_FLAG);
     }
     else
+    {
         rInventor = SdrInventor;
+        rType = (sal_uInt16)nTempType;
+    }
 }
 
 //----------------------------------------------------------------------
@@ -546,6 +549,7 @@ SvxShape* SvxDrawPage::CreateShapeByTypeAndInventor( sal_uInt16 nType, sal_uInt3
         {
             switch( nType )
             {
+                case E3D_SCENE_ID :
                 case E3D_POLYSCENE_ID :
                     pRet = new Svx3DSceneObject( pObj, pPage );
                     break;
@@ -672,8 +676,8 @@ SvxShape* SvxDrawPage::CreateShapeByTypeAndInventor( sal_uInt16 nType, sal_uInt3
             nObjId = OBJ_CIRC;
             break;
 
-        case E3D_POLYSCENE_ID | E3D_INVENTOR_FLAG:
-            nObjId = E3D_SCENE_ID | E3D_INVENTOR_FLAG;
+        case E3D_SCENE_ID | E3D_INVENTOR_FLAG:
+            nObjId = E3D_POLYSCENE_ID | E3D_INVENTOR_FLAG;
             break;
         }
 

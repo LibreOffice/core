@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprov.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-16 14:38:18 $
+ *  last change: $Author: aw $ $Date: 2000-11-17 10:14:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -458,7 +458,7 @@ UHashMapEntry pSdrShapeIdentifierMap[] =
     UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("FrameShape"),            OBJ_FRAME ),
     UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("CaptionShape"),          OBJ_CAPTION ),
 
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("Shape3DSceneObject"),    E3D_SCENE_ID      | E3D_INVENTOR_FLAG ),
+    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("Shape3DSceneObject"),    E3D_POLYSCENE_ID  | E3D_INVENTOR_FLAG ),
     UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("Shape3DCubeObject"),     E3D_CUBEOBJ_ID    | E3D_INVENTOR_FLAG ),
     UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("Shape3DSphereObject"),   E3D_SPHEREOBJ_ID  | E3D_INVENTOR_FLAG ),
     UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("Shape3DLatheObject"),    E3D_LATHEOBJ_ID   | E3D_INVENTOR_FLAG ),
