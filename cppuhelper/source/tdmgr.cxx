@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdmgr.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 13:28:45 $
+ *  last change: $Author: kz $ $Date: 2004-03-25 15:01:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,6 @@
 #include <osl/diagnose.h>
 #include <rtl/alloc.h>
 #include <rtl/ustring.hxx>
-#include <rtl/string.hxx>
 
 #include <cppuhelper/implbase1.hxx>
 #include <typelib/typedescription.h>
@@ -649,22 +648,21 @@ static void SAL_CALL typelib_callback(
                     *ppRet = createCTD( xTD );
                 }
             }
+            catch (container::NoSuchElementException & exc)
+            {
+                OSL_ENSURE(
+                    0, OUStringToOString(
+                        OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                      "typelibrary type not available: ") ) +
+                        exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
+            }
             catch (Exception & exc)
             {
                 OSL_ENSURE(
                     0, OUStringToOString(
-                        exc.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
+                        exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
             }
         }
-#if OSL_DEBUG_LEVEL > 0
-        if (0 == *ppRet)
-        {
-            OString msg(
-                OString("typelibrary type not accessable: ") +
-                OUStringToOString( pTypeName, RTL_TEXTENCODING_ASCII_US ) );
-            OSL_ENSURE( 0, msg.getStr() );
-        }
-#endif
     }
 }
 }
