@@ -2,9 +2,9 @@
  *
  *  $RCSfile: childwin.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mba $ $Date: 2001-12-03 14:34:20 $
+ *  last change: $Author: mba $ $Date: 2002-01-08 08:47:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -287,31 +287,29 @@ SfxChildWindow* SfxChildWindow::CreateChildWindow( sal_uInt16 nId,
 void SfxChildWindow::SaveStatus(const SfxChildWinInfo& rInfo)
 {
     sal_uInt16 nID = GetType();
-    // Don't make beamer data persitent in cfg ...
-    if( nID != SID_BROWSER )
+
+    String aWinData( 'V' );
+    aWinData += String::CreateFromInt32( nVersion );
+    aWinData += ',';
+    aWinData += rInfo.bVisible ? 'V' : 'H';
+    aWinData += ',';
+    aWinData += String::CreateFromInt32( rInfo.nFlags );
+    if ( rInfo.aExtraString.Len() )
     {
-        String aWinData( 'V' );
-        aWinData += String::CreateFromInt32( nVersion );
         aWinData += ',';
-        aWinData += rInfo.bVisible ? 'V' : 'H';
-        aWinData += ',';
-        aWinData += String::CreateFromInt32( rInfo.nFlags );
-        if ( rInfo.aExtraString.Len() )
-        {
-            aWinData += ',';
-            aWinData += rInfo.aExtraString;
-        }
-
-        SvtViewOptions aWinOpt( E_WINDOW, String::CreateFromInt32( nID ) );
-        // aWinOpt.SetPosition( rInfo.aPos.X(), rInfo.aPos.Y() );
-        // aWinOpt.SetSize( rInfo.aSize.Width(), rInfo.aSize.Height() );
-        aWinOpt.SetWindowState( String( rInfo.aWinState, RTL_TEXTENCODING_UTF8 ) );
-
-        ::com::sun::star::uno::Sequence < ::com::sun::star::beans::NamedValue > aSeq(1);
-        aSeq[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Data") );
-        aSeq[0].Value <<= ::rtl::OUString( aWinData );
-        aWinOpt.SetUserData( aSeq );
+        aWinData += rInfo.aExtraString;
     }
+
+    SvtViewOptions aWinOpt( E_WINDOW, String::CreateFromInt32( nID ) );
+    // aWinOpt.SetPosition( rInfo.aPos.X(), rInfo.aPos.Y() );
+    // aWinOpt.SetSize( rInfo.aSize.Width(), rInfo.aSize.Height() );
+    aWinOpt.SetWindowState( String( rInfo.aWinState, RTL_TEXTENCODING_UTF8 ) );
+
+    ::com::sun::star::uno::Sequence < ::com::sun::star::beans::NamedValue > aSeq(1);
+    aSeq[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Data") );
+    aSeq[0].Value <<= ::rtl::OUString( aWinData );
+    aWinOpt.SetUserData( aSeq );
+
     // ... but save status at runtime!
     pImp->pFact->aInfo = rInfo;
 }
