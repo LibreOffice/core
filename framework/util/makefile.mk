@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.46 $
+#   $Revision: 1.47 $
 #
-#   last change: $Author: as $ $Date: 2001-08-14 12:18:37 $
+#   last change: $Author: hjs $ $Date: 2001-08-14 13:47:54 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,9 +69,9 @@ NO_BSYMBOLIC=		TRUE
 COMP1TYPELIST=		fwk
 COMP2TYPELIST=		fwl
 COMP3TYPELIST=		lgd
-COMP4TYPELIST=		fwe
 
 # --- Settings -----------------------------------------------------
+
 .INCLUDE :  settings.mk
 .IF "$(COM)"=="ICC"
 LINKFLAGS+=/SEGMENTS:1024 /PACKD:32768
