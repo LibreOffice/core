@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.153 $
+ *  $Revision: 1.154 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 14:57:19 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 13:35:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1397,8 +1397,10 @@ void GetLineIndex(SvxBoxItem &rBox, short nLineThickness, short nSpace, BYTE nCo
         // or if in necessary by a double line
         case 24:
         case 25:
-            if( nLineThickness < 20)
+            if( nLineThickness < 10)
                 eCodeIdx = WW8_BordersSO::single0;//   1 Twip for us
+            else if( nLineThickness < 20)
+                eCodeIdx = WW8_BordersSO::single5;//   10 Twips for us
             else if (nLineThickness < 50)
                 eCodeIdx = WW8_BordersSO::single1;//  20 Twips
             else if (nLineThickness < 80)
