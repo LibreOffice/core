@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basmgr.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 14:01:50 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 13:39:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2175,7 +2175,7 @@ BOOL BasicManager::LoadLib( USHORT nLib )
         }
         else
         {
-            bDone = ImpLoadLibary( pLibInfo, NULL, NULL );
+            bDone = ImpLoadLibary( pLibInfo, NULL, FALSE );
             StarBASIC* pLib = GetLib( nLib );
             if ( pLib )
             {
