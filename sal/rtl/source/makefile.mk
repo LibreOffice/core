@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: sz $ $Date: 2002-09-11 11:29:50 $
+#   last change: $Author: sb $ $Date: 2002-10-07 11:58:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,6 +65,7 @@ PRJ=..$/..
 PRJNAME=sal
 TARGET=cpprtl
 USE_LDUMP2=TRUE
+ENABLE_EXCEPTIONS=TRUE
 
 PROJECTPCH4DLL=TRUE
 PROJECTPCH=cont_pch
