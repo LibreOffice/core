@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OInnerValueSetUpdateAccess.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-12-11 11:53:57 $
+ *  last change:$Date: 2004-11-02 11:59:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,10 +70,12 @@ import util.utils;
 import com.sun.star.beans.PropertyState;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.container.XNameAccess;
+import com.sun.star.container.XNameContainer;
 import com.sun.star.container.XNameReplace;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
+import com.sun.star.util.XChangesBatch;
 
 
 public class OInnerValueSetUpdateAccess extends TestCase {
@@ -95,7 +97,12 @@ public class OInnerValueSetUpdateAccess extends TestCase {
     protected TestEnvironment createTestEnvironment(TestParameters tParam,
                                                     PrintWriter log) {
         XInterface oObj = null;
+
         log.println("creating the Environment");
+
+        // create some entries for testing, use the ORootElementValueSetUpdateAccess
+        // service for this: see cfgmgr2.ORootElementValueSetUpdateAccess
+        createSomeEntries((XMultiServiceFactory)tParam.getMSF());
 
         PropertyValue[] nodeArgs = new PropertyValue[1];
         PropertyValue nodepath = new PropertyValue();
@@ -162,4 +169,83 @@ public class OInnerValueSetUpdateAccess extends TestCase {
 
         return tEnv;
     }
+
+        /**
+     * Create entries in the ExternalApps layer, so there is something to test
+     * @param oObj The test object: used to create some entries.
+     */
+    private void createSomeEntries(XMultiServiceFactory xMSF) {
+        PropertyValue[] nodeArgs = new PropertyValue[1];
+        PropertyValue nodepath = new PropertyValue();
+        nodepath.Name = "nodepath";
+        nodepath.Value = "org.openoffice.Office.Common/ExternalApps";
+        nodepath.Handle = -1;
+        nodepath.State = PropertyState.DEFAULT_VALUE;
+        nodeArgs[0] = nodepath;
+
+        Object oObj = null;
+        try {
+            XInterface Provider = (XInterface) xMSF.createInstance("com.sun.star.comp.configuration.ConfigurationProvider");
+            XMultiServiceFactory pMSF = (XMultiServiceFactory) UnoRuntime.queryInterface(
+                                                XMultiServiceFactory.class,
+                                                Provider);
+            oObj = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class,
+                                                           pMSF.createInstanceWithArguments(
+                                                                   "com.sun.star.configuration.ConfigurationUpdateAccess",
+                                                                   nodeArgs));
+
+        } catch (com.sun.star.uno.Exception e) {
+            e.printStackTrace();
+        }
+        XNameContainer xCont = (XNameContainer)UnoRuntime.queryInterface(XNameContainer.class, oObj);
+        insertOrUpdate(xCont, "file", "just");
+        insertOrUpdate(xCont, "ftp", "some");
+        insertOrUpdate(xCont, "dummy", "arbitrary");
+        insertOrUpdate(xCont, "http", "value");
+        // write the changes into the user layer.
+        XChangesBatch xBatch = (XChangesBatch)UnoRuntime.queryInterface(XChangesBatch.class, oObj);
+        try {
+            xBatch.commitChanges();
+        }
+        catch(com.sun.star.lang.WrappedTargetException e) {
+            // ignore: bug will be found with the interface test
+        }
+    }
+
+    /**
+     * Insert a value in a name container or else update it
+     * @param xCont The name conationer to insert or update.
+     * @param name The name of the value.
+     * @param value The value itself.
+     */
+    private void insertOrUpdate(XNameContainer xCont, String name, String value) {
+        boolean update = false;
+        try {
+            xCont.insertByName(name, value);
+            System.out.println("##### No Exception!");
+        }
+        catch(com.sun.star.lang.IllegalArgumentException e) {
+            // ignore: bug will be found with the interface test
+        }
+        catch(com.sun.star.lang.WrappedTargetException e) {
+            // ignore: bug will be found with the interface test
+        }
+        catch(com.sun.star.container.ElementExistException e) {
+            update = true;
+        }
+        try {
+            if (update)
+                xCont.replaceByName(name, value);
+        }
+        catch(com.sun.star.lang.IllegalArgumentException e) {
+            // ignore: bug will be found with the interface test
+        }
+        catch(com.sun.star.container.NoSuchElementException e) {
+            // ignore: bug will be found with the interface test
+        }
+        catch(com.sun.star.lang.WrappedTargetException e) {
+            // ignore: bug will be found with the interface test
+        }
+    }
+
 }
