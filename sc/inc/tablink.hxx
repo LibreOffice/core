@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablink.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:04:15 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 18:57:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,8 +155,9 @@ public:
     /** Returns the filter name and options from a file name.
         @param bWithContent
             true = Tries to detect the filter by looking at the file contents.
-            false = Detects filter by file name extension only (should be used in filter code only). */
-    static void         GetFilterName( const String& rFileName,
+            false = Detects filter by file name extension only (should be used in filter code only).
+        @return TRUE if a filter could be found, FALSE otherwise. */
+    static BOOL         GetFilterName( const String& rFileName,
                                         String& rFilter, String& rOptions,
                                         BOOL bWithContent );
 
