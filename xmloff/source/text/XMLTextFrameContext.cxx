@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextFrameContext.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:06:31 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 11:09:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -581,7 +581,17 @@ void XMLTextFrameContext_Impl::Create( sal_Bool bHRefOrBase64 )
     {
         case XML_TEXT_FRAME_OBJECT:
         case XML_TEXT_FRAME_OBJECT_OLE:
-            if( bHRefOrBase64 )
+            if( xBase64Stream.is() )
+            {
+                OUString sURL( GetImport().ResolveEmbeddedObjectURLFromBase64() );
+                if( sURL.getLength() )
+                    xPropSet = GetImport().GetTextImport()
+                            ->createAndInsertOLEObject( GetImport(), sURL,
+                                                        sStyleName,
+                                                        sTblName,
+                                                        nWidth, nHeight );
+            }
+            else if( sHRef.getLength() )
             {
                 OUString sURL( GetImport().ResolveEmbeddedObjectURL( sHRef,
                                                                 OUString() ) );
@@ -1215,12 +1225,12 @@ SvXMLImportContext *XMLTextFrameContext_Impl::CreateChildContext(
                 switch( nType )
                 {
                 case XML_TEXT_FRAME_GRAPHIC:
-                    xBase64Stream = GetImport().GetStreamForGraphicObjectURLFromBase64();
+                    xBase64Stream =
+                        GetImport().GetStreamForGraphicObjectURLFromBase64();
                     break;
                 case XML_TEXT_FRAME_OBJECT_OLE:
-                    sHRef = OUString( RTL_CONSTASCII_USTRINGPARAM( "#Obj12345678" ) );
                     xBase64Stream =
-                        GetImport().ResolveEmbeddedObjectURLFromBase64( sHRef );
+                        GetImport().GetStreamForEmbeddedObjectURLFromBase64();
                     break;
                 }
                 if( xBase64Stream.is() )
@@ -1283,13 +1293,13 @@ void XMLTextFrameContext_Impl::Characters( const OUString& rChars )
             {
                 if( XML_TEXT_FRAME_GRAPHIC == nType )
                 {
-                    xBase64Stream = GetImport().GetStreamForGraphicObjectURLFromBase64();
+                    xBase64Stream =
+                        GetImport().GetStreamForGraphicObjectURLFromBase64();
                 }
                 else
                 {
-                    sHRef = OUString( RTL_CONSTASCII_USTRINGPARAM( "#Obj12345678" ) );
                     xBase64Stream =
-                        GetImport().ResolveEmbeddedObjectURLFromBase64( sHRef );
+                        GetImport().GetStreamForEmbeddedObjectURLFromBase64();
                 }
                 if( xBase64Stream.is() )
                     bOwnBase64Stream = sal_True;
