@@ -2,9 +2,9 @@
  *
  *  $RCSfile: systemshell.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2002-07-05 07:23:55 $
+ *  last change: $Author: hr $ $Date: 2003-09-29 14:55:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ namespace SystemShell
           @param aFileUrl
                     The file url of the document.
     */
-    void AddToRecentDocumentList(const rtl::OUString& aFileUrl)
+    void AddToRecentDocumentList(const rtl::OUString& aFileUrl, const rtl::OUString& aMimeType)
     {
         rtl::OUString system_path;
         osl::FileBase::RC rc = osl::FileBase::getSystemPathFromFileURL(aFileUrl, system_path);
