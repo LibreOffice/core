@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfx.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-31 21:35:19 $
+ *  last change: $Author: kz $ $Date: 2001-11-13 22:32:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@ String STR_NONAME
     Text [ italian ] = "Senza nome" ;
     Text [ portuguese_brazilian ] = "Sem nome" ;
     Text [ portuguese ] = "Sem nome" ;
-    Text [ finnish ] = "Nimet?" ;
+    Text [ finnish ] = "Nimetön" ;
     Text [ danish ] = "ikke-navngivet" ;
     Text [ french ] = "Sans nom" ;
     Text [ swedish ] = "namnlös" ;
@@ -517,7 +517,7 @@ String RID_STR_NEW_TASK
     Text[ korean ] = "ìƒˆë¡œìš´ ìž‘ì—…";
     Text[ turkish ] = "Yeni görev";
     Text[ catalan ] = "Nueva tarea";
-    Text[ finnish ] = "Uusi teht?v?";
+    Text[ finnish ] = "Uusi tehtävä";
 };
 QueryBox MSG_QUERY_LASTVERSION
 {
@@ -548,6 +548,7 @@ QueryBox MSG_QUERY_LASTVERSION
     Message[ turkish ] = "Tüm deðiþiklikleri iptal et?";
     Message[ catalan ] = "¿Cancelar todos los cambios?";
 };
+
 
 
 
