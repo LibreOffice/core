@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: cmc $ $Date: 2001-11-06 16:34:30 $
+ *  last change: $Author: cmc $ $Date: 2001-11-08 16:39:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2307,6 +2307,8 @@ USHORT SwEscherEx::WriteFlyFrameAttr( const SwFrmFmt& rFmt, MSO_SPT eShapeType,
         else
             rPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x100000 );
     }
+    else
+        rPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x100000 );
 
     if( SFX_ITEM_SET == rFmt.GetItemState( RES_LR_SPACE, TRUE, &pItem ))
     {
