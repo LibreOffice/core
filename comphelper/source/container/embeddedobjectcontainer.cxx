@@ -2,9 +2,9 @@
  *
  *  $RCSfile: embeddedobjectcontainer.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mav $ $Date: 2005-02-02 16:04:07 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 14:27:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -635,12 +635,41 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::InsertEmbedde
     return xObj;
 }
 
-sal_Bool EmbeddedObjectContainer::CopyEmbeddedObject( const uno::Reference < embed::XEmbeddedObject >& xObj, ::rtl::OUString& rName )
+sal_Bool EmbeddedObjectContainer::TryToCopyGraphReplacement( EmbeddedObjectContainer& rSrc,
+                                                            const ::rtl::OUString& aOrigName,
+                                                            const ::rtl::OUString& aTargetName )
 {
+    sal_Bool bResult = sal_False;
+
+    if ( &rSrc != this && aOrigName.getLength() && aTargetName.getLength() )
+    {
+        ::rtl::OUString aMediaType;
+        uno::Reference < io::XInputStream > xGrStream = rSrc.GetGraphicStream( aOrigName, &aMediaType );
+        if ( xGrStream.is() )
+            bResult = InsertGraphicStream( xGrStream, aTargetName, aMediaType );
+    }
+
+    return bResult;
+}
+
+sal_Bool EmbeddedObjectContainer::CopyEmbeddedObject( EmbeddedObjectContainer& rSrc, const uno::Reference < embed::XEmbeddedObject >& xObj, ::rtl::OUString& rName )
+{
+    // get the object name before(!) it is assigned to a new storage
+    ::rtl::OUString aOrigName;
+    uno::Reference < embed::XEmbedPersist > xPersist( xObj, uno::UNO_QUERY );
+    if ( xPersist.is() )
+        aOrigName = xPersist->getEntryName();
+
     if ( !rName.getLength() )
         rName = CreateUniqueObjectName();
 
-    return StoreEmbeddedObject( xObj, rName, sal_True );
+    if ( StoreEmbeddedObject( xObj, rName, sal_True ) )
+    {
+        TryToCopyGraphReplacement( rSrc, aOrigName, rName );
+        return sal_True;
+    }
+
+    return sal_False;
 }
 
 sal_Bool EmbeddedObjectContainer::MoveEmbeddedObject( EmbeddedObjectContainer& rSrc, const uno::Reference < embed::XEmbeddedObject >& xObj, ::rtl::OUString& rName )
@@ -657,6 +686,8 @@ sal_Bool EmbeddedObjectContainer::MoveEmbeddedObject( EmbeddedObjectContainer& r
     try
     {
         bRet = InsertEmbeddedObject( xObj, rName );
+        if ( bRet )
+            TryToCopyGraphReplacement( rSrc, aName, rName );
     }
     catch ( uno::Exception& e )
     {
@@ -697,6 +728,8 @@ sal_Bool EmbeddedObjectContainer::MoveEmbeddedObject( EmbeddedObjectContainer& r
                 bRet = sal_False;
             }
         }
+
+        // rSrc.RemoveGraphicStream( aName );
     }
 
     return bRet;
@@ -744,6 +777,9 @@ sal_Bool EmbeddedObjectContainer::MoveEmbeddedObject( const ::rtl::OUString& rNa
                 uno::Reference < embed::XStorage > xNew = rCnt.pImpl->mxStorage->openStorageElement( rName, embed::ElementModes::READWRITE );
                 xOld->copyToStorage( xNew );
             }
+
+            rCnt.TryToCopyGraphReplacement( *this, rName, rName );
+            // RemoveGraphicStream( rName );
 
             return sal_True;
         }
@@ -899,6 +935,36 @@ sal_Bool EmbeddedObjectContainer::RemoveEmbeddedObject( const uno::Reference < e
     return sal_True;
 }
 
+uno::Reference < io::XInputStream > EmbeddedObjectContainer::GetGraphicStream( const ::rtl::OUString& aName, rtl::OUString* pMediaType )
+{
+    uno::Reference < io::XInputStream > xStream;
+
+    OSL_ENSURE( aName.getLength(), "Retrieving graphic for unknown object!" );
+    if ( aName.getLength() )
+    {
+        try
+        {
+            uno::Reference < embed::XStorage > xReplacements = pImpl->GetReplacements();
+            uno::Reference < io::XStream > xGraphicStream = xReplacements->openStreamElement( aName, embed::ElementModes::READ );
+            xStream = xGraphicStream->getInputStream();
+            if ( pMediaType )
+            {
+                uno::Reference < beans::XPropertySet > xSet( xStream, uno::UNO_QUERY );
+                if ( xSet.is() )
+                {
+                    uno::Any aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("MediaType") );
+                    aAny >>= *pMediaType;
+                }
+            }
+        }
+        catch ( uno::Exception& )
+        {
+        }
+    }
+
+    return xStream;
+}
+
 uno::Reference < io::XInputStream > EmbeddedObjectContainer::GetGraphicStream( const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >& xObj, rtl::OUString* pMediaType )
 {
     // get the object name
@@ -916,28 +982,7 @@ uno::Reference < io::XInputStream > EmbeddedObjectContainer::GetGraphicStream( c
     }
 
     // try to load it from the container storage
-    uno::Reference < io::XInputStream > xStream;
-    OSL_ENSURE( aName.getLength(), "Retrieving graphic for unknown object!" );
-    try
-    {
-        uno::Reference < embed::XStorage > xReplacements = pImpl->GetReplacements();
-        uno::Reference < io::XStream > xGraphicStream = xReplacements->openStreamElement( aName, embed::ElementModes::READ );
-        xStream = xGraphicStream->getInputStream();
-        if ( pMediaType )
-        {
-            uno::Reference < beans::XPropertySet > xSet( xStream, uno::UNO_QUERY );
-            if ( xSet.is() )
-            {
-                uno::Any aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("MediaType") );
-                aAny >>= *pMediaType;
-            }
-        }
-    }
-    catch ( uno::Exception& )
-    {
-    }
-
-    return xStream;
+    return GetGraphicStream( aName, pMediaType );
 }
 
 sal_Bool EmbeddedObjectContainer::InsertGraphicStream( const com::sun::star::uno::Reference < com::sun::star::io::XInputStream >& rStream, const ::rtl::OUString& rObjectName, const rtl::OUString& rMediaType )
