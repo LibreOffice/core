@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nativenumbersupplier.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: khong $ $Date: 2002-10-19 00:08:30 $
+ *  last change: $Author: khong $ $Date: 2002-10-19 00:22:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,8 @@ OUString SAL_CALL AsciiToNativeChar( const OUString& inStr, sal_Int32 startPos, 
     for (sal_Int32 i = 0; i < nCount; i++) {
         sal_Unicode ch = src[i];
         newStr->buffer[i] = (isNumber(ch) ? NumberChar[number][ ch - NUMBER_ZERO ] :
-            (isDecimal(ch) ? DecimalChar[number] : (isMinus(ch) ? MinusChar[number] : ch)));
+        isDecimal(ch) ? DecimalChar[number] : isMinus(ch) ? MinusChar[number] :
+        (isSeparator(ch) && number == NumberChar_FullWidth) ? thousandSeparator + 0xFEE0 : ch);
         offset[i] = startPos + i;
     }
     return OUString(newStr->buffer, nCount);
