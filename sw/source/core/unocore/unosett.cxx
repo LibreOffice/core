@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosett.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:24:35 $
+ *  last change: $Author: hr $ $Date: 2004-05-11 11:33:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1951,10 +1951,8 @@ void SwXNumberingRules::setNumberingRuleByIndex(
                 {
                     sal_Int32 nValue;
                     pData->aVal >>= nValue;
-                    if(nValue >= 0)
-                        aFmt.SetAbsLSpace((sal_uInt16) MM100_TO_TWIP(nValue));
-                    else
-                        bWrongArg = sal_True;
+                    // #i23727# nValue can be negative
+                    aFmt.SetAbsLSpace((sal_uInt16) MM100_TO_TWIP(nValue));
                 }
                 break;
                 case 7: //UNO_NAME_SYMBOL_TEXT_DISTANCE,
@@ -1971,15 +1969,9 @@ void SwXNumberingRules::setNumberingRuleByIndex(
                 {
                     sal_Int32 nValue;
                     pData->aVal >>= nValue;
-                    if(nValue <= 0)
-                    {
-                        nValue = MM100_TO_TWIP(nValue);
-                        if(-nValue > aFmt.GetAbsLSpace())
-                            aFmt.SetAbsLSpace(-nValue);
-                        aFmt.SetFirstLineOffset((short)nValue);
-                    }
-                    else
-                        bWrongArg = sal_True;
+                    // #i23727# nValue can be positive
+                    nValue = MM100_TO_TWIP(nValue);
+                    aFmt.SetFirstLineOffset((short)nValue);
                 }
                 break;
                 case 9: //"NumberingType"
