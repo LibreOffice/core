@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-23 09:48:35 $
+ *  last change: $Author: fs $ $Date: 2001-01-24 11:46:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -299,6 +299,7 @@ void SafeRemovePropertyListener(const Reference< XPropertySet > & xSet, const ::
 //-------------------------------------------------------------------------
 Reference< XInterface > SAL_CALL SbaTableQueryBrowser::Create(const Reference<XMultiServiceFactory >& _rxFactory)
 {
+    ::vos::OGuard aGuard(Application::GetSolarMutex());
     return *(new SbaTableQueryBrowser(_rxFactory));
 }
 //------------------------------------------------------------------------------
@@ -1614,6 +1615,8 @@ IMPL_LINK(SbaTableQueryBrowser, OnExpandEntry, SvLBoxEntry*, _pParent)
                 Image aImage(ModuleRes(VIEW_TREE_ICON));
                 populateTree(xViewSup->getViews(),_pParent,aImage);
             }
+            return 0L;
+                // 0 indicates that an error occured
         }
     }
     else // we have to expand the queries
@@ -2156,6 +2159,9 @@ void SbaTableQueryBrowser::unloadForm(sal_Bool _bDisposeConnection)
 // -------------------------------------------------------------------------
 void SAL_CALL SbaTableQueryBrowser::initialize( const Sequence< Any >& aArguments ) throw(Exception, RuntimeException)
 {
+    ::vos::OGuard aGuard(Application::GetSolarMutex());
+        // doin' a lot of VCL stuff here -> lock the SolarMutex
+
     // first initialize the parent
     SbaXDataBrowserController::initialize( aArguments );
 
