@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edattr.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: jp $ $Date: 2002-02-01 12:40:17 $
+ *  last change: $Author: fme $ $Date: 2002-04-10 07:04:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,15 @@
 #endif
 #ifndef _CRSSKIP_HXX
 #include <crsskip.hxx>
+#endif
+
+#ifdef BIDI
+#ifndef _TXTFRM_HXX
+#include <txtfrm.hxx>       // SwTxtFrm
+#endif
+#ifndef _DRAWFONT_HXX
+#include <drawfont.hxx>
+#endif
 #endif
 
 
@@ -509,6 +518,30 @@ BOOL lcl_IsNoEndTxtAttrAtPos( const SwTxtNode& rTNd, xub_StrLen nPos,
     return bRet;
 }
 
+
+#ifdef BIDI
+SwScriptInfo* lcl_GetScriptInfo( const SwTxtNode& rTNd )
+{
+    SwClientIter aClientIter( (SwTxtNode&)rTNd );
+    SwClient* pLast = aClientIter.GoStart();
+    SwScriptInfo* pScriptInfo = 0;
+
+    while( pLast )
+    {
+        if ( pLast->ISA( SwTxtFrm ) )
+        {
+            pScriptInfo = ((SwTxtFrm*)pLast)->GetScriptInfo();
+            if ( pScriptInfo )
+                break;
+        }
+        pLast = ++aClientIter;
+    }
+
+    return pScriptInfo;
+}
+#endif
+
+
 // returns the scripttpye of the selection
 USHORT SwEditShell::GetScriptType( USHORT nFlags ) const
 {
@@ -526,6 +559,11 @@ USHORT SwEditShell::GetScriptType( USHORT nFlags ) const
                 const SwTxtNode* pTNd = pStt->nNode.GetNode().GetTxtNode();
                 if( pTNd )
                 {
+#ifdef BIDI
+                    // try to get SwScriptInfo
+                    SwScriptInfo* pScriptInfo = lcl_GetScriptInfo( *pTNd );
+#endif
+
                     xub_StrLen nPos = pStt->nContent.GetIndex();
                     //Task 90448: we need the scripttype of the previous
                     //              position, if no selection exist!
@@ -536,9 +574,19 @@ USHORT SwEditShell::GetScriptType( USHORT nFlags ) const
                             nPos = aIdx.GetIndex();
                     }
 
+#ifdef BIDI
+                    const USHORT nScript = pScriptInfo ?
+                                           pScriptInfo->ScriptType( nPos ) :
+                                           pBreakIt->xBreak->
+                                           getScriptType( pTNd->GetTxt(), nPos );
+
+                    if( !lcl_IsNoEndTxtAttrAtPos( *pTNd, nPos, nRet, FALSE ))
+                        nRet |= lcl_SetScriptFlags( nScript );
+#else
                     if( !lcl_IsNoEndTxtAttrAtPos( *pTNd, nPos, nRet, FALSE ))
                         nRet |= lcl_SetScriptFlags( pBreakIt->xBreak->
                                     getScriptType( pTNd->GetTxt(), nPos ));
+#endif
                 }
             }
             else
@@ -550,6 +598,12 @@ USHORT SwEditShell::GetScriptType( USHORT nFlags ) const
                     {
                         const SwTxtNode* pTNd = aIdx.GetNode().GetTxtNode();
                         const String& rTxt = pTNd->GetTxt();
+
+#ifdef BIDI
+                        // try to get SwScriptInfo
+                        SwScriptInfo* pScriptInfo = lcl_GetScriptInfo( *pTNd );
+#endif
+
                         xub_StrLen nChg = aIdx == pStt->nNode
                                                 ? pStt->nContent.GetIndex()
                                                 : 0,
@@ -564,8 +618,15 @@ USHORT SwEditShell::GetScriptType( USHORT nFlags ) const
                         USHORT nScript;
                         while( nChg < nEndPos )
                         {
+#ifdef BIDI
+                            nScript = pScriptInfo ?
+                                      pScriptInfo->ScriptType( nChg ) :
+                                      pBreakIt->xBreak->getScriptType(
+                                                                rTxt, nChg );
+#else
                             nScript = pBreakIt->xBreak->getScriptType(
                                                                 rTxt, nChg );
+#endif
 
                             if( !lcl_IsNoEndTxtAttrAtPos( *pTNd, nChg, nRet, TRUE ) )
                                 nRet |= lcl_SetScriptFlags( nScript );
@@ -575,8 +636,18 @@ USHORT SwEditShell::GetScriptType( USHORT nFlags ) const
                                 break;
 
                             xub_StrLen nFldPos = nChg+1;
+
+#ifdef BIDI
+                            nChg = pScriptInfo ?
+                                   pScriptInfo->NextScriptChg( nChg ) :
+                                   (xub_StrLen)pBreakIt->xBreak->endOfScript(
+                                                    rTxt, nChg, nScript );
+#else
+
                             nChg = (xub_StrLen)pBreakIt->xBreak->endOfScript(
                                                     rTxt, nChg, nScript );
+#endif
+
                             nFldPos = rTxt.Search(
                                             CH_TXTATR_BREAKWORD, nFldPos );
                             if( nFldPos < nChg )
