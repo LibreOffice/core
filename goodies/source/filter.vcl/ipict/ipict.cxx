@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ipict.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-01 11:57:14 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 15:07:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,19 +63,16 @@
 #include <string.h>
 #include <vcl/bmpacc.hxx>
 #include <vcl/graph.hxx>
-#include <vcl/poly.hxx>
+#include <tools/poly.hxx>
 #include <vcl/virdev.hxx>
 #include <svtools/fltcall.hxx>
 
-#ifndef NOOLDSV
-#include <vcl/gdiobj.hxx>
-#else // NOOLDSV
+// MT: NOOLDSV, someone should change the code...
 enum PenStyle { PEN_NULL, PEN_SOLID, PEN_DOT, PEN_DASH, PEN_DASHDOT };
 enum BrushStyle { BRUSH_NULL, BRUSH_SOLID, BRUSH_HORZ, BRUSH_VERT,
                   BRUSH_CROSS, BRUSH_DIAGCROSS, BRUSH_UPDIAG, BRUSH_DOWNDIAG,
                   BRUSH_25, BRUSH_50, BRUSH_75,
                   BRUSH_BITMAP };
-#endif // NOOLDSV
 
 //============================ PictReader ==================================
 
@@ -180,8 +177,8 @@ private:
         // Auf jeden Fall wird die Anzahl der Datenbytes zu dem Opcode
         // zurueckgeliefert.
 
-    void SetPen( const Color& rPenColor, USHORT nWidth, PenStyle eStyle );
-    void SetBrush( const Color& rColor, const Color& rBgColor, BrushStyle eStyle );
+    void SetLineColor( const Color& rColor );
+    void SetFillColor( const Color& rColor );
 
 public:
 
@@ -246,12 +243,12 @@ public:
 
 //=================== Methoden von PictReader ==============================
 
-void PictReader::SetPen( const Color& rPenColor, USHORT nWidth, PenStyle eStyle )
+void PictReader::SetLineColor( const Color& rColor )
 {
-    pVirDev->SetLineColor( rPenColor );
+    pVirDev->SetLineColor( rColor );
 }
 
-void PictReader::SetBrush( const Color& rColor, const Color& rBgColor, BrushStyle eStyle )
+void PictReader::SetFillColor( const Color& rColor )
 {
     pVirDev->SetFillColor( rColor );
 }
@@ -600,28 +597,28 @@ void PictReader::DrawingMethod(PictDrawingMethod eMethod)
     if( eActMethod==eMethod ) return;
     switch (eMethod) {
         case PDM_FRAME:
-            SetPen( aActForeColor, nActPenSize, eActPenPenStyle );
-            SetBrush( Color(COL_TRANSPARENT), Color(COL_TRANSPARENT), BRUSH_NULL );
+            SetLineColor( aActForeColor );
+            SetFillColor( Color(COL_TRANSPARENT) );
             pVirDev->SetRasterOp(eActROP);
             break;
         case PDM_PAINT:
-            SetPen( Color(COL_TRANSPARENT), 0, PEN_NULL );
-            SetBrush( aActForeColor, aActBackColor, eActPenBrushStyle );
+            SetLineColor( Color(COL_TRANSPARENT) );
+            SetFillColor( aActForeColor );
             pVirDev->SetRasterOp(eActROP);
             break;
         case PDM_ERASE:
-            SetPen( Color(COL_TRANSPARENT), 0, PEN_NULL );
-            SetBrush( aActForeColor, aActBackColor, eActPenBrushStyle );
+            SetLineColor( Color(COL_TRANSPARENT) );
+            SetFillColor( aActForeColor );
             pVirDev->SetRasterOp(ROP_OVERPAINT);
             break;
         case PDM_INVERT:
-            SetPen( Color(COL_TRANSPARENT), 0, PEN_NULL );
-            SetBrush( Color( COL_BLACK ), Color( COL_BLACK ), BRUSH_SOLID );
+            SetLineColor( Color(COL_TRANSPARENT));
+            SetFillColor( Color( COL_BLACK ) );
             pVirDev->SetRasterOp(ROP_INVERT);
             break;
         case PDM_FILL:
-            SetPen( Color(COL_TRANSPARENT), 0, PEN_NULL );
-            SetBrush( aActForeColor, aActBackColor, eActPenBrushStyle );
+            SetLineColor( Color(COL_TRANSPARENT) );
+            SetFillColor( aActForeColor );
             pVirDev->SetRasterOp(ROP_OVERPAINT);
             break;
         case PDM_TEXT:
