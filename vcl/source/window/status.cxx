@@ -2,9 +2,9 @@
  *
  *  $RCSfile: status.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 16:22:11 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 16:22:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,9 @@
 #ifndef _SV_STATUS_HXX
 #include <status.hxx>
 #endif
-
+#ifndef _SV_VIRDEV_HXX
+#include <virdev.hxx>
+#endif
 
 
 // =======================================================================
@@ -101,6 +103,26 @@
 #define STATUSBAR_PRGS_MIN      5
 
 // -----------------------------------------------------------------------
+
+class StatusBar::ImplData
+{
+public:
+    ImplData();
+    ~ImplData();
+
+    VirtualDevice*      mpVirDev;
+    BOOL                mbTopBorder:1;
+};
+
+StatusBar::ImplData::ImplData()
+{
+    mpVirDev = NULL;
+    mbTopBorder = FALSE;
+}
+
+StatusBar::ImplData::~ImplData()
+{
+}
 
 struct ImplStatusItem
 {
@@ -163,6 +185,8 @@ BOOL StatusBar::ImplIsItemUpdate()
 
 void StatusBar::ImplInit( Window* pParent, WinBits nStyle )
 {
+    mpImplData = new ImplData;
+
     // Default ist RightAlign
     if ( !(nStyle & (WB_LEFT | WB_RIGHT)) )
         nStyle |= WB_RIGHT;
@@ -171,7 +195,7 @@ void StatusBar::ImplInit( Window* pParent, WinBits nStyle )
 
     // WinBits merken
     mpItemList      = new ImplStatusItemList;
-    mpVirDev        = new VirtualDevice( *this );
+    mpImplData->mpVirDev        = new VirtualDevice( *this );
     mnCurItemId     = 0;
     mbFormat        = TRUE;
     mbVisibleItems  = TRUE;
@@ -227,7 +251,9 @@ StatusBar::~StatusBar()
     delete mpItemList;
 
     // VirtualDevice loeschen
-    delete mpVirDev;
+    delete mpImplData->mpVirDev;
+
+    delete mpImplData;
 }
 
 // -----------------------------------------------------------------------
@@ -257,10 +283,10 @@ void StatusBar::ImplInitSettings( BOOL bFont,
         SetTextColor( aColor );
         SetTextFillColor();
 
-        mpVirDev->SetFont( GetFont() );
-        mpVirDev->SetTextColor( GetTextColor() );
-        mpVirDev->SetTextAlign( GetTextAlign() );
-        mpVirDev->SetTextFillColor();
+        mpImplData->mpVirDev->SetFont( GetFont() );
+        mpImplData->mpVirDev->SetTextColor( GetTextColor() );
+        mpImplData->mpVirDev->SetTextAlign( GetTextAlign() );
+        mpImplData->mpVirDev->SetTextFillColor();
     }
 
     if ( bBackground )
@@ -273,7 +299,7 @@ void StatusBar::ImplInitSettings( BOOL bFont,
         else
             aColor = rStyleSettings.GetWindowColor();
         SetBackground( aColor );
-        mpVirDev->SetBackground( GetBackground() );
+        mpImplData->mpVirDev->SetBackground( GetBackground() );
     }
 }
 
@@ -376,6 +402,8 @@ Rectangle StatusBar::ImplGetItemRectPos( USHORT nPos ) const
             aRect.Right()  = aRect.Left() + pItem->mnWidth + pItem->mnExtraWidth;
             aRect.Top()    = mnItemY;
             aRect.Bottom() = mnCalcHeight - STATUSBAR_OFFSET_Y;
+            if( IsTopBorder() )
+                aRect.Bottom()+=2;
         }
     }
 
@@ -408,11 +436,11 @@ void StatusBar::ImplDrawText( BOOL bOffScreen, long nOldTextWidth )
         {
             long nMaxWidth = Max( nOldTextWidth, GetTextWidth( aStr ) );
             Size aVirDevSize( nMaxWidth, aTextRect.GetHeight() );
-            mpVirDev->SetOutputSizePixel( aVirDevSize );
+            mpImplData->mpVirDev->SetOutputSizePixel( aVirDevSize );
             Rectangle aTempRect = aTextRect;
             aTempRect.SetPos( Point( 0, 0 ) );
-            mpVirDev->DrawText( aTempRect, aStr, TEXT_DRAW_LEFT | TEXT_DRAW_TOP | TEXT_DRAW_CLIP | TEXT_DRAW_ENDELLIPSIS );
-            DrawOutDev( aTextRect.TopLeft(), aVirDevSize, Point(), aVirDevSize, *mpVirDev );
+            mpImplData->mpVirDev->DrawText( aTempRect, aStr, TEXT_DRAW_LEFT | TEXT_DRAW_TOP | TEXT_DRAW_CLIP | TEXT_DRAW_ENDELLIPSIS );
+            DrawOutDev( aTextRect.TopLeft(), aVirDevSize, Point(), aVirDevSize, *mpImplData->mpVirDev );
         }
         else
             DrawText( aTextRect, aStr, TEXT_DRAW_LEFT | TEXT_DRAW_TOP | TEXT_DRAW_CLIP | TEXT_DRAW_ENDELLIPSIS );
@@ -435,7 +463,7 @@ void StatusBar::ImplDrawItem( BOOL bOffScreen, USHORT nPos, BOOL bDrawText, BOOL
     Size                aTextRectSize( aTextRect.GetSize() );
 
     if ( bOffScreen )
-        mpVirDev->SetOutputSizePixel( aTextRectSize );
+        mpImplData->mpVirDev->SetOutputSizePixel( aTextRectSize );
     else
     {
         Region aRegion( aTextRect );
@@ -448,7 +476,7 @@ void StatusBar::ImplDrawItem( BOOL bOffScreen, USHORT nPos, BOOL bDrawText, BOOL
         Size    aTextSize( GetTextWidth( pItem->maText ), GetTextHeight() );
         Point   aTextPos = ImplGetItemTextPos( aTextRectSize, aTextSize, pItem->mnBits );
         if ( bOffScreen )
-            mpVirDev->DrawText( aTextPos, pItem->maText );
+            mpImplData->mpVirDev->DrawText( aTextPos, pItem->maText );
         else
         {
             aTextPos.X() += aTextRect.Left();
@@ -463,7 +491,7 @@ void StatusBar::ImplDrawItem( BOOL bOffScreen, USHORT nPos, BOOL bDrawText, BOOL
         if ( bOffScreen )
         {
             mbInUserDraw = TRUE;
-            UserDrawEvent aODEvt( mpVirDev, Rectangle( Point(), aTextRectSize ), pItem->mnId );
+            UserDrawEvent aODEvt( mpImplData->mpVirDev, Rectangle( Point(), aTextRectSize ), pItem->mnId );
             UserDraw( aODEvt );
             mbInUserDraw = FALSE;
         }
@@ -475,7 +503,7 @@ void StatusBar::ImplDrawItem( BOOL bOffScreen, USHORT nPos, BOOL bDrawText, BOOL
     }
 
     if ( bOffScreen )
-        DrawOutDev( aTextRect.TopLeft(), aTextRectSize, Point(), aTextRectSize, *mpVirDev );
+        DrawOutDev( aTextRect.TopLeft(), aTextRectSize, Point(), aTextRectSize, *mpImplData->mpVirDev );
     else
         SetClipRegion();
 
@@ -600,6 +628,8 @@ void StatusBar::ImplCalcProgressRect()
     maPrgsFrameRect.Left()      = maPrgsTxtPos.X()+aPrgsTxtSize.Width()+STATUSBAR_OFFSET;
     maPrgsFrameRect.Top()       = mnItemY;
     maPrgsFrameRect.Bottom()    = mnCalcHeight - STATUSBAR_OFFSET_Y;
+    if( IsTopBorder() )
+        maPrgsFrameRect.Bottom()+=2;
 
     // Dabei die Breite des Fensters berechnen
     mnPrgsSize = maPrgsFrameRect.Bottom()-maPrgsFrameRect.Top()-(STATUSBAR_PRGS_OFFSET*2);
@@ -688,14 +718,17 @@ void StatusBar::Paint( const Rectangle& )
         }
     }
 
-    // draw a top border
-    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-    SetLineColor( rStyleSettings.GetShadowColor() );
-    DrawLine( Point( 0, 0 ), Point( mnDX-1, 0 ) );
-    SetLineColor( rStyleSettings.GetLightColor() );
-    DrawLine( Point( 0, 1 ), Point( mnDX-1, 1 ) );
+    // draw borders
+    if( IsTopBorder() )
+    {
+        const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+        SetLineColor( rStyleSettings.GetShadowColor() );
+        DrawLine( Point( 0, 0 ), Point( mnDX-1, 0 ) );
+        SetLineColor( rStyleSettings.GetLightColor() );
+        DrawLine( Point( 0, 1 ), Point( mnDX-1, 1 ) );
+    }
 
-    if ( mbBottomBorder )
+    if ( IsBottomBorder() )
     {
         const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
         SetLineColor( rStyleSettings.GetShadowColor() );
@@ -721,12 +754,16 @@ void StatusBar::Resize()
     mnDX = aSize.Width();
     mnDY = aSize.Height();
     mnCalcHeight = mnDY;
-    // subtract top border
-    mnCalcHeight -= 2;
-    if ( mbBottomBorder )
+    // subtract border
+    if( IsTopBorder() )
+        mnCalcHeight -= 2;
+    if ( IsBottomBorder() )
         mnCalcHeight -= 2;
 
     mnTextY = (mnCalcHeight-GetTextHeight())/2;
+    if( IsTopBorder() )
+        mnTextY += 2;
+    mnItemY = mnTextY - 1;
 
     // Formatierung neu ausloesen
     mbFormat = TRUE;
@@ -1365,16 +1402,43 @@ ULONG StatusBar::GetHelpId( USHORT nItemId ) const
 
 // -----------------------------------------------------------------------
 
+void StatusBar::ImplCalcBorder( )
+{
+    mnCalcHeight = mnDY;
+    // subtract border
+    if( IsTopBorder() )
+    {
+        mnCalcHeight -= 2;
+        mnTextY += 2;
+        mnItemY += 2;
+    }
+    if ( IsBottomBorder() )
+        mnCalcHeight -= 2;
+    mbFormat = TRUE;
+    Invalidate();
+}
+
 void StatusBar::SetBottomBorder( BOOL bBottomBorder )
 {
     if ( mbBottomBorder != bBottomBorder )
     {
         mbBottomBorder = bBottomBorder;
-        mnCalcHeight = mnDY;
-        if ( mbBottomBorder )
-            mnCalcHeight -= 2;
-        Invalidate();
+        ImplCalcBorder();
     }
+}
+
+void StatusBar::SetTopBorder( BOOL bTopBorder )
+{
+    if ( mpImplData->mbTopBorder != bTopBorder )
+    {
+        mpImplData->mbTopBorder = bTopBorder;
+        ImplCalcBorder();
+    }
+}
+
+BOOL StatusBar::IsTopBorder() const
+{
+    return mpImplData->mbTopBorder;
 }
 
 // -----------------------------------------------------------------------
@@ -1512,9 +1576,10 @@ Size StatusBar::CalcWindowSizePixel() const
     }
 
     nCalcHeight = GetTextHeight()+(STATUSBAR_OFFSET_TEXTY*2);
-    // add top border
-    nCalcHeight += 2;
-    if ( mbBottomBorder )
+    // add border
+    if( IsTopBorder() )
+        nCalcHeight += 2;
+    if ( IsBottomBorder() )
         nCalcHeight += 2;
 
     return Size( nCalcWidth, nCalcHeight );
