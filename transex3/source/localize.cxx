@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localize.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: nf $ $Date: 2001-07-31 12:47:04 $
+ *  last change: $Author: nf $ $Date: 2001-08-07 13:35:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,7 @@ const char *NegativeList[] = {
 
 const char *PositiveList[] = {
     "svx/inc/globlmn.hrc",
+    "svx/inc/globlac.hrc",
     "sw/source/ui/inc/swmn.hrc",
     "sw/source/ui/inc/swacc.hrc",
     "sw/source/ui/inc/toolbox.hrc",
