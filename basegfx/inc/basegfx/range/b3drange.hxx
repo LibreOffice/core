@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3drange.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: thb $ $Date: 2004-01-16 10:34:09 $
+ *  last change: $Author: thb $ $Date: 2004-01-16 13:40:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,38 @@ namespace basegfx
         {
         }
 
+        B3DRange(double x1,
+                 double y1,
+                 double z1,
+                 double x2,
+                 double y2,
+                 double z2,
+                 double x3,
+                 double y3,
+                 double z3)
+        :   maRangeX(x1),
+            maRangeY(y1),
+            maRangeZ(z1)
+        {
+            maRangeX.expand(x2);
+            maRangeY.expand(y2);
+            maRangeZ.expand(z2);
+            maRangeX.expand(x3);
+            maRangeY.expand(y3);
+            maRangeZ.expand(z3);
+        }
+
+        B3DRange(const B3DTuple& rTuple1,
+                 const B3DTuple& rTuple2,
+                 const B3DTuple& rTuple3)
+        :   maRangeX(rTuple1.getX()),
+            maRangeY(rTuple1.getY()),
+            maRangeZ(rTuple1.getZ())
+        {
+            expand(rTuple2);
+            expand(rTuple3);
+        }
+
         B3DRange(const B3DRange& rRange)
         :   maRangeX(rRange.maRangeX),
             maRangeY(rRange.maRangeY),
@@ -120,6 +152,51 @@ namespace basegfx
             maRangeX = rRange.maRangeX;
             maRangeY = rRange.maRangeY;
             maRangeZ = rRange.maRangeZ;
+        }
+
+        double getMinX() const
+        {
+            return maRangeX.getMinimum();
+        }
+
+        double getMinY() const
+        {
+            return maRangeY.getMinimum();
+        }
+
+        double getMinZ() const
+        {
+            return maRangeZ.getMinimum();
+        }
+
+        double getMaxX() const
+        {
+            return maRangeX.getMaximum();
+        }
+
+        double getMaxY() const
+        {
+            return maRangeY.getMaximum();
+        }
+
+        double getMaxZ() const
+        {
+            return maRangeZ.getMaximum();
+        }
+
+        double getWidth() const
+        {
+            return maRangeX.getRange();
+        }
+
+        double getHeight() const
+        {
+            return maRangeY.getRange();
+        }
+
+        double getDepth() const
+        {
+            return maRangeZ.getRange();
         }
 
         B3DTuple getMinimum() const

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2irange.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: thb $ $Date: 2004-01-15 19:57:15 $
+ *  last change: $Author: thb $ $Date: 2004-01-16 13:40:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,10 +87,29 @@ namespace basegfx
         {
         }
 
-        explicit B2IRange(const B2DTuple& rTuple)
+        explicit B2IRange(const B2ITuple& rTuple)
         :   maRangeX(rTuple.getX()),
             maRangeY(rTuple.getY())
         {
+        }
+
+        B2IRange(sal_Int32 x1,
+                 sal_Int32 y1,
+                 sal_Int32 x2,
+                 sal_Int32 y2)
+        :   maRangeX(x1),
+            maRangeY(y1)
+        {
+            maRangeX.expand(x2);
+            maRangeY.expand(y2);
+        }
+
+        B2IRange(const B2ITuple& rTuple1,
+                 const B2ITuple& rTuple2)
+        :   maRangeX(rTuple1.getX()),
+            maRangeY(rTuple1.getY())
+        {
+            expand( rTuple2 );
         }
 
         B2IRange(const B2IRange& rRange)
@@ -116,6 +135,36 @@ namespace basegfx
             maRangeY = rRange.maRangeY;
         }
 
+        sal_Int32 getMinX() const
+        {
+            return maRangeX.getMinimum();
+        }
+
+        sal_Int32 getMinY() const
+        {
+            return maRangeY.getMinimum();
+        }
+
+        sal_Int32 getMaxX() const
+        {
+            return maRangeX.getMaximum();
+        }
+
+        sal_Int32 getMaxY() const
+        {
+            return maRangeY.getMaximum();
+        }
+
+        sal_Int64 getWidth() const
+        {
+            return maRangeX.getRange();
+        }
+
+        sal_Int64 getHeight() const
+        {
+            return maRangeY.getRange();
+        }
+
         B2ITuple getMinimum() const
         {
             return B2ITuple(
@@ -126,7 +175,7 @@ namespace basegfx
 
         B2ITuple getMaximum() const
         {
-            return B2DTuple(
+            return B2ITuple(
                 maRangeX.getMaximum(),
                 maRangeY.getMaximum()
                 );

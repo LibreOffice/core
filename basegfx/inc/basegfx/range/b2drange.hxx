@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2drange.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: thb $ $Date: 2004-01-16 10:34:07 $
+ *  last change: $Author: thb $ $Date: 2004-01-16 13:40:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,25 @@ namespace basegfx
         {
         }
 
+        B2DRange(double x1,
+                 double y1,
+                 double x2,
+                 double y2)
+        :   maRangeX(x1),
+            maRangeY(y1)
+        {
+            maRangeX.expand(x2);
+            maRangeY.expand(y2);
+        }
+
+        B2DRange(const B2DTuple& rTuple1,
+                 const B2DTuple& rTuple2)
+        :   maRangeX(rTuple1.getX()),
+            maRangeY(rTuple1.getY())
+        {
+            expand( rTuple2 );
+        }
+
         B2DRange(const B2DRange& rRange)
         :   maRangeX(rRange.maRangeX),
             maRangeY(rRange.maRangeY)
@@ -114,6 +133,36 @@ namespace basegfx
         {
             maRangeX = rRange.maRangeX;
             maRangeY = rRange.maRangeY;
+        }
+
+        double getMinX() const
+        {
+            return maRangeX.getMinimum();
+        }
+
+        double getMinY() const
+        {
+            return maRangeY.getMinimum();
+        }
+
+        double getMaxX() const
+        {
+            return maRangeX.getMaximum();
+        }
+
+        double getMaxY() const
+        {
+            return maRangeY.getMaximum();
+        }
+
+        double getWidth() const
+        {
+            return maRangeX.getRange();
+        }
+
+        double getHeight() const
+        {
+            return maRangeY.getRange();
         }
 
         B2DTuple getMinimum() const

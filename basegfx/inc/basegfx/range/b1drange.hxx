@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b1drange.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: thb $ $Date: 2004-01-16 10:34:07 $
+ *  last change: $Author: thb $ $Date: 2004-01-16 13:40:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,12 @@ namespace basegfx
         explicit B1DRange(double fStartValue)
         :   maRange(fStartValue)
         {
+        }
+
+        B1DRange(double fStartValue1, double fStartValue2)
+        :   maRange(fStartValue1)
+        {
+            expand(fStartValue2);
         }
 
         B1DRange(const B1DRange& rRange)

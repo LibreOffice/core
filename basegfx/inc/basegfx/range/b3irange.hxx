@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3irange.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: thb $ $Date: 2004-01-15 19:57:30 $
+ *  last change: $Author: thb $ $Date: 2004-01-16 13:40:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,38 @@ namespace basegfx
         {
         }
 
+        B3IRange(sal_Int32 x1,
+                 sal_Int32 y1,
+                 sal_Int32 z1,
+                 sal_Int32 x2,
+                 sal_Int32 y2,
+                 sal_Int32 z2,
+                 sal_Int32 x3,
+                 sal_Int32 y3,
+                 sal_Int32 z3)
+        :   maRangeX(x1),
+            maRangeY(y1),
+            maRangeZ(z1)
+        {
+            maRangeX.expand(x2);
+            maRangeY.expand(y2);
+            maRangeZ.expand(z2);
+            maRangeX.expand(x3);
+            maRangeY.expand(y3);
+            maRangeZ.expand(z3);
+        }
+
+        B3IRange(const B3ITuple& rTuple1,
+                 const B3ITuple& rTuple2,
+                 const B3ITuple& rTuple3)
+        :   maRangeX(rTuple1.getX()),
+            maRangeY(rTuple1.getY()),
+            maRangeZ(rTuple1.getZ())
+        {
+            expand(rTuple2);
+            expand(rTuple3);
+        }
+
         B3IRange(const B3IRange& rRange)
         :   maRangeX(rRange.maRangeX),
             maRangeY(rRange.maRangeY),
@@ -121,9 +153,54 @@ namespace basegfx
             maRangeZ = rRange.maRangeZ;
         }
 
+        sal_Int32 getMinX() const
+        {
+            return maRangeX.getMinimum();
+        }
+
+        sal_Int32 getMinY() const
+        {
+            return maRangeY.getMinimum();
+        }
+
+        sal_Int32 getMinZ() const
+        {
+            return maRangeZ.getMinimum();
+        }
+
+        sal_Int32 getMaxX() const
+        {
+            return maRangeX.getMaximum();
+        }
+
+        sal_Int32 getMaxY() const
+        {
+            return maRangeY.getMaximum();
+        }
+
+        sal_Int32 getMaxZ() const
+        {
+            return maRangeZ.getMaximum();
+        }
+
+        sal_Int64 getWidth() const
+        {
+            return maRangeX.getRange();
+        }
+
+        sal_Int64 getHeight() const
+        {
+            return maRangeY.getRange();
+        }
+
+        sal_Int64 getDepth() const
+        {
+            return maRangeZ.getRange();
+        }
+
         B3ITuple getMinimum() const
         {
-            return B3DTuple(
+            return B3ITuple(
                 maRangeX.getMinimum(),
                 maRangeY.getMinimum(),
                 maRangeZ.getMinimum()
@@ -132,7 +209,7 @@ namespace basegfx
 
         B3ITuple getMaximum() const
         {
-            return B3DTuple(
+            return B3ITuple(
                 maRangeX.getMaximum(),
                 maRangeY.getMaximum(),
                 maRangeZ.getMaximum()
