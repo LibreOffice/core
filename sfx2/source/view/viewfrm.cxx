@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: mav $ $Date: 2002-09-03 14:20:41 $
+ *  last change: $Author: mba $ $Date: 2002-09-04 08:51:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3514,6 +3514,13 @@ void SfxViewFrame::MiscState_Impl(SfxItemSet &rSet)
 
                 case SID_RECORDMACRO :
                 {
+                    const char* pName = GetObjectShell()->GetFactory().GetShortName();
+                    if (  strcmp(pName,"swriter") && strcmp(pName,"scalc") )
+                    {
+                        rSet.DisableItem( nWhich );
+                        break;
+                    }
+
                     ::rtl::OUString sProperty = rtl::OUString::createFromAscii("DispatchRecorderSupplier");
                     com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xSet(
                             GetFrame()->GetFrameInterface(),
@@ -3530,6 +3537,13 @@ void SfxViewFrame::MiscState_Impl(SfxItemSet &rSet)
 
                 case SID_STOP_RECORDING :
                 {
+                    const char* pName = GetObjectShell()->GetFactory().GetShortName();
+                    if (  strcmp(pName,"swriter") && strcmp(pName,"scalc") )
+                    {
+                        rSet.DisableItem( nWhich );
+                        break;
+                    }
+
                     ::rtl::OUString sProperty = rtl::OUString::createFromAscii("DispatchRecorderSupplier");
                     com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xSet(
                             GetFrame()->GetFrameInterface(),
