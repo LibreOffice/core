@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SVersionRCFile.java,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-03-12 18:26:28 $
+ *  last change: $Author: svesik $ $Date: 2004-04-19 23:13:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,14 +72,14 @@ import java.util.Enumeration;
 import java.util.StringTokenizer;
 
 public class SVersionRCFile {
-    
-    public static final String DEFAULT_NAME = 
+
+    public static final String DEFAULT_NAME =
         System.getProperty("os.name").startsWith("Windows") == true ?
             System.getProperty("user.home") + File.separator +
             "Application Data" + File.separator + "sversion.ini" :
             System.getProperty("user.home") + File.separator +
             ".sversionrc";
-    
+
     public static final String FILE_URL_PREFIX =
         System.getProperty("os.name").startsWith("Windows") == true ?
             "file:///" : "file://";
@@ -167,7 +167,7 @@ public class SVersionRCFile {
 
     private void load(BufferedReader br) throws IOException {
         String s;
-        
+
         while ((s = br.readLine()) != null &&
               (s.equals(VERSIONS_LINE)) != true);
 
@@ -191,7 +191,7 @@ public class SVersionRCFile {
 
     public static String toFileURL(String path) {
         File f = new File(path);
-        
+
         if (!f.exists())
             return null;
 
@@ -243,7 +243,7 @@ public class SVersionRCFile {
         }
         return null;
     }
-    
+
     public static void main(String[] args) {
         SVersionRCFile ov;
 
