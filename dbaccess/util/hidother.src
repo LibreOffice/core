@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-24 08:35:10 $
+ *  last change: $Author: oj $ $Date: 2001-04-24 14:34:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -235,10 +235,14 @@ hidspecial HID_TABLE_DESIGN_NO_CONNECTION               { HelpId = HID_TABLE_DES
 hidspecial HID_DSADMIN_CREATEDATABASE                   { HelpId = HID_DSADMIN_CREATEDATABASE ; };
 hidspecial HID_BROWSER_COLUMNINFO                       { HelpId = HID_BROWSER_COLUMNINFO ; };
 hidspecial HID_DSADMIN_USECATALOG                       { HelpId = HID_DSADMIN_USECATALOG ; };
+hidspecial HID_BROWSER_VIEW_CREATE_DESIGN               { HelpId = HID_BROWSER_VIEW_CREATE_DESIGN ; };
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.21  2001/04/24 08:35:10  oj
+ *  wrong hid name
+ *
  *  Revision 1.20  2001/03/22 08:06:31  oj
  *  some new helpids
  *

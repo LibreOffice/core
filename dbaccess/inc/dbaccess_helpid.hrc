@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbaccess_helpid.hrc,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-24 08:34:41 $
+ *  last change: $Author: oj $ $Date: 2001-04-24 14:35:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,6 +251,7 @@
 #define HID_DSADMIN_CREATEDATABASE                  (HID_DBACCESS_START + 159)
 #define HID_BROWSER_COLUMNINFO                      (HID_DBACCESS_START + 160)
 #define HID_DSADMIN_USECATALOG                      (HID_DBACCESS_START + 161)
+#define HID_BROWSER_VIEW_CREATE_DESIGN              (HID_DBACCESS_START + 162)
 
 // don't forget to update the file util/hidother.src
 #endif // _DBA_DBACCESS_HELPID_HRC_
@@ -258,6 +259,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.26  2001/04/24 08:34:41  oj
+ *  wrong hid name
+ *
  *  Revision 1.25  2001/03/22 08:06:00  oj
  *  some new helpids
  *
