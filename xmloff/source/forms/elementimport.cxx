@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementimport.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: fs $ $Date: 2002-10-02 14:31:10 $
+ *  last change: $Author: fs $ $Date: 2002-10-25 13:14:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,9 @@
 #endif
 #ifndef _XMLOFF_FORMS_EVENTIMPORT_HXX_
 #include "eventimport.hxx"
+#endif
+#ifndef XMLOFF_FORMSTYLES_HXX
+#include "formstyles.hxx"
 #endif
 
 #ifndef _COMPHELPER_EXTRACT_HXX_
@@ -186,6 +189,7 @@ namespace xmloff
         ,m_xParentContainer(_rxParentContainer)
         ,m_rFormImport(_rImport)
         ,m_rEventManager(_rEventManager)
+        ,m_pStyleElement( NULL )
     {
         OSL_ENSURE(m_xParentContainer.is(), "OElementImport::OElementImport: invalid parent container!");
     }
@@ -302,6 +306,17 @@ namespace xmloff
             }
         }
 
+        // set the style properties
+        if ( m_pStyleElement && m_xElement.is() )
+        {
+            const_cast< OControlStyleContext* >( m_pStyleElement )->FillPropertySet( m_xElement );
+
+            ::rtl::OUString sNumberStyleName = const_cast< OControlStyleContext* >( m_pStyleElement )->getNumberStyleName( );
+            if ( sNumberStyleName.getLength() )
+                // the style also has a number (sub) style
+                m_rContext.applyControlNumberStyle( m_xElement, sNumberStyleName );
+        }
+
         // insert the element into the parent container
         if (!m_sName.getLength())
         {
@@ -362,8 +377,17 @@ namespace xmloff
                 // remember the name for later use in EndElement
                 m_sName = _rValue;
 
-            // let the base class handle it
-            OPropertyImport::handleAttribute(_nNamespaceKey, _rLocalName, _rValue);
+            // maybe it's the style attribute?
+            if ( 0 == _rLocalName.compareToAscii( getSpecialAttributeName( SCA_COLUMN_STYLE_NAME ) ) )
+            {
+                const SvXMLStyleContext* pStyleContext = m_rContext.getStyleElement( _rValue );
+                OSL_ENSURE( pStyleContext, "OPropertyImport::handleAttribute: do not know the style!" );
+                // remember the element for later usage.
+                m_pStyleElement = static_cast< const OControlStyleContext* >( pStyleContext );
+            }
+            else
+                // let the base class handle it
+                OPropertyImport::handleAttribute(_nNamespaceKey, _rLocalName, _rValue);
         }
     }
 
@@ -1389,6 +1413,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.30  2002/10/02 14:31:10  fs
+ *  #103388# some performance logging
+ *
  *  Revision 1.29  2002/09/09 13:55:30  fs
  *  #102475# OControlImport::EndElement: when reading a 'default value' property (such as 'DefaultText'), ensure that it does not wrongly overwrite the 'value' property (such as 'Text')
  *

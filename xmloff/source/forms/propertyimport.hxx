@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyimport.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-29 09:44:19 $
+ *  last change: $Author: fs $ $Date: 2002-10-25 13:19:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,6 @@ namespace com { namespace sun { namespace star { namespace util {
     struct Date;
 } } } }
 
-class XMLPropStyleContext;
 //.........................................................................
 namespace xmloff
 {
@@ -105,15 +104,15 @@ namespace xmloff
 
     protected:
         DECLARE_STL_VECTOR( ::com::sun::star::beans::PropertyValue, PropertyValueArray );
-        PropertyValueArray      m_aValues;
+        PropertyValueArray          m_aValues;
             // the values which the instance collects between StartElement and EndElement
 
         DECLARE_STL_STDKEY_SET( ::rtl::OUString, StringSet );
-        StringSet               m_aEncounteredAttributes;
+        StringSet                   m_aEncounteredAttributes;
 
-        IFormsImportContext&    m_rContext;
+        IFormsImportContext&        m_rContext;
 
-        sal_Bool                m_bTrackAttributes;
+        sal_Bool                    m_bTrackAttributes;
 
         // TODO: think about the restriction that the class does not know anything about the object it is importing.
         // Perhaps this object should be known to the class, so setting the properties ('normal' ones as well as
@@ -276,6 +275,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.8  2001/03/29 09:44:19  fs
+ *  enableTrackAttributes to prevent the (expensive) attribute tracking
+ *
  *  Revision 1.7  2001/03/28 13:59:54  fs
  *  #85371# +simulateDefaultedAttribute / +encounteredAttribute
  *

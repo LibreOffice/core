@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerimport.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-28 14:59:18 $
+ *  last change: $Author: fs $ $Date: 2002-10-25 13:17:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,7 @@ class SvXMLImport;
 class SvXMLImportContext;
 class XMLPropertyHandlerFactory;
 class SvXMLImportPropertyMapper;
+class XMLPropStyleContext;
 
 SV_DECL_REF( SvXMLStylesContext );
     // unfortunately, we can't put this into our namespace, as the macro expands to (amongst others) a forward
@@ -165,6 +166,11 @@ namespace xmloff
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
                                             getServiceFactory();
         virtual SvXMLImport&                getGlobalContext();
+        const SvXMLStyleContext*            getStyleElement(const ::rtl::OUString& _rStyleName) const;
+        void applyControlNumberStyle(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControlModel,
+            const ::rtl::OUString& _rControlNumerStyleName
+        );
         virtual void                        enterEventContext();
         virtual void                        leaveEventContext();
 
@@ -200,6 +206,17 @@ namespace xmloff
             const rtl::OUString& _rLocalName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttribs);
 
+        /**
+        */
+        XMLPropStyleContext* createControlStyleContext(
+            sal_uInt16 _nPrefix,
+            const ::rtl::OUString& _rLocalName,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList,
+            SvXMLStylesContext& _rParentStyles,
+            sal_uInt16 _nFamily = 0,
+            sal_Bool _bDefaultStyle = sal_False
+        );
+
         /** get the control with the given id
         */
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
@@ -213,17 +230,6 @@ namespace xmloff
         /** announces the auto-style context to the form importer
         */
         void setAutoStyleContext(SvXMLStylesContext* _pNewContext);
-
-        /** sets the given number style on the given control
-            @param _rxControlModel
-                the control model which's style is to be set
-            @param _rControlNumerStyleName
-                the style name for the control's number style
-        */
-        void applyControlNumberStyle(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControlModel,
-            const ::rtl::OUString& _rControlNumerStyleName
-        );
     };
 
 //.........................................................................
@@ -235,6 +241,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.9  2001/05/28 14:59:18  fs
+ *  #86712# added control number style related functionality
+ *
  *  Revision 1.8  2001/03/20 13:39:58  fs
  *  #83970# +createOfficeFormsContext
  *

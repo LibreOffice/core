@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementimport.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fs $ $Date: 2002-10-02 14:31:09 $
+ *  last change: $Author: fs $ $Date: 2002-10-25 13:14:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,7 @@ namespace xmloff
 
     class IControlIdMap;
     class IFormsImportContext;
+    class OControlStyleContext;
 
     //=====================================================================
     //= OElementNameMap
@@ -137,6 +138,9 @@ namespace xmloff
         ::rtl::OUString         m_sName;            // the name of the object (redundant, already contained in the base class' array)
         IFormsImportContext&    m_rFormImport;      // the form import context
         IEventAttacherManager&  m_rEventManager;    // the event attacher manager
+
+        const OControlStyleContext* m_pStyleElement;    // the XML element which describes the style we encountered
+                                                        // while reading our element
 
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
                         m_xParentContainer;
@@ -194,6 +198,10 @@ namespace xmloff
 
     private:
         ::rtl::OUString implGetDefaultName() const;
+
+        /** sets the style properties which have been read for the element (if any)
+        */
+        void implSetStyleProperties( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObject );
     };
 
     //=====================================================================
@@ -643,6 +651,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.15  2002/10/02 14:31:09  fs
+ *  #103388# some performance logging
+ *
  *  Revision 1.14  2001/11/05 15:24:12  fs
  *  #94194# +m_bEncounteredLSAttrib
  *

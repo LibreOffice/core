@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerimport.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dvo $ $Date: 2001-09-21 16:27:53 $
+ *  last change: $Author: fs $ $Date: 2002-10-25 13:16:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,9 @@
 #ifndef _XMLOFF_FORMS_STRINGS_HXX_
 #include "strings.hxx"
 #endif
+#ifndef XMLOFF_FORMSTYLES_HXX
+#include "formstyles.hxx"
+#endif
 #ifndef _XMLOFF_XMLICTXT_HXX
 #include "xmlictxt.hxx"
 #endif
@@ -85,6 +88,9 @@
 #endif
 #ifndef _XMLOFF_PROPERTYSETMAPPER_HXX
 #include "xmlprmap.hxx"
+#endif
+#ifndef _XMLOFF_PRSTYLEI_HXX_
+#include "prstylei.hxx"
 #endif
 #ifndef _XMLOFF_XMLIMP_HXX
 #include "xmlimp.hxx"
@@ -417,6 +423,21 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
+    const SvXMLStyleContext* OFormLayerXMLImport_Impl::getStyleElement(const ::rtl::OUString& _rStyleName) const
+    {
+        OSL_ENSURE( m_pAutoStyles, "OFormLayerXMLImport_Impl::getStyleElement: have no auto style context!" );
+            // did you use setAutoStyleContext?
+
+        const SvXMLStyleContext* pControlStyle =
+            m_pAutoStyles ? m_pAutoStyles->FindStyleChildContext( XML_STYLE_FAMILY_CONTROL_ID, _rStyleName ) : NULL;
+        OSL_ENSURE( pControlStyle || !m_pAutoStyles,
+                    ::rtl::OString( "OFormLayerXMLImport_Impl::getStyleElement: did not find the style named \"" )
+                +=  ::rtl::OString( _rStyleName.getStr(), _rStyleName.getLength(), RTL_TEXTENCODING_ASCII_US )
+                +=  ::rtl::OString( "\"!" ) );
+        return pControlStyle;
+    }
+
+    //---------------------------------------------------------------------
     void OFormLayerXMLImport_Impl::enterEventContext()
     {
         // install our own translation table. We need to disable the other tables because of name conflicts.
@@ -573,6 +594,14 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
+    XMLPropStyleContext* OFormLayerXMLImport_Impl::createControlStyleContext( sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName,
+        const Reference< sax::XAttributeList >& _rxAttrList, SvXMLStylesContext& _rParentStyles,
+        sal_uInt16 _nFamily, sal_Bool _bDefaultStyle )
+    {
+        return new OControlStyleContext( m_rImporter, _nPrefix, _rLocalName, _rxAttrList, _rParentStyles, _nFamily, _bDefaultStyle );
+    }
+
+    //---------------------------------------------------------------------
     void OFormLayerXMLImport_Impl::seekPage(const Reference< XDrawPage >& _rxDrawPage)
     {
         OSL_ENSURE(m_aCurrentPageIds == m_aControlIds.end(), "OFormLayerXMLImport_Impl::seekPage: importing another page currently! This will smash your import!");
@@ -587,6 +616,11 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.14  2001/09/21 16:27:53  dvo
+ *  #92176# include PrinterPaperTray property
+ *  SvXMLImportProperty now 'knows' the SvXMLImport in order to
+ *  enable error handling for 'wrong' paper trays and properties
+ *
  *  Revision 1.13  2001/05/28 15:04:18  fs
  *  #86712# no releaseContext anymore
  *
