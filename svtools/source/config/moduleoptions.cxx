@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduleoptions.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 17:22:49 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 16:08:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -851,7 +851,7 @@ sal_Bool SvtModuleOptions_Impl::IsModuleInstalled( SvtModuleOptions::EModule eMo
                                                   break;
         case SvtModuleOptions::E_DRAW          :  sURL = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:factory/sdraw"));
                                                   break;
-        case SvtModuleOptions::E_IMPRESS       :  sURL = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:factory/simpress?slot=10425"));
+        case SvtModuleOptions::E_IMPRESS       :  sURL = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:factory/simpress?slot=6686"));
                                                   break;
         case SvtModuleOptions::E_MATH          :  sURL = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:factory/smath"));
                                                   break;
