@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:58 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 19:24:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,6 @@
 
 #include <filedlg.hxx>
 #include <filedlg2.hxx>
-#include <vcl/rcid.h>
 
 PathDialog::PathDialog( Window* _pParent, WinBits nStyle, BOOL bCreateDir ) :
     ModalDialog( _pParent, WB_STDMODAL | nStyle )
