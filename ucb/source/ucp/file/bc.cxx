@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bc.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-16 14:53:36 $
+ *  last change: $Author: kso $ $Date: 2000-11-02 15:50:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -384,6 +384,15 @@ BaseContent::execute( const Command& aCommand,
             {
                 if( ! ( aCommand.Argument >>= aFalseCommandArgument ) )
                     throw CommandAbortedException();
+
+                if ( ( aFalseCommandArgument.Mode
+                            == OpenMode::DOCUMENT_SHARE_DENY_NONE ) ||
+                     ( aFalseCommandArgument.Mode
+                             == OpenMode::DOCUMENT_SHARE_DENY_WRITE ) )
+                {
+                    // Currently unsupported.
+                      throw CommandAbortedException();
+                }
 
                 aOpenArgument.Mode = aFalseCommandArgument.Mode;
                 aOpenArgument.Priority = aFalseCommandArgument.Priority;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavcontent.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kso $ $Date: 2000-11-02 10:28:23 $
+ *  last change: $Author: kso $ $Date: 2000-11-02 15:49:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,9 @@
 #endif
 #ifndef _COM_SUN_STAR_UCB_OPENCOMMANDARGUMENT2_HPP_
 #include <com/sun/star/ucb/OpenCommandArgument2.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UCB_OPENMODE_HPP_
+#include <com/sun/star/ucb/OpenMode.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UCB_INSERTCOMMANDARGUMENT_HPP_
 #include <com/sun/star/ucb/InsertCommandArgument.hpp>
@@ -595,65 +598,89 @@ Any SAL_CALL Content::execute( const Command& aCommand,
       // Note: Implemented by base class.
       aRet <<= getCommandInfo();
     }
-  else if ( aCommand.Name.compareToAscii( "open" ) == 0 )
+    else if ( aCommand.Name.compareToAscii( "open" ) == 0 )
     {
-      //////////////////////////////////////////////////////////////////
-      // open command
-      //////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////
+          // open command
+          //////////////////////////////////////////////////////////////////
 
-      OpenCommandArgument2 aOpenCommand;
-      if ( aCommand.Argument >>= aOpenCommand )
-    {
-      if (isFolder()) {
-        std::vector< DAVResource >* pResources = new  std::vector< DAVResource >;
-        getChildrenResources(*pResources, Environment);
-        Reference< XDynamicResultSet > xSet
-          = new DynamicResultSet( m_xSMgr, this, aOpenCommand, pResources );
-        aRet <<= xSet;
-      }
-      else {
-        OUString aURL = m_xIdentifier->getContentIdentifier();
-        Reference< XOutputStream > xOut
-          = Reference< XOutputStream >(aOpenCommand.Sink, UNO_QUERY );
-        if (xOut.is())
-          {
-        // PUSH: write data
-        try {
-          _pWebdavSession->GET(_path, xOut, Environment);
-        } catch (DAVException e) {
-          VOS_ENSURE( sal_False, "GET : DAVException" );
-          throw CommandAbortedException();
-        }
-          }
-        else
-          {     Reference< XActiveDataSink > xDataSink
-              = Reference< XActiveDataSink >(aOpenCommand.Sink, UNO_QUERY );
-          if (xDataSink.is())
+          OpenCommandArgument2 aOpenCommand;
+          if ( aCommand.Argument >>= aOpenCommand )
         {
-          // PULL: wait for client read
-          try {
-            Reference< XInputStream > xIn =_pWebdavSession->GET(_path, Environment);
-            xDataSink->setInputStream(xIn);
-          } catch (DAVException e) {
-            VOS_ENSURE( sal_False, "GET : DAVException" );
-            throw CommandAbortedException();
-          }
+              if ( isFolder() )
+            {
+                // Open collection.
+
+                std::vector< DAVResource >* pResources
+                    = new  std::vector< DAVResource >;
+                getChildrenResources( *pResources, Environment );
+                Reference< XDynamicResultSet > xSet = new DynamicResultSet(
+                                    m_xSMgr, this, aOpenCommand, pResources );
+                aRet <<= xSet;
+              }
+              else
+            {
+                // Open document.
+
+                if ( ( aOpenCommand.Mode
+                            == OpenMode::DOCUMENT_SHARE_DENY_NONE ) ||
+                     ( aOpenCommand.Mode
+                             == OpenMode::DOCUMENT_SHARE_DENY_WRITE ) )
+                {
+                    // Currently(?) unsupported.
+                      throw CommandAbortedException();
+                }
+
+                OUString aURL = m_xIdentifier->getContentIdentifier();
+                Reference< XOutputStream > xOut
+                      = Reference< XOutputStream >(aOpenCommand.Sink, UNO_QUERY );
+                if ( xOut.is() )
+                  {
+                    // PUSH: write data
+                    try
+                    {
+                          _pWebdavSession->GET( _path, xOut, Environment );
+                    }
+                    catch ( DAVException & )
+                    {
+                          VOS_ENSURE( sal_False, "GET : DAVException" );
+                          throw CommandAbortedException();
+                    }
+                  }
+                else
+                  {
+                    Reference< XActiveDataSink > xDataSink
+                          = Reference< XActiveDataSink >(
+                                                aOpenCommand.Sink, UNO_QUERY );
+                      if ( xDataSink.is() )
+                    {
+                          // PULL: wait for client read
+                          try
+                        {
+                            Reference< XInputStream > xIn
+                                =_pWebdavSession->GET( _path, Environment );
+                            xDataSink->setInputStream( xIn );
+                          }
+                        catch ( DAVException &)
+                        {
+                            VOS_ENSURE( sal_False, "GET : DAVException" );
+                            throw CommandAbortedException();
+                          }
+                    }
+                      else
+                    {
+                          VOS_ENSURE( sal_False,
+                                      "Content::execute - invalid parameter!" );
+                          throw CommandAbortedException();
+                    }
+                  }
+              }
         }
           else
         {
-          VOS_ENSURE( sal_False,
-                  "Content::execute - invalid parameter!" );
-          throw CommandAbortedException();
+              VOS_ENSURE( sal_False, "Content::execute - invalid parameter!" );
+              throw CommandAbortedException();
         }
-          }
-      }
-    }
-      else
-    {
-      VOS_ENSURE( sal_False,
-              "Content::execute - invalid parameter!" );
-      throw CommandAbortedException();
-    }
     }
   else if ( aCommand.Name.compareToAscii( "insert" ) == 0 )
     {
