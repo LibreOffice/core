@@ -59,7 +59,7 @@ PYRUNTIME_DIRS=\
 
 FILES=\
     $(DESTROOT)$/program$/$(DLLPRE)pyuno$(DLLPOST) 		\
-    $(DESTROOT)$/program$/$(DLLPRE)pycpld$(DLLPOST)	\
+    $(DESTROOT)$/program$/$(DLLPRE)pythonloader.uno$(DLLPOST)	\
     $(DESTROOT)$/program$/pyuno$(INISUFFIX)			\
     $(DESTROOT)$/program$/uno.py				\
     $(DESTROOT)$/program$/unohelper.py			\
@@ -133,7 +133,7 @@ $(DESTROOT)$/program$/pyuno_setup$(BATCHSUFFIX) : makefile.mk
     echo #\!/bin/sh >> $@
     chmod +x $@
 .ENDIF
-    echo regcomp -register -r services.rdb -c pycpld >>$@
+    echo regcomp -register -r services.rdb -c pythonloader.uno >>$@
 #	echo "$(MYCOPY) applicat.rdb pydemo$/applicat.rdb" >> $@
     echo regcomp -register -br types.rdb -br services.rdb -r services.rdb -c vnd.openoffice.pymodule:swritercomp -l com.sun.star.loader.Python >>$@
 
