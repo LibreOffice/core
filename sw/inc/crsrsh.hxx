@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crsrsh.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 09:12:35 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 14:42:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -802,7 +802,6 @@ public:
     FASTBOOL GoStartSentence();
     FASTBOOL GoEndSentence();
     FASTBOOL GoStartPara();
-
     FASTBOOL SelectWord( const Point* pPt = 0 );
 
     // Abfrage vom CrsrTravelling Status
