@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rdbmaker.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tbe $ $Date: 2001-05-11 09:02:06 $
+ *  last change: $Author: tbe $ $Date: 2001-05-11 09:39:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -259,6 +259,7 @@ OString createFileName(const OString& path)
     do
     {
         nameBuffer.append(fileName.getToken( 0, token, nIndex ).getStr());
+        if ( nIndex == -1 ) break;
 
         if (nameBuffer.getLength() == 0 || OString(".") == nameBuffer.getStr())
         {
