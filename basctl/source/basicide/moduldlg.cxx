@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldlg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tbe $ $Date: 2001-06-28 15:26:41 $
+ *  last change: $Author: tbe $ $Date: 2001-07-04 13:37:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,13 +228,12 @@ BOOL __EXPORT ExtBasicTreeListBox::NotifyAcceptDrop( SvLBoxEntry* pEntry )
 
         // a module/dialog is copied/moved
         SbxItem aSbxItem = GetSbxItem( pSelected );
-        pVar = (SbxVariable*)aSbxItem.GetSbx();
 
         // get source module/dialog name
         String aSourceName = aSbxItem.GetName();
 
         // module/dialog already existing?
-        if ( ( pVar && pVar->ISA( SbModule ) && pDestBasic->FindModule( pVar->GetName() ) ) ||
+        if ( ( aSbxItem.GetType() == BASICIDE_TYPE_MODULE && BasicIDE::HasModule( pDestShell, aDestLibName, aSourceName ) ) ||
              ( aSbxItem.GetType() == BASICIDE_TYPE_DIALOG && BasicIDE::HasDialog( pDestShell, aDestLibName, aSourceName ) ) )
         {
             bValid = FALSE;
