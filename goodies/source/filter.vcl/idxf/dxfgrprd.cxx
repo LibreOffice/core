@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dxfgrprd.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:15 $
+ *  last change: $Author: sj $ $Date: 2001-06-19 08:54:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,6 +152,7 @@ DXFGroupReader::DXFGroupReader(SvStream & rIStream,
     rIS.Seek(0);
 
     for (i=0; i<10; i++) S0_9[i][0]=0;
+    S100[ 0 ] = S102[ 0 ] = 0;
     for (i=0; i<50; i++) F10_59[i]=0.0;
     for (i=0; i<20; i++) I60_79[i]=0;
     for (i=0; i< 8; i++) F140_147[i]=0.0;
@@ -179,6 +180,13 @@ USHORT DXFGroupReader::Read()
     if      (nG<  10) ReadS(S0_9[nG]);
     else if (nG<  60) F10_59[nG-10]=ReadF();
     else if (nG<  80) I60_79[nG-60]=ReadI();
+    else if (nG==100) ReadS(S100);
+    else if (nG==102) ReadS(S102);
+    else if (nG==105)
+    {
+        char aTmp[ DXF_MAX_STRING_LEN + 1 ];
+        ReadS( aTmp );      // hex string
+    }
     else if (nG< 140) goto LErr;
     else if (nG< 148) F140_147[nG-140]=ReadF();
     else if (nG< 170) goto LErr;
@@ -186,6 +194,19 @@ USHORT DXFGroupReader::Read()
     else if (nG< 180) ReadI();
     else if (nG< 210) goto LErr;
     else if (nG< 240) F210_239[nG-210]=ReadF();
+    else if (nG==330)
+    {
+        char aTmp[ DXF_MAX_STRING_LEN + 1 ];
+        ReadS( aTmp );      // hex string
+    }
+    else if (nG< 340)
+        ReadI();
+    else if (nG==340)
+        ReadI();
+    else if (nG==350)
+        ReadI();
+    else if (nG==360)
+        ReadI();
     else if (nG< 999) goto LErr;
     else if (nG<1010) ReadS(S999_1009[nG-999]);
     else if (nG<1060) F1010_1059[nG-1010]=ReadF();
@@ -248,7 +269,12 @@ double DXFGroupReader::GetF(USHORT nG)
 const char * DXFGroupReader::GetS(USHORT nG)
 {
     if (nG<10) return S0_9[nG];
-    else {
+    else if ( nG == 100 )
+        return S100;
+    else if ( nG == 102 )
+        return S102;
+    else
+    {
         nG-=999;
         if (nG<11) return S999_1009[nG];
         else return NULL;
@@ -291,11 +317,21 @@ void DXFGroupReader::SetF(USHORT nG, double fF)
 
 void DXFGroupReader::SetS(USHORT nG, const char * sS)
 {
-    if (nG<10) strcpy(S0_9[nG],sS);
-    else {
-        nG-=999;
-        if (nG<11) strcpy(S999_1009[nG],sS);
+    char* pPtr = NULL;
+    if ( nG < 10 )
+        pPtr = S0_9[ nG ];
+    else if ( nG == 100 )
+        pPtr = S100;
+    else if ( nG == 102 )
+        pPtr = S102;
+    else
+    {
+        nG -= 999;
+        if ( nG < 11 )
+            pPtr = S999_1009[ nG ];
     }
+    if ( pPtr )
+        strcpy( pPtr, sS );
 }
 
 
