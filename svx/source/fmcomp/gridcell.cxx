@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridcell.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-25 10:02:45 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 15:49:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,9 @@
 #include "sdbdatacolumn.hxx"
 #endif
 
+#ifndef _COM_SUN_STAR_AWT_VISUALEFFECT_HPP_
+#include <com/sun/star/awt/VisualEffect.hpp>
+#endif
 #ifndef _COM_SUN_STAR_SDBC_XSTATEMENT_HPP_
 #include <com/sun/star/sdbc/XStatement.hpp>
 #endif
@@ -1562,6 +1565,18 @@ DbCheckBox::DbCheckBox( DbGridColumn& _rColumn )
     setAlignedController( sal_False );
 }
 
+namespace
+{
+    void setCheckBoxStyle( Window* _pWindow, USHORT nStyle )
+    {
+        AllSettings aSettings = _pWindow->GetSettings();
+        StyleSettings aStyleSettings = aSettings.GetStyleSettings();
+        aStyleSettings.SetCheckBoxStyle( nStyle );
+        aSettings.SetStyleSettings( aStyleSettings );
+        _pWindow->SetSettings( aSettings );
+    }
+}
+
 //------------------------------------------------------------------------------
 void DbCheckBox::Init(Window* pParent, const Reference< XRowSet >& xCursor)
 {
@@ -1574,6 +1589,21 @@ void DbCheckBox::Init(Window* pParent, const Reference< XRowSet >& xCursor)
     m_pPainter->SetPaintTransparent( sal_True );
 
     m_pPainter->SetBackground();
+
+    try
+    {
+        Reference< XPropertySet > xModel( m_rColumn.getModel() );
+        sal_Int16 nStyle = awt::VisualEffect::LOOK3D;
+        if ( xModel.is() )
+            xModel->getPropertyValue( FM_PROP_VISUALEFFECT ) >>= nStyle;
+
+        setCheckBoxStyle( m_pWindow, nStyle == awt::VisualEffect::FLAT ? STYLE_CHECKBOX_MONO : STYLE_CHECKBOX_WIN );
+        setCheckBoxStyle( m_pPainter, nStyle == awt::VisualEffect::FLAT ? STYLE_CHECKBOX_MONO : STYLE_CHECKBOX_WIN );
+    }
+    catch( const Exception& )
+    {
+        OSL_ENSURE( sal_False, "DbCheckBox::Init: caught an exception!" );
+    }
 
     DbCellControl::Init(pParent, xCursor);
 }
@@ -3676,7 +3706,7 @@ void SAL_CALL FmXListBoxCell::addItems(const ::comphelper::StringSequence& aItem
         for ( sal_uInt16 n = 0; n < aItems.getLength(); n++ )
         {
             m_pBox->InsertEntry( aItems.getConstArray()[n], nP );
-            if ( nPos < 0xFFFF )    // Nicht wenn 0xFFFF, weil LIST_APPEND
+            if ( nPos != -1 )    // Nicht wenn 0xFFFF, weil LIST_APPEND
                 nP++;
         }
     }
