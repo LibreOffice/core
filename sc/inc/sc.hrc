@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sc.hrc,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:52:04 $
+ *  last change: $Author: hr $ $Date: 2004-08-03 12:42:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -369,6 +369,9 @@
 #define HID_SC_DPDATAFIELD      ( HID_SC_OTHER_START + 10 )
 #define HID_SC_DPSUBT_OPT       ( HID_SC_OTHER_START + 11 )
 #define HID_SC_DPSUBT_HIDE      ( HID_SC_OTHER_START + 12 )
+#define HID_SC_DPNUMGROUP       ( HID_SC_OTHER_START + 13 )
+#define HID_SC_DPDATEGROUP      ( HID_SC_OTHER_START + 14 )
+#define HID_SC_DPDATEGROUP_LB   ( HID_SC_OTHER_START + 15 )
 #define HID_SC_DPSHOWDETAIL     ( HID_SC_OTHER_START + 16 )
 
 // Analysis Addin Functions (max.120) ----------------------------------------
@@ -1595,6 +1598,8 @@
 #define RID_SCDLG_LINKAREA              (SC_DIALOGS_START + 132)
 #define RID_SCDLG_DPDATAFIELD           (SC_DIALOGS_START + 133)
 #define RID_SCDLG_DPSUBTOTAL_OPT        (SC_DIALOGS_START + 134)
+#define RID_SCDLG_DPNUMGROUP            (SC_DIALOGS_START + 135)
+#define RID_SCDLG_DPDATEGROUP           (SC_DIALOGS_START + 136)
 #define RID_SCDLG_DPSHOWDETAIL          (SC_DIALOGS_START + 137)
 
 #define SC_DIALOGS_END          (SC_DIALOGS_START + 150)
