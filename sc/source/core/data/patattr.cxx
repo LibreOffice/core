@@ -2,9 +2,9 @@
  *
  *  $RCSfile: patattr.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: er $ $Date: 2001-08-10 18:02:39 $
+ *  last change: $Author: dr $ $Date: 2001-10-30 14:51:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -751,13 +751,14 @@ void ScPatternAttr::DeleteUnchanged( const ScPatternAttr* pOldAttrs )
         //  only items that are set are interesting
         if ( rThisSet.GetItemState( nWhich, FALSE, &pThisItem ) == SFX_ITEM_SET )
         {
-            if ( rOldSet.GetItemState( nWhich, TRUE, &pOldItem ) == SFX_ITEM_SET )
+            SfxItemState eOldState = rOldSet.GetItemState( nWhich, TRUE, &pOldItem );
+            if ( eOldState == SFX_ITEM_SET )
             {
                 //  item is set in OldAttrs (or its parent) -> compare pointers
                 if ( pThisItem == pOldItem )
                     rThisSet.ClearItem( nWhich );
             }
-            else
+            else if ( eOldState != SFX_ITEM_DONTCARE )
             {
                 //  not set in OldAttrs -> compare item value to default item
                 if ( *pThisItem == rThisSet.GetPool()->GetDefaultItem( nWhich ) )
