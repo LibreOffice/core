@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: lwang $ $Date: 2003-01-03 09:41:35 $
+#   last change: $Author: lla $ $Date: 2003-01-21 13:27:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
