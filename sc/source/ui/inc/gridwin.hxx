@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-17 17:24:48 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:33:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,8 +172,8 @@ private:
     BOOL                    bPivotMouse;            // Pivot-D&D (alte Pivottabellen)
     ScPivot*                pDragPivot;
     BOOL                    bPivotColField;
-    USHORT                  nPivotCol;
-    USHORT                  nPivotField;
+    SCCOL                   nPivotCol;
+    SCCOL                   nPivotField;
 
     BOOL                    bDPMouse;               // DataPilot-D&D (neue Pivottabellen)
     long                    nDPField;
@@ -182,12 +182,12 @@ private:
     BOOL                    bRFMouse;               // RangeFinder-Drag
     BOOL                    bRFSize;
     USHORT                  nRFIndex;
-    short                   nRFAddX;
-    short                   nRFAddY;
+    SCsCOL                  nRFAddX;
+    SCsROW                  nRFAddY;
 
     USHORT                  nPagebreakMouse;        // Pagebreak-Modus Drag
-    USHORT                  nPagebreakBreak;
-    USHORT                  nPagebreakPrev;
+    SCCOLROW                nPagebreakBreak;
+    SCCOLROW                nPagebreakPrev;
     ScRange                 aPagebreakSource;
     ScRange                 aPagebreakDrag;
     BOOL                    bPagebreakDrawn;
@@ -198,10 +198,10 @@ private:
     long                    nLastClickY;
 
     BOOL                    bDragRect;
-    USHORT                  nDragStartX;
-    USHORT                  nDragStartY;
-    USHORT                  nDragEndX;
-    USHORT                  nDragEndY;
+    SCCOL                   nDragStartX;
+    SCROW                   nDragStartY;
+    SCCOL                   nDragEndX;
+    SCROW                   nDragEndY;
 
     USHORT                  nCurrentPointer;
 
@@ -228,12 +228,12 @@ private:
 
     BOOL            TestMouse( const MouseEvent& rMEvt, BOOL bAction );
 
-    BOOL            DoPageFieldSelection( USHORT nCol, USHORT nRow );
-    void            DoPushButton( USHORT nCol, USHORT nRow, const MouseEvent& rMEvt );
+    BOOL            DoPageFieldSelection( SCCOL nCol, SCROW nRow );
+    void            DoPushButton( SCCOL nCol, SCROW nRow, const MouseEvent& rMEvt );
     void            PivotMouseMove( const MouseEvent& rMEvt );
     void            PivotMouseButtonUp( const MouseEvent& rMEvt );
     BOOL            PivotTestMouse( const MouseEvent& rMEvt, BOOL bMove );
-    void            DoPivotDrop( BOOL bDelete, BOOL bToCols, short nDestPos );
+    void            DoPivotDrop( BOOL bDelete, BOOL bToCols, SCSIZE nDestPos );
 
     void            DPMouseMove( const MouseEvent& rMEvt );
     void            DPMouseButtonUp( const MouseEvent& rMEvt );
@@ -245,14 +245,14 @@ private:
 
     void            UpdateDragRect( BOOL bShowRange, const Rectangle& rPosRect );
 
-    BOOL            IsAutoFilterActive( USHORT nCol, USHORT nRow, USHORT nTab );
-    void            ExecFilter( ULONG nSel, USHORT nCol, USHORT nRow,
+    BOOL            IsAutoFilterActive( SCCOL nCol, SCROW nRow, SCTAB nTab );
+    void            ExecFilter( ULONG nSel, SCCOL nCol, SCROW nRow,
                                 const String& aValue );
     void            FilterSelect( ULONG nSel );
 
-    void            ExecDataSelect( USHORT nCol, USHORT nRow, const String& rStr );
+    void            ExecDataSelect( SCCOL nCol, SCROW nRow, const String& rStr );
 
-    void            ExecPageFieldSelect( USHORT nCol, USHORT nRow, BOOL bHasSelection, const String& rStr );
+    void            ExecPageFieldSelect( SCCOL nCol, SCROW nRow, BOOL bHasSelection, const String& rStr );
 
     BOOL            HasScenarioButton( const Point& rPosPixel, ScRange& rScenRange );
 
@@ -260,7 +260,7 @@ private:
 
     sal_Int8        AcceptPrivateDrop( const AcceptDropEvent& rEvt );
     sal_Int8        ExecutePrivateDrop( const ExecuteDropEvent& rEvt );
-    sal_Int8        DropTransferObj( ScTransferObj* pTransObj, USHORT nDestPosX, USHORT nDestPosY,
+    sal_Int8        DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPosX, SCROW nDestPosY,
                                     const Point& rLogicPos, sal_Int8 nDndAction );
 
     BOOL            DrawMouseButtonDown(const MouseEvent& rMEvt);
@@ -290,7 +290,7 @@ private:
                                      BOOL           bBtnIn  = FALSE );
     Rectangle       GetListValButtonRect( const ScAddress& rButtonPos );
 
-    void            DrawPagePreview( USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2 );
+    void            DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2 );
 
     BOOL            GetEditUrl( const Point& rPos,
                                 String* pName=0, String* pUrl=0, String* pTarget=0 );
@@ -298,13 +298,13 @@ private:
                                 String* pName=0, String* pUrl=0, String* pTarget=0 );
 
     BOOL            HitRangeFinder( const Point& rMouse, BOOL& rCorner, USHORT* pIndex = NULL,
-                                        short* pAddX = NULL, short* pAddY = NULL );
+                                        SCsCOL* pAddX = NULL, SCsROW* pAddY = NULL );
 
     USHORT          HitPageBreak( const Point& rMouse, ScRange* pSource = NULL,
-                                    USHORT* pBreak = NULL, USHORT* pPrev = NULL );
+                                    SCCOLROW* pBreak = NULL, SCCOLROW* pPrev = NULL );
 
 #ifdef AUTOFILTER_POPUP
-    void            DoAutoFilterPopup( USHORT nCol, USHORT nRow, BOOL bDataSelect );
+    void            DoAutoFilterPopup( SCCOL nCol, SCROW nRow, BOOL bDataSelect );
 #endif
 
     void            PasteSelection( const Point& rPosPixel );
@@ -355,24 +355,24 @@ public:
 
     void            UpdateFormulas();
 
-    void            DoAutoFilterMenue( USHORT nCol, USHORT nRow, BOOL bDataSelect );
+    void            DoAutoFilterMenue( SCCOL nCol, SCROW nRow, BOOL bDataSelect );
     void            DoScenarioMenue( const ScRange& rScenRange );
-    void            DoPageFieldMenue( USHORT nCol, USHORT nRow );
+    void            DoPageFieldMenue( SCCOL nCol, SCROW nRow );
 
-    void            DrawButtons( USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2,
-                                    RowInfo* pRowInfo, USHORT nArrCount );
+    void            DrawButtons( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
+                                    RowInfo* pRowInfo, SCSIZE nArrCount );
 
-    void            Draw( USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2,
+    void            Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
                         ScUpdateMode eMode = SC_UPDATE_ALL );
 
-    void            InvertSimple( USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2,
+    void            InvertSimple( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
                                     BOOL bTestMerge = FALSE, BOOL bRepeat = FALSE );
 
-    void            DrawDragRect( USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2,
+    void            DrawDragRect( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
                                     BOOL bMarkDrop = TRUE );
 
-    void            DrawRefMark( USHORT nRefStartX, USHORT nRefStartY,
-                                    USHORT nRefEndX, USHORT nRefEndY,
+    void            DrawRefMark( SCCOL nRefStartX, SCROW nRefStartY,
+                                    SCCOL nRefEndX, SCROW nRefEndY,
                                     const Color& rColor, BOOL bHandle );
 
     void            CreateAnchorHandle(SdrHdlList& rHdl, const ScAddress& rAddress);
@@ -385,7 +385,7 @@ public:
 
     void            UpdateListValPos( BOOL bVisible, const ScAddress& rPos );
 
-    BOOL            ShowNoteMarker( short nPosX, short nPosY, BOOL bKeyboard );
+    BOOL            ShowNoteMarker( SCsCOL nPosX, SCsROW nPosY, BOOL bKeyboard );
     void            HideNoteMarker();
 
     MapMode         GetDrawMapMode( BOOL bForce = FALSE );
