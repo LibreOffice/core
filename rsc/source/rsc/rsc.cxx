@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rsc.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2001-06-12 14:58:55 $
+ *  last change: $Author: nf $ $Date: 2001-06-14 11:33:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 
     Source Code Control System - Header
 
-    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/rsc/source/rsc/rsc.cxx,v 1.2 2001-06-12 14:58:55 nf Exp $
+    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/rsc/source/rsc/rsc.cxx,v 1.3 2001-06-14 11:33:57 nf Exp $
 
 **************************************************************************/
 /****************************************************************/
@@ -353,7 +353,7 @@ RscCmdLine::RscCmdLine( short argc, char ** argv, RscError * pEH )
                 LT( USER6               );
                 LT( USER7               );
                 LT( USER8               );
-                LT( EXTERN              );
+                LT( USER9               );
                 if( nLangTypeId == LANGUAGE_DONTKNOW )
                     pEH->FatalError( ERR_UNKNOWNSW, RscId(), *ppStr );
             }
