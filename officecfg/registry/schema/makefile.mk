@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: dg $ $Date: 2002-05-23 18:22:55 $
+#   last change: $Author: dg $ $Date: 2002-05-27 15:41:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -110,6 +110,8 @@ TRIMXSL=$(foreach,i,$(XCSFILES) $(MISC)$/registry$/schema$/{$(subst,.xcs,.xcs $i
 #COMPARE=$(foreach,i,$(XCSFILES) $(MISC)$/compare$/{$(subst,.xcs,.xcd $i)})
 
 UNIXTEXT= \
+    $(MISC)$/oo-org-map.properties \
+    $(MISC)$/oo-ldap-attr-map.properties \
     $(MISC)$/oo-common.conf \
     $(MISC)$/oo-common.ldif
 
