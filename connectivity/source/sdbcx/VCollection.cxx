@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VCollection.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-10 07:38:26 $
+ *  last change: $Author: oj $ $Date: 2002-05-10 07:51:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,18 +126,17 @@ Sequence< Type > SAL_CALL OCollection::getTypes() throw (RuntimeException)
         Type* pBegin    = aTypes.getArray();
         Type* pEnd      = pBegin + aTypes.getLength();
 
-        Sequence< Type > aRetType(aTypes.getLength()-1);
+        ::std::vector<Type> aOwnTypes;
+        aOwnTypes.reserve(aTypes.getLength());
         Type aType = ::getCppuType(static_cast< Reference<XNameAccess> *>(NULL));
         sal_Int32 i=0;
         for(;pBegin != pEnd; ++pBegin)
         {
             if ( *pBegin != aType )
-            {
-                aRetType.getArray()[i++] = *pBegin;
-            }
+                aOwnTypes.push_back(*pBegin);
         }
 
-        return aRetType;
+        return Sequence< Type >(aOwnTypes.begin(),aOwnTypes.size());
     }
     return OCollectionBase::getTypes( );
 }
