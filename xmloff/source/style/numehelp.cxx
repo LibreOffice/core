@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numehelp.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:24:27 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:41:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,9 @@ XMLNumberFormatAttributesExportHelper::XMLNumberFormatAttributesExportHelper(
     xNumberFormats(xTempNumberFormatsSupplier.is() ? xTempNumberFormatsSupplier->getNumberFormats() : ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormats > ()),
     aNumberFormats(),
     sStandardFormat(RTL_CONSTASCII_USTRINGPARAM(XML_STANDARDFORMAT)),
-    sType(RTL_CONSTASCII_USTRINGPARAM(XML_TYPE))
+    sType(RTL_CONSTASCII_USTRINGPARAM(XML_TYPE)),
+    msCurrencySymbol(RTL_CONSTASCII_USTRINGPARAM(XML_CURRENCYSYMBOL)),
+    msCurrencyAbbreviation(RTL_CONSTASCII_USTRINGPARAM(XML_CURRENCYABBREVIATION))
 {
 }
 
@@ -128,7 +130,9 @@ XMLNumberFormatAttributesExportHelper::XMLNumberFormatAttributesExportHelper(
     sAttrStringValue(rTempExport.GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_OFFICE, GetXMLToken(XML_STRING_VALUE))),
     sAttrCurrency(rTempExport.GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_OFFICE, GetXMLToken(XML_CURRENCY))),
     sStandardFormat(RTL_CONSTASCII_USTRINGPARAM(XML_STANDARDFORMAT)),
-    sType(RTL_CONSTASCII_USTRINGPARAM(XML_TYPE))
+    sType(RTL_CONSTASCII_USTRINGPARAM(XML_TYPE)),
+    msCurrencySymbol(RTL_CONSTASCII_USTRINGPARAM(XML_CURRENCYSYMBOL)),
+    msCurrencyAbbreviation(RTL_CONSTASCII_USTRINGPARAM(XML_CURRENCYABBREVIATION))
 {
 }
 
@@ -139,8 +143,9 @@ XMLNumberFormatAttributesExportHelper::~XMLNumberFormatAttributesExportHelper()
 sal_Int16 XMLNumberFormatAttributesExportHelper::GetCellType(const sal_Int32 nNumberFormat, rtl::OUString& sCurrency, sal_Bool& bIsStandard)
 {
     XMLNumberFormat aFormat(sEmpty, nNumberFormat, 0);
-    XMLNumberFormatSet::iterator aItr = aNumberFormats.find(aFormat);
-    if (aItr != aNumberFormats.end())
+    XMLNumberFormatSet::iterator aItr(aNumberFormats.find(aFormat));
+    XMLNumberFormatSet::iterator aEndItr(aNumberFormats.end());
+    if (aItr != aEndItr)
     {
         bIsStandard = aItr->bIsStandard;
         sCurrency = aItr->sCurrency;
@@ -297,18 +302,16 @@ sal_Bool XMLNumberFormatAttributesExportHelper::GetCurrencySymbol(const sal_Int3
 {
     if (xNumberFormatsSupplier.is())
     {
-        uno::Reference <util::XNumberFormats> xNumberFormats = xNumberFormatsSupplier->getNumberFormats();
+        uno::Reference <util::XNumberFormats> xNumberFormats(xNumberFormatsSupplier->getNumberFormats());
         if (xNumberFormats.is())
         {
             try
             {
-                uno::Reference <beans::XPropertySet> xNumberPropertySet = xNumberFormats->getByKey(nNumberFormat);
-                uno::Any aCurrencySymbol = xNumberPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_CURRENCYSYMBOL)));
-                if ( aCurrencySymbol >>= sCurrencySymbol)
+                uno::Reference <beans::XPropertySet> xNumberPropertySet(xNumberFormats->getByKey(nNumberFormat));
+                if ( xNumberPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_CURRENCYSYMBOL))) >>= sCurrencySymbol)
                 {
                     rtl::OUString sCurrencyAbbreviation;
-                    uno::Any aCurrencyAbbreviation = xNumberPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_CURRENCYABBREVIATION)));
-                    if ( aCurrencyAbbreviation >>= sCurrencyAbbreviation)
+                    if ( xNumberPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_CURRENCYABBREVIATION))) >>= sCurrencyAbbreviation)
                     {
                         if ( sCurrencyAbbreviation.getLength() != 0 )
                             sCurrencySymbol = sCurrencyAbbreviation;
@@ -336,17 +339,15 @@ sal_Int16 XMLNumberFormatAttributesExportHelper::GetCellType(const sal_Int32 nNu
 {
     if (xNumberFormatsSupplier.is())
     {
-        uno::Reference <util::XNumberFormats> xNumberFormats = xNumberFormatsSupplier->getNumberFormats();
+        uno::Reference <util::XNumberFormats> xNumberFormats(xNumberFormatsSupplier->getNumberFormats());
         if (xNumberFormats.is())
         {
             try
             {
-                uno::Reference <beans::XPropertySet> xNumberPropertySet = xNumberFormats->getByKey(nNumberFormat);
-                uno::Any aIsStandardFormat = xNumberPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STANDARDFORMAT)));
-                aIsStandardFormat >>= bIsStandard;
-                uno::Any aNumberType = xNumberPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_TYPE)));
+                uno::Reference <beans::XPropertySet> xNumberPropertySet(xNumberFormats->getByKey(nNumberFormat));
+                xNumberPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STANDARDFORMAT))) >>= bIsStandard;
                 sal_Int16 nNumberType;
-                if ( aNumberType >>= nNumberType )
+                if ( xNumberPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_TYPE))) >>= nNumberType )
                 {
                     return nNumberType;
                 }
@@ -381,29 +382,27 @@ void XMLNumberFormatAttributesExportHelper::SetNumberFormatAttributes(SvXMLExpor
         rXMLExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_STRING_VALUE, rValue);
 }
 
-sal_Bool XMLNumberFormatAttributesExportHelper::GetCurrencySymbol(const sal_Int32 nNumberFormat, rtl::OUString& sCurrencySymbol)
+sal_Bool XMLNumberFormatAttributesExportHelper::GetCurrencySymbol(const sal_Int32 nNumberFormat, rtl::OUString& rCurrencySymbol)
 {
     if (!xNumberFormats.is() && pExport && pExport->GetNumberFormatsSupplier().is())
-        xNumberFormats = pExport->GetNumberFormatsSupplier()->getNumberFormats();
+        xNumberFormats.set(pExport->GetNumberFormatsSupplier()->getNumberFormats());
 
     if (xNumberFormats.is())
     {
         try
         {
-            uno::Reference <beans::XPropertySet> xNumberPropertySet = xNumberFormats->getByKey(nNumberFormat);
-            uno::Any aCurrencySymbol = xNumberPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_CURRENCYSYMBOL)));
-            if ( aCurrencySymbol >>= sCurrencySymbol)
+            uno::Reference <beans::XPropertySet> xNumberPropertySet(xNumberFormats->getByKey(nNumberFormat));
+            if ( xNumberPropertySet->getPropertyValue(msCurrencySymbol) >>= rCurrencySymbol)
             {
                 rtl::OUString sCurrencyAbbreviation;
-                uno::Any aCurrencyAbbreviation = xNumberPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_CURRENCYABBREVIATION)));
-                if ( aCurrencyAbbreviation >>= sCurrencyAbbreviation)
+                if ( xNumberPropertySet->getPropertyValue(msCurrencyAbbreviation) >>= sCurrencyAbbreviation)
                 {
                     if ( sCurrencyAbbreviation.getLength() != 0 )
-                        sCurrencySymbol = sCurrencyAbbreviation;
+                        rCurrencySymbol = sCurrencyAbbreviation;
                     else
                     {
-                        if ( sCurrencySymbol.getLength() == 1 && sCurrencySymbol.toChar() == NfCurrencyEntry::GetEuroSymbol() )
-                            sCurrencySymbol = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("EUR"));
+                        if ( rCurrencySymbol.getLength() == 1 && rCurrencySymbol.toChar() == NfCurrencyEntry::GetEuroSymbol() )
+                            rCurrencySymbol = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("EUR"));
                     }
                 }
                 return sal_True;
@@ -420,20 +419,21 @@ sal_Bool XMLNumberFormatAttributesExportHelper::GetCurrencySymbol(const sal_Int3
 sal_Int16 XMLNumberFormatAttributesExportHelper::GetCellType(const sal_Int32 nNumberFormat, sal_Bool& bIsStandard)
 {
     if (!xNumberFormats.is() && pExport && pExport->GetNumberFormatsSupplier().is())
-        xNumberFormats = pExport->GetNumberFormatsSupplier()->getNumberFormats();
+        xNumberFormats.set(pExport->GetNumberFormatsSupplier()->getNumberFormats());
 
     if (xNumberFormats.is())
     {
         try
         {
-            uno::Reference <beans::XPropertySet> xNumberPropertySet = xNumberFormats->getByKey(nNumberFormat);
-            uno::Any aIsStandardFormat = xNumberPropertySet->getPropertyValue(sStandardFormat);
-            aIsStandardFormat >>= bIsStandard;
-            uno::Any aNumberType = xNumberPropertySet->getPropertyValue(sType);
-            sal_Int16 nNumberType;
-            if ( aNumberType >>= nNumberType )
+            uno::Reference <beans::XPropertySet> xNumberPropertySet(xNumberFormats->getByKey(nNumberFormat));
+            if (xNumberPropertySet.is())
             {
-                return nNumberType;
+                xNumberPropertySet->getPropertyValue(sStandardFormat) >>= bIsStandard;
+                sal_Int16 nNumberType;
+                if ( xNumberPropertySet->getPropertyValue(sType) >>= nNumberType )
+                {
+                    return nNumberType;
+                }
             }
         }
         catch ( uno::Exception& )
