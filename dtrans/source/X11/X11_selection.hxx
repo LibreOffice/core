@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obr $ $Date: 2001-02-07 14:09:28 $
+ *  last change: $Author: pl $ $Date: 2001-02-07 14:35:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -293,7 +293,6 @@ namespace x11 {
         int                         m_nLastX, m_nLastY;
         bool                        m_bLazyListener;
 
-
         // drag only
 
         // None if no Dnd action is running with us as source
@@ -326,6 +325,8 @@ namespace x11 {
         Cursor                      m_aLinkCursor;
         Cursor                      m_aNoneCursor;
         Cursor                      m_aCurrentCursor;
+
+        bool                        m_bLazyCursor;
 
 
         // drag and drop

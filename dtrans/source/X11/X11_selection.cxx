@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obr $ $Date: 2001-02-07 14:09:28 $
+ *  last change: $Author: pl $ $Date: 2001-02-07 14:35:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1294,8 +1294,9 @@ void SelectionManager::handleDropEvent( XClientMessageEvent& rMessage )
                 aEvent.DropAction = ~0;
             else
                 aEvent.DropAction = DNDConstants::ACTION_NONE;
-            m_nLastDropAction = aEvent.DropAction;
-            m_bLazyListener = true;
+
+            m_nLastDropAction   = aEvent.DropAction;
+            m_bLazyListener     = true;
             if( ! m_bDropEnterSent )
             {
                 m_bDropEnterSent = true;
@@ -1472,7 +1473,10 @@ bool SelectionManager::updateDragAction( int modifierState )
         dsde.DragSource         = static_cast< XDragSource* >(this);
         dsde.DropAction         = m_nUserDragAction;
         dsde.UserAction         = m_nUserDragAction;
+        m_bLazyCursor       = true;
         m_xDragSourceListener->dropActionChanged( dsde );
+        if( m_bLazyCursor )
+            setCursor( getDefaultCursor( dsde.UserAction ) );
     }
     return bRet;
 }
@@ -1607,7 +1611,10 @@ void SelectionManager::handleDragEvent( XEvent& rMessage )
             else
                 m_nNoPosX = m_nNoPosY = m_nNoPosWidth = m_nNoPosHeight = 0;
 
+            m_bLazyCursor = true;
             m_xDragSourceListener->dragOver( dsde );
+            if( m_bLazyCursor )
+                setCursor( getDefaultCursor( dsde.DropAction ) );
         }
         else if( rMessage.xclient.message_type == m_nXdndFinished && m_aDropWindow == rMessage.xclient.data.l[0] )
         {
@@ -2178,6 +2185,8 @@ void SelectionManager::executeDrag(
         }
 
         updateDragWindow( root_x, root_y, aRoot );
+        setCursor( cursor ? cursor : m_aMoveCursor );
+        updateDragAction( mask );
     }
 
     // do drag
@@ -2242,6 +2251,7 @@ sal_Int32 SelectionManager::getCurrentCursor()
 
 void SelectionManager::setCursor( sal_Int32 cursor )
 {
+    m_bLazyCursor = false;
     if( m_xDragSourceListener.is() && ! m_bDropSent )
         XChangeActivePointerGrab( m_pDisplay, DRAG_EVENT_MASK, cursor, CurrentTime );
 }
