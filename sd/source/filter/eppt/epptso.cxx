@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epptso.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: sj $ $Date: 2002-12-05 14:34:08 $
+ *  last change: $Author: sj $ $Date: 2002-12-10 16:58:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4698,8 +4698,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 *mpExEmbed  << (sal_uInt32)( EPP_ExControlAtom << 16 )
                             << (sal_uInt32)4
                             << nPageId;
-                String aEmptyString;
-                PPTExOleObjEntry* pEntry = new PPTExOleObjEntry( OCX_CONTROL, aEmptyString, mpExEmbed->Tell() );
+                PPTExOleObjEntry* pEntry = new PPTExOleObjEntry( OCX_CONTROL, mpExEmbed->Tell() );
                 pEntry->xControlModel = aXControlModel;
                 maExOleObj.Insert( pEntry );
 
@@ -5082,67 +5081,46 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 }
                 else
                 {
-                    if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "PersistName" ) ) ) )
-                    {
-                        String  aString( *(::rtl::OUString*)mAny.getValue() );
-                        if ( aString.Len() )
-                        {
-                            SvStorageRef xSrcStor = mXSource->OpenStorage( aString, STREAM_READ | STREAM_NOCREATE | STREAM_SHARE_DENYALL );
-                            if ( xSrcStor.Is() )
-                            {
-                                SvStorageStreamRef xSrcTst = xSrcStor->OpenStream(
-                                    String( RTL_CONSTASCII_USTRINGPARAM( "\1Ole" ) ),
-                                        STREAM_READ | STREAM_NOCREATE | STREAM_SHARE_DENYALL );
-                                sal_uInt8 aTestA[ 10 ];
-                                if ( sizeof( aTestA ) == xSrcTst->Read( aTestA, sizeof( aTestA ) ) )
-                                {
-/*
-                                    if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CLSID" ) ) ) )
-                                    {
-                                        String aCLSID( *( ::rtl::OUString*)mAny.getValue() );
-                                    }
-*/
-                                    *mpExEmbed  << (sal_uInt32)( 0xf | ( EPP_ExEmbed << 16 ) )
-                                                << (sal_uInt32)0;               // Size of this container
+                    *mpExEmbed  << (sal_uInt32)( 0xf | ( EPP_ExEmbed << 16 ) )
+                                << (sal_uInt32)0;               // Size of this container
 
-                                    sal_uInt32 nSize, nOldPos = mpExEmbed->Tell();
+                    sal_uInt32 nSize, nOldPos = mpExEmbed->Tell();
 
-                                    *mpExEmbed  << (sal_uInt32)( EPP_ExEmbedAtom << 16 )
-                                                << (sal_uInt32)8
-                                                << (sal_uInt32)0    // follow colorscheme : 0->do not follow
-                                                                    //                      1->follow collorscheme
-                                                                    //                      2->follow text and background scheme
-                                                << (sal_uInt8)1     // (bool)set if embedded server can not be locked
-                                                << (sal_uInt8)0     // (bool)do not need to send dimension
-                                                << (sal_uInt8)0     // (bool)is object a world table
-                                                << (sal_uInt8)0;    // pad byte
+                    *mpExEmbed  << (sal_uInt32)( EPP_ExEmbedAtom << 16 )
+                                << (sal_uInt32)8
+                                << (sal_uInt32)0    // follow colorscheme : 0->do not follow
+                                                    //                      1->follow collorscheme
+                                                    //                      2->follow text and background scheme
+                                << (sal_uInt8)1     // (bool)set if embedded server can not be locked
+                                << (sal_uInt8)0     // (bool)do not need to send dimension
+                                << (sal_uInt8)0     // (bool)is object a world table
+                                << (sal_uInt8)0;    // pad byte
 
-                                    maExOleObj.Insert( new PPTExOleObjEntry( NORMAL_OLE_OBJECT, aString, mpExEmbed->Tell() ) );
+                    PPTExOleObjEntry* pE = new PPTExOleObjEntry( NORMAL_OLE_OBJECT, mpExEmbed->Tell() );
+                    pE->xShape = mXShape;
+                    maExOleObj.Insert( pE );
 
-                                    mnExEmbed++;
+                    mnExEmbed++;
 
-                                    *mpExEmbed  << (sal_uInt32)( 1 | ( EPP_ExOleObjAtom << 16 ) )
-                                                << (sal_uInt32)24
-                                                << (sal_uInt32)1
-                                                << (sal_uInt32)0
-                                                << (sal_uInt32)mnExEmbed    // index to the persist table
-                                                << (sal_uInt32)0            // subtype
-                                                << (sal_uInt32)0
-                                                << (sal_uInt32)0x0012b600;
+                    *mpExEmbed  << (sal_uInt32)( 1 | ( EPP_ExOleObjAtom << 16 ) )
+                                << (sal_uInt32)24
+                                << (sal_uInt32)1
+                                << (sal_uInt32)0
+                                << (sal_uInt32)mnExEmbed    // index to the persist table
+                                << (sal_uInt32)0            // subtype
+                                << (sal_uInt32)0
+                                << (sal_uInt32)0x0012b600;
 
-//                                  ImplWriteCString( *mpExEmbed, "Photo Editor Photo", 1 );
-//                                  ImplWriteCString( *mpExEmbed, "MSPhotoEd.3", 2 );
-//                                  ImplWriteCString( *mpExEmbed, "Microsoft Photo Editor 3.0 Photo", 3 );
+//                  ImplWriteCString( *mpExEmbed, "Photo Editor Photo", 1 );
+//                  ImplWriteCString( *mpExEmbed, "MSPhotoEd.3", 2 );
+//                  ImplWriteCString( *mpExEmbed, "Microsoft Photo Editor 3.0 Photo", 3 );
 
-                                    nSize = mpExEmbed->Tell() - nOldPos;
-                                    mpExEmbed->Seek( nOldPos - 4 );
-                                    *mpExEmbed << nSize;
-                                    mpExEmbed->Seek( STREAM_SEEK_TO_END );
-                                    nOlePictureId = mnExEmbed;
-                                }
-                            }
-                        }
-                    }
+                    nSize = mpExEmbed->Tell() - nOldPos;
+                    mpExEmbed->Seek( nOldPos - 4 );
+                    *mpExEmbed << nSize;
+                    mpExEmbed->Seek( STREAM_SEEK_TO_END );
+                    nOlePictureId = mnExEmbed;
+
                     sal_uInt32 nSpFlags = 0xa00;
                     if ( nOlePictureId )
                         nSpFlags |= 0x10;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eppt.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: sj $ $Date: 2002-12-06 10:02:08 $
+ *  last change: $Author: sj $ $Date: 2002-12-10 16:56:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,8 +95,14 @@
 #ifndef _SFXDOCFILE_HXX
 #include <sfx2/docfile.hxx>
 #endif
+#ifndef _SVX_UNOAPI_HXX_
+#include <svx/unoapi.hxx>
+#endif
 #ifndef _SVDOBJ_HXX
 #include <svx/svdobj.hxx>
+#endif
+#ifndef _SVDOOLE2_HXX
+#include <svx/svdoole2.hxx>
 #endif
 #ifndef _SVDMODEL_HXX
 #include <svx/svdmodel.hxx>
@@ -153,7 +159,7 @@
 
 //============================ PPTWriter ==================================
 
-PPTWriter::PPTWriter( SvStorageRef& rSvStorage, SvStorageRef& xOleSource,
+PPTWriter::PPTWriter( SvStorageRef& rSvStorage,
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & rXModel,
             ::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator > & rXStatInd,
             SvMemoryStream* pVBA, sal_uInt32 nCnvrtFlags ) :
@@ -215,10 +221,6 @@ PPTWriter::PPTWriter( SvStorageRef& rSvStorage, SvStorageRef& xOleSource,
 
     mrStg = rSvStorage;
     if ( !mrStg.Is() )
-        return;
-
-    mXSource = xOleSource;
-    if ( !mXSource.Is() )
         return;
 
     // MasterPages + Slides und Notizen + NotesMasterPage
@@ -1900,11 +1902,10 @@ void PPTWriter::ImplWriteOLE( sal_uInt32 nCnvrtFlags )
         {
             case NORMAL_OLE_OBJECT :
             {
-                SvStorageRef xSrcStor = mXSource->OpenStorage( pPtr->aObject, STREAM_READWRITE | STREAM_SHARE_DENYALL );
-                if ( xSrcStor.Is() )
+                SdrObject* pSdrObj = GetSdrObjectFromXShape( pPtr->xShape );
+                if ( pSdrObj && pSdrObj->ISA( SdrOle2Obj ) )
                 {
-                    SvInPlaceObjectRef  xInplaceObj( ((SvFactory*)SvInPlaceObject::
-                                            ClassFactory())->CreateAndLoad( xSrcStor ) );
+                    SvInPlaceObjectRef  xInplaceObj( ((SdrOle2Obj*)pSdrObj)->GetObjRef() );
                     if( xInplaceObj.Is() )
                     {
                         SvStorageRef xTempStorage( new SvStorage( new SvMemoryStream(), TRUE ) );
@@ -1925,7 +1926,6 @@ void PPTWriter::ImplWriteOLE( sal_uInt32 nCnvrtFlags )
                                 << (sal_uInt32)0        //  "
                                 << (sal_uInt32)0;
                         pStrm = xCleanStorage->CreateMemoryStream();
-                        xInplaceObj.Clear();
                     }
                 }
             }
@@ -1948,7 +1948,15 @@ void PPTWriter::ImplWriteOLE( sal_uInt32 nCnvrtFlags )
         {
             mpPptEscherEx->BeginAtom();
             pStrm->Seek( STREAM_SEEK_TO_END );
-            *mpStrm << (sal_uInt32)pStrm->Tell();           // uncompressed size
+            sal_uInt32 npStrmSize = pStrm->Tell();
+            *mpStrm << npStrmSize;                  // uncompressed size
+
+#ifdef DBG_EXTRACTOLEOBJECTS
+            SvFileStream aOut( String::CreateFromAscii( "D:\\OUT.OLE" ), STREAM_TRUNC | STREAM_WRITE );
+            pStrm->Seek( 0 );
+            aOut.Write( pStrm->GetData(), npStrmSize );
+#endif
+
             pStrm->Seek( 0 );
             ZCodec aZCodec( 0x8000, 0x8000 );
             aZCodec.BeginCompression();
@@ -2553,7 +2561,7 @@ void PPTExStyleSheet::WriteTxCFStyleAtom( SvStream& rSt )
 // - exported function -
 // ---------------------
 
-extern "C" BOOL __LOADONCALLAPI ExportPPT( SvStorageRef& rSvStorage, SvStorageRef& xOleSource,
+extern "C" BOOL __LOADONCALLAPI ExportPPT( SvStorageRef& rSvStorage,
                     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & rXModel,
                         ::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator > & rXStatInd,
                             SvMemoryStream* pVBA, sal_uInt32 nCnvrtFlags )
@@ -2561,7 +2569,7 @@ extern "C" BOOL __LOADONCALLAPI ExportPPT( SvStorageRef& rSvStorage, SvStorageRe
     PPTWriter*  pPPTWriter;
     BOOL bStatus = FALSE;
 
-    pPPTWriter = new PPTWriter( rSvStorage, xOleSource, rXModel, rXStatInd, pVBA, nCnvrtFlags );
+    pPPTWriter = new PPTWriter( rSvStorage, rXModel, rXStatInd, pVBA, nCnvrtFlags );
     if ( pPPTWriter )
     {
         bStatus = ( pPPTWriter->IsValid() == TRUE );

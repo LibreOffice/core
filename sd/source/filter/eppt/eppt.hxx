@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eppt.hxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: sj $ $Date: 2002-08-29 15:10:50 $
+ *  last change: $Author: sj $ $Date: 2002-12-10 16:57:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -613,17 +613,16 @@ enum PPTExOleObjEntryType
 
 struct PPTExOleObjEntry
 {
-    String                  aObject;
     PPTExOleObjEntryType    eType;
     sal_uInt32              nOfsA;          // offset to the EPP_ExOleObjAtom in mpExEmbed (set at creation)
     sal_uInt32              nOfsB;          // offset to the EPP_ExOleObjStg
 
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >    xControlModel;
+    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >       xShape;
 
-    PPTExOleObjEntry( PPTExOleObjEntryType eT, String& rStr, sal_uInt32 nOfs ) :
+    PPTExOleObjEntry( PPTExOleObjEntryType eT, sal_uInt32 nOfs ) :
         eType   ( eT ),
-        nOfsA   ( nOfs ),
-        aObject ( rStr ) {};
+        nOfsA   ( nOfs ) {};
 };
 
 struct TextRuleEntry
@@ -928,7 +927,6 @@ class PPTWriter : public GroupTable, public PropValue, public PPTExBulletProvide
         sal_uInt32          mnTextSize;
 
         SvStorageRef        mrStg;
-        SvStorageRef        mXSource;
         SvStorageStream*    mpCurUserStrm;
         SvStorageStream*    mpStrm;
         SvStorageStream*    mpPicStrm;
@@ -1034,7 +1032,7 @@ class PPTWriter : public GroupTable, public PropValue, public PPTExBulletProvide
         void                                ImplWriteCString( SvStream&, const String&, sal_uInt32 nInstance = 0 );
 
     public:
-                                PPTWriter( SvStorageRef& rSvStorage, SvStorageRef& rSource,
+                                PPTWriter( SvStorageRef& rSvStorage,
                                             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & rModel,
                                             ::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator > & rStatInd,
                                                 SvMemoryStream* pVBA, sal_uInt32 nCnvrtFlags );

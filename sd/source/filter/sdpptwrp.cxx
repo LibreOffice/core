@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpptwrp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sj $ $Date: 2002-06-19 11:20:55 $
+ *  last change: $Author: sj $ $Date: 2002-12-10 16:55:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::frame;
 
 
-typedef BOOL ( __LOADONCALLAPI *ExportPPT )( SvStorageRef&, SvStorageRef&,
+typedef BOOL ( __LOADONCALLAPI *ExportPPT )( SvStorageRef&,
                                              Reference< XModel > &,
                                              Reference< XStatusIndicator > &,
                                              SvMemoryStream*, sal_uInt32 nCnvrtFlags );
@@ -183,7 +183,7 @@ sal_Bool SdPPTFilter::Export()
                 if( mbShowProgress )
                     CreateStatusIndicator();
 
-                bRet = PPTExport( xStorRef, xOleSource, mxModel, mxStatusIndicator, pBas, nCnvrtFlags );
+                bRet = PPTExport( xStorRef, mxModel, mxStatusIndicator, pBas, nCnvrtFlags );
             }
         }
         delete pLibrary;
@@ -231,8 +231,3 @@ void SdPPTFilter::PreSaveBasic()
     }
 
 }
-
-void SdPPTFilter::SetOleSource( SvStorageRef xSource )
-{
-    xOleSource = xSource;
-};
