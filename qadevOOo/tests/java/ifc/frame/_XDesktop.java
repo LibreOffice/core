@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XDesktop.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:10:24 $
+ *  last change:$Date: 2003-01-31 12:36:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@ import com.sun.star.frame.XDesktop;
 import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.uno.XInterface;
 import lib.MultiMethodTest;
+import com.sun.star.uno.Any;
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
 
 /**
 * Testing <code>com.sun.star.frame.XDesktop</code>
@@ -97,7 +100,13 @@ public class _XDesktop extends MultiMethodTest {
 
         try {
             for (; xEnum.hasMoreElements();) {
-                XInterface xInt = (XInterface) xEnum.nextElement();
+                XInterface xInt = null;
+                try {
+                    xInt = (XInterface) AnyConverter.toObject(
+                            new Type(XInterface.class), xEnum.nextElement());
+                } catch (com.sun.star.lang.IllegalArgumentException iae) {
+                    log.println("Can't convert any");
+                }
             }
             result = true;
         } catch (WrappedTargetException e) {

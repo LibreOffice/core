@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _UserDefinedAttributeSupplier.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:14:13 $
+ *  last change:$Date: 2003-01-31 12:40:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,9 @@
 package ifc.xml;
 import com.sun.star.container.XNameContainer;
 import com.sun.star.xml.AttributeData;
+import com.sun.star.uno.Any;
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
 
 public class _UserDefinedAttributeSupplier extends lib.MultiPropertyTest {
 
@@ -69,7 +72,9 @@ public class _UserDefinedAttributeSupplier extends lib.MultiPropertyTest {
         XNameContainer uda = null;
         boolean res = false;
         try {
-            uda = (XNameContainer) oObj.getPropertyValue("UserDefinedAttributes");
+            uda = (XNameContainer) AnyConverter.toObject(
+                    new Type(XNameContainer.class),
+                        oObj.getPropertyValue("UserDefinedAttributes"));
             AttributeData attr = new AttributeData();
             attr.Namespace = "http://www.sun.com/staroffice/apitest/Chartprop";
             attr.Type="CDATA";
@@ -77,7 +82,9 @@ public class _UserDefinedAttributeSupplier extends lib.MultiPropertyTest {
             uda.insertByName("Chartprop:has-first-alien-attribute",attr);
             String[] els = uda.getElementNames();
             oObj.setPropertyValue("UserDefinedAttributes",uda);
-            uda = (XNameContainer) oObj.getPropertyValue("UserDefinedAttributes");
+            uda = (XNameContainer) AnyConverter.toObject(
+                    new Type(XNameContainer.class),
+                        oObj.getPropertyValue("UserDefinedAttributes"));
             els = uda.getElementNames();
             Object obj = uda.getByName("Chartprop:has-first-alien-attribute");
             res = true;
