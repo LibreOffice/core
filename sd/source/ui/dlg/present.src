@@ -2,9 +2,9 @@
  *
  *  $RCSfile: present.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2001-05-10 07:06:36 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 08:54:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ ModalDialog DLG_START_PRESENTATION
     Text [ ENGLISH ] = "Start Presentation" ;
     Text [ norwegian ] = "Start Presentation" ;
     Text [ italian ] = "Presentazione" ;
-    Text [ portuguese_brazilian ] = "Iniciar Apresentação" ;
+    Text [ portuguese_brazilian ] = "Iniciar Apresenta??o" ;
     Text [ portuguese ] = "Apresentação no ecrã" ;
     Text [ finnish ] = "Diaesitys" ;
     Text [ danish ] = "Præsentation" ;
@@ -217,7 +217,7 @@ ModalDialog DLG_START_PRESENTATION
         TabStop = TRUE ;
         Text [ portuguese ] = "Apres~entação personalizada" ;
         Text [ english_us ] = "~Custom Slide Show" ;
-        Text [ portuguese_brazilian ] = "~Individuelle Präsentation" ;
+        Text [ portuguese_brazilian ] = "~Individuelle Pr?sentation" ;
         Text [ swedish ] = "~Individuell presentation" ;
         Text [ danish ] = "Individuel præsentation" ;
         Text [ italian ] = "Presentazione su schermo personalizzata" ;
@@ -290,7 +290,7 @@ ModalDialog DLG_START_PRESENTATION
         Text[ italian ] = "Standard";
         Text[ danish ] = "Standard";
         Text[ swedish ] = "S~tandard";
-        Text[ polish ] = "Domyœlnie";
+        Text[ polish ] = "Domy?lnie";
         Text[ portuguese_brazilian ] = "Stan~dard";
         Text[ japanese ] = "•W€(~D)";
         Text[ chinese_simplified ] = "±ê×¼(~D)";
@@ -406,7 +406,7 @@ ModalDialog DLG_START_PRESENTATION
         QuickHelpText[ swedish ] = "Pausens längd";
         QuickHelpText[ polish ] = "D³ugo?æ przerwy!";
         QuickHelpText[ portuguese_brazilian ] = "Duration of pause";
-        QuickHelpText[ japanese ] = "‹x~ŠÔ";
+        QuickHelpText[ japanese ] = "‹x~ŠÔ!";
         QuickHelpText[ chinese_simplified ] = "¼ä¸ôÊ±¼ä";
         QuickHelpText[ chinese_traditional ] = "¶¡¹j®É¶¡";
         QuickHelpText[ arabic ] = "ãÏÉ ÇáÅíŞÇİ ÇáãÄŞÊ";
@@ -457,7 +457,7 @@ ModalDialog DLG_START_PRESENTATION
         Text [ ENGLISH ] = "Options" ;
         Text [ norwegian ] = "Options" ;
         Text [ italian ] = "Opzioni" ;
-        Text [ portuguese_brazilian ] = "Opções" ;
+        Text [ portuguese_brazilian ] = "Op??s" ;
         Text [ portuguese ] = "Opções" ;
         Text [ finnish ] = "Asetukset" ;
         Text [ danish ] = "Indstillinger" ;
@@ -486,7 +486,7 @@ ModalDialog DLG_START_PRESENTATION
         Text [ ENGLISH ] = "~Manual advance" ;
         Text [ norwegian ] = "~+++Manuell framgangsmåte" ;
         Text [ italian ] = "~Avanzamento manuale" ;
-        Text [ portuguese_brazilian ] = "~Avançar Manual" ;
+        Text [ portuguese_brazilian ] = "~Avan?ar Manual" ;
         Text [ portuguese ] = "Transição ~manual de diapositivos" ;
         Text [ finnish ] = "~Vaihda diakuvat manuaalisesti" ;
         Text [ danish ] = "Manuel diasovergang" ;
@@ -516,7 +516,7 @@ ModalDialog DLG_START_PRESENTATION
         Text [ ENGLISH ] = "Mousepointer ~visible" ;
         Text [ norwegian ] = "Musepeker ~synlig" ;
         Text [ italian ] = "Puntatore mouse ~visibile" ;
-        Text [ portuguese_brazilian ] = "Ponteiro do mouse ~visível" ;
+        Text [ portuguese_brazilian ] = "Ponteiro do mouse ~vis?vel" ;
         Text [ portuguese ] = "Ponteiro do rato ~visível" ;
         Text [ finnish ] = "Hiiren osoitin näky~vissä" ;
         Text [ danish ] = "Musemarkør synlig" ;
@@ -528,7 +528,7 @@ ModalDialog DLG_START_PRESENTATION
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "ÏÔÊ¾Êó±ê(~V)";
         Text[ russian ] = "Ïîêàçàòü óêàçàòåëü ìûøè";
-        Text[ polish ] = "WskaŸnik myszy widoczny";
+        Text[ polish ] = "Wska?nik myszy widoczny";
         Text[ japanese ] = "Ï³½Îß²İÀ‚ª–Ú‚ÉŒ©‚¦‚é(~V)";
         Text[ chinese_traditional ] = "Åã¥Ü·Æ¹«¼Ğ(~V)";
         Text[ arabic ] = "ãÄÔÑ ÇáãÇæÓ ãÑÆí";
@@ -558,7 +558,7 @@ ModalDialog DLG_START_PRESENTATION
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "Êó±êÏÔÊ¾³É±ÊĞÍ(~P)";
         Text[ russian ] = "Óêàçàòåëü ìûøè â âèäå êàğàíäàøà";
-        Text[ polish ] = "WskaŸnik myszy jako pióro";
+        Text[ polish ] = "Wska?nik myszy jako pióro";
         Text[ japanese ] = "Ï³½Îß²İÀ‚ğÍßİ‚Æ‚µ‚Ä(~P)";
         Text[ chinese_traditional ] = "¹«¼ĞÅã¥Ü¦¨µ§«¬(~P)";
         Text[ arabic ] = "ãÄÔÑ ÇáãÇæÓ Úáì åíÆÉ Şáã";
@@ -615,7 +615,7 @@ ModalDialog DLG_START_PRESENTATION
         Text [ portuguese ] = "Permitir a~nimações" ;
         Text[ chinese_simplified ] = "ÔÊĞí¶¯»­(~A)";
         Text[ russian ] = "Äîïóñòèòü àíèìàöèè";
-        Text[ polish ] = "Dopu~œæ animacje";
+        Text[ polish ] = "Dopu~?æ animacje";
         Text[ japanese ] = "±ÆÒ°¼®İ‚ğg—p‰Â”\\‚É‚·‚é(~A)";
         Text[ chinese_traditional ] = "¤¹³\\°Êµe(~A)";
         Text[ arabic ] = "ÇáÓãÇÍ ÈÇáÍÑßÉ";
@@ -671,7 +671,7 @@ ModalDialog DLG_START_PRESENTATION
         Text [ swedish ] = "Presentation alltid i förgrunden" ;
         Text [ danish ] = "Præsentation altid i forgrunden" ;
         Text [ portuguese ] = "Apresentação sempre em ~primeiro plano" ;
-        Text [ portuguese_brazilian ] = "Präsentation immer im ~Vordergrund" ;
+        Text [ portuguese_brazilian ] = "Pr?sentation immer im ~Vordergrund" ;
         Text[ chinese_simplified ] = "×ÜÊÇÇ°¶ËÏÔÊ¾ÑİÊ¾ÎÄ¸å(~O)";
         Text[ russian ] = "Âñåãäà íà ïåğåäíåì ïëàíå";
         Text[ polish ] = "Pokaz slajdów zawsze na pierwszym planie";
