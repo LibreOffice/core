@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLParser.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 15:52:42 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 11:38:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,7 +201,7 @@ class ElementNode : public Node
 public:
     ElementNode( const String& aName, Reference < XAttributeList > xAttributes );
     void AppendNode( NodeRef xNewNode );
-    USHORT GetChildCount(){ return aDocumentNodeList.Count(); }
+    ULONG GetChildCount(){ return aDocumentNodeList.Count(); }
     NodeRef GetChild( USHORT nIndex ){ return aDocumentNodeList.GetObject( nIndex ); }
     Reference < XAttributeList > GetAttributes(){ return xAttributeList; }
 
