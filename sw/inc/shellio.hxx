@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shellio.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:38:11 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:03:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -736,6 +736,8 @@ extern const sal_Char __FAR_DATA FILTER_XML[];  // XML filter
 extern const sal_Char __FAR_DATA FILTER_XMLV[]; // XML filter
 extern const sal_Char __FAR_DATA FILTER_XMLVW[];    // XML filter
 
-SW_DLLPUBLIC const sal_Char * SwGetFILTER_WW8();    // WinWord 97-Filter
+SW_DLLPUBLIC const sal_Char* GetFILTER_XML();
+SW_DLLPUBLIC const sal_Char* GetFILTER_TEXT();
+SW_DLLPUBLIC const sal_Char* GetFILTER_WW8();
 
 #endif
