@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hommatrixtemplate.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: thb $ $Date: 2004-02-16 17:03:11 $
+ *  last change: $Author: obo $ $Date: 2004-03-18 12:03:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -470,7 +470,8 @@ namespace basegfx
                 for(sal_uInt16 a(0); a < RowSize; a++)
                 {
                     // prepare line
-                    for(sal_uInt16 b(0); b < RowSize; b++)
+            sal_uInt16 b;
+                    for( b = 0; b < RowSize; b++)
                     {
                         fArray[b] = implGetDefaultValue(a, b);
                     }
@@ -479,7 +480,7 @@ namespace basegfx
                     rWork.lubksb(nIndex, fArray);
 
                     // copy line transposed to this matrix
-                    for(b = 0; b < RowSize; b++)
+                    for( b = 0; b < RowSize; b++)
                     {
                         set(b, a, fArray[b]);
                     }
