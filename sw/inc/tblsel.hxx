@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tblsel.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:28 $
+ *  last change: $Author: cmc $ $Date: 2001-07-26 15:55:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,6 +150,8 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
 // teste ob die selektierten Boxen ein gueltiges Merge erlauben
 USHORT CheckMergeSel( const SwPaM& rPam );
 USHORT CheckMergeSel( const SwSelBoxes& rBoxes );
+
+BOOL IsEmptyBox( const SwTableBox& rBox, SwPaM& rPam );
 
 // teste ob ein Split oder InsertCol dazu fuehrt, das eine Box
 // kleiner als MINLAY wird.

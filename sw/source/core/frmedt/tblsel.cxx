@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tblsel.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:20 $
+ *  last change: $Author: cmc $ $Date: 2001-07-26 15:56:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -923,7 +923,7 @@ void lcl_InsTblBox( SwTableNode* pTblNd, SwDoc* pDoc, SwTableBox* pBox,
                 nInsPos, nCnt );
 }
 
-BOOL lcl_IsEmptyBox( const SwTableBox& rBox, SwPaM& rPam )
+BOOL IsEmptyBox( const SwTableBox& rBox, SwPaM& rPam )
 {
     rPam.GetPoint()->nNode = *rBox.GetSttNd()->EndOfSectionNode();
     rPam.Move( fnMoveBackward, fnGoCntnt );
@@ -1194,7 +1194,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
             const _CmpLPt& rPt = aPosArr[ n ];
             if( n && aPosArr[ n - 1 ].Y() == rPt.Y() )  // gleiche Ebene ?
             {
-                if( bEmptyLine && !lcl_IsEmptyBox( *rPt.pSelBox, aPam ))
+                if( bEmptyLine && !IsEmptyBox( *rPt.pSelBox, aPam ))
                     bEmptyLine = FALSE;
                 if( bCalcWidth )
                     nWidth += rPt.pSelBox->GetFrmFmt()->GetFrmSize().GetWidth();
@@ -1219,7 +1219,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                 else
                     nSttPos = n;
 
-                bEmptyLine = lcl_IsEmptyBox( *aPosArr[n].pSelBox, aPam );
+                bEmptyLine = IsEmptyBox( *aPosArr[n].pSelBox, aPam );
             }
         }
         if( bEmptyLine && nSttPos < n )
@@ -1239,7 +1239,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
             const _CmpLPt& rPt = aPosArr[ n ];
             if( n && aPosArr[ n - 1 ].Y() == rPt.Y() )  // gleiche Ebene ?
             {
-                BOOL bEmptyBox = lcl_IsEmptyBox( *rPt.pSelBox, aPam );
+                BOOL bEmptyBox = IsEmptyBox( *rPt.pSelBox, aPam );
                 if( bEmptyBox )
                 {
                     if( nSEndPos == n )     // der Anfang ist leer
@@ -1285,7 +1285,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                 }
 
                 nSttPos = nSEndPos = nESttPos = n;
-                if( lcl_IsEmptyBox( *aPosArr[n].pSelBox, aPam ))
+                if( IsEmptyBox( *aPosArr[n].pSelBox, aPam ))
                     ++nSEndPos;
                 else
                     ++nESttPos;
@@ -1333,7 +1333,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                     bCalcWidth = FALSE;     // eine Zeile fertig
             }
 
-            if( lcl_IsEmptyBox( *rPt.pSelBox, aPam ) )
+            if( IsEmptyBox( *rPt.pSelBox, aPam ) )
             {
                 if( pUndo )
                     pUndo->SaveCollection( *rPt.pSelBox );
