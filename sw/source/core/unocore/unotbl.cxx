@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 15:44:11 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:43:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3831,25 +3831,13 @@ Sequence< OUString > SwXCellRange::getSupportedServiceNames(void) throw( Runtime
     pArray[6] = C2U("com.sun.star.style.ParagraphPropertiesComplex");
     return aRet;
 }
-/*-- 11.12.98 14:27:32---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
-SwXCellRange::SwXCellRange() :
-    aCursorDepend(this, 0),
-    aChartLstnrCntnr((cppu::OWeakObject*)this),
-    pTblCrsr(0),
-    aPropSet(0),
-    bFirstRowAsLabel(sal_False),
-    bFirstColumnAsLabel(sal_False),
-    _pMap(0)
-{
-
-}
 /*-- 11.12.98 14:27:33---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 SwXCellRange::SwXCellRange(SwUnoCrsr* pCrsr, SwFrmFmt& rFrmFmt,
-                                            SwRangeDescriptor& rDesc) :
+    SwRangeDescriptor& rDesc)
+    :
     SwClient(&rFrmFmt),
     aChartLstnrCntnr((cppu::OWeakObject*)this),
     aCursorDepend(this, pCrsr),
