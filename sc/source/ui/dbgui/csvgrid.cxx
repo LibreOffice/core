@@ -2,9 +2,9 @@
  *
  *  $RCSfile: csvgrid.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:53:38 $
+ *  last change: $Author: hr $ $Date: 2004-10-11 12:28:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1111,6 +1111,7 @@ void ScCsvGrid::ImplDrawCellText( const Point& rPos, const String& rText )
 {
     String aText( rText );
     aText.SearchAndReplaceAll( '\t', ' ' );
+    aText.SearchAndReplaceAll( '\n', ' ' );
     mpEditEngine->SetPaperSize( maEdEngSize );
     mpEditEngine->SetText( aText );
     mpEditEngine->Draw( &maBackgrDev, rPos );
@@ -1123,12 +1124,23 @@ void ScCsvGrid::ImplDrawCellText( const Point& rPos, const String& rText )
         sal_Int32 nY = rPos.Y() + GetLineHeight() / 2;
         Color aColor( maTextColor );
         maBackgrDev.SetLineColor( aColor );
-        maBackgrDev.DrawLine( Point( nX1, nY ), Point( nX2 - 1, nY ) );
-        maBackgrDev.DrawLine( Point( nX2 - 2, nY - 1 ), Point( nX2 - 2, nY + 1 ) );
-        aColor.Merge( maBackColor, 50 );
-        maBackgrDev.SetLineColor( aColor );
+        maBackgrDev.DrawLine( Point( nX1, nY ), Point( nX2, nY ) );
         maBackgrDev.DrawLine( Point( nX2 - 2, nY - 2 ), Point( nX2, nY ) );
         maBackgrDev.DrawLine( Point( nX2 - 2, nY + 2 ), Point( nX2, nY ) );
+        ++nCharIx;
+    }
+    nCharIx = 0;
+    while( (nCharIx = rText.Search( '\n', nCharIx )) != STRING_NOTFOUND )
+    {
+        sal_Int32 nX1 = rPos.X() + GetCharWidth() * nCharIx;
+        sal_Int32 nX2 = nX1 + GetCharWidth() - 2;
+        sal_Int32 nY = rPos.Y() + GetLineHeight() / 2;
+        Color aColor( maTextColor );
+        maBackgrDev.SetLineColor( aColor );
+        maBackgrDev.DrawLine( Point( nX1, nY ), Point( nX2, nY ) );
+        maBackgrDev.DrawLine( Point( nX1 + 2, nY - 2 ), Point( nX1, nY ) );
+        maBackgrDev.DrawLine( Point( nX1 + 2, nY + 2 ), Point( nX1, nY ) );
+        maBackgrDev.DrawLine( Point( nX2, nY - 2 ), Point( nX2, nY ) );
         ++nCharIx;
     }
 }
