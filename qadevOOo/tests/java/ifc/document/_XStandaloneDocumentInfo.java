@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XStandaloneDocumentInfo.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:08:54 $
+ *  last change:$Date: 2003-09-08 10:27:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,13 +61,14 @@
 
 package ifc.document;
 
+import lib.MultiMethodTest;
+import lib.Status;
+import lib.StatusException;
+
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.document.XStandaloneDocumentInfo;
 import com.sun.star.io.IOException;
 import com.sun.star.uno.UnoRuntime;
-import lib.MultiMethodTest;
-import lib.Status;
-import lib.StatusException;
 
 /**
 * Testing <code>com.sun.star.document.XStandaloneDocumentInfo</code>
