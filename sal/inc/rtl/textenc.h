@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textenc.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: th $ $Date: 2001-03-16 15:18:35 $
+ *  last change: $Author: th $ $Date: 2001-05-17 10:13:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,8 +162,9 @@ typedef sal_uInt16 rtl_TextEncoding;
 #define RTL_TEXTENCODING_JIS_X_0208             (RTL_TEXTENC_CAST( 82 ))
 #define RTL_TEXTENCODING_JIS_X_0212             (RTL_TEXTENC_CAST( 83 ))
 #define RTL_TEXTENCODING_MS_1361                (RTL_TEXTENC_CAST( 84 ))
+#define RTL_TEXTENCODING_GB_18030               (RTL_TEXTENC_CAST( 85 ))
 
-#define RTL_TEXTENCODING_STD_COUNT              (RTL_TEXTENC_CAST( 85 ))
+#define RTL_TEXTENCODING_STD_COUNT              (RTL_TEXTENC_CAST( 86 ))
 
 #define RTL_TEXTENCODING_USER_START             (RTL_TEXTENC_CAST( 0x8000 ))
 #define RTL_TEXTENCODING_USER_END               (RTL_TEXTENC_CAST( 0xEFFF ))
@@ -197,6 +198,7 @@ Chinese Simplified (GB-2312)                    RTL_TEXTENCODING_GB_2312
 Chinese Simplified (GBK/GB-2312-80)             RTL_TEXTENCODING_GBK
 # Chinese Simplified (ISO-2022-CN)                RTL_TEXTENCODING_ISO_2022_CN
 Chinese Simplified (Windows-936)                RTL_TEXTENCODING_MS_936
+# Chinese Simplified (GB-18030)                   RTL_TEXTENCODING_GB_18030
 
 Chinese Traditional (Apple Macintosh)           RTL_TEXTENCODING_APPLE_CHINTRAD
 Chinese Traditional (BIG5)                      RTL_TEXTENCODING_BIG5
