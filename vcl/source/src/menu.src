@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 18:05:26 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:29:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,26 +91,27 @@ String SV_RESID_STRING_NOSELECTIONPOSSIBLE
     Text[ czech ] = "<Výběr není možný>";
     Text[ hebrew ] = "‮<אין אפשרות לבחור>‬";
     Text[ hindi ] = "<कोई चुनाव संभव नहीं>";
+    Text[ slovak ] = "<Výber nie je možný>";
 };
 
 Menu SV_RESID_MENU_EDIT
 {
-    ItemList =
+    ItemList = 
     {
         MenuItem
         {
-            Identifier = SV_MENU_EDIT_UNDO ;
-            Text = "~R�ckg�ngig" ;
-            Text [ English ] = "~Undo" ;
-            Text [ portuguese ] = "~Anular" ;
-            Text [ english_us ] = "~Undo" ;
-            Text [ portuguese_brazilian ] = "~Desfazer" ;
-            Text [ swedish ] = "~�ngra" ;
-            Text [ danish ] = "Fo~rtryd" ;
-            Text [ italian ] = "~Annulla" ;
-            Text [ spanish ] = "~Deshacer" ;
-            Text [ french ] = "~Annuler" ;
-            Text [ dutch ] = "~Ongedaan maken" ;
+            Identifier = SV_MENU_EDIT_UNDO ; 
+            Text = "~R�ckg�ngig" ; 
+            Text [ English ] = "~Undo" ; 
+            Text [ portuguese ] = "~Anular" ; 
+            Text [ english_us ] = "~Undo" ; 
+            Text [ portuguese_brazilian ] = "~Desfazer" ; 
+            Text [ swedish ] = "~�ngra" ; 
+            Text [ danish ] = "Fo~rtryd" ; 
+            Text [ italian ] = "~Annulla" ; 
+            Text [ spanish ] = "~Deshacer" ; 
+            Text [ french ] = "~Annuler" ; 
+            Text [ dutch ] = "~Ongedaan maken" ; 
             Text[ russian ] = "��������";
             Text[ polish ] = "Co~fnij";
             Text[ japanese ] = "元に戻す(~U)";
@@ -127,24 +128,25 @@ Menu SV_RESID_MENU_EDIT
             Text[ czech ] = "Zpět";
             Text[ hebrew ] = "‮ביטול פעולה‬";
             Text[ hindi ] = "~अनावृत्ति";
+            Text[ slovak ] = "~Späť";
         };
-        MenuItem { Separator = TRUE ; };
+        MenuItem { Separator = TRUE ; }; 
         MenuItem
         {
-            Identifier = SV_MENU_EDIT_CUT ;
-            Text = "~Ausschneiden" ;
-            Text [ English ] = "Cu~t" ;
-            Text [ norwegian ] = "Klipp~ut" ;
-            Text [ italian ] = "~Taglia" ;
-            Text [ portuguese_brazilian ] = "Co~rtar" ;
-            Text [ portuguese ] = "Co~rtar" ;
-            Text [ finnish ] = "~Leikkaa" ;
-            Text [ danish ] = "~Klip" ;
-            Text [ french ] = "~Couper" ;
-            Text [ swedish ] = "~Klipp ut" ;
-            Text [ dutch ] = "K~nippen" ;
-            Text [ spanish ] = "C~ortar" ;
-            Text [ english_us ] = "Cu~t" ;
+            Identifier = SV_MENU_EDIT_CUT ; 
+            Text = "~Ausschneiden" ; 
+            Text [ English ] = "Cu~t" ; 
+            Text [ norwegian ] = "Klipp~ut" ; 
+            Text [ italian ] = "~Taglia" ; 
+            Text [ portuguese_brazilian ] = "Co~rtar" ; 
+            Text [ portuguese ] = "Co~rtar" ; 
+            Text [ finnish ] = "~Leikkaa" ; 
+            Text [ danish ] = "~Klip" ; 
+            Text [ french ] = "~Couper" ; 
+            Text [ swedish ] = "~Klipp ut" ; 
+            Text [ dutch ] = "K~nippen" ; 
+            Text [ spanish ] = "C~ortar" ; 
+            Text [ english_us ] = "Cu~t" ; 
             Text[ russian ] = "~��������";
             Text[ polish ] = "Wy~tnij";
             Text[ japanese ] = "切り取り(~T)";
@@ -160,23 +162,24 @@ Menu SV_RESID_MENU_EDIT
             Text[ czech ] = "Vyjmout";
             Text[ hebrew ] = "‮גזירה‬";
             Text[ hindi ] = "का~टो";
+            Text[ slovak ] = "Vys~trihnúť";
         };
         MenuItem
         {
-            Identifier = SV_MENU_EDIT_COPY ;
-            Text = "~Kopieren" ;
-            Text [ English ] = "~Copy" ;
-            Text [ norwegian ] = "~Kopier" ;
-            Text [ italian ] = "~Copia" ;
-            Text [ portuguese_brazilian ] = "~Copiar" ;
-            Text [ portuguese ] = "~Copiar" ;
-            Text [ finnish ] = "K~opioi" ;
-            Text [ danish ] = "K~opier" ;
-            Text [ french ] = "Co~pier" ;
-            Text [ swedish ] = "K~opiera" ;
-            Text [ dutch ] = "~Kopi�ren" ;
-            Text [ spanish ] = "~Copiar" ;
-            Text [ english_us ] = "~Copy" ;
+            Identifier = SV_MENU_EDIT_COPY ; 
+            Text = "~Kopieren" ; 
+            Text [ English ] = "~Copy" ; 
+            Text [ norwegian ] = "~Kopier" ; 
+            Text [ italian ] = "~Copia" ; 
+            Text [ portuguese_brazilian ] = "~Copiar" ; 
+            Text [ portuguese ] = "~Copiar" ; 
+            Text [ finnish ] = "K~opioi" ; 
+            Text [ danish ] = "K~opier" ; 
+            Text [ french ] = "Co~pier" ; 
+            Text [ swedish ] = "K~opiera" ; 
+            Text [ dutch ] = "~Kopi�ren" ; 
+            Text [ spanish ] = "~Copiar" ; 
+            Text [ english_us ] = "~Copy" ; 
             Text[ russian ] = "~����������";
             Text[ polish ] = "~Kopiuj";
             Text[ japanese ] = "コピー(~C)";
@@ -192,23 +195,24 @@ Menu SV_RESID_MENU_EDIT
             Text[ czech ] = "Kopírovat";
             Text[ hebrew ] = "‮העתקה‬";
             Text[ hindi ] = "~प्रतिलिपि";
+            Text[ slovak ] = "~Kopírovať";
         };
         MenuItem
         {
-            Identifier = SV_MENU_EDIT_PASTE ;
-            Text = "~Einf�gen" ;
-            Text [ English ] = "~Paste" ;
-            Text [ norwegian ] = "~Paste" ;
-            Text [ italian ] = "~Incolla" ;
-            Text [ portuguese_brazilian ] = "~Colar" ;
-            Text [ portuguese ] = "Co~lar" ;
-            Text [ finnish ] = "Lii~t�" ;
-            Text [ danish ] = "~Inds�t" ;
-            Text [ french ] = "C~oller" ;
-            Text [ swedish ] = "K~listra in" ;
-            Text [ dutch ] = "~Plakken" ;
-            Text [ spanish ] = "~Pegar" ;
-            Text [ english_us ] = "~Paste" ;
+            Identifier = SV_MENU_EDIT_PASTE ; 
+            Text = "~Einf�gen" ; 
+            Text [ English ] = "~Paste" ; 
+            Text [ norwegian ] = "~Paste" ; 
+            Text [ italian ] = "~Incolla" ; 
+            Text [ portuguese_brazilian ] = "~Colar" ; 
+            Text [ portuguese ] = "Co~lar" ; 
+            Text [ finnish ] = "Lii~t�" ; 
+            Text [ danish ] = "~Inds�t" ; 
+            Text [ french ] = "C~oller" ; 
+            Text [ swedish ] = "K~listra in" ; 
+            Text [ dutch ] = "~Plakken" ; 
+            Text [ spanish ] = "~Pegar" ; 
+            Text [ english_us ] = "~Paste" ; 
             Text[ russian ] = "���~�����";
             Text[ polish ] = "Wkle~j";
             Text[ japanese ] = "貼り付け(~P)";
@@ -224,23 +228,24 @@ Menu SV_RESID_MENU_EDIT
             Text[ czech ] = "Vložit";
             Text[ hebrew ] = "‮הדבקה‬";
             Text[ hindi ] = "~छिपकाओ";
+            Text[ slovak ] = "~Vložiť";
         };
         MenuItem
         {
-            Identifier = SV_MENU_EDIT_DELETE ;
-            Text = "~L�schen" ;
-            Text [ English ] = "~Delete" ;
-            Text [ norwegian ] = "~Slett" ;
-            Text [ italian ] = "Cancella" ;
-            Text [ portuguese_brazilian ] = "~Excluir" ;
-            Text [ portuguese ] = "E~liminar" ;
-            Text [ finnish ] = "~Poista" ;
-            Text [ danish ] = "~Slet" ;
-            Text [ french ] = "~Supprimer" ;
-            Text [ swedish ] = "~Radera" ;
-            Text [ dutch ] = "~Wissen" ;
-            Text [ spanish ] = "~Borrar" ;
-            Text [ english_us ] = "~Delete" ;
+            Identifier = SV_MENU_EDIT_DELETE ; 
+            Text = "~L�schen" ; 
+            Text [ English ] = "~Delete" ; 
+            Text [ norwegian ] = "~Slett" ; 
+            Text [ italian ] = "Cancella" ; 
+            Text [ portuguese_brazilian ] = "~Excluir" ; 
+            Text [ portuguese ] = "E~liminar" ; 
+            Text [ finnish ] = "~Poista" ; 
+            Text [ danish ] = "~Slet" ; 
+            Text [ french ] = "~Supprimer" ; 
+            Text [ swedish ] = "~Radera" ; 
+            Text [ dutch ] = "~Wissen" ; 
+            Text [ spanish ] = "~Borrar" ; 
+            Text [ english_us ] = "~Delete" ; 
             Text[ russian ] = "~�������";
             Text[ polish ] = "~Usu�";
             Text[ japanese ] = "削除(~D)";
@@ -256,24 +261,25 @@ Menu SV_RESID_MENU_EDIT
             Text[ czech ] = "Smazat";
             Text[ hebrew ] = "‮מחיקה‬";
             Text[ hindi ] = "~मिटाओ";
+            Text[ slovak ] = "~Zmazať";
         };
-        MenuItem { Separator = TRUE ; };
+        MenuItem { Separator = TRUE ; }; 
         MenuItem
         {
-            Identifier = SV_MENU_EDIT_SELECTALL ;
-            Text = "Alles aus~w�hlen" ;
-            Text [ English ] = "Select ~All" ;
-            Text [ norwegian ] = "Select ~All" ;
-            Text [ italian ] = "Seleziona tutto" ;
-            Text [ portuguese_brazilian ] = "Selecionar ~Tudo" ;
-            Text [ portuguese ] = "Seleccionar ~tudo" ;
-            Text [ finnish ] = "~Valitse kaikki" ;
-            Text [ danish ] = "~Marker alt" ;
-            Text [ french ] = "Tout ~s�lectionner" ;
-            Text [ swedish ] = "Markera ~allt" ;
-            Text [ dutch ] = "~Alles selecteren" ;
-            Text [ spanish ] = "Seleccionar ~todo" ;
-            Text [ english_us ] = "Select ~All" ;
+            Identifier = SV_MENU_EDIT_SELECTALL ; 
+            Text = "Alles aus~w�hlen" ; 
+            Text [ English ] = "Select ~All" ; 
+            Text [ norwegian ] = "Select ~All" ; 
+            Text [ italian ] = "Seleziona tutto" ; 
+            Text [ portuguese_brazilian ] = "Selecionar ~Tudo" ; 
+            Text [ portuguese ] = "Seleccionar ~tudo" ; 
+            Text [ finnish ] = "~Valitse kaikki" ; 
+            Text [ danish ] = "~Marker alt" ; 
+            Text [ french ] = "Tout ~s�lectionner" ; 
+            Text [ swedish ] = "Markera ~allt" ; 
+            Text [ dutch ] = "~Alles selecteren" ; 
+            Text [ spanish ] = "Seleccionar ~todo" ; 
+            Text [ english_us ] = "Select ~All" ; 
             Text[ russian ] = "�������� ���";
             Text[ polish ] = "~Zaznacz wszystko";
             Text[ japanese ] = "すべて選択(~A)";
@@ -289,8 +295,9 @@ Menu SV_RESID_MENU_EDIT
             Text[ czech ] = "Vybrat vše";
             Text[ hebrew ] = "‮בחירת הכל‬";
             Text[ hindi ] = "~सब चुनो";
+            Text[ slovak ] = "Vybr~ať všetko";
         };
-        MenuItem { Separator = TRUE ; };
+        MenuItem { Separator = TRUE ; }; 
         MenuItem
         {
             Identifier = SV_MENU_EDIT_INSERTSYMBOL;
@@ -308,7 +315,7 @@ Menu SV_RESID_MENU_EDIT
     TEXT[ russian ] = "�������...";
             TEXT[ polish ] = "Znak ~specjalny...";
             TEXT[ japanese ] = "記号と特殊文字の挿入(~S)...";
-
+        
             TEXT[ chinese_simplified ] = "插入特殊字符(~S)...";
             TEXT[ chinese_traditional ] = "插入特殊字元(~S)...";
             TEXT[ greek ] = "��~������ ������� ���������...";
@@ -322,9 +329,12 @@ Menu SV_RESID_MENU_EDIT
             TEXT[ czech ] = "Speciální symbol...";
             TEXT[ hebrew ] = "‮תו מיוחד...‬";
             TEXT[ hindi ] = "~विशेष अक्षर...";
+            TEXT[ slovak ] = "Špeciálny ~znak...";
         };
     };
 };
+
+
 
 
 
