@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshel.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2000-12-14 15:47:28 $
+ *  last change: $Author: dl $ $Date: 2000-12-18 12:50:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -459,6 +459,8 @@ void __EXPORT SdViewShell::Activate(BOOL bIsMDIActivate)
             pView->ShowMarkHdl(NULL);
         }
     }
+
+    ReadFrameViewData( pFrameView );
 
     pDocSh->Connect(this);
 }
