@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impop.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: rt $ $Date: 2003-05-21 07:57:13 $
+ *  last change: $Author: vg $ $Date: 2003-06-25 10:46:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -979,27 +979,9 @@ void ImportExcel::Pane( void )
 
 void ImportExcel::Codepage( void )
 {
-    UINT16  nPage;
-
-    aIn >> nPage;
-
-    switch( nPage )
-    {
-        case 0x01B5:    // IBM PC 437 (Multiplan)
-            SetCharSet( RTL_TEXTENCODING_IBM_437 );
-        break;
-        case 0x0352:    // Herkunft ?
-            SetCharSet( RTL_TEXTENCODING_IBM_850 );
-        break;
-        case 0x8000:    // Apple Macintosh
-        case 0x2710:    // ???????????????????????????????????????????????
-            SetCharSet( RTL_TEXTENCODING_APPLE_ROMAN );
-        break;
-        case 0x04E4:    // ANSI (Windows ) Biff4+5
-        case 0x8001:    // ANSI (Windows ) Biff2+3
-            SetCharSet( RTL_TEXTENCODING_MS_1252 );
-        break;
-    }
+    rtl_TextEncoding eEnc = XclTools::GetTextEncoding( maStrm.ReaduInt16() );
+    if( eEnc != RTL_TEXTENCODING_DONTKNOW )
+        SetCharSet( eEnc );
 }
 
 
