@@ -2,9 +2,9 @@
 #
 #   $RCSfile: Cws.pm,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-09 13:54:05 $
+#   last change: $Author: vg $ $Date: 2004-07-27 14:08:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -231,7 +231,7 @@ sub add_module
     my $public = shift;
 
     my $items_ref =  $self->add_items('modules', $public, $module);
-    if ( $items_ref->[0] eq $module ) {
+    if (defined ($items_ref->[0]) &&  ($items_ref->[0] eq $module)) {
         return 1;  # module has been added
     }
     elsif ( defined($items_ref) ) {
