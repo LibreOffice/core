@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen2.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 09:19:49 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 16:33:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -388,6 +388,7 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
         nAsianCompression(SC_ASIANCOMPRESSION_INVALID),
         nAsianKerning(SC_ASIANKERNING_INVALID),
         pLoadedSymbolStringCellList( NULL ),
+        nRangeOverflowType( 0 ),
         bPastingDrawFromOtherDoc( FALSE ),
         pCacheFieldEditEngine( NULL ),
         nInDdeLinkUpdate( 0 ),
