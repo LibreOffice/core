@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr3.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:17 $
+ *  last change: $Author: nn $ $Date: 2001-01-05 18:26:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,105 @@
 // PI jetzt als F_PI aus solar.h
 //#define   PI            3.1415926535897932
 
+//-----------------------------------------------------------------------------
+
+class ScDistFunc
+{
+public:
+    virtual double GetValue(double x) const = 0;
+};
+
+//  iteration for inverse distributions
+
+//template< class T > double lcl_IterateInverse( const T& rFunction, double x0, double x1, BOOL& rConvError )
+double lcl_IterateInverse( const ScDistFunc& rFunction, double x0, double x1, BOOL& rConvError )
+{
+    rConvError = FALSE;
+    double fEps = 1.0E-7;
+
+    DBG_ASSERT(x0<x1, "IterateInverse: wrong interval");
+
+    //  find enclosing interval
+
+    double f0 = rFunction.GetValue(x0);
+    double f1 = rFunction.GetValue(x1);
+    double xs;
+    USHORT i;
+    for (i = 0; i < 1000 && f0*f1 > 0.0; i++)
+    {
+        if (fabs(f0) <= fabs(f1))
+        {
+            xs = x0;
+            x0 += 2.0 * (x0 - x1);
+            if (x0 < 0.0)
+                x0 = 0.0;
+            x1 = xs;
+            f1 = f0;
+            f0 = rFunction.GetValue(x0);
+        }
+        else
+        {
+            xs = x1;
+            x1 += 2.0 * (x1 - x0);
+            x0 = xs;
+            f0 = f1;
+            f1 = rFunction.GetValue(x1);
+        }
+    }
+
+    if (f0 == 0.0)
+        return x0;
+    if (f1 == 0.0)
+        return x1;
+
+    //  simple iteration
+
+    double x00 = x0;
+    double x11 = x1;
+    double fs;
+    for (i = 0; i < 100; i++)
+    {
+        xs = 0.5*(x0+x1);
+        if (fabs(f1-f0) >= fEps)
+        {
+            fs = rFunction.GetValue(xs);
+            if (f0*fs <= 0.0)
+            {
+                x1 = xs;
+                f1 = fs;
+            }
+            else
+            {
+                x0 = xs;
+                f0 = fs;
+            }
+        }
+        else
+        {
+            //  add one step of regula falsi to improve precision
+
+            if ( x0 != x1 )
+            {
+                double regxs = (f1-f0)/(x1-x0);
+                if ( regxs != 0.0)
+                {
+                    double regx = x1 - f1/regxs;
+                    if (regx >= x00 && regx <= x11)
+                    {
+                        double regfs = rFunction.GetValue(regx);
+                        if ( fabs(regfs) < fabs(fs) )
+                            xs = regx;
+                    }
+                }
+            }
+
+            return xs;
+        }
+    }
+
+    rConvError = TRUE;
+    return 0.0;
+}
 
 //-----------------------------------------------------------------------------
 // Allgemeine Funktionen
@@ -1102,6 +1201,18 @@ void ScInterpreter::ScLogNormInv()
     }
 }
 
+class ScGammaDistFunction : public ScDistFunc
+{
+    ScInterpreter&  rInt;
+    double          fp, fAlpha, fBeta;
+
+public:
+            ScGammaDistFunction( ScInterpreter& rI, double fpVal, double fAlphaVal, double fBetaVal ) :
+                rInt(rI), fp(fpVal), fAlpha(fAlphaVal), fBeta(fBetaVal) {}
+
+    double  GetValue( double x ) const  { return fp - rInt.GetGammaDist(x, fAlpha, fBeta); }
+};
+
 void ScInterpreter::ScGammaInv()
 {
     if ( !MustHaveParamCount( GetByte(), 3 ) )
@@ -1118,58 +1229,27 @@ void ScInterpreter::ScGammaInv()
         PushInt(0);
     else
     {
-        double x0, x1, f0, f1, xs;
-        double fEps = 1.0E-7;
-        USHORT i;
-        x1 = fAlpha;                                    // Einschachteln:
-        x0 = x1*0.5;
-        f0 = fP - GetGammaDist(x0, fAlpha, fBeta);
-        f1 = fP - GetGammaDist(x1, fAlpha, fBeta);
-        for (i = 0; i < 1000 && f0*f1 > 0.0; i++)
-        {
-            if (fabs(f0) < fabs(f1))
-            {
-                xs = x0;
-                x0 += 2.0 * (x0 - x1);
-                if (x0 < 0.0)
-                    x0 = 0.0;
-                x1 = xs;
-                f1 = f0;
-                f0 = fP - GetGammaDist(x0, fAlpha, fBeta);
-            }
-            else
-            {
-                xs = x1;
-                x1 += 2.0 * (x1 - x0);
-                x0 = xs;
-                f0 = f1;
-                f1 = fP - GetGammaDist(x1, fAlpha, fBeta);
-            }
-        }
-                                                        // Regula Falsi:
-        double x00 = x0;
-        double x11 = x1;
-        for (i = 0; i < 100 && fabs(x1-x0) > fEps; i++)
-        {
-            xs = (f1-f0)/(x1-x0);
-            x0 = x1;
-            f0 = f1;
-            x1 -= f1/xs;
-            if (x1 < x00)
-                x1 = x00;
-            else if (x1 > x11)
-                x1 = x11;
-            f1 = fP - GetGammaDist(x1, fAlpha, fBeta);
-        }
-        if (i >= 100)
-        {
+        BOOL bConvError;
+        ScGammaDistFunction aFunc( *this, fP, fAlpha, fBeta );
+        double fStart = fAlpha * fBeta;
+        double fVal = lcl_IterateInverse( aFunc, fStart*0.5, fStart, bConvError );
+        if (bConvError)
             SetError(errNoConvergence);
-            PushInt(0);
-        }
-        else
-            PushDouble(x1);
+        PushDouble(fVal);
     }
 }
+
+class ScBetaDistFunction : public ScDistFunc
+{
+    ScInterpreter&  rInt;
+    double          fp, fAlpha, fBeta;
+
+public:
+            ScBetaDistFunction( ScInterpreter& rI, double fpVal, double fAlphaVal, double fBetaVal ) :
+                rInt(rI), fp(fpVal), fAlpha(fAlphaVal), fBeta(fBetaVal) {}
+
+    double  GetValue( double x ) const  { return fp - rInt.GetBetaDist(x, fAlpha, fBeta); }
+};
 
 void ScInterpreter::ScBetaInv()
 {
@@ -1197,65 +1277,35 @@ void ScInterpreter::ScBetaInv()
         PushInt(0);
     else
     {
-        double x0, x1, f0, f1, xs;
-        double fEps = 1.0E-7;
-        USHORT i;
-        x1 = 0.75;                                  // Einschachteln:
-        x0 = 0.25;
-        f0 = fP - GetBetaDist(x0, fAlpha, fBeta);
-        f1 = fP - GetBetaDist(x1, fAlpha, fBeta);
-        for (i = 0; i < 1000 && f0*f1 > 0.0; i++)
-        {
-            if (fabs(f0) < fabs(f1))
-            {
-                xs = x0;
-                x0 += 2.0 * (x0 - x1);
-                if (x0 < 0.0)
-                    x0 = 0.0;
-                x1 = xs;
-                f1 = f0;
-                f0 = fP - GetBetaDist(x0, fAlpha, fBeta);
-            }
-            else
-            {
-                xs = x1;
-                x1 += 2.0 * (x1 - x0);
-                x0 = xs;
-                f0 = f1;
-                f1 = fP - GetBetaDist(x1, fAlpha, fBeta);
-            }
-        }
-                                                        // Regula Falsi:
-        double x00 = x0;
-        double x11 = x1;
-        for (i = 0; i < 100 && fabs(x1-x0) > fEps; i++)
-        {
-            xs = (f1-f0)/(x1-x0);
-            x0 = x1;
-            f0 = f1;
-            x1 -= f1/xs;
-            if (x1 < x00)
-                x1 = x00;
-            else if (x1 > x11)
-                x1 = x11;
-            f1 = fP - GetBetaDist(x1, fAlpha, fBeta);
-        }
-        if (i >= 100)
+        BOOL bConvError;
+        ScBetaDistFunction aFunc( *this, fP, fAlpha, fBeta );
+        // 0..1 as range for iteration so it isn't extended beyond the valid range
+        double fVal = lcl_IterateInverse( aFunc, 0.0, 1.0, bConvError );
+        if (bConvError)
         {
             SetError(errNoConvergence);
             PushInt(0);
         }
         else
-            PushDouble(fA + x1*(fB-fA));                    // Skalierung auf (A,B)
+            PushDouble(fA + fVal*(fB-fA));                  // scale to (A,B)
     }
 }
+
                                                             // Achtung: T, F und Chi
                                                             // sind monoton fallend,
                                                             // deshalb 1-Dist als Funktion
 
-#if defined(WIN) && defined(MSC)
-#pragma optimize("",off)
-#endif
+class ScTDistFunction : public ScDistFunc
+{
+    ScInterpreter&  rInt;
+    double          fp, fDF;
+
+public:
+            ScTDistFunction( ScInterpreter& rI, double fpVal, double fDFVal ) :
+                rInt(rI), fp(fpVal), fDF(fDFVal) {}
+
+    double  GetValue( double x ) const  { return fp - 2 * rInt.GetTDist(x, fDF); }
+};
 
 void ScInterpreter::ScTInv()
 {
@@ -1268,69 +1318,26 @@ void ScInterpreter::ScTInv()
         SetIllegalArgument();
         return;
     }
-    double x0, x1, f0, f1, xs;
-    double fEps = 1.0E-7;
-    USHORT i;
-    x1 = fDF;                                       // Einschachteln:
-    x0 = x1*0.5;
-    f0 = fP - 2*GetTDist(x0, fDF);
-    f1 = fP - 2*GetTDist(x1, fDF);
-    for (i = 0; i < 1000 && f0*f1 > 0.0; i++)
-    {
-        if (fabs(f0) <= fabs(f1))
-        {
-            xs = x0;
-            x0 += 2.0 * (x0 - x1);
-            if (x0 < 0.0)
-                x0 = 0.0;
-            x1 = xs;
-            f1 = f0;
-            f0 = fP - 2*GetTDist(x0, fDF);
-        }
-        else
-        {
-            xs = x1;
-            x1 += 2.0 * (x1 - x0);
-            x0 = xs;
-            f0 = f1;
-            f1 = fP - 2*GetTDist(x1, fDF);
-        }
-    }
-                                                        // Regula Falsi:
-    double x00 = x0;
-    double x11 = x1;
-    double f00 = f0;
-    for (i = 0; i < 100 && fabs(x1-x0) > fEps; i++)
-    {
-        xs = (f1-f0)/(x1-x0);
-        if (xs == 0.0)
-        {
-            x0 = x00;
-            f0 = f00;
-        }
-        else
-        {
-            x0 = x1;
-            f0 = f1;
-            x1 -= f1/xs;
-            if (x1 < x00)
-                x1 = x00;
-            else if (x1 > x11)
-                x1 = x11;
-            f1 = fP - 2*GetTDist(x1, fDF);
-        }
-    }
-    if (i >= 100)
-    {
+
+    BOOL bConvError;
+    ScTDistFunction aFunc( *this, fP, fDF );
+    double fVal = lcl_IterateInverse( aFunc, fDF*0.5, fDF, bConvError );
+    if (bConvError)
         SetError(errNoConvergence);
-        PushInt(0);
-    }
-    else
-        PushDouble(x1);
+    PushDouble(fVal);
 }
-#if defined(WIN) && defined(MSC)
-#pragma optimize("",on)
-#endif
+
+class ScFDistFunction : public ScDistFunc
+{
+    ScInterpreter&  rInt;
+    double          fp, fF1, fF2;
+
+public:
+            ScFDistFunction( ScInterpreter& rI, double fpVal, double fF1Val, double fF2Val ) :
+                rInt(rI), fp(fpVal), fF1(fF1Val), fF2(fF2Val) {}
+
+    double  GetValue( double x ) const  { return fp - rInt.GetFDist(x, fF1, fF2); }
+};
 
 void ScInterpreter::ScFInv()
 {
@@ -1344,76 +1351,26 @@ void ScInterpreter::ScFInv()
         SetIllegalArgument();
         return;
     }
-    double x0, x1, f0, f1, xs;
-    double fEps = 1.0E-7;
-    USHORT i;
-    x1 = fF1;                                       // Einschachteln:
-    x0 = x1*0.5;
-    f0 = fP - GetFDist(x0, fF1, fF2);
-    f1 = fP - GetFDist(x1, fF1, fF2);
-    for (i = 0; i < 1000 && f0*f1 > 0.0; i++)
-    {
-        if (fabs(f0) <= fabs(f1))
-        {
-            xs = x0;
-            x0 += 2.0 * (x0 - x1);
-            if (x0 < 0.0)
-                x0 = 0.0;
-            x1 = xs;
-            f1 = f0;
-            f0 = fP - GetFDist(x0, fF1, fF2);
-        }
-        else
-        {
-            xs = x1;
-            x1 += 2.0 * (x1 - x0);
-            x0 = xs;
-            f0 = f1;
-            f1 = fP - GetFDist(x1, fF1, fF2);
-        }
-    }
-                                                        // Regula Falsi:
-    double x00 = x0;
-    double x11 = x1;
-    double f00 = f0;
-    for (i = 0; i < 100 && fabs(x1-x0) > fEps; i++)
-    {
-        xs = (f1-f0)/(x1-x0);
-        if (xs == 0.0)
-        {
-            x0 = x00;
-            f0 = f00;
-        }
-        else
-        {
-            x0 = x1;
-            f0 = f1;
-            x1 -= f1/xs;
-            if (x1 < x00)
-                x1 = x00;
-            else if (x1 > x11)
-                x1 = x11;
-            f1 = fP - GetFDist(x1, fF1, fF2);
-        }
-/*
-        x0 = x1;
-        f0 = f1;
-        x1 -= f1/xs;
-        if (x1 < x00)
-            x1 = x00;
-        else if (x1 > x11)
-            x1 = x11;
-        f1 = fP - GetFDist(x1, fF1, fF2);
-*/
-    }
-    if (i >= 100)
-    {
+
+    BOOL bConvError;
+    ScFDistFunction aFunc( *this, fP, fF1, fF2 );
+    double fVal = lcl_IterateInverse( aFunc, fF1*0.5, fF1, bConvError );
+    if (bConvError)
         SetError(errNoConvergence);
-        PushInt(0);
-    }
-    else
-        PushDouble(x1);
+    PushDouble(fVal);
 }
+
+class ScChiDistFunction : public ScDistFunc
+{
+    ScInterpreter&  rInt;
+    double          fp, fDF;
+
+public:
+            ScChiDistFunction( ScInterpreter& rI, double fpVal, double fDFVal ) :
+                rInt(rI), fp(fpVal), fDF(fDFVal) {}
+
+    double  GetValue( double x ) const  { return fp - rInt.GetChiDist(x, fDF); }
+};
 
 void ScInterpreter::ScChiInv()
 {
@@ -1426,114 +1383,15 @@ void ScInterpreter::ScChiInv()
         SetIllegalArgument();
         return;
     }
-    double x0, x1, f0, f1, xs;
-    double fEps = 1.0E-7;
-    USHORT i;
-    x1 = fDF;                                       // Einschachteln:
-    x0 = x1*0.5;
-    f0 = fP - GetChiDist(x0, fDF);
-    f1 = fP - GetChiDist(x1, fDF);
-    for (i = 0; i < 1000 && f0*f1 > 0.0; i++)
-    {
-        if (fabs(f0) <= fabs(f1))
-        {
-            xs = x0;
-            x0 += 2.0 * (x0 - x1);
-            if (x0 < 0.0)
-                x0 = 0.0;
-            x1 = xs;
-            f1 = f0;
-            f0 = fP - GetChiDist(x0, fDF);
-        }
-        else
-        {
-            xs = x1;
-            x1 += 2.0 * (x1 - x0);
-            x0 = xs;
-            f0 = f1;
-            f1 = fP - GetChiDist(x1, fDF);
-        }
-    }
-                                                        // Regula Falsi:
-    double x00 = x0;
-    double x11 = x1;
-    double f00 = f0;
-    for (i = 0; i < 100 && fabs(x1-x0) > fEps; i++)
-    {
-        xs = (f1-f0)/(x1-x0);
-        if (xs == 0.0)
-        {
-            x0 = x00;
-            f0 = f00;
-        }
-        else
-        {
-            x0 = x1;
-            f0 = f1;
-            x1 -= f1/xs;
-            if (x1 < x00)
-                x1 = x00;
-            else if (x1 > x11)
-                x1 = x11;
-            f1 = fP - GetChiDist(x1, fDF);
-        }
-/*
-        x0 = x1;
-        f0 = f1;
-        x1 -= f1/xs;
-        if (x1 < x00)
-            x1 = x00;
-        else if (x1 > x11)
-            x1 = x11;
-        f1 = fP - GetChiDist(x1, fDF);
-*/
-    }
-    if (i >= 100)
-    {
+
+    BOOL bConvError;
+    ScChiDistFunction aFunc( *this, fP, fDF );
+    double fVal = lcl_IterateInverse( aFunc, fDF*0.5, fDF, bConvError );
+    if (bConvError)
         SetError(errNoConvergence);
-        PushInt(0);
-    }
-    else
-        PushDouble(x1);
+    PushDouble(fVal);
 }
 
-/********************************************************/
-/*                              // Halbierung statt Regula Falsi
-    if (f0 == 0.0)
-    {
-        PushDouble(x0);
-        return;
-    }
-    if (f1 == 0.0)
-    {
-        PushDouble(x1);
-        return;
-    }
-    double fs;
-    for (i = 0; i < 100; i++)
-    {
-        xs = 0.5*(x0+x1);
-        if (fabs(f1-f0) >= fEps)
-        {
-            fs = fP - GetChiDist(xs, fDF);
-            if (f0*fs < 0.0)
-            {
-                x1 = xs;
-                f1 = fs;
-            }
-            else
-            {
-                x0 = xs;
-                f0 = fs;
-            }
-        }
-        else
-        {
-            PushDouble(xs);
-            return;
-        }
-    }
-*/
 /***********************************************/
 
 void ScInterpreter::ScConfidence()
