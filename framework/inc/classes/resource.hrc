@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resource.hrc,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 18:02:01 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 13:15:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,7 @@
 #define STR_UPDATEDOC                           (RID_STR_START+3)
 #define STR_CLOSEDOC_ANDRETURN                  (RID_STR_START+4)
 #define STR_SAVECOPYDOC                         (RID_STR_START+5)
+#define STR_NODOCUMENT                          (RID_STR_START+6)
 #define POPUPMENU_TOOLBAR_QUICKCUSTOMIZATION    (RID_MENU_START+0)
 
 #define MENUITEM_TOOLBAR_VISIBLEBUTTON          1
