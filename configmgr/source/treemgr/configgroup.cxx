@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configgroup.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-07 14:35:59 $
+ *  last change: $Author: jb $ $Date: 2000-11-10 17:32:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,10 @@
 #include "nodechangeimpl.hxx"
 #include "treeimpl.hxx"
 
+#ifndef _COM_SUN_STAR_SCRIPT_XTYPECONVERTER_HPP_
+#include <com/sun/star/script/XTypeConverter.hpp>
+#endif
+
 namespace configmgr
 {
     namespace configuration
@@ -73,9 +77,10 @@ namespace configmgr
 // class GroupUpdater
 //-----------------------------------------------------------------------------
 
-GroupUpdater::GroupUpdater(Tree const& aParentTree, NodeRef const& aGroupNode)
+GroupUpdater::GroupUpdater(Tree const& aParentTree, NodeRef const& aGroupNode, UnoTypeConverter const& xConverter)
 : m_aTree(aParentTree)
 , m_aNode(aGroupNode)
+, m_xTypeConverter(xConverter)
 {
     implValidateTree(m_aTree,m_aNode);
 
@@ -111,14 +116,47 @@ static inline UnoType getUnoAnyType()
 }
 //-----------------------------------------------------------------------------
 
-static inline sal_Bool isCompatibleType(UnoType const& aValueType, UnoType const& aTargetType)
+bool convertCompatibleValue(UnoTypeConverter const& xTypeConverter, uno::Any& rConverted, UnoAny const& rNewValue, UnoType const& rTargetType)
 {
-    // TODO: Use uno assignability checks
-    return aValueType == aTargetType;
+    if (rTargetType == rNewValue.getValueType()
+        || rTargetType == getUnoAnyType())
+    {
+        rConverted = rNewValue;
+        return true;
+    }
+
+    if (xTypeConverter.is())
+    try
+    {
+        rConverted = xTypeConverter->convertTo(rNewValue,rTargetType);
+    }
+    catch(uno::RuntimeException&) { throw; }
+    catch(css::lang::IllegalArgumentException&)
+    {
+        // try to do more conversion here ?!
+        return false;
+    }
+    catch(css::script::CannotConvertException&)
+    {
+        // try to do more conversion here ?!
+
+        // throw a WrappedUnoException here ?!
+        return false;
+    }
+    catch(uno::Exception&)
+    {
+        OSL_ENSHURE(sal_False, "ValueUpdater::convertValue : generic exception ... thought we caught all allowed exceptions !");
+        // try to do more conversion here ?!
+        return false;
+    }
+
+    return true;
 }
+
+
 //-----------------------------------------------------------------------------
 
-void GroupUpdater::implValidateValue(NodeRef const& aNode, UnoAny const& aValue) const
+UnoAny GroupUpdater::implValidateValue(NodeRef const& aNode, UnoAny const& aValue) const
 {
     OSL_ASSERT(TreeImplHelper::isValue(aNode));
 
@@ -135,19 +173,22 @@ void GroupUpdater::implValidateValue(NodeRef const& aNode, UnoAny const& aValue)
     OSL_ASSERT(aTargetType.getTypeClass() != uno::TypeClass_INTERFACE); // on a value node ??
     OSL_ASSERT( aValueType.getTypeClass() != uno::TypeClass_ANY);
 
-    if (aValueType != aTargetType)
-    {
-        if (aTargetType == getUnoAnyType())
-        {} // OK - any type
+    UnoAny aRet;
 
-        else if (aValueType.getTypeClass() == uno::TypeClass_VOID)
-            OSL_ASSERT(!aValue.hasValue()); // has been checked
+    if (aValueType == aTargetType)
+    { aRet = aValue; }
 
-        else if (!isCompatibleType(aValueType,aTargetType))
-            throw TypeMismatch(aValueType.getTypeName(), aTargetType.getTypeName(), " cannot set incompatible value");
+    else if (aTargetType == getUnoAnyType())
+    { aRet = aValue; } // OK - any type
 
-        // else TODO: maybe convert aValue
-    }
+    else if (aValueType.getTypeClass() == uno::TypeClass_VOID)
+        OSL_ASSERT(!aRet.hasValue()); // legality has been checked elsewhere
+
+    else if (!convertCompatibleValue(m_xTypeConverter, aRet, aValue,aTargetType))
+        throw TypeMismatch(aValueType.getTypeName(), aTargetType.getTypeName(), " cannot set incompatible value");
+
+
+    return aRet;
 }
 //-----------------------------------------------------------------------------
 
@@ -202,10 +243,10 @@ NodeChange GroupUpdater::validateSetDefault(NodeRef const& aValueNode)
 NodeChange GroupUpdater::validateSetValue(NodeRef const& aValueNode, UnoAny const& newValue )
 {
     implValidateNode(m_aTree, aValueNode);
-    implValidateValue(aValueNode, newValue);
+    UnoAny aNewValue = implValidateValue(aValueNode, newValue);
 
     // now build the specific change
-    ValueChangeImpl* pChange = new ValueReplaceImpl(newValue);
+    ValueChangeImpl* pChange = new ValueReplaceImpl(aNewValue);
 
     pChange->setTarget(TreeImplHelper::impl(m_aTree), TreeImplHelper::offset(aValueNode));
 
@@ -218,10 +259,10 @@ NodeChange GroupUpdater::validateSetDeepValue(  Tree const& aNestedTree, NodeRef
 {
     implValidateTree(aNestedTree, aNestedNode);
     implValidateNode(aNestedTree, aNestedNode);
-    implValidateValue(aNestedNode, newValue);
+    UnoAny aNewValue = implValidateValue(aNestedNode, newValue);
 
     // now build the specific change
-    DeepValueReplaceImpl* pChange = new DeepValueReplaceImpl(aRelPath, newValue);
+    DeepValueReplaceImpl* pChange = new DeepValueReplaceImpl(aRelPath, aNewValue);
 
     pChange->setBaseContext(TreeImplHelper::impl(m_aTree), TreeImplHelper::offset(m_aNode));
     pChange->setTarget(TreeImplHelper::impl(aNestedTree), TreeImplHelper::offset(aNestedNode));

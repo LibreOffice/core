@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configset.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-10 12:17:22 $
+ *  last change: $Author: jb $ $Date: 2000-11-10 17:32:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,7 @@
 #include "nodechangeimpl.hxx"
 #include "treeimpl.hxx"
 #include "template.hxx"
+#include "configgroup.hxx"
 
 #include "cmtreemodel.hxx" // grr, need this only for IRefCountedTemplateProvider ref counting (and the ValueNode stuff)
 
@@ -123,6 +124,12 @@ ElementTreeHolder ElementTree::get() const
 ElementTreeImpl* ElementTree::getImpl() const
 {
     return m_aTreeHolder.getBodyPtr();
+}
+//-----------------------------------------------------------------------------
+
+ISynchronizedData* ElementTree::getTreeLock() const
+{
+    return m_aTreeHolder->getRootLock();
 }
 //-----------------------------------------------------------------------------
 
@@ -352,10 +359,12 @@ TreeSetUpdater::TreeSetUpdater(Tree const& aParentTree, NodeRef const& aSetNode,
 }
 //-----------------------------------------------------------------------------
 
-ValueSetUpdater::ValueSetUpdater(Tree const& aParentTree, NodeRef const& aSetNode, SetElementInfo const& aInfo)
+ValueSetUpdater::ValueSetUpdater(Tree const& aParentTree, NodeRef const& aSetNode,
+                                 SetElementInfo const& aInfo, UnoTypeConverter const& xConverter)
 : m_aParentTree(aParentTree)
 , m_aSetNode(aSetNode)
 , m_aTemplate(aInfo.getTemplate())
+, m_xTypeConverter(xConverter)
 {
     implValidateSet();
 }
@@ -495,7 +504,7 @@ void TreeSetUpdater::implValidateTree(ElementTree const& aElementTree)
 }
 //-----------------------------------------------------------------------------
 
-void ValueSetUpdater::implValidateValue(UnoAny const& aValue)
+UnoAny ValueSetUpdater::implValidateValue(UnoAny const& aValue)
 {
     UnoType aValType        = aValue.getValueType();
     UnoType aThisType       = m_aTemplate->getInstanceType();
@@ -503,11 +512,13 @@ void ValueSetUpdater::implValidateValue(UnoAny const& aValue)
     if (aValType.getTypeClass() == uno::TypeClass_INTERFACE)
         throw TypeMismatch(aValType.getTypeName(), aThisType.getTypeName(), " - cannot replace value by complex tree in Set update");
 
+    UnoAny aRet(aValue);
     if (aValue.hasValue())
     {
         if (aValType != aThisType && uno::TypeClass_ANY != aThisType.getTypeClass())
         {
-            throw TypeMismatch(aValType.getTypeName(), aThisType.getTypeName(), " - new element does not match template in SetUpdate");
+            if (!convertCompatibleValue(m_xTypeConverter, aRet, aValue, aThisType))
+                throw TypeMismatch(aValType.getTypeName(), aThisType.getTypeName(), " - new element does not match template in SetUpdate");
         }
     }
     else
@@ -516,10 +527,11 @@ void ValueSetUpdater::implValidateValue(UnoAny const& aValue)
         OSL_ASSERT(aValType.getTypeClass() == uno::TypeClass_VOID);
 
     }
+    return aRet;
 }
 //-----------------------------------------------------------------------------
 
-void ValueSetUpdater::implValidateValue(NodeRef const& aElementNode, UnoAny const& aValue)
+UnoAny ValueSetUpdater::implValidateValue(NodeRef const& aElementNode, UnoAny const& aValue)
 {
     // Here we assume writable == removable/replaceable
     if (!aElementNode.getAttributes().writable)
@@ -531,6 +543,7 @@ void ValueSetUpdater::implValidateValue(NodeRef const& aElementNode, UnoAny cons
         if (!aElementNode.getAttributes().nullable)
             throw ConstraintViolation( "Set Update: Value is not nullable !" );
     }
+    return implValidateValue( aValue);
 }
 //-----------------------------------------------------------------------------
 
@@ -556,9 +569,9 @@ NodeChange ValueSetUpdater::validateInsertElement (Name const& aName, UnoAny con
     if (anEntry.isValid())
         throw Exception("INTERNAL ERROR: Set Update: Element to be inserted already exists");
 
-    implValidateValue(aNewValue);
+    UnoAny aValidValue = implValidateValue(aNewValue);
 
-    NodeChange aChange(new SetInsertValueImpl(aName, makeValueElement(aName, aNewValue)));
+    NodeChange aChange(new SetInsertValueImpl(aName, makeValueElement(aName, aValidValue)));
 
     aChange.impl()->setTarget(TreeImplHelper::impl(m_aParentTree), TreeImplHelper::offset(m_aSetNode));
 
@@ -584,9 +597,9 @@ NodeChange ValueSetUpdater::validateReplaceElement(Tree const& aElementTree, Nod
 {
     Name aName = implValidateElement(aElementTree, aElementNode);
 
-    implValidateValue(aElementNode, aNewValue);
+    UnoAny aValidValue = implValidateValue(aElementNode, aNewValue);
 
-    NodeChange aChange(new SetReplaceValueImpl(aName, makeValueElement(aName, aElementNode,aNewValue)));
+    NodeChange aChange(new SetReplaceValueImpl(aName, makeValueElement(aName, aElementNode,aValidValue)));
 
     aChange.impl()->setTarget(TreeImplHelper::impl(m_aParentTree), TreeImplHelper::offset(m_aSetNode));
 

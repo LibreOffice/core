@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configgroup.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-07 14:40:31 $
+ *  last change: $Author: jb $ $Date: 2000-11-10 17:32:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,10 @@
 #include "configexcept.hxx"
 #include "noderef.hxx"
 
+namespace com { namespace sun { namespace star {
+    namespace script { class XTypeConverter; }
+} } }
+
 namespace configmgr
 {
     namespace configuration
@@ -74,6 +78,7 @@ namespace configmgr
 
         typedef com::sun::star::uno::Type       UnoType;
         typedef com::sun::star::uno::Any        UnoAny;
+        typedef com::sun::star::uno::Reference<com::sun::star::script::XTypeConverter>  UnoTypeConverter;
 //-----------------------------------------------------------------------------
 
         class NodeRef;
@@ -86,8 +91,9 @@ namespace configmgr
         {
             Tree    m_aTree;
             NodeRef m_aNode;
+            UnoTypeConverter m_xTypeConverter;
         public:
-            GroupUpdater(Tree const& aParentTree, NodeRef const& aGroupNode);
+            GroupUpdater(Tree const& aParentTree, NodeRef const& aGroupNode, UnoTypeConverter const& xConverter);
 
             NodeChange validateSetDefault(NodeRef const& aValueNode);
 
@@ -99,8 +105,11 @@ namespace configmgr
         private:
             void implValidateTree(Tree const& aTree, NodeRef const& aNode) const;
             void implValidateNode(Tree const& aTree, NodeRef const& aNode) const;
-            void implValidateValue(NodeRef const& aNode, UnoAny const& aValue) const;
+            UnoAny implValidateValue(NodeRef const& aNode, UnoAny const& aValue) const;
         };
+//-----------------------------------------------------------------------------
+        bool convertCompatibleValue(UnoTypeConverter const& xConverter, uno::Any& rConverted,
+                                    UnoAny const& rNewValue, UnoType const& rTargetType);
 //-----------------------------------------------------------------------------
     }
 }

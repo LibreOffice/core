@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configset.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-10 12:19:02 $
+ *  last change: $Author: jb $ $Date: 2000-11-10 17:32:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,10 @@
 #include <vos/ref.hxx>
 #include <stl/memory>
 
+namespace com { namespace sun { namespace star {
+    namespace script { class XTypeConverter; }
+} } }
+
 namespace configmgr
 {
     class IRefCountedTemplateProvider;
@@ -86,6 +90,7 @@ namespace configmgr
 
         typedef com::sun::star::uno::Type       UnoType;
         typedef com::sun::star::uno::Any        UnoAny;
+        typedef com::sun::star::uno::Reference<com::sun::star::script::XTypeConverter>  UnoTypeConverter;
         //---------------------------------------------------------------------
 
         class NodeRef;
@@ -136,6 +141,8 @@ namespace configmgr
             ElementTreeImpl& operator*() const;
 
             Tree getTree() const;
+            ISynchronizedData* getTreeLock() const;
+
             static ElementTree extract(Tree const& aTree);
             /** if the element tree owns it's node tree, ownership is given to the caller.
                 <p>WARNING: Irresponsible use of this feature produces crashes</p>
@@ -208,8 +215,10 @@ namespace configmgr
             Tree    m_aParentTree;
             NodeRef m_aSetNode;
             TemplateHolder  m_aTemplate;
+            UnoTypeConverter m_xTypeConverter;
         public:
-            ValueSetUpdater(Tree const& aParentTree, NodeRef const& aSetNode, SetElementInfo const& aInfo);
+            ValueSetUpdater(Tree const& aParentTree, NodeRef const& aSetNode,
+                            SetElementInfo const& aInfo, UnoTypeConverter const& xConverter);
 
             NodeChange validateInsertElement (Name const& aName, UnoAny const& aNewValue);
 
@@ -219,8 +228,8 @@ namespace configmgr
         private:
             void implValidateSet();
             Name implValidateElement(Tree const& aTree, NodeRef const& aNode);
-            void implValidateValue(NodeRef const& aElementNode, UnoAny const& aValue);
-            void implValidateValue(UnoAny const& aValue);
+            UnoAny implValidateValue(NodeRef const& aElementNode, UnoAny const& aValue);
+            UnoAny implValidateValue(UnoAny const& aValue);
 
             ElementTreeHolder makeValueElement(Name const& aName, NodeRef const& aElementNode, UnoAny const& aValue);
             ElementTreeHolder makeValueElement(Name const& aName, UnoAny const& aValue);
