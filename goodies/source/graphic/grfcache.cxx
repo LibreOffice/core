@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfcache.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-30 10:53:48 $
+ *  last change: $Author: ka $ $Date: 2000-12-07 14:56:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -344,12 +344,18 @@ BOOL GraphicCacheEntry::AddGraphicObjectReference( const GraphicObject& rObj, Gr
             {
                 for( void* pObj = maGraphicObjectList.First(); mbSwappedAll && pObj; pObj = maGraphicObjectList.Next() )
                 {
-                    GraphicObject& rTestObj = *(GraphicObject*) pObj;
+                    GraphicObject&  rTestObj = *(GraphicObject*) pObj;
+                    const BOOL      bOldInitState = mbInitialized;
 
+                    // set mbInitialized=TRUE to avoid, that this object is destroyed
+                    // and reinserted in GraphicCache::GraphicObjectWasSwappedIn
+                    mbInitialized = TRUE;
                     rTestObj.FireSwapInRequest();
 
                     if( !mbSwappedAll )
                         rSubstitute = rTestObj.GetGraphic();
+                    else
+                        mbInitialized = bOldInitState;
                 }
 
                 DBG_ASSERT( !mbSwappedAll, "GraphicCacheEntry::AddGraphicObjectReference: Graphic object could not be swapped in" );
@@ -443,7 +449,12 @@ BOOL GraphicCacheEntry::FillSwappedGraphicObject( const GraphicObject& rObj, Gra
 void GraphicCacheEntry::GraphicObjectWasSwappedIn( const GraphicObject& rObj )
 {
     if( mbSwappedAll )
+    {
         mbSwappedAll = !ImplInit( rObj );
+
+        if( !mbSwappedAll && !mbInitialized )
+            mbInitialized = TRUE;
+    }
 }
 
 // ----------------------------
