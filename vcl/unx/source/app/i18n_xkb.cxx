@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_xkb.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: svesik $ $Date: 2000-12-19 00:25:06 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:08:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,7 +159,7 @@ SalI18N_KeyboardExtension::Dispatch( XEvent *pEvent )
 
         default:
 
-            #ifdef DEBUG
+            #if OSL_DEBUG_LEVEL > 1
             fprintf(stderr, "Got unrequested XkbAnyEvent %#x/%i\n",
                 nXKBType, nXKBType );
             #endif
