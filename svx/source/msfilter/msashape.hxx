@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msashape.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-08-07 15:24:55 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 14:08:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,9 +69,9 @@
 #include <msdffimp.hxx>
 #endif
 
-#define DFF_AUTOSHAPE_FLIP_V        1
-#define DFF_AUTOSHAPE_FLIP_H        2
-#define DFF_AUTOSHAPE_EXCH          4
+#define DFF_CUSTOMSHAPE_FLIP_V      1
+#define DFF_CUSTOMSHAPE_FLIP_H      2
+#define DFF_CUSTOMSHAPE_EXCH            4
 
 class SdrModel;
 class SfxItemSet;
@@ -79,7 +79,7 @@ struct SvxMSDffVertPair;
 struct SvxMSDffCalculationData;
 struct SvxMSDffTextRectangles;
 class SvxMSDffAdjustmentHandle;
-class SvxMSDffAutoShape
+class SvxMSDffCustomShape
 {
         MSFilterTracer*             pTracer;
         MSO_SPT                     eSpType;
@@ -141,9 +141,9 @@ class SvxMSDffAutoShape
         static sal_Bool             HasGluePointList( const MSO_SPT eShapeType );
         static MSO_SPT              GetShapeTypeFromSdrObject( const SdrObject* );
 
-        SvxMSDffAutoShape( const DffPropertyReader& rPropReader, SvStream&,
+        SvxMSDffCustomShape( const DffPropertyReader& rPropReader, SvStream&,
                             DffObjData& rObjDat, Rectangle& rSnapRect, sal_Int32 nFix16Angle, MSFilterTracer* pTracer );
-        ~SvxMSDffAutoShape();
+        ~SvxMSDffCustomShape();
 };
 
 #endif
