@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xepage.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 13:34:33 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 09:36:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,7 +265,7 @@ XclExpPageSettings::XclExpPageSettings( const XclExpRoot& rRoot ) :
     XclExpRoot( rRoot )
 {
     ScDocument& rDoc = GetDoc();
-    sal_uInt16 nScTab = GetScTab();
+    USHORT nScTab = GetCurrScTab();
 
     if( SfxStyleSheetBase* pStyleSheet = GetStyleSheetPool().Find( rDoc.GetPageStyle( nScTab ), SFX_STYLE_FAMILY_PAGE ) )
     {
@@ -328,12 +328,12 @@ XclExpPageSettings::XclExpPageSettings( const XclExpRoot& rRoot ) :
 
     // *** page breaks ***
 
-    for( sal_uInt16 nRow = 1; nRow <= MAXROW; ++nRow )
-        if( rDoc.GetRowFlags( nRow, nScTab ) & CR_MANUALBREAK )
-            maData.maHorPageBreaks.push_back( nRow );
-    for( sal_uInt16 nCol = 1; nCol <= MAXCOL; ++nCol )
-        if( rDoc.GetColFlags( nCol, nScTab ) & CR_MANUALBREAK )
-            maData.maVerPageBreaks.push_back( nCol );
+    for( USHORT nScRow = 1, nScMaxRow = GetMaxPos().Row(); nScRow <= nScMaxRow; ++nScRow )
+        if( rDoc.GetRowFlags( nScRow, nScTab ) & CR_MANUALBREAK )
+            maData.maHorPageBreaks.push_back( static_cast< sal_uInt16 >( nScRow ) );
+    for( USHORT nScCol = 1, nScMaxCol = GetMaxPos().Col(); nScCol <= nScMaxCol; ++nScCol )
+        if( rDoc.GetColFlags( nScCol, nScTab ) & CR_MANUALBREAK )
+            maData.maVerPageBreaks.push_back( static_cast< sal_uInt16 >( nScCol ) );
 }
 
 void XclExpPageSettings::Save( XclExpStream& rStrm )
@@ -341,8 +341,8 @@ void XclExpPageSettings::Save( XclExpStream& rStrm )
     XclExpBoolRecord( EXC_ID_PRINTHEADERS, maData.mbPrintHeadings ).Save( rStrm );
     XclExpBoolRecord( EXC_ID_PRINTGRIDLINES, maData.mbPrintGrid ).Save( rStrm );
     XclExpBoolRecord( EXC_ID_GRIDSET, true ).Save( rStrm );
-    XclExpPageBreaks( EXC_ID_HORPAGEBREAKS, maData.maHorPageBreaks, GetXclMaxPos().Col() ).Save( rStrm );
-    XclExpPageBreaks( EXC_ID_VERPAGEBREAKS, maData.maVerPageBreaks, GetXclMaxPos().Row() ).Save( rStrm );
+    XclExpPageBreaks( EXC_ID_HORPAGEBREAKS, maData.maHorPageBreaks, static_cast< sal_uInt16 >( GetXclMaxPos().Col() ) ).Save( rStrm );
+    XclExpPageBreaks( EXC_ID_VERPAGEBREAKS, maData.maVerPageBreaks, static_cast< sal_uInt16 >( GetXclMaxPos().Row() ) ).Save( rStrm );
     XclExpHeaderFooter( EXC_ID_HEADER, maData.maHeader ).Save( rStrm );
     XclExpHeaderFooter( EXC_ID_FOOTER, maData.maFooter ).Save( rStrm );
     XclExpBoolRecord( EXC_ID_HCENTER, maData.mbHorCenter ).Save( rStrm );
