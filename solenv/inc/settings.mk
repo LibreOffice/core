@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.145 $
+#   $Revision: 1.146 $
 #
-#   last change: $Author: rt $ $Date: 2004-05-03 13:24:55 $
+#   last change: $Author: rt $ $Date: 2004-05-21 13:46:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -610,6 +610,10 @@ common_build_sign_jar=true
 COMMON_OUTDIR=$(OUTPATH)
 .ENDIF			# "$(common_build)"!=""
 
+LOCAL_OUT:=$(OUT)
+LOCAL_COMMON_OUT:=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(OUT))
+.EXPORT : LOCAL_OUT LOCAL_COMMON_OUT
+
 # --- generate output tree -----------------------------------------
 
 %world.mk :
@@ -812,12 +816,6 @@ SRSX=$(LDSRS)
 INCCOMX=$(LDINC)
 .ENDIF			# "$(solarlang)" != "deut"
 .ENDIF			# "$(NO_REC_RES)"==""
-
-#bmp itself
-BMP=bmp
-# Bitmap-Pfad fuer bmp
-BMP_IN*=$(PRJ)$/res
-BMP_OUT*=$(RES)
 
 # das normale MISC wird nicht an LDMISC angepasst, stattdessen MISCX
 
