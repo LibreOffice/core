@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellbindinghelper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 11:00:59 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 11:22:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,8 +101,6 @@ namespace pcr
                     m_xControlModel;    // the model we work for
         ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheetDocument >
                     m_xDocument;        // the document where the model lives
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
-                    m_xORB;             // service factory, needed sometimes
 
     public:
         /** ctor
@@ -110,7 +108,6 @@ namespace pcr
                 the control model which is or will be bound
         */
         CellBindingHelper(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControlModel
         );
 
