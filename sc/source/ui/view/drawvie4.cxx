@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawvie4.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-14 08:43:38 $
+ *  last change: $Author: nn $ $Date: 2001-07-11 14:13:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,6 +134,7 @@ void lcl_CheckOle( const SdrMarkList& rMarkList, BOOL& rAnyOle, BOOL& rOneOle )
         }
 }
 
+#if 0
 void lcl_RefreshChartData( SdrModel* pModel, ScDocument* pSourceDoc )
 {
     USHORT nPages = pModel->GetPageCount();
@@ -167,6 +168,7 @@ void lcl_RefreshChartData( SdrModel* pModel, ScDocument* pSourceDoc )
         }
     }
 }
+#endif
 
 BOOL ScDrawView::BeginDrag( Window* pWindow, const Point& rStartPos )
 {
@@ -200,8 +202,11 @@ BOOL ScDrawView::BeginDrag( Window* pWindow, const Point& rStartPos )
         SdrModel* pModel = GetAllMarkedModel();
         ScDrawLayer::SetGlobalDrawPersist(NULL);
 
-        //  update chart data (with data from source document)
-        lcl_RefreshChartData( pModel, pViewData->GetDocument() );
+        //  Charts now always copy their data in addition to the source reference, so
+        //  there's no need to call SchDLL::Update for the charts in the clipboard doc.
+        //  Update with the data (including NumberFormatter) from the live document would
+        //  also store the NumberFormatter in the clipboard chart (#88749#)
+        // lcl_RefreshChartData( pModel, pViewData->GetDocument() );
 
         ScDocShell* pDocSh = pViewData->GetDocShell();
 
@@ -249,8 +254,11 @@ void ScDrawView::DoCopy()
     SdrModel* pModel = GetAllMarkedModel();
     ScDrawLayer::SetGlobalDrawPersist(NULL);
 
-    //  update chart data (with data from source document)
-    lcl_RefreshChartData( pModel, pViewData->GetDocument() );
+    //  Charts now always copy their data in addition to the source reference, so
+    //  there's no need to call SchDLL::Update for the charts in the clipboard doc.
+    //  Update with the data (including NumberFormatter) from the live document would
+    //  also store the NumberFormatter in the clipboard chart (#88749#)
+    // lcl_RefreshChartData( pModel, pViewData->GetDocument() );
 
     ScDocShell* pDocSh = pViewData->GetDocShell();
 
