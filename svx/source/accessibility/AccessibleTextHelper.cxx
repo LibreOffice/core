@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTextHelper.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: thb $ $Date: 2002-06-26 11:38:03 $
+ *  last change: $Author: thb $ $Date: 2002-07-05 10:39:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -535,6 +535,8 @@ namespace accessibility
         {
             SetShapeFocus( bHaveFocus );
         }
+
+        DBG_TRACE2("AccessibleTextHelper_Impl::SetFocus: focus changed, Object %d, state: %s", this, bHaveFocus ? "focused" : "not focused");
     }
 
     sal_Bool AccessibleTextHelper_Impl::HaveFocus() SAL_THROW((::com::sun::star::uno::RuntimeException))
@@ -581,7 +583,9 @@ namespace accessibility
                     if( maLastSelection.nStartPara != EE_PARA_NOT_FOUND )
                     {
                         // Did the caret move from one paragraph to another?
-                        if( maLastSelection.nEndPara != aSelection.nEndPara )
+                        // #100530# no caret events if not focused.
+                        if( mbGroupHasFocus &&
+                            maLastSelection.nEndPara != aSelection.nEndPara )
                         {
                             maParaManager.FireEvent( maLastSelection.nEndPara,
                                                      maLastSelection.nEndPara+1,
@@ -590,6 +594,9 @@ namespace accessibility
                                                      uno::makeAny(static_cast<sal_Int32>(maLastSelection.nEndPos)) );
 
                             ChangeChildFocus( aSelection.nEndPara );
+
+                            DBG_TRACE3("AccessibleTextHelper_Impl::UpdateSelection(): focus changed, Object: %d, Paragraph: %d, Last paragraph: %d",
+                                       this, aSelection.nEndPara, maLastSelection.nEndPara);
                         }
                     }
 
@@ -600,13 +607,20 @@ namespace accessibility
                     else
                         aOldCursor <<= static_cast<sal_Int32>(-1);
 
-                    maParaManager.FireEvent( aSelection.nEndPara,
-                                             aSelection.nEndPara+1,
-                                             AccessibleEventId::ACCESSIBLE_CARET_EVENT,
-                                             uno::makeAny(static_cast<sal_Int32>(aSelection.nEndPos)),
-                                             aOldCursor );
+                    // #100530# no caret events if not focused.
+                    if( mbGroupHasFocus )
+                    {
+                        maParaManager.FireEvent( aSelection.nEndPara,
+                                                 aSelection.nEndPara+1,
+                                                 AccessibleEventId::ACCESSIBLE_CARET_EVENT,
+                                                 uno::makeAny(static_cast<sal_Int32>(aSelection.nEndPos)),
+                                                 aOldCursor );
+                    }
 
                     maLastSelection = aSelection;
+
+                    DBG_TRACE5("AccessibleTextHelper_Impl::UpdateSelection(): caret changed, Object: %d, New pos: %d, Old pos: %d, New para: %d, Old para: %d",
+                               this, aSelection.nEndPos, maLastSelection.nEndPos, aSelection.nEndPara, maLastSelection.nEndPara);
                 }
             }
         }
