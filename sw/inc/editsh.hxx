@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-28 16:05:25 $
+ *  last change: $Author: jp $ $Date: 2001-10-25 14:28:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -931,7 +931,7 @@ public:
     // von japanischen/chinesischen Zeichen)
     SwExtTextInput* CreateExtTextInput();
     void DeleteExtTextInput( SwExtTextInput* pDel = 0, BOOL bInsText = TRUE );
-    SwExtTextInput* GetExtTextInput() const;
+//  SwExtTextInput* GetExtTextInput() const;
     void SetExtTextInputData( const CommandExtTextInputData& );
 
     // Schnistelle fuer den Zugriff auf die AutoComplete-Liste
