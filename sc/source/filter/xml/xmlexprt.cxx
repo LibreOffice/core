@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-18 17:38:49 $
+ *  last change: $Author: sab $ $Date: 2000-10-19 04:08:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2728,6 +2728,7 @@ void ScXMLExport::_ExportAutoStyles()
 
 void ScXMLExport::_ExportMasterStyles()
 {
+    GetPageExport()->exportMasterStyles( sal_True );
 }
 
 sal_Bool ScXMLExport::IsMerged (const uno::Reference <table::XCellRange>& xCellRange, const sal_Int32 nCol, const sal_Int32 nRow,
