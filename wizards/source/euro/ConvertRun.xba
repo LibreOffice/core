@@ -1,18 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
 <script:module xmlns:script="http://openoffice.org/2000/script" script:name="ConvertRun" script:language="StarBasic">Option Explicit
+
+Public oPreSelRange as Object
+
 &apos; Todo Den Bug mit der Statuszeilengeschichte überprüfen
 &apos; Todo Vorselektion der Listbox
 &apos; Mauspointer umschalten:
 
 &apos; Todo: Sinnigkeit von &apos;DocDisposed&apos; noch einmal überprüfen
+&apos; Todo: In der Hilfe sollte ein Hinweis erscheinen, dass immer zwei Nachkommastellen angezeigt werden
+&apos; und die resultierende Betrag ebenfalls bis auf zwei Stellen nach dem Komma gerundet wird
 
 Sub Main()
 	BasicLibraries.LoadLibrary(&quot;Tools&quot;)
 	If InitResources(&quot;Euro Converter&quot;, &quot;eur&quot;) Then
 		bDoUnProtect = False
 		bPreSelected = True
-		DocDisposed = False
+&apos;		DocDisposed = False
 		oDocument = StarDesktop.CurrentFrame.Controller.Model
 		RetrieveDocumentObjects()											&apos; Statusline, SheetsCollection etc.
 		InitializeConverter(oDocument.CharLocale, 1)
@@ -112,31 +117,35 @@ End Sub
 
 
 Sub EnableStep1DialogControls(bCurrEnabled as Boolean, bFrameEnabled as Boolean, bButtonsEnabled as Boolean)
-Dim bNoComboSelection as Boolean
-Dim bNoLBSelection as Boolean
-	&apos; Controls around the Currency-Listbox
+Dim bCurrIsSelected as Boolean
+Dim bObjectIsSelected as Boolean
+Dim bConvertWholeDoc as Boolean
+Dim bDoEnableFrame as Boolean
+	bConvertWholeDoc  = DialogModel.chkComplete.State = 1
+	bDoEnableFrame = bFrameEnabled And (NOT bConvertWholeDoc)
+
+	&apos; Controls around the Selection Listbox
 	With DialogModel
 		.lblCurrencies.Enabled = bCurrEnabled
-		.lstCurrencies.Enabled = bCurrEnabled	
-
-		.lstSelection.Enabled = bFrameEnabled
-		.lblSelection.Enabled = bFrameEnabled
-		.hlnSelection.Enabled = bFrameEnabled
-		.optCellTemplates.Enabled = bFrameEnabled
-		.optSheetRanges.Enabled = bFrameEnabled
-		.optDocRanges.Enabled = bFrameEnabled
-		.optSelRange.Enabled = bFrameEnabled
+		.lstCurrencies.Enabled = bCurrEnabled
+		.lstSelection.Enabled = bDoEnableFrame
+		.lblSelection.Enabled = bDoEnableFrame
+		.hlnSelection.Enabled = bDoEnableFrame
+		.optCellTemplates.Enabled = bDoEnableFrame
+		.optSheetRanges.Enabled = bDoEnableFrame
+		.optDocRanges.Enabled = bDoEnableFrame
+		.optSelRange.Enabled = bDoEnableFrame
 	End With
 	&apos; The CheckBox has the Value &apos;True&apos; when the Controls in the Frame are disabled
 	If bButtonsEnabled Then
-		bNoComboSelection = Ubound(DialogModel.lstCurrencies.SelectedItems()) = -1
+		bCurrIsSelected = Ubound(DialogModel.lstCurrencies.SelectedItems()) &lt;&gt; -1
 		&apos; Enable GoOnButton only when Currency is selected
-		DialogModel.cmdGoOn.Enabled =  Not bNoComboSelection
-		DialogModel.chkComplete.Enabled = Not bNoComboSelection
-		If bFrameEnabled AND Not DialogModel.chkComplete.State = 1 AND DialogModel.cmdGoOn.Enabled Then
+		DialogModel.cmdGoOn.Enabled =  bCurrIsSelected
+		DialogModel.chkComplete.Enabled = bCurrIsSelected
+		If bDoEnableFrame AND DialogModel.cmdGoOn.Enabled Then
 			&apos; If FrameControls are enabled, check if Listbox is Empty
-			bNoLBSelection = Ubound(DialogModel.lstSelection.SelectedItems()) = -1
-			DialogModel.cmdGoOn.Enabled = NOT bNoLBSelection
+			bObjectIsSelected = Ubound(DialogModel.lstSelection.SelectedItems()) &lt;&gt; -1
+			DialogModel.cmdGoOn.Enabled = bObjectIsSelected
 		End If
 	Else
 		DialogModel.cmdGoOn.Enabled = False
@@ -149,6 +158,7 @@ Sub ConvertRangesOrStylesOfDocument()
 Dim i as Integer
 Dim ItemName as String
 Dim SelList() as String
+Dim oSheetRanges as Object
 
 	bDocHasProtectedSheets = CheckSheetProtection(oSheets)
 	If bDocHasProtectedSheets Then
@@ -166,6 +176,13 @@ Dim SelList() as String
 			&apos; Option &apos;Soft&apos; Formatation is selected
 			AssignRangestoStyle(DialogModel.lstSelection.StringItemList(), SelList())
 			ConverttheSoftWay(SelList(), True)
+		ElseIf DialogModel.optSelRange.State = 1 Then
+			oSheetRanges = oPreSelRange.CellFormatRanges.createEnumeration
+			While oSheetRanges.hasMoreElements
+				oRange = oSheetRanges.NextElement
+				ConvertCellCurrencies(oRange)
+				SwitchNumberFormat(oRange, oFormats, sEuroSign)
+			Wend
 		Else
 			ConverttheHardWay(SelList(), False, True)
 		End If
@@ -208,82 +225,87 @@ Dim EmptySelRangeList() as String
 End Sub
 
 
-Sub AddSelectedRangeToSelRangesEnum()
+Function AddSelectedRangeToSelRangesEnum() as Object
+Dim oLocRange as Object
 	osheet = oDocument.CurrentController.GetActiveSheet
-&apos;	oAddressRanges = oDocument.createInstance(&quot;com.sun.star.sheet.SheetCellRanges&quot;)
 	oSelRanges = oDocument.createInstance(&quot;com.sun.star.sheet.SheetCellRanges&quot;)
 	&apos; Check if a Currency-Range has been selected
-	oRange = oDocument.CurrentController.Selection
-	oSelRanges.InsertbyName(&quot;&quot;,oRange)
-End Sub
+	oLocRange = oDocument.CurrentController.Selection
+	oSelRanges.InsertbyName(&quot;&quot;,oLocRange)
+	AddSelectedRangeToSelRangesEnum() = oLocRange
+End Function
 
 
 Sub GetPreSelectedRange()
 Dim i as Integer
 Dim OldCurrSymbolList(2) as String
 Dim OldCurrIndex as Integer
-Dim OldCurExtension(1) as String
-	AddSelectedRangeToSelRangesEnum()
-	bPreSelected =  CheckIfRangeisCurrency(oRange)
- 	If bPreSelected Then
-&apos; Todo: Array als ganzes übergeben!
-		OldCurrSymbolList() = CurrSymbolList()
-		OldCurExtension() = CurExtension()
-		OldCurrIndex = CurrIndex
-		For i = 0 To 11
-			CurrIndex = i
-			CurExtension(0) = LangIDValue(CurrIndex,0,2)
-			CurExtension(1) = LangIDValue(CurrIndex,1,2)
-			InitializeCurrencyValues(CurrIndex)
-			bPreSelected = CheckFormatType(oRange)
-			If bPreSelected Then
-				Exit For
-			End If
-		Next i
-		If Not bPreSelected Then
-			CurrIndex = OldCurrIndex
-			CurrSymbolList() = OldCurrSymbolList()
-			CurExtension() = OldCurExtension()
-		End If
-	End If
+Dim OldCurExtension(2) as String
+	oPreSelRange = AddSelectedRangeToSelRangesEnum()
+	bPreSelected = True
 
-	If CurrIndex &gt; -1 Then
+&apos;	bPreSelected =  CheckIfRangeisCurrency(oRange)
+&apos;	If bPreSelected Then
+&apos;		OldCurrSymbolList() = CurrSymbolList()
+&apos;		OldCurExtension() = CurExtension()
+&apos;		OldCurrIndex = CurrIndex
+&apos;		For i = 0 To 11
+&apos;			CurrIndex = i
+&apos;			CurExtension(0) = LangIDValue(CurrIndex,0,2)
+&apos;			CurExtension(1) = LangIDValue(CurrIndex,1,2)
+&apos;			CurExtension(2) = LangIDValue(CurrIndex,2,2)
+&apos;			InitializeCurrencyValues(CurrIndex)
+&apos;			bPreSelected = CheckFormatType(oRange)
+&apos;			If bPreSelected Then
+&apos;				Exit For
+&apos;			End If
+&apos;		Next i
+&apos;		If Not bPreSelected Then
+&apos;			CurrIndex = OldCurrIndex
+&apos;			CurrSymbolList() = OldCurrSymbolList()
+&apos;			CurExtension() = OldCurExtension()
+&apos;		End If
+&apos;	End If
+
+&apos;	If CurrIndex &gt; -1 Then
 		If bPreSelected Then
 			DialogModel.optSelRange.State = 1
-			AddRangeToListbox()
+			AddRangeToListbox(oPreSelRange)
 		Else
 			DialogModel.optCellTemplates.State  = 1
 			CreateStyleEnumeration()
 		End If
-	End If
+&apos;	End If
 	EnableStep1DialogControls(True, bPreSelected, True)
 &apos; Todo: auf Integer umstellen
-	If bPreselected Then
-		DialogModel.chkComplete.State = 0 
-	Else
-		DialogModel.chkComplete.State = 1
-	End If
+&apos;	If bPreselected Then
+		DialogModel.chkComplete.State = Not(Abs(bPreSelected)) &apos;0
+&apos;	Else
+&apos;		DialogModel.chkComplete.State = 1
+&apos;	End If
 	DialogModel.optSelRange.Enabled = bPreSelected
 End Sub
 
 
-Sub AddRangeToListbox()
+Sub AddRangeToListbox(oLocRange as Object)
 	EmptyListBox(DialogModel.lstSelection)
 	&apos; Den Namen der Range ermitteln und in ein Array packen
-	PreName = RetrieveRangeNamefromAddress(oRange)
+	PreName = RetrieveRangeNamefromAddress(oLocRange)
 	AddSingleItemToListbox(DialogModel.lstSelection, Prename)&apos;, 0)
 	SelectListboxItem(DialogModel.lstCurrencies, CurrIndex)
-	TotCellCount = CountRangeCells(oRange)
+	TotCellCount = CountRangeCells(oLocRange)
 End Sub
 
 
 Sub CheckRangeSelection(Optional oEvent)
 &apos; Todo: Beim Startup werden die folgenden zwei Zeilen doppelt ausgeführt
-	AddSelectedRangeToSelRangesEnum()
-	bPreSelected = CheckFormatType(oRange)
- 	If bPreSelected Then
-		AddRangeToListbox()
-	End If
+&apos;	oPreSelRange = AddSelectedRangeToSelRangesEnum()
+&apos;	bPreSelected = CheckFormatType(oRange)
+ &apos;	If bPreSelected Then
+&apos;
+		EmptySelection()
+		AddRangeToListbox(oPreSelRange)
+&apos;	End If
 End Sub
 
 

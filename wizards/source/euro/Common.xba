@@ -8,35 +8,39 @@ Public PasswordModel as Object
 
 Sub	RetrieveDocumentObjects()
 	CurMimeType = oDocument.DocumentInfo.MimeType
-	If Instr(1, CurMimeType, &quot;calc&quot;) &lt;&gt; 0 Then
+&apos;	If Instr(1, CurMimeType, &quot;calc&quot;) &lt;&gt; 0 Then
 	    oSheets = oDocument.Sheets
 		oSheet = oDocument.Sheets.GetbyIndex(0)
 &apos;		oAddressRanges = oDocument.createInstance(&quot;com.sun.star.sheet.SheetCellRanges&quot;)
-	End If
+&apos;	End If
     oStatusline = oDocument.GetCurrentController.GetFrame.CreateStatusIndicator
     &apos; Retrieve the indices for the cellformatations
     oFormats = oDocument.NumberFormats
-End Sub    
+End Sub
 
 
-Sub CloseDialog
-Dim n, m as Integer
-	If Not bMacroStopped Then
-		bMacroStopped = True
-		DialogConvert.EndExecute
-		If Not DocDisposed Then
-			ReprotectSheets()	
+Sub CancelTask()
+&apos;	If Not DocDisposed Then
+&apos;		ReprotectSheets()
+&apos;	End If
+	If DialogModel.Step = 3 And (Not bCancelTask) Then
+		If Msgbox(sMsgCancelConversion, 36, sMsgCancelTitle) = 6 Then
+			bCancelTask = True
+			DialogConvert.EndExecute
+		Else
+			bCancelTask = False
 		End If
-		Stop
+	Else
+		DialogConvert.EndExecute()
 	End If
 End Sub
 
 
 Function ConvertDocument()
 	GoOn = True
-	DocDisposed = True
-	InitializeProgressbar()	
-	If Instr(1, CurMimeType, &quot;calc&quot;) &lt;&gt; 0 Then
+&apos;	DocDisposed = True
+	InitializeProgressbar()
+&apos;	If Instr(1, CurMimeType, &quot;calc&quot;) &lt;&gt; 0 Then
 		bDocHasProtectedSheets = CheckSheetProtection(oSheets)
 		If bDocHasProtectedSheets Then
 			bDocHasProtectedSheets = UnprotectSheetsWithPassword(oSheets, bDoUnProtect)
@@ -44,7 +48,7 @@ Function ConvertDocument()
 		If Not bDocHasProtectedSheets Then
 			If Not bRangeListDefined Then
 				TotCellCount = 0
-				CreateRangeEnumeration(True)	
+				CreateRangeEnumeration(True)
 			Else
 				IncreaseStatusvalue(SBRelGet/3)
 			End If
@@ -57,12 +61,12 @@ Function ConvertDocument()
 			ReprotectSheets()
 			bRangeListDefined = False
 		End If
-	Else
-		oStatusline.SetValue(10)
-		ConvertTextFields()
-		oStatusline.SetValue(80)
-		ConvertWriterTables()
-	End If	
+&apos;	Else
+&apos;		oStatusline.SetValue(10)
+&apos;		ConvertTextFields()
+&apos;		oStatusline.SetValue(80)
+&apos;		ConvertWriterTables()
+&apos;	End If	
 	oStatusline.End
 	On Local Error Goto 0 
 End Function
@@ -80,30 +84,27 @@ Dim i as Integer
 Dim aNewStr as String
 Dim iNumberFormat as Long
 Dim AddToList as Boolean
-
-	&apos; Numberformat mit dem neuen Symbol als Basis für generateFormat
-	aSimpleStr = &quot;0 [$&quot;+sNewSymbol+&quot;]&quot;
-	nSimpleKey = Numberformat(oFormats, aSimpleStr, oLocale)
 	On Local Error Resume Next
 	iNumberFormat = oObject.NumberFormat
+	On Local Error GoTo NOKEY
+	aFormat() = oFormats.getByKey(iNumberFormat)
+	On Local Error GoTo 0
+	&apos; Numberformat mit dem neuen Symbol als Basis für generateFormat
+	aSimpleStr = &quot;0 [$&quot;+sNewSymbol &amp; aFormat.CurrencyExtension &amp; &quot;]&quot;
+	nSimpleKey = Numberformat(oFormats, aSimpleStr, oLocale)
 	If Err &lt;&gt; 0 Then
 		Msgbox &quot;Error Reading the Number Format&quot;
 		Resume CLERROR
 	End If
 
-	On Local Error GoTo NOKEY
-	aFormat() = oFormats.getByKey(iNumberFormat)
-	On Local Error GoTo 0
 	&apos; Typ und Währungssymbol des Numberformats heraussuchen
 	&apos; neues Währungsformat mit passenden Einstellungen setzen
-	nFormatDecimals = aFormat.Decimals
+	nFormatDecimals = 2
 	nFormatLeading = aFormat.LeadingZeros
 	bFormatNegRed = aFormat.NegativeRed
 	bFormatThousands = aFormat.ThousandsSeparator
 	aLocLocale = aFormat.Locale
-	aNewStr = oFormats.generateFormat( nSimpleKey, oLocale, _
-			bFormatThousands, bFormatNegRed, nFormatDecimals, nFormatLeading)
-	
+	aNewStr = oFormats.generateFormat( nSimpleKey, oLocale, bFormatThousands, bFormatNegRed, nFormatDecimals, nFormatLeading)
 	oObject.NumberFormat = Numberformat(oFormats, aNewStr, aLocLocale)
 	NOKEY:
 	If Err &lt;&gt; 0 Then
@@ -139,17 +140,16 @@ Dim oFormatofObject() as Object
 	On Local Error GoTo NOKEY
 	oFormatofObject = oFormats.getByKey(FormatObject.NumberFormat)
 	On Local Error GoTo 0			
-	&apos; Typ und WÃ¤hrungssymbol des Numberformats heraussuchen
+	&apos; Typ und Währungssymbol des Numberformats heraussuchen
   	If NOT INT(oFormatofObject.Type) AND com.sun.star.util.NumberFormat.CURRENCY Then
 		CheckFormatType = False
 		Exit Function
 	End If
-
 	If FieldinArray(CurrSymbolList(),2,oFormatofObject.CurrencySymbol) Then
 		&apos; If the Currencysymbol of the object ist the one needed, then check the Currency extension
 		sFormatCurrExt = oFormatofObject.CurrencyExtension
 
-		If FieldInList(CurExtension(),1,sFormatCurrExt) Then
+		If FieldInList(CurExtension(),2,sFormatCurrExt) Then
 			&apos; The Currency - extension also fits
 			CheckFormatType = True
 		Else
@@ -189,8 +189,7 @@ Sub StartConversion()
 			InitializeThirdStep()
 			ConvertDocuments()
 		Case 3
-			CloseDialog()
-
+			DialogConvert.EndExecute()
 	End Select
 End Sub
 
@@ -205,11 +204,13 @@ Sub SelectCurrency()
 Dim AddtoList as Boolean
 Dim UpRangeList as Integer
 Dim OldCurrIndex as Integer
+	bRangeListDefined = False
 	OldCurrIndex = CurrIndex
 	CurrIndex = DialogModel.lstCurrencies.SelectedItems(0)
 	InitializeCurrencyValues(CurrIndex)
 	CurExtension(0) = LangIDValue(CurrIndex,0,2)
 	CurExtension(1) = LangIDValue(CurrIndex,1,2)
+	CurExtension(2) = LangIDValue(CurrIndex,2,2)
 	If DialogModel.Step = 1 Then
 		If OldCurrIndex = -1 Then
 			DialogModel.chkComplete.State = 1
@@ -220,7 +221,6 @@ Dim OldCurrIndex as Integer
 			If DialogModel.optCellTemplates.State = 1 Then
 				EnableStep1DialogControls(False, False, False)
 				CreateStyleEnumeration()
-				EnableStep1DialogControls(True, True, True)
 			ElseIf ((DialogModel.optSheetRanges.State = 1) OR (DialogModel.optDocRanges.State = 1)) AND (DialogModel.Step = 1) Then
 				UpRangeList = UBound(RangeList())
 				ReDim RangeList(UpRangeList) &apos;as String

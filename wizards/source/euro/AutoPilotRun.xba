@@ -27,13 +27,13 @@ Dim i As Integer
 	BasicLibraries.LoadLibrary(&quot;Tools&quot;)
 	If InitResources(&quot;Euro Converter&quot;, &quot;eur&quot;) Then
 		oDocInfo = CreateUnoService(&quot;com.sun.star.document.DocumentProperties&quot;)
-
 		oUcb = createUnoService(&quot;com.sun.star.ucb.SimpleFileAccess&quot;)
-		DocDisposed = True
+&apos;		DocDisposed = True
 		oLocale = GetStarOfficeLocale()
 		InitializeConverter(oLocale, 2)
 		ToggleGoOnButton()
 		DialogModel.cmdGoOn.DefaultButton = True
+&apos;		YPos = DialogConvert.PosSize.Y + DialogConvert.PosSize.Height
 		DialogConvert.Execute
 	End If
 End Sub
@@ -67,16 +67,16 @@ Dim FilesList()
 		sTotDocCount = CStr(TotDocCount)
 		For DocIndex = 0 To TotDocCount - 1
 			If InitializeDocument(FilesList()) Then
-				ConvertDocument()
-				DocDisposed = StoreDocument()
+				If StoreDocument() Then
+					ConvertDocument()
+					oDocument.Store
+				End If
+				oDocument.Dispose()
 			End If
 		Next DocIndex
 		DialogModel.cmdGoOn.Enabled = True
 		DialogModel.cmdGoOn.Label = sReady
-		DialogModel.cmdCancel.Label = sClose
-&apos;		If GoOn Then
-&apos;			Msgbox (sMsgREADY,64, sMsgDLGTITLE)
-&apos;		End	If
+		DialogModel.cmdCancel.Label = sEnd
 	End If
 End Sub
 
@@ -86,28 +86,33 @@ Function InitializeDocument(FilesList()) as Boolean
 Dim sViewPath as String
 Dim bIsReadOnly as Boolean
 	On Local Error Goto NEXTFILE
-	If DialogModel.optWholeDir.State = 1 Then
-		SourceFile = FilesList(DocIndex,0)
-		TargetFile = ReplaceString(SourceFile,TargetStemDir,SourceDir)
-		TargetDir = DirectorynameoutofPath(TargetFile, &quot;/&quot;)
-	Else
-		SourceFile = Source
-		TargetFile = TargetDir &amp; &quot;/&quot; &amp; FileNameoutofPath(SourceFile, &quot;/&quot;)
-	End If
+	If Not bCancelTask Then
+		If DialogModel.optWholeDir.State = 1 Then
+			SourceFile = FilesList(DocIndex,0)
+			TargetFile = ReplaceString(SourceFile,TargetStemDir,SourceDir)
+			TargetDir = DirectorynameoutofPath(TargetFile, &quot;/&quot;)
+		Else
+			SourceFile = Source
+			TargetFile = TargetDir &amp; &quot;/&quot; &amp; FileNameoutofPath(SourceFile, &quot;/&quot;)
+		End If
 
-	If Not oUcb.Exists(TargetDir) Then
-		oUcb.CreateFolder(TargetDir)
-	End If
- 	oDocument = OpenDocument(SourceFile, NoArgs(), StarDesktop)
-	bIsReadOnly = oDocument.IsReadOnly
-	If Not bIsReadOnly Then
-		RetrieveDocumentObjects()
-		sViewPath = CutPathView(SourceFile, 60)
-		DialogModel.lblCurDocument.Label = Str(DocIndex+1) &amp; &quot;/&quot; &amp; sTotDocCount &amp; &quot;  (&quot; &amp; sViewPath &amp; &quot;)&quot;
+		If Not oUcb.Exists(TargetDir) Then
+			oUcb.CreateFolder(TargetDir)
+		End If
+ 		oDocument = OpenDocument(SourceFile, NoArgs(), StarDesktop)
+		If (oDocument.IsReadOnly) AND (UCase(SourceFile) = UCase(TargetFile)) Then
+			bIsReadOnly = True
+			Msgbox(sMsgDOCISREADONLY, 16, GetProductName())
+		Else
+			bIsReadOnly = False
+			RetrieveDocumentObjects()	
+			sViewPath = CutPathView(SourceFile, 60)
+			DialogModel.lblCurDocument.Label = Str(DocIndex+1) &amp; &quot;/&quot; &amp; sTotDocCount &amp; &quot;  (&quot; &amp; sViewPath &amp; &quot;)&quot;
+		End If
+		InitializeDocument() = Not bIsReadOnly
 	Else
-		Msgbox(sMsgDOCISREADONLY, 16, GetProductName())
+		InitializeDocument() = False	
 	End If
-	InitializeDocument() = Not bIsReadOnly
 NEXTFILE:
 	If Err &lt;&gt; 0 Then
 		InitializeDocument() = False
@@ -124,19 +129,31 @@ Sub ChangeToNextProgressStep()
 End Sub
 
 
-Function StoreDocument()
-	If TargetFile &lt;&gt; &quot;&quot; Then
+Function StoreDocument() as Boolean
+Dim sCurFileExists as String
+Dim iOverWrite as Integer
+	If (TargetFile &lt;&gt; &quot;&quot;) And (Not bCancelTask) Then
 		On Local Error Goto NOSAVING
-&apos;	XMLFilterName(1,1) = &quot;scalc: StarOffice XML (Calc)&quot;
-&apos;	XMLFilterName(5,0) = &quot;application/vnd.stardivision.calc;application/x-starcalc&quot;
-&apos;	XMLFilterName(5,1) = &quot;scalc: calc_StarOffice_XML_Calc_Template&quot;
-		
+		If oUcb.Exists(TargetFile) Then
+			sCurFileExists = ReplaceString(sMsgFileExists, ConvertFromUrl(TargetFile), &quot;&lt;1&gt;&quot;)
+			sCurFileExists = ReplaceString(sCurFileExists, chr(13), &quot;&lt;CR&gt;&quot;)
+			iOverWrite = Msgbox (sCurFileExists, 32 + 3, sMsgDLGTITLE)
+			Select Case iOverWrite
+				Case 1	&apos; OK
+				Case 2 	&apos; Abort
+					bCancelTask = True
+					StoreDocument() = False
+					Exit Function
+				Case 7 	&apos; No
+					StoreDocument() = False
+					Exit Function
+			End Select
+		End If
 		If TargetFile &lt;&gt; SourceFile Then
-			oDocument.StoreToUrl(TargetFile,NoArgs)
+			oDocument.StoreAsUrl(TargetFile,NoArgs)
 		Else
 			oDocument.Store
 		End If
-		oDocument.Dispose()
 		StoreDocument() = True
 		NOSAVING:
 		If Err &lt;&gt; 0 Then
@@ -175,6 +192,7 @@ End Sub
 
 Sub	InitializeThirdStep()
 Dim TextBoxText as String
+	bCancelTask = False
 	Source = AssignFileName(DialogModel.txtSource.Text, DialogModel.lblSource.Label, True)
 	TargetDir = AssignFileName(DialogModel.txtTarget.Text, DialogModel.lblTarget.Label, False)
 	If Source &lt;&gt; &quot;&quot; And TargetDir &lt;&gt; &quot;&quot; Then
@@ -184,14 +202,14 @@ Dim TextBoxText as String
 		DialogModel.lblRetrieval.Label = sPrgsRETRIEVAL
 		DialogModel.lblCurProgress.Label = sPrgsCONVERTING
 		If DialogModel.optWholeDir.State = 1 Then
-			TextBoxText = sSOURCEDIR &amp; &quot; &quot; &amp; Source &amp; chr(13) &apos;&amp; &quot; &quot;
+			TextBoxText = sSOURCEDIR &amp; &quot; &quot; &amp; ConvertFromUrl(Source) &amp; chr(13) &apos;&amp; &quot; &quot;
 			If DialogModel.chkRecursive.State = 1 Then
 				TextBoxText = TextBoxText &amp; DeleteStr(sInclusiveSubDir,&quot;~&quot;) &amp; chr(13)
 			End If
 		Else
-			TextBoxText = sSOURCEFILE &amp; &quot; &quot; &amp; Source &amp; chr(13) 
+			TextBoxText = sSOURCEFILE &amp; &quot; &quot; &amp; ConvertFromUrl(Source) &amp; chr(13) 
 		End If
-		TextBoxText = TextBoxText &amp; sTARGETDIR &amp; &quot; &quot; &amp; TargetDir &amp; chr(13)
+		TextBoxText = TextBoxText &amp; sTARGETDIR &amp; &quot; &quot; &amp; ConvertFromUrl(TargetDir) &amp; chr(13)
 		If DialogModel.chkProtect.State = 1 Then
 			TextBoxText = TextboxText &amp; sPrgsUNPROTECT
 		End If
@@ -314,8 +332,7 @@ Dim sPath as String
 	If bDoEnable Then
 		&apos; Check if Source is set correctly
 		sPath = ConvertToUrl(Trim(DialogModel.txtTarget.Text))
-		&apos; Check if Target is set correctly
-		bDoEnable = oUcb.Exists(DialogModel.txtTarget.Text)
+		bDoEnable = oUcb.Exists(sPath)
 	End If
 	DialogModel.cmdGoOn.Enabled = bDoEnable
 End Sub
@@ -323,6 +340,7 @@ End Sub
 
 Sub CallFolderPicker()
 	GetFolderName(DialogModel.txtTarget)
+	ToggleGoOnButton()	
 End Sub
 
 
@@ -410,4 +428,5 @@ Sub CallFilePicker()
 	Else
 		GetFolderName(DialogModel.txtSource)
 	End If
+	ToggleGoOnButton()
 End Sub</script:module>

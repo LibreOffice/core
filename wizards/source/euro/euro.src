@@ -2,9 +2,9 @@
  *
  *  $RCSfile: euro.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-26 22:41:31 $
+ *  last change: $Author: bc $ $Date: 2001-09-12 12:30:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,7 +198,7 @@ Text[ english_us ] = "Note: Currency amounts from external links and currency co
 
 String STEP_ZERO + 5
 {
-Text = "Entschützen Sie vorab alle Tabellen!";
+Text = "Heben Sie vorab Den Schutz aller Tabellen auf!";
 Text[English] = "Unprotect all sheets beforehand!";
 Text[ english_us ] = "Unprotect all sheets beforehand!";
     Text[ portuguese ] = "Desproteger primeiro todas as tabelas!";
@@ -1557,6 +1557,28 @@ Text[ english_us ] = "Document is read-only!";
     Text[ finnish ] = "Dokument ist schreibgeschützt!";
 };
 
+
+String MESSAGES + 22
+{
+    Text = "Die Datei '<1>' existiert bereits.<CR>Möchten Sie sie überschreiben?";
+    Text[English] = "The File '<1>' already exists. Do you want to overwrite it?";
+    Text[ English_us ] = "The '<1>' file already exists.<CR>Do you want to overwrite it?";
+};
+
+
+String MESSAGES + 23
+{
+    Text = "Möchten Sie das Konvertieren an dieser Stelle wirklich abbrechen ?";
+    Text[English] = "Do you really want to cancel the conversion at this point?";
+    Text[ English_us ] = "Do you really want to terminate conversion at this point?";
+};
+
+String MESSAGES + 24
+{
+    Text = "Autopilot abbrechen";
+    Text[English] = "Cancel Autopilot";
+    Text[ English_us ] = "Cancel AutoPilot";
+};
 
  String CURRENCIES
 {

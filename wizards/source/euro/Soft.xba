@@ -215,7 +215,7 @@ Dim MaxIndex as Integer
 				End If
 			End If
 		Next s
-		SwitchNumberFormat( ostyle, oFormats, sEuroSign)
+		SwitchNumberFormat(ostyle, oFormats, sEuroSign)
 &apos;		oStatusline.SetValue(100)
 		StyleRangeAssignmentList(n) = &quot;&quot;
 		l = GetItemPos(oSelListBox.Model, CurStyleName)

@@ -19,6 +19,7 @@ Public RangeList(SBRANGEUBOUND, 1) as String
 Public UnprotectList() as String
 Public FilterNames(2,1) as String
 Public bDoUnProtect as Boolean
+Public bCancelTask as Boolean
 
 Public sREADY as String
 Public sPROTECT as String
@@ -58,7 +59,9 @@ Public sMsgCANCEL as String
 Public sMsgFileInvalid as String
 Public sMsgNODIRECTORY as String
 Public sMsgDOCISREADONLY as String
-
+Public sMsgFileExists as String
+Public sMsgCancelConversion as String
+Public sMsgCancelTitle as String
 Public sCurrPORTUGUESE as String
 Public sCurrDUTCH as String
 Public sCurrFRENCH as String
@@ -111,7 +114,7 @@ Public StyleIndex as Integer
 Public RangeIndex as Integer
 Public CurrIndex as Integer
 Public ActLangNumber(1) as Integer
-Public CurExtension(1) as String
+Public CurExtension(2) as String
 Public Currfactor as Double
 Public CurrSymbolList(2) as String
 Public CurrLanguage as String
@@ -126,8 +129,8 @@ Public sEuroSign as String
 Public oPointer as Object
 Public sDocType as String
 Public bPreSelected as Boolean
-Public DocDisposed as Boolean
-Public bMacroStopped as Boolean
+&apos;Public DocDisposed as Boolean
+&apos;Public bMacroStopped as Boolean
 Public bRecursive as Boolean
 Public bCancelProtection as Boolean
 Public CurrRoundMode as Boolean
@@ -138,15 +141,15 @@ Public bDocHasProtectedSheets as Boolean
 Public sGOON as String
 Public sHELP as String
 Public sCANCEL as String
-Public sClose as String
+Dim sEnd as String
 
 Sub InitializeResources()
 	With DialogModel
 		&apos; Strings that are also needed by the Password Dialog
 		sGoOn = GetResText(1003)
 		sHelp = GetResText(1001)
-		sCANCEL = GetResText(1000)
-		sClose = GetResText(1008)
+		sCANCEL = GetResText(1418)
+		sEnd = GetResText(1000)
 		.cmdCancel.Label =  sCANCEL
 		.cmdHelp.Label =  sHELP
 		.cmdBack.Label =  GetResText(1002)
@@ -219,6 +222,9 @@ Sub InitializeResources()
 		sMsgFILEINVALID = ReplaceString(sMsgFILEINVALID,&quot;%PRODUCTNAME&quot;, GetProductname())
 		SMsgNODIRECTORY = GetResText(1420)
 		sMsgDOCISREADONLY = GetResText(1421)
+		sMsgFileExists = GetResText(1422)
+		sMsgCancelConversion = GetResText(1423)
+		sMsgCancelTitle = GetResText(1424)
 		sCurrPORTUGUESE = GetResText(1500)
 		sCurrDUTCH = GetResText(1501)
 		sCurrFRENCH = GetResText(1502)
@@ -265,6 +271,11 @@ Sub InitializeLanguages()
 	LangIDValue(3,1,1) = &quot;&quot;
 	LangIDValue(3,1,2) = &quot;-C0A&quot;
 
+	&apos;Spanish katalanic
+	LangIDValue(3,2,0) = &quot;es&quot;
+	LangIDValue(3,2,1) = &quot;&quot;
+	LangIDValue(3,2,2) = &quot;-403&quot;
+
 &apos; CURRENCIES_ITALIAN
 	LangIDValue(4,0,0) = &quot;it&quot;
 	LangIDValue(4,0,1) = &quot;&quot;
@@ -301,7 +312,7 @@ Sub InitializeLanguages()
 &apos; CURRENCIES_AUSTRIAN
 	LangIDValue(9,0,0) = &quot;de&quot;
 	LangIDValue(9,0,1) = &quot;AT&quot;
-	LangIDValue(9,0,1) = &quot;-C07&quot;
+	LangIDValue(9,0,2) = &quot;-C07&quot;
 
 &apos; CURRENCIES_FINNISH
 	LangIDValue(10,0,0) = &quot;fi&quot;
@@ -339,7 +350,7 @@ Dim i as Integer
 	&apos; Gerundeter Umrechnungskurs
 	CurrValue(1,2) = 2
 	CurrValue(1,3) = &quot;F&quot;
-	CurrValue(1,4) = &quot;F&quot;
+	CurrValue(1,4) = &quot;fl&quot;
 	CurrValue(1,5) = &quot;NLG&quot;
 
 	CurrValue(2,0) = sCurrFRENCH
@@ -392,8 +403,8 @@ Dim i as Integer
 	CurrValue(7,1) = 0.787564
 	&apos; Gerundeter Umrechnungskurs
 	CurrValue(7,2) = 0.8
-	CurrValue(7,3) = &quot;£&quot;
-	CurrValue(7,4) = &quot;£&quot;
+	CurrValue(7,3) = &quot;IR£&quot;
+	CurrValue(7,4) = &quot;£&quot;		&apos; Todo: This is only for backwards compatibility. Follow Bug #92049
 	CurrValue(7,5) = &quot;IEP&quot;
 
 	CurrValue(8,0) = sCurrLUXEMBOURG
@@ -410,7 +421,7 @@ Dim i as Integer
 	CurrValue(9,1) = 13.7603
 	&apos; Gerundeter Umrechnungskurs
 	CurrValue(9,2) = 15
-	CurrValue(9,3) = &quot;S&quot;
+	CurrValue(9,3) = &quot;öS&quot;
 	CurrValue(9,4) = &quot;S&quot;
 	CurrValue(9,5) = &quot;ATS&quot;
 
@@ -454,7 +465,7 @@ Sub InitializeConverter(oLocale, iDialogPage as Integer)
 Dim Isthere as Boolean
 	ToggleWindow(False)
 	bCancelProtection = False
-	bMacroStopped = False
+&apos;	bMacroStopped = False
 	bRangeListDefined = False
 	PWIndex = -1
 	sDocType = GetDocumentType(StarDesktop.ActiveFrame.Controller.Model)
@@ -494,14 +505,19 @@ End Sub
 Function InitializeLocales(oLocale) as Boolean
 Dim i as Integer, n as Integer, m as Integer
 Dim sLanguage as String, sCountry as String
-
+Dim bTakeThisLocale as Boolean
 	sLanguage = oLocale.Language
 	sCountry = oLocale.Country
 	For n = 0 To SBCOUNTRYCOUNT - 1
 		For m = 0 TO 1
-			If LangIDValue(n,m,0) = sLanguage AND LangIDValue(n,m,1) = sCountry Then
+			If DialogModel.Step = 2 Then
+				bTakeThisLocale = LangIDValue(n,m,0) = sLanguage
+			Else
+				bTakeThisLocale = LangIDValue(n,m,0) = sLanguage AND LangIDValue(n,m,1) = sCountry
+			End If
+			If bTakeThisLocale Then
 				CurrIndex = n
-				For i = 0 To 1
+				For i = 0 To 2
 					CurExtension(i) = LangIDValue(CurrIndex,i,2)
 				Next i
 				InitializeLocales = True

@@ -19,7 +19,9 @@ Dim MaxIndex as Integer
 		osheet = oDocument.CurrentController.GetActiveSheet
 		oRanges = osheet.CellFormatRanges.createEnumeration()
 		MaxIndex = AddSheetRanges(oRanges, MaxIndex, oSheet, False)
-		ReDim Preserve RangeList(MaxIndex,1)
+		If MaxIndex &gt; -1 Then
+			ReDim Preserve RangeList(MaxIndex,1)
+		End If
 	Else
 		CreateRangeEnumeration(False)
 		bRangeListDefined = True
@@ -187,7 +189,7 @@ End Sub
 Sub ModifyObjectValuewithCurrFactor(oDocObject as Object)
 Dim oDocObjectValue as double
 	oDocObjectValue = oDocObject.Value
-	oDocObject.Value = oDocObjectValue/CurrFactor
+	oDocObject.Value = Round(oDocObjectValue/CurrFactor, 2)
 End Sub
 
 
