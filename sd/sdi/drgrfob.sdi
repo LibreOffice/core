@@ -1,4 +1,4 @@
-shell SdDrawGrafObjectBar
+shell GraphicObjectBar
 {
     SID_GRFFILTER
     [
