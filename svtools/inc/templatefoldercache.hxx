@@ -1,0 +1,154 @@
+/*************************************************************************
+ *
+ *  $RCSfile: templatefoldercache.hxx,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: fs $ $Date: 2001-12-06 12:30:53 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc..
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef SFX2_TEMPLATEFOLDERCACHE_HXX
+#define SFX2_TEMPLATEFOLDERCACHE_HXX
+
+#ifndef _SAL_TYPES_H_
+#include <sal/types.h>
+#endif
+
+//.........................................................................
+namespace svt
+{
+//.........................................................................
+
+    //=====================================================================
+    //= TemplateFolderCache
+    //=====================================================================
+    class TemplateFolderCacheImpl;
+    /** allows to cache the state of the template directories of OOo
+        <p>Usually, this class is used together with an instance of a the
+        <service scope="com.sun.star.frame">DocumentTemplates</service> service. It allows to scan the template folders
+        of the Office, and updates the configuration so that it reflects the most recent state of the folders.<br/>
+        As this is an expensive, the TemplateFolderCache has been introduced. It caches the state of the template
+        folders, and allows to determine if the DocumentTemplates service needs to be invoked to do the (much more expensive)
+        update.</p>
+    @example C++
+    <listing>
+        TemplateFolderCache aTemplateFolders;
+        if ( aTemplateFolders.needsUpdate() )
+        {
+            // store the current state
+            aCache.storeState();
+
+            // create the DocumentTemplates instance
+            Reference< XDocumentTemplates > xTemplates = ...;
+
+            // update the templates configuration
+            xTemplates->update();
+        }
+
+        // do anything which relies on a up-to-date template configuration
+    </listing>
+    */
+    class TemplateFolderCache
+    {
+    private:
+        TemplateFolderCacheImpl*        m_pImpl;
+
+    public:
+        /** ctor.
+        @param _bAutoStoreState
+            Set this to <TRUE/> if you want the instance to automatically store the state of the template folders upon
+            destruction.<br/>
+            If set to <FALSE/>, you would epplicitly need to call <method>storeState</method> to do this.<br/>
+            If the current state is not known (e.g. because you did not call needsUpdate, which retrieves it),
+            it is not retrieved in the dtor, regardless of the <arg>_bAutoStoreState</arg> flag.
+        */
+        TemplateFolderCache( sal_Bool _bAutoStoreState = sal_False );
+        ~TemplateFolderCache( );
+
+        /** determines whether or not the template configuration needs to be updated
+        @param _bForceCheck
+            set this to <TRUE/> if you want the object to rescan the template folders in every case. The default (<FALSE/>)
+            means that once the information has been retrieved in a first call, every second call returns the same result
+            as the first one, even if in the meantime the template folders changed.
+        @return
+            <TRUE/> if the template configuration needs to be updated
+        */
+        sal_Bool    needsUpdate( sal_Bool _bForceCheck = sal_False );
+
+        /** stores the current state of the template folders in the cache
+        @param _bForceRetrieval
+            if set to <TRUE/>, the current state of the template folders is retrieved again, even if it is already known.
+            Usually, you set this to <FALSE/>: After calling <method>needsUpdate</method>, the state is know and does not
+            need to be read again.
+        */
+        void        storeState( sal_Bool _bForceRetrieval = sal_False );
+    };
+
+//.........................................................................
+}   // namespace sfx2
+//.........................................................................
+
+#endif // SFX2_TEMPLATEFOLDERCACHE_HXX
+
+/*************************************************************************
+ * history:
+ *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/11/07 14:27:58  fs
+ *  initial checkin - helper class for caching the state of OOo's template folders
+ *
+ *
+ *  Revision 1.0 07.11.01 12:38:24  fs
+ ************************************************************************/
+
