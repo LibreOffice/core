@@ -2,9 +2,9 @@
  *
  *  $RCSfile: abstract.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:34 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 10:46:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@
 
 SwInsertAbstractDlg::SwInsertAbstractDlg( Window* pParent ) :
     SfxModalDialog(pParent, SW_RES(DLG_INSERT_ABSTRACT)),
-    aGB     (this, ResId(GB_1       )),
+    aFL     (this, ResId(FL_1       )),
     aParaFT (this, ResId(FT_PARA    )),
     aParaNF (this, ResId(NF_PARA    )),
     aLevelFT(this, ResId(FT_LEVEL   )),
@@ -121,6 +121,9 @@ BYTE SwInsertAbstractDlg::GetPara() const
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 17:14:34  hr
+      initial import
+
       Revision 1.4  2000/09/18 16:05:19  willem.vandorp
       OpenOffice header added.
 

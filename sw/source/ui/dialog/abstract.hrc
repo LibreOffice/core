@@ -2,9 +2,9 @@
  *
  *  $RCSfile: abstract.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:34 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 10:46:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-#define GB_1                1
+#define FL_1                            1
 #define FT_PARA             2
 #define NF_PARA             3
 #define FT_LEVEL            4

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ascfldlg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-27 21:47:58 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 10:46:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,7 @@ const USHORT nDialogExtraDataLen = 11;      // 12345678901
 SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
                                     SvStream* pStream )
     : SfxModalDialog( pParent, SW_RES( DLG_ASCII_FILTER )),
-    aGB( this, ResId( GB_1 )),
+    aFL( this, ResId( FL_1 )),
     aCharSetFT( this, ResId( FT_CHARSET )),
     aCharSetLB( this, ResId( LB_CHARSET )),
     aFontFT( this, ResId( FT_FONT )),
@@ -522,6 +522,9 @@ IMPL_LINK( SwAsciiFilterDlg, LineEndHdl, RadioButton*, pBtn )
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.5  2001/03/27 21:47:58  jp
+      use GetAppLanguage
+
       Revision 1.4  2001/03/22 10:42:29  tl
       Type of aLanguageLB changed to SvxLanguageBox
 
