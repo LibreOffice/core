@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitools.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:56 $
+ *  last change: $Author: fs $ $Date: 2000-09-27 08:48:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,10 +155,6 @@ protected:
 
 public:
     OMutexAndBroadcastHelper() : m_aBHelper( m_aMutex ) { }
-    ~OMutexAndBroadcastHelper()
-    {
-        int nDummy = 0;
-    }
 
     ::osl::Mutex&               GetMutex() { return m_aMutex; }
     ::cppu::OBroadcastHelper&   GetBroadcastHelper() { return m_aBHelper; }
