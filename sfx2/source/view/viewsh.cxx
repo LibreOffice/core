@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-19 08:03:29 $
+ *  last change: $Author: cd $ $Date: 2001-09-24 12:37:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,7 +183,23 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
             }
             else
             {
-                SfxMailModel_Impl aModel( &GetViewFrame()->GetBindings() );
+                SfxMailModel_Impl   aModel( &GetViewFrame()->GetBindings() );
+
+                SFX_REQUEST_ARG(rReq, pMailSubject, SfxStringItem, SID_MAIL_SUBJECT, FALSE );
+                if ( pMailSubject )
+                    aModel.SetSubject( pMailSubject->GetValue() );
+
+                SFX_REQUEST_ARG(rReq, pMailRecipient, SfxStringItem, SID_MAIL_RECIPIENT, FALSE );
+                if ( pMailRecipient )
+                {
+                    String aRecipient( pMailRecipient->GetValue() );
+                    String aMailToStr( String::CreateFromAscii( "mailto:" ));
+
+                    if ( aRecipient.Search( aMailToStr ) == 0 )
+                        aRecipient = aRecipient.Erase( 0, aMailToStr.Len() );
+                    aModel.AddAddress( aRecipient, SfxMailModel_Impl::ROLE_TO );
+                }
+
                 sal_Bool bResult = aModel.Send();
                 if ( bResult == sal_False )
                 {
