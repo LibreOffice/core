@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Impress.xcs,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:50:07 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 15:04:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -496,6 +496,18 @@
 						<label xml:lang="en-US">Add spacing between paragraphs</label>
 					</info>
 					<value>false</value>
+				</prop>
+				<prop oor:name="PrinterIndependentLayout" oor:type="xs:short">
+					<!-- UIHints: Tools - Options - Presentation - Other - [Section] Compatibility -->
+					<info>
+						<author>AF</author>
+						<desc xml:lang="en-US">Indicates whether to use printer independent 
+                        metrics for document formatting (2) or to use metrics derived from the 
+                        current printer (1).  Refer to com::sun::star::document::PrinterIndependentLayout 
+                        for valid values.</desc> 
+						<label xml:lang="en-US">Use printer independent metrics for document formatting</label>
+					</info>
+					<value>2</value>
 				</prop>
 			</group>
 			<group oor:name="DefaultObjectSize">
