@@ -107,7 +107,6 @@
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:PreviewWindow" menu:helpid="27327" menu:label="" />
             <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:FullScreen" menu:helpid="5627" menu:label="" />
             <menu:menuitem menu:id=".uno:Zoom" menu:helpid="10000" menu:label="" />
         </menu:menupopup>
     </menu:menu>
