@@ -140,6 +140,7 @@ hedabu: ..\inc\objuno.hxx %_DEST%\inc%_EXT%\sfx2\objuno.hxx
 hedabu: ..\inc\viewuno.hxx %_DEST%\inc%_EXT%\sfx2\viewuno.hxx
 hedabu: ..\inc\misccfg.hxx %_DEST%\inc%_EXT%\sfx2\misccfg.hxx
 hedabu: ..\inc\srchitem.hxx %_DEST%\inc%_EXT%\sfx2\srchitem.hxx
+hedabu: ..\inc\srchdefs.hxx %_DEST%\inc%_EXT%\sfx2\srchdefs.hxx
 hedabu: ..\inc\fontitem.hxx %_DEST%\inc%_EXT%\sfx2\fontitem.hxx
 hedabu: ..\inc\xmlmetae.hxx %_DEST%\inc%_EXT%\sfx2\xmlmetae.hxx
 hedabu: ..\inc\xmlmetai.hxx %_DEST%\inc%_EXT%\sfx2\xmlmetai.hxx
