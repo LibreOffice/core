@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartTypeManager.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-15 15:00:35 $
+ *  last change: $Author: bm $ $Date: 2004-01-12 14:33:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,7 @@
 #include "PieChartTypeTemplate.hxx"
 #include "ScatterChartTypeTemplate.hxx"
 #include "StockChartTypeTemplate.hxx"
+#include "NetChartTypeTemplate.hxx"
 
 #ifndef _CPPUHELPER_COMPONENT_CONTEXT_HXX_
 #include <cppuhelper/component_context.hxx>
@@ -607,25 +608,30 @@ uno::Reference< uno::XInterface > SAL_CALL ChartTypeManager::createInstance(
                     chart2::CurveStyle_LINES, /* bSymbols */ true, /* bHasLines */ false ));
                 break;
 
-            // TEST !!!
+            // NetChart
             case TEMPLATE_NET:
-                xTemplate.set( new DoubleStackedBarChartTypeTemplate( m_xContext, aServiceSpecifier,
-                    chart2::StackMode_NONE, chart2::StackMode_STACKED ));
+                xTemplate.set( new NetChartTypeTemplate( m_xContext, aServiceSpecifier,
+                    chart2::StackMode_NONE, false ));
                 break;
-
-            // TEST !!!
             case TEMPLATE_NETSYMBOL:
-            case TEMPLATE_STACKEDNET:
-            case TEMPLATE_STACKEDNETSYMBOL:
-                xTemplate.set( new DoubleStackedBarChartTypeTemplate( m_xContext, aServiceSpecifier,
-                    chart2::StackMode_STACKED, chart2::StackMode_STACKED ));
+                xTemplate.set( new NetChartTypeTemplate( m_xContext, aServiceSpecifier,
+                    chart2::StackMode_NONE, true ));
                 break;
-
-            // TEST !!!
+            case TEMPLATE_STACKEDNET:
+                xTemplate.set( new NetChartTypeTemplate( m_xContext, aServiceSpecifier,
+                    chart2::StackMode_STACKED, false ));
+                break;
+            case TEMPLATE_STACKEDNETSYMBOL:
+                xTemplate.set( new NetChartTypeTemplate( m_xContext, aServiceSpecifier,
+                    chart2::StackMode_STACKED, true ));
+                break;
             case TEMPLATE_PERCENTSTACKEDNET:
+                xTemplate.set( new NetChartTypeTemplate( m_xContext, aServiceSpecifier,
+                    chart2::StackMode_STACKED_PERCENT, false ));
+                break;
             case TEMPLATE_PERCENTSTACKEDNETSYMBOL:
-                xTemplate.set( new DoubleStackedBarChartTypeTemplate( m_xContext, aServiceSpecifier,
-                    chart2::StackMode_STACKED_PERCENT, chart2::StackMode_STACKED ));
+                xTemplate.set( new NetChartTypeTemplate( m_xContext, aServiceSpecifier,
+                    chart2::StackMode_STACKED_PERCENT, true ));
                 break;
 
             case TEMPLATE_STOCKLOWHIGHCLOSE:

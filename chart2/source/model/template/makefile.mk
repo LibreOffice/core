@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: bm $ $Date: 2003-11-21 14:18:21 $
+#   last change: $Author: bm $ $Date: 2004-01-12 14:33:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -88,6 +88,8 @@ SLOFILES=	\
     $(SLO)$/DoubleStackedBarChartTypeTemplate.obj \
     $(SLO)$/LineChartType.obj \
     $(SLO)$/LineChartTypeTemplate.obj \
+    $(SLO)$/NetChartType.obj \
+    $(SLO)$/NetChartTypeTemplate.obj \
     $(SLO)$/PieChartType.obj \
     $(SLO)$/PieChartTypeTemplate.obj \
     $(SLO)$/ScatterChartType.obj \
