@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfly.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 15:53:11 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 14:31:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,6 +176,10 @@ class SwTxtFly
     sal_Bool bTopRule: 1;
     sal_Bool mbIgnoreCurrentFrame: 1;
     sal_Bool mbIgnoreContour: 1;
+    // --> OD 2004-12-17 #118809# - boolean, indicating if objects in page
+    // header|footer are considered for text frames not in page header|footer.
+    sal_Bool mbIgnoreObjsInHeaderFooter: 1;
+    // <--
     SwRect _GetFrm( const SwRect &rPortion, sal_Bool bTop ) const;
     SwFlyList* InitFlyList();
     // iteriert ueber die Fly-Liste
@@ -196,19 +200,21 @@ class SwTxtFly
     const SwCntntFrm* _GetMaster();
 
 public:
-    inline SwTxtFly() { mbIgnoreCurrentFrame = sal_False;
-                        mbIgnoreCurrentFrame = sal_False;
-                        pFlyList = 0; pMaster = 0; }
+    inline SwTxtFly()
+    {
+        mbIgnoreCurrentFrame = sal_False;
+        mbIgnoreCurrentFrame = sal_False;
+        // --> OD 2004-12-17 #118809#
+        mbIgnoreObjsInHeaderFooter = sal_False;
+        // <--
+        pFlyList = 0; pMaster = 0;
+    }
     inline SwTxtFly( const SwTxtFrm *pFrm )
         { CtorInit( pFrm ); }
 
     SwTxtFly( const SwTxtFly& rTxtFly );
     inline ~SwTxtFly() { delete pFlyList; }
-#ifdef VERTICAL_LAYOUT
     void CtorInit( const SwTxtFrm *pFrm );
-#else
-    void CtorInit( const SwCntntFrm *pFrm );
-#endif
     void SetTopRule(){ bTopRule = sal_False; }
 
     SwFlyList* GetFlyList() const
@@ -245,6 +251,12 @@ public:
 
     void SetIgnoreCurrentFrame( sal_Bool bNew ) { mbIgnoreCurrentFrame = bNew; }
     void SetIgnoreContour( sal_Bool bNew ) { mbIgnoreContour = bNew; }
+    // --> OD 2004-12-17 #118809#
+    inline void SetIgnoreObjsInHeaderFooter( const sal_Bool _bNew )
+    {
+        mbIgnoreObjsInHeaderFooter = _bNew;
+    }
+    // <--
 
 #ifndef PRODUCT
     void ShowContour( OutputDevice* pOut );
