@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: mav $ $Date: 2002-10-21 16:00:29 $
+ *  last change: $Author: mba $ $Date: 2002-10-28 12:54:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1364,7 +1364,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                     return;
                 }
             }
-
+/*
             com::sun::star::uno::Reference < ::com::sun::star::frame::XFramesSupplier >
                     xDesktop( ::comphelper::getProcessServiceFactory()->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ),
                     com::sun::star::uno::UNO_QUERY );
@@ -1389,6 +1389,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 pLastFrame->GetFrame()->CloseDocument_Impl();
             }
             else
+ */
                 DoClose();
             return;
         }
