@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfmt.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:49:58 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:37:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2087,19 +2087,15 @@ void SwDoc::MoveLeftMargin( const SwPaM& rPam, BOOL bRight, BOOL bModulus )
         {
             SvxLRSpaceItem aLS( (SvxLRSpaceItem&)pTNd->SwCntntNode::GetAttr(
                                                         RES_LR_SPACE ) );
-            USHORT nNext = aLS.GetTxtLeft();
+            long nNext = aLS.GetTxtLeft();
             if( bModulus )
                 nNext = ( nNext / nDefDist ) * nDefDist;
 
             if( bRight )
                 nNext += nDefDist;
-            else if( nNext )
-            {
-                if( !bModulus && nDefDist > nNext )
-                    nNext = 0;
-                else
-                    nNext -= nDefDist;
-            }
+            else
+                nNext -= nDefDist;
+
             aLS.SetTxtLeft( nNext );
 
             SwRegHistory aRegH( pTNd, *pTNd, pHistory );
