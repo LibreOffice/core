@@ -9,13 +9,12 @@ Public sSOHelperdocuments(1) As String
 Public sTemplateCheckbox(SBMAXAPPLCOUNT-1) As String
 Public sDocumentCheckbox(SBMAXAPPLCOUNT-1) As String
 Public sTemplateGroupName(SBMAXAPPLCOUNT-1) As String
-Public sSumDocuments As String  &apos; Todo: Platzhalter einfÃƒÆ’Ã‚Â¼gen
+Public sSearchInSubDir as String
 Public sPathErrorTemplates(SBMAXAPPLCOUNT-1) As String
 Public sPathErrorDocument(SBMAXAPPLCOUNT-1) As String
 Public sPathErrorStarDoc(SBMAXAPPLCOUNT-1) As String
 Public sStarDocLabel(SBMAXAPPLCOUNT-1) As String
 Public sImportLabel As String, sExportLabel As String
-Public sSearchInSubDir As String
 Public SOApplicationName(5) As String
 Public sHelpButton As String, sCancelButton As String, sBackButton As String, sNextButton As String
 Public sSumInclusiveSubDir As String, sSumSaveDocuments As String
@@ -32,6 +31,13 @@ Public sProgressPage_1 As String, sProgressPage_2 As String, sProgressPage_3 as 
 Public sProgressFound as String, sProgresspage_5 as String
 Public sContainerName(1) as String
 Public sReady as String, sTitle as String
+Public sCloseButton as String
+Public sSourceDocuments as String
+Public sTargetDocuments as String
+Public sSumSODocuments(4) as String
+Public sSumSOTemplates(4) as String
+Public sSumMSDocuments(3) as String
+Public sSumMSTemplates(3) as String
 
 
 Sub LoadLanguage()
@@ -41,13 +47,14 @@ Sub LoadLanguage()
 		sBackButton = GetResText(1002)
 		sNextButton = GetResText(1003)
 		sBeginButton = GetResText(1004)
-
-		sWelcometextLabel1 = ReplaceString(GetResText(1005), GetProductName(),&quot;%PRODUCTNAME&quot;)
-		sWelcometextLabel2 = GetResText(1006)
-		sWelcometextLabel3 = GetResText(1007)
+		sCloseButton = GetResText(1005)
+		
+		sWelcometextLabel1 = ReplaceString(GetResText(1006), GetProductName(),&quot;%PRODUCTNAME&quot;)
+		sWelcometextLabel2 = GetResText(1007)
+		sWelcometextLabel3 = GetResText(1008)
 
 		&apos; Microsoft Documents
-		GetApplResourceArray(1008, 3, sMSTemplateCheckBox())
+		GetApplResourceArray(1009, 3, sMSTemplateCheckBox())
 
 		&apos; DocumentCheckbox- Captions
 		GetApplResourceArray(1012, 3, sMSDocumentCheckBox())
@@ -58,17 +65,10 @@ Sub LoadLanguage()
 		&apos;StarOffice Applicationnames
 		GetApplResourceArray(2016,2, sSOHelperDocuments())		
 
-		sImportLabel = GetResText(1033)
-		sExportLabel = GetResText(1034)	
-
 		sContainerName(0) = GetResText(1030)
 
 		sContainerName(1) = &quot;StarOffice&quot;
 	
-		sSearchInSubDir = GetResText(1022)
-		sSumInclusiveSubDir = GetResText(1023)
-		sSumSaveDocuments = GetResText(1024)
-		sSumDocuments = GetResText(1025)
 		sSummaryHeader = GetResText(1031)
 
 		sTemplateGroupName(0) = GetResText(1036)
@@ -95,7 +95,29 @@ Sub LoadLanguage()
 		sProgressFound = GetResText(1093)
 		sProgressPage_5 = GetResText(1094)
 		sReady = GetResText(1100)
+		sSourceDocuments = GetResText(2030)
+		sTargetDocuments = GetResText(2031)
+		sSumInclusiveSubDir = GetResText(3000)
+		sSumSaveDocuments = GetResText(3001)
+		&apos;StarOffice Applicationnames
+		GetApplResourceArray(3100, 4, sSumSODocuments())
+		GetApplResourceArray(3110, 4, sSumSOTemplates())
+		GetApplResourceArray(3200, 3, sSumMSDocuments())
+		GetApplResourceArray(3210, 3, sSumMSTemplates())
 		ImportDialogArea.Title = sTitle
+		With ImportDialog
+			sImportLabel = GetResText(1033) 
+			sExportLabel = GetResText(1034)	
+			sSearchInSubDir = GetResText(1022)
+			.TemplateSearchSubDir.Label = sSearchInSubDir
+			.DocumentImportLabel.Label = sImportLabel
+			.DocumentExportLabel.Label = sExportLabel
+			.DocumentSearchSubDir.Label = sSearchInSubDir
+			.TemplateImportLabel.Label = sImportLabel	
+			.TemplateExportLabel.Label = sExportLabel	
+			.chkLogfile.Label = GetResText(2032)	
+			.chkLogfile.Helptext = GetResText(2033)
+		End With		
 	End If
 End Sub
 
@@ -109,23 +131,4 @@ Dim a as Integer
 		a = a + 1
 	Next			
 End Sub
-
-
-Sub LoadLibrary(sLibname as String)
-Dim oArg(0) as new com.sun.star.beans.PropertyValue
-Dim oUrl as new com.sun.star.util.URL
-Dim oTrans as Object
-Dim oDisp as Object
-
-	oArg(0).Name = &quot;LibraryName&quot;
-	oArg(0).Value = sLibname
-
-	oTrans = createUNOService(&quot;com.sun.star.util.URLTransformer&quot;)
-	oUrl.Complete = &quot;slot:6517&quot;
-	oTrans.parsestrict(oUrl)
-
-	oDisp = StarDesktop.currentFrame.queryDispatch(oUrl, &quot;_self&quot;, 0)	
-	oDisp.dispatch(oUrl, oArg())
-End Sub
-
 </script:module>

@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<script:module xmlns:script="http://openoffice.org/2000/script" script:name="Main" script:language="StarBasic">&apos;  *****  BASIC  *****
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="Main" script:language="StarBasic">Option Explicit
+
+&apos;  *****  BASIC  *****
 &apos; Todo: Problematik der VBA-Makros, die angeblich nicht mit abgespeichert werden koennen.
 &apos; Evt. Erkennen der Arbeitsverzeichnisse von MS Office
 &apos; Filternamen fuer Ziel-XML-Dokumente und deren Extensionen feststellen (auch fuer StarMath)
@@ -17,18 +19,19 @@ Sub Main
 		On Error Goto RTError
 	End If
 	SOBitmapPath = GetOfficeSubPath(&quot;Template&quot;, &quot;wizard/bitmap&quot;)
-	SOWorkPath = ConvertToUrl(GetPathSettings(&quot;Work&quot;, False))
-	SOTemplatePath = ConvertToUrl(GetPathSettings(&quot;Template&quot;,False,1))
+	SOWorkPath = GetPathSettings(&quot;Work&quot;, False)
+	SOTemplatePath = GetPathSettings(&quot;Template&quot;,False,1)
   	bCancelTask = False
+  	bDoKeepApplValues = False
 	CurOffice = 0
 	ImportDialogArea = LoadDialog(&quot;ImportWizard&quot;,&quot;ImportDialog&quot;)
-
 	ImportDialog = ImportDialogArea.Model
 	LoadLanguage()
 	FillStep_Welcome()
 	RepaintHeaderPreview()
 	SetStates()
-	ImportDialogArea.execute
+	ImportDialogArea.SetVisible(True)
+	ImportDialog.cbGoOn.DefaultButton = True
 	Exit Sub
 RTError:
 	Msgbox sRTErrorDesc, 16, sRTErrorHeader
@@ -50,8 +53,7 @@ Dim iCurStep as Integer
 	If Not bDebugWizard Then
 		On Error Goto RTError
 	End If
-
-  iCurStep = ImportDialog.Step
+	iCurStep = ImportDialog.Step
 	Select Case iCurStep
 		Case 1
 			FillStep_InputPaths(0, True)
@@ -59,6 +61,7 @@ Dim iCurStep as Integer
 			If SaveStep_InputPath Then
 				If CurOffice &lt; ApplCount - 1 Then
 					CurOffice = CurOffice + 1
+					TakeOverPathSettings()
 					FillStep_InputPaths(CurOffice, False)
 					RepaintHeaderPreview()
 				Else
@@ -75,11 +78,11 @@ Dim iCurStep as Integer
 			End Select
 		Case 4
 	End Select
+	ImportDialog.cbGoOn.DefaultButton = True		
 	Exit Sub
 RTError:
 	Msgbox sRTErrorDesc, 16, sRTErrorHeader
 End Sub
-
 
 
 Sub PrevStep
@@ -90,6 +93,7 @@ Dim iCurStep as Integer
 	iCurStep = ImportDialog.Step
 	Select Case iCurStep
 		Case 4
+			ImportDialog.cbCancel.Label = sCancelButton
 			FillStep_Summary()
 		Case 3
 &apos;Todo: muessen auch beim Zuruecksteppen wirklich die Importpfade auf ihre Gueltigkeit hin Ueberprueft werden?
@@ -102,11 +106,11 @@ Dim iCurStep as Integer
 					RepaintHeaderPreview()
 				Else
 					FillStep_Welcome()
-&apos;					bDoKeepApplValues = True
+					bDoKeepApplValues = True
 				End If
 			End If
 	End Select
-
+	ImportDialog.cbGoOn.DefaultButton = True
 	Exit Sub
 RTError:
 	Msgbox sRTErrorDesc, 16, sRTErrorHeader
@@ -114,13 +118,13 @@ End Sub
 
 
 Sub CancelButton
-	If ImportDialog.Step = 4 Then
-		Call CancelButtonPressed()
-	Else
+&apos;	If ImportDialog.Step = 4 Then
+&apos;		Call CancelButtonPressed()
+&apos;	Else
 		ImportDialogArea.EndExecute
-		ImportDialogArea.Dispose
+		ImportDialogArea.Dispose()
 		End
-	End If
+&apos;	End If
 End Sub
 
 
@@ -136,10 +140,10 @@ Sub CancelTask()
 End Sub
 
 
-Sub CancelButtonPressed()
-	ImportDialog.cbCancel.Enabled = False
-	bCancelTask = True
-End Sub
+&apos;Sub CancelButtonPressed()
+&apos;	ImportDialog.cbCancel.Enabled = False
+&apos;	bCancelTask = True
+&apos;End Sub
 
 
 Sub TemplateDirSearchDialog()
@@ -153,7 +157,7 @@ Dim CurStep as Integer
 Dim sBitmapPath as String
 	CurStep = ImportDialog.Step
 	If CurStep = 2 Then
-		sBitmapPath = SOBitmapPath &amp; WizardMode &amp; &quot;-Import_&quot; &amp; CurStep &amp; &quot;-&quot; &amp; Val(Applications(CurOffice,9))+1 &amp; &quot;.bmp&quot;
+		sBitmapPath = SOBitmapPath &amp; WizardMode &amp; &quot;-Import_&quot; &amp; CurStep &amp; &quot;-&quot; &amp; Applications(CurOffice,SBAPPLKEY) + 1 &amp; &quot;.bmp&quot;
 	Else
 		sBitmapPath = SOBitmapPath &amp; &quot;Import_&quot; &amp; CurStep &amp; &quot;.bmp&quot;
 	End If
@@ -168,25 +172,19 @@ End Sub
 
 
 Sub DisorEnableCheckboxes(oEvent as Object)
-Dim bMSEnable, bXMLEnable as Boolean
-	Select Case oEvent.Source.Model.Tag
-	Case &quot;MS&quot;
-		bMSEnable = true
-		bXMLEnable = false
-	Case &quot;XML&quot;
-		bMSEnable = false
-		bXMLEnable = true
-	End Select
+Dim bMSEnable as Boolean
+	bMSEnable = oEvent.Source.Model.Tag = &quot;MS&quot;
 	With ImportDialog
-		.ChkFirstSOApplication.Enabled = bXMLEnable
-		.ChkSecondSOApplication.Enabled = bXMLEnable
-		.ChkThirdSOApplication.Enabled = bXMLEnable
-		.ChkFourthSOApplication.Enabled = bXMLEnable
+		.ChkFirstSOApplication.Enabled = Not bMSEnable
+		.ChkSecondSOApplication.Enabled = Not bMSEnable
+		.ChkThirdSOApplication.Enabled = Not bMSEnable
+		.ChkFourthSOApplication.Enabled = Not bMSEnable
 		.ChkFirstMSApplication.Enabled = bMSEnable
 		.ChkSecondMSApplication.Enabled = bMSEnable
 		.ChkThirdMSApplication.Enabled = bMSEnable
 		.WelcomeTextLabel2.Enabled = bMSEnable
 	End With
+	bDoKeepApplValues = False
 	DisOrEnableNextButton()
 End Sub
 
@@ -195,18 +193,17 @@ Sub DisOrEnableNextButton()
 Dim iCurStep as Integer
 Dim bDoEnable as Boolean
 Dim i as Integer
-
 	iCurStep = ImportDialog.Step
 	Select Case iCurStep
 		Case 1
 			With ImportDialog
-				If .OptMSDocuments.State Then
-          			bDoEnable = .ChkFirstMSApplication.State Or .ChkSecondMSApplication.State Or .ChkThirdMSApplication.State
+				If .OptMSDocuments.State = 1 Then
+          			bDoEnable = .ChkFirstMSApplication.State = 1 Or .ChkSecondMSApplication.State = 1 Or .ChkThirdMSApplication.State = 1
 				Else
-          			bDoEnable = .ChkFirstSOApplication.State Or .ChkSecondSOApplication.State Or .ChkThirdSOApplication.State Or .ChkFourthSOApplication.State
+          			bDoEnable = .ChkFirstSOApplication.State = 1 Or .ChkSecondSOApplication.State = 1 Or .ChkThirdSOApplication.State = 1 Or .ChkFourthSOApplication.State = 1
 				End If
 			End With
-&apos;			bDoKeepApplValues = False
+			bDoKeepApplValues = False
 		Case 2
 			bDoEnable = CheckControlPath(ImportDialog.TemplateImportPath, True)
 			bDoEnable = CheckControlPath(ImportDialog.TemplateExportPath, bDoEnable)
@@ -217,7 +214,16 @@ Dim i as Integer
 End Sub
 
 
-Function ControlStateToBool(iState)
-	ControlStateToBool = (Val(iState) = 1)
-End Function
+Sub TakeOverPathSettings()					
+&apos;Takes over the Pathsettings from the first selected application to the next applications
+	Applications(CurOffice,SBDOCSOURCE) = Applications(0,SBDOCSOURCE)
+	Applications(CurOffice,SBDOCTARGET) = Applications(0,SBDOCTARGET)
+	If WizardMode = SBXMLMODE AND Applications(CurOffice,SBAPPLKEY) = 3 Then	&apos; Helper Applications
+		Applications(CurOffice,SBTEMPLSOURCE) = Applications(CurOffice,SBDOCSOURCE)
+		Applications(CurOffice,SBTEMPLTARGET) = Applications(CurOffice,SBDOCTARGET)											
+	Else
+		Applications(CurOffice,SBTEMPLSOURCE) = Applications(0,SBTEMPLSOURCE)
+		Applications(CurOffice,SBTEMPLTARGET) = Applications(0,SBTEMPLTARGET)					
+	End If
+End Sub					
 </script:module>

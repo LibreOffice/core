@@ -76,14 +76,14 @@ Dim sPath as String
 Dim Index as Integer
 	Select Case Wizardmode
 		Case SBMICROSOFTMODE
-			Index = Val(Application(CurOffice,9))
+			Index = Application(CurOffice,SBAPPLKEY)
 			If GetGUIType = 1 Then &apos; Windows
 			    sPath = QueryValue(HKEY_CURRENT_USER, sKeyName(Index), sValueName(Index))
 			Else
 				sPath = &quot;&quot;
 			End If
 			If sPath = &quot;&quot; Then
-&apos; Todo: das User/Work Verzeichnis kann man hier wohl kaum nehmen
+&apos; Todo: das User/Work Verzeichnis kann man hier wohl kaum nehmen!!
 				sPath = SOWorkPath
 			End If
 			GetDefaultPath = sPath

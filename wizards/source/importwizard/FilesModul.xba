@@ -4,6 +4,9 @@
 
 Public AbsTemplateFound as Integer
 Public AbsDocuFound as Integer
+Public oLogDocument as Object
+Public oLogTable as Object
+
 
 
 Function ReadApplicationDirectories(ApplIndex as Integer, FilesList(),bIsDocument as Boolean, sFiltername()) as Integer
@@ -14,21 +17,20 @@ Dim sSourceDir as String
 Dim bCheckRealType as Boolean
 Dim a as Integer
 Dim sFileContent() as String
-Dim NewList(200,1) as String
+Dim NewList() as String
 Dim Index as Integer
 Dim sLocExtension as String
-	Index = Val(Applications(ApplIndex,9)
+	Index = Applications(ApplIndex,SBAPPLKEY)
 	sLocExtension = &quot;&quot;
 	If bIsDocument Then
-		&apos; Documents
-		bCheckDocuType = ControlStateToBool(Applications(ApplIndex,1))
+		bCheckDocuType = Applications(ApplIndex,SBDOCCONVERT)
 		bCheckRealType = False
-		bRecursive = ControlStateToBool(Applications(ApplIndex,2))
+		bRecursive = Applications(ApplIndex,SBDOCRECURSIVE)
 		FilterIndex = Index
-		sSourceDir = Applications(ApplIndex,3)
+		sSourceDir = Applications(ApplIndex,SBDOCSOURCE)
 	Else
 		&apos; Templates
-		bCheckDocuType = ControlStateToBool(Applications(ApplIndex,5))
+		bCheckDocuType = Applications(ApplIndex,SBTEMPLCONVERT)
 		&apos; In SO the documenttype cannot be derived from the extension name
 		bCheckRealType = WizardMode = SBXMLMODE
 		If bCheckRealType Then
@@ -39,19 +41,20 @@ Dim sLocExtension as String
 			End If
 			bIsDocument = Not bCheckRealType
 		End If
-		bRecursive = ControlStateToBool(Applications(ApplIndex,6))
+		bRecursive = Applications(ApplIndex,SBTEMPLRECURSIVE)
     	FilterIndex = Index + MaxApplCount
-		sSourceDir = Applications(ApplIndex,7)
+		sSourceDir = Applications(ApplIndex,SBTEMPLSOURCE)
 	End If
 	If bCheckDocuType Then
 		sFileContent() = GetMimeTypeList(sFilterName(FilterIndex))
 		NewList() = ReadDirectories(sSourceDir, bRecursive, bCheckRealType, False, sFileContent(), sLocExtension)
-		AddListtoList(FilesList(), NewList(), ApplIndex)
-		LabelRetrieval.Caption = sProgressPage_2 &amp;  &quot;  &quot; &amp;  ReplaceString(sProgressPage_5, FilesList(0,0) &amp; &quot; &quot;, &quot;%1&quot;)
+		If Ubound(NewList()) &gt; -1 Then
+			AddListtoList(FilesList(), NewList(), ApplIndex)
+		End If
+		LabelRetrieval.Caption = sProgressPage_2 &amp;  &quot;  &quot; &amp; ReplaceString(sProgressPage_5, Str(Ubound(FilesList()) + 1) &amp; &quot; &quot;, &quot;%1&quot;)
 	End If
-	ReadApplicationDirectories() = Val(NewList(0,0))
+	ReadApplicationDirectories() = Ubound(NewList(),1) + 1
 End Function
-
 
 
 Sub	ShowCurrentProgress(bIsDocument as Boolean, CurFound as Integer)
@@ -64,10 +67,11 @@ Sub	ShowCurrentProgress(bIsDocument as Boolean, CurFound as Integer)
   End If
 End Sub
 
+
 Sub ConvertAllDocuments(sFilterName())
 Dim FileProperties(0) as new com.sun.star.beans.PropertyValue
 Dim OpenProperties(0) as new com.sun.star.beans.PropertyValue
-Dim FilesList(500,2) as String
+Dim FilesList(0,2) as String
 Dim sViewPath as String
 Dim i as Integer
 Dim FilterIndex as Integer
@@ -92,6 +96,7 @@ Dim oTaskEnum as Object
 Dim oTask as Object
 Dim oModel as Object
 Dim oTaskController as Object
+Dim MaxFileIndex as Integer
 	AbsTemplateFound = 0
 	AbsDocuFound = 0
 	For i = 0 To ApplCount-1
@@ -107,12 +112,11 @@ Dim oTaskController as Object
 		CurFound = ReadApplicationDirectories(i, FilesList(), bIsDocument, sFilterName())
 		ShowCurrentProgress(bIsDocument, CurFound)
 	Next i
-
 	InitializeProgressPage(ImportDialog)
-
 	OpenProperties(0).Name = &quot;Hidden&quot;
 	OpenProperties(0).Value = True
-	For i = 1 To cInt(FilesList(0, 0))
+	MaxFileIndex = Ubound(FilesList(),1)
+	For i = 0 To MaxFileIndex
 		bDoSave = True
 		If bCancelTask Then
 			Call CancelTask()
@@ -122,19 +126,19 @@ Dim oTaskController as Object
 		CurFiltername =	GetFilterName(FilesList(i,1), sFilterName(), sExtension, FilterIndex)
 		ApplIndex = FilesList(i,2)
 		sViewPath = CutPathView(sFullName, 60)
-		ImportDialog.LabelCurDocument.Label = Str(i) &amp; &quot;/&quot; &amp; FilesList(0,0) &amp; &quot;  (&quot; &amp; sViewPath &amp; &quot;)&quot;
-		If i = 1 Then
-
+		ImportDialog.LabelCurDocument.Label = Str(i+1) &amp; &quot;/&quot; &amp; MaxFileIndex + 1 &amp; &quot;  (&quot; &amp; sViewPath &amp; &quot;)&quot;
+		If i = 0 Then
+			CreateLogDocument(OpenProperties())
 		End If
 		oDocument = StarDesktop.LoadComponentFromURL(sFullName, &quot;_blank&quot;, 0, OpenProperties())
 		If Not IsNull(oDocument) Then
 			Select Case sExtension
 				Case &quot;sxw&quot;, &quot;sxc&quot;, &quot;sxi&quot;, &quot;sxd&quot;, &quot;sxs&quot;, &quot;mml&quot;
-					SourceStemDir = RTrimStr(Applications(ApplIndex,3), &quot;/&quot;)
-					TargetStemDir = RTrimStr(Applications(ApplIndex,4), &quot;/&quot;)
-			Case Else 								&apos; Templates and Helper-Applications remain
-					SourceStemDir = RTrimStr(Applications(ApplIndex,7), &quot;/&quot;)
-					TargetStemDir = RTrimStr(Applications(ApplIndex,8), &quot;/&quot;)
+					SourceStemDir = RTrimStr(Applications(ApplIndex,SBDOCSOURCE), &quot;/&quot;)
+					TargetStemDir = RTrimStr(Applications(ApplIndex,SBDOCTARGET), &quot;/&quot;)
+				Case Else 								&apos; Templates and Helper-Applications remain
+					SourceStemDir = RTrimStr(Applications(ApplIndex,SBTEMPLSOURCE), &quot;/&quot;)
+					TargetStemDir = RTrimStr(Applications(ApplIndex,SBTEMPLTARGET), &quot;/&quot;)
 			End Select
 
 			TargetFile = ReplaceString(sFullname, TargetStemDir, SourceStemDir)
@@ -162,6 +166,7 @@ Dim oTaskController as Object
 				End Select
 			End If
 			If bDoSave Then
+				InsertDocNamesToLogDocument(i+1, sFullName, TargetFile
 				On Local Error Resume Next
 				FileProperties(0).Name = &quot;FilterName&quot;
 				FileProperties(0).Value = CurFilterName
@@ -185,9 +190,11 @@ Dim oTaskController as Object
 &apos;			Wend
 		End If
 	Next i
+	ImportDialog.cbCancel.Label = sCloseButton
+&apos;	oLogDocument.Dispose()
 	Msgbox sReady, 64, sTitle
-	ImportDialogArea.endExecute
-	ImportDialogArea.Dispose	
+&apos;	ImportDialogArea.endExecute
+&apos;	ImportDialogArea.Dispose	
 	End
 
 	Exit Sub
@@ -198,16 +205,16 @@ End Sub
 
 Sub AddListtoList(FirstList(), SecList(), ApplIndex as Integer)
 Dim FirstStart as Integer, FirstEnd as Integer, i as Integer, s as Integer
-	FirstStart = Val(FirstList(0,0)) + 1
-	FirstEnd = FirstStart + Val(SecList(0,0))
-	s = 1
+	FirstStart = Ubound(FirstList(),1)
+	FirstEnd = FirstStart + Ubound(SecList(),1)
+	ReDim Preserve FirstList(FirstEnd,2)
+	s = 0
 	For i = FirstStart To FirstEnd
 		FirstList(i,0) = SecList(s,0)
 		FirstList(i,1) = SecList(s,1)
 		FirstList(i,2) = CStr(ApplIndex)
 		s = s + 1
 	Next i
-	FirstList(0,0) = i-2
 End Sub
 
 
@@ -273,4 +280,67 @@ Dim sMimeTypeList()
 		sMimeTypeList() = ArrayoutofString(sMimeTypeList(0),&quot;|&quot;)
 	End If
 	GetMimetypeList() = sMimeTypeList()
-End Function</script:module>
+End Function
+
+
+Sub CreateLogDocument(HiddenProperties())
+Dim oTableCursor as Object
+Dim oLogCursor as Object
+Dim oLogRows as Object
+Dim sLogUrl as String
+Dim NoArgs()
+Dim i as Integer
+Dim bLogExists as Boolean
+	If ImportDialog.chkLogfile.State = 1 Then
+		i = 2
+		oLogDocument = StarDesktop.LoadComponentFromURL(&quot;private:factory/swriter&quot;, &quot;_blank&quot;, 0, NoArgs())&apos; HiddenProperties()) &apos; HiddenProperties())
+		oLogCursor = oLogDocument.Text.CreateTextCursor
+		oLogTable =  oLogDocument.CreateInstance(&quot;com.sun.star.text.TextTable&quot;)
+		oLogCursor.Text.InsertTextContent(oLogCursor, oLogTable, True)
+		oLogCursor = oLogTable.GetCellbyPosition(0,0).createTextCursor
+&apos; Todo: Strings in Resourcen
+		oLogCursor.SetString(sSourceDocuments)
+		oLogCursor = oLogTable.GetCellbyPosition(1,0).createTextCursor
+		oLogCursor.SetString(sTargetDocuments)
+		sLogUrl = SOWorkPath &amp; &quot;/Logfile.sxw&quot;
+		Do
+			bLogExists = oUcb.Exists(sLogUrl)
+			If bLogExists Then
+				If i = 2 Then
+					sLogUrl = ReplaceString(sLogUrl, &quot;/Logfile_2.sxw&quot;, &quot;/Logfile.sxw&quot;)
+				Else
+					sLogUrl = ReplaceString(sLogUrl, &quot;/Logfile_&quot; &amp; cStr(i) &amp; &quot;.sxw&quot;, &quot;/Logfile_&quot; &amp; cStr(i-1) &amp; &quot;.sxw&quot;)
+				End If
+				i = i + 1
+			End If
+		Loop Until Not bLogExists
+&apos; Todo Für das Logdokument einen sinnigen Titel festlegen!	
+		oLogDocument.StoreToUrl(sLogUrl, NoArgs())
+	EndIf
+End Sub
+
+
+Sub InsertDocNamesToLogDocument(iRow as Integer, SourceUrl as String, TargetUrl as String)
+Dim oLogCursor as Object
+Dim UrlList(1) as String
+Dim LocFileName as String
+Dim LocUrl as String
+Dim i as Integer
+	If ImportDialog.chkLogfile.State = 1 Then
+		If iRow &gt; 1 Then
+			oLogTable.Rows.InsertByIndex(oLogTable.Rows.Count,1)
+		End If
+		UrlList(0) = SourceUrl
+		UrlList(1) = TargetUrl
+		For i = 0 To 1
+			oLogCursor = oLogTable.GetCellbyPosition(i,iRow).createTextCursor
+			LocUrl = UrlList(i)
+			oLogCursor.HyperLinkURL = LocUrl
+			oLogCursor.HyperLinkName = LocUrl
+			oLogCursor.HyperLinkTarget = LocUrl
+			LocFileName = FileNameOutOfPath(LocUrl, &quot;/&quot;)
+			oLogTable.GetCellbyPosition(i,iRow).InsertString(oLogCursor, LocFileName,False)
+		Next i 
+		oLogDocument.Store()
+	End If
+End Sub</script:module>

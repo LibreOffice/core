@@ -21,6 +21,7 @@ Public SOBitmapPath As String
 Public SOWorkPath As String
 Public SOTemplatePath as String
 Public bCancelTask As Boolean
+Public bDoKeepApplValues as Boolean
 Public iApplSection as Integer
 Public oUcb as Object
 Public PathSeparator as String
@@ -40,18 +41,29 @@ Public XMLFilterName(7,2)
 Public ChkApplication(SBMAXAPPLCOUNT-1) as Object
 Public Applications(SBMAXAPPLCOUNT-1,9)
 
+Public Const SBAPPLCONVERT = 0
+Public Const SBDOCCONVERT = 1
+Public Const SBDOCRECURSIVE = 2
+Public Const SBDOCSOURCE = 3
+Public Const SBDOCTARGET = 4
+Public Const SBTEMPLCONVERT = 5
+Public Const SBTEMPLRECURSIVE = 6
+Public Const SBTEMPLSOURCE = 7
+Public Const SBTEMPLTARGET = 8
+Public Const SBAPPLKEY = 9
+
 &apos; Application-relating Data are stored in this Array
 &apos; according to the following structure:
-&apos; Applications(X,0) = &quot;TRUE/FALSE&quot; 		(Application is to be converted)
-&apos; Applications(X,1) = &quot;TRUE/FALSE&quot; 		(Documents are to be converted)
-&apos; Applications(X,2) = &quot;TRUE/FALSE&quot;		(Including Subdirectories)
+&apos; Applications(X,0) = True/False 		(Application is to be converted)
+&apos; Applications(X,1) = True/False 		(Documents are to be converted)
+&apos; Applications(X,2) = True/False		(Including Subdirectories)
 &apos; Applications(X,3) = &quot;File:///...&quot;		(SourceUrl of the documents)
 &apos; Applications(X,4) = &quot;File///:...&quot;		(TargetUrl of the documents)
-&apos; Applications(X,5) = &quot;TRUE/FALSE&quot;		(Templates are to be converted)
-&apos; Applications(X,6) = &quot;TRUE/FALSE&quot; 		(Including Subdirectories)
+&apos; Applications(X,5) = True/False		(Templates are to be converted)
+&apos; Applications(X,6) = True/False 		(Including Subdirectories)
 &apos; Applications(X,7) = &quot;File:///...&quot;		(SourceUrl of the templates)
 &apos; Applications(X,8) = &quot;File:///...&quot; 	(TargetUrl of the templates)
-&apos; Applications(X,9) = &quot;0&quot;				(Key to the original Index of the Applications)
+&apos; Applications(X,9) = 0					(Key to the original Index of the Applications)
 
 
 Sub FillStep_Welcome()
@@ -86,11 +98,11 @@ End Sub
 Sub FillStep_InputPaths(OfficeIndex as Integer, bStartup as Boolean)
 Dim Index as Integer
 	If bStartup Then
-    If ImportDialog.OptMSDocuments.State Then
+	    If ImportDialog.OptMSDocuments.State = 1 Then
 			SetupMSConfiguration()
 		Else
 			SetupXMLConfiguration()
-	End If
+		End If
 		&apos; TemplateCheckBox-Captions
 		GetApplResourceArray(1008 + iApplSection, ApplCount, sTemplateCheckBox())
 		&apos; DocumentCheckbox- Captions
@@ -103,19 +115,14 @@ Dim Index as Integer
 
 	CurOffice = OfficeIndex
 
-	Index = Val(Applications(CurOffice,9))
+	Index = Applications(CurOffice,SBAPPLKEY)
 	With ImportDialog
 		.TemplateCheckbox.Label = sTemplateCheckbox(Index)
-		.TemplateSearchSubDir.Label = sSearchInSubDir
-
-		.DocumentImportLabel.Label =  sImportLabel
-		.DocumentExportLabel.Label = sExportLabel
-		.DocumentSearchSubDir.Label = sSearchInSubDir
-
-    	.DocumentPathCheckbox.State = Val(Applications(CurOffice,1))
-    	.DocumentSearchSubDir.State = Val(Applications(CurOffice,2))
-		.DocumentImportPath.Text = ConvertFromUrl(Applications(CurOffice,3))
-		.DocumentExportPath.Text = ConvertFromUrl(Applications(CurOffice,4))
+    	.DocumentPathCheckbox.State = Abs(Applications(CurOffice,SBDOCCONVERT))
+		SetEnabledDocument_InputPath()    	
+    	.DocumentSearchSubDir.State = Abs(Applications(CurOffice,SBDOCRECURSIVE))
+		.DocumentImportPath.Text = ConvertFromUrl(Applications(CurOffice,SBDOCSOURCE))
+		.DocumentExportPath.Text = ConvertFromUrl(Applications(CurOffice,SBDOCTARGET))
 		.DocumentFrame.Label = sProgressMoreDocs
 
 		If WizardMode = SBXMLMODE AND Index = 3 Then
@@ -128,16 +135,11 @@ Dim Index as Integer
 			.DocumentPathCheckbox.Label = sDocumentCheckbox(Index)
 			.TemplateFrame.Label = sProgressMoreTemplates
 		End If
-&apos;Todo: Enable this Checkbox as soon as an XML-Template-Format is defined
-		.TemplateCheckbox.State = Val(Applications(CurOffice,5))
-		.TemplateSearchSubDir.State = Val(Applications(CurOffice,6))
-		.TemplateImportPath.Text = ConvertFromUrl(Applications(CurOffice,7))
-		.TemplateImportLabel.Label = sImportLabel
-		.TemplateExportPath.Text = ConvertFromUrl(Applications(CurOffice,8))
-		.TemplateExportLabel.Label = sExportLabel
-
-&apos;		Call SetEnabledTemplate_InputPath()
-&apos;		Call SetEnabledDocument_InputPath()
+		.TemplateCheckbox.State = Abs(Applications(CurOffice,SBTEMPLCONVERT))
+		SetEnabledTemplate_InputPath()
+		.TemplateSearchSubDir.State = Abs(Applications(CurOffice,SBTEMPLRECURSIVE))
+		.TemplateImportPath.Text = ConvertFromUrl(Applications(CurOffice,SBTEMPLSOURCE))
+		.TemplateExportPath.Text = ConvertFromUrl(Applications(CurOffice,SBTEMPLTARGET))
 		.cbGoOn.Label = sNextButton
 		.cbBack.Enabled = True
 		ImportDialog.Step = 2
@@ -149,26 +151,26 @@ End Sub
 Sub	FillUpApplicationList()
 Dim i as Integer
 Dim a as Integer
-Dim sBoolValue as String
+Dim BoolValue as Boolean
 
-&apos;	If Not bDoKeepApplValues Then
+	If Not bDoKeepApplValues Then
 		a = 0
 		For i = 0 To ApplCount - 1
-      		sBoolValue = CStr(ChkApplication(i).State)
-			Applications(a,0) = sBoolValue
-			Applications(a,1) = sBoolValue
-			Applications(a,2) = sBoolValue
-			Applications(a,3) = GetDefaultPath(i)
-			Applications(a,4) = SOWorkPath
-			Applications(a,5) = sBoolValue
-			Applications(a,6) = sBoolValue
-			Applications(a,7) = GetTemplateDefaultPath(i)
-			Applications(a,8) = GetTargetTemplatePath(i)
-			Applications(a,9) = CStr(i)
+      		BoolValue = ChkApplication(i).State = 1
+			Applications(a,SBAPPLCONVERT) = BoolValue
+			Applications(a,SBDOCCONVERT) = BoolValue
+			Applications(a,SBDOCRECURSIVE) = BoolValue
+			Applications(a,SBDOCSOURCE) = GetDefaultPath(i)
+			Applications(a,SBDOCTARGET) = SOWorkPath
+			Applications(a,SBTEMPLCONVERT) = BoolValue
+			Applications(a,SBTEMPLRECURSIVE) = BoolValue
+			Applications(a,SBTEMPLSOURCE) = GetTemplateDefaultPath(i)
+			Applications(a,SBTEMPLTARGET) = GetTargetTemplatePath(i)
+			Applications(a,SBAPPLKEY) = i
       		If ChkApplication(i).State = 1 Then a = a + 1
 		Next i
 		ApplCount = a
-&apos;	End If
+	End If
 End Sub
 
 
@@ -177,14 +179,14 @@ Function SaveStep_InputPath() as Boolean
 Dim bSaveConfiguration as Boolean
 	bSaveConfiguration = CheckInputPaths
 	If bSaveConfiguration Then
-    	Applications(CurOffice,1)  = CStr(ImportDialog.DocumentPathCheckbox.State)
-    	Applications(CurOffice,2)  = CStr(ImportDialog.DocumentSearchSubDir.State)
-		Applications(CurOffice,3)  = ConvertToURL(ImportDialog.DocumentImportPath.Text)
-		Applications(CurOffice,4) = ConvertToUrl(ImportDialog.DocumentExportPath.Text)
-    	Applications(CurOffice,5) = CStr(ImportDialog.TemplateCheckbox.State)
-    	Applications(CurOffice,6) = CStr(ImportDialog.TemplateSearchSubDir.State)
-		Applications(CurOffice,7) = ConvertToURL(ImportDialog.TemplateImportPath.Text)
-		Applications(CurOffice,8) = ConvertToURL(ImportDialog.TemplateExportPath.Text)
+    	Applications(CurOffice,SBDOCCONVERT)  = ImportDialog.DocumentPathCheckbox.State = 1
+    	Applications(CurOffice,SBDOCRECURSIVE)  = ImportDialog.DocumentSearchSubDir.State = 1
+		Applications(CurOffice,SBDOCSOURCE)  = ConvertToURL(ImportDialog.DocumentImportPath.Text)
+		Applications(CurOffice,SBDOCTARGET) = ConvertToUrl(ImportDialog.DocumentExportPath.Text)
+    	Applications(CurOffice,SBTEMPLCONVERT) = ImportDialog.TemplateCheckbox.State = 1
+    	Applications(CurOffice,SBTEMPLRECURSIVE) = ImportDialog.TemplateSearchSubDir.State = 1
+		Applications(CurOffice,SBTEMPLSOURCE) = ConvertToURL(ImportDialog.TemplateImportPath.Text)
+		Applications(CurOffice,SBTEMPLTARGET) = ConvertToURL(ImportDialog.TemplateExportPath.Text)
 	End If
 	SaveStep_InputPath = bSaveConfiguration
 End Function
@@ -193,19 +195,18 @@ End Function
 Sub SetEnabledTemplate_InputPath()
 Dim bDoEnable as Boolean
 	With ImportDialog
-    	bDoEnable = ImportDialog.TemplateCheckbox.State = 1
+    	bDoEnable = .TemplateCheckbox.State = 1
 		.TemplateImportLabel.Enabled = bDoEnable
 		.TemplateExportLabel.Enabled = bDoEnable
 		.TemplateImportPath.Enabled = bDoEnable
 		.TemplateExportPath.Enabled = bDoEnable
 		.TemplateSearchSubDir.Enabled = bDoEnable
 		.TemplateImportPath.Enabled = bDoEnable
-&apos;Note: The following lines have bee disabled due to Bug 82532
-&apos;		If Not bDoEnable Then
-&apos;     .cbGoOn.Enabled = .DocumentPathCheckBox.State
-&apos;		Else
-&apos;			.cbGoOn.Enabled = True
-&apos;		End If
+		If Not bDoEnable Then
+			.cbGoOn.Enabled = .DocumentPathCheckbox.State = 1
+		Else
+			.cbGoOn.Enabled = True
+		End If
 	End With
 End Sub
 
@@ -219,13 +220,11 @@ Dim bDoEnable as Boolean
 		.DocumentSearchSubDir.Enabled = bDoEnable
 		.DocumentImportPath.Enabled = bDoEnable
 		.DocumentExportPath.Enabled = bDoEnable
-&apos;Note: The following lines have bee disabled due to Bug 82532
-
-&apos;		If Not bDoEnable Then
-&apos;     .cbGoOn.Enabled = .TemplateCheckBox.State
-&apos;		Else
-&apos;			.cbGoOn.Enabled = True
-&apos;		End If
+		If Not bDoEnable Then
+			.cbGoOn.Enabled = .TemplateCheckbox.State = 1
+		Else
+			.cbGoOn.Enabled = True
+		End If
 	End With
 End Sub
 
@@ -236,40 +235,41 @@ Dim i as Integer
 Dim Index as Integer
 Dim sAddText as String
 	For i = 0 To ApplCount -1
-		Index = Val(Applications(i,9))
-		If 	Applications(i,5) = &quot;1&quot; Then
+		Index = Applications(i,SBAPPLKEY)
+		If 	Applications(i,SBTEMPLCONVERT) Then
 			&apos; Templates are to be converted
-			If Index = 3 Then
-				sAddText = ReplaceString(sSumDocuments(Index),sSOHelperDocuments(0),&quot;%1&quot;) &amp; sCRLF
+			sAddText = &quot;&quot;
+			If WizardMode = SBMICROSOFTMODE Then
+				sAddText = sSumMSTemplates(Index) &amp; sCRLF
 			Else
-				sAddText = ReplaceString(sSumDocuments(Index),sTemplateCheckBox(Index),&quot;%1&quot;) &amp; sCRLF
+				sAddText = sSumSOTemplates(Index) &amp; sCRLF			
 			End If
-			sTmpText = sTmpText &amp; sAddText &amp;  Applications(i,7) &amp; sCRLF
-			If Applications(i,6) = &quot;1&quot; Then
+			sTmpText = sTmpText &amp; sAddText &amp;  ConvertFromUrl(Applications(i,SBTEMPLSOURCE)) &amp; sCRLF
+			If Applications(i,SBTEMPLRECURSIVE) Then
 				&apos; Including Subdirectories
 				sTmpText = sTmpText &amp; sSumInclusiveSubDir &amp; sCRLF
 			End If
 			sTmpText = sTmpText &amp; sSumSaveDocuments &amp; sCRLF
-			sTmpText = sTmpText &amp; Applications(i,8) &amp; sCRLF
+			sTmpText = sTmpText &amp; Applications(i,SBTEMPLTARGET) &amp; sCRLF
 			sTmpText = sTmpText &amp; sCRLF
 		End If
 
-		If 	Applications(i,1) = &quot;1&quot; Then
+		If Applications(i,SBDOCCONVERT) Then
 			&apos; Documents are to be converted
-			If Index = 3 Then
-				sAddText = ReplaceString(sSumDocuments(Index),sSOHelperDocuments(1),&quot;%1&quot;) &amp; sCRLF
+			If WizardMode = SBMICROSOFTMODE Then
+				sAddText = sSumMSDocuments(Index) &amp; sCRLF
 			Else
-				sAddText = ReplaceString(sSumDocuments(Index),sDocumentCheckBox(Index),&quot;%1&quot;) &amp; sCRLF
+				sAddText = sSumSODocuments(Index) &amp; sCRLF			
 			End If
-			sTmpText = sTmpText &amp; sAddText &amp; Applications(i,3) &amp; sCRLF
+			sTmpText = sTmpText &amp; sAddText &amp; ConvertFromUrl(Applications(i,SBDOCSOURCE)) &amp; sCRLF
 
-			If Applications(i,2) = &quot;1&quot; Then
+			If Applications(i,SBDOCRECURSIVE) Then
 				&apos; Including Subdirectories
 				sTmpText = sTmpText &amp; sSumInclusiveSubDir &amp; sCRLF
 			End If
 
 			sTmpText = sTmpText &amp; sSumSaveDocuments &amp; sCRLF
-			sTmpText = sTmpText &amp; Applications(i,4) &amp; sCRLF
+			sTmpText = sTmpText &amp; Applications(i,SBDOCTARGET) &amp; sCRLF
 			sTmpText = sTmpText &amp; sCRLF
 		End If
 	Next i
@@ -419,7 +419,7 @@ End Function
 
 Sub AssignCheckboxObjects()
 	With ImportDialog
-    	If .OptSODocuments.State Then
+    	If .OptSODocuments.State = 1 Then
 			Set ChkApplication(0) = .ChkFirstSOApplication
 			Set ChkApplication(1) = .ChkSecondSOApplication
 			Set ChkApplication(2) = .ChkThirdSOApplication
@@ -451,7 +451,7 @@ Dim sMessageNoDir as String
 Dim sShowPath as String
 	If oTextBox.Enabled Then
 		If bCheck Then
-			sShowPath = ConvertToUrl(oTextBox.Text)
+			sShowPath = oTextBox.Text
 			sUrlPath = ConvertToUrl(sShowPath)
 			If Not oUcb.Exists(sUrlPath) Then
 				If Not bCreateNew Then
@@ -496,5 +496,29 @@ Sub InitializeProgressPage(oDialog as Object)
   &apos;oDialog.LabelCurProgress.Label = &quot;&quot;
   oDialog.LabelRetrieval.FontWeight = com.sun.star.awt.FontWeight.NORMAL
   oDialog.LabelCurProgress.FontWeight = com.sun.star.awt.FontWeight.BOLD
+End Sub
+
+
+Sub GetFolderName(aEvent as Object)
+Dim oFolderDialog
+Dim iAccept as Integer
+Dim sPath as String
+Dim InitPath as String
+Dim RefControlName as String
+Dim oRefControl
+	oFolderDialog = CreateUnoService(&quot;com.sun.star.ui.FolderPicker&quot;)
+	RefControlName = aEvent.Source.Model.Tag
+	oRefControl = ImportDialogArea.GetControl(RefControlName)
+	InitPath = ConvertToUrl(oRefControl.Model.Text)
+	If oUcb.Exists(InitPath) Then
+		oFolderDialog.SetDisplayDirectory(InitPath)
+	End If
+	iAccept = oFolderDialog.Execute()
+	If iAccept = 1 Then
+		sPath = oFolderDialog.GetDisplayDirectory()
+		If oUcb.Exists(sPath) Then
+			oRefControl.Text = ConvertFromUrl(sPath)
+		End If
+	End If
 End Sub
 </script:module>
