@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: gt $ $Date: 2000-11-27 15:22:49 $
+ *  last change: $Author: sj $ $Date: 2000-12-11 14:32:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1361,17 +1361,18 @@ XclObjComment::XclObjComment( RootData& rRoot, const ScAddress& rPos, const Stri
     XclEscherEx* pEx = pMsodrawing->GetEscherEx();
     pEx->OpenContainer( ESCHER_SpContainer );
     pEx->AddShape( ESCHER_ShpInst_TextBox, SHAPEFLAG_HAVEANCHOR | SHAPEFLAG_HAVESPT );
-    pEx->BeginCount();
-    pEx->AddOpt( ESCHER_Prop_lTxid, 0 );                        // undocumented
-    pEx->AddOpt( ESCHER_Prop_FitTextToShape, 0x00080008 );      // bool field
-    pEx->AddOpt( 0x0158, 0x00000000 );                          // undocumented
-    pEx->AddOpt( ESCHER_Prop_fillColor, 0x08000050 );
-    pEx->AddOpt( ESCHER_Prop_fillBackColor, 0x08000050 );
-    pEx->AddOpt( ESCHER_Prop_fNoFillHitTest, 0x00110010 );      // bool field
-    pEx->AddOpt( ESCHER_Prop_shadowColor, 0x00000000 );
-    pEx->AddOpt( ESCHER_Prop_fshadowObscured, 0x00030003 );     // bool field
-    pEx->AddOpt( ESCHER_Prop_fPrint, 0x000A0002 );              // bool field
-    pEx->EndCount( ESCHER_OPT, 3 );
+    EscherPropertyContainer aPropOpt;
+    aPropOpt.AddOpt( ESCHER_Prop_lTxid, 0 );                        // undocumented
+    aPropOpt.AddOpt( ESCHER_Prop_FitTextToShape, 0x00080008 );      // bool field
+    aPropOpt.AddOpt( 0x0158, 0x00000000 );                          // undocumented
+    aPropOpt.AddOpt( ESCHER_Prop_fillColor, 0x08000050 );
+    aPropOpt.AddOpt( ESCHER_Prop_fillBackColor, 0x08000050 );
+    aPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x00110010 );      // bool field
+    aPropOpt.AddOpt( ESCHER_Prop_shadowColor, 0x00000000 );
+    aPropOpt.AddOpt( ESCHER_Prop_fshadowObscured, 0x00030003 );     // bool field
+    aPropOpt.AddOpt( ESCHER_Prop_fPrint, 0x000A0002 );              // bool field
+    aPropOpt.Commit( pEx->GetStream() );
+
     XclEscherClientAnchor( rRoot.pDoc, rPos ).WriteData( *pEx );
     pEx->AddAtom( 0, ESCHER_ClientData );                       // OBJ record
     pMsodrawing->UpdateStopPos();
@@ -1439,13 +1440,13 @@ XclObjDropDown::XclObjDropDown( RootData& rRoot, const ScAddress& rPos, BOOL bFi
     XclEscherEx* pEx = pMsodrawing->GetEscherEx();
     pEx->OpenContainer( ESCHER_SpContainer );
     pEx->AddShape( ESCHER_ShpInst_HostControl, SHAPEFLAG_HAVEANCHOR | SHAPEFLAG_HAVESPT );
-    pEx->BeginCount();
-    pEx->AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x01040104 ); // bool field
-    pEx->AddOpt( ESCHER_Prop_FitTextToShape, 0x00080008 );      // bool field
-    pEx->AddOpt( ESCHER_Prop_fNoFillHitTest, 0x00010000 );      // bool field
-    pEx->AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x00080000 );     // bool field
-    pEx->AddOpt( ESCHER_Prop_fPrint, 0x000A0000 );              // bool field
-    pEx->EndCount( ESCHER_OPT, 3 );
+    EscherPropertyContainer aPropOpt;
+    aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x01040104 ); // bool field
+    aPropOpt.AddOpt( ESCHER_Prop_FitTextToShape, 0x00080008 );      // bool field
+    aPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x00010000 );      // bool field
+    aPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x00080000 );     // bool field
+    aPropOpt.AddOpt( ESCHER_Prop_fPrint, 0x000A0000 );              // bool field
+    aPropOpt.Commit( pEx->GetStream() );
 
     XclEscherClientAnchor aAnchor( rRoot, 0x0001 );             // MsofbtClientAnchor
     aAnchor.SetDropDownPosition( rPos );
