@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 14:25:09 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 19:47:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,9 @@
 #ifndef _SVX_SRIPTTYPEITEM_HXX
 #include <svx/scripttypeitem.hxx>
 #endif
+#ifndef _SVX_UNOWPAGE_HXX
+#include <svx/unopage.hxx>
+#endif
 
 #ifndef _SVX_FLDITEM_HXX
 #define ITEMID_FIELD    EE_FEATURE_FIELD
@@ -193,8 +196,6 @@ SdPage::SdPage(SdDrawDocument& rNewDoc, StarBASIC* pBasic, BOOL bMasterPage) :
     FmFormPage(rNewDoc, pBasic, bMasterPage),
     SdrObjUserCall(),
     bSelected(FALSE),
-    eFadeSpeed(FADE_SPEED_MEDIUM),
-    eFadeEffect(::com::sun::star::presentation::FadeEffect_NONE),
     ePresChange(PRESCHANGE_MANUAL),
     nTime(1),
     bSoundOn(FALSE),
@@ -206,7 +207,12 @@ SdPage::SdPage(SdDrawDocument& rNewDoc, StarBASIC* pBasic, BOOL bMasterPage) :
     pPageLink(NULL),
     bBackgroundFullSize( FALSE ),
     nPaperBin(PAPERBIN_PRINTER_SETTINGS),
-    mpItems(NULL)
+    mpItems(NULL),
+    mnTransitionType(0),
+    mnTransitionSubtype(0),
+    mbTransitionDirection(sal_True),
+    mnTransitionFadeColor(0),
+    mfTransitionDuration(2.0)
 {
     // Der Layoutname der Seite wird von SVDRAW benutzt, um die Praesentations-
     // vorlagen der Gliederungsobjekte zu ermitteln. Darum enthaelt er bereits
@@ -806,6 +812,7 @@ void SdPage::Changed(const SdrObject& rObj, SdrUserCallType eType, const Rectang
                     List* pList = ((SdDrawDocument*) pModel)->GetDeletedPresObjList();
                     pList->Insert((void*) &rObj, LIST_APPEND);
                 }
+                removeAnimations( &rObj );
             }
             break;
 
@@ -2064,6 +2071,8 @@ SdrObject* SdPage::RemoveObject(ULONG nObjNum)
 
     ((SdDrawDocument*) pModel)->RemoveObject(pObj, this);
 
+    removeAnimations( pObj );
+
     return(pObj);
 }
 
@@ -3314,17 +3323,33 @@ uno::Reference< uno::XInterface > SdPage::createUnoPage()
     return createUnoPageImpl( this );
 }
 
+/** returns the SdPage implementation for the given XDrawPage or 0 if not available */
+SdPage* SdPage::getImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& xPage )
+{
+    try
+    {
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XUnoTunnel > xUnoTunnel( xPage, ::com::sun::star::uno::UNO_QUERY );
+        if( xUnoTunnel.is() )
+        {
+            SvxDrawPage* pUnoPage = static_cast< SvxDrawPage* >( (void*)xUnoTunnel->getSomething( SvxDrawPage::getUnoTunnelId() ) );
+            if( pUnoPage )
+                return static_cast< SdPage* >( pUnoPage->GetSdrPage() );
+        }
+    }
+    catch( ::com::sun::star::uno::Exception& e )
+    {
+        (void)e;
+        DBG_ERROR("sd::SdPage::getImplementation(), exception cathced!" );
+    }
 
-
+    return 0;
+}
 
 void SdPage::SetName (const String& rName)
 {
     FmFormPage::SetName (rName);
     ActionChanged();
 }
-
-
-
 
 HeaderFooterSettings& SdPage::getHeaderFooterSettings()
 {
@@ -3373,27 +3398,24 @@ bool SdPage::checkVisibility(
                 const bool bMasterObj(rDisplayInfo.GetMasterPagePainting());
                 if( bMasterObj || ( pPage->GetPageKind() == PK_HANDOUT && bIsPrinting ) )
                 {
-                    if( pPageView )
+                    // get the page that is currently painted
+                    SdPage* pPage = (SdPage*)rDisplayInfo.GetProcessedPage();
+
+                    if( pPage )
                     {
-                        // get the page that is currently painted
-                        SdPage* pPage = (SdPage*)rDisplayInfo.GetProcessedPage();
+                        // if we are not on a masterpage, see if we have to draw this header&footer object at all
+                        const sd::HeaderFooterSettings& rSettings = pPage->getHeaderFooterSettings();
 
-                        if( pPage )
+                        switch( eKind )
                         {
-                            // if we are not on a masterpage, see if we have to draw this header&footer object at all
-                            const sd::HeaderFooterSettings& rSettings = pPage->getHeaderFooterSettings();
-
-                            switch( eKind )
-                            {
-                            case PRESOBJ_FOOTER:
-                                return rSettings.mbFooterVisible;
-                            case PRESOBJ_HEADER:
-                                return rSettings.mbHeaderVisible;
-                            case PRESOBJ_DATETIME:
-                                return rSettings.mbDateTimeVisible;
-                            case PRESOBJ_SLIDENUMBER:
-                                return rSettings.mbSlideNumberVisible;
-                            }
+                        case PRESOBJ_FOOTER:
+                            return rSettings.mbFooterVisible;
+                        case PRESOBJ_HEADER:
+                            return rSettings.mbHeaderVisible;
+                        case PRESOBJ_DATETIME:
+                            return rSettings.mbDateTimeVisible;
+                        case PRESOBJ_SLIDENUMBER:
+                            return rSettings.mbSlideNumberVisible;
                         }
                     }
                 }
