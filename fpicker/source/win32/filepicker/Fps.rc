@@ -59,7 +59,7 @@ BEGIN
     LTEXT           "",1119,0,0,236,38
     CONTROL         "Mit Schreibschutz öffnen",103,"Button",BS_AUTOCHECKBOX | 
                     WS_TABSTOP,54,56,154,14
-    COMBOBOX        107,54,38,156,52,CBS_DROPDOWNLIST | CBS_SORT | 
+    COMBOBOX        107,54,38,156,52,CBS_DROPDOWNLIST | 
                     WS_VSCROLL | WS_TABSTOP
     LTEXT           "Version:",207,5,38,47,11
 END
@@ -70,7 +70,7 @@ FONT 8, "MS Shell Dlg"
 BEGIN
     CONTROL         "Mit Schreibschutz öffnen",103,"Button",BS_AUTOCHECKBOX | 
                     WS_TABSTOP,130,51,161,14
-    COMBOBOX        107,130,35,164,52,CBS_DROPDOWNLIST | CBS_SORT | 
+    COMBOBOX        107,130,35,164,52,CBS_DROPDOWNLIST |  
                     WS_VSCROLL | WS_TABSTOP
     LTEXT           "Version:",207,68,37,56,11
     LTEXT           "",1119,0,0,336,35
@@ -85,7 +85,7 @@ BEGIN
     CONTROL         "Vorschau",105,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,53,
                     53,124,14
     LTEXT           "",1119,0,0,185,25
-    COMBOBOX        109,54,25,156,54,CBS_DROPDOWNLIST | CBS_SORT | 
+    COMBOBOX        109,54,25,156,54,CBS_DROPDOWNLIST | 
                     WS_VSCROLL | WS_TABSTOP
     LTEXT           "Bildvorlage:",209,5,26,48,10
 END
@@ -99,7 +99,7 @@ BEGIN
     CONTROL         "Vorschau",105,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,130,
                     58,144,16
     LTEXT           "",1119,0,0,281,28
-    COMBOBOX        109,130,28,164,62,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | 
+    COMBOBOX        109,130,28,164,62,CBS_DROPDOWN | WS_VSCROLL | 
                     WS_TABSTOP
     LTEXT           "Bildvorlage:",209,67,29,47,11
 END
@@ -110,7 +110,7 @@ FONT 8, "MS Shell Dlg"
 BEGIN
     CONTROL         "Automatische Dateinamenserweiterung",100,"Button",
                     BS_AUTOCHECKBOX | WS_TABSTOP,54,56,161,14
-    COMBOBOX        108,54,38,156,52,CBS_DROPDOWNLIST | CBS_SORT | 
+    COMBOBOX        108,54,38,156,52,CBS_DROPDOWNLIST |  
                     WS_VSCROLL | WS_TABSTOP
     LTEXT           "Vorlagen:",208,5,38,47,11
     LTEXT           "",1119,0,0,215,38
@@ -122,7 +122,7 @@ FONT 8, "MS Shell Dlg"
 BEGIN
     CONTROL         "Automatische Dateinamenserweiterung",100,"Button",
                     BS_AUTOCHECKBOX | WS_TABSTOP,130,58,157,14
-    COMBOBOX        108,130,41,164,100,CBS_DROPDOWNLIST | CBS_SORT | 
+    COMBOBOX        108,130,41,164,100,CBS_DROPDOWNLIST |  
                     WS_VSCROLL | WS_TABSTOP
     LTEXT           "Vorlagen:",208,67,42,58,8
     LTEXT           "",1119,0,0,293,41
