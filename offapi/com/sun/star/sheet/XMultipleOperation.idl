@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMultipleOperation.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:08:21 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 23:09:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ module com {  module sun {  module star {  module sheet {
 /** provides a method to apply a Multiple Operations Table to the
     cell range.
  */
-interface XMultipleOperation: com::sun::star::uno::XInterface
+published interface XMultipleOperation: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
