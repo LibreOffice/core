@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XclImpChangeTrack.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 13:44:03 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 09:47:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,7 +192,7 @@ void XclImpChangeTrack::DoDeleteRange( const ScRange& rRange )
 
 sal_uInt16 XclImpChangeTrack::ReadTabNum()
 {
-    return pExcRoot->pIR->GetTabIdBuffer().GetCurrentIndex( pStrm->ReaduInt16(), nTabIdCount );
+    return pExcRoot->pIR->GetTabInfo().GetCurrentIndex( pStrm->ReaduInt16(), nTabIdCount );
 }
 
 void XclImpChangeTrack::ReadDateTime( DateTime& rDateTime )
@@ -227,10 +227,10 @@ sal_Bool XclImpChangeTrack::Read3DTabRefInfo( sal_uInt16& rFirstTab, sal_uInt16&
     {
         // internal ref - read tab num and return sc tab num (position in TABID list)
         pStrm->Ignore( 3 );
-        rFirstTab = pExcRoot->pIR->GetTabIdBuffer().GetCurrentIndex( pStrm->ReaduInt16(), nTabIdCount );
+        rFirstTab = pExcRoot->pIR->GetTabInfo().GetCurrentIndex( pStrm->ReaduInt16(), nTabIdCount );
         sal_uInt8 nFillByte = pStrm->ReaduInt8();
         rLastTab = (nFillByte == 0x00) ?
-            pExcRoot->pIR->GetTabIdBuffer().GetCurrentIndex( pStrm->ReaduInt16(), nTabIdCount ) : rFirstTab;
+            pExcRoot->pIR->GetTabInfo().GetCurrentIndex( pStrm->ReaduInt16(), nTabIdCount ) : rFirstTab;
     }
     else
     {
