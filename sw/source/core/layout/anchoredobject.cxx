@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anchoredobject.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: od $ $Date: 2004-08-03 06:05:14 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:02:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,6 +145,7 @@ SwAnchoredObject::SwAnchoredObject() :
     // --> OD 2004-06-30 #i28701#
     mpPageFrm( 0L ),
     // <--
+    maRelPos(),
     maLastCharRect(),
     mnLastTopOfLine( 0L ),
     mpVertPosOrientFrm( 0L ),
@@ -439,7 +440,38 @@ void SwAnchoredObject::SetCurrRelPos( Point _aRelPos )
 
 void SwAnchoredObject::ObjectAttachedToAnchorFrame()
 {
-    // default behaviour: nothing to do
+    // default behaviour:
+    // update layout direction, the anchored object is assigned to
+    UpdateLayoutDir();
+}
+
+/** method update layout direction the layout direction, the anchored
+    object is in
+
+    OD 2004-07-27 #i31698#
+    method has typically to be called, if the anchored object gets its
+    anchor frame assigned.
+
+    @author OD
+*/
+void SwAnchoredObject::UpdateLayoutDir()
+{
+    SwFrmFmt::tLayoutDir nLayoutDir = SwFrmFmt::HORI_L2R;
+    const SwFrm* pAnchorFrm = GetAnchorFrm();
+    if ( pAnchorFrm )
+    {
+        const bool bVert = pAnchorFrm->IsVertical();
+        const bool bR2L = pAnchorFrm->IsRightToLeft();
+        if ( bVert )
+        {
+            nLayoutDir = SwFrmFmt::VERT_R2L;
+        }
+        else if ( bR2L )
+        {
+            nLayoutDir = SwFrmFmt::HORI_R2L;
+        }
+    }
+    GetFrmFmt().SetLayoutDir( nLayoutDir );
 }
 
 /** method to perform necessary invalidations for the positioning of
