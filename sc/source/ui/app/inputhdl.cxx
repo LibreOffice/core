@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputhdl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: nn $ $Date: 2001-04-06 14:32:39 $
+ *  last change: $Author: nn $ $Date: 2001-05-11 17:13:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,7 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/docfile.hxx>
+#include <sfx2/printer.hxx>
 #include <offmgr/app.hxx>
 #include <svtools/zforlist.hxx>
 #include <vcl/sound.hxx>
@@ -400,6 +401,21 @@ void ScInputHandler::SetRefScale( const Fraction& rX, const Fraction& rY )
     }
 }
 
+void ScInputHandler::UpdateRefDevice()
+{
+    if (!pEngine)
+        return;
+
+    BOOL bTextWysiwyg = SC_MOD()->GetInputOptions().GetTextWysiwyg();
+    if ( bTextWysiwyg && pActiveViewSh )
+        pEngine->SetRefDevice( pActiveViewSh->GetViewData()->GetDocument()->GetPrinter() );
+    else
+        pEngine->SetRefDevice( NULL );
+
+    MapMode aMode( MAP_100TH_MM, Point(), aScaleX, aScaleY );
+    pEngine->SetRefMapMode( aMode );
+}
+
 void ScInputHandler::ImplCreateEditEngine()
 {
     if ( !pEngine )
@@ -412,8 +428,7 @@ void ScInputHandler::ImplCreateEditEngine()
         else
             pEngine = new ScFieldEditEngine( EditEngine::CreatePool(), NULL, TRUE );
         pEngine->SetWordDelimiters( ScEditUtil::ModifyDelimiters( pEngine->GetWordDelimiters() ) );
-        MapMode aMode( MAP_100TH_MM, Point(), aScaleX, aScaleY );
-        pEngine->SetRefMapMode( aMode );
+        UpdateRefDevice();      // also sets MapMode
         pEngine->SetPaperSize( Size( 1000,300 ) );
         pEditDefaults = new SfxItemSet( pEngine->GetEmptyItemSet() );
 
@@ -1239,6 +1254,9 @@ void ScInputHandler::ViewShellGone(ScTabViewShell* pViewSh)     // wird synchron
         DBG_ERROR("pActiveViewSh weg");
         pActiveViewSh = NULL;
     }
+
+    if ( SC_MOD()->GetInputOptions().GetTextWysiwyg() )
+        UpdateRefDevice();      // don't keep old document's printer as RefDevice
 }
 
 void ScInputHandler::UpdateActiveView()

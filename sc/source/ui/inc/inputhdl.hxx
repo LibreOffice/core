@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputhdl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-12-15 20:34:24 $
+ *  last change: $Author: nn $ $Date: 2001-05-11 17:13:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,7 @@ class TypedStrCollection;
 class ScRangeFindList;
 class Timer;
 class KeyEvent;
+class CommandEvent;
 
 struct ESelection;
 
@@ -228,6 +229,7 @@ public:
     void            ShowTip( const String& rText );     // am Cursor
 
     void            SetRefScale( const Fraction& rX, const Fraction& rY );
+    void            UpdateRefDevice();
 
     EditView*       GetActiveView();
     EditView*       GetTableView()      { return pTableView; }
