@@ -89,6 +89,11 @@ Dim i as Integer
 		.chkSOApplication4.Label = sSODocumentCheckbox(3)
 		.cmdBack.Enabled = False
 		.Step = 1
+		
+		If Not oFactoryKey.hasbyName(&quot;com.sun.star.text.TextDocument&quot;) Then
+			.chkLogfile.State = 0
+			.chkLogfile.Enabled = False
+		End If	
 	End With
 	CheckModuleInstallation()
 	ToggleNextButton()
@@ -129,9 +134,9 @@ Dim oNullObject as Object
 			&apos; Note: SO-Helper Applications are partly treated like templates although they only have documents
 			.hlnTemplates.Label = sProgressMoreDocs
 			.chkTemplatePath.Label = sSOHelperDocuments(0,0)
-			.chkTemplatePath.Enabled = oFactoriesAccess.HasByName(sSOHelperDocuments(0,1))
+			.chkTemplatePath.Enabled = oFactoryKey.HasByName(sSOHelperDocuments(0,1))
 			.chkDocumentPath.Label = sSOHelperDocuments(1,0)
-			.chkDocumentPath.Enabled = oFactoriesAccess.HasByName(sSOHelperDocuments(1,1))
+			.chkDocumentPath.Enabled = oFactoryKey.HasByName(sSOHelperDocuments(1,1))
 		Else
 			.chkTemplatePath.Enabled = True
 			.chkDocumentPath.Enabled = True

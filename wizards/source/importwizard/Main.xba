@@ -6,11 +6,12 @@
 Public HeaderPreviews(4) as Object
 Public ImportDialog as Object
 Public ImportDialogArea as Object
+Public oFactoryKey as Object
+
 
 &apos; If the ProgressPage ist already on Top The Dialog will be immediately closed when this flag is
 &apos; set to False
 Public bConversionIsRunnig as Boolean
-Public oFactoriesAccess as Object
 Public RetValue as Integer
 
 Sub Main()
@@ -20,9 +21,9 @@ Sub Main()
 	BasicLibraries.LoadLibrary(&quot;Tools&quot;)
 	RetValue = 10
 	bConversionIsRunnig = False
-	sCRLF = CHR(10) &amp; CHR(13)
+	sCRLF = CHR(13) &amp; CHR(10)
 	oUcb = createUnoService(&quot;com.sun.star.ucb.SimpleFileAccess&quot;)
-	oFactoriesAccess = GetRegistryKeyContent(&quot;org.openoffice.Setup/Office/Factories&quot;)
+	oFactoryKey = GetRegistryKeyContent(&quot;org.openoffice.Setup/Office/Factories&quot;)
 	SOBitmapPath = GetOfficeSubPath(&quot;Template&quot;, &quot;wizard/bitmap&quot;)
 	SOWorkPath = GetPathSettings(&quot;Work&quot;, False)
 	SOTemplatePath = GetPathSettings(&quot;Template&quot;,False,1)
@@ -181,14 +182,14 @@ Dim i as Integer
 	If Instr(1,ModuleName,&quot;/&quot;) &lt;&gt; 0 Then
 		NameList() = ArrayoutOfString(ModuleName,&quot;/&quot;, MaxIndex)
 		For i = 0 To MaxIndex
-			If Not oFactoriesAccess.HasByName(NameList(i)) Then
+			If Not oFactoryKey.HasByName(NameList(i)) Then
 				CheckInstalledModule() = False
 				Exit Function
 			End If
 		Next i
 		CheckInstalledModule() = True
 	Else
-		CheckInstalledModule() = oFactoriesAccess.HasByName(ModuleName)
+		CheckInstalledModule() = oFactoryKey.HasByName(ModuleName)
 	End If
 End Function
 
