@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailwindow.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-29 09:28:04 $
+ *  last change: $Author: kz $ $Date: 2000-12-01 08:02:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -323,7 +323,7 @@ Window RID_MAIL_WINDOW
         Text[ polish ] = "Od:";
         Text[ portuguese_brazilian ] = "From:";
         Text[ japanese ] = "嵎弌恖:";
-        Text[ korean ] = "何磐:";
+        Text[ korean ] = "~何磐:";
         Text[ chinese_simplified ] = "发件人：";
         Text[ chinese_traditional ] = "盚ン";
         Text[ turkish ] = "From:";
@@ -356,7 +356,7 @@ Window RID_MAIL_WINDOW
         Text[ polish ] = "Priorytet:";
         Text[ portuguese_brazilian ] = "Priority:";
         Text[ japanese ] = "廳梫搙:";
-        Text[ korean ] = "快急鉴困:";
+        Text[ korean ] = "~快急鉴困:";
         Text[ chinese_simplified ] = "重要性：";
         Text[ chinese_traditional ] = "璶┦";
         Text[ turkish ] = "Priority:";
