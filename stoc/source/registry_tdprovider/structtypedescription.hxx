@@ -2,9 +2,9 @@
  *
  *  $RCSfile: structtypedescription.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 02:32:55 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 15:04:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,10 +62,12 @@
 #ifndef INCLUDED_stoc_source_registry_tdprovider_structtypedescription_hxx
 #define INCLUDED_stoc_source_registry_tdprovider_structtypedescription_hxx
 
+#include "com/sun/star/reflection/XPublished.hpp"
 #include "com/sun/star/reflection/XStructTypeDescription.hpp"
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/Sequence.hxx"
-#include "cppuhelper/implbase1.hxx"
+#include "cppuhelper/implbase2.hxx"
+#include "rtl/ref.hxx"
 #include "sal/types.h"
 
 namespace com { namespace sun { namespace star {
@@ -73,12 +75,14 @@ namespace com { namespace sun { namespace star {
     namespace reflection { class XCompoundTypeDescription; }
 } } }
 namespace rtl { class OUString; }
+namespace stoc_rdbtdp { class CompoundTypeDescriptionImpl; }
 
 namespace stoc { namespace registry_tdprovider {
 
 class StructTypeDescription:
-    public cppu::WeakImplHelper1<
-        com::sun::star::reflection::XStructTypeDescription >
+    public cppu::WeakImplHelper2<
+        com::sun::star::reflection::XStructTypeDescription,
+        com::sun::star::reflection::XPublished >
 {
 public:
     StructTypeDescription(
@@ -86,7 +90,7 @@ public:
             com::sun::star::container::XHierarchicalNameAccess > const &
             manager,
         rtl::OUString const & name, rtl::OUString const & baseTypeName,
-        com::sun::star::uno::Sequence< sal_Int8 > const & data);
+        com::sun::star::uno::Sequence< sal_Int8 > const & data, bool published);
 
     virtual ~StructTypeDescription();
 
@@ -119,13 +123,15 @@ public:
             com::sun::star::reflection::XTypeDescription > >
     SAL_CALL getTypeArguments() throw (com::sun::star::uno::RuntimeException);
 
+    virtual sal_Bool SAL_CALL isPublished()
+        throw (com::sun::star::uno::RuntimeException);
+
 private:
     StructTypeDescription(StructTypeDescription &); // not implemented
     void operator =(StructTypeDescription); // not implemented
 
     com::sun::star::uno::Sequence< sal_Int8 > m_data;
-    com::sun::star::uno::Reference<
-        com::sun::star::reflection::XCompoundTypeDescription > m_base;
+    rtl::Reference< stoc_rdbtdp::CompoundTypeDescriptionImpl > m_base;
 };
 
 } }
