@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querydlg.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 15:21:12 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 12:47:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -529,6 +529,13 @@ ModalDialog DLG_QRY_JOIN
     Text[ slovak ] = "Vlastnosti spojenia";
     Text[ hungarian ] = "Ã–sszekapcsolÃ¡s tulajdonsÃ¡gai";
     Text[ slovenian ] = "Lastnosti spoja";
+};
+
+String STR_JOIN_TYPE_HINT
+{
+    Text = "Bitte beachten Sie, daß einige Datenbanken eventuell diese Art der Verknüpfung nicht unterstützen.";
+    Text [ english ] = "Please note that some databases may not support this join type.";
+    Text [ english_us ] = "Please note that some databases may not support this join type.";
 };
 
 String STR_QUERY_INNER_JOIN
