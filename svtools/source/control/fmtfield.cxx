@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtfield.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-17 08:55:26 $
+ *  last change: $Author: fs $ $Date: 2000-11-17 09:20:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -918,7 +918,7 @@ void DoubleNumericField::ResetConformanceTester()
     aParam.Locale.Language = sLanguage;
     aParam.Locale.Country = sCountry;
 
-    m_pConformanceTester = new TextSearch(aParam);
+    m_pConformanceTester = new ::utl::TextSearch(aParam);
 #else
     m_pConformanceTester = new SearchText(SearchParam(sDescription, SearchParam::SRCH_REGEXP, FALSE), GetpApp()->GetAppInternational());
 #endif
