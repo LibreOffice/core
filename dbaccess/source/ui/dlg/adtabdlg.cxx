@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adtabdlg.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-11 12:05:02 $
+ *  last change: $Author: vg $ $Date: 2002-07-16 09:53:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,7 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
 #endif
+#include <algorithm>
 
 
 // slot ids
