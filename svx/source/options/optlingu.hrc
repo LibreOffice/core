@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optlingu.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tl $ $Date: 2000-12-07 09:14:24 $
+ *  last change: $Author: tl $ $Date: 2001-06-11 07:06:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,7 @@
 
 // defines ---------------------------------------------------------------
 
-#define GB_LINGUISTIC           101
+#define FL_LINGUISTIC           101
 
 #define FT_LINGU_MODULES        111
 #define CLB_LINGU_MODULES       112
@@ -94,39 +94,29 @@
 #define BMP_CHKBUT_UNCHECKED    301
 #define BMP_CHKBUT_CHECKED      302
 
-#define GB_NUMVAL_PREBREAK      305
-#define BT_OK_PREBREAK          306
-#define BT_CANCEL_PREBREAK      307
-#define ED_PREBREAK             308
-#define PB_EDIT_MODULES_PRIO_UP     309
-#define PB_EDIT_MODULES_PRIO_DOWN   310
+#define PB_OK                               70
+#define PB_HELP                             72
+
+#define ST_SPELL                            82
+#define ST_HYPH                             83
+#define ST_THES                             84
+
+#define FL_NUMVAL_PREBREAK                  305
+#define BT_OK_PREBREAK                      306
+#define BT_CANCEL_PREBREAK                  307
+#define ED_PREBREAK                         308
+#define PB_EDIT_MODULES_PRIO_UP             309
+#define PB_EDIT_MODULES_PRIO_DOWN           310
 #define PB_EDIT_MODULES_PRIO_BACK           311
-#define PB_EDIT_MODULES_NEW_DIC             312
-#define PB_EDIT_MODULES_PRIO_EDIT_DIC       313
-#define PB_EDIT_MODULES_PRIO_DEL_DIC        314
-#define GB_EDIT_MODULES_OPTIONS             315
-#define FT_EDIT_MODULES_LANGUAGE            316
-#define LB_EDIT_MODULES_LANGUAGE            317
-#define CLB_EDIT_MODULES_MODULES            318
-#define GB_EDIT_MODULES_DICS                319
-#define CLB_EDIT_MODULES_DICS               320
 
+#define FT_LINGU_DICS                       312
+#define CLB_LINGU_DICS                      313
+#define PB_LINGU_DICS_NEW_DIC               314
+#define PB_LINGU_DICS_EDIT_DIC              315
+#define PB_LINGU_DICS_DEL_DIC               316
 
-//////////////////////////////////////////////////////////////////////
-
-// used at least in SvxExternalLinguTabPage
-#define PB_OK                   70
-#define PB_CANCEL               71
-#define PB_HELP                 72
-#define GB_LINGU                73
-#define LB_LINGU                74
-#define PB_OPTIONS              75
-#define CB_STDSPELL             76
-#define CB_STDTHES              77
-#define CB_STDHYPH              78
-#define GB_SETTINGS             79
-
-#define ST_SPELL                82
-#define ST_HYPH                 83
-#define ST_THES                 84
+#define FL_EDIT_MODULES_OPTIONS             317
+#define FT_EDIT_MODULES_LANGUAGE            318
+#define LB_EDIT_MODULES_LANGUAGE            319
+#define CLB_EDIT_MODULES_MODULES            320
 
