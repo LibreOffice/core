@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLDetectiveContext.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2002-02-08 15:50:07 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:48:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@ struct ScMyImpDetectiveObj
 {
     ScRange                     aSourceRange;
     ScDetectiveObjType          eObjType;
-    sal_Bool                    bHasError : 1;
+    sal_Bool                    bHasError;
 
                                 ScMyImpDetectiveObj();
 };
@@ -164,7 +164,7 @@ class ScXMLDetectiveHighlightedContext : public SvXMLImportContext
 private:
     ScMyImpDetectiveObjVec*     pDetectiveObjVec;
     ScMyImpDetectiveObj         aDetectiveObj;
-    sal_Bool                    bValid : 1;
+    sal_Bool                    bValid;
 
     const ScXMLImport&          GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport&                GetScImport()       { return (ScXMLImport&)GetImport(); }
@@ -194,7 +194,7 @@ class ScXMLDetectiveOperationContext : public SvXMLImportContext
 {
 private:
     ScMyImpDetectiveOp          aDetectiveOp;
-    sal_Bool                    bHasType : 1;
+    sal_Bool                    bHasType;
 
     const ScXMLImport&          GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport&                GetScImport()       { return (ScXMLImport&)GetImport(); }
