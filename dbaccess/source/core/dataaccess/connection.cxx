@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connection.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: oj $ $Date: 2002-12-12 10:43:23 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 10:35:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -378,51 +378,50 @@ OConnection::OConnection(ODatabaseSource& _rDB, const OConfigurationNode& _rTabl
     try
     {
         sal_Bool bCase = sal_True;
+        Reference<XDatabaseMetaData> xMeta;
         try
         {
-            bCase = getMetaData()->storesMixedCaseQuotedIdentifiers();
+            xMeta = getMetaData();
+            bCase = xMeta.is() && xMeta->storesMixedCaseQuotedIdentifiers();
         }
         catch(SQLException&)
         {
         }
         m_pTables = new OTableContainer(_rTablesConfig,_rCommitLocation,*this, m_aMutex,this, bCase, this,this);
         // check if we supports types
-        Reference<XResultSet> xRes = m_xConnection->getMetaData()->getTableTypes();
-        if(xRes.is())
+        if ( xMeta.is() )
         {
-            ::rtl::OUString sView = ::rtl::OUString::createFromAscii("VIEW");
-            Reference<XRow> xRow(xRes,UNO_QUERY);
-            while(xRes->next())
+            Reference<XResultSet> xRes = xMeta->getTableTypes();
+            if(xRes.is())
             {
-                ::rtl::OUString sValue = xRow->getString(1);
-                if( !xRow->wasNull() && sValue == sView)
+                ::rtl::OUString sView = ::rtl::OUString::createFromAscii("VIEW");
+                Reference<XRow> xRow(xRes,UNO_QUERY);
+                while(xRes->next())
                 {
-                    m_bSupportsViews = sal_True;
-                    break;
+                    ::rtl::OUString sValue = xRow->getString(1);
+                    if( !xRow->wasNull() && sValue == sView)
+                    {
+                        m_bSupportsViews = sal_True;
+                        break;
+                    }
                 }
             }
-        }
-        // some dbs doesn't support this type so we should ask if a XViewsSupplier is supported
-        if(!m_bSupportsViews)
-        {
-//          Reference< XDriverAccess> xManager(m_xORB->createInstance(SERVICE_SDBC_DRIVERMANAGER), UNO_QUERY);
-//          Reference< XDataDefinitionSupplier > xSupp(xManager->getDriverByURL(m_xConnection->getMetaData()->getURL()),UNO_QUERY);
-//          // if we don't get the catalog from the original driver we have to try them all.
-//          if ( !xSupp.is() )
-//          {
-//          }
-            Reference< XViewsSupplier > xMaster;
-            m_xMasterTables = ::dbtools::getDataDefinitionByURLAndConnection(m_xConnection->getMetaData()->getURL(),m_xMasterConnection,m_xORB);
-            xMaster = Reference< XViewsSupplier >(m_xMasterTables,UNO_QUERY);
+            // some dbs doesn't support this type so we should ask if a XViewsSupplier is supported
+            if(!m_bSupportsViews)
+            {
+                Reference< XViewsSupplier > xMaster;
+                m_xMasterTables = ::dbtools::getDataDefinitionByURLAndConnection(xMeta->getURL(),m_xMasterConnection,m_xORB);
+                xMaster = Reference< XViewsSupplier >(m_xMasterTables,UNO_QUERY);
 
-            if (xMaster.is() && xMaster->getViews().is())
-                m_bSupportsViews = sal_True;
-        }
-        if(m_bSupportsViews)
-        {
-            m_pViews = new OViewContainer(*this, m_aMutex, this, bCase,this,this);
-            m_pViews->addContainerListener(m_pTables);
-            m_pTables->addContainerListener(m_pViews);
+                if (xMaster.is() && xMaster->getViews().is())
+                    m_bSupportsViews = sal_True;
+            }
+            if(m_bSupportsViews)
+            {
+                m_pViews = new OViewContainer(*this, m_aMutex, this, bCase,this,this);
+                m_pViews->addContainerListener(m_pTables);
+                m_pTables->addContainerListener(m_pViews);
+            }
         }
     }
     catch(const SQLException&)
@@ -653,7 +652,9 @@ void OConnection::refresh(const Reference< XNameAccess >& _rToBeRefreshed)
             {
                 try
                 {
-                    m_xMasterTables = ::dbtools::getDataDefinitionByURLAndConnection(m_xConnection->getMetaData()->getURL(),m_xMasterConnection,m_xORB);
+                    Reference<XDatabaseMetaData> xMeta = getMetaData();
+                    if ( xMeta.is() )
+                        m_xMasterTables = ::dbtools::getDataDefinitionByURLAndConnection(xMeta->getURL(),m_xMasterConnection,m_xORB);
                 }
                 catch(SQLException&)
                 {
@@ -681,7 +682,9 @@ void OConnection::refresh(const Reference< XNameAccess >& _rToBeRefreshed)
             {
                 try
                 {
-                    m_xMasterTables = ::dbtools::getDataDefinitionByURLAndConnection(m_xConnection->getMetaData()->getURL(),m_xMasterConnection,m_xORB);
+                    Reference<XDatabaseMetaData> xMeta = getMetaData();
+                    if ( xMeta.is() )
+                        m_xMasterTables = ::dbtools::getDataDefinitionByURLAndConnection(xMeta->getURL(),m_xMasterConnection,m_xORB);
                     xMaster = Reference< XViewsSupplier >(m_xMasterTables,UNO_QUERY);
                 }
                 catch(SQLException&)
