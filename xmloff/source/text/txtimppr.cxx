@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimppr.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dvo $ $Date: 2001-09-21 16:27:53 $
+ *  last change: $Author: mib $ $Date: 2001-10-31 09:54:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,9 +85,9 @@
 #endif
 
 #define XML_LINE_LEFT 0
-#define XML_LINE_RIGHT 0
-#define XML_LINE_TOP 0
-#define XML_LINE_BOTTOM 0
+#define XML_LINE_RIGHT 1
+#define XML_LINE_TOP 2
+#define XML_LINE_BOTTOM 3
 #define MIN_BORDER_DIST 49
 
 using namespace ::rtl;
