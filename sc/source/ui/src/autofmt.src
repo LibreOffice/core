@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autofmt.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:04 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 20:38:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,7 +175,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text[ chinese_simplified ] = "µ÷Õû¿í/¸ß(~A)";
         Text[ russian ] = "Ïîäáîğ øèğèíû/âûñîòû";
         Text[ polish ] = "Dostosuj szerokoœæ/wysokoœæ";
-        Text[ japanese ] = "•/‚‚³‚ğ’²®(~A)";
+        Text[ japanese ] = "•‚Æ‚‚³‚Ì’²®(~A)";
         Text[ chinese_traditional ] = "½Õ¾ã¼e/°ª(~A)";
         Text[ arabic ] = "ãáÇÁãÉ ÇáÚÑÖ æÇáÇÑÊİÇÚ";
         Text[ greek ] = "Ñıèìéóç ğëÜôïõò/ıøïõò";
@@ -313,7 +313,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text [ norwegian ] = "~Numberformat" ;
         Text [ italian ] = "Formato ~numero" ;
         Text [ portuguese_brazilian ] = "~Formatodonúmero" ;
-        Text [ portuguese ] = "~Formato dos números" ;
+        Text [ portuguese ] = "~Formato numérico" ;
         Text [ finnish ] = "~Numeromuoto" ;
         Text [ danish ] = "Talformat" ;
         Text [ french ] = "~Format numérique" ;
@@ -420,10 +420,10 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text[ chinese_simplified ] = "²åÈë(~I)...";
         Text[ russian ] = "Äîáàâèòü...";
         Text[ polish ] = "Dodaj...";
-        Text[ japanese ] = "’Ç‰Á...";
+        Text[ japanese ] = "’Ç‰Á(~A)...";
         Text[ russian ] = "Äîáàâèòü...";
     Text[ polish ] = "Dodaj...";
-    Text[ japanese ] = "’Ç‰Á...";
+    Text[ japanese ] = "’Ç‰Á(~A)...";
     Text[ chinese_simplified ] = "²åÈë(~I)...";
     Text[ chinese_traditional ] = "´¡¤J(~I)...";
         Text[ arabic ] = "ÅÖÇİÉ...";
@@ -629,7 +629,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text[ chinese_simplified ] = "ÄúÕæÒªÉ¾³ı×Ô¶¯¸ñÊ½ # ?";
         Text[ russian ] = "Âû äåéñòâèòåëüíî õîòèòå óäàëèòü àâòîôîğìàò #?";
         Text[ polish ] = "Chcesz na pewno skasowaæ autoformatowanie #?";
-        Text[ japanese ] = "µ°ÄÌ«°Ï¯Ä#‚ğ–{“–‚Éíœ‚µ‚Ü‚·‚©?";
+        Text[ japanese ] = "# µ°ÄÌ«°Ï¯Ä‚ğ–{“–‚Éíœ‚µ‚Ü‚·‚©B";
         Text[ chinese_traditional ] = "±z¯u­n§R°£¦Û°Ê®æ¦¡ # ?";
         Text[ arabic ] = "åá ÊÑíÏ ÈÇáİÚá ÍĞİ ÇáÊäÓíŞ ÇáÊáŞÇÆí #¿";
         Text[ greek ] = "Èİëåôå ğñáãìáôéêÜ íá äéáãñáöåß ç ÁõôïÌïñöïğïßçóç #;";
