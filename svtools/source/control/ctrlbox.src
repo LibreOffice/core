@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrlbox.src,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 13:08:32 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:39:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,7 @@ String STR_SVT_AUTOMATIC_COLOR
     Text[ english_us ] = "Automatic";
     Text[ portuguese ] = "Autom�tico";
     Text[ russian ] = "�������������";
-    Text[ greek ] = "��������";
+    Text[ greek ] = "���������";
     Text[ dutch ] = "Automatisch";
     Text[ french ] = "Automatique";
     Text[ spanish ] = "Autom�tico";
@@ -144,7 +144,7 @@ String STR_SVT_COLLATE_ALPHANUMERIC
     Text[ english_us ] = "Alphanumeric";
     Text[ portuguese ] = "Alfanum�rico";
     Text[ russian ] = "���������-��������";
-    Text[ greek ] = "�������������";
+    Text[ greek ] = "��������������";
     Text[ dutch ] = "Alfanumeriek";
     Text[ french ] = "Alphanum�rique";
     Text[ spanish ] = "Alfanum�rica";
@@ -450,7 +450,7 @@ String STR_SVT_COLLATE_PHONEBOOK
     Text[ czech ] = "Telefonní seznam";
     Text[ hebrew ] = "‮ספר טלפונים‬";
     Text[ catalan ] = "Phone book";
-    Text[ portuguese_brazilian ] = "Phone book";
+    Text[ portuguese_brazilian ] = "Agenda de telefones";
     Text[ thai ] = "Phone book";
     Text[ hindi ] = "Phone book";
     Text[ slovak ] = "Telefónny zoznam";
@@ -471,7 +471,7 @@ String STR_SVT_COLLATE_PHONETIC_F
     Text[ danish ] = "Phonetic (alphanumeric first)";
     Text[ swedish ] = "Fonetiskt (alfanumeriskt f�rst)";
     Text[ polish ] = "Phonetic (alphanumeric first)";
-    Text[ portuguese_brazilian ] = "Phonetic (alphanumeric first)";
+    Text[ portuguese_brazilian ] = "Fon�tico (alfanum�ricos em primeiro)";
     Text[ japanese ] = "読み（英数字を先に）";
     Text[ korean ] = "발음 표기 (영숫자를 우선)";
     Text[ chinese_simplified ] = "语音的(数字排列最先)";
@@ -501,7 +501,7 @@ String STR_SVT_COLLATE_PHONETIC_L
     Text[ danish ] = "Phonetic (alphanumeric last)";
     Text[ swedish ] = "Fonetiskt (alfanumeriskt sist)";
     Text[ polish ] = "Phonetic (alphanumeric last)";
-    Text[ portuguese_brazilian ] = "Phonetic (alphanumeric last)";
+    Text[ portuguese_brazilian ] = "Fon�tico (alfanum�ricos por �ltimo)";
     Text[ japanese ] = "読み（英数字を後に）";
     Text[ korean ] = "발음 표기(영숫자를 마지막에)";
     Text[ chinese_simplified ] = "语音的(字母数字排列最后)";
@@ -717,7 +717,7 @@ String STR_SVT_INDEXENTRY_PHONETIC_FS
     Text[ danish ] = "Phonetic (alphanumeric first, grouped by syllables)";
     Text[ swedish ] = "Fonetiskt (alfanumeriskt f�rst, grupperat efter stavelser)";
     Text[ polish ] = "Phonetic (alphanumeric first, grouped by syllables)";
-    Text[ portuguese_brazilian ] = "Phonetic (alphanumeric first, grouped by syllables)";
+    Text[ portuguese_brazilian ] = "Fon�tico (alfanum�ricos em primeiro, agrupado por s�labas)";
     Text[ japanese ] = "読み（英数字を先に、あいうえお順）";
     Text[ korean ] = "발음 표기(영숫자를 우선, 음절 기준 순서)";
     Text[ chinese_simplified ] = "语音的(字母数字排列最先，按音节分组)";
@@ -747,7 +747,7 @@ String STR_SVT_INDEXENTRY_PHONETIC_FC
     Text[ danish ] = "Phonetic (alphanumeric first, grouped by consonants)";
     Text[ swedish ] = "Fonetiskt (alfanumeriskt f�rst, grupperat efter konsonanter)";
     Text[ polish ] = "Phonetic (alphanumeric first, grouped by consonants)";
-    Text[ portuguese_brazilian ] = "Phonetic (alphanumeric first, grouped by consonants)";
+    Text[ portuguese_brazilian ] = "Fon�tico (alfanum�ricos em primeiro, agrupado por consoantes)";
     Text[ japanese ] = "読み（英数字を先に、あかさたな順）";
     Text[ korean ] = "발음 표기(영숫자를 우선, 자음 기준 순서)";
     Text[ chinese_simplified ] = "语音的(字母数字排列最先，按辅音分组)";
@@ -777,7 +777,7 @@ String STR_SVT_INDEXENTRY_PHONETIC_LS
     Text[ danish ] = "Phonetic (alphanumeric last, grouped by syllables)";
     Text[ swedish ] = "Fonetiskt (alfanumeriskt sist, grupperat efter stavelser)";
     Text[ polish ] = "Phonetic (alphanumeric last, grouped by syllables)";
-    Text[ portuguese_brazilian ] = "Phonetic (alphanumeric last, grouped by syllables)";
+    Text[ portuguese_brazilian ] = "Fon�tico (alfanum�ricos por �ltimo, agrupado por s�labas)";
     Text[ japanese ] = "読み（英数字を後に、あいうえお順）";
     Text[ korean ] = "발음 표기(영숫자를 마지막으로, 음절 기준 순서)";
     Text[ chinese_simplified ] = "语音的(数字排列最后，按音节分组)";
@@ -807,7 +807,7 @@ String STR_SVT_INDEXENTRY_PHONETIC_LC
     Text[ danish ] = "Phonetic (alphanumeric last, grouped by consonants)";
     Text[ swedish ] = "Fonetiskt (alfanumeriskt sist, grupperat efter konsonanter)";
     Text[ polish ] = "Phonetic (alphanumeric last, grouped by consonants)";
-    Text[ portuguese_brazilian ] = "Phonetic (alphanumeric last, grouped by consonants)";
+    Text[ portuguese_brazilian ] = "Fon�tico (alfanum�ricos por �ltimo, agrupado por consoantes)";
     Text[ japanese ] = "読み（英数字を後に、あかさたな順）";
     Text[ korean ] = "발음 표기(영숫자를 마지막으로, 자음 기준 순서)";
     Text[ chinese_simplified ] = "语音的(数字排列最后，按辅音分组)";
@@ -821,6 +821,7 @@ String STR_SVT_INDEXENTRY_PHONETIC_LC
     Text[ hindi ] = "Phonetic (alphanumeric last, grouped by consonants)";
     Text[ slovak ] = "Foneticky (alfanumerické znaky posledné, zoskupené do konsonantov)";
 };
+
 
 
 
