@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3dtex.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2000-11-14 13:27:55 $
+ *  last change: $Author: aw $ $Date: 2001-07-03 13:00:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,8 @@
 #include <vcl/opengl.hxx>
 #endif
 
-#ifndef _SV_BITMAP_HXX
-#include <vcl/bitmap.hxx>
+#ifndef _SV_BITMAPEX_HXX
+#include <vcl/bitmapex.hxx>
 #endif
 
 #ifndef _SV_COLOR_HXX
@@ -78,17 +78,23 @@
 #include <vcl/salbtype.hxx>
 #endif
 
+#ifndef _TOOLS_TIME_HXX
+#include <tools/time.hxx>
+#endif
+
 // Vorausdeklarationen
 class BitmapReadAccess;
 class BitmapColor;
 
 /*************************************************************************
 |*
-|* define fuer die Ueberlebensdauer einer Textur
+|* define for lifetime of a texture in texture cache.
+|* Parameter of Time(...) call, so hrs, min, sec, 100thsec.
+|* Timer for cache uses ten secs delays
 |*
 \************************************************************************/
 
-#define B3D_TEXTURE_LIFETIME                (200)
+#define B3D_TEXTURE_LIFETIME                0, 1, 0
 
 /*************************************************************************
 |*
@@ -176,66 +182,83 @@ enum Base3DTextureWrap
 |*
 \************************************************************************/
 
-#define TEXTURE_ATTRIBUTE_TYPE_BITMAP           0x0000
-#define TEXTURE_ATTRIBUTE_TYPE_GRADIENT         0x0001
-#define TEXTURE_ATTRIBUTE_TYPE_HATCH            0x0002
+#define TEXTURE_ATTRIBUTE_TYPE_COLOR            0x0000
+#define TEXTURE_ATTRIBUTE_TYPE_BITMAP           0x0001
+#define TEXTURE_ATTRIBUTE_TYPE_GRADIENT         0x0002
+#define TEXTURE_ATTRIBUTE_TYPE_HATCH            0x0003
 
 class TextureAttributes
 {
 private:
+    void*           mpFloatTrans;
     BOOL            mbGhosted;
 
 public:
-    TextureAttributes(BOOL bGhosted);
+    TextureAttributes(BOOL bGhosted, void* pFT);
 
     virtual BOOL operator==(const TextureAttributes&) const;
     virtual UINT16 GetTextureAttributeType() const =0;
 
     BOOL GetGhostedAttribute() { return mbGhosted; }
+    void* GetFloatTransAttribute() { return mpFloatTrans; }
+};
+
+class TextureAttributesColor : public TextureAttributes
+{
+private:
+    Color           maColorAttribute;
+
+public:
+    TextureAttributesColor(BOOL bGhosted, void* pFT, Color aColor);
+
+    virtual BOOL operator==(const TextureAttributes&) const;
+    virtual UINT16 GetTextureAttributeType() const;
+
+    Color GetColorAttribute() { return maColorAttribute; }
 };
 
 class TextureAttributesBitmap : public TextureAttributes
 {
 private:
-    Bitmap          aBitmapAttribute;
+    Bitmap          maBitmapAttribute;
 
 public:
-    TextureAttributesBitmap(Bitmap aBmp, BOOL bGhosted);
+    TextureAttributesBitmap(BOOL bGhosted, void* pFT, Bitmap aBmp);
 
     virtual BOOL operator==(const TextureAttributes&) const;
     virtual UINT16 GetTextureAttributeType() const;
 
-    Bitmap GetBitmapAttribute() { return aBitmapAttribute; }
+    Bitmap GetBitmapAttribute() { return maBitmapAttribute; }
 };
 
 class TextureAttributesGradient : public TextureAttributes
 {
 private:
-    void*           pFill;
-    void*           pStepCount;
+    void*           mpFill;
+    void*           mpStepCount;
 
 public:
-    TextureAttributesGradient(void* pF, void *pSC, BOOL bGhosted);
+    TextureAttributesGradient(BOOL bGhosted, void* pFT, void* pF, void *pSC);
 
     virtual BOOL operator==(const TextureAttributes&) const;
     virtual UINT16 GetTextureAttributeType() const;
 
-    void* GetFillAttribute() { return pFill; }
-    void* GetStepCountAttribute() { return pStepCount; }
+    void* GetFillAttribute() { return mpFill; }
+    void* GetStepCountAttribute() { return mpStepCount; }
 };
 
 class TextureAttributesHatch : public TextureAttributes
 {
 private:
-    void*           pFill;
+    void*           mpFill;
 
 public:
-    TextureAttributesHatch(void* pF, BOOL bGhosted);
+    TextureAttributesHatch(BOOL bGhosted, void* pFT, void* pF);
 
     virtual BOOL operator==(const TextureAttributes&) const;
     virtual UINT16 GetTextureAttributeType() const;
 
-    void* GetHatchFillAttribute() { return pFill; }
+    void* GetHatchFillAttribute() { return mpFill; }
 };
 
 /*************************************************************************
@@ -247,15 +270,17 @@ public:
 class B3dTexture
 {
 protected:
-    // Die Bitmap der Textur
+    // Die Bitmap(s) der Textur
     Bitmap                  aBitmap;
+    AlphaMask               aAlphaMask;
     BitmapReadAccess*       pReadAccess;
+    BitmapReadAccess*       pAlphaReadAccess;
 
     // Attribute bei der Generierung
     TextureAttributes*      pAttributes;
 
     // Gibt die Haeufigkeit der Benutzung wieder
-    UINT16                  nUsageCount;
+    Time                    maTimeStamp;
 
     // Farbe fuer Base3DTextureBlend - Modus
     BitmapColor             aColBlend;
@@ -284,7 +309,7 @@ protected:
 
     // Konstruktor / Destruktor
     B3dTexture(TextureAttributes& rAtt,
-        Bitmap& rBmp,
+        BitmapEx& rBmpEx,
         Base3DTextureKind=Base3DTextureColor,
         Base3DTextureMode=Base3DTextureReplace,
         Base3DTextureFilter=Base3DTextureNearest,
@@ -294,12 +319,14 @@ protected:
 
     // Interne Zugriffsfunktion auf die BitMapFarben
     inline const BitmapColor GetBitmapColor(long nX, long nY);
+    inline const sal_uInt8 GetBitmapTransparency(long nX, long nY);
 
-    // Verwaltung UsageCount
-    void Touch() { nUsageCount=B3D_TEXTURE_LIFETIME; }
-    void DecrementUsageCount() { if(nUsageCount) nUsageCount--; }
-    UINT16 GetUsageCount() { return nUsageCount; };
+    // Generate switch val for optimized own texture mapping
     void SetSwitchVal();
+
+    // time stamp and texture cache methods
+    void Touch() { maTimeStamp = Time() + Time(B3D_TEXTURE_LIFETIME); }
+    const Time& GetTimeStamp() const { return maTimeStamp; }
 
 public:
     // Zugriff auf die Attribute der Textur
@@ -307,6 +334,8 @@ public:
 
     // Zugriff auf Bitmap
     Bitmap& GetBitmap() { return aBitmap; }
+    AlphaMask& GetAlphaMask() { return aAlphaMask; }
+    BitmapEx GetBitmapEx() { return BitmapEx(aBitmap, aAlphaMask); }
     const Size GetBitmapSize() { return aBitmap.GetSizePixel(); }
 
     // Texturfunktion
@@ -342,6 +371,7 @@ protected:
     // Zugriff auf Konstruktor/Destruktor nur fuer die verwaltenden Klassen
     friend class Base3D;
     friend class Base3DOpenGL;
+    friend class B3dGlobalData;
     friend class B3dTextureStore;
 };
 
@@ -359,7 +389,7 @@ private:
 
     // Konstruktor / Destruktor
     B3dTextureOpenGL(TextureAttributes& rAtt,
-        Bitmap& rBmp,
+        BitmapEx& rBmpEx,
         OpenGL& rOGL,
         Base3DTextureKind=Base3DTextureColor,
         Base3DTextureMode=Base3DTextureReplace,
