@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bitmap.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 14:56:22 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 13:16:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -496,12 +496,6 @@ void Bitmap::ImplSetImpBitmap( ImpBitmap* pImpBmp )
 
 BitmapReadAccess* Bitmap::AcquireReadAccess()
 {
-#ifdef REMOTE_APPSERVER
-    BOOL bGottenFromServer = FALSE;
-    if( mpImpBmp && mpImpBmp->ImplIsGetPrepared() )
-        mpImpBmp->ImplResolveGet(), bGottenFromServer = TRUE;
-#endif
-
     BitmapReadAccess* pReadAccess = new BitmapReadAccess( *this );
 
     if( !*pReadAccess )
@@ -510,11 +504,6 @@ BitmapReadAccess* Bitmap::AcquireReadAccess()
         pReadAccess = NULL;
     }
 
-#ifdef REMOTE_APPSERVER
-    if( pReadAccess && mpImpBmp && bGottenFromServer )
-        mpImpBmp->ImplReleaseRemoteBmp();
-#endif
-
     return pReadAccess;
 }
 
@@ -522,11 +511,6 @@ BitmapReadAccess* Bitmap::AcquireReadAccess()
 
 BitmapWriteAccess* Bitmap::AcquireWriteAccess()
 {
-#ifdef REMOTE_APPSERVER
-    if( mpImpBmp && mpImpBmp->ImplIsGetPrepared() )
-        mpImpBmp->ImplResolveGet();
-#endif
-
     BitmapWriteAccess* pWriteAccess = new BitmapWriteAccess( *this );
 
     if( !*pWriteAccess )
@@ -534,11 +518,6 @@ BitmapWriteAccess* Bitmap::AcquireWriteAccess()
         delete pWriteAccess;
         pWriteAccess = NULL;
     }
-
-#ifdef REMOTE_APPSERVER
-    if( pWriteAccess && mpImpBmp )
-        mpImpBmp->ImplReleaseRemoteBmp();
-#endif
 
     return pWriteAccess;
 }
@@ -1755,7 +1734,6 @@ Bitmap Bitmap::CreateDisplayBitmap( OutputDevice* pDisplay )
 {
     Bitmap aDispBmp( *this );
 
-#ifndef REMOTE_APPSERVER
     if( mpImpBmp && ( pDisplay->mpGraphics || pDisplay->ImplGetGraphics() ) )
     {
         ImpBitmap* pImpDispBmp = new ImpBitmap;
@@ -1765,7 +1743,6 @@ Bitmap Bitmap::CreateDisplayBitmap( OutputDevice* pDisplay )
         else
             delete pImpDispBmp;
     }
-#endif
 
     return aDispBmp;
 }
@@ -1971,80 +1948,3 @@ BOOL Bitmap::MakeMono( BYTE cThreshold )
 {
     return ImplMakeMono( cThreshold );
 }
-
-// ------------------------------------------------------------------
-
-#ifdef REMOTE_APPSERVER
-
-void Bitmap::ImplDrawRemote( OutputDevice* pOut,
-                             const Point& rSrcPt, const Size& rSrcSz,
-                             const Point& rDestPt, const Size& rDestSz ) const
-{
-    if( mpImpBmp )
-    {
-        if( !mpImpBmp->ImplGetRemoteBmp() )
-            mpImpBmp->ImplCreateRemoteBmp( *this );
-
-        mpImpBmp->ImplDrawRemoteBmp( pOut, rSrcPt, rSrcSz, rDestPt, rDestSz );
-    }
-}
-
-// ------------------------------------------------------------------
-
-void Bitmap::ImplDrawRemoteEx( OutputDevice* pOut,
-                             const Point& rSrcPt, const Size& rSrcSz,
-                             const Point& rDestPt, const Size& rDestSz,
-                             const Bitmap& rMask ) const
-{
-    if( mpImpBmp )
-    {
-        if( !mpImpBmp->ImplGetRemoteBmp() )
-            mpImpBmp->ImplCreateRemoteBmp( *this );
-
-        mpImpBmp->ImplDrawRemoteBmpEx( pOut, rSrcPt, rSrcSz, rDestPt, rDestSz, rMask );
-    }
-}
-
-// ------------------------------------------------------------------
-
-void Bitmap::ImplDrawRemoteAlpha( OutputDevice* pOut,
-                                  const Point& rSrcPt, const Size& rSrcSz,
-                                  const Point& rDestPt, const Size& rDestSz,
-                                  const AlphaMask& rAlpha ) const
-{
-    if( mpImpBmp )
-    {
-        if( !mpImpBmp->ImplGetRemoteBmp() )
-            mpImpBmp->ImplCreateRemoteBmp( *this );
-
-        mpImpBmp->ImplDrawRemoteBmpAlpha( pOut, rSrcPt, rSrcSz, rDestPt, rDestSz, rAlpha );
-    }
-}
-
-// ------------------------------------------------------------------
-
-void Bitmap::ImplDrawRemoteMask( OutputDevice* pOut,
-                             const Point& rSrcPt, const Size& rSrcSz,
-                             const Point& rDestPt, const Size& rDestSz,
-                             const Color& rColor ) const
-{
-    if( mpImpBmp )
-    {
-        if( !mpImpBmp->ImplGetRemoteBmp() )
-            mpImpBmp->ImplCreateRemoteBmp( *this );
-
-        mpImpBmp->ImplDrawRemoteBmpMask( pOut, rSrcPt, rSrcSz, rDestPt, rDestSz, rColor );
-    }
-}
-
-// ------------------------------------------------------------------
-
-void Bitmap::ImplGetRemoteBmp( OutputDevice* pOut, const Point& rPt, const Size& rSz )
-{
-    DBG_ASSERT( !mpImpBmp, "Bitmap::ImplGetRemoteBmp???" );
-
-    mpImpBmp = new ImpBitmap;
-    mpImpBmp->ImplCreateRemoteBmp( *this, pOut, rPt, rSz );
-}
-
-#endif
