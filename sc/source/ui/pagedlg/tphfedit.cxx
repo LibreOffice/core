@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tphfedit.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-24 13:10:20 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 17:17:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -465,7 +465,7 @@ __EXPORT ScEditWindow::~ScEditWindow()
     // delete Accessible object before deleting EditEngine and EditView
     if (pAcc)
     {
-        ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > xTemp = xAcc;
+        ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xTemp = xAcc;
         if (xTemp.is())
             pAcc->dispose();
     }
@@ -628,7 +628,7 @@ void __EXPORT ScEditWindow::GetFocus()
 {
     pActiveEdWnd = this;
 
-    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > xTemp = xAcc;
+    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xTemp = xAcc;
     if (xTemp.is() && pAcc)
     {
         pAcc->GotFocus();
@@ -639,7 +639,7 @@ void __EXPORT ScEditWindow::GetFocus()
 
 void __EXPORT ScEditWindow::LoseFocus()
 {
-    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > xTemp = xAcc;
+    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xTemp = xAcc;
     if (xTemp.is() && pAcc)
     {
         pAcc->LostFocus();
@@ -650,7 +650,7 @@ void __EXPORT ScEditWindow::LoseFocus()
 
 // -----------------------------------------------------------------------
 
-::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > ScEditWindow::CreateAccessible()
+::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > ScEditWindow::CreateAccessible()
 {
     String sName;
     String sDescription(GetHelpText());
@@ -677,7 +677,7 @@ void __EXPORT ScEditWindow::LoseFocus()
     }
     pAcc = new ScAccessibleEditObject(GetAccessibleParentWindow()->GetAccessible(), pEdView, this,
         rtl::OUString(sName), rtl::OUString(sDescription), EditControl);
-    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > xAccessible = pAcc;
+    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xAccessible = pAcc;
     xAcc = xAccessible;
     return pAcc;
 }
