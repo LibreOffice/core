@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 13:50:47 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 17:58:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -753,10 +753,13 @@ void ScXMLTableRowCellContext::SetContentValidation(com::sun::star::uno::Referen
                 uno::Reference<sheet::XSheetCondition> xCondition(xPropertySet, uno::UNO_QUERY);
                 if (xCondition.is())
                 {
-                        xCondition->setFormula1(aValidation.sFormula1);
-                        xCondition->setFormula2(aValidation.sFormula2);
-                        xCondition->setOperator(aValidation.aOperator);
-                        xCondition->setSourcePosition(aValidation.aBaseCellAddress);
+                    xCondition->setFormula1(aValidation.sFormula1);
+                    xCondition->setFormula2(aValidation.sFormula2);
+                    xCondition->setOperator(aValidation.aOperator);
+                    // #b4974740# source position must be set as string, because it may
+                    // refer to a sheet that hasn't been loaded yet.
+                    aAny <<= aValidation.sBaseCellAddress;
+                    xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_SOURCESTR)), aAny);
                 }
             }
             aAny <<= xPropertySet;
@@ -840,6 +843,8 @@ void ScXMLTableRowCellContext::SetAnnotation(const uno::Reference<table::XCell>&
                     aNote.SetRectangle(aNote.DefaultRectangle(ScAddress(static_cast<SCCOL>(aCellAddress.Column), static_cast<SCROW>(aCellAddress.Row), aCellAddress.Sheet)));
                 if (pMyAnnotation->pItemSet)
                     aNote.SetItemSet(*(pMyAnnotation->pItemSet));
+                else
+                    aNote.SetItemSet(aNote.DefaultItemSet());
                 if ( pMyAnnotation->pOPO )
                 {
                     EditTextObject* pEditText = NULL;
@@ -1148,7 +1153,7 @@ void ScXMLTableRowCellContext::EndElement()
                     {
                         DBG_ERRORFILE("It seems here are to many columns or rows");
                     }
-                    if (xCell.is())
+                    if (xCell.is() && pOUFormula)
                     {
                         SetCellProperties(xCell); // set now only the validation
                         DBG_ASSERT(((nCellsRepeated == 1) && (nRepeatedRows == 1)), "repeated cells with formula not possible now");
@@ -1177,16 +1182,7 @@ void ScXMLTableRowCellContext::EndElement()
                             if (nMatrixCols > 0 && nMatrixRows > 0)
                             {
                                 rXMLImport.GetTables().AddMatrixRange(aCellPos.Column, aCellPos.Row,
-                                                aCellPos.Column + nMatrixCols - 1, aCellPos.Row + nMatrixRows - 1);
-                                uno::Reference <table::XCellRange> xMatrixCellRange =
-                                    xCellRange->getCellRangeByPosition(aCellPos.Column, aCellPos.Row,
-                                                aCellPos.Column + nMatrixCols - 1, aCellPos.Row + nMatrixRows - 1);
-                                if (xMatrixCellRange.is())
-                                {
-                                    uno::Reference <sheet::XArrayFormulaRange> xArrayFormulaRange(xMatrixCellRange, uno::UNO_QUERY);
-                                    if (xArrayFormulaRange.is())
-                                        xArrayFormulaRange->setArrayFormula(*pOUFormula);
-                                }
+                                                aCellPos.Column + nMatrixCols - 1, aCellPos.Row + nMatrixRows - 1, *pOUFormula);
                             }
                         }
                         SetAnnotation(xCell);
