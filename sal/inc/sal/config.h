@@ -2,9 +2,9 @@
  *
  *  $RCSfile: config.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obr $ $Date: 2000-11-01 11:34:02 $
+ *  last change: $Author: svesik $ $Date: 2000-11-06 10:54:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,7 @@ extern "C" {
 #define SAL_DLLEXTENSION ".dll"
 #endif
 
-#if defined(SOLARIS) || defined(LINUX) || defined(NETBSD) || defined(SCO)
+#if defined(SOLARIS) || defined(LINUX) || defined(NETBSD) || defined(FREEBSD) || defined(SCO)
 #define SAL_UNX
 #define SAL_DLLEXTENSION ".so"
 #define SAL_DLLPREFIX "lib"
