@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SettingsExportHelper.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-09 19:08:59 $
+ *  last change: $Author: sab $ $Date: 2001-03-11 15:52:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ XMLSettingsExportHelper::~XMLSettingsExportHelper()
 }
 
 void XMLSettingsExportHelper::CallTypeFunction(const uno::Any& rAny,
-                                            const rtl::OUString& rName)
+                                            const rtl::OUString& rName) const
 {
     uno::TypeClass eClass = rAny.getValueTypeClass();
     switch (eClass)
@@ -173,7 +173,7 @@ void XMLSettingsExportHelper::CallTypeFunction(const uno::Any& rAny,
     }
 }
 
-void XMLSettingsExportHelper::exportBool(const sal_Bool bValue, const rtl::OUString& rName)
+void XMLSettingsExportHelper::exportBool(const sal_Bool bValue, const rtl::OUString& rName) const
 {
     DBG_ASSERT(rName.getLength(), "no name");
     rExport.AddAttribute(XML_NAMESPACE_CONFIG, sXML_name, rName);
@@ -187,7 +187,7 @@ void XMLSettingsExportHelper::exportBool(const sal_Bool bValue, const rtl::OUStr
     rExport.GetDocHandler()->characters(sValue);
 }
 
-void XMLSettingsExportHelper::exportShort(const sal_Int16 nValue, const rtl::OUString& rName)
+void XMLSettingsExportHelper::exportShort(const sal_Int16 nValue, const rtl::OUString& rName) const
 {
     DBG_ASSERT(rName.getLength(), "no name");
     rExport.AddAttribute(XML_NAMESPACE_CONFIG, sXML_name, rName);
@@ -198,7 +198,7 @@ void XMLSettingsExportHelper::exportShort(const sal_Int16 nValue, const rtl::OUS
     rExport.GetDocHandler()->characters(sBuffer.makeStringAndClear());
 }
 
-void XMLSettingsExportHelper::exportInt(const sal_Int32 nValue, const rtl::OUString& rName)
+void XMLSettingsExportHelper::exportInt(const sal_Int32 nValue, const rtl::OUString& rName) const
 {
     DBG_ASSERT(rName.getLength(), "no name");
     rExport.AddAttribute(XML_NAMESPACE_CONFIG, sXML_name, rName);
@@ -209,7 +209,7 @@ void XMLSettingsExportHelper::exportInt(const sal_Int32 nValue, const rtl::OUStr
     rExport.GetDocHandler()->characters(sBuffer.makeStringAndClear());
 }
 
-void XMLSettingsExportHelper::exportLong(const sal_Int64 nValue, const rtl::OUString& rName)
+void XMLSettingsExportHelper::exportLong(const sal_Int64 nValue, const rtl::OUString& rName) const
 {
     DBG_ASSERT(rName.getLength(), "no name");
     rExport.AddAttribute(XML_NAMESPACE_CONFIG, sXML_name, rName);
@@ -219,7 +219,7 @@ void XMLSettingsExportHelper::exportLong(const sal_Int64 nValue, const rtl::OUSt
     rExport.GetDocHandler()->characters(sValue);
 }
 
-void XMLSettingsExportHelper::exportDouble(const double fValue, const rtl::OUString& rName)
+void XMLSettingsExportHelper::exportDouble(const double fValue, const rtl::OUString& rName) const
 {
     DBG_ASSERT(rName.getLength(), "no name");
     rExport.AddAttribute(XML_NAMESPACE_CONFIG, sXML_name, rName);
@@ -230,7 +230,7 @@ void XMLSettingsExportHelper::exportDouble(const double fValue, const rtl::OUStr
     rExport.GetDocHandler()->characters(sBuffer.makeStringAndClear());
 }
 
-void XMLSettingsExportHelper::exportString(const rtl::OUString& sValue, const rtl::OUString& rName)
+void XMLSettingsExportHelper::exportString(const rtl::OUString& sValue, const rtl::OUString& rName) const
 {
     DBG_ASSERT(rName.getLength(), "no name");
     rExport.AddAttribute(XML_NAMESPACE_CONFIG, sXML_name, rName);
@@ -241,7 +241,7 @@ void XMLSettingsExportHelper::exportString(const rtl::OUString& sValue, const rt
 
 void XMLSettingsExportHelper::exportSequencePropertyValue(
                     const uno::Sequence<beans::PropertyValue>& aProps,
-                    const rtl::OUString& rName)
+                    const rtl::OUString& rName) const
 {
     DBG_ASSERT(rName.getLength(), "no name");
     sal_Int32 nLength(aProps.getLength());
@@ -255,7 +255,7 @@ void XMLSettingsExportHelper::exportSequencePropertyValue(
 }
 
 void XMLSettingsExportHelper::exportMapEntry(const uno::Any& rAny,
-                                        const rtl::OUString& rName)
+                                        const rtl::OUString& rName) const
 {
     DBG_ASSERT(rName.getLength(), "no name");
     uno::Sequence<beans::PropertyValue> aProps;
@@ -271,7 +271,7 @@ void XMLSettingsExportHelper::exportMapEntry(const uno::Any& rAny,
 
 void XMLSettingsExportHelper::exportNameAccess(
                     const uno::Reference<container::XNameAccess>& aNamed,
-                    const rtl::OUString& rName)
+                    const rtl::OUString& rName) const
 {
     DBG_ASSERT(rName.getLength(), "no name");
     DBG_ASSERT(aNamed->getElementType().equals(getCppuType( (uno::Sequence<beans::PropertyValue> *)0 ) ),
@@ -287,7 +287,7 @@ void XMLSettingsExportHelper::exportNameAccess(
 
 void XMLSettingsExportHelper::exportIndexAccess(
                     const uno::Reference<container::XIndexAccess> aIndexed,
-                    const rtl::OUString rName)
+                    const rtl::OUString rName) const
 {
     DBG_ASSERT(rName.getLength(), "no name");
     DBG_ASSERT(aIndexed->getElementType().equals(getCppuType( (uno::Sequence<beans::PropertyValue> *)0 ) ),
@@ -303,7 +303,7 @@ void XMLSettingsExportHelper::exportIndexAccess(
 
 void XMLSettingsExportHelper::exportSettings(
                     const uno::Sequence<beans::PropertyValue>& aProps,
-                    const rtl::OUString& rName)
+                    const rtl::OUString& rName) const
 {
     DBG_ASSERT(rName.getLength(), "no name");
     exportSequencePropertyValue(aProps, rName);
