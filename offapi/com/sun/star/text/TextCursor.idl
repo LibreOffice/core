@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextCursor.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2001-01-23 10:08:43 $
+ *  last change: $Author: cl $ $Date: 2001-08-15 12:42:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,13 +110,13 @@ service TextCursor
     service com::sun::star::text::TextRange;
 
     // DocMerge: empty anyway
-    interface com::sun::star::text::XWordCursor;
+    [optional] interface com::sun::star::text::XWordCursor;
 
     // DocMerge: empty anyway
-    interface com::sun::star::text::XSentenceCursor;
+    [optional] interface com::sun::star::text::XSentenceCursor;
 
     // DocMerge: empty anyway
-    interface com::sun::star::text::XParagraphCursor;
+    [optional] interface com::sun::star::text::XParagraphCursor;
 
 
     // DocMerge from xml: service com::sun::star::text::TextCursor: interface com::sun::star::beans::XPropertySet
@@ -155,6 +155,9 @@ service TextCursor
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2001/01/23 10:08:43  mi
+    optional interfaces now marked as [optional] instead of just a prosa description of this fact
+
     Revision 1.4  2000/12/21 08:35:21  mi
     @see interface/service/... ident -> @see ident - for new docu generator
 
