@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VLegend.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: iha $ $Date: 2003-12-04 15:46:26 $
+ *  last change: $Author: iha $ $Date: 2003-12-10 16:23:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -869,6 +869,8 @@ void VLegend::changePosition(
         awt::Rectangle aAvailableSpace(rOutAvailableSpace);
 
         //calculate position:
+        if(!bAutoPosition) //autoposition relative to whole page
+            rOutAvailableSpace = awt::Rectangle(0,0,rReferenceSize.Width,rReferenceSize.Height);
         awt::Point aPos = lcl_calculatePositionAndRemainingSpace(
             rOutAvailableSpace, rReferenceSize,
             fPrimaryOffset, fSecondaryOffset, ePos, aLegendSize );
