@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: svesik $ $Date: 2001-02-02 16:33:38 $
+#   last change: $Author: ganaya $ $Date: 2001-02-13 21:18:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -118,7 +118,11 @@ SLOFILES+=$(SLO)$/staticmbdbase.obj
 SLOFILES+=$(SLO)$/staticmbodbc.obj
 .ENDIF
 
-SHL1VERSIONMAP= $(TARGET).map
+.IF "$(OS)"=="MACOSX"
+SHL1VERSIONMAP=$(TARGET).$(DLLPOSTFIX).map
+.ELSE      
+SHL1VERSIONMAP=$(TARGET).map
+.ENDIF
 # --- Library -----------------------------------
 
 SHL1TARGET=$(TARGET)$(UPD)$(DLLPOSTFIX)
