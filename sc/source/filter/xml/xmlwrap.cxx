@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlwrap.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: sab $ $Date: 2001-04-05 09:17:57 $
+ *  last change: $Author: sab $ $Date: 2001-04-06 08:15:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,12 @@
 #include "xmlwrap.hxx"
 #include "xmlimprt.hxx"
 #include "xmlexprt.hxx"
+#ifndef SC_SCGLOB_HXX
+#include "global.hxx"
+#endif
+#ifndef __GLOBSTR_HRC_
+#include "globstr.hrc"
+#endif
 
 #ifndef SEQTYPE
  #if defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)
@@ -457,7 +463,7 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
         uno::Reference<task::XStatusIndicator> xStatusIndicator = GetStatusIndicator(xModel);
         sal_Int32 nProgressRange(1000000);
         if(xStatusIndicator.is())
-            xStatusIndicator->start(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Export XML")), nProgressRange);
+            xStatusIndicator->start(rtl::OUString(ScGlobal::GetRscString(STR_SAVE_DOC)), nProgressRange);
         uno::Any aProgRange;
         aProgRange <<= nProgressRange;
         xInfoSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ProgressRange")), aProgRange);
