@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3dopngl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2001-06-26 14:01:48 $
+ *  last change: $Author: hr $ $Date: 2004-09-09 11:25:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,9 +100,9 @@
 Base3DOpenGL::Base3DOpenGL(OutputDevice* pOutDev)
 :   Base3D(pOutDev),
     aOpenGL(pOutDev),
-    aEmptyVector(0.0, 0.0, 0.0),
     aLastNormal(DBL_MAX, DBL_MAX, DBL_MAX),
     aLastTexCoor(DBL_MAX, DBL_MAX, DBL_MAX),
+    aEmptyVector(0.0, 0.0, 0.0),
     fOffFacMul100((float)(-0.2 * 100.0)),
     fOffUniMul100((float)(-1.0 * 100.0)),
     aPhongBuffer(12),       // 4K
@@ -432,6 +432,8 @@ void Base3DOpenGL::DrawPhongPrimitives()
             }
             break;
         }
+        default:
+            break;  // -Wall multiple values not handled.
     }
     aOpenGL.End();
 }
