@@ -2,9 +2,9 @@
  *
  *  $RCSfile: defaultoptions.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pb $ $Date: 2001-11-01 13:28:14 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 17:24:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,9 @@
 
 #include <vos/process.hxx>
 #include <unotools/localfilehelper.hxx>
+#ifndef INCLUDED_RTL_INSTANCE_HXX
+#include <rtl/instance.hxx>
+#endif
 
 using namespace osl;
 using namespace utl;
@@ -164,7 +167,6 @@ public:
 
 static SvtDefaultOptions_Impl*  pOptions = NULL;
 static sal_Int32                nRefCount = 0;
-static ::osl::Mutex             aMutex;
 
 typedef String SvtDefaultOptions_Impl:: *PathStrPtr;
 
@@ -366,11 +368,12 @@ SvtDefaultOptions_Impl::SvtDefaultOptions_Impl() : ConfigItem( ASCII_STR("Office
 }
 
 // class SvtDefaultOptions -----------------------------------------------
+namespace { struct lclMutex : public rtl::Static< ::osl::Mutex, lclMutex > {}; }
 
 SvtDefaultOptions::SvtDefaultOptions()
 {
     // Global access, must be guarded (multithreading)
-    ::osl::MutexGuard aGuard( aMutex );
+    ::osl::MutexGuard aGuard( lclMutex::get() );
     if ( !pOptions )
         pOptions = new SvtDefaultOptions_Impl;
     ++nRefCount;
@@ -382,7 +385,7 @@ SvtDefaultOptions::SvtDefaultOptions()
 SvtDefaultOptions::~SvtDefaultOptions()
 {
     // Global access, must be guarded (multithreading)
-    ::osl::MutexGuard aGuard( aMutex );
+    ::osl::MutexGuard aGuard( lclMutex::get() );
     if ( !--nRefCount )
     {
         if ( pOptions->IsModified() )
