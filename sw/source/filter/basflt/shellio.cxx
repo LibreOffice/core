@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shellio.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:24:18 $
+ *  last change: $Author: obo $ $Date: 2005-01-25 14:00:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -553,6 +553,11 @@ SwReader::SwReader(SfxMedium& rMedium, const String& rFileName, SwPaM& rPam)
     pCrsr(&rPam), aFileName(rFileName)
 {
     SetBaseURL( rMedium.GetBaseURL() );
+}
+
+SwReader::SwReader( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage > &rStg, const String& rFilename, SwPaM &rPam )
+    : SwDocFac(rPam.GetDoc()), pStrm(0), pMedium(0), pCrsr(&rPam), xStg( rStg ), aFileName(rFilename)
+{
 }
 
 Reader::Reader()
