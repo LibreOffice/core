@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatchprovider.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: as $ $Date: 2001-07-20 08:10:17 $
+ *  last change: $Author: as $ $Date: 2001-07-25 12:54:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -278,7 +278,7 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL DispatchProvider::queryDis
                                             if(
                                                 ( aURL.Protocol.compareToAscii( ".uno" , 4 ) == 0 ) ||
                                                 ( aURL.Protocol.compareToAscii( "slot:", 5 ) == 0 )
-                                            )
+                                              )
                                             {
                                                 if(
                                                     ( aInfo.eFrameType == E_TASK        ) ||
@@ -294,6 +294,8 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL DispatchProvider::queryDis
                                                 }
                                             }
                                             // We should be last chance for user :-)
+                                            // But not for "slot, uno, nmacro" URLs
+                                            else
                                             if( xReturn.is() == sal_False )
                                             {
                                                 xReturn = implts_getOrCreateDispatchHelper( E_SELFDISPATCHER );
