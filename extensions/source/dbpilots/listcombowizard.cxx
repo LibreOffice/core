@@ -2,9 +2,9 @@
  *
  *  $RCSfile: listcombowizard.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-05 14:53:13 $
+ *  last change: $Author: fs $ $Date: 2001-03-20 15:45:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,9 @@
 #ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include <connectivity/dbtools.hxx>
 #endif
+#ifndef __EXTENSIONS_INC_EXTENSIO_HRC__
+#include "extensio.hrc"
+#endif
 
 //.........................................................................
 namespace dbp
@@ -113,6 +116,11 @@ namespace dbp
         ,m_bHadDataSelection(sal_True)
     {
         initControlSettings(&m_aSettings);
+
+        m_pPrevPage->SetHelpId(HID_LISTWIZARD_PREVIOUS);
+        m_pNextPage->SetHelpId(HID_LISTWIZARD_NEXT);
+        m_pCancel->SetHelpId(HID_LISTWIZARD_CANCEL);
+        m_pFinish->SetHelpId(HID_LISTWIZARD_FINISH);
 
         // if we do not need the data source selection page ...
         if (!needDatasourceSelection())
@@ -597,6 +605,9 @@ namespace dbp
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2001/03/05 14:53:13  fs
+ *  finished the grid control wizard
+ *
  *  Revision 1.2  2001/02/28 09:18:30  fs
  *  finalized the list/combo wizard
  *

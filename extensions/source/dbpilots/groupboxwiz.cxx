@@ -2,9 +2,9 @@
  *
  *  $RCSfile: groupboxwiz.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-06 15:09:00 $
+ *  last change: $Author: fs $ $Date: 2001-03-20 15:45:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@
 #ifndef _EXTENSIONS_DBP_OPTIONGROUPLAYOUTER_HXX_
 #include "optiongrouplayouter.hxx"
 #endif
+#ifndef __EXTENSIONS_INC_EXTENSIO_HRC__
+#include "extensio.hrc"
+#endif
 
 
 //#define GBW_STATE_DATASELECTION       0
@@ -108,6 +111,11 @@ namespace dbp
         ,m_bVisitedDB(sal_False)
     {
         initControlSettings(&m_aSettings);
+
+        m_pPrevPage->SetHelpId(HID_GROUPWIZARD_PREVIOUS);
+        m_pNextPage->SetHelpId(HID_GROUPWIZARD_NEXT);
+        m_pCancel->SetHelpId(HID_GROUPWIZARD_CANCEL);
+        m_pFinish->SetHelpId(HID_GROUPWIZARD_FINISH);
     }
 
     //---------------------------------------------------------------------
@@ -597,6 +605,9 @@ namespace dbp
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.7  2001/03/06 15:09:00  fs
+ *  adjust the focus on the RadioSelectionPage
+ *
  *  Revision 1.6  2001/03/06 09:50:06  fs
  *  #84643# clear aValues
  *

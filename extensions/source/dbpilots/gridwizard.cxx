@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwizard.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-05 14:52:24 $
+ *  last change: $Author: fs $ $Date: 2001-03-20 15:45:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,9 @@
 #ifndef _EXTENSIONS_DBP_DBPTOOLS_HXX_
 #include "dbptools.hxx"
 #endif
+#ifndef __EXTENSIONS_INC_EXTENSIO_HRC__
+#include "extensio.hrc"
+#endif
 
 #define GW_STATE_DATASOURCE_SELECTION   0
 #define GW_STATE_FIELDSELECTION         1
@@ -114,6 +117,11 @@ namespace dbp
         ,m_bHadDataSelection(sal_True)
     {
         initControlSettings(&m_aSettings);
+
+        m_pPrevPage->SetHelpId(HID_GRIDWIZARD_PREVIOUS);
+        m_pNextPage->SetHelpId(HID_GRIDWIZARD_NEXT);
+        m_pCancel->SetHelpId(HID_GRIDWIZARD_CANCEL);
+        m_pFinish->SetHelpId(HID_GRIDWIZARD_FINISH);
 
         // if we do not need the data source selection page ...
         if (!needDatasourceSelection())
@@ -515,6 +523,9 @@ namespace dbp
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/03/05 14:52:24  fs
+ *  initial checkin - grid auto pilot implementations
+ *
  *
  *  Revision 1.0 05.03.01 09:24:22  fs
  ************************************************************************/
