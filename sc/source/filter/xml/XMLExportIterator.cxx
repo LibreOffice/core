@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportIterator.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: sab $ $Date: 2002-04-12 08:15:43 $
+ *  last change: $Author: sab $ $Date: 2002-05-03 13:16:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -444,7 +444,8 @@ void ScMyDetectiveObjContainer::AddObject( ScDetectiveObjType eObjType, const Sc
 {
     if( (eObjType == SC_DETOBJ_ARROW) ||
         (eObjType == SC_DETOBJ_FROMOTHERTAB) ||
-        (eObjType == SC_DETOBJ_TOOTHERTAB) )
+        (eObjType == SC_DETOBJ_TOOTHERTAB) ||
+        (eObjType == SC_DETOBJ_CIRCLE) )
     {
         ScMyDetectiveObj aDetObj;
         aDetObj.eObjType = eObjType;
