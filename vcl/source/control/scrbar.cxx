@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scrbar.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mt $ $Date: 2001-11-27 09:54:45 $
+ *  last change: $Author: pl $ $Date: 2002-05-08 16:01:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -919,6 +919,7 @@ void ScrollBar::Paint( const Rectangle& rRect )
 
 void ScrollBar::Resize()
 {
+    Control::Resize();
     mbCalcSize = TRUE;
     if ( IsReallyVisible() )
         ImplCalc( FALSE );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lstbox.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: pl $ $Date: 2002-05-08 13:24:39 $
+ *  last change: $Author: pl $ $Date: 2002-05-08 16:01:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -604,6 +604,8 @@ void ListBox::Resize()
     // weil KEY_PGUP/DOWN ausgewertet wird...
     if ( mpFloatWin )
         mpFloatWin->SetSizePixel( mpFloatWin->CalcFloatSize() );
+
+    Control::Resize();
 }
 
 // -----------------------------------------------------------------------

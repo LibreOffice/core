@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: pl $ $Date: 2002-05-03 13:04:12 $
+ *  last change: $Author: pl $ $Date: 2002-05-08 16:01:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1339,6 +1339,7 @@ void Edit::Resize()
 {
     if ( !mpSubEdit && IsReallyVisible() )
     {
+        Control::Resize();
         // Wegen vertikaler Zentrierung...
         mnXOffset = 0;
         ImplAlign();

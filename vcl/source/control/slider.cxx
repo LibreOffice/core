@@ -2,9 +2,9 @@
  *
  *  $RCSfile: slider.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:36 $
+ *  last change: $Author: pl $ $Date: 2002-05-08 16:01:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -858,6 +858,7 @@ void Slider::Paint( const Rectangle& rRect )
 
 void Slider::Resize()
 {
+    Control::Resize();
     mbCalcSize = TRUE;
     if ( IsReallyVisible() )
         ImplCalc( FALSE );

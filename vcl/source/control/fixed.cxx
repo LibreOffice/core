@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fixed.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pl $ $Date: 2002-04-29 17:46:18 $
+ *  last change: $Author: pl $ $Date: 2002-05-08 16:01:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -347,6 +347,7 @@ void FixedText::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
 
 void FixedText::Resize()
 {
+    Control::Resize();
     Invalidate();
 }
 
@@ -626,6 +627,7 @@ void FixedLine::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
 
 void FixedLine::Resize()
 {
+    Control::Resize();
     Invalidate();
 }
 
@@ -852,6 +854,7 @@ void FixedBitmap::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize
 
 void FixedBitmap::Resize()
 {
+    Control::Resize();
     Invalidate();
 }
 
@@ -1097,6 +1100,7 @@ void FixedImage::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
 
 void FixedImage::Resize()
 {
+    Control::Resize();
     Invalidate();
 }
 

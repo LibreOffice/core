@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pl $ $Date: 2002-05-03 13:04:12 $
+ *  last change: $Author: pl $ $Date: 2002-05-08 16:05:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,6 +143,14 @@ void Control::GetFocus()
 void Control::LoseFocus()
 {
     Window::LoseFocus();
+}
+
+// -----------------------------------------------------------------------
+
+void Control::Resize()
+{
+    delete mpLayoutData, mpLayoutData = NULL;
+    Window::Resize();
 }
 
 // -----------------------------------------------------------------------

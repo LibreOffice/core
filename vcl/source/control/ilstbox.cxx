@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ilstbox.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: ssa $ $Date: 2002-05-08 12:50:01 $
+ *  last change: $Author: pl $ $Date: 2002-05-08 16:05:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1717,6 +1717,8 @@ USHORT ImplListBoxWindow::GetDisplayLineCount() const
 
 void ImplListBoxWindow::Resize()
 {
+    Control::Resize();
+
     BOOL bShowFocusRect = mbHasFocusRect;
     if ( bShowFocusRect )
         ImplHideFocusRect();
@@ -2012,6 +2014,7 @@ void ImplListBox::GetFocus()
 
 void ImplListBox::Resize()
 {
+    Control::Resize();
     ImplResizeControls();
     ImplCheckScrollBars();
 }
@@ -2535,7 +2538,7 @@ void ImplWin::DrawEntry( BOOL bDrawImage, BOOL bDrawText, BOOL bDrawTextAtImageP
 
 void ImplWin::Resize()
 {
-    delete mpLayoutData, mpLayoutData = NULL;
+    Control::Resize();
     maFocusRect.SetSize( GetOutputSizePixel() );
     Invalidate();
 }

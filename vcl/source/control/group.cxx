@@ -2,9 +2,9 @@
  *
  *  $RCSfile: group.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:36 $
+ *  last change: $Author: pl $ $Date: 2002-05-08 16:01:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,9 @@
 #endif
 #ifndef _SV_GROUP_HXX
 #include <group.hxx>
+#endif
+#ifndef _VCL_CONTROLLAYOUT_HXX
+#include <controllayout.hxx>
 #endif
 
 #ifndef _SV_RC_H
@@ -177,7 +180,7 @@ GroupBox::GroupBox( Window* pParent, const ResId& rResId ) :
 // -----------------------------------------------------------------------
 
 void GroupBox::ImplDraw( OutputDevice* pDev, ULONG nDrawFlags,
-                         const Point& rPos, const Size& rSize )
+                         const Point& rPos, const Size& rSize, bool bLayout )
 {
     long                    nTop;
     long                    nTextOff;
@@ -223,38 +226,51 @@ void GroupBox::ImplDraw( OutputDevice* pDev, ULONG nDrawFlags,
         nTextOff = GROUP_TEXT_BORDER;
     }
 
-    if ( nDrawFlags & WINDOW_DRAW_MONO )
-        pDev->SetLineColor( Color( COL_BLACK ) );
-    else
-        pDev->SetLineColor( rStyleSettings.GetShadowColor() );
-
-    if ( !aText.Len() )
-        pDev->DrawLine( Point( rPos.X(), nTop ), Point( rPos.X()+rSize.Width()-2, nTop ) );
-    else
+    if( ! bLayout )
     {
-        pDev->DrawLine( Point( rPos.X(), nTop ), Point( aRect.Left()-nTextOff, nTop ) );
-        pDev->DrawLine( Point( aRect.Right()+nTextOff, nTop ), Point( rPos.X()+rSize.Width()-2, nTop ) );
-    }
-    pDev->DrawLine( Point( rPos.X(), nTop ), Point( rPos.X(), rPos.Y()+rSize.Height()-2 ) );
-    pDev->DrawLine( Point( rPos.X(), rPos.Y()+rSize.Height()-2 ), Point( rPos.X()+rSize.Width()-2, rPos.Y()+rSize.Height()-2 ) );
-    pDev->DrawLine( Point( rPos.X()+rSize.Width()-2, rPos.Y()+rSize.Height()-2 ), Point( rPos.X()+rSize.Width()-2, nTop ) );
+        if ( nDrawFlags & WINDOW_DRAW_MONO )
+            pDev->SetLineColor( Color( COL_BLACK ) );
+        else
+            pDev->SetLineColor( rStyleSettings.GetShadowColor() );
 
-    if ( !(nDrawFlags & WINDOW_DRAW_MONO) )
-    {
-        pDev->SetLineColor( rStyleSettings.GetLightColor() );
         if ( !aText.Len() )
-            pDev->DrawLine( Point( rPos.X()+1, nTop+1 ), Point( rPos.X()+rSize.Width()-3, nTop+1 ) );
+            pDev->DrawLine( Point( rPos.X(), nTop ), Point( rPos.X()+rSize.Width()-2, nTop ) );
         else
         {
-            pDev->DrawLine( Point( rPos.X()+1, nTop+1 ), Point( aRect.Left()-nTextOff, nTop+1 ) );
-            pDev->DrawLine( Point( aRect.Right()+nTextOff, nTop+1 ), Point( rPos.X()+rSize.Width()-3, nTop+1 ) );
+            pDev->DrawLine( Point( rPos.X(), nTop ), Point( aRect.Left()-nTextOff, nTop ) );
+            pDev->DrawLine( Point( aRect.Right()+nTextOff, nTop ), Point( rPos.X()+rSize.Width()-2, nTop ) );
         }
-        pDev->DrawLine( Point( rPos.X()+1, nTop+1 ), Point( rPos.X()+1, rPos.Y()+rSize.Height()-3 ) );
-        pDev->DrawLine( Point( rPos.X(), rPos.Y()+rSize.Height()-1 ), Point( rPos.X()+rSize.Width()-1, rPos.Y()+rSize.Height()-1 ) );
-        pDev->DrawLine( Point( rPos.X()+rSize.Width()-1, rPos.Y()+rSize.Height()-1 ), Point( rPos.X()+rSize.Width()-1, nTop ) );
+        pDev->DrawLine( Point( rPos.X(), nTop ), Point( rPos.X(), rPos.Y()+rSize.Height()-2 ) );
+        pDev->DrawLine( Point( rPos.X(), rPos.Y()+rSize.Height()-2 ), Point( rPos.X()+rSize.Width()-2, rPos.Y()+rSize.Height()-2 ) );
+        pDev->DrawLine( Point( rPos.X()+rSize.Width()-2, rPos.Y()+rSize.Height()-2 ), Point( rPos.X()+rSize.Width()-2, nTop ) );
+
+        if ( !(nDrawFlags & WINDOW_DRAW_MONO) )
+        {
+            pDev->SetLineColor( rStyleSettings.GetLightColor() );
+            if ( !aText.Len() )
+                pDev->DrawLine( Point( rPos.X()+1, nTop+1 ), Point( rPos.X()+rSize.Width()-3, nTop+1 ) );
+            else
+            {
+                pDev->DrawLine( Point( rPos.X()+1, nTop+1 ), Point( aRect.Left()-nTextOff, nTop+1 ) );
+                pDev->DrawLine( Point( aRect.Right()+nTextOff, nTop+1 ), Point( rPos.X()+rSize.Width()-3, nTop+1 ) );
+            }
+            pDev->DrawLine( Point( rPos.X()+1, nTop+1 ), Point( rPos.X()+1, rPos.Y()+rSize.Height()-3 ) );
+            pDev->DrawLine( Point( rPos.X(), rPos.Y()+rSize.Height()-1 ), Point( rPos.X()+rSize.Width()-1, rPos.Y()+rSize.Height()-1 ) );
+            pDev->DrawLine( Point( rPos.X()+rSize.Width()-1, rPos.Y()+rSize.Height()-1 ), Point( rPos.X()+rSize.Width()-1, nTop ) );
+        }
     }
 
-    pDev->DrawText( aRect, aText, nTextStyle );
+    MetricVector* pVector = bLayout ? &mpLayoutData->m_aUnicodeBoundRects : NULL;
+    String* pDisplayText = bLayout ? &mpLayoutData->m_aDisplayText : NULL;
+    pDev->DrawText( aRect, aText, nTextStyle, pVector, pDisplayText );
+}
+
+// -----------------------------------------------------------------------
+
+void GroupBox::FillLayoutData() const
+{
+    mpLayoutData = new vcl::ControlLayoutData();
+    const_cast<GroupBox*>(this)->   ImplDraw( const_cast<GroupBox*>(this), 0, Point(), GetOutputSizePixel(), true );
 }
 
 // -----------------------------------------------------------------------
@@ -290,6 +306,7 @@ void GroupBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
 
 void GroupBox::Resize()
 {
+    Control::Resize();
     Invalidate();
 }
 

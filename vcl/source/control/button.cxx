@@ -2,9 +2,9 @@
  *
  *  $RCSfile: button.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: pl $ $Date: 2002-04-29 17:46:18 $
+ *  last change: $Author: pl $ $Date: 2002-05-08 16:01:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1066,6 +1066,7 @@ void PushButton::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
 
 void PushButton::Resize()
 {
+    Control::Resize();
     Invalidate();
 }
 
@@ -2211,6 +2212,7 @@ void RadioButton::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize
 
 void RadioButton::Resize()
 {
+    Control::Resize();
     Invalidate();
 }
 
@@ -2988,6 +2990,7 @@ void CheckBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
 
 void CheckBox::Resize()
 {
+    Control::Resize();
     Invalidate();
 }
 

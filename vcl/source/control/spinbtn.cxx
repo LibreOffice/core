@@ -2,9 +2,9 @@
  *
  *  $RCSfile: spinbtn.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mt $ $Date: 2001-11-27 09:54:45 $
+ *  last change: $Author: pl $ $Date: 2002-05-08 16:01:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,6 +166,8 @@ void SpinButton::Down()
 
 void SpinButton::Resize()
 {
+    Control::Resize();
+
     Size aSize( GetOutputSizePixel() );
     Point aTmpPoint;
     Rectangle aRect( aTmpPoint, aSize );

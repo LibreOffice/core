@@ -2,9 +2,9 @@
  *
  *  $RCSfile: spinfld.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: pl $ $Date: 2002-05-03 13:04:12 $
+ *  last change: $Author: pl $ $Date: 2002-05-08 16:01:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -587,6 +587,7 @@ void SpinField::Resize()
 {
     if ( mbSpin )
     {
+        Control::Resize();
         Size aSize = GetOutputSizePixel();
 
         if ( GetStyle() & (WB_SPIN|WB_DROPDOWN) )
