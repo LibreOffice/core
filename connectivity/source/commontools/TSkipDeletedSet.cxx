@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TSkipDeletedSet.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-08 13:40:38 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 12:32:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,12 @@ using namespace connectivity;
 OSkipDeletedSet::OSkipDeletedSet(IResultSetHelper* _pHelper)
     : m_pHelper(_pHelper)
 {
+}
+// -----------------------------------------------------------------------------
+OSkipDeletedSet::~OSkipDeletedSet()
+{
+    m_aBookmarksPositions.clear();
+    m_aBookmarks.clear();
 }
 // -----------------------------------------------------------------------------
 sal_Bool OSkipDeletedSet::skipDeleted(IResultSetHelper::Movement _eCursorPosition, sal_Int32 _nOffset, sal_Bool _bRetrieveData)
