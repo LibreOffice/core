@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexti.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mib $ $Date: 2001-02-09 13:15:58 $
+ *  last change: $Author: mtg $ $Date: 2001-02-23 14:33:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,10 @@
 #include "XMLRedlineImportHelper.hxx"
 #endif
 
+#ifndef _SW_APPLET_IMPL_HXX
+#include <SwAppletImpl.hxx>
+#endif
+
 using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -197,6 +201,179 @@ Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
                                          aObjName, &aItemSet );
     xPropSet = SwXFrames::GetObject( *pFrmFmt, FLYCNTTYPE_OLE );
     return xPropSet;
+}
+Reference< XPropertySet > SwXMLTextImportHelper::createApplet(
+        const OUString &rCode,
+        const OUString &rName,
+        sal_Bool bMayScript,
+        const OUString& rHRef,
+        sal_Int32 nWidth, sal_Int32 nHeight )
+{
+    Reference < XPropertySet > xPropSet;
+    Reference<XUnoTunnel> xCrsrTunnel( GetCursor(), UNO_QUERY );
+    ASSERT( xCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );
+    SwXTextCursor *pTxtCrsr =
+                (SwXTextCursor*)xCrsrTunnel->getSomething(
+                                            SwXTextCursor::getUnoTunnelId() );
+    ASSERT( pTxtCrsr, "SwXTextCursor missing" );
+    SwDoc *pDoc = pTxtCrsr->GetDoc();
+
+    SfxItemSet aItemSet( pDoc->GetAttrPool(), RES_FRM_SIZE, RES_FRM_SIZE );
+    if( nWidth > 0 && nHeight > 0 )
+    {
+        nWidth = MM100_TO_TWIP( nWidth );
+        if( nWidth < MINFLY )
+            nWidth = MINFLY;
+        nHeight = MM100_TO_TWIP( nHeight );
+        if( nHeight < MINFLY )
+            nHeight = MINFLY;
+        aItemSet.Put( SwFmtFrmSize( ATT_FIX_SIZE, nWidth, nHeight ) );
+    }
+    pAppletImpl = new SwApplet_Impl( aItemSet );
+    pAppletImpl->CreateApplet( rCode, rName, bMayScript, rHRef );
+    SwFrmFmt *pFrmFmt = pDoc->Insert( *pTxtCrsr->GetPaM(),
+                                       pAppletImpl->GetApplet(),
+                                       &pAppletImpl->GetItemSet());
+    xPropSet = SwXFrames::GetObject( *pFrmFmt, FLYCNTTYPE_OLE );
+    return xPropSet;
+}
+Reference< XPropertySet > SwXMLTextImportHelper::createPlugin(
+        const OUString &rMimeType,
+        const OUString& rHRef,
+        sal_Int32 nWidth, sal_Int32 nHeight )
+{
+    Reference < XPropertySet > xPropSet;
+    Reference<XUnoTunnel> xCrsrTunnel( GetCursor(), UNO_QUERY );
+    ASSERT( xCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );
+    SwXTextCursor *pTxtCrsr =
+                (SwXTextCursor*)xCrsrTunnel->getSomething(
+                                            SwXTextCursor::getUnoTunnelId() );
+    ASSERT( pTxtCrsr, "SwXTextCursor missing" );
+    SwDoc *pDoc = pTxtCrsr->GetDoc();
+
+    SfxItemSet aItemSet( pDoc->GetAttrPool(), RES_FRM_SIZE, RES_FRM_SIZE );
+    if( nWidth > 0 && nHeight > 0 )
+    {
+        nWidth = MM100_TO_TWIP( nWidth );
+        if( nWidth < MINFLY )
+            nWidth = MINFLY;
+        nHeight = MM100_TO_TWIP( nHeight );
+        if( nHeight < MINFLY )
+            nHeight = MINFLY;
+        aItemSet.Put( SwFmtFrmSize( ATT_FIX_SIZE, nWidth, nHeight ) );
+    }
+       INetURLObject aURLObj;
+    if( rHRef.getLength() && !aURLObj.SetURL( INetURLObject::RelToAbs(rHRef) ) )
+        return xPropSet;
+    SvStorageRef pStor = new SvStorage( aEmptyStr, STREAM_STD_READWRITE);
+    SvFactory *pPlugInFactory = SvFactory::GetDefaultPlugInFactory();
+    xPlugin = &pPlugInFactory->CreateAndInit( *pPlugInFactory, pStor );
+
+    xPlugin->EnableSetModified( FALSE );
+    xPlugin->SetPlugInMode( (USHORT)PLUGIN_EMBEDED );
+    xPlugin->SetURL( aURLObj );
+    xPlugin->SetMimeType( rMimeType );
+
+    SwFrmFmt *pFrmFmt = pDoc->Insert( *pTxtCrsr->GetPaM(),
+                                       xPlugin,
+                                       &aItemSet);
+    xPropSet = SwXFrames::GetObject( *pFrmFmt, FLYCNTTYPE_OLE );
+    return xPropSet;
+}
+Reference< XPropertySet > SwXMLTextImportHelper::createFloatingFrame(
+        const OUString& rHRef,
+        sal_Int32 nWidth, sal_Int32 nHeight )
+{
+    Reference < XPropertySet > xPropSet;
+    Reference<XUnoTunnel> xCrsrTunnel( GetCursor(), UNO_QUERY );
+    ASSERT( xCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );
+    SwXTextCursor *pTxtCrsr =
+                (SwXTextCursor*)xCrsrTunnel->getSomething(
+                                            SwXTextCursor::getUnoTunnelId() );
+    ASSERT( pTxtCrsr, "SwXTextCursor missing" );
+    SwDoc *pDoc = pTxtCrsr->GetDoc();
+
+    SfxItemSet aItemSet( pDoc->GetAttrPool(), RES_FRM_SIZE, RES_FRM_SIZE );
+    if( nWidth > 0 && nHeight > 0 )
+    {
+        nWidth = MM100_TO_TWIP( nWidth );
+        if( nWidth < MINFLY )
+            nWidth = MINFLY;
+        nHeight = MM100_TO_TWIP( nHeight );
+        if( nHeight < MINFLY )
+            nHeight = MINFLY;
+        aItemSet.Put( SwFmtFrmSize( ATT_FIX_SIZE, nWidth, nHeight ) );
+    }
+    SfxFrameDescriptor *pFrameDesc = new SfxFrameDescriptor( 0 );
+
+    pFrameDesc->SetURL( INetURLObject::RelToAbs( rHRef ) );
+
+    SvStorageRef pStor = new SvStorage( aEmptyStr, STREAM_STD_READWRITE );
+    SfxFrameObjectRef pFrame = new SfxFrameObject();
+    pFrame->DoInitNew( pStor );
+
+    pFrame->EnableSetModified( FALSE );
+    pFrame->SetFrameDescriptor( pFrameDesc );
+    pFrame->EnableSetModified( TRUE );
+
+    SwFrmFmt *pFrmFmt = pDoc->Insert( *pTxtCrsr->GetPaM(),
+                                       pFrame,
+                                       &aItemSet);
+    xPropSet = SwXFrames::GetObject( *pFrmFmt, FLYCNTTYPE_OLE );
+    return xPropSet;
+}
+void SwXMLTextImportHelper::addParam(
+    const ::rtl::OUString &rName,
+    const ::rtl::OUString &rValue,
+    sal_Bool bApplet)
+{
+    if (bApplet)
+    {
+        if (!pAppletImpl)
+            return;
+        pAppletImpl->AppendParam( rName, rValue );
+    }
+    else
+    {
+        if (!xPlugin.Is())
+            return;
+        aCmdList.Append( rName, rValue );
+    }
+}
+void SwXMLTextImportHelper::setAlternateText(
+    const ::rtl::OUString &rAlt,
+    sal_Bool bApplet)
+{
+    if (bApplet)
+    {
+        if (!pAppletImpl)
+            return;
+        pAppletImpl->SetAltText( rAlt );
+    }
+    /*
+    else
+    {
+        if (!xPlugin.Is())
+            return;
+    }
+    */
+}
+
+void SwXMLTextImportHelper::endApplet()
+{
+    if (!pAppletImpl)
+        return;
+    pAppletImpl->FinishApplet();
+    delete pAppletImpl; pAppletImpl = 0;
+}
+void SwXMLTextImportHelper::endPlugin()
+{
+    if (!xPlugin.Is())
+        return;
+    xPlugin->SetCommandList( aCmdList );
+    xPlugin->EnableSetModified ( TRUE );
+    xPlugin.Clear();
+    aCmdList.Clear();
 }
 
 XMLTextImportHelper* SwXMLImport::CreateTextImport()

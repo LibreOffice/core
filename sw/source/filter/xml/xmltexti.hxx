@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexti.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mib $ $Date: 2001-02-09 13:15:58 $
+ *  last change: $Author: mtg $ $Date: 2001-02-23 14:33:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,13 +66,24 @@
 #include <xmloff/txtimp.hxx>
 #endif
 
-class XMLRedlineImportHelper;
+#ifndef _PLUGIN_HXX //autogen
+#include <so3/plugin.hxx>
+#endif
 
+#ifndef _FRAMEOBJ_HXX //autogen
+#include <sfx2/frameobj.hxx>
+#endif
+
+class XMLRedlineImportHelper;
+class SwApplet_Impl;
+class SvPlugInObjectRef;
 
 class SwXMLTextImportHelper : public XMLTextImportHelper
 {
     sal_Bool bBlockMode;
-
+    SwApplet_Impl *pAppletImpl;
+    SvPlugInObjectRef xPlugin;
+    SvCommandList aCmdList;
     XMLRedlineImportHelper *pRedlineHelper;
 
 protected:
@@ -96,6 +107,36 @@ public:
                                       const ::rtl::OUString& rHRef,
                                          const ::rtl::OUString& rClassId,
                                          sal_Int32 nWidth, sal_Int32 nHeight );
+    virtual ::com::sun::star::uno::Reference<
+        ::com::sun::star::beans::XPropertySet>
+        createApplet(
+            const ::rtl::OUString &rCode,
+            const ::rtl::OUString &rName,
+            sal_Bool bMayScript,
+            const ::rtl::OUString& rHRef,
+            sal_Int32 nWidth, sal_Int32 nHeight );
+
+    virtual ::com::sun::star::uno::Reference<
+        ::com::sun::star::beans::XPropertySet>
+        createPlugin(
+            const ::rtl::OUString &rMimeType,
+            const ::rtl::OUString& rHRef,
+            sal_Int32 nWidth, sal_Int32 nHeight );
+
+    virtual ::com::sun::star::uno::Reference<
+        ::com::sun::star::beans::XPropertySet>
+        createFloatingFrame(
+            const ::rtl::OUString &rName,
+            sal_Int32 nWidth, sal_Int32 nHeight );
+
+    virtual void addParam(
+        const ::rtl::OUString &rName,
+        const ::rtl::OUString &rValue,
+        sal_Bool bApplet);
+    virtual void setAlternateText( const ::rtl::OUString &rAlt, sal_Bool bApplet );
+
+    virtual void endApplet( );
+    virtual void endPlugin( );
 
     virtual sal_Bool IsInHeaderFooter() const;
 
