@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotxed.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: thb $ $Date: 2002-06-12 14:20:33 $
+ *  last change: $Author: aw $ $Date: 2002-09-13 15:07:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,7 +150,8 @@ FASTBOOL SdrTextObj::BegTextEdit(SdrOutliner& rOutl)
     if (bFitToSize) {
         Rectangle aAnchorRect;
         Rectangle aTextRect;
-        TakeTextRect(rOutl, aTextRect, FALSE, &aAnchorRect, FALSE);
+        TakeTextRect(rOutl, aTextRect, FALSE,
+            &aAnchorRect/* #97097# give TRUE here, not FALSE */);
         Fraction aFitXKorreg(1,1);
         ImpSetCharStretching(rOutl,aTextRect,aAnchorRect,aFitXKorreg);
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdedxv.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: cl $ $Date: 2002-08-06 13:40:22 $
+ *  last change: $Author: aw $ $Date: 2002-09-13 15:06:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -726,7 +726,8 @@ BOOL SdrObjEditView::BegTextEdit(SdrObject* pObj, SdrPageView* pPV, Window* pWin
 
             Rectangle aTextRect;
             Rectangle aAnchorRect;
-            ((SdrTextObj*)pTextEditObj)->TakeTextRect(*pTextEditOutliner, aTextRect, TRUE, &aAnchorRect, FALSE);
+            ((SdrTextObj*)pTextEditObj)->TakeTextRect(*pTextEditOutliner, aTextRect, TRUE,
+                &aAnchorRect /* #97097# Give TRUE here, not FALSE */);
 
             if ( !((SdrTextObj*)pTextEditObj)->IsContourTextFrame() )
             {
