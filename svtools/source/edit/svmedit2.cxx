@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svmedit2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2001-05-21 11:12:34 $
+ *  last change: $Author: pb $ $Date: 2001-07-05 12:49:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,11 @@ void ExtMultiLineEdit::InsertText( const String& rNew, BOOL bSelect )
 void ExtMultiLineEdit::SetAutoScroll( BOOL bAutoScroll )
 {
     GetTextView()->SetAutoScroll( bAutoScroll );
+}
+
+void ExtMultiLineEdit::EnableCursor( BOOL bEnable )
+{
+    GetTextView()->EnableCursor( bEnable );
 }
 
 void ExtMultiLineEdit::SetAttrib( const TextAttrib& rAttr, ULONG nPara, USHORT nStart, USHORT nEnd )
