@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 17:32:31 $
+ *  last change: $Author: vg $ $Date: 2003-05-28 12:33:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2952,6 +2952,18 @@ void SalDisplay::GetScreenFontResolution( long& rDPIX, long& rDPIY ) const
     {
         rDPIX = Divide( rDPIX * nThreshold, rDPIY );
         rDPIY = nThreshold;
+    }
+
+    // #i12705# equalize x- and y-resolution if they are close enough
+    if( rDPIX != rDPIY )
+    {
+        if( (12*rDPIX >= 10*rDPIY) && (12*rDPIY >= 10*rDPIX) )  //+-20%
+        {
+#ifdef DEBUG
+            printf("Forcing Resolution from %dx%d to %dx%d\n",rDPIX,rDPIY,rDPIY,rDPIY);
+#endif
+            rDPIX = rDPIY;          // y-resolution is more trustworthy
+        }
     }
 }
 
