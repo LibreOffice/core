@@ -2,9 +2,9 @@
  *
  *  $RCSfile: methods.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ab $ $Date: 2000-09-26 09:01:44 $
+ *  last change: $Author: patrick.luby $ $Date: 2000-09-27 20:39:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -675,7 +675,11 @@ void implStepRenameUCB( const String& aSource, const String& aDest )
 void implStepRenameOSL( const String& aSource, const String& aDest )
 {
     FileBase::RC nRet = File::move( getFullPathUNC( aSource ), getFullPathUNC( aDest ) );
+#ifdef MACOSX
+    if( nRet != FileBase::E_None )
+#else
     if( nRet != FileBase::RC::E_None )
+#endif
     {
         StarBASIC::Error( SbERR_PATH_NOT_FOUND );
     }
