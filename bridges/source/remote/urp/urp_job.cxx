@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_job.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jbu $ $Date: 2002-03-21 16:37:22 $
+ *  last change: $Author: kz $ $Date: 2004-03-25 14:57:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -295,7 +295,9 @@ namespace bridges_urp
 #ifdef BRIDGES_URP_PROT
         sal_Int32 nLogStart = m_pBridgeImpl->m_blockMarshaler.getPos();
 #endif
-        if( nFlags )
+        // Short request headers can only handle 14-bit method IDs, so
+        // unconditionally use a long header for method IDs that are too large:
+        if( nFlags || m_nMethodIndex >= 0xC000 )
         {
             // the flag byte is needed + request
             nFlags = nFlags | HDRFLAG_LONGHEADER | HDRFLAG_REQUEST; //
