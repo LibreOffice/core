@@ -2535,3 +2535,11 @@ __CT??_R0?AVSQLException@sdbc@star@sun@com@@@8??0SQLException@sdbc@star@sun@com@
 ?cpp_release@uno@star@sun@com@@YAXPAX@Z
 ?refreshHeader@OFileTable@file@connectivity@@UAEXXZ
 ??1?$_Vector_base@U?$_Rb_tree_iterator@U?$pair@$$CBJJ@_STL@@U?$_Nonconst_traits@U?$pair@$$CBJJ@_STL@@@2@@_STL@@V?$allocator@U?$_Rb_tree_iterator@U?$pair@$$CBJJ@_STL@@U?$_Nonconst_traits@U?$pair@$$CBJJ@_STL@@@2@@_STL@@@2@@_STL@@QAE@XZ
+??_C@_0CH@PGO@o?3?2SRC641?2wntmsci7?4pro?2inc?2vos?1r@
+??_C@_0DJ@BFCK@o?3?2SRC641?2wntmsci7?4pro?2inc?2com?1s@
+??_C@_0DF@IMLL@o?3?2SRC641?2wntmsci7?4pro?2inc?2comph@
+??_C@_0DK@HLKJ@o?3?2SRC641?2wntmsci7?4pro?2inc?2comph@
+??0?$_Rb_tree@JU?$pair@$$CBJJ@_STL@@U?$_Select1st@U?$pair@$$CBJJ@_STL@@@2@U?$less@J@2@V?$allocator@U?$pair@$$CBJJ@_STL@@@2@@_STL@@QAE@ABU?$less@J@1@ABV?$allocator@U?$pair@$$CBJJ@_STL@@@1@@Z
+?__copy@_STL@@YAPAFPAF00Urandom_access_iterator_tag@1@PAH@Z
+?__copy@_STL@@YAPAU?$_Rb_tree_iterator@U?$pair@$$CBJJ@_STL@@U?$_Nonconst_traits@U?$pair@$$CBJJ@_STL@@@2@@1@PAU21@00Urandom_access_iterator_tag@1@PAH@Z
+?equal_range@?$_Rb_tree@JU?$pair@$$CBJJ@_STL@@U?$_Select1st@U?$pair@$$CBJJ@_STL@@@2@U?$less@J@2@V?$allocator@U?$pair@$$CBJJ@_STL@@@2@@_STL@@QAE?AU?$pair@U?$_Rb_tree_iterator@U?$pair@$$CBJJ@_STL@@U?$_Nonconst_traits@U?$pair@$$CBJJ@_STL@@@2@@_STL@@U12@@2@ABJ@Z
