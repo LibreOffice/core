@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: accessibility_XAccessibleEditableText.xba,v $ 
 '*
-'*  $Revision: 1.1 $ 
+'*  $Revision: 1.2 $ 
 '*
-'*  last change:$Date: 2003-01-27 17:43:29 $ 
+'*  last change:$Date: 2003-10-06 12:43:46 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -149,12 +149,12 @@ On Error Goto ErrHndl
 
 
     Test.StartMethod("setAttributes()")
-    Dim attrs As Variant, newAttrs As Variant
-    Dim i As Integer
-    bOK = true
-    length = oObj.getCharacterCount()
-    attrs = oObj.getCharacterAttributes(0)
     if hasChangeableAttrs then
+        Dim attrs As Variant, newAttrs As Variant
+        Dim i As Integer
+        bOK = true
+        length = oObj.getCharacterCount()
+        attrs = oObj.getCharacterAttributes(0)
         for i=0 to ubound(attrs())
             if attrs(i).Name = "CharBackColor" then attrs(i).Value = RGB(120,205,40)
             if attrs(i).Name = "CharHeight" then attrs(i).Value = 30
@@ -203,7 +203,7 @@ On Error Goto ErrHndl
     End If
     Test.MethodTested("setText()",bOK)
 
-    ' Setting initial text
+    out.dbg("Setting initial text: " + initialText )
     oObj.setText(initialText)
 
 Exit Sub
