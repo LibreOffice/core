@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.92 $
+#   $Revision: 1.93 $
 #
-#   last change: $Author: vg $ $Date: 2005-02-18 09:16:01 $
+#   last change: $Author: obo $ $Date: 2005-03-15 12:57:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -332,9 +332,11 @@ SHL4OBJS=       \
                 $(SLO)$/uicategorydescription.obj       \
                 $(SLO)$/vclstatusindicator.obj          \
                 $(SLO)$/wakeupthread.obj               \
+                $(SLO)$/sessionlistener.obj         \
                 $(SLO)$/newmenucontroller.obj          \
-                $(SLO)$/sessionlistener.obj
-
+                $(SLO)$/logoimagestatusbarcontroller.obj \
+                $(SLO)$/logotextstatusbarcontroller.obj               
+                
 SHL4STDLIBS=	\
                 $(FWILIB)                           \
                 $(FWELIB)							\
@@ -358,6 +360,32 @@ SHL4DEPN=		$(SHL1IMPLIBN) $(SHL1TARGETN) $(SHL2IMPLIBN) $(SHL2TARGETN)
 DEF4NAME=		$(SHL4TARGET)
 
 SHL4VERSIONMAP= exports.map
+
+# --- services library ----------------------------------------------------
+
+SHL5TARGET=		fwm$(UPD)$(DLLPOSTFIX)
+
+SHL5IMPLIB=		ifwm
+
+SHL5OBJS=       \
+                $(SLO)$/helponstartup.obj \
+                $(SLO)$/register3rdcomponents.obj
+
+SHL5STDLIBS=	\
+                $(FWILIB)			\
+                $(VCLLIB)			\
+                $(TOOLSLIB) 		\
+                $(COMPHELPERLIB)	\
+                $(CPPUHELPERLIB)	\
+                $(CPPULIB)			\
+                $(SALLIB)
+
+SHL5DEF=		$(MISC)$/$(SHL5TARGET).def
+SHL5DEPN=		$(SHL1IMPLIBN) $(SHL1TARGETN)
+
+DEF5NAME=		$(SHL5TARGET)
+
+SHL5VERSIONMAP= exports.map
 
 # --- Targets -----------------------------------------------------------------
 
