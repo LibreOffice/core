@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objcont.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 12:35:36 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:42:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,9 @@
 #include <vcl/wrkwin.hxx>
 #endif
 
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #include <svtools/stritem.hxx>
 #include <svtools/intitem.hxx>
@@ -220,7 +222,7 @@ FASTBOOL SfxObjectShell::SaveWindows_Impl( SvStorage &rStor ) const
         if ( pFrame->GetViewShell() )
         {
             SfxTopFrame* pTop = (SfxTopFrame*) pFrame->GetFrame();
-            Window* pWin = pTop->GetTopWindow_Impl();
+            pTop->GetTopWindow_Impl();
 
 #if SUPD<613//MUSTINI
             char cToken = SfxIniManager::GetToken();
@@ -278,7 +280,7 @@ SfxViewFrame* SfxObjectShell::LoadWindows_Impl( SfxTopFrame *pPreferedFrame )
         return 0;
 
     // get correct mode
-    SfxApplication *pSfxApp = SFX_APP();
+    SFX_APP();
     SfxViewFrame *pPrefered = pPreferedFrame ? pPreferedFrame->GetCurrentViewFrame() : 0;
     SvtSaveOptions aOpt;
     BOOL bLoadDocWins = aOpt.IsSaveDocWins() && !pPrefered;
@@ -672,8 +674,8 @@ BOOL SfxObjectShell::SaveInfoAndConfig_Impl( SvStorageRef pNewStg )
         //!! kein Aufruf der Basisklasse wegen doppeltem Aufruf in Persist
         //if(!SfxObjectShell::SaveAs(pNewStg))
         //  return FALSE;
-        SfxApplication *pSfxApp = SFX_APP();
-        SfxMedium *pActMed = GetMedium();
+        SFX_APP();
+        GetMedium();
 
         // alte DocInfo laden
         SfxDocumentInfo &rDocInfo = GetDocInfo();
@@ -1041,8 +1043,8 @@ void  SfxObjectShell::TriggerHelpPI(USHORT nIdx1, USHORT nIdx2, USHORT nIdx3)
     {
         SfxStyleSheetBasePool *pPool = GetStyleSheetPool();
         SetOrganizerSearchMask(pPool);
-        SfxStyleSheetBase *pStyle = (*pPool)[nIdx2];
 #ifdef WIR_KOENNEN_WIEDER_HILFE_FUER_STYLESHEETS
+        SfxStyleSheetBase *pStyle = (*pPool)[nIdx2];
         if(pStyle)
         {
             String aHelpFile;
@@ -1106,8 +1108,8 @@ void   SfxObjectShell::GetContent(String &rText,
         case INDEX_IGNORE:
         {
             USHORT nTextResId = 0;
-            USHORT nClosedBitmapResId; // evtl. sp"ater mal unterschiedliche
-            USHORT nOpenedBitmapResId; // "     "       "   "
+            USHORT nClosedBitmapResId = 0 ; //evtl. sp"ater mal unterschiedliche
+            USHORT nOpenedBitmapResId = 0; // "     "       "   "
             switch(i)
             {
                 case CONTENT_STYLE:
@@ -1209,6 +1211,9 @@ Bitmap SfxObjectShell::GetStyleFamilyBitmap(SfxStyleFamily eFamily, BmpColorMode
             break;
         case SFX_STYLE_FAMILY_PAGE :
             nResId = ( eColorMode == BMP_COLOR_NORMAL ) ? BMP_STYLES_FAMILY4 : BMP_STYLES_FAMILY4_HC;
+            break;
+        case SFX_STYLE_FAMILY_PSEUDO:
+        case SFX_STYLE_FAMILY_ALL:
             break;
     }
 
