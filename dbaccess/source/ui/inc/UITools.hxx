@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UITools.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-09 12:37:05 $
+ *  last change: $Author: oj $ $Date: 2002-07-25 06:55:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,11 +263,35 @@ namespace dbaui
 
     /** check if SQL92 name checking is enabled
         @param  _xConnection
-            Used to get the datasource as parent from the conenction.
+            Used to get the datasource as parent from the connection.
         @return
             <TRUE/> if so otherwise <FALSE/>
     */
     sal_Bool isSQL92CheckEnabled(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection);
+
+    /** fills the bool and string value with information out of the datasource info property
+        @param  _xDatasource
+            Asked for the properties.
+        @param  _rAutoIncrementValueEnabled
+            <OUT/> Set to TRUE when the property was set in the datasource.
+        @param  _rsAutoIncrementValue
+            <OUT/> Set to the value when the property was set in the datasource.
+    */
+    void fillAutoIncrementValue(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xDatasource
+                                ,sal_Bool& _rAutoIncrementValueEnabled
+                                ,::rtl::OUString& _rsAutoIncrementValue);
+
+    /** fills the bool and string value with information out of the datasource info property
+        @param  _xConnection
+            Used to get the datasource as parent from the connection.
+        @param  _rAutoIncrementValueEnabled
+            <OUT/> Set to TRUE when the property was set in the datasource.
+        @param  _rsAutoIncrementValue
+            <OUT/> Set to the value when the property was set in the datasource.
+    */
+    void fillAutoIncrementValue(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection
+                                ,sal_Bool& _rAutoIncrementValueEnabled
+                                ,::rtl::OUString& _rsAutoIncrementValue);
 
 // .........................................................................
 }

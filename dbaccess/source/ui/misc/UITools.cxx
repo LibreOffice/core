@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UITools.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-11 10:05:15 $
+ *  last change: $Author: oj $ $Date: 2002-07-25 06:55:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -644,8 +644,9 @@ void setColumnProperties(const Reference<XPropertySet>& _rxColumn,const OFieldDe
     _rxColumn->setPropertyValue(PROPERTY_ISAUTOINCREMENT,::cppu::bool2any(_pFieldDesc->IsAutoIncrement()));
     if ( _rxColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_ISCURRENCY) && _pFieldDesc->IsCurrency() )
         _rxColumn->setPropertyValue(PROPERTY_ISCURRENCY,::cppu::bool2any(_pFieldDesc->IsCurrency()));
-//  if(_rxColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_DEFAULTVALUE))
-//      _rxColumn->setPropertyValue(PROPERTY_DEFAULTVALUE,makeAny(_pFieldDesc->GetDefaultValue()));
+    // set autoincrement value when available
+    if ( _pFieldDesc->IsAutoIncrement() && _rxColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_AUTOINCREMENTCREATION) )
+        _rxColumn->setPropertyValue(PROPERTY_AUTOINCREMENTCREATION,makeAny(_pFieldDesc->GetAutoIncrementValue()));
 }
 // -----------------------------------------------------------------------------
 ::rtl::OUString createDefaultName(const Reference< XDatabaseMetaData>& _xMetaData,const Reference<XNameAccess>& _xTables,const ::rtl::OUString& _sName)
@@ -1110,16 +1111,13 @@ sal_Bool isSQL92CheckEnabled(const Reference<XConnection>& _xConnection)
             Reference< XPropertySet> xProp(xChild->getParent(),UNO_QUERY);
             if ( xProp.is() )
             {
-                Sequence< PropertyValue > aSeq;
-                xProp->getPropertyValue(PROPERTY_INFO) >>= aSeq;
-                const PropertyValue* pBegin = aSeq.getConstArray();
-                const PropertyValue* pEnd     = pBegin + aSeq.getLength();
-                ::rtl::OUString sProp(PROPERTY_ENABLESQL92CHECK);
-                for(;pBegin != pEnd;++pBegin)
-                {
-                    if ( pBegin->Name == sProp )
-                        pBegin->Value >>= bCheckNames;
-                }
+                Sequence< PropertyValue > aInfo;
+                xProp->getPropertyValue(PROPERTY_INFO) >>= aInfo;
+                const PropertyValue* pValue =::std::find_if(aInfo.getConstArray(),
+                                                    aInfo.getConstArray() + aInfo.getLength(),
+                                                    ::std::bind2nd(TPropertyValueEqualFunctor(),PROPERTY_ENABLESQL92CHECK));
+                if ( pValue && pValue != (aInfo.getConstArray() + aInfo.getLength()) )
+                    pValue->Value >>= bCheckNames;
             }
         }
     }
@@ -1128,6 +1126,42 @@ sal_Bool isSQL92CheckEnabled(const Reference<XConnection>& _xConnection)
         OSL_ASSERT(!"isSQL92CheckEnabled");
     }
     return bCheckNames;
+}
+// -----------------------------------------------------------------------------
+void fillAutoIncrementValue(const Reference<XPropertySet>& _xDatasource,
+                            sal_Bool& _rAutoIncrementValueEnabled,
+                            ::rtl::OUString& _rsAutoIncrementValue)
+{
+    if ( _xDatasource.is() )
+    {
+        OSL_ENSURE(_xDatasource->getPropertySetInfo()->hasPropertyByName(PROPERTY_INFO),"NO datasource supplied!");
+        Sequence<PropertyValue> aInfo;
+        _xDatasource->getPropertyValue(PROPERTY_INFO) >>= aInfo;
+
+        // search the right propertyvalue
+        const PropertyValue* pValue =::std::find_if(aInfo.getConstArray(),
+                                                    aInfo.getConstArray() + aInfo.getLength(),
+                                                    ::std::bind2nd(TPropertyValueEqualFunctor(),PROPERTY_AUTOINCREMENTCREATION));
+        if ( pValue && pValue != (aInfo.getConstArray() + aInfo.getLength()) )
+            pValue->Value >>= _rsAutoIncrementValue;
+        pValue =::std::find_if(aInfo.getConstArray(),
+                                                    aInfo.getConstArray() + aInfo.getLength(),
+                                                    ::std::bind2nd(TPropertyValueEqualFunctor(),::rtl::OUString::createFromAscii("IsAutoRetrievingEnabled") ));
+        if ( pValue && pValue != (aInfo.getConstArray() + aInfo.getLength()) )
+            pValue->Value >>= _rAutoIncrementValueEnabled;
+    }
+}
+// -----------------------------------------------------------------------------
+void fillAutoIncrementValue(const Reference<XConnection>& _xConnection,
+                            sal_Bool& _rAutoIncrementValueEnabled,
+                            ::rtl::OUString& _rsAutoIncrementValue)
+{
+    Reference< XChild> xChild(_xConnection,UNO_QUERY);
+    if(xChild.is())
+    {
+        Reference< XPropertySet> xProp(xChild->getParent(),UNO_QUERY);
+        fillAutoIncrementValue(xProp,_rAutoIncrementValueEnabled,_rsAutoIncrementValue);
+    }
 }
 // .........................................................................
 }
