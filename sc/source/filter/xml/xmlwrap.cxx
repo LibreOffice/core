@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlwrap.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: sab $ $Date: 2001-12-04 18:25:09 $
+ *  last change: $Author: sab $ $Date: 2002-01-22 12:29:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -570,8 +570,12 @@ sal_Bool ScXMLImportWrapper::ExportToComponent(uno::Reference<lang::XMultiServic
 
     if( pStorage )
     {
+        // #96807#; trunc stream before use, because it could be an existing stream
+        // and the new content could be shorter than the old content. In this case
+        // would not all be over written by the new content and the xml file
+        // would not be valid.
         xStream = pStorage->OpenStream( sName,
-                                STREAM_WRITE | STREAM_SHARE_DENYWRITE );
+                                STREAM_WRITE | STREAM_SHARE_DENYWRITE | STREAM_TRUNC );
         uno::Any aAny; aAny <<= sMediaType;
         xStream->SetProperty(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType")), aAny);
         if (bPlainText)
