@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.src,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: nf $ $Date: 2002-01-24 15:19:39 $
+ *  last change: $Author: kz $ $Date: 2002-02-04 10:44:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2197,8 +2197,8 @@ QueryBox DLG_MACROQUERY
     Message[ swedish ] = "Det h�r dokumentet inneh�ller makron. $(TEXT)";
     Message[ polish ] = "Dieses Dokument enth�lt Makros. $(TEXT)";
     Message[ portuguese_brazilian ] = "Dieses Dokument enth�lt Makros. $(TEXT)";
-    Message[ chinese_simplified ] = "这个文档含有宏 $(TEXT)";
-    Message[ chinese_traditional ] = "這個文件含有巨集 $(TEXT)";
+    Message[ chinese_simplified ] = "这个文档含有宏。$(TEXT)";
+    Message[ chinese_traditional ] = "這個文件含有巨集。$(TEXT)";
     Message[ turkish ] = "Dieses Dokument enth�lt Makros. $(TEXT)";
     Message[ arabic ] = "Dieses Dokument enth�lt Makros. $(TEXT)";
     Message[ catalan ] = "Dieses Dokument enth�lt Makros. $(TEXT)";
