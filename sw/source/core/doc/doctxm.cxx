@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctxm.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2000-11-06 07:25:56 $
+ *  last change: $Author: jp $ $Date: 2000-11-28 20:45:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -504,6 +504,26 @@ const SwTOXBaseSection* SwDoc::InsertTableOf( const SwPosition& rPos,
 
         if( bExpand )
             pNew->Update();
+        else if( 1 == rTOX.GetTitle().Len() && IsInReading() )
+        // insert title of TOX
+        {
+            // then insert the headline section
+            SwNodeIndex aIdx( *pSectNd, +1 );
+
+            SwTxtNode* pHeadNd = GetNodes().MakeTxtNode( aIdx,
+                            GetTxtCollFromPool( RES_POOLCOLL_STANDARD ) );
+
+            String sNm( pNew->GetTOXName() );
+// ??Resource
+sNm.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "_Head" ));
+
+            SwSection aSect( TOX_HEADER_SECTION, sNm );
+
+            SwNodeIndex aStt( *pHeadNd ); aIdx--;
+            SwSectionFmt* pSectFmt = MakeSectionFmt( 0 );
+            GetNodes().InsertSection( aStt, *pSectFmt, aSect, &aIdx,
+                                                TRUE, FALSE );
+        }
     }
     else
         delete pNew, pNew = 0;
