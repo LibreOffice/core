@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lstbox.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mt $ $Date: 2002-11-22 14:35:09 $
+ *  last change: $Author: mt $ $Date: 2002-12-12 16:26:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -351,7 +351,16 @@ IMPL_LINK( ListBox, ImplClickBtnHdl, void*, EMPTYARG )
 IMPL_LINK( ListBox, ImplPopupModeEndHdl, void*, p )
 {
     if( mpFloatWin->IsPopupModeCanceled() )
-        mpImplLB->SelectEntry( mpFloatWin->GetPopupModeStartSaveSelection(), TRUE );
+    {
+        if ( !IsEntryPosSelected( mpFloatWin->GetPopupModeStartSaveSelection() ) )
+        {
+            mpImplLB->SelectEntry( mpFloatWin->GetPopupModeStartSaveSelection(), TRUE );
+            BOOL bTravelSelect = mpImplLB->IsTravelSelect();
+            mpImplLB->SetTravelSelect( TRUE );
+            Select();
+            mpImplLB->SetTravelSelect( bTravelSelect );
+        }
+    }
 
     mpBtn->SetPressed( FALSE );
     ImplCallEventListeners( VCLEVENT_DROPDOWN_CLOSE );
