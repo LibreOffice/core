@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLExport.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: bm $ $Date: 2001-05-11 18:17:55 $
+ *  last change: $Author: bm $ $Date: 2001-05-15 12:24:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,63 +238,6 @@ void SchXMLExportHelper::collectAutoStyles( uno::Reference< chart::XChartDocumen
 void SchXMLExportHelper::exportChart( uno::Reference< chart::XChartDocument > rChartDoc,
                                       sal_Bool bIncludeTable )
 {
-    if( ! bIncludeTable )       // embedded chart in calc or writer getting data from container
-    {
-        // get table addresses from model
-        uno::Reference< lang::XServiceInfo > xServ( rChartDoc, uno::UNO_QUERY );
-        if( xServ.is())
-        {
-            if( xServ->supportsService(
-                rtl::OUString::createFromAscii( "com.sun.star.chart.ChartTableAddressSupplier" )))
-            {
-                uno::Reference< beans::XPropertySet > xProp( xServ, uno::UNO_QUERY );
-                if( xProp.is())
-                {
-                    uno::Any aAny;
-                    aAny = xProp->getPropertyValue(
-                        rtl::OUString::createFromAscii( "CategoriesRangeAddress" ));
-                    aAny >>= msCategoriesAddress;
-
-                    aAny = xProp->getPropertyValue(
-                        rtl::OUString::createFromAscii( "SeriesAddresses" ));
-                    aAny >>= maSeriesAddresses;
-
-                    // map strings
-                    if( mxTableAddressMapper.is())
-                    {
-                        // categories
-                        uno::Sequence< rtl::OUString > aStrSeq( 1 );
-                        aStrSeq[ 0 ] = msCategoriesAddress;
-                        mxTableAddressMapper->mapStrings( aStrSeq );
-                        msCategoriesAddress = aStrSeq[ 0 ];
-
-                        // series
-                        sal_Int32 nLength = maSeriesAddresses.getLength();
-                        sal_Int32 nIdx;
-                        aStrSeq.realloc( nLength * 2);
-                        for( nIdx = 0; nIdx < nLength; nIdx++ )
-                        {
-                            aStrSeq[ nIdx * 2 ] = maSeriesAddresses[ nIdx ].DataRangeAddress;
-                            aStrSeq[ nIdx * 2 + 1 ] = maSeriesAddresses[ nIdx ].LabelAddress;
-
-                            // domains
-                            if( maSeriesAddresses[ nIdx ].DomainRangeAddresses.getLength())
-                                mxTableAddressMapper->mapStrings( maSeriesAddresses[ nIdx ].DomainRangeAddresses );
-                        }
-
-                        mxTableAddressMapper->mapStrings( aStrSeq );
-
-                        for( nIdx = 0; nIdx < nLength; nIdx++ )
-                        {
-                            maSeriesAddresses[ nIdx ].DataRangeAddress = aStrSeq[ nIdx * 2 ];
-                            maSeriesAddresses[ nIdx ].LabelAddress = aStrSeq[ nIdx * 2 + 1 ];
-                        }
-                    }
-                }
-            }
-        }
-    }
-
     parseDocument( rChartDoc, sal_True, bIncludeTable );
 }
 
@@ -851,6 +794,9 @@ void SchXMLExportHelper::exportPlotArea( uno::Reference< chart::XDiagram > xDiag
         if( aASName.getLength())
             mrExport.AddAttribute( XML_NAMESPACE_CHART, sXML_style_name, aASName );
 
+        if( msChartAddress.getLength())
+            mrExport.AddAttribute( XML_NAMESPACE_TABLE, sXML_cell_range_address, msChartAddress );
+
         // attributes
         uno::Reference< drawing::XShape > xShape ( xDiagram, uno::UNO_QUERY );
         if( xShape.is())
@@ -938,7 +884,8 @@ void SchXMLExportHelper::exportPlotArea( uno::Reference< chart::XDiagram > xDiag
         }
         else
         {
-            msString = msCategoriesAddress;
+            // deprecated
+//              msString = msCategoriesAddress;
         }
 
         if( msString.getLength())
@@ -1009,20 +956,15 @@ void SchXMLExportHelper::exportPlotArea( uno::Reference< chart::XDiagram > xDiag
             {
                 // #81525# convert addresses for xy charts
                 // this should be done by calc in the future
-                if( maSeriesAddresses.getLength() > nSeries )
-                {
-                    mrExport.AddAttribute( XML_NAMESPACE_CHART, sXML_values_cell_range_address,
-                                           maSeriesAddresses[ nSeries ].DataRangeAddress );
-                    if( maSeriesAddresses[ nSeries ].LabelAddress.getLength())
-                        mrExport.AddAttribute( XML_NAMESPACE_CHART, sXML_label_cell_address,
-                                               maSeriesAddresses[ nSeries ].LabelAddress );
-                }
 
-                // this is what should be done in the future:
-//                  if( maSeriesAddresses.getLength() > nSeries - mnDomainAxes )
+                // deprecated
+//                  if( maSeriesAddresses.getLength() > nSeries )
 //                  {
 //                      mrExport.AddAttribute( XML_NAMESPACE_CHART, sXML_values_cell_range_address,
-//                                             maSeriesAddresses[ nSeries - mnDomainAxes  ].DataRangeAddress );
+//                                             maSeriesAddresses[ nSeries ].DataRangeAddress );
+//                      if( maSeriesAddresses[ nSeries ].LabelAddress.getLength())
+//                          mrExport.AddAttribute( XML_NAMESPACE_CHART, sXML_label_cell_address,
+//                                                 maSeriesAddresses[ nSeries ].LabelAddress );
 //                  }
             }
 
@@ -1071,16 +1013,11 @@ void SchXMLExportHelper::exportPlotArea( uno::Reference< chart::XDiagram > xDiag
                 {
                     // #81525# convert addresses for xy charts
                     // this should be done by calc in the future
-                    if( maSeriesAddresses.getLength() > 0 )
-                    {
-                        msStringBuffer.append( maSeriesAddresses[ 0 ].DataRangeAddress );
-                    }
 
-                    // this is what should be done in the future:
-//                      if( maSeriesAddresses.getLength() > nSeries &&
-//                          maSeriesAddresses[ nSeries ].DomainRangeAddresses.getLength() > nDomain )
+                    // deprecated
+//                      if( maSeriesAddresses.getLength() > 0 )
 //                      {
-//                          msStringBuffer.append( maSeriesAddresses[ nSeries ].DomainRangeAddresses[ nDomain ] );
+//                          msStringBuffer.append( maSeriesAddresses[ 0 ].DataRangeAddress );
 //                      }
                 }
 
@@ -1963,17 +1900,34 @@ void SchXMLExport::_ExportContent()
 
         // determine if data comes from the outside
         sal_Bool bIncludeTable = sal_True;
-        uno::Reference< beans::XPropertySet > xProp( xChartDoc, uno::UNO_QUERY );
-        if( xProp.is())
+        uno::Reference< lang::XServiceInfo > xServ( xChartDoc, uno::UNO_QUERY );
+        if( xServ.is())
         {
-            uno::Any aAny( xProp->getPropertyValue(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SeriesAddresses" ))));
-            uno::Sequence< chart::ChartSeriesAddress > aAddresses;
-            aAny >>= aAddresses;
-            if( aAddresses.getLength())
-                bIncludeTable = sal_False;
-        }
+            if( xServ->supportsService(
+                rtl::OUString::createFromAscii( "com.sun.star.chart.ChartTableAddressSupplier" )))
+            {
+                uno::Reference< beans::XPropertySet > xProp( xServ, uno::UNO_QUERY );
+                if( xProp.is())
+                {
+                    uno::Any aAny;
+                    try
+                    {
+                        ::rtl::OUString sChartAddress;
+                        aAny = xProp->getPropertyValue(
+                            rtl::OUString::createFromAscii( "ChartRangeAddress" ));
+                        aAny >>= sChartAddress;
+                        maExportHelper.SetChartRangeAddress( sChartAddress );
 
+                        // do not include own table if there are external addresses
+                        bIncludeTable = (sChartAddress.getLength() == 0);
+                    }
+                    catch( beans::UnknownPropertyException )
+                    {
+                        DBG_ERROR( "Property ChartRangeAddress not supported by ChartDocument" );
+                    }
+                }
+            }
+        }
         maExportHelper.exportChart( xChartDoc, bIncludeTable );
     }
     else
