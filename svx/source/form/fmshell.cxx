@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshell.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 11:24:21 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 12:20:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -938,7 +938,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
         case SID_FM_MORE_CONTROLS:
         case SID_FM_FORM_DESIGN_TOOLS:
         {
-            FormToolboxes aToolboxAccess( GetImpl()->getHostFrame() );
+            FormToolboxes aToolboxAccess( GetImpl()->getHostFrame(), GetImpl()->getDocumentType() );
             aToolboxAccess.toggleToolbox( nSlot );
             rReq.Done();
         }
@@ -1234,7 +1234,7 @@ void FmFormShell::GetState(SfxItemSet &rSet)
             case SID_FM_MORE_CONTROLS:
             case SID_FM_FORM_DESIGN_TOOLS:
             {
-                FormToolboxes aToolboxAccess( GetImpl()->getHostFrame() );
+                FormToolboxes aToolboxAccess( GetImpl()->getHostFrame(), GetImpl()->getDocumentType() );
                 rSet.Put( SfxBoolItem( nWhich, aToolboxAccess.isToolboxVisible( nWhich ) ) );
             }
             break;
