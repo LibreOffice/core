@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dataview.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-09 09:41:25 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 14:47:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,7 @@ namespace dbaui
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::util;
     using namespace ::com::sun::star::lang;
+    using namespace ::com::sun::star::frame;
 
     //=====================================================================
     //= ColorChanger
@@ -136,6 +137,7 @@ namespace dbaui
         DBG_CTOR(ODataView,NULL);
         OSL_ENSURE(m_pController,"Controller must be not NULL!");
         m_pController->acquire();
+        m_pAccel.reset(::svt::AcceleratorExecute::createAcceleratorHelper());
     }
 
     // -------------------------------------------------------------------------
@@ -225,31 +227,9 @@ namespace dbaui
             {
                 const KeyEvent* pKeyEvent = rNEvt.GetKeyEvent();
                 const KeyCode& aKeyCode = pKeyEvent->GetKeyCode();
-                ::rtl::OUString sCommand;
-
-                if ( aKeyCode.IsMod1() )
+                if ( m_pAccel.get() )
                 {
-                    switch ( pKeyEvent->GetKeyCode().GetCode() )
-                    {
-                        case KEY_S:
-                        {
-                            sCommand = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:Save"));
-                            bHandled = TRUE;
-                            break;
-                        }
-                        case KEY_Z:
-                        {
-                            sCommand =  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:Undo"));
-                            bHandled = TRUE;
-                            break;
-                        }
-                    }
-                }
-                if ( bHandled )
-                {
-                    URL aCommand;
-                    aCommand.Complete = sCommand;
-                    m_pController->executeChecked( aCommand ,Sequence<PropertyValue>());
+                    bHandled = m_pAccel->execute(aKeyCode);
                 }
             }
             break;
@@ -279,6 +259,11 @@ namespace dbaui
             // Check if we need to get new images for normal/high contrast mode
             m_pController->notifyHiContrastChanged();
         }
+    }
+    // -----------------------------------------------------------------------------
+    void ODataView::attachFrame(const Reference< XFrame >& _xFrame)
+    {
+        m_pAccel->init(m_xServiceFactory,_xFrame);
     }
 //.........................................................................
 }
