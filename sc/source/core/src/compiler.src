@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-21 20:35:05 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 06:20:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3061,7 +3061,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ english ] = "MIRR" ;
         Text[ english_us ] = "MIRR";
         Text[ portuguese ] = "MIRR";
-        Text[ russian ] = "MIRR";
+        Text[ russian ] = "Ã¬—ƒ";
         Text[ greek ] = "MIRR";
         Text[ dutch ] = "QIR";
         Text[ french ] = "TRIM";
@@ -3084,7 +3084,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ english ] = "ISPMT" ;
         Text[ english_us ] = "ISPMT";
         Text[ portuguese ] = "ISPMT";
-        Text[ russian ] = "ISPMT";
+        Text[ russian ] = "œ–Œ÷œÀ¿“";
         Text[ greek ] = "ISPMT";
         Text[ dutch ] = "ISPMT";
         Text[ french ] = "ISPMT";
@@ -3980,7 +3980,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ spanish ] = "VF" ;
         Text [ english_us ] = "FV" ;
         Text[ chinese_simplified ] = "FV";
-        Text[ russian ] = "¡Á";
+        Text[ russian ] = "¡«";
         Text[ polish ] = "FV";
         Text[ japanese ] = "FV";
         Text[ chinese_traditional ] = "FV";
@@ -4036,7 +4036,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ spanish ] = "TASA" ;
         Text [ english_us ] = "RATE" ;
         Text[ chinese_simplified ] = "RATE";
-        Text[ russian ] = "ÕŒ–Ã¿";
+        Text[ russian ] = "—“¿¬ ¿";
         Text[ polish ] = "RATE";
         Text[ japanese ] = "RATE";
         Text[ chinese_traditional ] = "RATE";
@@ -4596,7 +4596,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ spanish ] = "INDIRECTO" ;
         Text [ english_us ] = "INDIRECT" ;
         Text[ chinese_simplified ] = "INDIRECT";
-        Text[ russian ] = "INDIREKT";
+        Text[ russian ] = "ƒ¬——€À";
         Text[ polish ] = "ADR.POåR";
         Text[ japanese ] = "INDIRECT";
         Text[ chinese_traditional ] = "INDIRECT";
