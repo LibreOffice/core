@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javatype.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jsc $ $Date: 2001-08-02 12:53:28 $
+ *  last change: $Author: vg $ $Date: 2001-08-20 11:10:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -937,7 +937,7 @@ void InterfaceType::dumpAttributes(FileStream& o, UnoInfoList* pUnoInfos)
     }
 
     if (!first)
-        o << endl;
+        o << "\n";
 }
 
 void InterfaceType::dumpMethods(FileStream& o, UnoInfoList* pUnoInfos)
@@ -1058,7 +1058,7 @@ void InterfaceType::dumpMethods(FileStream& o, UnoInfoList* pUnoInfos)
     }
 
     if (!first)
-        o << endl;
+        o << "\n";
 }
 
 void InterfaceType::dumpUnoInfo(FileStream& o, const UnoInfo& unoInfo, sal_Int32 * index)
@@ -1447,7 +1447,7 @@ sal_Bool StructureType::dumpFile(FileStream& o)
         o << " " << fieldName << ";\n";
     }
 
-    o << endl << indent() << "//constructors\n";
+    o << "\n" << indent() << "//constructors\n";
     o << indent() << "public " << m_name << "()\n" << indent() << "{\n";
     inc();
     OString relType;
@@ -1594,7 +1594,7 @@ sal_Bool ExceptionType::dumpFile(FileStream& o)
         o << " " << fieldName << ";\n";
     }
 
-    o << endl << indent() << "//constructors\n";
+    o << "\n" << indent() << "//constructors\n";
     o << indent() << "public " << m_name << "()\n" << indent() << "{\n";
     inc();
 /*
