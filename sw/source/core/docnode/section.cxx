@@ -2,9 +2,9 @@
  *
  *  $RCSfile: section.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:58:00 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:21:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -962,7 +962,7 @@ void SwSectionFmt::UpdateParent()       // Parent wurde veraendert
         return;
 
     SwSectionPtr pSection = 0;
-    const SvxProtectItem* pProtect;
+    const SvxProtectItem* pProtect(0);
     int bIsHidden = FALSE;
 
     SwClientIter aIter( *this );
