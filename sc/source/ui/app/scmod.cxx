@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scmod.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-16 13:59:45 $
+ *  last change: $Author: nn $ $Date: 2000-11-26 13:52:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -496,7 +496,9 @@ void ScModule::Execute( SfxRequest& rReq )
             }
             break;
 
-        case SID_ATTR_LANGUAGE :
+        case SID_ATTR_LANGUAGE:
+        case SID_ATTR_CHAR_CJK_LANGUAGE:
+        case SID_ATTR_CHAR_CTL_LANGUAGE:
             {
                 const SfxPoolItem* pItem;
                 if ( pReqArgs && SFX_ITEM_SET == pReqArgs->GetItemState( nSlot, TRUE, &pItem ) )
@@ -505,10 +507,21 @@ void ScModule::Execute( SfxRequest& rReq )
                     ScDocument* pDoc = pDocSh ? pDocSh->GetDocument() : NULL;
                     if ( pDoc )
                     {
-                        LanguageType eLang = ((SvxLanguageItem*)pItem)->GetLanguage();
-                        if ( pDoc->GetLanguage() != eLang )
+                        LanguageType eNewLang = ((SvxLanguageItem*)pItem)->GetLanguage();
+                        LanguageType eLatin, eCjk, eCtl;
+                        pDoc->GetLanguage( eLatin, eCjk, eCtl );
+                        LanguageType eOld = ( nSlot == SID_ATTR_CHAR_CJK_LANGUAGE ) ? eCjk :
+                                            ( ( nSlot == SID_ATTR_CHAR_CTL_LANGUAGE ) ? eCtl : eLatin );
+                        if ( eNewLang != eOld )
                         {
-                            pDoc->SetLanguage( eLang );
+                            if ( nSlot == SID_ATTR_CHAR_CJK_LANGUAGE )
+                                eCjk = eNewLang;
+                            else if ( nSlot == SID_ATTR_CHAR_CTL_LANGUAGE )
+                                eCtl = eNewLang;
+                            else
+                                eLatin = eNewLang;
+
+                            pDoc->SetLanguage( eLatin, eCjk, eCtl );
 
                             ScInputHandler* pInputHandler = GetInputHdl();
                             if ( pInputHandler )
@@ -569,9 +582,9 @@ void ScModule::GetState( SfxItemSet& rSet )
                         bAuto = pDocSh->GetDocument()->GetDocOptions().IsAutoSpell();
                     else
                     {
-                        USHORT nDummyLang;
+                        USHORT nDummyLang, nDummyCjk, nDummyCtl;
                         BOOL bDummy;
-                        GetSpellSettings( nDummyLang, bAuto, bDummy );
+                        GetSpellSettings( nDummyLang, nDummyCjk, nDummyCtl, bAuto, bDummy );
                     }
                     rSet.Put( SfxBoolItem( nWhich, bAuto ) );
                 }
@@ -587,19 +600,27 @@ void ScModule::GetState( SfxItemSet& rSet )
                         bHide = pDocSh->GetDocument()->GetViewOptions().IsHideAutoSpell();
                     else
                     {
-                        USHORT nDummyLang;
+                        USHORT nDummyLang, nDummyCjk, nDummyCtl;
                         BOOL bDummy;
-                        GetSpellSettings( nDummyLang, bDummy, bHide );
+                        GetSpellSettings( nDummyLang, nDummyCjk, nDummyCtl, bDummy, bHide );
                     }
                     rSet.Put( SfxBoolItem( nWhich, bHide ) );
                 }
                 break;
-            case SID_ATTR_LANGUAGE :
+            case SID_ATTR_LANGUAGE:
+            case SID_ATTR_CHAR_CJK_LANGUAGE:
+            case SID_ATTR_CHAR_CTL_LANGUAGE:
                 {
                     ScDocShell* pDocSh = PTR_CAST(ScDocShell, SfxObjectShell::Current());
                     ScDocument* pDoc = pDocSh ? pDocSh->GetDocument() : NULL;
                     if ( pDoc )
-                        rSet.Put( SvxLanguageItem( pDoc->GetLanguage(), nWhich ) );
+                    {
+                        LanguageType eLatin, eCjk, eCtl;
+                        pDoc->GetLanguage( eLatin, eCjk, eCtl );
+                        LanguageType eLang = ( nWhich == SID_ATTR_CHAR_CJK_LANGUAGE ) ? eCjk :
+                                            ( ( nWhich == SID_ATTR_CHAR_CTL_LANGUAGE ) ? eCtl : eLatin );
+                        rSet.Put( SvxLanguageItem( eLang, nWhich ) );
+                    }
                 }
                 break;
 
@@ -833,9 +854,9 @@ ScNavipiCfg& ScModule::GetNavipiCfg()
 
 void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
 {
-    USHORT nOldSpellLang;
+    USHORT nOldSpellLang, nOldCjkLang, nOldCtlLang;
     BOOL bOldAutoSpell, bOldHideAuto;
-    GetSpellSettings( nOldSpellLang, bOldAutoSpell, bOldHideAuto );
+    GetSpellSettings( nOldSpellLang, nOldCjkLang, nOldCtlLang, bOldAutoSpell, bOldHideAuto );
 
     if (!pAppCfg)
         GetAppOptions();
