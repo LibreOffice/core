@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoedhlp.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: thb $ $Date: 2002-08-02 11:31:19 $
+ *  last change: $Author: thb $ $Date: 2002-09-13 14:10:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,9 @@
 #endif
 #ifndef _SFXHINT_HXX
 #include <svtools/hint.hxx>
+#endif
+#ifndef _SV_GEN_HXX
+#include <vcl/gen.hxx>
 #endif
 
 struct EENotify;
@@ -141,6 +144,86 @@ public:
         @return sal_True, if the range has been successfully determined
      */
     static sal_Bool GetAttributeRun( USHORT& nStartIndex, USHORT& nEndIndex, const EditEngine& rEE, USHORT nPara, USHORT nIndex );
+
+    /** Convert point from edit engine to user coordinate space
+
+        As the edit engine internally keeps vertical text unrotated,
+        all internal edit engine methods return their stuff unrotated,
+        too. This method rotates and shifts given point appropriately,
+        if vertical writing is on.
+
+        @param rPoint
+        Point to transform
+
+        @param rEESize
+        Paper size of the edit engine
+
+        @param  bIsVertical
+        Whether output text is vertical or not
+
+        @return the possibly transformed point
+     */
+    static Point EEToUserSpace( const Point& rPoint, const Size& rEESize, bool bIsVertical );
+
+    /** Convert point from user to edit engine coordinate space
+
+        As the edit engine internally keeps vertical text unrotated,
+        all internal edit engine methods return their stuff unrotated,
+        too. This method rotates and shifts given point appropriately,
+        if vertical writing is on.
+
+        @param rPoint
+        Point to transform
+
+        @param rEESize
+        Paper size of the edit engine
+
+        @param  bIsVertical
+        Whether output text is vertical or not
+
+        @return the possibly transformed point
+     */
+    static Point UserSpaceToEE( const Point& rPoint, const Size& rEESize, bool bIsVertical );
+
+    /** Convert rect from edit engine to user coordinate space
+
+        As the edit engine internally keeps vertical text unrotated,
+        all internal edit engine methods return their stuff unrotated,
+        too. This method rotates and shifts given rect appropriately,
+        if vertical writing is on.
+
+        @param rRect
+        Rectangle to transform
+
+        @param rEESize
+        Paper size of the edit engine
+
+        @param  bIsVertical
+        Whether output text is vertical or not
+
+        @return the possibly transformed rect
+     */
+    static Rectangle EEToUserSpace( const Rectangle& rRect, const Size& rEESize, bool bIsVertical );
+
+    /** Convert rect from user to edit engine coordinate space
+
+        As the edit engine internally keeps vertical text unrotated,
+        all internal edit engine methods return their stuff unrotated,
+        too. This method rotates and shifts given rect appropriately,
+        if vertical writing is on.
+
+        @param rRect
+        Rectangle to transform
+
+        @param rEESize
+        Paper size of the edit engine
+
+        @param  bIsVertical
+        Whether output text is vertical or not
+
+        @return the possibly transformed rect
+     */
+    static Rectangle UserSpaceToEE( const Rectangle& rRect, const Size& rEESize, bool bIsVertical );
 
 };
 
