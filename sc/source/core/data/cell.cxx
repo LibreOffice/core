@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cell.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 17:55:04 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 16:33:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1438,22 +1438,12 @@ void ScFormulaCell::Interpret()
         pMatrix = p->GetMatrixResult();
         if( pMatrix )
         {
-            pMatrix->SetEternalRef();
-#if 0
-//! MatrixFormel immer changed?!?
-// ist bei MD's Rundumschlag von r1.167 --> r1.168 reingekommen
-// => ewiges Repaint von MatrixFormel, besonders bei DDE laestig
-// ab r1.260 (sv369b) probieren wir's mal ohne..
-            if( cMatrixFlag == MM_FORMULA )
-                bChanged = TRUE;
-            else
-#else
+            // If the formula wasn't entered as a matrix formula, live on with
+            // the upper left corner and let the interpreter delete the matrix.
             if( cMatrixFlag != MM_FORMULA && !pCode->IsHyperLink() )
-#endif
-            {   // mit linker oberer Ecke weiterleben
-                pMatrix->Delete();
                 pMatrix = NULL;
-            }
+            else
+                pMatrix->SetEternalRef();   // it's mine now
         }
         if( bChanged )
         {
