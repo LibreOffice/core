@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfldi.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 18:20:44 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 13:16:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -351,8 +351,9 @@ const sal_Char sAPI_url_content[]       = "URLContent";
 const sal_Char sAPI_script_type[]       = "ScriptType";
 const sal_Char sAPI_is_hidden[]         = "IsHidden";
 const sal_Char sAPI_is_condition_true[] = "IsConditionTrue";
-const sal_Char sAPI_data_command_type[]  = "DataCommandType";
+const sal_Char sAPI_data_command_type[] = "DataCommandType";
 const sal_Char sAPI_is_fixed_language[] = "IsFixedLanguage";
+const sal_Char sAPI_is_visible[]        = "IsVisible";
 
 const sal_Char sAPI_true[] = "TRUE";
 
@@ -1527,7 +1528,7 @@ TYPEINIT1( XMLDatabaseFieldImportContext, XMLTextFieldImportContext );
 XMLDatabaseFieldImportContext::XMLDatabaseFieldImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp,
     const sal_Char* pServiceName, sal_uInt16 nPrfx,
-    const OUString& sLocalName) :
+    const OUString& sLocalName, bool bUseDisply) :
         XMLTextFieldImportContext(rImport, rHlp, pServiceName,
                                   nPrfx, sLocalName),
         sPropertyDatabaseName(
@@ -1535,12 +1536,17 @@ XMLDatabaseFieldImportContext::XMLDatabaseFieldImportContext(
         sPropertyTableName(RTL_CONSTASCII_USTRINGPARAM(sAPI_data_table_name)),
         sPropertyDataCommandType(
             RTL_CONSTASCII_USTRINGPARAM(sAPI_data_command_type)),
+        sPropertyIsVisible(
+            RTL_CONSTASCII_USTRINGPARAM(sAPI_is_visible)),
         sDatabaseName(),
         sTableName(),
         nCommandType( sdb::CommandType::TABLE ),
         bDatabaseOK(sal_False),
         bCommandTypeOK(sal_False),
-        bTableOK(sal_False)
+        bTableOK(sal_False),
+        bUseDisplay( bUseDisply ),
+        bDisplay( sal_True ),
+        bDisplayOK( false )
 {
 }
 
@@ -1574,6 +1580,18 @@ void XMLDatabaseFieldImportContext::ProcessAttribute(
                 bCommandTypeOK = sal_True;
             }
             break;
+        case XML_TOK_TEXTFIELD_DISPLAY:
+            if( IsXMLToken( sAttrValue, XML_NONE ) )
+            {
+                bDisplay = sal_False;
+                bDisplayOK = true;
+            }
+            else if( IsXMLToken( sAttrValue, XML_VALUE ) )
+            {
+                bDisplay = sal_True;
+                bDisplayOK = true;
+            }
+            break;
     }
 }
 
@@ -1595,6 +1613,12 @@ void XMLDatabaseFieldImportContext::PrepareField(
         aAny <<= nCommandType;
         xPropertySet->setPropertyValue( sPropertyDataCommandType, aAny );
     }
+
+    if( bUseDisplay && bDisplayOK )
+    {
+        aAny.setValue( &bDisplay, ::getBooleanCppuType() );
+        xPropertySet->setPropertyValue( sPropertyIsVisible, aAny );
+    }
 }
 
 
@@ -1609,7 +1633,7 @@ XMLDatabaseNameImportContext::XMLDatabaseNameImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp,
     sal_uInt16 nPrfx, const OUString& sLocalName) :
         XMLDatabaseFieldImportContext(rImport, rHlp, sAPI_database_name,
-                                      nPrfx, sLocalName)
+                                      nPrfx, sLocalName, true)
 {
 }
 
@@ -1634,7 +1658,7 @@ XMLDatabaseNextImportContext::XMLDatabaseNextImportContext(
     const sal_Char* pServiceName, sal_uInt16 nPrfx,
     const OUString& sLocalName) :
         XMLDatabaseFieldImportContext(rImport, rHlp, pServiceName,
-                                      nPrfx, sLocalName),
+                                      nPrfx, sLocalName, false),
         sPropertyCondition(RTL_CONSTASCII_USTRINGPARAM(sAPI_condition)),
         sTrue(RTL_CONSTASCII_USTRINGPARAM(sAPI_true)),
         sCondition(),
@@ -1646,7 +1670,7 @@ XMLDatabaseNextImportContext::XMLDatabaseNextImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp,
     sal_uInt16 nPrfx, const OUString& sLocalName) :
         XMLDatabaseFieldImportContext(rImport, rHlp, sAPI_database_next,
-                                      nPrfx, sLocalName),
+                                      nPrfx, sLocalName, false),
         sPropertyCondition(RTL_CONSTASCII_USTRINGPARAM(sAPI_condition)),
         sTrue(RTL_CONSTASCII_USTRINGPARAM(sAPI_true)),
         sCondition(),
@@ -1746,7 +1770,7 @@ XMLDatabaseNumberImportContext::XMLDatabaseNumberImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp,
     sal_uInt16 nPrfx, const OUString& sLocalName) :
         XMLDatabaseFieldImportContext(rImport, rHlp, sAPI_database_number,
-                                      nPrfx, sLocalName),
+                                      nPrfx, sLocalName, true),
         sPropertyNumberingType(
             RTL_CONSTASCII_USTRINGPARAM(sAPI_numbering_type)),
         sPropertySetNumber(RTL_CONSTASCII_USTRINGPARAM(sAPI_set_number)),
