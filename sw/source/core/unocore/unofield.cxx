@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: tl $ $Date: 2002-08-14 09:41:59 $
+ *  last change: $Author: tl $ $Date: 2002-09-10 13:52:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -747,8 +747,16 @@ void SwXFieldMaster::setPropertyValue( const OUString& rPropertyName,
         rValue >>= uTmp;
         String sTypeName(uTmp);
         SwFieldType* pType = m_pDoc->GetFldType(nResTypeId, sTypeName);
+
+        String sTable(SW_RES(STR_POOLCOLL_LABEL_TABLE));
+        String sDrawing(SW_RES(STR_POOLCOLL_LABEL_DRAWING));
+        String sFrame(SW_RES(STR_POOLCOLL_LABEL_FRAME));
+        String sIllustration(SW_RES(STR_POOLCOLL_LABEL_ABB));
+
         if(pType ||
-            (RES_SETEXPFLD == nResTypeId && sTypeName != String(SwStyleNameMapper::GetProgName(sTypeName, GET_POOLID_TXTCOLL ))))
+            (RES_SETEXPFLD == nResTypeId &&
+            ( sTypeName == sTable || sTypeName == sDrawing ||
+              sTypeName == sFrame || sTypeName == sIllustration )))
         {
             throw IllegalArgumentException();
         }
