@@ -2,9 +2,9 @@
  *
  *  $RCSfile: help.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 13:46:45 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 13:21:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -391,6 +391,10 @@ HelpTextWindow::HelpTextWindow( Window* pParent, const XubString& rText, USHORT 
     }
     SetHelpText( rText );
     Window::SetHelpText( rText );
+
+    ImplSVData* pSVData = ImplGetSVData();
+    if ( pSVData->maHelpData.mbSetKeyboardHelp )
+        pSVData->maHelpData.mbKeyboardHelp = TRUE;
 
     const HelpSettings& rHelpSettings = pParent->GetSettings().GetHelpSettings();
     maShowTimer.SetTimeoutHdl( LINK( this, HelpTextWindow, TimerHdl ) );
