@@ -2,9 +2,9 @@
  *
  *  $RCSfile: popup.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-26 21:20:32 $
+ *  last change: $Author: kz $ $Date: 2001-02-02 16:40:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -781,7 +781,7 @@ String RID_POPUP_PREVIEW
     Text [ dutch ] = "PopUp-menu voor paginavoorbeeld" ;
     Text [ spanish ] = "Menú para previsualización" ;
     Text [ english_us ] = "Page Preview pop-up menu" ;
-    Text[ chinese_simplified ] = "Ò³ÃæÔ¤ÊÓµ¯³öÊ½²Ëµ¥";
+    Text[ chinese_simplified ] = "Ò³ÃæÔ¤ÀÀµ¯³öÊ½²Ëµ¥";
     Text[ russian ] = "Âñïëûâàşùåå ìåíş äëÿ ïğåäâàğèòåëüíîãî ïğîñìîòğà ñòğàíèöû";
     Text[ polish ] = "Menu podrêczne dla podgl¹du stron";
     Text[ japanese ] = "Íß°¼ŞÌßÚËŞ­°‚ÌÎß¯Ìß±¯ÌßÒÆ­°";
