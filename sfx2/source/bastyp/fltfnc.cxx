@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltfnc.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: dv $ $Date: 2001-04-09 08:15:56 $
+ *  last change: $Author: as $ $Date: 2001-06-05 10:19:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2147,7 +2147,8 @@ void SfxFilterContainer::ReadExternalFilters( const String& rDocServiceName )
                 }
 
                 // register SfxFilter
-                aFilterName = impl_getOldFilterName( aName );
+//                aFilterName = impl_getOldFilterName( aName );
+                aFilterName = aName;
                 if ( aFilterName.Len() )
                 {
                     USHORT nPos = aFilterName.Search( ':' );
