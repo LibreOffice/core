@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh8.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-03 19:27:07 $
+ *  last change: $Author: hr $ $Date: 2000-11-07 11:48:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@
 #include <tools/urlobj.hxx>
 #include <svtools/converter.hxx>
 #include <svtools/zforlist.hxx>
-#include <unotools/types.hxx>
+#include <comphelper/types.hxx>
 #include <ucbhelper/content.hxx>
 #include <comphelper/processfactory.hxx>
 
@@ -194,7 +194,7 @@ BOOL ScDocShell::KillFile( const INetURLObject& rURL )
         ::ucb::Content aCnt( rURL.GetMainURL(),
                         uno::Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
         aCnt.executeCommand( rtl::OUString::createFromAscii( "delete" ),
-                                utl::makeBoolAny( sal_True ) );
+                                comphelper::makeBoolAny( sal_True ) );
     }
     catch( ::com::sun::star::ucb::CommandAbortedException& )
     {
