@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tcvtscn6.tab,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:29 $
+ *  last change: $Author: th $ $Date: 2000-12-13 22:23:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,22 +75,6 @@
 #define GBKOFF      0x61
 
 /* ======================================================================= */
-
-/* We use this EUC range also for GB, GBT and GBK */
-#define DBCS_EUC_MS936_COUNT    2
-static ImplDBCSEUCData const aImplMS936DBCSEUCTab[DBCS_EUC_MS936_COUNT] =
-{
-    /* EUC-Range (the mapping defined by ms is A0-FF, because the */
-    /* unicode range is E000-E29F and E2A0-E4DF) */
-    /* Lead:    F8-FE */
-    /* Trail:   A1-FE */
-    { 0xF8, 0xFE, 0xA0, 0xFF, 0, 0, 0, 0, 1, 0x60, 0xE000, 0xE29F },
-    /* Lead:    AA-AF */
-    /* Trail:   A1-FE */
-    { 0xAA, 0xAF, 0xA0, 0xFF, 0, 0, 0, 0, 1, 0x60, 0xE2A0, 0xE4DF }
-};
-
-/* ----------------------------------------------------------------------- */
 
 static ImplDBCSToUniLeadTab const aGB2312UniLeadTab[256] =
 {
@@ -616,13 +600,31 @@ static ImplUniToDBCSHighTab const aGB2312DBCSHighTab[256] =
 
 /* ----------------------------------------------------------------------- */
 
+/* F8A1-FEFE    --> E000-E29F */
+/* AAA1-AFFE    --> E2A0-E4DF */
+
+#define DBCS_EUDC_MS936_COUNT       2
+static ImplDBCSEUDCData const aImplMS936DBCSEUDCTab[DBCS_EUDC_MS936_COUNT] =
+{
+    /* EUDC-Range (the mapping defined by MS is A0-FF, because the */
+    /* unicode range is E000-E29F and E2A0-E4DF) */
+    /* Lead:    F8-FE */
+    /* Trail:   A1-FE */
+    { 0xF8, 0xFE, 0xA0, 0xFF, 0, 0, 0, 0, 1, 0x60, 0xE000, 0xE29F },
+    /* Lead:    AA-AF */
+    /* Trail:   A1-FE */
+    { 0xAA, 0xAF, 0xA0, 0xFF, 0, 0, 0, 0, 1, 0x60, 0xE2A0, 0xE4DF }
+};
+
+/* ----------------------------------------------------------------------- */
+
 static ImplDBCSConvertData const aImplGB2312DBCSCvtData =
 {
     aGB2312UniLeadTab,
     aGB2312DBCSHighTab,
     0xA1, 0xFE,
-    aImplMS936DBCSEUCTab,
-    DBCS_EUC_MS936_COUNT
+    aImplMS936DBCSEUDCTab,
+    DBCS_EUDC_MS936_COUNT
 };
 
 /* ----------------------------------------------------------------------- */
@@ -659,7 +661,7 @@ static ImplTextEncodingData const aImplGB2312TextEncodingData =
     134,
     936,
     25,
-    (const sal_Char*)"euc-cn",          /* ??? */
+    (const sal_Char*)"euc-cn",
     (const sal_Char*)"gb2312",
     RTL_TEXTENCODING_INFO_ASCII |
     RTL_TEXTENCODING_INFO_MULTIBYTE |
@@ -677,7 +679,7 @@ static ImplTextEncodingData aImplEUCCNTextEncodingData =
     134,
     936,
     25,
-    (const sal_Char*)"euc-cn",          /* ??? */
+    (const sal_Char*)"euc-cn",
     (const sal_Char*)"gb2312",
     RTL_TEXTENCODING_INFO_ASCII |
     RTL_TEXTENCODING_INFO_MULTIBYTE,
@@ -1215,8 +1217,8 @@ static ImplDBCSConvertData const aImplGBT12345DBCSCvtData =
     aGBT12345UniLeadTab,
     aGBT12345DBCSHighTab,
     0xA1, 0xFE,
-    aImplMS936DBCSEUCTab,
-    DBCS_EUC_MS936_COUNT
+    aImplMS936DBCSEUDCTab,
+    DBCS_EUDC_MS936_COUNT
 };
 
 /* ----------------------------------------------------------------------- */
@@ -1253,7 +1255,7 @@ static ImplTextEncodingData const aImplGBT12345TextEncodingData =
     134,
     936,
     25,
-    (const sal_Char*)"euc-cn",          /* ??? */
+    (const sal_Char*)"euc-cn",
     (const sal_Char*)"cn-gb-12345",
     RTL_TEXTENCODING_INFO_ASCII |
     RTL_TEXTENCODING_INFO_MULTIBYTE |
@@ -1792,8 +1794,8 @@ static ImplDBCSConvertData const aImplGBKDBCSCvtData =
     aGBKUniLeadTab,
     aGBKDBCSHighTab,
     0x40, 0xFE,
-    aImplMS936DBCSEUCTab,
-    DBCS_EUC_MS936_COUNT
+    aImplMS936DBCSEUDCTab,
+    DBCS_EUDC_MS936_COUNT
 };
 
 /* ----------------------------------------------------------------------- */
@@ -1830,7 +1832,7 @@ static ImplTextEncodingData const aImplGBKTextEncodingData =
     134,
     936,
     25,
-    (const sal_Char*)"euc-cn",          /* ??? */
+    (const sal_Char*)"euc-cn",
     (const sal_Char*)"gb2312",
     RTL_TEXTENCODING_INFO_ASCII |
     RTL_TEXTENCODING_INFO_MULTIBYTE |
@@ -2369,8 +2371,8 @@ static ImplDBCSConvertData const aImplMS936DBCSCvtData =
     aMS936UniLeadTab,
     aMS936DBCSHighTab,
     0x40, 0xFE,
-    aImplMS936DBCSEUCTab,
-    DBCS_EUC_MS936_COUNT
+    aImplMS936DBCSEUDCTab,
+    DBCS_EUDC_MS936_COUNT
 };
 
 /* ----------------------------------------------------------------------- */
@@ -2407,7 +2409,7 @@ static ImplTextEncodingData const aImplMS936TextEncodingData =
     134,
     936,
     25,
-    (const sal_Char*)"euc-cn",          /* ??? */
+    (const sal_Char*)"euc-cn",
     (const sal_Char*)"gb2312",
     RTL_TEXTENCODING_INFO_ASCII |
     RTL_TEXTENCODING_INFO_MULTIBYTE |
@@ -2985,7 +2987,7 @@ static ImplTextEncodingData const aImplAPPLECHINSIMPTextEncodingData =
     134,
     936,
     25,
-    (const sal_Char*)"euc-cn",          /* ??? */
+    (const sal_Char*)"euc-cn",
     (const sal_Char*)"gb2312",
     RTL_TEXTENCODING_INFO_ASCII |
     RTL_TEXTENCODING_INFO_MULTIBYTE |

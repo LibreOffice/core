@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tcvtjp6.tab,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: th $ $Date: 2000-12-01 10:56:11 $
+ *  last change: $Author: th $ $Date: 2000-12-13 22:22:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 /* ======================================================================= */
 
 /* This file contain the information tables for all japanese charsets: */
-/* SJIS, MS932, APPLE_JAPANESE, EUC_JP */
+/* SJIS, MS932, APPLE_JAPANESE, EUC_JP, JIS-X-201, JIS-X-208, JIS-X-212 */
 
 /* ======================================================================= */
 
@@ -308,16 +308,16 @@ static ImplDBCSToUniLeadTab const aSJISUniLeadTab[256] =
     {      0, 0x40, 0xFC, aImplDBCSToUniTab_MS932_ED },         /* 0xED */ /* We use the MS table for better MS compatibility */
     {      0, 0x40, 0xFC, aImplDBCSToUniTab_MS932_EE },         /* 0xEE */ /* We use the MS table for better MS compatibility */
     {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xEF */ /* We convert this as double byte */
-    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF0 */ /* EUC Range */
-    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF1 */ /* EUC Range */
-    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF2 */ /* EUC Range */
-    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF3 */ /* EUC Range */
-    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF4 */ /* EUC Range */
-    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF5 */ /* EUC Range */
-    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF6 */ /* EUC Range */
-    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF7 */ /* EUC Range */
-    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF8 */ /* EUC Range */
-    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF9 */ /* EUC Range */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF0 */ /* EUDC Range */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF1 */ /* EUDC Range */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF2 */ /* EUDC Range */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF3 */ /* EUDC Range */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF4 */ /* EUDC Range */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF5 */ /* EUDC Range */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF6 */ /* EUDC Range */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF7 */ /* EUDC Range */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF8 */ /* EUDC Range */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF9 */ /* EUDC Range */
     {      0, 0x40, 0xFC, aImplDBCSToUniTab_MS932_FA },         /* 0xFA */ /* We use the MS table for better MS compatibility */
     {      0, 0x40, 0xFC, aImplDBCSToUniTab_MS932_FB },         /* 0xFB */ /* We use the MS table for better MS compatibility */
     {      0, 0x40, 0x4B, aImplDBCSToUniTab_MS932_FC },         /* 0xFC */ /* We use the MS table for better MS compatibility */
@@ -592,11 +592,13 @@ static ImplUniToDBCSHighTab const aSJISDBCSHighTab[256] =
 
 /* ----------------------------------------------------------------------- */
 
-#define DBCS_EUC_SJIS_COUNT     1
-static ImplDBCSEUCData const aImplSJISDBCSEUCTab[DBCS_EUC_SJIS_COUNT] =
+/* F040-F9FC    --> E000-E757 */
+
+#define DBCS_EUDC_SJIS_COUNT        1
+static ImplDBCSEUDCData const aImplSJISDBCSEUDCTab[DBCS_EUDC_SJIS_COUNT] =
 {
-    /* EUC-Range */
-    /* Lead:    F0-FC */
+    /* EUDC-Range */
+    /* Lead:    F0-F9 */
     /* Trail:   40-7E, 80-FC */
     { 0xF0, 0xF9, 0x40, 0x7E, 0x7F, 0xFC, 0, 0, 2, 0xBC, 0xE000, 0xE757 }
 };
@@ -608,8 +610,8 @@ static ImplDBCSConvertData const aImplSJISDBCSCvtData =
     aSJISUniLeadTab,
     aSJISDBCSHighTab,
     0x40, 0xFC,
-    aImplSJISDBCSEUCTab,
-    DBCS_EUC_SJIS_COUNT
+    aImplSJISDBCSEUDCTab,
+    DBCS_EUDC_SJIS_COUNT
 };
 
 /* ----------------------------------------------------------------------- */
@@ -646,7 +648,7 @@ static ImplTextEncodingData const aImplSJISTextEncodingData =
     128,
     932,
     1,
-    (const sal_Char*)"euc-jp",          /* ??? JISX0208.1990-0 */
+    (const sal_Char*)"euc-jp",
     (const sal_Char*)"shift_jis",
     RTL_TEXTENCODING_INFO_ASCII |
     RTL_TEXTENCODING_INFO_MULTIBYTE |
@@ -898,16 +900,16 @@ static ImplDBCSToUniLeadTab const aMS932UniLeadTab[256] =
     {      0, 0x40, 0xFC, aImplDBCSToUniTab_MS932_ED },         /* 0xED */
     {      0, 0x40, 0xFC, aImplDBCSToUniTab_MS932_EE },         /* 0xEE */
     {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xEF */ /* We convert this as double byte */
-    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF0 */ /* EUC Range */
-    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF1 */ /* EUC Range */
-    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF2 */ /* EUC Range */
-    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF3 */ /* EUC Range */
-    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF4 */ /* EUC Range */
-    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF5 */ /* EUC Range */
-    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF6 */ /* EUC Range */
-    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF7 */ /* EUC Range */
-    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF8 */ /* EUC Range */
-    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF9 */ /* EUC Range */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF0 */ /* EUDC Range */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF1 */ /* EUDC Range */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF2 */ /* EUDC Range */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF3 */ /* EUDC Range */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF4 */ /* EUDC Range */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF5 */ /* EUDC Range */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF6 */ /* EUDC Range */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF7 */ /* EUDC Range */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF8 */ /* EUDC Range */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF9 */ /* EUDC Range */
     {      0, 0x40, 0xFC, aImplDBCSToUniTab_MS932_FA },         /* 0xFA */
     {      0, 0x40, 0xFC, aImplDBCSToUniTab_MS932_FB },         /* 0xFB */
     {      0, 0x40, 0x4B, aImplDBCSToUniTab_MS932_FC },         /* 0xFC */
@@ -1185,8 +1187,8 @@ static ImplDBCSConvertData const aImplMS932DBCSCvtData =
     aMS932UniLeadTab,
     aMS932DBCSHighTab,
     0x40, 0xFC,
-    aImplSJISDBCSEUCTab,
-    DBCS_EUC_SJIS_COUNT
+    aImplSJISDBCSEUDCTab,
+    DBCS_EUDC_SJIS_COUNT
 };
 
 /* ----------------------------------------------------------------------- */
@@ -1223,7 +1225,7 @@ static ImplTextEncodingData const aImplMS932TextEncodingData =
     128,
     932,
     1,
-    (const sal_Char*)"euc-jp",          /* ??? JISX0208.1990-0 */
+    (const sal_Char*)"euc-jp",
     (const sal_Char*)"shift_jis",
     RTL_TEXTENCODING_INFO_ASCII |
     RTL_TEXTENCODING_INFO_MULTIBYTE |
@@ -1476,16 +1478,16 @@ static ImplDBCSToUniLeadTab const aAPPLEJAPANESEUniLeadTab[256] =
     {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xED */ /* We convert this as double byte */
     {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xEE */ /* We convert this as double byte */
     {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xEF */ /* We convert this as double byte */
-    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF0 */ /* EUC Range */
-    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF1 */ /* EUC Range */
-    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF2 */ /* EUC Range */
-    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF3 */ /* EUC Range */
-    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF4 */ /* EUC Range */
-    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF5 */ /* EUC Range */
-    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF6 */ /* EUC Range */
-    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF7 */ /* EUC Range */
-    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF8 */ /* EUC Range */
-    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF9 */ /* EUC Range */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF0 */ /* EUDC Range */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF1 */ /* EUDC Range */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF2 */ /* EUDC Range */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF3 */ /* EUDC Range */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF4 */ /* EUDC Range */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF5 */ /* EUDC Range */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF6 */ /* EUDC Range */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF7 */ /* EUDC Range */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF8 */ /* EUDC Range */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF9 */ /* EUDC Range */
     {      0, 0x40, 0xFC, aImplDBCSToUniTab_MS932_FA },         /* 0xFA */ /* We use the MS table for better MS compatibility */
     {      0, 0x40, 0xFC, aImplDBCSToUniTab_MS932_FB },         /* 0xFB */ /* We use the MS table for better MS compatibility */
     {      0, 0x40, 0x4B, aImplDBCSToUniTab_MS932_FC },         /* 0xFC */ /* We use the MS table for better MS compatibility */
@@ -1763,8 +1765,8 @@ static ImplDBCSConvertData const aImplAPPLEJAPANESEDBCSCvtData =
     aAPPLEJAPANESEUniLeadTab,
     aAPPLEJAPANESEDBCSHighTab,
     0x40, 0xFC,
-    aImplSJISDBCSEUCTab,
-    DBCS_EUC_SJIS_COUNT
+    aImplSJISDBCSEUDCTab,
+    DBCS_EUDC_SJIS_COUNT
 };
 
 /* ----------------------------------------------------------------------- */
@@ -1801,7 +1803,7 @@ static ImplTextEncodingData const aImplAPPLEJAPANESETextEncodingData =
     128,
     932,
     1,
-    (const sal_Char*)"euc-jp",          /* ??? JISX0208.1990-0 */
+    (const sal_Char*)"euc-jp",
     (const sal_Char*)"shift_jis",
     RTL_TEXTENCODING_INFO_ASCII |
     RTL_TEXTENCODING_INFO_MULTIBYTE |
@@ -2645,7 +2647,7 @@ static ImplTextEncodingData const aImplEUCJPTextEncodingData =
     128,
     932,
     1,
-    (const sal_Char*)"euc-jp",          /* ??? JISX0208.1990-0 */
+    (const sal_Char*)"euc-jp",
     (const sal_Char*)"euc-jp",
     RTL_TEXTENCODING_INFO_ASCII |
     RTL_TEXTENCODING_INFO_MULTIBYTE |
@@ -2657,42 +2659,6 @@ static ImplTextEncodingData const aImplEUCJPTextEncodingData =
 
 /* !!! JIS - X Encodings not complete !!! */
 
-static ImplTextConverterData aImplJISX0208TextConverterData =
-{
-    aJIS0208DBCSHighTab,
-    NULL,
-    RTL_UNICODE_CHAR_DEFAULT,
-};
-
-static ImplTextConverter aImplJISX0208TextConverter =
-{
-    &aImplJISX0208TextConverterData,
-    NULL,
-    ImplUnicodeToJISX0208,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL
-};
-
-static ImplTextEncodingData aImplJISX0208TextEncodingData =
-{
-    &aImplJISX0208TextConverter,
-    RTL_TEXTENCODING_JIS_X_0208,
-    2, 2, 2,
-    128,
-    932,
-    1,
-    (const sal_Char*)"euc-jp",          /* ??? JISX0208.1990-0 */
-    (const sal_Char*)"euc-jp",
-    RTL_TEXTENCODING_INFO_MULTIBYTE,
-    SCRIPT_JAPANESE,
-};
-
-/* ======================================================================= */
-
 #define HALFWIDTHKANA_START 0xFF61
 #define HALFWIDTHKANA_END   0xFF9F
 
@@ -2703,6 +2669,8 @@ static sal_uChar aImplJISX0201Tab[HALFWIDTHKANA_END - HALFWIDTHKANA_START + 1] =
     0xC0, 0xC1, 0xC2, 0xC3, 0xC4, 0xC5, 0xC6, 0xC7, 0xC8, 0xC9, 0xCA, 0xCB, 0xCC, 0xCD, 0xCE, 0xCF,
     0xD0, 0xD1, 0xD2, 0xD3, 0xD4, 0xD5, 0xD6, 0xD7, 0xD8, 0xD9, 0xDA, 0xDB, 0xDC, 0xDD, 0xDE, 0xDF,
 };
+
+/* ----------------------------------------------------------------------- */
 
 static ImplByteConvertData aImplJISX0201ByteCvtData =
 {
@@ -2718,12 +2686,16 @@ static ImplByteConvertData aImplJISX0201ByteCvtData =
     0
 };
 
+/* ----------------------------------------------------------------------- */
+
 static ImplTextConverterData aImplJISX0201TextConverterData =
 {
     &aImplJISX0201ByteCvtData,
     NULL,
     RTL_UNICODE_CHAR_DEFAULT
 };
+
+/* ----------------------------------------------------------------------- */
 
 static ImplTextConverter aImplJISX0201TextConverter =
 {
@@ -2738,6 +2710,8 @@ static ImplTextConverter aImplJISX0201TextConverter =
     NULL
 };
 
+/* ----------------------------------------------------------------------- */
+
 static ImplTextEncodingData aImplJISX0201TextEncodingData =
 {
     &aImplJISX0201TextConverter,
@@ -2746,7 +2720,7 @@ static ImplTextEncodingData aImplJISX0201TextEncodingData =
     128,
     923,
     1,
-    (const sal_Char*)"euc-jp",          /* ??? JISX0208.1990-0 */
+    (const sal_Char*)"euc-jp",
     (const sal_Char*)"euc-jp",
     RTL_TEXTENCODING_INFO_MULTIBYTE,
     SCRIPT_JAPANESE,
@@ -2754,18 +2728,31 @@ static ImplTextEncodingData aImplJISX0201TextEncodingData =
 
 /* ======================================================================= */
 
-static ImplTextConverterData aImplJISX0212TextConverterData =
+static ImplDBCSConvertData const aImplJISX0208DBCSCvtData =
 {
-    aJIS0212DBCSHighTab,
+    NULL,
+    aJIS0208DBCSHighTab,
+    0x21, 0x7E,
+    NULL,
+    0
+};
+
+/* ----------------------------------------------------------------------- */
+
+static ImplTextConverterData aImplJISX0208TextConverterData =
+{
+    &aImplJISX0208DBCSCvtData,
     NULL,
     RTL_UNICODE_CHAR_DEFAULT,
 };
 
-static ImplTextConverter aImplJISX0212TextConverter =
+/* ----------------------------------------------------------------------- */
+
+static ImplTextConverter aImplJISX0208TextConverter =
 {
-    &aImplJISX0212TextConverterData,
+    &aImplJISX0208TextConverterData,
     NULL,
-    ImplUnicodeToJISX0208,  // can use same routine with JISX0208
+    ImplUnicodeToDBCS,
     NULL,
     NULL,
     NULL,
@@ -2773,6 +2760,59 @@ static ImplTextConverter aImplJISX0212TextConverter =
     NULL,
     NULL
 };
+
+/* ----------------------------------------------------------------------- */
+
+static ImplTextEncodingData aImplJISX0208TextEncodingData =
+{
+    &aImplJISX0208TextConverter,
+    RTL_TEXTENCODING_JIS_X_0208,
+    2, 2, 2,
+    128,
+    932,
+    1,
+    (const sal_Char*)"euc-jp",
+    (const sal_Char*)"euc-jp",
+    RTL_TEXTENCODING_INFO_MULTIBYTE,
+    SCRIPT_JAPANESE,
+};
+
+/* ======================================================================= */
+
+static ImplDBCSConvertData const aImplJISX0212DBCSCvtData =
+{
+    NULL,
+    aJIS0212DBCSHighTab,
+    0x21, 0x7E,
+    NULL,
+    0
+};
+
+/* ----------------------------------------------------------------------- */
+
+static ImplTextConverterData aImplJISX0212TextConverterData =
+{
+    &aImplJISX0212DBCSCvtData,
+    NULL,
+    RTL_UNICODE_CHAR_DEFAULT,
+};
+
+/* ----------------------------------------------------------------------- */
+
+static ImplTextConverter aImplJISX0212TextConverter =
+{
+    &aImplJISX0212TextConverterData,
+    NULL,
+    ImplUnicodeToDBCS,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL
+};
+
+/* ----------------------------------------------------------------------- */
 
 static ImplTextEncodingData aImplJISX0212TextEncodingData =
 {
@@ -2782,9 +2822,8 @@ static ImplTextEncodingData aImplJISX0212TextEncodingData =
     128,
     923,
     1,
-    (const sal_Char*)"euc-jp",          /* ??? JISX0208.1990-0 */
+    (const sal_Char*)"euc-jp",
     (const sal_Char*)"euc-jp",
     RTL_TEXTENCODING_INFO_MULTIBYTE,
     SCRIPT_JAPANESE,
 };
-

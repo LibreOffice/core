@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tcvttcn6.tab,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:30 $
+ *  last change: $Author: th $ $Date: 2000-12-13 22:23:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,27 +66,6 @@
 /* BIG5, MS950, APPLE_CHINTRAD */
 
 /* ======================================================================= */
-
-/* We use this EUC range also for BIG5 */
-/* !!! because I don't know how the ms mapping works, I use my own mapping !!! */
-/* tables like MS doku: */
-/* FA40-FEFE --> E000-E310      5*9D = 311 - E310-E000 = 311 */
-/* 8E40-A0FE --> E311-EEB7      3*9D = 1D7 - EEB7-E311 = BA7 */
-/* 8140-8DFE --> EEB8-F6B0     13*9D = BA7 - F6B=-EEB8 = 7F9 */
-/* C6A1-C8FE --> F6B1-F8FF      3*5E = 11A - F8FF-F6B1 = 24F */
-#define DBCS_EUC_MS950_COUNT    2
-static ImplDBCSEUCData const aImplMS950DBCSEUCTab[DBCS_EUC_MS950_COUNT] =
-{
-    /* EUC-Range */
-    /* Lead:    FA-FE */
-    /* Trail:   40-7E, A1-FE */
-    { 0xFA, 0xFE, 0x40, 0x7E, 0xA1, 0xFE, 0, 0, 2, 0x9D, 0xE000, 0xE310 },
-    /* Lead:    81-8D */
-    /* Trail:   40-7E, A1-FE */
-    { 0x81, 0x8D, 0x40, 0x7E, 0xA1, 0xFE, 0, 0, 2, 0x9D, 0xE311, 0xEEB7 }
-};
-
-/* ----------------------------------------------------------------------- */
 
 static ImplDBCSToUniLeadTab const aBIG5UniLeadTab[256] =
 {
@@ -612,13 +591,38 @@ static ImplUniToDBCSHighTab const aBIG5DBCSHighTab[256] =
 
 /* ----------------------------------------------------------------------- */
 
+/* FA40-FEFE --> E000-E310 */
+/* 8E40-A0FE --> E311-EEB7 */
+/* 8140-8DFE --> EEB8-F6B0 */
+/* C6A1-C8FE --> F6B1-F8FF      3*5E = 11A --> F6B1+11A-1 = F7CA ??? */
+
+#define DBCS_EUDC_MS950_COUNT       4
+static ImplDBCSEUDCData const aImplMS950DBCSEUDCTab[DBCS_EUDC_MS950_COUNT] =
+{
+    /* EUDC-Range */
+    /* Lead:    FA-FE */
+    /* Trail:   40-7E, A1-FE */
+    { 0xFA, 0xFE, 0x40, 0x7E, 0xA1, 0xFE, 0, 0, 2, 0x9D, 0xE000, 0xE310 },
+    /* Lead:    8E-A0 */
+    /* Trail:   40-7E, A1-FE */
+    { 0x8E, 0xA0, 0x40, 0x7E, 0xA1, 0xFE, 0, 0, 2, 0x9D, 0xE311, 0xEEB7 },
+    /* Lead:    81-8D */
+    /* Trail:   40-7E, A1-FE */
+    { 0x81, 0x8D, 0x40, 0x7E, 0xA1, 0xFE, 0, 0, 2, 0x9D, 0xEEB8, 0xF6B0 },
+    /* Lead:    C6-C8 */
+    /* Trail:   A1-FE */
+    { 0xC6, 0xC8, 0xA1, 0xFE, 0, 0, 0, 0, 1, 0x5E, 0xF6B1, 0xF7CA }
+};
+
+/* ----------------------------------------------------------------------- */
+
 static ImplDBCSConvertData const aImplBIG5DBCSCvtData =
 {
     aBIG5UniLeadTab,
     aBIG5DBCSHighTab,
     0x40, 0xFE,
-    aImplMS950DBCSEUCTab,
-    DBCS_EUC_MS950_COUNT
+    aImplMS950DBCSEUDCTab,
+    DBCS_EUDC_MS950_COUNT
 };
 
 /* ----------------------------------------------------------------------- */
@@ -655,7 +659,7 @@ static ImplTextEncodingData const aImplBIG5TextEncodingData =
     136,
     950,
     2,
-    (const sal_Char*)"euc-tw",              /* ??? */
+    (const sal_Char*)"euc-tw",
     (const sal_Char*)"big5",
     RTL_TEXTENCODING_INFO_ASCII |
     RTL_TEXTENCODING_INFO_MULTIBYTE |
@@ -1194,8 +1198,8 @@ static ImplDBCSConvertData const aImplMS950DBCSCvtData =
     aMS950UniLeadTab,
     aMS950DBCSHighTab,
     0x40, 0xFE,
-    aImplMS950DBCSEUCTab,
-    DBCS_EUC_MS950_COUNT
+    aImplMS950DBCSEUDCTab,
+    DBCS_EUDC_MS950_COUNT
 };
 
 /* ----------------------------------------------------------------------- */
@@ -1232,7 +1236,7 @@ static ImplTextEncodingData const aImplMS950TextEncodingData =
     136,
     950,
     2,
-    (const sal_Char*)"euc-tw",              /* ??? */
+    (const sal_Char*)"euc-tw",
     (const sal_Char*)"big5",
     RTL_TEXTENCODING_INFO_ASCII |
     RTL_TEXTENCODING_INFO_MULTIBYTE |
@@ -1810,7 +1814,7 @@ static ImplTextEncodingData const aImplAPPLECHINTRADTextEncodingData =
     136,
     950,
     2,
-    (const sal_Char*)"euc-tw",              /* ??? */
+    (const sal_Char*)"euc-tw",
     (const sal_Char*)"big5",
     RTL_TEXTENCODING_INFO_ASCII |
     RTL_TEXTENCODING_INFO_MULTIBYTE |
