@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: pb $ $Date: 2002-05-13 09:47:48 $
+ *  last change: $Author: gt $ $Date: 2002-05-24 15:03:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -447,10 +447,10 @@ void SvxCharBasePage::ActivatePage( const SfxItemSet& rSet )
     {
         const SvxColorItem& rItem = ( SvxColorItem& ) rSet.Get( nWhich );
         Color aCol( rItem.GetValue() );
-        if( COL_AUTO == aCol.GetColor() )
-            aCol = COL_BLACK;
         rFont.SetColor( aCol );
         rCJKFont.SetColor( aCol );
+
+        m_aPreviewWin.AutoCorrectFontColor();   // handle color COL_AUTO
     }
 
     // Kerning

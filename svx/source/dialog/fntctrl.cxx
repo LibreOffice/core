@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntctrl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-12 13:00:07 $
+ *  last change: $Author: gt $ $Date: 2002-05-24 15:03:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -714,3 +714,15 @@ void SvxFontPrevWindow::SetFontWidthScale( UINT16 n )
         Invalidate();
 }
 
+// -----------------------------------------------------------------------
+
+void SvxFontPrevWindow::AutoCorrectFontColor( void )
+{
+    Color   aFontColor( GetTextColor() );
+
+    if( COL_AUTO == pImpl->aFont.GetColor().GetColor() )
+        pImpl->aFont.SetColor( aFontColor );
+
+    if( COL_AUTO == pImpl->aCJKFont.GetColor().GetColor() )
+        pImpl->aCJKFont.SetColor( aFontColor );
+}
