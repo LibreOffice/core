@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabcont.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:40:55 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:41:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,10 @@
 #ifndef SC_TABCONT_HXX
 #define SC_TABCONT_HXX
 
+#ifndef SC_ADDRESS_HXX
+#include "address.hxx"
+#endif
+
 #ifndef _TABBAR_HXX //autogen wg. TabBar
 #include <svtools/tabbar.hxx>
 #endif
@@ -90,7 +94,7 @@ private:
     void            DoDrag( const Region& rRegion );
 
     USHORT          GetMaxId() const;
-    USHORT          GetPrivatDropPos(const Point& rPos );
+    SCTAB           GetPrivatDropPos(const Point& rPos );
 
 protected:
     virtual void    Select();
