@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addincol.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: er $ $Date: 2001-06-25 14:14:25 $
+ *  last change: $Author: nn $ $Date: 2001-09-26 09:28:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1082,6 +1082,14 @@ void ScUnoAddInCall::ExecuteCallWithArgs(uno::Sequence<uno::Any>& rCallArgs)
             nErrCode = errIllegalFPOperation;
         }
 #endif
+        catch(reflection::InvocationTargetException& rWrapped)
+        {
+            if ( rWrapped.TargetException.getValueType().equals(
+                    getCppuType( (lang::IllegalArgumentException*)0 ) ) )
+                nErrCode = errIllegalArgument;
+            else
+                nErrCode = errNoValue;
+        }
         catch(uno::Exception&)
         {
             nErrCode = errNoValue;
