@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: dbo $ $Date: 2001-03-30 11:03:34 $
+#   last change: $Author: jl $ $Date: 2002-07-05 09:48:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,7 +60,7 @@
 #
 #*************************************************************************
 PRJ=..$/..
-
+TARGET= testjavavm
 PRJNAME=	stoc
 TARGET6=	testjavavm
 TARGETTYPE=	CUI
@@ -75,24 +75,32 @@ UNOUCROUT=	$(OUT)$/inc$
 #INCPRE+=	$(OUT)$/inc$/test
 INCPRE+=	$(OUT)$/inc$
 
-#asdf: 
-#	echo $(OUT)
+
 
 # --- Settings -----------------------------------------------------
-
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 # --- Application 6 - testjavavm ------------------------------------
+
+UNOTYPES= com.sun.star.lang.XMultiComponentFactory \
+    com.sun.star.uno.XWeak	\
+    com.sun.star.java.XJavaVM	\
+    com.sun.star.java.XJavaThreadRegister_11	\
+    com.sun.star.registry.XSimpleRegistry \
+    com.sun.star.lang.XComponent \
+    com.sun.star.registry.XImplementationRegistration \
+    com.sun.star.lang.XSingleServiceFactory \
+    com.sun.star.uno.TypeClass \
+    com.sun.star.lang.XMultiServiceFactory
+
 APP6TARGET= 	$(TARGET6)
 APP6OBJS  = 	$(OBJ)$/testjavavm.obj 
 APP6STDLIBS= \
         $(CPPULIB) 		\
         $(CPPUHELPERLIB) 	\
         $(SALHELPERLIB) 	\
-        $(SALLIB)	\
-        $(UNOLIB)
+        $(SALLIB)	
+#		$(UNOLIB)
 
 .IF "$(GUI)"=="WNT"
 APP6STDLIBS+=	$(LIBCIMT)
@@ -103,22 +111,12 @@ APP6STDLIBS+=	$(LIBCIMT)
 # --- Target ------------------------------------------------
 
 .IF "$(depend)" == ""
-ALL : 		unoheader	\
-        ALLTAR 
+#ALL : 		unoheader	\
+#		ALLTAR
+ALL : 		ALLTAR
 .ELSE
 ALL: 		ALLDEP
 .ENDIF
 
 .INCLUDE :	target.mk
-
-TESTJAVAVM:=com.sun.star.uno.XWeak;com.sun.star.java.XJavaVM;com.sun.star.java.XJavaThreadRegister.XJavaThreadRegister_11;com.sun.star.registry.XSimpleRegistry;com.sun.star.lang.XComponent;com.sun.star.registry.XImplementationRegistration;com.sun.star.lang.XSingleServiceFactory;com.sun.star.uno.TypeClass;com.sun.star.lang.XMultiServiceFactory
-
-#$(BIN)$/stoctest.rdb: $(ALLIDLFILES)
-#	+unoidl -I$(PRJ) -I$(SOLARIDLDIR) -Burd -OH$(BIN) $?
-#	+regmerge $@ /UCR $(BIN)$/{$(?:f:s/.idl/.urd/)}
-#	+regmerge $@ / $(UNOUCRRDB)
-#	touch $@
-
-unoheader: $(UNOUCRRDB)
-    +cppumaker -BUCR -O$(UNOUCROUT) -T"$(TESTJAVAVM)" $(UNOUCRRDB)
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testjavavm.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-12 17:19:50 $
+ *  last change: $Author: jl $ $Date: 2002-07-05 09:48:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,18 +64,20 @@
 
 //#include <iostream>
 #include <stdio.h>
-#include <uno/api.h>
+#include <rtl/process.h>
 
 #include <vos/dynload.hxx>
 
 #include <cppuhelper/servicefactory.hxx>
 #include <cppuhelper/weak.hxx>
+#include <cppuhelper/bootstrap.hxx>
 
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/java/XJavaVM.hpp>
 #include <com/sun/star/registry/XImplementationRegistration.hpp>
-#include <com/sun/star/java/XJavaThreadRegister/XJavaThreadRegister_11.hpp>
+#include <com/sun/star/java/XJavaThreadRegister_11.hpp>
 
 //#include <cppuhelper/implbase1.hxx>
 
@@ -89,13 +91,19 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
 using namespace com::sun::star::java;
-using namespace com::sun::star::java::XJavaThreadRegister;
+
+#if defined(W32)
+#define LIBJEN    "jen.dll"
+#elif defined(UNX)
+#define LIBJEN    "libjen.so"
+#endif
 
 
 sal_Bool testJavaVM(const Reference< XMultiServiceFactory > & xMgr )
 {
 
-    Reference<XInterface> xXInt= xMgr->createInstance(L"com.sun.star.java.JavaVirtualMachine");
+      OUString sVMService( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.java.JavaVirtualMachine"));
+    Reference<XInterface> xXInt= xMgr->createInstance(sVMService);
     if( ! xXInt.is())
         return sal_False;
     Reference<XJavaVM> xVM( xXInt, UNO_QUERY);
@@ -105,23 +113,21 @@ sal_Bool testJavaVM(const Reference< XMultiServiceFactory > & xMgr )
     if( ! xreg11.is())
         return sal_False;
 
+
+    sal_Int8 arId[16];
+    rtl_getGlobalProcessId((sal_uInt8*) arId);
+    Any anyVM = xVM->getJavaVM( Sequence<sal_Int8>(arId, 16));
+
     sal_Bool b= xreg11->isThreadAttached();
     xreg11->registerThread();
     b= xreg11->isThreadAttached();
     xreg11->revokeThread();
     b= xreg11->isThreadAttached();
 
-    Uik aMachineId;
-    aMachineId.m_Data1= 0;
-    aMachineId.m_Data2= 0;
-    aMachineId.m_Data3= 0;
-    aMachineId.m_Data4= 0;
-    aMachineId.m_Data5= 0;
 
     b= xVM->isVMEnabled();
     b= xVM->isVMStarted();
 
-    Any anyVM = xVM->getJavaVM( aMachineId, UNO_getProcessIdentifier());
 
     b= xVM->isVMEnabled();
     b= xVM->isVMStarted();
@@ -129,7 +135,7 @@ sal_Bool testJavaVM(const Reference< XMultiServiceFactory > & xMgr )
 
     JavaVM* _jvm= *(JavaVM**) anyVM.getValue();
     JNIEnv *p_env;
-    if( _jvm->AttachCurrentThread( &p_env, 0))
+    if( _jvm->AttachCurrentThread((void**) &p_env, 0))
         return sal_False;
 
 //  jclass aJProg = p_env->FindClass("TestJavaVM");
@@ -189,32 +195,42 @@ int main( int argc, char * argv[] )
 int __cdecl main( int argc, char * argv[] )
 #endif
 {
-    Reference< XMultiServiceFactory > xMgr( createRegistryServiceFactory( "applicat.rdb" ) );
+    Reference<XSimpleRegistry> xreg= createSimpleRegistry();
+    xreg->open( OUString( RTL_CONSTASCII_USTRINGPARAM("applicat.rdb")),
+                               sal_False, sal_False );
+
+    Reference< XComponentContext > context= bootstrap_InitialComponentContext(xreg);
+    Reference<XMultiComponentFactory> fac= context->getServiceManager();
+    Reference<XMultiServiceFactory> xMgr( fac, UNO_QUERY);
 
     sal_Bool bSucc = sal_False;
     try
     {
+        OUString sImplReg(RTL_CONSTASCII_USTRINGPARAM(
+            "com.sun.star.registry.ImplementationRegistration"));
         Reference<com::sun::star::registry::XImplementationRegistration> xImplReg(
-            xMgr->createInstance( L"com.sun.star.registry.ImplementationRegistration" ), UNO_QUERY );
+            xMgr->createInstance( sImplReg ), UNO_QUERY );
         OSL_ENSURE( xImplReg.is(), "### no impl reg!" );
 
-        sal_Char pLibName[256];
-        ORealDynamicLoader::computeLibraryName("je558mi", pLibName, 255);
+
+        OUString sLibLoader( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.loader.SharedLibrary"));
+        OUString sJenLib( RTL_CONSTASCII_USTRINGPARAM( LIBJEN ));
         xImplReg->registerImplementation(
-            L"com.sun.star.loader.SharedLibrary", OWString::createFromAscii(pLibName), Reference< XSimpleRegistry >() );
+            sLibLoader, sJenLib, Reference< XSimpleRegistry >() );
 
         bSucc = testJavaVM( xMgr );
     }
     catch (Exception & rExc)
     {
         OSL_ENSURE( sal_False, "### exception occured!" );
-        OString aMsg( OWStringToOString( rExc.Message, RTL_TEXTENCODING_ASCII_US ) );
+        OString aMsg( OUStringToOString( rExc.Message, RTL_TEXTENCODING_ASCII_US ) );
         OSL_TRACE( "### exception occured: " );
         OSL_TRACE( aMsg.getStr() );
         OSL_TRACE( "\n" );
     }
 
-    Reference< XComponent >( xMgr, UNO_QUERY )->dispose();
+    Reference< XComponent > xCompContext( context, UNO_QUERY );
+    xCompContext->dispose();
     printf("javavm %s", bSucc ? "succeeded" : "failed");
 //  cout << "javavm " << (bSucc ? "succeeded" : "failed") << " !" << endl;
     return (bSucc ? 0 : -1);
