@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drtxtob.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:56 $
+ *  last change: $Author: nn $ $Date: 2000-10-27 12:04:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -401,6 +401,10 @@ void __EXPORT ScDrawTextObjectBar::Execute( SfxRequest &rReq )
 
 void __EXPORT ScDrawTextObjectBar::GetState( SfxItemSet& rSet )
 {
+    SfxViewFrame* pViewFrm = pViewData->GetViewShell()->GetViewFrame();
+    BOOL bHasFontWork = pViewFrm->HasChildWindow(SID_FONTWORK);
+    BOOL bDisableFontWork = FALSE;
+
     if (IsNoteEdit())
     {
         //  Funktionen, die bei Notizen disabled sind:
@@ -408,10 +412,14 @@ void __EXPORT ScDrawTextObjectBar::GetState( SfxItemSet& rSet )
         rSet.DisableItem( SID_TEXT_STANDARD );
         rSet.DisableItem( SID_DRAWTEXT_ATTR_DLG );
 
-        SfxViewFrame* pViewFrm = pViewData->GetViewShell()->GetViewFrame();
-        if(!pViewFrm->HasChildWindow(SID_FONTWORK))
-            rSet.DisableItem( SID_FONTWORK  );
+        if(!bHasFontWork)
+            bDisableFontWork = TRUE;
     }
+
+    if ( bDisableFontWork )
+        rSet.DisableItem( SID_FONTWORK  );
+    else
+        rSet.Put(SfxBoolItem(SID_FONTWORK, bHasFontWork));
 
     if ( rSet.GetItemState( SID_HYPERLINK_GETLINK ) != SFX_ITEM_UNKNOWN )
     {
