@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrlbox.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hdu $ $Date: 2001-07-19 17:20:19 $
+ *  last change: $Author: th $ $Date: 2001-08-01 19:21:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1092,10 +1092,7 @@ void FontSizeBox::ImplInit()
     bStdSize        = FALSE;
     pFontList       = NULL;
 
-    International aIntn = GetInternational();
-    aIntn.SetNumTrailingZeros( FALSE );
-    SetInternational( aIntn );
-
+    SetShowTrailingZeros( FALSE );
     SetDecimalDigits( 1 );
     SetMin( 20 );
     SetMax( 9999 );
@@ -1107,7 +1104,7 @@ void FontSizeBox::Reformat()
 {
     if ( !bRelativeMode )
     {
-        FontSizeNames aFontSizeNames( GetSettings().GetInternational().GetLanguage() );
+        FontSizeNames aFontSizeNames( GetSettings().GetUILanguage() );
         long nNewValue = aFontSizeNames.Name2Size( GetText() );
             if ( nNewValue)
         {
@@ -1207,7 +1204,7 @@ void FontSizeBox::Fill( const FontInfo& rInfo, const FontList* pList )
     USHORT nPos = 0;
 
     // first insert font size names (for simplified/traditional chinese)
-    FontSizeNames aFontSizeNames( GetSettings().GetInternational().GetLanguage() );
+    FontSizeNames aFontSizeNames( GetSettings().GetUILanguage() );
     if ( !aFontSizeNames.IsEmpty() )
     {
         if ( pAry == pList->GetStdSizeAry() )
@@ -1359,7 +1356,7 @@ void FontSizeBox::SetValue( long nNewValue, FieldUnit eInUnit )
     if ( !bRelative )
     {
         long nTempValue = MetricField::ConvertValue( nNewValue, GetBaseValue(), GetDecimalDigits(), eInUnit, GetUnit() );
-        FontSizeNames aFontSizeNames( GetSettings().GetInternational().GetLanguage() );
+        FontSizeNames aFontSizeNames( GetSettings().GetUILanguage() );
         String aName = aFontSizeNames.Size2Name( nTempValue );
         if ( aName.Len() && (GetEntryPos( aName ) != LISTBOX_ENTRY_NOTFOUND) )
         {
@@ -1405,7 +1402,7 @@ long FontSizeBox::GetValue( FieldUnit eOutUnit ) const
 {
     if ( !bRelative )
     {
-        FontSizeNames aFontSizeNames( GetSettings().GetInternational().GetLanguage() );
+        FontSizeNames aFontSizeNames( GetSettings().GetUILanguage() );
         long nValue = aFontSizeNames.Name2Size( GetText() );
         if ( nValue)
             return MetricField::ConvertValue( nValue, GetBaseValue(), GetDecimalDigits(), GetUnit(), eOutUnit );
@@ -1429,7 +1426,7 @@ void FontSizeBox::SetUserValue( long nNewValue, FieldUnit eInUnit )
     if ( !bRelative )
     {
         long nTempValue = MetricField::ConvertValue( nNewValue, GetBaseValue(), GetDecimalDigits(), eInUnit, GetUnit() );
-        FontSizeNames aFontSizeNames( GetSettings().GetInternational().GetLanguage() );
+        FontSizeNames aFontSizeNames( GetSettings().GetUILanguage() );
         String aName = aFontSizeNames.Size2Name( nTempValue );
         if ( aName.Len() && (GetEntryPos( aName ) != LISTBOX_ENTRY_NOTFOUND) )
         {
