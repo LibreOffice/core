@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glosdoc.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-18 12:27:55 $
+ *  last change: $Author: vg $ $Date: 2002-02-13 11:05:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,10 +158,11 @@ String lcl_CheckFileName( const String& rNewFilePath,
 
     if( !bOk )
     {
+        String rSG = SwGlossaries::GetExtension();
         //generate generic name
         utl::TempFile aTemp(
             String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "group" )),
-            &SwGlossaries::GetExtension(), &rNewFilePath );
+            &rSG, &rNewFilePath );
         aTemp.EnableKillingFile();
 
         INetURLObject aTempURL( aTemp.GetURL() );
