@@ -2,9 +2,9 @@
  *
  *  $RCSfile: measureproperties.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:51:02 $
+ *  last change: $Author: vg $ $Date: 2003-12-16 13:11:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,6 +175,9 @@ namespace sdr
             // call parent
             TextProperties::PreProcessSave();
 
+            // force ItemSet
+            GetObjectItemSet();
+
             // prepare SetItems for storage
             const SfxItemSet& rSet = *mpItemSet;
             const SfxItemSet* pParent = mpStyleSheet ? &(mpStyleSheet->GetItemSet()) : 0L;
@@ -202,10 +205,12 @@ namespace sdr
             // call parent
             TextProperties::ForceDefaultAttributes();
 
+            // force ItemSet
+            GetObjectItemSet();
+
             //#71958# by default, the show units Bool-Item is set as hard
             // attribute to TRUE to aviod confusion when copying SdrMeasureObj's
             // from one application to another
-            GetObjectItemSet();
             mpItemSet->Put(SdrMeasureShowUnitItem(TRUE));
 
             XPolygon aXP(4);            //      []
