@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctredlin.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-28 12:42:20 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 20:00:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,8 @@
  //
  // $Workfile:   ctredlin.src  $
  //   $Author: kz $
- //     $Date: 2001-03-28 12:42:20 $
- // $Revision: 1.12 $
+ //     $Date: 2001-05-04 20:00:05 $
+ // $Revision: 1.13 $
  //  $Logfile:   T:/svx/source/dialog/ctredlin.srv  $
  //---------------------------------------------------------------------------
 
@@ -100,6 +100,7 @@ TabPage SID_REDLIN_FILTER_PAGE
         Text[ korean ] = "ÇÊÅÍ";
         Text[ turkish ] = "Filtre";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Filtro";
     };
     HelpId = HID_REDLINING_FILTER_PAGE ;
     OutputSize = TRUE ;
@@ -133,6 +134,7 @@ TabPage SID_REDLIN_FILTER_PAGE
         Text[ korean ] = "³¯Â¥(~D)";
         Text[ turkish ] = "~Tarih";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Fecha";
     };
     ListBox LB_DATE
     {
@@ -332,6 +334,15 @@ TabPage SID_REDLIN_FILTER_PAGE
         < " " ; Default ; > ;
         < " " ; Default ; > ;
     };
+    StringList [ catalan ] =
+    {
+            < "antes de" ; Default ; > ;
+        < "desde el" ; Default ; > ;
+        < "igual a" ; Default ; > ;
+        < "desigual a" ; Default ; > ;
+        < "entre" ; Default ; > ;
+        < "desde el 'Guardado'" ; Default ; > ;
+    };
     };
     DateField DF_DATE
     {
@@ -392,7 +403,7 @@ TabPage SID_REDLIN_FILTER_PAGE
         QuickHelpText [ danish ] = "Indstil dato/klokkeslæt" ;
         QuickHelpText [ italian ] = "Imposta data/ora" ;
         QuickHelpText [ spanish ] = "Definir fecha/hora" ;
-        QuickHelpText [ french ] = "Actualiser la date/l'heure" ;
+        QuickHelpText [ french ] = "Définir la date/l'heure!" ;
         QuickHelpText [ dutch ] = "Datum/tijd instellen" ;
         QuickHelpText [ portuguese ] = "Define data e hora" ;
         QuickHelpText[ russian ] = "Âûñòàâèòü âðåìÿ è äàòó";
@@ -406,6 +417,7 @@ TabPage SID_REDLIN_FILTER_PAGE
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Datum/Uhrzeit einstellen";
+        QuickHelpText[ catalan ] = "Definir fecha/hora";
     };
     FixedText FT_DATE2
     {
@@ -433,6 +445,7 @@ TabPage SID_REDLIN_FILTER_PAGE
         Text[ korean ] = "±×¸®°í";
         Text[ turkish ] = "~ile";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "y";
     };
     DateField DF_DATE2
     {
@@ -493,7 +506,7 @@ TabPage SID_REDLIN_FILTER_PAGE
         QuickHelpText [ danish ] = "Indstil dato/klokkeslæt" ;
         QuickHelpText [ italian ] = "Imposta data/ora" ;
         QuickHelpText [ spanish ] = "Definir fecha/hora" ;
-        QuickHelpText [ french ] = "Actualiser la date/l'heure" ;
+        QuickHelpText [ french ] = "Définir la date/l'heure!" ;
         QuickHelpText [ dutch ] = "Datum/tijd instellen" ;
         QuickHelpText [ portuguese ] = "Define data e hora" ;
         QuickHelpText[ russian ] = "Âûñòàâèòü âðåìÿ è äàòó";
@@ -507,6 +520,7 @@ TabPage SID_REDLIN_FILTER_PAGE
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Datum/Uhrzeit einstellen";
+        QuickHelpText[ catalan ] = "Definir fecha/hora";
     };
     CheckBox CB_AUTOR
     {
@@ -535,6 +549,7 @@ TabPage SID_REDLIN_FILTER_PAGE
         Text[ korean ] = "ÀÛ¼ºÀÚ(~A)";
         Text[ turkish ] = "~Yazan";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Autor";
     };
     ListBox LB_AUTOR
     {
@@ -573,6 +588,7 @@ TabPage SID_REDLIN_FILTER_PAGE
         Text[ korean ] = "¹üÀ§(~R)";
         Text[ turkish ] = "~Aralýk";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Área";
     };
     Edit ED_RANGE
     {
@@ -606,6 +622,7 @@ TabPage SID_REDLIN_FILTER_PAGE
         Text[ korean ] = "¼öÇà(~C)";
         Text[ turkish ] = "Ý~þlem";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Acción";
     };
     ListBox LB_ACTION
     {
@@ -640,7 +657,7 @@ TabPage SID_REDLIN_FILTER_PAGE
         Text [ spanish ] = "..." ;
         QuickHelpText [ spanish ] = "Definir referencia a tabla" ;
         Text [ french ] = "..." ;
-        QuickHelpText [ french ] = "Ajuster référence" ;
+        QuickHelpText [ french ] = "Définir une référence!" ;
         Text [ dutch ] = "..." ;
         QuickHelpText [ dutch ] = "Tabellenreferentie instellen" ;
         Text [ portuguese ] = "..." ;
@@ -665,6 +682,8 @@ TabPage SID_REDLIN_FILTER_PAGE
         Text[ turkish ] = "...";
         Text[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Tabellenreferenz einstellen";
+        Text[ catalan ] = "...";
+        QuickHelpText[ catalan ] = "Definir referencia a tabla";
     };
     CheckBox CB_COMMENT
     {
@@ -693,6 +712,7 @@ TabPage SID_REDLIN_FILTER_PAGE
         Text[ korean ] = "¼³¸í";
         Text[ turkish ] = "Açýk~lama";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Descripción";
     };
     Edit ED_COMMENT
     {
@@ -740,6 +760,7 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text[ korean ] = "¸ñ·Ï";
         Text[ turkish ] = "Liste";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Lista";
     };
     Control DG_VIEW
     {
@@ -774,6 +795,7 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text[ korean ] = "¼ö¶ô(~A)";
         Text[ turkish ] = "~Kabul et";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Aceptar";
     };
     PushButton PB_REJECT
     {
@@ -801,6 +823,7 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text[ korean ] = "°ÅºÎ(~R)";
         Text[ turkish ] = "R~eddet";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Rechazar";
     };
     PushButton PB_ACCEPTALL
     {
@@ -828,6 +851,7 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text[ korean ] = "¸ðµÎ ¼ö¶ô(~C)";
         Text[ turkish ] = "~Tümünü kabul et";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Aceptar todo";
     };
     PushButton PB_REJECTALL
     {
@@ -855,6 +879,7 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text[ korean ] = "¸ðµÎ °ÅºÎ(~E)";
         Text[ turkish ] = "Tümünü ~reddet";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Rechazar todo";
     };
 
     PushButton PB_UNDO
@@ -884,6 +909,7 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text[ korean ] = "½ÇÇàÃë¼Ò";
         Text[ turkish ] = "~Geri al";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Deshacer";
     };
     String STR_TITLE1
     {
@@ -908,6 +934,7 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text[ korean ] = "¼öÇà";
         Text[ turkish ] = "Ýþlem";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Acción";
     };
     String STR_TITLE2
     {
@@ -932,6 +959,7 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text[ korean ] = "À§Ä¡";
         Text[ turkish ] = "Konum";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Posición";
     };
     String STR_TITLE3
     {
@@ -956,6 +984,7 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text[ korean ] = "ÀÛ¼ºÀÚ";
         Text[ turkish ] = "Yazan";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Autor";
     };
     String STR_TITLE4
     {
@@ -980,6 +1009,7 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text[ korean ] = "³¯Â¥";
         Text[ turkish ] = "Tarih";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Fecha";
     };
     String STR_TITLE5
     {
@@ -1004,5 +1034,6 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text[ korean ] = "¼³¸í";
         Text[ turkish ] = "Açýklama";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Descripción";
     };
 };
