@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dxfreprd.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:15 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 18:26:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,8 +137,13 @@ public:
     DXFEntities aEntities;
         // Die Entities (aus der Entities-Section) der DXF-Datei
 
+    rtl_TextEncoding mEnc;
+
     DXFRepresentation();
     ~DXFRepresentation();
+
+        rtl_TextEncoding getTextEncoding() const;
+        void setTextEncoding(rtl_TextEncoding aEnc);
 
     BOOL Read(SvStream & rIStream,
               PFilterCallback pCallback, void * pCallerData,
@@ -159,6 +164,8 @@ private:
 inline BYTE DXFPalette::GetRed(BYTE nIndex) const { return pRed[nIndex]; }
 inline BYTE DXFPalette::GetGreen(BYTE nIndex) const { return pGreen[nIndex]; }
 inline BYTE DXFPalette::GetBlue(BYTE nIndex) const { return pBlue[nIndex]; }
+inline rtl_TextEncoding DXFRepresentation::getTextEncoding() const { return mEnc; }
+inline void DXFRepresentation::setTextEncoding(rtl_TextEncoding aEnc) { mEnc = aEnc; }
 
 
 #endif
