@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldref.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:36 $
+ *  last change: $Author: os $ $Date: 2000-09-21 14:03:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -689,7 +689,7 @@ BOOL SwFldRefPage::FillItemSet(SfxItemSet& )
             {
                 aVal = String::CreateFromInt32( aArr[nPos]->nSeqNo );
 
-                if (IsFldEdit() && COMPARE_EQUAL != aVal.CompareTo(pRefFld->GetSeqNo()))
+                if (IsFldEdit() && aArr[nPos]->nSeqNo == pRefFld->GetSeqNo())
                     bModified = TRUE; // Kann bei Feldern passieren, deren Referenz geloescht wurde
             }
             else if (IsFldEdit())
@@ -710,7 +710,7 @@ BOOL SwFldRefPage::FillItemSet(SfxItemSet& )
             {
                 aVal = String::CreateFromInt32( aArr[nPos]->nSeqNo );
 
-                if (IsFldEdit() && COMPARE_EQUAL != aVal.CompareTo(pRefFld->GetSeqNo()))
+                if (IsFldEdit() && aArr[nPos]->nSeqNo == pRefFld->GetSeqNo())
                     bModified = TRUE; // Kann bei Feldern passieren, deren Referenz geloescht wurde
             }
             else if (IsFldEdit())
@@ -736,7 +736,7 @@ BOOL SwFldRefPage::FillItemSet(SfxItemSet& )
                 {
                     aVal = String::CreateFromInt32( aArr[nPos]->nSeqNo );
 
-                    if (IsFldEdit() && COMPARE_EQUAL != aVal.CompareTo(pRefFld->GetSeqNo()))
+                    if (IsFldEdit() && aArr[nPos]->nSeqNo == pRefFld->GetSeqNo())
                         bModified = TRUE; // Kann bei Feldern passieren, deren Referenz geloescht wurde
                 }
                 else if (IsFldEdit())
@@ -801,108 +801,4 @@ void    SwFldRefPage::FillUserData()
     sData += String::CreateFromInt32( nTypeSel );
     SetUserData(sData);
 }
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.32  2000/09/18 16:05:29  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.31  2000/08/31 10:07:13  os
-    #78315# CreateFromInt32
-
-    Revision 1.30  2000/07/20 08:10:52  jp
-    Unicode-Change-Error: call createfromint32
-
-    Revision 1.29  2000/06/30 08:52:53  os
-    #76541# string assertions removed
-
-    Revision 1.28  2000/06/19 14:06:07  os
-    #72953# call SubTypeHdl more often
-
-    Revision 1.27  2000/05/23 18:36:48  jp
-    Bugfixes for Unicode
-
-    Revision 1.26  2000/04/18 15:17:32  os
-    UNICODE
-
-    Revision 1.25  1999/09/28 11:10:35  os
-    #68076# call modify handler if a name is selected
-
-    Revision 1.24  1999/04/06 09:27:54  JP
-    Task #64320#: bei Referenz auf Nummernkreis auch die Nummer als Format anbieten
-
-
-      Rev 1.23   06 Apr 1999 11:27:54   JP
-   Task #64320#: bei Referenz auf Nummernkreis auch die Nummer als Format anbieten
-
-      Rev 1.22   25 Feb 1999 17:24:52   JP
-   Bug #62438#: UserData nur auswerten, wenn kein Refresh ist
-
-      Rev 1.21   21 Jan 1999 09:46:22   OS
-   #59900# Fussnoten im Dialog korrekt sortieren; keine prot. Member
-
-      Rev 1.20   20 Jan 1999 14:25:40   MIB
-   Keine leeren Refs auf Textmarken
-
-      Rev 1.19   12 Jan 1999 11:42:54   OS
-   #60579# ausgewaehlten Typ in den UserData speichern
-
-      Rev 1.18   10 Aug 1998 16:41:12   JP
-   Bug #54796#: neue NumerierungsTypen (WW97 kompatibel)
-
-      Rev 1.17   23 Jun 1998 14:43:10   OM
-   Referenzen und Textmarken mit beliebigem Namen einfuegen
-
-      Rev 1.16   22 Jun 1998 17:58:02   OM
-   Vorbereitung fuer eigenstaendige Referenzfelder
-
-      Rev 1.15   18 May 1998 15:21:34   OM
-   #50222 Korrekte Formate fuer Endnoten
-
-      Rev 1.14   27 Mar 1998 16:56:42   OM
-   Nur bei Aenderung Dok modifizieren
-
-      Rev 1.13   23 Feb 1998 07:26:36   OS
-   GetBookmark/ Cnt mit Bookmark-Flag
-
-      Rev 1.12   16 Feb 1998 10:10:22   OM
-   Fuer Solaris nicht direkt von void* auf ushort casten
-
-      Rev 1.11   30 Jan 1998 15:25:36   OM
-   Endnoten
-
-      Rev 1.10   27 Jan 1998 22:43:52   JP
-   GetNumDepend durch GetDepends ersetzt
-
-      Rev 1.9   09 Jan 1998 16:56:52   OM
-   Bei Dok-Wechsel updaten
-
-      Rev 1.8   08 Jan 1998 14:58:26   OM
-   Traveling
-
-      Rev 1.7   08 Jan 1998 10:19:04   OM
-   Referenzen editieren
-
-      Rev 1.6   07 Jan 1998 17:17:42   OM
-   Referenzen editieren
-
-      Rev 1.5   19 Dec 1997 18:24:26   OM
-   Feldbefehl-bearbeiten Dlg
-
-      Rev 1.4   12 Dec 1997 16:10:34   OM
-   AutoUpdate bei FocusWechsel u.a.
-
-      Rev 1.3   11 Dec 1997 16:58:50   OM
-   Feldumstellung
-
-      Rev 1.2   08 Dec 1997 12:32:22   MA
-   vorb. Endnoten
-
-      Rev 1.1   24 Nov 1997 14:40:24   OM
-   Referenz-TP
-
-      Rev 1.0   04 Nov 1997 10:07:20   OM
-   Initial revision.
-
-------------------------------------------------------------------------*/
 
