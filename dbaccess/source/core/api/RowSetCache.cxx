@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCache.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-10 11:05:43 $
+ *  last change: $Author: oj $ $Date: 2000-11-10 14:17:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,9 @@
 #ifndef _COM_SUN_STAR_SDBCX_XTABLESSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDBCX_KEYTYPE_HPP_
+#include <com/sun/star/sdbcx/KeyType.hpp>
+#endif
 #ifndef _COM_SUN_STAR_SDBCX_PRIVILEGE_HPP_
 #include <com/sun/star/sdbcx/Privilege.hpp>
 #endif
@@ -159,12 +162,24 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
         if(xKeys.is())
         {
             Reference< XIndexAccess> xKeyIndex = xKeys->getKeys();
-            if(xKeyIndex->getCount())
+            Reference<XColumnsSupplier> xColumnsSupplier;
+            // search the one and only primary key
+            for(sal_Int32 i=0;i< xKeyIndex->getCount();++i)
             {
-                OSL_ENSHURE(xKeyIndex->getCount() == 1,"ORowSetCache::ORowSetCache: There are more then one key in a table!?");
-                Reference<XColumnsSupplier> xColumnsSupplier;
-                xKeyIndex->getByIndex(0) >>= xColumnsSupplier;
-                OSL_ENSHURE(xColumnsSupplier.is(),"Found Key without columns!?");
+                Reference<XPropertySet> xProp;
+                xKeyIndex->getByIndex(i) >>= xProp;
+                sal_Int32 nKeyType = 0;
+                xProp->getPropertyValue(PROPERTY_TYPE) >>= nKeyType;
+                if(KeyType::PRIMARY == nKeyType)
+                {
+                    xColumnsSupplier = Reference<XColumnsSupplier>(xProp,UNO_QUERY);
+                    break;
+                }
+            }
+
+            OSL_ENSHURE(xColumnsSupplier.is(),"Found Key without columns!?");
+            if(xColumnsSupplier.is())
+            {
                 Reference<XNameAccess> xColumns = xColumnsSupplier->getColumns();
 
                 Sequence< ::rtl::OUString> aNames(xColumns->getElementNames());
@@ -1466,6 +1481,9 @@ void SAL_CALL ORowSetCache::clearWarnings(  ) throw(SQLException, RuntimeExcepti
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.10  2000/11/10 11:05:43  oj
+    bookmark error corrected
+
     Revision 1.9  2000/11/07 13:19:27  oj
     read one row forward because of isLast
 
