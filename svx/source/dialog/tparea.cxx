@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tparea.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 18:54:38 $
+ *  last change: $Author: hr $ $Date: 2004-12-13 12:16:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1896,13 +1896,13 @@ IMPL_LINK( SvxAreaTabPage, ClickColorHdl_Impl, void *, EMPTYARG )
     aURL.Append( pColorTab->GetName() );
     DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
 
-    if( aURL.getBase().Len() > 18 )
+    if( aURL.getBase().getLength() > 18 )
     {
-        aString += aURL.getBase().Copy( 0, 15 );
+        aString += String(aURL.getBase()).Copy( 0, 15 );
         aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "..." ) );
     }
     else
-        aString += aURL.getBase();
+        aString += String(aURL.getBase());
 
     ModifyColorHdl_Impl( this );
     return( 0L );
@@ -1986,13 +1986,13 @@ IMPL_LINK( SvxAreaTabPage, ClickGradientHdl_Impl, void *, EMPTYARG )
     aURL.Append( pGradientList->GetName() );
     DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
 
-    if( aURL.getBase().Len() > 18 )
+    if( aURL.getBase().getLength() > 18 )
     {
-        aString += aURL.getBase().Copy( 0, 15 );
+        aString += String(aURL.getBase()).Copy( 0, 15 );
         aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "..." ) );
     }
     else
-        aString += aURL.getBase();
+        aString += String(aURL.getBase());
 
     ModifyGradientHdl_Impl( this );
     ModifyStepCountHdl_Impl( &aTsbStepCount );
@@ -2081,13 +2081,13 @@ IMPL_LINK( SvxAreaTabPage, ClickHatchingHdl_Impl, void *, EMPTYARG )
     aURL.Append( pHatchingList->GetName() );
     DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
 
-    if( aURL.getBase().Len() > 18 )
+    if( aURL.getBase().getLength() > 18 )
     {
-        aString += aURL.getBase().Copy( 0, 15 );
+        aString += String(String(aURL.getBase()).Copy( 0, 15 ));
         aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "..." ) );
     }
     else
-        aString += aURL.getBase();
+        aString += String(aURL.getBase());
 
     ModifyHatchingHdl_Impl( this );
     ModifyHatchBckgrdColorHdl_Impl( this );
@@ -2249,13 +2249,13 @@ IMPL_LINK( SvxAreaTabPage, ClickBitmapHdl_Impl, void *, EMPTYARG )
     aURL.Append( pBitmapList->GetName() );
     DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
 
-    if( aURL.getBase().Len() > 18 )
+    if( aURL.getBase().getLength() > 18 )
     {
-        aString += aURL.getBase().Copy( 0, 15 );
+        aString += String(aURL.getBase()).Copy( 0, 15 );
         aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "..." ) );
     }
     else
-        aString += aURL.getBase();
+        aString += String(aURL.getBase());
 
     ModifyBitmapHdl_Impl( this );
     ModifyTileHdl_Impl( &aTsbOriginal );
