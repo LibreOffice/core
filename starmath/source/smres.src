@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smres.src,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: tl $ $Date: 2001-09-26 09:04:10 $
+ *  last change: $Author: rt $ $Date: 2001-09-27 20:25:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -857,7 +857,7 @@ ModalDialog RID_FONTTYPEDIALOG
         Text[ portuguese_brazilian ] = "~Serif";
         Text[ japanese ] = "~Serif";
         Text[ korean ] = "~Serif";
-        Text[ chinese_simplified ] = "η»†δ½“";
+        Text[ chinese_simplified ] = "~Serif";
         Text[ chinese_traditional ] = "~Serif";
         Text[ turkish ] = "~Serif";
         Text[ arabic ] = "~Serif";
@@ -930,7 +930,7 @@ ModalDialog RID_FONTTYPEDIALOG
         Text[ japanese ] = "ε›Ίε®";
         Text[ korean ] = "F~ixed";
         Text[ chinese_simplified ] = "ε›Ίε®η„";
-        Text[ chinese_traditional ] = "F~ixed";
+        Text[ chinese_traditional ] = "ε›Ίε®η„";
         Text[ turkish ] = "F~ixed";
         Text[ arabic ] = "F~ixed";
         Text[ catalan ] = "F~ixed";
@@ -1144,7 +1144,7 @@ ModalDialog RID_DISTANCEDIALOG
         Text[ portuguese_brazilian ] = "Scale all Brackets";
         Text[ japanese ] = "γ™γΉγ¦γ®γ‹γ£γ“γ‚’θªΏζ•΄";
         Text[ chinese_simplified ] = "ζ‰€ζ‰ζ‹¬ε·δ½Ώη”¨ζΎη¤Ίζ―”δΎ‹";
-        Text[ chinese_traditional ] = "ι΅―η¤Ίζ‰€ζ‰ζ‹¬θ™η„ε»εΊ¦";
+        Text[ chinese_traditional ] = "ζ‰€ζ‰ζ‹¬θ™δ½Ώη”¨ι΅―η¤Ίζ―”δΎ‹";
         Text[ arabic ] = "ΚΟΡνΜ ία ΗαΓήζΗΣ";
         Text[ greek ] = "Κλιμάκωση όλων των παρενθέσεων";
         Text[ korean ] = "λª¨λ“  κ΄„νΈμ λ°°μ¨μ΅°μ •";
@@ -3591,11 +3591,11 @@ String RID_FONTREGULAR
     Text [ dutch ] = "Normaal" ;
     Text [ spanish ] = "Normal" ;
     Text [ english_us ] = "Standard" ;
-    Text[ chinese_simplified ] = "ζ™®ι€";
+    Text[ chinese_simplified ] = "ζ ‡ε‡†";
     Text[ russian ] = "Ξαϋχνϋι";
     Text[ polish ] = "Domylnie";
     Text[ japanese ] = "ι€εΈΈ";
-    Text[ chinese_traditional ] = "οΌζ™®ι€";
+    Text[ chinese_traditional ] = "ζ¨™ζΊ–";
     Text[ arabic ] = "ΪΗΟν ,";
     Text[ greek ] = ", Κανονικά";
     Text[ korean ] = ", λ³΄ν†µ";
@@ -3622,7 +3622,7 @@ String RID_FONTITALIC
     Text[ russian ] = "Κσπρθβ";
     Text[ polish ] = "Kursywa";
     Text[ japanese ] = "ζ–δ½“";
-    Text[ chinese_traditional ] = ", ζ–ι«”";
+    Text[ chinese_traditional ] = "ζ–ι«”";
     Text[ arabic ] = "γΗΖα";
     Text[ greek ] = ", Πλάγια";
     Text[ korean ] = "μ΄νƒ¤λ¦­μ²΄";
@@ -3649,7 +3649,7 @@ String RID_FONTBOLD
     Text[ russian ] = "Ζθπνϋι";
     Text[ polish ] = "Pogrubienie";
     Text[ japanese ] = "ε¤ªε­—";
-    Text[ chinese_traditional ] = ", η²—ι«”";
+    Text[ chinese_traditional ] = "η²—ι«”";
     Text[ arabic ] = "ΪΡνΦ";
     Text[ greek ] = ";Έντονο";
     Text[ korean ] = ", κµµκ²";
@@ -6946,7 +6946,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ russian ] = "ΐπεΰ-ρθνσρ γθοεπαξλθχερκθι";
                 Text[ polish ] = "Arcus sinus hiperboliczny";
                 Text[ japanese ] = "εζ›²η·ι€†ο½»ο½²οΎ";
-                Text[ chinese_traditional ] = "ζ­£εΌ¦ι›™ζ›²ιΆ";
+                Text[ chinese_traditional ] = "ει›™ζ›²ζ­£εΌ¦";
                 Text[ arabic ] = "ΜνΘ ΗαÒΗζνΙ αήΨΪ ÒΗΖΟ αγδΨήΙ";
                 Text[ greek ] = "Αντίστροφο υπερβολικό ημίτονο";
                 Text[ korean ] = "λ©΄μ μκ³΅μ„  μ‚¬μΈ";
@@ -9338,7 +9338,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ dutch ] = "oneindig";
                 TEXT[ spanish ] = "infinito";
                 TEXT[ english_us ] = "infinite";
-                TEXT[ chinese_simplified ] = "ζ— ι™";
+                TEXT[ chinese_simplified ] = "ζ— η©·ε¤§";
                 TEXT[ russian ] = "Αερκξνεχνξ";
                 TEXT[ polish ] = "Nieskoρczonoζ";
                 TEXT[ japanese ] = "η„΅ι™ε¤§";
@@ -9982,7 +9982,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ russian ] = "Ξοεπΰφθθ μνξζερςβ";
                 Text[ polish ] = "Operacje na zbiorach";
                 Text[ japanese ] = "ι›†εζΌ”η®—";
-                Text[ chinese_traditional ] = "ζ•Έι‡ι‹η®—";
+                Text[ chinese_traditional ] = "ι›†ει‹η®—";
                 Text[ arabic ] = "γΜγζΪΙ ΪγανΗΚ";
                 Text[ greek ] = "Συναρτήσεις συνόλων";
                 Text[ korean ] = "μ§‘ν•© μ—°μ‚°";
@@ -10727,7 +10727,7 @@ String RID_ERR_LBRACEEXPECTED
     Text [ dutch ] = "'(' verwacht" ;
     Text [ english_us ] = "'(' expected" ;
     Text [ italian ] = "Atteso '('" ;
-    Text [ spanish ] = "Se requiere '('" ;
+    Text [ spanish ] = "Se requiere '(' " ;
     Text [ french ] = "'(' requis" ;
     Text [ swedish ] = "'(' fφrvδntad" ;
     Text [ danish ] = "'(' forventes" ;
@@ -11329,6 +11329,7 @@ String RID_MATH_TOOLBOX
     Text[ catalan ] = "Barra de herramientas";
     Text[ finnish ] = "Pδδtyφkalurivi";
 };
+
 
 
 
