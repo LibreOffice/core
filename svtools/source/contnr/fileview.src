@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-16 20:07:26 $
+ *  last change: $Author: rt $ $Date: 2001-08-21 20:10:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -567,6 +567,7 @@ ModalDialog DLG_SVT_QUERYDELETE
         TabStop = TRUE ;
     };
 };
+
 
 
 
