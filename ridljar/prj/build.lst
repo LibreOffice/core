@@ -11,6 +11,7 @@ ri	ridljar\com\sun\star\security			nmake	-	all	ri_sec ri_uno NULL
 ri	ridljar\com\sun\star\reflection			nmake	-	all	ri_reflection ri_lang ri_container NULL
 ri	ridljar\com\sun\star\beans				nmake	-	all	ri_beans ri_container ri_reflection NULL
 ri	ridljar\com\sun\star\bridge				nmake	-	all	ri_bridge ri_connection ri_container NULL
+ri	ridljar\com\sun\star\bridge\oleautomation				nmake	-	all	ri_auto ri_bridge NULL
 ri	ridljar\com\sun\star\connection			nmake	-	all	ri_connection ri_io NULL
 ri	ridljar\com\sun\star\container			nmake	-	all	ri_container ri_lang NULL
 ri	ridljar\com\sun\star\container_dep		nmake	-	all	ri_container_dep ri_lang ri_beans NULL
@@ -28,4 +29,4 @@ ri	ridljar\com\sun\star\test\performance	nmake	-	all	ri_test_perf ri_test NULL
 ri	ridljar\com\sun\star\test\bridge		nmake	-	all	ri_test_bridge ri_test NULL
 ri	ridljar\com\sun\star\task		nmake	-	all	ri_task ri_uno NULL
 ri  ridljar\com\sun\star\uri                nmake   -   all ri_uri ri_uno NULL
-ri	ridljar\util								nmake	-	all	ri_util ri_sec ri_bridge ri_corba_giop ri_corba_iiop ri_java ri_loader ri_script ri_test ri_typedesc ri_test_perf ri_test_bridge ri_log ri_task ri_package_util ri_container_dep ri_uri NULL
+ri	ridljar\util								nmake	-	all	ri_util ri_sec ri_bridge ri_auto ri_corba_giop ri_corba_iiop ri_java ri_loader ri_script ri_test ri_typedesc ri_test_perf ri_test_bridge ri_log ri_task ri_package_util ri_container_dep ri_uri NULL
