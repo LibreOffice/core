@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edattr.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: fme $ $Date: 2002-04-25 14:32:41 $
+ *  last change: $Author: fme $ $Date: 2002-05-30 15:06:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -529,9 +529,9 @@ const SwScriptInfo* lcl_GetScriptInfo( const SwTxtNode& rTNd )
             pScriptInfo = ((SwTxtFrm*)pLast)->GetScriptInfo();
             if ( pScriptInfo )
             {
-                ASSERT( STRING_LEN == pScriptInfo->GetInvalidity(),
-                        "Do not trust the ScriptInfo, it's invalid" )
-                break;
+                if ( STRING_LEN != pScriptInfo->GetInvalidity() )
+                    pScriptInfo = 0;
+                else break;
             }
         }
         pLast = ++aClientIter;
