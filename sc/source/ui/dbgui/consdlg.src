@@ -2,9 +2,9 @@
  *
  *  $RCSfile: consdlg.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:05:51 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 17:04:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,17 +147,17 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         };
         StringList [ portuguese_brazilian ] =
         {
-            < "Summe" ; Default ; > ;
-            < "Anzahl" ; Default ; > ;
-            < "Mittelwert" ; Default ; > ;
-            < "Max" ; Default ; > ;
-            < "Min" ; Default ; > ;
-            < "Produkt" ; Default ; > ;
-            < "Anzahl2 (nur Zahlen)" ; Default ; > ;
-            < "StAbw (Stichprobe)" ; Default ; > ;
-            < "StAbwN (Grundgesamtheit)" ; Default ; > ;
-            < "Varianz (Stichprobe)" ; Default ; > ;
-            < "VarP" ; Default ; > ;
+            < "Soma" ; Default ; > ;
+            < "Contagem" ; Default ; > ;
+            < "Média" ; Default ; > ;
+            < "Máx" ; Default ; > ;
+            < "Mín" ; Default ; > ;
+            < "Produto" ; Default ; > ;
+            < "Contar (somente números)" ; Default ; > ;
+            < "DesvPad (amostra)" ; Default ; > ;
+            < "DesvPadN (população)" ; Default ; > ;
+            < "Variância (amostra)" ; Default ; > ;
+            < "VarP (população)" ; Default ; > ;
         };
         StringList [ portuguese ] =
         {
@@ -303,15 +303,15 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
     {
             < "Suma" ; Default ; > ;
         < "Liczba" ; Default ; > ;
-        < "Œrednia wartoœæ" ; Default ; > ;
-        < "Max" ; Default ; > ;
+        < "Œrednia" ; Default ; > ;
+        < "Maks" ; Default ; > ;
         < "Min" ; Default ; > ;
         < "Iloczyn" ; Default ; > ;
-        < "Iloœæ (tylko liczby)" ; Default ; > ;
+        < "Liczba (tylko liczby)" ; Default ; > ;
         < "Odchylenie standardowe (Próbka)" ; Default ; > ;
-        < "Odch.standard. (populacja)" ; Default ; > ;
+        < "Odch.stdc (populacja)" ; Default ; > ;
         < "Wariancja (Próbka)" ; Default ; > ;
-        < "Wariancje (Zbiorowoœæ generalna)" ; Default ; > ;
+        < "Wariancje (populacja)" ; Default ; > ;
     };
     StringList [ japanese ] =
     {
@@ -386,16 +386,16 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
     StringList [ turkish ] =
     {
             < "Toplam" ; Default ; > ;
-        < "Sayı" ; Default ; > ;
-        < "Ortalama değer" ; Default ; > ;
-        < "Azami" ; Default ; > ;
-        < "Asgari" ; Default ; > ;
-        < "Çarpım sonucu" ; Default ; > ;
-        < "Count (yalnızca sayı)" ; Default ; > ;
-        < "StDev (sample)" ; Default ; > ;
-        < "StDevP (population)" ; Default ; > ;
-        < "Var (örneği)" ; Default ; > ;
-        < "VarP (population)" ; Default ; > ;
+        < "Say" ; Default ; > ;
+        < "Ortalama " ; Default ; > ;
+        < "Max" ; Default ; > ;
+        < "Min" ; Default ; > ;
+        < "Çarpım" ; Default ; > ;
+        < "Say (yalnızca sayıları)" ; Default ; > ;
+        < "StSapma (sample)" ; Default ; > ;
+        < "StSapmaP (popülasyon)" ; Default ; > ;
+        < "Değişken (örnek)" ; Default ; > ;
+        < "DeğişkenP (popülasyon)" ; Default ; > ;
     };
     StringList [ language_user1 ] =
     {
@@ -439,6 +439,48 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         < "Var (à¸•à¸±à¸§à¸­à¸¢à¹ˆà¸²à¸‡)" ; Default ; > ;
         < "VarP (à¸›à¸£à¸°à¸Šà¸²à¸à¸£)" ; Default ; > ;
     };
+    StringList [ czech ] =
+    {
+         < "SouÄet" ; Default ; > ;
+        < "PoÄet" ; Default ; > ;
+        < "PrÅ¯mÄ›r" ; Default ; > ;
+        < "Max" ; Default ; > ;
+        < "Min" ; Default ; > ;
+        < "Produkt" ; Default ; > ;
+        < "PoÄet (pouze ÄÃ­sla)" ; Default ; > ;
+        < "StDev (vÃ½bÄ›r)" ; Default ; > ;
+        < "StDevP (zÃ¡kladnÃ­ soubor)" ; Default ; > ;
+        < "Var (vÃ½bÄ›r)" ; Default ; > ;
+            < "VarP (zÃ¡kladnÃ­ soubor)" ; Default ; > ;
+        };
+    StringList [ hebrew ] =
+    {
+         < "â€®×¡×›×•×â€¬" ; Default ; > ;
+        < "Anzahl" ; Default ; > ;
+        < "Mittelwert" ; Default ; > ;
+        < "Max" ; Default ; > ;
+        < "Min" ; Default ; > ;
+        < "Produkt" ; Default ; > ;
+        < "Anzahl (nur Zahlen)" ; Default ; > ;
+        < "StAbw (Stichprobe)" ; Default ; > ;
+        < "StAbwN (Grundgesamtheit)" ; Default ; > ;
+        < "Varianz (Stichprobe)" ; Default ; > ;
+            < "Varianzen (Grundgesamtheit)" ; Default ; > ;
+        };
+    StringList [ hindi ] =
+    {
+         < "à¤œà¥‹à¤¡" ; Default ; > ;
+        < "à¤—à¤¿à¤¨à¤¤à¥€" ; Default ; > ;
+        < "à¤®à¤¾à¤§à¥à¤¯" ; Default ; > ;
+        < "à¤…à¤§à¤¿à¤•à¤¤à¤®" ; Default ; > ;
+        < "à¤¨à¥à¤¯à¥‚à¤¨à¤¤à¤®" ; Default ; > ;
+        < "à¤—à¥à¤£à¤¨" ; Default ; > ;
+        < "à¤—à¤¿à¤¨à¤¤à¥€ (à¤•à¥‡à¤µà¤² à¤¸à¤‚à¤–à¥à¤¯à¤¾)" ; Default ; > ;
+        < "StDev (à¤¨à¤®à¥‚à¤¨à¤¾)" ; Default ; > ;
+        < "StDevP (à¤œà¤¨à¤¸à¤‚à¤–à¥à¤¯à¤¾)" ; Default ; > ;
+        < "Var (à¤¨à¤®à¥‚à¤¨à¤¾)" ; Default ; > ;
+            < "VarP (à¤œà¤¨à¤¸à¤‚à¤–à¥à¤¯à¤¾)" ; Default ; > ;
+        };
     };
     Edit ED_DATA_AREA
     {
@@ -484,6 +526,9 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         QuickHelpText[ catalan ] = "Redueix";
         QuickHelpText[ finnish ] = "Kutista";
         QuickHelpText[ thai ] = "Shrink";
+        QuickHelpText[ czech ] = "ZmenÅ¡it";
+        QuickHelpText[ hebrew ] = "Verkleinern";
+        QuickHelpText[ hindi ] = "à¤¸à¤¿à¤•à¥à¤¡à¤¨à¤¾";
     };
     ImageButton RB_DEST_AREA
     {
@@ -515,6 +560,9 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         QuickHelpText[ catalan ] = "Redueix";
         QuickHelpText[ finnish ] = "Kutista";
         QuickHelpText[ thai ] = "Shrink";
+        QuickHelpText[ czech ] = "ZmenÅ¡it";
+        QuickHelpText[ hebrew ] = "Verkleinern";
+        QuickHelpText[ hindi ] = "à¤¸à¤¿à¤•à¥à¤¡à¤¨à¤¾";
     };
     ListBox LB_DATA_AREA
     {
@@ -548,7 +596,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text [ ENGLISH ] = "Fun~ction" ;
         Text [ norwegian ] = "Fu~nksjon" ;
         Text [ italian ] = "Fun~zione" ;
-        Text [ portuguese_brazilian ] = "Fun~??o" ;
+        Text [ portuguese_brazilian ] = "~Função" ;
         Text [ portuguese ] = "U~sar função" ;
         Text [ finnish ] = "~Funktio" ;
         Text [ danish ] = "Beregningsfunktion" ;
@@ -559,16 +607,19 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text [ english_us ] = "~Function" ;
         Text[ chinese_simplified ] = "è®¡ç®—è§„åˆ™(~F)";
         Text[ russian ] = "Ôóíêöèÿ";
-        Text[ polish ] = "Instrukcja obliczania";
+        Text[ polish ] = "~Funkcja";
         Text[ japanese ] = "è¨ˆç®—æ–¹æ³•(~F)";
         Text[ chinese_traditional ] = "è¨ˆç®—è¦å‰‡(~F)";
         Text[ arabic ] = "ÇáÏÇáÉ";
         Text[ greek ] = "Êáíüíáò õğïëïãéóìïı";
         Text[ korean ] = "í•¨ìˆ˜(~F)";
-        Text[ turkish ] = "Fonksi~yon";
+        Text[ turkish ] = "~Fonksiyon";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Funció";
         Text[ thai ] = "~à¸Ÿà¸±à¸‡à¸à¹Œà¸Šà¸±à¹ˆà¸™";
+        Text[ czech ] = "Funkce";
+        Text[ hebrew ] = "Be~rechnungsvorschrift";
+        Text[ hindi ] = "~à¤«à¤‚à¤•à¥à¤¶à¤¨à¥";
     };
     FixedText FT_CONSAREAS
     {
@@ -578,7 +629,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text [ ENGLISH ] = "Consoli~dation areas" ;
         Text [ norwegian ] = "Konsoli~derings områder" ;
         Text [ italian ] = "Aree di consolidamento" ;
-        Text [ portuguese_brazilian ] = "?reas de consoli~da??o" ;
+        Text [ portuguese_brazilian ] = "Áreas de ~Consolidação" ;
         Text [ portuguese ] = "Áreas de consoli~dação" ;
         Text [ finnish ] = "~Yhdistelyalueet" ;
         Text [ danish ] = "Konsolideringsområder" ;
@@ -589,16 +640,19 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text [ english_us ] = "~Consolidation ranges" ;
         Text[ chinese_simplified ] = "åˆå¹¶è®¡ç®—åŒºåŸŸ(~C)";
         Text[ russian ] = "Îáëàñòè îáúåäèíåíèÿ";
-        Text[ polish ] = "Obszary konsolidacji";
+        Text[ polish ] = "~Obszary konsolidacji";
         Text[ japanese ] = "çµ±åˆç¯„å›²(~C)";
         Text[ chinese_traditional ] = "åˆä½µè¨ˆç®—å€åŸŸ(~C)";
         Text[ arabic ] = "äØÇŞÇÊ ÇáÏãÌ";
         Text[ greek ] = "Ğå~ñéï÷İò åíïğïßçóçò";
         Text[ korean ] = "í†µí•© ë²”ìœ„(~C)";
-        Text[ turkish ] = "Bir~leştirme aralıkları";
+        Text[ turkish ] = "~Yoğunlaştırma çizgileri";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Àrees de ~consolidació";
         Text[ thai ] = "~à¸£à¸§à¸šà¸£à¸§à¸¡à¸à¸·à¹‰à¸™à¸—à¸µà¹ˆ";
+        Text[ czech ] = "Oblasti konsolidace";
+        Text[ hebrew ] = "~Konsolidierungsbereiche";
+        Text[ hindi ] = "~à¤à¤•à¤¤à¥à¤°à¤¿à¤¤ à¤•à¥€ à¤¹à¥à¤¯à¥€ à¤µà¤¿à¤¸à¥à¤¤à¥€à¤°à¥à¤£";
     };
     FixedText FT_DATA_AREA
     {
@@ -608,7 +662,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text [ ENGLISH ] = "~Source data area" ;
         Text [ norwegian ] = "~Kildedataområder" ;
         Text [ italian ] = "Area dati di sorgente" ;
-        Text [ portuguese_brazilian ] = "~?rea de origem dos dados" ;
+        Text [ portuguese_brazilian ] = "Á~rea da origem dos dados" ;
         Text [ portuguese ] = "~Área dos dados fonte" ;
         Text [ finnish ] = "Lähdetietoalue" ;
         Text [ danish ] = "Kildedataområde" ;
@@ -619,16 +673,19 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text [ english_us ] = "~Source data range" ;
         Text[ chinese_simplified ] = "æºæ•°æ®åŒºåŸŸ(~S)";
         Text[ russian ] = "Îáëàñòü èñõîäíûõ äàííûõ";
-        Text[ polish ] = "Obszar danych Ÿród³a";
+        Text[ polish ] = "O~bszar danych Ÿród³owych";
         Text[ japanese ] = "ã‚½ãƒ¼ã‚¹ãƒ‡ãƒ¼ã‚¿ç¯„å›²(~S)";
         Text[ chinese_traditional ] = "æºè³‡æ–™å€åŸŸ(~S)";
         Text[ arabic ] = "äØÇŞ ÈíÇäÇÊ ÇáãÕÏÑ";
         Text[ greek ] = "Ğåñéï÷Ş ğñïİëåõóçò äåäïìİíùí";
         Text[ korean ] = "ì›ë³¸ ë°ì´í„° ë²”ìœ„(~S)";
-        Text[ turkish ] = "Kaynak veri a~ralıkları";
+        Text[ turkish ] = "~Kaynak veri sınırı";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "F~ont de l'àrea de dades";
         Text[ thai ] = "à¸à¸·à¹‰à¸™à¸—à¸µà¹ˆà¹~à¸«à¸¥à¹ˆà¸‡à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
+        Text[ czech ] = "ZdrojovÃ¡ oblast dat";
+        Text[ hebrew ] = "Quelldaten~bereich";
+        Text[ hindi ] = "~à¤®à¥‚à¤² à¤¡à¤¼à¥‰à¤Ÿà¤¾ à¤µà¤¿à¤¸à¥à¤¤à¥€à¤°à¥à¤£";
     };
     FixedText FT_DEST_AREA
     {
@@ -638,7 +695,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text [ ENGLISH ] = "Result  a~t" ;
         Text [ norwegian ] = "Resultat ~ved" ;
         Text [ italian ] = "Risultato a partire da" ;
-        Text [ portuguese_brazilian ] = "Resultado a~t" ;
+        Text [ portuguese_brazilian ] = "Copiar resul~tados para" ;
         Text [ portuguese ] = "~Resultado a partir de" ;
         Text [ finnish ] = "~Kopioi tulokset kohteeseen" ;
         Text [ danish ] = "Resultat-output fra" ;
@@ -649,16 +706,19 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text [ english_us ] = "Copy results ~to" ;
         Text[ chinese_simplified ] = "å¤åˆ¶ç»“æœåˆ°(~T)";
         Text[ russian ] = "Ïîìåòèòü ğåçóëüòàò â";
-        Text[ polish ] = "Kopiuj wynik od";
+        Text[ polish ] = "~Kopiuj wyniki do";
         Text[ japanese ] = "çµæœè²¼ã‚Šä»˜ã‘å…ˆ(~T)";
         Text[ chinese_traditional ] = "è¤‡è£½çµæœåˆ°(~T)";
         Text[ arabic ] = "äÓÎ ÇáäÊÇÆÌ Åáì";
         Text[ greek ] = "ÅìöÜíéóç áğïôåëåóìÜôùí áğü";
         Text[ korean ] = "ê²°ê³¼ ë³µì‚¬ ìœ„ì¹˜(~T)";
-        Text[ turkish ] = "Sonuc~un gösterileceği yer";
+        Text[ turkish ] = "Sonuçlar~ın gösterileceği yer";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Co~pia els resultats a";
         Text[ thai ] = "à¸„à¸±à¸”à¸¥à¸­à¸à¸œà¸¥à¸¥à¸±à¸à¸˜à¹Œà¹„~à¸›à¸¢à¸±à¸‡";
+        Text[ czech ] = "KopÃ­rovat vÃ½sledky do";
+        Text[ hebrew ] = "Er~gebnis ausgeben ab";
+        Text[ hindi ] = "~à¤®à¥‡à¤‚ à¤¨à¤¤à¥€à¤œà¥‹à¤‚ à¤•à¥€ à¤ªà¥à¤°à¤¤à¤¿à¤²à¤¿à¤ªà¤¿";
     };
     CheckBox BTN_BYROW
     {
@@ -668,7 +728,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text [ ENGLISH ] = "by ro~ws" ;
         Text [ norwegian ] = "etter ra~der" ;
         Text [ italian ] = "Dicitura righe" ;
-        Text [ portuguese_brazilian ] = "por fi~leiras" ;
+        Text [ portuguese_brazilian ] = "~Rótulos das linhas" ;
         Text [ portuguese ] = "Legenda para ~linhas" ;
         Text [ finnish ] = "~Riviselitteet" ;
         Text [ danish ] = "Rækkeetiketter" ;
@@ -680,16 +740,19 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "è¡Œæ ‡é¢˜(~R)";
         Text[ russian ] = "Ïîäïèñè ñòğîê";
-        Text[ polish ] = "Etykiety wierszy";
+        Text[ polish ] = "~Etykiety wierszy";
         Text[ japanese ] = "è¡Œã®é …ç›®æ¬„(~R)";
         Text[ chinese_traditional ] = "åˆ—æ¨™ç±¤(~R)";
         Text[ arabic ] = "ÚäÇæíä ÇáÕİæİ";
         Text[ greek ] = "ÅğéãñáöŞ ãñáììŞò";
         Text[ korean ] = "í–‰ ë ˆì´ë¸”(~R)";
-        Text[ turkish ] = "Sa~tır etiketleri";
+        Text[ turkish ] = "~Satır etikerleri";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Eti~quetes de fila";
         Text[ thai ] = "à¸›à¹‰à¸²à¸¢à¸Šà¸·à¹ˆà¸­à¹~à¸–à¸§";
+        Text[ czech ] = "Popisky Å™Ã¡dkÅ¯";
+        Text[ hebrew ] = "Ze~ilenbeschriftungen";
+        Text[ hindi ] = "~à¤ªà¤‚à¤•à¥à¤¤à¤¿ à¤²à¥‡à¤¬à¤¿à¤²à¥‡à¤‚";
     };
     CheckBox BTN_BYCOL
     {
@@ -699,7 +762,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text [ ENGLISH ] = "by colum~ns" ;
         Text [ norwegian ] = "etter kolonn~er" ;
         Text [ italian ] = "~Intestazioni colonne" ;
-        Text [ portuguese_brazilian ] = "por colu~nas" ;
+        Text [ portuguese_brazilian ] = "Cabeçalhos das c~olunas" ;
         Text [ portuguese ] = "~Cabeçalhos de colunas" ;
         Text [ finnish ] = "~Sarakeotsikot" ;
         Text [ danish ] = "Kolonneoverskrifter" ;
@@ -711,16 +774,19 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "åˆ—æ ‡é¢˜(~O)";
         Text[ russian ] = "Çàãîëîâêè ñòîëáöîâ";
-        Text[ polish ] = "Nag³ówki kolumn";
+        Text[ polish ] = "~Nag³ówki kolumn";
         Text[ japanese ] = "åˆ—ã®é …ç›®æ¬„(~O)";
         Text[ chinese_traditional ] = "æ¬„æ¨™ç±¤(~O)";
         Text[ arabic ] = "ÑÄæÓ ÇáÃÚãÏÉ";
         Text[ greek ] = "Êåöáëßäåò óôçëşí";
         Text[ korean ] = "ì—´ ë ˆì´ë¸”(~O)";
-        Text[ turkish ] = "S~ütun başlıkları";
+        Text[ turkish ] = "Süt~un etiketleri";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Capçaleres de c~olumna";
         Text[ thai ] = "à¸ªà¹ˆà¸§à¸™à¸«à¸±à¸§à¸„~à¸­à¸¥à¸±à¸¡à¸ à¹Œ";
+        Text[ czech ] = "ZÃ¡hlavÃ­ sloupcÅ¯";
+        Text[ hebrew ] = "S~paltenbeschriftungen";
+        Text[ hindi ] = "à¤¸à¥à¤¤à¤‚~à¤­ à¤¶à¥€à¤°à¥à¤·à¤•à¥‡à¤‚";
     };
     FixedLine FL_CONSBY
     {
@@ -747,10 +813,13 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text[ arabic ] = "ÏãÌ Åáì";
         Text[ greek ] = "Åíïğïßçóç ùò ğñïò";
         Text[ korean ] = "í†µí•© ìœ„ì¹˜";
-        Text[ turkish ] = "Birleştirme ölçütü";
+        Text[ turkish ] = "Yoğunlaştıran";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Consolida segons";
         Text[ thai ] = "à¸£à¸§à¸šà¸£à¸§à¸¡à¹‚à¸”à¸¢";
+        Text[ czech ] = "Konsolidovat podle";
+        Text[ hebrew ] = "Konsolidieren nach";
+        Text[ hindi ] = "Consolidate by";
     };
     FixedLine FL_SEP
     {
@@ -765,7 +834,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text = "Optionen" ;
         Text [ ENGLISH ] = "Options" ;
         Text [ english_us ] = "Options" ;
-        Text [ portuguese_brazilian ] = "Optionen" ;
+        Text [ portuguese_brazilian ] = "Opções" ;
         Text [ swedish ] = "Alternativ" ;
         Text [ danish ] = "Indstillinger" ;
         Text [ italian ] = "Opzioni" ;
@@ -786,6 +855,9 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text[ catalan ] = "Opcions";
         Text[ finnish ] = "Asetukset";
         Text[ thai ] = "à¸•à¸±à¸§à¹€à¸¥à¸·à¸­à¸";
+        Text[ czech ] = "Volby";
+        Text[ hebrew ] = "â€®××¤×©×¨×•×™×•×ªâ€¬";
+        Text[ hindi ] = "à¤µà¤¿à¤•à¤²à¥à¤ª";
     };
     CheckBox BTN_REFS
     {
@@ -795,7 +867,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text [ ENGLISH ] = "Re~ference source data" ;
         Text [ norwegian ] = "Re~feranse kildedata" ;
         Text [ italian ] = "Collega con dati origine" ;
-        Text [ portuguese_brazilian ] = "Dados da fonte de re~fer?ncia" ;
+        Text [ portuguese_brazilian ] = "Vincu~lar aos dados de origem" ;
         Text [ portuguese ] = "~Ligar aos dados da fonte" ;
         Text [ finnish ] = "Linkki lähdetietoihin" ;
         Text [ danish ] = "Opret kæde til kildedata" ;
@@ -807,16 +879,19 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "å’Œæºæ•°æ®è¿æ¥(~L)";
         Text[ russian ] = "Ñâÿçàòü ñ èñõîäíûìè äàííûìè";
-        Text[ polish ] = "Utwórz ³¹cze z danymi Ÿród³a";
+        Text[ polish ] = "~Po³¹cz z danymi Ÿród³owymi";
         Text[ japanese ] = "ã‚½ãƒ¼ã‚¹ãƒ‡ãƒ¼ã‚¿ã¸ãƒªãƒ³ã‚¯ã™ã‚‹(~L)";
         Text[ chinese_traditional ] = "å’Œæºè³‡æ–™é€£çµ(~L)";
         Text[ arabic ] = "ÑÈØ ÈÈíÇäÇÊ ÇáãÕÏÑ";
         Text[ greek ] = "Óıíäåóç ìå äåäïìİíá ğñïİëåõóçò";
         Text[ korean ] = "ì›ë³¸ ë°ì´í„°ì— ì—°ê²°(~L)";
-        Text[ turkish ] = "Kaynak verilerine ~bağla";
+        Text[ turkish ] = "~Kaynak verilerine bağla";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "En~llaç a la font de dades";
         Text[ thai ] = "à¹€~à¸Šà¸·à¹ˆà¸­à¸¡à¹‚à¸¢à¸‡à¹„à¸›à¸¢à¸±à¸‡à¹à¸«à¸¥à¹ˆà¸‡à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
+        Text[ czech ] = "Odkaz na zdrojovÃ¡ data";
+        Text[ hebrew ] = "Mit Quelldaten ~verbinden";
+        Text[ hindi ] = "à¤®à¥‚à¤² à¤¡à¤¼à¥‰à¤Ÿà¤¾ à¤•à¥‹ ~à¤²à¤¿à¤‚à¤• à¤•à¤°à¥‹";
     };
     OKButton BTN_OK
     {
@@ -853,7 +928,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text [ ENGLISH ] = "~Remove" ;
         Text [ norwegian ] = "~Fjern" ;
         Text [ italian ] = "~Elimina" ;
-        Text [ portuguese_brazilian ] = "~Remover" ;
+        Text [ portuguese_brazilian ] = "~Excluir" ;
         Text [ portuguese ] = "E~liminar" ;
         Text [ finnish ] = "~Poista" ;
         Text [ danish ] = "Slet" ;
@@ -865,7 +940,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "åˆ é™¤(~D)";
         Text[ russian ] = "Óäàëèòü";
-        Text[ polish ] = "Usuñ";
+        Text[ polish ] = "~Usuñ";
         Text[ japanese ] = "å‰Šé™¤(~D)";
         Text[ chinese_traditional ] = "åˆªé™¤(~D)";
         Text[ arabic ] = "ÍĞİ";
@@ -875,6 +950,9 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Suprimeix";
         Text[ thai ] = "~à¸¥à¸š";
+        Text[ czech ] = "Smazat";
+        Text[ hebrew ] = "â€®××—×™×§×”â€¬";
+        Text[ hindi ] = "~à¤®à¤¿à¤Ÿà¤¾à¤“";
     };
     PushButton BTN_ADD
     {
@@ -884,7 +962,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text [ ENGLISH ] = "~Add" ;
         Text [ norwegian ] = "Leg~g til" ;
         Text [ italian ] = "A~ggiungi" ;
-        Text [ portuguese_brazilian ] = "~Acrescentar" ;
+        Text [ portuguese_brazilian ] = "~Adicionar" ;
         Text [ portuguese ] = "~Adicionar" ;
         Text [ finnish ] = "~Lisää" ;
         Text [ danish ] = "Tilføj" ;
@@ -896,7 +974,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "æ–°å¢(~A)";
         Text[ russian ] = "Äîáàâèòü";
-        Text[ polish ] = "Dodaj";
+        Text[ polish ] = "~Dodaj";
         Text[ japanese ] = "è¿½åŠ (~A)";
         Text[ chinese_traditional ] = "æ–°å¢(~A)";
         Text[ arabic ] = "ÅÖÇİÉ";
@@ -906,6 +984,9 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Afegeix";
         Text[ thai ] = "à¹€~à¸à¸´à¹ˆà¸¡";
+        Text[ czech ] = "PÅ™idat";
+        Text[ hebrew ] = "â€®×”×•×¡×¤×”â€¬";
+        Text[ hindi ] = "~à¤œà¥‹à¤¡à¤¼à¥‹";
     };
     Text[ chinese_simplified ] = "åˆå¹¶è®¡ç®—";
     Text[ russian ] = "Îáúåäèíèòü";
@@ -919,7 +1000,23 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Consolida";
     Text[ thai ] = "à¸£à¸§à¸šà¸£à¸§à¸¡";
+    Text[ czech ] = "Konsolidovat";
+    Text[ hebrew ] = "Konsolidieren";
+    Text[ hindi ] = "à¤à¤•à¤¤à¥à¤°à¤¿à¤¤ à¤•à¤°à¥‹";
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
