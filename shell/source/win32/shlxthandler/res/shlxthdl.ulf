@@ -1,0 +1,179 @@
+[%TITLE%]
+en-US = "Title"
+de = "Titel"
+
+[%TITLE_COLON%]
+en-US = "Title:"
+de = "Titel:"
+
+[%SUBJECT%]
+en-US = "Subject"
+de = "Thema"
+
+[%SUBJECT_COLON%]
+en-US = "Subject:"
+de = "Thema:"
+
+[%AUTHOR%]
+en-US = "Author"
+de = "Autor"
+
+[%AUTHOR_COLON%]
+en-US = "Author:"
+de = "Autor:"
+
+[%KEYWORDS%]
+en-US = "Keywords"
+de = "Schlüsselwörter"
+
+[%KEYWORDS_COLON%]
+en-US = "Keywords:"
+de = "Schlüsselwörter:"
+
+[%COMMENTS%]
+en-US = "Comments"
+de = "Kommentare"
+
+[%COMMENTS_COLON%]
+en-US = "Comments:"
+de = "Kommentare:"
+
+[%PAGES%]
+en-US = "Pages"
+de = "Seiten"
+
+[%TABLES%]
+en-US = "Tables"
+de = "Tabellen"
+
+[%GRAPHICS%]
+en-US = "Graphics"
+de = "Grafiken"
+
+[%OBJECTS%]
+en-US = "Objects"
+de = "Objekte"
+
+[%OLE_OBJECTS%]
+en-US = "OLE Objects"
+de = "OLE-Objekte"
+
+[%PARAGRAPHS%]
+en-US = "Paragraphs"
+de = "Absätze"
+
+[%WORDS%]
+en-US = "Words"
+de = "Wörter"
+
+[%CHARACTERS%]
+en-US = "Characters"
+de = "Zeichen"
+
+[%ROWS%]
+en-US = "Lines"
+de = "Zeilen"
+
+[%ORIGIN%]
+en-US = "Origin"
+de = "Quelle"
+
+[%VERSION%]
+en-US = "Version"
+de = "Version"
+
+[%SHEETS%]
+en-US = "Sheets"
+de = "Tabellen"
+
+[%CELLS%]
+en-US = "Cells"
+de = "Zellen"
+
+[%STATISTICS_TITLE%]
+en-US = "Document Statistics"
+de = "Dokumentstatistik"
+
+[%SUMMARY_TITLE%]
+en-US = "Summary"
+de = "Zusammenfassung"
+
+[%PROPERTY%]
+en-US = "Property"
+de = "Eigenschaft"
+
+[%PROPERTY_VALUE%]
+en-US = "Value"
+de = "Wert"
+
+[%MODIFIED%]
+en-US = "Modified"
+de = "Geändert am"
+
+[%MODIFIED_COLON%]
+en-US = "Modified:"
+de = "Geändert am:"
+
+[%DOCUMENT_NUMBER%]
+en-US = "Document number"
+de = "Dokumentnummer"
+
+[%DOCUMENT_NUMBER_COLON%]
+en-US = "Document number:"
+de = "Dokumentnummer:"
+
+[%EDITING_TIME%]
+en-US = "Editing time"
+de = "Bearbeitungszeit"
+
+[%EDITING_TIME_COLON%]
+en-US = "Editing time:"
+de = "Bearbeitungszeit:"
+
+[%DESCRIPTION%]
+en-US = "Description"
+de = "Beschreibung"
+
+[%DESCRIPTION_COLON%]
+en-US = "Description:"
+de = "Beschreibung:"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
