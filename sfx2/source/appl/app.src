@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: vg $ $Date: 2002-06-10 15:10:02 $
+ *  last change: $Author: rt $ $Date: 2002-06-13 12:44:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1348,14 +1348,14 @@ String GID_CONTROLS
     Text [ portuguese_brazilian ] = "Kontrollelemente" ;
     Text [ swedish ] = "Kontrollelement" ;
     Text [ danish ] = "Kontrolelementer" ;
-    Text[ chinese_simplified ] = "ζ§ε¶ε•ε…ƒ";
+    Text[ chinese_simplified ] = "ζ§ε¶";
     Text[ russian ] = "έλεμενςϋ σοπΰβλενθÿ";
     Text[ polish ] = "Formanty";
     Text[ japanese ] = "γ‚³γƒ³γƒγƒ­γƒΌγƒ«θ¦η΄ ";
-    Text[ chinese_traditional ] = "ζ§ε¶ε–®ε…ƒ";
+    Text[ chinese_traditional ] = "ζ§ε¶ι …";
     Text[ arabic ] = "ΪδΗΥΡ ΚΝίγ";
     Text[ dutch ] = "Controle-elementen";
-    Text[ chinese_simplified ] = "ζ§ε¶ε•ε…ƒ";
+    Text[ chinese_simplified ] = "ζ§ε¶";
     Text[ greek ] = "Στοιχεία ελέγχου";
     Text[ korean ] = "μ»¨νΈλ΅¤";
     Text[ turkish ] = "Kumanda φπeleri";
