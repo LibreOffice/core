@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfpage.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2001-07-06 07:07:09 $
+ *  last change: $Author: os $ $Date: 2001-12-12 16:14:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -451,7 +451,7 @@ void SvxGrfCropPage::ActivatePage(const SfxItemSet& rSet)
             aExampleWN.SetGraphic( *pGrf );
             aOrigSize = GetGrfOrigSize( *pGrf );
             aExampleWN.SetFrameSize(aOrigSize);
-            GraphicHasChanged( TRUE );
+            GraphicHasChanged( aOrigSize.Width() && aOrigSize.Height() );
             CalcMinMaxBorder();
         }
         else
@@ -882,6 +882,10 @@ void SvxGrfCropPage::SvxCropExample::Paint( const Rectangle& rRect )
 void SvxGrfCropPage::SvxCropExample::SetFrameSize( const Size& rSz )
 {
     aFrameSize = rSz;
+    if(!aFrameSize.Width())
+        aFrameSize.Width() = 1;
+    if(!aFrameSize.Height())
+        aFrameSize.Height() = 1;
     Size aWinSize( GetOutputSizePixel() );
     Fraction aXScale( aWinSize.Width() * 4, aFrameSize.Width() * 5 );
     Fraction aYScale( aWinSize.Height() * 4, aFrameSize.Height() * 5 );
