@@ -76,8 +76,8 @@ PARFILES = \
         file_kde.par
 .ENDIF
 
-LNGFILES= \
-        module_kde.lng
+ULFFILES= \
+        module_kde.ulf
 
 # --- File ---------------------------------------------------------
 
