@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpolypolygontools.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 08:38:12 $
+ *  last change: $Author: rt $ $Date: 2004-12-13 08:48:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -410,6 +410,30 @@ namespace basegfx
                     if(aCandidate.areControlPointsUsed())
                     {
                         aCandidate = tools::adaptiveSubdivideByAngle(aCandidate, fAngleBound);
+                        aRetval.setB2DPolygon(a, aCandidate);
+                    }
+                }
+            }
+
+            return aRetval;
+        }
+
+        // #i37443#
+        B2DPolyPolygon adaptiveSubdivideByCount(const B2DPolyPolygon& rCandidate, sal_uInt32 nCount)
+        {
+            B2DPolyPolygon aRetval(rCandidate);
+
+            if(aRetval.areControlPointsUsed())
+            {
+                const sal_uInt32 nPolygonCount(aRetval.count());
+
+                for(sal_uInt32 a(0L); aRetval.areControlPointsUsed() && a < nPolygonCount; a++)
+                {
+                    B2DPolygon aCandidate = aRetval.getB2DPolygon(a);
+
+                    if(aCandidate.areControlPointsUsed())
+                    {
+                        aCandidate = tools::adaptiveSubdivideByCount(aCandidate, nCount);
                         aRetval.setB2DPolygon(a, aCandidate);
                     }
                 }
