@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltshell.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:03:57 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 17:01:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,9 +58,6 @@
  *
  *
  ************************************************************************/
-
-
-#pragma hdrstop
 
 #define ITEMID_BOXINFO      SID_ATTR_BORDER_INNER
 #include <ctype.h>
@@ -253,14 +250,13 @@ BOOL SwFltStackEntry::MakeRegion(SwDoc* pDoc, SwPaM& rRegion, BOOL bCheck )
     // wird ueberhaupt ein Bereich umspannt ??
     // - ist kein Bereich, dann nicht returnen wenn am Anfang vom Absatz
     // - Felder aussortieren, koennen keinen Bereich haben !!
-#if OSL_DEBUG_LEVEL > 1
-    USHORT nWhich = pAttr->Which();
-#endif
-    if (nMkNode.GetIndex() == nPtNode.GetIndex()
-     && nMkCntnt == nPtCntnt
-     && nPtCntnt
-     && RES_TXTATR_FIELD != pAttr->Which())
+    if (
+         nMkNode.GetIndex() == nPtNode.GetIndex() && nMkCntnt == nPtCntnt &&
+         nPtCntnt && RES_TXTATR_FIELD != pAttr->Which()
+       )
+    {
         return FALSE;
+    }
 
     // !!! Die Content-Indizies beziehen sich immer auf den Node !!!
     rRegion.GetPoint()->nNode = nMkNode.GetIndex() + 1;
@@ -286,11 +282,9 @@ BOOL SwFltStackEntry::MakeRegion(SwDoc* pDoc, SwPaM& rRegion, BOOL bCheck )
 }
 
 
-SwFltControlStack::SwFltControlStack(SwDoc* pDo, ULONG nFieldFl) :
-    SwFltControlStackEntries(10, 5),
-    pDoc(pDo),
-    nFieldFlags(nFieldFl),
-    bIsEndStack(FALSE)
+SwFltControlStack::SwFltControlStack(SwDoc* pDo, ULONG nFieldFl)
+    : SwFltControlStackEntries(10, 5), nFieldFlags(nFieldFl), pDoc(pDo),
+    bIsEndStack(false)
 {
 }
 
@@ -499,13 +493,6 @@ static void MakePoint(SwFltStackEntry* pEntry, SwDoc* pDoc, SwPaM& rRegion)
     rRegion.GetPoint()->nContent.Assign(pCNd, pEntry->nMkCntnt);
 }
 
-static void MakeRegionOrPoint(SwFltStackEntry* pEntry, SwDoc* pDoc,
-                    SwPaM& rRegion, BOOL bCheck )
-{
-    if (!pEntry->MakeRegion(pDoc, rRegion, bCheck ))
-        MakePoint(pEntry, pDoc, rRegion);
-}
-
 // MakeBookRegionOrPoint() ist wie MakeRegionOrPoint, aber die besonderen
 // Beschraenkungen von Bookmarks in Tabellen werden beachtet.
 // ( Anfang und Ende muessen in selber Zelle sein )
@@ -525,13 +512,6 @@ static void MakeBookRegionOrPoint(SwFltStackEntry* pEntry, SwDoc* pDoc,
     }else{
         MakePoint(pEntry, pDoc, rRegion);
     }
-}
-
-static void MakePosition(SwFltStackEntry* pEntry, SwDoc* pDoc, SwPosition& rPosi)
-{
-    rPosi.nNode = pEntry->nMkNode.GetIndex() + 1;
-    SwCntntNode* pCNd = GetCntntNode(pDoc, rPosi.nNode, TRUE);
-    rPosi.nContent.Assign(pCNd, pEntry->nMkCntnt);
 }
 
 #if OSL_DEBUG_LEVEL > 1
@@ -999,18 +979,12 @@ void SwFltEndStack::SetBookRef( const String& rName, BOOL bPgRef)
 
 //////////////////////////////////////////////////////////// SwFltShell
 SwFltShell::SwFltShell(SwDoc* pDoc, SwPaM& rPaM, BOOL bNew, ULONG nFieldFl)
-    : aStack(pDoc, nFieldFl),
-    aEndStack(pDoc, nFieldFl),
-    pCurrentPageDesc(0),
-    eSrcCharSet( RTL_TEXTENCODING_MS_1252 ),
+    : pCurrentPageDesc(0), pSavedPos(0), eSubMode(None), nAktStyle(0),
+    aStack(pDoc, nFieldFl), aEndStack(pDoc, nFieldFl),
+    pPaM(new SwPaM(*(rPaM.GetPoint()))),
     nPageDescOffset(GetDoc().GetPageDescCnt()),
-    pPaM(new SwPaM( *(rPaM.GetPoint()))),
-    bNewDoc(bNew),
-    bStdPD(FALSE),
-    bProtect(FALSE),
-    nAktStyle(0),
-    pSavedPos(0),
-    eSubMode(None)
+    eSrcCharSet(RTL_TEXTENCODING_MS_1252), bNewDoc(bNew), bStdPD(FALSE),
+    bProtect(FALSE)
 {
     memset( pColls, 0, sizeof( pColls ) );
     pOutDoc = new SwFltOutDoc( *pDoc, pPaM, aStack, aEndStack );
@@ -1178,34 +1152,25 @@ SwFltShell& SwFltShell::AddLinkedSection( const String& rFileName )
 
 SwFltShell& SwFltShell::operator << (Graphic& rGraphic)
 {
-    SwFlyFrmFmt* pFlyFmt = GetDoc().Insert( *pPaM, aEmptyStr, aEmptyStr,
-                                            &rGraphic); // embedded Grafik !!
+    // embedded Grafik !!
+    GetDoc().Insert(*pPaM, aEmptyStr, aEmptyStr, &rGraphic);
     return *this;
 }
 
 SwFltShell& SwFltShell::AddGraphic( const String& rPicName )
 {
-    if (0) // gelinkt?
-    {
-        SwFlyFrmFmt* pFlyFmt = GetDoc().Insert(*pPaM,
-         INetURLObject::RelToAbs( rPicName ), // Name der Grafik !!
-         aEmptyStr);
-    }
-    else
-    {
     // embedded:
-        GraphicFilter* pFilter = ::GetGrfFilter();
-        Graphic aGraphic;
+    GraphicFilter* pFilter = ::GetGrfFilter();
+    Graphic aGraphic;
     // one of: GFF_NOT GFF_BMP GFF_GIF GFF_JPG GFF_PCD GFF_PCX GFF_PNG
     // GFF_TIF GFF_XBM GFF_DXF GFF_MET GFF_PCT GFF_SGF GFF_SVM GFF_WMF
     // GFF_SGV GFF_XXX
-        INetURLObject aDir( URIHelper::SmartRelToAbs(rPicName) );
-        switch ( pFilter->ImportGraphic( aGraphic, aDir ))
-        {
+    INetURLObject aDir( URIHelper::SmartRelToAbs(rPicName) );
+    switch (pFilter->ImportGraphic(aGraphic, aDir))
+    {
         case GRFILTER_OK:
             *this << aGraphic;
             break;
-
         case GRFILTER_OPENERROR:
         case GRFILTER_IOERROR:
         case GRFILTER_FORMATERROR:
@@ -1216,7 +1181,6 @@ SwFltShell& SwFltShell::AddGraphic( const String& rPicName )
         default:
             AddError( "picture import error" );
             break;
-        }
     }
     return *this;
 }
@@ -1391,6 +1355,16 @@ BOOL SwFltShell::GetCaseVersalien()
 //-------------------------------------------------------------------------
 // Tabellen
 //-------------------------------------------------------------------------
+
+SwFltOutBase::~SwFltOutBase()
+{
+}
+
+SwFltOutBase::SwFltOutBase(SwDoc& rDocu)
+    : rDoc(rDocu), eFlyAnchor(FLY_AT_CNTNT), bFlyAbsPos(false)
+{
+}
+
 const SfxPoolItem& SwFltOutBase::GetCellAttr(USHORT nWhich)
 {
     ASSERT(FALSE, "GetCellAttr ausserhalb von normalem Text");
@@ -1557,23 +1531,12 @@ void SwFltOutDoc::NextTableCell()
 void SwFltOutDoc::NextTableRow()
 {
     SwTableBox* pTableBox = GetBox(usTableY, 0);
-    if(pTableBox){
+    if (pTableBox)
+    {
 // duplicate row:
         SwSelBoxes aSelBoxes;
         aSelBoxes.Insert( pTableBox );
         GetDoc().InsertRow(aSelBoxes);
-//      GetDoc().InsertRow(pTable->SelLineFromBox(pTableBox, aSelBoxes));
-#if OSL_DEBUG_LEVEL > 1
-        const SwTableLines* pTableLines = &pTable->GetTabLines();
-        SwTableLine* pTableLine = (*pTableLines)[usTableY+1];
-        SwTableBoxes* pTableBoxes = &pTableLine->GetTabBoxes();
-        USHORT nBx = pTableBoxes->Count();
-        SwTableBox* pTableBox = (*pTableBoxes)[0];
-        SwFrmFmt* pFmt = pTableBox->GetFrmFmt();
-
-        SwFmtFrmSize &rSz = ((SwFmtFrmSize&)pFmt->GetAttr(RES_FRM_SIZE));
-        SwTwips nW = rSz.GetWidth();
-#endif
         usTableX = 0;
         SeekCell(++usTableY, usTableX, TRUE);
         GetDoc().SetTxtFmtColl(*pPaM,
@@ -1697,17 +1660,16 @@ void SwFltOutDoc::DeleteCell(USHORT nCell /* = USHRT_MAX */)
 
 void SwFltOutDoc::SplitTable()
 {
-    if(!pTable){
+    if(!pTable)
+    {
         ASSERT(pTable, "SplitTable ohne Tabelle");
         return;
     }
     SwTableBox* pAktBox = GetBox(usTableY, usTableX);
     SwTableBox* pSplitBox = GetBox(usTableY - 1, 0);
-    BOOL bOk = 0 != GetDoc().GetNodes().SplitTable(
-                            SwNodeIndex( *pSplitBox->GetSttNd() ), FALSE );
+    GetDoc().GetNodes().SplitTable(SwNodeIndex(*pSplitBox->GetSttNd()), false);
     pTable = &pAktBox->GetSttNd()->FindTableNode()->GetTable();
     usTableY = 0;
-//  GetDoc().Insert(*pPaM, "SplitTable", GetSystemCharSet());
 }
 
 void SwFltOutDoc::EndTable()
