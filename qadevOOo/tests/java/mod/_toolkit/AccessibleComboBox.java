@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleComboBox.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Date: 2003-04-28 11:21:10 $
+ *  last change: $Date: 2003-05-27 13:57:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,7 @@ public class AccessibleComboBox extends TestCase {
         AccessibilityTools at = new AccessibilityTools();
 
         try {
-            oObj = (XInterface) Param.getMSF().createInstance
+            oObj = (XInterface) ((XMultiServiceFactory)Param.getMSF()).createInstance
                 ("com.sun.star.awt.Toolkit") ;
         } catch (com.sun.star.uno.Exception e) {
             log.println("Couldn't get toolkit");
@@ -143,7 +143,7 @@ public class AccessibleComboBox extends TestCase {
         XExtendedToolkit tk = (XExtendedToolkit)
             UnoRuntime.queryInterface(XExtendedToolkit.class,oObj);
 
-        DiagThread psDiag = new DiagThread(xTextDoc,Param.getMSF());
+        DiagThread psDiag = new DiagThread(xTextDoc,(XMultiServiceFactory)Param.getMSF());
         psDiag.start();
 
         shortWait();
@@ -221,7 +221,7 @@ public class AccessibleComboBox extends TestCase {
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
         try {
-            SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF());
+            SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF());
             xTextDoc = SOF.createTextDoc(null);
         } catch (com.sun.star.uno.Exception e) {
             throw new StatusException("Can't create document", e);
