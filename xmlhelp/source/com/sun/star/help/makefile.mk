@@ -3,9 +3,9 @@
 #*    $Workfile:$
 #*
 #*    Creation date     KR 28.06.99
-#*    last change       $Author: abi $ $Date: 2000-10-30 10:35:11 $
+#*    last change       $Author: abi $ $Date: 2000-10-30 12:26:27 $
 #*
-#*    $Revision: 1.3 $
+#*    $Revision: 1.4 $
 #*
 #*    $Logfile:$
 #*
@@ -29,6 +29,15 @@ CLASSGENDIR		= $(OUT)$/classgen
 RDB		 		= $(SOLARBINDIR)$/applicat.rdb
 JAVAFILES		= $(subst,$(CLASSDIR)$/$(PACKAGE)$/, $(subst,.class,.java $(JAVACLASSFILES))) 
 
+COPYSCRIPT = \
+    $(BIN)$/helpserver.sh
+
+ALL:	            \
+    $(COPYSCRIPT)	\
+    ALLTAR
+
+$(BIN)$/helpserver.sh: helpserver.sh
+    +$(COPY) helpserver.sh $(BIN)
 
 %.java:
     javamaker -BUCR -O$(OUT)$/misc$/java $(subst,$/,. $(subst,$(OUT)$/misc$/java$/,-T  $*)) $(RDB)
