@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XDocumentHandler.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:14:11 $
+ *  last change:$Date: 2003-09-08 11:33:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,15 +61,16 @@
 
 package ifc.xml.sax;
 
-import com.sun.star.beans.PropertyValue;
-import com.sun.star.xml.sax.SAXException;
-import com.sun.star.xml.sax.XDocumentHandler;
-import com.sun.star.xml.sax.XLocator;
 import java.io.PrintWriter;
+
 import lib.MultiMethodTest;
 import lib.Status;
 import lib.StatusException;
 import util.XMLTools;
+
+import com.sun.star.xml.sax.SAXException;
+import com.sun.star.xml.sax.XDocumentHandler;
+import com.sun.star.xml.sax.XLocator;
 
 /**
 * Testing <code>com.sun.star.xml.sax.XDocumentHandler</code>
@@ -418,20 +419,6 @@ public class _XDocumentHandler extends MultiMethodTest {
         tRes.tested("setDocumentLocator()", result) ;
     }
 
-    private PropertyValue[] createMediaDescriptor(String[] propNames,
-            Object[] values) {
-        PropertyValue[] props = new PropertyValue[propNames.length] ;
-
-        for (int i = 0; i < props.length; i++) {
-            props[i] = new PropertyValue() ;
-            props[i].Name = propNames[i] ;
-            if (values != null && i < values.length) {
-                props[i].Value = values[i] ;
-            }
-        }
-
-        return props ;
-    }
 }
 
 
