@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinsdlg.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: iha $ $Date: 2002-11-21 13:34:30 $
+ *  last change: $Author: vg $ $Date: 2002-11-27 16:41:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text [ italian ] = "Inserisci file come:" ;
         Text [ spanish ] = "Insertar datos como:" ;
         Text [ french ] = "Insertion des données :" ;
-        Text [ dutch ] = "Data invoegen als" ;
+        Text [ dutch ] = "Gegevens invoegen als" ;
         Text [ portuguese ] = "Inserir dados como:" ;
         Text[ chinese_simplified ] = "æ’å…¥æ•°æ®çš„æ–¹å¼ï¼š";
         Text[ russian ] = "Âñòàâèòü äàííûå êàê:";
@@ -95,7 +95,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ã®æŒ¿å…¥:";
         Text[ chinese_traditional ] = "æ’å…¥è³‡æ–™çš„æ–¹å¼ï¼š";
         Text[ arabic ] = "ÅÏÑÇÌ ÇáÈíÇäÇÊ ßÜ:";
-        Text[ dutch ] = "Data invoegen als";
+        Text[ dutch ] = "Gegevens invoegen als";
         Text[ chinese_simplified ] = "æ’å…¥æ•°æ®çš„æ–¹å¼ï¼š";
         Text[ greek ] = "ÅéóáãùãŞ äåäïìİíùí ùò:";
         Text[ korean ] = "ë¡œ ë°ì´í„° ì‚½ì…:";
@@ -240,7 +240,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text [ dutch ] = "Database~kolommen" ;
         Text [ portuguese ] = "~Colunas da base de dados" ;
         Text[ chinese_simplified ] = "æ•°æ®åº“æ ä½(~C)";
-        Text[ russian ] = "Êîëîíêè áàçû äàííûõ";
+        Text[ russian ] = "Ñòîëáöû áàçû äàííûõ";
         Text[ polish ] = "Kolumny w bazie danych";
         Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹åˆ—(~C)";
         Text[ chinese_traditional ] = "è³‡æ–™åº«æ¬„ä½(~C)";
@@ -300,14 +300,14 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text [ italian ] = "Dal ~database" ;
         Text [ spanish ] = "~De la base de datos" ;
         Text [ french ] = "De la BD" ;
-        Text [ dutch ] = "U~it databank" ;
+        Text [ dutch ] = "U~it database" ;
         Text[ chinese_simplified ] = "ä»æ•°æ®åº“(~D)";
         Text[ russian ] = "Èç áàçû äàííûõ";
         Text[ polish ] = "Z bazy danych";
         Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ã‹ã‚‰(~D)";
         Text[ chinese_traditional ] = "å¾è³‡æ–™åº«(~D)";
         Text[ arabic ] = "ãä ŞÇÚÏÉ ÇáÈíÇäÇÊ";
-        Text[ dutch ] = "U~it databank";
+        Text[ dutch ] = "U~it database";
         Text[ chinese_simplified ] = "ä»æ•°æ®åº“(~D)";
         Text[ greek ] = "Áğü âÜóç äåäïìİíùí";
         Text[ korean ] = "ë°ì´í„°ë² ì´ìŠ¤ë¡œë¶€í„°(~D)";
@@ -556,12 +556,12 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Check = TRUE ;
         Text[ english_us ] = "Apply column ~name";
         Text[ portuguese ] = "~Aplicar nomes das colunas";
-        Text[ russian ] = "Ïğèíÿòü èìåíà êîëîíîê";
+        Text[ russian ] = "Ïğèíÿòü èìåíà ñòîëáöîâ";
         Text[ greek ] = "Ïíüìáôá óôŞëçò";
         Text[ dutch ] = "K~olomnaam overnemen";
         Text[ french ] = "Appliquer les noms des colonnes";
         Text[ spanish ] = "Aplicar ~nombres de columnas";
-        Text[ finnish ] = "~Hyväksy sarakkeen nimi";
+        Text[ finnish ] = "~Käytä sarakkeen nimeä";
         Text[ italian ] = "Importa nomi colonne";
         Text[ danish ] = "Anvend k~olonnenavn";
         Text[ swedish ] = "Använd kolumn~namn";
@@ -590,7 +590,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ dutch ] = "Lege regel invoegen";
         Text[ french ] = "Créer uniquement une ligne";
         Text[ spanish ] = "Crear sólo fila";
-        Text[ finnish ] = "Luo vain viiva";
+        Text[ finnish ] = "Luo vain rivi";
         Text[ italian ] = "Crea solo righe";
         Text[ danish ] = "Opret kun linje";
         Text[ swedish ] = "Skapa bara rad";
@@ -603,7 +603,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ turkish ] = "boş";
         Text[ arabic ] = "İÇÑÛ";
         Text[ catalan ] = "~buit";
-        Text[ language_user1 ] = "(EM18.7.01)Wo in Writer: Mit F4 den Datenbank-Browser aufrufen, dann eine Tabelle auswählen und mindestens eine Zeile selektieren. Danach den Button “Daten in Text” drücken. Dann erscheint der Dialog “Datenbankspalten einfügen”. Optionsfeld “Tabelle” auswählen.";
+        Text[ language_user1 ] = "(EM1; (EM18.7.01)Wo in Writer: Mit F4 den Datenbank-Browser aufrufen, dann eine Tabelle auswählen und mindestens eine Zeile selektieren. Danach den Button “Daten in Text” drücken. Dann erscheint der Dialog “Datenbankspalten einfügen”. Optionsfeld “Tabelle” auswählen.";
         Text[ thai ] = "à¸ªà¸£à¹‰à¸²à¸‡à¸šà¸£à¸£à¸—à¸±à¸”à¸­à¸¢à¹ˆà¸²à¸‡à¹€à¸”à¸µà¸¢à¸§";
     };
     PushButton PB_TBL_FORMAT
@@ -665,7 +665,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ korean ] = "ìë™ ì„œì‹ (~O)...";
         Text[ turkish ] = "Otomatik formatla...";
         Text[ catalan ] = "~Autoformat...";
-        Text[ finnish ] = "~Automaattinen muotoilu...";
+        Text[ finnish ] = "~Autom. muotoilu...";
         Text[ thai ] = "à¸£à¸¹à¸›à¹à¸šà¸šà¸­à¸±à¹‚à¸™~à¸¡à¸±à¸•à¸´...";
     };
     String STR_NOTEMPL
@@ -682,7 +682,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text [ portuguese ] = "<nenhum>" ;
         Text [ portuguese_brazilian ] = "<keine>" ;
         Text[ chinese_simplified ] = "<æ— >";
-        Text[ russian ] = "<áåç>";
+        Text[ russian ] = "<íåò>";
         Text[ polish ] = "<brak>";
         Text[ japanese ] = "<ãªã—>";
         Text[ chinese_traditional ] = "<ç„¡>";
@@ -703,15 +703,15 @@ ModalDialog DLG_AP_INSERT_DB_SEL
     Text [ italian ] = "Inserisci colonne di database" ;
     Text [ spanish ] = "Insertar columnas de la base de datos" ;
     Text [ french ] = "Insertion de colonnes de base de données" ;
-    Text [ dutch ] = "Database-kolommen invoegen" ;
+    Text [ dutch ] = "Databasekolommen invoegen" ;
     Text [ portuguese ] = "Inserir colunas para bases de dados" ;
     Text[ chinese_simplified ] = "æ’å…¥æ•°æ®åº“æ ä½";
-    Text[ russian ] = "Âñòàâêà êîëîíîê áàçû äàííûõ";
+    Text[ russian ] = "Âñòàâêà ñòîëáöîâ áàçû äàííûõ";
     Text[ polish ] = "Wstaw kolumny w bazie danych";
     Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ã®åˆ—ã®æŒ¿å…¥";
     Text[ chinese_traditional ] = "æ’å…¥è³‡æ–™åº«æ¬„";
     Text[ arabic ] = "ÅÏÑÇÌ ÃÚãÏÉ ŞÇÚÏÉ ÈíÇäÇÊ";
-    Text[ dutch ] = "Database-kolommen invoegen";
+    Text[ dutch ] = "Databasekolommen invoegen";
     Text[ chinese_simplified ] = "æ’å…¥æ•°æ®åº“æ ä½";
     Text[ greek ] = "ĞñïóèŞêç óôçëşí âÜóçò äåäïìİíùí";
     Text[ korean ] = "ë°ì´í„°ë² ì´ìŠ¤ ì—´ ì‚½ì…";
