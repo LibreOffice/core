@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfldi.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:12:49 $
+ *  last change: $Author: rt $ $Date: 2004-05-19 08:54:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1111,6 +1111,7 @@ class XMLMacroFieldImportContext : public XMLTextFieldImportContext
 
     const ::rtl::OUString sPropertyHint;
     const ::rtl::OUString sPropertyMacroName;
+    const ::rtl::OUString sPropertyScriptURL;
     const ::rtl::OUString sPropertyLibraryName;
 
     ::rtl::OUString sDescription;
