@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleImageBullet.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: thb $ $Date: 2002-05-31 13:05:42 $
+ *  last change: $Author: thb $ $Date: 2002-06-04 18:42:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,10 @@
 
 #ifndef _COM_SUN_STAR_AWT_RECTANGLE_HPP_
 #include <com/sun/star/awt/Rectangle.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
+#include <com/sun/star/lang/DisposedException.hpp>
 #endif
 
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
@@ -191,9 +195,12 @@ namespace accessibility
     {
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
+        // throws if defunc
+        sal_Int32 nPara( GetParagraphIndex() );
+
         // Get the string from the resource for the specified id.
         String sStr = ::rtl::OUString( SVX_RESSTR (RID_SVXSTR_A11Y_IMAGEBULLET_DESCRIPTION) );
-        String sParaIndex = ::rtl::OUString::valueOf( GetParagraphIndex() );
+        String sParaIndex = ::rtl::OUString::valueOf( nPara );
         sStr.SearchAndReplace( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "$(ARG)" )),
                                sParaIndex );
 
@@ -204,9 +211,12 @@ namespace accessibility
     {
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
+        // throws if defunc
+        sal_Int32 nPara( GetParagraphIndex() );
+
         // Get the string from the resource for the specified id.
         String sStr = ::rtl::OUString( SVX_RESSTR (RID_SVXSTR_A11Y_IMAGEBULLET_NAME) );
-        String sParaIndex = ::rtl::OUString::valueOf( GetParagraphIndex() );
+        String sParaIndex = ::rtl::OUString::valueOf( nPara );
         sStr.SearchAndReplace( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "$(ARG)" )),
                                sParaIndex );
 
@@ -355,40 +365,6 @@ namespace accessibility
         return awt::Size( aRect.Width, aRect.Height );
     }
 
-    sal_Bool SAL_CALL AccessibleImageBullet::isShowing(  ) throw (uno::RuntimeException)
-    {
-        // TODO: remove
-        return sal_False;
-    }
-
-    sal_Bool SAL_CALL AccessibleImageBullet::isVisible(  ) throw (uno::RuntimeException)
-    {
-        // TODO: remove
-        return sal_False;
-    }
-
-    sal_Bool SAL_CALL AccessibleImageBullet::isFocusTraversable(  ) throw (uno::RuntimeException)
-    {
-        // TODO: remove
-        return sal_False;
-    }
-
-    void SAL_CALL AccessibleImageBullet::addFocusListener( const uno::Reference< awt::XFocusListener >& xListener ) throw (uno::RuntimeException)
-    {
-        // TODO: remove
-        throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Not focusable")),
-                                    uno::Reference< uno::XInterface >
-                                    ( static_cast< XAccessible* > (this) ) );   // disambiguate hierarchy
-    }
-
-    void SAL_CALL AccessibleImageBullet::removeFocusListener( const uno::Reference< awt::XFocusListener >& xListener ) throw (uno::RuntimeException)
-    {
-        // TODO: remove
-        throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Not focusable")),
-                                    uno::Reference< uno::XInterface >
-                                    ( static_cast< XAccessible* > (this) ) );   // disambiguate hierarchy
-    }
-
     void SAL_CALL AccessibleImageBullet::grabFocus(  ) throw (uno::RuntimeException)
     {
         throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Not focusable")),
@@ -494,13 +470,26 @@ namespace accessibility
             {
                 try
                 {
-                    xListener->notifyEvent( aEvent );
+                    xListener->notifyEvent (aEvent);
                 }
-                catch( const uno::Exception& )
+                catch( const lang::DisposedException& e )
                 {
-#ifdef DBG_UTIL
-                    DBG_ERROR("AccessibleImageBullet::FireEvent: Caught runtime exception from listener, removing object (bridge/listener dead?)");
-#endif
+                    // DisposedExceptions from the listener might indicate a
+                    // broken connection to a different environment.
+
+                    OSL_ENSURE(e.Context.is(), "AccessibleImageBullet::FireEvent: caught dispose exception with empty Context field");
+                    // If the exception stems from the listener then remove it
+                    // from the list of listeners.  If the Context field of the
+                    // exception is empty this is interpreted to indicate the
+                    // listener as well.
+                    if (e.Context == xListener
+                        || !e.Context.is())
+                        aIter.remove();
+                }
+                catch( const uno::Exception& e )
+                {
+                    DBG_WARNING1("AccessibleImageBullet::FireEvent: exception %s from listener",
+                                 ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_DONTKNOW ).getStr() );
                 }
             }
         }

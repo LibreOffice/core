@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleParaManager.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: thb $ $Date: 2002-05-29 16:09:56 $
+ *  last change: $Author: thb $ $Date: 2002-06-04 18:42:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -241,7 +241,29 @@ namespace accessibility
         void SetEditSource      ( SvxEditSourceAdapter* pEditSource );
 
         // forwarder to given paragraphs
+        //------------------------------------------------------------------------
+        /** Release the given range of paragraphs
+
+            All ranges have the meaning [start,end), similar to STL
+
+            @param nStartPara
+            Index of paragraph to start with releasing
+
+            @param nEndPara
+            Index of first paragraph to stop with releasing
+         */
         void Release( sal_uInt32 nStartPara, sal_uInt32 nEndPara );
+
+        /** Fire event for the given range of paragraphs
+
+            All ranges have the meaning [start,end), similar to STL
+
+            @param nStartPara
+            Index of paragraph to start with event firing
+
+            @param nEndPara
+            Index of first paragraph to stop with event firing
+         */
         void FireEvent( sal_uInt32 nStartPara,
                         sal_uInt32 nEndPara,
                         const sal_Int16 nEventId,

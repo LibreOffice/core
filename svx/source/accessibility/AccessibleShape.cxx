@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleShape.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: af $ $Date: 2002-06-04 10:04:59 $
+ *  last change: $Author: thb $ $Date: 2002-06-04 18:42:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1021,6 +1021,9 @@ void AccessibleShape::ViewForwarderChanged (ChangeType aChangeType,
     if (mpChildrenManager != NULL)
         mpChildrenManager->ViewForwarderChanged (aChangeType, pViewForwarder);
 
+    // update our children that our screen position might have changed
+    if( mpText )
+        mpText->UpdateChildren();
 }
 
 

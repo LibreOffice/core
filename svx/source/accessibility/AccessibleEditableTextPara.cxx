@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleEditableTextPara.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: thb $ $Date: 2002-05-31 13:05:42 $
+ *  last change: $Author: thb $ $Date: 2002-06-04 18:42:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,10 @@
 
 #ifndef _COM_SUN_STAR_AWT_RECTANGLE_HPP_
 #include <com/sun/star/awt/Rectangle.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
+#include <com/sun/star/lang/DisposedException.hpp>
 #endif
 
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
@@ -504,13 +508,26 @@ namespace accessibility
             {
                 try
                 {
-                    xListener->notifyEvent( aEvent );
+                    xListener->notifyEvent (aEvent);
                 }
-                catch( const uno::Exception& )
+                catch( const lang::DisposedException& e )
                 {
-#ifdef DBG_UTIL
-                    DBG_ERROR("AccessibleEditableTextPara::FireEvent: Caught runtime exception from listener, removing object (bridge/listener dead?)");
-#endif
+                    // DisposedExceptions from the listener might indicate a
+                    // broken connection to a different environment.
+
+                    OSL_ENSURE(e.Context.is(), "AccessibleEditableTextPara::FireEvent: caught dispose exception with empty Context field");
+                    // If the exception stems from the listener then remove it
+                    // from the list of listeners.  If the Context field of the
+                    // exception is empty this is interpreted to indicate the
+                    // listener as well.
+                    if (e.Context == xListener
+                        || !e.Context.is())
+                        aIter.remove();
+                }
+                catch( const uno::Exception& e )
+                {
+                    DBG_WARNING1("AccessibleEditableTextPara::FireEvent: exception %s from listener",
+                                 ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_DONTKNOW ).getStr() );
                 }
             }
         }
@@ -645,16 +662,17 @@ namespace accessibility
     {
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
+        // append first 40 characters from text, or first line, if shorter
+        // (writer takes first sentence here, but that's not supported
+        // from EditEngine)
+        // throws if defunc
+        ::rtl::OUString aLine = getTextAtIndex(0, AccessibleTextType::LINE);
+
         // Get the string from the resource for the specified id.
         String sStr = ::rtl::OUString( SVX_RESSTR (RID_SVXSTR_A11Y_PARAGRAPH_DESCRIPTION ) );
         String sParaIndex = ::rtl::OUString::valueOf( GetParagraphIndex() );
         sStr.SearchAndReplace( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "$(ARG)" )),
                                sParaIndex );
-
-        // append first 40 characters from text, or first line, if shorter
-        // (writer takes first sentence here, but that's not supported
-        // from EditEngine)
-        ::rtl::OUString aLine = getTextAtIndex(0, AccessibleTextType::LINE);
 
         if( aLine.getLength() > MaxDescriptionLen )
         {
@@ -686,9 +704,12 @@ namespace accessibility
     {
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
+        // throws if defunc
+        sal_Int32 nPara( GetParagraphIndex() );
+
         // Get the string from the resource for the specified id.
         String sStr = ::rtl::OUString( SVX_RESSTR (RID_SVXSTR_A11Y_PARAGRAPH_NAME) );
-        String sParaIndex = ::rtl::OUString::valueOf( GetParagraphIndex() );
+        String sParaIndex = ::rtl::OUString::valueOf( nPara );
         sStr.SearchAndReplace( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "$(ARG)" )),
                                sParaIndex );
 
@@ -852,37 +873,6 @@ namespace accessibility
         awt::Rectangle aRect = getBounds();
 
         return awt::Size( aRect.Width, aRect.Height );
-    }
-
-    sal_Bool SAL_CALL AccessibleEditableTextPara::isShowing(  ) throw (uno::RuntimeException)
-    {
-        return IsVisible();
-    }
-
-    sal_Bool SAL_CALL AccessibleEditableTextPara::isVisible(  ) throw (uno::RuntimeException)
-    {
-        return IsVisible();
-    }
-
-    sal_Bool SAL_CALL AccessibleEditableTextPara::isFocusTraversable(  ) throw (uno::RuntimeException)
-    {
-        return IsActive();
-    }
-
-    void SAL_CALL AccessibleEditableTextPara::addFocusListener( const uno::Reference< awt::XFocusListener >& xListener ) throw (uno::RuntimeException)
-    {
-        // TODO: remove
-        throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Not focusable")),
-                                    uno::Reference< uno::XInterface >
-                                    ( static_cast< XAccessible* > (this) ) );   // disambiguate hierarchy
-    }
-
-    void SAL_CALL AccessibleEditableTextPara::removeFocusListener( const uno::Reference< awt::XFocusListener >& xListener ) throw (uno::RuntimeException)
-    {
-        // TODO: remove
-        throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Not focusable")),
-                                    uno::Reference< uno::XInterface >
-                                    ( static_cast< XAccessible* > (this) ) );   // disambiguate hierarchy
     }
 
     void SAL_CALL AccessibleEditableTextPara::grabFocus(  ) throw (uno::RuntimeException)

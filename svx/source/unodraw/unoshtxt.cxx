@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshtxt.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: thb $ $Date: 2002-05-29 16:07:34 $
+ *  last change: $Author: thb $ $Date: 2002-06-04 18:43:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,6 +173,7 @@ private:
     BOOL                            mbNeedsUpdate;
     BOOL                            mbOldUndoMode;
     BOOL                            mbForwarderIsEditMode;      // have to reflect that, since ENDEDIT can happen more often
+    BOOL                            mbNotificationsDisabled;    // prevent EditEngine/Outliner notifications (e.g. when setting up forwarder)
 
     SvxTextForwarder*               GetBackgroundTextForwarder();
     SvxTextForwarder*               GetEditModeTextForwarder();
@@ -231,7 +232,8 @@ SvxTextEditSourceImpl::SvxTextEditSourceImpl( SdrObject* pObject )
     mbIsLocked      ( FALSE ),
     mbNeedsUpdate   ( FALSE ),
     mbOldUndoMode   ( FALSE ),
-    mbForwarderIsEditMode ( FALSE )
+    mbForwarderIsEditMode ( FALSE ),
+    mbNotificationsDisabled ( FALSE )
 {
     DBG_ASSERT( mpObject, "invalid pObject!" );
 
@@ -255,7 +257,8 @@ SvxTextEditSourceImpl::SvxTextEditSourceImpl( SdrObject& rObject, SdrView& rView
     mbIsLocked      ( FALSE ),
     mbNeedsUpdate   ( FALSE ),
     mbOldUndoMode   ( FALSE ),
-    mbForwarderIsEditMode ( FALSE )
+    mbForwarderIsEditMode ( FALSE ),
+    mbNotificationsDisabled ( FALSE )
 {
     if( mpModel )
         StartListening( *mpModel );
@@ -356,26 +359,32 @@ void SvxTextEditSourceImpl::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             }
 
             case HINT_BEGEDIT:
-                // invalidate old forwarder
-                if( !mbForwarderIsEditMode )
+                if( mpObject == pSdrHint->GetObject() )
                 {
-                    delete mpTextForwarder;
-                    mpTextForwarder = NULL;
+                    // invalidate old forwarder
+                    if( !mbForwarderIsEditMode )
+                    {
+                        delete mpTextForwarder;
+                        mpTextForwarder = NULL;
+                    }
+
+                    // register as listener - need to broadcast state change messages
+                    if( mpView && mpView->GetTextEditOutliner() )
+                        mpView->GetTextEditOutliner()->SetNotifyHdl( LINK(this, SvxTextEditSourceImpl, NotifyHdl) );
+
+                    Broadcast( *pSdrHint );
                 }
-
-                // register as listener - need to broadcast state change messages
-                if( mpView && mpView->GetTextEditOutliner() )
-                    mpView->GetTextEditOutliner()->SetNotifyHdl( LINK(this, SvxTextEditSourceImpl, NotifyHdl) );
-
-                Broadcast( *pSdrHint );
                 break;
 
             case HINT_ENDEDIT:
-                // remove as listener - outliner might outlive ourselves
-                if( mpView && mpView->GetTextEditOutliner() )
-                    mpView->GetTextEditOutliner()->SetNotifyHdl( Link() );
+                if( mpObject == pSdrHint->GetObject() )
+                {
+                    // remove as listener - outliner might outlive ourselves
+                    if( mpView && mpView->GetTextEditOutliner() )
+                        mpView->GetTextEditOutliner()->SetNotifyHdl( Link() );
 
-                Broadcast( *pSdrHint );
+                    Broadcast( *pSdrHint );
+                }
                 break;
         }
     }
@@ -432,6 +441,9 @@ void SvxTextEditSourceImpl::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
 {
     sal_Bool bCreated = sal_False;
+
+    // #99840#: prevent EE/Outliner notifications during setup
+    mbNotificationsDisabled = sal_True;
 
     if (!mpTextForwarder)
     {
@@ -554,6 +566,9 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
         // register as listener - need to broadcast state change messages
         mpOutliner->SetNotifyHdl( LINK(this, SvxTextEditSourceImpl, NotifyHdl) );
     }
+
+    // #99840#: prevent EE/Outliner notifications during setup
+    mbNotificationsDisabled = sal_False;
 
     return mpTextForwarder;
 }
@@ -804,7 +819,7 @@ Point SvxTextEditSourceImpl::PixelToLogic( const Point& rPoint, const MapMode& r
 
 IMPL_LINK(SvxTextEditSourceImpl, NotifyHdl, EENotify*, aNotify)
 {
-    if( aNotify )
+    if( aNotify && !mbNotificationsDisabled )
     {
         ::std::auto_ptr< SfxHint > aHint( SvxEditSourceHintTranslator::EENotification2Hint( aNotify) );
 

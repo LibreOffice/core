@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTextHelper.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: thb $ $Date: 2002-05-29 17:01:52 $
+ *  last change: $Author: thb $ $Date: 2002-06-04 18:42:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,10 @@
 
 #ifndef _COM_SUN_STAR_AWT_RECTANGLE_HPP_
 #include <com/sun/star/awt/Rectangle.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
+#include <com/sun/star/lang/DisposedException.hpp>
 #endif
 
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
@@ -216,6 +220,8 @@ namespace accessibility
 
         void SetFocus( sal_Bool bHaveFocus ) throw (::com::sun::star::uno::RuntimeException);
         sal_Bool HaveFocus() throw (::com::sun::star::uno::RuntimeException);
+        void SetChildFocus( sal_Int32 nChild, sal_Bool bHaveFocus ) throw (::com::sun::star::uno::RuntimeException);
+        void SetShapeFocus( sal_Bool bHaveFocus ) throw (::com::sun::star::uno::RuntimeException);
 
 #ifdef DBG_UTIL
         void CheckInvariants() const;
@@ -234,8 +240,28 @@ namespace accessibility
         void ShutdownEditSource() throw (uno::RuntimeException);
 
         void SetChildrenState( const sal_Int16 nStateId );
+        /** Set the state for multiple children
+
+            All ranges have the meaning [start,end), similar to STL
+
+            @param nStartPara
+            Index of paragraph to start with state setting
+
+            @param nEndPara
+            Index of first paragraph to stop with state setting
+         */
         void SetChildrenState( sal_Int32 nStartPara, sal_Int32 nEndPara, const sal_Int16 nStateId );
         void UnSetChildrenState( const sal_Int16 nStateId );
+        /** Un-set the state for multiple children
+
+            All ranges have the meaning [start,end), similar to STL
+
+            @param nStartPara
+            Index of paragraph to start with state unsetting
+
+            @param nEndPara
+            Index of first paragraph to stop with state unsetting
+         */
         void UnSetChildrenState( sal_Int32 nStartPara, sal_Int32 nEndPara, const sal_Int16 nStateId );
 
         virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
@@ -284,8 +310,11 @@ namespace accessibility
         // spin lock to prevent notify in notify (guarded by solar mutex)
         sal_Bool mbInNotify;
 
-        // whether we have the focus set (guarded by solar mutex)
-        sal_Bool mbHaveFocus;
+        // whether the object or it's children has the focus set (guarded by solar mutex)
+        sal_Bool mbGroupHasFocus;
+
+        // whether we (this object) has the focus set (guarded by solar mutex)
+        sal_Bool mbThisHasFocus;
 
         // must be before maStateListeners, has to live longer
         mutable ::osl::Mutex maMutex;
@@ -309,7 +338,8 @@ namespace accessibility
         mnLastVisibleChild( -2 ),
         mnStartIndex( 0 ),
         mbInNotify( sal_False ),
-        mbHaveFocus( sal_False ),
+        mbGroupHasFocus( sal_False ),
+        mbThisHasFocus( sal_False ),
         maStateListeners( maMutex )
     {
     }
@@ -438,11 +468,44 @@ namespace accessibility
         }
     }
 
+    void AccessibleTextHelper_Impl::SetChildFocus( sal_Int32 nChild, sal_Bool bHaveFocus ) throw (::com::sun::star::uno::RuntimeException)
+    {
+        if( bHaveFocus )
+        {
+            if( mbThisHasFocus )
+                SetShapeFocus( sal_False );
+
+            SetChildrenState( nChild, nChild+1, AccessibleStateType::FOCUSED );
+        }
+        else
+        {
+            UnSetChildrenState( nChild, nChild+1, AccessibleStateType::FOCUSED );
+
+            if( mbGroupHasFocus )
+                SetShapeFocus( sal_True );
+        }
+    }
+
+    void AccessibleTextHelper_Impl::SetShapeFocus( sal_Bool bHaveFocus ) throw (::com::sun::star::uno::RuntimeException)
+    {
+        sal_Bool bOldFocus( mbThisHasFocus );
+
+        mbThisHasFocus = bHaveFocus;
+
+        if( bOldFocus != bHaveFocus )
+        {
+            if( bHaveFocus )
+                GotPropertyEvent( uno::makeAny(AccessibleStateType::FOCUSED), AccessibleEventId::ACCESSIBLE_STATE_EVENT );
+            else
+                LostPropertyEvent( uno::makeAny(AccessibleStateType::FOCUSED), AccessibleEventId::ACCESSIBLE_STATE_EVENT );
+        }
+    }
+
     void AccessibleTextHelper_Impl::SetFocus( sal_Bool bHaveFocus ) throw (::com::sun::star::uno::RuntimeException)
     {
-        sal_Bool bOldFocus( mbHaveFocus );
+        sal_Bool bOldFocus( mbGroupHasFocus );
 
-        mbHaveFocus = bHaveFocus;
+        mbGroupHasFocus = bHaveFocus;
 
         if( IsActive() )
         {
@@ -451,25 +514,13 @@ namespace accessibility
                 // find the one with the cursor and get/set focus accordingly
                 ESelection aSelection;
                 if( GetEditViewForwarder().GetSelection( aSelection ) )
-                {
-                    AccessibleParaManager::WeakPara::HardRefType aChild( maParaManager.GetChild(aSelection.nEndPara).first.get() );
-                    if( maParaManager.IsReferencable(aSelection.nEndPara) )
-                    {
-                        if( mbHaveFocus )
-                            aChild->SetState( AccessibleStateType::FOCUSED );
-                        else
-                            aChild->UnSetState( AccessibleStateType::FOCUSED );
-                    }
-                }
+                    SetChildFocus( aSelection.nEndPara, bHaveFocus );
             }
             catch( const uno::Exception& ) {}
         }
         else if( bOldFocus != bHaveFocus )
         {
-            if( mbHaveFocus )
-                GotPropertyEvent( uno::makeAny(AccessibleStateType::FOCUSED), AccessibleEventId::ACCESSIBLE_STATE_EVENT );
-            else
-                LostPropertyEvent( uno::makeAny(AccessibleStateType::FOCUSED), AccessibleEventId::ACCESSIBLE_STATE_EVENT );
+            SetShapeFocus( bHaveFocus );
         }
     }
 
@@ -477,10 +528,7 @@ namespace accessibility
     {
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
-        if( mbHaveFocus && !IsActive() )
-            return sal_True;
-        else
-            return sal_False;
+        return mbThisHasFocus;
     }
 
     sal_Bool AccessibleTextHelper_Impl::IsActive() const throw (uno::RuntimeException)
@@ -503,28 +551,49 @@ namespace accessibility
         {
             // notify all affected paragraphs (TODO: may be suboptimal,
             // since some paragraphs might stay selected)
-
+#ifdef NOTIFY_SELECTIONS
             UnSetChildrenState( maLastSelection.nStartPara,
-                                maLastSelection.nEndPara,
+                                maLastSelection.nEndPara+1,
                                 AccessibleStateType::SELECTED);
             maParaManager.FireEvent( maLastSelection.nStartPara,
-                                     maLastSelection.nEndPara,
-                                     AccessibleEventId::ACCESSIBLE_SELECTION_EVENT );
-
-            maParaManager.FireEvent( maLastSelection.nEndPara,
                                      maLastSelection.nEndPara+1,
-                                     AccessibleEventId::ACCESSIBLE_CARET_EVENT );
+                                     AccessibleEventId::ACCESSIBLE_SELECTION_EVENT );
+#endif
 
+            // Did the caret move from one paragraph to another?
+            if( maLastSelection.nEndPara != rSelection.nEndPara )
+            {
+                maParaManager.FireEvent( maLastSelection.nEndPara,
+                                         maLastSelection.nEndPara+1,
+                                         AccessibleEventId::ACCESSIBLE_CARET_EVENT,
+                                         uno::makeAny(static_cast<sal_Int32>(-1)),
+                                         uno::makeAny(maLastSelection.nEndPos) );
+
+                UnSetChildrenState( maLastSelection.nEndPara,
+                                    maLastSelection.nEndPara+1,
+                                    AccessibleStateType::FOCUSED );
+            }
+
+#ifdef NOTIFY_SELECTIONS
             SetChildrenState( rSelection.nStartPara,
-                              rSelection.nEndPara,
+                              rSelection.nEndPara+1,
                               AccessibleStateType::SELECTED);
             maParaManager.FireEvent( rSelection.nStartPara,
-                                     rSelection.nEndPara,
+                                     rSelection.nEndPara+1,
                                      AccessibleEventId::ACCESSIBLE_SELECTION_EVENT );
+#endif
 
             maParaManager.FireEvent( rSelection.nEndPara,
                                      rSelection.nEndPara+1,
-                                     AccessibleEventId::ACCESSIBLE_CARET_EVENT );
+                                     AccessibleEventId::ACCESSIBLE_CARET_EVENT,
+                                     uno::makeAny(rSelection.nEndPos),
+                                     uno::makeAny(maLastSelection.nEndPos) );
+
+            DBG_ASSERT( !mbThisHasFocus && mbGroupHasFocus, "AccessibleTextHelper_Impl::UpdateSelection: editing, but no focus set" );
+
+            SetChildrenState( rSelection.nEndPara,
+                              rSelection.nEndPara+1,
+                              AccessibleStateType::FOCUSED );
 
             maLastSelection = rSelection;
         }
@@ -794,6 +863,8 @@ namespace accessibility
 
         try
         {
+            const sal_Int32 nParas = GetTextForwarder().GetParagraphCount();
+
             // precondition: solar mutex locked
             if( pEditSourceHint )
             {
@@ -805,9 +876,7 @@ namespace accessibility
                                     pEditSourceHint->GetEndValue() < GetTextForwarder().GetParagraphCount(),
                                     "AccessibleTextHelper_Impl::NotifyHdl: Invalid notification");
 
-                        const sal_Int32 nParas = GetTextForwarder().GetParagraphCount();
-
-                        DBG_ASSERT( nParas == maParaManager.GetNum(), "AccessibleTextHelper_Impl::NotifyHdl: event PARASMOVED and paragraph number mismatch");
+                        DBG_ASSERT( static_cast<sal_uInt32>(nParas) == maParaManager.GetNum(), "AccessibleTextHelper_Impl::NotifyHdl: event PARASMOVED and paragraph number mismatch");
 
                         sal_Int32 nFirst, nMiddle, nLast;
 
@@ -875,13 +944,13 @@ namespace accessibility
                             ::accessibility::AccessibleParaManager::VectorOfChildren::const_iterator end = begin;
 
                             ::std::advance( begin, nFirst );
-                            ::std::advance( end, nLast );
+                            ::std::advance( end, nLast+1 );
 
                             AccessibleTextHelper_LostChildEvent aFunctor( *this );
 
                             ::std::for_each( begin, end, aFunctor );
 
-                            maParaManager.Release(nFirst, nLast);
+                            maParaManager.Release(nFirst, nLast+1);
                             // should be no need for UpdateVisibleData, since all affected children are cleared.
                         }
 #ifdef DBG_UTIL
@@ -916,18 +985,22 @@ namespace accessibility
                 switch( pTextHint->GetId() )
                 {
                     case TEXT_HINT_MODIFIED:
+                    {
                         // notify listeners
-                        if( pTextHint->GetValue() == EE_PARA_ALL )
-                            maParaManager.FireEvent( 0, GetTextForwarder().GetParagraphCount()-1, AccessibleEventId::ACCESSIBLE_TEXT_EVENT );
-                        else
-                            maParaManager.FireEvent( pTextHint->GetValue(), AccessibleEventId::ACCESSIBLE_TEXT_EVENT );
+                        sal_Int32 nPara( pTextHint->GetValue() );
+                        if( nPara < nParas )
+                        {
+                            if( pTextHint->GetValue() == EE_PARA_ALL )
+                                maParaManager.FireEvent( 0, GetTextForwarder().GetParagraphCount(), AccessibleEventId::ACCESSIBLE_TEXT_EVENT );
+                            else
+                                maParaManager.FireEvent( nPara, AccessibleEventId::ACCESSIBLE_TEXT_EVENT );
+                        }
                         break;
+                    }
 
                     case TEXT_HINT_PARAINSERTED:
                     {
                         // resize child vector to the current child count
-                        const sal_Int32 nParas = GetTextForwarder().GetParagraphCount();
-
                         maParaManager.SetNum( nParas );
 
                         sal_Int32 nFirst(pTextHint->GetValue()), nLast(nParas-1);
@@ -935,61 +1008,65 @@ namespace accessibility
                         if( pTextHint->GetValue() == EE_PARA_ALL )
                             nFirst = 0; // all paragraphs
 
-                        // since we have no "paragraph index
-                        // changed" event on UAA, remove
-                        // [first,last] and insert again later (in
-                        // UpdateVisibleChildren)
+                        if( nFirst < nParas && nLast < nParas )
+                        {
+                            // since we have no "paragraph index
+                            // changed" event on UAA, remove
+                            // [first,last] and insert again later (in
+                            // UpdateVisibleChildren)
 
-                        // move successors of inserted paragraph one position further
-                        //maParaManager.MoveRightFrom( pTextHint->GetValue() );
+                            // move successors of inserted paragraph one position further
+                            //maParaManager.MoveRightFrom( pTextHint->GetValue() );
 
-                        // release everything from the insertion position until the end
-                        maParaManager.Release(nFirst, nLast);
+                            // release everything from the insertion position until the end
+                            maParaManager.Release(nFirst, nLast+1);
 
-                        // send CHILD_EVENT to affected children
-                        ::accessibility::AccessibleParaManager::VectorOfChildren::const_iterator begin = maParaManager.begin();
-                        ::accessibility::AccessibleParaManager::VectorOfChildren::const_iterator end = begin;
+                            // send CHILD_EVENT to affected children
+                            ::accessibility::AccessibleParaManager::VectorOfChildren::const_iterator begin = maParaManager.begin();
+                            ::accessibility::AccessibleParaManager::VectorOfChildren::const_iterator end = begin;
 
-                        ::std::advance( begin, nFirst );
-                        ::std::advance( end, nLast );
+                            ::std::advance( begin, nFirst );
+                            ::std::advance( end, nLast+1 );
 
-                        AccessibleTextHelper_LostChildEvent aFunctor( *this );
-                        ::std::for_each( begin, end, aFunctor );
+                            AccessibleTextHelper_LostChildEvent aFunctor( *this );
+                            ::std::for_each( begin, end, aFunctor );
+                        }
                         break;
                     }
 
                     case TEXT_HINT_PARAREMOVED:
                     {
-                        const sal_Int32 nParas = GetTextForwarder().GetParagraphCount();
-
                         sal_Int32 nFirst(pTextHint->GetValue()), nLast(nParas-1);
 
                         if( pTextHint->GetValue() == EE_PARA_ALL )
                             nFirst = 0; // all paragraphs
 
-                        // since we have no "paragraph index
-                        // changed" event on UAA, remove
-                        // [first,last] and insert again later (in
-                        // UpdateVisibleChildren)
+                        if( nFirst < nParas && nLast < nParas )
+                        {
+                            // since we have no "paragraph index
+                            // changed" event on UAA, remove
+                            // [first,last] and insert again later (in
+                            // UpdateVisibleChildren)
 
-                        // move successors of removed paragraph one position closer
-                        // maParaManager.MoveLeftFrom( pTextHint->GetValue() );
+                            // move successors of removed paragraph one position closer
+                            // maParaManager.MoveLeftFrom( pTextHint->GetValue() );
 
-                        // release everything from the remove position until the end
-                        maParaManager.Release(nFirst, nLast);
+                            // release everything from the remove position until the end
+                            maParaManager.Release(nFirst, nLast+1);
 
-                        // send CHILD_EVENT to affected children
-                        ::accessibility::AccessibleParaManager::VectorOfChildren::const_iterator begin = maParaManager.begin();
-                        ::accessibility::AccessibleParaManager::VectorOfChildren::const_iterator end = begin;
+                            // send CHILD_EVENT to affected children
+                            ::accessibility::AccessibleParaManager::VectorOfChildren::const_iterator begin = maParaManager.begin();
+                            ::accessibility::AccessibleParaManager::VectorOfChildren::const_iterator end = begin;
 
-                        ::std::advance( begin, nFirst );
-                        ::std::advance( end, nLast );
+                            ::std::advance( begin, nFirst );
+                            ::std::advance( end, nLast+1 );
 
-                        AccessibleTextHelper_LostChildEvent aFunctor( *this );
-                        ::std::for_each( begin, end, aFunctor );
+                            AccessibleTextHelper_LostChildEvent aFunctor( *this );
+                            ::std::for_each( begin, end, aFunctor );
 
-                        // resize child vector to the current child count
-                        maParaManager.SetNum( nParas );
+                            // resize child vector to the current child count
+                            maParaManager.SetNum( nParas );
+                        }
                         break;
                     }
 
@@ -1021,6 +1098,9 @@ namespace accessibility
                 {
                     case HINT_BEGEDIT:
                     {
+                        // per definition, edit mode text has the focus
+                        SetFocus( sal_True );
+
                         // change children state
                         SetChildrenState( AccessibleStateType::ACTIVE );
                         SetChildrenState( AccessibleStateType::EDITABLE );
@@ -1033,6 +1113,11 @@ namespace accessibility
                     }
 
                     case HINT_ENDEDIT:
+                        // focused child now looses focus
+                        ESelection aSelection;
+                        if( GetEditViewForwarder().GetSelection( aSelection ) )
+                            SetChildFocus( aSelection.nEndPara, sal_False );
+
                         // change children state
                         UnSetChildrenState( AccessibleStateType::EDITABLE );
                         UnSetChildrenState( AccessibleStateType::ACTIVE );
@@ -1065,6 +1150,7 @@ namespace accessibility
 #ifdef DBG_UTIL
             DBG_ERROR("AccessibleTextHelper_Impl::Notify: Unhandled exception.");
 #endif
+            mbInNotify = sal_False;
         }
 
         mbInNotify = sal_False;
@@ -1097,13 +1183,26 @@ namespace accessibility
             {
                 try
                 {
-                    xListener->notifyEvent( aEvent );
+                    xListener->notifyEvent (aEvent);
                 }
-                catch( const uno::Exception& )
+                catch( const lang::DisposedException& e )
                 {
-#ifdef DBG_UTIL
-                    DBG_ERROR("AccessibleTextHelper_Impl::StateChangeEvent: Caught runtime exception from listener (bridge/listener dead?).");
-#endif
+                    // DisposedExceptions from the listener might indicate a
+                    // broken connection to a different environment.
+
+                    OSL_ENSURE(e.Context.is(), "AccessibleTextHelper::FireEvent: caught dispose exception with empty Context field");
+                    // If the exception stems from the listener then remove it
+                    // from the list of listeners.  If the Context field of the
+                    // exception is empty this is interpreted to indicate the
+                    // listener as well.
+                    if (e.Context == xListener
+                        || !e.Context.is())
+                        aIter.remove();
+                }
+                catch( const uno::Exception& e )
+                {
+                    DBG_WARNING1("AccessibleTextHelper::FireEvent: exception %s from listener",
+                                 ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_DONTKNOW ).getStr() );
                 }
             }
         }
