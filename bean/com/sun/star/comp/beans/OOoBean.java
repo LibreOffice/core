@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OOoBean.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2004-10-28 15:49:00 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:18:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1061,9 +1061,9 @@ public class OOoBean
                     com.sun.star.beans.XPropertySet xPropSet =
                             (com.sun.star.beans.XPropertySet) UnoRuntime.queryInterface(
                             com.sun.star.beans.XPropertySet.class, aFrame );
-                    drafts.com.sun.star.frame.XLayoutManager xLayoutManager =
-                            (drafts.com.sun.star.frame.XLayoutManager) UnoRuntime.queryInterface(
-                            drafts.com.sun.star.frame.XLayoutManager.class,
+                    com.sun.star.frame.XLayoutManager xLayoutManager =
+                            (com.sun.star.frame.XLayoutManager) UnoRuntime.queryInterface(
+                            com.sun.star.frame.XLayoutManager.class,
                             xPropSet.getPropertyValue( "LayoutManager" ) );
                     if ( bNewValue )
                         xLayoutManager.showElement( aResourceURL );
