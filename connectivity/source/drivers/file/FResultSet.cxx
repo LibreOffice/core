@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-14 07:21:05 $
+ *  last change: $Author: oj $ $Date: 2001-02-19 08:08:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1376,7 +1376,7 @@ BOOL OResultSet::Move(OFileTable::FilePosition eCursorPosition, INT32 nOffset, B
         {
             // COUNT(*) in Ergebnisrow packen
             // (muss die erste und einzige Variable in der Row sein)
-            if (m_aRow->size() == 2)
+            if (m_aRow->size() >= 2)
             {
                 (*m_aRow)[1] = m_nRowCountResult;
                 (*m_aRow)[0] = sal_Int32(1);
