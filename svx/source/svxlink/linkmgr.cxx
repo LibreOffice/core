@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkmgr.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-09-26 13:19:07 $
+ *  last change: $Author: jp $ $Date: 2001-01-18 17:51:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,9 +71,6 @@
 #ifndef _URLOBJ_HXX //autogen
 #include <tools/urlobj.hxx>
 #endif
-#ifndef _FSYS_HXX //autogen
-#include <tools/fsys.hxx>
-#endif
 #ifndef _IPOBJ_HXX //autogen
 #include <so3/ipobj.hxx>
 #endif
@@ -100,6 +97,9 @@
 #endif
 #ifndef _UNOTOOLS_CHARCLASS_HXX
 #include <unotools/charclass.hxx>
+#endif
+#ifndef SVTOOLS_URIHELPER_HXX
+#include <svtools/urihelper.hxx>
 #endif
 
 #include "linkmgr.hxx"
@@ -318,7 +318,7 @@ BOOL SvxInternalLink::Connect( SvBaseLink& rLink )
         SvInPlaceObjectRef aRef( pPersist );
         if( aRef.Is() )
         {
-            // sch... SFX das gerade gelesen Doc hat noch keinen Namen und
+            // sch... SFX: das gerade gelesen Doc hat noch keinen Namen und
             // steht noch nicht in der Doc. Liste
             pShell = ((SfxInPlaceObject*)&aRef)->GetObjectShell();
 
@@ -326,12 +326,7 @@ BOOL SvxInternalLink::Connect( SvBaseLink& rLink )
             {
                 sReferer = pShell->GetMedium()->GetName();
                 if( !pShell->HasName()  )
-                {
                     sTmp = sReferer;
-                    INetURLObject aURL( sTmp );
-                    if ( aURL.GetProtocol() == INET_PROT_FILE )
-                        sTmp = aURL.getFSysPath( INetURLObject::FSYS_DETECT );
-                }
             }
         }
 
@@ -373,52 +368,51 @@ BOOL SvxInternalLink::Connect( SvBaseLink& rLink )
         }
     }
 
-    DirEntry aFileNm( GUI2FSYS( sTopic ) );
-    aFileNm.ToAbs();
-    if( FSYS_KIND_FILE == FileStat( aFileNm ).GetKind() )
-    {
-        // File vorhanden
+    // dann versuche die Datei zu laden:
+    INetURLObject aURL( sTopic );
+    INetProtocol eOld = aURL.GetProtocol();
+    aURL.SetURL( sTopic = URIHelper::SmartRelToAbs( sTopic ) );
+    if( INET_PROT_NOT_VALID == eOld && INET_PROT_HTTP == aURL.GetProtocol())
+        return FALSE;
 
-        // dann versuche die Datei zu laden:
-
-        SfxStringItem aName( SID_FILE_NAME, aFileNm.GetFull() );
-        SfxBoolItem aNewView(SID_OPEN_NEW_VIEW, TRUE);
-//          SfxBoolItem aHidden(SID_HIDDEN, TRUE);
+    SfxStringItem aName( SID_FILE_NAME, sTopic );
+    SfxBoolItem aNewView(SID_OPEN_NEW_VIEW, TRUE);
+//  SfxBoolItem aHidden(SID_HIDDEN, TRUE);
         // minimiert!
 
-        SfxUInt16Item aViewStat( SID_VIEW_ZOOM_MODE, 0 );
-        SfxRectangleItem aRectItem( SID_VIEW_POS_SIZE, Rectangle() );
-        SfxStringItem aReferer( SID_REFERER, sReferer );
+    SfxUInt16Item aViewStat( SID_VIEW_ZOOM_MODE, 0 );
+    SfxRectangleItem aRectItem( SID_VIEW_POS_SIZE, Rectangle() );
+    SfxStringItem aReferer( SID_REFERER, sReferer );
 
-        SfxBoolItem aSilent(SID_SILENT, TRUE);
-        const SfxPoolItem* pRet = SfxViewFrame::Current()->GetDispatcher()->
-                Execute( SID_OPENDOC, SFX_CALLMODE_SYNCHRON,
-                        &aName, &aNewView,
-                        &aViewStat,&aRectItem/*aHidden*/,
-                        &aSilent, &aReferer, 0L );
+    SfxBoolItem aSilent(SID_SILENT, TRUE);
+    const SfxPoolItem* pRet = SfxViewFrame::Current()->GetDispatcher()->
+            Execute( SID_OPENDOC, SFX_CALLMODE_SYNCHRON,
+                    &aName, &aNewView,
+                    &aViewStat,&aRectItem/*aHidden*/,
+                    &aSilent, &aReferer, 0L );
 
-        SfxObjectShell* pShell;
-        if( pRet && pRet->ISA( SfxViewFrameItem ) &&
-            ((SfxViewFrameItem*)pRet)->GetFrame() &&
-            0 != ( pShell = ((SfxViewFrameItem*)pRet)
-                ->GetFrame()->GetObjectShell() ) )
+    BOOL bRet = FALSE;
+    SfxObjectShell* pShell;
+    if( pRet && pRet->ISA( SfxViewFrameItem ) &&
+        ((SfxViewFrameItem*)pRet)->GetFrame() &&
+        0 != ( pShell = ((SfxViewFrameItem*)pRet)
+            ->GetFrame()->GetObjectShell() ) )
+    {
+        SvPseudoObject* pNewObj = pShell->DdeCreateHotLink( sItem );
+        if( pNewObj )
         {
-            SvPseudoObject* pNewObj = pShell->DdeCreateHotLink( sItem );
-            if( pNewObj )
-            {
-                ((ImplCastBaseLink&)rLink).SetObject( pNewObj );
-                pNewObj->AddDataAdvise( &rLink, rLink.GetContentType(),
-                            LINKUPDATE_ONCALL == rLink.GetUpdateMode()
-                                ? ADVISEMODE_ONLYONCE
-                                : 0 );
+            bRet = TRUE;
+            ((ImplCastBaseLink&)rLink).SetObject( pNewObj );
+            pNewObj->AddDataAdvise( &rLink, rLink.GetContentType(),
+                        LINKUPDATE_ONCALL == rLink.GetUpdateMode()
+                            ? ADVISEMODE_ONLYONCE
+                            : 0 );
 //JP 13.04.96: interne Links sind nicht am Closed interresiert!
 //              pNewObj->AddConnectAdvise( &rLink, ADVISE_CLOSED );
-            }
-            return 0 != pNewObj;
         }
     }
 
-    return FALSE;
+    return bRet;
 }
 
 
