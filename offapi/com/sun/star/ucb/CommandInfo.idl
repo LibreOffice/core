@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CommandInfo.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:51 $
+ *  last change: $Author: mi $ $Date: 2001-01-31 09:57:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@ struct CommandInfo
     //-------------------------------------------------------------------------
     /** contains the type of the command's argument.
     */
-    TYPE_XIDLCLASS ArgType;
+    type ArgType;
 };
 
 //=============================================================================
