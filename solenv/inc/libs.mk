@@ -2,9 +2,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.67 $
+#   $Revision: 1.68 $
 #
-#   last change: $Author: hr $ $Date: 2003-08-07 14:37:11 $
+#   last change: $Author: vg $ $Date: 2003-10-09 10:09:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,7 +60,7 @@
 #
 #*************************************************************************
 
-LIBSMKREV!:="$$Revision: 1.67 $$"
+LIBSMKREV!:="$$Revision: 1.68 $$"
 
 .IF "$(COM)"=="WTC"
 LIBPRE=libr
@@ -166,7 +166,6 @@ BASICLIB=-lsb$(OFFICEUPD)$(DLLPOSTFIX)
 BASICLIGHTLIB=-lsbl$(OFFICEUPD)$(DLLPOSTFIX)
 SDBLIB=-lsdb$(OFFICEUPD)$(DLLPOSTFIX)
 DBTOOLSLIB=-ldbtools$(DBTOOLS_MAJOR)
-SYNCACCLIB=-lsyncacc1
 HM2LIBSH=-lhmwrpdll
 HM2LIBST=-lhmwrap
 LINGULIB=$(HM2LIBST)
@@ -332,7 +331,6 @@ BASICIDELIB=ybctl.lib
 SVXLLIB=$(LIBPRE) svxl.lib
 SDBLIB=$(LIBPRE) sdb.lib
 DBTOOLSLIB=$(LIBPRE) idbtools.lib
-SYNCACCLIB=$(LIBPRE) isyncacc1.lib
 HM2LIBSH=$(LIBPRE) hmwrpdll.lib
 HM2LIBST=$(LIBPRE) hmwrap.lib
 LINGULIB=$(HM2LIBST)
