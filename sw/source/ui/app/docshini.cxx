@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshini.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: os $ $Date: 2002-06-24 09:10:32 $
+ *  last change: $Author: tl $ $Date: 2002-08-12 12:43:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -863,15 +863,10 @@ void SwDocShell::SubInitNew()
     sal_Int16   nVal = aLinguOpt.nDefaultLanguage,
                 eCJK = aLinguOpt.nDefaultLanguage_CJK,
                 eCTL = aLinguOpt.nDefaultLanguage_CTL;
-    DBG_ASSERT( LANGUAGE_NONE != nVal, "default language (western) missing" );
-    if (LANGUAGE_NONE == eCJK)
-        eCJK = nVal;
-    if (LANGUAGE_NONE == eCTL)
-        eCTL = nVal;
-
     aDfltSet.Put( SvxLanguageItem( nVal, RES_CHRATR_LANGUAGE ) );
     aDfltSet.Put( SvxLanguageItem( eCJK, RES_CHRATR_CJK_LANGUAGE ) );
     aDfltSet.Put( SvxLanguageItem( eCTL, RES_CHRATR_CTL_LANGUAGE ) );
+
     if(!bWeb)
     {
         SvxHyphenZoneItem aHyp( (SvxHyphenZoneItem&) pDoc->GetDefault(
