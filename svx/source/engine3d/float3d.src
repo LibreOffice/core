@@ -2,9 +2,9 @@
  *
  *  $RCSfile: float3d.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2000-10-27 17:26:42 $
+ *  last change: $Author: kz $ $Date: 2000-11-09 12:19:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3224,7 +3224,7 @@ String RID_SVXFLOAT3D_FAVORITE
     Text[ dutch ] = "Favoriet";
     Text[ french ] = "Favori";
     Text[ spanish ] = "Favorito";
-    Text[ italian ] = "Favorite";
+    Text[ italian ] = "Preferito";
     Text[ danish ] = "Favorit";
     Text[ swedish ] = "Favorit";
     Text[ polish ] = "Faworyt";
