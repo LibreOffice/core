@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctempl.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: mba $ $Date: 2001-12-17 14:20:42 $
+ *  last change: $Author: mav $ $Date: 2002-01-11 18:12:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,6 +177,16 @@
 #ifndef _COM_SUN_STAR_UCB_XCONTENTACCESS_HPP_
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UCB_XANYCOMPAREFACTORY_HPP_
+#include <com/sun/star/ucb/XAnyCompareFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UCB_XANYCOMPARE_HPP_
+#include <com/sun/star/ucb/XAnyCompare.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UCB_NUMBEREDSORTINGINFO_HPP_
+#include <com/sun/star/ucb/NumberedSortingInfo.hpp>
+#endif
+
 
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
@@ -331,6 +341,8 @@ class SfxDocTemplate_Impl : public SvRefBase
     OUString            maStandardGroup;
     RegionList_Impl     maRegions;
     sal_Bool            mbConstructed;
+
+    Reference< XAnyCompareFactory > m_rCompareFactory;
 
 private:
     void                Clear();
@@ -2181,7 +2193,10 @@ void SfxDocTemplate_Impl::AddRegion( const OUString& rTitle,
     try
     {
         ResultSetInclude eInclude = INCLUDE_DOCUMENTS_ONLY;
-        xResultSet = rContent.createCursor( aProps, eInclude );
+        Sequence< NumberedSortingInfo >     aSortingInfo(1);
+        aSortingInfo.getArray()->ColumnIndex = 1;
+        aSortingInfo.getArray()->Ascending = sal_True;
+        xResultSet = rContent.createSortedCursor( aProps, aSortingInfo, m_rCompareFactory, eInclude );
     }
     catch ( Exception& ) {}
 
@@ -2214,7 +2229,10 @@ void SfxDocTemplate_Impl::CreateFromHierarchy( Content &rTemplRoot )
     try
     {
         ResultSetInclude eInclude = INCLUDE_FOLDERS_ONLY;
-        xResultSet = rTemplRoot.createCursor( aProps, eInclude );
+        Sequence< NumberedSortingInfo >     aSortingInfo(1);
+        aSortingInfo.getArray()->ColumnIndex = 1;
+        aSortingInfo.getArray()->Ascending = sal_True;
+        xResultSet = rTemplRoot.createSortedCursor( aProps, aSortingInfo, m_rCompareFactory, eInclude );
     }
     catch ( Exception& ) {}
 
@@ -2270,6 +2288,13 @@ sal_Bool SfxDocTemplate_Impl::Construct( )
 
     xLocalizable->setLocale( aLocale );
 
+    Sequence< Any > aCompareArg(1);
+    *(aCompareArg.getArray()) <<= aLocale;
+    m_rCompareFactory = Reference< XAnyCompareFactory >(
+                    xFactory->createInstanceWithArguments( OUString::createFromAscii( "com.sun.star.ucb.AnyCompareFactory" ),
+                                                           aCompareArg ),
+                    UNO_QUERY );
+
     Reference < XContent > aRootContent = xTemplates->getContent();
     Reference < XCommandEnvironment > aCmdEnv;
 
@@ -2304,7 +2329,10 @@ void SfxDocTemplate_Impl::GetTemplates( Content& rTargetFolder,
     try
     {
         ResultSetInclude eInclude = INCLUDE_DOCUMENTS_ONLY;
-        xResultSet = rTargetFolder.createCursor( aProps, eInclude );
+        Sequence< NumberedSortingInfo >     aSortingInfo(1);
+        aSortingInfo.getArray()->ColumnIndex = 1;
+        aSortingInfo.getArray()->Ascending = sal_True;
+        xResultSet = rTargetFolder.createSortedCursor( aProps, aSortingInfo, m_rCompareFactory, eInclude );
     }
     catch ( Exception& ) {}
 
