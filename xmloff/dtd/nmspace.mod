@@ -1,5 +1,5 @@
 <!--
-	$Id: nmspace.mod,v 1.4 2001-03-23 07:46:50 sab Exp $
+	$Id: nmspace.mod,v 1.5 2002-05-06 09:34:55 bm Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -56,6 +56,7 @@
 <!ENTITY nFO "http://www.w3.org/1999/XSL/Format">
 <!ENTITY nXLink "http://www.w3.org/1999/xlink">
 <!ENTITY nSVG "http://www.w3.org/2000/svg">
+<!ENTITY nMath "http://www.w3.org/1998/Math/MathML">
 
 <!-- StarOffice namespace names and prefixes -->
 
@@ -71,8 +72,9 @@
 <!ENTITY nDraw "&nOpenOffice;/drawing">
 <!ENTITY nChart "&nOpenOffice;/chart">
 <!ENTITY nNumber "&nOpenOffice;/datastyle">
+<!ENTITY nDr3D "&nOpenOffice;/dr3d">
+<!ENTITY nForm "&nOpenOffice;/form">
 <!ENTITY nConfig "&nOpenOffice2001;/config">
-
 
 <!-- dublin core namespace name and prefic -->
 <!ENTITY nDC "http://purl.org/dc/elements/1.1/">

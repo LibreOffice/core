@@ -1,5 +1,5 @@
 <!--
-	$Id: office.mod,v 1.45 2002-02-28 14:42:15 dvo Exp $
+	$Id: office.mod,v 1.46 2002-05-06 09:34:55 bm Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -75,6 +75,9 @@
 <!ATTLIST office:document xmlns:xlink	CDATA #FIXED "&nXLink;">
 <!ATTLIST office:document xmlns:svg		CDATA #FIXED "&nSVG;">
 <!ATTLIST office:document xmlns:dc		CDATA #FIXED "&nDC;">
+<!ATTLIST office:document xmlns:dr3d	CDATA #FIXED "&nDr3D;">
+<!ATTLIST office:document xmlns:math	CDATA #FIXED "&nMath;">
+<!ATTLIST office:document xmlns:form	CDATA #FIXED "&nForm;">
 
 <!ATTLIST office:document office:class
 						  (text|text-global|
@@ -103,6 +106,9 @@
 <!ATTLIST office:document-styles xmlns:xlink	CDATA #FIXED "&nXLink;">
 <!ATTLIST office:document-styles xmlns:svg		CDATA #FIXED "&nSVG;">
 <!ATTLIST office:document-styles xmlns:dc		CDATA #FIXED "&nDC;">
+<!ATTLIST office:document-styles xmlns:dr3d		CDATA #FIXED "&nDr3D;">
+<!ATTLIST office:document-styles xmlns:math		CDATA #FIXED "&nMath;">
+<!ATTLIST office:document-styles xmlns:form		CDATA #FIXED "&nForm;">
 
 <!ATTLIST office:document-styles office:version	%string; #IMPLIED>
 
@@ -127,6 +133,9 @@
 <!ATTLIST office:document-content xmlns:xlink	CDATA #FIXED "&nXLink;">
 <!ATTLIST office:document-content xmlns:svg		CDATA #FIXED "&nSVG;">
 <!ATTLIST office:document-content xmlns:dc		CDATA #FIXED "&nDC;">
+<!ATTLIST office:document-content xmlns:dr3d	CDATA #FIXED "&nDr3D;">
+<!ATTLIST office:document-content xmlns:math	CDATA #FIXED "&nMath;">
+<!ATTLIST office:document-content xmlns:form	CDATA #FIXED "&nForm;">
 
 <!ATTLIST office:document-content office:class
 						  (text|text-global|
@@ -152,6 +161,9 @@
 <!ATTLIST office:document-meta xmlns:xlink	CDATA #FIXED "&nXLink;">
 <!ATTLIST office:document-meta xmlns:svg		CDATA #FIXED "&nSVG;">
 <!ATTLIST office:document-meta xmlns:dc		CDATA #FIXED "&nDC;">
+<!ATTLIST office:document-meta xmlns:dr3d	CDATA #FIXED "&nDr3D;">
+<!ATTLIST office:document-meta xmlns:math	CDATA #FIXED "&nMath;">
+<!ATTLIST office:document-meta xmlns:form	CDATA #FIXED "&nForm;">
 
 <!ATTLIST office:document-meta office:version	%string; #IMPLIED>
 
