@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.2 $
+#*  $Revision: 1.3 $
 #*
-#*  last change: $Author: er $ $Date: 2002-03-26 16:55:00 $
+#*  last change: $Author: bustamam $ $Date: 2002-04-24 17:10:09 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -79,6 +79,7 @@ SLOFILES=   \
         $(SLO)$/breakiterator_cjk.obj \
         $(SLO)$/breakiterator_ctl.obj \
         $(SLO)$/breakiterator_th.obj \
+        $(SLO)$/breakiterator_hi.obj \
         $(SLO)$/breakiterator_unicode.obj \
         $(SLO)$/xdictionary.obj
 

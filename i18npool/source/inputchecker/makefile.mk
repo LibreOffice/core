@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.2 $
+#*  $Revision: 1.3 $
 #*
-#*  last change: $Author: er $ $Date: 2002-03-26 17:07:06 $
+#*  last change: $Author: bustamam $ $Date: 2002-04-24 17:09:27 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -76,7 +76,8 @@ ENABLE_EXCEPTIONS=TRUE
 
 SLOFILES=   \
         $(SLO)$/inputsequencechecker.obj \
-        $(SLO)$/inputsequencechecker_th.obj
+        $(SLO)$/inputsequencechecker_th.obj \
+        $(SLO)$/inputsequencechecker_hi.obj
 
 # --- Targets ------------------------------------------------------
 
