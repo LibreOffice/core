@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RadioButton.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-23 08:48:15 $
+ *  last change: $Author: fs $ $Date: 2001-02-21 11:01:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,9 +74,15 @@
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
+#ifndef _CPPUHELPER_EXTRACT_HXX_
+#include <cppuhelper/extract.hxx>
+#endif
 
 #ifndef _COM_SUN_STAR_CONTAINER_XINDEXACCESS_HPP_
 #include <com/sun/star/container/XIndexAccess.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_XVCLWINDOWPEER_HPP_
+#include <com/sun/star/awt/XVclWindowPeer.hpp>
 #endif
 
 //.........................................................................
@@ -117,6 +123,18 @@ StringSequence SAL_CALL ORadioButtonControl::getSupportedServiceNames() throw(Ru
 ORadioButtonControl::ORadioButtonControl(const Reference<XMultiServiceFactory>& _rxFactory)
                       :OBoundControl(_rxFactory, VCL_CONTROL_RADIOBUTTON)
 {
+}
+
+//------------------------------------------------------------------
+void SAL_CALL ORadioButtonControl::createPeer(const Reference<starawt::XToolkit>& _rxToolkit, const Reference<starawt::XWindowPeer>& _rxParent) throw (RuntimeException)
+{
+    OBoundControl::createPeer(_rxToolkit, _rxParent);
+
+    // switch off the auto-toggle, we do this ourself ....
+    // (formerly this switch-off was done in the toolkit - but the correct place is here ...)
+    Reference< XVclWindowPeer >  xVclWindowPeer( getPeer(), UNO_QUERY );
+    if (xVclWindowPeer.is())
+        xVclWindowPeer->setProperty(::rtl::OUString::createFromAscii("AutoToggle"), ::cppu::bool2any(sal_False));
 }
 
 //==================================================================

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RadioButton.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-23 08:48:15 $
+ *  last change: $Author: fs $ $Date: 2001-02-21 11:01:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,6 +152,10 @@ public:
     // XServiceInfo
     IMPLEMENTATION_NAME(ORadioButtonControl);
     virtual StringSequence SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException);
+
+protected:
+    // XControl
+    virtual void SAL_CALL createPeer(const ::com::sun::star::uno::Reference<starawt::XToolkit>& Toolkit, const ::com::sun::star::uno::Reference<starawt::XWindowPeer>& Parent) throw (::com::sun::star::uno::RuntimeException);
 };
 
 //.........................................................................
