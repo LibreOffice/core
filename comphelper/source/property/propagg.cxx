@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propagg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-07 09:19:05 $
+ *  last change: $Author: jl $ $Date: 2001-03-22 13:32:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -363,7 +363,7 @@ void OPropertySetAggregationHelper::disposing()
 //------------------------------------------------------------------------------
 void SAL_CALL OPropertySetAggregationHelper::disposing(const  ::com::sun::star::lang::EventObject& _rSource) throw ( ::com::sun::star::uno::RuntimeException)
 {
-    OSL_ENSHURE(m_xAggregateSet.is(), "OPropertySetAggregationHelper::disposing : don't have an aggregate anymore !");
+    OSL_ENSURE(m_xAggregateSet.is(), "OPropertySetAggregationHelper::disposing : don't have an aggregate anymore !");
     if (_rSource.Source == m_xAggregateSet)
         m_bListening = sal_False;
 }
@@ -371,7 +371,7 @@ void SAL_CALL OPropertySetAggregationHelper::disposing(const  ::com::sun::star::
 //------------------------------------------------------------------------------
 void SAL_CALL OPropertySetAggregationHelper::propertiesChange(const  ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyChangeEvent>& _rEvents) throw( ::com::sun::star::uno::RuntimeException)
 {
-    OSL_ENSHURE(m_xAggregateSet.is(), "OPropertySetAggregationHelper::propertiesChange : have no aggregate !");
+    OSL_ENSURE(m_xAggregateSet.is(), "OPropertySetAggregationHelper::propertiesChange : have no aggregate !");
 
     sal_Int32 nLen = _rEvents.getLength();
     cppu::IPropertyArrayHelper& rPH = getInfoHelper();
@@ -379,7 +379,7 @@ void SAL_CALL OPropertySetAggregationHelper::propertiesChange(const  ::com::sun:
     if (1 == nLen)
     {
         const  ::com::sun::star::beans::PropertyChangeEvent& evt = _rEvents.getConstArray()[0];
-        OSL_ENSHURE(evt.PropertyName.getLength() > 0, "OPropertySetAggregationHelper::propertiesChange : invalid event !");
+        OSL_ENSURE(evt.PropertyName.getLength() > 0, "OPropertySetAggregationHelper::propertiesChange : invalid event !");
             // we had a bug where this assertion would have us saved a whole day :) (72514)
         sal_Int32 nHandle = rPH.getHandleByName( evt.PropertyName );
         if (nHandle != -1)
@@ -418,7 +418,7 @@ void SAL_CALL OPropertySetAggregationHelper::propertiesChange(const  ::com::sun:
 //------------------------------------------------------------------------------
 void SAL_CALL OPropertySetAggregationHelper::vetoableChange(const  ::com::sun::star::beans::PropertyChangeEvent& _rEvent) throw( ::com::sun::star::beans::PropertyVetoException,  ::com::sun::star::uno::RuntimeException)
 {
-    OSL_ENSHURE(m_xAggregateSet.is(), "OPropertySetAggregationHelper::vetoableChange : have no aggregate !");
+    OSL_ENSURE(m_xAggregateSet.is(), "OPropertySetAggregationHelper::vetoableChange : have no aggregate !");
 
     cppu::IPropertyArrayHelper& rPH = getInfoHelper();
 
@@ -575,8 +575,8 @@ void SAL_CALL OPropertySetAggregationHelper::setPropertyValues(
                          ::com::sun::star::lang::WrappedTargetException,
                          ::com::sun::star::uno::RuntimeException)
 {
-    OSL_ENSHURE( !rBHelper.bInDispose, "OPropertySetAggregationHelper::setPropertyValues : do not use within the dispose call !");
-    OSL_ENSHURE( !rBHelper.bDisposed, "OPropertySetAggregationHelper::setPropertyValues : object is disposed" );
+    OSL_ENSURE( !rBHelper.bInDispose, "OPropertySetAggregationHelper::setPropertyValues : do not use within the dispose call !");
+    OSL_ENSURE( !rBHelper.bDisposed, "OPropertySetAggregationHelper::setPropertyValues : object is disposed" );
 
     // check where the properties come from
     if (!m_xAggregateSet.is())

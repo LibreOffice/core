@@ -2,9 +2,9 @@
  *
  *  $RCSfile: IdPropArrayHelper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ganaya $ $Date: 2001-01-10 23:46:46 $
+ *  last change: $Author: jl $ $Date: 2001-03-22 13:28:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@ namespace comphelper
         virtual ~OIdPropertyArrayUsageHelper()
         {
             ::osl::MutexGuard aGuard(s_aMutex);
-            OSL_ENSHURE(s_nRefCount > 0, "OIdPropertyArrayUsageHelper::~OIdPropertyArrayUsageHelper : suspicious call : have a refcount of 0 !");
+            OSL_ENSURE(s_nRefCount > 0, "OIdPropertyArrayUsageHelper::~OIdPropertyArrayUsageHelper : suspicious call : have a refcount of 0 !");
             if (!--s_nRefCount)
             {
                 // delete the element
@@ -154,13 +154,13 @@ namespace comphelper
     template <class TYPE>
     ::cppu::IPropertyArrayHelper* OIdPropertyArrayUsageHelper<TYPE>::getArrayHelper(sal_Int32 nId)
     {
-        OSL_ENSHURE(s_nRefCount, "OIdPropertyArrayUsageHelper::getArrayHelper : suspicious call : have a refcount of 0 !");
+        OSL_ENSURE(s_nRefCount, "OIdPropertyArrayUsageHelper::getArrayHelper : suspicious call : have a refcount of 0 !");
         ::osl::MutexGuard aGuard(s_aMutex);
         // do we have the array already?
         if (! (*s_pMap)[nId] )
         {
             (*s_pMap)[nId] = createArrayHelper(nId);
-            OSL_ENSHURE((*s_pMap)[nId], "OIdPropertyArrayUsageHelper::getArrayHelper : createArrayHelper returned nonsense !");
+            OSL_ENSURE((*s_pMap)[nId], "OIdPropertyArrayUsageHelper::getArrayHelper : createArrayHelper returned nonsense !");
         }
         return (*s_pMap)[nId];
     }

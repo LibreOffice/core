@@ -2,9 +2,9 @@
  *
  *  $RCSfile: types.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hjs $ $Date: 2001-03-13 18:21:08 $
+ *  last change: $Author: jl $ $Date: 2001-03-22 13:30:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,7 +156,7 @@ sal_Bool getBOOL(const Any& _rAny)
     if (_rAny.getValueType() == ::getCppuBooleanType())
         nReturn = *(sal_Bool*)_rAny.getValue();
     else
-        OSL_ENSHURE(sal_False, "comphelper::getBOOL : invalid argument !");
+        OSL_ENSURE(sal_False, "comphelper::getBOOL : invalid argument !");
     return nReturn;
 }
 
@@ -482,7 +482,7 @@ sal_Bool    operator ==(const FontDescriptor& _rLeft, const FontDescriptor& _rRi
 //-------------------------------------------------------------------------
 Type getSequenceElementType(const Type& _rSequenceType)
 {
-    OSL_ENSHURE(_rSequenceType.getTypeClass() == TypeClass_SEQUENCE,
+    OSL_ENSURE(_rSequenceType.getTypeClass() == TypeClass_SEQUENCE,
                 "getSequenceElementType: must be called with a  sequence type!");
 
     if (!(_rSequenceType.getTypeClass() == TypeClass_SEQUENCE))

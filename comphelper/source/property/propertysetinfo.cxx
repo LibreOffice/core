@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertysetinfo.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-14 15:55:13 $
+ *  last change: $Author: jl $ $Date: 2001-03-22 13:32:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,12 +110,12 @@ void PropertyMapImpl::add( PropertyMapEntry* pMap ) throw()
         PropertyMap::iterator aIter = maPropertyMap.find( aName );
         if( aIter != maPropertyMap.end() )
         {
-            OSL_ENSHURE( sal_False, "Warning: PropertyMapEntry added twice, possible error!");
+            OSL_ENSURE( sal_False, "Warning: PropertyMapEntry added twice, possible error!");
         }
 #endif
         if( NULL == pMap->mpType )
         {
-            OSL_ENSHURE( sal_False, "No type in PropertyMapEntry!");
+            OSL_ENSURE( sal_False, "No type in PropertyMapEntry!");
             pMap->mpType = &::getCppuType((const sal_Int32*)0);
         }
 

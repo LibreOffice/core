@@ -2,9 +2,9 @@
  *
  *  $RCSfile: streamsection.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-09-29 11:28:15 $
+ *  last change: $Author: jl $ $Date: 2001-03-22 13:33:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@ OStreamSection::OStreamSection(const staruno::Reference< stario::XDataInputStrea
     ,m_nBlockStart(-1)
     ,m_nBlockLen(-1)
 {
-    OSL_ENSHURE(m_xInStream.is() && m_xMarkStream.is(), "OStreamSection::OStreamSection : invalid argument !");
+    OSL_ENSURE(m_xInStream.is() && m_xMarkStream.is(), "OStreamSection::OStreamSection : invalid argument !");
     if (m_xInStream.is() && m_xMarkStream.is())
     {
         m_nBlockLen = _rxInput->readLong();
@@ -92,7 +92,7 @@ OStreamSection::OStreamSection(const staruno::Reference< stario::XDataOutputStre
     ,m_nBlockStart(-1)
     ,m_nBlockLen(-1)
 {
-    OSL_ENSHURE(m_xOutStream.is() && m_xMarkStream.is(), "OStreamSection::OStreamSection : invalid argument !");
+    OSL_ENSURE(m_xOutStream.is() && m_xMarkStream.is(), "OStreamSection::OStreamSection : invalid argument !");
     if (m_xOutStream.is() && m_xMarkStream.is())
     {
         m_nBlockStart = m_xMarkStream->createMark();

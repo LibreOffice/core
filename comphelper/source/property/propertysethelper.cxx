@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertysethelper.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-14 15:55:13 $
+ *  last change: $Author: jl $ $Date: 2001-03-22 13:32:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -318,17 +318,17 @@ Any SAL_CALL PropertySetHelper::getPropertyDefault( const ::rtl::OUString& aProp
 
 void PropertySetHelper::_getPropertyStates( const comphelper::PropertyMapEntry** ppEntries, PropertyState* pStates ) throw(UnknownPropertyException )
 {
-    OSL_ENSHURE( sal_False, "you have to implement this yourself!");
+    OSL_ENSURE( sal_False, "you have to implement this yourself!");
 }
 
 void PropertySetHelper::_setPropertyToDefault( const comphelper::PropertyMapEntry* pEntry )  throw(UnknownPropertyException )
 {
-    OSL_ENSHURE( sal_False, "you have to implement this yourself!");
+    OSL_ENSURE( sal_False, "you have to implement this yourself!");
 }
 
 Any PropertySetHelper::_getPropertyDefault( const comphelper::PropertyMapEntry* pEntry ) throw(UnknownPropertyException, WrappedTargetException )
 {
-    OSL_ENSHURE( sal_False, "you have to implement this yourself!");
+    OSL_ENSURE( sal_False, "you have to implement this yourself!");
 
     Any aAny;
     return aAny;

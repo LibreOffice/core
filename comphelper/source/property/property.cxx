@@ -2,9 +2,9 @@
  *
  *  $RCSfile: property.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-09-29 11:28:15 $
+ *  last change: $Author: jl $ $Date: 2001-03-22 13:32:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,7 @@ void copyProperties(const staruno::Reference<starbeans::XPropertySet>& _rxSource
 {
     if (!_rxSource.is() || !_rxDest.is())
     {
-        OSL_ENSHURE(sal_False, "copyProperties : invalid arguments !");
+        OSL_ENSURE(sal_False, "copyProperties : invalid arguments !");
     }
 
     staruno::Reference< starbeans::XPropertySetInfo > xSourceProps = _rxSource->getPropertySetInfo();
@@ -128,7 +128,7 @@ void copyProperties(const staruno::Reference<starbeans::XPropertySet>& _rxSource
             }
             catch (staruno::Exception&)
             {
-                OSL_ENSHURE(sal_False, "copyProperties : could not transfer at least one of the properties !");
+                OSL_ENSURE(sal_False, "copyProperties : could not transfer at least one of the properties !");
             }
         }
     }
@@ -159,7 +159,7 @@ void RemoveProperty(staruno::Sequence<starbeans::Property>& _rProps, const rtl::
     // gefunden ?
     if (pResult)
     {
-        OSL_ENSHURE(pResult->Name.equals(_rPropName), "::RemoveProperty Properties nicht sortiert");
+        OSL_ENSURE(pResult->Name.equals(_rPropName), "::RemoveProperty Properties nicht sortiert");
         removeElementAt(_rProps, pResult - pProperties);
     }
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: seqstream.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-02 16:10:26 $
+ *  last change: $Author: jl $ $Date: 2001-03-22 13:33:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,8 +169,8 @@ OSequenceOutputStream::OSequenceOutputStream(Sequence< sal_Int8 >& _rSeq, double
     ,m_nSize(0) // starting at position 0
     ,m_bConnected(sal_True)
 {
-    OSL_ENSHURE(m_nResizeFactor > 1, "OSequenceOutputStream::OSequenceOutputStream : invalid resize factor !");
-    OSL_ENSHURE((m_nMaximumResize < 0) || (m_nMaximumResize > m_nMinimumResize),
+    OSL_ENSURE(m_nResizeFactor > 1, "OSequenceOutputStream::OSequenceOutputStream : invalid resize factor !");
+    OSL_ENSURE((m_nMaximumResize < 0) || (m_nMaximumResize > m_nMinimumResize),
         "OSequenceOutputStream::OSequenceOutputStream : these limits don't make any sense !");
 
     if (m_nResizeFactor <= 1)
@@ -223,7 +223,7 @@ void SAL_CALL OSequenceOutputStream::writeBytes( const Sequence< sal_Int8 >& _rD
         m_rSequence.realloc(nNewLength);
     }
 
-    OSL_ENSHURE(m_rSequence.getLength() >= m_nSize + _rData.getLength(),
+    OSL_ENSURE(m_rSequence.getLength() >= m_nSize + _rData.getLength(),
         "ooops ... the realloc algorithm seems to be wrong :( !");
 
     memcpy(m_rSequence.getArray() + m_nSize, _rData.getConstArray(), _rData.getLength());

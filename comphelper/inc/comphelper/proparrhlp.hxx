@@ -2,9 +2,9 @@
  *
  *  $RCSfile: proparrhlp.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-06 14:00:38 $
+ *  last change: $Author: jl $ $Date: 2001-03-22 13:28:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,7 @@ public:
     {   // ARGHHHHHHH ..... would like to implement this in proparrhlp_impl.hxx (as we do with all other methods)
         // but SUNPRO 5 compiler (linker) doesn't like this
         ::osl::MutexGuard aGuard(s_aMutex);
-        OSL_ENSHURE(s_nRefCount > 0, "OPropertyArrayUsageHelper::~OPropertyArrayUsageHelper : suspicious call : have a refcount of 0 !");
+        OSL_ENSURE(s_nRefCount > 0, "OPropertyArrayUsageHelper::~OPropertyArrayUsageHelper : suspicious call : have a refcount of 0 !");
         if (!--s_nRefCount)
         {
             delete s_pProps;

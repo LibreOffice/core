@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numbers.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-09-29 11:28:15 $
+ *  last change: $Author: jl $ $Date: 2001-03-22 13:30:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,9 +111,9 @@ sal_Int16 getNumberFormatType(const staruno::Reference<starutil::XNumberFormats>
 //------------------------------------------------------------------------------
 sal_Int16 getNumberFormatType(const staruno::Reference<starutil::XNumberFormatter>& xFormatter, sal_Int32 nKey)
 {
-    OSL_ENSHURE(xFormatter.is(), "getNumberFormatType : the formatter isn't valid !");
+    OSL_ENSURE(xFormatter.is(), "getNumberFormatType : the formatter isn't valid !");
     staruno::Reference<starutil::XNumberFormatsSupplier> xSupplier( xFormatter->getNumberFormatsSupplier());
-    OSL_ENSHURE(xSupplier.is(), "getNumberFormatType : the formatter doesn't implement a supplier !");
+    OSL_ENSURE(xSupplier.is(), "getNumberFormatType : the formatter doesn't implement a supplier !");
     staruno::Reference<starutil::XNumberFormats> xFormats( xSupplier->getNumberFormats());
     return getNumberFormatType(xFormats, nKey);
 }
@@ -150,7 +150,7 @@ sal_Int32 getStandardFormat(
     staruno::Reference<starutil::XNumberFormatsSupplier> xSupplier( xFormatter.is() ? xFormatter->getNumberFormatsSupplier() : staruno::Reference<starutil::XNumberFormatsSupplier>(NULL));
     staruno::Reference<starutil::XNumberFormats> xFormats( xSupplier.is() ? xSupplier->getNumberFormats() : staruno::Reference<starutil::XNumberFormats>(NULL));
     staruno::Reference<starutil::XNumberFormatTypes> xTypes(xFormats, staruno::UNO_QUERY);
-    OSL_ENSHURE(xTypes.is(), "getStandardFormat : no format types !");
+    OSL_ENSURE(xTypes.is(), "getStandardFormat : no format types !");
 
     return xTypes.is() ? xTypes->getStandardFormat(nType, _rLocale) : 0;
 }

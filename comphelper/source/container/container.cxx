@@ -2,9 +2,9 @@
  *
  *  $RCSfile: container.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-09-29 11:28:15 $
+ *  last change: $Author: jl $ $Date: 2001-03-22 13:29:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ IndexAccessIterator::IndexAccessIterator(::com::sun::star::uno::Reference< ::com
     :m_xStartingPoint(xStartingPoint)
     ,m_xCurrentObject(NULL)
 {
-    OSL_ENSHURE(m_xStartingPoint.is(), "IndexAccessIterator::IndexAccessIterator : no starting point !");
+    OSL_ENSURE(m_xStartingPoint.is(), "IndexAccessIterator::IndexAccessIterator : no starting point !");
 }
 
 //------------------------------------------------------------------------------
@@ -127,11 +127,11 @@ IndexAccessIterator::IndexAccessIterator(::com::sun::star::uno::Reference< ::com
                 while (m_arrChildIndizies.size() > 0)
                 {   // (mein Stack ist nich leer, also kann ich noch nach oben gehen)
                     ::com::sun::star::uno::Reference< ::com::sun::star::container::XChild> xChild(xSearchLoop, ::com::sun::star::uno::UNO_QUERY);
-                    OSL_ENSHURE(xChild.is(), "IndexAccessIterator::Next : a content has no approriate interface !");
+                    OSL_ENSURE(xChild.is(), "IndexAccessIterator::Next : a content has no approriate interface !");
 
                     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> xParent( xChild->getParent());
                     xContainerAccess = ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>(xParent, ::com::sun::star::uno::UNO_QUERY);
-                    OSL_ENSHURE(xContainerAccess.is(), "IndexAccessIterator::Next : a content has an invalid parent !");
+                    OSL_ENSURE(xContainerAccess.is(), "IndexAccessIterator::Next : a content has an invalid parent !");
 
                     // den Index, den SearchLoop in diesem Parent hatte, von meinem 'Stack'
                     sal_Int32 nOldSearchChildIndex = m_arrChildIndizies[m_arrChildIndizies.size() - 1];
@@ -179,7 +179,7 @@ IndexAccessIterator::IndexAccessIterator(::com::sun::star::uno::Reference< ::com
 
     if (!bFoundSomething)
     {
-        OSL_ENSHURE(m_arrChildIndizies.size() == 0, "IndexAccessIterator::Next : items left on stack ! how this ?");
+        OSL_ENSURE(m_arrChildIndizies.size() == 0, "IndexAccessIterator::Next : items left on stack ! how this ?");
         Invalidate();
     }
 
@@ -194,6 +194,9 @@ IndexAccessIterator::IndexAccessIterator(::com::sun::star::uno::Reference< ::com
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1.1.1  2000/09/29 11:28:15  fs
+ *  initial import
+ *
  *
  *  Revision 1.0 29.09.00 08:59:20  fs
  ************************************************************************/

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertycontainer.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-29 08:18:43 $
+ *  last change: $Author: jl $ $Date: 2001-03-22 13:32:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,12 +120,12 @@ Sequence< Type > SAL_CALL OPropertyContainer::getTypes() throw (RuntimeException
 void OPropertyContainer::registerProperty(const ::rtl::OUString& _rName, sal_Int32 _nHandle,
         sal_Int32 _nAttributes, void* _pPointerToMember, const Type& _rMemberType)
 {
-    OSL_ENSHURE(!m_bAlreadyAccessed, "OPropertyContainer::registerProperty : invalid call, the property sequence was already accessed !");
-    OSL_ENSHURE((_nAttributes & PropertyAttribute::MAYBEVOID) == 0,
+    OSL_ENSURE(!m_bAlreadyAccessed, "OPropertyContainer::registerProperty : invalid call, the property sequence was already accessed !");
+    OSL_ENSURE((_nAttributes & PropertyAttribute::MAYBEVOID) == 0,
         "OPropertyContainer::registerProperty : don't use this for properties which may be void ! There is a method called \"registerMayBeVoidProperty\" for this !");
-    OSL_ENSHURE(!_rMemberType.equals(::getCppuType(static_cast< Any* >(NULL))),
+    OSL_ENSURE(!_rMemberType.equals(::getCppuType(static_cast< Any* >(NULL))),
         "OPropertyContainer::registerProperty : don't give my the type of an uno::Any ! Really can't handle this !");
-    OSL_ENSHURE(_pPointerToMember,
+    OSL_ENSURE(_pPointerToMember,
         "OPropertyContainer::registerProperty : you gave me nonsense : the pointer must be non-NULL");
 
     PropertyDescription aNewProp;
@@ -143,12 +143,12 @@ void OPropertyContainer::registerProperty(const ::rtl::OUString& _rName, sal_Int
 void OPropertyContainer::registerMayBeVoidProperty(const ::rtl::OUString& _rName, sal_Int32 _nHandle, sal_Int32 _nAttributes,
         Any* _pPointerToMember, const Type& _rExpectedType)
 {
-    OSL_ENSHURE(!m_bAlreadyAccessed, "OPropertyContainer::registerMayBeVoidProperty : invalid call, the property sequence was already accessed !");
-    OSL_ENSHURE((_nAttributes & PropertyAttribute::MAYBEVOID) != 0,
+    OSL_ENSURE(!m_bAlreadyAccessed, "OPropertyContainer::registerMayBeVoidProperty : invalid call, the property sequence was already accessed !");
+    OSL_ENSURE((_nAttributes & PropertyAttribute::MAYBEVOID) != 0,
         "OPropertyContainer::registerMayBeVoidProperty : why calling this when the attributes say nothing about may-be-void ?");
-    OSL_ENSHURE(!_rExpectedType.equals(::getCppuType(static_cast< Any* >(NULL))),
+    OSL_ENSURE(!_rExpectedType.equals(::getCppuType(static_cast< Any* >(NULL))),
         "OPropertyContainer::registerMayBeVoidProperty : don't give my the type of an uno::Any ! Really can't handle this !");
-    OSL_ENSHURE(_pPointerToMember,
+    OSL_ENSURE(_pPointerToMember,
         "OPropertyContainer::registerMayBeVoidProperty : you gave me nonsense : the pointer must be non-NULL");
 
     _nAttributes |= PropertyAttribute::MAYBEVOID;
@@ -169,10 +169,10 @@ void OPropertyContainer::registerMayBeVoidProperty(const ::rtl::OUString& _rName
 void OPropertyContainer::registerPropertyNoMember(const ::rtl::OUString& _rName, sal_Int32 _nHandle, sal_Int32 _nAttributes,
         const Type& _rType, void* _pInitialValue)
 {
-    OSL_ENSHURE(!m_bAlreadyAccessed, "OPropertyContainer::registerMayBeVoidProperty : invalid call, the property sequence was already accessed !");
-    OSL_ENSHURE(!_rType.equals(::getCppuType(static_cast< Any* >(NULL))),
+    OSL_ENSURE(!m_bAlreadyAccessed, "OPropertyContainer::registerMayBeVoidProperty : invalid call, the property sequence was already accessed !");
+    OSL_ENSURE(!_rType.equals(::getCppuType(static_cast< Any* >(NULL))),
         "OPropertyContainer::registerPropertyNoMember : don't give my the type of an uno::Any ! Really can't handle this !");
-    OSL_ENSHURE(!_pInitialValue || ((_nAttributes & PropertyAttribute::MAYBEVOID) != 0),
+    OSL_ENSURE(!_pInitialValue || ((_nAttributes & PropertyAttribute::MAYBEVOID) != 0),
         "OPropertyContainer::registerPropertyNoMember : you should not ommit the initial value if the property can't be void ! This will definitivly crash later !");
 
     PropertyDescription aNewProp;
@@ -252,7 +252,7 @@ sal_Bool OPropertyContainer::convertFastPropertyValue(
 
             if (PropertyDescription::ltHoldMyself == aPos->eLocated)
             {
-                OSL_ENSHURE(aPos->aLocation.nOwnClassVectorIndex < m_aHoldProperties.size(),
+                OSL_ENSURE(aPos->aLocation.nOwnClassVectorIndex < m_aHoldProperties.size(),
                     "OPropertyContainer::convertFastPropertyValue : invalid position !");
                 pPropContainer = m_aHoldProperties.begin() + aPos->aLocation.nOwnClassVectorIndex;
             }
@@ -316,7 +316,7 @@ void OPropertyContainer::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, co
             *reinterpret_cast< Any* >(aPos->aLocation.pDerivedClassMember) = _rValue;
             break;
         case PropertyDescription::ltDerivedClassRealType:
-            OSL_ENSHURE(_rValue.getValueType().equals(aPos->aType),
+            OSL_ENSURE(_rValue.getValueType().equals(aPos->aType),
                 "OPropertyContainer::setFastPropertyValue_NoBroadcast : ooops .... the value is of the wrong type !");
             uno_type_copyData(aPos->aLocation.pDerivedClassMember, const_cast<void*>(_rValue.getValue()), aPos->aType.getTypeLibType(), cpp_acquire);
             break;
@@ -344,7 +344,7 @@ void OPropertyContainer::getFastPropertyValue(Any& _rValue, sal_Int32 _nHandle) 
     switch (aPos->eLocated)
     {
         case PropertyDescription::ltHoldMyself:
-            OSL_ENSHURE(aPos->aLocation.nOwnClassVectorIndex < m_aHoldProperties.size(),
+            OSL_ENSURE(aPos->aLocation.nOwnClassVectorIndex < m_aHoldProperties.size(),
                 "OPropertyContainer::convertFastPropertyValue : invalid position !");
             _rValue = m_aHoldProperties[aPos->aLocation.nOwnClassVectorIndex];
             break;
@@ -381,7 +381,7 @@ OPropertyContainer::PropertiesIterator OPropertyContainer::searchHandle(sal_Int3
 //--------------------------------------------------------------------------
 void OPropertyContainer::modifyAttributes(sal_Int32 _nHandle, sal_Int32 _nAddAttrib, sal_Int32 _nRemoveAttrib)
 {
-    OSL_ENSHURE(!m_bAlreadyAccessed, "OPropertyContainer::modifyAttributes : invalid call, the property sequence was already accessed !");
+    OSL_ENSURE(!m_bAlreadyAccessed, "OPropertyContainer::modifyAttributes : invalid call, the property sequence was already accessed !");
 
     // get the property somebody is asking for
     PropertiesIterator aPos = searchHandle(_nHandle);
@@ -448,6 +448,9 @@ void OPropertyContainer::describeProperties(Sequence< Property >& _rProps) const
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2000/11/29 08:18:43  fs
+ *  arghhh ... build the correct attributes in registerMayBeVoidProperty now (hopefully ...)
+ *
  *  Revision 1.4  2000/11/19 10:24:07  fs
  *  registerMayBeVoidProperty: don't corrupt _nAttributes anymore
  *

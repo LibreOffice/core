@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interaction.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-31 08:30:33 $
+ *  last change: $Author: jl $ $Date: 2001-03-22 13:30:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@ namespace comphelper
     //-------------------------------------------------------------------------
     void OInteractionRequest::addContinuation(const Reference< XInteractionContinuation >& _rxContinuation)
     {
-        OSL_ENSHURE(_rxContinuation.is(), "OInteractionRequest::addContinuation: invalid argument!");
+        OSL_ENSURE(_rxContinuation.is(), "OInteractionRequest::addContinuation: invalid argument!");
         if (_rxContinuation.is())
         {
             sal_Int32 nOldLen = m_aContinuations.getLength();
@@ -120,6 +120,9 @@ namespace comphelper
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2000/10/31 08:30:33  fs
+ *  OInteraction* (concret interaction continuations) are templates now
+ *
  *  Revision 1.1  2000/10/25 12:46:18  fs
  *  initial checkin - helper for implementing using XInteractionContinution and XInteractionRequest
  *
