@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.47 $
+#   $Revision: 1.48 $
 #
-#   last change: $Author: obo $ $Date: 2004-04-29 16:47:16 $
+#   last change: $Author: obo $ $Date: 2004-07-06 12:12:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -102,14 +102,16 @@ SLOFILES = \
     $(SLO)$/cmdoptions.obj				\
     $(SLO)$/extendedsecurityoptions.obj \
     $(SLO)$/sourceviewconfig.obj		\
-    $(SLO)$/compatibility.obj
+    $(SLO)$/compatibility.obj           \
+    $(SLO)$/eventcfg.obj
 
 EXCEPTIONSFILES = \
     $(SLO)$/accelcfg.obj				\
     $(SLO)$/inetoptions.obj				\
     $(SLO)$/xmlaccelcfg.obj             \
     $(SLO)$/moduleoptions.obj           \
-    $(SLO)$/pathoptions.obj
+    $(SLO)$/pathoptions.obj         \
+    $(SLO)$/eventcfg.obj
 
 # --- heavyconfig.lib Files --------------------------------------------------------
 DEPOBJFILES=$(LIB1OBJFILES)
