@@ -101,7 +101,6 @@ End Function
 
 Function GetProductname() as String
 Dim oProdNameAccess as Object
-Dim omyNames(100) as Object
 Dim sVersion as String
 Dim sProdName as String
 	oProdNameAccess = GetRegistryKeyContent(&quot;org.openoffice.Setup/Product&quot;)
@@ -281,7 +280,7 @@ Dim iFileLen as Integer
 		If iFileLen &lt; 44 Then
 			sViewPath = Left(sViewPath,57-iFileLen-10) &amp; &quot;...&quot; &amp; Right(sViewPath,iFileLen + 10)
 		Else
-			sViewPath = Left(sViewPath,27) &amp; &quot;...&quot; &amp; Right(sViewPath,30)
+			sViewPath = Left(sViewPath,27) &amp; &quot; ... &quot; &amp; Right(sViewPath,28)
 		End If
 	End If
 	CutPathView = sViewPath

@@ -254,8 +254,14 @@ End Function
 Sub AddFiltersToDialog(FilterNames() as String, oDialog as Object)	
 Dim i as Integer
 Dim MaxIndex as Integer
+Dim ViewFiltername as String
+Dim oProdNameAccess as Object
+Dim sProdName as String
+	oProdNameAccess = GetRegistryKeyContent(&quot;org.openoffice.Setup/Product&quot;)
+	sProdName = oProdNameAccess.getByName(&quot;ooName&quot;)
 	MaxIndex = Ubound(FilterNames(), 1)
 	For i = 0 To MaxIndex
+		Filternames(i,0) = ReplaceString(Filternames(i,0), sProdName,&quot;%productname%&quot;)		
 		oDialog.AppendFilter(FilterNames(i,0), FilterNames(i,1))
 	Next i
 	oDialog.SetCurrentFilter(FilterNames(0,0)
