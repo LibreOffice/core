@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.97 $
+ *  $Revision: 1.98 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 14:32:49 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:17:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -328,7 +328,7 @@ namespace
 {
     void ensureToolbars( OQueryController* _pController, OQueryContainerWindow* _pWindow, sal_Bool _bDesign )
     {
-        Reference< drafts::com::sun::star::frame::XLayoutManager > xLayoutManager = _pController->getLayoutManager(_pController->getFrame());
+        Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager = _pController->getLayoutManager(_pController->getFrame());
         if ( xLayoutManager.is() )
         {
             xLayoutManager->lock();
@@ -896,7 +896,7 @@ void OQueryController::impl_initialize( const Sequence< Any >& aArguments )
 }
 
 // -----------------------------------------------------------------------------
-void OQueryController::onLoadedMenu(const Reference< drafts::com::sun::star::frame::XLayoutManager >& _xLayoutManager)
+void OQueryController::onLoadedMenu(const Reference< ::com::sun::star::frame::XLayoutManager >& _xLayoutManager)
 {
     ensureToolbars( this, getContainer(), m_bDesign );
 }
