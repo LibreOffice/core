@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.hxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: os $ $Date: 2001-03-13 10:38:58 $
+ *  last change: $Author: mtg $ $Date: 2001-03-21 15:00:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -678,6 +678,9 @@ extern const SwPropNameLen __FAR_DATA UNO_NAME_FOOTNOTE_LINE_DISTANCE;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_ROTATION;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_ROTATION_IS_FIT_TO_LINE;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_SCALE_WIDTH;
+
+extern const SwPropNameLen __FAR_DATA UNO_NAME_TAB_STOP_DISTANCE;
+
 extern const SwPropNameLen __FAR_DATA UNO_NAME_IS_WIDTH_RELATIVE;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_RELIEF;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_IS_HIDDEN;
