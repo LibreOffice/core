@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docdesc.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fme $ $Date: 2002-09-16 10:46:53 $
+ *  last change: $Author: hbrinkm $ $Date: 2002-12-04 14:34:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -676,6 +676,8 @@ void SwDoc::DelPageDesc( USHORT i )
     SetModified();
 }
 
+
+
 /*************************************************************************
 |*
 |*  SwDoc::MakePageDesc()
@@ -685,7 +687,10 @@ void SwDoc::DelPageDesc( USHORT i )
 |*
 |*************************************************************************/
 
-USHORT SwDoc::MakePageDesc( const String &rName, const SwPageDesc *pCpy)
+extern SvxFrameDirection lcl_GetFrameDirection(ULONG aLanguage);
+
+USHORT SwDoc::MakePageDesc( const String &rName, const SwPageDesc *pCpy,
+                            BOOL bRegardLanguage)
 {
     SwPageDesc *pNew;
     if( pCpy )
@@ -705,8 +710,13 @@ USHORT SwDoc::MakePageDesc( const String &rName, const SwPageDesc *pCpy)
         //Default-Seitenformat einstellen.
         ::lcl_DefaultPageFmt( USHRT_MAX, pNew->GetMaster(), pNew->GetLeft(),
                               GetPrt(), FALSE );
-        pNew->GetMaster().SetAttr( SvxFrameDirectionItem() );
-        pNew->GetLeft().SetAttr( SvxFrameDirectionItem() );
+
+        SvxFrameDirection aFrameDirection = bRegardLanguage ?
+            lcl_GetFrameDirection(GetAppLanguage())
+            : FRMDIR_HORI_LEFT_TOP;
+
+        pNew->GetMaster().SetAttr( SvxFrameDirectionItem(aFrameDirection) );
+        pNew->GetLeft().SetAttr( SvxFrameDirectionItem(aFrameDirection) );
 
         if( GetPrt() )
             pNew->SetLandscape( ORIENTATION_LANDSCAPE ==
