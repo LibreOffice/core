@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxform.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 13:15:11 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 10:23:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,10 +88,6 @@
 #include "fmitems.hxx"
 #endif
 
-#ifndef _TOOLS_INTN_HXX //autogen
-//#include <tools/intn.hxx>
-#endif
-
 #ifndef _SV_SOUND_HXX //autogen
 #include <vcl/sound.hxx>
 #endif
@@ -132,30 +128,20 @@
 #endif
 #include <sfx2/imagemgr.hxx>
 
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+
+#ifndef IMPROVEFORMS_SVX_SOURCE_FORM_FORMTOOLBARS_HXX
+#include "formtoolbars.hxx"
+#endif
+
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::frame;
+using ::com::sun::star::beans::XPropertySet;
 
 
-/* //CHINA001
-//========================================================================
-// class FmInputRecordNoDialog
-//========================================================================
-
-FmInputRecordNoDialog::FmInputRecordNoDialog(Window * pParent)
-    :ModalDialog( pParent, SVX_RES(RID_SVX_DLG_INPUTRECORDNO))
-    ,m_aLabel(this, ResId(1))
-    ,m_aRecordNo(this, ResId(1))
-    ,m_aOk(this, ResId(1))
-    ,m_aCancel(this, ResId(1))
-{
-    m_aRecordNo.SetMin(1);
-    m_aRecordNo.SetMax(0x7FFFFFFF);
-    m_aRecordNo.SetStrictFormat(TRUE);
-    m_aRecordNo.SetDecimalDigits(0);
-
-    FreeResource();
-}
-*/ //CHINA001
 //========================================================================
 // class SvxFmAbsRecWin
 //========================================================================
@@ -339,7 +325,41 @@ SfxPopupWindow* SvxFmTbxCtlConfig::CreatePopupWindow()
 {
     if ( GetSlotId() == SID_FM_CONFIG )
     {
-        rtl::OUString aToolBarResStr( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/formsbar" ));
+        ::svxform::DocumentType eDocType = ::svxform::eUnknownDocumentType;
+        try
+        {
+            Reference< XController > xController;
+            if ( m_xFrame.is() ) xController = m_xFrame->getController();
+            Reference< XModel > xModel;
+            if ( xController.is() ) xModel = xController->getModel();
+
+            OSL_ENSURE( xModel.is(), "SvxFmTbxCtlConfig::CreatePopupWindow: can't determine the document model!" );
+            if ( xModel.is() )
+                eDocType = ::svxform::DocumentClassification::classifyDocument( xModel );
+        }
+        catch( const Exception& )
+        {
+            OSL_ENSURE( sal_False, "SvxFmTbxCtlConfig::CreatePopupWindow: : caught an exception!" );
+        }
+
+        const sal_Char* pToolbarAsciiName = NULL;
+        switch ( eDocType )
+        {
+        case ::svxform::eDatabaseForm:
+            pToolbarAsciiName = "databasecontrols";
+            break;
+
+        case ::svxform::eElectronicForm:
+            pToolbarAsciiName = "xformcontrols";
+            break;
+
+        default:
+            pToolbarAsciiName = "formcontrols";
+            break;
+        }
+
+        ::rtl::OUString aToolBarResStr( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/" ) );
+        aToolBarResStr += ::rtl::OUString::createFromAscii( pToolbarAsciiName );
         createAndPositionSubToolBar( aToolBarResStr );
     }
     return NULL;
