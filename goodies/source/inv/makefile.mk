@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: vg $ $Date: 2002-09-05 12:51:56 $
+#   last change: $Author: jbu $ $Date: 2002-10-01 09:29:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -152,13 +152,13 @@ SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 ALLTAR: \
     $(BIN)$/applicat.rdb
 
-$(BIN)$/applicat.rdb : makefile.mk $(SOLARBINDIR)$/applicat.rdb
+$(BIN)$/applicat.rdb : makefile.mk $(SOLARBINDIR)$/types.rdb
     rm -f $@
-    $(GNUCOPY) $(SOLARBINDIR)$/applicat.rdb $@
-     +cd $(BIN) && \
-         regcomp -register -r applicat.rdb \
-             -c $(DLLPRE)i18n$(UPD)$(DLLPOSTFIX)$(DLLPOST) \
-             -c $(DLLPRE)i18npool$(UPD)$(DLLPOSTFIX)$(DLLPOST)
+    $(GNUCOPY) $(SOLARBINDIR)$/types.rdb $@
+    +cd $(BIN) && \
+        regcomp -register -r applicat.rdb \
+            -c $(DLLPRE)i18n$(UPD)$(DLLPOSTFIX)$(DLLPOST) \
+            -c $(DLLPRE)i18npool$(UPD)$(DLLPOSTFIX)$(DLLPOST)
 
 .IF "$(GUI)"=="WIN"
 

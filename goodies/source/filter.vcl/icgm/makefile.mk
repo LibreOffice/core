@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: thb $ $Date: 2001-12-06 14:18:03 $
+#   last change: $Author: jbu $ $Date: 2002-10-01 09:26:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,8 +73,6 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Uno III Header -----------------------------------------------
 
-UNOUCRDEP=$(SOLARBINDIR)$/applicat.rdb
-UNOUCRRDB=$(SOLARBINDIR)$/applicat.rdb
 # Every source directory generates headers in a own output directory to
 # enable parallel building of the source directories within a project!
 UNOUCROUT=$(OUT)$/inc$/$(PRJNAME)$/$(TARGET)
