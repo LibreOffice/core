@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_resource.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 14:09:38 $
+ *  last change: $Author: rt $ $Date: 2004-12-07 10:53:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,8 +74,9 @@ using ::rtl::OUString;
 namespace dp_misc {
 namespace {
 
-struct OfficeLocale : public ::rtl::StaticData<lang::Locale, OfficeLocale> {
-    lang::Locale operator () () {
+struct OfficeLocale :
+        public rtl::StaticWithInit<const lang::Locale, OfficeLocale> {
+    const lang::Locale operator () () {
         OUString slang;
         if (! (::utl::ConfigManager::GetDirectConfigProperty(
                    ::utl::ConfigManager::LOCALE ) >>= slang))
@@ -85,8 +86,8 @@ struct OfficeLocale : public ::rtl::StaticData<lang::Locale, OfficeLocale> {
 };
 
 void dummy() {}
-struct DeploymentResMgr : public ::rtl::StaticData< ResMgr *,
-                                                    DeploymentResMgr > {
+struct DeploymentResMgr : public rtl::StaticWithInit<
+    ResMgr *, DeploymentResMgr> {
     ResMgr * operator () () {
         OUString path;
         ::osl::Module::getUrlFromAddress( (void *) dummy, path );
