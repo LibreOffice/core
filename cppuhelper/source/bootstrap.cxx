@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 13:34:35 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 13:40:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -322,6 +322,7 @@ static Reference< registry::XSimpleRegistry > nestRegistries(
         }
         catch (registry::InvalidRegistryException & invalidRegistryException)
         {
+            (void) invalidRegistryException;
 #if OSL_DEBUG_LEVEL > 1
             OString rdb_name_tmp = OUStringToOString(
                 write_rdb, RTL_TEXTENCODING_ASCII_US);
@@ -349,15 +350,6 @@ static Reference< registry::XSimpleRegistry > nestRegistries(
         bool optional = ('?' == rdb_name[ 0 ]);
         if (optional)
             rdb_name = rdb_name.copy( 1 );
-
-        if (rdb_name.matchIgnoreAsciiCaseAsciiL(
-                RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.expand:") ))
-        {
-            rdb_name = ::rtl::Uri::decode(
-                rdb_name.copy( sizeof ("vnd.sun.star.expand:") -1 ),
-                rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
-            bootstrap.expandMacrosFrom( rdb_name );
-        }
 
         try
         {
@@ -394,6 +386,7 @@ static Reference< registry::XSimpleRegistry > nestRegistries(
                     throw;
             }
 
+            (void) invalidRegistryException;
 #if OSL_DEBUG_LEVEL > 1
             OString rdb_name_tmp = OUStringToOString(
                 rdb_name, RTL_TEXTENCODING_ASCII_US );
