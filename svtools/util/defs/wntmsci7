@@ -8643,3 +8643,5 @@ lpfnInsertMenuItemW
 ?SetToolboxStyle@SvtMiscOptions@@QAEXF@Z
 ?getPropertyValue@SfxItemPropertySet@@QBEXABUSfxItemPropertyMap@@ABVSfxItemSet@@AAVAny@uno@star@sun@com@@@Z
 ?getPropertyValue@SfxItemPropertySet@@QBEXABVOUString@rtl@@ABVSfxItemSet@@AAVAny@uno@star@sun@com@@@Z
+WideCharListGetMultiByteLength
+WideCharListToMultiByteList
