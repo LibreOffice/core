@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlnode.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-09 08:48:25 $
+ *  last change: $Author: oj $ $Date: 2000-11-13 07:14:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -751,8 +751,9 @@ void OSQLParseNode::likeNodeToStr(::rtl::OUString& rString, const SQLParseNodePa
             rParam.xField->getPropertyValue(::rtl::OUString::createFromAscii("Name")) >>= aString;
             aFieldName = aString.getStr();
         }
-        catch ( ... )
+        catch ( Exception& )
         {
+            OSL_ENSHURE(0,"OSQLParseNode::likeNodeToStr Exception occured!");
         }
 
         const OSQLParseNode* pCol = m_aChilds[0]->getChild(m_aChilds[0]->count()-1);
