@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edattr.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:39:13 $
+ *  last change: $Author: rt $ $Date: 2004-05-17 16:14:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,6 +140,10 @@
 #include <svtools/ctloptions.hxx>
 #endif
 
+#ifndef _CHARFMT_HXX
+#include <charfmt.hxx>  // #i27615#
+#endif
+
 using namespace ::com::sun::star::i18n;
 
 /*************************************
@@ -166,6 +170,34 @@ BOOL SwEditShell::GetAttr( SfxItemSet& rSet ) const
     SfxItemSet *pSet = &rSet;
 
     FOREACHPAM_START(this)
+
+        // #i27615# if the cursor is in front of the numbering label
+        // the attributes to get are those from the numbering format.
+        if (PCURCRSR->IsInFrontOfLabel())
+        {
+            SwTxtNode * pTxtNd =
+                PCURCRSR->GetPoint()->nNode.GetNode().GetTxtNode();
+
+            if (pTxtNd)
+            {
+                const SwNodeNum * pNdNum = pTxtNd->GetNum();
+
+                if (pNdNum)
+                {
+                    SwNumRule * pNumRule = pTxtNd->GetNumRule();
+                    const String & aCharFmtName =
+                        pNumRule->Get(pNdNum->GetRealLevel()).
+                        GetCharFmtName();
+                    SwCharFmt * pCharFmt =
+                        GetDoc()->FindCharFmtByName(aCharFmtName);
+
+                    if (pCharFmt)
+                        rSet.Put(pCharFmt->GetAttrSet());
+                }
+            }
+
+            continue;
+        }
 
         ULONG nSttNd = PCURCRSR->GetMark()->nNode.GetIndex(),
               nEndNd = PCURCRSR->GetPoint()->nNode.GetIndex();
