@@ -129,7 +129,13 @@ Sub SaveCurrentStyles(oDocument as Object)
 &apos;This sub stores the current document in the user work directory
 	On Error Goto ErrorOcurred
 	aTempURL = GetPathSettings(&quot;Work&quot;, False)
-	aTempURL = aTempURL &amp; &quot;/&quot; &amp; aTempFileName
+	Dim aRightMost as String
+	aRightMost = Right(aTempURL, 1)
+	if aRightMost = &quot;/&quot; Then
+		aTempURL = aTempURL &amp; aTempFileName
+	Else
+		aTempURL = aTempURL &amp; &quot;/&quot; &amp; aTempFileName
+	End If
 
 	While FileExists(aTempURL)
 		aTempURL=Left(aTempURL,(Len(aTempURL)-4)) &amp; &quot;_1.stc&quot;
