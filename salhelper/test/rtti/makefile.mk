@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: jl $ $Date: 2001-04-23 14:48:59 $
+#   last change: $Author: vg $ $Date: 2003-06-12 09:58:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -116,6 +116,10 @@ DEF1NAME=	$(SHL1TARGET)
 SHL1VERSIONMAP=	sols.map
 .ELIF "$(OS)$(CPU)"=="LINUXI"
 SHL1VERSIONMAP= lngi.map
+.ELIF "$(OS)$(CPU)$(COMNAME)" == "GCCFREEBSDIgcc2"
+SHL1VERSIONMAP= gcc2_freebsd_intel.map
+.ELIF "$(OS)$(CPU)$(COMNAME)" == "GCCFREEBSDIgcc3"
+SHL1VERSIONMAP= gcc3_freebsd_intel.map
 .ENDIF
 
 
