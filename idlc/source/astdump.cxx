@@ -2,9 +2,9 @@
  *
  *  $RCSfile: astdump.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jsc $ $Date: 2001-05-18 15:38:10 $
+ *  last change: $Author: jsc $ $Date: 2001-08-30 07:22:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,7 @@ sal_Bool AstModule::dump(RegistryKey& rKey, RegistryTypeWriterLoader* pLoader)
         {
             fprintf(stderr, "%s: warning, could not create key '%s' in '%s'\n",
                     idlc()->getOptions()->getProgramName().getStr(),
-                    getFullName().getStr(), rKey.getRegistryName().getStr());
+                    getFullName().getStr(), OUStringToOString(rKey.getRegistryName(), RTL_TEXTENCODING_UTF8).getStr());
             return sal_False;
         }
     }
@@ -149,7 +149,7 @@ sal_Bool AstModule::dump(RegistryKey& rKey, RegistryTypeWriterLoader* pLoader)
         {
             fprintf(stderr, "%s: warning, could not set value of key \"%s\" in %s\n",
                     idlc()->getOptions()->getProgramName().getStr(),
-                    getFullName(), localKey.getRegistryName());
+                    getFullName().getStr(), OUStringToOString(localKey.getRegistryName(), RTL_TEXTENCODING_UTF8).getStr());
             return sal_False;
         }
     } else
@@ -177,7 +177,7 @@ sal_Bool AstModule::dump(RegistryKey& rKey, RegistryTypeWriterLoader* pLoader)
             {
                 fprintf(stderr, "%s: warning, could not set value of key \"%s\" in %s\n",
                         idlc()->getOptions()->getProgramName().getStr(),
-                        getFullName(), localKey.getRegistryName());
+                        getFullName().getStr(), OUStringToOString(localKey.getRegistryName(), RTL_TEXTENCODING_UTF8).getStr());
                 return sal_False;
             }
         }
@@ -192,7 +192,7 @@ sal_Bool AstTypeDef::dump(RegistryKey& rKey, RegistryTypeWriterLoader* pLoader)
     {
         fprintf(stderr, "%s: warning, could not create key '%s' in '%s'\n",
                 idlc()->getOptions()->getProgramName().getStr(),
-                getFullName().getStr(), rKey.getRegistryName().getStr());
+                getFullName().getStr(), OUStringToOString(rKey.getRegistryName(), RTL_TEXTENCODING_UTF8).getStr());
         return sal_False;
     }
 
@@ -211,7 +211,7 @@ sal_Bool AstTypeDef::dump(RegistryKey& rKey, RegistryTypeWriterLoader* pLoader)
     {
         fprintf(stderr, "%s: warning, could not set value of key \"%s\" in %s\n",
                 idlc()->getOptions()->getProgramName().getStr(),
-                getFullName(), localKey.getRegistryName());
+                getFullName().getStr(), OUStringToOString(localKey.getRegistryName(), RTL_TEXTENCODING_UTF8).getStr());
         return sal_False;
     }
 
@@ -228,7 +228,7 @@ sal_Bool AstService::dump(RegistryKey& rKey, RegistryTypeWriterLoader* pLoader)
     {
         fprintf(stderr, "%s: warning, could not create key '%s' in '%s'\n",
                 idlc()->getOptions()->getProgramName().getStr(),
-                getFullName().getStr(), rKey.getRegistryName().getStr());
+                getFullName().getStr(), OUStringToOString(rKey.getRegistryName(), RTL_TEXTENCODING_UTF8).getStr());
         return sal_False;
     }
 
@@ -253,7 +253,7 @@ sal_Bool AstService::dump(RegistryKey& rKey, RegistryTypeWriterLoader* pLoader)
         {
             fprintf(stderr, "%s: warning, could not set value of key \"%s\" in %s\n",
                     idlc()->getOptions()->getProgramName().getStr(),
-                    getFullName(), localKey.getRegistryName());
+                    getFullName().getStr(), OUStringToOString(localKey.getRegistryName(), RTL_TEXTENCODING_UTF8).getStr());
             return sal_False;
         }
     } else
@@ -359,7 +359,7 @@ sal_Bool AstService::dump(RegistryKey& rKey, RegistryTypeWriterLoader* pLoader)
             {
                 fprintf(stderr, "%s: warning, could not set value of key \"%s\" in %s\n",
                         idlc()->getOptions()->getProgramName().getStr(),
-                        getFullName(), localKey.getRegistryName());
+                        getFullName().getStr(), OUStringToOString(localKey.getRegistryName(), RTL_TEXTENCODING_UTF8).getStr());
                 return sal_False;
             }
         }

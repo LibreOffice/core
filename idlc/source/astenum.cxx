@@ -2,9 +2,9 @@
  *
  *  $RCSfile: astenum.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jsc $ $Date: 2001-04-11 07:24:23 $
+ *  last change: $Author: jsc $ $Date: 2001-08-30 07:22:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,7 @@ sal_Bool AstEnum::dump(RegistryKey& rKey, RegistryTypeWriterLoader* pLoader)
     {
         fprintf(stderr, "%s: warning, could not create key '%s' in '%s'\n",
                 idlc()->getOptions()->getProgramName().getStr(),
-                getFullName().getStr(), rKey.getRegistryName().getStr());
+                getFullName().getStr(), OUStringToOString(rKey.getRegistryName(), RTL_TEXTENCODING_UTF8).getStr());
         return sal_False;
     }
 
@@ -142,7 +142,7 @@ sal_Bool AstEnum::dump(RegistryKey& rKey, RegistryTypeWriterLoader* pLoader)
         {
             fprintf(stderr, "%s: warning, could not set value of key \"%s\" in %s\n",
                     idlc()->getOptions()->getProgramName().getStr(),
-                    getFullName(), localKey.getRegistryName());
+                    getFullName().getStr(), OUStringToOString(localKey.getRegistryName(), RTL_TEXTENCODING_UTF8).getStr());
             return sal_False;
         }
     }
