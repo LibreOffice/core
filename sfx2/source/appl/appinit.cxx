@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appinit.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 13:43:22 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 16:37:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,9 +96,6 @@
 #endif
 #ifndef _INETBND_HXX //autogen
 #include <so3/inetbnd.hxx>
-#endif
-#ifndef _INET_WRAPPER_HXX
-#include <inet/wrapper.hxx>
 #endif
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
