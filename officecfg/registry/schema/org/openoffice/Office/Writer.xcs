@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Writer.xcs,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $: vg $ $Date: 2004-09-09 10:46:41 $
+ *  last change: $: vg $ $Date: 2004-09-20 12:33:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2376,12 +2376,11 @@
 								</constraints>
 								<value>4</value>
 							</prop>
-							<prop oor:name="CaptionText" oor:type="xs:string">
+                            <prop oor:name="CaptionText" oor:type="xs:string" oor:localized="true">
 								<info>
 									<desc>Specifies the text of the caption field.</desc>
 									<label>CaptionText</label>
 								</info>
-								<value/>
 								<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 							</prop>
 							<prop oor:name="Position" oor:type="xs:int">
@@ -2429,7 +2428,13 @@
 								</info>
 								<value>.</value>
 							</prop>
-						</group>
+                            <prop oor:name="CharacterStyle" oor:type="xs:string">
+                                <info>
+                                    <desc>Specifies the character style that is applied to the label and number part of the caption.</desc>
+                                    <label>Character style</label>
+                                </info>
+                            </prop>
+                        </group>
 					</group>
 					<group oor:name="Frame">
 						<!-- OldPath: Writer/Insert/Caption/Object/StarWriter_Frame -->
@@ -2497,14 +2502,12 @@
 								</constraints>
 								<value>4</value>
 							</prop>
-							<prop oor:name="CaptionText" oor:type="xs:string">
+                            <prop oor:name="CaptionText" oor:type="xs:string" oor:localized="true">
 								<info>
 									<desc>Specifies the text of the caption field.</desc>
 									<label>CaptionText</label>
 								</info>
-								<value/>
-								<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
-							</prop>
+                            </prop>
 							<prop oor:name="Position" oor:type="xs:int">
 								<info>
 									<desc>Specifies the position of the caption field.</desc>
@@ -2550,7 +2553,13 @@
 								</info>
 								<value>.</value>
 							</prop>
-						</group>
+                            <prop oor:name="CharacterStyle" oor:type="xs:string">
+                                <info>
+                                    <desc>Specifies the character style that is applied to the label and number part of the caption.</desc>
+                                    <label>Character style</label>
+                                </info>
+                            </prop>
+                        </group>
 					</group>
 					<group oor:name="Graphic">
 						<!-- OldPath: Writer/Insert/Caption/Object/StarWriter_Graphic -->
@@ -2618,13 +2627,11 @@
 								</constraints>
 								<value>4</value>
 							</prop>
-							<prop oor:name="CaptionText" oor:type="xs:string">
-								<info>
+                            <prop oor:name="CaptionText" oor:type="xs:string" oor:localized="true">
+                                <info>
 									<desc>Specifies the text of the caption field.</desc>
 									<label>CaptionText</label>
 								</info>
-								<value/>
-								<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 							</prop>
 							<prop oor:name="Level" oor:type="xs:int">
 								<info>
@@ -2652,7 +2659,38 @@
 								</info>
 								<value>.</value>
 							</prop>
-						</group>
+                            <prop oor:name="Position" oor:type="xs:int">
+                                <info>
+                                    <desc>Specifies the position of the caption field.</desc>
+                                    <label>Position</label>
+                                </info>
+                                <constraints>
+                                    <enumeration oor:value="0">
+                                        <info>
+                                            <desc>above</desc>
+                                        </info>
+                                    </enumeration>
+                                    <enumeration oor:value="1">
+                                        <info>
+                                            <desc>below</desc>
+                                        </info>
+                                    </enumeration>
+                                </constraints>
+                                <value>1</value>
+                            </prop>
+                            <prop oor:name="CharacterStyle" oor:type="xs:string">
+                                <info>
+                                    <desc>Specifies the character style that is applied to the label and number part of the caption.</desc>
+                                    <label>Character style</label>
+                                </info>
+                            </prop>
+                            <prop oor:name="ApplyAttributes" oor:type="xs:boolean">
+                                <info>
+                                    <desc>Determines whether the border and shadow attributes of the graphic frame should be applied to the newly inserted caption frame surrounding the graphic.</desc>
+                                    <label>Apply attributes</label>
+                                </info>
+                            </prop>
+                        </group>
 					</group>
 				</group>
 				<group oor:name="OfficeObject">
@@ -2725,14 +2763,12 @@
 								</constraints>
 								<value>4</value>
 							</prop>
-							<prop oor:name="CaptionText" oor:type="xs:string">
-								<info>
+                            <prop oor:name="CaptionText" oor:type="xs:string" oor:localized="true">
+                                <info>
 									<desc>Specifies the text of the caption field.</desc>
 									<label>CaptionText</label>
 								</info>
-								<value/>
-								<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
-							</prop>
+                            </prop>
 							<prop oor:name="Position" oor:type="xs:int">
 								<info>
 									<desc>Specifies the position of the caption field.</desc>
@@ -2778,7 +2814,19 @@
 								</info>
 								<value>.</value>
 							</prop>
-						</group>
+                            <prop oor:name="CharacterStyle" oor:type="xs:string">
+                                <info>
+                                    <desc>Specifies the character style that is applied to the label and number part of the caption.</desc>
+                                    <label>Character style</label>
+                                </info>
+                            </prop>
+                            <prop oor:name="ApplyAttributes" oor:type="xs:boolean">
+                                <info>
+                                    <desc>Determines whether the border and shadow attributes of the graphic frame should be applied to the newly inserted caption frame surrounding the graphic.</desc>
+                                    <label>Apply attributes</label>
+                                </info>
+                            </prop>
+                        </group>
 					</group>
 					<group oor:name="Draw">
 						<!-- OldPath: Writer/Insert/Caption/Object/StarOffice5.2_Draw -->
@@ -2846,14 +2894,12 @@
 								</constraints>
 								<value>4</value>
 							</prop>
-							<prop oor:name="CaptionText" oor:type="xs:string">
-								<info>
+                            <prop oor:name="CaptionText" oor:type="xs:string" oor:localized="true">
+                                <info>
 									<desc>Specifies the text of the caption field.</desc>
 									<label>CaptionText</label>
 								</info>
-								<value/>
-								<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
-							</prop>
+                            </prop>
 							<prop oor:name="Position" oor:type="xs:int">
 								<info>
 									<desc>Specifies the position of the caption field.</desc>
@@ -2899,7 +2945,19 @@
 								</info>
 								<value>.</value>
 							</prop>
-						</group>
+                            <prop oor:name="CharacterStyle" oor:type="xs:string">
+                                <info>
+                                    <desc>Specifies the character style that is applied to the label and number part of the caption.</desc>
+                                    <label>Character style</label>
+                                </info>
+                            </prop>
+                            <prop oor:name="ApplyAttributes" oor:type="xs:boolean">
+                                <info>
+                                    <desc>Determines whether the border and shadow attributes of the graphic frame should be applied to the newly inserted caption frame surrounding the graphic.</desc>
+                                    <label>Apply attributes</label>
+                                </info>
+                            </prop>
+                        </group>
 					</group>
 					<group oor:name="Chart">
 						<!-- OldPath: Writer/Insert/Caption/Object/StarOffice5.2_Chart -->
@@ -2967,14 +3025,12 @@
 								</constraints>
 								<value>4</value>
 							</prop>
-							<prop oor:name="CaptionText" oor:type="xs:string">
-								<info>
+                            <prop oor:name="CaptionText" oor:type="xs:string" oor:localized="true">
+                                <info>
 									<desc>Specifies the text of the caption field.</desc>
 									<label>CaptionText</label>
 								</info>
-								<value/>
-								<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
-							</prop>
+                            </prop>
 							<prop oor:name="Position" oor:type="xs:int">
 								<info>
 									<desc>Specifies the position of the caption field.</desc>
@@ -3020,7 +3076,19 @@
 								</info>
 								<value>.</value>
 							</prop>
-						</group>
+                            <prop oor:name="CharacterStyle" oor:type="xs:string">
+                                <info>
+                                    <desc>Specifies the character style that is applied to the label and number part of the caption.</desc>
+                                    <label>Character style</label>
+                                </info>
+                            </prop>
+                            <prop oor:name="ApplyAttributes" oor:type="xs:boolean">
+                                <info>
+                                    <desc>Determines whether the border and shadow attributes of the graphic frame should be applied to the newly inserted caption frame surrounding the graphic.</desc>
+                                    <label>Apply attributes</label>
+                                </info>
+                            </prop>
+                        </group>
 					</group>
 					<group oor:name="Image">
 						<!-- OldPath: Writer/Insert/Caption/Object/StarOffice5.2_Image -->
@@ -3088,14 +3156,12 @@
 								</constraints>
 								<value>4</value>
 							</prop>
-							<prop oor:name="CaptionText" oor:type="xs:string">
-								<info>
+                            <prop oor:name="CaptionText" oor:type="xs:string" oor:localized="true">
+                                <info>
 									<desc>Specifies the text of the caption field.</desc>
 									<label>CaptionText</label>
 								</info>
-								<value/>
-								<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
-							</prop>
+                            </prop>
 							<prop oor:name="Position" oor:type="xs:int">
 								<info>
 									<desc>Specifies the position of the caption field.</desc>
@@ -3141,7 +3207,19 @@
 								</info>
 								<value>.</value>
 							</prop>
-						</group>
+                            <prop oor:name="CharacterStyle" oor:type="xs:string">
+                                <info>
+                                    <desc>Specifies the character style that is applied to the label and number part of the caption.</desc>
+                                    <label>Character style</label>
+                                </info>
+                            </prop>
+                            <prop oor:name="ApplyAttributes" oor:type="xs:boolean">
+                                <info>
+                                    <desc>Determines whether the border and shadow attributes of the graphic frame should be applied to the newly inserted caption frame surrounding the graphic.</desc>
+                                    <label>Apply attributes</label>
+                                </info>
+                            </prop>
+                        </group>
 					</group>
 					<group oor:name="Formula">
 						<!-- OldPath: Writer/Insert/Caption/Object/StarOffice5.2_Formula -->
@@ -3209,14 +3287,12 @@
 								</constraints>
 								<value>4</value>
 							</prop>
-							<prop oor:name="CaptionText" oor:type="xs:string">
-								<info>
+                            <prop oor:name="CaptionText" oor:type="xs:string" oor:localized="true">
+                                <info>
 									<desc>Specifies the text of the caption field.</desc>
 									<label>CaptionText</label>
 								</info>
-								<value/>
-								<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
-							</prop>
+                            </prop>
 							<prop oor:name="Position" oor:type="xs:int">
 								<info>
 									<desc>Specifies the position of the caption field.</desc>
@@ -3262,7 +3338,19 @@
 								</info>
 								<value>.</value>
 							</prop>
-						</group>
+                            <prop oor:name="CharacterStyle" oor:type="xs:string">
+                                <info>
+                                    <desc>Specifies the character style that is applied to the label and number part of the caption.</desc>
+                                    <label>Character style</label>
+                                </info>
+                            </prop>
+                            <prop oor:name="ApplyAttributes" oor:type="xs:boolean">
+                                <info>
+                                    <desc>Determines whether the border and shadow attributes of the graphic frame should be applied to the newly inserted caption frame surrounding the graphic.</desc>
+                                    <label>Apply attributes</label>
+                                </info>
+                            </prop>
+                        </group>
 					</group>
 					<group oor:name="Impress">
 						<!-- OldPath: Writer/Insert/Caption/Object/StarOffice5.2_Impress -->
@@ -3330,14 +3418,12 @@
 								</constraints>
 								<value>4</value>
 							</prop>
-							<prop oor:name="CaptionText" oor:type="xs:string">
-								<info>
+                            <prop oor:name="CaptionText" oor:type="xs:string" oor:localized="true">
+                                <info>
 									<desc>Specifies the text of the caption field.</desc>
 									<label>CaptionText</label>
 								</info>
-								<value/>
-								<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
-							</prop>
+                            </prop>
 							<prop oor:name="Position" oor:type="xs:int">
 								<info>
 									<desc>Specifies the position of the caption field.</desc>
@@ -3383,7 +3469,19 @@
 								</info>
 								<value>.</value>
 							</prop>
-						</group>
+                            <prop oor:name="CharacterStyle" oor:type="xs:string">
+                                <info>
+                                    <desc>Specifies the character style that is applied to the label and number part of the caption.</desc>
+                                    <label>Character style</label>
+                                </info>
+                            </prop>
+                            <prop oor:name="ApplyAttributes" oor:type="xs:boolean">
+                                <info>
+                                    <desc>Determines whether the border and shadow attributes of the graphic frame should be applied to the newly inserted caption frame surrounding the graphic.</desc>
+                                    <label>Apply attributes</label>
+                                </info>
+                            </prop>
+                        </group>
 					</group>
 					<group oor:name="OLEMisc">
 						<!-- OldPath: Writer/Insert/Caption/Object/StarOffice5.2_OLEMisc -->
@@ -3451,14 +3549,12 @@
 								</constraints>
 								<value>4</value>
 							</prop>
-							<prop oor:name="CaptionText" oor:type="xs:string">
-								<info>
+                            <prop oor:name="CaptionText" oor:type="xs:string" oor:localized="true">
+                                <info>
 									<desc>Specifies the text of the caption field.</desc>
 									<label>CaptionText</label>
 								</info>
-								<value/>
-								<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
-							</prop>
+                            </prop>
 							<prop oor:name="Position" oor:type="xs:int">
 								<info>
 									<desc>Specifies the position of the caption field.</desc>
@@ -3504,7 +3600,19 @@
 								</info>
 								<value>.</value>
 							</prop>
-						</group>
+                            <prop oor:name="CharacterStyle" oor:type="xs:string">
+                                <info>
+                                    <desc>Specifies the character style that is applied to the label and number part of the caption.</desc>
+                                    <label>Character style</label>
+                                </info>
+                            </prop>
+                            <prop oor:name="ApplyAttributes" oor:type="xs:boolean">
+                                <info>
+                                    <desc>Determines whether the border and shadow attributes of the graphic frame should be applied to the newly inserted caption frame surrounding the graphic.</desc>
+                                    <label>Apply attributes</label>
+                                </info>
+                            </prop>
+                        </group>
 					</group>
 				</group>
 			</group>
