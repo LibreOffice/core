@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_xml.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-11 12:07:05 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 14:07:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,12 +96,11 @@ void xml_parse(
 class XmlElement : public ::cppu::WeakImplHelper1< css::xml::input::XElement >
 {
 protected:
-    css::uno::Reference< css::xml::input::XNamespaceMapping >
-    m_xNamespaceMapping;
-    css::uno::Reference< css::xml::input::XElement > m_xParent;
+    css::uno::Reference<css::xml::input::XNamespaceMapping> m_xNamespaceMapping;
+    const css::uno::Reference<css::xml::input::XElement> m_xParent;
     sal_Int32 m_uid;
     ::rtl::OUString m_localname;
-    css::uno::Reference< css::xml::input::XAttributes > m_xAttributes;
+    css::uno::Reference<css::xml::input::XAttributes> m_xAttributes;
     ::rtl::OUString m_characters;
     bool m_got_endElement;
 
@@ -113,7 +112,7 @@ protected:
         {}
     virtual ~XmlElement();
 public:
-    css::uno::Reference< css::xml::input::XNamespaceMapping > const &
+    css::uno::Reference<css::xml::input::XNamespaceMapping> const &
     getNamespaceMapping() const;
 
     inline bool isParsed() const { return m_got_endElement; }
@@ -122,9 +121,9 @@ public:
     inline ::rtl::OUString getCharacters() const;
 
     inline XmlElement(
-        css::uno::Reference< css::xml::input::XNamespaceMapping >
+        css::uno::Reference<css::xml::input::XNamespaceMapping>
         const & xMapping,
-        css::uno::Reference< css::xml::input::XElement > const & xParent,
+        css::uno::Reference<css::xml::input::XElement> const & xParent,
         sal_Int32 uid, ::rtl::OUString const & localname,
         css::uno::Reference< css::xml::input::XAttributes >
         const & xAttributes )
@@ -137,13 +136,13 @@ public:
         {}
 
     // XElement
-    virtual css::uno::Reference< css::xml::input::XElement > SAL_CALL
+    virtual css::uno::Reference<css::xml::input::XElement> SAL_CALL
     getParent() throw (css::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getLocalName()
         throw (css::uno::RuntimeException);
     virtual sal_Int32 SAL_CALL getUid()
         throw (css::uno::RuntimeException);
-    virtual css::uno::Reference< css::xml::input::XAttributes > SAL_CALL
+    virtual css::uno::Reference<css::xml::input::XAttributes> SAL_CALL
     getAttributes() throw (css::uno::RuntimeException);
     virtual void SAL_CALL ignorableWhitespace(
         ::rtl::OUString const & rWhitespaces )
@@ -155,11 +154,11 @@ public:
         throw (css::xml::sax::SAXException, css::uno::RuntimeException);
     virtual void SAL_CALL endElement()
         throw (css::xml::sax::SAXException, css::uno::RuntimeException);
-    virtual css::uno::Reference< css::xml::input::XElement > SAL_CALL
+    virtual css::uno::Reference<css::xml::input::XElement> SAL_CALL
     startChildElement(
         sal_Int32 nUid, ::rtl::OUString const & rLocalName,
-        css::uno::Reference< css::xml::input::XAttributes > const & xAttributes
-        ) throw (css::xml::sax::SAXException, css::uno::RuntimeException);
+        css::uno::Reference<css::xml::input::XAttributes> const & xAttributes )
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException);
 };
 
 //______________________________________________________________________________
@@ -174,7 +173,7 @@ inline ::rtl::OUString XmlElement::getCharacters() const
 class XmlRootElement : public ::cppu::ImplInheritanceHelper1<
                                         XmlElement, css::xml::input::XRoot >
 {
-    ::rtl::OUString m_uri;
+    const ::rtl::OUString m_uri;
 
 protected:
     virtual ~XmlRootElement();
@@ -187,7 +186,7 @@ public:
 
     // XRoot
     virtual void SAL_CALL startDocument(
-        css::uno::Reference< css::xml::input::XNamespaceMapping >
+        css::uno::Reference<css::xml::input::XNamespaceMapping>
         const & xMapping )
         throw (css::xml::sax::SAXException, css::uno::RuntimeException);
     virtual void SAL_CALL endDocument()
@@ -196,13 +195,13 @@ public:
         ::rtl::OUString const & target, ::rtl::OUString const & data )
         throw (css::xml::sax::SAXException, css::uno::RuntimeException);
     virtual void SAL_CALL setDocumentLocator(
-        css::uno::Reference< css::xml::sax::XLocator > const & xLocator )
+        css::uno::Reference<css::xml::sax::XLocator> const & xLocator )
         throw (css::xml::sax::SAXException, css::uno::RuntimeException);
-    virtual css::uno::Reference< css::xml::input::XElement > SAL_CALL
+    virtual css::uno::Reference<css::xml::input::XElement> SAL_CALL
     startRootElement(
         sal_Int32 uid, ::rtl::OUString const & localname,
-        css::uno::Reference< css::xml::input::XAttributes > const & xAttributes
-        ) throw (css::xml::sax::SAXException, css::uno::RuntimeException);
+        css::uno::Reference<css::xml::input::XAttributes> const & xAttributes )
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException);
 };
 
 }
