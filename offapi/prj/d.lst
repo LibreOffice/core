@@ -60,6 +60,7 @@ mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\packages\manifest
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\packages\zip
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\plugin
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\presentation
+mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\animations
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\resource
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\scanner
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\sdb
@@ -148,6 +149,7 @@ mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\xml\wrapper
 ..\com\sun\star\packages\zip\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\packages\zip
 ..\com\sun\star\plugin\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\plugin
 ..\com\sun\star\presentation\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\presentation
+..\com\sun\star\animations\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\animations
 ..\com\sun\star\resource\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\resource
 ..\com\sun\star\scanner\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\scanner
 ..\com\sun\star\script\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\script
