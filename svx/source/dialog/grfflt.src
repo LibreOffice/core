@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfflt.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-01 11:23:34 $
+ *  last change: $Author: rt $ $Date: 2000-12-06 14:31:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_MOSAIC
         Text[ dutch ] = "Voorbeeld";
         Text[ french ] = "Aperçu";
         Text[ spanish ] = "Previsualización";
-        Text[ italian ] = "Preview";
+        Text[ italian ] = "Anteprima";
         Text[ danish ] = "Eksempel";
         Text[ swedish ] = "Förhandsvisning";
         Text[ polish ] = "Podgl¹d";
@@ -146,7 +146,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_MOSAIC
         Text[ dutch ] = "Parameter";
         Text[ french ] = "Paramètres";
         Text[ spanish ] = "Parámetros";
-        Text[ italian ] = "Parameter";
+        Text[ italian ] = "Parametri";
         Text[ danish ] = "Parametre";
         Text[ swedish ] = "Parametrar";
         Text[ polish ] = "Parametry";
@@ -182,7 +182,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_MOSAIC
         Text[ chinese_traditional ] = "¼e«×(~W)";
         Text[ arabic ] = "ÇáÚÑÖ";
         Text[ greek ] = "ÐëÜôïò";
-        Text[ korean ] = "³Êºñ(~W)";
+        Text[ korean ] = "³Êºñ";
         Text[ turkish ] = "Geniþlik";
         Text[ language_user1 ] = " ";
     };
@@ -227,7 +227,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_MOSAIC
         Text[ chinese_traditional ] = "°ª«×(~H)";
         Text[ arabic ] = "ÇáÇÑÊÝÇÚ";
         Text[ greek ] = "¾øïò";
-        Text[ korean ] = "³ôÀÌ(~H)";
+        Text[ korean ] = "³ôÀÌ";
         Text[ turkish ] = "Yüksek.";
         Text[ language_user1 ] = " ";
     };
@@ -262,13 +262,13 @@ ModalDialog RID_SVX_GRFFILTER_DLG_MOSAIC
         Text[ dutch ] = "~Kanten accentueren";
         Text[ french ] = "Mise en évidence des ~arêtes";
         Text[ spanish ] = "~Resaltar aristas";
-        Text[ italian ] = "~Enhance edges";
+        Text[ italian ] = "E~videnzia gli angoli";
         Text[ danish ] = "Fremhæv kanter";
         Text[ swedish ] = "Framhäv ~kanter";
         Text[ polish ] = "Wyró¿nij krawêdzie";
         Text[ portuguese_brazilian ] = "~Enhance edges";
         Text[ japanese ] = "Šp‚ð‹­’²‚·‚é(~E)";
-        Text[ korean ] = "~°¡ÀåÀÚ¸® °­Á¶";
+        Text[ korean ] = "°¡ÀåÀÚ¸® °­Á¶";
         Text[ chinese_simplified ] = "Í»³öÏÔÊ¾±ß½Ç(~E)";
         Text[ chinese_traditional ] = "¬ð¥XÅã¥ÜÃä¨¤(~E)";
         Text[ turkish ] = "~Enhance edges";
@@ -345,7 +345,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SOLARIZE
         Text[ dutch ] = "Voorbeeld";
         Text[ french ] = "Aperçu";
         Text[ spanish ] = "Previsualización";
-        Text[ italian ] = "Preview";
+        Text[ italian ] = "Anteprima";
         Text[ danish ] = "Eksempel";
         Text[ swedish ] = "Förhandsvisning";
         Text[ polish ] = "Podgl¹d";
@@ -375,7 +375,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SOLARIZE
         Text[ dutch ] = "Parameter";
         Text[ french ] = "Paramètres";
         Text[ spanish ] = "Parámetros";
-        Text[ italian ] = "Parameter";
+        Text[ italian ] = "Parametri";
         Text[ danish ] = "Parametre";
         Text[ swedish ] = "Parametrar";
         Text[ polish ] = "Parametry";
@@ -411,7 +411,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SOLARIZE
         Text[ chinese_traditional ] = "ªì©l­È(~V)";
         Text[ arabic ] = "ÞíãÉ ÇáÈÏÁ";
         Text[ greek ] = "ÔéìÞ ïñßïõ";
-        Text[ korean ] = "ÀÓ°è°ª(~V)";
+        Text[ korean ] = "ÀÓ°è°ª";
         Text[ turkish ] = "Eþik deðer";
         Text[ language_user1 ] = " ";
     };
@@ -445,7 +445,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SOLARIZE
         Text[ danish ] = "Inverter" ;
         Text[ french ] = "~Invertir" ;
         Text[ swedish ] = "~Invertera" ;
-        Text[ dutch ] = "~Invers" ;
+        Text[ dutch ] = "~Diapositief" ;
         Text[ spanish ] = "I~nvertir" ;
         Text[ english_us ] = "~Invert" ;
         Text[ chinese_simplified ] = "»¥²¹É«×ª»»(~I)";
@@ -455,7 +455,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SOLARIZE
         Text[ chinese_traditional ] = "¤¬¸É¦âÂà´«(~I)";
         Text[ arabic ] = "ÚßÓ";
         Text[ greek ] = "Áíô~éóôñïöÞ";
-        Text[ korean ] = "¹ÝÀü(~I)";
+        Text[ korean ] = "¹ÝÀü";
         Text[ turkish ] = "Tersine çevir";
         Text[ language_user1 ] = " ";
     };
@@ -502,7 +502,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SEPIA
     Text[ danish ] = "Ældning" ;
     Text[ french ] = "Vieillissement" ;
     Text[ swedish ] = "Åldrande" ;
-    Text[ dutch ] = "Veroudering" ;
+    Text[ dutch ] = "Ouder maken" ;
     Text[ spanish ] = "Envejecimiento" ;
     Text[ english_us ] = "Aging" ;
     Text[ chinese_simplified ] = "Ê±Ð§";
@@ -511,7 +511,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SEPIA
     Text[ japanese ] = "´²¼ÞÝ¸Þ";
     Text[ chinese_traditional ] = "®É®Ä";
     Text[ arabic ] = "ÇáÊÞÇÏã";
-    Text[ dutch ] = "Veroudering";
+    Text[ dutch ] = "Ouder maken";
     Text[ chinese_simplified ] = "Ê±Ð§";
     Text[ greek ] = "ÃÞñáíóç";
     Text[ korean ] = "³°À½È¿°ú";
@@ -531,7 +531,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SEPIA
         Text[ dutch ] = "Voorbeeld";
         Text[ french ] = "Aperçu";
         Text[ spanish ] = "Previsualización";
-        Text[ italian ] = "Preview";
+        Text[ italian ] = "Anteprima";
         Text[ danish ] = "Eksempel";
         Text[ swedish ] = "Förhandsvisning";
         Text[ polish ] = "Podgl¹d";
@@ -561,7 +561,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SEPIA
         Text[ dutch ] = "Parameter";
         Text[ french ] = "Paramètre";
         Text[ spanish ] = "Parámetros";
-        Text[ italian ] = "Parameter";
+        Text[ italian ] = "Parametri";
         Text[ danish ] = "Parametre";
         Text[ swedish ] = "Parameter";
         Text[ polish ] = "Parametry";
@@ -599,7 +599,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SEPIA
         Text[ dutch ] = "Mate van veroudering";
         Text[ chinese_simplified ] = "Ê±Ð§¶È";
         Text[ greek ] = "Âáèìüò ãÞñáíóçò";
-        Text[ korean ] = "³°À½ È¿°ú Á¤µµ";
+        Text[ korean ] = "³°À½È¿°ú Á¤µµ";
         Text[ turkish ] = "Eskitme derecesi";
     };
     MetricField DLG_FILTERSEPIA_MTR_SEPIA
@@ -656,7 +656,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_POSTER
     Text = "Poster" ;
     Text[ ENGLISH ] = "Posterize" ;
     Text[ norwegian ] = "Posterize" ;
-    Text[ italian ] = "Posterizzazione" ;
+    Text[ italian ] = "Poster" ;
     Text[ portuguese_brazilian ] = "Transformar em poster" ;
     Text[ portuguese ] = "Poster" ;
     Text[ finnish ] = "Juliste" ;
@@ -673,7 +673,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_POSTER
     Text[ chinese_traditional ] = "©Û¶Kµe";
     Text[ arabic ] = "ãõáÕÞ";
     Text[ greek ] = "Áößóá";
-    Text[ korean ] = "Æ÷½ºÅÍ È¿°ú";
+    Text[ korean ] = "Æ÷½ºÅÍ";
     Text[ turkish ] = "Afiþ";
 
     GroupBox GRP_PREVIEW
@@ -690,7 +690,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_POSTER
         Text[ dutch ] = "Voorbeeld";
         Text[ french ] = "Aperçu";
         Text[ spanish ] = "Previsualización";
-        Text[ italian ] = "Preview";
+        Text[ italian ] = "Anteprima";
         Text[ danish ] = "Eksempel";
         Text[ swedish ] = "Förhandsvisning";
         Text[ polish ] = "Podgl¹d";
@@ -720,7 +720,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_POSTER
         Text[ dutch ] = "Parameter";
         Text[ french ] = "Paramètre";
         Text[ spanish ] = "Parámetros";
-        Text[ italian ] = "Parameter";
+        Text[ italian ] = "Parametri";
         Text[ danish ] = "Parametre";
         Text[ swedish ] = "Parameter";
         Text[ polish ] = "Parametry";
@@ -851,7 +851,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_EMBOSS
         Text[ dutch ] = "Voorbeeld";
         Text[ french ] = "Aperçu";
         Text[ spanish ] = "Previsualización";
-        Text[ italian ] = "Preview";
+        Text[ italian ] = "Anteprima";
         Text[ danish ] = "Eksempel";
         Text[ swedish ] = "Förhandsvisning";
         Text[ polish ] = "Podgl¹d";
@@ -881,7 +881,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_EMBOSS
         Text[ dutch ] = "Parameter";
         Text[ french ] = "Paramètre";
         Text[ spanish ] = "Parámetros";
-        Text[ italian ] = "Parameter";
+        Text[ italian ] = "Parametri";
         Text[ danish ] = "Parametre";
         Text[ swedish ] = "Parametrar";
         Text[ polish ] = "Parametry";
