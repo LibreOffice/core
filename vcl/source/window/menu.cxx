@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: ssa $ $Date: 2002-02-04 12:13:36 $
+ *  last change: $Author: ssa $ $Date: 2002-02-06 14:32:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,7 +209,8 @@ public:
     MenuItemData*   GetDataFromPos( ULONG nPos ) const
                         { return (MenuItemData*)List::GetObject( nPos ); }
 
-    MenuItemData*   SearchItem( xub_Unicode cSelectChar, USHORT& rPos ) const;
+    MenuItemData*   SearchItem( xub_Unicode cSelectChar, USHORT& rPos, USHORT& nDuplicates, USHORT nCurrentPos ) const;
+    USHORT          GetItemCount( xub_Unicode cSelectChar ) const;
     uno::Reference< i18n::XCharacterClassification > GetCharClass() const;
 };
 
@@ -283,18 +284,41 @@ MenuItemData* MenuItemList::GetData( USHORT nSVId, USHORT& rPos ) const
     return NULL;
 }
 
-MenuItemData* MenuItemList::SearchItem( xub_Unicode cSelectChar, USHORT& rPos ) const
+MenuItemData* MenuItemList::SearchItem( xub_Unicode cSelectChar, USHORT& rPos, USHORT& nDuplicates, USHORT nCurrentPos ) const
 {
     const vcl::I18nHelper& rI18nHelper = Application::GetSettings().GetUILocaleI18nHelper();
 
-    for ( rPos = (USHORT)Count(); rPos; )
+    nDuplicates = GetItemCount( cSelectChar );  // return number of duplicates
+
+    USHORT nListCount = (USHORT)Count();
+
+    for ( rPos = 0; rPos < nListCount; rPos++)
     {
-        MenuItemData* pData = GetDataFromPos( --rPos );
+        MenuItemData* pData = GetDataFromPos( rPos );
         if ( pData->bEnabled && rI18nHelper.MatchMnemonic( pData->aText, cSelectChar ) )
-            return pData;
+            if( nDuplicates > 1 && rPos == nCurrentPos )
+                continue;   // select next entry with the same mnemonic
+            else
+                return pData;
     }
 
     return NULL;
+}
+
+USHORT MenuItemList::GetItemCount( xub_Unicode cSelectChar ) const
+{
+    // returns number of entries with same mnemonic
+    const vcl::I18nHelper& rI18nHelper = Application::GetSettings().GetUILocaleI18nHelper();
+
+    USHORT nItems = 0, nPos;
+    for ( nPos = (USHORT)Count(); nPos; )
+    {
+        MenuItemData* pData = GetDataFromPos( --nPos );
+        if ( pData->bEnabled && rI18nHelper.MatchMnemonic( pData->aText, cSelectChar ) )
+            nItems++;
+    }
+
+    return nItems;
 }
 
 uno::Reference< i18n::XCharacterClassification > MenuItemList::GetCharClass() const
@@ -325,6 +349,7 @@ private:
     BOOL            bScrollMenu;
     BOOL            bScrollUp;
     BOOL            bScrollDown;
+    BOOL            bIgnoreFirstMove;
 
                     DECL_LINK( PopupEnd, FloatingWindow* );
                     DECL_LINK( HighlightChanged, Timer* );
@@ -339,7 +364,7 @@ protected:
     void            ImplDrawScroller( BOOL bUp );
     void            ImplScroll( const Point& rMousePos );
     void            ImplScroll( BOOL bUp );
-    void            ImplCursorUpDown( BOOL bUp );
+    void            ImplCursorUpDown( BOOL bUp, BOOL bHomeEnd = FALSE );
     void            ImplHighlightItem( const MouseEvent& rMEvt, BOOL bMBDown );
     long            ImplGetStartY() const;
 
@@ -392,6 +417,8 @@ private:
     USHORT          nHighlightedItem;
     ULONG           nSaveFocusId;
     BOOL            mbAutoPopup;
+    BOOL            bIgnoreFirstMove;
+    BOOL            bStayActive;
 
     PushButton      aCloser;
     PushButton      aFloatBtn;
@@ -2057,6 +2084,8 @@ USHORT PopupMenu::ImplExecute( Window* pW, const Rectangle& rRect, ULONG nPopupM
     if ( !pStartedFrom || !pStartedFrom->bIsMenuBar )
         nPopupModeFlags |= FLOATWIN_POPUPMODE_PATHMOUSECANCELCLICK | FLOATWIN_POPUPMODE_ALLMOUSEBUTTONCLOSE;
 
+    nPopupModeFlags |= FLOATWIN_POPUPMODE_NOKEYCLOSE;
+
     // Kann beim Debuggen hilfreich sein.
     // nPopupModeFlags |= FLOATWIN_POPUPMODE_NOFOCUSCLOSE;
 
@@ -2261,6 +2290,7 @@ MenuFloatingWindow::MenuFloatingWindow( Menu* pMen, Window* pParent, WinBits nSt
     nFirstEntry         = 0;
     bScrollUp           = FALSE;
     bScrollDown         = FALSE;
+    bIgnoreFirstMove    = TRUE;
 
     EnableSaveBackground();
     ImplInitMenuWindow( this, TRUE, FALSE );
@@ -2698,7 +2728,10 @@ void MenuFloatingWindow::MouseMove( const MouseEvent& rMEvt )
     }
     else if ( ImplIsMouseFollow() || ( rMEvt.GetButtons() == MOUSE_LEFT ) )
     {
-        ImplHighlightItem( rMEvt, FALSE );
+        if( bIgnoreFirstMove )
+            bIgnoreFirstMove = FALSE;
+        else
+            ImplHighlightItem( rMEvt, FALSE );
     }
 }
 
@@ -2861,7 +2894,7 @@ void MenuFloatingWindow::HighlightItem( USHORT nPos, BOOL bHighlight )
     }
 }
 
-void MenuFloatingWindow::ImplCursorUpDown( BOOL bUp )
+void MenuFloatingWindow::ImplCursorUpDown( BOOL bUp, BOOL bHomeEnd )
 {
     USHORT n = nHighlightedItem;
     if ( n == ITEMPOS_INVALID )
@@ -2873,6 +2906,22 @@ void MenuFloatingWindow::ImplCursorUpDown( BOOL bUp )
     }
 
     USHORT nLoop = n;
+
+    if( bHomeEnd )
+    {
+        // absolute positioning
+        if( bUp )
+        {
+            n = pMenu->GetItemCount();
+            nLoop = n-1;
+        }
+        else
+        {
+            n = -1;
+            nLoop = n+1;
+        }
+    }
+
     do
     {
         if ( bUp )
@@ -2932,6 +2981,33 @@ void MenuFloatingWindow::KeyInput( const KeyEvent& rKEvent )
             ImplCursorUpDown( nCode == KEY_UP );
         }
         break;
+        case KEY_END:
+        case KEY_HOME:
+        {
+            ImplCursorUpDown( nCode == KEY_END, TRUE );
+        }
+        break;
+        case KEY_ESCAPE:
+        {
+            if ( !pMenu->pStartedFrom )
+            {
+                StopExecute();
+                KillActivePopup();
+            }
+            else if ( pMenu->pStartedFrom->bIsMenuBar )
+            {
+                // Forward...
+                ((MenuBarWindow*)((MenuBar*)pMenu->pStartedFrom)->ImplGetWindow())->KeyInput( rKEvent );
+            }
+            else
+            {
+                StopExecute();
+                MenuFloatingWindow* pFloat = ((PopupMenu*)pMenu->pStartedFrom)->ImplGetFloatingWindow();
+                pFloat->GrabFocus();
+                pFloat->KillActivePopup();
+            }
+        }
+        break;
         case KEY_LEFT:
         {
             if ( pMenu->pStartedFrom )
@@ -2939,7 +3015,7 @@ void MenuFloatingWindow::KeyInput( const KeyEvent& rKEvent )
                 StopExecute();
                 if ( pMenu->pStartedFrom->bIsMenuBar )
                 {
-                    // Weiterkeiten...
+                    // Forward...
                     ((MenuBarWindow*)((MenuBar*)pMenu->pStartedFrom)->ImplGetWindow())->KeyInput( rKEvent );
                 }
                 else
@@ -2968,7 +3044,7 @@ void MenuFloatingWindow::KeyInput( const KeyEvent& rKEvent )
                 Menu* pStart = pMenu->ImplGetStartMenu();
                 if ( pStart && pStart->bIsMenuBar )
                 {
-                    // Weiterkeiten...
+                    // Forward...
                     pStart->ImplGetWindow()->KeyInput( rKEvent );
                 }
             }
@@ -2993,7 +3069,7 @@ void MenuFloatingWindow::KeyInput( const KeyEvent& rKEvent )
             Menu* pStart = pMenu->ImplGetStartMenu();
             if ( pStart && pStart->bIsMenuBar )
             {
-                // Weiterkeiten...
+                // Forward...
                 pStart->ImplGetWindow()->KeyInput( rKEvent );
             }
         }
@@ -3002,10 +3078,11 @@ void MenuFloatingWindow::KeyInput( const KeyEvent& rKEvent )
         {
             xub_Unicode nCharCode = rKEvent.GetCharCode();
             USHORT nPos;
-            MenuItemData* pData = nCharCode ? pMenu->GetItemList()->SearchItem( nCharCode, nPos ) : NULL;
+            USHORT nDuplicates = 0;
+            MenuItemData* pData = nCharCode ? pMenu->GetItemList()->SearchItem( nCharCode, nPos, nDuplicates, nHighlightedItem ) : NULL;
             if ( pData )
             {
-                if ( pData->pSubMenu )
+                if ( pData->pSubMenu || nDuplicates > 1 )
                 {
                     ChangeHighlightItem( nPos, FALSE );
                     HighlightChanged( 0 );
@@ -3127,6 +3204,8 @@ MenuBarWindow::MenuBarWindow( Window* pParent ) :
     nHighlightedItem = ITEMPOS_INVALID;
     mbAutoPopup = TRUE;
     nSaveFocusId = 0;
+    bIgnoreFirstMove = TRUE;
+    bStayActive = FALSE;
 
     ResMgr* pResMgr = ImplGetResMgr();
     aCloser.SetClickHdl( LINK( this, MenuBarWindow, CloserHdl ) );
@@ -3187,6 +3266,7 @@ void MenuBarWindow::ImplCreatePopup( BOOL bPreSelectFirst )
     MenuItemData* pData = pMenu->GetItemList()->GetDataFromPos( nHighlightedItem );
     if ( pData )
     {
+        bIgnoreFirstMove = TRUE;
         if ( pActivePopup && ( pActivePopup != pData->pSubMenu ) )
         {
             KillActivePopup();
@@ -3285,8 +3365,14 @@ void MenuBarWindow::MouseButtonUp( const MouseEvent& rMEvt )
 void MenuBarWindow::MouseMove( const MouseEvent& rMEvt )
 {
     // Im Move nur Highlighten, wenn schon eins gehighlightet.
-    if ( rMEvt.IsSynthetic() || rMEvt.IsLeaveWindow() || ( nHighlightedItem == ITEMPOS_INVALID ) )
+    if ( rMEvt.IsSynthetic() || rMEvt.IsLeaveWindow() || rMEvt.IsEnterWindow() || ( nHighlightedItem == ITEMPOS_INVALID ) )
         return;
+
+    if( bIgnoreFirstMove )
+    {
+        bIgnoreFirstMove = FALSE;
+        return;
+    }
 
     USHORT nEntry = ImplFindEntry( rMEvt.GetPosPixel() );
     if ( ( nEntry != ITEMPOS_INVALID ) && ( nEntry != nHighlightedItem )
@@ -3306,7 +3392,10 @@ void MenuBarWindow::ChangeHighlightItem( USHORT n, BOOL bSelectEntry, BOOL bAllo
     if ( ( nHighlightedItem == ITEMPOS_INVALID ) && ( n != ITEMPOS_INVALID ) )
     {
         ImplGetSVData()->maWinData.mbNoDeactivate = TRUE;
-        nSaveFocusId = Window::SaveFocus();
+        if( !bStayActive )
+            nSaveFocusId = Window::SaveFocus(); // only save focus when initially activated
+        else
+            bStayActive = FALSE;
         pMenu->bInCallback = TRUE;  // hier schon setzen, falls Activate ueberladen
         pMenu->Activate();
         pMenu->bInCallback = FALSE;
@@ -3395,7 +3484,8 @@ BOOL MenuBarWindow::ImplHandleKeyEvent( const KeyEvent& rKEvent, BOOL bFromMenu 
     }
     else if ( bFromMenu )
     {
-        if ( ( nCode == KEY_LEFT ) || ( nCode == KEY_RIGHT ) )
+        if ( ( nCode == KEY_LEFT ) || ( nCode == KEY_RIGHT ) ||
+            ( nCode == KEY_HOME ) || ( nCode == KEY_END ) )
         {
             USHORT n = nHighlightedItem;
             if ( n == ITEMPOS_INVALID )
@@ -3407,16 +3497,22 @@ BOOL MenuBarWindow::ImplHandleKeyEvent( const KeyEvent& rKEvent, BOOL bFromMenu 
             }
 
             USHORT nLoop = n;
+
+            if( nCode == KEY_HOME )
+                { n = -1; nLoop = n+1; }
+            if( nCode == KEY_END )
+                { n = pMenu->GetItemCount(); nLoop = n-1; }
+
             do
             {
-                if ( nCode == KEY_LEFT )
+                if ( nCode == KEY_LEFT || nCode == KEY_END )
                 {
                     if ( n )
                         n--;
                     else
                         n = pMenu->GetItemCount()-1;
                 }
-                else
+                if ( nCode == KEY_RIGHT || nCode == KEY_HOME )
                 {
                     n++;
                     if ( n >= pMenu->GetItemCount() )
@@ -3434,7 +3530,13 @@ BOOL MenuBarWindow::ImplHandleKeyEvent( const KeyEvent& rKEvent, BOOL bFromMenu 
         }
         else if ( nCode == KEY_RETURN )
         {
-            KillActivePopup();
+            if( pActivePopup ) KillActivePopup();
+            else
+                if ( !mbAutoPopup )
+                {
+                    ImplCreatePopup( TRUE );
+                    mbAutoPopup = TRUE;
+                }
             bDone = TRUE;
         }
         else if ( ( nCode == KEY_UP ) || ( nCode == KEY_DOWN ) )
@@ -3448,7 +3550,20 @@ BOOL MenuBarWindow::ImplHandleKeyEvent( const KeyEvent& rKEvent, BOOL bFromMenu 
         }
         else if ( nCode == KEY_ESCAPE)
         {
-            ChangeHighlightItem( ITEMPOS_INVALID, FALSE );
+            if( pActivePopup )
+            {
+                // bring focus to menu bar without any open popup
+                KillActivePopup();
+                mbAutoPopup = FALSE;
+                USHORT n = nHighlightedItem;
+                nHighlightedItem = ITEMPOS_INVALID;
+                bStayActive = TRUE;
+                ChangeHighlightItem( n, FALSE );
+                bStayActive = FALSE;
+                GrabFocus();
+            }
+            else
+                ChangeHighlightItem( ITEMPOS_INVALID, FALSE );
             bDone = TRUE;
         }
     }
@@ -3458,8 +3573,8 @@ BOOL MenuBarWindow::ImplHandleKeyEvent( const KeyEvent& rKEvent, BOOL bFromMenu 
         xub_Unicode nCharCode = rKEvent.GetCharCode();
         if ( nCharCode )
         {
-            USHORT nEntry;
-            MenuItemData* pData = pMenu->GetItemList()->SearchItem( nCharCode, nEntry );
+            USHORT nEntry, nDuplicates;
+            MenuItemData* pData = pMenu->GetItemList()->SearchItem( nCharCode, nEntry, nDuplicates, nHighlightedItem );
             if ( pData && (nEntry != ITEMPOS_INVALID) )
             {
                 mbAutoPopup = TRUE;
