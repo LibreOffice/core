@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrol.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:03:21 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 15:10:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,8 +158,8 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 
-using ::drafts::com::sun::star::accessibility::XAccessibleContext;
-using ::drafts::com::sun::star::accessibility::XAccessible;
+using ::com::sun::star::accessibility::XAccessibleContext;
+using ::com::sun::star::accessibility::XAccessible;
 
 WorkWindow* lcl_GetDefaultWindow()
 {
