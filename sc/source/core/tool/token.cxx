@@ -2,9 +2,9 @@
  *
  *  $RCSfile: token.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2004-09-07 10:42:41 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:33:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,7 @@
 #include "compiler.hxx"
 #include "rechead.hxx"
 #include "parclass.hxx"
+#include "jumpmatrix.hxx"
 
 // ImpTokenIterator wird je Interpreter angelegt, mehrfache auch durch
 // SubCode via ScTokenIterator Push/Pop moeglich
@@ -811,6 +812,10 @@ ScJumpMatrix* ScJumpMatrixToken::GetJumpMatrix() const  { return pJumpMatrix; }
 BOOL ScJumpMatrixToken::operator==( const ScToken& r ) const
 {
     return ScToken::operator==( r ) && pJumpMatrix == r.GetJumpMatrix();
+}
+ScJumpMatrixToken::~ScJumpMatrixToken()
+{
+    delete pJumpMatrix;
 }
 
 
