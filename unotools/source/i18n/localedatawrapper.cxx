@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localedatawrapper.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: er $ $Date: 2001-06-28 12:12:20 $
+ *  last change: $Author: er $ $Date: 2001-07-02 09:51:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,8 @@
  *
  ************************************************************************/
 
+#pragma hdrstop
+
 #include <string.h>     // memcpy()
 
 #include <unotools/localedatawrapper.hxx>
@@ -107,8 +109,89 @@
 #include <com/sun/star/i18n/CalendarDisplayIndex.hpp>
 #endif
 
-#pragma hdrstop
 
+// ====================================================================
+
+// Enable multiple threads to read simultaneously, but a write blocks all other
+// reads and writes, and a read blocks any write.
+class LocaleDataWrapperGuard
+{
+            LocaleDataWrapperMutex&  rMutex;
+            ::osl::MutexGuard*  pGuard;
+public:
+                                LocaleDataWrapperGuard(
+                                    LocaleDataWrapperMutex& rMutex,
+                                    sal_Bool bRequestWrite = sal_False );
+                                ~LocaleDataWrapperGuard();
+
+            void                changeReadToWrite();
+};
+
+
+LocaleDataWrapperGuard::LocaleDataWrapperGuard(
+            LocaleDataWrapperMutex& rMutexP, sal_Bool bRequestWrite )
+        : rMutex( rMutexP )
+{
+    // don't do anything until a pending write completed
+    ::osl::MutexGuard aGuard( rMutex.pWriteMutex );
+    if ( bRequestWrite )
+    {
+        pGuard = new ::osl::MutexGuard( rMutex.pWriteMutex );
+        // wait for any read to complete
+// TODO: set up a waiting thread instead of a loop
+        sal_Bool bWait = TRUE;
+        do
+        {
+            ::osl::MutexGuard aGuard( rMutex.pMutex );
+            bWait = (rMutex.nReadCount != 0);
+        } while ( bWait );
+    }
+    else
+    {
+        pGuard = NULL;
+        ::osl::MutexGuard aGuard( rMutex.pMutex );
+        ++rMutex.nReadCount;
+    }
+}
+
+
+LocaleDataWrapperGuard::~LocaleDataWrapperGuard()
+{
+    if ( pGuard )
+        delete pGuard;
+    else
+    {
+        ::osl::MutexGuard aGuard( rMutex.pMutex );
+        --rMutex.nReadCount;
+    }
+}
+
+
+void LocaleDataWrapperGuard::changeReadToWrite()
+{
+    DBG_ASSERT( !pGuard, "LocaleDataWrapperGuard::changeReadToWrite: already write" );
+    if ( !pGuard )
+    {
+        // MUST release read before acquiring write mutex or dead lock would
+        // occur if there was another write waiting for this read to complete.
+        {   // own scope
+            ::osl::MutexGuard aGuard( rMutex.pMutex );
+            --rMutex.nReadCount;
+        }
+        pGuard = new ::osl::MutexGuard( rMutex.pWriteMutex );
+        // wait for any other read to complete
+// TODO: set up a waiting thread instead of a loop
+        sal_Bool bWait = TRUE;
+        do
+        {
+            ::osl::MutexGuard aGuard( rMutex.pMutex );
+            bWait = (rMutex.nReadCount != 0);
+        } while ( bWait );
+    }
+}
+
+
+// ====================================================================
 
 #define LOCALEDATA_LIBRARYNAME "i18n"
 #define LOCALEDATA_SERVICENAME "com.sun.star.i18n.LocaleData"
@@ -187,8 +270,16 @@ LocaleDataWrapper::~LocaleDataWrapper()
 
 void LocaleDataWrapper::setLocale( const ::com::sun::star::lang::Locale& rLocale )
 {
+    LocaleDataWrapperGuard aGuard( aMutex, sal_True );
     aLocale = rLocale;
     invalidateData();
+}
+
+
+const ::com::sun::star::lang::Locale& LocaleDataWrapper::getLocale() const
+{
+    LocaleDataWrapperGuard aGuard( aMutex );
+    return aLocale;
 }
 
 
@@ -224,7 +315,7 @@ void LocaleDataWrapper::invalidateData()
     try
     {
         if ( xLD.is() )
-            return xLD->getLanguageCountryInfo( aLocale );
+            return xLD->getLanguageCountryInfo( getLocale() );
     }
     catch ( Exception& e )
     {
@@ -243,7 +334,7 @@ void LocaleDataWrapper::invalidateData()
     try
     {
         if ( xLD.is() )
-            return xLD->getLocaleItem( aLocale );
+            return xLD->getLocaleItem( getLocale() );
     }
     catch ( Exception& e )
     {
@@ -262,7 +353,7 @@ void LocaleDataWrapper::invalidateData()
     try
     {
         if ( xLD.is() )
-            return xLD->getAllCalendars( aLocale );
+            return xLD->getAllCalendars( getLocale() );
     }
     catch ( Exception& e )
     {
@@ -281,7 +372,7 @@ void LocaleDataWrapper::invalidateData()
     try
     {
         if ( xLD.is() )
-            return xLD->getAllCurrencies( aLocale );
+            return xLD->getAllCurrencies( getLocale() );
     }
     catch ( Exception& e )
     {
@@ -300,7 +391,7 @@ void LocaleDataWrapper::invalidateData()
     try
     {
         if ( xLD.is() )
-            return xLD->getAllFormats( aLocale );
+            return xLD->getAllFormats( getLocale() );
     }
     catch ( Exception& e )
     {
@@ -319,7 +410,7 @@ void LocaleDataWrapper::invalidateData()
     try
     {
         if ( xLD.is() )
-            return xLD->getCollatorImplementations( aLocale );
+            return xLD->getCollatorImplementations( getLocale() );
     }
     catch ( Exception& e )
     {
@@ -338,7 +429,7 @@ void LocaleDataWrapper::invalidateData()
     try
     {
         if ( xLD.is() )
-            return xLD->getTransliterations( aLocale );
+            return xLD->getTransliterations( getLocale() );
     }
     catch ( Exception& e )
     {
@@ -357,7 +448,7 @@ void LocaleDataWrapper::invalidateData()
     try
     {
         if ( xLD.is() )
-            return xLD->getForbiddenCharacters( aLocale );
+            return xLD->getForbiddenCharacters( getLocale() );
     }
     catch ( Exception& e )
     {
@@ -376,7 +467,7 @@ void LocaleDataWrapper::invalidateData()
     try
     {
         if ( xLD.is() )
-            return xLD->getReservedWord( aLocale );
+            return xLD->getReservedWord( getLocale() );
     }
     catch ( Exception& e )
     {
@@ -522,6 +613,7 @@ void LocaleDataWrapper::invalidateData()
 
 const String& LocaleDataWrapper::getOneLocaleItem( sal_Int16 nItem ) const
 {
+    LocaleDataWrapperGuard aGuard( aMutex );
     if ( nItem >= LocaleItem::COUNT )
     {
         DBG_ERRORFILE( "getOneLocaleItem: bounds" );
@@ -529,6 +621,7 @@ const String& LocaleDataWrapper::getOneLocaleItem( sal_Int16 nItem ) const
     }
     if ( aLocaleItem[nItem].Len() == 0 )
     {   // no cached content
+        aGuard.changeReadToWrite();
         ((LocaleDataWrapper*)this)->getOneLocaleItemImpl( nItem );
     }
     return aLocaleItem[nItem];
@@ -616,6 +709,7 @@ void LocaleDataWrapper::getOneReservedWordImpl( sal_Int16 nWord )
 
 const String& LocaleDataWrapper::getOneReservedWord( sal_Int16 nWord ) const
 {
+    LocaleDataWrapperGuard aGuard( aMutex );
     if ( nWord < 0 || nWord >= reservedWords::COUNT )
     {
         DBG_ERRORFILE( "getOneReservedWord: bounds" );
@@ -623,6 +717,7 @@ const String& LocaleDataWrapper::getOneReservedWord( sal_Int16 nWord ) const
     }
     if ( aReservedWord[nWord].Len() == 0 )
     {   // no cached content
+        aGuard.changeReadToWrite();
         ((LocaleDataWrapper*)this)->getOneReservedWordImpl( nWord );
     }
     return aReservedWord[nWord];
@@ -643,40 +738,60 @@ MeasurementSystem LocaleDataWrapper::mapMeasurementStringToEnum( const String& r
 
 const String& LocaleDataWrapper::getCurrSymbol() const
 {
+    LocaleDataWrapperGuard aGuard( aMutex );
     if ( !aCurrSymbol.Len() )
+    {
+        aGuard.changeReadToWrite();
         ((LocaleDataWrapper*)this)->getCurrSymbolsImpl();
+    }
     return aCurrSymbol;
 }
 
 
 const String& LocaleDataWrapper::getCurrBankSymbol() const
 {
+    LocaleDataWrapperGuard aGuard( aMutex );
     if ( !aCurrBankSymbol.Len() )
+    {
+        aGuard.changeReadToWrite();
         ((LocaleDataWrapper*)this)->getCurrSymbolsImpl();
+    }
     return aCurrBankSymbol;
 }
 
 
 USHORT LocaleDataWrapper::getCurrPositiveFormat() const
 {
+    LocaleDataWrapperGuard aGuard( aMutex );
     if ( nCurrPositiveFormat == nCurrFormatInvalid )
+    {
+        aGuard.changeReadToWrite();
         ((LocaleDataWrapper*)this)->getCurrFormatsImpl();
+    }
     return nCurrPositiveFormat;
 }
 
 
 USHORT LocaleDataWrapper::getCurrNegativeFormat() const
 {
+    LocaleDataWrapperGuard aGuard( aMutex );
     if ( nCurrNegativeFormat == nCurrFormatInvalid )
+    {
+        aGuard.changeReadToWrite();
         ((LocaleDataWrapper*)this)->getCurrFormatsImpl();
+    }
     return nCurrNegativeFormat;
 }
 
 
 USHORT LocaleDataWrapper::getCurrDigits() const
 {
+    LocaleDataWrapperGuard aGuard( aMutex );
     if ( nCurrDigits == nCurrFormatInvalid )
+    {
+        aGuard.changeReadToWrite();
         ((LocaleDataWrapper*)this)->getCurrSymbolsImpl();
+    }
     return nCurrDigits;
 }
 
@@ -711,7 +826,7 @@ void LocaleDataWrapper::getCurrSymbolsImpl()
 }
 
 
-void LocaleDataWrapper::scanCurrFormat( const String& rCode,
+void LocaleDataWrapper::scanCurrFormatImpl( const String& rCode,
         xub_StrLen nStart, xub_StrLen& nSign, xub_StrLen& nPar,
         xub_StrLen& nNum, xub_StrLen& nBlank, xub_StrLen& nSym )
 {
@@ -830,7 +945,7 @@ void LocaleDataWrapper::getCurrFormatsImpl()
 
     // positive format
     nElem = (nDef >= 0 ? nDef : (nNeg >= 0 ? nNeg : 0));
-    scanCurrFormat( aFormatSeq[nElem].Code, 0, nSign, nPar, nNum, nBlank, nSym );
+    scanCurrFormatImpl( aFormatSeq[nElem].Code, 0, nSign, nPar, nNum, nBlank, nSym );
 #ifndef PRODUCT
     if ( nNum == STRING_NOTFOUND || nSym == STRING_NOTFOUND )
     {
@@ -859,7 +974,7 @@ void LocaleDataWrapper::getCurrFormatsImpl()
     {
         const ::rtl::OUString& rCode = aFormatSeq[nNeg].Code;
         sal_Int32 nDelim = rCode.indexOf( ';' );
-        scanCurrFormat( rCode, nDelim+1, nSign, nPar, nNum, nBlank, nSym );
+        scanCurrFormatImpl( rCode, nDelim+1, nSign, nPar, nNum, nBlank, nSym );
 #ifndef PRODUCT
         if ( nNum == STRING_NOTFOUND || nSym == STRING_NOTFOUND
           || (nPar == STRING_NOTFOUND && nSign == STRING_NOTFOUND) )
@@ -925,21 +1040,29 @@ void LocaleDataWrapper::getCurrFormatsImpl()
 
 DateFormat LocaleDataWrapper::getDateFormat() const
 {
+    LocaleDataWrapperGuard aGuard( aMutex );
     if ( nDateFormat == nDateFormatInvalid )
+    {
+        aGuard.changeReadToWrite();
         ((LocaleDataWrapper*)this)->getDateFormatsImpl();
+    }
     return (DateFormat) nDateFormat;
 }
 
 
 DateFormat LocaleDataWrapper::getLongDateFormat() const
 {
+    LocaleDataWrapperGuard aGuard( aMutex );
     if ( nLongDateFormat == nDateFormatInvalid )
+    {
+        aGuard.changeReadToWrite();
         ((LocaleDataWrapper*)this)->getDateFormatsImpl();
+    }
     return (DateFormat) nLongDateFormat;
 }
 
 
-DateFormat LocaleDataWrapper::scanDateFormat( const String& rCode )
+DateFormat LocaleDataWrapper::scanDateFormatImpl( const String& rCode )
 {
     // Only some european versions were translated, the ones with different
     // keyword combinations are:
@@ -1048,14 +1171,14 @@ void LocaleDataWrapper::getDateFormatsImpl()
         else
             nDef = 0;
     }
-    DateFormat nDF = scanDateFormat( aFormatSeq[nDef].Code );
+    DateFormat nDF = scanDateFormatImpl( aFormatSeq[nDef].Code );
     if ( aFormatSeq[nDef].Type == KNumberFormatType::LONG )
     {
         nLongDateFormat = nDF;
         if ( nMedium == -1 )
             nDateFormat = nDF;
         else
-            nDateFormat = scanDateFormat( aFormatSeq[nMedium].Code );
+            nDateFormat = scanDateFormatImpl( aFormatSeq[nMedium].Code );
     }
     else
     {
@@ -1063,7 +1186,7 @@ void LocaleDataWrapper::getDateFormatsImpl()
         if ( nLong == -1 )
             nLongDateFormat = nDF;
         else
-            nLongDateFormat = scanDateFormat( aFormatSeq[nLong].Code );
+            nLongDateFormat = scanDateFormatImpl( aFormatSeq[nLong].Code );
     }
 }
 
@@ -1738,6 +1861,7 @@ String LocaleDataWrapper::getCurr( long nNumber, USHORT nDecimals,
 #ifndef PRODUCT
 ByteString& LocaleDataWrapper::AppendLocaleInfo( ByteString& rDebugMsg ) const
 {
+    LocaleDataWrapperGuard aGuard( aMutex );
     rDebugMsg += '\n';
     rDebugMsg += ByteString( String( aLocale.Language ), RTL_TEXTENCODING_UTF8 );
     rDebugMsg += '_';

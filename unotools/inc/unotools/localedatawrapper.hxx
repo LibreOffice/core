@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localedatawrapper.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: er $ $Date: 2001-06-28 12:11:43 $
+ *  last change: $Author: er $ $Date: 2001-07-02 09:51:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,16 +79,34 @@
 #include <com/sun/star/i18n/reservedWords.hpp>
 #endif
 
-class Date;
-class Time;
+
+class LocaleDataWrapperGuard;
+class LocaleDataWrapperMutex
+{
+    friend class LocaleDataWrapperGuard;
+
+            sal_Int32           nReadCount;
+            ::osl::Mutex*       pMutex;
+            ::osl::Mutex*       pWriteMutex;
+
+public:
+                                LocaleDataWrapperMutex()
+                                    : nReadCount(0)
+                                    , pMutex( new ::osl::Mutex )
+                                    , pWriteMutex( new ::osl::Mutex )
+                                    {}
+                                ~LocaleDataWrapperMutex()
+                                    { delete pMutex; delete pWriteMutex; }
+};
+
 
 namespace com { namespace sun { namespace star {
     namespace lang {
         class XMultiServiceFactory;
     }
 }}}
-
-
+class Date;
+class Time;
 class CalendarWrapper;
 
 class LocaleDataWrapper
@@ -113,6 +131,7 @@ class LocaleDataWrapper
     USHORT                      nCurrDigits;
     BOOL                        bLocaleDataItemValid;
     BOOL                        bReservedWordValid;
+    mutable LocaleDataWrapperMutex  aMutex;
 
     // dummies, to be implemented or provided by XML locale data
     sal_Unicode                 cCurrZeroChar;
@@ -134,13 +153,13 @@ class LocaleDataWrapper
             void                getCurrSymbolsImpl();
             void                getCurrFormatsImpl();
 
-            void                scanCurrFormat( const String& rCode,
+            void                scanCurrFormatImpl( const String& rCode,
                                     xub_StrLen nStart, xub_StrLen& nSign,
                                     xub_StrLen& nPar, xub_StrLen& nNum,
                                     xub_StrLen& nBlank, xub_StrLen& nSym );
 
             void                getDateFormatsImpl();
-            DateFormat          scanDateFormat( const String& rCode );
+            DateFormat          scanDateFormatImpl( const String& rCode );
 
 
             sal_Unicode*        ImplAddFormatNum( sal_Unicode* pBuf,
@@ -155,12 +174,11 @@ public:
 
                                 ~LocaleDataWrapper();
 
-
     /// set a new Locale to request
             void                setLocale( const ::com::sun::star::lang::Locale& rLocale );
 
     /// get current requested Locale
-    const ::com::sun::star::lang::Locale& getLocale() const { return aLocale; }
+    const ::com::sun::star::lang::Locale& getLocale() const;
 
     /// get current loaded Locale, which might differ from the requested Locale
     ::com::sun::star::lang::Locale getLoadedLocale() const;
