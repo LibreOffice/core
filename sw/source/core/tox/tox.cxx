@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tox.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 14:32:05 $
+ *  last change: $Author: vg $ $Date: 2005-03-07 17:33:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -840,6 +840,8 @@ SwTOXBase & SwTOXBase::operator = (const SwTOXBase & rSource)
     aName = rSource.aName;
     aTitle = rSource.aTitle;
     sMainEntryCharStyle = rSource.sMainEntryCharStyle;
+    for(USHORT nLevel = 0; nLevel < MAXLEVEL; nLevel++)
+        aStyleNames[nLevel] = rSource.aStyleNames[nLevel];
     sSequenceName = rSource.sSequenceName;
     eLanguage = rSource.eLanguage;
     sSortAlgorithm = rSource.sSortAlgorithm;
