@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 10:47:29 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 16:23:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,6 +161,15 @@
 #include <com/sun/star/awt/MouseEvent.hpp>
 #endif
 
+#if OSL_DEBUG_LEVEL > 1
+char dbgbuffer[1024];
+#ifndef WNT
+#include <stdio.h>
+#define MyOutputDebugString(s) (fprintf(stderr, s ))
+#else
+extern void MyOutputDebugString( char *s);
+#endif
+#endif
 
 
 //#define USE_NEW_RTL_IMPLEMENTATION
@@ -795,10 +804,11 @@ long ImplHandleMouseEvent( Window* pWindow, USHORT nSVEvent, BOOL bMouseLeave,
     if ( nSVEvent == EVENT_MOUSEMOVE )
         pChild->mpFrameData->mbInMouseMove = TRUE;
 
-    // Fenster bei Klick nach vorne bringen
+    // bring window into foreground on mouseclick
     if ( nSVEvent == EVENT_MOUSEBUTTONDOWN )
     {
-        if( !pSVData->maWinData.mpFirstFloat ) // totop for floating windows would change the focus
+        if( !pSVData->maWinData.mpFirstFloat && // totop for floating windows in popup would change the focus and would close them immediately
+            !(pChild->mpFrameWindow->GetStyle() & WB_OWNERDRAWDECORATION) )    // ownerdrawdecorated windows must never grab focus
             pChild->ToTop();
         if ( aDelData.IsDelete() )
             return 1;
@@ -1640,7 +1650,8 @@ void ImplHandleResize( Window* pWindow, long nNewWidth, long nNewHeight )
                 ( pWindow->mbFrame && pWindow->mpClientWindow ) )   // propagate resize for system border windows
             {
                 // use resize buffering for user resizes
-                if( pWindow->mbFrame && (pWindow->GetStyle() & WB_SIZEABLE) )
+                // ownerdraw decorated windows can be resized immediately
+                if( pWindow->mbFrame && (pWindow->GetStyle() & WB_SIZEABLE) && !(pWindow->GetStyle() & WB_OWNERDRAWDECORATION) )
                     pWindow->mpFrameData->maResizeTimer.Start();
                 else
                     pWindow->ImplCallResize(); // otherwise menues cannot be positioned
@@ -1677,6 +1688,8 @@ void ImplHandleMove( Window* pWindow, long nNewX, long nNewY )
 
     if ( pWindow->IsVisible() )
         pWindow->ImplCallMove();
+    else
+        pWindow->mbCallMove = TRUE; // make sure the framepos will be updated on the next Show()
 
     if ( pWindow->mbFrame && pWindow->mpClientWindow )
         pWindow->mpClientWindow->ImplCallMove();    // notify client to update geometry
@@ -1710,6 +1723,7 @@ static void ImplActivateFloatingWindows( Window* pWindow, BOOL bActive )
         pTempWindow = pTempWindow->mpNext;
     }
 }
+
 
 // -----------------------------------------------------------------------
 
