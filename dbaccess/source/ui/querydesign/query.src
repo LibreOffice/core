@@ -2,9 +2,9 @@
  *
  *  $RCSfile: query.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-21 20:19:34 $
+ *  last change: $Author: fs $ $Date: 2001-03-22 11:00:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -322,8 +322,8 @@ String RID_STR_TABLE_DOESNT_EXIST
 
 String RID_STR_FIELD_DOESNT_EXIST
 {
-    Text = "Der Ausdruck ist ungueltig, da der Feldname '$name$' nicht zugerordnet werden kann !";
-    Text [ ENGLISH ] = "The expression is invalid because the field name '$name$' kann nicht zugeordnet werden !";
+    Text = "Der Ausdruck ist ungueltig, da der Feldname '$name$' nicht zugeordnet werden kann!";
+    Text [ ENGLISH ] = "The expression is invalid because the field name '$name$' could not be assigned!";
     Text[ english_us ] = "Invalid expression, field name '$name$' does not exist.";
     Text[ portuguese ] = "A expressгo nгo й vбlida; й impossнvel atribuir o nome de campo '$name$'!";
     Text[ russian ] = "Неправильное выражение, поскольку имя поля '$name$' присвоить невозможно !";
