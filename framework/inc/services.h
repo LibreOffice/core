@@ -2,9 +2,9 @@
  *
  *  $RCSfile: services.h,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-19 08:04:38 $
+ *  last change: $Author: kz $ $Date: 2004-06-10 13:18:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,6 +131,7 @@ namespace framework{
 #define SERVICENAME_MENUBARFACTORY                              DECLARE_ASCII("drafts.com.sun.star.ui.UIElementFactory"             )
 #define SERVICENAME_STARTMODULE                                 DECLARE_ASCII("com.sun.star.frame.StartModule"                      )
 #define SERVICENAME_FRAMECONTROLLER                             DECLARE_ASCII("com.sun.star.frame.Controller"                       )
+#define SERVICENAME_LICENSE                                     DECLARE_ASCII("com.sun.star.task.Job"                       )
 
 //_________________________________________________________________________________________________________________
 //  used implementationnames by framework
@@ -181,6 +182,7 @@ namespace framework{
 #define IMPLEMENTATIONNAME_MODULEUICONFIGURATIONMANAGER         DECLARE_ASCII("com.sun.star.comp.framework.ModuleUIConfigurationManager" )
 #define IMPLEMENTATIONNAME_MENUBARFACTORY                       DECLARE_ASCII("com.sun.star.comp.framework.MenuBarFactory"          )
 #define IMPLEMENTATIONNAME_STARTMODULE                          DECLARE_ASCII("com.sun.star.comp.framework.BackingComp"             )
+#define IMPLEMENTATIONNAME_LICENSE                              DECLARE_ASCII("com.sun.star.comp.framework.License"             )
 
 }       //  namespace framework
 
