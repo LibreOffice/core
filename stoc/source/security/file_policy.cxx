@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file_policy.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2002-04-11 11:55:57 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 16:02:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,6 @@
 #define IMPL_NAME "com.sun.star.security.comp.stoc.FilePolicy"
 
 
-using namespace ::std;
 using namespace ::osl;
 using namespace ::rtl;
 using namespace ::cppu;
@@ -131,7 +130,7 @@ class FilePolicy
     AccessControl m_ac;
 
     Sequence< Any > m_defaultPermissions;
-    typedef hash_map< OUString, Sequence< Any >, OUStringHash > t_permissions;
+    typedef std::hash_map< OUString, Sequence< Any >, OUStringHash > t_permissions;
     t_permissions m_userPermissions;
     bool m_init;
 
@@ -197,7 +196,7 @@ Sequence< Any > FilePolicy::getPermissions(
     }
 
     MutexGuard guard( m_mutex );
-    t_permissions::const_iterator const iFind( m_userPermissions.find( userId ) );
+    t_permissions::iterator iFind( m_userPermissions.find( userId ) );
     if (m_userPermissions.end() == iFind)
     {
         return Sequence< Any >();
