@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptStorageManager.cxx,v $
 *
-*  $Revision: 1.26 $
+*  $Revision: 1.27 $
 *
-*  last change: $Author: dfoster $ $Date: 2003-05-21 09:06:24 $
+*  last change: $Author: npower $ $Date: 2003-07-07 14:28:47 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -92,7 +92,10 @@ static OUString s_serviceName =
     ::rtl::OUString::createFromAscii(
         "drafts.com.sun.star.script.framework.storage.ScriptStorageManager" );
 static Sequence< OUString > s_serviceNames = Sequence< OUString >( &s_serviceName, 1 );
-extern ::rtl_StandardModuleCount s_moduleCount = MODULE_COUNT_INIT;
+
+//extern ::rtl_StandardModuleCount s_moduleCount = MODULE_COUNT_INIT;
+//extern ::rtl_StandardModuleCount s_moduleCount;
+
 
 //*************************************************************************
 // ScriptStorageManager Constructor
@@ -101,7 +104,7 @@ ScriptStorageManager::ScriptStorageManager( const Reference<
         : m_xContext( xContext ), m_count( 0 ), m_securityMgr( xContext )
 {
     OSL_TRACE( "< ScriptStorageManager ctor called >\n" );
-    s_moduleCount.modCnt.acquire( &s_moduleCount.modCnt );
+    //s_moduleCount.modCnt.acquire( &s_moduleCount.modCnt );
 
     validateXRef( m_xContext,
                   "ScriptStorageManager::ScriptStorageManager : cannot get component context" );
@@ -231,7 +234,7 @@ ScriptStorageManager::~ScriptStorageManager()
 SAL_THROW ( () )
 {
     OSL_TRACE( "< ScriptStorageManager dtor called >\n" );
-    s_moduleCount.modCnt.release( &s_moduleCount.modCnt );
+//    s_moduleCount.modCnt.release( &s_moduleCount.modCnt );
 }
 
 //*************************************************************************
@@ -559,112 +562,31 @@ throw ( ::com::sun::star::uno::RuntimeException )
         m_securityMgr.removePermissionSettings ( storageURI );
     }
 }
+} // Namespace
 
-
+namespace scripting_runtimemgr
+{
 //*************************************************************************
-static Reference< XInterface > SAL_CALL
+Reference< XInterface > SAL_CALL
 ssm_create(
     const Reference< XComponentContext > & xCompC )
 {
-    return ( cppu::OWeakObject * ) new ScriptStorageManager( xCompC );
+    return ( cppu::OWeakObject * ) new ::scripting_impl::ScriptStorageManager( xCompC );
 }
 
 //*************************************************************************
-static Sequence< OUString >
+Sequence< OUString >
 ssm_getSupportedServiceNames( )
 SAL_THROW( () )
 {
-    return s_serviceNames;
+    return ::scripting_impl::s_serviceNames;
 }
 
 //*************************************************************************
-static OUString
+OUString
 ssm_getImplementationName( )
 SAL_THROW( () )
 {
-    return s_implName;
+    return ::scripting_impl::s_implName;
 }
-//*************************************************************************
-Reference< XInterface > SAL_CALL ss_create( const Reference< XComponentContext > & xCompC );
-//*************************************************************************
-Sequence< OUString > ss_getSupportedServiceNames( ) SAL_THROW( () );
-//*************************************************************************
-OUString ss_getImplementationName( ) SAL_THROW( () );
-//*************************************************************************
-//*************************************************************************
-static struct cppu::ImplementationEntry s_entries [] =
-    {
-        {
-            ssm_create, ssm_getImplementationName,
-            ssm_getSupportedServiceNames, cppu::createSingleComponentFactory,
-            &s_moduleCount.modCnt, 0
-        },
-        {
-            ss_create, ss_getImplementationName,
-            ss_getSupportedServiceNames, cppu::createSingleComponentFactory,
-            &s_moduleCount.modCnt, 0
-        },
-        { 0, 0, 0, 0, 0, 0 }
-    };
-} // Namespace
-
-//##################################################################################################
-//#### EXPORTED ####################################################################################
-//##################################################################################################
-
-/**
- * Gives the environment this component belongs to.
- */
-extern "C"
-{
-    void SAL_CALL component_getImplementationEnvironment( const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
-    {
-        *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-    }
-
-    /**
-     * This function creates an implementation section in the registry and another subkey
-     *
-     * for each supported service.
-     * @param pServiceManager   the service manager
-     * @param pRegistryKey      the registry key
-     */
-    sal_Bool SAL_CALL component_writeInfo( lang::XMultiServiceFactory * pServiceManager, registry::XRegistryKey * pRegistryKey )
-    {
-        if (::cppu::component_writeInfoHelper( pServiceManager, pRegistryKey,
-            ::scripting_impl::s_entries ))
-        {
-            try
-            {
-                // register singleton
-                registry::XRegistryKey * pKey =
-                    reinterpret_cast< registry::XRegistryKey * >(pRegistryKey);
-
-                Reference< registry::XRegistryKey > xKey(
-                    pKey->createKey(
-
-                    OUSTR("drafts.com.sun.star.script.framework.storage.ScriptStorageManager/UNO/SINGLETONS/drafts.com.sun.star.script.framework.storage.theScriptStorageManager")));
-                    xKey->setStringValue( OUSTR("drafts.com.sun.star.script.framework.storage.ScriptStorageManager") );
-
-                return sal_True;
-            }
-            catch (Exception & exc)
-            {
-            }
-        }
-        return sal_False;
-    }
-
-    /**
-     * This function is called to get service factories for an implementation.
-     *
-     * @param pImplName       name of implementation
-     * @param pServiceManager a service manager, need for component creation
-     * @param pRegistryKey    the registry key for this component, need for persistent data
-     * @return a component factory
-     */
-    void * SAL_CALL component_getFactory( const sal_Char * pImplName, lang::XMultiServiceFactory * pServiceManager, registry::XRegistryKey * pRegistryKey )
-    {
-        return ::cppu::component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey, ::scripting_impl::s_entries );
-    }
 }
