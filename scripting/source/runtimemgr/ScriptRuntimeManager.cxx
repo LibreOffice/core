@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptRuntimeManager.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dfoster $ $Date: 2003-01-27 17:18:27 $
+ *  last change: $Author: npower $ $Date: 2003-01-28 11:52:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,7 +211,7 @@ Any SAL_CALL ScriptRuntimeManager::invoke(
 
     try
     {
-        Reference< XInterface > resolvedScript = resolve( scriptURI,
+        Reference< storage::XScriptInfo > resolvedScript = resolve( scriptURI,
             resolvedCtx );
         validateXRef( resolvedScript, "ScriptRuntimeManager::invoke: No resolvedURI" );
 
@@ -326,13 +326,13 @@ Any SAL_CALL ScriptRuntimeManager::invoke(
 
 //*************************************************************************
 // XScriptNameResolver implementation
-Reference< XInterface > SAL_CALL
+Reference< storage::XScriptInfo > SAL_CALL
 ScriptRuntimeManager::resolve( const ::rtl::OUString& scriptURI,
     Any& invocationCtx )
 throw( lang::IllegalArgumentException, script::CannotConvertException, RuntimeException )
 {
     OSL_TRACE( "** ==> ScriptRuntimeManager in resolve\n" );
-    Reference< XInterface > resolvedURI;
+    Reference< storage::XScriptInfo > resolvedURI;
 
     Reference< XScriptNameResolver > xScriptNameResolver = getScriptNameResolver();
     validateXRef( xScriptNameResolver,

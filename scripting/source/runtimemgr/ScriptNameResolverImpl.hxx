@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptNameResolverImpl.hxx,v $
 *
-*  $Revision: 1.8 $
+*  $Revision: 1.9 $
 *
-*  last change: $Author: dfoster $ $Date: 2002-11-06 16:26:31 $
+*  last change: $Author: npower $ $Date: 2003-01-28 11:52:17 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -72,6 +72,7 @@
 
 #include <drafts/com/sun/star/script/framework/XScriptNameResolver.hpp>
 #include <drafts/com/sun/star/script/framework/storage/XScriptInfoAccess.hpp>
+#include <drafts/com/sun/star/script/framework/storage/XScriptInfo.hpp>
 
 namespace scripting_runtimemgr
 {
@@ -112,13 +113,13 @@ public:
      @exception NullPointerException
      @return  the resolved XScriptURI
     */
-    css::uno::Reference < css::uno::XInterface > SAL_CALL resolve(
+    css::uno::Reference < dcsssf::storage::XScriptInfo > SAL_CALL resolve(
         const ::rtl::OUString & scriptURI,
         css::uno::Any& invocationCtx )
         throw( css::script::CannotConvertException, css::lang::IllegalArgumentException,
            css::uno::RuntimeException );
 private:
-    css::uno::Reference < css::uno::XInterface >
+    css::uno::Reference < dcsssf::storage::XScriptInfo >
     resolveURIFromStorageID( sal_Int32 sid, const ::rtl::OUString &
         nameToResolve )
         SAL_THROW ( ( css::lang::IllegalArgumentException, css::uno::RuntimeException ) );

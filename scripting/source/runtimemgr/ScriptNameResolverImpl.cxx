@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptNameResolverImpl.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dfoster $ $Date: 2003-01-27 17:18:27 $
+ *  last change: $Author: npower $ $Date: 2003-01-28 11:52:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,12 +132,12 @@ ScriptNameResolverImpl::~ScriptNameResolverImpl()
 }
 
 //*************************************************************************
-Reference< XInterface > ScriptNameResolverImpl::resolve(
+Reference< storage::XScriptInfo > ScriptNameResolverImpl::resolve(
 const ::rtl::OUString & scriptURI, Any& invocationCtx )
 throw ( lang::IllegalArgumentException, script::CannotConvertException, RuntimeException )
 {
 
-    Reference< XInterface > resolvedName;
+    Reference< storage::XScriptInfo > resolvedName;
     Reference< beans::XPropertySet > xPropSetScriptingContext;
     scripting_constants::ScriptingConstantsPool& scriptingConstantsPool =
             scripting_constants::ScriptingConstantsPool::instance();
@@ -301,12 +301,12 @@ throw( RuntimeException )
 
 //*************************************************************************
 
-Reference< XInterface >
+Reference< storage::XScriptInfo >
 ScriptNameResolverImpl::resolveURIFromStorageID
 ( sal_Int32 sid, const ::rtl::OUString& scriptURI )
 SAL_THROW ( ( lang::IllegalArgumentException, RuntimeException ) )
 {
-    Reference< XInterface > resolvedScriptInfo;
+    Reference< storage::XScriptInfo > resolvedScriptInfo;
     scripting_constants::ScriptingConstantsPool& scriptingConstantsPool =
         scripting_constants::ScriptingConstantsPool::instance();
     if ( sid == scriptingConstantsPool.DOC_STORAGE_ID_NOT_SET )
