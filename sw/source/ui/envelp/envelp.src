@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envelp.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-04 20:43:06 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 06:27:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@ String STR_DATABASE_NOT_OPENED
     Text [ italian ] = "Impossibile aprire il database." ;
     Text [ portuguese_brazilian ] = "Não pude abrir base de dados." ;
     Text [ portuguese ] = "Foi impossível abrir base de dados." ;
-    Text [ finnish ] = "Tietokantaa ei voi avata." ;
+    Text [ finnish ] = "Tietokantaa ei voitu avata." ;
     Text [ danish ] = "Det var ikke muligt at åbne databasen." ;
     Text [ french ] = "Impossible d'ouvrir la base de données." ;
     Text [ swedish ] = "Databas gick inte att öppna." ;
@@ -178,6 +178,7 @@ String STR_BTN_NEWDOC
     Text[ turkish ] = "~Yeni blg.";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "~Nuevo doc.";
+    Text[ finnish ] = "~Uusi as.";
 };
 
 String STR_SENDER_TOKENS
@@ -203,5 +204,6 @@ String STR_SENDER_TOKENS
     Text[ turkish ] = "COMPANY;CR;FIRSTNAME; ;LASTNAME;CR;ADDRESS;CR;CITY; ;STATEPROV; ;POSTALCODE;CR;COUNTRY;CR;";
     Text[ arabic ] = "COMPANY;CR;FIRSTNAME; ;LASTNAME;CR;ADDRESS;CR;CITY; ;STATEPROV; ;POSTALCODE;CR;COUNTRY;CR;";
     Text[ catalan ] = "COMPANY;CR;FIRSTNAME; ;LASTNAME;CR;ADDRESS;CR;COUNTRY; ;POSTALCODE; ;CITY;CR;";
+    Text[ finnish ] = "YRITYS;CR;ETUNIMI; ;SUKUNIMI;CR;OSOITE;CR;POSTITOIMIPAIKKA; ;OSAVALTIO; ;POSTINUMERO;CR;MAA;CR;";
 };
 
