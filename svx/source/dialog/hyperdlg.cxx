@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyperdlg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:09 $
+ *  last change: $Author: pw $ $Date: 2000-10-17 08:50:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,19 @@ SvxHlinkDlgWrapper::SvxHlinkDlgWrapper( Window* pParent, USHORT nId,
     ((MyStruct*)pImp)->bVisible = FALSE;
 
     if ( pInfo->aSize.Width() != 0 && pInfo->aSize.Height() != 0 )
+    {
+        Size aParentSize( SFX_APP()->GetTopWindow()->GetSizePixel() );
+        Size aDlgSize ( GetSizePixel () );
+
+        if( aParentSize.Width() < pInfo->aPos.X() )
+            pInfo->aPos.setX( aParentSize.Width()-aDlgSize.Width() < 0.1*aParentSize.Width() ?
+                              0.1*aParentSize.Width() : aParentSize.Width()-aDlgSize.Width() );
+        if( aParentSize.Height() < pInfo->aPos. Y() )
+            pInfo->aPos.setY( aParentSize.Height()-aDlgSize.Height() < 0.1*aParentSize.Height() ?
+                              0.1*aParentSize.Height() : aParentSize.Height()-aDlgSize.Height() );
+
         pWindow->SetPosPixel( pInfo->aPos );
+    }
 
     eChildAlignment = SFX_ALIGN_NOALIGNMENT;
 
