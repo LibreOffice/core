@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impgraph.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-20 13:54:19 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:38:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1483,6 +1483,30 @@ BOOL ImpGraphic::ImplPaste()
 {
     DBG_ERROR( "Missing implementation!" );
     return FALSE;
+}
+
+// ------------------------------------------------------------------------
+BOOL ImpGraphic::ImplExportNative( SvStream& rOStm ) const
+{
+    BOOL bResult = FALSE;
+
+    if( !rOStm.GetError() )
+    {
+        if( !ImplIsSwapOut() )
+        {
+            if( mpGfxLink && mpGfxLink->IsNative() )
+                bResult = mpGfxLink->ExportNative( rOStm );
+            else
+            {
+                rOStm << *this;
+                bResult = ( rOStm.GetError() == ERRCODE_NONE );
+            }
+        }
+        else
+             rOStm.SetError( SVSTREAM_GENERALERROR );
+    }
+
+    return bResult;
 }
 
 // ------------------------------------------------------------------------
