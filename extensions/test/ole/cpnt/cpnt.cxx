@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpnt.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jl $ $Date: 2000-10-20 15:40:08 $
+ *  last change: $Author: jl $ $Date: 2001-03-23 11:58:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -296,7 +296,7 @@ extern "C" sal_Bool SAL_CALL component_writeInfo(   void * pServiceManager, void
         }
         catch(InvalidRegistryException &)
         {
-            OSL_ENSHURE( sal_False, "### InvalidRegistryException!\n");
+            OSL_ENSURE( sal_False, "### InvalidRegistryException!\n");
         }
     }
     return sal_False;
