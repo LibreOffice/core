@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforlist.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: er $ $Date: 2001-04-11 16:02:40 $
+ *  last change: $Author: er $ $Date: 2001-04-12 12:21:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1474,7 +1474,7 @@ ULONG SvNumberFormatter::TestNewString(const String& sFormatString,
 
 SvNumberformat* SvNumberFormatter::ImpInsertFormat(
             const ::com::sun::star::i18n::NumberFormatCode& rCode,
-            ULONG nPos, BOOL bAfterLoadingSO5 )
+            ULONG nPos, BOOL bAfterLoadingSO5, sal_Int16 nOrgIndex )
 {
     String aCodeStr( rCode.Code );
     if ( rCode.Index < NF_INDEX_TABLE_ENTRIES &&
@@ -1522,15 +1522,25 @@ SvNumberformat* SvNumberFormatter::ImpInsertFormat(
         if ( nKey != NUMBERFORMAT_ENTRY_NOT_FOUND )
         {
 #ifndef PRODUCT
-            if ( !bAfterLoadingSO5 )
-            {   // If bAfterLoadingSO5 there will definitely be some dupes,
-                // don't cry. But we need this test for verification of locale
-                // data if not loading old SO5 documents.
-                 ByteString aMsg( "ImpInsertFormat: dup format code, index " );
-                aMsg += ByteString::CreateFromInt32( rCode.Index );
-                aMsg += '\n';
-                aMsg += ByteString( String( rCode.Code ), RTL_TEXTENCODING_UTF8 );
-                DBG_ERRORFILE( (pLocaleData->AppendLocaleInfo( aMsg )).GetBuffer() );
+            switch ( nOrgIndex )
+            {
+                // These may be dupes of integer versions for locales where
+                // currencies have no decimals like Italian Lira.
+                case NF_CURRENCY_1000DEC2 :         // NF_CURRENCY_1000INT
+                case NF_CURRENCY_1000DEC2_RED :     // NF_CURRENCY_1000INT_RED
+                case NF_CURRENCY_1000DEC2_DASHED :  // NF_CURRENCY_1000INT_RED
+                break;
+                default:
+                    if ( !bAfterLoadingSO5 )
+                    {   // If bAfterLoadingSO5 there will definitely be some dupes,
+                        // don't cry. But we need this test for verification of locale
+                        // data if not loading old SO5 documents.
+                         ByteString aMsg( "ImpInsertFormat: dup format code, index " );
+                        aMsg += ByteString::CreateFromInt32( rCode.Index );
+                        aMsg += '\n';
+                        aMsg += ByteString( String( rCode.Code ), RTL_TEXTENCODING_UTF8 );
+                        DBG_ERRORFILE( (pLocaleData->AppendLocaleInfo( aMsg )).GetBuffer() );
+                    }
             }
 #endif
             delete pFormat;
@@ -1572,9 +1582,11 @@ SvNumberformat* SvNumberFormatter::ImpInsertFormat(
 
 SvNumberformat* SvNumberFormatter::ImpInsertNewStandardFormat(
             const ::com::sun::star::i18n::NumberFormatCode& rCode,
-            ULONG nPos, USHORT nVersion, BOOL bAfterLoadingSO5 )
+            ULONG nPos, USHORT nVersion, BOOL bAfterLoadingSO5,
+            sal_Int16 nOrgIndex )
 {
-    SvNumberformat* pNewFormat = ImpInsertFormat( rCode, nPos, bAfterLoadingSO5 );
+    SvNumberformat* pNewFormat = ImpInsertFormat( rCode, nPos,
+        bAfterLoadingSO5, nOrgIndex );
     if (pNewFormat)
         pNewFormat->SetNewStandardDefined( nVersion );
         // so that it gets saved, displayed properly, and converted by old versions
@@ -2199,11 +2211,13 @@ void SvNumberFormatter::ImpGenerateAdditionalFormats( ULONG CLOffset,
                 aFormatSeq[j].Index != NF_CURRENCY_1000DEC2_CCC )
         {   // Insert only if not already inserted, but internal index must be
             // above so ImpInsertFormat can distinguish it.
+            sal_Int16 nOrgIndex = aFormatSeq[j].Index;
             aFormatSeq[j].Index += nCodes + NF_INDEX_TABLE_ENTRIES;
             if ( ImpInsertNewStandardFormat( aFormatSeq[j], nPos+1,
                     SV_NUMBERFORMATTER_VERSION_ADDITIONAL_I18N_FORMATS,
-                    bAfterLoadingSO5 ) )
+                    bAfterLoadingSO5, nOrgIndex ) )
                 nPos++;
+            aFormatSeq[j].Index = nOrgIndex;
         }
     }
 
