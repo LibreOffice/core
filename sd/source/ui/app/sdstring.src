@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdstring.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:41:09 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:36:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,8 @@ String STR_SOLID
     Text[ hebrew ] = "Durchgängig";
     Text[ hindi ] = "निरन्तर";
     Text[ slovak ] = "Spojitý";
+    Text[ hungarian ] = "Folytonos";
+    Text[ slovenian ] = "Zvezno";
 };
 String STR_GRADIENT
 {
@@ -124,6 +126,8 @@ String STR_GRADIENT
     Text[ hebrew ] = "Farbverlauf";
     Text[ hindi ] = "ग्रेडिऐन्ट्";
     Text[ slovak ] = "Farebný prechod";
+    Text[ hungarian ] = "Színátmenet";
+    Text[ slovenian ] = "Preliv";
 };
 String STR_DESC_GRADIENT
 {
@@ -135,7 +139,7 @@ String STR_DESC_GRADIENT
     Text [ portuguese_brazilian ] = "Indique um nome para o novo gradiente de cor:" ;
     Text [ portuguese ] = "Introduza um nome para a nova grada��o de cor:" ;
     Text [ finnish ] = "M��rit� uuden liukuv�rj�yksen nimi:" ;
-    Text [ danish ] = "Indtast venligst et navn til den nye farvegraduering:" ;
+    Text [ danish ] = "Indtast et navn til den nye farvegraduering:" ;
     Text [ french ] = "Veuillez saisir un nom pour le nouveau d�grad� :" ;
     Text [ swedish ] = "Mata in namnet f�r den nya f�rggradienten h�r:" ;
     Text [ dutch ] = "Typ een naam voor de nieuwe kleurovergangen:" ;
@@ -157,6 +161,8 @@ String STR_DESC_GRADIENT
     Text[ hebrew ] = "Geben Sie hier bitte den Namen für den neuen Farbverlauf ein:";
     Text[ hindi ] = "कृपया नया ग्रेडिऐन्ट् केलिए एक नाम को प्रविष्ट कीजिए:";
     Text[ slovak ] = "Vložte, prosím, názov nového farebného prechodu:";
+    Text[ hungarian ] = "Adja meg az új színátmenet nevét:";
+    Text[ slovenian ] = "Vnesite ime novega preliva:";
 };
 String STR_DEL_GRADIENT
 {
@@ -190,6 +196,8 @@ String STR_DEL_GRADIENT
     Text[ hebrew ] = "Farbverlauf löschen";
     Text[ hindi ] = "ग्रेडिऐन्ट् मिटाओ";
     Text[ slovak ] = "Odstrániť farebný prechod";
+    Text[ hungarian ] = "Színátmenet törlése";
+    Text[ slovenian ] = "Izbriši preliv";
 };
 String STR_ASK_DEL_GRADIENT
 {
@@ -223,6 +231,8 @@ String STR_ASK_DEL_GRADIENT
     Text[ hebrew ] = "Soll der Farbverlauf wirklich gelöscht werden?";
     Text[ hindi ] = "आप ग्रेडिऐन्ट् को मिटाना चाहते है?";
     Text[ slovak ] = "Naozaj chcete odstrániť farebný prechod?";
+    Text[ hungarian ] = "Törölni kívánja a színátmenetet?";
+    Text[ slovenian ] = "Ali želite izbrisati preliv?";
 };
 String STR_ASK_CHANGE_GRADIENT
 {
@@ -256,6 +266,8 @@ String STR_ASK_CHANGE_GRADIENT
     Text[ hebrew ] = "Der Farbverlauf wurde geändert und nicht gesichert. \nSie können den selektierten Farbverlauf ändern \noder einen neuen Farbverlauf hinzufügen.";
     Text[ hindi ] = "संचित किये बिना ग्रेडिऐन्ट् को सुधार किया है । \nचुने हुए ग्रेडिऐन्ट् को सुधार सकते है \nअथवा एक नया ग्रेडिऐन्ट् को जोड़ सकते है ।";
     Text[ slovak ] = "Farebný prechod bol zmenený bez uloženia \nMôžete zmeniť vybraný farebný prechod \nalebo pridať nový.";
+    Text[ hungarian ] = "A színátmenet megváltozott, de nincs elmentve. \nMegváltoztathatja a kiválasztott színátmenetet, \nvagy újat vehet fel.";
+    Text[ slovenian ] = "Spremenjeni preliv ni bil shranjen. \nPosodobite izbrani preliv\nali dodajte novega.";
 };
 String STR_BITMAP
 {
@@ -288,6 +300,8 @@ String STR_BITMAP
     Text[ hebrew ] = "Bitmap";
     Text[ hindi ] = "बिटमॉप्";
     Text[ slovak ] = "Bitová mapa";
+    Text[ hungarian ] = "Bitkép";
+    Text[ slovenian ] = "Bitna slika";
 };
 String STR_DESC_NEW_BITMAP
 {
@@ -299,7 +313,7 @@ String STR_DESC_NEW_BITMAP
     Text [ portuguese_brazilian ] = "Indique um nome para o novo bitmap:" ;
     Text [ portuguese ] = "Introduza um nome para o novomapa de bits:" ;
     Text [ finnish ] = "Kirjoita uuden bittikartan nimi:" ;
-    Text [ danish ] = "Indtast venligst et navn til den nye bitmap:" ;
+    Text [ danish ] = "Indtast et navn til den nye bitmap:" ;
     Text [ french ] = "Veuillez saisir un nom pour le nouveau bitmap :" ;
     Text [ swedish ] = "Ange namn f�r den nya bitmappen:" ;
     Text [ dutch ] = "Typ een naam voor de nieuwe bitmap in:" ;
@@ -321,6 +335,8 @@ String STR_DESC_NEW_BITMAP
     Text[ hebrew ] = "Geben Sie hier bitte den Namen für die neue Bitmap ein:";
     Text[ hindi ] = "कृपया नया बिटमॉप् केलिए एक नाम को प्रविष्ट कीजिए:";
     Text[ slovak ] = "Prosím, vložte názov novej bitovej mapy:";
+    Text[ hungarian ] = "Adja meg az új bitkép nevét:";
+    Text[ slovenian ] = "Vnesite ime nove bitne slike:";
 };
 String STR_DESC_EXT_BITMAP
 {
@@ -332,7 +348,7 @@ String STR_DESC_EXT_BITMAP
     Text [ portuguese_brazilian ] = "Indique um nome para o bitmap externo:" ;
     Text [ portuguese ] = "Introduza um nome para o mapa de bits externo:" ;
     Text [ finnish ] = "M��rit� ulkoisen bittikartan nimi:" ;
-    Text [ danish ] = "Indtast venligst et navn til den eksterne bitmap:" ;
+    Text [ danish ] = "Indtast et navn til den eksterne bitmap:" ;
     Text [ french ] = "Veuillez saisir un nom pour le bitmap externe :" ;
     Text [ swedish ] = "Ange namn f�r extern bitmap:" ;
     Text [ dutch ] = "Geef een naam voor de externe bitmap op:" ;
@@ -354,6 +370,8 @@ String STR_DESC_EXT_BITMAP
     Text[ hebrew ] = "Geben Sie hier bitte den Namen für die externe Bitmap ein:";
     Text[ hindi ] = "कृपया बाहरी बिटमॉप् केलिए एक नाम को प्रविष्ट कीजिए:";
     Text[ slovak ] = "Prosím vložte názov externej bitovej mapy:";
+    Text[ hungarian ] = "Adja meg a külső bitkép nevét:";
+    Text[ slovenian ] = "Vnesite ime zunanje bitne slike:";
 };
 String STR_DEL_BITMAP
 {
@@ -387,6 +405,8 @@ String STR_DEL_BITMAP
     Text[ hebrew ] = "Bitmap löschen";
     Text[ hindi ] = "बिटमॉप् मिटाओ";
     Text[ slovak ] = "Odstrániť bitovú mapu";
+    Text[ hungarian ] = "Bitkép törlése";
+    Text[ slovenian ] = "Izbriši bitno sliko";
 };
 String STR_ASK_DEL_BITMAP
 {
@@ -420,6 +440,8 @@ String STR_ASK_DEL_BITMAP
     Text[ hebrew ] = "Soll die Bitmap wirklich gelöscht werden?";
     Text[ hindi ] = "आप बिटमॉप को मिटाना चाहते है?";
     Text[ slovak ] = "Naozaj chcete vymazať bitovú mapu?";
+    Text[ hungarian ] = "Biztosan törli a bitképet?";
+    Text[ slovenian ] = "Ali želite izbrisati bitno sliko?";
 };
 String STR_ASK_CHANGE_BITMAP
 {
@@ -453,6 +475,8 @@ String STR_ASK_CHANGE_BITMAP
     Text[ hebrew ] = "Die Bitmap wurde geändert und nicht gesichert. \nSie können die selektierte Bitmap ändern \noder eine neue Bitmap hinzufügen.";
     Text[ hindi ] = "संचित किये बिना बिटमॉप् को सुधार किया है । \nआप चुने हुए बिटमॉप् को बदल सकते है अथवा एक नया बिटमॉप् को जोड़ सकते है ।";
     Text[ slovak ] = "Bitová mapa bola zmenená bez uloženia. \nMôžete zmeniť vybranú bitovú mapu\nalebo pridať novú.";
+    Text[ hungarian ] = "A bitkép módosult, de nincs elmentve. \nMódosíthatja a kiválasztott bitképet, vagy újat vehet fel.";
+    Text[ slovenian ] = "Spremenjena bitna slika ni bila shranjena. \nPosodobite izbrano sliko\nali dodajte novo.";
 };
 String STR_LINESTYLE
 {
@@ -485,6 +509,8 @@ String STR_LINESTYLE
     Text[ hebrew ] = "‮סגנון קו‬";
     Text[ hindi ] = "रेखा शैली";
     Text[ slovak ] = "Štýl čiary";
+    Text[ hungarian ] = "Vonalstílus";
+    Text[ slovenian ] = "Slog črte";
 };
 String STR_DESC_LINESTYLE
 {
@@ -496,7 +522,7 @@ String STR_DESC_LINESTYLE
     Text [ portuguese_brazilian ] = "Indique um nome para o novo estilo de linha:" ;
     Text [ portuguese ] = "Introduza um nome para o novo estilo de linha:" ;
     Text [ finnish ] = "Kirjoita uuden viivatyylin nimi:" ;
-    Text [ danish ] = "Indtast venligst et navn til den nye stregtype:" ;
+    Text [ danish ] = "Indtast et navn til den nye stregtype:" ;
     Text [ french ] = "Veuillez saisir un nom pour le nouveau style de ligne :" ;
     Text [ swedish ] = "Mata in namnet f�r den nya linjestilen h�r:" ;
     Text [ dutch ] = "Geef een naam op voor het nieuwe lijntype:" ;
@@ -518,6 +544,8 @@ String STR_DESC_LINESTYLE
     Text[ hebrew ] = "Geben Sie hier bitte den Namen für den neuen Linienstil ein:";
     Text[ hindi ] = "कृपया नया रेखा शैली केलिए एक नाम को प्रविष्ट कीजिए:";
     Text[ slovak ] = "Vložte, prosím, názov nového štýlu čiary:";
+    Text[ hungarian ] = "Adja meg az új vonalstílus nevét:";
+    Text[ slovenian ] = "Vnesite ime novega sloga črte:";
 };
 String STR_DEL_LINESTYLE
 {
@@ -551,6 +579,8 @@ String STR_DEL_LINESTYLE
     Text[ hebrew ] = "Linienstil löschen";
     Text[ hindi ] = "रेखा शैली मिटाओ";
     Text[ slovak ] = "Odstrániť štýl čiary";
+    Text[ hungarian ] = "Vonalstílus törlése";
+    Text[ slovenian ] = "Izbriši slog črte";
 };
 String STR_ASK_DEL_LINESTYLE
 {
@@ -584,6 +614,8 @@ String STR_ASK_DEL_LINESTYLE
     Text[ hebrew ] = "Soll der Linienstil wirklich gelöscht werden?";
     Text[ hindi ] = "आप रेखा शैली को मिटाना चाहते है?";
     Text[ slovak ] = "Naozaj chcete vymazať štýl čiary?";
+    Text[ hungarian ] = "Törölni akarja a vonalstílust?";
+    Text[ slovenian ] = "Ali želite izbrisati slog črte?";
 };
 String STR_ASK_CHANGE_LINESTYLE
 {
@@ -617,6 +649,8 @@ String STR_ASK_CHANGE_LINESTYLE
     Text[ hebrew ] = "Der Linienstil wurde geändert und nicht gesichert. \nSie können den selektierten Linienstil ändern \noder einen neuen Linienstil hinzufügen.";
     Text[ hindi ] = "संचित किये बिना रेखा शैली को सुधार किया है ।\nचुने हुए रेखा शैली को सुधारो अथवा एक नया रेखा शैली को जोड़ो ।";
     Text[ slovak ] = "Štýl čiary bol zmenený bez uloženia. \nMôžete zmeniť vybraný štýl čiary\nalebo pridať nový.";
+    Text[ hungarian ] = "A vonalstílus megváltozott, de nincs elmentve.\nMegváltoztathatja a kiválasztott stílust,\nvagy újat vehet fel.";
+    Text[ slovenian ] = "Spremenjeni slog črte ni bil spremenjen shranjen. \nPosodobite izbrani slog\nali dodajte novega.";
 };
 String STR_INVISIBLE
 {
@@ -649,6 +683,8 @@ String STR_INVISIBLE
     Text[ hebrew ] = "Unsichtbar";
     Text[ hindi ] = "अगोचर";
     Text[ slovak ] = "Neviditeľný";
+    Text[ hungarian ] = "Láthatatlan";
+    Text[ slovenian ] = "Nevidno";
 };
 String STR_COLOR
 {
@@ -681,6 +717,8 @@ String STR_COLOR
     Text[ hebrew ] = "‮צבע‬";
     Text[ hindi ] = "रंग";
     Text[ slovak ] = "Farba";
+    Text[ hungarian ] = "Színes";
+    Text[ slovenian ] = "Barva";
 };
 String STR_HATCH
 {
@@ -713,6 +751,8 @@ String STR_HATCH
     Text[ hebrew ] = "Schraffur";
     Text[ hindi ] = "हाचिंग";
     Text[ slovak ] = "Šrafovanie";
+    Text[ hungarian ] = "Vonalkázás";
+    Text[ slovenian ] = "Šrafiranje";
 };
 String STR_CHANGE
 {
@@ -746,6 +786,8 @@ String STR_CHANGE
     Text[ hebrew ] = "‮שינוי‬";
     Text[ hindi ] = "सुधारो";
     Text[ slovak ] = "Upraviť";
+    Text[ hungarian ] = "Módosítás";
+    Text[ slovenian ] = "Spremeni";
 };
 String STR_ADD
 {
@@ -779,6 +821,8 @@ String STR_ADD
     Text[ hebrew ] = "‮הוספה‬";
     Text[ hindi ] = "जोड़ो";
     Text[ slovak ] = "Pridať";
+    Text[ hungarian ] = "Hozzáadás";
+    Text[ slovenian ] = "Dodaj";
 };
 
 String STR_SAR_TITLE
@@ -810,6 +854,8 @@ String STR_SAR_TITLE
     Text[ hebrew ] = "‮חיפוש והחלפה‬";
     Text[ hindi ] = "अन्वेषण और प्रतिस्थापन";
     Text[ slovak ] = "Nájsť a Nahradiť";
+    Text[ hungarian ] = "Keresés és csere";
+    Text[ slovenian ] = "Najdi in zamenjaj";
 };
 
 String STR_SAR_NOT_FOUND
@@ -841,6 +887,8 @@ String STR_SAR_NOT_FOUND
     Text[ hebrew ] = "Suchbegriff nicht gefunden.";
     Text[ hindi ] = "खोज किया हुआ चाभी नहीं प्राप्त हुआ ।";
     Text[ slovak ] = "Hľadané kľúčové slovo nenájdené";
+    Text[ hungarian ] = "A keresési kulcs nem található.";
+    Text[ slovenian ] = "Ključa za iskanje ni mogoče najti.";
 };
 
 String STR_SAR_WRAP_FORWARD
@@ -851,12 +899,12 @@ String STR_SAR_WRAP_FORWARD
     Text[ portuguese ] = "%PRODUCTNAME Impress has searched to the end of the presentation. Do you want to continue at the beginning?";
     Text[ russian ] = "%PRODUCTNAME Impress has searched to the end of the presentation. Do you want to continue at the beginning?";
     Text[ greek ] = "%PRODUCTNAME Impress has searched to the end of the presentation. Do you want to continue at the beginning?";
-    Text[ dutch ] = "%PRODUCTNAME Impress has searched to the end of the presentation. Do you want to continue at the beginning?";
+    Text[ dutch ] = "%PRODUCTNAME Impress heeft tot aan het einde van de presentatie gezocht. Wilt u doorgaan met zoeken vanaf het begin?";
     Text[ french ] = "%PRODUCTNAME Impress a atteint la fin de la pr�sentation. Souhaitez-vous reprendre la recherche au d�but de la pr�sentation ?";
     Text[ spanish ] = "%PRODUCTNAME Impress ha llegado hasta el final de la presentaci�n. �Desea continuar la b�squeda desde el principio? ";
     Text[ finnish ] = "%PRODUCTNAME Impress has searched to the end of the presentation. Do you want to continue at the beginning?";
     Text[ italian ] = "%PRODUCTNAME Impress ha eseguito la ricerca fino al termine della presentazione. Volete continuare la ricerca dall'inizio?";
-    Text[ danish ] = "%PRODUCTNAME Impress has searched to the end of the presentation. Do you want to continue at the beginning?";
+    Text[ danish ] = "%PRODUCTNAME Impress har n�et slutningen af pr�sentationen. Skal s�gningen forts�ttes fra pr�sentationens begyndelse?";
     Text[ swedish ] = "%PRODUCTNAME Impress har s�kt till slutet av presentationen. Vill du forts�tta s�kningen i b�rjan?";
     Text[ polish ] = "%PRODUCTNAME Impress has searched to the end of the presentation. Do you want to continue at the beginning?";
     Text[ portuguese_brazilian ] = "O %PRODUCTNAME Impress pesquisou at� o fim da apresenta��o. Deseja continuar pelo in�cio? ";
@@ -872,6 +920,8 @@ String STR_SAR_WRAP_FORWARD
     Text[ hebrew ] = "%PRODUCTNAME Impress hat bis zum Ende der Präsentation gesucht. Möchten Sie die Suche am Anfang fortsetzen?";
     Text[ hindi ] = "%PRODUCTNAME Impress has searched to the end of the presentation. Do you want to continue at the beginning?";
     Text[ slovak ] = "%PRODUCTNAME Impress hľadal do konca prezentácie. Chcete pokračovať od začiatku?";
+    Text[ hungarian ] = "Az %PRODUCTNAME Impress a bemutató végére ért. Folytatja a keresést az elejétől?";
+    Text[ slovenian ] = "%PRODUCTNAME Impress je preiskal do konca predstavitve. Ali želite nadaljevati na začetku?";
 };
 
 String STR_SAR_WRAP_BACKWARD
@@ -882,12 +932,12 @@ String STR_SAR_WRAP_BACKWARD
     Text[ portuguese ] = "%PRODUCTNAME Impress has searched to the beginning of the presentation. Do you want to continue at the end?";
     Text[ russian ] = "%PRODUCTNAME Impress has searched to the beginning of the presentation. Do you want to continue at the end?";
     Text[ greek ] = "%PRODUCTNAME Impress has searched to the beginning of the presentation. Do you want to continue at the end?";
-    Text[ dutch ] = "%PRODUCTNAME Impress has searched to the beginning of the presentation. Do you want to continue at the end?";
+    Text[ dutch ] = "%PRODUCTNAME Impress heeft tot aan het begin van de presentatie gezocht. Wilt u doorgaan met zoeken vanaf het einde?";
     Text[ french ] = "%PRODUCTNAME Impress a atteint le d�but de la pr�sentation. Souhaitez-vous reprendre la recherche � la fin de la pr�sentation ?";
     Text[ spanish ] = "%PRODUCTNAME Impress ha llegado hasta el principio de la presentaci�n. �Desea continuar la b�squeda desde el final? ";
     Text[ finnish ] = "%PRODUCTNAME Impress has searched to the beginning of the presentation. Do you want to continue at the end?";
     Text[ italian ] = "%PRODUCTNAME Impress eseguito la ricerca fino all'inizio della presentazione. Volete proseguire fino alla fine?";
-    Text[ danish ] = "%PRODUCTNAME Impress has searched to the beginning of the presentation. Do you want to continue at the end?";
+    Text[ danish ] = "%PRODUCTNAME Impress har n�et begyndelsen af pr�sentationen. Skal s�gningen forts�ttes fra pr�sentationens slutning?";
     Text[ swedish ] = "%PRODUCTNAME Impress har s�kt till b�rjan av presentationen. Vill du forts�tta s�kningen i slutet?";
     Text[ polish ] = "%PRODUCTNAME Impress has searched to the beginning of the presentation. Do you want to continue at the end?";
     Text[ portuguese_brazilian ] = "O %PRODUCTNAME Impress pesquisou at� o in�cio da apresenta��o. Deseja continuar pelo fim?";
@@ -903,6 +953,8 @@ String STR_SAR_WRAP_BACKWARD
     Text[ hebrew ] = "%PRODUCTNAME Impress hat bis zum Anfang der Präsentation gesucht. Möchten Sie die Suche am Ende fortsetzen?";
     Text[ hindi ] = "%PRODUCTNAME Impress has searched to the beginning of the presentation. Do you want to continue at the end?";
     Text[ slovak ] = "%PRODUCTNAME Impress hľadal do začiatku prezentácie. Chcete pokračovať na konci?";
+    Text[ hungarian ] = "Az %PRODUCTNAME Impress a bemutató elejére ért. Folytatja a keresést a végétől?";
+    Text[ slovenian ] = "%PRODUCTNAME Impress je preiskal do začetka predstavitve. Ali želite nadaljevati na koncu?";
 };
 
 String STR_SAR_WRAP_FORWARD_DRAW
@@ -913,12 +965,12 @@ String STR_SAR_WRAP_FORWARD_DRAW
     Text[ portuguese ] = "%PRODUCTNAME Draw has searched to the end of the document. Do you want to continue at the beginning?";
     Text[ russian ] = "%PRODUCTNAME Draw has searched to the end of the document. Do you want to continue at the beginning?";
     Text[ greek ] = "%PRODUCTNAME Draw has searched to the end of the document. Do you want to continue at the beginning?";
-    Text[ dutch ] = "%PRODUCTNAME Draw has searched to the end of the document. Do you want to continue at the beginning?";
+    Text[ dutch ] = "%PRODUCTNAME Draw heeft tot aan het einde van het document gezocht. Wilt u doorgaan met zoeken vanaf het begin?";
     Text[ french ] = "%PRODUCTNAME Draw a atteint la fin du document. Souhaitez-vous reprendre la recherche au d�but du document ?";
     Text[ spanish ] = "%PRODUCTNAME Draw ha llegado hasta el final del documento. �Desea continuar la b�squeda desde el principio? ";
     Text[ finnish ] = "%PRODUCTNAME Draw has searched to the end of the document. Do you want to continue at the beginning?";
     Text[ italian ] = "%PRODUCTNAME Draw ha eseguito la ricerca fino al termine della presentazione. Volete continuare la ricerca dall'inizio?";
-    Text[ danish ] = "%PRODUCTNAME Draw has searched to the end of the document. Do you want to continue at the beginning?";
+    Text[ danish ] = "%PRODUCTNAME Draw har n�et slutningen af pr�sentationen. Skal s�gningen forts�ttes fra pr�sentationens begyndelse?";
     Text[ swedish ] = "%PRODUCTNAME Draw har s�kt till slutet av dokumentet. Vill du forts�tta s�kningen i b�rjan?";
     Text[ polish ] = "%PRODUCTNAME Draw has searched to the end of the document. Do you want to continue at the beginning?";
     Text[ portuguese_brazilian ] = "O %PRODUCTNAME Draw pesquisou at� o fim da apresenta��o. Deseja continuar pelo in�cio? ";
@@ -934,6 +986,8 @@ String STR_SAR_WRAP_FORWARD_DRAW
     Text[ hebrew ] = "%PRODUCTNAME Draw has searched to the end of the document. Do you want to continue at the beginning?";
     Text[ hindi ] = "%PRODUCTNAME Draw has searched to the end of the document. Do you want to continue at the beginning?";
     Text[ slovak ] = "%PRODUCTNAME Draw hľadal do konca dokumetu. Chcete pokračovať od začiatku?";
+    Text[ hungarian ] = "Az %PRODUCTNAME Draw a bemutató végére ért. Folytatja a keresést az elejétől?";
+    Text[ slovenian ] = "%PRODUCTNAME Draw je preiskal do konca dokumenta. Ali želite nadaljevati na začetku?";
 };
 
 String STR_SAR_WRAP_BACKWARD_DRAW
@@ -944,12 +998,12 @@ String STR_SAR_WRAP_BACKWARD_DRAW
     Text[ portuguese ] = "%PRODUCTNAME Draw has searched to the beginning of the document. Do you want to continue at the end?";
     Text[ russian ] = "%PRODUCTNAME Draw has searched to the beginning of the document. Do you want to continue at the end?";
     Text[ greek ] = "%PRODUCTNAME Draw has searched to the beginning of the document. Do you want to continue at the end?";
-    Text[ dutch ] = "%PRODUCTNAME Draw has searched to the beginning of the document. Do you want to continue at the end?";
+    Text[ dutch ] = "%PRODUCTNAME Draw heeft tot aan het begin van het document gezocht. Wilt u doorgaan met zoeken vanaf het einde?";
     Text[ french ] = "%PRODUCTNAME Draw a atteint le d�but du document. Souhaitez-vous reprendre la recherche � la fin du document ?";
     Text[ spanish ] = "%PRODUCTNAME Draw ha llegado hasta el principio del documento. �Desea continuar desde el final? ";
     Text[ finnish ] = "%PRODUCTNAME Draw has searched to the beginning of the document. Do you want to continue at the end?";
     Text[ italian ] = "%PRODUCTNAME Draw ha eseguito la ricerca fino all'inizio della presentazione. Volete proseguire fino alla fine?";
-    Text[ danish ] = "%PRODUCTNAME Draw has searched to the beginning of the document. Do you want to continue at the end?";
+    Text[ danish ] = "%PRODUCTNAME Draw har n�et begyndelsen af pr�sentationen. Skal s�gningen forts�ttes fra pr�sentationens slutning?";
     Text[ swedish ] = "%PRODUCTNAME Draw har s�kt till b�rjan av dokumentet. Vill du forts�tta s�kningen i slutet?";
     Text[ polish ] = "%PRODUCTNAME Draw has searched to the beginning of the document. Do you want to continue at the end?";
     Text[ portuguese_brazilian ] = "O %PRODUCTNAME Draw pesquisou at� o in�cio da apresenta��o. Deseja continuar pelo fim?";
@@ -965,7 +1019,11 @@ String STR_SAR_WRAP_BACKWARD_DRAW
     Text[ hebrew ] = "%PRODUCTNAME Draw has searched to the beginning of the document. Do you want to continue at the end?";
     Text[ hindi ] = "%PRODUCTNAME Draw has searched to the beginning of the document. Do you want to continue at the end?";
     Text[ slovak ] = "%PRODUCTNAME Draw hľadal do začiatku dokumentu. Chcete pokračovať na konci?";
+    Text[ hungarian ] = "Az %PRODUCTNAME Draw a bemutató elejére ért. Folytatja a keresést a végétől?";
+    Text[ slovenian ] = "%PRODUCTNAME Draw je preiskal do začetka dokumenta. Ali želite nadaljevati na koncu?";
 };
+
+
 
 
 
