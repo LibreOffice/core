@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtffly.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 13:28:31 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 13:56:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,6 +186,12 @@
 #include <fmtwrapinfluenceonobjpos.hxx>
 #endif
 // <--
+#ifndef _SVX_BRSHITEM_HXX
+#include <svx/brshitem.hxx>
+#endif
+#ifndef _FMTFOLLOWTEXTFLOW_HXX
+#include <fmtfollowtextflow.hxx>
+#endif
 
 #define ANCHOR(p)   ((SwFmtAnchor*)p)
 
@@ -352,14 +358,16 @@ void SwRTFParser::SetFlysInDoc()
         ASSERT( pFlySave->nSttNd.GetIndex() <= pFlySave->nEndNd.GetIndex(),
                 "Fly hat falschen Bereich" );
 
+
+
         //JP 21.09.98: wenn ein DropCap ist, dann Text im Node belassen, am
         //              Absatz das Absatz Attribut setzen. Ggfs noch die
         //              FontSize zuruecksetzen, damit das DropCap nicht zu
         //              groá wird.
         if( pFlySave->nDropAnchor )
         {
-            SwTxtNode* pSttNd = pFlySave->nSttNd.GetNode().GetTxtNode(),
-                     * pEndNd = pFlySave->nEndNd.GetNode().GetTxtNode();
+            SwTxtNode* pSttNd = pFlySave->nSttNd.GetNode().GetTxtNode();
+            SwTxtNode* pEndNd = pFlySave->nEndNd.GetNode().GetTxtNode();
             if( pSttNd && pEndNd &&
                 pSttNd->GetIndex() + 1 == pEndNd->GetIndex() )
             {
@@ -370,6 +378,7 @@ void SwRTFParser::SetFlysInDoc()
                 }
                 if( bJoined )
                 {
+                    pEndNd=pSttNd; //#i38227# since pEndNd was deleted and joined
                     SwFmtDrop aDropCap;
                     aDropCap.GetLines() = (BYTE)pFlySave->nDropLines;
                     aDropCap.GetChars() = 1;
@@ -493,21 +502,36 @@ void SwRTFParser::SetFlysInDoc()
         // if the section only contains one Node and this has a
         // border or backgorund, then put it to the frame
         // Not in our own RTF-Format!
+        // #102781#. Added support for transparent frames.
         if( pSttNd->GetIndex() + 2 == pSttNd->EndOfSectionIndex() &&
             !bSwPageDesc )
         {
-            SwTxtNode* pSrcNd = pDoc->GetNodes()[ pSttNd->GetIndex() + 1 ]
+            SwTxtNode* _pSrcNd = pDoc->GetNodes()[ pSttNd->GetIndex() + 1 ]
                                     ->GetTxtNode();
+            SwCntntNode* pSrcNd = pDoc->GetNodes()[ pSttNd->GetIndex() + 1 ]->GetCntntNode();
+            SfxItemSet aTmpSet( pDoc->GetAttrPool(),
+                                    RES_BACKGROUND, RES_BOX );
+            if( pSrcNd && pSrcNd->GetpSwAttrSet() )
+                aTmpSet.Put( *pSrcNd->GetpSwAttrSet() );
+            if (const SvxBrushItem* pBackgroundBrush = (const SvxBrushItem*)pFlySave->aFlySet.GetItem(RES_BACKGROUND, FALSE))
+            {
+                aTmpSet.Put(*pBackgroundBrush, RES_BACKGROUND);
+            }
+            else if (const SvxBrushItem* pBackgroundBrush = (const SvxBrushItem*)aTmpSet.GetItem(RES_BACKGROUND, FALSE))
+            {
+                Color& rBackgroundColor = const_cast<SvxBrushItem*>(pBackgroundBrush)->GetColor();
+                rBackgroundColor.SetTransparency(0xFE);
+            } else {
+                Color aColor = Color(0xff, 0xff, 0xff);
+                aColor.SetTransparency( 0xFE);
+                SvxBrushItem aBrush(aColor);
+                aTmpSet.Put(aBrush, RES_BACKGROUND);
+            }
+            // #117914# Topic 6.
+            pFlySave->aFlySet.Put( aTmpSet );
             if( pSrcNd && pSrcNd->GetpSwAttrSet() )
             {
-                SfxItemSet aTmpSet( pDoc->GetAttrPool(),
-                                    RES_BACKGROUND, RES_BOX );
-                aTmpSet.Put( *pSrcNd->GetpSwAttrSet() );
-                if( aTmpSet.Count() )
-                {
-                    pFlySave->aFlySet.Put( aTmpSet );
-                    pSrcNd->ResetAttr( RES_BACKGROUND, RES_BOX );
-                }
+                pSrcNd->ResetAttr( RES_BACKGROUND, RES_BOX );
             }
         }
 
@@ -1021,6 +1045,9 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
                     text::WrapInfluenceOnPosition::ONCE_SUCCESSIVE ));
     // <--
 
+    SwFmtFollowTextFlow aFollowTextFlow( FALSE );
+    pSet->Put( aFollowTextFlow );
+
     if( !( aFrmDir == pSet->Get( RES_FRAMEDIR )) )
         pSet->Put( aFrmDir );
 
@@ -1106,6 +1133,16 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
 
         if( !IsPardTokenRead() )
         {
+            // #102781#. Added support for transparent frames.
+            if (nToken == RTF_CBPAT)
+            {
+                USHORT _index=USHORT(nTokenValue);
+                const Color& rColor = GetColor(_index);
+                SvxBrushItem aBrush(rColor);
+                SwFlySave* pFlySave = aFlyArr[nFlyArrCnt-1];
+                pFlySave->aFlySet.Put(aBrush, RES_BACKGROUND);
+            }
+
             nToken = GetNextToken();
 
             // BUG 22036: kommt zwischen Fly-Attributen ein unbekanntes,
@@ -1319,13 +1356,22 @@ void SwRTFParser::InsPicture( const String& rGrfNm, const Graphic* pGrf,
     else
     {
         // wenn normale RTF-Grafik, dann steht diese im Textfluss !
-        SwAttrSet aFlySet( pDoc->GetAttrPool(), RES_VERT_ORIENT, RES_ANCHOR );
+        SwAttrSet aFlySet( pDoc->GetAttrPool(), RES_OPAQUE, /*RES_OPAQUE,
+                                                RES_VERT_ORIENT,*/ RES_ANCHOR );
         const SwPosition* pPos = pPam->GetPoint();
 
         SwFmtAnchor aAnchor( FLY_IN_CNTNT );
         aAnchor.SetAnchor( pPos );
         aFlySet.Put( aAnchor );
         aFlySet.Put( SwFmtVertOrient( 0, VERT_TOP ));
+
+        if (pDoc->IsInHeaderFooter(pPos->nNode))
+        {
+            SvxOpaqueItem aOpaqueItem(RES_OPAQUE, FALSE);
+            SwFmtSurround aSurroundItem(SURROUND_THROUGHT);
+            aFlySet.Put(aOpaqueItem);
+            aFlySet.Put(aSurroundItem);
+        }
 
         SwFrmFmt* pFlyFmt = pDoc->Insert( *pPam,
                     rGrfNm, aEmptyStr,      // Name der Graphic !!
@@ -1370,8 +1416,10 @@ void SwRTFParser::_SetPictureSize( const SwNoTxtNode& rNd,
             else
             {
                 // von 100TH_MM nach TWIP umrechenen!
-                aSize.Width() = pPicType->nWidth * 144 / 254;
-                aSize.Height() = pPicType->nHeight * 144 / 254;
+                // #117879# when \picwgoal resp \pichgoal are present, then use them.
+                //          The values of \picwgoal and \picwgoal are already given in twips.
+                aSize.Width() = (pPicType->nGoalWidth?pPicType->nGoalWidth:(pPicType->nWidth*144)/254);
+                aSize.Height() = (pPicType->nGoalHeight?pPicType->nGoalHeight:(pPicType->nHeight*144)/254);
             }
             ((SwGrfNode&)rNd).SetTwipSize( aSize );
         }
