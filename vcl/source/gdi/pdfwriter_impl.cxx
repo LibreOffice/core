@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 13:23:40 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 12:57:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,8 @@
 #include <rtl/digest.h>
 
 #include "implncvt.hxx"
+
+#include <algorithm>
 
 using namespace vcl;
 using namespace rtl;
@@ -211,7 +213,7 @@ void doTestCode()
 
     aWriter.EndTransparencyGroup( aTranspRect, 50 );
 
-    // preapare an alpha mask
+    // prepare an alpha mask
     Bitmap aTransMask( Size( 256, 256 ), 8, &Bitmap::GetGreyPalette( 256 ) );
     BitmapWriteAccess* pAcc = aTransMask.AcquireWriteAccess();
     for( int nX = 0; nX < 256; nX++ )
@@ -230,11 +232,9 @@ void doTestCode()
     aWriter.DrawText( aTranspRect,
                       String( RTL_CONSTASCII_USTRINGPARAM( "Some transparent text" ) ),
                       TEXT_DRAW_CENTER | TEXT_DRAW_VCENTER | TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK );
-
     aTranspRect = Rectangle( Point( 1500, 16500 ), Size( 4800, 3000 ) );
     aWriter.SetFillColor( Color( COL_LIGHTRED ) );
     aWriter.DrawRect( aTranspRect );
-#if 0
     aWriter.BeginTransparencyGroup();
     aWriter.SetFillColor( Color( COL_LIGHTGREEN ) );
     aWriter.DrawEllipse( aTranspRect );
@@ -243,7 +243,6 @@ void doTestCode()
                       String( RTL_CONSTASCII_USTRINGPARAM( "Some transparent text" ) ),
                       TEXT_DRAW_CENTER | TEXT_DRAW_VCENTER | TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK );
     aWriter.EndTransparencyGroup( aTranspRect, aTransMask );
-#endif
 
     Bitmap aImageBmp( Size( 256, 256 ), 24 );
     pAcc = aImageBmp.AcquireWriteAccess();
@@ -710,7 +709,8 @@ PDFWriterImpl::PDFPage::PDFPage( PDFWriterImpl* pWriter, sal_Int32 nPageWidth, s
         m_nBeginStreamPos( 0 ),
         m_eTransition( PDFWriter::Regular ),
         m_nTransTime( 0 ),
-        m_nDuration( 0 )
+        m_nDuration( 0 ),
+        m_bHasWidgets( false )
 {
     // object ref must be only ever updated in emit()
     m_nPageObject = m_pWriter->createObject();
@@ -817,6 +817,11 @@ bool PDFWriterImpl::PDFPage::emit(sal_Int32 nParentObject )
         }
         aLine.append( "]\r\n" );
     }
+    #if 0
+    // FIXME: implement tab order as Structure Tree
+    if( m_bHasWidgets && m_pWriter->getVersion() >= PDFWriter::PDF_1_5 )
+        aLine.append( "   /Tabs /S\r\n" );
+    #endif
     if( m_aMCIDParents.size() > 0 )
     {
         aLine.append( "   /StructParents " );
@@ -1201,9 +1206,10 @@ PDFWriterImpl::PDFWriterImpl( const PDFWriter::PDFWriterContext& rContext )
         case PDFWriter::PDF_1_3: aBuffer.append( "1.3" );break;
         default:
         case PDFWriter::PDF_1_4: aBuffer.append( "1.4" );break;
+        case PDFWriter::PDF_1_5: aBuffer.append( "1.5" );break;
     }
     // append something binary as comment (suggested in PDF Reference)
-    aBuffer.append( "\r\n%��\r\n" );
+    aBuffer.append( "\r\n%äüöß\r\n" );
     if( !writeBuffer( aBuffer.getStr(), aBuffer.getLength() ) )
     {
         osl_closeFile( m_aFile );
@@ -1849,8 +1855,7 @@ OString PDFWriterImpl::emitStructureAttributes( PDFStructureElement& rEle )
                 updateObject( nRefObject );
                 writeBuffer( aRef.getStr(), aRef.getLength() );
 
-                rEle.m_aKids.append( nRefObject );
-                rEle.m_aKids.append( " 0 R " );
+                rEle.m_aKids.push_back( PDFStructureElementKid( nRefObject ) );
             }
             else
             {
@@ -2013,10 +2018,34 @@ sal_Int32 PDFWriterImpl::emitStructure( PDFStructureElement& rEle )
             aLine.append( "\r\n" );
         }
     }
-    if( rEle.m_aKids.getLength() )
+    if( ! rEle.m_aKids.empty() )
     {
         aLine.append( "   /K [ " );
-        aLine.append( rEle.m_aKids.makeStringAndClear() );
+        for( std::list< PDFStructureElementKid >::const_iterator it =
+             rEle.m_aKids.begin(); it != rEle.m_aKids.end(); ++it )
+        {
+            if( it->nMCID == -1 )
+            {
+                aLine.append( it->nObject );
+                aLine.append( " 0 R " );
+            }
+            else
+            {
+                if( it->nObject == rEle.m_nFirstPageObject )
+                {
+                    aLine.append( it->nMCID );
+                    aLine.append( " " );
+                }
+                else
+                {
+                    aLine.append( "<< /Type /MCR /Pg " );
+                    aLine.append( it->nObject );
+                    aLine.append( " 0 R /MCID " );
+                    aLine.append( it->nMCID );
+                    aLine.append( " >>\r\n" );
+                }
+            }
+        }
         aLine.append( "]\r\n" );
     }
     aLine.append( ">>\r\nendobj\r\n\r\n" );
@@ -4514,9 +4543,115 @@ bool PDFWriterImpl::emitTrailer()
     return true;
 }
 
+struct AnnotationSortEntry
+{
+    sal_Int32 nTabOrder;
+    sal_Int32 nObject;
+    sal_Int32 nWidgetIndex;
+
+    AnnotationSortEntry( sal_Int32 nTab, sal_Int32 nObj, sal_Int32 nI ) :
+        nTabOrder( nTab ),
+        nObject( nObj ),
+        nWidgetIndex( nI )
+    {}
+};
+
+struct AnnotSortContainer
+{
+    std::set< sal_Int32 >               aObjects;
+    std::vector< AnnotationSortEntry >    aSortedAnnots;
+};
+
+struct AnnotSorterLess
+{
+    std::vector< PDFWriterImpl::PDFWidget >& m_rWidgets;
+
+    AnnotSorterLess( std::vector< PDFWriterImpl::PDFWidget >& rWidgets ) : m_rWidgets( rWidgets ) {}
+
+    bool operator()( const AnnotationSortEntry& rLeft, const AnnotationSortEntry& rRight )
+    {
+        if( rLeft.nTabOrder < rRight.nTabOrder )
+            return true;
+        if( rRight.nTabOrder < rLeft.nTabOrder )
+            return false;
+        if( rLeft.nWidgetIndex < 0 && rRight.nWidgetIndex < 0 )
+            return false;
+        if( rRight.nWidgetIndex < 0 )
+            return true;
+        if( rLeft.nWidgetIndex < 0 )
+            return false;
+        // remember: widget rects are in PDF coordinates, so they are ordered down up
+        if( m_rWidgets[ rLeft.nWidgetIndex ].m_aRect.Top() >
+            m_rWidgets[ rRight.nWidgetIndex ].m_aRect.Top() )
+            return true;
+        if( m_rWidgets[ rRight.nWidgetIndex ].m_aRect.Top() >
+            m_rWidgets[ rLeft.nWidgetIndex ].m_aRect.Top() )
+            return false;
+        if( m_rWidgets[ rLeft.nWidgetIndex ].m_aRect.Left() <
+            m_rWidgets[ rRight.nWidgetIndex ].m_aRect.Left() )
+            return true;
+        return false;
+    }
+};
+
+void PDFWriterImpl::sortWidgets()
+{
+    // sort widget annotations on each page as per their
+    // TabOrder attribute
+    std::hash_map< sal_Int32, AnnotSortContainer > sorted;
+    int nWidgets = m_aWidgets.size();
+    for( int nW = 0; nW < nWidgets; nW++ )
+    {
+        const PDFWidget& rWidget = m_aWidgets[nW];
+        AnnotSortContainer& rCont = sorted[ rWidget.m_nPage ];
+        // optimize vector allocation
+        if( rCont.aSortedAnnots.empty() )
+            rCont.aSortedAnnots.reserve( m_aPages[ rWidget.m_nPage ].m_aAnnotations.size() );
+        // insert widget to tab sorter
+        // RadioButtons are not page annotations, only their individual check boxes are
+        if( rWidget.m_eType != PDFWriter::RadioButton )
+        {
+            rCont.aObjects.insert( rWidget.m_nObject );
+            rCont.aSortedAnnots.push_back( AnnotationSortEntry( rWidget.m_nTabOrder, rWidget.m_nObject, nW ) );
+        }
+    }
+    for( std::hash_map< sal_Int32, AnnotSortContainer >::iterator it = sorted.begin(); it != sorted.end(); ++it )
+    {
+        // append entries for non widget annotations
+        PDFPage& rPage = m_aPages[ it->first ];
+        unsigned int nAnnots = rPage.m_aAnnotations.size();
+        for( unsigned int nA = 0; nA < nAnnots; nA++ )
+            if( it->second.aObjects.find( rPage.m_aAnnotations[nA] ) == it->second.aObjects.end())
+                it->second.aSortedAnnots.push_back( AnnotationSortEntry( 10000, rPage.m_aAnnotations[nA], -1 ) );
+
+        AnnotSorterLess aLess( m_aWidgets );
+        std::stable_sort( it->second.aSortedAnnots.begin(), it->second.aSortedAnnots.end(), aLess );
+        // sanity check
+        if( it->second.aSortedAnnots.size() == nAnnots)
+        {
+            for( unsigned int nA = 0; nA < nAnnots; nA++ )
+                rPage.m_aAnnotations[nA] = it->second.aSortedAnnots[nA].nObject;
+        }
+        else
+        {
+            DBG_ASSERT( 0, "wrong number of sorted annotations" );
+            #if OSL_DEBUG_LEVEL > 0
+            fprintf( stderr, "PDFWriterImpl::sortWidgets(): wrong number of sorted assertions on page nr %d\n"
+                             "    %d sorted and %d unsorted\n", it->first, it->second.aSortedAnnots.size(), nAnnots );
+            #endif
+        }
+    }
+
+    // FIXME: implement tab order in structure tree for PDF 1.5
+}
+
 bool PDFWriterImpl::emit()
 {
     endPage();
+
+    // resort structure tree and annotations if necessary
+    // needed for widget tab order
+    sortWidgets();
 
     // emit catalog
     CHECK_RETURN( emitCatalog() );
@@ -6620,11 +6755,21 @@ bool PDFWriterImpl::writeTransparentObject( TransparencyEmit& rObject )
     appendFixedInt( rObject.m_aBoundRect.Right(), aLine );
     aLine.append( ' ' );
     appendFixedInt( rObject.m_aBoundRect.Bottom()+1, aLine );
-    aLine.append( " ]\r\n"
-                  "   /Resources " );
+    aLine.append( " ]\r\n" );
+    /* #i42884# the PDF reference recommends that each Form XObject
+    *  should have a resource dict; alas if that is the same object
+    *  as the one of the page it triggers an endless recursion in
+    *  acroread 5 (6 and up have that fixed). Since we have only one
+    *  resource dict anyway, let's use the one from the page by NOT
+    *  emitting a Resources entry.
+    */
+    #if 0
+    aLine.append( "   /Resources " );
     aLine.append( getResourceDictObj() );
-    aLine.append( " 0 R\r\n"
-                  "   /Length " );
+    aLine.append( " 0 R\r\n" );
+    #endif
+
+    aLine.append( "   /Length " );
     aLine.append( (sal_Int32)(nSize) );
     aLine.append( "\r\n" );
     if( bFlateFilter )
@@ -6676,10 +6821,15 @@ bool PDFWriterImpl::writeTransparentObject( TransparencyEmit& rObject )
         appendFixedInt( rObject.m_aBoundRect.Right(), aMask );
         aMask.append( ' ' );
         appendFixedInt( rObject.m_aBoundRect.Bottom()+1, aMask );
-        aMask.append( " ]\r\n"
-                      "   /Resources " );
+        aMask.append( " ]\r\n" );
+
+        /* #i42884# see above */
+        #if 0
+        aLine.append( "   /Resources " );
         aMask.append( getResourceDictObj() );
         aMask.append( " 0 R\r\n" );
+        #endif
+
         aMask.append( "   /Group << /S /Transparency /CS /DeviceRGB >>\r\n" );
         aMask.append( "   /Length " );
         aMask.append( nMaskSize );
@@ -6942,7 +7092,7 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
     sal_Int32 nStreamLengthObject   = createObject();
     sal_Int32 nMaskObject           = 0;
 
-    OStringBuffer aLine(80);
+    OStringBuffer aLine(512);
     aLine.append( rObject.m_nObject );
     aLine.append( " 0 obj\r\n"
                   "<< /Type /XObject\r\n"
@@ -6967,6 +7117,8 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
         aLine.append( "   /ColorSpace " );
         if( bTrueColor )
             aLine.append( "/DeviceRGB\r\n" );
+        else if( aBitmap.HasGreyPalette() )
+            aLine.append( "/DeviceGray\r\n" );
         else
         {
             aLine.append( "[  /Indexed /DeviceRGB " );
@@ -7529,97 +7681,119 @@ void PDFWriterImpl::updateGraphicsState()
     OStringBuffer aLine( 256 );
     GraphicsState& rNewState = m_aGraphicsStack.front();
     // first set clip region since it might invalidate everything else
-    Region& rNewClip = rNewState.m_aClipRegion;
 
-    /*  #103137# equality operator is not implemented
-     *  const as API promises but may change Region
-     *  from Polygon to rectangles. Arrrgghh !!!!
-     */
-    Region aLeft = m_aCurrentPDFState.m_aClipRegion;
-    Region aRight = rNewClip;
-    if( aLeft != aRight )
+    if( (rNewState.m_nUpdateFlags & GraphicsState::updateClipRegion) )
     {
-        if( ! m_aCurrentPDFState.m_aClipRegion.IsEmpty() &&
-            ! m_aCurrentPDFState.m_aClipRegion.IsNull() )
-        {
-            aLine.append( "Q " );
-            // invalidate everything
-            m_aCurrentPDFState = GraphicsState();
-        }
-        if( ! rNewClip.IsEmpty() && ! rNewClip.IsNull() )
-        {
-            // clip region is always stored in private PDF mapmode
-            MapMode aNewMapMode = rNewState.m_aMapMode;
-            rNewState.m_aMapMode = m_aMapMode;
-            getReferenceDevice()->SetMapMode( rNewState.m_aMapMode );
-            m_aCurrentPDFState.m_aMapMode = rNewState.m_aMapMode;
+        rNewState.m_nUpdateFlags &= ~GraphicsState::updateClipRegion;
 
-            aLine.append( "q " );
-            if( rNewClip.HasPolyPolygon() )
+        Region& rNewClip = rNewState.m_aClipRegion;
+
+        /*  #103137# equality operator is not implemented
+        *  const as API promises but may change Region
+        *  from Polygon to rectangles. Arrrgghh !!!!
+        */
+        Region aLeft = m_aCurrentPDFState.m_aClipRegion;
+        Region aRight = rNewClip;
+        if( aLeft != aRight )
+        {
+            if( ! m_aCurrentPDFState.m_aClipRegion.IsEmpty() &&
+                ! m_aCurrentPDFState.m_aClipRegion.IsNull() )
             {
-                m_aPages.back().appendPolyPolygon( rNewClip.GetPolyPolygon(), aLine );
-                aLine.append( "W* n\r\n" );
+                aLine.append( "Q " );
+                // invalidate everything but the clip region
+                m_aCurrentPDFState = GraphicsState();
+                rNewState.m_nUpdateFlags = ~GraphicsState::updateClipRegion;
             }
-            else
+            if( ! rNewClip.IsEmpty() && ! rNewClip.IsNull() )
             {
-                // need to clip all rectangles
-                RegionHandle aHandle = rNewClip.BeginEnumRects();
-                Rectangle aRect;
-                while( rNewClip.GetNextEnumRect( aHandle, aRect ) )
+                // clip region is always stored in private PDF mapmode
+                MapMode aNewMapMode = rNewState.m_aMapMode;
+                rNewState.m_aMapMode = m_aMapMode;
+                getReferenceDevice()->SetMapMode( rNewState.m_aMapMode );
+                m_aCurrentPDFState.m_aMapMode = rNewState.m_aMapMode;
+
+                aLine.append( "q " );
+                if( rNewClip.HasPolyPolygon() )
                 {
-                    m_aPages.back().appendRect( aRect, aLine );
-                    if( aLine.getLength() > 80 )
-                    {
-                        aLine.append( "\r\n" );
-                        writeBuffer( aLine.getStr(), aLine.getLength() );
-                        aLine.setLength( 0 );
-                    }
-                    else
-                        aLine.append( ' ' );
+                    m_aPages.back().appendPolyPolygon( rNewClip.GetPolyPolygon(), aLine );
+                    aLine.append( "W* n\r\n" );
                 }
-                rNewClip.EndEnumRects( aHandle );
-                aLine.append( "W* n\r\n" );
-            }
+                else
+                {
+                    // need to clip all rectangles
+                    RegionHandle aHandle = rNewClip.BeginEnumRects();
+                    Rectangle aRect;
+                    while( rNewClip.GetNextEnumRect( aHandle, aRect ) )
+                    {
+                        m_aPages.back().appendRect( aRect, aLine );
+                        if( aLine.getLength() > 80 )
+                        {
+                            aLine.append( "\r\n" );
+                            writeBuffer( aLine.getStr(), aLine.getLength() );
+                            aLine.setLength( 0 );
+                        }
+                        else
+                            aLine.append( ' ' );
+                    }
+                    rNewClip.EndEnumRects( aHandle );
+                    aLine.append( "W* n\r\n" );
+                }
 
-            rNewState.m_aMapMode = aNewMapMode;
-            getReferenceDevice()->SetMapMode( rNewState.m_aMapMode );
-            m_aCurrentPDFState.m_aMapMode = rNewState.m_aMapMode;
+                rNewState.m_aMapMode = aNewMapMode;
+                getReferenceDevice()->SetMapMode( rNewState.m_aMapMode );
+                m_aCurrentPDFState.m_aMapMode = rNewState.m_aMapMode;
+            }
         }
     }
 
-    if( m_aCurrentPDFState.m_aMapMode != rNewState.m_aMapMode )
+    if( (rNewState.m_nUpdateFlags & GraphicsState::updateMapMode) )
     {
+        rNewState.m_nUpdateFlags &= ~GraphicsState::updateMapMode;
         getReferenceDevice()->SetMapMode( rNewState.m_aMapMode );
     }
 
-    if( m_aCurrentPDFState.m_aFont != rNewState.m_aFont )
+    if( (rNewState.m_nUpdateFlags & GraphicsState::updateFont) )
     {
+        rNewState.m_nUpdateFlags &= ~GraphicsState::updateFont;
         getReferenceDevice()->SetFont( rNewState.m_aFont );
         getReferenceDevice()->ImplNewFont();
     }
 
-    if( m_aCurrentPDFState.m_nLayoutMode != rNewState.m_nLayoutMode )
+    if( (rNewState.m_nUpdateFlags & GraphicsState::updateLayoutMode) )
     {
+        rNewState.m_nUpdateFlags &= ~GraphicsState::updateLayoutMode;
         getReferenceDevice()->SetLayoutMode( rNewState.m_nLayoutMode );
     }
 
-    if( m_aCurrentPDFState.m_aLineColor != rNewState.m_aLineColor &&
-        rNewState.m_aLineColor != Color( COL_TRANSPARENT ) )
+    if( (rNewState.m_nUpdateFlags & GraphicsState::updateLineColor) )
     {
-        appendStrokingColor( rNewState.m_aLineColor, aLine );
-        aLine.append( "\r\n" );
+        rNewState.m_nUpdateFlags &= ~GraphicsState::updateLineColor;
+        if( m_aCurrentPDFState.m_aLineColor != rNewState.m_aLineColor &&
+            rNewState.m_aLineColor != Color( COL_TRANSPARENT ) )
+        {
+            appendStrokingColor( rNewState.m_aLineColor, aLine );
+            aLine.append( "\r\n" );
+        }
     }
 
-    if( m_aCurrentPDFState.m_aFillColor != rNewState.m_aFillColor &&
-        rNewState.m_aFillColor != Color( COL_TRANSPARENT ) )
+    if( (rNewState.m_nUpdateFlags & GraphicsState::updateFillColor) )
     {
-        appendNonStrokingColor( rNewState.m_aFillColor, aLine );
-        aLine.append( "\r\n" );
+        rNewState.m_nUpdateFlags &= ~GraphicsState::updateFillColor;
+        if( m_aCurrentPDFState.m_aFillColor != rNewState.m_aFillColor &&
+            rNewState.m_aFillColor != Color( COL_TRANSPARENT ) )
+        {
+            appendNonStrokingColor( rNewState.m_aFillColor, aLine );
+            aLine.append( "\r\n" );
+        }
     }
 
-    if( m_aContext.Version >= PDFWriter::PDF_1_4 && m_aCurrentPDFState.m_nTransparentPercent != rNewState.m_nTransparentPercent )
+    if( (rNewState.m_nUpdateFlags & GraphicsState::updateTransparentPercent) )
     {
-        // TODO: switch extended graphicsstate
+        rNewState.m_nUpdateFlags &= ~GraphicsState::updateTransparentPercent;
+        if( m_aContext.Version >= PDFWriter::PDF_1_4 && m_aCurrentPDFState.m_nTransparentPercent != rNewState.m_nTransparentPercent )
+        {
+            // TODO: switch extended graphicsstate
+        }
     }
 
     // everything is up to date now
@@ -7638,29 +7812,34 @@ void PDFWriterImpl::pop()
 {
     GraphicsState aState = m_aGraphicsStack.front();
     m_aGraphicsStack.pop_front();
+    GraphicsState& rOld = m_aGraphicsStack.front();
 
     // move those parameters back that were not pushed
     // in the first place
     if( ! (aState.m_nFlags & PUSH_LINECOLOR) )
-        m_aGraphicsStack.front().m_aLineColor = aState.m_aLineColor;
+        setLineColor( aState.m_aLineColor );
     if( ! (aState.m_nFlags & PUSH_FILLCOLOR) )
-        m_aGraphicsStack.front().m_aFillColor = aState.m_aFillColor;
+        setFillColor( aState.m_aFillColor );
     if( ! (aState.m_nFlags & PUSH_FONT) )
-        m_aGraphicsStack.front().m_aFont = aState.m_aFont;
+        setFont( aState.m_aFont );
     if( ! (aState.m_nFlags & PUSH_MAPMODE) )
         setMapMode( aState.m_aMapMode );
     if( ! (aState.m_nFlags & PUSH_CLIPREGION) )
-        m_aGraphicsStack.front().m_aClipRegion = aState.m_aClipRegion;
+        // do not use setClipRegion here
+        // it would convert again assuming the current mapmode
+        rOld.m_aClipRegion = aState.m_aClipRegion;
     if( ! (aState.m_nFlags & PUSH_TEXTLINECOLOR ) )
-        m_aGraphicsStack.front().m_aTextLineColor = aState.m_aTextLineColor;
+        setTextLineColor( aState.m_aTextLineColor );
     if( ! (aState.m_nFlags & PUSH_TEXTALIGN ) )
-        m_aGraphicsStack.front().m_aFont.SetAlign( aState.m_aFont.GetAlign() );
+        setTextAlign( aState.m_aFont.GetAlign() );
     if( ! (aState.m_nFlags & PUSH_TEXTFILLCOLOR) )
-        m_aGraphicsStack.front().m_aFont.SetFillColor( aState.m_aFont.GetFillColor() );
+        setTextFillColor( aState.m_aFont.GetFillColor() );
     if( ! (aState.m_nFlags & PUSH_REFPOINT) )
     {
         // what ?
     }
+    // invalidate graphics state
+    m_aGraphicsStack.front().m_nUpdateFlags = ~0;
 }
 
 void PDFWriterImpl::setMapMode( const MapMode& rMapMode )
@@ -7675,6 +7854,7 @@ void PDFWriterImpl::setClipRegion( const Region& rRegion )
     Region aRegion = getReferenceDevice()->LogicToPixel( rRegion, m_aGraphicsStack.front().m_aMapMode );
     aRegion = getReferenceDevice()->PixelToLogic( aRegion, m_aMapMode );
     m_aGraphicsStack.front().m_aClipRegion = aRegion;
+    m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsState::updateClipRegion;
 }
 
 void PDFWriterImpl::moveClipRegion( sal_Int32 nX, sal_Int32 nY )
@@ -7688,6 +7868,7 @@ void PDFWriterImpl::moveClipRegion( sal_Int32 nX, sal_Int32 nY )
                            getReferenceDevice(),
                            Point() );
     m_aGraphicsStack.front().m_aClipRegion.Move( aPoint.X(), aPoint.Y() );
+    m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsState::updateClipRegion;
 }
 
 bool PDFWriterImpl::intersectClipRegion( const Rectangle& rRect )
@@ -7696,7 +7877,7 @@ bool PDFWriterImpl::intersectClipRegion( const Rectangle& rRect )
                                   m_aMapMode,
                                   getReferenceDevice(),
                                   rRect ) );
-
+    m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsState::updateClipRegion;
     return m_aGraphicsStack.front().m_aClipRegion.Intersect( aRect );
 }
 
@@ -7705,6 +7886,7 @@ bool PDFWriterImpl::intersectClipRegion( const Region& rRegion )
 {
     Region aRegion = getReferenceDevice()->LogicToPixel( rRegion, m_aGraphicsStack.front().m_aMapMode );
     aRegion = getReferenceDevice()->PixelToLogic( aRegion, m_aMapMode );
+    m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsState::updateClipRegion;
     return m_aGraphicsStack.front().m_aClipRegion.Intersect( aRegion );
 }
 
@@ -7939,20 +8121,7 @@ void PDFWriterImpl::beginStructureElementMCSeq()
                  m_aPages[ m_nCurrentPage ].m_nPageObject,
                  rEle.m_nFirstPageObject );
 #endif
-        if( rEle.m_nFirstPageObject == m_aPages[ m_nCurrentPage ].m_nPageObject )
-        {
-            rEle.m_aKids.append( nMCID );
-            rEle.m_aKids.append( " " );
-        }
-        else
-        {
-            rEle.m_aKids.append( "<< /Type /MCR /Pg " );
-            rEle.m_aKids.append( m_aPages[ m_nCurrentPage ].m_nPageObject );
-            rEle.m_aKids.append( " 0 R /MCID " );
-            rEle.m_aKids.append( nMCID );
-            rEle.m_aKids.append( " >>\r\n" );
-        }
-
+        rEle.m_aKids.push_back( PDFStructureElementKid( nMCID, m_aPages[m_nCurrentPage].m_nPageObject ) );
         // update the page's mcid parent list
         m_aPages[ m_nCurrentPage ].m_aMCIDParents.push_back( rEle.m_nObject );
         // mark element MC sequence as open
@@ -8030,9 +8199,8 @@ sal_Int32 PDFWriterImpl::beginStructureElement( PDFWriter::StructElement eType )
     if( m_bEmitStructure ) // don't create nonexistant objects
     {
         rEle.m_nObject      = createObject();
-        // update parent's kids string
-        m_aStructure[ rEle.m_nParentElement ].m_aKids.append( rEle.m_nObject );
-        m_aStructure[ rEle.m_nParentElement ].m_aKids.append( " 0 R " );
+        // update parent's kids list
+        m_aStructure[ rEle.m_nParentElement ].m_aKids.push_back( rEle.m_nObject );
     }
     return nNewId;
 }
@@ -8548,6 +8716,7 @@ sal_Int32 PDFWriterImpl::createControl( const PDFWriter::AnyWidget& rControl, sa
         (  TEXT_DRAW_LEFT | TEXT_DRAW_CENTER | TEXT_DRAW_RIGHT | TEXT_DRAW_TOP |
            TEXT_DRAW_VCENTER | TEXT_DRAW_BOTTOM |
            TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK  );
+    rNewWidget.m_nTabOrder          = rControl.TabOrder;
 
     // various properties are set via the flags (/Ff) property of the field dict
     if( rControl.ReadOnly )
@@ -8691,6 +8860,9 @@ sal_Int32 PDFWriterImpl::createControl( const PDFWriter::AnyWidget& rControl, sa
 
     // insert widget to page's annotation list
     m_aPages[ nPageNr ].m_aAnnotations.push_back( rNewWidget.m_nObject );
+
+    // mark page as having widgets
+    m_aPages[ nPageNr ].m_bHasWidgets = true;
 
     return nNewWidget;
 }
