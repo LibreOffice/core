@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasource.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-26 11:22:15 $
+ *  last change: $Author: vg $ $Date: 2001-05-03 14:35:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -503,8 +503,8 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const ::rtl::O
 {
     Reference< XConnection > xReturn;
     Reference< XDriverManager > xManager(m_xServiceFactory->createInstance(
-#ifdef SUPD < 631
-        SERVICE_SDBC_DRIVERMANAGER
+#if SUPD < 631
+        SERVICE_SDBC_DRIVERMANAGER)
 #else
         ::rtl::OUString::createFromAscii("com.sun.star.sdbc.ConnectionPool") )
 #endif
