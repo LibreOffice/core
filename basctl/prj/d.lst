@@ -14,6 +14,8 @@ del %_DEST%\inc%_EXT%\basslots.hxx
 mkdir: %_DEST%\inc%_EXT%\basctl
 hedabu: ..\inc\iderdll.hxx %_DEST%\inc%_EXT%\basctl\iderdll.hxx
 
+..\util\basctl.xml %_DEST%\xml%_EXT%\basctl.xml
+
 ..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
 ..\%__SRC%\misc\*staticdatamembers.cxx %_DEST%\inc%_EXT%\*staticdatamembers.cxx
 ..\%__SRC%\misc\*staticdatamembers.h* %_DEST%\inc%_EXT%\*staticdatamembers.h*
