@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: mav $ $Date: 2002-08-26 14:58:17 $
+ *  last change: $Author: mav $ $Date: 2002-09-12 10:55:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -298,6 +298,7 @@ class FileDialogHelper_Impl : public WeakImplHelper1< XFilePickerListener >
     sal_Bool                mbDeleteMatcher         : 1;
     sal_Bool                mbInsert                : 1;
     sal_Bool                mbSystemPicker          : 1;
+    sal_Bool                mbPwdCheckBoxState      : 1;
 
 private:
     void                    addFilters( sal_uInt32 nFlags,
@@ -307,7 +308,7 @@ private:
     void                    addFilter( const OUString& rFilterName,
                                        const OUString& rExtension );
     void                    addGraphicFilter();
-    void                    enablePasswordBox();
+    void                    enablePasswordBox( sal_Bool bInit );
     void                    updateFilterOptionsBox();
     void                    updateSelectionBox();
     void                    updateVersions();
@@ -367,8 +368,7 @@ public:
 
     ErrCode                 execute( SvStringsDtor*& rpURLList,
                                      SfxItemSet *&   rpSet,
-                                     String&         rFilter,
-                                     sal_Bool        bHadPass);
+                                     String&         rFilter );
     ErrCode                 execute();
 
     void                    setPath( const OUString& rPath );
@@ -516,7 +516,7 @@ void FileDialogHelper_Impl::handleControlStateChanged( const FilePickerEvent& aE
     {
         case CommonFilePickerElementIds::LISTBOX_FILTER:
             updateFilterOptionsBox();
-            enablePasswordBox();
+            enablePasswordBox( sal_False );
             updateSelectionBox();
             break;
 
@@ -706,33 +706,42 @@ struct CheckPasswordCapability
 };
 
 // ------------------------------------------------------------------------
-void FileDialogHelper_Impl::enablePasswordBox()
+void FileDialogHelper_Impl::enablePasswordBox( sal_Bool bInit )
 {
-    static sal_Bool bCurrentBoxState = sal_False;
-    sal_Bool bWasEnabled = mbIsPwdEnabled;
-
     if ( ! mbHasPassword )
         return;
+
+    sal_Bool bWasEnabled = mbIsPwdEnabled;
 
     mbIsPwdEnabled = updateExtendedControl(
         ExtendedFilePickerElementIds::CHECKBOX_PASSWORD,
         CheckPasswordCapability()( getCurentSfxFilter() )
     );
 
-    if( bWasEnabled && !mbIsPwdEnabled )
+    if( bInit )
+    {
+        // in case of inintialization previous state is not interesting
+        if( mbIsPwdEnabled )
+        {
+            Reference< XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY );
+            if( mbPwdCheckBoxState )
+                xCtrlAccess->setValue( ExtendedFilePickerElementIds::CHECKBOX_PASSWORD, 0, makeAny( sal_True ) );
+        }
+    }
+    else if( !bWasEnabled && mbIsPwdEnabled )
+    {
+        Reference< XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY );
+        if( mbPwdCheckBoxState )
+            xCtrlAccess->setValue( ExtendedFilePickerElementIds::CHECKBOX_PASSWORD, 0, makeAny( sal_True ) );
+    }
+    else if( bWasEnabled && !mbIsPwdEnabled )
     {
         // remember user settings until checkbox is enabled
         Reference< XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY );
         Any aValue = xCtrlAccess->getValue( ExtendedFilePickerElementIds::CHECKBOX_PASSWORD, 0 );
         sal_Bool bPassWord = sal_False;
-        bCurrentBoxState = ( aValue >>= bPassWord ) && bPassWord;
+        mbPwdCheckBoxState = ( aValue >>= bPassWord ) && bPassWord;
         xCtrlAccess->setValue( ExtendedFilePickerElementIds::CHECKBOX_PASSWORD, 0, makeAny( sal_False ) );
-    }
-    else if( !bWasEnabled && mbIsPwdEnabled )
-    {
-        Reference< XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY );
-        if( bCurrentBoxState )
-            xCtrlAccess->setValue( ExtendedFilePickerElementIds::CHECKBOX_PASSWORD, 0, makeAny( sal_True ) );
     }
 }
 
@@ -1053,6 +1062,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl( FileDialogHelper* pParent,
     mbInsert                = SFXWB_INSERT == ( nFlags & SFXWB_INSERT );
     mbExport                = SFXWB_EXPORT == ( nFlags & SFXWB_EXPORT );
     mbIsSaveDlg             = sal_False;
+    mbPwdCheckBoxState      = sal_False;
 
     // default settings
     m_nDontFlags = SFX_FILTER_INTERNAL | SFX_FILTER_NOTINFILEDLG;
@@ -1295,7 +1305,7 @@ void FileDialogHelper_Impl::setDialogHelpId( const sal_Int32 _nHelpId )
 // ------------------------------------------------------------------------
 IMPL_LINK( FileDialogHelper_Impl, InitControls, void*, NOTINTERESTEDIN )
 {
-    enablePasswordBox( );
+    enablePasswordBox( sal_True );
     updateFilterOptionsBox( );
     updateSelectionBox( );
 
@@ -1357,16 +1367,28 @@ sal_Int16 FileDialogHelper_Impl::implDoExecute()
 // ------------------------------------------------------------------------
 ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
                                         SfxItemSet *&   rpSet,
-                                        String&         rFilter,
-                                        sal_Bool        bHadPath )
+                                        String&         rFilter )
 {
+    // rpSet is in/out parameter, usually just a media-descriptor that
+    // can be changed by dialog
+
     Reference< XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY );
 
-    // check password checkbox if the document had password before
-    if( mbHasPassword && bHadPath && xCtrlAccess.is() )
-        xCtrlAccess->setValue( ExtendedFilePickerElementIds::CHECKBOX_PASSWORD, 0, makeAny( sal_True ) );
+    // retrieves parameters from rpSet
+    // for now only Password is used
+    if ( rpSet )
+    {
+        // check password checkbox if the document had password before
+        if( mbHasPassword )
+        {
+            SFX_ITEMSET_ARG( rpSet, pPassItem, SfxStringItem, SID_PASSWORD, FALSE );
+            mbPwdCheckBoxState = ( pPassItem != NULL );
+        }
 
-    rpSet = NULL;
+        // the password will be set in case user decide so
+        rpSet->ClearItem( SID_PASSWORD );
+    }
+
     rpURLList = NULL;
 
     if ( ! mxFileDlg.is() )
@@ -1374,8 +1396,9 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
 
     if ( ExecutableDialogResults::CANCEL != implDoExecute() )
     {
-        // create an itemset
-        rpSet = new SfxAllItemSet( SFX_APP()->GetPool() );
+        // create an itemset if there is no
+        if( !rpSet )
+            rpSet = new SfxAllItemSet( SFX_APP()->GetPool() );
 
         // check, wether or not we have to display a password box
         if ( mbHasPassword && mbIsPwdEnabled && xCtrlAccess.is() )
@@ -2108,12 +2131,11 @@ void FileDialogHelper::SetDialogHelpId( const sal_Int32 _nHelpId )
 ErrCode FileDialogHelper::Execute( const String&   rPath,
                                    SvStringsDtor*& rpURLList,
                                    SfxItemSet *&   rpSet,
-                                   String&         rFilter,
-                                   sal_Bool        bHadPass )
+                                   String&         rFilter )
 {
     SetDisplayDirectory( rPath );
 
-    return mpImp->execute( rpURLList, rpSet, rFilter, bHadPass );
+    return mpImp->execute( rpURLList, rpSet, rFilter );
 }
 
 // ------------------------------------------------------------------------
@@ -2124,13 +2146,12 @@ ErrCode FileDialogHelper::Execute()
 
 // ------------------------------------------------------------------------
 ErrCode FileDialogHelper::Execute( SfxItemSet *&   rpSet,
-                                   String&         rFilter,
-                                   sal_Bool        bHadPass )
+                                   String&         rFilter )
 {
     ErrCode nRet;
     SvStringsDtor* pURLList;
 
-    nRet = mpImp->execute( pURLList, rpSet, rFilter, bHadPass );
+    nRet = mpImp->execute( pURLList, rpSet, rFilter );
 
     delete pURLList;
 

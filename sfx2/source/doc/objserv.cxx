@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: mav $ $Date: 2002-08-28 15:21:01 $
+ *  last change: $Author: mav $ $Date: 2002-09-12 10:56:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -563,21 +563,15 @@ sal_Bool SfxObjectShell::GUISaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
             }
 
             SFX_ITEMSET_ARG( GetMedium()->GetItemSet(), pPassItem, SfxStringItem, SID_PASSWORD, FALSE );
-            sal_Bool bHadPass = ( pPassItem != NULL );
+            if ( pPassItem != NULL )
+                pParams->Put( SfxStringItem( SID_PASSWORD, ::rtl::OUString() ) );
 
-            SfxItemSet* pTempSet = NULL;
-            if ( pFileDlg->Execute( pTempSet, aFilterName, bHadPass ) != ERRCODE_NONE )
+            if ( pFileDlg->Execute( pParams, aFilterName ) != ERRCODE_NONE )
             {
                 SetError(ERRCODE_IO_ABORT);
                 delete pFileDlg;
                 return sal_False;
             }
-
-            // merge in results of the dialog execution
-            // filename and filtername are not here
-            // they will be merged in pRequest later
-            if( pTempSet )
-                pParams->Put( *pTempSet );
 
             // get the path from the dialog
             aURL.SetURL( pFileDlg->GetPath() );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: cd $ $Date: 2002-09-09 07:36:17 $
+ *  last change: $Author: mav $ $Date: 2002-09-12 10:54:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -974,7 +974,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         SvStringsDtor* pURLList = NULL;
         String aFilter;
         void* pDummy = 0; // wegen GCC und C272
-        SfxItemSet* pSet;
+        SfxItemSet* pSet = NULL;
         String aPath;
         if ( nSID == SID_OPENTEMPLATE )
         {
@@ -1069,7 +1069,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
             aURL.Complete = aFileName;
             Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance(
                                                     ::rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" )), UNO_QUERY );
-            xTrans->parseSmart( aURL, rtl::OUString() );
+            xTrans->parseStrict( aURL );
 
             INetProtocol aINetProtocol = INetURLObject( aURL.Complete ).GetProtocol();
             SvtExtendedSecurityOptions aExtendedSecurityOptions;
