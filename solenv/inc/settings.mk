@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.165 $
+#   $Revision: 1.166 $
 #
-#   last change: $Author: vg $ $Date: 2005-02-24 15:01:34 $
+#   last change: $Author: kz $ $Date: 2005-03-01 16:14:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1186,10 +1186,10 @@ VBC*=vbc
 .ENDIF
 
 RDBMAKER*=rdbmaker
-.IF "$(JDK)"=="gcj"
-JAVA*=gij
-.ELSE
+.IF "$(JAVAINTERPRETER)" == ""
 JAVA*=java
+.ELSE
+JAVA*=$(JAVAINTERPRETER)
 .ENDIF
 SCPCOMP*=scpcomp
 #SCPLINK*=scplink
