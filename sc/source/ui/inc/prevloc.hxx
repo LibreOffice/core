@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prevloc.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2002-05-06 09:18:05 $
+ *  last change: $Author: sab $ $Date: 2002-05-24 14:56:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,10 @@
 
 
 #define SC_PREVIEW_MAXRANGES    4
+#define SC_PREVIEW_RANGE_EDGE   0
+#define SC_PREVIEW_RANGE_REPCOL 1
+#define SC_PREVIEW_RANGE_REPROW 2
+#define SC_PREVIEW_RANGE_TAB    3
 
 class Window;
 class String;
@@ -129,6 +133,7 @@ class ScPreviewLocationData
     MapMode     aCellMapMode;
     MapMode     aDrawMapMode[SC_PREVIEW_MAXRANGES];
     Rectangle   aDrawRectangle[SC_PREVIEW_MAXRANGES];
+        sal_uInt8       aDrawRangeId[SC_PREVIEW_MAXRANGES];
     USHORT      nDrawRanges;
     USHORT      nPrintTab;
     List        aEntries;
@@ -157,7 +162,7 @@ public:
     void    GetTableInfo( const Rectangle& rVisiblePixel, ScPreviewTableInfo& rInfo ) const;
 
     USHORT  GetDrawRanges() const   { return nDrawRanges; }
-    void    GetDrawRange( USHORT nPos, Rectangle& rPixelRect, MapMode& rMapMode ) const;
+    void    GetDrawRange( USHORT nPos, Rectangle& rPixelRect, MapMode& rMapMode, sal_uInt8& rRangeId ) const;
 
     BOOL    GetHeaderPosition( Rectangle& rHeaderRect ) const;
     BOOL    GetFooterPosition( Rectangle& rFooterRect ) const;
@@ -167,6 +172,8 @@ public:
     long    GetNoteCountInRange( const Rectangle& rVisiblePixel, BOOL bNoteMarks ) const;
     BOOL    GetNoteInRange( const Rectangle& rVisiblePixel, long nIndex, BOOL bNoteMarks,
                             ScAddress& rCellPos, Rectangle& rNoteRect ) const;
+    Rectangle GetNoteInRangeOutputRect(const Rectangle& rVisiblePixel, BOOL bNoteMarks,
+                            const ScAddress& aCellPos) const;
 
     //  Check if any cells (including column/row headers) are in the visible area
     BOOL    HasCellsInRange( const Rectangle& rVisiblePixel ) const;

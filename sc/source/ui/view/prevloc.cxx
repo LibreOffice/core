@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prevloc.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2002-05-06 09:19:15 $
+ *  last change: $Author: sab $ $Date: 2002-05-24 14:57:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -249,6 +249,16 @@ void ScPreviewLocationData::AddCellRange( const Rectangle& rRect, const ScRange&
     {
         aDrawRectangle[nDrawRanges] = rRect;
         aDrawMapMode[nDrawRanges] = rDrawMap;
+            if (bRepCol)
+                if (bRepRow)
+                    aDrawRangeId[nDrawRanges] = SC_PREVIEW_RANGE_EDGE;
+                else
+                    aDrawRangeId[nDrawRanges] = SC_PREVIEW_RANGE_REPCOL;
+            else
+                if (bRepRow)
+                    aDrawRangeId[nDrawRanges] = SC_PREVIEW_RANGE_REPROW;
+                else
+                    aDrawRangeId[nDrawRanges] = SC_PREVIEW_RANGE_TAB;
         ++nDrawRanges;
     }
 }
@@ -296,13 +306,14 @@ void ScPreviewLocationData::AddNoteText( const Rectangle& rRect, const ScAddress
 
 //------------------------------------------------------------------
 
-void ScPreviewLocationData::GetDrawRange( USHORT nPos, Rectangle& rPixelRect, MapMode& rMapMode ) const
+void ScPreviewLocationData::GetDrawRange( USHORT nPos, Rectangle& rPixelRect, MapMode& rMapMode, sal_uInt8& rRangeId ) const
 {
     DBG_ASSERT( nPos < nDrawRanges, "wrong position" );
     if ( nPos < nDrawRanges )
     {
         rPixelRect = aDrawRectangle[nPos];
         rMapMode = aDrawMapMode[nPos];
+        rRangeId = aDrawRangeId[nPos];
     }
 }
 
@@ -543,6 +554,25 @@ BOOL ScPreviewLocationData::GetNoteInRange( const Rectangle& rVisiblePixel, long
         }
     }
     return FALSE;
+}
+
+Rectangle ScPreviewLocationData::GetNoteInRangeOutputRect(const Rectangle& rVisiblePixel, BOOL bNoteMarks, const ScAddress& aCellPos) const
+{
+    ScPreviewLocationType eType = bNoteMarks ? SC_PLOC_NOTEMARK : SC_PLOC_NOTETEXT;
+
+    ULONG nPos = 0;
+    ULONG nCount = aEntries.Count();
+    for (ULONG nListPos=0; nListPos<nCount; nListPos++)
+    {
+        ScPreviewLocationEntry* pEntry = (ScPreviewLocationEntry*)aEntries.GetObject(nListPos);
+        if ( pEntry->eType == eType && pEntry->aPixelRect.IsOver( rVisiblePixel ) )
+        {
+            if ( aCellPos == pEntry->aCellRange.aStart )
+                return pEntry->aPixelRect;
+            ++nPos;
+        }
+    }
+    return Rectangle();
 }
 
 void ScPreviewLocationData::GetTableInfo( const Rectangle& rVisiblePixel, ScPreviewTableInfo& rInfo ) const
