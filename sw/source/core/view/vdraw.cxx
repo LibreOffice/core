@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vdraw.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-16 13:06:08 $
+ *  last change: $Author: obo $ $Date: 2004-02-16 11:59:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -368,76 +368,12 @@ void SwViewImp::PaintLayer( const SdrLayerID _nLayerID,
 
 /*************************************************************************
 |*
-|*  SwViewImp::PaintFlyChilds()
-|*
-|*  Ersterstellung      MA ??
-|*  Letzte Aenderung    MA 02. Aug. 95
-|*
-|*************************************************************************/
-
-
-void SwViewImp::PaintFlyChilds( SwFlyFrm *pFly, ExtOutputDevice& rOut,
-                                 const SdrPaintInfoRec& rInfoRec )
-{
-    SdrObject *pFlyObj  = pFly->GetVirtDrawObj();
-    SdrPage   *pPage = pFlyObj->GetPage();
-    OutputDevice *pOut = rOut.GetOutDev();
-
-    //Zuerst den am weitesten oben liegenden Child suchen.
-    ULONG i;
-    for ( i = pFlyObj->GetOrdNumDirect()+1; i < pPage->GetObjCount(); ++i )
-    {
-        SdrObject *pObj = pPage->GetObj( i );
-        SwFlyFrm *pF;
-        if ( pObj->ISA(SwVirtFlyDrawObj) )
-            pF = ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm();
-        else
-        {
-            SwFrm *pFrm = ((SwDrawContact*)GetUserCall(pObj))->GetAnchor();
-            pF = pFrm ? pFrm->FindFlyFrm() : 0;
-        }
-        if ( pF && pF != pFly && !pF->IsLowerOf( pFly ) )
-            break;
-    }
-    --i;    //Ich bin auf immer einen zu weit gelaufen.
-    if ( i != pFlyObj->GetOrdNumDirect() )
-    {
-        for ( UINT32 j = i; j > pFlyObj->GetOrdNumDirect(); --j )
-        {
-            SdrObject *pObj = pPage->GetObj( j );
-            if ( pObj->ISA(SwVirtFlyDrawObj) )
-            {
-                SwFlyFrm *pF = ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm();
-                if ( pF->GetAnchor()->FindFlyFrm() == pFly )
-                    PaintFlyChilds( pF, rOut, rInfoRec );
-            }
-            else
-            {
-                SwFrm *pFrm = ((SwDrawContact*)GetUserCall(pObj))->GetAnchor();
-                if( pFrm && pFrm->FindFlyFrm() == pFly )
-                {
-                    pOut->Push( PUSH_LINECOLOR );
-                    pObj->SingleObjectPainter( rOut, rInfoRec ); // #110094#-17
-                    pOut->Pop();
-                }
-            }
-        }
-    }
-
-    pFlyObj->SingleObjectPainter( rOut, rInfoRec ); // #110094#-17
-}
-
-/*************************************************************************
-|*
 |*  SwViewImp::IsDragPossible()
 |*
 |*  Ersterstellung      MA 19. Jan. 93
 |*  Letzte Aenderung    MA 16. Jan. 95
 |*
 |*************************************************************************/
-
-
-
 #define WIEDUWILLST 400
 
 BOOL SwViewImp::IsDragPossible( const Point &rPoint )
