@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationDlg.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-08 09:25:38 $
+ *  last change: $Author: oj $ $Date: 2002-11-21 13:55:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -273,15 +273,18 @@ IMPL_LINK( ORelationDialog, OKClickHdl, Button*, pButton )
             return 0L;
         }
     }
-    catch(SQLException& e)
+    catch(const SQLException& e)
     {
         ::dbaui::showError( SQLExceptionInfo(e),
                             this,
                             static_cast<OJoinTableView*>(GetParent())->getDesignView()->getController()->getORB());
     }
-    catch(Exception&)
+    catch(const ElementExistException&)
     {
-        OSL_ENSURE(sal_False, "ORelationDialog, OKClickHdl: caught an exception!");
+    }
+    catch(const Exception&)
+    {
+        //OSL_ENSURE(sal_False, "ORelationDialog, OKClickHdl: caught an exception!");
     }
 
     m_bTriedOneUpdate = TRUE;
