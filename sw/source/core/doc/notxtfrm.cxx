@@ -2,9 +2,9 @@
  *
  *  $RCSfile: notxtfrm.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-20 13:43:59 $
+ *  last change: $Author: jp $ $Date: 2000-10-31 15:41:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -927,7 +927,7 @@ void SwNoTxtFrm::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
                     BOOL bSizeUnequal;
                     if( rGrfObj.IsAnimated() )
                         pSh->GetWin()->Invalidate( aRect.SVRect() );
-                    else if ( rGrfObj.IsTransparent() ||
+                    else if ( pNd->IsTransparent() ||
                               (bSizeUnequal = (Frm().SSize() != Prt().SSize())))
                     {
                         if ( bSizeUnequal )

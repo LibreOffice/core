@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndgrf.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-09-28 13:02:59 $
+ *  last change: $Author: jp $ $Date: 2000-10-31 15:39:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,7 @@ public:
 #ifndef _FESHVIEW_ONLY_INLINE_NEEDED
     void SetTwipSize( const Size& rSz );
 
-    inline BOOL IsTransparent() const           { return aGrfObj.IsTransparent(); }
+    BOOL IsTransparent() const;
 
     inline BOOL IsAnimated() const              { return aGrfObj.IsAnimated(); }
 
