@@ -2,9 +2,9 @@
  *
  *  $RCSfile: opengl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:38 $
+ *  last change: $Author: ka $ $Date: 2000-11-15 11:21:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,95 +80,105 @@
 #include <svapp.hxx>
 #include <vos/mutex.hxx>
 
+// -----------
+// - Defines -
+// -----------
+
+#ifdef WIN
+#define __OPENGL_CALL _far _pascal
+#elif defined WNT
+#define __OPENGL_CALL __stdcall
+#else
+#define __OPENGL_CALL
+#endif
+
 // -----------------------
 // - Fnc-Pointer-Typedef -
 // -----------------------
 
-typedef void ( *OGLFncClearDepth )( GLclampd fDepth );
-typedef void ( *OGLFncDepthFunc )( GLenum fFunc );
-typedef void ( *OGLFncEnable )( GLenum eCap );
-typedef void ( *OGLFncDisable )( GLenum eCap );
-typedef void ( *OGLFncDepthMask )( GLboolean bFlag );
-typedef void ( *OGLFncShadeModel )( GLenum eMode );
-typedef void ( *OGLFncEdgeFlag )( GLboolean bFlag );
-typedef void ( *OGLFncClear )( GLbitfield nMask );
-typedef void ( *OGLFncFlush )( void );
-typedef void ( *OGLFncFinish )( void );
-typedef void ( *OGLFncViewport )( GLint nX, GLint nY, GLsizei nWidth, GLsizei nHeight );
-typedef void ( *OGLFncBegin )( GLenum eMode );
-typedef void ( *OGLFncEnd )( void );
-typedef void ( *OGLFncVertex3dv )( const GLdouble *fV );
-typedef void ( *OGLFncNormal3dv )( const GLdouble *fV );
-typedef void ( *OGLFncColor4ub )( GLubyte cRed, GLubyte cGreen, GLubyte cBlue, GLubyte cAlpha );
-typedef void ( *OGLFncMaterialfv )( GLenum eFace, GLenum ePNname, const GLfloat *fParams );
-typedef void ( *OGLFncMaterialf )( GLenum eFace, GLenum ePName, GLfloat fParam );
-typedef void ( *OGLFncLightModelfv )( GLenum ePNname, const GLfloat *fParams );
-typedef void ( *OGLFncLightModelf )( GLenum ePname, GLfloat fParam );
-typedef void ( *OGLFncLightfv )( GLenum eLight, GLenum ePNname, const GLfloat *fParams );
-typedef void ( *OGLFncLightf )( GLenum eLight, GLenum ePname, GLfloat fParam );
-typedef void ( *OGLFncPolygonMode )( GLenum eFace, GLenum eMode );
-typedef void ( *OGLFncCullFace )( GLenum eMode );
-typedef void ( *OGLFncPointSize )( GLfloat fSize );
-typedef void ( *OGLFncLineWidth )( GLfloat fWidth );
-typedef void ( *OGLFncMatrixMode )( GLenum eMode );
-typedef void ( *OGLFncLoadMatrixd )( const GLdouble *fM );
-typedef void ( *OGLFncTexCoord2dv )( const GLdouble *pParams );
-typedef void ( *OGLFncTexCoord3dv )( const GLdouble *fV );
-typedef void ( *OGLFncTexImage1D )( GLenum target, GLint level, GLint internalformat, GLsizei width, GLint border, GLenum format, GLenum type, const GLvoid *pixels );
-typedef void ( *OGLFncTexImage2D )( GLenum target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLint border, GLenum format, GLenum type, const GLvoid *pixels );
-typedef void ( *OGLFncCopyTexImage1D )( GLenum target, GLint level, GLenum internalFormat, GLint x, GLint y, GLsizei width, GLint border );
-typedef void ( *OGLFncCopyTexImage2D )( GLenum target, GLint level, GLenum internalFormat, GLint x, GLint y, GLsizei width, GLsizei height, GLint border );
-typedef void ( *OGLFncCopyTexSubImage1D )( GLenum target, GLint level, GLint xoffset, GLint x, GLint y, GLsizei width );
-typedef void ( *OGLFncCopyTexSubImage2D )( GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint x, GLint y, GLsizei width, GLsizei height );
-typedef void ( *OGLFncPixelTransferf )( GLenum pname, GLfloat param );
-typedef void ( *OGLFncPixelTransferi )( GLenum pname, GLint param );
-typedef void ( *OGLFncGetTexLevelParameterfv )( GLenum target, GLint level, GLenum pname, GLfloat *params );
-typedef void ( *OGLFncGetTexLevelParameteriv )( GLenum target, GLint level, GLenum pname, GLint *params );
-typedef void ( *OGLFncGetTexParameterfv )( GLenum target, GLenum pname, GLfloat *params );
-typedef void ( *OGLFncGetTexParameteriv )( GLenum target, GLenum pname, GLint *params );
-typedef void ( *OGLFncTexSubImage1D )( GLenum target, GLint level, GLint xoffset, GLsizei width, GLenum format, GLenum type, const GLvoid *pixels );
-typedef void ( *OGLFncTexSubImage2D )( GLenum target, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLenum type, const GLvoid *pixels );
-typedef void ( *OGLFncPixelStoref )( GLenum pname, GLfloat param );
-typedef void ( *OGLFncPixelStorei )( GLenum pname, GLint param );
-typedef void ( *OGLFncGenTextures )( GLsizei n, GLuint *textures );
-typedef GLboolean ( *OGLFncIsTexture )( GLuint texture );
-typedef void ( *OGLFncBindTexture )( GLenum target, GLuint texture );
-typedef void ( *OGLFncDeleteTextures )( GLsizei n, const GLuint *textures );
-typedef GLboolean ( *OGLFncAreTexturesResident )( GLsizei n, const GLuint *textures, GLboolean *residences );
-typedef void ( *OGLFncPrioritizeTextures )( GLsizei n, const GLuint *textures, const GLclampf *priorities );
-typedef void ( *OGLFncTexEnvf )( GLenum target, GLenum pname, GLfloat param );
-typedef void ( *OGLFncTexEnvfv )( GLenum target, GLenum pname, const GLfloat *params );
-typedef void ( *OGLFncTexEnvi )( GLenum target, GLenum pname, GLint param );
-typedef void ( *OGLFncTexEnviv )( GLenum target, GLenum pname, const GLint *params );
-typedef void ( *OGLFncTexParameterf )( GLenum target, GLenum pname, GLfloat param );
-typedef void ( *OGLFncTexParameterfv )( GLenum target, GLenum pname, const GLfloat *params );
-typedef void ( *OGLFncTexParameteri )( GLenum target, GLenum pname, GLint param );
-typedef void ( *OGLFncTexParameteriv )( GLenum target, GLenum pname, const GLint *params );
-typedef void ( *OGLFncTexGend )( GLenum coord, GLenum pname, GLdouble param );
-typedef void ( *OGLFncTexGendv )( GLenum coord, GLenum pname, const GLdouble *params );
-typedef void ( *OGLFncTexGenf )( GLenum coord, GLenum pname, GLfloat param );
-typedef void ( *OGLFncTexGenfv )( GLenum coord, GLenum pname, const GLfloat *params );
-typedef void ( *OGLFncTexGeni )( GLenum coord, GLenum pname, GLint param );
-typedef void ( *OGLFncTexGeniv )( GLenum coord, GLenum pname, const GLint *params );
-typedef void ( *OGLFncGetIntegerv )( GLenum pname, GLint *params );
-typedef void ( *OGLFncPolygonOffset ) ( GLfloat factor, GLfloat units );
-typedef void ( *OGLFncScissor ) ( GLint x, GLint y, GLsizei width, GLsizei height );
-
-typedef void ( *OGLFncEnableClientState ) ( GLenum array );
-typedef void ( *OGLFncDisableClientState ) ( GLenum array );
-typedef void ( *OGLFncVertexPointer ) ( GLint size, GLenum type, GLsizei stride, const GLvoid *pointer );
-typedef void ( *OGLFncColorPointer ) ( GLint size, GLenum type, GLsizei stride, const GLvoid *pointer );
-typedef void ( *OGLFncIndexPointer ) ( GLenum type, GLsizei stride, const GLvoid *pointer );
-typedef void ( *OGLFncNormalPointer ) ( GLenum type, GLsizei stride, const GLvoid *pointer );
-typedef void ( *OGLFncTexCoordPointer ) ( GLint size, GLenum type, GLsizei stride, const GLvoid *pointer );
-typedef void ( *OGLFncEdgeFlagPointer ) ( GLsizei stride, const GLvoid *pointer );
-typedef void ( *OGLFncArrayElement ) ( GLint i );
-typedef void ( *OGLFncDrawElements ) ( GLenum mode, GLsizei count, GLenum type, const GLvoid *indices );
-typedef void ( *OGLFncDrawArrays ) ( GLenum mode, GLint first, GLsizei count );
-typedef void ( *OGLFncInterleavedArrays ) ( GLenum format, GLsizei stride, const GLvoid *pointer );
-
-typedef void ( *OGLFncLoadIdentity ) ();
-typedef void ( *OGLFncBlendFunc ) ( GLenum sfactor, GLenum dfactor );
+typedef void ( __OPENGL_CALL *OGLFncClearDepth )( GLclampd fDepth );
+typedef void ( __OPENGL_CALL *OGLFncDepthFunc )( GLenum fFunc );
+typedef void ( __OPENGL_CALL *OGLFncEnable )( GLenum eCap );
+typedef void ( __OPENGL_CALL *OGLFncDisable )( GLenum eCap );
+typedef void ( __OPENGL_CALL *OGLFncDepthMask )( GLboolean bFlag );
+typedef void ( __OPENGL_CALL *OGLFncShadeModel )( GLenum eMode );
+typedef void ( __OPENGL_CALL *OGLFncEdgeFlag )( GLboolean bFlag );
+typedef void ( __OPENGL_CALL *OGLFncClear )( GLbitfield nMask );
+typedef void ( __OPENGL_CALL *OGLFncFlush )( void );
+typedef void ( __OPENGL_CALL *OGLFncFinish )( void );
+typedef void ( __OPENGL_CALL *OGLFncViewport )( GLint nX, GLint nY, GLsizei nWidth, GLsizei nHeight );
+typedef void ( __OPENGL_CALL *OGLFncBegin )( GLenum eMode );
+typedef void ( __OPENGL_CALL *OGLFncEnd )( void );
+typedef void ( __OPENGL_CALL *OGLFncVertex3dv )( const GLdouble *fV );
+typedef void ( __OPENGL_CALL *OGLFncNormal3dv )( const GLdouble *fV );
+typedef void ( __OPENGL_CALL *OGLFncColor4ub )( GLubyte cRed, GLubyte cGreen, GLubyte cBlue, GLubyte cAlpha );
+typedef void ( __OPENGL_CALL *OGLFncMaterialfv )( GLenum eFace, GLenum ePNname, const GLfloat *fParams );
+typedef void ( __OPENGL_CALL *OGLFncMaterialf )( GLenum eFace, GLenum ePName, GLfloat fParam );
+typedef void ( __OPENGL_CALL *OGLFncLightModelfv )( GLenum ePNname, const GLfloat *fParams );
+typedef void ( __OPENGL_CALL *OGLFncLightModelf )( GLenum ePname, GLfloat fParam );
+typedef void ( __OPENGL_CALL *OGLFncLightfv )( GLenum eLight, GLenum ePNname, const GLfloat *fParams );
+typedef void ( __OPENGL_CALL *OGLFncLightf )( GLenum eLight, GLenum ePname, GLfloat fParam );
+typedef void ( __OPENGL_CALL *OGLFncPolygonMode )( GLenum eFace, GLenum eMode );
+typedef void ( __OPENGL_CALL *OGLFncCullFace )( GLenum eMode );
+typedef void ( __OPENGL_CALL *OGLFncPointSize )( GLfloat fSize );
+typedef void ( __OPENGL_CALL *OGLFncLineWidth )( GLfloat fWidth );
+typedef void ( __OPENGL_CALL *OGLFncMatrixMode )( GLenum eMode );
+typedef void ( __OPENGL_CALL *OGLFncLoadMatrixd )( const GLdouble *fM );
+typedef void ( __OPENGL_CALL *OGLFncTexCoord2dv )( const GLdouble *pParams );
+typedef void ( __OPENGL_CALL *OGLFncTexCoord3dv )( const GLdouble *fV );
+typedef void ( __OPENGL_CALL *OGLFncTexImage1D )( GLenum target, GLint level, GLint internalformat, GLsizei width, GLint border, GLenum format, GLenum type, const GLvoid *pixels );
+typedef void ( __OPENGL_CALL *OGLFncTexImage2D )( GLenum target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLint border, GLenum format, GLenum type, const GLvoid *pixels );
+typedef void ( __OPENGL_CALL *OGLFncCopyTexImage1D )( GLenum target, GLint level, GLenum internalFormat, GLint x, GLint y, GLsizei width, GLint border );
+typedef void ( __OPENGL_CALL *OGLFncCopyTexImage2D )( GLenum target, GLint level, GLenum internalFormat, GLint x, GLint y, GLsizei width, GLsizei height, GLint border );
+typedef void ( __OPENGL_CALL *OGLFncCopyTexSubImage1D )( GLenum target, GLint level, GLint xoffset, GLint x, GLint y, GLsizei width );
+typedef void ( __OPENGL_CALL *OGLFncCopyTexSubImage2D )( GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint x, GLint y, GLsizei width, GLsizei height );
+typedef void ( __OPENGL_CALL *OGLFncPixelTransferf )( GLenum pname, GLfloat param );
+typedef void ( __OPENGL_CALL *OGLFncPixelTransferi )( GLenum pname, GLint param );
+typedef void ( __OPENGL_CALL *OGLFncGetTexLevelParameterfv )( GLenum target, GLint level, GLenum pname, GLfloat *params );
+typedef void ( __OPENGL_CALL *OGLFncGetTexLevelParameteriv )( GLenum target, GLint level, GLenum pname, GLint *params );
+typedef void ( __OPENGL_CALL *OGLFncGetTexParameterfv )( GLenum target, GLenum pname, GLfloat *params );
+typedef void ( __OPENGL_CALL *OGLFncGetTexParameteriv )( GLenum target, GLenum pname, GLint *params );
+typedef void ( __OPENGL_CALL *OGLFncTexSubImage1D )( GLenum target, GLint level, GLint xoffset, GLsizei width, GLenum format, GLenum type, const GLvoid *pixels );
+typedef void ( __OPENGL_CALL *OGLFncTexSubImage2D )( GLenum target, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLenum type, const GLvoid *pixels );
+typedef void ( __OPENGL_CALL *OGLFncPixelStoref )( GLenum pname, GLfloat param );
+typedef void ( __OPENGL_CALL *OGLFncPixelStorei )( GLenum pname, GLint param );
+typedef void ( __OPENGL_CALL *OGLFncGenTextures )( GLsizei n, GLuint *textures );
+typedef GLboolean ( __OPENGL_CALL *OGLFncIsTexture )( GLuint texture );
+typedef void ( __OPENGL_CALL *OGLFncBindTexture )( GLenum target, GLuint texture );
+typedef void ( __OPENGL_CALL *OGLFncDeleteTextures )( GLsizei n, const GLuint *textures );
+typedef GLboolean ( __OPENGL_CALL *OGLFncAreTexturesResident )( GLsizei n, const GLuint *textures, GLboolean *residences );
+typedef void ( __OPENGL_CALL *OGLFncPrioritizeTextures )( GLsizei n, const GLuint *textures, const GLclampf *priorities );
+typedef void ( __OPENGL_CALL *OGLFncTexEnvf )( GLenum target, GLenum pname, GLfloat param );
+typedef void ( __OPENGL_CALL *OGLFncTexEnvfv )( GLenum target, GLenum pname, const GLfloat *params );
+typedef void ( __OPENGL_CALL *OGLFncTexEnvi )( GLenum target, GLenum pname, GLint param );
+typedef void ( __OPENGL_CALL *OGLFncTexEnviv )( GLenum target, GLenum pname, const GLint *params );
+typedef void ( __OPENGL_CALL *OGLFncTexParameterf )( GLenum target, GLenum pname, GLfloat param );
+typedef void ( __OPENGL_CALL *OGLFncTexParameterfv )( GLenum target, GLenum pname, const GLfloat *params );
+typedef void ( __OPENGL_CALL *OGLFncTexParameteri )( GLenum target, GLenum pname, GLint param );
+typedef void ( __OPENGL_CALL *OGLFncTexParameteriv )( GLenum target, GLenum pname, const GLint *params );
+typedef void ( __OPENGL_CALL *OGLFncTexGend )( GLenum coord, GLenum pname, GLdouble param );
+typedef void ( __OPENGL_CALL *OGLFncTexGendv )( GLenum coord, GLenum pname, const GLdouble *params );
+typedef void ( __OPENGL_CALL *OGLFncTexGenf )( GLenum coord, GLenum pname, GLfloat param );
+typedef void ( __OPENGL_CALL *OGLFncTexGenfv )( GLenum coord, GLenum pname, const GLfloat *params );
+typedef void ( __OPENGL_CALL *OGLFncTexGeni )( GLenum coord, GLenum pname, GLint param );
+typedef void ( __OPENGL_CALL *OGLFncTexGeniv )( GLenum coord, GLenum pname, const GLint *params );
+typedef void ( __OPENGL_CALL *OGLFncGetIntegerv )( GLenum pname, GLint *params );
+typedef void ( __OPENGL_CALL *OGLFncPolygonOffset ) ( GLfloat factor, GLfloat units );
+typedef void ( __OPENGL_CALL *OGLFncScissor ) ( GLint x, GLint y, GLsizei width, GLsizei height );
+typedef void ( __OPENGL_CALL *OGLFncEnableClientState ) ( GLenum array );
+typedef void ( __OPENGL_CALL *OGLFncDisableClientState ) ( GLenum array );
+typedef void ( __OPENGL_CALL *OGLFncVertexPointer ) ( GLint size, GLenum type, GLsizei stride, const GLvoid *pointer );
+typedef void ( __OPENGL_CALL *OGLFncColorPointer ) ( GLint size, GLenum type, GLsizei stride, const GLvoid *pointer );
+typedef void ( __OPENGL_CALL *OGLFncIndexPointer ) ( GLenum type, GLsizei stride, const GLvoid *pointer );
+typedef void ( __OPENGL_CALL *OGLFncNormalPointer ) ( GLenum type, GLsizei stride, const GLvoid *pointer );
+typedef void ( __OPENGL_CALL *OGLFncTexCoordPointer ) ( GLint size, GLenum type, GLsizei stride, const GLvoid *pointer );
+typedef void ( __OPENGL_CALL *OGLFncEdgeFlagPointer ) ( GLsizei stride, const GLvoid *pointer );
+typedef void ( __OPENGL_CALL *OGLFncArrayElement ) ( GLint i );
+typedef void ( __OPENGL_CALL *OGLFncDrawElements ) ( GLenum mode, GLsizei count, GLenum type, const GLvoid *indices );
+typedef void ( __OPENGL_CALL *OGLFncDrawArrays ) ( GLenum mode, GLint first, GLsizei count );
+typedef void ( __OPENGL_CALL *OGLFncInterleavedArrays ) ( GLenum format, GLsizei stride, const GLvoid *pointer );
+typedef void ( __OPENGL_CALL *OGLFncLoadIdentity ) ();
+typedef void ( __OPENGL_CALL *OGLFncBlendFunc ) ( GLenum sfactor, GLenum dfactor );
 
 // ----------
 // - Macros -
