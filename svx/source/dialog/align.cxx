@@ -2,9 +2,9 @@
  *
  *  $RCSfile: align.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 15:27:09 $
+ *  last change: $Author: vg $ $Date: 2003-12-16 10:58:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,9 @@
 #ifndef _SFXMODULE_HXX
 #include <sfx2/module.hxx>
 #endif
+#ifndef SFX_ITEMCONNECT_HXX
+#include <sfx2/itemconnect.hxx>
+#endif
 #ifndef _SVTOOLS_CJKOPTIONS_HXX
 #include <svtools/cjkoptions.hxx>
 #endif
@@ -101,6 +104,21 @@
 #ifndef _SVTOOLS_LOCALRESACCESS_HXX_
 #include <svtools/localresaccess.hxx>
 #endif
+
+// item connections ------------------------------------------------------
+
+typedef sfx::ValueItemWrapper< SvxVerJustifyItem, SvxCellVerJustify > SvxVerJustItemWrapper;
+typedef sfx::ListBoxConnection< SvxVerJustItemWrapper > SvxVerJustConnection;
+
+static const SvxVerJustConnection::MapEntryType pVerJustMap[] =
+{
+    { ALIGNDLG_VERALIGN_STD,    SVX_VER_JUSTIFY_STANDARD    },
+    { ALIGNDLG_VERALIGN_TOP,    SVX_VER_JUSTIFY_TOP         },
+    { ALIGNDLG_VERALIGN_MID,    SVX_VER_JUSTIFY_CENTER      },
+    { ALIGNDLG_VERALIGN_BOTTOM, SVX_VER_JUSTIFY_BOTTOM      },
+    { ALIGNDLG_VERALIGN_BOTTOM, SVX_VER_JUSTIFY_BOTTOM      },
+    { LISTBOX_ENTRY_NOTFOUND,   SVX_VER_JUSTIFY_STANDARD    }
+};
 
 // static ----------------------------------------------------------------
 
@@ -207,6 +225,10 @@ SvxAlignmentTabPage::SvxAlignmentTabPage( Window* pParent,
 
     FillForLockMode();
     FreeResource();
+
+    AddItemConnection( new sfx::UInt16MetricConnection( SID_ATTR_ALIGN_INDENT, aEdIndent, FUNIT_TWIP ) );
+    AddItemConnection( new SvxVerJustConnection( SID_ATTR_ALIGN_VER_JUSTIFY, aLbVerAlign, pVerJustMap ) );
+    AddItemConnection( new sfx::CheckBoxConnection( SID_ATTR_ALIGN_LINEBREAK, aBtnWrap ) );
 }
 
 //------------------------------------------------------------------------
@@ -280,6 +302,9 @@ const SfxPoolItem* SvxAlignmentTabPage::GetUniqueItem( const SfxItemSet& rItemSe
 
 void SvxAlignmentTabPage::Reset( const SfxItemSet& rCoreAttrs )
 {
+    // automatic item connections
+    SfxTabPage::Reset( rCoreAttrs );
+
     const SfxPoolItem* pItem;
 
     pItem = GetUniqueItem( rCoreAttrs, SID_ATTR_ALIGN_HOR_JUSTIFY );
@@ -299,6 +324,7 @@ void SvxAlignmentTabPage::Reset( const SfxItemSet& rCoreAttrs )
     else
         aLbHorAlign.SetNoSelection();
 
+#if 0
     pItem = GetUniqueItem( rCoreAttrs, SID_ATTR_ALIGN_INDENT );
     if ( pItem )
     {
@@ -309,7 +335,9 @@ void SvxAlignmentTabPage::Reset( const SfxItemSet& rCoreAttrs )
     }
     else
         aEdIndent.SetText( String() );
+#endif
 
+#if 0
     pItem = GetUniqueItem( rCoreAttrs, SID_ATTR_ALIGN_VER_JUSTIFY );
     if ( pItem )
     {
@@ -325,6 +353,7 @@ void SvxAlignmentTabPage::Reset( const SfxItemSet& rCoreAttrs )
     }
     else
         aLbVerAlign.SetNoSelection();
+#endif
 
     pItem = GetUniqueItem( rCoreAttrs, SID_ATTR_ALIGN_ORIENTATION );
     aWinOrient.SetNoDegrees();
@@ -394,6 +423,7 @@ void SvxAlignmentTabPage::Reset( const SfxItemSet& rCoreAttrs )
         aEdBottomSpace.SetText  ( String() );
     }
 
+#if 0
     pItem = GetUniqueItem( rCoreAttrs, SID_ATTR_ALIGN_LINEBREAK );
     if ( pItem )
     {
@@ -407,6 +437,7 @@ void SvxAlignmentTabPage::Reset( const SfxItemSet& rCoreAttrs )
         aBtnWrap.EnableTriState();
         aBtnWrap.SetState( TriState( STATE_DONTKNOW ) );
     }
+#endif
 
     if (rCoreAttrs.GetItemState(GetWhich(SID_ATTR_ALIGN_HYPHENATION),TRUE) == SFX_ITEM_UNKNOWN)
         bHyphenDisabled = TRUE;
@@ -438,7 +469,7 @@ void SvxAlignmentTabPage::Reset( const SfxItemSet& rCoreAttrs )
 
     HorAlignSelectHdl_Impl( NULL );
 
-    aBtnWrap.SaveValue();  // TriStateButton
+//    aBtnWrap.SaveValue();  // TriStateButton
 }
 
 // -----------------------------------------------------------------------
@@ -451,6 +482,9 @@ BOOL SvxAlignmentTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
     TriState            eState;
     const SfxPoolItem*  pOld            = 0;
     bool                bSelected       = false;
+
+    // automatic item connections
+    bAttrsChanged = SfxTabPage::FillItemSet( rCoreAttrs );
 
     // Horizontale Ausrichtung
     nWhich = GetWhich( SID_ATTR_ALIGN_HOR_JUSTIFY );
@@ -479,6 +513,7 @@ BOOL SvxAlignmentTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
     else if ( rOldSet.GetItemState( nWhich, FALSE ) == SFX_ITEM_DEFAULT )
         rCoreAttrs.ClearItem( nWhich );
 
+#if 0
     nWhich = GetWhich( SID_ATTR_ALIGN_INDENT );
     pOld = GetOldItem( rCoreAttrs, SID_ATTR_ALIGN_INDENT );
     nTmp = aEdIndent.GetValue() * 20; // Point in twips
@@ -490,7 +525,9 @@ BOOL SvxAlignmentTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
     }
     else if ( rOldSet.GetItemState( nWhich, FALSE ) == SFX_ITEM_DEFAULT )
         rCoreAttrs.ClearItem( nWhich );
+#endif
 
+#if 0
     // Vertikale Ausrichtung
     nWhich = GetWhich( SID_ATTR_ALIGN_VER_JUSTIFY );
     nTmp = USHRT_MAX;
@@ -516,6 +553,7 @@ BOOL SvxAlignmentTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
     }
     else if ( rOldSet.GetItemState( nWhich, FALSE ) == SFX_ITEM_DEFAULT )
         rCoreAttrs.ClearItem( nWhich );
+#endif
 
     if ( aWinOrient.HasDegrees() )
     {
@@ -620,6 +658,7 @@ BOOL SvxAlignmentTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
             rCoreAttrs.ClearItem( nWhich );
     }
 
+#if 0
     // Zeilenumbruch
     nWhich = GetWhich( SID_ATTR_ALIGN_LINEBREAK );
     eState = aBtnWrap.GetState();
@@ -633,6 +672,7 @@ BOOL SvxAlignmentTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
     }
     else if ( rOldSet.GetItemState( nWhich, FALSE ) == SFX_ITEM_DEFAULT )
         rCoreAttrs.ClearItem( nWhich );
+#endif
 
     // Hyphenation
     nWhich = GetWhich( SID_ATTR_ALIGN_HYPHENATION );
