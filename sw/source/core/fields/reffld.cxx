@@ -2,9 +2,9 @@
  *
  *  $RCSfile: reffld.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:17:22 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:34:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,7 +188,7 @@ void lcl_GetLayTree( const SwFrm* pFrm, SvPtrarr& rArr )
                 break;
 
             if( pFrm->IsFlyFrm() )
-                pFrm = ((SwFlyFrm*)pFrm)->GetAnchor();
+                pFrm = ((SwFlyFrm*)pFrm)->GetAnchorFrm();
             else
                 pFrm = pFrm->GetUpper();
         }
