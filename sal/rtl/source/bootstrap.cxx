@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 10:56:23 $
+ *  last change: $Author: hr $ $Date: 2003-09-29 14:41:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,10 @@
 #include <rtl/byteseq.hxx>
 #endif
 
+#ifndef INCLUDED_SAL_INTERNAL_ALLOCATOR_HXX
+#include "internal/allocator.hxx"
+#endif
+
 #include <list>
 #include <hash_map>
 
@@ -97,104 +101,6 @@
 using namespace ::rtl;
 using namespace ::osl;
 
-//----------------------------------------------------------------------------
-
-template<typename T>
-struct MyAllocator
-{
-    typedef std::size_t    size_type;
-    typedef std::ptrdiff_t difference_type;
-
-    typedef T * pointer;
-    typedef const T * const_pointer;
-
-    typedef T & reference;
-    typedef const T & const_reference;
-
-    typedef T value_type;
-
-    template<typename U>
-    struct rebind
-    {
-        typedef MyAllocator<U> other;
-    };
-
-    pointer address (reference value) const
-    {
-        return &value;
-    }
-    const_pointer address (const_reference value) const
-    {
-        return &value;
-    }
-
-    MyAllocator (void)
-    {}
-
-    template<typename U>
-    MyAllocator (const MyAllocator<U> &)
-    {}
-
-    MyAllocator (const MyAllocator &)
-    {}
-
-    ~MyAllocator (void)
-    {}
-
-    size_type max_size() const
-    {
-        return size_type(-1)/sizeof(T);
-    }
-
-    pointer allocate (size_type n, void const * = 0)
-    {
-        n *= sizeof(T);
-        return (pointer)rtl_allocateMemory(sal_uInt32(n));
-    }
-    void deallocate (pointer p, size_type n)
-    {
-        n *= sizeof(T);
-        rtl_freeMemory(p);
-    }
-
-    void construct (pointer p, const_reference value)
-    {
-        new ((void*)p) T(value);
-    }
-    void destroy (pointer p)
-    {
-        p->~T();
-    }
-};
-
-//----------------------------------------------------------------------------
-
-template<typename T, typename U>
-inline bool operator== (const MyAllocator<T> &, const MyAllocator<U> &)
-{
-    return true;
-}
-
-template<typename T, typename U>
-inline bool operator!= (const MyAllocator<T> &, const MyAllocator<U> &)
-{
-    return false;
-}
-
-//----------------------------------------------------------------------------
-// see stlport '_alloc.h' comments why old compilers require the hack below.
-//----------------------------------------------------------------------------
-
-#ifndef __STL_MEMBER_TEMPLATE_CLASSES
-namespace _STL
-{
-    template<typename T, typename U>
-    inline MyAllocator<U> & __stl_alloc_rebind (MyAllocator<T> & a, U const *)
-    {
-        return (MyAllocator<U>&)(a);
-    }
-}
-#endif /* __STL_MEMBER_TEMPLATE_CLASSES */
 
 //----------------------------------------------------------------------------
 
@@ -215,7 +121,7 @@ struct rtl_bootstrap_NameValue
 
 typedef std::list<
     rtl_bootstrap_NameValue,
-    MyAllocator< rtl_bootstrap_NameValue >
+    sal::Allocator< rtl_bootstrap_NameValue >
 > NameValueList;
 
 static sal_Bool getFromCommandLineArgs( rtl_uString **ppValue , rtl_uString *pName )
@@ -578,7 +484,7 @@ extern "C"
 typedef ::std::hash_map<
     OUString, Bootstrap_Impl *,
     OUStringHash, ::std::equal_to< OUString >,
-    MyAllocator< OUString > > t_bootstrap_map;
+    sal::Allocator< OUString > > t_bootstrap_map;
 static t_bootstrap_map s_bootstrap_map;
 
 rtlBootstrapHandle SAL_CALL rtl_bootstrap_args_open( rtl_uString * pIniName )
