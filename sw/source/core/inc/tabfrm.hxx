@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabfrm.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ama $ $Date: 2002-06-19 14:33:05 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 10:11:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,8 +73,9 @@ class SwAttrSetChg;
 
 class SwTabFrm: public SwLayoutFrm, public SwFlowFrm
 {
+    // OD 14.03.2003 #i11760# - adjustment, because of method signature change
     //darf mit den Flags spielen.
-    friend void CalcCntnt( SwLayoutFrm *pLay, BOOL bNoColl = FALSE );
+    friend void CalcCntnt( SwLayoutFrm *pLay, bool bNoColl, bool bNoCalcFollow );
 
     //Fuert Spezialbehandlung fuer _Get[Next|Prev]Leaf() durch.
     SwLayoutFrm *GetLeaf( MakePageType eMakePage, BOOL bFwd );
