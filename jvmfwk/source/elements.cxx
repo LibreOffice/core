@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elements.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jl $ $Date: 2004-05-20 08:50:59 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 13:59:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,8 @@
 #include "osl/mutex.hxx"
 #include "osl/file.hxx"
 #include "fwkutil.hxx"
+#include "fwkbase.hxx"
+#include "framework.hxx"
 #include "libxmlutil.hxx"
 #include "osl/thread.hxx"
 #include <algorithm>
@@ -95,42 +97,45 @@ xmlNode* findChildNode(const xmlNode * pParent, const xmlChar* pName)
     return ret;
 }
 
-javaFrameworkError getElementUpdated(rtl::OString & sValue)
+rtl::OString getElementUpdated()
 {
     javaFrameworkError errcode = JFW_E_NONE;
     //Prepare the xml document and context
     rtl::OString sSettingsPath = jfw::getVendorSettingsPath();
+    OSL_ASSERT(sSettingsPath.getLength() > 0);
      jfw::CXmlDocPtr doc(xmlParseFile(sSettingsPath.getStr()));
     if (doc == NULL)
-    {
-        OSL_ASSERT(0);
-        return JFW_E_CONFIG_READWRITE;
-    }
+        throw FrameworkException(
+            JFW_E_ERROR,
+            rtl::OString("[Java framework] Error in function getElementUpdated "
+                         "(elements.cxx)"));
+
     jfw::CXPathContextPtr context(xmlXPathNewContext(doc));
-    int reg = xmlXPathRegisterNs(context, (xmlChar*) "jf",
-        (xmlChar*) NS_JAVA_FRAMEWORK);
-    if (reg == -1)
-        return JFW_E_ERROR;
+    if (xmlXPathRegisterNs(context, (xmlChar*) "jf",
+        (xmlChar*) NS_JAVA_FRAMEWORK) == -1)
+        throw FrameworkException(
+            JFW_E_ERROR,
+            rtl::OString("[Java framework] Error in function getElementUpdated "
+                         "(elements.cxx)"));
     CXPathObjectPtr pathObj;
     pathObj = xmlXPathEvalExpression(
         (xmlChar*)"/jf:javaSelection/jf:updated/text()", context);
     if (xmlXPathNodeSetIsEmpty(pathObj->nodesetval))
-            return JFW_E_FORMAT_STORE;
-    sValue = (sal_Char*) pathObj->nodesetval->nodeTab[0]->content;
-
-    return errcode;
+        throw FrameworkException(
+            JFW_E_ERROR,
+            rtl::OString("[Java framework] Error in function getElementUpdated "
+                         "(elements.cxx)"));
+    rtl::OString sValue = (sal_Char*) pathObj->nodesetval->nodeTab[0]->content;
+    return sValue;
 }
 bool createUserDirectory()
 {
     bool ret = false;
 
     rtl::OUString sUserDir;
-    rtl::Bootstrap::get(
+    getBootstrap().getFrom(
         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UserInstallation")),
-        sUserDir,
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-            "${$SYSBINDIR/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}")));
-
+        sUserDir);
     FileBase::RC rc = Directory::create(sUserDir);
     if (rc == FileBase::E_None || rc == FileBase::E_EXIST)
     {
@@ -147,27 +152,24 @@ bool createUserDirectory()
     }
     return ret;
 }
-javaFrameworkError createUserSettingsDocument()
+
+void createUserSettingsDocument()
 {
     //make sure there is a user directory
+    rtl::OString sExcMsg("[Java framework] Error in function createUserSettingsDocument "
+                         "(elements.cxx).");
     if( ! createUserDirectory())
-        return JFW_E_ERROR;
-    javaFrameworkError ret = JFW_E_NONE;
-    // check if javasettings.xml already exist
-    rtl::OUString sURL = getUserSettingsURL();
+        throw FrameworkException(JFW_E_ERROR, sExcMsg);
 
-    osl::DirectoryItem testFileItem;
-    osl::File::RC fileError = osl::DirectoryItem::get(sURL, testFileItem);
-    if (fileError == osl::FileBase::E_None)
-        //file exist already
-        return JFW_E_NONE;
-    else if (fileError != osl::FileBase::E_NOENT)
-        return JFW_E_ERROR;
+    // check if javasettings.xml already exist
+    rtl::OUString sURL = BootParams::getUserData();
+    if (checkFileURL(sURL) == FILE_OK)
+        return;
 
     //javasettings.xml does not exist yet
     CXmlDocPtr doc(xmlNewDoc((xmlChar *)"1.0"));
     if (! doc)
-        return JFW_E_ERROR;
+        throw FrameworkException(JFW_E_ERROR, sExcMsg);
     //Create a comment
     xmlNewDocComment(
         doc, (xmlChar *) "This is a generated file. Do not alter this file!");
@@ -175,37 +177,37 @@ javaFrameworkError createUserSettingsDocument()
     //Create the root element and name spaces
     xmlNodePtr root =   xmlNewDocNode(
         doc, NULL, (xmlChar *) "java", (xmlChar *) "\n");
+
     if (root == NULL)
-        return JFW_E_ERROR;
+        throw FrameworkException(JFW_E_ERROR, sExcMsg);
+
     if (xmlNewNs(root, (xmlChar *) NS_JAVA_FRAMEWORK,NULL) == NULL)
-        return JFW_E_ERROR;
+        throw FrameworkException(JFW_E_ERROR, sExcMsg);
     if (xmlNewNs(root,(xmlChar*) NS_SCHEMA_INSTANCE,(xmlChar*)"xsi") == NULL)
-        return JFW_E_ERROR;
+        throw FrameworkException(JFW_E_ERROR, sExcMsg);
     xmlDocSetRootElement(doc,  root);
 
     //Create a comment
     xmlNodePtr com = xmlNewComment(
         (xmlChar *) "This is a generated file. Do not alter this file!");
     if (com == NULL)
-        return JFW_E_ERROR;
+        throw FrameworkException(JFW_E_ERROR, sExcMsg);
 
     if (xmlAddPrevSibling(root, com) == NULL)
-        return JFW_E_ERROR;
+        throw FrameworkException(JFW_E_ERROR, sExcMsg);
 
-    rtl::OString sSettingsPath = jfw::getUserSettingsPath();
     if (xmlSaveFormatFileEnc(
-            sSettingsPath.getStr(), doc,"UTF-8", 1) == -1)
-        return JFW_E_CONFIG_READWRITE;
-
-    return ret;
+            getUserSettingsStoreLocation().getStr(), doc,"UTF-8", 1) == -1)
+        throw FrameworkException(JFW_E_ERROR, sExcMsg);
 }
 
-javaFrameworkError createSettingsStructure(xmlDoc * document, bool * bNeedsSave)
+void createSettingsStructure(xmlDoc * document, bool * bNeedsSave)
 {
-    javaFrameworkError errcode = JFW_E_NONE;
+    rtl::OString sExcMsg("[Java framework] Error in function createSettingsStructure "
+                         "(elements.cxx).");
     xmlNode * root = xmlDocGetRootElement(document);
     if (root == NULL)
-        return JFW_E_ERROR;
+        throw FrameworkException(JFW_E_ERROR, sExcMsg);
     bool bFound = false;
     xmlNode * cur = root->children;
     while (cur != NULL)
@@ -220,7 +222,7 @@ javaFrameworkError createSettingsStructure(xmlDoc * document, bool * bNeedsSave)
     if (bFound)
     {
         bNeedsSave = false;
-        return errcode;
+        return;
     }
     //We will modify this document
     *bNeedsSave = true;
@@ -229,30 +231,30 @@ javaFrameworkError createSettingsStructure(xmlDoc * document, bool * bNeedsSave)
     xmlNs* nsXsi = xmlSearchNsByHref(
         document, root,(xmlChar*)  NS_SCHEMA_INSTANCE);
 
-    //<classesDirectory/>
-    xmlNode  * nodeCP = xmlNewTextChild(
-        root,NULL, (xmlChar*) "classesDirectory", (xmlChar*) "");
-    if (nodeCP == NULL)
-        return JFW_E_ERROR;
-    //add a new line
-    xmlNode * nodeCrLf = xmlNewText((xmlChar*) "\n");
-    xmlAddChild(root, nodeCrLf);
+//     //<classesDirectory/>
+//     xmlNode  * nodeCP = xmlNewTextChild(
+//         root,NULL, (xmlChar*) "classesDirectory", (xmlChar*) "");
+//     if (nodeCP == NULL)
+//         throw FrameworkException(JFW_E_ERROR, sExcMsg);
+//     //add a new line
+//     xmlNode * nodeCrLf = xmlNewText((xmlChar*) "\n");
+//     xmlAddChild(root, nodeCrLf);
 
     //<enabled xsi:nil="true"
     xmlNode  * nodeEn = xmlNewTextChild(
         root,NULL, (xmlChar*) "enabled", (xmlChar*) "");
     if (nodeEn == NULL)
-        return JFW_E_ERROR;
+        throw FrameworkException(JFW_E_ERROR, sExcMsg);
     xmlSetNsProp(nodeEn,nsXsi,(xmlChar*) "nil",(xmlChar*) "true");
     //add a new line
-    nodeCrLf = xmlNewText((xmlChar*) "\n");
+    xmlNode * nodeCrLf = xmlNewText((xmlChar*) "\n");
     xmlAddChild(root, nodeCrLf);
 
     //<userClassPath xsi:nil="true">
     xmlNode  * nodeUs = xmlNewTextChild(
         root,NULL, (xmlChar*) "userClassPath", (xmlChar*) "");
     if (nodeUs == NULL)
-        return JFW_E_ERROR;
+        throw FrameworkException(JFW_E_ERROR, sExcMsg);
     xmlSetNsProp(nodeUs,nsXsi,(xmlChar*) "nil",(xmlChar*) "true");
     //add a new line
     nodeCrLf = xmlNewText((xmlChar*) "\n");
@@ -262,7 +264,7 @@ javaFrameworkError createSettingsStructure(xmlDoc * document, bool * bNeedsSave)
     xmlNode  * nodeVm = xmlNewTextChild(
         root,NULL, (xmlChar*) "vmParameters", (xmlChar*) "");
     if (nodeVm == NULL)
-        return JFW_E_ERROR;
+        throw FrameworkException(JFW_E_ERROR, sExcMsg);
     xmlSetNsProp(nodeVm,nsXsi,(xmlChar*) "nil",(xmlChar*) "true");
     //add a new line
     nodeCrLf = xmlNewText((xmlChar*) "\n");
@@ -272,7 +274,7 @@ javaFrameworkError createSettingsStructure(xmlDoc * document, bool * bNeedsSave)
     xmlNode  * nodeJre = xmlNewTextChild(
         root,NULL, (xmlChar*) "jreLocations", (xmlChar*) "");
     if (nodeJre == NULL)
-        return JFW_E_ERROR;
+        throw FrameworkException(JFW_E_ERROR, sExcMsg);
     xmlSetNsProp(nodeJre,nsXsi,(xmlChar*) "nil",(xmlChar*) "true");
     //add a new line
     nodeCrLf = xmlNewText((xmlChar*) "\n");
@@ -282,7 +284,7 @@ javaFrameworkError createSettingsStructure(xmlDoc * document, bool * bNeedsSave)
     xmlNode  * nodeJava = xmlNewTextChild(
         root,NULL, (xmlChar*) "javaInfo", (xmlChar*) "");
     if (nodeJava == NULL)
-        return JFW_E_ERROR;
+        throw FrameworkException(JFW_E_ERROR, sExcMsg);
     xmlSetNsProp(nodeJava,nsXsi,(xmlChar*) "nil",(xmlChar*) "true");
 //    xmlSetProp(nodeJava,(xmlChar*) "autoSelect",(xmlChar*) "true");
     //add a new line
@@ -291,80 +293,34 @@ javaFrameworkError createSettingsStructure(xmlDoc * document, bool * bNeedsSave)
 
     //only copied during first time setup for the current user and client
     //machine
-    errcode = copyShareSettings(document, root);
-
-    return errcode;
+    copyShareSettings(document, root);
 }
 
-javaFrameworkError copyShareSettings(xmlDoc * doc, xmlNode * userParent)
+void copyShareSettings(xmlDoc * doc, xmlNode * userParent)
 {
-    javaFrameworkError errcode = JFW_E_NONE;
-    CXPathContextPtr contextShare;
-    CXPathObjectPtr pathObj;
-
-    //check if there is a share/config/javasettings.xml
-    rtl::OUString sShareSettings = getSharedSettingsURLNoPlatformSuffix();
-
-    osl::DirectoryItem testFileItem;
-    osl::File::RC fileError = osl::DirectoryItem::get(
-        sShareSettings, testFileItem);
-    if (fileError == osl::FileBase::E_NOENT)
-        return JFW_E_NONE;
-    if (fileError != osl::FileBase::E_None)
-        //file exist already
-        return JFW_E_ERROR;
-
-    //Prepare access to share javasettings.xml
-    rtl::OString sSettings = getSharedSettingsPathNoPlatformSuffix();
-    CXmlDocPtr docShare(xmlParseFile(sSettings.getStr()));
-    if (docShare == NULL)
-        return JFW_E_CONFIG_READWRITE;
-    contextShare = xmlXPathNewContext(docShare);
-    if (xmlXPathRegisterNs(contextShare, (xmlChar*) "jf",
-        (xmlChar*) NS_JAVA_FRAMEWORK) == -1)
-        return JFW_E_CONFIG_READWRITE;
-
-    //copy <classesDirectory>
-    rtl::OString sExpression= rtl::OString("//jf:classesDirectory[1]/text()");
-    pathObj = xmlXPathEvalExpression((xmlChar*) sExpression.getStr(),
-                                     contextShare);
-    if ( ! pathObj || xmlXPathNodeSetIsEmpty(pathObj->nodesetval))
-        return JFW_E_FORMAT_STORE;
-
-    CXmlCharPtr sClasses;
-    sClasses = xmlNodeListGetString(
-        docShare, pathObj->nodesetval->nodeTab[0], 1);
-
-    xmlNode* userClasses =
-        findChildNode(userParent, (xmlChar*) "classesDirectory");
-    OSL_ASSERT(userClasses);
-
-    xmlNodeSetContent(userClasses, sClasses);
-
-    return errcode;
+    rtl::OString sExcMsg("[Java framework] Error in function copyShareSettings "
+                         "(elements.cxx).");
+    // insert values into user settings here
 }
-javaFrameworkError prepareSettingsDocument()
-{
-    javaFrameworkError errcode = JFW_E_NONE;
-    if ((errcode = createUserSettingsDocument()) != JFW_E_NONE)
-        return errcode;
 
+void prepareSettingsDocument()
+{
+    rtl::OString sExcMsg("[Java framework] Error in function copyShareSettings "
+                         "(elements.cxx).");
+    createUserSettingsDocument();
     rtl::OString sSettings = getUserSettingsPath();
     CXmlDocPtr doc(xmlParseFile(sSettings.getStr()));
     if (!doc)
-        return JFW_E_CONFIG_READWRITE;
+        throw FrameworkException(JFW_E_ERROR, sExcMsg);
 
     bool bNeedsSave = false;
-    errcode = createSettingsStructure(doc, & bNeedsSave);
-    if (errcode != JFW_E_NONE)
-        return errcode;
+    createSettingsStructure(doc, & bNeedsSave);
     if (bNeedsSave)
     {
         if (xmlSaveFormatFileEnc(
                 sSettings.getStr(), doc,"UTF-8", 1) == -1)
-            return JFW_E_CONFIG_READWRITE;
+            throw FrameworkException(JFW_E_ERROR, sExcMsg);
     }
-    return errcode;
 }
 
 //====================================================================
@@ -413,36 +369,33 @@ CNodeJava::CNodeJava():
 }
 
 
-javaFrameworkError CNodeJava::loadFromSettings()
+void CNodeJava::loadFromSettings()
 {
-    javaFrameworkError errcode = JFW_E_NONE;
     // share settings may not be given
-    errcode = loadShareSettings();
-    OSL_ASSERT(errcode == JFW_E_NONE);
-    if (errcode == JFW_E_NONE)
-        errcode = loadUserSettings();
-    return errcode;
+    loadShareSettings();
+    loadUserSettings();
 }
 
 
-javaFrameworkError CNodeJava::loadUserSettings()
+void CNodeJava::loadUserSettings()
 {
-    javaFrameworkError errcode = JFW_E_NONE;
+    rtl::OString sExcMsg("[Java framework] Error in function CNodeJava::loadUserSettings "
+                             "(elements.cxx).");
     CXmlDocPtr docUser;
-
-    if ((errcode = prepareSettingsDocument()) != JFW_E_NONE)
-        return errcode;
+    if (getMode() == JFW_MODE_DIRECT)
+        return;
+    prepareSettingsDocument();
 
     //Read the user elements
     rtl::OString sSettingsPath = jfw::getUserSettingsPath();
     //There must not be a share settings file
     docUser = xmlParseFile(sSettingsPath.getStr());
     if (docUser == NULL)
-        return JFW_E_CONFIG_READWRITE;
+        throw FrameworkException(JFW_E_ERROR, sExcMsg);
 
     xmlNode * cur = xmlDocGetRootElement(docUser);
     if (cur == NULL || cur->children == NULL)
-        return JFW_E_FORMAT_STORE;
+        throw FrameworkException(JFW_E_ERROR, sExcMsg);
 
     CXmlCharPtr sNil;
     cur = cur->children;
@@ -454,10 +407,7 @@ javaFrameworkError CNodeJava::loadUserSettings()
             sNil = xmlGetNsProp(
                 cur, (xmlChar*) "nil", (xmlChar*) NS_SCHEMA_INSTANCE);
             if (sNil == NULL)
-            {
-                OSL_ASSERT(0);
-                return JFW_E_FORMAT_STORE;
-            }
+                throw FrameworkException(JFW_E_ERROR, sExcMsg);;
             if (xmlStrcmp(sNil, (xmlChar*) "false") == 0)
             {
                 CXmlCharPtr sEnabled;
@@ -471,22 +421,12 @@ javaFrameworkError CNodeJava::loadUserSettings()
                     m_bEnabled = sal_True;
             }
         }
-        else if (xmlStrcmp(cur->name, (xmlChar*) "classesDirectory") == 0)
-        {
-            CXmlCharPtr sCls;
-            sCls = xmlNodeListGetString(
-                docUser, cur->children, 1);
-            m_sClassesDirectory = sCls;
-        }
         else if (xmlStrcmp(cur->name, (xmlChar*) "userClassPath") == 0)
         {
             sNil = xmlGetNsProp(
                 cur, (xmlChar*) "nil", (xmlChar*) NS_SCHEMA_INSTANCE);
             if (sNil == NULL)
-            {
-                OSL_ASSERT(0);
-                return JFW_E_FORMAT_STORE;
-            }
+                throw FrameworkException(JFW_E_ERROR, sExcMsg);
             if (xmlStrcmp(sNil, (xmlChar*) "false") == 0)
             {
                 CXmlCharPtr sUser;
@@ -500,10 +440,8 @@ javaFrameworkError CNodeJava::loadUserSettings()
             sNil = xmlGetNsProp(
                 cur, (xmlChar*) "nil", (xmlChar*) NS_SCHEMA_INSTANCE);
             if (sNil == NULL)
-            {
-                OSL_ASSERT(0);
-                return JFW_E_FORMAT_STORE;
-            }
+                throw FrameworkException(JFW_E_ERROR, sExcMsg);
+
             if (xmlStrcmp(sNil, (xmlChar*) "false") == 0)
             {
                 m_aInfo.loadFromNode(docUser, cur);
@@ -514,10 +452,7 @@ javaFrameworkError CNodeJava::loadUserSettings()
             sNil = xmlGetNsProp(
                 cur, (xmlChar*) "nil", (xmlChar*) NS_SCHEMA_INSTANCE);
             if (sNil == NULL)
-            {
-                OSL_ASSERT(0);
-                return JFW_E_FORMAT_STORE;
-            }
+                throw FrameworkException(JFW_E_ERROR, sExcMsg);
             if (xmlStrcmp(sNil, (xmlChar*) "false") == 0)
             {
                 //throw away share settings
@@ -541,10 +476,7 @@ javaFrameworkError CNodeJava::loadUserSettings()
             sNil = xmlGetNsProp(
                 cur, (xmlChar*) "nil", (xmlChar*) NS_SCHEMA_INSTANCE);
             if (sNil == NULL)
-            {
-                OSL_ASSERT(0);
-                return JFW_E_FORMAT_STORE;
-            }
+                throw FrameworkException(JFW_E_ERROR, sExcMsg);
             if (xmlStrcmp(sNil, (xmlChar*) "false") == 0)
             {
                 //throw away share settings
@@ -563,39 +495,37 @@ javaFrameworkError CNodeJava::loadUserSettings()
                 }
             }
         }
-
         cur = cur->next;
     }
-    return errcode;
 }
 
-javaFrameworkError CNodeJava::loadShareSettings()
+void CNodeJava::loadShareSettings()
 {
-    javaFrameworkError errcode = JFW_E_NONE;
-    CXmlDocPtr docShare;
-
-    //test if the file exist to avoid warning messages from libxml
-    rtl::OUString sSettingsUrl = getSharedSettingsURL();
-    osl::DirectoryItem testFileItem;
-    osl::File::RC fileError = osl::DirectoryItem::get(sSettingsUrl, testFileItem);
-    if (fileError == osl::FileBase::E_NOENT)
-        return JFW_E_NONE;
-
-    //Read the share elements, do not heed the nil attributes
+    rtl::OString sExcMsg("[Java framework] Error in function CNodeJava::loadShareSettings "
+                             "(elements.cxx).");
+    //check if shared settings exist at all.
+    jfw::FileStatus s = checkFileURL(BootParams::getSharedData());
+    if (s == FILE_INVALID)
+        throw FrameworkException(
+            JFW_E_ERROR,
+            "[Java framework] Invalid file for shared Java settings.");
+    else if (s == FILE_DOES_NOT_EXIST)
+        return;
     rtl::OString sSettingsPath = jfw::getSharedSettingsPath();
+    if (sSettingsPath.getLength() == 0)
+        return;
+
     //There must not be a share settings file
-    docShare = xmlParseFile(sSettingsPath.getStr());
+    CXmlDocPtr docShare(xmlParseFile(sSettingsPath.getStr()));
     if (docShare == NULL)
-        return JFW_E_NONE;
+        throw FrameworkException(JFW_E_ERROR, sExcMsg);
 
     xmlNode * cur = xmlDocGetRootElement(docShare);
     if (cur == NULL)
-    {
-        OSL_ASSERT(cur);
-        return JFW_E_FORMAT_STORE;
-    }
+        throw FrameworkException(JFW_E_ERROR, sExcMsg);
+
     if (cur->children == NULL)
-        return JFW_E_NONE;
+        return;
     cur = cur->children;
 
     while (cur != NULL)
@@ -611,13 +541,6 @@ javaFrameworkError CNodeJava::loadShareSettings()
                 m_bEnabled = sal_False;
             else
                 m_bEnabled = sal_True;
-        }
-        else if (xmlStrcmp(cur->name, (xmlChar*) "classesDirectory") == 0)
-        {
-            CXmlCharPtr sCls;
-            sCls = xmlNodeListGetString(
-                docShare, cur->children, 1);
-            m_sClassesDirectory = sCls;
         }
         else if (xmlStrcmp(cur->name, (xmlChar*) "userClassPath") == 0)
         {
@@ -663,28 +586,27 @@ javaFrameworkError CNodeJava::loadShareSettings()
 
         cur = cur->next;
     }
-    return errcode;
 }
 
-javaFrameworkError CNodeJava::writeSettings() const
+void CNodeJava::writeSettings() const
 {
-    javaFrameworkError errcode = JFW_E_NONE;
+    rtl::OString sExcMsg("[Java framework] Error in function CNodeJava::writeSettings "
+                         "(elements.cxx).");
     CXmlDocPtr docUser;
     CXPathContextPtr contextUser;
     CXPathObjectPtr pathObj;
 
-    if ((errcode = prepareSettingsDocument()) != JFW_E_NONE)
-        return errcode;
+    prepareSettingsDocument();
 
     //Read the user elements
     rtl::OString sSettingsPath = jfw::getUserSettingsPath();
     docUser = xmlParseFile(sSettingsPath.getStr());
     if (docUser == NULL)
-        return JFW_E_CONFIG_READWRITE;
+        throw FrameworkException(JFW_E_ERROR, sExcMsg);
     contextUser = xmlXPathNewContext(docUser);
     if (xmlXPathRegisterNs(contextUser, (xmlChar*) "jf",
         (xmlChar*) NS_JAVA_FRAMEWORK) == -1)
-        return JFW_E_CONFIG_READWRITE;
+        throw FrameworkException(JFW_E_ERROR, sExcMsg);
 
     xmlNode * root = xmlDocGetRootElement(docUser);
     //Get xsi:nil namespace
@@ -701,7 +623,7 @@ javaFrameworkError CNodeJava::writeSettings() const
         pathObj = xmlXPathEvalExpression((xmlChar*) sExpression.getStr(),
                                          contextUser);
         if ( ! pathObj || xmlXPathNodeSetIsEmpty(pathObj->nodesetval))
-            return JFW_E_FORMAT_STORE;
+            throw FrameworkException(JFW_E_ERROR, sExcMsg);
 
         xmlNode * nodeEnabled = pathObj->nodesetval->nodeTab[0];
         xmlSetNsProp(nodeEnabled,
@@ -724,7 +646,7 @@ javaFrameworkError CNodeJava::writeSettings() const
         pathObj = xmlXPathEvalExpression((xmlChar*) sExpression.getStr(),
                                          contextUser);
         if ( ! pathObj || xmlXPathNodeSetIsEmpty(pathObj->nodesetval))
-            return JFW_E_FORMAT_STORE;
+            throw FrameworkException(JFW_E_ERROR, sExcMsg);
 
         xmlNode * nodeEnabled = pathObj->nodesetval->nodeTab[0];
         xmlSetNsProp(nodeEnabled, nsXsi, (xmlChar*) "nil",(xmlChar*) "false");
@@ -742,12 +664,10 @@ javaFrameworkError CNodeJava::writeSettings() const
         pathObj = xmlXPathEvalExpression((xmlChar*) sExpression.getStr(),
                                                 contextUser);
         if ( ! pathObj || xmlXPathNodeSetIsEmpty(pathObj->nodesetval))
-            return JFW_E_FORMAT_STORE;
+            throw FrameworkException(JFW_E_ERROR, sExcMsg);
 
-        errcode = m_aInfo.writeToNode(
+        m_aInfo.writeToNode(
             docUser, pathObj->nodesetval->nodeTab[0]);
-        if (errcode != JFW_E_NONE)
-            return errcode;
     }
 
     //set <vmParameters> element
@@ -758,7 +678,7 @@ javaFrameworkError CNodeJava::writeSettings() const
         pathObj = xmlXPathEvalExpression((xmlChar*) sExpression.getStr(),
                                          contextUser);
         if ( ! pathObj || xmlXPathNodeSetIsEmpty(pathObj->nodesetval))
-            return JFW_E_FORMAT_STORE;
+            throw FrameworkException(JFW_E_ERROR, sExcMsg);
         xmlNode* vmParameters = pathObj->nodesetval->nodeTab[0];
         //set xsi:nil = false;
         xmlSetNsProp(vmParameters, nsXsi,(xmlChar*) "nil",
@@ -799,7 +719,7 @@ javaFrameworkError CNodeJava::writeSettings() const
         pathObj = xmlXPathEvalExpression((xmlChar*) sExpression.getStr(),
                                          contextUser);
         if ( ! pathObj || xmlXPathNodeSetIsEmpty(pathObj->nodesetval))
-            return JFW_E_FORMAT_STORE;
+            throw FrameworkException(JFW_E_ERROR, sExcMsg);
         xmlNode* jreLocationsNode = pathObj->nodesetval->nodeTab[0];
         //set xsi:nil = false;
         xmlSetNsProp(jreLocationsNode, nsXsi,(xmlChar*) "nil",
@@ -831,12 +751,8 @@ javaFrameworkError CNodeJava::writeSettings() const
             xmlAddChild(jreLocationsNode, nodeCrLf);
         }
     }
-
-//    sExpression =
     if (xmlSaveFormatFile(sSettingsPath.getStr(), docUser, 1) == -1)
-        return JFW_E_CONFIG_READWRITE;
-
-    return JFW_E_NONE;
+        throw FrameworkException(JFW_E_ERROR, sExcMsg);
 }
 
 void CNodeJava::setEnabled(sal_Bool bEnabled)
@@ -893,7 +809,7 @@ void CNodeJava::setJavaInfo(const JavaInfo * pInfo, bool bAutoSelect)
     m_bJavaInfoModified = true;
 }
 
-JavaInfo * CNodeJava::getJavaInfo() const
+JavaInfo * CNodeJava::createJavaInfo() const
 {
     return m_aInfo.makeJavaInfo();
 }
@@ -1047,41 +963,43 @@ CNodeJavaInfo::CNodeJavaInfo(const JavaInfo * pInfo)
         arVendorData = pInfo->arVendorData;
     }
 }
-javaFrameworkError CNodeJavaInfo::loadFromNode(xmlDoc * pDoc, xmlNode * pJavaInfo)
+void CNodeJavaInfo::loadFromNode(xmlDoc * pDoc, xmlNode * pJavaInfo)
 {
-    javaFrameworkError errcode = JFW_E_NONE;
+    rtl::OString sExcMsg("[Java framework] Error in function CNodeJavaInfo::loadFromNode "
+                         "(elements.cxx).");
+
     OSL_ASSERT(pJavaInfo && pDoc);
     if (pJavaInfo->children == NULL)
-        return JFW_E_NONE;
+        return;
     //Get the xsi:nil attribute;
     CXmlCharPtr sNil;
     sNil = xmlGetNsProp(
         pJavaInfo, (xmlChar*) "nil", (xmlChar*) NS_SCHEMA_INSTANCE);
     if ( ! sNil)
-        return JFW_E_FORMAT_STORE;
+        throw FrameworkException(JFW_E_ERROR, sExcMsg);
 
     if (xmlStrcmp(sNil, (xmlChar*) "true") == 0)
         bNil = true;
     else if (xmlStrcmp(sNil, (xmlChar*) "false") == 0)
         bNil = false;
     else
-        return JFW_E_FORMAT_STORE;
+        throw FrameworkException(JFW_E_ERROR, sExcMsg);
     if (bNil == true)
-        return JFW_E_NONE;
+        return;
 
     //Get javaInfo@manuallySelected attribute
     CXmlCharPtr sAutoSelect;
     sAutoSelect = xmlGetProp(
         pJavaInfo, (xmlChar*) "autoSelect");
     if ( ! sAutoSelect)
-        return JFW_E_FORMAT_STORE;
+        throw FrameworkException(JFW_E_ERROR, sExcMsg);
 
     if (xmlStrcmp(sAutoSelect, (xmlChar*) "true") == 0)
         bAutoSelect = true;
     else if (xmlStrcmp(sAutoSelect, (xmlChar*) "false") == 0)
         bAutoSelect = false;
     else
-        return JFW_E_FORMAT_STORE;
+        throw FrameworkException(JFW_E_ERROR, sExcMsg);
 
     xmlNode * cur = pJavaInfo->children;
 
@@ -1093,7 +1011,7 @@ javaFrameworkError CNodeJavaInfo::loadFromNode(xmlDoc * pDoc, xmlNode * pJavaInf
             xmlVendor = xmlNodeListGetString(
                 pDoc, cur->children, 1);
             if (! xmlVendor)
-                return JFW_E_NONE;
+                return;
             sVendor = xmlVendor;
         }
         else if (xmlStrcmp(cur->name, (xmlChar*) "location") == 0)
@@ -1148,27 +1066,25 @@ javaFrameworkError CNodeJavaInfo::loadFromNode(xmlDoc * pDoc, xmlNode * pJavaInf
     sVendorUpdate = xmlGetProp(pJavaInfo,
                                (xmlChar*) "vendorUpdate");
     if ( ! sVendorUpdate)
-        return JFW_E_FORMAT_STORE;
+        throw FrameworkException(JFW_E_ERROR, sExcMsg);
     sAttrVendorUpdate = sVendorUpdate;
-
-    return errcode;
 }
 
 
-javaFrameworkError CNodeJavaInfo::writeToNode(xmlDoc* pDoc,
-                                              xmlNode* pJavaInfoNode) const
+void CNodeJavaInfo::writeToNode(xmlDoc* pDoc,
+                                xmlNode* pJavaInfoNode) const
 
 {
     OSL_ASSERT(pJavaInfoNode && pDoc);
-    javaFrameworkError errcode = JFW_E_NONE;
+    rtl::OString sExcMsg("[Java framework] Error in function CNodeJavaInfo::writeToNode "
+                         "(elements.cxx).");
+
     //write the attribute vendorSettings
 
     //javaInfo@vendorUpdate
     //creates the attribute if necessary
-    rtl::OString sUpdated;
-    errcode = getElementUpdated(sUpdated);
-    if (errcode != JFW_E_NONE)
-        return errcode;
+    rtl::OString sUpdated = getElementUpdated();
+
     xmlSetProp(pJavaInfoNode, (xmlChar*)"vendorUpdate",
                (xmlChar*) sUpdated.getStr());
 
@@ -1200,7 +1116,7 @@ javaFrameworkError CNodeJavaInfo::writeToNode(xmlDoc* pDoc,
     //If the JavaInfo was set with an empty value,
     //then we are done.
     if (m_bEmptyNode)
-        return errcode;
+        return;
 
     //add a new line after <javaInfo>
     xmlNode * nodeCrLf = xmlNewText((xmlChar*) "\n");
@@ -1271,8 +1187,6 @@ javaFrameworkError CNodeJavaInfo::writeToNode(xmlDoc* pDoc,
     //add a new line for better readability
     nodeCrLf = xmlNewText((xmlChar*) "\n");
     xmlAddChild(pJavaInfoNode, nodeCrLf);
-
-    return JFW_E_NONE;
 }
 
 JavaInfo * CNodeJavaInfo::makeJavaInfo() const
