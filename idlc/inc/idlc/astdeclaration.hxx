@@ -2,9 +2,9 @@
  *
  *  $RCSfile: astdeclaration.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jsc $ $Date: 2001-05-18 15:33:49 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 11:55:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,23 +128,23 @@ public:
         { m_pScope = pSc; }
     const NodeType getNodeType()
         { return m_nodeType; }
-    sal_Bool isInMainfile()
+    sal_Bool isInMainfile() const
         { return m_bInMainFile; }
     void setInMainfile(sal_Bool bInMainfile)
         { m_bInMainFile = bInMainfile; }
-    sal_Bool isImported()
+    sal_Bool isImported() const
         { return m_bImported; }
     void setImported(sal_Bool bImported)
         { m_bImported = bImported; }
-    sal_Int32 getLineNumber()
+    sal_Int32 getLineNumber() const
         { return m_lineNumber; }
     void setLineNumber(sal_Int32 lineNumber)
         { m_lineNumber = lineNumber; }
-    const ::rtl::OString& getFileName()
+    const ::rtl::OString& getFileName() const
         { return m_fileName; }
     void setFileName(const ::rtl::OString& rFileName)
         { m_fileName = rFileName; }
-    const ::rtl::OUString& getDocumentation()
+    const ::rtl::OUString& getDocumentation() const
         { return m_documentation; }
     void setDocumentation(const ::rtl::OUString& rDocumentation)
         { m_documentation = rDocumentation; }
