@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtbl.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 11:38:57 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:44:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -517,9 +517,9 @@ BOOL SwNodes::InsBoxen( SwTableNode* pTblNd,
 
 // --------------- einfuegen einer neuen Tabelle --------------
 
-const SwTable* SwDoc::InsertTable( const SwPosition& rPos, USHORT nRows,
+const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTblOpts,
+                                   const SwPosition& rPos, USHORT nRows,
                                    USHORT nCols, SwHoriOrient eAdjust,
-                                   USHORT nInsTblFlags,
                                    const SwTableAutoFmt* pTAFmt,
                                    const SvUShorts* pColArr,
                                    BOOL bCalledFromShell )
@@ -543,7 +543,7 @@ const SwTable* SwDoc::InsertTable( const SwPosition& rPos, USHORT nRows,
     {
         ClearRedo();
         AppendUndo( new SwUndoInsTbl( rPos, nCols, nRows, eAdjust,
-                                        nInsTblFlags, pTAFmt, pColArr ));
+                                      rInsTblOpts, pTAFmt, pColArr ));
     }
 
     // fuege erstmal die Nodes ein
@@ -551,10 +551,15 @@ const SwTable* SwDoc::InsertTable( const SwPosition& rPos, USHORT nRows,
     SwTxtFmtColl *pBodyColl = GetTxtCollFromPool( RES_POOLCOLL_TABLE ),
                  *pHeadColl = pBodyColl;
 
-    BOOL bDfltBorders = nInsTblFlags & DEFAULT_BORDER;
+    BOOL bDfltBorders = rInsTblOpts.mnInsMode & tabopts::DEFAULT_BORDER;
 
-    if( (nInsTblFlags & HEADLINE) && (1 != nRows || !bDfltBorders) )
+    if( (rInsTblOpts.mnInsMode & tabopts::HEADLINE) && (1 != nRows || !bDfltBorders) )
         pHeadColl = GetTxtCollFromPool( RES_POOLCOLL_TABLE_HDLN );
+
+    const USHORT nRowsToRepeat =
+            tabopts::HEADLINE == (rInsTblOpts.mnInsMode & tabopts::HEADLINE) ?
+            rInsTblOpts.mnRowsToRepeat :
+            0;
 
     /* #106283# Save content node to extract FRAMEDIR from. */
     const SwCntntNode * pCntntNd = rPos.nNode.GetNode().GetCntntNode();
@@ -563,9 +568,14 @@ const SwTable* SwDoc::InsertTable( const SwPosition& rPos, USHORT nRows,
         pCntntNd (aka the node the table is inserted at) thus causing
         SwNodes::InsertTable to propagate an adjust item if
         necessary. */
-    SwTableNode *pTblNd = GetNodes().InsertTable
-        ( rPos.nNode, nCols, pBodyColl, nRows, pHeadColl,
-          bCalledFromShell ? &pCntntNd->GetSwAttrSet() : 0 );
+    SwTableNode *pTblNd = GetNodes().InsertTable(
+        rPos.nNode,
+        nCols,
+        pBodyColl,
+        nRows,
+        nRowsToRepeat,
+        pHeadColl,
+        bCalledFromShell ? &pCntntNd->GetSwAttrSet() : 0 );
 
     // dann erstelle die Box/Line/Table-Struktur
     SwTableLineFmt* pLineFmt = MakeTableLineFmt();
@@ -605,7 +615,7 @@ const SwTable* SwDoc::InsertTable( const SwPosition& rPos, USHORT nRows,
         nWidth = nLastPos - nSttPos;
     }
     pTableFmt->SetAttr( SwFmtFrmSize( ATT_VAR_SIZE, nWidth ));
-    if( !(nInsTblFlags & SPLIT_LAYOUT) )
+    if( !(rInsTblOpts.mnInsMode & tabopts::SPLIT_LAYOUT) )
         pTableFmt->SetAttr( SwFmtLayoutSplit( FALSE ));
 
     // verschiebe ggfs. die harten PageDesc/PageBreak Attribute:
@@ -633,7 +643,7 @@ const SwTable* SwDoc::InsertTable( const SwPosition& rPos, USHORT nRows,
     SwTable * pNdTbl = &pTblNd->GetTable();
     pTableFmt->Add( pNdTbl );       // das Frame-Format setzen
 
-    pNdTbl->SetHeadlineRepeat( HEADLINE_REPEAT == (nInsTblFlags & HEADLINE_REPEAT) );
+    pNdTbl->SetRowsToRepeat( nRowsToRepeat );
 
     SvPtrarr aBoxFmtArr( 0, 16 );
     SwTableBoxFmt* pBoxFmt = 0;
@@ -731,6 +741,7 @@ SwTableNode* SwNodes::InsertTable( const SwNodeIndex& rNdIdx,
                                    USHORT nBoxes,
                                    SwTxtFmtColl* pCntntTxtColl,
                                    USHORT nLines,
+                                   USHORT nRepeat,
                                    SwTxtFmtColl* pHeadlineTxtColl,
                                    const SwAttrSet * pAttrSet)
 {
@@ -776,7 +787,8 @@ SwTableNode* SwNodes::InsertTable( const SwNodeIndex& rNdIdx,
 
             new SwEndNode( aIdx, *pSttNd );
         }
-        pTxtColl = pCntntTxtColl;
+        if ( nL + 1 >= nRepeat )
+            pTxtColl = pCntntTxtColl;
     }
     return pTblNd;
 }
@@ -784,10 +796,10 @@ SwTableNode* SwNodes::InsertTable( const SwNodeIndex& rNdIdx,
 
 //---------------- Text -> Tabelle -----------------------
 
-const SwTable* SwDoc::TextToTable( const SwPaM& rRange, sal_Unicode cCh,
-                                    SwHoriOrient eAdjust,
-                                    USHORT nInsTblFlags,
-                                    const SwTableAutoFmt* pTAFmt )
+const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTblOpts,
+                                   const SwPaM& rRange, sal_Unicode cCh,
+                                   SwHoriOrient eAdjust,
+                                   const SwTableAutoFmt* pTAFmt )
 {
     // pruefe ob in der Selection eine Tabelle liegt
     const SwPosition *pStt = rRange.Start(), *pEnd = rRange.End();
@@ -811,7 +823,7 @@ const SwTable* SwDoc::TextToTable( const SwPaM& rRange, sal_Unicode cCh,
     if( DoesUndo() )
     {
         StartUndo( UNDO_TEXTTOTABLE );
-        pUndo = new SwUndoTxtToTbl( aOriginal, cCh, eAdjust, nInsTblFlags, pTAFmt );
+        pUndo = new SwUndoTxtToTbl( aOriginal, rInsTblOpts, cCh, eAdjust, pTAFmt );
         AppendUndo( pUndo );
 
         // das Splitten vom TextNode nicht in die Undohistory aufnehmen
@@ -868,7 +880,7 @@ const SwTable* SwDoc::TextToTable( const SwPaM& rRange, sal_Unicode cCh,
     pLineFmt->SetAttr( SwFmtFillOrder( ATT_LEFT_TO_RIGHT ));
     // die Tabelle bekommt USHRT_MAX als default SSize
     pTableFmt->SetAttr( SwFmtFrmSize( ATT_VAR_SIZE, USHRT_MAX ));
-    if( !(nInsTblFlags & SPLIT_LAYOUT) )
+    if( !(rInsTblOpts.mnInsMode & tabopts::SPLIT_LAYOUT) )
         pTableFmt->SetAttr( SwFmtLayoutSplit( FALSE ));
 
     /* #106283# If the first node in the selection is a context node and if it
@@ -886,15 +898,18 @@ const SwTable* SwDoc::TextToTable( const SwPaM& rRange, sal_Unicode cCh,
         }
     }
 
-    SwTableNode* pTblNd = GetNodes().TextToTable( aRg, cCh, pTableFmt,
-                                    pLineFmt, pBoxFmt,
-                                GetTxtCollFromPool( RES_POOLCOLL_STANDARD ),
-                                pUndo );
+    SwTableNode* pTblNd = GetNodes().TextToTable(
+            aRg, cCh, pTableFmt, pLineFmt, pBoxFmt,
+            GetTxtCollFromPool( RES_POOLCOLL_STANDARD ), pUndo );
 
     SwTable * pNdTbl = &pTblNd->GetTable();
     ASSERT( pNdTbl, "kein Tabellen-Node angelegt."  )
 
-    pNdTbl->SetHeadlineRepeat( HEADLINE_REPEAT == (nInsTblFlags & HEADLINE_REPEAT) );
+    const USHORT nRowsToRepeat =
+            tabopts::HEADLINE == (rInsTblOpts.mnInsMode & tabopts::HEADLINE) ?
+            rInsTblOpts.mnRowsToRepeat :
+            0;
+    pNdTbl->SetRowsToRepeat( nRowsToRepeat );
 
     BOOL bUseBoxFmt = FALSE;
     if( !pBoxFmt->GetDepends() )
@@ -911,7 +926,7 @@ const SwTable* SwDoc::TextToTable( const SwPaM& rRange, sal_Unicode cCh,
     pTableFmt->SetAttr( SwFmtHoriOrient( 0, eAdjust ) );
     pTableFmt->Add( pNdTbl );       // das Frame-Format setzen
 
-    if( pTAFmt || (nInsTblFlags & DEFAULT_BORDER) )
+    if( pTAFmt || ( rInsTblOpts.mnInsMode & tabopts::DEFAULT_BORDER) )
     {
         SwTableBoxFmt* pBoxFmt = 0;
 
@@ -2626,22 +2641,23 @@ void SwDoc::SetTabCols(SwTable& rTab, const SwTabCols &rNew, SwTabCols &rOld,
     SetModified();
 }
 
-void SwDoc::SetHeadlineRepeat( SwTable &rTable, BOOL bSet )
+void SwDoc::SetRowsToRepeat( SwTable &rTable, USHORT nSet )
 {
-    if( bSet == rTable.IsHeadlineRepeat() )
+    if( nSet == rTable.GetRowsToRepeat() )
         return;
 
     if( DoesUndo() )
     {
         ClearRedo();
-        AppendUndo( new SwUndoTblHeadline( rTable, !bSet ) );
+        AppendUndo( new SwUndoTblHeadline( rTable, rTable.GetRowsToRepeat() , nSet) );
     }
 
-    rTable.SetHeadlineRepeat( bSet );
     SwMsgPoolItem aChg( RES_TBLHEADLINECHG );
+    rTable.SetRowsToRepeat( nSet );
     rTable.GetFrmFmt()->Modify( &aChg, &aChg );
     SetModified();
 }
+
 
 
 
@@ -2900,7 +2916,7 @@ BOOL SwDoc::SplitTable( const SwPosition& rPos, USHORT eHdlnMode,
                 pLn->GetTabBoxes().ForEach( &lcl_BoxSetSplitBoxFmts, &aPara );
 
                 // Kopfzeile wiederholen abschalten
-                pNew->GetTable().SetHeadlineRepeat( FALSE );
+                pNew->GetTable().SetRowsToRepeat( 0 );
             }
             break;
 
@@ -2930,7 +2946,7 @@ BOOL SwDoc::SplitTable( const SwPosition& rPos, USHORT eHdlnMode,
 
         case HEADLINE_NONE:
             // Kopfzeile wiederholen abschalten
-            pNew->GetTable().SetHeadlineRepeat( FALSE );
+            pNew->GetTable().SetRowsToRepeat( 0 );
             break;
         }
 
@@ -3248,7 +3264,7 @@ BOOL SwNodes::MergeTable( const SwNodeIndex& rPos, BOOL bWithPrev,
         // dann mussen alle Attruibute der hinteren Tabelle auf die
         // vordere uebertragen werden, weil die hintere ueber das loeschen
         // des Node geloescht wird.
-        rTbl.SetHeadlineRepeat( rDelTbl.IsHeadlineRepeat() );
+        rTbl.SetRowsToRepeat( rDelTbl.GetRowsToRepeat() );
         rTbl.SetTblChgMode( rDelTbl.GetTblChgMode() );
 
         rTbl.GetFrmFmt()->LockModify();
