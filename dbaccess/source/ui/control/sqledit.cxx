@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqledit.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-16 07:44:54 $
+ *  last change: $Author: fs $ $Date: 2001-08-23 14:47:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,9 @@
 #ifndef DBAUI_QUERYVIEW_TEXT_HXX
 #include "QueryTextView.hxx"
 #endif
+#ifndef DBAUI_QUERYCONTAINERWINDOW_HXX
+#include "querycontainerwindow.hxx"
+#endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
@@ -115,8 +118,8 @@ OSqlEdit::~OSqlEdit()
 void OSqlEdit::KeyInput( const KeyEvent& rKEvt )
 {
     DBG_CHKTHIS(OSqlEdit,NULL);
-    static_cast<OQueryContainerWindow*>(m_pView->GetParent())->getView()->getRealView()->getController()->InvalidateFeature(SID_CUT);
-    static_cast<OQueryContainerWindow*>(m_pView->GetParent())->getView()->getRealView()->getController()->InvalidateFeature(SID_COPY);
+    m_pView->getContainerWindow()->getDesignView()->getController()->InvalidateFeature(SID_CUT);
+    m_pView->getContainerWindow()->getDesignView()->getController()->InvalidateFeature(SID_COPY);
 
     // Ist dies ein Cut, Copy, Paste Event?
     KeyFuncType aKeyFunc = rKEvt.GetKeyCode().GetFunction();
@@ -155,14 +158,14 @@ IMPL_LINK(OSqlEdit, OnUndoActionTimer, void*, EMPTYARG)
     String aText = GetText();
     if(aText != m_strOrigText)
     {
-        SfxUndoManager* pUndoMgr = static_cast<OQueryContainerWindow*>(m_pView->GetParent())->getView()->getRealView()->getController()->getUndoMgr();
+        SfxUndoManager* pUndoMgr = m_pView->getContainerWindow()->getDesignView()->getController()->getUndoMgr();
         OSqlEditUndoAct* pUndoAct = new OSqlEditUndoAct( this );
 
         pUndoAct->SetOriginalText( m_strOrigText );
         pUndoMgr->AddUndoAction( pUndoAct );
 
-        static_cast<OQueryContainerWindow*>(m_pView->GetParent())->getView()->getRealView()->getController()->InvalidateFeature(SID_UNDO);
-        static_cast<OQueryContainerWindow*>(m_pView->GetParent())->getView()->getRealView()->getController()->InvalidateFeature(SID_REDO);
+        m_pView->getContainerWindow()->getDesignView()->getController()->InvalidateFeature(SID_UNDO);
+        m_pView->getContainerWindow()->getDesignView()->getController()->InvalidateFeature(SID_REDO);
 
         m_strOrigText = aText;
     }
@@ -172,8 +175,8 @@ IMPL_LINK(OSqlEdit, OnUndoActionTimer, void*, EMPTYARG)
 //------------------------------------------------------------------------------
 IMPL_LINK(OSqlEdit, OnInvalidateTimer, void*, EMPTYARG)
 {
-    static_cast<OQueryContainerWindow*>(m_pView->GetParent())->getView()->getRealView()->getController()->InvalidateFeature(SID_CUT);
-    static_cast<OQueryContainerWindow*>(m_pView->GetParent())->getView()->getRealView()->getController()->InvalidateFeature(SID_COPY);
+    m_pView->getContainerWindow()->getDesignView()->getController()->InvalidateFeature(SID_CUT);
+    m_pView->getContainerWindow()->getDesignView()->getController()->InvalidateFeature(SID_COPY);
     if(!m_bStopTimer)
         m_timerInvalidate.Start();
     return 0L;
@@ -185,12 +188,12 @@ IMPL_LINK(OSqlEdit, ModifyHdl, void*, EMPTYTAG)
         m_timerUndoActionCreation.Stop();
     m_timerUndoActionCreation.Start();
 
-    if (!static_cast<OQueryContainerWindow*>(m_pView->GetParent())->getView()->getRealView()->getController()->isModified())
-        static_cast<OQueryContainerWindow*>(m_pView->GetParent())->getView()->getRealView()->getController()->setModified( sal_True );
+    if (!m_pView->getContainerWindow()->getDesignView()->getController()->isModified())
+        m_pView->getContainerWindow()->getDesignView()->getController()->setModified( sal_True );
 
-    static_cast<OQueryContainerWindow*>(m_pView->GetParent())->getView()->getRealView()->getController()->InvalidateFeature(SID_SBA_QRY_EXECUTE);
-    static_cast<OQueryContainerWindow*>(m_pView->GetParent())->getView()->getRealView()->getController()->InvalidateFeature(SID_CUT);
-    static_cast<OQueryContainerWindow*>(m_pView->GetParent())->getView()->getRealView()->getController()->InvalidateFeature(SID_COPY);
+    m_pView->getContainerWindow()->getDesignView()->getController()->InvalidateFeature(SID_SBA_QRY_EXECUTE);
+    m_pView->getContainerWindow()->getDesignView()->getController()->InvalidateFeature(SID_CUT);
+    m_pView->getContainerWindow()->getDesignView()->getController()->InvalidateFeature(SID_COPY);
 
     m_lnkTextModifyHdl.Call(NULL);
     return 0;
