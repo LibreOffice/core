@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XInteractionHandler.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 12:28:48 $
+ *  last change:$Date: 2003-09-08 11:11:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,10 +75,11 @@ package ifc.task;
 * Test is <b> NOT </b> multithread compilant. <p>
 * @see com.sun.star.task.XInteractionHandler
 */
-import com.sun.star.task.XInteractionHandler;
-import com.sun.star.task.XInteractionRequest;
 import lib.MultiMethodTest;
 import lib.Status;
+
+import com.sun.star.task.XInteractionHandler;
+import com.sun.star.task.XInteractionRequest;
 
 /**
 * <code>com.sun.star.task.XInteractionHandler</code> interface testing.
