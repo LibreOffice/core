@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formshell.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 12:09:23 $
+ *  last change: $Author: rt $ $Date: 2004-07-06 13:34:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -385,19 +385,19 @@ TabDialog RID_SVXDLG_TEXTCONTROL_CHARATTR
         {
             PageItem
             {
-                Identifier = 1;
+                Identifier = RID_SVXPAGE_CHAR_NAME;
                 Text [ de ] = "Schrift";
                 Text [ en-US ] = "Font";
             };
             PageItem
             {
-                Identifier = 2;
+                Identifier = RID_SVXPAGE_CHAR_EFFECTS;
                 Text [ de ] = "Schrifteffekt";
                 Text [ en-US ] = "Font Effects";
             };
             PageItem
             {
-                Identifier = 3;
+                Identifier = RID_SVXPAGE_CHAR_POSITION;
                 Text [ de ] = "Position";
                 Text [ en-US ] = "Position";
             };
@@ -421,25 +421,25 @@ TabDialog RID_SVXDLG_TEXTCONTROL_PARAATTR
         {
             PageItem
             {
-                Identifier = 1;
+                Identifier = RID_SVXPAGE_STD_PARAGRAPH;
                 Text [ de ] = "Einzüge und Abstände";
                 Text [ en-US ] = "Indents & Spacing";
             };
             PageItem
             {
-                Identifier = 2;
+                Identifier = RID_SVXPAGE_ALIGN_PARAGRAPH;
                 Text [ de ] = "Ausrichtung";
                 Text [ en-US ] = "Alignment";
             };
             PageItem
             {
-                Identifier = 3;
+                Identifier = RID_SVXPAGE_PARA_ASIAN;
                 Text [ de ] = "Asiatische Typographie";
                 Text [ en-US ] = "Asian Typography";
             };
             PageItem
             {
-                Identifier = 4;
+                Identifier = RID_SVXPAGE_TABULATOR;
                 Text [ de ] = "Tabulator";
                 Text [ en-US ] = "Tabs";
             };
