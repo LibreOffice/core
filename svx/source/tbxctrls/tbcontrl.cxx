@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbcontrl.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: cd $ $Date: 2002-05-22 13:57:34 $
+ *  last change: $Author: os $ $Date: 2002-05-28 12:33:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -950,15 +950,18 @@ void SvxFontSizeBox::DataChanged( const DataChangedEvent& rDCEvt )
 //========================================================================
 // class SvxColorWindow --------------------------------------------------
 //========================================================================
+#ifndef WB_NO_DIRECTSELECT
+#define WB_NO_DIRECTSELECT      ((WinBits)0x04000000)
+#endif
 
 SvxColorWindow::SvxColorWindow( USHORT nId, USHORT nSlotId,
                                 const String& rWndTitle,
                                 SfxBindings& rBindings ) :
 
-    SfxPopupWindow( nId, WinBits( WB_BORDER | WB_STDFLOATWIN | WB_3DLOOK ), rBindings ),
+    SfxPopupWindow( nId, WinBits( WB_BORDER | WB_STDFLOATWIN | WB_3DLOOK|WB_DIALOGCONTROL ), rBindings ),
 
     theSlotId( nSlotId ),
-    aColorSet( this, WinBits( WB_ITEMBORDER | WB_NAMEFIELD | WB_3DLOOK ) )
+    aColorSet( this, WinBits( WB_ITEMBORDER | WB_NAMEFIELD | WB_3DLOOK | WB_NO_DIRECTSELECT) )
 
 {
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
@@ -1023,6 +1026,7 @@ SvxColorWindow::SvxColorWindow( USHORT nId, USHORT nSlotId,
 
     SetText( rWndTitle );
     aColorSet.Show();
+    aColorSet.GrabFocus();
     StartListening( rBindings );
 }
 
