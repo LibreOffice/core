@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epsstr.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 17:55:18 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 12:10:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,8 @@ String KEY_VERSION_CHECK
     Text[ hindi ] = "चेतावनी: आयात की हुयी सभी EPS सुचित्र को सतह1 में संचित नहीं कर सकते है\nक्योंकि उनमें से कुछ उच्च सतह का है!";
     Text[ slovak ] = "Upozornenie: Nie všetky importované EPS obrázky mohli byť uložené na úrovni1\npreto sú niektoré na vyšších úrovniach!";
 };
+
+
 
 
 
