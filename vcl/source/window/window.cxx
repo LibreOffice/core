@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.141 $
+ *  $Revision: 1.142 $
  *
- *  last change: $Author: ssa $ $Date: 2002-09-16 08:00:05 $
+ *  last change: $Author: ssa $ $Date: 2002-09-16 08:39:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2767,15 +2767,23 @@ void Window::ImplScroll( const Rectangle& rRect,
     if ( !mpFirstChild )
         bScrollChilds = FALSE;
 
-    // Paint-Bereiche anpassen
-    ImplMoveAllInvalidateRegions( rRect, nHorzScroll, nVertScroll, bScrollChilds );
-
     // --- RTL --- check if this window requires special action
     BOOL bReMirror = ( ImplHasMirroredGraphics() && !IsRTLEnabled() );
 
+    Rectangle aRectMirror( rRect );
+    if( bReMirror )
+    {
+        // --- RTL --- make sure the invalidate region of this window is
+        // computed in the same coordinate space as the one from the overlap windows
+        ImplReMirror( aRectMirror );
+    }
+
+    // Paint-Bereiche anpassen
+    ImplMoveAllInvalidateRegions( aRectMirror, nHorzScroll, nVertScroll, bScrollChilds );
+
     if ( !(nFlags & SCROLL_NOINVALIDATE) )
     {
-        ImplCalcOverlapRegion( rRect, aInvalidateRegion, !bScrollChilds, TRUE, FALSE );
+        ImplCalcOverlapRegion( aRectMirror, aInvalidateRegion, !bScrollChilds, TRUE, FALSE );
 
         // --- RTL ---
         // if the scrolling on the device is performed in the opposite direction
@@ -2789,17 +2797,9 @@ void Window::ImplScroll( const Rectangle& rRect,
         }
         if ( !(nFlags & SCROLL_NOWINDOWINVALIDATE) )
         {
-            Rectangle aRect( rRect );
-            if( bReMirror )
-            {
-                // --- RTL --- make sure the invalidate region of this window is
-                // computed in the same coordinate space as the one from the overlap windows
-                ImplReMirror( aRect );
-            }
-
-            Rectangle aDestRect( aRect );
+            Rectangle aDestRect( aRectMirror );
             aDestRect.Move( bReMirror ? -nHorzScroll : nHorzScroll, nVertScroll );
-            Region aWinInvalidateRegion( aRect );
+            Region aWinInvalidateRegion( aRectMirror );
             aWinInvalidateRegion.Exclude( aDestRect );
 
             aInvalidateRegion.Union( aWinInvalidateRegion );
@@ -2846,7 +2846,7 @@ void Window::ImplScroll( const Rectangle& rRect,
             }
 
             ImplSelectClipRegion( pGraphics, aRegion, this );
-            pGraphics->CopyArea( rRect.Left()+ nHorzScroll, rRect.Top()+nVertScroll,
+            pGraphics->CopyArea( rRect.Left()+nHorzScroll, rRect.Top()+nVertScroll,
                                  rRect.Left(), rRect.Top(),
                                  rRect.GetWidth(), rRect.GetHeight(),
                                  SAL_COPYAREA_WINDOWINVALIDATE, this );
