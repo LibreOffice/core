@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winmtf.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ka $ $Date: 2001-11-30 16:51:05 $
+ *  last change: $Author: sj $ $Date: 2001-12-10 17:43:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1675,8 +1675,64 @@ void WinMtfOutput::ModifyWorldTransform( const XForm& rXForm, UINT32 nMode )
         }
         break;
 
-        case MWT_LEFTMULTIPLY :
         case MWT_RIGHTMULTIPLY :
+        case MWT_LEFTMULTIPLY :
+        {
+            const XForm* pLeft;
+            const XForm* pRight;
+
+            if ( nMode == MWT_LEFTMULTIPLY )
+            {
+                pLeft = &rXForm;
+                pRight = &maXForm;
+            }
+            else
+            {
+                pLeft = &maXForm;
+                pRight = &rXForm;
+            }
+
+            float aF[3][3];
+            float bF[3][3];
+            float cF[3][3];
+
+            aF[0][0] = pLeft->eM11;
+            aF[0][1] = pLeft->eM12;
+            aF[0][2] = 0;
+            aF[1][0] = pLeft->eM21;
+            aF[1][1] = pLeft->eM22;
+            aF[1][2] = 0;
+            aF[2][0] = pLeft->eDx;
+            aF[2][1] = pLeft->eDy;
+            aF[2][2] = 1;
+
+            bF[0][0] = pRight->eM11;
+            bF[0][1] = pRight->eM12;
+            bF[0][2] = 0;
+            bF[1][0] = pRight->eM21;
+            bF[1][1] = pRight->eM22;
+            bF[1][2] = 0;
+            bF[2][0] = pRight->eDx;
+            bF[2][1] = pRight->eDy;
+            bF[2][2] = 1;
+
+            int i, j, k;
+            for ( i = 0; i < 3; i++ )
+            {
+              for ( j = 0; j < 3; j++ )
+              {
+                 cF[i][j] = 0;
+                 for ( k = 0; k < 3; k++ )
+                    cF[i][j] += aF[i][k] * bF[k][j];
+              }
+            }
+            maXForm.eM11 = cF[0][0];
+            maXForm.eM12 = cF[0][1];
+            maXForm.eM21 = cF[1][0];
+            maXForm.eM22 = cF[1][1];
+            maXForm.eDx = cF[2][0];
+            maXForm.eDy = cF[2][1];
+        }
         break;
     }
  }

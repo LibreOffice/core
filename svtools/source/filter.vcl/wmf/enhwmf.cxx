@@ -2,9 +2,9 @@
  *
  *  $RCSfile: enhwmf.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sj $ $Date: 2001-11-28 16:58:38 $
+ *  last change: $Author: sj $ $Date: 2001-12-10 17:43:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -722,7 +722,7 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
                 aDestExt = Size( nx32, ny32 );
                 *pWMF >> nX32 >> nY32 >> nColor;
 
-                UINT32 nNewRop = R2_BLACK;
+                sal_uInt32 nNewRop = R2_BLACK;
                 switch( nRasterOp )
                 {
                     case DSTINVERT :
@@ -738,6 +738,9 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
                     case WHITENESS :
                         nColor = 0xffffff;
                     break;
+                    case 0xaa0029 :         // #93902# I added this rasterop, because it is heavily
+                        nNewRop = R2_NOP;   // used by XP, making all our metafiles black (SJ)
+                    break;                  // todo: supporting all 256 ternary rasterops
                 }
                 pOut->Push();
                 UINT32 nOldRop = pOut->SetRasterOp( nNewRop );
