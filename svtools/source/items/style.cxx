@@ -2,9 +2,9 @@
  *
  *  $RCSfile: style.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:59:01 $
+ *  last change: $Author: jp $ $Date: 2000-10-16 08:28:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,11 @@
 
 #pragma hdrstop
 
+#define _SVSTDARR_STRINGS
+#define _SVSTDARR_STRINGSSORTDTOR
+#define _SVSTDARR_BYTESTRINGS
+#define _SVSTDARR_BYTESTRINGSSORTDTOR
+
 #include <smplhint.hxx>
 #include <poolitem.hxx>
 #include <itemset.hxx>
@@ -70,6 +75,7 @@
 #include <filerec.hxx>
 #include <itemiter.hxx>
 #include "style.hxx"
+#include "svstdarr.hxx"
 
 #define STYLESTREAM             "SfxStyleSheets"
 #define STYLESTREAM_VERSION     USHORT(50)
@@ -879,31 +885,6 @@ BOOL SfxStyleSheetBasePool::Load( SvStream& rStream )
             SfxPoolItem::readByteString(rStream, aHelpFile);
             rStream >> nHelpId;
 
-#ifndef ENABLEUNICODE
-            // bei Unicode keine Konvertierung erforderlich
-            aName.Convert( (CharSet) nCharSet );
-            aParent.Convert( (CharSet) nCharSet );
-            aFollow.Convert( (CharSet) nCharSet );
-
-            //  #72939# When loading from a different CharSet, several style
-            //  names may have been converted to the same string, so the styles
-            //  can't be inserted. If a style with this name already exists,
-            //  generate an internal name so the information from the styles
-            //  isn't lost.
-            if ( nCharSet != ::GetSystemCharSet() &&
-                    Find( aName, (SfxStyleFamily)nFamily ) != NULL )
-            {
-                DBG_WARNING("style has to be renamed");
-                USHORT nMax = aStyles.Count() + 1;
-                for ( USHORT nAdd=1; nAdd<=nMax; nAdd++ )
-                {
-                    aName = '_';
-                    aName += nAdd;
-                    if ( Find( aName, (SfxStyleFamily)nFamily ) == NULL )
-                        break;
-                }
-            }
-#endif
             SfxStyleSheetBase& rSheet = Make( aName, (SfxStyleFamily)nFamily , nMask);
             rSheet.SetHelpId( aHelpFile, nHelpId );
             // Hier erst einmal Parent und Follow zwischenspeichern
@@ -1071,6 +1052,55 @@ BOOL SfxStyleSheetBasePool::Store( SvStream& rStream, BOOL bUsed )
 
     // die StyleSheets in einen MultiVarRecord
     {
+        // Bug 79478:
+        // make a check loop, to be shure, that the converted names are also
+        // unique like the originals! In other cases we get a loop.
+        SvStringsSortDtor aSortOrigNames( 0, 128 );
+        SvStrings aOrigNames( 0, 128 );
+        SvByteStringsSortDtor aSortConvNames( 0, 128 );
+        SvByteStrings aConvNames( 0, 128 );
+
+        {
+
+            for( SfxStyleSheetBase* p = First(); p; p = Next() )
+            {
+                if(!bUsed || p->IsUsed())
+                {
+                    String* pName = new String( p->GetName() );
+                    ByteString* pConvName = new ByteString( *pName, eCharSet );
+
+                    pConvName->Insert( "  ", 0 );
+                    USHORT nFamily = (USHORT)p->GetFamily();
+                    pConvName->SetChar( 0, (0xff & (nFamily >> 8)) );
+                    pConvName->SetChar( 0, (0xff & nFamily) );
+
+                    USHORT nInsPos, nAdd = aSortConvNames.Count();
+                    while( !aSortConvNames.Insert( pConvName, nInsPos ) )
+                        (pConvName->Append( '_' )).Append(
+                                    ByteString::CreateFromInt32( nAdd++ ));
+                    aOrigNames.Insert( pName, nInsPos );
+                }
+            }
+
+            // now we have the list of the names, sorted by convertede names
+            // But now we need the sorted list of orignames.
+            {
+                USHORT nInsPos, nEnd = aOrigNames.Count();
+                const ByteStringPtr* ppB = aSortConvNames.GetData();
+                for( USHORT n = 0; n < nEnd; ++n, ++ppB )
+                {
+                    String* p = aOrigNames.GetObject( n );
+                    aSortOrigNames.Insert( p, nInsPos );
+                    aConvNames.Insert( *ppB, nInsPos );
+                }
+
+            }
+        }
+
+
+        ByteString sEmpty;
+        USHORT nFndPos;
+        String sNm;
         SfxMultiVarRecordWriter aStylesRec( &rStream, SFX_STYLES_REC_STYLES, 0 );
         for( SfxStyleSheetBase* p = First(); p; p = Next() )
         {
@@ -1081,9 +1111,22 @@ BOOL SfxStyleSheetBasePool::Store( SvStream& rStream, BOOL bUsed )
                 // Globale Teile speichern
                 String aHelpFile;
                 ULONG nHelpId = p->GetHelpId( aHelpFile );
-                rStream.WriteByteString(p->GetName(), eCharSet);
-                rStream.WriteByteString(p->GetParent(), eCharSet);
-                rStream.WriteByteString(p->GetFollow(), eCharSet);
+
+                if( aSortOrigNames.Seek_Entry( &(sNm = p->GetName()), &nFndPos ))
+                    rStream.WriteByteString( aConvNames.GetObject( nFndPos )->Copy( 2 ));
+                else
+                    rStream.WriteByteString( sEmpty );
+
+                if( aSortOrigNames.Seek_Entry( &(sNm = p->GetParent()), &nFndPos ))
+                    rStream.WriteByteString( aConvNames.GetObject( nFndPos )->Copy( 2 ));
+                else
+                    rStream.WriteByteString( sEmpty );
+
+                if( aSortOrigNames.Seek_Entry( &(sNm = p->GetFollow()), &nFndPos ))
+                    rStream.WriteByteString( aConvNames.GetObject( nFndPos )->Copy( 2 ));
+                else
+                    rStream.WriteByteString( sEmpty );
+
                 rStream << (USHORT)p->GetFamily() << p->GetMask();
                 SfxPoolItem::writeByteString(rStream, aHelpFile);
                 rStream << nHelpId;
