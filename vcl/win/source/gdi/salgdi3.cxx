@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: pl $ $Date: 2002-07-15 11:58:22 $
+ *  last change: $Author: pl $ $Date: 2002-07-20 16:08:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1917,3 +1917,29 @@ BOOL SalGraphics::GetGlyphOutline( long nGlyphIndex, PolyPolygon& rPolyPoly )
 }
 
 // -----------------------------------------------------------------------
+
+BOOL SalGraphics::CreateFontSubset(
+                                   const rtl::OUString& rToFile,
+                                   ImplFontData* pFont,
+                                   long* pGlyphIDs,
+                                   sal_uInt8* pEncoding,
+                                   sal_Int32* pWidths,
+                                   int nGlyphs,
+                                   FontSubsetInfo& rInfo
+                                   )
+{
+    return FALSE;
+}
+
+//--------------------------------------------------------------------------
+
+const void* SalGraphics::GetEmbedFontData( ImplFontData* pFont, sal_Int32* pWidths, FontSubsetInfo& rInfo, long* pDataLen )
+{
+    return NULL;
+}
+
+//--------------------------------------------------------------------------
+
+void SalGraphics::FreeEmbedFontData( const void* pData, long nLen )
+{
+}
