@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-19 17:37:52 $
+#   last change: $Author: vg $ $Date: 2003-06-02 09:49:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,7 +83,7 @@ CONFIGURE_FLAGS= --without-ssl --enable-ftp --enable-ipv6 --disable-http --disab
 BUILD_DIR=$(CONFIGURE_DIR)$/lib
 BUILD_ACTION=make
 
-OUT2LIB=$(BUILD_DIR)$/.libs$/libcurl*.so
+OUT2LIB=$(BUILD_DIR)$/.libs$/libcurl*$(DLLPOST)
 .ENDIF			# "$(GUI)"=="UNX"
 
 
