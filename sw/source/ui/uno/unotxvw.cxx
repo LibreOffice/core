@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxvw.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-01-24 15:09:29 $
+ *  last change: $Author: os $ $Date: 2001-02-02 11:52:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,9 @@
 #ifndef _SWDOCSH_HXX //autogen
 #include <docsh.hxx>
 #endif
+#ifndef _RUBYLIST_HXX
+#include <rubylist.hxx>
+#endif
 #ifndef _SWDOC_HXX //autogen
 #include <doc.hxx>
 #endif
@@ -80,6 +83,12 @@
 #endif
 #ifndef _UNOMAP_HXX
 #include <unomap.hxx>
+#endif
+#ifndef _UNOSTYLE_HXX
+#include <unostyle.hxx>
+#endif
+#ifndef _UNOPRNMS_HXX
+#include <unoprnms.hxx>
 #endif
 #ifndef _SWVIEW_HXX
 #include <view.hxx>
@@ -163,12 +172,16 @@
 #ifndef _NDTXT_HXX
 #include <ndtxt.hxx>
 #endif
+#ifndef _FMTRUBY_HXX
+#include <fmtruby.hxx>
+#endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::text;
+using namespace ::com::sun::star::view;
 using namespace rtl;
 
 SV_IMPL_PTRARR( SelectionChangeListenerArr, XSelectionChangeListenerPtr );
@@ -270,14 +283,15 @@ Sequence< uno::Type > SAL_CALL SwXTextView::getTypes(  ) throw(::com::sun::star:
 
     long nIndex = aBaseTypes.getLength();
     aBaseTypes.realloc(
-        aBaseTypes.getLength() + 5 );
+        aBaseTypes.getLength() + 6 );
 
     uno::Type* pBaseTypes = aBaseTypes.getArray();
-    pBaseTypes[nIndex++] = ::getCppuType((Reference<view::XSelectionSupplier    >*)0);
-    pBaseTypes[nIndex++] = ::getCppuType((Reference<lang::XServiceInfo          >*)0);
-    pBaseTypes[nIndex++] = ::getCppuType((Reference<view::XControlAccess        >*)0);
-    pBaseTypes[nIndex++] = ::getCppuType((Reference<text::XTextViewCursorSupplier>*)0);
-    pBaseTypes[nIndex++] = ::getCppuType((Reference<view::XViewSettingsSupplier >*)0);
+    pBaseTypes[nIndex++] = ::getCppuType((Reference<XSelectionSupplier  >*)0);
+    pBaseTypes[nIndex++] = ::getCppuType((Reference<XServiceInfo            >*)0);
+    pBaseTypes[nIndex++] = ::getCppuType((Reference<XControlAccess      >*)0);
+    pBaseTypes[nIndex++] = ::getCppuType((Reference<XTextViewCursorSupplier>*)0);
+    pBaseTypes[nIndex++] = ::getCppuType((Reference<XViewSettingsSupplier   >*)0);
+    pBaseTypes[nIndex++] = ::getCppuType((Reference<XRubySelection  >*)0);
     return aBaseTypes;
 }
 /* -----------------------------18.05.00 10:18--------------------------------
@@ -335,6 +349,11 @@ uno::Any SAL_CALL SwXTextView::queryInterface( const uno::Type& aType )
     else if(aType == ::getCppuType((Reference<view::XViewSettingsSupplier   >*)0))
     {
         Reference<view::XViewSettingsSupplier> xRet = this;
+        aRet.setValue(&xRet, aType);
+    }
+    else if(aType == ::getCppuType((Reference<XRubySelection>*)0))
+    {
+        Reference<XRubySelection> xRet = this;
         aRet.setValue(&xRet, aType);
     }
     else
@@ -753,7 +772,111 @@ Reference< beans::XPropertySet >  SwXTextView::getViewSettings(void) throw( uno:
         throw uno::RuntimeException();
     return *pxViewSettings;
 }
+/* -----------------------------30.01.01 15:01--------------------------------
 
+ ---------------------------------------------------------------------------*/
+Sequence< Sequence< PropertyValue > > SwXTextView::getRubyList( sal_Bool bAutomatic ) throw(RuntimeException)
+{
+    ::vos::OGuard aGuard(Application::GetSolarMutex());
+
+    SwView* pView = GetView();
+    if(!pView)
+        throw RuntimeException();
+    SwWrtShell& rSh = pView->GetWrtShell();
+    ShellModes  eSelMode = pView->GetShellMode();
+    if(eSelMode != SEL_LIST_TEXT      &&
+        eSelMode != SEL_TABLE_LIST_TEXT &&
+        eSelMode != SEL_TEXT           )
+        return Sequence< Sequence< PropertyValue > > ();
+
+    SwDoc* pDoc = pView->GetDocShell()->GetDoc();
+    SwRubyList aList;
+
+    USHORT nCount = pDoc->FillRubyList( *rSh.GetCrsr(), aList, 0 );
+    Sequence< Sequence< PropertyValue > > aRet(nCount);
+    Sequence< PropertyValue >* pRet = aRet.getArray();
+    for(USHORT n = 0; n < nCount; n++)
+    {
+        const SwRubyListEntryPtr pEntry = aList[n];
+
+        const String& rEntryText = pEntry->GetText();
+        const SwFmtRuby& rAttr = pEntry->GetRubyAttr();
+
+        pRet[n].realloc(4);
+        PropertyValue* pValues = pRet[n].getArray();
+        pValues[0].Name = C2U(UNO_NAME_RUBY_BASE_TEXT);
+        pValues[0].Value <<= OUString(rEntryText);
+        pValues[1].Name = C2U(UNO_NAME_RUBY_TEXT);
+        pValues[1].Value <<= OUString(rAttr.GetText());
+        pValues[2].Name = C2U(UNO_NAME_CHAR_STYLE_NAME);
+        pValues[2].Value <<= OUString(
+                SwXStyleFamilies::GetProgrammaticName(rAttr.GetCharFmtName(),SFX_STYLE_FAMILY_CHAR));
+        pValues[3].Name = C2U(UNO_NAME_RUBY_ADJUST);
+        pValues[3].Value <<= (sal_Int16)rAttr.GetAdjustment();
+    }
+    return aRet;
+}
+/* -----------------------------30.01.01 15:02--------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SAL_CALL SwXTextView::setRubyList(
+    const Sequence< Sequence< PropertyValue > >& rRubyList, sal_Bool bAutomatic )
+        throw(RuntimeException)
+{
+    ::vos::OGuard aGuard(Application::GetSolarMutex());
+
+    SwView* pView = GetView();
+    if(!pView || !rRubyList.getLength())
+        throw RuntimeException();
+    SwWrtShell& rSh = pView->GetWrtShell();
+    ShellModes  eSelMode = pView->GetShellMode();
+    if(eSelMode != SEL_LIST_TEXT      &&
+        eSelMode != SEL_TABLE_LIST_TEXT &&
+        eSelMode != SEL_TEXT           )
+        throw RuntimeException();
+
+    SwRubyList aList;
+
+    const Sequence<PropertyValue>* pRubyList = rRubyList.getConstArray();
+    for(sal_Int32 nPos = 0; nPos < rRubyList.getLength(); nPos++)
+    {
+        SwRubyListEntryPtr pEntry = new SwRubyListEntry;
+        const PropertyValue* pProperties = pRubyList[nPos].getConstArray();
+        OUString sTmp;
+        for(sal_Int32 nProp = 0; nProp < pRubyList[nPos].getLength(); nProp++)
+        {
+            if(!pProperties[nProp].Name.compareToAscii(UNO_NAME_RUBY_BASE_TEXT.pName))
+            {
+                pProperties[nProp].Value >>= sTmp;
+                pEntry->SetText(sTmp);
+            }
+            else if(!pProperties[nProp].Name.compareToAscii(UNO_NAME_RUBY_TEXT.pName))
+            {
+                pProperties[nProp].Value >>= sTmp;
+                pEntry->GetRubyAttr().SetText(sTmp);
+            }
+            else if(!pProperties[nProp].Name.compareToAscii(UNO_NAME_CHAR_STYLE_NAME.pName))
+            {
+                pProperties[nProp].Value >>= sTmp;
+                String sName(SwXStyleFamilies::GetUIName(sTmp, SFX_STYLE_FAMILY_CHAR));
+                sal_uInt16 nPoolId = sName.Len() ?
+                    SwDoc::GetPoolId( sName, GET_POOLID_CHRFMT ) : -1;
+
+                pEntry->GetRubyAttr().SetCharFmtName( sName );
+                pEntry->GetRubyAttr().SetCharFmtId( nPoolId );
+            }
+            else if(!pProperties[nProp].Name.compareToAscii(UNO_NAME_RUBY_ADJUST.pName))
+            {
+                sal_Int16 nTmp;
+                pProperties[nProp].Value >>= nTmp;
+                pEntry->GetRubyAttr().SetAdjustment(nTmp);
+            }
+        }
+        aList.Insert(pEntry, (USHORT)nPos);
+    }
+    SwDoc* pDoc = pView->GetDocShell()->GetDoc();
+    pDoc->SetRubyList( *rSh.GetCrsr(), aList, 0 );
+}
 /*-- 17.12.98 09:34:29---------------------------------------------------
 
   -----------------------------------------------------------------------*/

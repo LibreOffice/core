@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxvw.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:43 $
+ *  last change: $Author: os $ $Date: 2001-02-02 11:51:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,9 @@
 #ifndef _COM_SUN_STAR_TEXT_XTEXTVIEWCURSORSUPPLIER_HPP_
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #endif
+#ifndef _COM_SUN_STAR_TEXT_XRUBYSELECTION_HPP_
+#include <com/sun/star/text/XRubySelection.hpp>
+#endif
 #ifndef _COM_SUN_STAR_VIEW_XCONTROLACCESS_HPP_
 #include <com/sun/star/view/XControlAccess.hpp>
 #endif
@@ -120,6 +123,7 @@ class SwXTextView :
     public ::com::sun::star::lang::XServiceInfo,
     public ::com::sun::star::view::XControlAccess,
     public ::com::sun::star::text::XTextViewCursorSupplier,
+    public ::com::sun::star::text::XRubySelection,
     public ::com::sun::star::view::XViewSettingsSupplier,
     public SfxBaseController
 {
@@ -154,6 +158,18 @@ public:
 
     //XViewSettings
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  SAL_CALL getViewSettings(void) throw( ::com::sun::star::uno::RuntimeException );
+
+    //XRubySelection
+    virtual ::com::sun::star::uno::Sequence<
+            ::com::sun::star::uno::Sequence<
+            ::com::sun::star::beans::PropertyValue > > SAL_CALL getRubyList( sal_Bool bAutomatic )
+                throw(::com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL setRubyList(
+        const ::com::sun::star::uno::Sequence<
+        ::com::sun::star::uno::Sequence<
+        ::com::sun::star::beans::PropertyValue > >& RubyList, sal_Bool bAutomatic )
+            throw(::com::sun::star::uno::RuntimeException);
 
     //XServiceInfo
     virtual rtl::OUString SAL_CALL getImplementationName(void) throw( ::com::sun::star::uno::RuntimeException );
