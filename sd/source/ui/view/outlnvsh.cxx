@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvsh.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:19:13 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 18:49:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -497,7 +497,7 @@ void SdOutlineViewShell::ArrangeGUIElements ()
 
 SvxRuler* SdOutlineViewShell::CreateHRuler(SdWindow* pWin, BOOL bIsFirst)
 {
-    WinBits aWBits = WB_HSCROLL | WB_SVLOOK | WB_BORDER;
+    WinBits aWBits = WB_HSCROLL | WB_3DLOOK | WB_BORDER;
     USHORT  nFlags = SVXRULER_SUPPORT_TABS | SVXRULER_SUPPORT_BORDERS |
                      SVXRULER_SUPPORT_PARAGRAPH_MARGINS;
 
