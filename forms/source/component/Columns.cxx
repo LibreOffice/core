@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Columns.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-14 13:46:11 $
+ *  last change: $Author: jl $ $Date: 2001-03-22 16:37:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -472,7 +472,7 @@ sal_Bool OGridColumn::convertFastPropertyValue( Any& rConvertedValue, Any& rOldV
             }
             catch(starlang::IllegalArgumentException&)
             {
-                OSL_ENSHURE(0,"OGridColumn::convertFastPropertyValue: TextAlign must be casted to sal_Int16!");
+                OSL_ENSURE(0,"OGridColumn::convertFastPropertyValue: TextAlign must be casted to sal_Int16!");
                 throw;
             }
             break;
