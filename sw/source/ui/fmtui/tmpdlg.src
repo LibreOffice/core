@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tmpdlg.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 20:47:42 $
+ *  last change: $Author: rt $ $Date: 2001-05-10 06:31:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ TabDialog DLG_TEMPLATE_1
     Text [ italian ] = "Modello di carattere" ;
     Text [ portuguese_brazilian ] = "Estilo de caracter" ;
     Text [ portuguese ] = "Estilos de caracteres" ;
-    Text [ finnish ] = "Merkkityyli" ;
+    Text [ finnish ] = "Merkistön tyyli" ;
     Text [ danish ] = "Tegntypografi" ;
     Text [ french ] = "Style de caractères" ;
     Text [ swedish ] = "Teckenformatmall" ;
@@ -126,7 +126,7 @@ TabDialog DLG_TEMPLATE_1
                 Text [ italian ] = "Effetto carattere" ;
                 Text [ portuguese_brazilian ] = "Efeitos de fonte" ;
                 Text [ portuguese ] = "Efeitos do tipo de letra" ;
-                Text [ finnish ] = "Fontin tehosteet" ;
+                Text [ finnish ] = "Fonttitehosteet" ;
                 Text [ danish ] = "Skrifteffekt" ;
                 Text [ french ] = "Effets de caractères" ;
                 Text [ swedish ] = "Teckensnittseffekt" ;
@@ -160,7 +160,7 @@ TabDialog DLG_TEMPLATE_1
                 Text[ french ] = "Position";
                 Text[ spanish ] = "Posición";
                 Text[ italian ] = "Posizione";
-                Text[ danish ] = "Position";
+                Text[ danish ] = "Start_ved";
                 Text[ swedish ] = "Position";
                 Text[ polish ] = "Pozycja";
                 Text[ portuguese_brazilian ] = "Position";
@@ -168,9 +168,10 @@ TabDialog DLG_TEMPLATE_1
                 Text[ korean ] = "À§Ä¡";
                 Text[ chinese_simplified ] = "Î»ÖÃ";
                 Text[ chinese_traditional ] = "¦ì¸m";
-                Text[ turkish ] = "Position";
+                Text[ turkish ] = "Konum";
                 Text[ arabic ] = "ÇáãæÖÚ";
                 Text[ catalan ] = "Posición";
+                Text[ finnish ] = "Sijainti";
             };
             PageItem
             {
@@ -197,6 +198,7 @@ TabDialog DLG_TEMPLATE_1
                 Text[ turkish ] = "Asian layout";
                 Text[ arabic ] = "ÊÎØíØ ÂÓíæí";
                 Text[ catalan ] = "Diseño asiático";
+                Text[ finnish ] = "Aasialainen asettelu";
             };
             PageItem
             {
@@ -251,7 +253,7 @@ TabDialog DLG_TEMPLATE_2
     Text [ italian ] = "Modello paragrafo" ;
     Text [ portuguese_brazilian ] = "Estilo de parágrafo" ;
     Text [ portuguese ] = "Estilo de parágrafo" ;
-    Text [ finnish ] = "Kappaletyyli" ;
+    Text [ finnish ] = "Kappaleen tyyli" ;
     Text [ danish ] = "Afsnitstypografi" ;
     Text [ french ] = "Style de paragraphe" ;
     Text [ swedish ] = "Styckeformatmall" ;
@@ -320,6 +322,7 @@ TabDialog DLG_TEMPLATE_2
                 Text[ turkish ] = "Hizalama";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Alineación";
+                Text[ finnish ] = "Tasaus";
             };
             PageItem
             {
@@ -331,7 +334,7 @@ TabDialog DLG_TEMPLATE_2
                 Text [ italian ] = "Flusso di testo" ;
                 Text [ portuguese_brazilian ] = "Fluxo do Texto" ;
                 Text [ portuguese ] = "Fluxo de texto" ;
-                Text [ finnish ] = "Tekstin juoksutus" ;
+                Text [ finnish ] = "Tekstin rivitys" ;
                 Text [ danish ] = "Tekstretning" ;
                 Text [ french ] = "Enchaînements" ;
                 Text [ swedish ] = "Textflöde" ;
@@ -375,6 +378,7 @@ TabDialog DLG_TEMPLATE_2
                 Text[ turkish ] = "Asian typography";
                 Text[ arabic ] = "ÃÓáæÈ ÇáØÈÇÚÉ ÇáÂÓíæíÉ";
                 Text[ catalan ] = "Tipografía asiática";
+                Text[ finnish ] = "Aasialaiset merkit";
             };
             PageItem
             {
@@ -414,7 +418,7 @@ TabDialog DLG_TEMPLATE_2
                 Text [ italian ] = "Effetto carattere" ;
                 Text [ portuguese_brazilian ] = "Efeitos de fonte" ;
                 Text [ portuguese ] = "Efeitos do tipo de letra" ;
-                Text [ finnish ] = "Fontin tehosteet" ;
+                Text [ finnish ] = "Fonttitehosteet" ;
                 Text [ danish ] = "Skrifteffekter" ;
                 Text [ french ] = "Effets de caractères" ;
                 Text [ swedish ] = "Teckensnittseffekter" ;
@@ -448,7 +452,7 @@ TabDialog DLG_TEMPLATE_2
                 Text[ french ] = "Position";
                 Text[ spanish ] = "Posición";
                 Text[ italian ] = "Posizione";
-                Text[ danish ] = "Position";
+                Text[ danish ] = "Start_ved";
                 Text[ swedish ] = "Position";
                 Text[ polish ] = "Pozycja";
                 Text[ portuguese_brazilian ] = "Position";
@@ -456,9 +460,10 @@ TabDialog DLG_TEMPLATE_2
                 Text[ korean ] = "À§Ä¡";
                 Text[ chinese_simplified ] = "Î»ÖÃ";
                 Text[ chinese_traditional ] = "¦ì¸m";
-                Text[ turkish ] = "Position";
+                Text[ turkish ] = "Ýþ unvaný";
                 Text[ arabic ] = "ÇáãæÖÚ";
                 Text[ catalan ] = "Posición";
+                Text[ finnish ] = "Sijainti";
             };
             PageItem
             {
@@ -485,6 +490,7 @@ TabDialog DLG_TEMPLATE_2
                 Text[ turkish ] = "Asian layout";
                 Text[ arabic ] = "ÊÎØíØ ÂÓíæí";
                 Text[ catalan ] = "Diseño asiático";
+                Text[ finnish ] = "Aasialainen asettelu";
             };
             PageItem
             {
@@ -511,6 +517,7 @@ TabDialog DLG_TEMPLATE_2
                 Text[ turkish ] = "Numaralama";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Numeración";
+                Text[ finnish ] = "Numerointi";
             };
             PageItem
             {
@@ -608,7 +615,7 @@ TabDialog DLG_TEMPLATE_2
                 Text [ italian ] = "Bordo" ;
                 Text [ portuguese_brazilian ] = "Borda" ;
                 Text [ portuguese ] = "Contornos" ;
-                Text [ finnish ] = "Reunaviiva" ;
+                Text [ finnish ] = "Reunat" ;
                 Text [ danish ] = "Ramme" ;
                 Text [ french ] = "Bordure" ;
                 Text [ swedish ] = "Inramning" ;
@@ -654,6 +661,7 @@ TabDialog DLG_TEMPLATE_2
                 Text[ turkish ] = "Koþul";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Condición";
+                Text[ finnish ] = "Ehto";
             };
         };
     };
@@ -850,6 +858,7 @@ TabDialog DLG_TEMPLATE_4
     Text[ turkish ] = "Sayfa biçimi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Estilo de página";
+    Text[ finnish ] = "Sivun tyyli";
 };
 String STR_PAGE_STD
 {
@@ -886,7 +895,7 @@ String STR_PAGE_BORDER
     Text [ italian ] = "Bordo" ;
     Text [ portuguese_brazilian ] = "Borda" ;
     Text [ portuguese ] = "Contornos" ;
-    Text [ finnish ] = "Reunaviiva" ;
+    Text [ finnish ] = "Reunat" ;
     Text [ danish ] = "Ramme" ;
     Text [ french ] = "Bordure" ;
     Text [ swedish ] = "Inramning" ;
@@ -913,7 +922,7 @@ String STR_PAGE_HEADER
     Text [ italian ] = "Riga d'intestazione" ;
     Text [ portuguese_brazilian ] = "Cabeçalho" ;
     Text [ portuguese ] = "Cabeçalho" ;
-    Text [ finnish ] = "Yläteksti" ;
+    Text [ finnish ] = "Yläotsikko" ;
     Text [ danish ] = "Sidehoved" ;
     Text [ french ] = "En-tête" ;
     Text [ swedish ] = "Sidhuvud" ;
@@ -941,7 +950,7 @@ String STR_PAGE_FOOTER
     Text [ italian ] = "Piè di pagina" ;
     Text [ portuguese_brazilian ] = "Rodapé" ;
     Text [ portuguese ] = "Rodapé" ;
-    Text [ finnish ] = "Alateksti" ;
+    Text [ finnish ] = "Alaselite" ;
     Text [ danish ] = "Sidefod" ;
     Text [ french ] = "Pied de page" ;
     Text [ swedish ] = "Sidfot" ;
@@ -1047,7 +1056,7 @@ TabDialog DLG_TEMPLATE_3
                 Text [ italian ] = "Tipo" ;
                 Text [ portuguese_brazilian ] = "Tipo" ;
                 Text [ portuguese ] = "Tipo" ;
-                Text [ finnish ] = "Laji" ;
+                Text [ finnish ] = "Tyyppi" ;
                 Text [ danish ] = "Type" ;
                 Text [ french ] = "Type" ;
                 Text [ swedish ] = "Typ" ;
@@ -1094,6 +1103,7 @@ TabDialog DLG_TEMPLATE_3
                 Text[ turkish ] = "Seçenekler";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Opciones";
+                Text[ finnish ] = "Asetukset";
             };
             PageItem
             {
@@ -1104,7 +1114,7 @@ TabDialog DLG_TEMPLATE_3
                 Text [ italian ] = "Scorrimento" ;
                 Text [ portuguese_brazilian ] = "Circundamento" ;
                 Text [ portuguese ] = "Ajuste" ;
-                Text [ finnish ] = "Kierrätys" ;
+                Text [ finnish ] = "Rivitä" ;
                 Text [ danish ] = "Ombrydning" ;
                 Text [ french ] = "Adaptation du texte" ;
                 Text [ swedish ] = "Textanpassning" ;
@@ -1162,7 +1172,7 @@ TabDialog DLG_TEMPLATE_3
                 Text [ italian ] = "Bordo" ;
                 Text [ portuguese_brazilian ] = "Borda" ;
                 Text [ portuguese ] = "Contornos" ;
-                Text [ finnish ] = "Reunaviiva" ;
+                Text [ finnish ] = "Reunat" ;
                 Text [ danish ] = "Ramme" ;
                 Text [ french ] = "Bordure" ;
                 Text [ swedish ] = "Inramning" ;
@@ -1236,6 +1246,7 @@ TabDialog DLG_TEMPLATE_3
                 Text[ turkish ] = "Makro";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Macro";
+                Text[ finnish ] = "Makro";
             };
         };
     };
@@ -1258,6 +1269,7 @@ TabDialog DLG_TEMPLATE_3
     Text[ turkish ] = "Çerçeve biçimi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Estilo de marcos";
+    Text[ finnish ] = "Kehyksen tyyli";
 };
 TabDialog DLG_TEMPLATE_5
 {
@@ -1295,6 +1307,7 @@ TabDialog DLG_TEMPLATE_5
                 Text[ turkish ] = "Madde iþareti";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Viñetas";
+                Text[ finnish ] = "Luettelomerkit";
             };
             PageItem
             {
@@ -1321,6 +1334,7 @@ TabDialog DLG_TEMPLATE_5
                 Text[ korean ] = "¹øÈ£¸Å±â±â À¯Çü";
                 Text[ turkish ] = "Numaralama türü";
                 Text[ catalan ] = "Tipo de numeración";
+                Text[ finnish ] = "Numerointityyli";
             };
             PageItem
             {
@@ -1347,6 +1361,7 @@ TabDialog DLG_TEMPLATE_5
                 Text[ turkish ] = "Anahat";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Esquema";
+                Text[ finnish ] = "Jäsennys";
             };
             PageItem
             {
@@ -1373,6 +1388,7 @@ TabDialog DLG_TEMPLATE_5
                 Text[ turkish ] = "Grafik";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Imágenes";
+                Text[ finnish ] = "Kuvat";
             };
             PageItem
             {
@@ -1399,6 +1415,7 @@ TabDialog DLG_TEMPLATE_5
                 Text[ turkish ] = "Konum";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Posición";
+                Text[ finnish ] = "Sijainti";
             };
             PageItem
             {
@@ -1425,6 +1442,7 @@ TabDialog DLG_TEMPLATE_5
                 Text[ korean ] = "¿É¼Ç";
                 Text[ turkish ] = "Seçenekler";
                 Text[ catalan ] = "~Opciones";
+                Text[ finnish ] = "Asetukset";
             };
         };
     };
@@ -1448,4 +1466,5 @@ TabDialog DLG_TEMPLATE_5
     Text[ turkish ] = "Numaralama biçimi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Estilo de numeración";
+    Text[ finnish ] = "Numerointityyli";
 };
