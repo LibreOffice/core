@@ -1,5 +1,5 @@
 <!--
-	$Id: style.mod,v 1.58 2003-05-27 16:06:15 rt Exp $
+	$Id: style.mod,v 1.59 2004-02-26 15:45:56 kz Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -227,6 +227,7 @@
 <!ATTLIST style:properties style:text-scale %percentage; #IMPLIED>
 <!ATTLIST style:properties style:text-rotation-angle %integer; #IMPLIED>
 <!ATTLIST style:properties style:text-rotation-scale (fixed|line-height) #IMPLIED>
+<!ATTLIST style:properties text:display (none|true) #IMPLIED>
 
 <!-- paragraph properties -->
 <!ENTITY % nonNegativeLengthOrPercentageOrNormal "CDATA">
