@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dicimp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tl $ $Date: 2000-12-01 18:58:41 $
+ *  last change: $Author: kz $ $Date: 2000-12-04 09:27:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -952,7 +952,7 @@ BOOL DictionaryNeo::isReadonly_Impl()
             Any aAny( aContent.getPropertyValue( A2OU( "IsReadOnly" ) ) );
             aAny >>= bRes;
         }
-        catch (::ucb::ContentCreationException &)
+        catch (::com::sun::star::ucb::ContentCreationException &)
         {
             bRes = TRUE;
         }
