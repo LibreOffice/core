@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:40:11 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:19:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -868,7 +868,9 @@ void SwLineRects::PaintLines( OutputDevice *pOut )
 
         FASTBOOL bPaint2nd = FALSE;
         USHORT nMinCount = Count();
-        for ( USHORT i = 0; i < Count(); ++i )
+        USHORT i;
+
+        for ( i = 0; i < Count(); ++i )
         {
             SwLineRect &rLRect = operator[](i);
 
