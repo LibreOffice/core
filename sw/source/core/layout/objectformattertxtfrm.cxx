@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objectformattertxtfrm.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 10:58:18 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 13:47:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,19 +265,18 @@ bool SwObjectFormatterTxtFrm::DoFormatObjs()
                     text::WrapInfluenceOnPosition::NONE_CONCURRENT_POSITIONED,
                     nToPageNum );
         }
-        if ( pObj )
+        // --> OD 2004-09-24 #i34569# - if anchor frame didn't have a previous,
+        // no action can be performed.
+        if ( pObj && bDoesAnchorHadPrev )
         {
             // Object found, whose anchor is moved forward
 
-            if ( bDoesAnchorHadPrev )
-            {
-                // Indicate that anchor text frame has to move forward and
-                // invalidate its position to force a re-format.
-                SwLayouter::InsertMovedFwdFrm( *(GetPageFrm().GetFmt()->GetDoc()),
-                                               mrAnchorTxtFrm,
-                                               nToPageNum );
-                mrAnchorTxtFrm.InvalidatePos();
-            }
+            // Indicate that anchor text frame has to move forward and
+            // invalidate its position to force a re-format.
+            SwLayouter::InsertMovedFwdFrm( *(GetPageFrm().GetFmt()->GetDoc()),
+                                           mrAnchorTxtFrm,
+                                           nToPageNum );
+            mrAnchorTxtFrm.InvalidatePos();
 
             // Indicate restart of the layout process
             bSuccess = false;
@@ -290,6 +289,7 @@ bool SwObjectFormatterTxtFrm::DoFormatObjs()
             // layout process
             _InvalidateFollowObjs( *pObj, true );
         }
+        // <--
     }
 
     return bSuccess;
@@ -362,14 +362,22 @@ SwAnchoredObject* SwObjectFormatterTxtFrm::_GetFirstObjWithMovedFwdAnchor(
              pAnchoredObj->GetFrmFmt().GetWrapInfluenceOnObjPos().
                    GetWrapInfluenceOnObjPos() == _nWrapInfluenceOnPosition )
         {
-            sal_uInt32 nFromPageNum = GetPgNumOfCollected(i);
-            sal_uInt32 nPageNum = pAnchoredObj->GetPageFrmOfAnchor().GetPhyPageNum();
-            if ( nPageNum > nFromPageNum )
+            const sal_uInt32 nFromPageNum = GetPgNumOfCollected(i);
+            // --> OD 2004-09-23 #i33751#, #i34060# - method <GetPageFrmOfAnchor()>
+            // is replaced by method <FindPageFrmOfAnchor()>. It's return value
+            // have to be checked.
+            SwPageFrm* pPageFrmOfAnchor = pAnchoredObj->FindPageFrmOfAnchor();
+            if ( pPageFrmOfAnchor )
             {
-                _noToPageNum = nPageNum;
-                pRetAnchoredObj = pAnchoredObj;
-                break;
+                const sal_uInt32 nPageNum = pPageFrmOfAnchor->GetPhyPageNum();
+                if ( nPageNum > nFromPageNum )
+                {
+                    _noToPageNum = nPageNum;
+                    pRetAnchoredObj = pAnchoredObj;
+                    break;
+                }
             }
+            // <--
         }
     }
 
