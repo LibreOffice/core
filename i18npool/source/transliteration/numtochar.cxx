@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numtochar.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 10:54:50 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 16:05:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,52 +64,37 @@
 
 #define TRANSLITERATION_ALL
 #include <numtochar.hxx>
-#include <data/numberchar.h>
-
-using namespace com::sun::star::uno;
-using namespace rtl;
+#include <drafts/com/sun/star/i18n/NativeNumberMode.hpp>
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
-OUString SAL_CALL NumToChar::transliterate( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
-    Sequence< sal_Int32 >& offset ) throw(RuntimeException)
-{
-    const sal_Unicode *src = inStr.getStr() + startPos;
-    rtl_uString *newStr = x_rtl_uString_new_WithLength(nCount);
-    offset.realloc(nCount);
 
-    for (sal_Int32 i = 0; i < nCount; i++) {
-        sal_Unicode ch = src[i];
-        newStr->buffer[i] = (isNumber(ch) ? NumberChar[number][ ch - NUMBER_ZERO ] :
-            (isDecimal(ch) ? DecimalChar[number] : (isMinus(ch) ? MinusChar[number] : ch)));
-        offset[i] = startPos + i;
-    }
-    return OUString(newStr->buffer, nCount);
-}
-
-#define TRANSLITERATION_NUMTOCHAR( name, _number ) \
+#define TRANSLITERATION_NUMTOCHAR( name, number ) \
 NumToChar##name::NumToChar##name() \
 { \
-    number = NumberChar_##_number; \
-    transliterationName = "NumToChar"#name; \
-    implementationName = "com.sun.star.i18n.Transliteration.NumToChar"#name; \
+        nNativeNumberMode = number; \
+        tableSize = 0; \
+        transliterationName = "NumToChar"#name; \
+        implementationName = "com.sun.star.i18n.Transliteration.NumToChar"#name; \
 }
 
-TRANSLITERATION_NUMTOCHAR( Halfwidth, HalfWidth )
-TRANSLITERATION_NUMTOCHAR( Fullwidth, FullWidth )
-TRANSLITERATION_NUMTOCHAR( Lower_zh_CN, Lower_zh )
-TRANSLITERATION_NUMTOCHAR( Lower_zh_TW, Lower_zh )
-TRANSLITERATION_NUMTOCHAR( Upper_zh_CN, Upper_zh )
-TRANSLITERATION_NUMTOCHAR( Upper_zh_TW, Upper_zh_TW )
-TRANSLITERATION_NUMTOCHAR( KanjiShort_ja_JP, Modern_ja )
-TRANSLITERATION_NUMTOCHAR( KanjiTraditional_ja_JP, Traditional_ja )
-TRANSLITERATION_NUMTOCHAR( Lower_ko, Lower_ko )
-TRANSLITERATION_NUMTOCHAR( Upper_ko, Upper_ko )
-TRANSLITERATION_NUMTOCHAR( Hangul_ko, Hangul_ko )
-TRANSLITERATION_NUMTOCHAR( Indic_ar, Indic_ar )
-TRANSLITERATION_NUMTOCHAR( EastIndic_ar, EastIndic_ar )
-TRANSLITERATION_NUMTOCHAR( Indic_hi, Indic_hi )
-TRANSLITERATION_NUMTOCHAR( _th, th )
+using namespace drafts::com::sun::star::i18n::NativeNumberMode;
+
+TRANSLITERATION_NUMTOCHAR( Halfwidth, NATNUM0 )
+TRANSLITERATION_NUMTOCHAR( Fullwidth, NATNUM3 )
+TRANSLITERATION_NUMTOCHAR( Lower_zh_CN, NATNUM1 )
+TRANSLITERATION_NUMTOCHAR( Lower_zh_TW, NATNUM1 )
+TRANSLITERATION_NUMTOCHAR( Upper_zh_CN, NATNUM2 )
+TRANSLITERATION_NUMTOCHAR( Upper_zh_TW, NATNUM2 )
+TRANSLITERATION_NUMTOCHAR( KanjiShort_ja_JP, NATNUM1 )
+TRANSLITERATION_NUMTOCHAR( KanjiTraditional_ja_JP, NATNUM2 )
+TRANSLITERATION_NUMTOCHAR( Lower_ko, NATNUM1 )
+TRANSLITERATION_NUMTOCHAR( Upper_ko, NATNUM2 )
+TRANSLITERATION_NUMTOCHAR( Hangul_ko, NATNUM9 )
+TRANSLITERATION_NUMTOCHAR( Indic_ar, NATNUM1 )
+TRANSLITERATION_NUMTOCHAR( EastIndic_ar, NATNUM1 )
+TRANSLITERATION_NUMTOCHAR( Indic_hi, NATNUM1 )
+TRANSLITERATION_NUMTOCHAR( _th, NATNUM1 )
 #undef TRANSLITERATION_NUMTOCHAR
 
 } } } }
