@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msvbasic.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-01 12:50:00 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 17:42:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,19 +102,8 @@ DECLARE_DYNARRAY(StringArray,String *);
 class VBA_Impl
 {
 public:
-    VBA_Impl(SvStorage &rIn, bool bCmmntd = true)
-        : xStor(&rIn), pOffsets(0), nOffsets(0), bCommented(bCmmntd),
-        aVBAStrings(0), nLines(0), sComment(String::CreateFromAscii(
-            RTL_CONSTASCII_STRINGPARAM("Rem "))),
-        meCharSet(RTL_TEXTENCODING_MS_1252), mbMac(false)
-        {}
-    ~VBA_Impl()
-    {
-        if (nOffsets)
-            delete [] pOffsets;
-        for(ULONG i=0;i<aVBAStrings.GetSize();i++)
-            delete aVBAStrings.Get(i);
-    }
+    VBA_Impl(SvStorage &rIn, bool bCmmntd = true);
+    ~VBA_Impl();
     //0 for failure, 1 for success
     bool Open( const String &rToplevel, const String &rSublevel);
     const StringArray & Decompress(sal_uInt16 nIndex, int *pOverflow=0);
@@ -124,7 +113,9 @@ public:
         DBG_ASSERT( nIndex < nOffsets, "Index out of range" );
         return pOffsets[ nIndex ].sName;
     }
-    virtual void Output(int len, const sal_uInt8 *data);
+    //I'm the method that would be made virtual to make this class
+    //useful elsewhere
+    void Output(int len, const sal_uInt8 *data);
     std::vector<String> maReferences;
 private:
     struct VBAOffset_Impl
