@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appinit.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 19:53:00 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 16:27:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -334,7 +334,13 @@ FASTBOOL SfxApplication::Initialize_Impl()
     SfxEventConfiguration::RegisterEvent(SFX_EVENT_ACTIVATEDOC,     String(SfxResId(STR_EVENT_ACTIVATEDOC)),    aEventNames.GetString( 10 ) );
     SfxEventConfiguration::RegisterEvent(SFX_EVENT_DEACTIVATEDOC,   String(SfxResId(STR_EVENT_DEACTIVATEDOC)),  aEventNames.GetString( 11 ) );
     SfxEventConfiguration::RegisterEvent(SFX_EVENT_PRINTDOC,        String(SfxResId(STR_EVENT_PRINTDOC)),       aEventNames.GetString( 12 ) );
-    SfxEventConfiguration::RegisterEvent(SFX_EVENT_MODIFYCHANGED,   String(SfxResId(STR_EVENT_MODIFYCHANGED)), aEventNames.GetString( 13 ) );
+    SfxEventConfiguration::RegisterEvent(SFX_EVENT_MODIFYCHANGED,   String(SfxResId(STR_EVENT_MODIFYCHANGED)),  aEventNames.GetString( 13 ) );
+
+    SfxEventConfiguration::RegisterEvent(SFX_EVENT_SAVETODOC,           String(), aEventNames.GetString( 14 ) );
+    SfxEventConfiguration::RegisterEvent(SFX_EVENT_SAVETODOCDONE,       String(), aEventNames.GetString( 15 ) );
+    SfxEventConfiguration::RegisterEvent(SFX_EVENT_VIEWCREATED,         String(), aEventNames.GetString( 16 ) );
+    SfxEventConfiguration::RegisterEvent(SFX_EVENT_PREPARECLOSEVIEW,    String(), aEventNames.GetString( 17 ) );
+    SfxEventConfiguration::RegisterEvent(SFX_EVENT_CLOSEVIEW,           String(), aEventNames.GetString( 18 ) );
 
     // Subklasse initialisieren
     bDowning = sal_False;
