@@ -2,9 +2,9 @@
  *
  *  $RCSfile: groupboxpages.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:11:19 $
+ *  last change: $Author: kz $ $Date: 2001-07-17 20:35:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -377,7 +377,7 @@ TabPage RID_PAGE_OPTIONVALUES
         Text [ portuguese_brazilian ] = "Welchen Wert m?hten Sie jeder Option zuweisen ?";
         Text [ japanese ] = "ŠeµÌß¼®İ‚É‚Ç‚Ì’l‚ğŠ„‚è“–‚Ä‚Ü‚·‚©B(~V)";
         Text [ chinese_simplified ] = "ÒªÈÃÑ¡ÏîÊ¹ÓÃµÄÊıÖµÊÇ(~V)£¿";
-        Text [ chinese_traditional ] = "­n«ü©w¨C­Ó¿ï¶µ®M¥Îªº¼Æ­È(~V)¡H";
+        Text [ chinese_traditional ] = "­n«ü©w¨C­Ó¿ï¶µ¨Ï¥Îªº¼Æ­È(~V)¡H";
         Text [ arabic ] = "ãÇ åí ÇáŞíãÉ ÇáÊí ÊÑíÏ ÊÚííäåÇ áßá ÎíÇÑ¿";
         Text [ dutch ] = "Welke waarden wilt u toewijzen aan de opties ?";
         Text [ chinese_simplified ] = "ÒªÈÃÑ¡ÏîÊ¹ÓÃµÄÊıÖµÊÇ(~V)£¿";
@@ -589,6 +589,9 @@ String RID_STR_GROUPWIZ_DBFIELD
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.15  2001/07/13 21:11:19  kz
+ *  Merge SRC638: 13.07.01 - 23:10:23
+ *
  *  Revision 1.14  2001/06/29 02:11:46  kz
  *  Merge SRC633: 29.06.01 - 04:12:02
  *
@@ -634,6 +637,7 @@ String RID_STR_GROUPWIZ_DBFIELD
  *
  *  Revision 1.0 14.02.01 12:47:37  fs
  ************************************************************************/
+
 
 
 
