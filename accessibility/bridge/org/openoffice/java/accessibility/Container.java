@@ -132,6 +132,36 @@ public class Container extends java.awt.Container implements javax.accessibility
     public void removeNotify() {
     }
 
+    /*
+     * Fake the java focus handling. This is necessary to keep OOo focus
+     * in sync with the java focus. See java.awt.DefaultKeyboardFocusManager
+     * for implementation details.
+     **/
+
+    /** Requests focus for this object */
+    public void requestFocus() {
+    }
+
+    /** Requests focus for this object */
+    public boolean requestFocus(boolean temporary) {
+        // Must be a no-op to make focus handling work
+        return true;
+    }
+
+    /** Requests the focus for this object in the containing window */
+    public boolean requestFocusInWindow() {
+        return requestFocusInWindow(false);
+    }
+
+    /** Requests the focus for this object in the containing window */
+    protected boolean requestFocusInWindow(boolean temporary) {
+        if (isFocusable() && isVisible()) {
+            getEventQueue().postEvent(new java.awt.event.FocusEvent(this, java.awt.event.FocusEvent.FOCUS_GAINED, temporary));
+            return true;
+        }
+        return false;
+    }
+
     public Object[] getAccessibleComponents(Object[] targetSet) {
         try {
             java.util.ArrayList list = new java.util.ArrayList(targetSet.length);
