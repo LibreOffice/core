@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: sj $ $Date: 2001-08-07 12:55:36 $
+ *  last change: $Author: sj $ $Date: 2001-08-07 14:08:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1149,20 +1149,25 @@ void FileDialogHelper_Impl::addGraphicFilter()
 
     // create the list of filters
     mpGraphicFilter = new GraphicFilter;
-    USHORT i, nCount = mpGraphicFilter->GetImportFormatCount();
+    USHORT i, j, nCount = mpGraphicFilter->GetImportFormatCount();
 
     // compute the extension string for all known import filters
     String aExtensions;
 
     for ( i = 0; i < nCount; i++ )
     {
-        String aWildcard = mpGraphicFilter->GetImportWildcard( i );
-
-        if ( aExtensions.Search( aWildcard ) == STRING_NOTFOUND )
+        j = 0;
+        while( TRUE )
         {
-            if ( aExtensions.Len() )
-                aExtensions += sal_Unicode(';');
-            aExtensions += aWildcard;
+            String aWildcard( mpGraphicFilter->GetImportWildcard( i, j++ ) );
+            if ( !aWildcard.Len() )
+                break;
+            if ( aExtensions.Search( aWildcard ) == STRING_NOTFOUND )
+            {
+                if ( aExtensions.Len() )
+                    aExtensions += sal_Unicode(';');
+                aExtensions += aWildcard;
+            }
         }
     }
 
@@ -1187,10 +1192,23 @@ void FileDialogHelper_Impl::addGraphicFilter()
     for ( i = 0; i < nCount; i++ )
     {
         String aName = mpGraphicFilter->GetImportFormatName( i );
-        String aWildcard = mpGraphicFilter->GetImportWildcard( i );
+        String aExtensions;
+        j = 0;
+        while( TRUE )
+        {
+            String aWildcard( mpGraphicFilter->GetImportWildcard( i, j++ ) );
+            if ( !aWildcard.Len() )
+                break;
+            if ( aExtensions.Search( aWildcard ) == STRING_NOTFOUND )
+            {
+                if ( aExtensions.Len() )
+                    aExtensions += sal_Unicode(';');
+                aExtensions += aWildcard;
+            }
+        }
         try
         {
-            xFltMgr->appendFilter( aName, aWildcard );
+            xFltMgr->appendFilter( aName, aExtensions );
         }
         catch( IllegalArgumentException )
         {
