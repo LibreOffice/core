@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imoptdlg.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 13:36:38 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:16:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,16 +266,16 @@ ModalDialog RID_SCDLG_IMPORTOPT
         Text[ danish ] = "Fixed text ~width";
         Text[ swedish ] = "Fast kolumn~bredd";
         Text[ polish ] = "Fixed text ~width";
-        Text[ japanese ] = "指定された列幅";
-        Text[ korean ] = "고정 열 너비";
-        Text[ chinese_simplified ] = "固定的列宽";
-        Text[ chinese_traditional ] = "固定的欄寬";
+        Text[ japanese ] = "指定された列幅(~W)";
+        Text[ korean ] = "고정 열 너비(~W)";
+        Text[ chinese_simplified ] = "固定的列宽(~W)";
+        Text[ chinese_traditional ] = "固定的欄寬(~W)";
         Text[ turkish ] = "Sabit kolon ~geni�li�i";
         Text[ arabic ] = "Fixed text ~width";
         Text[ czech ] = "Pevná šířka sloupce";
         Text[ hebrew ] = "Feste Spalten~breite";
         Text[ catalan ] = "Fixed column ~width";
-        Text[ portuguese_brazilian ] = "Fixed column ~width";
+        Text[ portuguese_brazilian ] = "Largura de coluna fixa";
         Text[ thai ] = "Fixed column ~width";
         Text[ hindi ] = "Fixed column ~width";
         Text[ slovak ] = "~Pevná šírka stĺpca";
@@ -313,6 +313,7 @@ ModalDialog RID_SCDLG_IMPORTOPT
     Text[ hindi ] = "फाइल को निर्यात करो";
     Text[ slovak ] = "Importovať súbor";
 };
+
 
 
 
