@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleRoleAdapter.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 18:13:06 $
+ *  last change: $Author: rt $ $Date: 2003-06-12 07:58:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 package org.openoffice.java.accessibility;
 
 import com.sun.star.accessibility.XAccessible;
+import com.sun.star.accessibility.XAccessibleContext;
 
 /** This class maps the AccessibleRole(s) of the UNO accessibility API
  *  to the corresponding javax.accessibility objects.
@@ -156,7 +157,11 @@ public abstract class AccessibleRoleAdapter {
 
     public static javax.accessibility.AccessibleRole getAccessibleRole(XAccessible unoAccessible) {
         try {
-            return getAccessibleRole(unoAccessible.getAccessibleContext().getAccessibleRole());
+                        XAccessibleContext unoAccessibleContext = unoAccessible.getAccessibleContext();
+                        if (unoAccessibleContext != null) {
+                            return getAccessibleRole(unoAccessibleContext.getAccessibleRole());
+                        }
+                        return null;
         } catch (com.sun.star.uno.RuntimeException e) {
             return javax.accessibility.AccessibleRole.UNKNOWN;
         }
