@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accdoc.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 17:41:25 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 10:01:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 
 #ifndef _SV_WINDOW_HXX
 #include <vcl/window.hxx>
@@ -574,10 +573,11 @@ Reference<XAccessible> SwAccessibleDocument::getSelectedAccessibleChild(
     return aSelectionHelper.getSelectedAccessibleChild(nSelectedChildIndex);
 }
 
+// --> OD 2004-11-16 #111714# - index has to be treated as global child index.
 void SwAccessibleDocument::deselectAccessibleChild(
-    sal_Int32 nSelectedChildIndex )
+    sal_Int32 nChildIndex )
     throw ( IndexOutOfBoundsException,
             RuntimeException )
 {
-    aSelectionHelper.deselectAccessibleChild(nSelectedChildIndex);
+    aSelectionHelper.deselectAccessibleChild( nChildIndex );
 }
