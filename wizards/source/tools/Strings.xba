@@ -454,4 +454,27 @@ Dim MaxIndex as Integer
 		End If
 	Next i
 End Function
+
+
+Function AddListtoList(ByVal FirstArray(), ByVal SecondArray(), Optional StartIndex)
+Dim n as Integer
+Dim m as Integer
+Dim MaxIndex as Integer
+	MaxIndex = Ubound(FirstArray()) + Ubound(SecondArray()) + 1
+	If MaxIndex &gt; -1 Then
+		Dim ResultArray(MaxIndex)
+		For m = 0 To Ubound(FirstArray())
+			ResultArray(m) = FirstArray(m)
+		Next m
+		For n = 0 To Ubound(SecondArray())
+			ResultArray(m) = SecondArray(n)
+			m = m + 1
+		Next n
+		AddListToList() = ResultArray()
+	Else
+		Dim NullArray()
+		AddListToList() = NullArray()
+	End If
+End Function
+
 </script:module>
