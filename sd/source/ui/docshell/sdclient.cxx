@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdclient.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 10:54:37 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:00:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,7 +174,7 @@ void Client::RequestObjAreaPixel(const Rectangle& rRect)
         SfxInPlaceClient::RequestObjAreaPixel(rRect);
     }
 
-    const SdrMarkList& rMarkList = pView->GetMarkList();
+    const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
 
     if (rMarkList.GetMarkCount() == 1)
     {
