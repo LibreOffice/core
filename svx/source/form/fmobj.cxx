@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmobj.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 11:23:16 $
+ *  last change: $Author: obo $ $Date: 2005-03-18 10:00:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -688,7 +688,7 @@ FASTBOOL FmFormObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
             // Komponente gehoert noch keiner Form an
             if (!xContent->getParent().is())
             {
-                Reference< XForm >  xTemp = ((FmFormPage*)pPage)->GetImpl()->SetDefaults(xContent);
+                Reference< XForm >  xTemp = ((FmFormPage*)pPage)->GetImpl()->placeInFormComponentHierarchy(xContent);
                 Reference< XIndexContainer >  xForm(xTemp, UNO_QUERY);
 
                 // Position des Elements
