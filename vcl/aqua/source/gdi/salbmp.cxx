@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salbmp.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: bmahbod $ $Date: 2001-02-01 00:33:31 $
+ *  last change: $Author: bmahbod $ $Date: 2001-02-02 04:47:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,113 @@
 #ifndef _SV_SALVD_HXX
 #include <salvd.hxx>
 #endif
+
+// =======================================================================
+
+enum RGBColorType
+    {
+        eRedColor   = 0,
+        eGreenColor = 1,
+        eBlueColor  = 2
+    };
+
+typedef RGBColorType  RGBColorType;
+
+// =======================================================================
+
+// =======================================================================
+
+static BYTE GetBestColorIndex ( const CTabHandle     hCTable,
+                                const ColorSpecPtr   pColorSpec,
+                                const RGBColorType   eRGBColorType
+                              )
+{
+    BYTE             nBestColor       = 0;
+    short            nCTableSize      = 0;
+    short            nCTableIndex     = 0;
+    short            nBestCTableIndex = 0;
+    unsigned short   nNewDistance     = 0;
+    unsigned short   nMinDistance     = USHRT_MAX;
+    BOOL             bColorsMatch     = FALSE;
+    RGBColor         aFirstColor      = pColorSpec->rgb;
+    RGBColor         aNextColor;
+
+    nCTableSize = (**hCTable).ctSize;
+
+    while ( ( nCTableIndex < nCTableSize ) && ( bColorsMatch == FALSE ) )
+    {
+        aNextColor = (**hCTable).ctTable[nCTableIndex].rgb;
+
+        switch( eRGBColorType )
+        {
+            case eRedColor:
+                if ( aNextColor.red == aFirstColor.red )
+                {
+                    bColorsMatch = TRUE;
+                }
+                break;
+            case eGreenColor:
+                if ( aNextColor.green == aFirstColor.green )
+                {
+                    bColorsMatch = TRUE;
+                }
+                break;
+            case eBlueColor:
+                if ( aNextColor.blue == aFirstColor.blue )
+                {
+                    bColorsMatch = TRUE;
+                }
+                break;
+        } // switch
+
+        if ( bColorsMatch == TRUE )
+        {
+            nBestCTableIndex = nCTableIndex;
+        } // if
+        else
+        {
+            long nDeltaColor = 0;
+
+            switch( eRGBColorType )
+            {
+                case eRedColor:
+                    nDeltaColor = (long)aFirstColor.red - (long)aNextColor.red;
+                    break;
+                case eGreenColor:
+                    nDeltaColor = (long)aFirstColor.green - (long)aNextColor.green;
+                    break;
+                case eBlueColor:
+                    nDeltaColor = (long)aFirstColor.blue - (long)aNextColor.blue;
+                    break;
+            } // switch
+
+            if ( nDeltaColor < 0 )
+            {
+                nNewDistance = -nDeltaColor;
+            } // if
+            else
+            {
+                nNewDistance = nDeltaColor;
+            } // else
+
+            if ( nNewDistance < nMinDistance )
+            {
+                nMinDistance     = nNewDistance;
+                nBestCTableIndex = nCTableIndex;
+            } // if
+
+            nCTableIndex++;
+        } //else
+    } // while
+
+    fprintf( stderr, "<INFO> best color table index = %hd\n", nBestCTableIndex );
+
+    nBestColor = (BYTE)nBestCTableIndex;
+
+    return nBestColor;
+} // GetBestColorIndex
+
+// =======================================================================
 
 // ==================================================================
 
@@ -805,55 +912,40 @@ static PixMapHandle MallocPixMap ( const Size           &rPixMapSize,
 
     if ( hNewPixMap == NULL )
     {
-        GDHandle hGDevice = GetGDevice( );
+        hNewPixMap = GetNewPixMap( rPixMapSize,
+                                   nPixMapBits,
+                                   rBitmapPalette,
+                                   rSalGraphics
+                                 );
 
-        if ( ( hGDevice != NULL ) && ( *hGDevice != NULL ) )
+        if ( hNewPixMap == NULL )
         {
-            SInt8  nGDeviceFlags = noErr;
+            GDHandle hGDevice = GetGDevice( );
 
-            nGDeviceFlags = HGetState( (Handle)hGDevice );
-
-            if ( nGDeviceFlags == noErr )
+            if ( ( hGDevice != NULL ) && ( *hGDevice != NULL ) )
             {
-                PixMapHandle hPixMap = NULL;
+                SInt8  nGDeviceFlags = noErr;
 
-                HLock( (Handle)hGDevice );
+                nGDeviceFlags = HGetState( (Handle)hGDevice );
 
-                    hPixMap = (**hGDevice).gdPMap;
+                if ( nGDeviceFlags == noErr )
+                {
+                    PixMapHandle hPixMap = NULL;
 
-                    if ( ( hPixMap != NULL ) && ( *hPixMap != NULL ) )
-                    {
-                        hNewPixMap = CopyPixMap( hPixMap );
-                    } // if
-                    else
-                    {
-                        hNewPixMap = GetNewPixMap( rPixMapSize,
-                                                   nPixMapBits,
-                                                   rBitmapPalette,
-                                                   rSalGraphics
-                                                 );
-                    } // else
+                    HLock( (Handle)hGDevice );
 
-                HSetState( (Handle)hGDevice, nGDeviceFlags );
-            } //if
-            else
-            {
-                hNewPixMap = GetNewPixMap( rPixMapSize,
-                                           nPixMapBits,
-                                           rBitmapPalette,
-                                           rSalGraphics
-                                         );
-            } // else
+                        hPixMap = (**hGDevice).gdPMap;
+
+                        if ( ( hPixMap != NULL ) && ( *hPixMap != NULL ) )
+                        {
+                            hNewPixMap = CopyPixMap( hPixMap );
+                        } // if
+
+                    HSetState( (Handle)hGDevice, nGDeviceFlags );
+                } //if
+            } // if
         } // if
-        else
-        {
-            hNewPixMap = GetNewPixMap( rPixMapSize,
-                                       nPixMapBits,
-                                       rBitmapPalette,
-                                       rSalGraphics
-                                     );
-        } // else
-    } // else
+    } // if
 
     return hNewPixMap;
 } // MallocPixMap
