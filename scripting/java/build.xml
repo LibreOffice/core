@@ -3,9 +3,9 @@
 #
 #   $RCSfile: build.xml,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: dfoster $ $Date: 2002-10-08 10:13:10 $
+#   last change: $Author: dfoster $ $Date: 2002-10-17 09:28:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,7 +74,7 @@
   <property name="jardir" value="${out}/class"/>
   <property name="bindir" value="${out}/bin"/>
   <property name="scriptingjarname" value="ScriptRuntimeForJava.jar"/>
-  <property name="storagejarname" value="StorageProxy.jar"/>
+  <!-- <property name="storagejarname" value="StorageProxy.jar"/> -->
 
   <!-- ==================== classpath setting ============================ -->
   <path id="idlclasspath">
@@ -93,7 +93,7 @@
     <mkdir dir="${scriptingclasses}"/>
     <mkdir dir="${storageclasses}"/>
     <mkdir dir="${jardir}"/>
-    <copy file="StorageProxy/com/sun/star/scripting/storage/scriptURI.xml" todir="${bindir}"/>
+    <!-- <copy file="StorageProxy/com/sun/star/scripting/storage/scriptURI.xml" todir="${bindir}"/> -->
   </target>
 
   <!-- ======================== Compile Classes ========================== -->
@@ -101,9 +101,9 @@
     <javac srcdir="JRuntime/" destdir="${scriptingclasses}"
               includes="**/*.java" classpathref="idlclasspath"
        debug="${debug}" optimize="${optimize}" deprecation="on"/>
-    <javac srcdir="StorageProxy/" destdir="${storageclasses}"
+    <!-- <javac srcdir="StorageProxy/" destdir="${storageclasses}"
            includes="**/*.java" classpathref="idlclasspath"
-            debug="${debug}" optimize="${optimize}" deprecation="on"/>
+            debug="${debug}" optimize="${optimize}" deprecation="on"/>-->
   </target>
 
   <!-- ===================== jar ========================= -->
