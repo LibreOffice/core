@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urltest.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: sb $ $Date: 2002-11-08 12:56:09 $
+ *  last change: $Author: sb $ $Date: 2002-11-29 08:10:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -470,10 +470,12 @@ main()
             INetURLObject aUrl(aTest[i]);
             if (aUrl.HasError())
                 printf("BAD %s\n", aTest[i]);
-            else if (aUrl.GetMainURL().CompareToAscii(aTest[i]) != 0)
+            else if (aUrl.GetMainURL(INetURLObject::DECODE_TO_IURI).
+                         CompareToAscii(aTest[i]) != 0)
                 printf("BAD %s -> %s\n",
                        aTest[i],
-                       ByteString(aUrl.GetMainURL(),
+                       ByteString(aUrl.GetMainURL(
+                                      INetURLObject::DECODE_TO_IURI),
                                   RTL_TEXTENCODING_ASCII_US).
                            GetBuffer());
         }
@@ -497,10 +499,12 @@ main()
             INetURLObject aUrl(aTest[i]);
             if (aUrl.HasError())
                 printf("BAD %s\n", aTest[i]);
-            else if (aUrl.GetMainURL().CompareToAscii(aTest[i]) != 0)
+            else if (aUrl.GetMainURL(INetURLObject::DECODE_TO_IURI).
+                         CompareToAscii(aTest[i]) != 0)
                 printf("BAD %s -> %s\n",
                        aTest[i],
-                       ByteString(aUrl.GetMainURL(),
+                       ByteString(aUrl.GetMainURL(
+                                      INetURLObject::DECODE_TO_IURI),
                                   RTL_TEXTENCODING_ASCII_US).
                            GetBuffer());
         }
@@ -522,10 +526,12 @@ main()
             INetURLObject aUrl(aTest[i]);
             if (aUrl.HasError())
                 printf("BAD %s\n", aTest[i]);
-            else if (aUrl.GetMainURL().CompareToAscii(aTest[i]) != 0)
+            else if (aUrl.GetMainURL(INetURLObject::DECODE_TO_IURI).
+                         CompareToAscii(aTest[i]) != 0)
                 printf("BAD %s -> %s\n",
                        aTest[i],
-                       ByteString(aUrl.GetMainURL(),
+                       ByteString(aUrl.GetMainURL(
+                                      INetURLObject::DECODE_TO_IURI),
                                   RTL_TEXTENCODING_ASCII_US).
                            GetBuffer());
         }
@@ -545,10 +551,12 @@ main()
             INetURLObject aUrl(aTest[i]);
             if (aUrl.HasError())
                 printf("BAD %s\n", aTest[i]);
-            else if (aUrl.GetMainURL().CompareToAscii(aTest[i]) != 0)
+            else if (aUrl.GetMainURL(INetURLObject::DECODE_TO_IURI).
+                         CompareToAscii(aTest[i]) != 0)
                 printf("BAD %s -> %s\n",
                        aTest[i],
-                       ByteString(aUrl.GetMainURL(),
+                       ByteString(aUrl.GetMainURL(
+                                      INetURLObject::DECODE_TO_IURI),
                                   RTL_TEXTENCODING_ASCII_US).
                            GetBuffer());
         }
@@ -1090,7 +1098,8 @@ main()
     {
         {
             INetURLObject aUrl1(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.odma:")));
-            rtl::OUString aUrl2(aUrl1.GetMainURL());
+            rtl::OUString aUrl2(aUrl1.GetMainURL(
+                                    INetURLObject::DECODE_TO_IURI));
             if (!aUrl2.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.odma:/")))
             {
                 printf("BAD vnd.sun.star.odma: != %s\n",
@@ -1101,7 +1110,8 @@ main()
         }
         {
             INetURLObject aUrl1(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.odma:/")));
-            rtl::OUString aUrl2(aUrl1.GetMainURL());
+            rtl::OUString aUrl2(aUrl1.GetMainURL(
+                                    INetURLObject::DECODE_TO_IURI));
             if (!aUrl2.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.odma:/")))
             {
                 printf("BAD vnd.sun.star.odma:/ != %s\n",
@@ -1112,7 +1122,8 @@ main()
         }
         {
             INetURLObject aUrl1(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.odma:/bla/bla")));
-            rtl::OUString aUrl2(aUrl1.GetMainURL());
+            rtl::OUString aUrl2(aUrl1.GetMainURL(
+                                    INetURLObject::DECODE_TO_IURI));
             if (!aUrl2.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.odma:/bla%2Fbla")))
             {
                 printf("BAD vnd.sun.star.odma:/bla/bla != %s\n",
@@ -1156,12 +1167,14 @@ main()
             if (aTest[i].m_pOutput == 0
                 ? !aUrl.HasError()
                 : (aUrl.HasError()
-                   || (aUrl.GetMainURL().CompareToAscii(aTest[i].m_pOutput)
+                   || (aUrl.GetMainURL(INetURLObject::DECODE_TO_IURI).
+                           CompareToAscii(aTest[i].m_pOutput)
                        != 0)))
                 printf("BAD %s -> %s != %s\n",
                        aTest[i].m_pInput,
                        aUrl.HasError() ? "<none>"
-                       : ByteString(aUrl.GetMainURL(),
+                       : ByteString(aUrl.GetMainURL(
+                                        INetURLObject::DECODE_TO_IURI),
                                     RTL_TEXTENCODING_ASCII_US).GetBuffer(),
                        aTest[i].m_pOutput == 0 ? "<none>" : aTest[i].m_pOutput);
         }
@@ -1184,12 +1197,14 @@ main()
             if (aTest[i].m_pOutput == 0
                 ? !aUrl.HasError()
                 : (aUrl.HasError()
-                   || (aUrl.GetMainURL().CompareToAscii(aTest[i].m_pOutput)
+                   || (aUrl.GetMainURL(INetURLObject::DECODE_TO_IURI).
+                           CompareToAscii(aTest[i].m_pOutput)
                        != 0)))
                 printf("BAD %s -> %s != %s\n",
                        aTest[i].m_pInput,
                        aUrl.HasError() ? "<none>"
-                       : ByteString(aUrl.GetMainURL(),
+                       : ByteString(aUrl.GetMainURL(
+                                        INetURLObject::DECODE_TO_IURI),
                                     RTL_TEXTENCODING_ASCII_US).GetBuffer(),
                        aTest[i].m_pOutput == 0 ? "<none>" : aTest[i].m_pOutput);
         }
