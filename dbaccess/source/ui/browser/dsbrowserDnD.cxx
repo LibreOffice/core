@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsbrowserDnD.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-23 12:32:39 $
+ *  last change: $Author: oj $ $Date: 2002-05-28 08:30:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,6 +182,16 @@
 #endif
 #ifndef _DBAUI_LINKEDDOCUMENTS_HXX_
 #include "linkeddocuments.hxx"
+#endif
+
+#ifndef _URLOBJ_HXX
+#include <tools/urlobj.hxx>
+#endif
+#ifndef _UNOTOOLS_UCBHELPER_HXX
+#include <unotools/ucbhelper.hxx>
+#endif
+#ifndef _UNOTOOLS_TEMPFILE_HXX
+#include <unotools/tempfile.hxx>
 #endif
 // .........................................................................
 namespace dbaui
@@ -457,35 +467,24 @@ namespace dbaui
     }
 
     // -----------------------------------------------------------------------------
-    void SbaTableQueryBrowser::implPasteQuery( SvLBoxEntry* _pApplyTo, const TransferableDataHelper& _rPasteData )
+    void SbaTableQueryBrowser::implPasteQuery( SvLBoxEntry* _pApplyTo, const ::svx::ODataAccessDescriptor& _rPasteData )
     {
         DBG_ASSERT(etQueryContainer == getEntryType(_pApplyTo) || etQuery == getEntryType(_pApplyTo), "SbaTableQueryBrowser::implPasteQuery: invalid target entry!");
         try
         {
-            sal_Bool bQueryDescriptor = _rPasteData.HasFormat(SOT_FORMATSTR_ID_DBACCESS_QUERY);
-            sal_Bool bCommandDescriptor = _rPasteData.HasFormat(SOT_FORMATSTR_ID_DBACCESS_COMMAND);
-            if (bQueryDescriptor || bCommandDescriptor)
-            {
-                DataFlavor aFlavor;
-                SotExchange::GetFormatDataFlavor(bQueryDescriptor ? SOT_FORMATSTR_ID_DBACCESS_QUERY : SOT_FORMATSTR_ID_DBACCESS_COMMAND, aFlavor);
-                Sequence<PropertyValue> aDescriptor;
-    #ifdef DBG_UTIL
-                sal_Bool bCorrectFormat =
-    #endif
-                _rPasteData.GetAny(aFlavor) >>= aDescriptor;
-                DBG_ASSERT(bCorrectFormat, "SbaTableQueryBrowser::implPasteQuery: invalid DnD or clipboard format!");
+            sal_Int32 nCommandType = CommandType::TABLE;
+            if ( _rPasteData.has(daCommandType) )
+                _rPasteData[daCommandType]      >>= nCommandType;
 
+            if ( CommandType::QUERY == nCommandType || CommandType::COMMAND == nCommandType )
+            {
+                // read all nescessary data
                 ::rtl::OUString sDataSourceName;
-                sal_Int32       nCommandType = CommandType::QUERY;
                 ::rtl::OUString sCommand;
                 sal_Bool        bEscapeProcessing = sal_True;
-                {
-                    ODataAccessDescriptor aDesc(aDescriptor);
-                    aDesc[daDataSource]         >>= sDataSourceName;
-                    aDesc[daCommandType]        >>= nCommandType;
-                    aDesc[daCommand]            >>= sCommand;
-                    aDesc[daEscapeProcessing]   >>= bEscapeProcessing;
-                }
+                _rPasteData[daDataSource]       >>= sDataSourceName;
+                _rPasteData[daCommand]          >>= sCommand;
+                _rPasteData[daEscapeProcessing] >>= bEscapeProcessing;
 
                 // plausibility check
                 sal_Bool bValidDescriptor = sal_False;
@@ -596,6 +595,8 @@ namespace dbaui
                     xDestQueries->insertByName( sTargetName, makeAny(xNewQuery) );
                 }
             }
+            else
+                OSL_TRACE("There should be a sequence in it!");
         }
         catch(SQLContext& e) { showError(SQLExceptionInfo(e)); }
         catch(SQLWarning& e) { showError(SQLExceptionInfo(e)); }
@@ -605,236 +606,202 @@ namespace dbaui
             DBG_ERROR("SbaTableQueryBrowser::implPasteQuery: caught a strange exception!");
         }
     }
-
     // -----------------------------------------------------------------------------
-    void SbaTableQueryBrowser::implPasteTable( SvLBoxEntry* _pApplyTo, const TransferableDataHelper& _rPasteData )
+    void SbaTableQueryBrowser::implPasteTable( SvLBoxEntry* _pApplyTo, const TransferableDataHelper& _rTransData )
+    {
+        if ( ODataAccessObjectTransferable::canExtractObjectDescriptor(_rTransData.GetDataFlavorExVector()) )
+            implPasteTable( _pApplyTo, ODataAccessObjectTransferable::extractObjectDescriptor(_rTransData) );
+        else
+        {
+            sal_Bool bHtml = _rTransData.HasFormat(SOT_FORMATSTR_ID_HTML) || _rTransData.HasFormat(SOT_FORMATSTR_ID_HTML_SIMPLE);
+            if ( bHtml || _rTransData.HasFormat(SOT_FORMAT_RTF))
+            {
+                DropDescriptor aTrans;
+                if ( bHtml )
+                    const_cast<TransferableDataHelper&>(_rTransData).GetSotStorageStream(_rTransData.HasFormat(SOT_FORMATSTR_ID_HTML) ? SOT_FORMATSTR_ID_HTML : SOT_FORMATSTR_ID_HTML_SIMPLE,aTrans.aHtmlRtfStorage);
+                else
+                    const_cast<TransferableDataHelper&>(_rTransData).GetSotStorageStream(SOT_FORMAT_RTF,aTrans.aHtmlRtfStorage);
+
+                aTrans.pDroppedAt       = _pApplyTo;
+                aTrans.bTable           = etTableContainer;
+                aTrans.bHtml            = bHtml;
+                if ( !copyHtmlRtfTable(aTrans,sal_False) )
+                    showError(SQLException(String(ModuleRes(STR_NO_TABLE_FORMAT_INSIDE)),*this,::rtl::OUString::createFromAscii("S1000") ,0,Any()));
+            }
+        }
+    }
+    // -----------------------------------------------------------------------------
+    void SbaTableQueryBrowser::implPasteTable( SvLBoxEntry* _pApplyTo, const ::svx::ODataAccessDescriptor& _rPasteData )
     {
         try
         {
             // paste into the tables
-            sal_Bool bTableDescriptor = _rPasteData.HasFormat(SOT_FORMATSTR_ID_DBACCESS_TABLE);
-            sal_Bool bQueryDescriptor = _rPasteData.HasFormat(SOT_FORMATSTR_ID_DBACCESS_QUERY);
-            OSL_ENSURE(!bTableDescriptor || !bQueryDescriptor, "SbaTableQueryBrowser::implPasteTable: suspicious formats (both a table and a query descriptor)!");
-            if  (bTableDescriptor || bQueryDescriptor)
+            sal_Int32 nCommandType = CommandType::COMMAND;
+            if ( _rPasteData.has(daCommandType) )
+                _rPasteData[daCommandType] >>= nCommandType;
+
+            if ( CommandType::QUERY == nCommandType || CommandType::TABLE == nCommandType )
             {
-                DataFlavor aFlavor;
-                SotExchange::GetFormatDataFlavor(bTableDescriptor ? SOT_FORMATSTR_ID_DBACCESS_TABLE : SOT_FORMATSTR_ID_DBACCESS_QUERY, aFlavor);
-                Sequence<PropertyValue> aSeq;
-    #ifdef DBG_UTIL
-                sal_Bool bCorrectFormat =
-    #endif
-                _rPasteData.GetAny(aFlavor) >>= aSeq;
-                DBG_ASSERT(bCorrectFormat, "SbaTableQueryBrowser::implPasteTable: invalid DnD or clipboard format!");
+                ::rtl::OUString aDSName = GetEntryText( m_pTreeView->getListBox()->GetRootLevelParent( _pApplyTo ) );
 
-                if(aSeq.getLength())
-                {
-                    ::rtl::OUString aDSName = GetEntryText( m_pTreeView->getListBox()->GetRootLevelParent( _pApplyTo ) );
-
-                    const PropertyValue* pBegin = aSeq.getConstArray();
-                    const PropertyValue* pEnd   = pBegin + aSeq.getLength();
-
-                    // first get the dest connection
-                    Reference<XConnection> xDestConnection;  // supports the service sdb::connection
-                    if(!ensureConnection(_pApplyTo, xDestConnection))
-                        return;
-
-                    // ask the descriptor for the needed properties
-                    Reference<XConnection>  xSrcConnection; // the source connection
-                    Reference<XResultSet>   xSrcRs;         // the source resultset may be empty
-                    sal_Int32 nCommandType = CommandType::TABLE;
-                    ::rtl::OUString sCommand,
-                                    sSrcDataSourceName;
-                    Sequence< Any > aSelection;
-                    {
-                        ODataAccessDescriptor aDesc(aSeq);
-                        aDesc[daDataSource]     >>= sSrcDataSourceName;
-                        aDesc[daCommandType]    >>= nCommandType;
-                        aDesc[daCommand]        >>= sCommand;
-                        aDesc[daConnection]     >>= xSrcConnection;
-                        aDesc[daSelection]      >>= aSelection;
-                        aDesc[daCursor]         >>= xSrcRs;
-                    }
-
-                    // check if the source connection is valid
-                    sal_Bool bDispose = sal_False;
-                    if(sSrcDataSourceName == aDSName)
-                        xSrcConnection = xDestConnection;
-                    else if(!xSrcConnection.is())
-                    {
-                        Reference< XEventListener> xEvt(static_cast< ::cppu::OWeakObject*>(this), UNO_QUERY);
-                        showError(::dbaui::createConnection(sSrcDataSourceName,m_xDatabaseContext,getORB(),xEvt,xSrcConnection));
-                        bDispose = sal_True;
-                    }
-                    // we need the right container for our type of command
-                    Reference<XNameAccess> xNameAccess;
-                    switch(nCommandType)
-                    {
-                        case CommandType::TABLE:
-                            {
-                                // only for tables
-                                Reference<XTablesSupplier> xSup(xSrcConnection,UNO_QUERY);
-                                if(xSup.is())
-                                    xNameAccess = xSup->getTables();
-                            }
-                            break;
-                        case CommandType::QUERY:
-                            {
-                                Reference<XQueriesSupplier> xSup(xSrcConnection,UNO_QUERY);
-                                if(xSup.is())
-                                    xNameAccess = xSup->getQueries();
-                            }
-                            break;
-                        default:
-                            OSL_ENSURE(0,"UNsupported command type found!");
-                    }
-
-                    // check if this name really exists in the name access
-                    if ( xNameAccess.is() && xNameAccess->hasByName( sCommand ) )
-                    {
-                        Reference<XPropertySet> xSourceObject;
-                        xNameAccess->getByName( sCommand ) >>= xSourceObject;
-                        OCopyTableWizard aWizard(getView(),
-                                                 xSourceObject,
-                                                 xSrcConnection,
-                                                 xDestConnection,
-                                                 getNumberFormatter(),
-                                                 getORB());
-                        OCopyTable*         pPage1 = new OCopyTable(&aWizard,COPY, sal_False,OCopyTableWizard::WIZARD_DEF_DATA);
-                        OWizNameMatching*   pPage2 = new OWizNameMatching(&aWizard);
-                        OWizColumnSelect*   pPage3 = new OWizColumnSelect(&aWizard);
-                        OWizNormalExtend*   pPage4 = new OWizNormalExtend(&aWizard);
-
-                        aWizard.AddWizardPage(pPage1);
-                        aWizard.AddWizardPage(pPage2);
-                        aWizard.AddWizardPage(pPage3);
-                        aWizard.AddWizardPage(pPage4);
-                        aWizard.ActivatePage();
-
-                        if (aWizard.Execute() == RET_OK)
-                        {
-                            Reference<XPropertySet> xTable;
-                            switch(aWizard.getCreateStyle())
-                            {
-                                case OCopyTableWizard::WIZARD_DEF:
-                                case OCopyTableWizard::WIZARD_DEF_DATA:
-                                    {
-                                        xTable = aWizard.createTable();
-                                        if(!xTable.is())
-                                            break;
-                                        if(OCopyTableWizard::WIZARD_DEF == aWizard.getCreateStyle())
-                                            break;
-                                    }
-                                case OCopyTableWizard::WIZARD_APPEND_DATA:
-                                    {
-                                        if(!xTable.is())
-                                            xTable = aWizard.createTable();
-                                        if(!xTable.is())
-                                            break;
-
-                                        Reference<XStatement> xStmt; // needed to hold a reference to the statement
-                                        Reference<XPreparedStatement> xPrepStmt;// needed to hold a reference to the statement
-                                        ::rtl::OUString sDestName;
-                                        ::dbaui::composeTableName(xDestConnection->getMetaData(),xTable,sDestName,sal_False);
-
-                                        ODatabaseExport::TPositions aColumnMapping = aWizard.GetColumnPositions();
-                                        // create the sql stmt
-                                        if ( !xSrcRs.is() ) // if not already exists
-                                            xSrcRs = createResultSet(this,
-                                                                    bDispose,
-                                                                    nCommandType,
-                                                                    xSrcConnection,
-                                                                    xSourceObject,
-                                                                    xStmt,
-                                                                    xPrepStmt);
-                                        else
-                                        {
-                                            // here I use the ResultSet directly so I have to adjust
-                                            // the column mapping given by the wizard, because the resultset could use
-                                            // another order of the columns
-                                            Reference< XColumnLocate> xLocate(xSrcRs,UNO_QUERY);
-                                            Reference<XColumnsSupplier> xSrcColsSup(xSourceObject,UNO_QUERY);
-                                            OSL_ENSURE(xSrcColsSup.is(),"No source columns!");
-                                            Reference<XNameAccess> xNameAccess = xSrcColsSup->getColumns();
-                                            Sequence< ::rtl::OUString> aSeq = xNameAccess->getElementNames();
-                                            const ::rtl::OUString* pBegin = aSeq.getConstArray();
-                                            const ::rtl::OUString* pEnd   = pBegin + aSeq.getLength();
-
-                                            ::std::vector<sal_Int32> aNewColMapping;
-                                            aNewColMapping.resize( aColumnMapping.size() ,CONTAINER_ENTRY_NOTFOUND);
-
-                                            for(sal_Int32 k = 0;pBegin != pEnd;++pBegin,++k)
-                                            {
-                                                sal_Int32 nColPos = xLocate->findColumn(*pBegin) -1;
-                                                if ( nColPos >= 0 )
-                                                    //  aNewColMapping[k] = aColumnMapping[nColPos];
-                                                    aNewColMapping[nColPos] = aColumnMapping[k];
-                                            }
-                                            aColumnMapping = aNewColMapping;
-                                            // position the resultset before the first row
-                                            if ( !xSrcRs->isBeforeFirst() )
-                                                xSrcRs->beforeFirst();
-                                        }
-                                        // now insert the rows into the new table
-                                        // we couldn't use the rowset here because it could happen that we haven't a primary key
-                                        insertRows( xSrcRs,
-                                                    aColumnMapping,
-                                                    xTable,
-                                                    xDestConnection->getMetaData(),
-                                                    aWizard.SetAutoincrement(),
-                                                    aSelection);
-                                    }
-                                    break;
-                                case OCopyTableWizard::WIZARD_DEF_VIEW:
-                                    xTable = aWizard.createView();
-                                    break;
-                                default:
-                                    break;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        switch(nCommandType)
-                        {
-                            case CommandType::TABLE:
-                                break;
-                            case CommandType::QUERY:
-                                break;
-                        }
-                        showError(SQLException(String(ModuleRes(STR_NO_TABLE_FORMAT_INSIDE)),*this,::rtl::OUString::createFromAscii("S1000") ,0,Any()));
-                    }
-                    if(bDispose)
-                        ::comphelper::disposeComponent(xSrcConnection);
-                }
-            }
-            else if(_rPasteData.HasFormat(SOT_FORMATSTR_ID_HTML) || _rPasteData.HasFormat(SOT_FORMATSTR_ID_HTML_SIMPLE) || _rPasteData.HasFormat(SOT_FORMAT_RTF))
-            {
                 // first get the dest connection
                 Reference<XConnection> xDestConnection;  // supports the service sdb::connection
                 if(!ensureConnection(_pApplyTo, xDestConnection))
                     return;
 
-                SotStorageStreamRef aStream;
-                Reference<XEventListener> xEvt;
-                ODatabaseImportExport* pImport = NULL;
-                if(_rPasteData.HasFormat(SOT_FORMATSTR_ID_HTML) || _rPasteData.HasFormat(SOT_FORMATSTR_ID_HTML_SIMPLE))
-                {
-                    const_cast<TransferableDataHelper&>(_rPasteData).GetSotStorageStream(_rPasteData.HasFormat(SOT_FORMATSTR_ID_HTML) ? SOT_FORMATSTR_ID_HTML : SOT_FORMATSTR_ID_HTML_SIMPLE,aStream);
-                        // TODO: why are the GetXXX methods not const???
+                Reference<XConnection> xSrcConnection;
+                ::rtl::OUString sCommand,sSrcDataSourceName;
+                _rPasteData[daDataSource]       >>= sSrcDataSourceName;
+                _rPasteData[daCommand]          >>= sCommand;
+                _rPasteData[daConnection]       >>= xSrcConnection;
 
-                    pImport = new OHTMLImportExport(xDestConnection,getNumberFormatter(),getORB());
+                // get the source connection
+                sal_Bool bDispose = sal_False;
+                if(sSrcDataSourceName == aDSName)
+                    xSrcConnection = xDestConnection;
+                else if(!xSrcConnection.is())
+                {
+                    Reference< XEventListener> xEvt(static_cast< ::cppu::OWeakObject*>(this), UNO_QUERY);
+                    showError(::dbaui::createConnection(sSrcDataSourceName,m_xDatabaseContext,getORB(),xEvt,xSrcConnection));
+                    bDispose = sal_True;
+                }
+                Reference<XNameAccess> xNameAccess;
+                switch(nCommandType)
+                {
+                    case CommandType::TABLE:
+                        {
+                            // only for tables
+                            Reference<XTablesSupplier> xSup(xSrcConnection,UNO_QUERY);
+                            if(xSup.is())
+                                xNameAccess = xSup->getTables();
+                        }
+                        break;
+                    case CommandType::QUERY:
+                        {
+                            Reference<XQueriesSupplier> xSup(xSrcConnection,UNO_QUERY);
+                            if(xSup.is())
+                                xNameAccess = xSup->getQueries();
+                        }
+                        break;
+                }
+
+                // check if this name really exists in the name access
+                if ( xNameAccess.is() && xNameAccess->hasByName( sCommand ) )
+                {
+                    Reference<XPropertySet> xSourceObject;
+                    xNameAccess->getByName( sCommand ) >>= xSourceObject;
+                    OCopyTableWizard aWizard(getView(),
+                                             xSourceObject,
+                                             xSrcConnection,
+                                             xDestConnection,
+                                             getNumberFormatter(),
+                                             getORB());
+                    OCopyTable*         pPage1 = new OCopyTable(&aWizard,COPY, sal_False,OCopyTableWizard::WIZARD_DEF_DATA);
+                    OWizNameMatching*   pPage2 = new OWizNameMatching(&aWizard);
+                    OWizColumnSelect*   pPage3 = new OWizColumnSelect(&aWizard);
+                    OWizNormalExtend*   pPage4 = new OWizNormalExtend(&aWizard);
+
+                    aWizard.AddWizardPage(pPage1);
+                    aWizard.AddWizardPage(pPage2);
+                    aWizard.AddWizardPage(pPage3);
+                    aWizard.AddWizardPage(pPage4);
+                    aWizard.ActivatePage();
+
+                    if (aWizard.Execute() == RET_OK)
+                    {
+                        Reference<XPropertySet> xTable;
+                        switch(aWizard.getCreateStyle())
+                        {
+                            case OCopyTableWizard::WIZARD_DEF:
+                            case OCopyTableWizard::WIZARD_DEF_DATA:
+                                {
+                                    xTable = aWizard.createTable();
+                                    if(!xTable.is())
+                                        break;
+                                    if(OCopyTableWizard::WIZARD_DEF == aWizard.getCreateStyle())
+                                        break;
+                                }
+                            case OCopyTableWizard::WIZARD_APPEND_DATA:
+                                {
+                                    if(!xTable.is())
+                                        xTable = aWizard.createTable();
+                                    if(!xTable.is())
+                                        break;
+
+                                    Reference<XStatement> xStmt; // needed to hold a reference to the statement
+                                    Reference<XPreparedStatement> xPrepStmt;// needed to hold a reference to the statement
+                                    ::rtl::OUString sDestName;
+                                    ::dbaui::composeTableName(xDestConnection->getMetaData(),xTable,sDestName,sal_False);
+
+                                    ::std::vector<sal_Int32> aColumnMapping = aWizard.GetColumnPositions();
+                                    // create the sql stmt
+                                    if ( !xSrcRs.is() ) // if not already exists
+                                        xSrcRs = createResultSet(this,
+                                                                bDispose,
+                                                                nCommandType,
+                                                                xSrcConnection,
+                                                                xSourceObject,
+                                                                xStmt,
+                                                                xPrepStmt);
+                                    else
+                                    {
+                                        // here I use the ResultSet directly so I have to adjust
+                                        // the column mapping given by the wizard, because the resultset could use
+                                        // another order of the columns
+                                        Reference< XColumnLocate> xLocate(xSrcRs,UNO_QUERY);
+                                        Reference<XColumnsSupplier> xSrcColsSup(xSourceObject,UNO_QUERY);
+                                        OSL_ENSURE(xSrcColsSup.is(),"No source columns!");
+                                        Reference<XNameAccess> xNameAccess = xSrcColsSup->getColumns();
+                                        Sequence< ::rtl::OUString> aSeq = xNameAccess->getElementNames();
+                                        const ::rtl::OUString* pBegin = aSeq.getConstArray();
+                                        const ::rtl::OUString* pEnd   = pBegin + aSeq.getLength();
+
+                                        ::std::vector<sal_Int32> aNewColMapping;
+                                        aNewColMapping.resize( aColumnMapping.size() ,CONTAINER_ENTRY_NOTFOUND);
+
+                                        for(sal_Int32 k = 0;pBegin != pEnd;++pBegin,++k)
+                                        {
+                                            sal_Int32 nColPos = xLocate->findColumn(*pBegin) -1;
+                                            if ( nColPos >= 0 )
+                                                //  aNewColMapping[k] = aColumnMapping[nColPos];
+                                                aNewColMapping[nColPos] = aColumnMapping[k];
+                                        }
+                                        aColumnMapping = aNewColMapping;
+                                        // position the resultset before the first row
+                                        if ( !xSrcRs->isBeforeFirst() )
+                                            xSrcRs->beforeFirst();
+                                    }
+                                    // now insert the rows into the new table
+                                    // we couldn't use the rowset here because it could happen that we haven't a primary key
+                                    insertRows( xSrcRs,
+                                                aColumnMapping,
+                                                xTable,
+                                                xDestConnection->getMetaData(),
+                                                aWizard.SetAutoincrement(),
+                                                aSelection);
+                                }
+                                break;
+                            case OCopyTableWizard::WIZARD_DEF_VIEW:
+                                xTable = aWizard.createView();
+                                break;
+                            default:
+                                break;
+                        }
+                    }
                 }
                 else
                 {
-                    const_cast<TransferableDataHelper&>(_rPasteData).GetSotStorageStream(SOT_FORMAT_RTF,aStream);
-                        // TODO: why are the GetXXX methods not const???
-                    pImport = new ORTFImportExport(xDestConnection,getNumberFormatter(),getORB());
+                    switch(nCommandType)
+                    {
+                        case CommandType::TABLE:
+                            break;
+                        case CommandType::QUERY:
+                            break;
+                    }
+                    showError(SQLException(String(ModuleRes(STR_NO_TABLE_FORMAT_INSIDE)),*this,::rtl::OUString::createFromAscii("S1000") ,0,Any()));
                 }
-                xEvt = pImport;
-                SvStream* pStream = (SvStream*)(SotStorageStream*)aStream;
-                pImport->setStream(pStream);
-                if(!pImport->Read())
-                    throw SQLException(String(ModuleRes(STR_NO_TABLE_FORMAT_INSIDE)),*this,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("S1000")) ,0,Any());
+                if(bDispose)
+                    ::comphelper::disposeComponent(xSrcConnection);
             }
             else
                 DBG_ERROR("SbaTableQueryBrowser::implPasteTable: invalid call (no supported format found)!");
@@ -847,7 +814,29 @@ namespace dbaui
             OSL_ENSURE(sal_False, "SbaTableQueryBrowser::implPasteTable: caught a generic exception!");
         }
     }
+    // -----------------------------------------------------------------------------
+    sal_Bool SbaTableQueryBrowser::copyHtmlRtfTable(DropDescriptor& _rDesc, sal_Bool _bCheck)
+    {
+        // first get the dest connection
+        Reference<XConnection> xDestConnection;  // supports the service sdb::connection
+        if(!ensureConnection(_rDesc.pDroppedAt, xDestConnection))
+            return sal_False;
 
+        Reference<XEventListener> xEvt;
+        ODatabaseImportExport* pImport = NULL;
+        if ( _rDesc.bHtml )
+            pImport = new OHTMLImportExport(xDestConnection,getNumberFormatter(),getORB());
+        else
+            pImport = new ORTFImportExport(xDestConnection,getNumberFormatter(),getORB());
+
+        xEvt = pImport;
+        SvStream* pStream = (SvStream*)(SotStorageStream*)_rDesc.aHtmlRtfStorage;
+        if ( _bCheck )
+            pImport->enableCheckOnly();
+
+        pImport->setStream(pStream);
+        return pImport->Read();
+    }
     // -----------------------------------------------------------------------------
     TransferableHelper* SbaTableQueryBrowser::implCopyObject( SvLBoxEntry* _pApplyTo, sal_Int32 _nCommandType, sal_Bool _bAllowConnection )
     {
@@ -875,12 +864,12 @@ namespace dbaui
         }
         return NULL;
     }
-    /// unary_function Functor object for class ZZ returntype is void
-    struct DataFlavorExVectorSlotPrec : ::std::unary_function<DataFlavorExVector::value_type,bool>
+    /// unary_function Functor object for class DataFlavorExVector::value_type returntype is bool
+    struct SupportedSotFunctor : ::std::unary_function<DataFlavorExVector::value_type,bool>
     {
         SbaTableQueryBrowser::EntryType eEntryType;
         sal_Bool    bQueryDrop;
-        DataFlavorExVectorSlotPrec(const SbaTableQueryBrowser::EntryType &_eEntryType,sal_Bool _bQueryDrop)
+        SupportedSotFunctor(const SbaTableQueryBrowser::EntryType &_eEntryType,sal_Bool _bQueryDrop)
             : eEntryType(_eEntryType)
             , bQueryDrop(_bQueryDrop)
         {
@@ -934,11 +923,25 @@ namespace dbaui
         m_nAsyncDrop = 0;
 
         if (m_aAsyncDrop.bTable)
-            implPasteTable(m_aAsyncDrop.pDroppedAt, m_aAsyncDrop.aDroppedData);
+        {
+            if ( m_aAsyncDrop.aHtmlRtfStorage.Is() )
+            {
+                copyHtmlRtfTable(m_aAsyncDrop,sal_False);
+                m_aAsyncDrop.aHtmlRtfStorage = NULL;
+                // we now have to delete the temp file created in executeDrop
+                INetURLObject aURL;
+                aURL.SetURL(m_aAsyncDrop.aUrl);
+                ::utl::UCBContentHelper::Kill(aURL.GetMainURL(INetURLObject::NO_DECODE));
+            }
+            else if ( !m_aAsyncDrop.bError )
+                implPasteTable(m_aAsyncDrop.pDroppedAt, m_aAsyncDrop.aDroppedData);
+            else
+                showError(SQLException(String(ModuleRes(STR_NO_TABLE_FORMAT_INSIDE)),*this,::rtl::OUString::createFromAscii("S1000") ,0,Any()));
+        }
         else
             implPasteQuery(m_aAsyncDrop.pDroppedAt, m_aAsyncDrop.aDroppedData);
 
-        m_aAsyncDrop.aDroppedData   = TransferableDataHelper();
+        m_aAsyncDrop.aDroppedData.clear();
         m_aAsyncDrop.pDroppedAt     = NULL;
 
         return 0L;
@@ -964,19 +967,59 @@ namespace dbaui
         if (m_nAsyncDrop)
             Application::RemoveUserEvent(m_nAsyncDrop);
         m_nAsyncDrop = 0;
-        m_aAsyncDrop.aDroppedData   = TransferableDataHelper();
+        m_aAsyncDrop.aDroppedData.clear();
         m_aAsyncDrop.pDroppedAt     = NULL;
         m_aAsyncDrop.bTable         = sal_False;
+        m_aAsyncDrop.bError         = sal_False;
+        m_aAsyncDrop.bHtml          = sal_False;
+
 
         // loop through the available formats and see what we can do ...
-        if(::std::find_if(aDroppedData.GetDataFlavorExVector().begin(),aDroppedData.GetDataFlavorExVector().end(),DataFlavorExVectorSlotPrec(eEntryType,sal_False)) != aDroppedData.GetDataFlavorExVector().end())
+        // first we have to check if it is our own format, if not we have to copy the stream :-(
+        if ( ODataAccessObjectTransferable::canExtractObjectDescriptor(aDroppedData.GetDataFlavorExVector()) )
         {
-            m_aAsyncDrop.aDroppedData   = aDroppedData;
+            m_aAsyncDrop.aDroppedData   = ODataAccessObjectTransferable::extractObjectDescriptor(aDroppedData);
             m_aAsyncDrop.pDroppedAt     = pHitEntry;
             m_aAsyncDrop.bTable         = (etTableContainer == eEntryType);
 
+            // asyncron because we some dialogs and we aren't allowed to show them while in D&D
             m_nAsyncDrop = Application::PostUserEvent(LINK(this, SbaTableQueryBrowser, OnAsyncDrop));
             return DND_ACTION_COPY;
+        }
+        else
+        {
+            sal_Bool bHtml = aDroppedData.HasFormat(SOT_FORMATSTR_ID_HTML) || aDroppedData.HasFormat(SOT_FORMATSTR_ID_HTML_SIMPLE);
+            if ( bHtml || aDroppedData.HasFormat(SOT_FORMAT_RTF))
+            {
+                if ( bHtml )
+                    const_cast<TransferableDataHelper&>(aDroppedData).GetSotStorageStream(aDroppedData.HasFormat(SOT_FORMATSTR_ID_HTML) ? SOT_FORMATSTR_ID_HTML : SOT_FORMATSTR_ID_HTML_SIMPLE,m_aAsyncDrop.aHtmlRtfStorage);
+                else
+                    const_cast<TransferableDataHelper&>(aDroppedData).GetSotStorageStream(SOT_FORMAT_RTF,m_aAsyncDrop.aHtmlRtfStorage);
+
+                m_aAsyncDrop.pDroppedAt     = pHitEntry;
+                m_aAsyncDrop.bTable         = (etTableContainer == eEntryType);
+                m_aAsyncDrop.bHtml          = bHtml;
+                m_aAsyncDrop.bError         = !copyHtmlRtfTable(m_aAsyncDrop,sal_True);
+
+                if ( !m_aAsyncDrop.bError && m_aAsyncDrop.aHtmlRtfStorage.Is() )
+                {
+                    // now we need to copy the stream
+                    ::utl::TempFile aTmp;
+                    aTmp.EnableKillingFile(sal_False);
+                    m_aAsyncDrop.aUrl = aTmp.GetURL();
+                    SotStorageStreamRef aNew = new SotStorageStream( aTmp.GetFileName() );
+                    m_aAsyncDrop.aHtmlRtfStorage->Seek(STREAM_SEEK_TO_BEGIN);
+                    m_aAsyncDrop.aHtmlRtfStorage->CopyTo( aNew );
+                    aNew->Commit();
+                    m_aAsyncDrop.aHtmlRtfStorage = aNew;
+                }
+                else
+                    m_aAsyncDrop.aHtmlRtfStorage = NULL;
+
+                // asyncron because we some dialogs and we aren't allowed to show them while in D&D
+                m_nAsyncDrop = Application::PostUserEvent(LINK(this, SbaTableQueryBrowser, OnAsyncDrop));
+                return DND_ACTION_COPY;
+            }
         }
 
         return DND_ACTION_NONE;
@@ -1249,7 +1292,7 @@ namespace dbaui
         {
             case etQuery:
             case etQueryContainer:
-                implPasteQuery(_pEntry, getViewClipboard());
+                implPasteQuery(_pEntry, ODataAccessObjectTransferable::extractObjectDescriptor(getViewClipboard()));
                 break;
 
             case etView:
@@ -1302,6 +1345,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.42  2002/05/23 12:32:39  fs
+ *  use the (member) view clipboard instead of an explicitly created one - during #99030#
+ *
  *  Revision 1.41  2002/05/23 11:00:10  oj
  *  #99407# check columns to set
  *
