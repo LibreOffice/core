@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pluby $ $Date: 2000-11-01 22:12:32 $
+ *  last change: $Author: pluby $ $Date: 2000-11-02 06:43:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,9 @@
 #endif
 #ifndef _SV_SALGDI_HXX
 #include <salgdi.hxx>
+#endif
+#ifndef _SV_VCLGRAPHICS_H
+#include <VCLGraphics.h>
 #endif
 
 
@@ -187,6 +190,9 @@ void SalGraphics::DrawPixel( long nX, long nY, SalColor nSalColor )
 
 void SalGraphics::DrawLine( long nX1, long nY1, long nX2, long nY2 )
 {
+    VCLVIEW hView = maGraphicsData.mhDC;
+    if ( hView )
+        VCLGraphics_drawLine( hView, nX1, nY1, nX2, nY2 );
 }
 
 // -----------------------------------------------------------------------

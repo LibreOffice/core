@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pluby $ $Date: 2000-11-01 22:12:34 $
+ *  last change: $Author: pluby $ $Date: 2000-11-02 06:43:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,9 @@
 #endif
 #ifndef _SV_VCLWINDOW_H
 #include <VCLWindow.h>
+#endif
+#ifndef _SV_VCLGRAPHICS_H
+#include <VCLGraphics.h>
 #endif
 
 // =======================================================================
@@ -179,6 +182,16 @@ void SalFrame::Show( BOOL bVisible )
         VCLWindow_makeKeyAndOrderFront( maFrameData.mhWnd );
     else
         VCLWindow_close( maFrameData.mhWnd );
+
+    // This is temporary code for testing only and should be removed when
+    // development of the SalObject class is complete. This code allows
+    // us to test our SalGraphics drawing methods.
+
+    // Get this window's cached handle to its native content view
+    VCLVIEW hView = VCLWindow_contentView( maFrameData.mhWnd );
+
+    // Draw a line on the native content view
+    VCLGraphics_drawLine( hView, 0L, 0L, 1000L, 1000L );
 }
 
 // -----------------------------------------------------------------------
