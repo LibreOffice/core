@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshe3.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: kz $ $Date: 2004-11-27 14:42:26 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 14:23:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,9 +177,6 @@
 #ifndef SD_OUTLINE_VIEW_SHELL_HXX
 #include "OutlineViewShell.hxx"
 #endif
-#ifndef SD_PREVIEW_WINDOW_HXX
-#include "PreviewWindow.hxx"
-#endif
 #ifndef SD_SLIDE_VIEW_SHELL_HXX
 #include "SlideViewShell.hxx"
 #endif
@@ -193,9 +190,6 @@
 #include "sdpage.hxx"
 #include "unoaprms.hxx"                 // Undo-Action
 #include "sdundogr.hxx"                 // Undo Gruppe
-#ifndef SD_PREVIEW_CHILD_WINDOW_HXX
-#include "PreviewChildWindow.hxx"
-#endif
 #ifndef SD_WINDOW_HXX
 #include "Window.hxx"
 #endif
@@ -209,6 +203,7 @@
 #ifndef SD_OUTLINER_HXX
 #include "Outliner.hxx"
 #endif
+#include "sdresid.hxx"
 
 // #96090#
 #ifndef _SVXIDS_HXX
@@ -1169,58 +1164,6 @@ void  ViewShell::GetMenuState( SfxItemSet &rSet )
         {
             rSet.DisableItem(SID_REDO);
         }
-    }
-}
-
-
-void ViewShell::SetPreview( bool bVisible )
-{
-    DBG_ASSERT( GetViewFrame(), "FATAL: no viewframe?" );
-    DBG_ASSERT( GetActiveWindow(), "FATAL: no window?" );
-
-    if( GetViewFrame() && GetActiveWindow() )
-    {
-        if ( ! bVisible)
-            mpWindowUpdater->UnregisterPreview ();
-        if (GetViewFrame()->KnowsChildWindow(
-            PreviewChildWindow::GetChildWindowId()))
-        {
-            GetViewFrame()->SetChildWindow(
-                PreviewChildWindow::GetChildWindowId(), bVisible,false);
-        }
-        if (bVisible)
-            mpWindowUpdater->RegisterPreview ();
-
-        const StyleSettings& rStyleSettings = GetActiveWindow()->GetSettings().GetStyleSettings();
-
-        sal_uInt16 nPreviewSlot;
-
-        SvtAccessibilityOptions aAccOptions;
-
-        if( GetViewFrame()->GetDispatcher() )
-        {
-            if( rStyleSettings.GetHighContrastMode() && aAccOptions.GetIsForPagePreviews() )
-            {
-                nPreviewSlot = SID_PREVIEW_QUALITY_CONTRAST;
-            }
-            else
-            {
-                nPreviewSlot = SID_PREVIEW_QUALITY_COLOR;
-            }
-
-            GetViewFrame()->GetDispatcher()->Execute( nPreviewSlot, SFX_CALLMODE_ASYNCHRON );
-        }
-
-        if (bVisible)
-            UpdatePreview (GetActualPage());
-
-        SfxBindings& rBindings = GetViewFrame()->GetBindings();
-        rBindings.Invalidate(SID_PREVIEW_WIN);
-        rBindings.Invalidate(SID_PREVIEW_QUALITY_COLOR);
-        rBindings.Invalidate(SID_PREVIEW_QUALITY_GRAYSCALE);
-        rBindings.Invalidate(SID_PREVIEW_QUALITY_BLACKWHITE);
-        rBindings.Invalidate(SID_PREVIEW_QUALITY_CONTRAST);
-
     }
 }
 
