@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: obo $ $Date: 2004-03-19 14:50:27 $
+#   last change: $Author: rt $ $Date: 2004-05-03 09:00:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,7 +82,7 @@ ENABLE_EXCEPTIONS=TRUE
 SHL1OBJS=  \
     $(SLO)$/osl_Thread.obj
 
-SHL1TARGET= Thread
+SHL1TARGET= osl_Thread
 SHL1STDLIBS=\
    $(SALLIB) 
 .IF "$(GUI)" == "WNT"
@@ -130,12 +130,13 @@ OBJ3FILES=$(OBJ)$/osl_process_child.obj
 APP3TARGET=osl_process_child
 APP3OBJS=$(OBJ3FILES)
 
-.IF "$(GUI)" == "UNX"
-APP3STDLIBS=$(LB)$/libsal.so
-.ENDIF
-.IF "$(GUI)" == "WNT"
-APP3STDLIBS=kernel32.lib $(LB)$/isal.lib
-.ENDIF
+# .IF "$(GUI)" == "UNX"
+# APP3STDLIBS=$(LB)$/libsal.so
+# .ENDIF
+# .IF "$(GUI)" == "WNT"
+# APP3STDLIBS=kernel32.lib $(LB)$/isal.lib
+# .ENDIF
+APP3STDLIBS=$(SALLIB)
 
 #.ENDIF # "$(GUI)" == "WNT"
 
