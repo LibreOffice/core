@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tblrwcl.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:43:58 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 14:49:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1225,8 +1225,8 @@ BOOL SwTable::SplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, USHORT nCnt,
 
         // Hoehe der Line beachten, gegebenenfalls neu setzen
         SwFmtFrmSize aFSz( pInsLine->GetFrmFmt()->GetFrmSize() );
-        if ( bSameHeight && ATT_VAR_SIZE == aFSz.GetSizeType() )
-            aFSz.SetSizeType( ATT_MIN_SIZE );
+        if ( bSameHeight && ATT_VAR_SIZE == aFSz.GetHeightSizeType() )
+            aFSz.SetHeightSizeType( ATT_MIN_SIZE );
 
         BOOL bChgLineSz = 0 != aFSz.GetHeight() || bSameHeight;
         if ( bChgLineSz )
