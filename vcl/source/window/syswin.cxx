@@ -2,9 +2,9 @@
  *
  *  $RCSfile: syswin.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: th $ $Date: 2001-08-28 11:05:45 $
+ *  last change: $Author: pl $ $Date: 2001-11-15 18:44:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -462,7 +462,7 @@ static void ImplWindowStateFromStr( WindowStateData& rData, const ByteString& rS
     {
         // 91625 - ignore Minimize
         ULONG nState = (ULONG)aTokenStr.ToInt32();
-        nState &= ~(WINDOWSTATE_STATE_MINIMIZED | WINDOWSTATE_STATE_ROLLUP);
+        nState &= ~(WINDOWSTATE_STATE_MINIMIZED);
         rData.SetState( nState );
         nValidMask |= WINDOWSTATE_MASK_STATE;
     }
@@ -495,7 +495,7 @@ static void ImplWindowStateToStr( const WindowStateData& rData, ByteString& rStr
     {
         // 91625 - ignore Minimize
         ULONG nState = rData.GetState();
-        nState &= ~(WINDOWSTATE_STATE_MINIMIZED | WINDOWSTATE_STATE_ROLLUP);
+        nState &= ~(WINDOWSTATE_STATE_MINIMIZED);
         rStr.Append( ByteString::CreateFromInt32( (long)nState ) );
     }
     rStr.Append( ';' );
@@ -527,7 +527,7 @@ void SystemWindow::SetWindowStateData( const WindowStateData& rData )
         aState.mnWidth  = rData.GetWidth();
         aState.mnHeight = rData.GetHeight();
         // 91625 - ignore Minimize
-        nState &= ~(WINDOWSTATE_STATE_MINIMIZED | WINDOWSTATE_STATE_ROLLUP);
+        nState &= ~(WINDOWSTATE_STATE_MINIMIZED);
         aState.mnState  = nState & SAL_FRAMESTATE_SYSTEMMASK;
         mpFrame->SetWindowState( &aState );
 #else
@@ -554,17 +554,31 @@ void SystemWindow::SetWindowStateData( const WindowStateData& rData )
             nPosSize |= WINDOW_POSSIZE_WIDTH;
         if ( nValidMask & WINDOWSTATE_MASK_HEIGHT )
             nPosSize |= WINDOW_POSSIZE_HEIGHT;
-        SetPosSizePixel( rData.GetX(), rData.GetY(), rData.GetWidth(), rData.GetHeight(), nPosSize );
+        long nX         = rData.GetX();
+        long nY         = rData.GetY();
+        long nWidth     = rData.GetWidth();
+        long nHeight    = rData.GetHeight();
+        const SalFrame::Geometry& rGeom( pWindow->mpFrame->GetGeometry() );
+        if( nX < 0 )
+            nX = 0;
+        if( nX + nWidth > rGeom.nWidth )
+            nX = rGeom.nWidth - nWidth;
+        if( nY < 0 )
+            nY = 0;
+        if( nY + nHeight > rGeom.nHeight )
+            nY = rGeom.nHeight - nHeight;
+        SetPosSizePixel( nX, nY, nWidth, nHeight, nPosSize );
+        maOrgSize = Size( nWidth, nHeight );
 
         // 91625 - ignore Minimize
-        // if ( nValidMask & WINDOWSTATE_MASK_STATE )
-        // {
-        //     ULONG nState = rData.GetState();
-        //     if ( nState & WINDOWSTATE_STATE_ROLLUP )
-        //         RollUp();
-        //     else
-        //         RollDown();
-        // }
+        if ( nValidMask & WINDOWSTATE_MASK_STATE )
+        {
+            ULONG nState = rData.GetState();
+            if ( nState & WINDOWSTATE_STATE_ROLLUP )
+                RollUp();
+            else
+                RollDown();
+        }
     }
 }
 
@@ -601,7 +615,7 @@ void SystemWindow::GetWindowStateData( WindowStateData& rData ) const
             if ( nValidMask & WINDOWSTATE_MASK_STATE )
             {
                 // 91625 - ignore Minimize
-                aState.mnState &= ~(WINDOWSTATE_STATE_MINIMIZED | WINDOWSTATE_STATE_ROLLUP);
+                aState.mnState &= ~(WINDOWSTATE_STATE_MINIMIZED);
                 rData.SetState( aState.mnState );
             }
         }
@@ -621,9 +635,11 @@ void SystemWindow::GetWindowStateData( WindowStateData& rData ) const
         Size    aSize = GetSizePixel();
         ULONG   nState = 0;
 
-        // 91625 - ignore Minimize
-        // if ( IsRollUp() )
-        //    nState |= WINDOWSTATE_STATE_ROLLUP;
+        if ( IsRollUp() )
+        {
+            aSize = maOrgSize;
+            nState |= WINDOWSTATE_STATE_ROLLUP;
+        }
 
         if ( nValidMask & WINDOWSTATE_MASK_X )
             rData.SetX( aPos.X() );
