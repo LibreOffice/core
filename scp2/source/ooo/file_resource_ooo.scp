@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_resource_ooo.scp,v $
 *
-*  $Revision: 1.5 $
+*  $Revision: 1.6 $
 *
-*  last change: $Author: rt $ $Date: 2004-06-07 08:36:13 $
+*  last change: $Author: kz $ $Date: 2004-06-11 11:58:01 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -98,6 +98,9 @@ STD_RES_FILE( gid_File_Res_Fwe, fwe)
 STD_RES_FILE( gid_File_Res_Gal, gal )
 
 STD_RES_FILE( gid_File_Res_Imp, imp )
+
+STD_RES_FILE( gid_File_Res_Deployment, deployment )
+STD_RES_FILE( gid_File_Res_DeploymentGui, deploymentgui )
 
 STD_RES_FILE( gid_File_Res_Langselect, langselect)
 
