@@ -2,9 +2,9 @@
  *
  *  $RCSfile: importwi.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 14:06:02 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:50:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,7 +199,7 @@ String sCancelButton
     Text[ portuguese ] = "Ca~ncelar";
     Text[ dutch ] = "~Annuleren";
     Text[ swedish ] = "~Avbryt";
-    Text[ greek ] = "~Ακύρωση";
+    Text[ greek ] = "~Άκυρο";
     Text[ dutch ] = "~Annuleren";
     Text[ swedish ] = "~Avbryt";
     Text[ russian ] = "~Ξςμενθςό";
@@ -275,7 +275,7 @@ String sNextButton
     Text[ japanese ] = "ζ¬΅γΈ(~X) >>";
     Text[ korean ] = "λ‹¤μ(~X) >>";
     Text[ chinese_simplified ] = "η»§η»­(~X) >>";
-    Text[ chinese_traditional ] = "ηΉΌηΊ(~X) >>";
+    Text[ chinese_traditional ] = "δΈ‹δΈ€ζ­¥(~X) >>";
     Text[ arabic ] = "~ΗαΚΗαν >>";
     Text[ turkish ] = "έ~leri >>";
     Text[ catalan ] = "C~ontinua >>";
@@ -327,7 +327,7 @@ String sCloseButton
     Text[ English_us ] = "~Close";
     Text[ portuguese ] = "~Fechar";
     Text[ russian ] = "~Ηΰκπϋςό";
-    Text[ greek ] = "Κλείσιμο";
+    Text[ greek ] = "~Κλείσιμο";
     Text[ dutch ] = "~Sluiten";
     Text[ french ] = "Fermer";
     Text[ spanish ] = "~Cerrar";
@@ -362,7 +362,7 @@ String sWelcometextLabel1
     Text[ portuguese ] = "Este AutoPiloto converte documentos em formato StarOffice antigo e Microsoft Office para o novo formato XML do %PRODUCTNAME.";
     Text[ dutch ] = "Deze AutoPiloot converteert oude StarOffice-indelingen en Microsoft Office-documenten naar de nieuwe %PRODUCTNAME XML-indeling.";
     Text[ swedish ] = "Den hδr AutoPiloten konverterar dokument i det gamla StarOffice-formatet och Microsoft Office-dokument till det nya %PRODUCTNAME-XML-formatet.";
-    Text[ greek ] = "Αυτό το πρόγραμμα του ΑυτοΠιλότου εκτελεί την μετατροπή των εγγράφων που δημιουργήθηκαν με κάποια προγενέστερη μορφή του StarOffice και του Microsoft Office σε έγγραφα με τη μορφή %PRODUCTNAME XML.";
+    Text[ greek ] = "Αυτό το πρόγραμμα αυτόματου πιλότου εκτελεί την μετατροπή των εγγράφων που δημιουργήθηκαν με κάποια προγενέστερη μορφή του StarOffice και του Microsoft Office σε έγγραφα με τη μορφή %PRODUCTNAME XML.";
     Text[ dutch ] = "Deze AutoPiloot converteert oude StarOffice-indelingen en Microsoft Office-documenten naar de nieuwe %PRODUCTNAME XML-indeling.";
     Text[ swedish ] = "Den hδr AutoPiloten konverterar dokument i det gamla StarOffice-formatet och Microsoft Office-dokument till det nya %PRODUCTNAME-XML-formatet.";
     Text[ russian ] = "Μΰρςεπ οπεξαπΰησες ρςΰπϋε τξπμΰςϋ StarOffice θ δξκσμενςϋ Microsoft Office β νξβϋι τξπμΰς %PRODUCTNAME XML.";
@@ -401,14 +401,14 @@ String sWelcometextLabel2
     Text[ russian ] = "Οπθ οπεξαπΰηξβΰνθθ δξκσμενςξβ Microsoft, βνεδπεννϋε β νθυ μΰκπξρϋ VBA ςεπÿώς ρβξώ τσνκφθξνΰλόνξρςό.";
     Text[ danish ] = "Vζr opmζrksom pε, at vedhζftede VBA-makroer til Microsoft-dokumenter mister deres funktioner under konverteringen";
     Text[ polish ] = "NaleΏy wziΉζ pod uwagκ, Ώe podczas konwersji dokumentσw Microsoft za³Ήczone makra VBA stracΉ swojΉ funkcjonalnoζ.";
-    Text[ portuguese_brazilian ] = "Por favor note que durante a conversγo dos documentos Microsoft, as macros VBA anexadas perdem sua funcionalidade.";
+    Text[ portuguese_brazilian ] = "Note que durante a conversγo dos documentos Microsoft, as macros VBA anexadas perdem sua funcionalidade.";
     Text[ japanese ] = "Microsoft γƒ‰γ‚­γƒ¥γƒ΅γƒ³γƒγ®ε¤‰ζ›ζ™‚γ«γ€ζ·»δ»γ•γ‚γ VBA γƒγ‚―γƒ­γ®ζ©θƒ½γε¤±γ‚γ‚γªγ„γ‚γ†ζ³¨ζ„γ—γ¦γγ γ•γ„γ€‚";
     Text[ korean ] = "Microsoft Office λ¬Έμ„λ¥Ό λ³€ν™ν•  λ•, μ²¨λ¶€λ VBA λ§¤ν¬λ΅λ” κ·Έ κΈ°λ¥μ„ μƒμ‹¤ν•λ‹¤λ” μ μ— μ μν•μ‹­μ‹μ¤.";
     Text[ chinese_simplified ] = "θ―·ζ‚¨ζ³¨ζ„ε¨θ½¬ζΆ Microsoft ζ–‡ζ΅£ζ—¶ζΊζ–‡ζ΅£ε†…ε« VBA ε®η„εθƒ½ε°±δΌζµε¤±γ€‚";
     Text[ chinese_traditional ] = "θ«‹ζ³¨ζ„ε¨ζ–‡δ»¶θ½‰ζ›ζ ΌεΌζ™‚ Microsoft ζ–‡δ»¶ε…§ε«η„ VBA ε·¨ι›†εθƒ½ε°±ζƒζµε¤±γ€‚";
     Text[ arabic ] = "ΗαΡΜΗΑ γαΗΝΩΙ Γδε ΪδΟ ΚΝζνα γΣΚδΟΗΚ Microsoft Σζέ ΚέήΟ ζΝΟΗΚ ΗαγΗίΡζ VBA ΗαΚν ήΟ Κίζδ γΡέήΙ ζΩνέΚεΗ.";
     Text[ turkish ] = "Lόtfen dikkat ediniz, Microsoft belgelerine iliώtirilmiώ VBA makrolarύ iώlevlerini yitirecektir.";
-    Text[ language_user1 ] = "VBA = Visual Basics for Applications TSM 01.12.00";
+    Text[ language_user1 ] = "; VBA = Visual Basics for Applications TSM 01.12.00";
     Text[ catalan ] = "Si us plau, tingueu en compte que en convertir documents de Microsoft les macros de VBA adjuntes perden la seva funcionalitat.";
     Text[ finnish ] = "Ota huomioon, ettδ Microsoft-asiakirjojen VBA-makrot eivδt enδδ toimi, jos ne muunnetaan.";
     Text[ thai ] = "ΰΈΰΈ£ΰΈΈΰΈ“ΰΈ²ΰΈ«ΰΈ΅ΰΈ²ΰΈΆΰΉ€ΰΈ«ΰΈ•ΰΈΈΰΈ§ΰΉΰΈ²ΰΈΰΈ²ΰΈ£ΰΉΰΈ›ΰΈ¥ΰΈ‡ΰΉ€ΰΈ­ΰΈΰΈªΰΈ²ΰΈ£ΰΉ„ΰΈ΅ΰΉ‚ΰΈ„ΰΈ£ΰΈ‹ΰΈ­ΰΈΰΈ—ΰΉΰΈ—ΰΈµΰΉΰΉΰΈ™ΰΈΰΈ΅ΰΈ²ΰΉ‚ΰΈ„ΰΈ£ VBA ΰΈªΰΈΉΰΈΰΉ€ΰΈªΰΈµΰΈΆΰΈΰΈ²ΰΈ£ΰΈ—ΰΈ³ΰΈ•ΰΈ²ΰΈ΅ΰΈ«ΰΈ™ΰΉ‰ΰΈ²ΰΈ—ΰΈµΰΉ";
@@ -828,7 +828,7 @@ String sGroupnameDefault
     Text[ portuguese ] = "Modelos_importados";
     Text[ dutch ] = "Geοmporteerde_sjablonen";
     Text[ swedish ] = "Importerade_mallar";
-    Text[ greek ] = "Εισαγόμενα_πρότυπα_κειμένου";
+    Text[ greek ] = "Εισαχθέντα_Πρότυπα";
     Text[ dutch ] = "Geοmporteerde_sjablonen";
     Text[ swedish ] = "Importerade_mallar";
     Text[ russian ] = "Θμοξπςθπξβΰννϋε_ψΰαλξνϋ";
@@ -842,7 +842,7 @@ String sGroupnameDefault
     Text[ arabic ] = "ήζΗαΘ_δΥ_γΣΚζΡΟΙ";
     Text[ turkish ] = "Alύnan ήablonlar";
     Text[ catalan ] = "Plantilles de text importades";
-    Text[ language_user1 ] = "Bezeichnet einen Verzeichnis, dass zur Laufzeit angelegt wird";
+    Text[ language_user1 ] = "; Bezeichnet einen Verzeichnis, dass zur Laufzeit angelegt wird";
     Text[ finnish ] = "Tuodut_mallit";
     Text[ thai ] = "ΰΈ™ΰΈ³ΰΉ€ΰΈ‚ΰΉ‰ΰΈ²_ΰΉΰΈ΅ΰΉΰΉΰΈΰΈ_ΰΈ‚ΰΉ‰ΰΈ­ΰΈ„ΰΈ§ΰΈ²ΰΈ΅";
     Text[ czech ] = "ImportovanΓ©_Ε΅ablony";
@@ -1076,7 +1076,7 @@ String sQueryfornewCreation
     Text[ arabic ] = "εα ΚΡνΟ ΕδΤΗΔε ΗαΒδΏ";
     Text[ catalan ] = "Voleu crear-lo ara?";
     Text[ finnish ] = "Haluatko luoda sen nyt?";
-    Text[ language_user1 ] = "Das 'es' bezieht sich auf ein bestimmtes Verzeichnis";
+    Text[ language_user1 ] = "; Das 'es' bezieht sich auf ein bestimmtes Verzeichnis";
     Text[ thai ] = "ΰΈ„ΰΈΈΰΈ“ΰΈ•ΰΉ‰ΰΈ­ΰΈ‡ΰΈΰΈ²ΰΈ£ΰΈªΰΈ£ΰΉ‰ΰΈ²ΰΈ‡ΰΈ΅ΰΈ±ΰΈ™ΰΈ‚ΰΈ“ΰΈ°ΰΈ™ΰΈµΰΉ‰ΰΈ«ΰΈ£ΰΈ·ΰΈ­ΰΉ„ΰΈ΅ΰΉ?";
     Text[ czech ] = "MΓ΅ bΓ½t zaloΕΎen?";
     Text[ hebrew ] = "β€®Χ”ΧΧ ΧΧ™Χ¦Χ•Χ¨ ΧΧ•ΧªΧ•\\Χ” ΧΆΧ›Χ©Χ™Χ•?β€¬";
@@ -1168,7 +1168,7 @@ String sOverwriteallFiles
     Text[ danish ] = "Do you want to overwrite documents without query";
     Text[ swedish ] = "Vill du att dokument ska skrivas φver utan att du blir tillfrεgad fφrst?";
     Text[ polish ] = "Do you want to overwrite documents without query";
-    Text[ portuguese_brazilian ] = "Do you want to overwrite documents without query";
+    Text[ portuguese_brazilian ] = "Deseja sobrescrever os documentos sem prιvio aviso?";
     Text[ japanese ] = "ηΆΊθªγªγ—γ§γƒ‰γ‚­γƒ¥γƒ΅γƒ³γƒγ«δΈζ›Έγγ—γΎγ™γ‹γ€‚";
     Text[ korean ] = "λ¬Έμ„λ¥Ό ν™•μΈν•μ§€ μ•κ³  κ²Ήμ³μ“°μ‹κ² μµλ‹κΉ?";
     Text[ chinese_simplified ] = "ζ‚¨θ¦ηε»θ―Άι—®θ€η›΄ζ¥ζ”Ήε†™ζ–‡ζ΅£οΌ";
@@ -1200,7 +1200,7 @@ String sreeditMacro
     Text[ danish ] = "Document macro has to be revised";
     Text[ swedish ] = "Dokumentmakro mεste revideras";
     Text[ polish ] = "Document macro has to be revised";
-    Text[ portuguese_brazilian ] = "Document macro has to be revised";
+    Text[ portuguese_brazilian ] = "A macro do documento deve ser revisada";
     Text[ japanese ] = "γƒ‰γ‚­γƒ¥γƒ΅γƒ³γƒγƒγ‚―γƒ­γ‚’η·¨ι›†γ—γªγγ™εΏ…θ¦γγ‚γ‚γΎγ™γ€‚";
     Text[ korean ] = "λ¬Έμ„ macroλ” κµμ •μ„ ν•„μ”λ΅ ν•©λ‹λ‹¤.";
     Text[ chinese_simplified ] = "εΏ…ι΅»ι‡ζ–°ηΌ–θΎ‘ζ–‡ζ΅£ε®";
@@ -1231,7 +1231,7 @@ String scouldNotsaveDocument
     Text[ danish ] = "Document '<1>' could not be saved";
     Text[ swedish ] = "Det gick inte att spara dokument '<1>'";
     Text[ polish ] = "Document '<1>' could not be saved";
-    Text[ portuguese_brazilian ] = "Document '<1>' could not be saved";
+    Text[ portuguese_brazilian ] = "Nγo foi possνvel salvar o documento '<1>' ";
     Text[ japanese ] = "γƒ‰γ‚­γƒ¥γƒ΅γƒ³γƒ '<1>' γ―δΏε­γ§γγΎγ›γ‚“γ§γ—γγ€‚";
     Text[ korean ] = "λ¬Έμ„ '<1>'μ„(λ¥Ό) μ €μ¥ν•μ§€ λª»ν–μµλ‹λ‹¤.";
     Text[ chinese_simplified ] = "ζ— ζ³•ε­η›ζ–‡ζ΅£ '<1>' ";
@@ -1263,7 +1263,7 @@ String scouldNotopenDocument
     Text[ danish ] = "Document '<1>' could not be opened";
     Text[ swedish ] = "Det gick inte att φppna dokument '<1>'";
     Text[ polish ] = "Document '<1>' could not be opened";
-    Text[ portuguese_brazilian ] = "Document '<1>' could not be opened";
+    Text[ portuguese_brazilian ] = "Nγo foi possνvel abrir o documento '<1>' ";
     Text[ japanese ] = "γƒ‰γ‚­γƒ¥γƒ΅γƒ³γƒ '<1>' γ‚’ι–‹γγ“γ¨γγ§γγΎγ›γ‚“γ€‚";
     Text[ korean ] = "λ¬Έμ„ '<1>'μ„(λ¥Ό) μ—΄μ§€ λª»ν–μµλ‹λ‹¤.";
     Text[ chinese_simplified ] = "ζ— ζ³•ζ‰“εΌ€ζ–‡ζ΅£ '<1>' ";
@@ -1324,7 +1324,7 @@ String sConvertError2
     Text[ portuguese ] = "Cancelar AutoPiloto";
     Text[ dutch ] = "AutoPiloot annuleren";
     Text[ swedish ] = "Avbryt Autopiloten";
-    Text[ greek ] = "Ακύρωση του ΑυτοΠιλότου";
+    Text[ greek ] = "Ακύρωση του αυτόματου πιλότου";
     Text[ dutch ] = "AutoPiloot annuleren";
     Text[ swedish ] = "Avbryt Autopiloten";
     Text[ russian ] = "Ξςμενθςό Μΰρςεπ";
@@ -1357,7 +1357,7 @@ String sRTErrorDesc
     Text[ portuguese ] = "Surgiu um erro imprevisto no AutoPiloto.";
     Text[ dutch ] = "Er is een onverwachte fout opgetreden in de AutoPiloot.";
     Text[ swedish ] = "Ett ovδntat fel har uppstεtt i Autopiloten.";
-    Text[ greek ] = "Παρουσιάστηκε ένα μη αναμενόμενο σφάλμα στον ΑυτοΠιλότο.";
+    Text[ greek ] = "Παρουσιάστηκε ένα μη αναμενόμενο σφάλμα στον αυτόματο πιλότο.";
     Text[ dutch ] = "Er is een onverwachte fout opgetreden in de AutoPiloot.";
     Text[ swedish ] = "Ett ovδntat fel har uppstεtt i Autopiloten.";
     Text[ russian ] = "Νεθηβερςνΰÿ ξψθακΰ β Μΰρςεπε.";
@@ -1452,7 +1452,7 @@ String sDialogTitle
     Text[English] = "Document Converter";
     Text[ English_us ] = "Document Converter";
     Text[ portuguese ] = "Conversor de documentos";
-    Text[ greek ] = "Πρόγραμμα μετατροπής εγγράφων";
+    Text[ greek ] = "Μετατροπέας εγγράφων";
     Text[ dutch ] = "Documenten-converter";
     Text[ french ] = "Convertisseur de documents";
     Text[ spanish ] = "Convertidor de documentos";
@@ -1627,7 +1627,7 @@ String sProgressPage5
     Text[ arabic ] = "Κγ ΗαΪΛζΡ Ϊαμ %1";
     Text[ catalan ] = "%1 trobat";
     Text[ finnish ] = "%1 lφydetty";
-    Text[ language_user1 ] = "RB (15.06.01): %1 bezieht sich auf die Anzahl der gefundenen Dokumente bzw. Vorlagen.";
+    Text[ language_user1 ] = "; RB (15.06.01): %1 bezieht sich auf die Anzahl der gefundenen Dokumente bzw. Vorlagen.";
     Text[ thai ] = "ΰΈΰΈ %1 ";
     Text[ czech ] = "%1";
     Text[ hebrew ] = "β€®%1 Χ ΧΧ¦Χβ€¬";
@@ -1642,7 +1642,7 @@ String sReady
     Text[ English_us ] = "Finished";
     Text[ portuguese ] = "Pronto!";
     Text[ russian ] = "Γξςξβξ";
-    Text[ greek ] = "Ολοκληρώθηκε!";
+    Text[ greek ] = "Ολοκληρώθηκε";
     Text[ dutch ] = "Klaar";
     Text[ french ] = "Terminer";
     Text[ spanish ] = "Terminado";
@@ -1711,7 +1711,7 @@ String sXMLTemplateCheckbox_2_
     Text[ portuguese ] = "Modelos de folhas de cαlculo";
     Text[ dutch ] = "Werkbladsjablonen";
     Text[ swedish ] = "Tabellmallar";
-    Text[ greek ] = "Πρότυπα πινάκων";
+    Text[ greek ] = "Πρότυπα υπολογιστικών φύλλων";
     Text[ dutch ] = "Werkbladsjablonen";
     Text[ swedish ] = "Tabellmallar";
     Text[ russian ] = "Ψΰαλξνϋ ύλεκςπξννϋυ ςΰαλθφ";
@@ -1842,7 +1842,7 @@ String sXMLDocumentCheckbox_2_
     Text[ portuguese ] = "Folhas de cαlculo ";
     Text[ dutch ] = "Werkbladdocumenten";
     Text[ swedish ] = "Tabelldokument";
-    Text[ greek ] = "Έγγραφα πινάκων";
+    Text[ greek ] = "Έγγραφα υπολογιστικών φύλλων";
     Text[ dutch ] = "Werkbladdocumenten";
     Text[ swedish ] = "Tabelldokument";
     Text[ russian ] = "Δξκσμενςϋ ύλεκςπξννϋυ ςΰαλθφ";
@@ -1934,10 +1934,10 @@ String sXMLHelperApplications_1
     Text = "Globaldokumente";
     Text[English] = "Master Documents";
     Text[ English_us ] = "Master documents";
-    Text[ language_user1 ] = "EM(1.2.01) kommt mitten im Satz vor, deshalb kleingeschr auf Eng. Zustδndig ist BC/Extras.";
+    Text[ language_user1 ] = "; EM(1.2.01) kommt mitten im Satz vor, deshalb kleingeschr auf Eng. Zustδndig ist BC/Extras.";
     Text[ portuguese ] = "documentos-mestre";
     Text[ russian ] = "Ρξρςΰβνϋε δξκσμενςϋ";
-    Text[ greek ] = "κύρια έγγραφα";
+    Text[ greek ] = "Κύρια έγγραφα";
     Text[ dutch ] = "Masterdocumenten";
     Text[ french ] = "Documents maξtres";
     Text[ spanish ] = "documentos maestros";
@@ -2000,7 +2000,7 @@ String sSourceDocuments
     Text[ English_us ] = "Source documents";
     Text[ portuguese ] = "Documentos fonte";
     Text[ russian ] = "Θρυξδνϋε δξκσμενςϋ";
-    Text[ greek ] = "Sourcedocuments";
+    Text[ greek ] = "Έγγραφα προέλευσης";
     Text[ dutch ] = "Brondocumenten";
     Text[ french ] = "Documents source";
     Text[ spanish ] = "Documentos fuente";
@@ -2032,7 +2032,7 @@ String sTargetDocuments
     Text[ English_us ] = "Target documents";
     Text[ portuguese ] = "Documentos destino";
     Text[ russian ] = "Φελεβϋε δξκσμενςϋ";
-    Text[ greek ] = "Targetdocuments";
+    Text[ greek ] = "Έγγραφα προορισμού";
     Text[ dutch ] = "Doeldocumenten";
     Text[ french ] = "Documents cible";
     Text[ spanish ] = "Documentos destino";
@@ -2063,7 +2063,7 @@ String sCreateLogfile
     Text[ English_us ] = "Create log file";
     Text[ portuguese ] = "Criar ficheiro de registo";
     Text[ russian ] = "Ρξηδΰςό ζσπνΰλ";
-    Text[ greek ] = "Creae Logfile";
+    Text[ greek ] = "Δημιουργία αρχείου καταγραφής";
     Text[ dutch ] = "Logbestand maken";
     Text[ french ] = "Crιer un fichier journal";
     Text[ spanish ] = "Crear archivo de operaciones";
@@ -2113,7 +2113,7 @@ String sLogfileSummary
     Text[ czech ] = "PΕ™evedenΓ½ch dokumentΕ―: <COUNT>";
     Text[ hebrew ] = "β€®<COUNT> ΧΧ΅ΧΧ›Χ™Χ Χ”Χ•ΧΧ¨Χ•β€¬";
     Text[ catalan ] = "<COUNT> documents converted";
-    Text[ portuguese_brazilian ] = "<COUNT> documents converted";
+    Text[ portuguese_brazilian ] = "<COUNT> documentos convertidos";
     Text[ thai ] = "<COUNT> documents converted";
     Text[ hindi ] = "<COUNT> documents converted";
     Text[ slovak ] = "<COUNT> konvertovanΓ½ch dokumentov";
@@ -2128,7 +2128,7 @@ String sLogfileHelpText
     Text[ English_us ] = "A log file will be created in your work directory";
     Text[ portuguese ] = "O ficheiro de registo serα criado na sua pasta de trabalho.";
     Text[ russian ] = "Β βΰψεμ πΰαξχεμ κΰςΰλξγε ασδες ρξηδΰν ζσπνΰλ";
-    Text[ greek ] = "A Logfile will be created within your Working Directory";
+    Text[ greek ] = "Ένα αρχείο καταγραφής θα δημιουργηθεί στον κατάλογο εργασίας";
     Text[ dutch ] = "In uw werkdirectory wordt een logbestand gemaakt.";
     Text[ french ] = "Un fichier journal va κtre crιι dans votre dossier de travail.";
     Text[ spanish ] = "Se crearα un archivo log en el directorio de trabajo.";
@@ -2169,7 +2169,7 @@ String sshowLogfile
     Text[ danish ] = "Show Logfile";
     Text[ swedish ] = "Visa loggfil";
     Text[ polish ] = "Show Logfile";
-    Text[ portuguese_brazilian ] = "Show Logfile";
+    Text[ portuguese_brazilian ] = "Mostrar o arquivo de log";
     Text[ japanese ] = "Log file γ®θ΅¨η¤Ί";
     Text[ korean ] = "λ΅κ·Έ νμΌ ν‘μ‹";
     Text[ chinese_simplified ] = "ζΎη¤Ίζ—¥εΏ—ζ–‡δ»¶";
@@ -2263,7 +2263,7 @@ String sSumSOTextDocuments
     Text[ portuguese ] = "Todos os documentos de texto do %PRODUCTNAME serγo importados do seguinte directσrio:";
     Text[ dutch ] = "Alle %PRODUCTNAME teksten uit de volgende directory worden geοmporteerd:";
     Text[ swedish ] = "Alla %PRODUCTNAME textdokument som finns i fφljande katalog importeras:";
-    Text[ greek ] = "Όλα τα %1 από τον εξής κατάλογο θα εισαχθούν:";
+    Text[ greek ] = "Θα εισαχθούν όλα τα έγγραφα κειμένου %PRODUCTNAME που περιέχονται στον παρακάτω κατάλογο:";
     Text[ dutch ] = "Alle %PRODUCTNAME teksten uit de volgende directory worden geοmporteerd:";
     Text[ swedish ] = "Alla %PRODUCTNAME textdokument som finns i fφljande katalog importeras:";
     Text[ russian ] = "Ασδσς θμοξπςθπξβΰνϋ βρε ςεκρςξβϋε δξκσμενςϋ %PRODUCTNAME θη ρλεδσώωεγξ κΰςΰλξγΰ:";
@@ -2297,7 +2297,7 @@ String sSumSOTableDocuments
     Text[ portuguese ] = "Todas as folhas de cαlculo do %PRODUCTNAME serγo importadas do seguinte directσrio:";
     Text[ dutch ] = "Alle %PRODUCTNAME werkbladen uit de volgende directory worden geοmporteerd:";
     Text[ swedish ] = "Alla %PRODUCTNAME tabelldokument som finns i fφljande katalog importeras:";
-    Text[ greek ] = "Όλα τα %1 από τον εξής κατάλογο θα εισαχθούν:";
+    Text[ greek ] = "Θα εισαχθούν όλα τα υπολογιστικά φύλλα %PRODUCTNAME που περιέχονται στον παρακάτω κατάλογο:";
     Text[ dutch ] = "Alle %PRODUCTNAME werkbladen uit de volgende directory worden geοmporteerd:";
     Text[ swedish ] = "Alla %PRODUCTNAME tabelldokument som finns i fφljande katalog importeras:";
     Text[ russian ] = "Ασδσς θμοξπςθπξβΰνϋ βρε δξκσμενςϋ ύλεκςπξννϋυ ςΰαλθφ %PRODUCTNAME θη ρλεδσώωεγξ κΰςΰλξγΰ:";
@@ -2331,7 +2331,7 @@ String sSumSODrawDocuments
     Text[ portuguese ] = "Todos os desenhos e apresentaηυes do %PRODUCTNAME serγo importados do seguinte directσrio:";
     Text[ dutch ] = "Alle %PRODUCTNAME tekening- en presentatiedocumenten uit de volgende directory worden geοmporteerd:";
     Text[ swedish ] = "Alla %PRODUCTNAME tecknings- och presentationsdokument som finns i fφljande katalog importeras:";
-    Text[ greek ] = "Όλα τα %1 από τον εξής κατάλογο θα εισαχθούν:";
+    Text[ greek ] = "Θα εισαχθούν όλα τα έγγραφα σχεδίασης και παρουσίασης %PRODUCTNAME που περιέχονται στον παρακάτω κατάλογο:";
     Text[ dutch ] = "Alle %PRODUCTNAME tekening- en presentatiedocumenten uit de volgende directory worden geοmporteerd:";
     Text[ swedish ] = "Alla %PRODUCTNAME tecknings- och presentationsdokument som finns i fφljande katalog importeras:";
     Text[ russian ] = "Ασδσς θμοξπςθπξβΰνϋ βρε πθρσνκθ θ οπεηενςΰφθθ %PRODUCTNAME θη ρλεδσώωεγξ κΰςΰλξγΰ:";
@@ -2360,12 +2360,12 @@ String sSumSOMathDocuments
     Text[English] = "All %PRODUCTNAME formula documents in the following directory will be imported:";
     Text[ English_us ] = "All %PRODUCTNAME formula documents contained in the following directory will be imported:";
     Text[ french ] = "Les formules %PRODUCTNAME contenues dans le rιpertoire suivant vont κtre importιes :";
-    Text[ italian ] = "Vengono importati tutte le formule PRODUCTNAME dalla cartella seguente:";
+    Text[ italian ] = "Vengono importate tutte le formule %PRODUCTNAME dalla cartella seguente:";
     Text[ spanish ] = "Se importarαn todos los documentos de fσrmula de %PRODUCTNAME desde el siguiente directorio:";
     Text[ portuguese ] = "Todas as fσrmulas do %PRODUCTNAME serγo importadas do seguinte directσrio:";
     Text[ dutch ] = "Alle %PRODUCTNAME formuledocumenten uit de volgende directory worden geοmporteerd:";
     Text[ swedish ] = "Alla %PRODUCTNAME formeldokument som finns i fφljande katalog importeras:";
-    Text[ greek ] = "Όλα τα %1 από τον εξής κατάλογο θα εισαχθούν:";
+    Text[ greek ] = "Θα εισαχθούν όλα τα έγγραφα τύπων %PRODUCTNAME που περιέχονται στον παρακάτω κατάλογο:";
     Text[ dutch ] = "Alle %PRODUCTNAME formuledocumenten uit de volgende directory worden geοmporteerd:";
     Text[ swedish ] = "Alla %PRODUCTNAME formeldokument som finns i fφljande katalog importeras:";
     Text[ russian ] = "Ασδσς θμοξπςθπξβΰνϋ βρε δξκσμενςϋ τξπμσλ %PRODUCTNAME θη ρλεδσώωεγξ κΰςΰλξγΰ:";
@@ -2399,7 +2399,7 @@ String sSumSOTextTemplates
     Text[ portuguese ] = "Todos os modelos de texto do %PRODUCTNAME serγo importados do seguinte directσrio:";
     Text[ dutch ] = "Alle %PRODUCTNAME tekstsjablonen uit de volgende directory worden geοmporteerd:";
     Text[ swedish ] = "Alla %PRODUCTNAME textmallar som finns i fφljande katalog importeras:";
-    Text[ greek ] = "Όλα τα %1 από τον εξής κατάλογο θα εισαχθούν:";
+    Text[ greek ] = "Θα εισαχθούν όλα τα πρότυπα κειμένου %PRODUCTNAME που περιέχονται στον παρακάτω κατάλογο:";
     Text[ dutch ] = "Alle %PRODUCTNAME tekstsjablonen uit de volgende directory worden geοmporteerd:";
     Text[ swedish ] = "Alla %PRODUCTNAME textmallar som finns i fφljande katalog importeras:";
     Text[ russian ] = "Ασδσς θμοξπςθπξβΰνϋ βρε ςεκρςξβϋε ψΰαλξνϋ %PRODUCTNAME θη ρλεδσώωεγξ κΰςΰλξγΰ:";
@@ -2433,7 +2433,7 @@ String sSumSOTableTemplates
     Text[ portuguese ] = "Todos os modelos de tabelas do %PRODUCTNAME serγo importados do seguinte directσrio:";
     Text[ dutch ] = "Alle %PRODUCTNAME werkbladsjablonen uit de volgende directory worden geοmporteerd:";
     Text[ swedish ] = "Alla %PRODUCTNAME tabellmallar som finns i fφljande katalog importeras:";
-    Text[ greek ] = "Όλα τα %1 από τον εξής κατάλογο θα εισαχθούν:";
+    Text[ greek ] = "Θα εισαχθούν όλα τα πρότυπα πίνακα %PRODUCTNAME που περιέχονται στον παρακάτω κατάλογο:";
     Text[ dutch ] = "Alle %PRODUCTNAME werkbladsjablonen uit de volgende directory worden geοmporteerd:";
     Text[ swedish ] = "Alla %PRODUCTNAME tabellmallar som finns i fφljande katalog importeras:";
     Text[ russian ] = "Ασδσς θμοξπςθπξβΰνϋ βρε ψΰαλξνϋ ύλεκςπξννϋυ ςΰαλθφ %PRODUCTNAME θη ρλεδσώωεγξ κΰςΰλξγΰ:";
@@ -2467,7 +2467,7 @@ String sSumSODrawTemplates
     Text[ portuguese ] = "Todos os modelos de desenhos e apresentaηυes do %PRODUCTNAME serγo importados do seguinte directσrio:";
     Text[ dutch ] = "Alle %PRODUCTNAME Tekening- en Presentatiesjablonen uit de volgende directory worden geοmporteerd:";
     Text[ swedish ] = "Alla %PRODUCTNAME tecknings- och presentationsmallar som finns i fφljande katalog importeras:";
-    Text[ greek ] = "Όλα τα %1 από τον εξής κατάλογο θα εισαχθούν:";
+    Text[ greek ] = "Θα εισαχθούν όλα τα πρότυπα σχεδίασης και παρουσίασης %PRODUCTNAME που περιέχονται στον παρακάτω κατάλογο:";
     Text[ dutch ] = "Alle %PRODUCTNAME Tekening- en Presentatiesjablonen uit de volgende directory worden geοmporteerd:";
     Text[ swedish ] = "Alla %PRODUCTNAME tecknings- och presentationsmallar som finns i fφljande katalog importeras:";
     Text[ russian ] = "Ασδσς θμοξπςθπξβΰνϋ βρε ψΰαλξνϋ πθρσνκξβ θ οπεηενςΰφθι %PRODUCTNAME θη ρλεδσώωεγξ κΰςΰλξγΰ:";
@@ -2500,7 +2500,7 @@ String sSumSOGlobalDocuments
     Text[ portuguese ] = "Todos os documentos-mestre do %PRODUCTNAME serγo importados do seguinte directσrio:";
     Text[ dutch ] = "Alle %PRODUCTNAME masterdocumenten uit de volgende directory worden geοmporteerd:";
     Text[ swedish ] = "Alla %PRODUCTNAME samlingsdokument som finns i fφljande katalog importeras:";
-    Text[ greek ] = "Όλα τα %1 από τον εξής κατάλογο θα εισαχθούν:";
+    Text[ greek ] = "Θα εισαχθούν όλα τα κύρια έγγραφα %PRODUCTNAME που περιέχονται στον παρακάτω κατάλογο:";
     Text[ dutch ] = "Alle %PRODUCTNAME masterdocumenten uit de volgende directory worden geοmporteerd:";
     Text[ swedish ] = "Alla %PRODUCTNAME samlingsdokument som finns i fφljande katalog importeras:";
     Text[ russian ] = "Ασδσς θμοξπςθπξβΰνϋ βρε ρξρςΰβνϋε δξκσμενςϋ %PRODUCTNAME θη ρλεδσώωεγξ κΰςΰλξγΰ:";
@@ -2535,7 +2535,7 @@ String sSumMSTextDocuments
     Text[ portuguese ] = "Todos os documentos Word serγo importados do seguinte directσrio:";
     Text[ dutch ] = "Alle Word-documenten uit de volgende directory worden geοmporteerd:";
     Text[ swedish ] = "Alla Word-dokument som finns i fφljande katalog importeras:";
-    Text[ greek ] = "Όλα τα %1 από τον εξής κατάλογο θα εισαχθούν:";
+    Text[ greek ] = "Θα εισαχθούν όλα τα έγγραφα Word που περιέχονται στον παρακάτω κατάλογο:";
     Text[ dutch ] = "Alle Word-documenten uit de volgende directory worden geοmporteerd:";
     Text[ swedish ] = "Alla Word-dokument som finns i fφljande katalog importeras:";
     Text[ russian ] = "Ασδσς θμοξπςθπξβΰνϋ βρε δξκσμενςϋ Word θη ρλεδσώωεγξ κΰςΰλξγΰ:";
@@ -2569,7 +2569,7 @@ String sSumMSTableDocuments
     Text[ portuguese ] = "Todos os doumentos Excel serγo importados do seguinte directσrio:";
     Text[ dutch ] = "Alle Excel-documenten uit de volgende directory worden geοmporteerd:";
     Text[ swedish ] = "Alla Excel-dokument som finns i fφljande katalog importeras:";
-    Text[ greek ] = "Όλα τα %1 από τον εξής κατάλογο θα εισαχθούν:";
+    Text[ greek ] = "Θα εισαχθούν όλα τα έγγραφα του Excel που περιέχονται στον παρακάτω κατάλογο:";
     Text[ dutch ] = "Alle Excel-documenten uit de volgende directory worden geοmporteerd:";
     Text[ swedish ] = "Alla Excel-dokument som finns i fφljande katalog importeras:";
     Text[ russian ] = "Ασδσς θμοξπςθπξβΰνϋ βρε δξκσμενςϋ Excel θη ρλεδσώωεγξ κΰςΰλξγΰ:";
@@ -2603,7 +2603,7 @@ String sSumMSDrawDocuments
     Text[ portuguese ] = "Todos os documentos PowerPoint serγo importados do seguinte directσrio:";
     Text[ dutch ] = "Alle PowerPoint-documenten uit de volgende directory worden geοmporteerd:";
     Text[ swedish ] = "Alla PowerPoint-dokument som finns i fφljande katalog importeras:";
-    Text[ greek ] = "Όλα τα %1 από τον εξής κατάλογο θα εισαχθούν:";
+    Text[ greek ] = "Θα εισαχθούν όλα τα έγγραφα του PowerPoint που περιέχονται στον παρακάτω κατάλογο:";
     Text[ dutch ] = "Alle PowerPoint-documenten uit de volgende directory worden geοmporteerd:";
     Text[ swedish ] = "Alla PowerPoint-dokument som finns i fφljande katalog importeras:";
     Text[ russian ] = "Ασδσς θμοξπςθπξβΰνϋ βρε δξκσμενςϋ PowerPoint θη ρλεδσώωεγξ κΰςΰλξγΰ:";
@@ -2637,7 +2637,7 @@ String sSumMSTextTemplates
     Text[ portuguese ] = "Todos os modelos Word serγo importados do seguinte directσrio:";
     Text[ dutch ] = "Alle Word-sjablonen uit de volgende directory worden geοmporteerd:";
     Text[ swedish ] = "Alla Word-mallar som finns i fφljande katalog importeras:";
-    Text[ greek ] = "Όλα τα %1 από τον εξής κατάλογο θα εισαχθούν:";
+    Text[ greek ] = "Θα εισαχθούν όλα τα πρότυπα του Word που περιέχονται στον παρακάτω κατάλογο:";
     Text[ dutch ] = "Alle Word-sjablonen uit de volgende directory worden geοmporteerd:";
     Text[ swedish ] = "Alla Word-mallar som finns i fφljande katalog importeras:";
     Text[ russian ] = "Ασδσς θμοξπςθπξβΰνϋ βρε ψΰαλξνϋ Word θη ρλεδσώωεγξ κΰςΰλξγΰ:";
@@ -2671,7 +2671,7 @@ String sSumMSTableTemplates
     Text[ portuguese ] = "Todos os modelos Excel serγo importados do seguinte directσrio:";
     Text[ dutch ] = "Alle Excel-sjablonen uit de volgende directory worden geοmporteerd:";
     Text[ swedish ] = "Alla Excel-mallar som finns i fφljande katalog importeras:";
-    Text[ greek ] = "Όλα τα %1 από τον εξής κατάλογο θα εισαχθούν:";
+    Text[ greek ] = "Θα εισαχθούν όλα τα πρότυπα του Excel που περιέχονται στον παρακάτω κατάλογο:";
     Text[ dutch ] = "Alle Excel-sjablonen uit de volgende directory worden geοmporteerd:";
     Text[ swedish ] = "Alla Excel-mallar som finns i fφljande katalog importeras:";
     Text[ russian ] = "Ασδσς θμοξπςθπξβΰνϋ βρε ψΰαλξνϋ Excel θη ρλεδσώωεγξ κΰςΰλξγΰ:";
@@ -2705,7 +2705,7 @@ String sSumMSDrawTemplates
     Text[ portuguese ] = "Todos os modelos PowerPoint serγo importados do seguinte directσrio:";
     Text[ dutch ] = "Alle PowerPoint-sjablonen uit de volgende directory worden geοmporteerd:";
     Text[ swedish ] = "Alla PowerPoint-mallar som finns i fφljande katalog importeras:";
-    Text[ greek ] = "Όλα τα %1 από τον εξής κατάλογο θα εισαχθούν:";
+    Text[ greek ] = "Θα εισαχθούν όλα τα πρότυπα του PowerPoint που περιέχονται στον παρακάτω κατάλογο:";
     Text[ dutch ] = "Alle PowerPoint-sjablonen uit de volgende directory worden geοmporteerd:";
     Text[ swedish ] = "Alla PowerPoint-mallar som finns i fφljande katalog importeras:";
     Text[ russian ] = "Ασδσς θμοξπςθπξβΰνϋ βρε ψΰαλξνϋ PowerPoint θη ρλεδσώωεγξ κΰςΰλξγΰ:";
@@ -2726,6 +2726,7 @@ String sSumMSDrawTemplates
     Text[ hindi ] = "ΰ¤¨ΰ¤Ώΰ¤®ΰ¥ΰ¤¨ΰ¤²ΰ¤Ώΰ¤–ΰ¤Ώΰ¤¤ ΰ¤΅ΰ¥ΰ¤°ΰ¤•ΰ¥ΰ¤ΰ¤°ΰ¥€ ΰ¤®ΰ¥‡ΰ¤‚ ΰ¤°ΰ¤Ήΰ¤¨ΰ¥‡ΰ¤µΰ¤Ύΰ¤²ΰ¤Ύ ΰ¤Έΰ¤¬ ΰ¤ªΰ¤µΰ¤°ΰ¤ªΰ¥‹ΰ¤‡ΰ¤¨ΰ¥ΰ¤ ΰ¤¨ΰ¤®ΰ¥‚ΰ¤¨ΰ¥‹ΰ¤‚ ΰ¤•ΰ¥‹ ΰ¤†ΰ¤―ΰ¤Ύΰ¤¤ ΰ¤•ΰ¤Ώΰ¤―ΰ¤Ύ ΰ¤ΰ¤Ύΰ¤―ΰ¥‡ΰ¤—ΰ¤Ύ:";
     Text[ slovak ] = "VΕ΅etky Ε΅ablΓ³ny PowerPoint obsiahnutΓ© v nasledujΓΊcom adresΓ΅ri budΓΊ importovanΓ©:";
 };
+
 
 
 
