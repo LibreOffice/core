@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: cmc $ $Date: 2002-02-15 12:42:55 $
+ *  last change: $Author: hr $ $Date: 2002-02-19 15:24:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -395,7 +395,7 @@ BOOL WW8_WrPlcDrawObj::Append( SwWW8Writer& rWrt, WW8_CP nCp,
         void* pPos = new Point( rNdTopLeft );
         aParentPos.Insert( pPos, aParentPos.Count() );
         aShapeIds.Insert( ULONG(0), aShapeIds.Count() );
-        aThick.Insert( USHORT(0), aThick.Count() );
+        aThick.C40_INSERT( SvInt32s, USHORT(0), aThick.Count() );
     }
     return bRet;
 }
