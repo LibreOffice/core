@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport2.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:16:08 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 10:34:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,14 +236,34 @@ void XMLShapeExport::ImpExportNewTrans_FeaturesAndWrite(Vector2D& rTRScale, doub
 
     // svg: width
     if(!(nFeatures & SEF_EXPORT_WIDTH))
+    {
         aTRScale.X() = 1.0;
+    }
+    else
+    {
+        if( aTRScale.X() > 0 )
+            aTRScale.X() -= 1;
+        else if( aTRScale.X() < 0 )
+            aTRScale.X() += 1;
+    }
+
     rExport.GetMM100UnitConverter().convertMeasure(sStringBuffer, FRound(aTRScale.X()));
     aStr = sStringBuffer.makeStringAndClear();
     rExport.AddAttribute(XML_NAMESPACE_SVG, XML_WIDTH, aStr);
 
     // svg: height
     if(!(nFeatures & SEF_EXPORT_HEIGHT))
+    {
         aTRScale.Y() = 1.0;
+    }
+    else
+    {
+        if( aTRScale.Y() > 0 )
+            aTRScale.Y() -= 1;
+        else if( aTRScale.Y() < 0 )
+            aTRScale.Y() += 1;
+    }
+
     rExport.GetMM100UnitConverter().convertMeasure(sStringBuffer, FRound(aTRScale.Y()));
     aStr = sStringBuffer.makeStringAndClear();
     rExport.AddAttribute(XML_NAMESPACE_SVG, XML_HEIGHT, aStr);
@@ -1300,8 +1320,32 @@ void XMLShapeExport::ImpExportConnectorShape(
     awt::Point aStart(0,0);
     awt::Point aEnd(1,1);
 
-    xProps->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("StartPosition"))) >>= aStart;
-    xProps->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("EndPosition"))) >>= aEnd;
+    // --> OD 2004-08-09 #i36248# - Get <StartPositionInHoriL2R> and
+    // <EndPositionInHoriL2R>, if they exist and if the document is exported
+    // into the OpenOffice.org file format.
+    // These properties only exist at service com::sun::star::text::Shape - the
+    // Writer UNO service for shapes.
+    // This code is needed, because the positioning attributes in the
+    // OpenOffice.org file format are given in horizontal left-to-right layout
+    // regardless the layout direction the shape is in. In the OASIS Open Office
+    // file format the positioning attributes are correctly given in the layout
+    // direction the shape is in. Thus, this code provides the conversion from
+    // the OASIS Open Office file format to the OpenOffice.org file format.
+    if ( ( GetExport().getExportFlags() & EXPORT_OASIS ) == 0 &&
+         xProps->getPropertySetInfo()->hasPropertyByName(
+            OUString(RTL_CONSTASCII_USTRINGPARAM("StartPositionInHoriL2R"))) &&
+         xProps->getPropertySetInfo()->hasPropertyByName(
+            OUString(RTL_CONSTASCII_USTRINGPARAM("EndPositionInHoriL2R"))) )
+    {
+        xProps->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("StartPositionInHoriL2R"))) >>= aStart;
+        xProps->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("EndPositionInHoriL2R"))) >>= aEnd;
+    }
+    else
+    {
+        xProps->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("StartPosition"))) >>= aStart;
+        xProps->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("EndPosition"))) >>= aEnd;
+    }
+    // <--
 
     if( pRefPoint )
     {
@@ -1408,11 +1452,32 @@ void XMLShapeExport::ImpExportMeasureShape(
     awt::Point aStart(0,0);
     awt::Point aEnd(1,1);
 
-    uno::Any aAny = xProps->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("StartPosition")));
-    aAny >>= aStart;
-
-    aAny = xProps->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("EndPosition")));
-    aAny >>= aEnd;
+    // --> OD 2004-08-09 #i36248# - Get <StartPositionInHoriL2R> and
+    // <EndPositionInHoriL2R>, if they exist and if the document is exported
+    // into the OpenOffice.org file format.
+    // These properties only exist at service com::sun::star::text::Shape - the
+    // Writer UNO service for shapes.
+    // This code is needed, because the positioning attributes in the
+    // OpenOffice.org file format are given in horizontal left-to-right layout
+    // regardless the layout direction the shape is in. In the OASIS Open Office
+    // file format the positioning attributes are correctly given in the layout
+    // direction the shape is in. Thus, this code provides the conversion from
+    // the OASIS Open Office file format to the OpenOffice.org file format.
+    if ( ( GetExport().getExportFlags() & EXPORT_OASIS ) == 0 &&
+         xProps->getPropertySetInfo()->hasPropertyByName(
+            OUString(RTL_CONSTASCII_USTRINGPARAM("StartPositionInHoriL2R"))) &&
+         xProps->getPropertySetInfo()->hasPropertyByName(
+            OUString(RTL_CONSTASCII_USTRINGPARAM("EndPositionInHoriL2R"))) )
+    {
+        xProps->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("StartPositionInHoriL2R"))) >>= aStart;
+        xProps->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("EndPositionInHoriL2R"))) >>= aEnd;
+    }
+    else
+    {
+        xProps->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("StartPosition"))) >>= aStart;
+        xProps->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("EndPosition"))) >>= aEnd;
+    }
+    // <--
 
     if( pRefPoint )
     {
@@ -1601,7 +1666,8 @@ void XMLShapeExport::ImpExportPageShape(
         {
             sal_Int32 nPageNumber = 0;
             xPropSet->getPropertyValue(aPageNumberStr) >>= nPageNumber;
-            rExport.AddAttribute(XML_NAMESPACE_DRAW, XML_PAGE_NUMBER, OUString::valueOf(nPageNumber));
+            if( nPageNumber )
+                rExport.AddAttribute(XML_NAMESPACE_DRAW, XML_PAGE_NUMBER, OUString::valueOf(nPageNumber));
         }
 
         // a presentation page shape, normally used on notes pages only. If
