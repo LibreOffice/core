@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smres.src,v $
  *
- *  $Revision: 1.101 $
+ *  $Revision: 1.102 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 15:36:14 $
+ *  last change: $Author: kz $ $Date: 2004-05-19 09:04:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -12137,13 +12137,13 @@ FloatingWindow RID_TOOLBOXWINDOW
 
     ImageList IL_UNOP
     {
-        ImageBitmap = Bitmap { File = "un_op.bmp" ; };
+        Prefix = "un";
         MaskColor = IMAGE_STDBTN_COLOR ;
         UNOP_IDLIST
     };
     ImageList  ILH_UNOP
     {
-        ImageBitmap = Bitmap { File = "unh_op.bmp" ; };
+        Prefix = "unh";
         MaskColor = IMAGE_STDBTN_COLOR_HC ;
         UNOP_IDLIST
     };
@@ -12177,13 +12177,13 @@ FloatingWindow RID_TOOLBOXWINDOW
 
     ImageList IL_BIOP
     {
-        ImageBitmap = Bitmap { File = "bi_op.bmp" ; };
+        Prefix = "bi";
         MaskColor = IMAGE_STDBTN_COLOR ;
         BIOP_IDLIST
     };
     ImageList  ILH_BIOP
     {
-        ImageBitmap = Bitmap { File = "bih_op.bmp" ; };
+        Prefix = "bih";
         MaskColor = IMAGE_STDBTN_COLOR_HC ;
         BIOP_IDLIST
     };
@@ -12218,13 +12218,13 @@ FloatingWindow RID_TOOLBOXWINDOW
 
     ImageList IL_OPER
     {
-        ImageBitmap = Bitmap { File = "op_er.bmp" ; };
+        Prefix = "op";
         MaskColor = IMAGE_STDBTN_COLOR ;
         OPER_IDLIST
     };
     ImageList  ILH_OPER
     {
-        ImageBitmap = Bitmap { File = "oph_er.bmp" ; };
+        Prefix = "oph";
         MaskColor = IMAGE_STDBTN_COLOR_HC ;
         OPER_IDLIST
     };
@@ -12262,13 +12262,13 @@ FloatingWindow RID_TOOLBOXWINDOW
 
     ImageList IL_FUNC
     {
-        ImageBitmap = Bitmap { File = "fu_nc.bmp" ; };
+        Prefix = "fu";
         MaskColor = IMAGE_STDBTN_COLOR ;
         FUNC_IDLIST
     };
     ImageList  ILH_FUNC
     {
-        ImageBitmap = Bitmap { File = "fuh_nc.bmp" ; };
+        Prefix = "fuh";
         MaskColor = IMAGE_STDBTN_COLOR_HC ;
         FUNC_IDLIST
     };
@@ -12294,13 +12294,13 @@ FloatingWindow RID_TOOLBOXWINDOW
 
     ImageList IL_FORM
     {
-        ImageBitmap = Bitmap { File = "fo_rm.bmp" ; };
+        Prefix = "fo";
         MaskColor = IMAGE_STDBTN_COLOR ;
         FORM_IDLIST
     };
     ImageList  ILH_FORM
     {
-        ImageBitmap = Bitmap { File = "foh_rm.bmp" ; };
+        Prefix = "foh";
         MaskColor = IMAGE_STDBTN_COLOR_HC ;
         FORM_IDLIST
     };
@@ -12336,13 +12336,13 @@ FloatingWindow RID_TOOLBOXWINDOW
 
     ImageList IL_ATTR
     {
-        ImageBitmap = Bitmap { File = "at_tr.bmp" ; };
+        Prefix = "at";
         MaskColor = IMAGE_STDBTN_COLOR ;
         ATTR_IDLIST
     };
     ImageList  ILH_ATTR
     {
-        ImageBitmap = Bitmap { File = "ath_tr.bmp" ; };
+        Prefix = "ath";
         MaskColor = IMAGE_STDBTN_COLOR_HC ;
         ATTR_IDLIST
     };
@@ -12374,13 +12374,13 @@ FloatingWindow RID_TOOLBOXWINDOW
 
     ImageList IL_ALGN
     {
-        ImageBitmap = Bitmap { File = "al_gn.bmp" ; };
+        Prefix = "al";
         MaskColor = IMAGE_STDBTN_COLOR ;
         ALGN_IDLIST
     };
     ImageList  ILH_ALGN
     {
-        ImageBitmap = Bitmap { File = "alh_gn.bmp" ; };
+        Prefix = "alh";
         MaskColor = IMAGE_STDBTN_COLOR_HC ;
         ALGN_IDLIST
     };
@@ -12408,13 +12408,13 @@ FloatingWindow RID_TOOLBOXWINDOW
 
     ImageList IL_COLR
     {
-        ImageBitmap = Bitmap { File = "co_lr.bmp" ; };
+        Prefix = "co";
         MaskColor = IMAGE_STDBTN_COLOR ;
         COLR_IDLIST
     };
     ImageList  ILH_COLR
     {
-        ImageBitmap = Bitmap { File = "coh_lr.bmp" ; };
+        Prefix = "coh";
         MaskColor = IMAGE_STDBTN_COLOR_HC ;
         COLR_IDLIST
     };
@@ -12446,13 +12446,13 @@ FloatingWindow RID_TOOLBOXWINDOW
 
     ImageList IL_MISC
     {
-        ImageBitmap = Bitmap { File = "mi_sc.bmp" ; };
+        Prefix = "mi";
         MaskColor = IMAGE_STDBTN_COLOR ;
         MISC_IDLIST
     };
     ImageList  ILH_MISC
     {
-        ImageBitmap = Bitmap { File = "mih_sc.bmp" ; };
+        Prefix = "mih";
         MaskColor = IMAGE_STDBTN_COLOR_HC ;
         MISC_IDLIST
     };
@@ -12474,13 +12474,13 @@ FloatingWindow RID_TOOLBOXWINDOW
 
     ImageList IL_IMG
     {
-        ImageBitmap = Bitmap { File = "im_g.bmp" ; };
+        Prefix = "im";
         MaskColor = IMAGE_STDBTN_COLOR ;
         IMG_IDLIST
     };
     ImageList  ILH_IMG
     {
-        ImageBitmap = Bitmap { File = "imh_g.bmp" ; };
+        Prefix = "imh";
         MaskColor = IMAGE_STDBTN_COLOR_HC ;
         IMG_IDLIST
     };
@@ -12557,72 +12557,28 @@ DockingWindow RID_CMDBOXWINDOW
 
 ImageList RID_DEFAULTIMAGELIST_LC
 {
-    ImageBitmap = Bitmap
-    {
-        File = "lc_out.bmp" ;
-        File [ ENGLISH ] = "lc_out01.bmp" ;
-        File [ DANISH ] = "lc_out45.bmp" ;
-        File [ ENGLISH_US ] = "lc_out01.bmp" ;
-        File [ SPANISH ] = "lc_out34.bmp" ;
-        File [ FRENCH ] = "lc_out33.bmp" ;
-        File [ ITALIAN ] = "lc_out39.bmp" ;
-        File [ DUTCH ] = "lc_out31.bmp" ;
-        File [ SWEDISH ] = "lc_out46.bmp" ;
-    };
+    Prefix = "lc";
     MaskColor = IMAGE_STDBTN_COLOR ;
     _ID_LIST
 };
 
 ImageList RID_DEFAULTIMAGELIST_SC
 {
-    ImageBitmap = Bitmap
-    {
-        File = "sc_out.bmp" ;
-        File [ ENGLISH ] = "sc_out01.bmp" ;
-        File [ DANISH ] = "sc_out45.bmp" ;
-        File [ ENGLISH_US ] = "sc_out01.bmp" ;
-        File [ SPANISH ] = "sc_out34.bmp" ;
-        File [ FRENCH ] = "sc_out33.bmp" ;
-        File [ ITALIAN ] = "sc_out39.bmp" ;
-        File [ DUTCH ] = "sc_out31.bmp" ;
-        File [ SWEDISH ] = "sc_out46.bmp" ;
-    };
+    Prefix = "sc";
     MaskColor = IMAGE_STDBTN_COLOR ;
     _ID_LIST
 };
 
 ImageList RID_DEFAULTIMAGELIST_LCH
 {
-    ImageBitmap = Bitmap
-    {
-        File = "lch_out.bmp" ;
-        File [ ENGLISH ] = "lch_out01.bmp" ;
-        File [ DANISH ] = "lch_out45.bmp" ;
-        File [ ENGLISH_US ] = "lch_out01.bmp" ;
-        File [ SPANISH ] = "lch_out34.bmp" ;
-        File [ FRENCH ] = "lch_out33.bmp" ;
-        File [ ITALIAN ] = "lch_out39.bmp" ;
-        File [ DUTCH ] = "lch_out31.bmp" ;
-        File [ SWEDISH ] = "lch_out46.bmp" ;
-    };
+    Prefix = "lch";
     MaskColor = IMAGE_STDBTN_COLOR_HC ;
     _ID_LIST
 };
 
 ImageList RID_DEFAULTIMAGELIST_SCH
 {
-    ImageBitmap = Bitmap
-    {
-        File = "sch_out.bmp" ;
-        File [ ENGLISH ] = "sch_out01.bmp" ;
-        File [ DANISH ] = "sch_out45.bmp" ;
-        File [ ENGLISH_US ] = "sch_out01.bmp" ;
-        File [ SPANISH ] = "sch_out34.bmp" ;
-        File [ FRENCH ] = "sch_out33.bmp" ;
-        File [ ITALIAN ] = "sch_out39.bmp" ;
-        File [ DUTCH ] = "sch_out31.bmp" ;
-        File [ SWEDISH ] = "sch_out46.bmp" ;
-    };
+    Prefix = "sch";
     MaskColor = IMAGE_STDBTN_COLOR_HC ;
     _ID_LIST
 };
