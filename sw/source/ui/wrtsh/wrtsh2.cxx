@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh2.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:46:05 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 14:40:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -346,10 +345,22 @@ void SwWrtShell::InsertTableOf(const SwTOXBase& rTOX, const SfxItemSet* pSet)
 
 BOOL SwWrtShell::UpdateTableOf(const SwTOXBase& rTOX, const SfxItemSet* pSet)
 {
-    if(!_CanInsert())
-        return FALSE;
+    BOOL bResult = FALSE;
 
-    return SwEditShell::UpdateTableOf(rTOX, pSet);
+    if(_CanInsert())
+    {
+        bResult = SwEditShell::UpdateTableOf(rTOX, pSet);
+
+        if (pSet == NULL)
+        {
+            SwDoc * pDoc = GetDoc();
+
+            if (pDoc != NULL)
+                pDoc->DelAllUndoObj();
+        }
+    }
+
+    return bResult;
 }
 
     // ein Klick aus das angegebene Feld. Der Cursor steht auf diesem.
