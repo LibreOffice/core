@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.28 $
-# Date:        $Date: 2004-12-10 17:49:56 $
+# Version:     $Revision: 1.29 $
+# Date:        $Date: 2004-12-13 12:24:03 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -80,7 +80,7 @@ my ( $oldPATH, $SRC_ROOT, $SO_HOME, $JAVA_HOME, $SHELL,
      $URD_ONLY, $SOLARROOT, $SOLARSRC, $RSCRES, $DEVROOT, $SOLARVER, $SOLARVERSION, $SOLARENV, 
      $STAR_INIROOT, $STAR_INIROOTOLD, $STAR_STANDLST, $STAR_SSCOMMON, $STAR_SSOLARINI, 
      $STAR_REGISTRY, $STAR_RESOURCEPATH, $DMAKEROOT, $CLASSPATH, $XCLASSPATH, $COMPATH, 
-     $MSPDB_PATH, $MIDL_PATH, $CSC_PATH, $NMAKE_PATH, $WDEVENV_PATH, 
+     $MSPDB_PATH, $MIDL_PATH, $CSC_PATH, $NMAKE_PATH, 
      $LD_LIBRARY_PATH, $PATH, $SOLARDEF, $SOLAREXTRAINC, $SOLAREXTRALIB, $SOLARLIB, 
      $SOLARINC, $LOCALINI, $MAC_LIB, $PATHEXTRA, $FRAMEWORKSHOME, $COMEX, $MULTITHREAD_OBJ, $PERL, 
      $COMP_ENV, $ILIB, $JAVAHOME, $PSDK_HOME, $EXTRA_DOTNET_FILES, $USE_NEW_SDK, $FRAME_HOME, 
@@ -499,7 +499,6 @@ elsif ( $platform eq "$Winnt" )
       $MIDL_PATH      = PosixFormat('@MIDL_PATH@');
       $CSC_PATH       = PosixFormat('@CSC_PATH@');
       $NMAKE_PATH     = PosixFormat('@NMAKE_PATH@');
-      $WDEVENV_PATH   = PosixFormat('@WDEVENV_PATH@');
       $PSDK_HOME      = PosixFormat('@PSDK_HOME@');
       if('@EXTRA_DOTNET_FILES@') {
           $EXTRA_DOTNET_FILES = PosixFormat('@EXTRA_DOTNET_FILES@');
@@ -1071,10 +1070,6 @@ elsif ($platform eq "$Winnt")
 		   # VC toolkit needs nmake.exe
 		   if ( "@ENABLE_VCTK@" and $noldPATH !~ /(?:[:]|\A)(?:$NMAKE_PATH)(?:[:]|\Z)/ ) {
 			   $PATH .= $ps.$NMAKE_PATH;
-		   }
-		   # .NET needs wdevenv.exe, VC toolkit doesn't
-		   if ( !"@ENABLE_VCTK@" and $noldPATH !~ /(?:[:]|\A)(?:$WDEVENV_PATH)(?:[:]|\Z)/ ) {
-			   $PATH .= $ps.$WDEVENV_PATH;
 		   }
 		   # Native installer needs some files if the Windows Installer SDK
 		   if ( $noldPATH !~ /(?:[:]|\A)(?:$PSDK_HOME\/bin)(?:[:]|\Z)/i ) {
