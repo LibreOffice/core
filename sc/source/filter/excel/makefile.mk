@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.30 $
+#   $Revision: 1.31 $
 #
-#   last change: $Author: kz $ $Date: 2005-01-14 12:01:55 $
+#   last change: $Author: vg $ $Date: 2005-02-21 13:27:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -117,6 +117,7 @@ SLOFILES =	\
         $(SLO)$/xestring.obj				\
         $(SLO)$/xestyle.obj					\
         $(SLO)$/xetable.obj					\
+        $(SLO)$/xeview.obj					\
         $(SLO)$/xicontent.obj				\
         $(SLO)$/xiescher.obj				\
         $(SLO)$/xihelper.obj				\
@@ -127,6 +128,8 @@ SLOFILES =	\
         $(SLO)$/xiroot.obj					\
         $(SLO)$/xistream.obj				\
         $(SLO)$/xistyle.obj					\
+        $(SLO)$/xiview.obj					\
+        $(SLO)$/xladdress.obj				\
         $(SLO)$/xlescher.obj				\
         $(SLO)$/xlformula.obj				\
         $(SLO)$/xlocx.obj					\
@@ -136,7 +139,8 @@ SLOFILES =	\
         $(SLO)$/xlstream.obj				\
         $(SLO)$/xlstyle.obj					\
         $(SLO)$/xltools.obj					\
-        $(SLO)$/xltracer.obj
+        $(SLO)$/xltracer.obj				\
+        $(SLO)$/xlview.obj
 
 .IF "$(OS)$(COM)$(CPUNAME)"=="LINUXGCCSPARC"
 NOOPTFILES= \
