@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdomeas.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-03 13:21:56 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 10:11:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -672,16 +672,25 @@ sal_Bool SdrMeasureObj::DoPaintObject(ExtOutputDevice& rXOut, const SdrPaintInfo
     SfxItemSet aEmptySet(*rSet.GetPool());
     aEmptySet.Put(XLineStyleItem(XLINE_NONE));
 
+    // #b4899532# if not filled but fill draft, avoid object being invisible in using
+    // a hair linestyle and COL_LIGHTGRAY
+    SfxItemSet aItemSet(rSet);
+    BOOL bIsFillDraft(0 != (rInfoRec.nPaintMode & SDRPAINTMODE_DRAFTFILL));
+    if(bIsFillDraft && XLINE_NONE == ((const XLineStyleItem&)(rSet.Get(XATTR_LINESTYLE))).GetValue())
+    {
+        ImpPrepareLocalItemSetForDraftLine(aItemSet);
+    }
+
     // prepare line geometry
     BOOL bIsLineDraft(0 != (rInfoRec.nPaintMode & SDRPAINTMODE_DRAFTLINE));
-    ::std::auto_ptr< SdrLineGeometry > pLineGeometry( ImpPrepareLineGeometry(rXOut, rSet, bIsLineDraft) );
+    ::std::auto_ptr< SdrLineGeometry > pLineGeometry( ImpPrepareLineGeometry(rXOut, aItemSet, bIsLineDraft) );
 
     // Shadows
-    BOOL bShadOn = ((SdrShadowItem&)(rSet.Get(SDRATTR_SHADOW))).GetValue();
+    BOOL bShadOn = ((SdrShadowItem&)(aItemSet.Get(SDRATTR_SHADOW))).GetValue();
     if( bShadOn && pLineGeometry.get() )
     {
         // draw the line geometry
-        ImpDrawShadowLineGeometry(rXOut, rSet, *pLineGeometry);
+        ImpDrawShadowLineGeometry(rXOut, aItemSet, *pLineGeometry);
     }
 
     // Before here the LineAttr were set: if(pLineAttr) rXOut.SetLineAttr(*pLineAttr);
@@ -718,7 +727,7 @@ sal_Bool SdrMeasureObj::DoPaintObject(ExtOutputDevice& rXOut, const SdrPaintInfo
     if( pLineGeometry.get() )
     {
         // draw the line geometry
-        ImpDrawColorLineGeometry(rXOut, rSet, *pLineGeometry);
+        ImpDrawColorLineGeometry(rXOut, aItemSet, *pLineGeometry);
     }
 
     sal_Bool bOk(sal_True);
