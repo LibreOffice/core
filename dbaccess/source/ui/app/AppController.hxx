@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppController.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:28:20 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 09:38:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,12 +172,9 @@ namespace dbaui
         TransferableClipboardListener*
                                 m_pClipbordNotifier;        // notifier for changes in the clipboard
         mutable ::rtl::OUString m_sDatabaseName;
-        Timer                   m_aRefreshMenu;             // the timer for the menu "refresh"
-        Timer                   m_aPasteSpecialMenu;        // the timer for the menu "paste"
         sal_Int32               m_nAsyncDrop;
         PreviewMode             m_ePreviewMode;             // the mode of the preview
-        ::std::map<sal_uInt16,sal_uInt16>
-                                m_aLastSelectedPullDownActions;
+        ElementType             m_eOldType;
         sal_Bool                m_bPreviewEnabled;          // true when the preview should enabled
         sal_Bool                m_bNeedToReconnect;         // true when the settings of the data source were modified and the connection is no longer up to date
         sal_Bool                m_bSuspended        : 1;    // is true when the controller was already suspended
@@ -397,12 +394,6 @@ namespace dbaui
         */
         void addContainerListener(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _xCollection);
 
-        /** opens the popup for the toolbox item
-            @param  _nSlotId
-                The slot id for whom the popup shoudl be opened.
-        */
-        void openToolBoxPopup(USHORT _nSlotId);
-
 
         /** opens a uno dialog withthe currently selected data source as initialize argument
             @param  _sServiceName
@@ -470,6 +461,22 @@ namespace dbaui
                                     ,sal_Bool _bCollection = sal_True
                                     ,const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent>& _xContent = ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent>()
                                     ,sal_Bool _bMove = sal_False);
+        /** checks if delete command or rename comamnd is allowed
+            @param  _eType
+                The element type.
+            @param  _bDelete
+                If <TRUE> then the delete command should be checked.
+            @return
+                <TRUE> if the command is allowed
+        */
+        sal_Bool isRenameDeleteAllowed(ElementType _eType,sal_Bool _bDelete) const;
+        /** all selected entries will be opened, or edited, or converted to a view
+            @param  _nId
+                The slot which should be executed.
+            @param  _bEdit
+                If <TRUE/> it was a edit command.
+        */
+        void doAction(sal_uInt16 _nId ,sal_Bool _bEdit);
     protected:
         // ----------------------------------------------------------------
         // initalizing members
@@ -481,8 +488,7 @@ namespace dbaui
         // state of a feature. 'feature' may be the handle of a ::com::sun::star::util::URL somebody requested a dispatch interface for OR a toolbar slot.
         virtual FeatureState    GetState(sal_uInt16 nId) const;
         // execute a feature
-        virtual void            Execute(sal_uInt16 nId);
-        virtual ToolBox*        CreateToolBox(Window* pParent);
+        virtual void            Execute(sal_uInt16 nId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs);
 
         // IControlActionListener overridables
         virtual sal_Bool        requestContextMenu( const CommandEvent& _rEvent );
@@ -492,6 +498,7 @@ namespace dbaui
 
         // OGenericUnoController
         virtual void            updateTitle( );
+        virtual void            loadSubToolbar(const ::com::sun::star::uno::Reference< drafts::com::sun::star::frame::XLayoutManager >& _xLayoutManager);
 
         virtual void impl_initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments );
 
@@ -527,15 +534,6 @@ namespace dbaui
         // XPropertyChangeListener
         virtual void SAL_CALL propertyChange( const ::com::sun::star::beans::PropertyChangeEvent& evt ) throw (::com::sun::star::uno::RuntimeException);
 
-        /** called when an item in the toolbox has been selected
-            <p>the default handling calls Execute with the id given.</p>
-        */
-        virtual void onToolBoxSelected( sal_uInt16 _nSelectedItem );
-        /** called when an item in the toolbox has been clicked
-            <p>the default handling does nothing.</p>
-        */
-        virtual void onToolBoxClicked( sal_uInt16 _nClickedItem );
-
         /** ensures that a connection for the selected data source exists
             @param  _xConnection
                 The new connection
@@ -562,7 +560,7 @@ namespace dbaui
         /// @see <method>IApplicationElementNotification::onEntryDoubleClick</method>
         virtual void onEntryDoubleClick(SvTreeListBox* _pTree);
         /// @see <method>IApplicationElementNotification::onCreationClick</method>
-        virtual void onCreationClick(sal_uInt16 _nId);
+        virtual void onCreationClick(const ::rtl::OUString& _sCommand);
         /// @see <method>IApplicationElementNotification::onContainerSelect</method>
         virtual sal_Bool onContainerSelect(ElementType _eType);
         /// @see <method>IApplicationElementNotification::onEntrySelect</method>
@@ -577,9 +575,6 @@ namespace dbaui
         virtual void onPasteEntry(SvLBoxEntry* _pEntry);
         /// @see <method>IApplicationElementNotification::onDeleteEntry</method>
         virtual void onDeleteEntry(SvLBoxEntry* _pEntry);
-
-        DECL_LINK( OnShowRefreshDropDown, void* );
-        DECL_LINK( OnPasteSpecialDropDown, void* );
 
         // time to check the CUT/COPY/PASTE-slot-states
         DECL_LINK( OnInvalidateClipboard, void* );
