@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dcontact.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 10:30:46 $
+ *  last change: $Author: vg $ $Date: 2005-02-22 08:17:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1382,6 +1382,15 @@ void SwDrawContact::_Changed( const SdrObject& rObj,
                                                ? *(pAnchoredDrawObj->GetLastObjRect())
                                                : *(pOldBoundRect);
                 // <--
+                // --> OD 2005-01-28 #i41324# - notify background before
+                // adjusting position and change the last object rectangle.
+                if ( bNotify )
+                {
+                    // --> OD 2004-07-20 #i31573# - correction: Only invalidate
+                    // background of given drawing object.
+                    lcl_NotifyBackgroundOfObj( *this, rObj, &aOldObjRect );
+                }
+                // <--
                 // --> OD 2004-08-04 #i31698# - determine layout direction
                 // via draw frame format.
                 SwFrmFmt::tLayoutDir eLayoutDir =
@@ -1477,12 +1486,6 @@ void SwDrawContact::_Changed( const SdrObject& rObj,
                             ->AnchorFrm()->Prepare( PREP_FLY_ATTR_CHG, GetFmt() );
                     }
                     // <--
-                }
-                if ( bNotify )
-                {
-                    // --> OD 2004-07-20 #i31573# - correction: Only invalidate
-                    // background of given drawing object.
-                    lcl_NotifyBackgroundOfObj( *this, rObj, &aOldObjRect );
                 }
             }
         }
