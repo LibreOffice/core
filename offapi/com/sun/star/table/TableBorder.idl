@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableBorder.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:19 $
+ *  last change: $Author: mi $ $Date: 2001-10-25 15:57:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,12 +73,9 @@
 //=============================================================================
 
 // DocMerge from xml: struct com::sun::star::table::TableBorder
-/** structure contains the values of the border lines of all boxes in
-    a table.
-
-
-
-    <p>In a queried structure, the flags in
+/** structure contains the values of the border lines of all boxes in a table.
+    <p>
+    In a queried structure, the flags in
     <member>TableBorder::Is...LineValid</member> indicate that not all
     lines of the boxes have the same values.
 
@@ -193,6 +190,9 @@ struct TableBorder
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:44:19  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:55  hjs
     initial import
 

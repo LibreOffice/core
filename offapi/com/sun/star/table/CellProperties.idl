@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CellProperties.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-21 08:35:19 $
+ *  last change: $Author: mi $ $Date: 2001-10-25 15:57:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,7 @@ service CellProperties
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::table::CellProperties::IsCellBackgroundTransparent
-    /** If this property is <TRUE/>, the cell background is transparent
+    /** If this property is <TRUE/>, the cell background is transparent,
         and the <member>CellProperties::CellBackColor</member> value is not used.
      */
     [property] boolean IsCellBackgroundTransparent;
@@ -132,10 +132,8 @@ service CellProperties
     /** contains the index of the number format
         that is used in the cells.
 
-
-
         <p>The proper value can be determined by using the
-        <type scope="com::sun::star::util">XNumberFormatter</type>
+        <type scope="com::sun::star::util">NumberFormatter</type>
         interface of the document.</p>
      */
     [property] long NumberFormat;
@@ -196,7 +194,7 @@ service CellProperties
 
 
 
-        <p>If used with a cell range, the top, left, right
+        <p>If used with a cell range, the top, left, right,
         and bottom lines are at the edges of the entire range,
         not at the edges of the individual cell.</p>
      */
@@ -205,7 +203,7 @@ service CellProperties
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::table::CellProperties::IsTextWrapped
-    /** property <TRUE/> if text in the cells is wrapped.
+    /** property is <TRUE/> if text in the cells is wrapped.
      */
     [property] boolean IsTextWrapped;
 
@@ -233,6 +231,9 @@ service CellProperties
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2000/12/21 08:35:19  mi
+    @see interface/service/... ident -> @see ident - for new docu generator
+
     Revision 1.4  2000/12/14 12:53:43  mi
     <true></true> -> <TRUE/> and same with FALSE
 
