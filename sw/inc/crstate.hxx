@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crstate.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ama $ $Date: 2001-09-10 15:02:49 $
+ *  last change: $Author: ama $ $Date: 2002-02-15 14:33:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,12 +95,19 @@ struct SwFillCrsrPos
     {}
 };
 
+// Multiportion types: two lines, bidirectional, 270 degrees rotation,
+//                     ruby portion and 90 degrees rotation
+#define MT_TWOLINE  0
+#define MT_BIDI     1
+#define MT_ROT_270  3
+#define MT_RUBY     4
+#define MT_ROT_90   7
+
 struct Sw2LinesPos
 {
     SwRect aLine;           // Position and size of the line
     SwRect aPortion;        // Position and size of the multi portion
-    BYTE nMultiType;        // Multiportion type 0 = 90 degrees rotation,
-                            // type 1 = 270 degrees rotation; 2 = TwoLines
+    BYTE nMultiType;        // Multiportion type
 };
 
 // CrsrTravelling-Staties (fuer GetCrsrOfst)
