@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 13:18:40 $
+ *  last change: $Author: vg $ $Date: 2003-07-04 13:23:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2680,7 +2680,28 @@ BOOL lcl_ArrangeLowers( SwLayoutFrm *pLay, long lYStart, BOOL bInva )
                             pFly->SetCompletePaint();
                     }
                     else
-                        pO->SetAnchorPos( pFrm->GetFrmAnchorPos( ::HasWrap( pO ) ) );
+                    {
+                        // OD 30.06.2003 #108784# - consider 'virtual' drawing
+                        // objects.
+                        if ( pO->ISA(SwDrawVirtObj) )
+                        {
+                            SwDrawVirtObj* pDrawVirtObj = static_cast<SwDrawVirtObj*>(pO);
+                            pDrawVirtObj->SetAnchorPos( pFrm->GetFrmAnchorPos( ::HasWrap( pO ) ) );
+                            pDrawVirtObj->AdjustRelativePosToReference();
+                        }
+                        else
+                        {
+                            pO->SetAnchorPos( pFrm->GetFrmAnchorPos( ::HasWrap( pO ) ) );
+                            // OD 30.06.2003 #108784# - correct relative position
+                            // of 'virtual' drawing objects.
+                            SwDrawContact* pDrawContact =
+                                static_cast<SwDrawContact*>(pO->GetUserCall());
+                            if ( pDrawContact )
+                            {
+                                pDrawContact->CorrectRelativePosOfVirtObjs();
+                            }
+                        }
+                    }
                 }
             }
         }
