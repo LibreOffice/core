@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: gt $ $Date: 2004-07-20 05:35:10 $
+#   last change: $Author: gt $ $Date: 2004-07-23 07:54:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,16 +86,14 @@ SRC1FILES =  \
             digitalsignaturesdialog.src			\
             certificatechooser.src				\
             certificateviewer.src				\
-            macrosecurity.src					\
-            warnings.src
+            macrosecurity.src
 
 SLOFILES=	\
             $(SLO)$/digitalsignaturesdialog.obj	\
             $(SLO)$/certificatechooser.obj		\
             $(SLO)$/certificateviewer.obj		\
             $(SLO)$/macrosecurity.obj			\
-            $(SLO)$/resourcemanager.obj			\
-            $(SLO)$/warnings.obj
+            $(SLO)$/resourcemanager.obj
             
 
 # --- Targets ------------------------------------------------------
