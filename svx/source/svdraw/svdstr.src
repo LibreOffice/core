@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdstr.src,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 17:09:26 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 11:51:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1835,7 +1835,7 @@ String STR_ItemValFITTOSIZEPROP
 String STR_ItemValFITTOSIZEALLLINES
 {
     Text [ de ] = "Alle Zeilen separat" ;
-    Text [ en-US ] = "Fit to size (all rows seperately) " ;
+    Text [ en-US ] = "Fit to size (all rows separately) " ;
     Text [ x-comment ] = " ";
 };
 String STR_ItemValFITTOSIZERESIZEAT
