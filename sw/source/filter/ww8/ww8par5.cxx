@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: cmc $ $Date: 2002-04-16 13:18:18 $
+ *  last change: $Author: cmc $ $Date: 2002-04-29 10:41:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -521,6 +521,9 @@ void SwWW8ImplReader::ConvertFFileName( String& rName, const String& rOrg )
     // ggfs. anhaengende Anfuehrungszeichen entfernen
     if( rName.Len() &&  '"' == rName.GetChar( rName.Len()-1 ))
         rName.Erase( rName.Len()-1, 1);
+
+    //#82900# Need the more sophisticated url converter. cmc
+    rName = URIHelper::SmartRelToAbs(rName);
 }
 
 // ConvertUFNneme uebersetzt FeldParameter-Namen u. ae. in den
@@ -2013,11 +2016,8 @@ eF_ResT SwWW8ImplReader::Read_F_IncludePicture( WW8FieldDesc*, String& rStr )
         switch( nRet )
         {
         case -2:
-            if( !aGrfName.Len() )
-            {
-                ConvertFFileName( aGrfName, aReadParam.GetResult() );
-                aGrfName = INetURLObject::RelToAbs( aGrfName );
-            }
+            if (!aGrfName.Len())
+                ConvertFFileName(aGrfName, aReadParam.GetResult());
             break;
 
         case 'd':
@@ -2030,7 +2030,6 @@ eF_ResT SwWW8ImplReader::Read_F_IncludePicture( WW8FieldDesc*, String& rStr )
         }
     }
 
-    aGrfName = URIHelper::SmartRelToAbs( aGrfName );
     if( !bEmbedded )
     {
         /*
@@ -2083,8 +2082,7 @@ eF_ResT SwWW8ImplReader::Read_F_IncludeText( WW8FieldDesc* pF, String& rStr )
             break;
         }
     }
-    ConvertFFileName( aPara, aPara );
-    aPara = URIHelper::SmartRelToAbs( aPara );
+    ConvertFFileName(aPara, aPara);
 
     if( aBook.Len() && aBook.GetChar( 0 ) != '\\' )
     {
@@ -2945,12 +2943,8 @@ eF_ResT SwWW8ImplReader::Read_F_Hyperlink( WW8FieldDesc* pF, String& rStr )
             switch( nRet )
             {
             case -2:
-                if( !sURL.Len() )
-                {
-                    ConvertFFileName( sURL, aReadParam.GetResult() );
-                    //#82900# Need the more sophisticated url converter. cmc
-                    sURL = URIHelper::SmartRelToAbs( sURL );
-                }
+                if (!sURL.Len())
+                    ConvertFFileName(sURL, aReadParam.GetResult());
                 break;
 
             case 'n':
