@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: svesik $ $Date: 2001-02-02 18:23:10 $
+#   last change: $Author: ab $ $Date: 2001-02-21 17:37:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,6 +77,7 @@ ENABLE_EXCEPTIONS=TRUE
 
 SLOFILES=   \
             $(SLO)$/geometrycontrolmodel.obj        \
+            $(SLO)$/eventcontainer.obj				\
             $(SLO)$/stdtabcontroller.obj 			\
             $(SLO)$/stdtabcontrollermodel.obj 		\
             $(SLO)$/unocontrol.obj 					\
