@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlroot.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:48:23 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 16:21:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,6 +155,37 @@ XclRootData::XclRootData( XclBiff eBiff, ScDocument& rDocument, const String& rD
     mnObjCnt = 0;
 #endif
 
+    // maximum cell position
+    switch( meBiff )
+    {
+        case xlBiff2:   maXclMaxPos.Set(
+                            static_cast<SCCOL>(EXC_MAXCOL2),
+                            static_cast<SCROW>(EXC_MAXROW2),
+                            static_cast<SCTAB>(EXC_MAXTAB2) );  break;
+        case xlBiff3:   maXclMaxPos.Set(
+                            static_cast<SCCOL>(EXC_MAXCOL3),
+                            static_cast<SCROW>(EXC_MAXROW3),
+                            static_cast<SCTAB>(EXC_MAXTAB3) );  break;
+        case xlBiff4:   maXclMaxPos.Set(
+                            static_cast<SCCOL>(EXC_MAXCOL4),
+                            static_cast<SCROW>(EXC_MAXROW4),
+                            static_cast<SCTAB>(EXC_MAXTAB4) );  break;
+        case xlBiff5:
+        case xlBiff7:   maXclMaxPos.Set(
+                            static_cast<SCCOL>(EXC_MAXCOL5),
+                            static_cast<SCROW>(EXC_MAXROW5),
+                            static_cast<SCTAB>(EXC_MAXTAB5) );  break;
+        case xlBiff8:   maXclMaxPos.Set(
+                            static_cast<SCCOL>(EXC_MAXCOL8),
+                            static_cast<SCROW>(EXC_MAXROW8),
+                            static_cast<SCTAB>(EXC_MAXTAB8) );  break;
+        default:        DBG_ERROR_BIFF();
+    }
+    maMaxPos.SetCol( ::std::min( maScMaxPos.Col(), maXclMaxPos.Col() ) );
+    maMaxPos.SetRow( ::std::min( maScMaxPos.Row(), maXclMaxPos.Row() ) );
+    maMaxPos.SetTab( ::std::min( maScMaxPos.Tab(), maXclMaxPos.Tab() ) );
+
+    // extended document options
     if( mrDoc.GetExtDocOptions() )
         mpExtDocOpt.reset( new ScExtDocOptions( *mrDoc.GetExtDocOptions() ) );
     else
@@ -178,8 +209,6 @@ XclRoot::XclRoot( XclRootData& rRootData ) :
 #ifdef DBG_UTIL
     ++mrData.mnObjCnt;
 #endif
-    if( GetBiff() != xlBiffUnknown )
-        SetMaxPos();
 }
 
 XclRoot::XclRoot( const XclRoot& rRoot ) :
@@ -205,13 +234,6 @@ XclRoot& XclRoot::operator=( const XclRoot& rRoot )
     return *this;
 }
 
-void XclRoot::SetBiff( XclBiff eBiff )
-{
-    mrData.meBiff = eBiff;
-    if( eBiff != xlBiffUnknown )
-        SetMaxPos();
-}
-
 void XclRoot::SetCharWidth( const XclFontData& rFontData )
 {
     if( SfxPrinter* pPrinter = GetPrinter() )
@@ -225,43 +247,6 @@ void XclRoot::SetCharWidth( const XclFontData& rFontData )
     }
     else
         mrData.mnCharWidth = 11 * rFontData.mnHeight / 20;
-}
-
-void XclRoot::SetMaxPos()
-{
-    switch( GetBiff() )
-    {
-        case xlBiff2:   mrData.maXclMaxPos.Set(
-                                static_cast<SCCOL>(EXC_MAXCOL2),
-                                static_cast<SCROW>(EXC_MAXROW2),
-                                static_cast<SCTAB>(EXC_MAXTAB2) );
-            break;
-        case xlBiff3:   mrData.maXclMaxPos.Set(
-                                static_cast<SCCOL>(EXC_MAXCOL3),
-                                static_cast<SCROW>(EXC_MAXROW3),
-                                static_cast<SCTAB>(EXC_MAXTAB3) );
-            break;
-        case xlBiff4:   mrData.maXclMaxPos.Set(
-                                static_cast<SCCOL>(EXC_MAXCOL4),
-                                static_cast<SCROW>(EXC_MAXROW4),
-                                static_cast<SCTAB>(EXC_MAXTAB4) );
-            break;
-        case xlBiff5:
-        case xlBiff7:   mrData.maXclMaxPos.Set(
-                                static_cast<SCCOL>(EXC_MAXCOL5),
-                                static_cast<SCROW>(EXC_MAXROW5),
-                                static_cast<SCTAB>(EXC_MAXTAB5) );
-            break;
-        case xlBiff8:   mrData.maXclMaxPos.Set(
-                                static_cast<SCCOL>(EXC_MAXCOL8),
-                                static_cast<SCROW>(EXC_MAXROW8),
-                                static_cast<SCTAB>(EXC_MAXTAB8) );
-            break;
-        default:        DBG_ERROR_BIFF();
-    }
-    mrData.maMaxPos.SetCol( ::std::min( mrData.maScMaxPos.Col(), mrData.maXclMaxPos.Col() ) );
-    mrData.maMaxPos.SetRow( ::std::min( mrData.maScMaxPos.Row(), mrData.maXclMaxPos.Row() ) );
-    mrData.maMaxPos.SetTab( ::std::min( mrData.maScMaxPos.Tab(), mrData.maXclMaxPos.Tab() ) );
 }
 
 SfxObjectShell* XclRoot::GetDocShell() const
