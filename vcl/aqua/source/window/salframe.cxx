@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: pluby $ $Date: 2000-11-27 01:47:45 $
+ *  last change: $Author: pluby $ $Date: 2000-11-27 20:10:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -487,6 +487,7 @@ const SystemEnvData* SalFrame::GetSystemData() const
 
 void SalFrame::Beep( SoundType eSoundType )
 {
+    VCLWindow_Beep( maFrameData.mhWnd );
 }
 
 // -----------------------------------------------------------------------
