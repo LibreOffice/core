@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlnode.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-14 10:29:29 $
+ *  last change: $Author: oj $ $Date: 2001-03-13 08:24:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -513,11 +513,9 @@ void OSQLParseNode::parseNodeToStr(::rtl::OUString& rString, const SQLParseNodeP
                         try
                         {
                             // retrieve the fields name
-                            rtl::OUString aString;
-                            rParam.xField->getPropertyValue(::rtl::OUString::createFromAscii("Name")) >>= aString;
-                            aFieldName = aString.getStr();
+                            rParam.xField->getPropertyValue(::rtl::OUString::createFromAscii("Name")) >>= aFieldName;
                         }
-                        catch ( ... )
+                        catch ( Exception& )
                         {
                         }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqliterator.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-01 11:02:19 $
+ *  last change: $Author: oj $ $Date: 2001-03-13 08:24:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1040,6 +1040,7 @@ void OSQLParseTreeIterator::traverseOnePredicate(
             {
                 OParseColumn* pNewColumn = new OParseColumn(*aIter,m_aCaseEqual.isCaseSensitive());
                 pNewColumn->setName(rValue);
+                pNewColumn->setRealName(rValue);
                 m_aParameters->push_back(pNewColumn);
             }
             else // search in the tables for the right one
@@ -1061,6 +1062,7 @@ void OSQLParseTreeIterator::traverseOnePredicate(
                             xColumns->getByName(aColumnName) >>= xColumn;
                             OParseColumn* pNewColumn = new OParseColumn(xColumn,m_aCaseEqual.isCaseSensitive());
                             pNewColumn->setName(rValue);
+                            pNewColumn->setRealName(rValue);
                             m_aParameters->push_back(pNewColumn);
                             break;
                         }
