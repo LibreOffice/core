@@ -1,0 +1,110 @@
+/*************************************************************************
+ *
+ *  $RCSfile: extensio.hrc,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:16:39 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __EXTENSIONS_INC_EXTENSIO_HRC__
+#define __EXTENSIONS_INC_EXTENSIO_HRC__
+
+#include <svtools/solar.hrc>
+
+#define HID_PROTOCOLS                   HID_EXTENSIONS_START
+
+#define HID_BIB_CHANGESOURCE            (HID_EXTENSIONS_START + 1)
+#define HID_BIB_MAPPINGDLG              (HID_EXTENSIONS_START + 2)
+#define HID_BIB_TBX_TABLE               (HID_EXTENSIONS_START + 3)
+#define HID_BIB_TBX_SEARCH              (HID_EXTENSIONS_START + 4)
+#define HID_BIB_TBX_AUTOFILTER          (HID_EXTENSIONS_START + 5)
+
+#define HID_BIB_IDENTIFIER_POS                  (HID_EXTENSIONS_START + 6)
+#define HID_BIB_AUTHORITYTYPE_POS               (HID_EXTENSIONS_START + 7)
+#define HID_BIB_AUTHOR_POS                      (HID_EXTENSIONS_START + 8)
+#define HID_BIB_TITLE_POS                       (HID_EXTENSIONS_START + 9)
+#define HID_BIB_YEAR_POS                        (HID_EXTENSIONS_START + 10)
+#define HID_BIB_ISBN_POS                        (HID_EXTENSIONS_START + 11)
+#define HID_BIB_BOOKTITLE_POS                   (HID_EXTENSIONS_START + 12)
+#define HID_BIB_CHAPTER_POS                     (HID_EXTENSIONS_START + 13)
+#define HID_BIB_EDITION_POS                     (HID_EXTENSIONS_START + 14)
+#define HID_BIB_EDITOR_POS                      (HID_EXTENSIONS_START + 15)
+#define HID_BIB_HOWPUBLISHED_POS                (HID_EXTENSIONS_START + 16)
+#define HID_BIB_INSTITUTION_POS                 (HID_EXTENSIONS_START + 17)
+#define HID_BIB_JOURNAL_POS                     (HID_EXTENSIONS_START + 18)
+#define HID_BIB_MONTH_POS                       (HID_EXTENSIONS_START + 19)
+#define HID_BIB_NOTE_POS                        (HID_EXTENSIONS_START + 20)
+#define HID_BIB_ANNOTE_POS                      (HID_EXTENSIONS_START + 21)
+#define HID_BIB_NUMBER_POS                      (HID_EXTENSIONS_START + 22)
+#define HID_BIB_ORGANIZATIONS_POS               (HID_EXTENSIONS_START + 23)
+#define HID_BIB_PAGES_POS                       (HID_EXTENSIONS_START + 24)
+#define HID_BIB_PUBLISHER_POS                   (HID_EXTENSIONS_START + 25)
+#define HID_BIB_ADDRESS_POS                     (HID_EXTENSIONS_START + 26)
+#define HID_BIB_SCHOOL_POS                      (HID_EXTENSIONS_START + 27)
+#define HID_BIB_SERIES_POS                      (HID_EXTENSIONS_START + 28)
+#define HID_BIB_REPORTTYPE_POS                  (HID_EXTENSIONS_START + 29)
+#define HID_BIB_VOLUME_POS                      (HID_EXTENSIONS_START + 30)
+#define HID_BIB_URL_POS                         (HID_EXTENSIONS_START + 31)
+#define HID_BIB_CUSTOM1_POS                     (HID_EXTENSIONS_START + 32)
+#define HID_BIB_CUSTOM2_POS                     (HID_EXTENSIONS_START + 33)
+#define HID_BIB_CUSTOM3_POS                     (HID_EXTENSIONS_START + 34)
+#define HID_BIB_CUSTOM4_POS                     (HID_EXTENSIONS_START + 35)
+#define HID_BIB_CUSTOM5_POS                     (HID_EXTENSIONS_START + 36)
+
+#define HID_BIB_DB_TBX                          (HID_EXTENSIONS_START + 37)
+#define HID_BIB_DB_GRIDCTRL                     (HID_EXTENSIONS_START + 38)
+
+
+#endif

@@ -1,0 +1,700 @@
+/*************************************************************************
+ *
+ *  $RCSfile: sanedlg.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:16:52 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#include <sanedlg.hrc>
+ModalDialog RID_SANE_DIALOG
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Pos = MAP_APPFONT ( 10 , 10 ) ;
+    Size = MAP_APPFONT ( THIRD_COLUMN + 60 , 268 ) ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    Text = "Scanner" ;
+    Text [ English ] = "Scanner" ;
+    OKButton RID_SCAN_OK
+    {
+        Pos = MAP_APPFONT ( THIRD_COLUMN , 6 ) ;
+        Size = MAP_APPFONT ( 55 , 14 ) ;
+        DefButton = TRUE;
+    };
+    CancelButton RID_SCAN_CANCEL
+    {
+        Pos = MAP_APPFONT ( THIRD_COLUMN , 25 ) ;
+        Size = MAP_APPFONT ( 55 , 14 ) ;
+    };
+    PushButton RID_DEVICEINFO_BTN
+    {
+        Pos = MAP_APPFONT ( THIRD_COLUMN , 44 ) ;
+        Size = MAP_APPFONT ( 55 , 22 ) ;
+        Text = "Geräte-\n~information" ;
+        Text [ English ] = "Device ~info" ;
+        Text [ english_us ] = "About\n Dev~ice" ;
+        Text [ portuguese_brazilian ] = "Gerõteinformation" ;
+        Text [ swedish ] = "Apparat\n~information" ;
+        Text [ danish ] = "Information\n om enheden" ;
+        Text [ italian ] = "Informazione\napparecchiatura" ;
+        Text [ spanish ] = "Información sobre\n ~dispositivo" ;
+        Text [ french ] = "Information sur le ~périphérique" ;
+        Text [ dutch ] = "Info over\n~apparaat" ;
+        Text [ portuguese ] = "~Informação sobre\nperiféricos" ;
+        Text[ chinese_simplified ] = "Éè±¸\nĞÅÏ¢(~I)";
+        Text[ russian ] = "Èíôîğìàöèÿ îá\nóñòğîéñòâå";
+        Text[ polish ] = "Informacja \no urz¹dzeniu";
+        Text[ japanese ] = "ÃŞÊŞ²½\nî•ñ(~I)";
+        Text[ chinese_traditional ] = "³]³Æ»¡©ú¸ê®Æ(~I)";
+        Text[ arabic ] = "ãÚáæãÇÊ\nÇáÌåÇÒ";
+        Text[ dutch ] = "Info over\n~apparaat";
+        Text[ chinese_simplified ] = "Éè±¸\nĞÅÏ¢(~I)";
+        Text[ greek ] = "Ğëçñïöïñßåò\nóõóêåõŞò";
+        Text[ korean ] = "ÀåÄ¡ Á¤º¸(~I)";
+        Text[ turkish ] = "Cihaz hakkında";
+    };
+    PushButton RID_PREVIEW_BTN
+    {
+        Pos = MAP_APPFONT ( THIRD_COLUMN , 71 ) ;
+        Size = MAP_APPFONT ( 55 , 22 ) ;
+        Text = "~Vorschau\nerstellen" ;
+        Text [ English ] = "Acquire\npre~view" ;
+        Text [ english_us ] = "Create\nPreview" ;
+        Text [ portuguese_brazilian ] = "Vorschau\nerstellen" ;
+        Text [ swedish ] = "S~kapa\nförhandsvisning" ;
+        Text [ danish ] = "Opret\neksempel" ;
+        Text [ italian ] = "Crea\nanteprima" ;
+        Text [ spanish ] = "Crear\n~Previsualización" ;
+        Text [ french ] = "Créer\nun ~aperçu" ;
+        Text [ dutch ] = "~Voorbeeld\nmaken" ;
+        Text [ portuguese ] = "Criar\n~previsualização" ;
+        Text[ chinese_simplified ] = "Éú³É\nÔ¤ÊÓ";
+        Text[ russian ] = "Ñîçäàòü\n ïğîñìîòğ";
+        Text[ polish ] = "Utwórz\n podgl¹d";
+        Text[ japanese ] = "ÌßÚËŞ­°\nì¬";
+        Text[ chinese_traditional ] = "¥Í¦¨\n¹wµø";
+        Text[ arabic ] = "ÅäÔÇÁ\nãÚÇíäÉ";
+        Text[ dutch ] = "~Voorbeeld\nmaken";
+        Text[ chinese_simplified ] = "Éú³É\nÔ¤ÊÓ";
+        Text[ greek ] = "Äçìéïõñãßá\nğñïåğéóêüğçóçò";
+        Text[ korean ] = "¹Ì¸® º¸±â\nÀÛ¼º";
+        Text[ turkish ] = "Önizleme\noluştur";
+        Text[ language_user1 ] = " ";
+    };
+    GroupBox RID_PREVIEW_BOX
+    {
+        Pos = MAP_APPFONT ( PREVIEW_UPPER_LEFT - 5 , PREVIEW_UPPER_TOP - 8 ) ;
+        Size = MAP_APPFONT ( PREVIEW_WIDTH + 10 , PREVIEW_HEIGHT + 14 ) ;
+        Text = "Vorschau" ;
+        Text [ English ] = "Preview" ;
+        Text [ portuguese ] = "Previsualizar" ;
+        Text [ english_us ] = "Preview" ;
+        Text [ portuguese_brazilian ] = "Vorschau" ;
+        Text [ swedish ] = "Förhandsvisning" ;
+        Text [ danish ] = "Eksempel" ;
+        Text [ italian ] = "Anteprima" ;
+        Text [ spanish ] = "Previsualización" ;
+        Text [ french ] = "Aperçu" ;
+        Text [ dutch ] = "Voorbeeld" ;
+        Text[ chinese_simplified ] = "Ô¤ÊÓ";
+        Text[ russian ] = "Ïğîñìîòğ";
+        Text[ polish ] = "Podgl¹d";
+        Text[ japanese ] = "ÌßÚËŞ­°";
+        Text[ chinese_traditional ] = "¹wµø";
+        Text[ arabic ] = "ãÚÇíäÉ";
+        Text[ dutch ] = "Voorbeeld";
+        Text[ chinese_simplified ] = "Ô¤ÊÓ";
+        Text[ greek ] = "Ğñïåğéóêüğçóç";
+        Text[ korean ] = "¹Ì¸® º¸±â";
+        Text[ turkish ] = "Önizleme";
+    };
+    GroupBox RID_SCANAREA_BOX
+    {
+        Pos = MAP_APPFONT ( SCAN_AREA_LEFT - 5 , SCAN_AREA_TOP - 12 ) ;
+        Size = MAP_APPFONT ( PREVIEW_WIDTH + 10 , 78 ) ;
+        Text = "Scanbereich" ;
+        Text [ English ] = "Scan area" ;
+        Text [ english_us ] = "Scan area" ;
+        Text [ portuguese_brazilian ] = "Scanbereich" ;
+        Text [ swedish ] = "Skanningsområde" ;
+        Text [ danish ] = "Scanområde" ;
+        Text [ italian ] = "Area di scansione" ;
+        Text [ spanish ] = "Área de escaneado" ;
+        Text [ french ] = "Zone à scanner" ;
+        Text [ dutch ] = "Scanbereik" ;
+        Text [ portuguese ] = "Área de digitalização" ;
+        Text[ chinese_simplified ] = "É¨ÃèÇøÓò";
+        Text[ russian ] = "Îáëàñòü ñêàíèğîâàíèÿ";
+        Text[ polish ] = "Obszar skanowania";
+        Text[ japanese ] = "½·¬İ”ÍˆÍ";
+        Text[ chinese_traditional ] = "±½´y°Ï°ì";
+        Text[ arabic ] = "äØÇŞ ÇáãÓÍ ÇáÖæÆí";
+        Text[ dutch ] = "Scanbereik";
+        Text[ chinese_simplified ] = "É¨ÃèÇøÓò";
+        Text[ greek ] = "Ğåñéï÷Ş óÜñùóçò";
+        Text[ korean ] = "½ºÄµ ¿µ¿ª";
+        Text[ turkish ] = "Tarama alanı";
+    };
+    FixedText RID_SCAN_LEFT_TXT
+    {
+        Pos = MAP_APPFONT ( SCAN_AREA_LEFT , SCAN_AREA_TOP ) ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Text = "~Links:" ;
+        Text [ English ] = "~Left:" ;
+        Text [ portuguese ] = "~Esquerda:" ;
+        Text [ english_us ] = "Left:" ;
+        Text [ portuguese_brazilian ] = "Links:" ;
+        Text [ swedish ] = "~Vänster:" ;
+        Text [ danish ] = "Venstre:" ;
+        Text [ italian ] = "A ~sinistra:" ;
+        Text [ spanish ] = "I~zquierda:" ;
+        Text [ french ] = "À gauche :" ;
+        Text [ dutch ] = "~Links:" ;
+        Text[ chinese_simplified ] = "×ó:";
+        Text[ russian ] = "Ñëåâà:";
+        Text[ polish ] = "Z lewej:";
+        Text[ japanese ] = "¶:";
+        Text[ chinese_traditional ] = "¥ª¡G";
+        Text[ arabic ] = "íÓÇÑ:";
+        Text[ dutch ] = "~Links:";
+        Text[ chinese_simplified ] = "×ó:";
+        Text[ greek ] = "ÁñéóôåñÜ:";
+        Text[ korean ] = "¿ŞÂÊ:";
+        Text[ turkish ] = "Sol:";
+    };
+    MetricField RID_SCAN_LEFT_BOX
+    {
+        Spin = TRUE ;
+        Repeat = TRUE ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( SCAN_AREA_LEFT + 50 , SCAN_AREA_TOP - 2 ) ;
+        Size = MAP_APPFONT ( PREVIEW_WIDTH - 50 , 12 ) ;
+    };
+    FixedText RID_SCAN_TOP_TXT
+    {
+        Pos = MAP_APPFONT ( SCAN_AREA_LEFT , SCAN_AREA_TOP + 17 ) ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Text = "~Oben:" ;
+        Text [ English ] = "~Top:" ;
+        Text [ english_us ] = "Top:" ;
+        Text [ portuguese_brazilian ] = "Oben:" ;
+        Text [ swedish ] = "Öv~erst:" ;
+        Text [ danish ] = "Top:" ;
+        Text [ italian ] = "In ~alto:" ;
+        Text [ spanish ] = "~Arriba:" ;
+        Text [ french ] = "En haut :" ;
+        Text [ dutch ] = "~Boven:" ;
+        Text [ portuguese ] = "Em ~cima:" ;
+        Text[ chinese_simplified ] = "ÉÏ:";
+        Text[ russian ] = "Ñâåğõó:";
+        Text[ polish ] = "W górze:";
+        Text[ japanese ] = "ã:";
+        Text[ chinese_traditional ] = "¤W¡G";
+        Text[ arabic ] = "ÃÚáì:";
+        Text[ dutch ] = "~Boven:";
+        Text[ chinese_simplified ] = "ÉÏ:";
+        Text[ greek ] = "ĞÜíù:";
+        Text[ korean ] = "À§:";
+        Text[ turkish ] = "Üst:";
+        Text[ language_user1 ] = " ";
+    };
+    MetricField RID_SCAN_TOP_BOX
+    {
+        Spin = TRUE ;
+        Repeat = TRUE ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( SCAN_AREA_LEFT + 50 , SCAN_AREA_TOP + 15 ) ;
+        Size = MAP_APPFONT ( PREVIEW_WIDTH - 50 , 12 ) ;
+    };
+    FixedText RID_SCAN_RIGHT_TXT
+    {
+        Pos = MAP_APPFONT ( SCAN_AREA_LEFT , SCAN_AREA_TOP + 34 ) ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Text = "~Rechts:" ;
+        Text [ English ] = "~Right:" ;
+        Text [ english_us ] = "Right:" ;
+        Text [ portuguese_brazilian ] = "Rechts:" ;
+        Text [ swedish ] = "~Höger:" ;
+        Text [ danish ] = "Højre:" ;
+        Text [ italian ] = "A ~destra:" ;
+        Text [ spanish ] = "~Derecha:" ;
+        Text [ french ] = "À droite :" ;
+        Text [ dutch ] = "~Rechts:" ;
+        Text [ portuguese ] = "~Direita:" ;
+        Text[ chinese_simplified ] = "ÓÒ:";
+        Text[ russian ] = "Ñïğàâà:";
+        Text[ polish ] = "Z prawej:";
+        Text[ japanese ] = "‰E:";
+        Text[ chinese_traditional ] = "¥k¡G";
+        Text[ arabic ] = "íãíä:";
+        Text[ dutch ] = "~Rechts:";
+        Text[ chinese_simplified ] = "ÓÒ:";
+        Text[ greek ] = "ÄåîéÜ:";
+        Text[ korean ] = "¿À¸¥ÂÊ:";
+        Text[ turkish ] = "Sağ:";
+        Text[ language_user1 ] = " ";
+    };
+    MetricField RID_SCAN_RIGHT_BOX
+    {
+        Spin = TRUE ;
+        Repeat = TRUE ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( SCAN_AREA_LEFT + 50 , SCAN_AREA_TOP + 32 ) ;
+        Size = MAP_APPFONT ( PREVIEW_WIDTH - 50 , 12 ) ;
+    };
+    FixedText RID_SCAN_BOTTOM_TXT
+    {
+        Pos = MAP_APPFONT ( SCAN_AREA_LEFT , SCAN_AREA_TOP + 51 ) ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Text = "~Unten:" ;
+        Text [ English ] = "~Bottom:" ;
+        Text [ english_us ] = "Bottom:" ;
+        Text [ portuguese_brazilian ] = "Unten:" ;
+        Text [ swedish ] = "~Underst:" ;
+        Text [ danish ] = "Bund:" ;
+        Text [ italian ] = "In ~basso:" ;
+        Text [ spanish ] = "~Abajo:" ;
+        Text [ french ] = "En bas :" ;
+        Text [ dutch ] = "~Beneden:" ;
+        Text [ portuguese ] = "Em ~baixo:" ;
+        Text[ chinese_simplified ] = "ÏÂ:";
+        Text[ russian ] = "Ñíèçó:";
+        Text[ polish ] = "W dole:";
+        Text[ japanese ] = "‰º:";
+        Text[ chinese_traditional ] = "¤U¡G";
+        Text[ arabic ] = "ÃÓİá:";
+        Text[ dutch ] = "~Beneden:";
+        Text[ chinese_simplified ] = "ÏÂ:";
+        Text[ greek ] = "ÊÜôù:";
+        Text[ korean ] = "¾Æ·¡:";
+        Text[ turkish ] = "Alt:";
+    };
+    MetricField RID_SCAN_BOTTOM_BOX
+    {
+        Spin = TRUE ;
+        Repeat = TRUE ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( SCAN_AREA_LEFT + 50 , SCAN_AREA_TOP + 49 ) ;
+        Size = MAP_APPFONT ( PREVIEW_WIDTH - 50 , 12 ) ;
+    };
+    FixedText RID_DEVICE_BOX_TXT
+    {
+        Pos = MAP_APPFONT ( SECOND_COLUMN , 8 ) ;
+        Size = MAP_APPFONT ( 70 , 8 ) ;
+        Text = "Verwendetes ~Gerät:" ;
+        Text [ English ] = "~Scanning device:" ;
+        Text [ english_us ] = "Device used:" ;
+        Text [ portuguese_brazilian ] = "Verwendetes Gerõt:" ;
+        Text [ swedish ] = "A~nvänd enhet:" ;
+        Text [ danish ] = "Brugt enhed:" ;
+        Text [ italian ] = "Apparecchiatura usata:" ;
+        Text [ spanish ] = "Dispositivo ~utilizado:" ;
+        Text [ french ] = "Périphérique utilisé :" ;
+        Text [ dutch ] = "~Gebruikte apparatuur:" ;
+        Text [ portuguese ] = "~Periférico usado:" ;
+        Text[ chinese_simplified ] = "Ê¹ÓÃµÄÉè±¸:";
+        Text[ russian ] = "Èñïîëüçóåìîå óñòğîéñòâî:";
+        Text[ polish ] = "Zastosowane urz¹dzenie:";
+        Text[ japanese ] = "g—p’†‚ÌÃŞÊŞ²½:";
+        Text[ chinese_traditional ] = "¨Ï¥Îªº³]³Æ¡G";
+        Text[ arabic ] = "ÇáÌåÇÒ ÇáãÓÊÎÏã:";
+        Text[ dutch ] = "~Gebruikte apparatuur:";
+        Text[ chinese_simplified ] = "Ê¹ÓÃµÄÉè±¸:";
+        Text[ greek ] = "×ñçóéìïğïéïıçìåíç óõóêåõŞ:";
+        Text[ korean ] = "»ç¿ëÇÑ ÀåÄ¡:";
+        Text[ turkish ] = "Kullanılan cihaz:";
+    };
+    ListBox RID_DEVICE_BOX
+    {
+        Border = TRUE ;
+        Dropdown = TRUE ;
+        Sort = TRUE ;
+        Pos = MAP_APPFONT ( SECOND_COLUMN + 70 , 6 ) ;
+        Size = MAP_APPFONT ( 60 , 80 ) ;
+    };
+    FixedText RID_SCAN_RESOLUTION_TXT
+    {
+        Pos = MAP_APPFONT ( SECOND_COLUMN , 25 ) ;
+        Size = MAP_APPFONT ( 70 , 8 ) ;
+        Text = "Auflösung [~DPI]" ;
+        Text [ English ] = "Resolution [~DPI]:" ;
+        Text [ english_us ] = "Resolution [~DPI]" ;
+        Text [ portuguese_brazilian ] = "Aufl÷sung [DPI]:" ;
+        Text [ swedish ] = "Upplösning [~DPI]:" ;
+        Text [ danish ] = "Opløsning [~DPI]:" ;
+        Text [ italian ] = "Risoluzione [~DPI]:" ;
+        Text [ spanish ] = "Resolución [~DPI]:" ;
+        Text [ french ] = "Résolution [~DPI]" ;
+        Text [ dutch ] = "Resolutie [~DPI]:" ;
+        Text [ portuguese ] = "Resolução [~DPI]:" ;
+        Text[ chinese_simplified ] = "·Ö±æÂÊ[DPI]";
+        Text[ russian ] = "Ğàçğåøåíèå [DPI]:";
+        Text[ polish ] = "Rozdzielczoœæ [~DPI]:";
+        Text[ japanese ] = "‰ğ‘œ [DPI]";
+        Text[ greek ] = "ÁíÜëõóç [~DPI]:";
+        Text[ korean ] = "ÇØ»óµµ [DPI]:(~D)";
+        Text[ chinese_traditional ] = "¸ÑªR«× [~DPI]";
+        Text[ arabic ] = "ÇÓÊÈÇäÉ [~DPI]";
+        Text[ turkish ] = "Çözünürlük [~DPI]";
+    };
+    NumericBox RID_SCAN_RESOLUTION_BOX
+    {
+        Dropdown = TRUE ;
+        Pos = MAP_APPFONT ( SECOND_COLUMN + 70 , 23 ) ;
+        Size = MAP_APPFONT ( 60 , 80 ) ;
+    };
+    FixedText RID_SCAN_ADVANCED_TXT
+    {
+        Pos = MAP_APPFONT ( SECOND_COLUMN , 40 ) ;
+        Size = MAP_APPFONT ( 120 , 8 ) ;
+        Text = "Er~weiterte Optionen anzeigen" ;
+        Text [ English ] = "Sho~w advanced options" ;
+        Text [ portuguese ] = "Mostrar opções a~vançadas" ;
+        Text [ english_us ] = "Show advanced options" ;
+        Text [ portuguese_brazilian ] = "Erweiterte Optionen anzeigen" ;
+        Text [ swedish ] = "Vi~sa utökade alternativ" ;
+        Text [ danish ] = "Vis avancerede funktioner" ;
+        Text [ italian ] = "Mostra opzioni avanzate" ;
+        Text [ spanish ] = "Mostrar otras ~opciones" ;
+        Text [ french ] = "Afficher les options avancées" ;
+        Text [ dutch ] = "~Verdere opties weergeven" ;
+        Text[ chinese_simplified ] = "ÏÔÊ¾¸ß¼¶Ñ¡Ïî";
+        Text[ russian ] = "Ïîêàçàòü ğàñøèğåííûå ïàğàìåòğû";
+        Text[ polish ] = "Poka¿ opcje zaawansowane";
+        Text[ japanese ] = "Ú×µÌß¼®İ‚Ì•\\¦";
+        Text[ chinese_traditional ] = "Åã¥Ü¶i¶¥¿ï¶µ";
+        Text[ arabic ] = "ÅÙåÇÑ ÇáÎíÇÑÇÊ ÇáãÊŞÏãÉ";
+        Text[ dutch ] = "~Verdere opties weergeven";
+        Text[ chinese_simplified ] = "ÏÔÊ¾¸ß¼¶Ñ¡Ïî";
+        Text[ greek ] = "ÅìöÜíéóç åğéğëİïí åğéëïãşí";
+        Text[ korean ] = "È®ÀåµÈ ¿É¼Ç Ç¥½Ã";
+        Text[ turkish ] = "Ek seçenekleri görüntüle";
+    };
+    CheckBox RID_SCAN_ADVANCED_BOX
+    {
+        Check = FALSE ;
+        Pos = MAP_APPFONT ( SECOND_COLUMN + 120 , 40 ) ;
+        Size = MAP_APPFONT ( 8 , 8 ) ;
+    };
+    FixedText RID_SCAN_OPTION_TXT
+    {
+        Pos = MAP_APPFONT ( SECOND_COLUMN , 54 ) ;
+        Size = MAP_APPFONT ( 130 , 8 ) ;
+        Text = "Optionen:" ;
+        Text [ English ] = "Options:" ;
+        Text [ portuguese ] = "Opções:" ;
+        Text [ english_us ] = "Options:" ;
+        Text [ portuguese_brazilian ] = "Optionen:" ;
+        Text [ swedish ] = "Alternativ:" ;
+        Text [ danish ] = "Indstillinger:" ;
+        Text [ italian ] = "Opzioni:" ;
+        Text [ spanish ] = "Opciones:" ;
+        Text [ french ] = "Options :" ;
+        Text [ dutch ] = "Opties:" ;
+        Text[ chinese_simplified ] = "Ñ¡Ïî:";
+        Text[ russian ] = "Ïàğàìåòğû:";
+        Text[ polish ] = "Opcje:";
+        Text[ japanese ] = "µÌß¼®İ:";
+        Text[ chinese_traditional ] = "¿ï¶µ¡G";
+        Text[ arabic ] = "ÇáÎíÇÑÇÊ:";
+        Text[ dutch ] = "Opties:";
+        Text[ chinese_simplified ] = "Ñ¡Ïî:";
+        Text[ greek ] = "Åğéëïãİò:";
+        Text[ korean ] = "¿É¼Ç:";
+        Text[ turkish ] = "Seçenekler:";
+        Text[ language_user1 ] = " ";
+    };
+    Control RID_SCAN_OPTION_BOX
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( SECOND_COLUMN , 63 ) ;
+        Size = MAP_APPFONT ( 130 , 102 ) ;
+    };
+    FixedText RID_SCAN_OPTIONTITLE_TXT
+    {
+        WordBreak = TRUE ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( SECOND_COLUMN , 170 ) ;
+        Size = MAP_APPFONT ( 130 , 50 ) ;
+    };
+    FixedText RID_SCAN_OPTION_DESC_TXT
+    {
+        Pos = MAP_APPFONT ( SECOND_COLUMN , 225 ) ;
+        Size = MAP_APPFONT ( 120 , 8 ) ;
+    };
+    CheckBox RID_SCAN_BOOL_OPTION_BOX
+    {
+        Pos = MAP_APPFONT ( SECOND_COLUMN + 120 , 225 ) ;
+        Size = MAP_APPFONT ( 8 , 8 ) ;
+    };
+    Edit RID_SCAN_STRING_OPTION_EDT
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( SECOND_COLUMN , 234 ) ;
+        Size = MAP_APPFONT ( 130 , 12 ) ;
+    };
+    ListBox RID_SCAN_QUANTUM_RANGE_BOX
+    {
+        Border = TRUE ;
+        Dropdown = TRUE ;
+        Pos = MAP_APPFONT ( SECOND_COLUMN , 234 ) ;
+        Size = MAP_APPFONT ( 130 , 80 ) ;
+    };
+    ListBox RID_SCAN_STRING_RANGE_BOX
+    {
+        Border = TRUE ;
+        Dropdown = TRUE ;
+        Pos = MAP_APPFONT ( SECOND_COLUMN , 234 ) ;
+        Size = MAP_APPFONT ( 130 , 80 ) ;
+    };
+    Edit RID_SCAN_NUMERIC_OPTION_EDT
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( SECOND_COLUMN , 234 ) ;
+        Size = MAP_APPFONT ( 130 , 12 ) ;
+    };
+    FixedText RID_SCAN_NUMERIC_VECTOR_TXT
+    {
+        Pos = MAP_APPFONT ( SECOND_COLUMN , 253 ) ;
+        Size = MAP_APPFONT ( 90 , 8 ) ;
+        Text = "Vektorelement" ;
+        Text [ English ] = "Element of vector" ;
+        Text [ english_us ] = "Vector element" ;
+        Text [ portuguese_brazilian ] = "Vektorelement" ;
+        Text [ swedish ] = "Vektorelement" ;
+        Text [ danish ] = "Vektorelement" ;
+        Text [ italian ] = "Elemento vettoriale" ;
+        Text [ spanish ] = "Elemento vectorial" ;
+        Text [ french ] = "Élément vectoriel" ;
+        Text [ dutch ] = "Vectorelement" ;
+        Text [ portuguese ] = "Elemento vectorial" ;
+        Text[ chinese_simplified ] = "Ê¸Á¿Í¼¼ş";
+        Text[ russian ] = "Âåêòîğíûé ıëåìåíò";
+        Text[ polish ] = "Element wektorowy";
+        Text[ japanese ] = "ÍŞ¸À—v‘f";
+        Text[ chinese_traditional ] = "¦V¶q¹Ï¥ó";
+        Text[ arabic ] = "ÚäÕÑ Vector";
+        Text[ dutch ] = "Vectorelement";
+        Text[ chinese_simplified ] = "Ê¸Á¿Í¼¼ş";
+        Text[ greek ] = "Óôïé÷åßï äéáíıóìáôïò";
+        Text[ korean ] = "º¤ÅÍ ¿ä¼Ò";
+        Text[ turkish ] = "Vektör öğesi";
+    };
+    NumericField RID_SCAN_NUMERIC_VECTOR_BOX
+    {
+        Border = TRUE ;
+        Spin = TRUE ;
+        Repeat = TRUE ;
+        Pos = MAP_APPFONT ( SECOND_COLUMN + 90 , 251 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+    };
+    PushButton RID_SCAN_BUTTON_OPTION_BTN
+    {
+        Pos = MAP_APPFONT ( SECOND_COLUMN , 234 ) ;
+        Size = MAP_APPFONT ( 130 , 14 ) ;
+        Text = "Setzen" ;
+        Text [ English ] = "Set" ;
+        Text [ english_us ] = "Set" ;
+        Text [ portuguese_brazilian ] = "Setzen" ;
+        Text [ swedish ] = "Definiera" ;
+        Text [ danish ] = "Definer" ;
+        Text [ italian ] = "Imposta" ;
+        Text [ spanish ] = "Definir" ;
+        Text [ french ] = "Appliquer" ;
+        Text [ dutch ] = "Overnemen" ;
+        Text [ portuguese ] = "Definir" ;
+        Text[ chinese_simplified ] = "Éè¶¨";
+        Text[ russian ] = "Óñòàíîâèòü";
+        Text[ polish ] = "OsadŸ";
+        Text[ japanese ] = "İ’è";
+        Text[ chinese_traditional ] = "³]©w";
+        Text[ arabic ] = "ÊÚííä";
+        Text[ dutch ] = "Overnemen";
+        Text[ chinese_simplified ] = "Éè¶¨";
+        Text[ greek ] = "Ïñéóìüò";
+        Text[ korean ] = "¼³Á¤";
+        Text[ turkish ] = "Tanımla";
+    };
+    Bitmap RID_SCAN_BITMAP_PLUS
+    {
+        File = "plus.bmp" ;
+    };
+    Bitmap RID_SCAN_BITMAP_MINUS
+    {
+        File = "minus.bmp" ;
+    };
+    Text [ english_us ] = "Scanner" ;
+    Text [ portuguese_brazilian ] = "Scanner" ;
+    Text [ swedish ] = "Skanner" ;
+    Text [ danish ] = "Scanner" ;
+    Text [ italian ] = "Scanner" ;
+    Text [ spanish ] = "Escáner" ;
+    Text [ french ] = "Scanner" ;
+    Text [ dutch ] = "Scanner" ;
+    Text [ portuguese ] = "Digitalizador" ;
+    Text[ chinese_simplified ] = "É¨Ãè»ú";
+    Text[ russian ] = "Ñêàíåğ";
+    Text[ polish ] = "Skaner";
+    Text[ japanese ] = "½·¬Å°";
+    Text[ chinese_traditional ] = "±½´y»ö";
+    Text[ arabic ] = "ãÇÓÍÉ ÖæÆíÉ";
+    Text[ dutch ] = "Scanner";
+    Text[ chinese_simplified ] = "É¨Ãè»ú";
+    Text[ greek ] = "ÓáñùôŞò";
+    Text[ korean ] = "½ºÄ³³Ê";
+    Text[ turkish ] = "Tarayıcı";
+};
+String RID_SANE_DEVICEINFO_TXT
+{
+    Text = "Gerät: %s\nHersteller: %s\nModell: %s\nTyp: %s" ;
+    Text [ English ] = "Device: %s\nVendor: %s\nModel: %s\nType: %s" ;
+    Text [ english_us ] = "Device: %s\nVendor: %s\nModel: %s\nType: %s" ;
+    Text [ portuguese_brazilian ] = "Gerõt: %s\nHersteller: %s\nModell: %s\nTyp: %s" ;
+    Text [ swedish ] = "Enhet: %s\nTillverkare: %s\nModell: %s\nTyp: %s" ;
+    Text [ danish ] = "Enhed: %s\nForhandler: %s\nModel: %s\nType: %s" ;
+    Text [ italian ] = "Apparecchiatura: %s\nProduttore: %s\nModello: %s\nTipo: %s" ;
+    Text [ spanish ] = "Dispositivo: %s\nFabricante: %s\nModelo: %s\nTipo: %s" ;
+    Text [ french ] = "Périphérique : %s\nFabricant : %s\nModèle : %s\nType : %s" ;
+    Text [ dutch ] = "Apparaat: %s\nProducent: %s\nModel: %s\nType: %s" ;
+    Text [ portuguese ] = "Periférico: %s\nFabricante: %s\nModelo: %s\nTipo: %s" ;
+    Text[ chinese_simplified ] = "Éè±¸: %s\nÖÆÔìÉÌ: %s\nĞÍºÅ: %s\nÀàĞÍ: %s";
+    Text[ russian ] = "Óñòğîéñòâî: %s\nÈçãîòîâèòåëü: %s\nÌîäåëü: %s\nÒèï: %s";
+    Text[ polish ] = "Urz¹dzenie: %s\nProducent: %s\nModel: %s\nTyp: %s";
+    Text[ japanese ] = "ÃŞÊŞ²½: %s\n»‘¢Œ³: %s\nÓÃŞÙ: %s\nÀ²Ìß: %s";
+    Text[ chinese_traditional ] = "³]³Æ¡G%s\n»s³y°Ó¡G%s\n«¬¸¹¡G%s\nÃş«¬¡G%s";
+    Text[ arabic ] = "ÇáÌåÇÒ: \n%sÇáãäÊÌ: \n%sÇáØÑÇÒ: %s\nÇáäæÚ: %s";
+    Text[ dutch ] = "Apparaat: %s\nProducent: %s\nModel: %s\nType: %s";
+    Text[ chinese_simplified ] = "Éè±¸: %s\nÖÆÔìÉÌ: %s\nĞÍºÅ: %s\nÀàĞÍ: %s";
+    Text[ greek ] = "ÓõóêåõŞ: %s\nÊáôáóêåõáóôŞò: %s\nÌïíôİëï: %s\nÔığïò: %s";
+    Text[ korean ] = "ÀåÄ¡: %s\nÁ¦Á¶¾÷Ã¼: %s\n¸ğµ¨: %s\nÀ¯Çü: %s";
+    Text[ turkish ] = "Cihaz: %s\nÜretici: %s\nModel: %s\nTip: %s";
+};
+String RID_SANE_SCANERROR_TXT
+{
+    Text = "Während des Scans ist ein Fehler aufgetreten." ;
+    Text [ English ] = "An error occured during scanning." ;
+    Text [ portuguese ] = "Surgiu um erro durante a digitalização." ;
+    Text [ english_us ] = "An error occurred while scanning." ;
+    Text [ portuguese_brazilian ] = "Wõhrend des Scans ist ein Fehler aufgetreten." ;
+    Text [ swedish ] = "Ett fel uppstod när Du skannade." ;
+    Text [ danish ] = "Der opstod en fejl under scanning." ;
+    Text [ italian ] = "Durante la scansione si è verificato un errore." ;
+    Text [ spanish ] = "Se ha producido un error durante el escaneado." ;
+    Text [ french ] = "Une erreur s'est produite durant la digitalisation." ;
+    Text [ dutch ] = "Tijdens het scannen is er een fout opgetreden." ;
+    Text[ chinese_simplified ] = "ÔÚÉ¨ÃèÊ±·¢Éú´íÎó¡£";
+    Text[ russian ] = "Âî âğåìÿ ñêàíèğîâàíèÿ ïğîèçîøëà îøèáêà.";
+    Text[ polish ] = "Podczas skanowania wyst¹pi³ b³¹d.";
+    Text[ japanese ] = "½·¬İ’†‚É´×°”­¶¡";
+    Text[ chinese_traditional ] = "¦b±½´y®Éµo¥Í¤@­Ó¿ù»~¡C";
+    Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÚãáíÉ ÇáãÓÍ ÇáÖæÆí.";
+    Text[ dutch ] = "Tijdens het scannen is er een fout opgetreden.";
+    Text[ chinese_simplified ] = "ÔÚÉ¨ÃèÊ±·¢Éú´íÎó¡£";
+    Text[ greek ] = "ĞáñïõóéÜóôçêå óöÜëìá êáôÜ ôçí óÜñùóç.";
+    Text[ korean ] = "½ºÄµÇÒ ¶§ ¿À·ù°¡ ¹ß»ıÇß½À´Ï´Ù.";
+    Text[ turkish ] = "Tarama sırasında hata oluştu.";
+};
+String RID_SANE_NORESOLUTIONOPTION_TXT
+{
+    Text = "Das Gerät ist nicht auf die Erzeugung einer Vorschau eingerichtet. Statt dessen wird als Vorschau ein normaler Scan verwendet. Dieser kann deutlich länger dauern." ;
+    Text [ English ] = "The device does not offer a preview option. Therefore the preview will be acquired by a normal scan which can consume considerable time." ;
+    Text [ portuguese ] = "O aparelho não oferece a possibilidade da previsualização. Por esta razão, será usada uma digitalização normal como previsualização. Isto poderá levar algum tempo." ;
+    Text [ english_us ] = "The device does not offer a preview option. Therefore, a normal scan will be used as a preview instead. This may take a considerable amount of time." ;
+    Text [ portuguese_brazilian ] = "Das Gerõt ist nicht auf die Erzeugung einer Vorschau eingerichtet. Statt dessen wird als Vorschau ein normaler Scan verwendet. Dieser kann deutlich lõnger dauern." ;
+    Text [ swedish ] = "Enheten är inte inställd för att skapa en förhandsvisning. I stället används en vanlig skanning som förhandsvisning. Detta kan ta betydligt längre tid." ;
+    Text [ danish ] = "Enheden er ikke indstillet til at kunne oprette eksempler. Istedet bruges et almindelig scan som eksempel. Dette kan komme til at vare betydelig længere tid." ;
+    Text [ italian ] = "L'apparecchiatura non è impostata per la creazione di un'anteprima. Al suo posto viene usata come anteprima una normale scansione. Ciò può richiedere molto più tempo." ;
+    Text [ spanish ] = "El dispositivo no está preparado para ofrecer opción de previsualización. En lugar de esta se utilizará un escaneado normal, que puede tardar considerablemente más." ;
+    Text [ french ] = "Le périphérique utilisé ne permet pas de créer un aperçu. Il permet uniquement une digitalisation normale en guise d'aperçu, ce qui peut durer nettement plus longtemps." ;
+    Text [ dutch ] = "Het apparaat is niet ingesteld op het maken van een voorbeeld. In plaats daarvan wordt gebruik gemaakt van een normale scan als voorbeeld. Dit kan beduidend langer duren." ;
+    Text[ chinese_simplified ] = "Õâ¸öÉè±¸Ã»ÓĞÔ¤ÊÓ¹¦ÄÜ¡£²ÉÓÃÆÕÍ¨µÄÉ¨Ãè·½Ê½Ô¤ÊÓ¿ÉÄÜĞèÒª½Ï³¤µÄÊ±¼ä¡£";
+    Text[ russian ] = "Óñòğîéñòâî íå íàñòğîåíî íà ñîçäàíèå ïğåäâàğèòåëüíîãî ïğîñìîòğà. Âìåñòî ıòîãî èñïîëüçóåòñÿ â êà÷åñòâå ïğåäâàğèòåëüíîãî ïğîñìîòğà îáû÷íîå ñêàíèğîâàíèå. İòîò ïğîöåññ ïğîäëèòñÿ çíà÷èòåëüíî äîëüøå.";
+    Text[ polish ] = "To urz¹dzenie nie mo¿e utworzyæ podgl¹du. Zamiast tego zostanie zastosowany jako podgl¹d normalny tryb przegl¹du. To mo¿e trochê d³u¿ej potrwaæ.";
+    Text[ japanese ] = "‚±‚ÌÃŞÊŞ²½‚ÍÌßÚËŞ­°‚Ìì¬‚É‚Í“K‚µ‚Ä‚¢‚Ü‚¹‚ñB‚»‚Ì‚©‚í‚è‚É•’Ê‚Ì½·¬İ‚ªÌßÚËŞ­°‚Æ‚µ‚Äg—p‚³‚ê‚Ü‚·‚ªAŠÔ‚ª‚©‚©‚è‚Ü‚·B";
+    Text[ chinese_traditional ] = "³o­Ó³]³Æ¨S¦³³]©w¹wµø¥\\¯à¡C¦]¦¹±Ä¥Î´¶³qªº±½´y¤è¦¡¹wµø·|»İ­n¸ûªøªº®É¶¡¡C";
+    Text[ arabic ] = "ÇáÌåÇÒ ÛíÑ ãõÚÏ áÅäÔÇÁ ãÚÇíäÉ. ÈÏáÇğ ãä åĞÇ¡ Óæİ íÊã ÇÓÊÎÏÇã ãÓÍ ÚÇÏí ßãÚÇíäÉ. íãßä Ãä íÓÊÛÑŞ Ğáß İÊÑÉ ÃØæá ÈßËíÑ.";
+    Text[ dutch ] = "Het apparaat is niet ingesteld op het maken van een voorbeeld. In plaats daarvan wordt gebruik gemaakt van een normale scan als voorbeeld. Dit kan beduidend langer duren.";
+    Text[ chinese_simplified ] = "Õâ¸öÉè±¸Ã»ÓĞÔ¤ÊÓ¹¦ÄÜ¡£²ÉÓÃÆÕÍ¨µÄÉ¨Ãè·½Ê½Ô¤ÊÓ¿ÉÄÜĞèÒª½Ï³¤µÄÊ±¼ä¡£";
+    Text[ greek ] = "Ç óõóêåõŞ äåí İ÷åé ñõèìéóôåß ãéá ôçí åìöÜíéóç ğñïåğéóêüğçóçò. Áíôß áõôïı ÷ñçóéìïğïéåßôáé ìéá êáíïíéêŞ óÜñùóç. Ç äéáäéêáóßá áõôŞ ìğïñåß íá áñãŞóåé ğåñéóóüôåñï.";
+    Text[ korean ] = "ÀåÄ¡°¡ ¹Ì¸® º¸±â ¿É¼ÇÀ» Á¦°øÇÏÁö ¾Ê½À´Ï´Ù. ±× ´ë½Å º¸Åë ½ºÄµÀÌ ¹Ì¸® º¸±â·Î ÀÌ¿ëµÉ °ÍÀÔ´Ï´Ù. ÀÌ ½ºÄµÀº ½Ã°£ÀÌ ÈÎ¾À ´õ ¿À·¡ °É¸± ¼ö ÀÖ½À´Ï´Ù.";
+    Text[ turkish ] = "Cihaz önizleme işlevine desteklemiyor. Bunun yerine önizleme olarak normal bir tarama görüntüsü kullanılacak. Bu işlem daha fazla zaman alabilir.";
+};
+String RID_SANE_NOSANELIB_TXT
+{
+    Text = "Das SANE Interface konnte nicht initialisiert werden. Es kann kein Scanvorgang stattfinden." ;
+    Text [ English ] = "The SANE interface could not be initialized. Scanning is not possible." ;
+    Text [ portuguese ] = "Impossível inicializar a interface SANE. Impossível iniciar o processo de digitalização." ;
+    Text [ english_us ] = "The SANE interface could not be initialized. Scanning is not possible." ;
+    Text [ portuguese_brazilian ] = "Das SANE Interface konnte nicht initialisiert werden. Es kann kein Scanvorgang stattfinden." ;
+    Text [ swedish ] = "SANE-gränssnittet kunde inte initialiseras. Det är inte möjligt att skanna." ;
+    Text [ danish ] = "Det var ikke muligt at initialisere SANE-grænsefladen. Scanning er ikke mulig." ;
+    Text [ italian ] = "Non è stato possibile inizializzare l'interfaccia SANE. Non è possibile eseguire lo scanning." ;
+    Text [ spanish ] = "La interfaz SANE no se pudo inicializar. No se puede realizar ningún proceso de digitalización." ;
+    Text [ french ] = "L'interface SANE n'a pas pu être initialisée. Impossible de scanner." ;
+    Text [ dutch ] = "Het SANE interface kon niet worden geïnitialiseerd. Scannen is niet mogelijk." ;
+    Text[ chinese_simplified ] = "ÎŞ·¨³õÊ¼»¯ SANE ½çÃæ¡£ÎŞ·¨Ö´ĞĞÉ¨Ãè×÷Òµ¡£";
+    Text[ russian ] = "Èíòåğôåéñ SANE íå óäåòñÿ èíèöèàëèçèğîâàòü. Ïğîöåññ ñêàíèğîâàíèÿ íåâîçìîæåí.";
+    Text[ polish ] = "Interfejsu SANE nie mo¿na zainincjowaæ. Skanowanie niemo¿liwe.";
+    Text[ japanese ] = "‚±‚ÌSANE²İÀ°Ìª²½‚Í‰Šú‰»‚Å‚«‚Ü‚¹‚ñB½·¬İÀs‚Í•s‰Â”\\‚Å‚·B";
+    Text[ chinese_traditional ] = "µLªkªì©l¤Æ SANE ¬É­±¡CµLªk°õ¦æ±½´y§@·~¡C";
+    Text[ arabic ] = "ÊÚĞÑ ÊËÈíÊ ÇáæÇÌåÉ SANE. áåĞÇ İÅäå ãä ÛíÑ Çáããßä ÅÌÑÇÁ ÚãáíÉ ÇáãÓÍ ÇáÖæÆí.";
+    Text[ dutch ] = "Het SANE interface kon niet worden geïnitialiseerd. Scannen is niet mogelijk.";
+    Text[ chinese_simplified ] = "ÎŞ·¨³õÊ¼»¯ SANE ½çÃæ¡£ÎŞ·¨Ö´ĞĞÉ¨Ãè×÷Òµ¡£";
+    Text[ greek ] = "Äåí Şôáí äõíáôüí íá ãßíåé áíáãíşñéóç ôçò äéáóıíäåóçò SANE. Áäıíáôïí íá ãßíåé óÜñùóç.";
+    Text[ korean ] = "SANE ÀÎÅÍÆäÀÌ½º¸¦ ÃÊ±âÈ­ÇÏÁö ¸øÇØ ½ºÄµ°úÁ¤À» ÁøÇàÇÒ ¼ö ¾ø½À´Ï´Ù.";
+    Text[ turkish ] = "SANE arabirimi başlatılamadı. Tarama işlemi yürütülemez.";
+};

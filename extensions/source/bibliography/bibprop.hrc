@@ -1,0 +1,211 @@
+/*************************************************************************
+ *
+ *  $RCSfile: bibprop.hrc,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:16:44 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef _BIB_FMPROP_HRC
+#define _BIB_FMPROP_HRC
+
+extern rtl::OUString FM_PROP_LABEL;
+extern rtl::OUString FM_PROP_NAME;
+extern rtl::OUString FM_PROP_CONTROLSOURCE;
+extern rtl::OUString FM_PROP_FORMATKEY;
+extern rtl::OUString FM_PROP_VALUE;
+#ifdef TF_SDBAPI
+#else // !TF_SDBAPI
+extern rtl::OUString FM_PROP_EDITMODE;
+extern rtl::OUString FM_PROP_DATASOURCE;
+extern rtl::OUString FM_PROP_CURSORSOURCE;
+extern rtl::OUString FM_PROP_CURSORSOURCETYPE;
+#endif // !TF_SDBAPI
+extern rtl::OUString FM_PROP_TEXT;
+/*
+extern rtl::OUString FM_PROP_TAG;
+extern rtl::OUString FM_PROP_TABINDEX;
+extern rtl::OUString FM_PROP_CLASSID;
+extern rtl::OUString FM_PROP_ALIGN;
+extern rtl::OUString FM_PROP_RECORDCOUNT;
+extern rtl::OUString FM_PROP_RECORDSTATUS;
+extern rtl::OUString FM_PROP_RECORDCOUNTFINAL;
+extern rtl::OUString FM_PROP_VALUEMIN;
+extern rtl::OUString FM_PROP_VALUEMAX;
+extern rtl::OUString FM_PROP_VALUESTEP;
+extern rtl::OUString FM_PROP_CANINSERT;
+extern rtl::OUString FM_PROP_CANUPDATE;
+extern rtl::OUString FM_PROP_CANDELETE;
+extern rtl::OUString FM_PROP_NAVIGATION;
+extern rtl::OUString FM_PROP_CYCLE;
+extern rtl::OUString FM_PROP_ENABLED;
+extern rtl::OUString FM_PROP_SPIN;
+extern rtl::OUString FM_PROP_READONLY;
+extern rtl::OUString FM_PROP_FILTER_CRITERIA;
+extern rtl::OUString FM_PROP_SORT_CRITERIA;
+extern rtl::OUString FM_PROP_AUTOINCREMENT;
+extern rtl::OUString FM_PROP_CACHESIZE;
+extern rtl::OUString FM_PROP_DATAENTRY;
+extern rtl::OUString FM_PROP_LASTDIRTY;
+extern rtl::OUString FM_PROP_STATEMENT;
+extern rtl::OUString FM_PROP_WIDTH;
+extern rtl::OUString FM_PROP_SEARCHINFO;
+extern rtl::OUString FM_PROP_MULTILINE;
+extern rtl::OUString FM_PROP_TARGET_URL;
+extern rtl::OUString FM_PROP_DEFAULTCONTROL;
+extern rtl::OUString FM_PROP_MAXTEXTLEN;
+extern rtl::OUString FM_PROP_SIZE;
+extern rtl::OUString FM_PROP_DATE;
+extern rtl::OUString FM_PROP_TIME;
+extern rtl::OUString FM_PROP_STATE;
+extern rtl::OUString FM_PROP_TRISTATE;
+extern rtl::OUString FM_PROP_HIDDEN_VALUE;
+extern rtl::OUString FM_PROP_TARGET_FRAME;
+extern rtl::OUString FM_PROP_BUTTONTYPE;
+extern rtl::OUString FM_PROP_STRINGITEMLIST;
+extern rtl::OUString FM_PROP_DEFAULT_TEXT;
+extern rtl::OUString FM_PROP_DEFAULTCHECKED;
+extern rtl::OUString FM_PROP_DEFAULT_DATE;
+extern rtl::OUString FM_PROP_DEFAULT_TIME;
+extern rtl::OUString FM_PROP_DEFAULT_VALUE;
+extern rtl::OUString FM_PROP_FORMATSSUPPLIER;
+extern rtl::OUString FM_PROP_SUBMIT_ACTION;
+extern rtl::OUString FM_PROP_SUBMIT_TARGET;
+extern rtl::OUString FM_PROP_SUBMIT_METHOD;
+extern rtl::OUString FM_PROP_SUBMIT_ENCODING;
+extern rtl::OUString FM_PROP_IMAGE_URL;
+extern rtl::OUString FM_PROP_EMPTY_IS_NULL;
+extern rtl::OUString FM_PROP_LISTSOURCETYPE;
+extern rtl::OUString FM_PROP_LISTSOURCE;
+extern rtl::OUString FM_PROP_SELECT_SEQ;
+extern rtl::OUString FM_PROP_VALUE_SEQ;
+extern rtl::OUString FM_PROP_DEFAULT_SELECT_SEQ;
+extern rtl::OUString FM_PROP_MULTISELECTION;
+extern rtl::OUString FM_PROP_DECIMAL_ACCURACY;
+extern rtl::OUString FM_PROP_EDITMASK;
+extern rtl::OUString FM_PROP_ISREADONLY;
+extern rtl::OUString FM_PROP_ISREQUIRED;
+extern rtl::OUString FM_PROP_FIELDTYPE;
+extern rtl::OUString FM_PROP_DECIMALS;
+extern rtl::OUString FM_PROP_REFVALUE;
+extern rtl::OUString FM_PROP_STRICTFORMAT;
+extern rtl::OUString FM_PROP_ALLOWADDITIONS;
+extern rtl::OUString FM_PROP_ALLOWEDITS;
+extern rtl::OUString FM_PROP_ALLOWDELETIONS;
+extern rtl::OUString FM_PROP_MASTERFIELDS;
+extern rtl::OUString FM_PROP_SLAVEFIELDS;
+extern rtl::OUString FM_PROP_ISPASSTHROUGH;
+extern rtl::OUString FM_PROP_QUERY;
+extern rtl::OUString FM_PROP_LITERALMASK;
+extern rtl::OUString FM_PROP_SHOWTHOUSANDSEP;
+extern rtl::OUString FM_PROP_CURRENCYSYMBOL;
+extern rtl::OUString FM_PROP_DATEFORMAT;
+extern rtl::OUString FM_PROP_DATEMIN;
+extern rtl::OUString FM_PROP_DATEMAX;
+extern rtl::OUString FM_PROP_DATE_SHOW_CENTURY;
+extern rtl::OUString FM_PROP_TIMEFORMAT;
+extern rtl::OUString FM_PROP_TIMEMIN;
+extern rtl::OUString FM_PROP_TIMEMAX;
+extern rtl::OUString FM_PROP_LINECOUNT;
+extern rtl::OUString FM_PROP_BOUNDCOLUMN;
+extern rtl::OUString FM_PROP_HASNAVIGATION;
+extern rtl::OUString FM_PROP_FONT;
+extern rtl::OUString FM_PROP_BACKGROUNDCOLOR;
+extern rtl::OUString FM_PROP_FILLCOLOR;
+extern rtl::OUString FM_PROP_TEXTCOLOR;
+extern rtl::OUString FM_PROP_LINECOLOR;
+extern rtl::OUString FM_PROP_BORDER;
+extern rtl::OUString FM_PROP_DROPDOWN;
+extern rtl::OUString FM_PROP_MULTI;
+extern rtl::OUString FM_PROP_HSCROLL;
+extern rtl::OUString FM_PROP_VSCROLL;
+extern rtl::OUString FM_PROP_TABSTOP;
+extern rtl::OUString FM_PROP_AUTOCOMPLETE;
+extern rtl::OUString FM_PROP_HARDLINEBREAKS;
+extern rtl::OUString FM_PROP_PRINTABLE;
+extern rtl::OUString FM_PROP_ECHO_CHAR;
+extern rtl::OUString FM_PROP_ROWHEIGHT;
+extern rtl::OUString FM_PROP_HELPTEXT;
+extern rtl::OUString FM_PROP_FONT_NAME;
+extern rtl::OUString FM_PROP_FONT_STYLENAME;
+extern rtl::OUString FM_PROP_FONT_FAMILY;
+extern rtl::OUString FM_PROP_FONT_CHARSET;
+extern rtl::OUString FM_PROP_FONT_HEIGHT;
+extern rtl::OUString FM_PROP_FONT_WEIGHT;
+extern rtl::OUString FM_PROP_FONT_SLANT;
+extern rtl::OUString FM_PROP_FONT_UNDERLINE;
+extern rtl::OUString FM_PROP_FONT_STRIKEOUT;
+extern rtl::OUString FM_PROP_HELPURL;
+extern rtl::OUString FM_PROP_RECORDMARKER;
+extern rtl::OUString FM_PROP_BOUNDFIELD;
+extern rtl::OUString FM_PROP_TREATASNUMERIC;
+extern rtl::OUString FM_PROP_EFFECTIVE_VALUE;
+extern rtl::OUString FM_PROP_EFFECTIVE_DEFAULT;
+extern rtl::OUString FM_PROP_EFFECTIVE_MIN;
+extern rtl::OUString FM_PROP_EFFECTIVE_MAX;
+extern rtl::OUString FM_PROP_HIDDEN;
+extern rtl::OUString FM_PROP_FILTERPROPOSAL;
+extern rtl::OUString FM_PROP_FIELDSOURCE;
+extern rtl::OUString FM_PROP_TABLENAME;
+extern rtl::OUString FM_PROP_FILTERSUPPLIER;
+extern rtl::OUString FM_PROP_CURRENTFILTER;
+extern rtl::OUString FM_PROP_SELECTED_FIELDS;
+extern rtl::OUString FM_PROP_SELECTED_TABLES;
+extern rtl::OUString FM_PROP_THREADSAFE;
+*/
+
+
+#endif // _SVX_FMPROP_HRC
+

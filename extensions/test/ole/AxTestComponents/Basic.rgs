@@ -1,0 +1,26 @@
+HKCR
+{
+	AxTestComponents.Basic.1 = s 'Basic Class'
+	{
+		CLSID = s '{BFE10EBE-8584-11D4-8335-005004526AB4}'
+	}
+	AxTestComponents.Basic = s 'Basic Class'
+	{
+		CLSID = s '{BFE10EBE-8584-11D4-8335-005004526AB4}'
+		CurVer = s 'AxTestComponents.Basic.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {BFE10EBE-8584-11D4-8335-005004526AB4} = s 'Basic Class'
+		{
+			ProgID = s 'AxTestComponents.Basic.1'
+			VersionIndependentProgID = s 'AxTestComponents.Basic'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{BFE10EB1-8584-11D4-8335-005004526AB4}'
+		}
+	}
+}

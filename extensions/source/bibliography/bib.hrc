@@ -1,0 +1,114 @@
+/*************************************************************************
+ *
+ *  $RCSfile: bib.hrc,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:16:44 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef BIB_HRC
+#define BIB_HRC
+
+#include <svtools/solar.hrc>
+
+#ifndef RID_BIB_START
+#define RID_BIB_START                   RID_EXTENSIONS_START
+#endif
+
+// ResIDs
+
+//Dialogs (100)
+#define RID_BIB_DIALOG              (RID_BIB_START)
+#define RID_TP_GENERAL              (RID_BIB_DIALOG)
+#define RID_DLG_MAPPING             (RID_BIB_DIALOG + 1)
+#define RID_DLG_DBCHANGE            (RID_BIB_DIALOG + 2)
+
+//Controls(100)
+#define RID_BIB_CONTROLS            (RID_BIB_START + 100)
+#define RID_BIB_BMPEXPANDER         (RID_BIB_CONTROLS)
+#define RID_BIB_TOOLBAR             (RID_BIB_CONTROLS+ 1)
+
+//Menu(100)
+#define RID_BIB_MENU                (RID_BIB_CONTROLS + 100)
+#define RID_MAIN_MENU               (RID_BIB_MENU +1)
+//#define RID_MAIN_ME_HIERARCHICAL  (RID_BIB_MENU +2)
+#define RID_MAIN_ME_NEWENTRY        (RID_BIB_MENU +3)
+#define RID_MAIN_ME_CHANGEENTRY     (RID_BIB_MENU +4)
+#define RID_MAIN_ME_REMOVEENTRY     (RID_BIB_MENU +5)
+#define RID_MAIN_ME_SEARCH          (RID_BIB_MENU +6)
+#define RID_MAIN_ME_FIELDDLG        (RID_BIB_MENU +7)
+//#define RID_MAIN_ME_LAYOUT            (RID_BIB_MENU +8)
+#define RID_MAIN_ME_MAPPING         (RID_BIB_MENU +9)
+#define RID_MAIN_ME_DBSOURCE        (RID_BIB_MENU +10)
+
+#define RID_POPUP_ME_VIEW           (RID_BIB_MENU +50)
+
+// Strings (500)
+#define RID_BIB_STRING              (RID_BIB_START + 200)
+#define RID_BIB_STR_SECTION         (RID_BIB_STRING +  1)
+#define RID_BIB_STR_FIELDSELECTION  (RID_BIB_STRING +  2)
+#define RID_BIB_STR_TABWIN_PREFIX   (RID_BIB_STRING +  3)
+#define RID_BIB_STR_FRAME_TITLE     (RID_BIB_STRING +  4)
+#define RID_MAP_QUESTION            (RID_BIB_STRING +  5)
+
+// HelpIDs *** nicht bestaetigt ***
+#ifndef HID_BIB_START
+#define HID_BIB_START                   5000
+#define HID_DLG_MAPPING                 (HID_BIB_START + 1)
+#define HID_DLG_DBCHANGE                (HID_BIB_START + 2)
+#define HID_SELECTION_TLB               (HID_BIB_START + 3)
+#endif
+
+#endif

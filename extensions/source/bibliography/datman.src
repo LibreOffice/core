@@ -1,0 +1,1276 @@
+/*************************************************************************
+ *
+ *  $RCSfile: datman.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:16:44 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+//==================================================================
+// BibDataManager
+//
+//
+//
+// $Author: hr $ $Date: 2000-09-18 16:16:44 $ $Revision: 1.1.1.1 $
+// $Logfile:   T:/sc/inc/scresid.hxv  $ $Workfile:   scresid.hxx  $
+//------------------------------------------------------------------
+
+#include "bib.hrc"
+#include "datman.hrc"
+ModalDialog RID_DLG_MAPPING
+{
+    HelpID = HID_DLG_MAPPING;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 391 , 181 ) ;
+    Moveable = TRUE ;
+    Text = "Spaltenzuordung f¸r Tabelle %1";
+    Text [ENGLISH] = "Column assignment for table %1";
+
+    OKButton BT_OK
+    {
+        Pos = MAP_APPFONT ( 338 , 3 ) ;
+        Size = MAP_APPFONT ( 50 , 12 ) ;
+    };
+    CancelButton BT_CANCEL
+    {
+        Pos = MAP_APPFONT ( 338 , 18 ) ;
+        Size = MAP_APPFONT ( 50 , 12 ) ;
+    };
+    HelpButton BT_HELP
+    {
+        Pos = MAP_APPFONT ( 338 , 36 ) ;
+        Size = MAP_APPFONT ( 50 , 12 ) ;
+    };
+    GroupBox    GB_MAPPING
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 329 , 175 ) ;
+        Text = "Spaltennamen";
+        Text [ENGLISH] = "Column names";
+        Text[ english_us ] = "Column names";
+        Text[ portuguese ] = "Nomes de coluna";
+        Text[ russian ] = "Õ‡Á‚‡ÌËˇ ÍÓÎÓÌÓÍ";
+        Text[ greek ] = "œÌ¸Ï·Ù· ÛÙÁÎ˛Ì";
+        Text[ dutch ] = "Kolomnamen";
+        Text[ french ] = "Noms des colonnes";
+        Text[ spanish ] = "Nombres de columna";
+        Text[ italian ] = "Nomi colonna";
+        Text[ danish ] = "Kolonnenavne";
+        Text[ swedish ] = "Kolumnnamn";
+        Text[ polish ] = "Nazwy kolumn";
+        Text[ portuguese_brazilian ] = "Column names";
+        Text[ japanese ] = "óÒñº";
+        Text[ korean ] = "ø≠ ¿Ã∏ß";
+        Text[ chinese_simplified ] = "¡–√˚≥∆";
+        Text[ chinese_traditional ] = "ƒÊ¶W";
+        Text[ arabic ] = "√”„«¡ «·√⁄„œ…";
+        Text[ turkish ] = "S¸tun adlar˝";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText   FT_IDENTIFIER
+    {
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Text = "K¸rzel";
+        Text [ENGLISH] = "Identifier";
+        Text[ english_us ] = "Identifier";
+        Text[ portuguese ] = "Abreviatura";
+        Text[ russian ] = "—ÓÍ‡˘ÂÌËÂ";
+        Text[ greek ] = "”ıÌÙ¸ÏÂıÛÁ";
+        Text[ dutch ] = "Initialen";
+        Text[ french ] = "AbrÈviation";
+        Text[ spanish ] = "Abreviatura";
+        Text[ italian ] = "Sigla";
+        Text[ danish ] = "Genvej";
+        Text[ swedish ] = "Initialer";
+        Text[ polish ] = "Inicja≥y";
+        Text[ portuguese_brazilian ] = "Identifier";
+        Text[ japanese ] = "è»ó™ñº";
+        Text[ korean ] = "¿Ã¥œº»";
+        Text[ chinese_simplified ] = "±Í ∂";
+        Text[ chinese_traditional ] = "¡Yºg";
+        Text[ arabic ] = "«·«Œ ’«—";
+        Text[ turkish ] = "K˝saltma";
+    };
+    ListBox     LB_IDENTIFIER
+    {
+        Pos = MAP_APPFONT ( 65 , 13 ) ;
+        Size = MAP_APPFONT ( 50 , 60 ) ;
+        DropDown = TRUE;
+    };
+    FixedText FT_AUTHORITYTYPE
+    {
+        Pos = MAP_APPFONT ( 118 , 14 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Text = "Literaturart";
+        Text [ENGLISH] = "Type of literature";
+        Text[ english_us ] = "Type of literature";
+        Text[ portuguese ] = "Tipo de literatura";
+        Text[ russian ] = "∆‡Ì";
+        Text[ greek ] = "≈ﬂ‰ÔÚ ÎÔ„ÔÙÂ˜Ìﬂ·Ú";
+        Text[ dutch ] = "Soort literatuur";
+        Text[ french ] = "Genre";
+        Text[ spanish ] = "Tipo de literatura";
+        Text[ italian ] = "Tipo di letteratura";
+        Text[ danish ] = "Litteraturtype";
+        Text[ swedish ] = "Typ av litteratur";
+        Text[ polish ] = "Rodzaj literatury";
+        Text[ portuguese_brazilian ] = "Type of literature";
+        Text[ japanese ] = "ñ{ÇÃï™óﬁ";
+        Text[ korean ] = "¬¸∞ÌπÆ«Â ¿Ø«¸";
+        Text[ chinese_simplified ] = "Œƒœ◊¿‡–Õ";
+        Text[ chinese_traditional ] = "§Âƒm√˛´¨";
+        Text[ arabic ] = "«·‰Ê⁄";
+        Text[ turkish ] = "KaynakÁa t¸r¸";
+    };
+    ListBox LB_AUTHORITYTYPE
+    {
+        Pos = MAP_APPFONT ( 171 , 13 ) ;
+        Size = MAP_APPFONT ( 50 , 60 ) ;
+        DropDown = TRUE;
+    };
+    FixedText FT_AUTHOR
+    {
+        Pos = MAP_APPFONT ( 229 , 14 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Text = "Autor";
+        Text [ENGLISH] = "Author";
+        Text[ english_us ] = "Author";
+        Text[ portuguese ] = "Autor";
+        Text[ russian ] = "¿‚ÚÓ";
+        Text[ greek ] = "”ı„„Ò·ˆ›·Ú";
+        Text[ dutch ] = "Auteur";
+        Text[ french ] = "Auteur";
+        Text[ spanish ] = "Autor";
+        Text[ italian ] = "Autore";
+        Text[ danish ] = "Forfatter";
+        Text[ swedish ] = "Fˆrfattare";
+        Text[ polish ] = "Autor";
+        Text[ portuguese_brazilian ] = "Author";
+        Text[ japanese ] = "íòé“";
+        Text[ korean ] = "¿˙¿⁄";
+        Text[ chinese_simplified ] = "◊˜’ﬂ";
+        Text[ chinese_traditional ] = "ß@™Ã";
+        Text[ arabic ] = "«·„ƒ·›";
+        Text[ turkish ] = "Yazan";
+    };
+    ListBox LB_AUTHOR
+    {
+        Pos = MAP_APPFONT ( 282 , 13 ) ;
+        Size = MAP_APPFONT ( 50 , 60 ) ;
+        DropDown = TRUE;
+    };
+    FixedText FT_TITLE
+    {
+        Pos = MAP_APPFONT ( 12 , 29 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Text = "Titel";
+        Text [ENGLISH] = "Title";
+        Text[ english_us ] = "Title";
+        Text[ portuguese ] = "TÌtulo";
+        Text[ russian ] = "Õ‡Á‚‡ÌËÂ";
+        Text[ greek ] = "‘ﬂÙÎÔÚ";
+        Text[ dutch ] = "Titel";
+        Text[ french ] = "Titre";
+        Text[ spanish ] = "TÌtulo";
+        Text[ italian ] = "Titolo";
+        Text[ danish ] = "Titel";
+        Text[ swedish ] = "Titel";
+        Text[ polish ] = "Tytu≥";
+        Text[ portuguese_brazilian ] = "Title";
+        Text[ japanese ] = "¿≤ƒŸ";
+        Text[ korean ] = "¡¶∏Ò";
+        Text[ chinese_simplified ] = "±ÍÃ‚";
+        Text[ chinese_traditional ] = "º–√D";
+        Text[ arabic ] = "«·⁄‰Ê«‰";
+        Text[ turkish ] = "Ba˛l˝k";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_TITLE
+    {
+        Pos = MAP_APPFONT ( 65 , 28 ) ;
+        Size = MAP_APPFONT ( 50 , 60 ) ;
+        DropDown = TRUE;
+    };
+    FixedText FT_MONTH
+    {
+        Pos = MAP_APPFONT ( 118 , 29 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Text = "Monat";
+        Text [ENGLISH] = "Month";
+        Text[ english_us ] = "Month";
+        Text[ portuguese ] = "MÍs";
+        Text[ russian ] = "ÃÂÒˇˆ";
+        Text[ greek ] = "ÃﬁÌ·Ú";
+        Text[ dutch ] = "Maand";
+        Text[ french ] = "Mois";
+        Text[ spanish ] = "Mes";
+        Text[ italian ] = "Mese";
+        Text[ danish ] = "MÂned";
+        Text[ swedish ] = "MÂnad";
+        Text[ polish ] = "Miesiπc";
+        Text[ portuguese_brazilian ] = "Month";
+        Text[ japanese ] = "åé";
+        Text[ korean ] = "¥ﬁ";
+        Text[ chinese_simplified ] = "‘¬";
+        Text[ chinese_traditional ] = "§Î";
+        Text[ arabic ] = "«·‘Â—";
+        Text[ turkish ] = "Ay";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_MONTH
+    {
+        Pos = MAP_APPFONT ( 171 , 28 ) ;
+        Size = MAP_APPFONT ( 50 , 60 ) ;
+        DropDown = TRUE;
+    };
+    FixedText FT_YEAR
+    {
+        Pos = MAP_APPFONT ( 229 , 29 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Text = "Jahr";
+        Text [ENGLISH] = "Year";
+        Text[ english_us ] = "Year";
+        Text[ portuguese ] = "Ano";
+        Text[ russian ] = "√Ó‰";
+        Text[ greek ] = "∏ÙÔÚ";
+        Text[ dutch ] = "Jaar";
+        Text[ french ] = "An";
+        Text[ spanish ] = "AÒo";
+        Text[ italian ] = "Anno";
+        Text[ danish ] = "≈r";
+        Text[ swedish ] = "≈r";
+        Text[ polish ] = "Rok";
+        Text[ portuguese_brazilian ] = "Year";
+        Text[ japanese ] = "îN";
+        Text[ korean ] = "«ÿ";
+        Text[ chinese_simplified ] = "ƒÍ";
+        Text[ chinese_traditional ] = "¶~";
+        Text[ arabic ] = "«·”‰…";
+        Text[ turkish ] = "Y˝l";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_YEAR
+    {
+        Pos = MAP_APPFONT ( 282 , 28 ) ;
+        Size = MAP_APPFONT ( 50 , 60 ) ;
+        DropDown = TRUE;
+    };
+    FixedText FT_ISBN
+    {
+        Pos = MAP_APPFONT ( 12 , 44 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Text = "ISBN";
+        Text [ENGLISH] = "ISBN";
+        Text[ english_us ] = "ISBN";
+        Text[ portuguese ] = "ISBN";
+        Text[ russian ] = "ISBN";
+        Text[ greek ] = "ISBN";
+        Text[ dutch ] = "ISBN";
+        Text[ french ] = "ISBN";
+        Text[ spanish ] = "ISBN";
+        Text[ italian ] = "ISBN";
+        Text[ danish ] = "ISBN";
+        Text[ swedish ] = "ISBN";
+        Text[ polish ] = "ISBN";
+        Text[ portuguese_brazilian ] = "ISBN";
+        Text[ japanese ] = "ISBN";
+        Text[ korean ] = "ISBN";
+        Text[ chinese_simplified ] = "ISBN";
+        Text[ chinese_traditional ] = "ISBN";
+        Text[ arabic ] = "ISBN";
+        Text[ turkish ] = "ISBN";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_ISBN
+    {
+        Pos = MAP_APPFONT ( 65 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 60 ) ;
+        DropDown = TRUE;
+    };
+    FixedText FT_BOOKTITLE
+    {
+        Pos = MAP_APPFONT ( 118 , 44 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Text = "Buchtitel";
+        Text [ENGLISH] = "Book title";
+        Text[ english_us ] = "Book title";
+        Text[ portuguese ] = "TÌtulo do livro";
+        Text[ russian ] = "Õ‡Á‚‡ÌËÂ ÍÌË„Ë";
+        Text[ greek ] = "‘ﬂÙÎÔÚ ‚È‚ÎﬂÔı";
+        Text[ dutch ] = "Boektitel";
+        Text[ french ] = "Titre du livre";
+        Text[ spanish ] = "TÌtulo del libro";
+        Text[ italian ] = "Titolo del libro";
+        Text[ danish ] = "Bogtitel";
+        Text[ swedish ] = "Boktitel";
+        Text[ polish ] = "Tytu≥ ksiπøki";
+        Text[ portuguese_brazilian ] = "Book title";
+        Text[ japanese ] = "èëñº";
+        Text[ korean ] = "√• ¡¶∏Ò";
+        Text[ chinese_simplified ] = " ÈºÆ±ÍÃ‚";
+        Text[ chinese_traditional ] = "Æ—¶W";
+        Text[ arabic ] = "⁄‰Ê«‰ «·ﬂ «»";
+        Text[ turkish ] = "Kitap ba˛l˝˝";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_BOOKTITLE
+    {
+        Pos = MAP_APPFONT ( 171, 43 ) ;
+        Size = MAP_APPFONT ( 50 , 60 ) ;
+        DropDown = TRUE;
+    };
+    FixedText FT_CHAPTER
+    {
+        Pos = MAP_APPFONT ( 229 , 44 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Text = "Kapitel";
+        Text [ENGLISH] = "Chapter";
+        Text[ english_us ] = "Chapter";
+        Text[ portuguese ] = "CapÌtulo";
+        Text[ russian ] = "√Î‡‚‡";
+        Text[ greek ] = " Âˆ‹Î·ÈÔ";
+        Text[ dutch ] = "Hoofdstuk";
+        Text[ french ] = "Chapitre";
+        Text[ spanish ] = "CapÌtulo";
+        Text[ italian ] = "Capitolo";
+        Text[ danish ] = "Kapitel";
+        Text[ swedish ] = "Kapitel";
+        Text[ polish ] = "Rozdzia≥";
+        Text[ portuguese_brazilian ] = "Chapter";
+        Text[ japanese ] = "èÕ";
+        Text[ korean ] = "¿Â";
+        Text[ chinese_simplified ] = "’¬";
+        Text[ chinese_traditional ] = "≥π";
+        Text[ arabic ] = "«·›’·";
+        Text[ turkish ] = "Bˆl¸m";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_CHAPTER
+    {
+        Pos = MAP_APPFONT ( 282 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 60 ) ;
+        DropDown = TRUE;
+    };
+    FixedText FT_EDITION
+    {
+        Pos = MAP_APPFONT ( 12 , 59 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Text = "Ausgabe";
+        Text [ENGLISH] = "Edition";
+        Text[ english_us ] = "Edition";
+        Text[ portuguese ] = "EdiÁ„o";
+        Text[ russian ] = "»Á‰‡ÌËÂ";
+        Text[ greek ] = "≈Ó·„˘„ﬁ";
+        Text[ dutch ] = "Editie";
+        Text[ french ] = "…dition";
+        Text[ spanish ] = "EdiciÛn";
+        Text[ italian ] = "Edizione";
+        Text[ danish ] = "Udgave";
+        Text[ swedish ] = "UtgÂva";
+        Text[ polish ] = "Wydanie";
+        Text[ portuguese_brazilian ] = "Edition";
+        Text[ japanese ] = "î≈";
+        Text[ korean ] = "∆«";
+        Text[ chinese_simplified ] = "∞Ê±æ";
+        Text[ chinese_traditional ] = "™©•ª";
+        Text[ arabic ] = "«·ÿ»⁄…";
+        Text[ turkish ] = "Yay˝m";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_EDITION
+    {
+        Pos = MAP_APPFONT ( 65 , 58 ) ;
+        Size = MAP_APPFONT ( 50 , 60 ) ;
+        DropDown = TRUE;
+    };
+    FixedText FT_EDITOR
+    {
+        Pos = MAP_APPFONT ( 118 , 59 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Text = "Herausgeber";
+        Text [ENGLISH] = "Editor";
+        Text[ english_us ] = "Editor";
+        Text[ portuguese ] = "Editor";
+        Text[ russian ] = "–Â‰‡ÍÚÓ";
+        Text[ greek ] = "≈Í‰¸ÙÁÚ";
+        Text[ dutch ] = "Uitgever";
+        Text[ french ] = "…diteur";
+        Text[ spanish ] = "Editor";
+        Text[ italian ] = "Editore";
+        Text[ danish ] = "Udgiver";
+        Text[ swedish ] = "Utgivare";
+        Text[ polish ] = "Wydawca";
+        Text[ portuguese_brazilian ] = "Editor";
+        Text[ japanese ] = "ï“èWé“";
+        Text[ korean ] = "πﬂ«‡¿Œ";
+        Text[ chinese_simplified ] = "∑¢––»À";
+        Text[ chinese_traditional ] = "•X™©∞”";
+        Text[ arabic ] = "«·‰«‘—";
+        Text[ turkish ] = "Yay˝mc˝";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_EDITOR
+    {
+        Pos = MAP_APPFONT ( 171, 58) ;
+        Size = MAP_APPFONT ( 50 , 60 ) ;
+        DropDown = TRUE;
+    };
+    FixedText FT_HOWPUBLISHED
+    {
+        Pos = MAP_APPFONT ( 229 , 59 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Text = "Ausgabeart";
+        Text [ENGLISH] = "How published";
+        Text[ english_us ] = "Publication type";
+        Text[ portuguese ] = "Tipo de publicaÁ„o";
+        Text[ russian ] = "“ËÔ ËÁ‰‡ÌËˇ";
+        Text[ greek ] = "‘˝ÔÚ ›Í‰ÔÛÁÚ";
+        Text[ dutch ] = "Wijze van publiceren";
+        Text[ french ] = "Mode de publication";
+        Text[ spanish ] = "Tipo de publicaciÛn";
+        Text[ italian ] = "Tipo di edizione";
+        Text[ danish ] = "Udgivelsestype";
+        Text[ swedish ] = "Utgivningstyp";
+        Text[ polish ] = "Rodzaj publikacji";
+        Text[ portuguese_brazilian ] = "How published";
+        Text[ japanese ] = "∂ ﬁ∞¿≤Ãﬂ";
+        Text[ korean ] = "πﬂ«‡ ¿Ø«¸";
+        Text[ chinese_simplified ] = "∑¢––∑Ω Ω";
+        Text[ chinese_traditional ] = "•X™©√˛´¨";
+        Text[ arabic ] = "ÿ—Ìﬁ… «·‰‘—";
+        Text[ turkish ] = "Yay˝m t¸r¸";
+    };
+    ListBox LB_HOWPUBLISHED
+    {
+        Pos = MAP_APPFONT ( 282 , 58 ) ;
+        Size = MAP_APPFONT ( 50 , 60 ) ;
+        DropDown = TRUE;
+    };
+    FixedText FT_INSTITUTION
+    {
+        Pos = MAP_APPFONT ( 12 , 74 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Text = "Institution";
+        Text [ENGLISH] = "Institution";
+        Text[ english_us ] = "Institution";
+        Text[ portuguese ] = "InstituiÁ„o";
+        Text[ russian ] = "”˜ÂÊ‰ÂÌËÂ";
+        Text[ greek ] = "∫‰ÒıÏ·";
+        Text[ dutch ] = "Instelling";
+        Text[ french ] = "Institution";
+        Text[ spanish ] = "InstituciÛn";
+        Text[ italian ] = "Istituzione";
+        Text[ danish ] = "Institution";
+        Text[ swedish ] = "Institution";
+        Text[ polish ] = "Instytucja";
+        Text[ portuguese_brazilian ] = "Institution";
+        Text[ japanese ] = "ã@ä÷";
+        Text[ korean ] = "«˘»∏";
+        Text[ chinese_simplified ] = "ª˙ππ";
+        Text[ chinese_traditional ] = "…ÛÃ€";
+        Text[ arabic ] = "«·ÂÌ∆…";
+        Text[ turkish ] = "Kurum";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_INSTITUTION
+    {
+        Pos = MAP_APPFONT ( 65 , 73 ) ;
+        Size = MAP_APPFONT ( 50 , 60 ) ;
+        DropDown = TRUE;
+    };
+    FixedText FT_JOURNAL
+    {
+        Pos = MAP_APPFONT ( 118 , 74 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Text = "Zeitschrift";
+        Text [ENGLISH] = "Journal";
+        Text[ english_us ] = "Journal";
+        Text[ portuguese ] = "Revista";
+        Text[ russian ] = "∆ÛÌ‡Î";
+        Text[ greek ] = "–ÂÒÈÔ‰ÈÍ¸";
+        Text[ dutch ] = "Tijdschrift";
+        Text[ french ] = "Revue";
+        Text[ spanish ] = "Revista";
+        Text[ italian ] = "Rivista";
+        Text[ danish ] = "Tidsskrift";
+        Text[ swedish ] = "Tidskrift";
+        Text[ polish ] = "Czasopismo";
+        Text[ portuguese_brazilian ] = "Journal";
+        Text[ japanese ] = "éGéè";
+        Text[ korean ] = "¿‚¡ˆ";
+        Text[ chinese_simplified ] = "‘”÷æ";
+        Text[ chinese_traditional ] = "¬¯ªx";
+        Text[ arabic ] = "„Ã·…";
+        Text[ turkish ] = "Dergi";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_JOURNAL
+    {
+        Pos = MAP_APPFONT ( 171 , 73 ) ;
+        Size = MAP_APPFONT ( 50 , 60 ) ;
+        DropDown = TRUE;
+    };
+    FixedText FT_NOTE
+    {
+        Pos = MAP_APPFONT ( 229 , 74 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Text = "Notiz";
+        Text [ENGLISH] = "Note";
+        Text[ english_us ] = "Note";
+        Text[ portuguese ] = "AnotaÁıes";
+        Text[ russian ] = "œËÏÂ˜‡ÌËÂ";
+        Text[ greek ] = "”ÁÏÂﬂ˘ÛÁ";
+        Text[ dutch ] = "Aantekening";
+        Text[ french ] = "Note";
+        Text[ spanish ] = "Nota";
+        Text[ italian ] = "Nota";
+        Text[ danish ] = "Note";
+        Text[ swedish ] = "Anteckning";
+        Text[ polish ] = "Notatka";
+        Text[ portuguese_brazilian ] = "Note";
+        Text[ japanese ] = "“”";
+        Text[ korean ] = "∏ﬁ∏";
+        Text[ chinese_simplified ] = "±∏◊¢";
+        Text[ chinese_traditional ] = "µß∞O";
+        Text[ arabic ] = "„·«ÕŸ…";
+        Text[ turkish ] = "Not";
+    };
+    ListBox LB_NOTE
+    {
+        Pos = MAP_APPFONT ( 282 , 73 ) ;
+        Size = MAP_APPFONT ( 50 , 60 ) ;
+        DropDown = TRUE;
+    };
+    FixedText FT_ANNOTE
+    {
+        Pos = MAP_APPFONT ( 12, 89 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Text = "Anmerkung";
+        Text [ENGLISH] = "Annotation";
+        Text[ english_us ] = "Annotation";
+        Text[ portuguese ] = "AnotaÁıes";
+        Text[ russian ] = "œÓÏÂÚÍË";
+        Text[ greek ] = "–·Ò·ÙﬁÒÁÛÁ";
+        Text[ dutch ] = "Commentaar";
+        Text[ french ] = "Annotation";
+        Text[ spanish ] = "AnotaciÛn";
+        Text[ italian ] = "Annotazione";
+        Text[ danish ] = "AnmÊrkning";
+        Text[ swedish ] = "Anm‰rkning";
+        Text[ polish ] = "Adnotacja";
+        Text[ portuguese_brazilian ] = "Annotation";
+        Text[ japanese ] = "∫“›ƒ";
+        Text[ korean ] = "¡÷ºÆ";
+        Text[ chinese_simplified ] = "Àµ√˜";
+        Text[ chinese_traditional ] = "≥∆™`";
+        Text[ arabic ] = " ⁄·Ìﬁ  Ê÷ÌÕÌ";
+        Text[ turkish ] = "AÁ˝klama";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_ANNOTE
+    {
+        Pos = MAP_APPFONT ( 65, 88 ) ;
+        Size = MAP_APPFONT ( 50 , 60 ) ;
+        DropDown = TRUE;
+    };
+    FixedText FT_NUMBER
+    {
+        Pos = MAP_APPFONT ( 118 , 89 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Text = "Nummer";
+        Text [ENGLISH] = "No.";
+        Text[ english_us ] = "No.";
+        Text[ portuguese ] = "N∫.";
+        Text[ russian ] = "π";
+        Text[ greek ] = "¡ÒÈËÏ¸Ú";
+        Text[ dutch ] = "Nummer";
+        Text[ french ] = "No.";
+        Text[ spanish ] = "N˙mero";
+        Text[ italian ] = "No.";
+        Text[ danish ] = "Nummer";
+        Text[ swedish ] = "Nummer";
+        Text[ polish ] = "Numer";
+        Text[ portuguese_brazilian ] = "No.";
+        Text[ japanese ] = "No.";
+        Text[ korean ] = "π¯»£";
+        Text[ chinese_simplified ] = "±‡∫≈";
+        Text[ chinese_traditional ] = "∏πΩX";
+        Text[ arabic ] = "—ﬁ„";
+        Text[ turkish ] = "Say˝";
+    };
+    ListBox LB_NUMBER
+    {
+        Pos = MAP_APPFONT ( 171 , 88 ) ;
+        Size = MAP_APPFONT ( 50 , 60 ) ;
+        DropDown = TRUE;
+    };
+    FixedText FT_ORGANIZATIONS
+    {
+        Pos = MAP_APPFONT ( 229 , 89 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Text = "Organisation";
+        Text [ENGLISH] = "Organization";
+        Text[ english_us ] = "Organization";
+        Text[ portuguese ] = "OrganizaÁ„o";
+        Text[ russian ] = "Œ„‡ÌËÁ‡ˆËˇ";
+        Text[ greek ] = "œÒ„·ÌÈÛÏ¸Ú";
+        Text[ dutch ] = "Organisatie";
+        Text[ french ] = "Organisation";
+        Text[ spanish ] = "OrganizaciÛn";
+        Text[ italian ] = "Organizzazione";
+        Text[ danish ] = "Organisation";
+        Text[ swedish ] = "Organisation";
+        Text[ polish ] = "Organizacja";
+        Text[ portuguese_brazilian ] = "Organization";
+        Text[ japanese ] = "ëgêDícëÃ";
+        Text[ korean ] = "¥‹√º";
+        Text[ chinese_simplified ] = "◊È÷Ø";
+        Text[ chinese_traditional ] = "≤’¬¥";
+        Text[ arabic ] = "„‰Ÿ„…";
+        Text[ turkish ] = "Organizasyon";
+    };
+    ListBox LB_ORGANIZATIONS
+    {
+        Pos = MAP_APPFONT ( 282, 88 ) ;
+        Size = MAP_APPFONT ( 50 , 60 ) ;
+        DropDown = TRUE;
+    };
+    FixedText FT_PAGES
+    {
+        Pos = MAP_APPFONT ( 12 , 104 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Text = "Seite(n)";
+        Text [ENGLISH] = "Page(s)";
+        Text[ english_us ] = "Page(s)";
+        Text[ portuguese ] = "P·gina(s)";
+        Text[ russian ] = "—Ú‡ÌËˆ(˚)";
+        Text[ greek ] = "”ÂÎﬂ‰·/-ÂÚ";
+        Text[ dutch ] = "Pagina(s)";
+        Text[ french ] = "Page(s)";
+        Text[ spanish ] = "P·gina(s)";
+        Text[ italian ] = "Pagina/e";
+        Text[ danish ] = "Side(r)";
+        Text[ swedish ] = "Sida(-or)";
+        Text[ polish ] = "Strona(y)";
+        Text[ portuguese_brazilian ] = "Page(s)";
+        Text[ japanese ] = "Õﬂ∞ºﬁ";
+        Text[ korean ] = "∆‰¿Ã¡ˆ ºˆ";
+        Text[ chinese_simplified ] = "“≥";
+        Text[ chinese_traditional ] = "≠∂";
+        Text[ arabic ] = "’›Õ… (’›Õ« )";
+        Text[ turkish ] = "Sayfa say˝s˝";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_PAGES
+    {
+        Pos = MAP_APPFONT ( 65 , 103 ) ;
+        Size = MAP_APPFONT ( 50 , 60 ) ;
+        DropDown = TRUE;
+    };
+    FixedText FT_PUBLISHER
+    {
+        Pos = MAP_APPFONT ( 118 , 104 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Text = "Verlag";
+        Text [ENGLISH] = "Publisher";
+        Text[ english_us ] = "Publisher";
+        Text[ portuguese ] = "Editora";
+        Text[ russian ] = "»Á‰‡ÚÂÎ¸ÒÚ‚Ó";
+        Text[ greek ] = "≈Í‰ÔÙÈÍ¸Ú ÔﬂÍÔÚ";
+        Text[ dutch ] = "Uitgeverij";
+        Text[ french ] = "…dition";
+        Text[ spanish ] = "Editorial";
+        Text[ italian ] = "Casa editrice";
+        Text[ danish ] = "Forlag";
+        Text[ swedish ] = "Fˆrlag";
+        Text[ polish ] = "Wydawnictwo";
+        Text[ portuguese_brazilian ] = "Publisher";
+        Text[ japanese ] = "î≠çsèä";
+        Text[ korean ] = "√‚∆«ªÁ";
+        Text[ chinese_simplified ] = "≥ˆ∞Ê…Á";
+        Text[ chinese_traditional ] = "•X™©™¿";
+        Text[ arabic ] = "œ«— «·‰‘—";
+        Text[ turkish ] = "Yay˝m evi";
+    };
+    ListBox LB_PUBLISHER
+    {
+        Pos = MAP_APPFONT ( 171, 103 ) ;
+        Size = MAP_APPFONT ( 50 , 60 ) ;
+        DropDown = TRUE;
+    };
+    FixedText FT_ADDRESS
+    {
+        Pos = MAP_APPFONT ( 229 , 104 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Text = "Adresse";
+        Text [ENGLISH] = "Address";
+        Text[ english_us ] = "Address";
+        Text[ portuguese ] = "EndereÁo";
+        Text[ russian ] = "¿‰ÂÒ";
+        Text[ greek ] = "ƒÈÂ˝ËıÌÛÁ";
+        Text[ dutch ] = "Adres";
+        Text[ french ] = "Adresse";
+        Text[ spanish ] = "DirecciÛn";
+        Text[ italian ] = "Indirizzo";
+        Text[ danish ] = "Adresse";
+        Text[ swedish ] = "Adress";
+        Text[ polish ] = "Adres";
+        Text[ portuguese_brazilian ] = "Address";
+        Text[ japanese ] = "èZèä";
+        Text[ korean ] = "¡÷º“";
+        Text[ chinese_simplified ] = "µÿ÷∑";
+        Text[ chinese_traditional ] = "¶aß}";
+        Text[ arabic ] = "«·⁄‰Ê«‰";
+        Text[ turkish ] = "Adres";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_ADDRESS
+    {
+        Pos = MAP_APPFONT ( 282 , 103 ) ;
+        Size = MAP_APPFONT ( 50 , 60 ) ;
+        DropDown = TRUE;
+    };
+    FixedText FT_SCHOOL
+    {
+        Pos = MAP_APPFONT ( 12 , 119 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Text = "Hochschule";
+        Text [ENGLISH] = "School";
+        Text[ english_us ] = "University";
+        Text[ portuguese ] = "Universidade";
+        Text[ russian ] = "¬”«";
+        Text[ greek ] = "¡.≈.…./‘.≈.….";
+        Text[ dutch ] = "Hogeschool";
+        Text[ french ] = "…cole supÈrieure";
+        Text[ spanish ] = "Universidad";
+        Text[ italian ] = "Scuola superiore";
+        Text[ danish ] = "Universitet";
+        Text[ swedish ] = "Hˆgskola";
+        Text[ polish ] = "Szko≥a wyøsza";
+        Text[ portuguese_brazilian ] = "School";
+        Text[ japanese ] = "ã≥àÁã@ä÷";
+        Text[ korean ] = "«–±≥";
+        Text[ chinese_simplified ] = "¥Û—ß";
+        Text[ chinese_traditional ] = "∞™µ•∞|Æ’";
+        Text[ arabic ] = "Ã«„⁄…";
+        Text[ turkish ] = "‹niversite";
+    };
+    ListBox LB_SCHOOL
+    {
+        Pos = MAP_APPFONT ( 65 , 118 ) ;
+        Size = MAP_APPFONT ( 50 , 60 ) ;
+        DropDown = TRUE;
+    };
+    FixedText FT_SERIES
+    {
+        Pos = MAP_APPFONT ( 118 , 119 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Text = "Serie";
+        Text [ENGLISH] = "Series";
+        Text[ english_us ] = "Series";
+        Text[ portuguese ] = "SÈrie";
+        Text[ russian ] = "—ÂËˇ";
+        Text[ greek ] = "”ÂÈÒ‹";
+        Text[ dutch ] = "Serie";
+        Text[ french ] = "SÈrie";
+        Text[ spanish ] = "Serie";
+        Text[ italian ] = "Serie";
+        Text[ danish ] = "Serie";
+        Text[ swedish ] = "Serie";
+        Text[ polish ] = "Seria";
+        Text[ portuguese_brazilian ] = "Series";
+        Text[ japanese ] = "ëpèë";
+        Text[ korean ] = "Ω√∏Æ¡Ó";
+        Text[ chinese_simplified ] = "œµ¡–";
+        Text[ chinese_traditional ] = "®t¶C";
+        Text[ arabic ] = "”·”·…";
+        Text[ turkish ] = "Dizi";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_SERIES
+    {
+        Pos = MAP_APPFONT ( 171 , 118) ;
+        Size = MAP_APPFONT ( 50 , 60 ) ;
+        DropDown = TRUE;
+    };
+    FixedText FT_REPORTTYPE
+    {
+        Pos = MAP_APPFONT ( 229 , 119 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Text = "Art des Reports";
+        Text [ENGLISH] = "Report type";
+        Text[ english_us ] = "Report type";
+        Text[ portuguese ] = "Tipo de relatÛrio";
+        Text[ russian ] = "“ËÔ ÓÚ˜ÂÚ‡";
+        Text[ greek ] = "‘˝ÔÚ ·Ì·ˆÔÒ‹Ú";
+        Text[ dutch ] = "Soort bericht";
+        Text[ french ] = "Type de rapport";
+        Text[ spanish ] = "Tipo de informe";
+        Text[ italian ] = "Rapporto";
+        Text[ danish ] = "Rapporttype";
+        Text[ swedish ] = "Typ av rapport";
+        Text[ polish ] = "Rodzaj raportu";
+        Text[ portuguese_brazilian ] = "Report type";
+        Text[ japanese ] = "⁄Œﬂ∞ƒÇÃéÌóﬁ";
+        Text[ korean ] = "∫∏∞Ìº≠ ¿Ø«¸";
+        Text[ chinese_simplified ] = "±®µ¿¿‡–Õ";
+        Text[ chinese_traditional ] = "≥¯ßi√˛´¨";
+        Text[ arabic ] = "‰Ê⁄ «· ﬁ—Ì—";
+        Text[ turkish ] = "Rapor t¸r¸";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_REPORTTYPE
+    {
+        Pos = MAP_APPFONT ( 282 , 118 ) ;
+        Size = MAP_APPFONT ( 50 , 60 ) ;
+        DropDown = TRUE;
+    };
+    FixedText FT_VOLUME
+    {
+        Pos = MAP_APPFONT ( 12 , 134 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Text = "Band";
+        Text [ENGLISH] = "Volume";
+        Text[ english_us ] = "Volume";
+        Text[ portuguese ] = "Volume";
+        Text[ russian ] = "“ÓÏ";
+        Text[ greek ] = "‘¸ÏÔÚ";
+        Text[ dutch ] = "Deel";
+        Text[ french ] = "Volume";
+        Text[ spanish ] = "Tomo";
+        Text[ italian ] = "Volume";
+        Text[ danish ] = "Bind";
+        Text[ swedish ] = "Volym";
+        Text[ polish ] = "Tom";
+        Text[ portuguese_brazilian ] = "Volume";
+        Text[ japanese ] = "ä™";
+        Text[ korean ] = "±«";
+        Text[ chinese_simplified ] = "≤·";
+        Text[ chinese_traditional ] = "•U";
+        Text[ arabic ] = "«·„Ã·œ";
+        Text[ turkish ] = "Cilt";
+    };
+    ListBox LB_VOLUME
+    {
+        Pos = MAP_APPFONT ( 65 , 133) ;
+        Size = MAP_APPFONT ( 50 , 60 ) ;
+        DropDown = TRUE;
+    };
+    FixedText FT_URL
+    {
+        Pos = MAP_APPFONT ( 118 , 134 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Text = "URL";
+        Text [ENGLISH] = "URL";
+        Text[ english_us ] = "URL";
+        Text[ portuguese ] = "URL";
+        Text[ russian ] = "URL";
+        Text[ greek ] = "URL";
+        Text[ dutch ] = "URL";
+        Text[ french ] = "URL";
+        Text[ spanish ] = "URL";
+        Text[ italian ] = "URL";
+        Text[ danish ] = "URL";
+        Text[ swedish ] = "URL";
+        Text[ polish ] = "URL";
+        Text[ portuguese_brazilian ] = "URL";
+        Text[ japanese ] = "URL";
+        Text[ korean ] = "URL";
+        Text[ chinese_simplified ] = "URL";
+        Text[ chinese_traditional ] = "URL";
+        Text[ arabic ] = "URL";
+        Text[ turkish ] = "URL";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_URL
+    {
+        Pos = MAP_APPFONT ( 171 , 133 ) ;
+        Size = MAP_APPFONT ( 50 , 60 ) ;
+        DropDown = TRUE;
+    };
+    FixedText FT_CUSTOM1
+    {
+        Pos = MAP_APPFONT ( 229 , 134 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Text = "Benutzerfeld 1";
+        Text [ENGLISH] = "Custom field 1";
+        Text[ english_us ] = "User-defined 1";
+        Text[ portuguese ] = "Campo de utilizador 1";
+        Text[ russian ] = "œÓÎÂ ÔÓÎ¸ÁÓ‚‡ÚÂÎˇ 1";
+        Text[ greek ] = "–Â‰ﬂÔ ˜ÒﬁÛÙÁ 1";
+        Text[ dutch ] = "Gebruikersveld 1";
+        Text[ french ] = "Champ d'utilisateur 1";
+        Text[ spanish ] = "Campo de usuario 1";
+        Text[ italian ] = "Utente 1";
+        Text[ danish ] = "Brugerdefineret 1";
+        Text[ swedish ] = "Anv‰ndarf‰lt 1";
+        Text[ polish ] = "Pole uøytkownika 1";
+        Text[ portuguese_brazilian ] = "Custom field 1";
+        Text[ japanese ] = "’∞ªﬁ∞Ã®∞Ÿƒﬁ1";
+        Text[ korean ] = "ªÁøÎ¿⁄ ¡§¿« « µÂ 1";
+        Text[ chinese_simplified ] = "”√ªß¿∏ 1";
+        Text[ chinese_traditional ] = "¶€≠qƒÊ¶Ï 1";
+        Text[ arabic ] = "Õﬁ· «·„” Œœ„ 1";
+        Text[ turkish ] = "Kullan˝c˝ alan˝ 1";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_CUSTOM1
+    {
+        Pos = MAP_APPFONT ( 282 , 133 ) ;
+        Size = MAP_APPFONT ( 50 , 60 ) ;
+        DropDown = TRUE;
+    };
+    FixedText FT_CUSTOM2
+    {
+        Pos = MAP_APPFONT ( 12 , 149 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Text = "Benutzerfeld 2";
+        Text [ENGLISH] = "Custom field 2";
+        Text[ english_us ] = "User-defined 2";
+        Text[ portuguese ] = "Campo de utilizador 2";
+        Text[ russian ] = "œÓÎÂ ÔÓÎ¸ÁÓ‚‡ÚÂÎˇ 2";
+        Text[ greek ] = "–Â‰ﬂÔ ˜ÒﬁÛÙÁ 2";
+        Text[ dutch ] = "Gebruikersveld 2";
+        Text[ french ] = "Champ d'tilisateur 2";
+        Text[ spanish ] = "Campo de usuario 2";
+        Text[ italian ] = "Utente 2";
+        Text[ danish ] = "Brugerdefineret 2";
+        Text[ swedish ] = "Anv‰ndarf‰lt 2";
+        Text[ polish ] = "Pole uøytkownika 2";
+        Text[ portuguese_brazilian ] = "Custom field 2";
+        Text[ japanese ] = "’∞ªﬁ∞Ã®∞Ÿƒﬁ2";
+        Text[ korean ] = "ªÁøÎ¿⁄ ¡§¿« « µÂ 2";
+        Text[ chinese_simplified ] = "”√ªß¿∏ 2";
+        Text[ chinese_traditional ] = "¶€≠qƒÊ¶Ï 2";
+        Text[ arabic ] = "Õﬁ· «·„” Œœ„ 2";
+        Text[ turkish ] = "Kullan˝c˝ alan˝ 2";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_CUSTOM2
+    {
+        Pos = MAP_APPFONT ( 65 , 148 ) ;
+        Size = MAP_APPFONT ( 50 , 60 ) ;
+        DropDown = TRUE;
+    };
+    FixedText FT_CUSTOM3
+    {
+        Pos = MAP_APPFONT ( 118 , 149 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Text = "Benutzerfeld 3";
+        Text [ENGLISH] = "Custom field 3";
+        Text[ english_us ] = "User-defined 3";
+        Text[ portuguese ] = "Campo de utilizador 3";
+        Text[ russian ] = "œÓÎÂ ÔÓÎ¸ÁÓ‚‡ÚÂÎˇ 3";
+        Text[ greek ] = "–Â‰ﬂÔ ˜ÒﬁÛÙÁ 3";
+        Text[ dutch ] = "Gebruikersveld 3";
+        Text[ french ] = "Champ d'utilisateur 3";
+        Text[ spanish ] = "Campo de usuario 3";
+        Text[ italian ] = "Utente 3";
+        Text[ danish ] = "Brugerdefineret 3";
+        Text[ swedish ] = "Anv‰ndarf‰lt 3";
+        Text[ polish ] = "Pole uøytkownika 3";
+        Text[ portuguese_brazilian ] = "Custom field 3";
+        Text[ japanese ] = "’∞ªﬁ∞Ã®∞Ÿƒﬁ3";
+        Text[ korean ] = "ªÁøÎ¿⁄ ¡§¿« « µÂ 3";
+        Text[ chinese_simplified ] = "”√ªß¿∏ 3";
+        Text[ chinese_traditional ] = "¶€≠qƒÊ¶Ï 3";
+        Text[ arabic ] = "Õﬁ· «·„” Œœ„ 3";
+        Text[ turkish ] = "Kullan˝c˝ alan˝ 3";
+    };
+    ListBox LB_CUSTOM3
+    {
+        Pos = MAP_APPFONT ( 171 , 148 ) ;
+        Size = MAP_APPFONT ( 50 , 60 ) ;
+        DropDown = TRUE;
+    };
+    FixedText FT_CUSTOM4
+    {
+        Pos = MAP_APPFONT ( 229 , 149 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Text = "Benutzerfeld 4";
+        Text [ENGLISH] = "Custom field 4";
+        Text[ english_us ] = "User-defined 4";
+        Text[ portuguese ] = "Campo de utilizador 4";
+        Text[ russian ] = "œÓÎÂ ÔÓÎ¸ÁÓ‚‡ÚÂÎˇ 4";
+        Text[ greek ] = "–Â‰ﬂÔ ˜ÒﬁÛÙÁ 4";
+        Text[ dutch ] = "Gebruikersveld 4";
+        Text[ french ] = "Champ d'utilisateur 4";
+        Text[ spanish ] = "Campo de usuario 4";
+        Text[ italian ] = "Utente 4";
+        Text[ danish ] = "Brugerdefineret 4";
+        Text[ swedish ] = "Anv‰ndarf‰lt 4";
+        Text[ polish ] = "Pole uøytkownika 4";
+        Text[ portuguese_brazilian ] = "Custom field 4";
+        Text[ japanese ] = "’∞ªﬁ∞Ã®∞Ÿƒﬁ4";
+        Text[ korean ] = "ªÁøÎ¿⁄ ¡§¿« « µÂ 4";
+        Text[ chinese_simplified ] = "”√ªß¿∏ 4";
+        Text[ chinese_traditional ] = "¶€≠qƒÊ¶Ï 4";
+        Text[ arabic ] = "Õﬁ· «·„” Œœ„ 4";
+        Text[ turkish ] = "Kullan˝c˝ alan˝ 4";
+    };
+    ListBox LB_CUSTOM4
+    {
+        Pos = MAP_APPFONT ( 282, 148 ) ;
+        Size = MAP_APPFONT ( 50 , 60 ) ;
+        DropDown = TRUE;
+    };
+    FixedText FT_CUSTOM5
+    {
+        Pos = MAP_APPFONT ( 12 , 164 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Text = "Benutzerfeld 5";
+        Text [ENGLISH] = "Custom field 5";
+        Text[ english_us ] = "User-defined 5";
+        Text[ portuguese ] = "Campo de utilizador 5";
+        Text[ russian ] = "œÓÎÂ ÔÓÎ¸ÁÓ‚‡ÚÂÎˇ 5";
+        Text[ greek ] = "–Â‰ﬂÔ ˜ÒﬁÛÙÁ 5";
+        Text[ dutch ] = "Gebruikersveld 5";
+        Text[ french ] = "Champ d'utilisateur 5";
+        Text[ spanish ] = "Campo de usuario 5";
+        Text[ italian ] = "Utente 5";
+        Text[ danish ] = "Brugerdefineret 5";
+        Text[ swedish ] = "Anv‰ndarf‰lt 5";
+        Text[ polish ] = "Pole uøytkownika 5";
+        Text[ portuguese_brazilian ] = "Custom field 5";
+        Text[ japanese ] = "’∞ªﬁ∞Ã®∞Ÿƒﬁ5";
+        Text[ korean ] = "ªÁøÎ¿⁄ ¡§¿« « µÂ 5";
+        Text[ chinese_simplified ] = "”√ªß¿∏ 5";
+        Text[ chinese_traditional ] = "¶€≠qƒÊ¶Ï 5";
+        Text[ arabic ] = "Õﬁ· «·„” Œœ„ 5";
+        Text[ turkish ] = "Kullan˝c˝ alan˝ 5";
+    };
+    ListBox LB_CUSTOM5
+    {
+        Pos = MAP_APPFONT ( 65 , 163 ) ;
+        Size = MAP_APPFONT ( 50 , 60 ) ;
+        DropDown = TRUE;
+    };
+    String ST_NONE
+    {
+        Text = "<kein>";
+        Text [ENGLISH] = "<none>";
+        Text[ english_us ] = "<none>";
+        Text[ portuguese ] = "<nenhum>";
+        Text[ russian ] = "<·ÂÁ>";
+        Text[ greek ] = "<Í·Ì›Ì·>";
+        Text[ dutch ] = "<geen>";
+        Text[ french ] = "<aucun>";
+        Text[ spanish ] = "<ninguno>";
+        Text[ italian ] = "<nessuno>";
+        Text[ danish ] = "<ingen>";
+        Text[ swedish ] = "<ingen>";
+        Text[ polish ] = "<brak>";
+        Text[ portuguese_brazilian ] = "<none>";
+        Text[ japanese ] = "<Ç»Çµ>";
+        Text[ korean ] = "<æ¯¿Ω>";
+        Text[ chinese_simplified ] = "<Œﬁ>";
+        Text[ chinese_traditional ] = "<µL>";
+        Text[ arabic ] = "<»œÊ‰>";
+        Text[ turkish ] = "<Yok>";
+        Text[ language_user1 ] = " ";
+    };
+    Text[ english_us ] = "Column Layout for Table %1";
+    Text[ portuguese ] = "AtribuiÁ„o de colunas para a tabela %1";
+    Text[ russian ] = "–‡ÒÔÓÎÓÊÂÌËÂ ÍÓÎÓÌÓÍ ‰Îˇ Ú‡·ÎËˆ˚ %1";
+    Text[ greek ] = "–ÒÔÛ‰ÈÔÒÈÛÏ¸Ú ÛÙÁÎ˛Ì „È· ﬂÌ·Í· %1";
+    Text[ dutch ] = "Kolomindeling voor tabel %1";
+    Text[ french ] = "Assignation de colonnes pour la table %1";
+    Text[ spanish ] = "AsignaciÛn de columnas para tabla %1";
+    Text[ italian ] = "Assegnazione colonne per la tabella %1";
+    Text[ danish ] = "Kolonnetildeling for tabel %1";
+    Text[ swedish ] = "Kolumntilldelning fˆr tabell %1";
+    Text[ polish ] = "Przyporzπdkowanie kolumn tabeli %1";
+    Text[ portuguese_brazilian ] = "Column assignment for table %1";
+    Text[ japanese ] = "√∞ÃﬁŸ%1ópÇÃóÒÇÃï™óﬁ";
+    Text[ korean ] = "≈◊¿Ã∫ÌøÎ ø≠ ∑π¿Ãæ∆øÙ %1";
+    Text[ chinese_simplified ] = "Œ™±Ì∏Ò %1 ±‡≈≈…Ëº∆¡–";
+    Text[ chinese_traditional ] = "Ωs±∆ %1 ™ÌÆÊ™∫ƒÊ";
+    Text[ arabic ] = " ⁄ÌÌ‰ «·√⁄„œ… ··ÃœÊ· %1";
+    Text[ turkish ] = "Tablo %1 iÁin s¸tun d¸zeni";
+};
+ModalDialog RID_DLG_DBCHANGE
+{
+    HelpID = HID_DLG_DBCHANGE;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 291 , 131 ) ;
+    Moveable = TRUE ;
+    Text = "Auswahl der Datenquelle";
+    Text [ENGLISH] = "Select data source";
+
+    OKButton BT_OK
+    {
+        Pos = MAP_APPFONT ( 238 , 3 ) ;
+        Size = MAP_APPFONT ( 50 , 12 ) ;
+    };
+    CancelButton BT_CANCEL
+    {
+        Pos = MAP_APPFONT ( 238 , 18 ) ;
+        Size = MAP_APPFONT ( 50 , 12 ) ;
+    };
+    HelpButton BT_HELP
+    {
+        Pos = MAP_APPFONT ( 238 , 36 ) ;
+        Size = MAP_APPFONT ( 50 , 12 ) ;
+    };
+    GroupBox    GB_SELECTION
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 229 , 125 ) ;
+        Text = "Auswahl";
+        Text [ENGLISH] = "Selection";
+        Text[ english_us ] = "Selection";
+        Text[ portuguese ] = "SelecÁ„o";
+        Text[ russian ] = "¬˚·Ó";
+        Text[ greek ] = "≈ÈÎÔ„ﬁ";
+        Text[ dutch ] = "Selectie";
+        Text[ french ] = "SÈlection";
+        Text[ spanish ] = "SelecciÛn";
+        Text[ italian ] = "Selezione";
+        Text[ danish ] = "Udvalg";
+        Text[ swedish ] = "Urval";
+        Text[ polish ] = "WybÛr";
+        Text[ portuguese_brazilian ] = "Selection";
+        Text[ japanese ] = "ëIë";
+        Text[ korean ] = "º±≈√";
+        Text[ chinese_simplified ] = "—°‘Ò";
+        Text[ chinese_traditional ] = "øÔæ‹";
+        Text[ arabic ] = "«· ÕœÌœ";
+        Text[ turkish ] = "SeÁim";
+        Text[ language_user1 ] = " ";
+    };
+    String ST_ENTRY
+    {
+        Text = "Eintrag";
+        Text [ENGLISH] = "Entry";
+        Text[ english_us ] = "Entry";
+        Text[ portuguese ] = "Entrada";
+        Text[ russian ] = "›ÎÂÏÂÌÚ";
+        Text[ greek ] = "≈„„Ò·ˆﬁ";
+        Text[ dutch ] = "Item";
+        Text[ french ] = "EntrÈe";
+        Text[ spanish ] = "Entrada";
+        Text[ italian ] = "Voce";
+        Text[ danish ] = "Element";
+        Text[ swedish ] = "Post";
+        Text[ polish ] = "Wpis";
+        Text[ portuguese_brazilian ] = "Entry";
+        Text[ japanese ] = "çÄñ⁄";
+        Text[ korean ] = "«◊∏Ò";
+        Text[ chinese_simplified ] = "Ãıƒø";
+        Text[ chinese_traditional ] = "±¯•ÿ";
+        Text[ arabic ] = "≈œŒ«·";
+        Text[ turkish ] = "Giri˛";
+    };
+    String ST_URL
+    {
+        Text = "URL";
+        Text [ENGLISH] = "URL";
+        Text[ english_us ] = "URL";
+        Text[ portuguese ] = "URL";
+        Text[ russian ] = "URL";
+        Text[ greek ] = "URL";
+        Text[ dutch ] = "URL";
+        Text[ french ] = "URL";
+        Text[ spanish ] = "URL";
+        Text[ italian ] = "URL";
+        Text[ danish ] = "URL";
+        Text[ swedish ] = "URL";
+        Text[ polish ] = "URL";
+        Text[ portuguese_brazilian ] = "URL";
+        Text[ japanese ] = "URL";
+        Text[ korean ] = "URL";
+        Text[ chinese_simplified ] = "URL";
+        Text[ chinese_traditional ] = "URL";
+        Text[ arabic ] = "URL";
+        Text[ turkish ] = "URL";
+        Text[ language_user1 ] = " ";
+    };
+    Control LB_SELECTION
+    {
+        Pos = MAP_APPFONT ( 9 , 24 ) ;
+        Size = MAP_APPFONT ( 223 , 100 ) ;
+        Border = TRUE;
+        TabStop = TRUE;
+    };
+    Window HB_SELECTION
+    {
+        Pos = MAP_APPFONT ( 9 , 12 ) ;
+        Size = MAP_APPFONT ( 223 , 12 ) ;
+        Border = TRUE;
+    };
+    Text[ english_us ] = "Select Data Source";
+    Text[ portuguese ] = "Seleccionar fonte de dados";
+    Text[ russian ] = "¬˚·Ó ËÒÚÓ˜ÌËÍ‡ ‰‡ÌÌ˚ı";
+    Text[ greek ] = "≈ÈÎÔ„ﬁ ÒÔ›ÎÂıÛÁÚ ‰Â‰ÔÏ›Ì˘Ì";
+    Text[ dutch ] = "Kies gegevensbron";
+    Text[ french ] = "SÈlection de la source de donnÈes";
+    Text[ spanish ] = "SelecciÛn de la fuente de datos";
+    Text[ italian ] = "Selezione della sorgente dati";
+    Text[ danish ] = "VÊlg datakilde";
+    Text[ swedish ] = "Urval av datak‰lla";
+    Text[ polish ] = "WybÛr ürÛd≥a danych";
+    Text[ portuguese_brazilian ] = "Select data source";
+    Text[ japanese ] = "√ﬁ∞¿ø∞ΩÇÃëIë";
+    Text[ korean ] = "µ•¿Ã≈Õ º“Ω∫ º±≈√";
+    Text[ chinese_simplified ] = "—°‘Ò ˝æ›‘¥";
+    Text[ chinese_traditional ] = "øÔæ‹º∆’u∑Ω";
+    Text[ arabic ] = " ÕœÌœ „’œ— «·»Ì«‰« ";
+    Text[ turkish ] = "Veri kayna˝ seÁimi";
+    Text[ language_user1 ] = " ";
+};
+

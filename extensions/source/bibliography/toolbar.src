@@ -1,0 +1,421 @@
+/*************************************************************************
+ *
+ *  $RCSfile: toolbar.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:16:45 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#include <offmgr/sba.hrc>
+#include "extensio.hrc"
+#include "toolbar.hrc"
+
+ToolBox RID_BIB_TOOLBAR
+{
+    HelpId = HID_BIB_DB_TBX;
+    Sizeable = TRUE ;
+    HideWhenDeactivate = TRUE ;
+    LineSpacing = TRUE ;
+    Border = TRUE ;
+    SVLook = TRUE ;
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( 200 , 16 ) ;
+    ButtonType = BUTTON_SYMBOL ;
+    ItemList =
+    {
+        ToolBoxItem
+        {
+            Identifier = TBC_FT_SOURCE;
+            //HelpID = SID_SBA_BRW_INSERT ;
+            Text = "Tabelle" ;
+            Text [ ENGLISH ] = "Table" ;
+            Text[ english_us ] = "Table";
+            Text[ portuguese ] = "Tabela";
+            Text[ russian ] = "Òàáëèöà";
+            Text[ greek ] = "Ğßíáêáò";
+            Text[ dutch ] = "Tabel";
+            Text[ french ] = "Table";
+            Text[ spanish ] = "Tabla";
+            Text[ italian ] = "Tabella";
+            Text[ danish ] = "Tabel";
+            Text[ swedish ] = "Tabell";
+            Text[ polish ] = "Tabela";
+            Text[ portuguese_brazilian ] = "Data source";
+            Text[ japanese ] = "Ã°ÌŞÙ";
+            Text[ korean ] = "µ¥ÀÌÅÍ ¼Ò½º";
+            Text[ chinese_simplified ] = "±í¸ñ";
+            Text[ chinese_traditional ] = "ªí®æ";
+            Text[ arabic ] = "ÌÏæá";
+            Text[ turkish ] = "Tablo";
+            Text[ language_user1 ] = " ";
+        };
+        ToolBoxItem
+        {
+            Identifier = TBC_LB_SOURCE;
+            HelpID = HID_BIB_TBX_TABLE;
+            Command = ".uno:Bib/source" ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+
+        ToolBoxItem
+        {
+            Identifier = TBC_FT_QUERY;
+            //HelpID = SID_SBA_BRW_INSERT ;
+            Text = "Suchbegriff" ;
+            Text [ ENGLISH ] = "Search key" ;
+            Text[ english_us ] = "Search Key";
+            Text[ portuguese ] = "Expressão procurada";
+            Text[ russian ] = "Èñêîìîå ïîíÿòèå";
+            Text[ greek ] = "¼ñïò áíáæŞôçóçò";
+            Text[ dutch ] = "Zoekbegrip";
+            Text[ french ] = "Élément recherché";
+            Text[ spanish ] = "Expresión de búsqueda";
+            Text[ italian ] = "Termine ricercato";
+            Text[ danish ] = "Søgeord";
+            Text[ swedish ] = "Sökord";
+            Text[ polish ] = "Szukane has³o";
+            Text[ portuguese_brazilian ] = "Search key";
+            Text[ japanese ] = "ŒŸõ·°";
+            Text[ korean ] = "°Ë»ö Å°";
+            Text[ chinese_simplified ] = "ËÑÑ°ÄÚÈİ";
+            Text[ chinese_traditional ] = "·j´MÃöÁä¦r";
+            Text[ arabic ] = "ãÕØáÍ ÇáÈÍË";
+            Text[ turkish ] = "Arama ölçütü";
+        };
+        ToolBoxItem
+        {
+            Identifier = TBC_ED_QUERY;
+            HelpID = HID_BIB_TBX_SEARCH;
+            Command = ".uno:Bib/query" ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+
+        ToolBoxItem
+        {
+            Identifier = TBC_BT_AUTOFILTER ;
+            HelpID = HID_BIB_TBX_AUTOFILTER;
+            ItemBitmap = Bitmap { File = "sc10716.bmp" ; };
+            DropDown = TRUE ;
+            Text = "AutoFilter" ;
+            Text [ ENGLISH ] = "AutoFilter" ;
+            Command = ".uno:Bib/autoFilter" ;
+            Text[ english_us ] = "AutoFilter";
+            Text[ portuguese ] = "AutoFiltro";
+            Text[ russian ] = "Àâòîôèëüòğ";
+            Text[ greek ] = "ÁõôïÖßëôñï";
+            Text[ dutch ] = "AutoFilter";
+            Text[ french ] = "AutoFiltre";
+            Text[ spanish ] = "AutoFiltro";
+            Text[ italian ] = "Filtro automatico";
+            Text[ danish ] = "AutoFilter";
+            Text[ swedish ] = "AutoFilter";
+            Text[ polish ] = "Autofiltr";
+            Text[ portuguese_brazilian ] = "AutoFilter";
+            Text[ japanese ] = "µ°ÄÌ¨ÙÀ";
+            Text[ korean ] = "ÀÚµ¿ÇÊÅÍ";
+            Text[ chinese_simplified ] = "×Ô¶¯É¸Ñ¡";
+            Text[ chinese_traditional ] = "¦Û­q¿z¿ï";
+            Text[ arabic ] = "İáÊÑ Âáí";
+            Text[ turkish ] = "Otomatik filtre";
+            Text[ language_user1 ] = " ";
+        };
+
+        ToolBoxItem
+        {
+            Identifier = TBC_BT_FILTERCRIT ;
+            HelpID = SID_SBA_QRY_FILTERCRIT ;
+            ItemBitmap = Bitmap { File = "sc10715.bmp" ; };
+            Text = "Standard Filter" ;
+            Text [ ENGLISH ] = "Standard Filter" ;
+            Command = ".uno:Bib/standardFilter" ;
+            Text[ english_us ] = "Standard Filter";
+            Text[ portuguese ] = "Filtro padrão";
+            Text[ russian ] = "Ñòàíäàğòíûé ôèëüòğ";
+            Text[ greek ] = "Ößëôñï ğñïåğéëïãŞò";
+            Text[ dutch ] = "Standaardfilter";
+            Text[ french ] = "Filtre par défaut";
+            Text[ spanish ] = "Filtro estándar";
+            Text[ italian ] = "Filtro standard";
+            Text[ danish ] = "Standardfilter";
+            Text[ swedish ] = "Standardfilter";
+            Text[ polish ] = "Filtr standardowy";
+            Text[ portuguese_brazilian ] = "Standard Filter";
+            Text[ japanese ] = "•W€Ì¨ÙÀ";
+            Text[ korean ] = "±âº» ÇÊÅÍ";
+            Text[ chinese_simplified ] = "±ê×¼É¸Ñ¡";
+            Text[ chinese_traditional ] = "¼Ğ­ã¿z¿ï";
+            Text[ arabic ] = "İáÊÑ ŞíÇÓí";
+            Text[ turkish ] = "Standart filtre";
+            Text[ language_user1 ] = " ";
+        };
+
+        ToolBoxItem
+        {
+            Identifier = TBC_BT_REMOVEFILTER ;
+            HelpID = SID_SBA_QRY_REMOVEFILTER ;
+            ItemBitmap = Bitmap { File = "sc10711.bmp" ; };
+            Text = "Filter entfernen" ;
+            Text [ ENGLISH ] = "Remove Filter" ;
+            Command = ".uno:Bib/removeFilter" ;
+            Text[ english_us ] = "Remove Filter";
+            Text[ portuguese ] = "Eliminar filtro";
+            Text[ russian ] = "Óáğàòü ôèëüòğ";
+            Text[ greek ] = "ÄéáãñáöŞ ößëôñïõ";
+            Text[ dutch ] = "Filter verwijderen";
+            Text[ french ] = "Supprimer le filtre";
+            Text[ spanish ] = "Eliminar filtro";
+            Text[ italian ] = "Rimuovi filtro";
+            Text[ danish ] = "Fjern filter";
+            Text[ swedish ] = "Ta bort filter";
+            Text[ polish ] = "Usuñ filtr";
+            Text[ portuguese_brazilian ] = "Remove Filter";
+            Text[ japanese ] = "Ì¨ÙÀ‚Ì‰ğœ";
+            Text[ korean ] = "ÇÊÅÍ Á¦°Å";
+            Text[ chinese_simplified ] = "É¾³ıÉ¸Ñ¡";
+            Text[ chinese_traditional ] = "§R°£¿z¿ï";
+            Text[ arabic ] = "ÅÒÇáÉ İáÊÑ";
+            Text[ turkish ] = "Filtreyi kaldır";
+            Text[ language_user1 ] = " ";
+        };
+/*
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+
+        ToolBoxItem
+        {
+            Identifier = TBC_BT_NEWCARD ;
+            //HelpID = SID_SBA_QRY_REMOVEFILTER ;
+            Command = ".uno:Bib/newEntry" ;
+            ItemBitmap = Bitmap { File = "newcard.bmp" ; };
+            Text = "Neue Adresse" ;
+            Text [ ENGLISH ] = "New Address" ;
+            Text[ english_us ] = "New Address";
+            Text[ portuguese ] = "Novo endereço";
+            Text[ russian ] = "Íîâûé àäğåñ";
+            Text[ greek ] = "New Address";
+            Text[ dutch ] = "Nieuw adres";
+            Text[ french ] = "Nouvelle adresse";
+            Text[ spanish ] = "Nueva dirección";
+            Text[ italian ] = "Nuovo indirizzo";
+            Text[ danish ] = "Ny adresse";
+            Text[ swedish ] = "Ny adress";
+            Text[ polish ] = "Nowy adres";
+            Text[ portuguese_brazilian ] = "New Address";
+            Text[ japanese ] = "V‚µ‚¢ZŠ";
+            Text[ korean ] = "New Address";
+            Text[ chinese_simplified ] = "ĞÂµØÖ·";
+            Text[ chinese_traditional ] = "·s¦a§}";
+            Text[ arabic ] = "ÚäæÇä ÌÏíÏ";
+        };
+
+        ToolBoxItem
+        {
+            Identifier = TBC_BT_EDITCARD ;
+            //HelpID = SID_SBA_QRY_REMOVEFILTER ;
+            Command = ".uno:Bib/changeEntry" ;
+            ItemBitmap = Bitmap { File = "modcard.bmp" ; };
+            Text = "Adresse bearbeiten" ;
+            Text [ ENGLISH ] = "Edit address" ;
+            Text[ english_us ] = "Edit Address";
+            Text[ portuguese ] = "Editar endereço";
+            Text[ russian ] = "Ïğàâêà àäğåñà";
+            Text[ greek ] = "Edit address";
+            Text[ dutch ] = "Adres wijzigen";
+            Text[ french ] = "Éditer une adresse";
+            Text[ spanish ] = "Editar dirección";
+            Text[ italian ] = "Modifica indirizzo";
+            Text[ danish ] = "Rediger adresse";
+            Text[ swedish ] = "Redigera adress";
+            Text[ polish ] = "Edytuj adres";
+            Text[ portuguese_brazilian ] = "Edit address";
+            Text[ japanese ] = "±ÄŞÚ½‚Ì•ÒW";
+            Text[ korean ] = "Edit address";
+            Text[ chinese_simplified ] = "±à¼­µØÖ·";
+            Text[ chinese_traditional ] = "½s¿è¦a§}";
+            Text[ arabic ] = "ÊÍÑíÑ ÚäæÇä";
+        };
+
+        ToolBoxItem
+        {
+            Identifier = TBC_BT_REMOVECARD ;
+            //HelpID = SID_SBA_QRY_REMOVEFILTER ;
+            Command = ".uno:Bib/removeEntry" ;
+            ItemBitmap = Bitmap { File = "remcard.bmp" ; };
+            Text = "Adresse löschen" ;
+            Text [ ENGLISH ] = "Remove address" ;
+            Text[ english_us ] = "Remove Address";
+            Text[ portuguese ] = "Eliminar endereço";
+            Text[ russian ] = "Óäàëèòü àäğåñ";
+            Text[ greek ] = "ÄéáãñáöŞ äéåıèõíóçò";
+            Text[ dutch ] = "Adres wissen";
+            Text[ french ] = "Supprimer une adresse";
+            Text[ spanish ] = "Eliminar dirección";
+            Text[ italian ] = "Elimina indirizzo";
+            Text[ danish ] = "Slet adresse";
+            Text[ swedish ] = "Ta bort adress";
+            Text[ polish ] = "Usuñ adres";
+            Text[ portuguese_brazilian ] = "Remove address";
+            Text[ japanese ] = "±ÄŞÚ½‚Ìíœ";
+            Text[ korean ] = "Remove address";
+            Text[ chinese_simplified ] = "É¾³ıµØÖ·";
+            Text[ chinese_traditional ] = "§R°£¦a§}";
+            Text[ arabic ] = "ÍĞİ ÚäæÇä";
+        };
+
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+
+        ToolBoxItem
+        {
+            Identifier = TBC_BT_INSERT ;
+            HelpID = SID_SBA_BRW_INSERT ;
+            ItemBitmap = Bitmap { File = "sc12202.bmp" ; };
+            Text = "Daten in Text" ;
+            Text [ ENGLISH ] = "Insert" ;
+            Text[ english_us ] = "Data into Text";
+            Text[ portuguese ] = "Dados no texto";
+            Text[ russian ] = "Äàííûå â òåêñò";
+            Text[ greek ] = "Äåäïìİíá óôï êåßìåíï";
+            Text[ dutch ] = "Gegevens in tekst";
+            Text[ french ] = "Données dans le texte";
+            Text[ spanish ] = "Datos en texto";
+            Text[ italian ] = "Dati nel testo";
+            Text[ danish ] = "Data i tekst";
+            Text[ swedish ] = "Data i text";
+            Text[ polish ] = "Dane w tekœcie";
+            Text[ portuguese_brazilian ] = "Insert";
+            Text[ japanese ] = "•¶‘‚ÉÃŞ°À";
+            Text[ korean ] = "Insert";
+            Text[ chinese_simplified ] = "²åÈëÊı¾İÖÁÎÄ±¾ÖĞ";
+            Text[ chinese_traditional ] = "¼ÆÕuÂà´«¦¨¤å¦r";
+            Text[ arabic ] = "ÈíÇäÇÊ Åáì äÕ";
+        };
+        ToolBoxItem
+        {
+            Identifier = TBC_BT_UPDATE ;
+            HelpID = SID_SBA_BRW_UPDATE ;
+            ItemBitmap = Bitmap { File = "sc12201.bmp" ; };
+            Text = "Daten in Felder" ;
+        };
+
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+
+        ToolBoxItem
+        {
+            Identifier = TBC_BT_MAIL ;
+            //HelpID = HID_ADDRPI_AUTOMAIL ;
+            ItemBitmap = Bitmap { File = "sc06305.bmp" ; };
+            Text = "AutoMail" ;
+            Text [ ENGLISH ] = "AutoMail" ;
+            Text[ english_us ] = "AutoMail";
+            Text[ portuguese ] = "AutoMail";
+            Text[ russian ] = "AutoMail";
+            Text[ greek ] = "AutoMail";
+            Text[ dutch ] = "AutoMail";
+            Text[ french ] = "AutoMail";
+            Text[ spanish ] = "AutoMail";
+            Text[ italian ] = "Mail automatica";
+            Text[ danish ] = "AutoPost";
+            Text[ swedish ] = "AutoMail";
+            Text[ polish ] = "AutoMail";
+            Text[ portuguese_brazilian ] = "AutoMail";
+            Text[ japanese ] = "µ°ÄÒ°Ù";
+            Text[ korean ] = "AutoMail";
+            Text[ chinese_simplified ] = "×Ô¶¯µç×ÓÓÊ¼ş";
+            Text[ chinese_traditional ] = "¦Û°Ê¹q¤l¶l¥ó";
+            Text[ arabic ] = "ÈÑíÏ Âáí";
+        };
+        ToolBoxItem
+        {
+            Identifier = TBC_BT_URL ;
+            //HelpID = HID_ADDRPI_AUTOBROWSE ;
+            ItemBitmap = Bitmap { File = "sc06304.bmp" ; };
+            Text = "AutoBrowse" ;
+            Text [ ENGLISH ] = "AutoBrowse" ;
+            Text[ english_us ] = "AutoBrowse";
+            Text[ portuguese ] = "AutoBrowse";
+            Text[ russian ] = "Àâòîïğîñìîòğ";
+            Text[ greek ] = "AutoBrowse";
+            Text[ dutch ] = "AutoBrowse";
+            Text[ french ] = "AutoBrowse";
+            Text[ spanish ] = "AutoBrowse";
+            Text[ italian ] = "Browse automatico";
+            Text[ danish ] = "AutoBrowse";
+            Text[ swedish ] = "AutoBrowse";
+            Text[ polish ] = "AutoBrowse";
+            Text[ portuguese_brazilian ] = "AutoBrowse";
+            Text[ japanese ] = "µ°ÄÌŞ×³¾Ş";
+            Text[ korean ] = "AutoBrowse";
+            Text[ chinese_simplified ] = "×Ô¶¯ä¯ÀÀ";
+            Text[ chinese_traditional ] = "¦Û°ÊÂsÄı";
+            Text[ arabic ] = "ÇÓÊÚÑÇÖ Âáí";
+        };*/
+    };
+    Scroll = TRUE ;
+};
+

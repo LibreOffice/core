@@ -1,0 +1,187 @@
+/*************************************************************************
+ *
+ *  $RCSfile: bib.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:16:44 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#include "bib.hrc"
+
+ImageList RID_BIB_BMPEXPANDER
+{
+    ImageBitmap = Bitmap { File = "expander.bmp" ; };
+    IdList = { 1 ; 2 ; 3 ; 4 ; 5 ; 6 ; 7 ; 8 ; 9 ; };
+    IdCount = { 9 ; };
+};
+
+String  RID_BIB_STR_SECTION
+{
+    Text = "Abschnitt";
+    Text [ ENGLISH ] = "Section" ;
+    Text[ english_us ] = "Section";
+    Text[ portuguese ] = "Secção";
+    Text[ russian ] = "Ğàçäåë";
+    Text[ greek ] = "Ôïìİáò";
+    Text[ dutch ] = "Sectie";
+    Text[ french ] = "Section";
+    Text[ spanish ] = "Sección";
+    Text[ italian ] = "Sezione";
+    Text[ danish ] = "Sektion";
+    Text[ swedish ] = "Avsnitt";
+    Text[ polish ] = "Sekcja";
+    Text[ portuguese_brazilian ] = "Section";
+    Text[ japanese ] = "¾¸¼®İ";
+    Text[ korean ] = "±¸¿ª";
+    Text[ chinese_simplified ] = "¶ÎÂä";
+    Text[ chinese_traditional ] = "°Ï¬q";
+    Text[ arabic ] = "äØÇŞ";
+    Text[ turkish ] = "Bölüm";
+};
+
+String RID_BIB_STR_FIELDSELECTION
+{
+    Text = "Feldauswahl:" ;
+    Text [ English ] = "Fieldselection:" ;
+    Text[ english_us ] = "Field selection:";
+    Text[ portuguese ] = "Selecção de campo:";
+    Text[ russian ] = "Âûáîğ ïîëÿ:";
+    Text[ greek ] = "ÅğéëïãŞ ğåäßïõ:";
+    Text[ dutch ] = "Veldselectie:";
+    Text[ french ] = "Sélection de champ :";
+    Text[ spanish ] = "Selección de campo:";
+    Text[ italian ] = "Selezione campo:";
+    Text[ danish ] = "Feltudvalg:";
+    Text[ swedish ] = "Fälturval:";
+    Text[ polish ] = "Wybór pola:";
+    Text[ portuguese_brazilian ] = "Fieldselection:";
+    Text[ japanese ] = "Ì¨°ÙÄŞ‘I‘ğ:";
+    Text[ korean ] = "ÇÊµå ¼±ÅÃ:";
+    Text[ chinese_simplified ] = "ÇøÓòÑ¡Ôñ£º";
+    Text[ chinese_traditional ] = "¿ï¾ÜÄæ¦ì¡G";
+    Text[ arabic ] = "ÇÎÊíÇÑ ÇáÍŞá:";
+    Text[ turkish ] = "Alan seçimi:";
+    Text[ language_user1 ] = " ";
+};
+
+String RID_BIB_STR_TABWIN_PREFIX
+{
+    Text = "Tabelle;Abfrage;Sql;Sql [Native]" ;
+    Text [ English ] = "Table;Query;Sql;Sql [Native]" ;
+    Text[ english_us ] = "Table;Query;Sql;Sql [Native]";
+    Text[ portuguese ] = "Tabela; Consulta; Sql;Sql [Native]";
+    Text[ russian ] = "Òàáëèöà;Çàïğîñ;Sql;Sql [Native]";
+    Text[ greek ] = "Ğßíáêáò;Åñşôçìá;Sql;Sql [Native]";
+    Text[ dutch ] = "Tabel;Query;Sql;Sql [Native]";
+    Text[ french ] = "Table;Requête;Sql;Sql [Natif]";
+    Text[ spanish ] = "Tabla;Consulta;Sql;Sql [Native]";
+    Text[ italian ] = "Tabella;Ricerca;Sql;Sql [native]";
+    Text[ danish ] = "Tabel;Forespørgsel;Sql;Sql [native]";
+    Text[ swedish ] = "Tabell;Sökning;Sql;Sql [Native]";
+    Text[ polish ] = "Tabela;Kwerenda;Sql;Sql [Native]";
+    Text[ portuguese_brazilian ] = "Table;Query;Sql;Sql [Native]";
+    Text[ japanese ] = "Ã°ÌŞÙ;¸´Ø°;Sql;Sql [Native]";
+    Text[ korean ] = "Å×ÀÌºí;ÁúÀÇ;Sql;Sql [Native]";
+    Text[ chinese_simplified ] = "±í¸ñ;²éÑ¯;Sql;Sql [Native]";
+    Text[ chinese_traditional ] = "ªí®æ;¬d¸ß;Sql;Sql [Native]";
+    Text[ arabic ] = "ÌÏæá;ÇÓÊİÓÇÑ;Sql;Sql [Native]";
+    Text[ turkish ] = "Tablo;Sorgu;Sql;Sql [Native]";
+};
+String RID_BIB_STR_FRAME_TITLE
+{
+    Text = "Literaturdatenbank" ;
+    Text [ English ] = "Bibliography database" ;
+    Text[ english_us ] = "Bibliography Database";
+    Text[ portuguese ] = "Base de dados bibliográfica";
+    Text[ russian ] = "Áàçà äàííûõ áèáëèîãğàôèè";
+    Text[ greek ] = "ÂÜóç äåäïìİíùí âéâëéïãñáößáò";
+    Text[ dutch ] = "Literatuurdatabase";
+    Text[ french ] = "Base de données bibliographique";
+    Text[ spanish ] = "Base de datos bibliográfica";
+    Text[ italian ] = "Database bibliografico";
+    Text[ danish ] = "Litteraturdatabase";
+    Text[ swedish ] = "Litteraturdatabas";
+    Text[ polish ] = "Bibliograficzna baza danych";
+    Text[ portuguese_brazilian ] = "Bibliography database";
+    Text[ japanese ] = "‘ ‘ŠÇ—ÃŞ°ÀÍŞ°½";
+    Text[ korean ] = "Âü°í¹®Çå µ¥ÀÌÅÍº£ÀÌ½º";
+    Text[ chinese_simplified ] = "ÎÄÏ×Êı¾İ¿â";
+    Text[ chinese_traditional ] = "¤åÄm¸ê®Æ®w";
+    Text[ arabic ] = "ŞÇÚÏÉ ÈíÇäÇÊ ÇáãÑÇÌÚ";
+    Text[ turkish ] = "Kaynakça veritabanı";
+};
+String RID_MAP_QUESTION
+{
+    Text = "Möchten Sie die Spaltenzuordnung bearbeiten?" ;
+    Text [ English ] = "Dow you want to edit the column arrangement" ;
+    Text[ english_us ] = "Do you want to edit the column arrangement?";
+    Text[ portuguese ] = "Editar disposição de colunas?";
+    Text[ russian ] = "Âû õîòèòå èçìåíèòü ğàçìåùåíèå êîëîíîê?";
+    Text[ greek ] = "Èİëåôå íá ãßíåé åğåîåñãáóßá ôçò áíôéóôïß÷éóçò óôçëşí;";
+    Text[ dutch ] = "Wilt u de kolomindeling veranderen?";
+    Text[ french ] = "Souhaitez-vous éditer l'assignation des colonnes ?";
+    Text[ spanish ] = "¿Desea modificar el orden de las columnas?";
+    Text[ italian ] = "Volete modificare l'ordine delle colonne?";
+    Text[ danish ] = "Vil du redigere kolonnetildelingen?";
+    Text[ swedish ] = "Vill Du redigera kolumntilldelningen?";
+    Text[ polish ] = "Chcesz edytowaæ przyporz¹dkowanie kolumn?";
+    Text[ portuguese_brazilian ] = "Dow you want to edit the column arrangement";
+    Text[ japanese ] = "—ñ‚Ì•ª—Ş‚ğ•ÒW‚µ‚Ü‚·‚©?";
+    Text[ korean ] = "¿­ ¹è¿­À» ÆíÁıÇÏ½Ã°Ú½À´Ï±î?";
+    Text[ chinese_simplified ] = "ÄúÒª±à¼­ÁĞµÄÅÅÁĞË³Ğò£¿";
+    Text[ chinese_traditional ] = "±z­n½s±ÆÄæ¡H";
+    Text[ arabic ] = "åá ÊÑíÏ ÊÍÑíÑ ÊÚííä ÇáÚãæÏ¿";
+    Text[ turkish ] = "Sütunları düzenlemek istiyor musunuz?";
+};

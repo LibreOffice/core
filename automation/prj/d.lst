@@ -1,0 +1,8 @@
+mkdir: %_DEST%\inc%_EXT%\automation
+
+..\%__SRC%\bin\sts%UPD%*.dll %_DEST%\bin%_EXT%\sts%UPD%*.dll
+..\%__SRC%\lib\libsts* %_DEST%\lib%_EXT%\*
+..\%__SRC%\lib\automation.lib %_DEST%\lib%_EXT%\automation.lib
+
+hedabu: ..\inc\automation.hxx %_DEST%\inc%_EXT%\automation\automation.hxx
+

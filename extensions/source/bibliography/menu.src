@@ -1,0 +1,594 @@
+/*************************************************************************
+ *
+ *  $RCSfile: menu.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:16:45 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include <svtools/solar.hrc>
+#include <sfx2/sfxsids.hrc>
+#ifndef _GLOBLMN_HRC
+#include <svx/globlmn.hrc>
+#endif
+#ifndef _GLOBALACC_SRC
+#include <svx/globlac.hrc>
+#endif
+#include <offmgr/ofaids.hrc>
+#include <offmgr/sbasltid.hrc>
+#include <extensio.hrc>
+
+#include "bib.hrc"
+
+#define MN_EDIT 20
+#define MN_VIEW 21
+#define MN_EXTRA 22
+#define MN_WIN 30
+#define MN_HELP 31
+
+Menu RID_MAIN_MENU
+{
+    ItemList =
+    {
+    MenuItem
+    {
+        ITEM_FILE_PICKLIST
+        SubMenu = Menu
+        {
+        ItemList =
+        {
+            MenuItem
+            {
+            ITEM_FILE_NEWDOC
+            };
+            MenuItem
+            {
+            ITEM_FILE_OPENDOC
+            };
+            ITEM_FILE_AUTOPILOT
+            MenuItem
+            {
+            Separator = TRUE ;
+            };
+            MenuItem
+            {
+            ITEM_FILE_CLOSEDOC
+            };
+                    /*
+            MenuItem
+            {
+            ITEM_FILE_SAVEDOC
+            };
+            MenuItem
+            {
+            ITEM_FILE_SAVEASDOC
+            };
+                    */
+            MenuItem
+            {
+            ITEM_FILE_SAVEDOCS //!!muss fuer andere geoeffnete Tasks drinbleiben
+            };
+            MenuItem
+            {
+                Command = ".uno:ss/sendasemail" ;
+                Identifier = 369;
+                Text = "Als E-Mail ~versenden..." ;
+                Text[ English ] = "Send as EMail...";
+                Text [ english_us ] = "Send as ~E-mail..." ;
+                Text[ portuguese ] = "~Enviar como e-mail...";
+                Text[ russian ] = "ŒÚÔ‡‚ËÚ¸ Í‡Í ˝ÎÂÍÚÓÌÌÓÂ ÔËÒ¸ÏÓ...";
+                Text[ dutch ] = "Als ~e-mail verzenden...";
+                Text[ french ] = "~Envoyer par e-mail...";
+                Text[ spanish ] = "Enviar como ~mensaje electrÛnico...";
+                Text[ italian ] = "~Invia come eMail...";
+                Text[ danish ] = "Send som e-mail...";
+                Text[ swedish ] = "~Skicka som e-post...";
+                Text[ polish ] = "Wyúlij jako e-mail...";
+                Text[ portuguese_brazilian ] = "Send Even~t as EMail...";
+                Text[ japanese ] = "E-mailÇ∆ÇµÇƒëóêM(~E)...";
+                Text[ chinese_simplified ] = "µ±◊˜µÁ◊”” º˛ºƒ∑¢(~E)...";
+                Text[ chinese_traditional ] = "∑Ìß@πq§l∂l•Ûµo∞e(~E)...";
+                        Text[ arabic ] = "≈—”«· ﬂ»—Ìœ ≈·ﬂ —Ê‰Ì...";
+                        Text[ greek ] = "¡ÔÛÙÔÎﬁ ~˘Ú E-mail...";
+                        Text[ korean ] = "¿¸¿⁄øÏ∆Ì¿∏∑Œ ∫∏≥ª±‚(~E)...";
+                        Text[ turkish ] = "E-posta olarak gˆnder...";
+                        Text[ language_user1 ] = " ";
+                    };
+                    /*
+            MenuItem
+            {
+            ITEM_FILE_MAIL_SENDDOC
+            };
+                    */
+            MenuItem
+            {
+            Separator = TRUE ;
+            };
+            MenuItem
+            {
+            ITEM_FILE_PRINTDOC
+            };
+            MenuItem
+            {
+            ITEM_FILE_SETUPPRINTER
+            };
+            MenuItem
+            {
+            Separator = TRUE ;
+            };
+            MenuItem
+            {
+            ITEM_FILE_QUITAPP
+            };
+        };
+        };
+    };
+    MenuItem
+    {
+        Identifier = MN_EDIT ;
+        HelpID = MN_EDIT ;
+        Text = "~Bearbeiten" ;
+        Text [ English ] = "~Edit" ;
+        Text [ norwegian ] = "~Rediger" ;
+        Text [ italian ] = "~Modifica" ;
+        Text [ portuguese_brazilian ] = "~Editar" ;
+        Text [ portuguese ] = "~Editar" ;
+        Text [ finnish ] = "~Muokkaa" ;
+        Text [ danish ] = "~Rediger" ;
+        Text [ french ] = "~…dition" ;
+        Text [ swedish ] = "R~edigera" ;
+        Text [ dutch ] = "Be~werken" ;
+        Text [ spanish ] = "~Editar" ;
+        Text [ english_us ] = "~Edit" ;
+        SubMenu = Menu
+        {
+        ItemList =
+        {
+/*          MenuItem
+            {
+            ITEM_EDIT_UNDO
+            Command = ".uno:Bib/undo" ;
+            };
+              MenuItem
+            {
+            ITEM_EDIT_REDO
+            };
+            MenuItem
+            {
+            ITEM_EDIT_REPEAT
+            };
+            MenuItem
+            {
+            Separator = TRUE ;
+            };*/
+            MenuItem
+            {
+            ITEM_EDIT_CUT
+            };
+            MenuItem
+            {
+            ITEM_EDIT_COPY
+            };
+            MenuItem
+            {
+            ITEM_EDIT_PASTE
+            };
+            MenuItem
+            {
+            ITEM_EDIT_SELECTALL
+            };
+            MenuItem
+            {
+            Separator = TRUE ;
+            };
+            MenuItem
+            {
+                HelpId = HID_BIB_MAPPINGDLG;
+                Text = "~Spaltenzuordnung..." ;
+                Text[ English ] = "~Column assignment..." ;
+                Command = ".uno:Bib/Mapping" ;
+                Identifier = RID_MAIN_ME_MAPPING    ;
+                Checkable=TRUE;
+                Text[ english_us ] = "~Column Arrangement...";
+                        Text[ portuguese ] = "~Dispor colunas...";
+                        Text[ russian ] = "~–‡ÒÔÓÎÓÊÂÌËÂ ÍÓÎÓÌÓÍ...";
+                        Text[ greek ] = "¡ÌÙÈÛÙÔﬂ˜ÈÛÁ ~ÛÙﬁÎÁÚ...";
+                        Text[ dutch ] = "~Kolomindeling...";
+                        Text[ french ] = "~Assignation de colonnes...";
+                        Text[ spanish ] = "~AsignaciÛn de columnas...";
+                        Text[ italian ] = "A~ssegnazione colonne...";
+                        Text[ danish ] = "Kolonnetildeling...";
+                        Text[ swedish ] = "~Kolumntilldelning...";
+                        Text[ polish ] = "Przyporzπdkowanie kolumn...";
+                        Text[ portuguese_brazilian ] = "~Column assignment...";
+                        Text[ japanese ] = "óÒÇÃï™óﬁ(~C)...";
+                        Text[ korean ] = "ø≠ πË¡§(~C)...";
+                        Text[ chinese_simplified ] = "±‡≈≈¡–(~C)...";
+                        Text[ chinese_traditional ] = "Ωs±∆ƒÊ(~C)...";
+                        Text[ arabic ] = " ⁄ÌÌ‰ «·√⁄„œ…...";
+                        Text[ turkish ] = "~S¸tun d¸zeni...";
+                        Text[ language_user1 ] = " ";
+                    };
+            MenuItem
+            {
+                HelpId = HID_BIB_CHANGESOURCE;
+                Text = "~Datenquelle..." ;
+                Text[ English ] = "~Data source..." ;
+                Command = ".uno:Bib/sdbsource" ;
+                Identifier = RID_MAIN_ME_DBSOURCE;
+                Checkable=TRUE;
+                Text[ english_us ] = "~Data Source...";
+                        Text[ portuguese ] = "~Fonte de dados...";
+                        Text[ russian ] = "~»ÒıÓ‰Ì˚Â ‰‡ÌÌ˚Â...";
+                        Text[ greek ] = "–ÒÔ›ÎÂıÛÁ ~‰Â‰ÔÏ›Ì˘Ì...";
+                        Text[ dutch ] = "~Gegevensbron...";
+                        Text[ french ] = "~Source de donnÈes...";
+                        Text[ spanish ] = "~Fuente de datos...";
+                        Text[ italian ] = "Sorgente ~dati...";
+                        Text[ danish ] = "Datakilde...";
+                        Text[ swedish ] = "~Datak‰lla...";
+                        Text[ polish ] = "èrÛd≥o danych...";
+                        Text[ portuguese_brazilian ] = "~Data source...";
+                        Text[ japanese ] = "√ﬁ∞¿ø∞Ω(~D)...";
+                        Text[ korean ] = "µ•¿Ã≈Õ º“Ω∫(~D)...";
+                        Text[ chinese_simplified ] = " ˝æ›¿¥‘¥(~D)...";
+                        Text[ chinese_traditional ] = "º∆’u∑Ω(~D)...";
+                        Text[ arabic ] = "„’œ— «·»Ì«‰« ...";
+                        Text[ turkish ] = "~Veri kayna˝...";
+                        Text[ language_user1 ] = " ";
+                    };
+/*          MenuItem
+            {
+            Separator = TRUE ;
+            };
+            MenuItem
+            {
+                Text = "~Layout" ;
+                Text[ English ] = "~Layout" ;
+                Command = ".uno:Bib/Layout" ;
+                Identifier = RID_MAIN_ME_LAYOUT;
+                Checkable=TRUE;
+            };
+
+            MenuItem
+            {
+            Separator = TRUE ;
+            };
+            MenuItem
+            {
+            ITEM_EDIT_SEARCH_DLG
+            };
+            MenuItem
+            {
+            ITEM_EDIT_SBA_ADDRPI
+            };
+            MenuItem
+            {
+            Separator = TRUE ;
+            };
+            MenuItem
+            {
+            ITEM_EDIT_EDIT_FRAMESET
+            };
+                    */
+        };
+        };
+        Text[ russian ] = "~œ‡‚Í‡";
+            Text[ polish ] = "~Edytuj";
+            Text[ japanese ] = "ï“èW(~E)";
+            Text[ chinese_simplified ] = "±‡º≠(~E)";
+            Text[ chinese_traditional ] = "ΩsøË(~E)";
+            Text[ arabic ] = "~ Õ—Ì—";
+            Text[ greek ] = "~≈ÂÓÂÒ„·Ûﬂ·";
+            Text[ korean ] = "∆Ì¡˝(~E)";
+            Text[ turkish ] = "~D¸zenle";
+            Text[ language_user1 ] = " ";
+        };
+    MenuItem
+    {
+        Identifier = MN_VIEW ;
+        HelpID = MN_VIEW ;
+        Text = "~Ansicht" ;
+        Text [ English ] = "~View" ;
+        Text [ norwegian ] = "~Vis" ;
+        Text [ italian ] = "~Visualizza" ;
+        Text [ portuguese_brazilian ] = "~Ver" ;
+        Text [ portuguese ] = "~Ver" ;
+        Text [ finnish ] = "~N‰yt‰" ;
+        Text [ danish ] = "~Vis" ;
+        Text [ french ] = "~Affichage" ;
+        Text [ swedish ] = "Vi~sa" ;
+        Text [ dutch ] = "Beel~d" ;
+        Text [ spanish ] = "~Ver" ;
+        Text [ english_us ] = "~View" ;
+        SubMenu = Menu
+        {
+        ItemList =
+        {
+            MenuItem
+            {
+            ITEM_VIEW_EXPLORER
+            };
+            MenuItem
+            {
+            ITEM_VIEW_BROWSER
+            };
+            MenuItem
+            {
+            Separator = TRUE ;
+            };
+            MenuItem
+            {
+            Identifier = 22 ;
+            HelpID = 22 ;
+            Text = "S~ymbolleisten" ;
+            Text [ English ] = "Toolbars" ;
+            Text [ english_us ] = "~Toolbars" ;
+            Text [ swedish ] = "S~ymbollister" ;
+            Text [ danish ] = "Ikonlin~jer" ;
+            Text [ italian ] = "Barr~e dei simboli" ;
+            Text [ spanish ] = "Barras de ~sÌmbolos" ;
+            Text [ french ] = "Barres d'~outils" ;
+            Text [ dutch ] = "We~rkbalken" ;
+            Text [ portuguese ] = "Barras de ~ferramentas" ;
+            Text [ portuguese_brazilian ] = "Symbolleisten" ;
+            SubMenu = Menu
+            {
+                ItemList =
+                {
+                MenuItem
+                {
+                    ITEM_VIEW_TOGGLEFUNCTIONBAR
+                };
+                MenuItem
+                {
+                    ITEM_VIEW_TOGGLEOBJECTBAR
+                };
+                MenuItem
+                {
+                    ITEM_INSERT_HYPERLINK_INSERT
+                };
+                                /*
+                MenuItem
+                {
+                    Separator = TRUE ;
+                };
+                MenuItem
+                {
+                    Identifier = SID_CUSTOMIZETOOLBOX ;
+                    HelpID = SID_CUSTOMIZETOOLBOX ;
+                    Text = "~Bearbeiten..." ;
+                    Text [ English ] = "~Customize..." ;
+                    Text [ english_us ] = "~Customize..." ;
+                    Text [ swedish ] = "~Redigera..." ;
+                    Text [ danish ] = "~Rediger..." ;
+                    Text [ italian ] = "~Modifica..." ;
+                    Text [ spanish ] = "~Personalizar..." ;
+                    Text [ french ] = "~Personnaliser..." ;
+                    Text [ dutch ] = "~Bewerken..." ;
+                    Text [ portuguese ] = "~Personalizar..." ;
+                    Text [ portuguese_brazilian ] = "~Bearbeiten..." ;
+                };
+                                */
+                };
+            };
+                Text[ russian ] = "œ‡ÌÂÎË ÒËÏ‚ÓÎÓ‚";
+                        Text[ polish ] = "Paski symboli";
+                        Text[ japanese ] = "¬∞Ÿ ﬁ∞(~T)";
+                        Text[ chinese_simplified ] = "Õº±Í¿∏(~T)";
+                        Text[ chinese_traditional ] = "§u®„¶C(~T)";
+                        Text[ arabic ] = "√‘—ÿ… «·—„Ê“";
+                        Text[ greek ] = "√Ò·ÏÏ›Ú Û~ıÏ‚¸Î˘Ì";
+                        Text[ korean ] = "µµ±∏∏¿Ω(~T)";
+                        Text[ turkish ] = "AraÁ Áubuklar˝";
+                        Text[ language_user1 ] = " ";
+                    };
+            MenuItem
+            {
+            ITEM_VIEW_TOGGLESTATUSBAR
+            };
+/*          MenuItem
+            {
+            Separator = TRUE ;
+            };
+            MenuItem
+            {
+                Text = "Hierarchisch" ;
+                Text[ English ] = "Hierarchical" ;
+                Command = ".uno:Bib/hierarchical" ;
+                Identifier = RID_MAIN_ME_HIERARCHICAL;
+                Checkable=TRUE;
+            };
+*/          MenuItem
+            {
+            Separator = TRUE ;
+            };
+            ITEM_VIEW_SCREENMODE
+        };
+        };
+            Text[ russian ] = "~¬Ë‰";
+            Text[ greek ] = "–ÒÔ~‚ÔÎﬁ";
+            Text[ polish ] = "~Widok";
+            Text[ japanese ] = "ï\\é¶(~V)";
+            Text[ korean ] = "∫∏±‚(~V)";
+            Text[ chinese_simplified ] = " ”Õº(~V)";
+            Text[ chinese_traditional ] = "¿Àµ¯(~V)";
+            Text[ arabic ] = "~⁄—÷";
+            Text[ turkish ] = "Gˆr¸n¸m";
+            Text[ language_user1 ] = " ";
+        };
+    MenuItem
+    {
+        Identifier = MN_EXTRA ;
+        HelpID = MN_EXTRA ;
+        Text = "E~xtras" ;
+        Text [ English ] = "T~ools" ;
+        Text [ norwegian ] = "Verk~t¯y" ;
+        Text [ italian ] = "~Strumenti" ;
+        Text [ portuguese_brazilian ] = "F~erramentas" ;
+        Text [ portuguese ] = "~Ferramentas" ;
+        Text [ finnish ] = "~Tyˆkalut" ;
+        Text [ danish ] = "Fun~ktioner" ;
+        Text [ french ] = "~Outils" ;
+        Text [ swedish ] = "~Verktyg" ;
+        Text [ dutch ] = "E~xtra" ;
+        Text [ spanish ] = "~Herramientas" ;
+        Text [ english_us ] = "~Tools" ;
+        SubMenu = Menu
+        {
+        ItemList =
+        {
+/*          MenuItem
+            {
+                Text = "Neue Adresse" ;
+                Text [ English ] = "New Address" ;
+                Command = ".uno:Bib/newEntry" ;
+                Identifier = RID_MAIN_ME_NEWENTRY;
+            };
+            MenuItem
+            {
+                Text = "Adresse ‰ndern" ;
+                Text [ English ] = "Change Address" ;
+                Command = ".uno:Bib/changeEntry" ;
+                Identifier = RID_MAIN_ME_CHANGEENTRY;
+            };
+            MenuItem
+            {
+                Text = "Adresse lˆschen" ;
+                Text [ English ] = "Remove Address" ;
+                Command = ".uno:Bib/removeEntry" ;
+                Identifier = RID_MAIN_ME_REMOVEENTRY;
+            };
+
+            MenuItem
+            {
+            Separator = TRUE ;
+            };
+
+*/          MenuItem
+            {
+                Command = ".uno:Bib/standardFilter" ;
+                Identifier = RID_MAIN_ME_SEARCH;
+                Text = "~Filtern...";
+                Text[ English ] = "Filter..." ;
+                Text[ english_us ] = "~Filter...";
+                        Text[ portuguese ] = "~Filtrar...";
+                        Text[ russian ] = "‘ËÎ¸Ú...";
+                        Text[ greek ] = "÷ÈÎÙÒ‹ÒÈÛÏ·...";
+                        Text[ dutch ] = "~Filteren...";
+                        Text[ french ] = "~Filtrer...";
+                        Text[ spanish ] = "~Filtrar...";
+                        Text[ italian ] = "~Filtra...";
+                        Text[ danish ] = "Filtrer...";
+                        Text[ swedish ] = "~Filtrera...";
+                        Text[ polish ] = "Filtruj...";
+                        Text[ portuguese_brazilian ] = "Filter...";
+                        Text[ japanese ] = "Ã®Ÿ¿(~F)...";
+                        Text[ korean ] = "« ≈Õ(~F)...";
+                        Text[ chinese_simplified ] = "…∏—°(~F)...";
+                        Text[ chinese_traditional ] = "øzøÔ(~F)...";
+                        Text[ arabic ] = " ’›Ì…...";
+                        Text[ turkish ] = "~Filtrele...";
+                        Text[ language_user1 ] = " ";
+                    };
+/*          MenuItem
+            {
+            Separator = TRUE ;
+            };
+            MenuItem
+            {
+                Command = ".uno:Bib/InsertFieldDlg" ;
+                Identifier = RID_MAIN_ME_FIELDDLG;
+                Text = "Felder ~einf¸gen...";
+                Text[ English ] = "Insert Fields..." ;
+            };
+*/          MenuItem
+            {
+            Separator = TRUE ;
+            };
+
+
+            MenuItem
+            {
+            ITEM_TOOLS_BASICCHOOSER
+            };
+
+
+                    /*
+            MenuItem
+            {
+            ITEM_TOOLS_CONFIG
+            };
+                    */
+            ITEM_MN_OPTIONS
+        };
+        };
+            Text[ russian ] = "~—Â‚ËÒ";
+            Text[ greek ] = "≈~Ò„·ÎÂﬂ·";
+            Text[ polish ] = "~NarzÍdzia";
+            Text[ japanese ] = "¬∞Ÿ(~T)";
+            Text[ korean ] = "µµ±∏(~T)";
+            Text[ chinese_simplified ] = "π§æﬂ(~T)";
+            Text[ chinese_traditional ] = "§u®„(~T)";
+            Text[ arabic ] = "√~œÊ« ";
+            Text[ turkish ] = "~AraÁlar";
+            Text[ language_user1 ] = " ";
+        };
+    ITEM_WINDOW_MENU
+    ITEM_HELP_MENU
+    };
+};
+

@@ -1,0 +1,158 @@
+/*************************************************************************
+ *
+ *  $RCSfile: AxTestComponents.idl,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:16:55 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+// AxTestComponents.idl : IDL source for AxTestComponents.dll
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (AxTestComponents.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+    [
+        object,
+        uuid(BFE10EBD-8584-11D4-8335-005004526AB4),
+        dual,
+        helpstring("IBasic Interface"),
+        pointer_default(unique)
+    ]
+    interface IBasic : IDispatch
+    {
+        [id(1), helpstring("method inByte")] HRESULT inByte([in] unsigned char val);
+        [id(2), helpstring("method inShort")] HRESULT inShort([in] short val);
+        [id(3), helpstring("method inLong")] HRESULT inLong([in] long val);
+        [id(4), helpstring("method inString")] HRESULT inString([in] BSTR val);
+        [id(5), helpstring("method inFloat")] HRESULT inFloat([in] float val);
+        [id(6), helpstring("method inDouble")] HRESULT inDouble([in] double val);
+        [id(7), helpstring("method inVariant")] HRESULT inVariant([in] VARIANT val);
+        [id(8), helpstring("method inArray")] HRESULT inArray([in] SAFEARRAY(VARIANT) val);
+        [id(9), helpstring("method inObject")] HRESULT inObject([in] IDispatch* val);
+        [id(12), helpstring("method inoutByte")] HRESULT inoutByte([in,out] unsigned char* val);
+        [id(13), helpstring("method inoutShort")] HRESULT inoutShort([in,out] short* val);
+        [id(14), helpstring("method inoutLong")] HRESULT inoutLong([in,out] long * val);
+        [id(15), helpstring("method inoutString")] HRESULT inoutString([in, out] BSTR* val);
+        [id(16), helpstring("method inoutFloat")] HRESULT inoutFloat([in,out] float * val);
+        [id(17), helpstring("method inoutDouble")] HRESULT inoutDouble([in,out] double * val);
+        [id(18), helpstring("method inoutVariant")] HRESULT inoutVariant([in,out] VARIANT * val);
+        [id(19), helpstring("method inoutArray")] HRESULT inoutArray([in,out] SAFEARRAY(VARIANT) * val);
+        [id(20), helpstring("method inoutObject")] HRESULT inoutObject([in,out] IDispatch** val);
+        [id(23), helpstring("method outByte")] HRESULT outByte([out] unsigned char* val);
+        [id(24), helpstring("method outShort")] HRESULT outShort([out] short* val);
+        [id(25), helpstring("method outLong")] HRESULT outLong([out] long* val);
+        [id(26), helpstring("method outString")] HRESULT outString([out] BSTR* val);
+        [id(27), helpstring("method outFloat")] HRESULT outFloat([out] float* val);
+        [id(28), helpstring("method outDouble")] HRESULT outDouble([out] double* val);
+        [id(29), helpstring("method outVariant")] HRESULT outVariant([out] VARIANT* val);
+        [id(30), helpstring("method outArray")] HRESULT outArray([out] SAFEARRAY(VARIANT) * val);
+        [id(31), helpstring("method outObject")] HRESULT outObject([out] IDispatch** val);
+        [propget, id(34), helpstring("property prpByte")] HRESULT prpByte([out, retval] unsigned char *pVal);
+        [propput, id(34), helpstring("property prpByte")] HRESULT prpByte([in] unsigned char newVal);
+        [propget, id(35), helpstring("property prpShort")] HRESULT prpShort([out, retval] short *pVal);
+        [propput, id(35), helpstring("property prpShort")] HRESULT prpShort([in] short newVal);
+        [propget, id(36), helpstring("property prpLong")] HRESULT prpLong([out, retval] long *pVal);
+        [propput, id(36), helpstring("property prpLong")] HRESULT prpLong([in] long newVal);
+        [propget, id(37), helpstring("property prpString")] HRESULT prpString([out, retval] BSTR *pVal);
+        [propput, id(37), helpstring("property prpString")] HRESULT prpString([in] BSTR newVal);
+        [propget, id(38), helpstring("property prpFloat")] HRESULT prpFloat([out, retval] float *pVal);
+        [propput, id(38), helpstring("property prpFloat")] HRESULT prpFloat([in] float newVal);
+        [propget, id(39), helpstring("property prpDouble")] HRESULT prpDouble([out, retval] double *pVal);
+        [propput, id(39), helpstring("property prpDouble")] HRESULT prpDouble([in] double newVal);
+        [propget, id(40), helpstring("property prpVariant")] HRESULT prpVariant([out, retval] VARIANT *pVal);
+        [propput, id(40), helpstring("property prpVariant")] HRESULT prpVariant([in] VARIANT newVal);
+        [propget, id(41), helpstring("property prpArray")] HRESULT prpArray([out, retval]SAFEARRAY(VARIANT) *pVal);
+        [propput, id(41), helpstring("property prpArray")] HRESULT prpArray([in] SAFEARRAY(VARIANT) newVal);
+        [propget, id(42), helpstring("property prpObject")] HRESULT prpObject([out, retval] IDispatch* *pVal);
+        [propput, id(42), helpstring("property prpObject")] HRESULT prpObject([in] IDispatch* newVal);
+        [id(43), helpstring("method mixed1")] HRESULT mixed1(
+                                              [in] unsigned char aChar,
+                                              [out] unsigned char *outChar,
+                                              [in, out] unsigned char* inoutChar,
+                                              [in] VARIANT var,
+                                              [out] VARIANT* outVar,
+                                              [in,out] VARIANT* inoutVar,
+                                              [in] SAFEARRAY(VARIANT) ar,
+                                              [out] SAFEARRAY(VARIANT)* outAr,
+                                              [in,out] SAFEARRAY(VARIANT)* inoutAr,
+                                              [in] IDispatch *disp,
+                                              [out] IDispatch** outDisp,
+                                              [in,out] IDispatch** inoutDisp);
+        [id(44), helpstring("method inSequenceLong")] HRESULT inSequenceLong([in] SAFEARRAY(long)  ar);
+
+    };
+
+[
+    uuid(BFE10EB1-8584-11D4-8335-005004526AB4),
+    version(1.0),
+    helpstring("AxTestComponents 1.0 Type Library")
+]
+library AXTESTCOMPONENTSLib
+{
+    importlib("stdole32.tlb");
+    importlib("stdole2.tlb");
+
+    [
+        uuid(BFE10EBE-8584-11D4-8335-005004526AB4),
+        helpstring("Basic Class")
+    ]
+    coclass Basic
+    {
+        [default] interface IBasic;
+    };
+};

@@ -1,0 +1,211 @@
+/*************************************************************************
+ *
+ *  $RCSfile: grid.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:16:52 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#include <grid.hrc>
+
+ModalDialog GRID_DIALOG
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Pos = MAP_APPFONT ( 10 , 10 ) ;
+    Size = MAP_APPFONT ( 300, 200 ) ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+
+    OKButton GRID_DIALOG_OK_BTN
+    {
+        Pos = MAP_APPFONT( 245, 5 );
+        Size = MAP_APPFONT( 50, 15 );
+        DefButton = TRUE;
+    };
+    CancelButton GRID_DIALOG_CANCEL_BTN
+    {
+        Pos = MAP_APPFONT ( 245 , 25 ) ;
+        Size = MAP_APPFONT ( 50 , 15 ) ;
+    };
+    ListBox GRID_DIALOG_TYPE_BOX
+    {
+        Border = TRUE ;
+        Dropdown = TRUE ;
+        Pos = MAP_APPFONT( 245, 45 );
+        Size = MAP_APPFONT( 50, 130 );
+      };
+    PushButton GRID_DIALOG_RESET_BTN
+    {
+        Pos = MAP_APPFONT( 245, 65 );
+        Size = MAP_APPFONT( 50, 15 );
+        Text = "Setzen";
+        Text [ English ] = "Set";
+        Text[ english_us ] = "Set";
+        Text[ portuguese ] = "Definir";
+        Text[ russian ] = "Óñòàíîâèòü";
+        Text[ greek ] = "Ïñéóìüò";
+        Text[ dutch ] = "Zetten";
+        Text[ french ] = "Restaurer";
+        Text[ spanish ] = "Definir";
+        Text[ italian ] = "Imposta";
+        Text[ danish ] = "Definer";
+        Text[ swedish ] = "Definiera";
+        Text[ polish ] = "OsadŸ";
+        Text[ portuguese_brazilian ] = "Set";
+        Text[ japanese ] = "İ’è";
+        Text[ korean ] = "ÁöÁ¤";
+        Text[ chinese_simplified ] = "Éè¶¨";
+        Text[ chinese_traditional ] = "«ü©w";
+        Text[ arabic ] = "ÊÚííä";
+        Text[ turkish ] = "Tanımla";
+    };
+    Bitmap GRID_DIALOG_HANDLE_BMP
+    {
+        File = "handle.bmp";
+    };
+    String RESET_TYPE_LINEAR_ASCENDING
+    {
+        Text = "Linear steigend";
+        Text [ English ] = "Linear ascending";
+        Text[ english_us ] = "Linear ascending";
+        Text[ portuguese ] = "Linear crescente";
+        Text[ russian ] = "Ëèíåéíîå âîçğàñòàíèå";
+        Text[ greek ] = "ÃñáììéêŞ áıîçóç";
+        Text[ dutch ] = "Lineair stijgend";
+        Text[ french ] = "Croissance linéaire";
+        Text[ spanish ] = "Lineal ascendente";
+        Text[ italian ] = "Lineare crescente";
+        Text[ danish ] = "Lineær stigende";
+        Text[ swedish ] = "Linjärt stigande";
+        Text[ polish ] = "Wzrastaj¹ce linearnie";
+        Text[ portuguese_brazilian ] = "Linear ascending";
+        Text[ japanese ] = "‚Ü‚Á‚·‚®ã¸";
+        Text[ korean ] = "¿À¸§Â÷¼ø ¼±Çü";
+        Text[ chinese_simplified ] = "ÏßĞÔÉÏÉı";
+        Text[ chinese_traditional ] = "½u©Ê¤Wª@";
+        Text[ arabic ] = "ÎØí ÊÕÇÚÏí";
+        Text[ turkish ] = "Doğrusal artış";
+    };
+    String RESET_TYPE_LINEAR_DESCENDING
+    {
+        Text = "Linear fallend";
+        Text [ English ] = "Linear descending";
+        Text[ english_us ] = "Linear descending";
+        Text[ portuguese ] = "Linear decrescente";
+        Text[ russian ] = "Ëèíåéíîå óáûâàíèå";
+        Text[ greek ] = "ÃñáììéêŞ ìåßùóç";
+        Text[ dutch ] = "Lineair dalend";
+        Text[ french ] = "Décroissance linéaire";
+        Text[ spanish ] = "Lineal descendente";
+        Text[ italian ] = "Lineare descrescente";
+        Text[ danish ] = "Lineær faldende";
+        Text[ swedish ] = "Linjärt fallande";
+        Text[ polish ] = "Spadaj¹ce linearnie";
+        Text[ portuguese_brazilian ] = "Linear descending";
+        Text[ japanese ] = "‚Ü‚Á‚·‚®‰º~";
+        Text[ korean ] = "³»¸²Â÷¼ø ¼±Çü";
+        Text[ chinese_simplified ] = "ÏßĞÔÏÂ½µ";
+        Text[ chinese_traditional ] = "½u©Ê¤U­°";
+        Text[ arabic ] = "ÎØí ÊäÇÒáí";
+        Text[ turkish ] = "Doğrusal düşüş";
+    };
+    String RESET_TYPE_RESET
+    {
+        Text = "Originalwerte";
+        Text [ English ] = "Original values";
+        Text[ english_us ] = "Original values";
+        Text[ portuguese ] = "Valores originais";
+        Text[ russian ] = "Èñõîäíûå çíà÷åíèÿ";
+        Text[ greek ] = "Áñ÷éêİò ôéìİò";
+        Text[ dutch ] = "Oorspronkelijke waarden";
+        Text[ french ] = "Restaurer les valeurs d'origine";
+        Text[ spanish ] = "Valores originales";
+        Text[ italian ] = "Valori originali";
+        Text[ danish ] = "Originalværdier";
+        Text[ swedish ] = "Originalvärden";
+        Text[ polish ] = "Wartoœci oryginalne";
+        Text[ portuguese_brazilian ] = "Original values";
+        Text[ japanese ] = "µØ¼ŞÅÙ’l";
+        Text[ korean ] = "¿ø·¡°ª";
+        Text[ chinese_simplified ] = "Ô­Ê¼ÊıÖµ";
+        Text[ chinese_traditional ] = "­ì©l­È";
+        Text[ arabic ] = "ÇáŞíã ÇáÃÕáíÉ";
+        Text[ turkish ] = "Asıl değerler";
+    };
+    String RESET_TYPE_EXPONENTIAL
+    {
+        Text = "Exponentiell wachsend";
+        Text [ English ] = "Exponential raise";
+        Text[ english_us ] = "Exponential increasing";
+        Text[ portuguese ] = "Exponencial crescente";
+        Text[ russian ] = "İêñïîíåíöèàëüíîå âîçğàñòàíèå";
+        Text[ greek ] = "ÅêèåôéêŞ áıîçóç";
+        Text[ dutch ] = "Exponentiele groei";
+        Text[ french ] = "Croissance exponentielle";
+        Text[ spanish ] = "Exponencial aumentando";
+        Text[ italian ] = "Esponenziale crescente";
+        Text[ danish ] = "Eksponentiel vækst";
+        Text[ swedish ] = "Exponentiellt växande";
+        Text[ polish ] = "Rosn¹ce wyk³adniczo";
+        Text[ portuguese_brazilian ] = "Exponential raise";
+        Text[ japanese ] = "‹}Œƒ‚É‘‚â‚·";
+        Text[ korean ] = "¿À¸§ Áö¼ö";
+        Text[ chinese_simplified ] = "Ö¸ÊıĞÍÔö³¤";
+        Text[ chinese_traditional ] = "¾­¼Æ¦¡»¼¼W";
+        Text[ arabic ] = "ÊÒÇíÏ ÃÓí";
+        Text[ turkish ] = "Üstel artış";
+    };
+};

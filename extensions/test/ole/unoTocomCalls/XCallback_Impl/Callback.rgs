@@ -1,0 +1,26 @@
+HKCR
+{
+	XCallback_Impl.Callback.1 = s 'Callback Class'
+	{
+		CLSID = s '{180FF560-6F5C-11D4-8330-005004526AB4}'
+	}
+	XCallback_Impl.Callback = s 'Callback Class'
+	{
+		CLSID = s '{180FF560-6F5C-11D4-8330-005004526AB4}'
+		CurVer = s 'XCallback_Impl.Callback.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {180FF560-6F5C-11D4-8330-005004526AB4} = s 'Callback Class'
+		{
+			ProgID = s 'XCallback_Impl.Callback.1'
+			VersionIndependentProgID = s 'XCallback_Impl.Callback'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{180FF553-6F5C-11D4-8330-005004526AB4}'
+		}
+	}
+}

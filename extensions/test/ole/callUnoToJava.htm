@@ -1,0 +1,516 @@
+<HTML>
+<HEAD>
+<META NAME="GENERATOR" Content="Microsoft Developer Studio">
+<META HTTP-EQUIV="Content-Type" content="text/html; charset=iso-8859-1">
+<TITLE>Document Title</TITLE>
+</HEAD>
+<BODY id=theBody>
+
+<script language="JScript">
+function callOleTest(	 id)
+{   
+	var factory= new ActiveXObject("com.sun.star.ServiceManager");
+	var oletest= factory.createInstance("oletest.OleTest");
+//	alert(oletest);
+		
+	switch( id)
+	{
+		case 1: // Test simple call of JScript object function from UNO
+		oletest.testInterface( new XCallback_Impl, 1);
+		break;
+
+		case 2:
+		// return value is the parameter object
+		oletest.testInterface( new XCallback_Impl, 2);
+		break;
+		//##################################################
+		// OUT parameter
+		//##################################################
+		case 3: // Test out parameter of type interface
+		oletest.testInterface( new XCallback_Impl, 3);
+		break;
+		case 4: // Test out parameter of type struct
+		oletest.testInterface( new XCallback_Impl, 4);
+		break;
+		case 5: // Test out parameter of type enum
+		oletest.testInterface( new XCallback_Impl, 5);
+		break;
+		case 6: // Test out parameter of type sequence<any>
+		oletest.testInterface( new XCallback_Impl, 6);
+		break;
+		case 7: // Test out parameter of type any
+		oletest.testInterface( new XCallback_Impl, 7);
+		break;
+		case 8: // Test out parameter of type bool
+		oletest.testInterface( new XCallback_Impl, 8);
+		break;
+		case 9: // Test out parameter of type char
+		oletest.testInterface( new XCallback_Impl, 9);
+		break;
+		case 10: // Test out parameter of type string
+		oletest.testInterface( new XCallback_Impl, 10);
+		break;
+		case 11: // Test out parameter of type float
+		oletest.testInterface( new XCallback_Impl, 11);
+		break;
+		case 12: // Test out parameter of type double
+		oletest.testInterface( new XCallback_Impl, 12);
+		break;
+		case 13: // Test out parameter of type byte
+		oletest.testInterface( new XCallback_Impl, 13);
+		break;
+		case 14: // Test out parameter of type short
+		oletest.testInterface( new XCallback_Impl, 14);
+		break;
+		case 15: // Test out parameter of type long
+		oletest.testInterface( new XCallback_Impl, 15);
+		break;
+		case 30: //  outValuesMixed
+		oletest.testInterface( new XCallback_Impl, 30);
+		break;
+		case 31: //  outValuesAll
+		oletest.testInterface( new XCallback_Impl, 31);
+		break;
+		//##################################################
+		// IN/OUT parameter
+		//##################################################
+
+		case 100: // inoutInterface
+		oletest.testInterface( new XCallback_Impl, 100);
+		break;
+		case 101: // inoutStruct
+		oletest.testInterface( new XCallback_Impl, 101);
+		break;
+		case 102: // inoutEnum
+		oletest.testInterface( new XCallback_Impl, 102);
+		break;
+		case 103: // inoutSeqAny
+		oletest.testInterface( new XCallback_Impl, 103);
+		break;
+		case 104: // inoutAny
+		oletest.testInterface( new XCallback_Impl, 104);
+		break;
+		case 105: // inoutBool
+		oletest.testInterface( new XCallback_Impl, 105);
+		break;
+		case 106: // inoutChar
+		oletest.testInterface( new XCallback_Impl, 106);
+		break;
+		case 107: // inoutString
+		oletest.testInterface( new XCallback_Impl, 107);
+		break;
+		case 108: // inoutFloat
+		oletest.testInterface( new XCallback_Impl, 108);
+		break;
+		case 109: // inoutDouble
+		oletest.testInterface( new XCallback_Impl, 109);
+		break;
+		case 110: // inoutByte
+		oletest.testInterface( new XCallback_Impl, 110);
+		break;
+		case 111: // inoutShort
+		oletest.testInterface( new XCallback_Impl, 111);
+		break;
+		case 112: // inoutLong
+		oletest.testInterface( new XCallback_Impl, 112);
+		break;
+		case 120: // inoutValuesAll
+		oletest.testInterface( new XCallback_Impl, 120);
+		break;
+		case 200: // inValues
+		oletest.testInterface( new XCallback_Impl, 200);
+		break;
+
+		case 1000:
+		oletest.testInterface2(new MultiInterface(), 0);
+		break;
+	}
+
+}
+
+
+
+// The class --------------------------------------------
+
+function XCallback_Impl()
+{
+	
+	// XCallback
+	this._environment= "JScript";
+
+	this.func1= XCallback_Impl_func1;
+	this.returnInterface= XCallback_Impl_returnInterface;
+	// #################################################
+	// OUT parameter
+	//###################################################
+	this.outInterface= XCallback_Impl_outInterface;
+	this.outStruct= XCallback_Impl_outStruct;
+	this.outEnum= XCallback_Impl_outEnum;
+	this.outSeqAny= XCallback_Impl_outSeqAny;
+	this.outAny= XCallback_Impl_outAny;
+	this.outBool= XCallback_Impl_outBool;
+	this.outChar= XCallback_Impl_outChar;
+	this.outString= XCallback_Impl_outString;
+	this.outFloat= XCallback_Impl_outFloat;
+	this.outDouble= XCallback_Impl_outDouble;
+	this.outByte= XCallback_Impl_outByte;
+	this.outShort= XCallback_Impl_outShort;
+	this.outLong= XCallback_Impl_outLong;
+	this.outValuesMixed= XCallback_Impl_outValuesMixed;
+	this.outValuesAll= XCallback_Impl_outValuesAll;
+	// #################################################
+	// IN/ OUT parameter
+	//###################################################
+	this.inoutInterface= XCallback_Impl_inoutInterface;
+	this.inoutStruct= XCallback_Impl_inoutStruct;
+	this.inoutEnum= XCallback_Impl_inoutEnum;
+	this.inoutSeqAny= XCallback_Impl_inoutSeqAny;
+	this.inoutAny= XCallback_Impl_inoutAny;
+	this.inoutBool= XCallback_Impl_inoutBool;
+	this.inoutChar= XCallback_Impl_inoutChar;
+	this.inoutString= XCallback_Impl_inoutString;
+	this.inoutFloat= XCallback_Impl_inoutFloat;
+	this.inoutDouble= XCallback_Impl_inoutDouble;
+	this.inoutByte= XCallback_Impl_inoutByte;
+	this.inoutShort= XCallback_Impl_inoutShort;
+	this.inoutLong= XCallback_Impl_inoutLong;
+	this.inoutValuesAll= XCallback_Impl_inoutValuesAll;
+	// #################################################
+	// IN parameter
+	//##################################################
+	this.inValues= XCallback_Impl_inValues;
+
+}
+
+
+function XCallback_Impl_func1()
+{
+	alert("XCallback_Impl_func1");
+}
+function XCallback_Impl_returnInterface()
+{
+	alert("XCallback::returnInterface called");
+	return new XSimple_Impl();
+}
+
+function XCallback_Impl_outInterface( outVal)
+{
+	outVal[0]= new XSimple_Impl();
+}
+
+function XCallback_Impl_outLong( outVal)
+{
+	alert("outLong");
+}
+function XCallback_Impl_outStruct( outVal)
+{
+	var factory= new ActiveXObject("com.sun.star.ServiceManager");
+    var starCoreReflection = factory.createInstance("com.sun.star.reflection.CoreReflection");
+    var structClass = starCoreReflection.forName("oletest.SimpleStruct");
+	var outParam= new Array();
+	structClass.createObject(outParam);
+	var aStruct= outParam[0];
+	aStruct.message= "a Struct created in JScript";
+	outVal[0]= aStruct;
+
+}
+function XCallback_Impl_outEnum( outVal)
+{
+	outVal[0]= 2;
+}
+function XCallback_Impl_outSeqAny( outVal)
+{
+	var ar= new Array(1,2,3);
+	outVal[0]= ar;
+}
+function XCallback_Impl_outAny( outVal)
+{
+	outVal[0]= "this is an Any";
+}
+function XCallback_Impl_outBool( outVal)
+{
+	outVal[0]= true;
+} 
+function XCallback_Impl_outChar( outVal)
+{
+	outVal[0]= "a";
+}
+function XCallback_Impl_outString( outVal)
+{
+	outVal[0]= "This string was created in JScript";
+}
+function XCallback_Impl_outFloat( outVal)
+{
+	outVal[0]= 3.14;
+}
+function XCallback_Impl_outDouble( outVal)
+{
+	outVal[0]= 3.145;
+}
+function XCallback_Impl_outByte( outVal)
+{
+	outVal[0]= 100;
+}
+function XCallback_Impl_outShort( outVal)
+{
+	outVal[0]= 1000;
+}
+function XCallback_Impl_outLong( outVal)
+{
+	outVal[0]= 1000000;
+}
+function XCallback_Impl_outValuesMixed( inLong, outLong, inString)
+{
+	alert("inVal long: " + inLong +" inString:" + inString);
+	outLong[0]= inLong + 1;
+}
+function XCallback_Impl_outValuesAll( xSimple, aSimpleStruct, aSimpleEnum, seqAny, aAny, aBool,
+				aChar, aString, aFloat, aDouble, aByte, aShort, aLong)
+{
+	this.outInterface( xSimple);
+	this.outStruct( aSimpleStruct);
+	this.outEnum( aSimpleEnum);
+	this.outSeqAny( seqAny);
+	this.outAny( aAny);
+	this.outBool( aBool);
+	this.outChar( aChar);
+	this.outString( aString);
+	this.outFloat( aFloat);
+	this.outDouble( aDouble);
+	this.outByte( aByte);
+	this.outShort( aShort);
+	this.outLong( aLong);
+}
+
+function XCallback_Impl_inoutInterface( val)
+{
+	val[0].func("calling on in parameter");
+	val[0]= new XSimple_Impl();
+}
+function XCallback_Impl_inoutStruct( val)
+{
+	alert( val[0].message);
+	val[0].message= "property message changed in JScript";
+}
+function XCallback_Impl_inoutEnum(val)
+{
+	alert("enum value +" + val);
+	val[0]= 2;
+}
+function XCallback_Impl_inoutSeqAny( val)
+{
+	var vbar = new VBArray(val[0]);
+	var seq= vbar.toArray();
+	alert( seq[0] +" "+seq[1] +" " +seq[2]);
+	val[0]= new Array("jscript1", "jscript2","jscript3");
+}
+function XCallback_Impl_inoutAny(val)
+{
+	alert( "JScript in any: " + val[0]);
+	val[0]= "a string from JScript";
+}
+function XCallback_Impl_inoutBool(val)
+{
+	alert( "JScript in bool: " + val[0]);
+	val[0]= true;
+}
+function XCallback_Impl_inoutChar(val)
+{
+	alert( "JScript in char: " + val[0]);
+	val[0]= 'b';
+}
+function XCallback_Impl_inoutString(val)
+{
+	alert( "JScript in string: " + val[0]);
+	val[0]= " a JScript string";
+}
+function XCallback_Impl_inoutFloat(val)
+{
+	alert( "JScript in float: " + val[0]);
+	val[0]= 4.14;
+}
+function XCallback_Impl_inoutDouble(val)
+{
+	alert( "JScript in double: " + val[0]);
+	val[0]= 4.145;
+}
+
+function XCallback_Impl_inoutByte(val)
+{
+	alert( "JScript in byte: " + val[0]);
+	val[0]= 100;
+}
+function XCallback_Impl_inoutShort(val)
+{
+	alert( "JScript in short: " + val[0]);
+	val[0]= 1000;
+}
+function XCallback_Impl_inoutLong(val)
+{
+	alert( "JScript in long: " + val[0]);
+	val[0]= 100000;
+}
+function XCallback_Impl_inoutValuesAll(aXSimple, aStruct, aEnum, aSeq, 
+			aAny, aBool, aChar, aString,  aFloat, aDouble, 
+			aByte, aShort,  aLong )
+{
+	this.inoutInterface( aXSimple);
+	this.inoutStruct( aStruct);
+	this.inoutEnum( aEnum);
+	this.inoutSeqAny( aSeq);
+	this.inoutAny( aAny);
+	this.inoutBool( aBool);
+	this.inoutChar( aChar);
+	this.inoutString( aString);
+	this.inoutFloat( aFloat);
+	this.inoutDouble( aDouble);
+	this.inoutByte( aByte);
+	this.inoutShort( aShort);
+	this.inoutLong( aLong);
+}
+
+function XCallback_Impl_inValues( aChar, aLong, aString)
+{
+	alert( "char : " + aChar + " long: " + aLong + " string: " + aString);
+}
+
+
+//################################################################
+// class MultiInterface implements XSimple, XSimple2, XSimple3
+//################################################################
+function MultiInterface()
+{
+	this._environment= "JScript";
+	this._implementedInterfaces= new Array( "oletest.XSimple", "oletest.XSimple2", "oletest.XSimple3");
+	// XSimple ---------------
+	this.getName= MultiInterface_getName;
+	this.func= MultiInterface_func;
+	this.func2= MultiInterface_func2;
+	this.func3= MultiInterface_func3;
+	// XSimple2
+	this.getName2= MultiInterface_getName2;	
+	// XSimple3
+	this.getName3= MultiInterface_getName3;
+}
+
+
+function MultiInterface_getName()
+{
+	return "JScript XSimple called";
+}
+function MultiInterface_func( message)
+{
+	alert("JScript object (XSimple)-- " + message);
+}
+
+function MultiInterface_getName2()
+{
+	return "JScript XSimple2 called";
+}
+function MultiInterface_func2( message)
+{
+	alert("JScript object (XSimple2) -- " + message);
+}
+
+function MultiInterface_getName3()
+{
+	return "JScript XSimple3 called";
+}
+function MultiInterface_func3( message)
+{
+	alert("JScript object (XSimple3) -- " + message);
+}
+
+
+
+
+//XCallback_Impl_outValuesMixed( val1, outval, val2)
+//{
+//}
+//XCallback_Impl_outValuesAll( xSimple, aSimpleStruct, aSimpleEnum, seqAny, aAny, aBool,
+//				aChar, aString, aFloat, aDouble, aByte, aShort, aLong, aUShort, aULong)
+//{
+//	
+//}
+
+
+
+//  class XSimple_Impl----------------------------------------------------------------------
+function XSimple_Impl()
+{
+	//XSimple
+	this.func= XSimple_Impl_func;
+}	
+function XSimple_Impl_func( message)
+{
+	alert( "XSimple called." + message);
+}
+
+
+</script>
+
+
+
+<h2> Object in JScript</h2>
+
+This test passes a XCallback to an UNO function of the UNO test control.
+XCallback is implemented by the JScript class XCallback_Impl. The function
+XCallback::func1 is then called from the UNO test control.
+<br>
+<button onclick='callOleTest( 1)'>go</Button>
+<br>
+On the UNO object the function testInterface is called which takes
+a XCallback as parameter. XCallback is implemented in a JScript object.The function
+returns a XSimple Interface. Then the UNO object calls XSimple::notify. This test shall
+verify the correct conversion of the return value( IDispatch JScript object) to an XSimple object.<br>
+<button onclick='callOleTest( 2)'>go</Button>
+<br>
+<h1> out parameter </h1>
+The a JScript object of class XCallback_Impl is passed to the UNO OleTest Control as parameter. 
+According to the buttons the OleTest object calls a function on XCallback_Impl that has appropriate type
+as out parameter.<br>
+<button onclick='callOleTest( 3)'>interface</Button>
+<button onclick='callOleTest( 4)'>struct</Button>
+<button onclick='callOleTest( 5)'>enum</Button>
+<button onclick='callOleTest( 6)'>sequence&lt;any&gt;</Button>
+<button onclick='callOleTest( 7)'>any</Button>
+<button onclick='callOleTest( 8)'>bool</Button>
+<button onclick='callOleTest( 9)'>char</Button>
+<button onclick='callOleTest( 10)'>string</Button>
+<button onclick='callOleTest( 11)'>float</Button>
+<button onclick='callOleTest( 12)'>double</Button>
+<button onclick='callOleTest( 13)'>byte</Button>
+<button onclick='callOleTest( 14)'>short</Button>
+<button onclick='callOleTest( 15)'>long</Button>
+<br>
+Other test with out parameters <br>
+<button onclick='callOleTest( 30)'>outValuesMixed</Button>
+<button onclick='callOleTest( 31)'>outValuesAll</Button>
+<h1> in out parameter </h1>
+<button onclick='callOleTest( 100)'>interface</Button>
+<button onclick='callOleTest( 101)'>struct</Button>
+<button onclick='callOleTest( 102)'>enum</Button>
+<button onclick='callOleTest( 103)'>seqence&lt;any&gt;</Button>
+<button onclick='callOleTest( 104)'>any</Button>
+<button onclick='callOleTest( 105)'>bool</Button>
+<button onclick='callOleTest( 106)'>char</Button>
+<button onclick='callOleTest( 107)'>string</Button>
+<button onclick='callOleTest( 108)'>float</Button>
+<button onclick='callOleTest( 109)'>double</Button>
+<button onclick='callOleTest( 110)'>byte</Button>
+<button onclick='callOleTest( 111)'>short</Button>
+<button onclick='callOleTest( 112)'>long</Button>
+<br>
+Other tests with inout parameters <br>
+<button onclick='callOleTest( 120)'>inoutValuesAll</Button>
+<h1>in parameters </h1>
+<button onclick='callOleTest( 200)'>inValues</Button>
+
+<h1> JScript object implements several interfaces </h1>
+<button onclick='callOleTest( 1000)'>go</Button>
+
+
+</body>
+</html>
+
+

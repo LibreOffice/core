@@ -1,0 +1,1008 @@
+/*************************************************************************
+ *
+ *  $RCSfile: basecontrol.cxx,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:11:17 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+//____________________________________________________________________________________________________________
+//  my own include
+//____________________________________________________________________________________________________________
+
+#ifndef _UNOCONTROLS_BASECONTROL_CTRL_HXX
+#include "basecontrol.hxx"
+#endif
+
+//____________________________________________________________________________________________________________
+//  includes of other projects
+//____________________________________________________________________________________________________________
+
+#ifndef _COM_SUN_STAR_AWT_XDEVICE_HPP_
+#include <com/sun/star/awt/XDevice.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_AWT_XDISPLAYBITMAP_HPP_
+#include <com/sun/star/awt/XDisplayBitmap.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_AWT_DEVICEINFO_HPP_
+#include <com/sun/star/awt/DeviceInfo.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_AWT_WINDOWATTRIBUTE_HPP_
+#include <com/sun/star/awt/WindowAttribute.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_AWT_POSSIZE_HPP_
+#include <com/sun/star/awt/PosSize.hpp>
+#endif
+
+#ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
+#include <cppuhelper/typeprovider.hxx>
+#endif
+
+//____________________________________________________________________________________________________________
+//  includes of my own project
+//____________________________________________________________________________________________________________
+
+//____________________________________________________________________________________________________________
+//  namespaces
+//____________________________________________________________________________________________________________
+
+using namespace ::cppu                  ;
+using namespace ::osl                   ;
+using namespace ::rtl                   ;
+using namespace ::com::sun::star::uno   ;
+using namespace ::com::sun::star::lang  ;
+using namespace ::com::sun::star::awt   ;
+
+namespace unocontrols{
+
+//____________________________________________________________________________________________________________
+//  defines
+//____________________________________________________________________________________________________________
+
+#define DEFAULT_PMULTIPLEXER                NULL
+#define DEFAULT_X                           0
+#define DEFAULT_Y                           0
+#define DEFAULT_WIDTH                       100
+#define DEFAULT_HEIGHT                      100
+#define DEFAULT_VISIBLE                     sal_False
+#define DEFAULT_INDESIGNMODE                sal_False
+#define DEFAULT_ENABLE                      sal_True
+#define SERVICE_VCLTOOLKIT                  "com.sun.star.awt.Toolkit"
+
+//____________________________________________________________________________________________________________
+//  construct/destruct
+//____________________________________________________________________________________________________________
+
+BaseControl::BaseControl( const Reference< XMultiServiceFactory >& xFactory )
+    : IMPL_MutexContainer       (                       )
+    , OComponentHelper          ( m_aMutex              )
+    , m_xFactory    ( xFactory              )
+    , m_pMultiplexer            ( DEFAULT_PMULTIPLEXER  )
+    , m_nX                      ( DEFAULT_X             )
+    , m_nY                      ( DEFAULT_Y             )
+    , m_nWidth                  ( DEFAULT_WIDTH         )
+    , m_nHeight                 ( DEFAULT_HEIGHT        )
+    , m_bVisible                ( DEFAULT_VISIBLE       )
+    , m_bInDesignMode           ( DEFAULT_INDESIGNMODE  )
+    , m_bEnable                 ( DEFAULT_ENABLE        )
+{
+}
+
+BaseControl::~BaseControl()
+{
+}
+
+//____________________________________________________________________________________________________________
+//  XInterface
+//____________________________________________________________________________________________________________
+
+Any SAL_CALL BaseControl::queryInterface( const Type& rType ) throw( RuntimeException )
+{
+    Any aReturn ;
+    if ( m_xDelegator.is() == sal_True )
+    {
+        // If an delegator exist, forward question to his queryInterface.
+        // Delegator will ask his own queryAggregation!
+        aReturn = m_xDelegator->queryInterface( rType );
+    }
+    else
+    {
+        // If an delegator unknown, forward question to own queryAggregation.
+        aReturn = queryAggregation( rType );
+    }
+
+    return aReturn ;
+}
+
+//____________________________________________________________________________________________________________
+//  XInterface
+//____________________________________________________________________________________________________________
+
+void SAL_CALL BaseControl::acquire() throw( RuntimeException )
+{
+    // Attention:
+    //  Don't use mutex or guard in this method!!! Is a method of XInterface.
+
+    // Forward to baseclass
+    OComponentHelper::acquire();
+}
+
+//____________________________________________________________________________________________________________
+//  XInterface
+//____________________________________________________________________________________________________________
+
+void SAL_CALL BaseControl::release() throw( RuntimeException )
+{
+    // Attention:
+    //  Don't use mutex or guard in this method!!! Is a method of XInterface.
+
+    // Forward to baseclass
+    OComponentHelper::release();
+}
+
+//____________________________________________________________________________________________________________
+//  XTypeProvider
+//____________________________________________________________________________________________________________
+
+Sequence< Type > SAL_CALL BaseControl::getTypes() throw( RuntimeException )
+{
+    // Optimize this method !
+    // We initialize a static variable only one time. And we don't must use a mutex at every call!
+    // For the first call; pTypeCollection is NULL - for the second call pTypeCollection is different from NULL!
+    static OTypeCollection* pTypeCollection = NULL ;
+
+    if ( pTypeCollection == NULL )
+    {
+        // Ready for multithreading; get global mutex for first call of this method only! see before
+        MutexGuard aGuard( Mutex::getGlobalMutex() );
+
+        // Control these pointer again ... it can be, that another instance will be faster then these!
+        if ( pTypeCollection == NULL )
+        {
+            // Create a static typecollection ...
+            static OTypeCollection aTypeCollection  (   ::getCppuType(( const Reference< XPaintListener >*)NULL )   ,
+                                                          ::getCppuType(( const Reference< XView            >*)NULL )   ,
+                                                          ::getCppuType(( const Reference< XWindow      >*)NULL )   ,
+                                                          ::getCppuType(( const Reference< XServiceInfo >*)NULL )   ,
+                                                          ::getCppuType(( const Reference< XControl     >*)NULL )   ,
+                                                        OComponentHelper::getTypes()
+                                                    );
+
+            // ... and set his address to static pointer!
+            pTypeCollection = &aTypeCollection ;
+        }
+    }
+
+    return pTypeCollection->getTypes();
+}
+
+//____________________________________________________________________________________________________________
+//  XTypeProvider
+//____________________________________________________________________________________________________________
+
+Sequence< sal_Int8 > SAL_CALL BaseControl::getImplementationId() throw( RuntimeException )
+{
+    // Create one Id for all instances of this class.
+    // Use ethernet address to do this! (sal_True)
+
+    // Optimize this method
+    // We initialize a static variable only one time. And we don't must use a mutex at every call!
+    // For the first call; pID is NULL - for the second call pID is different from NULL!
+    static OImplementationId* pID = NULL ;
+
+    if ( pID == NULL )
+    {
+        // Ready for multithreading; get global mutex for first call of this method only! see before
+        MutexGuard aGuard( Mutex::getGlobalMutex() );
+
+        // Control these pointer again ... it can be, that another instance will be faster then these!
+        if ( pID == NULL )
+        {
+            // Create a new static ID ...
+            static OImplementationId aID( sal_False );
+            // ... and set his address to static pointer!
+            pID = &aID ;
+        }
+    }
+
+    return pID->getImplementationId();
+}
+
+//____________________________________________________________________________________________________________
+//  XAggregation
+//____________________________________________________________________________________________________________
+
+void SAL_CALL BaseControl::setDelegator( const Reference< XInterface >& xDelegator ) throw( RuntimeException )
+{
+    // Ready for multithreading
+    MutexGuard aGuard( m_aMutex );
+    m_xDelegator = xDelegator ;
+}
+
+//____________________________________________________________________________________________________________
+//  XAggregation
+//____________________________________________________________________________________________________________
+
+Any SAL_CALL BaseControl::queryAggregation( const Type& aType ) throw( RuntimeException )
+{
+    // Ask for my own supported interfaces ...
+    // Attention: XTypeProvider and XInterface are supported by OComponentHelper!
+    Any aReturn ( ::cppu::queryInterface(   aType                                   ,
+                                               static_cast< XPaintListener*> ( this )   ,
+                                               static_cast< XView*          > ( this )  ,
+                                               static_cast< XWindow*        > ( this )  ,
+                                               static_cast< XServiceInfo*   > ( this )  ,
+                                               static_cast< XControl*       > ( this )
+                                        )
+                );
+
+    // If searched interface supported by this class ...
+    if ( aReturn.hasValue() == sal_True )
+    {
+        // ... return this information.
+        return aReturn ;
+    }
+    else
+    {
+        // Else; ... ask baseclass for interfaces!
+        return OComponentHelper::queryAggregation( aType );
+    }
+}
+
+//____________________________________________________________________________________________________________
+//  XServiceInfo
+//____________________________________________________________________________________________________________
+
+OUString SAL_CALL BaseControl::getImplementationName() throw( RuntimeException )
+{
+    return impl_getStaticImplementationName();
+}
+
+//____________________________________________________________________________________________________________
+//  XServiceInfo
+//____________________________________________________________________________________________________________
+
+sal_Bool SAL_CALL BaseControl::supportsService( const OUString& sServiceName ) throw( RuntimeException )
+{
+    Sequence< OUString >    seqServiceNames =   getSupportedServiceNames();
+    const OUString*         pArray          =   seqServiceNames.getConstArray();
+    for ( sal_Int32 nCounter=0; nCounter<seqServiceNames.getLength(); nCounter++ )
+    {
+        if ( pArray[nCounter] == sServiceName )
+        {
+            return sal_True ;
+        }
+    }
+    return sal_False ;
+}
+
+//____________________________________________________________________________________________________________
+//  XServiceInfo
+//____________________________________________________________________________________________________________
+
+Sequence< OUString > SAL_CALL BaseControl::getSupportedServiceNames() throw( RuntimeException )
+{
+    return impl_getStaticSupportedServiceNames();
+}
+
+//____________________________________________________________________________________________________________
+//  XComponent
+//____________________________________________________________________________________________________________
+
+void SAL_CALL BaseControl::dispose() throw( RuntimeException )
+{
+    // Ready for multithreading
+    MutexGuard aGuard( m_aMutex );
+
+    if ( m_pMultiplexer != NULL )
+    {
+        // to all other paint, focus, etc.
+        m_pMultiplexer->disposeAndClear();
+    }
+
+    // set the service manager to disposed
+    OComponentHelper::dispose();
+
+    // release context and peer
+    m_xContext = Reference< XInterface >();
+    impl_releasePeer();
+
+    // release view
+    if ( m_xGraphicsView.is() == sal_True )
+    {
+        m_xGraphicsView = Reference< XGraphics >();
+    }
+}
+
+//____________________________________________________________________________________________________________
+//  XComponent
+//____________________________________________________________________________________________________________
+
+void SAL_CALL BaseControl::addEventListener( const Reference< XEventListener >& xListener ) throw( RuntimeException )
+{
+    // Ready for multithreading
+    MutexGuard aGuard( m_aMutex );
+    OComponentHelper::addEventListener( xListener );
+}
+
+//____________________________________________________________________________________________________________
+//  XComponent
+//____________________________________________________________________________________________________________
+
+void SAL_CALL BaseControl::removeEventListener( const Reference< XEventListener >& xListener ) throw( RuntimeException )
+{
+    // Ready for multithreading
+    MutexGuard aGuard( m_aMutex );
+    OComponentHelper::removeEventListener( xListener );
+}
+
+//____________________________________________________________________________________________________________
+//  XControl
+//____________________________________________________________________________________________________________
+
+void SAL_CALL BaseControl::createPeer(  const   Reference< XToolkit >&      xToolkit    ,
+                                        const   Reference< XWindowPeer >&   xParentPeer ) throw( RuntimeException )
+{
+    // Ready for multithreading
+    MutexGuard aGuard( m_aMutex );
+
+    if ( m_xPeer.is() == sal_False )
+    {
+        // use method "BaseControl::getWindowDescriptor()" fot change window attributes !!!
+        WindowDescriptor* pDescriptor = impl_getWindowDescriptor( xParentPeer );
+
+        if ( m_bVisible == sal_True )
+        {
+            pDescriptor->WindowAttributes |= WindowAttribute::SHOW ;
+        }
+
+        // very slow under remote conditions!
+        // create the window on the server
+        Reference< XToolkit > xLocalToolkit = xToolkit ;
+        if ( xLocalToolkit.is() == sal_False )
+        {
+            // but first create wellknown toolkit, if it not exist
+            xLocalToolkit = Reference< XToolkit > ( m_xFactory->createInstance( OUString::createFromAscii( SERVICE_VCLTOOLKIT ) ), UNO_QUERY );
+        }
+        m_xPeer         = xLocalToolkit->createWindow( *pDescriptor );
+        m_xPeerWindow   = Reference< XWindow >( m_xPeer, UNO_QUERY );
+
+        // don't forget to release the memory!
+        delete pDescriptor ;
+
+        if ( m_xPeerWindow.is() == sal_True )
+        {
+            if ( m_pMultiplexer != NULL )
+            {
+                m_pMultiplexer->setPeer( m_xPeerWindow );
+            }
+
+            // create new referenz to xgraphics for painting on a peer
+            // and add a paint listener
+            Reference< XDevice > xDevice( m_xPeerWindow, UNO_QUERY );
+
+            if ( xDevice.is() == sal_True )
+            {
+                m_xGraphicsPeer = xDevice->createGraphics();
+            }
+
+            if ( m_xGraphicsPeer.is() == sal_True )
+            {
+                addPaintListener( this );
+            }
+
+            // PosSize_POSSIZE defined in <stardiv/uno/awt/window.hxx>
+            m_xPeerWindow->setPosSize(  m_nX, m_nY, m_nWidth, m_nHeight, PosSize::POSSIZE   );
+            m_xPeerWindow->setEnable(   m_bEnable                                           );
+            m_xPeerWindow->setVisible(  m_bVisible && !m_bInDesignMode                      );
+        }
+    }
+}
+
+//____________________________________________________________________________________________________________
+//  XControl
+//____________________________________________________________________________________________________________
+
+void SAL_CALL BaseControl::setContext( const Reference< XInterface >& xContext ) throw( RuntimeException )
+{
+    // Ready for multithreading
+    MutexGuard aGuard( m_aMutex );
+    m_xContext = xContext ;
+}
+
+//____________________________________________________________________________________________________________
+//  XControl
+//____________________________________________________________________________________________________________
+
+void SAL_CALL BaseControl::setDesignMode( sal_Bool bOn ) throw( RuntimeException )
+{
+    // Ready for multithreading
+    MutexGuard aGuard( m_aMutex );
+    m_bInDesignMode = bOn ;
+}
+
+//____________________________________________________________________________________________________________
+//  XControl
+//____________________________________________________________________________________________________________
+
+Reference< XInterface > SAL_CALL BaseControl::getContext() throw( RuntimeException )
+{
+    // Ready for multithreading
+    MutexGuard aGuard( m_aMutex );
+    return m_xContext ;
+}
+
+//____________________________________________________________________________________________________________
+//  XControl
+//____________________________________________________________________________________________________________
+
+Reference< XWindowPeer > SAL_CALL BaseControl::getPeer() throw( RuntimeException )
+{
+    // Ready for multithreading
+    MutexGuard aGuard( m_aMutex );
+    return m_xPeer ;
+}
+
+//____________________________________________________________________________________________________________
+//  XControl
+//____________________________________________________________________________________________________________
+
+Reference< XView > SAL_CALL BaseControl::getView() throw( RuntimeException )
+{
+    // Ready for multithreading
+    MutexGuard aGuard( m_aMutex );
+    return Reference< XView >( (OWeakObject*)this, UNO_QUERY );
+}
+
+//____________________________________________________________________________________________________________
+//  XControl
+//____________________________________________________________________________________________________________
+
+sal_Bool SAL_CALL BaseControl::isDesignMode() throw( RuntimeException )
+{
+    // Ready for multithreading
+    MutexGuard aGuard( m_aMutex );
+    return m_bInDesignMode ;
+}
+
+//____________________________________________________________________________________________________________
+//  XControl
+//____________________________________________________________________________________________________________
+
+sal_Bool SAL_CALL BaseControl::isTransparent() throw( RuntimeException )
+{
+    return sal_False ;
+}
+
+//____________________________________________________________________________________________________________
+//  XWindow
+//____________________________________________________________________________________________________________
+
+void SAL_CALL BaseControl::setPosSize(  sal_Int32   nX      ,
+                                        sal_Int32   nY      ,
+                                        sal_Int32   nWidth  ,
+                                        sal_Int32   nHeight ,
+                                        sal_Int16   nFlags  ) throw( RuntimeException )
+{
+    // - change size and position of window and save the values
+    // - "nFlags" declared in <stardiv/uno/awt/window.hxx> ("#define PosSize_X .....")
+
+    // Ready for multithreading
+    MutexGuard aGuard( m_aMutex );
+
+    sal_Bool bChanged = sal_False ;
+
+    if ( nFlags & PosSize::X )
+    {
+        bChanged |= m_nX != nX, m_nX = nX ;
+    }
+
+    if ( nFlags & PosSize::Y )
+    {
+        bChanged |= m_nY != nY, m_nY = nY ;
+    }
+
+    if ( nFlags & PosSize::WIDTH )
+    {
+        bChanged |= m_nWidth != nWidth, m_nWidth  = nWidth ;
+    }
+
+    if ( nFlags & PosSize::HEIGHT )
+    {
+        bChanged |= m_nHeight != nHeight, m_nHeight = nHeight  ;
+    }
+
+    if ( bChanged && m_xPeerWindow.is() )
+    {
+        m_xPeerWindow->setPosSize( m_nX, m_nY, m_nWidth, m_nHeight, nFlags );
+    }
+}
+
+//____________________________________________________________________________________________________________
+//  XWindow
+//____________________________________________________________________________________________________________
+
+void SAL_CALL BaseControl::setVisible( sal_Bool bVisible ) throw( RuntimeException )
+{
+    // Ready for multithreading
+    MutexGuard aGuard( m_aMutex );
+
+    // Set new state of flag
+    m_bVisible = bVisible ;
+
+    if ( m_xPeerWindow.is() == sal_True )
+    {
+        // Set it also on peerwindow
+        m_xPeerWindow->setVisible( m_bVisible );
+    }
+}
+
+//____________________________________________________________________________________________________________
+//  XWindow
+//____________________________________________________________________________________________________________
+
+void SAL_CALL BaseControl::setEnable( sal_Bool bEnable ) throw( RuntimeException )
+{
+    // Ready for multithreading
+    MutexGuard aGuard( m_aMutex );
+
+    // Set new state of flag
+    m_bEnable = bEnable ;
+
+    if ( m_xPeerWindow.is() == sal_True )
+    {
+        // Set it also on peerwindow
+        m_xPeerWindow->setEnable( m_bEnable );
+    }
+}
+
+//____________________________________________________________________________________________________________
+//  XWindow
+//____________________________________________________________________________________________________________
+
+void SAL_CALL BaseControl::setFocus() throw( RuntimeException )
+{
+    // Ready for multithreading
+    MutexGuard aGuard( m_aMutex );
+
+    if ( m_xPeerWindow.is() == sal_True )
+    {
+        m_xPeerWindow->setFocus();
+    }
+}
+
+//____________________________________________________________________________________________________________
+//  XWindow
+//____________________________________________________________________________________________________________
+
+Rectangle SAL_CALL BaseControl::getPosSize() throw( RuntimeException )
+{
+    // Ready for multithreading
+    MutexGuard aGuard( m_aMutex );
+    return Rectangle( m_nX, m_nY , m_nWidth, m_nHeight );
+}
+
+//____________________________________________________________________________________________________________
+//  XWindow
+//____________________________________________________________________________________________________________
+
+void SAL_CALL BaseControl::addWindowListener( const Reference< XWindowListener >& xListener ) throw( RuntimeException )
+{
+    impl_getMultiplexer()->advise( ::getCppuType(( const Reference< XWindowListener >*)0), xListener );
+}
+
+//____________________________________________________________________________________________________________
+//  XWindow
+//____________________________________________________________________________________________________________
+
+void SAL_CALL BaseControl::addFocusListener( const Reference< XFocusListener >& xListener ) throw( RuntimeException )
+{
+    impl_getMultiplexer()->advise( ::getCppuType(( const Reference< XFocusListener >*)0), xListener );
+}
+
+//____________________________________________________________________________________________________________
+//  XWindow
+//____________________________________________________________________________________________________________
+
+void SAL_CALL BaseControl::addKeyListener( const Reference< XKeyListener >& xListener ) throw( RuntimeException )
+{
+    impl_getMultiplexer()->advise( ::getCppuType(( const Reference< XKeyListener >*)0), xListener );
+}
+
+//____________________________________________________________________________________________________________
+//  XWindow
+//____________________________________________________________________________________________________________
+
+void SAL_CALL BaseControl::addMouseListener( const Reference< XMouseListener >& xListener ) throw( RuntimeException )
+{
+    impl_getMultiplexer()->advise( ::getCppuType(( const Reference< XMouseListener >*)0), xListener );
+}
+
+//____________________________________________________________________________________________________________
+//  XWindow
+//____________________________________________________________________________________________________________
+
+void SAL_CALL BaseControl::addMouseMotionListener( const Reference< XMouseMotionListener >& xListener ) throw( RuntimeException )
+{
+    impl_getMultiplexer()->advise( ::getCppuType(( const Reference< XMouseMotionListener >*)0), xListener );
+}
+
+//____________________________________________________________________________________________________________
+//  XWindow
+//____________________________________________________________________________________________________________
+
+void SAL_CALL BaseControl::addPaintListener( const Reference< XPaintListener >& xListener ) throw( RuntimeException )
+{
+    impl_getMultiplexer()->advise( ::getCppuType(( const Reference< XPaintListener >*)0), xListener );
+}
+
+//____________________________________________________________________________________________________________
+//  XWindow
+//____________________________________________________________________________________________________________
+
+void SAL_CALL BaseControl::removeWindowListener( const Reference< XWindowListener >& xListener ) throw( RuntimeException )
+{
+    impl_getMultiplexer()->unadvise( ::getCppuType(( const Reference< XWindowListener >*)0), xListener );
+}
+
+//____________________________________________________________________________________________________________
+//  XWindow
+//____________________________________________________________________________________________________________
+
+void SAL_CALL BaseControl::removeFocusListener( const Reference< XFocusListener >& xListener ) throw( RuntimeException )
+{
+    impl_getMultiplexer()->unadvise( ::getCppuType(( const Reference< XFocusListener >*)0), xListener );
+}
+
+//____________________________________________________________________________________________________________
+//  XWindow
+//____________________________________________________________________________________________________________
+
+void SAL_CALL BaseControl::removeKeyListener( const Reference< XKeyListener >& xListener ) throw( RuntimeException )
+{
+    impl_getMultiplexer()->unadvise( ::getCppuType(( const Reference< XKeyListener >*)0), xListener );
+}
+
+//____________________________________________________________________________________________________________
+//  XWindow
+//____________________________________________________________________________________________________________
+
+void SAL_CALL BaseControl::removeMouseListener( const Reference< XMouseListener >& xListener ) throw( RuntimeException )
+{
+    impl_getMultiplexer()->unadvise( ::getCppuType(( const Reference< XMouseListener >*)0), xListener );
+}
+
+//____________________________________________________________________________________________________________
+//  XWindow
+//____________________________________________________________________________________________________________
+
+void  SAL_CALL BaseControl::removeMouseMotionListener( const Reference< XMouseMotionListener >& xListener ) throw( RuntimeException )
+{
+    impl_getMultiplexer()->unadvise( ::getCppuType(( const Reference< XMouseMotionListener >*)0), xListener );
+}
+
+//____________________________________________________________________________________________________________
+//  XWindow
+//____________________________________________________________________________________________________________
+
+void SAL_CALL BaseControl::removePaintListener( const Reference< XPaintListener >& xListener ) throw( RuntimeException )
+{
+    impl_getMultiplexer()->unadvise( ::getCppuType(( const Reference< XPaintListener >*)0), xListener );
+}
+
+//____________________________________________________________________________________________________________
+//  XView
+//____________________________________________________________________________________________________________
+
+void SAL_CALL BaseControl::draw(    sal_Int32   nX  ,
+                                    sal_Int32   nY  ) throw( RuntimeException )
+{
+    // Ready for multithreading
+    MutexGuard aGuard( m_aMutex );
+
+    // - paint to an view
+    // - use the method "paint()"
+    // - see also "windowPaint()"
+    impl_paint( nX, nY, m_xGraphicsView );
+}
+
+//____________________________________________________________________________________________________________
+//  XView
+//____________________________________________________________________________________________________________
+
+sal_Bool SAL_CALL BaseControl::setGraphics( const Reference< XGraphics >& xDevice ) throw( RuntimeException )
+{
+    // - set the graphics for an view
+    // - in this class exist 2 graphics-member ... one for peer[_xGraphicsPeer] and one for view[_xGraphicsView]
+    // - they are used by "windowPaint() and draw()", forwarded to "paint ()"
+    sal_Bool bReturn = sal_False ;
+    if ( xDevice.is() == sal_True )
+    {
+        // Ready for multithreading
+        MutexGuard aGuard( m_aMutex );
+
+        m_xGraphicsView = xDevice   ;
+        bReturn         = sal_True  ;
+    }
+
+    return bReturn ;
+}
+
+//____________________________________________________________________________________________________________
+//  XView
+//____________________________________________________________________________________________________________
+
+void SAL_CALL BaseControl::setZoom( float   fZoomX  ,
+                                    float   fZoomY  ) throw( RuntimeException )
+{
+    // Not implemented yet
+}
+
+//____________________________________________________________________________________________________________
+//  XView
+//____________________________________________________________________________________________________________
+
+Reference< XGraphics > SAL_CALL BaseControl::getGraphics() throw( RuntimeException )
+{
+    // Ready for multithreading
+    MutexGuard aGuard( m_aMutex );
+    return m_xGraphicsView ;
+}
+
+//____________________________________________________________________________________________________________
+//  XView
+//____________________________________________________________________________________________________________
+
+Size SAL_CALL BaseControl::getSize() throw( RuntimeException )
+{
+    // Ready for multithreading
+    MutexGuard aGuard( m_aMutex );
+    return Size( m_nWidth, m_nHeight );
+}
+
+//____________________________________________________________________________________________________________
+//  XEventListener
+//____________________________________________________________________________________________________________
+
+void SAL_CALL BaseControl::disposing( const EventObject& aSource ) throw( RuntimeException )
+{
+    // Ready for multithreading
+    MutexGuard aGuard( m_aMutex );
+
+    // - release ALL references
+    // - it must be !!!
+    if ( m_xGraphicsPeer.is() == sal_True )
+    {
+        removePaintListener( this );
+        m_xGraphicsPeer = Reference< XGraphics >();
+    }
+
+    if ( m_xGraphicsView.is() == sal_True )
+    {
+        m_xGraphicsView = Reference< XGraphics >();
+    }
+}
+
+//____________________________________________________________________________________________________________
+//  XPaintListener
+//____________________________________________________________________________________________________________
+
+void SAL_CALL BaseControl::windowPaint( const PaintEvent& aEvent ) throw( RuntimeException )
+{
+    // Ready for multithreading
+    MutexGuard aGuard( m_aMutex );
+
+    // - repaint the peer
+    // - use the method "paint ()" for painting on a peer and a print device !!!
+    // - see also "draw ()"
+    impl_paint( 0, 0, m_xGraphicsPeer );
+}
+
+//____________________________________________________________________________________________________________
+//  impl but public method to register service in DLL
+//  (In this BASE-implementation not implemented! Overwrite it in derived classes.)
+//____________________________________________________________________________________________________________
+
+const Sequence< OUString > BaseControl::impl_getStaticSupportedServiceNames()
+{
+    return Sequence< OUString >();
+}
+
+//____________________________________________________________________________________________________________
+//  impl but public method to register service in DLL
+//  (In this BASE-implementation not implemented! Overwrite it in derived classes.)
+//____________________________________________________________________________________________________________
+
+const OUString BaseControl::impl_getStaticImplementationName()
+{
+    return OUString();
+}
+
+//____________________________________________________________________________________________________________
+//  protected method
+//____________________________________________________________________________________________________________
+
+const Reference< XMultiServiceFactory > BaseControl::impl_getMultiServiceFactory()
+{
+    return m_xFactory ;
+}
+
+//____________________________________________________________________________________________________________
+//  protected method
+//____________________________________________________________________________________________________________
+
+const Reference< XWindow > BaseControl::impl_getPeerWindow()
+{
+    return m_xPeerWindow ;
+}
+
+//____________________________________________________________________________________________________________
+//  protected method
+//____________________________________________________________________________________________________________
+
+const Reference< XGraphics > BaseControl::impl_getGraphicsPeer()
+{
+    return m_xGraphicsPeer ;
+}
+
+//____________________________________________________________________________________________________________
+//  protected method
+//____________________________________________________________________________________________________________
+
+const sal_Int32& BaseControl::impl_getWidth()
+{
+    return m_nWidth ;
+}
+
+//____________________________________________________________________________________________________________
+//  protected method
+//____________________________________________________________________________________________________________
+
+const sal_Int32& BaseControl::impl_getHeight()
+{
+    return m_nHeight ;
+}
+
+//____________________________________________________________________________________________________________
+//  protected method
+//____________________________________________________________________________________________________________
+
+WindowDescriptor* BaseControl::impl_getWindowDescriptor( const Reference< XWindowPeer >& xParentPeer )
+{
+    // - used from "createPeer()" to set the values of an ::com::sun::star::awt::WindowDescriptor !!!
+    // - if you will change the descriptor-values, you must override thid virtuell function
+    // - the caller must release the memory for this dynamical descriptor !!!
+
+    WindowDescriptor* pDescriptor = new WindowDescriptor ;
+
+    pDescriptor->Type               = WindowClass_SIMPLE                    ;
+    pDescriptor->WindowServiceName  = OUString::createFromAscii( "window" ) ;
+    pDescriptor->ParentIndex        = -1                                    ;
+    pDescriptor->Parent             = xParentPeer                           ;
+    pDescriptor->Bounds             = getPosSize ()                         ;
+    pDescriptor->WindowAttributes   = 0                                     ;
+
+    return pDescriptor ;
+}
+
+//____________________________________________________________________________________________________________
+//  protected method
+//____________________________________________________________________________________________________________
+
+void BaseControl::impl_paint(           sal_Int32               nX          ,
+                                        sal_Int32               nY          ,
+                                const   Reference< XGraphics >& xGraphics   )
+{
+    // - one paint method for peer AND view !!!
+    //   (see also => "windowPaint()" and "draw()")
+    // - not used in this implementation, but its not necessary to make it pure virtual !!!
+}
+
+//____________________________________________________________________________________________________________
+//  protected method
+//____________________________________________________________________________________________________________
+
+Reference< XInterface > BaseControl::impl_getDelegator()
+{
+    return m_xDelegator ;
+}
+
+//____________________________________________________________________________________________________________
+//  private method
+//____________________________________________________________________________________________________________
+
+void BaseControl::impl_releasePeer()
+{
+    if ( m_xPeer.is() == sal_True )
+    {
+        if ( m_xGraphicsPeer.is() == sal_True )
+        {
+            removePaintListener( this );
+            m_xGraphicsPeer = Reference< XGraphics >();
+        }
+
+        m_xPeer->dispose();
+        m_xPeerWindow   = Reference< XWindow >();
+        m_xPeer         = Reference< XWindowPeer >();
+
+        if ( m_pMultiplexer != NULL )
+        {
+            // take changes on multiplexer
+            m_pMultiplexer->setPeer( Reference< XWindow >() );
+        }
+    }
+}
+
+//____________________________________________________________________________________________________________
+//  private method
+//____________________________________________________________________________________________________________
+
+OMRCListenerMultiplexerHelper* BaseControl::impl_getMultiplexer()
+{
+    if ( m_pMultiplexer == NULL )
+    {
+        m_pMultiplexer = new OMRCListenerMultiplexerHelper( (XWindow*)this, m_xPeerWindow );
+        m_xMultiplexer = Reference< XInterface >( (OWeakObject*)m_pMultiplexer, UNO_QUERY );
+    }
+
+    return m_pMultiplexer ;
+}
+
+} // namespace unocontrols

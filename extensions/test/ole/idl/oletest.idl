@@ -1,0 +1,309 @@
+/*************************************************************************
+ *
+ *  $RCSfile: oletest.idl,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:16:55 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+//#include <stardiv/uno/interface.idl>
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/script/XInvocation.idl>
+//#include <stardiv/uno/beans/propset.idl>
+#include <com/sun/star/beans/XPropertySet.idl>
+
+/*=============================================================================
+
+    $Source: /cvs/Archiv/one/stardiv/one/chart/xcenum.idl,v 1.6 1999/04/26 10:42
+
+    status: proofreading done
+
+    (c) Copyright 1998-1999, Star Office Entwicklungs GmbH, Hamburg
+
+=============================================================================*/
+
+module oletest
+{
+
+[ uik(8DE309C0-8310-11d3-9EEC0050-04526AB4), ident("XTestSequence", 1.0) ]
+interface XTestSequence: com::sun::star::uno::XInterface
+{
+    sequence<byte> methodByte( [in] sequence<byte> aSeq );
+    sequence<float> methodFloat( [in] sequence<float> aSeq);
+    sequence<double> methodDouble( [in] sequence<double> aSeq);
+    sequence<boolean> methodBool( [in] sequence<boolean> aSeq);
+    sequence<short> methodShort( [in] sequence<short> aSeq);
+    sequence<unsigned short> methodUShort( [in] sequence<unsigned short> aSeq);
+    sequence<long> methodLong( [in] sequence<long> aSeq);
+    sequence<unsigned long> methodULong( [in] sequence<unsigned long> aSeq);
+    sequence<string> methodString( [in] sequence<string> aSeq);
+    sequence<char> methodChar( [in] sequence<char> aSeq);
+    sequence<any> methodAny ( [in] sequence<any> aSeq);
+    sequence<com::sun::star::uno::XInterface> methodXInterface ( [in] sequence<com::sun::star::uno::XInterface> aSeq);
+    sequence< sequence <long> > methodSequence( [in] sequence< sequence< long > > aSeq);
+    sequence< sequence <sequence <long> > > methodSequence2( [in] sequence< sequence< sequence<long> > > aSeq);
+
+    [attribute] sequence<byte> AttrByte;
+    [attribute] sequence<float> AttrFloat;
+    [attribute] sequence<double> AttrDouble;
+    [attribute] sequence<boolean> AttrBool;
+    [attribute] sequence<short> AttrShort;
+    [attribute] sequence<unsigned short> AttrUShort;
+    [attribute] sequence<long> AttrLong;
+    [attribute] sequence<unsigned long> AttrULong;
+    [attribute] sequence<string> AttrString;
+    [attribute] sequence<char> AttrChar;
+    [attribute] sequence<any> AttrAny;
+    [attribute] sequence< sequence<long> > AttrSequence;
+    [attribute] sequence< sequence< sequence <long> > > AttrSequence2;
+    [attribute] sequence< com::sun::star::uno::XInterface > AttrXInterface;
+
+    void testout_methodByte( [out] byte rOut );
+    void testout_methodFloat( [out] float rOut);
+    void testout_methodDouble( [out] double rOut);
+    void testout_methodBool( [out] boolean rOut);
+    void testout_methodShort( [out] short rOut);
+    void testout_methodUShort( [out] unsigned short rOut);
+    void testout_methodLong( [out]  long rOut);
+    void testout_methodULong( [out] unsigned long rOut);
+    void testout_methodString( [out] string rOut);
+    void testout_methodChar( [out] char rOut);
+    void testout_methodAny  ( [out] any rOut);
+    void testout_methodSequence( [out] sequence< long > rOut);
+    void testout_methodSequence2( [out] sequence < sequence< long > > rOut);
+    void testout_methodXInterface( [out] com::sun::star::uno::XInterface rOut);
+
+    void testout_methodMulParams1( [out] long rout1, [out] long rout2);
+    void testout_methodMulParams2( [out] long rout1, [out] long rout2, [out] string rout3);
+    void testout_methodMulParams3( [in] string sin, [out] string sout);
+    void testout_methodMulParams4( [in] float in1, [out] float out1, [in] long in2, [out] long out2, [in] long in3);
+
+    void testinout_methodByte( [inout] byte rOut );
+    void testinout_methodFloat( [inout] float rOut);
+    void testinout_methodDouble( [inout] double rOut);
+    void testinout_methodBool( [inout] boolean rOut);
+    void testinout_methodShort( [inout] short rOut);
+    void testinout_methodUShort( [inout] unsigned short rOut);
+    void testinout_methodLong( [inout]  long rOut);
+    void testinout_methodULong( [inout] unsigned long rOut);
+    void testinout_methodString( [inout] string rOut);
+    void testinout_methodChar( [inout] char rOut);
+    void testinout_methodAny    ( [inout] any rOut);
+    void testinout_methodSequence( [inout] sequence< long > rOut);
+    void testinout_methodSequence2( [inout] sequence < sequence< long > > rOut);
+    void testinout_methodXInterface( [inout] com::sun::star::script::XInvocation rOut);
+
+    any methodAnyTest1( [in] any rIn);
+    [attribute]  any AttrAny2;
+
+};
+[uik(EBEF02B0-8C41-11d3-9EF90050-04526AB4), ident("XTestStruct", 1.0)]
+interface XTestStruct: com::sun::star::uno::XInterface
+{
+// Method taking structs as arguments
+    void methodStruct( [in] com::sun::star::beans::Property aProp);
+//  Methods returning structs
+    com::sun::star::beans::Property retMethodStruct();
+// Attributes as structs
+    [attribute] com::sun::star::beans::Property AttrStruct;
+};
+
+[uik(E5087290-95E9-11d3-9F070050-04526AB4), ident("XTestOutParameters", 1.0)]
+interface XTestOutParameters: com::sun::star::uno::XInterface
+{
+    void out_methodByte( [out] byte rOut );
+    void out_methodDouble( [out] double rOut);
+    void out_methodBool( [out] boolean rOut);
+    void out_methodShort( [out] short rOut);
+    void out_methodUShort( [out] unsigned short rOut);
+    void out_methodLong( [out]  long rOut);
+    void out_methodULong( [out] unsigned long rOut);
+    void out_methodString( [out] string rOut);
+    void out_methodChar( [out] char rOut);
+    void out_methodAny  ( [out] any rOut);
+    void out_methodSequence( [out] sequence< long > rOut);
+    void out_methodSequence2( [out] sequence < sequence< long > > rOut);
+
+    void out_methodMulParams1( [out] long rout1, [out] long rout2);
+    void out_methodMulParams2( [out] long rout1, [out] long rout2, [out] string rout3);
+    void out_methodMulParams3( [in] string sin, [out] string sout);
+
+
+};
+
+struct SimpleStruct
+{
+    string message;
+};
+
+enum SimpleEnum
+{
+    A,
+    B,
+    C
+};
+
+[uik(57F9DDE0-9293-11d3-9F000050-04526AB4), ident("XTestOthers", 1.0)]
+interface XTestOther: com::sun::star::uno::XInterface
+{
+    // Any test
+    void other_methodAnyIn( [in] any rAny);
+    void other_methodAnyOut( [out] any rAny);
+    any other_methodAnyRet();
+    void in_float( [in] float val);
+};
+
+
+[uik(67E59870-6EA4-11d4-832F0050-04526AB4), ident("XSimple", 1.0)]
+interface XSimple: com::sun::star::uno::XInterface
+{
+    void func( [in] string message);
+    string getName();
+};
+[uik(29828AB0-79A0-11d4-83330050-04526AB4), ident("XSimple2", 1.0)]
+interface XSimple2: com::sun::star::uno::XInterface
+{
+    void func2( [in] string message);
+    string getName2();
+};
+[uik(29828AB1-79A0-11d4-83330050-04526AB4), ident("XSimple3", 1.0)]
+interface XSimple3: com::sun::star::uno::XInterface
+{
+    void func3( [in] string message);
+    string getName3();
+};
+
+[uik(4405B9E0-6D39-11d4-832F0050-04526AB4), ident("XTestOthers", 1.0)]
+interface XCallback: com::sun::star::uno::XInterface
+{
+    void func1();
+    oletest::XSimple returnInterface();
+    void outInterface( [out] oletest::XSimple outInterface);
+    void outStruct( [out] oletest::SimpleStruct outStruct);
+    void outEnum( [out] oletest::SimpleEnum outEnum);
+    void outSeqAny( [out] sequence<any> outSeqAny);
+    void outSeqByte( [out] sequence<byte> outVal);
+    void outAny( [out] any outAny);
+    void outBool( [out] boolean outBool);
+    void outChar( [out] char outChar);
+    void outString( [out] string outString);
+    void outFloat( [out] float outFloat);
+    void outDouble( [out] double outDouble);
+    void outByte( [out] byte outByte);
+    void outShort( [out] short outShort);
+    void outLong( [out] long outLong);
+    void outValuesMixed( [in] long lval, [out] long outval, [in] string sval);
+    void outValuesAll( [out] oletest::XSimple outInterface,
+                       [out] SimpleStruct outStruct ,
+                       [out] SimpleEnum outEnum,
+                       [out] sequence<any> outSeqAny,
+                       [out] any outAny,
+                       [out] boolean outBool,
+                       [out] char outChar,
+                       [out] string outString,
+                       [out] float outFloat,
+                       [out] double outDouble,
+                       [out] byte   outByte,
+                       [out] short outShort,
+                       [out] long outLong);
+// IN OUT parameters
+    void inoutInterface( [inout] oletest::XSimple inoutVal);
+    void inoutStruct( [inout] oletest::SimpleStruct inoutVal);
+    void inoutEnum( [inout] oletest::SimpleEnum inoutVal);
+    void inoutSeqAny( [inout] sequence<any> inoutVal);
+    void inoutAny( [inout] any inoutVal);
+    void inoutBool( [inout] boolean inoutVal);
+    void inoutChar( [inout] char inoutVal);
+    void inoutString( [inout] string inoutVal);
+    void inoutFloat( [inout] float inoutVal);
+    void inoutDouble( [inout] double inoutVal);
+    void inoutByte( [inout] byte inoutVal);
+    void inoutShort( [inout] short inoutVal);
+    void inoutLong( [inout] long inoutVal);
+
+    void inoutValuesAll( [inout] oletest::XSimple aXSimple,
+                         [inout] oletest::SimpleStruct aStruct,
+                         [inout] oletest::SimpleEnum aEnum,
+                         [inout] sequence<any> aSeq,
+                         [inout] any aAny,
+                         [inout] boolean aBool,
+                         [inout] char aChar,
+                         [inout] string aString,
+                         [inout] float aFloat,
+                         [inout] double aDouble,
+                         [inout] byte aByte,
+                         [inout] short aShort,
+                         [inout] long aLong);
+
+    // IN parameter
+
+    void inValues( [in] char aChar, [in] long aLong, [in] string aString);
+    void inSeqByte( [in] sequence<byte> val);
+
+
+
+};
+
+
+[uik(259159C0-6D38-11d4-832F0050-04526AB4), ident("XTestOthers", 1.0)]
+interface XTestInterfaces: com::sun::star::uno::XInterface
+{
+    // Any test
+    void testInterface( [in] oletest::XCallback xCallback, [in] long mode);
+    void testInterface2( [in] oletest::XSimple xSimple, [in] long mode);
+};
+
+}; // oletest
+

@@ -1,0 +1,137 @@
+/*************************************************************************
+ *
+ *  $RCSfile: datman.hrc,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:16:44 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+
+#define BT_OK               1
+#define BT_CANCEL           2
+#define BT_HELP             3
+#define GB_MAPPING          4
+#define FT_IDENTIFIER       5
+#define LB_IDENTIFIER       6
+#define ST_NONE             7
+
+#define FT_AUTHORITYTYPE    8
+#define LB_AUTHORITYTYPE    9
+#define FT_ADDRESS          10
+#define LB_ADDRESS          11
+#define FT_ANNOTE           12
+#define LB_ANNOTE           13
+#define FT_AUTHOR           14
+#define LB_AUTHOR           15
+#define FT_TITLE            16
+#define LB_TITLE            17
+#define FT_MONTH            18
+#define LB_MONTH            19
+#define FT_YEAR             20
+#define LB_YEAR             21
+#define FT_ISBN             22
+#define LB_ISBN             23
+#define FT_BOOKTITLE        24
+#define LB_BOOKTITLE        25
+#define FT_CHAPTER          26
+#define LB_CHAPTER          27
+#define FT_EDITION          28
+#define LB_EDITION          29
+#define FT_EDITOR           30
+#define LB_EDITOR           31
+#define FT_HOWPUBLISHED     32
+#define LB_HOWPUBLISHED     33
+#define FT_INSTITUTION      34
+#define LB_INSTITUTION      35
+#define FT_JOURNAL          36
+#define LB_JOURNAL          37
+#define FT_NOTE             38
+#define LB_NOTE             39
+#define FT_NUMBER           40
+#define LB_NUMBER           41
+#define FT_ORGANIZATIONS    42
+#define LB_ORGANIZATIONS    43
+#define FT_PAGES            44
+#define LB_PAGES            45
+#define FT_PUBLISHER        46
+#define LB_PUBLISHER        47
+#define FT_SCHOOL           48
+#define LB_SCHOOL           49
+#define FT_SERIES           50
+#define LB_SERIES           51
+#define FT_REPORTTYPE       52
+#define LB_REPORTTYPE       53
+#define FT_VOLUME           54
+#define LB_VOLUME           55
+#define FT_URL              56
+#define LB_URL              57
+#define FT_CUSTOM1          58
+#define LB_CUSTOM1          59
+#define FT_CUSTOM2          60
+#define LB_CUSTOM2          61
+#define FT_CUSTOM3          62
+#define LB_CUSTOM3          63
+#define FT_CUSTOM4          64
+#define LB_CUSTOM4          65
+#define FT_CUSTOM5          66
+#define LB_CUSTOM5          67
+
+#define GB_SELECTION        68
+#define ST_ENTRY            69
+#define ST_URL              70
+#define LB_SELECTION        71
+#define HB_SELECTION        72
+

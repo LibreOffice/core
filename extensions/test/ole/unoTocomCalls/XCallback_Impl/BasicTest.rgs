@@ -1,0 +1,26 @@
+HKCR
+{
+	XCallback_Impl.BasicTest.1 = s 'BasicTest Class'
+	{
+		CLSID = s '{A0F04CBD-8494-11D4-8335-005004526AB4}'
+	}
+	XCallback_Impl.BasicTest = s 'BasicTest Class'
+	{
+		CLSID = s '{A0F04CBD-8494-11D4-8335-005004526AB4}'
+		CurVer = s 'XCallback_Impl.BasicTest.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {A0F04CBD-8494-11D4-8335-005004526AB4} = s 'BasicTest Class'
+		{
+			ProgID = s 'XCallback_Impl.BasicTest.1'
+			VersionIndependentProgID = s 'XCallback_Impl.BasicTest'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{180FF553-6F5C-11D4-8330-005004526AB4}'
+		}
+	}
+}

@@ -1,0 +1,1538 @@
+/*************************************************************************
+ *
+ *  $RCSfile: sections.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:16:45 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+//#pragma CHARSET_ANSI
+
+#include "sections.hrc"
+
+#define FT_POS          6
+#define FTSIZE_LEFT     65
+#define ED_POS_LEFT     FT_POS+FTSIZE_LEFT+1
+#define ED_SIZE         65
+#define BTN_SIZE        12
+#define ED_POS_LEFT2    ED_POS_LEFT + ED_SIZE +1
+#define FT_POS_MIDDLE   ED_POS_LEFT2 + 5
+#define FT_POS_RIGHT    FT_POS_MIDDLE + FT_POS_MIDDLE - FT_POS
+
+TabPage RID_TP_GENERAL
+{
+    Size = MAP_APPFONT( 452, 195 );
+    Text = "Allgemein";
+    Text[English]= "General";
+
+    FixedText FT_IDENTIFIER
+    {
+        Pos = MAP_APPFONT( FT_POS, 6 );
+        Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Text = "~Kurzbezeichnung";
+        Text[English]= "Identifier";
+        Text[ english_us ] = "Short ~name";
+        Text[ portuguese ] = "~Abreviatura";
+        Text[ russian ] = "Ñîêğàùåíèå";
+        Text[ greek ] = "Óõíôïìïãñáößá";
+        Text[ dutch ] = "~Beknopte aanduiding";
+        Text[ french ] = "~Abrégé";
+        Text[ spanish ] = "~Abreviatura";
+        Text[ italian ] = "Abbreviazione";
+        Text[ danish ] = "Kort betegnelse";
+        Text[ swedish ] = "~Kort beteckning";
+        Text[ polish ] = "Skrót";
+        Text[ portuguese_brazilian ] = "Identifier";
+        Text[ japanese ] = "’˜ÒID(~N)";
+        Text[ korean ] = "¾àÄª(~N)";
+        Text[ chinese_simplified ] = "¼ò³Æ(~N)";
+        Text[ chinese_traditional ] = "ÃÑ§O¤å(~N)";
+        Text[ arabic ] = "ÇÓã ãÎÊÕÑ";
+        Text[ turkish ] = "~Kısa ad";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_AUTHTYPE
+    {
+        Pos = MAP_APPFONT( FT_POS_MIDDLE, 6 );
+        Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Text = "~Art";
+        Text[English]= "Type";
+        Text[ english_us ] = "~Type";
+        Text[ portuguese ] = "~Tipo";
+        Text[ russian ] = "Òèï";
+        Text[ greek ] = "Ôığïò";
+        Text[ dutch ] = "~Type";
+        Text[ french ] = "T~ype";
+        Text[ spanish ] = "~Tipo";
+        Text[ italian ] = "Tipo";
+        Text[ danish ] = "Type";
+        Text[ swedish ] = "Typ";
+        Text[ polish ] = "Typ";
+        Text[ portuguese_brazilian ] = "Type";
+        Text[ japanese ] = "–{‚Ì•ª—Ş(~T)";
+        Text[ korean ] = "À¯Çü(~T)";
+        Text[ chinese_simplified ] = "ÀàĞÍ(~T)";
+        Text[ chinese_traditional ] = "Ãş«¬(~T)";
+        Text[ arabic ] = "ÇáäæÚ";
+        Text[ turkish ] = "~Tür";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_YEAR
+    {
+        Pos = MAP_APPFONT( FT_POS_RIGHT, 6 );
+        Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Text = "~Jahr";
+        Text[English]= "Year";
+        Text[ english_us ] = "~Year";
+        Text[ portuguese ] = "A~no";
+        Text[ russian ] = "Ãîä";
+        Text[ greek ] = "¸ôïò";
+        Text[ dutch ] = "~Jaar";
+        Text[ french ] = "A~nnée";
+        Text[ spanish ] = "~Año";
+        Text[ italian ] = "Anno";
+        Text[ danish ] = "År";
+        Text[ swedish ] = "År";
+        Text[ polish ] = "Rok";
+        Text[ portuguese_brazilian ] = "Year";
+        Text[ japanese ] = "’˜ì”N(~Y)";
+        Text[ korean ] = "¿¬µµ(~Y)";
+        Text[ chinese_simplified ] = "Äê(~Y)";
+        Text[ chinese_traditional ] = "¦~";
+        Text[ arabic ] = "ÓäÉ";
+        Text[ turkish ] = "Yıl";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_AUTHOR
+    {
+        Pos = MAP_APPFONT( FT_POS, 20 );
+        Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Text = "A~utor";
+        Text[English]= "Author";
+        Text[ english_us ] = "~Author";
+        Text[ portuguese ] = "A~utor";
+        Text[ russian ] = "Àâòîğ";
+        Text[ greek ] = "ÓõíôÜêôçò";
+        Text[ dutch ] = "~Auteur";
+        Text[ french ] = "A~uteur";
+        Text[ spanish ] = "A~utor";
+        Text[ italian ] = "A~utore";
+        Text[ danish ] = "Forfatter";
+        Text[ swedish ] = "Författare";
+        Text[ polish ] = "Autor";
+        Text[ portuguese_brazilian ] = "Author";
+        Text[ japanese ] = "’˜Ò(~A)";
+        Text[ korean ] = "ÀúÀÚ(~A)";
+        Text[ chinese_simplified ] = "×÷Õß(~A)";
+        Text[ chinese_traditional ] = "§@ªÌ(~A)";
+        Text[ arabic ] = "ÇáãÄáİ";
+        Text[ turkish ] = "Yazar";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_TITLE
+    {
+        Pos = MAP_APPFONT( FT_POS_MIDDLE, 20 );
+        Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Text = "Tite~l";
+        Text[English]= "Title";
+        Text[ english_us ] = "Tit~le";
+        Text[ portuguese ] = "Títu~lo";
+        Text[ russian ] = "Çàãîëîâîê";
+        Text[ greek ] = "Ôßôëïò";
+        Text[ dutch ] = "~Titel";
+        Text[ french ] = "Tit~re";
+        Text[ spanish ] = "Títu~lo";
+        Text[ italian ] = "Tito~lo";
+        Text[ danish ] = "Titel";
+        Text[ swedish ] = "Titel";
+        Text[ polish ] = "Tytu³";
+        Text[ portuguese_brazilian ] = "Title";
+        Text[ japanese ] = "‘è–¼(~L)";
+        Text[ korean ] = "Á¦¸ñ(~L)";
+        Text[ chinese_simplified ] = "±êÌâ(~L)";
+        Text[ chinese_traditional ] = "¼ĞÃD(~L)";
+        Text[ arabic ] = "ÇáÚäæÇä";
+        Text[ turkish ] = "Başlık";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_PUBLISHER
+    {
+        Pos = MAP_APPFONT( FT_POS, 34 );
+        Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Text = "~Verlag";
+        Text[English]= "Publisher";
+        Text[ english_us ] = "~Publisher";
+        Text[ portuguese ] = "~Editora";
+        Text[ russian ] = "Èçäàòåëüñòâî";
+        Text[ greek ] = "Åêäüôçò";
+        Text[ dutch ] = "~Uitgeverij";
+        Text[ french ] = "Éditi~on";
+        Text[ spanish ] = "~Editorial";
+        Text[ italian ] = "Casa editrice";
+        Text[ danish ] = "Forlag";
+        Text[ swedish ] = "Förlag";
+        Text[ polish ] = "Wydawnictwo";
+        Text[ portuguese_brazilian ] = "Publisher";
+        Text[ japanese ] = "o”ÅĞ–¼(~P)";
+        Text[ korean ] = "ÃâÆÇ»ç(~P)";
+        Text[ chinese_simplified ] = "³ö°æÉç(~P)";
+        Text[ chinese_traditional ] = "¥Xª©ªÀ(~P)";
+        Text[ arabic ] = "ÏÇÑ ÇáäÔÑ";
+        Text[ turkish ] = "Yayınevi";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_ADDRESS
+    {
+        Pos = MAP_APPFONT( FT_POS_MIDDLE, 34 );
+        Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Text = "A~dresse";
+        Text[English]= "Address";
+        Text[ english_us ] = "A~ddress";
+        Text[ portuguese ] = "En~dereço";
+        Text[ russian ] = "Àäğåñ";
+        Text[ greek ] = "Äéåıèõíóç";
+        Text[ dutch ] = "A~dres";
+        Text[ french ] = "A~dresse";
+        Text[ spanish ] = "~Dirección";
+        Text[ italian ] = "Indirizzo";
+        Text[ danish ] = "Adresse";
+        Text[ swedish ] = "Adress";
+        Text[ polish ] = "Adres";
+        Text[ portuguese_brazilian ] = "Address";
+        Text[ japanese ] = "ZŠ(~D)";
+        Text[ korean ] = "ÁÖ¼Ò(~D)";
+        Text[ chinese_simplified ] = "µØÖ·(~D)";
+        Text[ chinese_traditional ] = "¦a§}(~D)";
+        Text[ arabic ] = "ÇáÚäæÇä";
+        Text[ turkish ] = "Adres";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_ISBN
+    {
+        Pos = MAP_APPFONT( FT_POS_RIGHT, 34 );
+        Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Text = "~ISBN";
+        Text[English]= "ISBN";
+        Text[ english_us ] = "~ISBN";
+        Text[ portuguese ] = "~ISBN";
+        Text[ russian ] = "ISBN";
+        Text[ greek ] = "ISBN";
+        Text[ dutch ] = "~ISBN";
+        Text[ french ] = "~ISBN";
+        Text[ spanish ] = "I~SBN";
+        Text[ italian ] = "~ISBN";
+        Text[ danish ] = "ISBN";
+        Text[ swedish ] = "ISBN";
+        Text[ polish ] = "ISBN";
+        Text[ portuguese_brazilian ] = "ISBN";
+        Text[ japanese ] = "ISBN(~I)";
+        Text[ korean ] = "ISBN(~I)";
+        Text[ chinese_simplified ] = "ISBN(~I)";
+        Text[ chinese_traditional ] = "ISBN(~I)";
+        Text[ arabic ] = "ISBN";
+        Text[ turkish ] = "~ISBN";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_CHAPTER
+    {
+        Pos = MAP_APPFONT( FT_POS, 48 );
+        Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Text = "~Kapitel";
+        Text[English]= "Chapter";
+        Text[ english_us ] = "~Chapter";
+        Text[ portuguese ] = "~Capítulo";
+        Text[ russian ] = "Ãëàâà";
+        Text[ greek ] = "ÊåöÜëáéï";
+        Text[ dutch ] = "~Hoofdstuk";
+        Text[ french ] = "~Chapitre";
+        Text[ spanish ] = "~Capítulo";
+        Text[ italian ] = "Capitolo";
+        Text[ danish ] = "Kapitel";
+        Text[ swedish ] = "Kapitel";
+        Text[ polish ] = "Rozdzia³";
+        Text[ portuguese_brazilian ] = "Chapter";
+        Text[ japanese ] = "Í(~C)";
+        Text[ korean ] = "Àå(~C)";
+        Text[ chinese_simplified ] = "ÕÂ(~C)";
+        Text[ chinese_traditional ] = "³¹(~C)";
+        Text[ arabic ] = "ÇáİÕá";
+        Text[ turkish ] = "Bölüm";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_PAGE
+    {
+        Pos = MAP_APPFONT( FT_POS_MIDDLE, 48 );
+        Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Text = "Seite~(n)";
+        Text[English]= "Page(s)";
+        Text[ english_us ] = "Pa~ge(s)";
+        Text[ portuguese ] = "Pá~gina(s)";
+        Text[ russian ] = "Ñòğàíèö(û)";
+        Text[ greek ] = "Óåëßäá/-åò";
+        Text[ dutch ] = "~Pagina's";
+        Text[ french ] = "~Page(s)";
+        Text[ spanish ] = "~Página(s)";
+        Text[ italian ] = "Pagina/e";
+        Text[ danish ] = "Side(r)";
+        Text[ swedish ] = "Sida(-or)";
+        Text[ polish ] = "Strona(y)";
+        Text[ portuguese_brazilian ] = "Page(s)";
+        Text[ japanese ] = "Íß°¼Ş”(~G)";
+        Text[ korean ] = "ÆäÀÌÁö(~G)";
+        Text[ chinese_simplified ] = "Ò³(~G)";
+        Text[ chinese_traditional ] = "­¶(~G)";
+        Text[ arabic ] = "ÕİÍÉ (ÕİÍÇÊ)";
+        Text[ turkish ] = "Sayfa(lar)";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_EDITOR
+    {
+        Pos = MAP_APPFONT( FT_POS, 69 );
+        Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Text = "~Herausgeber";
+        Text[English]= "Editor";
+        Text[ english_us ] = "Editor";
+        Text[ portuguese ] = "Edi~tor";
+        Text[ russian ] = "Ğåäàêòîğ èçäàíèÿ";
+        Text[ greek ] = "Åêäüô~çò";
+        Text[ dutch ] = "Uit~gever";
+        Text[ french ] = "Éditeu~r";
+        Text[ spanish ] = "~Editor";
+        Text[ italian ] = "Editore";
+        Text[ danish ] = "Udgiver";
+        Text[ swedish ] = "Utgivare";
+        Text[ polish ] = "Wydawca";
+        Text[ portuguese_brazilian ] = "Editor";
+        Text[ japanese ] = "•ÒÒ";
+        Text[ korean ] = "¹ßÇàÀÎ";
+        Text[ chinese_simplified ] = "·¢ĞĞÈË";
+        Text[ chinese_traditional ] = "¥Xª©¤H";
+        Text[ arabic ] = "ÇáäÇÔÑ";
+        Text[ turkish ] = "Yayıma hazırlayan";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_EDITION
+    {
+        Pos = MAP_APPFONT( FT_POS_MIDDLE, 67 );
+        Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Text = "Aus~gabe";
+        Text[English]= "Edition";
+        Text[ english_us ] = "Ed~ition";
+        Text[ portuguese ] = "~Edição";
+        Text[ russian ] = "Èçäàíèå";
+        Text[ greek ] = "Åîá~ãùãŞ";
+        Text[ dutch ] = "E~ditie";
+        Text[ french ] = "É~dition";
+        Text[ spanish ] = "~Edición";
+        Text[ italian ] = "Edizione";
+        Text[ danish ] = "Udgave";
+        Text[ swedish ] = "Utgåva";
+        Text[ polish ] = "Wydanie";
+        Text[ portuguese_brazilian ] = "Edition";
+        Text[ japanese ] = "”Å(~I)";
+        Text[ korean ] = "ÆÇ(~I)";
+        Text[ chinese_simplified ] = "°æ±¾(~I)";
+        Text[ chinese_traditional ] = "ª©¥»(~I)";
+        Text[ arabic ] = "ÇáØÈÚÉ";
+        Text[ turkish ] = "Yayım";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_BOOKTITLE
+    {
+        Pos = MAP_APPFONT( FT_POS, 83 );
+        Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Text = "Bu~chtitel";
+        Text[English]= "Book title";
+        Text[ english_us ] = "~Book title";
+        Text[ portuguese ] = "~Título do livro";
+        Text[ russian ] = "Íàçâàíèå êíèãè";
+        Text[ greek ] = "Ôßôëïò âéâëßïõ";
+        Text[ dutch ] = "Bo~ektitel";
+        Text[ french ] = "~Titre du livre";
+        Text[ spanish ] = "~Título del libro";
+        Text[ italian ] = "Titolo libro";
+        Text[ danish ] = "Bogtitel";
+        Text[ swedish ] = "Boktitel";
+        Text[ polish ] = "Tytu³ ksi¹¿ki";
+        Text[ portuguese_brazilian ] = "Book title";
+        Text[ japanese ] = "‘–¼(~B)";
+        Text[ korean ] = "Ã¥ Á¦¸ñ(~B)";
+        Text[ chinese_simplified ] = "Êé¼®±êÌâ(~B)";
+        Text[ chinese_traditional ] = "®Ñ¦W(~B)";
+        Text[ arabic ] = "ÚäæÇä ÇáßÊÇÈ";
+        Text[ turkish ] = "Kitap adı";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_VOLUME
+    {
+        Pos = MAP_APPFONT( FT_POS_MIDDLE, 83 );
+        Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Text = "Buch Nummer";
+        Text[English]= "Volume";
+        Text[ english_us ] = "Volume";
+        Text[ portuguese ] = "Volume";
+        Text[ russian ] = "Òîì";
+        Text[ greek ] = "Ôüìïò";
+        Text[ dutch ] = "Deel nummer";
+        Text[ french ] = "Volume";
+        Text[ spanish ] = "Tomo";
+        Text[ italian ] = "Numero libro";
+        Text[ danish ] = "Bind";
+        Text[ swedish ] = "Volym";
+        Text[ polish ] = "Tom";
+        Text[ portuguese_brazilian ] = "Volume";
+        Text[ japanese ] = "Šª";
+        Text[ korean ] = "±Ç";
+        Text[ chinese_simplified ] = "Êé¼®±àºÅ";
+        Text[ chinese_traditional ] = "®Ñ¸¹";
+        Text[ arabic ] = "ÑŞã ÇáãÌáÏ";
+        Text[ turkish ] = "Kitap no.";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_HOWPUBLISHED
+    {
+        Pos = MAP_APPFONT( FT_POS_RIGHT, 83 );
+        Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Text = "Au~sgabeart";
+        Text[English]= "How published";
+        Text[ english_us ] = "Publication t~ype";
+        Text[ portuguese ] = "Ti~po de publicação";
+        Text[ russian ] = "Òèï èçäàíèÿ";
+        Text[ greek ] = "Ôığï~ò İêäïóçò";
+        Text[ dutch ] = "Wijze van ~publiceren";
+        Text[ french ] = "Mode de ~publication";
+        Text[ spanish ] = "Tip~o de publicación";
+        Text[ italian ] = "Tipo di edizione";
+        Text[ danish ] = "Udgivelsestype";
+        Text[ swedish ] = "Utgivningstyp";
+        Text[ polish ] = "Rodzaj publikacji";
+        Text[ portuguese_brazilian ] = "How published";
+        Text[ japanese ] = "¶ÊŞ°À²Ìß(~Y)";
+        Text[ korean ] = "ÃâÆÇÇüÅÂ(~Y)";
+        Text[ chinese_simplified ] = "·¢ĞĞ·½Ê½(~Y)";
+        Text[ chinese_traditional ] = "ª©¥»Ãş«¬(~Y)";
+        Text[ arabic ] = "ØÑíŞÉ ÇáØÈÇÚÉ";
+        Text[ turkish ] = "Yayım türü";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_ORGANIZATION
+    {
+        Pos = MAP_APPFONT( FT_POS, 97 );
+        Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Text = "~Organisation";
+        Text[English]= "Organization";
+        Text[ english_us ] = "Organi~zation";
+        Text[ portuguese ] = "~Organização";
+        Text[ russian ] = "Îğãàíèçàöèÿ";
+        Text[ greek ] = "~Ïñãáíéóìüò";
+        Text[ dutch ] = "~Organisatie";
+        Text[ french ] = "Or~ganisation";
+        Text[ spanish ] = "~Organización";
+        Text[ italian ] = "~Organizzazione";
+        Text[ danish ] = "Organisation";
+        Text[ swedish ] = "Organisation";
+        Text[ polish ] = "Organizacja";
+        Text[ portuguese_brazilian ] = "Organization";
+        Text[ japanese ] = "‘gD’c‘Ì(~Z)";
+        Text[ korean ] = "Á¶Á÷(~Z)";
+        Text[ chinese_simplified ] = "×éÖ¯(~Z)";
+        Text[ chinese_traditional ] = "²ÕÂ´(~Z)";
+        Text[ arabic ] = "ãäÙãÉ";
+        Text[ turkish ] = "Organizasyon";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_INSTITUTION
+    {
+        Pos = MAP_APPFONT( FT_POS_MIDDLE, 97 );
+        Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Text = "~Institution";
+        Text[English]= "Institution";
+        Text[ english_us ] = "Instit~ution";
+        Text[ portuguese ] = "~Instituição";
+        Text[ russian ] = "Ğåäàêöèÿ";
+        Text[ greek ] = "ºäñõìá";
+        Text[ dutch ] = "~Instelling";
+        Text[ french ] = "~Institution";
+        Text[ spanish ] = "I~nstitución";
+        Text[ italian ] = "~Istituzione";
+        Text[ danish ] = "Institution";
+        Text[ swedish ] = "Institution";
+        Text[ polish ] = "Instytucja";
+        Text[ portuguese_brazilian ] = "Institution";
+        Text[ japanese ] = "‹@ŠÖ(~U)";
+        Text[ korean ] = "°ø°ø±â°ü(~U)";
+        Text[ chinese_simplified ] = "»ú¹¹(~U)";
+        Text[ chinese_traditional ] = "ÉóÌÛ(~U)";
+        Text[ arabic ] = "ÇáåíÆÉ";
+        Text[ turkish ] = "Kurum";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_SCHOOL
+    {
+        Pos = MAP_APPFONT( FT_POS_RIGHT, 97 );
+        Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Text = "Universit~ät/Hochschule";
+        Text[English]= "University";
+        Text[ english_us ] = "Unive~rsity";
+        Text[ portuguese ] = "~Universidade/Escola Sup.";
+        Text[ russian ] = "ÂÓÇ";
+        Text[ greek ] = "Á.Å.É./Ô.Å.É.";
+        Text[ dutch ] = "~Universeit/Hogeschool";
+        Text[ french ] = "~Université/École supérieure";
+        Text[ spanish ] = "~Universidad";
+        Text[ italian ] = "Università";
+        Text[ danish ] = "Universitet/læreanstalt";
+        Text[ swedish ] = "Universitet/högskola";
+        Text[ polish ] = "Uniwersytet/Szko³a wy¿sza";
+        Text[ portuguese_brazilian ] = "University";
+        Text[ japanese ] = "‘åŠw(~R)";
+        Text[ korean ] = "´ëÇĞ±³(~R)";
+        Text[ chinese_simplified ] = "´óÑ§(~R)";
+        Text[ chinese_traditional ] = "°ªµ¥°|®Õ(~R)";
+        Text[ arabic ] = "ÇáÌÇãÚÉ";
+        Text[ turkish ] = "Üniversite/yüksek okul";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_REPORT
+    {
+        Pos = MAP_APPFONT( FT_POS, 111);
+        Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Text = "Re~port";
+        Text[English]= "Report";
+        Text[ english_us ] = "Re~port";
+        Text[ portuguese ] = "~Relatório";
+        Text[ russian ] = "Îò÷åò";
+        Text[ greek ] = "ÁíáöïñÜ";
+        Text[ dutch ] = "~Reportage";
+        Text[ french ] = "Rapport";
+        Text[ spanish ] = "I~nforme";
+        Text[ italian ] = "Relazione";
+        Text[ danish ] = "Rapport";
+        Text[ swedish ] = "Rapport";
+        Text[ polish ] = "Raport";
+        Text[ portuguese_brazilian ] = "Report";
+        Text[ japanese ] = "ÚÎß°Ä(~P)";
+        Text[ korean ] = "¸®Æ÷Æ®(~P)";
+        Text[ chinese_simplified ] = "±¨¸æ(~P)";
+        Text[ chinese_traditional ] = "³ø§i(~P)";
+        Text[ arabic ] = "ÊŞÑíÑ";
+        Text[ turkish ] = "Rapor";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_MONTH
+    {
+        Pos = MAP_APPFONT( FT_POS_MIDDLE, 111 );
+        Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Text = "~Monat";
+        Text[English]= "Month";
+        Text[ english_us ] = "~Month";
+        Text[ portuguese ] = "~Mês";
+        Text[ russian ] = "Ìåñÿö";
+        Text[ greek ] = "ÌŞíáò";
+        Text[ dutch ] = "~Maand";
+        Text[ french ] = "~Mois";
+        Text[ spanish ] = "~Mes";
+        Text[ italian ] = "~Mese";
+        Text[ danish ] = "Måned";
+        Text[ swedish ] = "Månad";
+        Text[ polish ] = "Miesi¹c";
+        Text[ portuguese_brazilian ] = "Month";
+        Text[ japanese ] = "Œ(~M)";
+        Text[ korean ] = "¿ù(~M)";
+        Text[ chinese_simplified ] = "ÔÂ(~M)";
+        Text[ chinese_traditional ] = "¤ë(~M)";
+        Text[ arabic ] = "ÔåÑ";
+        Text[ turkish ] = "Ay";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_JOURNAL
+    {
+        Pos = MAP_APPFONT( FT_POS, 132 );
+        Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Text = "Zeitschri~ft";
+        Text[English]= "Journal";
+        Text[ english_us ] = "~Journal";
+        Text[ portuguese ] = "~Revista";
+        Text[ russian ] = "Æóğíàë";
+        Text[ greek ] = "Ğåñéïäéêü";
+        Text[ dutch ] = "~Tijdschrift";
+        Text[ french ] = "~Journal";
+        Text[ spanish ] = "~Revista";
+        Text[ italian ] = "Rivista";
+        Text[ danish ] = "Tidsskrift";
+        Text[ swedish ] = "Tidskrift";
+        Text[ polish ] = "Czasopismo";
+        Text[ portuguese_brazilian ] = "Journal";
+        Text[ japanese ] = "G(~J)";
+        Text[ korean ] = "ÀâÁö(~J)";
+        Text[ chinese_simplified ] = "ÔÓÖ¾(~J)";
+        Text[ chinese_traditional ] = "Âø»x(~J)";
+        Text[ arabic ] = "ãÌáÉ";
+        Text[ turkish ] = "Dergi";
+        Text[ language_user1 ] = " ";
+    };
+
+    FixedText FT_NUMBER
+    {
+        Pos = MAP_APPFONT( FT_POS_MIDDLE, 132 );
+        Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Text = "Numm~er";
+        Text[English]= "Number";
+        Text[ english_us ] = "Numb~er";
+        Text[ portuguese ] = "Núm~ero";
+        Text[ russian ] = "Íîìåğ";
+        Text[ greek ] = "Áñéèìüò";
+        Text[ dutch ] = "~Nummer";
+        Text[ french ] = "Nu~méro";
+        Text[ spanish ] = "~Número";
+        Text[ italian ] = "Num~ero";
+        Text[ danish ] = "Nummer";
+        Text[ swedish ] = "Nummer";
+        Text[ polish ] = "Numer";
+        Text[ portuguese_brazilian ] = "Number";
+        Text[ japanese ] = "”Ô†(~E)";
+        Text[ korean ] = "¹øÈ£(~E)";
+        Text[ chinese_simplified ] = "±àºÅ(~E)";
+        Text[ chinese_traditional ] = "¸¹(~E)";
+        Text[ arabic ] = "ÑŞã";
+        Text[ language_user1 ] = "\"Sayı\" burada istisna (dergi için)";
+        Text[ turkish ] = "Sayı";
+    };
+    FixedText FT_SERIES
+    {
+        Pos = MAP_APPFONT( FT_POS_RIGHT, 132 );
+        Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Text = "Ser~ie";
+        Text[English]= "Series";
+        Text[ english_us ] = "Se~ries";
+        Text[ portuguese ] = "~Série";
+        Text[ russian ] = "Ñåğèÿ";
+        Text[ greek ] = "ÓåéñÜ";
+        Text[ dutch ] = "~Serie";
+        Text[ french ] = "Sér~ie";
+        Text[ spanish ] = "~Serie";
+        Text[ italian ] = "Ser~ie";
+        Text[ danish ] = "Serie";
+        Text[ swedish ] = "Serie";
+        Text[ polish ] = "Seria";
+        Text[ portuguese_brazilian ] = "Series";
+        Text[ japanese ] = "‘p‘(~R)";
+        Text[ korean ] = "½Ã¸®Áî(~R)";
+        Text[ chinese_simplified ] = "ÏµÁĞ(~R)";
+        Text[ chinese_traditional ] = "¨t¦C(~R)";
+        Text[ arabic ] = "ÓáÓáÉ";
+        Text[ turkish ] = "Dizi";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_ANNOTE
+    {
+        Pos = MAP_APPFONT( FT_POS, 146 );
+        Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Text = "A~nmerkung";
+        Text[English]= "Annotation";
+        Text[ english_us ] = "Ann~otation";
+        Text[ portuguese ] = "A~notações";
+        Text[ russian ] = "Ïğèìå÷àíèå";
+        Text[ greek ] = "ĞáñáôŞñçóç";
+        Text[ dutch ] = "~Commentaar";
+        Text[ french ] = "Ann~otation";
+        Text[ spanish ] = "A~notación";
+        Text[ italian ] = "A~nnotazione";
+        Text[ danish ] = "Anmærkning";
+        Text[ swedish ] = "Anmärkning";
+        Text[ polish ] = "Adnotacja";
+        Text[ portuguese_brazilian ] = "Annotation";
+        Text[ japanese ] = "”õl(~O)";
+        Text[ korean ] = "ÁÖ¼®(~O)";
+        Text[ chinese_simplified ] = "ËµÃ÷(~O)";
+        Text[ chinese_traditional ] = "³Æª`(~O)";
+        Text[ arabic ] = "ÊÚáíŞ ÊæÖíÍí";
+        Text[ turkish ] = "Açıklama";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_NOTE
+    {
+        Pos = MAP_APPFONT( FT_POS_MIDDLE, 146 );
+        Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Text = "Noti~z";
+        Text[English]= "Note";
+        Text[ english_us ] = "~Note";
+        Text[ portuguese ] = "~Anotação";
+        Text[ russian ] = "Ïğèìå÷àíèå";
+        Text[ greek ] = "Óçìåßùóç";
+        Text[ dutch ] = "~Aantekening";
+        Text[ french ] = "N~ote";
+        Text[ spanish ] = "~Nota";
+        Text[ italian ] = "Nota";
+        Text[ danish ] = "Note";
+        Text[ swedish ] = "Anteckning";
+        Text[ polish ] = "Notatka";
+        Text[ portuguese_brazilian ] = "Note";
+        Text[ japanese ] = "ÒÓ(~N)";
+        Text[ korean ] = "¸Ş¸ğ(~N)";
+        Text[ chinese_simplified ] = "±¸×¢(~N)";
+        Text[ chinese_traditional ] = "µ§°O(~N)";
+        Text[ arabic ] = "ãáÇÍÙÉ";
+        Text[ turkish ] = "Not";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_URL
+    {
+        Pos = MAP_APPFONT( FT_POS_RIGHT, 146 );
+        Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Text = "URL";
+        Text[English]= "URL";
+        Text[ english_us ] = "URL";
+        Text[ portuguese ] = "URL";
+        Text[ russian ] = "URL";
+        Text[ greek ] = "URL";
+        Text[ dutch ] = "URL";
+        Text[ french ] = "URL";
+        Text[ spanish ] = "URL";
+        Text[ italian ] = "URL";
+        Text[ danish ] = "URL";
+        Text[ swedish ] = "URL";
+        Text[ polish ] = "URL";
+        Text[ portuguese_brazilian ] = "URL";
+        Text[ japanese ] = "URL";
+        Text[ korean ] = "URL";
+        Text[ chinese_simplified ] = "URL";
+        Text[ chinese_traditional ] = "URL";
+        Text[ arabic ] = "URL";
+        Text[ turkish ] = "URL";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_CUSTOM1
+    {
+        Pos = MAP_APPFONT( FT_POS, 167 );
+        Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Text = "Benutzerfeld ~1";
+        Text[English]= "Custom field 1";
+        Text[ english_us ] = "User-defined field ~1";
+        Text[ portuguese ] = "Campo personalizado ~1";
+        Text[ russian ] = "Ïîëå ïîëüçîâàòåëÿ 1";
+        Text[ greek ] = "Ğåäßï ÷ñŞóôç 1";
+        Text[ dutch ] = "Gebruikerveld ~1";
+        Text[ french ] = "Champ d'utilisateur ~1";
+        Text[ spanish ] = "Campo de usuario ~1";
+        Text[ italian ] = "Campo utente ~1";
+        Text[ danish ] = "Brugerdefineret ~1";
+        Text[ swedish ] = "Användarfält 1";
+        Text[ polish ] = "Pole u¿ytkownika ~1";
+        Text[ portuguese_brazilian ] = "Custom field 1";
+        Text[ japanese ] = "Õ°»Ş°Ì¨°ÙÄŞ 1";
+        Text[ korean ] = "»ç¿ëÀÚÇÊµå1(~ 1)";
+        Text[ chinese_simplified ] = "ÓÃ»§À¸ 1";
+        Text[ chinese_traditional ] = "¦Û­qÄæ¦ì ~1";
+        Text[ arabic ] = "ÍŞá ÇáãÓÊÎÏã 1";
+        Text[ turkish ] = "Kullanıcı alanı ~1";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_CUSTOM2
+    {
+        Pos = MAP_APPFONT( FT_POS_MIDDLE, 167 );
+        Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Text = "Benutzerfeld ~2";
+        Text[English]= "Custom field 2";
+        Text[ english_us ] = "User-defined field ~2";
+        Text[ portuguese ] = "Campo personalizado ~2";
+        Text[ russian ] = "Ïîëå ïîëüçîâàòåëÿ 2";
+        Text[ greek ] = "Ğåäßï ÷ñŞóôç 2";
+        Text[ dutch ] = "Gebruikerveld ~2";
+        Text[ french ] = "Champ d'utilisateur ~2";
+        Text[ spanish ] = "Campo de usuario ~2";
+        Text[ italian ] = "Campo utente ~2";
+        Text[ danish ] = "Brugerdefineret ~2";
+        Text[ swedish ] = "Användarfält 2";
+        Text[ polish ] = "Pole u¿ytkownika ~2";
+        Text[ portuguese_brazilian ] = "Custom field 2";
+        Text[ japanese ] = "Õ°»Ş°Ì¨°ÙÄŞ 2";
+        Text[ korean ] = "»ç¿ëÀÚÇÊµå 2(~2)";
+        Text[ chinese_simplified ] = "ÓÃ»§À¸ 2";
+        Text[ chinese_traditional ] = "¦Û­qÄæ¦ì ~2";
+        Text[ arabic ] = "ÍŞá ÇáãÓÊÎÏã 2";
+        Text[ turkish ] = "Kullanıcı alanı ~2";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_CUSTOM3
+    {
+        Pos = MAP_APPFONT( FT_POS_RIGHT, 167 );
+        Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Text = "Benutzerfeld ~3";
+        Text[English]= "Custom field 3";
+        Text[ english_us ] = "User-defined field ~3";
+        Text[ portuguese ] = "Campo personalizado ~3";
+        Text[ russian ] = "Ïîëå ïîëüçîâàòåëÿ 3";
+        Text[ greek ] = "Ğåäßï ÷ñŞóôç 3";
+        Text[ dutch ] = "Gebruikerveld ~3";
+        Text[ french ] = "Champ d'utilisateur ~3";
+        Text[ spanish ] = "Campo de usuario ~3";
+        Text[ italian ] = "Campo utente ~3";
+        Text[ danish ] = "Brugerdefineret ~3";
+        Text[ swedish ] = "Användarfält 3";
+        Text[ polish ] = "Pole u¿ytkownika ~3";
+        Text[ portuguese_brazilian ] = "Custom field 3";
+        Text[ japanese ] = "Õ°»Ş°Ì¨°ÙÄŞ 3";
+        Text[ korean ] = "»ç¿ëÀÚÇÊµå 3(~3)";
+        Text[ chinese_simplified ] = "ÓÃ»§À¸ 3";
+        Text[ chinese_traditional ] = "¦Û­qÄæ¦ì ~3";
+        Text[ arabic ] = "ÍŞá ÇáãÓÊÎÏã 3";
+        Text[ turkish ] = "Kullanıcı alanı ~3";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_CUSTOM4
+    {
+        Pos = MAP_APPFONT( FT_POS, 181 );
+        Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Text = "Benutzerfeld ~4";
+        Text[English]= "Custom field 4";
+        Text[ english_us ] = "User-defined field ~4";
+        Text[ portuguese ] = "Campo personalizado ~4";
+        Text[ russian ] = "Ïîëå ïîëüçîâàòåëÿ 4";
+        Text[ greek ] = "Ğåäßï ÷ñŞóôç 4";
+        Text[ dutch ] = "Gebruikerveld ~4";
+        Text[ french ] = "Champ d'utilisateur ~4";
+        Text[ spanish ] = "Campo de usuario ~4";
+        Text[ italian ] = "Campo utente ~4";
+        Text[ danish ] = "Brugerdefineret ~4";
+        Text[ swedish ] = "Användarfält 4";
+        Text[ polish ] = "Pole u¿ytkownika ~4";
+        Text[ portuguese_brazilian ] = "Custom field 4";
+        Text[ japanese ] = "Õ°»Ş°Ì¨°ÙÄŞ 4";
+        Text[ korean ] = "»ç¿ëÀÚÇÊµå 4(~4)";
+        Text[ chinese_simplified ] = "ÓÃ»§À¸ 4";
+        Text[ chinese_traditional ] = "¦Û­qÄæ¦ì ~4";
+        Text[ arabic ] = "ÍŞá ÇáãÓÊÎÏã 4";
+        Text[ turkish ] = "Kullanıcı alanı ~4";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_CUSTOM5
+    {
+        Pos = MAP_APPFONT( FT_POS_MIDDLE, 181 );
+        Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Text = "Benutzerfeld ~5";
+        Text[English]= "Custom field 5";
+        Text[ english_us ] = "User-defined field ~5";
+        Text[ portuguese ] = "Campo personalizado ~5";
+        Text[ russian ] = "Ïîëå ïîëüçîâàòåëÿ 5";
+        Text[ greek ] = "Ğåäßï ÷ñŞóôç 5";
+        Text[ dutch ] = "Gebruikerveld ~5";
+        Text[ french ] = "Champ d'utilisateur ~5";
+        Text[ spanish ] = "Campo de usuario ~5";
+        Text[ italian ] = "Campo utente ~5";
+        Text[ danish ] = "Brugerdefineret ~5";
+        Text[ swedish ] = "Användarfält 5";
+        Text[ polish ] = "Pole u¿ytkownika ~5";
+        Text[ portuguese_brazilian ] = "Custom field 5";
+        Text[ japanese ] = "Õ°»Ş°Ì¨°ÙÄŞ 5";
+        Text[ korean ] = "»ç¿ëÀÚÇÊµå 5(~5)";
+        Text[ chinese_simplified ] = "ÓÃ»§À¸ 5";
+        Text[ chinese_traditional ] = "¦Û­qÄæ¦ì ~5";
+        Text[ arabic ] = "ÍŞá ÇáãÓÊÎÏã 5";
+        Text[ turkish ] = "Kullanıcı alanı ~5";
+        Text[ language_user1 ] = " ";
+    };
+    String ST_ERROR_PREFIX
+    {
+        Text = "Die folgenden Spaltennamen konnten nicht zugeordnet werden:\n" ;
+        Text [ English ] = "The following column names could not be assigned:\n" ;
+        Text[ english_us ] = "The following column names could not be assigned:\n";
+        Text[ portuguese ] = "Foi impossível atribuir os seguintes nomes de coluna:\n";
+        Text[ russian ] = "Ñëåäóşùèå èìåíà êîëîíîê êëàññèôèöèğîâàòü íå óäàëîñü:\n";
+        Text[ greek ] = "Äåí Şôáí äõíáôüí íá ãßíåé áíôéóôïß÷éóç ôïõ áêüëïõèïõ ïíüìáôïò óôŞëçò:\n";
+        Text[ dutch ] = "De volgende kolomnaam kon niet worden toegewezen:\n";
+        Text[ french ] = "Impossible d'assigner les noms de colonnes :\n";
+        Text[ spanish ] = "No se pudieron asignar los siguientes nombres de columnas:\n";
+        Text[ italian ] = "Non è stato possibile assegnare i nomi seguenti delle colonne:\n";
+        Text[ danish ] = "Det var ikke muligt at tildele de følgende kolonnenavne:\n";
+        Text[ swedish ] = "Följande kolumnnamn kunde inte tilldelas:\n";
+        Text[ polish ] = "Nie mo¿na by³o przypisaæ nastêpuj¹cej nazwy kolumny:\n";
+        Text[ portuguese_brazilian ] = "The following column names could not be assigned:\n";
+        Text[ japanese ] = "ˆÈ‰º‚Ì—ñ–¼‚Í•ª—Ş‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½:\n";
+        Text[ korean ] = "´ÙÀ½°ú °°Àº ´Ü¸íÄªÀº ÁöÁ¤µÉ ¼ö ¾ø½À´Ï´Ù :\n";
+        Text[ chinese_simplified ] = "ÎŞ·¨±àÅÅÒÔÏÂÁĞÃû³Æ£º\n";
+        Text[ chinese_traditional ] = "µLªk«ü©w¤U¦CÄæ¦W¡G\n";
+        Text[ arabic ] = "ÊÚĞÑ ÊÚííä ÃÓãÇÁ ÇáÃÚãÏÉ ÇáÊÇáíÉ:\n";
+        Text[ turkish ] = "Şu sütun adları atanamadı:\n";
+    };
+    String ST_TYPE_ARTICLE
+    {
+        Text = "Artikel" ;
+        Text [ English ] = "Article" ;
+        Text[ english_us ] = "Article";
+        Text[ portuguese ] = "Artigo";
+        Text[ russian ] = "Ñòàòüÿ";
+        Text[ greek ] = "¢ñèñï";
+        Text[ dutch ] = "Artikel";
+        Text[ french ] = "Article";
+        Text[ spanish ] = "Artículo";
+        Text[ italian ] = "Articolo";
+        Text[ danish ] = "Artikel";
+        Text[ swedish ] = "Artikel";
+        Text[ polish ] = "Artyku³";
+        Text[ portuguese_brazilian ] = "Article";
+        Text[ japanese ] = "±°Ã¨¸Ù";
+        Text[ korean ] = "Ç×¸ñ";
+        Text[ chinese_simplified ] = "ÎÄÕÂ";
+        Text[ chinese_traditional ] = "¤å³¹";
+        Text[ arabic ] = "ãŞÇáÉ";
+        Text[ turkish ] = "Makale";
+        Text[ language_user1 ] = " ";
+    };
+    String ST_TYPE_BOOK
+    {
+        Text = "Buch" ;
+        Text [ English ] = "Book" ;
+        Text[ english_us ] = "Book";
+        Text[ portuguese ] = "Livro";
+        Text[ russian ] = "Êíèãà";
+        Text[ greek ] = "Âéâëßï";
+        Text[ dutch ] = "Boek";
+        Text[ french ] = "Livre";
+        Text[ spanish ] = "Libro";
+        Text[ italian ] = "Libro";
+        Text[ danish ] = "Bog";
+        Text[ swedish ] = "Bok";
+        Text[ polish ] = "Ksi¹¿ka";
+        Text[ portuguese_brazilian ] = "Book";
+        Text[ japanese ] = "–{";
+        Text[ korean ] = "Ã¥";
+        Text[ chinese_simplified ] = "Êé¼®";
+        Text[ chinese_traditional ] = "®ÑÄy";
+        Text[ arabic ] = "ßÊÇÈ";
+        Text[ turkish ] = "Kitap";
+        Text[ language_user1 ] = " ";
+    };
+    String ST_TYPE_BOOKLET
+    {
+        Text = "Broschüre" ;
+        Text [ English ] = "Booklet" ;
+        Text[ english_us ] = "Brochures";
+        Text[ portuguese ] = "Brochura";
+        Text[ russian ] = "Áğîøşğà";
+        Text[ greek ] = "Ìğñïóïıñá";
+        Text[ dutch ] = "Brochure";
+        Text[ french ] = "Brochure";
+        Text[ spanish ] = "Folleto";
+        Text[ italian ] = "Dépliant";
+        Text[ danish ] = "Brochure";
+        Text[ swedish ] = "Broschyr";
+        Text[ polish ] = "Broszura";
+        Text[ portuguese_brazilian ] = "Booklet";
+        Text[ japanese ] = "ÊßİÌÚ¯Ä";
+        Text[ korean ] = "¾È³»Ã¥ÀÚ";
+        Text[ chinese_simplified ] = "Ğ¡²á×Ó";
+        Text[ chinese_traditional ] = "¤p¤â¥U";
+        Text[ arabic ] = "ßÊíÈ";
+        Text[ turkish ] = "Broşür";
+        Text[ language_user1 ] = " ";
+    };
+    String ST_TYPE_CONFERENCE
+    {
+        Text = "Konferenzbericht" ;
+        Text [ English ] = "Conference report" ;
+        Text[ english_us ] = "Conference report";
+        Text[ portuguese ] = "Relatório sobre conferência";
+        Text[ russian ] = "Îò÷åò î êîíôåğåíöèè";
+        Text[ greek ] = "ÁíáöïñÜ óıóêåøçò";
+        Text[ dutch ] = "Conferentiebericht";
+        Text[ french ] = "Rapport de conférence";
+        Text[ spanish ] = "Informe de conferencia";
+        Text[ italian ] = "Rapporto sulla conferenza";
+        Text[ danish ] = "Konferencerapport";
+        Text[ swedish ] = "Konferensrapport";
+        Text[ polish ] = "Sprawozdanie z konferencji";
+        Text[ portuguese_brazilian ] = "Conference report";
+        Text[ japanese ] = "‰ï‹c•ñ";
+        Text[ korean ] = "È¸ÀÇº¸°í¼­";
+        Text[ chinese_simplified ] = "ÌÖÂÛ»á±¨¸æ";
+        Text[ chinese_traditional ] = "·|½Í³ø§i";
+        Text[ arabic ] = "ÊŞÑíÑ Úä ãÄÊãÑ";
+        Text[ turkish ] = "Toplantı tutanağı";
+        Text[ language_user1 ] = " ";
+    };
+    String ST_TYPE_INBOOK
+    {
+        Text = "Buchauszug" ;
+        Text [ English ] = "Book excerpt" ;
+        Text[ english_us ] = "Book excerpt";
+        Text[ portuguese ] = "Excerto de livro";
+        Text[ russian ] = "Öèòàòà èç êíèãè";
+        Text[ greek ] = "Áğüóğáóìá âéâëßïõ";
+        Text[ dutch ] = "Uittreksel";
+        Text[ french ] = "Extrait de livre";
+        Text[ spanish ] = "Extracto de libro";
+        Text[ italian ] = "Brano";
+        Text[ danish ] = "Boguddrag";
+        Text[ swedish ] = "Bokutdrag";
+        Text[ polish ] = "Wyci¹g z ksi¹¿ki";
+        Text[ portuguese_brazilian ] = "Book excerpt";
+        Text[ japanese ] = "–{‚Ì”²ˆ";
+        Text[ korean ] = "Ã¥ ¹ßÃé";
+        Text[ chinese_simplified ] = "Êé¼®ÕªÂ¼ÎÄ";
+        Text[ chinese_traditional ] = "®ÑÄy¤å³¹ºK­n";
+        Text[ arabic ] = "ãŞÊÈÓÇÊ ãä ßÊÇÈ";
+        Text[ turkish ] = "Kitap özeti";
+        Text[ language_user1 ] = " ";
+    };
+    String ST_TYPE_INCOLLECTION
+    {
+        Text = "Buchauszug mit Titel" ;
+        Text [ English ] = "Book excerpt with title" ;
+        Text[ english_us ] = "Book excerpt with title";
+        Text[ portuguese ] = "Excerto de livro com título";
+        Text[ russian ] = "Âûäåğæêà èç êíèãè ñ çàãîëîâêîì";
+        Text[ greek ] = "Áğüóğáóìá âéâëßïõ ìå ôßôëï";
+        Text[ dutch ] = "Uittreksel met titel";
+        Text[ french ] = "Extrait de livre avec titre";
+        Text[ spanish ] = "Extracto de libro con título";
+        Text[ italian ] = "Brano con titolo";
+        Text[ danish ] = "Boguddrag med titel";
+        Text[ swedish ] = "Bokutdrag med titel";
+        Text[ polish ] = "Wyci¹g z ksi¹¿ki z tytu³em";
+        Text[ portuguese_brazilian ] = "Book excerpt with title";
+        Text[ japanese ] = "–{‚Ì”²ˆi‘–¼•t‚«j";
+        Text[ korean ] = "Á¦¸ñÀÌ ÀÖ´Â Ã¥ ¹ßÃé";
+        Text[ chinese_simplified ] = "×¢Ã÷±êÌâµÄÊé¼®ÕªÂ¼ÎÄ";
+        Text[ chinese_traditional ] = "§t¦³¼ĞÃDªº®ÑÄy¤å³¹ºK­n";
+        Text[ arabic ] = "ãŞÊÈÓÇÊ ãä ßÊÇÈ ĞÇÊ ÚäæÇä";
+        Text[ turkish ] = "Başlıklı kitap özeti";
+        Text[ language_user1 ] = " ";
+    };
+    String ST_TYPE_INPROCEEDINGS
+    {
+        Text = "Tagungsbericht" ;
+        Text [ English ] = "Conference proceedings";
+        Text[ english_us ] = "Conference proceedings";
+        Text[ portuguese ] = "Relatório de congresso";
+        Text[ russian ] = "Îò÷åò î çàñåäàíèè";
+        Text[ greek ] = "Ğñùôüêïëëï óõíåäñßáóçò";
+        Text[ dutch ] = "Conferentiebericht";
+        Text[ french ] = "Rapport de congrès";
+        Text[ spanish ] = "Informe de congreso";
+        Text[ italian ] = "Rapporto sulla conferenza";
+        Text[ danish ] = "Kongresberetning";
+        Text[ swedish ] = "Konferensrapport";
+        Text[ polish ] = "Sprawozdanie z obrady";
+        Text[ portuguese_brazilian ] = "Conference proceedings";
+        Text[ japanese ] = "‰ï•ñ";
+        Text[ korean ] = "È¸ÀÇ·Ï";
+        Text[ chinese_simplified ] = "»áÒé±¨¸æ";
+        Text[ chinese_traditional ] = "·|Ä³³ø§i";
+        Text[ arabic ] = "ÈÑæÊæßæá ÇÌÊãÇÚ";
+        Text[ turkish ] = "Konferans raporu";
+        Text[ language_user1 ] = " ";
+    };
+    String ST_TYPE_JOURNAL
+    {
+        Text = "Zeitschrift" ;
+        Text [ English ] = "Journal" ;
+        Text[ english_us ] = "Journal";
+        Text[ portuguese ] = "Revista";
+        Text[ russian ] = "Æóğíàë";
+        Text[ greek ] = "Ğåñéïäéêü";
+        Text[ dutch ] = "Tijdschrift";
+        Text[ french ] = "Revue";
+        Text[ spanish ] = "Revista";
+        Text[ italian ] = "Rivista";
+        Text[ danish ] = "Tidsskrift";
+        Text[ swedish ] = "Tidskrift";
+        Text[ polish ] = "Czasopismo";
+        Text[ portuguese_brazilian ] = "Journal";
+        Text[ japanese ] = "G";
+        Text[ korean ] = "ÀâÁö";
+        Text[ chinese_simplified ] = "ÔÓÖ¾";
+        Text[ chinese_traditional ] = "Âø»x";
+        Text[ arabic ] = "ãÌáÉ";
+        Text[ turkish ] = "Dergi";
+        Text[ language_user1 ] = " ";
+    };
+    String ST_TYPE_MANUAL
+    {
+        Text = "Techn. Dokumentation" ;
+        Text [ English ] = "Manual" ;
+        Text[ english_us ] = "Manual";
+        Text[ portuguese ] = "Documentação técnica";
+        Text[ russian ] = "Òåõíè÷åñêàÿ äîêóìåíòàöèÿ";
+        Text[ greek ] = "Eã÷åéñßäéï";
+        Text[ dutch ] = "Techn. documentatie";
+        Text[ french ] = "Documentation technique";
+        Text[ spanish ] = "Documentación técnica";
+        Text[ italian ] = "Documentazione tec.";
+        Text[ danish ] = "Teknisk dokumentation";
+        Text[ swedish ] = "Manual";
+        Text[ polish ] = "Dokumentacja techn.";
+        Text[ portuguese_brazilian ] = "Manual";
+        Text[ japanese ] = "ÏÆ­±Ù";
+        Text[ korean ] = "¸Å´º¾ó";
+        Text[ chinese_simplified ] = "¼¼ÊõÎÄÏ×";
+        Text[ chinese_traditional ] = "§Ş³N»¡©ú®Ñ";
+        Text[ arabic ] = "Ïáíá ÇÓÊÎÏÇã";
+        Text[ turkish ] = "Teknik dokümantasyon";
+        Text[ language_user1 ] = " ";
+    };
+    String ST_TYPE_MASTERSTHESIS
+    {
+        Text = "Diplomarbeit" ;
+        Text [ English ] = "Thesis" ;
+        Text[ english_us ] = "Thesis";
+        Text[ portuguese ] = "Tese";
+        Text[ russian ] = "Äèïëîìíàÿ ğàáîòà";
+        Text[ greek ] = "ÄéğëùìáôéêŞ åñãáóßá";
+        Text[ dutch ] = "Scriptie";
+        Text[ french ] = "Mémoire";
+        Text[ spanish ] = "Trabajo de diplomatura";
+        Text[ italian ] = "Tesi di laurea";
+        Text[ danish ] = "Eksamensopgave";
+        Text[ swedish ] = "Examensarbete";
+        Text[ polish ] = "Praca dyplomowa";
+        Text[ portuguese_brazilian ] = "Thesis";
+        Text[ japanese ] = "‘²‹Æ˜_•¶";
+        Text[ korean ] = "´ëÇĞÁ¹¾÷³í¹®";
+        Text[ chinese_simplified ] = "´óÑ§±ÏÒµÂÛÎÄ";
+        Text[ chinese_traditional ] = "²¦·~½×¤å";
+        Text[ arabic ] = "ÑÓÇáÉ ãÇÌÓÊíÑ";
+        Text[ turkish ] = "Tez";
+        Text[ language_user1 ] = " ";
+    };
+    String ST_TYPE_MISC
+    {
+        Text = "Verschiedenes" ;
+        Text [ ENGLISH ] = "Miscellaneous" ;
+        Text[ english_us ] = "Miscellaneous";
+        Text[ portuguese ] = "Miscelânea";
+        Text[ russian ] = "Ïğî÷åå";
+        Text[ greek ] = "ÄéÜöïñá";
+        Text[ dutch ] = "Diverse";
+        Text[ french ] = "Divers";
+        Text[ spanish ] = "Diversos";
+        Text[ italian ] = "Varie";
+        Text[ danish ] = "Forskelligt";
+        Text[ swedish ] = "Diverse";
+        Text[ polish ] = "Ró¿ne";
+        Text[ portuguese_brazilian ] = "Miscellaneous";
+        Text[ japanese ] = "”õl";
+        Text[ korean ] = "¿©·¯ °¡Áö";
+        Text[ chinese_simplified ] = "ÆäËü";
+        Text[ chinese_traditional ] = "Âø¶µ";
+        Text[ arabic ] = "ãäæÚÇÊ";
+        Text[ turkish ] = "Diğer";
+        Text[ language_user1 ] = " ";
+    };
+    String ST_TYPE_PHDTHESIS
+    {
+        Text = "Dissertation" ;
+        Text [ ENGLISH ] = "Dissertation";
+        Text[ english_us ] = "Dissertation";
+        Text[ portuguese ] = "Dissertação";
+        Text[ russian ] = "Äèññåğòàöèÿ";
+        Text[ greek ] = "ÄéáôñéâŞ";
+        Text[ dutch ] = "Dissertatie";
+        Text[ french ] = "Thèse de doctorat";
+        Text[ spanish ] = "Tesis doctoral";
+        Text[ italian ] = "Dottorato di ricerca";
+        Text[ danish ] = "Doktorafhandling";
+        Text[ swedish ] = "Avhandling";
+        Text[ polish ] = "Praca doktorska";
+        Text[ portuguese_brazilian ] = "Dissertation";
+        Text[ japanese ] = "”m˜_•¶";
+        Text[ korean ] = "¹Ú»çÇĞÀ§³í¹®";
+        Text[ chinese_simplified ] = "²©Ê¿ÂÛÎÄ";
+        Text[ chinese_traditional ] = "³Õ¤h½×¤å";
+        Text[ arabic ] = "ÑÓÇáÉ ÏßÊæÑÇå";
+        Text[ turkish ] = "Disertasyon";
+        Text[ language_user1 ] = " ";
+    };
+    String ST_TYPE_PROCEEDINGS
+    {
+        Text = "Tagungsbericht" ;
+        Text [ English ] = "Conference proceedings";
+        Text[ english_us ] = "Conference proceedings";
+        Text[ portuguese ] = "Relatório de congresso";
+        Text[ russian ] = "Îò÷åò î çàñåäàíèè";
+        Text[ greek ] = "Ğñùôüêïëëï óõíåäñßáóçò";
+        Text[ dutch ] = "Conferentiebericht";
+        Text[ french ] = "Rapport de congrès";
+        Text[ spanish ] = "Informe de congreso";
+        Text[ italian ] = "Rapporto sulla conferenza";
+        Text[ danish ] = "Kongresberetning";
+        Text[ swedish ] = "Konferensrapport";
+        Text[ polish ] = "Sprawozdanie z obrady";
+        Text[ portuguese_brazilian ] = "Conference proceedings";
+        Text[ japanese ] = "‰ï•ñ";
+        Text[ korean ] = "È¸ÀÇ·Ï";
+        Text[ chinese_simplified ] = "»áÒé±¨¸æ";
+        Text[ chinese_traditional ] = "·|Ä³³ø§i";
+        Text[ arabic ] = "ÈÑæÊæßæá ÇÌÊãÇÚ";
+        Text[ turkish ] = "Konferans raporu";
+        Text[ language_user1 ] = " ";
+    };
+    String ST_TYPE_TECHREPORT
+    {
+        Text = "Forschungsbericht" ;
+        Text [ English ] = "Research report";
+        Text[ english_us ] = "Research report";
+        Text[ portuguese ] = "Relatório de investigação";
+        Text[ russian ] = "Îò÷åò î íàó÷íîì èññëåäîâàíèè";
+        Text[ greek ] = "ÁíáöïñÜ İñåõíáò";
+        Text[ dutch ] = "Onderzoeksbericht";
+        Text[ french ] = "Rapport de recherche";
+        Text[ spanish ] = "Informe de investigación";
+        Text[ italian ] = "Rapporto di ricerca";
+        Text[ danish ] = "Forskningsrapport";
+        Text[ swedish ] = "Forskningsrapport";
+        Text[ polish ] = "Sprawozdanie z badania naukow.";
+        Text[ portuguese_brazilian ] = "Research report";
+        Text[ japanese ] = "Œ¤‹†•ñ";
+        Text[ korean ] = "¿¬±¸º¸°í¼­";
+        Text[ chinese_simplified ] = "¿ÆÑĞ±¨¸æ";
+        Text[ chinese_traditional ] = "¬ã¨s³ø§i";
+        Text[ arabic ] = "ÊŞÑíÑ Úä ÚãáíÉ ÇáÈÍË";
+        Text[ turkish ] = "Araştırma raporu";
+        Text[ language_user1 ] = " ";
+    };
+    String ST_TYPE_UNPUBLISHED
+    {
+        Text = "Unveröffentlicht" ;
+        Text [ ENGLISH ] = "Unpublished" ;
+        Text[ english_us ] = "Unpublished";
+        Text[ portuguese ] = "Inédito";
+        Text[ russian ] = "Íå îïóáëèêîâàíî";
+        Text[ greek ] = "Áäçìïóßåõôï";
+        Text[ dutch ] = "Niet gepubliceerd";
+        Text[ french ] = "Non publié";
+        Text[ spanish ] = "Inédito";
+        Text[ italian ] = "Non pubblicato";
+        Text[ danish ] = "Ikke offentliggjort";
+        Text[ swedish ] = "Opublicerad";
+        Text[ polish ] = "Nieopublikowane";
+        Text[ portuguese_brazilian ] = "Unpublished";
+        Text[ japanese ] = "–¢”­•\\";
+        Text[ korean ] = "ºñ°ø°³";
+        Text[ chinese_simplified ] = "ÉĞÎ´·¢±íµÄ";
+        Text[ chinese_traditional ] = "©|¥¼µoªí";
+        Text[ arabic ] = "áã íõäÔÑ ÈÚÏ";
+        Text[ turkish ] = "Yayımlanmamış";
+        Text[ language_user1 ] = " ";
+    };
+    String ST_TYPE_EMAIL
+    {
+        Text = "e-Mail" ;
+        Text [ English ] = "e-mail" ;
+        Text[ english_us ] = "e-mail";
+        Text[ portuguese ] = "e-mail";
+        Text[ russian ] = "e-mail";
+        Text[ greek ] = "e-mail";
+        Text[ dutch ] = "e-mail";
+        Text[ french ] = "E-mail";
+        Text[ spanish ] = "Mensaje electrónico";
+        Text[ italian ] = "eMail";
+        Text[ danish ] = "E-mail";
+        Text[ swedish ] = "e-post";
+        Text[ polish ] = "e-mail";
+        Text[ portuguese_brazilian ] = "e-mail";
+        Text[ japanese ] = "E-mail";
+        Text[ korean ] = "ÀüÀÚ¿ìÆí";
+        Text[ chinese_simplified ] = "µç×ÓÓÊ¼ş";
+        Text[ chinese_traditional ] = "¹q¤l¶l¥ó";
+        Text[ arabic ] = "ÈÑíÏ ÅáßÊÑæäí";
+        Text[ turkish ] = "e-posta";
+        Text[ language_user1 ] = " ";
+    };
+    String ST_TYPE_WWW
+    {
+        Text = "WWW-Dokument" ;
+        Text [ ENGLISH ] = "WWW document" ;
+        Text[ english_us ] = "WWW document";
+        Text[ portuguese ] = "Documento WWW";
+        Text[ russian ] = "Äîêóìåíò WWW";
+        Text[ greek ] = "¸ããñáöï WWW";
+        Text[ dutch ] = "WWW document";
+        Text[ french ] = "Document WWW";
+        Text[ spanish ] = "Documento WWW";
+        Text[ italian ] = "Documento Web";
+        Text[ danish ] = "WWW-dokument";
+        Text[ swedish ] = "WWW-dokument";
+        Text[ polish ] = "Dokument WWW";
+        Text[ portuguese_brazilian ] = "WWW document";
+        Text[ japanese ] = "WWW ÄŞ·­ÒİÄ";
+        Text[ korean ] = "WWW ¹®¼­";
+        Text[ chinese_simplified ] = "ÍòÎ¬ÍøÎÄµµ";
+        Text[ chinese_traditional ] = "WWW ¤å¥ó";
+        Text[ arabic ] = "ãÓÊäÏ æíÈ";
+        Text[ turkish ] = "WWW belgesi";
+        Text[ language_user1 ] = " ";
+    };
+    String ST_TYPE_CUSTOM1
+    {
+        Text = "Benutzertyp1" ;
+        Text [ English ] = "User-defined1";
+        Text[ english_us ] = "User-defined1";
+        Text[ portuguese ] = "Tipo personalizado1";
+        Text[ russian ] = "Òèï ïîëüçîâàòåëÿ1";
+        Text[ greek ] = "Ôığïò ÷ñŞóôç1";
+        Text[ dutch ] = "Gebruikerstype1";
+        Text[ french ] = "Utilisateur1";
+        Text[ spanish ] = "Definido por usuario 1";
+        Text[ italian ] = "Utente1";
+        Text[ danish ] = "Brugerdefineret1";
+        Text[ swedish ] = "Användartyp1";
+        Text[ polish ] = "Typ u¿ytkownika1";
+        Text[ portuguese_brazilian ] = "User-defined1";
+        Text[ japanese ] = "Õ°»Ş°À²Ìß 1";
+        Text[ korean ] = "»ç¿ëÀÚÀ¯Çü1";
+        Text[ chinese_simplified ] = "ÓÃ»§ÀàĞÍ1";
+        Text[ chinese_traditional ] = "¦Û­qÃş«¬ 1";
+        Text[ arabic ] = "ãõÚÑøóİ ãä ŞÈá ÇáãÓÊÎÏã1";
+        Text[ turkish ] = "Kullanıcı tanımlı1";
+        Text[ language_user1 ] = " ";
+    };
+    String ST_TYPE_CUSTOM2
+    {
+        Text = "Benutzertyp2" ;
+        Text [ English ] = "User-defined2";
+        Text[ english_us ] = "User-defined2";
+        Text[ portuguese ] = "Tipo personalizado2";
+        Text[ russian ] = "Òèï ïîëüçîâàòåëÿ2";
+        Text[ greek ] = "Ôığïò ÷ñŞóôç2";
+        Text[ dutch ] = "Gebruikerstype2";
+        Text[ french ] = "Utilisateur2";
+        Text[ spanish ] = "Definido por usuario 2";
+        Text[ italian ] = "Utente2";
+        Text[ danish ] = "Brugerdefineret2";
+        Text[ swedish ] = "Användartyp2";
+        Text[ polish ] = "Typ u¿ytkownika2";
+        Text[ portuguese_brazilian ] = "User-defined2";
+        Text[ japanese ] = "¶½ÀÏ²½Ş2";
+        Text[ korean ] = "»ç¿ëÀÚÀ¯Çü2";
+        Text[ chinese_simplified ] = "ÓÃ»§ÀàĞÍ2";
+        Text[ chinese_traditional ] = "¦Û­qÃş«¬ 2";
+        Text[ arabic ] = "ãõÚÑøóİ ãä ŞÈá ÇáãÓÊÎÏã2";
+        Text[ turkish ] = "Kullanıcı tanımlı2";
+        Text[ language_user1 ] = " ";
+    };
+    String ST_TYPE_CUSTOM3
+    {
+        Text = "Benutzertyp3" ;
+        Text [ English ] = "User-defined3";
+        Text[ english_us ] = "User-defined3";
+        Text[ portuguese ] = "Tipo personalizado3";
+        Text[ russian ] = "Òèï ïîëüçîâàòåëÿ3";
+        Text[ greek ] = "Ôığïò ÷ñŞóôç3";
+        Text[ dutch ] = "Gebruikerstype3";
+        Text[ french ] = "Utilisateur3";
+        Text[ spanish ] = "Definido por usuario 3";
+        Text[ italian ] = "Utente3";
+        Text[ danish ] = "Brugerdefineret3";
+        Text[ swedish ] = "Användartyp3";
+        Text[ polish ] = "Typ u¿ytkownika3";
+        Text[ portuguese_brazilian ] = "User-defined3";
+        Text[ japanese ] = "¶½ÀÏ²½Ş3";
+        Text[ korean ] = "»ç¿ëÀÚÀ¯Çü3";
+        Text[ chinese_simplified ] = "ÓÃ»§ÀàĞÍ 3";
+        Text[ chinese_traditional ] = "¦Û­qÃş«¬ 3";
+        Text[ arabic ] = "ãõÚÑøóİ ãä ŞÈá ÇáãÓÊÎÏã3";
+        Text[ turkish ] = "Kullanıcı tanımlı3";
+        Text[ language_user1 ] = " ";
+    };
+    String ST_TYPE_CUSTOM4
+    {
+        Text = "Benutzertyp4" ;
+        Text [ English ] = "User-defined4";
+        Text[ english_us ] = "User-defined4";
+        Text[ portuguese ] = "Tipo personalizado4";
+        Text[ russian ] = "Òèï ïîëüçîâàòåëÿ4";
+        Text[ greek ] = "Ôığïò ÷ñŞóôç4";
+        Text[ dutch ] = "Gebruikerstype4";
+        Text[ french ] = "Utilisateur4";
+        Text[ spanish ] = "Definido por usuario 4";
+        Text[ italian ] = "Utente4";
+        Text[ danish ] = "Brugerdefineret4";
+        Text[ swedish ] = "Användartyp4";
+        Text[ polish ] = "Typ u¿ytkownika4";
+        Text[ portuguese_brazilian ] = "User-defined4";
+        Text[ japanese ] = "¶½ÀÏ²½Ş4";
+        Text[ korean ] = "»ç¿ëÀÚÀ¯Çü4";
+        Text[ chinese_simplified ] = "ÓÃ»§ÀàĞÍ 4";
+        Text[ chinese_traditional ] = "¦Û­qÃş«¬ 4";
+        Text[ arabic ] = "ãõÚÑøóİ ãä ŞÈá ÇáãÓÊÎÏã4";
+        Text[ turkish ] = "Kullanıcı tanımlı4";
+        Text[ language_user1 ] = " ";
+    };
+    String ST_TYPE_CUSTOM5
+    {
+        Text = "Benutzertyp5" ;
+        Text [ English ] = "User-defined5";
+        Text[ english_us ] = "User-defined5";
+        Text[ portuguese ] = "Tipo personalizado5";
+        Text[ russian ] = "Òèï ïîëüçîâàòåëÿ5";
+        Text[ greek ] = "Ôığïò ÷ñŞóôç5";
+        Text[ dutch ] = "Gebruikerstype5";
+        Text[ french ] = "Utilisateur5";
+        Text[ spanish ] = "Definido por usuario 5";
+        Text[ italian ] = "Utente5";
+        Text[ danish ] = "Brugerdefineret5";
+        Text[ swedish ] = "Användartyp5";
+        Text[ polish ] = "Typ u¿ytkownika5";
+        Text[ portuguese_brazilian ] = "User-defined5";
+        Text[ japanese ] = "¶½ÀÏ²½Ş5";
+        Text[ korean ] = "»ç¿ëÀÚÀ¯Çü5";
+        Text[ chinese_simplified ] = "ÓÃ»§ÀàĞÍ 5";
+        Text[ chinese_traditional ] = "¦Û­qÃş«¬ 5";
+        Text[ arabic ] = "ãõÚÑøóİ ãä ŞÈá ÇáãÓÊÎÏã5";
+        Text[ turkish ] = "Kullanıcı tanımlı5";
+        Text[ language_user1 ] = " ";
+    };
+    Text[ english_us ] = "General";
+    Text[ portuguese ] = "Geral";
+    Text[ russian ] = "Îáùåå";
+    Text[ greek ] = "ÃåíéêÜ";
+    Text[ dutch ] = "Algemeen";
+    Text[ french ] = "Général";
+    Text[ spanish ] = "General";
+    Text[ italian ] = "Generale";
+    Text[ danish ] = "Generel";
+    Text[ swedish ] = "Allmän";
+    Text[ polish ] = "Ogólne";
+    Text[ portuguese_brazilian ] = "General";
+    Text[ japanese ] = "‘S”Ê";
+    Text[ korean ] = "ÀÏ¹İ";
+    Text[ chinese_simplified ] = "³£¹æ";
+    Text[ chinese_traditional ] = "¤@¯ë";
+    Text[ arabic ] = "ÚÇã";
+    Text[ turkish ] = "Genel";
+    Text[ language_user1 ] = " ";
+};
+Menu RID_POPUP_ME_VIEW
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Text = "Abschnitt einfügen..." ;
+            Text [ English ] = "Insert Section..." ;
+            Identifier = PU_INSERT;
+            Text[ english_us ] = "Insert Section...";
+            Text[ portuguese ] = "Inserir secção...";
+            Text[ russian ] = "Âñòàâèòü ğàçäåë...";
+            Text[ greek ] = "ĞñïóèŞêç ôìŞìáôïò...";
+            Text[ dutch ] = "Sectie invoegen...";
+            Text[ french ] = "Insérer une section...";
+            Text[ spanish ] = "Insertar sección...";
+            Text[ italian ] = "Inserisci sezione...";
+            Text[ danish ] = "Indsæt sektion...";
+            Text[ swedish ] = "Infoga avsnitt...";
+            Text[ polish ] = "Wstaw sekcjê...";
+            Text[ portuguese_brazilian ] = "Insert Section...";
+            Text[ japanese ] = "€–Ú‚Ì‘}“ü...";
+            Text[ korean ] = "¼½¼Ç »ğÀÔ...";
+            Text[ chinese_simplified ] = "²åÈë¶ÎÂä...";
+            Text[ chinese_traditional ] = "´¡¤J¬q¸¨...";
+            Text[ arabic ] = "ÅÏÑÇÌ äØÇŞ...";
+            Text[ turkish ] = "Bölüm ekle...";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Text = "Abschnitt löschen..." ;
+            Text [ English ] = "Remove Section..." ;
+            Identifier = PU_REMOVE;
+            Text[ english_us ] = "Delete Section...";
+            Text[ portuguese ] = "Eliminar secção...";
+            Text[ russian ] = "Óáğàòü ğàçäåë...";
+            Text[ greek ] = "ÄéáãñáöŞ ôìŞìáôïò...";
+            Text[ dutch ] = "Sectie wissen...";
+            Text[ french ] = "Supprimer une section...";
+            Text[ spanish ] = "Eliminar sección...";
+            Text[ italian ] = "Elimina sezione...";
+            Text[ danish ] = "Slet sektion...";
+            Text[ swedish ] = "Radera avsnitt...";
+            Text[ polish ] = "Usuñ sekcjê...";
+            Text[ portuguese_brazilian ] = "Remove Section...";
+            Text[ japanese ] = "€–Ú‚Ìíœ...";
+            Text[ korean ] = "¼½¼Ç »èÁ¦...";
+            Text[ chinese_simplified ] = "É¾³ı¶ÎÂä...";
+            Text[ chinese_traditional ] = "§R°£¬q¸¨...";
+            Text[ arabic ] = "ÍĞİ äØÇŞ...";
+            Text[ turkish ] = "Bölümü sil...";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Text = "Namen ändern..." ;
+            Text [ English ] = "Remove Address..." ;
+            Identifier = PU_CHG_NAME;
+            Text[ english_us ] = "Modify Name...";
+            Text[ portuguese ] = "Modificar nome...";
+            Text[ russian ] = "Èçìåíèòü èìåíà...";
+            Text[ greek ] = "ÁëëáãŞ ïíüìáôïò...";
+            Text[ dutch ] = "Adres wissen...";
+            Text[ french ] = "Corriger un nom...";
+            Text[ spanish ] = "Modificar nombre...";
+            Text[ italian ] = "Cambia indirizzo...";
+            Text[ danish ] = "Modificer navn...";
+            Text[ swedish ] = "Ändra namn...";
+            Text[ polish ] = "Modyfikuj nazwê...";
+            Text[ portuguese_brazilian ] = "Remove Address...";
+            Text[ japanese ] = "–¼‘O‚Ì•ÏX...";
+            Text[ korean ] = "ÁÖ¼Ò »èÁ¦...";
+            Text[ chinese_simplified ] = "¸ü¸ÄÃû³Æ...";
+            Text[ chinese_traditional ] = "ÅÜ§ó¦WºÙ...";
+            Text[ arabic ] = "ÊÚÏíá ÇÓã...";
+            Text[ turkish ] = "Adı değiştir...";
+            Text[ language_user1 ] = " ";
+        };
+    };
+};
