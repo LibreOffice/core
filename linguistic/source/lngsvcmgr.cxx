@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lngsvcmgr.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: tl $ $Date: 2001-02-02 11:10:14 $
+ *  last change: $Author: tl $ $Date: 2001-02-12 12:28:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -271,7 +271,7 @@ void SetAvailableCfgServiceLists( LinguDispatcher &rDispatcher,
         const SvcInfoArray &rAvailSvcs )
 {
     String aRoot( String::CreateFromAscii( "Office.Linguistic/ServiceManager" ) );
-    LinguConfigItem aCfg( aRoot );
+    SvtLinguConfigItem aCfg( aRoot );
 
     // get list of nodenames to look at for their service list
     const char *pEntryName = 0;
@@ -1162,7 +1162,7 @@ BOOL LngSvcMgr::SaveCfgSvcs( const String &rServiceName )
     if (pDsp  &&  aLocales.getLength())
     {
         String aRoot( String::CreateFromAscii( "Office.Linguistic/ServiceManager" ) );
-        LinguConfigItem aCfg( aRoot );
+        SvtLinguConfigItem aCfg( aRoot );
 
         INT32 nLen = aLocales.getLength();
         const Locale *pLocale = aLocales.getConstArray();
@@ -1300,7 +1300,7 @@ Sequence< OUString > SAL_CALL
     String aCfgLocale( ConvertLanguageToIsoString( nLanguage ) );
 
     String aRoot( String::CreateFromAscii( "Office.Linguistic/ServiceManager" ) );
-    LinguConfigItem aCfg( aRoot );
+    SvtLinguConfigItem aCfg( aRoot );
 
     Sequence< Any > aValues;
     Sequence< OUString > aName( 1 );
