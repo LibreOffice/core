@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePreviewHeaderCell.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: sab $ $Date: 2002-10-01 10:49:09 $
+ *  last change: $Author: sab $ $Date: 2002-10-02 14:07:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,9 @@
 #include <svx/AccessibleTextHelper.hxx>
 #endif
 #include "AccessiblePreviewHeaderCell.hxx"
+#ifndef SC_ACCESSIBILITYHINTS_HXX
+#include "AccessibilityHints.hxx"
+#endif
 #include "prevwsh.hxx"
 #include "unoguard.hxx"
 #include "miscuno.hxx"
@@ -144,6 +147,17 @@ void SAL_CALL ScAccessiblePreviewHeaderCell::disposing()
 
 void ScAccessiblePreviewHeaderCell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
+    if (rHint.ISA( SfxSimpleHint ))
+    {
+        const SfxSimpleHint& rRef = (const SfxSimpleHint&)rHint;
+        ULONG nId = rRef.GetId();
+        if (rRef.GetId() == SC_HINT_ACC_VISAREACHANGED)
+        {
+            if (mpTextHelper)
+                mpTextHelper->UpdateChildren();
+        }
+    }
+
     ScAccessibleContextBase::Notify(rBC, rHint);
 }
 
