@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VndSunStarPkgUrlReferenceFactory.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 17:04:42 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 16:16:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@ interface XVndSunStarPkgUrlReferenceFactory;
 /**
    creates &ldquo;vnd.sun.star.pkg&rdquo; URL references.
 
-   @since OOo2.0.0
+   @since OOo 2.0.0
  */
 service VndSunStarPkgUrlReferenceFactory: XVndSunStarPkgUrlReferenceFactory;
 
