@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: hjs $ $Date: 2001-10-22 12:18:27 $
+#   last change: $Author: hr $ $Date: 2003-04-28 17:00:54 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -135,10 +135,4 @@ $(PACKAGE_DIR)$/so_custom_patch :  $(PACKAGE_DIR)$/$(ADD_FILES_FLAG_FILE)
 $(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE) : $(PACKAGE_DIR)$/so_custom_patch
 .ENDIF          # "$(GUI)"=="WNT"
 
-TG_DELIVER : $(PACKAGE_DIR)$/so_predeliver
-        $(DELIVER)
-
-.IF "$(BUILD_SOSL)"!=""
-ALLTAR : TG_DELIVER
-.ENDIF			# "$(BUILD_SOSL)"!=""
 
