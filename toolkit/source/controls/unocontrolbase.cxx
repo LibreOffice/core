@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrolbase.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:03:21 $
+ *  last change: $Author: rt $ $Date: 2004-05-07 16:17:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,12 @@ sal_Bool UnoControlBase::ImplHasProperty( sal_uInt16 nPropId )
 sal_Bool UnoControlBase::ImplHasProperty( const ::rtl::OUString& aPropertyName )
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xPSet( mxModel, ::com::sun::star::uno::UNO_QUERY );
+    if ( !xPSet.is() )
+        return sal_False;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >  xInfo = xPSet->getPropertySetInfo();
+    if ( !xInfo.is() )
+        return sal_False;
+
     return xInfo->hasPropertyByName( aPropertyName );
 }
 
