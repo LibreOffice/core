@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: tl $ $Date: 2002-08-29 08:42:32 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:51:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,9 +73,6 @@
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
-#ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
-#include <com/sun/star/lang/XUnoTunnel.hpp>
-#endif
 #ifndef _COM_SUN_STAR_VIEW_XRENDERABLE_HPP_
 #include <com/sun/star/view/XRenderable.hpp>
 #endif
@@ -92,7 +89,6 @@ class SmFormat;
 class SmModel : public SfxBaseModel,
                 public comphelper::PropertySetHelper,
                 public com::sun::star::lang::XServiceInfo,
-                public com::sun::star::lang::XUnoTunnel,
                 public com::sun::star::view::XRenderable
 {
 protected:
@@ -130,12 +126,8 @@ public:
     virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void)
             throw( ::com::sun::star::uno::RuntimeException );
 
-    inline ::rtl::OUString SmModel::getImplementationName_Static() throw(  );
+    static ::com::sun::star::uno::Sequence< rtl::OUString > getSupportedServiceNames_Static();
+    static ::rtl::OUString getImplementationName_Static();
 };
-
-inline ::rtl::OUString SmModel::getImplementationName_Static() throw(  )
-{
-    return rtl::OUString::createFromAscii("math.SmModel");
-}
 
 #endif
