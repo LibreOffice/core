@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileextensions.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-07 11:17:17 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 14:35:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,11 +67,11 @@
 //
 //------------------------------------
 
-const std::string WRITER_FILE_EXTENSIONS  = "sxwstwsxg";
-const std::string CALC_FILE_EXTENSIONS    = "sxcstc";
-const std::string DRAW_FILE_EXTENSIONS    = "sxdstd";
-const std::string IMPRESS_FILE_EXTENSIONS = "sxisti";
-const std::string MATH_FILE_EXTENSIONS    = "sxm";
+const std::string WRITER_FILE_EXTENSIONS  = "sxwstwsxgoxtottoxgootoom";
+const std::string CALC_FILE_EXTENSIONS    = "sxcstcoxsotsoos";
+const std::string DRAW_FILE_EXTENSIONS    = "sxdstdoxdotdood";
+const std::string IMPRESS_FILE_EXTENSIONS = "sxistioxpotpoop";
+const std::string MATH_FILE_EXTENSIONS    = "sxmoxfoof";
 
 FileExtensionEntry OOFileExtensionTable[] = {
     { ".sxw", L".sxw", "soffice.StarWriterDocument.6"      },
@@ -83,7 +83,21 @@ FileExtensionEntry OOFileExtensionTable[] = {
     { ".sxg", L".sxg", "soffice.StarWriterGlobalDocument.6"},
     { ".std", L".std", "soffice.StarDrawTemplate.6"        },
     { ".sti", L".sti", "soffice.StarImpressTemplate.6"     },
-    { ".stc", L".stc", "soffice.StarCalcTemplate.6"        }};
+    { ".stc", L".stc", "soffice.StarCalcTemplate.6"        },
+    { ".oot", L".oot", "openoffice.WriterDocument.1"       },
+    { ".ott", L".ott", "openoffice.WriterTemplate.1"       },
+    { ".oom", L".oom", "openoffice.WriterGlobalDocument.1" },
+    { ".oth", L".oth", "openoffice.WriterWebDocument.1"    },
+    { ".oos", L".oos", "openoffice.CalcDocument.1"         },
+    { ".ots", L".ots", "openoffice.CalcTemplate.1"         },
+    { ".ood", L".ood", "openoffice.DrawDocument.1"         },
+    { ".otd", L".otd", "openoffice.DrawTemplate.1"         },
+    { ".oop", L".oop", "openoffice.ImpressDocument.1"      },
+    { ".otp", L".otp", "openoffice.ImpressTemplate.1"      },
+    { ".oof", L".oof", "openoffice.MathDocument.1"         },
+    { ".odb", L".odb", "openoffice.DatabaseDocument.1"     }
+    };
+
 
 size_t OOFileExtensionTableSize = sizeof(OOFileExtensionTable)/sizeof(OOFileExtensionTable[0]);
 
