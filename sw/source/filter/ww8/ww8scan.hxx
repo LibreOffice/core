@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.hxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-26 12:50:52 $
+ *  last change: $Author: cmc $ $Date: 2002-12-03 13:30:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,24 @@ namespace SL
     DEFCONSTSTRINGARRAY(TextBox);
     DEFCONSTSTRINGARRAY(TextField);
 }
+
+/*
+ winword strings are typically Belt and Braces strings preceeded with a
+ pascal style count, and ending with a c style 0 terminator. 16bit chars
+ and count for ww8+ and 8bit chars and count for ww7-. The count and 0
+ can be checked for integrity to catch errors (e.g. lotus created documents)
+ where in error 8bit strings are used instead of 16bits strings for style
+ names.
+*/
+template<class C> class wwString
+{
+public:
+    static bool TestBeltAndBraces(const SvStream& rStrm);
+    //move the other string related code into this class as time goes by
+};
+
+typedef wwString<sal_uInt16> ww8String;
+typedef wwString<sal_uInt8> ww6String;
 
 //simple template that manages a static [] array by sorting at construction
 template<class C> class wwSortedArray;

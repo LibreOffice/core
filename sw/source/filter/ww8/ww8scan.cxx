@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: cmc $ $Date: 2002-12-03 12:01:29 $
+ *  last change: $Author: cmc $ $Date: 2002-12-03 13:30:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,32 @@ namespace SL
     IMPLCONSTSTRINGARRAY(TextField);
 }
 
+template<class C> bool wwString<C>::TestBeltAndBraces(const SvStream& rStrm)
+{
+    bool bRet = false;
+    sal_uInt32 nOldPos = rStrm.Tell();
+    SvStream &rMutableStrm = const_cast<SvStream &>(rStrm);
+    sal_uInt32 nLen = rMutableStrm.Seek(STREAM_SEEK_TO_END);
+    rMutableStrm.Seek(nOldPos);
+    C nBelt;
+    rMutableStrm >> nBelt;
+    nBelt *= sizeof(C);
+    if (nOldPos + sizeof(C) + nBelt + sizeof(C) <= nLen &&
+        !rStrm.GetError() && !rStrm.IsEof())
+    {
+        rMutableStrm.SeekRel(nBelt);
+        if (!rStrm.GetError())
+        {
+            C cBraces;
+            rMutableStrm >> cBraces;
+            if (!rMutableStrm.GetError() && cBraces == 0)
+                bRet = true;
+        }
+    }
+    rMutableStrm.Seek(nOldPos);
+    return bRet;
+}
+
 template<class C> class wwSortedArray
 {
 private:
@@ -206,7 +232,7 @@ const wwSprmSearcher *wwSprmParser::GetWW6SprmSearcher()
     // WW7- Sprms
     static SprmInfo aSprms[] =
     {
-    {  0, 0, L_FIX}, // "Default-sprm",  wird uebersprungen
+        {  0, 0, L_FIX}, // "Default-sprm",  wird uebersprungen
         {  2, 2, L_FIX}, // "sprmPIstd",  pap.istd (style code)
         {  3, 3, L_VAR}, // "sprmPIstdPermute pap.istd permutation
         {  4, 1, L_FIX}, // "sprmPIncLv1" pap.istddifference
@@ -5850,27 +5876,6 @@ WW8_STD* WW8Style::Read1STDFixed( short& rSkip, short* pcbStd )
     return pStd;
 }
 
-//Belt and Braces style strings start with a char count and end with 0 so if
-//the two don't match up there is a problem somewhere, e.g.  someone forgot to
-//use unicode strings in a unicode document.
-bool TestBeltAndBraces(SvStream& rStrm)
-{
-    bool bRet = false;
-    sal_uInt32 nOldPos = rStrm.Tell();
-    sal_uInt16 nBelt;
-    rStrm >> nBelt;
-    rStrm.SeekRel(nBelt);
-    if (!rStrm.GetError())
-    {
-        sal_uInt16 cBraces;
-        rStrm >> cBraces;
-        if (!rStrm.GetError() && cBraces == 0)
-            bRet = true;
-    }
-    rStrm.Seek(nOldPos);
-    return bRet;
-}
-
 WW8_STD* WW8Style::Read1Style( short& rSkip, String* pString, short* pcbStd )
 {
     // OS2, or WIN with Mac-Doc,...
@@ -5896,7 +5901,7 @@ WW8_STD* WW8Style::Read1Style( short& rSkip, String* pString, short* pcbStd )
                 case 8:
                     // handle Unicode-String with leading length short and
                     // trailing zero
-                    if (TestBeltAndBraces(rSt))
+                    if (ww8String::TestBeltAndBraces(rSt))
                     {
                         *pString = WW8Read_xstz(rSt, 0, true);
                         rSkip -= (pString->Len() + 2) * 2;
