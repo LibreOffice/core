@@ -13,13 +13,13 @@ mkdir: %_DEST%\inc%_EXT%\vcl\unx
 ..\%__SRC%\bin\vcl?????.sym %_DEST%\bin%_EXT%\vcl?????.sym
 ..\%__SRC%\bin\getstyle-gnome %_DEST%\bin%_EXT%\getstyle-gnome
 ..\%__SRC%\bin\msgbox-gnome %_DEST%\bin%_EXT%\msgbox-gnome
-..\%__SRC%\lib\libvcl*.so %_DEST%\lib%_EXT%\*.so
+..\%__SRC%\lib\libvcl*.so %_DEST%\lib%_EXT%\libvcl*.so
 ..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
 ..\%__SRC%\lib\app16.lib %_DEST%\lib%_EXT%\app16.lib
 ..\%__SRC%\lib\gdi16.lib %_DEST%\lib%_EXT%\gdi16.lib
 ..\%__SRC%\lib\isv.lib %_DEST%\lib%_EXT%\isv.lib
 ..\%__SRC%\lib\ivcl.lib %_DEST%\lib%_EXT%\ivcl.lib
-..\%__SRC%\lib\remote\*.so %_DEST%\lib%_EXT%\remote\*.so
+..\%__SRC%\lib\remote\lib*.so %_DEST%\lib%_EXT%\remote\lib*.so
 ..\%__SRC%\lib\vcl.lib %_DEST%\lib%_EXT%\vcl.lib
 ..\%__SRC%\misc\vcl?????.map %_DEST%\bin%_EXT%\vcl?????.map
 ..\%__SRC%\obj\main.obj %_DEST%\lib%_EXT%\xsvmain.obj
