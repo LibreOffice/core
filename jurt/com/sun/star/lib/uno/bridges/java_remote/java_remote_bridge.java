@@ -2,9 +2,9 @@
  *
  *  $RCSfile: java_remote_bridge.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kr $ $Date: 2000-09-28 11:47:06 $
+ *  last change: $Author: kr $ $Date: 2000-09-28 16:54:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,7 +125,7 @@ import com.sun.star.uno.IQueryInterface;
  * The protocol to used is passed by name, the bridge
  * then looks for it under <code>com.sun.star.lib.uno.protocols</code>.
  * <p>
- * @version     $Revision: 1.3 $ $ $Date: 2000-09-28 11:47:06 $
+ * @version     $Revision: 1.4 $ $ $Date: 2000-09-28 16:54:22 $
  * @author      Kay Ramme
  * @see         com.sun.star.lib.uno.environments.remote.IProtocol
  * @since       UDK1.0
@@ -507,7 +507,7 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
 
                     if(!(dispatcherAdapterBase.getObject() instanceof String)) { // is it not my object?
                         try {
-                            sendRequest(oId, new Type(zInterface), "release", null, null);
+                            sendRequest(oId, new Type(zInterface), "release", null, null, null);
                         }
                         catch(Exception exception) {
                             throw new MappingException(exception.getMessage());
@@ -700,6 +700,7 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
                                  new Type(XInterface.class),
                                  "queryInterface",
                                  new Object[]{new Type(XInterface.class)},
+                                 null,
                                  null);
         }
         catch(Exception exception) {
@@ -743,12 +744,15 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
         }
     }
 
-    public Object sendRequest(Object object, Type type, String operation, Object params[], Boolean synchron[]) throws Exception {
+    public Object sendRequest(Object object, Type type, String operation, Object params[], Boolean synchron[], Boolean mustReply[]) throws Exception {
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".sendRequest:" + object + " " + type +" " + operation + " " + synchron);
         Object result = null;
 
         if(synchron == null)
             synchron = new Boolean[1];
+
+        if(mustReply == null)
+            mustReply = new Boolean[1];
 
         try {
             if(_disposed) throw new RuntimeException("java_remote_bridge(" + this + ").sendRequest - is disposed");
@@ -758,7 +762,7 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
             // is this what we realy want to do, is the writing to the stream realy protected? Not that
             // an other thread flushes the output and an reply arrives before we have added the thread queue!!!
             synchronized(_xConnection) {
-                _iProtocol.writeRequest((String)object, type, operation, ThreadPool.getThreadId(), params, synchron);
+                _iProtocol.writeRequest((String)object, type, operation, ThreadPool.getThreadId(), params, synchron, mustReply);
 
                 if(synchron[0].booleanValue()) // prepare a queue for this thread in the threadpool
                     ThreadPool.addThread(this);
