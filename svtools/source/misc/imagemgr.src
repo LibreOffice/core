@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.src,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 16:41:03 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 14:38:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,6 @@
 #define X_IMAGE_LIST \
         IMG_WORKPLACE ; \
         IMG_BITMAP ; \
-        IMG_DATABASE ; \
         IMG_EXCEL ; \
         IMG_EXCELTEMPLATE ; \
         IMG_FTPSERVER ; \
@@ -133,7 +132,7 @@ ImageList RID_SVTOOLS_IMAGELIST_BIG
     };
     IdCount =
     {
-        56 ;
+        55 ;
     };
 };
 
@@ -147,7 +146,7 @@ ImageList RID_SVTOOLS_IMAGELIST_SMALL
     };
     IdCount =
     {
-        56;
+        55;
     };
 };
 
@@ -161,7 +160,7 @@ ImageList RID_SVTOOLS_IMAGELIST_BIG_HIGHCONTRAST
     };
     IdCount =
     {
-        56 ;
+        55 ;
     };
 };
 
@@ -175,7 +174,7 @@ ImageList RID_SVTOOLS_IMAGELIST_SMALL_HIGHCONTRAST
     };
     IdCount =
     {
-        56;
+        55;
     };
 };
 
@@ -256,6 +255,13 @@ String STR_DESCRIPTION_SDRAW_DOC
     Text [ de ] = "%PRODUCTNAME Zeichnung" ;
     Text [ en-US ] = "%PRODUCTNAME drawing" ;
 };
+
+String STR_DESCRIPTION_SDATABASE_DOC
+{
+    Text [ de ] = "%PRODUCTNAME Datenbankdatei" ;
+    Text [ en-US ] = "%PRODUCTNAME database file" ;
+};
+
 String STR_DESCRIPTION_SCALC_DOC
 {
     Text [ de ] = "%PRODUCTNAME Tabelle" ;
