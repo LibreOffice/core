@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XAccessibleSelection.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change:$Date: 2003-04-28 12:22:42 $
+ *  last change:$Date: 2003-05-22 13:29:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ import com.sun.star.accessibility.XAccessible;
  *  <li><code>selectAccessibleChild()</code></li>
  *  <li><code>isAccessibleChildSelected()</code></li>
  *  <li><code>clearAccessibleSelection()</code></li>
- *  <li><code>selectAllAccessible()</code></li>
+ *  <li><code>selectAllAccessibleChildren()</code></li>
  *  <li><code>getSelectedAccessibleChildCount()</code></li>
  *  <li><code>getSelectedAccessibleChild()</code></li>
  *  <li><code>deselectAccessibleChild()</code></li>
@@ -228,7 +228,7 @@ public class _XAccessibleSelection extends MultiMethodTest {
 
         if (SelectableChildCount > 0) {
             try {
-                oObj.selectAllAccessible();
+                oObj.selectAllAccessibleChildren();
                 log.println("isAccessibleChildSelected(" + (childCount-1)+ ")? ");
                 isSelected = oObj.isAccessibleChildSelected(childCount - 1);
                 log.println(isSelected);
@@ -281,13 +281,13 @@ public class _XAccessibleSelection extends MultiMethodTest {
      * returns <code>true</code> for first and for last accessible child
      * or if multiselection is not allowed.
      */
-    public void _selectAllAccessible() {
+    public void _selectAllAccessibleChildren() {
         executeMethod("clearAccessibleSelection()");
 
-        log.println("selectAllAccessible...");
-        oObj.selectAllAccessible();
+        log.println("selectAllAccessibleChildren...");
+        oObj.selectAllAccessibleChildren();
 
-        // selectAllAccessible() call is oneway so we need
+        // selectAllAccessibleChildren() call is oneway so we need
         // some waiting
         shortWait();
 
@@ -314,7 +314,7 @@ public class _XAccessibleSelection extends MultiMethodTest {
             }
         }
 
-        tRes.tested("selectAllAccessible()", res);
+        tRes.tested("selectAllAccessibleChildren()", res);
     }
 
     /**
@@ -326,7 +326,7 @@ public class _XAccessibleSelection extends MultiMethodTest {
      * And if the method returns a zero after clearing selection.
      */
     public void _getSelectedAccessibleChildCount() {
-        requiredMethod("selectAllAccessible()");
+        requiredMethod("selectAllAccessibleChildren()");
 
         log.println("getSelectedAccessibleChildCount: ");
         int sCount = chkSelectable(tEnv.getTestObject());
@@ -437,7 +437,7 @@ public class _XAccessibleSelection extends MultiMethodTest {
             res &= true;
         }
         log.println("Selecting all accessible");
-        oObj.selectAllAccessible();
+        oObj.selectAllAccessibleChildren();
         selCount = oObj.getSelectedAccessibleChildCount();
         log.println("getSelectedAccessibleChildCount():" + selCount);
 
