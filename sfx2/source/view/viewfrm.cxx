@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.104 $
+ *  $Revision: 1.105 $
  *
- *  last change: $Author: rt $ $Date: 2005-02-02 14:03:36 $
+ *  last change: $Author: vg $ $Date: 2005-02-25 09:37:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4049,7 +4049,7 @@ SfxMacro* SfxViewFrame::GetRecordingMacro_Impl()
 void SfxViewFrame::UpdateDocument_Impl()
 {
     SfxObjectShell* pDoc = GetObjectShell();
-    if ( pDoc->HasMacros_Impl() )
+    if ( pDoc->HasMacrosLib_Impl() || pDoc->HasMacrosStor_Impl() )
         pDoc->AdjustMacroMode( String() );
     else
     {
