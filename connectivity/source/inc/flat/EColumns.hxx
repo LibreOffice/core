@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EColumns.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-12 11:53:30 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 15:39:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ namespace connectivity
         class OFlatColumns : public file::OColumns
         {
         protected:
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed > createObject(const ::rtl::OUString& _rName);
+            virtual sdbcx::ObjectType createObject(const ::rtl::OUString& _rName);
         public:
             OFlatColumns(file::OFileTable* _pTable,
                             ::osl::Mutex& _rMutex,
