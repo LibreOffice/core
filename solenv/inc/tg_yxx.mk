@@ -3,12 +3,10 @@
 $(YACCTARGET): $(YACCFILES)
     @echo ------------------------------
     @echo Making: $@
-#.IF "$(GUI)"!="UNX"
-    $(BISON) $(YACCFLAGS) $(YACCOUT)$/$(YACCTARGET) $(YACCFILES)
-#.ELSE
-#	$(BISON) $(YACCFLAGS) $(YACCFILES)
-#	mv y.tab.c $(INCCOM)/rscyacc.yxx
-#	mv y.tab.h $(INCCOM)/yytab.h
-#.ENDIF
+    $(BISON) $(YACCFLAGS) $(YACCTARGET) $(YACCFILES)
+# removing -f switch - avoid getting nothing when copying a file to itself
+    @+-$(COPY:s/-f//) $@.h $(INCCOM)$/$(@:b).hxx >& $(NULLDEV)
+    @+-$(COPY:s/-f//) $(@:d)$/$(@:b).hxx $(INCCOM)$/$(@:b).hxx >& $(NULLDEV)
+    +$(TYPE) $(INCCOM)$/$(@:b).hxx >& $(NULLDEV)
 .ENDIF
 
