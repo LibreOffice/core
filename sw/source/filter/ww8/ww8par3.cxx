@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par3.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:01:07 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 15:54:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,6 +239,9 @@
 #ifndef _FMTFLD_HXX
 #include <fmtfld.hxx>
 #endif
+#ifndef _FLDDROPDOWN_HXX
+#include <flddropdown.hxx>
+#endif
 
 #ifndef _WW8PAR_HXX
 #include "ww8par.hxx"
@@ -316,13 +319,24 @@ eF_ResT SwWW8ImplReader::Read_F_FormListBox( WW8FieldDesc* pF, String& rStr)
 {
     WW8FormulaListBox aFormula(*this);
 
-    if( !pFormImpl )
-        pFormImpl = new SwMSConvertControls(rDoc.GetDocShell(),pPaM);
-
     if (0x01 == rStr.GetChar(pF->nLCode-1))
         ImportFormulaControl(aFormula,pF->nSCode+pF->nLCode-1, WW8_CT_DROPDOWN);
 
-    pFormImpl->InsertFormula(aFormula);
+    SwDropDownField aFld(
+        (SwDropDownFieldType*)rDoc.GetSysFldType(RES_DROPDOWN));
+
+    aFld.SetName(aFormula.sTitle);
+
+    if (!aFormula.maListEntries.empty())
+    {
+        aFld.SetItems(aFormula.maListEntries);
+        int nIndex = aFormula.fDropdownIndex  < aFormula.maListEntries.size()
+            ? aFormula.fDropdownIndex : 0;
+        aFld.SetSelectedItem(aFormula.maListEntries[nIndex]);
+    }
+
+    rDoc.Insert(*pPaM, SwFmtFld(aFld));
+
     return FLD_OK;
 }
 
@@ -1848,6 +1862,8 @@ void WW8FormulaControl::FormulaRead(SwWw8ControlType nWhich,
         *pDataStream >> nHeaderByte;
         nType=1;
     }
+    fUnknown = nHeaderByte & 0x3;
+    fDropdownIndex = (nHeaderByte & 0xFC) >> 2;
     *pDataStream >> nField;
     fToolTip = nField & 0x01;
     fNoMark = (nField & 0x02)>>1;
@@ -1867,7 +1883,8 @@ void WW8FormulaControl::FormulaRead(SwWw8ControlType nWhich,
 
     if (nWhich == WW8_CT_CHECKBOX)
     {
-        *pDataStream >> nChecked;
+        *pDataStream >> nDefaultChecked;
+        nChecked = nDefaultChecked;
         //Don't know the details yet
         switch (nHeaderByte)
         {
@@ -2187,8 +2204,16 @@ sal_Bool WW8FormulaCheckBox::Import(const uno::Reference <
         aTmp <<= rtl::OUString(sName);
     xPropSet->setPropertyValue(C2U("Name"), aTmp );
 
+#if 0
+    aTmp <<= (sal_Int16)nDefaultChecked;
+    xPropSet->setPropertyValue(C2U("DefaultState"), aTmp);
+
+    aTmp <<= (sal_Int16)nChecked;
+    xPropSet->setPropertyValue(C2U("State"), aTmp);
+#else
     aTmp <<= (sal_Int16)nChecked;
     xPropSet->setPropertyValue(C2U("DefaultState"), aTmp);
+#endif
 
     if( sToolTip.Len() )
     {
