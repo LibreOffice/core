@@ -6,9 +6,9 @@
 '*
 '*  $RCSfile: sch_AccWall.xba,v $ 
 '*
-'*  $Revision: 1.1 $ 
+'*  $Revision: 1.2 $ 
 '*
-'*  last change:$Date: 2003-01-27 18:01:11 $ 
+'*  last change:$Date: 2003-05-27 12:13:37 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -87,7 +87,7 @@ On Error Goto ErrHndl
 	wait(1000)
     oWin = utils.at_getCurrentWindow(oDoc)
     xRoot = utils.at_getAccessibleObject(oWin)
-    oObj = utils.at_getAccessibleObjectForRole(xRoot, 111, "Wall")
+    oObj = utils.at_getAccessibleObjectForRole(xRoot, com.sun.star.accessibility.AccessibleRole.SHAPE, "Wall")
     
 Exit Sub
 ErrHndl:
