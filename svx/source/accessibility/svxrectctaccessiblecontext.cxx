@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxrectctaccessiblecontext.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: gt $ $Date: 2002-03-06 09:44:27 $
+ *  last change: $Author: rt $ $Date: 2002-03-08 13:11:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -937,7 +937,7 @@ sal_Int32 SAL_CALL SvxRectCtlChildAccessibleContext::getAccessibleChildCount( vo
     return 0;
 }
 
-uno::Reference< XAccessible > SAL_CALL SvxRectCtlChildAccessibleContext::getAccessibleChild( sal_Int32 nIndex ) throw ( uno::RuntimeException/*, lang::IndexOutOfBoundsException*/ )
+uno::Reference< XAccessible > SAL_CALL SvxRectCtlChildAccessibleContext::getAccessibleChild( sal_Int32 nIndex ) throw ( uno::RuntimeException, lang::IndexOutOfBoundsException )
 {
     throw lang::IndexOutOfBoundsException();
 }
