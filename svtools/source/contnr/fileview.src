@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-13 20:08:53 $
+ *  last change: $Author: kz $ $Date: 2001-08-16 20:07:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -321,7 +321,7 @@ Menu RID_FILEVIEW_CONTEXTMENU
             HelpId = HID_FILEVIEW_MENU_DELETE ;
             Text = "~Lцschen" ;
             Text[ English ] = "Delete" ;
-            Text[ english_us ] = "Delete";
+            Text[ english_us ] = "~Delete";
             Text[ portuguese ] = "~Eliminar";
             Text[ russian ] = "Удалить";
             Text[ greek ] = "Delete";
@@ -348,7 +348,7 @@ Menu RID_FILEVIEW_CONTEXTMENU
             HelpId = HID_FILEVIEW_MENU_RENAME ;
             Text = "~Umbenennen" ;
             Text[ English ] = "Rename" ;
-            Text[ english_us ] = "Rename";
+            Text[ english_us ] = "~Rename";
             Text[ portuguese ] = "~Mudar nome";
             Text[ russian ] = "Переименовать";
             Text[ greek ] = "Rename";
@@ -567,6 +567,7 @@ ModalDialog DLG_SVT_QUERYDELETE
         TabStop = TRUE ;
     };
 };
+
 
 
 
