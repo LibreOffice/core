@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hfedtdlg.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-07 15:15:28 $
+ *  last change: $Author: kz $ $Date: 2001-08-13 20:30:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1375,6 +1375,7 @@ TabPage RID_SCPAGE_HFED_FR < RID_HFBASE
         TabStop = TRUE ;
     };
 };
+
 
 
 
