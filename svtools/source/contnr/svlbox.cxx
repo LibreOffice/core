@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svlbox.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:57 $
+ *  last change: $Author: jp $ $Date: 2001-03-27 22:22:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -727,8 +727,9 @@ SvViewDataEntry::~SvViewDataEntry()
 DBG_NAME(SvLBox);
 
 
-__EXPORT SvLBox::SvLBox( Window* pParent, WinBits nWinStyle ) :
-    Control( pParent, nWinStyle | WB_CLIPCHILDREN )
+SvLBox::SvLBox( Window* pParent, WinBits nWinStyle  ) :
+    Control( pParent, nWinStyle | WB_CLIPCHILDREN ),
+    DropTargetHelper( this ), DragSourceHelper( this )
 {
     DBG_CTOR(SvLBox,0);
     nWindowStyle = nWinStyle;
@@ -755,8 +756,9 @@ __EXPORT SvLBox::SvLBox( Window* pParent, WinBits nWinStyle ) :
 #endif
 }
 
-__EXPORT SvLBox::SvLBox( Window* pParent, const ResId& rResId ) :
-    Control( pParent, rResId )
+SvLBox::SvLBox( Window* pParent, const ResId& rResId ) :
+    Control( pParent, rResId ),
+    DropTargetHelper( this ), DragSourceHelper( this )
 {
     DBG_CTOR(SvLBox,0);
     pTargetEntry = 0;
@@ -1688,4 +1690,27 @@ BOOL SvLBox::EditingCanceled() const
     return FALSE;
 }
 
+
+//JP 28.3.2001: new Drag & Drop API
+sal_Int8 SvLBox::AcceptDrop( const AcceptDropEvent& rEvt )
+{
+    DBG_ERROR( "must be implemented" );
+    return DND_ACTION_NONE;
+}
+
+sal_Int8 SvLBox::ExecuteDrop( const ExecuteDropEvent& rEvt )
+{
+    DBG_ERROR( "must be implemented" );
+    return DND_ACTION_NONE;
+}
+
+void SvLBox::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
+{
+    DBG_ERROR( "must be implemented" );
+}
+
+void SvLBox::DragFinished()
+{
+    DBG_ERROR( "must be implemented" );
+}
 
