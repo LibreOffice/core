@@ -2,9 +2,9 @@
  *
  *  $RCSfile: types.h,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-19 18:23:13 $
+ *  last change: $Author: hr $ $Date: 2004-03-09 11:18:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,8 +81,15 @@ typedef signed char         sal_Int8;
 typedef unsigned char       sal_uInt8;
 typedef signed short        sal_Int16;
 typedef unsigned short      sal_uInt16;
+
+/* #i8593#: On 64bit systems, use int for sal_*32 types. */
+#if __SIZEOFLONG == 8
+typedef signed int          sal_Int32;
+typedef unsigned int        sal_uInt32;
+#else
 typedef signed long         sal_Int32;
 typedef unsigned long       sal_uInt32;
+#endif
 
 #   if (_MSC_VER >= 1000)
    typedef __int64             sal_Int64;
@@ -92,9 +99,14 @@ typedef unsigned long       sal_uInt32;
 #  define SAL_CONST_UINT64(x) x##ui64
 
 #   elif defined(__SUNPRO_CC) || defined(__SUNPRO_C) || defined (__GNUC__) || defined (__MWERKS__) || defined(__hpux) || defined (sgi)
-   //  TODO:  64 bit logic needed.
+#if __SIZEOFLONG == 8
+   typedef long                sal_Int64;
+   typedef unsigned long       sal_uInt64;
+#else
    typedef long long           sal_Int64;
    typedef unsigned long long  sal_uInt64;
+#endif
+
    //  The following are macros that will add the 64 bit constant suffix.
 #  define SAL_CONST_INT64(x)  x##ll
 #  define SAL_CONST_UINT64(x) x##ull
