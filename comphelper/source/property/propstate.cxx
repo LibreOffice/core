@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propstate.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-09-29 11:28:15 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 14:25:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,91 +76,91 @@ namespace comphelper
 //==============================================================================
 
 //------------------------------------------------------------------------------
-staruno::Any SAL_CALL OPropertyStateHelper::queryInterface(const staruno::Type& _rType) throw(staruno::RuntimeException)
+ ::com::sun::star::uno::Any SAL_CALL OPropertyStateHelper::queryInterface(const  ::com::sun::star::uno::Type& _rType) throw( ::com::sun::star::uno::RuntimeException)
 {
-    staruno::Any aReturn;
+     ::com::sun::star::uno::Any aReturn;
     // ask the base class
     aReturn = OPropertySetHelper::queryInterface(_rType);
     // our own ifaces
     if (!aReturn.hasValue())
-        aReturn = ::cppu::queryInterface(_rType, static_cast<starbeans::XPropertyState*>(this));
+        aReturn = ::cppu::queryInterface(_rType, static_cast< ::com::sun::star::beans::XPropertyState*>(this));
 
     return aReturn;
 }
 
 //------------------------------------------------------------------------------
-staruno::Sequence<staruno::Type> OPropertyStateHelper::getTypes() throw(staruno::RuntimeException)
+ ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> OPropertyStateHelper::getTypes() throw( ::com::sun::star::uno::RuntimeException)
 {
-    static staruno::Sequence<staruno::Type> aTypes;
+    static  ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> aTypes;
     if (!aTypes.getLength())
     {
         aTypes.realloc(4);
-        staruno::Type* pTypes = aTypes.getArray();
+         ::com::sun::star::uno::Type* pTypes = aTypes.getArray();
         // base class types
-        pTypes[0] = getCppuType((staruno::Reference<starbeans::XPropertySet>*)NULL);
-        pTypes[1] = getCppuType((staruno::Reference<starbeans::XMultiPropertySet>*)NULL);
-        pTypes[2] = getCppuType((staruno::Reference<starbeans::XFastPropertySet>*)NULL);
+        pTypes[0] = getCppuType(( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>*)NULL);
+        pTypes[1] = getCppuType(( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XMultiPropertySet>*)NULL);
+        pTypes[2] = getCppuType(( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XFastPropertySet>*)NULL);
         // my own type
-        pTypes[3] = getCppuType((staruno::Reference<starbeans::XPropertyState>*)NULL);
+        pTypes[3] = getCppuType(( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyState>*)NULL);
     }
     return aTypes;
 }
 
 //------------------------------------------------------------------------------
-void OPropertyStateHelper::firePropertyChange(sal_Int32 nHandle, const staruno::Any& aNewValue, const staruno::Any& aOldValue)
+void OPropertyStateHelper::firePropertyChange(sal_Int32 nHandle, const  ::com::sun::star::uno::Any& aNewValue, const  ::com::sun::star::uno::Any& aOldValue)
 {
     fire(&nHandle, &aNewValue, &aOldValue, 1, sal_False);
 }
 
 // XPropertyState
 //------------------------------------------------------------------------------
-starbeans::PropertyState SAL_CALL OPropertyStateHelper::getPropertyState(const ::rtl::OUString& _rsName) throw(starbeans::UnknownPropertyException, staruno::RuntimeException)
+ ::com::sun::star::beans::PropertyState SAL_CALL OPropertyStateHelper::getPropertyState(const ::rtl::OUString& _rsName) throw( ::com::sun::star::beans::UnknownPropertyException,  ::com::sun::star::uno::RuntimeException)
 {
     cppu::IPropertyArrayHelper& rPH = getInfoHelper();
     sal_Int32 nHandle = rPH.getHandleByName(_rsName);
 
     if (nHandle == -1)
-        throw starbeans::UnknownPropertyException();
+        throw  ::com::sun::star::beans::UnknownPropertyException();
 
     return getPropertyStateByHandle(nHandle);
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL OPropertyStateHelper::setPropertyToDefault(const ::rtl::OUString& _rsName) throw(starbeans::UnknownPropertyException, staruno::RuntimeException)
+void SAL_CALL OPropertyStateHelper::setPropertyToDefault(const ::rtl::OUString& _rsName) throw( ::com::sun::star::beans::UnknownPropertyException,  ::com::sun::star::uno::RuntimeException)
 {
     cppu::IPropertyArrayHelper& rPH = getInfoHelper();
     sal_Int32 nHandle = rPH.getHandleByName(_rsName);
 
     if (nHandle == -1)
-        throw starbeans::UnknownPropertyException();
+        throw  ::com::sun::star::beans::UnknownPropertyException();
 
     setPropertyToDefaultByHandle(nHandle);
 }
 
 //------------------------------------------------------------------------------
-staruno::Any SAL_CALL OPropertyStateHelper::getPropertyDefault(const ::rtl::OUString& _rsName) throw(starbeans::UnknownPropertyException, starlang::WrappedTargetException, staruno::RuntimeException)
+ ::com::sun::star::uno::Any SAL_CALL OPropertyStateHelper::getPropertyDefault(const ::rtl::OUString& _rsName) throw( ::com::sun::star::beans::UnknownPropertyException,  ::com::sun::star::lang::WrappedTargetException,  ::com::sun::star::uno::RuntimeException)
 {
     cppu::IPropertyArrayHelper& rPH = getInfoHelper();
     sal_Int32 nHandle = rPH.getHandleByName(_rsName);
 
     if (nHandle == -1)
-        throw starbeans::UnknownPropertyException();
+        throw  ::com::sun::star::beans::UnknownPropertyException();
 
     return getPropertyDefaultByHandle(nHandle);
 }
 
 //------------------------------------------------------------------------------
-staruno::Sequence<starbeans::PropertyState> SAL_CALL OPropertyStateHelper::getPropertyStates(const staruno::Sequence< ::rtl::OUString >& _rPropertyNames) throw(starbeans::UnknownPropertyException, staruno::RuntimeException)
+ ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyState> SAL_CALL OPropertyStateHelper::getPropertyStates(const  ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rPropertyNames) throw( ::com::sun::star::beans::UnknownPropertyException,  ::com::sun::star::uno::RuntimeException)
 {
     sal_Int32 nLen = _rPropertyNames.getLength();
-    staruno::Sequence<starbeans::PropertyState> aRet(nLen);
-    starbeans::PropertyState* pValues = aRet.getArray();
+     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyState> aRet(nLen);
+     ::com::sun::star::beans::PropertyState* pValues = aRet.getArray();
     const ::rtl::OUString* pNames = _rPropertyNames.getConstArray();
 
     cppu::IPropertyArrayHelper& rHelper = getInfoHelper();
 
-    staruno::Sequence<starbeans::Property> aProps = rHelper.getProperties();
-    const starbeans::Property* pProps = aProps.getConstArray();
+     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property> aProps = rHelper.getProperties();
+    const  ::com::sun::star::beans::Property* pProps = aProps.getConstArray();
     sal_Int32 nPropCount       = aProps.getLength();
 
     osl::MutexGuard aGuard(rBHelper.rMutex);
@@ -180,9 +180,9 @@ staruno::Sequence<starbeans::PropertyState> SAL_CALL OPropertyStateHelper::getPr
 }
 
 //------------------------------------------------------------------------------
-starbeans::PropertyState OPropertyStateHelper::getPropertyStateByHandle(sal_Int32 nHandle)
+ ::com::sun::star::beans::PropertyState OPropertyStateHelper::getPropertyStateByHandle(sal_Int32 nHandle)
 {
-    return starbeans::PropertyState_DIRECT_VALUE;
+    return  ::com::sun::star::beans::PropertyState_DIRECT_VALUE;
 }
 
 //------------------------------------------------------------------------------
@@ -191,9 +191,9 @@ void OPropertyStateHelper::setPropertyToDefaultByHandle(sal_Int32 nHandle)
 }
 
 //------------------------------------------------------------------------------
-staruno::Any OPropertyStateHelper::getPropertyDefaultByHandle( sal_Int32 nHandle ) const
+ ::com::sun::star::uno::Any OPropertyStateHelper::getPropertyDefaultByHandle( sal_Int32 nHandle ) const
 {
-    return staruno::Any();
+    return  ::com::sun::star::uno::Any();
 }
 
 //.........................................................................

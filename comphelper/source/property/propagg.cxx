@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propagg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-09-29 11:28:15 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 14:25:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,17 +88,17 @@ namespace comphelper
 
 //------------------------------------------------------------------------------
 OPropertyArrayAggregationHelper::OPropertyArrayAggregationHelper(
-                                    const staruno::Sequence<starbeans::Property>& _rProperties,
-                                    const staruno::Sequence<starbeans::Property>& _rAggProperties,
+                                    const  ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property>& _rProperties,
+                                    const  ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property>& _rAggProperties,
                                     IPropertyInfoService* _pInfoService,
                                     sal_Int32 _nFirstAggregateId)
                                 :m_aProperties(_rProperties)
 {
     m_aProperties.realloc(_rProperties.getLength() + _rAggProperties.getLength());
 
-    const starbeans::Property* pAggregateProps = _rAggProperties.getConstArray();
-    const starbeans::Property* pDelegateProps   = _rProperties.getConstArray();
-    starbeans::Property* pProps = m_aProperties.getArray();
+    const  ::com::sun::star::beans::Property* pAggregateProps = _rAggProperties.getConstArray();
+    const  ::com::sun::star::beans::Property* pDelegateProps    = _rProperties.getConstArray();
+     ::com::sun::star::beans::Property* pProps = m_aProperties.getArray();
 
     // create the map for the delegator properties
     sal_Int32 i = 0;
@@ -121,7 +121,7 @@ OPropertyArrayAggregationHelper::OPropertyArrayAggregationHelper(
             nHandle = nAggregateHandle++;
         else
         {   // check if we alread have a property with the given handle
-            const starbeans::Property* pPropsTilNow = m_aProperties.getConstArray();
+            const  ::com::sun::star::beans::Property* pPropsTilNow = m_aProperties.getConstArray();
             for (sal_Int32 k=0; k<i; ++k, ++pPropsTilNow)
                 if (pPropsTilNow->Handle == nHandle)
                 {   // conflicts -> use another one (which we don't check anymore, assuming _nFirstAggregateId was large enough)
@@ -136,7 +136,7 @@ OPropertyArrayAggregationHelper::OPropertyArrayAggregationHelper(
     pProps = m_aProperties.getArray();  // reset, needed again below
 
     // sortieren der Properties nach Namen
-    qsort((void*) pProps, m_aProperties.getLength(), sizeof(starbeans::Property), &PropertyCompare);
+    qsort((void*) pProps, m_aProperties.getLength(), sizeof( ::com::sun::star::beans::Property), &PropertyCompare);
 
     // Positionen in der Map abgleichen
     for (i = 0; i < m_aProperties.getLength(); ++i, ++pProps)
@@ -144,13 +144,13 @@ OPropertyArrayAggregationHelper::OPropertyArrayAggregationHelper(
 }
 
 //------------------------------------------------------------------
-starbeans::Property OPropertyArrayAggregationHelper::getPropertyByName(const ::rtl::OUString& _rPropertyName)
-                                throw(starbeans::UnknownPropertyException)
+ ::com::sun::star::beans::Property OPropertyArrayAggregationHelper::getPropertyByName(const ::rtl::OUString& _rPropertyName)
+                                throw( ::com::sun::star::beans::UnknownPropertyException)
 {
-    starbeans::Property* pProperty = findPropertyByName(_rPropertyName);
+     ::com::sun::star::beans::Property* pProperty = findPropertyByName(_rPropertyName);
 
     if (!pProperty)
-        throw starbeans::UnknownPropertyException();
+        throw  ::com::sun::star::beans::UnknownPropertyException();
 
     return *pProperty;
 }
@@ -162,23 +162,23 @@ sal_Bool OPropertyArrayAggregationHelper::hasPropertyByName(const ::rtl::OUStrin
 }
 
 //------------------------------------------------------------------------------
-starbeans::Property* OPropertyArrayAggregationHelper::findPropertyByName(const ::rtl::OUString& _rName) const
+ ::com::sun::star::beans::Property* OPropertyArrayAggregationHelper::findPropertyByName(const ::rtl::OUString& _rName) const
 {
-    starbeans::Property aSearch;
+     ::com::sun::star::beans::Property aSearch;
     aSearch.Name = _rName;
 
-    const starbeans::Property* pAry = m_aProperties.getConstArray();
-    return (starbeans::Property*) bsearch(&aSearch,
+    const  ::com::sun::star::beans::Property* pAry = m_aProperties.getConstArray();
+    return ( ::com::sun::star::beans::Property*) bsearch(&aSearch,
                                 (void*)pAry,
                                  m_aProperties.getLength(),
-                                 sizeof(starbeans::Property),
+                                 sizeof( ::com::sun::star::beans::Property),
                                  &PropertyCompare);
 }
 
 //------------------------------------------------------------------------------
 sal_Int32 OPropertyArrayAggregationHelper::getHandleByName(const ::rtl::OUString& _rPropertyName)
 {
-    starbeans::Property* pProperty = findPropertyByName(_rPropertyName);
+     ::com::sun::star::beans::Property* pProperty = findPropertyByName(_rPropertyName);
     return pProperty ? pProperty->Handle : -1;
 }
 
@@ -190,7 +190,7 @@ sal_Bool OPropertyArrayAggregationHelper::fillPropertyMembersByHandle(
     sal_Bool bRet = i != m_aPropertyAccessors.end();
     if (bRet)
     {
-        const starbeans::Property& rProperty = m_aProperties.getConstArray()[(*i).second.nPos];
+        const  ::com::sun::star::beans::Property& rProperty = m_aProperties.getConstArray()[(*i).second.nPos];
         if (_pPropName)
             *_pPropName = rProperty.Name;
         if (_pAttributes)
@@ -211,7 +211,7 @@ sal_Bool OPropertyArrayAggregationHelper::fillAggregatePropertyInfoByHandle(
             *_pOriginalHandle = (*i).second.nOriginalHandle;
         if (_pPropName)
         {
-            const starbeans::Property& rProperty = m_aProperties.getConstArray()[(*i).second.nPos];
+            const  ::com::sun::star::beans::Property& rProperty = m_aProperties.getConstArray()[(*i).second.nPos];
             *_pPropName = rProperty.Name;
         }
     }
@@ -220,7 +220,7 @@ sal_Bool OPropertyArrayAggregationHelper::fillAggregatePropertyInfoByHandle(
 
 
 //------------------------------------------------------------------------------
-staruno::Sequence<starbeans::Property> OPropertyArrayAggregationHelper::getProperties()
+ ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property> OPropertyArrayAggregationHelper::getProperties()
 {
     return m_aProperties;
 }
@@ -228,14 +228,14 @@ staruno::Sequence<starbeans::Property> OPropertyArrayAggregationHelper::getPrope
 
 //------------------------------------------------------------------------------
 sal_Int32 OPropertyArrayAggregationHelper::fillHandles(
-        sal_Int32* _pHandles, const staruno::Sequence< ::rtl::OUString >& _rPropNames )
+        sal_Int32* _pHandles, const  ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rPropNames )
 {
     sal_Int32 nHitCount = 0;
     const ::rtl::OUString* pReqProps = _rPropNames.getConstArray();
     sal_Int32 nReqLen = _rPropNames.getLength();
 
-    const starbeans::Property* pCur = m_aProperties.getConstArray();
-    const starbeans::Property* pEnd = m_aProperties.getConstArray() + m_aProperties.getLength();
+    const  ::com::sun::star::beans::Property* pCur = m_aProperties.getConstArray();
+    const  ::com::sun::star::beans::Property* pEnd = m_aProperties.getConstArray() + m_aProperties.getLength();
 
     for( sal_Int32 i = 0; i < nReqLen; ++i )
     {
@@ -269,8 +269,8 @@ sal_Int32 OPropertyArrayAggregationHelper::fillHandles(
         {
             // binary search is better
             sal_Int32   nCompVal = 1;
-            const starbeans::Property*  pOldEnd = pEnd--;
-            const starbeans::Property*  pMid = pCur;
+            const  ::com::sun::star::beans::Property*  pOldEnd = pEnd--;
+            const  ::com::sun::star::beans::Property*  pMid = pCur;
 
             while( nCompVal != 0 && pCur <= pEnd )
             {
@@ -311,17 +311,17 @@ sal_Int32 OPropertyArrayAggregationHelper::fillHandles(
 //==================================================================
 
 //------------------------------------------------------------------------------
-staruno::Any SAL_CALL OPropertySetAggregationHelper::queryInterface(const staruno::Type& _rType) throw(staruno::RuntimeException)
+ ::com::sun::star::uno::Any SAL_CALL OPropertySetAggregationHelper::queryInterface(const  ::com::sun::star::uno::Type& _rType) throw( ::com::sun::star::uno::RuntimeException)
 {
-    staruno::Any aReturn;
+     ::com::sun::star::uno::Any aReturn;
 
     aReturn = OPropertyStateHelper::queryInterface(_rType);
 
     if (!aReturn.hasValue())
         aReturn = cppu::queryInterface(_rType
-        ,static_cast<starbeans::XPropertiesChangeListener*>(this)
-        ,static_cast<starbeans::XVetoableChangeListener*>(this)
-        ,static_cast<starlang::XEventListener*>(static_cast<starbeans::XPropertiesChangeListener*>(this))
+        ,static_cast< ::com::sun::star::beans::XPropertiesChangeListener*>(this)
+        ,static_cast< ::com::sun::star::beans::XVetoableChangeListener*>(this)
+        ,static_cast< ::com::sun::star::lang::XEventListener*>(static_cast< ::com::sun::star::beans::XPropertiesChangeListener*>(this))
         );
 
     return aReturn;
@@ -344,7 +344,7 @@ void OPropertySetAggregationHelper::disposing()
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL OPropertySetAggregationHelper::disposing(const starlang::EventObject& _rSource) throw (staruno::RuntimeException)
+void SAL_CALL OPropertySetAggregationHelper::disposing(const  ::com::sun::star::lang::EventObject& _rSource) throw ( ::com::sun::star::uno::RuntimeException)
 {
     OSL_ENSHURE(m_xAggregateSet.is(), "OPropertySetAggregationHelper::disposing : don't have an aggregate anymore !");
     if (_rSource.Source == m_xAggregateSet)
@@ -352,7 +352,7 @@ void SAL_CALL OPropertySetAggregationHelper::disposing(const starlang::EventObje
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL OPropertySetAggregationHelper::propertiesChange(const staruno::Sequence<starbeans::PropertyChangeEvent>& _rEvents) throw(staruno::RuntimeException)
+void SAL_CALL OPropertySetAggregationHelper::propertiesChange(const  ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyChangeEvent>& _rEvents) throw( ::com::sun::star::uno::RuntimeException)
 {
     OSL_ENSHURE(m_xAggregateSet.is(), "OPropertySetAggregationHelper::propertiesChange : have no aggregate !");
 
@@ -361,7 +361,7 @@ void SAL_CALL OPropertySetAggregationHelper::propertiesChange(const staruno::Seq
 
     if (1 == nLen)
     {
-        const starbeans::PropertyChangeEvent& evt = _rEvents.getConstArray()[0];
+        const  ::com::sun::star::beans::PropertyChangeEvent& evt = _rEvents.getConstArray()[0];
         OSL_ENSHURE(evt.PropertyName.getLength() > 0, "OPropertySetAggregationHelper::propertiesChange : invalid event !");
             // we had a bug where this assertion would have us saved a whole day :) (72514)
         sal_Int32 nHandle = rPH.getHandleByName( evt.PropertyName );
@@ -372,10 +372,10 @@ void SAL_CALL OPropertySetAggregationHelper::propertiesChange(const staruno::Seq
     else
     {
         sal_Int32* pHandles = new sal_Int32[nLen];
-        staruno::Any* pNewValues = new staruno::Any[nLen];
-        staruno::Any* pOldValues = new staruno::Any[nLen];
+         ::com::sun::star::uno::Any* pNewValues = new  ::com::sun::star::uno::Any[nLen];
+         ::com::sun::star::uno::Any* pOldValues = new  ::com::sun::star::uno::Any[nLen];
 
-        const starbeans::PropertyChangeEvent* pEvents = _rEvents.getConstArray();
+        const  ::com::sun::star::beans::PropertyChangeEvent* pEvents = _rEvents.getConstArray();
         sal_Int32 nDest = 0;
         for (sal_Int32 nSource=0; nSource<nLen; ++nSource, ++pEvents)
         {
@@ -399,7 +399,7 @@ void SAL_CALL OPropertySetAggregationHelper::propertiesChange(const staruno::Seq
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL OPropertySetAggregationHelper::vetoableChange(const starbeans::PropertyChangeEvent& _rEvent) throw(starbeans::PropertyVetoException, staruno::RuntimeException)
+void SAL_CALL OPropertySetAggregationHelper::vetoableChange(const  ::com::sun::star::beans::PropertyChangeEvent& _rEvent) throw( ::com::sun::star::beans::PropertyVetoException,  ::com::sun::star::uno::RuntimeException)
 {
     OSL_ENSHURE(m_xAggregateSet.is(), "OPropertySetAggregationHelper::vetoableChange : have no aggregate !");
 
@@ -410,8 +410,8 @@ void SAL_CALL OPropertySetAggregationHelper::vetoableChange(const starbeans::Pro
 }
 
 //------------------------------------------------------------------------------
-void OPropertySetAggregationHelper::setAggregation(const staruno::Reference< staruno::XInterface >& _rxDelegate)
-        throw( starlang::IllegalArgumentException )
+void OPropertySetAggregationHelper::setAggregation(const  ::com::sun::star::uno::Reference<  ::com::sun::star::uno::XInterface >& _rxDelegate)
+        throw(  ::com::sun::star::lang::IllegalArgumentException )
 {
     osl::MutexGuard aGuard(rBHelper.rMutex);
 
@@ -422,15 +422,15 @@ void OPropertySetAggregationHelper::setAggregation(const staruno::Reference< sta
         m_bListening = sal_False;
     }
 
-    m_xAggregateState       = staruno::Reference<starbeans::XPropertyState>(_rxDelegate, staruno::UNO_QUERY);
-    m_xAggregateSet         = staruno::Reference<starbeans::XPropertySet>(_rxDelegate, staruno::UNO_QUERY);
-    m_xAggregateMultiSet    = staruno::Reference<starbeans::XMultiPropertySet>(_rxDelegate, staruno::UNO_QUERY);
-    m_xAggregateFastSet     = staruno::Reference<starbeans::XFastPropertySet>(_rxDelegate, staruno::UNO_QUERY);
+    m_xAggregateState       =  ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyState>(_rxDelegate,  ::com::sun::star::uno::UNO_QUERY);
+    m_xAggregateSet         =  ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>(_rxDelegate,  ::com::sun::star::uno::UNO_QUERY);
+    m_xAggregateMultiSet    =  ::com::sun::star::uno::Reference< ::com::sun::star::beans::XMultiPropertySet>(_rxDelegate,  ::com::sun::star::uno::UNO_QUERY);
+    m_xAggregateFastSet     =  ::com::sun::star::uno::Reference< ::com::sun::star::beans::XFastPropertySet>(_rxDelegate,  ::com::sun::star::uno::UNO_QUERY);
 
     // must support XPropertySet and XMultiPropertySet
     if (m_xAggregateSet.is() && !m_xAggregateMultiSet.is())
     {
-        throw starlang::IllegalArgumentException();
+        throw  ::com::sun::star::lang::IllegalArgumentException();
     }
 }
 
@@ -442,7 +442,7 @@ void OPropertySetAggregationHelper::startListening()
         osl::MutexGuard aGuard(rBHelper.rMutex);
 
         // als einziger Listener anmelden
-        staruno::Sequence< ::rtl::OUString > aPropertyNames;
+         ::com::sun::star::uno::Sequence< ::rtl::OUString > aPropertyNames;
         m_xAggregateMultiSet->addPropertiesChangeListener(aPropertyNames, this);
         m_xAggregateSet->addVetoableChangeListener(::rtl::OUString(), this);
 
@@ -452,8 +452,8 @@ void OPropertySetAggregationHelper::startListening()
 
 //------------------------------------------------------------------------------
 void SAL_CALL OPropertySetAggregationHelper::addVetoableChangeListener(const ::rtl::OUString& _rPropertyName,
-                                                                       const staruno::Reference<starbeans::XVetoableChangeListener>& _rxListener)
-                                                                       throw(starbeans::UnknownPropertyException, starlang::WrappedTargetException, staruno::RuntimeException)
+                                                                       const  ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener>& _rxListener)
+                                                                       throw( ::com::sun::star::beans::UnknownPropertyException,  ::com::sun::star::lang::WrappedTargetException,  ::com::sun::star::uno::RuntimeException)
 {
     OPropertySetHelper::addVetoableChangeListener(_rPropertyName, _rxListener);
     if (!m_bListening)
@@ -462,8 +462,8 @@ void SAL_CALL OPropertySetAggregationHelper::addVetoableChangeListener(const ::r
 
 //------------------------------------------------------------------------------
 void SAL_CALL OPropertySetAggregationHelper::addPropertyChangeListener(const ::rtl::OUString& _rPropertyName,
-                                                                       const staruno::Reference<starbeans::XPropertyChangeListener>& _rxListener)
-                                                                       throw(starbeans::UnknownPropertyException, starlang::WrappedTargetException, staruno::RuntimeException)
+                                                                       const  ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener>& _rxListener)
+                                                                       throw( ::com::sun::star::beans::UnknownPropertyException,  ::com::sun::star::lang::WrappedTargetException,  ::com::sun::star::uno::RuntimeException)
 {
     OPropertySetHelper::addPropertyChangeListener(_rPropertyName, _rxListener);
     if (!m_bListening)
@@ -471,9 +471,9 @@ void SAL_CALL OPropertySetAggregationHelper::addPropertyChangeListener(const ::r
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL OPropertySetAggregationHelper::addPropertiesChangeListener(const staruno::Sequence< ::rtl::OUString >& _rPropertyNames,
-                                                                         const staruno::Reference<starbeans::XPropertiesChangeListener>& _rxListener)
-                                                                         throw(staruno::RuntimeException)
+void SAL_CALL OPropertySetAggregationHelper::addPropertiesChangeListener(const  ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rPropertyNames,
+                                                                         const  ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertiesChangeListener>& _rxListener)
+                                                                         throw( ::com::sun::star::uno::RuntimeException)
 {
     OPropertySetHelper::addPropertiesChangeListener(_rPropertyNames, _rxListener);
     if (!m_bListening)
@@ -490,10 +490,10 @@ sal_Int32 OPropertySetAggregationHelper::getOriginalHandle(sal_Int32 nHandle) co
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL OPropertySetAggregationHelper::setFastPropertyValue(sal_Int32 _nHandle, const staruno::Any& _rValue)
-        throw(  starbeans::UnknownPropertyException, starbeans::PropertyVetoException,
-                starlang::IllegalArgumentException, starlang::WrappedTargetException,
-                staruno::RuntimeException)
+void SAL_CALL OPropertySetAggregationHelper::setFastPropertyValue(sal_Int32 _nHandle, const  ::com::sun::star::uno::Any& _rValue)
+        throw(   ::com::sun::star::beans::UnknownPropertyException,  ::com::sun::star::beans::PropertyVetoException,
+                 ::com::sun::star::lang::IllegalArgumentException,  ::com::sun::star::lang::WrappedTargetException,
+                 ::com::sun::star::uno::RuntimeException)
 {
     OPropertyArrayAggregationHelper& rPH = (OPropertyArrayAggregationHelper&)getInfoHelper();
     ::rtl::OUString aPropName;
@@ -510,7 +510,7 @@ void SAL_CALL OPropertySetAggregationHelper::setFastPropertyValue(sal_Int32 _nHa
 }
 
 //------------------------------------------------------------------------------
-void OPropertySetAggregationHelper::getFastPropertyValue(staruno::Any& rValue, sal_Int32 nHandle) const
+void OPropertySetAggregationHelper::getFastPropertyValue( ::com::sun::star::uno::Any& rValue, sal_Int32 nHandle) const
 {
     OPropertyArrayAggregationHelper& rPH = (OPropertyArrayAggregationHelper&)const_cast<OPropertySetAggregationHelper*>(this)->getInfoHelper();
     ::rtl::OUString aPropName;
@@ -526,15 +526,15 @@ void OPropertySetAggregationHelper::getFastPropertyValue(staruno::Any& rValue, s
 }
 
 //------------------------------------------------------------------------------
-staruno::Any SAL_CALL OPropertySetAggregationHelper::getFastPropertyValue(sal_Int32 nHandle)
-        throw(  starbeans::UnknownPropertyException,
-                starlang::WrappedTargetException,
-                staruno::RuntimeException)
+ ::com::sun::star::uno::Any SAL_CALL OPropertySetAggregationHelper::getFastPropertyValue(sal_Int32 nHandle)
+        throw(   ::com::sun::star::beans::UnknownPropertyException,
+                 ::com::sun::star::lang::WrappedTargetException,
+                 ::com::sun::star::uno::RuntimeException)
 {
     OPropertyArrayAggregationHelper& rPH = (OPropertyArrayAggregationHelper&)getInfoHelper();
     ::rtl::OUString aPropName;
     sal_Int32   nOriginalHandle = -1;
-    staruno::Any  aValue;
+     ::com::sun::star::uno::Any  aValue;
 
     if (rPH.fillAggregatePropertyInfoByHandle(&aPropName, &nOriginalHandle, nHandle))
     {
@@ -551,12 +551,12 @@ staruno::Any SAL_CALL OPropertySetAggregationHelper::getFastPropertyValue(sal_In
 
 //------------------------------------------------------------------------------
 void SAL_CALL OPropertySetAggregationHelper::setPropertyValues(
-                const staruno::Sequence< ::rtl::OUString >& _rPropertyNames,
-                const staruno::Sequence<staruno::Any>& _rValues)
-                throw(  starbeans::PropertyVetoException,
-                        starlang::IllegalArgumentException,
-                        starlang::WrappedTargetException,
-                        staruno::RuntimeException)
+                const  ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rPropertyNames,
+                const  ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any>& _rValues)
+                throw(   ::com::sun::star::beans::PropertyVetoException,
+                         ::com::sun::star::lang::IllegalArgumentException,
+                         ::com::sun::star::lang::WrappedTargetException,
+                         ::com::sun::star::uno::RuntimeException)
 {
     OSL_ENSHURE( !rBHelper.bInDispose, "OPropertySetAggregationHelper::setPropertyValues : do not use within the dispose call !");
     OSL_ENSHURE( !rBHelper.bDisposed, "OPropertySetAggregationHelper::setPropertyValues : object is disposed" );
@@ -569,7 +569,7 @@ void SAL_CALL OPropertySetAggregationHelper::setPropertyValues(
     else
     {
         // gehoeren die Properties alle zum aggregierten Object ?
-        staruno::Reference<starbeans::XPropertySetInfo> xInfo(m_xAggregateSet->getPropertySetInfo());
+         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo> xInfo(m_xAggregateSet->getPropertySetInfo());
         const ::rtl::OUString* pNames = _rPropertyNames.getConstArray();
         sal_Int32 nAggCount(0);
         sal_Int32 nLen(_rPropertyNames.getLength());
@@ -590,22 +590,22 @@ void SAL_CALL OPropertySetAggregationHelper::setPropertyValues(
         // mixed
         else
         {
-            const staruno::Any* pValues = _rValues.getConstArray();
-            staruno::Any* pConvertedValues = NULL;
-            staruno::Any* pOldValues = NULL;
+            const  ::com::sun::star::uno::Any* pValues = _rValues.getConstArray();
+             ::com::sun::star::uno::Any* pConvertedValues = NULL;
+             ::com::sun::star::uno::Any* pOldValues = NULL;
             sal_Int32*  pHandles = NULL;
 
             try
             {
                 // dividing the Names and _rValues
-                staruno::Sequence< ::rtl::OUString > AggPropertyNames(nAggCount);
+                 ::com::sun::star::uno::Sequence< ::rtl::OUString > AggPropertyNames(nAggCount);
                 ::rtl::OUString* pAggNames = AggPropertyNames.getArray();
-                staruno::Sequence<staruno::Any>  AggValues(nAggCount);
-                staruno::Any* pAggValues = AggValues.getArray();
-                staruno::Sequence< ::rtl::OUString > OwnPropertyNames(nLen - nAggCount);
+                 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any>  AggValues(nAggCount);
+                 ::com::sun::star::uno::Any* pAggValues = AggValues.getArray();
+                 ::com::sun::star::uno::Sequence< ::rtl::OUString > OwnPropertyNames(nLen - nAggCount);
                 ::rtl::OUString* pOwnNames = AggPropertyNames.getArray();
-                staruno::Sequence<staruno::Any>  OwnValues(nLen - nAggCount);
-                staruno::Any* pOwnValues = OwnValues.getArray();
+                 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any>  OwnValues(nLen - nAggCount);
+                 ::com::sun::star::uno::Any* pOwnValues = OwnValues.getArray();
 
                 for (sal_Int32 i = 0, a = 0, o = 0; i < nLen; ++i)
                 {
@@ -631,8 +631,8 @@ void SAL_CALL OPropertySetAggregationHelper::setPropertyValues(
                 if (nHitCount != 0)
                 {
 
-                    staruno::Any * pConvertedValues = new staruno::Any[ nHitCount ];
-                    staruno::Any * pOldValues = new staruno::Any[ nHitCount ];
+                     ::com::sun::star::uno::Any * pConvertedValues = new  ::com::sun::star::uno::Any[ nHitCount ];
+                     ::com::sun::star::uno::Any * pOldValues = new  ::com::sun::star::uno::Any[ nHitCount ];
                     nHitCount = 0;
                     sal_Int32 i;
 
@@ -645,8 +645,8 @@ void SAL_CALL OPropertySetAggregationHelper::setPropertyValues(
                             {
                                 sal_Int16 nAttributes;
                                 rPH.fillPropertyMembersByHandle( NULL, &nAttributes, pHandles[i] );
-                                if( nAttributes & starbeans::PropertyAttribute::READONLY )
-                                    throw starbeans::PropertyVetoException();
+                                if( nAttributes &  ::com::sun::star::beans::PropertyAttribute::READONLY )
+                                    throw  ::com::sun::star::beans::PropertyVetoException();
                                 // Will the property change?
                                 if( convertFastPropertyValue( pConvertedValues[ nHitCount ], pOldValues[nHitCount],
                                                             pHandles[i], pOwnValues[i] ) )
@@ -702,15 +702,15 @@ void SAL_CALL OPropertySetAggregationHelper::setPropertyValues(
 
 // XPropertyState
 //------------------------------------------------------------------------------
-starbeans::PropertyState SAL_CALL OPropertySetAggregationHelper::getPropertyState(const ::rtl::OUString& _rPropertyName)
-            throw(starbeans::UnknownPropertyException, staruno::RuntimeException)
+ ::com::sun::star::beans::PropertyState SAL_CALL OPropertySetAggregationHelper::getPropertyState(const ::rtl::OUString& _rPropertyName)
+            throw( ::com::sun::star::beans::UnknownPropertyException,  ::com::sun::star::uno::RuntimeException)
 {
     OPropertyArrayAggregationHelper& rPH = (OPropertyArrayAggregationHelper&)getInfoHelper();
     sal_Int32 nHandle = rPH.getHandleByName( _rPropertyName );
 
     if (nHandle == -1)
     {
-        throw starbeans::UnknownPropertyException();
+        throw  ::com::sun::star::beans::UnknownPropertyException();
     }
 
     ::rtl::OUString aPropName;
@@ -720,7 +720,7 @@ starbeans::PropertyState SAL_CALL OPropertySetAggregationHelper::getPropertyStat
         if (m_xAggregateState.is())
             return m_xAggregateState->getPropertyState(_rPropertyName);
         else
-            return starbeans::PropertyState_DIRECT_VALUE;
+            return  ::com::sun::star::beans::PropertyState_DIRECT_VALUE;
     }
     else
         return getPropertyStateByHandle(nHandle);
@@ -728,13 +728,13 @@ starbeans::PropertyState SAL_CALL OPropertySetAggregationHelper::getPropertyStat
 
 //------------------------------------------------------------------------------
 void SAL_CALL OPropertySetAggregationHelper::setPropertyToDefault(const ::rtl::OUString& _rPropertyName)
-        throw(starbeans::UnknownPropertyException, staruno::RuntimeException)
+        throw( ::com::sun::star::beans::UnknownPropertyException,  ::com::sun::star::uno::RuntimeException)
 {
     OPropertyArrayAggregationHelper& rPH = (OPropertyArrayAggregationHelper&)getInfoHelper();
     sal_Int32 nHandle = rPH.getHandleByName(_rPropertyName);
     if (nHandle == -1)
     {
-        throw starbeans::UnknownPropertyException();
+        throw  ::com::sun::star::beans::UnknownPropertyException();
     }
 
     ::rtl::OUString aPropName;
@@ -749,15 +749,15 @@ void SAL_CALL OPropertySetAggregationHelper::setPropertyToDefault(const ::rtl::O
 }
 
 //------------------------------------------------------------------------------
-staruno::Any SAL_CALL OPropertySetAggregationHelper::getPropertyDefault(const ::rtl::OUString& aPropertyName)
-        throw(starbeans::UnknownPropertyException, starlang::WrappedTargetException, staruno::RuntimeException)
+ ::com::sun::star::uno::Any SAL_CALL OPropertySetAggregationHelper::getPropertyDefault(const ::rtl::OUString& aPropertyName)
+        throw( ::com::sun::star::beans::UnknownPropertyException,  ::com::sun::star::lang::WrappedTargetException,  ::com::sun::star::uno::RuntimeException)
 {
     OPropertyArrayAggregationHelper& rPH = (OPropertyArrayAggregationHelper&)getInfoHelper();
     sal_Int32 nHandle = rPH.getHandleByName( aPropertyName );
 
     if (nHandle == -1)
     {
-        throw starbeans::UnknownPropertyException();
+        throw  ::com::sun::star::beans::UnknownPropertyException();
     }
 
     ::rtl::OUString aPropName;
@@ -767,7 +767,7 @@ staruno::Any SAL_CALL OPropertySetAggregationHelper::getPropertyDefault(const ::
         if (m_xAggregateState.is())
             return m_xAggregateState->getPropertyDefault(aPropertyName);
         else
-            return staruno::Any();
+            return  ::com::sun::star::uno::Any();
     }
     else
         return getPropertyDefaultByHandle(nHandle);

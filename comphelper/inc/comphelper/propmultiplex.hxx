@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propmultiplex.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-09-29 11:28:15 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 14:23:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,9 +78,6 @@ namespace comphelper
 {
 //.........................................................................
 
-    namespace staruno   = ::com::sun::star::uno;
-    namespace starbeans = ::com::sun::star::beans;
-
 //==================================================================
 //= OPropertyChangeListener
 //==================================================================
@@ -97,7 +94,7 @@ public:
         :m_rMutex(_rMutex) ,m_pAdapter(NULL) { }
     virtual ~OPropertyChangeListener();
 
-    virtual void _propertyChanged(const starbeans::PropertyChangeEvent& evt) throw(staruno::RuntimeException) = 0;
+    virtual void _propertyChanged(const  ::com::sun::star::beans::PropertyChangeEvent& evt) throw( ::com::sun::star::uno::RuntimeException) = 0;
 
 protected:
     void setAdapter(OPropertyChangeMultiplexer* _pAdapter);
@@ -107,23 +104,23 @@ protected:
 //= OPropertyChangeMultiplexer
 //==================================================================
 /// multiplexer for property changes
-class OPropertyChangeMultiplexer    :public cppu::WeakImplHelper1<starbeans::XPropertyChangeListener>
+class OPropertyChangeMultiplexer    :public cppu::WeakImplHelper1< ::com::sun::star::beans::XPropertyChangeListener>
 {
     friend class OPropertyChangeListener;
-    staruno::Sequence< ::rtl::OUString >        m_aProperties;
-    staruno::Reference<starbeans::XPropertySet> m_xSet;
+     ::com::sun::star::uno::Sequence< ::rtl::OUString >     m_aProperties;
+     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>   m_xSet;
     OPropertyChangeListener*                    m_pListener;
 
 
     virtual ~OPropertyChangeMultiplexer();
 public:
-    OPropertyChangeMultiplexer(OPropertyChangeListener* _pListener, const staruno::Reference<starbeans::XPropertySet>& _rxSet);
+    OPropertyChangeMultiplexer(OPropertyChangeListener* _pListener, const  ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxSet);
 
 // XEventListener
-    virtual void SAL_CALL disposing( const starlang::EventObject& Source ) throw(staruno::RuntimeException);
+    virtual void SAL_CALL disposing( const  ::com::sun::star::lang::EventObject& Source ) throw( ::com::sun::star::uno::RuntimeException);
 
 // XPropertyChangeListener
-    virtual void SAL_CALL propertyChange( const starbeans::PropertyChangeEvent& evt ) throw(staruno::RuntimeException);
+    virtual void SAL_CALL propertyChange( const  ::com::sun::star::beans::PropertyChangeEvent& evt ) throw( ::com::sun::star::uno::RuntimeException);
 
 
     void addProperty(const ::rtl::OUString& aPropertyName);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propmultiplex.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-09-29 11:28:15 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 14:25:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,7 @@ void OPropertyChangeListener::setAdapter(OPropertyChangeMultiplexer* pAdapter)
 //= OPropertyChangeMultiplexer
 //========================================================================
 //------------------------------------------------------------------
-OPropertyChangeMultiplexer::OPropertyChangeMultiplexer(OPropertyChangeListener* _pListener, const staruno::Reference<starbeans::XPropertySet>& _rxSet)
+OPropertyChangeMultiplexer::OPropertyChangeMultiplexer(OPropertyChangeListener* _pListener, const  ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxSet)
             :m_xSet(_rxSet)
             ,m_pListener(_pListener)
 {
@@ -121,11 +121,11 @@ void OPropertyChangeMultiplexer::dispose()
 {
     if (m_xSet.is())
     {
-        staruno::Reference<starbeans::XPropertyChangeListener> xPreventDelete(this);
+         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener> xPreventDelete(this);
 
         const ::rtl::OUString* pProperties = m_aProperties.getConstArray();
         for (sal_Int32 i = 0; i < m_aProperties.getLength(); ++i, ++pProperties)
-            m_xSet->removePropertyChangeListener(*pProperties, static_cast<starbeans::XPropertyChangeListener*>(this));
+            m_xSet->removePropertyChangeListener(*pProperties, static_cast< ::com::sun::star::beans::XPropertyChangeListener*>(this));
 
         m_pListener->setAdapter(NULL);
 
@@ -136,7 +136,7 @@ void OPropertyChangeMultiplexer::dispose()
 
 // XEventListener
 //------------------------------------------------------------------
-void SAL_CALL OPropertyChangeMultiplexer::disposing( const starlang::EventObject& Source ) throw(staruno::RuntimeException)
+void SAL_CALL OPropertyChangeMultiplexer::disposing( const  ::com::sun::star::lang::EventObject& Source ) throw( ::com::sun::star::uno::RuntimeException)
 {
     if (m_pListener)
         m_pListener->setAdapter(NULL);
@@ -147,7 +147,7 @@ void SAL_CALL OPropertyChangeMultiplexer::disposing( const starlang::EventObject
 
 // XPropertyChangeListener
 //------------------------------------------------------------------
-void SAL_CALL OPropertyChangeMultiplexer::propertyChange( const starbeans::PropertyChangeEvent& _rEvent ) throw(staruno::RuntimeException)
+void SAL_CALL OPropertyChangeMultiplexer::propertyChange( const  ::com::sun::star::beans::PropertyChangeEvent& _rEvent ) throw( ::com::sun::star::uno::RuntimeException)
 {
     if (m_pListener)
         m_pListener->_propertyChanged(_rEvent);
@@ -158,7 +158,7 @@ void OPropertyChangeMultiplexer::addProperty(const ::rtl::OUString& _sPropertyNa
 {
     if (m_xSet.is())
     {
-        m_xSet->addPropertyChangeListener(_sPropertyName, static_cast<starbeans::XPropertyChangeListener*>(this));
+        m_xSet->addPropertyChangeListener(_sPropertyName, static_cast< ::com::sun::star::beans::XPropertyChangeListener*>(this));
         m_aProperties.realloc(m_aProperties.getLength() + 1);
         m_aProperties.getArray()[m_aProperties.getLength()-1] = _sPropertyName;
     }

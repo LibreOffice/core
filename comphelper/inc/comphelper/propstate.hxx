@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propstate.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-09-29 11:28:15 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 14:23:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,37 +86,33 @@ namespace comphelper
 {
 //.........................................................................
 
-    namespace staruno   = ::com::sun::star::uno;
-    namespace starlang  = ::com::sun::star::lang;
-    namespace starbeans = ::com::sun::star::beans;
-
 //==================================================================
 //= OPropertyStateHelper
 //==================================================================
 /// helper class for implementing property states
-class OPropertyStateHelper  :public cppu::OPropertySetHelper
-                            ,public starbeans::XPropertyState
+class OPropertyStateHelper  :public ::cppu::OPropertySetHelper
+                            ,public ::com::sun::star::beans::XPropertyState
 {
 public:
-    OPropertyStateHelper(cppu::OBroadcastHelper& rBHelper):OPropertySetHelper(rBHelper) { }
+    OPropertyStateHelper(::cppu::OBroadcastHelper& rBHelper):OPropertySetHelper(rBHelper) { }
 
-    virtual staruno::Any SAL_CALL queryInterface(const staruno::Type& aType) throw(staruno::RuntimeException);
+    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(const ::com::sun::star::uno::Type& aType) throw(::com::sun::star::uno::RuntimeException);
 
 // XPropertyState
-    virtual starbeans::PropertyState SAL_CALL                       getPropertyState(const ::rtl::OUString& PropertyName) throw(starbeans::UnknownPropertyException, staruno::RuntimeException);
-    virtual staruno::Sequence<starbeans::PropertyState> SAL_CALL    getPropertyStates(const staruno::Sequence< ::rtl::OUString >& aPropertyName) throw(starbeans::UnknownPropertyException, staruno::RuntimeException);
-    virtual void SAL_CALL                                           setPropertyToDefault(const ::rtl::OUString& PropertyName) throw(starbeans::UnknownPropertyException, staruno::RuntimeException);
-    virtual staruno::Any SAL_CALL                                   getPropertyDefault(const ::rtl::OUString& aPropertyName) throw(starbeans::UnknownPropertyException, starlang::WrappedTargetException, staruno::RuntimeException);
+    virtual ::com::sun::star::beans::PropertyState SAL_CALL                     getPropertyState(const ::rtl::OUString& PropertyName) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyState> SAL_CALL   getPropertyStates(const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyName) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL                                           setPropertyToDefault(const ::rtl::OUString& PropertyName) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Any SAL_CALL                                 getPropertyDefault(const ::rtl::OUString& aPropertyName) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
 // access via handle
-    virtual starbeans::PropertyState    getPropertyStateByHandle(sal_Int32 nHandle);
-    virtual void                        setPropertyToDefaultByHandle(sal_Int32 nHandle);
-    virtual staruno::Any                getPropertyDefaultByHandle(sal_Int32 nHandle) const;
+    virtual ::com::sun::star::beans::PropertyState  getPropertyStateByHandle(sal_Int32 nHandle);
+    virtual void                                    setPropertyToDefaultByHandle(sal_Int32 nHandle);
+    virtual ::com::sun::star::uno::Any              getPropertyDefaultByHandle(sal_Int32 nHandle) const;
 
 protected:
-    void firePropertyChange(sal_Int32 nHandle, const staruno::Any& aNewValue, const staruno::Any& aOldValue);
+    void firePropertyChange(sal_Int32 nHandle, const ::com::sun::star::uno::Any& aNewValue, const ::com::sun::star::uno::Any& aOldValue);
 
-    virtual staruno::Sequence<staruno::Type> SAL_CALL getTypes() throw(staruno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
 };
 
 //.........................................................................
