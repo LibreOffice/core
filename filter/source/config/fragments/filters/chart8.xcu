@@ -7,8 +7,8 @@
         <prop oor:name="FilterService"/>
         <prop oor:name="TemplateName"/>
         <prop oor:name="UIName">
-            <value xml:lang="en-US">Open Chart</value>
-            <value xml:lang="de">Offenes Diagramm</value>
+            <value xml:lang="en-US">Open Office Chart</value>
+            <value xml:lang="de">Open Office Diagramm</value>
         </prop>
         <prop oor:name="Flags"><value>IMPORT OWN DEFAULT NOTINFILEDIALOG NOTINCHOOSER</value></prop>
     </node>
