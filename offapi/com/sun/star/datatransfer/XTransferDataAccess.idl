@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTransferDataAccess.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-21 07:09:33 $
+ *  last change: $Author: arellano $ $Date: 2001-04-02 20:48:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,9 @@ module com { module sun { module star { module datatransfer {
     flush operations.
 
     @see com::sun::star::datatransfer::XTransferable
+
+ <!-- Dennis: What is meant by "flavors" -->
+
 */
 
 interface XTransferDataAccess: com::sun::star::uno::XInterface

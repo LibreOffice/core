@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMimeContentType.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-21 07:09:33 $
+ *  last change: $Author: arellano $ $Date: 2001-04-02 20:44:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,8 @@ interface XMimeContentType : com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
     /** @returns
         the media subtype of the contenttype
+
+ <!-- Dennis: should "contenttype" be hyphenated or not? -->
     */
     string getMediaSubtype( );
 
@@ -101,7 +103,7 @@ interface XMimeContentType : com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
     /** @returns
-        true if the contenttype has the specified parameter
+        <true/> if the contenttype has the specified parameter
     */
     boolean hasParameter( [in] string aName );
 
