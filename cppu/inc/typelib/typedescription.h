@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typedescription.h,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dbo $ $Date: 2002-08-21 09:19:13 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:16:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -301,7 +301,7 @@ typedef struct _typelib_MethodParameter
     sal_Bool                            bOut;
 } typelib_MethodParameter;
 
-/** Common base type description of typelib_InterfaceMemberTypeDescription and
+/** Common base type description of typelib_InterfaceMethodTypeDescription and
     typelib_InterfaceAttributeTypeDescription.
 */
 typedef struct _typelib_InterfaceMemberTypeDescription
@@ -310,7 +310,8 @@ typedef struct _typelib_InterfaceMemberTypeDescription
     */
     typelib_TypeDescription             aBase;
 
-    /** position of member in the interface including the number of members of the base interface
+    /** position of member in the interface including the number of members of
+        any base interfaces
     */
     sal_Int32                           nPosition;
     /** name of member
@@ -345,6 +346,20 @@ typedef struct _typelib_InterfaceMethodTypeDescription
     /** determines whether method is declared oneway
     */
     sal_Bool                                    bOneWay;
+
+    /** the interface description this method is a member of
+    */
+    struct _typelib_InterfaceTypeDescription *  pInterface;
+    /** the inherited direct base method (null for a method that is not
+        inherited)
+    */
+    typelib_TypeDescriptionReference *          pBaseRef;
+    /** if pBaseRef is null, the member position of this method within
+        pInterface, not counting members inherited from bases; if pBaseRef is
+        not null, the index of the direct base within pInterface from which this
+        method is inherited
+    */
+    sal_Int32                                   nIndex;
 } typelib_InterfaceMethodTypeDescription;
 
 /** The description of an interface attribute. The type class of this description is
@@ -362,9 +377,40 @@ typedef struct _typelib_InterfaceAttributeTypeDescription
     /** type of the attribute
     */
     typelib_TypeDescriptionReference *          pAttributeTypeRef;
+
+    /** the interface description this attribute is a member of
+    */
+    struct _typelib_InterfaceTypeDescription *  pInterface;
+    /** the inherited direct base attribute (null for an attribute that is not
+        inherited)
+    */
+    typelib_TypeDescriptionReference *          pBaseRef;
+    /** if pBaseRef is null, the member position of this attribute within
+        pInterface, not counting members inherited from bases; if pBaseRef is
+        not null, the index of the direct base within pInterface from which this
+        attribute is inherited
+    */
+    sal_Int32                                   nIndex;
 } typelib_InterfaceAttributeTypeDescription;
 
 /** Type description of an interface.
+
+    Not all members are always initialized (not yet initialized members being
+    null); there are three levels:
+    - Minimally, only aBase, pBaseTypeDescription, aUik, nBaseTypes, and
+      ppBaseTypes are initialized; aBase.bComplete is false.  This only happens
+      when an interface type description is created with
+      typelib_static_mi_interface_type_init or
+      typelib_static_interface_type_init.
+    - At the next level, nMembers, ppMembers, nAllMembers, ppAllMembers are also
+      initialized; aBase.bComplete is still false.  This happens when an
+      interface type description is created with
+      typelib_typedescription_newMIInterface or
+      typelib_typedescription_newInterface.
+    - At the final level, pMapMemberIndexToFunctionIndex,
+      nMapFunctionIndexToMemberIndex, and pMapFunctionIndexToMemberIndex are
+      also initialized; aBase.bComplete is true.  This happens after a call to
+      typelib_typedescription_complete.
 */
 typedef struct _typelib_InterfaceTypeDescription
 {
@@ -373,6 +419,7 @@ typedef struct _typelib_InterfaceTypeDescription
     typelib_TypeDescription                     aBase;
 
     /** pointer to base type description, else 0
+        Obsolete, as it only supports single inheritance.
     */
     struct _typelib_InterfaceTypeDescription *  pBaseTypeDescription;
     /** unique identifier of interface
@@ -400,6 +447,12 @@ typedef struct _typelib_InterfaceTypeDescription
     /** array mapping function index to member index; size of arry is nMapFunctionIndexToMemberIndex
     */
     sal_Int32 *                                 pMapFunctionIndexToMemberIndex;
+    /* number of base types
+    */
+    sal_Int32                                   nBaseTypes;
+    /* array of base type descriptions
+    */
+    struct _typelib_InterfaceTypeDescription ** ppBaseTypes;
 } typelib_InterfaceTypeDescription;
 
 /** Init struct of compound members for typelib_typedescription_new().
@@ -550,6 +603,30 @@ void SAL_CALL typelib_typedescription_newInterface(
     rtl_uString * pTypeName,
     sal_uInt32 nUik1, sal_uInt16 nUik2, sal_uInt16 nUik3, sal_uInt32 nUik4, sal_uInt32 nUik5,
     typelib_TypeDescriptionReference * pBaseInterface,
+    sal_Int32 nMembers,
+    typelib_TypeDescriptionReference ** ppMembers )
+    SAL_THROW_EXTERN_C();
+
+/** Creates a multiple-inheritance interface type description.
+
+    @param ppRet inout interface type description
+    @param pTypeName the fully qualified name of the interface.
+    @param nUik1 uik part
+    @param nUik2 uik part
+    @param nUik3 uik part
+    @param nUik4 uik part
+    @param nUik5 uik part
+    @param nBaseInterfaces number of base interface types
+    @param ppBaseInterface base interface types
+    @param nMembers number of members
+    @param ppMembers members; attributes or methods
+*/
+void SAL_CALL typelib_typedescription_newMIInterface(
+    typelib_InterfaceTypeDescription ** ppRet,
+    rtl_uString * pTypeName,
+    sal_uInt32 nUik1, sal_uInt16 nUik2, sal_uInt16 nUik3, sal_uInt32 nUik4, sal_uInt32 nUik5,
+    sal_Int32 nBaseInterfaces,
+    typelib_TypeDescriptionReference ** ppBaseInterfaces,
     sal_Int32 nMembers,
     typelib_TypeDescriptionReference ** ppMembers )
     SAL_THROW_EXTERN_C();
@@ -895,6 +972,21 @@ void SAL_CALL typelib_static_interface_type_init(
     typelib_TypeDescriptionReference ** ppRef,
     const sal_Char * pTypeName,
     typelib_TypeDescriptionReference * pBaseType )
+    SAL_THROW_EXTERN_C();
+
+/** Inits incomplete static multiple-inheritance interface type reference.
+    Thread synchronizes on typelib init mutex.
+
+    @param ppRef pointer to type reference pointer
+    @param pTypeName name of interface
+    @param nBaseTypes number of base types
+    @param ppBaseTypes base types
+*/
+void SAL_CALL typelib_static_mi_interface_type_init(
+    typelib_TypeDescriptionReference ** ppRef,
+    const sal_Char * pTypeName,
+    sal_Int32 nBaseTypes,
+    typelib_TypeDescriptionReference ** ppBaseTypes )
     SAL_THROW_EXTERN_C();
 
 /** Inits incomplete static enum type reference. Thread synchronizes on typelib init mutex.
