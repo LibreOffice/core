@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resource.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hjs $ $Date: 2001-09-13 11:47:01 $
+ *  last change: $Author: pl $ $Date: 2002-05-06 14:48:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,20 +60,6 @@
  ************************************************************************/
 
 #include <vos/mutex.hxx>
-//#include <usr/ustring.hxx>
-//#include <usr/factoryhlp.hxx>
-//#include <usr/weak.hxx>
-
-//#include <smart/com/sun/star/lang/XServiceInfo.hxx>
-//#include <smart/com/sun/star/script/XInvocation.hxx>
-//#include <smart/com/sun/star/script/XTypeConverter.hxx>
-//#include <smart/com/sun/star/beans/XExactName.hxx>
-
-// Changes from ...Ref to Reference< ... >, USR_QUERY -> UNO_QUERY, THROWS( ... ) -> throw( ... ),
-// UsrAny -> Any, (BOOL -> sal_BOOL, ...), OUString -> OUString, put SAL_CALL infront of each interface method,
-// UsrSystemException -> RuntimeException, const is removed from each interface method
-// are done without comment
-/**** NEW ****/
 #include <uno/lbnames.h>            // CPPU_CURRENT_LANGUAGE_BINDING_NAME macro, which specify the environment type
 #include <cppuhelper/factory.hxx>   // helper for factories
 #include <cppuhelper/implbase3.hxx> // helper for implementations
@@ -84,53 +70,29 @@
 #include <com/sun/star/reflection/InvocationTargetException.hpp>
 #include <com/sun/star/beans/XExactName.hpp>
 
-/**** END NEW ****/
-
 #include <tools/resmgr.hxx>
 #include <tools/rcid.h>
 #include <vcl/svapp.hxx>
 
 #include <rtl/ustring.hxx>
 
-#ifndef _VOS_NO_NAMESPACE
 using namespace vos;
-//using namespace usr;
 using namespace rtl;
-/**** NEW ****/
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
 using namespace com::sun::star::script;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::reflection;
-/**** END NEW ****/
-#endif
-
 
 //------------------------------------------------------------------------
 //------------------------------------------------------------------------
 //------------------------------------------------------------------------
-//class ResourceService : public XInvocation
-//                      , public XExactName
-//                      , public XServiceInfo
-//                      , public OWeakObject
-
-/**** NEW ****/
 class ResourceService : public cppu::WeakImplHelper3< XInvocation, XExactName, XServiceInfo >
-/**** END NEW ****/
 {
 public:
                                 ResourceService( const Reference< XMultiServiceFactory > & );
                                 ~ResourceService();
-
-    // XInterface
-    //BOOL                      queryInterface( Uik aUik, Reference< XInterface > & rOut );
-    //void                      acquire()                        { OWeakObject::acquire(); }
-    //void                      release()                        { OWeakObject::release(); }
-    //void*                         getImplementation(Reflection *p) { return OWeakObject::getImplementation(p); }
-
-    // XIdlClassProvider
-    //Sequence< Reference< XIdlClass > >    getIdlClasses(void);
 
     // XServiceInfo
     OUString SAL_CALL           getImplementationName() throw();
@@ -148,7 +110,7 @@ public:
 
     // XInvokation
     Reference< XIntrospectionAccess >  SAL_CALL getIntrospection(void)  throw(RuntimeException);
-    Any  SAL_CALL               invoke(const OUString& FunctionName, const Sequence< Any >& Params, Sequence< INT16 >& OutParamIndex, Sequence< Any >& OutParam) throw(IllegalArgumentException, CannotConvertException, InvocationTargetException, RuntimeException);
+    Any  SAL_CALL               invoke(const OUString& FunctionName, const Sequence< Any >& Params, Sequence< sal_Int16 >& OutParamIndex, Sequence< Any >& OutParam) throw(IllegalArgumentException, CannotConvertException, InvocationTargetException, RuntimeException);
     void  SAL_CALL              setValue(const OUString& PropertyName, const Any& Value) throw(UnknownPropertyException, CannotConvertException, InvocationTargetException, RuntimeException);
     Any  SAL_CALL               getValue(const OUString& PropertyName) throw(UnknownPropertyException, RuntimeException);
     BOOL  SAL_CALL              hasMethod(const OUString& Name)  throw(RuntimeException);
@@ -156,7 +118,6 @@ public:
 private:
     Reference< XTypeConverter >         getTypeConverter() const;
     Reference< XInvocation >            getDefaultInvocation() const;
-    //Reference< XIdlClass >            getStaticIdlClass();
 
     Reference< XMultiServiceFactory >   xSMgr;
     Reference< XInvocation >            xDefaultInvocation;
@@ -185,48 +146,6 @@ Reference< XInterface > SAL_CALL ResourceService_CreateInstance( const Reference
     return xService;
 }
 
-//*************************************************************************
-// DLLImplementationLoader::getStaticIdlClass()
-//
-//Reference< XIdlClass > ResourceService::getStaticIdlClass()
-//{
-//  // Global Method, must be guarded (multithreading)
-//  OGuard aGuard( OMutex::getGlobalMutex() );
-//  {
-//      // use the standard class implementation of the usr library
-//      static Reference< XIdlClass > xClass =
-//      createStandardClass( getImplementationName_Static(),
-//                      OWeakObject::getStaticIdlClass(), 2,
-//                      XInvocation_Reference< get >lection(),
-//                      XExactName_getReflection(),
-//                      XServiceInfo_getReflection()
-//                      );
-//      return xClass;
-//  }
-//}
-
-// Methoden von XInterface
-//BOOL ResourceService::queryInterface( Uik aUik, Reference< XInterface > & rOut )
-//{
-//  if( aUik == XInvocation::getSmartUik() )
-//      rOut = (XInvocation*)this;
-//  else if( aUik == XExactName::getSmartUik() )
-//      rOut = (XExactName*)this;
-//  else if( aUik == XServiceInfo::getSmartUik() )
-//      rOut = (XServiceInfo *)this;
-//  else
-//      OWeakObject::queryInterface( aUik, rOut );
-//  return rOut.is();
-//}
-//
-// XIdlClassProvider
-//Sequence< XIdlClassRef > ResourceService::getIdlClasses()
-//{
-//  XIdlClassRef x = getStaticIdlClass();
-//  return Sequence< XIdlClassRef >( &x, 1 );
-//}
-
-
 // XServiceInfo
 OUString ResourceService::getImplementationName() throw()
 {
@@ -238,7 +157,7 @@ BOOL SAL_CALL ResourceService::supportsService(const OUString& ServiceName) thro
 {
     Sequence< OUString > aSNL = getSupportedServiceNames();
     const OUString * pArray = aSNL.getConstArray();
-    for( INT32 i = 0; i < aSNL.getLength(); i++ )
+    for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
         if( pArray[i] == ServiceName )
             return TRUE;
     return FALSE;
@@ -323,69 +242,70 @@ Any SAL_CALL ResourceService::invoke
 (
     const OUString& FunctionName,
     const Sequence< Any >& Params,
-    Sequence< INT16 >& OutParamIndex,
+    Sequence< sal_Int16 >& OutParamIndex,
     Sequence< Any >& OutParam
 )
     throw(IllegalArgumentException, CannotConvertException, InvocationTargetException, RuntimeException)
 {
+    Any aRet;
     if( FunctionName == OUString::createFromAscii("getString") || FunctionName == OUString::createFromAscii("hasString" ))
     {
-        if( Params.getLength() != 1 )
+        sal_Int32 nElements = Params.getLength();
+        if( nElements < 1 )
             throw IllegalArgumentException();
-        INT32 nId;
-        /**** NEW ****/
-        if( !(Params.getConstArray()[0] >>= nId) )
-        /**** END NEW ****/
-        //if( Params.getConstArray()[0].getReflection()->getTypeClass() == TypeClass_LONG )
-        //  nId = Params.getConstArray()[0].getINT32();
-        //else
-        {
-            Reference< XTypeConverter > xC = getTypeConverter();
-            if( xC.is() )
-            {
-                /**** NEW ****/
-                xC->convertToSimpleType( Params.getConstArray()[0], TypeClass_LONG ) >>= nId;
-                /**** END NEW ****/
-                //nId = xC->convertToSimpleType( Params.getConstArray()[0], TypeClass_LONG ).getINT32();
-            }
-            else
-                throw CannotConvertException();
-        }
-        if( nId > 0xFFFF || nId < 0 )
+        if( !pResMgr )
             throw IllegalArgumentException();
 
+        OutParam.realloc( nElements );
+        OutParamIndex.realloc( nElements );
+        const Any* pIn = Params.getConstArray();
+        Any* pOut = OutParam.getArray();
+        sal_Int16* pIndex = OutParamIndex.getArray();
+        Reference< XTypeConverter > xC = getTypeConverter();
+
         OGuard aGuard( Application::GetSolarMutex() );
-        if( FunctionName == OUString::createFromAscii("getString" ))
+        for( sal_Int32 n = 0; n < nElements; n++ )
         {
-            if( !pResMgr )
-                throw IllegalArgumentException();
-            ResId aId( (USHORT)nId, pResMgr );
-            aId.SetRT( RSC_STRING );
-            if( pResMgr->IsAvailable( aId ) )
+            sal_Int32 nId;
+            if( !(pIn[n] >>= nId) )
             {
-                String aStr( aId );
-        /**** NEW ****/
-//              return makeAny( StringToOUString( aStr, CHARSET_SYSTEM ) );
-                return makeAny( OUString( aStr ) );
-        /**** END NEW ****/
-                //return Any( StringToOWString( aStr, CHARSET_SYSTEM ) );
+                if( xC.is() )
+                {
+                    xC->convertToSimpleType( pIn[n], TypeClass_LONG ) >>= nId;
+                }
+                else
+                    throw CannotConvertException();
             }
-            else
+            if( nId > 0xFFFF || nId < 0 )
                 throw IllegalArgumentException();
-        }
-        else //if( FunctionName == OUString::createFromAscii("hasString") )
-        {
-            sal_Bool bRet = sal_False;
-            if( pResMgr )
+
+            if( FunctionName == OUString::createFromAscii("getString" ))
             {
                 ResId aId( (USHORT)nId, pResMgr );
                 aId.SetRT( RSC_STRING );
-                bRet = pResMgr->IsAvailable( aId );
+                if( pResMgr->IsAvailable( aId ) )
+                {
+                    String aStr( aId );
+                    pOut[n] = makeAny( OUString( aStr ) );
+                    pIndex[n] = n;
+                }
+                else
+                    throw IllegalArgumentException();
             }
-            //return UsrAny( bRet );
-            /**** NEW ****/
-            return Any( &bRet, getBooleanCppuType() );
-            /**** END NEW ****/
+            else //if( FunctionName == OUString::createFromAscii("hasString") )
+            {
+                sal_Bool bRet = sal_False;
+                if( pResMgr )
+                {
+                    ResId aId( (USHORT)nId, pResMgr );
+                    aId.SetRT( RSC_STRING );
+                    bRet = pResMgr->IsAvailable( aId );
+                }
+                pOut[n] = Any( &bRet, getBooleanCppuType() );
+                pIndex[n] = n;
+            }
+            if( n == 0)
+                aRet = pOut[n];
         }
     }
     else
@@ -396,7 +316,7 @@ Any SAL_CALL ResourceService::invoke
         else
             throw IllegalArgumentException();
     }
-    return Any();
+    return aRet;
 }
 
 // XInvokation
@@ -406,24 +326,17 @@ void SAL_CALL ResourceService::setValue(const OUString& PropertyName, const Any&
     if( PropertyName == OUString::createFromAscii("FileName") )
     {
         OUString aName;
-        //if( Value.getReflection()->getTypeClass() == TypeClass_STRING )
-        //  aName = Value.getString();
-        //else
-        /**** NEW ****/
         if( !(Value >>= aName) )
-        /**** END NEW ****/
         {
             Reference< XTypeConverter > xC = getTypeConverter();
             if( xC.is() )
                 xC->convertToSimpleType( Value, TypeClass_STRING ) >>= aName;
-                //aName = xC->convertToSimpleType( Value, TypeClass_STRING ).getString();
             else
                 throw CannotConvertException();
         }
 
         OGuard aGuard( Application::GetSolarMutex() );
-        aName = aName + OUString( OUString::valueOf( (INT32)SUPD ).getStr() );
-//      ResMgr * pRM = ResMgr::CreateResMgr( OUStringToString( aName, CHARSET_SYSTEM ) );
+        aName = aName + OUString( OUString::valueOf( (sal_Int32)SUPD ).getStr() );
         String aTmpString( aName );
         ByteString a( aTmpString, gsl_getSystemTextEncoding() );
         ResMgr * pRM = ResMgr::CreateResMgr( a.GetBuffer() );
@@ -497,32 +410,24 @@ BOOL SAL_CALL ResourceService::hasProperty(const OUString& Name)
 
 extern "C" {
 
-// NEW: return the environment type name of the c++ compiler
 void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
-//BOOL EXTERN_SERVICE_CALLTYPE exService_writeRegEntry(
-//        const UNO_INTERFACE(XRegistryKey)* xUnoKey)
 sal_Bool SAL_CALL component_writeInfo( void * /*pServiceManager*/, XRegistryKey * pRegistryKey )
 {
-    //XRegistryKeyRef   pRegistryKey;
-    //uno2smart(pRegistryKey, *xUnoKey);
-    /**** NEW ****/
     try
     {
         Reference< XRegistryKey > xNewKey =
-    /**** END NEW ****/
             pRegistryKey->createKey(
             OUString::createFromAscii( "/" ) + ResourceService::getImplementationName_Static() + OUString::createFromAscii( "/UNO/SERVICES" ) );
         Sequence< OUString > aServices = ResourceService::getSupportedServiceNames_Static();
-        for( INT32 i = 0; i < aServices.getLength(); i++ )
+        for( sal_Int32 i = 0; i < aServices.getLength(); i++ )
             xNewKey->createKey( aServices.getConstArray()[i]);
 
         return sal_True;
-    /**** NEW ****/
     }
     catch (Exception &)
     {
@@ -530,38 +435,11 @@ sal_Bool SAL_CALL component_writeInfo( void * /*pServiceManager*/, XRegistryKey 
         //OSL_ENSURE( sal_False, "Exception cannot register component!" );
         return sal_False;
     }
-    /**** END NEW ****/
-
 }
 
-//UNO_INTERFACE(XInterface) EXTERN_SERVICE_CALLTYPE exService_getFactory
-//(
-//  const sal_Unicode* pImplName,
-//  const UNO_INTERFACE(XMultiServiceFactory)* pServiceManager,
-//  const UNO_INTERFACE(XRegistryKey)*
-//)
 void * SAL_CALL component_getFactory(
     const sal_Char * pImplName, XMultiServiceFactory * pServiceManager, void * /*pRegistryKey*/ )
 {
-    //UNO_INTERFACE(XInterface) xUnoRet = {0, 0};
-    //XInterfaceRef             xRet;
-    //XMultiServiceFactoryRef xSMgr;
-    //OUString                  aImplementationName(pImplName);
-    //uno2smart(xSMgr, *xUnoFact);
-    //if (OUString(pImplName) == ResourceService::getpImplName_Static() )
-    //{
-    //  xRet = createSingleFactory( pServiceManager, pImplName,
-    //                              ResourceService_CreateInstance,
-    //                              ResourceService::getSupportedServiceNames_Static() );
-    //}
-    //
-    //if (xRet.is())
-    //{
-    //  smart2uno(xRet, xUnoRet);
-    //}
-    //return xUnoRet;
-
-    /**** NEW ****/
     void * pRet = 0;
     if (!ResourceService::getImplementationName_Static().compareToAscii( pImplName ) )
     {
@@ -576,7 +454,6 @@ void * SAL_CALL component_getFactory(
         pRet = xFactory.get();
     }
     return pRet;
-    /**** END NEW ****/
 }
 
 }
