@@ -9421,3 +9421,6 @@ _real@8@4003a000000000000000
 ?FillPropertyValues@XMLIndexTabStopEntryContext@@MAEXAAV?$Sequence@UPropertyValue@beans@star@sun@com@@@uno@star@sun@com@@@Z
 ??0XMLIndexTemplateContext@@QAE@AAVSvXMLImport@@AAV?$Reference@VXPropertySet@beans@star@sun@com@@@uno@star@sun@com@@GABVOUString@rtl@@PBUSvXMLEnumMapEntry@@W4XMLTokenEnum@token@xmloff@@PAPBDPBE@Z
 ?ExportBoolean@XMLSectionExport@@IAEXABV?$Reference@VXPropertySet@beans@star@sun@com@@@uno@star@sun@com@@ABVOUString@rtl@@W4XMLTokenEnum@token@xmloff@@EE@Z
+??0?$pair@$$CBGV?$ORef@VNameSpaceEntry@@@vos@@@_STL@@QAE@ABGABV?$ORef@VNameSpaceEntry@@@vos@@@Z
+?_Add@SvXMLNamespaceMap@@AAEGABVOUString@rtl@@0G@Z
+?find@?$_Rb_tree@GU?$pair@$$CBGV?$ORef@VNameSpaceEntry@@@vos@@@_STL@@U?$_S1st@U?$pair@$$CBGV?$ORef@VNameSpaceEntry@@@vos@@@_STL@@@2@UuInt32lt@@V?$allocator@U?$pair@$$CBGV?$ORef@VNameSpaceEntry@@@vos@@@_STL@@@2@@_STL@@QAE?AU?$_Rb_tree_iterator@U?$pair@$$CBGV?$ORef@VNameSpaceEntry@@@vos@@@_STL@@U?$_N_Tr@U?$pair@$$CBGV?$ORef@VNameSpaceEntry@@@vos@@@_STL@@@2@@2@ABG@Z
