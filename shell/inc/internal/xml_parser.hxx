@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xml_parser.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-09-29 14:53:34 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 14:25:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,17 +66,17 @@
 #include <stdexcept>
 
 //-----------------------------------------------------
-class xml_parser_exception //: public std::runtime_error
+class xml_parser_exception : public std::runtime_error
 {
 public:
 
     xml_parser_exception(
-        const XML_Char* error_msg,
+        const std::string& error_msg,
         int error_code,
         int line_number,
         int column_number,
         long byte_index) :
-        /*std::runtime_error(error_msg),*/
+        std::runtime_error(error_msg),
         error_code_(error_code),
         line_number_(line_number),
         column_number_(column_number),
@@ -133,9 +133,9 @@ public:
     //########################################################
     /** Set a document handler
 
-        @descr      A document handler implements the interface ISaxDocumentHandler.
+        @descr      A document handler implements the interface i_xml_parser_event_handler.
                     The document handler receive notifications of various events
-                    from the sax parser for instance "StartDocument".
+                    from the sax parser for instance "start_document".
 
                     The client is responsible for the life time management of
                     the given document handler, that means the document handler
