@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlannoi.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-16 14:16:30 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 07:47:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,8 +77,9 @@ class ScXMLTableRowCellContext;
 class ScXMLAnnotationContext : public SvXMLImportContext
 {
     rtl::OUStringBuffer sOUText;
-    rtl::OUString   sAuthor;
-    rtl::OUString   sCreateDate;
+    rtl::OUStringBuffer sAuthorBuffer;
+    rtl::OUStringBuffer sCreateDateBuffer;
+    rtl::OUStringBuffer sCreateDateStringBuffer;
     sal_Int32       nParagraphCount;
     sal_Bool        bDisplay : 1;
     sal_Bool        bHasTextP : 1;
