@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objface.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mba $ $Date: 2002-04-22 16:56:18 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:39:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,9 @@
 #ifndef _TOOLS_RCID_H
 #include <tools/rcid.h>
 #endif
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #ifndef _STREAM_HXX //autogen
 #include <tools/stream.hxx>
@@ -123,11 +125,11 @@ struct SfxObjectUI_Impl
     SfxObjectUI_Impl(USHORT n, const ResId& rResId, BOOL bVis, ULONG nFeat,
                 USHORT nClassId=0xFFFF) :
         nPos(n),
-        aResId(rResId.GetId(), rResId.GetResMgr()),
         nInterfaceId(nClassId),
+        aResId(rResId.GetId(), rResId.GetResMgr()),
         bVisible(bVis),
-        pName(0),
         bContext(FALSE),
+        pName(0),
         nFeature(nFeat)
     {
         aResId.SetRT(rResId.GetRT());
@@ -239,13 +241,13 @@ SfxInterface::SfxInterface( SfxModule *pMod,
                             const SfxInterface* pParent,
                             const SfxTypeLibImpl* pLibInfo ):
     pName(pClassName),
-    nClassId(nId),
-    aNameResId(rNameResId.GetId()),
     pGenoType(pParent),
+    nCount(0),
     pTypeLibInfo(pLibInfo),
     pConfig(NULL),
-    pImpData(0),
-    nCount(0)
+    nClassId(nId),
+    aNameResId(rNameResId.GetId()),
+    pImpData(0)
 {
     aNameResId.SetResMgr(rNameResId.GetResMgr());
     Init( );
@@ -260,11 +262,11 @@ SfxInterface::SfxInterface( SfxModule *pMod,
                             const SfxTypeLibImpl* pLibInfo,
                             SfxSlot &rSlotMap, USHORT nSlotCount ):
     pName(pClassName),
-    nClassId(nId),
-    aNameResId(rNameResId.GetId()),
     pGenoType(pParent),
     pTypeLibInfo(pLibInfo),
     pConfig(NULL),
+    nClassId(nId),
+    aNameResId(rNameResId.GetId()),
     pImpData(0)
 {
     aNameResId.SetResMgr(rNameResId.GetResMgr());
@@ -775,8 +777,10 @@ const ResId& SfxInterface::GetObjectBarResId( USHORT nNo ) const
             nNo -= nBaseCount;
     }
 
+#ifdef DEBUG
     USHORT nCount = pImpData->pObjectBars->Count();
     DBG_ASSERT( nNo<nCount,"Objectbar ist unbekannt!" );
+#endif
     return (*pImpData->pObjectBars)[nNo]->aResId;
 }
 
@@ -797,8 +801,10 @@ USHORT SfxInterface::GetObjectBarPos( USHORT nNo ) const
             nNo -= nBaseCount;
     }
 
+#ifdef DEBUG
     USHORT nCount = pImpData->pObjectBars->Count();
     DBG_ASSERT( nNo<nCount,"Objectbar ist unbekannt!" );
+#endif
     return (*pImpData->pObjectBars)[nNo]->nPos;
 }
 
@@ -922,8 +928,10 @@ ULONG SfxInterface::GetChildWindowId (USHORT nNo) const
             nNo -= nBaseCount;
     }
 
+#ifdef DEBUG
     USHORT nCount = pImpData->pChildWindows->Count();
     DBG_ASSERT( nNo<nCount,"ChildWindow ist unbekannt!" );
+#endif
     ULONG nRet = (ULONG) (*pImpData->pChildWindows)[nNo]->aResId.GetId();
     if ( (*pImpData->pChildWindows)[nNo]->bContext )
         nRet += ( (ULONG) nClassId ) << 16;
@@ -943,8 +951,10 @@ ULONG SfxInterface::GetChildWindowFeature (USHORT nNo) const
             nNo -= nBaseCount;
     }
 
+#ifdef DEBUG
     USHORT nCount = pImpData->pChildWindows->Count();
     DBG_ASSERT( nNo<nCount,"ChildWindow ist unbekannt!" );
+#endif
     ULONG nRet = (ULONG) (*pImpData->pChildWindows)[nNo]->nFeature;
     return nRet;
 }
@@ -991,8 +1001,10 @@ const String* SfxInterface::GetObjectBarName ( USHORT nNo ) const
             nNo -= nBaseCount;
     }
 
+#ifdef DEBUG
     USHORT nCount = pImpData->pObjectBars->Count();
     DBG_ASSERT( nNo<nCount,"Objectbar ist unbekannt!" );
+#endif
     return (*pImpData->pObjectBars)[nNo]->pName;
 }
 
@@ -1010,8 +1022,10 @@ ULONG SfxInterface::GetObjectBarFeature ( USHORT nNo ) const
             nNo -= nBaseCount;
     }
 
+#ifdef DEBUG
     USHORT nCount = pImpData->pObjectBars->Count();
     DBG_ASSERT( nNo<nCount,"Objectbar ist unbekannt!" );
+#endif
     return (*pImpData->pObjectBars)[nNo]->nFeature;
 }
 
@@ -1030,8 +1044,10 @@ BOOL SfxInterface::IsObjectBarVisible(USHORT nNo) const
             nNo -= nBaseCount;
     }
 
+#ifdef DEBUG
     USHORT nCount = pImpData->pObjectBars->Count();
     DBG_ASSERT( nNo<nCount,"Objectbar ist unbekannt!" );
+#endif
     return (*pImpData->pObjectBars)[nNo]->bVisible;
 }
 
@@ -1095,11 +1111,10 @@ USHORT SfxInterface::RegisterUserDefToolBox(USHORT nId, const String *pName,
 
     // Ansonsten n"achste freie Id besorgen
     USHORT nFreeId = SfxToolBoxManager::GetUserDefToolBoxId_Impl();
-    BOOL bFound = FALSE;
 
     // Alle Interfaces durchprobieren, ob sie noch eine UserDefToolBox
     // aufnehmen k"onnen
-    USHORT nPos;
+    USHORT nPos = 0;
     for (pIFace = SFX_SLOTPOOL().FirstInterface(); pIFace != 0;
             pIFace = SFX_SLOTPOOL().NextInterface())
     {
@@ -1139,8 +1154,8 @@ USHORT SfxInterface::RegisterUserDefToolBox(USHORT nId, const String *pName,
     if ( pIFace )
     {
         // Am gefundenen Interface mu\s die Konfiguration ver"andert werden
-        SfxConfigItem *pCfgItem = pIFace->GetConfig_Impl();
-        SfxConfigManager *pOldCfgMgr = pCfgItem->GetConfigManager();
+        //SfxConfigItem *pCfgItem = pIFace->GetConfig_Impl();
+        //SfxConfigManager *pOldCfgMgr = pCfgItem->GetConfigManager();
 /* //!MBA
         if ( pOldCfgMgr != pCfgMgr )
         {
@@ -1190,8 +1205,8 @@ void SfxInterface::ReleaseUserDefToolBox(USHORT nId, SfxConfigManager *pCfgMgr)
         if (pIFace->HasName())
         {
             // Die Konfiguration vom "ubergebenen Manager interessiert
-            SfxConfigItem *pCfgItem = pIFace->GetConfig_Impl();
-            SfxConfigManager *pOldCfgMgr = pCfgItem->GetConfigManager();
+            //SfxConfigItem *pCfgItem = pIFace->GetConfig_Impl();
+            //SfxConfigManager *pOldCfgMgr = pCfgItem->GetConfigManager();
 /* //!MBA
             if ( pOldCfgMgr != pCfgMgr )
             {
@@ -1207,7 +1222,7 @@ void SfxInterface::ReleaseUserDefToolBox(USHORT nId, SfxConfigManager *pCfgMgr)
             if ( pIFace->HasObjectBar(nId) )
             {
                 pIFace->ReleaseObjectBar(nId);
-                BOOL bDone = TRUE;
+                bDone = TRUE;
             }
 
 /* //!MBA
