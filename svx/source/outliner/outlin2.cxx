@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlin2.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mt $ $Date: 2002-05-27 14:13:15 $
+ *  last change: $Author: cl $ $Date: 2002-05-31 09:39:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -746,11 +746,11 @@ BOOL Outliner::IsAutoColorEnabled() const
 void Outliner::ForceAutoColor( BOOL b )
 {
     DBG_CHKTHIS(Outliner,0);
-    pEditEngine->EnableAutoColor( b );
+    pEditEngine->ForceAutoColor( b );
 }
 
 BOOL Outliner::IsForceAutoColor() const
 {
     DBG_CHKTHIS(Outliner,0);
-    return pEditEngine->IsAutoColorEnabled();
+    return pEditEngine->IsForceAutoColor();
 }
