@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr1.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:36:24 $
+ *  last change: $Author: obo $ $Date: 2004-09-08 15:56:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3411,7 +3411,7 @@ void ScInterpreter::ScMatch()
             rParam.bHasHeader  = FALSE;
             rParam.bInplace    = TRUE;
             rParam.bCaseSens   = FALSE;
-            rParam.bRegExp     = pDok->GetDocOptions().IsFormulaRegexEnabled();
+            rParam.bRegExp     = FALSE;
             rParam.bDuplicate  = FALSE;
 
             ScQueryEntry& rEntry = rParam.GetEntry(0);
@@ -3488,15 +3488,7 @@ void ScInterpreter::ScMatch()
                 }
                 else
                 {                                       // <= or >=
-                    aCellIter.SetStopOnMismatch( TRUE );
-                    if ( aCellIter.GetFirst() )
-                    {
-                        do
-                        {
-                            nR = aCellIter.GetRow();
-                        } while ( aCellIter.GetNext() );
-                    }
-                    else
+                    if ( !aCellIter.FindEqualOrSortedLastInRange( nC, nR ) )
                     {
                         SetNV();
                         return;
@@ -3506,6 +3498,7 @@ void ScInterpreter::ScMatch()
             }
             else
             {                                           // search column in row
+                rParam.bByRow = FALSE;
                 rParam.nRow2 = nRow1;
                 rEntry.nField = nCol1;
                 ScQueryCellIterator aCellIter(pDok, nTab1, rParam, FALSE);
@@ -3523,15 +3516,7 @@ void ScInterpreter::ScMatch()
                 }
                 else
                 {                                       // <= or >=
-                    aCellIter.SetStopOnMismatch( TRUE );
-                    if ( aCellIter.GetFirst() )
-                    {
-                        do
-                        {
-                            nC = aCellIter.GetCol();
-                        } while ( aCellIter.GetNext() );
-                    }
-                    else
+                    if ( !aCellIter.FindEqualOrSortedLastInRange( nC, nR ) )
                     {
                         SetNV();
                         return;
@@ -3690,7 +3675,7 @@ void ScInterpreter::ScCountIf()
             rParam.bHasHeader  = FALSE;
             rParam.bInplace    = TRUE;
             rParam.bCaseSens   = FALSE;
-            rParam.bRegExp     = pDok->GetDocOptions().IsFormulaRegexEnabled();
+            rParam.bRegExp     = FALSE;
             rParam.bDuplicate  = FALSE;
 
             ScQueryEntry& rEntry = rParam.GetEntry(0);
@@ -3870,7 +3855,7 @@ void ScInterpreter::ScSumIf()
             rParam.bHasHeader  = FALSE;
             rParam.bInplace    = TRUE;
             rParam.bCaseSens   = FALSE;
-            rParam.bRegExp     = pDok->GetDocOptions().IsFormulaRegexEnabled();
+            rParam.bRegExp     = FALSE;
             rParam.bDuplicate  = FALSE;
 
             ScQueryEntry& rEntry = rParam.GetEntry(0);
@@ -4095,7 +4080,7 @@ void ScInterpreter::ScLookup()
         rParam.bHasHeader  = FALSE;
         rParam.bInplace    = TRUE;
         rParam.bCaseSens   = FALSE;
-        rParam.bRegExp     = pDok->GetDocOptions().IsFormulaRegexEnabled();
+        rParam.bRegExp     = FALSE;
         rParam.bDuplicate  = FALSE;
 
         ScQueryEntry& rEntry = rParam.GetEntry(0);
@@ -4366,9 +4351,10 @@ void ScInterpreter::ScHLookup()
             rParam.nCol2       = nCol2;
             rParam.nRow2       = nRow1;     // nur in der ersten Zeile suchen
             rParam.bHasHeader  = FALSE;
+            rParam.bByRow      = FALSE;
             rParam.bInplace    = TRUE;
             rParam.bCaseSens   = FALSE;
-            rParam.bRegExp     = pDok->GetDocOptions().IsFormulaRegexEnabled();
+            rParam.bRegExp     = FALSE;
             rParam.bDuplicate  = FALSE;
 
             ScQueryEntry& rEntry = rParam.GetEntry(0);
@@ -4439,18 +4425,19 @@ void ScInterpreter::ScHLookup()
 //! TODO: enable regex on matrix strings
 //!!!!!!!
                     String aParamStr = *rEntry.pStr;
-                    SCSIZE i;
                     if ( bSorted )
                     {
-                        for (i = 0; i < nMatCount; i++)
+                        for (SCSIZE i = 0; i < nMatCount; i++)
                         {
                             if (pMat->IsString(i, 0))
                             {
-                                if ( ScGlobal::pTransliteration->isEqual(
-                                        pMat->GetString(i,0), aParamStr ) )
-                                    i = nMatCount+1;
-                                else
+                                sal_Int32 nRes =
+                                    ScGlobal::pCollator->compareString(
+                                            pMat->GetString(i,0), aParamStr);
+                                if (nRes <= 0)
                                     nDelta = i;
+                                else if (i>0)   // #i2168# ignore first mismatch
+                                    i = nMatCount+1;
                             }
                             else
                                 nDelta = i;
@@ -4458,7 +4445,7 @@ void ScInterpreter::ScHLookup()
                     }
                     else
                     {
-                        for (i = 0; i < nMatCount; i++)
+                        for (SCSIZE i = 0; i < nMatCount; i++)
                         {
                             if (pMat->IsString(i, 0))
                             {
@@ -4474,34 +4461,31 @@ void ScInterpreter::ScHLookup()
                 }
                 else
                 {
-                    double fVal1;
-                    SCSIZE i;
                     if ( bSorted )
                     {
-                        for (i = 0; i < nMatCount; i++)
+                        // #i2168# ignore strings
+                        for (SCSIZE i = 0; i < nMatCount; i++)
                         {
                             if (!pMat->IsString(i, 0))
-                                fVal1 = pMat->GetDouble(i,0);
-                            else
-                                fVal1 = MAXDOUBLE;
-                            if (fVal1 <= rEntry.nVal)
-                                nDelta = i;
-                            else
-                                i = nMatCount+1;
+                            {
+                                if (pMat->GetDouble(i,0) <= rEntry.nVal)
+                                    nDelta = i;
+                                else
+                                    i = nMatCount+1;
+                            }
                         }
                     }
                     else
                     {
-                        for (i = 0; i < nMatCount; i++)
+                        for (SCSIZE i = 0; i < nMatCount; i++)
                         {
                             if (!pMat->IsString(i, 0))
-                                fVal1 = pMat->GetDouble(i,0);
-                            else
-                                fVal1 = MAXDOUBLE;
-                            if (fVal1 == rEntry.nVal)
                             {
-                                nDelta = i;
-                                i = nMatCount + 1;
+                                if (pMat->GetDouble(i,0) == rEntry.nVal)
+                                {
+                                    nDelta = i;
+                                    i = nMatCount + 1;
+                                }
                             }
                         }
                     }
@@ -4537,11 +4521,6 @@ void ScInterpreter::ScHLookup()
                 {
                     bFound = TRUE;
                     nC = aCellIter.GetCol();
-                    if ( bSorted )
-                    {
-                        while ( aCellIter.GetNext() )
-                            nC = aCellIter.GetCol();
-                    }
                 }
                 if ( bFound )
                 {
@@ -4629,7 +4608,7 @@ void ScInterpreter::ScVLookup()
             rParam.bHasHeader  = FALSE;
             rParam.bInplace    = TRUE;
             rParam.bCaseSens   = FALSE;
-            rParam.bRegExp     = pDok->GetDocOptions().IsFormulaRegexEnabled();
+            rParam.bRegExp     = FALSE;
             rParam.bDuplicate  = FALSE;
 
             ScQueryEntry& rEntry = rParam.GetEntry(0);
@@ -4700,18 +4679,19 @@ void ScInterpreter::ScVLookup()
 //! TODO: enable regex on matrix strings
 //!!!!!!!
                     String aParamStr = *rEntry.pStr;
-                    SCSIZE i;
                     if ( bSorted )
                     {
-                        for (i = 0; i < nMatCount; i++)
+                        for (SCSIZE i = 0; i < nMatCount; i++)
                         {
                             if (pMat->IsString(0, i))
                             {
-                                if ( ScGlobal::pTransliteration->isEqual(
-                                        pMat->GetString(0,i), aParamStr ) )
-                                    i = nMatCount+1;
-                                else
+                                sal_Int32 nRes =
+                                    ScGlobal::pCollator->compareString(
+                                            pMat->GetString(0,i), aParamStr);
+                                if (nRes <= 0)
                                     nDelta = i;
+                                else if (i>0)   // #i2168# ignore first mismatch
+                                    i = nMatCount+1;
                             }
                             else
                                 nDelta = i;
@@ -4719,7 +4699,7 @@ void ScInterpreter::ScVLookup()
                     }
                     else
                     {
-                        for (i = 0; i < nMatCount; i++)
+                        for (SCSIZE i = 0; i < nMatCount; i++)
                         {
                             if (pMat->IsString(0, i))
                             {
@@ -4735,34 +4715,31 @@ void ScInterpreter::ScVLookup()
                 }
                 else
                 {
-                    double fVal1;
-                    SCSIZE i;
                     if ( bSorted )
                     {
-                        for (i = 0; i < nMatCount; i++)
+                        // #i2168# ignore strings
+                        for (SCSIZE i = 0; i < nMatCount; i++)
                         {
                             if (!pMat->IsString(0, i))
-                                fVal1 = pMat->GetDouble(0, i);
-                            else
-                                fVal1 = MAXDOUBLE;
-                            if (fVal1 <= rEntry.nVal)
-                                nDelta = i;
-                            else
-                                i = nMatCount+1;
+                            {
+                                if (pMat->GetDouble(0,i) <= rEntry.nVal)
+                                    nDelta = i;
+                                else
+                                    i = nMatCount+1;
+                            }
                         }
                     }
                     else
                     {
-                        for (i = 0; i < nMatCount; i++)
+                        for (SCSIZE i = 0; i < nMatCount; i++)
                         {
                             if (!pMat->IsString(0, i))
-                                fVal1 = pMat->GetDouble(0, i);
-                            else
-                                fVal1 = MAXDOUBLE;
-                            if (fVal1 == rEntry.nVal)
                             {
-                                nDelta = i;
-                                i = nMatCount + 1;
+                                if (pMat->GetDouble(0,i) == rEntry.nVal)
+                                {
+                                    nDelta = i;
+                                    i = nMatCount + 1;
+                                }
                             }
                         }
                     }
@@ -4796,11 +4773,6 @@ void ScInterpreter::ScVLookup()
                 {
                     bFound = TRUE;
                     nR = aCellIter.GetRow();
-                    if ( bSorted )
-                    {
-                        while (aCellIter.GetNext())
-                            nR = aCellIter.GetRow();
-                    }
                 }
                 if ( bFound )
                 {
