@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldwrap.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:43:41 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:28:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,10 +62,12 @@
 #define _FLDWRAP_HXX
 
 #include "chldwrap.hxx"
+class AbstractSwFldDlg;
 
 class SwFldDlgWrapper : public SwChildWinWrapper
 {
 public:
+    AbstractSwFldDlg * pDlgInterface; // CHINA001 this member hold the pointer to the interface AbstractSwFldDlg
     SwFldDlgWrapper( Window* pParent, USHORT nId,
                         SfxBindings* pBindings, SfxChildWinInfo* pInfo );
 
@@ -81,6 +83,7 @@ public:
 class SwFldDataOnlyDlgWrapper : public SwChildWinWrapper
 {
 public:
+    AbstractSwFldDlg * pDlgInterface; // CHINA001 this member hold the pointer to the interface AbstractSwFldDlg
     SwFldDataOnlyDlgWrapper( Window* pParent, USHORT nId,
                         SfxBindings* pBindings, SfxChildWinInfo* pInfo );
 
