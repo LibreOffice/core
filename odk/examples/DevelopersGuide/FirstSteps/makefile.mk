@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: vg $ $Date: 2003-06-10 10:23:49 $
+#   last change: $Author: kz $ $Date: 2003-08-27 16:44:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,15 +80,19 @@ FIRSTSTEPS_FILES=\
     $(DESTDIRDEVGUIDEEXAMPLES)$/FirstSteps$/HelloTextTableShape.java \
     $(DESTDIRDEVGUIDEEXAMPLES)$/FirstSteps$/Makefile
 
-EXAMPLESLIST= \
+DIR_FILE_LIST= \
     $(FIRSTSTEPS_FILES) \
 
+DIR_DIRECTORY_LIST=$(uniq $(DIR_FILE_LIST:d))
+DIR_CREATE_FLAG=$(MISC)$/devguide_firststeps_dirs_created.txt
+DIR_FILE_FLAG=$(MISC)$/devguide_firststeps.txt
 
 #--------------------------------------------------
 # TARGETS
 #--------------------------------------------------
 all : \
-    $(EXAMPLESLIST)
+    $(DIR_FILE_LIST) \
+    $(DIR_FILE_FLAG)
 
 #--------------------------------------------------
 # use global rules
