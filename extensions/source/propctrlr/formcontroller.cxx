@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formcontroller.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:42:14 $
+ *  last change: $Author: hr $ $Date: 2004-08-05 10:13:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -356,6 +356,7 @@
 #include <cppuhelper/weakref.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <list>
+#include <algorithm>
 
 typedef ::std::list< ::std::pair< ::rtl::OUString, ::rtl::OUString > > EventList;
 
@@ -2622,7 +2623,17 @@ class EventsNameReplace_Impl:
                             Sequence< ::rtl::OUString > aDatasources = xDatabaseContext->getElementNames();
                             const ::rtl::OUString* pBegin = aDatasources.getConstArray();
                             const ::rtl::OUString* pEnd = pBegin + aDatasources.getLength();
-                            pProperty->aListValues.insert(pProperty->aListValues.begin(),pBegin,pEnd);
+
+                            ::std::vector< ::rtl::OUString > aPrevious( pProperty->aListValues.size() );
+                            ::std::copy( pProperty->aListValues.begin(), pProperty->aListValues.end(), aPrevious.begin() );
+
+
+                            pProperty->aListValues.resize( aPrevious.size() + aDatasources.getLength() );
+                            ::std::copy(
+                                aPrevious.begin(),
+                                aPrevious.end(),
+                                ::std::copy( pBegin, pEnd, pProperty->aListValues.begin() )
+                            );
                         }
                     }
                     break;
