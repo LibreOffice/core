@@ -1,14 +1,46 @@
- //============================================================================
- //
- // ScGraphicShell fuer StarCalc
- //
- // (C) 1999 StarDivision GmbH, Hamburg, Germany
- // $Author: hr $ $Date: 2000-09-18 16:44:52 $ $Revision: 1.1.1.1 $
- // $Logfile:   T:/sc/sdi/graphsh.sdv  $ $Workfile:   graphsh.sdi  $
- //----------------------------------------------------------------------------
 
 interface GraphSelection : Selection
 {
+    SID_ATTR_GRAF_MODE
+    [
+        ExecMethod = Execute;
+        StateMethod = GetAttrState;
+    ]
+    SID_ATTR_GRAF_RED
+    [
+        ExecMethod = Execute;
+        StateMethod = GetAttrState;
+    ]
+    SID_ATTR_GRAF_GREEN
+    [
+        ExecMethod = Execute;
+        StateMethod = GetAttrState;
+    ]
+    SID_ATTR_GRAF_BLUE
+    [
+        ExecMethod = Execute;
+        StateMethod = GetAttrState;
+    ]
+    SID_ATTR_GRAF_LUMINANCE
+    [
+        ExecMethod = Execute;
+        StateMethod = GetAttrState;
+    ]
+    SID_ATTR_GRAF_CONTRAST
+    [
+        ExecMethod = Execute;
+        StateMethod = GetAttrState;
+    ]
+    SID_ATTR_GRAF_GAMMA
+    [
+        ExecMethod = Execute;
+        StateMethod = GetAttrState;
+    ]
+    SID_ATTR_GRAF_TRANSPARENCE
+    [
+        ExecMethod = Execute;
+        StateMethod = GetAttrState;
+    ]
 }
 
  // ===========================================================================
@@ -16,3 +48,4 @@ shell ScGraphicShell : ScDrawShell
 {
     import GraphSelection;
 }
+
