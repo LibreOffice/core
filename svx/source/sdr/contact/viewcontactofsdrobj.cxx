@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewcontactofsdrobj.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 14:31:23 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 14:41:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -312,7 +312,7 @@ static sal_Bool bTestTheBitmapBufferedObjects(sal_False);
             else
             {
                 // Paint the object. Just hand over to the old Paint() ATM.
-                GetSdrObject().DoPaintObject_Wrapper(
+                GetSdrObject().DoPaintObject(
                     *rDisplayInfo.GetExtendedOutputDevice(),
                     *rDisplayInfo.GetPaintInfoRec());
 
