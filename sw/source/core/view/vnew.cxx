@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vnew.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 17:46:45 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 10:53:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,6 +181,14 @@ void ViewShell::Init( const SwViewOption *pNewOpt )
                 com::sun::star::document::PrinterIndependentLayout::DISABLED ==
                 pDoc->IsUseVirtualDevice() ) )
         InitPrt( GetPrt() );
+    // <--
+
+    // --> FME 2005-03-16 #i44963# Good occasion to check if page sizes in
+    // page descriptions are still set to (LONG_MAX, LONG_MAX) (html import)
+    if ( !pDoc->IsBrowseMode() )
+    {
+        pDoc->CheckDefaultPageFmt();
+    }
     // <--
 
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "View::Init - after InitPrt" );
