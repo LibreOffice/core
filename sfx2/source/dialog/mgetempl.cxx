@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mgetempl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pb $ $Date: 2001-02-15 07:34:55 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:31:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -479,7 +479,7 @@ BOOL SfxManageStyleSheetPage::FillItemSet( SfxItemSet& rSet )
         bModified = TRUE;
         DBG_ASSERT( pItem, "kein Item" );
         // geht nur bei Benutzervorlagen
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         USHORT nIdx = (USHORT)(long)aFilterLb.GetEntryData( nFilterIdx );
         SfxFilterTupel* p = pItem->GetFilterList().GetObject( nIdx );
 #endif
