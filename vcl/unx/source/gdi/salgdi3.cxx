@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hdu $ $Date: 2001-02-15 15:36:37 $
+ *  last change: $Author: svesik $ $Date: 2001-02-16 01:18:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <assert.h>
-#ifndef FREEBSD
+#if !( defined(FREEBSD) || defined(NETBSD) )
 #include <alloca.h>
 #endif
 
