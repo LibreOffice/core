@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tplpitem.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 15:38:29 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 14:53:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,13 @@
 #ifndef _SFX_TPLPITEM_HXX
 #define _SFX_TPLPITEM_HXX
 
+#ifndef _SAL_CONFIG_H_
+#include "sal/config.h"
+#endif
+
+#ifndef INCLUDED_SFX2_DLLAPI_H
+#include "sfx2/dllapi.h"
+#endif
 
 #ifndef _STRING_HXX //autogen
 #include <tools/string.hxx>
@@ -72,7 +79,7 @@
 #include <svtools/flagitem.hxx>
 #endif
 
-class SfxTemplateItem: public SfxFlagItem
+class SFX2_DLLPUBLIC SfxTemplateItem: public SfxFlagItem
 {
     String aStyle;
 public:
