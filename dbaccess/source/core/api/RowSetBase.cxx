@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetBase.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-13 11:13:00 $
+ *  last change: $Author: oj $ $Date: 2002-10-11 11:08:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -937,8 +937,18 @@ void ORowSetBase::setCurrentRow(sal_Bool _bMoved,const ORowSetMatrix::iterator& 
         m_aCurrentRow.setBookmark(m_aBookmark);
     }
 
-    if(_bMoved)
+    if ( _bMoved )
+    {
         notifyAllListenersCursorMoved(_rGuard);
+        // the cache could repositioned so we need to adjust the cache
+        // #104144# OJ
+        if ( m_aCurrentRow.isNull() )
+        {
+            positionCache();
+            m_aCurrentRow   = m_pCache->m_aMatrixIter;
+            OSL_ENSURE(m_aCurrentRow,"CurrentRow is nul after positionCache!");
+        }
+    }
 
     firePropertyChange(_rOldValues);
 
@@ -1025,7 +1035,12 @@ void ORowSetBase::firePropertyChange(const ORowSetMatrix::iterator& _rOldRow)
         aRow = *_rOldRow;
 
     OSL_ENSURE(m_pColumns,"Columns can not be NULL here!");
-    OSL_ENSURE(m_aCurrentRow,"ORowSetBase::firePropertyChange: we don't stand on a valid row! Row is null.");
+#ifdef DEBUG
+    sal_Bool bNull = m_aCurrentRow.isNull();
+    ORowSetMatrix::iterator atest = m_aCurrentRow;
+#endif
+    OSL_ENSURE(!m_aCurrentRow.isNull() && m_aCurrentRow != m_pCache->getEnd(),"Position of matrix iterator isn't valid!");
+    OSL_ENSURE(m_aCurrentRow->isValid(),"Currentrow isn't valid");
     sal_Int32 i=0;
     try
     {
