@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.109 $
+ *  $Revision: 1.110 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-25 13:24:38 $
+ *  last change: $Author: fs $ $Date: 2001-09-28 18:37:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2449,10 +2449,6 @@ IMPL_LINK(SbaTableQueryBrowser, OnSelectEntry, SvLBoxEntry*, _pEntry)
             // reset the values
             xProp->setPropertyValue(PROPERTY_DATASOURCENAME,Any());
             xProp->setPropertyValue(PROPERTY_ACTIVECONNECTION,Any());
-        }
-        catch(...)
-        {
-            OSL_ENSURE(0,"Unkown Exception in SbaTableQueryBrowser::OnSelectEntry!");
         }
     }
     return 0L;
