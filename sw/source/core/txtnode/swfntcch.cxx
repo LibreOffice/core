@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfntcch.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ama $ $Date: 2001-04-10 14:24:20 $
+ *  last change: $Author: fme $ $Date: 2001-07-10 15:17:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@
 #include "swfont.hxx"
 
 // aus atrstck.cxx
-extern USHORT StackPos[];
+extern const BYTE StackPos[];
 
 // globale Variablen, werden in SwFntCch.Hxx bekanntgegeben
 // Der FontCache wird in TxtInit.Cxx _TXTINIT erzeugt und in _TXTEXIT geloescht
