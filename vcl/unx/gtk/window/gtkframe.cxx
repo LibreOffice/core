@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gtkframe.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 12:48:23 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 09:20:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,7 @@
 #include <plugins/gtk/gtkdata.hxx>
 #include <plugins/gtk/gtkinst.hxx>
 #include <plugins/gtk/gtkgdi.hxx>
+#include <pspgraphics.h>
 #include <keycodes.hxx>
 #include <wmadaptor.hxx>
 #include <salbmp.h>
@@ -369,8 +370,6 @@ void GtkSalFrame::Init( SalFrame* pParent, ULONG nStyle )
 
 GdkNativeWindow GtkSalFrame::findTopLevelSystemWindow( GdkNativeWindow aWindow )
 {
-    int x_ret, y_ret;
-    unsigned int bw, d;
     XLIB_Window aRoot, aParent;
     XLIB_Window* pChildren;
     unsigned int nChildren;
@@ -528,7 +527,7 @@ void GtkSalFrame::Center()
             gdk_display_get_pointer( getGdkDisplay(), &pScreen, &x, &y, &aMask );
 
             const std::vector< Rectangle >& rScreens = GetSalData()->GetDisplay()->GetXineramaScreens();
-            for( int i = 0; i < rScreens.size(); i++ )
+            for( unsigned int i = 0; i < rScreens.size(); i++ )
                 if( rScreens[i].IsInside( Point( x, y ) ) )
                 {
                     nScreenX            = rScreens[i].Left();
@@ -637,7 +636,7 @@ void GtkSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, USHOR
 #if OSL_DEBUG_LEVEL > 1
         if( nWidth < 2 || nWidth > 2000 || nHeight < 2 || nHeight > 2000 )
         {
-            fprintf( stderr, "Discarding bad size: %d, %d\n", nWidth, nHeight );
+            fprintf( stderr, "Discarding bad size: %ld, %ld\n", nWidth, nHeight );
             return;
         }
 #endif
@@ -667,7 +666,7 @@ void GtkSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, USHOR
 #if OSL_DEBUG_LEVEL > 1
         if( std::abs( nX ) > 2000 || std::abs( nY ) > 2000 )
         {
-            fprintf( stderr, "Discarding bad pos: %d, %d\n", nX, nY );
+            fprintf( stderr, "Discarding bad pos: %ld, %ld\n", nX, nY );
             return;
         }
 #endif
@@ -1129,10 +1128,59 @@ void GtkSalFrame::UpdateSettings( AllSettings& rSettings )
     aStyleSet.SetMenuHighlightTextColor( aHighlightTextColor );
 
     // UI font
-    ByteString  aFamily = pango_font_description_get_family( pStyle->font_desc );
+    OString aFamily     = pango_font_description_get_family( pStyle->font_desc );
     int nPixelHeight    = pango_font_description_get_size( pStyle->font_desc )/PANGO_SCALE;
     PangoStyle  eStyle  = pango_font_description_get_style( pStyle->font_desc );
     PangoWeight eWeight = pango_font_description_get_weight( pStyle->font_desc );
+    PangoStretch eStretch = pango_font_description_get_stretch( pStyle->font_desc );
+
+    psp::FastPrintFontInfo aInfo;
+    // set family name
+    aInfo.m_aFamilyName = OStringToOUString( aFamily, RTL_TEXTENCODING_UTF8 );
+    // set italic
+    switch( eStyle )
+    {
+        case PANGO_STYLE_NORMAL:    aInfo.m_eItalic = psp::italic::Upright;break;
+        case PANGO_STYLE_ITALIC:    aInfo.m_eItalic = psp::italic::Italic;break;
+        case PANGO_STYLE_OBLIQUE:   aInfo.m_eItalic = psp::italic::Oblique;break;
+    }
+    // set weight
+    if( eWeight <= PANGO_WEIGHT_ULTRALIGHT )
+        aInfo.m_eWeight = psp::weight::UltraLight;
+    else if( eWeight <= PANGO_WEIGHT_LIGHT )
+        aInfo.m_eWeight = psp::weight::Light;
+    else if( eWeight <= PANGO_WEIGHT_NORMAL )
+        aInfo.m_eWeight = psp::weight::Normal;
+    else if( eWeight <= PANGO_WEIGHT_BOLD )
+        aInfo.m_eWeight = psp::weight::Bold;
+    else
+        aInfo.m_eWeight = psp::weight::UltraBold;
+    // set width
+    switch( eStretch )
+    {
+        case PANGO_STRETCH_ULTRA_CONDENSED: aInfo.m_eWidth = psp::width::UltraCondensed;break;
+        case PANGO_STRETCH_EXTRA_CONDENSED: aInfo.m_eWidth = psp::width::ExtraCondensed;break;
+        case PANGO_STRETCH_CONDENSED:       aInfo.m_eWidth = psp::width::Condensed;break;
+        case PANGO_STRETCH_SEMI_CONDENSED:  aInfo.m_eWidth = psp::width::SemiCondensed;break;
+        case PANGO_STRETCH_NORMAL:          aInfo.m_eWidth = psp::width::Normal;break;
+        case PANGO_STRETCH_SEMI_EXPANDED:   aInfo.m_eWidth = psp::width::SemiExpanded;break;
+        case PANGO_STRETCH_EXPANDED:        aInfo.m_eWidth = psp::width::Expanded;break;
+        case PANGO_STRETCH_EXTRA_EXPANDED:  aInfo.m_eWidth = psp::width::ExtraExpanded;break;
+        case PANGO_STRETCH_ULTRA_EXPANDED:  aInfo.m_eWidth = psp::width::UltraExpanded;break;
+    }
+
+#if OSL_DEBUG_LEVEL > 1
+    fprintf( stderr, "font name BEFORE system match: \"%s\"\n", aFamily.getStr() );
+#endif
+
+    // match font to e.g. resolve "Sans"
+    psp::PrintFontManager::get().matchFont( aInfo );
+
+#if OSL_DEBUG_LEVEL > 1
+    fprintf( stderr, "font match %s, name AFTER: \"%s\"\n",
+             aInfo.m_nID != 0 ? "succeeded" : "failed",
+             OUStringToOString( aInfo.m_aFamilyName, RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
+#endif
 
     sal_Int32 nDPIX, nDPIY;
     sal_Int32 nDispDPIY = getDisplay()->GetResolution().B();
@@ -1144,15 +1192,15 @@ void GtkSalFrame::UpdateSettings( AllSettings& rSettings )
     while( (nHeight * nDPIY / nDispDPIY) < nPixelHeight )
         nHeight++;
 
-    Font aFont( String( aFamily, RTL_TEXTENCODING_UTF8 ), Size( 0, nHeight ) );
-    if( eWeight >= PANGO_WEIGHT_BOLD )
-        aFont.SetWeight( WEIGHT_BOLD );
-    else if( PANGO_WEIGHT_LIGHT )
-        aFont.SetWeight( WEIGHT_LIGHT );
-    if( eStyle == PANGO_STYLE_OBLIQUE )
-        aFont.SetItalic( ITALIC_OBLIQUE );
-    else if( eStyle == PANGO_STYLE_ITALIC )
-        aFont.SetItalic( ITALIC_NORMAL );
+    Font aFont( aInfo.m_aFamilyName, Size( 0, nHeight ) );
+    if( aInfo.m_eWeight != psp::weight::Unknown )
+        aFont.SetWeight( PspGraphics::ToFontWeight( aInfo.m_eWeight ) );
+    if( aInfo.m_eWidth != psp::width::Unknown )
+        aFont.SetWidthType( PspGraphics::ToFontWidth( aInfo.m_eWidth ) );
+    if( aInfo.m_eItalic != psp::italic::Unknown )
+        aFont.SetItalic( PspGraphics::ToFontItalic( aInfo.m_eItalic ) );
+    if( aInfo.m_ePitch != psp::pitch::Unknown )
+        aFont.SetPitch( PspGraphics::ToFontPitch( aInfo.m_ePitch ) );
 
     aStyleSet.SetAppFont( aFont );
     aStyleSet.SetHelpFont( aFont );
@@ -1466,7 +1514,7 @@ gboolean GtkSalFrame::signalConfigure( GtkWidget* pWidget, GdkEventConfigure* pE
 
     if( x != pThis->maGeometry.nX || y != pThis->maGeometry.nY )
         bMoved = true;
-    if( pEvent->width != pThis->maGeometry.nWidth || pEvent->height != pThis->maGeometry.nHeight )
+    if( (unsigned int)pEvent->width != pThis->maGeometry.nWidth || (unsigned int)pEvent->height != pThis->maGeometry.nHeight )
         bSized = true;
 
     pThis->maGeometry.nX        = x;
@@ -1787,24 +1835,24 @@ void GtkSalFrame::signalIMPreeditChanged( GtkIMContext* pContext, gpointer frame
 
 void GtkSalFrame::signalIMPreeditStart( GtkIMContext* pContext, gpointer frame )
 {
-    GtkSalFrame* pThis = (GtkSalFrame*)frame;
+//    GtkSalFrame* pThis = (GtkSalFrame*)frame;
 }
 
 void GtkSalFrame::signalIMPreeditEnd( GtkIMContext* pContext, gpointer frame )
 {
-    GtkSalFrame* pThis = (GtkSalFrame*)frame;
+//    GtkSalFrame* pThis = (GtkSalFrame*)frame;
 }
 
 gboolean GtkSalFrame::signalIMRetrieveSurrounding( GtkIMContext* pContext, gpointer frame )
 {
-    GtkSalFrame* pThis = (GtkSalFrame*)frame;
+//    GtkSalFrame* pThis = (GtkSalFrame*)frame;
 
     return FALSE;
 }
 
 gboolean GtkSalFrame::signalIMDeleteSurrounding( GtkIMContext* pContext, gint arg1, gint arg2, gpointer frame )
 {
-    GtkSalFrame* pThis = (GtkSalFrame*)frame;
+//    GtkSalFrame* pThis = (GtkSalFrame*)frame;
 
     return FALSE;
 }
