@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbstreamhelper.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 12:29:09 $
+ *  last change: $Author: obo $ $Date: 2004-05-28 15:19:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,15 +94,9 @@ using namespace ::com::sun::star::beans;
 namespace utl
 {
 
-SvStream* UcbStreamHelper::CreateStream( const String& rFileName, StreamMode eOpenMode,
-        UcbLockBytesHandler* pHandler, sal_Bool bForceSynchron )
-{
-    return CreateStream( rFileName, eOpenMode, Reference < XInteractionHandler >(), pHandler, bForceSynchron );
-}
-
-SvStream* UcbStreamHelper::CreateStream( const String& rFileName, StreamMode eOpenMode,
+static SvStream* lcl_CreateStream( const String& rFileName, StreamMode eOpenMode,
         Reference < XInteractionHandler > xInteractionHandler,
-        UcbLockBytesHandler* pHandler, sal_Bool bForceSynchron )
+        UcbLockBytesHandler* pHandler, sal_Bool bForceSynchron, sal_Bool bEnsureFileExists )
 {
     SvStream* pStream = NULL;
     ::ucb::ContentBroker* pBroker = ::ucb::ContentBroker::get();
@@ -133,33 +127,36 @@ SvStream* UcbStreamHelper::CreateStream( const String& rFileName, StreamMode eOp
                 }
             }
 
-            try
+            if ( bEnsureFileExists )
             {
-                // make sure that the desired file exists before trying to open
-                SvMemoryStream aStream(0,0);
-                ::utl::OInputStreamWrapper* pInput = new ::utl::OInputStreamWrapper( aStream );
-                Reference< XInputStream > xInput( pInput );
+                try
+                {
+                    // make sure that the desired file exists before trying to open
+                    SvMemoryStream aStream(0,0);
+                    ::utl::OInputStreamWrapper* pInput = new ::utl::OInputStreamWrapper( aStream );
+                    Reference< XInputStream > xInput( pInput );
 
-                ::ucb::Content aContent( rFileName, Reference < XCommandEnvironment >() );
-                InsertCommandArgument aInsertArg;
-                aInsertArg.Data = xInput;
+                    ::ucb::Content aContent( rFileName, Reference < XCommandEnvironment >() );
+                    InsertCommandArgument aInsertArg;
+                    aInsertArg.Data = xInput;
 
-                aInsertArg.ReplaceExisting = sal_False;
-                Any aCmdArg;
-                aCmdArg <<= aInsertArg;
-                aContent.executeCommand( ::rtl::OUString::createFromAscii( "insert" ), aCmdArg );
-            }
+                    aInsertArg.ReplaceExisting = sal_False;
+                    Any aCmdArg;
+                    aCmdArg <<= aInsertArg;
+                    aContent.executeCommand( ::rtl::OUString::createFromAscii( "insert" ), aCmdArg );
+                }
 
-            // it is NOT an error when the stream already exists and no truncation was desired
-            catch ( CommandAbortedException& )
-            {
-                // currently never an error is detected !
-            }
-            catch ( ContentCreationException& )
-            {
-            }
-            catch ( Exception& )
-            {
+                // it is NOT an error when the stream already exists and no truncation was desired
+                catch ( CommandAbortedException& )
+                {
+                    // currently never an error is detected !
+                }
+                catch ( ContentCreationException& )
+                {
+                }
+                catch ( Exception& )
+                {
+                }
             }
         }
 
@@ -191,6 +188,28 @@ SvStream* UcbStreamHelper::CreateStream( const String& rFileName, StreamMode eOp
         pStream = new SvFileStream( rFileName, eOpenMode );
 
     return pStream;
+}
+
+//============================================================================
+
+SvStream* UcbStreamHelper::CreateStream( const String& rFileName, StreamMode eOpenMode,
+        UcbLockBytesHandler* pHandler, sal_Bool bForceSynchron )
+{
+    return lcl_CreateStream( rFileName, eOpenMode, Reference < XInteractionHandler >(), pHandler, bForceSynchron, sal_True /* bEnsureFileExists */ );
+}
+
+SvStream* UcbStreamHelper::CreateStream( const String& rFileName, StreamMode eOpenMode,
+        Reference < XInteractionHandler > xInteractionHandler,
+        UcbLockBytesHandler* pHandler, sal_Bool bForceSynchron )
+{
+    return lcl_CreateStream( rFileName, eOpenMode, xInteractionHandler, pHandler, bForceSynchron, sal_True /* bEnsureFileExists */ );
+}
+
+SvStream* UcbStreamHelper::CreateStream( const String& rFileName, StreamMode eOpenMode,
+        sal_Bool bFileExists,
+        UcbLockBytesHandler* pHandler, sal_Bool bForceSynchron )
+{
+    return lcl_CreateStream( rFileName, eOpenMode, Reference < XInteractionHandler >(), pHandler, bForceSynchron, !bFileExists );
 }
 
 SvStream* UcbStreamHelper::CreateStream( Reference < XInputStream > xStream )
