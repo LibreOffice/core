@@ -2,9 +2,9 @@
  *
  *  $RCSfile: schedule.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2002-12-05 10:35:31 $
+ *  last change: $Author: kz $ $Date: 2002-12-09 10:00:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -530,7 +530,7 @@ Text[ swedish ] = "Egna data";
     Text[ polish ] = "Dane osobiste";
     Text[ portuguese_brazilian ] = "Personal Data";
     Text[ japanese ] = "ç‹¬è‡ªã®ãƒ‡ãƒ¼ã‚¿";
-    Text[ korean ] = "ê°œì¸ ë°ì´í„°";
+    Text[ korean ] = "ê³ ìœ  ë°ì´í„°";
     Text[ chinese_simplified ] = "ä¸ªäººæ•°æ®";
     Text[ chinese_traditional ] = "å€‹äººæ•¸æ“š";
     Text[ arabic ] = "ÇáÈíÇäÇÊ ÇáÎÇÕÉ";
