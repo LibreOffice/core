@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chartarr.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 09:11:50 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:32:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -804,8 +804,8 @@ SchMemChart* ScChartArray::CreateMemChartSingle()
             }
             pMemChart->SetColText( static_cast<short>(nCol), aString);
 
-            ULONG nNumberAttr = pDocument->GetNumberFormat( ScAddress(
-                                            pCols[nCol], nRow1, nTab1 ) );
+            ULONG nNumberAttr = (nTotalRows ? pDocument->GetNumberFormat(
+                        ScAddress( pCols[nCol], nRow1, nTab1)) : 0);
             pMemChart->SetNumFormatIdCol( static_cast<long>(nCol), nNumberAttr );
         }
 
@@ -829,8 +829,8 @@ SchMemChart* ScChartArray::CreateMemChartSingle()
             }
             pMemChart->SetRowText( static_cast<short>(nRow), aString);
 
-            ULONG nNumberAttr = pDocument->GetNumberFormat( ScAddress(
-                                            nCol1, pRows[nRow], nTab1 ) );
+            ULONG nNumberAttr = (nTotalCols ? pDocument->GetNumberFormat(
+                        ScAddress( nCol1, pRows[nRow], nTab1)) : 0);
             pMemChart->SetNumFormatIdRow( static_cast<long>(nRow), nNumberAttr );
         }
 
@@ -848,8 +848,9 @@ SchMemChart* ScChartArray::CreateMemChartSingle()
         //  Zahlen-Typ
         //
 
-        ULONG nNumberAttr = pDocument->GetNumberFormat( ScAddress(
-                                        nCol1, nRow1, nTab1 ) );
+        ULONG nNumberAttr = (nTotalCols && nTotalRows ?
+                pDocument->GetNumberFormat( ScAddress( nCol1, nRow1, nTab1)) :
+                0);
         if (pFormatter)
             pMemChart->SetDataType(pFormatter->GetType( nNumberAttr ));
 
