@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undobase.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:50:31 $
+ *  last change: $Author: kz $ $Date: 2004-07-23 10:53:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,12 +75,16 @@
 #include "tabvwsh.hxx"
 #include "undoolk.hxx"
 #include "undodraw.hxx"
+#include "dbcolect.hxx"
+#include "attrib.hxx"
+#include "globstr.hrc"
 
 // STATIC DATA -----------------------------------------------------------
 
 TYPEINIT1(ScSimpleUndo,     SfxUndoAction);
 TYPEINIT1(ScBlockUndo,      SfxUndoAction);
 TYPEINIT1(ScMoveUndo,       SfxUndoAction);
+TYPEINIT1(ScDBFuncUndo,     SfxUndoAction);
 TYPEINIT1(ScUndoWrapper,    SfxUndoAction);
 
 // -----------------------------------------------------------------------
@@ -371,6 +375,102 @@ void ScMoveUndo::EndRedo()
     ScSimpleUndo::EndRedo();
 }
 */
+
+// -----------------------------------------------------------------------
+
+ScDBFuncUndo::ScDBFuncUndo( ScDocShell* pDocSh, const ScRange& rOriginal ) :
+    ScSimpleUndo( pDocSh ),
+    aOriginalRange( rOriginal )
+{
+    pAutoDBRange = pDocSh->GetOldAutoDBRange();
+}
+
+ScDBFuncUndo::~ScDBFuncUndo()
+{
+    delete pAutoDBRange;
+}
+
+void ScDBFuncUndo::BeginUndo()
+{
+    ScSimpleUndo::BeginUndo();
+}
+
+void ScDBFuncUndo::EndUndo()
+{
+    ScSimpleUndo::EndUndo();
+
+    if ( pAutoDBRange )
+    {
+        USHORT nNoNameIndex;
+        ScDocument* pDoc = pDocShell->GetDocument();
+        ScDBCollection* pColl = pDoc->GetDBCollection();
+        if ( pColl->SearchName( ScGlobal::GetRscString( STR_DB_NONAME ), nNoNameIndex ) )
+        {
+            ScDBData* pNoNameData = (*pColl)[nNoNameIndex];
+
+            SCCOL nRangeX1;
+            SCROW nRangeY1;
+            SCCOL nRangeX2;
+            SCROW nRangeY2;
+            SCTAB nRangeTab;
+            pNoNameData->GetArea( nRangeTab, nRangeX1, nRangeY1, nRangeX2, nRangeY2 );
+            pDocShell->DBAreaDeleted( nRangeTab, nRangeX1, nRangeY1, nRangeX2, nRangeY2 );
+
+            *pNoNameData = *pAutoDBRange;
+
+            if ( pAutoDBRange->HasAutoFilter() )
+            {
+                // restore AutoFilter buttons
+                pAutoDBRange->GetArea( nRangeTab, nRangeX1, nRangeY1, nRangeX2, nRangeY2 );
+                pDoc->ApplyFlagsTab( nRangeX1, nRangeY1, nRangeX2, nRangeY1, nRangeTab, SC_MF_AUTO );
+                pDocShell->PostPaint( nRangeX1, nRangeY1, nRangeTab, nRangeX2, nRangeY1, nRangeTab, PAINT_GRID );
+            }
+        }
+    }
+}
+
+void ScDBFuncUndo::BeginRedo()
+{
+    if ( pAutoDBRange )
+    {
+        // move the database range to this function's position again (see ScDocShell::GetDBData)
+
+        USHORT nNoNameIndex;
+        ScDocument* pDoc = pDocShell->GetDocument();
+        ScDBCollection* pColl = pDoc->GetDBCollection();
+        if ( pColl->SearchName( ScGlobal::GetRscString( STR_DB_NONAME ), nNoNameIndex ) )
+        {
+            ScDBData* pNoNameData = (*pColl)[nNoNameIndex];
+
+            SCCOL nRangeX1;
+            SCROW nRangeY1;
+            SCCOL nRangeX2;
+            SCROW nRangeY2;
+            SCTAB nRangeTab;
+            pNoNameData->GetArea( nRangeTab, nRangeX1, nRangeY1, nRangeX2, nRangeY2 );
+            pDocShell->DBAreaDeleted( nRangeTab, nRangeX1, nRangeY1, nRangeX2, nRangeY2 );
+
+            pNoNameData->SetSortParam( ScSortParam() );
+            pNoNameData->SetQueryParam( ScQueryParam() );
+            pNoNameData->SetSubTotalParam( ScSubTotalParam() );
+
+            pNoNameData->SetArea( aOriginalRange.aStart.Tab(),
+                                  aOriginalRange.aStart.Col(), aOriginalRange.aStart.Row(),
+                                  aOriginalRange.aEnd.Col(), aOriginalRange.aEnd.Row() );
+
+            pNoNameData->SetByRow( TRUE );
+            pNoNameData->SetAutoFilter( FALSE );
+            // header is always set with the operation in redo
+        }
+    }
+
+    ScSimpleUndo::BeginRedo();
+}
+
+void ScDBFuncUndo::EndRedo()
+{
+    ScSimpleUndo::EndRedo();
+}
 
 // -----------------------------------------------------------------------
 
