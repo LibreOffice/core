@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_shl.mk,v $
 #
-#   $Revision: 1.29 $
+#   $Revision: 1.30 $
 #
-#   last change: $Author: pluby $ $Date: 2001-03-06 19:20:33 $
+#   last change: $Author: hjs $ $Date: 2001-04-26 11:18:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -208,6 +208,14 @@ $(USE_SHL$(TNR)VERSIONMAP): $(SHL$(TNR)VERSIONMAP)
 .ENDIF			# "$(SHL$(TNR)VERSIONMAP)"!=""
 .ENDIF			# "$(USE_SHL$(TNR)VERSIONMAP)"!=""
 .ENDIF			# "$(GUI)" != "UNX"
+
+.IF "$(UNIXVERSIONNAMES)"!=""
+.IF "$(OS)"!="MACOSX"
+.IF "$(GUI)"=="UNX"
+SHL$(TNR)SONAME)=$(SONAME_SWITCH) $(SHL$(TNR)TARGETN:b:b)	
+.ENDIF			# "$(GUI)"!="UNX"
+.ENDIF			# "$(OS)"!="MACOSX"
+.ENDIF			# "$(UNIXVERSIONNAMES)"!=""
 
 .IF "$(NO_REC_RES)"!=""
 .IF "$(SHL$(TNR)RES)"!=""
@@ -460,7 +468,7 @@ $(SHL$(TNR)TARGETN) : \
 .ENDIF
 .ELSE			# "$(OS)"=="MACOSX"
     @+-$(RM) $(MISC)$/$(@:b).cmd
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(SHL$(TNR)VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL$(TNR)OBJS:s/.obj/.o/) \
+    @+echo $(LINK) $(LINKFLAGS) $(SHL$(TNR)SONAME) $(LINKFLAGSSHL) $(SHL$(TNR)VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL$(TNR)OBJS:s/.obj/.o/) \
     $(SHL$(TNR)VERSIONOBJ) $(SHL$(TNR)DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
     `cat /dev/null $(SHL$(TNR)LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
     $(SHL$(TNR)STDLIBS) $(SHL$(TNR)ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
@@ -473,6 +481,12 @@ $(SHL$(TNR)TARGETN) : \
 .IF "$(UPDATER)"=="YES"
     +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB:s/2.6//) $(SHL$(TNR)TARGETN)
 .ENDIF			# "$(UPDATER)"=="YES"
+.IF "$(UNIXVERSIONNAMES)"!=""
+    +$(RM) $(LB)$/$(SHL$(TNR)TARGETN:b:b:b)
+    +$(RM) $(LB)$/$(SHL$(TNR)TARGETN:b:b)
+    +$(COPY) $(SHL$(TNR)TARGETN) $(LB)$/$(SHL$(TNR)TARGETN:b:b)
+    +$(COPY) $(LB)$/$(SHL$(TNR)TARGETN:f:b:b) $(LB)$/$(SHL$(TNR)TARGETN:b:b:b)
+.ENDIF			# "$(UNIXVERSIONNAMES)"!=""
 .ENDIF			# "$(OS)"=="MACOSX"
 .ENDIF			# "$(GUI)" == "UNX"
 .IF "$(GUI)"=="MAC"

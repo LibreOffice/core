@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unx.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: hr $ $Date: 2000-11-23 17:24:26 $
+#   last change: $Author: hjs $ $Date: 2001-04-26 11:18:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -181,4 +181,19 @@ YACCFLAGS*=-d -t
 EXECPOST=
 SCPPOST=.ins
 DLLDEST=$(LB)
-.ENDIF
+SONAME_SWITCH*=-h
+
+.IF "$(UNIXVERSIONNAMES)"!=""
+DLLPOST!:=$(DLLPOST).$($(UNIXVERSIONNAMES)_MAJOR).$($(UNIXVERSIONNAMES)_MINOR).$($(UNIXVERSIONNAMES)_MICRO)
+.ENDIF			# "$(UNIXVERSIONNAMES)"!=""
+.IF "$(UDK_MAJOR)"!=""
+SCPDEFS+=-D$(UDK_MAJOR)
+.ENDIF			# "$(UDK_MAJOR)"!=""
+.IF "$(UDK_MINOR)"!=""
+SCPDEFS+=-D$(UDK_MINOR)
+.ENDIF			# "$(UDK_MINOR)"!=""
+.IF "$(UDK_MICRO)"!=""
+SCPDEFS+=-D$(UDK_MICRO)
+.ENDIF			# "$(UDK_MICRO)"!=""
+.ENDIF			# "$(GUI)" == "UNX"
+
