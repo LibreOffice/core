@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: fs $ $Date: 2002-03-21 14:55:08 $
+ *  last change: $Author: fs $ $Date: 2002-05-23 12:19:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,9 @@
 #ifndef DBAUI_GENERICCONTROLLER_HXX
 #include "genericcontroller.hxx"
 #endif
-
+#ifndef _CLIPLISTENER_HXX
+#include <svtools/cliplistener.hxx>
+#endif
 
 class ResMgr;
 struct FmFoundRecordInformation;
@@ -165,6 +167,10 @@ namespace dbaui
 
         AutoTimer               m_aInvalidateClipboard;             // for testing the state of the CUT/COPY/PASTE-slots
 
+        TransferableDataHelper  m_aSystemClipboard;     // content of the clipboard
+        TransferableClipboardListener*
+                                m_pClipbordNotifier;    // notifier for changes in the clipboard
+
         ::osl::Mutex            m_aAsyncLoadSafety;     // for multi-thread access to our members
 
         OAsyncronousLink        m_aAsyncGetCellFocus;
@@ -185,9 +191,6 @@ namespace dbaui
         sal_Bool                m_bLoadCanceled : 1;            // the load was canceled somehow
         sal_Bool                m_bClosingKillOpen : 1;         // are we killing the load thread because we are to be suspended ?
         sal_Bool                m_bErrorOccured : 1;            // see enter-/leaveFormAction
-
-    protected:
-        TransferableDataHelper  m_aSystemClipboard;
 
     protected:
         class FormErrorHelper
@@ -216,6 +219,9 @@ namespace dbaui
         sal_Bool    loadingCancelled() const { return m_bLoadCanceled; }
         void        setLoadingStarted()     { m_bLoadCanceled = sal_False; }
         void        setLoadingCancelled()   { m_bLoadCanceled = sal_True; }
+
+        const TransferableDataHelper&
+            getViewClipboard() const { return m_aSystemClipboard; }
 
     protected:
         ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposer >    getParser() const { return m_xParser; }
@@ -403,7 +409,8 @@ namespace dbaui
         void applyParserOrder(const ::rtl::OUString& _rOldOrder);
 
         // time to check the CUT/COPY/PASTE-slot-states
-        DECL_LINK(OnInvalidateClipboard, void*);
+        DECL_LINK( OnInvalidateClipboard, void* );
+        DECL_LINK( OnClipboardChanged, void* );
 
         // search callbacks
         DECL_LINK(OnSearchContextRequest, FmSearchContext*);
