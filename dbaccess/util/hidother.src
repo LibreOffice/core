@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-06 11:59:12 $
+ *  last change: $Author: fs $ $Date: 2001-08-16 10:57:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -286,10 +286,14 @@ hidspecial HID_DLGINDEX_INDEXDETAILS_SORTORDER          { HelpId = HID_DLGINDEX_
 hidspecial HID_DOCLINKEDIT_URL                          { HelpId = HID_DOCLINKEDIT_URL; }
 
 hidspecial HID_QUERY_SQLMODE                            { HelpId = HID_QUERY_SQLMODE ; };
+hidspecial HID_BROWSER_REFRESH_REBUILDVIEW              { HelpId = HID_BROWSER_REFRESH_REBUILDVIEW ; };
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.35  2001/08/06 11:59:12  oj
+ *  #90563# new helpid for sql mode
+ *
  *  Revision 1.34  2001/08/06 07:49:58  fs
  *  #90558# #90529# new help ids
  *
