@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acredlin.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-21 20:32:08 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 20:20:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text[ korean ] = "¹üÀ§";
         Text[ turkish ] = "Aralýk";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Área";
     };
     Edit ED_ASSIGN
     {
@@ -155,6 +156,7 @@ ModelessDialog RID_SCDLG_CHANGES
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern/Vergrößern";
+        QuickHelpText[ catalan ] = "Reducir/Aumentar";
     };
     String STR_INSERT_COLS
     {
@@ -194,6 +196,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text[ korean ] = "¿­ÀÌ »ðÀÔµÇ¾ú½À´Ï´Ù.";
         Text[ turkish ] = "Sütun eklendi";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Columna insertada";
     };
     String STR_INSERT_ROWS
     {
@@ -220,6 +223,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text[ korean ] = "ÇàÀÌ »ðÀÔµÇ¾ú½À´Ï´Ù.";
         Text[ turkish ] = "Satýr eklendi";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Fila insertada";
     };
     String STR_INSERT_TABS
     {
@@ -246,6 +250,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text[ korean ] = "½ÃÆ®°¡ »ðÀÔµÇ¾ú½À´Ï´Ù.";
         Text[ turkish ] = "Tablo eklendi";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Hoja insertada";
     };
     String STR_DELETE_COLS
     {
@@ -272,6 +277,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text[ korean ] = "¿­ÀÌ »èÁ¦µÇ¾ú½À´Ï´Ù.";
         Text[ turkish ] = "Sütun silindi";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Columna eliminada";
     };
     String STR_DELETE_ROWS
     {
@@ -298,6 +304,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text[ korean ] = "ÇàÀÌ »èÁ¦µÇ¾ú½À´Ï´Ù.";
         Text[ turkish ] = "Satýr silindi";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Fila eliminada";
     };
     String STR_DELETE_TABS
     {
@@ -324,6 +331,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text[ korean ] = "½ÃÆ®°¡ »èÁ¦µÇ¾ú½À´Ï´Ù.";
         Text[ turkish ] = "Tablo silindi";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Hoja eliminada";
     };
     String STR_MOVE
     {
@@ -350,6 +358,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text[ korean ] = "¹üÀ§°¡ ÀÌµ¿µÇ¾ú½À´Ï´Ù.";
         Text[ turkish ] = "Aralýk kaydýrýldý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Área desplazada";
     };
     String STR_CONTENT
     {
@@ -376,6 +385,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text[ korean ] = "³»¿ë¡¡º¯°æ";
         Text[ turkish ] = "Ýçerik deðiþikliði";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Modificación de contenido";
     };
     String STR_CONTENT_WITH_CHILD
     {
@@ -402,6 +412,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text[ korean ] = "³»¿ë¡¡º¯°æ";
         Text[ turkish ] = "Ýçerik deðiþikliði";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Modificación de contenido";
     };
     String STR_CHILD_CONTENT
     {
@@ -428,6 +439,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text[ korean ] = "ÀÇ º¯°æ. ";
         Text[ turkish ] = "Deðiþiklikler: ";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Cambiada a  ";
     };
     String STR_CHILD_ORGCONTENT
     {
@@ -454,6 +466,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text[ korean ] = "¿ø·¡ÀÇ";
         Text[ turkish ] = "Özgün hali";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Original";
     };
     String STR_REJECT
     {
@@ -480,6 +493,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text[ korean ] = "º¯°æÀÌ Ãë¼ÒµÇ¾ú½À´Ï´Ù.";
         Text[ turkish ] = "Deðiþiklikler reddedildi";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Modificación rechazada";
     };
     String STR_ACCEPTED
     {
@@ -506,6 +520,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text[ korean ] = "¼ö¶ôµÈ";
         Text[ turkish ] = "Kabul edilenler";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Aceptadas";
     };
     String STR_REJECTED
     {
@@ -532,6 +547,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text[ korean ] = "°ÅºÎµÈ";
         Text[ turkish ] = "Reddedilenler";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Rechazadas";
     };
     String STR_NO_ENTRY
     {
@@ -558,6 +574,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text[ korean ] = "ÀÔ·Â¡¡¾øÀ½";
         Text[ turkish ] = "Giriþ yok";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Ninguna entrada";
     };
     String STR_EMPTY
     {
@@ -584,6 +601,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text[ korean ] = "<°ø¹é>";
         Text[ turkish ] = "<Boþ>";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "<vacío>";
     };
     Bitmap BMP_STR_CLOSE
     {
@@ -622,6 +640,7 @@ ModelessDialog RID_SCDLG_CHANGES
     Text[ korean ] = "º¯°æ»çÇ×  Àû¿ë ¶Ç´Â Ãë¼Ò";
     Text[ turkish ] = "Deðiþiklikleri kabul/redd et";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Aceptar o rechazar modificaciones";
 };
 Menu RID_POPUP_CHANGES
 {
@@ -655,6 +674,7 @@ Menu RID_POPUP_CHANGES
             Text[ korean ] = "ÁÖ¼® ÆíÁý...";
             Text[ turkish ] = "Açýklamayý düzenle...";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Modificar comentario...";
         };
         MenuItem
         {
@@ -694,6 +714,7 @@ Menu RID_POPUP_CHANGES
                         Text[ korean ] = "ÀÛµ¿";
                         Text[ turkish ] = "Ýþlem";
                         Text[ language_user1 ] = " ";
+                        Text[ catalan ] = "Acción";
                     };
                     MenuItem
                     {
@@ -723,6 +744,7 @@ Menu RID_POPUP_CHANGES
                         Text[ korean ] = "À§Ä¡";
                         Text[ turkish ] = "Konum";
                         Text[ language_user1 ] = " ";
+                        Text[ catalan ] = "Posición";
                     };
                     MenuItem
                     {
@@ -752,6 +774,7 @@ Menu RID_POPUP_CHANGES
                         Text[ korean ] = "ÀÛ¼ºÀÚ";
                         Text[ turkish ] = "Yazan";
                         Text[ language_user1 ] = " ";
+                        Text[ catalan ] = "Autor";
                     };
                     MenuItem
                     {
@@ -781,6 +804,7 @@ Menu RID_POPUP_CHANGES
                         Text[ korean ] = "³¯Â¥";
                         Text[ turkish ] = "Tarih";
                         Text[ language_user1 ] = " ";
+                        Text[ catalan ] = "Fecha";
                     };
                     MenuItem
                     {
@@ -810,6 +834,7 @@ Menu RID_POPUP_CHANGES
                         Text[ korean ] = "¼³¸í";
                         Text[ turkish ] = "Açýklama";
                         Text[ language_user1 ] = " ";
+                        Text[ catalan ] = "Descripción";
                     };
                 };
             };
@@ -834,6 +859,7 @@ Menu RID_POPUP_CHANGES
             Text[ korean ] = "Á¤·Ä";
             Text[ turkish ] = "Sýrala";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Ordenar";
         };
     };
 };
