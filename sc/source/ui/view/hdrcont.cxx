@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hdrcont.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 09:50:04 $
+ *  last change: $Author: kz $ $Date: 2004-05-17 17:25:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -778,6 +778,40 @@ void __EXPORT ScHeaderControl::Command( const CommandEvent& rCEvt )
                                             SfxViewShell::Current() );
         if ( pViewSh )
         {
+            if ( rCEvt.IsMouseEvent() )
+            {
+                // #i18735# select the column/row under the mouse pointer
+                ScViewData* pViewData = pViewSh->GetViewData();
+
+                SelectWindow();     // also deselects drawing objects, stops draw text edit
+                if ( pViewData->HasEditView( pViewData->GetActivePart() ) )
+                    SC_MOD()->InputEnterHandler();  // always end edit mode
+
+                MouseEvent aMEvt( rCEvt.GetMousePosPixel() );
+                BOOL bBorder;
+                USHORT nPos = GetMousePos( aMEvt, bBorder );
+                USHORT nTab = pViewData->GetTabNo();
+
+                ScRange aNewRange;
+                if ( bVertical )
+                    aNewRange = ScRange( 0, nPos, nTab, MAXCOL, nPos, nTab );
+                else
+                    aNewRange = ScRange( nPos, 0, nTab, nPos, MAXROW, nTab );
+
+                // see if any part of the range is already selected
+                BOOL bSelected = FALSE;
+                ScRangeList aRanges;
+                pViewData->GetMarkData().FillRangeListWithMarks( &aRanges, FALSE );
+                ULONG nRangeCount = aRanges.Count();
+                for (ULONG i=0; i<nRangeCount && !bSelected; i++)
+                    if ( aRanges.GetObject(i)->Intersects( aNewRange ) )
+                        bSelected = TRUE;
+
+                // select the range if no part of it was selected
+                if ( !bSelected )
+                    pViewSh->MarkRange( aNewRange );
+            }
+
             ScResId aResId( bVertical ? RID_POPUP_ROWHEADER : RID_POPUP_COLHEADER );
             pViewSh->GetDispatcher()->ExecutePopup( aResId );
         }
