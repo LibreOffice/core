@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txenctab.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2001-12-14 20:58:29 $
+ *  last change: $Author: vg $ $Date: 2002-01-14 21:28:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1261,19 +1261,19 @@ ItemList [ language_user1 ] =
         < "중국어 전통 (Windows-950)"          ; RTL_TEXTENCODING_MS_950           ; > ;
         < "일본어 (Shift-JIS)"                           ; RTL_TEXTENCODING_SHIFT_JIS        ; > ;
         < "중국어 간체 (GB-2312)"              ; RTL_TEXTENCODING_GB_2312          ; > ;
-        < "중국어 전통 (GBT-12345)"               ; RTL_TEXTENCODING_GB_18030         ; > ;
-        < "중국어 간체 (GBK/GB-2312-80)"               ; RTL_TEXTENCODING_GBT_12345        ; > ;
-        < "중국어 전통 (BIG5)"         ; RTL_TEXTENCODING_GBK              ; > ;
-        < "일본어 (EUC-JP)"                  ; RTL_TEXTENCODING_BIG5             ; > ;
-        < "중국어 간체 (EUC-CN)"                               ; RTL_TEXTENCODING_EUC_JP           ; > ;
-        < "키릴 (KOI8-R)"                 ; RTL_TEXTENCODING_EUC_CN           ; > ;
-        < "유니코드 (UTF-7)"                ; RTL_TEXTENCODING_EUC_TW           ; > ;
-        < "유니코드 (UTF-8)"                         ; RTL_TEXTENCODING_ISO_2022_JP      ; > ;
-        < "동유럽 (ISO-8859-10)"            ; RTL_TEXTENCODING_ISO_2022_CN      ; > ;
-        < "동유럽 (ISO-8859-13)"                             ; RTL_TEXTENCODING_KOI8_R           ; > ;
-        < "한국어 (EUC-KR)"                                  ; RTL_TEXTENCODING_UTF7             ; > ;
-        < "한국어 (Windows-Johab-1361)"                                  ; RTL_TEXTENCODING_UTF8             ; > ;
-        < "유니코드"                            ; RTL_TEXTENCODING_ISO_8859_10      ; > ;
+        < "중국어 간체 (GB-18030)"               ; RTL_TEXTENCODING_GB_18030         ; > ;
+        < "중국어 번체 (GBT-12345)"                ; RTL_TEXTENCODING_GBT_12345        ; > ;
+        < "중국어 간체 (GBK/GB-2312-80)"           ; RTL_TEXTENCODING_GBK              ; > ;
+        < "중국어 번체 (BIG5)"                 ; RTL_TEXTENCODING_BIG5             ; > ;
+        < "일본어 (EUC-JP)"                              ; RTL_TEXTENCODING_EUC_JP           ; > ;
+        < "중국어 간체 (EUC-CN)"                   ; RTL_TEXTENCODING_EUC_CN           ; > ;
+        < "중국어 번체 (EUC-TW)"                ; RTL_TEXTENCODING_EUC_TW           ; > ;
+        < "일본어 (ISO-2022-JP)"                         ; RTL_TEXTENCODING_ISO_2022_JP      ; > ;
+        < "중국어 간체 (ISO-2022-CN)"            ; RTL_TEXTENCODING_ISO_2022_CN      ; > ;
+        < "키릴어 (KOI8-R)"                              ; RTL_TEXTENCODING_KOI8_R           ; > ;
+        < "유니코드 (UTF-7)"                                    ; RTL_TEXTENCODING_UTF7             ; > ;
+        < "유니 코드 (UTF-8)"                                   ; RTL_TEXTENCODING_UTF8             ; > ;
+        < "동유럽 (ISO-8859-10) "                            ; RTL_TEXTENCODING_ISO_8859_10      ; > ;
         < "동유럽 (ISO-8859-13)"                         ; RTL_TEXTENCODING_ISO_8859_13      ; > ;
         < "한국어 (EUC-KR)"                              ; RTL_TEXTENCODING_EUC_KR           ; > ;
         < "한국어 (ISO-2022-KR)"                        ; RTL_TEXTENCODING_ISO_2022_KR      ; > ;
@@ -1696,6 +1696,7 @@ ItemList [ language_user1 ] =
     };
     };
  // ********************************************************************** EOF
+
 
 
 
