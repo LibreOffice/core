@@ -2,9 +2,9 @@
  *
  *  $RCSfile: styledlg.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 22:53:06 $
+ *  last change: $Author: kz $ $Date: 2001-07-03 22:33:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,7 +163,7 @@ TabDialog RID_SCDLG_STYLES_PAR
                 Text[ polish ] = "Efekt czcionki";
                 Text[ portuguese_brazilian ] = "Character Extension";
                 Text[ japanese ] = "Ì«İÄŒø‰Ê";
-                Text[ korean ] = "±Û²Ã¡¡È¿°ú";
+                Text[ korean ] = "±Û²Ã È¿°ú";
                 Text[ chinese_simplified ] = "×ÖÌåĞ§¹û";
                 Text[ chinese_traditional ] = "¦r«¬®ÄªG";
                 Text[ turkish ] = "Character Extension";
@@ -373,7 +373,7 @@ TabDialog RID_SCDLG_STYLES_PAGE
                 Text[ chinese_traditional ] = "­¶";
                 Text[ arabic ] = "ÕİÍÉ";
                 Text[ greek ] = "Óåëßäá";
-                Text[ korean ] = "ÂÊ";
+                Text[ korean ] = "ÆäÀÌÁö";
                 Text[ turkish ] = "Sayfa";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Página";
@@ -527,10 +527,11 @@ TabDialog RID_SCDLG_STYLES_PAGE
     Text[ chinese_traditional ] = "­¶­±¼Ë¦¡";
     Text[ arabic ] = "äãØ ÕİÍÉ";
     Text[ greek ] = "Ğñüôõğï óåëßäáò";
-    Text[ korean ] = "ÂÊ À¯Çü";
+    Text[ korean ] = "ÆäÀÌÁö À¯Çü";
     Text[ turkish ] = "Sayfa biçimi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Estilo de hoja";
 };
+
 
 
