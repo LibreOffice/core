@@ -2,9 +2,9 @@
  *
  *  $RCSfile: assclass.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:37 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:21:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,12 +66,16 @@
 #include <tools/solar.h>
 #endif
 
+#ifndef INCLUDED_SDDLLAPI_H
+#include "sddllapi.h"
+#endif
+
 #define MAX_PAGES 10
 
 class List;
 class Control;
 
-class Assistent
+class SD_DLLPUBLIC Assistent
 {
     List* pPages[MAX_PAGES];
         //enthaelt fuer jede Seite die Controls die
