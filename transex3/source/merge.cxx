@@ -2,9 +2,9 @@
  *
  *  $RCSfile: merge.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ihi $ $Date: 2004-11-26 20:44:36 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 19:17:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -258,7 +258,7 @@ MergeDataFile::MergeDataFile( const ByteString &rFileName, const ByteString& sFi
     ByteString sQHTEXT;
     ByteString sTITLE;
 
-    fprintf( stdout, "Scanning File %s ...\n", rFileName.GetBuffer());
+//  fprintf( stdout, "Scanning File %s ...\n", rFileName.GetBuffer());
 
     ULONG nFileFormat = FFORMAT_UNKNOWN;
     if( !aInputStream.IsOpen() ) {
@@ -272,7 +272,6 @@ MergeDataFile::MergeDataFile( const ByteString &rFileName, const ByteString& sFi
         if ( sLine.GetTokenCount( '\t' ) == 15  ) {
             if ( nFileFormat != FFORMAT_NEW ) {
                 nFileFormat = FFORMAT_NEW;
-                //fprintf( stdout, "File detection: Version 2.0 detected!\n" );
             }
             // Merge While Build speedup
             if(
@@ -315,7 +314,6 @@ MergeDataFile::MergeDataFile( const ByteString &rFileName, const ByteString& sFi
         else if ( sLine.GetTokenCount( '\t' ) == 10 ){
             if ( nFileFormat != FFORMAT_OLD ) {
                 nFileFormat = FFORMAT_OLD;
-                fprintf( stdout, "File detection: Version 1.0 detected!\n" );
             }
             sTYP = sLine.GetToken( 1, '\t' );
                 sTYP = sTYP.Copy( 1 ); sTYP.Erase( sTYP.Len() - 1 );
@@ -363,7 +361,7 @@ MergeDataFile::MergeDataFile( const ByteString &rFileName, const ByteString& sFi
         }
     }
     aInputStream.Close();
-    fprintf( stdout, "Merging ...\n" );
+//  fprintf( stdout, "Merging ...\n" );
 /*   for( ByteStringSet::const_iterator pos = LanguagesBeginIter();
     pos != LanguagesEndIter(); ++pos){
       ByteString sCur = *pos;
