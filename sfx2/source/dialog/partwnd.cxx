@@ -2,9 +2,9 @@
  *
  *  $RCSfile: partwnd.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dv $ $Date: 2000-12-05 12:45:18 $
+ *  last change: $Author: mba $ $Date: 2000-12-07 11:20:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,6 +195,14 @@ SfxPartChildWnd_Impl::SfxPartChildWnd_Impl
     ( ( SfxDockingWindow* ) pWindow )->Initialize( pInfo );
 }
 
+SfxPartChildWnd_Impl::~SfxPartChildWnd_Impl()
+{
+    SfxPartDockWnd_Impl* pWin = (SfxPartDockWnd_Impl*) pWindow;
+    ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame > xFrame = pWin->ForgetFrame();
+    pWindow = NULL;
+    xFrame->dispose();
+}
+
 sal_Bool SfxPartChildWnd_Impl::QueryClose()
 {
     return ( (SfxPartDockWnd_Impl*)pWindow )->QueryClose();
@@ -216,7 +224,7 @@ SfxPartDockWnd_Impl::SfxPartDockWnd_Impl
     m_xFrame = ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame > (
             ::comphelper::getProcessServiceFactory()->createInstance(
             DEFINE_CONST_UNICODE("com.sun.star.frame.Frame") ), ::com::sun::star::uno::UNO_QUERY );
-    m_xFrame->initialize( VCLUnoHelper::GetInterface ( new Window(this) ) );
+    m_xFrame->initialize( VCLUnoHelper::GetInterface ( this ) );
     pChildWin->SetFrame( m_xFrame );
     if ( pBindings->GetDispatcher() )
     {
@@ -225,13 +233,21 @@ SfxPartDockWnd_Impl::SfxPartDockWnd_Impl
         if ( xSupp.is() )
             xSupp->getFrames()->append( m_xFrame );
     }
+    else
+        DBG_ERROR("Bindings without Dispatcher!");
 }
 
 //****************************************************************************
 
 SfxPartDockWnd_Impl::~SfxPartDockWnd_Impl()
 {
-    m_xFrame->dispose();
+}
+
+::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame > SfxPartDockWnd_Impl::ForgetFrame()
+{
+    ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame > xRet( m_xFrame );
+    m_xFrame = ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame > ();
+    return xRet;
 }
 
 //****************************************************************************
@@ -248,12 +264,6 @@ void SfxPartDockWnd_Impl::Resize()
 */
 
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >  xWindow( m_xFrame->getContainerWindow() );
-    Size aSize( GetOutputSizePixel() );
-    Rectangle aRect( impl_Rectangle_Struct2Object(xWindow->getPosSize()) );
-    Point aPos( aRect.TopLeft() );
-    Size aNewSize(  aSize.Width() - 2 * aPos.X(), aSize.Height() - aPos.Y() );
-    xWindow->setPosSize( aPos.X(), aPos.Y(), aNewSize.Width(), aNewSize.Height(), ::com::sun::star::awt::PosSize::SIZE );
     SfxDockingWindow::Resize();
 }
 

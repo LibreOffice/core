@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dockwin.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dv $ $Date: 2000-12-05 12:32:36 $
+ *  last change: $Author: mba $ $Date: 2000-12-07 11:20:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1427,7 +1427,7 @@ void SfxDockingWindow::EnableSplitting(BOOL bEnable)
 
 long SfxDockingWindow::Notify( NotifyEvent& rEvt )
 {
-    if ( rEvt.GetType() == EVENT_GETFOCUS || rEvt.GetType() == EVENT_MOUSEBUTTONDOWN )
+    if ( rEvt.GetType() == EVENT_GETFOCUS )
     {
         pBindings->SetActiveFrame( pMgr->GetFrame() );
 
@@ -1443,7 +1443,7 @@ long SfxDockingWindow::Notify( NotifyEvent& rEvt )
 */
         // In VCL geht Notify zun"achst an das Fenster selbst,
         // also base class rufen, sonst erf"ahrt der parent nichts
-        if ( rEvt.GetType() == EVENT_MOUSEBUTTONDOWN || rEvt.GetWindow() == this )
+        if ( rEvt.GetWindow() == this )
             DockingWindow::Notify( rEvt );
         return TRUE;
     }

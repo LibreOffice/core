@@ -2,9 +2,9 @@
  *
  *  $RCSfile: partwnd.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2000-10-24 08:37:54 $
+ *  last change: $Author: mba $ $Date: 2000-12-07 11:23:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,7 @@ public:
                                    SfxChildWinInfo* pInfo );
 
     SFX_DECL_CHILDWINDOW(SfxPartChildWnd_Impl);
+                            ~SfxPartChildWnd_Impl();
 
     virtual sal_Bool        QueryClose();
 };
@@ -103,7 +104,6 @@ public:
 class SfxPartDockWnd_Impl : public SfxDockingWindow
 {
 private:
-//    SfxPartwinFrame_Impl*   _pFrame;
     ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame > m_xFrame;
 
 protected:
@@ -119,6 +119,7 @@ public:
                             ~SfxPartDockWnd_Impl();
     sal_Bool                    QueryClose();
     virtual void            FillInfo(SfxChildWinInfo&) const;
+    ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame > ForgetFrame();
 };
 
 #endif
