@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lru_cache.h,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dbo $ $Date: 2002-03-04 17:43:21 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 14:31:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,7 +214,7 @@ template< typename t_key, typename t_val, typename t_hashKey, typename t_equalKe
 inline bool lru_cache< t_key, t_val, t_hashKey, t_equalKey >::has(
     t_key const & key ) const SAL_THROW( () )
 {
-    t_key2element::const_iterator const iFind( m_key2element.find( key ) );
+    typename t_key2element::const_iterator const iFind( m_key2element.find( key ) );
     return (iFind != m_key2element.end());
 }
 //__________________________________________________________________________________________________
@@ -224,7 +224,7 @@ inline t_val const * lru_cache< t_key, t_val, t_hashKey, t_equalKey >::lookup(
 {
     if (0 < m_size)
     {
-        t_key2element::const_iterator const iFind( m_key2element.find( key ) );
+        typename t_key2element::const_iterator const iFind( m_key2element.find( key ) );
         if (iFind != m_key2element.end())
         {
             Entry * entry = iFind->second;
@@ -250,7 +250,7 @@ inline void lru_cache< t_key, t_val, t_hashKey, t_equalKey >::set(
 {
     if (0 < m_size)
     {
-        t_key2element::const_iterator const iFind( m_key2element.find( key ) );
+        typename t_key2element::const_iterator const iFind( m_key2element.find( key ) );
 
         Entry * entry;
         if (iFind == m_key2element.end())
@@ -270,7 +270,7 @@ inline void lru_cache< t_key, t_val, t_hashKey, t_equalKey >::set(
 #endif
             m_key2element.erase( entry->m_key );
             entry->m_key = key;
-            ::std::pair< t_key2element::iterator, bool > insertion(
+            ::std::pair< typename t_key2element::iterator, bool > insertion(
                 m_key2element.insert( t_key2element::value_type( key, entry ) ) );
 #ifdef __CACHE_DIAGNOSE
             OSL_ENSURE( insertion.second, "### inserting new cache entry failed?!" );
