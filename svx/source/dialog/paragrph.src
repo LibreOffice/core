@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2001-06-05 21:53:13 $
+ *  last change: $Author: kz $ $Date: 2001-06-08 23:17:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1676,7 +1676,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text [ portuguese ] = "Divisão silábica" ;
         Text [ finnish ] = "Tavutus" ;
         Text [ danish ] = "Orddeling" ;
-        Text [ french ] = "Coupure de mots" ;
+        Text [ french ] = "Coupure des mots" ;
         Text [ swedish ] = "Avstavning" ;
         Text [ dutch ] = "Woordafbreking" ;
         Text [ spanish ] = "Separación silábica" ;
@@ -2162,7 +2162,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text [ english_us ] = "Options" ;
         Group = TRUE ;
         Text[ chinese_simplified ] = "Ñ¡Ïî";
-        Text[ russian ] = "Äîïîëíåíèÿ";
+        Text[ russian ] = "Äîïîëíèòåëüíî";
         Text[ polish ] = "Opcje";
         Text[ japanese ] = "µÌß¼®İ";
         Text[ chinese_traditional ] = "¿ï¶µ";
@@ -2582,3 +2582,4 @@ TabPage RID_SVXPAGE_PARA_ASIAN
 };
 
  // ********************************************************************** EOF
+
