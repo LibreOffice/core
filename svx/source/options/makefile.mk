@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: os $ $Date: 2001-01-09 14:22:04 $
+#   last change: $Author: os $ $Date: 2001-01-17 16:09:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -90,6 +90,7 @@ CFLAGS+=-DDG_DLL
 #BMP_IN=$(PRJ)$/win/res
 
 CXXFILES = \
+        asiancfg.cxx		\
         optasian.cxx		\
         optpath.cxx		\
         optdict.cxx		\
@@ -120,6 +121,7 @@ SRCFILES =  \
         optextbr.src
 
 SLOFILES=	\
+        $(SLO)$/asiancfg.obj	\
         $(SLO)$/optasian.obj	\
         $(SLO)$/optpath.obj	\
         $(SLO)$/optdict.obj	\
