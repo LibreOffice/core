@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hr $ $Date: 2003-08-13 17:21:27 $
+#   last change: $Author: rt $ $Date: 2004-07-23 14:50:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -122,8 +122,7 @@ TEST_JAVAUNO_ACQUIRE_UNO_URL := \
 $(BIN)$/testacquire-java-client$(SCRIPTEXT):
     echo java -classpath \
         ..$/class$/test$(PATH_SEPERATOR)..$/class$(PATH_SEPERATOR)\
-..$/class$/java_uno.jar$(PATH_SEPERATOR)$(EXEC_CLASSPATH)$(PATH_SEPERATOR)\
-$(SOLARBINDIR)$/sandbox.jar \
+..$/class$/java_uno.jar$(PATH_SEPERATOR)$(EXEC_CLASSPATH) \
         test.javauno.acquire.TestAcquire client \
         $(TEST_JAVAUNO_ACQUIRE_UNO_URL) > $@
     $(GIVE_EXEC_RIGHTS) $@
@@ -131,8 +130,7 @@ $(SOLARBINDIR)$/sandbox.jar \
 $(BIN)$/testacquire-java-server$(SCRIPTEXT):
     echo java -classpath \
         ..$/class$/test$(PATH_SEPERATOR)..$/class$(PATH_SEPERATOR)\
-..$/class$/java_uno.jar$(PATH_SEPERATOR)$(EXEC_CLASSPATH)$(PATH_SEPERATOR)\
-$(SOLARBINDIR)$/sandbox.jar \
+..$/class$/java_uno.jar$(PATH_SEPERATOR)$(EXEC_CLASSPATH) \
         test.javauno.acquire.TestAcquire server \
         $(TEST_JAVAUNO_ACQUIRE_UNO_URL) > $@
     $(GIVE_EXEC_RIGHTS) $@
