@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh3.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-21 11:03:22 $
+ *  last change: $Author: dr $ $Date: 2001-11-19 13:32:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -776,7 +776,8 @@ void ScCellShell::Execute( SfxRequest& rReq )
                         ScAutoFormatDlg*  pDlg      = new ScAutoFormatDlg(
                                                                 pDlgParent,
                                                                 ScGlobal::GetAutoFormat(),
-                                                                pNewEntry );
+                                                                pNewEntry,
+                                                                GetViewData()->GetDocument() );
 
                         if ( pDlg->Execute() == RET_OK )
                         {

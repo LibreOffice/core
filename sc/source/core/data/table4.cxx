@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table4.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-14 15:08:38 $
+ *  last change: $Author: dr $ $Date: 2001-11-19 13:29:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1518,113 +1518,7 @@ void ScTable::AutoFormatArea(USHORT nStartCol, USHORT nStartRow, USHORT nEndCol,
         if (pData)
         {
             ScPatternAttr aPattern(pDocument->GetPool());
-            if (pData->GetIncludeValueFormat())
-            {
-                ScNumFormatAbbrev aNumFormat;
-                pData->GetNumFormat(nIndex, aNumFormat);
-                SfxUInt32Item aValueFormat( ATTR_VALUE_FORMAT, 0 );
-                aValueFormat.SetValue(aNumFormat.GetFormatIndex(*pDocument->GetFormatTable()));
-                aPattern.GetItemSet().Put(aValueFormat);
-                SvxLanguageItem aLangItem( aNumFormat.GetLanguage(), ATTR_LANGUAGE_FORMAT );
-                aPattern.GetItemSet().Put( aLangItem );
-            }
-            if (pData->GetIncludeFont())
-            {
-
-                SvxFontItem aFont;
-                pData->GetFont(nIndex, aFont);
-                aPattern.GetItemSet().Put(aFont);
-                pData->GetCJKFont(nIndex, aFont);
-                aPattern.GetItemSet().Put(aFont);
-                pData->GetCTLFont(nIndex, aFont);
-                aPattern.GetItemSet().Put(aFont);
-
-                SvxFontHeightItem aFontHeight;
-                pData->GetFontHeight(nIndex, aFontHeight);
-                aPattern.GetItemSet().Put(aFontHeight);
-                pData->GetCJKFontHeight(nIndex, aFontHeight);
-                aPattern.GetItemSet().Put(aFontHeight);
-                pData->GetCTLFontHeight(nIndex, aFontHeight);
-                aPattern.GetItemSet().Put(aFontHeight);
-
-                SvxWeightItem aFontWeight;
-                pData->GetFontWeight(nIndex, aFontWeight);
-                aPattern.GetItemSet().Put(aFontWeight);
-                pData->GetCJKFontWeight(nIndex, aFontWeight);
-                aPattern.GetItemSet().Put(aFontWeight);
-                pData->GetCTLFontWeight(nIndex, aFontWeight);
-                aPattern.GetItemSet().Put(aFontWeight);
-
-                SvxPostureItem aFontPosture;
-                pData->GetFontPosture(nIndex, aFontPosture);
-                aPattern.GetItemSet().Put(aFontPosture);
-                pData->GetCJKFontPosture(nIndex, aFontPosture);
-                aPattern.GetItemSet().Put(aFontPosture);
-                pData->GetCTLFontPosture(nIndex, aFontPosture);
-                aPattern.GetItemSet().Put(aFontPosture);
-
-                SvxUnderlineItem aFontUnderline;
-                pData->GetFontUnderline(nIndex, aFontUnderline);
-                aPattern.GetItemSet().Put(aFontUnderline);
-
-                SvxCrossedOutItem aFontCrossedOut;
-                pData->GetFontCrossedOut(nIndex, aFontCrossedOut);
-                aPattern.GetItemSet().Put(aFontCrossedOut);
-
-                SvxContourItem aFontContour;
-                pData->GetFontContour(nIndex, aFontContour);
-                aPattern.GetItemSet().Put(aFontContour);
-
-                SvxShadowedItem aFontShadowed;
-                pData->GetFontShadowed(nIndex, aFontShadowed);
-                aPattern.GetItemSet().Put(aFontShadowed);
-
-                SvxColorItem aFontColor;
-                pData->GetFontColor(nIndex, aFontColor);
-                aPattern.GetItemSet().Put(aFontColor);
-            }
-            if (pData->GetIncludeJustify())
-            {
-                SvxHorJustifyItem aHorJustify;
-                pData->GetHorJustify(nIndex, aHorJustify);
-                aPattern.GetItemSet().Put(aHorJustify);
-
-                SvxVerJustifyItem aVerJustify;
-                pData->GetVerJustify(nIndex, aVerJustify);
-                aPattern.GetItemSet().Put(aVerJustify);
-
-                SvxOrientationItem aOrientation;
-                pData->GetOrientation(nIndex, aOrientation);
-                aPattern.GetItemSet().Put(aOrientation);
-
-                SfxBoolItem aLinebreak;
-                pData->GetLinebreak(nIndex, aLinebreak);
-                aPattern.GetItemSet().Put(aLinebreak);
-
-                SvxMarginItem aMargin;
-                pData->GetMargin(nIndex, aMargin);
-                aPattern.GetItemSet().Put(aMargin);
-
-                SfxInt32Item aRotateAngle( ATTR_ROTATE_VALUE );
-                pData->GetRotateAngle(nIndex, aRotateAngle);
-                aPattern.GetItemSet().Put(aRotateAngle);
-
-                SvxRotateModeItem aRotateMode( SVX_ROTATE_MODE_STANDARD, ATTR_ROTATE_MODE );
-                pData->GetRotateMode(nIndex, aRotateMode);
-                aPattern.GetItemSet().Put(aRotateMode);
-            }
-            if (pData->GetIncludeFrame())
-            {
-                SvxBoxItem aBox(ATTR_BORDER);
-                pData->GetBox(nIndex, aBox);
-                aPattern.GetItemSet().Put(aBox);
-            }
-            if (pData->GetIncludeBackground())
-            {
-                SvxBrushItem aBackground;
-                pData->GetBackground(nIndex, aBackground);
-                aPattern.GetItemSet().Put(aBackground);
-            }
+            pData->FillToItemSet(nIndex, aPattern.GetItemSet(), *pDocument);
             ApplyPatternArea(nStartCol, nStartRow, nEndCol, nEndRow, aPattern);
         }
     }
@@ -1638,7 +1532,7 @@ void ScTable::AutoFormat( USHORT nStartCol, USHORT nStartRow, USHORT nEndCol, US
         ScAutoFormat* pAutoFormat = ScGlobal::GetAutoFormat();
         if (pAutoFormat)
         {
-            ScAutoFormatData* pData = (ScAutoFormatData*)(*pAutoFormat)[nFormatNo];
+            ScAutoFormatData* pData = (*pAutoFormat)[nFormatNo];
             if (pData)
             {
                 USHORT nCol = nStartCol;
@@ -1766,33 +1660,7 @@ void ScTable::GetAutoFormatAttr(USHORT nCol, USHORT nRow, USHORT nIndex, ScAutoF
 {
     UINT32 nFormatIndex = GetNumberFormat( nCol, nRow );
     ScNumFormatAbbrev   aNumFormat( nFormatIndex, *pDocument->GetFormatTable() );
-
-    rData.SetNumFormat      (nIndex, aNumFormat);
-    rData.SetFont           (nIndex, *(SvxFontItem*)GetAttr(       nCol, nRow, ATTR_FONT));
-    rData.SetFontHeight     (nIndex, *(SvxFontHeightItem*)GetAttr( nCol, nRow, ATTR_FONT_HEIGHT));
-    rData.SetFontWeight     (nIndex, *(SvxWeightItem*)GetAttr(     nCol, nRow, ATTR_FONT_WEIGHT));
-    rData.SetFontPosture    (nIndex, *(SvxPostureItem*)GetAttr(    nCol, nRow, ATTR_FONT_POSTURE));
-    rData.SetCJKFont        (nIndex, *(SvxFontItem*)GetAttr(       nCol, nRow, ATTR_CJK_FONT));
-    rData.SetCJKFontHeight  (nIndex, *(SvxFontHeightItem*)GetAttr( nCol, nRow, ATTR_CJK_FONT_HEIGHT));
-    rData.SetCJKFontWeight  (nIndex, *(SvxWeightItem*)GetAttr(     nCol, nRow, ATTR_CJK_FONT_WEIGHT));
-    rData.SetCJKFontPosture (nIndex, *(SvxPostureItem*)GetAttr(    nCol, nRow, ATTR_CJK_FONT_POSTURE));
-    rData.SetCTLFont        (nIndex, *(SvxFontItem*)GetAttr(       nCol, nRow, ATTR_CTL_FONT));
-    rData.SetCTLFontHeight  (nIndex, *(SvxFontHeightItem*)GetAttr( nCol, nRow, ATTR_CTL_FONT_HEIGHT));
-    rData.SetCTLFontWeight  (nIndex, *(SvxWeightItem*)GetAttr(     nCol, nRow, ATTR_CTL_FONT_WEIGHT));
-    rData.SetCTLFontPosture (nIndex, *(SvxPostureItem*)GetAttr(    nCol, nRow, ATTR_CTL_FONT_POSTURE));
-    rData.SetFontUnderline  (nIndex, *(SvxUnderlineItem*)GetAttr(  nCol, nRow, ATTR_FONT_UNDERLINE));
-    rData.SetFontCrossedOut (nIndex, *(SvxCrossedOutItem*)GetAttr( nCol, nRow, ATTR_FONT_CROSSEDOUT));
-    rData.SetFontContour    (nIndex, *(SvxContourItem*)GetAttr(    nCol, nRow, ATTR_FONT_CONTOUR));
-    rData.SetFontShadowed   (nIndex, *(SvxShadowedItem*)GetAttr(   nCol, nRow, ATTR_FONT_SHADOWED));
-    rData.SetFontColor      (nIndex, *(SvxColorItem*)GetAttr(      nCol, nRow, ATTR_FONT_COLOR));
-    rData.SetHorJustify     (nIndex, *(SvxHorJustifyItem*)GetAttr( nCol, nRow, ATTR_HOR_JUSTIFY));
-    rData.SetVerJustify     (nIndex, *(SvxVerJustifyItem*)GetAttr( nCol, nRow, ATTR_VER_JUSTIFY));
-    rData.SetOrientation    (nIndex, *(SvxOrientationItem*)GetAttr(nCol, nRow, ATTR_ORIENTATION));
-    rData.SetLinebreak      (nIndex, *(SfxBoolItem*)GetAttr(       nCol, nRow, ATTR_LINEBREAK));
-    rData.SetMargin         (nIndex, *(SvxMarginItem*)GetAttr(     nCol, nRow, ATTR_MARGIN));
-    rData.SetBackground     (nIndex, *(SvxBrushItem*)GetAttr(      nCol, nRow, ATTR_BACKGROUND));
-    rData.SetRotateAngle    (nIndex, *(SfxInt32Item*)GetAttr(      nCol, nRow, ATTR_ROTATE_VALUE));
-    rData.SetRotateMode     (nIndex, *(SvxRotateModeItem*)GetAttr( nCol, nRow, ATTR_ROTATE_MODE));
+    rData.GetFromItemSet( nIndex, GetPattern( nCol, nRow )->GetItemSet(), aNumFormat );
 }
 
 #define LF_LEFT         1
@@ -1858,7 +1726,7 @@ void ScTable::GetAutoFormatFrame(USHORT nCol, USHORT nRow, USHORT nFlags, USHORT
         else
             aBox.SetLine(pTheBox->GetBottom(), BOX_LINE_BOTTOM);
     }
-    rData.SetBox(nIndex, aBox);
+    rData.PutItem( nIndex, aBox );
 }
 
 void ScTable::GetAutoFormatData(USHORT nStartCol, USHORT nStartRow, USHORT nEndCol, USHORT nEndRow, ScAutoFormatData& rData)
@@ -1877,11 +1745,7 @@ void ScTable::GetAutoFormatData(USHORT nStartCol, USHORT nStartRow, USHORT nEndC
             if (nEndRow - nStartRow >= 4)
                 GetAutoFormatFrame(nStartCol, nStartRow + 2, LF_LEFT | LF_RIGHT | LF_BOTTOM, 8, rData);
             else
-            {
-                SvxBoxItem aBox;
-                rData.GetBox(4, aBox);
-                rData.SetBox(8, aBox);
-            }
+                rData.CopyItem( 8, 4, ATTR_BORDER );
             // Linke untere Ecke
             GetAutoFormatAttr(nStartCol, nEndRow, 12, rData);
             GetAutoFormatFrame(nStartCol, nEndRow, LF_ALL, 12, rData);
@@ -1895,11 +1759,7 @@ void ScTable::GetAutoFormatData(USHORT nStartCol, USHORT nStartRow, USHORT nEndC
             if (nEndRow - nStartRow >= 4)
                 GetAutoFormatFrame(nEndCol, nStartRow + 2, LF_LEFT | LF_RIGHT | LF_BOTTOM, 11, rData);
             else
-            {
-                SvxBoxItem aBox;
-                rData.GetBox(7, aBox);
-                rData.SetBox(11, aBox);
-            }
+                rData.CopyItem( 11, 7, ATTR_BORDER );
             // Rechte untere Ecke
             GetAutoFormatAttr(nEndCol, nEndRow, 15, rData);
             GetAutoFormatFrame(nEndCol, nEndRow, LF_ALL, 15, rData);
@@ -1910,11 +1770,7 @@ void ScTable::GetAutoFormatData(USHORT nStartCol, USHORT nStartRow, USHORT nEndC
             if (nEndCol - nStartCol >= 4)
                 GetAutoFormatFrame(nStartCol + 2, nStartRow, LF_TOP | LF_BOTTOM | LF_RIGHT, 2, rData);
             else
-            {
-                SvxBoxItem aBox;
-                rData.GetBox(1, aBox);
-                rData.SetBox(2, aBox);
-            }
+                rData.CopyItem( 2, 1, ATTR_BORDER );
             // Untere Zeile
             GetAutoFormatAttr(nStartCol + 1, nEndRow, 13, rData);
             GetAutoFormatAttr(nStartCol + 2, nEndRow, 14, rData);
@@ -1922,11 +1778,7 @@ void ScTable::GetAutoFormatData(USHORT nStartCol, USHORT nStartRow, USHORT nEndC
             if (nEndCol - nStartCol >= 4)
                 GetAutoFormatFrame(nStartCol + 2, nEndRow, LF_TOP | LF_BOTTOM | LF_RIGHT, 14, rData);
             else
-            {
-                SvxBoxItem aBox;
-                rData.GetBox(13, aBox);
-                rData.SetBox(14, aBox);
-            }
+                rData.CopyItem( 14, 13, ATTR_BORDER );
             // Body
             GetAutoFormatAttr(nStartCol + 1, nStartRow + 1, 5, rData);
             GetAutoFormatAttr(nStartCol + 2, nStartRow + 1, 6, rData);
@@ -1941,11 +1793,9 @@ void ScTable::GetAutoFormatData(USHORT nStartCol, USHORT nStartRow, USHORT nEndC
             }
             else
             {
-                SvxBoxItem aBox;
-                rData.GetBox(5, aBox);
-                rData.SetBox(6, aBox);
-                rData.SetBox(9, aBox);
-                rData.SetBox(10, aBox);
+                rData.CopyItem( 6, 5, ATTR_BORDER );
+                rData.CopyItem( 9, 5, ATTR_BORDER );
+                rData.CopyItem( 10, 5, ATTR_BORDER );
             }
         }
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen6.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: nn $ $Date: 2001-11-14 15:34:17 $
+ *  last change: $Author: dr $ $Date: 2001-11-19 13:29:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,21 +90,26 @@ using namespace com::sun::star;
 
 // -----------------------------------------------------------------------
 
-BOOL ScDocument::HasStringWeakCharacters( const String& rString )
+const uno::Reference< i18n::XBreakIterator >& ScDocument::GetBreakIterator()
 {
     if ( !pScriptTypeData )
-    {
         pScriptTypeData = new ScScriptTypeData;
-        uno::Reference<uno::XInterface> xInterface = xServiceManager->createInstance(
-                            rtl::OUString::createFromAscii( SC_BREAKITER_SERVICE ) );
-        pScriptTypeData->xBreakIter = uno::Reference<i18n::XBreakIterator>( xInterface, uno::UNO_QUERY );
+    if ( !pScriptTypeData->xBreakIter.is() )
+    {
+        uno::Reference< uno::XInterface > xInterface = xServiceManager->createInstance(
+                            ::rtl::OUString::createFromAscii( SC_BREAKITER_SERVICE ) );
+        pScriptTypeData->xBreakIter = uno::Reference< i18n::XBreakIterator >( xInterface, uno::UNO_QUERY );
         DBG_ASSERT( pScriptTypeData->xBreakIter.is(), "can't get BreakIterator" );
     }
+    return pScriptTypeData->xBreakIter;
+}
 
+BOOL ScDocument::HasStringWeakCharacters( const String& rString )
+{
     BYTE nRet = 0;
     if (rString.Len())
     {
-        uno::Reference<i18n::XBreakIterator> xBreakIter = pScriptTypeData->xBreakIter;
+        uno::Reference<i18n::XBreakIterator> xBreakIter = GetBreakIterator();
         if ( xBreakIter.is() )
         {
             rtl::OUString aText = rString;
@@ -126,22 +131,13 @@ BOOL ScDocument::HasStringWeakCharacters( const String& rString )
     return FALSE;       // none found
 }
 
-
 BYTE ScDocument::GetStringScriptType( const String& rString )
 {
-    if ( !pScriptTypeData )
-    {
-        pScriptTypeData = new ScScriptTypeData;
-        uno::Reference<uno::XInterface> xInterface = xServiceManager->createInstance(
-                            rtl::OUString::createFromAscii( SC_BREAKITER_SERVICE ) );
-        pScriptTypeData->xBreakIter = uno::Reference<i18n::XBreakIterator>( xInterface, uno::UNO_QUERY );
-        DBG_ASSERT( pScriptTypeData->xBreakIter.is(), "can't get BreakIterator" );
-    }
 
     BYTE nRet = 0;
     if (rString.Len())
     {
-        uno::Reference<i18n::XBreakIterator> xBreakIter = pScriptTypeData->xBreakIter;
+        uno::Reference<i18n::XBreakIterator> xBreakIter = GetBreakIterator();
         if ( xBreakIter.is() )
         {
             rtl::OUString aText = rString;

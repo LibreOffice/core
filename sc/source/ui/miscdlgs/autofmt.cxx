@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autofmt.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-25 16:16:13 $
+ *  last change: $Author: dr $ $Date: 2001-11-19 13:32:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,7 @@
 #include "miscdlgs.hrc"
 #include "autofmt.hxx"
 #include "scresid.hxx"
+#include "document.hxx"
 
 #define FRAME_OFFSET 4
 
@@ -112,13 +113,14 @@ BOOL bIsOlk = FALSE;
 
 ScAutoFormatDlg::ScAutoFormatDlg( Window*                   pParent,
                                   ScAutoFormat*             pAutoFormat,
-                                  const ScAutoFormatData*   pSelFormatData ) :
+                                  const ScAutoFormatData*   pSelFormatData,
+                                  ScDocument*               pDoc ) :
 
     ModalDialog     ( pParent, ScResId( RID_SCDLG_AUTOFORMAT ) ),
     //
     aLbFormat       ( this, ScResId( LB_FORMAT ) ),
     aFlFormat       ( this, ScResId( FL_FORMAT ) ),
-    pWndPreview     ( new AutoFmtPreview( this, ScResId( WND_PREVIEW ) ) ),
+    pWndPreview     ( new AutoFmtPreview( this, ScResId( WND_PREVIEW ), pDoc ) ),
     aBtnNumFormat   ( this, ScResId( BTN_NUMFORMAT ) ),
     aBtnBorder      ( this, ScResId( BTN_BORDER ) ),
     aBtnFont        ( this, ScResId( BTN_FONT ) ),
@@ -133,12 +135,12 @@ ScAutoFormatDlg::ScAutoFormatDlg( Window*                   pParent,
     aBtnRemove      ( this, ScResId( BTN_REMOVE ) ),
     aBtnMore        ( this, ScResId( BTN_MORE ) ),
     aBtnRename      ( this, ScResId( BTN_RENAME ) ),
-    aStrTitle       ( String( ScResId( STR_ADD_TITLE ) ) ),
-    aStrLabel       ( String( ScResId( STR_ADD_LABEL ) ) ),
-    aStrRename      ( String( ScResId( STR_RENAME_TITLE) ) ),
-    aStrClose       ( String( ScResId( STR_BTN_CLOSE ) ) ),
-    aStrDelTitle    ( String( ScResId( STR_DEL_TITLE ) ) ),
-    aStrDelMsg      ( String( ScResId( STR_DEL_MSG ) ) ),
+    aStrTitle       ( ScResId( STR_ADD_TITLE ) ),
+    aStrLabel       ( ScResId( STR_ADD_LABEL ) ),
+    aStrRename      ( ScResId( STR_RENAME_TITLE ) ),
+    aStrClose       ( ScResId( STR_BTN_CLOSE ) ),
+    aStrDelTitle    ( ScResId( STR_DEL_TITLE ) ),
+    aStrDelMsg      ( ScResId( STR_DEL_MSG ) ) ,
     //
     nIndex          ( 0 ),
     bFmtInserted    ( FALSE ),
@@ -519,18 +521,20 @@ String __EXPORT ScAutoFormatDlg::GetCurrFormatName()
 //========================================================================
 // AutoFmtPreview
 
-AutoFmtPreview::AutoFmtPreview( Window* pParent, const ResId& rRes ) :
+AutoFmtPreview::AutoFmtPreview( Window* pParent, const ResId& rRes, ScDocument* pDoc ) :
         Window          ( pParent, rRes ),
         aVD             ( *this ),
+        aScriptedText   ( aVD ),
+        xBreakIter      ( pDoc->GetBreakIterator() ),
         pCurData        ( NULL ),
         bFitWidth       ( FALSE ),
-        aStrJan         ( String( ScResId( STR_JAN ) ) ),
-        aStrFeb         ( String( ScResId( STR_FEB ) ) ),
-        aStrMar         ( String( ScResId( STR_MAR ) ) ),
-        aStrNorth       ( String( ScResId( STR_NORTH ) ) ),
-        aStrMid         ( String( ScResId( STR_MID ) ) ),
-        aStrSouth       ( String( ScResId( STR_SOUTH ) ) ),
-        aStrSum         ( String( ScResId( STR_SUM ) ) ),
+        aStrJan         ( ScResId( STR_JAN ) ),
+        aStrFeb         ( ScResId( STR_FEB ) ),
+        aStrMar         ( ScResId( STR_MAR ) ),
+        aStrNorth       ( ScResId( STR_NORTH ) ),
+        aStrMid         ( ScResId( STR_MID ) ),
+        aStrSouth       ( ScResId( STR_SOUTH ) ),
+        aStrSum         ( ScResId( STR_SUM ) ),
         aPrvSize        ( GetSizePixel().Width()  - 6,
                           GetSizePixel().Height() - 30 ),
         nLabelColWidth  ( (USHORT)(((aPrvSize.Width()-4)/4)-12) ),
@@ -970,47 +974,59 @@ void AutoFmtPreview::DrawFrame( USHORT nIndex )
 
 //------------------------------------------------------------------------
 
-void AutoFmtPreview::MakeFont( USHORT nIndex, Font& rFont )
+void lcl_SetFontProperties(
+        Font& rFont,
+        const SvxFontItem& rFontItem,
+        const SvxWeightItem& rWeightItem,
+        const SvxPostureItem& rPostureItem )
+{
+    rFont.SetFamily     ( rFontItem.GetFamily() );
+    rFont.SetName       ( rFontItem.GetFamilyName() );
+    rFont.SetStyleName  ( rFontItem.GetStyleName() );
+    rFont.SetCharSet    ( rFontItem.GetCharSet() );
+    rFont.SetPitch      ( rFontItem.GetPitch() );
+    rFont.SetWeight     ( (FontWeight)rWeightItem.GetValue() );
+    rFont.SetItalic     ( (FontItalic)rPostureItem.GetValue() );
+}
+
+#define SETONALLFONTS( MethodName, Value )                  \
+rFont.MethodName( Value );                                  \
+rCJKFont.MethodName( Value );                               \
+rCTLFont.MethodName( Value );
+
+void AutoFmtPreview::MakeFonts( USHORT nIndex, Font& rFont, Font& rCJKFont, Font& rCTLFont )
 {
     if ( pCurData )
     {
-        Size                aSize;
-        SvxFontItem         aFontItem;
-        SvxWeightItem       aFontWeightItem;
-        SvxPostureItem      aFontPostureItem;
-        SvxUnderlineItem    aFontUnderlineItem;
-        SvxCrossedOutItem   aFontCrossedOutItem;
-        SvxContourItem      aFontContourItem;
-        SvxShadowedItem     aFontShadowedItem;
-        SvxColorItem        aFontColorItem;
+        rFont = rCJKFont = rCTLFont = GetFont();
+        Size aFontSize( rFont.GetSize().Width(), 10 );
 
-        rFont = GetFont();
-        aSize = rFont.GetSize();
-        aSize.Height() = 10;
+        const SvxFontItem*        pFontItem       = (const SvxFontItem*)      pCurData->GetItem( nIndex, ATTR_FONT );
+        const SvxWeightItem*      pWeightItem     = (const SvxWeightItem*)    pCurData->GetItem( nIndex, ATTR_FONT_WEIGHT );
+        const SvxPostureItem*     pPostureItem    = (const SvxPostureItem*)   pCurData->GetItem( nIndex, ATTR_FONT_POSTURE );
+        const SvxFontItem*        pCJKFontItem    = (const SvxFontItem*)      pCurData->GetItem( nIndex, ATTR_CJK_FONT );
+        const SvxWeightItem*      pCJKWeightItem  = (const SvxWeightItem*)    pCurData->GetItem( nIndex, ATTR_CJK_FONT_WEIGHT );
+        const SvxPostureItem*     pCJKPostureItem = (const SvxPostureItem*)   pCurData->GetItem( nIndex, ATTR_CJK_FONT_POSTURE );
+        const SvxFontItem*        pCTLFontItem    = (const SvxFontItem*)      pCurData->GetItem( nIndex, ATTR_CTL_FONT );
+        const SvxWeightItem*      pCTLWeightItem  = (const SvxWeightItem*)    pCurData->GetItem( nIndex, ATTR_CTL_FONT_WEIGHT );
+        const SvxPostureItem*     pCTLPostureItem = (const SvxPostureItem*)   pCurData->GetItem( nIndex, ATTR_CTL_FONT_POSTURE );
+        const SvxUnderlineItem*   pUnderlineItem  = (const SvxUnderlineItem*) pCurData->GetItem( nIndex, ATTR_FONT_UNDERLINE );
+        const SvxCrossedOutItem*  pCrossedOutItem = (const SvxCrossedOutItem*)pCurData->GetItem( nIndex, ATTR_FONT_CROSSEDOUT );
+        const SvxContourItem*     pContourItem    = (const SvxContourItem*)   pCurData->GetItem( nIndex, ATTR_FONT_CONTOUR );
+        const SvxShadowedItem*    pShadowedItem   = (const SvxShadowedItem*)  pCurData->GetItem( nIndex, ATTR_FONT_SHADOWED );
+        const SvxColorItem*       pColorItem      = (const SvxColorItem*)     pCurData->GetItem( nIndex, ATTR_FONT_COLOR );
 
-        pCurData->GetFont           ( nIndex, aFontItem );
-        pCurData->GetFontWeight     ( nIndex, aFontWeightItem );
-        pCurData->GetFontPosture    ( nIndex, aFontPostureItem );
-        pCurData->GetFontUnderline  ( nIndex, aFontUnderlineItem );
-        pCurData->GetFontCrossedOut ( nIndex, aFontCrossedOutItem );
-        pCurData->GetFontContour    ( nIndex, aFontContourItem );
-        pCurData->GetFontShadowed   ( nIndex, aFontShadowedItem );
-        pCurData->GetFontColor      ( nIndex, aFontColorItem );
+        lcl_SetFontProperties( rFont, *pFontItem, *pWeightItem, *pPostureItem );
+        lcl_SetFontProperties( rCJKFont, *pCJKFontItem, *pCJKWeightItem, *pCJKPostureItem );
+        lcl_SetFontProperties( rCTLFont, *pCTLFontItem, *pCTLWeightItem, *pCTLPostureItem );
 
-        rFont.SetFamily     ( aFontItem.GetFamily() );
-        rFont.SetName       ( aFontItem.GetFamilyName() );
-        rFont.SetStyleName  ( aFontItem.GetStyleName() );
-        rFont.SetCharSet    ( aFontItem.GetCharSet() );
-        rFont.SetPitch      ( aFontItem.GetPitch() );
-        rFont.SetWeight     ( (FontWeight)aFontWeightItem.GetValue() );
-        rFont.SetUnderline  ( (FontUnderline)aFontUnderlineItem.GetValue() );
-        rFont.SetStrikeout  ( (FontStrikeout)aFontCrossedOutItem.GetValue() );
-        rFont.SetItalic     ( (FontItalic)aFontPostureItem.GetValue() );
-        rFont.SetOutline    ( aFontContourItem.GetValue() );
-        rFont.SetShadow     ( aFontShadowedItem.GetValue() );
-        rFont.SetColor      ( aFontColorItem.GetValue() );
-        rFont.SetSize       ( aSize );
-        rFont.SetTransparent (TRUE);
+        SETONALLFONTS( SetUnderline,    (FontUnderline)pUnderlineItem->GetValue() );
+        SETONALLFONTS( SetStrikeout,    (FontStrikeout)pCrossedOutItem->GetValue() );
+        SETONALLFONTS( SetOutline,      pContourItem->GetValue() );
+        SETONALLFONTS( SetShadow,       pShadowedItem->GetValue() );
+        SETONALLFONTS( SetColor,        pColorItem->GetValue() );
+        SETONALLFONTS( SetSize,         aFontSize );
+        SETONALLFONTS( SetTransparent,  TRUE );
     }
 }
 
@@ -1067,9 +1083,8 @@ void AutoFmtPreview::DrawString( USHORT nIndex )
             mknum:
                 if( bNumFormat )
                 {
-                    ScNumFormatAbbrev aFmt;
-                    pCurData->GetNumFormat( (USHORT) nNum, aFmt );
-                    nNum = aFmt.GetFormatIndex( *pNumFmt );
+                    ScNumFormatAbbrev& rNumFormat = (ScNumFormatAbbrev&)pCurData->GetNumFormat( (USHORT) nNum );
+                    nNum = rNumFormat.GetFormatIndex( *pNumFmt );
                 }
                 else
                     nNum = 0;
@@ -1079,7 +1094,6 @@ void AutoFmtPreview::DrawString( USHORT nIndex )
 
         if ( cellString.Len() > 0 )
         {
-            Font                oldFont;
             Size                aStrSize;
             USHORT              nFmtIndex       = aFmtMap[nIndex];
             Rectangle           cellRect        = aCellArray[nIndex];
@@ -1092,38 +1106,32 @@ void AutoFmtPreview::DrawString( USHORT nIndex )
             //-------------
             // Ausrichtung:
             //-------------
-            if ( bJustify )
-            {
-                pCurData->GetHorJustify( nFmtIndex, aHorJustifyItem );
-                eJustification = (SvxCellHorJustify)aHorJustifyItem.GetValue();
-            }
-            else
-            {
-                eJustification = SVX_HOR_JUSTIFY_STANDARD;
-            }
+            eJustification = bJustify ?
+                (SvxCellHorJustify)(((const SvxHorJustifyItem*)pCurData->GetItem( nFmtIndex, ATTR_HOR_JUSTIFY ))->GetValue()) :
+                SVX_HOR_JUSTIFY_STANDARD;
 
             if ( pCurData->GetIncludeFont() )
             {
-                Font aFont;
+                Font aFont, aCJKFont, aCTLFont;
                 Size theMaxStrSize;
 
-                MakeFont( nFmtIndex, aFont );
-                oldFont = aVD.GetFont();
-                aVD.SetFont( aFont );
+                MakeFonts( nFmtIndex, aFont, aCJKFont, aCTLFont );
+
                 theMaxStrSize           = cellRect.GetSize();
                 theMaxStrSize.Width()  -= FRAME_OFFSET;
                 theMaxStrSize.Height() -= FRAME_OFFSET;
-                aStrSize.Width()  = aVD.GetTextWidth( cellString );
-                aStrSize.Height() = aVD.GetTextHeight();
+
+                aScriptedText.SetFonts( &aFont, &aCJKFont, &aCTLFont );
+                aScriptedText.SetText( cellString, xBreakIter );
+                aStrSize = aScriptedText.GetTextSize();
 
                 if ( theMaxStrSize.Height() < aStrSize.Height() )
                 {
                     // wenn der String in diesem Font nicht
                     // in die Zelle passt, wird wieder der
                     // Standard-Font genommen:
-                    aVD.SetFont( oldFont );
-                    aStrSize.Width()  = aVD.GetTextWidth( cellString );
-                    aStrSize.Height() = aVD.GetTextHeight();
+                    aScriptedText.SetDefaultFont();
+                    aStrSize = aScriptedText.GetTextSize();
                 }
                 while ( ( theMaxStrSize.Width() <= aStrSize.Width() )
                     && ( cellString.Len() > 1 ) )
@@ -1132,14 +1140,16 @@ void AutoFmtPreview::DrawString( USHORT nIndex )
                         cellString.Erase( 0, 1 );
                     else
                         cellString.Erase( cellString.Len() - 1 );
-                    aStrSize.Width()  = aVD.GetTextWidth( cellString );
-                    aStrSize.Height() = aVD.GetTextHeight();
+
+                    aScriptedText.SetText( cellString, xBreakIter );
+                    aStrSize = aScriptedText.GetTextSize();
                 }
             }
             else
             {
-                aStrSize.Width()  = aVD.GetTextWidth( cellString );
-                aStrSize.Height() = aVD.GetTextHeight();
+                aScriptedText.SetDefaultFont();
+                aScriptedText.SetText( cellString, xBreakIter );
+                aStrSize = aScriptedText.GetTextSize();
             }
 
             nRightX  = (USHORT)(  cellRect.GetWidth()
@@ -1196,11 +1206,8 @@ void AutoFmtPreview::DrawString( USHORT nIndex )
             }
 
             //-------------------------------
-            aVD.DrawText( aPos, cellString );
+            aScriptedText.DrawText( aPos );
             //-------------------------------
-
-            if ( pCurData->GetIncludeFont() )
-                aVD.SetFont( oldFont );
         }
     }
 }
@@ -1216,15 +1223,12 @@ void AutoFmtPreview::DrawBackground( USHORT nIndex )
         USHORT          nFmtIndex = aFmtMap[nIndex];
         Rectangle       cellRect  = aCellArray[nIndex];
 
-        SvxBrushItem    aBrushItem;
-        pCurData->GetBackground( nFmtIndex, aBrushItem );
-
         BOOL bHadLine  = aVD.IsLineColor();
         Color aOldLine = aVD.GetLineColor();
         BOOL bHadFill  = aVD.IsFillColor();
         Color aOldFill = aVD.GetFillColor();
 
-        aVD.SetFillColor( aBrushItem.GetColor() );
+        aVD.SetFillColor( ((const SvxBrushItem*)pCurData->GetItem( nFmtIndex, ATTR_BACKGROUND ))->GetColor() );
         aVD.SetLineColor();
         //-----------------------
         aVD.DrawRect( cellRect );
@@ -1378,8 +1382,7 @@ void AutoFmtPreview::CalcLineMap()
             for ( nCell=nFirst; nCell<=nLast; nCell++ )
             {
                 nLine = nCell + 8 + ((nCell/5)*2);
-                pCurData->GetBox( aFmtMap[nCell], aFrameItem );
-                *(aLinePtrArray[nLine]) = aFrameItem;
+                *(aLinePtrArray[nLine]) = *(const SvxBoxItem*)pCurData->GetItem( aFmtMap[nCell], ATTR_BORDER );
             }
         }
     }

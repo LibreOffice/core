@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autoform.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-14 15:09:18 $
+ *  last change: $Author: dr $ $Date: 2001-11-19 13:30:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,31 +67,20 @@
 
 #define READ_OLDVERS
 
-#include "scitems.hxx"
-#include <svx/adjitem.hxx>
-#include <svx/algitem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/cntritem.hxx>
-#include <svx/colritem.hxx>
-#include <svx/crsditem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/postitem.hxx>
-#include <svx/shdditem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/wghtitem.hxx>
-#include <svx/rotmodit.hxx>
+#include "autoform.hxx"
+
 #include <sfx2/app.hxx>
-#include <svtools/intitem.hxx>
+#include <sfx2/docfile.hxx>
 #include <svtools/pathoptions.hxx>
+#include <svtools/itemset.hxx>
 #include <tools/shl.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
+#include <svx/langitem.hxx>
 #include <tools/urlobj.hxx>
-#include <sfx2/docfile.hxx>
+
 #ifndef _UNOTOOLS_TRANSLITERATIONWRAPPER_HXX
 #include <unotools/transliterationwrapper.hxx>
 #endif
@@ -99,9 +88,8 @@
 #include <tools/tenccvt.hxx>
 #endif
 
-#include "autoform.hxx"
-#include "zforauto.hxx"
 #include "globstr.hrc"
+#include "document.hxx"
 
 //------------------------------------------------------------------------
 
@@ -255,6 +243,205 @@ void ScAfVersions::Write(SvStream& rStream)
 
 //  ---------------------------------------------------------------------------
 
+ScAutoFormatDataField::ScAutoFormatDataField() :
+    aCJKFont( ATTR_CJK_FONT ),
+    aCJKHeight( 240, 100, ATTR_CJK_FONT_HEIGHT ),
+    aCJKWeight( WEIGHT_NORMAL, ATTR_CJK_FONT_WEIGHT ),
+    aCJKPosture( ITALIC_NONE, ATTR_CJK_FONT_POSTURE ),
+    aCTLFont( ATTR_CTL_FONT ),
+    aCTLHeight( 240, 100, ATTR_CTL_FONT_HEIGHT ),
+    aCTLWeight( WEIGHT_NORMAL, ATTR_CTL_FONT_WEIGHT ),
+    aCTLPosture( ITALIC_NONE, ATTR_CTL_FONT_POSTURE ),
+    aLinebreak( ATTR_LINEBREAK ),
+    aRotateAngle( ATTR_ROTATE_VALUE ),
+    aRotateMode( SVX_ROTATE_MODE_STANDARD, ATTR_ROTATE_MODE )
+{
+}
+
+ScAutoFormatDataField::ScAutoFormatDataField( const ScAutoFormatDataField& rCopy ) :
+    aFont( rCopy.aFont ),
+    aHeight( rCopy.aHeight ),
+    aWeight( rCopy.aWeight ),
+    aPosture( rCopy.aPosture ),
+    aCJKFont( rCopy.aCJKFont ),
+    aCJKHeight( rCopy.aCJKHeight ),
+    aCJKWeight( rCopy.aCJKWeight ),
+    aCJKPosture( rCopy.aCJKPosture ),
+    aCTLFont( rCopy.aCTLFont ),
+    aCTLHeight( rCopy.aCTLHeight ),
+    aCTLWeight( rCopy.aCTLWeight ),
+    aCTLPosture( rCopy.aCTLPosture ),
+    aUnderline( rCopy.aUnderline ),
+    aCrossedOut( rCopy.aCrossedOut ),
+    aContour( rCopy.aContour ),
+    aShadowed( rCopy.aShadowed ),
+    aColor( rCopy.aColor ),
+    aBox( rCopy.aBox ),
+    aBackground( rCopy.aBackground ),
+    aAdjust( rCopy.aAdjust ),
+    aHorJustify( rCopy.aHorJustify ),
+    aVerJustify( rCopy.aVerJustify ),
+    aOrientation( rCopy.aOrientation ),
+    aMargin( rCopy.aMargin ),
+    aLinebreak( rCopy.aLinebreak ),
+    aRotateAngle( rCopy.aRotateAngle ),
+    aRotateMode( rCopy.aRotateMode ),
+    aNumFormat( rCopy.aNumFormat )
+{
+}
+
+ScAutoFormatDataField::~ScAutoFormatDataField()
+{
+}
+
+void ScAutoFormatDataField::SetAdjust( const SvxAdjustItem& rAdjust )
+{
+    aAdjust.SetAdjust( rAdjust.GetAdjust() );
+    aAdjust.SetOneWord( rAdjust.GetOneWord() );
+    aAdjust.SetLastBlock( rAdjust.GetLastBlock() );
+}
+
+#define READ( aItem, ItemType, nVers )      \
+    pNew = aItem.Create( rStream, nVers );  \
+    aItem = *(ItemType*)pNew;               \
+    delete pNew;
+
+BOOL ScAutoFormatDataField::Load( SvStream& rStream, const ScAfVersions& rVersions, USHORT nVer )
+{
+    SfxPoolItem* pNew;
+
+    READ( aFont,        SvxFontItem,        rVersions.nFontVersion)
+    READ( aHeight,      SvxFontHeightItem,  rVersions.nFontHeightVersion)
+    READ( aWeight,      SvxWeightItem,      rVersions.nWeightVersion)
+    READ( aPosture,     SvxPostureItem,     rVersions.nPostureVersion)
+    // --- from 641 on: CJK and CTL font settings
+    if( AUTOFORMAT_DATA_ID_641 <= nVer )
+    {
+        READ( aCJKFont,     SvxFontItem,        rVersions.nFontVersion)
+        READ( aCJKHeight,   SvxFontHeightItem,  rVersions.nFontHeightVersion)
+        READ( aCJKWeight,   SvxWeightItem,      rVersions.nWeightVersion)
+        READ( aCJKPosture,  SvxPostureItem,     rVersions.nPostureVersion)
+        READ( aCTLFont,     SvxFontItem,        rVersions.nFontVersion)
+        READ( aCTLHeight,   SvxFontHeightItem,  rVersions.nFontHeightVersion)
+        READ( aCTLWeight,   SvxWeightItem,      rVersions.nWeightVersion)
+        READ( aCTLPosture,  SvxPostureItem,     rVersions.nPostureVersion)
+    }
+    READ( aUnderline,   SvxUnderlineItem,   rVersions.nUnderlineVersion)
+    READ( aCrossedOut,  SvxCrossedOutItem,  rVersions.nCrossedOutVersion)
+    READ( aContour,     SvxContourItem,     rVersions.nContourVersion)
+    READ( aShadowed,    SvxShadowedItem,    rVersions.nShadowedVersion)
+    READ( aColor,       SvxColorItem,       rVersions.nColorVersion)
+    READ( aBox,         SvxBoxItem,         rVersions.nBoxVersion)
+    READ( aBackground,  SvxBrushItem,       rVersions.nBrushVersion)
+
+    pNew = aAdjust.Create( rStream, rVersions.nAdjustVersion );
+    SetAdjust( *(SvxAdjustItem*)pNew );
+    delete pNew;
+
+    READ( aHorJustify,   SvxHorJustifyItem,  rVersions.nHorJustifyVersion)
+    READ( aVerJustify,   SvxVerJustifyItem,  rVersions.nVerJustifyVersion)
+    READ( aOrientation,  SvxOrientationItem, rVersions.nOrientationVersion)
+    READ( aMargin,       SvxMarginItem,      rVersions.nMarginVersion)
+
+    pNew = aLinebreak.Create( rStream, rVersions.nBoolVersion );
+    SetLinebreak( *(SfxBoolItem*)pNew );
+    delete pNew;
+
+    if ( nVer >= AUTOFORMAT_DATA_ID_504 )
+    {
+        pNew = aRotateAngle.Create( rStream, rVersions.nInt32Version );
+        SetRotateAngle( *(SfxInt32Item*)pNew );
+        delete pNew;
+        pNew = aRotateMode.Create( rStream, rVersions.nRotateModeVersion );
+        SetRotateMode( *(SvxRotateModeItem*)pNew );
+        delete pNew;
+    }
+
+    if( 0 == rVersions.nNumFmtVersion )
+        aNumFormat.Load( rStream );
+
+    //  adjust charset in font
+    CharSet eSysSet = gsl_getSystemTextEncoding();
+    CharSet eSrcSet = rStream.GetStreamCharSet();
+    if( eSrcSet != eSysSet && aFont.GetCharSet() == eSrcSet )
+        aFont.GetCharSet() = eSysSet;
+
+    return (rStream.GetError() == 0);
+}
+
+#ifdef READ_OLDVERS
+BOOL ScAutoFormatDataField::LoadOld( SvStream& rStream, const ScAfVersions& rVersions )
+{
+    SfxPoolItem* pNew;
+
+    aNumFormat.Load(rStream);
+
+    READ( aFont,        SvxFontItem,        rVersions.nFontVersion)
+    READ( aHeight,      SvxFontHeightItem,  rVersions.nFontHeightVersion)
+    READ( aWeight,      SvxWeightItem,      rVersions.nWeightVersion)
+    READ( aPosture,     SvxPostureItem,     rVersions.nPostureVersion)
+    READ( aUnderline,   SvxUnderlineItem,   rVersions.nUnderlineVersion)
+    READ( aCrossedOut,  SvxCrossedOutItem,  rVersions.nCrossedOutVersion)
+    READ( aContour,     SvxContourItem,     rVersions.nContourVersion)
+    READ( aShadowed,    SvxShadowedItem,    rVersions.nShadowedVersion)
+    READ( aColor,       SvxColorItem,       rVersions.nColorVersion)
+    READ( aHorJustify,  SvxHorJustifyItem,  rVersions.nHorJustifyVersion)
+    READ( aVerJustify,  SvxVerJustifyItem,  rVersions.nVerJustifyVersion)
+    READ( aOrientation, SvxOrientationItem, rVersions.nOrientationVersion)
+    pNew = aLinebreak.Create( rStream, rVersions.nBoolVersion );
+    SetLinebreak( *(SfxBoolItem*)pNew );
+    delete pNew;
+    READ( aMargin,      SvxMarginItem,      rVersions.nMarginVersion)
+    READ( aBox,         SvxBoxItem,         rVersions.nBoxVersion)
+    READ( aBackground,  SvxBrushItem,       rVersions.nBrushVersion)
+
+    return (rStream.GetError() == 0);
+}
+#endif
+
+BOOL ScAutoFormatDataField::Save( SvStream& rStream )
+{
+    aFont.Store         ( rStream, aFont.GetVersion( SOFFICE_FILEFORMAT_40 ) );
+    aHeight.Store       ( rStream, aHeight.GetVersion( SOFFICE_FILEFORMAT_40 ) );
+    aWeight.Store       ( rStream, aWeight.GetVersion( SOFFICE_FILEFORMAT_40 ) );
+    aPosture.Store      ( rStream, aPosture.GetVersion( SOFFICE_FILEFORMAT_40 ) );
+    // --- from 641 on: CJK and CTL font settings
+    aCJKFont.Store      ( rStream, aCJKFont.GetVersion( SOFFICE_FILEFORMAT_40 ) );
+    aCJKHeight.Store    ( rStream, aCJKHeight.GetVersion( SOFFICE_FILEFORMAT_40 ) );
+    aCJKWeight.Store    ( rStream, aCJKWeight.GetVersion( SOFFICE_FILEFORMAT_40 ) );
+    aCJKPosture.Store   ( rStream, aCJKPosture.GetVersion( SOFFICE_FILEFORMAT_40 ) );
+    aCTLFont.Store      ( rStream, aCTLFont.GetVersion( SOFFICE_FILEFORMAT_40 ) );
+    aCTLHeight.Store    ( rStream, aCTLHeight.GetVersion( SOFFICE_FILEFORMAT_40 ) );
+    aCTLWeight.Store    ( rStream, aCTLWeight.GetVersion( SOFFICE_FILEFORMAT_40 ) );
+    aCTLPosture.Store   ( rStream, aCTLPosture.GetVersion( SOFFICE_FILEFORMAT_40 ) );
+
+    aUnderline.Store    ( rStream, aUnderline.GetVersion( SOFFICE_FILEFORMAT_40 ) );
+    aCrossedOut.Store   ( rStream, aCrossedOut.GetVersion( SOFFICE_FILEFORMAT_40 ) );
+    aContour.Store      ( rStream, aContour.GetVersion( SOFFICE_FILEFORMAT_40 ) );
+    aShadowed.Store     ( rStream, aShadowed.GetVersion( SOFFICE_FILEFORMAT_40 ) );
+    aColor.Store        ( rStream, aColor.GetVersion( SOFFICE_FILEFORMAT_40 ) );
+    aBox.Store          ( rStream, aBox.GetVersion( SOFFICE_FILEFORMAT_40 ) );
+    aBackground.Store   ( rStream, aBackground.GetVersion( SOFFICE_FILEFORMAT_40 ) );
+
+    aAdjust.Store       ( rStream, aAdjust.GetVersion( SOFFICE_FILEFORMAT_40 ) );
+
+    aHorJustify.Store   ( rStream, aHorJustify.GetVersion( SOFFICE_FILEFORMAT_40 ) );
+    aVerJustify.Store   ( rStream, aVerJustify.GetVersion( SOFFICE_FILEFORMAT_40 ) );
+    aOrientation.Store  ( rStream, aOrientation.GetVersion( SOFFICE_FILEFORMAT_40 ) );
+    aMargin.Store       ( rStream, aMargin.GetVersion( SOFFICE_FILEFORMAT_40 ) );
+    aLinebreak.Store    ( rStream, aLinebreak.GetVersion( SOFFICE_FILEFORMAT_40 ) );
+    // Rotation ab SO5
+    aRotateAngle.Store  ( rStream, aRotateAngle.GetVersion( SOFFICE_FILEFORMAT_40 ) );
+    aRotateMode.Store   ( rStream, aRotateMode.GetVersion( SOFFICE_FILEFORMAT_40 ) );
+
+    aNumFormat.Save( rStream );
+
+    return (rStream.GetError() == 0);
+}
+
+
+//  ---------------------------------------------------------------------------
+
 ScAutoFormatData::ScAutoFormatData()
 {
     nStrResId = USHRT_MAX;
@@ -265,43 +452,6 @@ ScAutoFormatData::ScAutoFormatData()
     bIncludeFrame =
     bIncludeBackground =
     bIncludeWidthHeight = TRUE;
-    for (USHORT i = 0; i < 16; i++)
-    {
-        pFont[i]            = new SvxFontItem;
-        pFontHeight[i]      = new SvxFontHeightItem;
-        pFontWeight[i]      = new SvxWeightItem;
-        pFontPosture[i]     = new SvxPostureItem;
-
-        pCJKFont[i]         = new SvxFontItem( ATTR_CJK_FONT );
-        pCJKFontHeight[i]   = new SvxFontHeightItem( 240, 100, ATTR_CJK_FONT_HEIGHT );
-        pCJKFontWeight[i]   = new SvxWeightItem( WEIGHT_NORMAL, ATTR_CJK_FONT_WEIGHT );
-        pCJKFontPosture[i]  = new SvxPostureItem( ITALIC_NONE, ATTR_CJK_FONT_POSTURE );
-
-        pCTLFont[i]         = new SvxFontItem( ATTR_CTL_FONT );
-        pCTLFontHeight[i]   = new SvxFontHeightItem( 240, 100, ATTR_CTL_FONT_HEIGHT );
-        pCTLFontWeight[i]   = new SvxWeightItem( WEIGHT_NORMAL, ATTR_CTL_FONT_WEIGHT );
-        pCTLFontPosture[i]  = new SvxPostureItem( ITALIC_NONE, ATTR_CTL_FONT_POSTURE );
-
-        pFontUnderline[i]   = new SvxUnderlineItem;
-        pFontCrossedOut[i]  = new SvxCrossedOutItem;
-        pFontContour[i]     = new SvxContourItem;
-        pFontShadowed[i]    = new SvxShadowedItem;
-        pFontColor[i]       = new SvxColorItem;
-        pBox[i]             = new SvxBoxItem;
-        pBackground[i]      = new SvxBrushItem;
-
-        pAdjust[i]          = new SvxAdjustItem;
-
-        pHorJustify[i]      = new SvxHorJustifyItem;
-        pVerJustify[i]      = new SvxVerJustifyItem;
-        pOrientation[i]     = new SvxOrientationItem;
-        pMargin[i]          = new SvxMarginItem;
-        pLinebreak[i]       = new SfxBoolItem( ATTR_LINEBREAK );
-        pRotateAngle[i]     = new SfxInt32Item( ATTR_ROTATE_VALUE );
-        pRotateMode[i]      = new SvxRotateModeItem( SVX_ROTATE_MODE_STANDARD, ATTR_ROTATE_MODE );
-
-        pNumFormat[i]       = new ScNumFormatAbbrev;
-    }
 }
 
 ScAutoFormatData::ScAutoFormatData( const ScAutoFormatData& rData ) :
@@ -314,605 +464,263 @@ ScAutoFormatData::ScAutoFormatData( const ScAutoFormatData& rData ) :
         bIncludeBackground( rData.bIncludeBackground ),
         bIncludeWidthHeight( rData.bIncludeWidthHeight )
 {
-    for (USHORT i = 0; i < 16; i++)
-    {
-        pFont[i]            = new SvxFontItem(*rData.pFont[i]);
-        pFontHeight[i]      = new SvxFontHeightItem(*rData.pFontHeight[i]);
-        pFontWeight[i]      = new SvxWeightItem(*rData.pFontWeight[i]);
-        pFontPosture[i]     = new SvxPostureItem(*rData.pFontPosture[i]);
-
-        pCJKFont[i]         = new SvxFontItem(*rData.pCJKFont[i]);
-        pCJKFontHeight[i]   = new SvxFontHeightItem(*rData.pCJKFontHeight[i]);
-        pCJKFontWeight[i]   = new SvxWeightItem(*rData.pCJKFontWeight[i]);
-        pCJKFontPosture[i]  = new SvxPostureItem(*rData.pCJKFontPosture[i]);
-
-        pCTLFont[i]         = new SvxFontItem(*rData.pCTLFont[i]);
-        pCTLFontHeight[i]   = new SvxFontHeightItem(*rData.pCTLFontHeight[i]);
-        pCTLFontWeight[i]   = new SvxWeightItem(*rData.pCTLFontWeight[i]);
-        pCTLFontPosture[i]  = new SvxPostureItem(*rData.pCTLFontPosture[i]);
-
-        pFontUnderline[i]   = new SvxUnderlineItem(*rData.pFontUnderline[i]);
-        pFontCrossedOut[i]  = new SvxCrossedOutItem(*rData.pFontCrossedOut[i]);
-        pFontContour[i]     = new SvxContourItem(*rData.pFontContour[i]);
-        pFontShadowed[i]    = new SvxShadowedItem(*rData.pFontShadowed[i]);
-        pFontColor[i]       = new SvxColorItem(*rData.pFontColor[i]);
-        pBox[i]             = new SvxBoxItem(*rData.pBox[i]);
-        pBackground[i]      = new SvxBrushItem(*rData.pBackground[i]);
-
-        pAdjust[ i ]        = new SvxAdjustItem( *rData.pAdjust[ i ] );
-
-        pHorJustify[i]      = new SvxHorJustifyItem(*rData.pHorJustify[i]);
-        pVerJustify[i]      = new SvxVerJustifyItem(*rData.pVerJustify[i]);
-        pOrientation[i]     = new SvxOrientationItem(*rData.pOrientation[i]);
-        pMargin[i]          = new SvxMarginItem(*rData.pMargin[i]);
-        pLinebreak[i]       = new SfxBoolItem(*rData.pLinebreak[i]);
-        pRotateAngle[i]     = new SfxInt32Item(*rData.pRotateAngle[i]);
-        pRotateMode[i]      = new SvxRotateModeItem(*rData.pRotateMode[i]);
-
-        pNumFormat[i]       = new ScNumFormatAbbrev(*rData.pNumFormat[i]);
-    }
 }
 
 ScAutoFormatData::~ScAutoFormatData()
 {
-    for (USHORT i = 0; i < 16; i++)
-    {
-        delete pFont[i];
-        delete pFontHeight[i];
-        delete pFontWeight[i];
-        delete pFontPosture[i];
-
-        delete pCJKFont[i];
-        delete pCJKFontHeight[i];
-        delete pCJKFontWeight[i];
-        delete pCJKFontPosture[i];
-
-        delete pCTLFont[i];
-        delete pCTLFontHeight[i];
-        delete pCTLFontWeight[i];
-        delete pCTLFontPosture[i];
-
-        delete pFontUnderline[i];
-        delete pFontCrossedOut[i];
-        delete pFontContour[i];
-        delete pFontShadowed[i];
-        delete pFontColor[i];
-        delete pBox[i];
-        delete pBackground[i];
-
-        delete pAdjust[i];
-
-        delete pHorJustify[i];
-        delete pVerJustify[i];
-        delete pOrientation[i];
-        delete pMargin[i];
-        delete pLinebreak[i];
-        delete pRotateAngle[i];
-        delete pRotateMode[i];
-
-        delete pNumFormat[i];
-    }
 }
 
-//---------------------------------------------------------------------------------------
-
-void ScAutoFormatData::GetNumFormat(USHORT nIndex, ScNumFormatAbbrev& rNumFormat) const
+ScAutoFormatDataField& ScAutoFormatData::GetField( USHORT nIndex )
 {
-    rNumFormat = *pNumFormat[nIndex];
+    DBG_ASSERT( (0 <= nIndex) && (nIndex < 16), "ScAutoFormatData::GetField - illegal index" );
+    return aDataField[ nIndex ];
 }
 
-void ScAutoFormatData::SetNumFormat(USHORT nIndex, const ScNumFormatAbbrev& rNumFormat)
+const ScAutoFormatDataField& ScAutoFormatData::GetField( USHORT nIndex ) const
 {
-    *pNumFormat[nIndex] = rNumFormat;
+    DBG_ASSERT( (0 <= nIndex) && (nIndex < 16), "ScAutoFormatData::GetField - illegal index" );
+    return aDataField[ nIndex ];
 }
-
-//---------------------------------------------------------------------------------------
-
-void ScAutoFormatData::GetFont(USHORT nIndex, SvxFontItem& rFont) const
-{
-    rFont = *pFont[nIndex];
-}
-
-void ScAutoFormatData::SetFont(USHORT nIndex, const SvxFontItem& rFont)
-{
-    *pFont[nIndex] = rFont;
-}
-
-//---------------------------------------------------------------------------------------
-
-void ScAutoFormatData::GetFontHeight(USHORT nIndex, SvxFontHeightItem& rFontHeight) const
-{
-    rFontHeight = *pFontHeight[nIndex];
-}
-
-void ScAutoFormatData::SetFontHeight(USHORT nIndex, const SvxFontHeightItem& rFontHeight)
-{
-    *pFontHeight[nIndex] = rFontHeight;
-}
-
-//---------------------------------------------------------------------------------------
-
-void ScAutoFormatData::GetFontWeight(USHORT nIndex, SvxWeightItem& rFontWeight) const
-{
-    rFontWeight = *pFontWeight[nIndex];
-}
-
-void ScAutoFormatData::SetFontWeight(USHORT nIndex, const SvxWeightItem& rFontWeight)
-{
-    *pFontWeight[nIndex] = rFontWeight;
-}
-
-//---------------------------------------------------------------------------------------
-
-void ScAutoFormatData::GetFontPosture(USHORT nIndex, SvxPostureItem& rFontPosture) const
-{
-    rFontPosture = *pFontPosture[nIndex];
-}
-
-void ScAutoFormatData::SetFontPosture(USHORT nIndex, const SvxPostureItem& rFontPosture)
-{
-    *pFontPosture[nIndex] = rFontPosture;
-}
-
-//---------------------------------------------------------------------------------------
-
-void ScAutoFormatData::GetCJKFont(USHORT nIndex, SvxFontItem& rFont) const
-{
-    rFont = *pCJKFont[nIndex];
-    rFont.SetWhich( pCJKFont[nIndex]->Which() );
-}
-
-void ScAutoFormatData::SetCJKFont(USHORT nIndex, const SvxFontItem& rFont)
-{
-    *pCJKFont[nIndex] = rFont;
-}
-
-//---------------------------------------------------------------------------------------
-
-void ScAutoFormatData::GetCJKFontHeight(USHORT nIndex, SvxFontHeightItem& rFontHeight) const
-{
-    rFontHeight = *pCJKFontHeight[nIndex];
-    rFontHeight.SetWhich( pCJKFontHeight[nIndex]->Which() );
-}
-
-void ScAutoFormatData::SetCJKFontHeight(USHORT nIndex, const SvxFontHeightItem& rFontHeight)
-{
-    *pCJKFontHeight[nIndex] = rFontHeight;
-}
-
-//---------------------------------------------------------------------------------------
-
-void ScAutoFormatData::GetCJKFontWeight(USHORT nIndex, SvxWeightItem& rFontWeight) const
-{
-    rFontWeight = *pCJKFontWeight[nIndex];
-    rFontWeight.SetWhich( pCJKFontWeight[nIndex]->Which() );
-}
-
-void ScAutoFormatData::SetCJKFontWeight(USHORT nIndex, const SvxWeightItem& rFontWeight)
-{
-    *pCJKFontWeight[nIndex] = rFontWeight;
-}
-
-//---------------------------------------------------------------------------------------
-
-void ScAutoFormatData::GetCJKFontPosture(USHORT nIndex, SvxPostureItem& rFontPosture) const
-{
-    rFontPosture = *pCJKFontPosture[nIndex];
-    rFontPosture.SetWhich( pCJKFontPosture[nIndex]->Which() );
-}
-
-void ScAutoFormatData::SetCJKFontPosture(USHORT nIndex, const SvxPostureItem& rFontPosture)
-{
-    *pCJKFontPosture[nIndex] = rFontPosture;
-}
-
-//---------------------------------------------------------------------------------------
-
-void ScAutoFormatData::GetCTLFont(USHORT nIndex, SvxFontItem& rFont) const
-{
-    rFont = *pCTLFont[nIndex];
-    rFont.SetWhich( pCTLFont[nIndex]->Which() );
-}
-
-void ScAutoFormatData::SetCTLFont(USHORT nIndex, const SvxFontItem& rFont)
-{
-    *pCTLFont[nIndex] = rFont;
-}
-
-//---------------------------------------------------------------------------------------
-
-void ScAutoFormatData::GetCTLFontHeight(USHORT nIndex, SvxFontHeightItem& rFontHeight) const
-{
-    rFontHeight = *pCTLFontHeight[nIndex];
-    rFontHeight.SetWhich( pCTLFontHeight[nIndex]->Which() );
-}
-
-void ScAutoFormatData::SetCTLFontHeight(USHORT nIndex, const SvxFontHeightItem& rFontHeight)
-{
-    *pCTLFontHeight[nIndex] = rFontHeight;
-}
-
-//---------------------------------------------------------------------------------------
-
-void ScAutoFormatData::GetCTLFontWeight(USHORT nIndex, SvxWeightItem& rFontWeight) const
-{
-    rFontWeight = *pCTLFontWeight[nIndex];
-    rFontWeight.SetWhich( pCTLFontWeight[nIndex]->Which() );
-}
-
-void ScAutoFormatData::SetCTLFontWeight(USHORT nIndex, const SvxWeightItem& rFontWeight)
-{
-    *pCTLFontWeight[nIndex] = rFontWeight;
-}
-
-//---------------------------------------------------------------------------------------
-
-void ScAutoFormatData::GetCTLFontPosture(USHORT nIndex, SvxPostureItem& rFontPosture) const
-{
-    rFontPosture = *pCTLFontPosture[nIndex];
-    rFontPosture.SetWhich( pCTLFontPosture[nIndex]->Which() );
-}
-
-void ScAutoFormatData::SetCTLFontPosture(USHORT nIndex, const SvxPostureItem& rFontPosture)
-{
-    *pCTLFontPosture[nIndex] = rFontPosture;
-}
-
-//---------------------------------------------------------------------------------------
-
-void ScAutoFormatData::GetFontUnderline(USHORT nIndex, SvxUnderlineItem& rFontUnderline) const
-{
-    rFontUnderline = *pFontUnderline[nIndex];
-}
-
-void ScAutoFormatData::SetFontUnderline(USHORT nIndex, const SvxUnderlineItem& rFontUnderline)
-{
-    *pFontUnderline[nIndex] = rFontUnderline;
-}
-
-//---------------------------------------------------------------------------------------
-
-void ScAutoFormatData::GetFontCrossedOut(USHORT nIndex, SvxCrossedOutItem& rFontCrossedOut) const
-{
-    rFontCrossedOut = *pFontCrossedOut[nIndex];
-}
-
-void ScAutoFormatData::SetFontCrossedOut(USHORT nIndex, const SvxCrossedOutItem& rFontCrossedOut)
-{
-    *pFontCrossedOut[nIndex] = rFontCrossedOut;
-}
-
-//---------------------------------------------------------------------------------------
-
-void ScAutoFormatData::GetFontContour(USHORT nIndex, SvxContourItem& rFontContour) const
-{
-    rFontContour = *pFontContour[nIndex];
-}
-
-void ScAutoFormatData::SetFontContour(USHORT nIndex, const SvxContourItem& rFontContour)
-{
-    *pFontContour[nIndex] = rFontContour;
-}
-
-//---------------------------------------------------------------------------------------
-
-void ScAutoFormatData::GetFontShadowed(USHORT nIndex, SvxShadowedItem& rFontShadowed) const
-{
-    rFontShadowed = *pFontShadowed[nIndex];
-}
-
-void ScAutoFormatData::SetFontShadowed(USHORT nIndex, const SvxShadowedItem& rFontShadowed)
-{
-    *pFontShadowed[nIndex] = rFontShadowed;
-}
-
-//---------------------------------------------------------------------------------------
-
-void ScAutoFormatData::GetFontColor(USHORT nIndex, SvxColorItem& rFontColor) const
-{
-    rFontColor = *pFontColor[nIndex];
-}
-
-void ScAutoFormatData::SetFontColor(USHORT nIndex, const SvxColorItem& rFontColor)
-{
-    *pFontColor[nIndex] = rFontColor;
-}
-
-//---------------------------------------------------------------------------------------
-
-void ScAutoFormatData::GetHorJustify(USHORT nIndex, SvxHorJustifyItem& rHorJustify) const
-{
-    rHorJustify = *pHorJustify[nIndex];
-}
-
-void ScAutoFormatData::SetHorJustify(USHORT nIndex, const SvxHorJustifyItem& rHorJustify)
-{
-    *pHorJustify[nIndex] = rHorJustify;
-}
-
-//---------------------------------------------------------------------------------------
-
-void ScAutoFormatData::GetVerJustify(USHORT nIndex, SvxVerJustifyItem& rVerJustify) const
-{
-    rVerJustify = *pVerJustify[nIndex];
-}
-
-void ScAutoFormatData::SetVerJustify(USHORT nIndex, const SvxVerJustifyItem& rVerJustify)
-{
-    *pVerJustify[nIndex] = rVerJustify;
-}
-
-//---------------------------------------------------------------------------------------
-
-void ScAutoFormatData::GetOrientation(USHORT nIndex, SvxOrientationItem& rOrientation) const
-{
-    rOrientation = *pOrientation[nIndex];
-}
-
-void ScAutoFormatData::SetOrientation(USHORT nIndex, const SvxOrientationItem& rOrientation)
-{
-    *pOrientation[nIndex] = rOrientation;
-}
-
-//---------------------------------------------------------------------------------------
-
-void ScAutoFormatData::GetLinebreak(USHORT nIndex, SfxBoolItem& rLinebreak) const
-{
-    rLinebreak.SetValue( pLinebreak[nIndex]->GetValue() );
-}
-
-void ScAutoFormatData::SetLinebreak(USHORT nIndex, const SfxBoolItem& rLinebreak)
-{
-    pLinebreak[nIndex]->SetValue( rLinebreak.GetValue() );
-}
-
-//---------------------------------------------------------------------------------------
-
-void ScAutoFormatData::GetMargin(USHORT nIndex, SvxMarginItem& rMargin) const
-{
-    rMargin = *pMargin[nIndex];
-}
-
-void ScAutoFormatData::SetMargin(USHORT nIndex, const SvxMarginItem& rMargin)
-{
-    *pMargin[nIndex] = rMargin;
-}
-
-//---------------------------------------------------------------------------------------
-
-void ScAutoFormatData::GetBox(USHORT nIndex, SvxBoxItem& rBox) const
-{
-    rBox = *pBox[nIndex];
-}
-
-void ScAutoFormatData::SetBox(USHORT nIndex, const SvxBoxItem& rBox)
-{
-    *pBox[nIndex] = rBox;
-}
-
-//---------------------------------------------------------------------------------------
-
-void ScAutoFormatData::GetBackground(USHORT nIndex, SvxBrushItem& rBackground) const
-{
-    rBackground = *pBackground[nIndex];
-}
-
-void ScAutoFormatData::SetBackground(USHORT nIndex, const SvxBrushItem& rBackground)
-{
-    *pBackground[nIndex] = rBackground;
-}
-
-//---------------------------------------------------------------------------------------
-
-void ScAutoFormatData::GetRotateAngle( USHORT nIndex, SfxInt32Item& rRotateAngle ) const
-{
-    rRotateAngle.SetValue( pRotateAngle[nIndex]->GetValue() );
-}
-
-void ScAutoFormatData::SetRotateAngle( USHORT nIndex, const SfxInt32Item& rRotateAngle )
-{
-    pRotateAngle[nIndex]->SetValue( rRotateAngle.GetValue() );
-}
-
-//---------------------------------------------------------------------------------------
-
-void ScAutoFormatData::GetRotateMode( USHORT nIndex, SvxRotateModeItem& rRotateMode ) const
-{
-    rRotateMode.SetValue( pRotateMode[nIndex]->GetValue() );
-}
-
-void ScAutoFormatData::SetRotateMode( USHORT nIndex, const SvxRotateModeItem& rRotateMode )
-{
-    pRotateMode[nIndex]->SetValue( rRotateMode.GetValue() );
-}
-
-//---------------------------------------------------------------------------------------
 
 const SfxPoolItem* ScAutoFormatData::GetItem( USHORT nIndex, USHORT nWhich ) const
 {
-    switch (nWhich)
+    const ScAutoFormatDataField& rField = GetField( nIndex );
+    switch( nWhich )
     {
-        case ATTR_FONT:             return pFont[nIndex];
-        case ATTR_FONT_HEIGHT:      return pFontHeight[nIndex];
-        case ATTR_FONT_WEIGHT:      return pFontWeight[nIndex];
-        case ATTR_FONT_POSTURE:     return pFontPosture[nIndex];
-        case ATTR_CJK_FONT:         return pCJKFont[nIndex];
-        case ATTR_CJK_FONT_HEIGHT:  return pCJKFontHeight[nIndex];
-        case ATTR_CJK_FONT_WEIGHT:  return pCJKFontWeight[nIndex];
-        case ATTR_CJK_FONT_POSTURE: return pCJKFontPosture[nIndex];
-        case ATTR_CTL_FONT:         return pCTLFont[nIndex];
-        case ATTR_CTL_FONT_HEIGHT:  return pCTLFontHeight[nIndex];
-        case ATTR_CTL_FONT_WEIGHT:  return pCTLFontWeight[nIndex];
-        case ATTR_CTL_FONT_POSTURE: return pCTLFontPosture[nIndex];
-        case ATTR_FONT_UNDERLINE:   return pFontUnderline[nIndex];
-        case ATTR_FONT_CROSSEDOUT:  return pFontCrossedOut[nIndex];
-        case ATTR_FONT_CONTOUR:     return pFontContour[nIndex];
-        case ATTR_FONT_SHADOWED:    return pFontShadowed[nIndex];
-        case ATTR_FONT_COLOR:       return pFontColor[nIndex];
-        case ATTR_BORDER:           return pBox[nIndex];
-        case ATTR_BACKGROUND:       return pBackground[nIndex];
-        case ATTR_HOR_JUSTIFY:      return pHorJustify[nIndex];
-        case ATTR_VER_JUSTIFY:      return pVerJustify[nIndex];
-        case ATTR_ORIENTATION:      return pOrientation[nIndex];
-        case ATTR_MARGIN:           return pMargin[nIndex];
-        case ATTR_LINEBREAK:        return pLinebreak[nIndex];
-        case ATTR_ROTATE_VALUE:     return pRotateAngle[nIndex];
-        case ATTR_ROTATE_MODE:      return pRotateMode[nIndex];
+        case ATTR_FONT:             return &rField.GetFont();
+        case ATTR_FONT_HEIGHT:      return &rField.GetHeight();
+        case ATTR_FONT_WEIGHT:      return &rField.GetWeight();
+        case ATTR_FONT_POSTURE:     return &rField.GetPosture();
+        case ATTR_CJK_FONT:         return &rField.GetCJKFont();
+        case ATTR_CJK_FONT_HEIGHT:  return &rField.GetCJKHeight();
+        case ATTR_CJK_FONT_WEIGHT:  return &rField.GetCJKWeight();
+        case ATTR_CJK_FONT_POSTURE: return &rField.GetCJKPosture();
+        case ATTR_CTL_FONT:         return &rField.GetCTLFont();
+        case ATTR_CTL_FONT_HEIGHT:  return &rField.GetCTLHeight();
+        case ATTR_CTL_FONT_WEIGHT:  return &rField.GetCTLWeight();
+        case ATTR_CTL_FONT_POSTURE: return &rField.GetCTLPosture();
+        case ATTR_FONT_UNDERLINE:   return &rField.GetUnderline();
+        case ATTR_FONT_CROSSEDOUT:  return &rField.GetCrossedOut();
+        case ATTR_FONT_CONTOUR:     return &rField.GetContour();
+        case ATTR_FONT_SHADOWED:    return &rField.GetShadowed();
+        case ATTR_FONT_COLOR:       return &rField.GetColor();
+        case ATTR_BORDER:           return &rField.GetBox();
+        case ATTR_BACKGROUND:       return &rField.GetBackground();
+        case ATTR_HOR_JUSTIFY:      return &rField.GetHorJustify();
+        case ATTR_VER_JUSTIFY:      return &rField.GetVerJustify();
+        case ATTR_ORIENTATION:      return &rField.GetOrientation();
+        case ATTR_MARGIN:           return &rField.GetMargin();
+        case ATTR_LINEBREAK:        return &rField.GetLinebreak();
+        case ATTR_ROTATE_VALUE:     return &rField.GetRotateAngle();
+        case ATTR_ROTATE_MODE:      return &rField.GetRotateMode();
     }
     return NULL;
 }
 
 void ScAutoFormatData::PutItem( USHORT nIndex, const SfxPoolItem& rItem )
 {
-    switch (rItem.Which())
+    ScAutoFormatDataField& rField = GetField( nIndex );
+    switch( rItem.Which() )
     {
-        case ATTR_FONT:
-            *pFont[nIndex] = (const SvxFontItem&)rItem;
-            break;
-        case ATTR_FONT_HEIGHT:
-            *pFontHeight[nIndex] = (const SvxFontHeightItem&)rItem;
-            break;
-        case ATTR_FONT_WEIGHT:
-            *pFontWeight[nIndex] = (const SvxWeightItem&)rItem;
-            break;
-        case ATTR_FONT_POSTURE:
-            *pFontPosture[nIndex] = (const SvxPostureItem&)rItem;
-            break;
-        case ATTR_CJK_FONT:
-            *pCJKFont[nIndex] = (const SvxFontItem&)rItem;
-            break;
-        case ATTR_CJK_FONT_HEIGHT:
-            *pCJKFontHeight[nIndex] = (const SvxFontHeightItem&)rItem;
-            break;
-        case ATTR_CJK_FONT_WEIGHT:
-            *pCJKFontWeight[nIndex] = (const SvxWeightItem&)rItem;
-            break;
-        case ATTR_CJK_FONT_POSTURE:
-            *pCJKFontPosture[nIndex] = (const SvxPostureItem&)rItem;
-            break;
-        case ATTR_CTL_FONT:
-            *pCTLFont[nIndex] = (const SvxFontItem&)rItem;
-            break;
-        case ATTR_CTL_FONT_HEIGHT:
-            *pCTLFontHeight[nIndex] = (const SvxFontHeightItem&)rItem;
-            break;
-        case ATTR_CTL_FONT_WEIGHT:
-            *pCTLFontWeight[nIndex] = (const SvxWeightItem&)rItem;
-            break;
-        case ATTR_CTL_FONT_POSTURE:
-            *pCTLFontPosture[nIndex] = (const SvxPostureItem&)rItem;
-            break;
-        case ATTR_FONT_UNDERLINE:
-            *pFontUnderline[nIndex] = (const SvxUnderlineItem&)rItem;
-            break;
-        case ATTR_FONT_CROSSEDOUT:
-            *pFontCrossedOut[nIndex] = (const SvxCrossedOutItem&)rItem;
-            break;
-        case ATTR_FONT_CONTOUR:
-            *pFontContour[nIndex] = (const SvxContourItem&)rItem;
-            break;
-        case ATTR_FONT_SHADOWED:
-            *pFontShadowed[nIndex] = (const SvxShadowedItem&)rItem;
-            break;
-        case ATTR_FONT_COLOR:
-            *pFontColor[nIndex] = (const SvxColorItem&)rItem;
-            break;
-        case ATTR_BORDER:
-            *pBox[nIndex] = (const SvxBoxItem&)rItem;
-            break;
-        case ATTR_BACKGROUND:
-            *pBackground[nIndex] = (const SvxBrushItem&)rItem;
-            break;
-        case ATTR_HOR_JUSTIFY:
-            *pHorJustify[nIndex] = (const SvxHorJustifyItem&)rItem;
-            break;
-        case ATTR_VER_JUSTIFY:
-            *pVerJustify[nIndex] = (const SvxVerJustifyItem&)rItem;
-            break;
-        case ATTR_ORIENTATION:
-            *pOrientation[nIndex] = (const SvxOrientationItem&)rItem;
-            break;
-        case ATTR_MARGIN:
-            *pMargin[nIndex] = (const SvxMarginItem&)rItem;
-            break;
-        case ATTR_LINEBREAK:
-            pLinebreak[nIndex]->SetValue( ((const SfxBoolItem&)rItem).GetValue() );
-            break;
-        case ATTR_ROTATE_VALUE:
-            pRotateAngle[nIndex]->SetValue( ((const SfxInt32Item&)rItem).GetValue() );
-            break;
-        case ATTR_ROTATE_MODE:
-            pRotateMode[nIndex]->SetValue( ((const SvxRotateModeItem&)rItem).GetValue() );
-            break;
+        case ATTR_FONT:             rField.SetFont( (const SvxFontItem&)rItem );              break;
+        case ATTR_FONT_HEIGHT:      rField.SetHeight( (const SvxFontHeightItem&)rItem );      break;
+        case ATTR_FONT_WEIGHT:      rField.SetWeight( (const SvxWeightItem&)rItem );          break;
+        case ATTR_FONT_POSTURE:     rField.SetPosture( (const SvxPostureItem&)rItem );        break;
+        case ATTR_CJK_FONT:         rField.SetCJKFont( (const SvxFontItem&)rItem );           break;
+        case ATTR_CJK_FONT_HEIGHT:  rField.SetCJKHeight( (const SvxFontHeightItem&)rItem );   break;
+        case ATTR_CJK_FONT_WEIGHT:  rField.SetCJKWeight( (const SvxWeightItem&)rItem );       break;
+        case ATTR_CJK_FONT_POSTURE: rField.SetCJKPosture( (const SvxPostureItem&)rItem );     break;
+        case ATTR_CTL_FONT:         rField.SetCTLFont( (const SvxFontItem&)rItem );           break;
+        case ATTR_CTL_FONT_HEIGHT:  rField.SetCTLHeight( (const SvxFontHeightItem&)rItem );   break;
+        case ATTR_CTL_FONT_WEIGHT:  rField.SetCTLWeight( (const SvxWeightItem&)rItem );       break;
+        case ATTR_CTL_FONT_POSTURE: rField.SetCTLPosture( (const SvxPostureItem&)rItem );     break;
+        case ATTR_FONT_UNDERLINE:   rField.SetUnderline( (const SvxUnderlineItem&)rItem );    break;
+        case ATTR_FONT_CROSSEDOUT:  rField.SetCrossedOut( (const SvxCrossedOutItem&)rItem );  break;
+        case ATTR_FONT_CONTOUR:     rField.SetContour( (const SvxContourItem&)rItem );        break;
+        case ATTR_FONT_SHADOWED:    rField.SetShadowed( (const SvxShadowedItem&)rItem );      break;
+        case ATTR_FONT_COLOR:       rField.SetColor( (const SvxColorItem&)rItem );            break;
+        case ATTR_BORDER:           rField.SetBox( (const SvxBoxItem&)rItem );                break;
+        case ATTR_BACKGROUND:       rField.SetBackground( (const SvxBrushItem&)rItem );       break;
+        case ATTR_HOR_JUSTIFY:      rField.SetHorJustify( (const SvxHorJustifyItem&)rItem );  break;
+        case ATTR_VER_JUSTIFY:      rField.SetVerJustify( (const SvxVerJustifyItem&)rItem );  break;
+        case ATTR_ORIENTATION:      rField.SetOrientation( (const SvxOrientationItem&)rItem );break;
+        case ATTR_MARGIN:           rField.SetMargin( (const SvxMarginItem&)rItem );          break;
+        case ATTR_LINEBREAK:        rField.SetLinebreak( (const SfxBoolItem&)rItem );         break;
+        case ATTR_ROTATE_VALUE:     rField.SetRotateAngle( (const SfxInt32Item&)rItem );      break;
+        case ATTR_ROTATE_MODE:      rField.SetRotateMode( (const SvxRotateModeItem&)rItem );  break;
     }
 }
 
-//---------------------------------------------------------------------------------------
+void ScAutoFormatData::CopyItem( USHORT nToIndex, USHORT nFromIndex, USHORT nWhich )
+{
+    const SfxPoolItem* pItem = GetItem( nFromIndex, nWhich );
+    if( pItem )
+        PutItem( nToIndex, *pItem );
+}
 
-BOOL ScAutoFormatData::IsEqualData(USHORT nIndex1, USHORT nIndex2)
+const ScNumFormatAbbrev& ScAutoFormatData::GetNumFormat( USHORT nIndex ) const
+{
+    return GetField( nIndex ).GetNumFormat();
+}
+
+void ScAutoFormatData::SetNumFormat( USHORT nIndex, const ScNumFormatAbbrev& rNumFormat )
+{
+    GetField( nIndex ).SetNumFormat( rNumFormat );
+}
+
+BOOL ScAutoFormatData::IsEqualData( USHORT nIndex1, USHORT nIndex2 ) const
 {
     BOOL bEqual = TRUE;
-    if (bIncludeValueFormat)
+    const ScAutoFormatDataField& rField1 = GetField( nIndex1 );
+    const ScAutoFormatDataField& rField2 = GetField( nIndex2 );
+
+    if( bIncludeValueFormat )
     {
-        bEqual = (bEqual && (*pNumFormat[nIndex1] == *pNumFormat[nIndex2]));
+        bEqual = bEqual
+            && (rField1.GetNumFormat()      == rField2.GetNumFormat());
     }
-    if (bIncludeFont)
+    if( bIncludeFont )
     {
-        bEqual = (bEqual && (*pFont[nIndex1] == *pFont[nIndex2]));
-        bEqual = (bEqual && (*pFontHeight[nIndex1] == *pFontHeight[nIndex2]));
-        bEqual = (bEqual && (*pFontWeight[nIndex1] == *pFontWeight[nIndex2]));
-        bEqual = (bEqual && (*pFontPosture[nIndex1] == *pFontPosture[nIndex2]));
-        bEqual = (bEqual && (*pCJKFont[nIndex1] == *pCJKFont[nIndex2]));
-        bEqual = (bEqual && (*pCJKFontHeight[nIndex1] == *pCJKFontHeight[nIndex2]));
-        bEqual = (bEqual && (*pCJKFontWeight[nIndex1] == *pCJKFontWeight[nIndex2]));
-        bEqual = (bEqual && (*pCJKFontPosture[nIndex1] == *pCJKFontPosture[nIndex2]));
-        bEqual = (bEqual && (*pCTLFont[nIndex1] == *pCTLFont[nIndex2]));
-        bEqual = (bEqual && (*pCTLFontHeight[nIndex1] == *pCTLFontHeight[nIndex2]));
-        bEqual = (bEqual && (*pCTLFontWeight[nIndex1] == *pCTLFontWeight[nIndex2]));
-        bEqual = (bEqual && (*pCTLFontPosture[nIndex1] == *pCTLFontPosture[nIndex2]));
-        bEqual = (bEqual && (*pFontUnderline[nIndex1] == *pFontUnderline[nIndex2]));
-        bEqual = (bEqual && (*pFontCrossedOut[nIndex1] == *pFontCrossedOut[nIndex2]));
-        bEqual = (bEqual && (*pFontContour[nIndex1] == *pFontContour[nIndex2]));
-        bEqual = (bEqual && (*pFontShadowed[nIndex1] == *pFontShadowed[nIndex2]));
-        bEqual = (bEqual && (*pFontColor[nIndex1] == *pFontColor[nIndex2]));
+        bEqual = bEqual
+            && (rField1.GetFont()           == rField2.GetFont())
+            && (rField1.GetHeight()         == rField2.GetHeight())
+            && (rField1.GetWeight()         == rField2.GetWeight())
+            && (rField1.GetPosture()        == rField2.GetPosture())
+            && (rField1.GetCJKFont()        == rField2.GetCJKFont())
+            && (rField1.GetCJKHeight()      == rField2.GetCJKHeight())
+            && (rField1.GetCJKWeight()      == rField2.GetCJKWeight())
+            && (rField1.GetCJKPosture()     == rField2.GetCJKPosture())
+            && (rField1.GetCTLFont()        == rField2.GetCTLFont())
+            && (rField1.GetCTLHeight()      == rField2.GetCTLHeight())
+            && (rField1.GetCTLWeight()      == rField2.GetCTLWeight())
+            && (rField1.GetCTLPosture()     == rField2.GetCTLPosture())
+            && (rField1.GetUnderline()      == rField2.GetUnderline())
+            && (rField1.GetCrossedOut()     == rField2.GetCrossedOut())
+            && (rField1.GetContour()        == rField2.GetContour())
+            && (rField1.GetShadowed()       == rField2.GetShadowed())
+            && (rField1.GetColor()          == rField2.GetColor());
     }
-    if (bIncludeJustify)
+    if( bIncludeJustify )
     {
-        bEqual = (bEqual && (*pHorJustify[nIndex1] == *pHorJustify[nIndex2]));
-        bEqual = (bEqual && (*pVerJustify[nIndex1] == *pVerJustify[nIndex2]));
-        bEqual = (bEqual && (*pOrientation[nIndex1] == *pOrientation[nIndex2]));
-        bEqual = (bEqual && (*pLinebreak[nIndex1] == *pLinebreak[nIndex2]));
-        bEqual = (bEqual && (*pMargin[nIndex1] == *pMargin[nIndex2]));
-        bEqual = (bEqual && (*pRotateAngle[nIndex1] == *pRotateAngle[nIndex2]));
-        bEqual = (bEqual && (*pRotateMode[nIndex1] == *pRotateMode[nIndex2]));
+        bEqual = bEqual
+            && (rField1.GetHorJustify()     == rField2.GetHorJustify())
+            && (rField1.GetVerJustify()     == rField2.GetVerJustify())
+            && (rField1.GetOrientation()    == rField2.GetOrientation())
+            && (rField1.GetLinebreak()      == rField2.GetLinebreak())
+            && (rField1.GetMargin()         == rField2.GetMargin())
+            && (rField1.GetRotateAngle()    == rField2.GetRotateAngle())
+            && (rField1.GetRotateMode()     == rField2.GetRotateMode());
     }
-    if (bIncludeFrame)
-        bEqual = (bEqual && (*pBox[nIndex1] == *pBox[nIndex2]));
-    if (bIncludeBackground)
-        bEqual = (bEqual && (*pBackground[nIndex1] == *pBackground[nIndex2]));
+    if( bIncludeFrame )
+    {
+        bEqual = bEqual
+            && (rField1.GetBox()            == rField2.GetBox());
+    }
+    if( bIncludeBackground )
+    {
+        bEqual = bEqual
+            && (rField1.GetBackground()     == rField2.GetBackground());
+    }
     return bEqual;
 }
 
-#define READ( i, aItem, aItemType, nVers )\
-    pNew = aItem[i]->Create(rStream, nVers ); \
-    *aItem[i] = *(aItemType*)pNew; \
-    delete pNew;
+void ScAutoFormatData::FillToItemSet( USHORT nIndex, SfxItemSet& rItemSet, ScDocument& rDoc ) const
+{
+    DBG_ASSERT( (0 <= nIndex) && (nIndex < 16), "ScAutoFormatData::FillToItemSet - illegal index" );
+    const ScAutoFormatDataField& rField = aDataField[ nIndex ];
 
-BOOL ScAutoFormatData::Load(SvStream& rStream, const ScAfVersions& rVersions)
+    if( bIncludeValueFormat )
+    {
+        ScNumFormatAbbrev& rNumFormat = (ScNumFormatAbbrev&)rField.GetNumFormat();
+        SfxUInt32Item aValueFormat( ATTR_VALUE_FORMAT, 0 );
+        aValueFormat.SetValue( rNumFormat.GetFormatIndex( *rDoc.GetFormatTable() ) );
+        rItemSet.Put( aValueFormat );
+        rItemSet.Put( SvxLanguageItem( rNumFormat.GetLanguage(), ATTR_LANGUAGE_FORMAT ) );
+    }
+    if( bIncludeFont )
+    {
+        rItemSet.Put( rField.GetFont() );
+        rItemSet.Put( rField.GetHeight() );
+        rItemSet.Put( rField.GetWeight() );
+        rItemSet.Put( rField.GetPosture() );
+        rItemSet.Put( rField.GetCJKFont() );
+        rItemSet.Put( rField.GetCJKHeight() );
+        rItemSet.Put( rField.GetCJKWeight() );
+        rItemSet.Put( rField.GetCJKPosture() );
+        rItemSet.Put( rField.GetCTLFont() );
+        rItemSet.Put( rField.GetCTLHeight() );
+        rItemSet.Put( rField.GetCTLWeight() );
+        rItemSet.Put( rField.GetCTLPosture() );
+        rItemSet.Put( rField.GetUnderline() );
+        rItemSet.Put( rField.GetCrossedOut() );
+        rItemSet.Put( rField.GetContour() );
+        rItemSet.Put( rField.GetShadowed() );
+        rItemSet.Put( rField.GetColor() );
+    }
+    if( bIncludeJustify )
+    {
+        rItemSet.Put( rField.GetHorJustify() );
+        rItemSet.Put( rField.GetVerJustify() );
+        rItemSet.Put( rField.GetOrientation() );
+        rItemSet.Put( rField.GetLinebreak() );
+        rItemSet.Put( rField.GetMargin() );
+        rItemSet.Put( rField.GetRotateAngle() );
+        rItemSet.Put( rField.GetRotateMode() );
+    }
+    if( bIncludeFrame )
+        rItemSet.Put( rField.GetBox() );
+    if( bIncludeBackground )
+        rItemSet.Put( rField.GetBackground() );
+}
+
+void ScAutoFormatData::GetFromItemSet( USHORT nIndex, const SfxItemSet& rItemSet, const ScNumFormatAbbrev& rNumFormat )
+{
+    DBG_ASSERT( (0 <= nIndex) && (nIndex < 16), "ScAutoFormatData::GetFromItemSet - illegal index" );
+    ScAutoFormatDataField& rField = aDataField[ nIndex ];
+
+    rField.SetNumFormat     ( rNumFormat);
+    rField.SetFont          ( (const SvxFontItem&)          rItemSet.Get( ATTR_FONT ) );
+    rField.SetHeight        ( (const SvxFontHeightItem&)    rItemSet.Get( ATTR_FONT_HEIGHT ) );
+    rField.SetWeight        ( (const SvxWeightItem&)        rItemSet.Get( ATTR_FONT_WEIGHT ) );
+    rField.SetPosture       ( (const SvxPostureItem&)       rItemSet.Get( ATTR_FONT_POSTURE ) );
+    rField.SetCJKFont       ( (const SvxFontItem&)          rItemSet.Get( ATTR_CJK_FONT ) );
+    rField.SetCJKHeight     ( (const SvxFontHeightItem&)    rItemSet.Get( ATTR_CJK_FONT_HEIGHT ) );
+    rField.SetCJKWeight     ( (const SvxWeightItem&)        rItemSet.Get( ATTR_CJK_FONT_WEIGHT ) );
+    rField.SetCJKPosture    ( (const SvxPostureItem&)       rItemSet.Get( ATTR_CJK_FONT_POSTURE ) );
+    rField.SetCTLFont       ( (const SvxFontItem&)          rItemSet.Get( ATTR_CTL_FONT ) );
+    rField.SetCTLHeight     ( (const SvxFontHeightItem&)    rItemSet.Get( ATTR_CTL_FONT_HEIGHT ) );
+    rField.SetCTLWeight     ( (const SvxWeightItem&)        rItemSet.Get( ATTR_CTL_FONT_WEIGHT ) );
+    rField.SetCTLPosture    ( (const SvxPostureItem&)       rItemSet.Get( ATTR_CTL_FONT_POSTURE ) );
+    rField.SetUnderline     ( (const SvxUnderlineItem&)     rItemSet.Get( ATTR_FONT_UNDERLINE ) );
+    rField.SetCrossedOut    ( (const SvxCrossedOutItem&)    rItemSet.Get( ATTR_FONT_CROSSEDOUT ) );
+    rField.SetContour       ( (const SvxContourItem&)       rItemSet.Get( ATTR_FONT_CONTOUR ) );
+    rField.SetShadowed      ( (const SvxShadowedItem&)      rItemSet.Get( ATTR_FONT_SHADOWED ) );
+    rField.SetColor         ( (const SvxColorItem&)         rItemSet.Get( ATTR_FONT_COLOR ) );
+    rField.SetHorJustify    ( (const SvxHorJustifyItem&)    rItemSet.Get( ATTR_HOR_JUSTIFY ) );
+    rField.SetVerJustify    ( (const SvxVerJustifyItem&)    rItemSet.Get( ATTR_VER_JUSTIFY ) );
+    rField.SetOrientation   ( (const SvxOrientationItem&)   rItemSet.Get( ATTR_ORIENTATION ) );
+    rField.SetLinebreak     ( (const SfxBoolItem&)          rItemSet.Get( ATTR_LINEBREAK ) );
+    rField.SetMargin        ( (const SvxMarginItem&)        rItemSet.Get( ATTR_MARGIN ) );
+    rField.SetBackground    ( (const SvxBrushItem&)         rItemSet.Get( ATTR_BACKGROUND ) );
+    rField.SetRotateAngle   ( (const SfxInt32Item&)           rItemSet.Get( ATTR_ROTATE_VALUE ) );
+    rField.SetRotateMode    ( (const SvxRotateModeItem&)    rItemSet.Get( ATTR_ROTATE_MODE ) );
+}
+
+BOOL ScAutoFormatData::Load( SvStream& rStream, const ScAfVersions& rVersions )
 {
     BOOL    bRet = TRUE;
-    USHORT  nVal = 0;
-    rStream >> nVal;
+    USHORT  nVer = 0;
+    rStream >> nVer;
     bRet = 0 == rStream.GetError();
-    if( bRet && (nVal == AUTOFORMAT_DATA_ID_X ||
-            (AUTOFORMAT_DATA_ID_504 <= nVal && nVal <= AUTOFORMAT_DATA_ID)) )
+    if( bRet && (nVer == AUTOFORMAT_DATA_ID_X ||
+            (AUTOFORMAT_DATA_ID_504 <= nVer && nVer <= AUTOFORMAT_DATA_ID)) )
     {
         CharSet eSysSet = gsl_getSystemTextEncoding();
         CharSet eSrcSet = rStream.GetStreamCharSet();
 
         BOOL b;
         rStream.ReadByteString( aName, eSrcSet );
-        if( AUTOFORMAT_DATA_ID_552 <= nVal )
+        if( AUTOFORMAT_DATA_ID_552 <= nVer )
         {
             rStream >> nStrResId;
             USHORT nId = RID_SVXSTR_TBLAFMT_BEGIN + nStrResId;
@@ -932,68 +740,9 @@ BOOL ScAutoFormatData::Load(SvStream& rStream, const ScAfVersions& rVersions)
         rStream >> b; bIncludeValueFormat = b;
         rStream >> b; bIncludeWidthHeight = b;
 
-        SfxPoolItem* pNew;
         bRet = 0 == rStream.GetError();
         for( USHORT i = 0; bRet && i < 16; ++i )
-        {
-            READ( i, pFont,             SvxFontItem         , rVersions.nFontVersion)
-            READ( i, pFontHeight,       SvxFontHeightItem   , rVersions.nFontHeightVersion)
-            READ( i, pFontWeight,       SvxWeightItem       , rVersions.nWeightVersion)
-            READ( i, pFontPosture,      SvxPostureItem      , rVersions.nPostureVersion)
-            // --- from 641 on: CJK and CTL font settings
-            if( AUTOFORMAT_DATA_ID_641 <= nVal )
-            {
-                READ( i, pCJKFont,          SvxFontItem         , rVersions.nFontVersion)
-                READ( i, pCJKFontHeight,    SvxFontHeightItem   , rVersions.nFontHeightVersion)
-                READ( i, pCJKFontWeight,    SvxWeightItem       , rVersions.nWeightVersion)
-                READ( i, pCJKFontPosture,   SvxPostureItem      , rVersions.nPostureVersion)
-                READ( i, pCTLFont,          SvxFontItem         , rVersions.nFontVersion)
-                READ( i, pCTLFontHeight,    SvxFontHeightItem   , rVersions.nFontHeightVersion)
-                READ( i, pCTLFontWeight,    SvxWeightItem       , rVersions.nWeightVersion)
-                READ( i, pCTLFontPosture,   SvxPostureItem      , rVersions.nPostureVersion)
-            }
-            READ( i, pFontUnderline,    SvxUnderlineItem    , rVersions.nUnderlineVersion)
-            READ( i, pFontCrossedOut,   SvxCrossedOutItem   , rVersions.nCrossedOutVersion)
-            READ( i, pFontContour,      SvxContourItem      , rVersions.nContourVersion)
-            READ( i, pFontShadowed,     SvxShadowedItem     , rVersions.nShadowedVersion)
-            READ( i, pFontColor,        SvxColorItem        , rVersions.nColorVersion)
-            READ( i, pBox,              SvxBoxItem          , rVersions.nBoxVersion)
-            READ( i, pBackground,       SvxBrushItem        , rVersions.nBrushVersion)
-
-            pNew = pAdjust[i]->Create(rStream, rVersions.nAdjustVersion );
-            ((SvxAdjustItem*)pAdjust[i])->SetAdjust( ((SvxAdjustItem*)pNew)->GetAdjust() );
-            ((SvxAdjustItem*)pAdjust[i])->SetOneWord( ((SvxAdjustItem*)pNew)->GetOneWord() );
-            ((SvxAdjustItem*)pAdjust[i])->SetLastBlock( ((SvxAdjustItem*)pNew)->GetLastBlock() );
-            delete pNew;
-
-            READ( i, pHorJustify,   SvxHorJustifyItem,  rVersions.nHorJustifyVersion)
-            READ( i, pVerJustify,   SvxVerJustifyItem,  rVersions.nVerJustifyVersion)
-            READ( i, pOrientation,  SvxOrientationItem, rVersions.nOrientationVersion)
-            READ( i, pMargin,       SvxMarginItem,      rVersions.nMarginVersion)
-
-            pNew = pLinebreak[i]->Create(rStream, rVersions.nBoolVersion );
-            pLinebreak[i]->SetValue( ((SfxBoolItem*)pNew)->GetValue() );
-            delete pNew;
-
-            if ( nVal >= AUTOFORMAT_DATA_ID_504 )
-            {
-                pNew = pRotateAngle[i]->Create( rStream, rVersions.nInt32Version );
-                pRotateAngle[i]->SetValue( ((SfxInt32Item*)pNew)->GetValue() );
-                delete pNew;
-                pNew = pRotateMode[i]->Create( rStream, rVersions.nRotateModeVersion );
-                pRotateMode[i]->SetValue( ((SvxRotateModeItem*)pNew)->GetValue() );
-                delete pNew;
-            }
-
-            if( 0 == rVersions.nNumFmtVersion )
-                pNumFormat[i]->Load( rStream );
-
-            //  CharSet in Font anpassen
-            if ( eSrcSet != eSysSet && pFont[i]->GetCharSet() == eSrcSet )
-                pFont[i]->GetCharSet() = eSysSet;
-
-            bRet = 0 == rStream.GetError();
-        }
+            bRet = aDataField[ i ].Load( rStream, rVersions, nVer );
     }
     else
         bRet = FALSE;
@@ -1001,8 +750,7 @@ BOOL ScAutoFormatData::Load(SvStream& rStream, const ScAfVersions& rVersions)
 }
 
 #ifdef READ_OLDVERS
-
-BOOL ScAutoFormatData::LoadOld(SvStream& rStream, const ScAfVersions& rVersions)
+BOOL ScAutoFormatData::LoadOld( SvStream& rStream, const ScAfVersions& rVersions )
 {
     BOOL    bRet = TRUE;
     USHORT  nVal = 0;
@@ -1020,38 +768,13 @@ BOOL ScAutoFormatData::LoadOld(SvStream& rStream, const ScAfVersions& rVersions)
         rStream >> b; bIncludeWidthHeight = b;
 
         bRet = 0 == rStream.GetError();
-        SfxPoolItem* pNew;
         for (USHORT i=0; bRet && i < 16; i++)
-        {
-            pNumFormat[i]->Load(rStream);
-
-            READ( i, pFont,             SvxFontItem         , rVersions.nFontVersion)
-            READ( i, pFontHeight,       SvxFontHeightItem   , rVersions.nFontHeightVersion)
-            READ( i, pFontWeight,       SvxWeightItem       , rVersions.nWeightVersion)
-            READ( i, pFontPosture,      SvxPostureItem      , rVersions.nPostureVersion)
-            READ( i, pFontUnderline,    SvxUnderlineItem    , rVersions.nUnderlineVersion)
-            READ( i, pFontCrossedOut,   SvxCrossedOutItem   , rVersions.nCrossedOutVersion)
-            READ( i, pFontContour,      SvxContourItem      , rVersions.nContourVersion)
-            READ( i, pFontShadowed,     SvxShadowedItem     , rVersions.nShadowedVersion)
-            READ( i, pFontColor,        SvxColorItem        , rVersions.nColorVersion)
-            READ( i, pHorJustify,       SvxHorJustifyItem,  rVersions.nHorJustifyVersion)
-            READ( i, pVerJustify,       SvxVerJustifyItem,  rVersions.nVerJustifyVersion)
-            READ( i, pOrientation,      SvxOrientationItem, rVersions.nOrientationVersion)
-            pNew = pLinebreak[i]->Create(rStream, rVersions.nBoolVersion );
-            pLinebreak[i]->SetValue( ((SfxBoolItem*)pNew)->GetValue() );
-            delete pNew;
-            READ( i, pMargin,           SvxMarginItem,      rVersions.nMarginVersion)
-            READ( i, pBox,              SvxBoxItem          , rVersions.nBoxVersion)
-            READ( i, pBackground,       SvxBrushItem        , rVersions.nBrushVersion)
-
-            bRet = (rStream.GetError() == 0);
-        }
+            bRet = aDataField[ i ].LoadOld( rStream, rVersions );
     }
     else
         bRet = FALSE;
     return bRet;
 }
-
 #endif
 
 BOOL ScAutoFormatData::Save(SvStream& rStream)
@@ -1093,46 +816,11 @@ BOOL ScAutoFormatData::Save(SvStream& rStream)
     rStream << ( b = bIncludeBackground );
     rStream << ( b = bIncludeValueFormat );
     rStream << ( b = bIncludeWidthHeight );
+
     BOOL bRet = 0 == rStream.GetError();
     for (USHORT i = 0; bRet && (i < 16); i++)
-    {
-        pFont[i]->Store(rStream, pFont[i]->GetVersion(SOFFICE_FILEFORMAT_40));
-        pFontHeight[i]->Store(rStream, pFontHeight[i]->GetVersion(SOFFICE_FILEFORMAT_40));
-        pFontWeight[i]->Store(rStream, pFontWeight[i]->GetVersion(SOFFICE_FILEFORMAT_40));
-        pFontPosture[i]->Store(rStream, pFontPosture[i]->GetVersion(SOFFICE_FILEFORMAT_40));
-        // --- from 641 on: CJK and CTL font settings
-        pCJKFont[i]->Store(rStream, pCJKFont[i]->GetVersion(SOFFICE_FILEFORMAT_40));
-        pCJKFontHeight[i]->Store(rStream, pCJKFontHeight[i]->GetVersion(SOFFICE_FILEFORMAT_40));
-        pCJKFontWeight[i]->Store(rStream, pCJKFontWeight[i]->GetVersion(SOFFICE_FILEFORMAT_40));
-        pCJKFontPosture[i]->Store(rStream, pCJKFontPosture[i]->GetVersion(SOFFICE_FILEFORMAT_40));
-        pCTLFont[i]->Store(rStream, pCTLFont[i]->GetVersion(SOFFICE_FILEFORMAT_40));
-        pCTLFontHeight[i]->Store(rStream, pCTLFontHeight[i]->GetVersion(SOFFICE_FILEFORMAT_40));
-        pCTLFontWeight[i]->Store(rStream, pCTLFontWeight[i]->GetVersion(SOFFICE_FILEFORMAT_40));
-        pCTLFontPosture[i]->Store(rStream, pCTLFontPosture[i]->GetVersion(SOFFICE_FILEFORMAT_40));
-        // ---
+        bRet = aDataField[ i ].Save( rStream );
 
-        pFontUnderline[i]->Store(rStream, pFontUnderline[i]->GetVersion(SOFFICE_FILEFORMAT_40));
-        pFontCrossedOut[i]->Store(rStream, pFontCrossedOut[i]->GetVersion(SOFFICE_FILEFORMAT_40));
-        pFontContour[i]->Store(rStream, pFontContour[i]->GetVersion(SOFFICE_FILEFORMAT_40));
-        pFontShadowed[i]->Store(rStream, pFontShadowed[i]->GetVersion(SOFFICE_FILEFORMAT_40));
-        pFontColor[i]->Store(rStream, pFontColor[i]->GetVersion(SOFFICE_FILEFORMAT_40));
-        pBox[i]->Store(rStream, pBox[i]->GetVersion(SOFFICE_FILEFORMAT_40));
-        pBackground[i]->Store(rStream, pBackground[i]->GetVersion(SOFFICE_FILEFORMAT_40));
-
-        pAdjust[i]->Store(rStream, pAdjust[i]->GetVersion(SOFFICE_FILEFORMAT_40));
-
-        pHorJustify[i]->Store(rStream, pHorJustify[i]->GetVersion(SOFFICE_FILEFORMAT_40));
-        pVerJustify[i]->Store(rStream, pVerJustify[i]->GetVersion(SOFFICE_FILEFORMAT_40));
-        pOrientation[i]->Store(rStream, pOrientation[i]->GetVersion(SOFFICE_FILEFORMAT_40));
-        pMargin[i]->Store(rStream, pMargin[i]->GetVersion(SOFFICE_FILEFORMAT_40));
-        pLinebreak[i]->Store(rStream, pLinebreak[i]->GetVersion(SOFFICE_FILEFORMAT_40));
-        // Rotation ab SO5
-        pRotateAngle[i]->Store(rStream, pRotateAngle[i]->GetVersion(SOFFICE_FILEFORMAT_40));
-        pRotateMode[i]->Store(rStream, pRotateMode[i]->GetVersion(SOFFICE_FILEFORMAT_40));
-
-        pNumFormat[i]->Save(rStream);
-        bRet = (rStream.GetError() == 0);
-    }
     return bRet;
 }
 
@@ -1143,12 +831,12 @@ ScAutoFormat::ScAutoFormat(USHORT nLim, USHORT nDel, BOOL bDup):
     SortedCollection        (nLim, nDel, bDup),
     bSaveLater              (FALSE)
 {
-    //  Default "Standard" Format anlegen
-    ScAutoFormatData* pData = new ScAutoFormatData();
+    //  create default autoformat
+    ScAutoFormatData* pData = new ScAutoFormatData;
     String aName(ScGlobal::GetRscString(STR_STYLENAME_STANDARD));
     pData->SetName(aName);
 
-    //  Default-Font und Groesse
+    //  default font, default height
     Font aStdFont = OutputDevice::GetDefaultFont(
         DEFAULTFONT_LATIN_SPREADSHEET, LANGUAGE_ENGLISH_US, DEFAULTFONT_FLAGS_ONLYONE );
     SvxFontItem aFontItem(
@@ -1159,17 +847,17 @@ ScAutoFormat::ScAutoFormat(USHORT nLim, USHORT nDel, BOOL bDup):
         DEFAULTFONT_CJK_SPREADSHEET, LANGUAGE_ENGLISH_US, DEFAULTFONT_FLAGS_ONLYONE );
     SvxFontItem aCJKFontItem(
         aStdFont.GetFamily(), aStdFont.GetName(), aStdFont.GetStyleName(),
-        aStdFont.GetPitch(), aStdFont.GetCharSet() );
+        aStdFont.GetPitch(), aStdFont.GetCharSet(), ATTR_CJK_FONT );
 
     aStdFont = OutputDevice::GetDefaultFont(
         DEFAULTFONT_CTL_SPREADSHEET, LANGUAGE_ENGLISH_US, DEFAULTFONT_FLAGS_ONLYONE );
     SvxFontItem aCTLFontItem(
         aStdFont.GetFamily(), aStdFont.GetName(), aStdFont.GetStyleName(),
-        aStdFont.GetPitch(), aStdFont.GetCharSet() );
+        aStdFont.GetPitch(), aStdFont.GetCharSet(), ATTR_CTL_FONT );
 
     SvxFontHeightItem aHeight( 200 );       // 10 pt;
 
-    //  schwarze duenne Umrandung
+    //  black thin border
     Color aBlack( COL_BLACK );
     SvxBorderLine aLine( &aBlack, DEF_LINE_WIDTH_0 );
     SvxBoxItem aBox;
@@ -1189,32 +877,35 @@ ScAutoFormat::ScAutoFormat(USHORT nLim, USHORT nDel, BOOL bDup):
 
     for (USHORT i=0; i<16; i++)
     {
-        pData->SetBox( i, aBox );
-        pData->SetFont( i, aFontItem );
-        pData->SetCJKFont( i, aCJKFontItem );
-        pData->SetCTLFont( i, aCTLFontItem );
-        pData->SetFontHeight( i, aHeight );
-        pData->SetCJKFontHeight( i, aHeight );
-        pData->SetCTLFontHeight( i, aHeight );
-        if (i<4)                                    // oben: weiss auf blau
+        pData->PutItem( i, aBox );
+        pData->PutItem( i, aFontItem );
+        pData->PutItem( i, aCJKFontItem );
+        pData->PutItem( i, aCTLFontItem );
+        aHeight.SetWhich( ATTR_FONT_HEIGHT );
+        pData->PutItem( i, aHeight );
+        aHeight.SetWhich( ATTR_CJK_FONT_HEIGHT );
+        pData->PutItem( i, aHeight );
+        aHeight.SetWhich( ATTR_CTL_FONT_HEIGHT );
+        pData->PutItem( i, aHeight );
+        if (i<4)                                    // top: white on blue
         {
-            pData->SetFontColor( i, aWhiteText );
-            pData->SetBackground( i, aBlueBack );
+            pData->PutItem( i, aWhiteText );
+            pData->PutItem( i, aBlueBack );
         }
-        else if ( i%4 == 0 )                        // links: weiss auf grau70
+        else if ( i%4 == 0 )                        // left: white on gray70
         {
-            pData->SetFontColor( i, aWhiteText );
-            pData->SetBackground( i, aGray70Back );
+            pData->PutItem( i, aWhiteText );
+            pData->PutItem( i, aGray70Back );
         }
-        else if ( i%4 == 3 || i >= 12 )             // rechts & unten: schwarz auf grau20
+        else if ( i%4 == 3 || i >= 12 )             // right and bottom: black on gray20
         {
-            pData->SetFontColor( i, aBlackText );
-            pData->SetBackground( i, aGray20Back );
+            pData->PutItem( i, aBlackText );
+            pData->PutItem( i, aGray20Back );
         }
-        else                                        // Mitte: schwarz auf weiss
+        else                                        // center: black on white
         {
-            pData->SetFontColor( i, aBlackText );
-            pData->SetBackground( i, aWhiteBack );
+            pData->PutItem( i, aBlackText );
+            pData->PutItem( i, aWhiteBack );
         }
     }
 

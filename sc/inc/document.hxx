@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: nn $ $Date: 2001-11-14 15:33:05 $
+ *  last change: $Author: dr $ $Date: 2001-11-19 13:28:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,7 +170,10 @@ namespace com { namespace sun { namespace star {
     namespace lang {
         class XMultiServiceFactory;
     }
-}}}
+    namespace i18n {
+        class XBreakIterator;
+    }
+} } }
 
 
 #ifdef _ZFORLIST_DECLARE_TABLE
@@ -1023,6 +1026,7 @@ public:
     const SfxItemSet*   GetCondResult( USHORT nCol, USHORT nRow, USHORT nTab ) const;
     const SfxPoolItem*  GetEffItem( USHORT nCol, USHORT nRow, USHORT nTab, USHORT nWhich ) const;
 
+    const ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator >& GetBreakIterator();
     BOOL            HasStringWeakCharacters( const String& rString );
     BYTE            GetStringScriptType( const String& rString );
     BYTE            GetCellScriptType( ScBaseCell* pCell, ULONG nNumberFormat );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforauto.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:51 $
+ *  last change: $Author: dr $ $Date: 2001-11-19 13:28:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@ public:
     void Save( SvStream& rStream ) const;   // Speichern der Zahlenformate
     void PutFormatIndex(ULONG nFormat, SvNumberFormatter& rFormatter);
     ULONG GetFormatIndex( SvNumberFormatter& rFormatter);
-    inline int operator==(const ScNumFormatAbbrev& rNumFormat)
+    inline int operator==(const ScNumFormatAbbrev& rNumFormat) const
     {
         return ((sFormatstring == rNumFormat.sFormatstring)
             && (eLnge == rNumFormat.eLnge)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autofmt.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-25 16:16:47 $
+ *  last change: $Author: dr $ $Date: 2001-11-19 13:31:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,9 @@
 #ifndef _DIALOG_HXX //autogen
 #include <vcl/dialog.hxx>
 #endif
+#ifndef _SVTOOLS_SCRIPTEDTEXT_HXX
+#include <svtools/scriptedtext.hxx>
+#endif
 
 
 //------------------------------------------------------------------------
@@ -102,7 +105,8 @@ class ScAutoFormatDlg : public ModalDialog
 public:
             ScAutoFormatDlg( Window*                    pParent,
                              ScAutoFormat*              pAutoFormat,
-                             const ScAutoFormatData*    pSelFormatData );
+                             const ScAutoFormatData*    pSelFormatData,
+                             ScDocument*                pDoc );
             ~ScAutoFormatDlg();
 
     USHORT GetIndex() const { return nIndex; }
@@ -158,7 +162,7 @@ private:
 class AutoFmtPreview : public Window
 {
 public:
-            AutoFmtPreview( Window* pParent, const ResId& rRes );
+            AutoFmtPreview( Window* pParent, const ResId& rRes, ScDocument* pDoc );
             ~AutoFmtPreview();
 
     void NotifyChange( ScAutoFormatData* pNewData );
@@ -167,25 +171,27 @@ protected:
     virtual void Paint( const Rectangle& rRect );
 
 private:
-    ScAutoFormatData*   pCurData;
-    VirtualDevice       aVD;
-    BOOL                bFitWidth;
-    static USHORT       aFmtMap[25];        // Zuordnung: Zelle->Format
-    Rectangle           aCellArray[25];     // Position und Groesse der Zellen
-    SvxBoxItem*         aLinePtrArray[49];  // LinienAttribute
-    Size                aPrvSize;
-    const USHORT        nLabelColWidth;
-    const USHORT        nDataColWidth1;
-    const USHORT        nDataColWidth2;
-    const USHORT        nRowHeight;
-    const String        aStrJan;
-    const String        aStrFeb;
-    const String        aStrMar;
-    const String        aStrNorth;
-    const String        aStrMid;
-    const String        aStrSouth;
-    const String        aStrSum;
-    SvNumberFormatter*  pNumFmt;
+    ScAutoFormatData*       pCurData;
+    VirtualDevice           aVD;
+    SvtScriptedTextHelper   aScriptedText;
+    ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator > xBreakIter;
+    BOOL                    bFitWidth;
+    static USHORT           aFmtMap[25];        // Zuordnung: Zelle->Format
+    Rectangle               aCellArray[25];     // Position und Groesse der Zellen
+    SvxBoxItem*             aLinePtrArray[49];  // LinienAttribute
+    Size                    aPrvSize;
+    const USHORT            nLabelColWidth;
+    const USHORT            nDataColWidth1;
+    const USHORT            nDataColWidth2;
+    const USHORT            nRowHeight;
+    const String            aStrJan;
+    const String            aStrFeb;
+    const String            aStrMar;
+    const String            aStrNorth;
+    const String            aStrMid;
+    const String            aStrSouth;
+    const String            aStrSum;
+    SvNumberFormatter*      pNumFmt;
     //-------------------------------------------
     void    Init            ();
     void    DoPaint         ( const Rectangle& rRect );
@@ -195,7 +201,10 @@ private:
     void    DrawBackground  ( USHORT nIndex );
     void    DrawFrame       ( USHORT nIndex );
     void    DrawString      ( USHORT nIndex );
-    void    MakeFont        ( USHORT nIndex, Font& rFont );
+    void    MakeFonts       ( USHORT nIndex,
+                              Font& rFont,
+                              Font& rCJKFont,
+                              Font& rCTLFont );
     String  MakeNumberString( String cellString, BOOL bAddDec );
     void    DrawFrameLine   ( const SvxBorderLine&  rLineD,
                               Point                 from,
