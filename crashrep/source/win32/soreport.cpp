@@ -2,9 +2,9 @@
  *
  *  $RCSfile: soreport.cpp,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 11:05:36 $
+ *  last change: $Author: kz $ $Date: 2004-06-11 15:16:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,17 +97,7 @@
 #include <malloc.h>
 #include <process.h>
 
-#if _MSC_VER < 1300
-#define COMEX "9"
-#else
-#define COMEX "8"
-#endif
-
-#ifdef PRODUCT
-#define _INPATH "wntmsci" COMEX ".pro"
-#else
-#define _INPATH "wntmsci" COMEX
-#endif
+#include <_version.h>
 
 #include "resource.h"
 #include "base64.h"
