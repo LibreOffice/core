@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: mt $ $Date: 2002-07-24 13:11:04 $
+ *  last change: $Author: mt $ $Date: 2002-07-24 13:48:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1498,8 +1498,17 @@ BOOL ImpEditEngine::IsRightToLeft( USHORT nPara ) const
 
     if ( !IsVertical() )
     {
-        const SvxWritingModeItem& rWritingMode = (const SvxWritingModeItem&)GetParaAttrib( nPara, EE_PARA_WRITINGDIR );
-        bR2L = rWritingMode.GetValue() == com::sun::star::text::WritingMode_RL_TB;
+        if ( !aStatus.IsOutliner() )
+        {
+            const SvxWritingModeItem& rWritingMode = (const SvxWritingModeItem&)GetParaAttrib( nPara, EE_PARA_WRITINGDIR );
+            bR2L = rWritingMode.GetValue() == com::sun::star::text::WritingMode_RL_TB;
+        }
+        else
+        {
+            // Use pool default
+            const SvxWritingModeItem& rWritingMode = (const SvxWritingModeItem&)((ImpEditEngine*)this)->GetEmptyItemSet().Get( EE_PARA_WRITINGDIR );
+            bR2L = rWritingMode.GetValue() == com::sun::star::text::WritingMode_RL_TB;
+        }
     }
 
     return bR2L;
