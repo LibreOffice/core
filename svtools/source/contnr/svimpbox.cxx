@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svimpbox.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 14:37:38 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 18:19:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,7 +207,14 @@ short SvImpLBox::UpdateContextBmpWidthVector( SvLBoxEntry* pEntry, short nWidth 
     DBG_ASSERT( pView->pModel, "View and Model aren't valid!" );
 
     USHORT nDepth = pView->pModel->GetDepth( pEntry );
-    DBG_ASSERT( aContextBmpWidthVector.size() >= nDepth, "Some level missing!" );
+    // initialize vector if necessary
+    USHORT nSize = aContextBmpWidthVector.size();
+    while ( nDepth > nSize )
+    {
+        aContextBmpWidthVector.resize( nSize + 1 );
+        aContextBmpWidthVector.at( nSize ) = nWidth;
+        ++nSize;
+    }
     if( aContextBmpWidthVector.size() == nDepth )
     {
         aContextBmpWidthVector.resize( nDepth + 1 );
