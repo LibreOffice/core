@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outline.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: os $ $Date: 2002-11-07 14:42:23 $
+ *  last change: $Author: fme $ $Date: 2002-12-10 09:46:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,6 +139,9 @@
 #endif
 #ifndef _DOCSTYLE_HXX //autogen
 #include <docstyle.hxx>
+#endif
+#ifndef _VIEWOPT_HXX
+#include <viewopt.hxx>
 #endif
 
 #ifndef _HELPID_H
@@ -1099,7 +1102,7 @@ void    NumberingPreview::Paint( const Rectangle& rRect )
                                     DEFAULTFONT_UI_SANS, GetAppLanguage(),
                                     DEFAULTFONT_FLAGS_ONLYONE, this );
         // #101524# OJ
-        aStdFont.SetColor(GetSettings().GetStyleSettings().GetWindowTextColor());
+        aStdFont.SetColor( SwViewOption::GetFontColor() );
 
         //
         USHORT nFontHeight = nYStep * 6 / 10;

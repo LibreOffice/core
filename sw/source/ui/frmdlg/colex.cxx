@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colex.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2002-06-12 13:07:52 $
+ *  last change: $Author: fme $ $Date: 2002-12-10 09:44:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,9 @@
 #endif
 #ifndef SW_TGRDITEM_HXX
 #include <tgrditem.hxx>
+#endif
+#ifndef _VIEWOPT_HXX
+#include <viewopt.hxx>
 #endif
 #include "colex.hxx"
 #include "colmgr.hxx"
@@ -401,7 +404,7 @@ void SwColumnOnlyExample::Paint( const Rectangle& rRect )
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     const Color& rFieldColor = rStyleSettings.GetFieldColor();
     const Color& rDlgColor = rStyleSettings.GetDialogColor();
-    const Color& rFieldTextColor = rStyleSettings.GetFieldTextColor();
+    const Color& rFieldTextColor = SwViewOption::GetFontColor();
     Color aGrayColor(COL_LIGHTGRAY);
     if(rFieldColor == aGrayColor)
         aGrayColor.Invert();

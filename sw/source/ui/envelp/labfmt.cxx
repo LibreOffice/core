@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labfmt.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2002-05-31 11:55:42 $
+ *  last change: $Author: fme $ $Date: 2002-12-10 09:43:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,9 @@
 #ifndef _SV_POLY_HXX //autogen
 #include <vcl/poly.hxx>
 #endif
-
+#ifndef _VIEWOPT_HXX
+#include <viewopt.hxx>
+#endif
 
 #include "swtypes.hxx"
 #include "cmdid.h"
@@ -153,7 +155,7 @@ void SwLabPreview::Paint(const Rectangle &rRect)
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     const Color& rWinColor = rStyleSettings.GetWindowColor();
-    const Color& rFieldTextColor = rStyleSettings.GetFieldTextColor();
+    const Color& rFieldTextColor = SwViewOption::GetFontColor();
 
     Font aFont = GetFont();
     aFont.SetFillColor( rWinColor );
@@ -315,7 +317,7 @@ void SwLabPreview::DrawArrow(const Point &rP1, const Point &rP2, BOOL bArrow)
             aArr[2].Y() = rP2.Y();
         }
 
-        const Color& rFieldTextColor = GetSettings().GetStyleSettings().GetFieldTextColor();
+        const Color& rFieldTextColor = SwViewOption::GetFontColor();
         SetFillColor(rFieldTextColor);
         DrawPolygon(Polygon(3, aArr));
     }

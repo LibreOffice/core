@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envlop1.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: gt $ $Date: 2002-07-23 08:19:39 $
+ *  last change: $Author: fme $ $Date: 2002-12-10 09:43:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,9 @@
 #endif
 #ifndef _SWWAIT_HXX
 #include <swwait.hxx>
+#endif
+#ifndef _VIEWOPT_HXX
+#include <viewopt.hxx>
 #endif
 
 #include "wrtsh.hxx"
@@ -151,7 +154,7 @@ void SwEnvPreview::Paint(const Rectangle &)
           f  = 0.8 * ( fx < fy ? fx : fy );
 
     Color aBack = rSettings.GetWindowColor( );
-    Color aFront = rSettings.GetWindowTextColor();
+    Color aFront = SwViewOption::GetFontColor();
     Color aMedium = Color(  ( aBack.GetRed() + aFront.GetRed() ) / 2,
                             ( aBack.GetGreen() + aFront.GetGreen() ) / 2,
                             ( aBack.GetBlue() + aFront.GetBlue() ) / 2

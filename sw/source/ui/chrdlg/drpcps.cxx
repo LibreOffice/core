@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drpcps.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2002-12-05 13:06:28 $
+ *  last change: $Author: fme $ $Date: 2002-12-10 09:41:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,7 +250,7 @@ void SwDropCapsPict::UpdatePaintSettings( void )
     mnTextH = mnLines * mnTotLineH;
     aFont.SetSize(Size(0, mnTextH));
     aFont.SetTransparent(TRUE);
-    aFont.SetColor(GetSettings().GetStyleSettings().GetWindowTextColor());
+    aFont.SetColor( SwViewOption::GetFontColor() );
     aFont.SetFillColor(GetSettings().GetStyleSettings().GetWindowColor());
     SetFont(aFont);
     aFont.SetSize(Size(0, aFont.GetSize().Height() + mnLeading));

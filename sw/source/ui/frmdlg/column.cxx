@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: os $ $Date: 2002-10-10 09:34:44 $
+ *  last change: $Author: fme $ $Date: 2002-12-10 09:44:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1418,7 +1418,7 @@ void ColumnValueSet::UserDraw( const UserDrawEvent& rUDEvt )
     Color aFillColor(pDev->GetFillColor());
     Color aLineColor(pDev->GetLineColor());
     pDev->SetFillColor(rStyleSettings.GetFieldColor());
-    pDev->SetLineColor(rStyleSettings.GetFieldTextColor());
+    pDev->SetLineColor(SwViewOption::GetFontColor());
 
     long nStep = Abs(Abs(nRectHeight * 95 /100) / 11);
     long nTop = (nRectHeight - 11 * nStep ) / 2;

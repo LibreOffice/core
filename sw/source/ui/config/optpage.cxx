@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optpage.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: os $ $Date: 2002-09-20 12:09:52 $
+ *  last change: $Author: fme $ $Date: 2002-12-10 09:42:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,6 +183,9 @@
 #endif
 #ifndef _CRSTATE_HXX
 #include <crstate.hxx>
+#endif
+#ifndef _VIEWOPT_HXX
+#include <viewopt.hxx>
 #endif
 
 #ifndef _GLOBALS_HRC
@@ -1484,9 +1487,9 @@ void SwMarkPreview::InitColors( void )
     m_aBgCol = Color( rSettings.GetWindowColor() );
 
     BOOL bHC = m_aBgCol.IsDark();
-    m_aLineCol = bHC? rSettings.GetWindowTextColor() : Color( COL_BLACK );
+    m_aLineCol = bHC? SwViewOption::GetFontColor() : Color( COL_BLACK );
     m_aShadowCol = bHC? m_aBgCol : rSettings.GetShadowColor();
-    m_aTxtCol = bHC? rSettings.GetWindowTextColor() : Color( COL_GRAY );
+    m_aTxtCol = bHC? SwViewOption::GetFontColor() : Color( COL_GRAY );
     m_aPrintAreaCol = m_aTxtCol;
 }
 
