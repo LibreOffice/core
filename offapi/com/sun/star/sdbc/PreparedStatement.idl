@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PreparedStatement.idl,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:55:24 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 21:54:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,13 +75,13 @@
 
  module com {  module sun {  module star {  module sdbc {
 
-interface XPreparedStatement;
-interface XPreparedBatchExecution;
-interface XParameters;
-interface XWarningsSupplier;
-interface XMultipleResults;
-interface XResultSetMetaDataSupplier;
-interface XCloseable;
+ published interface XPreparedStatement;
+ published interface XPreparedBatchExecution;
+ published interface XParameters;
+ published interface XWarningsSupplier;
+ published interface XMultipleResults;
+ published interface XResultSetMetaDataSupplier;
+ published interface XCloseable;
 
 
 // DocMerge from idl: service com::sun::star::sdbc::PreparedStatement
@@ -131,7 +131,7 @@ interface XCloseable;
      methods implicitly close a statement's current ResultSet if an open one exists.
      </p>
  */
-service PreparedStatement
+published service PreparedStatement
 {
 
     // DocMerge from xml: service com::sun::star::sdbc::PreparedStatement: interface com::sun::star::lang::XComponent
