@@ -2,9 +2,9 @@
  *
  *  $RCSfile: label.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2002-01-22 21:23:07 $
+ *  last change: $Author: kz $ $Date: 2002-01-25 21:19:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -914,7 +914,7 @@ TabPage TP_PRIVATE_DATA
         Text[ polish ] = "Imiê/Nazwisko/Inicja³y";
         Text[ portuguese_brazilian ] = "First/Last ~name";
         Text[ japanese ] = "å/å§“/ã‚¤ãƒ‹ã‚·ãƒ£ãƒ«(~N)";
-        Text[ korean ] = "ì´ë¦„/ì„±/ë¨¸ë¦¬ê¸€ì(~N)";
+        Text[ korean ] = "ì„±/ì´ë¦„/ë¨¸ë¦¬ê¸€ì(~N)";
         Text[ chinese_simplified ] = "åå­—/å§“æ°/ç¼©å†™(~N)";
         Text[ chinese_traditional ] = "åå­—/å§“æ°/ç¸®å¯«(~N)";
         Text[ arabic ] = "ÇáÇÓã/ÇÓã ÇáÚÇÆáÉ/ÇáÇÎÊÕÇÑ";
@@ -960,7 +960,7 @@ TabPage TP_PRIVATE_DATA
         Text[ polish ] = "Imiê/Nazwisko/Inicja³y";
         Text[ portuguese_brazilian ] = "First/Last ~name 2";
         Text[ japanese ] = "å§“/å/ã‚¤ãƒ‹ã‚·ãƒ£ãƒ« 2 (~N)";
-        Text[ korean ] = "ì´ë¦„/ì„±/ë¨¸ë¦¬ê¸€ì 2(~N)";
+        Text[ korean ] = "ì„±/ì´ë¦„/ë¨¸ë¦¬ê¸€ì 2(~N)";
         Text[ chinese_simplified ] = "åå­—/å§“æ°/ç¼©å†™ 2(~N)";
         Text[ chinese_traditional ] = "åå­—/å§“æ°/ç¸®å¯« 2(~N)";
         Text[ arabic ] = "ÇáÇÓã/ÇÓã ÇáÚÇÆáÉ/ÇáÇÎÊÕÇÑ 2";
