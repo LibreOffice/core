@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itratr.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-06 16:02:26 $
+ *  last change: $Author: ama $ $Date: 2001-03-08 08:16:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -298,6 +298,9 @@ sal_Bool SwAttrIter::IsSymbol( const xub_StrLen nNewPos )
 
 sal_Bool SwAttrIter::SeekStartAndChg( OutputDevice *pOut, const sal_Bool bParaFont )
 {
+    if ( pRedln && pRedln->ExtOn() )
+        pRedln->LeaveExtend( *pFnt, 0 );
+
     // Gehe zurueck auf Start ...
     pFnt->SetFnt( pAttrSet );
     pFnt->GetTox() = 0;
@@ -398,6 +401,9 @@ void SwAttrIter::SeekFwd( const xub_StrLen nNewPos )
 
 sal_Bool SwAttrIter::Seek( const xub_StrLen nNewPos )
 {
+    if ( pRedln && pRedln->ExtOn() )
+        pRedln->LeaveExtend( *pFnt, nNewPos );
+
     if( pHints )
     {
         if( !nNewPos || nNewPos < nPos )

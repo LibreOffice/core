@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atrstck.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-06 16:22:21 $
+ *  last change: $Author: ama $ $Date: 2001-03-08 08:14:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,7 +159,7 @@
  * ids to stack ids
  *************************************************************************/
 
-static USHORT StackPos[ NUM_OBJECTS ] = {
+USHORT StackPos[ NUM_OBJECTS ] = {
      0, //                                       //  0
      1, // RES_CHRATR_CASEMAP = RES_CHRATR_BEGIN //  1
      0, // RES_CHRATR_CHARSETCOLOR,              //  2
@@ -510,13 +510,13 @@ USHORT SwAttrHandler::SwAttrStack::FindLast( const USHORT nWhich, const sal_Bool
 SwAttrHandler::SwAttrHandler()
 {
     pAttrSet = 0;
-    memset( pDefaultArray, 0, NUM_ATTRIBUTE_STACKS * sizeof(SfxPoolItem*) );
+    memset( pDefaultArray, 0, NUM_DEFAULT_VALUES * sizeof(SfxPoolItem*) );
 }
 
 SwAttrHandler::SwAttrHandler( const SwAttrHandler& rAttrHandler )
 {
     memcpy( pDefaultArray, rAttrHandler.pDefaultArray,
-            NUM_ATTRIBUTE_STACKS * sizeof(SfxPoolItem*)
+            NUM_DEFAULT_VALUES * sizeof(SfxPoolItem*)
             );
     pAttrSet = 0;
 }
@@ -530,6 +530,12 @@ void SwAttrHandler::Init( const SwAttrSet& rAttrSet )
     pAttrSet = &rAttrSet;
     for (USHORT i = RES_CHRATR_BEGIN; i < RES_CHRATR_END; i++)
         pDefaultArray[ StackPos[ i ] ] = &rAttrSet.Get( i, TRUE );
+}
+
+void SwAttrHandler::Init( const SfxPoolItem** pPoolItem )
+{
+    memcpy( pDefaultArray, pPoolItem,
+            NUM_DEFAULT_VALUES * sizeof(SfxPoolItem*) );
 }
 
 /*************************************************************************
@@ -641,31 +647,10 @@ void SwAttrHandler::PopAndChg( const SwTxtAttr& rAttr, SwFont& rFnt )
             if ( bRet )
             {
                 // we remove rAttr from the appropriate stack
-                const USHORT nStackPos = StackPos[ i ];
-                aAttrStack[ nStackPos ].Remove( rAttr );
+                aAttrStack[ StackPos[ i ] ].Remove( rAttr );
                 // reset font according to attribute on top of stack
                 // or default value
-                const SwTxtAttr* pTopAt = aAttrStack[ nStackPos ].Top();
-                if ( pTopAt ) {
-                    // check again, if attribute is collection of attributes
-                    if ( RES_TXTATR_INETFMT == pTopAt->Which() ||
-                         RES_TXTATR_CHARFMT == pTopAt->Which() )
-                    {
-                        SwCharFmt* pFmtNext;
-                        if( RES_TXTATR_INETFMT == pTopAt->Which() )
-                            pFmtNext = ((SwTxtINetFmt*)pTopAt)->GetCharFmt();
-                        else
-                            pFmtNext = pTopAt->GetCharFmt().GetCharFmt();
-
-                        const SfxPoolItem* pItemNext;
-                        pFmtNext->GetItemState( i, TRUE, &pItemNext );
-                        FontChg( pItemNext, rFnt, sal_False );
-                    }
-                    else
-                        FontChg( &pTopAt->GetAttr(), rFnt, sal_False );
-                }
-                else
-                    FontChg( pDefaultArray[ nStackPos ], rFnt, sal_False );
+                ActivateTop( rFnt, i );
             }
         }
     }
@@ -723,7 +708,8 @@ void SwAttrHandler::Pop( const SwTxtAttr& rAttr )
  *************************************************************************/
 void SwAttrHandler::ActivateTop( SwFont& rFnt, const USHORT nAttr )
 {
-    const SwTxtAttr* pTopAt = aAttrStack[ StackPos[ nAttr ] ].Top();
+    const USHORT nStackPos = StackPos[ nAttr ];
+    const SwTxtAttr* pTopAt = aAttrStack[ nStackPos ].Top();
     if ( pTopAt )
     {
         // check again, if attribute is collection of attributes
@@ -743,8 +729,13 @@ void SwAttrHandler::ActivateTop( SwFont& rFnt, const USHORT nAttr )
         else
             FontChg( &pTopAt->GetAttr(), rFnt, sal_False );
     }
-    else
-        FontChg( pDefaultArray[ StackPos[ nAttr ] ], rFnt, sal_False );
+    // default value has to be set, we only have default values for char attribs
+    else if ( nStackPos < NUM_DEFAULT_VALUES )
+        FontChg( pDefaultArray[ nStackPos ], rFnt, sal_False );
+    else if ( RES_TXTATR_REFMARK == nAttr )
+        rFnt.GetRef()--;
+    else if ( RES_TXTATR_TOXMARK == nAttr )
+        rFnt.GetTox()--;
 }
 
 /**************************************************************************

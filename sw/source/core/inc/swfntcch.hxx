@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfntcch.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:21 $
+ *  last change: $Author: ama $ $Date: 2001-03-08 08:08:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,14 +61,17 @@
 #ifndef _SWFNTCCH_HXX
 #define _SWFNTCCH_HXX
 
-
 #ifndef _SVMEMPOOL_HXX //autogen
 #include <tools/mempool.hxx>
 #endif
+
+#define NUM_DEFAULT_VALUES 32
+
 #include "swcache.hxx"
 #include "swfont.hxx"
 
 class ViewShell;
+class SfxPoolItem;
 
 /*************************************************************************
  *                      class SwFontCache
@@ -99,6 +102,7 @@ class SwFontObj : public SwCacheObj
 
 private:
     SwFont aSwFont;
+    const SfxPoolItem* pDefaultArray[ NUM_DEFAULT_VALUES ];
 
 public:
     DECL_FIXEDMEMPOOL_NEWDEL(SwFontObj)
@@ -109,7 +113,7 @@ public:
 
     inline       SwFont *GetFont()      { return &aSwFont; }
     inline const SwFont *GetFont() const  { return &aSwFont; }
-
+    inline const SfxPoolItem** GetDefault() { return pDefaultArray; }
 };
 
 /*************************************************************************
@@ -127,7 +131,5 @@ public:
     SwFontAccess( const void *pOwner, ViewShell *pSh );
     SwFontObj *Get();
 };
-
-
 
 #endif
