@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: pb $ $Date: 2001-11-22 15:03:18 $
+ *  last change: $Author: mba $ $Date: 2001-11-28 17:00:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1360,7 +1360,7 @@ OUString FileDialogHelper_Impl::getRealFilter() const
         const SfxFilter* pFilter = mpMatcher->GetFilter4UIName(
                                         aFilter, 0, SFX_FILTER_NOTINFILEDLG );
         if ( pFilter )
-            aFilter = pFilter->GetName();
+            aFilter = pFilter->GetFilterName();
     }
 
     return aFilter;

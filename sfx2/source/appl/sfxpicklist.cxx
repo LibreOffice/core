@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxpicklist.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-28 11:19:39 $
+ *  last change: $Author: mba $ $Date: 2001-11-28 17:00:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -459,7 +459,7 @@ void SfxPickList::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     const SfxFilter*    pFilter = pMed->GetOrigFilter();
 
                     if ( pFilter )
-                        aFilter = pFilter->GetName();
+                        aFilter = pFilter->GetFilterName();
 
                     // add to svtool history options
                     SvtHistoryOptions().AppendItem( ePICKLIST,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-19 11:18:08 $
+ *  last change: $Author: mba $ $Date: 2001-11-28 17:00:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -315,7 +315,7 @@ sal_Bool SfxObjectShell::DoInitNew( SvStorage * pStor )
         if ( xModel.is() )
         {
             SfxItemSet *pSet = GetMedium()->GetItemSet();
-            pSet->Put( SfxStringItem( SID_FILTER_NAME, GetFactory().GetFilter(0)->GetName() ) );
+            pSet->Put( SfxStringItem( SID_FILTER_NAME, GetFactory().GetFilter(0)->GetFilterName() ) );
             ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aArgs;
             TransformItems( SID_OPENDOC, *pSet, aArgs );
             sal_Int32 nLength = aArgs.getLength();
@@ -1560,9 +1560,11 @@ sal_Bool SfxObjectShell::Save_Impl( const SfxItemSet* pSet )
     if ( pSalvageItem )
     {
         SFX_ITEMSET_ARG( GetMedium()->GetItemSet(), pFilterItem, SfxStringItem, SID_FILTER_NAME, sal_False);
-        const SfxFilter *pFilter = pFilterItem
-                    ? GetFactory().GetFilterContainer()->GetFilter(pFilterItem->GetValue())
-                    : 0;
+        String aFilterName;
+        const SfxFilter *pFilter = NULL;
+        if ( pFilterItem )
+            pFilter = GetFactory().GetFilterContainer()->GetFilter( aFilterName );
+
         SfxMedium *pMed = new SfxMedium(
             pSalvageItem->GetValue(), STREAM_READWRITE | STREAM_SHARE_DENYWRITE, sal_False, pFilter );
 
@@ -1616,7 +1618,7 @@ sal_Bool SfxObjectShell::SaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
 
     String aFilterName;
     if( pFilt )
-        aFilterName = pFilt->GetName();
+        aFilterName = pFilt->GetFilterName();
 
     SfxItemSet *pParams = new SfxAllItemSet( SFX_APP()->GetPool() );
     SFX_REQUEST_ARG( (*pRequest), pFileNameItem, SfxStringItem, SID_FILE_NAME, sal_False );
@@ -1667,14 +1669,13 @@ sal_Bool SfxObjectShell::SaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
                         aFileDlg.SetDisplayDirectory( aObj.GetMainURL( INetURLObject::NO_DECODE ) );
                     }
 
-                    aFileDlg.SetCurrentFilter( pFilt->GetName() );
+                    aFileDlg.SetCurrentFilter( pFilt->GetFilterName() );
                 }
                 else
                 {
                     if( aLastName.Len() )
                         aFileDlg.SetDisplayDirectory( aLastName );
-
-                    aFileDlg.SetCurrentFilter( pMedFilter->GetName() );
+                    aFileDlg.SetCurrentFilter( pMedFilter->GetFilterName() );
                 }
             }
             else
@@ -1818,7 +1819,7 @@ sal_Bool SfxObjectShell::SaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
         }
         // gleicher Filter? -> Save()
         const SfxFilter *pFilter = pActMed->GetFilter();
-        if ( pFilter && pFilter->GetName() == aFilterName )
+        if ( pFilter && pFilter->GetFilterName() == aFilterName )
         {
             pImp->bIsSaving=sal_False;
             if ( pParams )

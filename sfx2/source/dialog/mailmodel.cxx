@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmodel.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: sb $ $Date: 2001-11-02 15:59:13 $
+ *  last change: $Author: mba $ $Date: 2001-11-28 17:00:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -299,7 +299,7 @@ sal_Bool SfxMailModel_Impl::SaveDocument( String& rFileName, String& rType )
 //#endif
         SfxStringItem* pFilterName = NULL;
         if ( pFilter && bHasFilter )
-            pFilterName = new SfxStringItem( SID_FILTER_NAME, pFilter->GetName() );
+            pFilterName = new SfxStringItem( SID_FILTER_NAME, pFilter->GetFilterName() );
 //      pDisp->Execute( SID_SAVEDOC, SFX_CALLMODE_SYNCHRON,
 //                      pFilterName, 0L );
         pDisp->Execute( SID_SAVEASDOC, SFX_CALLMODE_SYNCHRON, &aFileName, &aPicklist, &aSaveTo,

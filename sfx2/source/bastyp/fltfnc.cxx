@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltfnc.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: as $ $Date: 2001-11-08 12:03:39 $
+ *  last change: $Author: mba $ $Date: 2001-11-28 17:00:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -484,7 +484,8 @@ const SfxFilter* SfxFilterContainer::aMethod(                   \
  */
 
 IMPL_CONTAINER_LOOP( GetFilter, const String&,
-                     pFilter->GetName().CompareIgnoreCaseToAscii( aArg ) == COMPARE_EQUAL )
+    ( pFilter->GetFilterNameWithPrefix().CompareIgnoreCaseToAscii( aArg ) == COMPARE_EQUAL ||
+        pFilter->GetFilterName().CompareIgnoreCaseToAscii( aArg ) == COMPARE_EQUAL ) )
 
 /*   [Beschreibung]
      Ermitelt einen Filter nach seinem Mimetypen.
@@ -748,6 +749,7 @@ sal_uInt32 SfxFactoryFilterContainer::GetFilter4Content(
         return 0;
     }
 */
+    return 0;
 }
 
 //----------------------------------------------------------------
@@ -948,7 +950,7 @@ if( nErr == 1 || nErr == USHRT_MAX || nErr == ULONG_MAX )       \
     if( pFilter )                                               \
     {                                                           \
         aText += ' ';                                           \
-        aText += ByteString(U2S(pFilter->GetName()));           \
+        aText += ByteString(U2S(pFilter->GetFilterName()));     \
     }                                                           \
     DBG_ERROR( aText.GetBuffer() );                             \
     nErr = ERRCODE_ABORT;                                       \
@@ -1680,6 +1682,7 @@ void SfxFilterContainer::ReadExternalFilters( const String& rDocServiceName )
                             sal_Int32 nStartRealName = sFilterName.indexOf( DEFINE_CONST_UNICODE(": "), 0 );
                             if( nStartRealName != -1 )
                             {
+                                DBG_ERROR("Old format, not supported!");
                                 sFilterName = sFilterName.copy( nStartRealName+2 );
                             }
 
@@ -1762,13 +1765,13 @@ void SfxFilterContainer_Impl::syncDefaults( const ::com::sun::star::uno::Sequenc
         for( sal_Int32 nStep=0; nStep<nCount; ++nStep )
         {
             // get new default filter
-            if( equalFilterNames( aList.GetObject(nStep)->GetName(), lNew[0] ) == sal_True )
+            if( equalFilterNames( aList.GetObject(nStep)->GetFilterName(), lNew[0] ) == sal_True )
             {
                 pNewDefault = aList.GetObject(nStep);
             }
 
             // get position for old default filter
-            if( equalFilterNames( pOldDefault->GetName(), lNew[nStep] ) == sal_True )
+            if( equalFilterNames( pOldDefault->GetFilterName(), lNew[nStep] ) == sal_True )
             {
                 nOldPos = nStep;
             }

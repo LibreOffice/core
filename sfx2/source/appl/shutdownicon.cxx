@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shutdownicon.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-28 11:22:53 $
+ *  last change: $Author: mba $ $Date: 2001-11-28 17:00:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -319,7 +319,7 @@ void ShutdownIcon::FileOpen()
 
                         if ( pFilter )
                         {
-                            aFilterName = pFilter->GetName();
+                            aFilterName = pFilter->GetFilterName();
 
                             if ( aFilterName.getLength() )
                             {

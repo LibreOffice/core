@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-04 10:34:48 $
+ *  last change: $Author: mba $ $Date: 2001-11-28 17:00:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1213,7 +1213,7 @@ void SfxFrame::UpdateDescriptor( SfxObjectShell *pDoc )
     const SfxFilter* pFilter = pMed->GetOrigFilter();
     String aFilter;
     if ( pFilter )
-        aFilter = pFilter->GetName();
+        aFilter = pFilter->GetFilterName();
 
     SFX_ITEMSET_ARG( pItemSet, pRefererItem, SfxStringItem, SID_REFERER, sal_False);
     SFX_ITEMSET_ARG( pItemSet, pOptionsItem, SfxStringItem, SID_FILE_FILTEROPTIONS, sal_False);
@@ -1487,7 +1487,7 @@ sal_Bool SfxFrame::CheckContentForLoad_Impl()
 
         // Falls die Filter nicht uebereinstimmen
         SFX_ITEMSET_ARG( pNew, pFilterItem, SfxStringItem, SID_FILTER_NAME, sal_False );
-        if( pMedium->GetOrigFilter() && pFilterItem && pFilterItem->GetValue() != pMedium->GetOrigFilter()->GetName() )
+        if( pMedium->GetOrigFilter() && pFilterItem && pFilterItem->GetValue() != pMedium->GetOrigFilter()->GetFilterName() )
             return sal_True;
 
         return sal_False;

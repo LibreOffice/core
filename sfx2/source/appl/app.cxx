@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-05 08:59:34 $
+ *  last change: $Author: mba $ $Date: 2001-11-28 17:00:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1325,7 +1325,7 @@ sal_uInt16 SfxApplication::Exception( sal_uInt16 nError )
                     String aFilterName;
                     if ( pFilter )
                     {
-                        aFilterName = pFilter->GetName();
+                        aFilterName = pFilter->GetFilterName();
                         ::utl::TempFile aTempFile( &aSavePath );
                         aSaveName = aTempFile.GetURL();
                     }
@@ -1344,7 +1344,7 @@ sal_uInt16 SfxApplication::Exception( sal_uInt16 nError )
                     pIter->ExecuteSlot(aReq);
 
                     pInternalOptions->PushRecoveryItem( bHadName ? aOldURL.GetMainURL() : aOldName              ,
-                                                          pOrigFilter ? pOrigFilter->GetName() : aFilterName        ,
+                                                        pOrigFilter ? pOrigFilter->GetFilterName() : aFilterName      ,
                                                         aSaveName                                               );
                 }
                 /*catch ( ::Exception & )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtergrouping.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: svesik $ $Date: 2001-10-25 02:21:18 $
+ *  last change: $Author: mba $ $Date: 2001-11-28 17:00:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -668,7 +668,7 @@ namespace sfx2
         // loop through all the filters
         for ( const SfxFilter* pFilter = _rFilterMatcher.First(); pFilter; pFilter = _rFilterMatcher.Next() )
         {
-            sFilterName = pFilter->GetName();
+            sFilterName = pFilter->GetFilterName();
             sFilterWildcard = pFilter->GetWildcard().GetWildCard();
             AppendWildcardToDescriptor aExtendWildcard( sFilterWildcard );
 
@@ -973,6 +973,10 @@ namespace sfx2
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.7  2001/10/25 02:21:18  svesik
+ *  Remove sfx2/ from #include statement so also builds in a fresh, from
+ *  scratch build
+ *
  *  Revision 1.6  2001/10/24 15:32:10  fs
  *  #93701# do not add global classes which are empty
  *

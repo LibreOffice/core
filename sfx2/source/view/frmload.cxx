@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmload.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-09 15:33:28 $
+ *  last change: $Author: mba $ $Date: 2001-11-28 17:00:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,14 +185,13 @@ SfxFrameLoader::~SfxFrameLoader()
 
 sal_Bool SAL_CALL SfxFrameLoader::load( const Sequence< PropertyValue >& rArgs, const Reference< XFrame >& rFrame ) throw( RuntimeException )
 {
+    // this methods assumes that the filter is detected before, usually by calling the detect() method below
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
     RTL_LOGFILE_CONTEXT( aLog, "sfx2 (mb93783) ::SfxFrameLoader::load" );
 
-    // Extract URL from given descriptor.
     String rURL;
     String aTypeName;
-
     sal_uInt32 nPropertyCount = rArgs.getLength();
     for( sal_uInt32 nProperty=0; nProperty<nPropertyCount; ++nProperty )
     {
@@ -204,12 +203,15 @@ sal_Bool SAL_CALL SfxFrameLoader::load( const Sequence< PropertyValue >& rArgs, 
         }
         if( rArgs[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("TypeName")) )
         {
+            // the name of the file type detected so far (or provided by the client code)
             ::rtl::OUString sTemp;
             rArgs[nProperty].Value >>= sTemp;
             aTypeName = sTemp;
         }
         if( rArgs[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("FilterName")) )
         {
+            // the name of the desired filter, usually to prevent us from using the default
+            // filter for the detected type
             ::rtl::OUString sTemp;
             rArgs[nProperty].Value >>= sTemp;
             aFilterName = sTemp;
@@ -217,16 +219,23 @@ sal_Bool SAL_CALL SfxFrameLoader::load( const Sequence< PropertyValue >& rArgs, 
     }
 
     const SfxFilter*  pFilter  = NULL;
-    SfxFilterFlags    nMust    = SFX_FILTER_IMPORT;
-    SfxFilterFlags    nDont    = SFX_FILTER_NOTINSTALLED | SFX_FILTER_STARONEFILTER;
     SfxFilterMatcher& rMatcher = SFX_APP()->GetFilterMatcher();
-    if ( !aFilterName.Len() && aTypeName.Len() )
+    if ( !aFilterName.Len() )
     {
+        // no filter detection made, give a warning for the developer
+        DBG_ERROR("load called without calling detect before!");
+        if ( !aTypeName.Len() )
+            return sal_False;
+
+        // try to find a filter with SFX filter detection using the typename
+        SfxFilterFlags    nMust    = SFX_FILTER_IMPORT;
+        SfxFilterFlags    nDont    = SFX_FILTER_NOTINSTALLED;
         pFilter = rMatcher.GetFilter4EA( aTypeName, nMust, nDont );
         if ( !pFilter )
             return sal_False;
         else
-            aFilterName = pFilter->GetName();
+            // use filter names without prefix
+            aFilterName = pFilter->GetFilterName();
     }
 
     xFrame = rFrame;
@@ -251,106 +260,120 @@ sal_Bool SAL_CALL SfxFrameLoader::load( const Sequence< PropertyValue >& rArgs, 
     if ( !pFrame )
         pFrame = SfxTopFrame::Create( rFrame );
 
+    // check for the URL pattern of our factory URLs
     BOOL bFactoryURL = FALSE;
     const SfxObjectFactory* pFactory = 0;
-    String aFact( rURL );
     String aPrefix = String::CreateFromAscii( "private:factory/" );
-    String aParam;
+    String aFact( rURL );
     if ( aPrefix.Len() == aFact.Match( aPrefix ) )
     {
-        bFactoryURL = TRUE;
+        // it's a factory URL
         aFact.Erase( 0, aPrefix.Len() );
+
+        // look for parameters
+        String aParam;
         USHORT nPos = aFact.Search( '?' );
         if ( nPos != STRING_NOTFOUND )
         {
+            // currently only the "slot" parameter is supported
             USHORT nParamPos = aFact.Search( String::CreateFromAscii("slot="), nPos );
             if ( nParamPos != STRING_NOTFOUND )
                 aParam = aFact.Copy( nParamPos+5, aFact.Len() );
             aFact.Erase( nPos, aFact.Len() );
         }
-    }
-    else
-        aFact = aFilterName.GetToken( 0, ':' );
 
-    WildCard aSearchedFac( aFact.EraseAllChars('4').ToUpperAscii() );
-    for( USHORT n = SfxObjectFactory::GetObjectFactoryCount_Impl(); !pFactory && n--; )
-    {
-        pFactory = &SfxObjectFactory::GetObjectFactory_Impl( n );
-        if( !aSearchedFac.Matches( String::CreateFromAscii( pFactory->GetShortName() ).ToUpperAscii() ) )
-            pFactory = 0;
-    }
-
-    if ( bFactoryURL && pFactory )
-    {
-        INetURLObject aObj( rURL );
-        if ( aParam.Len() )
+        WildCard aSearchedFac( aFact.EraseAllChars('4').ToUpperAscii() );
+        for( USHORT n = SfxObjectFactory::GetObjectFactoryCount_Impl(); !pFactory && n--; )
         {
-            sal_uInt16 nSlotId = (sal_uInt16) aParam.ToInt32();
-            SfxModule* pMod = pFactory->GetModule()->Load();
-            SfxRequest aReq( nSlotId, SFX_CALLMODE_SYNCHRON, pMod->GetPool() );
-            aReq.AppendItem( SfxStringItem ( SID_FILE_NAME, rURL ) );
-            aReq.AppendItem( SfxFrameItem ( SID_DOCFRAME, pFrame ) );
-            aReq.AppendItem( SfxBoolItem ( SID_NEWDOCDIRECT, TRUE ) );
+            pFactory = &SfxObjectFactory::GetObjectFactory_Impl( n );
+            if( !aSearchedFac.Matches( String::CreateFromAscii( pFactory->GetShortName() ).ToUpperAscii() ) )
+                pFactory = 0;
+        }
 
-            const SfxPoolItem* pRet = pMod->ExecuteSlot( aReq );
-            SfxObjectShell* pDoc = pFrame->GetCurrentDocument();
-            if ( pRet )
+        if ( pFactory )
+        {
+            INetURLObject aObj( rURL );
+            if ( aParam.Len() )
             {
-                bLoadState = sal_True;
+                // slots are executed on the module shell
+                sal_uInt16 nSlotId = (sal_uInt16) aParam.ToInt32();
+                SfxModule* pMod = pFactory->GetModule()->Load();
+                SfxRequest aReq( nSlotId, SFX_CALLMODE_SYNCHRON, pMod->GetPool() );
+                aReq.AppendItem( SfxStringItem ( SID_FILE_NAME, rURL ) );
+                aReq.AppendItem( SfxFrameItem ( SID_DOCFRAME, pFrame ) );
+
+                // the next parameter is especially needed for Impress, because they want to know
+                // wether their slot is called directly (like from Autopilot menue) or as part
+                // of a "NewDocument" request
+                aReq.AppendItem( SfxBoolItem ( SID_NEWDOCDIRECT, TRUE ) );
+
+                const SfxPoolItem* pRet = pMod->ExecuteSlot( aReq );
+                if ( pRet )
+                {
+                    bLoadState = sal_True;
+                }
+                else
+                {
+                    SfxObjectShell* pDoc = pFrame->GetCurrentDocument();
+                    if ( !pDoc )
+                    {
+                        Reference < XFrame > aXFrame;
+                        pFrame->SetFrameInterface_Impl( aXFrame );
+                        pFrame->DoClose();
+                    }
+
+                    bLoadState = sal_False;
+                }
+
+                return bLoadState;
+            }
+
+            String aPathName( aObj.GetMainURL() );
+            if( pFactory->GetStandardTemplate().Len() )
+            {
+                // standard template set -> load it "AsTemplate"
+                aSet.Put( SfxStringItem ( SID_FILE_NAME, pFactory->GetStandardTemplate() ) );
+                aSet.Put( SfxBoolItem( SID_TEMPLATE, sal_True ) );
             }
             else
             {
-                if ( !pDoc )
+                // execute "NewDocument" request
+                SfxViewShell *pView = pFrame->GetCurrentViewFrame() ? pFrame->GetCurrentViewFrame()->GetViewShell() : NULL;
+                SfxRequest aReq( SID_NEWDOCDIRECT, SFX_CALLMODE_SYNCHRON, aSet );
+                aReq.AppendItem( SfxFrameItem( SID_DOCFRAME, pFrame ) );
+                aReq.AppendItem( SfxStringItem( SID_NEWDOCDIRECT, String::CreateFromAscii(pFactory->GetShortName()) ) );
+                const SfxPoolItem* pRet = pApp->ExecuteSlot( aReq );
+                if ( pFrame->GetCurrentViewFrame() && pView != pFrame->GetCurrentViewFrame()->GetViewShell() )
                 {
-                    Reference < XFrame > aXFrame;
-                    pFrame->SetFrameInterface_Impl( aXFrame );
-                    pFrame->DoClose();
+                    bLoadState = sal_True;
+                }
+                else if ( xListener.is() )
+                {
+                    if ( !pFrame->GetCurrentDocument() )
+                    {
+                        Reference < XFrame > aXFrame;
+                        pFrame->SetFrameInterface_Impl( aXFrame );
+                        pFrame->DoClose();
+                    }
+
+                    bLoadState = sal_False;
                 }
 
-                bLoadState = sal_False;
+                xFrame = Reference < XFrame >();
+                return bLoadState;
             }
-            return bLoadState;
-        }
-
-        String aPathName( aObj.GetMainURL() );
-        if( pFactory->GetStandardTemplate().Len() )
-        {
-            aSet.Put( SfxStringItem ( SID_FILE_NAME, pFactory->GetStandardTemplate() ) );
-            aSet.Put( SfxBoolItem( SID_TEMPLATE, sal_True ) );
-        }
-        else
-        {
-            SfxViewShell *pView = pFrame->GetCurrentViewFrame() ? pFrame->GetCurrentViewFrame()->GetViewShell() : NULL;
-            SfxRequest aReq( SID_NEWDOCDIRECT, SFX_CALLMODE_SYNCHRON, aSet );
-            aReq.AppendItem( SfxFrameItem( SID_DOCFRAME, pFrame ) );
-            aReq.AppendItem( SfxStringItem( SID_NEWDOCDIRECT, String::CreateFromAscii(pFactory->GetShortName()) ) );
-            const SfxPoolItem* pRet = pApp->ExecuteSlot( aReq );
-            if ( pFrame->GetCurrentViewFrame() && pView != pFrame->GetCurrentViewFrame()->GetViewShell() )
-            {
-                bLoadState = sal_True;
-            }
-            else if ( xListener.is() )
-            {
-                if ( !pFrame->GetCurrentDocument() )
-                {
-                    Reference < XFrame > aXFrame;
-                    pFrame->SetFrameInterface_Impl( aXFrame );
-                    pFrame->DoClose();
-                }
-                bLoadState = sal_False;
-            }
-
-            xFrame = Reference < XFrame >();
-            return bLoadState;
         }
     }
     else
     {
+        // load the desired file
         aSet.Put( SfxStringItem ( SID_FILE_NAME, rURL ) );
     }
 
     aSet.Put( SfxFrameItem( SID_DOCFRAME, pFrame ) );
     aSet.Put( SfxStringItem( SID_FILTER_NAME, aFilterName ) );
+
+    // create LoadEnvironment and set link for callback when it is finished
     pLoader = LoadEnvironment_Impl::Create( aSet );
     pLoader->AddRef();
     pLoader->SetDoneLink( LINK( this, SfxFrameLoader, LoadDone_Impl ) );
@@ -369,10 +392,10 @@ sal_Bool SAL_CALL SfxFrameLoader::load( const Sequence< PropertyValue >& rArgs, 
         pMatcher = new SfxFilterMatcher( pFactory->GetFilterContainer() );
         pLoader->SetFilterMatcher( pMatcher );
         pLoader->Start();
+
+        // wait for callback
         while( bLoadDone == sal_False )
-        {
             Application::Yield();
-        }
     }
 
     return bLoadState;
@@ -383,6 +406,7 @@ void SfxFrameLoader::cancel() throw( RUNTIME_EXCEPTION )
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( pLoader )
         pLoader->CancelTransfers();
+    bLoadDone = sal_True;
 }
 
 IMPL_LINK( SfxFrameLoader, LoadDone_Impl, void*, pVoid )
@@ -399,6 +423,7 @@ IMPL_LINK( SfxFrameLoader, LoadDone_Impl, void*, pVoid )
             pFrame->SetFrameInterface_Impl( aXFrame );
             pFrame->DoClose();
         }
+
         bLoadDone  = sal_True ;
         bLoadState = sal_False;
     }
@@ -415,37 +440,35 @@ IMPL_LINK( SfxFrameLoader, LoadDone_Impl, void*, pVoid )
 
 SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
 {
+    DBG_ERROR("Useless method!");
     SfxObjectFactory* pFactory = 0;
-    String aFact = GetFilterName().GetToken( ':', 0 );
-    WildCard aSearchedFac( aFact.EraseAllChars('4').ToUpperAscii() );
-    for( USHORT n = SfxObjectFactory::GetObjectFactoryCount_Impl(); !pFactory && n--; )
-    {
-        pFactory = (SfxObjectFactory*) &SfxObjectFactory::GetObjectFactory_Impl( n );
-        if( !aSearchedFac.Matches( String::CreateFromAscii( pFactory->GetShortName() ).ToUpperAscii() ) )
-            pFactory = 0;
-    }
-
     return *pFactory;
 }
 
 ::rtl::OUString SAL_CALL SfxFrameLoader::detect( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lDescriptor ) throw( ::com::sun::star::uno::RuntimeException )
 {
-    // This method faces different combinations of filter or type names.
+    // This method detects (or verifies) the file type of the content to load. It also detects the filter, because SFX
+    // detects type through filters, so detecting the filter later in the load method would be double work.
     // It can detect all types for that an internal filter is known, even if the preselected filter is an external one.
-    // Internal filters may have "old" names that must be retrieved from a table using a static method in class SfxFilterContainer, or it may have
-    // a "new name that follows the rules for filter names that can be used as configuration keys.
+    // Internal filters should be exactly as described in the configuration, but they may also have filter names with a
+    // module prefix as in the old SFX-API, this is handled inside this method; but all filter names that are inserted
+    // into the media descriptor by this method will be without prefix
+    // examples for supported formats for filter names:
+    //  with module prefix  : "swriter: StarWriter 5.0"
+    //  without             : "StarWriter 5.0"
+
     RTL_LOGFILE_CONTEXT( aLog, "sfx2 (mb93783) ::SfxFrameLoader::detect" );
 
     Reference < XInputStream > xStream;
     Reference < XInteractionHandler > xInteraction;
     String aURL;
     ::rtl::OUString sTemp;
-    rtl::OUString aTypeName;            // a name describing the type ( from MediaDescriptor )
-    String aPreselectedFilterName;      // a name describing the filter to use ( from MediaDescriptor )
+    rtl::OUString aTypeName;            // a name describing the type (from MediaDescriptor, usually from flat detection)
+    String aPreselectedFilterName;      // a name describing the filter to use (from MediaDescriptor, usually from UI action)
     const SfxFilter* pFilter = NULL, *pExternalFilter = NULL;
 
     // opening as template is done when a parameter tells to do so and a template filter can be detected
-    // ( otherwise no valid filter would be found! ) or if the detected filter is a template filter and
+    // (otherwise no valid filter would be found) or if the detected filter is a template filter and
     // there is no parameter that forbids to open as template
     sal_Bool bOpenAsTemplate = sal_False;
     sal_Bool bWasReadOnly = sal_False, bReadOnly = sal_False;
@@ -492,35 +515,25 @@ SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
             lDescriptor[nProperty].Value >>= xInteraction;
     }
 
-    // detect using SfxFilter names
-    // can't detect filter for external filters, so set the "dont" flag accordingly
+    // can't check the type for external filters, so set the "dont" flag accordingly
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     SfxFilterFlags nMust = SFX_FILTER_IMPORT, nDont = SFX_FILTER_NOTINSTALLED | SFX_FILTER_STARONEFILTER;
     SfxFilterMatcher& rMatcher = SFX_APP()->GetFilterMatcher();
     if ( aPreselectedFilterName.Len() )
     {
-        // supported formats for filter names:
-        //   (1) old with factory: "swriter: Writer 6.0"        ( from SFX based UI or API )
-        //   (2) new with factory: "swriter: New_Filter_XYZ"    ( from SFX based UI )
-        //   (3) new ( only name): "New_Filter_XYZ"             ( from not SFX based UI or API )
-        //   (4) old ( only name): "Writer_60"                  ( from not SFX based UI or API )
-
-        // the preselected filter name itself may be valid SFX filter name, case (1) or (2)
+        // the preselected filter name itself may be valid SFX filter name
+        // the method "GetFilter" supports both formats, so there is no need to deal with module prefixes here
         pFilter = rMatcher.GetFilter( aPreselectedFilterName );
-        if ( !pFilter )
-            // the preselected filter name is a new filter name from the configuration, case (3)
-            pFilter = rMatcher.GetFilter4FilterName( aPreselectedFilterName );
-
         if ( pFilter )
         {
-            // if only a filter name is given but the shallow detection was not successful,
-            // get the type name from the filter
+            // if only a filter name is given but the shallow detection was not successful, get the type name from the filter
             if ( !aTypeName.getLength() )
                 aTypeName = pFilter->GetTypeName();
 
             if ( pFilter->GetFilterFlags() & SFX_FILTER_STARONEFILTER )
             {
                 // external filters can't be detected with this service ( only their type may be used )
+                // so reset pFilter to prevent deep detection
                 pExternalFilter = pFilter;
                 pFilter = NULL;
             }
@@ -534,9 +547,10 @@ SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
 
     if ( !pFilter && aTypeName.getLength() )
     {
-        // now try the type from the shallow detection or extracted from the preselected filter ( though the filter itself
-        // was not valid! )
-        // "new" type name; look for a filter registered for the desired type that is not an external one
+        // now try the type from the shallow detection or extracted from the preselected filter,
+        // though the filter itself was not valid
+        // look for a filter registered for the desired type that is not an external one
+        // this will be the default filter for that type
         pFilter = rMatcher.GetFilter4EA( aTypeName, nMust, nDont );
     }
 
@@ -547,9 +561,9 @@ SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
         // use the result of the shallow detection
         if ( pFilter )
         {
-            aFilterName = pFilter->GetName();
+            // use format without prefix
+            aFilterName = pFilter->GetFilterName();
             if ( nIndexOfFilterName < nPropertyCount )
-                // convert to format with factory ( makes load more easy to implement )
                 lDescriptor[nIndexOfFilterName].Value <<= ::rtl::OUString( aFilterName );
             else
             {
@@ -565,15 +579,15 @@ SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
     else if ( !pFilter && aTypeName.getLength() )
     {
         // the detection is called for an unknown type that does not support deep detection
-        // ( otherwise its own detection service and not this generic one should have been called ! )
-        // in this case it is correct to use the result of the shallow detection ( if there is any )
-        // if no shallow detection has been done or it gave no result ( aTypeName is empty ),
-        // we must try a deep detection for all possible SFX filters ( see below )
+        // (otherwise its own detection service and not this generic one should have been called)
+        // in this case it is correct to use the result of the shallow detection (if there is any)
+        // if no shallow detection has been done or it gave no result (aTypeName is empty),
+        // we must try a deep detection for all possible SFX filters (see below), that will possibly
+        // find the correct type
         pFilter = rMatcher.GetFilter4EA( aTypeName, nMust, SFX_FILTER_NOTINSTALLED );
         if ( !pFilter )
-            // no SFX handled type at all
+            // type completely unknown
             return aTypeName;
-            //return String();
     }
     else
     {
@@ -581,6 +595,7 @@ SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
         SfxErrorContext aCtx( ERRCTX_SFX_OPENDOC, aURL );
         const SfxFilter* pOldFilter = pFilter;
 
+        // transform parameters into an SfxItemSet
         SfxApplication* pApp = SFX_APP();
         SfxAllItemSet *pSet = new SfxAllItemSet( pApp->GetPool() );
         TransformParameters( SID_OPENDOC, lDescriptor, *pSet );
@@ -589,7 +604,7 @@ SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
         bWasReadOnly = pItem && pItem->GetValue();
 
         SfxMedium aMedium( aURL, bWasReadOnly ? STREAM_STD_READ : STREAM_STD_READWRITE, FALSE, NULL, pSet );
-        aMedium.UseInteractionHandler( TRUE         );
+        aMedium.UseInteractionHandler( TRUE );
         aMedium.SetInteractionHandler( xInteraction );
 
         BOOL bIsStorage = aMedium.IsStorage();
@@ -598,7 +613,7 @@ SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
         else
             aMedium.GetInStream();
 
-        // special filters that can or must (!) be detected inside the medium without further investigation
+        // special filters that can or must(!) be detected inside the medium without further investigation
         // f.e. disk spanned jar files
         if ( aMedium.GetFilter() )
             pFilter = aMedium.GetFilter();
@@ -609,7 +624,7 @@ SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
 
         if ( aMedium.GetErrorCode() == ERRCODE_NONE && !aMedium.GetFilter() )
         {
-            // check the filter detected so far ( if any )
+            // check the filter detected so far (if any)
             ErrCode nErr = ERRCODE_ABORT;
             if ( pFilter )
             {
@@ -617,13 +632,13 @@ SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
                 SfxFilterFlags nFlags = pFilter->GetFilterFlags();
                 if ( ( nFlags & nMust ) == nMust && ( nFlags & nDont ) == 0 )
                 {
-                    pSet->Put( SfxStringItem( SID_FILTER_NAME, pFilter->GetName() ) );
+                    pSet->Put( SfxStringItem( SID_FILTER_NAME, pFilter->GetFilterName() ) );
                     nErr = pFilter->GetFilterContainer()->GetFilter4Content( aMedium, &pFilter, nMust, nDont );
                     if ( pOldFilter == pFilter && nErr != ERRCODE_NONE )
                         pFilter = NULL;
                 }
                 else
-                    // filterflags not suitable
+                    // filterflags don't fit
                     pFilter = NULL;
 
                 if ( !pFilter )
@@ -655,13 +670,13 @@ SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
                                 SfxFilterFlags nFlags = pFilter->GetFilterFlags();
                                 if ( ( nFlags & nMust ) == nMust && ( nFlags & nDont ) == 0 )
                                 {
-                                    pSet->Put( SfxStringItem( SID_FILTER_NAME, pFilter->GetName() ) );
+                                    pSet->Put( SfxStringItem( SID_FILTER_NAME, pFilter->GetFilterName() ) );
                                     nErr = pFilter->GetFilterContainer()->GetFilter4Content( aMedium, &pFilter );
                                     if ( pOldFilter == pFilter && nErr != ERRCODE_NONE )
                                         pFilter = NULL;
                                 }
                                 else
-                                    // filterflags not suitable
+                                    // filterflags don't fit
                                     pFilter = NULL;
                             }
                         }
@@ -707,12 +722,13 @@ SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
 
     if ( pFilter )
     {
+        // successful detection, get the filter name (without prefix)
         aTypeName = pFilter->GetTypeName();
         if ( pExternalFilter && pExternalFilter->GetTypeName() == pFilter->GetTypeName() )
             // internally detected type is OK, if external filter was preselected for this type, it's OK
-            aFilterName = pExternalFilter->GetName();
+            aFilterName = pExternalFilter->GetFilterName();
         else
-            aFilterName = pFilter->GetName();
+            aFilterName = pFilter->GetFilterName();
         if ( nIndexOfFilterName < nPropertyCount )
             // convert to format with factory ( makes load more easy to implement )
             lDescriptor[nIndexOfFilterName].Value <<= ::rtl::OUString( aFilterName );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: mba $ $Date: 2001-10-11 07:44:21 $
+ *  last change: $Author: mba $ $Date: 2001-11-28 17:00:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -544,7 +544,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
 
                                 if( pMed->GetFilter() )
                                 {
-                                    aSet.Put( SfxStringItem( SID_FILTER_NAME, pMed->GetFilter()->GetName() ) );
+                                    aSet.Put( SfxStringItem( SID_FILTER_NAME, pMed->GetFilter()->GetFilterName() ) );
                                     SFX_ITEMSET_ARG( pMed->GetItemSet(), pOptions,
                                                      SfxStringItem, SID_FILE_FILTEROPTIONS, sal_False );
                                     if ( pOptions )
@@ -825,7 +825,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                                 aSet.Put( *pReferer );
                             aSet.Put( SfxBoolItem( SID_TEMPLATE, sal_True ) );
                             if( pSaveFilter )
-                                aSet.Put( SfxStringItem( SID_FILTER_NAME, pSaveFilter->GetName() ) );
+                                aSet.Put( SfxStringItem( SID_FILTER_NAME, pSaveFilter->GetFilterName() ) );
 
                             //MI: im selben Frame => er macht gar nix !?!
                             //SfxFrameItem aFrameItem( SID_DOCFRAME, GetFrame() );
@@ -2913,7 +2913,7 @@ void SfxViewFrame::ExecView_Impl
                 aSet.Put( SfxUInt16Item( SID_VIEW_ID, GetCurViewId() ) );
                 aSet.Put( *pRefererItem );
                 if( pMed->GetFilter() )
-                    aSet.Put( SfxStringItem( SID_FILTER_NAME, pMed->GetFilter()->GetName()) );
+                    aSet.Put( SfxStringItem( SID_FILTER_NAME, pMed->GetFilter()->GetFilterName()) );
                 aSet.Put( SfxFrameItem ( SID_DOCFRAME, pFrame ) );
                 if ( xFrame.is() )
                     GetDispatcher()->Execute( SID_OPENDOC, SFX_CALLMODE_SYNCHRON, aSet );

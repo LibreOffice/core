@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nfltdlg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2001-06-28 13:40:07 $
+ *  last change: $Author: mba $ $Date: 2001-11-28 17:00:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,6 @@ private:
     CancelButton            aCancelBtn;
     HelpButton              aHelpBtn;
 
-    String                  aDefFilter;
     const SfxFilterMatcher& rMatcher;
 
     DECL_LINK( OkHdl, Control * );
