@@ -15,6 +15,7 @@
 <LC_FORMAT ref="no_NO" replaceTo="[$kr-814]"/>
 <LC_COLLATION ref="no_NO"/>
 <LC_SEARCH ref="no_NO"/>
+<LC_INDEX ref="no_NO"/>
 <LC_CALENDAR>
 <Calendar unoid="gregorian" default="true">
 <DaysOfWeek>
