@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layoutmanager.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 16:50:12 $
+ *  last change: $Author: hr $ $Date: 2004-07-20 16:41:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -394,6 +394,7 @@ namespace framework
                                m_xUIElement( rUIElement ),
                                m_bFloating( bFloating ),
                                m_bVisible( sal_True ),
+                               m_bUserActive( sal_False ),
                                m_bCreateNewRowCol0( sal_False ),
                                m_bDeactiveHide( sal_False ),
                                m_bMasterHide( sal_False ),
