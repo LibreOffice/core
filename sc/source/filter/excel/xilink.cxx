@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xilink.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:47:12 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 14:02:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -295,6 +295,28 @@ private:
 // ============================================================================
 
 // Excel sheet indexes ========================================================
+
+// original Excel sheet names -------------------------------------------------
+
+void XclImpTabInfo::AppendXclTabName( const String& rXclTabName, SCTAB nScTab )
+{
+    maTabNames[ rXclTabName ] = nScTab;
+}
+
+void XclImpTabInfo::InsertScTab( SCTAB nScTab )
+{
+    for( XclTabNameMap::iterator aIt = maTabNames.begin(), aEnd = maTabNames.end(); aIt != aEnd; ++aIt )
+        if( aIt->second >= nScTab )
+            ++aIt->second;
+}
+
+SCTAB XclImpTabInfo::GetScTabFromXclName( const String& rXclTabName ) const
+{
+    XclTabNameMap::const_iterator aIt = maTabNames.find( rXclTabName );
+    return (aIt != maTabNames.end()) ? aIt->second : SCNOTAB;
+}
+
+// record creation order - TABID record ---------------------------------------
 
 void XclImpTabInfo::ReadTabid( XclImpStream& rStrm )
 {
