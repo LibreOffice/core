@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfshex.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 14:12:31 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 10:15:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,15 @@
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
 #endif
+#ifndef _SVX_SVDOMEDIA_HXX
+#include <svx/svdomedia.hxx>
+#endif
+#ifndef _SVX_SVDVIEW_HXX
+#include <svx/svdview.hxx>
+#endif
+#ifndef _SVX_SVDPAGV_HXX
+#include <svx/svdpagv.hxx>
+#endif
 #ifndef _SWSTYLENAMEMAPPER_HXX
 #include <SwStyleNameMapper.hxx>
 #endif
@@ -143,6 +152,7 @@
 
 #include <sfx2/request.hxx>
 #include <svtools/stritem.hxx>
+#include <avmedia/mediawindow.hxx>
 
 // -> #111827#
 #include <SwRewriter.hxx>
@@ -377,4 +387,78 @@ BOOL SwTextShell::InsertGraphicDlg( SfxRequest& rReq )
     return bReturn;
 }
 
+bool SwTextShell::InsertMediaDlg( SfxRequest& rReq )
+{
+    ::rtl::OUString     aURL;
+    const SfxItemSet*   pReqArgs = rReq.GetArgs();
+    Window*             pWindow = &GetView().GetViewFrame()->GetWindow();
+    bool                bAPI = false, bRet = false;
 
+    if( pReqArgs )
+    {
+        const SfxStringItem* pStringItem = PTR_CAST( SfxStringItem, &pReqArgs->Get( rReq.GetSlot() ) );
+
+        if( pStringItem )
+        {
+            aURL = pStringItem->GetValue();
+            bAPI = aURL.getLength();
+        }
+    }
+
+    if( bAPI || ::avmedia::MediaWindow::executeMediaURLDialog( pWindow, aURL ) )
+    {
+        Size aPrefSize;
+
+        if( pWindow )
+            pWindow->EnterWait();
+
+        if( !::avmedia::MediaWindow::isMediaURL( aURL, true, &aPrefSize ) )
+        {
+            if( pWindow )
+                pWindow->LeaveWait();
+
+            if( !bAPI )
+                ::avmedia::MediaWindow::executeFormatErrorBox( pWindow );
+        }
+        else
+        {
+            SwWrtShell& rSh = GetShell();
+
+            if( !rSh.HasDrawView() )
+                rSh.MakeDrawView();
+
+            Size            aDocSz( rSh.GetDocSize() );
+               const SwRect&    rVisArea = rSh.VisArea();
+            Point           aPos( rVisArea.Center() );
+            Size            aSize;
+
+            if( rVisArea.Width() > aDocSz.Width())
+                aPos.X() = aDocSz.Width() / 2 + rVisArea.Left();
+
+            if(rVisArea.Height() > aDocSz.Height())
+                aPos.Y() = aDocSz.Height() / 2 + rVisArea.Top();
+
+            if( aPrefSize.Width() && aPrefSize.Height() )
+            {
+                if( pWindow )
+                    aSize = pWindow->PixelToLogic( aPrefSize, MAP_TWIP );
+                else
+                    aSize = Application::GetDefaultDevice()->PixelToLogic( aPrefSize, MAP_TWIP );
+            }
+            else
+                aSize = Size( 2835, 2835 );
+
+            SdrMediaObj* pObj = new SdrMediaObj( Rectangle( aPos, aSize ) );
+
+            pObj->setURL( aURL );
+            rSh.EnterStdMode();
+            rSh.SwFEShell::Insert( *pObj, 0, 0, &aPos );
+            bRet = true;
+
+            if( pWindow )
+                pWindow->LeaveWait();
+        }
+    }
+
+    return bRet;
+}
