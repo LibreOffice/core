@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Sortable.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tl $ $Date: 2002-10-10 11:14:20 $
+ *  last change: $Author: tl $ $Date: 2002-10-10 12:57:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,12 +76,16 @@ module com {  module sun {  module star {  module util {
 
 //=============================================================================
 
-/** provides an interface and a sort descriptor to be used for sorting.
+/** provides an interface for sorting.
  */
 service Sortable
 {
-        service com::sun::star::util::SortDescriptor;
+        /** the properties returned by a call to the 'createSortDescriptor' method
+            of this interfaces implementation are those of the
+            'com.sun.star.util.SortDescriptor' service.
 
+           @see <type scope="com::sun::star::util">SortDescriptor</type>
+         */
         interface com::sun::star::util::XSortable;
 };
 
