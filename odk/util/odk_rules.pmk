@@ -1,0 +1,394 @@
+#*************************************************************************
+#
+#   $RCSfile: odk_rules.pmk,v $
+#
+#   $Revision: 1.2 $
+#
+#   last change: $Author: vg $ $Date: 2003-06-10 10:52:01 $
+#
+#   The Contents of this file are made available subject to the terms of
+#   either of the following licenses
+#
+#          - GNU Lesser General Public License Version 2.1
+#          - Sun Industry Standards Source License Version 1.1
+#
+#   Sun Microsystems Inc., October, 2000
+#
+#   GNU Lesser General Public License Version 2.1
+#   =============================================
+#   Copyright 2000 by Sun Microsystems, Inc.
+#   901 San Antonio Road, Palo Alto, CA 94303, USA
+#
+#   This library is free software; you can redistribute it and/or
+#   modify it under the terms of the GNU Lesser General Public
+#   License version 2.1, as published by the Free Software Foundation.
+#
+#   This library is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+#   Lesser General Public License for more details.
+#
+#   You should have received a copy of the GNU Lesser General Public
+#   License along with this library; if not, write to the Free Software
+#   Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+#   MA  02111-1307  USA
+#
+#
+#   Sun Industry Standards Source License Version 1.1
+#   =================================================
+#   The contents of this file are subject to the Sun Industry Standards
+#   Source License Version 1.1 (the "License"); You may not use this file
+#   except in compliance with the License. You may obtain a copy of the
+#   License at http://www.openoffice.org/license.html.
+#
+#   Software provided under this License is provided on an "AS IS" basis,
+#   WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+#   WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+#   MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+#   See the License for the specific provisions governing your rights and
+#   obligations concerning the Software.
+#
+#   The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+#
+#   Copyright: 2000 by Sun Microsystems, Inc.
+#
+#   All Rights Reserved.
+#
+#   Contributor(s): _______________________________________
+#
+#
+#
+#*************************************************************************
+
+
+$(DESTDIR)$/index.html : $(PRJ)$/index.html 
+    +-$(MKDIRHIER) $(@:d)        
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $(PRJ)$/index.html $(MY_TEXTCOPY_TARGETPRE) $@
+
+$(DESTDIREXAMPLES)$/examples.html : $(PRJ)$/docs$/examples.html
+    +-$(MKDIRHIER) $(@:d)        
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $(PRJ)$/docs$/examples.html $(MY_TEXTCOPY_TARGETPRE) $@
+
+$(DESTDIRDOCU)$/%.html : $(PRJ)$/docs$/%.html 
+    +-$(MKDIRHIER) $(@:d)        
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
+
+$(DESTDIRDOCU)$/%.css : $(PRJ)$/docs$/%.css 
+    +-$(MKDIRHIER) $(@:d)        
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
+
+$(DESTDIRDOCUIMAGES)$/% : $(PRJ)$/docs$/images$/% 
+    +-$(MKDIRHIER) $(@:d)        
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_COPY) $< $@
+
+$(DESTDIRDOCU)$/DevStudioWizards$/images$/% : $(PRJ)$/docs$/DevStudioWizards$/images$/% 
+    +-$(MKDIRHIER) $(@:d)        
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_COPY) $< $@
+
+$(DESTDIR)$/configure : $(PRJ)$/configure
+    +-$(MKDIRHIER) $(@:d)        
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $(PRJ)$/configure $(MY_TEXTCOPY_TARGETPRE) $@
+.IF "$(GUI)"=="UNX"
+    +-chmod 755 $@
+.ENDIF
+
+$(DESTDIR)$/configure.pl : $(PRJ)$/configure.pl
+    +-$(MKDIRHIER) $(@:d)        
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $(PRJ)$/configure.pl $(MY_TEXTCOPY_TARGETPRE) $@
+.IF "$(GUI)"=="UNX"
+    +-chmod 755 $@
+.ENDIF
+
+$(DESTDIR)$/setsdkenv_unix.in : $(PRJ)$/setsdkenv_unix.in
+    +-$(MKDIRHIER) $(@:d)        
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $(PRJ)$/setsdkenv_unix.in $(MY_TEXTCOPY_TARGETPRE) $@
+.IF "$(GUI)"=="UNX"
+    +-chmod 755 $@
+.ENDIF
+
+$(DESTDIR)$/configureWindowsNT.bat : $(PRJ)$/configureWindowsNT.bat
+    +-$(MKDIRHIER) $(@:d)        
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $(PRJ)$/configureWindowsNT.bat $(MY_TEXTCOPY_TARGETPRE) $@
+
+$(DESTDIR)$/setsdkenv_windows.bat : $(PRJ)$/setsdkenv_windows.bat
+    +-$(MKDIRHIER) $(@:d)        
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $(PRJ)$/setsdkenv_windows.bat $(MY_TEXTCOPY_TARGETPRE) $@
+
+$(DESTDIREXAMPLES)$/%.sxw : $(PRJ)$/examples$/%.sxw 
+    +-$(MKDIRHIER) $(@:d)        
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_COPY) $< $@
+
+$(DESTDIREXAMPLES)$/%.sxc : $(PRJ)$/examples$/%.sxc 
+    +-$(MKDIRHIER) $(@:d)        
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_COPY) $< $@
+
+$(DESTDIREXAMPLES)$/%.sxd : $(PRJ)$/examples$/%.sxd 
+    +-$(MKDIRHIER) $(@:d)        
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_COPY) $< $@
+
+$(DESTDIREXAMPLES)$/%.sxi : $(PRJ)$/examples$/%.sxi 
+    +-$(MKDIRHIER) $(@:d)        
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_COPY) $< $@
+
+$(DESTDIREXAMPLES)$/%.xlb : $(PRJ)$/examples$/%.xlb 
+    +-$(MKDIRHIER) $(@:d)        
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_COPY) $< $@
+
+$(DESTDIREXAMPLES)$/%.xdl : $(PRJ)$/examples$/%.xdl 
+    +-$(MKDIRHIER) $(@:d)        
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_COPY) $< $@
+
+$(DESTDIREXAMPLES)$/%.gif : $(PRJ)$/examples$/%.gif 
+    +-$(MKDIRHIER) $(@:d)        
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_COPY) $< $@
+
+$(DESTDIREXAMPLES)$/%.jpg : $(PRJ)$/examples$/%.jpg 
+    +-$(MKDIRHIER) $(@:d)        
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_COPY) $< $@
+
+$(DESTDIREXAMPLES)$/%.wmf : $(PRJ)$/examples$/%.wmf 
+    +-$(MKDIRHIER) $(@:d)        
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_COPY) $< $@
+
+$(DESTDIREXAMPLES)$/%.nsf : $(PRJ)$/examples$/%.nsf 
+    +-$(MKDIRHIER) $(@:d)        
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_COPY) $< $@
+
+$(DESTDIREXAMPLES)$/%.pdf : $(PRJ)$/examples$/%.pdf 
+    +-$(MKDIRHIER) $(@:d)        
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_COPY) $< $@
+
+$(DESTDIREXAMPLES)$/%.xba : $(PRJ)$/examples$/%.xba 
+    +-$(MKDIRHIER) $(@:d)        
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
+
+$(DESTDIREXAMPLES)$/%.cxx : $(PRJ)$/examples$/%.cxx 
+    +-$(MKDIRHIER) $(@:d)        
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
+
+$(DESTDIREXAMPLES)$/%.c : $(PRJ)$/examples$/%.c
+    +-$(MKDIRHIER) $(@:d)        
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
+
+$(DESTDIREXAMPLES)$/%.hxx : $(PRJ)$/examples$/%.hxx 
+    +-$(MKDIRHIER) $(@:d)        
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
+
+$(DESTDIREXAMPLES)$/%.java : $(PRJ)$/examples$/%.java 
+    +-$(MKDIRHIER) $(@:d)        
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
+
+$(DESTDIREXAMPLES)$/%.idl : $(PRJ)$/examples$/%.idl 
+    +-$(MKDIRHIER) $(@:d)        
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
+
+$(DESTDIREXAMPLES)$/%.dxp : $(PRJ)$/examples$/%.dxp 
+    +-$(MKDIRHIER) $(@:d)        
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
+
+$(DESTDIREXAMPLES)$/%.xml : $(PRJ)$/examples$/%.xml 
+    +-$(MKDIRHIER) $(@:d)        
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
+
+$(DESTDIREXAMPLES)$/%.xcu : $(PRJ)$/examples$/%.xcu 
+    +-$(MKDIRHIER) $(@:d)        
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
+
+$(DESTDIREXAMPLES)$/%.html : $(PRJ)$/examples$/%.html 
+    +-$(MKDIRHIER) $(@:d)        
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
+
+$(DESTDIREXAMPLES)$/%.txt : $(PRJ)$/examples$/%.txt 
+    +-$(MKDIRHIER) $(@:d)        
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
+
+$(DESTDIREXAMPLES)$/%$/Makefile : $(PRJ)$/examples$/%$/Makefile 
+    +-$(MKDIRHIER) $(@:d)        
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
+
+$(DESTDIREXAMPLES)$/%$/README : $(PRJ)$/examples$/%$/README 
+    +-$(MKDIRHIER) $(@:d)        
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
+
+$(DESTDIREXAMPLES)$/%.cpp : $(PRJ)$/examples$/%.cpp 
+    +-$(MKDIRHIER) $(@:d)        
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
+
+$(DESTDIREXAMPLES)$/%.h : $(PRJ)$/examples$/%.h 
+    +-$(MKDIRHIER) $(@:d)        
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
+
+$(DESTDIREXAMPLES)$/%.def : $(PRJ)$/examples$/%.def 
+    +-$(MKDIRHIER) $(@:d)        
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
+
+$(DESTDIREXAMPLES)$/%.rc : $(PRJ)$/examples$/%.rc 
+    +-$(MKDIRHIER) $(@:d)        
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
+
+$(DESTDIREXAMPLES)$/%.rgs : $(PRJ)$/examples$/%.rgs 
+    +-$(MKDIRHIER) $(@:d)        
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
+
+$(DESTDIREXAMPLES)$/%.dpr : $(PRJ)$/examples$/%.dpr 
+    +-$(MKDIRHIER) $(@:d)        
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
+
+$(DESTDIREXAMPLES)$/%.res : $(PRJ)$/examples$/%.res 
+    +-$(MKDIRHIER) $(@:d)        
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
+
+$(DESTDIREXAMPLES)$/%.pas : $(PRJ)$/examples$/%.pas 
+    +-$(MKDIRHIER) $(@:d)        
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
+
+$(DESTDIREXAMPLES)$/%.dfm : $(PRJ)$/examples$/%.dfm 
+    +-$(MKDIRHIER) $(@:d)        
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
+
+$(DESTDIREXAMPLES)$/%.vbs : $(PRJ)$/examples$/%.vbs 
+    +-$(MKDIRHIER) $(@:d)        
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
+
+$(DESTDIREXAMPLES)$/%.mk : $(PRJ)$/examples$/%.mk 
+    +-$(MKDIRHIER) $(@:d)        
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
+
+$(DESTDIREXAMPLES)$/%.ini : $(PRJ)$/examples$/%.ini
+    +-$(MKDIRHIER) $(@:d)        
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
+
+$(DESTDIREXAMPLES)$/%.bas : $(PRJ)$/examples$/%.bas
+    +-$(MKDIRHIER) $(@:d)        
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
+
+$(DESTDIRCLASSES)$/oosupport.nbm : $(OUT)$/class$/oosupport.nbm
+    +-$(MKDIRHIER) $(@:d)        
+    $(GNUCOPY) -p $(OUT)$/class$/oosupport.nbm $@
+
+$(DESTDIRSETTINGS)$/%.mk : $(PRJ)$/settings$/%.mk 
+    +-$(MKDIRHIER) $(@:d)        
+    +-rm -f $@ >& $(NULLDEV)
+.IF "$(COMEX)"=="8"
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
+.ELSE
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< | $(SED) -e 's/stlport_vc7/stlport_vc6/' $(MY_TEXTCOPY_TARGETPRE) $@
+.ENDIF
+
+$(DESTDIRSETTINGS)$/dk.mk :
+    +-$(MKDIRHIER) $(@:d)        
+    +-rm -f $@ >& $(NULLDEV)
+    echo #$(PRODUCT_NAME) dependent settings > $@
+    echo DKNAME=${PRODUCT_NAME} >> $@    
+.IF "$(GUI)"=="UNX"
+    echo 'DKREGISTRYNAME=$$(subst \\,\,"$$(OFFICE_PROGRAM_PATH)$$(PS)types.rdb")' >> $@
+.ELSE
+    echo DKREGISTRYNAME=$$(subst \\,\,"$$(OFFICE_PROGRAM_PATH)$$(PS)types.rdb") >> $@
+.ENDIF
+      
+#$(DESTDIRDOCU)$/DevelopersGuide$/DevelopersGuide.pdf : DevelopersGuide.pdf
+#	+-$(MKDIRHIER) $(@:d)        
+#	$(GNUCOPY) -p DevelopersGuide.pdf $@
+    
+#$(DESTDIRDOCU)$/DevelopersGuide$/DevelopersGuide.pdf : DevelopersGuide.zip
+#	+-$(MKDIRHIER) $(@:d)        
+#	unzip -quod $(DESTDIRDOCU) DevelopersGuide.zip
+
+$(DESTDIRCOMMONDOCU)$/spec$/xml_format$/xml_specification.pdf : xml_specification.pdf
+    +-$(MKDIRHIER) $(@:d)        
+    $(GNUCOPY) -p xml_specification.pdf $@
+        
+$(DESTDIRXML)$/module-description.dtd : $(XMLOUT)$/module-description.dtd
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $(XMLOUT)$/module-description.dtd $(MY_TEXTCOPY_TARGETPRE) $@  
+
+$(DESTDIRBIN)$/%$(EXEPOSTFIX) : $(BINOUT)$/%$(EXEPOSTFIX)
+    +-$(MKDIRHIER) $(@:d)        
+    $(GNUCOPY) -p $(BINOUT)$/$(@:f) $@
+.IF "$(GUI)"=="UNX"
+    +-strip $@    
+.ENDIF
+    
+$(DESTDIRDLL)$/%$(MY_DLLPOSTFIX) : $(DLLOUT)$/%$(MY_DLLPOSTFIX)
+    +-$(MKDIRHIER) $(@:d)        
+    $(GNUCOPY) -p $(DLLOUT)$/$(@:f) $@
+    
+$(DESTDIRIDL)$/% : $(IDLOUT)$/%
+    +-$(MKDIRHIER) $(@:d)        
+    +-rm -f $@
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
+
+$(DESTDIRINC)$/udkversion.mk :
+    +-$(MKDIRHIER) $(@:d)        
+    +-rm -f $@ >& $(NULLDEV)
+    echo #UDK version number > $@
+    echo #major >> $@
+    echo UDK_MAJOR=$(UDK_MAJOR) >> $@
+    echo #minor >> $@
+    echo UDK_MINOR=$(UDK_MINOR) >> $@
+    echo #micro >> $@
+    echo UDK_MICRO=$(UDK_MICRO) >> $@
+    
+$(DESTDIRINC)$/% : $(INCOUT)$/%
+    +-$(MKDIRHIER) $(@:d)        
+    +-rm -f $@
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
+
+$(DESTDIRLIB)$/%.lib : $(LIBOUT)$/%.lib
+    +-$(MKDIRHIER) $(@:d)        
+    $(GNUCOPY) -p $(LIBOUT)$/$(@:f) $@
+    
+$(DESTDIRXML)$/%.xml : $(XMLOUT)$/%.xml
+    +-$(MKDIRHIER) $(@:d)        
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
+    
+#$(CONVERTTAGFLAG) : $(MISC)$/deltree.txt $(DOCUHTMLFILES)
+#	+$(PERL) $(CONVERTTAGSCRIPT) $(CONVMODE) $(TITLE) $(OFFICEPRODUCTNAME) $(DOCUHTMLFILES) $(DESTDIREXAMPLES)$/DevelopersGuide$/examples.html
+#	+@echo "tags converted" > $@
