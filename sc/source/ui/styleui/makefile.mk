@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 15:21:34 $
+#   last change: $Author: kz $ $Date: 2004-05-19 03:24:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,9 +78,6 @@ AUTOSEG=true
 .INCLUDE :  settings.mk
 .INCLUDE :  sc.mk
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
-
-IMGLST_SRS=$(SRS)$/styleui.srs
-BMP_IN=$(PRJ)$/res
 
 # --- Files --------------------------------------------------------
 
