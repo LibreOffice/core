@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltfnc.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-23 12:23:18 $
+ *  last change: $Author: pb $ $Date: 2000-10-24 11:41:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,6 +239,9 @@ using namespace ::vos;
 #ifndef _SFXECODE_HXX
 #include <svtools/sfxecode.hxx>
 #endif
+#ifndef _UNOTOOLS_CHARCLASS_HXX
+#include <unotools/charclass.hxx>
+#endif
 
 #include "inimgr.hxx"
 #include "app.hxx"
@@ -460,8 +463,9 @@ String FlagsToName_Impl( SfxFilterFlags nValue )
 
 inline String ToUpper_Impl( const String &rStr )
 {
-    String aRet(rStr);
-    Application::GetAppInternational().ToUpper(aRet);
+    String aRet( rStr );
+    CharClass aCharClass( Application::GetSettings().GetLocale() );
+    aCharClass.toUpper( aRet );
     return aRet;
 }
 
