@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmsearch.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: kz $ $Date: 2002-05-06 07:56:03 $
+ *  last change: $Author: kz $ $Date: 2002-09-05 17:31:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ spanish ] = "~Texto";
         Text[ finnish ] = "~Teksti";
         Text[ italian ] = "~Testo";
-        Text[ danish ] = "Tekst :";
+        Text[ danish ] = "~Tekst";
         Text[ swedish ] = "~Text";
         Text[ polish ] = "Tekst";
         Text[ portuguese_brazilian ] = "~Text :";
@@ -238,7 +238,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ korean ] = "Î≤îÏúÑ";
         Text[ turkish ] = "Aranacak bˆl¸m";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "¡rea";
+        Text[ catalan ] = "¿rea";
         Text[ finnish ] = "Hakukohde";
     };
     FixedText FT_FORM
@@ -255,7 +255,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ spanish ] = "~Formulario";
         Text[ finnish ] = "muoto";
         Text[ italian ] = "Formulario";
-        Text[ danish ] = "~Formular :";
+        Text[ danish ] = "~Formular";
         Text[ swedish ] = "~Formul‰r";
         Text[ polish ] = "Formularz";
         Text[ portuguese_brazilian ] = "~Formular :";
@@ -319,7 +319,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ spanish ] = "~Campo individual";
         Text[ finnish ] = "Yksitt‰inen kentt‰";
         Text[ italian ] = "Campo singolo";
-        Text[ danish ] = "Enkelt felt :";
+        Text[ danish ] = "En~kelt felt";
         Text[ swedish ] = "~Enskilt f‰lt";
         Text[ polish ] = "Pojedyncze pole";
         Text[ portuguese_brazilian ] = "ein~zelnes Feld :";
@@ -365,7 +365,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ korean ] = "ÏÑ§Ï†ï";
         Text[ turkish ] = "Ayarlar";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "ConfiguraciÛn";
+        Text[ catalan ] = "Par‡metres";
         Text[ finnish ] = "Asetukset";
     };
     FixedText FT_POSITION
@@ -382,7 +382,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ spanish ] = "PosiciÛn";
         Text[ finnish ] = "Sijainti";
         Text[ italian ] = "Posizione";
-        Text[ danish ] = "Placering :";
+        Text[ danish ] = "~Placering";
         Text[ swedish ] = "~Position";
         Text[ polish ] = "Pozycja";
         Text[ portuguese_brazilian ] = "~Position :";
@@ -659,7 +659,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ spanish ] = "Considerar ancho de car·cter";
         Text[ finnish ] = "T‰sm‰yt‰ puoli- ja t‰ysleveyksiset muodot";
         Text[ italian ] = "Considera la larghezza dei caratteri";
-        Text[ danish ] = "Match half/full width forms";
+        Text[ danish ] = "Halv-/normalbrede former";
         Text[ swedish ] = "Ta h‰nsyn till teckenbredd";
         Text[ polish ] = "UwzglÍdnij szerokoúÊ znakÛw";
         Text[ portuguese_brazilian ] = "Match half/full width forms";
@@ -686,7 +686,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ french ] = "SimilaritÈs japonaises";
         Text[ spanish ] = "OrtografÌa similar (JaponÈs)";
         Text[ italian ] = "Ortografia simile (giapponese)";
-        Text[ danish ] = "Sounds like (Japanese)";
+        Text[ danish ] = "Lign. skrivemÂde (Jap.)";
         Text[ swedish ] = "Likn. skrivs‰tt (japanska)";
         Text[ polish ] = "Podobna pisownia (japoÒski)";
         Text[ portuguese_brazilian ] = "Sounds like (Japanese)";
@@ -752,7 +752,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ korean ] = "ÏÉÅÌÉú";
         Text[ turkish ] = "Durum";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Estado";
+        Text[ catalan ] = "Estat";
         Text[ finnish ] = "Osavaltio";
     };
     FixedText FT_RECORDLABEL
@@ -823,7 +823,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ korean ] = "Ï∞æÍ∏∞";
         Text[ turkish ] = "Ara";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Buscar";
+        Text[ catalan ] = "~Cerca";
         Text[ finnish ] = "Etsi";
     };
     CancelButton 1
@@ -837,7 +837,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ italian ] = "Chiudi";
         Text[ portuguese_brazilian ] = "S~chlie?en";
         Text[ portuguese ] = "~Fechar";
-        Text[ danish ] = "Luk";
+        Text[ danish ] = "L~uk";
         Text[ french ] = "Fermer";
         Text[ swedish ] = "~St‰ng";
         Text[ dutch ] = "S~luiten";
@@ -853,7 +853,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ korean ] = "Îã´Í∏∞(~C)";
         Text[ turkish ] = "Kapat";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Cerrar";
+        Text[ catalan ] = "~Tanca";
         Text[ finnish ] = "~Sulje";
     };
     HelpButton 1
@@ -882,7 +882,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ korean ] = "ÎèÑÏõÄÎßê(~H)";
         Text[ turkish ] = "Yard˝m";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Ayuda";
+        Text[ catalan ] = "~Ajuda";
         Text[ finnish ] = "~Ohje";
     };
 };
@@ -1005,7 +1005,7 @@ String RID_STR_SEARCH_OVERFLOW
     Text[ italian ] = "Overflow, la ricerca Ë stata proseguita dall'inizio;Overflow, la ricerca Ë stata proseguita dalla fine";
     Text[ portuguese_brazilian ] = "?berlauf, Suche wurde am Anfang forgesetzt;?berlauf, Suche wurde am Ende forgesetzt";
     Text[ portuguese ] = "Transbordo - Localizar continua pelo inÌcio;Transbordo - Localizar continua pelo final.";
-    Text[ danish ] = "Overl¯b, s¯gning blev fortsat ved begyndelsen;Overl¯b, s¯gningen blev fortsat ved slutningen";
+    Text[ danish ] = "\"Overl¯b, s¯gning fortsat ved start;Overl¯b, s¯gning fortsat ved slutning\"";
     Text[ french ] = "DÈbordement - la recherche a continuÈ au dÈbut;DÈbordement - la recherche a continuÈ ‡ la fin";
     Text[ swedish ] = "Spill, sˆkningen fortsatte frÂn bˆrjan;spill, sˆkningen fortsatte frÂn slutet";
     Text[ dutch ] = "Overloop, zoeken werd voortgezet aan het begin; Overloop, zoeken werd voortgezet aan het einde";
