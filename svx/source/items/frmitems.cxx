@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmitems.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2000-11-01 16:06:51 $
+ *  last change: $Author: mib $ $Date: 2000-11-08 11:19:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1463,15 +1463,11 @@ sal_Bool SvxOpaqueItem::exportXML( OUString& rValue, sal_uInt16 nMemberId, const
 #ifndef SVX_LIGHT
     if(GetValue())
     {
-        //rValue = ACP2WS( sXML_opaque_foreground );
-        rValue = OUString( sXML_opaque_foreground, sizeof(sXML_opaque_foreground),
-            gsl_getSystemTextEncoding() );
+        rValue = OUString( RTL_CONSTASCII_USTRINGPARAM(sXML_opaque_foreground) );
     }
     else
     {
-        //rValue = ACP2WS( sXML_opaque_background );
-        rValue = OUString( sXML_opaque_background, sizeof(sXML_opaque_background),
-            gsl_getSystemTextEncoding() );
+        rValue = OUString( RTL_CONSTASCII_USTRINGPARAM(sXML_opaque_background) );
     }
     return sal_True;
 #else
@@ -1821,7 +1817,7 @@ sal_Bool SvxShadowItem::exportXML( OUString& rValue, sal_uInt16 nMemberId, const
         break;
     case SVX_SHADOW_NONE:
     default:
-        rValue = OUString( sXML_none, sizeof(sXML_none), gsl_getSystemTextEncoding() );
+        rValue = OUString( RTL_CONSTASCII_USTRINGPARAM(sXML_none) );
         return sal_True;
     }
 
