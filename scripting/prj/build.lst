@@ -1,7 +1,9 @@
 tc	scripting	:	bridges rdbmaker vcl NULL
 tc	scripting									usr1	-	all	tc_mkout NULL
 tc	scripting\source\storage				nmake	-	all	tc_scriptingstorage NULL
-tc	scripting\source\runtimemgr				nmake	-	all	tc_scriptingruntimemgr NULL
-tc	scripting\source\protocolhandler				nmake	-	all tc_scriptingprotocolhandler tc_scriptingstorage NULL
-tc	scripting\source\provider				nmake	-	all	tc_scriptingprovider NULL
-tc	scripting\java						nmake	-	all	tc_scriptingjava NULL
+tc	scripting\source\provider				nmake	-	all	tc_scriptingprovider tc_scriptingstorage NULL
+tc	scripting\source\protocolhandler			nmake	-	all	tc_scriptingprotocolhandler tc_scriptingstorage tc_scriptingprovider NULL
+tc	scripting\java						nmake	-	all	tc_scriptingjava tc_scriptingstorage tc_scriptingprovider tc_scriptingprotocolhandler NULL
+tc	scripting\source\runtimemgr				nmake	-	all	tc_scriptingruntimemgr tc_scriptingstorage tc_scriptingprovider tc_scriptingprotocolhandler tc_scriptingjava  NULL
+tc	scripting\util						nmake	-	all	tc_scriptingutil tc_scriptingstorage tc_scriptingprovider tc_scriptingprotocolhandler tc_scriptingjava tc_scriptingruntimemgr  NULL
+
