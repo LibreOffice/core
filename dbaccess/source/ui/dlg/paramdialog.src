@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paramdialog.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-04 20:09:43 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 06:04:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,7 @@ ModalDialog DLG_PARAMETERS
         Text[ turkish ] = "Parametre";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Parámetros";
+        Text[ finnish ] = "~Parametrit";
     };
     ListBox LB_ALLPARAMS
     {
@@ -135,6 +136,7 @@ ModalDialog DLG_PARAMETERS
         Text[ turkish ] = "Deðer";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Valor";
+        Text[ finnish ] = "~Arvo";
     };
     Edit ET_PARAM
     {
@@ -170,6 +172,7 @@ ModalDialog DLG_PARAMETERS
         Text[ arabic ] = "ÇáÊÇáí";
         Text[ turkish ] = "Sonraki";
         Text[ catalan ] = "~siguiente";
+        Text[ finnish ] = "~seuraava";
     };
     FixedLine FT_DELIM
     {
@@ -232,13 +235,18 @@ ModalDialog DLG_PARAMETERS
         Text[ arabic ] = "ÊÚÐÑ ÊÍæíá ÇáÅÏÎÇá Åáì ÞíãÉ ÕÇáÍÉ ááÚãæÏ \"$name$\".";
         Text[ turkish ] = "Giriþ, \"$name$\" sütunu için geçerli bir deðere dönüþtürülemedi.";
         Text[ catalan ] = "La entrada no se pudo convertir en un valor válido para la columna \"$name$\".";
+        Text[ finnish ] = "Merkintää ei voitu muuttaa sarakkeen $name$ kelvolliseksi arvoksi";
     };
     Text[ catalan ] = "Entrada de parámetro";
+    Text[ finnish ] = "Parametrin syöttö";
 };
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.7  2001/05/04 20:09:43  rt
+ *  Merge SRC630: 04.05.01 - 22:09:57 (NoBranch)
+ *
  *  Revision 1.6  2001/03/09 20:46:24  avy
  *  Merge SRC624: 03/09/01 - 21:46:05 (NoBranch)
  *
