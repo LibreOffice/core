@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: guw.pl,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: hr $ $Date: 2004-03-09 12:19:01 $
+#   last change: $Author: rt $ $Date: 2004-06-16 10:34:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -172,12 +172,15 @@ sub WinFormat {
 sub replace_cyg {
     my $args = shift;
     my( @cmd_file, @cmd_temp );
+    my $atchars;
     foreach my $para ( @$args )
       {
         if ( $para =~ "^@" ) {
           # it's a command file
           if ( defined $debug ) { print(STDERR "----------------------------\n");};
-          $para =~ s/^@//;
+          # Workaround, iz28717, keep number of @'s.
+          $para =~ s/(^\@+)//;
+          $atchars = $1;
           $filename = $para;
           if ( defined $debug ) { print(STDERR "filename = $filename \n");};
           # open this command file for reading
@@ -210,7 +213,7 @@ sub replace_cyg {
           $para = WinFormat( $para );
           if ( defined $debug ) { print(STDERR "----------------------------\n");};
           if ( (defined $debug_light) or (defined $debug) ) { print(STDERR "\nParameter in File:".join(' ', @cmd_file).":\n");}
-          $para = "@".$para;
+          $para = $atchars.$para;
         } else {
           # it's just a parameter
           if ( defined $debug ) { print(STDERR "\nParameter:---${para}---\n");};
@@ -285,7 +288,7 @@ while ( $command =~ /^-/ )
 
     $command = shift(@params);
 }
-print( STDERR "Command: $command\n" );
+if ( (defined $debug_light) or (defined $debug) ) { print( STDERR "Command: $command\n" ); }
 
 replace_cyg(\@params);
 if ( (defined $debug_light) or (defined $debug) ) { print(STDERR "\n---------------------\nExecute: $command @params\n----------------\n");};
