@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 14:09:14 $
+ *  last change: $Author: rt $ $Date: 2004-05-19 08:51:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1770,8 +1770,17 @@ void SwXTextField::attachToRange(
             {
                 SwFieldType* pFldType = pDoc->GetSysFldType(RES_MACROFLD);
                 String aName;
-                SwMacroField::CreateMacroString(
-                    aName, m_pProps->sPar1, m_pProps->sPar3 );
+
+                // support for Scripting Framework macros
+                if (m_pProps->sPar4.Len() != 0)
+                {
+                    aName = m_pProps->sPar4;
+                }
+                else
+                {
+                    SwMacroField::CreateMacroString(
+                        aName, m_pProps->sPar1, m_pProps->sPar3 );
+                }
                 pFld = new SwMacroField((SwMacroFieldType*)pFldType, aName,
                                         m_pProps->sPar2);
             }
