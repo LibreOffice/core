@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-24 11:54:22 $
+ *  last change: $Author: hr $ $Date: 2003-08-07 15:28:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -474,8 +474,8 @@ void ExcCondFormList::Apply( void )
 
 
 
-ImportExcel8::ImportExcel8( SvStorage* pStorage, SvStream& rStream, ScDocument* pDoc, const String& rBasePath, SvStorage* pPivotCache ) :
-    ImportExcel( rStream, pDoc, rBasePath )
+ImportExcel8::ImportExcel8( SvStorage* pStorage, SvStream& rStream, ScDocument* pDoc, const String& rDocUrl, SvStorage* pPivotCache ) :
+    ImportExcel( rStream, pDoc, rDocUrl )
 {
     delete pFormConv;
 
