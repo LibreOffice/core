@@ -2,9 +2,9 @@
  *
  *  $RCSfile: math_pch.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2001-08-09 15:10:46 $
+ *  last change: $Author: rt $ $Date: 2001-08-09 15:57:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,6 @@
 #include <sal/types.h>
 #include <sal/config.h>
 #include <tools/date.hxx>
-#include <sot/dtrans.hxx>
 #include <tools/ownlist.hxx>
 #include <vcl/accel.hxx>
 #include <vcl/resid.hxx>
