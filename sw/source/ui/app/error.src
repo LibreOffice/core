@@ -2,9 +2,9 @@
  *
  *  $RCSfile: error.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-22 16:50:35 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 18:50:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,8 @@ String STR_COMCORE_READERROR
     TEXT[ hebrew ] = "Lesefehler";
     TEXT[ hindi ] = "पढ़ने में गलती";
     TEXT[ slovak ] = "Chyba pri čítaní";
+    TEXT[ hungarian ] = "Olvasási hiba";
+    TEXT[ slovenian ] = "Napaka pri branju";
 };
 String STR_COMCORE_CANT_SHOW
 {
@@ -135,6 +137,8 @@ String STR_COMCORE_CANT_SHOW
     TEXT[ hebrew ] = "Grafik nicht darstellbar.";
     TEXT[ hindi ] = "सुचित्र को नहीं दिखा सकते है ।";
     TEXT[ slovak ] = "Obrázok nie je možné zobraziť.";
+    TEXT[ hungarian ] = "A kép nem jeleníthető meg.";
+    TEXT[ slovenian ] = "Grafike ni mogoče prikazati.";
 };
 /*--------------------------------------------------------------------
     Beschreibung:   Boxes
@@ -170,6 +174,8 @@ InfoBox ERR_CLPBRD_WRITE
     MESSAGE[ hebrew ] = "Fehler beim Kopieren in die Zwischenablage.";
     MESSAGE[ hindi ] = "क्लिपबोर्ड में प्रतिलिपि बनाने के समय गलती ।";
     MESSAGE[ slovak ] = "Chyba pri kopírovaní do schránky.";
+    MESSAGE[ hungarian ] = "Hiba történt a vágólapra másoláskor.";
+    MESSAGE[ slovenian ] = "Napaka pri kopiranju v odložišče.";
 };
 InfoBox ERR_CLPBRD_READ
 {
@@ -202,6 +208,8 @@ InfoBox ERR_CLPBRD_READ
     MESSAGE[ hebrew ] = "Fehler beim Lesen aus der Zwischenablage.";
     MESSAGE[ hindi ] = "क्लिपबोर्ड से पढ़ने के समय गलती ।";
     MESSAGE[ slovak ] = "Chyba pri čítaní­ zo schránky.";
+    MESSAGE[ hungarian ] = "Hiba a vágólap olvasásakor.";
+    MESSAGE[ slovenian ] = "Napaka pri branju iz odložišča.";
 };
 
 
@@ -220,7 +228,7 @@ Resource RID_SW_ERRHDL
         TEXT [ portuguese_brazilian ] = "Foi encontrado um erro de formato no arquivo" ;
         TEXT [ portuguese ] = "Encontrado erro de formato no ficheiro" ;
         TEXT [ finnish ] = "Tiedostomuotovirhe ilmeni." ;
-        TEXT [ danish ] = "Opdaget formatfejl i filen" ;
+        TEXT [ danish ] = "Der er fejl i filformatet" ;
         TEXT [ french ] = "Erreur de format de fichier" ;
         TEXT [ swedish ] = "Formatfel uppt�ckt i filen" ;
         TEXT [ dutch ] = "Indelingsfout ontdekt in het bestand" ;
@@ -242,6 +250,8 @@ Resource RID_SW_ERRHDL
         TEXT[ hebrew ] = "Formatfehler in der Datei entdeckt";
         TEXT[ hindi ] = "फाइल रचना गलती घटित हुआ";
         TEXT[ slovak ] = "Chybný formát súboru";
+        TEXT[ hungarian ] = "Fájlformátumhiba";
+        TEXT[ slovenian ] = "Napaka v obliki datoteke";
     };
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_SWG_READ_ERROR )
     {
@@ -252,7 +262,7 @@ Resource RID_SW_ERRHDL
         TEXT [ portuguese_brazilian ] = "Ocorreu um erro ao ler o arquivo" ;
         TEXT [ portuguese ] = "Erro na leitura do ficheiro " ;
         TEXT [ finnish ] = "Virhe luettaessa tiedostoa " ;
-        TEXT [ danish ] = "Fejl under l�sning af filen " ;
+        TEXT [ danish ] = "Fejl ved l�sning af filen " ;
         TEXT [ french ] = "Erreur de lecture du fichier " ;
         TEXT [ swedish ] = "Fel vid l�sning av fil " ;
         TEXT [ dutch ] = "Fout bij lezen van het bestand" ;
@@ -274,6 +284,8 @@ Resource RID_SW_ERRHDL
         TEXT[ hebrew ] = "Fehler beim Lesen der Datei";
         TEXT[ hindi ] = "पढ़ने के समय गलती ";
         TEXT[ slovak ] = "Chyba pri čítaní súboru";
+        TEXT[ hungarian ] = "Hiba a fájl olvasásakor";
+        TEXT[ slovenian ] = "Napaka pri branju datoteke";
     };
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_SW6_INPUT_FILE )
     {
@@ -306,6 +318,8 @@ Resource RID_SW_ERRHDL
         TEXT[ hebrew ] = "Fehler in der Eingabedatei";
         TEXT[ hindi ] = "इनपुट् फाइल गलती";
         TEXT[ slovak ] = "Chyba vo vstupnom súbore";
+        TEXT[ hungarian ] = "Hibás bemeneti fájl.";
+        TEXT[ slovenian ] = "Napaka v vhodni datoteki";
     };
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_SW6_NOWRITER_FILE )
     {
@@ -338,6 +352,8 @@ Resource RID_SW_ERRHDL
         TEXT[ hebrew ] = "Die Datei ist keine %PRODUCTNAME Writer-Datei";
         TEXT[ hindi ] = "यह %PRODUCTNAME लेखक फाइल नहीं है";
         TEXT[ slovak ] = "Toto nieje súbor %PRODUCTNAME Writer";
+        TEXT[ hungarian ] = "Ez nem egy %PRODUCTNAME Writer fájl";
+        TEXT[ slovenian ] = "To ni datoteka programa %PRODUCTNAME Writer";
     };
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_SW6_UNEXPECTED_EOF )
     {
@@ -348,7 +364,7 @@ Resource RID_SW_ERRHDL
         TEXT [ portuguese_brazilian ] = "Fim de arquivo inesperado" ;
         TEXT [ portuguese ] = "Fim de ficheiro imprevisto" ;
         TEXT [ finnish ] = "Odottamaton tiedoston loppu" ;
-        TEXT [ danish ] = "Uventet filafslutning" ;
+        TEXT [ danish ] = "Uventet filslutning" ;
         TEXT [ french ] = "Fin de fichier impr�vue" ;
         TEXT [ swedish ] = "Ov�ntat filslut" ;
         TEXT [ dutch ] = "Onverwacht bestandseinde" ;
@@ -370,6 +386,8 @@ Resource RID_SW_ERRHDL
         TEXT[ hebrew ] = "Unerwartetes Dateiende";
         TEXT[ hindi ] = "प्रतीक्षा न किया हुआ फाइल का अंत";
         TEXT[ slovak ] = "Neočakávaný koniec súboru";
+        TEXT[ hungarian ] = "Váratlanul véget ért a fájl";
+        TEXT[ slovenian ] = "Nepričakovan konec datoteke";
     };
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_SW6_PASSWD )
     {
@@ -380,7 +398,7 @@ Resource RID_SW_ERRHDL
         TEXT [ portuguese_brazilian ] = "Arquivos protegidos com senhas n�o s�o suportados" ;
         TEXT [ portuguese ] = "As senhas n�o t�m suporte" ;
         TEXT [ finnish ] = "Salasanoilla suojattuja tiedostoja ei tueta." ;
-        TEXT [ danish ] = "Adgangskoder underst�ttes ikke" ;
+        TEXT [ danish ] = "Filer, der er beskyttet med adgangskode, kan ikke �bnes." ;
         TEXT [ french ] = "Impossible d'ouvrir les fichiers prot�g�s par des mots de passe !" ;
         TEXT [ swedish ] = "Det g�r inte att �ppna filer som �r skyddade med l�senord" ;
         TEXT [ dutch ] = "Wachtwoorden worden niet ondersteund" ;
@@ -402,6 +420,8 @@ Resource RID_SW_ERRHDL
         TEXT[ hebrew ] = "Dateien, die mit Kennwort geschützt sind, können nicht geöffnet werden.";
         TEXT[ hindi ] = "कूटशब्द रक्षित फाइलें समर्थित नहीं";
         TEXT[ slovak ] = "Zamknuté súbory nie sú podporované";
+        TEXT[ hungarian ] = "A jelszóval védett fájlokat nem lehet megnyitni.";
+        TEXT[ slovenian ] = "Z geslom zaščitenih datotek ni mogoče odpreti.";
     };
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_WW6_NO_WW6_FILE_ERR )
     {
@@ -412,7 +432,7 @@ Resource RID_SW_ERRHDL
         TEXT [ portuguese_brazilian ] = "Este n�o � um arquivo do WinWord6" ;
         TEXT [ portuguese ] = "Este n�o � um ficheiro do WinWord6" ;
         TEXT [ finnish ] = "T�m� ei ole WinWord6-tiedosto" ;
-        TEXT [ danish ] = "Filen er ingen WinWord6-fil" ;
+        TEXT [ danish ] = "Filen er ikke en WinWord6-fil" ;
         TEXT [ french ] = "Ceci n'est pas un fichier WinWord6" ;
         TEXT [ swedish ] = "Detta �r inte en WinWord6-fil" ;
         TEXT [ dutch ] = "Dit bestand is geen WinWord6-bestand" ;
@@ -434,6 +454,8 @@ Resource RID_SW_ERRHDL
         TEXT[ hebrew ] = "Die Datei ist keine WinWord6-Datei";
         TEXT[ hindi ] = "यह WinWord6 फाइल नहीं है";
         TEXT[ slovak ] = "Toto nie je súbor WinWord6";
+        TEXT[ hungarian ] = "Ez nem WinWord6 fájl.";
+        TEXT[ slovenian ] = "To ni datoteka programa Winword 6.0";
     };
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_WW6_FASTSAVE_ERR )
     {
@@ -470,6 +492,8 @@ Resource RID_SW_ERRHDL
         TEXT[ hebrew ] = "Diese Datei wurde mit der WinWord-Option 'Schnellspeichern' gespeichert. Bitte schalten Sie in WinWord die Option 'Schnellspeichern zulassen' aus und speichern sie die Datei erneut mit WinWord";
         TEXT[ hindi ] = "इस फाइल को WinWord में 'शीघ्र संचित करो' प्रकार में  संचित किया है । कृपया 'शीघ्र संचित करना स्वीकृत' विकल्प को हटाओ और फाइल को फिर से संचित करो । ";
         TEXT[ slovak ] = "Tento súbor bol uložený programom WinWord v režime 'Rýchle ukladanie'. Vypnite prosím voľbu 'Povoliť rýchle ukladanie' a uložte súbor znovu.";
+        TEXT[ hungarian ] = "Ez a fájl a WinWord 'Gyors mentés' funkciójával készült. Kapcsolja ki a 'Gyors mentések engedélyezése' funkciót, majd mentse ismét a fájlt.";
+        TEXT[ slovenian ] = "Datoteka je bila shranjena v programu WinWord v načinu 'Hitro shranjevanje'. Počistite možnost 'Dopusti hitro shranjevanje' za program WinWord in znova shranite datoteko.";
     };
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_W4W_WRITE_TMP_ERROR )
     {
@@ -502,6 +526,8 @@ Resource RID_SW_ERRHDL
         TEXT[ hebrew ] = "Fehler beim Schreiben der Temporärdatei";
         TEXT[ hindi ] = "अस्थायी फाइल में लिखने के समय गलती";
         TEXT[ slovak ] = "Chyba pri zápise do dočasného súboru";
+        TEXT[ hungarian ] = "Hiba az ideiglenes fájl írásakor";
+        TEXT[ slovenian ] = "Napaka pri pisanju začasne datoteke";
     };
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_EXCLOT_WRONG_RANGE )
     {
@@ -514,7 +540,7 @@ Resource RID_SW_ERRHDL
         TEXT [ french ] = "Zone d'insertion dans le fichier Ini trop grande" ;
         TEXT [ dutch ] = "Invoegbereik in INI-bestand is te groot" ;
         TEXT [ spanish ] = "La secci�n insertada en el archivo Ini es demasiado grande" ;
-        TEXT [ danish ] = "Importomr�det i ini-filen er for stort" ;
+        TEXT [ danish ] = "Den importerede sektion i ini-filen er for stort" ;
         TEXT [ swedish ] = "Importomr�det i ini-filen �r f�r stort" ;
         TEXT [ finnish ] = "Ini-tiedostoon lis�tty osa on liian suuri." ;
         TEXT [ english_us ] = "Inserted section in ini file too large" ;
@@ -534,6 +560,8 @@ Resource RID_SW_ERRHDL
         TEXT[ hebrew ] = "Einfügebereich in Ini-Datei zu groß";
         TEXT[ hindi ] = "ini फाइल में जोड़ा हुआ विभाग बहुत बड़ा है";
         TEXT[ slovak ] = "Vkladaná oblasť v ini súbore je príliš veľká";
+        TEXT[ hungarian ] = "Az ini fájlba beszúrt szakasz túl nagy";
+        TEXT[ slovenian ] = "Vstavljeni del v ini datoteki je prevelik";
     };
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_FORMAT_ROWCOL )
     {
@@ -545,7 +573,7 @@ Resource RID_SW_ERRHDL
         Text [ french ] = "Erreur de format dans le fichier, position $(ARG1)(ligne, colonne)." ;
         Text [ dutch ] = "Indelingsfout ontdekt op positie $(ARG1)(cel,kolom) in het bestand" ;
         Text [ swedish ] = "Formatfel vid position $(ARG1)(rad,kolumn) uppt�ckt i filen" ;
-        Text [ danish ] = "Der blev opdaget en formatfejl i filen p� position $(ARG1)(r�kke,spalte)" ;
+        Text [ danish ] = "Der er konstateret filformatfejl p� position $(ARG1)(r�kke,kolonne)" ;
         Text [ portuguese ] = "Descoberto erro de formato na posi��o $(ARG1)(linha, coluna) do ficheiro" ;
         Text [ portuguese_brazilian ] = "Foi encontrado um erro de formato de arquivo em $(ARG1)(lin,col)" ;
         Text[ chinese_simplified ] = "文件格式错误 $(ARG1)(行，列)";
@@ -565,6 +593,8 @@ Resource RID_SW_ERRHDL
         Text[ hebrew ] = "Formatfehler an Position $(ARG1)(Zeile,Spalte) in der Datei entdeckt";
         Text[ hindi ] = "$(ARG1)(पंक्ति,स्तंभ) में फाइल रचना गलती घटित हुआ ";
         Text[ slovak ] = "Chybný formát súboru na $(ARG1)(riadok,stĺpec)";
+        Text[ hungarian ] = "Fájlformátumhiba a következő helyen: $(ARG1)(sor, oszlop)";
+        Text[ slovenian ] = "Napaka v obliki datoteke na $(ARG1)(vrs,sto)";
     };
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_SWG_NEW_VERSION )
     {
@@ -596,6 +626,8 @@ Resource RID_SW_ERRHDL
         Text[ hebrew ] = "Datei wurde von einer neueren Version geschrieben";
         Text[ hindi ] = "फाइल को नया आवर्तन में लिखा है";
         Text[ slovak ] = "Súbor bol uložený novšou verziou";
+        Text[ hungarian ] = "A file újabb verzióban lett elmentve";
+        Text[ slovenian ] = "Datoteka je bila zapisana v novejši različici";
     };
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_WW8_NO_WW8_FILE_ERR )
     {
@@ -609,7 +641,7 @@ Resource RID_SW_ERRHDL
         TEXT[ french ] = "Il ne s'agit pas d'un fichier WinWord97 !";
         TEXT[ spanish ] = "El archivo no es de WinWord97";
         TEXT[ italian ] = "Il file non � nel formato WinWord97";
-        TEXT[ danish ] = "Filen er ingen WinWord97-fil";
+        TEXT[ danish ] = "Filen er ikke en WinWord97-fil";
         TEXT[ swedish ] = "Filen �r inte en WinWord97-fil";
         TEXT[ polish ] = "To nie jest plik WinWord97";
         TEXT[ portuguese_brazilian ] = "Este n�o � um arquivo do WinWord97";
@@ -626,6 +658,8 @@ Resource RID_SW_ERRHDL
         TEXT[ hebrew ] = "Die Datei ist keine WinWord97-Datei";
         TEXT[ hindi ] = "यह WinWord97 फाइल नहीं है";
         TEXT[ slovak ] = "Toto nie je súbor WinWord97";
+        TEXT[ hungarian ] = "Ez nem WinWord97 fájl";
+        TEXT[ slovenian ] = "To ni datoteka programa WinWord97";
     };
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_FORMAT_FILE_ROWCOL )
     {
@@ -639,7 +673,7 @@ Resource RID_SW_ERRHDL
         TEXT[ french ] = "Erreur de format dans le sous-document $(ARG1), position $(ARG2)(ligne,colonne), du fichier.";
         TEXT[ spanish ] = "En el documento parcial $(ARG1) del archivo existe un error de formato en la posici�n $(ARG2)(fila,columna)";
         TEXT[ italian ] = "Errore di formato nel sottodocumento $(ARG1) del file nel punto $(ARG2)(riga,colonna)";
-        TEXT[ danish ] = "Der er konstateret formatfejl i underdokumentet $(ARG1) p� position $(ARG2)(linje,kolonne) i filen";
+        TEXT[ danish ] = "Der er fundet formatfejl i underdokumentet $(ARG1) p� position $(ARG2)(r�kke,kolonne)";
         TEXT[ swedish ] = "Det har uppt�ckts ett formatfel i filen:  deldokument $(ARG1), position $(ARG2)(rad,kolumn)";
         TEXT[ polish ] = "Wykryto b��d formatowania w pliku dokumentu podrz�dnego $(ARG1) na pozycji $(ARG2) (wiersz, kolumna)";
         TEXT[ portuguese_brazilian ] = "Foi descoberto um erro de formato no arquivo do sub-documento $(ARG1) em $(ARG2)(lin,col)";
@@ -656,6 +690,8 @@ Resource RID_SW_ERRHDL
         TEXT[ hebrew ] = "Formatfehler in Teildokument $(ARG1) an Position $(ARG2)(Zeile,Spalte) in der Datei entdeckt";
         TEXT[ hindi ] = "फाइल में अधीन-लेखपत्र $(ARG1) में $(ARG2)(पंक्ति,स्तंभ) में रचना में गलती है";
         TEXT[ slovak ] = "Chybný formát súboru v sub-dokumente $(ARG1) na pozícii $(ARG2)(riadok, stĺpec)";
+        TEXT[ hungarian ] = "Aldokumentumbeli ( $(ARG1) ) fájlformátum-hiba a következő (sor, oszlop) helyen: $(ARG2)";
+        TEXT[ slovenian ] = "Napaka v obliki datoteke v poddokumentu $(ARG1) na $(ARG2)(vrs,sto)";
     };
      // Export-Errors
     String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_SWG_WRITE_ERROR )
@@ -689,6 +725,8 @@ Resource RID_SW_ERRHDL
         TEXT[ hebrew ] = "Fehler beim Schreiben der Datei";
         TEXT[ hindi ] = "फाइल में लिखने के समय गलती ";
         TEXT[ slovak ] = "Chyba pri zápise súboru ";
+        TEXT[ hungarian ] = "Hiba a fájl írása során";
+        TEXT[ slovenian ] = "Napaka pri pisanju datoteke";
     };
     String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_SWG_OLD_GLOSSARY )
     {
@@ -720,12 +758,14 @@ Resource RID_SW_ERRHDL
         Text[ hebrew ] = "Das Autotextdokument hat falsche Version";
         Text[ hindi ] = "गलत स्वचालित टेक्स्ट् लेखपत्र आवर्तन";
         Text[ slovak ] = "Zlá verzia AutoText dokumentu";
+        Text[ hungarian ] = "Hibás szöveg-o-mata-dokumentumverzió";
+        Text[ slovenian ] = "Napačna različica dokumenta s samobesedilom";
     };
     String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_SWG_CANNOT_WRITE )
     {
         TEXT = "Das Dokument kann nicht angelegt werden" ;
         TEXT [ English ] = "The document cannot be created" ;
-        Text [ dutch ] = "Het document kan niet worden gemaakt" ;
+        Text [ dutch ] = "Het document kan niet worden aangemaakt" ;
         Text [ english_us ] = "The document cannot be created" ;
         Text [ italian ] = "Non � possibile creare il documento" ;
         Text [ spanish ] = "No se puede crear el documento" ;
@@ -751,6 +791,8 @@ Resource RID_SW_ERRHDL
         Text[ hebrew ] = "Das Dokument kann nicht angelegt werden";
         Text[ hindi ] = "लेखपत्र को उत्पन्न नहीं कर सकते है";
         Text[ slovak ] = "Dokument nemôže byť vytvorený";
+        Text[ hungarian ] = "A dokumentumot nem lehet létrehozni";
+        Text[ slovenian ] = "Dokumenta ni mogoče ustvariti";
     };
     String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_W4W_READ_TMP_ERROR )
     {
@@ -783,6 +825,8 @@ Resource RID_SW_ERRHDL
         TEXT[ hebrew ] = "Fehler beim Lesen der Temporärdatei";
         TEXT[ hindi ] = "अस्थायी फाइल को पढ़ने के समय गलती";
         TEXT[ slovak ] = "Chyba pri čítaní­ dočasného súboru";
+        TEXT[ hungarian ] = "Hiba az ideiglenes fájl olvasása közben.";
+        TEXT[ slovenian ] = "Napaka pri branju začasne datoteke";
     };
     String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_SWG_LARGE_DOC_ERROR )
     {
@@ -814,6 +858,8 @@ Resource RID_SW_ERRHDL
         Text[ hebrew ] = "Das Dokument überschreitet die mögliche 3.1/4.0-Textdokument-Größe";
         Text[ hindi ] = "लेखपत्र का परिमाण स्वीकृत 3.1/4.0 टेक्स्ट् लेखपत्र परिमाण से अधिक है";
         Text[ slovak ] = "Dokument prekračuje povolenú veľkosť textového dokumentu 3.1/4.0";
+        Text[ hungarian ] = "A dokumentum túllépi a 3.1 és 4.0 verziókban megengedett méretet.";
+        Text[ slovenian ] = "Velikost dokumenta presega dovoljeno velikost za dokumente z besedilom, ki je 3.1/4.0";
     };
     String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_WRITE_ERROR_FILE )
     {
@@ -844,6 +890,8 @@ Resource RID_SW_ERRHDL
         TEXT[ hebrew ] = "Fehler beim Schreiben des Teildokuments $(ARG1)";
         TEXT[ hindi ] = "अधीन-लेखपत्र $(ARG1) में लिखने के समय गलती";
         TEXT[ slovak ] = "Chyba pri zápise sub-dokumentu $(ARG1)";
+        TEXT[ hungarian ] = "Hiba az aldokumentum írásakor: $(ARG1)";
+        TEXT[ slovenian ] = "Napaka pri pisanju poddokumenta $(ARG1)";
     };
      // Import-/Export-Errors
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_SWG_INTERNAL_ERROR )
@@ -877,6 +925,8 @@ Resource RID_SW_ERRHDL
         TEXT[ hebrew ] = "Interner Fehler im %PRODUCTNAME Writer Dateiformat";
         TEXT[ hindi ] = "%PRODUCTNAME Writer फाइल रचना में भीतरी गलती";
         TEXT[ slovak ] = "Interná chyba vo formáte súboru %PRODUCTNAME Writer";
+        TEXT[ hungarian ] = "Belső hiba az %PRODUCTNAME Writer fájlformátumában";
+        TEXT[ slovenian ] = "Notranja napaka v obliki datoteke programa %PRODUCTNAME Writer";
     };
     String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_SWG_INTERNAL_ERROR )
     {
@@ -909,6 +959,8 @@ Resource RID_SW_ERRHDL
         TEXT[ hebrew ] = "Interner Fehler im %PRODUCTNAME Writer Dateiformat";
         TEXT[ hindi ] = "%PRODUCTNAME लेखक फाइल रचना में भीतरी गलती";
         TEXT[ slovak ] = "Interná chyba vo formáte súboru %PRODUCTNAME Writer";
+        TEXT[ hungarian ] = "Belső hiba az %PRODUCTNAME Writer fájlformátumban.";
+        TEXT[ slovenian ] = "Notranja napaka v obliki datoteke programa %PRODUCTNAME Writer";
     };
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_W4W_MEM )
     {
@@ -919,7 +971,7 @@ Resource RID_SW_ERRHDL
         TEXT [ portuguese_brazilian ] = "Mem�ria insuficiente" ;
         TEXT [ portuguese ] = "Mem�ria insuficiente" ;
         TEXT [ finnish ] = "Muisti ei riit�" ;
-        TEXT [ danish ] = "Ikke nok hukommelse" ;
+        TEXT [ danish ] = "Ikke tilstr�kkelig hukommelse" ;
         TEXT [ french ] = "M�moire insuffisante !" ;
         TEXT [ swedish ] = "Inte tillr�ckligt med minne" ;
         TEXT [ dutch ] = "Onvoldoende geheugen beschikbaar" ;
@@ -941,6 +993,8 @@ Resource RID_SW_ERRHDL
         TEXT[ hebrew ] = "Nicht genügend Speicher vorhanden";
         TEXT[ hindi ] = "अपर्याप्त मेमरी";
         TEXT[ slovak ] = "Nedostatok pamäti";
+        TEXT[ hungarian ] = "Kevés a memória";
+        TEXT[ slovenian ] = "Na voljo ni dovolj pomnilnika";
     };
     String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_W4W_MEM )
     {
@@ -951,7 +1005,7 @@ Resource RID_SW_ERRHDL
         TEXT [ portuguese_brazilian ] = "Mem�ria insuficiente" ;
         TEXT [ portuguese ] = "Mem�ria insuficiente" ;
         TEXT [ finnish ] = "Muisti ei riit�" ;
-        TEXT [ danish ] = "Ikke nok hukommelse" ;
+        TEXT [ danish ] = "Ikke tilstr�kkelig hukommelse" ;
         TEXT [ french ] = "M�moire insuffisante !" ;
         TEXT [ swedish ] = "Inte tillr�ckligt med minne" ;
         TEXT [ dutch ] = "Onvoldoende geheugen beschikbaar" ;
@@ -973,6 +1027,8 @@ Resource RID_SW_ERRHDL
         TEXT[ hebrew ] = "Nicht genügend Speicher vorhanden";
         TEXT[ hindi ] = "अपर्याप्त मेमरी";
         TEXT[ slovak ] = "Nedostatok pamäti";
+        TEXT[ hungarian ] = "Kevés a memória";
+        TEXT[ slovenian ] = "Na voljo ni dovolj pomnilnika";
     };
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_W4W_WRITE_FULL )
     {
@@ -983,7 +1039,7 @@ Resource RID_SW_ERRHDL
         TEXT [ portuguese_brazilian ] = "Espa�o em disco insuficiente" ;
         TEXT [ portuguese ] = "Espa�o do disco insuficiente" ;
         TEXT [ finnish ] = "Levytila ei riit�" ;
-        TEXT [ danish ] = "Ikke tilstr�kkelig diskplads" ;
+        TEXT [ danish ] = "Ikke tilstr�kkelig ledig diskplads" ;
         TEXT [ french ] = "Espace insuffisant sur le disque" ;
         TEXT [ swedish ] = "Inte tillr�ckligt med diskutrymme" ;
         TEXT [ dutch ] = "Onvoldoende vrije ruimte op opslagmedium" ;
@@ -1005,6 +1061,8 @@ Resource RID_SW_ERRHDL
         TEXT[ hebrew ] = "Nicht genügend Platz auf dem Speichermedium";
         TEXT[ hindi ] = "डिस्क् में जगह अपर्याप्त है";
         TEXT[ slovak ] = "Nedostatok miesta na disku";
+        TEXT[ hungarian ] = "Nincs elég lemezterület.";
+        TEXT[ slovenian ] = "Ni dovolj prostora na disku";
     };
     String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_W4W_WRITE_FULL )
     {
@@ -1015,7 +1073,7 @@ Resource RID_SW_ERRHDL
         TEXT [ portuguese_brazilian ] = "Espa�o em disco insuficiente" ;
         TEXT [ portuguese ] = "Espa�o do disco insuficiente" ;
         TEXT [ finnish ] = "Levytila ei riit�." ;
-        TEXT [ danish ] = "Ikke tilstr�kkelig diskplads" ;
+        TEXT [ danish ] = "Ikke tilstr�kkelig ledig diskplads" ;
         TEXT [ french ] = "Espace insuffisant sur le disque" ;
         TEXT [ swedish ] = "Inte tillr�ckligt med diskutrymme" ;
         TEXT [ dutch ] = "Onvoldoende vrije ruimte op opslagmedium" ;
@@ -1037,6 +1095,8 @@ Resource RID_SW_ERRHDL
         TEXT[ hebrew ] = "Nicht genügend Platz auf dem Speichermedium";
         TEXT[ hindi ] = "डिस्क् में जगह अपर्याप्त है";
         TEXT[ slovak ] = "Nedostatok miesta na disku";
+        TEXT[ hungarian ] = "Nincs elég lemezterület.";
+        TEXT[ slovenian ] = "Ni dovolj prostora na disku";
     };
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_W4W_INTERNAL_ERROR )
     {
@@ -1047,7 +1107,7 @@ Resource RID_SW_ERRHDL
         TEXT [ portuguese_brazilian ] = "Ocorreu um erro desconhecido no filtro W4W" ;
         TEXT [ portuguese ] = "Erro desconhecido no filtro W4W" ;
         TEXT [ finnish ] = "Tuntematon virhe W4W-suodattimessa" ;
-        TEXT [ danish ] = "Intern fejl i W4W-filtret" ;
+        TEXT [ danish ] = "Ukendt fejl i W4W-filtret" ;
         TEXT [ french ] = "Erreur inconnue du filtre W4W" ;
         TEXT [ swedish ] = "Obekant fel i W4W-filter" ;
         TEXT [ dutch ] = "Onbekende fout in W4W-filter" ;
@@ -1069,6 +1129,8 @@ Resource RID_SW_ERRHDL
         TEXT[ hebrew ] = "Unbekannter Fehler im W4W-Filter";
         TEXT[ hindi ] = "W4W फिल्टर में अज्ञात गलती";
         TEXT[ slovak ] = "Neznáma chyba vo filtri W4W";
+        TEXT[ hungarian ] = "Ismeretlen hiba a W4W szűrőben.";
+        TEXT[ slovenian ] = "Neznana napaka v filtru W4W";
     };
     String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_W4W_INTERNAL_ERROR )
     {
@@ -1079,7 +1141,7 @@ Resource RID_SW_ERRHDL
         TEXT [ portuguese_brazilian ] = "Ocorreu um erro desconhecido no filtro W4W" ;
         TEXT [ portuguese ] = "Erro desconhecido no filtro W4W" ;
         TEXT [ finnish ] = "Tuntematon virhe W4W-suodattimessa" ;
-        TEXT [ danish ] = "Intern fejl i W4W-filtret" ;
+        TEXT [ danish ] = "Ukendt fejl i W4W-filtret" ;
         TEXT [ french ] = "Erreur inconnue dans le filtre W4W" ;
         TEXT [ swedish ] = "Obekant fel i W4W-filter" ;
         TEXT [ dutch ] = "Onbekende fout in W4W-filter" ;
@@ -1101,6 +1163,8 @@ Resource RID_SW_ERRHDL
         TEXT[ hebrew ] = "Unbekannter Fehler im W4W-Filter";
         TEXT[ hindi ] = "W4W फिल्टर में अज्ञात गलती";
         TEXT[ slovak ] = "Neznáma chyba vo filtri W4W";
+        TEXT[ hungarian ] = "Ismeretlen hiba a W4W szűrőben.";
+        TEXT[ slovenian ] = "Neznana napaka v filtru W4W";
     };
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_W4W_DLL_ERROR )
     {
@@ -1133,6 +1197,8 @@ Resource RID_SW_ERRHDL
         TEXT[ hebrew ] = "Fehler beim Laden des Konverters";
         TEXT[ hindi ] = "कनवर्टर को लोड़ करने के समय गलती";
         TEXT[ slovak ] = "Chyba pri načítaní­ konvertoru";
+        TEXT[ hungarian ] = "Hiba az átalakító betöltésekor";
+        TEXT[ slovenian ] = "Napaka pri nalaganju pretvornika";
     };
     String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_W4W_DLL_ERROR )
     {
@@ -1165,6 +1231,8 @@ Resource RID_SW_ERRHDL
         TEXT[ hebrew ] = "Fehler beim Laden des Konverters";
         TEXT[ hindi ] = "कनवर्टर को लोड़ करने के समय गलती";
         TEXT[ slovak ] = "Chyba pri načítaní­ konvertoru";
+        TEXT[ hungarian ] = "Hiba az átalakító betöltésekor";
+        TEXT[ slovenian ] = "Napaka pri nalaganju pretvornika";
     };
     String ERR_CODE ( ERRCODE_CLASS_LOCKING , ERR_TXTBLOCK_NEWFILE_ERROR )
     {
@@ -1196,6 +1264,8 @@ Resource RID_SW_ERRHDL
         Text[ hebrew ] = "$(ARG1) hat sich geändert";
         Text[ hindi ] = "$(ARG1) को परिवर्तन किया है";
         Text[ slovak ] = "$(ARG1) bol zmenený";
+        Text[ hungarian ] = "Változás: $(ARG1)";
+        Text[ slovenian ] = "$(ARG1) se je spremenil";
     };
     String ERR_CODE ( ERRCODE_CLASS_PATH , ERR_AUTOPATH_ERROR )
     {
@@ -1207,7 +1277,7 @@ Resource RID_SW_ERRHDL
         Text [ spanish ] = "$(ARG1) no existe" ;
         Text [ french ] = "$(ARG1) n'existe pas." ;
         Text [ swedish ] = "$(ARG1) existerar inte" ;
-        Text [ danish ] = "$(ARG1) eksisterer ikke" ;
+        Text [ danish ] = "$(ARG1) findes ikke" ;
         Text [ portuguese ] = "$(ARG1) n�o existe" ;
         Text [ portuguese_brazilian ] = "$(ARG1) n�o existe" ;
         Text[ chinese_simplified ] = "$(ARG1) 不存在";
@@ -1227,6 +1297,8 @@ Resource RID_SW_ERRHDL
         Text[ hebrew ] = "$(ARG1) existiert nicht";
         Text[ hindi ] = "$(ARG1) अस्तित्व में नहीं है";
         Text[ slovak ] = "$(ARG1) neexistuje";
+        Text[ hungarian ] = "Nem létezik: $(ARG1)";
+        Text[ slovenian ] = "$(ARG1) ne obstaja";
     };
     String ERR_CODE ( ERRCODE_CLASS_NONE , ERR_TBLSPLIT_ERROR )
     {
@@ -1259,6 +1331,8 @@ Resource RID_SW_ERRHDL
         Text[ hebrew ] = "Zellen können nicht mehr geteilt werden";
         Text[ hindi ] = "कोष्ठों को और आलगाना असंभव है";
         Text[ slovak ] = "Bunky už ďalej nie je možné deliť";
+        Text[ hungarian ] = "A cellák további felosztása nem lehetséges.";
+        Text[ slovenian ] = "Celic ni mogoče več deliti";
     };
     String ERR_CODE ( ERRCODE_CLASS_NONE , ERR_TBLINSCOL_ERROR )
     {
@@ -1291,6 +1365,8 @@ Resource RID_SW_ERRHDL
         Text[ hebrew ] = "weitere Spalten können nicht eingefügt werden";
         Text[ hindi ] = "अधिकतर स्तंभों को नहीं जोड़ सकते है";
         Text[ slovak ] = "Nie je možné pridať ďalšie stĺpce";
+        Text[ hungarian ] = "Nem lehet további oszlopokat beszúrni";
+        Text[ slovenian ] = "Dodatnih stolpcev ni mogoče vstaviti";
     };
     String ERR_CODE ( ERRCODE_CLASS_NONE , ERR_TBLDDECHG_ERROR )
     {
@@ -1322,6 +1398,8 @@ Resource RID_SW_ERRHDL
         Text[ hebrew ] = "Bei einer verknüpften Tabelle darf die Struktur nicht verändert werden";
         Text[ hindi ] = "लिंक किया हुआ सारणी का बनावट को नहीं सुधार सकते है";
         Text[ slovak ] = "Štruktúru prepojených tabuliek nemožno zmeniť";
+        Text[ hungarian ] = "Hivatkozásban szereplő tábla szerkezete nem módosítható";
+        Text[ slovenian ] = "Zgradbe povezane tabele ni mogoče spreminjati";
     };
      // -------------------- Warnings -----------------------------------
     String WARN_CODE ( ERRCODE_CLASS_READ , WARN_SWG_NO_DRAWINGS )
@@ -1354,6 +1432,8 @@ Resource RID_SW_ERRHDL
         Text[ hebrew ] = "Es konnten keine Zeichnungen geladen werden";
         Text[ hindi ] = "कोई रेखाचित्र को नहीं पढ़ सकते है";
         Text[ slovak ] = "Nie je možné načítať kresby";
+        Text[ hungarian ] = "Nem található beolvasható rajz.";
+        Text[ slovenian ] = "Risb ni bilo mogoče prebrati";
     };
     String WARN_CODE ( ERRCODE_CLASS_READ , WARN_WW6_FASTSAVE_ERR )
     {
@@ -1390,6 +1470,8 @@ Resource RID_SW_ERRHDL
         TEXT[ hebrew ] = "Diese Datei wurde mit der WinWord-Option 'Schnellspeichern' gespeichert. Bitte schalten Sie in WinWord die Option 'Schnellspeichern zulassen' aus und speichern sie die Datei erneut mit WinWord";
         TEXT[ hindi ] = "इस फाइल को WinWord में 'शीघ्र संचित करो' प्रकार में  संचित किया है । कृपया 'शीघ्र संचित करना स्वीकृत' विकल्प को हटाओ और फाइल को फिर से संचित करो ।";
         TEXT[ slovak ] = "Tento súbor bol uložený programom WinWord v režime 'Rýchle ukladanie'. Vypnite prosím voľbu 'Povoliť rýchle ukladanie' a uložte súbor znovu.";
+        TEXT[ hungarian ] = " Ez a fájl a WinWord 'Gyors mentés' funkciójával készült. Kapcsolja ki a 'Gyors mentések engedélyezése' funkciót, majd mentse ismét a dokumentumot.";
+        TEXT[ slovenian ] = "Datoteka je bila shranjena v programu WinWord v načinu 'Hitro shranjevanje'. Počistite možnost 'Dopusti hitro shranjevanje' za program WinWord in znova shranite datoteko.";
     };
     String WARN_CODE ( ERRCODE_CLASS_READ , WARN_SWG_FEATURES_LOST )
     {
@@ -1421,6 +1503,8 @@ Resource RID_SW_ERRHDL
         Text[ hebrew ] = "Es konnten nicht alle Attribute gelesen werden";
         Text[ hindi ] = "सब ऐट्रिब्यूटों को नहीं पढ़ सकते है";
         Text[ slovak ] = "Nie je možné načítať všetky atribúty";
+        Text[ hungarian ] = "Nem lehetett minden jellemzőt beolvasni";
+        Text[ slovenian ] = "Vseh atributov ni bilo mogoče prebrati";
     };
     String WARN_CODE ( ERRCODE_CLASS_WRITE , WARN_SWG_FEATURES_LOST )
     {
@@ -1452,6 +1536,8 @@ Resource RID_SW_ERRHDL
         Text[ hebrew ] = "Es konnten nicht alle Attribute geschrieben werden";
         Text[ hindi ] = "सब ऐट्रिब्यूटों को नहीं रेकोर्ड कर सकते है";
         Text[ slovak ] = "Nie je možné zaznamenať všetky atribúty";
+        Text[ hungarian ] = "Nem lehetett minden attribútumot rögzíteni";
+        Text[ slovenian ] = "Vseh atributov ni bilo mogoče zapisati";
     };
     String WARN_CODE ( ERRCODE_CLASS_READ , WARN_SWG_OLE )
     {
@@ -1464,7 +1550,7 @@ Resource RID_SW_ERRHDL
         Text [ spanish ] = "Algunos objetos OLE se pudieron incluir s�lo como im�genes" ;
         Text [ french ] = "Certains objets OLE ont pu �tre charg�s uniquement sous forme d'images" ;
         Text [ swedish ] = "N�gra OLE-objekt kunde bara �vertas som grafik" ;
-        Text [ danish ] = "Nogle OLE-objekter kunne kun overtages som grafik" ;
+        Text [ danish ] = "Nogle OLE-objekter kunne kun indl�ses som grafik" ;
         Text [ portuguese ] = "Alguns dos objectos OLE puderam ser apenas carregados como imagens" ;
         Text [ portuguese_brazilian ] = "Alguns objetos OLE s� puderam ser carregados como figuras" ;
         Text[ chinese_simplified ] = "一些 OLE 对象只能以图像方式装入";
@@ -1484,6 +1570,8 @@ Resource RID_SW_ERRHDL
         Text[ hebrew ] = "Einige OLE-Objekte konnten nur als Grafiken übernommen werden";
         Text[ hindi ] = "कुछ OLE वस्तुओं को केवल सुचित्र जैसे लोड़ कर सकते है";
         Text[ slovak ] = "Niektoré OLE objekty bolo možné načítať len ako obrázky";
+        Text[ hungarian ] = "Egyes OLE-objektumok betöltése csak képként megoldható.";
+        Text[ slovenian ] = "Nekatere OLE predmete je mogoče naložiti samo kot grafike";
     };
     String WARN_CODE ( ERRCODE_CLASS_WRITE , WARN_SWG_OLE )
     {
@@ -1496,7 +1584,7 @@ Resource RID_SW_ERRHDL
         Text [ french ] = "Certains objets OLE ont pu �tre charg�s uniquement sous forme d'images" ;
         Text [ dutch ] = "Enkele OLE-objecten kunnen alleen als grafische objecten worden overgenomen" ;
         Text [ swedish ] = "N�gra OLE-objekt kunde bara �vertas som grafik" ;
-        Text [ danish ] = "Nogle OLE-objekter kunne kun overtages som grafik" ;
+        Text [ danish ] = "Nogle OLE-objekter kunne kun indl�ses som grafik" ;
         Text [ portuguese ] = "Alguns dos objectos OLE foram carregados apenas como imagens" ;
         Text [ portuguese_brazilian ] = "Alguns objetos OLE s� puderam ser salvos como figuras" ;
         Text[ chinese_simplified ] = "一些 OLE 对象无法被存盘为图形";
@@ -1516,6 +1604,8 @@ Resource RID_SW_ERRHDL
         Text[ hebrew ] = "Einige OLE-Objekte konnten nur als Grafiken übernommen werden";
         Text[ hindi ] = "कुछ OLE वस्तुओं को केवल सुचित्र जैसे संचित कर सकते है";
         Text[ slovak ] = "Niektoré OLE objekty možno uložiť len ako obrázky";
+        Text[ hungarian ] = "Egyes OLE-objektumok mentése csak képként megoldható.";
+        Text[ slovenian ] = "Nekatere OLE predmete je mogoče shraniti samo kot grafike";
     };
     String WARN_CODE ( ERRCODE_CLASS_READ , WARN_SWG_POOR_LOAD )
     {
@@ -1548,6 +1638,8 @@ Resource RID_SW_ERRHDL
         Text[ hebrew ] = "Dokument konnte nicht vollständig geladen werden";
         Text[ hindi ] = "लेखपत्र को संपूर्ण लोड़ नहीं कर सकते है";
         Text[ slovak ] = "Nie je možné načítať celý dokument";
+        Text[ hungarian ] = "A dokumentumot nem sikerült teljesen betölteni.";
+        Text[ slovenian ] = "Dokumenta ni bilo mogoče v celoti naložiti";
     };
     String WARN_CODE ( ERRCODE_CLASS_WRITE , WARN_SWG_POOR_LOAD )
     {
@@ -1580,6 +1672,8 @@ Resource RID_SW_ERRHDL
         Text[ hebrew ] = "Dokument konnte nicht vollständig gespeichert werden";
         Text[ hindi ] = "लेखपत्र को संपूर्ण संचित नहीं कर सकते है";
         Text[ slovak ] = "Nie je možné uložiť celý dokument";
+        Text[ hungarian ] = "A dokumentum mentése félbeszakadt";
+        Text[ slovenian ] = "Dokumenta ni bilo mogoče v celoti shraniti";
     };
     String WARN_CODE ( ERRCODE_CLASS_WRITE , WARN_SWG_HTML_NO_MACROS)
     {
@@ -1593,7 +1687,7 @@ Resource RID_SW_ERRHDL
         Text[ french ] = "Le document HTML contient des macros %PRODUCTNAME Basic.\nCelles-ci n'ont pas �t� enregistr�es avec les param�tres d'export actifs.";
         Text[ spanish ] = "El documento HTML contiene macros %PRODUCTNAME Basic.\nNo se guardaron con la configuraci�n actual de exportaci�n.";
         Text[ italian ] = "Il documento HTML contiene macro %PRODUCTNAME Basic che\nnon sono state salvate con le impostazioni attuali di esportazione.";
-        Text[ danish ] = "HTML-dokumentet indeholder %PRODUCTNAME Basic-makroer.\nDe er ikke gemt med de aktuelle eksportindstillinger.";
+        Text[ danish ] = "HTML-dokumentet indeholder %PRODUCTNAME Basic-makroer.\nDe er ikke gemt med de nuv�rende eksportindstillinger.";
         Text[ swedish ] = "HTML-dokumentet inneh�ller %PRODUCTNAME Basic-makron.\nDe sparades inte med de aktuella exportinst�llningarna.";
         Text[ polish ] = "Ten dokument HTML zawiera makra %PRODUCTNAME Basic.\nPrzy bie��cych ustawieniach eksportu makra te nie zosta�y zapisane.";
         Text[ portuguese_brazilian ] = "Este documento HTML cont�m macros %PRODUCTNAME Basic.\nElas n�o foram salvas com as defini��es atuais de exporta��o";
@@ -1611,6 +1705,8 @@ Resource RID_SW_ERRHDL
         Text[ hebrew ] = "Das HTML-Dokument enthält %PRODUCTNAME Basic Makros.\nSie wurden mit den aktuellen Exporteinstellungen nicht gespeichert.";
         Text[ hindi ] = "इस HTML लेखपत्र में %PRODUCTNAME Basic मॉक्रोस है ।\nउनको वर्तमान निर्यात निर्धारण द्वारा संचित नहीं किया है ।";
         Text[ slovak ] = "Tento HTML dokument obsahuje makrá  %PRODUCTNAME Basic.\nPodľa aktuálneho nastavenia neboli uložené.";
+        Text[ hungarian ] = "Ez a HTML-dokumentum %PRODUCTNAME Basic-makrókat tartalmaz.\nAz aktuális exportbeállítások mellett a makrók nem lesznek mentve.";
+        Text[ slovenian ] = "Ta HTML dokument vsebuje makre programa %PRODUCTNAME Basic.\nLe-ti niso bili shranjeni s trenutnimi nastavitvami izvoza.";
     };
     String ERR_CODE ( ERRCODE_CLASS_WRITE , WARN_WRITE_ERROR_FILE )
     {
@@ -1641,6 +1737,8 @@ Resource RID_SW_ERRHDL
         TEXT[ hebrew ] = "Fehler beim Schreiben des Teildokuments $(ARG1)";
         TEXT[ hindi ] = "अधीन-लेखपत्र $(ARG1) में लिखने के समय गलती";
         TEXT[ slovak ] = "Chyba pri zápise sub-dokumentu $(ARG1)";
+        TEXT[ hungarian ] = "Hiba történt a következő aldokumentum írásakor: $(ARG1)";
+        TEXT[ slovenian ] = "Napaka pri pisanju poddokumenta $(ARG1)";
     };
     String ERR_CODE ( ERRCODE_CLASS_WRITE , WARN_FORMAT_FILE_ROWCOL )
     {
@@ -1654,7 +1752,7 @@ Resource RID_SW_ERRHDL
         TEXT[ french ] = "Erreur de format dans le sous-document $(ARG1), position $(ARG2)(ligne,colonne), du fichier.";
         TEXT[ spanish ] = "En el documento parcial $(ARG1) del archivo existe un error de formato en la posici�n $(ARG2)(fila,columna)";
         TEXT[ italian ] = "Errore di formato nel sottodocumento $(ARG1) del file nel punto $(ARG2)(riga,colonna)";
-        TEXT[ danish ] = "Der er konstateret formatfejl i underdokumentet $(ARG1) p� position $(ARG2)(linje,kolonne) i filen";
+        TEXT[ danish ] = "Der er fundet formatfejl i underdokumentet $(ARG1) p� position $(ARG2)(r�kke,kolonne)";
         TEXT[ swedish ] = "Det har uppt�ckts ett formatfel i filen: deldokument $(ARG1), position $(ARG2)(rad,kolumn)";
         TEXT[ polish ] = "Wykryto b��d formatowania w pliku dokumentu podrz�dnego $(ARG1) na pozycji $(ARG2) (wiersz, kolumna)";
         TEXT[ portuguese_brazilian ] = "Foi descoberto um erro no formato do arquivo do sub-documento $(ARG1) em $(ARG2)(lin,col)";
@@ -1671,6 +1769,8 @@ Resource RID_SW_ERRHDL
         TEXT[ hebrew ] = "Formatfehler in Teildokument $(ARG1) an Position $(ARG2)(Zeile,Spalte) in der Datei entdeckt";
         TEXT[ hindi ] = "फाइल में अधीन-लेखपत्र $(ARG1) में $(ARG2)(पंक्ति,स्तंभ) में रचना में गलती है";
         TEXT[ slovak ] = "Chybný formát súboru v sub-dokumente $(ARG1) na pozícii $(ARG2)(riadok,stĺpec)";
+        TEXT[ hungarian ] = "Formátumhiba a következő aldokumentumban: $(ARG1) a $(ARG2) (sor, oszlop) pozícióban";
+        TEXT[ slovenian ] = "Napaka v obliki datoteke v poddokumentu $(ARG1) na $(ARG2)(vrs,sto)";
     };
     String ERR_CODE ( ERRCODE_CLASS_WRITE , WARN_UNCONVERTABLE_CHARS )
     {
@@ -1701,8 +1801,19 @@ Resource RID_SW_ERRHDL
         TEXT[ hebrew ] = "Die folgenden Zeichen konnten nicht im gewählten Zeichsatz dargestellt werden: $(ARG1)";
         TEXT[ hindi ] = "चुने हुए अक्षर समूह में निम्नलिखित अक्षरों को नहीं दिखा सकते है: $(ARG1)";
         TEXT[ slovak ] = "V zvolenej znakovej sade nemožno zobraziť nasledujúce znaky:\n$(ARG1)";
+        TEXT[ hungarian ] = "A következő karaktereket nem lehet megjeleníteni a kiválasztott karakterkészlettel:\n$(ARG1)";
+        TEXT[ slovenian ] = "Naslednjih znakov ni bilo mogoče prikazati v izbranem nabiru znakov:\n $(ARG1)";
     };
 };
+
+
+
+
+
+
+
+
+
 
 
 
