@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Reference.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:57:54 $
+ *  last change: $Author: hr $ $Date: 2004-04-14 11:54:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -383,6 +383,30 @@ inline sal_Bool BaseReference::operator == ( XInterface * pInterface ) const SAL
     }
 #endif
 }
+
+//______________________________________________________________________________
+inline sal_Bool BaseReference::operator < (
+    const BaseReference & rRef ) const SAL_THROW( () )
+{
+    if (_pInterface == rRef._pInterface)
+        return sal_False;
+#if ! defined EXCEPTIONS_OFF
+    try
+    {
+#endif
+        // only the query to XInterface must return the same pointer:
+        Reference< XInterface > x1( _pInterface, UNO_QUERY );
+        Reference< XInterface > x2( rRef, UNO_QUERY );
+        return (x1._pInterface < x2._pInterface);
+#if ! defined EXCEPTIONS_OFF
+    }
+    catch (RuntimeException &)
+    {
+        return sal_False;
+    }
+#endif
+}
+
 //__________________________________________________________________________________________________
 inline sal_Bool BaseReference::operator != ( XInterface * pInterface ) const SAL_THROW( () )
 {
