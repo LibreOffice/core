@@ -9,7 +9,7 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="final"/>
-        <supported-service>drafts.com.sun.star.accessibility.AccessibleContext</supported-service>
+        <supported-service>com.sun.star.accessibility.AccessibleContext</supported-service>
     </component-description>
     <component-description>
         <author>Ocke Janssen</author>
@@ -18,7 +18,7 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="final"/>
-        <supported-service>drafts.com.sun.star.accessibility.AccessibleContext</supported-service>
+        <supported-service>com.sun.star.accessibility.AccessibleContext</supported-service>
     </component-description>
     <component-description>
         <author>Ocke Janssen</author>
@@ -27,7 +27,7 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="final"/>
-        <supported-service>drafts.com.sun.star.accessibility.AccessibleContext</supported-service>
+        <supported-service>com.sun.star.accessibility.AccessibleContext</supported-service>
     </component-description>
     <component-description>
         <author>Ocke Janssen</author>
@@ -36,7 +36,7 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="final"/>
-        <supported-service>drafts.com.sun.star.accessibility.AccessibleContext</supported-service>
+        <supported-service>com.sun.star.accessibility.AccessibleContext</supported-service>
     </component-description>
     <component-description>
         <author>Ocke Janssen</author>
@@ -45,7 +45,7 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="final"/>
-        <supported-service>drafts.com.sun.star.accessibility.AccessibleContext</supported-service>
+        <supported-service>com.sun.star.accessibility.AccessibleContext</supported-service>
     </component-description>
     <component-description>
         <author>Ocke Janssen</author>
@@ -54,7 +54,7 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="final"/>
-        <supported-service>drafts.com.sun.star.accessibility.AccessibleContext</supported-service>
+        <supported-service>com.sun.star.accessibility.AccessibleContext</supported-service>
     </component-description>
     <component-description>
         <author>Hans-Peter Burow</author>
@@ -63,7 +63,7 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="final"/>
-        <supported-service>drafts.com.sun.star.awt.AccessibleTreeListBox</supported-service>
+        <supported-service>com.sun.star.awt.AccessibleTreeListBox</supported-service>
     </component-description>
     <component-description>
         <author>Hans-Peter Burow</author>
@@ -72,7 +72,7 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="final"/>
-        <supported-service>drafts.com.sun.star.awt.AccessibleTreeListBoxEntry</supported-service>
+        <supported-service>com.sun.star.awt.AccessibleTreeListBoxEntry</supported-service>
     </component-description>
     <component-description>
         <author>Hans-Peter Burow</author>
@@ -81,7 +81,7 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="final"/>
-        <supported-service>drafts.com.sun.star.awt.AccessibleIconChoiceControl</supported-service>
+        <supported-service>com.sun.star.awt.AccessibleIconChoiceControl</supported-service>
     </component-description>
     <component-description>
         <author>Hans-Peter Burow</author>
@@ -90,7 +90,7 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="final"/>
-        <supported-service>drafts.com.sun.star.awt.AccessibleIconChoiceControlEntry</supported-service>
+        <supported-service>com.sun.star.awt.AccessibleIconChoiceControlEntry</supported-service>
     </component-description>
     <component-description>
         <author>Thomas Benisch</author>
@@ -99,7 +99,7 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="beta"/>
-        <supported-service>drafts.com.sun.star.awt.AccessibleTabBar</supported-service>
+        <supported-service>com.sun.star.awt.AccessibleTabBar</supported-service>
     </component-description>
     <component-description>
         <author>Thomas Benisch</author>
@@ -108,7 +108,7 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="beta"/>
-        <supported-service>drafts.com.sun.star.awt.AccessibleTabBarPage</supported-service>
+        <supported-service>com.sun.star.awt.AccessibleTabBarPage</supported-service>
     </component-description>
     <component-description>
         <author>Thomas Benisch</author>
@@ -117,6 +117,6 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="beta"/>
-        <supported-service>drafts.com.sun.star.awt.AccessibleTabBarPageList</supported-service>
+        <supported-service>com.sun.star.awt.AccessibleTabBarPageList</supported-service>
     </component-description>
 </module-description>
