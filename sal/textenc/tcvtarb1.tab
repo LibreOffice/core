@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tcvtarb1.tab,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:28 $
+ *  last change: $Author: th $ $Date: 2001-07-16 11:04:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -271,8 +271,9 @@ static ImplTextEncodingData const aImplIBM862TextEncodingData =
     862,
     5,
     (const sal_Char*)"iso8859-8",
-    (const sal_Char*)"iso-8859-8",
+    (const sal_Char*)"DOS-862",
     RTL_TEXTENCODING_INFO_ASCII |
+    RTL_TEXTENCODING_INFO_MIME |
     RTL_TEXTENCODING_INFO_R2L |
     RTL_TEXTENCODING_INFO_DOS_OS2,
     SCRIPT_HEBREW
@@ -620,8 +621,9 @@ static ImplTextEncodingData const aImplMS1255TextEncodingData =
     862,
     5,
     (const sal_Char*)"iso8859-8",
-    (const sal_Char*)"iso-8859-8",
+    (const sal_Char*)"windows-1255",
     RTL_TEXTENCODING_INFO_ASCII |
+    RTL_TEXTENCODING_INFO_MIME |
     RTL_TEXTENCODING_INFO_R2L |
     RTL_TEXTENCODING_INFO_WIN,
     SCRIPT_HEBREW
@@ -810,8 +812,9 @@ static ImplTextEncodingData const aImplMS1256TextEncodingData =
     864,
     4,
     (const sal_Char*)"iso8859-6",
-    (const sal_Char*)"iso-8859-6",
+    (const sal_Char*)"windows-1256",
     RTL_TEXTENCODING_INFO_ASCII |
+    RTL_TEXTENCODING_INFO_MIME |
     RTL_TEXTENCODING_INFO_R2L |
     RTL_TEXTENCODING_INFO_WIN,
     SCRIPT_ARABIC
