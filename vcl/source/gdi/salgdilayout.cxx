@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdilayout.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 11:53:51 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:49:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -278,6 +278,18 @@ BOOL SalGraphics::mirror( sal_uInt32 nPoints, const SalPoint *pPtAry, SalPoint *
         return FALSE;
 }
 
+void SalGraphics::mirror( Region& rRgn, const OutputDevice *pOutDev )
+{
+    // mirror the bounding rect and move Region by resulting offset
+    Rectangle aRect( rRgn.GetBoundRect() );
+    long nWidth = aRect.GetWidth();
+    long x      = aRect.Left();
+    long x_org = x;
+
+    mirror( x, nWidth, pOutDev );
+    rRgn.Move( x - x_org, 0 );
+}
+
 // ----------------------------------------------------------------------------
 
 BOOL    SalGraphics::UnionClipRegion( long nX, long nY, long nWidth, long nHeight, const OutputDevice *pOutDev )
@@ -492,4 +504,70 @@ BOOL    SalGraphics::DrawEPS( long nX, long nY, long nWidth, long nHeight, void*
     if( (m_nLayout & SAL_LAYOUT_BIDI_RTL) )
         mirror( nX, nWidth, pOutDev );
     return drawEPS( nX, nY, nWidth, nHeight,  pPtr, nSize );
+}
+
+BOOL SalGraphics::HitTestNativeControl( ControlType nType, ControlPart nPart, const Region& rControlRegion,
+                                                const Point& aPos, SalControlHandle& rControlHandle, BOOL& rIsInside, const OutputDevice *pOutDev )
+{
+    if( (m_nLayout & SAL_LAYOUT_BIDI_RTL) )
+    {
+        Point pt( aPos );
+        Region rgn( rControlRegion );
+        mirror( pt.X(), pOutDev );
+        mirror( rgn, pOutDev );
+        return hitTestNativeControl( nType, nPart, rgn, pt, rControlHandle, rIsInside );
+    }
+    else
+        return hitTestNativeControl( nType, nPart, rControlRegion, aPos, rControlHandle, rIsInside );
+}
+
+BOOL SalGraphics::DrawNativeControl( ControlType nType, ControlPart nPart, const Region& rControlRegion,
+                                                ControlState nState, const ImplControlValue& aValue, SalControlHandle& rControlHandle,
+                                                OUString aCaption, const OutputDevice *pOutDev )
+{
+    if( (m_nLayout & SAL_LAYOUT_BIDI_RTL) )
+    {
+        Region rgn( rControlRegion );
+        mirror( rgn, pOutDev );
+        return drawNativeControl( nType, nPart, rgn, nState, aValue, rControlHandle, aCaption );
+    }
+    else
+        return drawNativeControl( nType, nPart, rControlRegion, nState, aValue, rControlHandle, aCaption );
+}
+
+BOOL SalGraphics::DrawNativeControlText( ControlType nType, ControlPart nPart, const Region& rControlRegion,
+                                                ControlState nState, const ImplControlValue& aValue,
+                                                SalControlHandle& rControlHandle, OUString aCaption, const OutputDevice *pOutDev )
+{
+    if( (m_nLayout & SAL_LAYOUT_BIDI_RTL) )
+    {
+        Region rgn( rControlRegion );
+        mirror( rgn, pOutDev );
+        return drawNativeControlText( nType, nPart, rgn, nState, aValue, rControlHandle, aCaption );
+    }
+    else
+        return drawNativeControlText( nType, nPart, rControlRegion, nState, aValue, rControlHandle, aCaption );
+}
+
+BOOL SalGraphics::GetNativeControlRegion( ControlType nType, ControlPart nPart, const Region& rControlRegion, ControlState nState,
+                                                const ImplControlValue& aValue, SalControlHandle& rControlHandle, OUString aCaption,
+                                                Region &rNativeBoundingRegion, Region &rNativeContentRegion, const OutputDevice *pOutDev )
+{
+    if( (m_nLayout & SAL_LAYOUT_BIDI_RTL) )
+    {
+        Region rgn( rControlRegion );
+        mirror( rgn, pOutDev );
+        if( getNativeControlRegion( nType, nPart, rgn, nState, aValue, rControlHandle, aCaption,
+                                                rNativeBoundingRegion, rNativeContentRegion ) )
+        {
+            mirror( rNativeBoundingRegion, pOutDev );
+            mirror( rNativeContentRegion, pOutDev );
+            return TRUE;
+        }
+        else
+            return FALSE;
+    }
+    else
+        return getNativeControlRegion( nType, nPart, rControlRegion, nState, aValue, rControlHandle, aCaption,
+                                                rNativeBoundingRegion, rNativeContentRegion );
 }
