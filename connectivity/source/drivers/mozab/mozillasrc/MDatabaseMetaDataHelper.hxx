@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MDatabaseMetaDataHelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dkenny $ $Date: 2001-11-15 10:01:12 $
+ *  last change: $Author: dkenny $ $Date: 2001-12-13 09:34:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,8 @@ namespace connectivity
                                 ODatabaseMetaDataResultSet::ORows& _rRows);
 
             const ::rtl::OUString& getErrorString() { return m_aErrorString; }
+
+            sal_Bool    testLDAPConnection( OConnection* _pCon );
 
         private:
             sal_Bool                            m_bProfileExists ;

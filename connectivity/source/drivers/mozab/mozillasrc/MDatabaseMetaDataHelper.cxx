@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MDatabaseMetaDataHelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dkenny $ $Date: 2001-11-15 10:01:12 $
+ *  last change: $Author: dkenny $ $Date: 2001-12-13 09:34:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,8 +72,25 @@
 #include <connectivity/dbexception.hxx>
 #endif
 
+#ifndef _OSL_MUTEX_HXX_
+#include <osl/mutex.hxx>
+#endif
+#ifndef _OSL_CONDITN_HXX_
+#include <osl/conditn.hxx>
+#endif
+
 #include <MNSInit.hxx>
 #include <MNameMapper.hxx>
+
+// More Mozilla includes for LDAP Connection Test
+#include "prprf.h"
+#include "nsILDAPURL.h"
+#include "nsILDAPMessage.h"
+#include "nsILDAPMessageListener.h"
+#include "nsILDAPErrors.h"
+#include "nsILDAPConnection.h"
+#include "nsILDAPOperation.h"
+
 
 #ifdef DEBUG
 # define OUtoCStr( x ) ( ::rtl::OUStringToOString ( (x), RTL_TEXTENCODING_ASCII_US).getStr())
@@ -456,4 +473,213 @@ sal_Bool MDatabaseMetaDataHelper::getTables( OConnection* _pCon,
     OSL_TRACE( "\tOUT MDatabaseMetaDataHelper::getTables()\n" );
     _rRows = aRows;
     return(sal_True);
+}
+
+//-------------------------------------------------------------------
+
+#define NS_LDAPCONNECTION_CONTRACTID     "@mozilla.org/network/ldap-connection;1"
+#define NS_LDAPOPERATION_CONTRACTID      "@mozilla.org/network/ldap-operation;1"
+#define NS_LDAPMESSAGE_CONTRACTID      "@mozilla.org/network/ldap-message;1"
+#define NS_LDAPURL_CONTRACTID       "@mozilla.org/network/ldap-url;1"
+
+namespace connectivity {
+    namespace mozab {
+        class MLDAPMessageListener : public nsILDAPMessageListener {
+            NS_DECL_ISUPPORTS
+            NS_DECL_NSILDAPMESSAGELISTENER
+
+            MLDAPMessageListener(nsILDAPConnection* _ldapConnection);
+            ~MLDAPMessageListener();
+
+            sal_Bool    connected();
+        protected:
+            nsCOMPtr<nsILDAPConnection> m_LDAPConnection;
+
+            ::osl::Mutex        m_aMutex;
+            ::osl::Condition    m_aCondition;
+
+            sal_Bool    m_IsComplete;
+            sal_Bool    m_GoodConnection;
+
+            void        setConnectionStatus( sal_Bool _good );
+        };
+    }
+}
+
+NS_IMPL_THREADSAFE_ISUPPORTS1(MLDAPMessageListener, nsILDAPMessageListener)
+
+MLDAPMessageListener::MLDAPMessageListener(nsILDAPConnection* _ldapConnection)
+    : mRefCnt( 0 )
+    , m_IsComplete( sal_False )
+    , m_GoodConnection( sal_False )
+    , m_LDAPConnection( _ldapConnection )
+{
+    m_aCondition.reset();
+}
+
+MLDAPMessageListener::~MLDAPMessageListener()
+{
+}
+
+sal_Bool MLDAPMessageListener::connected()
+{
+    TimeValue               timeValue = { 10, 0 };  // 10 Seconds 0 NanoSecond timeout
+    osl::Condition::Result  rv = ::osl::Condition::result_ok;
+
+    // Can't hold mutex or condition would never get set...
+    while( m_aCondition.check() == sal_False || rv  == ::osl::Condition::result_error ) {
+        rv = m_aCondition.wait( &timeValue );
+        if ( rv == ::osl::Condition::result_timeout ) {
+            return sal_False;
+        }
+    }
+
+    return m_GoodConnection;
+}
+
+void MLDAPMessageListener::setConnectionStatus( sal_Bool _good )
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+    m_IsComplete = sal_True;
+    m_GoodConnection = _good;
+
+    m_aCondition.set();
+}
+
+NS_IMETHODIMP MLDAPMessageListener::OnLDAPInit( nsresult aStatus )
+{
+    nsresult rv;
+
+    // Make sure that the Init() worked properly
+    if ( NS_FAILED(aStatus ) ) {
+        setConnectionStatus( sal_False );
+        return aStatus;
+    }
+
+    // Initiate the LDAP operation
+    nsCOMPtr<nsILDAPOperation> ldapOperation =
+        do_CreateInstance(NS_LDAPOPERATION_CONTRACTID, &rv);
+    if ( NS_FAILED( rv ) ) {
+        setConnectionStatus( sal_False );
+        return rv;
+    }
+
+    rv = ldapOperation->Init(m_LDAPConnection, this);
+    if ( NS_FAILED( rv ) ) {
+        setConnectionStatus( sal_False );
+        return rv;
+    }
+
+    // Bind
+    rv = ldapOperation->SimpleBind(NULL);
+    if ( NS_FAILED( rv ) ) {
+        setConnectionStatus( sal_False );
+        return rv;
+    }
+
+    // rv = ldapOperation->Abandon();
+    // NS_ENSURE_SUCCESS(rv, rv);
+
+    return rv;
+}
+
+NS_IMETHODIMP MLDAPMessageListener::OnLDAPMessage( nsILDAPMessage* aMessage )
+{
+    nsresult rv;
+
+    PRInt32 messageType;
+    rv = aMessage->GetType(&messageType);
+    NS_ENSURE_SUCCESS(rv, rv);
+
+    switch (messageType)
+    {
+    case nsILDAPMessage::RES_BIND:
+    case nsILDAPMessage::RES_SEARCH_RESULT:
+        setConnectionStatus( sal_True );
+        break;
+    default:
+        break;
+    }
+
+    return NS_OK;
+}
+
+//-------------------------------------------------------------------
+
+sal_Bool
+MDatabaseMetaDataHelper::testLDAPConnection( OConnection* _pCon )
+{
+    const sal_Unicode QUERY_CHAR = '?';
+    const sal_Char*   MOZ_SCHEMA = "moz-abldapdirectory:";
+    const sal_Char*   LDAP_SCHEMA = "ldap:";
+
+    rtl::OString   sAbURI;
+    nsresult       rv;
+
+    sAbURI = OUStringToOString( _pCon->getMozURI(), RTL_TEXTENCODING_ASCII_US );
+
+
+    sal_Int32 pos = sAbURI.indexOf( MOZ_SCHEMA );
+    if ( pos != -1 ) {
+        sAbURI = sAbURI.replaceAt (pos, strlen( MOZ_SCHEMA ), OString(LDAP_SCHEMA) );
+    }
+
+    pos = sAbURI.indexOf( QUERY_CHAR );
+    if ( pos != -1 ) {
+        sal_Int32 len =  sAbURI.getLength();
+        sAbURI = sAbURI.replaceAt( pos, len - pos, OString("") );
+    }
+
+    nsCOMPtr<nsILDAPURL> url;
+    url = do_CreateInstance(NS_LDAPURL_CONTRACTID, &rv);
+    if ( NS_FAILED(rv) )
+        return sal_False;
+
+    rv = url->SetSpec( sAbURI.getStr() );
+    if ( NS_FAILED(rv) )
+        return sal_False;
+
+    nsXPIDLCString host;
+    rv = url->GetHost(getter_Copies (host));
+    if ( NS_FAILED(rv) )
+        return sal_False;
+
+    PRInt32 port;
+    rv = url->GetPort(&port);
+    if ( NS_FAILED(rv) )
+        return sal_False;
+
+    nsXPIDLCString dn;
+    rv = url->GetDn(getter_Copies (dn));
+    if ( NS_FAILED(rv) )
+        return sal_False;
+
+    // Get the ldap connection
+    nsCOMPtr<nsILDAPConnection> ldapConnection;
+    ldapConnection = do_CreateInstance(NS_LDAPCONNECTION_CONTRACTID, &rv);
+    if ( NS_FAILED(rv) )
+        return sal_False;
+
+    // Initiate LDAP message listener
+    nsCOMPtr<nsILDAPMessageListener> messageListener;
+    MLDAPMessageListener* _messageListener =
+        new MLDAPMessageListener ( ldapConnection );
+    if (_messageListener == NULL)
+            return sal_False;
+
+    messageListener = _messageListener;
+
+    // Now lets initialize the LDAP connection properly. We'll kick
+    // off the bind operation in the callback function, |OnLDAPInit()|.
+    rv = ldapConnection->Init(host, port, NS_ConvertASCIItoUCS2(dn).get(),
+                              messageListener);
+    if ( NS_FAILED(rv) )
+        return sal_False;
+
+    if ( ! _messageListener->connected() ) {
+        setAbSpecificError( _pCon, sal_True );
+        return sal_False;
+    }
+
+    return sal_True;
 }

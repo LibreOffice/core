@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MConnection.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dkenny $ $Date: 2001-12-12 15:32:45 $
+ *  last change: $Author: dkenny $ $Date: 2001-12-13 09:34:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -334,12 +334,26 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
     OSL_TRACE("Moz URI = %s, %s\n", ((OUtoCStr(m_sMozillaURI)) ? (OUtoCStr(m_sMozillaURI)):("NULL")),m_UsesFactory ? "uses factory" : "no factory");
     OSL_TRACE( "\tOUT OConnection::construct()\n" );
 
-    // Test connection by getting to get the Table Names
     MDatabaseMetaDataHelper     _aDbHelper;
 
+    // The creation of the nsIAbDirectory i/f for LDAP doesn't actually test
+    // the validity of the connection, it's normally delayed until the query
+    // is executed, but it's a bit late then to fail...
+    if ( m_IsLDAP ) {
+        if ( !_aDbHelper.testLDAPConnection( this ) ) {
+            OSL_TRACE("testLDAPConnection : FAILED\n" );
+            ::dbtools::throwGenericSQLException( _aDbHelper.getErrorString(), NULL);
+        }
+        else {
+            OSL_TRACE("testLDAPConnection : SUCCESS\n" );
+        }
+    }
+
+    // Test connection by getting to get the Table Names
     ::std::vector< ::rtl::OUString > tables;
-    if ( !_aDbHelper.getTableStrings( this, tables, sal_True ) )
+    if ( !_aDbHelper.getTableStrings( this, tables, sal_True ) ) {
         ::dbtools::throwGenericSQLException( _aDbHelper.getErrorString(), NULL);
+    }
 
 }
 // XServiceInfo
@@ -552,4 +566,4 @@ MNameMapper* OConnection::getNameMapper ()
 // -----------------------------------------------------------------------------
 
 
- 
+
