@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoashp.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-17 09:08:18 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 16:21:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef _SVDOASHP_HXX
 #include "svdoashp.hxx"
 #endif
@@ -2915,6 +2914,11 @@ SdrObject* SdrObjCustomShape::CheckHit(const Point& rPnt, USHORT nTol, const Set
                 pHitObj = (SdrObject*)this;
         }
     }
+    else if ( HasText() )
+    {
+        pHitObj = SdrTextObj::CheckHit( rPnt, nTol, pVisiLayer );
+    }
+
     return pHitObj;
 }
 
