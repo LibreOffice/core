@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porftn.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fme $ $Date: 2002-08-27 13:40:01 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 15:52:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,7 @@ public:
     inline SwFtnNumPortion( const XubString &rExpand, SwFont *pFnt )
          : SwNumberPortion( rExpand, pFnt, sal_True, sal_False, 0 )
          { SetWhichPor( POR_FTNNUM ); }
-    sal_Bool DiffFont( SwFont* pFont );
+
     OUTPUT_OPERATOR
 };
 
