@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adminpages.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-26 16:12:12 $
+ *  last change: $Author: fs $ $Date: 2001-05-10 13:34:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,14 @@ namespace dbaui
 //.........................................................................
 
     //=========================================================================
+    //= OPageSettings
+    //=========================================================================
+    struct OPageSettings
+    {
+        virtual ~OPageSettings();
+    };
+
+    //=========================================================================
     //= OGenericAdministrationPage
     //=========================================================================
     class OGenericAdministrationPage : public SfxTabPage
@@ -123,6 +131,27 @@ namespace dbaui
 
         /// set a handler which gets called every time something on the page has been modified
         void            SetModifiedHandler(const Link& _rHandler) { m_aModifiedHandler = _rHandler; }
+
+        /** create an instance of view settings for the page
+            <p>The caller is responsible for destroying the object later on.</p>
+            <p>The page may return <NULL/> if it does not support view settings.</p>
+        */
+        virtual OPageSettings*  createViewSettings();
+
+        /** get the pages current view settings, if any
+        */
+        virtual void            fillViewSettings(OPageSettings* _pSettings);
+
+        /** called by the dialog after changes have been applied asnychronously
+            <p>The page can use this method to restore it's (non-persistent, e.g. view-) settings to the
+            state before the changes have been applied</p>
+            <p>This method is necessary because during applying, the page may die and be re-created.</p>
+
+            @param _pPageState
+                the page state as given in <method>ODbAdminDialog::applyChangesAsync</method>
+            @see ODbAdminDialog::applyChangesAsync
+        */
+        virtual void            restoreViewSettings(const OPageSettings* _pSettings);
 
     protected:
         /// default implementation: call FillItemSet, call checkItems,
@@ -165,6 +194,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.19  2001/01/26 16:12:12  fs
+ *  split up the file
+ *
  *  Revision 1.18  2001/01/26 06:59:12  fs
  *  some basics for the query administration page - not enabled yet
  *

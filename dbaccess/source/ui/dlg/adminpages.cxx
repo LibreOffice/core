@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adminpages.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-26 16:12:12 $
+ *  last change: $Author: fs $ $Date: 2001-05-10 13:34:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,14 @@ namespace dbaui
     using namespace ::dbtools;
 
     //=========================================================================
+    //= OPageSettings
+    //=========================================================================
+    //-------------------------------------------------------------------------
+    OPageSettings::~OPageSettings()
+    {
+    }
+
+    //=========================================================================
     //= OGenericAdministrationPage
     //=========================================================================
     //-------------------------------------------------------------------------
@@ -141,6 +149,24 @@ namespace dbaui
     }
 
     // -----------------------------------------------------------------------
+    OPageSettings* OGenericAdministrationPage::createViewSettings()
+    {
+        return NULL;
+    }
+
+    // -----------------------------------------------------------------------
+    void OGenericAdministrationPage::fillViewSettings(OPageSettings* _rSettings)
+    {
+        // nothing to do
+    }
+
+    // -----------------------------------------------------------------------
+    void OGenericAdministrationPage::restoreViewSettings(const OPageSettings* _pPageState)
+    {
+        // nothing to do
+    }
+
+    // -----------------------------------------------------------------------
     void OGenericAdministrationPage::getFlags(const SfxItemSet& _rSet, sal_Bool& _rValid, sal_Bool& _rReadonly)
     {
         SFX_ITEMSET_GET(_rSet, pInvalid, SfxBoolItem, DSID_INVALID_SELECTION, sal_True);
@@ -163,6 +189,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.28  2001/01/26 16:12:12  fs
+ *  split up the file
+ *
  *  Revision 1.27  2001/01/26 06:59:12  fs
  *  some basics for the query administration page - not enabled yet
  *
