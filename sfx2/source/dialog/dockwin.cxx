@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dockwin.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mba $ $Date: 2001-02-19 11:43:23 $
+ *  last change: $Author: pb $ $Date: 2001-03-21 09:37:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -572,7 +572,9 @@ SfxDockingWindow::SfxDockingWindow( SfxBindings *pBindinx, SfxChildWindow *pCW,
 
 {
     ULONG nId = GetHelpId();
-    SetHelpId(0);
+    if ( !nId && pCW )
+        nId = pCW->GetType();
+    SetHelpId( 0 );
     SetUniqueId( nId );
 
     pImp = new SfxDockingWindow_Impl;
