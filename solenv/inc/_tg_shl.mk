@@ -338,7 +338,7 @@ $(SHL1TARGETN) : \
     @ls -l $@
 .IF "$(OS)"=="MACOSX"
 .IF "$(SHL1VERSIONMAP)"!=""
-    @strip -i -n -r -u -s $(SHL1VERSIONMAP) $@
+    @strip -i -r -u -s $(SHL1VERSIONMAP) $@
 .ENDIF
     @echo "Making: $@.framework"
     @create-bundle $@
@@ -698,7 +698,7 @@ $(SHL2TARGETN) : \
     @ls -l $@
 .IF "$(OS)"=="MACOSX"
 .IF "$(SHL2VERSIONMAP)"!=""
-    @strip -i -n -r -u -s $(SHL2VERSIONMAP) $@
+    @strip -i -r -u -s $(SHL2VERSIONMAP) $@
 .ENDIF
     @echo "Making: $@.framework"
     @create-bundle $@
@@ -1058,7 +1058,7 @@ $(SHL3TARGETN) : \
     @ls -l $@
 .IF "$(OS)"=="MACOSX"
 .IF "$(SHL3VERSIONMAP)"!=""
-    @strip -i -n -r -u -s $(SHL3VERSIONMAP) $@
+    @strip -i -r -u -s $(SHL3VERSIONMAP) $@
 .ENDIF
     @echo "Making: $@.framework"
     @create-bundle $@
@@ -1418,7 +1418,7 @@ $(SHL4TARGETN) : \
     @ls -l $@
 .IF "$(OS)"=="MACOSX"
 .IF "$(SHL4VERSIONMAP)"!=""
-    @strip -i -n -r -u -s $(SHL4VERSIONMAP) $@
+    @strip -i -r -u -s $(SHL4VERSIONMAP) $@
 .ENDIF
     @echo "Making: $@.framework"
     @create-bundle $@
@@ -1778,7 +1778,7 @@ $(SHL5TARGETN) : \
     @ls -l $@
 .IF "$(OS)"=="MACOSX"
 .IF "$(SHL5VERSIONMAP)"!=""
-    @strip -i -n -r -u -s $(SHL5VERSIONMAP) $@
+    @strip -i -r -u -s $(SHL5VERSIONMAP) $@
 .ENDIF
     @echo "Making: $@.framework"
     @create-bundle $@
@@ -2138,7 +2138,7 @@ $(SHL6TARGETN) : \
     @ls -l $@
 .IF "$(OS)"=="MACOSX"
 .IF "$(SHL6VERSIONMAP)"!=""
-    @strip -i -n -r -u -s $(SHL6VERSIONMAP) $@
+    @strip -i -r -u -s $(SHL6VERSIONMAP) $@
 .ENDIF
     @echo "Making: $@.framework"
     @create-bundle $@
@@ -2498,7 +2498,7 @@ $(SHL7TARGETN) : \
     @ls -l $@
 .IF "$(OS)"=="MACOSX"
 .IF "$(SHL7VERSIONMAP)"!=""
-    @strip -i -n -r -u -s $(SHL7VERSIONMAP) $@
+    @strip -i -r -u -s $(SHL7VERSIONMAP) $@
 .ENDIF
     @echo "Making: $@.framework"
     @create-bundle $@
@@ -2858,7 +2858,7 @@ $(SHL8TARGETN) : \
     @ls -l $@
 .IF "$(OS)"=="MACOSX"
 .IF "$(SHL8VERSIONMAP)"!=""
-    @strip -i -n -r -u -s $(SHL8VERSIONMAP) $@
+    @strip -i -r -u -s $(SHL8VERSIONMAP) $@
 .ENDIF
     @echo "Making: $@.framework"
     @create-bundle $@
@@ -3218,7 +3218,7 @@ $(SHL9TARGETN) : \
     @ls -l $@
 .IF "$(OS)"=="MACOSX"
 .IF "$(SHL9VERSIONMAP)"!=""
-    @strip -i -n -r -u -s $(SHL9VERSIONMAP) $@
+    @strip -i -r -u -s $(SHL9VERSIONMAP) $@
 .ENDIF
     @echo "Making: $@.framework"
     @create-bundle $@
@@ -3578,7 +3578,7 @@ $(SHL10TARGETN) : \
     @ls -l $@
 .IF "$(OS)"=="MACOSX"
 .IF "$(SHL10VERSIONMAP)"!=""
-    @strip -i -n -r -u -s $(SHL10VERSIONMAP) $@
+    @strip -i -r -u -s $(SHL10VERSIONMAP) $@
 .ENDIF
     @echo "Making: $@.framework"
     @create-bundle $@
