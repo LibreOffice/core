@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pardlg.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:19:16 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 14:42:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -262,6 +262,7 @@ void __EXPORT SwParaDlg::PageCreated(USHORT nId, SfxTabPage& rPage)
             //CHINA001 ((SvxStdParagraphTabPage&)rPage).EnableAbsLineDist(MM50/2);
             //CHINA001 ((SvxStdParagraphTabPage&)rPage).EnableNegativeMode();
             aSet.Put(SfxUInt32Item(SID_SVXSTDPARAGRAPHTABPAGE_FLAGSET,0x000E));
+            aSet.Put(SfxUInt32Item(SID_SVXSTDPARAGRAPHTABPAGE_ABSLINEDIST, MM50/2));
 
         }
         rPage.PageCreated(aSet);//add CHINA001
