@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column2.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: nn $ $Date: 2002-06-24 15:40:30 $
+ *  last change: $Author: nn $ $Date: 2002-10-30 09:36:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -929,24 +929,37 @@ long ScColumn::GetNeededSize( USHORT nRow, OutputDevice* pDev,
                 aPaper.Width() = 1;
             else if (bBreak)
             {
-                // bei ausgeblendeten Spalten die alte Spaltenbreite:
-                long nDocWidth = (long) ( pDocument->GetOriginalWidth(nCol,nTab) * nPPTX );
+                double fWidthFactor = nPPTX;
+                BOOL bTextWysiwyg = ( pDev->GetOutDevType() == OUTDEV_PRINTER );
+                if ( bTextWysiwyg )
+                {
+                    //  #95593# if text is formatted for printer, don't use PixelToLogic,
+                    //  to ensure the exact same paper width (and same line breaks) as in
+                    //  ScEditUtil::GetEditArea, used for output.
+
+                    fWidthFactor = HMM_PER_TWIPS;
+                }
+
+                // use original width for hidden columns:
+                long nDocWidth = (long) ( pDocument->GetOriginalWidth(nCol,nTab) * fWidthFactor );
                 USHORT nColMerge = pMerge->GetColMerge();
                 if (nColMerge > 1)
                     for (USHORT nColAdd=1; nColAdd<nColMerge; nColAdd++)
-                        nDocWidth += (long) ( pDocument->GetColWidth(nCol+nColAdd,nTab) * nPPTX );
-                nDocWidth -= (long) ( pMargin->GetLeftMargin() * nPPTX )
-                           + (long) ( pMargin->GetRightMargin() * nPPTX )
+                        nDocWidth += (long) ( pDocument->GetColWidth(nCol+nColAdd,nTab) * fWidthFactor );
+                nDocWidth -= (long) ( pMargin->GetLeftMargin() * fWidthFactor )
+                           + (long) ( pMargin->GetRightMargin() * fWidthFactor )
                            + 1;     // Ausgabebereich ist Breite-1 Pixel (wegen Gitterlinien)
                 if ( nIndent )
-                    nDocWidth -= (long) ( nIndent * nPPTX );
+                    nDocWidth -= (long) ( nIndent * fWidthFactor );
 
-                //      Platz fuer Autofilter-Button:  20 * nZoom/100
-                if ( pFlag->HasAutoFilter() )
+                // space for AutoFilter button:  20 * nZoom/100
+                if ( pFlag->HasAutoFilter() && !bTextWysiwyg )
                     nDocWidth -= (rZoomX.GetNumerator()*20)/rZoomX.GetDenominator();
 
                 aPaper.Width() = nDocWidth;
-                aPaper = pDev->PixelToLogic( aPaper, aHMMMode );
+
+                if ( !bTextWysiwyg )
+                    aPaper = pDev->PixelToLogic( aPaper, aHMMMode );
             }
             pEngine->SetPaperSize(aPaper);
 
