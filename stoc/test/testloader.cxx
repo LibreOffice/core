@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testloader.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jbu $ $Date: 2001-06-22 16:21:02 $
+ *  last change: $Author: hr $ $Date: 2002-08-19 14:19:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,7 @@ int _cdecl main( int argc, char * argv[] )
     OUString dllName( OUString::createFromAscii("cpld.dll") );
 #else
 #ifdef MACOSX
-    OUString dllName( OUString::createFromAscii("libcpld.dylib.framework") );
+    OUString dllName( OUString::createFromAscii("libcpld.dylib") );
 #else
     OUString dllName( OUString::createFromAscii("libcpld.so") );
 #endif
