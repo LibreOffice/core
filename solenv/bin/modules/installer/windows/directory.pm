@@ -2,9 +2,9 @@
 #
 #   $RCSfile: directory.pm,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2005-01-31 10:48:33 $
+#   last change: $Author: vg $ $Date: 2005-02-24 16:22:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -172,6 +172,9 @@ sub add_root_directories
     my $oneline = "TARGETDIR\t\tSourceDir\n";
     push(@{$directorytableref}, $oneline);
 
+    my $sourcediraddon = "";
+    if ($installer::globals::addchildprojects) { $sourcediraddon = "\:\."; }
+
     if (!($installer::globals::product =~ /ada/i )) # the following directories not for ada products
     {
         $oneline = "$installer::globals::programfilesfolder\tTARGETDIR\t.\n";
@@ -198,10 +201,10 @@ sub add_root_directories
             # my $shortmanufacturer = installer::windows::idtglobal::make_eight_three_conform($manufacturer, "dir");    # third parameter not used
             # $shortmanufacturer =~ s/\s/\_/g;                                  # changing empty space to underline
 
-            $oneline = "sundirectory\t$installer::globals::programfilesfolder\t$installer::globals::sundirname\n";
+            $oneline = "sundirectory\t$installer::globals::programfilesfolder\t$installer::globals::sundirname$sourcediraddon\n";
             push(@{$directorytableref}, $oneline);
 
-            $oneline = "INSTALLLOCATION\tsundirectory\t$shortproductkey|$productkey\n";
+            $oneline = "INSTALLLOCATION\tsundirectory\t$shortproductkey|$productkey$sourcediraddon\n";
             push(@{$directorytableref}, $oneline);
         }
 
