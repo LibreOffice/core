@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 12:01:56 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:27:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,8 +254,10 @@ Menu RID_MENU_APP_EDIT
         };
         MenuItem
         {
-            MID_DOCUMENT_NEW_AUTOPILOT
-            Command = ".uno:DBNewFormAutoPilot";
+            Identifier = SID_FORM_CREATE_REPWIZ_PRE_SEL;
+            Text [ de ] = "Formular-Assistent...";
+            Text [ en-US ] = "Form Wizard...";
+            Command = ".uno:DBNewFormAutoPilotWithPreSelection";
         };
         MenuItem
         {
