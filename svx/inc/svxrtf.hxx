@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxrtf.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-12 16:19:49 $
+ *  last change: $Author: jp $ $Date: 2001-05-03 11:48:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,7 +227,11 @@ struct RTFPardAttrMapIds
             nShadow,
             nOutlineLvl,
             nSplit,
-            nKeep
+            nKeep,
+            nFontAlign,
+            nScriptSpace,
+            nHangPunct,
+            nForbRule
             ;
     RTFPardAttrMapIds( const SfxItemPool& rPool );
 };
@@ -255,6 +259,7 @@ class SvxRTFParser : public SvRTFParser
     Color*  pDfltColor;
     Font*   pDfltFont;
     SfxDocumentInfo* pSfxInfo;
+    SfxItemSet *pRTFDefaults;
 
     long    nVersionNo;
     int     nDfltFont;
@@ -268,7 +273,7 @@ class SvxRTFParser : public SvRTFParser
     BOOL    bReadDocInfo : 1;       // TRUE - DocInfo mit einlesen
     BOOL    bIsLeftToRightDef : 1;  // TRUE - in LeftToRight char run def.
                                     // FALSE - in RightToLeft char run def.
-
+    BOOL    bIsInReadStyleTab : 1;  // TRUE - in ReadStyleTable
 
     void ClearColorTbl();
     void ClearFontTbl();
@@ -403,6 +408,10 @@ public:
 //  virtual void SaveState( int nToken );
 //  virtual void RestoreState();
     virtual void Continue( int nToken );
+
+    // get RTF default ItemSets. Must be used by pard/plain tokens or in
+    // reset of Style-Items
+    const SfxItemSet& GetRTFDefaults();
 };
 
 // der Stack fuer die Attribute:
@@ -443,6 +452,8 @@ public:
     const SfxItemSet& GetAttrSet() const    { return aAttrSet; }
 
     USHORT StyleNo() const  { return nStyleNo; }
+
+    void SetRTFDefaults( const SfxItemSet& rDefaults );
 };
 
 
@@ -469,11 +480,14 @@ inline SfxItemSet& SvxRTFParser::GetAttrSet()
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/svx/inc/svxrtf.hxx,v 1.5 2001-03-12 16:19:49 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/svx/inc/svxrtf.hxx,v 1.6 2001-05-03 11:48:03 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.5  2001/03/12 16:19:49  jp
+      import relief item
+
       Revision 1.4  2001/02/16 10:28:22  jp
       im-/export the Rotate-/ScaleWidth-Character attribut
 
