@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pb $ $Date: 2001-09-18 08:23:27 $
+ *  last change: $Author: os $ $Date: 2001-09-27 13:28:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,4 +224,4 @@ hidspecial HID_HELP_TOOLBOXITEM_BOOKMARKS       { HelpID = HID_HELP_TOOLBOXITEM_
 hidspecial HID_HELP_TOOLBOXITEM_SEARCHDIALOG    { HelpID = HID_HELP_TOOLBOXITEM_SEARCHDIALOG; };
 hidspecial HID_TBXCONTROL_FILENEW               { HelpID = HID_TBXCONTROL_FILENEW; };
 hidspecial HID_GLOBAL_FALLBACK                  { HelpID = HID_GLOBAL_FALLBACK; };
-
+hidspecial HID_CLOSE_WARNING                    { HelpID = HID_CLOSE_WARNING; };
