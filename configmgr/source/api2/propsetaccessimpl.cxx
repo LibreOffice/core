@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propsetaccessimpl.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:18:36 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 13:29:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,7 +201,7 @@ private:
 //-----------------------------------------------------------------------------------
 CollectProperties::NodeAttributes CollectProperties::adjustAttributes(NodeAttributes nNodeAttr)
 {
-    if (m_bReadonly) nNodeAttr.bWritable = false;
+    if (m_bReadonly) nNodeAttr.markReadonly();
 
     return nNodeAttr;
 }
