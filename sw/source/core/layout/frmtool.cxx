@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: fme $ $Date: 2002-11-19 13:00:29 $
+ *  last change: $Author: od $ $Date: 2002-11-20 15:33:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1240,13 +1240,17 @@ void MA_FASTCALL _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
 
                 pFrm->Frm().Pos() = pLay->Frm().Pos();
                 pFrm->Frm().Pos().Y() += 1; //wg. Benachrichtigungen.
-                // OD 18.09.2002 #100522#
-                // invalidate page in order to force format and paint of
-                // inserted section frame
-                pFrm->InvalidatePage( pPage );
-                // OD 14.11.2002 #104684# - invalidate page content in order to
-                // force format and paint of section content.
-                pPage->InvalidateCntnt();
+                // OD 20.11.2002 #105405# - no page, no invalidate.
+                if ( pPage )
+                {
+                    // OD 18.09.2002 #100522#
+                    // invalidate page in order to force format and paint of
+                    // inserted section frame
+                    pFrm->InvalidatePage( pPage );
+                    // OD 14.11.2002 #104684# - invalidate page content in order to
+                    // force format and paint of section content.
+                    pPage->InvalidateCntnt();
+                }
 
                 pLay = (SwLayoutFrm*)pFrm;
                 if ( pLay->Lower() && pLay->Lower()->IsLayoutFrm() )
