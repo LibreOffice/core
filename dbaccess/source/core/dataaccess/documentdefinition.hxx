@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documentdefinition.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:10:49 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 12:29:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,15 @@ private:
     // Command "insert"
     void insert( const ::rtl::OUString& _sURL, const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >& Environment ) throw( ::com::sun::star::uno::Exception );
 
-
+    /** fills the load arguments
+    *
+    * \param _rArgs
+    * \param _rEmbeddedObjectDescriptor
+    */
+    void fillLoadArgs(::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& _rArgs
+                    , ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& _rEmbeddedObjectDescriptor
+                    ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection
+                    ,sal_Bool _bReadOnly);
     /** loads the EmbeddedObject if not already loaded
         @param  _aClassID
             If set, it will be used to create the embedded object.
