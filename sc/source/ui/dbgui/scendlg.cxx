@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scendlg.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 16:11:46 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:57:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,9 +144,9 @@ ScNewScenarioDlg::ScNewScenarioDlg( Window* pParent, const String& rName, BOOL b
     aComment.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ", " ));
     aComment += String( ScResId( STR_ON ) );
     aComment += ' ';
-    aComment += ScGlobal::pLocaleData->getDate( Date() );
+    aComment += GetScGlobalpLocaleData()->getDate( Date() );//CHINA001 aComment += ScGlobal::pLocaleData->getDate( Date() );
     aComment.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ", " ));
-    aComment += ScGlobal::pLocaleData->getTime( Time() );
+    aComment += GetScGlobalpLocaleData()->getTime( Time() );//CHINA001  aComment += ScGlobal::pLocaleData->getTime( Time() );
 
     aEdComment  .SetText( aComment );
     aEdName     .SetText( rName );
