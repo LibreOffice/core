@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeopt.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 11:14:13 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 17:50:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,8 @@
 #ifndef _TOOLS_RCID_H
 #include <tools/rcid.h>
 #endif
+
+#include <tools/shl.hxx>
 
 #include <comphelper/processfactory.hxx>
 
