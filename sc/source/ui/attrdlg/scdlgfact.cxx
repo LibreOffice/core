@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scdlgfact.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 15:56:04 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 14:10:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,7 @@ IMPL_ABSTDLG_BASE(AbstractScNameCreateDlg_Impl); //add for ScNameCreateDlg
 IMPL_ABSTDLG_BASE(AbstractScNamePasteDlg_Impl); //add for ScNamePasteDlg
 IMPL_ABSTDLG_BASE(AbstractScPivotFilterDlg_Impl); //add for ScPivotFilterDlg
 IMPL_ABSTDLG_BASE(AbstractScDPFunctionDlg_Impl); //add for ScDPFunctionDlg
+IMPL_ABSTDLG_BASE(AbstractScDPSubtotalDlg_Impl); //add for ScDPSubtotalDlg
 IMPL_ABSTDLG_BASE(AbstractScNewScenarioDlg_Impl); //add for ScNewScenarioDlg
 IMPL_ABSTDLG_BASE(AbstractScShowTabDlg_Impl); //add for ScShowTabDlg
 IMPL_ABSTDLG_BASE(AbstractScStringInputDlg_Impl); //add for ScStringInputDlg
@@ -499,12 +500,22 @@ USHORT AbstractScDPFunctionDlg_Impl::GetFuncMask() const //add for ScDPFunctionD
 {
      return pDlg->GetFuncMask();
 }
-BOOL    AbstractScDPFunctionDlg_Impl::GetShowAll() const
+::com::sun::star::sheet::DataPilotFieldReference AbstractScDPFunctionDlg_Impl::GetFieldRef() const
 {
-    return pDlg->GetShowAll();
+    return pDlg->GetFieldRef();
 }
 //add for AbstractScDPFunctionDlg_Impl end
 
+//add for AbstractScDPSubtotalDlg_Impl begin
+USHORT AbstractScDPSubtotalDlg_Impl::GetFuncMask() const //add for ScDPSubtotalDlg
+{
+     return pDlg->GetFuncMask();
+}
+void AbstractScDPSubtotalDlg_Impl::FillLabelData( ScDPLabelData& rLabelData ) const
+{
+    pDlg->FillLabelData( rLabelData );
+}
+//add for AbstractScDPSubtotalDlg_Impl end
 
 //add for AbstractScNewScenarioDlg_Impl begin
 void AbstractScNewScenarioDlg_Impl::SetScenarioData( const String& rName, const String& rComment,
@@ -1042,17 +1053,17 @@ AbstractScPivotFilterDlg * ScAbstractDialogFactory_Impl::CreateScPivotFilterDlg 
 
 
 //add for ScDPFunctionDlg begin
-AbstractScDPFunctionDlg * ScAbstractDialogFactory_Impl::CreateScDPFunctionDlg ( Window*         pParent,
-                                                                BOOL            bSubTotalFunc,
-                                                                const String&   rName,
-                                                                USHORT          nFunctions,
-                                                                BOOL            bIsShowAll,const ResId& rResId)
+AbstractScDPFunctionDlg * ScAbstractDialogFactory_Impl::CreateScDPFunctionDlg ( Window* pParent,
+                                                                const ResId& rResId,
+                                                                const ScDPLabelDataVec& rLabelVec,
+                                                                const ScDPLabelData& rLabelData,
+                                                                const ScDPFuncData& rFuncData )
 {
     ScDPFunctionDlg * pDlg=NULL;
     switch ( rResId.GetId() )
     {
-        case RID_SCDLG_PIVOTSUBT :
-            pDlg = new ScDPFunctionDlg( pParent, bSubTotalFunc, rName,nFunctions, bIsShowAll );
+        case RID_SCDLG_DPDATAFIELD :
+            pDlg = new ScDPFunctionDlg( pParent, rLabelVec, rLabelData, rFuncData );
             break;
         default:
             break;
@@ -1063,6 +1074,31 @@ AbstractScDPFunctionDlg * ScAbstractDialogFactory_Impl::CreateScDPFunctionDlg ( 
     return 0;
 }
 //add for ScDPFunctionDlg end
+
+//add for ScDPSubtotalDlg begin
+AbstractScDPSubtotalDlg * ScAbstractDialogFactory_Impl::CreateScDPSubtotalDlg ( Window* pParent,
+                                                                const ResId& rResId,
+                                                                ScDPObject& rDPObj,
+                                                                const ScDPLabelData& rLabelData,
+                                                                const ScDPFuncData& rFuncData,
+                                                                const ScDPNameVec& rDataFields,
+                                                                bool bEnableLayout )
+{
+    ScDPSubtotalDlg * pDlg=NULL;
+    switch ( rResId.GetId() )
+    {
+        case RID_SCDLG_PIVOTSUBT :
+            pDlg = new ScDPSubtotalDlg( pParent, rDPObj, rLabelData, rFuncData, rDataFields, bEnableLayout );
+            break;
+        default:
+            break;
+    }
+
+    if ( pDlg )
+        return new AbstractScDPSubtotalDlg_Impl( pDlg );
+    return 0;
+}
+//add for ScDPSubtotalDlg end
 
 //add for ScNewScenarioDlg begin
 AbstractScNewScenarioDlg * ScAbstractDialogFactory_Impl::CreateScNewScenarioDlg ( Window* pParent, const String& rName,

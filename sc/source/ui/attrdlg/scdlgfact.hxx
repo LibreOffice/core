@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scdlgfact.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 15:56:14 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 14:10:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,7 @@ class ScNameCreateDlg;
 class ScNamePasteDlg;
 class ScPivotFilterDlg;
 class ScDPFunctionDlg;
+class ScDPSubtotalDlg;
 class ScNewScenarioDlg;
 class ScShowTabDlg;
 class ScStringInputDlg;
@@ -281,8 +282,15 @@ class AbstractScPivotFilterDlg_Impl : public AbstractScPivotFilterDlg  //add for
 class AbstractScDPFunctionDlg_Impl : public AbstractScDPFunctionDlg  //add for ScDPFunctionDlg
 {
     DECL_ABSTDLG_BASE( AbstractScDPFunctionDlg_Impl, ScDPFunctionDlg);
-    virtual USHORT  GetFuncMask() const;
-    virtual BOOL    GetShowAll() const;
+    virtual USHORT GetFuncMask() const;
+    virtual ::com::sun::star::sheet::DataPilotFieldReference GetFieldRef() const;
+};
+
+class AbstractScDPSubtotalDlg_Impl : public AbstractScDPSubtotalDlg  //add for ScDPSubtotalDlg
+{
+    DECL_ABSTDLG_BASE( AbstractScDPSubtotalDlg_Impl, ScDPSubtotalDlg);
+    virtual USHORT GetFuncMask() const;
+    virtual void FillLabelData( ScDPLabelData& rLabelData ) const;
 };
 
 class AbstractScNewScenarioDlg_Impl : public AbstractScNewScenarioDlg  //add for ScNewScenarioDlg
@@ -428,11 +436,17 @@ public:
     virtual AbstractScPivotFilterDlg * CreateScPivotFilterDlg ( Window* pParent, //add for ScPivotFilterDlg
                                                                 const SfxItemSet&   rArgSet, USHORT nSourceTab , const ResId& rResId );
 
-    virtual AbstractScDPFunctionDlg * CreateScDPFunctionDlg ( Window*         pParent, //add for ScDPFunctionDlg
-                                                                BOOL            bSubTotalFunc,
-                                                                const String&   rName,
-                                                                USHORT          nFunctions,
-                                                                BOOL            bIsShowAll,const ResId& rResId);
+    virtual AbstractScDPFunctionDlg * CreateScDPFunctionDlg( Window* pParent, const ResId& rResId,
+                                                                const ScDPLabelDataVec& rLabelVec,
+                                                                const ScDPLabelData& rLabelData,
+                                                                const ScDPFuncData& rFuncData );
+
+    virtual AbstractScDPSubtotalDlg * CreateScDPSubtotalDlg( Window* pParent, const ResId& rResId,
+                                                                ScDPObject& rDPObj,
+                                                                const ScDPLabelData& rLabelData,
+                                                                const ScDPFuncData& rFuncData,
+                                                                const ScDPNameVec& rDataFields,
+                                                                bool bEnableLayout );
 
     virtual AbstractScNewScenarioDlg * CreateScNewScenarioDlg ( Window* pParent, const String& rName, //add for ScNewScenarioDlg
                                                                 const ResId& rResId,
