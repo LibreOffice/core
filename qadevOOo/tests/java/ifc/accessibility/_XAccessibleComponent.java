@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XAccessibleComponent.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-03-25 12:13:36 $
+ *  last change:$Date: 2003-03-25 13:03:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -291,9 +291,17 @@ public class _XAccessibleComponent extends MultiMethodTest {
                 } else {
                     XAccessible xAccCh = (XAccessible) UnoRuntime.queryInterface
                         (XAccessible.class, children[i]);
+                    XAccessibleContext xAccC = (XAccessibleContext) UnoRuntime.queryInterface
+                        (XAccessibleContext.class, children[i]);
                     log.println("Child found at point ("
                         + (chBnd.X +curX) + "," + (chBnd.Y+curY) + ") - OK");
-                    boolean res = util.AccessibilityTools.equals(xAccCh, xAcc);
+                    boolean res = false;
+                    if (xAccCh != null) {
+                        res = util.AccessibilityTools.equals(xAccCh, xAcc);
+                    } else {
+                        res = xAccC.getAccessibleName().equals(
+                                xAcc.getAccessibleContext().getAccessibleName());
+                    }
                     if (!res) {
                         int expIndex = xAccCh.getAccessibleContext().getAccessibleIndexInParent();
                         int gotIndex = xAcc.getAccessibleContext().getAccessibleIndexInParent();
@@ -307,8 +315,12 @@ public class _XAccessibleComponent extends MultiMethodTest {
                             log.println("The children found is not the same - FAILED");
                             log.println("Expected: "
                                 +xAccCh.getAccessibleContext().getAccessibleName());
+                            log.println("Description:  " +
+                                xAccCh.getAccessibleContext().getAccessibleDescription());
                             log.println("Found: "
                                 +xAcc.getAccessibleContext().getAccessibleName());
+                            log.println("Description:  " +
+                                xAcc.getAccessibleContext().getAccessibleDescription());
                             result = false ;
                         }
                     }
