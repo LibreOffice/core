@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkeddocuments.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-27 13:06:49 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:19:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,9 +119,16 @@ namespace dbaui
             ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection
             );
 
+        enum EOpenMode
+        {
+            OPEN_NORMAL,
+            OPEN_DESIGN,
+            OPEN_FORMAIL
+        };
+
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>       open(const ::rtl::OUString& _rLinkName
                                                                                     ,::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>& _xDefinition
-                                                                                    , sal_Bool _bReadOnly = sal_True);
+                                                                                    , EOpenMode _eOpenMode = OPEN_NORMAL);
 
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>       newForm(sal_Int32 _nNewFormId
                                 ,::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>& _xDefinition);
@@ -147,8 +154,6 @@ namespace dbaui
 
         sal_Bool        newTableWithPilot(
                             const String& _rDataSourceName,
-                            const sal_Int32 _nCommandType,
-                            const String& _rObjectName,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection
                         );
 
@@ -160,7 +165,7 @@ namespace dbaui
         };
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>   implOpen(const ::rtl::OUString& _rLinkName
                                 ,::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>& _xDefinition
-                                , sal_Bool _bReadOnly = sal_True);
+                                , EOpenMode _eOpenMode);
         void    implDrop(const ::rtl::OUString& _rLinkName);
     };
 
