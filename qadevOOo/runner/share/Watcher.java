@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Watcher.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 16:27:48 $
+ *  last change:$Date: 2005-02-02 13:57:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,5 +67,10 @@ public interface Watcher {
      * pings the watcher to check for changes
      */
     public void ping();
+
+    /**
+     * returns the amount of pings
+     */
+    public int getPing();
 
 }
