@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-01 17:10:45 $
+ *  last change: $Author: cl $ $Date: 2000-12-01 17:28:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -278,6 +278,7 @@ XML_CONSTASCII_ACTION( sXML_break_before, "break-before" );
 XML_CONSTASCII_ACTION( sXML_break_inside, "break-inside" );
 XML_CONSTASCII_ACTION( sXML_bubble, "bubble" );
 XML_CONSTASCII_ACTION( sXML_bullet_char, "bullet-char" );
+XML_CONSTASCII_ACTION( sXML_bullet_relative_size, "bullet-relative-size" );
 XML_CONSTASCII_ACTION( sXML_buttons, "buttons");
 XML_CONSTASCII_ACTION( sXML_bvar, "bvar");
 XML_CONSTASCII_ACTION( sXML_c, "c" );
@@ -1556,6 +1557,7 @@ XML_CONSTASCII_ACTION( sXML_dots1, "dots1" );
 XML_CONSTASCII_ACTION( sXML_dots1_length, "dots1-length" );
 XML_CONSTASCII_ACTION( sXML_dots2, "dots2" );
 XML_CONSTASCII_ACTION( sXML_dots2_length, "dots2-length" );
+XML_CONSTASCII_ACTION( sXML_enable_numbering, "enable-numbering" );
 
 XML_CONSTASCII_ACTION( sXML_vrp, "vrp");
 XML_CONSTASCII_ACTION( sXML_vpn, "vpn");
@@ -1563,5 +1565,4 @@ XML_CONSTASCII_ACTION( sXML_vup, "vup");
 
 XML_CONSTASCII_ACTION( sXML_min_edge, "min-edge");
 XML_CONSTASCII_ACTION( sXML_max_edge, "max-edge");
-
 #endif
