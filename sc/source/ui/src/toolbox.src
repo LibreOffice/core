@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-02 20:22:00 $
+ *  last change: $Author: kz $ $Date: 2002-08-05 20:39:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
  // Toolbox - Resourcen
  //
  // (C) 1994 StarDivision GmbH, Hamburg, Germany
- // $Author: kz $ $Date: 2002-08-02 20:22:00 $ $Revision: 1.43 $
+ // $Author: kz $ $Date: 2002-08-05 20:39:58 $ $Revision: 1.44 $
  // $Logfile:   T:/sc/source/ui/src/toolbox.srv  $ $Workfile:   TOOLBOX.SRC  $
  //==================================================================
 
@@ -300,7 +300,7 @@ String SCSTR_QHELP_BTNSUM
     Text[ korean ] = "합계";
     Text[ turkish ] = "Toplam";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "SUM";
+    Text[ catalan ] = "Suma";
     Text[ thai ] = "ผลรวม";
 };
 
