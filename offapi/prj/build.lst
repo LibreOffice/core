@@ -9,6 +9,7 @@ oa	offapi\com\sun\star\datatransfer\dnd	nmake	-	all	oa_datatrans_dnd oa_awt NULL
 oa	offapi\com\sun\star\document			nmake	-	all	oa_docu NULL
 oa	offapi\com\sun\star\drawing				nmake	-	all	oa_draw NULL
 oa	offapi\com\sun\star\form\component		nmake	-	all	oa_fcomp NULL
+oa	offapi\com\sun\star\form\control		nmake	-	all	oa_fcontr NULL
 oa	offapi\com\sun\star\form				nmake	-	all	oa_form NULL
 oa	offapi\com\sun\star\formula				nmake	-	all	oa_formula NULL
 oa	offapi\com\sun\star\frame				nmake	-	all	oa_frame NULL
@@ -42,4 +43,4 @@ oa	offapi\com\sun\star\sdbcx				nmake	-	all	oa_sdbcx NULL
 oa	offapi\com\sun\star\sdbc				nmake	-	all	oa_sdbc NULL
 oa	offapi\com\sun\star\sdb					nmake	-	all	oa_sdb NULL
 oa	offapi\com\sun\star\image				nmake	-	all	oa_image NULL
-oa	offapi\util								nmake	-	all	oa_util oa_awt oa_chart oa_config oa_datatrans_clip oa_datatrans_dnd oa_datatransfer oa_docu oa_draw oa_fcomp oa_fieldmaster oa_form oa_formula oa_frame oa_i18n oa_inst oa_ling2 oa_mozilla oa_packages oa_pgp oa_plug oa_pres oa_putil oa_resrc oa_sax oa_scan oa_sdb oa_sdbc oa_sdbcx oa_setup oa_sheet oa_style oa_svg oa_sync oa_table oa_task oa_text oa_textfield oa_ucb oa_ui oa_view oa_xml oa_image NULL
+oa	offapi\util								nmake	-	all	oa_util oa_awt oa_chart oa_config oa_datatrans_clip oa_datatrans_dnd oa_datatransfer oa_docu oa_draw oa_fcomp oa_fcontr oa_fieldmaster oa_form oa_formula oa_frame oa_i18n oa_inst oa_ling2 oa_mozilla oa_packages oa_pgp oa_plug oa_pres oa_putil oa_resrc oa_sax oa_scan oa_sdb oa_sdbc oa_sdbcx oa_setup oa_sheet oa_style oa_svg oa_sync oa_table oa_task oa_text oa_textfield oa_ucb oa_ui oa_view oa_xml oa_image NULL
