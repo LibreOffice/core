@@ -2,9 +2,9 @@
  *
  *  $RCSfile: digitalsignaturesdialog.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-27 11:55:25 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 18:02:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,7 @@ private:
     XMLSignatureHelper      maSignatureHelper;
 
     css::uno::Reference < css::embed::XStorage > mxStore;
+    css::uno::Reference < css::io::XStream > mxSignatureStream;
     SignatureInformations   maCurrentSignatureInformations;
     bool                    mbVerifySignatures;
     bool                    mbSignaturesChanged;
@@ -130,6 +131,7 @@ private:
     void                ImplGetSignatureInformations();
     void                ImplFillSignaturesBox();
     void                ImplShowSignaturesDetails();
+    SignatureStreamHelper ImplOpenSignatureStream( sal_Int32 eStreamMode );
 
 public:
     DigitalSignaturesDialog( Window* pParent, cssu::Reference< css::lang::XMultiServiceFactory >& rxMSF, DocumentSignatureMode eMode, sal_Bool bReadOnly );
@@ -140,6 +142,7 @@ public:
 
             // Set the storage which should be signed or verified
     void    SetStorage( const cssu::Reference < css::embed::XStorage >& rxStore );
+    void    SetSignatureStream( const cssu::Reference < css::io::XStream >& rxStream );
 
                 // Execute the dialog...
     short       Execute();
