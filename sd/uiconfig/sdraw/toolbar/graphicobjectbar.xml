@@ -19,5 +19,9 @@
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:GrafTransparence" toolbar:helpid="helpid:10867" toolbar:text="" />
  <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:FormatLine" toolbar:helpid="helpid:10143" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:FormatArea" toolbar:helpid="helpid:10142" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:FillShadow" toolbar:helpid="helpid:10299" toolbar:text="" />
+ <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:GrafAttrCrop" toolbar:helpid="helpid:10883" toolbar:text="" />
 </toolbar:toolbar>
