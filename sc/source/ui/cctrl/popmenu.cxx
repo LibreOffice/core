@@ -2,9 +2,9 @@
  *
  *  $RCSfile: popmenu.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:53 $
+ *  last change: $Author: mh $ $Date: 2001-10-23 10:42:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,49 +67,14 @@
 
 #pragma hdrstop
 
-#ifndef PCH
-#include <segmentc.hxx>
-#endif
-
 // INCLUDE ---------------------------------------------------------------
 
 #include "popmenu.hxx"
 
-// STATIC DATA -----------------------------------------------------------
-
-SEG_EOFGLOBALS()
-
 //------------------------------------------------------------------
-
-#pragma SEG_FUNCDEF(popmenu_01)
 
 void __EXPORT ScPopupMenu::Select()
 {
     nSel = GetCurItemId();
     bHit = TRUE;
 }
-
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.4  2000/09/17 14:08:55  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.3  2000/08/31 16:38:19  willem.vandorp
-    Header and footer replaced
-
-    Revision 1.2  1996/07/31 18:58:38  NN
-    bHit setzen
-
-
-      Rev 1.1   31 Jul 1996 20:58:38   NN
-   bHit setzen
-
-      Rev 1.0   27 Jun 1996 12:41:58   NN
-   Initial revision.
-
-------------------------------------------------------------------------*/
-
-#pragma SEG_EOFMODULE
-
-
