@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: gh $ $Date: 2000-11-29 12:44:32 $
+ *  last change: $Author: gh $ $Date: 2000-11-30 14:35:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -533,7 +533,15 @@ void BasicFrame::LoadIniFile()
 BasicFrame::~BasicFrame()
 {
     AppWin* p = pList->First();
-    if( p ) while( (p = pList->Remove() ) != NULL ) delete p;
+    DBG_ASSERT( !p, "Still open FileWindows");
+    if( p )
+        while( (p = pList->Remove() ) != NULL )
+            delete p;
+
+    MenuBar *pBar = GetMenuBar();
+    SetMenuBar( NULL );
+    delete pBar;
+
     delete pStatus;
     delete pPrn;
     delete pList;
