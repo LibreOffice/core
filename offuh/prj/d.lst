@@ -20,6 +20,7 @@ mkdir: %_DEST%\inc%_EXT%\com\sun\star\io
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\java
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\lang
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\linguistic
+mkdir: %_DEST%\inc%_EXT%\com\sun\star\linguistic2
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\presentation
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\reflection
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\registry
@@ -38,6 +39,7 @@ mkdir: %_DEST%\inc%_EXT%\com\sun\star\uno
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\util
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\view
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\linguistic
+mkdir: %_DEST%\inc%_EXT%\com\sun\star\linguistic2
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\xml
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\xml\sax
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\loader
@@ -89,6 +91,8 @@ mkdir: %_DEST%\inc%_EXT%\com\sun\star\mozilla
 ..\%__SRC%\inc\com\sun\star\lang\*.hpp %_DEST%\inc%_EXT%\com\sun\star\lang\*.hpp
 ..\%__SRC%\inc\com\sun\star\linguistic\*.hdl %_DEST%\inc%_EXT%\com\sun\star\linguistic\*.hdl
 ..\%__SRC%\inc\com\sun\star\linguistic\*.hpp %_DEST%\inc%_EXT%\com\sun\star\linguistic\*.hpp
+..\%__SRC%\inc\com\sun\star\linguistic2\*.hdl %_DEST%\inc%_EXT%\com\sun\star\linguistic2\*.hdl
+..\%__SRC%\inc\com\sun\star\linguistic2\*.hpp %_DEST%\inc%_EXT%\com\sun\star\linguistic2\*.hpp
 ..\%__SRC%\inc\com\sun\star\presentation\*.hdl %_DEST%\inc%_EXT%\com\sun\star\presentation\*.hdl
 ..\%__SRC%\inc\com\sun\star\presentation\*.hpp %_DEST%\inc%_EXT%\com\sun\star\presentation\*.hpp
 ..\%__SRC%\inc\com\sun\star\reflection\*.hdl %_DEST%\inc%_EXT%\com\sun\star\reflection\*.hdl
@@ -125,6 +129,8 @@ mkdir: %_DEST%\inc%_EXT%\com\sun\star\mozilla
 ..\%__SRC%\inc\com\sun\star\view\*.hpp %_DEST%\inc%_EXT%\com\sun\star\view\*.hpp
 ..\%__SRC%\inc\com\sun\star\linguistic\*.hdl %_DEST%\inc%_EXT%\com\sun\star\linguistic\*.hdl
 ..\%__SRC%\inc\com\sun\star\linguistic\*.hpp %_DEST%\inc%_EXT%\com\sun\star\linguistic\*.hpp
+..\%__SRC%\inc\com\sun\star\linguistic2\*.hdl %_DEST%\inc%_EXT%\com\sun\star\linguistic2\*.hdl
+..\%__SRC%\inc\com\sun\star\linguistic2\*.hpp %_DEST%\inc%_EXT%\com\sun\star\linguistic2\*.hpp
 ..\%__SRC%\inc\com\sun\star\xml\*.hdl %_DEST%\inc%_EXT%\com\sun\star\xml\*.hdl
 ..\%__SRC%\inc\com\sun\star\xml\*.hpp %_DEST%\inc%_EXT%\com\sun\star\xml\*.hpp
 ..\%__SRC%\inc\com\sun\star\xml\sax\*.hdl %_DEST%\inc%_EXT%\com\sun\star\xml\sax\*.hdl
