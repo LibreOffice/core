@@ -115,7 +115,7 @@ Dim i as Integer
 
 ErrorAndCloseForm:
 	ToggleWindow(True)
-	MsgBox(Form_gErrMsg$, 16, Form_gWizardName$)
+	MsgBox(sMsgErrMsg, 16, sMsgWizardName)
 	oDocument.Dispose()
 	Stop
 	exit Function
@@ -164,7 +164,7 @@ Dim OldBorderType as Integer
 Dim i as Integer
 Dim oCurModel as Object
 	ToggleLayoutPage(False)
-	oDocument.LockControllers
+&apos;	oDocument.LockControllers
 	OldBorderType = CurBorderType
 	oModel = oEvent.Source.Model
 	CurBorderType = Val(Right(oModel.Name,1))	
@@ -185,7 +185,7 @@ Dim oCurModel as Object
 			Next i
 		End If
 	End If
-	oDocument.UnLockControllers
+&apos;	oDocument.UnLockControllers
 	ToggleLayoutPage(True)
 End Sub
 
@@ -196,7 +196,7 @@ Dim oCurModel as Object
 Dim OldAlignMode as Integer
 Dim oModel as Object
 	ToggleLayoutPage(False)
-	oDocument.LockControllers()
+&apos;	oDocument.LockControllers()
 	OldAlignMode = CurAlignMode
 	oModel = oEvent.Source.Model
 	CurAlignMode = Val(Right(oModel.Name,1))
@@ -208,7 +208,7 @@ Dim oModel as Object
 			oCurModel.Align = CurAlignmode
 		Next i
 	End If
-	oDocument.UnlockControllers()
+&apos;	oDocument.UnlockControllers()
 	ToggleLayoutPage(True)
 End Sub
 

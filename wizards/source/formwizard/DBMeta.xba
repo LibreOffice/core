@@ -14,39 +14,61 @@ End Sub
 Sub GetSelectedDBMetaData()
 Dim NullList()
 Dim OldsDBname as String
+Dim bGetConnection as Boolean
 	ToggleDatabasePage(False)
-	GetDBMetaData(sDatabaseList(), oDialogModel.lstDatabases.SelectedItems(0) )
-	With oDialogModel
-		.lstTables.Enabled = True
-		.lblTables.Enabled = True
-		.lstTables.StringItemList() = AddListToList(TableNames(), QueryNames())
-		.lstFields.StringItemList() = NullList()
-		.lstSelFields.StringItemList() = NullList()
-	End With
+	bGetConnection = GetDBMetaData(sDatabaseList(), oDialogModel.lstDatabases.SelectedItems(0) )
+	If bGetConnection Then
+		With oDialogModel
+			.lstTables.Enabled = True
+			.lblTables.Enabled = True
+			.lstTables.StringItemList() = AddListToList(TableNames(), QueryNames())
+			.lstFields.StringItemList() = NullList()
+			.lstSelFields.StringItemList() = NullList()
+		End With
+	End If
 	ToggleDatabasePage(True)
 End Sub
 
 
-Sub GetDBMetaData(sDataBaseList(), DBIndex as Integer)
+Function GetDBMetaData(sDataBaseList(), DBIndex as Integer)
 Dim oDatabase as Object
 Dim oInteractionHandler as Object
 Dim oDataSource as Object
+Dim bExitLoop as Boolean
+Dim iMsg as Integer
 	If oDBContext.HasElements Then
 		oDatabase = oDBContext.GetByName(sDatabaseList(DBIndex))
 		sDBName = oDatabase.Name
 		If Not oDatabase.IsPasswordRequired Then
 			oDBConnection = oDBContext.GetByName(sDatabaseList(DBIndex)).GetConnection(&quot;&quot;,&quot;&quot;)
+			bGetConnection = True
 		Else
 			oInteractionHandler = createUnoService(&quot;com.sun.star.sdb.InteractionHandler&quot;)
 			oDataSource = oDBContext.GetByName(sDatabaseList(DBIndex))
-			oDBConnection = oDataSource.ConnectWithCompletion(oInteractionHandler) 
+			On Local Error Goto NOCONNECTION
+			Do
+				bExitLoop = True
+				oDBConnection = oDataSource.ConnectWithCompletion(oInteractionHandler) 
+
+				NOCONNECTION:
+				bGetConnection = Err = 0
+				If Not bGetConnection Then
+					iMsg = Msgbox (sMsgNoConnection,32 + 2, sMsgWizardName)	&apos; &apos;?&apos; &amp; &apos; Repeat and Cancel&apos;
+					bExitLoop = iMsg = SBCANCEL
+				End If
+				On Local Error Goto 0		
+			Loop Until bExitLoop
 		End If
-		Tablenames() = oDBConnection.Tables.ElementNames()
-		Querynames() = oDBConnection.Queries.ElementNames()
+		If bGetConnection Then
+			Tablenames() = oDBConnection.Tables.ElementNames()
+			Querynames() = oDBConnection.Queries.ElementNames()
+		End If
+		GetDBMetaData() = bGetConnection
 	Else
-		MsgBox(Form_gErrNoDatabase$, 64, Form_gWizardName$)
+		MsgBox(sMsgErrNoDatabase, 64, sMsgWizardName)
+		GetDBMetaData = False
 	End If
-End Sub
+End Function
 
 
 Sub GetTableMetaData()

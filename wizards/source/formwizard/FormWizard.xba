@@ -61,7 +61,7 @@ Sub MainWithDefault()
 GlobalError:
 	If Err &lt;&gt; 0 Then
 		ToggleWindow(True)
-		MsgBox(Form_gErrMsg$ , 16, Form_gWizardName$)
+		MsgBox(sMsgErrMsg , 16, sMsgWizardName)
 	End If
 End Sub
 
@@ -89,7 +89,7 @@ Dim i as Integer
 	Exit Sub
 
 GlobalError:
-	MsgBox(Form_gErrMsg$ , 16, Form_gWizardName$)
+	MsgBox(sMsgErrMsg , 16, sMsgWizardName)
 	ToggleWindow(True)
 	DlgFormDB.EndExecute()
 	Reset
@@ -136,7 +136,7 @@ Dim n as Integer
 &apos;	bNeedFieldRefresh = False
 	Exit Sub
 no_fields:
-	MsgBox Form_gErrCouldNotOpenObject$, 16, Form_gWizardName$
+	MsgBox sMsgErrCouldNotOpenObject, 16, sMsgWizardName
 End Sub
 
 
@@ -198,29 +198,35 @@ Sub InitializeLayoutSettings()
 		ToggleAlignGroup(bControlsAreCreated)
 		ArrangeControls()
 	End If
-
-	&apos; Todo: Hier die Grafik Urls der ImageControls setzen.
-	&apos; Alternativ würde es vielleicht reichen die Border auf 3-D zu setzen
 End Sub
 
 
 Sub HandleCreatedDocument()
 Dim sPath as String
 Dim NoArgs() as new com.sun.star.beans.PropertyValue
+Dim DocTitle as String
+Dim sDirPath as String
 	On Local Error Goto NOSAVING
 
 	If oDialogModel.optSaveDocument.State = 1 Then
-		sPath = oDialogModel.txtInputPath.Text
+		sDirPath = ConvertToUrl(oDialogModel.txtInputPath.Text)
+		sDirPath = RTrimStr(sDirPath,&quot;/&quot;)
+		DocTitle = oDialogModel.txtTitle.Text	
+		sPath = sDirPath &amp; &quot;/&quot; &amp; DocTitle &amp; &quot;.sxw&quot;
+		
 		oDocument.StoreToUrl(sPath,NoArgs()
-	End If
-	NOSAVING:
-	If Err &lt;&gt; 0 Then
-		Msgbox(&quot;Todo: Resourcen für fehlerhaftes Abspeichern suchen!&quot;, 16, GetProductname)
-		Resume CLERROR
+		NOSAVING:
+		If Err &lt;&gt; 0 Then
+			Msgbox(&quot;Todo: Resourcen für fehlerhaftes Abspeichern suchen!&quot;, 16, GetProductname)
+			Resume CLERROR
+		Else
+			DlgFormDB.EndExecute()
+			oDocument.Dispose
+		End If
+		CLERROR:
 	Else
-		oDocument.Dispose
+		DlgFormDB.EndExecute()
 	End If
-	CLERROR:
 End Sub
 
 

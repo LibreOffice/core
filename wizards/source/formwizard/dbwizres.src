@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbwizres.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: bc $ $Date: 2001-06-05 15:26:14 $
+ *  last change: $Author: bc $ $Date: 2001-06-06 09:51:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -441,6 +441,13 @@ String RID_DB_COMMON_START + 13
 };
 
 String RID_DB_COMMON_START + 14
+{
+    Text = "Es konnte keine Verbindung zur Datenbank hergestellt werden!";
+    Text [ english ] = "A Connection to the database could not be established";
+    Text[ english_us ] = "A Connection to the database could not be established";
+};
+
+String RID_DB_COMMON_START + 20
 {
     Text = "~Hilfe";
     Text [ english ] = "~Help";

@@ -4,52 +4,56 @@
 Global Const RID_COMMON	= 1000
 Global Const RID_FORM	= 2200
 
+Public Const SBCANCEL = 2
+Public Const SBREPEAT = 4
+
 Public WizardTitle(1 To 3) as String
 Public DlgFormDB as Object
 Public oDialogModel as Object
 
 &apos;	Global Msg
-Dim Form_gWizardName$
-Dim Form_gErrMsg$
-Dim Form_gErrFormOpen$
-Dim Form_gErrNoDatabase$
-Dim Form_gErrNoTableInDatabase$
-Dim Form_gErrTitleSuggestedExist$
-Dim Form_gErrTitleSyntaxError$
-Dim Form_gErrTitleAsTableExist$
-Dim Form_gProgressText$
-Dim Form_gCreatedForm$
-Dim Form_gErrCouldNotOpenObject$
-Dim Form_gErrNameToLong$
+Dim sMsgWizardName as String
+Dim sMsgErrMsg as String
+Dim sMsgErrFormOpen as String
+Dim sMsgErrNoDatabase as String
+Dim sMsgErrNoTableInDatabase as String
+Dim sMsgErrTitleSuggestedExist as String
+Dim sMsgErrTitleSyntaxError as String
+Dim sMsgErrTitleAsTableExist as String
+Dim sMsgProgressText as String
+Dim sMsgCreatedForm as String
+Dim sMsgErrCouldNotOpenObject as String
+Dim sMsgErrNameToLong as String
 
 &apos;	Internal Logic
-Dim Form_ilFormTitleSuggestPrefix$
+Dim Form_ilFormTitleSuggestPrefix as String
 
-Dim Form_gDatetime_DateComponent$
-Dim Form_gDatetime_TimeComponent$
+Dim sMsgDatetime_DateComponent as String
+Dim sMsgDatetime_TimeComponent as String
 
 Public sGoOn as String
 Public sReady as String
+Public sMsgNoConnection as String
 
 Sub LoadLanguage ()
-	Form_gWizardName$ = GetResText(RID_FORM + 0)
-	Form_gErrMsg$ = GetResText(RID_COMMON + 6)
-	Form_gErrFormOpen$ = GetResText(RID_COMMON + 7)
-	Form_gErrNoDatabase$ = GetResText(RID_COMMON + 8)
-	Form_gErrNoTableInDatabase$ = GetResText(RID_COMMON + 9)
-	Form_gErrTitleSuggestedExist$ = GetResText(RID_COMMON + 10)
-	Form_gErrTitleAsTableExist$ = GetResText(RID_COMMON + 10)
-	Form_gErrTitleSyntaxError$ = GetResText(RID_COMMON + 11)
-
-	Form_gProgressText$ = GetResText(RID_FORM + 2)
-	Form_gCreatedForm$ = GetResText(RID_FORM + 26)
-	Form_gErrNameToLong$ = GetResText (RID_FORM + 27)
-	Form_gErrCouldNotOpenObject$ = GetResText (RID_COMMON + 13)
+	sMsgWizardName = GetResText(RID_FORM + 0)
+	sMsgErrMsg = GetResText(RID_COMMON + 6)
+	sMsgErrFormOpen = GetResText(RID_COMMON + 7)
+	sMsgErrNoDatabase = GetResText(RID_COMMON + 8)
+	sMsgErrNoTableInDatabase = GetResText(RID_COMMON + 9)
+	sMsgErrTitleSuggestedExist = GetResText(RID_COMMON + 10)
+	sMsgErrTitleAsTableExist = GetResText(RID_COMMON + 10)
+	sMsgErrTitleSyntaxError = GetResText(RID_COMMON + 11)
+	sMsgNoConnection = GetResText(RID_COMMON + 14
+	sMsgProgressText = GetResText(RID_FORM + 2)
+	sMsgCreatedForm = GetResText(RID_FORM + 26)
+	sMsgErrNameToLong = GetResText (RID_FORM + 27)
+	sMsgErrCouldNotOpenObject = GetResText (RID_COMMON + 13)
 
 	&apos;	Internal Logic
-	Form_ilFormTitleSuggestPrefix$ = GetResText(RID_FORM + 3)
-	Form_gDatetime_DateComponent$ = GetResText(RID_FORM + 4)
-	Form_gDatetime_TimeComponent$ = GetResText(RID_FORM + 5)
+	Form_ilFormTitleSuggestPrefix = GetResText(RID_FORM + 3)
+	sMsgDatetime_DateComponent = GetResText(RID_FORM + 4)
+	sMsgDatetime_TimeComponent = GetResText(RID_FORM + 5)
 	
 	sReady = GetResText(RID_COMMON + 0)
 	SetDialogLanguage()
@@ -61,7 +65,7 @@ Sub SetDialogLanguage ()
 	oDialogModel = DlgFormDB.Model
 	oDialogModel.cmdCancel.Label = GetResText(RID_COMMON + 1)
 	oDialogModel.cmdBack.Label = GetResText(RID_COMMON + 2)
-	oDialogModel.cmdHelp.Label = GetResText(RID_COMMON + 14)
+	oDialogModel.cmdHelp.Label = GetResText(RID_COMMON + 20)
 	sGoOn = GetResText(RID_COMMON + 3)
 	oDialogModel.cmdGoOn.Label = sGoOn
 	oDialogModel.lblDatabases.Label = GetResText(RID_COMMON + 4)
