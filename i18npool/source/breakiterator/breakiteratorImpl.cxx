@@ -2,9 +2,9 @@
  *
  *  $RCSfile: breakiteratorImpl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 14:25:32 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 11:05:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,7 @@
  ************************************************************************/
 
 #include <breakiteratorImpl.hxx>
-#include <unicode.hxx>
+#include <i18nutil/unicode.hxx>
 #include <rtl/ustrbuf.hxx>
 
 using namespace ::com::sun::star::uno;
