@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CharacterPropertyItemConverter.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-04 12:37:17 $
+ *  last change: $Author: bm $ $Date: 2003-11-14 10:48:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,7 @@ namespace
     static ::comphelper::ItemPropertyMapType aCharacterPropertyMap(
         ::comphelper::MakeItemPropertyMap
         ( EE_CHAR_COLOR,                  C2U( "CharColor" ))
+        ( EE_CHAR_LANGUAGE,               C2U( "CharLocale" ))
         ( EE_CHAR_FONTHEIGHT,             C2U( "CharHeight" ))
 //         ( EE_CHAR_ITALIC,                 C2U( "CharPosture" ))
 //         ( EE_CHAR_WEIGHT,                 C2U( "CharWeight" ))
@@ -109,6 +110,16 @@ namespace
         ( EE_CHAR_RELIEF,                 C2U( "CharRelief" ))
         ( EE_CHAR_OUTLINE,                C2U( "CharContoured" ))
         ( EE_CHAR_EMPHASISMARK,           C2U( "CharEmphasis" ))
+
+        ( EE_CHAR_LANGUAGE_CJK,           C2U( "CharLocaleAsian" ))
+        ( EE_CHAR_LANGUAGE_CTL,           C2U( "CharLocaleComplex" ))
+        ( EE_CHAR_FONTHEIGHT_CJK,         C2U( "CharHeightAsian" ))
+        ( EE_CHAR_FONTHEIGHT_CTL,         C2U( "CharHeightComplex" ))
+//         ( EE_CHAR_WEIGHT_CJK,             C2U( "CharWeightAsian" ))
+//         ( EE_CHAR_WEIGHT_CTL,             C2U( "CharWeightComplex" ))
+//         ( EE_CHAR_ITALIC_CJK,             C2U( "CharPostureAsian" ))
+//         ( EE_CHAR_ITALIC_CTL,             C2U( "CharPostureComplex" ))
+
         );
 
     return aCharacterPropertyMap;
@@ -156,18 +167,26 @@ void CharacterPropertyItemConverter::FillSpecialItem(
     switch( nWhichId )
     {
         case EE_CHAR_FONTINFO:
+        case EE_CHAR_FONTINFO_CJK:
+        case EE_CHAR_FONTINFO_CTL:
         {
-            SvxFontItem aItem;
+            ::rtl::OUString aPostfix;
+            if( nWhichId == EE_CHAR_FONTINFO_CJK )
+                aPostfix = C2U( "Asian" );
+            else if( nWhichId == EE_CHAR_FONTINFO_CTL )
+                aPostfix = C2U( "Complex" );
 
-            aItem.PutValue( GetPropertySet()->getPropertyValue( C2U( "CharFontName" )),
+            SvxFontItem aItem( nWhichId );
+
+            aItem.PutValue( GetPropertySet()->getPropertyValue( C2U( "CharFontName" ) + aPostfix),
                             MID_FONT_FAMILY_NAME );
-            aItem.PutValue( GetPropertySet()->getPropertyValue( C2U( "CharFontFamily" )),
+            aItem.PutValue( GetPropertySet()->getPropertyValue( C2U( "CharFontFamily" ) + aPostfix),
                             MID_FONT_FAMILY );
-            aItem.PutValue( GetPropertySet()->getPropertyValue( C2U( "CharFontStyleName" )),
+            aItem.PutValue( GetPropertySet()->getPropertyValue( C2U( "CharFontStyleName" ) + aPostfix),
                             MID_FONT_STYLE_NAME );
-            aItem.PutValue( GetPropertySet()->getPropertyValue( C2U( "CharFontCharSet" )),
+            aItem.PutValue( GetPropertySet()->getPropertyValue( C2U( "CharFontCharSet" ) + aPostfix),
                             MID_FONT_CHAR_SET );
-            aItem.PutValue( GetPropertySet()->getPropertyValue( C2U( "CharFontPitch" )),
+            aItem.PutValue( GetPropertySet()->getPropertyValue( C2U( "CharFontPitch" ) + aPostfix),
                             MID_FONT_PITCH );
 
             rOutItemSet.Put( aItem );
@@ -221,10 +240,18 @@ void CharacterPropertyItemConverter::FillSpecialItem(
         break;
 
         case EE_CHAR_ITALIC:
+        case EE_CHAR_ITALIC_CJK:
+        case EE_CHAR_ITALIC_CTL:
         {
-            SvxPostureItem aItem;
+            ::rtl::OUString aPostfix;
+            if( nWhichId == EE_CHAR_ITALIC_CJK )
+                aPostfix = C2U( "Asian" );
+            else if( nWhichId == EE_CHAR_ITALIC_CTL )
+                aPostfix = C2U( "Complex" );
 
-            uno::Any aValue( GetPropertySet()->getPropertyValue( C2U( "CharPosture" )));
+            SvxPostureItem aItem( ITALIC_NONE, nWhichId );
+
+            uno::Any aValue( GetPropertySet()->getPropertyValue( C2U( "CharPosture" ) + aPostfix));
             if( aValue.hasValue())
             {
                 aItem.PutValue( aValue, MID_POSTURE );
@@ -234,10 +261,18 @@ void CharacterPropertyItemConverter::FillSpecialItem(
         break;
 
         case EE_CHAR_WEIGHT:
+        case EE_CHAR_WEIGHT_CJK:
+        case EE_CHAR_WEIGHT_CTL:
         {
-            SvxWeightItem aItem;
+            ::rtl::OUString aPostfix;
+            if( nWhichId == EE_CHAR_WEIGHT_CJK )
+                aPostfix = C2U( "Asian" );
+            else if( nWhichId == EE_CHAR_WEIGHT_CTL )
+                aPostfix = C2U( "Complex" );
 
-            uno::Any aValue( GetPropertySet()->getPropertyValue( C2U( "CharWeight" )));
+            SvxWeightItem aItem( WEIGHT_NORMAL, nWhichId );
+
+            uno::Any aValue( GetPropertySet()->getPropertyValue( C2U( "CharWeight" ) + aPostfix));
             if( aValue.hasValue())
             {
                 aItem.PutValue( aValue, MID_WEIGHT );
@@ -258,48 +293,56 @@ bool CharacterPropertyItemConverter::ApplySpecialItem(
     switch( nWhichId )
     {
         case EE_CHAR_FONTINFO:
+        case EE_CHAR_FONTINFO_CJK:
+        case EE_CHAR_FONTINFO_CTL:
         {
+            ::rtl::OUString aPostfix;
+            if( nWhichId == EE_CHAR_FONTINFO_CJK )
+                aPostfix = C2U( "Asian" );
+            else if( nWhichId == EE_CHAR_FONTINFO_CTL )
+                aPostfix = C2U( "Complex" );
+
             const SvxFontItem & rItem =
                 reinterpret_cast< const SvxFontItem & >(
                     rItemSet.Get( nWhichId ));
 
             if( rItem.QueryValue( aValue, MID_FONT_FAMILY_NAME ))
             {
-                if( aValue != GetPropertySet()->getPropertyValue( C2U( "CharFontName" ) ))
+                if( aValue != GetPropertySet()->getPropertyValue( C2U( "CharFontName" ) + aPostfix ))
                 {
-                    GetPropertySet()->setPropertyValue( C2U( "CharFontName" ), aValue );
+                    GetPropertySet()->setPropertyValue( C2U( "CharFontName" ) + aPostfix, aValue );
                     bChanged = true;
                 }
             }
             if( rItem.QueryValue( aValue, MID_FONT_FAMILY ))
             {
-                if( aValue != GetPropertySet()->getPropertyValue( C2U( "CharFontFamily" ) ))
+                if( aValue != GetPropertySet()->getPropertyValue( C2U( "CharFontFamily" ) + aPostfix ))
                 {
-                    GetPropertySet()->setPropertyValue( C2U( "CharFontFamily" ), aValue );
+                    GetPropertySet()->setPropertyValue( C2U( "CharFontFamily" ) + aPostfix, aValue );
                     bChanged = true;
                 }
             }
             if( rItem.QueryValue( aValue, MID_FONT_STYLE_NAME ))
             {
-                if( aValue != GetPropertySet()->getPropertyValue( C2U( "CharFontStyleName" ) ))
+                if( aValue != GetPropertySet()->getPropertyValue( C2U( "CharFontStyleName" ) + aPostfix ))
                 {
-                    GetPropertySet()->setPropertyValue( C2U( "CharFontStyleName" ), aValue );
+                    GetPropertySet()->setPropertyValue( C2U( "CharFontStyleName" ) + aPostfix, aValue );
                     bChanged = true;
                 }
             }
             if( rItem.QueryValue( aValue, MID_FONT_CHAR_SET ))
             {
-                if( aValue != GetPropertySet()->getPropertyValue( C2U( "CharFontCharSet" ) ))
+                if( aValue != GetPropertySet()->getPropertyValue( C2U( "CharFontCharSet" ) + aPostfix ))
                 {
-                    GetPropertySet()->setPropertyValue( C2U( "CharFontCharSet" ), aValue );
+                    GetPropertySet()->setPropertyValue( C2U( "CharFontCharSet" ) + aPostfix, aValue );
                     bChanged = true;
                 }
             }
             if( rItem.QueryValue( aValue, MID_FONT_PITCH ))
             {
-                if( aValue != GetPropertySet()->getPropertyValue( C2U( "CharFontPitch" ) ))
+                if( aValue != GetPropertySet()->getPropertyValue( C2U( "CharFontPitch" ) + aPostfix ))
                 {
-                    GetPropertySet()->setPropertyValue( C2U( "CharFontPitch" ), aValue );
+                    GetPropertySet()->setPropertyValue( C2U( "CharFontPitch" ) + aPostfix, aValue );
                     bChanged = true;
                 }
             }
@@ -359,16 +402,24 @@ bool CharacterPropertyItemConverter::ApplySpecialItem(
         break;
 
         case EE_CHAR_ITALIC:
+        case EE_CHAR_ITALIC_CJK:
+        case EE_CHAR_ITALIC_CTL:
         {
+            ::rtl::OUString aPostfix;
+            if( nWhichId == EE_CHAR_ITALIC_CJK )
+                aPostfix = C2U( "Asian" );
+            else if( nWhichId == EE_CHAR_ITALIC_CTL )
+                aPostfix = C2U( "Complex" );
+
             const SvxPostureItem & rItem =
                 reinterpret_cast< const SvxPostureItem & >(
                     rItemSet.Get( nWhichId ));
 
             if( rItem.QueryValue( aValue, MID_POSTURE ))
             {
-                if( aValue != GetPropertySet()->getPropertyValue( C2U( "CharPosture" ) ))
+                if( aValue != GetPropertySet()->getPropertyValue( C2U( "CharPosture" ) + aPostfix))
                 {
-                    GetPropertySet()->setPropertyValue( C2U( "CharPosture" ), aValue );
+                    GetPropertySet()->setPropertyValue( C2U( "CharPosture" ) + aPostfix, aValue );
                     bChanged = true;
                 }
             }
@@ -376,16 +427,24 @@ bool CharacterPropertyItemConverter::ApplySpecialItem(
         break;
 
         case EE_CHAR_WEIGHT:
+        case EE_CHAR_WEIGHT_CJK:
+        case EE_CHAR_WEIGHT_CTL:
         {
+            ::rtl::OUString aPostfix;
+            if( nWhichId == EE_CHAR_WEIGHT_CJK )
+                aPostfix = C2U( "Asian" );
+            else if( nWhichId == EE_CHAR_WEIGHT_CTL )
+                aPostfix = C2U( "Complex" );
+
             const SvxWeightItem & rItem =
                 reinterpret_cast< const SvxWeightItem & >(
                     rItemSet.Get( nWhichId ));
 
             if( rItem.QueryValue( aValue, MID_WEIGHT ))
             {
-                if( aValue != GetPropertySet()->getPropertyValue( C2U( "CharWeight" ) ))
+                if( aValue != GetPropertySet()->getPropertyValue( C2U( "CharWeight" ) + aPostfix))
                 {
-                    GetPropertySet()->setPropertyValue( C2U( "CharWeight" ), aValue );
+                    GetPropertySet()->setPropertyValue( C2U( "CharWeight" ) + aPostfix, aValue );
                     bChanged = true;
                 }
             }
