@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pview.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2002-03-19 13:37:32 $
+ *  last change: $Author: os $ $Date: 2002-05-06 12:11:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,7 @@ class Button;
 class SwRect;
 class DataChangedEvent;
 class CommandEvent;
+class SvtAccessibilityOptions;
 
 class SwPagePreViewWin : public Window
 {
@@ -249,6 +250,9 @@ public:
     void            StateUndo(SfxItemSet&);
 
     SwDocShell*     GetDocShell();
+
+    //apply Accessiblity options
+    void ApplyAccessiblityOptions(SvtAccessibilityOptions& rAccessibilityOptions);
 
     SwPagePreView( SfxViewFrame* pFrame, SfxViewShell* );
     ~SwPagePreView();

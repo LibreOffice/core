@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: os $ $Date: 2002-04-26 16:45:52 $
+ *  last change: $Author: os $ $Date: 2002-05-06 12:11:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -987,6 +987,7 @@ SwView::SwView( SfxViewFrame *pFrame, SfxViewShell* pOldSh )
 
     pWrtShell->SetUIOptions( aUsrPref );
     pWrtShell->SetReadOnlyAvailable( aUsrPref.IsCursorInProtectedArea() );
+    pWrtShell->ApplyAccessiblityOptions(SW_MOD()->GetAccessibilityOptions());
 
     if( UseObjectSize() )
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ama $ $Date: 2002-03-15 11:43:42 $
+ *  last change: $Author: os $ $Date: 2002-05-06 12:10:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,7 @@ struct ShellResource;
 class SwRegionRects;
 class SwFrm;
 struct SwPrintData;
+class SvtAccessibilityOptions;
 
 //JP 19.07.98: - Bug 52312
 // define fuer Flags, die im CTOR oder den darunter liegenden Schichten
@@ -418,6 +419,9 @@ public:
 #ifdef ACCESSIBLE_LAYOUT
     ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > CreateAccessible();
 #endif
+
+    //apply Accessiblity options
+    void ApplyAccessiblityOptions(SvtAccessibilityOptions& rAccessibilityOptions);
 
     ViewShell( ViewShell&, Window *pWin = 0, OutputDevice *pOut = 0,
                 long nFlags = 0 );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2002-03-15 07:32:50 $
+ *  last change: $Author: os $ $Date: 2002-05-06 12:11:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,7 +127,7 @@ class FmFormShell;
 class CommandEvent;
 class InsCaptionOpt;
 class SvGlobalName;
-
+class SvtAccessibilityOptions;
 
 namespace com{ namespace sun { namespace star {
     namespace view{ class XSelectionSupplier; }
@@ -599,6 +599,8 @@ public:
     BOOL IsPasteAllowed();
     BOOL IsPasteSpecialAllowed();
 
+    //apply Accessiblity options
+    void ApplyAccessiblityOptions(SvtAccessibilityOptions& rAccessibilityOptions);
 
     SwView(SfxViewFrame* pFrame, SfxViewShell*);
     ~SwView();

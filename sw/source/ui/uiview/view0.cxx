@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view0.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2001-07-24 07:53:46 $
+ *  last change: $Author: os $ $Date: 2002-05-06 12:11:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,9 @@
 
 #ifndef _NAVIPI_HXX //autogen
 #include <navipi.hxx>
+#endif
+#ifndef _WRTSH_HXX
+#include <wrtsh.hxx>
 #endif
 #include "view.hxx"
 #include "basesh.hxx"
@@ -179,124 +182,10 @@ view::XSelectionSupplier* SwView::GetUNOObject()
 {
     return pViewImpl->GetUNOObject();
 }
+/* -----------------------------06.05.2002 13:18------------------------------
 
-
-/*------------------------------------------------------------------------
-    $Log: not supported by cvs2svn $
-    Revision 1.7  2001/06/14 11:42:00  mba
-    #86150#: enable office without writer: webfactory always present, others are optional
-
-    Revision 1.6  2001/01/10 16:10:12  os
-    Ruby dialog
-
-    Revision 1.5  2000/11/10 15:49:54  tbe
-    removed outcommented basctl include file idetemp.hxx
-
-    Revision 1.4  2000/10/23 10:52:34  tbe
-    idetemp.hxx include removed
-
-    Revision 1.3  2000/10/10 16:41:12  rt
-    include vcl/graph.hxx (galbrws.hxx needs it for class Graphic)
-
-    Revision 1.2  2000/09/28 15:34:12  os
-    gallery child window registered
-
-    Revision 1.1.1.1  2000/09/18 17:14:49  hr
-    initial import
-
-    Revision 1.72  2000/09/18 16:06:12  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.71  2000/09/04 11:44:56  tbe
-    basicide, isetbrw, si, vcdlged moved from svx to basctl
-
-    Revision 1.70  2000/05/10 11:53:20  os
-    Basic API removed
-
-    Revision 1.69  2000/05/09 14:43:13  os
-    BASIC interface partially removed
-
-    Revision 1.68  2000/04/18 15:02:50  os
-    UNICODE
-
-    Revision 1.67  2000/03/23 07:50:25  os
-    UNO III
-
-    Revision 1.66  2000/02/09 08:07:01  os
-    #72165# hyperlink dialog moved again
-
-    Revision 1.65  1999/09/07 13:56:53  os
-    Insert/EditIndexEntry as FloatingWindow
-
-    Revision 1.64  1999/01/27 08:58:32  OS
-    #56371# TF_ONE51
-
-
-      Rev 1.63   27 Jan 1999 09:58:32   OS
-   #56371# TF_ONE51
-
-      Rev 1.62   15 Jul 1998 12:52:42   OS
-   Navigator an der SwView registrieren #34794#
-
-      Rev 1.61   09 Jun 1998 15:32:20   OM
-   VC-Controls entfernt
-
-      Rev 1.60   02 Jun 1998 15:49:54   OS
-   TF_STARONE raus; GetUNOSelectionObject gestrichen
-
-      Rev 1.59   03 Apr 1998 14:38:18   OS
-   UnoObject fuer die View reaktiviert
-
-      Rev 1.58   16 Mar 1998 16:18:04   OM
-   Aktualisieren-Button kontextsensitiv
-
-      Rev 1.57   15 Mar 1998 15:14:08   OM
-   Synchron-Button
-
-      Rev 1.56   27 Feb 1998 18:25:14   OM
-   Redline-Browser
-
-      Rev 1.55   29 Jan 1998 09:21:06   OS
-   TF_STARONE
-
-      Rev 1.54   16 Dec 1997 12:00:24   OS
-   Impl-Pointer fuer UNO
-
-      Rev 1.53   29 Nov 1997 16:49:14   MA
-   includes
-
-      Rev 1.52   21 Nov 1997 15:00:12   MA
-   includes
-
-      Rev 1.51   03 Nov 1997 13:58:28   MA
-   precomp entfernt
-
-      Rev 1.50   09 Sep 1997 11:33:08   OS
-   TextPage heisst nur Page #43650#
-
-      Rev 1.49   08 Sep 1997 10:52:36   OS
-   DBG_ERROR -> DBG_ASSERT
-
-      Rev 1.48   08 Sep 1997 07:43:38   OS
-   TextTables nur ClassName
-
-      Rev 1.47   04 Sep 1997 18:10:56   MBA
-   GetSelectionObject erzeugt richtiges Objekt auch bei WebView
-
-      Rev 1.46   04 Sep 1997 08:25:24   OS
-   Tables heisst jetzt TextTables, kein GPF wg. fehlender TLB-Angaben
-
-      Rev 1.45   03 Sep 1997 10:52:26   MBA
-   OLEObjects in SVX
-
-      Rev 1.44   29 Aug 1997 12:21:34   MH
-   chg: SfxTypeLib_Impl
-
-      Rev 1.43   05 Aug 1997 16:36:38   TJ
-   include svx/srchitem.hxx
-
-      Rev 1.42   07 Jul 1997 09:35:10   OS
-   Collection fuer GlobalDoc
-
-------------------------------------------------------------------------*/
-
+ ---------------------------------------------------------------------------*/
+void SwView::ApplyAccessiblityOptions(SvtAccessibilityOptions& rAccessibilityOptions)
+{
+    pWrtShell->ApplyAccessiblityOptions(rAccessibilityOptions);
+}

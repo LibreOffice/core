@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewopt.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2002-05-02 11:14:55 $
+ *  last change: $Author: os $ $Date: 2002-05-06 12:11:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -546,6 +546,7 @@ SwViewOption& SwViewOption::operator=( const SwViewOption &rVOpt )
     nDivisionY      = rVOpt.nDivisionY  ;
     nPagePrevRow    = rVOpt.nPagePrevRow;
     nPagePrevCol    = rVOpt.nPagePrevCol;
+    bIsPagePreview  = rVOpt.bIsPagePreview;
     eZoom           = rVOpt.eZoom       ;
     nTblDest        = rVOpt.nTblDest    ;
     nUIOptions      = rVOpt.nUIOptions  ;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pview.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: os $ $Date: 2002-04-26 16:17:48 $
+ *  last change: $Author: os $ $Date: 2002-05-06 12:11:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1441,6 +1441,7 @@ void SwPagePreView::Init(const SwViewOption * pPrefs)
     aOpt.SetGridVisible( FALSE );
     aOpt.SetHideSpell( TRUE );
     GetViewShell().ApplyViewOptions( aOpt );
+    GetViewShell().ApplyAccessiblityOptions(SW_MOD()->GetAccessibilityOptions());
 
     if( pESh->GetDoc()->IsBrowseMode() )
     {
@@ -2252,150 +2253,11 @@ BOOL SwPagePreView::HandleWheelCommands( const CommandEvent& rCEvt )
     return bOk;
 }
 
-/*************************************************************************
+/* -----------------------------06.05.2002 13:18------------------------------
 
-      $Log: not supported by cvs2svn $
-      Revision 1.15  2002/04/25 13:53:11  os
-      #97695# color configuration entries added/moved/removed
-
-      Revision 1.14  2002/03/20 11:00:27  os
-      #97978# close preview button as text only
-
-      Revision 1.13  2002/03/20 09:18:37  os
-      #97978# keyboard access corrected
-
-      Revision 1.12  2002/03/15 07:32:50  os
-      #97978# page preview accessiblity implemented
-
-      Revision 1.11  2002/02/26 15:54:02  os
-      #97682# prevent division by zero if no printer can be found
-
-      Revision 1.10  2001/11/30 12:54:23  jp
-      Bug #95431#: DataChanged - react only on whished type/flags
-
-      Revision 1.9  2001/10/08 13:50:55  jp
-      Task #92830#: min/max -> Min/Max
-
-      Revision 1.8  2001/06/01 11:23:56  fme
-      Fix #86988#: Redesign of dialogs
-
-      Revision 1.7  2001/05/17 09:32:40  jp
-      Bug #80651#: call InitJob at the printer
-
-      Revision 1.6  2001/05/10 08:48:50  os
-      store print options at the document
-
-      Revision 1.5  2000/11/09 10:14:21  obo
-      Without string include
-
-      Revision 1.4  2000/11/07 13:09:54  hjs
-      use min/max from stl
-
-      Revision 1.3  2000/10/25 12:05:50  jp
-      Spellchecker/Hyphenator are not longer member of the shells
-
-      Revision 1.2  2000/09/28 15:24:06  os
-      use of configuration service in view options
-
-      Revision 1.1.1.1  2000/09/18 17:14:48  hr
-      initial import
-
-      Revision 1.201  2000/09/18 16:06:10  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.200  2000/09/07 15:59:32  os
-      change: SFX_DISPATCHER/SFX_BINDINGS removed
-
-      Revision 1.199  2000/08/14 17:25:29  jp
-      Task #77422#: PrintPreView in the same window
-
-      Revision 1.198  2000/08/07 11:48:15  jp
-      PagePreView replace the current view
-
-      Revision 1.197  2000/06/19 11:33:51  os
-      #73648# display all values after <standard> has been reset
-
-      Revision 1.196  2000/05/26 07:21:34  os
-      old SW Basic API Slots removed
-
-      Revision 1.195  2000/05/23 19:42:35  jp
-      Bugfixes for Unicode
-
-      Revision 1.194  2000/05/11 12:41:59  tl
-      if[n]def ONE_LINGU entfernt
-
-      Revision 1.193  2000/05/10 11:53:20  os
-      Basic API removed
-
-      Revision 1.192  2000/04/18 15:02:50  os
-      UNICODE
-
-      Revision 1.191  2000/03/23 16:17:01  os
-      #74433# dont show section boundaries in print preview
-
-      Revision 1.190  2000/03/03 15:17:04  os
-      StarView remainders removed
-
-      Revision 1.189  2000/02/11 14:59:07  hr
-      #70473# changes for unicode ( patched by automated patchtool )
-
-      Revision 1.188  2000/01/04 15:40:55  os
-      #71433# no index background in preview
-
-      Revision 1.187  1999/12/14 14:32:01  jp
-      Bug #69595#: print can create single Jobs
-
-      Revision 1.186  1999/10/25 19:42:26  tl
-      ongoing ONE_LINGU implementation
-
-      Revision 1.185  1999/09/10 13:19:10  os
-      Chg: resource types removed
-
-      Revision 1.184  1999/08/31 08:40:12  TL
-      #if[n]def ONE_LINGU inserted (for transition of lingu to StarOne)
-
-
-      Rev 1.183   31 Aug 1999 10:40:12   TL
-   #if[n]def ONE_LINGU inserted (for transition of lingu to StarOne)
-
-      Rev 1.182   08 Jul 1999 18:45:16   MA
-   Use internal object to toggle wait cursor
-
-      Rev 1.181   10 Jun 1999 10:52:32   JP
-   have to change: no AppWin from SfxApp
-
-      Rev 1.180   09 Jun 1999 19:33:28   JP
-   have to change: no cast from GetpApp to SfxApp/OffApp, SfxShell only subclass of SfxApp
-
-      Rev 1.179   11 May 1999 08:41:40   OS
-   #65779# SaveValue nach hinten verschoben
-
-      Rev 1.178   08 Apr 1999 10:59:12   OS
-   #61864# Controls jetzt auch initial leer, wenn noch nichts gesetzt ist
-
-      Rev 1.177   10 Mar 1999 12:02:54   MA
-   #52642# Fontwechsel im DataChanged
-
-      Rev 1.176   02 Mar 1999 16:03:28   AMA
-   Fix #62568#: Invalidierungen so sparsam wie moeglich, so gruendlich wie noetig
-
-      Rev 1.175   01 Mar 1999 13:54:40   JP
-   #62496# VScrollbar IMMER pruefen
-
-      Rev 1.174   26 Feb 1999 15:07:28   OS
-   #62496# VScrollbar IMMER pruefen
-
-      Rev 1.173   12 Nov 1998 12:24:26   OS
-   #59297# Einstellungen bei Standard zuruecksetzen
-
-      Rev 1.172   29 Oct 1998 11:52:40   OM
-   #58593# Selektion nur anbieten, wenn auch vorhanden
-
-      Rev 1.171   15 Oct 1998 13:39:20   OS
-   #57602# printPages mit optionen
-
-      Rev 1.170   29 Sep 1998 14:35:44   OS
-   #57281#, #57264# Zoom der Preview mit Controller, Preview-Close ueber eigenen Slot
-
-*************************************************************************/
+ ---------------------------------------------------------------------------*/
+void SwPagePreView::ApplyAccessiblityOptions(SvtAccessibilityOptions& rAccessibilityOptions)
+{
+    GetViewShell().ApplyAccessiblityOptions(rAccessibilityOptions);
+}
 

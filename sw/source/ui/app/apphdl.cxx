@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apphdl.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: os $ $Date: 2002-05-06 08:53:45 $
+ *  last change: $Author: os $ $Date: 2002-05-06 12:11:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1014,8 +1014,11 @@ void SwModule::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         if(SFX_HINT_COLORS_CHANGED == nHintId ||
             SFX_HINT_ACCESSIBILITY_CHANGED == nHintId)
         {
+            sal_Bool bAccessibility = sal_False;
             if(SFX_HINT_COLORS_CHANGED == nHintId)
                 SwViewOption::ApplyColorConfigValues(*pColorConfig);
+            else
+                bAccessibility = sal_True;
 
             //invalidate all edit windows
             const TypeId aSwViewTypeId = TYPE(SwView);
@@ -1024,11 +1027,22 @@ void SwModule::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             SfxViewShell* pViewShell = SfxViewShell::GetFirst();
             while(pViewShell)
             {
-                if(pViewShell->GetWindow() &&
-                    (pViewShell->IsA(aSwViewTypeId) ||
-                        pViewShell->IsA(aSwViewTypeId) ||
-                        pViewShell->IsA(aSwViewTypeId)))
-                    pViewShell->GetWindow()->Invalidate();
+                if(pViewShell->GetWindow())
+                {
+                    if((pViewShell->IsA(aSwViewTypeId) ||
+                        pViewShell->IsA(aSwPreViewTypeId) ||
+                        pViewShell->IsA(aSwSrcViewTypeId)))
+                    {
+                        if(bAccessibility)
+                        {
+                            if(pViewShell->IsA(aSwViewTypeId))
+                                ((SwView*)pViewShell)->ApplyAccessiblityOptions(*pAccessibilityOptions);
+                            else if(pViewShell->IsA(aSwPreViewTypeId))
+                                ((SwPagePreView*)pViewShell)->ApplyAccessiblityOptions(*pAccessibilityOptions);
+                        }
+                        pViewShell->GetWindow()->Invalidate();
+                    }
+                }
                 pViewShell = SfxViewShell::GetNext( *pViewShell );
             }
         }

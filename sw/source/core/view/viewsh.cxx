@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: os $ $Date: 2002-04-25 13:57:38 $
+ *  last change: $Author: os $ $Date: 2002-05-06 12:11:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,6 +171,9 @@
 #endif
 #ifndef _SVX_COLORCFG_HXX
 #include <svx/colorcfg.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_ACCESSIBILITYOPTIONS_HXX
+#include <svtools/accessibilityoptions.hxx>
 #endif
 
 #ifndef _STATSTR_HRC
@@ -2199,3 +2202,22 @@ BOOL ViewShell::IsNewLayout() const
     return xAcc;
 }
 #endif
+/* -----------------------------06.05.2002 13:23------------------------------
+
+ ---------------------------------------------------------------------------*/
+void ViewShell::ApplyAccessiblityOptions(SvtAccessibilityOptions& rAccessibilityOptions)
+{
+    if(pOpt->IsPagePreview() && !rAccessibilityOptions.GetIsForPagePreviews())
+    {
+        pOpt->SetAlwaysAutoColor(sal_False);
+        pOpt->SetStopAnimatedGraphics(sal_False);
+        pOpt->SetStopAnimatedText(sal_False);
+    }
+    else
+    {
+        pOpt->SetAlwaysAutoColor(rAccessibilityOptions.GetIsAutomaticFontColor());
+        pOpt->SetStopAnimatedGraphics(rAccessibilityOptions.GetIsAllowAnimatedGraphics());
+        pOpt->SetStopAnimatedText(rAccessibilityOptions.GetIsAllowAnimatedText());
+    }
+}
+
