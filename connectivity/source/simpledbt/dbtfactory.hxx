@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtfactory.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-25 13:28:19 $
+ *  last change: $Author: fs $ $Date: 2001-08-13 14:54:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,8 @@ namespace connectivity
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxServiceFactory
         ) const;
 
+        virtual ::rtl::Reference< simple::IDataAccessCharSet > createCharsetHelper( ) const;
+
         virtual ::rtl::Reference< simple::IDataAccessTypeConversion > getTypeConversionHelper();
 
         virtual ::rtl::Reference< simple::IDataAccessTools > getDataAccessTools();
@@ -111,6 +113,9 @@ namespace connectivity
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/07/25 13:28:19  fs
+ *  initial checkin - main factory for load-on-demand usage of DBTOOLS
+ *
  *
  *  Revision 1.0 24.07.01 16:32:42  fs
  ************************************************************************/
