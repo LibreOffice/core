@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FStatement.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: fs $ $Date: 2002-01-16 08:42:47 $
+ *  last change: $Author: oj $ $Date: 2002-03-27 15:21:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -503,8 +503,8 @@ void OStatement_Base::construct(const ::rtl::OUString& sql)  throw(SQLException,
         m_aSQLIterator.setParseTree(m_pParseTree);
         m_aSQLIterator.traverseAll();
         const OSQLTables& xTabs = m_aSQLIterator.getTables();
-        if(xTabs.empty())
-            throw SQLException(::rtl::OUString::createFromAscii("Driver does not support this function!"),*this,::rtl::OUString::createFromAscii("IM001"),0,Any());
+        if ( xTabs.empty() )
+            throw SQLException(::rtl::OUString::createFromAscii("No valid tables found in SQL statement!"),*this,::rtl::OUString::createFromAscii("IM001"),0,Any());
 
         // at this moment we support only one table per select statement
         Reference< ::com::sun::star::lang::XUnoTunnel> xTunnel(xTabs.begin()->second,UNO_QUERY);
