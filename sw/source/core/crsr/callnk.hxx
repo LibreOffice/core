@@ -2,9 +2,9 @@
  *
  *  $RCSfile: callnk.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:17 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 16:03:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,10 +74,12 @@ public:
     xub_StrLen nCntnt;
     BYTE nNdTyp;
     long nLeftFrmPos;
+    bool bHasSelection;
 
     SwCallLink( SwCrsrShell & rSh );
     SwCallLink( SwCrsrShell & rSh, ULONG nAktNode, xub_StrLen nAktCntnt,
-                                    BYTE nAktNdTyp, long nLRPos );
+                                    BYTE nAktNdTyp, long nLRPos,
+                                    bool bAktSelection );
     ~SwCallLink();
 
     static long GetFrm( SwTxtNode& rNd, xub_StrLen nCntPos, BOOL bCalcFrm );
