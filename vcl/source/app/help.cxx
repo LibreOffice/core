@@ -2,9 +2,9 @@
  *
  *  $RCSfile: help.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ssa $ $Date: 2001-10-31 13:36:39 $
+ *  last change: $Author: ssa $ $Date: 2001-11-14 11:10:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,8 @@
 #ifndef _DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
+
+#include <stdio.h>
 
 #pragma hdrstop
 
@@ -344,7 +346,7 @@ void Help::HideTip( ULONG nId )
 }
 
 // =======================================================================
-
+
 HelpTextWindow::HelpTextWindow( Window* pParent, const XubString& rText, USHORT nHelpWinStyle, USHORT nStyle ) :
     FloatingWindow( pParent->ImplGetFrameWindow(), WB_SYSTEMWINDOW ),
     maHelpText( rText )
@@ -364,6 +366,33 @@ HelpTextWindow::HelpTextWindow( Window* pParent, const XubString& rText, USHORT 
     SetLineColor( COL_BLACK );
     SetFillColor();
 
+    SetHelpText( rText );
+
+    const HelpSettings& rHelpSettings = GetSettings().GetHelpSettings();
+    maShowTimer.SetTimeoutHdl( LINK( this, HelpTextWindow, TimerHdl ) );
+    maHideTimer.SetTimeoutHdl( LINK( this, HelpTextWindow, TimerHdl ) );
+    maHideTimer.SetTimeout( rHelpSettings.GetTipTimeout() );
+}
+
+// -----------------------------------------------------------------------
+
+HelpTextWindow::~HelpTextWindow()
+{
+    maShowTimer.Stop();
+    maHideTimer.Stop();
+
+    if ( maStatusText.Len() )
+    {
+        ImplSVData* pSVData = ImplGetSVData();
+        pSVData->mpApp->HideHelpStatusText();
+    }
+}
+
+// -----------------------------------------------------------------------
+
+void HelpTextWindow::SetHelpText( const String& rHelpText )
+{
+    maHelpText = rHelpText;
     if ( mnHelpWinStyle == HELPWINSTYLE_QUICK )
     {
         Size aSize;
@@ -396,24 +425,8 @@ HelpTextWindow::HelpTextWindow( Window* pParent, const XubString& rText, USHORT 
         maTextRect.SetPos( Point( HELPTEXTMARGIN_BALLOON, HELPTEXTMARGIN_BALLOON ) );
     }
 
-    const HelpSettings& rHelpSettings = GetSettings().GetHelpSettings();
-    maShowTimer.SetTimeoutHdl( LINK( this, HelpTextWindow, TimerHdl ) );
-    maHideTimer.SetTimeoutHdl( LINK( this, HelpTextWindow, TimerHdl ) );
-    maHideTimer.SetTimeout( rHelpSettings.GetTipTimeout() );
-}
-
-// -----------------------------------------------------------------------
-
-HelpTextWindow::~HelpTextWindow()
-{
-    maShowTimer.Stop();
-    maHideTimer.Stop();
-
-    if ( maStatusText.Len() )
-    {
-        ImplSVData* pSVData = ImplGetSVData();
-        pSVData->mpApp->HideHelpStatusText();
-    }
+    Size aSize( CalcOutSize() );
+    SetOutputSizePixel( aSize );
 }
 
 // -----------------------------------------------------------------------
@@ -510,8 +523,8 @@ IMPL_LINK( HelpTextWindow, TimerHdl, Timer*, pTimer)
     }
     else
     {
-        Hide();
-        ImplDestroyHelpWindow();
+          Hide();
+          ImplDestroyHelpWindow();
     }
 
     return 1;
@@ -537,7 +550,6 @@ void HelpTextWindow::RequestHelp( const HelpEvent& rHEvt )
 
 // =======================================================================
 
-
 void ImplShowHelpWindow( Window* pParent, USHORT nHelpWinStyle, USHORT nStyle,
                          const XubString& rHelpText, const XubString& rStatusText,
                          const Point& rScreenPos, const Rectangle* pHelpArea )
@@ -549,9 +561,7 @@ void ImplShowHelpWindow( Window* pParent, USHORT nHelpWinStyle, USHORT nStyle,
     {
         DBG_ASSERT( pHelpWin != pParent, "HelpInHelp ?!" );
 
-        if ( ( pHelpWin->GetHelpText() != rHelpText ) ||
-             ( pHelpWin->GetWinStyle() != nHelpWinStyle ) ||
-             ( pHelpArea && ( pHelpWin->GetHelpArea() != *pHelpArea ) ) )
+        if ( ! rHelpText.Len() || pHelpWin->GetWinStyle() != nHelpWinStyle )
         {
             // Fenster wegnehmen wenn kein HelpText oder anderer HelpText oder
             // anderer Modus.
@@ -560,10 +570,21 @@ void ImplShowHelpWindow( Window* pParent, USHORT nHelpWinStyle, USHORT nStyle,
             pHelpWin = NULL;
             ImplDestroyHelpWindow();
         }
-        else if ( !pHelpWin->IsVisible() )
+        else
         {
-            // Dann die Position der Maus annaehren...
-            ImplSetHelpWindowPos( pHelpWin, nHelpWinStyle, nStyle, rScreenPos, pHelpArea );
+            bool bTextChanged = rHelpText != pHelpWin->GetHelpText();
+            if( bTextChanged )
+            {
+                Window * pWindow = pHelpWin->GetParent();
+                Rectangle aInvRect( pHelpWin->GetWindowExtentsRelative( pWindow ) );
+                pWindow->Invalidate( aInvRect );
+
+                pHelpWin->SetHelpText( rHelpText );
+                // Dann die Position der Maus annaehern...
+                ImplSetHelpWindowPos( pHelpWin, nHelpWinStyle, nStyle, rScreenPos, pHelpArea );
+                if( pHelpWin->IsVisible() )
+                    pHelpWin->Invalidate();
+            }
         }
     }
 
@@ -595,6 +616,9 @@ void ImplDestroyHelpWindow( BOOL bUpdate )
     HelpTextWindow* pHelpWin = pSVData->maHelpData.mpHelpWin;
     if ( pHelpWin )
     {
+        Window * pWindow = pHelpWin->GetParent();
+        Rectangle aInvRect( pHelpWin->GetWindowExtentsRelative( pWindow ) );
+        pWindow->Invalidate( aInvRect );
         pSVData->maHelpData.mpHelpWin = NULL;
         pHelpWin->Hide();
         if ( bUpdate )
@@ -706,6 +730,7 @@ void ImplSetHelpWindowPos( Window* pHelpWin, USHORT nHelpWinStyle, USHORT nStyle
             aPos = mPos + delta;
     }
 
-    aPos = pHelpWin->GetParent()->AbsoluteScreenToOutputPixel( aPos );
+    Window* pWindow = pHelpWin->GetParent();
+    aPos = pWindow->AbsoluteScreenToOutputPixel( aPos );
     pHelpWin->SetPosPixel( aPos );
 }
