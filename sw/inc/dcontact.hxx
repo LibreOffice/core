@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dcontact.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 10:54:54 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 09:51:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -387,7 +387,7 @@ class SwDrawVirtObj : public SdrVirtObj
         virtual const Rectangle& GetCurrentBoundRect() const;
         virtual const Rectangle& GetLastBoundRect() const;
         virtual void RecalcBoundRect();
-        virtual sal_Bool DoPaintObject(ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoRec) const;
+        virtual sal_Bool DoPaintObject(XOutputDevice& rOut, const SdrPaintInfoRec& rInfoRec) const;
         virtual SdrObject* CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const;
         virtual void TakeXorPoly(XPolyPolygon& rPoly, FASTBOOL bDetail) const;
         virtual void TakeContour(XPolyPolygon& rPoly) const;
