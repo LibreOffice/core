@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmexch.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-09 11:19:08 $
+ *  last change: $Author: fs $ $Date: 2001-07-30 14:26:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,10 +63,6 @@
 
 #ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
-#endif
-
-#ifndef _SOT_DTRANS_HXX //autogen
-#include <sot/dtrans.hxx>
 #endif
 
 #ifndef _DTRANS_HXX //autogen
