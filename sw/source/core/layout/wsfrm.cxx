@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wsfrm.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 08:46:01 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:10:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -924,6 +924,8 @@ void SwCntntFrm::Paste( SwFrm* pParent, SwFrm* pSibling)
     ASSERT( pSibling != this, "Bin mein eigener Nachbar." );
     ASSERT( !GetPrev() && !GetNext() && !GetUpper(),
             "Bin noch irgendwo angemeldet." );
+    ASSERT( !pSibling || pSibling->IsFlowFrm(),
+            "<SwCntntFrm::Paste(..)> - sibling not of expected type." )
 
     //In den Baum einhaengen.
     InsertBefore( (SwLayoutFrm*)pParent, pSibling );
@@ -1122,7 +1124,14 @@ void SwCntntFrm::Cut()
     {
         SwSectionFrm *pSct;
         if ( !pUp->Lower() && ( ( pUp->IsFtnFrm() && !pUp->IsColLocked() )
-            || ( pUp->IsInSct() && !(pSct = pUp->FindSctFrm())->ContainsCntnt() ) ) )
+            || ( pUp->IsInSct() &&
+                // -->  FME 2004-06-03 #i29438#
+                // We have to consider the case that the section may be "empty"
+                // except from a temporary empty table frame.
+                // This can happen due to the new cell split feature.
+                !pUp->IsCellFrm() &&
+                // <--
+                 !(pSct = pUp->FindSctFrm())->ContainsCntnt() ) ) )
         {
             if ( pUp->GetUpper() )
             {
