@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: pl $ $Date: 2000-12-13 16:42:19 $
+ *  last change: $Author: pl $ $Date: 2000-12-15 18:10:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2690,8 +2690,6 @@ long SalFrameData::Dispatch( XEvent *pEvent )
                 break;
 
             case VisibilityNotify:
-                nVisibility_ = pEvent->xvisibility.state;
-                nRet = TRUE;
                 // HACK: this is a workaround for CJK input method
                 // (see #79518#) the input method switches the focus forth and
                 // back while a second document is being mapped
@@ -2699,7 +2697,8 @@ long SalFrameData::Dispatch( XEvent *pEvent )
                 // as there are other problems with it too: on some window
                 // managers the focus will end in the status window of
                 // the IME and not in any document.
-                if( nVisibility_ != VisibilityUnobscured
+                if( pEvent->xvisibility.state != VisibilityUnobscured
+                    && nVisibility_ == VisibilityFullyObscured
                     && ! mpParent && maChildren.Count() == 0
                     )
                 {
@@ -2711,6 +2710,8 @@ long SalFrameData::Dispatch( XEvent *pEvent )
                         || focusWindow == GetWindow() )
                         XRaiseWindow( pDisplay_->GetDisplay(), GetShellWindow() );
                 }
+                nVisibility_ = pEvent->xvisibility.state;
+                nRet = TRUE;
                 break;
 
             case ReparentNotify:
