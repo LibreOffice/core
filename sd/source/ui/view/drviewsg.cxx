@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-09 09:14:17 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 12:48:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,8 @@
  *
  ************************************************************************/
 
+#include "DrawViewShell.hxx"
+
 #ifndef _SVXIDS_HRC
 #include <svx/svxids.hrc>
 #endif
@@ -83,15 +85,21 @@
 
 #include "app.hrc"
 
-#include "drviewsh.hxx"
 #include "drawdoc.hxx"
+#ifndef SD_FU_SLIDE_SHOW_HXX
 #include "fuslshow.hxx"
+#endif
 #include "imapinfo.hxx"
 #include "sdmod.hxx"
 #include "optsitem.hxx"
-#include "frmview.hxx"
+#ifndef SD_FRAME_VIEW
+#include "FrameView.hxx"
+#endif
+#ifndef SD_DRAW_VIEW_HXX
 #include "drawview.hxx"
+#endif
 
+namespace sd {
 
 /*************************************************************************
 |*
@@ -99,7 +107,7 @@
 |*
 \************************************************************************/
 
-void SdDrawViewShell::ExecIMap( SfxRequest& rReq )
+void DrawViewShell::ExecIMap( SfxRequest& rReq )
 {
     // waehrend einer Diashow wird nichts ausgefuehrt!
     if (pFuActual && pFuActual->GetSlotID() == SID_PRESENTATION)
@@ -117,14 +125,14 @@ void SdDrawViewShell::ExecIMap( SfxRequest& rReq )
             if ( pDlg->GetEditingObject() == (void*) pSdrObj )
             {
                 const ImageMap& rImageMap = pDlg->GetImageMap();
-                SdIMapInfo*     pIMapInfo = pDoc->GetIMapInfo( pSdrObj );
+                SdIMapInfo*     pIMapInfo = GetDoc()->GetIMapInfo( pSdrObj );
 
                 if ( !pIMapInfo )
                     pSdrObj->InsertUserData( new SdIMapInfo( rImageMap ) );
                 else
                     pIMapInfo->SetImageMap( rImageMap );
 
-                pDoc->SetChanged( sal_True );
+                GetDoc()->SetChanged( sal_True );
             }
         }
     }
@@ -137,7 +145,7 @@ void SdDrawViewShell::ExecIMap( SfxRequest& rReq )
 |*
 \************************************************************************/
 
-void SdDrawViewShell::GetIMapState( SfxItemSet& rSet )
+void DrawViewShell::GetIMapState( SfxItemSet& rSet )
 {
     BOOL bDisable = TRUE;
 
@@ -168,7 +176,7 @@ void SdDrawViewShell::GetIMapState( SfxItemSet& rSet )
 |*
 \************************************************************************/
 
-void SdDrawViewShell::ExecOptionsBar( SfxRequest& rReq )
+void DrawViewShell::ExecOptionsBar( SfxRequest& rReq )
 {
     // waehrend einer Diashow wird nichts ausgefuehrt!
     if (pFuActual && pFuActual->GetSlotID() == SID_PRESENTATION)
@@ -178,7 +186,7 @@ void SdDrawViewShell::ExecOptionsBar( SfxRequest& rReq )
     USHORT nSlot = rReq.GetSlot();
     FrameView* pFrameView = GetFrameView();
 
-    SdOptions* pOptions = SD_MOD()->GetSdOptions(pDoc->GetDocumentType());
+    SdOptions* pOptions = SD_MOD()->GetSdOptions(GetDoc()->GetDocumentType());
 
     switch( nSlot )
     {
@@ -320,7 +328,7 @@ void SdDrawViewShell::ExecOptionsBar( SfxRequest& rReq )
 |*
 \************************************************************************/
 
-void SdDrawViewShell::GetOptionsBarState( SfxItemSet& rSet )
+void DrawViewShell::GetOptionsBarState( SfxItemSet& rSet )
 {
     FrameView* pFrameView = GetFrameView();
 
@@ -349,5 +357,4 @@ void SdDrawViewShell::GetOptionsBarState( SfxItemSet& rSet )
     rSet.Put( SfxBoolItem( SID_CLICK_CHANGE_ROTATION, pFrameView->IsClickChangeRotation() ) );
 }
 
-
-
+} // end of namespace sd
