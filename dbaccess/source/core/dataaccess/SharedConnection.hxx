@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SharedConnection.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-12 09:21:58 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 18:01:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,7 +201,9 @@ namespace dbaccess
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL getTypeMap(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
     };
 
+#ifdef IMPLEMENT_GET_IMPLEMENTATION_ID
     IMPLEMENT_GET_IMPLEMENTATION_ID( OSharedConnection );
+#endif
 //........................................................................
 }   // namespace dbaccess
 //........................................................................
