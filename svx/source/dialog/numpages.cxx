@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpages.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2001-01-31 12:23:09 $
+ *  last change: $Author: os $ $Date: 2001-02-09 07:18:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1478,7 +1478,7 @@ SvxBmpNumValueSet::SvxBmpNumValueSet( Window* pParent, const ResId& rResId, cons
 
 {
     SetStyle( GetStyle() | WB_VSCROLL );
-    SetLineCount( 2 );
+    SetLineCount( 3 );
     aFormatTimer.SetTimeout(300);
     aFormatTimer.SetTimeoutHdl(LINK(this, SvxBmpNumValueSet, FormatHdl_Impl));
 }

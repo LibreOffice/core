@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabstpge.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-26 21:17:54 $
+ *  last change: $Author: os $ $Date: 2001-02-09 07:15:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ TabPage RID_SVXPAGE_TABULATOR
     Text [ dutch ] = "Tabstops" ;
     Text [ spanish ] = "Tabulaciones" ;
     Text [ english_us ] = "Tabs" ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     MetricBox ED_TABPOS
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
@@ -291,7 +291,7 @@ TabPage RID_SVXPAGE_TABULATOR
     GroupBox GB_TABTYPE
     {
         Pos = MAP_APPFONT ( 69 , 3 ) ;
-        Size = MAP_APPFONT ( 61 , 84 ) ;
+        Size = MAP_APPFONT ( 61 , 112 ) ;
         Text = "Typ" ;
         Text [ ENGLISH ] = "Type" ;
         Text [ norwegian ] = "Type" ;
@@ -401,9 +401,7 @@ TabPage RID_SVXPAGE_TABULATOR
     GroupBox GB_FILLCHAR
     {
         Pos = MAP_APPFONT ( 136 , 3 ) ;
-        Size = MAP_APPFONT ( 65 , 84 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? F¸llzeichen : F≥llzeichen */
-        /* ### ACHTUNG: Neuer Text in Resource? F¸llzeichen : F≥llzeichen */
+        Size = MAP_APPFONT ( 65 , 112 ) ;
         Text = "F¸llzeichen" ;
         Text [ ENGLISH ] = "Fill character" ;
         Text [ norwegian ] = "Fylltegn" ;
@@ -456,42 +454,10 @@ TabPage RID_SVXPAGE_TABULATOR
         Text[ turkish ] = "~Yeni";
         Text[ language_user1 ] = " ";
     };
-    PushButton BTN_DEL
-    {
-        Pos = MAP_APPFONT ( 205 , 40 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? Lˆ~schen : L˜~schen */
-        /* ### ACHTUNG: Neuer Text in Resource? Lˆ~schen : L˜~schen */
-        Text = "Lˆ~schen" ;
-        Text [ ENGLISH ] = "~Delete" ;
-        Text [ norwegian ] = "~Slett" ;
-        Text [ italian ] = "~Elimina" ;
-        Text [ portuguese_brazilian ] = "~Apagar" ;
-        Text [ portuguese ] = "~Apagar" ;
-        Text [ finnish ] = "~Poista" ;
-        Text [ danish ] = "Slet" ;
-        Text [ french ] = "~Supprimer" ;
-        Text [ swedish ] = "Ra~dera" ;
-        Text [ dutch ] = "~Wissen" ;
-        Text [ spanish ] = "~Eliminar" ;
-        Text [ english_us ] = "~Delete" ;
-        Text[ chinese_simplified ] = "…æ≥˝";
-        Text[ russian ] = "”‰‡ÎËÚ¸";
-        Text[ polish ] = "~UsuÒ";
-        Text[ japanese ] = "çÌèú(~C)";
-        Text[ chinese_traditional ] = "ßR∞£(~C)";
-        Text[ arabic ] = "Õ–›";
-        Text[ greek ] = "ƒÈ·„Ò·ˆﬁ";
-        Text[ korean ] = "ªË¡¶(~C)";
-        Text[ turkish ] = "~Sil";
-        Text[ language_user1 ] = " ";
-    };
     PushButton BTN_DELALL
     {
         Pos = MAP_APPFONT ( 205 , 23 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? ~Alle lˆschen : ~Alle l˜schen */
-        /* ### ACHTUNG: Neuer Text in Resource? ~Alle lˆschen : ~Alle l˜schen */
         Text = "~Alle lˆschen" ;
         Text [ ENGLISH ] = "Dele~te all" ;
         Text [ norwegian ] = "Sle~tt alle" ;
@@ -514,6 +480,34 @@ TabPage RID_SVXPAGE_TABULATOR
         Text[ greek ] = "ƒÈ·„Ò·ˆﬁ ¸Î~·";
         Text[ korean ] = "∏µŒ ªË¡¶(~A)";
         Text[ turkish ] = "~T¸m¸n¸ sil";
+        Text[ language_user1 ] = " ";
+    };
+    PushButton BTN_DEL
+    {
+        Pos = MAP_APPFONT ( 205 , 40 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text = "Lˆ~schen" ;
+        Text [ ENGLISH ] = "~Delete" ;
+        Text [ norwegian ] = "~Slett" ;
+        Text [ italian ] = "~Elimina" ;
+        Text [ portuguese_brazilian ] = "~Apagar" ;
+        Text [ portuguese ] = "~Apagar" ;
+        Text [ finnish ] = "~Poista" ;
+        Text [ danish ] = "Slet" ;
+        Text [ french ] = "~Supprimer" ;
+        Text [ swedish ] = "Ra~dera" ;
+        Text [ dutch ] = "~Wissen" ;
+        Text [ spanish ] = "~Eliminar" ;
+        Text [ english_us ] = "~Delete" ;
+        Text[ chinese_simplified ] = "…æ≥˝";
+        Text[ russian ] = "”‰‡ÎËÚ¸";
+        Text[ polish ] = "~UsuÒ";
+        Text[ japanese ] = "çÌèú(~C)";
+        Text[ chinese_traditional ] = "ßR∞£(~C)";
+        Text[ arabic ] = "Õ–›";
+        Text[ greek ] = "ƒÈ·„Ò·ˆﬁ";
+        Text[ korean ] = "ªË¡¶(~C)";
+        Text[ turkish ] = "~Sil";
         Text[ language_user1 ] = " ";
     };
     Text[ chinese_simplified ] = "÷∆±Ì∑˚";

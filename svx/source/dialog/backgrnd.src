@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backgrnd.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-02 16:15:51 $
+ *  last change: $Author: os $ $Date: 2001-02-09 07:18:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@ TabPage RID_SVXPAGE_BACKGROUND
 {
     HelpId = HID_BACKGROUND ;
     Hide = TRUE ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     Text = "Hintergrund" ;
     Text [ ENGLISH ] = "Background" ;
     Text [ NORWEGIAN ] = "Background" ;
@@ -530,14 +530,14 @@ TabPage RID_SVXPAGE_BACKGROUND
         HelpId = HID_BACKGROUND_CTL_BGDCOLORSET ;
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 22 , 32 ) ;
-        Size = MAP_APPFONT ( 116 , 95 ) ;
+        Size = MAP_APPFONT ( 116 , 145 ) ;
         TabStop = TRUE ;
     };
     GroupBox GB_BGDCOLOR
     {
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 6 , 21 ) ;
-        Size = MAP_APPFONT ( 148 , 109 ) ;
+        Size = MAP_APPFONT ( 148 , 159 ) ;
         Text = "Hintergrundfarbe" ;
         Text [ ENGLISH ] = "Background Color" ;
         Text [ NORWEGIAN ] = "Background Color" ;
@@ -566,7 +566,7 @@ TabPage RID_SVXPAGE_BACKGROUND
     {
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 160 , 21 ) ;
-        Size = MAP_APPFONT ( 94 , 109 ) ;
+        Size = MAP_APPFONT ( 94 , 159 ) ;
         Text = "Vorschau" ;
         Text [ ENGLISH ] = "Preview" ;
         Text [ NORWEGIAN ] = "Preview" ;
@@ -597,14 +597,14 @@ TabPage RID_SVXPAGE_BACKGROUND
         Border = TRUE ;
         SVLook = TRUE ;
         Pos = MAP_APPFONT ( 166 , 32 ) ;
-        Size = MAP_APPFONT ( 82 , 92 ) ;
+        Size = MAP_APPFONT ( 82 , 142 ) ;
     };
      // Hintergrund-Bitmap ----------------------------------------------------
     FixedText FT_FILE
     {
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 12 , 34 ) ;
-        Size = MAP_APPFONT ( 141 , 10 ) ;
+        Size = MAP_APPFONT ( 141 , 8 ) ;
         UNLINKED_IMAGE
     };
     CheckBox BTN_LINK
@@ -612,7 +612,6 @@ TabPage RID_SVXPAGE_BACKGROUND
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 12 , 48 ) ;
         Size = MAP_APPFONT ( 78 , 10 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? ~Verknüpfen : ~Verkn³pfen */
         Text = "~Verknüpfen" ;
         Text [ ENGLISH ] = "~Link" ;
         Text [ ENGLISH_US ] = "~Link" ;
@@ -633,32 +632,6 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text[ greek ] = "Óýíäåóç";
         Text[ korean ] = "¿¬°á(~L)";
         Text[ turkish ] = "Baðla";
-        Text[ language_user1 ] = " ";
-    };
-    CheckBox BTN_PREVIEW
-    {
-        Pos = MAP_APPFONT ( 12 , 60 ) ;
-        Size = MAP_APPFONT ( 141 , 10 ) ;
-        Text = "V~orschau" ;
-        Text [ ENGLISH ] = "P~review" ;
-        Text [ ENGLISH_US ] = "Pre~view" ;
-        Text [ italian ] = "Anteprima" ;
-        Text [ spanish ] = "Previsuali~zación" ;
-        Text [ french ] = "A~perçu" ;
-        Text [ dutch ] = "V~oorbeeld" ;
-        Text [ swedish ] = "Fö~rhandsvisning" ;
-        Text [ danish ] = "Eksempel" ;
-        Text [ portuguese ] = "~Previsualizar" ;
-        Text [ portuguese_brazilian ] = "V~orschau" ;
-        Text[ chinese_simplified ] = "Ô¤ÀÀ(~R)";
-        Text[ russian ] = "Ïðîñìîòð";
-        Text[ polish ] = "P~odgl¹d";
-        Text[ japanese ] = "ÌßÚËÞ­°(~R)";
-        Text[ chinese_traditional ] = "¹wÄý(~R)";
-        Text[ arabic ] = "ãÚÇíäÉ";
-        Text[ greek ] = "Ðñïåðéóêüðçóç";
-        Text[ korean ] = "¹Ì¸® º¸±â(~V)";
-        Text[ turkish ] = "Ö~nizleme";
         Text[ language_user1 ] = " ";
     };
     PushButton BTN_BROWSE
@@ -688,11 +661,37 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text[ turkish ] = "Seç...";
         Text[ language_user1 ] = " ";
     };
+    CheckBox BTN_PREVIEW
+    {
+        Pos = MAP_APPFONT ( 12 , 62 ) ;
+        Size = MAP_APPFONT ( 141 , 10 ) ;
+        Text = "V~orschau" ;
+        Text [ ENGLISH ] = "P~review" ;
+        Text [ ENGLISH_US ] = "Pre~view" ;
+        Text [ italian ] = "Anteprima" ;
+        Text [ spanish ] = "Previsuali~zación" ;
+        Text [ french ] = "A~perçu" ;
+        Text [ dutch ] = "V~oorbeeld" ;
+        Text [ swedish ] = "Fö~rhandsvisning" ;
+        Text [ danish ] = "Eksempel" ;
+        Text [ portuguese ] = "~Previsualizar" ;
+        Text [ portuguese_brazilian ] = "V~orschau" ;
+        Text[ chinese_simplified ] = "Ô¤ÊÓ(~R)";
+        Text[ russian ] = "Ïðîñìîòð";
+        Text[ polish ] = "P~odgl¹d";
+        Text[ japanese ] = "ÌßÚËÞ­°(~R)";
+        Text[ chinese_traditional ] = "¹wÄý(~R)";
+        Text[ arabic ] = "ãÚÇíäÉ";
+        Text[ greek ] = "Ðñïåðéóêüðçóç";
+        Text[ korean ] = "¹Ì¸® º¸±â(~V)";
+        Text[ turkish ] = "Ö~nizleme";
+        Text[ language_user1 ] = " ";
+    };
     GroupBox GB_FILE
     {
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 6 , 23 ) ;
-        Size = MAP_APPFONT ( 153 , 51 ) ;
+        Size = MAP_APPFONT ( 153 , 52 ) ;
         Text = "Datei" ;
         Text [ ENGLISH ] = "~File" ;
         Text [ ENGLISH_US ] = "File" ;
@@ -718,7 +717,7 @@ TabPage RID_SVXPAGE_BACKGROUND
     RadioButton BTN_POSITION
     {
         Hide = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 88 ) ;
+        Pos = MAP_APPFONT ( 12 , 89 ) ;
         Size = MAP_APPFONT ( 49 , 10 ) ;
         Text = "~Position" ;
         Text [ ENGLISH ] = "~Position" ;
@@ -745,7 +744,7 @@ TabPage RID_SVXPAGE_BACKGROUND
     RadioButton BTN_AREA
     {
         Hide = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 101 ) ;
+        Pos = MAP_APPFONT ( 12 , 103 ) ;
         Size = MAP_APPFONT ( 49 , 10 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? ~Fläche : ~Flõche */
         Text = "~Fläche" ;
@@ -773,7 +772,7 @@ TabPage RID_SVXPAGE_BACKGROUND
     RadioButton BTN_TILE
     {
         Hide = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 114 ) ;
+        Pos = MAP_APPFONT ( 12 , 117 ) ;
         Size = MAP_APPFONT ( 49 , 10 ) ;
         Text = "~Kachel" ;
         Text [ ENGLISH ] = "~Tile" ;
@@ -802,15 +801,15 @@ TabPage RID_SVXPAGE_BACKGROUND
         HelpId = HID_BACKGROUND_CTL_POSITION ;
         Hide = TRUE ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 64 , 88 ) ;
-        Size = MAP_APPFONT ( 90 , 35 ) ;
+        Pos = MAP_APPFONT ( 64 , 89 ) ;
+        Size = MAP_APPFONT ( 90 , 87 ) ;
         TabStop = TRUE ;
     };
     GroupBox GB_POSITION
     {
         Hide = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 75 ) ;
-        Size = MAP_APPFONT ( 153 , 54 ) ;
+        Pos = MAP_APPFONT ( 6 , 78 ) ;
+        Size = MAP_APPFONT ( 153 , 101 ) ;
         Text = "Art" ;
         Text [ ENGLISH ] = "Type" ;
         Text [ ENGLISH_US ] = "Type" ;
@@ -839,13 +838,13 @@ TabPage RID_SVXPAGE_BACKGROUND
         Border = TRUE ;
         SVLook = TRUE ;
         Pos = MAP_APPFONT ( 170 , 34 ) ;
-        Size = MAP_APPFONT ( 81 , 89 ) ;
+        Size = MAP_APPFONT ( 81 , 139 ) ;
     };
     GroupBox GB_PREVIEW
     {
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 165 , 23 ) ;
-        Size = MAP_APPFONT ( 91 , 106 ) ;
+        Size = MAP_APPFONT ( 91 , 156 ) ;
         Text = "Grafikvorschau" ;
         Text [ ENGLISH ] = "Image Preview" ;
         Text [ ENGLISH_US ] = "Preview" ;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2001-01-17 16:13:25 $
+ *  last change: $Author: os $ $Date: 2001-02-09 07:18:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -973,19 +973,6 @@ void SvxStdParagraphTabPage::EnableRegisterMode()
 {
     aRegisterCB.Show();
     aRegisterGB.Show();
-    Size aExWinSz = aExampleWin.GetOutputSizePixel();
-    Size aExFrmSz = aExampleFrm.GetOutputSizePixel();
-    Size aRegSz = aRegisterGB.GetOutputSizePixel();
-    long nWinDiff = aExFrmSz.Height() - aExWinSz.Height();
-    long nYOffset = aExampleFrm.GetPosPixel().Y();
-
-    aExFrmSz.Height() = aDistFrm.GetPosPixel().Y() + aDistFrm.GetSizePixel().Height() - nYOffset;
-    aExWinSz.Height() = aExFrmSz.Height() - nWinDiff;
-
-    aExampleWin.SetOutputSizePixel(aExWinSz);
-    aExampleFrm.SetOutputSizePixel(aExFrmSz);
-    aExampleWin.OutputSizeChanged();
-
 }
 
 /*-----------------16.01.97 19.54-------------------

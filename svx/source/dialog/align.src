@@ -2,9 +2,9 @@
  *
  *  $RCSfile: align.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-02 16:13:48 $
+ *  last change: $Author: os $ $Date: 2001-02-09 07:18:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
     Text [ dutch ] = "Uitlijning" ;
     Text [ spanish ] = "Alineación" ;
     Text [ english_us ] = "Alignment" ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     SVLook = TRUE ;
     RadioButton BTN_HORSTD
     {
@@ -241,9 +241,9 @@ TabPage RID_SVXPAGE_ALIGNMENT
     };
     FixedText FT_INDENT
     {
-        Pos = MAP_APPFONT ( 51 , 27 ) ;
-        Size = MAP_APPFONT ( 30 , 10 ) ;
-        Text = "Einzug" ;
+        Pos = MAP_APPFONT ( 51 , 28 ) ;
+        Size = MAP_APPFONT ( 30 , 8 ) ;
+        Text = "Einzu~g" ;
         Text [ English ] = "~Indent" ;
         Text [ english_us ] = "Indent" ;
         Text [ swedish ] = "Indrag" ;
@@ -282,7 +282,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
     GroupBox GB_HORALIGN
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 112 , 80 ) ;
+        Size = MAP_APPFONT ( 112 , 76 ) ;
         Text = "Horizontal" ;
         Text [ ENGLISH ] = "Horizontal" ;
         Text [ norwegian ] = "Horisontal" ;
@@ -432,7 +432,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
     GroupBox GB_VERALIGN
     {
         Pos = MAP_APPFONT ( 124 , 3 ) ;
-        Size = MAP_APPFONT ( 55 , 80 ) ;
+        Size = MAP_APPFONT ( 55 , 76 ) ;
         Text = "Vertikal" ;
         Text [ ENGLISH ] = "Vertical" ;
         Text [ norwegian ] = "Vertikal" ;
@@ -481,7 +481,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
     {
         Pos = MAP_APPFONT ( 222 , 61 ) ;
         Size = MAP_APPFONT ( 31 , 10 ) ;
-        Text = "~Grad" ;
+        Text = "G~rad" ;
         Text [ ENGLISH ] = "Degrees" ;
         Text [ english_us ] = "Degrees" ;
         Text [ portuguese_brazilian ] = "Gra~d" ;
