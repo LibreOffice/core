@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews1.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: thb $ $Date: 2001-11-20 10:43:00 $
+ *  last change: $Author: thb $ $Date: 2001-12-19 14:09:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -357,22 +357,18 @@ void SdDrawViewShell::SelectionHasChanged()
             nObjBarId = RID_BEZIER_TOOLBOX;
         else if (pView->GetContext() == SDRCONTEXT_GRAPHIC)
             nObjBarId = RID_DRAW_GRAF_TOOLBOX;
+        else if (pView->GetContext() == SDRCONTEXT_TEXTEDIT)
+            nObjBarId = RID_DRAW_TEXT_TOOLBOX;  // #96124# Keep text bar when in textedit
         else
             nObjBarId = RID_DRAW_OBJ_TOOLBOX;
 
         SwitchObjectBar(nObjBarId);
     }
 
-    if (GetObjectBar() == RID_BEZIER_TOOLBOX)
-    {
-        SfxShell* pShell = (SfxShell*) aShellTable.Get(RID_BEZIER_TOOLBOX);
+    // #96124# Invalidate for every subshell
+    SfxShell* pShell = (SfxShell*) aShellTable.Get( GetObjectBar() );
+    if( pShell )
         pShell->Invalidate();
-    }
-    else if (GetObjectBar() == RID_DRAW_GRAF_TOOLBOX)
-    {
-        SfxShell* pShell = (SfxShell*) aShellTable.Get(RID_DRAW_GRAF_TOOLBOX);
-        pShell->Invalidate();
-    }
 
     if( SFX_APP()->GetHelpPI() )
         SetHelpIdBySelection();
