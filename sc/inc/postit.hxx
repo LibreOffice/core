@@ -2,9 +2,9 @@
  *
  *  $RCSfile: postit.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 13:42:17 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 17:54:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,8 @@ public:
     explicit ScPostIt( ScDocument* pDoc );
     ScPostIt( const String& rText, ScDocument* pDoc );
     ScPostIt( const EditTextObject* pTextObj, ScDocument* pDoc );
+    ScPostIt( const ScPostIt& rNote, ScDocument* pDoc );
+
     ~ScPostIt();
 
     inline const EditTextObject* GetEditTextObject() const { return mpEditObj.get();     }
@@ -132,7 +134,7 @@ public:
     const String&       GetAuthor() const { return maStrAuthor; }
     BOOL            IsShown()   const { return mbShown;     }
 
-    void                SetEditTextObject( const EditTextObject* pTextObj );
+    void                SetEditTextObject( const EditTextObject* pTextObj);
     void            SetText( const String& rText );
     void            SetDate( const String& rNew )   { maStrDate   = rNew; }
     void            SetAuthor( const String& rNew ) { maStrAuthor = rNew; }
@@ -143,6 +145,7 @@ public:
 
     BOOL            IsEmpty() const;
     Rectangle   DefaultRectangle(const ScAddress& rPos) const ;
+    SfxItemSet  DefaultItemSet() const ;
     inline const Rectangle& GetRectangle() const {return maRectangle;}
     inline void     SetRectangle(const Rectangle& aRect) {maRectangle = aRect;}
     inline const SfxItemSet&    GetItemSet() const {return maItemSet;}
@@ -151,7 +154,7 @@ public:
     void         InsertObject( SdrCaptionObj* pObj, ScDocument& rDoc, SCTAB nTab) const;
     void         RemoveObject( SdrCaptionObj* pObj, ScDocument& rDoc, SCTAB nTab) const;
 
-    inline const ScPostIt&  operator= ( const ScPostIt& rCpy );
+    const ScPostIt& operator= ( const ScPostIt& rCpy );
     inline int      operator==( const ScPostIt& rPostIt ) const;
     int         operator!=( const ScPostIt& rPostIt ) const { return !(operator==(rPostIt)); }
 
@@ -159,18 +162,6 @@ public:
     friend inline SvStream&     operator<<( SvStream& rStream, const ScPostIt& rPostIt );
 };
 
-
-inline const ScPostIt& ScPostIt::operator=( const ScPostIt& rCpy )
-{
-    mpEditObj.reset(rCpy.mpEditObj->Clone());
-    maStrDate   = rCpy.maStrDate;
-    maStrAuthor = rCpy.maStrAuthor;
-    mbShown = rCpy.mbShown;
-    maRectangle = rCpy.maRectangle;
-    maItemSet.PutExtended(rCpy.maItemSet,SFX_ITEM_DONTCARE, SFX_ITEM_DEFAULT);
-
-    return *this;
-}
 
 inline int ScPostIt::operator==( const ScPostIt& rPostIt ) const
 {
