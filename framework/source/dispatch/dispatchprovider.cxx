@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatchprovider.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: as $ $Date: 2001-12-20 14:01:43 $
+ *  last change: $Author: as $ $Date: 2002-05-02 11:49:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,10 +81,6 @@
 
 #ifndef __FRAMEWORK_DISPATCH_MENUDISPATCHER_HXX_
 #include <dispatch/menudispatcher.hxx>
-#endif
-
-#ifndef __FRAMEWORK_DISPATCH_MAILTODISPATCHER_HXX_
-#include <dispatch/mailtodispatcher.hxx>
 #endif
 
 #ifndef __FRAMEWORK_DISPATCH_HELPAGENTDISPATCHER_HXX_
@@ -280,17 +276,8 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL DispatchProvider::queryDis
     aReadLock.unlock();
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
 
-    if( xOwner.is() == sal_True )
+    if (xOwner.is())
     {
-        if( aURL.Complete.compareToAscii( "macro:", 6 ) == 0 )
-        {
-            /* TODO: In current code we use implementation name instead of service name ...
-                     If we use generic mechanism for protocol handler we should change that.
-             */
-            xReturn = css::uno::Reference< css::frame::XDispatch >( xFactory->createInstance( DECLARE_ASCII("com.sun.star.comp.sfx2.SfxMacroLoader") ), css::uno::UNO_QUERY );
-        }
-        else
-        {
             // Classify target of this dispatch call to find right dispatch helper!
             // Try to get neccessary informations from tree environment.
             TargetInfo   aInfo  ( xOwner, sTargetFrameName, nSearchFlags );
@@ -311,6 +298,18 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL DispatchProvider::queryDis
                                                 }
                                             }
                                             // If controller has no fun to dispatch these URL - we must search another right dispatcher.
+                                            // Search for any registered protocol handler first.
+                                            // Note: member "m_aProtocolHandlerCache" use singleton mechanism to implement an internal threadsafe data container
+                                            //       and use a ref count member too. On the other side he lives till we die. So we can use it without a lock.
+                                            ProtocolHandler aHandler;
+                                            if (m_aProtocolHandlerCache.search(aURL,&aHandler))
+                                            {
+                                                xReturn = css::uno::Reference< css::frame::XDispatch >(
+                                                            xFactory->createInstance(aHandler.m_sUNOName),
+                                                            css::uno::UNO_QUERY);
+                                            }
+                                            // Not for controller - not for protocol handler
+                                            // It should be a loadable content - may be a file. Check it ...
                                             if( xReturn.is() == sal_False )
                                             {
                                                 xReturn = implts_searchProtocolHandler( aURL, aInfo );
@@ -428,7 +427,6 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL DispatchProvider::queryDis
                 #endif
             }
         }
-    }
 
     // Return result of this operation.
     return xReturn;
@@ -576,7 +574,6 @@ void SAL_CALL DispatchProvider::disposing( const css::lang::EventObject& aEvent 
         // They are listener on our owner frame too. So they will get same event from it and die herself.
         // But we should release our references and stop working on it.
         m_xMenuDispatcher       = css::uno::Reference< css::frame::XDispatch >()          ;
-        m_xMailToDispatcher     = css::uno::Reference< css::frame::XDispatch >()          ;
         m_xHelpAgentDispatcher  = css::uno::Reference< css::frame::XDispatch >()          ;
         m_xBlankDispatcher      = css::uno::Reference< css::frame::XDispatch >()          ;
         m_xDefaultDispatcher    = css::uno::Reference< css::frame::XDispatch >()          ;
@@ -616,13 +613,6 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_searchProt
     // default value, if operation failed.
     css::uno::Reference< css::frame::XDispatch > xHandler;
 
-    //-------------------------------------------------------------------------------------------------------------
-    // May be - it's a "mailto:" URL ...?
-    if( aURL.Complete.compareToAscii( "mailto:", 7 ) == 0 )
-    {
-        xHandler = implts_getOrCreateDispatchHelper( E_MAILTODISPATCHER );
-    }
-    else
     //-------------------------------------------------------------------------------------------------------------
     // May be - it's an internal URL ... like "uno/slot"?
     // But they could be handled by tasks/pluginframes/desktop only.
@@ -719,16 +709,6 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_getOrCreat
                                                     m_xMenuDispatcher = css::uno::Reference< css::frame::XDispatch >( static_cast< ::cppu::OWeakObject* >(pDispatcher), css::uno::UNO_QUERY );
                                                 }
                                                 xDispatchHelper = m_xMenuDispatcher;
-                                            }
-                                            break;
-            //-----------------------------------------------------------------------------------------------------
-            case E_MAILTODISPATCHER     :   {
-                                                if( m_xMailToDispatcher.is() == sal_False )
-                                                {
-                                                    MailToDispatcher* pDispatcher = new MailToDispatcher( m_xFactory, xOwner );
-                                                    m_xMailToDispatcher = css::uno::Reference< css::frame::XDispatch >( static_cast< ::cppu::OWeakObject* >(pDispatcher), css::uno::UNO_QUERY );
-                                                }
-                                                xDispatchHelper = m_xMailToDispatcher;
                                             }
                                             break;
             //-----------------------------------------------------------------------------------------------------
