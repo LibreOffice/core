@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyprlink.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:49:28 $
+ *  last change: $Author: kz $ $Date: 2001-07-17 20:47:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -309,7 +309,7 @@ Menu RID_SVXMN_HYPERLINK
             Text [ danish ] = "Som tekst" ;
             Text [ portuguese_brazilian ] = "Als ~Text" ;
             Text [ portuguese ] = "Como ~texto" ;
-            Text[ chinese_simplified ] = "µ±×÷ÎÄ±¾";
+            Text[ chinese_simplified ] = "µ±×÷ÎÄ×Ö";
             Text[ russian ] = "Êàê òåêñò";
             Text[ polish ] = "Jako tekst";
             Text[ japanese ] = "Ã·½Ä‚Æ‚µ‚Ä";
@@ -412,6 +412,7 @@ QueryBox RID_SVXQB_DONTEXIST
     Message[ catalan ] = "La URL no existe.\n¿Desea insertarla de todas formas?";
     Message[ finnish ] = "URL-osoitetta ei ole olemassa. Lisätäänkö kuitenkin?";
 };
+
 
 
 
