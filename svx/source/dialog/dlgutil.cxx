@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgutil.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:08 $
+ *  last change: $Author: pb $ $Date: 2000-10-09 11:36:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -42,13 +42,13 @@
  *  License at http://www.openoffice.org/license.html.
  *
  *  Software provided under this License is provided on an "AS IS" basis,
- *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
- *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  WITHOUT WARRUNTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRUNTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
  *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
  *  See the License for the specific provisions governing your rights and
  *  obligations concerning the Software.
  *
- *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc..
  *
  *  Copyright: 2000 by Sun Microsystems, Inc.
  *
@@ -73,6 +73,9 @@
 #ifndef _UNO_LINGU_HXX
 #include <unolingu.hxx>
 #endif
+
+#include <sfx2/viewfrm.hxx>
+#include <sfx2/objsh.hxx>
 
 #pragma hdrstop
 
@@ -203,6 +206,29 @@ void SetFieldUnit( MetricBox& rBox, FieldUnit eUnit, BOOL bAll )
         rBox.SetMin( rBox.Normalize( nMin ), FUNIT_TWIP );
         rBox.SetMax( rBox.Normalize( nMax ), FUNIT_TWIP );
     }
+}
+
+// -----------------------------------------------------------------------
+
+FieldUnit GetModuleFieldUnit()
+{
+    FieldUnit eUnit = FUNIT_INCH;
+    SfxViewFrame* pFrame = SfxViewFrame::Current();
+    SfxObjectShell* pSh = NULL;
+    if ( pFrame )
+        pSh = pFrame->GetObjectShell();
+    SfxModule* pModule = pSh ? pSh->GetModule() : NULL;
+    if ( pModule )
+    {
+        const SfxPoolItem* pItem = pModule->GetItem( SID_ATTR_METRIC );
+        if ( pItem )
+            eUnit = (FieldUnit)( (SfxUInt16Item*)pItem )->GetValue();
+    }
+    else
+    {
+        DBG_ERRORFILE( "GetModuleFieldUnit(): no module found" );
+    }
+    return eUnit;
 }
 
 // -----------------------------------------------------------------------
