@@ -2,9 +2,9 @@
  *
  *  $RCSfile: job.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 18:19:45 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 08:35:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,6 +173,23 @@ class Job : public  css::lang::XTypeProvider
           , public  ::cppu::OWeakObject
 {
     //___________________________________
+    // structs
+
+    private:
+
+    /** different possible states for the internal wrapped job.
+        It can be started, stopped by a queryClosing() request or
+        disposed() by a notifyClosing() request ...
+     */
+    enum ERunState
+    {
+        E_NEW,
+        E_RUNNING,
+        E_STOPPED_OR_FINISHED,
+        E_DISPOSED
+    };
+
+    //___________________________________
     // member
 
     private:
@@ -202,8 +219,21 @@ class Job : public  css::lang::XTypeProvider
             For some special cases we must know the environment, in which
             this job runs. Means the frame inside which we may was triggered.
             We use it too, to listen for closing events of this ressource.
+
+            Please note: If m_xFrame is set - m_xModel should be NULL.
+            Only one environment can be supported realy.
          */
         css::uno::Reference< css::frame::XFrame > m_xFrame;
+
+        /**
+            For some special cases we must know the environment, in which
+            this job runs. Means the document inside which we may was triggered.
+            We use it too, to listen for closing events of this ressource.
+
+            Please note: If m_xModel is set - m_xFrame should be NULL.
+            Only one environment can be supported realy.
+         */
+        css::uno::Reference< css::frame::XModel > m_xModel;
 
         /**
             We are registered at this instance to listen for office shutdown events.
@@ -227,25 +257,30 @@ class Job : public  css::lang::XTypeProvider
         css::uno::Reference< css::uno::XInterface > m_xResultSourceFake;
 
         /**
-            Holds the state, if we are listen for frame closing events or not.
-            The used frame reference isn't realy enough - we use this additional
-            information here too.
+            Holds the state, if we are listen for desktop/frame or model closing events or not.
+            The used references are not realy enough to detect a valid listener connection.
+            Thats why we use this additional information here too.
          */
-        sal_Bool m_bCloseListening;
+        sal_Bool m_bListenOnDesktop;
+        sal_Bool m_bListenOnFrame;
+        sal_Bool m_bListenOnModel;
 
         /**
-            In case we got a close request from our frame (on which we listen) ... and
-            the ownership was delivered there ... we have to close ourself and this frame
+            In case we got a close request from our desktop/frame/model (on which we listen) ... and
+            the ownership was delivered there ... we have to close ourself and this object
             in case the internal wrapped and running job finish his work.
          */
         sal_Bool m_bPendingCloseFrame;
+        sal_Bool m_bPendingCloseModel;
 
         /**
-            indicates a still running internal job.
+            indicates in which state the internal job currently exist.
+
             We can use this information to throw any suitable veto exception
-            to prevent the environment against dieing.
+            to prevent the environment against dieing or supress superflous dispose()
+            calls at the job.
          */
-        sal_Bool m_bRuns;
+        ERunState m_eRunState;
 
     //___________________________________
     // native interface
@@ -254,6 +289,8 @@ class Job : public  css::lang::XTypeProvider
 
                  Job( const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR  ,
                       const css::uno::Reference< css::frame::XFrame >&              xFrame );
+                 Job( const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR  ,
+                      const css::uno::Reference< css::frame::XModel >&              xModel );
         virtual ~Job(                                                                      );
 
         void     setDispatchResultFake( const css::uno::Reference< css::frame::XDispatchResultListener >& xListener    ,
