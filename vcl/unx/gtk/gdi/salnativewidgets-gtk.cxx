@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salnativewidgets-gtk.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 15:52:59 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:12:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,7 @@
 #include <cmath>
 #include <vector>
 #include <algorithm>
+#include <hash_map>
 
 #ifndef _SV_SALDATA_HXX
 #include <saldata.hxx>
@@ -98,6 +99,7 @@ static GtkWidget *  gDumbContainer = NULL;
 
 static GtkWidget *  gBtnWidget          = NULL;
 static GtkWidget *  gRadioWidget            = NULL;
+static GtkWidget *  gRadioWidgetSibling     = NULL;
 static GtkWidget *  gCheckWidget            = NULL;
 static GtkWidget *  gScrollHorizWidget      = NULL;
 static GtkWidget *  gScrollVertWidget       = NULL;
@@ -114,6 +116,11 @@ osl::Mutex  * pWidgetMutex;
 
 class NWPixmapCacheList;
 static NWPixmapCacheList* gNWPixmapCacheList = NULL;
+
+// Keep a hash table of Widgets->default flags so that we can
+// easily and quickly reset each to a default state before using
+// them
+static std::hash_map<long, guint>   gWidgetDefaultFlags;
 
 static const GtkBorder aDefDefBorder        = { 1, 1, 1, 1 };
 static const GtkBorder aDefDefOutsideBorder = { 0, 0, 0, 0 };
@@ -138,6 +145,7 @@ static void NWEnsureGTKScrolledWindow   ( void );
 
 static void NWConvertVCLStateToGTKState( ControlState nVCLState, GtkStateType* nGTKState, GtkShadowType* nGTKShadow );
 static void NWAddWidgetToCacheWindow( GtkWidget* widget );
+static void NWSetWidgetState( GtkWidget* widget, ControlState nState, GtkStateType nGtkState );
 
 
 /*
@@ -617,7 +625,7 @@ BOOL GtkSalGraphics::NWPaintGTKButton( ControlType nType, ControlPart nPart,
             const Region& rControlRegion, ControlState nState, const ImplControlValue& aValue,
             SalControlHandle& rControlHandle, OUString aCaption )
 {
-    GdkPixmap * pixmap;
+    GdkPixmap * pixmap = NULL;
     Rectangle       pixmapRect;
     Rectangle       buttonRect;
     GtkStateType    stateType;
@@ -671,19 +679,6 @@ BOOL GtkSalGraphics::NWPaintGTKButton( ControlType nType, ControlPart nPart,
     if ( (w < 16) || (h < 16) )
         bDrawFocus = FALSE;
 
-    // Some themes use these GTK flags to alter the appearance of the button
-    GTK_WIDGET_UNSET_FLAGS( gBtnWidget, GTK_HAS_DEFAULT );
-    GTK_WIDGET_UNSET_FLAGS( gBtnWidget, GTK_HAS_FOCUS );
-    GTK_WIDGET_UNSET_FLAGS( gBtnWidget, GTK_SENSITIVE );
-    if ( nState & CTRL_STATE_DEFAULT )
-        GTK_WIDGET_SET_FLAGS( gBtnWidget, GTK_HAS_DEFAULT );
-    if ( nState & CTRL_STATE_FOCUSED )
-        GTK_WIDGET_SET_FLAGS( gBtnWidget, GTK_HAS_FOCUS );
-    if ( nState & CTRL_STATE_ENABLED )
-        GTK_WIDGET_SET_FLAGS( gBtnWidget, GTK_SENSITIVE );
-
-    gtk_widget_set_state( gBtnWidget, stateType );
-
     if( !bUseWindow )
     {
         pixmap = NWGetPixmapFromScreen( pixmapRect );
@@ -703,6 +698,8 @@ BOOL GtkSalGraphics::NWPaintGTKButton( ControlType nType, ControlPart nPart,
     // set up references to correct drawable and cliprect
     GdkDrawable* const &gdkDrawable = GDK_DRAWABLE( bUseWindow ? GetGdkWindow() : pixmap );
     GdkRectangle* const &gdkRect    = bUseWindow ? &clipRect : NULL;
+
+    NWSetWidgetState( gBtnWidget, nState, stateType );
 
     // Buttons must paint opaque since some themes have alpha-channel enabled buttons
     gtk_paint_flat_box( gBtnWidget->style, gdkDrawable, GTK_STATE_NORMAL, GTK_SHADOW_NONE,
@@ -731,8 +728,8 @@ BOOL GtkSalGraphics::NWPaintGTKButton( ControlType nType, ControlPart nPart,
     }
 
     if ( (GTK_BUTTON(gBtnWidget)->relief != GTK_RELIEF_NONE)
-        || ((GTK_WIDGET_STATE(gBtnWidget) != GTK_STATE_NORMAL)
-            && (GTK_WIDGET_STATE(gBtnWidget) != GTK_STATE_INSENSITIVE)) )
+        || (nState & CTRL_STATE_PRESSED)
+        || (nState & CTRL_STATE_ROLLOVER) )
     {
         gtk_paint_box( gBtnWidget->style, gdkDrawable, stateType, shadowType,
                        gdkRect, gBtnWidget, "button", x, y, w, h );
@@ -761,8 +758,6 @@ BOOL GtkSalGraphics::NWPaintGTKButton( ControlType nType, ControlPart nPart,
                              gBtnWidget, "button", x, y, w, h );
     }
 #endif
-
-//  gdk_draw_rectangle( pixmap, gBtnWidget->style->black_gc, false, 0, 0, pixmapRect.getWidth()-1, pixmapRect.getHeight()-1 );
 
     if( !bUseWindow )
     {
@@ -847,7 +842,7 @@ BOOL GtkSalGraphics::NWPaintGTKRadio( ControlType nType, ControlPart nPart,
 {
 #define RADIO_BUTTON_MINIMUMSIZE   14 // found by experiment, TODO: should be checked at runtime if possible
 
-    GdkPixmap * pixmap;
+    GdkPixmap * pixmap = NULL;
     Rectangle       pixmapRect;
     GtkStateType    stateType;
     GtkShadowType   shadowType;
@@ -876,8 +871,13 @@ BOOL GtkSalGraphics::NWPaintGTKRadio( ControlType nType, ControlPart nPart,
 
     // Set the shadow based on if checked or not so we get a freakin checkmark.
     shadowType = isChecked ? GTK_SHADOW_IN : GTK_SHADOW_OUT;
+    NWSetWidgetState( gRadioWidget, nState, stateType );
+    NWSetWidgetState( gRadioWidgetSibling, nState, stateType );
 
-    gtk_widget_set_state( GTK_WIDGET(gRadioWidget), stateType );
+    // GTK enforces radio groups, so that if we don't have 2 buttons in the group,
+    // the single button will always be active.  So we have to have 2 buttons.
+    if (!isChecked)
+        gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON(gRadioWidgetSibling), TRUE );
     gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON(gRadioWidget), isChecked );
 
     if( !bUseWindow )
@@ -927,7 +927,7 @@ BOOL GtkSalGraphics::NWPaintGTKCheck( ControlType nType, ControlPart nPart,
 {
 #define CHECKBOX_MINIMUMSIZE   14 // found by experiment, TODO: should be checked at runtime if possible
 
-    GdkPixmap * pixmap;
+    GdkPixmap * pixmap = NULL;
     Rectangle       pixmapRect;
     Rectangle       btnBoundRect;
     GtkStateType    stateType;
@@ -954,10 +954,9 @@ BOOL GtkSalGraphics::NWPaintGTKCheck( ControlType nType, ControlPart nPart,
 
     btnBoundRect = pixmapRect;
 
-    // Set the shadow based on if checked or not so we get a freakin checkmark.
+    // Set the shadow based on if checked or not so we get a checkmark.
     shadowType = isChecked ? GTK_SHADOW_IN : GTK_SHADOW_OUT;
-
-    gtk_widget_set_state( gCheckWidget, stateType );
+    NWSetWidgetState( gCheckWidget, nState, stateType );
     gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON(gCheckWidget), isChecked );
 
     if( !bUseWindow )
@@ -1027,10 +1026,11 @@ BOOL GtkSalGraphics::NWPaintGTKScrollbar( ControlType nType, ControlPart nPart,
     gchar *     scrollbarTag = NULL;
     Rectangle       arrow1Rect;
     Rectangle       arrow2Rect;
-    gint            slider_width;
-    gint            stepper_size;
-    gint            stepper_spacing;
-    gint            trough_border;
+    gint            slider_width = 0;
+    gint            stepper_size = 0;
+    gint            stepper_spacing = 0;
+    gint            trough_border = 0;
+    gint            min_slider_length = 0;
     gint            vShim = 0;
     gint            hShim = 0;
     gint            x,y;
@@ -1056,7 +1056,8 @@ BOOL GtkSalGraphics::NWPaintGTKScrollbar( ControlType nType, ControlPart nPart,
     gtk_widget_style_get( gScrollHorizWidget, "slider_width", &slider_width,
                                       "stepper_size", &stepper_size,
                                       "trough_border", &trough_border,
-                                      "stepper_spacing", &stepper_spacing, NULL );
+                                      "stepper_spacing", &stepper_spacing,
+                                      "min_slider_length", &min_slider_length, NULL );
 
     if ( nPart == PART_DRAW_BACKGROUND_HORZ )
     {
@@ -1089,6 +1090,15 @@ BOOL GtkSalGraphics::NWPaintGTKScrollbar( ControlType nType, ControlPart nPart,
         nButton2Extra =  button2BoundRect.getX() - pScrollbarVal->maButton2Rect.getX();
 
         thumbRect.setHeight( slider_width );
+        // Make sure the thumb is at least the default width (so we don't get tiny thumbs),
+        // but if the VCL gives us a size smaller than the theme's default thumb size,
+        // honor the VCL size
+#if 0
+        if ( (thumbRect.getWidth() < min_slider_length)
+            && ((scrollbarRect.getWidth()-button1BoundRect.getWidth()-button2BoundRect.getWidth()) > min_slider_length) )
+            thumbRect.setWidth( min_slider_length );
+#endif
+
         // Center vertically in the track
         thumbRect.Move( 0, (scrollbarRect.getHeight() - slider_width) / 2 );
 
@@ -1129,6 +1139,15 @@ BOOL GtkSalGraphics::NWPaintGTKScrollbar( ControlType nType, ControlPart nPart,
         nButton2Extra =  button2BoundRect.getY() - pScrollbarVal->maButton2Rect.getY();
 
         thumbRect.setWidth( slider_width );
+#if 0
+        // Make sure the thumb is at least the default width (so we don't get tiny thumbs),
+        // but if the VCL gives us a size smaller than the theme's default thumb size,
+        // honor the VCL size
+        if ( (thumbRect.getHeight() < min_slider_length)
+            && ((scrollbarRect.getHeight()-button1BoundRect.getHeight()-button2BoundRect.getHeight()) > min_slider_length) )
+            thumbRect.setHeight( min_slider_length );
+#endif
+
         // Center horizontally in the track
         thumbRect.Move( (scrollbarRect.getWidth() - slider_width) / 2, 0 );
 
@@ -1190,6 +1209,8 @@ BOOL GtkSalGraphics::NWPaintGTKScrollbar( ControlType nType, ControlPart nPart,
     GdkRectangle* const &gdkRect    = bUseWindow ? &clipRect : NULL;
 
     NWConvertVCLStateToGTKState( nState, &stateType, &shadowType );
+    NWSetWidgetState( GTK_WIDGET(scrollbarWidget), nState, stateType );
+    NWSetWidgetState( gBtnWidget, nState, stateType );
     style = GTK_WIDGET( scrollbarWidget )->style;
 
     // ----------------- TROUGH
@@ -1370,17 +1391,8 @@ static void NWPaintOneEditBox(  GdkWindow * gdkDrawable,
             break;
     }
 
-    GTK_WIDGET_UNSET_FLAGS( widget, GTK_HAS_DEFAULT );
-    GTK_WIDGET_UNSET_FLAGS( widget, GTK_HAS_FOCUS );
-    GTK_WIDGET_UNSET_FLAGS( widget, GTK_SENSITIVE );
-    if ( nState & CTRL_STATE_DEFAULT )
-        GTK_WIDGET_SET_FLAGS( widget, GTK_HAS_DEFAULT );
-    if ( nState & CTRL_STATE_FOCUSED )
-        GTK_WIDGET_SET_FLAGS( widget, GTK_HAS_FOCUS );
-    if ( nState & CTRL_STATE_ENABLED )
-        GTK_WIDGET_SET_FLAGS( widget, GTK_SENSITIVE );
-
-    gtk_widget_set_state( widget, stateType );
+    NWSetWidgetState( gBtnWidget, nState, stateType );
+    NWSetWidgetState( widget, nState, stateType );
 
     // Blueprint needs to paint entry_bg with a Button widget, not an Entry widget to get
     // a nice white (or whatever default color) background
@@ -1487,6 +1499,7 @@ BOOL GtkSalGraphics::NWPaintGTKSpinBox( ControlType nType, ControlPart nPart,
         NWPaintOneEditBox( pixmap, NULL, nType, nPart, aEditBoxRect, nState, aValue, rControlHandle, aCaption );
     }
 
+    NWSetWidgetState( gSpinButtonWidget, nState, stateType );
     gtk_widget_style_get( gSpinButtonWidget, "shadow_type", &shadowType, NULL );
 
     if ( shadowType != GTK_SHADOW_NONE )
@@ -1533,9 +1546,11 @@ static Rectangle NWGetSpinButtonRect(   ControlType         nType,
     buttonSize -= buttonSize % 2 - 1; /* force odd */
     buttonRect.setWidth( buttonSize + 2 * gSpinButtonWidget->style->xthickness );
     buttonRect.setX( aAreaRect.getX() + (aAreaRect.getWidth() - buttonRect.getWidth()) );
-    buttonRect.setHeight( (aAreaRect.getHeight() / 2) );
     if ( nPart == PART_BUTTON_UP )
-        buttonRect.setY( aAreaRect.getY() );
+    {
+        buttonRect.Top() = aAreaRect.getY();
+        buttonRect.Bottom() = buttonRect.Top() + (aAreaRect.getHeight() / 2);
+    }
     else
     {
         buttonRect.Top() = aAreaRect.getY() + (aAreaRect.getHeight() / 2);
@@ -1564,14 +1579,10 @@ static void NWPaintOneSpinButton(   GdkPixmap   *           pixmap,
 
     NWEnsureGTKSpinButton();
     NWConvertVCLStateToGTKState( nState, &stateType, &shadowType );
-//  gtk_widget_set_state( gSpinButtonWidget, stateType );
 
     buttonRect = NWGetSpinButtonRect( nType, nPart, aAreaRect, nState, aValue, rControlHandle, aCaption );
 
-    GTK_WIDGET_UNSET_FLAGS( gSpinButtonWidget, GTK_SENSITIVE );
-    if ( nState & CTRL_STATE_ENABLED )
-        GTK_WIDGET_SET_FLAGS( gSpinButtonWidget, GTK_SENSITIVE );
-
+    NWSetWidgetState( gSpinButtonWidget, nState, stateType );
     gtk_paint_box( gSpinButtonWidget->style, pixmap, stateType, shadowType, NULL, gSpinButtonWidget,
             (nPart == PART_BUTTON_UP) ? "spinbutton_up" : "spinbutton_down",
             (buttonRect.getX() - aAreaRect.getX()), (buttonRect.getY() - aAreaRect.getY()),
@@ -1601,7 +1612,7 @@ BOOL GtkSalGraphics::NWPaintGTKComboBox( ControlType nType, ControlPart nPart,
                                          const ImplControlValue& aValue,
                                          SalControlHandle& rControlHandle, OUString aCaption )
 {
-    GdkPixmap   *   pixmap;
+    GdkPixmap   *   pixmap = NULL;
     Rectangle       pixmapRect;
     Rectangle       buttonRect;
     GtkStateType    stateType;
@@ -1653,7 +1664,9 @@ BOOL GtkSalGraphics::NWPaintGTKComboBox( ControlType nType, ControlPart nPart,
     NWPaintOneEditBox( gdkDrawable, gdkRect, nType, nPart, aEditBoxRect,
                        nState, aValue, rControlHandle, aCaption );
 
-//  gtk_widget_set_state( gComboWidget, stateType );
+    NWSetWidgetState( gBtnWidget, nState, stateType );
+    NWSetWidgetState( gComboWidget, nState, stateType );
+    NWSetWidgetState( gArrowWidget, nState, stateType );
 
     // Buttons must paint opaque since some themes have alpha-channel enabled buttons
     gtk_paint_flat_box( gBtnWidget->style, gdkDrawable, GTK_STATE_NORMAL, GTK_SHADOW_NONE,
@@ -1661,6 +1674,7 @@ BOOL GtkSalGraphics::NWPaintGTKComboBox( ControlType nType, ControlPart nPart,
                         x+(buttonRect.getX() - pixmapRect.getX()),
                         y+(buttonRect.getY() - pixmapRect.getY()),
                         buttonRect.getWidth(), buttonRect.getHeight() );
+
     gtk_paint_box( GTK_COMBO(gComboWidget)->button->style, gdkDrawable, stateType, shadowType,
                    gdkRect, GTK_COMBO(gComboWidget)->button, "button",
                    x+(buttonRect.getX() - pixmapRect.getX()),
@@ -1802,6 +1816,7 @@ BOOL GtkSalGraphics::NWPaintGTKTabItem( ControlType nType, ControlPart nPart,
     if ( !pixmap )
         return( FALSE );
 
+    NWSetWidgetState( gNotebookWidget, nState, stateType );
     switch( nType )
     {
         case CTRL_TAB_BODY:
@@ -1861,7 +1876,7 @@ BOOL GtkSalGraphics::NWPaintGTKListBox( ControlType nType, ControlPart nPart,
                                         const ImplControlValue& aValue,
                                         SalControlHandle& rControlHandle, OUString aCaption )
 {
-    GdkPixmap   *   pixmap;
+    GdkPixmap   *   pixmap = NULL;
     Rectangle       pixmapRect;
     Rectangle       widgetRect;
     Rectangle       aIndicatorRect;
@@ -1915,6 +1930,10 @@ BOOL GtkSalGraphics::NWPaintGTKListBox( ControlType nType, ControlPart nPart,
     GdkDrawable* const &gdkDrawable = GDK_DRAWABLE( bUseWindow ? GetGdkWindow() : pixmap );
     GdkRectangle* const &gdkRect    = bUseWindow ? &clipRect : NULL;
 
+    NWSetWidgetState( gBtnWidget, nState, stateType );
+    NWSetWidgetState( gOptionMenuWidget, nState, stateType );
+    NWSetWidgetState( gScrolledWindowWidget, nState, stateType );
+
     if ( nPart != PART_WINDOW )
     {
         gtk_widget_style_get( gOptionMenuWidget,
@@ -1937,7 +1956,7 @@ BOOL GtkSalGraphics::NWPaintGTKListBox( ControlType nType, ControlPart nPart,
         aIndicatorRect = NWGetListBoxIndicatorRect( nType, nPart, widgetRect, nState,
                                                     aValue, rControlHandle, aCaption );
         gtk_paint_tab( gOptionMenuWidget->style, gdkDrawable, stateType, shadowType, gdkRect,
-                       gOptionMenuWidget, "op  tionmenutab",
+                       gOptionMenuWidget, "optionmenutab",
                        x+(aIndicatorRect.getX() - pixmapRect.getX()),
                        y+(aIndicatorRect.getY() - pixmapRect.getY()),
                        aIndicatorRect.getWidth(), aIndicatorRect.getHeight() );
@@ -2143,7 +2162,6 @@ static void NWConvertVCLStateToGTKState( ControlState nVCLState,
 
     if ( nVCLState & CTRL_STATE_ENABLED )
     {
-        // Pressed button?
         if ( nVCLState & CTRL_STATE_PRESSED )
         {
             *nGTKState = GTK_STATE_ACTIVE;
@@ -2162,19 +2180,31 @@ static void NWConvertVCLStateToGTKState( ControlState nVCLState,
     }
 }
 
+/************************************************************************
+ * Set widget flags
+ ************************************************************************/
+static void NWSetWidgetState( GtkWidget* widget, ControlState nState, GtkStateType nGtkState )
+{
+    // Set to default state, then build up from there
+    GTK_WIDGET_UNSET_FLAGS( widget, GTK_HAS_DEFAULT );
+    GTK_WIDGET_UNSET_FLAGS( widget, GTK_HAS_FOCUS );
+    GTK_WIDGET_UNSET_FLAGS( widget, GTK_SENSITIVE );
+    GTK_WIDGET_SET_FLAGS( widget, gWidgetDefaultFlags[(long)widget] );
+
+    if ( nState & CTRL_STATE_DEFAULT )
+        GTK_WIDGET_SET_FLAGS( widget, GTK_HAS_DEFAULT );
+    if ( !GTK_IS_TOGGLE_BUTTON(widget) && (nState & CTRL_STATE_FOCUSED) )
+        GTK_WIDGET_SET_FLAGS( widget, GTK_HAS_FOCUS );
+    if ( nState & CTRL_STATE_ENABLED )
+        GTK_WIDGET_SET_FLAGS( widget, GTK_SENSITIVE );
+    gtk_widget_set_state( widget, nGtkState );
+}
 
 /************************************************************************
  * Widget ensure functions - make sure cached objects are valid
  ************************************************************************/
 
 //-------------------------------------
-#if 0
-static void
-style_set_cb (GtkWidget *widget)
-{
-  g_print ("Here: %s\n", g_type_name_from_instance ((gpointer)widget));
-}
-#endif
 
 static void NWAddWidgetToCacheWindow( GtkWidget* widget )
 {
@@ -2187,18 +2217,14 @@ static void NWAddWidgetToCacheWindow( GtkWidget* widget )
         gtk_container_add( GTK_CONTAINER(gCacheWindow), gDumbContainer );
         gtk_widget_realize( gDumbContainer );
         gtk_widget_realize( gCacheWindow );
-#if 0
-        gtk_widget_show( gCacheWindow );
-        gtk_widget_show( gDumbContainer );
-#endif
     }
 
     gtk_container_add( GTK_CONTAINER(gDumbContainer), widget );
     gtk_widget_realize( widget );
-#if 0
-    gtk_widget_show( widget );
-    g_signal_connect ( widget, "style-set", G_CALLBACK (style_set_cb), NULL);
-#endif
+    gtk_widget_ensure_style( widget );
+
+    // Store widget's default flags
+    gWidgetDefaultFlags[ (long)widget ] = GTK_WIDGET_FLAGS( widget );
 }
 
 //-------------------------------------
@@ -2216,10 +2242,12 @@ static void NWEnsureGTKButton( void )
 
 static void NWEnsureGTKRadio( void )
 {
-    if ( !gRadioWidget )
+    if ( !gRadioWidget || !gRadioWidgetSibling )
     {
         gRadioWidget = gtk_radio_button_new( NULL );
+        gRadioWidgetSibling = gtk_radio_button_new_from_widget( GTK_RADIO_BUTTON(gRadioWidget) );
         NWAddWidgetToCacheWindow( gRadioWidget );
+        NWAddWidgetToCacheWindow( gRadioWidgetSibling );
     }
 }
 
