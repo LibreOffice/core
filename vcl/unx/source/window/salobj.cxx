@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salobj.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:00:55 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 10:47:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,7 +117,7 @@ SalObject* X11SalInstance::CreateObject( SalFrame* pParent )
         XCreateSimpleWindow( pDisp,
                              aObjectParent,
                              0, 0,
-                             100, 100, 0,
+                             1, 1, 0,
                              pSalDisp->GetColormap().GetBlackPixel(),
                              pSalDisp->GetColormap().GetWhitePixel()
                              );
@@ -125,7 +125,7 @@ SalObject* X11SalInstance::CreateObject( SalFrame* pParent )
         XCreateSimpleWindow( pDisp,
                              pObject->maPrimary,
                              0, 0,
-                             100, 100, 0,
+                             1, 1, 0,
                              pSalDisp->GetColormap().GetBlackPixel(),
                              pSalDisp->GetColormap().GetWhitePixel()
                              );
@@ -217,7 +217,6 @@ X11SalObject::X11SalObject()
     maSystemChildData.pAppContext   = NULL;
     maSystemChildData.aShellWindow  = 0;
     maSystemChildData.pShellWidget  = NULL;
-
     mpInst                          = NULL;
     mpProc                          = ImplSalObjCallbackDummy;
     maPrimary                       = 0;
