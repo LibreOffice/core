@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc4.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-09-21 16:11:07 $
+ *  last change: $Author: pw $ $Date: 2000-10-12 11:40:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,6 +253,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     pSheet = &(pStyleSheetPool->Make(aName, SFX_STYLE_FAMILY_PARA, nMask));
     pSheet->SetHelpId( aHelpFile, HID_STANDARD_STYLESHEET_NAME );
     SfxItemSet& rISet = pSheet->GetItemSet();
+    SfxItemPool* pPool = rISet.GetPool();
 
     String   aNullStr;
 
@@ -271,9 +272,9 @@ void SdDrawDocument::CreateLayoutTemplates()
     rISet.Put(XLineStyleItem(XLINE_SOLID));
     rISet.Put(XLineColorItem(String(), RGB_Color(COL_BLACK)));
     rISet.Put(XLineWidthItem(0));
-    rISet.Put(XLineDashItem(aNullStr,aNullDash));
-    rISet.Put(XLineStartItem(aNullStr,aNullPol));
-    rISet.Put(XLineEndItem(aNullStr,aNullPol));
+    rISet.Put(XLineDashItem(pPool,aNullDash));
+    rISet.Put(XLineStartItem(pPool,aNullPol));
+    rISet.Put(XLineEndItem(pPool,aNullPol));
     rISet.Put(XLineStartWidthItem(300));
     rISet.Put(XLineEndWidthItem(300));
     rISet.Put(XLineStartCenterItem());
@@ -283,9 +284,9 @@ void SdDrawDocument::CreateLayoutTemplates()
     rISet.Put(XFillStyleItem(XFILL_SOLID));
     rISet.Put(XFillColorItem(String(), Color(0,184,255))); // "Blau 7"
 
-    rISet.Put(XFillGradientItem(aNullStr,aNullGrad));
-    rISet.Put(XFillHatchItem(aNullStr,aNullHatch));
-    rISet.Put(XFillBitmapItem(aNullStr,aNullBmp));
+    rISet.Put(XFillGradientItem(pPool,aNullGrad));
+    rISet.Put(XFillHatchItem(pPool,aNullHatch));
+    rISet.Put(XFillBitmapItem(pPool,aNullBmp));
 
                     // Schattenattribute (Drawing Engine)
     rISet.Put(SdrShadowItem(FALSE));
