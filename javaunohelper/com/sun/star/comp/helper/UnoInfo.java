@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoInfo.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 07:36:39 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 15:15:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,6 @@ public final class UnoInfo {
             "jurt.jar",
             "unoil.jar",
             "ridl.jar",
-            "sandbox.jar",
             "juh.jar",
             "unoinfo.jar" };
 
