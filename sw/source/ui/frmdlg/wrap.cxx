@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrap.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:41:03 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 14:59:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -508,7 +508,8 @@ void SwWrapTabPage::ActivatePage(const SfxItemSet& rSet)
         const SwFmtVertOrient& rVert = (const SwFmtVertOrient&)rSet.Get(RES_VERT_ORIENT);
 
         aVal.eArea = (RndStdIds)nAnchorId;
-        aVal.bAuto = rFrmSize.GetSizeType() == ATT_MIN_SIZE;
+        aVal.bAutoHeight = rFrmSize.GetHeightSizeType() == ATT_MIN_SIZE;
+        aVal.bAutoWidth = rFrmSize.GetWidthSizeType() == ATT_MIN_SIZE;
         aVal.bMirror = rHori.IsPosToggle();
         // OD 18.09.2003 #i18732#
         aVal.bFollowTextFlow =
