@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envfmt.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-30 16:32:13 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 11:57:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,8 +112,6 @@ class SwEnvFmtPage : public SfxTabPage
     SwEnvPreview aPreview;
 
     SvUShorts  aIDs;
-    Timer      aPreviewTimer;
-    Edit*      pLastEdit;
 
      SwEnvFmtPage(Window* pParent, const SfxItemSet& rSet);
     ~SwEnvFmtPage();
@@ -121,7 +119,6 @@ class SwEnvFmtPage : public SfxTabPage
     DECL_LINK( ModifyHdl, Edit * );
     DECL_LINK( EditHdl, MenuButton * );
     DECL_LINK( FormatHdl, ListBox * );
-    DECL_LINK( PreviewHdl, Timer * );
 
     void SetMinMax();
 
