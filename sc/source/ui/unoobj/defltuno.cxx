@@ -2,9 +2,9 @@
  *
  *  $RCSfile: defltuno.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-23 13:37:10 $
+ *  last change: $Author: sab $ $Date: 2001-03-29 15:38:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,7 @@
 #include "docpool.hxx"
 #include "unoguard.hxx"
 #include "unonames.hxx"
+#include "docoptio.hxx"
 
 using namespace ::com::sun::star;
 
@@ -102,6 +103,8 @@ const SfxItemPropertyMap* lcl_GetDocDefaultsMap()
         {MAP_CHAR_LEN(SC_UNONAME_CFSTYLE),  ATTR_FONT,          &getCppuType((rtl::OUString*)0),    0, MID_FONT_STYLE_NAME },
         {MAP_CHAR_LEN(SC_UNO_CJK_CFSTYLE),  ATTR_CJK_FONT,      &getCppuType((rtl::OUString*)0),    0, MID_FONT_STYLE_NAME },
         {MAP_CHAR_LEN(SC_UNO_CTL_CFSTYLE),  ATTR_CTL_FONT,      &getCppuType((rtl::OUString*)0),    0, MID_FONT_STYLE_NAME },
+        {MAP_CHAR_LEN(SC_UNO_STANDARDDEC),              0,      &getCppuType((sal_Int16*)0),        0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_TABSTOPDIS),               0,      &getCppuType((sal_Int32*)0),        0, 0 },
         {0,0,0,0}
     };
     return aDocDefaultsMap_Impl;
@@ -170,17 +173,54 @@ void SAL_CALL ScDocDefaultsObj::setPropertyValue(
             SfxItemPropertyMap::GetByName( lcl_GetDocDefaultsMap(), aPropertyName );
     if ( !pMap )
         throw beans::UnknownPropertyException();
+    if(!pMap->nWID)
+    {
+        if(aPropertyName.compareToAscii(SC_UNO_STANDARDDEC) == 0)
+        {
+            ScDocument* pDoc = pDocShell->GetDocument();
+            if (pDoc)
+            {
+                ScDocOptions aDocOpt(pDoc->GetDocOptions());
+                sal_Int16 nValue;
+                if (aValue >>= nValue)
+                {
+                    aDocOpt.SetStdPrecision(static_cast<sal_uInt8> (nValue));
+                    pDoc->SetDocOptions(aDocOpt);
+                }
+            }
+            else
+                throw uno::RuntimeException();
+        }
+        else if (aPropertyName.compareToAscii(SC_UNO_TABSTOPDIS) == 0)
+        {
+            ScDocument* pDoc = pDocShell->GetDocument();
+            if (pDoc)
+            {
+                ScDocOptions aDocOpt(pDoc->GetDocOptions());
+                sal_Int32 nValue;
+                if (aValue >>= nValue)
+                {
+                    aDocOpt.SetTabDistance(static_cast<sal_uInt8> (nValue));
+                    pDoc->SetDocOptions(aDocOpt);
+                }
+            }
+            else
+                throw uno::RuntimeException();
+        }
+    }
+    else
+    {
+        ScDocumentPool* pPool = pDocShell->GetDocument()->GetPool();
+        SfxPoolItem* pNewItem = pPool->GetDefaultItem(pMap->nWID).Clone();
 
-    ScDocumentPool* pPool = pDocShell->GetDocument()->GetPool();
-    SfxPoolItem* pNewItem = pPool->GetDefaultItem(pMap->nWID).Clone();
+        if( !pNewItem->PutValue( aValue, pMap->nMemberId ) )
+            throw lang::IllegalArgumentException();
 
-    if( !pNewItem->PutValue( aValue, pMap->nMemberId ) )
-        throw lang::IllegalArgumentException();
+        pPool->SetPoolDefaultItem( *pNewItem );
+        delete pNewItem;    // copied in SetPoolDefaultItem
 
-    pPool->SetPoolDefaultItem( *pNewItem );
-    delete pNewItem;    // copied in SetPoolDefaultItem
-
-    ItemsChanged();
+        ItemsChanged();
+    }
 }
 
 uno::Any SAL_CALL ScDocDefaultsObj::getPropertyValue( const rtl::OUString& aPropertyName )
@@ -194,15 +234,43 @@ uno::Any SAL_CALL ScDocDefaultsObj::getPropertyValue( const rtl::OUString& aProp
     if ( !pDocShell )
         throw uno::RuntimeException();
 
+    uno::Any aRet;
     const SfxItemPropertyMap* pMap =
             SfxItemPropertyMap::GetByName( lcl_GetDocDefaultsMap(), aPropertyName );
     if ( !pMap )
         throw beans::UnknownPropertyException();
 
-    ScDocumentPool* pPool = pDocShell->GetDocument()->GetPool();
-    const SfxPoolItem& rItem = pPool->GetDefaultItem( pMap->nWID );
-    uno::Any aRet;
-    rItem.QueryValue( aRet, pMap->nMemberId );
+    if (!pMap->nWID)
+    {
+        if(aPropertyName.compareToAscii(SC_UNO_STANDARDDEC) == 0)
+        {
+            ScDocument* pDoc = pDocShell->GetDocument();
+            if (pDoc)
+            {
+                const ScDocOptions& aDocOpt = pDoc->GetDocOptions();
+                aRet <<= static_cast<sal_Int16> (aDocOpt.GetStdPrecision());
+            }
+            else
+                throw uno::RuntimeException();
+        }
+        else if (aPropertyName.compareToAscii(SC_UNO_TABSTOPDIS) == 0)
+        {
+            ScDocument* pDoc = pDocShell->GetDocument();
+            if (pDoc)
+            {
+                const ScDocOptions& aDocOpt = pDoc->GetDocOptions();
+                aRet <<= static_cast<sal_Int32> (aDocOpt.GetTabDistance());
+            }
+            else
+                throw uno::RuntimeException();
+        }
+    }
+    else
+    {
+        ScDocumentPool* pPool = pDocShell->GetDocument()->GetPool();
+        const SfxPoolItem& rItem = pPool->GetDefaultItem( pMap->nWID );
+        rItem.QueryValue( aRet, pMap->nMemberId );
+    }
     return aRet;
 }
 
@@ -226,7 +294,7 @@ beans::PropertyState SAL_CALL ScDocDefaultsObj::getPropertyState( const rtl::OUS
     beans::PropertyState eRet = beans::PropertyState_DEFAULT_VALUE;
 
     USHORT nWID = pMap->nWID;
-    if ( nWID == ATTR_FONT || nWID == ATTR_CJK_FONT || nWID == ATTR_CTL_FONT )
+    if ( nWID == ATTR_FONT || nWID == ATTR_CJK_FONT || nWID == ATTR_CTL_FONT || !nWID )
     {
         //  static default for font is system-dependent,
         //  so font default is always treated as "direct value".
@@ -273,10 +341,13 @@ void SAL_CALL ScDocDefaultsObj::setPropertyToDefault( const rtl::OUString& aProp
     if ( !pMap )
         throw beans::UnknownPropertyException();
 
-    ScDocumentPool* pPool = pDocShell->GetDocument()->GetPool();
-    pPool->ResetPoolDefaultItem( pMap->nWID );
+    if (pMap->nWID)
+    {
+        ScDocumentPool* pPool = pDocShell->GetDocument()->GetPool();
+        pPool->ResetPoolDefaultItem( pMap->nWID );
 
-    ItemsChanged();
+        ItemsChanged();
+    }
 }
 
 uno::Any SAL_CALL ScDocDefaultsObj::getPropertyDefault( const rtl::OUString& aPropertyName )
@@ -295,11 +366,14 @@ uno::Any SAL_CALL ScDocDefaultsObj::getPropertyDefault( const rtl::OUString& aPr
     if ( !pMap )
         throw beans::UnknownPropertyException();
 
-    ScDocumentPool* pPool = pDocShell->GetDocument()->GetPool();
-    const SfxPoolItem* pItem = pPool->GetItem( pMap->nWID, SFX_ITEMS_STATICDEFAULT );
     uno::Any aRet;
-    if (pItem)
-        pItem->QueryValue( aRet, pMap->nMemberId );
+    if (pMap->nWID)
+    {
+        ScDocumentPool* pPool = pDocShell->GetDocument()->GetPool();
+        const SfxPoolItem* pItem = pPool->GetItem( pMap->nWID, SFX_ITEMS_STATICDEFAULT );
+        if (pItem)
+            pItem->QueryValue( aRet, pMap->nMemberId );
+    }
     return aRet;
 }
 
