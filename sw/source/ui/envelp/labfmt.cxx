@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labfmt.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-01 10:53:31 $
+ *  last change: $Author: os $ $Date: 2002-05-31 11:55:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,9 +96,6 @@ using namespace com::sun::star::beans;
 #define C2S(cChar) String::CreateFromAscii(cChar)
 #define C2U(cChar) OUString::createFromAscii(cChar)
 // --------------------------------------------------------------------------
-
-
-
 SwLabPreview::SwLabPreview( const SwLabFmtPage* pParent, const ResId& rResID ) :
 
     Window((Window*) pParent, rResID),
@@ -111,25 +108,24 @@ SwLabPreview::SwLabPreview( const SwLabFmtPage* pParent, const ResId& rResID ) :
     aUpperStr (SW_RES(STR_UPPER )),
     aColsStr  (SW_RES(STR_COLS  )),
     aRowsStr  (SW_RES(STR_ROWS  )),
-    aBlackColor(COL_BLACK),
-    aGrayColor(COL_LIGHTGRAY),
-    aWhiteColor(COL_WHITE)
-
+    aGrayColor(COL_LIGHTGRAY)
 {
     SetMapMode(MAP_PIXEL);
+
+    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+    const Color& rWinColor = rStyleSettings.GetWindowColor();
+    SetBackground(Wallpaper(rWinColor));
+
+    Font aFont = GetFont();
+    aFont.SetTransparent(TRUE);
+    aFont.SetWeight  (WEIGHT_NORMAL);
+    SetFont(aFont);
 
     const Size aSz(GetOutputSizePixel());
 
     lOutWPix   = aSz.Width ();
     lOutHPix   = aSz.Height();
 
-
-    SetBackground(Wallpaper(aWhiteColor));
-
-    Font aFont = GetFont();
-    aFont.SetFillColor(Color(COL_WHITE));
-    aFont.SetWeight  (WEIGHT_NORMAL);
-    SetFont(aFont);
 
     lHDistWidth  = GetTextWidth(aHDistStr );
     lVDistWidth  = GetTextWidth(aVDistStr );
@@ -149,20 +145,24 @@ SwLabPreview::SwLabPreview( const SwLabFmtPage* pParent, const ResId& rResID ) :
 }
 
 // --------------------------------------------------------------------------
-
-
-
 SwLabPreview::~SwLabPreview()
 {
 }
-
 // --------------------------------------------------------------------------
-
-
-
 void SwLabPreview::Paint(const Rectangle &rRect)
 {
-    SetLineColor(aWhiteColor);
+    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+    const Color& rWinColor = rStyleSettings.GetWindowColor();
+    const Color& rFieldTextColor = rStyleSettings.GetFieldTextColor();
+
+    Font aFont = GetFont();
+    aFont.SetFillColor( rWinColor );
+    aFont.SetColor(rFieldTextColor);
+    SetFont(aFont);
+
+    SetBackground(Wallpaper(rWinColor));
+
+    SetLineColor(rWinColor);
     SetFillColor(aGrayColor);
     Font aPaintFont(GetFont());
     aPaintFont.SetTransparent(FALSE);
@@ -202,7 +202,7 @@ void SwLabPreview::Paint(const Rectangle &rRect)
     DrawRect(Rectangle(Point(lX0, lY0), Size(lOutlineW, lOutlineH)));
 
     // Umriss zeichnen (Umrandung)
-    SetLineColor(aBlackColor);
+    SetLineColor(rFieldTextColor);
     DrawLine(Point(lX0, lY0), Point(lX0 + lOutlineW - 1, lY0)); // Oben
     DrawLine(Point(lX0, lY0), Point(lX0, lY0 + lOutlineH - 1)); // Links
     if (aItem.nCols == 1)
@@ -212,7 +212,7 @@ void SwLabPreview::Paint(const Rectangle &rRect)
 
     // Etiketten
     SetClipRegion (Rectangle(Point(lX0, lY0), Size(lOutlineW, lOutlineH)));
-    SetFillColor(aWhiteColor);
+    SetFillColor(rWinColor);
     for (USHORT nRow = 0; nRow < Min((USHORT) 2, (USHORT) aItem.nRows); nRow++)
         for (USHORT nCol = 0; nCol < Min((USHORT) 2, (USHORT) aItem.nCols); nCol++)
             DrawRect(Rectangle(
@@ -315,7 +315,8 @@ void SwLabPreview::DrawArrow(const Point &rP1, const Point &rP2, BOOL bArrow)
             aArr[2].Y() = rP2.Y();
         }
 
-        SetFillColor(aBlackColor);
+        const Color& rFieldTextColor = GetSettings().GetStyleSettings().GetFieldTextColor();
+        SetFillColor(rFieldTextColor);
         DrawPolygon(Polygon(3, aArr));
     }
     else
