@@ -2,9 +2,9 @@
  *
  *  $RCSfile: topfrm.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 14:26:23 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 15:41:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,12 @@
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
 #include <com/sun/star/frame/XLayoutManager.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_NAMEDVALUE_HPP_
+#include <com/sun/star/beans/NamedValue.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XMATERIALHOLDER_HPP_
+#include <com/sun/star/beans/XMaterialHolder.hpp>
 #endif
 
 #ifndef _SV_MENU_HXX
@@ -455,6 +461,31 @@ public:
 
 static svtools::AsynchronLink* pPendingCloser = 0;
 
+static String _getTabString()
+{
+    String result;
+
+    Reference < XMaterialHolder > xHolder(
+        ::comphelper::getProcessServiceFactory()->createInstance(
+        DEFINE_CONST_UNICODE("com.sun.star.tab.tabreg") ), UNO_QUERY );
+    if (xHolder.is())
+    {
+        rtl::OUString aTabString;
+        Sequence< NamedValue > sMaterial;
+        if (xHolder->getMaterial() >>= sMaterial) {
+            for (int i=0; i < sMaterial.getLength(); i++) {
+                if ((sMaterial[i].Name.equalsAscii("title")) &&
+                    (sMaterial[i].Value >>= aTabString))
+                {
+                    result += ' ';
+                    result += String(aTabString);
+                }
+            }
+        }
+    }
+    return result;
+}
+
 SfxTopFrame* SfxTopFrame::Create( SfxObjectShell* pDoc, USHORT nViewId, BOOL bHidden, const SfxItemSet* pSet )
 {
     Reference < XFrame > xDesktop ( ::comphelper::getProcessServiceFactory()->createInstance( DEFINE_CONST_UNICODE("com.sun.star.frame.Desktop") ), UNO_QUERY );
@@ -570,6 +601,10 @@ SfxTopFrame* SfxTopFrame::Create( SfxObjectShell* pDoc, USHORT nViewId, BOOL bHi
         aTitle += aVerId;
         aTitle += ']';
 #endif
+
+        // append TAB string if available
+        aTitle += _getTabString();
+
         pWindow->SetText( aTitle );
         if( pWindow->GetType() == WINDOW_WORKWINDOW )
         {
@@ -1130,6 +1165,9 @@ String SfxTopViewFrame::UpdateTitle()
     aTitle += aVerId;
     aTitle += ']';
 #endif
+
+    // append TAB string if available
+    aTitle += _getTabString();
 
     GetBindings().Invalidate( SID_NEWDOCDIRECT );
 
