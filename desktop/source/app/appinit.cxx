@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appinit.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mav $ $Date: 2002-09-04 14:05:50 $
+ *  last change: $Author: mav $ $Date: 2002-09-10 11:01:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -316,14 +316,8 @@ void createTemporaryDirectory()
     aTempPath = ::utl::TempFile::SetTempNameBaseDirectory( aTempPath );
     if ( !aTempPath.getLength() )
     {
-#ifdef WNT
-        INetURLObject aTmp( TempFile::CreateTempName() );
-        aTmp.CutLastName();
-        aTempBaseURL = aTmp.GetMainURL();
-#else
-        aTempBaseURL = ::rtl::OUString::createFromAscii("$(userurl)/temp");
-        aTempBaseURL = aOpt.SubstituteVariable( aTempBaseURL );
-#endif
+        ::osl::File::getTempDirURL( aTempBaseURL );
+
         sal_Int32 nLength = aTempBaseURL.getLength();
         if ( aTempBaseURL.matchAsciiL( "/", 1, nLength-1 ) )
             aTempBaseURL = aTempBaseURL.copy( 0, nLength - 1 );
