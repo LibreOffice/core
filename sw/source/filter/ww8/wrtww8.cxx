@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-04 10:19:32 $
+ *  last change: $Author: obo $ $Date: 2003-09-01 12:41:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,6 +214,20 @@
 #ifndef _COM_SUN_STAR_I18N_FORBIDDENCHARACTERS_HPP_
 #include <com/sun/star/i18n/ForbiddenCharacters.hpp>
 #endif
+#ifndef _COMPHELPER_EXTRACT_HXX_
+#include <comphelper/extract.hxx>
+#endif
+
+#ifndef SW_WRITERHELPER
+#include "writerhelper.hxx"
+#endif
+#ifndef SW_WRITERWORDGLUE
+#include "writerwordglue.hxx"
+#endif
+
+
+using namespace sw::util;
+using namespace sw::types;
 
 class WW8_WrFkp
 {
@@ -339,8 +353,8 @@ static void WriteDop( SwWW8Writer& rWrt )
     rDop.fUsePrinterMetrics = !rWrt.pDoc->IsUseVirtualDevice();
 
     // default TabStop schreiben
-    const SvxTabStopItem& rTabStop = (SvxTabStopItem& )rWrt.pDoc->
-                    GetAttrPool().GetDefaultItem( RES_PARATR_TABSTOP );
+    const SvxTabStopItem& rTabStop =
+        DefaultItemGet<SvxTabStopItem>(*rWrt.pDoc, RES_PARATR_TABSTOP);
     rDop.dxaTab = (USHORT)rTabStop[0].GetTabPos();
 
 
@@ -354,6 +368,34 @@ static void WriteDop( SwWW8Writer& rWrt )
     rDop.cPg    = (INT16)rDStat.nPage;
     rDop.cParas = rDStat.nPara;
     rDop.cLines = rDStat.nPara;
+
+#if 0
+    //Currently don't ever exprt as protected forms, we will import protected
+    //forms as "no design mode", but the opposite is not possible as the the
+    //default writer is "design", which would mean that users in word cannot
+    //edit any document :-(
+    //Readonly would be a better match, but form fields cannot be edited in
+    //that mode :-(
+    using namespace com::sun::star;
+
+    uno::Reference<lang::XComponent> xModelComp(
+        rWrt.pDoc->GetDocShell()->GetModel(), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xDocProps(
+        xModelComp, uno::UNO_QUERY);
+    if (xDocProps.is())
+    {
+        uno::Reference<beans::XPropertySetInfo> xInfo =
+            xDocProps->getPropertySetInfo();
+        if (xInfo.is() &&
+            xInfo->hasPropertyByName(C2U("ApplyFormDesignMode")))
+        {
+            sal_Bool bValue = cppu::any2bool(
+                xDocProps->getPropertyValue(C2U("ApplyFormDesignMode")));
+            if (!bValue)
+                rDop.fProtEnabled = 1;
+        }
+    }
+#endif
 
 //  auch damit werden die DocStat-Felder in Kopf-/Fusszeilen nicht korrekt
 //  berechnet.
@@ -569,12 +611,12 @@ void SwWW8Writer::ExportDopTypography(WW8DopTypography &rTypo)
     rTypo.reserved1=nUseReserved;
     if (rTypo.iLevelOfKinsoku)
     {
-        rTypo.cchFollowingPunct = static_cast<INT16>
+        rTypo.cchFollowingPunct = msword_cast<sal_Int16>
             (pUseMe->beginLine.getLength());
         if (rTypo.cchFollowingPunct > WW8DopTypography::nMaxFollowing - 1)
             rTypo.cchFollowingPunct = WW8DopTypography::nMaxFollowing - 1;
 
-        rTypo.cchLeadingPunct = static_cast<INT16>
+        rTypo.cchLeadingPunct = msword_cast<sal_Int16>
             (pUseMe->endLine.getLength());
         if (rTypo.cchLeadingPunct > WW8DopTypography::nMaxLeading - 1)
             rTypo.cchLeadingPunct = WW8DopTypography::nMaxLeading -1;
@@ -1467,14 +1509,14 @@ void SwWW8Writer::AppendBookmarks( const SwTxtNode& rNd,
                 nCntnt < nAktEnd ) )
             {
                 ULONG nCp = nSttCP + pPos->nContent.GetIndex() - nAktPos;
-                pBkmks->Append( nCp, rBkmk.GetName() );
+                pBkmks->Append(nCp, BookmarkToWord(rBkmk.GetName()));
             }
             if( pOPos && nNd == pOPos->nNode.GetIndex() &&
                 ( nCntnt = pOPos->nContent.GetIndex() ) >= nAktPos &&
                 nCntnt < nAktEnd )
             {
                 ULONG nCp = nSttCP + pOPos->nContent.GetIndex() - nAktPos;
-                pBkmks->Append( nCp, rBkmk.GetName() );
+                pBkmks->Append(nCp, BookmarkToWord(rBkmk.GetName()));
             }
         }
     }
