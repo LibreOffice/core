@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrpaint.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-14 08:52:29 $
+ *  last change: $Author: fme $ $Date: 2001-06-18 11:42:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -453,7 +453,7 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
             {
                 if( pArrow )
                     pArrow->PaintIt( pOut );
-                if( !GetTxtFrm()->GetFollow() )
+                if( !GetTxtFrm()->GetFollow() && ! GetTxtFrm()->GetNext() )
                 {
                     SwTwips nDiff = GetInfo().Y() + nTmpHeight - nTmpAscent - GetTxtFrm()->Frm().Bottom();
                     if( nDiff > 0 && ( GetEnd() < GetInfo().GetTxt().Len() ||
