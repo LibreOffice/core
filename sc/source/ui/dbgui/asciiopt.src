@@ -2,9 +2,9 @@
  *
  *  $RCSfile: asciiopt.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 13:36:02 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:15:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,7 @@ ModalDialog RID_SCDLG_ASCII
         Text[ english_us ] = "Column t~ype";
         Text[ portuguese ] = "Tipo";
         Text[ russian ] = "Òθο ρςξλαφξβ";
-        Text[ greek ] = "Τύπος στ~υλών";
+        Text[ greek ] = "Τύπος στ~ηλών";
         Text[ dutch ] = "Kolomt~ype";
         Text[ french ] = "Type";
         Text[ spanish ] = "T~ipo de columna";
@@ -515,7 +515,7 @@ ModalDialog RID_SCDLG_ASCII
         Text [ ENGLISH ] = "Space" ;
         TabStop = TRUE ;
         Text [ english_us ] = "S~pace" ;
-        Text [ portuguese_brazilian ] = "Es~paηo" ;
+        Text [ portuguese_brazilian ] = "~Espaηo" ;
         Text [ swedish ] = "~Blanksteg" ;
         Text [ danish ] = "Mellemrum" ;
         Text [ italian ] = "~Spazio" ;
@@ -666,7 +666,7 @@ ModalDialog RID_SCDLG_ASCII
         Text[ arabic ] = "Φγ έζΗΥα ΗαΝήζα";
         Text[ dutch ] = "Vel~dscheidingstekens samenvatten";
         Text[ chinese_simplified ] = "ε‹ηΌ©ζΎη¤Ί(~D)";
-        Text[ greek ] = "Σύνοψη διαχωριστικών πεδίων";
+        Text[ greek ] = "Συγχώνευση διαχωριστικών πεδίων";
         Text[ korean ] = "ν•„λ“ κµ¬λ¶„ κΈ°νΈ λ³‘ν•©(~D)";
         Text[ turkish ] = "Ay~raηlarύ φzetle";
         Text[ language_user1 ] = " ";
@@ -698,6 +698,7 @@ ModalDialog RID_SCDLG_ASCII
     Text[ hindi ] = "ΰ¤ΰ¥‡ΰ¤•ΰ¥ΰ¤Έΰ¥ΰ¤ΰ¥ ΰ¤†ΰ¤―ΰ¤Ύΰ¤¤";
     Text[ slovak ] = "Import textu";
 };
+
 
 
 
