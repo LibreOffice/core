@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docholder.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: abi $ $Date: 2003-03-26 13:51:22 $
+ *  last change: $Author: abi $ $Date: 2003-03-27 16:18:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,8 @@
 
 #include "docholder.hxx"
 #include "embeddoc.hxx"
+#include "intercept.hxx"
+
 
 #ifndef _COM_SUN_STAR_FRAME_XCOMPONENTLOADER_HPP_
 #include <com/sun/star/frame/XComponentLoader.hpp>
@@ -89,7 +91,9 @@
 #ifndef _COM_SUN_STAR_UTIL_XMODIFYBROADCASTER_HPP_
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #endif
-
+#ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDERINTERCEPTION_HPP_
+#include <com/sun/star/frame/XDispatchProviderInterception.hpp>
+#endif
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
@@ -182,8 +186,11 @@ void DocumentHolder::CloseFrame()
         }
         catch( const uno::Exception& ) {
         }
-    else
-        uno::Reference<lang::XComponent>(m_xFrame,uno::UNO_QUERY)->dispose();
+    else {
+        uno::Reference<lang::XComponent> xComp(m_xFrame,uno::UNO_QUERY);
+        if(xComp.is())
+            xComp->dispose();
+    }
 
     m_xFrame = uno::Reference< frame::XFrame >();
 }
@@ -227,6 +234,16 @@ uno::Reference< frame::XFrame > DocumentHolder::DocumentFrame()
         if( xFrame.is() )
             m_xFrame = xFrame->findFrame(
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_blank")),0);
+    }
+
+    if( m_xFrame.is() )
+    {
+        // intercept
+        uno::Reference<frame::XDispatchProviderInterception>
+            xDPI(m_xFrame,uno::UNO_QUERY);
+        if(xDPI.is())
+            xDPI->registerDispatchProviderInterceptor(
+                new Interceptor(m_pOLEInterface));
     }
 
     return m_xFrame;

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: mav $ $Date: 2003-03-12 15:37:58 $
+#   last change: $Author: abi $ $Date: 2003-03-27 16:18:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -88,13 +88,15 @@ SLOFILES =  \
         $(SLO)$/ed_idataobj.obj \
         $(SLO)$/ed_ioleobject.obj \
         $(SLO)$/guid.obj \
-        $(SLO)$/esdll.obj
+        $(SLO)$/esdll.obj  \
+        $(SLO)$/intercept.obj
 
 EXCEPTIONSFILES= \
-         $(SLO)$/register.obj \
+        $(SLO)$/register.obj \
         $(SLO)$/docholder.obj \
         $(SLO)$/ed_ipersiststr.obj \
-        $(SLO)$/ed_idataobj.obj
+        $(SLO)$/ed_idataobj.obj \
+        $(SLO)$/intercept.obj
 
 
 # --- Targets -------------------------------------------------------

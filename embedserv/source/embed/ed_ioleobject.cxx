@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ed_ioleobject.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mav $ $Date: 2003-03-27 15:17:36 $
+ *  last change: $Author: abi $ $Date: 2003-03-27 16:18:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,10 @@ STDMETHODIMP EmbedDocument_Impl::Close( DWORD dwSaveOption )
     if ( m_pClientSite )
         m_pClientSite->OnShowWindow( FALSE );
 
-    for ( AdviseSinkHashMapIterator iAdvise = m_aAdviseHashMap.begin(); iAdvise != m_aAdviseHashMap.end(); iAdvise++ )
+    AdviseSinkHashMap aAHM(m_aAdviseHashMap);
+
+    for ( AdviseSinkHashMapIterator iAdvise = aAHM.begin();
+          iAdvise != aAHM.end(); iAdvise++ )
     {
         if ( iAdvise->second )
             iAdvise->second->OnClose();
@@ -134,20 +137,6 @@ STDMETHODIMP EmbedDocument_Impl::InitFromData( IDataObject *pDataObject, BOOL fC
 STDMETHODIMP EmbedDocument_Impl::GetClipboardData( DWORD dwReserved, IDataObject **ppDataObject )
 {
     return E_NOTIMPL;
-}
-
-
-void EmbedDocument_Impl::notify()
-{
-    for ( AdviseSinkHashMapIterator iAdvise =
-              m_aAdviseHashMap.begin();
-          iAdvise != m_aAdviseHashMap.end();
-          iAdvise++ )
-        if ( iAdvise->second )
-            iAdvise->second->OnViewChange( DVASPECT_CONTENT, -1 );
-
-    if ( m_pDAdviseHolder )
-        m_pDAdviseHolder->SendOnDataChange( (IDataObject*)this, 0, 0 );
 }
 
 
@@ -303,5 +292,38 @@ STDMETHODIMP EmbedDocument_Impl::GetMiscStatus( DWORD dwAspect, DWORD *pdwStatus
 STDMETHODIMP EmbedDocument_Impl::SetColorScheme( LOGPALETTE *pLogpal )
 {
     return E_NOTIMPL;
+}
+
+
+// C++ - methods
+
+void EmbedDocument_Impl::SaveObject()
+{
+    if(m_pClientSite) {
+        m_pClientSite->SaveObject();
+
+        for ( AdviseSinkHashMapIterator iAdvise =
+                  m_aAdviseHashMap.begin();
+              iAdvise != m_aAdviseHashMap.end();
+              iAdvise++ )
+            if ( iAdvise->second )
+                iAdvise->second->OnSave( );
+    }
+
+    notify();
+}
+
+
+void EmbedDocument_Impl::notify()
+{
+    for ( AdviseSinkHashMapIterator iAdvise =
+              m_aAdviseHashMap.begin();
+          iAdvise != m_aAdviseHashMap.end();
+          iAdvise++ )
+        if ( iAdvise->second )
+            iAdvise->second->OnViewChange( DVASPECT_CONTENT, -1 );
+
+    if ( m_pDAdviseHolder )
+        m_pDAdviseHolder->SendOnDataChange( (IDataObject*)this, 0, 0 );
 }
 

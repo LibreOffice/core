@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: mav $ $Date: 2003-03-19 10:58:50 $
+#   last change: $Author: abi $ $Date: 2003-03-27 16:20:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,7 +86,8 @@ SHL1OBJS= \
         $(SLO)$/ed_idataobj.obj \
         $(SLO)$/ed_ioleobject.obj \
         $(SLO)$/guid.obj \
-        $(SLO)$/esdll.obj
+        $(SLO)$/esdll.obj \
+        $(SLO)$/intercept.obj
 
 SHL1STDLIBS=\
     $(SALLIB) 	\
