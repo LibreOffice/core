@@ -2,9 +2,9 @@
 #
 #   $RCSfile: archivefiles.pm,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: hr $ $Date: 2004-11-09 18:31:47 $
+#   last change: $Author: rt $ $Date: 2004-12-16 10:43:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,6 +71,35 @@ use installer::pathanalyzer;
 use installer::systemactions;
 
 #################################################################
+# Changing the name for files with flag RENAME_TO_LANGUAGE
+#################################################################
+
+sub put_language_into_name
+{
+    my ( $oldname, $onelanguage ) = @_;
+
+    my $newname = "";
+
+    my $filename = "";
+    my $extension = "";
+
+    if ( $oldname =~ /^\s*(.*)(\..*?)\s*$/ )    # files with extension
+    {
+        $filename = $1;
+        $extension = $2;
+    }
+    else
+    {
+        $filename = $oldname;
+        $extension = "";
+    }
+
+    $newname = $1 . "_" . $onelanguage . $2;
+
+    return $newname;
+}
+
+#################################################################
 # Analyzing files with flag ARCHIVE
 #################################################################
 
@@ -112,6 +141,9 @@ sub resolving_archive_flag
             {
                 $iscommonfile = 1;
             }
+
+            my $rename_to_language = 0;
+            if ( $styles =~ /\bRENAME_TO_LANGUAGE\b/ ) { $rename_to_language = 1; } # special handling for renamed files (scriptitems.pm)
 
             # creating directories
 
@@ -252,6 +284,22 @@ sub resolving_archive_flag
                             installer::pathanalyzer::get_path_from_fullqualifiedname(\$destination);
                             $newfile{'destination'} = $destination . $zipname;
                             $newfile{'sourcepath'} = $unzipdir . $zipname;
+
+                            if ( $rename_to_language )
+                            {
+                                my $newzipname = put_language_into_name($zipname, $onelanguage);
+                                my $oldfilename = $unzipdir . $zipname;
+                                my $newfilename = $unzipdir . $newzipname;
+
+                                installer::systemactions::copy_one_file($oldfilename, $newfilename);
+
+                                $newfile{'Name'} = $newzipname;
+                                $newfile{'destination'} = $destination . $newzipname;
+                                $newfile{'sourcepath'} = $unzipdir . $newzipname;
+
+                                $infoline = "RENAME_TO_LANGUAGE: Using $newzipname instead of $zipname!\n";
+                                push( @installer::globals::logfileinfo, $infoline);
+                            }
 
                             my $sourcefiletest = $unzipdir . $zipname;
                             if ( ! -f $sourcefiletest )
