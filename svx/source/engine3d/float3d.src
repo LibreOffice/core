@@ -2,9 +2,9 @@
  *
  *  $RCSfile: float3d.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-08 21:58:13 $
+ *  last change: $Author: rt $ $Date: 2001-06-13 22:04:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1632,7 +1632,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text[ arabic ] = "ÇáÚÑÖ";
         Text[ dutch ] = "Weergave";
         Text[ chinese_simplified ] = "ÏÔÊ¾";
-        Text[ greek ] = "ÅìöÜíéóç";
+        Text[ greek ] = "ĞñïâïëŞ";
         Text[ korean ] = "º¸ÀÌ±â";
         Text[ turkish ] = "Görüntü";
         Text[ catalan ] = "Representación";
@@ -3625,5 +3625,6 @@ String RID_SVXFLOAT3D_FIX_B
     Text[ catalan ] = "A:";
     Text[ finnish ] = "B:";
 };
+
 
 
