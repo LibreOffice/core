@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xeroot.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:04:35 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 16:24:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,8 @@ XclExpRoot::XclExpRoot( XclExpRootData& rExpRootData ) :
     mrExpData.mpXFBuffer.reset( new XclExpXFBuffer( GetRoot() ) );
     mrExpData.mpTabIdBuffer.reset( new XclExpTabIdBuffer( GetDoc() ) );
     mrExpData.mpLinkManager.reset( new XclExpLinkManager( GetRoot() ) );
+
+    mrExpData.mpXFBuffer->InitDefaults();
 }
 
 XclExpRoot::XclExpRoot( const XclExpRoot& rRoot ) :
@@ -120,14 +122,6 @@ XclExpRoot& XclExpRoot::operator=( const XclExpRoot& rRoot )
 {
     XclRoot::operator=( rRoot );
     return *this;
-}
-
-void XclExpRoot::SetBiff( XclBiff eBiff )
-{
-    XclRoot::SetBiff( eBiff );
-    GetPalette().OnChangeBiff();
-    GetFontBuffer().OnChangeBiff();
-    GetNumFmtBuffer().OnChangeBiff();
 }
 
 XclExpSst& XclExpRoot::GetSst() const
