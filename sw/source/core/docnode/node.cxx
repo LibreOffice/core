@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:57:27 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:02:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -499,7 +499,9 @@ const SwPageDesc* SwNode::FindPageDesc( BOOL bCalcLay,
             // dann erstmal den richtigen Anker finden
             const SwFrmFmt* pFmt = 0;
             const SwSpzFrmFmts& rFmts = *pDoc->GetSpzFrmFmts();
-            for( USHORT n = 0; n < rFmts.Count(); ++n )
+            USHORT n;
+
+            for( n = 0; n < rFmts.Count(); ++n )
             {
                 SwFrmFmt* pFrmFmt = rFmts[ n ];
                 const SwFmtCntnt& rCntnt = pFrmFmt->GetCntnt();
@@ -823,7 +825,7 @@ const SwTxtNode* SwNode::FindOutlineNodeOfLevel( BYTE nLvl ) const
 // This information is used for the export filters. Our layout never have a
 // distance before or after if the node is the first or last in a section.
 
-inline IsValidNextPrevNd( const SwNode& rNd )
+inline sal_Bool IsValidNextPrevNd( const SwNode& rNd )
 {
     return ND_TABLENODE == rNd.GetNodeType() ||
            ( ND_CONTENTNODE & rNd.GetNodeType() ) ||
