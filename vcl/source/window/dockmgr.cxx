@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dockmgr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 13:48:09 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 16:52:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1617,15 +1617,19 @@ Rectangle  ImplDockingWindowWrapper::GetDragArea() const
 void ImplDockingWindowWrapper::Lock()
 {
     mbLocked = TRUE;
-    // force repaint to allow for updating drag area and size
-    GetWindow()->Invalidate();
+    // only toolbars support locking
+    ToolBox *pToolBox = dynamic_cast< ToolBox * >( GetWindow() );
+    if( pToolBox )
+        pToolBox->Lock( mbLocked );
 }
 
 void ImplDockingWindowWrapper::Unlock()
 {
     mbLocked = FALSE;
-    // force repaint to allow for updating drag area and size
-    GetWindow()->Invalidate();
+    // only toolbars support locking
+    ToolBox *pToolBox = dynamic_cast< ToolBox * >( GetWindow() );
+    if( pToolBox )
+        pToolBox->Lock( mbLocked );
 }
 
 BOOL ImplDockingWindowWrapper::IsLocked() const
