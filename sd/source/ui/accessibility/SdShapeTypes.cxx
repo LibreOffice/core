@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SdShapeTypes.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: af $ $Date: 2002-02-08 17:01:33 $
+ *  last change: $Author: af $ $Date: 2002-03-06 16:55:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,15 +61,19 @@
 
 #include "SdShapeTypes.hxx"
 #include "AccessiblePresentationShape.hxx"
+#include "AccessiblePresentationGraphicShape.hxx"
+#include "AccessiblePresentationOLEShape.hxx"
 
 namespace accessibility {
 
 ::com::sun::star::uno::Reference<
     ::drafts::com::sun::star::accessibility::XAccessible>
     createSdAccessibleShape (const ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::accessibility::XAccessible>& rxParent,
+            ::drafts::com::sun::star::accessibility::XAccessible>& rxParent,
         const ::com::sun::star::uno::Reference<
-        ::com::sun::star::drawing::XShape>& rxShape,
+            ::com::sun::star::drawing::XShape>& rxShape,
+        const ::com::sun::star::uno::Reference<
+        ::com::sun::star::document::XEventBroadcaster>& rxBroadcaster,
         ShapeTypeId nId)
 {
     switch (nId)
@@ -77,14 +81,18 @@ namespace accessibility {
         case PRESENTATION_TITLE:
         case PRESENTATION_OUTLINER:
         case PRESENTATION_SUBTITLE:
-        case PRESENTATION_GRAPHIC_OBJECT:
         case PRESENTATION_PAGE:
-        case PRESENTATION_OLE:
-        case PRESENTATION_CHART:
-        case PRESENTATION_TABLE:
         case PRESENTATION_NOTES:
         case PRESENTATION_HANDOUT:
             return new AccessiblePresentationShape (rxShape, rxParent);
+
+        case PRESENTATION_GRAPHIC_OBJECT:
+            return new AccessiblePresentationGraphicShape (rxShape, rxParent);
+
+        case PRESENTATION_OLE:
+        case PRESENTATION_CHART:
+        case PRESENTATION_TABLE:
+            return new AccessiblePresentationOLEShape (rxShape, rxParent);
 
         default:
             return NULL;
@@ -95,34 +103,44 @@ namespace accessibility {
 
 
 ShapeTypeDescriptor aSdShapeTypeList[] = {
-    ShapeTypeDescriptor (   PRESENTATION_TITLE,
+    ShapeTypeDescriptor (
+        PRESENTATION_TITLE,
         ::rtl::OUString::createFromAscii ("com.sun.star.presentation.TitleTextShape"),
         createSdAccessibleShape ),
-    ShapeTypeDescriptor (   PRESENTATION_OUTLINER,
+    ShapeTypeDescriptor (
+        PRESENTATION_OUTLINER,
         ::rtl::OUString::createFromAscii ("com.sun.star.presentation.OutlinerShape"),
         createSdAccessibleShape ),
-    ShapeTypeDescriptor (   PRESENTATION_SUBTITLE,
+    ShapeTypeDescriptor (
+        PRESENTATION_SUBTITLE,
         ::rtl::OUString::createFromAscii ("com.sun.star.presentation.SubtitleShape"),
         createSdAccessibleShape ),
-    ShapeTypeDescriptor (   PRESENTATION_GRAPHIC_OBJECT,
+    ShapeTypeDescriptor (
+        PRESENTATION_GRAPHIC_OBJECT,
         ::rtl::OUString::createFromAscii ("com.sun.star.presentation.GraphicObjectShape"),
         createSdAccessibleShape ),
-    ShapeTypeDescriptor (   PRESENTATION_PAGE,
+    ShapeTypeDescriptor (
+        PRESENTATION_PAGE,
         ::rtl::OUString::createFromAscii ("com.sun.star.presentation.PageShape"),
         createSdAccessibleShape ),
-    ShapeTypeDescriptor (   PRESENTATION_OLE,
+    ShapeTypeDescriptor (
+        PRESENTATION_OLE,
         ::rtl::OUString::createFromAscii ("com.sun.star.presentation.OLE2Shape"),
         createSdAccessibleShape ),
-    ShapeTypeDescriptor (   PRESENTATION_CHART,
+    ShapeTypeDescriptor (
+        PRESENTATION_CHART,
         ::rtl::OUString::createFromAscii ("com.sun.star.presentation.ChartShape"),
         createSdAccessibleShape ),
-    ShapeTypeDescriptor (   PRESENTATION_TABLE,
+    ShapeTypeDescriptor (
+        PRESENTATION_TABLE,
         ::rtl::OUString::createFromAscii ("com.sun.star.presentation.TableShape"),
         createSdAccessibleShape ),
-    ShapeTypeDescriptor (   PRESENTATION_NOTES,
+    ShapeTypeDescriptor (
+        PRESENTATION_NOTES,
         ::rtl::OUString::createFromAscii ("com.sun.star.presentation.NotesShape"),
         createSdAccessibleShape ),
-    ShapeTypeDescriptor (   PRESENTATION_HANDOUT,
+    ShapeTypeDescriptor (
+        PRESENTATION_HANDOUT,
         ::rtl::OUString::createFromAscii ("com.sun.star.presentation.HandoutShape"),
         createSdAccessibleShape )
 };
