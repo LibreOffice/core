@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlndlg.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dvo $ $Date: 2002-08-30 14:48:41 $
+ *  last change: $Author: os $ $Date: 2002-10-08 13:55:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1320,7 +1320,8 @@ IMPL_LINK( SwRedlineAcceptDlg, GotoHdl, void*, EMPTYARG )
     BOOL bSel = FALSE;
     BOOL bReadonlySel = FALSE;
 
-    SvLBoxEntry* pSelEntry = pTable->FirstSelected();
+    //#98883# don't select redlines while the dialog is not focussed
+    SvLBoxEntry* pSelEntry = pTable->HasFocus() ? pTable->FirstSelected() : 0;
     if( pSelEntry )
     {
         SvLBoxEntry* pActEntry = pSelEntry;
