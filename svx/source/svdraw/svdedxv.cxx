@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdedxv.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: aw $ $Date: 2001-10-29 12:45:18 $
+ *  last change: $Author: cl $ $Date: 2001-11-05 13:49:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1494,6 +1494,24 @@ SfxStyleSheet* SdrObjEditView::GetStyleSheet(BOOL& rOk) const
 
 BOOL SdrObjEditView::SetStyleSheet(SfxStyleSheet* pStyleSheet, BOOL bDontRemoveHardAttr)
 {
+    // if we are currently in edit mode we must also set the stylesheet
+    // on all paragraphs in the Outliner for the edit view
+    // #92191#
+    if( NULL != pTextEditOutlinerView )
+    {
+        Outliner* pOutliner = pTextEditOutlinerView->GetOutliner();
+
+        const ULONG nParaCount = pOutliner->GetParagraphCount();
+        ULONG nPara;
+        for( nPara = 0; nPara < nParaCount; nPara++ )
+        {
+            pOutliner->SetStyleSheet( nPara, pStyleSheet );
+        }
+    }
+
+/*  #92191# we do not support the 'feature' for different styles in paragraphs
+    any longer
+
     if (pTextEditOutlinerView!=NULL) {
         BOOL bAllSelected=ImpIsTextEditAllSelected();
         if (bAllSelected) {
@@ -1519,7 +1537,9 @@ BOOL SdrObjEditView::SetStyleSheet(SfxStyleSheet* pStyleSheet, BOOL bDontRemoveH
 #endif
         ImpMakeTextCursorAreaVisible();
         return TRUE;
-    } else {
+    } else
+*/
+    {
         return SdrGlueEditView::SetStyleSheet(pStyleSheet,bDontRemoveHardAttr);
     }
 }
