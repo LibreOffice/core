@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ids.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kso $ $Date: 2001-07-09 09:05:31 $
+ *  last change: $Author: kso $ $Date: 2001-07-12 12:53:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 //
 //  Miscellaneous Resources
 //
-// $Author: kso $ $Date: 2001-07-09 09:05:31 $ $Revision: 1.13 $
+// $Author: kso $ $Date: 2001-07-12 12:53:38 $ $Revision: 1.14 $
 //============================================================================
 
 #define __RSC
@@ -184,7 +184,7 @@ Resource RID_UUI_ERRHDL
     // IOErrorCode_ABORT = 0,
     String ( ERRCODE_UUI_IO_ABORT & ERRCODE_RES_MASK )
     {
-        Text = "Die auf $(ARG1) ausgefnhrte Aktion wurde abgebrochen" ;
+        Text = "Die auf $(ARG1) ausgeführte Aktion wurde abgebrochen" ;
         Text [ ENGLISH ] = "The operation executed on $(ARG1) was aborted" ;
     };
     // IOErrorCode_ACCESS_DENIED = 1,
@@ -202,7 +202,7 @@ Resource RID_UUI_ERRHDL
     // IOErrorCode_BAD_CRC = 3,
     String ( ERRCODE_UUI_IO_BADCRC & ERRCODE_RES_MASK )
     {
-        Text = "Die Daten von $(ARG1) haben eine inkorrekte Prnfsumme" ;
+        Text = "Die Daten von $(ARG1) haben eine inkorrekte Prüfsumme" ;
         Text [ english ] = "The data of $(ARG1) have an incorrect checksum" ;
     };
     // IOErrorCode_CANT_CREATE = 4,
@@ -221,37 +221,37 @@ Resource RID_UUI_ERRHDL
     // IOErrorCode_CANT_SEEK = 6,
     String ( ERRCODE_UUI_IO_CANTSEEK & ERRCODE_RES_MASK )
     {
-        Text = "Die Seek-Operation auf $(ARG1) konnte nicht ausgefnhrt werden" ;
+        Text = "Die Seek-Operation auf $(ARG1) konnte nicht ausgeführt werden" ;
         Text [ ENGLISH ] = "The seek operation on $(ARG1) could not be completed" ;
     };
     // IOErrorCode_CANT_TELL = 7,
     String ( ERRCODE_UUI_IO_CANTTELL & ERRCODE_RES_MASK )
     {
-        Text = "Die Tell-Operation auf $(ARG1) konnte nicht ausgefnhrt werden" ;
+        Text = "Die Tell-Operation auf $(ARG1) konnte nicht ausgeführt werden" ;
         Text [ ENGLISH ] = "The tell operation on $(ARG1) could not be completed" ;
     };
     // IOErrorCode_CANT_WRITE = 8,
     String ( ERRCODE_UUI_IO_CANTWRITE & ERRCODE_RES_MASK )
     {
-        Text = "Daten fnr $(ARG1) konnten nicht geschrieben werden" ;
+        Text = "Daten für $(ARG1) konnten nicht geschrieben werden" ;
         Text [ ENGLISH ] = "Data for $(ARG1) could not be written" ;
     };
     // IOErrorCode_CURRENT_DIRECTORY = 9,
     String ( ERRCODE_UUI_IO_CURRENTDIR & ERRCODE_RES_MASK )
     {
-        Text = "Aktion unm÷glich: $(ARG1) ist das aktuelle Verzeichnis" ;
+        Text = "Aktion unmöglich: $(ARG1) ist das aktuelle Verzeichnis" ;
         Text [ english ] = "Action not allowed: $(ARG1) is the current directory" ;
     };
     // IOErrorCode_DEVICE_NOT_READY = 10,
     String ( ERRCODE_UUI_IO_DEVICENOTREADY & ERRCODE_RES_MASK )
     {
-        Text = "Das GerSt (Laufwerk) $(ARG1) ist nicht bereit" ;
+        Text = "Das Gerät (Laufwerk) $(ARG1) ist nicht bereit" ;
         Text [ english ] = "The Device (drive) $(ARG1) is not ready" ;
     };
     // IOErrorCode_DIFFERENT_DEVICES = 11,
     String ( ERRCODE_UUI_IO_NOTSAMEDEVICE & ERRCODE_RES_MASK )
     {
-        Text = "Aktion unm÷glich: $(ARG1) und $(ARG2) sind verschiedene GerSte (Laufwerke)" ;
+        Text = "Aktion unmöglich: $(ARG1) und $(ARG2) sind verschiedene Geräte (Laufwerke)" ;
         Text [ english ] = "Action not allowed: $(ARG1) and $(ARG2) are different devices (drives)" ;
     };
     // IOErrorCode_GENERAL = 12,
@@ -263,37 +263,37 @@ Resource RID_UUI_ERRHDL
     // IOErrorCode_INVALID_ACCESS = 13,
     String ( ERRCODE_UUI_IO_INVALIDACCESS & ERRCODE_RES_MASK )
     {
-        Text = "Es wurde versucht, in ungnltiger Weise auf $(ARG1) zuzugreifen" ;
+        Text = "Es wurde versucht, in ungültiger Weise auf $(ARG1) zuzugreifen" ;
         Text [ ENGLISH ] = "An invalid attempt was made to access $(ARG1)" ;
     };
     // IOErrorCode_INVALID_CHARACTER = 14,
     String ( ERRCODE_UUI_IO_INVALIDCHAR & ERRCODE_RES_MASK )
     {
-        Text = "$(ARG1) enthSlt unzulSssige Zeichen" ;
+        Text = "$(ARG1) enthält unzulässige Zeichen" ;
         Text [ ENGLISH ] = "$(ARG1) contains invalid characters" ;
     };
     // IOErrorCode_INVALID_DEVICE = 15,
     String ( ERRCODE_UUI_IO_INVALIDDEVICE & ERRCODE_RES_MASK )
     {
-        Text = "Das GerSt (Laufwerk) $(ARG1) ist ungnltig" ;
+        Text = "Das Gerät (Laufwerk) $(ARG1) ist ungültig" ;
         Text [ ENGLISH ] = "The device (drive) $(ARG1) is invalid" ;
     };
     // IOErrorCode_INVALID_LENGTH = 16,
     String ( ERRCODE_UUI_IO_INVALIDLENGTH & ERRCODE_RES_MASK )
     {
-        Text = "Die Daten von $(ARG1) haben eine ungnltige LSnge" ;
+        Text = "Die Daten von $(ARG1) haben eine ungültige Länge" ;
         Text [ english ] = "The data of $(ARG1) have an invalid length" ;
     };
     // IOErrorCode_INVALID_PARAMETER = 17,
     String ( ERRCODE_UUI_IO_INVALIDPARAMETER & ERRCODE_RES_MASK )
     {
-        Text = "Die Operation auf $(ARG1) wurde mit einem ungnltigen Parameter gestartet" ;
+        Text = "Die Operation auf $(ARG1) wurde mit einem ungültigen Parameter gestartet" ;
         Text [ ENGLISH ] = "The operation on $(ARG1) was started with an invalid parameter" ;
     };
     // IOErrorCode_IS_WILDCARD = 18,
     String ( ERRCODE_UUI_IO_ISWILDCARD & ERRCODE_RES_MASK )
     {
-        Text = "Die Operation kann nicht ausgefnhrt werden, weil $(ARG1) Wildcards enthSlt";
+        Text = "Die Operation kann nicht ausgeführt werden, weil $(ARG1) Wildcards enthält";
         Text [ ENGLISH ] = "The operation cannot be run, because $(ARG1) contains wildcards" ;
     };
     // IOErrorCode_LOCKING_VIOLATION = 19,
@@ -305,13 +305,13 @@ Resource RID_UUI_ERRHDL
     // IOErrorCode_MISPLACED_CHARACTER = 20,
     String ( ERRCODE_UUI_IO_MISPLACEDCHAR & ERRCODE_RES_MASK )
     {
-        Text = "$(ARG1) enthSlt Zeichen an unzulSssiger Position" ;
+        Text = "$(ARG1) enthält Zeichen an unzulässiger Position" ;
         Text [ ENGLISH ] = "$(ARG1) contains misplaced characters" ;
     };
     // IOErrorCode_NAME_TOO_LONG = 21,
     String ( ERRCODE_UUI_IO_NAMETOOLONG & ERRCODE_RES_MASK )
     {
-        Text = "Der Name $(ARG1) enthSlt zu viele Zeichen" ;
+        Text = "Der Name $(ARG1) enthält zu viele Zeichen" ;
         Text [ ENGLISH ] = "The name $(ARG1) contains to many characters" ;
     };
     // IOErrorCode_NOT_EXISTING = 22,
@@ -329,7 +329,7 @@ Resource RID_UUI_ERRHDL
     // IOErrorCode_NOT_SUPPORTED = 24,
     String ( ERRCODE_UUI_IO_NOTSUPPORTED & ERRCODE_RES_MASK )
     {
-        Text = "Die Operation auf $(ARG1) wird auf dem vorliegenden Betriebssystem nicht unterstntzt" ;
+        Text = "Die Operation auf $(ARG1) wird auf dem vorliegenden Betriebssystem nicht unterstützt" ;
         Text [ ENGLISH ] = "The operation on $(ARG1) is not supported on this operating system" ;
     };
     // IOErrorCode_NO_DIRECTORY = 25,
@@ -347,19 +347,19 @@ Resource RID_UUI_ERRHDL
     // IOErrorCode_OUT_OF_DISK_SPACE = 27,
     String ( ERRCODE_UUI_IO_OUTOFSPACE & ERRCODE_RES_MASK )
     {
-        Text = "Auf dem GerSt $(ARG1) ist kein Platz mehr vorhanden" ;
+        Text = "Auf dem Gerät $(ARG1) ist kein Platz mehr vorhanden" ;
         Text [ ENGLISH ] = "There was no space left on device $(ARG1)" ;
     };
     // IOErrorCode_OUT_OF_FILE_HANDLES = 28,
     String ( ERRCODE_UUI_IO_TOOMANYOPENFILES & ERRCODE_RES_MASK )
     {
-        Text = "Die Operation auf $(ARG1) kann nicht ausgefnhrt werden, da bereits zu viele Dateien ge÷ffnet sind" ;
+        Text = "Die Operation auf $(ARG1) kann nicht ausgeführt werden, da bereits zu viele Dateien geöffnet sind" ;
         Text [ ENGLISH ] = "The operation on $(ARG1) can't be completed because there are too many open files" ;
     };
     // IOErrorCode_OUT_OF_MEMORY = 29,
     String ( ERRCODE_UUI_IO_OUTOFMEMORY & ERRCODE_RES_MASK )
     {
-        Text = "Die Operation auf $(ARG1) kann nicht ausgefnhrt werden, da kein Speicher mehr zur Verfngung steht" ;
+        Text = "Die Operation auf $(ARG1) kann nicht ausgeführt werden, da kein Speicher mehr zur Verfügung steht" ;
         Text [ ENGLISH ] = "The operation on $(ARG1) can't be completed because there is no more memory available" ;
     };
     // IOErrorCode_PENDING = 30,
@@ -383,7 +383,7 @@ Resource RID_UUI_ERRHDL
     // IOErrorCode_WRITE_PROTECTED = 33,
     String ( ERRCODE_UUI_IO_WRITEPROTECTED & ERRCODE_RES_MASK )
     {
-        Text = "$(ARG1) ist schreibgeschntzt" ;
+        Text = "$(ARG1) ist schreibgeschützt" ;
         Text [ english ] = "$(ARG1) is write protected" ;
     };
     // IOErrorCode_WRONG_FORMAT = 34,
