@@ -2,9 +2,9 @@
  *
  *  $RCSfile: errorhandler.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 11:56:07 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:43:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,10 +115,17 @@ enum ErrorCode
     EIDL_DEFINED_ATTRIBUTEFLAG,
     EIDL_WRONGATTRIBUTEKEYWORD,
     EIDL_MISSINGATTRIBUTEKEYWORD,
-    EIDL_ATTRIBUTEREADONLYEXPECTED,
+    EIDL_BAD_ATTRIBUTE_FLAGS,
     EIDL_OPTIONALEXPECTED,
     EIDL_MIXED_INHERITANCE,
-    EIDL_DOUBLE_INHERITANCE
+    EIDL_DOUBLE_INHERITANCE,
+    EIDL_DOUBLE_MEMBER,
+    EIDL_CONSTRUCTOR_PARAMETER_NOT_IN,
+    EIDL_CONSTRUCTOR_REST_PARAMETER_NOT_FIRST,
+    EIDL_REST_PARAMETER_NOT_LAST,
+    EIDL_REST_PARAMETER_NOT_ANY,
+    EIDL_METHOD_HAS_REST_PARAMETER,
+    EIDL_READONLY_ATTRIBUTE_SET_EXCEPTIONS
 };
 
 enum WarningCode
@@ -135,8 +142,9 @@ class ErrorHandler
 public:
     // Report errors with varying numbers of arguments
     void    error0(ErrorCode e);
-    void    error1(ErrorCode e, AstDeclaration* d);
-    void    error2(ErrorCode e, AstDeclaration* d1, AstDeclaration* d2);
+    void    error1(ErrorCode e, AstDeclaration const * d);
+    void    error2(
+        ErrorCode e, AstDeclaration const * d1, AstDeclaration const * d2);
     void    error3(ErrorCode e, AstDeclaration* d1, AstDeclaration* d2, AstDeclaration* d3);
 
     // Warning
@@ -160,7 +168,7 @@ public:
 
 
     // Report a type error
-    void    noTypeError(AstDeclaration* pDecl);
+    void    noTypeError(AstDeclaration const * pDecl);
 
     void    inheritanceError(NodeType nodeType, const ::rtl::OString* name, AstDeclaration* pDecl);
 
