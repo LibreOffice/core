@@ -2,9 +2,9 @@
  *
  *  $RCSfile: owriteablestream.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-30 09:48:16 $
+ *  last change: $Author: rt $ $Date: 2004-01-06 08:46:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,6 +223,10 @@ public:
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > GetStreamProperties();
 
+    void CopyInternallyTo_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& xDestStream,
+                                const ::com::sun::star::uno::Sequence< sal_Int8 >& aKey );
+    void CopyInternallyTo_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& xDestStream );
+
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > GetStream(
                         sal_Int32 nStreamMode,
                         const ::com::sun::star::uno::Sequence< sal_Int8 >& aKey );
@@ -255,10 +259,14 @@ protected:
     OWriteStream_Impl* m_pImpl;
     WSInternalData_Impl* m_pData;
 
+    sal_Bool m_bInStreamDisconnected;
+
+
     OWriteStream( OWriteStream_Impl* pImpl, ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > xStream );
 
     void CloseOutput_Impl();
 
+    void CopyToStreamInternally_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& xStream );
 public:
 
     virtual ~OWriteStream();
