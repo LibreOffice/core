@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-01 12:43:31 $
+ *  last change: $Author: rt $ $Date: 2003-09-25 07:44:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -328,6 +328,7 @@ public:
     void UseSwTable();
     void SetSizePosition(SwFrmFmt* pFrmFmt);
     void TableCellEnd();
+    void MoveOutsideTable();
     void FinishSwTable();
     void MergeCells();
     short GetMinLeft() const { return nConvertedLeft; }
@@ -467,7 +468,7 @@ sal_uInt16 SwWW8ImplReader::End_Ftn()
         pPlcxMan->RestoreAllPLCFx( aSave );
     }
 
-       if (bFtEdOk)
+    if (bFtEdOk)
         maSectionManager.SetCurrentSectionHasFootnote();
 
     maFtnStack.pop_back();
@@ -660,9 +661,8 @@ static void SetBaseAnlv(SwNumFmt &rNum, WW8_ANLV &rAV, BYTE nSwLevel )
         rNum.SetAbsLSpace( nIndent );
     }
     else
-    {
         rNum.SetCharTextDistance( nIndent );        // Breite der Nummer fehlt
-    }
+
     if( SVBT8ToByte( rAV.nfc ) == 5 || SVBT8ToByte( rAV.nfc ) == 7 )
     {
         String sP( rNum.GetSuffix() );
@@ -781,8 +781,6 @@ void SwWW8ImplReader::SetAnld(SwNumRule* pNumR, WW8_ANLD* pAD, BYTE nSwLevel,
     }
     pNumR->Set(nSwLevel, aNF);
 }
-
-
 
 //-------------------------------------------------------
 //          Kapitelnummerierung und Kapitelbullets
@@ -911,9 +909,6 @@ void SwWW8ImplReader::SetNumOlst(SwNumRule* pNumR, WW8_OLST* pO, BYTE nSwLevel)
     SetAnlvStrings(aNF, rAV, pO->rgch + nTxtOfs, true); // und rein
     pNumR->Set(nSwLevel, aNF);
 }
-
-
-
 
 // der OLST kommt am Anfang jeder Section, die Gliederungen enthaelt. Die ANLDs,
 // die an jeder Gliederungszeile haengen, enthalten nur Stuss, also werden die
@@ -1563,9 +1558,11 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp)
 
     eOri = HORI_LEFT;
 
-       WW8TabBandDesc* pNewBand = new WW8TabBandDesc;
+    WW8TabBandDesc* pNewBand = new WW8TabBandDesc;
 
     wwSprmParser aSprmParser(pIo->GetFib().nVersion);
+
+    bool bCantSplit(false);
 
     // process pPap until end of table found
     do
@@ -1590,13 +1587,16 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp)
         WW8SprmIter aSprmIter(aDesc.pMemPos, aDesc.nSprmsLen, aSprmParser);
 
         const BYTE* pParams = aSprmIter.GetAktParams();
-        for( int nLoop = 0; nLoop < 2; ++nLoop )
+        for (int nLoop = 0; nLoop < 2; ++nLoop)
         {
             while ( aSprmIter.GetSprms() &&
                 (0 != (pParams = aSprmIter.GetAktParams())) )
             {
                 switch( aSprmIter.GetAktId() )
                 {
+                case 0x3403:
+                    bCantSplit = *pParams;
+                    break;
                 case 187:
                 case 0xD605:
                     // sprmTTableBorders
@@ -1752,6 +1752,11 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp)
         }
         nBands++;
 
+        if (!bCantSplit)
+        {
+            pIo->maTracer.Log(sw::log::eRowCanSplit);
+            bCantSplit = true;
+        }
         pNewBand = new WW8TabBandDesc;
 
         nRows++;
@@ -2419,12 +2424,19 @@ void WW8TabDesc::MergeCells()
     }
 }
 
+void WW8TabDesc::MoveOutsideTable()
+{
+    ASSERT(pTmpPos && pIo, "I've forgotten where the table is anchored");
+    if (pTmpPos && pIo)
+        *pIo->pPaM->GetPoint() = *pTmpPos;
+}
+
 void WW8TabDesc::FinishSwTable()
 {
     WW8DupProperties aDup(pIo->rDoc,pIo->pCtrlStck);
     pIo->pCtrlStck->SetAttr( *pIo->pPaM->GetPoint(), 0, false);
 
-    *pIo->pPaM->GetPoint() = *pTmpPos;
+    MoveOutsideTable();
     delete pTmpPos, pTmpPos = 0;
 
     aDup.Insert(*pIo->pPaM->GetPoint());
@@ -2683,7 +2695,6 @@ bool WW8TabDesc::IsValidCell(short nCol) const
     return pActBand->bExist[nCol] && (USHORT)nAktRow < pTabLines->Count();
 }
 
-
 bool WW8TabDesc::SetPamInCell(short nWwCol, bool bPam)
 {
     ASSERT( pActBand, "pActBand ist 0" );
@@ -2693,18 +2704,26 @@ bool WW8TabDesc::SetPamInCell(short nWwCol, bool bPam)
     if ((USHORT)nAktRow >= pTabLines->Count())
     {
         ASSERT(!this, "Actual row bigger than expected." );
+        if (bPam)
+            MoveOutsideTable();
         return false;
     }
 
     pTabLine = (*pTabLines)[nAktRow];
     pTabBoxes = &pTabLine->GetTabBoxes();
 
-    if ( nCol >= pTabBoxes->Count() )
+    if (nCol >= pTabBoxes->Count())
+    {
+        if (bPam)
+            MoveOutsideTable();
         return false;
+    }
     pTabBox = (*pTabBoxes)[nCol];
     if( !pTabBox->GetSttNd() )
     {
         ASSERT(pTabBox->GetSttNd(), "Probleme beim Aufbau der Tabelle");
+        if (bPam)
+            MoveOutsideTable();
         return false;
     }
     if( bPam )
@@ -3066,7 +3085,7 @@ bool SwWW8ImplReader::StartTable(WW8_CP nStartCp)
         return false;
 
     if (pTableDesc)
-        aTableStack.push(pTableDesc);
+        maTableStack.push(pTableDesc);
 
     pTableDesc = new WW8TabDesc( this, nStartCp );
 
@@ -3079,7 +3098,7 @@ bool SwWW8ImplReader::StartTable(WW8_CP nStartCp)
                 "how could we be in a local apo and have no apo");
         }
 
-        if (!aTableStack.empty() && !InEqualApo(nNewInTable))
+        if (!maTableStack.empty() && !InEqualApo(nNewInTable))
         {
             pTableDesc->pParentPos = new SwPosition(*pPaM->GetPoint());
             SfxItemSet aItemSet(rDoc.GetAttrPool(),
@@ -3109,7 +3128,13 @@ bool SwWW8ImplReader::StartTable(WW8_CP nStartCp)
     else
         PopTableDesc();
 
-    return 0 != pTableDesc;
+    bool bSuccess = (0 != pTableDesc);
+    if (bSuccess)
+    {
+        maTracer.EnterEnvironment(sw::log::eTable, rtl::OUString::valueOf(
+            static_cast<sal_Int32>(maTableStack.size())));
+    }
+    return bSuccess;
 }
 
 void SwWW8ImplReader::TabCellEnd()
@@ -3130,19 +3155,27 @@ void SwWW8ImplReader::PopTableDesc()
         MoveOutsideFly(pTableDesc->pFlyFmt,*pTableDesc->pParentPos);
 
     delete pTableDesc;
-    if (aTableStack.empty())
+    if (maTableStack.empty())
         pTableDesc = 0;
     else
     {
-       pTableDesc = aTableStack.top();
-       aTableStack.pop();
+       pTableDesc = maTableStack.top();
+       maTableStack.pop();
     }
 }
 
 void SwWW8ImplReader::StopTable()
 {
+    maTracer.LeaveEnvironment(sw::log::eTable);
+
     pTableDesc->FinishSwTable();
     PopTableDesc();
+
+    if (!maTableStack.empty())
+    {
+        maTracer.EnterEnvironment(sw::log::eTable, rtl::OUString::valueOf(
+            static_cast<sal_Int32>(maTableStack.size())));
+    }
 }
 
 // GetTableLeft() wird fuer absatzgebundene Grafikobjekte in Tabellen
@@ -3450,32 +3483,30 @@ SwCharFmt* WW8RStyle::MakeOrGetCharFmt(bool * pbStyExist, WW8_STD* pStd,
         RES_POOLCHR_HTML_STRONG, RES_POOLCHR_HTML_EMPHASIS };
 
     // Einfuegen: immer neue Styles generieren || nicht abgeschaltet
-    if ( pIo->mbNewDoc && !(pIo->nIniFlags & WW8FL_NO_DEFSTYLES) )
+    if (pIo->mbNewDoc)
     {
         SwCharFmt* pFmt = 0;
 
         // Default-Style bekannt ?
         short nIdx = pStd->sti - 38;
-        if(    nIdx >= 0 && nIdx < 5
-            && aArr1[nIdx]!=0 )
+        if(nIdx >= 0 && nIdx < 5 && aArr1[nIdx] !=0)
             pFmt = pIo->rDoc.GetCharFmtFromPool( aArr1[ nIdx ] );
         else
         {
             nIdx = pStd->sti - 85;
-            if(    nIdx >= 0
-                && nIdx <  4 )
-                pFmt = pIo->rDoc.GetCharFmtFromPool( aArr2[ nIdx ] );
+            if (nIdx >= 0 && nIdx <  4)
+                pFmt = pIo->rDoc.GetCharFmtFromPool(aArr2[nIdx]);
         }
-        if( pFmt )
+        if (pFmt)
         {
             *pbStyExist = true;
             return pFmt;
         }
     }
     *pbStyExist = false;
-    String aName( rName );
-    xub_StrLen nPos = aName.Search( ',' );
-    if( STRING_NOTFOUND != nPos )   // mehrere Namen mit Komma getrennt
+    String aName(rName);
+    xub_StrLen nPos = aName.Search(',');
+    if (STRING_NOTFOUND != nPos)   // mehrere Namen mit Komma getrennt
         aName.Erase( nPos );        // gibts im SW nicht
     return MakeNewCharFmt( pStd, aName );   // nicht gefunden
 }
@@ -3576,13 +3607,16 @@ SwTxtFmtColl* WW8RStyle::MakeOrGetFmtColl(bool * pbStyExist, WW8_STD* pStd,
     ASSERT( ( sizeof( aArr ) / sizeof( RES_POOL_COLLFMT_TYPE ) == 75 ),
             "Style-UEbersetzungstabelle hat falsche Groesse" );
 
-    if( pStd->sti < sizeof( aArr ) / sizeof( RES_POOL_COLLFMT_TYPE )
-        && aArr[pStd->sti]!=RES_NONE    // Default-Style bekannt
-        && !( pIo->nIniFlags & WW8FL_NO_DEFSTYLES ) ) // nicht abgeschaltet
+    //If this is a built-in word style that has a built-in writer
+    //equivalent, then map it to ours
+    if (
+        pStd->sti < sizeof(aArr) / sizeof(RES_POOL_COLLFMT_TYPE)
+        && aArr[pStd->sti] != RES_NONE
+       )
     {
         SwTxtFmtColl* pCol =
             pIo->rDoc.GetTxtCollFromPoolSimple(aArr[pStd->sti], false);
-        if(pCol)
+        if (pCol)
         {
             *pbStyExist = true;
             return pCol;
@@ -3590,14 +3624,8 @@ SwTxtFmtColl* WW8RStyle::MakeOrGetFmtColl(bool * pbStyExist, WW8_STD* pStd,
     }
     String aName( rName );
     xub_StrLen nPos = aName.Search( ',' );
-    if( STRING_NOTFOUND != nPos )   // mehrere Namen mit Komma getrennt
-        aName.Erase( nPos );        // gibts im SW nicht
-    SwTxtFmtColl* pCol = SearchFmtColl( aName );
-    if( pCol )
-    {
-        *pbStyExist = true;
-        return pCol;
-    }
+    if (STRING_NOTFOUND != nPos)   // mehrere Namen mit Komma getrennt
+        aName.Erase(nPos);         // gibts im SW nicht
     *pbStyExist = false;
     return MakeNewFmtColl( pStd, aName );   // nicht gefunden
 }
@@ -3658,7 +3686,7 @@ void WW8RStyle::Import1Style( USHORT nNr )
     pSI->pFmt = pColl;                  // UEbersetzung WW->SW merken
     pSI->bImportSkipped = !bImport;
 
-    // Setze Based on
+    // Set Based on style
     USHORT j = pSI->nBase;
     if (j != nNr && j < cstd )
     {
@@ -3668,11 +3696,12 @@ void WW8RStyle::Import1Style( USHORT nNr )
             pSI->pFmt->SetDerivedFrom( pj->pFmt );  // ok, Based on eintragen
             pSI->eLTRFontSrcCharSet = pj->eLTRFontSrcCharSet;
             pSI->eRTLFontSrcCharSet = pj->eRTLFontSrcCharSet;
-            pSI->nLeftParaMgn = pj->nLeftParaMgn;
-            pSI->nTxtFirstLineOfst = pj->nTxtFirstLineOfst;
+            pSI->eCJKFontSrcCharSet = pj->eCJKFontSrcCharSet;
             pSI->n81Flags = pj->n81Flags;
             pSI->n81BiDiFlags = pj->n81BiDiFlags;
             pSI->bInvisFlag = pj->bInvisFlag;
+            pSI->bParaAutoBefore = pj->bParaAutoBefore;
+            pSI->bParaAutoAfter = pj->bParaAutoAfter;
 
             if (pj->pWWFly)
                 pSI->pWWFly = new WW8FlyPara(pIo->bVer67, pj->pWWFly);
@@ -3754,8 +3783,14 @@ void WW8RStyle::RecursiveReg(USHORT nNr)
             RecursiveReg(pSI->nBase);
 
         pIo->RegisterNumFmtOnStyle(nNr);
-        pIo->NeedAdjustStyleTabStops(pIo->pCollA[nNr].nLeftParaMgn,
-            pIo->pCollA[nNr].nTxtFirstLineOfst,pSI);
+
+        long nTabPosStart = 0;
+        if (pIo->pCollA[nNr].pFmt)
+        {
+            const SvxLRSpaceItem &rLR = pIo->pCollA[nNr].pFmt->GetLRSpace();
+            nTabPosStart = rLR.GetTxtLeft();
+        }
+        pIo->AdjustStyleTabStops(nTabPosStart, pSI);
     }
 }
 
