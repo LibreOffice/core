@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editview.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mt $ $Date: 2001-08-20 12:30:55 $
+ *  last change: $Author: hr $ $Date: 2001-10-16 18:57:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -526,25 +526,29 @@ sal_uInt32 EditView::Write( SvStream& rOutput, EETextFormat eFormat )
 void EditView::Cut()
 {
     DBG_CHKTHIS( EditView, 0 );
-    pImpEditView->CutCopy( GetWindow()->GetClipboard(), sal_True );
+    Reference<com::sun::star::datatransfer::clipboard::XClipboard> aClipBoard(GetWindow()->GetClipboard());
+    pImpEditView->CutCopy( aClipBoard, sal_True );
 }
 
 void EditView::Copy()
 {
     DBG_CHKTHIS( EditView, 0 );
-    pImpEditView->CutCopy( GetWindow()->GetClipboard(), sal_False );
+    Reference<com::sun::star::datatransfer::clipboard::XClipboard> aClipBoard(GetWindow()->GetClipboard());
+    pImpEditView->CutCopy( aClipBoard, sal_False );
 }
 
 void EditView::Paste()
 {
     DBG_CHKTHIS( EditView, 0 );
-    pImpEditView->Paste( GetWindow()->GetClipboard(), sal_False );
+    Reference<com::sun::star::datatransfer::clipboard::XClipboard> aClipBoard(GetWindow()->GetClipboard());
+    pImpEditView->Paste( aClipBoard, sal_False );
 }
 
 void EditView::PasteSpecial()
 {
     DBG_CHKTHIS( EditView, 0 );
-    pImpEditView->Paste( GetWindow()->GetClipboard(), sal_True );
+    Reference<com::sun::star::datatransfer::clipboard::XClipboard> aClipBoard(GetWindow()->GetClipboard());
+    pImpEditView->Paste(aClipBoard, sal_True );
 }
 
 void EditView::EnablePaste( sal_Bool bEnable )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: mt $ $Date: 2001-10-11 12:52:58 $
+ *  last change: $Author: hr $ $Date: 2001-10-16 18:57:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -815,8 +815,10 @@ sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditVie
                 {
                     aCurSel = pImpEditEngine->MoveCursor( rKeyEvent, pEditView );
 
-                    if ( aCurSel.HasRange() )
-                        pEditView->pImpEditView->CutCopy( pEditView->GetWindow()->GetSelection(), FALSE );
+                    if ( aCurSel.HasRange() ) {
+                        Reference<com::sun::star::datatransfer::clipboard::XClipboard> aSelection(pEditView->GetWindow()->GetSelection());
+                        pEditView->pImpEditView->CutCopy( aSelection, FALSE );
+                    }
 
                     bMoved = sal_True;
                     if ( nCode == KEY_END )
