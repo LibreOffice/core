@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adc_cmd_parse.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-11-14 18:02:01 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:34:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,4 +240,3 @@ class S_ProjectData : public Context
 
 
 #endif
-
