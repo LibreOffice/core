@@ -2,9 +2,9 @@
  *
  *  $RCSfile: float3d.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2001-12-14 18:41:48 $
+ *  last change: $Author: kz $ $Date: 2002-02-08 21:14:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -558,7 +558,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText [ swedish ] = "Tilldela bara 3D-attribut" ;
         QuickHelpText [ danish ] = "Tildel kun 3D-attributter" ;
         QuickHelpText [ italian ] = "Assegna solo attributi 3D" ;
-        QuickHelpText [ spanish ] = "Asignar solo atributos 3D" ;
+        QuickHelpText [ spanish ] = "Asignar sуlo atributos 3D" ;
         QuickHelpText [ french ] = "Assigner uniquement les attributs 3 D" ;
         QuickHelpText [ dutch ] = "Alleen 3D-attributen toewijzen" ;
     QuickHelpText[ russian ] = "Применить только атрибуты 3-М";
