@@ -2,9 +2,9 @@
  *
  *  $RCSfile: conditio.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-20 12:11:54 $
+ *  last change: $Author: nn $ $Date: 2002-06-27 16:30:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,7 +205,7 @@ ScConditionEntry::ScConditionEntry( ScConditionMode eOper,
     aSrcPos(rPos),
     bFirstRun(TRUE)
 {
-    Compile( rExpr1, rExpr2, bCompileEnglish, bCompileXML );
+    Compile( rExpr1, rExpr2, bCompileEnglish, bCompileXML, FALSE );
 
     //  Formelzellen werden erst bei IsValid angelegt
 }
@@ -407,7 +407,7 @@ void ScConditionEntry::StoreCondition(SvStream& rStream, ScMultipleWriteHeader& 
 }
 
 void ScConditionEntry::Compile( const String& rExpr1, const String& rExpr2,
-                                BOOL bEnglish, BOOL bCompileXML )
+                                BOOL bEnglish, BOOL bCompileXML, BOOL bTextToReal )
 {
     if ( rExpr1.Len() || rExpr2.Len() )
     {
@@ -417,52 +417,74 @@ void ScConditionEntry::Compile( const String& rExpr1, const String& rExpr2,
 
         if ( rExpr1.Len() )
         {
-            pFormula1 = aComp.CompileString( rExpr1 );
-            if ( pFormula1->GetLen() == 1 )
+            if ( pDoc->IsImportingXML() && !bTextToReal )
             {
-                // einzelne (konstante Zahl) ?
-                ScToken* pToken = pFormula1->First();
-                if ( pToken->GetOpCode() == ocPush )
+                //  temporary formula string as string tokens
+                //! merge with lcl_ScDocFunc_CreateTokenArrayXML
+                pFormula1 = new ScTokenArray;
+                pFormula1->AddString( rExpr1 );
+                // bRelRef1 is set when the formula is compiled again (CompileXML)
+            }
+            else
+            {
+                pFormula1 = aComp.CompileString( rExpr1 );
+                if ( pFormula1->GetLen() == 1 )
                 {
-                    if ( pToken->GetType() == svDouble )
+                    // einzelne (konstante Zahl) ?
+                    ScToken* pToken = pFormula1->First();
+                    if ( pToken->GetOpCode() == ocPush )
                     {
-                        nVal1 = pToken->GetDouble();
-                        DELETEZ(pFormula1);             // nicht als Formel merken
-                    }
-                    else if ( pToken->GetType() == svString )
-                    {
-                        bIsStr1 = TRUE;
-                        aStrVal1 = pToken->GetString();
-                        DELETEZ(pFormula1);             // nicht als Formel merken
+                        if ( pToken->GetType() == svDouble )
+                        {
+                            nVal1 = pToken->GetDouble();
+                            DELETEZ(pFormula1);             // nicht als Formel merken
+                        }
+                        else if ( pToken->GetType() == svString )
+                        {
+                            bIsStr1 = TRUE;
+                            aStrVal1 = pToken->GetString();
+                            DELETEZ(pFormula1);             // nicht als Formel merken
+                        }
                     }
                 }
+                bRelRef1 = lcl_HasRelRef( pDoc, pFormula1 );
             }
-            bRelRef1 = lcl_HasRelRef( pDoc, pFormula1 );
         }
 
         if ( rExpr2.Len() )
         {
-            pFormula2 = aComp.CompileString( rExpr2 );
-            if ( pFormula2->GetLen() == 1 )
+            if ( pDoc->IsImportingXML() && !bTextToReal )
             {
-                // einzelne (konstante Zahl) ?
-                ScToken* pToken = pFormula2->First();
-                if ( pToken->GetOpCode() == ocPush )
+                //  temporary formula string as string tokens
+                //! merge with lcl_ScDocFunc_CreateTokenArrayXML
+                pFormula2 = new ScTokenArray;
+                pFormula2->AddString( rExpr2 );
+                // bRelRef2 is set when the formula is compiled again (CompileXML)
+            }
+            else
+            {
+                pFormula2 = aComp.CompileString( rExpr2 );
+                if ( pFormula2->GetLen() == 1 )
                 {
-                    if ( pToken->GetType() == svDouble )
+                    // einzelne (konstante Zahl) ?
+                    ScToken* pToken = pFormula2->First();
+                    if ( pToken->GetOpCode() == ocPush )
                     {
-                        nVal2 = pToken->GetDouble();
-                        DELETEZ(pFormula2);             // nicht als Formel merken
-                    }
-                    else if ( pToken->GetType() == svString )
-                    {
-                        bIsStr2 = TRUE;
-                        aStrVal2 = pToken->GetString();
-                        DELETEZ(pFormula2);             // nicht als Formel merken
+                        if ( pToken->GetType() == svDouble )
+                        {
+                            nVal2 = pToken->GetDouble();
+                            DELETEZ(pFormula2);             // nicht als Formel merken
+                        }
+                        else if ( pToken->GetType() == svString )
+                        {
+                            bIsStr2 = TRUE;
+                            aStrVal2 = pToken->GetString();
+                            DELETEZ(pFormula2);             // nicht als Formel merken
+                        }
                     }
                 }
+                bRelRef2 = lcl_HasRelRef( pDoc, pFormula2 );
             }
-            bRelRef2 = lcl_HasRelRef( pDoc, pFormula2 );
         }
     }
 }
@@ -506,7 +528,12 @@ void ScConditionEntry::CompileAll()
 
 void ScConditionEntry::CompileXML()
 {
-    Compile(GetExpression(aSrcPos, 0), GetExpression(aSrcPos, 1), sal_False, sal_False);
+    //  Convert the text tokens that were created during XML import into real tokens:
+    //  The stored string tokens contain english function names, but no XML-style references
+
+    Compile( GetExpression(aSrcPos, 0, 0, TRUE, FALSE, TRUE),
+             GetExpression(aSrcPos, 1, 0, TRUE, FALSE, TRUE),
+             TRUE, FALSE, TRUE );
 }
 
 void ScConditionEntry::UpdateReference( UpdateRefMode eUpdateRefMode,
@@ -872,7 +899,8 @@ BOOL ScConditionEntry::IsCellValid( ScBaseCell* pCell, const ScAddress& rPos ) c
 }
 
 String ScConditionEntry::GetExpression( const ScAddress& rCursor, USHORT nIndex,
-                                        ULONG nNumFmt, BOOL bEnglish, BOOL bCompileXML ) const
+                                        ULONG nNumFmt, BOOL bEnglish,
+                                        BOOL bCompileXML, BOOL bTextToReal ) const
 {
     String aRet;
 
@@ -886,6 +914,7 @@ String ScConditionEntry::GetExpression( const ScAddress& rCursor, USHORT nIndex,
             ScCompiler aComp(pDoc, rCursor, *pFormula1);
             aComp.SetCompileEnglish( bEnglish );
             aComp.SetCompileXML( bCompileXML );
+            aComp.SetImportXML( bTextToReal );          // set only from CompileXML method
             aComp.CreateStringFromTokenArray( aRet );
         }
         else if (bIsStr1)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: validat.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: gt $ $Date: 2001-03-28 13:15:41 $
+ *  last change: $Author: nn $ $Date: 2002-06-27 16:28:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,6 +197,7 @@ public:
     void    Store( SvStream& rStream ) const;
     void    ResetUsed();
 
+    void    CompileXML();
     void    UpdateReference( UpdateRefMode eUpdateRefMode,
                                 const ScRange& rRange, short nDx, short nDy, short nDz );
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: conditio.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-20 12:11:11 $
+ *  last change: $Author: nn $ $Date: 2002-06-27 16:28:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,8 @@ class ScConditionEntry
     BOOL                bFirstRun;
 
     void    MakeCells( const ScAddress& rPos );
-    void    Compile( const String& rExpr1, const String& rExpr2, BOOL bEnglish, BOOL bCompileXML );
+    void    Compile( const String& rExpr1, const String& rExpr2, BOOL bEnglish,
+                        BOOL bCompileXML, BOOL bTextToReal );
     void    Interpret( const ScAddress& rPos );
 
     BOOL    IsValid( double nArg ) const;
@@ -165,7 +166,8 @@ public:
     ScAddress       GetSrcPos() const           { return aSrcPos; }
 
     String          GetExpression( const ScAddress& rCursor, USHORT nPos, ULONG nNumFmt = 0,
-                                    BOOL bEnglish = FALSE, BOOL bCompileXML = FALSE ) const;
+                                    BOOL bEnglish = FALSE, BOOL bCompileXML = FALSE,
+                                    BOOL bTextToReal = FALSE ) const;
 
     ScTokenArray*   CreateTokenArry( USHORT nPos ) const;
 

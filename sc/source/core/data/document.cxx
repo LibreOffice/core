@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-20 12:11:54 $
+ *  last change: $Author: nn $ $Date: 2002-06-27 16:30:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,7 @@
 #include "rangelst.hxx"
 #include "markdata.hxx"
 #include "conditio.hxx"
+#include "validat.hxx"
 #include "prnsave.hxx"
 #include "chgtrack.hxx"
 #include "sc.hrc"
@@ -2204,6 +2205,8 @@ void ScDocument::CompileXML()
 
     if ( pCondFormList )
         pCondFormList->CompileXML();
+    if ( pValidationList )
+        pValidationList->CompileXML();
 
     SetDirty();
     SetAutoCalc( bOldAutoCalc );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: validat.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2001-12-19 19:55:28 $
+ *  last change: $Author: nn $ $Date: 2002-06-27 16:30:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -636,6 +636,13 @@ void ScValidationDataList::ResetUsed()
     USHORT nCount = Count();
     for (USHORT i=0; i<nCount; i++)
         (*this)[i]->SetUsed(FALSE);
+}
+
+void ScValidationDataList::CompileXML()
+{
+    USHORT nCount = Count();
+    for (USHORT i=0; i<nCount; i++)
+        (*this)[i]->CompileXML();
 }
 
 void ScValidationDataList::UpdateReference( UpdateRefMode eUpdateRefMode,
