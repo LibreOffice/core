@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statusbarcontroller.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 17:14:04 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 15:02:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,6 +226,7 @@ throw ( Exception, RuntimeException )
     const rtl::OUString aCommandURLName( RTL_CONSTASCII_USTRINGPARAM( "CommandURL" ));
     const rtl::OUString aServiceManagerName( RTL_CONSTASCII_USTRINGPARAM( "ServiceManager" ));
     const rtl::OUString aParentWindow( RTL_CONSTASCII_USTRINGPARAM( "ParentWindow" ));
+    const rtl::OUString aIdentifier( RTL_CONSTASCII_USTRINGPARAM( "Identifier" ));
 
     bool bInitialized( true );
     bool bBindListener( false );
@@ -257,6 +258,8 @@ throw ( Exception, RuntimeException )
                     aPropValue.Value >>= m_xServiceManager;
                 else if ( aPropValue.Name.equalsAscii( "ParentWindow" ))
                     aPropValue.Value >>= m_xParentWindow;
+                else if ( aPropValue.Name.equalsAscii( "Identifier" ))
+                    aPropValue.Value >>= m_nID;
             }
         }
 
