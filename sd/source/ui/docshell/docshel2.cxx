@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel2.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: cl $ $Date: 2002-05-07 10:17:08 $
+ *  last change: $Author: cl $ $Date: 2002-07-30 14:11:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,25 +112,44 @@ void SdDrawDocShell::Draw(OutputDevice* pOut, const JobSetup& rSetup,
     pView->SetPageVisible(FALSE);
     pView->SetGlueVisible(FALSE);
 
-    SdPage* pPage = NULL;
-    USHORT nSelectedPage = 0;
-    USHORT nPageCnt = (USHORT) pDoc->GetSdPageCount(PK_STANDARD);
+    SdPage* pSelectedPage = NULL;
 
-    for (USHORT i = 0; i < nPageCnt; i++)
+    List* pFrameViewList = pDoc->GetFrameViewList();
+    if( pFrameViewList && pFrameViewList->Count() )
     {
-        pPage = pDoc->GetSdPage(i, PK_STANDARD);
-
-        if ( pPage->IsSelected() )
+        FrameView* pFrameView = (FrameView*)pFrameViewList->GetObject(0);
+        if( pFrameView && pFrameView->GetPageKind() == PK_STANDARD )
         {
-            nSelectedPage = i;
+            USHORT nSelectedPage = pFrameView->GetSelectedPage();
+            pSelectedPage = pDoc->GetSdPage(nSelectedPage, PK_STANDARD);
         }
+    }
+
+    if( NULL == pSelectedPage )
+    {
+        SdPage* pPage = NULL;
+        USHORT nSelectedPage = 0;
+        USHORT nPageCnt = (USHORT) pDoc->GetSdPageCount(PK_STANDARD);
+
+        for (USHORT i = 0; i < nPageCnt; i++)
+        {
+            pPage = pDoc->GetSdPage(i, PK_STANDARD);
+
+            if ( pPage->IsSelected() )
+            {
+                nSelectedPage = i;
+                pSelectedPage = pPage;
+            }
+        }
+
+        if( NULL == pSelectedPage )
+            pSelectedPage = pDoc->GetSdPage(0, PK_STANDARD);
     }
 
     Rectangle aVisArea = GetVisArea(nAspect);
     pOut->IntersectClipRegion(aVisArea);
 
-    pPage = pDoc->GetSdPage(nSelectedPage, PK_STANDARD);
-    pView->ShowPage(pPage, Point());
+    pView->ShowPage(pSelectedPage, Point());
 
     if (pOut->GetOutDevType() != OUTDEV_WINDOW)
     {
