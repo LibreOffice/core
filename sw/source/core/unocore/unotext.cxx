@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotext.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-08 09:43:52 $
+ *  last change: $Author: mtg $ $Date: 2001-04-04 12:19:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -341,7 +341,7 @@ void SwXText::insertControlCharacter(const uno::Reference< XTextRange > & xTextR
                 case ControlCharacter::PARAGRAPH_BREAK :
                     // eine Tabellen Zelle wird jetzt zu einer normalen Textzelle!
                     pDoc->ClearBoxNumAttrs( aTmp.GetPoint()->nNode );
-                    pDoc->SplitNode( *aTmp.GetPoint(), sal_True );
+                    pDoc->SplitNode( *aTmp.GetPoint(), sal_False );
                     break;
                 case ControlCharacter::APPEND_PARAGRAPH:
                 {
