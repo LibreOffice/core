@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iahndl.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: sb $ $Date: 2001-08-16 13:41:57 $
+ *  last change: $Author: sb $ $Date: 2001-08-16 14:24:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -297,6 +297,21 @@ SimpleErrorContextPtr::~SimpleErrorContextPtr() SAL_THROW(())
         vos::OGuard aGuard(Application::GetSolarMutex());
         delete m_pContext;
     }
+}
+
+bool
+hasAbortContinuation(
+    star::uno::Sequence< star::uno::Reference<
+                             star::task::XInteractionContinuation > > const &
+        rContinuations)
+    SAL_THROW((star::uno::RuntimeException))
+{
+    for (sal_Int32 i = 0; i < rContinuations.getLength(); ++i)
+        if (star::uno::Reference< star::task::XInteractionAbort >::query(
+                    rContinuations[i]).
+                is())
+            return true;
+    return false;
 }
 
 void
@@ -1000,17 +1015,7 @@ UUIInteractionHandler::handle(
             // errors only display an OK button, and that button is (per
             // definition) mapped to the XInteractionAbort continuation.  So,
             // if that continuation is missing, do not handle the request:
-            bool bAbort = false;
-            for (sal_Int32 i = 0; i < aContinuations.getLength(); ++i)
-                if (star::uno::Reference< star::task::XInteractionAbort >::
-                                query(
-                            aContinuations[i]).
-                        is())
-                {
-                    bAbort = true;
-                    break;
-                }
-            if (!bAbort)
+            if (!hasAbortContinuation(aContinuations))
                 return;
 
             nErrorFlags = ERRCODE_BUTTON_OK;
@@ -1310,6 +1315,10 @@ UUIInteractionHandler::handle(
             eExecute = EXECUTE_NO;
         }
         else if (aTheRequest >>= aWrongJavaVersionException)
+        {
+            if (!hasAbortContinuation(aContinuations))
+                return;
+            eExecute = EXECUTE_IGNORE_RESULT;
             nErrorID
                 = aWrongJavaVersionException.DetectedVersion.getLength()
                           == 0 ?
@@ -1337,12 +1346,18 @@ UUIInteractionHandler::handle(
                                            DetectedVersion,
                                        aWrongJavaVersionException.
                                            LowestSupportedVersion));
+        }
         else if (aTheRequest >>= aBadPartnershipException)
+        {
+            if (!hasAbortContinuation(aContinuations))
+                return;
+            eExecute = EXECUTE_IGNORE_RESULT;
             nErrorID = aBadPartnershipException.Partnership.getLength() == 0 ?
                            ERRCODE_UUI_BADPARTNERSHIP :
                            *new StringErrorInfo(
                                     ERRCODE_UUI_BADPARTNERSHIP_NAME,
                                     aBadPartnershipException.Partnership);
+        }
     }
     catch (std::bad_alloc const &)
     {
