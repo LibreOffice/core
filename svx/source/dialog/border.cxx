@@ -2,9 +2,9 @@
  *
  *  $RCSfile: border.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:27:46 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 14:00:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifdef SVX_DLLIMPLEMENTATION
 #undef SVX_DLLIMPLEMENTATION
 #endif
@@ -742,12 +741,13 @@ BOOL SvxBorderTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
     //-------------------
     // Abstand nach Innen
     //-------------------
-    if( !mbUseMarginItem )
+    if( aLeftMF.IsVisible() )
     {
-        if( aLeftMF.IsVisible() )
-        {
-            aBoxInfoItem.SetDist( TRUE );
+        // #i40405# enable distance controls for next dialog call
+        aBoxInfoItem.SetDist( TRUE );
 
+        if( !mbUseMarginItem )
+        {
             // #106224# all edits empty: do nothing
             if( aLeftMF.GetText().Len() || aRightMF.GetText().Len() ||
                 aTopMF.GetText().Len() || aBottomMF.GetText().Len() )
