@@ -421,8 +421,12 @@ $(DESTDIR)$/settings$/dk.mk : $(PRJ)$/util$/dk.mk
     echo DKNAME=${ODKNAME} >> $@
 .ELSE
     echo DKNAME=${PRODUCT_NAME} >> $@    
-.ENDIF    
-    echo DKREGISTRYNAME=$(DOLLARSIGN)(OFFICE_PROGRAMM_PATH)$(DOLLARSIGN)(PS)applicat.rdb >> $@
+.ENDIF
+.IF "$(GUI)"=="UNX"
+    echo 'DKREGISTRYNAME=$$(OFFICE_PROGRAM_PATH)$$(PS)applicat.rdb' >> $@
+.ELSE
+    echo DKREGISTRYNAME=$$(OFFICE_PROGRAM_PATH)$$(PS)applicat.rdb >> $@
+.ENDIF
 
 .IF "$(BUILD_SOSL)"==""
 $(DESTDIR)$/odk_overview.html : $(PRJ)$/util$/odk_overview.html
@@ -447,7 +451,6 @@ $(CONVERTTAGFLAG) : $(MISC)$/deltree.txt
     touch $@
 .ELSE
 $(CONVERTTAGFLAG) : $(MISC)$/deltree.txt
-    +echo no conversion necessary!!
-    touch $@    
-.ENDIF    
-        
+    +echo no conversion necessary
+    touch $@
+.ENDIF
