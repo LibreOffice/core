@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hangulhanjadlg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:32:19 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:36:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,11 @@
  *
  *
  ************************************************************************/
+
+#ifdef SVX_DLLIMPLEMENTATION
+#undef SVX_DLLIMPLEMENTATION
+#endif
+
 #ifndef SVX_HANGUL_HANJA_DLG_HXX
 #include "hangulhanjadlg.hxx"
 #endif
