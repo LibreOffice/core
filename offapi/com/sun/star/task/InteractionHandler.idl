@@ -2,9 +2,9 @@
  *
  *  $RCSfile: InteractionHandler.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:09:52 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 23:46:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,8 +63,8 @@
 #define __com_sun_star_task_PropertyMatcherFactory_idl__
 
 module com { module sun { module star {
-    module lang { interface XInitialization; };
-    module task { interface XInteractionHandler; };
+    module lang { published interface XInitialization; };
+    module task { published interface XInteractionHandler; };
 }; }; };
 
 module com { module sun { module star { module task {
@@ -164,7 +164,7 @@ module com { module sun { module star { module task {
         <atom>string</atom>s).</DD>
     </DL></P>
  */
-service InteractionHandler
+published service InteractionHandler
 {
     //------------------------------------------------------------------------
     /** Handle an interaction request.
