@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sanedlg.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2000-10-27 15:19:14 $
+ *  last change: $Author: kz $ $Date: 2000-11-03 16:13:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -420,7 +420,7 @@ ModalDialog RID_SANE_DIALOG
         Text[ arabic ] = "ΕΩεΗΡ ΗαΞνΗΡΗΚ ΗαγΚήΟγΙ";
         Text[ dutch ] = "~Verdere opties weergeven";
         Text[ chinese_simplified ] = "ΟΤΚΎΈίΌ¶Ρ΅Οξ";
-        Text[ greek ] = "Εμφάνιση επιπλέον επιλογών";
+        Text[ greek ] = "Εμφάνιση περισσότερων επιλογών";
         Text[ korean ] = "Θ®ΐεµΘ ΏΙΌΗ Η¥½Γ";
         Text[ turkish ] = "Ek seηenekleri gφrόntόle";
     };
