@@ -2,9 +2,9 @@
  *
  *  $RCSfile: environmentofanchoredobject.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 14:01:53 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:42:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,7 @@ const SwLayoutFrm& SwEnvironmentOfAnchoredObject::GetHoriEnvironmentLayoutFrm(
             {
                 pHoriEnvironmentLayFrm =
                     pHoriEnvironmentLayFrm->IsFlyFrm()
-                    ? static_cast<const SwFlyFrm*>(pHoriEnvironmentLayFrm)->GetAnchor()
+                    ? static_cast<const SwFlyFrm*>(pHoriEnvironmentLayFrm)->GetAnchorFrm()
                     : pHoriEnvironmentLayFrm->GetUpper();
                 ASSERT( pHoriEnvironmentLayFrm,
                         "SwEnvironmentOfAnchoredObject::GetHoriEnvironmentLayoutFrm(..) - no page|cell frame found" );
@@ -153,7 +153,7 @@ const SwLayoutFrm& SwEnvironmentOfAnchoredObject::GetVertEnvironmentLayoutFrm(
             {
                 pVertEnvironmentLayFrm =
                     pVertEnvironmentLayFrm->IsFlyFrm()
-                    ? static_cast<const SwFlyFrm*>(pVertEnvironmentLayFrm)->GetAnchor()
+                    ? static_cast<const SwFlyFrm*>(pVertEnvironmentLayFrm)->GetAnchorFrm()
                     : pVertEnvironmentLayFrm->GetUpper();
                 ASSERT( pVertEnvironmentLayFrm,
                         "SwEnvironmentOfAnchoredObject::GetVertEnvironmentLayoutFrm(..) - proposed frame not found" );
