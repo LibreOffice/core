@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urihelper.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 14:39:20 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 17:26:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,9 @@
 #endif
 #ifndef _UNOTOOLS_CHARCLASS_HXX
 #include <unotools/charclass.hxx>
+#endif
+#ifndef INCLUDED_RTL_INSTANCE_HXX
+#include "rtl/instance.hxx"
 #endif
 
 namespace unnamed_svtools_urihelper {}
@@ -213,15 +216,11 @@ URIHelper::SmartRel2Abs(INetURLObject const & rTheBaseURIRef,
 //
 //============================================================================
 
-namespace unnamed_svtools_urihelper {
-
-static Link aMaybeFileHdl;
-
-}
+namespace { struct MaybeFileHdl : public rtl::Static< Link, MaybeFileHdl > {}; }
 
 void URIHelper::SetMaybeFileHdl(Link const & rTheMaybeFileHdl)
 {
-    aMaybeFileHdl = rTheMaybeFileHdl;
+    MaybeFileHdl::get() = rTheMaybeFileHdl;
 }
 
 //============================================================================
@@ -232,7 +231,7 @@ void URIHelper::SetMaybeFileHdl(Link const & rTheMaybeFileHdl)
 
 Link URIHelper::GetMaybeFileHdl()
 {
-    return aMaybeFileHdl;
+    return MaybeFileHdl::get();
 }
 
 //============================================================================
