@@ -10,7 +10,7 @@ namespace DOM { namespace events {
     void CEventDispatcher::addListener(xmlNodePtr pNode, EventType aType, const Reference<XEventListener>& aListener, sal_Bool bCapture)
     {
         TypeListenerMap* pTMap = &targetListeners;
-        if (bCapture) pTMap = &captureListeners;        
+        if (bCapture) pTMap = &captureListeners;
 
         // get the multimap for the specified type
         ListenerMap *pMap = 0;
@@ -30,7 +30,7 @@ namespace DOM { namespace events {
     {
         TypeListenerMap *pTMap = &targetListeners;
         if (bCapture) pTMap = &captureListeners;
-        
+
         // get the multimap for the specified type
         TypeListenerMap::const_iterator tIter = pTMap->find(aType);
         if (tIter != pTMap->end()) {
@@ -52,12 +52,12 @@ namespace DOM { namespace events {
             }
         }
     }
-    
+
     void CEventDispatcher::callListeners(xmlNodePtr pNode, EventType aType, const Reference< XEvent >& xEvent, sal_Bool bCapture)
-    {        
+    {
         TypeListenerMap *pTMap = &targetListeners;
         if (bCapture) pTMap = &captureListeners;
-        
+
         // get the multimap for the specified type
         TypeListenerMap::const_iterator tIter = pTMap->find(aType);
         if (tIter != pTMap->end()) {
@@ -65,13 +65,15 @@ namespace DOM { namespace events {
             ListenerMap::const_iterator iter = pMap->find(pNode);
             if( iter == pMap->end() ) return;
             ListenerMap::const_iterator ibound = pMap->upper_bound(pNode);
-            while (iter != ibound)
+            ListenerPairVector lv(iter, ibound);
+            ListenerPairVector::const_iterator liter = lv.begin();
+            while (liter != lv.end())
             {
-                if((iter->second).is())
-                {                    
-                    (iter->second)->handleEvent(xEvent);
+                if((liter->second).is())
+                {
+                    (liter->second)->handleEvent(xEvent);
                 }
-                iter++;
+                liter++;
             }
         }
     }
@@ -88,10 +90,10 @@ namespace DOM { namespace events {
             case EventType_DOMNodeInsertedIntoDocument:
             case EventType_DOMAttrModified:
             case EventType_DOMCharacterDataModified:
-            {                
+            {
                 Reference< XMutationEvent > aMEvent(aEvent, UNO_QUERY);
                 // dispatch a mutation event
-                // we need to clone the event in order to have complete control 
+                // we need to clone the event in order to have complete control
                 // over the implementation
                 CMutationEvent* pEvent = new CMutationEvent;
                 pEvent->m_target = aEvent->getTarget();
@@ -100,12 +102,12 @@ namespace DOM { namespace events {
                 pEvent->initMutationEvent(
                     aType, aMEvent->getBubbles(), aMEvent->getCancelable(),
                     aMEvent->getRelatedNode(), aMEvent->getPrevValue(),
-                    aMEvent->getNewValue(), aMEvent->getAttrName(), 
-                    aMEvent->getAttrChange());    
+                    aMEvent->getNewValue(), aMEvent->getAttrName(),
+                    aMEvent->getAttrChange());
                 Reference< XEvent > xEvent(static_cast< CEvent* >(pEvent));
 
                 // build the path from target node to the root
-                NodeVector captureVector;  
+                NodeVector captureVector;
                 Reference< XUnoTunnel > aTunnel(xEvent->getTarget(), UNO_QUERY_THROW);
                 xmlNodePtr cur = (xmlNodePtr)aTunnel->getSomething(Sequence< sal_Int8 >());
                 while (cur != NULL)
@@ -115,12 +117,12 @@ namespace DOM { namespace events {
                 }
 
                 // the caputre vector now holds the node path from target to root
-                // first we must search for capture listernes in order root to 
+                // first we must search for capture listernes in order root to
                 // to target. after that, any target listeners have to be called
                 // then bubbeling phase listeners are called in target to root
                 // order
-                NodeVector::const_iterator inode;                
-                
+                NodeVector::const_iterator inode;
+
                 // start at the root
                 inode = captureVector.end();
                 inode--;
@@ -129,7 +131,7 @@ namespace DOM { namespace events {
                     // capturing phase:
                     pEvent->m_phase = PhaseType_CAPTURING_PHASE;
                     while (inode != captureVector.begin())
-                    {  
+                    {
                         //pEvent->m_currentTarget = *inode;
                         pEvent->m_currentTarget = Reference< XEventTarget >(CNode::get(*inode));
                         callListeners(*inode, aType, xEvent, sal_True);
@@ -150,7 +152,7 @@ namespace DOM { namespace events {
                             inode++;
                         }
                     }
-                }                
+                }
             }
             break;
         }

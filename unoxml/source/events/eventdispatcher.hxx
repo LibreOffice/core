@@ -18,7 +18,7 @@ namespace DOM { namespace events
 
 typedef std::vector< xmlNodePtr > NodeVector;
 typedef std::multimap< xmlNodePtr, Reference< XEventListener> > ListenerMap;
-typedef std::map<EventType, ListenerMap*> TypeListenerMap;
+typedef std::map<EventType, ListenerMap*> TypeListenerMap;typedef std::vector<ListenerMap::value_type> ListenerPairVector;
 
 class CEventDispatcher
 {
