@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptSecurityManager.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dfoster $ $Date: 2003-02-12 14:59:00 $
+ *  last change: $Author: dfoster $ $Date: 2003-02-12 16:19:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,9 +150,13 @@ void ScriptSecurityManager::addScriptStorage( rtl::OUString url,
         switch( m_officeBasic )
         {
             case 0:         // never
-                break;
+                {
+                    OSL_TRACE("never run");
+                    break;
+                }
             case 1:         // according to path list
                 {
+                    OSL_TRACE("according to path");
                     // check path
                     rtl::OUString path = url.copy( 0, url.lastIndexOf( '/' ) );
                     for(int j=m_secureURL.getLength();j>0;j--)
@@ -162,6 +166,7 @@ void ScriptSecurityManager::addScriptStorage( rtl::OUString url,
                             if( m_warning == sal_True )
                             {
                                 OUString dummyStr;
+                                OSL_TRACE("path match & warning dialog");
                                 short result = executeDialog( dummyStr );
                                 if ( result&1 == 1 )
                                 {
@@ -170,6 +175,7 @@ void ScriptSecurityManager::addScriptStorage( rtl::OUString url,
                             }
                             else
                             {
+                                OSL_TRACE("path match & no warning dialog");
                                 newPerm.execPermission=sal_True;
                             }
                             break;
@@ -177,6 +183,7 @@ void ScriptSecurityManager::addScriptStorage( rtl::OUString url,
                     }
                     if( m_confirmationRequired == sal_True )
                     {
+                        OSL_TRACE("no path match & confirmation dialog");
                         short result = executeDialog( path );
                         if ( result&1 == 1 )
                         {
@@ -192,6 +199,7 @@ void ScriptSecurityManager::addScriptStorage( rtl::OUString url,
             case 2:         // always
                 if( m_warning == sal_True )
                 {
+                    OSL_TRACE("always & warning dialog");
                     OUString dummyStr;
                     short result = executeDialog(  dummyStr );
                     if ( result&1 == 1 )
@@ -201,6 +209,7 @@ void ScriptSecurityManager::addScriptStorage( rtl::OUString url,
                 }
                 else
                 {
+                    OSL_TRACE("always & no warning dialog");
                     newPerm.execPermission=sal_True;
                 }
                 break;
@@ -243,6 +252,7 @@ short ScriptSecurityManager::executeDialog( const OUString & path )
     Sequence < Any > aArgs;
     if( path )
     {
+        OSL_TRACE("reallocing");
         aArgs.realloc(1);
         aArgs[ 0 ] <<= path;
     }
