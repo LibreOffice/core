@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgcontent.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kso $ $Date: 2002-06-19 15:08:01 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:15:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,6 +233,11 @@ private:
              com::sun::star::uno::Reference<
                  com::sun::star::container::XHierarchicalNameAccess > &
                     rxPackage );
+
+    static ::rtl::OUString
+    GetContentType( const ::rtl::OUString& aScheme,
+            sal_Bool bFolder );
+
     sal_Bool
     hasData( const PackageUri& rURI );
     sal_Bool
