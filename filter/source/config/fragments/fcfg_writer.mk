@@ -1,5 +1,5 @@
 # -----------------------------------------------
-# count = 31
+# count = 33
 T4_WRITER = \
     writer_web_HTML \
     writer_Lotus_1_2_3_10_DOS_StarWriter \
@@ -31,10 +31,12 @@ T4_WRITER = \
     writer_MIZI_Hwp_97 \
     writer_StarOffice_XML_Writer_Template \
     writer_WPSSystem_WPS2000_10 \
-    pdf_Portable_Document_Format
+    pdf_Portable_Document_Format\
+    writer8_template\
+    writer8
 
 # -----------------------------------------------
-# count = 31
+# count = 33
 F4_WRITER = \
     HTML__StarWriter_ \
     Lotus_1_2_3_1_0__DOS___StarWriter_ \
@@ -66,7 +68,9 @@ F4_WRITER = \
     writer_MIZI_Hwp_97 \
     writer_StarOffice_XML_Writer_Template \
     writer_WPSSystem_WPS2000_10 \
-    writer_pdf_Export
+    writer_pdf_Export\
+    writer8\
+    writer8_template
 
 # -----------------------------------------------
 # count = 0
