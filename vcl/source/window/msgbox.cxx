@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msgbox.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-03 16:05:19 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 18:04:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,9 @@
 #endif
 #ifndef _SV_MNEMONIC_HXX
 #include <mnemonic.hxx>
+#endif
+#ifndef _SV_WINDOW_H
+#include <window.h>
 #endif
 
 
@@ -334,17 +337,17 @@ void MessBox::ImplPosControls()
         nIndex = aMessText.SearchAndReplace( '\t', aTabStr, nIndex );
 
     // Wenn Fenster zu schmall, machen wir Dialog auch breiter
-    if ( mbFrame )
+    if ( mpWindowImpl->mbFrame )
         nMaxWidth = 630;
     else if ( nMaxWidth < 120 )
         nMaxWidth = 120;
 
-    nMaxWidth -= mnLeftBorder+mnRightBorder+4;
+    nMaxWidth -= mpWindowImpl->mnLeftBorder+mpWindowImpl->mnRightBorder+4;
 
     // MessageBox sollte min. so breit sein, das auch Title sichtbar ist
     // Extra-Width for Closer, because Closer is set after this call
     nTitleWidth = CalcTitleWidth();
-    nTitleWidth += mnTopBorder;
+    nTitleWidth += mpWindowImpl->mnTopBorder;
 
     nMaxWidth -= (IMPL_DIALOG_OFFSET*2)+(IMPL_MSGBOX_OFFSET_EXTRA_X*2);
 
