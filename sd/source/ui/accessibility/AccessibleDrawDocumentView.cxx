@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDrawDocumentView.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: af $ $Date: 2002-06-12 12:37:09 $
+ *  last change: $Author: af $ $Date: 2002-06-27 12:46:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,9 +178,20 @@ void AccessibleDrawDocumentView::Init (void)
     mpChildrenManager = new ChildrenManager(this, xShapeList, maShapeTreeInfo, *this);
     if (mpChildrenManager != NULL)
     {
-        mpChildrenManager->AddAccessibleShape (
-            std::auto_ptr<AccessibleShape>(CreateDrawPageShape()));
-        mpChildrenManager->Update ();
+        // Create the page shape and initialize it.  The shape is acquired
+        // before initialization and released after transferring ownership
+        // to the children manager to prevent premature disposing of the
+        // shape.
+        AccessiblePageShape* pPage = CreateDrawPageShape();
+        if (pPage != NULL)
+        {
+            pPage->acquire();
+            pPage->Init();
+            mpChildrenManager->AddAccessibleShape (
+                std::auto_ptr<AccessibleShape>(pPage));
+            pPage->release();
+            mpChildrenManager->Update ();
+        }
         mpChildrenManager->UpdateSelection ();
     }
 }
@@ -251,8 +262,6 @@ AccessiblePageShape* AccessibleDrawDocumentView::CreateDrawPageShape (void)
                 // initialize it.
                 pShape = new AccessiblePageShape (
                     xView->getCurrentPage(), this, maShapeTreeInfo);
-                if (pShape != NULL)
-                    pShape->Init();
             }
         }
     }
@@ -361,8 +370,21 @@ void SAL_CALL
             mpChildrenManager->ClearAccessibleShapeList ();
             mpChildrenManager->SetShapeList (uno::Reference<drawing::XShapes> (
                 xView->getCurrentPage(), uno::UNO_QUERY));
-            mpChildrenManager->AddAccessibleShape (std::auto_ptr<AccessibleShape>(CreateDrawPageShape ()));
-            mpChildrenManager->Update (false);
+
+            // Create the page shape and initialize it.  The shape is
+            // acquired before initialization and released after
+            // transferring ownership to the children manager to prevent
+            // premature disposing of the shape.
+            AccessiblePageShape* pPage = CreateDrawPageShape ();
+            if (pPage != NULL)
+            {
+                pPage->acquire();
+                pPage->Init();
+                mpChildrenManager->AddAccessibleShape (
+                    std::auto_ptr<AccessibleShape>(pPage));
+                mpChildrenManager->Update (false);
+                pPage->release();
+            }
         }
         else
             OSL_TRACE ("View invalid");
