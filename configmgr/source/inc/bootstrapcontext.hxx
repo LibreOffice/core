@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrapcontext.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-06-18 15:49:52 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:36:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,6 +196,8 @@ namespace configmgr
         Context             m_xContext;
         /// The bootstrap data consulted as fallback
         rtlBootstrapHandle  m_hBootstrapData;
+        /// The service manager associated with this context
+        ServiceManager      m_xServiceManager;
     };
 // -----------------------------------------------------------------------------
 
