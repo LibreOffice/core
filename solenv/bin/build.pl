@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.25 $
+#   $Revision: 1.26 $
 #
-#   last change: $Author: vg $ $Date: 2001-06-27 15:31:04 $
+#   last change: $Author: vg $ $Date: 2001-06-28 17:14:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,7 +73,7 @@ use Cwd;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.25 $ ';
+$id_str = ' $Revision: 1.26 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -198,14 +198,18 @@ sub MakeDir {
     if ($ENV{GUI} eq "UNX") {
         use Cwd 'chdir';
     };
-    chdir ($BuildDir);
-    print $BuildDir, "\n";
+    if (chdir ($BuildDir)) {
+        print "$BuildDir\n";
+    } else {
+        print STDERR "\n$BuildDir not found!!\n\n";
+        exit (1);
+    };
     cwd();
     $error = system ("$dmake");
     if (!$error) {
         RemoveFromDependencies($DirToBuild, \%LocalDepsHash);
     } else {
-        print "Error $error occurred while making $BuildDir\n";
+        print STDERR "Error $error occurred while making $BuildDir\n";
         $ENV{mk_tmp} = "";
         exit();
     };
