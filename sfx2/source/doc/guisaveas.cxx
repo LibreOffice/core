@@ -2,9 +2,9 @@
  *
  *  $RCSfile: guisaveas.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 16:16:26 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:30:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -821,9 +821,13 @@ sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
         // <--
 
         if ( !aLastName.getLength() )
+        {
             aLastName = GetDocProps().getUnpackedValueOrDefault(
                                                         ::rtl::OUString::createFromAscii( "Title" ),
                                                         ::rtl::OUString() );
+            INetURLObject aObj( INetURLObject::GetAbsURL( SvtPathOptions().GetWorkPath(), aLastName ) );
+            aLastName = aObj.GetMainURL( INetURLObject::NO_DECODE );
+        }
 
         uno::Sequence< beans::PropertyValue > aOldFilterProps;
         sal_Int32 nOldFiltFlags = 0;
@@ -844,11 +848,7 @@ sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
         {
             if( aLastName.getLength() )
             {
-                String aPath( aLastName );
-                INetURLObject aObj( SvtPathOptions().GetWorkPath() );
-                aObj.setFinalSlash();
-                aObj = INetURLObject( aObj.RelToAbs( aPath, sal_False ) );
-
+                INetURLObject aObj( aLastName );
                 ::rtl::OUString aTypeName = aPreselectedFilterPropsHM.getUnpackedValueOrDefault(
                                                         ::rtl::OUString::createFromAscii( "Type" ),
                                                         ::rtl::OUString() );
@@ -1776,16 +1776,17 @@ void SfxStoringHelper::SetDocInfoState( const uno::Reference< frame::XModel >& x
 //-------------------------------------------------------------------------
 // static
 void SfxStoringHelper::ExecuteInfoDlg( const ::rtl::OUString& aTargetURL,
-                                        const ::rtl::OUString& aTitle,
+                                        const ::rtl::OUString& aTitle, const String& rBaseURL,
                                         SfxDocumentInfo &aDocInfo )
 {
     // Itemset f"ur Dialog aufbereiten
     SfxDocumentInfoItem aDocInfoItem( aTargetURL, aDocInfo );
     SfxItemSet aSet( SFX_APP()->GetPool(), SID_DOCINFO, SID_DOCINFO,
-                                        SID_EXPLORER_PROPS_START, SID_EXPLORER_PROPS_START,
+                                        SID_EXPLORER_PROPS_START, SID_EXPLORER_PROPS_START, SID_BASEURL, SID_BASEURL,
                                         0L );
     aSet.Put( aDocInfoItem );
     aSet.Put( SfxStringItem( SID_EXPLORER_PROPS_START, aTitle ) );
+    aSet.Put( SfxStringItem( SID_BASEURL, rBaseURL ) );
 
     // Dialog via Factory erzeugen und ausf"uhren
     SfxDocumentInfoDialog aDlg( 0, aSet );
