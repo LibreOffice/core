@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cmc $ $Date: 2001-02-27 14:55:15 $
+ *  last change: $Author: mib $ $Date: 2001-03-07 14:27:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,10 @@ one go*/
 #include <osl/mutex.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_UNO_ANY_H_
+#include <com/sun/star/uno/Any.h>
+#endif
+
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include <xmloff/xmlnmspe.hxx>
 #endif
@@ -111,6 +115,9 @@ one go*/
 #endif
 #ifndef _XMLOFF_XMLUCONV_HXX
 #include <xmloff/xmluconv.hxx>
+#endif
+#ifndef _XMLOFF_XMLMETAI_HXX
+#include <xmloff/xmlmetai.hxx>
 #endif
 
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
@@ -128,6 +135,9 @@ one go*/
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/io/XActiveDataControl.hpp>
 
+using namespace com::sun::star::uno;
+using namespace com::sun::star::lang;
+using namespace com::sun::star::document;
 using namespace com::sun::star;
 using namespace rtl;
 
@@ -149,97 +159,169 @@ sal_Unicode UnicodeToStarMath(sal_uInt16 rChar)
     return cMathChar;
 }
 
-sal_Bool SmXMLWrapper::Import(SfxMedium &rMedium)
+/// read a component (file + filter version)
+sal_Bool SmXMLWrapper::ReadThroughComponent(
+    Reference<io::XInputStream> xInputStream,
+    Reference<XComponent> xModelComponent,
+    Reference<lang::XMultiServiceFactory> & rFactory,
+    const sal_Char* pFilterName )
 {
-    sal_Bool bRet=sal_False;
-    uno::Reference<io::XActiveDataSource> xSource;
+    DBG_ASSERT(xInputStream.is(), "input stream missing");
+    DBG_ASSERT(xModelComponent.is(), "document missing");
+    DBG_ASSERT(rFactory.is(), "factory missing");
+    DBG_ASSERT(NULL != pFilterName,"I need a service name for the component!");
+
+    // prepare ParserInputSrouce
     xml::sax::InputSource aParserInput;
-    SvStorageStreamRef xDocStream;
-
-    uno::Reference<lang::XMultiServiceFactory> xServiceFactory(
-        utl::getProcessServiceFactory());
-    DBG_ASSERT(xServiceFactory.is(), "XMLReader::Read: got no service manager");
-
-    if (rMedium.IsStorage())
-    {
-        xDocStream = rMedium.GetStorage()->OpenStream
-            (C2S("Content.xml"),STREAM_READ|STREAM_NOCREATE);
-        aParserInput.aInputStream = new utl::OInputStreamWrapper(*xDocStream);
-    }
-    else
-    {
-        xSource = rMedium.GetDataSource();
-        DBG_ASSERT(xSource.is(),"XMLReader::Read: data source missing");
-
-        // get a pipe for connecting the data source to the parser
-        uno::Reference<uno::XInterface> xPipe(xServiceFactory->createInstance(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.Pipe"))));
-        DBG_ASSERT(xPipe.is(),"com.sun.star.io.Pipe service missing");
-
-        uno::Reference<io::XOutputStream> xPipeOutput(xPipe, uno::UNO_QUERY);
-        xSource->setOutputStream(xPipeOutput);
-
-        aParserInput.aInputStream = uno::Reference<io::XInputStream>(xPipe,
-            uno::UNO_QUERY);
-    }
+    aParserInput.aInputStream = xInputStream;
 
     // get parser
-    uno::Reference<xml::sax::XParser> xParser(xServiceFactory->createInstance(
-        OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser"))),
-        uno::UNO_QUERY);
-    DBG_ASSERT(xParser.is(),
-        "com.sun.star.xml.sax.Parser service missing");
+    Reference< xml::sax::XParser > xParser(
+        rFactory->createInstance(
+            OUString::createFromAscii("com.sun.star.xml.sax.Parser") ),
+        UNO_QUERY );
+    DBG_ASSERT( xParser.is(), "Can't create parser" );
+    if( !xParser.is() )
+        return sal_False;
 
     // get filter
     uno::Sequence < uno::Any > aArgs( 0 );
-    uno::Reference< xml::sax::XDocumentHandler > xFilter(
-        xServiceFactory->createInstanceWithArguments(
-        OUString::createFromAscii("com.sun.star.office.sax.importer.Math"),
-        aArgs ), uno::UNO_QUERY );
-
-    DBG_ASSERT( xFilter.is(),
-    "XMLReader::Read: com.sun.star.xml.sax.importer.Math service missing");
+    Reference< xml::sax::XDocumentHandler > xFilter(
+        rFactory->createInstanceWithArguments(
+            OUString::createFromAscii(pFilterName), aArgs ),
+        UNO_QUERY );
+    DBG_ASSERT( xFilter.is(), "Can't instantiate filter component." );
+    if( !xFilter.is() )
+        return sal_False;
 
     // connect parser and filter
-    xParser->setDocumentHandler(xFilter);
-
-    //Make a model component from our SmModel
-    uno::Reference< lang::XComponent > xModelComp( rModel, uno::UNO_QUERY );
-    DBG_ASSERT( xModelComp.is(), "XMLReader::Read: got no model" );
+    xParser->setDocumentHandler( xFilter );
 
     // connect model and filter
-    uno::Reference < document::XImporter > xImporter( xFilter, uno::UNO_QUERY );
-    xImporter->setTargetDocument( xModelComp );
+    Reference < XImporter > xImporter( xFilter, UNO_QUERY );
+    xImporter->setTargetDocument( xModelComponent );
 
-    xParser->setDocumentHandler(xFilter);
-
-    if (xSource.is())
-    {
-        uno::Reference<io::XActiveDataControl> xSourceControl(
-            xSource,uno::UNO_QUERY);
-        xSourceControl->start();
-    }
-#ifdef WANTEXCEPT
+    // finally, parser the stream
+    sal_Bool bRet = sal_True;
     try
     {
-#endif
-        xParser->parseStream(aParserInput);
+        xParser->parseStream( aParserInput );
 
         uno::Reference<lang::XUnoTunnel> xFilterTunnel;
         xFilterTunnel = uno::Reference<lang::XUnoTunnel>
             ( xFilter, uno::UNO_QUERY );
         SmXMLImport *pFilter = (SmXMLImport *)xFilterTunnel->getSomething(
             SmXMLImport::getUnoTunnelId() );
-        if (pFilter)
+        if( pFilter )
             bRet = pFilter->GetSuccess();
-
-#ifdef WANTEXCECT
     }
-    catch(...)
+    catch( xml::sax::SAXParseException& )
     {
-        pRet = 0;
+        bRet = sal_False;
     }
-#endif
+    catch( xml::sax::SAXException& )
+    {
+        bRet = sal_False;
+    }
+    catch( io::IOException& )
+    {
+        bRet = sal_False;
+    }
+
+    // success!
+    return bRet;
+}
+
+sal_Bool SmXMLWrapper::ReadThroughComponent(
+    SvStorage* pStorage,
+    Reference<XComponent> xModelComponent,
+    const sal_Char* pStreamName,
+    const sal_Char* pCompatibilityStreamName,
+    Reference<lang::XMultiServiceFactory> & rFactory,
+    const sal_Char* pFilterName )
+{
+    DBG_ASSERT(NULL != pStorage, "Need storage!");
+    DBG_ASSERT(NULL != pStreamName, "Please, please, give me a name!");
+
+    // open stream (and set parser input)
+    OUString sStreamName = OUString::createFromAscii(pStreamName);
+    if (! pStorage->IsStream(sStreamName))
+    {
+        // stream name not found! Then try the compatibility name.
+
+        // do we even have an alternative name?
+        if ( NULL == pCompatibilityStreamName )
+            return sal_False;
+
+        // if so, does the stream exist?
+        sStreamName = OUString::createFromAscii(pCompatibilityStreamName);
+        if (! pStorage->IsStream(sStreamName) )
+            return sal_False;
+    }
+
+    // get input stream
+    SvStorageStreamRef xEventsStream;
+    xEventsStream = pStorage->OpenStream( sStreamName,
+                                          STREAM_READ | STREAM_NOCREATE );
+    xEventsStream->SetBufferSize( 16*1024 );
+    Reference<io::XInputStream> xInputStream =
+        new utl::OInputStreamWrapper( *xEventsStream );
+
+    // read from the stream
+    return ReadThroughComponent(
+        xInputStream, xModelComponent, rFactory, pFilterName );
+}
+
+sal_Bool SmXMLWrapper::Import(SfxMedium &rMedium)
+{
+    sal_Bool bRet=sal_False;
+
+    uno::Reference<lang::XMultiServiceFactory> xServiceFactory(
+        utl::getProcessServiceFactory());
+    DBG_ASSERT(xServiceFactory.is(), "XMLReader::Read: got no service manager");
+    if( !xServiceFactory.is() )
+        return sal_False;
+
+    //Make a model component from our SmModel
+    uno::Reference< lang::XComponent > xModelComp( rModel, uno::UNO_QUERY );
+    DBG_ASSERT( xModelComp.is(), "XMLReader::Read: got no model" );
+
+    if( rMedium.IsStorage())
+    {
+        ReadThroughComponent(
+            rMedium.GetStorage(), xModelComp, "meta.xml", "Meta.xml", xServiceFactory,
+            "com.sun.star.comp.Math.XMLMetaImporter" );
+
+        bRet = ReadThroughComponent(
+           rMedium.GetStorage(), xModelComp, "content.xml", "Content.xml", xServiceFactory,
+           "com.sun.star.comp.Math.XMLImporter" );
+    }
+    else
+    {
+
+        uno::Reference<io::XActiveDataSource> xSource( rMedium.GetDataSource() );
+        DBG_ASSERT(xSource.is(),"XMLReader::Read: data source missing");
+
+        // get a pipe for connecting the data source to the parser
+        Reference< XInterface > xPipe =
+            xServiceFactory->createInstance(
+            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.Pipe")));
+        DBG_ASSERT(xPipe.is(),"com.sun.star.io.Pipe service missing");
+
+        uno::Reference<io::XOutputStream> xPipeOutput(xPipe, uno::UNO_QUERY);
+        xSource->setOutputStream(xPipeOutput);
+
+        Reference<io::XInputStream> xInputStream(xPipe, uno::UNO_QUERY);
+
+        uno::Reference<io::XActiveDataControl> xSourceControl(
+            xSource,uno::UNO_QUERY);
+        xSourceControl->start();
+
+        bRet = ReadThroughComponent(
+            xInputStream, xModelComp, xServiceFactory,
+            "com.sun.star.comp.Math.XMLImporter" );
+    }
+
     return bRet;
 }
 
@@ -275,18 +357,17 @@ const uno::Sequence< sal_Int8 > & SmXMLExport::getUnoTunnelId() throw()
     return *pSeq;
 }
 
+OUString SAL_CALL SmXMLImport_getImplementationName() throw()
+{
+    return OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Math.XMLImporter" ) );
+}
+
 uno::Sequence< OUString > SAL_CALL SmXMLImport_getSupportedServiceNames()
         throw()
 {
-    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM(
-        "com.sun.star.office.sax.importer.Math" ));
+    const OUString aServiceName( SmXMLImport_getImplementationName() );
     const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
         return aSeq;
-}
-
-OUString SAL_CALL SmXMLImport_getImplementationName() throw()
-{
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "SmXMLImport" ) );
 }
 
 uno::Reference< uno::XInterface > SAL_CALL SmXMLImport_createInstance(
@@ -296,18 +377,17 @@ uno::Reference< uno::XInterface > SAL_CALL SmXMLImport_createInstance(
     return (cppu::OWeakObject*)new SmXMLImport;
 }
 
+OUString SAL_CALL SmXMLExport_getImplementationName() throw()
+{
+    return OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Math.XMLExporter" ) );
+}
+
 uno::Sequence< OUString > SAL_CALL SmXMLExport_getSupportedServiceNames()
         throw()
 {
-    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM(
-        "com.sun.star.office.sax.exporter.Math" ));
+    const OUString aServiceName( SmXMLExport_getImplementationName());
     const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
         return aSeq;
-}
-
-OUString SAL_CALL SmXMLExport_getImplementationName() throw()
-{
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "SmXMLExport" ) );
 }
 
 uno::Reference< uno::XInterface > SAL_CALL SmXMLExport_createInstance(
@@ -315,6 +395,47 @@ uno::Reference< uno::XInterface > SAL_CALL SmXMLExport_createInstance(
     throw( uno::Exception )
 {
     return (cppu::OWeakObject*)new SmXMLExport;
+}
+
+
+OUString SAL_CALL SmXMLImportMeta_getImplementationName() throw()
+{
+    return OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Math.XMLMetaImporter" ) );
+}
+
+uno::Sequence< OUString > SAL_CALL SmXMLImportMeta_getSupportedServiceNames()
+        throw()
+{
+    const OUString aServiceName( SmXMLImportMeta_getImplementationName() );
+    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
+        return aSeq;
+}
+
+uno::Reference< uno::XInterface > SAL_CALL SmXMLImportMeta_createInstance(
+    const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
+    throw( uno::Exception )
+{
+    return (cppu::OWeakObject*)new SmXMLImport( IMPORT_META );
+}
+
+OUString SAL_CALL SmXMLExportMeta_getImplementationName() throw()
+{
+    return OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Math.XMLMetaExporter" ) );
+}
+
+uno::Sequence< OUString > SAL_CALL SmXMLExportMeta_getSupportedServiceNames()
+        throw()
+{
+    const OUString aServiceName( SmXMLExportMeta_getImplementationName());
+    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
+        return aSeq;
+}
+
+uno::Reference< uno::XInterface > SAL_CALL SmXMLExportMeta_createInstance(
+    const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
+    throw( uno::Exception )
+{
+    return (cppu::OWeakObject*)new SmXMLExport( EXPORT_META );
 }
 
 
@@ -380,6 +501,113 @@ void SmXMLImport::endDocument(void)
     }
 }
 
+/// export through an XML exporter component (output stream version)
+sal_Bool SmXMLWrapper::WriteThroughComponent(
+    Reference<io::XOutputStream> xOutputStream,
+    Reference<XComponent> xComponent,
+    Reference<lang::XMultiServiceFactory> & rFactory,
+    const sal_Char* pComponentName )
+{
+    DBG_ASSERT(xOutputStream.is(), "I really need an output stream!");
+    DBG_ASSERT(xComponent.is(), "Need component!");
+    DBG_ASSERT(NULL != pComponentName, "Need component name!");
+
+    // get component
+    Reference< io::XActiveDataSource > xSaxWriter(
+        rFactory->createInstance(
+            OUString::createFromAscii("com.sun.star.xml.sax.Writer") ),
+        UNO_QUERY );
+    DBG_ASSERT( xSaxWriter.is(), "can't instantiate XML writer" );
+    if(!xSaxWriter.is())
+        return sal_False;
+
+    // connect XML writer to output stream
+    xSaxWriter->setOutputStream( xOutputStream );
+
+    // prepare arguments (prepend doc handler to given arguments)
+    Reference<xml::sax::XDocumentHandler> xDocHandler( xSaxWriter,UNO_QUERY);
+    Sequence<Any> aArgs( 1 );
+    aArgs[0] <<= xDocHandler;
+
+    // get filter component
+    Reference< document::XExporter > xExporter(
+        rFactory->createInstanceWithArguments(
+            OUString::createFromAscii(pComponentName), aArgs), UNO_QUERY);
+    DBG_ASSERT( xExporter.is(),
+            "can't instantiate export filter component" );
+    if( !xExporter.is() )
+        return sal_False;
+
+
+    // connect model and filter
+    xExporter->setSourceDocument( xComponent );
+
+    // filter!
+    Reference < XFilter > xFilter( xExporter, UNO_QUERY );
+    uno::Sequence< beans::PropertyValue > aProps(0);
+    xFilter->filter( aProps );
+
+    uno::Reference<lang::XUnoTunnel> xFilterTunnel;
+    xFilterTunnel = uno::Reference<lang::XUnoTunnel>
+        ( xFilter, uno::UNO_QUERY );
+    SmXMLExport *pFilter = (SmXMLExport *)xFilterTunnel->getSomething(
+        SmXMLExport::getUnoTunnelId() );
+    return pFilter ? pFilter->GetSuccess() : sal_True;
+}
+
+/// export through an XML exporter component (storage version)
+sal_Bool SmXMLWrapper::WriteThroughComponent(
+    SvStorage* pStorage,
+    Reference<XComponent> xComponent,
+    const sal_Char* pStreamName,
+    Reference<lang::XMultiServiceFactory> & rFactory,
+    const sal_Char* pComponentName,
+    sal_Bool bCompress )
+{
+    DBG_ASSERT(NULL != pStorage, "Need storage!");
+    DBG_ASSERT(NULL != pStreamName, "Need stream name!");
+
+    Reference< io::XOutputStream > xOutputStream;
+    SvStorageStreamRef xDocStream;
+
+    // open stream
+    OUString sStreamName = OUString::createFromAscii(pStreamName);
+    xDocStream = pStorage->OpenStream( sStreamName,
+                                       STREAM_WRITE | STREAM_SHARE_DENYWRITE );
+    if (! xDocStream.Is())
+        return sal_False;
+    DBG_ASSERT(xDocStream.Is(), "Can't create output stream in package!");
+
+    String aPropName( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM("MediaType") ) );
+    OUString aMime( RTL_CONSTASCII_USTRINGPARAM("text/xml") );
+    uno::Any aAny;
+    aAny <<= aMime;
+    xDocStream->SetProperty( aPropName, aAny );
+
+    if( !bCompress )
+    {
+        aPropName = String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM("Compressed") );
+        sal_Bool bFalse = sal_False;
+        aAny.setValue( &bFalse, ::getBooleanCppuType() );
+        xDocStream->SetProperty( aPropName, aAny );
+    }
+
+    // set buffer and create outputstream
+    xDocStream->SetBufferSize( 16*1024 );
+    xOutputStream = new utl::OOutputStreamWrapper( *xDocStream );
+
+    // write the stuff
+    sal_Bool bRet = WriteThroughComponent(
+        xOutputStream, xComponent, rFactory,
+        pComponentName );
+
+    // finally, commit stream.
+    if( bRet )
+        xDocStream->Commit();
+
+    return bRet;
+}
+
 sal_Bool SmXMLWrapper::Export(SfxMedium &rMedium)
 {
     sal_Bool bRet=sal_False;
@@ -387,102 +615,71 @@ sal_Bool SmXMLWrapper::Export(SfxMedium &rMedium)
         xServiceFactory(utl::getProcessServiceFactory());
     DBG_ASSERT(xServiceFactory.is(),"got no service manager");
 
-    uno::Reference<io::XOutputStream> xOut;
-    SvStorageStreamRef xDocStream;
+    //Get model
+    uno::Reference< lang::XComponent > xModelComp(rModel, uno::UNO_QUERY );
 
     if (!bFlat) //Storage (Package) of Stream
     {
         SvStorage *pStg = rMedium.GetOutputStorage(sal_True);
-        xDocStream = pStg->OpenStream
-            (C2S("Content.xml"),STREAM_WRITE|STREAM_SHARE_DENYWRITE);
-        xOut = new utl::OOutputStreamWrapper(*xDocStream);
+        bRet = WriteThroughComponent(
+            pStg, xModelComp, "meta.xml", xServiceFactory,
+            "com.sun.star.comp.Math.XMLMetaExporter", sal_False );
+        if( bRet )
+            WriteThroughComponent(
+                pStg, xModelComp, "content.xml", xServiceFactory,
+                "com.sun.star.comp.Math.XMLExporter" );
     }
     else
     {
         SvStream *pStream = rMedium.GetOutStream();
-        xOut = new utl::OOutputStreamWrapper(*pStream);
+        uno::Reference<io::XOutputStream> xOut( new utl::OOutputStreamWrapper(*pStream) );
+        bRet = WriteThroughComponent(
+            xOut, xModelComp, xServiceFactory,
+            "com.sun.star.comp.Math.XMLExporter" );
     }
-
-
-    uno::Reference<io::XActiveDataSource> xWriter(
-        xServiceFactory->createInstance(
-        OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Writer"))),
-        uno::UNO_QUERY);
-    DBG_ASSERT(xWriter.is(),"com.sun.star.xml.sax.Writer service missing");
-
-    //connect writer and output stream
-    xWriter->setOutputStream(xOut);
-
-    //get filter
-    uno::Reference< xml::sax::XDocumentHandler > xHandler(xWriter,
-        uno::UNO_QUERY);
-    uno::Sequence< uno::Any > aArgs(1);
-    uno::Any *pArgs = aArgs.getArray();
-    *pArgs <<= xHandler;
-
-    uno::Reference<document::XExporter> xExporter(
-        xServiceFactory->createInstanceWithArguments(
-        OUString::createFromAscii("com.sun.star.office.sax.exporter.Math"),
-        aArgs),uno::UNO_QUERY);
-    DBG_ASSERT(xExporter.is(),"com.sun.star.office.sax.exporter.Math service missing");
-    if (!xExporter.is())
-        return bRet;
-
-    //Get model
-    uno::Reference< lang::XComponent > xModelComp(rModel, uno::UNO_QUERY );
-
-    // connect model and filter
-    xExporter->setSourceDocument( xModelComp );
-    uno::Reference< document::XFilter> xFilter(xExporter,uno::UNO_QUERY);
-
-    // would the MathML filter care about having an original file name?
-    // I don't think so
-    uno::Sequence< beans::PropertyValue > aProps(0);
-    xFilter->filter(aProps);
-
-
-    uno::Reference<lang::XUnoTunnel> xFilterTunnel;
-    xFilterTunnel = uno::Reference<lang::XUnoTunnel>
-        ( xFilter, uno::UNO_QUERY );
-    SmXMLExport *pFilter = (SmXMLExport *)xFilterTunnel->getSomething(
-        SmXMLExport::getUnoTunnelId() );
-    if (pFilter)
-        bRet = pFilter->GetSuccess();
 
     return bRet;
 }
 
-SmXMLExport::SmXMLExport() : SvXMLExport(MAP_INCH,sXML_math) , pTree(0) ,
+SmXMLExport::SmXMLExport(sal_uInt16 nExportFlags) : SvXMLExport(MAP_INCH,sXML_math, nExportFlags) , pTree(0) ,
     bSuccess(sal_False),pText(0)
 {}
 
 sal_uInt32 SmXMLExport::exportDoc(const sal_Char *pClass)
 {
-    uno::Reference <frame::XModel> xModel = GetModel();
-    uno::Reference <lang::XUnoTunnel> xTunnel;
-    xTunnel = uno::Reference <lang::XUnoTunnel> (xModel,uno::UNO_QUERY);
-    SmModel *pModel = reinterpret_cast<SmModel *>
-        (xTunnel->getSomething(SmModel::getUnoTunnelId()));
-
-    if (pModel)
+    if( (getExportFlags() & EXPORT_CONTENT) == 0 )
     {
-        SmDocShell *pDocShell =
-            static_cast<SmDocShell*>(pModel->GetObjectShell());
-        pTree = pDocShell->GetFormulaTree();
-        pText = &(pDocShell->GetText());
+        SvXMLExport::exportDoc( pClass );
+    }
+    else
+    {
+        uno::Reference <frame::XModel> xModel = GetModel();
+        uno::Reference <lang::XUnoTunnel> xTunnel;
+        xTunnel = uno::Reference <lang::XUnoTunnel> (xModel,uno::UNO_QUERY);
+        SmModel *pModel = reinterpret_cast<SmModel *>
+            (xTunnel->getSomething(SmModel::getUnoTunnelId()));
+
+        if (pModel)
+        {
+            SmDocShell *pDocShell =
+                static_cast<SmDocShell*>(pModel->GetObjectShell());
+            pTree = pDocShell->GetFormulaTree();
+            pText = &(pDocShell->GetText());
+        }
+
+        GetDocHandler()->startDocument();
+
+        /*Add xmlns line*/
+        SvXMLAttributeList &rList = GetAttrList();
+        rList.AddAttribute(GetNamespaceMap().GetAttrNameByIndex(
+            XML_NAMESPACE_MATH_IDX),sCDATA,GetNamespaceMap().GetNameByIndex(
+            XML_NAMESPACE_MATH_IDX));
+
+        //I think we need something like ImplExportEntities();
+        _ExportContent();
+        GetDocHandler()->endDocument();
     }
 
-    GetDocHandler()->startDocument();
-
-    /*Add xmlns line*/
-    SvXMLAttributeList &rList = GetAttrList();
-    rList.AddAttribute(GetNamespaceMap().GetAttrNameByIndex(
-        XML_NAMESPACE_MATH_IDX),sCDATA,GetNamespaceMap().GetNameByIndex(
-        XML_NAMESPACE_MATH_IDX));
-
-    //I think we need something like ImplExportEntities();
-    _ExportContent();
-    GetDocHandler()->endDocument();
     bSuccess=sal_True;
     return 0;
 }
@@ -531,6 +728,7 @@ public:
         const uno::Reference< xml::sax::XAttributeList > &xAttrList);
     void EndElement();
 };
+
 
 /*avert thy gaze from the proginator*/
 class SmXMLRowContext_Impl : public SmXMLDocContext_Impl
@@ -1692,6 +1890,32 @@ public:
     void EndElement();
 };
 
+class SmXMLOfficeContext_Impl : public SvXMLImportContext
+{
+public:
+    SmXMLOfficeContext_Impl( SmXMLImport &rImport, sal_uInt16 nPrfx,
+        const OUString& rLName)
+        : SvXMLImportContext(rImport,nPrfx,rLName) {}
+    virtual SvXMLImportContext *CreateChildContext(sal_uInt16 nPrefix,
+        const OUString& rLocalName,
+        const uno::Reference< xml::sax::XAttributeList > &xAttrList);
+};
+
+SvXMLImportContext *SmXMLOfficeContext_Impl::CreateChildContext(sal_uInt16 nPrefix,
+        const OUString& rLocalName,
+        const uno::Reference< xml::sax::XAttributeList > &xAttrList)
+{
+    SvXMLImportContext *pContext = 0;
+    if( XML_NAMESPACE_OFFICE == nPrefix &&
+        rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sXML_meta) ) )
+        pContext = new SfxXMLMetaContext( GetImport(),
+                                    XML_NAMESPACE_OFFICE, rLocalName,
+                                    GetImport().GetModel() );
+    else
+        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
+
+    return pContext;
+}
 
 static __FAR_DATA SvXMLTokenMapEntry aPresLayoutElemTokenMap[] =
 {
@@ -2472,6 +2696,10 @@ SvXMLImportContext *SmXMLImport::CreateContext(sal_uInt16 nPrefix,
     const OUString &rLocalName,
     const uno::Reference <xml::sax::XAttributeList> &xAttrList)
 {
+    if( XML_NAMESPACE_OFFICE == nPrefix &&
+        rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sXML_document_meta ) ) )
+        return new SmXMLOfficeContext_Impl( *this,nPrefix,rLocalName);
+    else
         return new SmXMLDocContext_Impl(*this,nPrefix,rLocalName);
 }
 

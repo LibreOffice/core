@@ -4,6 +4,9 @@ SM_1_0 {
         CreateObjSmDocShellDll;
         InitSmDll;
         DeInitSmDll;
+        component_getImplementationEnvironment;
+        component_writeInfo;
+        component_getFactory;
     local:
         *;
 };

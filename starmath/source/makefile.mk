@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: cmc $ $Date: 2000-11-15 10:47:20 $
+#   last change: $Author: mib $ $Date: 2001-03-07 14:27:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -118,6 +118,7 @@ SLOFILES =  \
 
 EXCEPTIONSFILES =   \
                 $(SLO)$/frmload.obj  \
+        $(SLO)$/mathml.obj \
         $(SLO)$/unomodel.obj
 
 

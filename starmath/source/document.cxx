@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cmc $ $Date: 2001-02-19 08:27:13 $
+ *  last change: $Author: mib $ $Date: 2001-03-07 14:27:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -716,7 +716,8 @@ BOOL SmDocShell::Load(SvStorage *pStor)
             if (bRet = (1 == aEquation.Parse(pStor)))
                 Parse();
         }
-        else if( pStor->IsStream(C2S("Content.xml")))
+        else if( pStor->IsStream(C2S("content.xml")) ||
+                 pStor->IsStream(C2S("Content.xml")) )
         {
             // is this a fabulous math package ?
             SmXMLWrapper aEquation(GetModel());

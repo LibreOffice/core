@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cmc $ $Date: 2001-02-05 10:36:18 $
+ *  last change: $Author: mib $ $Date: 2001-03-07 14:27:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,11 @@
 #endif
 
 class SfxMedium;
+class SvStorage;
+namespace com { namespace sun { namespace star { namespace io {
+    class XInputStream;
+    class XOutputStream;
+} } } }
 
 class SmXMLWrapper
 {
@@ -86,14 +91,42 @@ private:
     sal_Bool bFlat;     //set true for export to flat .mml, set false for
                         //export to a .sxm (or whatever) package
 
+    sal_Bool ReadThroughComponent(
+        ::com::sun::star::uno::Reference<::com::sun::star::io::XInputStream> xInputStream,
+        ::com::sun::star::uno::Reference<::com::sun::star::lang::XComponent> xModelComponent,
+        ::com::sun::star::uno::Reference<::com::sun::star::lang::XMultiServiceFactory> & rFactory,
+        const sal_Char* pFilterName );
+
+    sal_Bool ReadThroughComponent(
+        SvStorage* pStorage,
+        ::com::sun::star::uno::Reference<::com::sun::star::lang::XComponent> xModelComponent,
+        const sal_Char* pStreamName,
+        const sal_Char* pCompatibilityStreamName,
+        ::com::sun::star::uno::Reference<::com::sun::star::lang::XMultiServiceFactory> & rFactory,
+        const sal_Char* pFilterName );
+
+    sal_Bool WriteThroughComponent(
+        ::com::sun::star::uno::Reference<::com::sun::star::io::XOutputStream> xOutputStream,
+        ::com::sun::star::uno::Reference<::com::sun::star::lang::XComponent> xComponent,
+        ::com::sun::star::uno::Reference<::com::sun::star::lang::XMultiServiceFactory> & rFactory,
+        const sal_Char* pComponentName );
+    sal_Bool WriteThroughComponent(
+        SvStorage* pStorage,
+        ::com::sun::star::uno::Reference<::com::sun::star::lang::XComponent> xComponent,
+        const sal_Char* pStreamName,
+        ::com::sun::star::uno::Reference<::com::sun::star::lang::XMultiServiceFactory> & rFactory,
+        const sal_Char* pComponentName,
+        sal_Bool bCompress=sal_True );
+
 };
 
 
 class SmXMLImport : public SvXMLImport
 {
 public:
-    SmXMLImport() :
-    pMathElemTokenMap(0), pPresLayoutElemTokenMap(0), pPresElemTokenMap(0),
+    SmXMLImport(sal_uInt16 nImportFlags=IMPORT_ALL) :
+        SvXMLImport( nImportFlags ),
+        pMathElemTokenMap(0), pPresLayoutElemTokenMap(0), pPresElemTokenMap(0),
         pPresScriptEmptyElemTokenMap(0), pPresTableElemTokenMap(0),
         pPresLayoutAttrTokenMap(0),pFencedAttrTokenMap(0),
         pOperatorAttrTokenMap(0),pColorTokenMap(0),pAnnotationAttrTokenMap(0),
@@ -358,7 +391,7 @@ enum SmXMLAnnotationAttrTokenMap
 class SmXMLExport : public SvXMLExport
 {
 public:
-    SmXMLExport();
+    SmXMLExport(sal_uInt16 nExportFlags=EXPORT_ALL);
     SmXMLExport(const SmNode *pIn,const rtl::OUString &rFileName,
         com::sun::star::uno::Reference<
         com::sun::star::xml::sax::XDocumentHandler> &rHandler) :
