@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-30 08:41:55 $
+ *  last change: $Author: mba $ $Date: 2000-11-30 16:41:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1452,6 +1452,7 @@ void SfxMedium::GetMedium_Impl()
             if ( !pImp->bDownloadDone )
                 pImp->pCancellable = new UcbLockBytesCancellable_Impl( xLockBytes, pImp->GetCancelManager(), aLogicName );
             pInStream = new SvStream( xLockBytes );
+            pInStream->SetBufferSize( 4096 );
             pImp->bStreamReady = sal_True;
         }
     }
