@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.116 $
+ *  $Revision: 1.117 $
  *
- *  last change: $Author: hr $ $Date: 2003-08-07 15:22:05 $
+ *  last change: $Author: hjs $ $Date: 2003-08-18 15:28:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -454,6 +454,7 @@ private:
     WW8PLCFxSaveAll maPLCFxSave;
     SwPosition maTmpPos;
     std::deque<bool> maOldApos;
+    std::deque<USHORT> maOldFieldStack;
     SwWW8FltControlStack* mpOldStck;
     SwWW8FltAnchorStack* mpOldAnchorStck;
     wwRedlineStack *mpOldRedlines;
@@ -1015,6 +1016,7 @@ friend class wwSectionManager;
 //---------------------------------------------
 
     bool StyleExists(int nColl) const { return (nColl < nColls); }
+    SwWW8StyInf *GetStyle(USHORT nColl) const;
     void AppendTxtNode(SwPosition& rPos);
     void GetNoninlineNodeAttribs(const SwTxtNode *pNode,
         std::vector<const xub_StrLen*> &rPositions);
@@ -1032,7 +1034,7 @@ friend class wwSectionManager;
     void DeleteCtrlStk()    { DeleteStk( pCtrlStck  ); pCtrlStck   = 0; }
     void DeleteRefStk()     { DeleteStk( pRefStck ); pRefStck = 0; }
     void DeleteAnchorStk()  { DeleteStk( pAnchorStck ); pAnchorStck = 0; }
-    bool AddTextToParagraph(String& sAddString);
+    bool AddTextToParagraph(const String& sAddString);
     bool ReadChar(long nPosCp, long nCpOfs);
     bool ReadPlainChars(long& rPos, long nEnd, long nCpOfs);
     bool ReadChars(long& rPos, long nNextAttr, long nTextEnd, long nCpOfs);
@@ -1117,8 +1119,8 @@ friend class wwSectionManager;
     bool ReadGrafFile(String& rFileName, Graphic*& rpGraphic,
        const WW8_PIC& rPic, SvStream* pSt, ULONG nFilePos, bool* pDelIt);
 
-    void ReplaceObjWithGraphicLink(const SdrObject &rReplaceTextObj,
-        const String& rFileName);
+    void ReplaceObj(const SdrObject &rReplaceTextObj,
+        SdrObject &rSubObj);
 
     SwFlyFrmFmt* MakeGrafNotInCntnt(const WW8PicDesc& rPD,
         const Graphic* pGraph, const String& rFileName,
@@ -1152,6 +1154,7 @@ friend class wwSectionManager;
     bool InEqualApo(int nLvl) const;
     bool InLocalApo() const { return InEqualApo(nInTable); }
     bool InEqualOrHigherApo(int nLvl) const;
+    bool InAnyApo() const { return InEqualOrHigherApo(1); }
     void TabCellEnd();
     void StopTable();
     short GetTableLeft();
@@ -1483,6 +1486,10 @@ void SyncStyleIndentWithList(SvxLRSpaceItem &rLR, const SwNumFmt &rFmt);
 long GetListFirstLineIndent(const SwNumFmt &rFmt);
 const SwNumFmt* GetNumFmtFromTxtNode(const SwTxtNode &rTxtNode,
     const SwDoc &rDocb);
+
+bool RTLGraphicsHack(long &rLeft, long nWidth,
+    SwHoriOrient eHoriOri, SwRelationOrient eHoriRel, SwTwips nPageLeft,
+    SwTwips nPageRight, SwTwips nPageSize, bool bRTL);
 #endif
 
 /* vi:set tabstop=4 shiftwidth=4 expandtab: */
