@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saltimer.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 14:33:07 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:57:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,14 +94,14 @@ void SalData::Timeout() const
 
 // -=-= SalXLib =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-inline void SalXLib::StopTimer()
+void SalXLib::StopTimer()
 {
     Timeout_.tv_sec     = 0;
     Timeout_.tv_usec    = 0;
     nTimeoutMS_         = 0;
 }
 
-inline void SalXLib::StartTimer( ULONG nMS )
+void SalXLib::StartTimer( ULONG nMS )
 {
     timeval Timeout (Timeout_); // previous timeout.
     gettimeofday (&Timeout_, 0);
