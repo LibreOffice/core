@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh4.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:53:54 $
+ *  last change: $Author: vg $ $Date: 2003-12-16 13:12:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1852,9 +1852,12 @@ void ScDocShell::Print( SfxProgress& rProgress, PrintDialog* pPrintDialog,
                 {
                     FmFormView* pDrawView = NULL;
                     Rectangle aFull( 0, 0, LONG_MAX, LONG_MAX );
-                    if ( aDocument.HasControl( nTab, aFull ) )
+
+                    // #114135#
+                    ScDrawLayer* pModel = aDocument.GetDrawLayer();     // ist nicht NULL
+
+                    if(pModel)
                     {
-                        ScDrawLayer* pModel = aDocument.GetDrawLayer();     // ist nicht NULL
                         pDrawView = new FmFormView( pModel, pPrinter );
                         pDrawView->ShowPagePgNum( nTab, Point() );
                         pDrawView->SetPrintPreview( TRUE );
