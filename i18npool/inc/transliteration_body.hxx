@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transliteration_body.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2002-03-26 17:57:44 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 15:45:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,42 +62,9 @@
 #define TRANSLITERATION_BODY_H
 
 #include <transliteration_commonclass.hxx>
+#include <casefolding.hxx>
 
 namespace com { namespace sun { namespace star { namespace i18n {
-
-#define MappingTypeLowerToUpper     1 << 0  // Upper to Lower mapping
-#define MappingTypeUpperToLower     1 << 1  // Lower to Upper mapping
-#define MappingTypeToUpper          1 << 2  // to Upper mapping
-#define MappingTypeToLower          1 << 3  // to Lower mapping
-#define MappingTypeToTitle          1 << 4  // to Title mapping
-#define MappingTypeSimpleFolding    1 << 5  // Simple Case Folding
-#define MappingTypeFullFolding      1 << 6  // Full Case Folding
-#define MappingTypeMask MappingTypeLowerToUpper|MappingTypeUpperToLower|\
-            MappingTypeToUpper|MappingTypeToLower|MappingTypeToTitle|\
-            MappingTypeSimpleFolding|MappingTypeFullFolding
-
-#define ValueTypeNotValue       1 << 7 // Value field is an address
-
-#define CasedLetter     MappingTypeMask  // for final sigmar
-
-typedef struct _Value{
-    sal_uInt8   type;
-    sal_uInt16  value;  // value or address, depend on the type
-} Value;
-
-typedef struct _Mapping{
-    sal_uInt8   type;
-    sal_Int8    nmap;
-#define NMAPPINGMAX 3
-    sal_Unicode map[NMAPPINGMAX];
-} Mapping;      // for Unconditional mapping
-
-typedef class _MappingElement {
-public:
-    _MappingElement() {element.nmap = current = 0;};
-    Mapping element;
-    sal_Int8 current;
-} MappingElement;
 
 class Transliteration_body : public transliteration_commonclass
 {
@@ -109,6 +76,15 @@ public:
 
     rtl::OUString SAL_CALL transliterate(const rtl::OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
         com::sun::star::uno::Sequence< sal_Int32 >& offset) throw(com::sun::star::uno::RuntimeException);
+
+        rtl::OUString SAL_CALL
+        transliterateChar2String( sal_Unicode inChar)
+        throw(com::sun::star::uno::RuntimeException);
+
+        virtual sal_Unicode SAL_CALL
+        transliterateChar2Char( sal_Unicode inChar)
+        throw(com::sun::star::uno::RuntimeException,
+        drafts::com::sun::star::i18n::MultipleCharsOutputException);
 
     rtl::OUString SAL_CALL folding(const rtl::OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
         com::sun::star::uno::Sequence< sal_Int32 >& offset) throw(com::sun::star::uno::RuntimeException);
@@ -122,9 +98,7 @@ public:
         const rtl::OUString& str2 ) throw(com::sun::star::uno::RuntimeException);
 
 protected:
-    sal_uInt8 aMappingType;
-    Mapping& getValue(const sal_Unicode* str, sal_Int32 pos, sal_Int32 len) throw(com::sun::star::uno::RuntimeException);
-    Mapping& getConditionalValue(const sal_Unicode* str, sal_Int32 pos, sal_Int32 len) throw(com::sun::star::uno::RuntimeException);
+    sal_uInt8 nMappingType;
 };
 
 #if defined( TRANSLITERATION_UPPER_LOWER ) || defined( TRANSLITERATION_ALL )

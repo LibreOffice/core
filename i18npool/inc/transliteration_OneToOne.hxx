@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transliteration_OneToOne.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2002-03-26 17:57:44 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 15:45:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,37 +71,34 @@ typedef sal_Unicode (*TransFunc)(const sal_Unicode);
 class transliteration_OneToOne : public transliteration_commonclass
 {
 public:
-    virtual rtl::OUString SAL_CALL
-    transliterate( const rtl::OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, com::sun::star::uno::Sequence< sal_Int32 >& offset  )
-    throw(com::sun::star::uno::RuntimeException) = 0;
+        rtl::OUString SAL_CALL
+        transliterate( const rtl::OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, com::sun::star::uno::Sequence< sal_Int32 >& offset  )
+        throw(com::sun::star::uno::RuntimeException);
 
-    // Methods which are shared.
-    sal_Int16 SAL_CALL getType() throw(com::sun::star::uno::RuntimeException);
+        sal_Unicode SAL_CALL
+        transliteration_OneToOne::transliterateChar2Char( sal_Unicode inChar)
+        throw(com::sun::star::uno::RuntimeException,
+        drafts::com::sun::star::i18n::MultipleCharsOutputException);
 
-    rtl::OUString SAL_CALL
-    folding( const rtl::OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, com::sun::star::uno::Sequence< sal_Int32 >& offset)
-    throw(com::sun::star::uno::RuntimeException);
+        // Methods which are shared.
+        sal_Int16 SAL_CALL getType() throw(com::sun::star::uno::RuntimeException);
 
-    sal_Bool SAL_CALL
-    equals( const rtl::OUString& str1, sal_Int32 pos1, sal_Int32 nCount1, sal_Int32& nMatch1,
-        const rtl::OUString& str2, sal_Int32 pos2, sal_Int32 nCount2, sal_Int32& nMatch2 )
-    throw(com::sun::star::uno::RuntimeException);
+        rtl::OUString SAL_CALL
+        folding( const rtl::OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, com::sun::star::uno::Sequence< sal_Int32 >& offset)
+        throw(com::sun::star::uno::RuntimeException);
 
-    com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL
-    transliterateRange( const rtl::OUString& str1, const rtl::OUString& str2 )
-    throw(com::sun::star::uno::RuntimeException);
+        sal_Bool SAL_CALL
+        equals( const rtl::OUString& str1, sal_Int32 pos1, sal_Int32 nCount1, sal_Int32& nMatch1,
+            const rtl::OUString& str2, sal_Int32 pos2, sal_Int32 nCount2, sal_Int32& nMatch2 )
+        throw(com::sun::star::uno::RuntimeException);
 
-    rtl::OUString SAL_CALL
-    transliterate( const rtl::OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, oneToOneMapping& table )
-    throw(com::sun::star::uno::RuntimeException);
+        com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL
+        transliterateRange( const rtl::OUString& str1, const rtl::OUString& str2 )
+        throw(com::sun::star::uno::RuntimeException);
 
-    rtl::OUString SAL_CALL
-    transliterate( const rtl::OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, com::sun::star::uno::Sequence< sal_Int32 >& offset, oneToOneMapping& table )
-    throw(com::sun::star::uno::RuntimeException);
-
-    rtl::OUString SAL_CALL
-    transliterate( const rtl::OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, com::sun::star::uno::Sequence< sal_Int32 >& offset, TransFunc func )
-    throw(com::sun::star::uno::RuntimeException);
+protected:
+        TransFunc func;
+        oneToOneMapping *table;
 };
 
 #define TRANSLITERATION_ONETOONE( name ) \
@@ -112,6 +109,10 @@ public: \
     rtl::OUString SAL_CALL \
     transliterate( const rtl::OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, com::sun::star::uno::Sequence< sal_Int32 >& offset ) \
     throw(com::sun::star::uno::RuntimeException); \
+    sal_Unicode SAL_CALL \
+    transliterateChar2Char( sal_Unicode inChar) \
+    throw(com::sun::star::uno::RuntimeException, \
+        drafts::com::sun::star::i18n::MultipleCharsOutputException); \
 };
 
 #if defined( TRANSLITERATION_fullwidthToHalfwidth ) || defined( TRANSLITERATION_ALL )
@@ -120,6 +121,15 @@ TRANSLITERATION_ONETOONE( fullwidthToHalfwidth )
 #if defined( TRANSLITERATION_halfwidthToFullwidth ) || defined( TRANSLITERATION_ALL )
 TRANSLITERATION_ONETOONE(halfwidthToFullwidth)
 #endif
+#undef TRANSLITERATION_ONETOONE
+
+#define TRANSLITERATION_ONETOONE( name ) \
+class name : public transliteration_OneToOne \
+{ \
+public: \
+    name (); \
+};
+
 #if defined( TRANSLITERATION_hiraganaToKatakana ) || defined( TRANSLITERATION_ALL )
 TRANSLITERATION_ONETOONE(hiraganaToKatakana)
 #endif
