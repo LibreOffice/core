@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbabrw.src,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-09 12:46:13 $
+ *  last change: $Author: oj $ $Date: 2002-07-25 07:04:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -865,10 +865,23 @@ Menu MENU_BROWSER_QUERYCONTEXT
         {
             Separator = TRUE;
         };
+        MenuItem
+        {
+            MID_DOCUMENT_NEW_AUTOPILOT
+        };
+        MenuItem
+        {
+            MID_DOCUMENT_CREATE_REPWIZ
+        };
+        MenuItem
+        {
+            Separator = TRUE;
+        };
         MenuItem { MID_RENAME_ENTRY     };
         MenuItem { ITEM_EDIT_DELETE     };
         MenuItem { ITEM_EDIT_COPY       };
         MenuItem { ITEM_EDIT_PASTE      };
+
     };
 };
 
@@ -881,15 +894,6 @@ Menu MENU_BROWSER_TABLECONTEXT
         MenuItem { MID_NEW_TABLE_DESIGN };
         MenuItem { MID_EDIT_TABLE       };
         MenuItem { MID_NEW_VIEW_DESIGN  };
-        MenuItem
-        {
-            Separator = TRUE;
-        };
-        MenuItem { ITEM_EDIT_DELETE     };
-        MenuItem { MID_RENAME_ENTRY     };
-        MenuItem { ITEM_EDIT_COPY       };
-        MenuItem { ITEM_EDIT_PASTE      };
-
         MenuItem
         {
             Separator = TRUE;
@@ -921,7 +925,29 @@ Menu MENU_BROWSER_TABLECONTEXT
             Text[ finnish ] = "~Suhteen rakenne";
             Text[ catalan ] = "Disseny de la rel~aci�";
             Text[ thai ] = "ออกแบบความ~สัมพันธ์";
-            };
+        };
+        MenuItem
+        {
+            Separator = TRUE;
+        };
+        MenuItem
+        {
+            MID_DOCUMENT_NEW_AUTOPILOT
+        };
+        MenuItem
+        {
+            MID_DOCUMENT_CREATE_REPWIZ
+        };
+        MenuItem
+        {
+            Separator = TRUE;
+        };
+        MenuItem { ITEM_EDIT_DELETE     };
+        MenuItem { MID_RENAME_ENTRY     };
+        MenuItem { ITEM_EDIT_COPY       };
+        MenuItem { ITEM_EDIT_PASTE      };
+
+
     };
 };
 Menu MENU_BROWSER_VIEWCONTEXT
@@ -932,15 +958,6 @@ Menu MENU_BROWSER_VIEWCONTEXT
 
         MenuItem { MID_NEW_TABLE_DESIGN };
         MenuItem { MID_NEW_VIEW_DESIGN  };
-        MenuItem
-        {
-            Separator = TRUE;
-        };
-        MenuItem { ITEM_EDIT_DELETE     };
-        MenuItem { MID_RENAME_ENTRY     };
-        MenuItem { ITEM_EDIT_COPY       };
-        MenuItem { ITEM_EDIT_PASTE      };
-
         MenuItem
         {
             Separator = TRUE;
@@ -970,9 +987,31 @@ Menu MENU_BROWSER_VIEWCONTEXT
             Text[ turkish ] = "relatio~n design";
             Text[ arabic ] = "����� ������";
             Text[ finnish ] = "~Suhteen rakenne";
-                Text[ catalan ] = "Disseny de la rel~aci�";
-                Text[ thai ] = "ออกแบบความ~สัมพันธ์";
-            };
+            Text[ catalan ] = "Disseny de la rel~aci�";
+            Text[ thai ] = "ออกแบบความ~สัมพันธ์";
+        };
+        MenuItem
+        {
+            Separator = TRUE;
+        };
+        MenuItem
+        {
+            MID_DOCUMENT_NEW_AUTOPILOT
+        };
+        MenuItem
+        {
+            MID_DOCUMENT_CREATE_REPWIZ
+        };
+        MenuItem
+        {
+            Separator = TRUE;
+        };
+        MenuItem { ITEM_EDIT_DELETE     };
+        MenuItem { MID_RENAME_ENTRY     };
+        MenuItem { ITEM_EDIT_COPY       };
+        MenuItem { ITEM_EDIT_PASTE      };
+
+
     };
 };
 

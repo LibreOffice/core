@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.137 $
+ *  $Revision: 1.138 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-09 07:46:42 $
+ *  last change: $Author: oj $ $Date: 2002-07-25 07:04:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3751,6 +3751,8 @@ sal_Bool SbaTableQueryBrowser::requestContextMenu( const CommandEvent& _rEvent )
                 aContextMenu.EnableItem(SID_DELETE,         etTable == eType && bIsConnectionWriteAble);
                 aContextMenu.EnableItem(ID_RENAME_ENTRY,    etTable == eType && bIsConnectionWriteAble && bRenameAllowed);
                 aContextMenu.EnableItem(SID_COPY,           etTable == eType);
+                aContextMenu.EnableItem(ID_DOCUMENT_CREATE_REPWIZ,  etTable == eType);
+                aContextMenu.EnableItem(ID_FORM_NEW_PILOT,          etTable == eType);
                 // these have to be disabled if the connection is readonly
                 if(!bIsConnectionWriteAble)
                 {
@@ -3777,6 +3779,8 @@ sal_Bool SbaTableQueryBrowser::requestContextMenu( const CommandEvent& _rEvent )
                     aContextMenu.EnableItem(ID_NEW_TABLE_DESIGN,sal_False);
                     aContextMenu.EnableItem(ID_NEW_VIEW_DESIGN,sal_False);
                 }
+                aContextMenu.EnableItem(ID_DOCUMENT_CREATE_REPWIZ,  sal_True);
+                aContextMenu.EnableItem(ID_FORM_NEW_PILOT,          sal_True);
             }
             break;
 
@@ -3788,10 +3792,12 @@ sal_Bool SbaTableQueryBrowser::requestContextMenu( const CommandEvent& _rEvent )
                 sal_Bool bPasteAble = aTransferData.HasFormat(SOT_FORMATSTR_ID_DBACCESS_QUERY);
                 aContextMenu.EnableItem(SID_PASTE, bPasteAble);
                 // 3.2 actions on existing queries
-                aContextMenu.EnableItem(ID_EDIT_QUERY_DESIGN,   etQuery == eType);
-                aContextMenu.EnableItem(SID_DELETE,             etQuery == eType);
-                aContextMenu.EnableItem(SID_COPY,               etQuery == eType);
-                aContextMenu.EnableItem(ID_RENAME_ENTRY,        etQuery == eType);
+                aContextMenu.EnableItem(ID_EDIT_QUERY_DESIGN,       etQuery == eType);
+                aContextMenu.EnableItem(SID_DELETE,                 etQuery == eType);
+                aContextMenu.EnableItem(SID_COPY,                   etQuery == eType);
+                aContextMenu.EnableItem(ID_RENAME_ENTRY,            etQuery == eType);
+                aContextMenu.EnableItem(ID_DOCUMENT_CREATE_REPWIZ,  etQuery == eType);
+                aContextMenu.EnableItem(ID_FORM_NEW_PILOT,          etQuery == eType);
             }
             break;
 
@@ -3914,6 +3920,7 @@ sal_Bool SbaTableQueryBrowser::requestContextMenu( const CommandEvent& _rEvent )
         case ID_FORM_NEW_IMPRESS:
         case ID_FORM_NEW_PILOT:
         case ID_FORM_NEW_TEMPLATE:
+        case ID_DOCUMENT_CREATE_REPWIZ:
             handleLinkContextMenu(nPos,pEntry,eType,pDSEntry);
         break;
     }
@@ -3968,10 +3975,11 @@ void SbaTableQueryBrowser::handleLinkContextMenu(USHORT _nPos,SvLBoxEntry* pEntr
             break;
 
         case ID_FORM_NEW_PILOT:
+        case ID_DOCUMENT_CREATE_REPWIZ:
         {
             // the type of the object to initially select
             sal_Int32 nObjectType = -1;
-            if (etTable == eType)
+            if ( etTable == eType || etView == eType )
                 nObjectType = CommandType::TABLE;
             else if (etQuery == eType)
                 nObjectType = CommandType::QUERY;
@@ -3984,9 +3992,14 @@ void SbaTableQueryBrowser::handleLinkContextMenu(USHORT _nPos,SvLBoxEntry* pEntr
             // the connection
             Reference< XConnection > xConn;
             if (ensureConnection(pEntry, xConn))
-                aHelper.newFormWithPilot(GetEntryText(pDSEntry), nObjectType, sObjectName, xConn);
+            {
+                if ( ID_FORM_NEW_PILOT == _nPos )
+                    aHelper.newFormWithPilot(GetEntryText(pDSEntry), nObjectType, sObjectName, xConn);
+                else
+                    aHelper.newReportWithPilot(GetEntryText(pDSEntry), nObjectType, sObjectName, xConn);
+            }
         }
-        break;
+            break;
 
         default:
             DBG_ERROR("SbaTableQueryBrowser::requestContextMenu: invalid menu id!");
