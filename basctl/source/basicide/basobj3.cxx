@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basobj3.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-23 16:39:29 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 14:08:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,9 @@
  *
  ************************************************************************/
 
+#ifndef _SFX_IPFRM_HXX
+#include <sfx2/ipfrm.hxx>
+#endif
 
 #include <ide_pch.hxx>
 
@@ -777,9 +780,12 @@ void BasicIDE::MarkDocShellModified( SfxObjectShell* pShell )
             pIDEShell->SetAppBasicModified();
     }
 
-    SfxBindings& rBindings = BasicIDE::GetBindings();
-    rBindings.Invalidate( SID_SAVEDOC );
-    rBindings.Update( SID_SAVEDOC );
+    SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
+    if ( pBindings )
+    {
+        pBindings->Invalidate( SID_SAVEDOC );
+        pBindings->Update( SID_SAVEDOC );
+    }
 
     // Objectcatalog updaten...
     BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
@@ -874,25 +880,26 @@ void BasicIDE::BasicStopped( BOOL* pbAppWindowDisabled,
 
 void BasicIDE::InvalidateDebuggerSlots()
 {
-    SfxBindings& rBindings = BasicIDE::GetBindings();
-    rBindings.Invalidate( SID_BASICSTOP );
-    rBindings.Update( SID_BASICSTOP );
-    rBindings.Invalidate( SID_BASICRUN );
-    rBindings.Update( SID_BASICRUN );
-    rBindings.Invalidate( SID_BASICCOMPILE );
-    rBindings.Update( SID_BASICCOMPILE );
-    rBindings.Invalidate( SID_BASICSTEPOVER );
-    rBindings.Update( SID_BASICSTEPOVER );
-    rBindings.Invalidate( SID_BASICSTEPINTO );
-    rBindings.Update( SID_BASICSTEPINTO );
-    rBindings.Invalidate( SID_BASICSTEPOUT );
-    rBindings.Update( SID_BASICSTEPOUT );
-    rBindings.Invalidate( SID_BASICIDE_TOGGLEBRKPNT );
-    rBindings.Update( SID_BASICIDE_TOGGLEBRKPNT );
-    rBindings.Invalidate( SID_BASICIDE_MANAGEBRKPNTS );
-    rBindings.Update( SID_BASICIDE_MANAGEBRKPNTS );
-    rBindings.Invalidate( SID_BASICIDE_STAT_POS );
-    rBindings.Update( SID_BASICIDE_STAT_POS );
+    SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
+    if ( pBindings )
+    {
+        pBindings->Invalidate( SID_BASICSTOP );
+        pBindings->Update( SID_BASICSTOP );
+        pBindings->Invalidate( SID_BASICRUN );
+        pBindings->Update( SID_BASICRUN );
+        pBindings->Invalidate( SID_BASICCOMPILE );
+        pBindings->Update( SID_BASICCOMPILE );
+        pBindings->Invalidate( SID_BASICSTEPOVER );
+        pBindings->Update( SID_BASICSTEPOVER );
+        pBindings->Invalidate( SID_BASICSTEPINTO );
+        pBindings->Update( SID_BASICSTEPINTO );
+        pBindings->Invalidate( SID_BASICSTEPOUT );
+        pBindings->Update( SID_BASICSTEPOUT );
+        pBindings->Invalidate( SID_BASICIDE_TOGGLEBRKPNT );
+        pBindings->Update( SID_BASICIDE_TOGGLEBRKPNT );
+        pBindings->Invalidate( SID_BASICIDE_STAT_POS );
+        pBindings->Update( SID_BASICIDE_STAT_POS );
+    }
 }
 
 //----------------------------------------------------------------------------
@@ -934,12 +941,17 @@ long BasicIDE::HandleBasicError( StarBASIC* pBasic )
                 pIDEShell = IDE_DLL()->GetShell();
                 if ( !pIDEShell )
                 {
-                    SfxViewFrame* pCurFrame = SfxViewFrame::Current();
-                    DBG_ASSERT( pCurFrame != NULL, "No current view frame!" );
-                    SfxDispatcher* pDispatcher = pCurFrame ? pCurFrame->GetDispatcher() : NULL;
-                    if( pDispatcher )
+                    SfxViewFrame* pViewFrame = SfxViewFrame::Current();
+                    SfxDispatcher* pDispatcher = ( pViewFrame && !pViewFrame->ISA( SfxInPlaceFrame ) ) ? pViewFrame->GetDispatcher() : NULL;
+                    if ( pDispatcher )
                     {
                         pDispatcher->Execute( SID_BASICIDE_APPEAR, SFX_CALLMODE_SYNCHRON );
+                    }
+                    else
+                    {
+                        SfxAllItemSet aArgs( SFX_APP()->GetPool() );
+                        SfxRequest aRequest( SID_BASICIDE_APPEAR, SFX_CALLMODE_SYNCHRON, aArgs );
+                        SFX_APP()->ExecuteSlot( aRequest );
                     }
                     pIDEShell = IDE_DLL()->GetShell();
                 }
@@ -1018,6 +1030,8 @@ SfxBindings& BasicIDE::GetBindings()
     return pCurFrame->GetBindings();
 }
 
+//----------------------------------------------------------------------------
+
 SfxBindings* BasicIDE::GetBindingsPtr()
 {
     SfxViewFrame* pFrame;
@@ -1033,7 +1047,4 @@ SfxBindings* BasicIDE::GetBindingsPtr()
     return pBindings;
 }
 
-
 //----------------------------------------------------------------------------
-
-
