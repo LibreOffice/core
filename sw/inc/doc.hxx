@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.100 $
+ *  $Revision: 1.101 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-25 14:41:12 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 16:01:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1602,14 +1602,8 @@ public:
 
         // setzt, wenn noch keine Numerierung, sonst wird geaendert
         // arbeitet mit alten und neuen Regeln, nur Differenzen aktualisieren
-    /** #109308# new parameter
-        @param bCalledFromShell
-        - sal_True called from shel
-        - sal_False else
-    */
     void SetNumRule( const SwPaM&, const SwNumRule&,
-                     sal_Bool bSetAbsLSpace = sal_True,
-                     sal_Bool bCalledFromShell = sal_False );
+                     sal_Bool bSetAbsLSpace = sal_True );
         // ab hier neu starten lassen oder den Start wieder aufheben
 
     /**
