@@ -8798,3 +8798,4 @@ threadFunc
 ?GetStyleFamilyBitmap@SfxObjectShell@@UAE?AVBitmap@@W4SfxStyleFamily@@W4BmpColorMode@@@Z
 ?DataChanged@SfxPreviewWin@@MAEXABVDataChangedEvent@@@Z
 ?UseHighContrastSetting@SfxPreviewWin@@MBE_NXZ
+?lcl_translateBasic2Uno@?%O:\SRX643\src\sfx2\source\doc\objmisc.cxx111075349@@YAXABVSbxVariableRef@@PAX@Z
