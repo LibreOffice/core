@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailwindow.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-24 20:31:32 $
+ *  last change: $Author: kz $ $Date: 2001-08-07 14:52:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,10 +89,10 @@ Window RID_MAIL_WINDOW
         Text[ swedish ] = "~Skicka";
         Text[ polish ] = "Wyúlij";
         Text[ portuguese_brazilian ] = "Send";
-        Text[ japanese ] = "ëóêM";
-        Text[ korean ] = "º€Ω≈";
-        Text[ chinese_simplified ] = "ºƒ∑¢";
-        Text[ chinese_traditional ] = "µo∞e";
+        Text[ japanese ] = "ÈÄÅ‰ø°";
+        Text[ korean ] = "ÏÜ°Ïã†";
+        Text[ chinese_simplified ] = "ÂØÑÂèë";
+        Text[ chinese_traditional ] = "ÁôºÈÄÅ";
         Text[ turkish ] = "Send";
         Text[ arabic ] = "≈—”«·";
         Text[ catalan ] = "Enviar";
@@ -118,10 +118,10 @@ Window RID_MAIL_WINDOW
         Text[ swedish ] = "S~t‰ng";
         Text[ polish ] = "Zamknij";
         Text[ portuguese_brazilian ] = "Close";
-        Text[ japanese ] = "ï¬Ç∂ÇÈ";
-        Text[ korean ] = "¥›±‚";
-        Text[ chinese_simplified ] = "πÿ±’";
-        Text[ chinese_traditional ] = "√ˆ≥¨";
+        Text[ japanese ] = "Èñâ„Åò„Çã";
+        Text[ korean ] = "Îã´Í∏∞";
+        Text[ chinese_simplified ] = "ÂÖ≥Èó≠";
+        Text[ chinese_traditional ] = "ÈóúÈñâ";
         Text[ turkish ] = "Close";
         Text[ arabic ] = "≈€·«ﬁ";
         Text[ catalan ] = "Cerrar";
@@ -226,27 +226,27 @@ Window RID_MAIL_WINDOW
         };
         StringList [ japanese ] =
         {
-            < "à∂êÊ" ; 1 ; > ;
+            < "ÂÆõÂÖà" ; 1 ; > ;
             < "CC" ; 2 ; > ;
             < "BCC" ; 3 ; > ;
         };
         StringList [ korean ] =
         {
-            < "ºˆΩ≈:" ; 1 ; > ;
-            < "∫πªÁ" ; 2 ; > ;
+            < "ÏàòÏã†:" ; 1 ; > ;
+            < "Î≥µÏÇ¨" ; 2 ; > ;
             < "BCC" ; 3 ; > ;
         };
         StringList [ chinese_simplified ] =
         {
-            < " ’º˛»À" ; 1 ; > ;
-            < "≥≠ÀÕ" ; 2 ; > ;
-            < "√‹≥≠" ; 3 ; > ;
+            < "Êî∂‰ª∂‰∫∫" ; 1 ; > ;
+            < "ÊäÑÈÄÅ" ; 2 ; > ;
+            < "ÂØÜÊäÑ" ; 3 ; > ;
         };
         StringList [ chinese_traditional ] =
         {
-            < "¶¨•Û™Ã" ; 1 ; > ;
-            < "ß€∞e" ; 2 ; > ;
-            < "±Kß€" ; 3 ; > ;
+            < "Êî∂‰ª∂ËÄÖ" ; 1 ; > ;
+            < "ÊäÑÈÄÅ" ; 2 ; > ;
+            < "ÂØÜÊäÑ" ; 3 ; > ;
         };
         StringList [ turkish ] =
         {
@@ -306,10 +306,10 @@ Window RID_MAIL_WINDOW
         Text[ swedish ] = "~AngÂende:";
         Text[ polish ] = "Dotyczy:";
         Text[ portuguese_brazilian ] = "Subject:";
-        Text[ japanese ] = "åèñº:";
-        Text[ korean ] = "¡¶∏Ò:";
-        Text[ chinese_simplified ] = " ¬”…£∫";
-        Text[ chinese_traditional ] = "•D¶Æ°G";
+        Text[ japanese ] = "‰ª∂Âêç:";
+        Text[ korean ] = "Ï†úÎ™©:";
+        Text[ chinese_simplified ] = "‰∫ãÁî±Ôºö";
+        Text[ chinese_traditional ] = "‰∏ªÊó®Ôºö";
         Text[ turkish ] = "Subject:";
         Text[ arabic ] = "«·„Ê÷Ê⁄:";
         Text[ catalan ] = "Asunto:";
@@ -340,10 +340,10 @@ Window RID_MAIL_WINDOW
         Text[ swedish ] = "~FrÂn:";
         Text[ polish ] = "Od:";
         Text[ portuguese_brazilian ] = "From:";
-        Text[ japanese ] = "ç∑èoêl:";
-        Text[ korean ] = "∫Œ≈Õ:";
-        Text[ chinese_simplified ] = "∑¢º˛»À£∫";
-        Text[ chinese_traditional ] = "±H•Û™Ã°G";
+        Text[ japanese ] = "Â∑ÆÂá∫‰∫∫:";
+        Text[ korean ] = "Î∂ÄÌÑ∞:";
+        Text[ chinese_simplified ] = "Âèë‰ª∂‰∫∫Ôºö";
+        Text[ chinese_traditional ] = "ÂØÑ‰ª∂ËÄÖÔºö";
         Text[ turkish ] = "From:";
         Text[ arabic ] = "„‰:";
         Text[ catalan ] = "De:";
@@ -375,10 +375,10 @@ Window RID_MAIL_WINDOW
         Text[ swedish ] = "~Prioritet:";
         Text[ polish ] = "Priorytet:";
         Text[ portuguese_brazilian ] = "Priority:";
-        Text[ japanese ] = "èdóvìx:";
-        Text[ korean ] = "øÏº±º¯¿ß:";
-        Text[ chinese_simplified ] = "÷ÿ“™–‘£∫";
-        Text[ chinese_traditional ] = "≠´≠n© °G";
+        Text[ japanese ] = "ÈáçË¶ÅÂ∫¶:";
+        Text[ korean ] = "Ïö∞ÏÑ†ÏàúÏúÑ:";
+        Text[ chinese_simplified ] = "ÈáçË¶ÅÊÄßÔºö";
+        Text[ chinese_traditional ] = "ÈáçË¶ÅÊÄßÔºö";
         Text[ turkish ] = "Priority:";
         Text[ arabic ] = "«·√Ê·ÊÌ…:";
         Text[ catalan ] = "Prioridad:";
@@ -513,35 +513,35 @@ Window RID_MAIL_WINDOW
         };
         StringList [ japanese ] =
         {
-            < "çÇÇ¢" ; 1 ; > ;
-            < "Ç‚Ç‚çÇÇ¢" ; 2 ; > ;
-            < "ïWèÄ" ; 3 ; > ;
-            < "Ç‚Ç‚í·Ç¢" ; 4 ; > ;
-            < "í·Ç¢" ; 5 ; > ;
+            < "È´ò„ÅÑ" ; 1 ; > ;
+            < "„ÇÑ„ÇÑÈ´ò„ÅÑ" ; 2 ; > ;
+            < "Ê®ôÊ∫ñ" ; 3 ; > ;
+            < "„ÇÑ„ÇÑ‰Ωé„ÅÑ" ; 4 ; > ;
+            < "‰Ωé„ÅÑ" ; 5 ; > ;
         };
         StringList [ korean ] =
         {
-            < "∏≈øÏ ≥Ù¿∫" ; 1 ; > ;
-            < "≥Ù¿∫" ; 2 ; > ;
-            < "∫∏≈Î" ; 3 ; > ;
-            < "≥∑¿∫" ; 4 ; > ;
-            < "∏≈øÏ ≥∑¿∫" ; 5 ; > ;
+            < "Îß§Ïö∞ ÎÜíÏùÄ" ; 1 ; > ;
+            < "ÎÜíÏùÄ" ; 2 ; > ;
+            < "Î≥¥ÌÜµ" ; 3 ; > ;
+            < "ÎÇÆÏùÄ" ; 4 ; > ;
+            < "Îß§Ïö∞ ÎÇÆÏùÄ" ; 5 ; > ;
         };
         StringList [ chinese_simplified ] =
         {
-            < "∫‹∏ﬂ" ; 1 ; > ;
-            < "∏ﬂ" ; 2 ; > ;
-            < "∆’Õ®" ; 3 ; > ;
-            < "µÕ" ; 4 ; > ;
-            < "∫‹µ◊" ; 5 ; > ;
+            < "ÂæàÈ´ò" ; 1 ; > ;
+            < "È´ò" ; 2 ; > ;
+            < "ÊôÆÈÄö" ; 3 ; > ;
+            < "‰Ωé" ; 4 ; > ;
+            < "ÂæàÂ∫ï" ; 5 ; > ;
         };
         StringList [ chinese_traditional ] =
         {
-            < "´‹∞™" ; 1 ; > ;
-            < "∞™" ; 2 ; > ;
-            < "§@ØÎ" ; 3 ; > ;
-            < "ßC" ; 4 ; > ;
-            < "´‹ßC" ; 5 ; > ;
+            < "ÂæàÈ´ò" ; 1 ; > ;
+            < "È´ò" ; 2 ; > ;
+            < "‰∏ÄËà¨" ; 3 ; > ;
+            < "‰Ωé" ; 4 ; > ;
+            < "Âæà‰Ωé" ; 5 ; > ;
         };
         StringList [ turkish ] =
         {
@@ -589,6 +589,7 @@ Window RID_MAIL_WINDOW
 };
 
 // ------------------------------------------------------------------- EOF
+
 
 
 
