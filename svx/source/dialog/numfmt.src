@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numfmt.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 20:53:22 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 07:09:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
     Text [ italian ] = "Formato numero" ;
     Text [ portuguese_brazilian ] = "Numberformat" ;
     Text [ portuguese ] = "Formato numérico" ;
-    Text [ finnish ] = "Numberformat" ;
+    Text [ finnish ] = "Numeromuoto" ;
     Text [ danish ] = "Talformat" ;
     Text [ french ] = "Format numérique" ;
     Text [ swedish ] = "Talformat" ;
@@ -93,7 +93,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text [ italian ] = "Categoria" ;
         Text [ portuguese_brazilian ] = "~Categoria" ;
         Text [ portuguese ] = "~Categoria" ;
-        Text [ finnish ] = "~Ryhmä" ;
+        Text [ finnish ] = "~Luokka" ;
         Text [ danish ] = "Kategori" ;
         Text [ french ] = "~Catégorie" ;
         Text [ swedish ] = "~Kategori" ;
@@ -205,17 +205,17 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         };
         StringList [ finnish ] =
         {
-            < "Alle" ; Default ; > ;
-            < "Benutzerdefiniert" ; Default ; > ;
-            < "Zahl" ; Default ; > ;
-            < "Prozent" ; Default ; > ;
-            < "Währung" ; Default ; > ;
-            < "Datum" ; Default ; > ;
-            < "Zeit" ; Default ; > ;
-            < "Wissenschaft" ; Default ; > ;
-            < "Bruch" ; Default ; > ;
-            < "Wahrheitswert" ; Default ; > ;
-            < "Text" ; Default ; > ;
+            < "Kaikki" ; Default ; > ;
+            < "Käyttäjän määrittämät" ; Default ; > ;
+            < "Luku" ; Default ; > ;
+            < "Prosenttia" ; Default ; > ;
+            < "Valuutta" ; Default ; > ;
+            < "Päivämäärä" ; Default ; > ;
+            < "Aika" ; Default ; > ;
+            < "Tieteellinen" ; Default ; > ;
+            < "Murtoluku" ; Default ; > ;
+            < "Boolen arvo" ; Default ; > ;
+            < "Teksti" ; Default ; > ;
         };
         StringList [ danish ] =
         {
@@ -466,7 +466,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text [ italian ] = "Codice del formato" ;
         Text [ portuguese_brazilian ] = "Formato-~Descrição" ;
         Text [ portuguese ] = "Código do formato" ;
-        Text [ finnish ] = "Muodon ~kuvaus" ;
+        Text [ finnish ] = "~Muotoile koodi" ;
         Text [ danish ] = "Format-kode" ;
         Text [ french ] = "~Description de format" ;
         Text [ swedish ] = "Format~beskrivning" ;
@@ -514,7 +514,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text [ italian ] = "Formato" ;
         Text [ portuguese_brazilian ] = "~Formato" ;
         Text [ portuguese ] = "Fo~rmatar" ;
-        Text [ finnish ] = "~Muoto" ;
+        Text [ finnish ] = "~Muotoile" ;
         Text [ danish ] = "~Format" ;
         Text [ french ] = "Forma~t" ;
         Text [ swedish ] = "~Format" ;
@@ -632,6 +632,10 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
     {
              < "Automático" ; Default ; > ;
     };
+    StringList [ finnish ] =
+    {
+             < "Automaattisesti" ; Default ; > ;
+    };
     };
 
     Control LB_FORMAT
@@ -653,7 +657,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text [ italian ] = "Posizioni decimali" ;
         Text [ portuguese_brazilian ] = "~Precisão" ;
         Text [ portuguese ] = "Casas ~decimais" ;
-        Text [ finnish ] = "~Tarkkuus" ;
+        Text [ finnish ] = "~Desimaaleja" ;
         Text [ danish ] = "Antal decimaler" ;
         Text [ french ] = "~Décimales" ;
         Text [ swedish ] = "~Decimalpositioner" ;
@@ -696,7 +700,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text [ italian ] = "~Zeri iniziali" ;
         Text [ portuguese_brazilian ] = "~Zeros à esquerda" ;
         Text [ portuguese ] = "~Zeros à esquerda" ;
-        Text [ finnish ] = "~Alkunollat" ;
+        Text [ finnish ] = "~Etunollat" ;
         Text [ danish ] = "Indledende nuller" ;
         Text [ french ] = "~Zéro(s) non significatif(s)" ;
         Text [ swedish ] = "Inledande ~nollor" ;
@@ -738,7 +742,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text [ italian ] = "Valori negativi in rosso" ;
         Text [ portuguese_brazilian ] = "~Marca vermelho negativo" ;
         Text [ portuguese ] = "Negativos em ~vermelho" ;
-        Text [ finnish ] = "~Negatiiviset punaisella" ;
+        Text [ finnish ] = "~Negatiiviset luvut punaisina" ;
         Text [ danish ] = "Røde negative tal" ;
         Text [ french ] = "~Nbres nég. en rouge" ;
         Text [ swedish ] = "Negativa värden i ~rött" ;
@@ -796,7 +800,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text [ italian ] = "Opzioni" ;
         Text [ portuguese_brazilian ] = "Opções" ;
         Text [ portuguese ] = "Opções" ;
-        Text [ finnish ] = "Määritykset" ;
+        Text [ finnish ] = "Asetukset" ;
         Text [ danish ] = "Indstillinger" ;
         Text [ french ] = "Options" ;
         Text [ swedish ] = "Alternativ" ;
@@ -825,7 +829,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text [ italian ] = "Lingua" ;
         Text [ portuguese_brazilian ] = "~Idioma" ;
         Text [ portuguese ] = "~Língua" ;
-        Text [ finnish ] = "K~ieli" ;
+        Text [ finnish ] = "~Kieli" ;
         Text [ danish ] = "Sprog" ;
         Text [ french ] = "~Langue" ;
         Text [ swedish ] = "S~pråk" ;
@@ -900,7 +904,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         QuickHelpText [ italian ] = "Aggiungi" ;
         QuickHelpText [ portuguese_brazilian ] = "Acrescentar" ;
         QuickHelpText [ portuguese ] = "Adicionar" ;
-        QuickHelpText [ finnish ] = "Lisää" ;
+        QuickHelpText [ finnish ] = "Lisää!" ;
         QuickHelpText [ danish ] = "Tilføj" ;
         QuickHelpText [ french ] = "Ajouter" ;
         QuickHelpText [ swedish ] = "Lägg till" ;
@@ -935,7 +939,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         QuickHelpText [ italian ] = "Rimuovi" ;
         QuickHelpText [ portuguese_brazilian ] = "Remover" ;
         QuickHelpText [ portuguese ] = "Remover" ;
-        QuickHelpText [ finnish ] = "Poista" ;
+        QuickHelpText [ finnish ] = "Poista!" ;
         QuickHelpText [ danish ] = "Fjern" ;
         QuickHelpText [ french ] = "Supprimer" ;
         QuickHelpText [ swedish ] = "Ta bort" ;
@@ -987,6 +991,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Kommentar ändern";
         QuickHelpText[ catalan ] = "Modificar comentario";
+        QuickHelpText[ finnish ] = "Muokkaa huomautusta!";
     };
     ImageList IL_ICON
     {
@@ -1025,6 +1030,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text[ turkish ] = "Avrupa";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Europa";
+        Text[ finnish ] = "Eurooppa";
     };
 
     Text[ chinese_simplified ] = "Êý×Ö¸ñÊ½";
