@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addonsoptions.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 16:49:07 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 12:49:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,10 @@
 
 #ifndef _SV_BITMAP_HXX
 #include <vcl/bitmap.hxx>
+#endif
+
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_H_
@@ -301,6 +305,21 @@ class AddonsOptions
         *//*-*****************************************************************************************************/
 
         static ::osl::Mutex& GetOwnStaticMutex();
+
+        /*-****************************************************************************************************//**
+            @short      return a reference to a static mutex
+            @descr      These class is partially threadsafe (for de-/initialization only).
+                        All access methods are'nt safe!
+                        We create a static mutex only for one ime and use at different times.
+
+            @seealso    -
+
+            @param      -
+            @return     A reference to a static mutex member.
+
+            @onerror    -
+        *//*-*****************************************************************************************************/
+        DECL_STATIC_LINK( AddonsOptions, Notify, void* );
 
     //-------------------------------------------------------------------------------------------------------------
     //  private member
