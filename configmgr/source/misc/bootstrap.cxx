@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2001-05-22 07:23:45 $
+ *  last change: $Author: vg $ $Date: 2001-05-22 11:21:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -401,7 +401,6 @@ namespace configmgr
 
 // ---------------------------------------------------------------------------------------
     void Settings::override(const Sequence< Any >& _rOverrides, Origin _eOrigin)
-        throw (IllegalArgumentException)
     {
         // transfer the runtime overrides
         const sal_Int32 nCount = _rOverrides.getLength();
