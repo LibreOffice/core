@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: kz $ $Date: 2004-08-02 12:49:03 $
+#   last change: $Author: rt $ $Date: 2004-09-08 15:55:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,11 +78,12 @@ EXCEPTIONSFILES=\
         $(SLO)$/cfg.obj				\
         $(SLO)$/partwnd.obj         \
         $(SLO)$/menucfg.obj         \
-        $(SLO)$/templdlg.obj        
+        $(SLO)$/templdlg.obj        \
+        $(SLO)$/itemconnect.obj
 
 SLOFILES =\
         $(EXCEPTIONSFILES)			\
-                $(SLO)$/sfxdlg.obj            \
+        $(SLO)$/sfxdlg.obj          \
         $(SLO)$/about.obj			\
         $(SLO)$/acccfg.obj			\
         $(SLO)$/basedlgs.obj		\
@@ -111,8 +112,7 @@ SLOFILES =\
         $(SLO)$/printopt.obj		\
         $(SLO)$/recfloat.obj		\
         $(SLO)$/cfgtreelstbox.obj	\
-        $(SLO)$/srchdlg.obj             \
-        $(SLO)$/itemconnect.obj
+        $(SLO)$/srchdlg.obj
 
 SRS1NAME=$(TARGET)
 SRC1FILES =\
