@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.120 $
+ *  $Revision: 1.121 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-08 17:20:17 $
+ *  last change: $Author: cmc $ $Date: 2002-11-11 13:31:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4537,6 +4537,38 @@ void SwWW8ImplReader::Read_LineSpace( USHORT, const BYTE* pData, short nLen )
     }
 }
 
+void SwWW8ImplReader::Read_ParaAutoBefore(USHORT, const BYTE *pData, short nLen)
+{
+    if (nLen < 0)
+    {
+        pCtrlStck->SetAttr(*pPaM->GetPoint(), RES_UL_SPACE);
+        return;
+    }
+
+    if (*pData)
+    {
+        SvxULSpaceItem aUL(*(const SvxULSpaceItem*)GetFmtAttr(RES_UL_SPACE));
+        aUL.SetUpper(280);  //Seems to be always 14points
+        NewAttr(aUL);
+    }
+}
+
+void SwWW8ImplReader::Read_ParaAutoAfter(USHORT, const BYTE *pData, short nLen)
+{
+    if (nLen < 0)
+    {
+        pCtrlStck->SetAttr(*pPaM->GetPoint(), RES_UL_SPACE);
+        return;
+    }
+
+    if (*pData)
+    {
+        SvxULSpaceItem aUL(*(const SvxULSpaceItem*)GetFmtAttr(RES_UL_SPACE));
+        aUL.SetLower(280);  //Seems to be always 14points
+        NewAttr(aUL);
+    }
+}
+
 // Sprm 21, 22
 void SwWW8ImplReader::Read_UL( USHORT nId, const BYTE* pData, short nLen )
 {
@@ -6162,7 +6194,10 @@ SprmReadInfo aSprmReadTab[] = {
     {0xD660, (FNReadRecord)0},                   //undocumented
     {0xD670, (FNReadRecord)0},                   //undocumented
     {0xCA71, &SwWW8ImplReader::Read_TxtBackColor},//undocumented
-    {0x303C, (FNReadRecord)0}                    //undocumented
+    {0x303C, (FNReadRecord)0},                   //undocumented
+    {0x245B, &SwWW8ImplReader::Read_ParaAutoBefore},//undocumented, para
+    {0x245C, &SwWW8ImplReader::Read_ParaAutoAfter}//undocumented, para
+                                                 //autobefore ?
 };
 
 //-----------------------------------------

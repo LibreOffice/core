@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-07 16:54:19 $
+ *  last change: $Author: cmc $ $Date: 2002-11-11 13:31:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -745,7 +745,7 @@ void SwWW8ImplReader::End_Field()
         cases we have inserted a field not an attribute with an unknown end
         point
         */
-        switch(maFieldStack.top())
+        switch(maFieldStack.back())
         {
             case 88:
                 pCtrlStck->SetAttr(*pPaM->GetPoint(),RES_TXTATR_INETFMT);
@@ -753,7 +753,7 @@ void SwWW8ImplReader::End_Field()
             default:
             break;
         }
-        maFieldStack.pop();
+        maFieldStack.pop_back();
     }
 }
 
@@ -879,8 +879,15 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
     bool bNested = false;
     if (!maFieldStack.empty())
     {
-        if (maFieldStack.top() != 88)
-            bNested = true;
+        mycFieldIter aEnd = maFieldStack.end();
+        for(mycFieldIter aIter = maFieldStack.begin(); aIter != aEnd; ++aIter)
+        {
+            if (*aIter != 88)
+            {
+                bNested = true;
+                break;
+            }
+        }
     }
 
     WW8FieldDesc aF;
@@ -888,7 +895,10 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
 
     ASSERT(bOk, "WW8: Bad Field!\n");
 
-    maFieldStack.push(aF.nId);
+    maFieldStack.push_back(aF.nId);
+
+    if (bNested)
+        return 0;
 
     USHORT n = ( aF.nId <= 91 ) ? aF.nId : 92; // alle > 91 werden 92
     USHORT nI = n / 32;                     // # des UINT32

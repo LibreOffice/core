@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-07 16:54:20 $
+ *  last change: $Author: cmc $ $Date: 2002-11-11 13:31:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -704,7 +704,9 @@ const wwSprmSearcher *wwSprmParser::GetWW8SprmSearcher()
         {0xD660, 0, L_VAR}, // undocumented, something to do with colour.
         {0xD670, 0, L_VAR}, // undocumented, something to do with colour.
         {0xCA71, 0, L_VAR}, // undocumented, text backcolour
-        {0x303C, 1, L_FIX}  // undocumented, sep
+        {0x303C, 1, L_FIX}, // undocumented, sep
+        {0x245B, 1, L_FIX}, // undocumented, para autobefore
+        {0x245C, 1, L_FIX}  // undocumented, para autoafter
     };
 
     static wwSprmSearcher aSprmSrch(aSprms, sizeof(aSprms) / sizeof(aSprms[0]));

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.100 $
+ *  $Revision: 1.101 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-08 17:20:16 $
+ *  last change: $Author: cmc $ $Date: 2002-11-11 13:31:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,9 @@
 #endif
 #ifndef __SGI_STLSTACK
 #include <stack>
+#endif
+#ifndef __SGI_STLDEQUE
+#include <deque>
 #endif
 #ifndef __SGI_STL_MAP
 #include <map>
@@ -251,7 +254,7 @@ private:
     SwDoc&           rDoc;
     const WW8Fib&    rFib;
     SvStream&        rSt;
-    ::std::vector<WW8LSTInfo* > maLSTInfos;
+    std::vector<WW8LSTInfo* > maLSTInfos;
     WW8LFOInfos* pLFOInfos;// D. aus PLF LFO, sortiert genau wie im WW8 Stream
     USHORT       nUniqueList; // current number for creating unique list names
     BYTE* GrpprlHasSprm(USHORT nId, BYTE& rSprms, BYTE nLen);
@@ -377,7 +380,7 @@ public:
     //Keep track of variable names created with fields, and the bookmark
     //mapped to their position, hopefully the same, but very possibly
     //an additional pseudo bookmark
-    ::std::map<String, String, ltstr> aFieldVarNames;
+    std::map<String, String, ltstr> aFieldVarNames;
 protected:
     SwFltStackEntry *RefToVar(const SwField* pFld,SwFltStackEntry *pEntry);
     virtual void SetAttrInDoc(const SwPosition& rTmpPos,
@@ -658,7 +661,8 @@ friend class WW8FormulaControl;
     where the end point will fall, to do so fully correctly duplicates the
     main logic of the filter itself.
     */
-    ::std::stack<USHORT> maFieldStack;
+    std::deque<USHORT> maFieldStack;
+    typedef std::deque<USHORT>::const_iterator mycFieldIter;
 
     /*
     Knows how to split a series of bytes into sprms and their arguments
@@ -673,7 +677,7 @@ friend class WW8FormulaControl;
     /*
      Stack of textencoding being used as we progress through the document text
     */
-    ::std::stack<rtl_TextEncoding> maFontSrcCharSets;
+    std::stack<rtl_TextEncoding> maFontSrcCharSets;
 
     SwMSConvertControls *pFormImpl; // Control-Implementierung
 
@@ -684,7 +688,7 @@ friend class WW8FormulaControl;
     Keep track of generated Ruby character formats we we can minimize the
     number of character formats created
     */
-    ::std::vector<const SwCharFmt*> aRubyCharFmts;
+    std::vector<const SwCharFmt*> aRubyCharFmts;
 
     WW8Fib* pWwFib;
     WW8Fonts* pFonts;
@@ -710,7 +714,7 @@ friend class WW8FormulaControl;
 
     WW8TabDesc* pTableDesc;     // Beschreibung der Tabelleneigenschaften
     //Keep track of tables within tables
-    ::std::stack<WW8TabDesc*> aTableStack;
+    std::stack<WW8TabDesc*> aTableStack;
 
     SwNumRule* pNumRule;        // fuer Nummerierung / Aufzaehlungen im Text
     WW8_OLST* pNumOlst;         // Gliederung im Text
@@ -728,7 +732,7 @@ friend class WW8FormulaControl;
 
     SwMSDffManager* pMSDffManager;
 
-    ::std::vector<String>* mpAtnNames;
+    std::vector<String>* mpAtnNames;
 
     WW8AuthorInfos* pAuthorInfos;
     WW8OleMaps* pOleMap;
@@ -866,7 +870,7 @@ friend class WW8FormulaControl;
 
     void AppendTxtNode(SwPosition& rPos);
     void GetNoninlineNodeAttribs(const SwTxtNode *pNode,
-        ::std::vector<const xub_StrLen*> &rPositions);
+        std::vector<const xub_StrLen*> &rPositions);
     void SetLastPgDeskIdx();
 
     SwPageDesc* CreatePageDesc( SwPageDesc* pFirstPageDesc,
@@ -1199,6 +1203,8 @@ public:     // eigentlich private, geht aber leider nur public
     void NeedAdjustTextTabStops(short nLeft, short nFirstLineOfst,
         SwNodeIndex *pPos,xub_StrLen nIndex);
     void Read_UL(               USHORT nId, const BYTE*, short nLen );
+    void Read_ParaAutoBefore(USHORT , const BYTE *pData, short nLen);
+    void Read_ParaAutoAfter(USHORT , const BYTE *pData, short nLen);
     void Read_LineSpace(        USHORT, const BYTE*, short nLen );
     void Read_Justify(          USHORT, const BYTE*, short nLen );
     void Read_Hyphenation(      USHORT, const BYTE* pData, short nLen );
