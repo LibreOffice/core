@@ -3,9 +3,9 @@
  *
  *  $RCSfile: UI.xcs,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-24 13:12:14 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 17:57:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,9 @@
 				<desc xml:lang="th">Describes a class of filters. Filter classes (for example, &apos;Text documents&apos;) appear as a single filter to the user.</desc>
 				<desc xml:lang="hi-IN">Describes a class of filters. Filter classes (for example, &apos;Text documents&apos;) appear as a single filter to the user.</desc>
 				<desc xml:lang="x-comment">Describes a class of filters. Filter classes (for example, &apos;Text documents&apos;) appear as a single filter to the user.</desc>
+				<desc xml:lang="hu">Describes a class of filters. Filter classes (for example, &apos;Text documents&apos;) appear as a single filter to the user.</desc>
+				<desc xml:lang="sk">Describes a class of filters. Filter classes (for example, &apos;Text documents&apos;) appear as a single filter to the user.</desc>
+				<desc xml:lang="sl">Describes a class of filters. Filter classes (for example, &apos;Text documents&apos;) appear as a single filter to the user.</desc>
 			</info>
 			<prop oor:name="DisplayName" oor:type="xs:string" oor:localized="true" oor:nillable="false">
 				<info>
@@ -120,6 +123,9 @@
 					<desc xml:lang="th">Specifies the localized name that is used when presenting the class to the user.</desc>
 					<desc xml:lang="hi-IN">Specifies the localized name that is used when presenting the class to the user.</desc>
 					<desc xml:lang="x-comment">Specifies the localized name that is used when presenting the class to the user.</desc>
+					<desc xml:lang="hu">Specifies the localized name that is used when presenting the class to the user.</desc>
+					<desc xml:lang="sk">Specifies the localized name that is used when presenting the class to the user.</desc>
+					<desc xml:lang="sl">Specifies the localized name that is used when presenting the class to the user.</desc>
 				</info>
 			</prop>
 			<prop oor:name="Filters" oor:type="oor:string-list">
@@ -149,6 +155,9 @@
 					<desc xml:lang="th">Contains a list of filters that belong to this filter class. Filters that referred here (for a given class) are collected at runtime and then presented as one single entry.</desc>
 					<desc xml:lang="hi-IN">Contains a list of filters that belong to this filter class. Filters that referred here (for a given class) are collected at runtime and then presented as one single entry.</desc>
 					<desc xml:lang="x-comment">Contains a list of filters that belong to this filter class. Filters that referred here (for a given class) are collected at runtime and then presented as one single entry.</desc>
+					<desc xml:lang="hu">Contains a list of filters that belong to this filter class. Filters that referred here (for a given class) are collected at runtime and then presented as one single entry.</desc>
+					<desc xml:lang="sk">Contains a list of filters that belong to this filter class. Filters that referred here (for a given class) are collected at runtime and then presented as one single entry.</desc>
+					<desc xml:lang="sl">Contains a list of filters that belong to this filter class. Filters that referred here (for a given class) are collected at runtime and then presented as one single entry.</desc>
 				</info>
 			</prop>
 		</group>
@@ -160,6 +169,13 @@
 				<desc xml:lang="x-comment">Defines the templates for color settings used to customize the appearance of the applications.!; Specifies the color settings for customizing the appearance of the applications.</desc>
 				<desc xml:lang="ja">アプリケーションの外観をカスタマイズするための色設定を指定します。</desc>
 				<desc xml:lang="zh-CN">设定用户自己的应用程序外观颜色。</desc>
+				<desc xml:lang="el">Specifies the color settings for customizing the appearance of the applications.</desc>
+				<desc xml:lang="nl">Specifies the color settings for customizing the appearance of the applications.</desc>
+				<desc xml:lang="hu">Specifies the color settings for customizing the appearance of the applications.</desc>
+				<desc xml:lang="cs">Specifies the color settings for customizing the appearance of the applications.</desc>
+				<desc xml:lang="sk">Specifies the color settings for customizing the appearance of the applications.</desc>
+				<desc xml:lang="da">Specifies the color settings for customizing the appearance of the applications.</desc>
+				<desc xml:lang="sl">Specifies the color settings for customizing the appearance of the applications.</desc>
 			</info>
 			<group oor:name="DocColor">
 				<info>
@@ -188,6 +204,9 @@
 					<desc xml:lang="th">Specifies the color settings for the document.</desc>
 					<desc xml:lang="hi-IN">Specifies the color settings for the document.</desc>
 					<desc xml:lang="x-comment">Specifies the color settings for the document.</desc>
+					<desc xml:lang="hu">Specifies the color settings for the document.</desc>
+					<desc xml:lang="sk">Specifies the color settings for the document.</desc>
+					<desc xml:lang="sl">Specifies the color settings for the document.</desc>
 				</info>
 				<prop oor:name="Color" oor:type="xs:int">
 					<info>
@@ -216,6 +235,9 @@
 						<desc xml:lang="th">Specifies the color of the document.</desc>
 						<desc xml:lang="hi-IN">Specifies the color of the document.</desc>
 						<desc xml:lang="x-comment">Specifies the color of the document.</desc>
+						<desc xml:lang="hu">Specifies the color of the document.</desc>
+						<desc xml:lang="sk">Specifies the color of the document.</desc>
+						<desc xml:lang="sl">Specifies the color of the document.</desc>
 					</info>
 				</prop>
 			</group>
@@ -246,6 +268,9 @@
 					<desc xml:lang="th">Specifies the settings for the documents boundaries.</desc>
 					<desc xml:lang="hi-IN">Specifies the settings for the documents boundaries.</desc>
 					<desc xml:lang="x-comment">Specifies the settings for the documents boundaries.</desc>
+					<desc xml:lang="hu">Specifies the settings for the documents boundaries.</desc>
+					<desc xml:lang="sk">Specifies the settings for the documents boundaries.</desc>
+					<desc xml:lang="sl">Specifies the settings for the documents boundaries.</desc>
 				</info>
 				<prop oor:name="IsVisible" oor:type="xs:boolean">
 					<info>
@@ -274,6 +299,9 @@
 						<desc xml:lang="th">Specifies the visibility of anchors (true = visible).</desc>
 						<desc xml:lang="hi-IN">Specifies the visibility of anchors (true = visible).</desc>
 						<desc xml:lang="x-comment">Specifies the visibility of anchors (true = visible).</desc>
+						<desc xml:lang="hu">Specifies the visibility of anchors (true = visible).</desc>
+						<desc xml:lang="sk">Specifies the visibility of anchors (true = visible).</desc>
+						<desc xml:lang="sl">Specifies the visibility of anchors (true = visible).</desc>
 					</info>
 					<value>true</value>
 				</prop>
@@ -304,6 +332,9 @@
 						<desc xml:lang="th">Specifies the color used for of the document boundaries.</desc>
 						<desc xml:lang="hi-IN">Specifies the color used for of the document boundaries.</desc>
 						<desc xml:lang="x-comment">Specifies the color used for of the document boundaries.</desc>
+						<desc xml:lang="hu">Specifies the color used for of the document boundaries.</desc>
+						<desc xml:lang="sk">Specifies the color used for of the document boundaries.</desc>
+						<desc xml:lang="sl">Specifies the color used for of the document boundaries.</desc>
 					</info>
 				</prop>
 			</group>
@@ -334,6 +365,9 @@
 					<desc xml:lang="th">Specifies the settings for the application background.</desc>
 					<desc xml:lang="hi-IN">Specifies the settings for the application background.</desc>
 					<desc xml:lang="x-comment">Specifies the settings for the application background.</desc>
+					<desc xml:lang="hu">Specifies the settings for the application background.</desc>
+					<desc xml:lang="sk">Specifies the settings for the application background.</desc>
+					<desc xml:lang="sl">Specifies the settings for the application background.</desc>
 				</info>
 				<prop oor:name="Color" oor:type="xs:int">
 					<info>
@@ -362,6 +396,9 @@
 						<desc xml:lang="th">Specifies Color of the application background.</desc>
 						<desc xml:lang="hi-IN">Specifies Color of the application background.</desc>
 						<desc xml:lang="x-comment">Specifies Color of the application background.</desc>
+						<desc xml:lang="hu">Specifies Color of the application background.</desc>
+						<desc xml:lang="sk">Specifies Color of the application background.</desc>
+						<desc xml:lang="sl">Specifies Color of the application background.</desc>
 					</info>
 				</prop>
 			</group>
@@ -392,6 +429,9 @@
 					<desc xml:lang="th">Specifies the settings for object boundaries.</desc>
 					<desc xml:lang="hi-IN">Specifies the settings for object boundaries.</desc>
 					<desc xml:lang="x-comment">Specifies the settings for object boundaries.</desc>
+					<desc xml:lang="hu">Specifies the settings for object boundaries.</desc>
+					<desc xml:lang="sk">Specifies the settings for object boundaries.</desc>
+					<desc xml:lang="sl">Specifies the settings for object boundaries.</desc>
 				</info>
 				<prop oor:name="IsVisible" oor:type="xs:boolean">
 					<info>
@@ -420,6 +460,9 @@
 						<desc xml:lang="th">Specifies the visibility of object boundaries (true = visible).</desc>
 						<desc xml:lang="hi-IN">Specifies the visibility of object boundaries (true = visible).</desc>
 						<desc xml:lang="x-comment">Specifies the visibility of object boundaries (true = visible).</desc>
+						<desc xml:lang="hu">Specifies the visibility of object boundaries (true = visible).</desc>
+						<desc xml:lang="sk">Specifies the visibility of object boundaries (true = visible).</desc>
+						<desc xml:lang="sl">Specifies the visibility of object boundaries (true = visible).</desc>
 					</info>
 					<value>true</value>
 				</prop>
@@ -450,6 +493,9 @@
 						<desc xml:lang="th">Specifies the color used for object boundaries.</desc>
 						<desc xml:lang="hi-IN">Specifies the color used for object boundaries.</desc>
 						<desc xml:lang="x-comment">Specifies the color used for object boundaries.</desc>
+						<desc xml:lang="hu">Specifies the color used for object boundaries.</desc>
+						<desc xml:lang="sk">Specifies the color used for object boundaries.</desc>
+						<desc xml:lang="sl">Specifies the color used for object boundaries.</desc>
 					</info>
 				</prop>
 			</group>
@@ -480,6 +526,9 @@
 					<desc xml:lang="th">Specifies the settings for table boundaries.</desc>
 					<desc xml:lang="hi-IN">Specifies the settings for table boundaries.</desc>
 					<desc xml:lang="x-comment">Specifies the settings for table boundaries.</desc>
+					<desc xml:lang="hu">Specifies the settings for table boundaries.</desc>
+					<desc xml:lang="sk">Specifies the settings for table boundaries.</desc>
+					<desc xml:lang="sl">Specifies the settings for table boundaries.</desc>
 				</info>
 				<prop oor:name="IsVisible" oor:type="xs:boolean">
 					<info>
@@ -508,6 +557,9 @@
 						<desc xml:lang="th">Specifies the visibility of table boundaries (true = visible).</desc>
 						<desc xml:lang="hi-IN">Specifies the visibility of table boundaries (true = visible).</desc>
 						<desc xml:lang="x-comment">Specifies the visibility of table boundaries (true = visible).</desc>
+						<desc xml:lang="hu">Specifies the visibility of table boundaries (true = visible).</desc>
+						<desc xml:lang="sk">Specifies the visibility of table boundaries (true = visible).</desc>
+						<desc xml:lang="sl">Specifies the visibility of table boundaries (true = visible).</desc>
 					</info>
 					<value>true</value>
 				</prop>
@@ -538,6 +590,9 @@
 						<desc xml:lang="th">Specifies the color used for table boundaries.</desc>
 						<desc xml:lang="hi-IN">Specifies the color used for table boundaries.</desc>
 						<desc xml:lang="x-comment">Specifies the color used for table boundaries.</desc>
+						<desc xml:lang="hu">Specifies the color used for table boundaries.</desc>
+						<desc xml:lang="sk">Specifies the color used for table boundaries.</desc>
+						<desc xml:lang="sl">Specifies the color used for table boundaries.</desc>
 					</info>
 				</prop>
 			</group>
@@ -568,6 +623,9 @@
 					<desc xml:lang="th">Specifies the settings for the font.</desc>
 					<desc xml:lang="hi-IN">Specifies the settings for the font.</desc>
 					<desc xml:lang="x-comment">Specifies the settings for the font.</desc>
+					<desc xml:lang="hu">Specifies the settings for the font.</desc>
+					<desc xml:lang="sk">Specifies the settings for the font.</desc>
+					<desc xml:lang="sl">Specifies the settings for the font.</desc>
 				</info>
 				<prop oor:name="Color" oor:type="xs:int">
 					<info>
@@ -596,6 +654,9 @@
 						<desc xml:lang="th">Specifies color of the font.</desc>
 						<desc xml:lang="hi-IN">Specifies color of the font.</desc>
 						<desc xml:lang="x-comment">Specifies color of the font.</desc>
+						<desc xml:lang="hu">Specifies color of the font.</desc>
+						<desc xml:lang="sk">Specifies color of the font.</desc>
+						<desc xml:lang="sl">Specifies color of the font.</desc>
 					</info>
 				</prop>
 			</group>
@@ -626,6 +687,9 @@
 					<desc xml:lang="th">Specifies the settings for unvisited links.</desc>
 					<desc xml:lang="hi-IN">Specifies the settings for unvisited links.</desc>
 					<desc xml:lang="x-comment">Specifies the settings for unvisited links.</desc>
+					<desc xml:lang="hu">Specifies the settings for unvisited links.</desc>
+					<desc xml:lang="sk">Specifies the settings for unvisited links.</desc>
+					<desc xml:lang="sl">Specifies the settings for unvisited links.</desc>
 				</info>
 				<prop oor:name="IsVisible" oor:type="xs:boolean">
 					<info>
@@ -654,6 +718,9 @@
 						<desc xml:lang="th">Specifies the visibility of unvisited links (true = visible).</desc>
 						<desc xml:lang="hi-IN">Specifies the visibility of unvisited links (true = visible).</desc>
 						<desc xml:lang="x-comment">Specifies the visibility of unvisited links (true = visible).</desc>
+						<desc xml:lang="hu">Specifies the visibility of unvisited links (true = visible).</desc>
+						<desc xml:lang="sk">Specifies the visibility of unvisited links (true = visible).</desc>
+						<desc xml:lang="sl">Specifies the visibility of unvisited links (true = visible).</desc>
 					</info>
 					<value>false</value>
 				</prop>
@@ -684,6 +751,9 @@
 						<desc xml:lang="th">Specifies the color used for unvisited links.</desc>
 						<desc xml:lang="hi-IN">Specifies the color used for unvisited links.</desc>
 						<desc xml:lang="x-comment">Specifies the color used for unvisited links.</desc>
+						<desc xml:lang="hu">Specifies the color used for unvisited links.</desc>
+						<desc xml:lang="sk">Specifies the color used for unvisited links.</desc>
+						<desc xml:lang="sl">Specifies the color used for unvisited links.</desc>
 					</info>
 				</prop>
 			</group>
@@ -714,6 +784,9 @@
 					<desc xml:lang="th">Specifies the settings for visited links.</desc>
 					<desc xml:lang="hi-IN">Specifies the settings for visited links.</desc>
 					<desc xml:lang="x-comment">Specifies the settings for visited links.</desc>
+					<desc xml:lang="hu">Specifies the settings for visited links.</desc>
+					<desc xml:lang="sk">Specifies the settings for visited links.</desc>
+					<desc xml:lang="sl">Specifies the settings for visited links.</desc>
 				</info>
 				<prop oor:name="IsVisible" oor:type="xs:boolean">
 					<info>
@@ -742,6 +815,9 @@
 						<desc xml:lang="th">Specifies the visibility of visited links (true = visible).</desc>
 						<desc xml:lang="hi-IN">Specifies the visibility of visited links (true = visible).</desc>
 						<desc xml:lang="x-comment">Specifies the visibility of visited links (true = visible).</desc>
+						<desc xml:lang="hu">Specifies the visibility of visited links (true = visible).</desc>
+						<desc xml:lang="sk">Specifies the visibility of visited links (true = visible).</desc>
+						<desc xml:lang="sl">Specifies the visibility of visited links (true = visible).</desc>
 					</info>
 					<value>false</value>
 				</prop>
@@ -772,6 +848,9 @@
 						<desc xml:lang="th">Specifies the color used for visited links.</desc>
 						<desc xml:lang="hi-IN">Specifies the color used for visited links.</desc>
 						<desc xml:lang="x-comment">Specifies the color used for visited links.</desc>
+						<desc xml:lang="hu">Specifies the color used for visited links.</desc>
+						<desc xml:lang="sk">Specifies the color used for visited links.</desc>
+						<desc xml:lang="sl">Specifies the color used for visited links.</desc>
 					</info>
 				</prop>
 			</group>
@@ -802,6 +881,9 @@
 					<desc xml:lang="th">Specifies the settings for anchors.</desc>
 					<desc xml:lang="hi-IN">Specifies the settings for anchors.</desc>
 					<desc xml:lang="x-comment">Specifies the settings for anchors.</desc>
+					<desc xml:lang="hu">Specifies the settings for anchors.</desc>
+					<desc xml:lang="sk">Specifies the settings for anchors.</desc>
+					<desc xml:lang="sl">Specifies the settings for anchors.</desc>
 				</info>
 				<prop oor:name="IsVisible" oor:type="xs:boolean">
 					<info>
@@ -830,6 +912,9 @@
 						<desc xml:lang="th">Specifies the visibility of anchors (true = visible).</desc>
 						<desc xml:lang="hi-IN">Specifies the visibility of anchors (true = visible).</desc>
 						<desc xml:lang="x-comment">Specifies the visibility of anchors (true = visible).</desc>
+						<desc xml:lang="hu">Specifies the visibility of anchors (true = visible).</desc>
+						<desc xml:lang="sk">Specifies the visibility of anchors (true = visible).</desc>
+						<desc xml:lang="sl">Specifies the visibility of anchors (true = visible).</desc>
 					</info>
 					<value>true</value>
 				</prop>
@@ -860,6 +945,9 @@
 						<desc xml:lang="th">Specifies the color used for anchors.</desc>
 						<desc xml:lang="hi-IN">Specifies the color used for anchors.</desc>
 						<desc xml:lang="x-comment">Specifies the color used for anchors.</desc>
+						<desc xml:lang="hu">Specifies the color used for anchors.</desc>
+						<desc xml:lang="sk">Specifies the color used for anchors.</desc>
+						<desc xml:lang="sl">Specifies the color used for anchors.</desc>
 					</info>
 				</prop>
 			</group>
@@ -890,6 +978,9 @@
 					<desc xml:lang="th">Specifies the settings for incorrect text found with spellchecking.</desc>
 					<desc xml:lang="hi-IN">Specifies the settings for incorrect text found with spellchecking.</desc>
 					<desc xml:lang="x-comment">Specifies the settings for incorrect text found with spellchecking.</desc>
+					<desc xml:lang="hu">Specifies the settings for incorrect text found with spellchecking.</desc>
+					<desc xml:lang="sk">Specifies the settings for incorrect text found with spellchecking.</desc>
+					<desc xml:lang="sl">Specifies the settings for incorrect text found with spellchecking.</desc>
 				</info>
 				<prop oor:name="Color" oor:type="xs:int">
 					<info>
@@ -918,6 +1009,9 @@
 						<desc xml:lang="th">Specifies the color of incorrect text found with AutoSpellcheck.</desc>
 						<desc xml:lang="hi-IN">Specifies the color of incorrect text found with AutoSpellcheck.</desc>
 						<desc xml:lang="x-comment">Specifies the color of incorrect text found with AutoSpellcheck.</desc>
+						<desc xml:lang="hu">Specifies the color of incorrect text found with AutoSpellcheck.</desc>
+						<desc xml:lang="sk">Specifies the color of incorrect text found with AutoSpellcheck.</desc>
+						<desc xml:lang="sl">Specifies the color of incorrect text found with AutoSpellcheck.</desc>
 					</info>
 				</prop>
 			</group>
@@ -948,6 +1042,9 @@
 					<desc xml:lang="th">Specifies the settings for the text grid in Writer.</desc>
 					<desc xml:lang="hi-IN">Specifies the settings for the text grid in Writer.</desc>
 					<desc xml:lang="x-comment">Specifies the settings for the text grid in Writer.</desc>
+					<desc xml:lang="hu">Specifies the settings for the text grid in Writer.</desc>
+					<desc xml:lang="sk">Specifies the settings for the text grid in Writer.</desc>
+					<desc xml:lang="sl">Specifies the settings for the text grid in Writer.</desc>
 				</info>
 				<prop oor:name="Color" oor:type="xs:int">
 					<info>
@@ -976,6 +1073,9 @@
 						<desc xml:lang="th">Specifies the color used for the text grid.</desc>
 						<desc xml:lang="hi-IN">Specifies the color used for the text grid.</desc>
 						<desc xml:lang="x-comment">Specifies the color used for the text grid.</desc>
+						<desc xml:lang="hu">Specifies the color used for the text grid.</desc>
+						<desc xml:lang="sk">Specifies the color used for the text grid.</desc>
+						<desc xml:lang="sl">Specifies the color used for the text grid.</desc>
 					</info>
 				</prop>
 			</group>
@@ -1006,6 +1106,9 @@
 					<desc xml:lang="th">Specifies the settings for field shadings in Writer.</desc>
 					<desc xml:lang="hi-IN">Specifies the settings for field shadings in Writer.</desc>
 					<desc xml:lang="x-comment">Specifies the settings for field shadings in Writer.</desc>
+					<desc xml:lang="hu">Specifies the settings for field shadings in Writer.</desc>
+					<desc xml:lang="sk">Specifies the settings for field shadings in Writer.</desc>
+					<desc xml:lang="sl">Specifies the settings for field shadings in Writer.</desc>
 				</info>
 				<prop oor:name="IsVisible" oor:type="xs:boolean">
 					<info>
@@ -1034,6 +1137,9 @@
 						<desc xml:lang="th">Specifies the visibility of field shadings (true = visible).</desc>
 						<desc xml:lang="hi-IN">Specifies the visibility of field shadings (true = visible).</desc>
 						<desc xml:lang="x-comment">Specifies the visibility of field shadings (true = visible).</desc>
+						<desc xml:lang="hu">Specifies the visibility of field shadings (true = visible).</desc>
+						<desc xml:lang="sk">Specifies the visibility of field shadings (true = visible).</desc>
+						<desc xml:lang="sl">Specifies the visibility of field shadings (true = visible).</desc>
 					</info>
 					<value>true</value>
 				</prop>
@@ -1064,6 +1170,9 @@
 						<desc xml:lang="th">Specifies the color used for the field shadings.</desc>
 						<desc xml:lang="hi-IN">Specifies the color used for the field shadings.</desc>
 						<desc xml:lang="x-comment">Specifies the color used for the field shadings.</desc>
+						<desc xml:lang="hu">Specifies the color used for the field shadings.</desc>
+						<desc xml:lang="sk">Specifies the color used for the field shadings.</desc>
+						<desc xml:lang="sl">Specifies the color used for the field shadings.</desc>
 					</info>
 				</prop>
 			</group>
@@ -1094,6 +1203,9 @@
 					<desc xml:lang="th">Specifies the settings for index and table shadings in Writer.</desc>
 					<desc xml:lang="hi-IN">Specifies the settings for index and table shadings in Writer.</desc>
 					<desc xml:lang="x-comment">Specifies the settings for index and table shadings in Writer.</desc>
+					<desc xml:lang="hu">Specifies the settings for index and table shadings in Writer.</desc>
+					<desc xml:lang="sk">Specifies the settings for index and table shadings in Writer.</desc>
+					<desc xml:lang="sl">Specifies the settings for index and table shadings in Writer.</desc>
 				</info>
 				<prop oor:name="IsVisible" oor:type="xs:boolean">
 					<info>
@@ -1122,6 +1234,9 @@
 						<desc xml:lang="th">Specifies the visibility of index and table shadings (true = visible).</desc>
 						<desc xml:lang="hi-IN">Specifies the visibility of index and table shadings (true = visible).</desc>
 						<desc xml:lang="x-comment">Specifies the visibility of index and table shadings (true = visible).</desc>
+						<desc xml:lang="hu">Specifies the visibility of index and table shadings (true = visible).</desc>
+						<desc xml:lang="sk">Specifies the visibility of index and table shadings (true = visible).</desc>
+						<desc xml:lang="sl">Specifies the visibility of index and table shadings (true = visible).</desc>
 					</info>
 					<value>true</value>
 				</prop>
@@ -1152,6 +1267,9 @@
 						<desc xml:lang="th">Specifies the color used for the index and table shadings.</desc>
 						<desc xml:lang="hi-IN">Specifies the color used for the index and table shadings.</desc>
 						<desc xml:lang="x-comment">Specifies the color used for the index and table shadings.</desc>
+						<desc xml:lang="hu">Specifies the color used for the index and table shadings.</desc>
+						<desc xml:lang="sk">Specifies the color used for the index and table shadings.</desc>
+						<desc xml:lang="sl">Specifies the color used for the index and table shadings.</desc>
 					</info>
 				</prop>
 			</group>
@@ -1182,6 +1300,9 @@
 					<desc xml:lang="th">Specifies the settings for the direct cursor in Writer.</desc>
 					<desc xml:lang="hi-IN">Specifies the settings for the direct cursor in Writer.</desc>
 					<desc xml:lang="x-comment">Specifies the settings for the direct cursor in Writer.</desc>
+					<desc xml:lang="hu">Specifies the settings for the direct cursor in Writer.</desc>
+					<desc xml:lang="sk">Specifies the settings for the direct cursor in Writer.</desc>
+					<desc xml:lang="sl">Specifies the settings for the direct cursor in Writer.</desc>
 				</info>
 				<prop oor:name="IsVisible" oor:type="xs:boolean">
 					<info>
@@ -1210,6 +1331,9 @@
 						<desc xml:lang="th">Specifies the visibility of direct cursor (true = visible).</desc>
 						<desc xml:lang="hi-IN">Specifies the visibility of direct cursor (true = visible).</desc>
 						<desc xml:lang="x-comment">Specifies the visibility of direct cursor (true = visible).</desc>
+						<desc xml:lang="hu">Specifies the visibility of direct cursor (true = visible).</desc>
+						<desc xml:lang="sk">Specifies the visibility of direct cursor (true = visible).</desc>
+						<desc xml:lang="sl">Specifies the visibility of direct cursor (true = visible).</desc>
 					</info>
 					<value>true</value>
 				</prop>
@@ -1240,6 +1364,9 @@
 						<desc xml:lang="th">Specifies the color used for the direct cursor.</desc>
 						<desc xml:lang="hi-IN">Specifies the color used for the direct cursor.</desc>
 						<desc xml:lang="x-comment">Specifies the color used for the direct cursor.</desc>
+						<desc xml:lang="hu">Specifies the color used for the direct cursor.</desc>
+						<desc xml:lang="sk">Specifies the color used for the direct cursor.</desc>
+						<desc xml:lang="sl">Specifies the color used for the direct cursor.</desc>
 					</info>
 				</prop>
 			</group>
@@ -1270,6 +1397,9 @@
 					<desc xml:lang="th">Specifies the settings for note indicators in Writer.</desc>
 					<desc xml:lang="hi-IN">Specifies the settings for note indicators in Writer.</desc>
 					<desc xml:lang="x-comment">Specifies the settings for note indicators in Writer.</desc>
+					<desc xml:lang="hu">Specifies the settings for note indicators in Writer.</desc>
+					<desc xml:lang="sk">Specifies the settings for note indicators in Writer.</desc>
+					<desc xml:lang="sl">Specifies the settings for note indicators in Writer.</desc>
 				</info>
 				<prop oor:name="Color" oor:type="xs:int">
 					<info>
@@ -1298,6 +1428,9 @@
 						<desc xml:lang="th">Specifies the color used for note indicators.</desc>
 						<desc xml:lang="hi-IN">Specifies the color used for note indicators.</desc>
 						<desc xml:lang="x-comment">Specifies the color used for note indicators.</desc>
+						<desc xml:lang="hu">Specifies the color used for note indicators.</desc>
+						<desc xml:lang="sk">Specifies the color used for note indicators.</desc>
+						<desc xml:lang="sl">Specifies the color used for note indicators.</desc>
 					</info>
 				</prop>
 			</group>
@@ -1328,6 +1461,9 @@
 					<desc xml:lang="th">Specifies the settings for script indicators in Writer.</desc>
 					<desc xml:lang="hi-IN">Specifies the settings for script indicators in Writer.</desc>
 					<desc xml:lang="x-comment">Specifies the settings for script indicators in Writer.</desc>
+					<desc xml:lang="hu">Specifies the settings for script indicators in Writer.</desc>
+					<desc xml:lang="sk">Specifies the settings for script indicators in Writer.</desc>
+					<desc xml:lang="sl">Specifies the settings for script indicators in Writer.</desc>
 				</info>
 				<prop oor:name="Color" oor:type="xs:int">
 					<info>
@@ -1356,6 +1492,9 @@
 						<desc xml:lang="th">Specifies the color used for script indicators.</desc>
 						<desc xml:lang="hi-IN">Specifies the color used for script indicators.</desc>
 						<desc xml:lang="x-comment">Specifies the color used for script indicators.</desc>
+						<desc xml:lang="hu">Specifies the color used for script indicators.</desc>
+						<desc xml:lang="sk">Specifies the color used for script indicators.</desc>
+						<desc xml:lang="sl">Specifies the color used for script indicators.</desc>
 					</info>
 				</prop>
 			</group>
@@ -1386,6 +1525,9 @@
 					<desc xml:lang="th">Specifies the settings for section boundaries in Writer.</desc>
 					<desc xml:lang="hi-IN">Specifies the settings for section boundaries in Writer.</desc>
 					<desc xml:lang="x-comment">Specifies the settings for section boundaries in Writer.</desc>
+					<desc xml:lang="hu">Specifies the settings for section boundaries in Writer.</desc>
+					<desc xml:lang="sk">Specifies the settings for section boundaries in Writer.</desc>
+					<desc xml:lang="sl">Specifies the settings for section boundaries in Writer.</desc>
 				</info>
 				<prop oor:name="IsVisible" oor:type="xs:boolean">
 					<info>
@@ -1414,6 +1556,9 @@
 						<desc xml:lang="th">Specifies the visibility of section boundaries (true = visible).</desc>
 						<desc xml:lang="hi-IN">Specifies the visibility of section boundaries (true = visible).</desc>
 						<desc xml:lang="x-comment">Specifies the visibility of section boundaries (true = visible).</desc>
+						<desc xml:lang="hu">Specifies the visibility of section boundaries (true = visible).</desc>
+						<desc xml:lang="sk">Specifies the visibility of section boundaries (true = visible).</desc>
+						<desc xml:lang="sl">Specifies the visibility of section boundaries (true = visible).</desc>
 					</info>
 					<value>true</value>
 				</prop>
@@ -1444,6 +1589,9 @@
 						<desc xml:lang="th">Specifies the color used for section boundaries.</desc>
 						<desc xml:lang="hi-IN">Specifies the color used for section boundaries.</desc>
 						<desc xml:lang="x-comment">Specifies the color used for section boundaries.</desc>
+						<desc xml:lang="hu">Specifies the color used for section boundaries.</desc>
+						<desc xml:lang="sk">Specifies the color used for section boundaries.</desc>
+						<desc xml:lang="sl">Specifies the color used for section boundaries.</desc>
 					</info>
 				</prop>
 			</group>
@@ -1474,6 +1622,9 @@
 					<desc xml:lang="th">Specifies the settings for the page break mark in Writer.</desc>
 					<desc xml:lang="hi-IN">Specifies the settings for the page break mark in Writer.</desc>
 					<desc xml:lang="x-comment">Specifies the settings for the page break mark in Writer.</desc>
+					<desc xml:lang="hu">Specifies the settings for the page break mark in Writer.</desc>
+					<desc xml:lang="sk">Specifies the settings for the page break mark in Writer.</desc>
+					<desc xml:lang="sl">Specifies the settings for the page break mark in Writer.</desc>
 				</info>
 				<prop oor:name="Color" oor:type="xs:int">
 					<info>
@@ -1502,6 +1653,9 @@
 						<desc xml:lang="th">Specifies the color used for the page break mark.</desc>
 						<desc xml:lang="hi-IN">Specifies the color used for the page break mark.</desc>
 						<desc xml:lang="x-comment">Specifies the color used for the page break mark.</desc>
+						<desc xml:lang="hu">Specifies the color used for the page break mark.</desc>
+						<desc xml:lang="sk">Specifies the color used for the page break mark.</desc>
+						<desc xml:lang="sl">Specifies the color used for the page break mark.</desc>
 					</info>
 				</prop>
 			</group>
@@ -1532,6 +1686,9 @@
 					<desc xml:lang="th">Specifies the settings used for SGML in HTML documents.</desc>
 					<desc xml:lang="hi-IN">Specifies the settings used for SGML in HTML documents.</desc>
 					<desc xml:lang="x-comment">Specifies the settings used for SGML in HTML documents.</desc>
+					<desc xml:lang="hu">Specifies the settings used for SGML in HTML documents.</desc>
+					<desc xml:lang="sk">Specifies the settings used for SGML in HTML documents.</desc>
+					<desc xml:lang="sl">Specifies the settings used for SGML in HTML documents.</desc>
 				</info>
 				<prop oor:name="Color" oor:type="xs:int">
 					<info>
@@ -1560,6 +1717,9 @@
 						<desc xml:lang="th">Specifies the color used for SGML code.</desc>
 						<desc xml:lang="hi-IN">Specifies the color used for SGML code.</desc>
 						<desc xml:lang="x-comment">Specifies the color used for SGML code.</desc>
+						<desc xml:lang="hu">Specifies the color used for SGML code.</desc>
+						<desc xml:lang="sk">Specifies the color used for SGML code.</desc>
+						<desc xml:lang="sl">Specifies the color used for SGML code.</desc>
 					</info>
 				</prop>
 			</group>
@@ -1590,6 +1750,9 @@
 					<desc xml:lang="th">Specifies the settings used for comments in HTML documents.</desc>
 					<desc xml:lang="hi-IN">Specifies the settings used for comments in HTML documents.</desc>
 					<desc xml:lang="x-comment">Specifies the settings used for comments in HTML documents.</desc>
+					<desc xml:lang="hu">Specifies the settings used for comments in HTML documents.</desc>
+					<desc xml:lang="sk">Specifies the settings used for comments in HTML documents.</desc>
+					<desc xml:lang="sl">Specifies the settings used for comments in HTML documents.</desc>
 				</info>
 				<prop oor:name="Color" oor:type="xs:int">
 					<info>
@@ -1618,6 +1781,9 @@
 						<desc xml:lang="th">Specifies the color used for comments.</desc>
 						<desc xml:lang="hi-IN">Specifies the color used for comments.</desc>
 						<desc xml:lang="x-comment">Specifies the color used for comments.</desc>
+						<desc xml:lang="hu">Specifies the color used for comments.</desc>
+						<desc xml:lang="sk">Specifies the color used for comments.</desc>
+						<desc xml:lang="sl">Specifies the color used for comments.</desc>
 					</info>
 				</prop>
 			</group>
@@ -1648,6 +1814,9 @@
 					<desc xml:lang="th">Specifies the settings used for keywords in HTML documents.</desc>
 					<desc xml:lang="hi-IN">Specifies the settings used for keywords in HTML documents.</desc>
 					<desc xml:lang="x-comment">Specifies the settings used for keywords in HTML documents.</desc>
+					<desc xml:lang="hu">Specifies the settings used for keywords in HTML documents.</desc>
+					<desc xml:lang="sk">Specifies the settings used for keywords in HTML documents.</desc>
+					<desc xml:lang="sl">Specifies the settings used for keywords in HTML documents.</desc>
 				</info>
 				<prop oor:name="Color" oor:type="xs:int">
 					<info>
@@ -1676,6 +1845,9 @@
 						<desc xml:lang="th">Specifies the color used for keywords.</desc>
 						<desc xml:lang="hi-IN">Specifies the color used for keywords.</desc>
 						<desc xml:lang="x-comment">Specifies the color used for keywords.</desc>
+						<desc xml:lang="hu">Specifies the color used for keywords.</desc>
+						<desc xml:lang="sk">Specifies the color used for keywords.</desc>
+						<desc xml:lang="sl">Specifies the color used for keywords.</desc>
 					</info>
 				</prop>
 			</group>
@@ -1706,6 +1878,9 @@
 					<desc xml:lang="th">Specifies the settings used for other text in HTML documents.</desc>
 					<desc xml:lang="hi-IN">Specifies the settings used for other text in HTML documents.</desc>
 					<desc xml:lang="x-comment">Specifies the settings used for other text in HTML documents.</desc>
+					<desc xml:lang="hu">Specifies the settings used for other text in HTML documents.</desc>
+					<desc xml:lang="sk">Specifies the settings used for other text in HTML documents.</desc>
+					<desc xml:lang="sl">Specifies the settings used for other text in HTML documents.</desc>
 				</info>
 				<prop oor:name="Color" oor:type="xs:int">
 					<info>
@@ -1734,6 +1909,9 @@
 						<desc xml:lang="th">Specifies the color used for other text.</desc>
 						<desc xml:lang="hi-IN">Specifies the color used for other text.</desc>
 						<desc xml:lang="x-comment">Specifies the color used for other text.</desc>
+						<desc xml:lang="hu">Specifies the color used for other text.</desc>
+						<desc xml:lang="sk">Specifies the color used for other text.</desc>
+						<desc xml:lang="sl">Specifies the color used for other text.</desc>
 					</info>
 				</prop>
 			</group>
@@ -1764,6 +1942,9 @@
 					<desc xml:lang="th">Specifies the settings used for grid lines in Calc.</desc>
 					<desc xml:lang="hi-IN">Specifies the settings used for grid lines in Calc.</desc>
 					<desc xml:lang="x-comment">Specifies the settings used for grid lines in Calc.</desc>
+					<desc xml:lang="hu">Specifies the settings used for grid lines in Calc.</desc>
+					<desc xml:lang="sk">Specifies the settings used for grid lines in Calc.</desc>
+					<desc xml:lang="sl">Specifies the settings used for grid lines in Calc.</desc>
 				</info>
 				<prop oor:name="Color" oor:type="xs:int">
 					<info>
@@ -1792,6 +1973,9 @@
 						<desc xml:lang="th">Specifies the color used for the grid.</desc>
 						<desc xml:lang="hi-IN">Specifies the color used for the grid.</desc>
 						<desc xml:lang="x-comment">Specifies the color used for the grid.</desc>
+						<desc xml:lang="hu">Specifies the color used for the grid.</desc>
+						<desc xml:lang="sk">Specifies the color used for the grid.</desc>
+						<desc xml:lang="sl">Specifies the color used for the grid.</desc>
 					</info>
 				</prop>
 			</group>
@@ -1822,6 +2006,9 @@
 					<desc xml:lang="th">Specifies the settings used for page breaks in the page break preview in Calc.</desc>
 					<desc xml:lang="hi-IN">Specifies the settings used for page breaks in the page break preview in Calc.</desc>
 					<desc xml:lang="x-comment">Specifies the settings used for page breaks in the page break preview in Calc.</desc>
+					<desc xml:lang="hu">Specifies the settings used for page breaks in the page break preview in Calc.</desc>
+					<desc xml:lang="sk">Specifies the settings used for page breaks in the page break preview in Calc.</desc>
+					<desc xml:lang="sl">Specifies the settings used for page breaks in the page break preview in Calc.</desc>
 				</info>
 				<prop oor:name="Color" oor:type="xs:int">
 					<info>
@@ -1850,6 +2037,9 @@
 						<desc xml:lang="th">Specifies the color used for page breaks in the page break preview.</desc>
 						<desc xml:lang="hi-IN">Specifies the color used for page breaks in the page break preview.</desc>
 						<desc xml:lang="x-comment">Specifies the color used for page breaks in the page break preview.</desc>
+						<desc xml:lang="hu">Specifies the color used for page breaks in the page break preview.</desc>
+						<desc xml:lang="sk">Specifies the color used for page breaks in the page break preview.</desc>
+						<desc xml:lang="sl">Specifies the color used for page breaks in the page break preview.</desc>
 					</info>
 				</prop>
 			</group>
@@ -1880,6 +2070,9 @@
 					<desc xml:lang="th">Specifies the settings used for manual breaks in Calc.</desc>
 					<desc xml:lang="hi-IN">Specifies the settings used for manual breaks in Calc.</desc>
 					<desc xml:lang="x-comment">Specifies the settings used for manual breaks in Calc.</desc>
+					<desc xml:lang="hu">Specifies the settings used for manual breaks in Calc.</desc>
+					<desc xml:lang="sk">Specifies the settings used for manual breaks in Calc.</desc>
+					<desc xml:lang="sl">Specifies the settings used for manual breaks in Calc.</desc>
 				</info>
 				<prop oor:name="Color" oor:type="xs:int">
 					<info>
@@ -1908,6 +2101,9 @@
 						<desc xml:lang="th">Specifies the color used for manual page breaks.</desc>
 						<desc xml:lang="hi-IN">Specifies the color used for manual page breaks.</desc>
 						<desc xml:lang="x-comment">Specifies the color used for manual page breaks.</desc>
+						<desc xml:lang="hu">Specifies the color used for manual page breaks.</desc>
+						<desc xml:lang="sk">Specifies the color used for manual page breaks.</desc>
+						<desc xml:lang="sl">Specifies the color used for manual page breaks.</desc>
 					</info>
 				</prop>
 			</group>
@@ -1938,6 +2134,9 @@
 					<desc xml:lang="th">Specifies the settings used for automatic breaks in Calc.</desc>
 					<desc xml:lang="hi-IN">Specifies the settings used for automatic breaks in Calc.</desc>
 					<desc xml:lang="x-comment">Specifies the settings used for automatic breaks in Calc.</desc>
+					<desc xml:lang="hu">Specifies the settings used for automatic breaks in Calc.</desc>
+					<desc xml:lang="sk">Specifies the settings used for automatic breaks in Calc.</desc>
+					<desc xml:lang="sl">Specifies the settings used for automatic breaks in Calc.</desc>
 				</info>
 				<prop oor:name="Color" oor:type="xs:int">
 					<info>
@@ -1966,6 +2165,9 @@
 						<desc xml:lang="th">Specifies the color used for automatic page breaks.</desc>
 						<desc xml:lang="hi-IN">Specifies the color used for automatic page breaks.</desc>
 						<desc xml:lang="x-comment">Specifies the color used for automatic page breaks.</desc>
+						<desc xml:lang="hu">Specifies the color used for automatic page breaks.</desc>
+						<desc xml:lang="sk">Specifies the color used for automatic page breaks.</desc>
+						<desc xml:lang="sl">Specifies the color used for automatic page breaks.</desc>
 					</info>
 				</prop>
 			</group>
@@ -1996,6 +2198,9 @@
 					<desc xml:lang="th">Specifies the settings used for audition arrows in Calc.</desc>
 					<desc xml:lang="hi-IN">Specifies the settings used for audition arrows in Calc.</desc>
 					<desc xml:lang="x-comment">Specifies the settings used for audition arrows in Calc.</desc>
+					<desc xml:lang="hu">Specifies the settings used for audition arrows in Calc.</desc>
+					<desc xml:lang="sk">Specifies the settings used for audition arrows in Calc.</desc>
+					<desc xml:lang="sl">Specifies the settings used for audition arrows in Calc.</desc>
 				</info>
 				<prop oor:name="Color" oor:type="xs:int">
 					<info>
@@ -2024,6 +2229,9 @@
 						<desc xml:lang="th">Specifies the color used for audition arrows to precedent or dependent cells.</desc>
 						<desc xml:lang="hi-IN">Specifies the color used for audition arrows to precedent or dependent cells.</desc>
 						<desc xml:lang="x-comment">Specifies the color used for audition arrows to precedent or dependent cells.</desc>
+						<desc xml:lang="hu">Specifies the color used for audition arrows to precedent or dependent cells.</desc>
+						<desc xml:lang="sk">Specifies the color used for audition arrows to precedent or dependent cells.</desc>
+						<desc xml:lang="sl">Specifies the color used for audition arrows to precedent or dependent cells.</desc>
 					</info>
 				</prop>
 			</group>
@@ -2054,6 +2262,9 @@
 					<desc xml:lang="th">Specifies the settings used for audition arrows to cells with errors in Calc.</desc>
 					<desc xml:lang="hi-IN">Specifies the settings used for audition arrows to cells with errors in Calc.</desc>
 					<desc xml:lang="x-comment">Specifies the settings used for audition arrows to cells with errors in Calc.</desc>
+					<desc xml:lang="hu">Specifies the settings used for audition arrows to cells with errors in Calc.</desc>
+					<desc xml:lang="sk">Specifies the settings used for audition arrows to cells with errors in Calc.</desc>
+					<desc xml:lang="sl">Specifies the settings used for audition arrows to cells with errors in Calc.</desc>
 				</info>
 				<prop oor:name="Color" oor:type="xs:int">
 					<info>
@@ -2082,6 +2293,9 @@
 						<desc xml:lang="th">Specifies the color used for audition arrows to cells containing errors.</desc>
 						<desc xml:lang="hi-IN">Specifies the color used for audition arrows to cells containing errors.</desc>
 						<desc xml:lang="x-comment">Specifies the color used for audition arrows to cells containing errors.</desc>
+						<desc xml:lang="hu">Specifies the color used for audition arrows to cells containing errors.</desc>
+						<desc xml:lang="sk">Specifies the color used for audition arrows to cells containing errors.</desc>
+						<desc xml:lang="sl">Specifies the color used for audition arrows to cells containing errors.</desc>
 					</info>
 				</prop>
 			</group>
@@ -2112,6 +2326,9 @@
 					<desc xml:lang="th">Specifies the settings used for the cursor when editing references in Calc.</desc>
 					<desc xml:lang="hi-IN">Specifies the settings used for the cursor when editing references in Calc.</desc>
 					<desc xml:lang="x-comment">Specifies the settings used for the cursor when editing references in Calc.</desc>
+					<desc xml:lang="hu">Specifies the settings used for the cursor when editing references in Calc.</desc>
+					<desc xml:lang="sk">Specifies the settings used for the cursor when editing references in Calc.</desc>
+					<desc xml:lang="sl">Specifies the settings used for the cursor when editing references in Calc.</desc>
 				</info>
 				<prop oor:name="Color" oor:type="xs:int">
 					<info>
@@ -2140,6 +2357,9 @@
 						<desc xml:lang="th">Specifies the color used for the cursor when editing references.</desc>
 						<desc xml:lang="hi-IN">Specifies the color used for the cursor when editing references.</desc>
 						<desc xml:lang="x-comment">Specifies the color used for the cursor when editing references.</desc>
+						<desc xml:lang="hu">Specifies the color used for the cursor when editing references.</desc>
+						<desc xml:lang="sk">Specifies the color used for the cursor when editing references.</desc>
+						<desc xml:lang="sl">Specifies the color used for the cursor when editing references.</desc>
 					</info>
 				</prop>
 			</group>
@@ -2170,6 +2390,9 @@
 					<desc xml:lang="th">Specifies the settings used for the background of notes in Calc.</desc>
 					<desc xml:lang="hi-IN">Specifies the settings used for the background of notes in Calc.</desc>
 					<desc xml:lang="x-comment">Specifies the settings used for the background of notes in Calc.</desc>
+					<desc xml:lang="hu">Specifies the settings used for the background of notes in Calc.</desc>
+					<desc xml:lang="sk">Specifies the settings used for the background of notes in Calc.</desc>
+					<desc xml:lang="sl">Specifies the settings used for the background of notes in Calc.</desc>
 				</info>
 				<prop oor:name="Color" oor:type="xs:int">
 					<info>
@@ -2198,6 +2421,9 @@
 						<desc xml:lang="th">Specifies the color used for the background of notes.</desc>
 						<desc xml:lang="hi-IN">Specifies the color used for the background of notes.</desc>
 						<desc xml:lang="x-comment">Specifies the color used for the background of notes.</desc>
+						<desc xml:lang="hu">Specifies the color used for the background of notes.</desc>
+						<desc xml:lang="sk">Specifies the color used for the background of notes.</desc>
+						<desc xml:lang="sl">Specifies the color used for the background of notes.</desc>
 					</info>
 				</prop>
 			</group>
@@ -2228,6 +2454,9 @@
 					<desc xml:lang="th">Specifies the settings used for the grid in Draw/Impress.</desc>
 					<desc xml:lang="hi-IN">Specifies the settings used for the grid in Draw/Impress.</desc>
 					<desc xml:lang="x-comment">Specifies the settings used for the grid in Draw/Impress.</desc>
+					<desc xml:lang="hu">Specifies the settings used for the grid in Draw/Impress.</desc>
+					<desc xml:lang="sk">Specifies the settings used for the grid in Draw/Impress.</desc>
+					<desc xml:lang="sl">Specifies the settings used for the grid in Draw/Impress.</desc>
 				</info>
 				<prop oor:name="IsVisible" oor:type="xs:boolean">
 					<info>
@@ -2256,6 +2485,9 @@
 						<desc xml:lang="th">Specifies the visibility of the grid (true = visible).</desc>
 						<desc xml:lang="hi-IN">Specifies the visibility of the grid (true = visible).</desc>
 						<desc xml:lang="x-comment">Specifies the visibility of the grid (true = visible).</desc>
+						<desc xml:lang="hu">Specifies the visibility of the grid (true = visible).</desc>
+						<desc xml:lang="sk">Specifies the visibility of the grid (true = visible).</desc>
+						<desc xml:lang="sl">Specifies the visibility of the grid (true = visible).</desc>
 					</info>
 					<value>true</value>
 				</prop>
@@ -2286,6 +2518,9 @@
 						<desc xml:lang="th">Specifies the color used for the grid.</desc>
 						<desc xml:lang="hi-IN">Specifies the color used for the grid.</desc>
 						<desc xml:lang="x-comment">Specifies the color used for the grid.</desc>
+						<desc xml:lang="hu">Specifies the color used for the grid.</desc>
+						<desc xml:lang="sk">Specifies the color used for the grid.</desc>
+						<desc xml:lang="sl">Specifies the color used for the grid.</desc>
 					</info>
 				</prop>
 			</group>
@@ -2316,6 +2551,9 @@
 					<desc xml:lang="th">Specifies the settings for the default drawing color in Draw/Impress.</desc>
 					<desc xml:lang="hi-IN">Specifies the settings for the default drawing color in Draw/Impress.</desc>
 					<desc xml:lang="x-comment">Specifies the settings for the default drawing color in Draw/Impress.</desc>
+					<desc xml:lang="hu">Specifies the settings for the default drawing color in Draw/Impress.</desc>
+					<desc xml:lang="sk">Specifies the settings for the default drawing color in Draw/Impress.</desc>
+					<desc xml:lang="sl">Specifies the settings for the default drawing color in Draw/Impress.</desc>
 				</info>
 				<prop oor:name="Color" oor:type="xs:int">
 					<info>
@@ -2344,6 +2582,9 @@
 						<desc xml:lang="th">Specifies the default drawing color.</desc>
 						<desc xml:lang="hi-IN">Specifies the default drawing color.</desc>
 						<desc xml:lang="x-comment">Specifies the default drawing color.</desc>
+						<desc xml:lang="hu">Specifies the default drawing color.</desc>
+						<desc xml:lang="sk">Specifies the default drawing color.</desc>
+						<desc xml:lang="sl">Specifies the default drawing color.</desc>
 					</info>
 				</prop>
 			</group>
@@ -2374,6 +2615,9 @@
 					<desc xml:lang="th">Specifies the settings for the default fill color in Draw/Impress.</desc>
 					<desc xml:lang="hi-IN">Specifies the settings for the default fill color in Draw/Impress.</desc>
 					<desc xml:lang="x-comment">Specifies the settings for the default fill color in Draw/Impress.</desc>
+					<desc xml:lang="hu">Specifies the settings for the default fill color in Draw/Impress.</desc>
+					<desc xml:lang="sk">Specifies the settings for the default fill color in Draw/Impress.</desc>
+					<desc xml:lang="sl">Specifies the settings for the default fill color in Draw/Impress.</desc>
 				</info>
 				<prop oor:name="Color" oor:type="xs:int">
 					<info>
@@ -2402,6 +2646,9 @@
 						<desc xml:lang="th">Specifies the default fill color.</desc>
 						<desc xml:lang="hi-IN">Specifies the default fill color.</desc>
 						<desc xml:lang="x-comment">Specifies the default fill color.</desc>
+						<desc xml:lang="hu">Specifies the default fill color.</desc>
+						<desc xml:lang="sk">Specifies the default fill color.</desc>
+						<desc xml:lang="sl">Specifies the default fill color.</desc>
 					</info>
 				</prop>
 			</group>
@@ -2432,6 +2679,9 @@
 					<desc xml:lang="th">Specifies the settings for identifiers in BASIC source code.</desc>
 					<desc xml:lang="hi-IN">Specifies the settings for identifiers in BASIC source code.</desc>
 					<desc xml:lang="x-comment">Specifies the settings for identifiers in BASIC source code.</desc>
+					<desc xml:lang="hu">Specifies the settings for identifiers in BASIC source code.</desc>
+					<desc xml:lang="sk">Specifies the settings for identifiers in BASIC source code.</desc>
+					<desc xml:lang="sl">Specifies the settings for identifiers in BASIC source code.</desc>
 				</info>
 				<prop oor:name="Color" oor:type="xs:int">
 					<info>
@@ -2460,6 +2710,9 @@
 						<desc xml:lang="th">Specifies the color used for identifiers.</desc>
 						<desc xml:lang="hi-IN">Specifies the color used for identifiers.</desc>
 						<desc xml:lang="x-comment">Specifies the color used for identifiers.</desc>
+						<desc xml:lang="hu">Specifies the color used for identifiers.</desc>
+						<desc xml:lang="sk">Specifies the color used for identifiers.</desc>
+						<desc xml:lang="sl">Specifies the color used for identifiers.</desc>
 					</info>
 				</prop>
 			</group>
@@ -2490,6 +2743,9 @@
 					<desc xml:lang="th">Specifies the settings for comments in BASIC source code.</desc>
 					<desc xml:lang="hi-IN">Specifies the settings for comments in BASIC source code.</desc>
 					<desc xml:lang="x-comment">Specifies the settings for comments in BASIC source code.</desc>
+					<desc xml:lang="hu">Specifies the settings for comments in BASIC source code.</desc>
+					<desc xml:lang="sk">Specifies the settings for comments in BASIC source code.</desc>
+					<desc xml:lang="sl">Specifies the settings for comments in BASIC source code.</desc>
 				</info>
 				<prop oor:name="Color" oor:type="xs:int">
 					<info>
@@ -2518,6 +2774,9 @@
 						<desc xml:lang="th">Specifies the color used for comments.</desc>
 						<desc xml:lang="hi-IN">Specifies the color used for comments.</desc>
 						<desc xml:lang="x-comment">Specifies the color used for comments.</desc>
+						<desc xml:lang="hu">Specifies the color used for comments.</desc>
+						<desc xml:lang="sk">Specifies the color used for comments.</desc>
+						<desc xml:lang="sl">Specifies the color used for comments.</desc>
 					</info>
 				</prop>
 			</group>
@@ -2548,6 +2807,9 @@
 					<desc xml:lang="th">Specifies the settings for numbers in BASIC source code.</desc>
 					<desc xml:lang="hi-IN">Specifies the settings for numbers in BASIC source code.</desc>
 					<desc xml:lang="x-comment">Specifies the settings for numbers in BASIC source code.</desc>
+					<desc xml:lang="hu">Specifies the settings for numbers in BASIC source code.</desc>
+					<desc xml:lang="sk">Specifies the settings for numbers in BASIC source code.</desc>
+					<desc xml:lang="sl">Specifies the settings for numbers in BASIC source code.</desc>
 				</info>
 				<prop oor:name="Color" oor:type="xs:int">
 					<info>
@@ -2576,6 +2838,9 @@
 						<desc xml:lang="th">Specifies the color used for numbers.</desc>
 						<desc xml:lang="hi-IN">Specifies the color used for numbers.</desc>
 						<desc xml:lang="x-comment">Specifies the color used for numbers.</desc>
+						<desc xml:lang="hu">Specifies the color used for numbers.</desc>
+						<desc xml:lang="sk">Specifies the color used for numbers.</desc>
+						<desc xml:lang="sl">Specifies the color used for numbers.</desc>
 					</info>
 				</prop>
 			</group>
@@ -2606,6 +2871,9 @@
 					<desc xml:lang="th">Specifies the settings for strings in BASIC source code.</desc>
 					<desc xml:lang="hi-IN">Specifies the settings for strings in BASIC source code.</desc>
 					<desc xml:lang="x-comment">Specifies the settings for strings in BASIC source code.</desc>
+					<desc xml:lang="hu">Specifies the settings for strings in BASIC source code.</desc>
+					<desc xml:lang="sk">Specifies the settings for strings in BASIC source code.</desc>
+					<desc xml:lang="sl">Specifies the settings for strings in BASIC source code.</desc>
 				</info>
 				<prop oor:name="Color" oor:type="xs:int">
 					<info>
@@ -2634,6 +2902,9 @@
 						<desc xml:lang="th">Specifies the color used for strings.</desc>
 						<desc xml:lang="hi-IN">Specifies the color used for strings.</desc>
 						<desc xml:lang="x-comment">Specifies the color used for strings.</desc>
+						<desc xml:lang="hu">Specifies the color used for strings.</desc>
+						<desc xml:lang="sk">Specifies the color used for strings.</desc>
+						<desc xml:lang="sl">Specifies the color used for strings.</desc>
 					</info>
 				</prop>
 			</group>
@@ -2664,6 +2935,9 @@
 					<desc xml:lang="th">Specifies the settings for operators in BASIC source code.</desc>
 					<desc xml:lang="hi-IN">Specifies the settings for operators in BASIC source code.</desc>
 					<desc xml:lang="x-comment">Specifies the settings for operators in BASIC source code.</desc>
+					<desc xml:lang="hu">Specifies the settings for operators in BASIC source code.</desc>
+					<desc xml:lang="sk">Specifies the settings for operators in BASIC source code.</desc>
+					<desc xml:lang="sl">Specifies the settings for operators in BASIC source code.</desc>
 				</info>
 				<prop oor:name="Color" oor:type="xs:int">
 					<info>
@@ -2692,6 +2966,9 @@
 						<desc xml:lang="th">Specifies the color used for operators.</desc>
 						<desc xml:lang="hi-IN">Specifies the color used for operators.</desc>
 						<desc xml:lang="x-comment">Specifies the color used for operators.</desc>
+						<desc xml:lang="hu">Specifies the color used for operators.</desc>
+						<desc xml:lang="sk">Specifies the color used for operators.</desc>
+						<desc xml:lang="sl">Specifies the color used for operators.</desc>
 					</info>
 				</prop>
 			</group>
@@ -2722,6 +2999,9 @@
 					<desc xml:lang="th">Specifies the settings for keywords in BASIC source code.</desc>
 					<desc xml:lang="hi-IN">Specifies the settings for keywords in BASIC source code.</desc>
 					<desc xml:lang="x-comment">Specifies the settings for keywords in BASIC source code.</desc>
+					<desc xml:lang="hu">Specifies the settings for keywords in BASIC source code.</desc>
+					<desc xml:lang="sk">Specifies the settings for keywords in BASIC source code.</desc>
+					<desc xml:lang="sl">Specifies the settings for keywords in BASIC source code.</desc>
 				</info>
 				<prop oor:name="Color" oor:type="xs:int">
 					<info>
@@ -2750,6 +3030,9 @@
 						<desc xml:lang="th">Specifies the color used for keywords (reserved expressions).</desc>
 						<desc xml:lang="hi-IN">Specifies the color used for keywords (reserved expressions).</desc>
 						<desc xml:lang="x-comment">Specifies the color used for keywords (reserved expressions).</desc>
+						<desc xml:lang="hu">Specifies the color used for keywords (reserved expressions).</desc>
+						<desc xml:lang="sk">Specifies the color used for keywords (reserved expressions).</desc>
+						<desc xml:lang="sl">Specifies the color used for keywords (reserved expressions).</desc>
 					</info>
 				</prop>
 			</group>
@@ -2780,6 +3063,9 @@
 					<desc xml:lang="th">Specifies the settings for errors shown in BASIC source code.</desc>
 					<desc xml:lang="hi-IN">Specifies the settings for errors shown in BASIC source code.</desc>
 					<desc xml:lang="x-comment">Specifies the settings for errors shown in BASIC source code.</desc>
+					<desc xml:lang="hu">Specifies the settings for errors shown in BASIC source code.</desc>
+					<desc xml:lang="sk">Specifies the settings for errors shown in BASIC source code.</desc>
+					<desc xml:lang="sl">Specifies the settings for errors shown in BASIC source code.</desc>
 				</info>
 				<prop oor:name="Color" oor:type="xs:int">
 					<info>
@@ -2808,6 +3094,9 @@
 						<desc xml:lang="th">Specifies the color used for errors.</desc>
 						<desc xml:lang="hi-IN">Specifies the color used for errors.</desc>
 						<desc xml:lang="x-comment">Specifies the color used for errors.</desc>
+						<desc xml:lang="hu">Specifies the color used for errors.</desc>
+						<desc xml:lang="sk">Specifies the color used for errors.</desc>
+						<desc xml:lang="sl">Specifies the color used for errors.</desc>
 					</info>
 				</prop>
 			</group>
@@ -2842,6 +3131,9 @@
 				<desc xml:lang="th">Contains the collection of settings relevant for filter classification. These settings are used in the file open / file save dialogs, where the user is presented with a list of file format filters to choose from. Filters are classified into so-called global and local classes, which control how filters are grouped together in the user interface.</desc>
 				<desc xml:lang="hi-IN">Contains the collection of settings relevant for filter classification. These settings are used in the file open / file save dialogs, where the user is presented with a list of file format filters to choose from. Filters are classified into so-called global and local classes, which control how filters are grouped together in the user interface.</desc>
 				<desc xml:lang="x-comment">Contains the collection of settings relevant for filter classification. These settings are used in the file open / file save dialogs, where the user is presented with a list of file format filters to choose from. Filters are classified into so-called global and local classes, which control how filters are grouped together in the user interface.</desc>
+				<desc xml:lang="hu">Contains the collection of settings relevant for filter classification. These settings are used in the file open / file save dialogs, where the user is presented with a list of file format filters to choose from. Filters are classified into so-called global and local classes, which control how filters are grouped together in the user interface.</desc>
+				<desc xml:lang="sk">Contains the collection of settings relevant for filter classification. These settings are used in the file open / file save dialogs, where the user is presented with a list of file format filters to choose from. Filters are classified into so-called global and local classes, which control how filters are grouped together in the user interface.</desc>
+				<desc xml:lang="sl">Contains the collection of settings relevant for filter classification. These settings are used in the file open / file save dialogs, where the user is presented with a list of file format filters to choose from. Filters are classified into so-called global and local classes, which control how filters are grouped together in the user interface.</desc>
 			</info>
 			<group oor:name="GlobalFilters">
 				<info>
@@ -2870,6 +3162,9 @@
 					<desc xml:lang="th">Presents global classes to the user in a group of their own. A typical example for a global class is &quot;text documents&quot;, whereas &quot;StarWriter 4.0 / 5.0 documents&quot; is not a global class.</desc>
 					<desc xml:lang="hi-IN">Presents global classes to the user in a group of their own. A typical example for a global class is &quot;text documents&quot;, whereas &quot;StarWriter 4.0 / 5.0 documents&quot; is not a global class.</desc>
 					<desc xml:lang="x-comment">Presents global classes to the user in a group of their own. A typical example for a global class is &quot;text documents&quot;, whereas &quot;StarWriter 4.0 / 5.0 documents&quot; is not a global class.</desc>
+					<desc xml:lang="hu">Presents global classes to the user in a group of their own. A typical example for a global class is &quot;text documents&quot;, whereas &quot;StarWriter 4.0 / 5.0 documents&quot; is not a global class.</desc>
+					<desc xml:lang="sk">Presents global classes to the user in a group of their own. A typical example for a global class is &quot;text documents&quot;, whereas &quot;StarWriter 4.0 / 5.0 documents&quot; is not a global class.</desc>
+					<desc xml:lang="sl">Presents global classes to the user in a group of their own. A typical example for a global class is &quot;text documents&quot;, whereas &quot;StarWriter 4.0 / 5.0 documents&quot; is not a global class.</desc>
 				</info>
 				<prop oor:name="Order" oor:type="oor:string-list">
 					<info>
@@ -2898,6 +3193,9 @@
 						<desc xml:lang="th">List specifying the order of the global filters within their group.</desc>
 						<desc xml:lang="hi-IN">List specifying the order of the global filters within their group.</desc>
 						<desc xml:lang="x-comment">List specifying the order of the global filters within their group.</desc>
+						<desc xml:lang="hu">List specifying the order of the global filters within their group.</desc>
+						<desc xml:lang="sk">List specifying the order of the global filters within their group.</desc>
+						<desc xml:lang="sl">List specifying the order of the global filters within their group.</desc>
 					</info>
 					<value oor:separator=";">com.sun.star.text.TextDocument;com.sun.star.sheet.SpreadsheetDocument;com.sun.star.presentation.PresentationDocument;com.sun.star.drawing.DrawingDocument;com.sun.star.text.WebDocument;com.sun.star.text.GlobalDocument;com.sun.star.formula.FormularProperties</value>
 				</prop>
@@ -2928,6 +3226,9 @@
 						<desc xml:lang="th">Lists global classes. The name of a class denotes to the document service name of the associated module.</desc>
 						<desc xml:lang="hi-IN">Lists global classes. The name of a class denotes to the document service name of the associated module.</desc>
 						<desc xml:lang="x-comment">Lists global classes. The name of a class denotes to the document service name of the associated module.</desc>
+						<desc xml:lang="hu">Lists global classes. The name of a class denotes to the document service name of the associated module.</desc>
+						<desc xml:lang="sk">Lists global classes. The name of a class denotes to the document service name of the associated module.</desc>
+						<desc xml:lang="sl">Lists global classes. The name of a class denotes to the document service name of the associated module.</desc>
 					</info>
 				</set>
 			</group>
@@ -2958,6 +3259,9 @@
 					<desc xml:lang="th">Combines several filters into one entry and presents the classes to the user &quot;in-place&quot;.</desc>
 					<desc xml:lang="hi-IN">Combines several filters into one entry and presents the classes to the user &quot;in-place&quot;.</desc>
 					<desc xml:lang="x-comment">Combines several filters into one entry and presents the classes to the user &quot;in-place&quot;.</desc>
+					<desc xml:lang="hu">Combines several filters into one entry and presents the classes to the user &quot;in-place&quot;.</desc>
+					<desc xml:lang="sk">Combines several filters into one entry and presents the classes to the user &quot;in-place&quot;.</desc>
+					<desc xml:lang="sl">Combines several filters into one entry and presents the classes to the user &quot;in-place&quot;.</desc>
 				</info>
 				<set oor:name="Classes" oor:node-type="FilterClass">
 					<info>
@@ -2986,6 +3290,9 @@
 						<desc xml:lang="th">Lists local classes.</desc>
 						<desc xml:lang="hi-IN">Lists local classes.</desc>
 						<desc xml:lang="x-comment">Lists local classes.</desc>
+						<desc xml:lang="hu">Lists local classes.</desc>
+						<desc xml:lang="sk">Lists local classes.</desc>
+						<desc xml:lang="sl">Lists local classes.</desc>
 					</info>
 				</set>
 			</group>
@@ -3022,6 +3329,9 @@
 					<desc xml:lang="th">Specifies the name of the columns selected for inserting data into text or fields, plus inserted text and line breaks.</desc>
 					<desc xml:lang="hi-IN">Specifies the name of the columns selected for inserting data into text or fields, plus inserted text and line breaks.</desc>
 					<desc xml:lang="x-comment">Specifies the name of the columns selected for inserting data into text or fields, plus inserted text and line breaks.</desc>
+					<desc xml:lang="hu">Specifies the name of the columns selected for inserting data into text or fields, plus inserted text and line breaks.</desc>
+					<desc xml:lang="sk">Specifies the name of the columns selected for inserting data into text or fields, plus inserted text and line breaks.</desc>
+					<desc xml:lang="sl">Specifies the name of the columns selected for inserting data into text or fields, plus inserted text and line breaks.</desc>
 				</info>
 				<value>Default</value>
 			</prop>
@@ -3054,11 +3364,15 @@
 					<desc xml:lang="th">Lists entries with color settings.</desc>
 					<desc xml:lang="hi-IN">Lists entries with color settings.</desc>
 					<desc xml:lang="x-comment">Lists entries with color settings.</desc>
+					<desc xml:lang="hu">Lists entries with color settings.</desc>
+					<desc xml:lang="sk">Lists entries with color settings.</desc>
+					<desc xml:lang="sl">Lists entries with color settings.</desc>
 				</info>
 			</set>
 		</group>
 	</component>
 </oor:component-schema>
+
 
 
 
