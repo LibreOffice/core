@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprmap.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-04 12:41:51 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 08:15:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -297,9 +297,9 @@ XMLPropertyMapEntry aXMLParaPropMap[] =
     // RES_PARATR_TABSTOP
     MP_ED( "ParaTabStops",      STYLE,  TAB_STOPS,          MID_FLAG_ELEMENT_ITEM|XML_TYPE_TEXT_TABSTOP, CTF_TABSTOP ), // this is not realy a string!
     // RES_PARATR_HYPHENZONE
-    MP_E( "ParaIsHyphenation",  FO,     HYPHENATE,          XML_TYPE_BOOL, 0 ),
-    MP_E( "ParaHyphenationMaxLeadingChars", FO, HYPHENATION_REMAIN_CHAR_COUNT, XML_TYPE_NUMBER16, 0 ),
-    MP_E( "ParaHyphenationMaxTrailingChars",FO, HYPHENATION_PUSH_CHAR_COUNT, XML_TYPE_NUMBER16, 0 ),
+    MT_E( "ParaIsHyphenation",  FO,     HYPHENATE,          XML_TYPE_BOOL, 0 ),
+    MT_E( "ParaHyphenationMaxLeadingChars", FO, HYPHENATION_REMAIN_CHAR_COUNT, XML_TYPE_NUMBER16, 0 ),
+    MT_E( "ParaHyphenationMaxTrailingChars",FO, HYPHENATION_PUSH_CHAR_COUNT, XML_TYPE_NUMBER16, 0 ),
     MP_E( "ParaHyphenationMaxHyphens",  FO, HYPHENATION_LADDER_COUNT, XML_TYPE_NUMBER16_NONE, 0 ),
     // RES_PARATR_DROP
     MP_E( "DropCapWholeWord",   STYLE,  LENGTH,     MID_FLAG_SPECIAL_ITEM|XML_TYPE_BOOL, CTF_DROPCAPWHOLEWORD ),
@@ -414,7 +414,7 @@ XMLPropertyMapEntry aXMLParaPropMap[] =
 
     // RES_ROW_SPLIT: only occurs in table rows, but we need to
     // read/write the default for this item
-    MP_ED( "IsSplitAllowed", STYLE, KEEP_TOGETHER, XML_TYPE_BOOL | MID_FLAG_NO_PROPERTY_IMPORT, CTF_KEEP_TOGETHER ),
+    MP_ED( "IsSplitAllowed", FO, KEEP_TOGETHER, XML_TYPE_TEXT_NKEEP | MID_FLAG_NO_PROPERTY_IMPORT, CTF_KEEP_TOGETHER ),
 
     // RES_FOLLOW_TEXT_FLOW - DVO, OD 01.10.2003 #i18732#
     MG_ED( "IsFollowingTextFlow", STYLE, FLOW_WITH_TEXT,      XML_TYPE_BOOL, 0 ),
@@ -800,7 +800,7 @@ XMLPropertyMapEntry aXMLShapePropMap[] =
     // chained to.
 
     // RES_FOLLOW_TEXT_FLOW - OD 2004-04-21 #i26791#
-    MG_ED( "IsFollowingTextFlow", DRAW, FLOW_WITH_TEXT,      XML_TYPE_BOOL, 0 ),
+    MG_ED( "IsFollowingTextFlow", STYLE, FLOW_WITH_TEXT,      XML_TYPE_BOOL, 0 ),
 
     M_END()
 };
