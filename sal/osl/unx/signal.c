@@ -2,9 +2,9 @@
  *
  *  $RCSfile: signal.c,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-28 16:25:50 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:41:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -411,7 +411,7 @@ static int fputs_xml( const char *string, FILE *stream )
 static int ReportCrash( int Signal )
 {
     static sal_Bool bCrashReporterExecuted = sal_False;
-    sal_Bool        bNoUI = sal_False;
+    sal_Bool        bAutoCrashReport = sal_False;
 
     sal_uInt32  argi;
     sal_uInt32  argc;
@@ -430,7 +430,7 @@ static int ReportCrash( int Signal )
             }
             else if ( 0 == rtl_ustr_ascii_compare( rtl_uString_getStr( ustrCommandArg ), "-autocrashreport" ) )
             {
-                bNoUI = sal_True;
+                bAutoCrashReport = sal_True;
             }
             else if ( 0 == rtl_ustr_ascii_shortenedCompare_WithLength(
                 rtl_uString_getStr( ustrCommandArg ), rtl_uString_getLength( ustrCommandArg ),
@@ -640,7 +640,7 @@ static int ReportCrash( int Signal )
                         pXMLTempName,
                         pChecksumTempName,
                         pStackTempName,
-                        bNoUI ? " -noui" : "" );
+                        bAutoCrashReport ? " -noui -send" : " -noui" );
 #elif defined ( SOLARIS )
                 if ( pXMLTempName && pChecksumTempName )
                     snprintf( szShellCmd, sizeof(szShellCmd)/sizeof(szShellCmd[0]),
@@ -649,12 +649,12 @@ static int ReportCrash( int Signal )
                         Signal,
                         pXMLTempName,
                         pChecksumTempName,
-                        bNoUI ? " -noui" : "" );
+                        bAutoCrashReport ? " -noui -send" : " -noui" );
 #endif
 
 #else /* defined INCLUDE BACKTRACE */
                 snprintf( szShellCmd, sizeof(szShellCmd)/sizeof(szShellCmd[0]),
-                "crash_report -p %d -s %d%s", getpid(), Signal, bNoUI ? " -noui" : "" );
+                "crash_report -p %d -s %d%s", getpid(), Signal, bAutoCrashReport ? " -noui -send" : " -noui" );
 #endif /* defined INCLUDE BACKTRACE */
 
 
