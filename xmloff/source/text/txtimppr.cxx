@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimppr.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:07 $
+ *  last change: $Author: sab $ $Date: 2000-10-26 10:37:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,8 @@ XMLTextImportPropertyMapper::~XMLTextImportPropertyMapper()
 }
 
 void XMLTextImportPropertyMapper::finished(
-            ::std::vector< XMLPropertyState >& rProperties ) const
+            ::std::vector< XMLPropertyState >& rProperties,
+            sal_Int32 nStartIndex, sal_Int32 nEndIndex ) const
 {
     XMLPropertyState* pFontName = 0;
     XMLPropertyState* pFontStyleName = 0;

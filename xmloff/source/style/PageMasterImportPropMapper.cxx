@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageMasterImportPropMapper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-26 07:17:20 $
+ *  last change: $Author: sab $ $Date: 2000-10-26 10:35:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,9 +107,9 @@ PageMasterImportPropertyMapper::~PageMasterImportPropertyMapper()
     return sal_True;
 }*/
 
-void PageMasterImportPropertyMapper::finished(::std::vector< XMLPropertyState >& rProperties ) const
+void PageMasterImportPropertyMapper::finished(::std::vector< XMLPropertyState >& rProperties, sal_Int32 nStartIndex, sal_Int32 nEndIndex ) const
 {
-    SvXMLImportPropertyMapper::finished(rProperties);
+    SvXMLImportPropertyMapper::finished(rProperties, nStartIndex, nEndIndex);
     XMLPropertyState* pAllPaddingProperty = NULL;
     XMLPropertyState* pAllBorderProperty = NULL;
     XMLPropertyState* pAllBorderWidthProperty = NULL;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyMaps.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-19 14:25:04 $
+ *  last change: $Author: sab $ $Date: 2000-10-26 10:33:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -477,7 +477,7 @@ sal_Bool XMLChartImportPropertyMapper::handleSpecialItem(
     return sal_False;
 }
 
-void XMLChartImportPropertyMapper::finished( ::std::vector< XMLPropertyState >& rProperties ) const
+void XMLChartImportPropertyMapper::finished( ::std::vector< XMLPropertyState >& rProperties, sal_Int32 nStartIndex, sal_Int32 nEndIndex ) const
 {
 }
 

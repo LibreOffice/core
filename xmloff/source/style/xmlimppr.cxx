@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimppr.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-26 08:35:07 $
+ *  last change: $Author: sab $ $Date: 2000-10-26 10:35:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -258,7 +258,7 @@ void SvXMLImportPropertyMapper::importXML(
         while( ( nIndex >= 0 ) && (( nFlags & MID_FLAG_MULTI_PROPERTY ) != 0 ) );
     }
 
-    finished( rProperties );
+    finished( rProperties, nStartIdx, nEndIdx );
 }
 
 /** this method is called for every item that has the MID_FLAG_SPECIAL_ITEM_IMPORT flag set */
@@ -286,7 +286,8 @@ BOOL SvXMLImportPropertyMapper::handleNoItem(
 }
 
 void SvXMLImportPropertyMapper::finished(
-        vector< XMLPropertyState >& rProperties ) const
+        vector< XMLPropertyState >& rProperties,
+        sal_Int32 nStartIndex, sal_Int32 nEndIndex ) const
 {
     // nothing to do here
 }
