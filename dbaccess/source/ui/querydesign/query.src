@@ -2,9 +2,9 @@
  *
  *  $RCSfile: query.src,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: cd $ $Date: 2002-04-22 08:51:18 $
+ *  last change: $Author: oj $ $Date: 2002-04-29 08:52:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1167,7 +1167,7 @@ ToolBox RID_BRW_QUERYDESIGN_TOOLBOX
 {
     SVLook = TRUE ;
     Pos = MAP_APPFONT ( 3 , 1 ) ;
-    Size = MAP_APPFONT ( 200 , 14 ) ;
+    //  Size = MAP_APPFONT ( 200 , 14 ) ;
     OutputSize = TRUE ;
     Align = BOXALIGN_TOP ;
     ItemImageList = RID_DEFAULTIMAGELIST_SC ;
