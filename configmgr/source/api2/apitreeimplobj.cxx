@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitreeimplobj.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:18:29 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:16:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -709,7 +709,7 @@ void ApiTreeImpl::setParentTree(ApiTreeImpl*    pParentTree) // internal impleme
 {
     osl::MutexGuard aLock(getApiLock());
 
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
     if (pParentTree)
     {
         using configuration::NodeID;
