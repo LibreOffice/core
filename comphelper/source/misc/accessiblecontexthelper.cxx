@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessiblecontexthelper.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sb $ $Date: 2002-07-22 07:00:37 $
+ *  last change: $Author: obr $ $Date: 2002-08-14 12:00:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,13 +186,6 @@ namespace comphelper
     //---------------------------------------------------------------------
     void SAL_CALL OAccessibleContextHelper::disposing()
     {
-        // notify our listeners that we're going to be defunc
-        NotifyAccessibleEvent(
-            AccessibleEventId::ACCESSIBLE_STATE_EVENT,
-            Any(),
-            makeAny( AccessibleStateType::DEFUNC )
-        );
-
         ::osl::ClearableMutexGuard aGuard( GetMutex() );
         ::cppu::OInterfaceContainerHelper* pListeners = m_pImpl->getListenerContainer( sal_False );
         if ( pListeners )
@@ -409,6 +402,9 @@ namespace comphelper
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.8  2002/07/22 07:00:37  sb
+ *  #100004# Added second NotifyAccessibleEvent with AccessibleEventBuffer.
+ *
  *  Revision 1.7  2002/05/08 15:38:36  fs
  *  #99218# allow abstract external locks in addition to the own mutex
  *
