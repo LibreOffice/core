@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabletree.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-13 08:43:51 $
+ *  last change: $Author: kz $ $Date: 2002-09-13 14:36:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -255,14 +255,14 @@ String STR_COULDNOTCONNECT_PLEASECHECK
     Text[ greek ] = "Παρακαλώ ελέγξτε τις τρέχουσες ρυθμίσεις, π.χ σχετικά με το όνομα χρήστη και τον κωδικό πρόσβασης.";
     Text[ dutch ] = "Controleer de actuele instellingen, bijv. wat betreft naam gebruiker en wachtwoord.";
     Text[ french ] = "Vιrifiez les paramθtres actifs - par ex. ceux qui concernent le nom d'utilisateur et le mot de passe.";
-    Text[ spanish ] = "Compruebe la configuraciσn actual, en especial la que se refiere al nombre de usuario y a la contraseρa.";
+    Text[ spanish ] = "Compruebe la configuraciσn actual, como el nombre de usuario y la contraseρa.";
     Text[ italian ] = "Verificare le impostazioni attuali; in particolare quelle in riferimento al nome utente e password.";
     Text[ danish ] = "Kontroller de aktuelle indstillinger, f.eks. vedrψrende brugernavn og adgangskode.";
-    Text[ swedish ] = "Kontrollera de aktuella instδllningarna, till exempel med avseende pε anvδndarnamn och lφsenord.";
+    Text[ swedish ] = "Kontrollera de aktuella instδllningarna, till exempel anvδndarnamn och lφsenord.";
     Text[ polish ] = "Sprawd bieΏΉce konfiguracje, np. nazwκ uΏytkownika i has³o.";
     Text[ portuguese_brazilian ] = "Please check the current settings, e.g. with respect to user name and password.";
-    Text[ japanese ] = "γƒ¦γƒΌγ‚¶γƒΌεγ‚„γƒ‘γ‚Ήγƒ―γƒΌγƒ‰γªγ©ηΎε¨θ¨­ε®γ•γ‚γ¦γ„γ‚‹ε†…ε®Ήγ‚’γ‚‚γ†δΈ€εΊ¦γƒγ‚§γƒƒγ‚―γ—γ¦γγ γ•γ„γ€‚";
-    Text[ korean ] = "μ‚¬μ©μ μ΄λ¦„κ³Ό ν¨μ¤μ›λ“ λ“±μ ν„μ¬ μ„¤μ •μ„ μ κ²€ν•μ‹­μ‹μ¤.";
+    Text[ japanese ] = "γƒ¦γƒΌγ‚¶γƒΌεγ‚„γƒ‘γ‚Ήγƒ―γƒΌγƒ‰γªγ©γ€ηΎε¨θ¨­ε®γ•γ‚γ¦γ„γ‚‹ε†…ε®Ήγ‚’γ‚‚γ†δΈ€εΊ¦γƒγ‚§γƒƒγ‚―γ—γ¦γγ γ•γ„γ€‚";
+    Text[ korean ] = "μ‚¬μ©μ μ΄λ¦„κ³Ό μ•”νΈ λ“±μ— κ΄€ν• ν„μ¬ μ„¤μ •μ„ μ κ²€ν•μ‹­μ‹μ¤.";
     Text[ chinese_simplified ] = "θ―·ζ‚¨ζ£€ζ¥ε½“ε‰η„θ®Ύε®οΌε¦‚δ½Ώη”¨εε’ε―†η γ€‚";
     Text[ chinese_traditional ] = "θ«‹ζ‚¨ζªΆζ¥η›®ε‰η„θ¨­ε®οΌε¦‚δ½Ώη”¨θ€…ε’ε―†ηΆΌγ€‚";
     Text[ turkish ] = "Please check the current settings, e.g. with respect to user name and password.";
@@ -379,6 +379,9 @@ String STR_ALL_TABLES_AND_VIEWS
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.29  2002/09/13 08:43:51  kz
+ *  Merge SRX643: 13.09.02 - 10:40:24
+ *
  *  Revision 1.28  2002/09/05 13:44:17  kz
  *  Merge SRX643: 05.09.02 - 15:41:13
  *
