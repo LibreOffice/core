@@ -2,9 +2,9 @@
  *
  *  $RCSfile: random.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mhu $ $Date: 2001-11-04 20:35:50 $
+ *  last change: $Author: mhu $ $Date: 2001-11-29 19:12:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,7 @@
  ************************************************************************/
 
 #ifndef _RTL_RANDOM_H_
-#define _RTL_RANDOM_H_ "$Revision: 1.3 $"
+#define _RTL_RANDOM_H_ "$Revision: 1.4 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -80,11 +80,6 @@ extern "C" {
 typedef void* rtlRandomPool;
 
 
-/** Error Code type.
- */
-typedef enum __rtl_RandomError rtlRandomError;
-
-
 /** Error Code enumeration.
  */
 enum __rtl_RandomError
@@ -95,6 +90,10 @@ enum __rtl_RandomError
     rtl_Random_E_Unknown,
     rtl_Random_E_FORCE_EQUAL_SIZE = SAL_MAX_ENUM
 };
+
+/** Error Code type.
+ */
+typedef enum __rtl_RandomError rtlRandomError;
 
 
 /** Create a Random Pool.

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cipher.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mhu $ $Date: 2001-11-04 20:35:50 $
+ *  last change: $Author: mhu $ $Date: 2001-11-29 19:12:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,7 @@
  ************************************************************************/
 
 #ifndef _RTL_CIPHER_H_
-#define _RTL_CIPHER_H_ "$Revision: 1.3 $"
+#define _RTL_CIPHER_H_ "$Revision: 1.4 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -80,10 +80,6 @@ extern "C" {
 typedef void* rtlCipher;
 
 
-/** Cipher Algorithm type.
- */
-typedef enum __rtl_CipherAlgorithm rtlCipherAlgorithm;
-
 /** Cipher Algorithm enumeration.
     @see rtl_cipher_create()
  */
@@ -94,10 +90,10 @@ enum __rtl_CipherAlgorithm
     rtl_Cipher_Algorithm_FORCE_EQUAL_SIZE = SAL_MAX_ENUM
 };
 
-
-/** Cipher Mode type.
+/** Cipher Algorithm type.
  */
-typedef enum __rtl_CipherMode rtlCipherMode;
+typedef enum __rtl_CipherAlgorithm rtlCipherAlgorithm;
+
 
 /** Cipher Mode enumeration.
     @see rtl_cipher_create()
@@ -111,10 +107,10 @@ enum __rtl_CipherMode
     rtl_Cipher_Mode_FORCE_EQUAL_SIZE = SAL_MAX_ENUM
 };
 
-
-/** Cipher Direction type.
+/** Cipher Mode type.
  */
-typedef enum __rtl_CipherDirection rtlCipherDirection;
+typedef enum __rtl_CipherMode rtlCipherMode;
+
 
 /** Cipher Direction enumeration.
     @see rtl_cipher_init()
@@ -128,10 +124,10 @@ enum __rtl_CipherDirection
     rtl_Cipher_Direction_FORCE_EQUAL_SIZE = SAL_MAX_ENUM
 };
 
-
-/** Error Code type.
+/** Cipher Direction type.
  */
-typedef enum __rtl_CipherError rtlCipherError;
+typedef enum __rtl_CipherDirection rtlCipherDirection;
+
 
 /** Error Code enumeration.
  */
@@ -147,6 +143,10 @@ enum __rtl_CipherError
     rtl_Cipher_E_Unknown,
     rtl_Cipher_E_FORCE_EQUAL_SIZE = SAL_MAX_ENUM
 };
+
+/** Error Code type.
+ */
+typedef enum __rtl_CipherError rtlCipherError;
 
 
 /** Create a cipher handle for the given algorithm and mode.

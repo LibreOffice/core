@@ -2,9 +2,9 @@
  *
  *  $RCSfile: digest.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mhu $ $Date: 2001-11-04 20:35:50 $
+ *  last change: $Author: mhu $ $Date: 2001-11-29 19:12:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,7 @@
  ************************************************************************/
 
 #ifndef _RTL_DIGEST_H_
-#define _RTL_DIGEST_H_ "$Revision: 1.4 $"
+#define _RTL_DIGEST_H_ "$Revision: 1.5 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -80,10 +80,6 @@ extern "C" {
 typedef void* rtlDigest;
 
 
-/** Digest Algorithm type.
- */
-typedef enum __rtl_DigestAlgorithm rtlDigestAlgorithm;
-
 /** Digest Algorithm enumeration.
     @see rtl_digest_create()
  */
@@ -101,10 +97,10 @@ enum __rtl_DigestAlgorithm
     rtl_Digest_Algorithm_FORCE_EQUAL_SIZE = SAL_MAX_ENUM
 };
 
-
-/** Error Code type.
+/** Digest Algorithm type.
  */
-typedef enum __rtl_DigestError rtlDigestError;
+typedef enum __rtl_DigestAlgorithm rtlDigestAlgorithm;
+
 
 /** Error Code enumeration.
  */
@@ -118,6 +114,10 @@ enum __rtl_DigestError
     rtl_Digest_E_Unknown,
     rtl_Digest_E_FORCE_EQUAL_SIZE = SAL_MAX_ENUM
 };
+
+/** Error Code type.
+ */
+typedef enum __rtl_DigestError rtlDigestError;
 
 
 /** Create a digest handle for the given algorithm.
