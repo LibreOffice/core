@@ -2,9 +2,9 @@
  *
  *  $RCSfile: miscdlgs.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-08 21:22:34 $
+ *  last change: $Author: kz $ $Date: 2002-02-19 21:15:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3388,7 +3388,7 @@ ModalDialog RID_SCDLG_NAMES_CREATE
         Text[ chinese_traditional ] = "å·¦æ¬„(~L)";
         Text[ arabic ] = "ÇáÚãæÏ ÇáÃíÓÑ";
         Text[ greek ] = "ÁñéóôåñÞò óôÞëçò";
-        Text[ korean ] = "ì™¼ìª½ ì—´(~L)";
+        Text[ korean ] = "ì™¼ìª½ ë‹¨(~L)";
         Text[ turkish ] = "~Sol sütun";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Columna es~querra";
