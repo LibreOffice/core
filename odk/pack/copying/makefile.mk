@@ -413,6 +413,7 @@ DOCUSTUDIO4INTEGRATIONGRAPHICSFILES= \
 DOCUHTMLFILES+= \
     $(DOCUSTUDIO4INTEGRATIONHTMLFILES) \
     $(DESTDIR)$/index.html \
+    $(DESTDIRDOCU)$/sdk_styles.css \
     $(DESTDIRDOCU)$/tools.html \
     $(DESTDIRDOCU)$/notsupported.html \
     $(DESTDIRDOCU)$/devmanual_preview.html \
@@ -457,6 +458,10 @@ all : 	\
 
 $(DIRLIST) :
      -$(MKDIRHIER) 	$@
+
+$(DESTDIRDOCU)$/sdk_styles.css : $(PRJ)$/docs$/sdk_styles.css
+    +-rm -f $(CONVERTTAGFLAG) >& $(NULLDEV)
+    $(MY_COPY) $? $@
 
 $(DESTDIR)$/index.html : $(PRJ)$/index.html
     +-rm -f $@ >& $(NULLDEV)
