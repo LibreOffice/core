@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prex.h,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-12 10:25:34 $
+ *  last change: $Author: obo $ $Date: 2003-10-20 17:49:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,16 +58,6 @@
  *
  *
  ************************************************************************/
-//*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-//
-//                                                                            //
-// (C) 1997 Star Division GmbH, Hamburg, Germany                              //
-//                                                                            //
-// $Revision: 1.9 $  $Author: vg $  $Date: 2003-06-12 10:25:34 $    //
-//                                                                            //
-// $Workfile:   prex.h  $                                                     //
-//  $Modtime:   08 Aug 1997 10:13:54  $                                       //
-//                                                                            //
-//*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-//
 
 #ifndef _PREX_H
 #define _PREX_H
