@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xception.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:18:13 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 13:47:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,13 +83,7 @@ namespace vos
  * based on true rtti type checking
  */
 
-#define TRY                             try
-#define CATCH( Class, Exception )       catch( Class& Exception )
-#define CATCH_ALL()                     catch( ... )
-#define AND_CATCH( Class, Exception )   catch( Class& Exception )
-#define AND_CATCH_ALL()                 catch( ... )
 #define THROW_AGAIN                     throw;
-#define END_CATCH
 #define THROW( Constructor )            throw Constructor;
 
 /*
