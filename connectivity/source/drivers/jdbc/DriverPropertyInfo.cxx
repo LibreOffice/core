@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DriverPropertyInfo.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-01 07:15:14 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 13:20:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,10 +103,11 @@ jclass java_sql_DriverPropertyInfo::getMyClass()
     }
     return theClass;
 }
+
 // --------------------------------------------------------------------------------
 void java_sql_DriverPropertyInfo::saveClassRef( jclass pClass )
 {
-    if( SDBThreadAttach::IsJavaErrorOccured() || pClass==0  )
+    if( pClass==0  )
         return;
     // der uebergebe Klassen-Handle ist schon global, daher einfach speichern
     theClass = pClass;
