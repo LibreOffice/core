@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsave.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 18:48:03 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 16:21:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,12 @@
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
+#ifndef _COMPHELPER_SEQUENCEASVECTOR_HXX_
+#include <comphelper/sequenceasvector.hxx>
+#endif
+#ifndef _COMPHELPER_SEQUENCEASHASHMAP_HXX_
+#include <comphelper/sequenceashashmap.hxx>
+#endif
 #ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
 #include <svtools/moduleoptions.hxx>
 #endif
@@ -94,6 +100,12 @@
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XCONTAINERQUERY_HPP_
+#include <com/sun/star/container/XContainerQuery.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XENUMERATION_HPP_
+#include <com/sun/star/container/XEnumeration.hpp>
 #endif
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -123,6 +135,7 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
 using namespace rtl;
+using namespace comphelper;
 
 #define C2U(cChar) OUString::createFromAscii(cChar)
 // -------------------- --------------------------------------------------
@@ -185,7 +198,7 @@ class SvxAlienFilterWarningConfig_Impl : public utl::ConfigItem
 };
 // ----------------------------------------------------------------------
 SvxAlienFilterWarningConfig_Impl::SvxAlienFilterWarningConfig_Impl() :
-    ConfigItem(C2U("Office.TypeDetection/Defaults"),
+    ConfigItem(C2U("TypeDetection.Misc/Defaults"),
         CONFIG_MODE_IMMEDIATE_UPDATE),
     aPropNames(1),
     bWarning(sal_True)
@@ -491,7 +504,8 @@ void SfxSaveTabPage::Reset( const SfxItemSet& rSet )
                     xMSF->createInstance(C2U("com.sun.star.document.FilterFactory")), UNO_QUERY);
 
             DBG_ASSERT(pImpl->xFact.is(), "service com.sun.star.document.FilterFactory unavailable")
-            if(pImpl->xFact.is())
+            Reference< XContainerQuery > xQuery(pImpl->xFact, UNO_QUERY);
+            if(xQuery.is())
             {
                 for(int n = 0; n < aApplicationLB.GetEntryCount(); n++)
                 {
@@ -516,8 +530,16 @@ void SfxSaveTabPage::Reset( const SfxItemSet& rSet )
                     String sTmp(sCommand);
                     sTmp.SearchAndReplaceAscii("%1", sReplace);
                     sCommand = sTmp;
-                    Any aVal = pImpl->xFact->getByName(sCommand);
-                    aVal >>= pImpl->aFilterArr[nData];
+                    Reference< XEnumeration > xList = xQuery->createSubSetEnumerationByQuery(sCommand);
+                    SequenceAsVector< OUString > lList;
+                    while(xList->hasMoreElements())
+                    {
+                        SequenceAsHashMap aFilter(xList->nextElement());
+                        OUString sFilter = aFilter.getUnpackedValueOrDefault(OUString::createFromAscii("Name"),OUString());
+                        if (sFilter.getLength())
+                            lList.push_back(sFilter);
+                    }
+                    pImpl->aFilterArr[nData] = lList.getAsConstList();
                 }
             }
             aApplicationLB.SelectEntryPos(0);
