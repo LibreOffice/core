@@ -1,4 +1,4 @@
-/* RCS  $Id: expand.c,v 1.1.1.1 2000-09-22 15:33:25 hr Exp $
+/* RCS  $Id: expand.c,v 1.2 2002-10-11 13:42:42 waratah Exp $
 --
 -- SYNOPSIS
 --      Macro expansion code.
@@ -321,7 +321,7 @@ char *src;
        * DIRECTORY_FLAG is set, then we want to keep the directory portion
        * othewise throw it away and blank out to the end of the token */
 
-      if( (e = Basename(s)) != s)
+      if( (e = Basename(s)) != s) {
      if( !(mod & DIRECTORY_FLAG) ) {
         strcpy(s, e);
         e = s+(str.tk_str-e);
@@ -330,6 +330,7 @@ char *src;
      }
      else
         s = e;
+      }
 
       /* search for the suffix, if there is none, treat it as a NULL suffix.
        * if no file name treat it as a NULL file name.  same copy op as

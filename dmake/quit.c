@@ -1,4 +1,4 @@
-/* RCS  $Id: quit.c,v 1.1.1.1 2000-09-22 15:33:25 hr Exp $
+/* RCS  $Id: quit.c,v 1.2 2002-10-11 13:42:43 waratah Exp $
 --
 -- SYNOPSIS
 --      End the dmake session.
@@ -47,6 +47,11 @@ Quit()/*
    Epilog( ERROR_EXIT_VALUE );
 }
 
+
+const int in_quit( void )
+{
+    return _dont_quit;
+}
 
 static void
 _handle_quit( err_target )/*

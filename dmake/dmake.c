@@ -1,4 +1,4 @@
-/* RCS  $Id: dmake.c,v 1.1.1.1 2000-09-22 15:33:25 hr Exp $
+/* RCS  $Id: dmake.c,v 1.2 2002-10-11 13:42:42 waratah Exp $
 --
 -- SYNOPSIS
 --      The main program.
@@ -116,7 +116,7 @@ static  void    _do_f_flag ANSI((char, char *, char **));
 static  void    _do_f_flag ANSI((int, char *, char **));
 #endif
 
-PUBLIC void
+PUBLIC int
 main(argc, argv)
 int  argc;
 char **argv;
@@ -393,6 +393,7 @@ char **argv;
 
    Clear_signals();
    Epilog(ex_val);      /* Does not return -- EVER */
+   return 0;
 }
 
 
@@ -484,11 +485,12 @@ int  err;
 
    DB_ENTER("Openfile");
 
-   if( name == NIL(char) || !*name )
+   if( name == NIL(char) || !*name ) {
       if( !err )
          DB_RETURN(NIL(FILE));
       else
          Fatal( "Openfile:  NIL filename" );
+   }
 
    if( next_file_slot == MAX_INC_DEPTH )
       Fatal( "Too many open files. Max nesting level is %d.", MAX_INC_DEPTH);
@@ -566,7 +568,7 @@ char **rname;
 {
    HASHPTR hp;
    FILE *fil = NIL(FILE);
-   char *fname;
+   char *fname = NIL(char);
    char *ename = NIL(char);
 
    /* order of precedence is:

@@ -1,4 +1,4 @@
-/* RCS  $Id: make.c,v 1.1.1.1 2000-09-22 15:33:25 hr Exp $
+/* RCS  $Id: make.c,v 1.2 2002-10-11 13:42:43 waratah Exp $
 --
 -- SYNOPSIS
 --      Perform the update of all outdated targets.
@@ -59,6 +59,8 @@ static  LINKPTR _dup_prq ANSI((LINKPTR));
 static  LINKPTR _expand_dynamic_prq ANSI(( LINKPTR, LINKPTR, char * ));
 static  char*   _prefix ANSI((char *, char *));
 static  char*   _pool_lookup ANSI((char *));
+static  int _explode_graph ANSI((CELLPTR, LINKPTR, CELLPTR));
+
 
 #define RP_GPPROLOG       0
 #define RP_RECIPE         1
@@ -340,7 +342,7 @@ CELLPTR setdirroot;
    DB_PRINT( "make", ("(%s, %ld, 0x%08x, 0x%04x)", cp->CE_NAME,
             cp->ce_time, cp->ce_attr, cp->ce_flag) );
 
-   if( !(cp->ce_flag & F_TARGET) && (cp->ce_time == (time_t) 0L) )
+   if( !(cp->ce_flag & F_TARGET) && (cp->ce_time == (time_t) 0L) ) {
       if( Makemkf ) {
      rval = -1;
      goto stop_making_it;
@@ -353,6 +355,7 @@ CELLPTR setdirroot;
      cp->ce_flag |= F_RULES;
       else
      Fatal( "`%s' not found, and can't be made", cp->CE_NAME );
+   }
 
    DB_PRINT( "mem", ("%s:-A mem %ld", cp->CE_NAME, (long) coreleft()) );
 
@@ -417,7 +420,7 @@ CELLPTR setdirroot;
       tcp = dp->cl_prq;
       seq = (((cp->ce_attr | Glob_attr) & A_SEQ) != 0);
 
-      if( tcp->ce_flag & F_VISITED )
+      if( tcp->ce_flag & F_VISITED ) {
      if( _explode_graph(tcp, dp, setdirroot) == 0 ) {
         /* didn't blow it up so see if we need to wait for it. */
         if( tcp->ce_flag & F_MADE ) {
@@ -429,6 +432,7 @@ CELLPTR setdirroot;
      }
      else
         tcp = dp->cl_prq;
+      }
 
       if( seq && !made ) goto stop_making_it;
 
@@ -590,13 +594,14 @@ CELLPTR setdirroot;
      name = cp->ce_fname;
      lib  = cp->ce_lib;
 
-     if( (!(Glob_attr & A_SILENT) || !Trace) && !(cp->ce_attr & A_PHONY) )
+     if( (!(Glob_attr & A_SILENT) || !Trace) && !(cp->ce_attr & A_PHONY) ) {
         if( lib == NIL(char) )
            printf("touch(%s)", name );
         else if( cp->ce_attr & A_SYMBOL )
            printf("touch(%s((%s)))", lib, name );
         else
            printf("touch(%s(%s))", lib, name );
+     }
 
      if( !Trace && !(cp->ce_attr & A_PHONY) )
         if( Do_touch( name, lib,
@@ -854,7 +859,7 @@ HASHPTR hp;
 
 
 
-int
+static int
 _explode_graph( cp, parent, setdirroot )/*
 ==========================================
    Check to see if we have made the node already.  If so then don't do
@@ -945,7 +950,7 @@ CELLPTR cp;
    STRINGPTR            orp;
    char         *cmnd;
    char         *groupfile;
-   FILE         *tmpfile;
+   FILE         *tmpfile = 0;
    int          do_it;
    t_attr       attr;
    int          group;
@@ -1221,12 +1226,13 @@ int ignore;
 
    DB_ENTER( "Pop_dir" );
 
-   if( dir_stack == NIL(STRING) )
+   if( dir_stack == NIL(STRING) ) {
       if( ignore ) {
          DB_VOID_RETURN;
       }
       else
      Error( "Directory stack empty for return from .SETDIR" );
+   }
 
    if( Set_dir(dir = dir_stack->st_string) )
       Fatal( "Could not change to directory `%s'", dir );
@@ -1272,7 +1278,7 @@ _set_tmd()/*
       p = Get_token( &pd, DirBrkStr, FALSE );
 
       if( !is_sep && strcmp(m, p) ) {   /* they differ */
-     char *tmp;
+     char *tmp = 0;
      if( first ) {      /* They differ in the first component   */
         tmd = Makedir;  /* In this case use the full path   */
         break;

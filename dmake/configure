@@ -2120,7 +2120,7 @@ fi
 
 fi
 
-for ac_func in getcwd getwd putenv strcspn strerror strspn strstr
+for ac_func in getcwd getwd putenv strcspn strerror strspn strstr setvbuf tzset settz
 do
 echo $ac_n "checking for $ac_func""... $ac_c" 1>&6
 echo "configure:2127: checking for $ac_func" >&5

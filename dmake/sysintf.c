@@ -1,4 +1,4 @@
-/* RCS  $Id: sysintf.c,v 1.3 2001-02-19 16:08:04 hjs Exp $
+/* RCS  $Id: sysintf.c,v 1.4 2002-10-11 13:42:44 waratah Exp $
 --
 -- SYNOPSIS
 --      System independent interface
@@ -125,7 +125,11 @@ char **member;
    else if( strlen(Basename(name)) > NameMax )
       return(-1);
    else
-      return( utime(name, NIL(time_t)) );
+#ifdef HAVE_UTIME_NULL
+      return( utime(name, NULL) );
+#else
+#   error "Utime NULL not supported"
+#endif
 }
 
 
@@ -598,7 +602,7 @@ CELLPTR target;
         : (status & 0xff)==SIGTERM ? -1
         : (status & 0x7f)+128);
 
-   if( status )
+   if( status ) {
       if( !abort_flg ) {
      char buf[512];
 
@@ -636,6 +640,7 @@ CELLPTR target;
       }
       else if(!(target->ce_attr & A_PRECIOUS)||(target->ce_attr & A_ERRREMOVE))
      Remove_file( target->ce_fname );
+   }
 }
 
 

@@ -1,4 +1,4 @@
-/* RCS  $Id: dcache.c,v 1.1.1.1 2000-09-22 15:33:33 hr Exp $
+/* RCS  $Id: dcache.c,v 1.2 2002-10-11 13:42:47 waratah Exp $
 --
 -- SYNOPSIS
 --      Directory cache management routines.
@@ -189,7 +189,7 @@ int          force;
       }
 
       if( Verbose & V_DIR_CACHE )
-     printf("%s:  Updating dir cache entry for [%s], new time is %d\n",
+     printf("%s:  Updating dir cache entry for [%s], new time is %ld\n",
             Pname, spath, ep ? ep->mtime : 0L);
    }
 

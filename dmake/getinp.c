@@ -1,4 +1,4 @@
-/* RCS  $Id: getinp.c,v 1.2 2000-10-20 11:12:55 hjs Exp $
+/* RCS  $Id: getinp.c,v 1.3 2002-10-11 13:42:43 waratah Exp $
 --
 -- SYNOPSIS
 --      Handle reading of input.
@@ -44,6 +44,8 @@ static  int _handle_conditional ANSI((int, TKSTRPTR));
 static int  rule_ind = 0;   /* index of rule when reading Rule_tab   */
 static int  skip = FALSE;   /* if true the skip input        */
 
+int partcomp( char* lhs, int opcode );
+
 
 PUBLIC int
 Get_line( buf, fil )/*
@@ -61,7 +63,7 @@ FILE *fil;
    static   int  ignore = FALSE;
    int       cont   = FALSE;
    int       pos    = 0;
-   int       res;
+   int       res = 0;
    register char *tmp = NIL(char);
 
    DB_ENTER( "Get_line" );
@@ -324,7 +326,7 @@ char      *brk;
 int   anchor;
 {
    register char *s;
-   register char *curp;
+   register char *curp = 0;
    register char *t;
    int           done = FALSE;
    char          space[100];
@@ -476,7 +478,7 @@ TKSTRPTR tg;
 {
    static short action[MAX_COND_DEPTH];
    static char  ifcntl[MAX_COND_DEPTH];
-   char     *tok, *lhs, *rhs, *op, *expr;
+   char     *lhs, *expr;
    char     *lop, *partstr;
    int      result, n, m;
 
@@ -584,7 +586,7 @@ TKSTRPTR tg;
 int partcomp( char* lhs, int opcode )
 {
 
-    char    *tok, *rhs, *op;
+    char    *tok, *rhs, *op = 0;
     int result, opsind;
     const int localopscount=4;
     char* localops[]={"==","!=","<=",">="};

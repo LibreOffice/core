@@ -1,10 +1,10 @@
-/* RCS  $Id: function.c,v 1.2 2002-10-04 13:31:34 waratah Exp $
+/* RCS  $Id: function.c,v 1.3 2002-10-11 13:42:42 waratah Exp $
 --
 -- SYNOPSIS
 --      GNU style functions for dmake.
 --
 -- DESCRIPTION
---  All GNU stule functions understood by dmake are implemented in this
+--  All GNU style functions understood by dmake are implemented in this
 --  file.  Currently the only such function is $(mktmp ...) which is
 --  not part of GNU-make is an extension provided by dmake.
 --
@@ -565,22 +565,6 @@ char *mod1;
    }
 
    return(res);
-}
-
-
-static int
-not (arg)
-int arg;
-{
-   return(!arg);
-}
-
-
-static int
-nop (arg)
-int arg;
-{
-   return(arg);
 }
 
 

@@ -1,4 +1,4 @@
-/* RCS  $Id: rulparse.c,v 1.3 2002-07-11 08:53:30 mh Exp $
+/* RCS  $Id: rulparse.c,v 1.4 2002-10-11 13:42:44 waratah Exp $
 --
 -- SYNOPSIS
 --      Perform semantic analysis on input
@@ -144,11 +144,12 @@ int *state;
            /* Logically OR the attributes specified into one main
             * ATTRIBUTE mask. */
 
-           if( at == A_SETDIR )
+           if( at == A_SETDIR ) {
               if( set_dir != NIL( char ) )
                  Warning( "Multiple .SETDIR attribute ignored" );
               else
                  set_dir = DmStrDup( tok );
+           }
 
            attr |= at;
         }
@@ -832,12 +833,13 @@ CELLPTR prereq;
     * apply all of the attributes to the complete list of prerequisites.
     */
 
-   if( (targets == NIL(CELL)) && attr )
+   if( (targets == NIL(CELL)) && attr ) {
       if( prereq != NIL(CELL) )
      for( tp1=prereq; tp1 != NIL(CELL); tp1 = tp1->ce_link )
         _set_attributes( attr, set_dir, tp1 );
       else
      _set_global_attr( attr );
+   }
 
    /* Now that we have built the lists of targets, the parser must parse the
     * rules if there are any.  However we must start the rule list with the
@@ -964,7 +966,7 @@ CELLPTR target;
 CELLPTR prereq;
 {
    LINKPTR edl;
-   CELLPTR edge;
+   CELLPTR edge = 0;
    CELLPTR tpq,cur;
    int match;
 
@@ -1188,7 +1190,7 @@ t_attr  attr;
 char    *set_dir;
 CELLPTR cp;
 {
-   char   *dir;
+   char   *dir = 0;
 
    DB_ENTER( "_set_attributes" );
 
@@ -1225,7 +1227,7 @@ t_attr attr;
    /* Some compilers can't handle a switch on a long, and t_attr is now a long
     * integer on some systems.  foey! */
    for( flag = MAX_ATTR; flag; flag >>= 1 )
-      if( flag & attr )
+      if( flag & attr ) {
      if( flag == A_PRECIOUS)      Def_macro(".PRECIOUS",  "y", M_EXPANDED);
      else if( flag == A_SILENT)   Def_macro(".SILENT",    "y", M_EXPANDED);
      else if( flag == A_IGNORE )  Def_macro(".IGNORE",    "y", M_EXPANDED);
@@ -1236,6 +1238,7 @@ t_attr attr;
      else if( flag == A_SHELL )   Def_macro(".USESHELL",  "y", M_EXPANDED);
      else if( flag == A_MKSARGS ) Def_macro(".MKSARGS",   "y", M_EXPANDED);
      else if( flag == A_SWAP )    Def_macro(".SWAP",      "y", M_EXPANDED);
+      }
 
    attr &= ~A_GLOB;
    if( attr ) Warning( "Non global attribute(s) ignored" );

@@ -1,4 +1,4 @@
-/* RCS  $Id: parse.c,v 1.1.1.1 2000-09-22 15:33:25 hr Exp $
+/* RCS  $Id: parse.c,v 1.2 2002-10-11 13:42:43 waratah Exp $
 --
 -- SYNOPSIS
 --      Parse the input, and perform semantic analysis
@@ -105,7 +105,7 @@ FILE *fil;
                   }
                   else if( *p == ']' )
                      Fatal( "Found unmatched ']'" );
-                  else if( *pTmpBuf && *p || (Notabs && !*pTmpBuf && !*p))
+                  else if( (*pTmpBuf && *p) || (Notabs && !*pTmpBuf && !*p))
              State = NORMAL_SCAN;
                }
 

@@ -1,4 +1,4 @@
-/* RCS  $Id: arlib.c,v 1.1.1.1 2000-09-22 15:33:33 hr Exp $
+/* RCS  $Id: arlib.c,v 1.2 2002-10-11 13:42:47 waratah Exp $
 --
 -- SYNOPSIS
 --      Unix archive manipulation code.
@@ -415,7 +415,6 @@ ar_touch( f, now )/*
 FILE   *f;
 time_t now;
 {
-   struct ar_hdr arhdr;                /* external archive header */
 
    fseek(f, arhdroffset + (unsigned long)(((struct ar_hdr *)0)->ar_date), 0);
 

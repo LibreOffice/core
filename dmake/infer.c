@@ -1,4 +1,4 @@
-/* RCS  $Id: infer.c,v 1.1.1.1 2000-09-22 15:33:25 hr Exp $
+/* RCS  $Id: infer.c,v 1.2 2002-10-11 13:42:43 waratah Exp $
 --
 -- SYNOPSIS
 --      Infer how to make a target.
@@ -145,14 +145,14 @@ CELLPTR setdirroot;
      int dump = (match->ic_next->ic_next != NIL(ICELL));
 
      /* Check for definite ambiguity */
-     if( !dump )
+     if( !dump ) {
         if( (match->ic_meta->ce_prq && match->ic_next->ic_meta->ce_prq) ||
             (!match->ic_meta->ce_prq && !match->ic_next->ic_meta->ce_prq)  )
            dump = TRUE;
         else if(!match->ic_meta->ce_prq && match->ic_next->ic_meta->ce_prq )
            match = match->ic_next;
-
-     if( dump ) {
+     }
+     else {
         int count = 1;
 
         Continue = TRUE;
@@ -236,7 +236,7 @@ CELLPTR setdirroot;
 
         /* If infcell already had a directory set then modify it based on
          * whether it was the original cell or some intermediary. */
-        if( imeta->ce_dir )
+        if( imeta->ce_dir ) {
            if( infcell->ce_dir && infcell == cp ) {
           /* cp->ce_dir was set and we have pushed the directory prior
            * to calling this routine.  We should therefore pop it and
@@ -247,6 +247,7 @@ CELLPTR setdirroot;
            }
            else
           infcell->ce_dir = imeta->ce_dir;
+        }
 
         for( lp=imeta->ce_indprq; lp != NIL(LINK); lp=lp->cl_next ) {
            char    *name = lp->cl_prq->CE_NAME;
@@ -350,12 +351,12 @@ ICELLPTR *nnmp;
 
       /* Now run through the list of prerequisite edge's for the %-meta. */
       for( ; edge != NIL(LINK); edge = edge->cl_next ) {
-     HASHPTR  thp;      /* temporary hash table pointer     */
+     HASHPTR  thp = 0;      /* temporary hash table pointer     */
      HASH     iprqh;    /* hash cell for new prerequisite   */
      CELL     iprq;     /* inferred prerequisite to look for    */
      CELLPTR  idirroot; /* Inferred prerequisite root       */
      CELLPTR  nidirroot;    /* Inferred prerequisite root       */
-     STRINGPTR ircp;    /* Inferred prerequisites recipe    */
+     STRINGPTR ircp = 0;    /* Inferred prerequisites recipe    */
      char     *idir;    /* directory to CD to.          */
      int      ipush = 0;    /* flag for push on inferred prereq     */
      char     *name = NIL(char);        /* prerequisite name    */

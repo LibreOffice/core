@@ -1,4 +1,4 @@
-/* RCS  $Id: runargv.c,v 1.4 2001-05-29 22:43:32 pluby Exp $
+/* RCS  $Id: runargv.c,v 1.5 2002-10-11 13:42:48 waratah Exp $
 --
 -- SYNOPSIS
 --      Invoke a sub process.
@@ -24,10 +24,20 @@
 */
 
 #include <signal.h>
+#include <wait.h>
+
 #include "extern.h"
+
+/*  temporarily comment out spwan code as it does not actually work yet */
+#undef HAVE_SPAWN_H
+#if HAVE_SPAWN_H
+#  include <spawn.h>
+#endif
 #include "sysintf.h"
-#if defined(__CYGWIN__)
-#include <errno.h>
+#if HAVE_ERRNO_H
+#  include <errno.h>
+#else
+   extern  int  errno;
 #endif
 
 typedef struct prp {
@@ -54,12 +64,36 @@ static PR  *_procs    = NIL(PR);
 static int  _proc_cnt = 0;
 static int  _abort_flg= FALSE;
 static int  _use_i    = -1;
-static int  _do_upd   = 0;
 
 static  void    _add_child ANSI((int, CELLPTR, int, int));
 static  void    _attach_cmd ANSI((char *, int, int, CELLPTR, int, int));
 static  void    _finished_child ANSI((int, int));
 static  int     _running ANSI((CELLPTR));
+
+#if ! HAVE_STRERROR
+static char *
+private_strerror (errnum)
+     int errnum;
+{
+#ifndef __APPLE__
+#ifdef arm32
+  extern  const char * const sys_errlist[];
+#else
+#if defined(linux) || defined(__FreeBSD__)
+  extern  const char * const sys_errlist[];
+#else
+  extern  char *sys_errlist[];
+#endif
+ #endif
+#endif
+  extern int sys_nerr;
+
+  if (errnum > 0 && errnum <= sys_nerr)
+    return sys_errlist[errnum];
+  return "Unknown system error";
+}
+#define strerror private_strerror
+#endif /* HAVE_STRERROR */
 
 PUBLIC int
 runargv(target, ignore, group, last, shell, cmd)
@@ -70,22 +104,7 @@ int last;
 int     shell;
 char    *cmd;
 {
-#if !defined(__CYGWIN__)
-   extern  int  errno;
-#ifndef __APPLE__
-#ifdef arm32
-   extern  const char * const sys_errlist[];
-#else
-#if defined(linux) || defined(__FreeBSD__)
-   extern  const char * const sys_errlist[];
-#else
-   extern  char *sys_errlist[];
-#endif
-#endif
-#endif
-#else /* __CYGWIN__ */
-#define sys_errlist _sys_errlist
-#endif
+
    int          pid;
    char         **argv;
 
@@ -96,36 +115,52 @@ char    *cmd;
       return(1);
    }
 
-   while( _proc_cnt == Max_proc )
-      if( Wait_for_child(FALSE, -1) == -1 )
-      {
-         Fatal( "Lost a child %d", errno );
-         /* If we make it here, something has gone wrong and we need to
-          * forcefully exit */
-         Epilog( ERROR_EXIT_VALUE );
+    /*  Any Fatal call can potentially loop by recursion because we
+     *  are called from the Quit routine that Fatal indirectly calls
+     *  since Fatal should not happen I have left this bug in here */
+   while( _proc_cnt == Max_proc ) {
+      if( Wait_for_child(FALSE, -1) == -1 ) {
+        if( ! in_quit() || errno != ECHILD )
+            Fatal( "Lost a child %d: %s", errno, strerror( errno ) );
+        else  {/* we are quitting and the _proc_cnt was stuffed up by ^C */
+            fprintf(stderr,"_proc_cnt %d, Max_proc %d\n",_proc_cnt,Max_proc);
+            _proc_cnt = 0;
+        }
       }
+   }
 
    argv = Pack_argv( group, shell, cmd );
 
+#if HAVE_SPAWN_H
+   if (posix_spawn (&pid, argv[0], NULL, NULL, argv, (char *)NULL))
+   {   /* posix_spawn failed */
+       Error("%s: %s", argv[0], strerror(errno));
+       Handle_result(-1, ignore, _abort_flg, target);
+       return(-1);
+   } else {
+       _add_child(pid, target, ignore, last);
+   }
+#else  /* HAVE_SPAWN_H */
+
    switch( pid=fork() ){
-      int   wid;
-      int   status;
 
    case -1: /* fork failed */
-      Error("%s: %s", argv[0], sys_errlist[errno]);
+      Error("%s: %s", argv[0], strerror( errno ));
       Handle_result(-1, ignore, _abort_flg, target);
       return(-1);
 
    case 0:  /* child */
       execvp(argv[0], argv);
       Continue = TRUE;   /* survive error message */
-      Error("%s: %s", argv[0], sys_errlist[errno]);
+      Error("%s: %s", argv[0], strerror( errno ));
       kill(getpid(), SIGTERM);
       /*NOTREACHED*/
 
    default: /* parent */
       _add_child(pid, target, ignore, last);
    }
+
+#endif  /* HAVE_SPAWN_H */
 
    return(1);
 }
@@ -143,7 +178,9 @@ int pid;
    waitchild = (pid == -1)? FALSE : Wait_for_completion;
 
    do {
-      if( (wid = wait(&status)) == -1 ) return(-1);
+      wid = wait(&status);
+      if( wid  == -1 )
+         return(-1);
 
       _abort_flg = abort_flg;
       _finished_child(wid, status);
@@ -212,7 +249,6 @@ int pid;
 int status;
 {
    register int i;
-   register PR *pp;
    char     *dir;
 
    for( i=0; i<Max_proc; i++ )

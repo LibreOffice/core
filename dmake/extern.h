@@ -1,4 +1,4 @@
-/* RCS  $Id: extern.h,v 1.5 2002-10-07 13:36:01 waratah Exp $
+/* RCS  $Id: extern.h,v 1.6 2002-10-11 13:42:42 waratah Exp $
 --
 -- SYNOPSIS
 --      External declarations for dmake functions.
@@ -89,5 +89,29 @@
  * externally above and turns them into no-ops.  Have to do this after
  * the extern declarations however. */
 #include "posix.h"
+
+/* Work around some of the functions that may or may not exist */
+#if ! HAVE_TZSET
+#if HAVE_SETTZ
+#  define tzset() settz()
+#else
+#  warn "tzset is not supported, null out"
+#  define tzset()
+#endif
+#endif
+
+/* Get the working directory fall back code */
+#if ! HAVE_GETCWD
+#if HAVE_GETWD
+#  define getcwd(buf,len) getwd(buf)
+#else
+#  error "You have no supported way of getting working directory"
+#endif
+#endif
+
+/*  If setvbuf is not available set output to unbuffered */
+#if ! HAVE_SETVBUF
+#  define setvbuf(fp,bp,type,len) setbuf(fp,NULL)
+#endif
 
 #endif

@@ -1,4 +1,4 @@
-/* RCS  $Id: dag.c,v 1.1.1.1 2000-09-22 15:33:25 hr Exp $
+/* RCS  $Id: dag.c,v 1.2 2002-10-11 13:42:42 waratah Exp $
 --
 -- SYNOPSIS
 --      Routines to construct the internal dag.
@@ -321,11 +321,12 @@ int     flags;          /* initial ht_flags */
    /* Check for macro variables and make the necessary adjustment in the
     * corresponding global variables */
 
-   if( hp->ht_flag & M_VAR_MASK )
+   if( hp->ht_flag & M_VAR_MASK ) {
       if( !(flags & M_EXPANDED) )
      Error( "Macro variable '%s' must be assigned with :=", name );
       else
          set_macro_value(hp);
+   }
 
    DB_RETURN( hp );
 }
@@ -496,11 +497,12 @@ int     fail;
    DB_ENTER( "Test_circle" );
    DB_PRINT( "tc", ("checking [%s]", cp->CE_NAME) );
 
-   if( cp->ce_flag & F_MARK )
+   if( cp->ce_flag & F_MARK ) {
       if( fail )
      Fatal("Detected circular dependency in graph at [%s]", cp->CE_NAME);
       else
      DB_RETURN( 1 );
+   }
 
    cp->ce_flag |= F_MARK;
    for( lp = cp->ce_prq; !res && lp != NIL(LINK); lp = lp->cl_next )
