@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TransparencyGradientTable.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:53:45 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 19:24:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@
     @see DrawingDocumentFactory
     @see com::sun::star::awt::Gradient
 */
-service TransparencyGradientTable
+published service TransparencyGradientTable
 {
     /** this container lets you access the <typeu scope="com::sun::star::awt">Gradient</type>s that
         are indexed with a name.
