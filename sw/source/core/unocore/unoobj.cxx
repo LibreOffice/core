@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: os $ $Date: 2000-12-15 12:26:05 $
+ *  last change: $Author: os $ $Date: 2000-12-20 17:27:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1845,7 +1845,7 @@ sal_Bool SwXTextCursor::gotoEndOfParagraph(sal_Bool Expand) throw( uno::RuntimeE
         SwXTextCursor::SelectPam(*pUnoCrsr, Expand);
         bRet = SwUnoCursorHelper::IsEndOfPara(*pUnoCrsr);
         if(!bRet)
-            pUnoCrsr->MovePara(fnParaCurr, fnParaEnd);
+            bRet = pUnoCrsr->MovePara(fnParaCurr, fnParaEnd);
     }
     else
         throw uno::RuntimeException();
