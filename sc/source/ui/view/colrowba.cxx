@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colrowba.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2001-01-31 19:37:51 $
+ *  last change: $Author: nn $ $Date: 2001-03-20 18:02:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -358,6 +358,7 @@
 #include "document.hxx"
 #include "scmod.hxx"
 #include "tabvwsh.hxx"
+#include "docsh.hxx"
 #include "appoptio.hxx"
 #include "globstr.hrc"
 
@@ -527,7 +528,8 @@ BOOL ScColBar::IsDisabled()
 
 BOOL ScColBar::ResizeAllowed()
 {
-    return !pViewData->HasEditView( pViewData->GetActivePart() );
+    return !pViewData->HasEditView( pViewData->GetActivePart() ) &&
+            !pViewData->GetDocShell()->IsReadOnly();
 }
 
 void ScColBar::DrawInvert( long nDragPos )
@@ -687,7 +689,8 @@ BOOL ScRowBar::IsDisabled()
 
 BOOL ScRowBar::ResizeAllowed()
 {
-    return !pViewData->HasEditView( pViewData->GetActivePart() );
+    return !pViewData->HasEditView( pViewData->GetActivePart() ) &&
+            !pViewData->GetDocShell()->IsReadOnly();
 }
 
 void ScRowBar::DrawInvert( long nDragPos )
