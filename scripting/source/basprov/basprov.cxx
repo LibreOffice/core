@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basprov.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 14:02:27 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 17:43:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,12 @@
 #endif
 #ifndef _OSL_FILE_HXX_
 #include <osl/file.hxx>
+#endif
+#ifndef _VOS_MUTEX_HXX_
+#include <vos/mutex.hxx>
+#endif
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
 #endif
 #ifndef _SBXCLASS_HXX
 #include <svtools/sbx.hxx>
@@ -320,7 +326,7 @@ namespace basprov
     {
         // TODO
 
-        ::osl::MutexGuard aGuard( StarBASIC::GetGlobalMutex() );
+        ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
         if ( aArguments.getLength() == 1 && aArguments[0].getValueType() ==  ::getCppuType(  (const ::rtl::OUString* ) NULL ))
         {
@@ -393,7 +399,7 @@ namespace basprov
     {
         // TODO
 
-        ::osl::MutexGuard aGuard( StarBASIC::GetGlobalMutex() );
+        ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
         Reference< provider::XScript > xScript;
         Reference< lang::XMultiComponentFactory > xMcFac ( m_xContext->getServiceManager() );
@@ -501,7 +507,7 @@ namespace basprov
     {
         // TODO
 
-        ::osl::MutexGuard aGuard( StarBASIC::GetGlobalMutex() );
+        ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
         return ::rtl::OUString::createFromAscii( "Basic" );
     }
@@ -510,7 +516,7 @@ namespace basprov
 
     Sequence< Reference< browse::XBrowseNode > > BasicProviderImpl::getChildNodes(  ) throw (RuntimeException)
     {
-        ::osl::MutexGuard aGuard( StarBASIC::GetGlobalMutex() );
+        ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
         Reference< script::XLibraryContainer > xLibContainer;
         BasicManager* pBasicManager = NULL;
@@ -568,7 +574,7 @@ namespace basprov
 
     sal_Bool BasicProviderImpl::hasChildNodes(  ) throw (RuntimeException)
     {
-        ::osl::MutexGuard aGuard( StarBASIC::GetGlobalMutex() );
+        ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
         sal_Bool bReturn = sal_False;
         Reference< script::XLibraryContainer > xLibContainer;
@@ -590,7 +596,7 @@ namespace basprov
 
     sal_Int16 BasicProviderImpl::getType(  ) throw (RuntimeException)
     {
-        ::osl::MutexGuard aGuard( StarBASIC::GetGlobalMutex() );
+        ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
         return browse::BrowseNodeTypes::CONTAINER;
     }
