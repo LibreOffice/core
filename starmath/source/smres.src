@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smres.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-06 15:00:36 $
+ *  last change: $Author: kz $ $Date: 2000-12-08 17:51:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,7 +152,7 @@ ModalDialog RID_FONTDIALOG
         Text[ chinese_traditional ] = "²ÊÅé(~B)";
         Text[ arabic ] = "ÚÑíÖ";
         Text[ greek ] = "¸íôïíï";
-        Text[ korean ] = "ÁøÇÏ°Ô(~B)";
+        Text[ korean ] = "±½°Ô(~B)";
         Text[ turkish ] = "Kalın";
         Text[ language_user1 ] = " ";
     };
@@ -1228,7 +1228,7 @@ ModalDialog RID_DISTANCEDIALOG
         Text[ chinese_traditional ] = "¤ÀÃş(~C)";
         Text[ arabic ] = "İÆÉ";
         Text[ greek ] = "~Êáôçãïñßá";
-        Text[ korean ] = "Ä«Å×°í¸®(~C)";
+        Text[ korean ] = "¹üÁÖ";
         Text[ turkish ] = "Kategori";
         Text[ language_user1 ] = " ";
     };
@@ -1262,7 +1262,7 @@ ModalDialog RID_DISTANCEDIALOG
         Text[ chinese_traditional ] = "¤ÀÃş";
         Text[ arabic ] = "İÆÉ";
         Text[ greek ] = "Êáôçãïñßåò";
-        Text[ korean ] = "Ä«Å×°í¸®";
+        Text[ korean ] = "¹üÁÖ";
         Text[ turkish ] = "Kategori";
         Text[ language_user1 ] = " ";
     };
@@ -3423,14 +3423,14 @@ WarningBox RID_NOMATHTYPEFACEWARNING
     Message [ dutch ] = "Het lettertype \"StarMath\" is niet geïnstalleerd!\nZonder dit lettertype werkt %PRODUCTNAME Math niet correct...\nInstalleer dit lettertype en start %PRODUCTNAME Math opnieuw." ;
     Message [ spanish ] = "¡La fuente \"StarMath\" no está instalada!\nSin esta fuente StarMath no funcionará correctamente...\nInstale la fuente y reinicie StarMath." ;
     Message [ english_us ] = "The \"StarMath\" font has not been installed.\nWithout this font %PRODUCTNAME Math cannot function correctly.\nPlease install this font and restart %PRODUCTNAME Math." ;
-    Message[ chinese_simplified ] = "Ã»ÓĞ°²×°¡°StarMath¡± ×ÖÌå£¡\nÃ»ÓĞÕâ¸ö×ÖÌå %PRODUCTNAME Math ÎŞ·¨Õı³£ÔË×÷¡£\nÇëÔÚ°²×°Õâ¸ö×ÖÌåºóÖØĞÂÆô¶¯ %PRODUCTNAME Math ¡£";
+    Message[ chinese_simplified ] = "Ã»ÓĞ°²×°¡°StarMath¡± ×ÖÌå£¡\nÃ»ÓĞÕâ¸ö StarMath×ÖÌå³ÌĞò»áÎŞ·¨Õı³£ÔË×÷¡£\nÇëÔÚ°²×°Õâ¸ö×ÖÌåºóÖØĞÂÆô¶¯ StarMath ¡£";
     Message[ russian ] = "Øğèôò \"StarMath\" íå èíñòàëëèğîâàí !\nÁåç ıòîãî øğèôòà %PRODUCTNAME Math ìîæåò íåïğàâèëüíî ğàáîòàòü...\nÈíñòàëëèğóéòå øğèôò è ïåğåçàïóñòèòå %PRODUCTNAME Math.";
     Message[ polish ] = "Czcionka \"StarMath\" nie jest zainstalowana!\nBez tej czcionki %PRODUCTNAME Math nie mo¿e poprawnie pracowaæ...\nZainstaluj tê czcionkê i uruchom %PRODUCTNAME Math ponownie.";
     Message[ japanese ] = "\"StarMath\" Ì«İÄ‚ª²İ½Ä°Ù‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ¡\n‚±‚ÌÌ«İÄ‚È‚µ‚Å‚Í %PRODUCTNAME Math ‚ª‚¤‚Ü‚­‹@”\\‚µ‚Ü‚¹‚ñ...\n‚Ü‚¸Ì«İÄ‚ğ²İ½Ä°Ù‚µ‚Ä %PRODUCTNAME Math ‚ğÄ‹N“®‚µ‚Ä‚­‚¾‚³‚¢B";
     Message[ chinese_traditional ] = "¨S¦³¦w¸Ë StarMath ¦r«¬\n¦ÓµLªk¥¿±`¹B§@¡I\n½Ğ±z¦w¸Ë StarMath ¦r«¬¡AµM¦Z¦A­«·s¶}±Ò StaMath¡C";
     Message[ arabic ] = "ÇáÎØ \"StarMath\" ÛíÑ ãõËÈøóÊ!\nÈÏæä åĞÇ ÇáÎØ áÇ íÓÊØíÚ %PRODUCTNAME Math ÇáÚãá ÈÔßá ÕÍíÍ...\nÇáÑÌÇÁ ÊËÈíÊ åĞÇ ÇáÎØ¡ Ëã ÈÏÁ %PRODUCTNAME Math ãÌÏÏÇğ.";
     Message[ greek ] = "Äåí İãéíå ç åãêáôÜóôáóç ôçò ãñáììáôïóåéñÜò \"StarMath\".\n×ùñßò áõôŞ ôç ãñáììáôïóåéñÜ ôï %PRODUCTNAME Math äåí èá åêôåëåóôåß óùóôÜ.\nĞáñáêáëş íá ãßíåé ğñşôá ç åãêáôÜóôáóç áõôŞò ôçò ãñáììáôïóåéñÜò êáé óôç óõíİ÷åéá ç åğáíåêêßíçóç ôïõ %PRODUCTNAME Math.";
-    Message[ korean ] = "\"%PRODUCTNAME Math\" ±Û²ÃÀÌ ¼³Ä¡µÇ¾î ÀÖÁö ¾Ê½À´Ï´Ù!\nÀÌ ±Û²ÃÀÌ ¾øÀ¸¸é %PRODUCTNAME Math°¡ Á¦´ë·Î ÀÛ¾÷À» ÇÒ ¼ö ¾ø½À´Ï´Ù...\n±Û²ÃÀ» ¼³Ä¡ÇÑ ´ÙÀ½, %PRODUCTNAME Math¸¦ ´Ù½Ã ½ÃÀÛÇÏ½Ê½Ã¿À.";
+    Message[ korean ] = "\"StarMath\" ±Û²ÃÀÌ ¼³Ä¡µÇ¾î ÀÖÁö ¾Ê½À´Ï´Ù!\nÀÌ ±Û²ÃÀÌ ¾øÀ¸¸é%PRODUCTNAME Math°¡ Á¦´ë·Î ÀÛ¾÷À» ÇÒ ¼ö ¾ø½À´Ï´Ù...\n±Û²ÃÀ» ¼³Ä¡ÇÑ ´ÙÀ½, %PRODUCTNAME Math¸¦ ´Ù½Ã ½ÃÀÛÇÏ½Ê½Ã¿À.";
     Message[ turkish ] = "\"StarMath\" yazıtipi yüklenmedi!\nBu yazıtipi olmadan StarMath programı doğru bir biçimde çalışmaz...\nYazıtipini yükleyin ve StarMath programını yeniden başlatın.";
     Message[ language_user1 ] = " ";
 };
@@ -3539,7 +3539,7 @@ String RID_FONTBOLD
     Text[ chinese_traditional ] = ", ²ÊÅé";
     Text[ arabic ] = "ÚÑíÖ";
     Text[ greek ] = ";¸íôïíï";
-    Text[ korean ] = ", ÁøÇÏ°Ô";
+    Text[ korean ] = ", ±½°Ô";
     Text[ turkish ] = ", kalın";
     Text[ language_user1 ] = " ";
 };
@@ -4677,7 +4677,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_simplified ] = "³ı·¨(Ò»ĞĞË«µã)";
                 Text[ russian ] = "Äåëåíèå (äâîåòî÷èå ñ ÷åğòîé)";
                 Text[ polish ] = "Dzielenie (dwukropek-kreska)";
-                Text[ japanese ] = "Š„Z(ü‚É2“_)";
+                Text[ japanese ] = "Š„Z(ü‚É“_‚Ó‚½‚Â)";
                 Text[ chinese_traditional ] = "°£ªk(¤@¦æÂùÂI)";
                 Text[ arabic ] = "(÷) ŞÓãÉ";
                 Text[ greek ] = "Division (¸)";
@@ -5758,7 +5758,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_traditional ] = "¥ş¶°";
                 Text[ arabic ] = "ãÌãæÚÉ ÚÇáíÉ";
                 Text[ greek ] = "Õğåñóıíïëï";
-                Text[ korean ] = "À­Ã·ÀÚ";
+                Text[ korean ] = "À§Ã·ÀÚ";
                 Text[ turkish ] = "Üst küme";
                 Text[ language_user1 ] = " ";
             };
@@ -5784,7 +5784,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_traditional ] = "¥ş¶°©Îµ¥¶°";
                 Text[ arabic ] = "ãÌãæÚÉ ÚÇáíÉ Ãæ íÓÇæí";
                 Text[ greek ] = "Õğåñóıíïëï Ş ßóï";
-                Text[ korean ] = "À­Ã·ÀÚ ¶Ç´Â µ¿ÀÏ";
+                Text[ korean ] = "À§Ã·ÀÚ ¶Ç´Â µ¿ÀÏ";
                 Text[ turkish ] = "Üst kümesi ya da eşittir";
                 Text[ language_user1 ] = " ";
             };
@@ -6872,7 +6872,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_traditional ] = "­¼¿n";
                 Text[ arabic ] = "ÖÑÈ";
                 Text[ greek ] = "Ãéíüìåíï";
-                Text[ korean ] = "°ö";
+                Text[ korean ] = "Á¦Ç°";
                 Text[ turkish ] = "Çarpım";
                 Text[ language_user1 ] = " ";
             };
@@ -7385,7 +7385,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_traditional ] = "¥[¦b¦è¯Z¤ú»yn_¦r¤Wªºµo­µ²Å¸¹";
                 Text[ arabic ] = "ÇáÊáÏÉ";
                 Text[ greek ] = "Ğåñéóğùìİíç";
-                Text[ korean ] = "Æ¿µå";
+                Text[ korean ] = "¹İº¹ ±âÈ£";
                 Text[ turkish ] = "Tilde";
                 Text[ language_user1 ] = " ";
             };
@@ -7463,7 +7463,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_traditional ] = "ÂI";
                 Text[ arabic ] = "äŞØÉ";
                 Text[ greek ] = "Êïõêêßäá";
-                Text[ korean ] = "µµÆ®";
+                Text[ korean ] = "Á¡";
                 Text[ turkish ] = "Nokta";
                 Text[ language_user1 ] = " ";
             };
@@ -7519,7 +7519,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ chinese_traditional ] = "¼eªº¥[¦b¦è¯Z¤ú»yn_¦r¤Wªºµo­µ²Å¸¹";
                 TEXT[ arabic ] = "ÊáÏÉ ÚÑíÖÉ";
                 TEXT[ greek ] = "ÌåãÜëç ğåñéóğùìİíç";
-                TEXT[ korean ] = "Å« Æ¿µå";
+                TEXT[ korean ] = "Å« ¹İº¹ ±âÈ£";
                 TEXT[ turkish ] = "Geniş tilde";
                 TEXT[ language_user1 ] = " ";
             };
@@ -7998,7 +7998,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_traditional ] = "Âù½u";
                 Text[ arabic ] = "ÎØæØ ãÒÏæÌÉ";
                 Text[ greek ] = "Äéğëİò ãñáììİò";
-                Text[ korean ] = "2Áß ¼±";
+                Text[ korean ] = "ÀÌÁß ¼±";
                 Text[ turkish ] = "Çift çizgiler";
                 Text[ language_user1 ] = " ";
             };
