@@ -81,12 +81,12 @@ void YYWarning();
 	}
 }
 
-(^[\t ]*"#ifndef".+$)	|
-(^[\t ]*"#ifdef".+$)	|
-(^[\t ]*"#if".+$)		|
-(^[\t ]*"#elif".*$)	|
-(^[\t ]*"#else".*$)	|
-(^[\t ]*"#endif".*$)	{
+^[\t ]*"#ifndef".+$	|
+^[\t ]*"#ifdef".+$	|
+^[\t ]*"#if".+$		|
+^[\t ]*"#elif".*$	|
+^[\t ]*"#else".*$	|
+^[\t ]*"#endif".*$	{
 	WorkOnTokenSet( CONDITION, yytext );
 }
 
