@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vectdlg.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 07:19:16 $
+ *  last change: $Author: rt $ $Date: 2001-05-04 21:42:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,7 @@ ModalDialog DLG_VECTORIZE
         Text[ korean ] = "¹Ì¸®º¸±â";
         Text[ turkish ] = "Önizleme";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Previsualización";
     };
 
     GroupBox GRP_SETTINGS
@@ -157,6 +158,7 @@ ModalDialog DLG_VECTORIZE
         Text[ korean ] = "¼³Á¤";
         Text[ turkish ] = "Ayarlar";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Configuración";
     };
 
     FixedText FT_LAYERS
@@ -184,6 +186,7 @@ ModalDialog DLG_VECTORIZE
         Text[ korean ] = "»ö»ó¡¡°³¼ö:";
         Text[ turkish ] = "Renk sayýsý:";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Cantidad de colores:";
     };
 
     NumericField NM_LAYERS
@@ -227,6 +230,7 @@ ModalDialog DLG_VECTORIZE
         Text[ korean ] = "Á¡ ÁÙÀÓ:";
         Text[ turkish ] = "Nokta azaltma:";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Reducción de puntos:";
     };
 
     MetricField MT_REDUCE
@@ -273,6 +277,7 @@ ModalDialog DLG_VECTORIZE
         Text[ korean ] = "±¸¸Û Ã¤¿ì±â(~F):";
         Text[ turkish ] = "Boþluklarý doldur";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Rellenar agujeros";
     };
 
     FixedText FT_FILLHOLES
@@ -300,6 +305,7 @@ ModalDialog DLG_VECTORIZE
         Text[ korean ] = "¹ÙµÏÆÇ Å©±â:";
         Text[ turkish ] = "Döþeme taþý boyutu:";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Tamaño de azulejo:";
     };
 
     MetricField MT_FILLHOLES
@@ -345,6 +351,7 @@ ModalDialog DLG_VECTORIZE
         Text[ korean ] = "¼Ò½º ±×¸²:";
         Text[ turkish ] = "Asýl resim:";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Imagen original:";
     };
 
     Control CTL_BMP
@@ -380,6 +387,7 @@ ModalDialog DLG_VECTORIZE
         Text[ korean ] = "º¤ÅÍ ÀÌ¹ÌÁö:";
         Text[ turkish ] = "Vektör tabanlý resim:";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Imagen vectorizada:";
     };
 
     Control CTL_WMF
@@ -415,6 +423,7 @@ ModalDialog DLG_VECTORIZE
         Text[ korean ] = "ÁøÇà";
         Text[ turkish ] = "Artýþ";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Progreso";
     };
 
     Window WND_PRGS
@@ -442,5 +451,6 @@ ModalDialog DLG_VECTORIZE
     Text[ korean ] = "´Ù°¢ÇüÀ¸·Î º¯È¯";
     Text[ turkish ] = "Çokgene dönüþtür";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Convertir en polígono";
 };
 
