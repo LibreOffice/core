@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tblrwcl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:39:41 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 10:10:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -285,9 +285,33 @@ void _CheckBoxWidth( const SwTableLine& rLine, SwTwips nSize );
             ::_CheckBoxWidth( *aLines[ n ], nSize );            \
     }
 
+#define CHECKTABLELAYOUT                                            \
+    {                                                               \
+        for ( int i = 0; i < GetTabLines().Count(); ++i )    \
+        {                                                           \
+            SwFrmFmt* pFmt = GetTabLines()[i]->GetFrmFmt();  \
+            SwClientIter aIter( *pFmt );                            \
+            SwClient* pLast = aIter.GoStart();                      \
+            if( pLast )                                             \
+            {                                                       \
+                do                                                  \
+                {                                                   \
+                    SwFrm *pFrm = PTR_CAST( SwFrm, pLast );         \
+                    if ( pFrm &&                                    \
+                         ((SwRowFrm*)pFrm)->GetTabLine() == GetTabLines()[i] ) \
+                    {                                               \
+                        ASSERT( pFrm->GetUpper()->IsTabFrm(),       \
+                                "Table layout does not match table structure" )       \
+                    }                                               \
+                } while ( 0 != ( pLast = aIter++ ) );               \
+            }                                                       \
+        }                                                           \
+    }
+
 #else
 
 #define CHECKBOXWIDTH
+#define CHECKTABLELAYOUT
 
 #endif
 
@@ -616,6 +640,7 @@ BOOL SwTable::InsertCol( SwDoc* pDoc, const SwSelBoxes& rBoxes,
     aFndBox.MakeFrms( *this );
     aFndBox.RestoreChartData( *this );
     CHECKBOXWIDTH
+    CHECKTABLELAYOUT
     return TRUE;
 }
 
@@ -707,6 +732,8 @@ BOOL SwTable::InsertRow( SwDoc* pDoc, const SwSelBoxes& rBoxes,
         aFndBox.RestoreChartData( *this );
     }
     CHECKBOXWIDTH
+    CHECKTABLELAYOUT
+
     return TRUE;
 }
 
@@ -797,6 +824,8 @@ BOOL SwTable::AppendRow( SwDoc* pDoc, USHORT nCnt )
         aFndBox.RestoreChartData( *this );
     }
     CHECKBOXWIDTH
+    CHECKTABLELAYOUT
+
     return TRUE;
 }
 
@@ -1147,6 +1176,9 @@ BOOL SwTable::DeleteSel( SwDoc* pDoc, const SwSelBoxes& rBoxes, SwUndo* pUndo,
     if( bDelMakeFrms && aFndBox.AreLinesToRestore( *this ) )
         aFndBox.MakeFrms( *this );
     aFndBox.RestoreChartData( *this );
+
+    CHECKTABLELAYOUT
+
     return TRUE;
 }
 
@@ -1284,10 +1316,12 @@ BOOL SwTable::SplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, USHORT nCnt,
 
     delete[] pRowHeights;
 
-    //Layout updaten
+    GCLines();
+
     aFndBox.MakeFrms( *this );
     aFndBox.RestoreChartData( *this );
     CHECKBOXWIDTH
+    CHECKTABLELAYOUT
     return TRUE;
 }
 
@@ -1386,6 +1420,7 @@ BOOL SwTable::SplitCol( SwDoc* pDoc, const SwSelBoxes& rBoxes, USHORT nCnt )
     aFndBox.MakeFrms( *this );
     aFndBox.RestoreChartData( *this );
     CHECKBOXWIDTH
+    CHECKTABLELAYOUT
     return TRUE;
 }
 
@@ -1826,6 +1861,8 @@ BOOL SwTable::Merge( SwDoc* pDoc, const SwSelBoxes& rBoxes,
     aFndBox.MakeFrms( *this );
     aFndBox.RestoreChartData( *this );
     CHECKBOXWIDTH
+    CHECKTABLELAYOUT
+
     return TRUE;
 }
 
@@ -2159,6 +2196,9 @@ BOOL SwTable::MakeCopy( SwDoc* pInsDoc, const SwPosition& rPos,
     pNewTbl->GCLines();
 
     pTblNd->MakeFrms( &aIdx );  // erzeuge die Frames neu
+
+    CHECKTABLELAYOUT
+
     return TRUE;
 }
 
@@ -3853,6 +3893,7 @@ BOOL SwTable::SetColWidth( SwTableBox& rAktBox, USHORT eType,
     if( bRet )
     {
         CHECKBOXWIDTH
+        CHECKTABLELAYOUT
     }
 
     return bRet;
@@ -4334,6 +4375,8 @@ BOOL SwTable::SetRowHeight( SwTableBox& rAktBox, USHORT eType,
                 aParam.pUndo->SaveNewBoxes( *aParam.pTblNd, aTmpLst );
         }
     }
+
+    CHECKTABLELAYOUT
 
     return bRet;
 }
