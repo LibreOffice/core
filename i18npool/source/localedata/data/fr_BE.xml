@@ -385,6 +385,7 @@
 <quarter4Word>4e trimestre</quarter4Word>
 <aboveWord>supra</aboveWord>
 <belowWord>infra</belowWord>
+<quarterAbbreviation>T</quarterAbbreviation>
 </ReservedWords>
 </LC_MISC>
 <LC_NumberingLevel>

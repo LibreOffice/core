@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zformat.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: er $ $Date: 2002-07-25 09:59:58 $
+ *  last change: $Author: er $ $Date: 2002-07-26 12:57:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2754,7 +2754,7 @@ BOOL SvNumberformat::ImpGetDateOutput(double fNumber,
                 rCal.loadCalendar( rInfo.sStrArray[i], rLoc().getLocale() );
                 rCal.setDateTime( fOrgDateTime );
                 ImpFallBackToGregorianCalendar( aOrgCalendar, fOrgDateTime );
-                break;
+            break;
             case SYMBOLTYPE_STAR:
                 if( bStarFlag )
                 {
@@ -2762,15 +2762,15 @@ BOOL SvNumberformat::ImpGetDateOutput(double fNumber,
                     OutString += rInfo.sStrArray[i].GetChar(1);
                     bRes = TRUE;
                 }
-                break;
+            break;
             case SYMBOLTYPE_BLANK:
                 InsertBlanks( OutString, OutString.Len(),
                     rInfo.sStrArray[i].GetChar(1) );
-                break;
+            break;
             case SYMBOLTYPE_STRING:
             case SYMBOLTYPE_CURRENCY:
                 OutString += rInfo.sStrArray[i];
-                break;
+            break;
             case NF_KEY_M:                  // M
                 OutString += rCal.getDisplayString(
                         CalendarDisplayCode::SHORT_MONTH, nNatNum );
@@ -2793,7 +2793,7 @@ BOOL SvNumberformat::ImpGetDateOutput(double fNumber,
             break;
             case NF_KEY_Q:                  // Q
             {
-                OutString += 'Q';
+                OutString += rLoc().getQuarterAbbreviation();
                 if ( bOtherCalendar )
                     ImpSwitchToGregorianCalendar( aOrgCalendar, fOrgDateTime );
                 sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::MONTH );
@@ -3117,7 +3117,7 @@ BOOL SvNumberformat::ImpGetDateTimeOutput(double fNumber,
             break;
             case NF_KEY_Q:                  // Q
             {
-                OutString += 'Q';
+                OutString += rLoc().getQuarterAbbreviation();
                 if ( bOtherCalendar )
                     ImpSwitchToGregorianCalendar( aOrgCalendar, fOrgDateTime );
                 sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::MONTH );

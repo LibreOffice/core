@@ -378,6 +378,7 @@
 <quarter4Word>4-й квартал</quarter4Word>
 <aboveWord>выше</aboveWord>
 <belowWord>ниже</belowWord>
+<quarterAbbreviation>Q</quarterAbbreviation>
 </ReservedWords>
 </LC_MISC>
 <LC_NumberingLevel>

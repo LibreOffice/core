@@ -20,7 +20,7 @@ PURPOSE:
         'msgid                     CDATA              #REQUIRED'>
 <!ENTITY % RefLocale
         'ref                     CDATA              #REQUIRED'>
-<!-- The locale refered for the sub categories -->
+<!-- The locale referred to for the sub categories -->
 
 <!ELEMENT DefaultName  (#PCDATA)>
 
@@ -207,7 +207,8 @@ Can be 	FIXED_NUMBER ,FRACTION_NUMBER ,PERCENT_NUMBER  	SCIENTIFIC_NUMBER
 <!ELEMENT ForbiddenLineBeginCharacters (#PCDATA)>
 <!ELEMENT ForbiddenLineEndCharacters (#PCDATA)>
 
-<!ELEMENT ReservedWords  (trueWord, falseWord, quarter1Word, quarter2Word, quarter3Word, quarter4Word, aboveWord, belowWord)>
+<!ELEMENT ReservedWords  (trueWord, falseWord, quarter1Word, quarter2Word, quarter3Word, quarter4Word, aboveWord, belowWord, quarterAbbreviation)>
+<!-- order is significant! -->
 <!ELEMENT trueWord (#PCDATA)>
 <!ELEMENT falseWord (#PCDATA)>
 <!ELEMENT quarter1Word (#PCDATA)>
@@ -216,6 +217,7 @@ Can be 	FIXED_NUMBER ,FRACTION_NUMBER ,PERCENT_NUMBER  	SCIENTIFIC_NUMBER
 <!ELEMENT quarter4Word (#PCDATA)>
 <!ELEMENT aboveWord (#PCDATA)>
 <!ELEMENT belowWord (#PCDATA)>
+<!ELEMENT quarterAbbreviation (#PCDATA)>    <!-- "Q" (quarter), "T" (trimestre), ... -->
 
 
 <!--
