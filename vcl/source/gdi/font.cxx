@@ -2,9 +2,9 @@
  *
  *  $RCSfile: font.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 09:26:52 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 08:30:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ DBG_NAME( Font );
 // -----------------------------------------------------------------------
 
 Impl_Font::Impl_Font() :
-    maColor( COL_BLACK ),
+    maColor( COL_TRANSPARENT ),
     maFillColor( COL_TRANSPARENT )
 {
     mnRefCount          = 1;
