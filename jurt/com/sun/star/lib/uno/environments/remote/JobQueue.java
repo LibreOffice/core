@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JobQueue.java,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kr $ $Date: 2001-03-09 11:45:22 $
+ *  last change: $Author: kr $ $Date: 2001-04-17 16:14:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ import com.sun.star.uno.UnoRuntime;
  * (put by <code>putjob</code>) into the async queue, which is only
  * known by the sync queue.
  * <p>
- * @version     $Revision: 1.11 $ $ $Date: 2001-03-09 11:45:22 $
+ * @version     $Revision: 1.12 $ $ $Date: 2001-04-17 16:14:21 $
  * @author      Kay Ramme
  * @see         com.sun.star.lib.uno.environments.remote.ThreadPool
  * @see         com.sun.star.lib.uno.environments.remote.Job
@@ -329,19 +329,6 @@ public class JobQueue {
     private Job removeJob(int waitTime) throws InterruptedException {
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".removeJob:" + _head + " " + _threadId);
 
-        // if there is an async queue, wait for jobs to be done
-        if(_async_jobQueue != null) {
-            synchronized(_async_jobQueue) {
-
-                // wait for async queue to be empty and last job to be done
-                while(_async_jobQueue._active || _async_jobQueue._head != null) {
-                    if(DEBUG) System.err.println("waiting for async:" + _async_jobQueue._head + " " +  _async_jobQueue._worker_thread);
-                    _async_jobQueue.wait(10);
-                    if(DEBUG) System.err.println("waited for async");
-                }
-            }
-        }
-
         Job job = null;
         synchronized (this) {
             // wait max. waitTime time for a job to enter the queue
@@ -353,6 +340,7 @@ public class JobQueue {
                 waited = true;
             }
 
+
             if(_head != null) {
                 _current = _head;
                 _head    = _head._next;
@@ -361,6 +349,19 @@ public class JobQueue {
                     _tail = null;
 
                 job = _current;
+                _active = true;
+            }
+        }
+
+        // always wait for asynchron jobqueue to be finished !
+        if( job != null && _async_jobQueue != null )
+        {
+            synchronized(_async_jobQueue) {
+                // wait for async queue to be empty and last job to be done
+                while(_async_jobQueue._active || _async_jobQueue._head != null) {
+                    if(DEBUG) System.err.println("waiting for async:" + _async_jobQueue._head + " " +  _async_jobQueue._worker_thread);
+                    _async_jobQueue.wait(10);
+                }
             }
         }
 
@@ -427,7 +428,7 @@ public class JobQueue {
         }
 
         // always notify possible waiters
-        notify();
+        notifyAll();
     }
 
     /**
@@ -466,7 +467,6 @@ public class JobQueue {
 
                 if(job != null) {
                     try {
-                        _active = true;
                         result = job.execute();
                     }
                     finally {
@@ -499,7 +499,7 @@ public class JobQueue {
                         removeDisposeId(disposeId, disposeId_count);
 
                         if(_sync_jobQueue != null)
-                            notify(); // notify waiters (e.g. this is an asyncQueue and there is a sync waiting)
+                            notifyAll(); // notify waiters (e.g. this is an asyncQueue and there is a sync waiting)
                     }
                     else
                         quit = false;
