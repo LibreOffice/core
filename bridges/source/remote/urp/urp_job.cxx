@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_job.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2004-03-25 14:57:32 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 13:45:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,6 @@
  ************************************************************************/
 #include <string.h>
 #include <stdio.h>
-
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 
@@ -136,10 +135,10 @@ namespace bridges_urp
               sal_Sequence *pTid,
               struct urp_BridgeImpl *pBridgeImpl,
               Unmarshal *pUnmarshal )
-        : m_pTid( pTid )
-        , m_counter( pEnvRemote )
+        : m_pUnmarshal( pUnmarshal )
         , m_pBridgeImpl( pBridgeImpl )
-        , m_pUnmarshal( pUnmarshal )
+        , m_pTid( pTid )
+        , m_counter( pEnvRemote )
     {
         if( m_pTid )
             rtl_byte_sequence_acquire( pTid );
@@ -523,9 +522,9 @@ namespace bridges_urp
         sal_Int32 nMaxMessages )
         : Job( pEnvRemote, pTid, pBridgeImpl , pUnmarshal )
         , m_pEnvRemote( pEnvRemote )
-        , m_nCurrentMemPosition( 0 )
         , m_nCalls( 0 )
         , m_nMaxMessages( nMaxMessages )
+        , m_nCurrentMemPosition( 0 )
     {
         m_pEnvRemote->acquire( m_pEnvRemote );
         m_nCurrentMemSize = MULTIJOB_STANDARD_MEMORY_SIZE + m_nMaxMessages * (
