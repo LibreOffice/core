@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xilink.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:05:12 $
+ *  last change: $Author: rt $ $Date: 2003-05-21 08:03:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,6 @@
 class ScDocument;
 class ScTokenArray;
 class XclImpStream;
-class ExcelToSc;
 
 
 /* ============================================================================
@@ -165,7 +164,7 @@ private:
 
 public:
     /** Reads a cached value and stores it with its cell address. */
-    explicit                    XclImpCrn( XclImpStream& rStrm, ExcelToSc& rFmlaConv, sal_uInt16 nCol, sal_uInt16 nRow );
+    explicit                    XclImpCrn( XclImpStream& rStrm, sal_uInt16 nCol, sal_uInt16 nRow );
 
     /** Copies the cached value to sheet nTab in the document. */
     void                        SetCell( ScDocument& rDoc, sal_uInt16 nTab ) const;
@@ -226,7 +225,7 @@ public:
     /** Reads an XCT record (count of following CRNs and current sheet). */
     void                        ReadXct( XclImpStream& rStrm );
     /** Reads a CRN record (external referenced cell). */
-    void                        ReadCrn( XclImpStream& rStrm, ExcelToSc& rFmlaConv );
+    void                        ReadCrn( XclImpStream& rStrm );
     /** Reads an EXTERNNAME record. */
     void                        ReadExternname( XclImpStream& rStrm );
 
@@ -337,7 +336,7 @@ public:
     /** Reads an XCT record and appends it to the current SUPBOOK. */
     void                        ReadXct( XclImpStream& rStrm );
     /** Reads a CRN record and appends it to the current SUPBOOK. */
-    void                        ReadCrn( XclImpStream& rStrm, ExcelToSc& rFmlaConv );
+    void                        ReadCrn( XclImpStream& rStrm );
     /** Reads an EXTERNNAME record and appends it to the current SUPBOOK. */
     void                        ReadExternname( XclImpStream& rStrm );
 

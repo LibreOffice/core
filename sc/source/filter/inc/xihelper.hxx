@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xihelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:05:11 $
+ *  last change: $Author: rt $ $Date: 2003-05-21 08:03:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -260,7 +260,6 @@ public:
 // Cached Values ==============================================================
 
 class ScTokenArray;
-class ExcelToSc;
 
 /** This class stores one cached value of a cached value list (used for instance in
     CRN, EXTERNNAME, tArray). */
@@ -277,7 +276,7 @@ protected:
 
 public:
     /** Creates a cached value and reads contents from stream. */
-                                XclImpCachedValue( XclImpStream& rStrm, ExcelToSc& rFmlConv );
+                                XclImpCachedValue( XclImpStream& rStrm );
     virtual                     ~XclImpCachedValue();
 
     /** Returns the type of the cached value (EXC_CACHEDVAL_*). */
