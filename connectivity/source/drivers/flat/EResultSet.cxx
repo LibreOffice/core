@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EResultSet.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2000-10-24 15:21:58 $
+ *  last change: $Author: oj $ $Date: 2000-10-24 16:32:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,9 +74,22 @@
 #ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
 #endif
+#define CONNECTIVITY_PROPERTY_NAME_SPACE flat
 #ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
 #include "propertyids.hxx"
 #endif
+// define the properties of this lib
+// this file includes the properties for this dll
+namespace connectivity
+{
+    namespace flat
+    {
+#ifndef CONNECTIVITY_USTRINGDESCRIPTION_IMPL_HXX
+#include "UStringDescription_Impl.hxx"
+#endif
+    }
+}
+
 using namespace connectivity::flat;
 using namespace connectivity::file;
 using namespace cppu;

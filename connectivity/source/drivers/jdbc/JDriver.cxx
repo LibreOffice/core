@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JDriver.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:22 $
+ *  last change: $Author: oj $ $Date: 2000-10-24 16:31:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,10 +163,10 @@ void java_sql_Driver::saveClassRef( jclass pClass )
     theClass = pClass;
 }
 // -------------------------------------------------------------------------
-Reference< starsdbc::XConnection > SAL_CALL java_sql_Driver::connect( const ::rtl::OUString& url, const
-                                                                         Sequence< ::com::sun::star::beans::PropertyValue >& info ) throw(starsdbc::SQLException, RuntimeException)
+Reference< XConnection > SAL_CALL java_sql_Driver::connect( const ::rtl::OUString& url, const
+                                                                         Sequence< ::com::sun::star::beans::PropertyValue >& info ) throw(SQLException, RuntimeException)
 {
-    Reference< starsdbc::XConnection > xRet;
+    Reference< XConnection > xRet;
 
     object = java_sql_DriverManager::getDriver(url);
     jobject out(0);
@@ -185,42 +185,59 @@ Reference< starsdbc::XConnection > SAL_CALL java_sql_Driver::connect( const ::rt
         if( mID )
         {
             out = t.pEnv->CallObjectMethodA( getMyClass(), mID, args );
-            ThrowSQLException(t.pEnv,*this);
-            // und aufraeumen
-            t.pEnv->DeleteLocalRef((jstring)args[0].l);
-            t.pEnv->DeleteLocalRef((jstring)args[1].l);
         } //mID
+        // und aufraeumen
+        t.pEnv->DeleteLocalRef((jstring)args[0].l);
+        t.pEnv->DeleteLocalRef((jstring)args[1].l);
+        ThrowSQLException(t.pEnv,*this);
     } //t.pEnv
     // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
-    Reference< starsdbc::XConnection > xOut;
+    Reference< XConnection > xOut;
     return out==0 ? 0 : new java_sql_Connection( t.pEnv, out,this );
     //  return xOut;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL java_sql_Driver::acceptsURL( const ::rtl::OUString& url ) throw(starsdbc::SQLException, RuntimeException)
+sal_Bool SAL_CALL java_sql_Driver::acceptsURL( const ::rtl::OUString& url ) throw(SQLException, RuntimeException)
 {
-    if(!object)
+    try
+    {
+        if(object)
+        {
+            SDBThreadAttach t;
+            if( t.pEnv )
+                t.pEnv->DeleteGlobalRef( object );
+            object = NULL;
+        }
         object = java_sql_DriverManager::getDriver(url);
+    }
+    catch(SQLException&)
+    {
+        return sal_False;
+    }
 
     jboolean out(0);
     SDBThreadAttach t; OSL_ENSHURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv )
     {
         if(!object)
-            ThrowSQLException(t.pEnv,*this);
+            return sal_False;
+        jvalue args;
+        args.l = convertwchar_tToJavaString(t.pEnv,url);
         // temporaere Variable initialisieren
         char * cSignature = "(Ljava/lang/String;)Z";
         char * cMethodName = "acceptsURL";
         // Java-Call absetzen
         jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );
         if( mID )
-            out = t.pEnv->CallBooleanMethod( object, mID);
-            ThrowSQLException(t.pEnv,*this);
+            out = t.pEnv->CallBooleanMethod( object, mID,args);
+        // und aufraeumen
+        t.pEnv->DeleteLocalRef((jstring)args.l);
+        ThrowSQLException(t.pEnv,*this);
     } //t.pEnv
     return out;
 }
 // -------------------------------------------------------------------------
-Sequence< starsdbc::DriverPropertyInfo > SAL_CALL java_sql_Driver::getPropertyInfo( const ::rtl::OUString& url, const Sequence< ::com::sun::star::beans::PropertyValue >& info ) throw(starsdbc::SQLException, RuntimeException)
+Sequence< DriverPropertyInfo > SAL_CALL java_sql_Driver::getPropertyInfo( const ::rtl::OUString& url, const Sequence< ::com::sun::star::beans::PropertyValue >& info ) throw(SQLException, RuntimeException)
 {
     if(!object)
         object = java_sql_DriverManager::getDriver(url);
@@ -248,7 +265,7 @@ Sequence< starsdbc::DriverPropertyInfo > SAL_CALL java_sql_Driver::getPropertyIn
         } //mID
     } //t.pEnv
     // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
-    return copyArrayAndDelete( t.pEnv, out, starsdbc::DriverPropertyInfo(),java_sql_DriverPropertyInfo(NULL,NULL));
+    return copyArrayAndDelete( t.pEnv, out, DriverPropertyInfo(),java_sql_DriverPropertyInfo(NULL,NULL));
 }
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL java_sql_Driver::getMajorVersion(  ) throw(RuntimeException)

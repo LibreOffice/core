@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OResultSet.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-11 10:46:17 $
+ *  last change: $Author: oj $ $Date: 2000-10-24 16:27:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 #ifndef _CONNECTIVITY_ODBC_ORESULTSET_HXX_
 #include "odbc/OResultSet.hxx"
 #endif
+#define CONNECTIVITY_PROPERTY_NAME_SPACE odbc
 #ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
 #include "propertyids.hxx"
 #endif
@@ -94,9 +95,6 @@
 #ifndef _CPPUHELPER_EXTRACT_HXX_
 #include <cppuhelper/extract.hxx>
 #endif
-//#ifndef _CONNECTIVITY_OTOOLS_HXX_
-//#include "odbc/OTools.hxx"
-//#endif
 
 using namespace connectivity::odbc;
 using namespace cppu;

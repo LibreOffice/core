@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OStatement.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-17 08:52:52 $
+ *  last change: $Author: oj $ $Date: 2000-10-24 16:27:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,7 @@
 #ifndef _CONNECTIVITY_ODBC_ORESULTSET_HXX_
 #include "odbc/OResultSet.hxx"
 #endif
+#define CONNECTIVITY_PROPERTY_NAME_SPACE odbc
 #ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
 #include "propertyids.hxx"
 #endif
@@ -118,6 +119,19 @@
     {                                   \
     }
 #endif
+
+// define the properties of this lib
+// this file includes the properties for this dll
+namespace connectivity
+{
+    namespace odbc
+    {
+#ifndef CONNECTIVITY_USTRINGDESCRIPTION_IMPL_HXX
+#include "UStringDescription_Impl.hxx"
+#endif
+    }
+}
+
 
 using namespace connectivity::odbc;
 //------------------------------------------------------------------------------
