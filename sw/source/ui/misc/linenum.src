@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linenum.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 11:59:19 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:11:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,7 +139,7 @@ TabPage TP_LINENUMBERING
         Text[ greek ] = "Στυλ χαρακτήρων";
         Text[ korean ] = "λ¬Έμ μ¤νƒ€μΌ(~C)";
         Text[ turkish ] = "~Karakter biηimi";
-        Text[ language_user1 ] = "All \"Vorlage\"/Styles are always written with capital S. 10.5.00EM";
+        Text[ language_user1 ] = "; All \"Vorlage\"/Styles are always written with capital S. 10.5.00EM";
         Text[ catalan ] = "Est~il de carΰcters";
         Text[ finnish ] = "~Merkkityyli";
         Text[ thai ] = "ΰΈ¥ΰΈ±ΰΈΰΈ©ΰΈ“ΰΈ°~ΰΈ•ΰΈ±ΰΈ§ΰΈ­ΰΈ±ΰΈΰΈ‚ΰΈ£ΰΈ°";
@@ -740,7 +740,7 @@ TabPage TP_LINENUMBERING
         Text[ japanese ] = "εΊε‡γ‚";
         Text[ chinese_traditional ] = "ε†ι”η¬¦";
         Text[ arabic ] = "ΗαέΗΥα";
-        Text[ greek ] = "Διαιρέτης";
+        Text[ greek ] = "Διαχωριστικό";
         Text[ korean ] = "κµ¬λ¶„ κΈ°νΈ";
         Text[ turkish ] = "Ayraη";
         Text[ language_user1 ] = " ";
@@ -913,6 +913,7 @@ TabPage TP_LINENUMBERING
     Text[ hindi ] = "ΰ¤°ΰ¥‡ΰ¤–ΰ¤Ύ ΰ¤•ΰ¥‹ ΰ¤Έΰ¤‚ΰ¤–ΰ¥ΰ¤―ΰ¤Ύ ΰ¤¦ΰ¥‡ΰ¤¨ΰ¤Ύ";
     Text[ slovak ] = "ΔΓ­slovanie riadkov";
 };
+
 
 
 
