@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fusel.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: aw $ $Date: 2001-08-09 12:02:05 $
+ *  last change: $Author: ka $ $Date: 2001-10-17 09:36:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1333,13 +1333,11 @@ BOOL FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
 
                 case presentation::ClickAction_PROGRAM:
                 {
-                    INetURLObject  aURL( ::URIHelper::SmartRelToAbs( pInfo->aBookmark, FALSE, INetURLObject::WAS_ENCODED, INetURLObject::DECODE_UNAMBIGUOUS ) );
-                    String         aFileName;
+                   INetURLObject aURL( ::URIHelper::SmartRelToAbs( pInfo->aBookmark, FALSE, INetURLObject::WAS_ENCODED, INetURLObject::DECODE_UNAMBIGUOUS ) );
 
-                   if( ( INET_PROT_FILE == aURL.GetProtocol() ) &&
-                       ::utl::LocalFileHelper::ConvertURLToPhysicalName( aURL.GetMainURL( INetURLObject::NO_DECODE ), aFileName ) )
+                   if( INET_PROT_FILE == aURL.GetProtocol() )
                    {
-                       ::vos::OProcess                 aApp( aFileName );
+                       ::vos::OProcess                 aApp( aURL.GetMainURL( INetURLObject::NO_DECODE ) );
                        ::vos::OArgumentList            aParameters;
                        ::vos::OProcess::TProcessError  eError = aApp.execute( (::vos::OProcess::TProcessOption) ( ::vos::OProcess::TOption_SearchPath |
                                                                                                                   ::vos::OProcess::TOption_Detached ),
