@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlideSorterViewShell.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 16:52:42 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 14:01:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #include "SlideSorterViewShell.hxx"
 
 #include "model/SlideSorterModel.hxx"
@@ -213,20 +212,25 @@ void SlideSorterViewShell::Init (void)
 
 SlideSorterViewShell* SlideSorterViewShell::GetSlideSorter (ViewShellBase& rBase)
 {
-    // Test the center, left, and right pane for showing a slide sorter.
-    ViewShell* pShell = rBase.GetPaneManager().GetViewShell (PaneManager::PT_CENTER);
-    if (pShell==NULL || pShell->GetShellType() != ViewShell::ST_SLIDE_SORTER)
-        pShell = rBase.GetPaneManager().GetViewShell (PaneManager::PT_LEFT);
-    if (pShell==NULL || pShell->GetShellType() != ViewShell::ST_SLIDE_SORTER)
-        pShell = rBase.GetPaneManager().GetViewShell (PaneManager::PT_RIGHT);
+    // Test the center, left, and then the right pane for showing a slide sorter.
+    PaneManager::PaneType aPanes[] = {
+        PaneManager::PT_CENTER, PaneManager::PT_LEFT, PaneManager::PT_RIGHT, PaneManager::PT_NONE };
+    ViewShell* pShell = NULL;
+    for (int i=0; pShell==NULL && aPanes[i]!=PaneManager::PT_NONE; i++)
+    {
+        pShell = rBase.GetPaneManager().GetViewShell(aPanes[i]);
+        if (pShell!=NULL && pShell->GetShellType()!=ViewShell::ST_SLIDE_SORTER)
+            // A shell but not the right one.
+            pShell = NULL;
 
-    // Set the shell to NULL when still no slide sorter.
-    if (pShell!=NULL && pShell->GetShellType() != ViewShell::ST_SLIDE_SORTER)
-        pShell = NULL;
+        ::Window* pWindow = rBase.GetPaneManager().GetWindow(aPanes[i]);
+        if (pWindow==NULL || ! pWindow->IsReallyVisible())
+            // The pane is not visible.
+            pShell = NULL;
 
-    SlideSorterViewShell* pSlideSorter = static_cast<SlideSorterViewShell*>(pShell);
+    }
 
-    return pSlideSorter;
+    return static_cast<SlideSorterViewShell*>(pShell);
 }
 
 
