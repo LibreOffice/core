@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newstyle.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 21:50:21 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 19:43:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,7 @@ ModalDialog DLG_NEW_STYLE_BY_EXAMPLE
         Text[ korean ] = "¼­½ÄÆÄÀÏ ÀÌ¸§";
         Text[ turkish ] = "Biçim adý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Nombre del estilo";
     };
     QueryBox MSG_OVERWRITE
     {
@@ -162,6 +163,7 @@ ModalDialog DLG_NEW_STYLE_BY_EXAMPLE
         Message[ korean ] = "¼­½ÄÆÄÀÏÀÌ ÀÌ¹Ì ÀÖ½À´Ï´Ù. µ¤¾î¾º¿ì½Ã°Ú½À´Ï±î?";
         Message[ turkish ] = "Biçim mevcut durumda. Üzerine yazýlsýn mý?";
         Message[ language_user1 ] = " ";
+        Message[ catalan ] = "El estilo ya existe. ¿Desea sobrescribirlo?";
     };
     Text[ chinese_simplified ] = "Éú³ÉÑùÊ½";
     Text[ russian ] = "Ñîçäàòü ñòèëü";
@@ -173,5 +175,6 @@ ModalDialog DLG_NEW_STYLE_BY_EXAMPLE
     Text[ korean ] = "¼­½ÄÆÄÀÏ ÀÛ¼º";
     Text[ turkish ] = "Biçim oluþtur";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Crear estilo";
 };
  // ********************************************************************** EOF
