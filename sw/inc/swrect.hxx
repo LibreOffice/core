@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swrect.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ama $ $Date: 2001-09-18 09:14:03 $
+ *  last change: $Author: ama $ $Date: 2001-09-19 08:37:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,6 +180,12 @@ public:
     const Size  _Size() const;
     const Point SwappedPos()  const;
     const Size  SwappedSize() const;
+    long GetLeftDistance( long ) const;
+    long GetBottomDistance( long ) const;
+    long GetRightDistance( long ) const;
+    long GetTopDistance( long ) const;
+    BOOL OverStepLeft( long ) const;
+    BOOL OverStepBottom( long ) const;
 #endif
 };
 
@@ -191,6 +197,8 @@ typedef void (SwRect:: *SwRectSet)( const long nNew );
 typedef long (SwRect:: *SwRectGet)() const;
 typedef const Point (SwRect:: *SwRectPoint)() const;
 typedef const Size (SwRect:: *SwRectSize)() const;
+typedef BOOL (SwRect:: *SwRectMax)( long ) const;
+typedef long (SwRect:: *SwRectDist)( long ) const;
 #endif
 
 //---------------------------------- Set-Methoden

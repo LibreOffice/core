@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ama $ $Date: 2001-09-18 09:12:43 $
+ *  last change: $Author: ama $ $Date: 2001-09-19 08:38:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,7 +185,6 @@ struct SwCrsrMoveState;
 class SwFrm;
 typedef long (SwFrm:: *SwFrmGet)() const;
 typedef BOOL (SwFrm:: *SwFrmMax)( long );
-typedef long (SwFrm:: *SwFrmDist)( long ) const;
 
 struct SwRectFnCollection
 {
@@ -221,8 +220,8 @@ struct SwRectFnCollection
     SwFrmGet      fnGetRightMargin;
     SwFrmGet      fnGetLimit;
     SwFrmMax      fnSetLimit;
-    SwFrmDist     fnCheckLimit;
-    SwFrmMax      fnOverStep;
+    SwRectDist    fnCheckLimit;
+    SwRectMax     fnOverStep;
 };
 
 typedef SwRectFnCollection* SwRectFn;
@@ -550,10 +549,11 @@ public:
     inline void SetDerivedVert( BOOL bNew ){ bDerivedVert = bNew ? 1 : 0; }
     inline void SetInvalidVert( BOOL bNew) { bInvalidVert = bNew ? 1 : 0; }
     inline BOOL IsRightToLeft() const;
+    inline BOOL GetRightToLeftFlag() const;
     inline void SetRightToLeft( BOOL bNew ){ bRightToLeft = bNew ? 1 : 0; }
     inline void SetDerivedR2L( BOOL bNew ) { bDerivedR2L  = bNew ? 1 : 0; }
     inline void SetInvalidR2L( BOOL bNew ) { bInvalidR2L  = bNew ? 1 : 0; }
-    void CheckVertical();
+    void CheckDirChange();
 #endif
     BOOL IsMoveable() const;
 
@@ -757,10 +757,8 @@ public:
     long GetPrtBottom() const;
     BOOL SetMinLeft( long );
     BOOL SetMaxBottom( long );
-    long GetLeftDistance( long ) const;
-    long GetBottomDistance( long ) const;
-    BOOL OverStepLeft( long );
-    BOOL OverStepBottom( long );
+    inline BOOL SwFrm::IsNeighbourFrm() const
+        { return GetType() & FRM_NEIGHBOUR ? TRUE : FALSE; }
 #endif
 
 #ifndef PRODUCT
@@ -814,6 +812,10 @@ inline BOOL SwFrm::IsRightToLeft() const
 {
     if( bInvalidR2L )
         ((SwFrm*)this)->SetDirFlags( FALSE );
+    return bRightToLeft != 0;
+}
+BOOL SwFrm::GetRightToLeftFlag() const
+{
     return bRightToLeft != 0;
 }
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagechg.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ama $ $Date: 2001-09-13 15:19:59 $
+ *  last change: $Author: ama $ $Date: 2001-09-19 08:44:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,6 +207,7 @@ SwPageFrm::SwPageFrm( SwFrmFmt *pFmt, SwPageDesc *pPgDsc ) :
 #ifdef VERTICAL_LAYOUT
     // Test
     SetDerivedVert( FALSE );
+    SetDerivedR2L( FALSE );
 #endif
     SetMaxFtnHeight( pPgDsc->GetFtnInfo().GetHeight() ?
                      pPgDsc->GetFtnInfo().GetHeight() : LONG_MAX ),
@@ -318,8 +319,10 @@ void SwPageFrm::CheckDirection( BOOL bVert )
     }
     else
     {
-        if( GetFmt()->GetName().GetChar(1)=='x')
+        if( pDesc && pDesc->GetName().GetChar(1)=='x')
             bRightToLeft = 1;
+        else
+            bRightToLeft = 0;
         bInvalidR2L = 0;
     }
 }
@@ -559,7 +562,7 @@ void SwPageFrm::_UpdateAttr( SfxPoolItem *pOld, SfxPoolItem *pNew,
         case RES_FRM_SIZE:
         {
 #ifdef VERTICAL_LAYOUT
-            CheckVertical();
+            CheckDirChange();
 #endif
             const SwRect aOldRect( Frm() );
             if ( GetFmt()->GetDoc()->IsBrowseMode() )

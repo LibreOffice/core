@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ssfrm.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ama $ $Date: 2001-09-17 11:20:17 $
+ *  last change: $Author: ama $ $Date: 2001-09-19 08:42:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,14 +106,6 @@ long SwFrm::GetPrtLeft() const
     { return Frm().Left() + Prt().Left(); }
 long SwFrm::GetPrtBottom() const
     { return Frm().Top() + Prt().Height() + Prt().Top(); }
-long SwFrm::GetLeftDistance( long nLimit ) const
-    { return nLimit - Frm().Left(); }
-long SwFrm::GetBottomDistance( long nLimit ) const
-    { return Frm().Top() + Frm().Height() - nLimit; }
-BOOL SwFrm::OverStepLeft( long nLimit )
-    { return nLimit > Frm().Left() && Frm().Left() + Frm().Width() > nLimit; }
-BOOL SwFrm::OverStepBottom( long nLimit )
-    { return nLimit > Frm().Top() && Frm().Top() + Frm().Height() > nLimit; }
 
 BOOL SwFrm::SetMinLeft( long nDeadline )
 {
@@ -140,16 +132,19 @@ BOOL SwFrm::SetMaxBottom( long nDeadline )
 }
 
 /*-----------------11.9.2001 11:11------------------
- * SwFrm::CheckVertical(..)
- * checks the horizontal/vertical direction and
+ * SwFrm::CheckDirChange(..)
+ * checks the layout direction and
  * invalidates the lower frames rekursivly, if necessary.
  * --------------------------------------------------*/
 
-void SwFrm::CheckVertical()
+void SwFrm::CheckDirChange()
 {
-    BOOL bOld = GetVerticalFlag();
+    BOOL bOldVert = GetVerticalFlag();
+    BOOL bOldR2L = GetRightToLeftFlag();
     SetInvalidVert( TRUE );
-    if( IsVertical() != bOld && IsLayoutFrm() )
+    SetInvalidR2L( TRUE );
+    BOOL bChg = bOldR2L != IsRightToLeft();
+    if( ( ( IsVertical() != bOldVert ) || bChg ) && IsLayoutFrm() )
     {
         InvalidateAll();
         SwFrm* pFrm = ((SwLayoutFrm*)this)->Lower();
@@ -165,7 +160,7 @@ void SwFrm::CheckVertical()
         }
         while( pFrm )
         {
-            pFrm->CheckVertical();
+            pFrm->CheckDirChange();
             pFrm = pFrm->GetNext();
         }
         if( pCol )
@@ -380,15 +375,27 @@ const SwRect SwFrm::PaintArea() const
         }
         else if( pTmp->IsColumnFrm() )  // nobody enters neightbour columns
         {
-            if( pTmp->GetPrev() )   // the first column has _no_
-            {                       // influence to the left range
 #ifdef VERTICAL_LAYOUT
+            BOOL bR2L = pTmp->IsRightToLeft();
+            // the first column has _no_ influence to the left range
+            if( bR2L ? pTmp->GetNext() : pTmp->GetPrev() )
+            {
                 if( bLeft || nLeft < nTmpLeft )
                     nLeft = nTmpLeft;
+                bLeft = FALSE;
+            }
+             // the last column has _no_ influence to the right range
+            if( bR2L ? pTmp->GetPrev() : pTmp->GetNext() )
+            {
+                if( bRight || nTmpRight < nRight )
+                    nRight = nTmpRight;
+                bRight = FALSE;
+            }
 #else
+            if( pTmp->GetPrev() )   // the first column has _no_
+            {                       // influence to the left range
                 if( bLeft || aRect.Left() < pTmp->Frm().Left() )
                     aRect.Left( pTmp->Frm().Left() );
-#endif
                 bLeft = FALSE;
             }
             if( pTmp->GetNext() )   // the last column has _no_
@@ -397,6 +404,7 @@ const SwRect SwFrm::PaintArea() const
                     nRight = nTmpRight;
                 bRight = FALSE;
             }
+#endif
         }
 #ifdef VERTICAL_LAYOUT
         else if( bVert && pTmp->IsBodyFrm() )

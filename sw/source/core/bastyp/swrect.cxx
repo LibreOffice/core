@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swrect.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ama $ $Date: 2001-09-18 09:13:21 $
+ *  last change: $Author: ama $ $Date: 2001-09-19 08:39:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -315,6 +315,14 @@ const Point SwRect::_Pos()  const { return Pos(); }
 const Size  SwRect::_Size() const { return SSize(); }
 const Point SwRect::SwappedPos()  const { return Point( nY, nX ); }
 const Size  SwRect::SwappedSize() const { return Size( nHeight, nWidth ); }
+long SwRect::GetLeftDistance( long nLimit ) const { return nLimit - nX; }
+long SwRect::GetBottomDistance( long nLim ) const { return nY + nHeight - nLim;}
+long SwRect::GetTopDistance( long nLimit ) const { return nLimit - nY; }
+long SwRect::GetRightDistance( long nLim ) const { return nX + nWidth - nLim; }
+BOOL SwRect::OverStepLeft( long nLimit ) const
+    { return nLimit > nX && nX + nWidth > nLimit; }
+BOOL SwRect::OverStepBottom( long nLimit ) const
+    { return nLimit > nY && nY + nHeight > nLimit; }
 #endif
 
 #ifndef PRODUCT

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wsfrm.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ama $ $Date: 2001-09-13 15:20:41 $
+ *  last change: $Author: ama $ $Date: 2001-09-19 08:42:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3376,8 +3376,8 @@ void lcl_InvalidateAllCntnt( SwCntntFrm *pCnt, BYTE nInv )
             {
                 ::lcl_InvalidateCntnt( pFly->ContainsCntnt(), nInv );
 #ifdef VERTICAL_LAYOUT
-                if( nInv & INV_VERTICAL )
-                    pFly->CheckVertical();
+                if( nInv & INV_DIRECTION )
+                    pFly->CheckDirChange();
 #endif
             }
         }
@@ -3408,15 +3408,15 @@ void SwRootFrm::InvalidateAllCntnt( BYTE nInv )
                     ::lcl_InvalidateCntnt( ((SwVirtFlyDrawObj*)pO)->GetFlyFrm()->ContainsCntnt(),
                                          nInv );
 #ifdef VERTICAL_LAYOUT
-                    if( nInv & INV_VERTICAL )
-                        ((SwVirtFlyDrawObj*)pO)->GetFlyFrm()->CheckVertical();
+                    if( nInv & INV_DIRECTION )
+                        ((SwVirtFlyDrawObj*)pO)->GetFlyFrm()->CheckDirChange();
 #endif
                 }
             }
         }
 #ifdef VERTICAL_LAYOUT
-        if( nInv & INV_VERTICAL )
-            pPage->CheckVertical();
+        if( nInv & INV_DIRECTION )
+            pPage->CheckDirChange();
 #endif
         pPage = (SwPageFrm*)(pPage->GetNext());
     }

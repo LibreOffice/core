@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calcmove.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ama $ $Date: 2001-09-14 10:59:33 $
+ *  last change: $Author: ama $ $Date: 2001-09-19 08:44:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -535,8 +535,16 @@ void SwFrm::MakePos()
         if ( !bUseUpper && pPrv )
         {   aFrm.Pos( pPrv->Frm().Pos() );
 #ifdef VERTICAL_LAYOUT
-            if( FRM_NEIGHBOUR & nMyType && !IsVertical() )
-                aFrm.Pos().X() += pPrv->Frm().Width();
+            if( FRM_NEIGHBOUR & nMyType )
+            {
+                BOOL bR2L = IsRightToLeft();
+                if( bVert )
+                    aFrm.Pos().Y() += bR2L ? -Frm().Height()
+                                           : pPrv->Frm().Height();
+                else
+                    aFrm.Pos().X() += bR2L ? -Frm().Width()
+                                           : pPrv->Frm().Width();
+            }
             else if( bVert && FRM_NOTE_VERT & nMyType )
                 aFrm.Pos().X() -= aFrm.Width();
             else
@@ -557,8 +565,16 @@ void SwFrm::MakePos()
             if ( !bUseUpper && pPrv )
             {   aFrm.Pos( pPrv->Frm().Pos() );
 #ifdef VERTICAL_LAYOUT
-                if( FRM_NEIGHBOUR & nMyType && !IsVertical() )
-                    aFrm.Pos().X() += pPrv->Frm().Width();
+                if( FRM_NEIGHBOUR & nMyType )
+                {
+                    BOOL bR2L = IsRightToLeft();
+                    if( bVert )
+                        aFrm.Pos().Y() += bR2L ? -Frm().Height()
+                                               : pPrv->Frm().Height();
+                    else
+                        aFrm.Pos().X() += bR2L ? -Frm().Width()
+                                               : pPrv->Frm().Width();
+                }
                 else if( bVert && FRM_NOTE_VERT & nMyType )
                     aFrm.Pos().X() -= aFrm.Width();
                 else
@@ -572,7 +588,16 @@ void SwFrm::MakePos()
                 aFrm.Pos( GetUpper()->Frm().Pos() );
                 aFrm.Pos() += GetUpper()->Prt().Pos();
 #ifdef VERTICAL_LAYOUT
-                if( bVert && FRM_NOTE_VERT & nMyType )
+                if( FRM_NEIGHBOUR & nMyType && IsRightToLeft() )
+                {
+                    if( bVert )
+                        aFrm.Pos().Y() += GetUpper()->Prt().Height()
+                                          - aFrm.Height();
+                    else
+                        aFrm.Pos().X() += GetUpper()->Prt().Width()
+                                          - aFrm.Width();
+                }
+                else if( bVert && FRM_NOTE_VERT & nMyType )
                     aFrm.Pos().X() -= aFrm.Width() - GetUpper()->Prt().Width();
 #endif
             }
@@ -601,6 +626,9 @@ void lcl_CheckObjects( SwSortDrawObjs* pSortedObjs, SwFrm* pFrm, long& rBot )
     //Und dann kann es natuerlich noch Absatzgebundene
     //Rahmen geben, die unterhalb ihres Absatzes stehen.
     long nMax = 0;
+#ifdef VERTICAL_LAYOUT
+    SwRectFn fnRect = pFrm->IsVertical() ? fnRectVert : fnRectHori;
+#endif
     for ( USHORT i = 0; i < pSortedObjs->Count(); ++i )
     {
         SdrObject *pObj = (*pSortedObjs)[i];
@@ -614,6 +642,18 @@ void lcl_CheckObjects( SwSortDrawObjs* pSortedObjs, SwFrm* pFrm, long& rBot )
                     ( pFrm->IsBodyFrm() ? pFly->GetAnchor()->IsInDocBody() :
                                           pFly->GetAnchor()->IsInFtn() ) ) ) )
             {
+#ifdef VERTICAL_LAYOUT
+                nTmp = (pFly->Frm().*fnRect->fnGetBottom)();
+            }
+        }
+        else
+        {
+            SwRect aTmpRect( pObj->GetBoundRect() );
+            nTmp = (aTmpRect.*fnRect->fnGetBottom)();
+        }
+        nMax = Max( nTmp, nMax );
+    }
+#else
                 nTmp = pFly->Frm().Bottom();
             }
         }
@@ -622,6 +662,7 @@ void lcl_CheckObjects( SwSortDrawObjs* pSortedObjs, SwFrm* pFrm, long& rBot )
         nMax = Max( nTmp, nMax );
     }
     ++nMax; //Unterkante vs. Hoehe!
+#endif
     rBot = Max( rBot, nMax );
 }
 
@@ -779,7 +820,7 @@ void SwLayoutFrm::MakeAll()
         //uebernimmt im DTor die Benachrichtigung
     const SwLayNotify aNotify( this );
 #ifdef VERTICAL_LAYOUT
-    const SzPtr pFix = ( bVarHeight == IsVertical() ) ? pHeight : pWidth;
+    SwRectFn fnRect = ( bVarHeight == IsVertical() )? fnRectVert : fnRectHori;
 #else
     const SzPtr pFix = pFIXSIZE;
 #endif
@@ -798,41 +839,21 @@ void SwLayoutFrm::MakeAll()
             {
                 //FixSize einstellen, die VarSize wird von Format() nach
                 //Berechnung der PrtArea eingestellt.
-                aFrm.SSize().*pFix = GetUpper()->Prt().SSize().*pFix;
                 bValidPrtArea = FALSE;
+#ifdef VERTICAL_LAYOUT
+                (aFrm.*fnRect->fnSetWidth)(
+                                    (GetUpper()->Prt().*fnRect->fnGetWidth)() );
+            }
+            else
+            {   // Don't leave your upper
+                const SwTwips nDeadLine = (GetUpper()->*fnRect->fnGetLimit)();
+                if( (Frm().*fnRect->fnOverStep)( nDeadLine ) )
+                    bValidSize = FALSE;
+#else
+                aFrm.SSize().*pFix = GetUpper()->Prt().SSize().*pFix;
             }
             else
             {   //nicht ueber die auessere Kante des Upper hinausragen.
-#ifdef VERTICAL_LAYOUT
-                SwTwips nDeadLine;
-                SwTwips nBot;
-                if( pFix == pWidth )
-                {
-                    nDeadLine = GetUpper()->Frm().Top() +
-                        GetUpper()->Prt().Top() + GetUpper()->Prt().Height();
-                    nBot = Frm().Top() + Frm().Height();
-                    if ( nBot > nDeadLine )
-                        bValidSize = FALSE;
-                }
-                else
-                {
-                    nDeadLine = GetUpper()->Frm().Left()
-                                + GetUpper()->Prt().Left();
-                    nBot = Frm().Left();
-                    if( bVarHeight )
-                    {
-                        if( nBot < nDeadLine )
-                            bValidSize = FALSE;
-                    }
-                    else
-                    {
-                        nDeadLine += GetUpper()->Prt().Width();
-                        nBot += Frm().Width();
-                        if ( nBot > nDeadLine )
-                            bValidSize = FALSE;
-                    }
-                }
-#else
                 const SwTwips nDeadLine = GetUpper()->Frm().Pos().*pVARPOS +
                     (bVarHeight ?
                         GetUpper()->Prt().Top() + GetUpper()->Prt().Height() :
@@ -1163,18 +1184,14 @@ void SwCntntFrm::MakeAll()
     const BOOL bTab = IsInTab();
     const BOOL bFtn = IsInFtn();
     const BOOL bSct = IsInSct();
-#ifdef VERTICAL_LAYOUT
-    const FASTBOOL bVert = IsVertical();
-    SwRectFn fnRect = IsVertical() ? fnRectVert : fnRectHori;
-    long nKeepBottom = (Frm().*fnRect->fnGetBottom)();
-    long nOldFrmX;
-    long nOldFrmY;
-    long nOldPrtX;
-    long nOldPrtY;
-#else
     Point aOldFrmPos;               //Damit bei Turnarounds jew. mit der
     Point aOldPrtPos;               //letzten Pos verglichen und geprueft
                                     //werden kann, ob ein Prepare sinnvoll ist.
+#ifdef VERTICAL_LAYOUT
+    const FASTBOOL bVert = IsVertical();
+    SwRectFn fnRect = bVert ? fnRectVert : fnRectHori;
+    long nKeepBottom = (Frm().*fnRect->fnGetBottom)();
+#else
     long  nKeepBottom = Frm().Bottom(); //Um beim Keep den naechsten sinnvoll
                                         //anstossen zu koennen.
 #endif
@@ -1232,10 +1249,8 @@ void SwCntntFrm::MakeAll()
         }
 
 #ifdef VERTICAL_LAYOUT
-        nOldFrmX = (Frm().*fnRect->fnGetLeft)();
-        nOldFrmY = (Frm().*fnRect->fnGetTop)();
-        nOldPrtX = (Prt().*fnRect->fnGetLeft)();
-        nOldPrtY = (Prt().*fnRect->fnGetTop)();
+        aOldFrmPos = (Frm().*fnRect->fnGetPos)();
+        aOldPrtPos = (Prt().*fnRect->fnGetPos)();
 
         if ( !bValidPos )
             MakePos();
@@ -1252,8 +1267,7 @@ void SwCntntFrm::MakeAll()
                 Prepare( PREP_FIXSIZE_CHG );
         }
 
-        if ( nOldFrmX != (Frm().*fnRect->fnGetLeft)() ||
-             nOldFrmY != (Frm().*fnRect->fnGetTop)() )
+        if ( aOldFrmPos != (Frm().*fnRect->fnGetPos)() )
             CalcFlys( TRUE );
 #else
         aOldFrmPos = Frm().Pos();
@@ -1287,15 +1301,13 @@ void SwCntntFrm::MakeAll()
 #ifdef VERTICAL_LAYOUT
             const SwTwips nDeadLine = (GetUpper()->*fnRect->fnGetLimit)();
             if ( bMoveable && !bFormatted && ( GetFollow() ||
-                 ( (this->*fnRect->fnOverStep)( nDeadLine ) ) ) )
+                 ( (Frm().*fnRect->fnOverStep)( nDeadLine ) ) ) )
             {
                 Prepare( PREP_WIDOWS_ORPHANS, 0, FALSE );
                 bValidSize = bWidow = FALSE;
             }
-            if( (Frm().*fnRect->fnGetLeft)() != nOldFrmX ||
-                (Frm().*fnRect->fnGetTop)() != nOldFrmY ||
-                (Prt().*fnRect->fnGetLeft)() != nOldPrtX ||
-                (Prt().*fnRect->fnGetTop)() != nOldPrtY )
+            if( (Frm().*fnRect->fnGetPos)() != aOldFrmPos ||
+                (Prt().*fnRect->fnGetPos)() != aOldPrtPos )
 #else
             const SwTwips nDeadLine = GetUpper()->Prt().Bottom() +
                                       GetUpper()->Frm().Top();
@@ -1340,11 +1352,9 @@ void SwCntntFrm::MakeAll()
                     bMoveable = IsMoveable();
                 }
 #ifdef VERTICAL_LAYOUT
-                long nOldX = (Frm().*fnRect->fnGetLeft)();
-                long nOldY = (Frm().*fnRect->fnGetTop)();
+                Point aOldPos = (Frm().*fnRect->fnGetPos)();
                 MakePos();
-                if( nOldX != (Frm().*fnRect->fnGetLeft)() ||
-                    nOldY != (Frm().*fnRect->fnGetTop)() )
+                if( aOldPos != (Frm().*fnRect->fnGetPos)() )
                 {
                     CalcFlys( TRUE );
                     Prepare( PREP_POS_CHGD, (const void*)&bFormatted, FALSE );
@@ -1430,10 +1440,8 @@ void SwCntntFrm::MakeAll()
             {   bValidPos = FALSE;
                 MakePos();
 #ifdef VERTICAL_LAYOUT
-                nOldFrmX = (Frm().*fnRect->fnGetLeft)();
-                nOldFrmY = (Frm().*fnRect->fnGetTop)();
-                nOldPrtX = (Prt().*fnRect->fnGetLeft)();
-                nOldPrtY = (Prt().*fnRect->fnGetTop)();
+                aOldFrmPos = (Frm().*fnRect->fnGetPos)();
+                aOldPrtPos = (Prt().*fnRect->fnGetPos)();
 #else
                 aOldFrmPos = Frm().Pos();
                 aOldPrtPos = Prt().Pos();
@@ -1449,7 +1457,8 @@ void SwCntntFrm::MakeAll()
         // Achtung, wg. Hoehe==0, ist es besser statt Bottom() Top()+Height() zu nehmen
         // (kommt bei Undersized TxtFrms an der Unterkante eines spaltigen Bereichs vor)
 #ifdef VERTICAL_LAYOUT
-        if((this->*fnRect->fnCheckLimit)((GetUpper()->*fnRect->fnGetLimit)())>0)
+        if( (Frm().*fnRect->fnCheckLimit)( (GetUpper()->*fnRect->fnGetLimit)() )
+            <= 0 )
 #else
         if ( GetUpper()->Prt().Top()+GetUpper()->Prt().Height()+GetUpper()->Frm().Top() >=
              Frm().Top()+Frm().Height() )
@@ -1511,7 +1520,7 @@ void SwCntntFrm::MakeAll()
             if( !bMoveable && IsInTab() )
             {
 #ifdef VERTICAL_LAYOUT
-                long nDiff = (this->*fnRect->fnCheckLimit)(
+                long nDiff = (Frm().*fnRect->fnCheckLimit)(
                                         (GetUpper()->*fnRect->fnGetLimit)() );
 #else
                 long nDiff = Frm().Top()+Frm().Height() -GetUpper()->Prt().Top()
