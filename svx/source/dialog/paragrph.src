@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2002-01-29 21:19:14 $
+ *  last change: $Author: kz $ $Date: 2002-02-04 11:53:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -231,7 +231,7 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Text [ portuguese_brazilian ] = "~Automatisch" ;
         Text [ swedish ] = "~Automatiskt" ;
         Text [ danish ] = "Automatisk" ;
-        Text [ italian ] = "~Automatico" ;
+        Text [ italian ] = "Automatico" ;
         Text [ spanish ] = "Auto~m·tico" ;
         Text [ french ] = "~Automatique" ;
         Text [ dutch ] = "~Automatisch" ;
@@ -292,7 +292,7 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Text [ french ] = "En haut" ;
         Text [ swedish ] = "~÷verkant" ;
         Text [ dutch ] = "~Boven" ;
-        Text [ spanish ] = "~Arriba" ;
+        Text [ spanish ] = "Arriba" ;
         Text [ english_us ] = "~Top" ;
         Left = TRUE ;
         Text[ chinese_simplified ] = "‰∏äÈÉ®(~T)";
@@ -334,7 +334,7 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Text [ portuguese ] = "~Inferior" ;
         Text [ finnish ] = "~Alaosa" ;
         Text [ danish ] = "Forneden" ;
-        Text [ french ] = "En ~bas" ;
+        Text [ french ] = "En bas" ;
         Text [ swedish ] = "~Underkant" ;
         Text [ dutch ] = "Be~neden" ;
         Text [ spanish ] = "A~bajo" ;
@@ -876,7 +876,7 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Text [ portuguese ] = "Esq~uerda" ;
         Text [ finnish ] = "~Vasen:" ;
         Text [ danish ] = "Venstre" ;
-        Text [ french ] = "~¿ gauche" ;
+        Text [ french ] = "¿ gauche" ;
         Text [ swedish ] = "~V‰nster" ;
         Text [ dutch ] = "L~inks" ;
         Text [ spanish ] = "I~zquierda" ;
@@ -906,10 +906,10 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Text [ portuguese ] = "~Direita" ;
         Text [ finnish ] = "~Oikea" ;
         Text [ danish ] = "H¯jre" ;
-        Text [ french ] = "¿ droi~te" ;
+        Text [ french ] = "¿ droite" ;
         Text [ swedish ] = "Hˆge~r" ;
         Text [ dutch ] = "Re~chts" ;
-        Text [ spanish ] = "~Derecha" ;
+        Text [ spanish ] = "Derecha" ;
         Text [ english_us ] = "Righ~t" ;
         Text[ chinese_simplified ] = "ÂêëÂè≥(~T)";
         Text[ russian ] = "—Ô‡‚‡";
@@ -935,7 +935,7 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Text [ portuguese ] = "~Centrado" ;
         Text [ finnish ] = "~Keskit‰" ;
         Text [ danish ] = "Centreret" ;
-        Text [ french ] = "~CentrÈ" ;
+        Text [ french ] = "CentrÈ" ;
         Text [ swedish ] = "C~entrerat" ;
         Text [ dutch ] = "~Gecentreerd" ;
         Text [ spanish ] = "~Centrado" ;
@@ -1897,7 +1897,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text [ english_us ] = "Page ~number" ;
         Text [ swedish ] = "S~idnummer" ;
         Text [ danish ] = "Sidetal" ;
-        Text [ italian ] = "Numero di pag~ina" ;
+        Text [ italian ] = "Numero di pagina" ;
         Text [ spanish ] = "N˙~mero de p·gina" ;
         Text [ french ] = "~NumÈro de page" ;
         Text [ dutch ] = "Pa~ginanummer" ;
