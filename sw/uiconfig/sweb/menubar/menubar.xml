@@ -300,13 +300,8 @@
     </menu:menu>
     <menu:menu menu:id=".uno:ToolsMenu" menu:label="" >
         <menu:menupopup>
-            <menu:menu menu:id=".uno:SpellingMenu" menu:label="" >
-                <menu:menupopup>
-                    <menu:menuitem menu:id=".uno:Spelling" menu:helpid="20622" menu:label="" />
-                    <menu:menuitem menu:id=".uno:SpellOnline" menu:helpid="12021" menu:label="" />
-                </menu:menupopup>
-            </menu:menu>
-            <menu:menu menu:id=".uno:LanguageMenu" menu:label="" >
+            <menu:menuitem menu:id=".uno:SpellDialog" menu:helpid="10243" menu:label="" />
+            <menu:menuitem menu:id=".uno:HangulHanjaConversion" menu:helpid="10959" menu:label="" />
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:HangulHanjaConversion" menu:helpid="10959" menu:label="" />
                     <menu:menuitem menu:id=".uno:ChineseConversion" menu:helpid="10999" menu:label="" />
