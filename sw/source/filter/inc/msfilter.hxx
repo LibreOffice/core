@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msfilter.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-01 12:36:54 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 14:13:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,12 +65,55 @@
 #ifndef SW_MS_MSFILTER_HXX
 #define SW_MS_MSFILTER_HXX
 
+#ifndef _RTL_TEXTENC_H
+#include <rtl/textenc.h>    //rtl_TextEncoding
+#endif
+
 class SwDoc;
 class SwPaM;
 class String;
 
 namespace sw
 {
+    namespace types
+    {
+        /** MSOffice appears to set the charset of unicode fonts to MS 932
+
+            Arial Unicode MS for example is a unicode font, but word sets
+            exported uses of it to the MS 932 charset
+
+            @param eTextEncoding
+                the OOo encoding to convert from
+
+            @return
+                a msoffice equivalent charset identifier
+
+            @author
+                <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
+        */
+        sal_uInt8 rtl_TextEncodingToWinCharset(rtl_TextEncoding eTextEncoding);
+
+        /** Get the OOo rtl_TextEncoding equivalent to the closest
+            textencoding word will be using
+
+            Some of the eTextEncodings in writer will map to an encoding in
+            word which does not map back to the same encoding, so get the
+            encoding it would map back to
+
+            @param eTextEncoding
+                the OOo encoding to convert from
+
+            @return
+                the writer equivalent charset identifier
+
+            @author
+                <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
+        */
+        rtl_TextEncoding rtl_TextEncodingToWinCharsetAndBack(
+            rtl_TextEncoding eTextEncoding);
+
+    }
+
     namespace ms
     {
         /** Import a MSWord XE field. Suitable for .doc and .rtf
@@ -87,7 +130,7 @@ namespace sw
             @author
                 <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
         */
-    void ImportXE(SwDoc &rDoc, SwPaM &rPaM, const String &rXE);
+        void ImportXE(SwDoc &rDoc, SwPaM &rPaM, const String &rXE);
     }
 }
 
