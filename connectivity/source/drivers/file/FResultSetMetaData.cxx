@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSetMetaData.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-12 15:08:43 $
+ *  last change: $Author: oj $ $Date: 2001-04-17 12:17:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,12 +97,18 @@ OResultSetMetaData::~OResultSetMetaData()
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL OResultSetMetaData::getColumnDisplaySize( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
+    if(column <= 0 || column > (sal_Int32)(sal_Int32)m_xColumns->size())
+        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
+
     return getINT32((*m_xColumns)[column-1]->getPropertyValue(PROPERTY_PRECISION));
 }
 // -------------------------------------------------------------------------
 
 sal_Int32 SAL_CALL OResultSetMetaData::getColumnType( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
+    if(column <= 0 || column > (sal_Int32)(sal_Int32)m_xColumns->size())
+        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
+
     return getINT32((*m_xColumns)[column-1]->getPropertyValue(PROPERTY_TYPE));
 }
 // -------------------------------------------------------------------------
@@ -115,91 +121,125 @@ sal_Int32 SAL_CALL OResultSetMetaData::getColumnCount(  ) throw(SQLException, Ru
 
 sal_Bool SAL_CALL OResultSetMetaData::isCaseSensitive( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
+    if(column <= 0 || column > (sal_Int32)(sal_Int32)m_xColumns->size())
+        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
+
     return sal_False;
 }
 // -------------------------------------------------------------------------
 
 ::rtl::OUString SAL_CALL OResultSetMetaData::getSchemaName( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
+    if(column <= 0 || column > (sal_Int32)(sal_Int32)m_xColumns->size())
+        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
+
     return ::rtl::OUString();
 }
 // -------------------------------------------------------------------------
 
 ::rtl::OUString SAL_CALL OResultSetMetaData::getColumnName( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
-        Any aName((*m_xColumns)[column-1]->getPropertyValue(PROPERTY_REALNAME));
+    if(column <= 0 || column > (sal_Int32)m_xColumns->size())
+        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
+
+    Any aName((*m_xColumns)[column-1]->getPropertyValue(PROPERTY_REALNAME));
     return aName.hasValue() ? getString(aName) : getString((*m_xColumns)[column-1]->getPropertyValue(PROPERTY_NAME));
 }
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OResultSetMetaData::getTableName( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
+    if(column <= 0 || column > (sal_Int32)m_xColumns->size())
+        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
+
     return m_aTableName;
 }
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OResultSetMetaData::getCatalogName( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
+    if(column <= 0 || column > (sal_Int32)m_xColumns->size())
+        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
     return ::rtl::OUString();
 }
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OResultSetMetaData::getColumnTypeName( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
+    if(column <= 0 || column > (sal_Int32)m_xColumns->size())
+        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
     return getString((*m_xColumns)[column-1]->getPropertyValue(PROPERTY_TYPENAME));
 }
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OResultSetMetaData::getColumnLabel( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
+    if(column <= 0 || column > (sal_Int32)m_xColumns->size())
+        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
     return getString((*m_xColumns)[column-1]->getPropertyValue(PROPERTY_NAME));
 }
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OResultSetMetaData::getColumnServiceName( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
+    if(column <= 0 || column > (sal_Int32)m_xColumns->size())
+        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
     return ::rtl::OUString();
 }
 // -------------------------------------------------------------------------
 
 sal_Bool SAL_CALL OResultSetMetaData::isCurrency( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
+    if(column <= 0 || column > (sal_Int32)m_xColumns->size())
+        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
     return getBOOL((*m_xColumns)[column-1]->getPropertyValue(PROPERTY_ISCURRENCY));
 }
 // -------------------------------------------------------------------------
 
 sal_Bool SAL_CALL OResultSetMetaData::isAutoIncrement( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
+    if(column <= 0 || column > (sal_Int32)m_xColumns->size())
+        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
     return getBOOL((*m_xColumns)[column-1]->getPropertyValue(PROPERTY_ISAUTOINCREMENT));
 }
 // -------------------------------------------------------------------------
-
-
 sal_Bool SAL_CALL OResultSetMetaData::isSigned( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
+    if(column <= 0 || column > (sal_Int32)m_xColumns->size())
+        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
     return sal_False;
 }
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL OResultSetMetaData::getPrecision( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
+    if(column <= 0 || column > (sal_Int32)m_xColumns->size())
+        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
     return getINT32((*m_xColumns)[column-1]->getPropertyValue(PROPERTY_PRECISION));
 }
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL OResultSetMetaData::getScale( sal_Int32 column ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
+    if(column <= 0 || column > (sal_Int32)m_xColumns->size())
+        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
     return getINT32((*m_xColumns)[column-1]->getPropertyValue(PROPERTY_SCALE));
 }
 // -------------------------------------------------------------------------
 
 sal_Int32 SAL_CALL OResultSetMetaData::isNullable( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
+    if(column <= 0 || column > (sal_Int32)m_xColumns->size())
+        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
     return getINT32((*m_xColumns)[column-1]->getPropertyValue(PROPERTY_ISNULLABLE));
 }
 // -------------------------------------------------------------------------
 
 sal_Bool SAL_CALL OResultSetMetaData::isSearchable( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
+    if(column <= 0 || column > (sal_Int32)m_xColumns->size())
+        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
     return sal_True;
 }
 // -------------------------------------------------------------------------
 
 sal_Bool SAL_CALL OResultSetMetaData::isReadOnly( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
+    if(column <= 0 || column > (sal_Int32)m_xColumns->size())
+        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
     if((*m_xColumns)[column-1]->getPropertySetInfo()->hasPropertyByName(PROPERTY_FUNCTION) &&
         ::cppu::any2bool((*m_xColumns)[column-1]->getPropertyValue(PROPERTY_FUNCTION)))
         return sal_True;
@@ -209,6 +249,8 @@ sal_Bool SAL_CALL OResultSetMetaData::isReadOnly( sal_Int32 column ) throw(SQLEx
 
 sal_Bool SAL_CALL OResultSetMetaData::isDefinitelyWritable( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
+    if(column <= 0 || column > (sal_Int32)m_xColumns->size())
+        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
     if((*m_xColumns)[column-1]->getPropertySetInfo()->hasPropertyByName(PROPERTY_FUNCTION) &&
         ::cppu::any2bool((*m_xColumns)[column-1]->getPropertyValue(PROPERTY_FUNCTION)))
         return sal_False;
@@ -218,6 +260,8 @@ sal_Bool SAL_CALL OResultSetMetaData::isDefinitelyWritable( sal_Int32 column ) t
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL OResultSetMetaData::isWritable( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
+    if(column <= 0 || column > (sal_Int32)m_xColumns->size())
+        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
     if((*m_xColumns)[column-1]->getPropertySetInfo()->hasPropertyByName(PROPERTY_FUNCTION) &&
         ::cppu::any2bool((*m_xColumns)[column-1]->getPropertyValue(PROPERTY_FUNCTION)))
         return sal_False;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-12 12:40:19 $
+ *  last change: $Author: oj $ $Date: 2001-04-17 12:17:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -285,6 +285,8 @@ Reference< ::com::sun::star::io::XInputStream > SAL_CALL OResultSet::getBinarySt
     if (OResultSet_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
+    if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
+        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
     columnIndex = mapColumn(columnIndex);
     return NULL;
 }
@@ -295,6 +297,8 @@ Reference< ::com::sun::star::io::XInputStream > SAL_CALL OResultSet::getCharacte
     if (OResultSet_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
+    if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
+        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
     columnIndex = mapColumn(columnIndex);
     return NULL;
 }
@@ -306,6 +310,8 @@ sal_Bool SAL_CALL OResultSet::getBoolean( sal_Int32 columnIndex ) throw(SQLExcep
     if (OResultSet_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
+    if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
+        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
     columnIndex = mapColumn(columnIndex);
     m_bWasNull = (*m_aRow)[columnIndex].isNull();
     return (*m_aRow)[columnIndex];
@@ -318,6 +324,8 @@ sal_Int8 SAL_CALL OResultSet::getByte( sal_Int32 columnIndex ) throw(SQLExceptio
     if (OResultSet_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
+    if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
+        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
     columnIndex = mapColumn(columnIndex);
     m_bWasNull = (*m_aRow)[columnIndex].isNull();
     return (*m_aRow)[columnIndex];
@@ -330,6 +338,8 @@ Sequence< sal_Int8 > SAL_CALL OResultSet::getBytes( sal_Int32 columnIndex ) thro
     if (OResultSet_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
+    if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
+        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
     columnIndex = mapColumn(columnIndex);
     m_bWasNull = (*m_aRow)[columnIndex].isNull();
     // it could happen that values are updated as string and then called for as getBytes
@@ -350,6 +360,8 @@ Sequence< sal_Int8 > SAL_CALL OResultSet::getBytes( sal_Int32 columnIndex ) thro
     if (OResultSet_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
+    if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
+        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
     columnIndex = mapColumn(columnIndex);
     m_bWasNull = (*m_aRow)[columnIndex].isNull();
 
@@ -363,6 +375,8 @@ double SAL_CALL OResultSet::getDouble( sal_Int32 columnIndex ) throw(SQLExceptio
     if (OResultSet_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
+    if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
+        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
     columnIndex = mapColumn(columnIndex);
     m_bWasNull = (*m_aRow)[columnIndex].isNull();
     return (*m_aRow)[columnIndex];
@@ -375,6 +389,8 @@ float SAL_CALL OResultSet::getFloat( sal_Int32 columnIndex ) throw(SQLException,
     if (OResultSet_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
+    if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
+        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
     columnIndex = mapColumn(columnIndex);
     m_bWasNull = (*m_aRow)[columnIndex].isNull();
     return (*m_aRow)[columnIndex];
@@ -387,6 +403,8 @@ sal_Int32 SAL_CALL OResultSet::getInt( sal_Int32 columnIndex ) throw(SQLExceptio
     if (OResultSet_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
+    if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
+        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
     columnIndex = mapColumn(columnIndex);
     m_bWasNull = (*m_aRow)[columnIndex].isNull();
     return (*m_aRow)[columnIndex];
@@ -415,6 +433,8 @@ sal_Int64 SAL_CALL OResultSet::getLong( sal_Int32 columnIndex ) throw(SQLExcepti
     ::osl::MutexGuard aGuard( m_aMutex );
     if (OResultSet_BASE::rBHelper.bDisposed)
         throw DisposedException();
+    if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
+        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
 
     columnIndex = mapColumn(columnIndex);
     return sal_Int64();
@@ -438,6 +458,8 @@ Reference< XArray > SAL_CALL OResultSet::getArray( sal_Int32 columnIndex ) throw
     if (OResultSet_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
+    if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
+        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
     columnIndex = mapColumn(columnIndex);
     return NULL;
 }
@@ -450,6 +472,8 @@ Reference< XClob > SAL_CALL OResultSet::getClob( sal_Int32 columnIndex ) throw(S
     if (OResultSet_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
+    if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
+        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
     columnIndex = mapColumn(columnIndex);
     return NULL;
 }
@@ -460,6 +484,8 @@ Reference< XBlob > SAL_CALL OResultSet::getBlob( sal_Int32 columnIndex ) throw(S
     if (OResultSet_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
+    if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
+        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
     columnIndex = mapColumn(columnIndex);
     return NULL;
 }
@@ -471,6 +497,8 @@ Reference< XRef > SAL_CALL OResultSet::getRef( sal_Int32 columnIndex ) throw(SQL
     if (OResultSet_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
+    if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
+        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
     columnIndex = mapColumn(columnIndex);
     return NULL;
 }
@@ -493,6 +521,8 @@ sal_Int16 SAL_CALL OResultSet::getShort( sal_Int32 columnIndex ) throw(SQLExcept
     if (OResultSet_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
+    if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
+        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
     columnIndex = mapColumn(columnIndex);
     m_bWasNull = (*m_aRow)[columnIndex].isNull();
     return (*m_aRow)[columnIndex];
@@ -506,6 +536,8 @@ sal_Int16 SAL_CALL OResultSet::getShort( sal_Int32 columnIndex ) throw(SQLExcept
     if (OResultSet_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
+    if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
+        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
     columnIndex = mapColumn(columnIndex);
     m_bWasNull = (*m_aRow)[columnIndex].isNull();
     return (*m_aRow)[columnIndex];
@@ -520,6 +552,9 @@ sal_Int16 SAL_CALL OResultSet::getShort( sal_Int32 columnIndex ) throw(SQLExcept
     if (OResultSet_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
+    if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
+        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
+
     columnIndex = mapColumn(columnIndex);
     return (*m_aRow)[columnIndex];
 }
@@ -532,6 +567,8 @@ sal_Int16 SAL_CALL OResultSet::getShort( sal_Int32 columnIndex ) throw(SQLExcept
     if (OResultSet_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
+    if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
+        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
     columnIndex = mapColumn(columnIndex);
     return (*m_aRow)[columnIndex];
 }
@@ -876,7 +913,8 @@ void SAL_CALL OResultSet::updateNull( sal_Int32 columnIndex ) throw(SQLException
     ::osl::MutexGuard aGuard( m_aMutex );
     if (OResultSet_BASE::rBHelper.bDisposed)
         throw DisposedException();
-
+    if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
+        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
     columnIndex = mapColumn(columnIndex);
 
     (*m_aInsertRow)[columnIndex].setBound(sal_True);
@@ -891,6 +929,8 @@ void SAL_CALL OResultSet::updateBoolean( sal_Int32 columnIndex, sal_Bool x ) thr
     if (OResultSet_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
+    if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
+        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
     columnIndex = mapColumn(columnIndex);
 
     (*m_aInsertRow)[columnIndex].setBound(sal_True);
@@ -903,6 +943,8 @@ void SAL_CALL OResultSet::updateByte( sal_Int32 columnIndex, sal_Int8 x ) throw(
     if (OResultSet_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
+    if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
+        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
     columnIndex = mapColumn(columnIndex);
 
     (*m_aInsertRow)[columnIndex].setBound(sal_True);
@@ -916,6 +958,8 @@ void SAL_CALL OResultSet::updateShort( sal_Int32 columnIndex, sal_Int16 x ) thro
     if (OResultSet_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
+    if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
+        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
     columnIndex = mapColumn(columnIndex);
 
     (*m_aInsertRow)[columnIndex].setBound(sal_True);
@@ -928,6 +972,8 @@ void SAL_CALL OResultSet::updateInt( sal_Int32 columnIndex, sal_Int32 x ) throw(
     if (OResultSet_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
+    if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
+        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
     columnIndex = mapColumn(columnIndex);
 
     (*m_aInsertRow)[columnIndex].setBound(sal_True);
@@ -936,6 +982,8 @@ void SAL_CALL OResultSet::updateInt( sal_Int32 columnIndex, sal_Int32 x ) throw(
 // -------------------------------------------------------------------------
 void SAL_CALL OResultSet::updateLong( sal_Int32 columnIndex, sal_Int64 x ) throw(SQLException, RuntimeException)
 {
+    if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
+        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
     columnIndex = mapColumn(columnIndex);
     throw RuntimeException();
 }
@@ -946,6 +994,8 @@ void SAL_CALL OResultSet::updateFloat( sal_Int32 columnIndex, float x ) throw(SQ
     if (OResultSet_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
+    if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
+        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
     columnIndex = mapColumn(columnIndex);
 
     (*m_aInsertRow)[columnIndex].setBound(sal_True);
@@ -959,6 +1009,8 @@ void SAL_CALL OResultSet::updateDouble( sal_Int32 columnIndex, double x ) throw(
     if (OResultSet_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
+    if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
+        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
     columnIndex = mapColumn(columnIndex);
 
     (*m_aInsertRow)[columnIndex].setBound(sal_True);
@@ -971,6 +1023,8 @@ void SAL_CALL OResultSet::updateString( sal_Int32 columnIndex, const ::rtl::OUSt
     if (OResultSet_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
+    if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
+        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
     columnIndex = mapColumn(columnIndex);
 
     (*m_aInsertRow)[columnIndex].setBound(sal_True);
@@ -983,6 +1037,8 @@ void SAL_CALL OResultSet::updateBytes( sal_Int32 columnIndex, const Sequence< sa
     if (OResultSet_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
+    if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
+        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
     columnIndex = mapColumn(columnIndex);
 
     (*m_aInsertRow)[columnIndex].setBound(sal_True);
@@ -995,6 +1051,8 @@ void SAL_CALL OResultSet::updateDate( sal_Int32 columnIndex, const ::com::sun::s
     if (OResultSet_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
+    if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
+        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
     columnIndex = mapColumn(columnIndex);
 
     (*m_aInsertRow)[columnIndex].setBound(sal_True);
@@ -1008,6 +1066,8 @@ void SAL_CALL OResultSet::updateTime( sal_Int32 columnIndex, const ::com::sun::s
     if (OResultSet_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
+    if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
+        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
     columnIndex = mapColumn(columnIndex);
 
     (*m_aInsertRow)[columnIndex].setBound(sal_True);
@@ -1021,6 +1081,8 @@ void SAL_CALL OResultSet::updateTimestamp( sal_Int32 columnIndex, const ::com::s
     if (OResultSet_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
+    if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
+        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
     columnIndex = mapColumn(columnIndex);
 
     (*m_aInsertRow)[columnIndex].setBound(sal_True);
@@ -1036,6 +1098,8 @@ void SAL_CALL OResultSet::updateBinaryStream( sal_Int32 columnIndex, const Refer
     if(!x.is())
         throw ::dbtools::FunctionSequenceException(*this);
 
+    if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
+        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
     columnIndex = mapColumn(columnIndex);
     Sequence<sal_Int8> aSeq;
     x->readSomeBytes(aSeq,length);
@@ -1051,6 +1115,8 @@ void SAL_CALL OResultSet::updateCharacterStream( sal_Int32 columnIndex, const Re
     if(!x.is())
         throw ::dbtools::FunctionSequenceException(*this);
 
+    if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
+        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
     columnIndex = mapColumn(columnIndex);
     Sequence<sal_Int8> aSeq;
     x->readSomeBytes(aSeq,length);
@@ -1071,6 +1137,8 @@ void SAL_CALL OResultSet::updateObject( sal_Int32 columnIndex, const Any& x ) th
     if (OResultSet_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
+    if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
+        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
     columnIndex = mapColumn(columnIndex);
 
     (*m_aInsertRow)[columnIndex].setBound(sal_True);
@@ -1083,6 +1151,8 @@ void SAL_CALL OResultSet::updateNumericObject( sal_Int32 columnIndex, const Any&
     ::osl::MutexGuard aGuard( m_aMutex );
     if (OResultSet_BASE::rBHelper.bDisposed)
         throw DisposedException();
+    if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
+        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
     columnIndex = mapColumn(columnIndex);
     OSL_ENSURE(0,"OResultSet::updateNumericObject: NYI");
 }
