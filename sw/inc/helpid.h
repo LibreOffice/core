@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpid.h,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:03:26 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 13:54:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -955,5 +955,7 @@
 #define HID_MM_QUERY                                (HID_BASE + 2223 )
 #define HID_MM_SENDWARNING                          (HID_BASE + 2224 )
 #define HID_MM_SERVERAUTHENTICATION                 (HID_BASE + 2225 )
-#define HID_DLG_WORDCOUNT                           (HID_BASE + 2226 )
+
 #define HID_MEDIA_TOOLBOX                           (HID_BASE + 2227)
+#define HID_MM_NEXT_PAGE                            (HID_BASE + 2228)
+#define HID_MM_PREV_PAGE                            (HID_BASE + 2229)
