@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bmpgui.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 13:41:12 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 20:25:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,8 @@ static LangInfo aLangEntries[] =
     { "ital", 39 },
     { "dtch", 31 },
     { "span", 34 },
+    { "hung", 36 },
+    { "estonian", 77},
     { "dan", 45 },
     { "swed", 46 },
     { "port", 03 },
@@ -106,8 +108,10 @@ static LangInfo aLangEntries[] =
     { "pol", 48 },
     { "arab",96 },
     { "greek", 30 },
+    { "catalan", 37},
     { "korean", 82 },
     { "turk", 90 },
+    { "slovenian", 50 }
 };
 
 // ----------
