@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2004-08-20 10:06:15 $
+#   last change: $Author: mba $ $Date: 2004-09-03 11:41:22 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,12 +72,10 @@ USE_DEFFILE=TRUE
 
 # --- Settings ----------------------------------
 
-.INCLUDE :  	svpre.mk
 .INCLUDE :  	settings.mk
-.INCLUDE :  	sv.mk
+
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)"=="LINUX"
-#INC+= -I/usr/include/gtk-2.0 -I/usr/lib/gtk-2.0/include -I/usr/include/atk-1.0 -I/usr/include/pango-1.0 -I/usr/X11R6/include -I/usr/include/freetype2 -I/usr/include/glib-2.0 -I/usr/lib/glib-2.0/include  
 INC+= -DNP_LINUX
 .ENDIF
 .ENDIF
@@ -86,21 +84,23 @@ INC+= -DENGLISH
 .ENDIF
 # --- Files -------------------------------------
 
-#CXXFILES=	npshell.c \
-#			npunix.c
-            
+SLOFILES=       $(SLO)$/npshell.obj \
+            $(SLO)$/so_env.obj
+
 SHL1OBJS=	$(SLO)$/npshell.obj \
             $(SLO)$/so_env.obj
-            
+
 .IF "$(GUI)"=="UNX"
-SHL1OBJS+=$(SLO)$/npunix.obj 
+SHL1OBJS+=$(SLO)$/npunix.obj
+SLOFILES+=$(SLO)$/npunix.obj
 SHL1STDLIBS+= -ldl -lnsl
-.ENDIF			
+.ENDIF
 .IF "$(GUI)"=="WNT"
-SHL1OBJS+=$(SLO)$/npwin.obj 
+SHL1OBJS+=$(SLO)$/npwin.obj
+SLOFILES+=$(SLO)$/npwin.obj
 SHL1STDLIBS+= shell32.lib
-.ENDIF			
-    
+.ENDIF
+
 
 # --- Plugin executable -------------------------
 APP1TARGET=nsplugin$(EXEPOSTFIX)
@@ -118,12 +118,12 @@ APP1STDLIBS=\
             $(SALLIB)			\
             $(VCLLIB)			\
             $(SVLLIB)			\
-            $(TOOLSLIB)	
+            $(TOOLSLIB)
 
 .IF "$(GUI)"=="UNX"
-#APP1STDLIBS+= -lgdk-x11-2.0 -lgtk-x11-2.0		
+#APP1STDLIBS+= -lgdk-x11-2.0 -lgtk-x11-2.0
 .IF "$(OS)"=="LINUX"
-.ELSE 
+.ELSE
 APP1STDLIBS+= -ldl -lnsl -lnls -lsocket
 .ENDIF
 .ENDIF
@@ -138,7 +138,7 @@ APP1STDLIBS+= ws2_32.lib shell32.lib ole32.lib kernel32.lib user32.lib gdi32.lib
 #SHL1TARGET=$(TARGET)$(DLLPOSTFIX)
 SHL1TARGET=$(TARGET)
 .IF "$(GUI)"=="WNT"
-SHL1STDLIBS+= ws2_32.lib shell32.lib ole32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib ole32.lib oleaut32.lib uuid.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib 
+SHL1STDLIBS+= ws2_32.lib shell32.lib ole32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib ole32.lib oleaut32.lib uuid.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib
 .ENDIF
 
 SHL1DEPN=

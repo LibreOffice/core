@@ -2,9 +2,9 @@
  *
  *  $RCSfile: npshell.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-09-02 14:08:39 $
+ *  last change: $Author: mba $ $Date: 2004-09-03 11:41:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,6 +215,8 @@ int sendMsg( PLUGIN_MSG* pMsg, unsigned int len, int iEnsure)
     return len_w;
 }
 
+extern "C"
+{
 char* pMimeTypes = "application/vnd.stardivision.calc:sdc:StarCalc 3.0 - 5.0;"
 "application/vnd.stardivision.chart:sds:StarChart 3.0 - 5.0;"
 "application/vnd.stardivision.draw:sda:StarDraw 3.0 - 5.0;"
@@ -249,8 +251,6 @@ char* pMimeTypes = "application/vnd.stardivision.calc:sdc:StarCalc 3.0 - 5.0;"
 "application/x-vnd.oasis.openoffice.presentation-template:otp:Open Office Presentation Template;"
 "application/x-vnd.oasis.openoffice.formula:oof:Open Office Formula";
 
-extern "C"
-{
 char*
 NPP_GetMIMEDescription(void)
 {
