@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: jb $ $Date: 2002-07-12 16:16:11 $
+ *  last change: $Author: jb $ $Date: 2002-09-18 14:49:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1321,13 +1321,11 @@ namespace {
         }
     }
 // ---------------------------------------------------------------------------------------
-    // need an exported symbol of this shared object
-    extern "C" sal_Bool SAL_CALL component_writeInfo(void* , void* );
 
     static OUString getCurrentModuleDirectory()
     {
         OUString aFileURL;
-        if ( !osl::Module::getUrlFromAddress((void*)&component_writeInfo,aFileURL) )
+        if ( !osl::Module::getUrlFromAddress((void*)&getCurrentModuleDirectory,aFileURL) )
         {
             OSL_TRACE(false, "Cannot locate current module - using executable instead");
 
