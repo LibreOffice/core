@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-27 09:35:24 $
+ *  last change: $Author: oj $ $Date: 2002-12-12 13:44:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -476,6 +476,8 @@ FeatureState OQueryController::GetState(sal_uInt16 _nId) const
 #ifdef DEBUG
         case ID_EDIT_QUERY_SQL:
             break;
+        case ID_EDIT_QUERY_DESIGN:
+            break;
 #endif
         case ID_BROWSER_ADDTABLE:
             if ( !m_bDesign )
@@ -638,6 +640,7 @@ void OQueryController::Execute(sal_uInt16 _nId)
             }
             break;
 #ifdef DEBUG
+        case ID_EDIT_QUERY_DESIGN:
         case ID_EDIT_QUERY_SQL:
             {
                 ::rtl::OUString aErrorMsg;
@@ -650,6 +653,26 @@ void OQueryController::Execute(sal_uInt16 _nId)
                     pWindow->SetPosSizePixel(Point(0,0),pView->GetSizePixel());
                     SvTreeListBox* pTreeBox = new SvTreeListBox(pWindow);
                     pTreeBox->SetPosSizePixel(Point(0,0),pView->GetSizePixel());
+
+                    if ( _nId == ID_EDIT_QUERY_DESIGN )
+                    {
+                        ::connectivity::OSQLParseNode* pTemp = pNode ? pNode->getChild(3)->getChild(1) : NULL;
+                        // no where clause found
+                        if ( pTemp && !pTemp->isLeaf() )
+                        {
+                            ::connectivity::OSQLParseNode * pCondition = pTemp->getChild(1);
+                            if ( pCondition ) // no where clause
+                            {
+                                ::connectivity::OSQLParseNode::negateSearchCondition(pCondition);
+                                ::connectivity::OSQLParseNode *pNodeTmp = pTemp->getChild(1);
+
+                                ::connectivity::OSQLParseNode::disjunctiveNormalForm(pNodeTmp);
+                                pNodeTmp = pTemp->getChild(1);
+                                ::connectivity::OSQLParseNode::absorptions(pNodeTmp);
+                                pNodeTmp = pTemp->getChild(1);
+                            }
+                        }
+                    }
 
                     insertParseTree(pTreeBox,pNode);
 
@@ -868,6 +891,7 @@ void OQueryController::AddSupportedFeatures()
     m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DB/AddRelation")]      = ID_RELATION_ADD_RELATION;
 #ifdef DEBUG
     m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DB/ShowParseTree")]    = ID_EDIT_QUERY_SQL;
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DB/MakeDisjunct")]     = ID_EDIT_QUERY_DESIGN;
 #endif
 }
 // -----------------------------------------------------------------------------
