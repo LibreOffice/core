@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxdraw.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-12 06:28:19 $
+ *  last change: $Author: rt $ $Date: 2001-05-16 15:22:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text [ ENGLISH ] = "Selection" ;
                 Text [ norwegian ] = "Selection" ;
                 Text [ italian ] = "Selezione" ;
-                Text [ portuguese_brazilian ] = "Seleção" ;
+                Text [ portuguese_brazilian ] = "Sele??o" ;
                 Text [ portuguese ] = "Selecção" ;
                 Text [ finnish ] = "Valinta" ;
                 Text [ danish ] = "Marker" ;
@@ -151,7 +151,7 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text [ ENGLISH ] = "Rectangle" ;
                 Text [ norwegian ] = "Rectangle" ;
                 Text [ italian ] = "Rettangolo" ;
-                Text [ portuguese_brazilian ] = "Retângulo" ;
+                Text [ portuguese_brazilian ] = "Ret?ngulo" ;
                 Text [ portuguese ] = "Rectângulo" ;
                 Text [ finnish ] = "Suorakulmio" ;
                 Text [ danish ] = "Rektangel" ;
@@ -212,7 +212,7 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text [ ENGLISH ] = "Polygon" ;
                 Text [ norwegian ] = "Polygon" ;
                 Text [ italian ] = "Poligono" ;
-                Text [ portuguese_brazilian ] = "Polígono" ;
+                Text [ portuguese_brazilian ] = "Pol?gono" ;
                 Text [ portuguese ] = "Polígono" ;
                 Text [ finnish ] = "Polygoni" ;
                 Text [ danish ] = "Polygon" ;
@@ -623,7 +623,7 @@ FloatingWindow RID_SVXTBX_ALIGNMENT
                 Text [ english_us ] = "Center" ;
                 Text[ chinese_simplified ] = "¾ÓÖÐ";
                 Text[ russian ] = "Ïî öåíòðó";
-                Text[ polish ] = "Wyœrodkuj";
+                Text[ polish ] = "Wy?rodkuj";
                 Text[ japanese ] = "’†‰›‘µ‚¦";
                 Text[ chinese_traditional ] = "¸m¤¤";
                 Text[ greek ] = "ÊåíôñáñéóìÝíá";
@@ -710,7 +710,7 @@ FloatingWindow RID_SVXTBX_ALIGNMENT
                 Text [ english_us ] = "Centered" ;
                 Text[ chinese_simplified ] = "ÖÐÐÄ";
                 Text[ russian ] = "Ïî ñåðåäèíå";
-                Text[ polish ] = "Poœrodku";
+                Text[ polish ] = "Po?rodku";
                 Text[ japanese ] = "’†‰›";
                 Text[ chinese_traditional ] = "¸m¤¤";
                 Text[ greek ] = "ÊÝíôñï";
