@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urlparameter.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-24 11:17:19 $
+ *  last change: $Author: abi $ $Date: 2001-10-31 13:08:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -365,6 +365,7 @@ void URLParameter::readBerkeley()
     DbtToStringConverter converter( static_cast< sal_Char* >( data.get_data() ),
                                     data.get_size() );
     m_aTitle = converter.getTitle();
+    m_pDatabases->replaceName( m_aTitle );
     m_aPath  = converter.getFile();
     m_aJar   = converter.getDatabase();
     m_aTag   = converter.getHash();
@@ -793,8 +794,8 @@ InputStreamTransformer::InputStreamTransformer( URLParameter* urlParam,
 
         // Uses the implementation detail, that rtl::OString::getStr returns a zero terminated character-array
 
-        const char* parameter[31];
-        rtl::OString parString[30];
+        const char* parameter[41];
+        rtl::OString parString[40];
         int last;
 
         parString[ 0] = "Program";
@@ -809,29 +810,51 @@ InputStreamTransformer::InputStreamTransformer( URLParameter* urlParam,
         parString[ 9] = urlParam->getByName( "Language" );
         parString[10] = "System";
         parString[11] = urlParam->getByName( "System" );
-        parString[12] = "hp";
-        parString[13] = urlParam->getByName( "HelpPrefix" );
-        last = 14;
+        parString[12] = "productname";
+        parString[13] = rtl::OString( pDatabases->getProductName().getStr(),
+                                      pDatabases->getProductName().getLength(),
+                                      RTL_TEXTENCODING_UTF8 );
+        parString[14] = "productversion";
+        parString[15] = rtl::OString( pDatabases->getProductVersion().getStr(),
+                                      pDatabases->getProductVersion().getLength(),
+                                      RTL_TEXTENCODING_UTF8 );
 
-        if( parString[13].getLength() )
+        parString[16] = "hp";
+        parString[17] = urlParam->getByName( "HelpPrefix" );
+        last = 18;
+
+        if( parString[17].getLength() )
         {
-            parString[14] = "sm";
-            parString[15] = "vnd.sun.star.help%3A%2F%2F";
-            parString[16] = "qm";
-            parString[17] = "%3F";
-            parString[18] = "es";
-            parString[19] = "%3D";
-            parString[20] = "am";
-            parString[21] = "%26";
-            parString[22] = "cl";
-            parString[23] = "%3A";
-            parString[24] = "sl";
-            parString[25] = "%2F";
-            parString[26] = "hm";
-            parString[27] = "%23";
-            parString[28] = "cs";
-            parString[29] = "css";
-            last = 30;
+            parString[18] = "sm";
+            parString[19] = "vnd.sun.star.help%3A%2F%2F";
+            parString[20] = "qm";
+            parString[21] = "%3F";
+            parString[22] = "es";
+            parString[23] = "%3D";
+            parString[24] = "am";
+            parString[25] = "%26";
+            parString[26] = "cl";
+            parString[27] = "%3A";
+            parString[28] = "sl";
+            parString[29] = "%2F";
+            parString[30] = "hm";
+            parString[31] = "%23";
+            parString[32] = "cs";
+            parString[33] = "css";
+
+            parString[34] = "vendorname";
+            parString[35] = rtl::OString( pDatabases->getVendorName().getStr(),
+                                          pDatabases->getVendorName().getLength(),
+                                          RTL_TEXTENCODING_UTF8 );
+            parString[36] = "vendorversion";
+            parString[37] = rtl::OString( pDatabases->getVendorVersion().getStr(),
+                                          pDatabases->getVendorVersion().getLength(),
+                                          RTL_TEXTENCODING_UTF8 );
+            parString[38] = "vendorshort";
+            parString[39] = rtl::OString( pDatabases->getVendorShort().getStr(),
+                                          pDatabases->getVendorShort().getLength(),
+                                          RTL_TEXTENCODING_UTF8 );
+            last = 40;
         }
 
         for( int i = 0; i < last; ++i )
@@ -842,8 +865,6 @@ InputStreamTransformer::InputStreamTransformer( URLParameter* urlParam,
         SablotHandle p;
         SablotCreateProcessor(&p);
         SablotRegHandler( p,HLR_SCHEME,&schemeHandler,(void*)(&userData) );
-
-        // rtl::OUString xslURL = pDatabases->getInstallPathAsURL();
         rtl::OUString xslURL = pDatabases->getInstallPathAsURLWithOutEncoding();
 
           rtl::OString xslURLascii = "file:";

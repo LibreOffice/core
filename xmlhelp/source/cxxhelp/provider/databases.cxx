@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databases.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-24 10:55:13 $
+ *  last change: $Author: abi $ $Date: 2001-10-31 13:08:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,9 +84,10 @@
 #ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
 #include <com/sun/star/lang/Locale.hpp>
 #endif
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
+#endif
 #include "inputstream.hxx"
-
-#include <algorithm>
 
 
 using namespace chelp;
@@ -98,6 +99,11 @@ using namespace com::sun::star::lang;
 
 
 Databases::Databases( const rtl::OUString& instPath,
+                      const rtl::OUString& productName,
+                      const rtl::OUString& productVersion,
+                      const rtl::OUString& vendorName,
+                      const rtl::OUString& vendorVersion,
+                      const rtl::OUString& vendorShort,
                       com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > xSMgr )
     : m_xSMgr( xSMgr ),
       m_nErrorDocLength( 0 ),
@@ -105,6 +111,12 @@ Databases::Databases( const rtl::OUString& instPath,
       m_nCustomCSSDocLength( 0 ),
       m_pCustomCSSDoc( 0 )
 {
+    m_vReplacement[0] = productName;
+    m_vReplacement[1] = productVersion;
+    m_vReplacement[2] = vendorName;
+    m_vReplacement[3] = vendorVersion;
+    m_vReplacement[4] = vendorShort;
+
     setInstallPath( instPath );
 }
 
@@ -156,6 +168,72 @@ Databases::~Databases()
     }
 
 }
+
+
+
+void Databases::replaceName( rtl::OUString& oustring ) const
+{
+    sal_Int32 idx = -1,k = 0,add,off;
+    bool cap = false;
+    rtl::OUStringBuffer aStrBuf( 0 );
+
+    while( ( idx = oustring.indexOf( sal_Unicode('%'),++idx ) ) != -1 )
+    {
+        if( oustring.indexOf( rtl::OUString::createFromAscii( "%PRODUCTNAME" ),
+                              idx ) == idx )
+        {
+            add = 12;
+            off = PRODUCTNAME;
+        }
+        else if( oustring.indexOf( rtl::OUString::createFromAscii( "%PRODUCTVERSION" ),
+                                   idx ) == idx )
+        {
+            add = 15;
+            off = PRODUCTVERSION;
+        }
+        else if( oustring.indexOf( rtl::OUString::createFromAscii( "%VENDORNAME" ),
+                                   idx ) == idx )
+        {
+            add = 11;
+            off = VENDORNAME;
+        }
+        else if( oustring.indexOf( rtl::OUString::createFromAscii( "%VENDORVERSION" ),
+                                   idx ) == idx )
+        {
+            add = 14;
+            off = VENDORVERSION;
+        }
+        else if( oustring.indexOf( rtl::OUString::createFromAscii( "%VENDORSHORT" ),
+                                   idx ) == idx )
+        {
+            add = 12;
+            off = VENDORSHORT;
+        }
+        else
+            add = 0;
+
+        if( add )
+        {
+            if( ! cap )
+            {
+                cap = true;
+                aStrBuf.ensureCapacity( 256 );
+            }
+
+            aStrBuf.append( &oustring.getStr()[k],idx - k );
+            aStrBuf.append( m_vReplacement[off] );
+            k = idx + add;
+        }
+    }
+
+    if( cap )
+    {
+        if( k < oustring.getLength() )
+            aStrBuf.append( &oustring.getStr()[k],oustring.getLength()-k );
+        oustring = aStrBuf.makeStringAndClear();
+    }
+}
+
 
 
 
@@ -322,7 +400,13 @@ StaticModuleInformation* Databases::getStaticInformationForModule( const rtl::OU
                 else
                     lineBuffer[ pos++ ] = ch;
             }
-            it->second = new StaticModuleInformation( title,startid,program,heading,fulltext,order );
+            replaceName( title );
+            it->second = new StaticModuleInformation( title,
+                                                      startid,
+                                                      program,
+                                                      heading,
+                                                      fulltext,
+                                                      order );
         }
     }
 
@@ -462,59 +546,27 @@ Databases::getCollator( const rtl::OUString& Language,
 }
 
 
-
-
-KeywordInfo::KeywordInfo()
-    : pos( 0 ),
-      listKey( 100 )
+KeywordInfo::KeywordElement::KeywordElement( Databases *pDatabases,
+                                             Db* pDb,
+                                             Reference< XCollator > xCollator,
+                                             rtl::OUString& ky,
+                                             rtl::OUString& data )
+    :  m_xCollator( xCollator ),
+       key( ky )
 {
+    if( key.indexOf( rtl::OUString::createFromAscii( "%PRODUCTNAME" ) ) != -1 )
+        while( false );
+
+    pDatabases->replaceName( key );
+    init( pDatabases,pDb,data );
 }
 
 
-
-Sequence< rtl::OUString >& KeywordInfo::insertId( sal_Int32 index,rtl::OUString ids )
+bool KeywordInfo::KeywordElement::operator<( const KeywordElement& ra ) const
 {
-    std::vector< rtl::OUString > test;
-    while( ids.getLength() )
-    {
-        sal_Int32 idx = ids.indexOf( ';' );
-        test.push_back( ids.copy(0,idx) );
-        ids = ids.copy( 1+idx );
-    }
+    const rtl::OUString& l = key;
+    const rtl::OUString& r = ra.key;
 
-    listId[index].realloc( test.size() );
-    for( sal_uInt32 i = 0; i < test.size(); ++i )
-        listId[index][i] = test[i];
-
-    listAnchor[index].realloc( test.size() );
-
-    for( sal_Int32 k = 0; k < listId[index].getLength(); ++k )
-    {
-        if( listId[index][k].getLength() )
-        {
-            sal_Int32 idx = listId[index][k].indexOf( sal_Unicode( '#' ) );
-            if( idx != -1 )
-            {
-                listAnchor[index][k] = listId[index][k].copy(1+idx).trim();
-                listId[index][k] = listId[index][k].copy(0,idx).trim();
-            }
-        }
-    }
-
-    listTitle[index].realloc( test.size() );
-    return listId[index];
-}
-
-
-
-KeywordInfo::Compare::Compare( const Reference< XCollator >& xCollator )
-    : m_xCollator( xCollator )
-{
-}
-
-
-int KeywordInfo::Compare::operator()( const rtl::OUString& l,const rtl::OUString& r ) const
-{
     if( m_xCollator.is() )
     {
         sal_Int32 l1 = l.indexOf( sal_Unicode( ';' ) );
@@ -541,31 +593,84 @@ int KeywordInfo::Compare::operator()( const rtl::OUString& l,const rtl::OUString
         sal_Int32 c1 = m_xCollator->compareSubstring( l,0,l3,r,0,r3 );
 
         if( c1 == +1 )
-            return 0;
+            return false;
         else
         {
             if( c1 == 0 )
-                return ( m_xCollator->compareSubstring( l,1+l1,l2,r,1+r1,r2 ) < 0 ) ? 1 : 0;
+                return ( m_xCollator->compareSubstring( l,1+l1,l2,r,1+r1,r2 ) < 0 ) ? true : false;
             else
-                return 1;
+                return true;
         }
     }
     else
-        return ( l <= r ) ? 1 : 0;
+        return ( l <= r ) ? true : false;
 }
 
 
 
-void KeywordInfo::sort( std::vector< rtl::OUString >& listKey_, const Compare& comp )
+void KeywordInfo::KeywordElement::init( Databases *pDatabases,Db* pDb,const rtl::OUString& ids )
 {
-    std::sort( listKey_.begin(),listKey_.end(),comp );
-    listKey.realloc( listKey_.size() );
-    listId.realloc( listKey_.size() );
-    listAnchor.realloc( listKey_.size() );
-    listTitle.realloc( listKey_.size() );
+    const sal_Unicode* idstr = ids.getStr();
+    std::vector< rtl::OUString > id,anchor;
+    int idx = -1,k;
+    while( ( idx = ids.indexOf( ';',k = ++idx ) ) != -1 )
+    {
+        int h = ids.indexOf( sal_Unicode( '#' ),k );
+        if( h < idx )
+        {
+            // found an anchor
+            id.push_back( rtl::OUString( &idstr[k],h-k ) );
+            anchor.push_back( rtl::OUString( &idstr[h+1],idx-h-1 ) );
+        }
+        else
+        {
+            id.push_back( rtl::OUString( &idstr[k],idx-k ) );
+            anchor.push_back( rtl::OUString() );
+        }
+    }
 
-    for( sal_uInt32 i = 0; i < listKey_.size(); ++i )
-        listKey[i] = listKey_[i];
+    listId.realloc( id.size() );
+    listAnchor.realloc( id.size() );
+    listTitle.realloc( id.size() );
+    for( sal_uInt32 i = 0; i < id.size(); ++i )
+    {
+        listId[i] = id[i];
+        listAnchor[i] = anchor[i];
+
+        rtl::OString idi( id[i].getStr(),id[i].getLength(),RTL_TEXTENCODING_UTF8 );
+        Dbt key( static_cast< void* >( const_cast< sal_Char* >( idi.getStr() ) ),
+                 idi.getLength() );
+        Dbt data;
+        if( pDb )
+            pDb->get( 0,&key,&data,0 );
+
+        DbtToStringConverter converter( static_cast< sal_Char* >( data.get_data() ),
+                                        data.get_size() );
+
+        rtl::OUString title = converter.getTitle();
+        pDatabases->replaceName( title );
+        listTitle[i] = title;
+    }
+}
+
+
+KeywordInfo::KeywordInfo( const std::set< KeywordElement >& aSet )
+    : listKey( aSet.size() ),
+      listId( aSet.size() ),
+      listAnchor( aSet.size() ),
+      listTitle( aSet.size() )
+{
+    int idx = 0;
+    std::set< KeywordElement >::iterator it = aSet.begin();
+    while( it != aSet.end() )
+    {
+        listKey[idx] = it->key;
+        listId[idx] = it->listId;
+        listAnchor[idx] = it->listAnchor;
+        listTitle[idx] = it->listTitle;
+        ++idx;
+        ++it;
+    }
 }
 
 
@@ -584,40 +689,42 @@ KeywordInfo* Databases::getKeyword( const rtl::OUString& Database,
 
     if( aPair.second && ! it->second )
     {
-        std::vector< rtl::OUString > listKey_;
-        std::hash_map< rtl::OUString,rtl::OUString,ha,eq > internalHash;
-
         rtl::OUString fileNameOU =
             getInstallPathAsSystemPath() +
             key +
             rtl::OUString::createFromAscii( ".key" );
 
         rtl::OString fileName( fileNameOU.getStr(),fileNameOU.getLength(),osl_getThreadTextEncoding() );
-
         Db table( 0,DB_CXX_NO_EXCEPTIONS );
         if( 0 == table.open( fileName.getStr(),0,DB_BTREE,DB_RDONLY,0644 ) )
-        {   // success opening the database
-            Dbc* cursor = 0;
-            table.cursor( 0,&cursor,0 );
-            Dbt key,data;
+        {
+            std::set<KeywordInfo::KeywordElement> aSet;
+            Db* idmap = getBerkeley( Database,Language );
+            Reference< XCollator > xCollator = getCollator( Language,rtl::OUString() );
 
             bool first = true;
+            Dbt key,data;
             key.set_flags( DB_DBT_MALLOC );      // Initially the cursor must allocate the necessary memory
             data.set_flags( DB_DBT_MALLOC );
-            KeywordInfo* info = it->second = new KeywordInfo();
 
-            rtl::OUString keyStri;
+            Dbc* cursor = 0;
+            table.cursor( 0,&cursor,0 );
 
             while( cursor && DB_NOTFOUND != cursor->get( &key,&data,DB_NEXT ) )
             {
-                keyStri = rtl::OUString( static_cast<sal_Char*>(key.get_data()),
-                                         key.get_size(),
-                                         RTL_TEXTENCODING_UTF8 );
-                info->insert( listKey_,keyStri );
-                internalHash[ keyStri ] = rtl::OUString( static_cast<sal_Char*>(data.get_data()),
-                                                         data.get_size(),
-                                                         RTL_TEXTENCODING_UTF8 );
+                rtl::OUString keyword( static_cast<sal_Char*>(key.get_data()),
+                                       key.get_size(),
+                                       RTL_TEXTENCODING_UTF8 );
+                rtl::OUString doclist( static_cast<sal_Char*>(data.get_data()),
+                                       data.get_size(),
+                                       RTL_TEXTENCODING_UTF8 );
 
+                aSet.insert(
+                    KeywordInfo::KeywordElement( this,
+                                                 idmap,
+                                                 xCollator,
+                                                 keyword,
+                                                 doclist ) );
                 if( first )
                 {
                     key.set_flags( DB_DBT_REALLOC );
@@ -625,40 +732,16 @@ KeywordInfo* Databases::getKeyword( const rtl::OUString& Database,
                     first = false;
                 }
             }
-
-            info->sort( listKey_,KeywordInfo::Compare( getCollator( Language,
-                                                                    rtl::OUString() ) ) );
             cursor->close();
-
-            Sequence< rtl::OUString >& keywords = info->getKeywordList();
-            Db *table2 = getBerkeley( Database,Language );
-            for( sal_Int32 i = 0; i < keywords.getLength(); ++i )
-            {
-                Sequence< rtl::OUString >& id = info->insertId( i,internalHash[ keywords[i] ] );
-                Sequence< rtl::OUString >& title = info->getTitleForIndex( i );
-
-                for( sal_Int32 j = 0; j < id.getLength(); ++j )
-                {
-                    rtl::OString idj( id[j].getStr(),id[j].getLength(),RTL_TEXTENCODING_UTF8 );
-                    Dbt key1( static_cast< void* >( const_cast< sal_Char* >( idj.getStr() ) ),
-                              idj.getLength() );
-                    Dbt data1;
-                    if( table2 )
-                        table2->get( 0,&key1,&data1,0 );
-
-                    DbtToStringConverter converter( static_cast< sal_Char* >( data1.get_data() ),
-                                                    data1.get_size() );
-
-                    title[j] = converter.getTitle();
-                }
-            }
+            KeywordInfo* info = it->second = new KeywordInfo( aSet );
         }
-
         table.close( 0 );
     }
 
     return it->second;
 }
+
+
 
 
 
@@ -889,10 +972,29 @@ void Databases::setActiveText( const rtl::OUString& Module,
         Dbt key( static_cast< void* >( const_cast< sal_Char* >( id.getStr() ) ),id.getLength() );
         Dbt data;
         db->get( 0,&key,&data,0 );
-        *byteCount = data.get_size();
-        *buffer = new char[ 1 + *byteCount ];
-        (*buffer)[*byteCount] = 0;
-        rtl_copyMemory( *buffer,data.get_data(),*byteCount );
+        int len = data.get_size();
+        const sal_Char* ptr = static_cast<sal_Char*>( data.get_data() );
+
+        // ensure existence of tmp after for
+        rtl::OString tmp;
+        for( int i = 0; i < len; ++i )
+            if( ptr[i] == '%' )
+            {
+                // need to replace
+                rtl::OUString temp = rtl::OUString( ptr,len,RTL_TEXTENCODING_UTF8 );
+                replaceName( temp );
+                tmp = rtl::OString( temp.getStr(),
+                                    temp.getLength(),
+                                    RTL_TEXTENCODING_UTF8 );
+                len = tmp.getLength();
+                ptr = tmp.getStr();
+                break;
+            }
+
+        *byteCount = len;
+        *buffer = new char[ 1 + len ];
+        (*buffer)[len] = 0;
+        rtl_copyMemory( *buffer,ptr,len );
     }
     else
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: provider.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mh $ $Date: 2001-10-04 08:35:51 $
+ *  last change: $Author: abi $ $Date: 2001-10-31 13:08:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,9 +84,6 @@
 #endif
 #ifndef _DATABASES_HXX_
 #include <provider/databases.hxx>
-#endif
-#ifndef COM_SUN_STAR_CONTAINER_XHIERARCHICALNAMEACCESS_HPP_
-#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XCONFIGMANAGER_HPP_
 #include <com/sun/star/frame/XConfigManager.hpp>
@@ -222,116 +219,175 @@ Reference< XContent > SAL_CALL ContentProvider::queryContent( const Reference< X
 }
 
 
-#include <provider/debughelper.hxx>
-
 void ContentProvider::init()
 {
+    osl::MutexGuard aGuard( m_aMutex );
+
     isInitialized = true;
+    Reference< XMultiServiceFactory >  sProvider( getConfiguration() );
+    Reference< XHierarchicalNameAccess > xHierAccess( getHierAccess( sProvider,
+                                                                     "org.openoffice.Office.Common" ) );
 
-//    rtl::OUString sProviderService =
-//      rtl::OUString::createFromAscii( "com.sun.star.configuration.ConfigurationProvider" );
+    rtl::OUString instPath( getKey( xHierAccess,"Path/Current/Help" ) );
+    if( ! instPath.getLength() )
+        // try to determine path from default
+        instPath = rtl::OUString::createFromAscii( "$(instpath)/help" );
 
+    // replace anything like $(instpath);
+    subst( instPath );
 
-//    Any aAny;
-//    aAny <<= rtl::OUString::createFromAscii( "local" );
-//    PropertyValue aProp( rtl::OUString::createFromAscii( "servertype" ),
-//                 -1,
-//                 aAny,
-//                 PropertyState_DIRECT_VALUE );
+    /**
+     *  now determing
+     *  productname,
+     *  productversion,
+     *  vendorname,
+     *  vendorversion,
+     *  vendorshort
+     */
 
-//    Sequence< Any > seq(1);
-//    seq[0] <<= aProp;
+    xHierAccess = getHierAccess( sProvider,
+                                 "org.openoffice.Setup" );
+    rtl::OUString productname( getKey(  xHierAccess,"Product/ooName" ) );
 
-//    Reference< XMultiServiceFactory > sProvider;
-//    try
-//      {
-//        sProvider =
-//      Reference< XMultiServiceFactory >(
-//                        m_xSMgr->createInstanceWithArguments( sProviderService,seq ),
-//                        UNO_QUERY );
-//      }
-//    catch( const com::sun::star::uno::Exception& e )
-//      {
-//        VOS_ENSHURE( sProvider.is()," cant instantiate the multiservicefactory " );
-//      }
-
-
-//    if( ! sProvider.is() )
-//      {
-//        return;
-//      }
-
-//    rtl::OUString sReaderService =
-//        rtl::OUString::createFromAscii( "com.sun.star.configuration.ConfigurationAccess" );
-
-//    seq[0] <<= rtl::OUString::createFromAscii( "org.openoffice.Office.Common" );
+    rtl::OUString setupversion( getKey(  xHierAccess,"Product/ooSetupVersion" ) );
+    rtl::OUString setupextension( getKey(  xHierAccess,"Product/ooSetupExtension") );
+    rtl::OUString productversion( setupversion +
+                                  rtl::OUString::createFromAscii( " " ) +
+                                  setupextension );
 
 
-//    Reference< XHierarchicalNameAccess > xHierAccess;
-//    try
-//    {
-//        xHierAccess =
-//            Reference< XHierarchicalNameAccess >
-//            ( sProvider->createInstanceWithArguments( sReaderService,seq ),
-//              UNO_QUERY );
-//    }
-//    catch( const com::sun::star::uno::Exception& e )
-//    {
-//        VOS_ENSHURE( xHierAccess.is()," cant instantiate the reader service " );
-//    }
+    xHierAccess = getHierAccess( sProvider,
+                                 "org.openoffice.Webtop.Common" );
+    rtl::OUString vendorname( getKey(  xHierAccess,"Product/ooName" ) );
 
-//    if( ! xHierAccess.is() )
-//        return;
-
-//    try
-//    {
-//        aAny =
-//            xHierAccess->getByHierarchicalName( rtl::OUString::createFromAscii("Path/Current/Help") );
-//    }
-//    catch( const com::sun::star::container::NoSuchElementException& e )
-//    {
-//        VOS_ENSHURE( false," path to help files could not be determined " );
-//        return;
-//    }
-
-
-//    rtl::OUString instPath;
-//    bool err = ! ( aAny >>= instPath );
-
-//    if( err )
-//    {
-//        VOS_ENSHURE( false," path to help files could not be determined " );
-//        return;
-//    }
-
-    rtl::OUString instPath( rtl::OUString::createFromAscii( "$(instpath)/help/" ) );
-
-    Reference< XConfigManager >  xCfgMgr;
-    try
-    {
-        xCfgMgr =
-            Reference< XConfigManager >(
-                m_xSMgr->createInstance( rtl::OUString::createFromAscii( "com.sun.star.config.SpecialConfigManager" ) ),
-                UNO_QUERY );
-    }
-    catch( const com::sun::star::uno::Exception& e )
-    {
-        VOS_ENSHURE( xCfgMgr.is()," cant instantiate the special config manager " );
-    }
-
-
-    if( ! xCfgMgr.is() )
-    {
-        fprintf( stderr,"specialconfigmanager not found\n" );
-    }
-    else
-        instPath = xCfgMgr->substituteVariables( instPath );
-
-//      err_msg( "installpath as given by substituteVariables ",
-//               instPath );
-
-//    instPath = rtl::OUString::createFromAscii( "/export/home/abi/src38b11/help" );
+    setupversion = rtl::OUString( getKey(  xHierAccess,"Product/ooSetupVersion" ) );
+    setupextension = rtl::OUString ( getKey(  xHierAccess,"Product/ooSetupExtension") );
+    rtl::OUString vendorversion( setupversion +
+                                 rtl::OUString::createFromAscii( " " ) +
+                                 setupextension );
+    rtl::OUString vendorshort = vendorname;
 
     m_pDatabases = new Databases( instPath,
+                                  productname,
+                                  productversion,
+                                  vendorname,
+                                  vendorversion,
+                                  vendorshort,
                                   m_xSMgr );
+}
+
+
+
+
+Reference< XMultiServiceFactory > ContentProvider::getConfiguration() const
+{
+    Reference< XMultiServiceFactory > sProvider;
+    if( m_xSMgr.is() )
+    {
+        Any aAny;
+        aAny <<= rtl::OUString::createFromAscii( "plugin" );
+        PropertyValue aProp( rtl::OUString::createFromAscii( "servertype" ),
+                             -1,
+                             aAny,
+                             PropertyState_DIRECT_VALUE );
+
+        Sequence< Any > seq(1);
+        seq[0] <<= aProp;
+
+        try
+        {
+            rtl::OUString sProviderService =
+                rtl::OUString::createFromAscii( "com.sun.star.configuration.ConfigurationProvider" );
+            sProvider =
+                Reference< XMultiServiceFactory >(
+                    m_xSMgr->createInstanceWithArguments( sProviderService,seq ),
+                    UNO_QUERY );
+        }
+        catch( const com::sun::star::uno::Exception& )
+        {
+            OSL_ENSURE( sProvider.is(),"cant instantiate configuration" );
+        }
+    }
+
+    return sProvider;
+}
+
+
+
+Reference< XHierarchicalNameAccess >
+ContentProvider::getHierAccess( const Reference< XMultiServiceFactory >& sProvider,
+                                const char* file ) const
+{
+    Reference< XHierarchicalNameAccess > xHierAccess;
+
+    if( sProvider.is() )
+    {
+        Sequence< Any > seq(1);
+        rtl::OUString sReaderService =
+            rtl::OUString::createFromAscii( "com.sun.star.configuration.ConfigurationAccess" );
+
+        seq[0] <<= rtl::OUString::createFromAscii( file );
+
+        try
+        {
+            xHierAccess =
+                Reference< XHierarchicalNameAccess >
+                ( sProvider->createInstanceWithArguments( sReaderService,seq ),
+                  UNO_QUERY );
+        }
+        catch( const com::sun::star::uno::Exception& )
+        {
+        }
+    }
+
+    return xHierAccess;
+}
+
+
+
+rtl::OUString
+ContentProvider::getKey( const Reference< XHierarchicalNameAccess >& xHierAccess,
+                         const char* key ) const
+{
+    rtl::OUString instPath;
+    if( xHierAccess.is() )
+    {
+        Any aAny;
+        try
+        {
+            aAny =
+                xHierAccess->getByHierarchicalName( rtl::OUString::createFromAscii( key ) );
+        }
+        catch( const com::sun::star::container::NoSuchElementException& )
+        {
+        }
+        aAny >>= instPath;
+    }
+    return instPath;
+}
+
+
+
+void ContentProvider::subst( rtl::OUString& instpath ) const
+{
+    Reference< XConfigManager >  xCfgMgr;
+    if( m_xSMgr.is() )
+    {
+        try
+        {
+            xCfgMgr =
+                Reference< XConfigManager >(
+                    m_xSMgr->createInstance( rtl::OUString::createFromAscii( "com.sun.star.config.SpecialConfigManager" ) ),
+                    UNO_QUERY );
+        }
+        catch( const com::sun::star::uno::Exception& e )
+        {
+            OSL_ENSURE( xCfgMgr.is()," cant instantiate the special config manager " );
+        }
+    }
+
+    OSL_ENSURE( xCfgMgr.is(), "specialconfigmanager not found\n" );
+
+    if( xCfgMgr.is() )
+        instpath = xCfgMgr->substituteVariables( instpath );
 }
