@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drpcps.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 18:52:26 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 03:20:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,19 +69,8 @@ TabDialog DLG_DROPCAPS
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Text = "Initialen" ;
-    Text [ English ] = "Drop Caps" ;
-    Text [ norwegian ] = "Drop Caps" ;
-    Text [ italian ] = "Capolettera" ;
-    Text [ portuguese_brazilian ] = "Capitular" ;
-    Text [ portuguese ] = "Capitulares" ;
-    Text [ finnish ] = "Anfangit" ;
-    Text [ danish ] = "Uncialer" ;
-    Text [ french ] = "Lettrines" ;
-    Text [ swedish ] = "Anfanger" ;
-    Text [ dutch ] = "Initialen" ;
-    Text [ spanish ] = "Iniciales" ;
-    Text [ english_us ] = "Drop Caps" ;
+    Text [ de ] = "Initialen" ;
+    Text [ en-US ] = "Drop Caps" ;
     Moveable = TRUE ;
     TabControl 1
     {
@@ -91,59 +80,14 @@ TabDialog DLG_DROPCAPS
             PageItem
             {
                 Identifier = TP_DROPCAPS ;
-                Text = "Initialen" ;
-                Text [ ENGLISH ] = "Drop Caps" ;
-                Text [ norwegian ] = "Drop Caps" ;
-                Text [ italian ] = "Capolettera" ;
-                Text [ portuguese_brazilian ] = "Capitular" ;
-                Text [ portuguese ] = "Capitulares" ;
-                Text [ finnish ] = "Anfangit" ;
-                Text [ danish ] = "Uncialer" ;
-                Text [ french ] = "Lettrines" ;
-                Text [ swedish ] = "Anfanger" ;
-                Text [ dutch ] = "Initialen" ;
-                Text [ spanish ] = "Iniciales" ;
-                Text [ english_us ] = "Drop Caps" ;
+                Text [ de ] = "Initialen" ;
+                Text [ en-US ] = "Drop Caps" ;
                 PageResID = TP_DROPCAPS ;
-                Text[ chinese_simplified ] = "å­—é¦–å¤§å†™";
-                Text[ russian ] = "Áóêâèöà";
-                Text[ polish ] = "Inicja³y";
-                Text[ japanese ] = "ãƒ‰ãƒ­ãƒƒãƒ—ã‚­ãƒ£ãƒƒãƒ—";
-                Text[ chinese_traditional ] = "å­—é¦–å¤§å¯«";
-                Text[ arabic ] = "ÇáÃÍÑİ ÇáÇÓÊåáÇáíÉ";
-                Text[ greek ] = "Áñ÷éãñÜììáôá";
-                Text[ korean ] = "ë‹¨ë½ ì²«ë¬¸ì ì¥ì‹";
-                Text[ turkish ] = "Başharfler";
-                Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Caplletres";
-                Text[ thai ] = "à¸•à¸±à¸§à¸­à¸±à¸à¸©à¸£à¸‚à¸¶à¹‰à¸™à¸•à¹‰à¸™à¸—à¸µà¹ˆà¸¡à¸µà¸‚à¸™à¸²à¸”à¹ƒà¸«à¸à¹ˆ";
-                Text[ czech ] = "IniciÃ¡ly";
-                Text[ hebrew ] = "â€®×”×©××˜×ª ××•×ª×™×•×ª ×’×“×•×œ×•×ªâ€¬";
-                Text[ hindi ] = "à¤¬à¤¡à¤¼à¥‡ à¤…à¤•à¥à¤·à¤°à¥‹à¤‚ à¤•à¥‹ à¤®à¤¿à¤Ÿà¤¾à¤“ ";
-                Text[ slovak ] = "StrÃ¡nkovanie veÄ¾kÃ½mi pÃ­smenami";
-                Text[ hungarian ] = "IniciÃ¡lÃ©k";
-                Text[ slovenian ] = "OzaljÅ¡ana zaÄetnica";
+                Text [ x-comment ] = " ";
             };
         };
     };
-    Text[ chinese_simplified ] = "å­—é¦–å¤§å†™";
-    Text[ russian ] = "Áóêâèöà";
-    Text[ polish ] = "Inicja³y";
-    Text[ japanese ] = "ãƒ‰ãƒ­ãƒƒãƒ—ã‚­ãƒ£ãƒƒãƒ—";
-    Text[ chinese_traditional ] = "å­—é¦–å¤§å¯«";
-    Text[ arabic ] = "ÇáÃÍÑİ ÇáÇÓÊåáÇáíÉ";
-    Text[ greek ] = "Áñ÷éãñÜììáôá";
-    Text[ korean ] = "ë‹¨ë½ ì²«ë¬¸ì ì¥ì‹";
-    Text[ turkish ] = "Başharfler";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Caplletres";
-    Text[ thai ] = "à¸•à¸±à¸§à¸­à¸±à¸à¸©à¸£à¸‚à¸¶à¹‰à¸™à¸•à¹‰à¸™à¸—à¸µà¹ˆà¸¡à¸µà¸‚à¸™à¸²à¸”à¹ƒà¸«à¸à¹ˆ";
-    Text[ czech ] = "IniciÃ¡ly";
-    Text[ hebrew ] = "â€®×”×©××˜×ª ××•×ª×™×•×ª ×’×“×•×œ×•×ªâ€¬";
-    Text[ hindi ] = "à¤¬à¤¡à¤¼à¥‡ à¤…à¤•à¥à¤·à¤°à¥‹à¤‚ à¤•à¥‹ à¤®à¤¿à¤Ÿà¤¾à¤“";
-    Text[ slovak ] = "StrÃ¡nkovanie veÄ¾kÃ½mi pÃ­smenami";
-    Text[ hungarian ] = "IniciÃ¡lÃ©k";
-    Text[ slovenian ] = "OzaljÅ¡ana zaÄetnica";
+    Text [ x-comment ] = " ";
 };
  // TabPage ******************************************************************
 TabPage TP_DROPCAPS
@@ -155,106 +99,25 @@ TabPage TP_DROPCAPS
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 90 , 10 ) ;
-        Text = "I~nitialen anzeigen" ;
-        Text [ English ] = "Show Drop Caps" ;
-        Text [ english_us ] = "Display drop caps" ;
-        Text [ italian ] = "Mostra capolettera" ;
-        Text [ spanish ] = "Mostrar iniciales" ;
-        Text [ french ] = "~Première(s) lettre(s)" ;
-        Text [ dutch ] = "I~nitialen weergeven" ;
-        Text [ swedish ] = "Visa a~nfanger" ;
-        Text [ danish ] = "Vis uncialer" ;
-        Text [ portuguese_brazilian ] = "Exibir capitulação" ;
-        Text [ portuguese ] = "Mostrar ~capitulares" ;
-        Text[ chinese_simplified ] = "æ˜¾ç¤ºå­—é¦–å¤§å†™";
-        Text[ russian ] = "Ïîêàçàòü áóêâèöó";
-        Text[ polish ] = "Wyœwietl inicja³y";
-        Text[ japanese ] = "ãƒ‰ãƒ­ãƒƒãƒ—ã‚­ãƒ£ãƒƒãƒ—ã®è¡¨ç¤º";
-        Text[ chinese_traditional ] = "é¡¯ç¤ºå­—é¦–å¤§å¯«";
-        Text[ arabic ] = "ÅÙåÇÑ ÇáÃÍÑİ ÇáÇÓÊåáÇáíÉ";
-        Text[ greek ] = "ÅìöÜ~íéóç áñ÷éãñáììÜôùí";
-        Text[ korean ] = "ë‹¨ë½ ì²«ë¬¸ì ì¥ì‹ í‘œì‹œ";
-        Text[ turkish ] = "Display drop caps";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Visualitza les caplletres";
-        Text[ finnish ] = "Näytä anfangit";
-        Text[ thai ] = "à¹à¸ªà¸”à¸‡à¸œà¸¥à¸•à¸±à¸§à¸­à¸±à¸à¸©à¸£à¸‚à¸¶à¹‰à¸™à¸•à¹‰à¸™à¸—à¸µà¹ˆà¸¡à¸µà¸‚à¸™à¸²à¸”à¹ƒà¸«à¸à¹ˆ";
-        Text[ czech ] = "Zobrazovat iniciÃ¡ly";
-        Text[ hebrew ] = "I~nitialen anzeigen";
-        Text[ hindi ] = "à¤¬à¤¡à¤¼à¥‡ à¤…à¤•à¥à¤·à¤°à¥‹à¤‚ à¤•à¥‹ à¤®à¤¿à¤Ÿà¤¾à¤•à¤° à¤¦à¤¿à¤–à¤¾à¤“";
-        Text[ slovak ] = "ZobrazovaÅ¥ iniciÃ¡ly";
-        Text[ hungarian ] = "IniciÃ¡lÃ©k megjelenÃ­tÃ©se";
-        Text[ slovenian ] = "PrikaÅ¾i ozaljÅ¡ano zaÄetnico";
+        Text [ de ] = "I~nitialen anzeigen" ;
+        Text [ en-US ] = "Display drop caps" ;
+        Text [ x-comment ] = " ";
     };
     CheckBox CB_WORD
     {
         Pos = MAP_APPFONT ( 12 , 28 ) ;
         Size = MAP_APPFONT ( 90 , 10 ) ;
-        Text = "Ganzes ~Wort" ;
-        Text [ English ] = "Whole Word" ;
-        Text [ english_us ] = "~Whole word" ;
-        Text [ portuguese_brazilian ] = "~Palavra inteira" ;
-        Text [ swedish ] = "Helt ~ord" ;
-        Text [ danish ] = "~Helt ord" ;
-        Text [ italian ] = "Parola intera" ;
-        Text [ spanish ] = "Toda la pala~bra" ;
-        Text [ french ] = "~Mot entier" ;
-        Text [ dutch ] = "Heel ~woord" ;
-        Text [ portuguese ] = "~Palavra inteira" ;
-        Text[ chinese_simplified ] = "æ•´ä¸ªå­—(~W)";
-        Text[ russian ] = "Âñå ñëîâî";
-        Text[ polish ] = "~Ca³y wyraz";
-        Text[ japanese ] = "å˜èª(~W)";
-        Text[ chinese_traditional ] = "æ•´å€‹å­—(~W)";
-        Text[ arabic ] = "ßáãÉ ßÇãáÉ";
-        Text[ greek ] = "Ïëüêëçñç ëİîç";
-        Text[ korean ] = "ë‹¨ì–´(~W)";
-        Text[ turkish ] = "Tam sözcük";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Tota la paraula";
-        Text[ finnish ] = "~Koko sana";
-        Text[ thai ] = "à¸„à¸³~à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”";
-        Text[ czech ] = "CelÃ© slovo";
-        Text[ hebrew ] = "Ganzes ~Wort";
-        Text[ hindi ] = "~à¤ªà¥‚à¤°à¥à¤£ à¤¶à¤¬à¥à¤¦";
-        Text[ slovak ] = "~CelÃ© slovo";
-        Text[ hungarian ] = "~EgÃ©sz szÃ³";
-        Text[ slovenian ] = "~Cela beseda";
+        Text [ de ] = "Ganzes ~Wort" ;
+        Text [ en-US ] = "~Whole word" ;
+        Text [ x-comment ] = " ";
     };
     FixedText FT_DROPCAPS
     {
         Pos = MAP_APPFONT ( 12 , 44 ) ;
         Size = MAP_APPFONT ( 70 , 8 ) ;
-        Text = "Anzahl der Ze~ichen" ;
-        Text [ English ] = "Number of characters" ;
-        Text [ english_us ] = "Number of ~characters:" ;
-        Text [ italian ] = "Numero di caratteri" ;
-        Text [ spanish ] = "~Número de caracteres" ;
-        Text [ french ] = "~Largeur (en caractères)" ;
-        Text [ dutch ] = "~Aantal tekens" ;
-        Text [ swedish ] = "Antal te~cken" ;
-        Text [ danish ] = "Antal ~tegn" ;
-        Text [ portuguese_brazilian ] = "Número de ~caracteres:" ;
-        Text [ portuguese ] = "Número de ~caracteres" ;
-        Text[ chinese_simplified ] = "å­—ç¬¦æ•°ç›®(~C)";
-        Text[ russian ] = "Êîëè÷åñòâî ñèìâîëîâ";
-        Text[ polish ] = "~Liczba znaków";
-        Text[ japanese ] = "æ–‡å­—æ•°(~C)";
-        Text[ chinese_traditional ] = "å­—å…ƒæ•¸ç›®(~C)";
-        Text[ arabic ] = "ÚÏÏ ÇáÃÍÑİ";
-        Text[ greek ] = "Áñéèìüò ÷áñáêôŞñùí";
-        Text[ korean ] = "ë¬¸ì ìˆ˜(~C):";
-        Text[ turkish ] = "Karakter sayısı";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Nombre caràcters";
-        Text[ finnish ] = "~Merkkien määrä";
-        Text[ thai ] = "à¸ˆà¸³à¸™à¸§à¸™~à¸•à¸±à¸§à¸­à¸±à¸à¸‚à¸£à¸°:";
-        Text[ czech ] = "PoÄet znakÅ¯:";
-        Text[ hebrew ] = "Anzahl der Ze~ichen";
-        Text[ hindi ] = "~à¤…à¤•à¥à¤·à¤°à¥‹à¤‚ à¤•à¥€ à¤¸à¤‚à¤–à¥à¤¯à¤¾:";
-        Text[ slovak ] = "PoÄet ~znakov:";
-        Text[ hungarian ] = "A ~karakterek szÃ¡ma:";
-        Text[ slovenian ] = "Å tevilo ~znakov:";
+        Text [ de ] = "Anzahl der Ze~ichen" ;
+        Text [ en-US ] = "Number of ~characters:" ;
+        Text [ x-comment ] = " ";
     };
     NumericField FLD_DROPCAPS
     {
@@ -275,37 +138,9 @@ TabPage TP_DROPCAPS
         Left = TRUE ;
         Pos = MAP_APPFONT ( 12 , 60 ) ;
         Size = MAP_APPFONT ( 70 , 8 ) ;
-        Text = "Zei~len" ;
-        Text [ English ] = "~Lines" ;
-        Text [ norwegian ] = "~Linjer" ;
-        Text [ italian ] = "Righe" ;
-        Text [ portuguese_brazilian ] = "~Linhas" ;
-        Text [ portuguese ] = "~Linhas" ;
-        Text [ finnish ] = "~Rivit" ;
-        Text [ danish ] = "~Linjer" ;
-        Text [ french ] = "~Hauteur (en lignes)" ;
-        Text [ swedish ] = "~Rader" ;
-        Text [ dutch ] = "~Regels" ;
-        Text [ spanish ] = "~Líneas" ;
-        Text [ english_us ] = "~Lines" ;
-        Text[ chinese_simplified ] = "è¡Œ(~L)";
-        Text[ russian ] = "Ñòğî~êè";
-        Text[ polish ] = "~Wiersze";
-        Text[ japanese ] = "è¡Œ(~L)";
-        Text[ chinese_traditional ] = "è¡Œ(~L)";
-        Text[ arabic ] = "ÃÓØÑ";
-        Text[ greek ] = "Ãñáììİò";
-        Text[ korean ] = "ì„ (~L)";
-        Text[ turkish ] = "Satır adedi";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Línies";
-        Text[ thai ] = "~à¸šà¸£à¸£à¸—à¸±à¸”";
-        Text[ czech ] = "Å˜Ã¡dkÅ¯";
-        Text[ hebrew ] = "Zei~len";
-        Text[ hindi ] = "~à¤°à¥‡à¤–à¤¾à¤à¤";
-        Text[ slovak ] = "~Riadkov";
-        Text[ hungarian ] = "S~orok";
-        Text[ slovenian ] = "~Vrstice";
+        Text [ de ] = "Zei~len" ;
+        Text [ en-US ] = "~Lines" ;
+        Text [ x-comment ] = " ";
     };
     NumericField FLD_LINES
     {
@@ -326,37 +161,9 @@ TabPage TP_DROPCAPS
         Left = TRUE ;
         Pos = MAP_APPFONT ( 12 , 76 ) ;
         Size = MAP_APPFONT ( 70 , 8 ) ;
-        Text = "A~bstand zum Text" ;
-        Text [ English ] = "D~istance" ;
-        Text [ norwegian ] = "A~vstand" ;
-        Text [ italian ] = "D~istanza dal testo" ;
-        Text [ portuguese_brazilian ] = "Distância do corpo do texto" ;
-        Text [ portuguese ] = "~Distância do texto" ;
-        Text [ finnish ] = "Etäisyys tekstistä" ;
-        Text [ danish ] = "Afstand til tekst" ;
-        Text [ french ] = "~Écart du texte" ;
-        Text [ swedish ] = "A~vstånd till text" ;
-        Text [ dutch ] = "A~fstand tot tekst" ;
-        Text [ spanish ] = "~Distancia hasta el texto" ;
-        Text [ english_us ] = "Space to text" ;
-        Text[ chinese_simplified ] = "è‡³æ–‡å­—çš„è·ç¦»";
-        Text[ russian ] = "Ğàññòîÿíèå äî òåêñòà";
-        Text[ polish ] = "Odstêp od tekstu";
-        Text[ japanese ] = "ãƒ†ã‚­ã‚¹ãƒˆã¾ã§ã®é–“éš”";
-        Text[ chinese_traditional ] = "è‡³æ–‡å­—çš„è·ç¦»";
-        Text[ arabic ] = "ÇáãÓÇİÉ ÍÊì ÇáäÕ";
-        Text[ greek ] = "Á~ğüóôáóç áğü ôï êåßìåíï";
-        Text[ korean ] = "í…ìŠ¤íŠ¸ì™€ì˜ ê°„ê²©";
-        Text[ turkish ] = "Metne uzaklık";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Espai per al text";
-        Text[ thai ] = "à¸£à¸°à¸¢à¸°à¸«à¹ˆà¸²à¸‡à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡";
-        Text[ czech ] = "VzdÃ¡lenost k textu";
-        Text[ hebrew ] = "A~bstand zum Text";
-        Text[ hindi ] = "à¤Ÿà¥‡à¤•à¥à¤¸à¥à¤Ÿà¥ à¤•à¥‡ à¤¬à¥€à¤š à¤…à¤‚à¤¤à¤°";
-        Text[ slovak ] = "VzdialenosÅ¥ k textu";
-        Text[ hungarian ] = "TÃ¡volsÃ¡g a szÃ¶vegtÅ‘l";
-        Text[ slovenian ] = "Razmik do besedila";
+        Text [ de ] = "A~bstand zum Text" ;
+        Text [ en-US ] = "Space to text" ;
+        Text [ x-comment ] = " ";
     };
     MetricField FLD_DISTANCE
     {
@@ -379,37 +186,9 @@ TabPage TP_DROPCAPS
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 125 , 8 ) ;
-        Text = "Einstellungen" ;
-        Text [ English ] = "Options" ;
-        Text [ norwegian ] = "Options" ;
-        Text [ italian ] = "Impostazioni" ;
-        Text [ portuguese_brazilian ] = "Definições" ;
-        Text [ portuguese ] = "Definições" ;
-        Text [ finnish ] = "Asetukset" ;
-        Text [ danish ] = "Indstillinger" ;
-        Text [ french ] = "Paramètres" ;
-        Text [ swedish ] = "Inställningar" ;
-        Text [ dutch ] = "Instellingen" ;
-        Text [ spanish ] = "Configuración" ;
-        Text [ english_us ] = "Settings" ;
-        Text[ chinese_simplified ] = "è®¾å®š";
-        Text[ russian ] = "Íàñòğîéêè";
-        Text[ polish ] = "Ustawienia";
-        Text[ japanese ] = "è¨­å®š";
-        Text[ chinese_traditional ] = "è¨­å®š";
-        Text[ arabic ] = "ÅÚÏÇÏÇÊ";
-        Text[ greek ] = "Ñõèìßóåéò";
-        Text[ korean ] = "ì„¤ì •";
-        Text[ turkish ] = "Ayarlar";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Configuració";
-        Text[ thai ] = "à¸à¸³à¸«à¸™à¸”";
-        Text[ czech ] = "NastavenÃ­";
-        Text[ hebrew ] = "â€®×”×’×“×¨×•×ªâ€¬";
-        Text[ hindi ] = "à¤¨à¤¿à¤°à¥à¤§à¤¾à¤°à¤£";
-        Text[ slovak ] = "Nastavenia";
-        Text[ hungarian ] = "BeÃ¡llÃ­tÃ¡sok";
-        Text[ slovenian ] = "Nastavitve";
+        Text [ de ] = "Einstellungen" ;
+        Text [ en-US ] = "Settings" ;
+        Text [ x-comment ] = " ";
     };
     Control CNT_PICT
     {
@@ -422,37 +201,9 @@ TabPage TP_DROPCAPS
         Left = TRUE ;
         Pos = MAP_APPFONT ( 12 , 102 ) ;
         Size = MAP_APPFONT ( 125 , 8 ) ;
-        Text = "Initialen~text" ;
-        Text [ English ] = "~Text" ;
-        Text [ norwegian ] = "~Text" ;
-        Text [ italian ] = "Testo" ;
-        Text [ portuguese_brazilian ] = "~Texto" ;
-        Text [ portuguese ] = "~Texto" ;
-        Text [ finnish ] = "~Teksti" ;
-        Text [ danish ] = "~Tekst" ;
-        Text [ french ] = "~Texte" ;
-        Text [ swedish ] = "Anfangs~text" ;
-        Text [ dutch ] = "~Initialentekst" ;
-        Text [ spanish ] = "Te~xto" ;
-        Text [ english_us ] = "~Text" ;
-        Text[ chinese_simplified ] = "å­—é¦–å¤§å†™(~T)";
-        Text[ russian ] = "Òåêñò";
-        Text[ polish ] = "~Tekst z inicja³ami";
-        Text[ japanese ] = "ãƒ‰ãƒ­ãƒƒãƒ—ã‚­ãƒ£ãƒƒãƒ—ã®ãƒ†ã‚­ã‚¹ãƒˆ(~T)";
-        Text[ chinese_traditional ] = "å¤§å¯«å­—(~T)";
-        Text[ arabic ] = "ÇáäÕ";
-        Text[ greek ] = "Êåßìåíï";
-        Text[ korean ] = "ë‹¨ë½ ì²« ë¬¸ì ì¥ì‹ì˜ í…ìŠ¤íŠ¸(~T)";
-        Text[ turkish ] = "Başharf metni";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Text";
-        Text[ thai ] = "~à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡";
-        Text[ czech ] = "Text";
-        Text[ hebrew ] = "Initialen~text";
-        Text[ hindi ] = "~à¤Ÿà¥‡à¤•à¥à¤¸à¥à¤Ÿà¥";
-        Text[ slovak ] = "~Text";
-        Text[ hungarian ] = "S~zÃ¶veg";
-        Text[ slovenian ] = "~Besedilo";
+        Text [ de ] = "Initialen~text" ;
+        Text [ en-US ] = "~Text" ;
+        Text [ x-comment ] = " ";
     };
     Edit EDT_TEXT
     {
@@ -468,37 +219,9 @@ TabPage TP_DROPCAPS
         Left = TRUE ;
         Pos = MAP_APPFONT ( 12 , 118 ) ;
         Size = MAP_APPFONT ( 125 , 8 ) ;
-        Text = "Zeichen~vorlage" ;
-        Text [ English ] = "Character st~yle" ;
-        Text [ norwegian ] = "M~al" ;
-        Text [ italian ] = "Modello di carattere" ;
-        Text [ portuguese_brazilian ] = "E~stilo do Caracter" ;
-        Text [ portuguese ] = "Es~tilo de caracteres" ;
-        Text [ finnish ] = "~Merkkityyli" ;
-        Text [ danish ] = "Te~gntypografi" ;
-        Text [ french ] = "Style de caractères" ;
-        Text [ swedish ] = "Tecken~formatmall" ;
-        Text [ dutch ] = "~Tekenopmaakprofiel" ;
-        Text [ spanish ] = "E~stilo de carácter" ;
-        Text [ english_us ] = "Character St~yle" ;
-        Text[ chinese_simplified ] = "å­—ç¬¦æ ·å¼(~Y)";
-        Text[ russian ] = "~Ñòèëü ñèìâîëà";
-        Text[ polish ] = "Styl ~znaku";
-        Text[ japanese ] = "æ–‡å­—ã‚¹ã‚¿ã‚¤ãƒ«(~Y)";
-        Text[ chinese_traditional ] = "å­—å…ƒæ¨£å¼(~Y)";
-        Text[ arabic ] = "äãØ ÇáÃÍÑİ";
-        Text[ greek ] = "Óôõë ÷áñáêôŞñùí";
-        Text[ korean ] = "ë¬¸ì ìŠ¤íƒ€ì¼(~Y)";
-        Text[ turkish ] = "Karakter ~biçimi";
-        Text[ language_user1 ] = "; All ; All \"Vorlage\"/Styles are always written with capital S. 10.5.00EM";
-        Text[ catalan ] = "E~stil de caràcter";
-        Text[ thai ] = "à¸¥à¸±à¸~à¸©à¸“à¸°à¸•à¸±à¸§à¸­à¸±à¸à¸‚à¸£à¸°";
-        Text[ czech ] = "Styl znaku:";
-        Text[ hebrew ] = "Zeichen~vorlage";
-        Text[ hindi ] = "à¤…à¤•à¥à¤·à¤° à¤¶à¥ˆ~à¤²à¥€";
-        Text[ slovak ] = "Å tÃ½l ~znaku:";
-        Text[ hungarian ] = "Ka~rakterstÃ­lus";
-        Text[ slovenian ] = "Znakovni slo~g";
+        Text [ de ] = "Zeichen~vorlage" ;
+        Text [ en-US ] = "Character St~yle" ;
+        Text [ x-comment ] = "; All ; All \"Vorlage\"/Styles are always written with capital S. 10.5.00EM";
     };
     ListBox BOX_TEMPLATE
     {
@@ -512,36 +235,9 @@ TabPage TP_DROPCAPS
     {
         Pos = MAP_APPFONT ( 6 , 89 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text = "Inhalt" ;
-        Text [ English ] = "Content" ;
-        Text [ english_us ] = "Contents" ;
-        Text [ italian ] = "Contenuto" ;
-        Text [ spanish ] = "Contenido" ;
-        Text [ french ] = "Contenu" ;
-        Text [ dutch ] = "Inhoud" ;
-        Text [ swedish ] = "Innehåll" ;
-        Text [ danish ] = "Indhold" ;
-        Text [ portuguese_brazilian ] = "Índice" ;
-        Text [ portuguese ] = "Conteúdo" ;
-        Text[ chinese_simplified ] = "å†…å®¹";
-        Text[ russian ] = "Ñîäåğæèìîå";
-        Text[ polish ] = "Zawartoœæ";
-        Text[ japanese ] = "å†…å®¹";
-        Text[ chinese_traditional ] = "å…§å®¹";
-        Text[ arabic ] = "ÇáãÍÊæíÇÊ";
-        Text[ greek ] = "Ğåñéå÷üìåíá";
-        Text[ korean ] = "ë‚´ìš©";
-        Text[ turkish ] = "İçerikler";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Contingut";
-        Text[ finnish ] = "Sisältö";
-        Text[ thai ] = "à¹€à¸™à¸·à¹‰à¸­à¸«à¸²";
-        Text[ czech ] = "Obsah";
-        Text[ hebrew ] = "â€®×ª×•×›×Ÿ ×¢×™× ×™×™× ×™×â€¬";
-        Text[ hindi ] = "à¤µà¤¿à¤·à¤¯à¥‡à¤‚";
-        Text[ slovak ] = "Obsah";
-        Text[ hungarian ] = "Tartalom";
-        Text[ slovenian ] = "Vsebina";
+        Text [ de ] = "Inhalt" ;
+        Text [ en-US ] = "Contents" ;
+        Text [ x-comment ] = " ";
     };
 };
  // ********************************************************************** EOF
