@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scriptinfo.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 13:55:11 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:27:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,8 @@ class SwScanner
 
 public:
     SwScanner( const SwTxtNode& rNd, USHORT nWordType,
-               xub_StrLen nStart, xub_StrLen nEnde, BOOL bClip = FALSE);
+               xub_StrLen nStart, xub_StrLen nEnde, BOOL bClip = FALSE );
+
 
     // This next word function tries to find the language for the next word
     // It should currently _not_ be used for spell checking, and works only for
