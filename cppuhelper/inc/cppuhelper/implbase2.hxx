@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implbase2.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dbo $ $Date: 2001-11-09 13:49:15 $
+ *  last change: $Author: hr $ $Date: 2003-07-16 17:50:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,8 @@
 #ifndef _CPPUHELPER_IMPLBASE2_HXX_
 #define _CPPUHELPER_IMPLBASE2_HXX_
 
-#ifdef MACOSX /* use old impl helpers for macosx */
+#if defined( MACOSX ) && ( __GNUC__ < 3 )
+/* use old impl helpers for macosx */
 
 #define __IFC2 Ifc1, Ifc2
 #define __CLASS_IFC2 class Ifc1, class Ifc2
