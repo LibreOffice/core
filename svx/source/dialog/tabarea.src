@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabarea.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-09 13:08:29 $
+ *  last change: $Author: kz $ $Date: 2000-11-15 21:32:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -571,7 +571,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         CustomUnitText[ russian ] = "ãðàäóñîâ";
         CustomUnitText[ greek ] = "ìïßñåò";
         CustomUnitText[ dutch ] = "graden";
-        CustomUnitText[ french ] = "degrés";
+        CustomUnitText[ french ] = " degrés";
         CustomUnitText[ spanish ] = "grados";
         CustomUnitText[ italian ] = "grado";
         CustomUnitText[ danish ] = "grader";
@@ -2320,7 +2320,7 @@ TabPage RID_SVXPAGE_HATCH
         CustomUnitText [ portuguese ] = "grau" ;
         CustomUnitText [ finnish ] = " astetta" ;
         CustomUnitText [ danish ] = "grader" ;
-        CustomUnitText [ french ] = "degrés" ;
+        CustomUnitText [ french ] = " degrés" ;
         CustomUnitText [ swedish ] = "grader" ;
         CustomUnitText [ dutch ] = "graden" ;
         CustomUnitText [ spanish ] = "grados" ;
@@ -2545,6 +2545,7 @@ TabPage RID_SVXPAGE_HATCH
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
+        QuickHelpText[ turkish ] = "Schraffurentabelle laden";
     };
     ImageButton BTN_SAVE
     {
@@ -2589,6 +2590,7 @@ TabPage RID_SVXPAGE_HATCH
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
+        QuickHelpText[ turkish ] = "Schraffurentabelle sichern";
     };
     Text[ chinese_simplified ] = "ÒõÓ°Ïß";
     Text[ russian ] = "Øòðèõîâêè";
@@ -2992,6 +2994,7 @@ TabPage RID_SVXPAGE_BITMAP
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
+        QuickHelpText[ turkish ] = "Bitmaptabelle laden";
     };
     ImageButton BTN_SAVE
     {
@@ -3036,6 +3039,7 @@ TabPage RID_SVXPAGE_BITMAP
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
+        QuickHelpText[ turkish ] = "Bitmaptabelle sichern";
     };
     Text[ chinese_simplified ] = "Î»Í¼Í¼°¸";
     Text[ russian ] = "Îáðàçöû bitmap";
@@ -3280,7 +3284,7 @@ TabPage RID_SVXPAGE_GRADIENT
         CustomUnitText [ portuguese ] = "grau" ;
         CustomUnitText [ finnish ] = " astetta" ;
         CustomUnitText [ danish ] = "grader" ;
-        CustomUnitText [ french ] = "degrés" ;
+        CustomUnitText [ french ] = " degrés" ;
         CustomUnitText [ swedish ] = "grader" ;
         CustomUnitText [ dutch ] = "graden" ;
         CustomUnitText [ spanish ] = "grados" ;
@@ -3845,6 +3849,7 @@ TabPage RID_SVXPAGE_GRADIENT
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
+        QuickHelpText[ turkish ] = "Farbverlauftabelle laden";
     };
     ImageButton BTN_SAVE
     {
@@ -3889,6 +3894,7 @@ TabPage RID_SVXPAGE_GRADIENT
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
+        QuickHelpText[ turkish ] = "Farbverlauftabelle sichern";
     };
     Text[ chinese_simplified ] = "²ÊÉ«Í¼°¸";
     Text[ russian ] = "Ãðàäèåíòíûå";
@@ -4448,6 +4454,7 @@ TabPage RID_SVXPAGE_COLOR
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
+        QuickHelpText[ turkish ] = "Farbtabelle laden";
     };
     ImageButton BTN_SAVE
     {
@@ -4492,6 +4499,7 @@ TabPage RID_SVXPAGE_COLOR
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
+        QuickHelpText[ turkish ] = "Farbtabelle sichern";
     };
     Text[ chinese_simplified ] = "ÑÕÉ«";
     Text[ russian ] = "Öâåòà";
