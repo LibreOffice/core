@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage2.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 11:54:15 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 14:56:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,9 +190,9 @@ void SdPage::SetPresentationLayout(const String& rLayoutName,
         }
         else
         {
-            for ( nMaster = nMasterCount - 1; nMaster >= 0; nMaster-- )
+            for ( nMaster = nMasterCount; nMaster > 0; nMaster-- )
             {
-                pMaster = (SdPage*)pModel->GetMasterPage(nMaster);
+                pMaster = (SdPage*)pModel->GetMasterPage(nMaster - 1);
                 if (pMaster->GetPageKind() == ePageKind &&
                     pMaster->GetLayoutName() == aLayoutName)
                 {
@@ -204,11 +204,7 @@ void SdPage::SetPresentationLayout(const String& rLayoutName,
         DBG_ASSERT(nMaster < nMasterCount, "Masterpage nicht gefunden");
 
         // falls es eine oder mehrere Masterpages gibt: die 1. ersetzen
-        if (GetMasterPageCount() > 0)
-            SetMasterPageNum(nMaster, 0);
-        // sonst: als 1. Masterpage einfuegen
-        else
-            InsertMasterPage(nMaster);
+        TRG_SetMasterPage(*pModel->GetMasterPage(nMaster));
     }
 
     /*********************************************************************
