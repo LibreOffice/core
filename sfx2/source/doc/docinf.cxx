@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docinf.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 14:13:11 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 17:36:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1389,7 +1389,10 @@ const SfxDocumentInfo &SfxDocumentInfo::CopyUserData(const SfxDocumentInfo &rSou
         aUserKeys[i] = rSource.aUserKeys[i];
 
     if(pUserData)
-        DELETEZ(pUserData);
+    {
+        delete []pUserData;
+        pUserData = 0;
+    }
     nUserDataSize = rSource.nUserDataSize;
     if(nUserDataSize) {
         pUserData = new char[nUserDataSize];
@@ -1415,7 +1418,8 @@ const SfxDocumentInfo &SfxDocumentInfo::CopyUserData(const SfxDocumentInfo &rSou
 
 void SfxDocumentInfo::Free()
 {
-    DELETEZ(pUserData);
+    delete []pUserData;
+    pUserData = 0;
     nUserDataSize = 0;
 }
 
