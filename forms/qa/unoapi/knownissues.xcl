@@ -1,0 +1,37 @@
+### 100040 ###
+forms.ODatabaseForm::com::sun::star::awt::XTabControllerModel
+
+### 112634 ###
+forms.OButtonControl::com::sun::star::awt::XWindow
+forms.OCheckBoxControl::com::sun::star::awt::XWindow
+forms.OComboBoxControl::com::sun::star::awt::XWindow
+forms.OCurrencyControl::com::sun::star::awt::XWindow
+forms.ODateControl::com::sun::star::awt::XWindow
+forms.OEditControl::com::sun::star::awt::XWindow
+forms.OFormattedControl::com::sun::star::awt::XWindow
+forms.OGroupBoxControl::com::sun::star::awt::XWindow
+forms.OImageButtonControl::com::sun::star::awt::XWindow
+forms.OImageControlControl::com::sun::star::awt::XWindow
+forms.OListBoxControl::com::sun::star::awt::XWindow
+forms.ONumericControl::com::sun::star::awt::XWindow
+forms.OPatternControl::com::sun::star::awt::XWindow
+forms.ORadioButtonControl::com::sun::star::awt::XWindow
+forms.OTimeControl::com::sun::star::awt::XWindow
+
+### 114044 ###
+forms.ODatabaseForm::com::sun::star::sdbc::XWarningsSupplier
+
+### 114045 ###
+forms.OButtonModel::com::sun::star::io::XPersistObject
+forms.OImageButtonModel::com::sun::star::io::XPersistObject
+
+### i21167 ###
+forms.ODatabaseForm::com::sun::star::form::XLoadable
+
+### i23451 ###
+forms.OFileControlModel::com::sun::star::beans::XMultiPropertySet
+forms.OGroupBoxModel::com::sun::star::beans::XMultiPropertySet
+forms.OImageButtonModel::com::sun::star::beans::XMultiPropertySet
+forms.OFileControlModel::com::sun::star::beans::XFastPropertySet
+forms.OGroupBoxModel::com::sun::star::beans::XFastPropertySet
+forms.OImageButtonModel::com::sun::star::beans::XFastPropertySet
