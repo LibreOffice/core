@@ -2,9 +2,9 @@
  *
  *  $RCSfile: font.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:37 $
+ *  last change: $Author: th $ $Date: 2000-10-27 14:41:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,7 @@ Impl_Font::Impl_Font() :
     meWidthType         = WIDTH_DONTKNOW;
     meUnderline         = UNDERLINE_NONE;
     meStrikeout         = STRIKEOUT_NONE;
+    meEmphasisMark      = EMPHASISMARK_NONE;
     meItalic            = ITALIC_NONE;
     mbWordLine          = FALSE;
     mbOutline           = FALSE;
@@ -101,6 +102,7 @@ Impl_Font::Impl_Font() :
     mbKerning           = FALSE;
     mbTransparent       = TRUE;
     mnOrientation       = 0;
+    mbVertical          = FALSE;
 }
 
 // -----------------------------------------------------------------------
@@ -122,6 +124,7 @@ Impl_Font::Impl_Font( const Impl_Font& rImplFont ) :
     meWidthType         = rImplFont.meWidthType;
     meUnderline         = rImplFont.meUnderline;
     meStrikeout         = rImplFont.meStrikeout;
+    meEmphasisMark      = rImplFont.meEmphasisMark;
     meItalic            = rImplFont.meItalic;
     mbWordLine          = rImplFont.mbWordLine;
     mbOutline           = rImplFont.mbOutline;
@@ -129,6 +132,7 @@ Impl_Font::Impl_Font( const Impl_Font& rImplFont ) :
     mbKerning           = rImplFont.mbKerning;
     mbTransparent       = rImplFont.mbTransparent;
     mnOrientation       = rImplFont.mnOrientation;
+    mbVertical          = rImplFont.mbVertical;
 }
 
 // -----------------------------------------------------------------------
@@ -350,6 +354,16 @@ void Font::SetOrientation( short nOrientation )
 
 // -----------------------------------------------------------------------
 
+void Font::SetVertical( BOOL bVertical )
+{
+    DBG_CHKTHIS( Font, NULL );
+
+    MakeUnique();
+    mpImplFont->mbVertical = bVertical;
+}
+
+// -----------------------------------------------------------------------
+
 void Font::SetKerning( BOOL bKerning )
 {
     DBG_CHKTHIS( Font, NULL );
@@ -430,6 +444,16 @@ void Font::SetStrikeout( FontStrikeout eStrikeout )
 
 // -----------------------------------------------------------------------
 
+void Font::SetEmphasisMark( FontEmphasisMark eEmphasisMark )
+{
+    DBG_CHKTHIS( Font, NULL );
+
+    MakeUnique();
+    mpImplFont->meEmphasisMark = eEmphasisMark;
+}
+
+// -----------------------------------------------------------------------
+
 void Font::SetWordLineMode( BOOL bWordLine )
 {
     DBG_CHKTHIS( Font, NULL );
@@ -478,8 +502,6 @@ BOOL Font::operator==( const Font& rFont ) const
 
     if ( (mpImplFont->meWeight          == rFont.mpImplFont->meWeight           ) &&
          (mpImplFont->meItalic          == rFont.mpImplFont->meItalic           ) &&
-         (mpImplFont->meUnderline       == rFont.mpImplFont->meUnderline        ) &&
-         (mpImplFont->mbWordLine        == rFont.mpImplFont->mbWordLine         ) &&
          (mpImplFont->meFamily          == rFont.mpImplFont->meFamily           ) &&
          (mpImplFont->mePitch           == rFont.mpImplFont->mePitch            ) &&
          (mpImplFont->meCharSet         == rFont.mpImplFont->meCharSet          ) &&
@@ -490,7 +512,10 @@ BOOL Font::operator==( const Font& rFont ) const
          (mpImplFont->maFillColor       == rFont.mpImplFont->maFillColor        ) &&
          (mpImplFont->maSize            == rFont.mpImplFont->maSize             ) &&
          (mpImplFont->mnOrientation     == rFont.mpImplFont->mnOrientation      ) &&
+         (mpImplFont->meUnderline       == rFont.mpImplFont->meUnderline        ) &&
          (mpImplFont->meStrikeout       == rFont.mpImplFont->meStrikeout        ) &&
+         (mpImplFont->meEmphasisMark    == rFont.mpImplFont->meEmphasisMark     ) &&
+         (mpImplFont->mbWordLine        == rFont.mpImplFont->mbWordLine         ) &&
          (mpImplFont->mbOutline         == rFont.mpImplFont->mbOutline          ) &&
          (mpImplFont->mbShadow          == rFont.mpImplFont->mbShadow           ) &&
          (mpImplFont->mbKerning         == rFont.mpImplFont->mbKerning          ) &&
@@ -535,6 +560,8 @@ void Font::Merge( const Font& rFont )
 
     // Defaults?
     SetOrientation( rFont.GetOrientation() );
+    SetVertical( rFont.IsVertical() );
+    SetEmphasisMark( rFont.GetEmphasisMark() );
     SetKerning( rFont.IsKerning() );
     SetOutline( rFont.IsOutline() );
     SetShadow( rFont.IsShadow() );
