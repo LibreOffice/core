@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:02:50 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 16:42:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -245,7 +245,7 @@ public:
     void        SetText(const String& rBuffer);
     String&     GetText() { return (aText); }
     void        SetFormat(SmFormat& rFormat);
-    SmFormat&   GetFormat() { return (aFormat); }
+    const SmFormat&  GetFormat() { return (aFormat); }
 
     void            Parse();
     SmParser &      GetParser() { return aInterpreter; }
@@ -266,7 +266,7 @@ public:
     void        Draw(OutputDevice &rDev, Point &rPosition);
     Size        GetSize();
 
-    void        Resize();
+    void        Repaint();
 
     virtual     SfxUndoManager *GetUndoManager ();
 
