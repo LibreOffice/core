@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.pmk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: dg $ $Date: 2002-05-06 19:16:43 $
+#   last change: $Author: vg $ $Date: 2002-05-07 13:20:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,14 +74,12 @@ $(MISC)$/xcdformat$/%.xcd : %.xcs
 # stripping schema files 
 $(MISC)$/registry$/schema$/%.xcs : %.xcs
     -$(MKDIR) -p $(@:d)
-    java -Xmx128m -classpath $(COMMON_BUILD_TOOLS)$/xt.jar$(PATH_SEPERATOR)$(COMMON_BUILD_TOOLS)$/parser.jar -Dcom.jclark.xsl.sax.parser=com.sun.xml.parser.Parser com.jclark.xsl.sax.Driver $< $(PRJ)$/util$/schema_trim.xsl $(MISC)$/registry$/schema$/$(<:d)$(<:b).tmp
-    java -Xmx128m -classpath $(COMMON_BUILD_TOOLS)$/parser.jar$(PATH_SEPERATOR)$(CLASSDIR)$/schema.jar org.openoffice.helper.PrettyPrinter $(MISC)$/registry$/schema$/$(<:d)$(<:b).tmp $(MISC)$/registry$/schema$/$(<:d)$(<:b).xcs
+    java -Xmx128m -classpath $(COMMON_BUILD_TOOLS)$/xt.jar$(PATH_SEPERATOR)$(COMMON_BUILD_TOOLS)$/parser.jar -Dcom.jclark.xsl.sax.parser=com.sun.xml.parser.Parser com.jclark.xsl.sax.Driver $< $(PRJ)$/util$/schema_trim.xsl $(MISC)$/registry$/schema$/$(<:d)$(<:b).xcs
 
 # creating a locale independent file 
 $(MISC)$/registry$/data$/%.xcu : %.xcu
     -$(MKDIR) -p $(@:d) 
-    java -Xmx128m -classpath $(COMMON_BUILD_TOOLS)$/xt.jar$(PATH_SEPERATOR)$(COMMON_BUILD_TOOLS)$/parser.jar -Dcom.jclark.xsl.sax.parser=com.sun.xml.parser.Parser com.jclark.xsl.sax.Driver $< $(PRJ)$/util$/alllang.xsl $(MISC)$/registry$/data$/$(<:d)$(<:b).tmp
-    java -Xmx128m -classpath $(COMMON_BUILD_TOOLS)$/parser.jar$(PATH_SEPERATOR)$(CLASSDIR)$/schema.jar org.openoffice.helper.PrettyPrinter $(MISC)$/registry$/data$/$(<:d)$(<:b).tmp $(MISC)$/registry$/data$/$(<:d)$(<:b).xcu
+    java -Xmx128m -classpath $(COMMON_BUILD_TOOLS)$/xt.jar$(PATH_SEPERATOR)$(COMMON_BUILD_TOOLS)$/parser.jar -Dcom.jclark.xsl.sax.parser=com.sun.xml.parser.Parser com.jclark.xsl.sax.Driver $< $(PRJ)$/util$/alllang.xsl $(MISC)$/registry$/data$/$(<:d)$(<:b).xcu
 
 # creating locale dependent entries
 $(MISC)$/registry$/res$/{$(alliso)}$/%.xcu :| %.xcu
