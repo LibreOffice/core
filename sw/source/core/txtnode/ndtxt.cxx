@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtxt.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-07 12:44:48 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 13:42:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -2605,14 +2604,16 @@ BOOL SwTxtNode::GetExpandTxt( SwTxtNode& rDestNd, const SwIndex* pDestIdx,
     xub_StrLen nDestStt = aDestIdx.GetIndex();
 
     // Text einfuegen
-    String sTmpText = GetTxt().Copy(nIdx, nLen);
-    if(bReplaceTabsWithSpaces)
+    String sTmpText = GetTxt();
+    if( bReplaceTabsWithSpaces )
         sTmpText.SearchAndReplaceAll('\t', ' ');
 
+    // mask hidden characters
     const xub_Unicode cChar = CH_TXTATR_BREAKWORD;
-    const USHORT nHiddenChrs =
-        SwScriptInfo::MaskHiddenRanges( *this, sTmpText, &cChar );
+    USHORT nHiddenChrs =
+        SwScriptInfo::MaskHiddenRanges( *this, sTmpText, 0, sTmpText.Len(), cChar );
 
+    sTmpText = sTmpText.Copy( nIdx, nLen );
     rDestNd.Insert( sTmpText, aDestIdx );
     nLen = aDestIdx.GetIndex() - nDestStt;
 
