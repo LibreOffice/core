@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen9.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-30 16:15:55 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:43:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -603,7 +603,7 @@ void ScDocument::RefreshNoteFlags()
 
     BOOL bAnyIntObj = FALSE;
     SCTAB nTab;
-    ScPostIt aNote;
+    ScPostIt aNote(this);
     for (nTab=0; nTab<=MAXTAB && pTab[nTab]; nTab++)
     {
         SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
