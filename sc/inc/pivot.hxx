@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pivot.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 12:23:22 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:12:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,13 @@
 #ifndef SC_PIVOT_HXX
 #define SC_PIVOT_HXX
 
+#ifndef SC_SCGLOB_HXX
 #include <global.hxx>
+#endif
+
+#ifndef SC_ADDRESS_HXX
+#include "address.hxx"
+#endif
 
 class SubTotal;
 
@@ -88,8 +94,8 @@ class SubTotal;
 #include "collect.hxx"
 #endif
 
-#define PIVOT_DATA_FIELD        (MAXCOL + 1)
-#define PIVOT_FUNC_REF          (MAXCOL + 1)
+#define PIVOT_DATA_FIELD        (MAXCOLCOUNT)
+#define PIVOT_FUNC_REF          (MAXCOLCOUNT)
 
 #define PIVOT_STYLE_INNER       0
 #define PIVOT_STYLE_RESULT      1
@@ -107,10 +113,10 @@ class ScProgress;
 
 struct PivotColRef
 {
-    USHORT nDataIndex;
-    USHORT nRecCount;
+    SCSIZE nDataIndex;
+    SCSIZE nRecCount;
     USHORT nFuncMask;
-    USHORT nIndex;
+    SCSIZE nIndex;
 
     PivotColRef()
     {
@@ -142,7 +148,7 @@ public:
                             { pUserData = pData; }
     const   String&     GetString(USHORT nIndex)
                             { return ((TypedStrData*)At(nIndex))->GetString(); }
-            short       GetIndex(TypedStrData* pData) const;
+            USHORT      GetIndex(TypedStrData* pData) const;
 };
 
 class ScPivot : public DataObject
@@ -158,27 +164,27 @@ class ScPivot : public DataObject
 
     String              aName;
     String              aTag;
-    USHORT              nColNameCount;
+    SCSIZE              nColNameCount;
     String*             pColNames;              // Array
 
-    USHORT              nSrcCol1;
-    USHORT              nSrcRow1;
-    USHORT              nSrcCol2;
-    USHORT              nSrcRow2;
-    USHORT              nSrcTab;
+    SCCOL               nSrcCol1;
+    SCROW               nSrcRow1;
+    SCCOL               nSrcCol2;
+    SCROW               nSrcRow2;
+    SCTAB               nSrcTab;
 
-    USHORT              nDestCol1;
-    USHORT              nDestRow1;
-    USHORT              nDestCol2;
-    USHORT              nDestRow2;
-    USHORT              nDestTab;
+    SCCOL               nDestCol1;
+    SCROW               nDestRow1;
+    SCCOL               nDestCol2;
+    SCROW               nDestRow2;
+    SCTAB               nDestTab;
 
-    USHORT              nDataStartCol;
-    USHORT              nDataStartRow;
+    SCCOL               nDataStartCol;
+    SCROW               nDataStartRow;
 
-    short               nColCount;
-    short               nRowCount;
-    short               nDataCount;
+    SCSIZE              nColCount;
+    SCSIZE              nRowCount;
+    SCSIZE              nDataCount;
 
     PivotFieldArr       aColArr;
     PivotFieldArr       aRowArr;
@@ -189,12 +195,12 @@ class ScPivot : public DataObject
     PivotStrCollection* pDataList;                      // Shortcut auf Col/RowList mit Daten
 
     SubTotal**          ppDataArr;
-    short               nDataColCount;
-    short               nDataRowCount;
-    short               nRowIndex;
-    short               nColIndex;
-    short               nDataIndex;
-    short               nRecCount;
+    SCSIZE              nDataColCount;
+    SCSIZE              nDataRowCount;
+    SCSIZE              nRowIndex;
+    SCSIZE              nColIndex;
+    SCSIZE              nDataIndex;
+    SCSIZE              nRecCount;
 
     PivotColRef*        pColRef;
 
@@ -232,24 +238,24 @@ public:
     void            SetTag(const String& rNew);
     const String&   GetTag() const;
 
-    void        SetSrcArea(USHORT nCol1, USHORT nRow1, USHORT nCol2, USHORT nRow2, USHORT nTab);
-    void        GetSrcArea(USHORT& rCol1, USHORT& rRow1, USHORT& rCol2, USHORT& rRow2, USHORT& rTab) const;
+    void        SetSrcArea(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, SCTAB nTab);
+    void        GetSrcArea(SCCOL& rCol1, SCROW& rRow1, SCCOL& rCol2, SCROW& rRow2, SCTAB& rTab) const;
     ScRange     GetSrcArea() const;
 
-    void        SetDestPos(USHORT nCol, USHORT nRow, USHORT nTab);
-    void        GetDestArea(USHORT& rCol1, USHORT& rRow1, USHORT& rCol2, USHORT& rRow2, USHORT& rTab) const;
+    void        SetDestPos(SCCOL nCol, SCROW nRow, SCTAB nTab);
+    void        GetDestArea(SCCOL& rCol1, SCROW& rRow1, SCCOL& rCol2, SCROW& rRow2, SCTAB& rTab) const;
     ScRange     GetDestArea() const;
 
-    void        SetColFields(const PivotField* pFieldArr, short nCount);
-    void        GetColFields(PivotField* pFieldArr, short& rCount) const;
-    short       GetColFieldCount() const    { return nColCount; }
+    void        SetColFields(const PivotField* pFieldArr, SCSIZE nCount);
+    void        GetColFields(PivotField* pFieldArr, SCSIZE& rCount) const;
+    SCSIZE      GetColFieldCount() const    { return nColCount; }
 
-    void        SetRowFields(const PivotField* pFieldArr, short nCount);
-    void        GetRowFields(PivotField* pFieldArr, short& rCount) const;
-    short       GetRowFieldCount() const    { return nRowCount; }
+    void        SetRowFields(const PivotField* pFieldArr, SCSIZE nCount);
+    void        GetRowFields(PivotField* pFieldArr, SCSIZE& rCount) const;
+    SCSIZE      GetRowFieldCount() const    { return nRowCount; }
 
-    void        SetDataFields(const PivotField* pFieldArr, short nCount);
-    void        GetDataFields(PivotField* pFieldArr, short& rCount) const;
+    void        SetDataFields(const PivotField* pFieldArr, SCSIZE nCount);
+    void        GetDataFields(PivotField* pFieldArr, SCSIZE& rCount) const;
 
     void        GetParam( ScPivotParam& rParam, ScQueryParam& rQuery, ScArea& rSrcArea ) const;
     void        SetParam( const ScPivotParam& rParam, const ScQueryParam& rQuery,
@@ -259,36 +265,36 @@ public:
     void        DrawData();
     void        ReleaseData();
 
-    BOOL        IsPivotAtCursor(USHORT nCol, USHORT nRow, USHORT nTab) const;
-    BOOL        IsFilterAtCursor(USHORT nCol, USHORT nRow, USHORT nTab) const;
-    BOOL        GetColFieldAtCursor(USHORT nCol, USHORT nRow, USHORT nTab, USHORT& rField) const;
-    BOOL        GetRowFieldAtCursor(USHORT nCol, USHORT nRow, USHORT nTab, USHORT& rField) const;
+    BOOL        IsPivotAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab) const;
+    BOOL        IsFilterAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab) const;
+    BOOL        GetColFieldAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, SCCOL& rField) const;
+    BOOL        GetRowFieldAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, SCCOL& rField) const;
 
                 //  Referenz-Anpassung:
 
-    void        MoveSrcArea( USHORT nNewCol, USHORT nNewRow, USHORT nNewTab );
-    void        MoveDestArea( USHORT nNewCol, USHORT nNewRow, USHORT nNewTab );
-    void        ExtendSrcArea( USHORT nNewEndCol, USHORT nNewEndRow );
+    void        MoveSrcArea( SCCOL nNewCol, SCROW nNewRow, SCTAB nNewTab );
+    void        MoveDestArea( SCCOL nNewCol, SCROW nNewRow, SCTAB nNewTab );
+    void        ExtendSrcArea( SCCOL nNewEndCol, SCROW nNewEndRow );
 
 private:
     BOOL    CreateFields();
     void    CreateFieldData();
     void    CalcArea();
 
-    void    SetDataLine(USHORT nCol, USHORT nRow, USHORT nTab, USHORT nRIndex);
-    void    SetFuncLine(USHORT nCol, USHORT nRow, USHORT nTab, USHORT nFunc, USHORT nIndex, USHORT nStartRIndex, USHORT nEndRIndex);
-    void    ColToTable(short nField, USHORT& nRow, ScProgress& rProgress);
-    void    RowToTable(short nField, USHORT& nCol);
-    void    SetFrame(USHORT nCol1, USHORT nRow1, USHORT nCol2, USHORT nRow2, USHORT nWidth = 20);
-    void    SetFrameHor(USHORT nCol1, USHORT nRow1, USHORT nCol2, USHORT nRow2);
-    void    SetFrameVer(USHORT nCol1, USHORT nRow1, USHORT nCol2, USHORT nRow2);
-    void    SetFontBold(USHORT nCol1, USHORT nRow1, USHORT nCol2, USHORT nRow2);
-    void    SetJustifyLeft(USHORT nCol1, USHORT nRow1, USHORT nCol2, USHORT nRow2);
-    void    SetJustifyRight(USHORT nCol1, USHORT nRow1, USHORT nCol2, USHORT nRow2);
-    void    SetStyle(USHORT nCol1, USHORT nRow1, USHORT nCol2, USHORT nRow2, USHORT nId);
-    void    SetButton(USHORT nCol1, USHORT nRow1, USHORT nCol2, USHORT nRow2);
-    void    SetValue(USHORT nCol, USHORT nRow, const SubTotal& rTotal, USHORT nFunc);
-    USHORT  GetCategoryRow( USHORT nCol, USHORT nRow );
+    void    SetDataLine(SCCOL nCol, SCROW nRow, SCTAB nTab, SCSIZE nRIndex);
+    void    SetFuncLine(SCCOL nCol, SCROW nRow, SCTAB nTab, USHORT nFunc, SCSIZE nIndex, SCSIZE nStartRIndex, SCSIZE nEndRIndex);
+    void    ColToTable(SCSIZE nField, SCROW& nRow, ScProgress& rProgress);
+    void    RowToTable(SCSIZE nField, SCCOL& nCol);
+    void    SetFrame(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, USHORT nWidth = 20);
+    void    SetFrameHor(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
+    void    SetFrameVer(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
+    void    SetFontBold(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
+    void    SetJustifyLeft(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
+    void    SetJustifyRight(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
+    void    SetStyle(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, USHORT nId);
+    void    SetButton(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
+    void    SetValue(SCCOL nCol, SCROW nRow, const SubTotal& rTotal, USHORT nFunc);
+    SCROW   GetCategoryRow( SCCOL nCol, SCROW nRow );
 };
 
 //------------------------------------------------------------------------
@@ -307,16 +313,16 @@ public:
 
     virtual DataObject* Clone() const;
             ScPivot*    operator[]( const USHORT nIndex) const {return (ScPivot*)At(nIndex);}
-            ScPivot*    GetPivotAtCursor(USHORT nCol, USHORT nRow, USHORT nTab) const;
+            ScPivot*    GetPivotAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab) const;
 
     BOOL    Load( SvStream& rStream );
     BOOL    Store( SvStream& rStream ) const;
 
     void    UpdateReference(UpdateRefMode eUpdateRefMode,
-                                USHORT nCol1, USHORT nRow1, USHORT nTab1,
-                                USHORT nCol2, USHORT nRow2, USHORT nTab2,
-                                short nDx, short nDy, short nDz );
-    void    UpdateGrow( const ScRange& rArea, USHORT nGrowX, USHORT nGrowY );
+                                SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
+                                SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
+                                SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
+    void    UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY );
 
     BOOL    operator==(const ScPivotCollection& rCmp) const;
 
@@ -327,13 +333,13 @@ public:
 struct LabelData
 {
     String* pStrColName;
-    short   nCol;
+    SCsCOL  nCol;
     BOOL    bIsValue; // Summe oder Anzahl im Data-Feld
     USHORT  nFuncMask;
 
 
         LabelData( const String&    rColName,
-                   short            nColumn,
+                   SCsCOL           nColumn,
                    BOOL             bVal,
                    USHORT           nMask = PIVOT_FUNC_NONE )
             :   nCol        (nColumn),
