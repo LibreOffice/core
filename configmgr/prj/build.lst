@@ -8,9 +8,10 @@ cg	configmgr\source\data					nmake	-	all	cg_data cg_cppugen NULL
 cg	configmgr\source\tree					nmake	-	all	cg_tree cg_cppugen NULL
 cg	configmgr\source\treecache				nmake	-	all	cg_trcache cg_cppugen NULL
 cg	configmgr\source\xml					nmake	-	all	cg_xml cg_cppugen NULL
+cg	configmgr\source\backend				nmake	-	all	cg_backend cg_cppugen NULL
 cg	configmgr\source\api					nmake	-	all	cg_api cg_cppugen NULL
 cg	configmgr\source\api2					nmake	-	all	cg_api2 cg_cppugen NULL
 cg	configmgr\source\treemgr				nmake	-	all	cg_treemgr cg_cppugen NULL
 cg	configmgr\source\registry				nmake	-	all	cg_reg cg_cppugen NULL
-cg	configmgr\util							nmake	-	all	cg_util cg_api cg_api2 cg_cmdtools cg_misc cg_reg cg_session cg_trcache cg_data cg_tree cg_treemgr cg_xml NULL
+cg	configmgr\util							nmake	-	all	cg_util cg_api cg_api2 cg_cmdtools cg_misc cg_reg cg_session cg_trcache cg_data cg_tree cg_treemgr cg_xml cg_backend NULL
 
