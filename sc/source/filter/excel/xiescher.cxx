@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xiescher.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:24:03 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 20:26:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,12 +82,7 @@
 #ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
 #include <svtools/moduleoptions.hxx>
 #endif
-#ifndef _OFF_APP_HXX
-#include <offmgr/app.hxx>
-#endif
-#ifndef _OFA_FLTRCFG_HXX
-#include <offmgr/fltrcfg.hxx>
-#endif
+#include <svtools/fltrcfg.hxx>
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
 #endif
@@ -1119,7 +1114,7 @@ XclImpDffManager::XclImpDffManager(
 {
     SetSvxMSDffSettings( SVXMSDFF_SETTINGS_CROP_BITMAPS | SVXMSDFF_SETTINGS_IMPORT_EXCEL );
 
-    if( OfaFilterOptions* pFilterOpt = OFF_APP()->GetFilterOptions() )
+    if( SvtFilterOptions* pFilterOpt = SvtFilterOptions::Get() )
     {
         if( pFilterOpt->IsMathType2Math() )
             mnOleImpFlags |= OLE_MATHTYPE_2_STARMATH;
