@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.114 $
+ *  $Revision: 1.115 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 15:32:38 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 09:14:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -7445,9 +7445,7 @@ SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
                 //TODO/LATER: retrieve aspect from MS document
                 sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
 
-                // working with visual area needs running state for our own objects (MSOLE objects don't need to be)
-                ::svt::EmbeddedObjectRef::TryRunningState( xObj );
-
+                // working with visual area can switch the object to running state
                 MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nAspect ) );
                 Size aSz(lcl_GetPrefSize(rGrf, MapMode(aMapUnit)));
                 //xInplaceObj->EnableSetModified( FALSE );
