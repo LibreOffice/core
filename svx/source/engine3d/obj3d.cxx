@@ -2,9 +2,9 @@
  *
  *  $RCSfile: obj3d.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-27 13:26:17 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:36:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,6 +252,14 @@
 #include "svdoimp.hxx"
 #endif
 
+#ifndef _SDR_PROPERTIES_E3DPROPERTIES_HXX
+#include <svx/sdr/properties/e3dproperties.hxx>
+#endif
+
+#ifndef _SDR_PROPERTIES_E3DCOMPOUNDPROPERTIES_HXX
+#include <svx/sdr/properties/e3dcompoundproperties.hxx>
+#endif
+
 #define ITEMVALUE(ItemSet,Id,Cast)  ((const Cast&)(ItemSet).Get(Id)).GetValue()
 
 /*************************************************************************
@@ -333,6 +341,15 @@ SdrObject* E3dObjList::RemoveObject(ULONG nObjNum)
 |*
 \************************************************************************/
 
+//////////////////////////////////////////////////////////////////////////////
+
+sdr::properties::BaseProperties* E3dObject::CreateObjectSpecificProperties()
+{
+    return new sdr::properties::E3dProperties(*this);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
 TYPEINIT1(E3dObject, SdrAttrObj);
 
 E3dObject::E3dObject() :
@@ -404,7 +421,7 @@ SdrAttrObj* E3dObject::GetBreakObj()
 |*
 \************************************************************************/
 
-void E3dObject::SetRectsDirty(FASTBOOL bNotMyself)
+void E3dObject::SetRectsDirty(sal_Bool bNotMyself)
 {
     // call parent
     SdrAttrObj::SetRectsDirty(bNotMyself);
@@ -467,7 +484,7 @@ void E3dObject::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 
     // gradient depends on fillstyle
     // BM *** check if SetItem is NULL ***
-    XFillStyle eFillStyle = ((XFillStyleItem&)(GetItem(XATTR_FILLSTYLE))).GetValue();
+    XFillStyle eFillStyle = ((XFillStyleItem&)(GetMergedItem(XATTR_FILLSTYLE))).GetValue();
     rInfo.bGradientAllowed = (eFillStyle == XFILL_GRADIENT);
 
     // Umwandeln von 3D-Koerpern in Gruppe von Polygonen:
@@ -853,7 +870,7 @@ void E3dObject::RecalcBoundRect()
         {
             SdrObject* pObj = pSub->GetObj(i);
             DBG_ASSERT(pObj->ISA(E3dObject), "AW: In E3dObject sind nur 3D-Objekte erlaubt!");
-            Rectangle aSubRect = ((E3dObject*)pObj)->GetBoundRect();
+            Rectangle aSubRect = ((E3dObject*)pObj)->GetCurrentBoundRect();
             aOutRect.Union(aSubRect);
         }
     }
@@ -1155,10 +1172,10 @@ void E3dObject::NbcResetTransform()
 
 void E3dObject::SetTransform(const Matrix4D& rMatrix)
 {
-    SendRepaintBroadcast();
+    // #110094#-14 SendRepaintBroadcast();
     NbcSetTransform(rMatrix);
     SetChanged();
-    SendRepaintBroadcast();
+    BroadcastObjectChange();
     if (pUserCall != NULL) pUserCall->Changed(*this, SDRUSERCALL_RESIZE, Rectangle());
 }
 
@@ -1170,10 +1187,10 @@ void E3dObject::SetTransform(const Matrix4D& rMatrix)
 
 void E3dObject::ResetTransform()
 {
-    SendRepaintBroadcast();
+    // #110094#-14 SendRepaintBroadcast();
     NbcResetTransform();
     SetChanged();
-    SendRepaintBroadcast();
+    BroadcastObjectChange();
     if (pUserCall != NULL) pUserCall->Changed(*this, SDRUSERCALL_RESIZE, Rectangle());
 }
 
@@ -1197,10 +1214,10 @@ void E3dObject::NbcTranslate(const Vector3D& rTrans)
 
 void E3dObject::Translate(const Vector3D& rTrans)
 {
-    SendRepaintBroadcast();
+    // #110094#-14 SendRepaintBroadcast();
     NbcTranslate(rTrans);
     SetChanged();
-    SendRepaintBroadcast();
+    BroadcastObjectChange();
     if (pUserCall != NULL) pUserCall->Changed(*this, SDRUSERCALL_RESIZE, Rectangle());
 }
 
@@ -1265,10 +1282,10 @@ void E3dObject::NbcScale(double fS)
 
 void E3dObject::ScaleX(double fSx)
 {
-    SendRepaintBroadcast();
+    // #110094#-14 SendRepaintBroadcast();
     NbcScaleX(fSx);
     SetChanged();
-    SendRepaintBroadcast();
+    BroadcastObjectChange();
     if (pUserCall != NULL) pUserCall->Changed(*this, SDRUSERCALL_RESIZE, Rectangle());
 }
 
@@ -1276,10 +1293,10 @@ void E3dObject::ScaleX(double fSx)
 
 void E3dObject::ScaleY(double fSy)
 {
-    SendRepaintBroadcast();
+    // #110094#-14 SendRepaintBroadcast();
     NbcScaleY(fSy);
     SetChanged();
-    SendRepaintBroadcast();
+    BroadcastObjectChange();
     if (pUserCall != NULL) pUserCall->Changed(*this, SDRUSERCALL_RESIZE, Rectangle());
 }
 
@@ -1287,10 +1304,10 @@ void E3dObject::ScaleY(double fSy)
 
 void E3dObject::ScaleZ(double fSz)
 {
-    SendRepaintBroadcast();
+    // #110094#-14 SendRepaintBroadcast();
     NbcScaleZ(fSz);
     SetChanged();
-    SendRepaintBroadcast();
+    BroadcastObjectChange();
     if (pUserCall != NULL) pUserCall->Changed(*this, SDRUSERCALL_RESIZE, Rectangle());
 }
 
@@ -1298,10 +1315,10 @@ void E3dObject::ScaleZ(double fSz)
 
 void E3dObject::Scale(double fSx, double fSy, double fSz)
 {
-    SendRepaintBroadcast();
+    // #110094#-14 SendRepaintBroadcast();
     NbcScale(fSx, fSy, fSz);
     SetChanged();
-    SendRepaintBroadcast();
+    BroadcastObjectChange();
     if (pUserCall != NULL) pUserCall->Changed(*this, SDRUSERCALL_RESIZE, Rectangle());
 }
 
@@ -1309,10 +1326,10 @@ void E3dObject::Scale(double fSx, double fSy, double fSz)
 
 void E3dObject::Scale(double fS)
 {
-    SendRepaintBroadcast();
+    // #110094#-14 SendRepaintBroadcast();
     NbcScale(fS);
     SetChanged();
-    SendRepaintBroadcast();
+    BroadcastObjectChange();
     if (pUserCall != NULL) pUserCall->Changed(*this, SDRUSERCALL_RESIZE, Rectangle());
 }
 
@@ -1355,10 +1372,10 @@ void E3dObject::NbcRotateZ(double fAng)
 
 void E3dObject::RotateX(double fAng)
 {
-    SendRepaintBroadcast();
+    // #110094#-14 SendRepaintBroadcast();
     NbcRotateX(fAng);
     SetChanged();
-    SendRepaintBroadcast();
+    BroadcastObjectChange();
     if (pUserCall != NULL) pUserCall->Changed(*this, SDRUSERCALL_RESIZE, Rectangle());
 }
 
@@ -1366,10 +1383,10 @@ void E3dObject::RotateX(double fAng)
 
 void E3dObject::RotateY(double fAng)
 {
-    SendRepaintBroadcast();
+    // #110094#-14 SendRepaintBroadcast();
     NbcRotateY(fAng);
     SetChanged();
-    SendRepaintBroadcast();
+    BroadcastObjectChange();
     if (pUserCall != NULL) pUserCall->Changed(*this, SDRUSERCALL_RESIZE, Rectangle());
 }
 
@@ -1377,10 +1394,10 @@ void E3dObject::RotateY(double fAng)
 
 void E3dObject::RotateZ(double fAng)
 {
-    SendRepaintBroadcast();
+    // #110094#-14 SendRepaintBroadcast();
     NbcRotateZ(fAng);
     SetChanged();
-    SendRepaintBroadcast();
+    BroadcastObjectChange();
     if (pUserCall != NULL) pUserCall->Changed(*this, SDRUSERCALL_RESIZE, Rectangle());
 }
 
@@ -1553,8 +1570,7 @@ void E3dObject::TakeXorPoly(XPolyPolygon& rXPP, FASTBOOL bDetail) const
 
 void E3dObject::operator=(const SdrObject& rObj)
 {
-    // erstmal alle Childs kopieren
-    SdrAttrObj::operator=(rObj);
+    SdrObject::operator=(rObj);
 
     const E3dObject& r3DObj = (const E3dObject&) rObj;
     if (r3DObj.GetSubList())
@@ -1631,98 +1647,6 @@ void E3dObject::operator=(const SdrObject& rObj)
 
     // Selektionsstatus kopieren
     bIsSelected = r3DObj.bIsSelected;
-}
-
-//////////////////////////////////////////////////////////////////////////////
-// ItemSet access
-
-const SfxItemSet& E3dObject::GetItemSet() const
-{
-    // include Items of scene this object belongs to
-    E3dScene* pScene = GetScene();
-    if(pScene && pScene != this)
-    {
-        SfxItemSet& rSet = (SfxItemSet&)SdrAttrObj::GetItemSet();
-        SfxItemSet aSet(*rSet.GetPool(), SDRATTR_3DSCENE_FIRST, SDRATTR_3DSCENE_LAST);
-        aSet.Put(pScene->E3dObject::GetItemSet());
-        rSet.Put(aSet);
-    }
-
-    return SdrAttrObj::GetItemSet();
-}
-
-SfxItemSet* E3dObject::CreateNewItemSet(SfxItemPool& rPool)
-{
-    // include ALL items, 2D and 3D
-    return new SfxItemSet(rPool,
-        // ranges from SdrAttrObj
-        SDRATTR_START, SDRATTRSET_SHADOW,
-        SDRATTRSET_OUTLINER, SDRATTRSET_MISC,
-
-        // ranges for 3D (object and scene)
-        SDRATTR_3D_FIRST, SDRATTR_3D_LAST,
-
-        // outliner and end
-        EE_ITEMS_START, EE_ITEMS_END,
-        0, 0);
-}
-
-// private support routines for ItemSet access. NULL pointer means clear item.
-void E3dObject::ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem)
-{
-    // propagate item changes to scene
-    if(!nWhich || (nWhich >= SDRATTR_3DSCENE_FIRST && nWhich <= SDRATTR_3DSCENE_LAST))
-    {
-        E3dScene* pScene = GetScene();
-        if(pScene && pScene != this)
-            pScene->E3dObject::ItemChange(nWhich, pNewItem);
-    }
-
-    // call parent
-    SdrAttrObj::ItemChange(nWhich, pNewItem);
-}
-
-// #107770# Like propagating ItemChange to the scene if scene items are changed,
-// do the same with the PostItemChange calls.
-void E3dObject::PostItemChange(const sal_uInt16 nWhich)
-{
-    // propagate item changes to scene
-    if(!nWhich || (nWhich >= SDRATTR_3DSCENE_FIRST && nWhich <= SDRATTR_3DSCENE_LAST))
-    {
-        E3dScene* pScene = GetScene();
-        if(pScene && pScene != this)
-            pScene->PostItemChange(nWhich);
-    }
-
-    // call parent
-    SdrAttrObj::PostItemChange(nWhich);
-}
-
-void E3dObject::ItemSetChanged( const SfxItemSet& rSet )
-{
-    // call parent
-    SdrAttrObj::ItemSetChanged( rSet );
-
-    // local changes
-    StructureChanged(this);
-}
-
-/*************************************************************************
-|*
-|* StyleSheet setzen
-|*
-\************************************************************************/
-
-void E3dObject::NbcSetStyleSheet(SfxStyleSheet* pNewStyleSheet,
-    FASTBOOL bDontRemoveHardAttr)
-{
-    // call parent
-    SdrAttrObj::NbcSetStyleSheet(pNewStyleSheet, bDontRemoveHardAttr);
-
-    E3dObjList* pOL = pSub;
-    ULONG nObjCnt = pOL->GetObjCount();
-    for ( ULONG i = 0; i < nObjCnt; i++ )
-        pOL->GetObj(i)->NbcSetStyleSheet(pNewStyleSheet, bDontRemoveHardAttr);
 }
 
 /*************************************************************************
@@ -1976,27 +1900,6 @@ BOOL E3dObject::ImpCheckSubRecords (const SdrObjIOHeader& rHead,
 
 /*************************************************************************
 |*
-|* Keine DefaultAttr, zu langsam
-|*
-\************************************************************************/
-
-void E3dObject::ForceDefaultAttr()
-{
-}
-
-/*************************************************************************
-|*
-|* Falls doch noch DefaultAttrs benoetigt werden
-|*
-\************************************************************************/
-
-void E3dObject::ForceDefaultAttrAgain()
-{
-    SdrAttrObj::ForceDefaultAttr();
-}
-
-/*************************************************************************
-|*
 |* Rotation eines 3d-Koerpers
 |*
 \************************************************************************/
@@ -2022,6 +1925,15 @@ void E3dObject::NbcRotate(const Point& rRef, long nWink, double sn, double cs)
 }
 
 /*************************************************************************/
+
+//////////////////////////////////////////////////////////////////////////////
+
+sdr::properties::BaseProperties* E3dCompoundObject::CreateObjectSpecificProperties()
+{
+    return new sdr::properties::E3dCompoundProperties(*this);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
 TYPEINIT1(E3dCompoundObject, E3dObject);
 
@@ -2105,17 +2017,6 @@ UINT16 E3dCompoundObject::GetObjIdentifier() const
 
 /*************************************************************************
 |*
-|* Compounds brauchen Defaults
-|*
-\************************************************************************/
-
-void E3dCompoundObject::ForceDefaultAttr()
-{
-    SdrAttrObj::ForceDefaultAttr();
-}
-
-/*************************************************************************
-|*
 |* SnapRect berechnen
 |*
 \************************************************************************/
@@ -2184,7 +2085,7 @@ void E3dCompoundObject::RecalcBoundRect()
         }
 
         // Linienbreite beruecksichtigen
-        INT32 nLineWidth = ((const XLineWidthItem&)(GetItem(XATTR_LINEWIDTH))).GetValue();
+        INT32 nLineWidth = ((const XLineWidthItem&)(GetObjectItem(XATTR_LINEWIDTH))).GetValue();
         if(nLineWidth)
         {
             Rectangle aShadowRect = aOutRect;
@@ -2323,7 +2224,7 @@ void E3dCompoundObject::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
         sal_uInt16 nTmp;
 
         rIn >> bTmp;
-        mpObjectItemSet->Put(Svx3DDoubleSidedItem(bTmp));
+        GetProperties().SetObjectItemDirect(Svx3DDoubleSidedItem(bTmp));
 
         // neue Parameter zur Geometrieerzeugung
         if (aCompat.GetBytesLeft () >= sizeof (BOOL))
@@ -2342,7 +2243,7 @@ void E3dCompoundObject::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
                 nTmp = 1;
             else
                 nTmp = 2;
-            mpObjectItemSet->Put(Svx3DNormalsKindItem(nTmp));
+            GetProperties().SetObjectItemDirect(Svx3DNormalsKindItem(nTmp));
 
             rIn >> bTmp;
             rIn >> bTmp2;
@@ -2352,7 +2253,7 @@ void E3dCompoundObject::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
                 nTmp = 1;
             else
                 nTmp = 2;
-            mpObjectItemSet->Put(Svx3DTextureProjectionXItem(nTmp));
+            GetProperties().SetObjectItemDirect(Svx3DTextureProjectionXItem(nTmp));
 
             rIn >> bTmp;
             rIn >> bTmp2;
@@ -2362,10 +2263,10 @@ void E3dCompoundObject::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
                 nTmp = 1;
             else
                 nTmp = 2;
-            mpObjectItemSet->Put(Svx3DTextureProjectionYItem(nTmp));
+            GetProperties().SetObjectItemDirect(Svx3DTextureProjectionYItem(nTmp));
 
             rIn >> bTmp;
-            mpObjectItemSet->Put(Svx3DShadow3DItem(bTmp));
+            GetProperties().SetObjectItemDirect(Svx3DShadow3DItem(bTmp));
 
             // Setze ein Flag fuer den Aufrufer, dass neues Format
             // zu lesen ist
@@ -2387,31 +2288,31 @@ void E3dCompoundObject::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
             // SetItem(XFillColorItem(String(), aCol));
 
             rIn >> aCol;
-            mpObjectItemSet->Put(Svx3DMaterialSpecularItem(aCol));
+            GetProperties().SetObjectItemDirect(Svx3DMaterialSpecularItem(aCol));
 
             rIn >> aCol;
-            mpObjectItemSet->Put(Svx3DMaterialEmissionItem(aCol));
+            GetProperties().SetObjectItemDirect(Svx3DMaterialEmissionItem(aCol));
 
             rIn >> nTmp;
-            mpObjectItemSet->Put(Svx3DMaterialSpecularIntensityItem(nTmp));
+            GetProperties().SetObjectItemDirect(Svx3DMaterialSpecularIntensityItem(nTmp));
 
             aBackMaterial.ReadData(rIn);
 
             rIn >> nTmp;
-            mpObjectItemSet->Put(Svx3DTextureKindItem(nTmp));
+            GetProperties().SetObjectItemDirect(Svx3DTextureKindItem(nTmp));
 
             rIn >> nTmp;
-            mpObjectItemSet->Put(Svx3DTextureModeItem(nTmp));
+            GetProperties().SetObjectItemDirect(Svx3DTextureModeItem(nTmp));
 
             rIn >> bTmp;
-            mpObjectItemSet->Put(Svx3DNormalsInvertItem(bTmp));
+            GetProperties().SetObjectItemDirect(Svx3DNormalsInvertItem(bTmp));
         }
 
         // neu ab 534: (hat noch gefehlt)
         if (aCompat.GetBytesLeft () >= sizeof (BOOL))
         {
             rIn >> bTmp;
-            mpObjectItemSet->Put(Svx3DTextureFilterItem(bTmp));
+            GetProperties().SetObjectItemDirect(Svx3DTextureFilterItem(bTmp));
         }
     }
 }
@@ -3352,7 +3253,7 @@ void E3dCompoundObject::ImpSet3DParForFill(ExtOutputDevice& rOut, Base3D* pBase3
     }
     else
     {
-        const SfxItemSet& rSet = GetItemSet();
+        const SfxItemSet& rSet = GetObjectItemSet();
         const XFillStyle eFillStyle = ((const XFillStyleItem&)(rSet.Get(XATTR_FILLSTYLE))).GetValue();
 
         if(eFillStyle == XFILL_NONE)
@@ -3777,7 +3678,7 @@ void E3dCompoundObject::ImpSet3DParForLine(ExtOutputDevice& rOut, Base3D* pBase3
     BOOL& bDrawOutline, UINT16 nDrawFlags, BOOL bGhosted, BOOL bIsLineDraft)
 {
     // do drawflags allow line drawing at all?
-    const SfxItemSet& rSet = GetItemSet();
+    const SfxItemSet& rSet = GetObjectItemSet();
     sal_uInt16 nLineTransparence = ((const XLineTransparenceItem&)(rSet.Get(XATTR_LINETRANSPARENCE))).GetValue();
     BOOL bLineTransparence = (nLineTransparence != 0);
     BOOL bDrawTransparence = ((nDrawFlags & E3D_DRAWFLAG_TRANSPARENT) != 0);
@@ -3956,12 +3857,12 @@ void E3dCompoundObject::CenterObject(const Vector3D& rCenter)
 
 Color E3dCompoundObject::GetShadowColor()
 {
-    return ((SdrShadowColorItem&)(GetItem(SDRATTR_SHADOWCOLOR))).GetValue();
+    return ((SdrShadowColorItem&)(GetObjectItem(SDRATTR_SHADOWCOLOR))).GetValue();
 }
 
 BOOL E3dCompoundObject::DrawShadowAsOutline()
 {
-    const SfxItemSet& rSet = GetItemSet();
+    const SfxItemSet& rSet = GetObjectItemSet();
     XFillStyle eFillStyle = ((XFillStyleItem&)(rSet.Get(XATTR_FILLSTYLE))).GetValue();
     XLineStyle eLineStyle = ((XLineStyleItem&)(rSet.Get(XATTR_LINESTYLE))).GetValue();
     BOOL bFillAttrIsNone = eFillStyle == XFILL_NONE;
@@ -3971,22 +3872,22 @@ BOOL E3dCompoundObject::DrawShadowAsOutline()
 
 INT32 E3dCompoundObject::GetShadowXDistance()
 {
-    return (long)((SdrShadowXDistItem&)(GetItem(SDRATTR_SHADOWXDIST))).GetValue();
+    return (long)((SdrShadowXDistItem&)(GetObjectItem(SDRATTR_SHADOWXDIST))).GetValue();
 }
 
 INT32 E3dCompoundObject::GetShadowYDistance()
 {
-    return (long)((SdrShadowYDistItem&)(GetItem(SDRATTR_SHADOWYDIST))).GetValue();
+    return (long)((SdrShadowYDistItem&)(GetObjectItem(SDRATTR_SHADOWYDIST))).GetValue();
 }
 
 UINT16 E3dCompoundObject::GetShadowTransparence()
 {
-    return (UINT16)((SdrShadowTransparenceItem&)(GetItem(SDRATTR_SHADOWTRANSPARENCE))).GetValue();
+    return (UINT16)((SdrShadowTransparenceItem&)(GetObjectItem(SDRATTR_SHADOWTRANSPARENCE))).GetValue();
 }
 
 BOOL E3dCompoundObject::DoDrawShadow()
 {
-    const SfxItemSet& rSet = GetItemSet();
+    const SfxItemSet& rSet = GetObjectItemSet();
     BOOL bRetval(FALSE);
     BOOL bShadOn = ((SdrShadowItem&)(rSet.Get(SDRATTR_SHADOW))).GetValue();
 
@@ -4595,7 +4496,7 @@ void E3dCompoundObject::Paint3D(ExtOutputDevice& rOut, Base3D* pBase3D,
 
             // #78972#
             // detect if lines need to be drawn specifically
-            const SfxItemSet& rSet = GetItemSet();
+            const SfxItemSet& rSet = GetObjectItemSet();
             sal_Int32 nLineWidth = ((const XLineWidthItem&)(rSet.Get(XATTR_LINEWIDTH))).GetValue();
             XLineStyle aLineStyle = ((const XLineStyleItem&)(rSet.Get(XATTR_LINESTYLE))).GetValue();
             BOOL bDrawLineSolidHair = (aLineStyle == XLINE_SOLID && nLineWidth == 0);
@@ -4721,7 +4622,7 @@ void E3dCompoundObject::Paint3D(ExtOutputDevice& rOut, Base3D* pBase3D,
         pOut->DrawRect(aTempRect);
 
         // BoundRect in Gruen
-        aTempRect = GetBoundRect();
+        aTempRect = GetCurrentBoundRect();
         pOut->SetLineColor(Color(COL_GREEN));
         pOut->SetFillColor();
         pOut->DrawRect(aTempRect);
@@ -4835,7 +4736,7 @@ void E3dCompoundObject::ImpGetShadowPolygon(PolyPolygon3D& rPoly)
     BOOL bDrawAsOutline(DrawShadowAsOutline());
     PolyPolygon3D aLinePolyPolygon;
     B3dTransformationSet& rTransSet = GetScene()->GetCameraSet();
-    const SfxItemSet& rSet = GetItemSet();
+    const SfxItemSet& rSet = GetObjectItemSet();
     XLineStyle aLineStyle = ((const XLineStyleItem&)(rSet.Get(XATTR_LINESTYLE))).GetValue();
     sal_Int32 nLineWidth = ((const XLineWidthItem&)(rSet.Get(XATTR_LINEWIDTH))).GetValue();
 
@@ -5202,49 +5103,6 @@ XPolyPolygon E3dCompoundObject::TransformToScreenCoor(const PolyPolygon3D &rExtr
     }
 
     return aNewPolyPolygon;
-}
-
-/*************************************************************************
-|*
-|* Attribute setzen
-|*
-\************************************************************************/
-
-// private support routines for ItemSet access. NULL pointer means clear item.
-void E3dCompoundObject::PostItemChange(const sal_uInt16 nWhich)
-{
-    // call parent
-    E3dObject::PostItemChange(nWhich);
-
-    // handle value change
-    switch(nWhich)
-    {
-        case SDRATTR_3DOBJ_DOUBLE_SIDED:
-        {
-            bGeometryValid = FALSE;
-            break;
-        }
-        case SDRATTR_3DOBJ_NORMALS_KIND:
-        {
-            bGeometryValid = FALSE;
-            break;
-        }
-        case SDRATTR_3DOBJ_NORMALS_INVERT:
-        {
-            bGeometryValid = FALSE;
-            break;
-        }
-        case SDRATTR_3DOBJ_TEXTURE_PROJ_X:
-        {
-            bGeometryValid = FALSE;
-            break;
-        }
-        case SDRATTR_3DOBJ_TEXTURE_PROJ_Y:
-        {
-            bGeometryValid = FALSE;
-            break;
-        }
-    }
 }
 
 // EOF
