@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.134 $
+ *  $Revision: 1.135 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 14:13:57 $
+ *  last change: $Author: hr $ $Date: 2004-05-11 11:29:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1006,6 +1006,9 @@ void SwWW8ImplReader::ImportDop()
         }
     }
 
+    //
+    // COMPATIBILITY FLAGS START
+    //
 
     // Abstand zwischen zwei Absaetzen ist die SUMME von unterem
     // Abst. des ersten und oberem Abst. des zweiten
@@ -1039,9 +1042,15 @@ void SwWW8ImplReader::ImportDop()
     else
         rDoc._SetUseVirtualDevice( com::sun::star::document::PrinterIndependentLayout::HIGH_RESOLUTION );
 
-    rDoc.SetAddExtLeading(!pWDop->fNoLeading);
     rDoc.SetAddFlyOffsets( true );
+    rDoc.SetAddExtLeading(!pWDop->fNoLeading);
+
+    // -> #111955#
+    rDoc.SetOldNumbering( false );
+    // <- #111955#
+
     rDoc.SetUseFormerLineSpacing( false );
+
     // OD, MMAHER 2004-03-01 #i25901#- set new compatibility option
     //      'Add paragraph and table spacing at bottom of table cells'
     rDoc.SetAddParaSpacingToTableCells( true );
@@ -1049,6 +1058,15 @@ void SwWW8ImplReader::ImportDop()
     // OD 2004-03-17 #i11860# - set new compatibility option
     //      'Use former object positioning' to <FALSE>
     rDoc.SetUseFormerObjectPositioning( false );
+
+
+    // --> FME 2004-04-22 # #108724#, #i13832#, #i24135#
+    rDoc.SetUseFormerTextWrapping( false );
+    // <--
+
+    //
+    // COMPATIBILITY FLAGS START
+    //
 
     if (!pWDop->fNoLeading)
         maTracer.Log(sw::log::eExtraLeading);
