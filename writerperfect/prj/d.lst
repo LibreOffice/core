@@ -1,0 +1,4 @@
+mkdir: %_DEST%\inc%_EXT%\libwpd
+..\%__SRC%\misc\build\libwpd-0.8.0\src\lib\*.h %_DEST%\inc%_EXT%\libwpd\*.h
+..\%__SRC%\lib\*.so %_DEST%\lib%_EXT%\*.so
+..\%__SRC%\bin\*.dll %_DEST%\lib%_EXT%\*.dll

@@ -1,0 +1,7 @@
+wpft	writerperfect : libwpd sot sfx2 NULL
+
+wpft	writerperfect\source\ooo	nmake	-	all	wpft_ooo NULL
+wpft	writerperfect\source\stream	nmake	-	all	wpft_stream NULL
+wpft	writerperfect\source\filter	nmake	-	all	wpft_filter NULL
+
+wpft	writerperfect\util		nmake	-	all	wpft_util wpft_ooo wpft_filter wpft_stream NULL
