@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.159 $
+ *  $Revision: 1.160 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 09:05:00 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 12:04:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,9 @@
 #ifndef _COM_SUN_STAR_SDBCX_XRENAME_HPP_
 #include <com/sun/star/sdbcx/XRename.hpp>
 #endif
+#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
+#include <drafts/com/sun/star/frame/XLayoutManager.hpp>
+#endif
 #ifndef _URLOBJ_HXX //autogen
 #include <tools/urlobj.hxx>
 #endif
@@ -122,6 +125,9 @@
 #endif
 #ifndef _SV_SVAPP_HXX //autogen
 #include <vcl/svapp.hxx>
+#endif
+#ifndef _SV_TOOLBOX_HXX
+#include <vcl/toolbox.hxx>
 #endif
 #ifndef _SFXAPP_HXX //autogen
 #include <sfx2/app.hxx>
@@ -219,6 +225,9 @@
 #endif
 #ifndef DBACCESS_UI_DBTREEVIEW_HXX
 #include "dbtreeview.hxx"
+#endif
+#ifndef SVTOOLS_FILENOTATION_HXX
+#include <svtools/filenotation.hxx>
 #endif
 #ifndef _SVLBOXITM_HXX
 #include <svtools/svlbitm.hxx>
@@ -341,6 +350,9 @@ using namespace ::com::sun::star::view;
 using namespace ::com::sun::star::datatransfer;
 using namespace ::dbtools;
 using namespace ::svx;
+
+using ::drafts::com::sun::star::frame::XLayoutManager;      // obsolete of interface is moved outside drafts
+using ::drafts::com::sun::star::ui::XUIElement;             // dito
 
 // .........................................................................
 namespace dbaui
@@ -663,6 +675,24 @@ sal_Bool SbaTableQueryBrowser::InitializeForm(const Reference< ::com::sun::star:
 }
 
 //------------------------------------------------------------------------------
+void SbaTableQueryBrowser::initializePreviewMode()
+{
+    if ( getBrowserView() && getBrowserView()->getVclControl() )
+    {
+        getBrowserView()->getVclControl()->AlwaysEnableInput( FALSE );
+        getBrowserView()->getVclControl()->EnableInput( FALSE );
+        getBrowserView()->getVclControl()->ForceHideScrollbars( sal_True );
+    }
+    Reference< XPropertySet >  xDataSourceSet(getRowSet(), UNO_QUERY);
+    if ( xDataSourceSet.is() )
+    {
+        xDataSourceSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AllowInserts")),makeAny(sal_False));
+        xDataSourceSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AllowUpdates")),makeAny(sal_False));
+        xDataSourceSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AllowDeletes")),makeAny(sal_False));
+    }
+}
+
+//------------------------------------------------------------------------------
 sal_Bool SbaTableQueryBrowser::InitializeGridModel(const Reference< ::com::sun::star::form::XFormComponent > & xGrid)
 {
     try
@@ -843,21 +873,6 @@ sal_Bool SbaTableQueryBrowser::InitializeGridModel(const Reference< ::com::sun::
 
                 xColContainer->insertByName(*pBegin, makeAny(xCurrentCol));
             }
-            if ( m_bPreview )
-            {
-                if ( getBrowserView() && getBrowserView()->getVclControl() )
-                {
-                    getBrowserView()->getVclControl()->AlwaysEnableInput(FALSE);
-                    getBrowserView()->getVclControl()->EnableInput(FALSE);
-                }
-                Reference< XPropertySet >  xDataSourceSet(getRowSet(), UNO_QUERY);
-                if ( xDataSourceSet.is() )
-                {
-                    xDataSourceSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AllowInserts")),makeAny(sal_False));
-                    xDataSourceSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AllowUpdates")),makeAny(sal_False));
-                    xDataSourceSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AllowDeletes")),makeAny(sal_False));
-                }
-            }
         }
     }
     catch(Exception&)
@@ -1030,19 +1045,19 @@ void SAL_CALL SbaTableQueryBrowser::statusChanged( const FeatureStateEvent& _rEv
 {
     // search the external dispatcher causing this call
     Reference< XDispatch > xSource(_rEvent.Source, UNO_QUERY);
-    SpecialSlotDispatchersIterator aLoop;
-    for (   aLoop = m_aDispatchers.begin();
-            aLoop != m_aDispatchers.end();
-            ++aLoop
+    ExternalFeaturesMap::iterator aLoop;
+    for ( aLoop = m_aExternalFeatures.begin();
+          aLoop != m_aExternalFeatures.end();
+          ++aLoop
         )
     {
-        if (_rEvent.FeatureURL.Complete == getURLForId(aLoop->first).Complete)
+        if ( _rEvent.FeatureURL.Complete == aLoop->second.aURL.Complete)
         {
-            DBG_ASSERT(xSource.get() == aLoop->second.get(), "SbaTableQueryBrowser::statusChanged: inconsistent!");
+            DBG_ASSERT( xSource.get() == aLoop->second.xDispatcher.get(), "SbaTableQueryBrowser::statusChanged: inconsistent!" );
             // update the enabled state
-            m_aDispatchStates[aLoop->first] = _rEvent.IsEnabled;
+            aLoop->second.bEnabled = _rEvent.IsEnabled;
 
-            switch (aLoop->first)
+            switch ( aLoop->first )
             {
                 case ID_BROWSER_DOCUMENT_DATASOURCE:
                 {
@@ -1065,14 +1080,14 @@ void SAL_CALL SbaTableQueryBrowser::statusChanged( const FeatureStateEvent& _rEv
 
                 default:
                     // update the toolbox
-                    implCheckExternalSlot(aLoop->first);
+                    implCheckExternalSlot( aLoop->first );
                     break;
             }
             break;
         }
     }
 
-    DBG_ASSERT(aLoop != m_aDispatchers.end(), "SbaTableQueryBrowser::statusChanged: don't know who sent this!");
+    DBG_ASSERT(aLoop != m_aExternalFeatures.end(), "SbaTableQueryBrowser::statusChanged: don't know who sent this!");
 }
 
 // -------------------------------------------------------------------------
@@ -1105,7 +1120,8 @@ void SbaTableQueryBrowser::checkDocumentDataSource()
         }
     }
 
-    m_aDispatchStates[ID_BROWSER_DOCUMENT_DATASOURCE] = m_aDispatchStates[ID_BROWSER_DOCUMENT_DATASOURCE] && bKnownDocDataSource;
+    if ( !bKnownDocDataSource )
+        m_aExternalFeatures[ ID_BROWSER_DOCUMENT_DATASOURCE ].bEnabled = sal_False;
 
     // update the toolbox
     implCheckExternalSlot(ID_BROWSER_DOCUMENT_DATASOURCE);
@@ -1127,6 +1143,52 @@ void SbaTableQueryBrowser::extractDescriptorProps(const ::svx::ODataAccessDescri
 }
 
 // -------------------------------------------------------------------------
+namespace
+{
+    bool getDataSourceDisplayName_isURL( const String& _rDS, String& _rDisplayName, String& _rUniqueId )
+    {
+        INetURLObject aURL( _rDS );
+        if ( aURL.GetProtocol() != INET_PROT_NOT_VALID )
+        {
+            _rDisplayName = aURL.getName();
+            _rUniqueId = aURL.GetMainURL( INetURLObject::NO_DECODE );
+            return true;
+        }
+        _rDisplayName = _rDS;
+        _rUniqueId = String();
+        return false;
+    }
+
+    // .....................................................................
+    struct FilterByEntryDataId : public IEntryFilter
+    {
+        String sId;
+        FilterByEntryDataId( const String& _rId ) : sId( _rId ) { }
+
+        virtual bool    includeEntry( SvLBoxEntry* _pEntry ) const;
+    };
+
+    bool FilterByEntryDataId::includeEntry( SvLBoxEntry* _pEntry ) const
+    {
+        DBTreeListModel::DBTreeListUserData* pData = static_cast< DBTreeListModel::DBTreeListUserData* >( _pEntry->GetUserData() );
+        if ( !pData || ( pData->sAccessor == sId ) )
+            return true;
+        return false;
+    }
+}
+
+// -------------------------------------------------------------------------
+String SbaTableQueryBrowser::getDataSourceAcessor( SvLBoxEntry* _pDataSourceEntry ) const
+{
+    DBG_ASSERT( _pDataSourceEntry, "SbaTableQueryBrowser::getDataSourceAcessor: invalid entry!" );
+
+    DBTreeListModel::DBTreeListUserData* pData = static_cast< DBTreeListModel::DBTreeListUserData* >( _pDataSourceEntry->GetUserData() );
+    DBG_ASSERT( pData, "SbaTableQueryBrowser::getDataSourceAcessor: invalid entry data!" );
+    DBG_ASSERT( pData->eType == etDatasource, "SbaTableQueryBrowser::getDataSourceAcessor: entry does not denote a data source!" );
+    return pData->sAccessor.Len() ? pData->sAccessor : GetEntryText( _pDataSourceEntry );
+}
+
+// -------------------------------------------------------------------------
 SvLBoxEntry* SbaTableQueryBrowser::getObjectEntry(const ::rtl::OUString& _rDataSource, const ::rtl::OUString& _rCommand, sal_Int32 _nCommandType,
         SvLBoxEntry** _ppDataSourceEntry, SvLBoxEntry** _ppContainerEntry,
         sal_Bool _bExpandAncestors)
@@ -1140,17 +1202,22 @@ SvLBoxEntry* SbaTableQueryBrowser::getObjectEntry(const ::rtl::OUString& _rDataS
     if (m_pTreeView && m_pTreeView->getListBox())
     {
         // look for the data source entry
-        SvLBoxEntry* pDataSource = m_pTreeView->getListBox()->GetEntryPosByName(_rDataSource, NULL);
+        String sDisplayName, sDataSourceId;
+        bool bIsDataSourceURL = getDataSourceDisplayName_isURL( _rDataSource, sDisplayName, sDataSourceId );
+            // the display name may differ from the URL for readability reasons
+            // #i33699# - 2004-09-24 - fs@openoffice.org
+
+        FilterByEntryDataId aFilter( sDataSourceId );
+        SvLBoxEntry* pDataSource = m_pTreeView->getListBox()->GetEntryPosByName( sDisplayName, NULL, &aFilter );
         if ( !pDataSource ) // check if the data source name is a file location
         {
-            INetURLObject aURL(_rDataSource);
-            if ( aURL.GetProtocol() != INET_PROT_NOT_VALID )
+            if ( bIsDataSourceURL )
             {
-                // special case, the data source is file URL
+                // special case, the data source is a URL
                 // add new entries to the list box model
                 Image a, b, c;  // not interested in  reusing them
                 String e, f;
-                implAddDatasource(_rDataSource, a, e, b, f, c);
+                implAddDatasource( _rDataSource, a, e, b, f, c );
                 pDataSource = m_pTreeView->getListBox()->GetEntryPosByName(_rDataSource, NULL);
             }
         }
@@ -1213,63 +1280,88 @@ SvLBoxEntry* SbaTableQueryBrowser::getObjectEntry(const ::svx::ODataAccessDescri
 void SbaTableQueryBrowser::connectExternalDispatches()
 {
     Reference< XDispatchProvider >  xProvider(m_xCurrentFrame, UNO_QUERY);
-    DBG_ASSERT(xProvider.is(), "SbaTableQueryBrowser::connectExternalDispatches: no DispatchPprovider !");
+    DBG_ASSERT(xProvider.is(), "SbaTableQueryBrowser::connectExternalDispatches: no DispatchProvider !");
     if (xProvider.is())
     {
-        sal_Int32 nExternalIds[] = { ID_BROWSER_DOCUMENT_DATASOURCE, ID_BROWSER_FORMLETTER, ID_BROWSER_INSERTCOLUMNS, ID_BROWSER_INSERTCONTENT };
-        sal_Int32 nSize = sizeof(nExternalIds)/sizeof(nExternalIds[0]);
-        for (sal_Int32 i=0; i<nSize; ++i)
+        if ( m_aExternalFeatures.empty() )
         {
-            URL aURL = getURLForId(nExternalIds[i]);
-            m_aDispatchers[nExternalIds[i]] = xProvider->queryDispatch(aURL, ::rtl::OUString::createFromAscii("_parent"), FrameSearchFlag::PARENT);
-            if (m_aDispatchers[nExternalIds[i]].get() == static_cast< XDispatch* >(this))
-                // as the URL is one of our "supported features", we may answer the request ourself if nobody out there
-                // is interested in.
-                m_aDispatchers[nExternalIds[i]].clear();
+            const sal_Char* pURLs[] = {
+                ".uno:DataSourceBrowser/DocumentDataSource",
+                ".uno:DataSourceBrowser/FormLetter",
+                ".uno:DataSourceBrowser/InsertColumns",
+                ".uno:DataSourceBrowser/InsertContent",
+            };
+            const sal_uInt16 nIds[] = {
+                ID_BROWSER_DOCUMENT_DATASOURCE,
+                ID_BROWSER_FORMLETTER,
+                ID_BROWSER_INSERTCOLUMNS,
+                ID_BROWSER_INSERTCONTENT
+            };
 
-            // assume te general availability of the feature. This is overruled if there is no dispatcher for the URL
-            m_aDispatchStates[nExternalIds[i]] = sal_True;
+            for ( sal_Int32 i=0; i < sizeof( pURLs ) / sizeof( pURLs[0] ); ++i )
+            {
+                URL aURL;
+                aURL.Complete = ::rtl::OUString::createFromAscii( pURLs[i] );
+                if ( m_xUrlTransformer.is() )
+                    m_xUrlTransformer->parseStrict( aURL );
+                m_aExternalFeatures[ nIds[ i ] ] = ExternalFeature( aURL );
+            }
+        }
 
-            if (m_aDispatchers[nExternalIds[i]].is())
+        for ( ExternalFeaturesMap::iterator feature = m_aExternalFeatures.begin();
+              feature != m_aExternalFeatures.end();
+              ++feature
+            )
+        {
+            feature->second.xDispatcher = xProvider->queryDispatch(
+                feature->second.aURL, ::rtl::OUString::createFromAscii("_parent"), FrameSearchFlag::PARENT
+            );
+
+            if ( feature->second.xDispatcher.get() == static_cast< XDispatch* >( this ) )
+            {
+                OSL_ENSURE( sal_False, "SbaTableQueryBrowser::connectExternalDispatches: this should not happen anymore!" );
+                    // (nowadays, the URLs aren't in our SupportedFeatures list anymore, so we should
+                    // not supply a dispatcher for this)
+                feature->second.xDispatcher.clear();
+            }
+
+            if ( feature->second.xDispatcher.is() )
             {
                 try
                 {
-                    m_aDispatchers[nExternalIds[i]]->addStatusListener(this, aURL);
-                }
-                catch(DisposedException&)
-                {
-                    OSL_ENSURE(0,"Object already disposed!");
+                    feature->second.xDispatcher->addStatusListener( this, feature->second.aURL );
                 }
                 catch(Exception&)
                 {
-                    DBG_ERROR("SbaTableQueryBrowser::connectExternalDispatches: could not attach a status listener!");
+                    OSL_ENSURE( 0, "SbaTableQueryBrowser::connectExternalDispatches: caught an exception while attaching a status listener!!" );
                 }
             }
 
-            implCheckExternalSlot(nExternalIds[i]);
+            implCheckExternalSlot( feature->first );
         }
     }
 }
 
 // -------------------------------------------------------------------------
-void SbaTableQueryBrowser::implCheckExternalSlot(sal_Int32 _nId)
+void SbaTableQueryBrowser::implCheckExternalSlot( sal_uInt16 _nId )
 {
+    if ( !m_xMainToolbar.is() )
+        return;
+
+    Window* pToolboxWindow = VCLUnoHelper::GetWindow( m_xMainToolbar );
+    ToolBox* pToolbox = dynamic_cast< ToolBox* >( pToolboxWindow );
+    OSL_ENSURE( pToolbox, "SbaTableQueryBrowser::implCheckExternalSlot: cannot obtain the toolbox window!" );
+
     // check if we have to hide this item from the toolbox
-    // TODO: toolbox
-    /*
-    if ( getBrowserView() )
+    if ( pToolbox )
     {
-        ToolBox* pTB = getBrowserView()->getToolBox();
-        if (pTB)
-        {
-            sal_Bool bHaveDispatcher = m_aDispatchers[_nId].is();
-            if (bHaveDispatcher != pTB->IsItemVisible((sal_uInt16)_nId))
-                bHaveDispatcher ? pTB->ShowItem((sal_uInt16)_nId) : pTB->HideItem((sal_uInt16)_nId);
-        }
+        sal_Bool bHaveDispatcher = m_aExternalFeatures[ _nId ].xDispatcher.is();
+        if ( bHaveDispatcher != pToolbox->IsItemVisible( _nId ) )
+            bHaveDispatcher ? pToolbox->ShowItem( _nId ) : pToolbox->HideItem( _nId );
     }
-    */
+
     // and invalidate this feature in general
-    InvalidateFeature((sal_uInt16)_nId);
+    InvalidateFeature( _nId );
 }
 
 // -------------------------------------------------------------------------
@@ -1285,19 +1377,18 @@ void SAL_CALL SbaTableQueryBrowser::disposing( const EventObject& _rSource ) thr
         Reference< XDispatch > xSource(_rSource.Source, UNO_QUERY);
         if(xSource.is())
         {
-            for (   SpecialSlotDispatchersIterator aLoop = m_aDispatchers.begin();
-                    aLoop != m_aDispatchers.end();
-                    ++aLoop
+            for (  ExternalFeaturesMap::iterator aLoop = m_aExternalFeatures.begin();
+                  aLoop != m_aExternalFeatures.end();
+                  ++aLoop
                 )
             {
-                if (aLoop->second.get() == xSource.get())
+                if ( aLoop->second.xDispatcher.get() == xSource.get() )
                 {
-                    SpecialSlotDispatchersIterator aPrevious = aLoop;
+                    ExternalFeaturesMap::iterator aPrevious = aLoop;
                     --aPrevious;
 
                     // remove it
-                    m_aDispatchers.erase(aLoop);
-                    m_aDispatchStates.erase(aLoop->first);
+                    m_aExternalFeatures.erase( aLoop );
 
                     // maybe update the UI
                     implCheckExternalSlot(aLoop->first);
@@ -1339,16 +1430,16 @@ void SAL_CALL SbaTableQueryBrowser::disposing( const EventObject& _rSource ) thr
 void SbaTableQueryBrowser::implRemoveStatusListeners()
 {
     // clear all old dispatches
-    for (   ConstSpecialSlotDispatchersIterator aLoop = m_aDispatchers.begin();
-            aLoop != m_aDispatchers.end();
-            ++aLoop
+    for ( ExternalFeaturesMap::const_iterator aLoop = m_aExternalFeatures.begin();
+          aLoop != m_aExternalFeatures.end();
+          ++aLoop
         )
     {
-        if (aLoop->second.is())
+        if ( aLoop->second.xDispatcher.is() )
         {
             try
             {
-                aLoop->second->removeStatusListener(this, getURLForId(aLoop->first));
+                aLoop->second.xDispatcher->removeStatusListener( this, aLoop->second.aURL );
             }
             catch (Exception&)
             {
@@ -1356,8 +1447,7 @@ void SbaTableQueryBrowser::implRemoveStatusListeners()
             }
         }
     }
-    m_aDispatchers.clear();
-    m_aDispatchStates.clear();
+    m_aExternalFeatures.clear();
 }
 
 // -------------------------------------------------------------------------
@@ -1443,6 +1533,29 @@ void SbaTableQueryBrowser::attachFrame(const Reference< ::com::sun::star::frame:
         m_xCurrentFrameParent = m_xCurrentFrame->findFrame(::rtl::OUString::createFromAscii("_parent"),FrameSearchFlag::PARENT);
         if(m_xCurrentFrameParent.is())
             m_xCurrentFrameParent->addFrameActionListener((::com::sun::star::frame::XFrameActionListener*)this);
+    }
+
+    // obtain our toolbox
+    try
+    {
+        Reference< XLayoutManager > xLayouter;
+        Reference< XPropertySet > xFrameProps( m_xCurrentFrame, UNO_QUERY );
+        if ( xFrameProps.is() )
+            xFrameProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" ) ) ) >>= xLayouter;
+
+        if ( xLayouter.is() )
+        {
+            Reference< XUIElement > xUI = xLayouter->getElement( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/toolbar" ) ) );
+            if ( xUI.is() )
+            {
+                m_xMainToolbar = m_xMainToolbar.query( xUI->getRealInterface() );
+                OSL_ENSURE( m_xMainToolbar.is(), "SbaTableQueryBrowser::attachFrame: where's my toolbox?" );
+            }
+        }
+    }
+    catch( const Exception& )
+    {
+        OSL_ENSURE( sal_False, "SbaTableQueryBrowser::attachFrame: caught an exception!" );
     }
 
     // get the dispatchers for the external slots
@@ -1562,18 +1675,12 @@ void SbaTableQueryBrowser::LoadFinished(sal_Bool _bWasSynch)
 }
 
 //------------------------------------------------------------------------------
-sal_Bool SbaTableQueryBrowser::getExternalSlotState( sal_Int32 _nId ) const
+sal_Bool SbaTableQueryBrowser::getExternalSlotState( sal_uInt16 _nId ) const
 {
     sal_Bool bEnabled = sal_False;
-    SpecialSlotDispatchers::const_iterator aPos = m_aDispatchers.find( _nId );
-    if ( ( m_aDispatchers.end() != aPos ) && aPos->second.is() )
-    {
-        SpecialSlotStates::const_iterator aStatePos = m_aDispatchStates.find( _nId );
-        DBG_ASSERT( m_aDispatchStates.end() != aStatePos,
-            "SbaTableQueryBrowser::getExternalSlotState: inconsistence between dispatcher and states!" );
-        if ( m_aDispatchStates.end() != aStatePos )
-            bEnabled = aStatePos->second;
-    }
+    ExternalFeaturesMap::const_iterator aPos = m_aExternalFeatures.find( _nId );
+    if ( ( m_aExternalFeatures.end() != aPos ) && aPos->second.xDispatcher.is() )
+        bEnabled = aPos->second.bEnabled;
     return bEnabled;
 }
 
@@ -1808,10 +1915,12 @@ void SbaTableQueryBrowser::Execute(sal_uInt16 nId, const Sequence< PropertyValue
             if (getBrowserView() && isValidCursor())
             {
                 // the URL the slot id is assigned to
-                URL aParentUrl = getURLForId(nId);
+                OSL_ENSURE( m_aExternalFeatures.find( nId ) != m_aExternalFeatures.end(),
+                    "SbaTableQueryBrowser::Execute( ID_BROWSER_?): how could this ever be enabled?" );
+                URL aParentUrl = m_aExternalFeatures[ nId ].aURL;
 
                 // let the dispatcher execute the slot
-                Reference< XDispatch > xDispatch(m_aDispatchers[nId]);
+                Reference< XDispatch > xDispatch( m_aExternalFeatures[ nId ].xDispatcher );
                 if (xDispatch.is())
                 {
                     // set the properties for the dispatch
@@ -1928,9 +2037,15 @@ void SbaTableQueryBrowser::implAddDatasource(const String& _rDbName, Image& _rDb
         _rDbImage = Image(ModuleRes( DBTreeListModel::getImageResId(etDatasource,isHiContrast()) ));
 
     // add the entry for the data source
-    SvLBoxEntry* pDatasourceEntry = m_pTreeView->getListBox()->InsertEntry(_rDbName, _rDbImage, _rDbImage, NULL, sal_False);
+    // special handling for data sources denoted by URLs - we do not want to display this ugly URL, do we?
+    // #i33699# - 2004-09-24 - fs@openoffice.org
+    String sDSDisplayName, sDataSourceId;
+    getDataSourceDisplayName_isURL( _rDbName, sDSDisplayName, sDataSourceId );
+
+    SvLBoxEntry* pDatasourceEntry = m_pTreeView->getListBox()->InsertEntry( sDSDisplayName, _rDbImage, _rDbImage, NULL, sal_False );
     DBTreeListModel::DBTreeListUserData* pDSData = new DBTreeListModel::DBTreeListUserData;
     pDSData->eType = etDatasource;
+    pDSData->sAccessor = sDataSourceId;
     pDatasourceEntry->SetUserData(pDSData);
 
     // the child for the queries container
@@ -2126,7 +2241,7 @@ sal_Bool SbaTableQueryBrowser::ensureEntryObject( SvLBoxEntry* _pEntry )
             try
             {
                 Reference< XQueryDefinitionsSupplier > xQuerySup;
-                m_xDatabaseContext->getByName( GetEntryText( pDataSourceEntry ) ) >>= xQuerySup;
+                m_xDatabaseContext->getByName( getDataSourceAcessor( pDataSourceEntry ) ) >>= xQuerySup;
                 if (xQuerySup.is())
                 {
                     Reference< XNameAccess > xQueryDefs = xQuerySup->getQueryDefinitions();
@@ -2229,6 +2344,9 @@ sal_Bool SbaTableQueryBrowser::implLoadAnything(const ::rtl::OUString& _rDataSou
 
                 // initialize the model
                 InitializeGridModel(getFormComponent());
+
+                if ( m_bPreview )
+                    initializePreviewMode();
 
                 LoadFinished(sal_True);
             }
@@ -2452,7 +2570,7 @@ IMPL_LINK(SbaTableQueryBrowser, OnSelectEntry, SvLBoxEntry*, _pEntry)
                 }
             }
 
-            String sDataSourceName( GetEntryText( pConnection ) );
+            String sDataSourceName( getDataSourceAcessor( pConnection ) );
             if ( implLoadAnything( sDataSourceName, aName, nCommandType, sal_True, xConnection ) )
                 // set the title of the beamer
                 updateTitle();
@@ -3151,7 +3269,7 @@ sal_Bool SbaTableQueryBrowser::ensureConnection(SvLBoxEntry* _pDSEntry, void* pD
             sConnectingContext.SearchAndReplaceAscii("$name$", aDSName);
 
             // connect
-            _xConnection = connect(aDSName, sConnectingContext, rtl::OUString(), sal_True);
+            _xConnection = connect( getDataSourceAcessor( _pDSEntry ), sConnectingContext, rtl::OUString(), sal_True);
 
             // remember the connection
             static_cast< DBTreeListModel::DBTreeListUserData* >( pData )->xObject = _xConnection;
@@ -3268,21 +3386,21 @@ void SbaTableQueryBrowser::implAdministrate( SvLBoxEntry* _pApplyTo )
                 pTopLevelSelected = m_pTreeView->getListBox()->GetParent(pTopLevelSelected);
             ::rtl::OUString sInitialSelection;
             if (pTopLevelSelected)
-                sInitialSelection = m_pTreeView->getListBox()->GetEntryText(pTopLevelSelected);
+                sInitialSelection = getDataSourceAcessor( pTopLevelSelected );
 
             Reference<XModel> xDS;
-            if ( m_xDatabaseContext->hasByName(sInitialSelection) )
+            INetURLObject aURLParser( sInitialSelection );
+            if ( ( aURLParser.GetProtocol() != INET_PROT_NOT_VALID ) || m_xDatabaseContext->hasByName( sInitialSelection ) )
             {
                 xDS.set(m_xDatabaseContext->getByName(sInitialSelection),UNO_QUERY);
                 if ( xDS.is() )
                 {
-                    // create a new frame and remove it from the desktop, so we care for it
-                        xFrameLoader->loadComponentFromURL(
-                            xDS->getURL(),
-                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_default")),
-                            nFrameSearchFlag,
-                            Sequence<PropertyValue >()
-                        );
+                    xFrameLoader->loadComponentFromURL(
+                        xDS->getURL(),
+                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_default")),
+                        nFrameSearchFlag,
+                        Sequence<PropertyValue >()
+                    );
                 }
             }
         }
@@ -3292,6 +3410,19 @@ void SbaTableQueryBrowser::implAdministrate( SvLBoxEntry* _pApplyTo )
         DBG_ERROR("SbaTableQueryBrowser::implAdministrate: caught an exception while creating/executing the dialog!");
     }
 }
+
+// -----------------------------------------------------------------------------
+sal_Bool SbaTableQueryBrowser::requestQuickHelp( const SvLBoxEntry* _pEntry, String& _rText ) const
+{
+    const DBTreeListModel::DBTreeListUserData* pData = static_cast< const DBTreeListModel::DBTreeListUserData* >( _pEntry->GetUserData() );
+    if ( ( pData->eType == etDatasource ) && pData->sAccessor.Len() )
+    {
+        _rText = ::svt::OFileNotation( pData->sAccessor ).get( ::svt::OFileNotation::N_SYSTEM );
+        return sal_True;
+    }
+    return sal_False;
+}
+
 // -----------------------------------------------------------------------------
 sal_Bool SbaTableQueryBrowser::requestContextMenu( const CommandEvent& _rEvent )
 {
@@ -3584,8 +3715,6 @@ void SbaTableQueryBrowser::loadMenu(const Reference< XFrame >& _xFrame)
 {
     if ( m_bShowMenu )
     {
-        // TODO: toolbox
-        //getView()->getToolBox()->HideItem(ID_BROWSER_CLOSE);
         OGenericUnoController::loadMenu(_xFrame);
     }
     else if ( !m_bPreview )
@@ -3596,10 +3725,10 @@ void SbaTableQueryBrowser::loadMenu(const Reference< XFrame >& _xFrame)
         {
             xLayoutManager->lock();
             xLayoutManager->createElement( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/toolbar" )));
-            loadSubToolbar(xLayoutManager);
             xLayoutManager->unlock();
             xLayoutManager->doLayout();
         }
+        onLoadedMenu( xLayoutManager );
     }
 }
 // -----------------------------------------------------------------------------
