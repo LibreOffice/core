@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabdlg.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-13 12:31:05 $
+ *  last change: $Author: vg $ $Date: 2003-12-16 11:00:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,7 @@
 #include "sfxhelp.hxx"
 #include "ctrlitem.hxx"
 #include "bindings.hxx"
+#include "itemconnect.hxx"
 
 #include "dialog.hrc"
 #include "helpid.hrc"
@@ -231,9 +232,10 @@ struct TabDlg_Impl
 
 struct TabPageImpl
 {
-    BOOL    _bStandard;
+    BOOL                        mbStandard;
+    sfx::ItemConnectionArray    maItemConn;
 
-    TabPageImpl() : _bStandard( FALSE ) {}
+    TabPageImpl() : mbStandard( FALSE ) {}
 };
 
 /*  -----------------------------------------------------------------
@@ -298,6 +300,21 @@ SfxTabPage::~SfxTabPage()
 
 {
     delete pImpl;
+}
+
+// -----------------------------------------------------------------------
+
+BOOL SfxTabPage::FillItemSet( SfxItemSet& rSet )
+{
+    return pImpl->maItemConn.DoFillItemSet( rSet, GetItemSet() );
+}
+
+// -----------------------------------------------------------------------
+
+void SfxTabPage::Reset( const SfxItemSet& rSet )
+{
+    pImpl->maItemConn.DoApplyFlags( rSet );
+    pImpl->maItemConn.DoReset( rSet );
 }
 
 // -----------------------------------------------------------------------
@@ -407,7 +424,7 @@ const SfxPoolItem* SfxTabPage::GetOldItem( const SfxItemSet& rSet,
     USHORT nWh = GetWhich( nSlot );
     const SfxPoolItem* pItem = 0;
 
-    if ( pImpl->_bStandard && rOldSet.GetParent() )
+    if ( pImpl->mbStandard && rOldSet.GetParent() )
         pItem = GetItem( *rOldSet.GetParent(), nSlot );
     else if ( rSet.GetParent() &&
               SFX_ITEM_DONTCARE == rSet.GetItemState( nWh ) )
@@ -434,6 +451,13 @@ const SfxPoolItem* SfxTabPage::GetExchangeItem( const SfxItemSet& rSet,
         return GetItem( *pTabDlg->GetExampleSet(), nSlot );
     else
         return GetOldItem( rSet, nSlot );
+}
+
+// -----------------------------------------------------------------------
+
+void SfxTabPage::AddItemConnection( sfx::ItemConnectionBase* pConnection )
+{
+    pImpl->maItemConn.AddConnection( pConnection );
 }
 
 // class SfxTabDialog ----------------------------------------------------
@@ -1296,7 +1320,7 @@ IMPL_LINK( SfxTabDialog, BaseFmtHdl, Button *, EMPTYARG )
         // alle Items neu gesetzt -> dann an der aktuellen Page Reset() rufen
         DBG_ASSERT( pDataObject->pTabPage, "die Page ist weg" );
         pDataObject->pTabPage->Reset( aTmpSet );
-        pDataObject->pTabPage->pImpl->_bStandard = TRUE;
+        pDataObject->pTabPage->pImpl->mbStandard = TRUE;
     }
     return 1;
 }
