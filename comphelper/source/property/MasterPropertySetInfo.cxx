@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MasterPropertySetInfo.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-24 20:37:41 $
+ *  last change: $Author: mtg $ $Date: 2001-11-27 18:40:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,8 +191,9 @@ Sequence< ::Property > SAL_CALL MasterPropertySetInfo::getProperties()
 
             pProperties->Name = OUString( pInfo->mpName, pInfo->mnNameLen, RTL_TEXTENCODING_ASCII_US );
             pProperties->Handle = pInfo->mnHandle;
-            const Type* pType = &pProperties->Type;
+            const Type* pType;
             GenerateCppuType ( pInfo->meCppuType, pType);
+            pProperties->Type = *pType;
             pProperties->Attributes = pInfo->mnAttributes;
         }
     }
@@ -211,8 +212,10 @@ Property SAL_CALL MasterPropertySetInfo::getPropertyByName( const ::rtl::OUStrin
     Property aProperty;
     aProperty.Name   = OUString( pInfo->mpName, pInfo->mnNameLen, RTL_TEXTENCODING_ASCII_US );
     aProperty.Handle = pInfo->mnHandle;
-    const Type* pType = &aProperty.Type;
+    const Type* pType;
     GenerateCppuType ( pInfo->meCppuType, pType );
+    aProperty.Type = *pType;
+
     aProperty.Attributes = pInfo->mnAttributes;
     return aProperty;
 }
