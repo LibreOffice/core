@@ -2,9 +2,9 @@
  *
  *  $RCSfile: memory.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:14 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 13:25:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,12 +71,12 @@
 extern "C" {
 #endif
 
-void SAL_CALL rtl_zeroMemory(void *Ptr, sal_uInt32 Bytes);
-void SAL_CALL rtl_fillMemory(void *Ptr, sal_uInt32 Bytes, sal_uInt8 Fill);
-void SAL_CALL rtl_copyMemory(void *Dst, const void *Src, sal_uInt32 Bytes);
-void SAL_CALL rtl_moveMemory(void *Dst, const void *Src, sal_uInt32 Bytes);
-sal_Int32 SAL_CALL rtl_compareMemory(const void *MemA, const void *MemB, sal_uInt32 Bytes);
-void* SAL_CALL rtl_findInMemory(const void *MemA, sal_uInt8 ch, sal_uInt32 Bytes);
+void SAL_CALL rtl_zeroMemory(void *Ptr, sal_Size Bytes);
+void SAL_CALL rtl_fillMemory(void *Ptr, sal_Size Bytes, sal_uInt8 Fill);
+void SAL_CALL rtl_copyMemory(void *Dst, const void *Src, sal_Size Bytes);
+void SAL_CALL rtl_moveMemory(void *Dst, const void *Src, sal_Size Bytes);
+sal_Int32 SAL_CALL rtl_compareMemory(const void *MemA, const void *MemB, sal_Size Bytes);
+void* SAL_CALL rtl_findInMemory(const void *MemA, sal_uInt8 ch, sal_Size Bytes);
 
 #ifdef __cplusplus
 }
