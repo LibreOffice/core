@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctemplates.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: pb $ $Date: 2001-09-05 12:10:30 $
+ *  last change: $Author: mav $ $Date: 2002-07-10 09:32:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,10 @@
 
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <svtools/pathoptions.hxx>
+#endif
+
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
 #endif
 
 #ifndef  _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
@@ -292,6 +296,10 @@ public:
 
     void                        setLocale( const LOCALE & rLocale );
     Locale                      getLocale();
+
+    sal_Bool                    storeTemplate( const OUString& rGroupName,
+                                               const OUString& rTemplateName,
+                                               const Reference< XSTORABLE >& rStorable );
 
     sal_Bool                    addTemplate( const OUString& rGroupName,
                                              const OUString& rTemplateName,
@@ -1132,6 +1140,179 @@ sal_Bool SfxDocTplService_Impl::renameGroup( const OUString& rOldName,
 }
 
 //-----------------------------------------------------------------------------
+sal_Bool SfxDocTplService_Impl::storeTemplate( const OUString& rGroupName,
+                                               const OUString& rTemplateName,
+                                               const Reference< XSTORABLE >& rStorable )
+{
+    int ind = 0;
+    ::osl::MutexGuard aGuard( maMutex );
+
+    // Check, wether or not there is a group with this name
+    // Return false, if there is no group with the given name
+    Content         aGroup, aTemplate, aTargetGroup;
+    OUString        aGroupURL, aTemplateURL;
+    INetURLObject   aGroupObj( maRootURL );
+
+    aGroupObj.insertName( rGroupName, false,
+                      INetURLObject::LAST_SEGMENT, true,
+                      INetURLObject::ENCODE_ALL );
+    aGroupURL = aGroupObj.GetMainURL();
+
+    if ( ! Content::create( aGroupURL, maCmdEnv, aGroup ) )
+        return sal_False;
+
+    // Check, if there's a template with the given name in this group
+    // Return false, if there already is a template
+    aGroupObj.insertName( rTemplateName, false,
+                      INetURLObject::LAST_SEGMENT, true,
+                      INetURLObject::ENCODE_ALL );
+    aTemplateURL = aGroupObj.GetMainURL();
+
+    if ( Content::create( aTemplateURL, maCmdEnv, aTemplate ) )
+        return sal_False;
+
+    // The object provided with XStorable interface must
+    // support one of the listed below services
+
+    // Find service name of the document
+    // and construct a query for it
+    OUString aQueryForFilter;
+
+    Reference< XSERVICEINFO > rServiceInfo( rStorable, UNO_QUERY );
+    if( !rServiceInfo.is() )
+        return sal_False;
+
+    if( rServiceInfo->supportsService( OUString::createFromAscii( "com.sun.star.text.TextDocument" ) ) )
+    {
+        aQueryForFilter = OUString::createFromAscii( "_query_writer" );
+    }
+    else if( rServiceInfo->supportsService( OUString::createFromAscii( "com.sun.star.formula.FormulaProperties" ) ) )
+    {
+        aQueryForFilter = OUString::createFromAscii( "_query_math" );
+    }
+    else if( rServiceInfo->supportsService( OUString::createFromAscii( "com.sun.star.presentation.PresentationDocument" ) ) )
+    {
+        aQueryForFilter = OUString::createFromAscii( "_query_impress" );
+    }
+    else if( rServiceInfo->supportsService( OUString::createFromAscii( "com.sun.star.drawing.DrawingDocument" ) ) )
+    {
+        aQueryForFilter = OUString::createFromAscii( "_query_draw" );
+    }
+    else if( rServiceInfo->supportsService( OUString::createFromAscii( "com.sun.star.sheet.SpreadsheetDocument" ) ) )
+    {
+        aQueryForFilter = OUString::createFromAscii( "_query_calc" );
+    }
+    else if( rServiceInfo->supportsService( OUString::createFromAscii( "com.sun.star.text.WebDocument" ) ) )
+    {
+        aQueryForFilter = OUString::createFromAscii( "_query_web" );
+    }
+    else if( rServiceInfo->supportsService( OUString::createFromAscii( "com.sun.star.text.GlobalDocument" ) ) )
+    {
+        aQueryForFilter = OUString::createFromAscii( "_query_global" );
+    }
+    else
+        return sal_False;
+
+    aQueryForFilter += OUString::createFromAscii( ":iflags=54:eflags=64:default_first" ); // template export filter
+
+    // Find a template filter for the document type
+    Reference< XMULTISERVICEFACTORY > rServiceManager = ::comphelper::getProcessServiceFactory();
+    if( !rServiceManager.is() )
+        return sal_False;
+
+    Reference< XNAMEACCESS > rFilterCFG(
+        rServiceManager->createInstance( OUString::createFromAscii( "com.sun.star.document.FilterFactory" ) ),
+        UNO_QUERY );
+
+    if( !rFilterCFG.is() )
+        return sal_False;
+
+    OUString aFilterName;
+    Sequence< OUString > aFoundFilterNames;
+    Any aFilterNameAny = rFilterCFG->getByName( aQueryForFilter );
+    aFilterNameAny >>= aFoundFilterNames;
+    if( aFoundFilterNames.getLength() )
+        aFilterName = aFoundFilterNames[0];
+
+    if( !aFilterName.getLength() ) // no filter - no template
+        return sal_False;
+
+    // find a type
+    OUString aTypeName;
+    Sequence< PROPERTYVALUE > aFilterProps;
+    Any aPropSeqAny = rFilterCFG->getByName( aFilterName );
+    aPropSeqAny >>= aFilterProps;
+
+    for( ind = 0; !aTypeName.getLength() && ind < aFilterProps.getLength(); ind++ )
+        if( aFilterProps[ind].Name.equals( OUString::createFromAscii( "Type" ) ) )
+            aFilterProps[ind].Value >>= aTypeName;
+
+    if( !aTypeName.getLength() )
+        return sal_False;
+
+    // Find an extention and a mime-type for the type
+    OUString aExt;
+    OUString aMimeType;
+    Reference< XNAMEACCESS > rTypeDetection(
+        rServiceManager->createInstance( OUString::createFromAscii( "com.sun.star.document.TypeDetection" ) ),
+        UNO_QUERY );
+
+    if( !rTypeDetection.is() )
+        return sal_False;
+
+    Sequence< PROPERTYVALUE > aTypeProps;
+    Any aTypePropsAny = rTypeDetection->getByName( aTypeName );
+    aTypePropsAny >>= aTypeProps;
+
+    for( ind = 0; ( !aMimeType.getLength() || !aExt.getLength() ) && ind < aTypeProps.getLength(); ind++ )
+        if( aTypeProps[ind].Name.equals( OUString::createFromAscii( "Extensions" ) ) )
+        {
+            Sequence< OUString > aExts;
+            aTypeProps[ind].Value >>= aExts;
+            if( aExts.getLength() )
+                aExt = aExts[0];
+        }
+        else if( aTypeProps[ind].Name.equals( OUString::createFromAscii( "MediaType" ) ) )
+            aTypeProps[ind].Value >>= aMimeType;
+
+    if( !aExt.getLength() )
+        return sal_False;
+
+    // construct destination url
+    OUString    aTargetURL;
+    OUString    aPropName( RTL_CONSTASCII_USTRINGPARAM( TARGET_DIR_URL ) );
+    Any         aValue;
+    if ( getProperty( aGroup, aPropName, aValue ) )
+        aValue >>= aTargetURL;
+    if ( !aTargetURL.getLength() )
+        return sal_False;
+
+    INetURLObject   aTargetObj( aTargetURL );
+    aTargetObj.insertName( rTemplateName, false,
+                      INetURLObject::LAST_SEGMENT, true,
+                      INetURLObject::ENCODE_ALL );
+    aTargetObj.setExtension( aExt );
+    OUString aTargetURL2 = aTargetObj.GetMainURL();
+
+    // store template
+    Sequence< PropertyValue > aArgs(1);
+    aArgs[0].Name = OUString::createFromAscii( "FilterName" );
+    aArgs[0].Value <<= aFilterName;
+
+    try {
+        rStorable->storeToURL( aTargetURL2, aArgs );
+    }
+    catch( Exception& )
+    {
+        // the template was not stored
+        return sal_False;
+    }
+
+    // add the template to hierarchy
+    return addEntry( aGroup, rTemplateName, aTargetURL2, aMimeType );
+}
+
+//-----------------------------------------------------------------------------
 sal_Bool SfxDocTplService_Impl::addTemplate( const OUString& rGroupName,
                                              const OUString& rTemplateName,
                                              const OUString& rSourceURL )
@@ -1425,7 +1606,10 @@ sal_Bool SAL_CALL SfxDocTplService::storeTemplate( const OUString& GroupName,
                                                    const Reference< XSTORABLE >& Storable )
     throw( RUNTIMEEXCEPTION )
 {
-    return sal_False;
+    if ( pImp->init() )
+        return pImp->storeTemplate( GroupName, TemplateName, Storable );
+    else
+        return sal_False;
 }
 
 //-----------------------------------------------------------------------------

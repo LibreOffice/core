@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctemplates.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dv $ $Date: 2001-03-23 15:12:04 $
+ *  last change: $Author: mav $ $Date: 2002-07-10 09:31:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,11 +69,18 @@
 #include <cppuhelper/implbase3.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
+#include <com/sun/star/container/XNameAccess.hpp>
+#endif
+
 #ifndef  _COM_SUN_STAR_FRAME_XDOCUMENTTEMPLATES_HPP_
 #include <com/sun/star/frame/XDocumentTemplates.hpp>
 #endif
 #ifndef  _COM_SUN_STAR_FRAME_XSTORABLE_HPP_
 #include <com/sun/star/frame/XStorable.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
+#include <com/sun/star/frame/XModel.hpp>
 #endif
 
 #ifndef  _COM_SUN_STAR_LANG_LOCALE_HPP_
@@ -85,9 +92,16 @@
 #ifndef  _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
 
 #ifndef  _COM_SUN_STAR_UCB_XCONTENT_HPP_
 #include <com/sun/star/ucb/XContent.hpp>
+#endif
+
+#ifndef  _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
+#include <com/sun/star/beans/PropertyValue.hpp>
 #endif
 
 #ifndef  _COM_SUN_STAR_UNO_RUNTIMEEXCEPTION_HPP_
@@ -110,10 +124,14 @@
 #define LOCALE                      ::com::sun::star::lang::Locale
 #define REFERENCE                   ::com::sun::star::uno::Reference
 #define RUNTIMEEXCEPTION            ::com::sun::star::uno::RuntimeException
+#define PROPERTYVALUE               ::com::sun::star::beans::PropertyValue
 #define XCONTENT                    ::com::sun::star::ucb::XContent
 #define XDOCUMENTTEMPLATES          ::com::sun::star::frame::XDocumentTemplates
 #define XINTERFACE                  ::com::sun::star::uno::XInterface
 #define XLOCALIZABLE                ::com::sun::star::lang::XLocalizable
+#define XMODEL                      ::com::sun::star::frame::XModel
+#define XMULTISERVICEFACTORY        ::com::sun::star::lang::XMultiServiceFactory
+#define XNAMEACCESS                 ::com::sun::star::container::XNameAccess
 #define XSERVICEINFO                ::com::sun::star::lang::XServiceInfo
 #define XSTORABLE                   ::com::sun::star::frame::XStorable
 
