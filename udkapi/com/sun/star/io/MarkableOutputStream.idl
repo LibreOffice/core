@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MarkableOutputStream.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 12:43:58 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:44:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,13 +79,12 @@ module com {  module sun {  module star {  module io {
 //==========================================================================
 /** allows to set marks in an outputstream and to later jump back to these
     marks.
-
     <p>The implementation stores the data as long as marks exists
     and later writes these data into the output stream,
     that has been set previously at the <type>XActiveDataSource</type>
     interface. </p>
  */
-service MarkableOutputStream
+published service MarkableOutputStream
 {
     /** allows to write data at the current position.
         <p> Flushing the outputstream will only flush data,
