@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apinodeaccess.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dg $ $Date: 2000-11-13 12:14:15 $
+ *  last change: $Author: jb $ $Date: 2000-11-13 12:22:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,18 +166,19 @@ UnoAny  makeElement(configapi::Factory& rFactory, configuration::ElementTree con
 
 configuration::ElementTree extractElementTree(configapi::Factory& rFactory, UnoAny const& aElement, configuration::SetElementInfo const& aElementInfo )
 {
+    using configuration::ElementTree;
     configuration::TemplateHolder const aRequestedTemplate = aElementInfo.getTemplate();
     OSL_ENSURE(aRequestedTemplate.isValid(), "ERROR: Need a template to extract a matching set element");
     if (!aRequestedTemplate.isValid())
-        return 0;
+        return ElementTree(0);
 
-    configuration::ElementTree aRet(0);
+    ElementTree aRet(0);
 
     if (SetElement* pSetElement = rFactory.extractSetElement(aElement))
     {
         configuration::TemplateHolder aFoundTemplate = pSetElement->getTemplateInfo().getTemplate();
         if (!aFoundTemplate.isValid())
-            return 0;
+            return ElementTree(0);
 
         if (aFoundTemplate != aRequestedTemplate)
             throw configuration::TypeMismatch(aFoundTemplate->getPath().toString(), aRequestedTemplate->getPath().toString());
