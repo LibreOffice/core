@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itratr.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:35:29 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 08:13:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1141,4 +1141,38 @@ USHORT SwTxtNode::GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd )
     SwDrawTextInfo aDrawInf( pSh, *pOut, 0, GetTxt(), nStt, 1 );
     return (USHORT)
            ( nWidth ? ((100 * aIter.GetFnt()->_GetTxtSize( aDrawInf ).Height()) / nWidth ) : 0 );
+}
+
+USHORT SwTxtNode::GetWidthOfLeadingTabs() const
+{
+    USHORT nRet = 0;
+
+    // Find the non-follow text frame:
+    SwClientIter aClientIter( (SwTxtNode&)*this );
+    SwClient* pLast = aClientIter.GoStart();
+
+    while( pLast )
+    {
+        // Only consider master frames:
+        if ( pLast->ISA(SwTxtFrm) &&
+             !static_cast<SwTxtFrm*>(pLast)->IsFollow() )
+        {
+            const SwParaPortion* pPara =
+                static_cast<SwTxtFrm*>(pLast)->GetPara();
+
+            if ( pPara )
+            {
+                const SwLinePortion* pFirst = pPara->GetFirstPortion();
+                while ( pFirst && pFirst->InTabGrp() )
+                {
+                    nRet += pFirst->Width();
+                    pFirst = pFirst->GetPortion();
+                }
+            }
+            break;
+        }
+        pLast = ++aClientIter;
+    }
+
+    return nRet;
 }
