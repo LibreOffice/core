@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsignature_mscryptimpl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mmi $ $Date: 2004-07-23 03:12:26 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:58:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,10 @@
 
 #ifndef _XMLSTREAMIO_XMLSECIMPL_HXX_
 #include "xmlstreamio.hxx"
+#endif
+
+#ifndef _ERRORCALLBACK_XMLSECIMPL_HXX_
+#include "errorcallback.hxx"
 #endif
 
 #include "xmlsec/xmlsec.h"
@@ -168,10 +172,16 @@ SAL_CALL XMLSignature_MSCryptImpl :: generate(
 
     pMngr = pSecCtxt->keysManager() ;
 
+     setErrorRecorder( aTemplate );
+
     //Create Signature context
     pDsigCtx = xmlSecDSigCtxCreate( pMngr ) ;
     if( pDsigCtx == NULL )
-        throw XMLSignatureException() ;
+    {
+        //throw XMLSignatureException() ;
+        clearErrorRecorder();
+        return aTemplate;
+    }
 
     //Sign the template
     if( xmlSecDSigCtxSign( pDsigCtx , pNode ) < 0 ) {
@@ -181,7 +191,9 @@ SAL_CALL XMLSignature_MSCryptImpl :: generate(
         if( xUriBinding.is() )
             xmlUnregisterStreamInputCallbacks() ;
 
-        throw XMLSignatureException() ;
+        //throw XMLSignatureException() ;
+        clearErrorRecorder();
+        return aTemplate;
     }
 
     xmlSecDSigCtxDestroy( pDsigCtx ) ;
@@ -190,12 +202,13 @@ SAL_CALL XMLSignature_MSCryptImpl :: generate(
     if( xUriBinding.is() )
         xmlUnregisterStreamInputCallbacks() ;
 
+    clearErrorRecorder();
     return aTemplate ;
 }
 
 /* XXMLSignature */
-sal_Bool SAL_CALL
-XMLSignature_MSCryptImpl :: validate(
+Reference< XXMLSignatureTemplate >
+SAL_CALL XMLSignature_MSCryptImpl :: validate(
     const Reference< XXMLSignatureTemplate >& aTemplate ,
     const Reference< XXMLSecurityContext >& aSecurityCtx
 ) throw( com::sun::star::uno::RuntimeException,
@@ -204,7 +217,7 @@ XMLSignature_MSCryptImpl :: validate(
     xmlSecKeysMngrPtr pMngr = NULL ;
     xmlSecDSigCtxPtr pDsigCtx = NULL ;
     xmlNodePtr pNode = NULL ;
-    sal_Bool valid ;
+    //sal_Bool valid ;
 
     if( !aTemplate.is() )
         throw RuntimeException() ;
@@ -257,11 +270,16 @@ XMLSignature_MSCryptImpl :: validate(
 
     pMngr = pSecCtxt->keysManager() ;
 
+     setErrorRecorder( aTemplate );
+
     //Create Signature context
     pDsigCtx = xmlSecDSigCtxCreate( pMngr ) ;
     if( pDsigCtx == NULL )
-        throw XMLSignatureException() ;
-
+    {
+        //throw XMLSignatureException() ;
+        clearErrorRecorder();
+        return aTemplate;
+    }
 
     //Verify signature
     if( xmlSecDSigCtxVerify( pDsigCtx , pNode ) < 0 ) {
@@ -271,10 +289,12 @@ XMLSignature_MSCryptImpl :: validate(
         if( xUriBinding.is() )
             xmlUnregisterStreamInputCallbacks() ;
 
-        throw XMLSignatureException() ;
+        //throw XMLSignatureException() ;
+        clearErrorRecorder();
+        return aTemplate;
     }
 
-    valid = ( pDsigCtx->status == xmlSecDSigStatusSucceeded ) ;
+    //valid = ( pDsigCtx->status == xmlSecDSigStatusSucceeded ) ;
 
     xmlSecDSigCtxDestroy( pDsigCtx ) ;
 
@@ -282,7 +302,8 @@ XMLSignature_MSCryptImpl :: validate(
     if( xUriBinding.is() )
         xmlUnregisterStreamInputCallbacks() ;
 
-    return valid ;
+    clearErrorRecorder();
+    return aTemplate ;
 }
 
 /* XInitialization */
