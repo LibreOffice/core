@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview3.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: nn $ $Date: 2002-03-04 19:28:30 $
+ *  last change: $Author: sab $ $Date: 2002-03-12 09:28:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -506,6 +506,9 @@ void ScTabView::SelectionChanged()
     rBindings.Invalidate( FID_VALIDATION );
     rBindings.Invalidate( SID_EXTERNAL_SOURCE );
 
+    if (aViewData.GetViewShell()->HasAccessibilityObjects())
+        aViewData.GetViewShell()->BroadcastAccessibility(SfxSimpleHint(SC_HINT_ACC_CURSORCHANGED));
+
     CellContentChanged();
 }
 
@@ -531,12 +534,6 @@ void ScTabView::CursorPosChanged()
     SelectionChanged();
 
     aViewData.SetTabStartCol( SC_TABSTART_NONE );
-
-    if (aViewData.GetViewShell()->HasAccessibilityObjects())
-    {
-        ScAccActiveCellChangeHint aAccHint(aViewData.GetCurPos());
-        aViewData.GetViewShell()->BroadcastAccessibility(aAccHint);
-    }
 }
 
 void ScTabView::TestHintWindow()
