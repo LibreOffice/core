@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testtool.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-02 15:29:08 $
+ *  last change: $Author: kz $ $Date: 2001-02-09 20:07:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,7 +270,7 @@ WorkWindow TT_INLINE_TRANSLATION {
     Text[ ENGLISH ] = "Inplace Translation";
     Text[ DANISH ] = "Ny oversζttelse";
     Text[ ENGLISH_US ] = "Translation In Place";
-    Text[ SPANISH ] = "Inplace Translation ";
+    Text[ SPANISH ] = "Translation In Place";
     Text[ FRENCH ] = "Relogement inline";
     Text[ ITALIAN ] = "Inplace Translation";
     Text[ JAPANESE ] = "‚Ν‚ί‚έ–|–σ";
@@ -280,7 +280,7 @@ WorkWindow TT_INLINE_TRANSLATION {
     Text[ RUSSIAN ] = "Inplace Translation";
     Text[ SWEDISH ] = "Ny φversδttning";
     Text[ CHINESE_SIMPLIFIED ] = "·­ÒλΉ¤Ύί";
-    Text[ PORTUGUESE ] = "Inplace Translation";
+    Text[ PORTUGUESE ] = "Translation In Place";
     Moveable = TRUE;
     Sizeable = TRUE;
     Closeable = TRUE;
@@ -333,7 +333,7 @@ WorkWindow TT_INLINE_TRANSLATION {
             Text[ chinese_traditional ] = "½sΏθ(~E)";
             Text[ arabic ] = "ΚΝΡνΡ";
         Text[ greek ] = "Επεξεργασία";
-        Text[ korean ] = "ΖνΑύ(~E)";
+        Text[ korean ] = "ΖνΑύ";
         Text[ turkish ] = "~Dόzenle";
         Text[ language_user1 ] = " ";
     };
@@ -435,7 +435,7 @@ WorkWindow TT_INLINE_TRANSLATION {
             Text[ chinese_traditional ] = "ΏοΎά(~S)";
             Text[ arabic ] = "ΚΝΟνΟ";
         Text[ greek ] = "Επιλογή";
-        Text[ korean ] = "Ό±ΕΓ(~S)";
+        Text[ korean ] = "Ό±ΕΓ";
         Text[ turkish ] = "~Seη";
         Text[ language_user1 ] = " ";
     };
@@ -488,7 +488,7 @@ WorkWindow TT_INLINE_TRANSLATION {
             Text[ chinese_traditional ] = "±µ¨ό(~A)";
             Text[ arabic ] = "ήΘζα";
         Text[ greek ] = "~Αποδοχή";
-        Text[ korean ] = "µΏΐΗ(~A)";
+        Text[ korean ] = "µΏΐΗ";
         Text[ turkish ] = "~Kabul";
         Text[ language_user1 ] = " ";
     };
@@ -514,14 +514,14 @@ WorkWindow TT_INLINE_TRANSLATION {
             Text[ chinese_traditional ] = "Δ~Δς(~N)";
             Text[ arabic ] = "ΗαΚΗαν";
         Text[ greek ] = "Επόμενο";
-        Text[ korean ] = "΄Ωΐ½(~N)";
+        Text[ korean ] = "΄Ωΐ½";
         Text[ turkish ] = "~έleri";
         Text[ language_user1 ] = " ";
     };
     Text[ chinese_traditional ] = "Β½Δ¶¤u¨γ";
     Text[ arabic ] = "ΚΡΜγΙ ΜΟνΟΙ";
     Text[ greek ] = "Νέα μετάφραση";
-    Text[ korean ] = "³»ΊΞ ΉψΏª";
+    Text[ korean ] = "Α¦ΐ§Δ΅Ώ΅Ό­ ΉψΏª";
     Text[ turkish ] = "Inplace Translation";
     Text[ language_user1 ] = " ";
 };
@@ -571,7 +571,7 @@ ErrorBox TT_NO_CONTROL {
     Message[ chinese_traditional ] = "³o­Σ±±¨ξ¶µ¤wΈgµL®Δ΅CµLªkΐx¦sΒ½Δ¶¤Ί®e΅C";
     Message[ arabic ] = "ΪδΥΡ ΗαΚΝίγ εΠΗ αγ νΪΟ ΥΗαΝΗπ. αΗ νγίδ ΝέΩ ΗαΚΡΜγΙ.";
     Message[ greek ] = "Το στοιχείο ελέγχου δεν είναι πλέον έγκυρο. Δεν είναι δυνατόν να αποθηκευτεί η μετάφραση.";
-    Message[ korean ] = "ΔΑΖ®·ΡΐΜ ΄υ ΐΜ»σ ΐ―ΘΏΗΟΑφ ΎΚ½ΐ΄Ο΄Ω. Ί―Θ―ΗΡ °Νΐ» ΐϊΐεΗÒ Όφ Ύψ½ΐ΄Ο΄Ω.";
+    Message[ korean ] = "ΔΑΖ®·ΡΐΜ ΄υ ΐΜ»σ ΐ―ΘΏΗΟΑφ ΎΚ½ΐ΄Ο΄Ω. ΉψΏªΗΡ °Νΐ» ΐϊΐεΗÒ Όφ Ύψ½ΐ΄Ο΄Ω.";
     Message[ turkish ] = "Denetim artύk geηerli deπil. Ηeviri kaydedilemiyor.";
     Message[ language_user1 ] = " ";
 };
