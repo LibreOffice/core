@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prltempl.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hjs $ $Date: 2001-06-16 21:46:26 $
+ *  last change: $Author: kz $ $Date: 2001-07-14 20:20:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE
                 PageResID = RID_SVXPAGE_AREA ;
                 Text[ chinese_simplified ] = "≥‰ÃÓ";
                 Text[ russian ] = "«‡ÎË‚Í‡";
-                Text[ polish ] = "Obszar";
+                Text[ polish ] = "Powierzchnia";
                 Text[ japanese ] = "ï\\ñ ";
                 Text[ chinese_traditional ] = "•R∂Ò";
                 Text[ arabic ] = " ⁄»∆…";
@@ -378,7 +378,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE_2
                 PageResID = RID_SVXPAGE_AREA ;
                 Text[ chinese_simplified ] = "≥‰ÃÓ";
                 Text[ russian ] = "«‡ÎË‚Í‡";
-                Text[ polish ] = "Obszar";
+                Text[ polish ] = "Powierzchnia";
                 Text[ japanese ] = "ï\\ñ ";
                 Text[ chinese_traditional ] = "•R∂Ò";
                 Text[ arabic ] = " ⁄»∆…";
@@ -602,6 +602,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE_3
         };
     };
 };
+
 
 
 
