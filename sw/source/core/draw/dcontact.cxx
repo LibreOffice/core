@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dcontact.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 15:40:11 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 10:04:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #pragma hdrstop
 
 #include "hintids.hxx"
@@ -670,7 +669,11 @@ sal_uInt32 SwFlyDrawContact::_GetOrdNumForNewRef( const SwFlyFrm* _pFlyFrm )
     else
     {
         // no other Writer fly frame found. Take order number of 'master' object
-        nOrdNum = GetMaster()->GetOrdNum();
+        // --> OD 2004-11-11 #i35748# - use method <GetOrdNumDirect()> instead
+        // of method <GetOrdNum()> to avoid a recalculation of the order number,
+        // which isn't intended.
+        nOrdNum = GetMaster()->GetOrdNumDirect();
+        // <--
     }
 
     return nOrdNum;
@@ -1294,9 +1297,13 @@ void SwDrawContact::_Changed( const SdrObject& rObj,
     // OD 05.08.2002 #100843# - do *not* notify, if document is destructing
     // --> OD 2004-10-21 #i35912# - do *not* notify for as-character anchored
     // drawing objects.
+    // --> OD 2004-11-11 #i35007#
+    // improvement: determine as-character anchored object flag only once.
+    const bool bAnchoredAsChar = ObjAnchoredAsChar();
+    // <--
     const bool bNotify = !(GetFmt()->GetDoc()->IsInDtor()) &&
                          ( SURROUND_THROUGHT != GetFmt()->GetSurround().GetSurround() ) &&
-                         !ObjAnchoredAsChar();
+                         !bAnchoredAsChar;
     // <--
     switch( eType )
     {
@@ -1357,12 +1364,6 @@ void SwDrawContact::_Changed( const SdrObject& rObj,
             const SwAnchoredDrawObject* pAnchoredDrawObj =
                 static_cast<const SwAnchoredDrawObject*>( GetAnchoredObj( &rObj ) );
             // <--
-            // --> OD 2004-09-29 #i34748# - If no last object rectangle is
-            // provided by the anchored object, use parameter <pOldBoundRect>.
-            const Rectangle& aOldObjRect = pAnchoredDrawObj->GetLastObjRect()
-                                           ? *(pAnchoredDrawObj->GetLastObjRect())
-                                           : *(pOldBoundRect);
-            // <--
             // OD 2004-04-06 #i26791# - adjust positioning and alignment attributes,
             // if positioning of drawing object isn't in progress.
             // --> OD 2004-10-19 #i35798# - no adjust of positioning attributes,
@@ -1371,6 +1372,12 @@ void SwDrawContact::_Changed( const SdrObject& rObj,
                  !pAnchoredDrawObj->NotYetAttachedToAnchorFrm() )
             // <--
             {
+                // --> OD 2004-09-29 #i34748# - If no last object rectangle is
+                // provided by the anchored object, use parameter <pOldBoundRect>.
+                const Rectangle& aOldObjRect = pAnchoredDrawObj->GetLastObjRect()
+                                               ? *(pAnchoredDrawObj->GetLastObjRect())
+                                               : *(pOldBoundRect);
+                // <--
                 // --> OD 2004-08-04 #i31698# - determine layout direction
                 // via draw frame format.
                 SwFrmFmt::tLayoutDir eLayoutDir =
@@ -1436,7 +1443,7 @@ void SwDrawContact::_Changed( const SdrObject& rObj,
                 }
 
                 const SwFmtHoriOrient& rHori = GetFmt()->GetHoriOrient();
-                if ( !ObjAnchoredAsChar() && nXPosDiff != 0 )
+                if ( !bAnchoredAsChar && nXPosDiff != 0 )
                 {
                     aSet.Put( SwFmtHoriOrient( rHori.GetPos()+nXPosDiff,
                                                HORI_NONE,
@@ -1444,7 +1451,7 @@ void SwDrawContact::_Changed( const SdrObject& rObj,
                 }
 
                 if ( nYPosDiff ||
-                     ( !ObjAnchoredAsChar() && nXPosDiff != 0 ) )
+                     ( !bAnchoredAsChar && nXPosDiff != 0 ) )
                 {
                     GetFmt()->GetDoc()->SetFlyFrmAttr( *(GetFmt()), aSet );
                     // keep new object rectangle, to avoid multiple
@@ -1458,13 +1465,21 @@ void SwDrawContact::_Changed( const SdrObject& rObj,
                 else if ( aObjRect.SSize() != aOldObjRect.GetSize() )
                 {
                     _InvalidateObjs();
+                    // --> OD 2004-11-11 #i35007# - notify anchor frame
+                    // of as-character anchored object
+                    if ( bAnchoredAsChar )
+                    {
+                        const_cast<SwAnchoredDrawObject*>(pAnchoredDrawObj)
+                            ->AnchorFrm()->Prepare( PREP_FLY_ATTR_CHG, GetFmt() );
+                    }
+                    // <--
                 }
-            }
-            if ( bNotify )
-            {
-                // --> OD 2004-07-20 #i31573# - correction: Only invalidate
-                // background of given drawing object.
-                lcl_NotifyBackgroundOfObj( *this, rObj, &aOldObjRect );
+                if ( bNotify )
+                {
+                    // --> OD 2004-07-20 #i31573# - correction: Only invalidate
+                    // background of given drawing object.
+                    lcl_NotifyBackgroundOfObj( *this, rObj, &aOldObjRect );
+                }
             }
         }
         break;
@@ -1966,9 +1981,6 @@ void SwDrawContact::ConnectToLayout( const SwFmtAnchor* pAnch )
     {
         // OD 2004-04-01 #i26791# - invalidate objects instead of direct positioning
         _InvalidateObjs();
-        // OD 21.08.2003 #i18447# - in order to consider group object correct
-        // use new method <SwDrawContact::MoveObjToVisibleLayer(..)>
-        MoveObjToVisibleLayer( GetMaster() );
     }
 }
 
@@ -2104,6 +2116,9 @@ SwDrawVirtObj::SwDrawVirtObj( SdrObject&        _rNewObj,
 {
     // OD 2004-03-29 #i26791#
     maAnchoredDrawObj.SetDrawObj( *this );
+    // --> OD 2004-11-17 #i35635# - set initial position out of sight
+    NbcMove( Size( -RECT_EMPTY, -RECT_EMPTY ) );
+    // <--
 }
 
 SwDrawVirtObj::~SwDrawVirtObj()
