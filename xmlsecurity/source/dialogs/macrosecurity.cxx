@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrosecurity.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 18:05:30 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:19:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -372,7 +372,7 @@ void MacroSecurityTrustedSourcesTP::FillCertLB( void )
 
         SvLBoxEntry*    pLBEntry = maTrustCertLB.InsertEntry( XmlSec::GetContentPart( xCert->getSubjectName() ) );
         maTrustCertLB.SetEntryText( XmlSec::GetContentPart( xCert->getIssuerName() ), pLBEntry, 1 );
-        maTrustCertLB.SetEntryText( XmlSec::GetDateTimeString( xCert->getNotAfter() ), pLBEntry, 2 );
+        maTrustCertLB.SetEntryText( XmlSec::GetDateTimeString( xCert->getNotValidAfter() ), pLBEntry, 2 );
         pLBEntry->SetUserData( ( void* ) sal_Int32( nEntry ) );     // missuse user data as index
     }
 }
