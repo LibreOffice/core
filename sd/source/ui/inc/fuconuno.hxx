@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuconuno.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2002-02-15 17:02:42 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 11:58:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,17 +59,18 @@
  *
  ************************************************************************/
 
-#ifndef _SD_FUCONUNO_HXX
-#define _SD_FUCONUNO_HXX
+#ifndef SD_FU_CONSTRUCT_UNO_CONTROL_HXX
+#define SD_FU_CONSTRUCT_UNO_CONTROL_HXX
 
 #ifndef _SFXITEMSET_HXX //autogen
 #include <svtools/itemset.hxx>
 #endif
 
-#ifndef _SD_FUCONSTR_HXX
+#ifndef SD_FU_CONSTRUCT_HXX
 #include "fuconstr.hxx"
 #endif
 
+namespace sd {
 
 /*************************************************************************
 |*
@@ -77,23 +78,22 @@
 |*
 \************************************************************************/
 
-class FuConstUnoControl : public FuConstruct
+class FuConstructUnoControl
+    : public FuConstruct
 {
-    UINT32 nInventor;
-    UINT16 nIdentifier;
-
-protected:
-    String  aOldLayer;
-
 public:
     TYPEINFO();
 
-    FuConstUnoControl(SdViewShell* pViewSh, SdWindow* pWin,
-                   SdView* pView, SdDrawDocument* pDoc,
-                   SfxRequest& rReq);
+    FuConstructUnoControl(
+        ViewShell* pViewSh,
+        ::sd::Window* pWin,
+        ::sd::View* pView,
+        SdDrawDocument* pDoc,
+        SfxRequest& rReq);
 
-    virtual ~FuConstUnoControl();
-                                       // Mouse- & Key-Events
+    virtual ~FuConstructUnoControl();
+
+    // Mouse- & Key-Events
     virtual BOOL KeyInput(const KeyEvent& rKEvt);
     virtual BOOL MouseMove(const MouseEvent& rMEvt);
     virtual BOOL MouseButtonUp(const MouseEvent& rMEvt);
@@ -104,9 +104,16 @@ public:
 
     // #97016#
     virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle);
+
+protected:
+    String  aOldLayer;
+
+private:
+    UINT32 nInventor;
+    UINT16 nIdentifier;
 };
 
+} // end of namespace sd
 
-
-#endif      // _SD_FUCONCTL_HXX
+#endif
 
