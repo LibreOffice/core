@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewstrategy.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2002-03-28 08:14:40 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 13:43:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,7 +171,7 @@ namespace configmgr
         }
 
 //-----------------------------------------------------------------------------
-        data::NodeAddress::DataType * ViewStrategy::getDataForUpdate(data::NodeAccess const & _aNode)
+        data::NodeAddress::DataType * ViewStrategy::getDataForUpdate(data::NodeAccessRef const & _aNode)
         {
             typedef data::NodeAddress::DataType DataType;
             DataType * pResult = implAccessForUpdate(_aNode);
@@ -213,7 +213,7 @@ namespace configmgr
         }
 
 //-----------------------------------------------------------------------------
-        data::NodeAddress::DataType * ViewStrategy::implAccessForUpdate(data::NodeAccess const & _aNode)
+        data::NodeAddress::DataType * ViewStrategy::implAccessForUpdate(data::NodeAccessRef const & _aNode)
         {
             if (memory::Segment * pUpdatableSegment = doGetDataSegmentForUpdate())
             {
@@ -545,9 +545,9 @@ namespace configmgr
             }
 
             virtual Result handle(data::ValueNodeAccess const& _aValue);
-            virtual Result handle(data::NodeAccess const& _aNonValue);
+            virtual Result handle(data::NodeAccessRef const& _aNonValue);
 
-            bool test_value(data::NodeAccess const & _aNode) const;
+            bool test_value(data::NodeAccessRef const & _aNode) const;
 
             ViewStrategy&       m_rStrategy;
             GroupNode           m_aGroup;
@@ -556,7 +556,7 @@ namespace configmgr
             GroupMemberVisitor::Result m_aResult;
         };
 
-        bool GroupMemberDispatch::test_value(data::NodeAccess const& _aNode) const
+        bool GroupMemberDispatch::test_value(data::NodeAccessRef const& _aNode) const
         {
             Name aName = _aNode.getName();
 
@@ -572,7 +572,7 @@ namespace configmgr
             return mapResult( m_rVisitor.visit( m_rStrategy.getValue(m_aGroup,aValueName) ) );
         }
 
-        GroupMemberDispatch::Result GroupMemberDispatch::handle(data::NodeAccess const& _aNonValue)
+        GroupMemberDispatch::Result GroupMemberDispatch::handle(data::NodeAccessRef const& _aNonValue)
         {
             OSL_ENSURE( !test_value(_aNonValue), "ERROR: Group MemberDispatch:Found a ValueMember for a subtree child.");
 
@@ -751,10 +751,10 @@ namespace configmgr
         }
 */
 //-----------------------------------------------------------------------------
-        data::NodeAccess ViewStrategy::getNodeAccess(Node const& _aNode) const
+        data::NodeAccessRef ViewStrategy::getNodeAccessRef(Node const& _aNode) const
         {
             checkInstance(_aNode.tree());
-            return _aNode.getAccess();
+            return _aNode.getAccessRef();
         }
 
         Name ViewStrategy::getNodeName(Node const& _aNode) const
@@ -766,7 +766,7 @@ namespace configmgr
         node::Attributes ViewStrategy::getNodeAttributes(Node const& _aNode) const
         {
             checkInstance(_aNode.tree());
-            return _aNode.getAccess().getAttributes();
+            return _aNode.getAccessRef().getAttributes();
         }
 
 //-----------------------------------------------------------------------------
