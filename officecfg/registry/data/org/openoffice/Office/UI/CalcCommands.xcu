@@ -6234,6 +6234,37 @@
                     <value xml:lang="pt">Inserir a partir do Editor de Imagens</value>
                 </prop>
             </node>
+            <node oor:name=".uno:SheetRightToLeft" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Tabelle rechts-nach-links</value>
+                    <value xml:lang="en-US">Sheet right-to-left</value>
+                    <value xml:lang="ar">Tabelle rechts-nach-links</value>
+                    <value xml:lang="no">Sheet right-to-left</value>
+                    <value xml:lang="ca">Sheet right-to-left</value>
+                    <value xml:lang="zh-TW">Tabelle rechts-nach-links</value>
+                    <value xml:lang="cs">Sheet right-to-left</value>
+                    <value xml:lang="da">Sheet right-to-left</value>
+                    <value xml:lang="el">Sheet right-to-left</value>
+                    <value xml:lang="es">Tabelle rechts-nach-links</value>
+                    <value xml:lang="fi">Sheet right-to-left</value>
+                    <value xml:lang="fr">Tabelle rechts-nach-links</value>
+                    <value xml:lang="he">Sheet right-to-left</value>
+                    <value xml:lang="it">Tabelle rechts-nach-links</value>
+                    <value xml:lang="ja">Tabelle rechts-nach-links</value>
+                    <value xml:lang="ko">Tabelle rechts-nach-links</value>
+                    <value xml:lang="nl">Sheet right-to-left</value>
+                    <value xml:lang="pl">Tabelle rechts-nach-links</value>
+                    <value xml:lang="pt-BR">Tabelle rechts-nach-links</value>
+                    <value xml:lang="ru">Tabelle rechts-nach-links</value>
+                    <value xml:lang="sk">Sheet right-to-left</value>
+                    <value xml:lang="sv">Tabelle rechts-nach-links</value>
+                    <value xml:lang="th">Sheet right-to-left</value>
+                    <value xml:lang="tr">Sheet right-to-left</value>
+                    <value xml:lang="hi">Tabelle rechts-nach-links</value>
+                    <value xml:lang="zh-CN">Tabelle rechts-nach-links</value>
+                    <value xml:lang="pt">Tabelle rechts-nach-links</value>
+                </prop>
+            </node>
         </node>
         <node oor:name="Popups">
             <node oor:name=".uno:AuditMenu" oor:op="replace">
