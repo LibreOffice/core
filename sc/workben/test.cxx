@@ -2,9 +2,9 @@
  *
  *  $RCSfile: test.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:17 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 18:12:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -387,7 +387,7 @@ void lcl_SetText( const XTextRef& xText )
     xCursor->gotoEnd(FALSE);
     xControl->insertControlCharacter( TEXTCONTROLCHAR_PARAGRAPH_BREAK );
     xPos->collapseToEnd();
-    xPos->setText(L"sülz");     // zweiter Absatz
+    xPos->setText(L"s\xFClz");      // zweiter Absatz
 
     xCursor->gotoStart(FALSE);
     xPara->gotoEndOfParagraph(FALSE);
@@ -1504,7 +1504,7 @@ void lcl_PageStyle( FixedText& aTimeText )  // 28
     String aVal = OUStringToString(xText->getText(), CHARSET_SYSTEM);
     aTimeText.SetText(aVal);
 
-//  xText->setText(L"Bla fasel sülz");
+//  xText->setText(L"Bla fasel s\xFClz");
     lcl_SetText(xText);
 
     xProp->setPropertyValue(L"RightPageHeaderContent", aAny);
