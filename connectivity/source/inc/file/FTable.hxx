@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FTable.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-27 08:00:25 $
+ *  last change: $Author: oj $ $Date: 2000-12-12 07:21:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,9 +94,11 @@ namespace connectivity
             OConnection*                                        m_pConnection;
             SvStream*                                           m_pFileStream;
             ::vos::ORef<OSQLColumns>                            m_aColumns;
+            sal_Int32                                           m_nFilePos;                 // aktuelle FilePosition
             sal_uInt8*                                          m_pBuffer;
             sal_uInt16                                          m_nBufferSize;  // Groesse des ReadBuffer, wenn pBuffer != NULL
-            sal_Int32                                           m_nFilePos;                 // aktuelle FilePosition
+            sal_Bool                                            m_bWriteable;   // svstream cann't say if we are writeable
+                                                                                // so we have to
 
             virtual void FileClose();
         public:
@@ -154,7 +156,8 @@ namespace connectivity
             ::rtl::OUString SAL_CALL getName() { return m_Name; }
 
             ::rtl::OUString getSchema() { return m_SchemaName; }
-            sal_Bool isReadOnly() const { return m_pFileStream && (m_pFileStream->GetStreamMode() & STREAM_READWRITE) != STREAM_READWRITE; }
+            sal_Bool isReadOnly() const { return m_bWriteable; }
+                // m_pFileStream && !m_pFileStream->IsWritable(); }
             // com::sun::star::lang::XUnoTunnel
             virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
             static ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
