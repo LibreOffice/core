@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageStream.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-28 16:48:39 $
+ *  last change: $Author: mtg $ $Date: 2000-11-29 03:21:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,8 @@
 
 using namespace com::sun::star;
 
-ZipPackageStream::ZipPackageStream (ZipFile &rInFile)
-: rZipFile(rInFile)
+ZipPackageStream::ZipPackageStream (ZipFile *pInFile)
+: pZipFile(pInFile)
 , bPackageMember( sal_False )
 {
     aEntry.nVersion     = -1;
@@ -143,7 +143,7 @@ uno::Reference< io::XInputStream > SAL_CALL ZipPackageStream::getInputStream(  )
         throw(uno::RuntimeException)
 {
     if (bPackageMember)
-        return rZipFile.getInputStream(aEntry);
+        return pZipFile->getInputStream(aEntry);
     else
         return xStream;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-28 16:49:34 $
+ *  last change: $Author: mtg $ $Date: 2000-11-29 03:18:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,30 +141,24 @@ class ZipPackage : public cppu::WeakImplHelper4<
 private:
     ZipPackageFolder *pRootFolder;
     ZipFile          *pZipFile;
-    ZipOutputStream  *pZipOut;
-    ZipPackageBuffer *pZipBuffer;
-    ::ucb::Content  *pContent;
+    ::ucb::Content   *pContent;
     ::std::vector < com::sun::star::uno::Reference < com::sun::star::lang::XSingleServiceFactory > > aContainedZips;
     ::com::sun::star::uno::Reference < com::sun::star::package::XZipFile > xZipFile;
-    ::com::sun::star::uno::Reference < com::sun::star::package::XZipOutputStream > xZipOut;
     ::com::sun::star::uno::Reference < com::sun::star::io::XOutputStream > xBuffer;
-    ::com::sun::star::uno::Reference < com::sun::star::container::XNameContainer > xFolder;
-    ::com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xStream;
+    ::com::sun::star::uno::Reference < com::sun::star::lang::XUnoTunnel > xRootFolder;
+    ::com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xContentStream;
+    ::com::sun::star::uno::Reference < com::sun::star::io::XSeekable > xContentSeek;
     const ::com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > xFactory;
     sal_Bool isZipFile(com::sun::star::package::ZipEntry &rEntry);
+    void getZipFileContents();
+    void destroyFolderTree( ::com::sun::star::uno::Reference < ::com::sun::star::lang::XUnoTunnel > xFolder );
 public:
     ZipPackage (com::sun::star::uno::Reference < com::sun::star::io::XInputStream > &xInput,
-                const ::com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > &xNewFactory,
-                ZipPackageBuffer *pNewBuffer,
-                ZipOutputStream *pNewZipOut);
+                const ::com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > &xNewFactory);
     ZipPackage (const ::com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > &xNewFactory);
     ZipPackageFolder * getRootFolder()
     {
         return pRootFolder;
-    }
-    ZipPackageBuffer * getZipBuffer()
-    {
-        return pZipBuffer;
     }
     virtual ~ZipPackage( void );
     // XInitialization

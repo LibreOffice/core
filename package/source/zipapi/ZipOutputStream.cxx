@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipOutputStream.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-28 16:49:07 $
+ *  last change: $Author: mtg $ $Date: 2000-11-29 03:14:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,35 +113,14 @@ void SAL_CALL ZipOutputStream::putNextEntry( const package::ZipEntry& rEntry )
     {
         pNonConstEntry->nMethod = nMethod;
     }
-    switch (pNonConstEntry->nMethod)
-    {
-        case DEFLATED:
+    pNonConstEntry->nVersion = 20;
+    if (pNonConstEntry->nSize == -1 || pNonConstEntry->nCompressedSize == -1 ||
+        pNonConstEntry->nCrc == -1)
+        pNonConstEntry->nFlag = 8;
+    else if (pNonConstEntry->nSize != -1 && pNonConstEntry->nCompressedSize != -1 &&
+        pNonConstEntry->nCrc != -1)
+        pNonConstEntry->nFlag = 0;
 
-            if (pNonConstEntry->nSize == -1 || pNonConstEntry->nCompressedSize == -1 ||
-                pNonConstEntry->nCrc == -1)
-                pNonConstEntry->nFlag = 8;
-            else if (pNonConstEntry->nSize != -1 && pNonConstEntry->nCompressedSize != -1 &&
-                pNonConstEntry->nCrc != -1)
-                pNonConstEntry->nFlag = 0;
-            pNonConstEntry->nVersion = 20;
-            break;
-        case STORED:
-            /*
-            if (pNonConstEntry->nSize == -1)
-                pNonConstEntry->nSize = pNonConstEntry->nCompressedSize;
-            else if (pNonConstEntry->nCompressedSize == -1 || pNonConstEntry->nCompressedSize == 0)
-                pNonConstEntry->nCompressedSize = pNonConstEntry->nSize;
-            pNonConstEntry->nFlag = 0;
-            */
-            pNonConstEntry->nVersion = 10;
-            if (pNonConstEntry->nSize == -1 || pNonConstEntry->nCompressedSize == -1 ||
-                pNonConstEntry->nCrc == -1)
-                pNonConstEntry->nFlag = 8;
-            else if (pNonConstEntry->nSize != -1 && pNonConstEntry->nCompressedSize != -1 &&
-                pNonConstEntry->nCrc != -1)
-                pNonConstEntry->nFlag = 0;
-            break;
-    }
     pNonConstEntry->nOffset = aChucker.getPosition();
     writeLOC(rEntry);
     aZipList.push_back(pNonConstEntry);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ByteChucker.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2000-11-22 14:55:50 $
+ *  last change: $Author: mtg $ $Date: 2000-11-29 03:14:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,6 +167,7 @@ ByteChucker& ByteChucker::operator << (sal_Int16 nInt16)
 ByteChucker& ByteChucker::operator << (sal_Int32 nInt32)
 {
     uno::Sequence< sal_Int8 > aSequence (4);
+
     aSequence[0] = (nInt32 >>  0 ) & 0xFF;
     aSequence[1] = (nInt32 >>  8 ) & 0xFF;
     aSequence[2] = (nInt32 >> 16 ) & 0xFF;

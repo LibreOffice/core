@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipEnumeration.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-21 12:07:58 $
+ *  last change: $Author: mtg $ $Date: 2000-11-29 03:18:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,17 +73,41 @@
 #include "ZipEntryImpl.hxx"
 #endif
 
+struct entryEqFunc
+{
+    sal_Bool operator()( const rtl::OUString &r1,
+                         const rtl::OUString &r2) const
+    {
+        return r1 == r2;
+    }
+};
+
+struct entryHashFunc
+{
+    sal_Int32 operator()(const rtl::OUString &r1) const
+    {
+        return r1.hashCode();
+    }
+};
+#include <hash_map>
+typedef std::hash_map < rtl::OUString, com::sun::star::package::ZipEntry, entryHashFunc, entryEqFunc > EntryHash;
+
+#ifndef _ZIP_FILE_HXX_
+#include "ZipFile.hxx"
+#endif
+
+
 class ZipEnumeration : public cppu::WeakImplHelper1 < com::sun::star::container::XEnumeration>
 {
 private:
-    com::sun::star::uno::Sequence< com::sun::star::package::ZipEntry > xZipList;
+    EntryHash       &rEntryHash;
+    EntryHash::const_iterator aIterator;
     sal_uInt16      nCurrent;
 public:
     virtual sal_Bool SAL_CALL hasMoreElements() throw (::com::sun::star::uno::RuntimeException);
     virtual com::sun::star::uno::Any SAL_CALL nextElement() throw (::com::sun::star::uno::RuntimeException);
     virtual ~ZipEnumeration(void);
-             ZipEnumeration(void);
-             ZipEnumeration( com::sun::star::uno::Sequence< com::sun::star::package::ZipEntry > &xList);
+             ZipEnumeration( EntryHash &rNewEntryHash);
              //ZipEnumeration( com::sun::star::uno::Reference < com::sun::star::uno::Sequence< com::sun::star::package::ZipEntry > >&xList);
 /*
              ZipEnumeration(const com::sun::star::uno::Sequence<

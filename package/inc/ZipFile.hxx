@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipFile.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-28 16:49:34 $
+ *  last change: $Author: mtg $ $Date: 2000-11-29 03:18:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,8 +85,18 @@
 #include "ByteGrabber.hxx"
 #endif
 
+#ifndef _MANIFEST_ENTRY_HXX_
+#include "ManifestEntry.hxx"
+#endif
+
+#include <vector>
+
 #ifndef _VOS_DIAGNOSE_H_
 #include <vos/diagnose.hxx>
+#endif
+
+#ifndef _COM_SUN_STAR_PACKAGE_ZIPCONSTANTS_HPP_
+#include <com/sun/star/package/ZipConstants.hpp>
 #endif
 
 /*
@@ -102,14 +112,12 @@ class ZipFile : public cppu::WeakImplHelper1<
 private:
     ::rtl::OUString sName;          /* zip file name */
     ::rtl::OUString sComment;       /* zip file comment */
-    sal_uInt16      nTotal;         /* total number of entries */
-    com::sun::star::package::ZipEntry   *pEntries;      /* array of zip entries */
-    ZipEntryImpl    **pTable;       /* Hash chain heads: indexes into entries */
-    sal_Int32       nTableLen;      /* number of hash eads */
+    EntryHash       aEntries;
     ByteGrabber     aGrabber;
     com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xStream;
 public:
     ZipFile( com::sun::star::uno::Reference < com::sun::star::io::XInputStream > &xInput);
+    void updateFromManList(std::vector < ManifestEntry * > &rManList);
     virtual ~ZipFile();
 
     // XElementAccess

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipEnumeration.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2000-11-28 16:11:37 $
+ *  last change: $Author: mtg $ $Date: 2000-11-29 03:14:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,30 +72,25 @@ using namespace com::sun::star;
 
 /** Provides an Enumeration over the contents of a Zip file */
 
-ZipEnumeration::ZipEnumeration( uno::Sequence< package::ZipEntry > &xList)
-:  nCurrent(0)
-{
-    xZipList = xList;
-}
-ZipEnumeration::ZipEnumeration( )
-:  nCurrent(0)
+ZipEnumeration::ZipEnumeration( EntryHash & rNewEntryHash)
+: rEntryHash(rNewEntryHash)
+, aIterator(rEntryHash.begin())
 {
 }
-
 ZipEnumeration::~ZipEnumeration( void )
 {
 }
 sal_Bool SAL_CALL ZipEnumeration::hasMoreElements() throw (uno::RuntimeException)
 {
-    return (nCurrent < xZipList.getLength());
+    return (aIterator != rEntryHash.end());
 }
 
 uno::Any SAL_CALL ZipEnumeration::nextElement() throw (uno::RuntimeException)
 {
-    if (hasMoreElements() == sal_False)
-        throw container::NoSuchElementException();
-    uno::Any aElement;
-    //aElement <<= uno::Reference < package::ZipEntry > (static_cast <package::ZipEntry > (xZipList[nCurrent++]));
-    aElement <<= xZipList[nCurrent++];
-    return aElement;
+    uno::Any aAny;
+    if (aIterator == rEntryHash.end())
+        throw (container::NoSuchElementException());
+    aAny <<= (*aIterator).second;
+    aIterator++;
+    return aAny;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-28 16:48:39 $
+ *  last change: $Author: mtg $ $Date: 2000-11-29 03:21:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,137 +73,36 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::package::ZipConstants;
 
 ZipPackage::ZipPackage (Reference < XInputStream > &xNewInput,
-                        const Reference < XMultiServiceFactory > &xNewFactory,
-                        ZipPackageBuffer *pNewBuffer,
-                        ZipOutputStream *pNewZipOut)
+                        const Reference < XMultiServiceFactory > &xNewFactory)
 : pContent(NULL)
 , pZipFile(NULL)
-, pZipOut(pNewZipOut)
-, pZipBuffer(pNewBuffer)
 , pRootFolder(NULL)
-, xStream (xNewInput)
-, xFolder (NULL)
+, xContentStream (xNewInput)
+, xContentSeek (xNewInput, UNO_QUERY)
+, xRootFolder (NULL)
 , xZipFile (NULL)
 , xBuffer (NULL)
-, xZipOut(NULL)
 , xFactory(xNewFactory)
 {
-    pZipFile    = new ZipFile(xStream);
-
-    xZipFile    = Reference < XZipFile >         (pZipFile);
-    xBuffer     = Reference < XOutputStream >    (pZipBuffer);
-
-    pRootFolder = new ZipPackageFolder(*pZipOut);
-
-    xZipOut     = Reference < XZipOutputStream > (pZipOut);
-    xFolder     = Reference < XNameContainer >   (pRootFolder );
-
-    Reference< XEnumeration > xEnum = pZipFile->entries();
-    Reference< XNameContainer > xCurrent  = xFolder;
-    ZipPackageStream *pPkgStream;
-    ZipPackageFolder *pPkgFolder;
-    ZipEntry aEntry;
-    pZipOut->setMethod(DEFLATED);
-    pZipOut->setLevel(DEFAULT_COMPRESSION);
-
-    while (xEnum->hasMoreElements())
-    {
-        xCurrent  = Reference < XNameContainer > (pRootFolder);
-        sal_Int32 nOldIndex =0,nIndex = 0;
-        Any aAny = xEnum->nextElement();
-        aAny >>= aEntry;
-        OUString &rName = aEntry.sName;
-
-        if (rName.lastIndexOf('/') == rName.getLength()-1)
-        {
-            while ((nIndex = rName.indexOf('/', nOldIndex)) != -1)
-            {
-                OUString sTemp = rName.copy (nOldIndex, nIndex - nOldIndex);
-                if (nIndex == nOldIndex) //sTemp.getLength() == 1)
-                    break;
-                if (!xCurrent->hasByName(sTemp))
-                {
-                    pPkgFolder = new ZipPackageFolder(*pZipOut);//*this);
-                    pPkgFolder->setName(sTemp);
-                    pPkgFolder->setParent( Reference < XInterface >(xCurrent, UNO_QUERY));
-                    aAny <<= Reference < XUnoTunnel > (pPkgFolder);
-                    xCurrent->insertByName(sTemp, aAny);
-                    xCurrent = Reference < XNameContainer > (pPkgFolder);
-                }
-                else
-                {
-                    aAny = xCurrent->getByName(sTemp);
-                    Reference < XUnoTunnel> xRef;
-                    aAny >>= xRef;
-                    xCurrent = Reference < XNameContainer > (xRef, UNO_QUERY);
-                }
-
-                nOldIndex = nIndex+1;
-            }
-        }
-        else
-        {
-            while ((nIndex = rName.indexOf('/', nOldIndex)) != -1)
-            {
-                OUString sTemp = rName.copy (nOldIndex, nIndex - nOldIndex);
-                if (nIndex == nOldIndex) //sTemp.getLength() == 1)
-                    break;
-                if (xCurrent->hasByName(sTemp))
-                {
-                    Reference < XUnoTunnel > xChildRef;
-                    aAny = xCurrent->getByName(sTemp);
-                    aAny >>= xChildRef;
-                    xCurrent = Reference < XNameContainer > (xChildRef, UNO_QUERY);
-                }
-                nOldIndex = nIndex+1;
-            }
-            OUString sStreamName = rName.copy( nOldIndex, rName.getLength() - nOldIndex);
-            if (isZipFile(aEntry))
-            {
-                Reference < XInputStream > xStream = pZipFile->getInputStream(aEntry);
-                ZipPackage *pInZip = new ZipPackage (xStream, xFactory, pZipBuffer, pZipOut );
-                aContainedZips.push_back (Reference < XSingleServiceFactory > (pInZip));
-                pPkgFolder = pInZip->getRootFolder();
-                pPkgFolder->setName(sStreamName);
-                pPkgFolder->setParent( Reference < XInterface >(xCurrent, UNO_QUERY));
-                aAny <<= Reference < XUnoTunnel > (pPkgFolder);
-                xCurrent->insertByName(sStreamName, aAny);
-            }
-            else
-            {
-                pPkgStream = new ZipPackageStream( *pZipFile );
-                pPkgStream->bPackageMember = sal_True;
-                pPkgStream->setParent( Reference < XInterface > (xCurrent, UNO_QUERY));
-                pPkgStream->setZipEntry( aEntry );
-                pPkgStream->setName( sStreamName );
-                aAny <<= Reference < XUnoTunnel > (pPkgStream);
-                xCurrent->insertByName(sStreamName, aAny);
-            }
-        }
-    }
+    pZipFile    = new ZipFile(xContentStream);
+    pRootFolder = new ZipPackageFolder( );
+    xRootFolder = Reference < XUnoTunnel >   (pRootFolder );
+    getZipFileContents();
 }
 
 ZipPackage::ZipPackage (const Reference < XMultiServiceFactory > &xNewFactory)
 : pContent(NULL)
 , pZipFile(NULL)
-, pZipOut(NULL)
-, pZipBuffer(NULL)
 , pRootFolder(NULL)
-, xStream (NULL)
-, xFolder (NULL)
+, xContentStream (NULL)
+, xContentSeek (NULL)
+, xRootFolder (NULL)
 , xZipFile (NULL)
-, xBuffer (NULL)
-, xZipOut(NULL)
 , xFactory(xNewFactory)
 {
-    pZipBuffer  = new ZipPackageBuffer(65535);
-    xBuffer     = Reference < XOutputStream >    (pZipBuffer);
 
-    pZipOut     = new ZipOutputStream(xBuffer, 65535);
-    pRootFolder = new ZipPackageFolder(*pZipOut);
-
-    xZipOut     = Reference < XZipOutputStream > (pZipOut);
-    xFolder     = Reference < XNameContainer >   (pRootFolder );
+    pRootFolder = new ZipPackageFolder();
+    xRootFolder = Reference < XUnoTunnel >   (pRootFolder );
 }
 
 ZipPackage::~ZipPackage( void )
@@ -218,30 +117,54 @@ ZipPackage::~ZipPackage( void )
         delete pZipBuffer;
     if (pRootFolder)
         delete pRootFolder;
+    destroyFolderTree(xRootFolder);
 */
 }
 
-// XInitialization
-void SAL_CALL ZipPackage::initialize( const Sequence< Any >& aArguments )
-        throw(Exception, RuntimeException)
+void ZipPackage::destroyFolderTree( Reference < XUnoTunnel > xFolder )
 {
-    OUString sURL;
-    aArguments[0] >>= sURL;
-    pContent = new ::ucb::Content(sURL, Reference < com::sun::star::ucb::XCommandEnvironment >() );
-    Reference < XActiveDataSink > xSink = new ZipPackageSink;
-    if (pContent->openStream ( xSink) )
-        xStream = xSink->getInputStream();
 
-    pZipFile    = new ZipFile(xStream);
-    xZipFile    = Reference < XZipFile >         (pZipFile);
+    ZipPackageFolder *pCurrentFolder = reinterpret_cast < ZipPackageFolder* > (xFolder->getSomething(ZipPackageFolder::getUnoTunnelImplementationId()));
+    Reference < XEnumeration > xEnum = pCurrentFolder->createEnumeration();
+    while (xEnum->hasMoreElements())
+    {
+        Reference < XUnoTunnel > xTunnel;
+        Any aAny = xEnum->nextElement();
 
+        ZipPackageFolder *pFolder = NULL;
+        ZipPackageStream *pStream = NULL;
+        sal_Bool bIsFolder = sal_False;
+
+        aAny >>= xTunnel;
+        try
+        {
+            pFolder = reinterpret_cast < ZipPackageFolder* > (xTunnel->getSomething(ZipPackageFolder::getUnoTunnelImplementationId()));
+            bIsFolder = sal_True;
+        }
+        catch (RuntimeException)
+        {
+            pStream = reinterpret_cast < ZipPackageStream* > (xTunnel->getSomething(ZipPackageStream::getUnoTunnelImplementationId()));
+            bIsFolder = sal_False;
+        }
+        if (bIsFolder)
+        {
+            destroyFolderTree(xTunnel);
+            delete pFolder;
+        }
+        else
+        {
+            delete pStream;
+        }
+    }
+}
+
+void ZipPackage::getZipFileContents()
+{
     Reference< XEnumeration > xEnum = pZipFile->entries();
-    Reference< XNameContainer > xCurrent  = xFolder;
+    Reference< XNameContainer > xCurrent (xRootFolder, UNO_QUERY);
     ZipPackageStream *pPkgStream;
     ZipPackageFolder *pPkgFolder;
     ZipEntry aEntry;
-    pZipOut->setMethod(DEFLATED);
-    pZipOut->setLevel(DEFAULT_COMPRESSION);
 
     while (xEnum->hasMoreElements())
     {
@@ -260,7 +183,7 @@ void SAL_CALL ZipPackage::initialize( const Sequence< Any >& aArguments )
                     break;
                 if (!xCurrent->hasByName(sTemp))
                 {
-                    pPkgFolder = new ZipPackageFolder(*pZipOut);//*this);
+                    pPkgFolder = new ZipPackageFolder();//*this);
                     pPkgFolder->setName(sTemp);
                     pPkgFolder->setParent( Reference < XInterface >(xCurrent, UNO_QUERY));
                     aAny <<= Reference < XUnoTunnel > (pPkgFolder);
@@ -285,20 +208,29 @@ void SAL_CALL ZipPackage::initialize( const Sequence< Any >& aArguments )
                 OUString sTemp = rName.copy (nOldIndex, nIndex - nOldIndex);
                 if (nIndex == nOldIndex) //sTemp.getLength() == 1)
                     break;
-                if (xCurrent->hasByName(sTemp))
+                if (!xCurrent->hasByName(sTemp))
                 {
-                    Reference < XUnoTunnel > xChildRef;
+                    pPkgFolder = new ZipPackageFolder();//*this);
+                    pPkgFolder->setName(sTemp);
+                    pPkgFolder->setParent( Reference < XInterface >(xCurrent, UNO_QUERY));
+                    aAny <<= Reference < XUnoTunnel > (pPkgFolder);
+                    xCurrent->insertByName(sTemp, aAny);
+                    xCurrent = Reference < XNameContainer > (pPkgFolder);
+                }
+                else
+                {
                     aAny = xCurrent->getByName(sTemp);
-                    aAny >>= xChildRef;
-                    xCurrent = Reference < XNameContainer > (xChildRef, UNO_QUERY);
+                    Reference < XUnoTunnel> xRef;
+                    aAny >>= xRef;
+                    xCurrent = Reference < XNameContainer > (xRef, UNO_QUERY);
                 }
                 nOldIndex = nIndex+1;
             }
             OUString sStreamName = rName.copy( nOldIndex, rName.getLength() - nOldIndex);
             if (isZipFile(aEntry))
             {
-                Reference < XInputStream > xStream = pZipFile->getInputStream(aEntry);
-                ZipPackage *pInZip = new ZipPackage (xStream, xFactory, pZipBuffer, pZipOut );
+                Reference < XInputStream > xContentStream = pZipFile->getInputStream(aEntry);
+                ZipPackage *pInZip = new ZipPackage (xContentStream, xFactory );
                 aContainedZips.push_back (Reference < XSingleServiceFactory > (pInZip));
                 pPkgFolder = pInZip->getRootFolder();
                 pPkgFolder->setName(sStreamName);
@@ -308,7 +240,7 @@ void SAL_CALL ZipPackage::initialize( const Sequence< Any >& aArguments )
             }
             else
             {
-                pPkgStream = new ZipPackageStream( *pZipFile );
+                pPkgStream = new ZipPackageStream( pZipFile );
                 pPkgStream->bPackageMember = sal_True;
                 pPkgStream->setParent( Reference < XInterface > (xCurrent, UNO_QUERY));
                 pPkgStream->setZipEntry( aEntry );
@@ -327,6 +259,22 @@ void SAL_CALL ZipPackage::initialize( const Sequence< Any >& aArguments )
         ManifestReader aReader(*this, xSink->getInputStream(), xFactory);
         aReader.Read();
     }
+}
+// XInitialization
+void SAL_CALL ZipPackage::initialize( const Sequence< Any >& aArguments )
+        throw(Exception, RuntimeException)
+{
+    OUString sURL;
+    aArguments[0] >>= sURL;
+    pContent = new ::ucb::Content(sURL, Reference < com::sun::star::ucb::XCommandEnvironment >() );
+    Reference < XActiveDataSink > xSink = new ZipPackageSink;
+    if (pContent->openStream ( xSink) )
+        xContentStream = xSink->getInputStream();
+
+    xContentSeek = Reference < XSeekable > (xContentStream, UNO_QUERY);
+    pZipFile    = new ZipFile(xContentStream);
+    //xZipFile  = Reference < XZipFile >         (pZipFile);
+    getZipFileContents();
 }
 // XHierarchicalNameAccess
 Any SAL_CALL ZipPackage::getByHierarchicalName( const OUString& aName )
@@ -360,11 +308,6 @@ Any SAL_CALL ZipPackage::getByHierarchicalName( const OUString& aName )
                 throw (NoSuchElementException());
             nOldIndex = nIndex+1;
         }
-        OUString sStreamName = aName.copy( nOldIndex, aName.getLength() - nOldIndex);
-        if (xCurrent->hasByName(sStreamName))
-            aAny <<= xCurrent->getByName(sStreamName);
-        else
-            throw (NoSuchElementException());
     }
     else
     {
@@ -425,8 +368,7 @@ sal_Bool SAL_CALL ZipPackage::hasByHierarchicalName( const OUString& aName )
                 return sal_False;
             nOldIndex = nIndex+1;
         }
-        OUString sStreamName = aName.copy( nOldIndex, aName.getLength() - nOldIndex);
-        return xCurrent->hasByName(sStreamName);
+        return sal_True;
     }
     else
     {
@@ -454,7 +396,7 @@ sal_Bool SAL_CALL ZipPackage::hasByHierarchicalName( const OUString& aName )
 Reference< XInterface > SAL_CALL ZipPackage::createInstance(  )
         throw(Exception, RuntimeException)
 {
-    Reference < XInterface > xRef = *(new ZipPackageStream ( *pZipFile ));
+    Reference < XInterface > xRef = *(new ZipPackageStream ( pZipFile ));
     return xRef;
 }
 Reference< XInterface > SAL_CALL ZipPackage::createInstanceWithArguments( const Sequence< Any >& aArguments )
@@ -464,9 +406,9 @@ Reference< XInterface > SAL_CALL ZipPackage::createInstanceWithArguments( const 
     Reference < XInterface > xRef;
     aArguments[0] >>= bArg;
     if (bArg)
-        xRef = *new ZipPackageFolder ( *pZipOut );
+        xRef = *new ZipPackageFolder ( );
     else
-        xRef = *new ZipPackageStream ( *pZipFile );
+        xRef = *new ZipPackageStream ( pZipFile );
 
     return xRef;
 }
@@ -474,44 +416,80 @@ Reference< XInterface > SAL_CALL ZipPackage::createInstanceWithArguments( const 
 void SAL_CALL ZipPackage::commitChanges(  )
         throw(WrappedTargetException, RuntimeException)
 {
-#ifdef _DEBUG_RECURSION_
-    TestZip *pFoo = new TestZip(L"e:/clean/foo.txt", sal_False);
-
-    pRootFolder->saveContents(OUString::createFromAscii(""), *pFoo);
-    pFoo->closeInput();
-#else
+    Reference < XNameContainer > xMetaFolder;
+    Reference < XUnoTunnel > xMetaTunnel;
     std::vector < ManifestEntry * > aManList;
-    if (hasByHierarchicalName(OUString::createFromAscii("META-INF/manifest.xml")))
+    Any aAny;
+    ZipPackageBuffer *pZipBuffer = new ZipPackageBuffer( 65535 );
+    Reference < XOutputStream > xOutStream (pZipBuffer);
+    ZipOutputStream *pZipOut = new ZipOutputStream( xOutStream, 65535 );
+    Reference < XZipOutputStream > xZipOut (pZipOut);
+    pZipOut->setMethod(DEFLATED);
+    pZipOut->setLevel(DEFAULT_COMPRESSION);
+
+    sal_Bool bAddMetaFolder = sal_False;
+    if (hasByHierarchicalName(OUString::createFromAscii("META-INF/")))
     {
-        Any aAny = getByHierarchicalName(OUString::createFromAscii("META-INF/"));
-        Reference < XNameContainer > xCont;
-        aAny >>= xCont;
-        xCont->removeByName(OUString::createFromAscii("manifest.xml"));
+        aAny = getByHierarchicalName(OUString::createFromAscii("META-INF/"));
+        aAny >>= xMetaTunnel;
+        xMetaFolder = Reference < XNameContainer > (xMetaTunnel, UNO_QUERY);
+        if (xMetaFolder->hasByName(OUString::createFromAscii("manifest.xml")))
+            xMetaFolder->removeByName(OUString::createFromAscii("manifest.xml"));
     }
-    pRootFolder->saveContents(OUString::createFromAscii(""), aManList);
-#endif
-    ZipEntry *pEntry = new ZipEntry;
+    else
+        bAddMetaFolder = sal_True;
+
+    pRootFolder->saveContents(OUString::createFromAscii(""), aManList, *pZipOut);
+
+    if (bAddMetaFolder)
+    {
+        sal_Bool bFolder = sal_True;
+        aAny <<= bFolder;
+        xMetaFolder = Reference < XNameContainer> (createInstanceWithArguments( Sequence < Any > (&aAny, 1)), UNO_QUERY);
+        Reference < XNameContainer > xZipRoot = Reference < XNameContainer > (xRootFolder, UNO_QUERY);
+        xMetaTunnel = Reference < XUnoTunnel > (xMetaFolder, UNO_QUERY);
+        aAny <<= xMetaTunnel;
+        xZipRoot->insertByName(OUString::createFromAscii("META-INF"), aAny);
+    }
+
+    Reference < XUnoTunnel > xManifestStream = Reference < XUnoTunnel > (createInstance(), UNO_QUERY);
+    ZipPackageStream * pManifestStream = reinterpret_cast < ZipPackageStream * > (xManifestStream->getSomething(ZipPackageStream::getUnoTunnelImplementationId()));
     ZipPackageBuffer *pBuffer = new ZipPackageBuffer(65535);
-    Reference < XOutputStream > xOutStream = pBuffer;
-    pEntry->nVersion = -1;
-    pEntry->nFlag = 0;
-    pEntry->nMethod = STORED;
-    pEntry->nTime = -1;
-    pEntry->nCrc = 0;
-    pEntry->nOffset = -1;
-    pEntry->sName = OUString::createFromAscii("META-INF/manifest.xml");
-    ManifestWriter aWriter ( xOutStream, xFactory, aManList);
+
+    Reference < XOutputStream > xManOutStream (pBuffer);
+    pManifestStream->aEntry.sName = OUString::createFromAscii("META-INF/manifest.xml");
+    pManifestStream->aEntry.nVersion = -1;
+    pManifestStream->aEntry.nFlag = 0;
+    pManifestStream->aEntry.nMethod = STORED;
+    pManifestStream->aEntry.nTime = -1;
+    pManifestStream->aEntry.nCrc = 0;
+    pManifestStream->aEntry.nOffset = -1;
+    pManifestStream->bPackageMember = sal_True;
+
+    ManifestWriter aWriter ( xManOutStream, xFactory, aManList);
     aWriter.Write();
-    pEntry->nSize = pEntry->nCompressedSize = pBuffer->getPosition();
+    pManifestStream->aEntry.nSize = pManifestStream->aEntry.nCompressedSize = pBuffer->getPosition();
     pBuffer->aBuffer.realloc(pBuffer->getPosition());
     CRC32 aCRC;
     aCRC.update(pBuffer->aBuffer);
-    pEntry->nCrc = aCRC.getValue();
-    pZipOut->putNextEntry(*pEntry);
+    pManifestStream->aEntry.nCrc = aCRC.getValue();
+
+    pZipOut->putNextEntry(pManifestStream->aEntry);
     pZipOut->write(pBuffer->aBuffer, 0, pBuffer->getPosition());
     pZipOut->closeEntry();
+
     pZipOut->finish();
     pZipBuffer->seek(0);
+
+    aAny <<= xManifestStream;
+    xMetaFolder->insertByName(OUString::createFromAscii("manifest.xml"), aAny);
+
+    pZipFile->updateFromManList( aManList );
+    for (sal_Int32 i=0 ; i < aManList.size(); i++)
+    {
+        ZipEntry * pEntry = aManList[i]->pEntry;
+        pEntry->sName = aManList[i]->sShortName;
+    }
     pContent->writeStream(Reference < XInputStream > (pZipBuffer), sal_True);
 }
 sal_Bool SAL_CALL ZipPackage::hasPendingChanges(  )
@@ -527,9 +505,9 @@ Sequence< ElementChange > SAL_CALL ZipPackage::getPendingChanges(  )
 
 sal_Bool ZipPackage::isZipFile(com::sun::star::package::ZipEntry &rEntry)
 {
-    Reference < XInputStream > xStream = pZipFile->getInputStream(rEntry);
+    Reference < XInputStream > xContentStream = pZipFile->getInputStream(rEntry);
     Sequence < sal_Int8 > aSequence (4);
-    xStream->readBytes(aSequence, 4);
+    xContentStream->readBytes(aSequence, 4);
     sal_uInt32 nTestSig = static_cast < sal_uInt32 >
             (static_cast < sal_uInt8> (aSequence[0]& 0xFF)
            | static_cast < sal_uInt8> (aSequence[1]& 0xFF) << 8

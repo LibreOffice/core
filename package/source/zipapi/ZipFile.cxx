@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipFile.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-24 10:34:26 $
+ *  last change: $Author: mtg $ $Date: 2000-11-29 03:14:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,15 +62,6 @@
 #include "ZipFile.hxx"
 #endif
 
-#ifndef _ZIP_ENUMERATION_HXX
-#include "ZipEnumeration.hxx"
-#endif
-
-#ifndef _COM_SUN_STAR_PACKAGE_ZIPCONSTANTS_HPP_
-#include <com/sun/star/package/ZipConstants.hpp>
-#endif
-
-#include <string.h>
 
 using namespace rtl;
 using namespace com::sun::star;
@@ -81,16 +72,42 @@ using namespace com::sun::star::package::ZipConstants;
 ZipFile::ZipFile (uno::Reference < io::XInputStream > &xInput)
 : xStream(xInput)
 , aGrabber(xInput)
-, pEntries(NULL)
-, pTable(NULL)
+/*, pTable(NULL)
 , nTotal(0)
 , nTableLen(0)
+*/
 {
     readCEN();
 }
 
+
+void ZipFile::updateFromManList(std::vector < ManifestEntry * > &rManList)
+{
+    sal_Int32 i=0, nSize = rManList.size();
+    aEntries.clear();
+
+    for (;i < nSize ; i++)
+    {
+        package::ZipEntry *pEntry = new package::ZipEntry;
+        pEntry->nVersion        = rManList[i]->pEntry->nVersion;
+        pEntry->nFlag           = rManList[i]->pEntry->nFlag;
+        pEntry->nMethod         = rManList[i]->pEntry->nMethod;
+        pEntry->nTime           = rManList[i]->pEntry->nTime;
+        pEntry->nCrc            = rManList[i]->pEntry->nCrc;
+        pEntry->nCompressedSize = rManList[i]->pEntry->nCompressedSize;
+        pEntry->nSize           = rManList[i]->pEntry->nSize;
+        rManList[i]->pEntry->nOffset *=-1;
+        pEntry->nOffset         = rManList[i]->pEntry->nOffset;
+        pEntry->sName           = rManList[i]->pEntry->sName;
+        pEntry->extra           = rManList[i]->pEntry->extra;
+        pEntry->sComment        = rManList[i]->pEntry->sComment;
+        aEntries[pEntry->sName] = *pEntry;
+    }
+}
+
 ZipFile::~ZipFile()
 {
+    /*
     if (pEntries != NULL)
         delete []pEntries;
     if (pTable != NULL)
@@ -106,7 +123,7 @@ ZipFile::~ZipFile()
         }
         delete []pTable;
     }
-
+    */
 }
 void SAL_CALL ZipFile::close(  )
     throw(io::IOException, uno::RuntimeException)
@@ -117,7 +134,7 @@ uno::Reference< container::XEnumeration > SAL_CALL ZipFile::entries(  )
         throw(uno::RuntimeException)
 {
     uno::Reference< container::XEnumeration> xEnumRef;
-    xEnumRef= new ZipEnumeration( uno::Sequence < package::ZipEntry > (pEntries, nTotal) );
+    xEnumRef= new ZipEnumeration( aEntries );
     //xEnumRef = uno::Reference < container::XEnumeration>( (OWeakObject*) pEnum, uno::UNO_QUERY );
 //  xEnumRef = uno::Reference < container::XEnumeration>( static_cast < container::XEnumeration *> (pEnum), uno::UNO_QUERY );
     return xEnumRef;
@@ -130,7 +147,7 @@ uno::Reference< container::XEnumeration > SAL_CALL ZipFile::entries(  )
 sal_Int32 SAL_CALL ZipFile::getSize(  )
     throw(uno::RuntimeException)
 {
-    return nTotal;
+    return aEntries.size();
 }
 
 uno::Type SAL_CALL ZipFile::getElementType(  )
@@ -141,48 +158,32 @@ uno::Type SAL_CALL ZipFile::getElementType(  )
 sal_Bool SAL_CALL ZipFile::hasElements(  )
     throw(uno::RuntimeException)
 {
-    return (nTotal>0);
+    return (aEntries.size()>0);
 }
 
 uno::Any SAL_CALL ZipFile::getByName( const ::rtl::OUString& aName )
         throw(container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
 {
     uno::Any aAny;
-    sal_Int32 nHash = abs(aName.hashCode() % nTableLen);
-       ZipEntryImpl * pEntry = pTable[nHash];
-    while (pEntry != NULL)
-    {
-        if (aName == pEntry->getName())
-        {
-            //uno::Reference < package::ZepEntry > xEntry = pEntry;
-            aAny <<= *(pEntry->pEntry);
-            return aAny;
-        }
-        pEntry = pEntry->pNext;
-    }
-    throw container::NoSuchElementException();
+    if (!aEntries.count(sName))
+        throw container::NoSuchElementException();
+    EntryHash::const_iterator aCI = aEntries.find(sName);
+    aAny <<= (*aCI).second;
      return aAny;
 }
 uno::Sequence< ::rtl::OUString > SAL_CALL ZipFile::getElementNames(  )
         throw(uno::RuntimeException)
 {
-    OUString *pNames = new OUString[nTotal];
-    for (int i = 0; i < nTotal; i++)
-        pNames[i] = pEntries[i].sName;
-    return uno::Sequence<OUString> (pNames, nTotal);
+    sal_uInt32 i=0, nSize = aEntries.size();
+    OUString *pNames = new OUString[aEntries.size()];
+    for (EntryHash::const_iterator aIterator = aEntries.begin(); aIterator != aEntries.end(); aIterator++,i++)
+        pNames[i] = (*aIterator).first;
+    return uno::Sequence<OUString> (pNames, nSize);
 }
 sal_Bool SAL_CALL ZipFile::hasByName( const ::rtl::OUString& aName )
         throw(uno::RuntimeException)
 {
-    sal_Int32 nHash = abs(aName.hashCode() % nTableLen);
-       ZipEntryImpl * pEntry = pTable[nHash];
-       while (pEntry != NULL)
-    {
-        if (aName == pEntry->getName())
-            return sal_True;
-        pEntry = pEntry->pNext;
-    }
-     return sal_False;
+    return aEntries.count(aName);
 }
 uno::Reference< io::XInputStream > SAL_CALL ZipFile::getInputStream( const package::ZipEntry& rEntry )
         throw(io::IOException, package::ZipException, uno::RuntimeException)
@@ -317,7 +318,7 @@ void ZipFile::addEntryComment( int nIndex, ByteSequence &rComment)
 sal_Int32 ZipFile::readCEN()
 {
     sal_uInt32 nEndPos, nLocPos;
-    sal_Int16  nCount;
+    sal_Int16  nCount, nTotal;
     sal_uInt32 nCenLen, nCenPos, nCenOff;
 
     nEndPos = findEND();
@@ -355,15 +356,15 @@ sal_Int32 ZipFile::readCEN()
     nLocPos = nCenPos - nCenOff;
 
     aGrabber.seek(nCenPos);
-
+/*
     pEntries = new package::ZipEntry[nTotal];
     nTableLen = nTotal * 2;
     pTable = new ZipEntryImpl*[nTableLen];
     memset(pTable, 0, sizeof (ZipEntryImpl*) * nTableLen);
-
+*/
     for (nCount = 0 ; nCount < nTotal; nCount++)
     {
-        package::ZipEntry *pEntry = &pEntries[nCount];
+        package::ZipEntry *pEntry = new package::ZipEntry;
         sal_Int32 nTestSig, nCRC, nCompressedSize, nTime, nSize, nExtAttr, nOffset;
         sal_Int16 nVerMade, nVersion, nFlag, nHow, nNameLen, nExtraLen, nCommentLen;
         sal_Int16 nDisk, nIntAttr;
@@ -445,13 +446,15 @@ sal_Int32 ZipFile::readCEN()
             aGrabber.readBytes(aCommentSeq, nCommentLen);
             pEntry->sComment = OUString((sal_Char*)aCommentSeq.getConstArray(), nNameLen, RTL_TEXTENCODING_ASCII_US);
         }
+        /*
         sal_Int32 nHash = abs(pEntry->sName.hashCode() % nTableLen);
          ZipEntryImpl* pTmp = new ZipEntryImpl();
         pTmp->pEntry = pEntry;
         pTmp->pNext = pTable[nHash];
         pTable[nHash] = pTmp;
-        /*pEntry->pNext = pTable[nHash];
+        pEntry->pNext = pTable[nHash];
         pTable[nHash] = pEntry;*/
+        aEntries[pEntry->sName] = *pEntry;
     }
 
     if (nCount != nTotal)
@@ -461,5 +464,3 @@ sal_Int32 ZipFile::readCEN()
     }
     return nCenPos;
 }
-
-

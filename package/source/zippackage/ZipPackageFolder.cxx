@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageFolder.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-28 16:48:39 $
+ *  last change: $Author: mtg $ $Date: 2000-11-29 03:21:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,8 @@ using namespace com::sun::star::package::ZipConstants;
 using namespace com::sun::star;
 using namespace rtl;
 
-ZipPackageFolder::ZipPackageFolder (ZipOutputStream &rStream)//ZipPackage &rInPackage)
-: rZipOut(rStream)
+ZipPackageFolder::ZipPackageFolder (void) //ZipOutputStream &rStream)//ZipPackage &rInPackage)
+//: rZipOut(rStream)
 {
     aEntry.nVersion     = -1;
     aEntry.nFlag        = 0;
@@ -146,6 +146,8 @@ void SAL_CALL ZipPackageFolder::removeByName( const ::rtl::OUString& Name )
         sName = Name.copy(1, Name.getLength());
     else
         sName = Name;
+    if (!aContents.count(sName))
+        throw(container::NoSuchElementException());
     aContents.erase(sName);
 }
     // XEnumerationAccess
@@ -175,11 +177,10 @@ uno::Any SAL_CALL ZipPackageFolder::getByName( const ::rtl::OUString& aName )
         sName = aName.copy(1, aName.getLength());
     else
         sName = aName;
+    if (!aContents.count(sName))
+        throw (container::NoSuchElementException());
+
     TunnelHash::const_iterator aCI = aContents.find(sName);
-    if (aCI == aContents.end())
-        throw container::NoSuchElementException();
-//  rtl::OUString sTemp = aCI->first;
-//  uno::Reference < container::XNamed > xRef (aCI->second);
     aAny <<= (*aCI).second;
     return aAny;
 }
@@ -200,7 +201,6 @@ sal_Bool SAL_CALL ZipPackageFolder::hasByName( const ::rtl::OUString& aName )
         sName = aName.copy(1, aName.getLength());
     else
         sName = aName;
-    //return !(aContents.find(sName) == aContents.end());
     return aContents.count(sName);
 }
     // XNameReplace
@@ -214,6 +214,8 @@ void SAL_CALL ZipPackageFolder::replaceByName( const ::rtl::OUString& aName, con
         sName = aName;
     if (hasByName(aName))
         removeByName(aName);
+    else
+        throw(container::NoSuchElementException());
     insertByName(aName, aElement);
 }
     //XPropertySet
@@ -266,11 +268,7 @@ void SAL_CALL ZipPackageFolder::removeVetoableChangeListener( const ::rtl::OUStr
         throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
 }
-#ifdef _DEBUG_RECURSION_
-void ZipPackageFolder::saveContents(rtl::OUString &rPath, TestZip &rFoo)
-#else
-void ZipPackageFolder::saveContents(rtl::OUString &rPath, std::vector < ManifestEntry *> &rManList)
-#endif
+void ZipPackageFolder::saveContents(rtl::OUString &rPath, std::vector < ManifestEntry *> &rManList, ZipOutputStream & rZipOut)
 {
     uno::Reference < lang::XUnoTunnel > xTunnel;
     package::ZipEntry *aEntry = NULL;
@@ -297,53 +295,46 @@ void ZipPackageFolder::saveContents(rtl::OUString &rPath, std::vector < Manifest
 
         if (bIsFolder)
         {
-            time_t nTime = 0;
-            pFolder->aEntry.sName = rPath + pFolder->getName() + OUString::createFromAscii("/");
-#ifdef _DEBUG_RECURSION_
-            /*pFolder->aEntry.nMethod = STORED;*/
-            ByteString sByte(String(pFolder->aEntry.sName),RTL_TEXTENCODING_ASCII_US);
-            uno::Sequence < sal_Int8 > aSeq ((sal_Int8*) sByte.GetBuffer(), sByte.Len());
-            rFoo.writeBytes(aSeq);
-            sal_Int8 me[] = {(sal_Int8) '\n'};
-            uno::Sequence < sal_Int8 > bSeq (me, 1);
-            rFoo.writeBytes(bSeq);
-#endif
-
+            time_t nTime = time(NULL);
+            ManifestEntry *pMan = new ManifestEntry;
+            pMan->sShortName = pFolder->getName();
+            pFolder->aEntry.sName = rPath + pMan->sShortName + OUString::createFromAscii("/");
             pFolder->aEntry.nTime = ZipOutputStream::tmDateToDosDate ( *localtime(&nTime));
+            pFolder->aEntry.nCrc = 0;
+            pFolder->aEntry.nSize = 0;
+            pFolder->aEntry.nCompressedSize = 0;
             rZipOut.putNextEntry(pFolder->aEntry);
             rZipOut.closeEntry();
-            ManifestEntry *pMan = new ManifestEntry;
             pMan->sMediaType = OUString::createFromAscii("");
-            pMan->sFullPath = pFolder->aEntry.sName;
+            pMan->pEntry = &(pFolder->aEntry);
+            pFolder->saveContents(pFolder->aEntry.sName, rManList, rZipOut);
+            //setEntry(pMan->aEntry, pFolder->aEntry);
             rManList.push_back (pMan);
-#ifdef _DEBUG_RECURSION_
-            pFolder->saveContents(pFolder->aEntry.sName, rFoo);
-#else
-            pFolder->saveContents(pFolder->aEntry.sName, rManList);
-#endif
         }
         else
         {
-            pStream->aEntry.sName = rPath + pStream->getName();
+            ManifestEntry *pMan = new ManifestEntry;
+            pMan->sShortName = pStream->getName();
+            pStream->aEntry.sName = rPath + pMan->sShortName;
 
-#ifdef _DEBUG_RECURSION_
-            /*pStream->aEntry.nMethod = STORED;*/
-            ByteString sByte(String(pStream->aEntry.sName),RTL_TEXTENCODING_ASCII_US);
-            uno::Sequence < sal_Int8 > aSeq ((sal_Int8*) sByte.GetBuffer(), sByte.Len());
-            rFoo.writeBytes(aSeq);
-            sal_Int8 me[] = {(sal_Int8) '\n'};
-            uno::Sequence < sal_Int8 > bSeq (me, 1);
-            rFoo.writeBytes(bSeq);
-#endif
             uno::Reference < io::XInputStream > xStream = pStream->getInputStream();
             uno::Reference < io::XSeekable > xSeek (xStream, uno::UNO_QUERY);
-            xSeek->seek(0);
+            sal_Bool bTrackLength = sal_True;
+
             pStream->aEntry.nCrc = -1;
             pStream->aEntry.nSize = -1;
             pStream->aEntry.nCompressedSize = -1;
+            if (xSeek.is())
+            {
+                xSeek->seek(0);
+                if (pStream->aEntry.nMethod == STORED)
+                {
+                    pStream->aEntry.nSize = pStream->aEntry.nCompressedSize = xSeek->getLength();
+                    bTrackLength = sal_False;
+                }
+            }
+
             rZipOut.putNextEntry(pStream->aEntry);
-            if (pStream->aEntry.nMethod == STORED)
-                pStream->aEntry.nSize = 0;
             while (1)
             {
                 uno::Sequence < sal_Int8 > aSeq (65535);
@@ -352,20 +343,63 @@ void ZipPackageFolder::saveContents(rtl::OUString &rPath, std::vector < Manifest
                 if (nLength < 65535)
                     aSeq.realloc(nLength);
                 rZipOut.write(aSeq, 0, nLength);
-                if (pStream->aEntry.nMethod == STORED)
-                    pStream->aEntry.nSize +=nLength;
+                if (bTrackLength)
+                    pStream->aEntry.nSize+=nLength;
                 if (nLength < 65535) // EOF
                     break;
             }
-            if (pStream->aEntry.nMethod == STORED)
+            if (bTrackLength)
                 pStream->aEntry.nCompressedSize = pStream->aEntry.nSize;
+            pStream->bPackageMember = sal_True;
             rZipOut.closeEntry();
-            ManifestEntry *pMan = new ManifestEntry;
             uno::Any aAny = pStream->getPropertyValue(OUString::createFromAscii("MediaType"));
             aAny >>= pMan->sMediaType;
-            pMan->sFullPath = pStream->aEntry.sName;
+            pMan->pEntry = &(pStream->aEntry);
+            //setEntry(pMan->aEntry, pStream->aEntry);
             rManList.push_back (pMan);
         }
+    }
+}
+void ZipPackageFolder::setEntry(package::ZipEntry &rDest, package::ZipEntry &rSrc)
+{
+    rDest.nVersion = rSrc.nVersion;
+    rDest.nFlag = rSrc.nFlag;
+    rDest.nMethod = rSrc.nMethod;
+    rDest.nTime = rSrc.nTime;
+    rDest.nCrc = rSrc.nCrc;
+    rDest.nCompressedSize = rSrc.nCompressedSize;
+    rDest.nSize = rSrc.nSize;
+    rDest.nOffset = rSrc.nOffset;
+    rDest.sName = rSrc.sName;
+    rDest.extra = rSrc.extra;
+    rDest.sComment = rSrc.sComment;
+}
+void ZipPackageFolder::updateReferences( ZipFile * pNewZipFile)
+{
+    uno::Reference < lang::XUnoTunnel > xTunnel;
+    ZipPackageFolder *pFolder = NULL;
+    ZipPackageStream *pStream = NULL;
+    sal_Bool bIsFolder;
+    TunnelHash::const_iterator aCI = aContents.begin();
+
+    for (;aCI!=aContents.end();aCI++)
+    {
+        xTunnel = uno::Reference < lang::XUnoTunnel> ((*aCI).second, uno::UNO_QUERY);
+        try
+        {
+            pFolder = reinterpret_cast < ZipPackageFolder* > (xTunnel->getSomething(ZipPackageFolder::getUnoTunnelImplementationId()));
+            bIsFolder = sal_True;
+        }
+        catch (uno::RuntimeException)
+        {
+            pStream = reinterpret_cast < ZipPackageStream* > (xTunnel->getSomething(ZipPackageStream::getUnoTunnelImplementationId()));
+            bIsFolder = sal_False;
+        }
+
+        if (bIsFolder)
+            pFolder->updateReferences(pNewZipFile);
+        else
+            pStream->pZipFile = pNewZipFile;
     }
 }
 
