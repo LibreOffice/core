@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvw.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2001-06-08 22:43:53 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 23:04:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,7 +181,7 @@ Menu MN_READONLY_POPUP
             Text[ dutch ] = "~Opnieuw laden";
             Text[ chinese_simplified ] = "ΦΨΠΒΧ°Θλ(~L)";
             Text[ greek ] = "Επα~ναφόρτωση";
-            Text[ korean ] = "΄Ω½Γ ·Ξµε(~L)";
+            Text[ korean ] = "΄Ω½Γ ·Ξµε(~L)!";
             Text[ turkish ] = "Yeniden yόkle";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Recargar";
@@ -736,7 +736,7 @@ Menu MN_READONLY_POPUP
             Text [ portuguese_brazilian ] = "~PlugIns ausschalten" ;
             Text[ chinese_simplified ] = "²»ΚΉΣΓ ~Plug-In";
             Text[ russian ] = "Ξςκλώχθςό Plug-Ins";
-            Text[ polish ] = "Wy³Ήcz wtyczki Plug-In";
+            Text[ polish ] = "Wy³Ήcz wtyczki ~plug-in";
             Text[ japanese ] = "ΜίΧΈή²έµΜ(~P)";
             Text[ chinese_traditional ] = "Γφ³¬ ~PlugIn";
             Text[ arabic ] = "ΕνήΗέ Plug-Ins";
@@ -886,7 +886,7 @@ String STR_CHAIN_WRONG_AREA
     Text[ dutch ] = "Het bronkader staat in een bereik waarin geen koppeling mogelijk is.";
     Text[ chinese_simplified ] = "ΔΏ±κΏς΄¦ΣΪÒ»ΈφΞή·¨Α΄½ΣµΔΗψΣς΅£";
     Text[ greek ] = "Το πλαίσιο προορισμού βρίσκεται σε μια περιοχή στην οποία είναι αδύνατον να δημιουργηθεί μία σύνδεση.";
-    Text[ korean ] = "ΈρΗ¥ ΗΑ·ΉΐΣΐΊ΅΅Ώ¬°αΐΜ  ΊÒ°΅΄ΙΗΡ΅΅ΏµΏªΏ΅ ΐΦ½ΐ΄Ο΄Ω.";
+    Text[ korean ] = "ΈρΗ¥ ΗΑ·ΉΐΣΐΊ΅΅Ώ¬°αΐΜ ΊÒ°΅΄ΙΗΡ΅΅ΏµΏªΏ΅ ΐΦ½ΐ΄Ο΄Ω.";
     Text[ turkish ] = "Hedef ηerηeve baπlantύ oluώturulamayacak bir alanda bulunuyor.";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "El marco destino se encuentra en un αrea en la que los vνnculos no son posibles.";
@@ -1194,12 +1194,13 @@ InfoBox MSG_READONLY_CONTENT
     MESSAGE[ arabic ] = "ΚήΪ ΪαΗγΙ ΗαίΚΗΘΙ Γζ ΗαΚΝΟνΟ έν γζΦΪ γΝγν ΦΟ ΗαίΚΗΘΙ.\nαεΠΗ αΗ νγίδ ήΘζα ΓνΙ ΚΫννΡΗΚ.";
     MESSAGE[ dutch ] = "De cursor of de selectie bevindt zich op een schrijfbeveiligde positie.\nDe inhoud kan daarom niet worden gewijzigd.";
     MESSAGE[ chinese_simplified ] = "ΚδΘλΉβ±κ»ςΡ΅ΦΠµΘΔΪΘέΚΗÒ»ΈφΚά±£»¤µΔ΅£\nΞή·¨ΈόΈΔ·ΐΈ²Π΄µΔΔΪΘέ΅£";
-    MESSAGE[ greek ] = "Το σημάδι της εγγραφής ή η επιλογή βρίσκεται σε μία προστατευόμενη θέση.\nΓι αυτό το λόγο δεν μπορούν να γίνουν δεκτές οποιεσδήποτε τροποπο?";
+    MESSAGE[ greek ] = "Το σημάδι της εγγραφής ή η επιλογή βρίσκεται σε μία προστατευόμενη θέση.\nΓι αυτό το λόγο δεν μπορούν να γίνουν δεκτές οποιεσδήποτε τροποπο? ";
     MESSAGE[ korean ] = "Ύ²±β΅΅Έ¶Ε©΅΅¶Η΄Β΅΅Ό±ΕΓΐΊ΅΅ΊΈΘ£µΘ΅΅ΐ§Δ΅Ώ΅΅΅ΐΦ½ΐ΄Ο΄Ω.\nΌφΑ¤ΐΊ ΗγΏλµΗΑφ΅΅ΎΚ½ΐ΄Ο΄Ω.";
     MESSAGE[ turkish ] = "Salt okunur bir iηerik deπiώtirilemez.\nYapύlan deπiώiklikler nu nedenle kabul edilmeyecek.";
     MESSAGE[ language_user1 ] = " ";
     MESSAGE[ catalan ] = "La marca o selecciσn se encuentra en una posiciσn protegida.\nPor ello no se puede aceptar una modificaciσn.";
     MESSAGE[ finnish ] = "Vain luku -sisδltφδ ei voi muuttaa.\nMuokkauksia ei hyvδksytδ";
 };
+
 
 

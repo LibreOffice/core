@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dochdl.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2001-06-08 22:43:10 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 23:04:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,7 +250,7 @@ QueryBox MSG_UPDATE_NEW_GLOS_FMT
     Message[ arabic ] = "ΚδΣνή ΗαδΨΗή ήΟνγ.\nνΜΘ ΚΝζναε΅ ΝΚμ νγίδ \nΝέΩ ΗαΚΫννΡΗΚ.\nεα ΚΡνΟ ΚΝζναεΏ";
     Message[ dutch ] = "Het bereik heeft een verouderd formaat.\nHet moet worden geconverteerd om de wijzigingen\nte kunnen opslaan.\nWilt u de conversie nu uitvoeren?";
     Message[ chinese_simplified ] = "ΥβΈφΗψΣςΎίΣΠµΔΈρΚ½ΚΗΎΙµΔ΅£\nÒª΄ζΕΜΈόΈΔΎΝ±ΨΠλ½ψΠΠΈρΚ½Χª»»΅£\nÒªΧª»»ΈρΚ½Βπ£Ώ";
-    Message[ greek ] = "Η περιοχή υπάρχει σε κάποια προγενέστερη μορφή.\nΠρέπει να μετατραπεί για να είναι δυνατή\nη αποθήκευση των αλλαγών.\nΘέλετε να γίνει η μετατ";
+    Message[ greek ] = "Η περιοχή υπάρχει σε κάποια προγενέστερη μορφή.\nΠρέπει να μετατραπεί για να είναι δυνατή\nη αποθήκευση των αλλαγών.\nΘέλετε να γίνει η μετατ ";
     Message[ korean ] = "±ΈΏª Ό­½ΔΐΊ Ώΐ·΅µΘ °ΝΐΤ΄Ο΄Ω.\n ΐΜ°Νΐ» Ί―Θ―ΗΟΏ©Ύί Ί―°ζ»ηΗΧΐ»\nΐϊΐεΗÒ Όφ ΐΦ½ΐ΄Ο΄Ω.\n Αφ±έ Ί―Θ― ΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
     Message[ turkish ] = "Bφlόmόn formatύ eski.\nDeπiώikliklerin kaydedilebilmesi n\niηin deπiώtirilmesi gerekiyor.\nFormat deπiώtirilsin mi?";
     Message[ language_user1 ] = " ";
@@ -381,7 +381,7 @@ String STR_RTFFORMAT
     Text [ english_us ] = "Formatted text [RTF]" ;
     Text[ chinese_simplified ] = "ÒΡΈρΚ½»―µΔΞΔ±Ύ[RTF]";
     Text[ russian ] = "Ξςτξπμΰςθπξβΰννϋι ςεκρς [RTF]";
-    Text[ polish ] = "Sformatowany tekst [RTF]";
+    Text[ polish ] = "sformatowany tekst [RTF]";
     Text[ japanese ] = "‘®έ’θΟ‚έ‚ΜΓ·½Δ [RTF]";
     Text[ greek ] = "Μορφοποιημένο κείμενο [RTF]";
     Text[ korean ] = "ΖχΈΛµΘ ΕΨ½ΊΖ® [RTF]";
@@ -407,7 +407,7 @@ String STR_TEXTFORMAT
     Text [ english_us ] = "Unformatted text" ;
     Text[ chinese_simplified ] = "Ξ΄ΈρΚ½»―µΔΞΔ±Ύ";
     Text[ russian ] = "Νεξςτξπμΰςθπξβΰννϋι ςεκρς";
-    Text[ polish ] = "Tekst bez formatu";
+    Text[ polish ] = "niesformatowany tekst";
     Text[ japanese ] = "‘®έ’θ‚³‚κ‚Δ‚Ά‚Θ‚ΆΓ·½Δ";
     Text[ chinese_traditional ] = "¥Ό®ζ¦΅¤ΖªΊ¤ε¦r";
     Text[ arabic ] = "δΥ ΫνΡ γδΣή";
@@ -419,6 +419,7 @@ String STR_TEXTFORMAT
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Texto no formateado";
 };
+
 
 
 
