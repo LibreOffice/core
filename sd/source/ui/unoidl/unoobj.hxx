@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 17:35:28 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 17:03:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,8 +125,6 @@ private:
     void SetMasterDepend( sal_Bool bDepend ) throw();
 
     SdrObject* GetSdrObject() const throw();
-    sal_Int32 GetPresentationOrderPos() const throw();
-    void SetPresentationOrderPos( sal_Int32 nPos ) throw();
 
     com::sun::star::uno::Sequence< sal_Int8 >* mpImplementationId;
 
@@ -173,7 +171,15 @@ private:
     void setOldPresOrder( const com::sun::star::uno::Any& aValue );
     void updateOldSoundEffect( SdAnimationInfo* pInfo );
 
-
+    void getOldEffect( com::sun::star::uno::Any& rValue ) const;
+    void getOldTextEffect( com::sun::star::uno::Any& rValue ) const;
+    void getOldSpeed( com::sun::star::uno::Any& rValue ) const;
+    void getOldSoundFile( com::sun::star::uno::Any& rValue ) const;
+    void getOldSoundOn( com::sun::star::uno::Any& rValue ) const;
+    void getOldDimColor( com::sun::star::uno::Any& rValue ) const;
+    void getOldDimHide( com::sun::star::uno::Any& rValue ) const;
+    void getOldDimPrev( com::sun::star::uno::Any& rValue ) const;
+    void getOldPresOrder( com::sun::star::uno::Any& rValue ) const;
 };
 
 struct SvEventDescription;
