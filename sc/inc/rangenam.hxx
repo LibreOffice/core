@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rangenam.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-06 13:44:06 $
+ *  last change: $Author: nn $ $Date: 2001-06-15 13:37:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,6 +185,8 @@ public:
 
     void            UpdateTabRef(USHORT nOldTable, USHORT nFlag, USHORT nNewTable);
     void            TransferTabRef( USHORT nOldTab, USHORT nNewTab );
+
+    void            ValidateTabRefs();
 
     void            ReplaceRangeNamesInUse( const ScIndexMap& rMap );
 

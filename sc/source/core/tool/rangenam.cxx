@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rangenam.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: er $ $Date: 2001-03-14 18:10:21 $
+ *  last change: $Author: nn $ $Date: 2001-06-15 13:39:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -655,6 +655,69 @@ void ScRangeData::ReplaceRangeNamesInUse( const ScIndexMap& rMap )
     {
         ScCompiler aComp( pDoc, aPos, *pCode );
         aComp.CompileTokenArray();
+    }
+}
+
+
+void ScRangeData::ValidateTabRefs()
+{
+    //  try to make sure all relative references and the reference position
+    //  are within existing tables, so they can be represented as text
+    //  (if the range of used tables is more than the existing tables,
+    //  the result may still contain invalid tables, because the relative
+    //  references aren't changed so formulas stay the same)
+
+    //  find range of used tables
+
+    USHORT nMinTab = aPos.Tab();
+    USHORT nMaxTab = nMinTab;
+    ScToken* t;
+    pCode->Reset();
+    while ( t = pCode->GetNextReference() )
+    {
+        SingleRefData& rRef1 = t->GetSingleRef();
+        if ( rRef1.IsTabRel() && !rRef1.IsTabDeleted() )
+        {
+            if ( rRef1.nTab < nMinTab )
+                nMinTab = rRef1.nTab;
+            if ( rRef1.nTab > nMaxTab )
+                nMaxTab = rRef1.nTab;
+        }
+        if ( t->GetType() == svDoubleRef )
+        {
+            SingleRefData& rRef2 = t->GetDoubleRef().Ref2;
+            if ( rRef2.IsTabRel() && !rRef2.IsTabDeleted() )
+            {
+                if ( rRef2.nTab < nMinTab )
+                    nMinTab = rRef2.nTab;
+                if ( rRef2.nTab > nMaxTab )
+                    nMaxTab = rRef2.nTab;
+            }
+        }
+    }
+
+    USHORT nTabCount = pDoc->GetTableCount();
+    if ( nMaxTab >= nTabCount && nMinTab > 0 )
+    {
+        //  move position and relative tab refs
+        //  The formulas that use the name are not changed by this
+
+        USHORT nMove = nMinTab;
+        aPos.SetTab( aPos.Tab() - nMove );
+
+        pCode->Reset();
+        while ( t = pCode->GetNextReference() )
+        {
+            SingleRefData& rRef1 = t->GetSingleRef();
+            if ( rRef1.IsTabRel() && !rRef1.IsTabDeleted() )
+                rRef1.nTab -= nMove;
+            if ( t->GetType() == svDoubleRef )
+            {
+                SingleRefData& rRef2 = t->GetDoubleRef().Ref2;
+                if ( rRef2.IsTabRel() && !rRef2.IsTabDeleted() )
+                    rRef2.nTab -= nMove;
+            }
+        }
     }
 }
 
