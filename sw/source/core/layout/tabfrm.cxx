@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ama $ $Date: 2001-10-19 10:25:19 $
+ *  last change: $Author: ama $ $Date: 2001-11-16 11:40:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,8 +238,15 @@ void SwTabFrm::RegistFlys()
 |*************************************************************************/
 SwTwips SwTabFrm::Split( const SwTwips nCutPos )
 {
+#ifdef VERTICAL_LAYOUT
+    SWRECTFN( this )
+    ASSERT( bVert ? nCutPos >= Frm().Left() && nCutPos <= Frm().Right() :
+            nCutPos >= Frm().Top() && nCutPos <= Frm().Bottom(),
+            "SplitLine out of table." );
+#else
     ASSERT( nCutPos >= Frm().Top() && nCutPos <= Frm().Bottom(),
             "SplitLine ausserhalb der Tabelle." );
+#endif
 
     //Um die Positionen der Zellen mit der CutPos zu vergleichen muessen sie
     //ausgehend von der Tabelle nacheinander berechnet werden. Sie koennen
@@ -248,12 +255,22 @@ SwTwips SwTabFrm::Split( const SwTwips nCutPos )
     SwFrm *pRow = Lower();
     if( !pRow )
         return 0;
+#ifdef VERTICAL_LAYOUT
+    SwTwips nCut = (*fnRect->fnYDiff)( nCutPos, (Frm().*fnRect->fnGetTop)() );
+    nCut -= (this->*fnRect->fnGetTopMargin)();
+    SwTwips nRowPos = (pRow->Frm().*fnRect->fnGetHeight)();
+#else
     SwTwips nRowPos = Frm().Top() + Prt().Top() + pRow->Frm().Height();
+#endif
     const BOOL bRepeat  = GetTable()->IsHeadlineRepeat();
     pRow = pRow->GetNext();
     if( pRow && bRepeat )
     {
+#ifdef VERTICAL_LAYOUT
+        nRowPos += (pRow->Frm().*fnRect->fnGetHeight)();
+#else
         nRowPos += pRow->Frm().Height();
+#endif
         pRow = pRow->GetNext();
     }
     // No break before the first row and, in case of repeated headlines,
@@ -261,9 +278,15 @@ SwTwips SwTabFrm::Split( const SwTwips nCutPos )
     if( !pRow )
         return 0;
 
+#ifdef VERTICAL_LAYOUT
+    while( pRow && nCut >= ( nRowPos + (pRow->Frm().*fnRect->fnGetHeight)() ) )
+    {
+        nRowPos += (pRow->Frm().*fnRect->fnGetHeight)();
+#else
     while ( pRow && nCutPos > (nRowPos + pRow->Frm().Height() - 1) )
     {
         nRowPos += pRow->Frm().Height();
+#endif
         pRow = pRow->GetNext();
     }
 
@@ -330,7 +353,11 @@ SwTwips SwTabFrm::Split( const SwTwips nCutPos )
         while ( pRow )
         {
             pNxt = pRow->GetNext();
+#ifdef VERTICAL_LAYOUT
+            nRet += (pRow->Frm().*fnRect->fnGetHeight)();
+#else
             nRet += pRow->Frm().Height();
+#endif
             pRow->Remove();
             pRow->InsertBehind( pFoll, pPrv );
             pRow->_InvalidateAll();
@@ -346,6 +373,18 @@ SwTwips SwTabFrm::Split( const SwTwips nCutPos )
         while ( pRow )
         {
             pNxt = pRow->GetNext();
+#ifdef VERTICAL_LAYOUT
+            nRet += (pRow->Frm().*fnRect->fnGetHeight)();
+            pRow->Remove();
+            pRow->Paste( pFoll, pPrv );
+            pRow->CheckDirChange();
+            pRow = pNxt;
+        }
+    }
+    ASSERT( !bNewFollow || !(pFoll->Frm().*fnRect->fnGetHeight)(),
+            "Dont care about Performance");
+    Shrink( nRet );
+#else
             nRet += pRow->Frm().Height();
             pRow->Remove();
             pRow->Paste( pFoll, pPrv );
@@ -354,6 +393,7 @@ SwTwips SwTabFrm::Split( const SwTwips nCutPos )
     }
     ASSERT( !bNewFollow || !pFoll->Frm().Height(), "Dont care about Performance");
     Shrink( nRet PHEIGHT );
+#endif
     return nRet;
 }
 
@@ -364,6 +404,9 @@ SwTwips SwTabFrm::Join()
 
     if ( !pFoll->IsJoinLocked() )
     {
+#ifdef VERTICAL_LAYOUT
+        SWRECTFN( this )
+#endif
         pFoll->Cut();   //Erst ausschneiden um unuetze Benachrichtigungen zu
                         //minimieren.
 
@@ -379,10 +422,17 @@ SwTwips SwTabFrm::Join()
         while ( pRow )
         {
             pNxt = pRow->GetNext();
+#ifdef VERTICAL_LAYOUT
+            nHeight += (pRow->Frm().*fnRect->fnGetHeight)();
+#else
             nHeight += pRow->Frm().Height();
+#endif
             pRow->Remove();
             pRow->_InvalidateAll();
             pRow->InsertBehind( this, pPrv );
+#ifdef VERTICAL_LAYOUT
+            pRow->CheckDirChange();
+#endif
             pPrv = pRow;
             pRow = pNxt;
         }
@@ -403,6 +453,9 @@ SwTwips SwTabFrm::Join()
 |*************************************************************************/
 void MA_FASTCALL SwInvalidatePositions( SwFrm *pFrm, long nBottom )
 {
+#ifdef VERTICAL_LAYOUT
+    SWRECTFN( pFrm )
+#endif
     do
     {   pFrm->_InvalidatePos();
         pFrm->_InvalidateSize();
@@ -414,20 +467,32 @@ void MA_FASTCALL SwInvalidatePositions( SwFrm *pFrm, long nBottom )
         else
             pFrm->Prepare( PREP_ADJUST_FRM );
         pFrm = pFrm->GetNext();
+#ifdef VERTICAL_LAYOUT
+    } while ( pFrm && (*fnRect->fnYDiff)( (pFrm->Frm().*fnRect->fnGetTop)(),
+              nBottom ) < 0 );
+#else
     } while ( pFrm && pFrm->Frm().Top() < nBottom );
+#endif
 }
 
 BOOL MA_FASTCALL lcl_CalcLowers( SwLayoutFrm *pLay, long nBottom )
 {
     BOOL bRet = FALSE;
     SwCntntFrm *pCnt = pLay->ContainsCntnt();
+#ifdef VERTICAL_LAYOUT
+    SWRECTFN( pLay )
+#endif
     while ( pCnt && pLay->GetUpper()->IsAnLower( pCnt ) )
     {
         bRet |= !pCnt->IsValid();
         pCnt->CalcFlys( FALSE );
         pCnt->Calc();
         pCnt->GetUpper()->Calc();
+#ifdef VERTICAL_LAYOUT
+        if( (*fnRect->fnYDiff)((pCnt->Frm().*fnRect->fnGetTop)(), nBottom) > 0 )
+#else
         if ( pCnt->Frm().Top() > nBottom )
+#endif
             break;
         pCnt = pCnt->GetNextCntntFrm();
     }
@@ -438,6 +503,9 @@ BOOL MA_FASTCALL lcl_InnerCalcLayout( SwFrm *pFrm, long nBottom )
 {
     BOOL bRet = FALSE;
     const SwFrm* pOldUp = pFrm->GetUpper();
+#ifdef VERTICAL_LAYOUT
+    SWRECTFN( pFrm )
+#endif
     do
     {
         if( pFrm->IsLayoutFrm() )
@@ -448,7 +516,13 @@ BOOL MA_FASTCALL lcl_InnerCalcLayout( SwFrm *pFrm, long nBottom )
                 bRet |= lcl_InnerCalcLayout( ((SwLayoutFrm*)pFrm)->Lower(), nBottom);
         }
         pFrm = pFrm->GetNext();
+#ifdef VERTICAL_LAYOUT
+    } while( pFrm &&
+            (*fnRect->fnYDiff)((pFrm->Frm().*fnRect->fnGetTop)(), nBottom) < 0
+            && pFrm->GetUpper() == pOldUp );
+#else
     } while( pFrm && pFrm->Frm().Top() < nBottom && pFrm->GetUpper()==pOldUp );
+#endif
     return bRet;
 }
 
@@ -471,6 +545,49 @@ void MA_FASTCALL lcl_CalcLayout( SwLayoutFrm *pLay, long nBottom )
 
 void MA_FASTCALL lcl_FirstTabCalc( SwTabFrm *pTab )
 {
+#ifdef VERTICAL_LAYOUT
+    SWRECTFN( pTab )
+    if ( !pTab->IsFollow() && !pTab->GetTable()->IsTblComplex() )
+    {
+        SwLayoutFrm *pRow = (SwLayoutFrm*)pTab->Lower();
+        do
+        {
+            SwLayoutFrm *pCell = (SwLayoutFrm*)pRow->Lower();
+            SwFrm *pCnt = pCell->Lower();
+            pCnt->Calc();
+            const long nCellHeight = (pCell->Frm().*fnRect->fnGetHeight)();
+            const long nCellY      = (pCell->Frm().*fnRect->fnGetTop)()-1;
+            const long nCntHeight  = (pCnt->Frm().*fnRect->fnGetHeight)();
+            const long nCntY       = (pCnt->Frm().*fnRect->fnGetTop)()-1;
+            if ( 0 != (pCell = (SwLayoutFrm*)pCell->GetNext()) )
+                do
+                {   (pCell->Frm().*fnRect->fnSetTopAndHeight)
+                                                        ( nCellY, nCellHeight );
+                    (pCell->Prt().*fnRect->fnSetHeight)( nCellHeight );
+                    pCell->_InvalidateAll();
+
+                    pCnt = pCell->Lower();
+                    (pCnt->Frm().*fnRect->fnSetTopAndHeight)(nCntY, nCntHeight);
+                    (pCnt->Prt().*fnRect->fnSetHeight)( nCntHeight );
+                    pCnt->_InvalidateAll();
+
+                    pCell = (SwLayoutFrm*)pCell->GetNext();
+                } while ( pCell );
+
+            SwTwips nRowTop = (pRow->Frm().*fnRect->fnGetTop)();
+            SwTwips nUpBot = (pTab->GetUpper()->Frm().*fnRect->fnGetBottom)();
+            if( (*fnRect->fnYDiff)( nUpBot, nRowTop ) < 0 )
+                break;
+            pRow = (SwLayoutFrm*)pRow->GetNext();
+
+        } while ( pRow );
+    }
+    SwFrm *pUp = pTab->GetUpper();
+    long nBottom = (pUp->*fnRect->fnGetLimit)();
+    if ( pTab->GetFmt()->GetDoc()->IsBrowseMode() )
+        nBottom += pUp->Grow( LONG_MAX, TRUE );
+    lcl_CalcLowers( (SwLayoutFrm*)pTab->Lower(), nBottom );
+#else
     //Ersteinmal koennen wir die Strukturen auf die richtige Groesse
     //bringen.
     if ( !pTab->IsFollow() && !pTab->GetTable()->IsTblComplex() )
@@ -516,6 +633,7 @@ void MA_FASTCALL lcl_FirstTabCalc( SwTabFrm *pTab )
     if ( pTab->GetFmt()->GetDoc()->IsBrowseMode() )
         nBottom += pUp->Grow( LONG_MAX PHEIGHT, TRUE );
     lcl_CalcLowers( (SwLayoutFrm*)pTab->Lower(), nBottom );
+#endif
 }
 
 void MA_FASTCALL lcl_Recalc( SwTabFrm *pTab,
@@ -524,6 +642,28 @@ void MA_FASTCALL lcl_Recalc( SwTabFrm *pTab,
 {
     if ( pTab->Lower() )
     {
+#ifdef VERTICAL_LAYOUT
+        SWRECTFN( pTab )
+        const SwTwips nOldHeight = (pTab->Frm().*fnRect->fnGetHeight)();
+        const SwTwips nOldWidth  = (pTab->Frm().*fnRect->fnGetWidth)();
+        if ( !pFirstRow )
+        {
+            pFirstRow = (SwLayoutFrm*)pTab->Lower();
+            rNotify.SetLowersComplete( TRUE );
+        }
+        ::SwInvalidatePositions( pFirstRow, LONG_MAX );
+        ::lcl_CalcLayout( pFirstRow, LONG_MAX );
+        SwTwips nNew = (pTab->Frm().*fnRect->fnGetHeight)();
+        if ( nOldHeight < nNew )
+            rNotify.AddHeightOfst( nNew - nOldHeight );
+        else if ( nOldHeight > nNew )
+            rNotify.SubtractHeightOfst( nOldHeight - nNew );
+        nNew = (pTab->Frm().*fnRect->fnGetWidth)();
+        if ( nOldWidth < nNew )
+            rNotify.AddWidthOfst( nNew - nOldWidth );
+        else if ( nOldWidth > nNew )
+            rNotify.SubtractWidthOfst( nOldWidth - nNew );
+#else
         const SwTwips nOldHeight = pTab->Frm().Height();
         const SwTwips nOldWidth  = pTab->Frm().Width();
         if ( !pFirstRow )
@@ -541,6 +681,7 @@ void MA_FASTCALL lcl_Recalc( SwTabFrm *pTab,
             rNotify.AddWidthOfst( pTab->Frm().Width() - nOldWidth );
         else if ( nOldWidth > pTab->Frm().Width() )
             rNotify.SubtractWidthOfst( nOldWidth - pTab->Frm().Width() );
+#endif
     }
 }
 
@@ -605,6 +746,10 @@ void SwTabFrm::MakeAll()
         }
     }
 
+#ifdef VERTICAL_LAYOUT
+    SWRECTFN( this )
+#endif
+
     while ( !bValidPos || !bValidSize || !bValidPrtArea )
     {
         if ( TRUE == (bMoveable = IsMoveable()) )
@@ -614,11 +759,19 @@ void SwTabFrm::MakeAll()
                 bCalcLowers = TRUE;
             }
 
+#ifdef VERTICAL_LAYOUT
+        Point aOldPos( (Frm().*fnRect->fnGetPos)() );
+        MakePos();
+        if ( aOldPos != (Frm().*fnRect->fnGetPos)() )
+        {
+            if ( aOldPos.Y() != (Frm().*fnRect->fnGetTop)() )
+#else
         Point aOldPos( Frm().Pos() );
         MakePos();
         if ( aOldPos != Frm().Pos() )
         {
             if ( aOldPos.Y() != Frm().Top() )
+#endif
             {
                 SwHTMLTableLayout *pLayout = GetTable()->GetHTMLTableLayout();
                 if( pLayout )
@@ -651,6 +804,24 @@ void SwTabFrm::MakeAll()
             if ( bRepeat && pFrm )
                 pFrm = pFrm->GetNext();
             if ( pFrm )
+#ifdef VERTICAL_LAYOUT
+                n1StLineHeight = (pFrm->Frm().*fnRect->fnGetHeight)();
+        }
+
+        if ( !bValidSize || !bValidPrtArea )
+        {
+            const BOOL bOptLower = (Frm().*fnRect->fnGetHeight)() == 0;
+
+            const long nOldPrtWidth = (Prt().*fnRect->fnGetWidth)();
+            const long nOldFrmWidth = (Frm().*fnRect->fnGetWidth)();
+            const Point aOldPrtPos  = (Prt().*fnRect->fnGetPos)();
+            Format( pAttrs );
+
+            SwHTMLTableLayout *pLayout = GetTable()->GetHTMLTableLayout();
+            if ( /*!bOptLower &&*/ pLayout &&
+                 ((Prt().*fnRect->fnGetWidth)() != nOldPrtWidth ||
+                  (Frm().*fnRect->fnGetWidth)() != nOldFrmWidth) )
+#else
                 n1StLineHeight = pFrm->Frm().Height();
         }
 
@@ -667,6 +838,7 @@ void SwTabFrm::MakeAll()
             if ( /*!bOptLower &&*/ pLayout &&
                  (Prt().Width() != nOldPrtWidth ||
                   Frm().Width() != nOldFrmWidth) )
+#endif
             {
                 delete pAccess;
                 bCalcLowers |= pLayout->Resize(
@@ -675,10 +847,12 @@ void SwTabFrm::MakeAll()
                 pAccess= new SwBorderAttrAccess( SwFrm::GetCache(), this );
                 pAttrs = pAccess->Get();
             }
+#ifdef VERTICAL_LAYOUT
+            if ( !bOptLower && aOldPrtPos != (Prt().*fnRect->fnGetPos)() )
+#else
             if ( !bOptLower && aOldPrtPos != Prt().Pos() )
-            {
+#endif
                 aNotify.SetLowersComplete( FALSE );
-            }
 
             if ( bOptLower )
             {
@@ -706,13 +880,22 @@ void SwTabFrm::MakeAll()
                             const FASTBOOL bOldPrev = GetPrev() != 0;
                             if ( MoveBwd( bDummy ) )
                             {
+#ifdef VERTICAL_LAYOUT
+                                SWREFRESHFN( this )
+#endif
                                 bMovedBwd = TRUE;
                                 if ( bFtnsInDoc )
                                     MoveLowerFtns( 0, pOldBoss, 0, TRUE );
 
+#ifdef VERTICAL_LAYOUT
+                                long nOldTop = (Frm().*fnRect->fnGetTop)();
+                                MakePos();
+                                if( nOldTop != (Frm().*fnRect->fnGetTop)() )
+#else
                                 long nOldTop = Frm().Top();
                                 MakePos();
                                 if( nOldTop != Frm().Top() )
+#endif
                                 {
                                     SwHTMLTableLayout *pLayout =
                                         GetTable()->GetHTMLTableLayout();
@@ -774,7 +957,11 @@ void SwTabFrm::MakeAll()
                 SwFrm *pFrm = Lower();
                 if ( bRepeat && pFrm )
                     pFrm = pFrm->GetNext();
+#ifdef VERTICAL_LAYOUT
+                if(pFrm && n1StLineHeight >(pFrm->Frm().*fnRect->fnGetHeight)())
+#else
                 if ( pFrm && n1StLineHeight > pFrm->Frm().Height() )
+#endif
                 {
                     SwTabFrm *pMaster = (SwTabFrm*)FindMaster();
                     BOOL bDummy;
@@ -786,15 +973,24 @@ void SwTabFrm::MakeAll()
             BOOL bReformat;
             if ( MoveBwd( bReformat ) )
             {
+#ifdef VERTICAL_LAYOUT
+                SWREFRESHFN( this )
+#endif
                 bMovedBwd = TRUE;
                 aNotify.SetLowersComplete( FALSE );
                 if ( bFtnsInDoc )
                     MoveLowerFtns( 0, pOldBoss, 0, TRUE );
                 if ( bReformat || bKeep )
                 {
+#ifdef VERTICAL_LAYOUT
+                    long nOldTop = (Frm().*fnRect->fnGetTop)();
+                    MakePos();
+                    if( nOldTop != (Frm().*fnRect->fnGetTop)() )
+#else
                     long nOldTop = Frm().Top();
                     MakePos();
                     if ( nOldTop != Frm().Top() )
+#endif
                     {
                         SwHTMLTableLayout *pLayout =
                             GetTable()->GetHTMLTableLayout();
@@ -835,8 +1031,12 @@ void SwTabFrm::MakeAll()
             continue;
 
         //Fertig?
+#ifdef VERTICAL_LAYOUT
+        if( (Frm().*fnRect->fnCheckLimit)( (GetUpper()->*fnRect->fnGetLimit)()))
+#else
         if ( GetUpper()->Prt().Bottom()+GetUpper()->Frm().Top() >=
              Frm().Bottom() )
+#endif
         {
             //Wenn ich zur Unterkante des Upper noch Raum habe, so kann ich
             //wenigstens probehalber eine weitere Zeile meines Follows
@@ -847,6 +1047,17 @@ void SwTabFrm::MakeAll()
                 if ( GetFollow()->ShouldBwdMoved( GetUpper(), FALSE, bDummy ) )
                 {
                     SwFrm *pTmp = GetUpper();
+#ifdef VERTICAL_LAYOUT
+                    SwTwips nDeadLine = (pTmp->*fnRect->fnGetLimit)();
+                    if ( GetFmt()->GetDoc()->IsBrowseMode() )
+                        nDeadLine += pTmp->Grow( LONG_MAX, TRUE );
+                    if( (Frm().*fnRect->fnCheckLimit)( nDeadLine ) < 0 )
+                    {
+                        SwFrm *pRow = GetFollow()->Lower();
+                        if ( bRepeat )
+                            pRow = pRow->GetNext();
+                        const SwTwips nOld = (Frm().*fnRect->fnGetHeight)();
+#else
                     SwTwips nDeadLine = pTmp->Prt().Bottom() + pTmp->Frm().Top();
                     if ( GetFmt()->GetDoc()->IsBrowseMode() )
                         nDeadLine += pTmp->Grow( LONG_MAX PHEIGHT, TRUE );
@@ -856,6 +1067,7 @@ void SwTabFrm::MakeAll()
                         if ( bRepeat )
                             pRow = pRow->GetNext();
                         const SwTwips nOld = Frm().Height();
+#endif
 
                         const BOOL bMoveFtns = bFtnsInDoc && pRow &&
                                                !GetFollow()->IsJoinLocked();
@@ -872,7 +1084,12 @@ void SwTabFrm::MakeAll()
                         {
                             pRow->Cut();
                             pRow->Paste( this );
+#ifdef VERTICAL_LAYOUT
+                            aNotify.AddHeightOfst(
+                                        (pRow->Frm().*fnRect->fnGetHeight)() );
+#else
                             aNotify.AddHeightOfst( pRow->Frm().Height() );
+#endif
                         }
                         //Die Fussnoten verschieben!
                         if ( pRow && bMoveFtns )
@@ -880,7 +1097,11 @@ void SwTabFrm::MakeAll()
                                  0, pOldBoss, FindFtnBossFrm( TRUE ), TRUE ) )
                                 GetUpper()->Calc();
 
+#ifdef VERTICAL_LAYOUT
+                        if ( pRow && nOld != (Frm().*fnRect->fnGetHeight)() )
+#else
                         if ( pRow && nOld != Frm().Height() )
+#endif
                             ::lcl_Recalc( this, (SwLayoutFrm*)pRow, aNotify );
                         continue;
                     }
@@ -946,6 +1167,26 @@ void SwTabFrm::MakeAll()
             //nur noch eine nicht Headline Zeile vorhanden ist.
             if ( !bRepeat || Lower()->GetNext()->GetNext() )
             {
+#ifdef VERTICAL_LAYOUT
+                SwTwips nDeadLine = (GetUpper()->*fnRect->fnGetLimit)();
+                if( IsInSct() )
+                    nDeadLine = (*fnRect->fnYInc)( nDeadLine,
+                                        GetUpper()->Grow( LONG_MAX, TRUE ) );
+                ::lcl_CalcLayout( (SwLayoutFrm*)Lower(), nDeadLine );
+                bLowersFormatted = TRUE;
+                aNotify.SetLowersComplete( TRUE );
+                if( (Frm().*fnRect->fnCheckLimit)( nDeadLine ) < 0 )
+                    continue;
+
+                SwTwips nBreakLine = (Frm().*fnRect->fnGetTop)();
+                nBreakLine = (*fnRect->fnYInc)( nBreakLine,
+                        (this->*fnRect->fnGetTopMargin)() +
+                        (Lower()->Frm().*fnRect->fnGetHeight)() +
+                        ( bRepeat ?
+                          (Lower()->GetNext()->Frm().*fnRect->fnGetHeight)()
+                          : 0 ) );
+                if( (*fnRect->fnYDiff)(nDeadLine, nBreakLine) >=0 || !pIndPrev )
+#else
                 SwTwips nDeadLine = GetUpper()->Prt().Bottom() +
                                     GetUpper()->Frm().Top();
                 if( IsInSct() )
@@ -968,6 +1209,7 @@ void SwTabFrm::MakeAll()
                     nBreakLine += Lower()->GetNext()->Frm().Height();
                 nBreakLine += Frm().Top() + Prt().Top();
                 if ( nBreakLine <= nDeadLine || !pIndPrev )
+#endif
                 {
                     aNotify.SubtractHeightOfst( Split( nDeadLine ) );
                     if ( aNotify.GetHeightOfst() < 0 )
@@ -1019,6 +1261,9 @@ void SwTabFrm::MakeAll()
         //Mal sehen ob ich irgenwo Platz finde...
         if ( !bMovedFwd && !MoveFwd( bMakePage, FALSE ) )
             bMakePage = FALSE;
+#ifdef VERTICAL_LAYOUT
+        SWREFRESHFN( this )
+#endif
         bMovedFwd = bCalcLowers = TRUE;
         aNotify.SetLowersComplete( FALSE );
         if ( IsFollow() )
@@ -1086,6 +1331,65 @@ BOOL SwTabFrm::CalcFlyOffsets( SwTwips& rUpper,
     const SwFlyFrm* pMyFly = FindFlyFrm();
     if ( pPage->GetSortedObjs() )
     {
+#ifdef VERTICAL_LAYOUT
+        SWRECTFN( this )
+        long nPrtPos = (Frm().*fnRect->fnGetTop)();
+        nPrtPos = (*fnRect->fnYInc)( nPrtPos, rUpper );
+        SwRect aRect( Frm() );
+        long nYDiff = (*fnRect->fnYDiff)( (Prt().*fnRect->fnGetTop)(), rUpper );
+        if( nYDiff > 0 )
+            (aRect.*fnRect->fnAddBottom)( -nYDiff );
+        for ( USHORT i = 0; i < pPage->GetSortedObjs()->Count(); ++i )
+        {
+            SdrObject *pObj = (*pPage->GetSortedObjs())[i];
+            if ( pObj->IsWriterFlyFrame() )
+            {
+                SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm();
+                const SwRect aFlyRect = pFly->AddSpacesToFrm();
+                if ( WEIT_WECH != (pFly->Frm().*fnRect->fnGetTop)() &&
+                     pFly->IsFlyAtCntFrm() && aFlyRect.IsOver( aRect ) &&
+                     (*fnRect->fnYDiff)(
+                            (pFly->GetAnchor()->Frm().*fnRect->fnGetBottom)(),
+                            (Frm().*fnRect->fnGetTop)() ) < 0 &&
+                     !IsAnLower( pFly ) && !pFly->IsAnLower( this ) &&
+                     ( !pMyFly || pMyFly->IsAnLower( pFly ) ) &&
+                     pPage->GetPhyPageNum() >=
+                     pFly->GetAnchor()->FindPageFrm()->GetPhyPageNum() )
+                {
+                    const SwFmtSurround   &rSur = pFly->GetFmt()->GetSurround();
+                    const SwFmtHoriOrient &rHori= pFly->GetFmt()->GetHoriOrient();
+                    if ( SURROUND_NONE == rSur.GetSurround() )
+                    {
+                        long nBottom = (aFlyRect.*fnRect->fnGetBottom)();
+                        if( (*fnRect->fnYDiff)( nPrtPos, nBottom ) < 0 )
+                            nPrtPos = nBottom;
+                        bInvalidatePrtArea = TRUE;
+                    }
+                    if ( (SURROUND_RIGHT    == rSur.GetSurround() ||
+                          SURROUND_PARALLEL == rSur.GetSurround())&&
+                         HORI_LEFT == rHori.GetHoriOrient() )
+                    {
+                        const long nWidth = (*fnRect->fnXDiff)(
+                            (aFlyRect.*fnRect->fnGetRight)(),
+                            (pFly->GetAnchor()->Frm().*fnRect->fnGetLeft)() );
+                        rLeftOffset = Max( rLeftOffset, nWidth );
+                        bInvalidatePrtArea = TRUE;
+                    }
+                    if ( (SURROUND_LEFT     == rSur.GetSurround() ||
+                          SURROUND_PARALLEL == rSur.GetSurround())&&
+                         HORI_RIGHT == rHori.GetHoriOrient() )
+                    {
+                        const long nWidth = (*fnRect->fnXDiff)(
+                            (pFly->GetAnchor()->Frm().*fnRect->fnGetRight)(),
+                            (aFlyRect.*fnRect->fnGetLeft)() );
+                        rRightOffset = Max( rRightOffset, nWidth );
+                        bInvalidatePrtArea = TRUE;
+                    }
+                }
+            }
+        }
+        rUpper = (*fnRect->fnYDiff)( nPrtPos, (Frm().*fnRect->fnGetTop)() );
+#else
         long nPrtPos = Frm().Top() + rUpper;
         SwRect aRect( Frm() );
         if ( Prt().Top() - rUpper > 0 )
@@ -1109,7 +1413,7 @@ BOOL SwTabFrm::CalcFlyOffsets( SwTwips& rUpper,
                     const SwFmtHoriOrient &rHori= pFly->GetFmt()->GetHoriOrient();
                     if ( SURROUND_NONE == rSur.GetSurround() )
                     {
-                        nPrtPos = Max( nPrtPos, aFlyRect.Bottom() + 1l );
+                        nPrtPos = Max( nPrtPos, aFlyRect.Bottom() + 1L );
                         bInvalidatePrtArea = TRUE;
                     }
                     if ( (SURROUND_RIGHT    == rSur.GetSurround() ||
@@ -1136,6 +1440,7 @@ BOOL SwTabFrm::CalcFlyOffsets( SwTwips& rUpper,
             }
         }
         rUpper = nPrtPos - Frm().Top();
+#endif
     }
 
     return bInvalidatePrtArea;
@@ -1155,9 +1460,20 @@ void SwTabFrm::Format( const SwBorderAttrs *pAttrs )
 {
     ASSERT( pAttrs, "TabFrm::Format, pAttrs ist 0." );
 
+#ifdef VERTICAL_LAYOUT
+    SWRECTFN( this )
+    if ( !bValidSize )
+    {
+        long nDiff = (GetUpper()->Prt().*fnRect->fnGetWidth)() -
+                     (Frm().*fnRect->fnGetWidth)();
+        if( nDiff )
+            (aFrm.*fnRect->fnAddRight)( nDiff );
+    }
+#else
     //FixSize einstellen
     if ( !bValidSize )
         aFrm.Width( GetUpper()->Prt().Width() );
+#endif
 
     //VarSize ist immer die Hoehe.
     //Fuer den oberen/unteren Rand gelten die selben Regeln wie fuer
@@ -1181,8 +1497,6 @@ void SwTabFrm::Format( const SwBorderAttrs *pAttrs )
     if ( !bValidPrtArea )
     {   bValidPrtArea = TRUE;
 
-        const SwTwips nOldHeight = Prt().Height();
-
         //Die Breite der PrtArea wird vom FrmFmt vorgegeben, die Raender
         //sind entsprechend einzustellen.
         //Mindestraender werden von Umrandung und Schatten vorgegeben.
@@ -1191,7 +1505,14 @@ void SwTabFrm::Format( const SwBorderAttrs *pAttrs )
         //Wenn das Adjustment 0 ist, so werden die Rander anhand des
         //Randattributes eingestellt.
 
+#ifdef VERTICAL_LAYOUT
+        const SwTwips nOldHeight = (Prt().*fnRect->fnGetHeight)();
+        const SwTwips nMax = (aFrm.*fnRect->fnGetWidth)();
+#else
+        const SwTwips nOldHeight = Prt().Height();
         const SwTwips nMax = aFrm.Width();
+#endif
+
         SwTwips nLeft  = pAttrs->CalcLeftLine();
         SwTwips nRight = pAttrs->CalcRightLine();
 
@@ -1287,6 +1608,13 @@ void SwTabFrm::Format( const SwBorderAttrs *pAttrs )
             default:
                 ASSERT( FALSE, "Ungueltige orientation fuer Table." );
         }
+#ifdef VERTICAL_LAYOUT
+        (this->*fnRect->fnSetYMargins)( nUpper, nLower );
+        if( (nMax - MINLAY) < (nLeft + nRight) )
+            (this->*fnRect->fnSetXMargins)( 0, 0 );
+        else
+            (this->*fnRect->fnSetXMargins)( nLeft, nRight );
+#else
         Prt().Top( nUpper );
         Prt().Height( aFrm.Height() - (nUpper + nLower) );
         if ( (nMax - MINLAY) < (nLeft + nRight) )
@@ -1299,7 +1627,7 @@ void SwTabFrm::Format( const SwBorderAttrs *pAttrs )
             Prt().Left( nLeft );
             Prt().Width( nMax - (nLeft + nRight) );
         }
-
+#endif
         ViewShell *pSh;
         if ( bCheckBrowseWidth && GetFmt()->GetDoc()->IsBrowseMode() &&
              GetUpper()->IsPageBodyFrm() &&  // nur PageBodyFrms, nicht etwa ColBodyFrms
@@ -1315,7 +1643,11 @@ void SwTabFrm::Format( const SwBorderAttrs *pAttrs )
             Prt().Width( Min( nWidth, Prt().Width() ) );
         }
 
+#ifdef VERTICAL_LAYOUT
+        if ( nOldHeight != (Prt().*fnRect->fnGetHeight)() )
+#else
         if ( nOldHeight != Prt().Height() )
+#endif
             bValidSize = FALSE;
     }
 
@@ -1327,13 +1659,21 @@ void SwTabFrm::Format( const SwBorderAttrs *pAttrs )
         SwTwips nRemaining = 0, nDiff;
         SwFrm *pFrm = pLower;
         while ( pFrm )
+#ifdef VERTICAL_LAYOUT
+        {   nRemaining += (pFrm->Frm().*fnRect->fnGetHeight)();
+#else
         {   nRemaining += pFrm->Frm().Height();
+#endif
             pFrm = pFrm->GetNext();
         }
         //Jetzt noch die Raender addieren
         nRemaining += nUpper + nLower;
 
+#ifdef VERTICAL_LAYOUT
+        nDiff = (Frm().*fnRect->fnGetHeight)() - nRemaining;
+#else
         nDiff = Frm().Height() - nRemaining;
+#endif
         if ( nDiff > 0 )
             Shrink( nDiff PHEIGHT );
         else if ( nDiff < 0 )
@@ -1725,6 +2065,52 @@ BOOL SwTabFrm::ShouldBwdMoved( SwLayoutFrm *pNewUpper, BOOL bHead, BOOL &rReform
         BOOL bMoveAnyway = FALSE;
         SwTwips nSpace = 0;
 
+#ifdef VERTICAL_LAYOUT
+        SWRECTFN( this )
+        if ( !SwFlowFrm::IsMoveBwdJump() )
+        {
+
+            long nOldWidth = (GetUpper()->Prt().*fnRect->fnGetWidth)();
+            SWRECTFNX( pNewUpper );
+            long nNewWidth = (pNewUpper->Prt().*fnRectX->fnGetWidth)();
+            if( Abs( nNewWidth - nOldWidth ) < 2 )
+            {
+                if( FALSE ==
+                    ( bMoveAnyway = BwdMoveNecessary( pOldPage, Frm() ) > 1 ) )
+                {
+                    SwRect aRect( pNewUpper->Prt() );
+                    aRect.Pos() += pNewUpper->Frm().Pos();
+                    const SwFrm *pPrevFrm = pNewUpper->Lower();
+                    while ( pPrevFrm )
+                    {
+                        (aRect.*fnRectX->fnSetTop)( (pPrevFrm->Frm().*fnRectX->
+                                                    fnGetBottom)() );
+                        pPrevFrm = pPrevFrm->GetNext();
+                    }
+                    bMoveAnyway = BwdMoveNecessary( pNewPage, aRect) > 1;
+                    nSpace = (aRect.*fnRectX->fnGetHeight)();
+                    if ( GetFmt()->GetDoc()->IsBrowseMode() )
+                        nSpace += pNewUpper->Grow( LONG_MAX, TRUE );
+                }
+            }
+            else if( !bLockBackMove )
+                bMoveAnyway = TRUE;
+        }
+        else if( !bLockBackMove )
+            bMoveAnyway = TRUE;
+
+        if ( bMoveAnyway )
+            return rReformat = TRUE;
+        else if ( !bLockBackMove )
+        {   const BOOL bRepeat = GetTable()->IsHeadlineRepeat();
+            SwTwips nHeight = bRepeat && Lower()->GetNext() ?
+                    (Lower()->GetNext()->Frm().*fnRect->fnGetHeight)()
+                    : (Lower()->Frm().*fnRect->fnGetHeight)();
+            if ( bHead && bRepeat && Lower()->GetNext() )
+                nHeight += (Lower()->Frm().*fnRect->fnGetHeight)();
+            return nHeight <= nSpace;
+        }
+#else
         if ( !SwFlowFrm::IsMoveBwdJump() &&
              Abs(pNewUpper->Prt().Width() - GetUpper()->Prt().Width()) < 2 )
         {
@@ -1758,6 +2144,7 @@ BOOL SwTabFrm::ShouldBwdMoved( SwLayoutFrm *pNewUpper, BOOL bHead, BOOL &rReform
                 nHeight += Lower()->Frm().Height();
             return nHeight <= nSpace;
         }
+#endif
     }
     return FALSE;
 }
@@ -1826,6 +2213,9 @@ void SwTabFrm::Cut()
 
     //Erst removen, dann Upper Shrinken.
     SwLayoutFrm *pUp = GetUpper();
+#ifdef VERTICAL_LAYOUT
+    SWRECTFN( this )
+#endif
     Remove();
     if ( pUp )
     {
@@ -1840,7 +2230,11 @@ void SwTabFrm::Cut()
                 pSct->_InvalidateSize();
             }
         }
+#ifdef VERTICAL_LAYOUT
+        else if( (Frm().*fnRect->fnGetHeight)() )
+#else
         else if ( Frm().Height() )
+#endif
             pUp->Shrink( Frm().Height() PHEIGHT );
     }
 
@@ -1880,12 +2274,20 @@ void SwTabFrm::Paste( SwFrm* pParent, SwFrm* pSibling )
             GetNext()->InvalidatePage( pPage );
     }
 
+#ifdef VERTICAL_LAYOUT
+    SWRECTFN( this )
+    if( (Frm().*fnRect->fnGetHeight)() )
+        pParent->Grow( (Frm().*fnRect->fnGetHeight)() );
+
+    if( (Frm().*fnRect->fnGetWidth)() != (pParent->Prt().*fnRect->fnGetWidth)() )
+        Prepare( PREP_FIXSIZE_CHG );
+#else
     if ( Frm().Height() )
         pParent->Grow( Frm().Height() PHEIGHT );
 
     if ( Frm().Width() != pParent->Prt().Width() )
         Prepare( PREP_FIXSIZE_CHG );
-
+#endif
     if ( GetPrev() )
     {
         if ( !IsFollow() )
@@ -2028,6 +2430,9 @@ void SwRowFrm::MakeAll()
 |*************************************************************************/
 long MA_FASTCALL CalcHeightWidthFlys( const SwFrm *pFrm )
 {
+#ifdef VERTICAL_LAYOUT
+    SWRECTFN( pFrm )
+#endif
     long nHeight = 0;
     const SwFrm* pTmp = pFrm->IsSctFrm() ?
             ((SwSectionFrm*)pFrm)->ContainsCntnt() : pFrm;
@@ -2041,11 +2446,11 @@ long MA_FASTCALL CalcHeightWidthFlys( const SwFrm *pFrm )
                 if ( pO->IsWriterFlyFrame() )
                 {
                     const SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
-                    if ( !pFly->IsFlyInCntFrm() && pFly->Frm().Top()!=WEIT_WECH )
-//                       pFrm->GetValidPosFlag() && pFrm->GetValidSizeFlag() )
+                    if( !pFly->IsFlyInCntFrm() && pFly->Frm().Top()!=WEIT_WECH )
                     {
                         const SwFmtFrmSize &rSz = pFly->GetFmt()->GetFrmSize();
                         if( !rSz.GetHeightPercent() )
+// to do VERTICAL !
                             nHeight = Max( nHeight, pFly->Frm().Height() +
                                 pFly->GetCurRelPos().Y() + pTmp->Frm().Top()
                                 - pFrm->Frm().Top() - pFrm->Frm().Height() );
@@ -2067,6 +2472,9 @@ SwTwips MA_FASTCALL lcl_CalcMinRowHeight( SwLayoutFrm *pRow );
 SwTwips MA_FASTCALL lcl_CalcMinCellHeight( SwLayoutFrm *pCell,
                                   const SwBorderAttrs *pAttrs = 0 )
 {
+#ifdef VERTICAL_LAYOUT
+    SWRECTFN( pCell )
+#endif
     SwTwips nHeight = 0;
     SwFrm *pLow = pCell->Lower();
     if ( pLow )
@@ -2076,8 +2484,14 @@ SwTwips MA_FASTCALL lcl_CalcMinCellHeight( SwLayoutFrm *pCell,
         {
             if( pLow->IsCntntFrm() || pLow->IsSctFrm() )
             {
+#ifdef VERTICAL_LAYOUT
+                long nLowHeight = (pLow->Frm().*fnRect->fnGetHeight)();
+                nHeight += nLowHeight;
+                nFlyAdd = Max( 0L, nFlyAdd - nLowHeight );
+#else
                 nHeight += pLow->Frm().Height();
                 nFlyAdd = Max( 0L, nFlyAdd - pLow->Frm().Height() );
+#endif
                 nFlyAdd = Max( nFlyAdd, ::CalcHeightWidthFlys( pLow ) );
             }
             else
@@ -2105,11 +2519,13 @@ SwTwips MA_FASTCALL lcl_CalcMinCellHeight( SwLayoutFrm *pCell,
 SwTwips MA_FASTCALL lcl_CalcMinRowHeight( SwLayoutFrm *pRow )
 {
 #ifdef VERTICAL_LAYOUT
+    SWRECTFN( pRow )
     if ( pRow->HasFixSize() )
+        return (pRow->Frm().*fnRect->fnGetHeight)();
 #else
     if ( pRow->HasFixSize( pHeight ) )
-#endif
         return pRow->Frm().Height();
+#endif
 
     SwTwips nHeight = 0;
     SwLayoutFrm *pLow = (SwLayoutFrm*)pRow->Lower();
@@ -2128,6 +2544,9 @@ SwTwips MA_FASTCALL lcl_CalcMinRowHeight( SwLayoutFrm *pRow )
 
 void SwRowFrm::Format( const SwBorderAttrs *pAttrs )
 {
+#ifdef VERTICAL_LAYOUT
+    SWRECTFN( this )
+#endif
     ASSERT( pAttrs, "SwRowFrm::Format ohne Attrs." );
 
     const BOOL bFix = BFIXHEIGHT;
@@ -2155,7 +2574,7 @@ void SwRowFrm::Format( const SwBorderAttrs *pAttrs )
             ASSERT( rFrmSize.GetSize().Height() > 0, "Hat ihn" );
         }
 #endif
-        const SwTwips nDiff = Frm().Height() - (HasFixSize() ?
+        const SwTwips nDiff = (Frm().*fnRect->fnGetHeight)() - (HasFixSize() ?
                                                 pAttrs->GetSize().Height() :
                                                 ::lcl_CalcMinRowHeight( this ));
 #else
@@ -2183,10 +2602,17 @@ void SwRowFrm::Format( const SwBorderAttrs *pAttrs )
     if ( !GetNext() )
     {
         //Der letzte fuellt den verbleibenden Raum im Upper aus.
+#ifdef VERTICAL_LAYOUT
+        SwTwips nDiff = (GetUpper()->Prt().*fnRect->fnGetHeight)();
+        SwFrm *pSibling = GetUpper()->Lower();
+        do
+        {   nDiff -= (pSibling->Frm().*fnRect->fnGetHeight)();
+#else
         SwTwips nDiff = GetUpper()->Prt().Height();
         SwFrm *pSibling = GetUpper()->Lower();
         do
         {   nDiff -= pSibling->Frm().Height();
+#endif
             pSibling = pSibling->GetNext();
         } while ( pSibling );
         if ( nDiff > 0 )
@@ -2212,10 +2638,20 @@ void SwRowFrm::AdjustCells( const SwTwips nHeight, const BOOL bHeight )
     SwFrm *pFrm = Lower();
     if ( bHeight )
     {
+#ifdef VERTICAL_LAYOUT
+        SWRECTFN( this )
+        while ( pFrm )
+        {
+            long nDiff = nHeight - (pFrm->Frm().*fnRect->fnGetHeight)();
+            if( nDiff )
+            {
+                (pFrm->Frm().*fnRect->fnAddBottom)( nDiff );
+#else
         while ( pFrm )
         {   if ( pFrm->Frm().Height() != nHeight )
             {
                 pFrm->Frm().Height( nHeight );
+#endif
                 pFrm->_InvalidatePrt();
             }
             pFrm = pFrm->GetNext();
@@ -2270,7 +2706,7 @@ SwTwips SwRowFrm::GrowFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
     if ( !bTst )
     {
         SWRECTFN( this )
-        AdjustCells( (Prt().*fnRect->fnGetHeight)() + nReal, !bVert );
+        AdjustCells( (Prt().*fnRect->fnGetHeight)() + nReal, TRUE );
         if ( nReal )
             SetCompletePaint();
     }
@@ -2547,6 +2983,69 @@ BOOL lcl_ArrangeLowers( SwLayoutFrm *pLay, long lYStart, BOOL bInva )
     BOOL bRet = FALSE;
     SwFrm *pFrm = pLay->Lower();
     SwPageFrm* pPg = NULL;
+#ifdef VERTICAL_LAYOUT
+    SWRECTFN( pLay )
+    while ( pFrm )
+    {
+        long nFrmTop = (pFrm->Frm().*fnRect->fnGetTop)();
+        if( nFrmTop != lYStart )
+        {
+            bRet = TRUE;
+            const long lDiff = (*fnRect->fnYDiff)( lYStart, nFrmTop );
+            const long lDiffX = lYStart - nFrmTop;
+            (pFrm->Frm().*fnRect->fnSubTop)( -lDiff );
+            (pFrm->Frm().*fnRect->fnAddBottom)( lDiff );
+            pFrm->SetCompletePaint();
+            if ( !pFrm->GetNext() )
+                pFrm->SetRetouche();
+            if( bInva )
+                pFrm->Prepare( PREP_POS_CHGD );
+            if ( pFrm->IsLayoutFrm() && ((SwLayoutFrm*)pFrm)->Lower() )
+                lcl_ArrangeLowers( (SwLayoutFrm*)pFrm,
+                    (((SwLayoutFrm*)pFrm)->Lower()->Frm().*fnRect->fnGetTop)()
+                    + lDiffX, bInva );
+            if ( pFrm->GetDrawObjs() )
+            {
+                for ( USHORT i = 0; i < pFrm->GetDrawObjs()->Count(); ++i )
+                {
+                    SdrObject *pO = (*pFrm->GetDrawObjs())[i];
+                    if ( pO->IsWriterFlyFrame() )
+                    {
+                        SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
+                        if( WEIT_WECH != pFly->Frm().Top() )
+                        {
+                            (pFly->Frm().*fnRect->fnSubTop)( -lDiff );
+                            (pFly->Frm().*fnRect->fnAddBottom)( lDiff );
+                        }
+                        pFly->GetVirtDrawObj()->_SetRectsDirty();
+                        if ( pFly->IsFlyInCntFrm() )
+                            ((SwFlyInCntFrm*)pFly)->AddRefOfst( lDiff );
+                        else
+                        {
+                            if( !pPg )
+                                pPg = pLay->FindPageFrm();
+                            SwPageFrm* pOld = pFly->FindPageFrm();
+                            if( pPg != pOld )
+                                pOld->MoveFly( pFly, pPg );
+                            if( pFly->IsAutoPos() )
+                                ((SwFlyAtCntFrm*)pFly)->AddLastCharY( lDiff );
+                        }
+                        if( ::lcl_ArrangeLowers( pFly,
+                            (pFly->*fnRect->fnGetPrtTop)(), bInva ) )
+                            pFly->SetCompletePaint();
+                    }
+                    else
+                        pO->SetAnchorPos( (pFrm->Frm().*fnRect->fnGetPos)() );
+                }
+            }
+        }
+        // Columns and cells are ordered horizontal, not vertical
+        if( !pFrm->IsColumnFrm() && !pFrm->IsCellFrm() )
+            lYStart = (*fnRect->fnYInc)( lYStart,
+                                        (pFrm->Frm().*fnRect->fnGetHeight)() );
+        pFrm = pFrm->GetNext();
+    }
+#else
     while ( pFrm )
     {
         if ( pFrm->Frm().Top() != lYStart )
@@ -2599,13 +3098,28 @@ BOOL lcl_ArrangeLowers( SwLayoutFrm *pLay, long lYStart, BOOL bInva )
             lYStart += pFrm->Frm().Height();
         pFrm = pFrm->GetNext();
     }
+#endif
     return bRet;
 }
 
 void SwCellFrm::Format( const SwBorderAttrs *pAttrs )
 {
     ASSERT( pAttrs, "CellFrm::Format, pAttrs ist 0." );
+#ifdef VERTICAL_LAYOUT
+    SWRECTFN( this )
+    if ( !bValidPrtArea )
+    {
+        bValidPrtArea = TRUE;
 
+        //Position einstellen.
+        long nTmp1 = pAttrs->CalcLeft( this );
+        long nTmp2 = pAttrs->CalcRight();
+        (this->*fnRect->fnSetXMargins)( nTmp1, nTmp2 );
+        nTmp1 = pAttrs->CalcTop();
+        nTmp2 = pAttrs->CalcBottom();
+        (this->*fnRect->fnSetYMargins)( nTmp1, nTmp2 );
+    }
+#else
     if ( !bValidPrtArea )
     {
         bValidPrtArea = TRUE;
@@ -2619,7 +3133,7 @@ void SwCellFrm::Format( const SwBorderAttrs *pAttrs )
         aPrt.Width ( aFrm.Width() - (aPrt.Left() + pAttrs->CalcRight()) );
         aPrt.Height( aFrm.Height()- (aPrt.Top()  + pAttrs->CalcBottom()));
     }
-
+#endif
     long nRemaining = ::lcl_CalcMinCellHeight( this, pAttrs );
     if ( !bValidSize )
     {
@@ -2646,6 +3160,32 @@ void SwCellFrm::Format( const SwBorderAttrs *pAttrs )
             ASSERT( nWidth <= nWish, "Zelle breiter als Tabelle." );
             ASSERT( nWidth > 0, "Box without width" );
 
+#ifdef VERTICAL_LAYOUT
+            long nPrtWidth = (pTab->Prt().*fnRect->fnGetWidth)();
+            if ( nWish != nPrtWidth )
+            {
+                nWidth *= nPrtWidth;
+                nWidth /= nWish;
+            }
+        }
+        else
+        {
+            ASSERT( pAttrs->GetSize().Width() > 0, "Box without width" );
+            nWidth = (GetUpper()->Prt().*fnRect->fnGetWidth)();
+            SwFrm *pPre = GetUpper()->Lower();
+            while ( pPre != this )
+            {   nWidth -= (pPre->Frm().*fnRect->fnGetWidth)();
+                pPre = pPre->GetNext();
+            }
+        }
+        const long nDiff = nWidth - (Frm().*fnRect->fnGetWidth)();
+        (Frm().*fnRect->fnAddRight)( nDiff );
+        (Prt().*fnRect->fnAddRight)( nDiff );
+
+        //Jetzt die Hoehe einstellen, sie wird vom Inhalt und den Raendern
+        //bestimmt.
+        const long nDiffHeight = nRemaining - (Frm().*fnRect->fnGetHeight)();
+#else
             if ( nWish != pTab->Prt().Width() )
             {
                 nWidth *= pTab->Prt().Width();
@@ -2669,6 +3209,7 @@ void SwCellFrm::Format( const SwBorderAttrs *pAttrs )
         //Jetzt die Hoehe einstellen, sie wird vom Inhalt und den Raendern
         //bestimmt.
         const long nDiffHeight = nRemaining - Frm().Height();
+#endif
         if ( nDiffHeight )
         {
             if ( nDiffHeight > 0 )
@@ -2733,12 +3274,23 @@ void SwCellFrm::Format( const SwBorderAttrs *pAttrs )
                 }
             }
         }
+#ifdef VERTICAL_LAYOUT
+        long nPrtHeight = (Prt().*fnRect->fnGetHeight)();
+        if( ( bVertDir && ( nRemaining -= (pAttrs->CalcTop() +
+                            pAttrs->CalcBottom())) < nPrtHeight ) ||
+            (Lower()->Frm().*fnRect->fnGetTop)() !=
+            (this->*fnRect->fnGetPrtTop)() )
+        {
+            long lTopOfst = 0,
+                    nDiff = (Prt().*fnRect->fnGetHeight)() - nRemaining;
+#else
         if ( (bVertDir &&
                 (nRemaining -= (pAttrs->CalcTop() + pAttrs->CalcBottom())) < Prt().Height()) ||
                 Lower()->Frm().Top() > Frm().Top()+Prt().Top() )
         {
             long lTopOfst = 0,
                     nDiff = Prt().Height() - nRemaining;
+#endif
             if ( nDiff >= 0 )
             {
                 if ( bVertDir )
@@ -2749,8 +3301,14 @@ void SwCellFrm::Format( const SwBorderAttrs *pAttrs )
                         case VERT_BOTTOM:   lTopOfst = nDiff;     break;
                     };
                 }
+#ifdef VERTICAL_LAYOUT
+                long nTmp = (*fnRect->fnYInc)(
+                                    (this->*fnRect->fnGetPrtTop)(), lTopOfst );
+                if ( lcl_ArrangeLowers( this, nTmp, !bVertDir ) )
+#else
                 if ( lcl_ArrangeLowers( this, Frm().Top()+Prt().Top()+lTopOfst,
                       !bVertDir ) )
+#endif
                     SetCompletePaint();
             }
         }
@@ -2760,7 +3318,11 @@ void SwCellFrm::Format( const SwBorderAttrs *pAttrs )
         //Ist noch eine alte Ausrichtung beruecksichtigt worden?
         if ( Lower()->IsCntntFrm() )
         {
+#ifdef VERTICAL_LAYOUT
+            const long lYStart = (this->*fnRect->fnGetPrtTop)();
+#else
             const long lYStart = Frm().Top()+Prt().Top();
+#endif
             lcl_ArrangeLowers( this, lYStart, TRUE );
         }
     }
@@ -2790,7 +3352,12 @@ void SwCellFrm::Modify( SfxPoolItem * pOld, SfxPoolItem * pNew )
         if ( VERT_NONE == ((SwFmtVertOrient*)pItem)->GetVertOrient() &&
              Lower()->IsCntntFrm() )
         {
+#ifdef VERTICAL_LAYOUT
+            SWRECTFN( this )
+            const long lYStart = (this->*fnRect->fnGetPrtTop)();
+#else
             const long lYStart = Frm().Top()+Prt().Top();
+#endif
             bInva = lcl_ArrangeLowers( this, lYStart, FALSE );
         }
         if ( bInva )

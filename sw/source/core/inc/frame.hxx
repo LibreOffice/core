@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ama $ $Date: 2001-11-14 14:38:42 $
+ *  last change: $Author: ama $ $Date: 2001-11-16 11:36:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,7 +240,10 @@ struct SwRectFnCollection
     SwFrmGet      fnGetRightMargin;
     SwFrmSet      fnSetXMargins;
     SwFrmSet      fnSetYMargins;
-    SwFrmGet      fnGetLimit;
+    SwFrmGet      fnGetPrtTop;
+    SwFrmGet      fnGetLimit;           // PrtBottom is limit for inner frames
+    SwFrmGet      fnGetPrtLeft;
+    SwFrmGet      fnGetPrtRight;
     SwFrmMax      fnSetLimit;
     SwRectDist    fnCheckLimit;
     SwRectMax     fnOverStep;
@@ -250,6 +253,9 @@ struct SwRectFnCollection
     SwOperator    fnYDiff;
     SwOperator    fnXInc;
     SwOperator    fnYInc;
+
+//    SwRectSetTwice fnSetLeftAndWidth;
+    SwRectSetTwice fnSetTopAndHeight;
 };
 
 typedef SwRectFnCollection* SwRectFn;
@@ -823,6 +829,10 @@ public:
     void SetBottomTopMargins( long, long );
     void SetLeftRightMargins( long, long );
     void SetRightLeftMargins( long, long );
+    void SetLeftAndWidth( long nLeft, long nWidth );
+    void SetTopAndHeight( long nTop, long nHeight );
+    void SetRightAndWidth( long nRight, long nWidth );
+    void SetBottomAndHeight( long nBottom, long nHeight );
     long GetPrtLeft() const;
     long GetPrtBottom() const;
     long GetPrtRight() const;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newfrm.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ama $ $Date: 2001-11-09 13:29:54 $
+ *  last change: $Author: ama $ $Date: 2001-11-16 11:39:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,7 +188,10 @@ static SwRectFnCollection aHorizontal = {
     &SwFrm::GetRightMargin,
     &SwFrm::SetLeftRightMargins,
     &SwFrm::SetTopBottomMargins,
+    &SwFrm::GetPrtTop,
     &SwFrm::GetPrtBottom,
+    &SwFrm::GetPrtLeft,
+    &SwFrm::GetPrtRight,
     &SwFrm::SetMaxBottom,
     &SwRect::GetBottomDistance,
     &SwRect::OverStepBottom,
@@ -197,7 +200,9 @@ static SwRectFnCollection aHorizontal = {
     &FirstMinusSecond,
     &FirstMinusSecond,
     &SwIncrement,
-    &SwIncrement
+    &SwIncrement,
+//    &SwRect::SetLeftAndWidth,
+    &SwRect::SetTopAndHeight
 };
 
 static SwRectFnCollection aVertical = {
@@ -234,7 +239,10 @@ static SwRectFnCollection aVertical = {
     &SwFrm::GetBottomMargin,
     &SwFrm::SetTopBottomMargins,
     &SwFrm::SetRightLeftMargins,
+    &SwFrm::GetPrtRight,
     &SwFrm::GetPrtLeft,
+    &SwFrm::GetPrtTop,
+    &SwFrm::GetPrtBottom,
     &SwFrm::SetMinLeft,
     &SwRect::GetLeftDistance,
     &SwRect::OverStepLeft,
@@ -243,7 +251,9 @@ static SwRectFnCollection aVertical = {
     &FirstMinusSecond,
     &SecondMinusFirst,
     &SwIncrement,
-    &SwDecrement
+    &SwDecrement,
+//    &SwRect::SetTopAndHeight,
+    &SwRect::SetRightAndWidth
 };
 
 static SwRectFnCollection aBottomToTop = {
@@ -280,7 +290,10 @@ static SwRectFnCollection aBottomToTop = {
     &SwFrm::GetRightMargin,
     &SwFrm::SetLeftRightMargins,
     &SwFrm::SetBottomTopMargins,
+    &SwFrm::GetPrtBottom,
     &SwFrm::GetPrtTop,
+    &SwFrm::GetPrtRight,
+    &SwFrm::GetPrtLeft,
     &SwFrm::SetMinTop,
     &SwRect::GetTopDistance,
     &SwRect::OverStepTop,
@@ -289,7 +302,9 @@ static SwRectFnCollection aBottomToTop = {
     &FirstMinusSecond,
     &SecondMinusFirst,
     &SwIncrement,
-    &SwDecrement
+    &SwDecrement,
+//    &SwRect::SetLeftAndWidth,
+    &SwRect::SetBottomAndHeight
 };
 
 static SwRectFnCollection aVerticalRightToLeft = {
@@ -326,7 +341,10 @@ static SwRectFnCollection aVerticalRightToLeft = {
     &SwFrm::GetBottomMargin,
     &SwFrm::SetTopBottomMargins,
     &SwFrm::SetLeftRightMargins,
+    &SwFrm::GetPrtLeft,
     &SwFrm::GetPrtRight,
+    &SwFrm::GetPrtBottom,
+    &SwFrm::GetPrtTop,
     &SwFrm::SetMaxRight,
     &SwRect::GetRightDistance,
     &SwRect::OverStepRight,
@@ -335,7 +353,9 @@ static SwRectFnCollection aVerticalRightToLeft = {
     &FirstMinusSecond,
     &FirstMinusSecond,
     &SwDecrement,
-    &SwIncrement
+    &SwIncrement,
+//    &SwRect::SetBottomAndHeight,
+    &SwRect::SetLeftAndWidth
 };
 
 SwRectFn fnRectHori = &aHorizontal;

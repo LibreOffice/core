@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swrect.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ama $ $Date: 2001-10-05 12:30:22 $
+ *  last change: $Author: ama $ $Date: 2001-11-16 11:37:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -332,6 +332,14 @@ BOOL SwRect::OverStepTop( long nLimit ) const
     { return nLimit > nY && nY + nHeight > nLimit; }
 BOOL SwRect::OverStepRight( long nLimit ) const
     { return nLimit > nX && nX + nWidth > nLimit; }
+void SwRect::SetLeftAndWidth( long nLeft, long nNew )
+    { nX = nLeft; nWidth = nNew; }
+void SwRect::SetTopAndHeight( long nTop, long nNew )
+    { nY = nTop; nHeight = nNew; }
+void SwRect::SetRightAndWidth( long nRight, long nNew )
+    { nX = nRight - nNew; nWidth = nNew; }
+void SwRect::SetBottomAndHeight( long nBottom, long nNew )
+    { nY = nBottom - nNew; nHeight = nNew; }
 #endif
 
 #ifndef PRODUCT
