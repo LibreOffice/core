@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxrtf.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 15:53:07 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 14:17:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,7 +159,7 @@ struct SvxRTFPictureType
     } nMode;
 
     USHORT  nType;
-    USHORT  uPicLen;
+    sal_uInt32 uPicLen;
     USHORT  nWidth, nHeight;
     USHORT  nGoalWidth, nGoalHeight;
     USHORT  nBitsPerPixel;
@@ -248,6 +248,7 @@ struct RTFPardAttrMapIds
 
 class SvxRTFParser : public SvRTFParser
 {
+    SvStream &rStrm;
     SvxRTFColorTbl  aColorTbl;
     SvxRTFFontTbl   aFontTbl;
     SvxRTFStyleTbl  aStyleTbl;
