@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imapdlg.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:34:29 $
+ *  last change: $Author: hr $ $Date: 2004-12-13 12:15:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -771,7 +771,7 @@ BOOL SvxIMapDlg::DoSave()
         }
         else
         {
-            if( !aURL.getExtension().Len() )
+            if( !aURL.getExtension().getLength() )
                 aURL.setExtension( aExt );
 
             SvStream* pOStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_WRITE | STREAM_TRUNC );
