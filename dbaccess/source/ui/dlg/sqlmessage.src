@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlmessage.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-26 17:32:00 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 14:50:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,4 +193,10 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
         Text [ de ] = "Fehler-Code";
         Text [ en-US ] = "Error code";
     };
+};
+
+String STR_EXPLAN_STRINGCONVERSION_ERROR
+{
+    Text [ de ] = "Ein häufiger Grund für diesen Fehler ist eine ungeignete Zeichensatz-Einstellung für die Sprache Ihrer Datenbank. Überprüfen Sie diese Einstellung unter Bearbeiten - Datenbank - Eigenschaften.";
+    Text [ en-US ] = "A frequent reason for this error is an inappropriate character set setting for the language of your database. Check the setting by choosing Edit - Database - Properties.";
 };
