@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldata.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: cp $ $Date: 2002-08-06 14:27:57 $
+ *  last change: $Author: hr $ $Date: 2002-08-27 14:32:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,23 @@
 #endif
 
 #include <prex.h>
+
+// [ed] 6/15/02 There's a conflicting definition of INT8 within the Xmd.h header
+// and the solar.h OOo header.  So, wrap the X11 header with a bogus #define
+// to use the OOo definition of the symbol for INT8.
+
+#ifdef MACOSX
+#define INT8 blehBlahFooBar
+#endif
+
 #include <X11/Xproto.h>
+
+// [ed] 6/15/02 Get rid of INT8 hack
+
+#ifdef MACOSX
+#undef INT8
+#endif
+
 #include <postx.h>
 
 #ifndef _SV_SALDISP_HXX
