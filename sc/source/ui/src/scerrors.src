@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scerrors.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:05 $
+ *  last change: $Author: obo $ $Date: 2000-10-27 16:04:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ Resource RID_ERRHDLSC
         Text [ spanish ] = "No se pudo establecer conexión con el archivo." ;
         Text [ french ] = "Impossible d'établir un lien avec le fichier." ;
         Text [ dutch ] = "Er kon geen verbinding met het bestand tot stand worden gebracht." ;
-        Text [ swedish ] = "En förbindelse till filen kunde inte etableras." ;
+        Text [ swedish ] = "Det gick inte att upprätta en förbindelse till filen." ;
         Text [ danish ] = "Det var ikke muligt at oprette en forbindelse til filen." ;
         Text [ portuguese ] = "Não foi possível estabelecer ligação com o ficheiro." ;
         Text [ portuguese_brazilian ] = "Es konnte keine Verbindung zu der Datei hergestellt werden." ;
@@ -177,7 +177,7 @@ Resource RID_ERRHDLSC
         Text [ italian ] = "Memoria insufficiente durante l'importazione." ;
         Text [ spanish ] = "Memoria insuficiente al importar." ;
         Text [ french ] = "Mémoire insuffisante lors de l'import." ;
-        Text [ swedish ] = "Inte tillräckligt med minne under importeringen." ;
+        Text [ swedish ] = "Inte tillräckligt med minne under importen." ;
         Text [ danish ] = "Ikke tilstrækkelig hukommelse ved import." ;
         Text [ portuguese ] = "Memória insuficiente ao importar." ;
         Text [ portuguese_brazilian ] = "Nicht genug Speicher beim Importieren." ;
@@ -225,7 +225,7 @@ Resource RID_ERRHDLSC
         Text [ italian ] = "Errore nella struttura del file durante l'importazione" ;
         Text [ spanish ] = "Error en la estructura del archivo al importar." ;
         Text [ french ] = "Erreur dans la structure du fichier lors de l'import." ;
-        Text [ swedish ] = "Fel i filstruktur vid importering." ;
+        Text [ swedish ] = "Fel i filstruktur vid import." ;
         Text [ danish ] = "Fejl i filstrukturen ved import." ;
         Text [ portuguese ] = "Erro na estrutura do ficheiro ao importar." ;
         Text [ portuguese_brazilian ] = "Fehler in Dateistruktur beim Importieren." ;
@@ -498,7 +498,7 @@ Resource RID_ERRHDLSC
         Text [ italian ] = "Il numero massimo di righe è stato superato. le righe in eccesso non sono state importate!" ;
         Text [ spanish ] = "Se ha excedido la cantidad máxima de filas. ¡Las filas adicionales no se importaron!" ;
         Text [ french ] = "Le nombre de lignes maximum a été dépassé. Le surplus n'a pas pu être importé !" ;
-        Text [ swedish ] = "Radantalet överskrider maximum. Överblivna rader blev inte medimporterade!" ;
+        Text [ swedish ] = "Det maximala antalet rader överskreds. Överblivna rader importerades inte!" ;
         Text [ danish ] = "Det maksimale antal rækker blev overskredet. De overtallige rækker blev ikke importeret!" ;
         Text [ portuguese ] = "O número máximo de linhas foi ultrapassado! As linhas em excesso não foram importadas!" ;
         Text [ portuguese_brazilian ] = "Die Maximalanzahl von Zeilen wurde überschritten. überzählige Zeilen wurden nicht mitimportiert!" ;
@@ -596,7 +596,7 @@ Resource RID_ERRHDLSC
         Text [ portuguese ] = "O documento contém mais linhas do que as previstas para o formato correspondente.\nAs linhas em excesso não foram guardadas." ;
         Text [ english_us ] = "The document contains more rows than supported in the selected format.\nAdditional rows were not saved." ;
         Text [ portuguese_brazilian ] = "Das Dokument enthält mehr Zeilen, als das Ausgabeformat unterstützt.\nÜberzählige Zeilen wurden nicht gespeichert." ;
-        Text [ swedish ] = "Dokumentet innehåller mer rader än vad som understöds av utmatningsformatet.\nÖvertaliga rader kommer inte att sparas." ;
+        Text [ swedish ] = "Dokumentet innehåller mer rader än vad som understöds av utmatningsformatet.\nÖvertaliga rader sparades inte." ;
         Text [ danish ] = "Dokumentet indeholder flere rækker end output-formatet understøtter.\nDe overtallige rækker blev ikke gemt." ;
         Text [ italian ] = "Il documento contiene più righe di quelle supportate dal formato di uscita.\nLe righe in eccesso non sono state salvate." ;
         Text [ spanish ] = "El documento contiene mas filas de las que soporta el formato seleccionado.\nLas filas adicionales no se guardaron." ;
@@ -621,7 +621,7 @@ Resource RID_ERRHDLSC
         Text [ portuguese ] = "O documento contém informações desconhecidas para esta versão do programa.\nAo guardar novamente perderá estas informações!" ;
         Text [ english_us ] = "The document contains information not recognized by this program version.\nResaving the document will delete this information!" ;
         Text [ portuguese_brazilian ] = "Das Dokument enthält Informationen, die dieser Programmversion unbekannt sind.\nBei erneutem Speichern gehen diese Informationen verloren!" ;
-        Text [ swedish ] = "Dokumentet innehåller information som denna programversion inte känner igen.\nOm Du sparar igen kommer denna information att gå förlorad!" ;
+        Text [ swedish ] = "Dokumentet innehåller information som denna programversion inte känner igen.\nOm Du sparar igen går den här informationen förlorad!" ;
         Text [ danish ] = "Dokumentet indeholder informationer, som denne programversion ikke kan genkende.\nHvis du gemmer dokumentet igen, vil disse informationer gå tabt." ;
         Text [ italian ] = "Il documento contiene informazioni sconosciute alla versione corrente del programma.\nCon un nuovo salvataggio le informazioni andranno perse!" ;
         Text [ spanish ] = "El documento contiene información desconocida para la versión de este programa.\n¡Al volver a guardar se perderá esta información!" ;
