@@ -2,9 +2,9 @@
 #
 #   $RCSfile: worker.pm,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2004-08-12 08:30:00 $
+#   last change: $Author: obo $ $Date: 2004-10-18 13:54:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -338,17 +338,20 @@ sub create_installation_directory
 
     my $installdir = "";
 
+    my $languageref = $languagestringref;
+    if ( $installer::globals::is_unix_multi ) { $languageref = \$installer::globals::unixmultipath; }
+
     if ( $installer::globals::updatepack )
     {
         $installdir = $shipinstalldir;
         installer::systemactions::create_directory_structure($installdir);
-        $$current_install_number_ref = installer::systemactions::determine_maximum_number($installdir, $languagestringref);
+        $$current_install_number_ref = installer::systemactions::determine_maximum_number($installdir, $languageref);
         $installdir = installer::systemactions::rename_string_in_directory($installdir, "number", $$current_install_number_ref);
         remove_old_ship_installation_sets($installdir);
     }
     else
     {
-        $installdir = installer::systemactions::create_directories("install", $languagestringref);
+        $installdir = installer::systemactions::create_directories("install", $languageref);
         print "... creating installation set in $installdir ...\n";
         remove_old_installation_sets($installdir);
         my $inprogressinstalldir = $installdir . "_inprogress";
@@ -425,5 +428,45 @@ sub clean_output_tree
         }
     }
 }
+
+###########################################################
+# Copying a reference array
+###########################################################
+
+sub copy_array_from_references
+{
+    my ( $arrayref ) = @_;
+
+    my @newarray = ();
+
+    for ( my $i = 0; $i <= $#{$arrayref}; $i++ )
+    {
+        push(@newarray, ${$arrayref}[$i]);
+    }
+
+    return \@newarray;
+}
+
+###########################################################
+# Setting one language in the language independent
+# array of include pathes with $(LANG)
+###########################################################
+
+sub get_language_specific_include_pathes
+{
+    my ( $patharrayref, $onelanguage ) = @_;
+
+    my @patharray = ();
+
+    for ( my $i = 0; $i <= $#{$patharrayref}; $i++ )
+    {
+        my $line = ${$patharrayref}[$i];
+        $line =~ s/\$\(LANG\)/$onelanguage/g;
+        push(@patharray ,$line);
+    }
+
+    return \@patharray;
+}
+
 
 1;
