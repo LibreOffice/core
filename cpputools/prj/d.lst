@@ -8,6 +8,8 @@ mkdir: %_DEST%\inc%_EXT%\cpputools
 ..\%__SRC%\bin\regcomp %_DEST%\bin%_EXT%\regcomp
 ..\%__SRC%\bin\uno.exe %_DEST%\bin%_EXT%\uno.exe
 ..\%__SRC%\bin\uno %_DEST%\bin%_EXT%\uno
+..\%__SRC%\bin\regsingleton.exe %_DEST%\bin%_EXT%\regsingleton.exe
+..\%__SRC%\bin\regsingleton %_DEST%\bin%_EXT%\regsingleton
 
 ..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
 ..\%__SRC%\misc\*staticdatamembers.cxx %_DEST%\inc%_EXT%\*staticdatamembers.cxx
