@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilterConfigItem.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sj $ $Date: 2001-04-25 16:55:41 $
+ *  last change: $Author: sj $ $Date: 2001-04-26 13:14:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -319,6 +319,15 @@ Size FilterConfigItem::ReadSize( const OUString& rKey, const Size& rDefault )
     return aRetValue;
 }
 
+OUString FilterConfigItem::ReadString( const OUString& rKey, const OUString& rDefault )
+{
+    Any aAny;
+    OUString aRetValue( rDefault );
+    if ( ImplGetPropertyValue( aAny, xPropSet, rKey, sal_True ) )
+        aAny >>= aRetValue;
+    return aRetValue;
+}
+
 void FilterConfigItem::WriteBool( const OUString& rKey, sal_Bool bNewValue )
 {
     if ( xPropSet.is() )
@@ -409,6 +418,35 @@ void FilterConfigItem::WriteSize( const OUString& rKey, const Size& rNewValue )
             catch ( ::com::sun::star::uno::Exception& )
             {
                 DBG_ERROR( "FilterConfigItem::WriteSize - could not read PropertyValue" );
+            }
+        }
+    }
+}
+
+void FilterConfigItem::WriteString( const OUString& rKey, const OUString& rNewValue )
+{
+    if ( xPropSet.is() )
+    {
+        Any aAny;
+
+        if ( ImplGetPropertyValue( aAny, xPropSet, rKey, sal_True ) )
+        {
+            OUString aOldValue;
+            if ( aAny >>= aOldValue )
+            {
+                if ( aOldValue != rNewValue )
+                {
+                    aAny <<= rNewValue;
+                    try
+                    {
+                        xPropSet->setPropertyValue( rKey, aAny );
+                        bModified = sal_True;
+                    }
+                    catch ( ::com::sun::star::uno::Exception& )
+                    {
+                        DBG_ERROR( "FilterConfigItem::WriteInt32 - could not set PropertyValue" );
+                    }
+                }
             }
         }
     }
