@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ItemConverter.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:28 $
+ *  last change: $Author: bm $ $Date: 2003-10-07 11:39:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,11 @@ SfxItemPool & ItemConverter::GetItemPool() const
 SfxItemSet ItemConverter::CreateEmptyItemSet() const
 {
     return SfxItemSet( GetItemPool(), GetWhichPairs() );
+}
+
+bool ItemConverter::IsValid() const
+{
+    return m_bIsValid;
 }
 
 uno::Reference< beans::XPropertySet >  ItemConverter::GetPropertySet() const
