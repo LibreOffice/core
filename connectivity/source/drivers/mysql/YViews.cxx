@@ -2,9 +2,9 @@
  *
  *  $RCSfile: YViews.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-25 09:48:58 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:08:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,11 +174,7 @@ void OViews::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
     if ( m_bInDrop )
         return;
 
-    ObjectIter aIter = m_aElements[_nPos];
-
-    if(!aIter->second.is()) // we want to drop a object which isn't loaded yet so we must load it
-        aIter->second = createObject(_sElementName);
-    Reference< ::com::sun::star::lang::XUnoTunnel> xTunnel(aIter->second.get(),UNO_QUERY);
+    Reference< ::com::sun::star::lang::XUnoTunnel> xTunnel(getObject(_nPos),UNO_QUERY);
     sal_Bool bIsNew = sal_False;
     if(xTunnel.is())
     {
@@ -190,7 +186,7 @@ void OViews::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
     {
         ::rtl::OUString aSql = ::rtl::OUString::createFromAscii("DROP VIEW");
 
-        Reference<XPropertySet> xProp(aIter->second,UNO_QUERY);
+        Reference<XPropertySet> xProp(xTunnel,UNO_QUERY);
         aSql += ::dbtools::composeTableName(m_xMetaData,xProp,sal_True,::dbtools::eInTableDefinitions);
 
         Reference<XConnection> xConnection = static_cast<OMySQLCatalog&>(m_rParent).getConnection();
