@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FConnection.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-07 09:31:40 $
+ *  last change: $Author: oj $ $Date: 2000-12-08 08:34:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,11 +170,11 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
         SvtPathOptions aPathOptions;
         aFileName = aPathOptions.SubstituteVariable(aFileName);
     }
-    aURL.SetURL(aFileName);
+    aURL.SetSmartURL(aFileName);
 
 
     //  String aFileName = aURL.PathToFileName();
-    //  String aFileName = aURL.GetMainURL();
+    aFileName = aURL.GetMainURL();
 
     if(!aFileName.Len())
         aFileName = aDSN;
