@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svapp.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 10:46:07 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:04:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -772,8 +772,8 @@ void Application::SetSettings( const AllSettings& rSettings )
             // Update all windows
             Window* pFirstFrame = pSVData->maWinData.mpFirstFrame;
             // Daten, die neu berechnet werden muessen, zuruecksetzen
-            long nOldDPIX(0);
-            long nOldDPIY(0);
+            long nOldDPIX = 0;
+            long nOldDPIY = 0;
             if ( pFirstFrame )
             {
                 nOldDPIX = pFirstFrame->mnDPIX;
