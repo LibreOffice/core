@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2004-06-22 17:42:18 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 15:17:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,7 +228,6 @@ void X11SalGraphics::Init( SalFrame *pFrame, Drawable aTarget )
     nPenPixel_      = GetPixel( nPenColor_ );
     nTextPixel_     = GetPixel( nTextColor_ );
     nBrushPixel_    = GetPixel( nBrushColor_ );
-    numClipRects_   = 0;
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -520,7 +519,7 @@ void X11SalGraphics::GetResolution( sal_Int32 &rDPIX, sal_Int32 &rDPIY ) // cons
         //if( (13*rDPIX >= 10*rDPIY) && (13*rDPIY >= 10*rDPIX) )  //+-30%
         {
 #ifdef DEBUG
-            printf("Forcing Resolution from %dx%d to %dx%d\n",
+            printf("Forcing Resolution from %ldx%ld to %ldx%ld\n",
                 rDPIX,rDPIY,rDPIY,rDPIY);
 #endif
             rDPIX = rDPIY; // y-resolution is more trustworthy
@@ -577,8 +576,6 @@ void X11SalGraphics::BeginSetClipRegion( ULONG n )
     if( pClipRegion_ )
         XDestroyRegion( pClipRegion_ );
     pClipRegion_ = XCreateRegion();
-    numClipRects_ = 0;
-    boundingClipRect_.SetEmpty();
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -586,9 +583,6 @@ BOOL X11SalGraphics::unionClipRegion( long nX, long nY, long nDX, long nDY )
 {
     if (!nDX || !nDY)
         return TRUE;
-
-    numClipRects_++;
-    boundingClipRect_.Union( Rectangle( nX, nY, nX+nDX, nY+nDY ) );
 
     XRectangle aRect;
     aRect.x         = (short)nX;
@@ -618,8 +612,6 @@ void X11SalGraphics::EndSetClipRegion()
     {
         XDestroyRegion( pClipRegion_ );
         pClipRegion_= NULL;
-        numClipRects_ = 0;
-        boundingClipRect_.SetEmpty();
     }
 }
 
@@ -937,7 +929,6 @@ void X11SalGraphics::invert( ULONG nPoints,
                              const SalPoint* pPtAry,
                              SalInvert nFlags )
 {
-    SalDisplay *pDisp = GetDisplay();
     SalPolyLine Points ( nPoints, pPtAry );
 
     GC pGC;
