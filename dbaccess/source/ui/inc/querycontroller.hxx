@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-21 17:44:17 $
+ *  last change: $Author: fs $ $Date: 2001-08-14 11:54:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,7 +163,7 @@ namespace dbaui
         virtual ToolBox* CreateToolBox(Window* pParent);
 
         OQueryView* getQueryView() { return static_cast<OQueryView*>(m_pView); }
-        virtual void createNewConnection(sal_Bool _bUI = sal_False);
+        virtual void        reconnect( sal_Bool _bUI );
 
     public:
         OQueryController(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM);
