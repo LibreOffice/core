@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zoomctrl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 19:41:02 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 15:41:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@
 #ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
 #endif
+#include <tools/urlobj.hxx>
 #pragma hdrstop
 
 #include "dialogs.hrc"
@@ -147,16 +148,13 @@ void ZoomPopup_Impl::Select()
 
 // class SvxZoomStatusBarControl ------------------------------------------
 
-SvxZoomStatusBarControl::SvxZoomStatusBarControl( USHORT nId,
-                                                  StatusBar& rStb,
-                                                  SfxBindings& rBind ) :
+SvxZoomStatusBarControl::SvxZoomStatusBarControl( USHORT nSlotId,
+                                                  USHORT nId,
+                                                  StatusBar& rStb ) :
 
-    SfxStatusBarControl( nId, rStb, rBind ),
-
+    SfxStatusBarControl( nSlotId, nId, rStb ),
     nZoom( 100 ),
-
     nValueSet( SVX_ZOOM_ENABLE_ALL )
-
 {
 }
 
@@ -239,7 +237,15 @@ void SvxZoomStatusBarControl::Command( const CommandEvent& rCEvt )
             else if ( ZOOM_WHOLE_PAGE == nId )
                 aZoom.SetType( SVX_ZOOM_WHOLEPAGE );
 
-            GetBindings().GetDispatcher()->Execute( GetId(), SFX_CALLMODE_RECORD, &aZoom, 0L );
+            ::com::sun::star::uno::Any a;
+            INetURLObject aObj( m_aCommandURL );
+
+            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aArgs( 1 );
+            aArgs[0].Name  = aObj.GetURLPath();
+            aZoom.QueryValue( a );
+            aArgs[0].Value = a;
+
+            execute( aArgs );
         }
         ReleaseMouse();
     }
