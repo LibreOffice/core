@@ -86,11 +86,8 @@ fi
 # check for /bin/rpm first, otherwise the rpm database is most likly empty anyway
 if [ -x /bin/rpm ]
 then
-  /bin/rpm -q gnome-vfs2 >/dev/null
-  if [ $? -eq 0 ]
-  then
-    GNOMERPM=`find $PACKAGE_PATH -type f -name "*.rpm" -name "*-gnome*" -print`
-  fi
+  GNOMERPM=`find $PACKAGE_PATH -type f -name "*.rpm" -name "*-gnome*" -print`
+  /bin/rpm -i --test $GNOMERPM $CORERPM 2>/dev/null || GNOMERPM=""
 fi
 
 echo "Packages found:"
