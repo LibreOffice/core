@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toxwrap.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 10:52:51 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:07:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,9 +106,6 @@ public:
 
     STAR_NMSPC::uno::Sequence< ::rtl::OUString >
     GetAlgorithmList( const STAR_NMSPC::lang::Locale& rLcl ) const;
-
-    STAR_NMSPC::uno::Sequence < com::sun::star::lang::Locale >
-    GetLocaleList() const;
 
     sal_Bool LoadAlgorithm( const STAR_NMSPC::lang::Locale& rLcl,
                             const String& sSortAlgorithm, long nOptions ) const;
