@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-14 11:35:10 $
+ *  last change: $Author: aw $ $Date: 2001-05-16 10:31:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1633,7 +1633,9 @@ SdXMLCaptionShapeContext::SdXMLCaptionShapeContext(
     const OUString& rLocalName,
     const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes)
-:   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes )
+:   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes ),
+    // #86616# for correct edge rounding import mnRadius needs to be initialized
+    mnRadius( 0L )
 {
 }
 
