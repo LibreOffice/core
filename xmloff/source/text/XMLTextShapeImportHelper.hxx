@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextShapeImportHelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2001-04-23 07:37:30 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 14:29:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,11 +62,19 @@
 #ifndef _XMLTEXTSHAPEIMPORTHELPER_HXX
 #define _XMLTEXTSHAPEIMPORTHELPER_HXX
 
+#ifndef _SAL_CONFIG_H_
+#include "sal/config.h"
+#endif
+
+#ifndef INCLUDED_XMLOFF_DLLAPI_H
+#include "xmloff/dllapi.h"
+#endif
+
 #ifndef _XMLOFF_SHAPEIMPORT_HXX_
 #include "shapeimport.hxx"
 #endif
 
-class XMLTextShapeImportHelper : public XMLShapeImportHelper
+class XMLOFF_DLLPUBLIC XMLTextShapeImportHelper : public XMLShapeImportHelper
 {
     SvXMLImport& rImport;
 
