@@ -2,9 +2,9 @@
  *
  *  $RCSfile: userinstall.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hjs $ $Date: 2004-07-07 15:53:39 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 11:23:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,7 +206,7 @@ namespace desktop {
         return false;
     }
 
-    UserInstall::UserInstallError UserInstall::finalize( Desktop& rDesktop )
+    UserInstall::UserInstallError UserInstall::finalize()
     {
         OUString aUserInstallPath;
         Bootstrap::PathStatus aLocateResult =
@@ -230,8 +230,8 @@ namespace desktop {
                 // Note: fall-thru intended.
             }
             case Bootstrap::PATH_VALID:
-                return  create_user_install(aUserInstallPath);
-
+                // found a path but need to create user install
+                return create_user_install(aUserInstallPath);
             default:
                 return E_Unknown;
         }
@@ -291,26 +291,10 @@ namespace desktop {
         NULL
     };
 
-    static UserInstall::UserInstallError create_user_install(OUString& aUserPath)
+    UserInstall::UserInstallError UserInstall::configureLanguage()
     {
-        OUString aBasePath;
-        if (Bootstrap::locateBaseInstallation(aBasePath) != Bootstrap::PATH_EXISTS)
-            return UserInstall::E_InvalidBaseinstall;
-
-        // create the user directory
-        FileBase::RC rc = Directory::create(aUserPath);
-        if ((rc != FileBase::E_None) && (rc != FileBase::E_EXIST)) return UserInstall::E_Creation;
-
-            // copy data from shared data directory of base installation
-        for (sal_Int32 i=0; pszCopyList[i]!=NULL; i++)
+        try
         {
-            rc = copy_recursive(
-                    aBasePath + OUString::createFromAscii(pszCopyList[i]),
-                    aUserPath + OUString::createFromAscii(pszCopyList[i]));
-            if ((rc != FileBase::E_None) && (rc != FileBase::E_EXIST)) return UserInstall::E_Creation;
-        }
-
-        try{
             OUString sConfigSrvc = OUString::createFromAscii("com.sun.star.configuration.ConfigurationProvider");
             OUString sAccessSrvc = OUString::createFromAscii("com.sun.star.configuration.ConfigurationUpdateAccess");
 
@@ -365,6 +349,28 @@ namespace desktop {
         }
 
         // everything went well
+        return UserInstall::E_None;
+    }
+
+    static UserInstall::UserInstallError create_user_install(OUString& aUserPath)
+    {
+        OUString aBasePath;
+        if (Bootstrap::locateBaseInstallation(aBasePath) != Bootstrap::PATH_EXISTS)
+            return UserInstall::E_InvalidBaseinstall;
+
+        // create the user directory
+        FileBase::RC rc = Directory::create(aUserPath);
+        if ((rc != FileBase::E_None) && (rc != FileBase::E_EXIST)) return UserInstall::E_Creation;
+
+            // copy data from shared data directory of base installation
+        for (sal_Int32 i=0; pszCopyList[i]!=NULL; i++)
+        {
+            rc = copy_recursive(
+                    aBasePath + OUString::createFromAscii(pszCopyList[i]),
+                    aUserPath + OUString::createFromAscii(pszCopyList[i]));
+            if ((rc != FileBase::E_None) && (rc != FileBase::E_EXIST)) return UserInstall::E_Creation;
+        }
+
         return UserInstall::E_None;
 
     }
