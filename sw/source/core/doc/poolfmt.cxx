@@ -2,9 +2,9 @@
  *
  *  $RCSfile: poolfmt.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:17:20 $
+ *  last change: $Author: rt $ $Date: 2004-05-25 14:59:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,7 +254,8 @@ long lcl_GetRightMargin( SwDoc& rDoc )
     }
     else
     {
-        const SwFrmFmt& rPgDscFmt = rDoc.GetPageDesc( 0 ).GetMaster();
+        const SwFrmFmt& rPgDscFmt =
+            const_cast<const SwDoc *>(&rDoc)->GetPageDesc( 0 ).GetMaster();
         const SvxLRSpaceItem& rLR = rPgDscFmt.GetLRSpace();
         nLeft = rLR.GetLeft();
         nRight = rLR.GetRight();
