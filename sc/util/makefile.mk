@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.27 $
+#   $Revision: 1.28 $
 #
-#   last change: $Author: rt $ $Date: 2004-08-23 09:41:58 $
+#   last change: $Author: kz $ $Date: 2004-10-04 20:28:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -120,7 +120,6 @@ SHL1STDLIBS+= $(SCHLIB)
 SHL1STDLIBS+=       \
     $(BASICLIB)	\
     $(SFXLIB)		\
-    $(SO2LIB)		\
     $(SVMEMLIB)	\
     $(SVTOOLLIB)	\
     $(SVLLIB)		\
@@ -241,6 +240,7 @@ SHL2STDLIBS= \
             $(UCBHELPERLIB)	\
             $(CPPUHELPERLIB) \
             $(CPPULIB) \
+            $(SOTLIB) \
             $(SALLIB)
 
 SHL2OBJS=   $(SLO)$/scdetect.obj \
@@ -322,3 +322,4 @@ LIB8OBJFILES = \
 
 .INCLUDE :  target.mk
    
+
