@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoedge.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: pluby $ $Date: 2001-05-14 22:08:57 $
+ *  last change: $Author: cl $ $Date: 2001-05-31 12:55:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2589,14 +2589,11 @@ void SdrEdgeObj::setGluePointIndex( sal_Bool bTail, sal_Int32 nIndex /* = -1 */ 
     if( nIndex > 3 )
     {
         nIndex -= 4;
-
         // for user defined glue points we have
         // to get the id for this index first
         const SdrGluePointList* pList = rConn1.GetObject() ? rConn1.GetObject()->GetGluePointList() : NULL;
-        if( pList == NULL || nIndex >= pList->GetCount() )
+        if( pList == NULL || SDRGLUEPOINT_NOTFOUND == pList->FindGluePoint((sal_uInt16)nIndex) )
             return;
-
-        nIndex = (*pList)[(sal_uInt16)nIndex].GetId();
     }
     else if( nIndex < 0 )
     {
@@ -2625,10 +2622,13 @@ sal_Int32 SdrEdgeObj::getGluePointIndex( sal_Bool bTail )
             // for user defined glue points we have
             // to get the index for this id first
             const SdrGluePointList* pList = rConn1.GetObject() ? rConn1.GetObject()->GetGluePointList() : NULL;
-            if( pList == NULL || nId >= pList->GetCount() )
+            if( NULL == pList )
                 return -1;
 
             nId = pList->FindGluePoint((sal_uInt16)nId);
+            if( SDRGLUEPOINT_NOTFOUND == nId )
+                return -1;
+
             nId += 4;
         }
     }
