@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layoutmanager.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 14:49:49 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 13:14:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -459,6 +459,7 @@ namespace framework
             sal_Int16 implts_getCurrentSymbolSet();
             ::com::sun::star::uno::Reference< com::sun::star::awt::XWindowPeer > implts_createToolkitWindow( const ::com::sun::star::uno::Reference< com::sun::star::awt::XWindowPeer >& rParent );
             ::com::sun::star::uno::Reference< drafts::com::sun::star::ui::XUIElement > implts_createElement( const rtl::OUString& aName );
+            rtl::OUString implts_generateGenericAddonToolbarTitle( sal_Int32 nNumber ) const;
 
             // docking methods
             ::Rectangle      implts_calcHotZoneRect( const ::Rectangle& rRect, sal_Int32 nHotZoneOffset );
@@ -514,7 +515,8 @@ namespace framework
             void    implts_resetInplaceMenuBar()
                             throw (::com::sun::star::uno::RuntimeException);
 
-            void implts_updateUIElementsVisibleState( sal_Bool bShow );
+            void    implts_setVisibleState( sal_Bool bShow );
+            void    implts_updateUIElementsVisibleState( sal_Bool bShow );
             sal_Bool impl_parseResourceURL( const rtl::OUString aResourceURL, rtl::OUString& aElementType, rtl::OUString& aElementName );
 
             DECL_LINK( OptionsChanged, void* );
@@ -552,7 +554,8 @@ namespace framework
                                                                                         m_bMenuVisible : 1,
                                                                                         m_bComponentAttached : 1,
                                                                                         m_bDoLayout : 1,
-                                                                                        m_bVisible : 1;
+                                                                                        m_bVisible : 1,
+                                                                                        m_bParentWindowVisible : 1;
             DockingOperation                                                            m_eDockOperation;
             UIElement                                                                   m_aDockUIElement;
             css::awt::Rectangle                                                         m_aDockingArea;
