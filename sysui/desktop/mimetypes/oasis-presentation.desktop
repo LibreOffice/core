@@ -2,8 +2,8 @@
 Version=1.0
 Encoding=UTF-8
 Hidden=false
-Icon=presentation
+Icon=oasis-presentation
 Type=MimeType
-Patterns=*.oop
-MimeType=application/x-vnd.oasis.openoffice.presentation
-Comment=Open Office Presentation
+Patterns=*.odp
+MimeType=application/vnd.oasis.opendocument.presentation
+Comment=OpenDocument Presentation
