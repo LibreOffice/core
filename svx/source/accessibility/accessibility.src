@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibility.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:30:25 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:09:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,7 @@ String RID_SVXSTR_A11Y_3D_MATERIAL_COLOR
     Text[ czech ] = "Barva 3D materiálu";
     Text[ hebrew ] = "‮צבע חומר תלת מימדי‬";
     Text[ hindi ] = "3D material color";
+    Text[ slovak ] = "3D farba materiálu";
 };
 String RID_SVXSTR_A11Y_TEXT_COLOR
 {
@@ -118,6 +119,7 @@ String RID_SVXSTR_A11Y_TEXT_COLOR
     Text[ czech ] = "Barva textu";
     Text[ hebrew ] = "‮צבע גופן‬";
     Text[ hindi ] = "टेक्स्ट् का रंग";
+    Text[ slovak ] = "Farba písma";
 };
 String RID_SVXSTR_A11Y_BACKGROUND_COLOR
 {
@@ -135,7 +137,7 @@ String RID_SVXSTR_A11Y_BACKGROUND_COLOR
     Text[ danish ] = "Baggrundsfarve";
     Text[ swedish ] = "Bakgrundsf�rg";
     Text[ polish ] = "Kolor t�a";
-    Text[ portuguese_brazilian ] = "Background color";
+    Text[ portuguese_brazilian ] = "Cor de fundo";
     Text[ japanese ] = "背景色";
     Text[ korean ] = "배경 색상";
     Text[ chinese_simplified ] = "背景颜色";
@@ -147,6 +149,7 @@ String RID_SVXSTR_A11Y_BACKGROUND_COLOR
     Text[ czech ] = "Barva pozadí";
     Text[ hebrew ] = "‮צבע רקע‬";
     Text[ hindi ] = "Background color";
+    Text[ slovak ] = "Farba pozadia";
 };
 String RID_SVXSTR_A11Y_FILLSTYLE_NONE
 {
@@ -176,35 +179,37 @@ String RID_SVXSTR_A11Y_FILLSTYLE_NONE
     Text[ czech ] = "Nic";
     Text[ hebrew ] = "‮ללא‬";
     Text[ hindi ] = "None";
+    Text[ slovak ] = "Žiadne";
 };
 String RID_SVXSTR_A11Y_FILLSTYLE_SOLID
 {
     Text = "Ausgef�llt" ;
     Text[ ENGLISH ] = "Solid" ;
     Text[ ENGLISH_US ] = "Solid" ;
-    Text[ portuguese ] = "Solid";
-    Text[ russian ] = "Solid";
-    Text[ greek ] = "Solid";
-    Text[ dutch ] = "Solid";
+    Text[ portuguese ] = "Cheio";
+    Text[ russian ] = "����������";
+    Text[ greek ] = "������";
+    Text[ dutch ] = "Vol";
     Text[ french ] = "Plein";
     Text[ spanish ] = "Relleno";
-    Text[ finnish ] = "Solid";
+    Text[ finnish ] = "Tasainen";
     Text[ italian ] = "Riempito";
-    Text[ danish ] = "Solid";
+    Text[ danish ] = "Massiv";
     Text[ swedish ] = "Ifyllt";
-    Text[ polish ] = "Solid";
-    Text[ portuguese_brazilian ] = "Solid";
+    Text[ polish ] = "Pe�ny";
+    Text[ portuguese_brazilian ] = "S�lido";
     Text[ japanese ] = "ぎっしりと詰まった";
-    Text[ korean ] = "채워짐";
+    Text[ korean ] = "채움";
     Text[ chinese_simplified ] = "填满的";
     Text[ chinese_traditional ] = "填滿的";
     Text[ turkish ] = "Kesiksiz";
-    Text[ arabic ] = "Solid";
-    Text[ catalan ] = "Solid";
-    Text[ thai ] = "Solid";
+    Text[ arabic ] = "�����";
+    Text[ catalan ] = "S�lid";
+    Text[ thai ] = "ทึบ";
     Text[ czech ] = "Pevná";
     Text[ hebrew ] = "‮חלק‬";
     Text[ hindi ] = "Solid";
+    Text[ slovak ] = "Plné";
 };
 String RID_SVXSTR_A11Y_FILLSTYLE_HATCH
 {
@@ -234,51 +239,53 @@ String RID_SVXSTR_A11Y_FILLSTYLE_HATCH
     Text[ czech ] = "Se šrafováním";
     Text[ hebrew ] = "‮מקווקו‬";
     Text[ hindi ] = "With hatching";
+    Text[ slovak ] = "So šrafovaním";
 };
 String RID_SVXSTR_A11Y_FILLSTYLE_GRADIENT
 {
     Text = "Verlauf" ;
     Text[ ENGLISH ] = "Gradient" ;
     Text[ ENGLISH_US ] = "Gradient" ;
-    Text[ portuguese ] = "Gradient";
-    Text[ russian ] = "Gradient";
-    Text[ greek ] = "Gradient";
-    Text[ dutch ] = "Gradient";
+    Text[ portuguese ] = "~Grada��o";
+    Text[ russian ] = "��������";
+    Text[ greek ] = "~������. ��������";
+    Text[ dutch ] = "~Verloop";
     Text[ french ] = "D�grad�";
     Text[ spanish ] = "Gradiente";
-    Text[ finnish ] = "Gradient";
-    Text[ italian ] = "Trasparenza";
-    Text[ danish ] = "Gradient";
+    Text[ finnish ] = "Liukuv�rj�ys";
+    Text[ italian ] = "Sfumatura";
+    Text[ danish ] = "~Graduering";
     Text[ swedish ] = "Gradient";
-    Text[ polish ] = "Gradient";
-    Text[ portuguese_brazilian ] = "Gradient";
-    Text[ japanese ] = "透過性グラデーション";
+    Text[ polish ] = "~Gradient";
+    Text[ portuguese_brazilian ] = "~Gradiente";
+    Text[ japanese ] = "グラデーション";
     Text[ korean ] = "그라디언트";
     Text[ chinese_simplified ] = "透明图案";
     Text[ chinese_traditional ] = "透明圖案";
     Text[ turkish ] = "De�i�im �l��s�";
-    Text[ arabic ] = "Gradient";
-    Text[ catalan ] = "Gradient";
-    Text[ thai ] = "Gradient";
+    Text[ arabic ] = "���� �����";
+    Text[ catalan ] = "~Gradient transpar�ncia";
+    Text[ thai ] = "ไล่ระดับสี";
     Text[ language_user1 ] = "Corr; Correct German is \"Verlauf\"";
     Text[ czech ] = "Přechod";
     Text[ hebrew ] = "‮שיפוע‬";
     Text[ hindi ] = "Gradient";
+    Text[ slovak ] = "Prechod";
 };
 String RID_SVXSTR_A11Y_FILLSTYLE_BITMAP
 {
     Text = "Bitmap" ;
     Text[ ENGLISH ] = "Bitmap" ;
     Text[ ENGLISH_US ] = "Bitmap" ;
-    Text[ portuguese ] = "Bitmap";
+    Text[ portuguese ] = "~Bitmap";
     Text[ russian ] = "�����";
     Text[ greek ] = "Bitmap";
-    Text[ dutch ] = "Bitmap";
+    Text[ dutch ] = "~Bitmap";
     Text[ french ] = "Bitmap";
-    Text[ spanish ] = "Bitmap";
+    Text[ spanish ] = "Mapa de bits";
     Text[ finnish ] = "Bittikartta";
-    Text[ italian ] = "Stile bitmap";
-    Text[ danish ] = "Bitmap";
+    Text[ italian ] = "Bitmap";
+    Text[ danish ] = "~Bitmap";
     Text[ swedish ] = "Bitmap";
     Text[ polish ] = "Mapa bitowa";
     Text[ portuguese_brazilian ] = "Bitmap";
@@ -294,6 +301,7 @@ String RID_SVXSTR_A11Y_FILLSTYLE_BITMAP
     Text[ czech ] = "Rastr";
     Text[ hebrew ] = "‮מפת סיביות‬";
     Text[ hindi ] = "Bitmap";
+    Text[ slovak ] = "Bitová mapa";
 };
 String RID_SVXSTR_A11Y_WITH
 {
@@ -323,35 +331,37 @@ String RID_SVXSTR_A11Y_WITH
     Text[ czech ] = "s";
     Text[ hebrew ] = "‮עם‬";
     Text[ hindi ] = "with";
+    Text[ slovak ] = "s";
 };
 String RID_SVXSTR_A11Y_STYLE
 {
     Text = "Stil" ;
     Text[ ENGLISH ] = "style" ;
     Text[ ENGLISH_US ] = "Style" ;
-    Text[ portuguese ] = "Style";
-    Text[ russian ] = "Style";
-    Text[ greek ] = "Style";
-    Text[ dutch ] = "Style";
+    Text[ portuguese ] = "Estilo";
+    Text[ russian ] = "�����";
+    Text[ greek ] = "�����";
+    Text[ dutch ] = "PROFIEL";
     Text[ french ] = "Style";
     Text[ spanish ] = "Estilo";
-    Text[ finnish ] = "Style";
+    Text[ finnish ] = "Tyyli";
     Text[ italian ] = "Stile";
-    Text[ danish ] = "Style";
+    Text[ danish ] = "Form";
     Text[ swedish ] = "Stil";
-    Text[ polish ] = "Style";
-    Text[ portuguese_brazilian ] = "Style";
+    Text[ polish ] = "Szablon";
+    Text[ portuguese_brazilian ] = "ESTILO";
     Text[ japanese ] = "スタイル";
     Text[ korean ] = "스타일";
     Text[ chinese_simplified ] = "风格";
     Text[ chinese_traditional ] = "風格";
     Text[ turkish ] = "Bi�em";
-    Text[ arabic ] = "Style";
-    Text[ catalan ] = "Style";
-    Text[ thai ] = "Style";
+    Text[ arabic ] = "�����";
+    Text[ catalan ] = "Estil";
+    Text[ thai ] = "ลักษณะ";
     Text[ czech ] = "styl";
     Text[ hebrew ] = "‮סגנון‬";
     Text[ hindi ] = "Style";
+    Text[ slovak ] = "Štýl";
 };
 String RID_SVXSTR_A11Y_AND
 {
@@ -381,6 +391,7 @@ String RID_SVXSTR_A11Y_AND
     Text[ czech ] = "a";
     Text[ hebrew ] = "‮ו‬";
     Text[ hindi ] = "and";
+    Text[ slovak ] = "a";
 };
 
 
@@ -413,6 +424,7 @@ String RID_SVXSTR_RECTCTL_ACC_CORN_NAME
     Text[ czech ] = "Ovládání rohu";
     Text[ hebrew ] = "‮בקרת פינות‬";
     Text[ hindi ] = "Corner control";
+    Text[ slovak ] = "Ovládacie pole rohu";
 };
 
 String RID_SVXSTR_RECTCTL_ACC_CORN_DESCR
@@ -442,6 +454,7 @@ String RID_SVXSTR_RECTCTL_ACC_CORN_DESCR
     Text[ czech ] = "Výběr bodu v rohu.";
     Text[ hebrew ] = "‮בחירת נקודת פינה‬";
     Text[ hindi ] = "Selection of a corner point.";
+    Text[ slovak ] = "Výber rohového bodu.";
 };
 
 String RID_SVXSTR_RECTCTL_ACC_ANGL_NAME
@@ -471,6 +484,7 @@ String RID_SVXSTR_RECTCTL_ACC_ANGL_NAME
     Text[ czech ] = "Ovládání úhlu";
     Text[ hebrew ] = "‮בקרת זווית‬";
     Text[ hindi ] = "Angle control";
+    Text[ slovak ] = "Ovládacie pole uhla";
 };
 
 String RID_SVXSTR_RECTCTL_ACC_ANGL_DESCR
@@ -500,6 +514,7 @@ String RID_SVXSTR_RECTCTL_ACC_ANGL_DESCR
     Text[ czech ] = "Výběr hlavního úhlu.";
     Text[ hebrew ] = "‮בחירת זווית עיקרית‬.";
     Text[ hindi ] = "Selection of a major angle.";
+    Text[ slovak ] = "Výber hlavného uhla.";
 };
 
 
@@ -530,6 +545,7 @@ String RID_SVXSTR_RECTCTL_ACC_CHLD_LT
     Text[ czech ] = "Nahoře vlevo";
     Text[ hebrew ] = "‮עליון שמאלי‬";
     Text[ hindi ] = "Top left";
+    Text[ slovak ] = "Nahor doľava";
 };
 
 String RID_SVXSTR_RECTCTL_ACC_CHLD_MT
@@ -559,6 +575,7 @@ String RID_SVXSTR_RECTCTL_ACC_CHLD_MT
     Text[ czech ] = "Nahoře uprostřed";
     Text[ hebrew ] = "‮עליון אמצעי‬";
     Text[ hindi ] = "Top middle";
+    Text[ slovak ] = "Nahor do stredu";
 };
 
 String RID_SVXSTR_RECTCTL_ACC_CHLD_RT
@@ -588,6 +605,7 @@ String RID_SVXSTR_RECTCTL_ACC_CHLD_RT
     Text[ czech ] = "Nahoře vpravo";
     Text[ hebrew ] = "‮עליון ימני‬";
     Text[ hindi ] = "Top right";
+    Text[ slovak ] = "Nahor doprava";
 };
 
 String RID_SVXSTR_RECTCTL_ACC_CHLD_LM
@@ -617,6 +635,7 @@ String RID_SVXSTR_RECTCTL_ACC_CHLD_LM
     Text[ czech ] = "Vlevo uprostřed";
     Text[ hebrew ] = "‮מרכז שמאלי‬";
     Text[ hindi ] = "Left center";
+    Text[ slovak ] = "Zarovnať vľavo";
 };
 
 String RID_SVXSTR_RECTCTL_ACC_CHLD_MM
@@ -646,6 +665,7 @@ String RID_SVXSTR_RECTCTL_ACC_CHLD_MM
     Text[ czech ] = "Uprostřed";
     Text[ hebrew ] = "‮מרכז‬";
     Text[ hindi ] = "Center";
+    Text[ slovak ] = "Zarovnať";
 };
 
 String RID_SVXSTR_RECTCTL_ACC_CHLD_RM
@@ -675,6 +695,7 @@ String RID_SVXSTR_RECTCTL_ACC_CHLD_RM
     Text[ czech ] = "Vpravo uprostřed";
     Text[ hebrew ] = "‮מרכז ימני‬";
     Text[ hindi ] = "Right center";
+    Text[ slovak ] = "Zarovnať vpravo";
 };
 
 String RID_SVXSTR_RECTCTL_ACC_CHLD_LB
@@ -704,6 +725,7 @@ String RID_SVXSTR_RECTCTL_ACC_CHLD_LB
     Text[ czech ] = "Dole vlevo";
     Text[ hebrew ] = "‮תחתון שמאלי‬";
     Text[ hindi ] = "Bottom left";
+    Text[ slovak ] = "Doľava dole";
 };
 
 String RID_SVXSTR_RECTCTL_ACC_CHLD_MB
@@ -733,6 +755,7 @@ String RID_SVXSTR_RECTCTL_ACC_CHLD_MB
     Text[ czech ] = "Dole uprostřed";
     Text[ hebrew ] = "‮תחתון אמצעי‬";
     Text[ hindi ] = "Bottom middle";
+    Text[ slovak ] = "Dole do stredu";
 };
 
 String RID_SVXSTR_RECTCTL_ACC_CHLD_RB
@@ -762,6 +785,7 @@ String RID_SVXSTR_RECTCTL_ACC_CHLD_RB
     Text[ czech ] = "Dole vpravo";
     Text[ hebrew ] = "‮תחתון ימני‬";
     Text[ hindi ] = "Bottom right";
+    Text[ slovak ] = "Vpravo dole";
 };
 
 
@@ -792,6 +816,7 @@ String RID_SVXSTR_RECTCTL_ACC_CHLD_A000
     Text[ czech ] = "0 stupňů";
     Text[ hebrew ] = "‮0 מעלות‬";
     Text[ hindi ] = "0 degrees";
+    Text[ slovak ] = "0 stupňov";
 };
 
 String RID_SVXSTR_RECTCTL_ACC_CHLD_A045
@@ -821,6 +846,7 @@ String RID_SVXSTR_RECTCTL_ACC_CHLD_A045
     Text[ czech ] = "45 stupňů";
     Text[ hebrew ] = "‮45 מעלות‬";
     Text[ hindi ] = "45 degrees";
+    Text[ slovak ] = "45 stupňov";
 };
 
 String RID_SVXSTR_RECTCTL_ACC_CHLD_A090
@@ -850,6 +876,7 @@ String RID_SVXSTR_RECTCTL_ACC_CHLD_A090
     Text[ czech ] = "90 stupňů";
     Text[ hebrew ] = "‮90 מעלות‬";
     Text[ hindi ] = "90 degrees";
+    Text[ slovak ] = "90 stupňov";
 };
 
 String RID_SVXSTR_RECTCTL_ACC_CHLD_A135
@@ -879,6 +906,7 @@ String RID_SVXSTR_RECTCTL_ACC_CHLD_A135
     Text[ czech ] = "135 stupňů";
     Text[ hebrew ] = "‮135 מעלות‬";
     Text[ hindi ] = "135 degrees";
+    Text[ slovak ] = "135 stupňov";
 };
 
 String RID_SVXSTR_RECTCTL_ACC_CHLD_A180
@@ -908,6 +936,7 @@ String RID_SVXSTR_RECTCTL_ACC_CHLD_A180
     Text[ czech ] = "180 stupňů";
     Text[ hebrew ] = "‮180 מעלות‬";
     Text[ hindi ] = "180 degrees";
+    Text[ slovak ] = "180 stupňov";
 };
 
 String RID_SVXSTR_RECTCTL_ACC_CHLD_A225
@@ -937,6 +966,7 @@ String RID_SVXSTR_RECTCTL_ACC_CHLD_A225
     Text[ czech ] = "225 stupňů";
     Text[ hebrew ] = "‮225 מעלות‬";
     Text[ hindi ] = "225 degrees";
+    Text[ slovak ] = "225 stupňov";
 };
 
 String RID_SVXSTR_RECTCTL_ACC_CHLD_A270
@@ -966,6 +996,7 @@ String RID_SVXSTR_RECTCTL_ACC_CHLD_A270
     Text[ czech ] = "270 stupňů";
     Text[ hebrew ] = "‮270 מעלות‬";
     Text[ hindi ] = "270 degrees";
+    Text[ slovak ] = "270 stupňov";
 };
 
 String RID_SVXSTR_RECTCTL_ACC_CHLD_A315
@@ -995,6 +1026,7 @@ String RID_SVXSTR_RECTCTL_ACC_CHLD_A315
     Text[ czech ] = "315 stupňů";
     Text[ hebrew ] = "‮315 מעלות‬";
     Text[ hindi ] = "315 degrees";
+    Text[ slovak ] = "315 stupňov";
 };
 
 // SvxGraphCtrlAccessibleContext
@@ -1025,6 +1057,7 @@ String RID_SVXSTR_GRAPHCTRL_ACC_NAME
     Text[ czech ] = "Ovládání obrysu";
     Text[ hebrew ] = "‮בקרת מתאר‬";
     Text[ hindi ] = "Contour control";
+    Text[ slovak ] = "Ovládacie pole obrysov";
 };
 
 String RID_SVXSTR_GRAPHCTRL_ACC_DESCRIPTION
@@ -1054,6 +1087,7 @@ String RID_SVXSTR_GRAPHCTRL_ACC_DESCRIPTION
     Text[ czech ] = "Zde můžete upravit obrys.";
     Text[ hebrew ] = "‮כאן ניתן לערוך את המתאר.‬";
     Text[ hindi ] = "This is where you can edit the contour.";
+    Text[ slovak ] = "Tu môžete upravovať obrysy.";
 };
 
 String RID_SVXSTR_A11Y_PARAGRAPH_DESCRIPTION
@@ -1084,6 +1118,7 @@ String RID_SVXSTR_A11Y_PARAGRAPH_DESCRIPTION
     Text[ czech ] = "Odstavec: $(ARG) ";
     Text[ hebrew ] = "‮פיסקת: $(ARG)‬";
     Text[ hindi ] = "Paragraph: $(ARG) ";
+    Text[ slovak ] = "Odstavec: $(ARG) ";
 };
 
 String RID_SVXSTR_A11Y_PARAGRAPH_NAME
@@ -1114,6 +1149,7 @@ String RID_SVXSTR_A11Y_PARAGRAPH_NAME
     Text[ czech ] = "Odstavec $(ARG)";
     Text[ hebrew ] = "‮פיסקת: $(ARG)‬";
     Text[ hindi ] = "Paragraph $(ARG)";
+    Text[ slovak ] = "Odstavec $(ARG)";
 };
 
 String RID_SVXSTR_A11Y_IMAGEBULLET_DESCRIPTION
@@ -1144,6 +1180,7 @@ String RID_SVXSTR_A11Y_IMAGEBULLET_DESCRIPTION
     Text[ czech ] = "Odrážka s obrázkem v odstavci: $(ARG)";
     Text[ hebrew ] = "‮נקודת צלם בפיסקה: $(ARG)‬";
     Text[ hindi ] = "Image bullet in paragraph: $(ARG)";
+    Text[ slovak ] = "Obrázok guľky v odstavci: $(ARG)";
 };
 
 String RID_SVXSTR_A11Y_IMAGEBULLET_NAME
@@ -1174,6 +1211,7 @@ String RID_SVXSTR_A11Y_IMAGEBULLET_NAME
     Text[ czech ] = "Odrážka s obrázkem";
     Text[ hebrew ] = "‮נקודת צלם‬";
     Text[ hindi ] = "Image bullet";
+    Text[ slovak ] = "Obrázok guľky";
 };
 
 String RID_SVXSTR_CHARACTER_SELECTION
@@ -1204,6 +1242,7 @@ String RID_SVXSTR_CHARACTER_SELECTION
     Text[ czech ] = "Výběr speciálního znaku";
     Text[ hebrew ] = "‮בחירת תווים מיוחדים‬";
     Text[ hindi ] = "Special character selection";
+    Text[ slovak ] = "Výber špeciálneho znaku";
 };
 
 String RID_SVXSTR_CHAR_SEL_DESC
@@ -1234,6 +1273,7 @@ String RID_SVXSTR_CHAR_SEL_DESC
     Text[ czech ] = "V této oblasti vyberte speciální znak.";
     Text[ hebrew ] = "‮בחירת תוים מיוחדים לשטח זה.‬";
     Text[ hindi ] = "Select special characters in this area.";
+    Text[ slovak ] = "Tu vyberte špeciálne znaky.";
 };
 
 String RID_SVXSTR_CHARACTER_CODE
@@ -1265,7 +1305,10 @@ String RID_SVXSTR_CHARACTER_CODE
     Text[ czech ] = "Kód znaku ";
     Text[ hebrew ] = "‮קוד תו‬";
     Text[ hindi ] = "Character code ";
+    Text[ slovak ] = "Kód znaku ";
 };
+
+
 
 
 
