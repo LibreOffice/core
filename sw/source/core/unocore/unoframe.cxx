@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: os $ $Date: 2000-12-09 14:49:18 $
+ *  last change: $Author: os $ $Date: 2000-12-11 08:15:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -666,14 +666,18 @@ sal_Bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rSet)
                 bRet &= ((SfxPoolItem&)aFrmSz).PutValue(*pSize, MID_FRMSIZE_SIZE|CONVERT_TWIPS);
             if(pSizeType)
                 bRet &= ((SfxPoolItem&)aFrmSz).PutValue(*pSizeType, MID_FRMSIZE_SIZE_TYPE|CONVERT_TWIPS);
+            if(!aFrmSz.GetWidth())
+                aFrmSz.SetWidth(MINFLY);
+            if(!aFrmSz.GetHeight())
+                aFrmSz.SetHeight(MINFLY);
             rSet.Put(aFrmSz);
         }
         else
         {
             SwFmtFrmSize aFrmSz;
             awt::Size aSize;
-            aSize.Width = MM50;
-            aSize.Height = MM50;
+            aSize.Width = MINFLY;
+            aSize.Height = MINFLY;
             uno::Any aSizeVal;
             aSizeVal <<= aSize;
             ((SfxPoolItem&)aFrmSz).PutValue(aSizeVal, MID_FRMSIZE_SIZE|CONVERT_TWIPS);
