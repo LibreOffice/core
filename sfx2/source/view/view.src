@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-26 19:20:55 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 19:24:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,7 @@ String STR_NODEFPRINTER
     TEXT[ korean ] = "±âº» ÇÁ¸°ÅÍ¸¦ Ã£Áö ¸øÇß½À´Ï´Ù. \nÇÁ¸°ÅÍ¸¦ ¼±ÅÃÇÑ ´ÙÀ½, Àç½ÃµµÇÏ½Ê½Ã¿À.";
     TEXT[ arabic ] = "áã íÊã ÇáÚËæÑ Úáì ØÇÈÚÉ ŞíÇÓíÉ. ãä İÖáß ÇÎÊÑ ØÇÈÚÉ Ëã ÍÇæá ãÑÉ ÃÎÑì";
     TEXT[ turkish ] = "Standart yazıcı bulunamadı.\nBir yazıcı seçip yeniden deneyin.";
+    TEXT[ catalan ] = "No se encontró ninguna impresora predeterminada.\nSeleccione por favor una impresora e inténtelo nuevamente.";
 };
 String STR_NOSTARTPRINTER
 {
@@ -116,6 +117,7 @@ String STR_NOSTARTPRINTER
     TEXT[ arabic ] = "ÊÚĞÑ ÊÔÛíá ÇáØÇÈÚÉ. ÇáÑÌÇÁ İÍÕ\nÊßæíä ÇáØÇÈÚÉ.";
     TEXT[ turkish ] = "Yazıcı çalıştırılamadı.\nYazıcı konfigürasyonunu kontrol edin.";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "No se puede iniciar la impresora.\nPor favor verifique la configuración de su impresora.";
 };
 String STR_PRINTER_NOTAVAIL
 {
@@ -142,6 +144,7 @@ String STR_PRINTER_NOTAVAIL
     TEXT[ arabic ] = "Êã ÊäÓíŞ ÇáãÓÊäÏ ááØÇÈÚÉ $1. ÅáÇ Ãä åĞå ÇáØÇÈÚÉ ÛíÑ ãæÌæÏÉ.\nåá ÊÑíÏ ÇÓÊÎÏÇã ÇáØÇÈÚÉ ÇáÇİÊÑÇÖíÉ $2¿";
     TEXT[ turkish ] = "Belge, $1 yazıcısı için formatlandı. Belirtilen yazıcı bulunamadı.\nStandart yazıcı $2 kullanılsın mı?";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Este documento se ha formateado para la impresora $1, pero esta no está disponible.\n¿Desea usar la impresora predeterminada $2?";
 };
 String STR_MENU_NEWMAIL
 {
@@ -166,6 +169,7 @@ String STR_MENU_NEWMAIL
     Text[ arabic ] = "ÑÓÇáÉ ÌÏíÏÉ";
     Text[ turkish ] = "Y~eni ileti";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Nuevo ~mensaje";
 };
 String STR_PRINT_OPTIONS
 {
@@ -192,6 +196,7 @@ String STR_PRINT_OPTIONS
     Text[ arabic ] = "ÅÖÇİÇÊ...";
     Text[ turkish ] = "Seçenekler...";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Opciones...";
 };
 String STR_PRINT_OPTIONS_TITLE
 {
@@ -218,6 +223,7 @@ String STR_PRINT_OPTIONS_TITLE
     Text[ arabic ] = "ÎíÇÑÇÊ ÇáØÇÈÚÉ";
     Text[ turkish ] = "Yazıcı seçenekleri";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Opciones de impresión";
 };
 String STR_ERROR_PRINTER_BUSY
 {
@@ -244,6 +250,7 @@ String STR_ERROR_PRINTER_BUSY
     Text[ arabic ] = "ÇáØÇÈÚÉ ãÔÛæáÉ ÍÇáíÇ";
     Text[ turkish ] = "Yazıcı şu an kullanılıyor";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Impresora ocupada";
 };
 String STR_ERROR_PRINT
 {
@@ -270,6 +277,7 @@ String STR_ERROR_PRINT
     Text[ arabic ] = "ÎØÃ ÃËäÇÁ ÇáØÈÇÚÉ";
     Text[ turkish ] = "Yazdırma hatası";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Error al imprimir";
 };
 String STR_PRINTING
 {
@@ -296,6 +304,7 @@ String STR_PRINTING
     Text[ arabic ] = "ØÈÇÚÉ";
     Text[ turkish ] = "Yazdır";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Imprimiendo";
 };
 String STR_PAGE
 {
@@ -322,6 +331,7 @@ String STR_PAGE
     Text[ arabic ] = "ÇáÕİÍÉ ";
     Text[ turkish ] = "Sayfa ";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Página  ";
 };
 String STR_MDIFRAME_INTERFACE
 {
@@ -348,6 +358,7 @@ String STR_MDIFRAME_INTERFACE
     Text[ arabic ] = "äÇİĞÉ MDI";
     Text[ turkish ] = "MDI penceresi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Ventana MDI";
 };
 String STR_ERROR_SAVE_TEMPLATE
 {
@@ -374,6 +385,7 @@ String STR_ERROR_SAVE_TEMPLATE
     Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ßÊÇÈÉ ÇáŞÇáÈ ";
     Text[ turkish ] = "Şablon hazırlamada hata ";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Error al grabar la plantilla  ";
 };
 String STR_READONLY
 {
@@ -400,6 +412,7 @@ String STR_READONLY
     Text[ arabic ] = "(ááŞÑÇÁÉ İŞØ)";
     Text[ turkish ] = "(salt okunur)";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "(solo lectura)";
 };
 String STR_PRINT_NEWORI
 {
@@ -424,6 +437,7 @@ String STR_PRINT_NEWORI
     Text[ arabic ] = "áŞÏ ŞãÊ ÈÊÛííÑ ÅÚÏÇÏÇÊ ÇÊÌÇå ÇáÕİÍÉ.\nåá ÊÑíÏ ÊØÈíŞ ÇáÅÚÏÇÏÇÊ ÇáÌÏíÏÉ\nÚáì ÇáãÓÊäÏ¿";
     Text[ turkish ] = "Sayfa duruş ayarını değiştirdiniz.\nDeğiştirilen ayar\nbelgede kullanılsın mı?";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "La orientación de la página ha sido modificada.\n¿Desea aplicar las modificaciones al documento\n actual?";
 };
 String STR_PRINT_NEWSIZE
 {
@@ -448,6 +462,7 @@ String STR_PRINT_NEWSIZE
     Text[ arabic ] = "áŞÏ ŞãÊ ÈÊÛííÑ ÍÌã ÇáÕİÍÉ.\nåá ÊÑíÏ ÊØÈíŞ ÇáÅÚÏÇÏÇÊ ÇáÌÏíÏÉ Úáì ÇáãÓÊäÏ¿";
     Text[ turkish ] = "Sayfa boyutunu değiştirdiniz.\nDeğiştirilen ayarlar\nbelgede kullanılsın mı?";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "El tamaño de la página se ha modificado.\n¿Desea aplicar las modificaciones al documento\nactual?";
 };
 String STR_PRINT_NEWORISIZE
 {
@@ -472,6 +487,7 @@ String STR_PRINT_NEWORISIZE
     Text[ arabic ] = "áŞÏ ŞãÊ ÈÊÛííÑ ÍÌã ÇáÕİÍÉ æÇÊÌÇååÇ.\nåá ÊÑíÏ ÊØÈíŞ ÇáÅÚÏÇÏÇÊ ÇáÌÏíÏÉ Úáì ÇáãÓÊäÏ¿";
     Text[ turkish ] = "Sayfa boyutunu ve sayfa duruşunu değiştirdiniz. Değiştirilen\n ayarlar\nbelgede kullanılsın mı?";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "El tamaño y orientación de la página se han modificado\n. ¿Desea aplicar las modificaciones al\ndocumento actual?";
 };
 String STR_PLUGINVIEW
 {
@@ -508,6 +524,7 @@ String RID_EXPLORERTOOLSTOOLBOX
     Text[ arabic ] = "ÔÑíØ ÃÏæÇÊ ÓØÍ ÇáãßÊÈ";
     Text[ turkish ] = "Masaüstü araç çubuğu";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Barra de herramientas del escritorio";
 };
 String STR_PREVIEW_DOCINFO
 {
@@ -532,6 +549,7 @@ String STR_PREVIEW_DOCINFO
     Text[ arabic ] = "<html><body BGCOLOR=\"#c0c0c0\"><font FACE=\"Arial\"><dl><dt><b>Title:</b><dd>$(TITEL)<dt><b>Subject:</b><dd>$(THEME)<dt><b>Keywords:</b><dd>$(KEYWORDS)<dt><b>Description:</b><dd>$(TEXT)</dl></font></body></html>";
     Text[ turkish ] = "<html><body BGCOLOR=\"#c0c0c0\"><font FACE=\"Arial\"><dl><dt><b>Titel:</b><dd>$(TITEL)<dt><b>Konu:</b><dd>$(THEME)<dt><b>Anahtar sözcük:</b><dd>$(KEYWORDS)<dt><b>Tanım:</b><dd>$(TEXT)</dl></font></body></html>";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "<html><body BGCOLOR=\"#c0c0c0\"><font FACE=\"Arial\"><dl><dt><b>Título:</b><dd>$(TITULO)<dt><b>Tema:</b><dd>$(THEME)<dt><b>Contraseñas:</b><dd>$(KEYWORDS)<dt><b>Descripción:</b><dd>$(TEXT)</dl></font></body></html>";
 };
 String STR_PREVIEW_NODOCINFO
 {
@@ -556,6 +574,7 @@ String STR_PREVIEW_NODOCINFO
     Text[ arabic ] = "<HTML><BODY BGCOLOR=\"#c0c0c0\"><BR><BR><P><FONT FACE=\"Arial\"><B>No document properties found.</B></FONT></P></BODY></HTML>";
     Text[ turkish ] = "<HTML><BODY BGCOLOR=\"#c0c0c0\"><BR><BR><P><FONT FACE=\"Arial\"><B>Belge özellikleri bulunamadı.</B></FONT></P></BODY></HTML>";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "<HTML><BODY BGCOLOR=\"#c0c0c0\"><BR><BR><P><FONT FACE=\"Arial\"><B>No se encontraron propiedades de documentos.</B></FONT></P></BODY></HTML>";
 };
 String STR_EXPLORERVIEW
 {
@@ -580,6 +599,7 @@ String STR_EXPLORERVIEW
     Text[ arabic ] = "ÇáãÓÊßÔİ";
     Text[ turkish ] = "Explorer";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Explorador";
 };
  // -----------------------------------------------------------------------
 InfoBox MSG_CANT_CLOSE
@@ -605,6 +625,7 @@ InfoBox MSG_CANT_CLOSE
     Message[ arabic ] = "áÇ íãßä ÅÛáÇŞ ÇáãÓÊäÏ ÍÇáíÇğ¡\náÃä åäÇáß ÚãáíÉ ØÈÇÚÉ ŞíÏ ÇáÊäİíĞ.";
     Message[ turkish ] = "Belge, devam eden bir yazdırma işi nedeniyle\nşu an kapatılamıyor.";
     Message[ language_user1 ] = " ";
+    Message[ catalan ] = "El documento no se puede cerrar por ahora\nya que todavía se está imprimiendo.";
 };
  // DLG_PRINTMONITOR ------------------------------------------------------
 
@@ -629,7 +650,8 @@ InfoBox MSG_CANT_CLOSE
     TEXT[ greek ] = "Ïèüíç åêôığùóçò";  \
     TEXT[ korean ] = "ÀÎ¼â ¸ğ´ÏÅÍ"; \
     TEXT[ arabic ] = "ãÑÇŞÈ ÇáØÇÈÚÉ";   \
-    TEXT[ turkish ] = "Yazıcı penceresi";
+    TEXT[ turkish ] = "Yazıcı penceresi";   \
+    TEXT[ catalan ] = "Monitor de impresión";
 
 ModelessDialog DLG_PRINTMONITOR
 {
@@ -673,6 +695,7 @@ ModelessDialog DLG_PRINTMONITOR
         TEXT[ arabic ] = "Óæİ íõØÈÚ Úáì";
         TEXT[ turkish ] = "çıktının alındığı yer";
         TEXT[ language_user1 ] = " ";
+        TEXT[ catalan ] = "se está imprimiendo en";
     };
     FixedText FT_PRINTER
     {
@@ -722,6 +745,7 @@ InfoBox MSG_ERROR_SEND_MAIL
     MESSAGE[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÅÑÓÇá ÇáÑÓÇáÉ ";
     MESSAGE[ turkish ] = "Posta gönderirken hata oluştu.";
     MESSAGE[ language_user1 ] = " ";
+    MESSAGE[ catalan ] = "Error al enviar el mensaje.";
 };
 
  // DLG_MAILDIALOG --------------------------------------------------------
@@ -775,6 +799,7 @@ ModalDialog RID_MAILATTACHDOC_DLG
         Text[ arabic ] = "ÅÑİÇŞ";
         Text[ turkish ] = "~Ekle";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Adjuntar";
     };
     Text[ chinese_simplified ] = "¼Ä·¢ÓÊ¼ş";
     Text[ russian ] = "Îòïğàâèòü ñîîáùåíèå";
@@ -806,6 +831,7 @@ ModalDialog RID_MAILATTACHDOC_DLG
         Text[ korean ] = "ÀúÀåÇÏ°í Ã·ºÎÇÏ±â(~S)";
         Text[ arabic ] = "ÍİÙ æÅÑİÇŞ";
         Text[ turkish ] = "~Kaydet ve iliştir";
+        Text[ catalan ] = "~Guardar y adjuntar";
     };
     RadioButton BTN_MAILBODY
     {
@@ -832,6 +858,7 @@ ModalDialog RID_MAILATTACHDOC_DLG
         Text[ arabic ] = "ÇÓÊÎÏÇã ßãÍÊæíÇÊ ÑÓÇáÉ";
         Text[ turkish ] = "Posta içeriği olarak kullan";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Como contenido del mensaje";
     };
     RadioButton BTN_SAVE_AND_MAILBODY
     {
@@ -858,6 +885,7 @@ ModalDialog RID_MAILATTACHDOC_DLG
         Text[ korean ] = "ÀúÀåÇÏ°í ¸ŞÀÏ ³»¿ëÀ¸·Î »ç¿ë(~V)";
         Text[ arabic ] = "ÍİÙ æÇÓÊÎÏÇã ßãÍÊæì ÑÓÇáÉ";
         Text[ turkish ] = "Kaydet ve ileti içeriği olarak kullan";
+        Text[ catalan ] = "Gu~ardar y usar como contenido del mensaje";
     };
     RadioButton BTN_SELECTION
     {
@@ -884,6 +912,7 @@ ModalDialog RID_MAILATTACHDOC_DLG
         Text[ arabic ] = "ÇÓÊÎÏÇã ÇáÊÍÏíÏ";
         Text[ turkish ] = "Seçimi kullan";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Utilizar la ~selección";
     };
     RadioButton BTN_NO_ATTACH
     {
@@ -910,6 +939,7 @@ ModalDialog RID_MAILATTACHDOC_DLG
         Text[ arabic ] = "ÚÏã ÇáÇÓÊÎÏÇã";
         Text[ turkish ] = "Kullanma";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~No usar";
     };
     GroupBox GB_DOC
     {
@@ -936,6 +966,7 @@ ModalDialog RID_MAILATTACHDOC_DLG
         Text[ arabic ] = "ÇáãÓÊäÏ";
         Text[ turkish ] = "Belge";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Documento";
     };
     OKButton BTN_OK
     {
@@ -958,6 +989,7 @@ ModalDialog RID_MAILATTACHDOC_DLG
     Text[ arabic ] = "ÅÑÓÇá ÇáÑÓÇáÉ";
     Text[ turkish ] = "Posta gönder";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Enviar mensaje";
 };
  // ErrorBox --------------------------------------------------------------
 ErrorBox ERRBOX_SFX_INVALID_MERGEOPT
@@ -987,6 +1019,7 @@ ErrorBox ERRBOX_SFX_INVALID_MERGEOPT
     Message[ arabic ] = "ÅÑÓÇá ÑÓÇáÉ ãä ÎáÇá ÇáÅäÊÑäÊ¡\níÊØáÈ æÌæÏ ÚäæÇä ÈÑíÏ ÅáßÊÑæäí æãÒæøÏ SMTP.\nÇáÑÌÇÁ ÅÏÑÇÌ åĞå ÇáÅÚÏÇÏÇÊ ÊÍÊ\n\"ÃÏæÇÊ/ÎíÇÑÇÊ/ÚÇã.../ÈíÇäÇÊ ÇáãÓÊÎÏã/ÈÑíÏ ÅáßÊÑæäí\"¡ Ëã ÊÍÊ\n\"ÃÏæÇÊ/ÎíÇÑÇÊ/ÅäÊÑäÊ/ÇáÈÑíÏ \\ãÌãæÚÇÊ ÇáÃÎÈÇÑ/ÅÑÓÇá ÇáÈÑíÏ\"¡\nËã ÍÇæá ÅÑÓÇá åĞå ÇáÑÓÇáÉ ãÑÉ ÃÎÑì.";
     Message[ language_user1 ] = " ";
     Message[ turkish ] = "Internet üzerinden ileti gönderebilmek için önce\n e-posta adresinizi ve bir SMTP sunucusu belirtmeniz gerekiyor.\nİleti göndermeden önce bu ayarlar için,\n\"Araçlar\\Seçenekler\\Genel...\\Kullanıcı\\E-Posta\" ve\n\"Araçlar\\Seçenekler\\Internet\\E-Posta/Haber Grubu\\Giden Posta\" \nalanlarına girin.";
+    Message[ catalan ] = "Para enviar un mensaje a través de Internet\nse necesitan su dirección de correo electrónico y un servidor SMTP para el envío.\nAntes de enviar el próximo mensaje, introduzca por favor estas informaciones en\n\"Herramientas\\Opciones\\Generales...\\Datos de usuario\\E-mail y en\n\"Herramientas\\Opciones\\Internet\\Correo/Noticias\\Correo saliente\".";
 };
 ErrorBox ERRBOX_SFX_NO_OUTBOX
 {
@@ -1013,6 +1046,7 @@ ErrorBox ERRBOX_SFX_NO_OUTBOX
     Message[ arabic ] = "ÊäİíĞ ÇáÅÌÑÇÁ ÇáĞí ŞãÊ ÈÇÎÊíÇÑå íÍÊÇÌ Åáì ÓáÉ ÕÇÏÑÇÊ.\nÇáÑÌÇÁ ÅäÔÇÁ ÓáÉ ÕÇÏÑÇÊ¡ ŞÈá ãÍÇæáÉ ÊäİíĞ åĞÇ ÇáÅÌÑÇÁ ãÌÏÏÇğ.";
     Message[ turkish ] = "Seçtiğiniz işlem için giden kutusu gerekiyor.\nBu işlemi yeniden yürütmeden önce giden kutusunu oluşturun.";
     Message[ language_user1 ] = " ";
+    Message[ catalan ] = "Se necesitará una carpeta de salida para ejecutar esta acción.\nPor favor cree una carpeta de salida antes de reiniciar la acción.";
 };
  // QueryBoxen ------------------------------------------------------------
 QueryBox MSG_QUERY_OPENASTEMPLATE
@@ -1043,6 +1077,7 @@ QueryBox MSG_QUERY_OPENASTEMPLATE
     Message[ arabic ] = "áÇ íãßä İÊÍ ÇáãÓÊäÏ ááÊÍÑíÑ (áÚÏã ÊæİÑ ÇáÍŞæŞ ÇááÇÒãÉ\nÚáì ÓÈíá ÇáãËÇá). åá ÊÑíÏ ÇÓÊÎÏÇãå\nßŞÇáÈ áãÓÊäÏ ÌÏíÏ¿";
     Message[ turkish ] = "Belge (muhtemelen erişim hakkı olmaması nedeniyle)\n düzenleme için açılamıyor. Belgeyi yeni bir\nbelge için şablon olarak kullanmak istiyor musunuz?";
     Message[ language_user1 ] = " ";
+    Message[ catalan ] = "No es posible abrir el documento \npara la edición (p.ej. por falta de derechos). ¿Desea usarlo como plantilla \npara un nuevo documento?";
 };
 String STR_FRAMESIZE
 {
@@ -1066,6 +1101,7 @@ String STR_FRAMESIZE
     Text[ arabic ] = "ÍÌã ÇáÅØÇÑ";
     Text[ turkish ] = "Frame boyutu";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Tamaño del frame";
 };
 String RID_EXTERNALFRAME_TOOLBOX
 {
@@ -1090,6 +1126,7 @@ String RID_EXTERNALFRAME_TOOLBOX
     Text[ arabic ] = "ÔÑíØ ÇáãåÇã";
     Text[ turkish ] = "Araç çubuğu";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Barra de funciones";
 };
 ToolBox RID_EXTERNALFRAME_TOOLBOX
 {
@@ -1260,6 +1297,7 @@ String STR_FORWARDMAIL
     Text[ chinese_traditional ] = "³z¹L³W«hÂà±Hªº¹q¤l¶l¥ó¡C\n·½¹q¤l¶l¥ó·í§@ªş¥[¡C";
     Text[ arabic ] = "ÑÓÇáÉ Êã ÊãÑíÑåÇ ÍÓÈ ÇáŞÇÚÏÉ.\nÇáÑÓÇáÉ ÇáÃÕáíÉ ßãÑİŞÇÊ.";
     Text[ turkish ] = "Kurala göre aktarılan ileti.\nEk olarak özgün ileti.";
+    Text[ catalan ] = "Mensaje transmitido por regla.\nEl mensaje original como anexo.";
 };
 
 
