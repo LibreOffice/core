@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 16:51:34 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 10:27:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2754,6 +2754,16 @@ void SAL_CALL SwXTextDocument::render(
         pVwSh->SetPDFExportOption( sal_False );
         delete pViewOptionAdjust;
     }
+}
+/* -----------------------------03.10.04 -------------------------------------
+
+ ---------------------------------------------------------------------------*/
+    // ::com::sun::star::xforms::XFormsSupplier
+Reference<XNameContainer> SAL_CALL SwXTextDocument::getXForms()
+    throw( RuntimeException )
+{
+    SwDoc* pDoc = pDocShell->GetDoc();
+    return pDoc->getXForms();
 }
 /* -----------------------------20.06.00 09:54--------------------------------
 
