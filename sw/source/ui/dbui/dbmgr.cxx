@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: jp $ $Date: 2000-12-21 13:54:25 $
+ *  last change: $Author: os $ $Date: 2000-12-21 14:38:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1965,9 +1965,20 @@ BOOL SwNewDBMgr::OpenDataSource(const String& rDataSource, const String& rTableO
     {
         try
         {
-            pFound->bScrollable = pFound->xConnection->getMetaData()
+            Reference< sdbc::XDatabaseMetaData >  xMetaData = pFound->xConnection->getMetaData();
+            pFound->bScrollable = xMetaData
                         ->supportsResultSetType((sal_Int32)ResultSetType::SCROLL_INSENSITIVE);
             pFound->xStatement = pFound->xConnection->createStatement();
+            if(!pFound->sStatement.Len())
+            {
+                OUString aQuoteChar = xMetaData->getIdentifierQuoteString();
+                OUString sStatement(C2U("SELECT * FROM "));
+                sStatement = C2U("SELECT * FROM ");
+                sStatement += aQuoteChar;
+                sStatement += rTableOrQuery;
+                sStatement += aQuoteChar;
+                pFound->sStatement = sStatement;
+            }
             pFound->xResultSet = pFound->xStatement->executeQuery( pFound->sStatement );
 
             //after executeQuery the cursor must be positioned
