@@ -2,9 +2,9 @@
  *
  *  $RCSfile: w1filter.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cmc $ $Date: 2002-12-06 16:36:26 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:00:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,7 +187,7 @@
 #ifndef _STATSTR_HRC
 #include <statstr.hrc>
 #endif
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 #include <stdio.h>
 #endif
 
@@ -567,7 +567,7 @@ void Ww1Manager::Pop()
 
 void Ww1Bookmarks::Out(Ww1Shell& rOut, Ww1Manager& rMan, USHORT)
 {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     const String & rN = GetName();
     long nHandle = GetHandle();
 #endif
@@ -608,7 +608,7 @@ void Ww1Bookmarks::Out(Ww1Shell& rOut, Ww1Manager& rMan, USHORT)
 
 void Ww1Bookmarks::Start(Ww1Shell& rOut, Ww1Manager& rMan)
 {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     ULONG ulMan = rMan.Where();
     ULONG ulBook = Where();
 #endif
@@ -1353,7 +1353,7 @@ void Ww1Pap::Start(Ww1Shell& rOut, Ww1Manager& rMan)
 
 void Ww1Pap::Stop(Ww1Shell& rOut, Ww1Manager& rMan, sal_Unicode&)
 {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     ULONG ulMan = rMan.Where();
     ULONG ulPap = Where();
     BOOL bIsStopAll = rMan.IsStopAll();
@@ -1459,7 +1459,7 @@ void W1_CHP::Out(Ww1Shell& rOut, Ww1Manager& rMan)
 /////////////////////////////////////////////////////////////////// Chp
 void Ww1Chp::Start(Ww1Shell& rOut, Ww1Manager& rMan)
 {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     ULONG ulMan = rMan.Where();
     ULONG ulChp = Where();
 #endif
