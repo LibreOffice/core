@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flycnt.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 11:16:27 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:21:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,11 @@
 #include "crstate.hxx"
 #include "sectfrm.hxx"
 
+// OD 31.07.2003 #110978#
+#ifndef _ANCHOREDOBJECTPOSITION_HXX
+#include <anchoredobjectposition.hxx>
+#endif
+
 /*************************************************************************
 |*
 |*  SwFlyAtCntFrm::SwFlyAtCntFrm()
@@ -120,7 +125,9 @@
 |*************************************************************************/
 
 SwFlyAtCntFrm::SwFlyAtCntFrm( SwFlyFrmFmt *pFmt, SwFrm *pAnch ) :
-    SwFlyFreeFrm( pFmt, pAnch )
+    SwFlyFreeFrm( pFmt, pAnch ),
+    // OD 06.10.2003 #110978#
+    mpVertPosOrientFrm( 0 )
 {
     bAtCnt = TRUE;
     bAutoPosition = FLY_AUTO_CNTNT == pFmt->GetAnchor().GetAnchorId();
@@ -135,24 +142,59 @@ SwFlyAtCntFrm::SwFlyAtCntFrm( SwFlyFrmFmt *pFmt, SwFrm *pAnch ) :
 void SwFlyAtCntFrm::CheckCharRect()
 {
     SwFlyFrmFmt *pFmt = (SwFlyFrmFmt*)GetFmt();
-    if( FLY_AUTO_CNTNT == pFmt->GetAnchor().GetAnchorId() && GetAnchor() )
+    if ( FLY_AUTO_CNTNT == pFmt->GetAnchor().GetAnchorId() && GetAnchor() )
     {
-        SwRect aAutoPos;
+        // determine rectangle of anchor character. If not exist, abort operation
+        SwRect aCharRect;
         const SwFmtAnchor& rAnch = pFmt->GetAnchor();
-        if( !rAnch.GetCntntAnchor() )
-            return;
-        if( ((SwTxtFrm*)GetAnchor())->GetAutoPos( aAutoPos,
-              *rAnch.GetCntntAnchor() ) && aAutoPos != aLastCharRect )
+        if ( !rAnch.GetCntntAnchor() )
         {
-            SwFmtVertOrient aVert( pFmt->GetVertOrient() );
-            SwFmtHoriOrient aHori( pFmt->GetHoriOrient() );
-            if( ( REL_CHAR == aHori.GetRelationOrient() &&
-                  aAutoPos.Left() != aLastCharRect.Left() ) ||
-                  ( REL_CHAR == aVert.GetRelationOrient() &&
-                    ( aAutoPos.Top() != aLastCharRect.Top() ||
-                      aAutoPos.Height() != aLastCharRect.Height() ) ) )
-                InvalidatePos();
-            aLastCharRect = aAutoPos;
+            return;
+        }
+        if ( !static_cast<SwTxtFrm*>(GetAnchor())->GetAutoPos( aCharRect,
+                                                    *rAnch.GetCntntAnchor() ) )
+        {
+            return;
+        }
+        // check, if anchor character rectangle has changed
+        if ( aCharRect != aLastCharRect )
+        {
+            // check positioning and alignment for invalidation of position
+            {
+                // determine frame the anchor character is in.
+                SwTxtFrm& aAnchorCharFrm =
+                    static_cast<SwTxtFrm*>(GetAnchor())->GetFrmAtOfst(
+                        rAnch.GetCntntAnchor()->nContent.GetIndex() );
+                SWRECTFN( (&aAnchorCharFrm) );
+                // determine positioning and alignment
+                SwFmtVertOrient aVert( pFmt->GetVertOrient() );
+                SwFmtHoriOrient aHori( pFmt->GetHoriOrient() );
+                // check for anchor character rectangle changes for certain
+                // positionings and alignments
+                // OD 07.10.2003 #110978# - add condition to invalidate position,
+                // if vertical aligned at frame/page area and vertical position
+                // of anchor character has changed.
+                const SwRelationOrient eVertRelOrient = aVert.GetRelationOrient();
+                if ( ( aHori.GetRelationOrient() == REL_CHAR &&
+                       (aCharRect.*fnRect->fnGetLeft)() !=
+                            (aLastCharRect.*fnRect->fnGetLeft)() ) ||
+                     ( eVertRelOrient == REL_CHAR &&
+                       ( (aCharRect.*fnRect->fnGetTop)() !=
+                            (aLastCharRect.*fnRect->fnGetTop)() ||
+                         (aCharRect.*fnRect->fnGetHeight)() !=
+                            (aLastCharRect.*fnRect->fnGetHeight)() ) ) ||
+                     ( ( ( eVertRelOrient == FRAME ) ||
+                         ( eVertRelOrient == PRTAREA ) ||
+                         ( eVertRelOrient == REL_PG_FRAME ) ||
+                         ( eVertRelOrient == REL_PG_PRTAREA ) ) &&
+                       ( (aCharRect.*fnRect->fnGetTop)() !=
+                            (aLastCharRect.*fnRect->fnGetTop)() ) ) )
+                {
+                    InvalidatePos();
+                }
+            }
+            // keep new anchor character rectangle
+            aLastCharRect = aCharRect;
         }
     }
 }
@@ -420,7 +462,7 @@ void SwFlyAtCntFrm::MakeAll()
             }
             SwOszControl aOszCntrl( this );
 
-            if( !bLockedAnchor )
+            if ( !bLockedAnchor )
             {
                 if( GetAnchor()->IsInSct() )
                 {
@@ -442,7 +484,8 @@ void SwFlyAtCntFrm::MakeAll()
                 Point aOldPos( (Frm().*fnRect->fnGetPos)() );
                 SwFlyFreeFrm::MakeAll();
                 BOOL bPosChg = aOldPos != (Frm().*fnRect->fnGetPos)();
-                if( !bLockedAnchor )
+
+                if ( !bLockedAnchor )
                 {
                     if( GetAnchor()->IsInSct() )
                     {
@@ -467,6 +510,10 @@ void SwFlyAtCntFrm::MakeAll()
 
             if ( bOsz )
             {
+#ifdef DEBUG
+                ASSERT( false,
+                        "<SwFlyAtCntFrm::MakeAll()> - loop detected, perform attribute changes to avoid the loop" );
+#endif
                 SwFlyFrmFmt *pFmt = (SwFlyFrmFmt*)GetFmt();
                 pFmt->LockModify();
                 SwFmtSurround aMain( pFmt->GetSurround() );
@@ -502,7 +549,7 @@ void SwFlyAtCntFrm::MakeAll()
                     if( !bLockedAnchor )
                         GetAnchor()->Calc();
                 }
-                //Osz auf jeden fall zum Stehen bringen.
+                // validate fly frame
                 bValidPos = bValidSize = bValidPrtArea = TRUE;
             }
             bSetCompletePaintOnInvalidate = FALSE;
@@ -560,6 +607,7 @@ const SwFrm * MA_FASTCALL lcl_CalcDownDist( SwDistance &rRet,
         //Dem Textflus folgen.
         if ( pUp->Frm().IsInside( rPt ) )
         {
+            // OD 26.09.2003 - <rPt> point is inside environment of given content frame
             if( bVert )
                 rRet.nMain =  pCnt->Frm().Left() + pCnt->Frm().Width() -rPt.X();
             else
@@ -568,16 +616,21 @@ const SwFrm * MA_FASTCALL lcl_CalcDownDist( SwDistance &rRet,
         }
         else if ( rPt.Y() <= pUp->Frm().Top() )
         {
+            // OD 26.09.2003 - <rPt> point is above environment of given content frame
+            // OD: correct for vertical layout?
             rRet.nMain = LONG_MAX;
         }
         else if( rPt.X() < pUp->Frm().Left() &&
                  rPt.Y() <= ( bVert ? pUp->Frm().Top() : pUp->Frm().Bottom() ) )
         {
+            // OD 26.09.2003 - <rPt> point is left of environment of given content frame
+            // OD: seems not to be correct for vertical layout!?
             const SwFrm *pLay = pUp->GetLeaf( MAKEPAGE_NONE, FALSE, pCnt );
             if( !pLay ||
                 (bVert && (pLay->Frm().Top() + pLay->Prt().Bottom()) <rPt.Y())||
                 (!bVert && (pLay->Frm().Left() + pLay->Prt().Right())<rPt.X()) )
             {
+                // OD 26.09.2003 - <rPt> point is in left border of environment
                 if( bVert )
                     rRet.nMain =  pCnt->Frm().Left() + pCnt->Frm().Width()
                                   - rPt.X();
@@ -935,11 +988,14 @@ const SwCntntFrm *FindAnchor( const SwFrm *pOldAnch, const Point &rNew,
 {
     //Zu der angegebenen DokumentPosition wird der dichteste Cnt im
     //Textfluss gesucht. AusgangsFrm ist der uebergebene Anker.
-    const SwCntntFrm *pCnt;
+    const SwCntntFrm* pCnt;
     if ( pOldAnch->IsCntntFrm() )
+    {
         pCnt = (const SwCntntFrm*)pOldAnch;
+    }
     else
-    {   Point aTmp( rNew );
+    {
+        Point aTmp( rNew );
         SwLayoutFrm *pTmpLay = (SwLayoutFrm*)pOldAnch;
         if( pTmpLay->IsRootFrm() )
         {
@@ -1320,12 +1376,6 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
 |*
 |*************************************************************************/
 
-inline void ValidateSz( SwFrm *pFrm )
-{
-    if ( pFrm )
-        pFrm->bValidSize = TRUE;
-}
-
 void DeepCalc( const SwFrm *pFrm )
 {
     if( pFrm->IsSctFrm() ||
@@ -1383,6 +1433,8 @@ void DeepCalc( const SwFrm *pFrm )
     } while ( bContinue );
 }
 
+// OD 02.10.2003 #110978# - remove method implementations
+/*
 //Ermittlung des virtuellen Ankers fuer die Positionierung.
 //Dieser ist entweder der Anker selbst oder einer seiner Follows.
 
@@ -1436,6 +1488,7 @@ const SwFrm *GetVirtualHoriAnchor( const SwFrm *pAssumed, const SwFlyFrm *pFly )
     return pRet;
 
 }
+*/
 
 void SwFlyAtCntFrm::AssertPage()
 {
@@ -1543,6 +1596,8 @@ void SwFlyAtCntFrm::AssertPage()
 
 }
 
+// OD 02.10.2003 #110978# - remove method implementation
+/*
 BOOL MA_FASTCALL lcl_IsMoveable( SwFlyFrm *pFly, SwLayoutFrm *pLay )
 {
     //Waere der Anker auch in der neuen Umgebung noch moveable?
@@ -1574,16 +1629,24 @@ BOOL MA_FASTCALL lcl_Minor( SwRelationOrient eRelO, SwRelationOrient eRelO2,
         return aLeft[ eRelO ] >= aLeft[ eRelO2 ];
     return aRight[ eRelO ] >= aRight[ eRelO2 ];
 }
+*/
 
 void SwFlyAtCntFrm::MakeFlyPos()
 {
-    /// OD 02.10.2002 #102646#
-    /// if fly frame position is valid, nothing is to do, Thus, return
+    // OD 02.10.2002 #102646#
+    // if fly frame position is valid, nothing is to do, Thus, return
     if ( bValidPos )
     {
         return;
     }
 
+    // OD 07.08.2003 #110978# - use new class to position object
+    objectpositioning::SwAnchoredObjectPosition
+            aObjPositioning( objectpositioning::TO_CNTNT, *GetVirtDrawObj() );
+    aObjPositioning.CalcPosition();
+    mpVertPosOrientFrm = &(aObjPositioning.GetVertPosOrientFrm());
+
+    /*
     /// OD 02.10.2002 #102646# - NOTE
     /// declare and set <pFooter> to footer frame, if fly frame is anchored
     /// at a frame belonging to the footer.
@@ -1617,7 +1680,7 @@ void SwFlyAtCntFrm::MakeFlyPos()
     const FASTBOOL bWrapThrough =
         rSurround.GetSurround() == SURROUND_THROUGHT;
 
-    BOOL bGrow =
+    const BOOL bGrow =
         !GetAnchor()->IsInTab() || !pFmt->GetFrmSize().GetHeightPercent();
 
     for (;;)
@@ -1711,11 +1774,14 @@ void SwFlyAtCntFrm::MakeFlyPos()
                     nRelPosY = nUpper;
             }
             nRelPosY += nAdd;
+
             SwTwips nOTop = (pOrient->Frm().*fnRect->fnGetTop)();
-            SwTwips nBot = nRelPosY + nFrmHeight + (*fnRect->fnYDiff)( nOTop,
-                              (pOrient->GetUpper()->*fnRect->fnGetPrtBottom)());
-            if( nBot > 0 )
-                nRelPosY -= nBot;
+            {
+                SwTwips nBot = nRelPosY + nFrmHeight + (*fnRect->fnYDiff)( nOTop,
+                                  (pOrient->GetUpper()->*fnRect->fnGetPrtBottom)());
+                if( nBot > 0 )
+                    nRelPosY -= nBot;
+            }
             if( nRelPosY < 0 )
                 nRelPosY = 0;
             //Da die relative Position immer zum Anker relativ ist, muss dessen
@@ -2146,8 +2212,11 @@ void SwFlyAtCntFrm::MakeFlyPos()
                     nRelPosX += aHori.GetPos();
             }
             else if( bToggle || ( !aHori.IsPosToggle() && bR2L ) )
-                nRelPosX = nWidth - aFrm.Width() - aHori.GetPos() +
-                            ( bR2L ? nAdd : 0 );
+            {
+                // OD 04.08.2003 #110978# - correction: consider <nAdd> also for
+                // toggling from left to right.
+                nRelPosX += nWidth - aFrm.Width() - aHori.GetPos();
+            }
             else
                 nRelPosX += aHori.GetPos();
             //Da die relative Position immer zum Anker relativ ist,
@@ -2176,7 +2245,9 @@ void SwFlyAtCntFrm::MakeFlyPos()
                     if( !bPageRel && nTmp > pAnchor->Frm().Right() &&
                         Frm().Top() < GetAnchor()->Frm().Bottom() )
                     {
-                        nTmp = aRelPos.X() + GetAnchor()->Frm().Left();
+                        // OD 04.08.2003 #110978# - correction: use <nRelPosX>
+                        // instead of <aRelPos.X()>
+                        nTmp = nRelPosX + GetAnchor()->Frm().Left();
                         if ( nTmp < GetAnchor()->Frm().Right() )
                             nRelPosX = GetAnchor()->Frm().Width()+1;
                     }
@@ -2446,7 +2517,7 @@ void SwFlyAtCntFrm::MakeFlyPos()
         pFmt->UnlockModify();
 
         break;
-    } /// OD 02.10.2002 #102646# - End of loop
+    } // OD 02.10.2002 #102646# - End of loop
 
     if ( bInvalidatePage )
         FindPageFrm()->InvalidateSize();
@@ -2455,4 +2526,5 @@ void SwFlyAtCntFrm::MakeFlyPos()
 //      ASSERT( StackHack::IsLocked(), "invalid Anchor" );
         bValidPos = TRUE;
     }
+    */
 }
