@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objdraw.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-24 20:41:16 $
+ *  last change: $Author: kz $ $Date: 2001-08-07 15:14:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,14 +81,14 @@
         Text [ danish ] = "Standar~d" ; \
         Text [ portuguese ] = "~Padrão" ; \
         Text [ portuguese_brazilian ] = "Standar~d" ; \
-        Text[ chinese_simplified ] = "±ê×¼(~D)";\
+        Text[ chinese_simplified ] = "æ ‡å‡†(~D)";\
         Text[ russian ] = "~Ñòàíäàğò";\
         Text[ polish ] = "~Domyœlnie";\
-        Text[ japanese ] = "•W€(~D)";\
-        Text[ chinese_traditional ] = "¼Ğ·Ç(~D)";\
+        Text[ japanese ] = "æ¨™æº–(~D)";\
+        Text[ chinese_traditional ] = "æ¨™æº–(~D)";\
         Text[ arabic ] = "~ŞíÇÓí";\
         Text[ greek ] = "~ĞñïåğéëïãŞ";\
-        Text[ korean ] = "Ç¥ÁØ(~D)";\
+        Text[ korean ] = "í‘œì¤€(~D)";\
         Text[ turkish ] = "Standar~t";\
         Text[ language_user1 ] = " ";\
         Text[ catalan ] = "~Predeterminado";\
@@ -164,14 +164,14 @@
                     Text [ dutch ] = "Su~perscript" ; \
                     Text [ spanish ] = "Superín~dice" ; \
                     Text [ english_us ] = "~Superscript" ; \
-                    Text[ chinese_simplified ] = "ÉÏ±ê(~S)";\
+                    Text[ chinese_simplified ] = "ä¸Šæ ‡(~S)";\
                     Text[ russian ] = "Âåğõíèé ğåãèñòğ";\
                     Text[ polish ] = "Indeks górny";\
-                    Text[ japanese ] = "ã•t‚«(~S)";\
-                    Text[ chinese_traditional ] = "¤W¼Ğ(~S)";\
+                    Text[ japanese ] = "ä¸Šä»˜ã(~S)";\
+                    Text[ chinese_traditional ] = "ä¸Šæ¨™(~S)";\
                     Text[ arabic ] = "ãÑÊİÚ";\
                     Text[ greek ] = "Åêèİô~çò";\
-                    Text[ korean ] = "À§ Ã·ÀÚ(~S)";\
+                    Text[ korean ] = "ìœ„ ì²¨ì(~S)";\
                     Text[ turkish ] = "~Üst simge";\
                     Text[ language_user1 ] = " ";\
                     Text[ catalan ] = "Superín~dice";\
@@ -193,28 +193,28 @@
                     Text [ dutch ] = "Su~bscript" ; \
                     Text [ spanish ] = "Su~bíndice" ; \
                     Text [ english_us ] = "S~ubscript" ; \
-                    Text[ chinese_simplified ] = "ÏÂ±ê(~U)";\
+                    Text[ chinese_simplified ] = "ä¸‹æ ‡(~U)";\
                     Text[ russian ] = "Íèæíèé ğåãèñòğ";\
                     Text[ polish ] = "Indeks dolny";\
-                    Text[ japanese ] = "‰º•t‚«(~U)";\
-                    Text[ chinese_traditional ] = "¤U¼Ğ(~U)";\
+                    Text[ japanese ] = "ä¸‹ä»˜ã(~U)";\
+                    Text[ chinese_traditional ] = "ä¸‹æ¨™(~U)";\
                     Text[ arabic ] = "ãäÎİÖ";\
                     Text[ greek ] = "Äåßê~ôçò";\
-                    Text[ korean ] = "¾Æ·¡Ã·ÀÚ(~U)";\
+                    Text[ korean ] = "ì•„ë˜ì²¨ì(~U)";\
                     Text[ turkish ] = "~Alt simge";\
                     Text[ language_user1 ] = " ";\
                     Text[ catalan ] = "Su~bíndice";\
                 };\
             };\
         };\
-        Text[ chinese_simplified ] = "Ê½Ñù(~S)";\
+        Text[ chinese_simplified ] = "å¼æ ·(~S)";\
         Text[ russian ] = "Ñòèëü";\
         Text[ polish ] = "Styl";\
-        Text[ japanese ] = "½À²Ù(~S)";\
-        Text[ chinese_traditional ] = "¼Ë¦¡(~S)";\
+        Text[ japanese ] = "ï½½ï¾€ï½²ï¾™(~S)";\
+        Text[ chinese_traditional ] = "æ¨£å¼(~S)";\
         Text[ arabic ] = "äãØ";\
         Text[ greek ] = "Óôõ~ë";\
-        Text[ korean ] = "À¯Çü(~S)";\
+        Text[ korean ] = "ìœ í˜•(~S)";\
         Text[ turkish ] = "Bi~çim";\
         Text[ language_user1 ] = " ";\
         Text[ catalan ] = "Est~ilo";\
@@ -274,28 +274,28 @@
                     Text [ dutch ] = "~Uitgevuld" ; \
                     Text [ spanish ] = "~Justificado" ; \
                     Text [ english_us ] = "~Justified" ; \
-                    Text[ chinese_simplified ] = "×óÓÒ¶ÔÆë(~J)";\
+                    Text[ chinese_simplified ] = "å·¦å³å¯¹é½(~J)";\
                     Text[ russian ] = "Ïî øèğèíå";\
                     Text[ polish ] = "~Do lewej i prawej";\
-                    Text[ japanese ] = "‹Ï“™Š„•t(~J)";\
-                    Text[ chinese_traditional ] = "¥ª¥k¹ï»ô(~J)";\
+                    Text[ japanese ] = "å‡ç­‰å‰²ä»˜(~J)";\
+                    Text[ chinese_traditional ] = "å·¦å³å°é½Š(~J)";\
                     Text[ arabic ] = "ÖÈØ";\
                     Text[ greek ] = "~ĞëŞñçò óôïß÷éóç";\
-                    Text[ korean ] = "¾çÂÊ ¸ÂÃã(~J)";\
+                    Text[ korean ] = "ì–‘ìª½ ë§ì¶¤(~J)";\
                     Text[ turkish ] = "~İki yana yasla";\
                     Text[ language_user1 ] = " ";\
                     Text[ catalan ] = "~Justificado";\
                 };\
             };\
         };\
-        Text[ chinese_simplified ] = "¶ÔÆë(~A)";\
+        Text[ chinese_simplified ] = "å¯¹é½(~A)";\
         Text[ russian ] = "Âûğàâíèâàíèå";\
         Text[ polish ] = "Wyrównanie";\
-        Text[ japanese ] = "”z’u(~A)";\
-        Text[ chinese_traditional ] = "¹ï»ô(~A)";\
+        Text[ japanese ] = "é…ç½®(~A)";\
+        Text[ chinese_traditional ] = "å°é½Š(~A)";\
         Text[ arabic ] = "ãÍÇĞÇÉ";\
         Text[ greek ] = "~Óôïß÷éóç";\
-        Text[ korean ] = "¸ÂÃã(~A)";\
+        Text[ korean ] = "ë§ì¶¤(~A)";\
         Text[ turkish ] = "~Hizalama";\
         Text[ language_user1 ] = " ";\
         Text[ catalan ] = "~Alineación";\
@@ -339,14 +339,14 @@
                 };\
             };\
         };\
-        Text[ chinese_simplified ] = "ĞĞ¾à(~L)";\
+        Text[ chinese_simplified ] = "è¡Œè·(~L)";\
         Text[ russian ] = "ìåæäóñòğî÷íûé";\
         Text[ polish ] = "Odstêp wierszy";\
-        Text[ japanese ] = "sŠÔ(~L)";\
-        Text[ chinese_traditional ] = "¦C¶¡¹j(~L)";\
+        Text[ japanese ] = "è¡Œé–“(~L)";\
+        Text[ chinese_traditional ] = "åˆ—é–“éš”(~L)";\
         Text[ arabic ] = "ÊÈÇÚÏ ÇáÃÓØÑ";\
         Text[ greek ] = "ÄéÜóôé~÷ï";\
-        Text[ korean ] = "Çà °£°İ(~L)";\
+        Text[ korean ] = "í–‰ ê°„ê²©(~L)";\
         Text[ turkish ] = "~Satır aralığı";\
         Text[ language_user1 ] = " ";\
         Text[ catalan ] = "Inter~lineado";\
@@ -379,14 +379,14 @@
         Text [ danish ] = "~Tekst..." ; \
         Text [ portuguese ] = "Te~xto..." ; \
         Text [ portuguese_brazilian ] = "Te~xt..." ; \
-        Text[ chinese_simplified ] = "ÎÄ×Ö(~X)...";\
+        Text[ chinese_simplified ] = "æ–‡å­—(~X)...";\
         Text[ russian ] = "~Òåêñò...";\
         Text[ polish ] = "~Tekst...";\
-        Text[ japanese ] = "Ã·½Ä(~X)...";\
-        Text[ chinese_traditional ] = "¤å¦r(~X)...";\
+        Text[ japanese ] = "ï¾ƒï½·ï½½ï¾„(~X)...";\
+        Text[ chinese_traditional ] = "æ–‡å­—(~X)...";\
         Text[ arabic ] = "~äÕ...";\
         Text[ greek ] = "~Êåßìåíï...";\
-        Text[ korean ] = "ÅØ½ºÆ®.(~X)...";\
+        Text[ korean ] = "í…ìŠ¤íŠ¸.(~X)...";\
         Text[ turkish ] = "~Metin...";\
         Text[ language_user1 ] = " ";\
         Text[ catalan ] = "Te~xto...";\
@@ -412,14 +412,14 @@
         Text [ dutch ] = "Originele ~grootte" ; \
         Text [ spanish ] = "Ta~maño original" ; \
         Text [ english_us ] = "~Original Size" ; \
-        Text[ chinese_simplified ] = "Ô­¼ş´óĞ¡(~O)";\
+        Text[ chinese_simplified ] = "åŸä»¶å¤§å°(~O)";\
         Text[ russian ] = "Èñõîäíûé ğàçìåğ";\
         Text[ polish ] = "Rozmiar oryginalny";\
-        Text[ japanese ] = "µØ¼ŞÅÙ»²½Ş(~O)";\
-        Text[ chinese_traditional ] = "­ì¥ó¤j¤p(~O)";\
+        Text[ japanese ] = "ï½µï¾˜ï½¼ï¾ï¾…ï¾™ï½»ï½²ï½½ï¾(~O)";\
+        Text[ chinese_traditional ] = "åŸä»¶å¤§å°(~O)";\
         Text[ arabic ] = "ÇáÍÌã ÇáÃÕáí";\
         Text[ greek ] = "Áñ÷éêü ìİ~ãåèïò";\
-        Text[ korean ] = "±âº» Å©±â(~O)";\
+        Text[ korean ] = "ê¸°ë³¸ í¬ê¸°(~O)";\
         Text[ turkish ] = "Gerçek ~boyut";\
         Text[ language_user1 ] = " ";\
         Text[ catalan ] = "Ta~maño original";\
@@ -464,14 +464,14 @@
                     Text [ dutch ] = "~Verticaal" ; \
                     Text [ spanish ] = "~Vertical" ; \
                     Text [ english_us ] = "~Vertically" ; \
-                    Text[ chinese_simplified ] = "´¹Ö±·½Ïò(~V)";\
+                    Text[ chinese_simplified ] = "å‚ç›´æ–¹å‘(~V)";\
                     Text[ russian ] = "~Ïî âåğòèêàëè";\
                     Text[ polish ] = "~W pionie";\
-                    Text[ japanese ] = "ã‰º”½“](~V)";\
-                    Text[ chinese_traditional ] = "««ª½¤è¦V(~V)";\
+                    Text[ japanese ] = "ä¸Šä¸‹åè»¢(~V)";\
+                    Text[ chinese_traditional ] = "å‚ç›´æ–¹å‘(~V)";\
                     Text[ arabic ] = "ÑÃÓí~";\
                     Text[ greek ] = "Êáôáêüñõ~öá";\
-                    Text[ korean ] = "¼öÁ÷(~V)";\
+                    Text[ korean ] = "ìˆ˜ì§(~V)";\
                     Text[ turkish ] = "~Dikey";\
                     Text[ language_user1 ] = " ";\
                     Text[ catalan ] = "~Vertical";\
@@ -493,28 +493,28 @@
                     Text [ dutch ] = "~Horizontaal" ; \
                     Text [ spanish ] = "~Horizontal" ; \
                     Text [ english_us ] = "~Horizontal" ; \
-                    Text[ chinese_simplified ] = "Ë®Æ½·½Ïò(~H)";\
+                    Text[ chinese_simplified ] = "æ°´å¹³æ–¹å‘(~H)";\
                     Text[ russian ] = "Ïî ãîğèçîíòàëè";\
                     Text[ polish ] = "W pionie";\
-                    Text[ japanese ] = "¶‰E”½“](~H)";\
-                    Text[ chinese_traditional ] = "¤ô¥­¤è¦V(~H)";\
+                    Text[ japanese ] = "å·¦å³åè»¢(~H)";\
+                    Text[ chinese_traditional ] = "æ°´å¹³æ–¹å‘(~H)";\
                     Text[ arabic ] = "ÃİŞí";\
                     Text[ greek ] = "Ïñé~æüíôéá";\
-                    Text[ korean ] = "¼öÆò(~H)";\
+                    Text[ korean ] = "ìˆ˜í‰(~H)";\
                     Text[ turkish ] = "~Yatay";\
                     Text[ language_user1 ] = " ";\
                     Text[ catalan ] = "~Horizontal";\
                 };\
             };\
         };\
-        Text[ chinese_simplified ] = "·­×ª(~F)";\
+        Text[ chinese_simplified ] = "ç¿»è½¬(~F)";\
         Text[ russian ] = "~Îòğàçèòü";\
         Text[ polish ] = "~Odbij";\
-        Text[ japanese ] = "”½“](~F)";\
-        Text[ chinese_traditional ] = "Â½Âà(~F)";\
+        Text[ japanese ] = "åè»¢(~F)";\
+        Text[ chinese_traditional ] = "ç¿»è½‰(~F)";\
         Text[ arabic ] = "ÇäÚßÇ~Ó";\
         Text[ greek ] = "Êáôüğôñ~éóç";\
-        Text[ korean ] = "´ëÄª(~F)";\
+        Text[ korean ] = "ëŒ€ì¹­(~F)";\
         Text[ turkish ] = "~Yansıt";\
         Text[ language_user1 ] = " ";\
         Text[ catalan ] = "~Reflejar";\
@@ -564,14 +564,14 @@
                     Text [ dutch ] = "Verder naar ~voren" ; \
                     Text [ spanish ] = "Traer más a~delante" ; \
                     Text [ english_us ] = "Bring ~Forward" ; \
-                    Text[ chinese_simplified ] = "ÉÏÒÆÒ»²ã(~F)";\
+                    Text[ chinese_simplified ] = "ä¸Šç§»ä¸€å±‚(~F)";\
                     Text[ russian ] = "Ïåğåìåñòèòü ~âïåğåä";\
                     Text[ polish ] = "~Wysuñ do przodu";\
-                    Text[ japanese ] = "‘O–Ê‚ÖˆÚ“®(~F)";\
-                    Text[ chinese_traditional ] = "¤W²¾¤@¼h(~F)";\
+                    Text[ japanese ] = "å‰é¢ã¸ç§»å‹•(~F)";\
+                    Text[ chinese_traditional ] = "ä¸Šç§»ä¸€å±¤(~F)";\
                     Text[ arabic ] = "ÅÍÖÇÑ ÃãÇãÇğ";\
                     Text[ greek ] = "Ì~åôáöïñÜ İíá åğßğåäï åìğñüò";\
-                    Text[ korean ] = "¾ÕÀ¸·Î °¡Á®¿À±â(~F)";\
+                    Text[ korean ] = "ì•ìœ¼ë¡œ ê°€ì ¸ì˜¤ê¸°(~F)";\
                     Text[ turkish ] = "B~ir öne getir";\
                     Text[ language_user1 ] = " ";\
                     Text[ catalan ] = "Traer más a~delante";\
@@ -594,14 +594,14 @@
                     Text [ dutch ] = "Verder naar ~achteren" ; \
                     Text [ spanish ] = "Enviar hacia a~trás" ; \
                     Text [ english_us ] = "Send Back~ward" ; \
-                    Text[ chinese_simplified ] = "ÏÂÒÆÒ»²ã(~W)";\
+                    Text[ chinese_simplified ] = "ä¸‹ç§»ä¸€å±‚(~W)";\
                     Text[ russian ] = "Ïåğåìåñòèòü ~íàçàä";\
                     Text[ polish ] = "Przesuñ do ty³u";\
-                    Text[ japanese ] = "”w–Ê‚ÉˆÚ“®(~W)";\
-                    Text[ chinese_traditional ] = "¤U²¾¤@¼h(~W)";\
+                    Text[ japanese ] = "èƒŒé¢ã«ç§»å‹•(~W)";\
+                    Text[ chinese_traditional ] = "ä¸‹ç§»ä¸€å±¤(~W)";\
                     Text[ arabic ] = "ÅÑÓÇá ÎáİÇğ";\
                     Text[ greek ] = "~ÌåôáöïñÜ ğßóù";\
-                    Text[ korean ] = "µÚ·Î º¸³»±â(~W)";\
+                    Text[ korean ] = "ë’¤ë¡œ ë³´ë‚´ê¸°(~W)";\
                     Text[ turkish ] = "Bir  ~geri gönder";\
                     Text[ language_user1 ] = " ";\
                     Text[ catalan ] = "Enviar hacia a~trás";\
@@ -621,14 +621,14 @@
                 };\
             };\
         };\
-        Text[ chinese_simplified ] = "ÅÅĞò(~A)";\
+        Text[ chinese_simplified ] = "æ’åº(~A)";\
         Text[ russian ] = "Ğ~àñïîëîæåíèå";\
         Text[ polish ] = "~Rozmieszczenie";\
-        Text[ japanese ] = "®—ñ(~A)";\
-        Text[ chinese_traditional ] = "±Æ§Ç(~A)";\
+        Text[ japanese ] = "æ•´åˆ—(~A)";\
+        Text[ chinese_traditional ] = "æ’åº(~A)";\
         Text[ arabic ] = "ÊÑÊíÈ~";\
         Text[ greek ] = "ÄéÜô~áîç";\
-        Text[ korean ] = "¹è¿­(~A)";\
+        Text[ korean ] = "ë°°ì—´(~A)";\
         Text[ turkish ] = "~Sıralama";\
         Text[ language_user1 ] = " ";\
         Text[ catalan ] = "~Posición";\
@@ -665,14 +665,14 @@
                     Text [ danish ] = "Til ~siden" ; \
                     Text [ portuguese_brazilian ] = "An der ~Seite" ; \
                     Text [ portuguese ] = "~Na página" ; \
-                    Text[ chinese_simplified ] = "ÔÚÒ³ÃæÉÏ(~A)";\
+                    Text[ chinese_simplified ] = "åœ¨é¡µé¢ä¸Š(~A)";\
                     Text[ russian ] = "~Ê ñòğàíèöå";\
                     Text[ polish ] = "~Na stronie";\
-                    Text[ japanese ] = "Íß°¼Ş‚É(~A)";\
-                    Text[ chinese_traditional ] = "¦b­¶­±¤W(~A)";\
+                    Text[ japanese ] = "ï¾ï¾Ÿï½°ï½¼ï¾ã«(~A)";\
+                    Text[ chinese_traditional ] = "åœ¨é é¢ä¸Š(~A)";\
                     Text[ arabic ] = "Úáì Çá~ÕİÍÉ";\
                     Text[ greek ] = "~Óôç óåëßäá";\
-                    Text[ korean ] = "ÆäÀÌÁö¿¡¼­(~A)";\
+                    Text[ korean ] = "í˜ì´ì§€ì—ì„œ(~A)";\
                     Text[ turkish ] = "Sayfa~da";\
                     Text[ language_user1 ] = " ";\
                     Text[ catalan ] = "A la ~página";\
@@ -693,14 +693,14 @@
                     Text [ danish ] = "Til cellen" ; \
                     Text [ portuguese ] = "~Célula" ; \
                     Text [ portuguese_brazilian ] = "An der ~Zelle" ; \
-                    Text[ chinese_simplified ] = "ÔÚµ¥Ôª¸ñÉÏ(~C)";\
+                    Text[ chinese_simplified ] = "åœ¨å•å…ƒæ ¼ä¸Š(~C)";\
                     Text[ russian ] = "Ê ÿ÷åéêå";\
                     Text[ polish ] = "Przy komórce";\
-                    Text[ japanese ] = "¾Ù‚É(~C)";\
-                    Text[ chinese_traditional ] = "¦bÀx¦s®æ¤W(~C)";\
+                    Text[ japanese ] = "ï½¾ï¾™ã«(~C)";\
+                    Text[ chinese_traditional ] = "åœ¨å„²å­˜æ ¼ä¸Š(~C)";\
                     Text[ arabic ] = "ÎáíÉ";\
                     Text[ greek ] = "Óôï ~êåëß";\
-                    Text[ korean ] = "¼¿¿¡(~C)";\
+                    Text[ korean ] = "ì…€ì—(~C)";\
                     Text[ turkish ] = "Hücre~de";\
                     Text[ language_user1 ] = " ";\
                     Text[ catalan ] = "A la ~celda";\
@@ -712,14 +712,14 @@
         Text [ danish ] = "~Forankring" ; \
         Text [ portuguese ] = "~Âncora" ; \
         Text [ portuguese_brazilian ] = "~Verankerung" ; \
-        Text[ chinese_simplified ] = "Ëø¶¨(~C)";\
+        Text[ chinese_simplified ] = "é”å®š(~C)";\
         Text[ russian ] = "~Ïğèâÿçêà";\
         Text[ polish ] = "~Zakotwiczenie";\
-        Text[ japanese ] = "±İ¶°(~C)";\
-        Text[ chinese_traditional ] = "Âê©w(~C)";\
+        Text[ japanese ] = "ï½±ï¾ï½¶ï½°(~C)";\
+        Text[ chinese_traditional ] = "é–å®š(~C)";\
         Text[ arabic ] = "~ÅÑÓÇÁ";\
         Text[ greek ] = "Áãêıñ~ùóç";\
-        Text[ korean ] = "À§Ä¡ °íÁ¤(~C)";\
+        Text[ korean ] = "ìœ„ì¹˜ ê³ ì •(~C)";\
         Text[ turkish ] = "Sa~bitleyici";\
         Text[ language_user1 ] = " ";\
         Text[ catalan ] = "~Anclaje";\
@@ -778,14 +778,14 @@
                 };\
             };\
         };\
-        Text[ chinese_simplified ] = "¶ÔÆë(~L)";\
+        Text[ chinese_simplified ] = "å¯¹é½(~L)";\
         Text[ russian ] = "~Âûğàâíèâàíèå";\
         Text[ polish ] = "~Wyrównanie";\
-        Text[ japanese ] = "”z’u(~L)";\
-        Text[ chinese_traditional ] = "¹ï»ô(~L)";\
+        Text[ japanese ] = "é…ç½®(~L)";\
+        Text[ chinese_traditional ] = "å°é½Š(~L)";\
         Text[ arabic ] = "~ãÍÇĞÇÉ";\
         Text[ greek ] = "Ó~ôïß÷éóç";\
-        Text[ korean ] = "¸ÂÃã(~L)";\
+        Text[ korean ] = "ë§ì¶¤(~L)";\
         Text[ turkish ] = "Hiz~alama";\
         Text[ language_user1 ] = " ";\
         Text[ catalan ] = "Ali~neación";\
@@ -812,14 +812,14 @@ String RID_DRAW_OBJECTBAR
     Text [ dutch ] = "Werkbalk voor tekenobjecten" ;
     Text [ spanish ] = "Barra de objetos de dibujo" ;
     Text [ english_us ] = "Drawing Object Bar" ;
-    Text[ chinese_simplified ] = "»æÍ¼¶ÔÏóÀ¸";
+    Text[ chinese_simplified ] = "ç»˜å›¾å¯¹è±¡æ ";
     Text[ russian ] = "Ïàíåëü ãğàôè÷åñêèõ îáúåêòîâ";
     Text[ polish ] = "Pasek obiektów graficznych";
-    Text[ japanese ] = "}Œ`•`‰æµÌŞ¼Şª¸ÄÊŞ°";
-    Text[ chinese_traditional ] = "Ã¸¹Ïª«¥ó¦C";
+    Text[ japanese ] = "å›³å½¢æç”»ï½µï¾Œï¾ï½¼ï¾ï½ªï½¸ï¾„ï¾Šï¾ï½°";
+    Text[ chinese_traditional ] = "ç¹ªåœ–ç‰©ä»¶åˆ—";
     Text[ arabic ] = "ÔÑíØ ÇáßÇÆäÇÊ ÇáÑÓæãíÉ";
     Text[ greek ] = "ÃñáììŞ ó÷åäßáóçò áíôéêåéìİíùí";
-    Text[ korean ] = "±×¸®±â °³Ã¼ ¸ğÀ½";
+    Text[ korean ] = "ê·¸ë¦¬ê¸° ê°œì²´ ëª¨ìŒ";
     Text[ turkish ] = "Çizim nesne çubuğu";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Barra de objetos de dibujo";
@@ -986,14 +986,14 @@ String RID_TEXT_TOOLBOX
     Text [ dutch ] = "Werkbalk voor tekstobjecten" ;
     Text [ spanish ] = "Barra de objetos de texto" ;
     Text [ english_us ] = "Text Object Bar" ;
-    Text[ chinese_simplified ] = "ÎÄ×Ö¶ÔÏóÀ¸";
+    Text[ chinese_simplified ] = "æ–‡å­—å¯¹è±¡æ ";
     Text[ russian ] = "Ïàíåëü îáúåêòîâ òåêñòà";
     Text[ polish ] = "Pasek obiektów tekstowych";
-    Text[ japanese ] = "Ã·½ÄµÌŞ¼Şª¸ÄÊŞ°";
-    Text[ chinese_traditional ] = "¤å¦rª«¥ó¦C";
+    Text[ japanese ] = "ï¾ƒï½·ï½½ï¾„ï½µï¾Œï¾ï½¼ï¾ï½ªï½¸ï¾„ï¾Šï¾ï½°";
+    Text[ chinese_traditional ] = "æ–‡å­—ç‰©ä»¶åˆ—";
     Text[ arabic ] = "ÔÑíØ ßÇÆäÇÊ ÇáäÕ";
     Text[ greek ] = "ÃñáììŞ áíôéêåéìİíùí êåéìİíïõ";
-    Text[ korean ] = "ÅØ½ºÆ® °³Ã¼ ¸ğÀ½";
+    Text[ korean ] = "í…ìŠ¤íŠ¸ ê°œì²´ ëª¨ìŒ";
     Text[ turkish ] = "Metin nesne çubuğu";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Barra de objetos de texto";
@@ -1178,10 +1178,10 @@ String RID_GRAPHIC_OBJECTBAR
     Text[ swedish ] = "Grafikobjektlist";
     Text[ polish ] = "Pasek obiektów graficznych";
     Text[ portuguese_brazilian ] = "Toolbar for graphic objects";
-    Text[ japanese ] = "}µÌŞ¼Şª¸ÄÊŞ°";
-    Text[ korean ] = "±×·¡ÇÈ °³Ã¼ ¸ğÀ½";
-    Text[ chinese_simplified ] = "Í¼ĞÎ¶ÔÏóÀ¸";
-    Text[ chinese_traditional ] = "¹Ï§Îª«¥ó¦C";
+    Text[ japanese ] = "å›³ï½µï¾Œï¾ï½¼ï¾ï½ªï½¸ï¾„ï¾Šï¾ï½°";
+    Text[ korean ] = "ê·¸ë˜í”½ ê°œì²´ ëª¨ìŒ";
+    Text[ chinese_simplified ] = "å›¾å½¢å¯¹è±¡æ ";
+    Text[ chinese_traditional ] = "åœ–å½¢ç‰©ä»¶åˆ—";
     Text[ turkish ] = "Toolbar for graphic objects";
     Text[ arabic ] = "ÔÑíØ ßÇÆäÇÊ ÕæÑÉ";
     Text[ catalan ] = "Barra de objetos gráficos";
@@ -1436,14 +1436,14 @@ String RID_POPUP_DRAW
     Text [ swedish ] = "Popup-meny för ritobjekt" ;
     Text [ finnish ] = "Piirrosobjektien ponnahdusvalikko" ;
     Text [ english_us ] = "Pop-up menu for drawing objects" ;
-    Text[ chinese_simplified ] = "»æÍ¼µ¯³öÊ½²Ëµ¥";
+    Text[ chinese_simplified ] = "ç»˜å›¾å¼¹å‡ºå¼èœå•";
     Text[ russian ] = "Âñïëûâàşùåå ìåíş äëÿ ãğàôè÷åñêèõ îáúåêòîâ";
     Text[ polish ] = "Menu podrêczne obiektów graficznych";
-    Text[ japanese ] = "}Œ`•`‰æµÌŞ¼Şª¸Ä‚ÌÎß¯Ìß±¯ÌßÒÆ­°";
-    Text[ chinese_traditional ] = "Ã¸¹Ï§ÖÅã¥\\¯àªí";
+    Text[ japanese ] = "å›³å½¢æç”»ï½µï¾Œï¾ï½¼ï¾ï½ªï½¸ï¾„ã®ï¾ï¾Ÿï½¯ï¾Œï¾Ÿï½±ï½¯ï¾Œï¾Ÿï¾’ï¾†ï½­ï½°";
+    Text[ chinese_traditional ] = "ç¹ªåœ–å¿«é¡¯åŠŸèƒ½è¡¨";
     Text[ arabic ] = "ŞÇÆãÉ ãäÈËŞÉ ááßÇÆäÇÊ ÇáÑÓæãíÉ";
     Text[ greek ] = "Áíáäõüìåíï ìåíïı ãéá áíôéêåßìåíá ó÷åäßáóçò";
-    Text[ korean ] = "±×¸®±â °³Ã¼¸¦ À§ÇÑ ÆË¾÷ ¸Ş´º";
+    Text[ korean ] = "ê·¸ë¦¬ê¸° ê°œì²´ë¥¼ ìœ„í•œ íŒì—… ë©”ë‰´";
     Text[ turkish ] = "Çizim nesneleri için açılan mönü";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Menú emergente para objetos de dibujo";
@@ -1590,14 +1590,14 @@ Menu RID_POPUP_CHART
             Text [ danish ] = "Rediger dataområde..." ;
             Text [ portuguese_brazilian ] = "Datenbereich ?ndern..." ;
             Text [ portuguese ] = "~Modificar área de dados..." ;
-            Text[ chinese_simplified ] = "¸ü¸ÄÊı¾İÇøÓò(~M)...";
+            Text[ chinese_simplified ] = "æ›´æ”¹æ•°æ®åŒºåŸŸ(~M)...";
                                                 Text[ russian ] = "Èçìåíèòü îáëàñòü äàííûõ...";
                                                 Text[ polish ] = "Zmieñ obszar danych..";
-                                                Text[ japanese ] = "ÃŞ°À”ÍˆÍ‚Ì•ÏX(~M)...";
-                                                Text[ chinese_traditional ] = "­×§ï¸ê®Æ°Ï°ì(~M)...";
+                                                Text[ japanese ] = "ï¾ƒï¾ï½°ï¾€ç¯„å›²ã®å¤‰æ›´(~M)...";
+                                                Text[ chinese_traditional ] = "ä¿®æ”¹è³‡æ–™å€åŸŸ(~M)...";
                                                 Text[ arabic ] = "...ÊÚÏíá äØÇŞ ÇáÈíÇäÇÊ";
                                                 Text[ greek ] = "ÁëëáãŞ ğåñéï÷Şò ~äåäïìİíùí...";
-            Text[ korean ] = "µ¥ÀÌÅÍ ¿µ¿ª ¼öÁ¤(~M)...";
+            Text[ korean ] = "ë°ì´í„° ì˜ì—­ ìˆ˜ì •(~M)...";
             Text[ turkish ] = "~Veri alanını değiştir...";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Modificar área de ~datos...";
@@ -1628,14 +1628,14 @@ String RID_POPUP_DRAWTEXT
     Text [ danish ] = "Popup-menu for tekstobjekter" ;
     Text [ portuguese_brazilian ] = "Popup-Men?f? Text-Objekte" ;
     Text [ portuguese ] = "Menu instantâneo para objectos de texto" ;
-    Text[ chinese_simplified ] = "ÎÄ×Ö¶ÔÏóµÄµ¯³öÊ½²Ëµ¥";
+    Text[ chinese_simplified ] = "æ–‡å­—å¯¹è±¡çš„å¼¹å‡ºå¼èœå•";
                                         Text[ russian ] = "Âñïëûâàşùåå ìåíş äëÿ îáúåêòîâ òåêñòà";
                                         Text[ polish ] = "Menu podrêczne dla obiektów tekstowych";
-                                        Text[ japanese ] = "Ã·½ÄµÌŞ¼Şª¸Ä‚ÌÎß¯Ìß±¯ÌßÒÆ­°";
-                                        Text[ chinese_traditional ] = "¤å¦rª«¥ó§ÖÅã¥\\¯àªí";
+                                        Text[ japanese ] = "ï¾ƒï½·ï½½ï¾„ï½µï¾Œï¾ï½¼ï¾ï½ªï½¸ï¾„ã®ï¾ï¾Ÿï½¯ï¾Œï¾Ÿï½±ï½¯ï¾Œï¾Ÿï¾’ï¾†ï½­ï½°";
+                                        Text[ chinese_traditional ] = "æ–‡å­—ç‰©ä»¶å¿«é¡¯åŠŸèƒ½è¡¨";
                                         Text[ arabic ] = "ŞÇÆãÉ ãäÈËŞÉ ááßÇÆäÇÊ ÇáäÕíÉ";
                                         Text[ greek ] = "Áíáäõüìåíï ìåíïı ãéá áíôêåßìåíá êåéìİíïõ";
-    Text[ korean ] = "ÅØ½ºÆ® °³Ã¼ÀÇ ÆË¾÷ ¸Ş´º";
+    Text[ korean ] = "í…ìŠ¤íŠ¸ ê°œì²´ì˜ íŒì—… ë©”ë‰´";
     Text[ turkish ] = "Metin nesneleri için açılan mönü";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Menú emergente para objetos de texto";
@@ -1665,6 +1665,7 @@ Menu RID_POPUP_DRAWTEXT
         MN_DRWTXT
     };
 };
+
 
 
 
