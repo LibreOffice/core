@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gallery1.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:03:02 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 15:26:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -430,43 +430,113 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, sal_Bool& rbDirIsR
                         OUString        aTitle;
                         sal_Bool        bReadOnly = sal_False;
 
-                        Content aThmCnt( aThmURL.GetMainURL( INetURLObject::NO_DECODE ), xEnv );
-                        Content aSdgCnt( aSdgURL.GetMainURL( INetURLObject::NO_DECODE ), xEnv );
-                        Content aSdvCnt( aSdvURL.GetMainURL( INetURLObject::NO_DECODE ), xEnv );
-
-                        aThmCnt.getPropertyValue( aTitleProp ) >>= aTitle;
-
-                        if( aTitle.getLength() )
+                        try
                         {
-                            aThmCnt.getPropertyValue( aReadOnlyProp ) >>= bReadOnly;
+                            Content aThmCnt( aThmURL.GetMainURL( INetURLObject::NO_DECODE ), xEnv );
+                            Content aSdgCnt( aSdgURL.GetMainURL( INetURLObject::NO_DECODE ), xEnv );
+                            Content aSdvCnt( aSdvURL.GetMainURL( INetURLObject::NO_DECODE ), xEnv );
 
-                            if( !bReadOnly )
+                            try
                             {
-                                aSdgCnt.getPropertyValue( aTitleProp ) >>= aTitle;
-
-                                if( aTitle.getLength() )
-                                    aSdgCnt.getPropertyValue( aReadOnlyProp ) >>= bReadOnly;
+                                aThmCnt.getPropertyValue( aTitleProp ) >>= aTitle;
+                            }
+                            catch( const ::com::sun::star::uno::RuntimeException& )
+                            {
+                            }
+                            catch( const ::com::sun::star::uno::Exception& )
+                            {
                             }
 
-                            if( !bReadOnly )
+                            if( aTitle.getLength() )
                             {
-                                aSdvCnt.getPropertyValue( aTitleProp ) >>= aTitle;
+                                try
+                                {
+                                    aThmCnt.getPropertyValue( aReadOnlyProp ) >>= bReadOnly;
+                                }
+                                catch( const ::com::sun::star::uno::RuntimeException& )
+                                {
+                                }
+                                catch( const ::com::sun::star::uno::Exception& )
+                                {
+                                }
 
-                                if( aTitle.getLength() )
-                                    aSdvCnt.getPropertyValue( aReadOnlyProp ) >>= bReadOnly;
+                                if( !bReadOnly )
+                                {
+                                    try
+                                    {
+                                        aSdgCnt.getPropertyValue( aTitleProp ) >>= aTitle;
+                                    }
+                                    catch( const ::com::sun::star::uno::RuntimeException& )
+                                    {
+                                    }
+                                    catch( const ::com::sun::star::uno::Exception& )
+                                    {
+                                    }
+
+                                    if( aTitle.getLength() )
+                                    {
+                                        try
+                                        {
+                                            aSdgCnt.getPropertyValue( aReadOnlyProp ) >>= bReadOnly;
+                                        }
+                                        catch( const ::com::sun::star::uno::RuntimeException& )
+                                        {
+                                        }
+                                        catch( const ::com::sun::star::uno::Exception& )
+                                        {
+                                        }
+                                    }
+                                }
+
+                                if( !bReadOnly )
+                                {
+                                    try
+                                    {
+                                        aSdvCnt.getPropertyValue( aTitleProp ) >>= aTitle;
+                                    }
+                                    catch( const ::com::sun::star::uno::RuntimeException& )
+                                    {
+                                    }
+                                    catch( const ::com::sun::star::uno::Exception& )
+                                    {
+                                    }
+
+                                    if( aTitle.getLength() )
+                                    {
+                                        try
+                                        {
+                                            aSdvCnt.getPropertyValue( aReadOnlyProp ) >>= bReadOnly;
+                                        }
+                                        catch( const ::com::sun::star::uno::RuntimeException& )
+                                        {
+                                        }
+                                        catch( const ::com::sun::star::uno::Exception& )
+                                        {
+                                        }
+                                    }
+                                }
+
+                                GalleryThemeEntry* pEntry = GalleryTheme::CreateThemeEntry( aThmURL, rbDirIsReadOnly || bReadOnly );
+
+                                if( pEntry )
+                                {
+                                    const ULONG nFileNumber = (ULONG) aThmURL.GetBase().Erase( 0, 2 ).Erase( 6 ).ToInt32();
+
+                                    aThemeList.Insert( pEntry, LIST_APPEND );
+
+                                    if( nFileNumber > nLastFileNumber )
+                                        nLastFileNumber = nFileNumber;
+                                }
                             }
-
-                            GalleryThemeEntry* pEntry = GalleryTheme::CreateThemeEntry( aThmURL, rbDirIsReadOnly || bReadOnly );
-
-                            if( pEntry )
-                            {
-                                const ULONG nFileNumber = (ULONG) aThmURL.GetBase().Erase( 0, 2 ).Erase( 6 ).ToInt32();
-
-                                aThemeList.Insert( pEntry, LIST_APPEND );
-
-                                if( nFileNumber > nLastFileNumber )
-                                    nLastFileNumber = nFileNumber;
-                            }
+                        }
+                        catch( const ContentCreationException& )
+                        {
+                        }
+                        catch( const ::com::sun::star::uno::RuntimeException& )
+                        {
+                        }
+                        catch( const ::com::sun::star::uno::Exception& )
+                        {
                         }
                     }
                 }
