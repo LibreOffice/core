@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edattr.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-01 20:02:10 $
+ *  last change: $Author: jp $ $Date: 2001-02-20 09:23:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -547,4 +547,29 @@ USHORT SwEditShell::GetCurLang() const
     const SwTxtNode* pTNd = pCrsr->GetPoint()->nNode.GetNode().GetTxtNode();
     return pTNd ? pTNd->GetLang( pCrsr->GetPoint()->nContent.GetIndex(), 0 )
                 : LANGUAGE_DONTKNOW;
+}
+
+USHORT SwEditShell::GetScalingOfSelectedText() const
+{
+    const SwPaM* pCrsr = GetCrsr();
+    const SwPosition* pStt = pCrsr->Start();
+    const SwTxtNode* pTNd = pStt->nNode.GetNode().GetTxtNode();
+    ASSERT( pTNd, "no textnode available" );
+
+    USHORT nScaleWidth;
+    if( pTNd )
+    {
+        xub_StrLen nStt = pStt->nContent.GetIndex(), nEnd;
+        const SwPosition* pEnd = pStt == pCrsr->GetPoint()
+                                        ? pCrsr->GetMark()
+                                        : pCrsr->GetPoint();
+        if( pStt->nNode == pEnd->nNode )
+            nEnd = pEnd->nContent.GetIndex();
+        else
+            nEnd = pTNd->GetTxt().Len();
+        nScaleWidth = pTNd->GetScalingOfSelectedText( nStt, nEnd );
+    }
+    else
+        nScaleWidth = 100;              // default are no scaling -> 100%
+    return nScaleWidth;
 }

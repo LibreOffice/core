@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-08 14:31:37 $
+ *  last change: $Author: jp $ $Date: 2001-02-20 09:21:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,7 +224,7 @@ public:
     // werden ganze Nodes selektiert, werden die Nodes geloescht
     long Delete();
 
-    // Voellig private Methode. Nur fuer JOE's-Wizzards
+    // remove a complete paragraph
     BOOL DelFullPara();
 
     // change text to Upper/Lower/Hiragana/Katagana/...
@@ -745,7 +745,8 @@ public:
     // errechnet die Selektion
     String Calculate();
 
-    BOOL InsertURL( const SwFmtINetFmt& rFmt, const String& rStr, BOOL bKeepSelection = FALSE );
+    BOOL InsertURL( const SwFmtINetFmt& rFmt, const String& rStr,
+                    BOOL bKeepSelection = FALSE );
     USHORT GetINetAttrs( SwGetINetAttrs& rArr );
 
     //SS Fuer holen/ersetzen DropCap-Inhalt
@@ -903,6 +904,10 @@ public:
 
     // Schnistelle fuer den Zugriff auf die AutoComplete-Liste
     static SwAutoCompleteWord& GetAutoCompleteWords();
+
+    // returns a scaling factor of selected text. Used for the rotated
+    // character attribut dialog.
+    USHORT GetScalingOfSelectedText() const;
 
     // ctor/dtor
     SwEditShell( SwDoc&, Window*,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtxt.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-12-21 09:27:52 $
+ *  last change: $Author: jp $ $Date: 2001-02-20 09:21:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -337,6 +337,8 @@ public:
     void TransliterateText( utl::TransliterationWrapper& rTrans,
                             xub_StrLen nStart, xub_StrLen nEnd,
                             SwUndoTransliterate* pUndo = 0 );
+
+    USHORT GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd ) const;
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwTxtNode)
 };
