@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flylay.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ama $ $Date: 2001-04-26 10:36:13 $
+ *  last change: $Author: ama $ $Date: 2001-07-04 11:01:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -262,10 +262,10 @@ void SwFlyFreeFrm::CheckClip( const SwFmtFrmSize &rSz )
     ::CalcClipRect( pObj, aTmpStretch, FALSE );
     aClip._Intersection( aTmpStretch );
 
-    const long nBot = Frm().Bottom();
-    const long nRig = Frm().Right();
-    const long nClipBot = aClip.Bottom();
-    const long nClipRig = aClip.Right();
+    const long nBot = Frm().Top() + Frm().Height();
+    const long nRig = Frm().Left() + Frm().Width();
+    const long nClipBot = aClip.Top() + aClip.Height();
+    const long nClipRig = aClip.Left() + aClip.Width();
 
     const FASTBOOL bBot = nBot > nClipBot;
     const FASTBOOL bRig = nRig > nClipRig;
@@ -282,8 +282,7 @@ void SwFlyFreeFrm::CheckClip( const SwFmtFrmSize &rSz )
             if( !pHeader || !pHeader->IsHeaderFrm() )
             {
                 const long nOld = Frm().Top();
-                Frm().Pos().Y() = Max( aClip.Top(),
-                    aClip.Bottom() - Frm().Height());
+                Frm().Pos().Y() = Max( aClip.Top(), nClipBot - Frm().Height() );
                 if ( Frm().Top() != nOld )
                     bAgain = TRUE;
                 bHeightClipped = TRUE;
@@ -292,7 +291,7 @@ void SwFlyFreeFrm::CheckClip( const SwFmtFrmSize &rSz )
         if ( bRig )
         {
             const long nOld = Frm().Left();
-            Frm().Pos().X() = Max( aClip.Left(), aClip.Right() - Frm().Width() );
+            Frm().Pos().X() = Max( aClip.Left(), nClipRig - Frm().Width() );
             if ( Frm().Left() != nOld )
             {
                 const SwFmtHoriOrient &rH = GetFmt()->GetHoriOrient();
@@ -324,7 +323,7 @@ void SwFlyFreeFrm::CheckClip( const SwFmtFrmSize &rSz )
             if ( bBot )
             {
                 long nDiff = nClipBot;
-                nDiff -= aFrmRect.Top() - 1; //nDiff ist die verfuegbare Strecke.
+                nDiff -= aFrmRect.Top(); //nDiff ist die verfuegbare Strecke.
                 nDiff = aFrmRect.Height() - nDiff;
                 aFrmRect.Height( aFrmRect.Height() - nDiff );
                 bHeightClipped = TRUE;
@@ -332,7 +331,7 @@ void SwFlyFreeFrm::CheckClip( const SwFmtFrmSize &rSz )
             if ( bRig )
             {
                 long nDiff = nClipRig;
-                nDiff -= aFrmRect.Left() - 1;//nDiff ist die verfuegbare Strecke.
+                nDiff -= aFrmRect.Left();//nDiff ist die verfuegbare Strecke.
                 nDiff = aFrmRect.Width() - nDiff;
                 aFrmRect.Width( aFrmRect.Width() - nDiff );
                 bWidthClipped = TRUE;
