@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gsicheck.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 11:50:14 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:51:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@ private:
 
     ByteString aUniqId;
     ByteString aLineType;
-    USHORT nLangId;
+    ByteString aLangId;
     ByteString aStatus;
     ByteString aText;
 
@@ -94,7 +94,7 @@ public:
 
     ByteString  const GetUniqId()         { return aUniqId; }
     ByteString  const GetLineType()       { return aLineType; }
-    USHORT      const GetLanguageId()     { return nLangId; }
+    ByteString  const GetLanguageId()     { return aLangId; }
     ByteString  const GetLineStatus()     { return aStatus; }
     ByteString  const GetText()           { return aText; }
 
@@ -124,11 +124,11 @@ public:
     GSIBlock( BOOL PbPrintContext, BOOL bInt, BOOL bRef ) : pSourceLine( NULL ), pReferenceLine( NULL ), bPrintContext( PbPrintContext ), bInternal( bInt ), bReference( bRef ) {};
     ~GSIBlock();
     void PrintError( ByteString aMsg, ByteString aPrefix, ByteString aContext, ULONG nLine, ByteString aUniqueId = ByteString() );
-    void InsertLine( GSILine* pLine, const USHORT nSourceLang);
+    void InsertLine( GSILine* pLine, const ByteString aSourceLang);
     void SetReferenceLine( GSILine* pLine );
     BOOL CheckSyntax( ULONG nLine, BOOL bRequireSourceLine );
 
-    void WriteError( SvStream &aErrOut );
+    BOOL WriteError( SvStream &aErrOut );
     void WriteCorrect( SvStream &aOkOut );
 };
 
@@ -149,6 +149,27 @@ void PrintError( ByteString aMsg, ByteString aPrefix,
     fprintf( stdout, "\n" );
 }
 
+BOOL LanguageOK( ByteString aLang )
+{
+    if ( !aLang.Len() )
+        return FALSE;
+
+    if ( aLang.IsNumericAscii() )
+        return TRUE;
+
+    if ( aLang.GetTokenCount( '-' ) == 1 )
+        return aLang.IsLowerAscii();
+    else if ( aLang.GetTokenCount( '-' ) == 2 )
+    {
+        ByteString aTok0( aLang.GetToken( 0, '-' ) );
+        ByteString aTok1( aLang.GetToken( 1, '-' ) );
+        return  aTok0.Len() && aTok0.IsLowerAscii()
+             && aTok1.Len() && aTok1.IsUpperAscii()
+             && !aTok1.EqualsIgnoreCaseAscii( aTok0 );
+    }
+
+    return FALSE;
+}
 
 
 //
@@ -165,11 +186,23 @@ GSILine::GSILine( const ByteString &rLine, ULONG nLine )
     if ( rLine.GetTokenCount( '\t' ) == 15 )
     {
         aFormat = FORMAT_SDF;
-        aUniqId = rLine.GetToken( 4, '\t' ).Append("/").Append( rLine.GetToken( 3, '\t' ) ).Append("/").Append( rLine.GetToken( 5, '\t' ) ).Append("/").Append( rLine.GetToken( 6, '\t' ) ).Append("/").Append( rLine.GetToken( 7, '\t' ) );
+        aUniqId = rLine.GetToken( 0, '\t' ).Append("/").Append( rLine.GetToken( 1, '\t' ) ).Append("/").Append( rLine.GetToken( 4, '\t' ) ).Append("/").Append( rLine.GetToken( 3, '\t' ) ).Append("/").Append( rLine.GetToken( 5, '\t' ) ).Append("/").Append( rLine.GetToken( 6, '\t' ) ).Append("/").Append( rLine.GetToken( 7, '\t' ) );
         aLineType = "";
-        nLangId = rLine.GetToken( 9, '\t' ).ToInt32();
+        aLangId = rLine.GetToken( 9, '\t' );
         aStatus = "";
         aText = rLine.GetToken( 10, '\t' );
+
+        // do some more format checks here
+        if ( !rLine.GetToken( 8, '\t' ).IsNumericAscii() )
+        {
+            PrintError( "The length field does not contain a number!", "Line format", rLine.GetToken( 8, '\t' ), TRUE, GetLineNumber(), GetUniqId() );
+            NotOK();
+        }
+        if ( !LanguageOK( aLangId ) )
+        {
+            PrintError( "The Language is invalid!", "Line format", aLangId, TRUE, GetLineNumber(), GetUniqId() );
+            NotOK();
+        }
     }
     else    // allow tabs in gsi files
     {
@@ -191,7 +224,7 @@ GSILine::GSILine( const ByteString &rLine, ULONG nLine )
         }
         if ( nPos != STRING_NOTFOUND )
         {
-            nLangId = sTmp.Copy( nStart, nPos - nStart ).ToInt32();
+            aLangId = sTmp.Copy( nStart, nPos - nStart );
             nStart = nPos + 4;  // + length of the delemiter
             nPos = sTmp.Search( "($$)", nStart );
         }
@@ -225,10 +258,10 @@ GSIBlock::~GSIBlock()
 }
 
 /*****************************************************************************/
-void GSIBlock::InsertLine( GSILine* pLine, const USHORT nSourceLang)
+void GSIBlock::InsertLine( GSILine* pLine, ByteString aSourceLang)
 /*****************************************************************************/
 {
-    if ( pLine->GetLanguageId() == nSourceLang )
+    if ( pLine->GetLanguageId().Equals( aSourceLang ) )
     {
         if ( pSourceLine && bInternal )
             PrintError( "Source Language entry double. Ignoring.", "File format", "", pLine->GetLineNumber(), pLine->GetUniqId() );
@@ -242,11 +275,11 @@ void GSIBlock::InsertLine( GSILine* pLine, const USHORT nSourceLang)
            ||( !bLineIsInternal && !bInternal )
            ||( pLine->GetLineFormat() == FORMAT_SDF ))  // in sdf files check it all
         {
-            if ( nSourceLang != 0 ) // only check blockstructure if source lang is given
+            if ( aSourceLang.Len() ) // only check blockstructure if source lang is given
             {
                 while ( nPos < Count() )
                 {
-                    if ( GetObject( nPos )->GetLanguageId() == pLine->GetLanguageId() )
+                    if ( GetObject( nPos )->GetLanguageId().Equals( pLine->GetLanguageId() ) )
                         PrintError( "Translation Language entry double. Checking both.", "File format", "", pLine->GetLineNumber(), pLine->GetUniqId() );
                     nPos++;
                 }
@@ -385,7 +418,7 @@ BOOL GSIBlock::CheckSyntax( ULONG nLine, BOOL bRequireSourceLine )
     return TRUE;
 }
 
-void GSIBlock::WriteError( SvStream &aErrOut )
+BOOL GSIBlock::WriteError( SvStream &aErrOut )
 {
     BOOL bHasError = FALSE;
     BOOL bCopyAll = ( !pSourceLine || !pSourceLine->IsOK() ) && bInternal;
@@ -401,6 +434,8 @@ void GSIBlock::WriteError( SvStream &aErrOut )
 
     if ( pSourceLine && ( bHasError || ( !pSourceLine->IsOK() && bInternal ) ) )
         aErrOut.WriteLine( *pSourceLine );
+
+    return bHasError;
 }
 
 void GSIBlock::WriteCorrect( SvStream &aOkOut )
@@ -450,7 +485,7 @@ void Help()
     fprintf( stdout, "-wc   Write GSI-File containing all correct parts\n" );
     fprintf( stdout, "-i    Check records marked 'int' rather than marked 'ext' or similar\n" );
     fprintf( stdout, "-l    Numerical 2 digits Identifier of the source language. Default = 1\n" );
-    fprintf( stdout, "      Use 0 (zero) to disable source language dependent checks\n" );
+    fprintf( stdout, "      Use "" (empty string) to disable source language dependent checks\n" );
     fprintf( stdout, "-r    Reference filename to check that source language has not been changed\n" );
        fprintf( stdout, "\n" );
 }
@@ -469,7 +504,8 @@ int _cdecl main( int argc, char *argv[] )
     BOOL bInternal = FALSE;
     BOOL bWriteError = FALSE;
     BOOL bWriteCorrect = FALSE;
-    USHORT nSourceLang = 1;     // English is default
+    BOOL bFileHasError = FALSE;
+    ByteString aSourceLang( "en-US" );     // English is default
     ByteString aFilename;
     ByteString aReferenceFilename;
     BOOL bReferenceFile = FALSE;
@@ -500,7 +536,7 @@ int _cdecl main( int argc, char *argv[] )
                     {
                         if ( (i+1) < argc )
                         {
-                            nSourceLang = ByteString( argv[ i+1 ] ).ToInt32();
+                            aSourceLang = ByteString( argv[ i+1 ] );
                             i++;
                         }
                         else
@@ -548,6 +584,14 @@ int _cdecl main( int argc, char *argv[] )
         Help();
         exit ( 0 );
     }
+
+    if ( aSourceLang.Len() && !LanguageOK( aSourceLang ) )
+    {
+        fprintf( stderr, "\nERROR: The Language '%s' is invalid!\n\n", aSourceLang.GetBuffer() );
+        Help();
+        exit ( 1 );
+    }
+
 
     DirEntry aSource = DirEntry( String( aFilename, RTL_TEXTENCODING_ASCII_US ));
     if ( !aSource.Exists()) {
@@ -645,10 +689,10 @@ int _cdecl main( int argc, char *argv[] )
                 {
                     if ( pBlock )
                     {
-                        pBlock->CheckSyntax( nLine, nSourceLang != 0 );
+                        pBlock->CheckSyntax( nLine, aSourceLang.Len() );
 
                         if ( bWriteError )
-                            pBlock->WriteError( aErrOut );
+                            bFileHasError |= pBlock->WriteError( aErrOut );
                         if ( bWriteCorrect )
                             pBlock->WriteCorrect( aOkOut );
 
@@ -659,7 +703,7 @@ int _cdecl main( int argc, char *argv[] )
                     aOldId = aId;
 
 
-                    // find corrosponding line in reference file
+                    // find corresponding line in reference file
                     if ( bReferenceFile )
                     {
                         BOOL bContinueSearching = TRUE;
@@ -673,20 +717,20 @@ int _cdecl main( int argc, char *argv[] )
                             }
                             if ( pReferenceLine->GetLineFormat() != FORMAT_UNKNOWN )
                             {
-                                if ( pReferenceLine->GetUniqId() == aId && pReferenceLine->GetLanguageId() == nSourceLang )
+                                if ( pReferenceLine->GetUniqId() == aId && pReferenceLine->GetLanguageId().Equals( aSourceLang ) )
                                 {
                                     pBlock->SetReferenceLine( pReferenceLine );
                                     pReferenceLine = NULL;
                                 }
                                 else if ( pReferenceLine->GetUniqId() > aId )
                                 {
-//                                    if ( pGSILine->GetLanguageId() == nSourceLang )
+//                                    if ( pGSILine->GetLanguageId() == aSourceLang )
 //                                      PrintError( "No reference line found. Entry is new in source file", "File format", "", bPrintContext, pGSILine->GetLineNumber(), aId );
                                     bContinueSearching = FALSE;
                                 }
                                 else
                                 {
-                                    if ( pReferenceLine->GetUniqId() < aId  && pReferenceLine->GetLanguageId() == nSourceLang )
+                                    if ( pReferenceLine->GetUniqId() < aId  && pReferenceLine->GetLanguageId().Equals( aSourceLang ) )
                                         PrintError( "No Entry in source file found. Entry has been removed from source file", "File format", "", bPrintContext, pGSILine->GetLineNumber(), pReferenceLine->GetUniqId() );
                                     delete pReferenceLine;
                                     pReferenceLine = NULL;
@@ -703,7 +747,7 @@ int _cdecl main( int argc, char *argv[] )
 
                 }
 
-                pBlock->InsertLine( pGSILine, nSourceLang );
+                pBlock->InsertLine( pGSILine, aSourceLang );
                 bDelete = FALSE;
             }
         }
@@ -713,15 +757,18 @@ int _cdecl main( int argc, char *argv[] )
     }
     if ( pBlock )
     {
-        pBlock->CheckSyntax( nLine, nSourceLang != 0 );
+        pBlock->CheckSyntax( nLine, aSourceLang.Len() );
 
         if ( bWriteError )
-            pBlock->WriteError( aErrOut );
+            bFileHasError |= pBlock->WriteError( aErrOut );
         if ( bWriteCorrect )
             pBlock->WriteCorrect( aOkOut );
 
         delete pBlock;
     }
     aGSI.Close();
-    return 0;
+    if ( bFileHasError )
+        return 55;
+    else
+        return 0;
 }
