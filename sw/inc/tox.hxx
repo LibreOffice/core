@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tox.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:07:37 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:41:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,18 +61,23 @@
 #ifndef _TOX_HXX
 #define _TOX_HXX
 
-#ifndef _SVARRAY_HXX //autogen
-#include <svtools/svarray.hxx>
+#ifndef _LANG_HXX
+#include "tools/lang.hxx"
 #endif
-
 #ifndef _STRING_HXX //autogen
 #include <tools/string.hxx>
 #endif
 
+#ifndef _SVARRAY_HXX //autogen
+#include <svtools/svarray.hxx>
+#endif
 #ifndef _SFXPOOLITEM_HXX //autogen
 #include <svtools/poolitem.hxx>
 #endif
 
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
 #ifndef _SWTYPES_HXX
 #include <swtypes.hxx>
 #endif
@@ -86,7 +91,10 @@
 #include <errhdl.hxx>
 #endif
 
+#ifndef INCLUDED_VECTOR
 #include <vector> // #i21237#
+#define INCLUDED_VECTOR
+#endif
 
 class SwTOXType;
 class SwTOXMark;
@@ -102,7 +110,7 @@ SV_DECL_PTRARR(SwTOXMarks, SwTOXMark*, 0, 10)
 #define IVER_TOXMARK_STRPOOL ((USHORT)1)
 #define IVER_TOXMARK_NEWTOX ((USHORT)2)
 
-class SwTOXMark : public SfxPoolItem, public SwClient
+class SW_DLLPUBLIC SwTOXMark : public SfxPoolItem, public SwClient
 {
     friend void _InitCore();
     friend class SwTxtTOXMark;
@@ -127,9 +135,12 @@ class SwTOXMark : public SfxPoolItem, public SwClient
 public:
     TYPEINFO();   // rtti
 
-    SwTOXMark( const SwTOXType* pTyp );
-    SwTOXMark( const SwTOXMark& rCopy );
+    // single argument ctors shall be explicit.
+    explicit SwTOXMark( const SwTOXType* pTyp );
     virtual ~SwTOXMark();
+
+    SwTOXMark( const SwTOXMark& rCopy );
+    SwTOXMark& operator=( const SwTOXMark& rCopy );
 
     // "pure virtual methods" of SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
@@ -138,7 +149,6 @@ public:
     virtual SvStream&       Store(SvStream &, USHORT nIVer) const;
     virtual USHORT          GetVersion( USHORT nFFVer ) const;
 
-    SwTOXMark&              operator=( const SwTOXMark& rCopy );
     String                  GetText() const;
 
     inline BOOL             IsAlternativeText() const;
@@ -183,6 +193,8 @@ class SwTOXType : public SwModify
 {
 public:
     SwTOXType(TOXTypes eTyp, const String& aName);
+
+    // @@@ public copy ctor, but no copy assignment?
     SwTOXType(const SwTOXType& rCopy);
 
     inline  const String&   GetTypeName() const;
@@ -192,6 +204,9 @@ public:
 private:
     String          aName;
     TOXTypes        eType;
+
+    // @@@ public copy ctor, but no copy assignment?
+    SwTOXType & operator= (const SwTOXType &);
 };
 
 /*--------------------------------------------------------------------
@@ -235,7 +250,7 @@ enum FormTokenType
     TOKEN_END
 };
 
-struct SwFormToken
+struct SW_DLLPUBLIC SwFormToken
 {
     String          sText;
     String          sCharStyleName;
@@ -305,7 +320,7 @@ typedef std::vector<SwFormToken> SwFormTokens;
    Helper class that converts vectors of tokens to strings and vice
    versa.
  */
-class SwFormTokensHelper
+class SW_DLLPUBLIC SwFormTokensHelper
 {
     /// the tokens
     SwFormTokens aTokens;
@@ -318,8 +333,8 @@ class SwFormTokensHelper
 
        @return the token
      */
-    SwFormToken BuildToken( const String & sPattern,
-                            xub_StrLen & nCurPatternPos ) const;
+    SW_DLLPRIVATE SwFormToken BuildToken( const String & sPattern,
+                                          xub_StrLen & nCurPatternPos ) const;
 
     /**
        Returns the string of a token.
@@ -329,8 +344,8 @@ class SwFormTokensHelper
 
        @return   the string representation of the token
     */
-    String SearchNextToken( const String & sPattern,
-                            xub_StrLen nStt ) const;
+    SW_DLLPRIVATE String SearchNextToken( const String & sPattern,
+                                          xub_StrLen nStt ) const;
 
     /**
        Returns the type of a token.
@@ -343,8 +358,8 @@ class SwFormTokensHelper
 
        @return the type of the token
     */
-    FormTokenType GetTokenType(const String & sToken,
-                               xub_StrLen * pTokenLen) const;
+    SW_DLLPRIVATE FormTokenType GetTokenType(const String & sToken,
+                                             xub_StrLen * pTokenLen) const;
 
 public:
     /**
@@ -370,7 +385,7 @@ public:
 };
 // <- #i21237#
 
-class SwForm
+class SW_DLLPUBLIC SwForm
 {
     SwFormTokens    aPattern[ AUTH_TYPE_END + 1 ]; // #i21237#
     String  aTemplate[ AUTH_TYPE_END + 1 ];
@@ -499,7 +514,7 @@ enum SwTOOElements
      Description:  Class for all indexes
  --------------------------------------------------------------------*/
 
-class SwTOXBase : public SwClient
+class SW_DLLPUBLIC SwTOXBase : public SwClient
 {
     SwForm      aForm;              // description of the lines
     String      aName;              // unique name
