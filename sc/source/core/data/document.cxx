@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:03:56 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 08:49:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2596,7 +2596,7 @@ USHORT ScDocument::GetNextDifferentChangedCol( USHORT nTab, USHORT nStart) const
     return 0;
 }
 
-USHORT ScDocument::GetNextDifferentChangedRow( USHORT nTab, USHORT nStart) const
+USHORT ScDocument::GetNextDifferentChangedRow( USHORT nTab, USHORT nStart, bool bCareManualSize) const
 {
     if ( nTab<=MAXTAB && pTab[nTab] )
     {
@@ -2606,7 +2606,8 @@ USHORT ScDocument::GetNextDifferentChangedRow( USHORT nTab, USHORT nStart) const
         {
             if (((nStartFlags & CR_MANUALBREAK) != (pTab[nTab]->GetRowFlags(nRow) & CR_MANUALBREAK)) ||
                 ((nStartFlags & CR_MANUALSIZE) != (pTab[nTab]->GetRowFlags(nRow) & CR_MANUALSIZE)) ||
-                ((nStartFlags & CR_MANUALSIZE) && (nStartHeight != pTab[nTab]->GetOriginalHeight(nRow))))
+                (bCareManualSize && (nStartFlags & CR_MANUALSIZE) && (nStartHeight != pTab[nTab]->GetOriginalHeight(nRow))) ||
+                (!bCareManualSize && ((nStartHeight != pTab[nTab]->GetOriginalHeight(nRow)))))
                 return nRow;
         }
         return MAXROW;
