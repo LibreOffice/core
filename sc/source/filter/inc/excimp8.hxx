@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: dr $ $Date: 2001-07-17 12:47:49 $
+ *  last change: $Author: dr $ $Date: 2001-07-24 13:51:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,6 +178,7 @@ class ImportExcel8 : public ImportExcel
 
         XclImpObjectManager     aObjManager;
         ExcChart*               pActChart;
+        BOOL                    bObjSection;
 
         ExcScenarioList         aScenList;
 
@@ -266,6 +267,7 @@ class ImportExcel8 : public ImportExcel
         void                    WebQrySettings( void );         // 0x0803
         void                    WebQryTables( void );           // 0x0804
 
+        void                    ChartEof( void );               // 0x000A
         void                    ChartScl( void );               // 0x00A0
         void                    ChartChart( void );             // 0x1002
         void                    ChartSeries( void );            // 0x1003       changed from Biff5
@@ -323,7 +325,6 @@ class ImportExcel8 : public ImportExcel
         virtual void            GetHFString( String& rStr );
         void                    EndSheet( void );
         virtual void            EndAllChartObjects( void );     // -> excobj.cxx
-        void                    EndChartObj( void );
         virtual void            PostDocLoad( void );
 
         virtual FltError        ReadChart8( FilterProgressBar&, const BOOL bOwnTab );

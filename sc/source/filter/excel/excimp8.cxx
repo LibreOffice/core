@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: dr $ $Date: 2001-07-23 08:36:00 $
+ *  last change: $Author: dr $ $Date: 2001-07-24 13:49:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -731,7 +731,8 @@ void ImportExcel8::Font( void )
 
 void ImportExcel8::Cont( void )
 {
-    aObjManager.ReadContinue( aIn );
+    if( bObjSection )
+        aObjManager.ReadMsodrawing( aIn );
 }
 
 
@@ -1791,11 +1792,6 @@ void ImportExcel8::CreateTmpCtrlStorage( void )
 
 
 void ImportExcel8::EndAllChartObjects( void )
-{
-}
-
-
-void ImportExcel8::EndChartObj( void )
 {
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: read.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dr $ $Date: 2001-07-17 12:46:45 $
+ *  last change: $Author: dr $ $Date: 2001-07-24 13:49:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1035,6 +1035,7 @@ FltError ImportExcel8::Read( void )
 
     FilterProgressBar*  pPrgrsBar = new FilterProgressBar( aIn );
     pExcRoot->pProgress = pPrgrsBar;
+    bObjSection = FALSE;
 
     while( eAkt != Z_Ende )
     {
@@ -1049,11 +1050,16 @@ FltError ImportExcel8::Read( void )
         if( eAkt != Z_Biff8Pre && eAkt != Z_Biff8WPre )
             pPrgrsBar->Progress();
 
-        if( nOpcode != 0x5D && nOpcode != 0x3C )    // no obj-record and no cont-record
-            aObjManager.ClearLeadingObj();
-
-        if( nOpcode != 0x003C )
-            aIn.InitializeRecord( TRUE );           // enable internal CONTINUE handling
+        if( nOpcode != EXC_CONT )
+        {
+            aIn.InitializeRecord( TRUE );       // enable internal CONTINUE handling
+            bObjSection =
+                (nOpcode == 0x005D) ||          // OBJ
+                (nOpcode == 0x00EB) ||          // MSODRAWINGGROUP
+                (nOpcode == 0x00EC) ||          // MSODRAWING
+                (nOpcode == 0x00ED) ||          // MSODRAWINGSELECTION
+                (nOpcode == 0x01B6);            // TXO
+        }
 
         switch( eAkt )
         {
@@ -1308,7 +1314,6 @@ FltError ImportExcel8::Read( void )
                             EndSheet();
                             eAkt = Z_Biff8E;
                             nTab++;
-                            aObjManager.ClearEscherContinue();
                         }
                         break;
                         case 0x002F:                            // FILEPASS     [ 2345   ]
@@ -1334,7 +1339,7 @@ FltError ImportExcel8::Read( void )
                         Bof5();
                         NeueTabelle();
 
-                        aObjManager.StartWithDummyObj();
+                        aObjManager.InsertDummyObj();
 
                         switch( pExcRoot->eDateiTyp )
                         {

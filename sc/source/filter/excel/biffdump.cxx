@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biffdump.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: dr $ $Date: 2001-07-17 12:46:44 $
+ *  last change: $Author: dr $ $Date: 2001-07-24 13:49:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -894,6 +894,7 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
     // set CONTINUE handling mode
     switch( nR )
     {
+        case 0x000A:        // EOF
         case 0x003C:        // CONT
         case 0x005D:        // OBJ
         case 0x00EC:        // MSODRAWING
@@ -4749,6 +4750,7 @@ void Biff8RecDumper::ObjDump( const ULONG nMaxLen )
                             if ( sizeof(nFmlaLen) + nFmlaLen == nL )
                             {
                                 ADDTEXT( "linked\n    OLE stream: LNK........ (ID in EXTERNNAME of SUPBOOK)\n    XTI: " );
+                                IGNORE(7);
                                 ADDHEX(2);
                                 ADDTEXT( "   Externname: " );
                                 ADDHEX(2);
