@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textuno.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sab $ $Date: 2002-10-01 16:33:19 $
+ *  last change: $Author: nn $ $Date: 2002-11-27 18:20:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -357,6 +357,28 @@ public:
     static ScHeaderFooterTextCursor* getImplementation( const com::sun::star::uno::Reference<
                                     com::sun::star::uno::XInterface> xObj );
 };
+
+class ScDrawTextCursor : public SvxUnoTextCursor
+{
+private:
+    com::sun::star::uno::Reference< com::sun::star::text::XText > xParentText;
+
+public:
+                            ScDrawTextCursor(const ScDrawTextCursor& rOther);
+                            ScDrawTextCursor( const com::sun::star::uno::Reference<
+                                                com::sun::star::text::XText >& xParent,
+                                            const SvxUnoTextBase& rText );
+    virtual                  ~ScDrawTextCursor() throw();
+
+                            // SvxUnoTextCursor methods reimplemented here:
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XText > SAL_CALL
+                            getText() throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > SAL_CALL
+                            getStart() throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > SAL_CALL
+                            getEnd() throw(::com::sun::star::uno::RuntimeException);
+};
+
 
 // ScAnnotationTextCursor isn't needed anymore - SvxUnoTextCursor is used instead
 

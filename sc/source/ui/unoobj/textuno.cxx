@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textuno.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: sab $ $Date: 2002-10-01 16:33:47 $
+ *  last change: $Author: nn $ $Date: 2002-11-27 18:20:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -878,6 +878,68 @@ ScHeaderFooterTextCursor* ScHeaderFooterTextCursor::getImplementation(
     if (xUT.is())
         pRet = (ScHeaderFooterTextCursor*) xUT->getSomething( getUnoTunnelId() );
     return pRet;
+}
+
+//------------------------------------------------------------------------
+
+ScDrawTextCursor::ScDrawTextCursor(const ScDrawTextCursor& rOther) :
+    SvxUnoTextCursor( rOther ),
+    xParentText( rOther.xParentText )
+{
+}
+
+ScDrawTextCursor::ScDrawTextCursor( const uno::Reference<text::XText>& xParent,
+                                    const SvxUnoTextBase& rText ) :
+    SvxUnoTextCursor( rText ),
+    xParentText( xParent )
+
+{
+}
+
+ScDrawTextCursor::~ScDrawTextCursor() throw()
+{
+}
+
+// SvxUnoTextCursor methods reimplemented here to return the right objects:
+
+uno::Reference<text::XText> SAL_CALL ScDrawTextCursor::getText() throw(uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    return xParentText;
+}
+
+uno::Reference<text::XTextRange> SAL_CALL ScDrawTextCursor::getStart() throw(uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+
+    //! use other object for range than cursor?
+
+    ScDrawTextCursor* pNew = new ScDrawTextCursor( *this );
+    uno::Reference<text::XTextRange> xRange( static_cast<SvxUnoTextRangeBase*>(pNew) );
+
+    ESelection aNewSel = GetSelection();
+    aNewSel.nEndPara = aNewSel.nStartPara;
+    aNewSel.nEndPos  = aNewSel.nStartPos;
+    pNew->SetSelection( aNewSel );
+
+    return xRange;
+}
+
+uno::Reference<text::XTextRange> SAL_CALL ScDrawTextCursor::getEnd() throw(uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+
+    //! use other object for range than cursor?
+
+    ScDrawTextCursor* pNew = new ScDrawTextCursor( *this );
+    uno::Reference<text::XTextRange> xRange( static_cast<SvxUnoTextRangeBase*>(pNew) );
+
+    ESelection aNewSel = GetSelection();
+    aNewSel.nStartPara = aNewSel.nEndPara;
+    aNewSel.nStartPos  = aNewSel.nEndPos;
+    pNew->SetSelection( aNewSel );
+
+    return xRange;
 }
 
 //------------------------------------------------------------------------
