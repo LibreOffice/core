@@ -2,7 +2,7 @@
  *
  *  $RCSfile: ScAccessibleCell.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
  *  last change: $Author: sw $
  *
@@ -82,6 +82,8 @@ import lib.TestParameters;
 import util.AccessibilityTools;
 import util.SOfficeFactory;
 import util.utils;
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
 
 /**
  * Test for object which is represented by accessible component of
@@ -162,7 +164,13 @@ public class ScAccessibleCell extends TestCase {
             XSpreadsheets oSheets = xSpreadsheetDoc.getSheets() ;
             XIndexAccess oIndexSheets = (XIndexAccess)
                 UnoRuntime.queryInterface(XIndexAccess.class, oSheets);
-            XSpreadsheet oSheet = (XSpreadsheet) oIndexSheets.getByIndex(0);
+            XSpreadsheet oSheet = null;
+            try {
+                oSheet = (XSpreadsheet) AnyConverter.toObject(
+                        new Type(XSpreadsheet.class),oIndexSheets.getByIndex(0));
+            } catch (com.sun.star.lang.IllegalArgumentException iae) {
+                throw new StatusException("couldn't get sheet",iae);
+            }
             xCell = oSheet.getCellByPosition(1, 0) ;
             xCell.setFormula(text);
         } catch(com.sun.star.lang.WrappedTargetException e) {
