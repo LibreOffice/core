@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2001-06-25 20:20:54 $
+ *  last change: $Author: sab $ $Date: 2001-07-23 15:18:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,6 +251,8 @@ ScDrawLayer* ScDocShell::MakeDrawLayer()
         pDrawLayer = aDocument.GetDrawLayer();
         InitItems();                                            // incl. Undo und Basic
         Broadcast( SfxSimpleHint( SC_HINT_DRWLAYER_NEW ) );
+        if (nDocumentLock)
+            pDrawLayer->setLock(TRUE);
     }
     return pDrawLayer;
 }

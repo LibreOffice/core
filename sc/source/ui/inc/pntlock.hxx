@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pntlock.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:00 $
+ *  last change: $Author: sab $ $Date: 2001-07-23 15:13:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,7 @@ private:
     ScRangeListRef  xRangeList;
     USHORT          nMode;
     USHORT          nLevel;
+    USHORT          nDocLevel;
     USHORT          nParts;
     BOOL            bModified;
 
@@ -82,16 +83,20 @@ public:
     void            AddRange( const ScRange& rRange, USHORT nP );
 
     void            SetModified()   { bModified = TRUE; }
-    void            IncLevel()      { ++nLevel; }
-    void            DecLevel()      { --nLevel; }
+    void            IncLevel(sal_Bool bDoc)
+                        { if (bDoc) ++nDocLevel; else ++nLevel; }
+    void            DecLevel(sal_Bool bDoc)
+                        { if (bDoc) --nDocLevel; else --nLevel; }
 
-    const ScRangeListRef&   GetRangeList() const        { return xRangeList; }
-    USHORT                  GetParts() const            { return nParts; }
-    USHORT                  GetLevel() const            { return nLevel; }
-    BOOL                    GetModified() const         { return bModified; }
+    const ScRangeListRef&   GetRangeList() const            { return xRangeList; }
+    USHORT                  GetParts() const                { return nParts; }
+    USHORT                  GetLevel(sal_Bool bDoc) const
+                                { return bDoc ? nDocLevel : nLevel; }
+    BOOL                    GetModified() const             { return bModified; }
 
                     // fuer Wiederherstellen nach Reset
-    void            SetLevel(USHORT nNew)               { nLevel = nNew; }
+    void            SetLevel(USHORT nNew, sal_Bool bDoc)
+                        { if (bDoc) nDocLevel = nNew; else nLevel = nNew; }
 };
 
 #endif

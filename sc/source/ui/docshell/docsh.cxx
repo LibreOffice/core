@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: er $ $Date: 2001-07-20 18:37:51 $
+ *  last change: $Author: sab $ $Date: 2001-07-23 15:18:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2063,7 +2063,8 @@ BOOL ScDocShell::HasAutomaticTableName( const String& rFilter )     // static
         nPrtToScreenFactor( 1.0 ), \
         bIsEmpty        ( TRUE ), \
         bIsInUndo       ( FALSE ), \
-        bDocumentModifiedPending( FALSE )
+        bDocumentModifiedPending( FALSE ), \
+        nDocumentLock   ( 0 )
 
 //------------------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh3.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: er $ $Date: 2001-07-11 15:59:09 $
+ *  last change: $Author: sab $ $Date: 2001-07-23 15:18:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,7 @@
 #include "redcom.hxx"
 #include "sc.hrc"
 #include "inputopt.hxx"
+#include "drwlayer.hxx"
 
 //------------------------------------------------------------------
 
@@ -213,44 +214,21 @@ void ScDocShell::PostPaintExtras()
 
 //------------------------------------------------------------------
 
-USHORT ScDocShell::GetLockCount() const
-{
-    if (pPaintLockData)
-        return pPaintLockData->GetLevel() + 1;      // erster Lock setzt Level auf 0
-    else
-        return 0;
-}
-
-void ScDocShell::SetLockCount(USHORT nNew)
-{
-    if (nNew)                   // setzen
-    {
-        if ( !pPaintLockData )
-            pPaintLockData = new ScPaintLockData(0);    //! Modus...
-        pPaintLockData->SetLevel(nNew-1);
-    }
-    else if (pPaintLockData)    // loeschen
-    {
-        pPaintLockData->SetLevel(0);    // bei Unlock sofort ausfuehren
-        UnlockPaint();                  // jetzt
-    }
-}
-
-void ScDocShell::LockPaint()
+void ScDocShell::LockPaint_Impl(BOOL bDoc)
 {
     if ( pPaintLockData )
-        pPaintLockData->IncLevel();
+        pPaintLockData->IncLevel(bDoc);
     else
         pPaintLockData = new ScPaintLockData(0);    //! Modus...
 }
 
-void ScDocShell::UnlockPaint()
+void ScDocShell::UnlockPaint_Impl(BOOL bDoc)
 {
     if ( pPaintLockData )
     {
-        if ( pPaintLockData->GetLevel() )
-            pPaintLockData->DecLevel();
-        else
+        if ( pPaintLockData->GetLevel(bDoc) )
+            pPaintLockData->DecLevel(bDoc);
+        else if (!pPaintLockData->GetLevel(!bDoc))
         {
             //      Paint jetzt ausfuehren
 
@@ -280,6 +258,77 @@ void ScDocShell::UnlockPaint()
     }
     else
         DBG_ERROR("UnlockPaint ohne LockPaint");
+}
+
+void ScDocShell::LockDocument_Impl(USHORT nNew)
+{
+    if (!nDocumentLock)
+    {
+        ScDrawLayer* pDrawLayer = aDocument.GetDrawLayer();
+        if (pDrawLayer)
+            pDrawLayer->setLock(TRUE);
+    }
+    nDocumentLock = nNew;
+}
+
+void ScDocShell::UnlockDocument_Impl(USHORT nNew)
+{
+    nDocumentLock = nNew;
+    if (!nDocumentLock)
+    {
+        ScDrawLayer* pDrawLayer = aDocument.GetDrawLayer();
+        if (pDrawLayer)
+            pDrawLayer->setLock(FALSE);
+    }
+}
+
+USHORT ScDocShell::GetLockCount() const
+{
+    return nDocumentLock;
+}
+
+void ScDocShell::SetLockCount(USHORT nNew)
+{
+    if (nNew)                   // setzen
+    {
+        if ( !pPaintLockData )
+            pPaintLockData = new ScPaintLockData(0);    //! Modus...
+        pPaintLockData->SetLevel(nNew-1, TRUE);
+        LockDocument_Impl(nNew);
+    }
+    else if (pPaintLockData)    // loeschen
+    {
+        pPaintLockData->SetLevel(0, TRUE);  // bei Unlock sofort ausfuehren
+        UnlockPaint_Impl(TRUE);                 // jetzt
+        UnlockDocument_Impl(0);
+    }
+}
+
+void ScDocShell::LockPaint()
+{
+    LockPaint_Impl(FALSE);
+}
+
+void ScDocShell::UnlockPaint()
+{
+    UnlockPaint_Impl(FALSE);
+}
+
+void ScDocShell::LockDocument()
+{
+    LockPaint_Impl(TRUE);
+    LockDocument_Impl(nDocumentLock + 1);
+}
+
+void ScDocShell::UnlockDocument()
+{
+    if (nDocumentLock)
+    {
+        UnlockPaint_Impl(TRUE);
+        UnlockDocument_Impl(nDocumentLock + 1);
+    }
+    else
+        DBG_ERROR("UnlockDocument without LockDocument");
 }
 
 //------------------------------------------------------------------

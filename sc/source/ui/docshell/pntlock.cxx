@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pntlock.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:55 $
+ *  last change: $Author: sab $ $Date: 2001-07-23 15:18:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,7 @@ ScPaintLockData::ScPaintLockData(USHORT nNewMode) :
     nMode( nNewMode ),
     nParts( 0 ),
     nLevel( 0 ),
+    nDocLevel( 0 ),
     bModified( FALSE )
 {
 }

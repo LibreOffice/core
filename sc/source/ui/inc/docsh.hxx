@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: nn $ $Date: 2001-06-22 19:51:42 $
+ *  last change: $Author: sab $ $Date: 2001-07-23 15:13:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,6 +142,7 @@ class ScDocShell: public SfxObjectShell, public SfxInPlaceObject, public SfxList
     BOOL                bIsEmpty;
     BOOL                bIsInUndo;
     BOOL                bDocumentModifiedPending;
+    USHORT              nDocumentLock;
 
     ScSbxDocHelper*     pDocHelper;
 
@@ -172,6 +173,11 @@ class ScDocShell: public SfxObjectShell, public SfxInPlaceObject, public SfxList
     static BOOL     MoveFile( const INetURLObject& rSource, const INetURLObject& rDest );
     static BOOL     KillFile( const INetURLObject& rURL );
     static BOOL     IsDocument( const INetURLObject& rURL );
+
+    void            LockPaint_Impl(BOOL bDoc);
+    void            UnlockPaint_Impl(BOOL bDoc);
+    void            LockDocument_Impl(USHORT nNew);
+    void            UnlockDocument_Impl(USHORT nNew);
 
 protected:
 
@@ -337,6 +343,9 @@ public:
     void            UnlockPaint();
     USHORT          GetLockCount() const;
     void            SetLockCount(USHORT nNew);
+
+    void            LockDocument();
+    void            UnlockDocument();
 
     DECL_LINK( ChartSelectionHdl, ChartSelectionInfo* );
 
