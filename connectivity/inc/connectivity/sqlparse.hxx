@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlparse.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-27 08:02:49 $
+ *  last change: $Author: er $ $Date: 2000-10-29 16:47:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,14 +75,14 @@
 #include <connectivity/sqlbison.hxx>
 #endif
 #endif
-#ifndef _COM_SUN_STAR_LANG_XCHARACTERCLASSIFICATION_HPP_
-#include <com/sun/star/lang/XCharacterClassification.hpp>
+#ifndef _COM_SUN_STAR_I18N_XCHARACTERCLASSIFICATION_HPP_
+#include <com/sun/star/i18n/XCharacterClassification.hpp>
 #endif
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
-#ifndef _COM_SUN_STAR_LANG_XLOCALEDATA_HPP_
-#include <com/sun/star/lang/XLocaleData.hpp>
+#ifndef _COM_SUN_STAR_I18N_XLOCALEDATA_HPP_
+#include <com/sun/star/i18n/XLocaleData.hpp>
 #endif
 
 // forward declarations
@@ -201,8 +201,8 @@ namespace connectivity
                                     m_xFormatter;   // current number formatter
         sal_Int32                   m_nFormatKey;   // numberformat, which should be used
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xServiceFactory;
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XCharacterClassification> m_xCharClass;
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XLocaleData>              m_xLocaleData;
+        ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XCharacterClassification> m_xCharClass;
+        ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XLocaleData>              m_xLocaleData;
 
         // convert a string into double trim it to scale of _nscale and than transform it back to string
         ::rtl::OUString stringToDouble(const ::rtl::OUString& _rValue,sal_Int16 _nScale);
