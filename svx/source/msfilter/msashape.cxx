@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msashape.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: sj $ $Date: 2002-08-08 08:29:22 $
+ *  last change: $Author: sj $ $Date: 2002-08-27 08:55:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5425,40 +5425,38 @@ SdrObject* SvxMSDffAutoShape::GetObject( SdrModel* pSdrModel, SfxItemSet& rSet, 
                 aPolygon[ 0 ] = aPolygon[ 1 ];                              // try to get the arc boundrect
                 aPolygon[ nPt - 1 ] = aPolygon[ nPt - 2 ];
                 Rectangle aPolyArcRect( aPolygon.GetBoundRect() );
-                if ( aPolyArcRect != aPolyPieRect )
+
+                double  fYScale, fXScale;
+                double  fYOfs, fXOfs;
+                int     nCond;
+
+                fYOfs = fXOfs = 0.0;
+                if ( aPolyPieRect.GetWidth() != aPolyArcRect.GetWidth() )
                 {
-                    double  fYScale, fXScale;
-                    double  fYOfs, fXOfs;
-                    int     nCond;
-
-                    fYOfs = fXOfs = 0.0;
-                    if ( aPolyPieRect.GetWidth() != aPolyArcRect.GetWidth() )
+                    nCond = ( (sal_uInt32)( nStartAngle - 9000 ) > 18000 ) && ( (sal_uInt32)( nEndAngle - 9000 ) > 18000 ) ? 1 : 0;
+                    nCond ^= bFlipH ? 1 : 0;
+                    if ( nCond )
                     {
-                        nCond = ( (sal_uInt32)( nStartAngle - 9000 ) > 18000 ) && ( (sal_uInt32)( nEndAngle - 9000 ) > 18000 ) ? 1 : 0;
-                        nCond ^= bFlipH ? 1 : 0;
-                        if ( nCond )
-                        {
-                            fXScale = (double)aSnapRect.GetWidth() / (double)aPolyPieRect.GetWidth();
-                            fXOfs = ( (double)aPolyPieRect.GetWidth() - (double)aPolyArcRect.GetWidth() ) * fXScale;
-                        }
+                        fXScale = (double)aSnapRect.GetWidth() / (double)aPolyPieRect.GetWidth();
+                        fXOfs = ( (double)aPolyPieRect.GetWidth() - (double)aPolyArcRect.GetWidth() ) * fXScale;
                     }
-                    if ( aPolyPieRect.GetHeight() != aPolyArcRect.GetHeight() )
-                    {
-                        nCond = ( ( nStartAngle > 18000 ) && ( nEndAngle > 18000 ) ) ? 1 : 0;
-                        nCond ^= bFlipV ? 1 : 0;
-                        if ( nCond )
-                        {
-                            fYScale = (double)aSnapRect.GetHeight() / (double)aPolyPieRect.GetHeight();
-                            fYOfs = ( (double)aPolyPieRect.GetHeight() - (double)aPolyArcRect.GetHeight() ) * fYScale;
-                        }
-                    }
-                    fXScale = (double)aPolyArcRect.GetWidth() / (double)aPolyPieRect.GetWidth();
-                    fYScale = (double)aPolyArcRect.GetHeight() / (double)aPolyPieRect.GetHeight();
-
-                    aPolyArcRect = Rectangle( Point( aSnapRect.Left() + (sal_Int32)fXOfs, aSnapRect.Top() + (sal_Int32)fYOfs ),
-                        Size( (sal_Int32)( aSnapRect.GetWidth() * fXScale ), (sal_Int32)( aSnapRect.GetHeight() * fYScale ) ) );
-
                 }
+                if ( aPolyPieRect.GetHeight() != aPolyArcRect.GetHeight() )
+                {
+                    nCond = ( ( nStartAngle > 18000 ) && ( nEndAngle > 18000 ) ) ? 1 : 0;
+                    nCond ^= bFlipV ? 1 : 0;
+                    if ( nCond )
+                    {
+                        fYScale = (double)aSnapRect.GetHeight() / (double)aPolyPieRect.GetHeight();
+                        fYOfs = ( (double)aPolyPieRect.GetHeight() - (double)aPolyArcRect.GetHeight() ) * fYScale;
+                    }
+                }
+                fXScale = (double)aPolyArcRect.GetWidth() / (double)aPolyPieRect.GetWidth();
+                fYScale = (double)aPolyArcRect.GetHeight() / (double)aPolyPieRect.GetHeight();
+
+                aPolyArcRect = Rectangle( Point( aSnapRect.Left() + (sal_Int32)fXOfs, aSnapRect.Top() + (sal_Int32)fYOfs ),
+                    Size( (sal_Int32)( aSnapRect.GetWidth() * fXScale ), (sal_Int32)( aSnapRect.GetHeight() * fYScale ) ) );
+
                 SdrCircObj* pObjCirc = new SdrCircObj( OBJ_CARC, aPolyBoundRect, nStartAngle, nEndAngle );
                 pObjCirc->SetSnapRect( aPolyArcRect );
                 pObjCirc->SetModel( pSdrModel );
