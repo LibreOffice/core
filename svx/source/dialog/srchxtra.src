@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchxtra.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: dr $ $Date: 2002-07-19 07:59:42 $
+ *  last change: $Author: kz $ $Date: 2002-08-01 20:19:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text[ french ] = "Police";
                 Text[ spanish ] = "Fuente";
                 Text[ italian ] = "Caratteri";
-                Text[ danish ] = "Font";
+                Text[ danish ] = "Skrifttype";
                 Text[ swedish ] = "Teckensnitt";
                 Text[ polish ] = "Czcionka";
                 Text[ portuguese_brazilian ] = "Font";
@@ -125,7 +125,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text[ french ] = "Effets de caractËres";
                 Text[ spanish ] = "Efectos de fuente";
                 Text[ italian ] = "Effetto caratteri";
-                Text[ danish ] = "Font Effects";
+                Text[ danish ] = "Skrifteffekt";
                 Text[ swedish ] = "Teckeneffekt";
                 Text[ polish ] = "Efekty czcionki";
                 Text[ portuguese_brazilian ] = "Font Effects";
@@ -151,7 +151,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text[ french ] = "Position";
                 Text[ spanish ] = "PosiciÛn";
                 Text[ italian ] = "Posizione";
-                Text[ danish ] = "Start_ved";
+                Text[ danish ] = "Placering";
                 Text[ swedish ] = "Position";
                 Text[ polish ] = "Pozycja";
                 Text[ portuguese_brazilian ] = "Position";
@@ -177,7 +177,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text[ french ] = "Mise en page asiatique";
                 Text[ spanish ] = "DiseÒo asi·tico";
                 Text[ italian ] = "Layout asiatico";
-                Text[ danish ] = "Asian Layout";
+                Text[ danish ] = "Asiatisk layout";
                 Text[ swedish ] = "Asiatisk layout";
                 Text[ polish ] = "Uk≥ad azjatycki";
                 Text[ portuguese_brazilian ] = "Asian Layout";
@@ -290,7 +290,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text[ french ] = "Typographie asiatique";
                 Text[ spanish ] = "TipografÌa asi·tica";
                 Text[ italian ] = "Tipografia asiatica";
-                Text[ danish ] = "Asian typography";
+                Text[ danish ] = "Asiatisk typografi";
                 Text[ swedish ] = "Asiatisk typografi";
                 Text[ polish ] = "Typografia azjatycka";
                 Text[ portuguese_brazilian ] = "Asian typography";
@@ -405,8 +405,8 @@ ModalDialog RID_SVXDLG_SEARCHATTR
         Text[ korean ] = "ÏÑ†ÌÉù";
         Text[ turkish ] = "SeÁenekler";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "SelecciÛn";
-        Text[ thai ] = "‡∏ï‡∏±‡∏ß‡πÄ‡∏•‡∏∑‡∏≠‡∏Å";
+        Text[ catalan ] = "Selecciona";
+        Text[ thai ] = "‡πÄ‡∏•‡∏∑~‡∏≠‡∏Å";
     };
     OKButton BTN_ATTR_OK
     {
