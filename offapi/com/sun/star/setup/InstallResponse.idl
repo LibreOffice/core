@@ -2,9 +2,9 @@
  *
  *  $RCSfile: InstallResponse.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:07:32 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 22:20:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,7 @@
 module com {  module sun {  module star {  module setup {
 
 /// @deprecated
-enum ResponseErrorCode
+published enum ResponseErrorCode
 {
     // DocMerge: empty anyway
     NOERROR,
@@ -74,7 +74,7 @@ enum ResponseErrorCode
     };
 
 // DocMerge: empty anyway
-struct InstallResponse
+published struct InstallResponse
 {
     // DocMerge: empty anyway
     boolean             bSuccess;
