@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datefunc.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dr $ $Date: 2001-10-08 12:52:05 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:15:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -715,7 +715,11 @@ sal_Int32 DateToDays( sal_uInt16 nDay, sal_uInt16 nMonth, sal_uInt16 nYear )
 
 void DaysToDate( sal_Int32 nDays,
                 sal_uInt16& rDay, sal_uInt16& rMonth, sal_uInt16& rYear )
+        throw( lang::IllegalArgumentException )
 {
+    if( nDays < 0 )
+        throw lang::IllegalArgumentException();
+
     sal_Int32   nTempDays;
     sal_Int32   i = 0;
     sal_Bool    bCalc;
