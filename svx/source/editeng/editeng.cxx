@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mt $ $Date: 2001-02-09 16:42:31 $
+ *  last change: $Author: mt $ $Date: 2001-02-15 12:28:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1334,7 +1334,12 @@ void EditEngine::StripPortions()
     DBG_CHKTHIS( EditEngine, 0 );
     VirtualDevice aTmpDev;
     Rectangle aBigRec( Point( 0, 0 ), Size( 0x7FFFFFFF, 0x7FFFFFFF ) );
-    pImpEditEngine->Paint( &aTmpDev, aBigRec, Point( 0, 0 ), sal_True );
+    if ( IsVertical() )
+    {
+        aBigRec.Right() = 0;
+        aBigRec.Left() = -0x7FFFFFFF;
+    }
+    pImpEditEngine->Paint( &aTmpDev, aBigRec, Point(), sal_True );
 }
 
 void EditEngine::GetPortions( sal_uInt16 nPara, SvUShorts& rList )
