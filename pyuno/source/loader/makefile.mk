@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: jbu $ $Date: 2003-03-23 12:12:53 $
+#   last change: $Author: jbu $ $Date: 2003-04-06 17:15:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,7 +60,7 @@
 PRJ=..$/..
 
 PRJNAME=pyuno
-TARGET=pycpld
+TARGET=pythonloader.uno
 ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
@@ -104,7 +104,7 @@ COMPONENTS= \
     insp		\
     invadp		\
     proxyfac 	\
-    pycpld		\
+    pythonloader.uno \
 
 # --- Targets ------------------------------------------------------
 
@@ -120,9 +120,4 @@ $(DLLDEST)$/%.py: %.py
 $(DLLDEST)$/pyuno_services.rdb : makefile.mk
     -rm -f $@ $(DLLDEST)$/pyuno_services.tmp $(DLLDEST)$/pyuno_services.rdb
     +cd $(DLLDEST) && regcomp -register -r pyuno_services.tmp $(foreach,i,$(COMPONENTS) -c $(i))
-# just needed until OO644
-# 	regmerge $(MY_SHLOUT)$/pyuno_regcomp.rdb / $(MY_SHLOUT)$/pyuno_services.tmp $(SOLARBINDIR)$/udkapi.rdb
-# 	+cd $(MY_SHLOUT) && \
-# 		regcomp -register -br pyuno_regcomp.rdb -r pyuno_services.tmp \
-# 			-l com.sun.star.loader.Python $(foreach,i,$(PYCOMPONENTS) -c $(i))
     +cd $(DLLDEST) && mv pyuno_services.tmp pyuno_services.rdb
