@@ -2,9 +2,9 @@
  *
  *  $RCSfile: progress.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:28 $
+ *  last change: $Author: mba $ $Date: 2000-09-28 11:41:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,8 @@
 #endif
 #pragma hdrstop
 
+#include <so3/transbnd.hxx>             // SvProgressArg
+
 #include "progress.hxx"
 #include "viewfrm.hxx"
 #include "ipfrm.hxx"
@@ -75,12 +77,75 @@
 #include "dispatch.hxx"
 #include "sfxtypes.hxx"
 #include "docfile.hxx"
-#include <workwin.hxx>
+#include "workwin.hxx"
+#include "sfxresid.hxx"
+#include "bastyp.hrc"
 
 #include <time.h>
 
-struct SfxProgress_Impl :
-    public SfxCancellable
+void AddNumber_Impl( String& aNumber, sal_uInt32 nArg )
+{
+    if ( nArg >= 10240 )
+    {
+        aNumber += String::CreateFromInt32( (sal_uInt16)( ( nArg + 512 ) / 1024 ) );
+        aNumber += ' ';
+        aNumber += SfxResId( STR_KB );
+    }
+    else
+    {
+        aNumber += String::CreateFromInt32( nArg );
+        aNumber += ' ';
+        aNumber += SfxResId( STR_BYTES );
+    }
+}
+
+String GetStatusString( const SvProgressArg* pArg )
+{
+    String aString;
+    StringList_Impl aSL( SfxResId( RID_DLSTATUS2 ), (USHORT)pArg->eStatus );
+    USHORT nTotal = 0;
+
+    if ( pArg->eStatus == SVBINDSTATUS_ENDDOWNLOADDATA && nTotal <= 1 )
+        return aString;
+
+    if( aSL )
+    {
+        INetURLObject aObj( pArg->rStatus );
+        aString = aSL.GetString();
+        aString.SearchAndReplaceAscii( "$(HOST)", aObj.GetHost() );
+        String aTarget = aObj.GetFull();
+        if( aTarget.Len() <= 1 && pArg->eStatus != SVBINDSTATUS_CONNECTING )
+            aTarget = aObj.GetHost();
+        if( pArg->nMax )
+        {
+            aTarget += DEFINE_CONST_UNICODE( " (" );
+            AddNumber_Impl( aTarget, pArg->nMax );
+            aTarget += ')';
+        }
+
+        aString.SearchAndReplaceAscii( "$(TARGET)",aTarget );
+        String aNumber;
+        AddNumber_Impl( aNumber, pArg->nProgress );
+        if( pArg->nRate )
+        {
+            aNumber+= DEFINE_CONST_UNICODE( " (" );
+            AddNumber_Impl( aNumber, (ULONG)pArg->nRate );
+            aNumber+= DEFINE_CONST_UNICODE( "/s)" );
+        }
+        if( pArg->nMax && pArg->nProgress && pArg->nMax != pArg->nProgress )
+        {
+            aNumber += DEFINE_CONST_UNICODE( " [" );
+            float aPerc = pArg->nProgress / (float)pArg->nMax;
+            aNumber += String::CreateFromInt32( (USHORT)(aPerc * 100) );
+            aNumber += DEFINE_CONST_UNICODE( "%]" );
+        }
+        aString.SearchAndReplaceAscii( "$(BYTE)", aNumber );
+    }
+    return aString;
+}
+
+
+struct SfxProgress_Impl : public SfxCancellable
 {
     String                  aText, aStateText;
     ULONG                   nMax;
@@ -357,7 +422,7 @@ IMPL_STATIC_LINK( SfxProgress, DefaultBindingProgress, SvProgressArg*, pArg )
     if( Time::GetSystemTicks( ) - nLastTime > 100 )
     {
         nLastTime = Time::GetSystemTicks();
-        String aString = SfxMedium::GetStatusString( pArg );
+        String aString = GetStatusString( pArg );
         if( aString.Len() )
             GetpApp()->ShowStatusText( aString );
     }
