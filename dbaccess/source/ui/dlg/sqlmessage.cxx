@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlmessage.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sj $ $Date: 2001-05-17 13:28:14 $
+ *  last change: $Author: pb $ $Date: 2001-11-29 11:21:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -311,6 +311,7 @@ void OSQLMessageBox::Construct(const UniString& rTitle,
     m_aTitle.SetFont(aFont);
     m_aTitle.Show();
 
+    m_aMessage.SetStyle( m_aMessage.GetStyle() | WB_NOLABEL );
     m_aMessage.SetPosSizePixel(LogicToPixel(Point(45, 29),MAP_APPFONT),
                                LogicToPixel(Size(169, 1),MAP_APPFONT));
     m_aMessage.Show();
@@ -576,6 +577,9 @@ IMPL_LINK( OSQLMessageBox, ButtonClickHdl, Button *, pButton )
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.9  2001/05/17 13:28:14  sj
+ *  #86988# dialog redesign
+ *
  *  Revision 1.8  2001/03/02 17:04:27  fs
  *  correcting the building of the exception tree
  *
