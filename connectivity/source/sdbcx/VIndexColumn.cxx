@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VIndexColumn.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-02 15:26:27 $
+ *  last change: $Author: fs $ $Date: 2001-03-16 16:28:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,9 @@ sal_Bool SAL_CALL OIndexColumn::supportsService( const ::rtl::OUString& _rServic
 // -----------------------------------------------------------------------------
 OIndexColumn::OIndexColumn(sal_Bool _bCase) : OColumn(_bCase),  m_IsAscending(sal_True)
 {
+    construct();
 }
+
 // -------------------------------------------------------------------------
 OIndexColumn::OIndexColumn( sal_Bool _IsAscending,
                             const ::rtl::OUString&  _Name,
