@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-16 15:55:25 $
+ *  last change: $Author: hr $ $Date: 2001-10-26 13:28:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -289,7 +289,7 @@ extern "C" void SAL_CALL createRegistryInfo_SbaXGridControl()
     static OMultiInstanceAutoRegistration< SbaXGridControl > aAutoRegistration;
 }
 //-------------------------------------------------------------------------
-::comphelper::StringSequence SAL_CALL SbaXGridControl::getSupportedServiceNames() throw(RuntimeException)
+::comphelper::StringSequence SAL_CALL SbaXGridControl::getSupportedServiceNames() throw()
 {
     return getSupportedServiceNames_Static();
 }
@@ -406,7 +406,7 @@ Reference< XInterface > SAL_CALL SbaXGridControl_CreateInstance(const Reference<
 }
 
 //------------------------------------------------------------------------------
-::rtl::OUString SAL_CALL SbaXGridControl::getImplementationName() throw( RuntimeException )
+::rtl::OUString SAL_CALL SbaXGridControl::getImplementationName() throw()
 {
     return getImplementationName_Static();
 }
