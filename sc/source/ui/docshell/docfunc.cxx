@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfunc.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: sab $ $Date: 2002-07-24 09:18:05 $
+ *  last change: $Author: nn $ $Date: 2002-08-15 10:07:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1290,9 +1290,7 @@ BOOL ScDocFunc::InsertCells( const ScRange& rRange, InsCellCmd eCmd,
         pRefUndoDoc = new ScDocument( SCDOCMODE_UNDO );
         pRefUndoDoc->InitUndo( pDoc, 0, nTabCount-1, FALSE, FALSE );
 
-                //  alle Formeln wegen Referenzen
-                //! stattdessen bei InsertRow uebergeben
-        pDoc->CopyToDocument( 0,0,0, MAXCOL,MAXROW,MAXTAB, IDF_FORMULA,FALSE,pRefUndoDoc );
+        // pRefUndoDoc is filled in InsertCol / InsertRow
 
         pUndoData = new ScRefUndoData( pDoc );
 
@@ -1303,12 +1301,12 @@ BOOL ScDocFunc::InsertCells( const ScRange& rRange, InsCellCmd eCmd,
     {
         case INS_CELLSDOWN:
             bSuccess = pDoc->InsertRow( nStartCol,nStartTab, nEndCol,nEndTab,
-                                        nStartRow, nEndRow-nStartRow+1 );
+                                        nStartRow, nEndRow-nStartRow+1, pRefUndoDoc );
             nPaintEndY = MAXROW;
             break;
         case INS_INSROWS:
             bSuccess = pDoc->InsertRow( 0,nStartTab, MAXCOL,nEndTab,
-                                        nStartRow, nEndRow-nStartRow+1 );
+                                        nStartRow, nEndRow-nStartRow+1, pRefUndoDoc );
             nPaintStartX = 0;
             nPaintEndX = MAXCOL;
             nPaintEndY = MAXROW;
@@ -1316,12 +1314,12 @@ BOOL ScDocFunc::InsertCells( const ScRange& rRange, InsCellCmd eCmd,
             break;
         case INS_CELLSRIGHT:
             bSuccess = pDoc->InsertCol( nStartRow,nStartTab, nEndRow,nEndTab,
-                                        nStartCol, nEndCol-nStartCol+1 );
+                                        nStartCol, nEndCol-nStartCol+1, pRefUndoDoc );
             nPaintEndX = MAXCOL;
             break;
         case INS_INSCOLS:
             bSuccess = pDoc->InsertCol( 0,nStartTab, MAXROW,nEndTab,
-                                        nStartCol, nEndCol-nStartCol+1 );
+                                        nStartCol, nEndCol-nStartCol+1, pRefUndoDoc );
             nPaintStartY = 0;
             nPaintEndY = MAXROW;
             nPaintEndX = MAXCOL;
