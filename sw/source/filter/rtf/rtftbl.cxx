@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtftbl.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 12:52:31 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 13:57:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -355,7 +355,7 @@ void SwRTFParser::ReadTable( int nToken )
             break;
 
         case RTF_CELLX:
-            {
+            if (!bTrowdRead) {
                 SwTableBoxFmt* pFmt = pBoxFmt;
                 SwTwips nSize = nTokenValue - nTblSz;
                 if( aMergeBoxes[ nBoxCnt ] )
@@ -479,7 +479,8 @@ void SwRTFParser::ReadTable( int nToken )
             break;
 
         case RTF_TRGAPH:
-                aRow.mnBrdDist = (USHORT)nTokenValue;
+                //$flr bug #117887#: RTF: wrong internal table cell margin imported (A13)
+                aRow.mnBrdDist = (nTokenValue>0?(USHORT)nTokenValue:0); // filter out negative values of \trgaph
             break;
 
         case RTF_TRQL:          eAdjust = HORI_LEFT;    break;
@@ -588,6 +589,7 @@ void SwRTFParser::ReadTable( int nToken )
 
     int bNewTbl = TRUE;
     SwTableLine* pNewLine;
+    bTrowdRead=true;
 
     // lege eine neue Tabelle an oder erweiter die aktuelle um eine neue Line
     // oder Box !
@@ -730,7 +732,7 @@ void SwRTFParser::ReadTable( int nToken )
             }
         }
 
-        if( pTableNode )
+        if( pTableNode && !bForceNewTable)
         {
 
             // das Attribut darf nicht ueber das Modify an der
@@ -762,12 +764,14 @@ void SwRTFParser::ReadTable( int nToken )
         }
         else
         {
+            bForceNewTable = false;
             const SwTable *pTable =
                 pDoc->InsertTable(
                     SwInsertTableOptions( tabopts::HEADLINE_NO_BORDER, 0 ),
                     *pPam->GetPoint(), 1, 1, eAdjust );
-
+            bContainsTablePara=true; //#117881#
             pTableNode = pTable ? pTable->GetTableNode() : 0;
+
             if (pTableNode)
             {
                 maSegments.PrependedInlineNode(*pPam->GetPoint(),
