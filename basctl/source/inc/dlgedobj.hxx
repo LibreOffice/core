@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedobj.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tbe $ $Date: 2001-03-12 11:30:48 $
+ *  last change: $Author: tbe $ $Date: 2001-03-13 17:22:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,6 @@ class DlgEdObj: public SdrUnoObj
 
 private:
     sal_Bool        bIsListening;
-    sal_uInt32      nEvent;
     DlgEdForm*      pDlgEdForm;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener> m_xPropertyChangeListener;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener> m_xContainerListener;
