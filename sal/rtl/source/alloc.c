@@ -2,9 +2,9 @@
  *
  *  $RCSfile: alloc.c,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mhu $ $Date: 2001-10-17 20:53:52 $
+ *  last change: $Author: mhu $ $Date: 2001-11-26 11:56:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -271,7 +271,9 @@ static size_t queue (size_t n)
         k = m;
     }
 
-    OSL_ASSERT((0 < k) && (k < __N__));
+    OSL_POSTCOND((0 < k) && (k < __N__),
+                 "__rtl_memory_queue()[1]: "
+                 "internal error: index out of bounds");
     return (k);
 }
 #else  /* PRODUCT */
@@ -341,45 +343,14 @@ void SAL_CALL ___rtl_memory_fini (void);
     RTL_MUTEX_RELEASE(&(g_memory.m_mutex.m_lock)); \
 }
 
-/*
- * ___rtl_memory_init.
- */
-void SAL_CALL ___rtl_memory_init (void)
-{
-#if defined(RTL_MUTEX_INIT)
-    RTL_MUTEX_INIT (&(g_memory.m_mutex.m_lock));
-#endif /* RTL_MUTEX_INIT */
-
-    RTL_MUTEX_ACQUIRE(&(g_memory.m_mutex.m_lock));
-    if (!(g_memory.m_align))
-    {
-        int i;
-
-        queue_start (&(g_memory.m_alloc_head));
-        for (i = 0; i < __N__; i++)
-            queue_start (&(g_memory.m_queue_head[i]));
-        for (i = 1; i <= __L__; i++)
-            g_memory.m_queue_head[i].m_length = (i << 3);
-        for (i = 1; i < __P__; i++)
-            g_memory.m_queue_head[__L__ + i].m_length = ((1 << (i+5)) << 3);
-
-        g_memory.m_align = __rtl_memory_vmpagesize();
-    }
-    RTL_MUTEX_RELEASE(&(g_memory.m_mutex.m_lock));
-}
-
-/*
- * ___rtl_memory_fini (NYI).
- */
-void SAL_CALL ___rtl_memory_fini (void)
-{
-}
-
 /*===========================================================================
  *
  * rtl_memory (debug) internals.
  *
  *=========================================================================*/
+#define DBG_MEMORY_K_DEQFILL 0x77777777
+#define DBG_MEMORY_K_ENQFILL 0x33333333
+
 #if defined(DEBUG) || defined(_DEBUG)
 
 #define __dbg_memory_succ(entry, length) \
@@ -441,40 +412,123 @@ static void __dbg_memory_remove (memory_type **ppMemory)
 }
 
 /*
+ * __dbg_memory_verify_chain.
+ */
+static int __dbg_memory_verify_chain (memory_type * x)
+{
+    if (!__dbg_memory_ensure(x))
+    {
+        OSL_ENSURE(0, "__rtl_memory_verify(): invalid pointer alignment.");
+        return (0);
+    }
+    if (!__dbg_memory_ensure(x->m_length))
+    {
+        OSL_ENSURE(0, "__rtl_memory_verify(): dynamic memory corruption");
+        return (0);
+    }
+    if (!__dbg_memory_ensure(x->m_offset))
+    {
+        OSL_ENSURE(0, "__rtl_memory_verify(): dynamic memory corruption");
+        return (0);
+    }
+    if (!(x->m_length & 0x7fffffff))
+    {
+        OSL_ENSURE(0, "__rtl_memory_verify(): dynamic memory corruption");
+        return (0);
+    }
+    return (1);
+}
+
+/*
+ * __dbg_memory_verify_queue.
+ */
+static int __dbg_memory_verify_queue (memory_type * x)
+{
+    if (!__dbg_memory_ensure(x))
+    {
+        OSL_ENSURE(0, "__rtl_memory_verify(): invalid pointer alignment.");
+        return (0);
+    }
+    if (!__dbg_memory_ensure(x->m_flink))
+    {
+        OSL_ENSURE(0, "__rtl_memory_verify(): free memory corruption");
+        return (0);
+    }
+    if (!__dbg_memory_ensure(x->m_blink))
+    {
+        OSL_ENSURE(0, "__rtl_memory_verify(): free memory corruption");
+        return (0);
+    }
+    if ((x == x->m_flink) || (x == x->m_blink))
+    {
+        OSL_ENSURE(0, "__rtl_memory_verify(): internal logic error");
+        return (0);
+    }
+    return (1);
+}
+
+/*
  * __dbg_memory_verify.
  */
-static int __dbg_memory_verify (memory_type * x)
+static int __dbg_memory_verify (memory_type * x, int debug)
 {
     register memory_type *head, *entry;
-    OSL_ASSERT(__dbg_memory_ensure(x));
 
+    /* verify 'chain' fields */
+    if (!__dbg_memory_verify_chain (x))
+        return (0);
+    if (!debug)
+        goto verify_leave;
+
+    /* verify allocation */
     head = entry = &(g_memory.m_alloc_head);
     while (!((entry = entry->m_flink) == head))
     {
         if ((entry < (x)) && ((x) < __dbg_memory_succ(entry, entry->m_length)))
         {
-            head = __dbg_memory_succ(entry, sizeof(memory_type));
-            OSL_ASSERT(head->m_length & 0x7fffffff);
-
-            while (!(head->m_offset & 0x80000000))
+            head = entry = __dbg_memory_succ(entry, sizeof(memory_type));
+            while (!((x == entry) || (entry->m_offset & 0x80000000)))
             {
-                entry = __dbg_memory_succ(head, head->m_length);
-                OSL_ASSERT(entry->m_length & 0x7fffffff);
-                head = entry;
+                /* no match, not last */
+                if (!__dbg_memory_verify_chain (entry))
+                    return (0);
+                entry = __dbg_memory_succ(entry, entry->m_length);
             }
-            return (1);
+
+            /* match, or last */
+            if (!__dbg_memory_verify_chain (entry))
+                return (0);
+            break;
         }
     }
-    return (0);
+    if (!(x == entry))
+    {
+        OSL_ENSURE(0, "__rtl_memory_verify(): memory not allocated.");
+        return (0);
+    }
+
+verify_leave:
+    /* verify 'used' bit */
+    if (!(x->m_length & 0x80000000))
+    {
+        OSL_ENSURE(0, "__rtl_memory_verify(): memory not used.");
+        return (0);
+    }
+    return (1);
 }
 
 /*
  * __dbg_memory_usage.
  */
-static void __dbg_memory_usage (void)
+static void __dbg_memory_usage (memory_stat * total)
 {
     register memory_type *head, *entry, *memory;
-    register size_t       total = 0, avail = 0;
+    memory_stat           stat[__N__];
+    size_t                i;
+
+    total->m_dequeue = total->m_enqueue = 0;
+    for (i = 0; i < __N__; i++)
+        stat[i].m_dequeue = stat[i].m_enqueue = 0;
 
     head = entry = &(g_memory.m_alloc_head);
     while (!((entry = entry->m_flink) == head))
@@ -498,12 +552,14 @@ static void __dbg_memory_usage (void)
             k += memory->m_length;
         }
 
-        OSL_TRACE("%08x %10d %10d", (size_t)(entry), n, k);
-        total += n;
-        avail += k;
-    }
+        i = queue(n);
+        stat[i].m_dequeue += n;
+        stat[i].m_enqueue += k;
 
-    OSL_TRACE("Total:   %10d %10d", total, avail);
+        OSL_TRACE("%08x %10d %10d", (size_t)(entry), n, k);
+        total->m_dequeue += n;
+        total->m_enqueue += k;
+    }
 }
 
 #endif /* DEBUG */
@@ -518,9 +574,9 @@ static void __dbg_memory_usage (void)
 #define DBG_MEMORY_REMOVE(entry) __dbg_memory_remove((entry))
 
 #if defined(DEBUG)
-#define DBG_MEMORY_VERIFY(entry) __dbg_memory_verify((entry))
+#define DBG_MEMORY_VERIFY(entry) __dbg_memory_verify((entry), 1)
 #else  /* _DEBUG */
-#define DBG_MEMORY_VERIFY(entry) __dbg_memory_ensure((entry))
+#define DBG_MEMORY_VERIFY(entry) __dbg_memory_verify((entry), 0)
 #endif /* _DEBUG */
 
 #else  /* PRODUCT */
@@ -530,13 +586,9 @@ static void __dbg_memory_usage (void)
 #define DBG_MEMORY_ENQUEUE(n)
 #define DBG_MEMORY_INSERT(entry)
 #define DBG_MEMORY_REMOVE(entry)
-#define DBG_MEMORY_VERIFY(entry) (1)
+#define DBG_MEMORY_VERIFY(entry)
 
 #endif /* DEBUG || PRODUCT */
-
-#define RTL_MEMORY_FILL(p, n, d) memset((p), (d), (n))
-#define DBG_MEMORY_C_DEQFILL 0x77777777
-#define DBG_MEMORY_C_ENQFILL 0x33333333
 
 /*===========================================================================
  *
@@ -550,6 +602,54 @@ static void __dbg_memory_usage (void)
 #define __rtl_memory_last(entry) ((entry)->m_offset & 0x80000000)
 
 /*
+ * ___rtl_memory_init.
+ */
+void SAL_CALL ___rtl_memory_init (void)
+{
+#if defined(RTL_MUTEX_INIT)
+    RTL_MUTEX_INIT (&(g_memory.m_mutex.m_lock));
+#endif /* RTL_MUTEX_INIT */
+
+    RTL_MUTEX_ACQUIRE(&(g_memory.m_mutex.m_lock));
+    if (!(g_memory.m_align))
+    {
+        int i;
+
+        queue_start (&(g_memory.m_alloc_head));
+        for (i = 0; i < __N__; i++)
+            queue_start (&(g_memory.m_queue_head[i]));
+        for (i = 1; i <= __L__; i++)
+            g_memory.m_queue_head[i].m_length = (i << 3);
+        for (i = 1; i < __P__; i++)
+            g_memory.m_queue_head[__L__ + i].m_length = ((1 << (i+5)) << 3);
+
+        g_memory.m_align = __rtl_memory_vmpagesize();
+    }
+    RTL_MUTEX_RELEASE(&(g_memory.m_mutex.m_lock));
+}
+
+/*
+ * ___rtl_memory_fini (NYI).
+ */
+void SAL_CALL ___rtl_memory_fini (void)
+{
+#if defined(DEBUG)
+
+    memory_stat total;
+    size_t      usage;
+
+    __dbg_memory_usage (&total);
+    if ((usage = total.m_dequeue - total.m_enqueue) > 0)
+    {
+        OSL_TRACE("___rtl_memory_fini(): "
+                  "Leak: %10d (Alloc: %10d, Free: %10d)",
+                  usage, total.m_dequeue, total.m_enqueue);
+    }
+
+#endif /* DEBUG */
+}
+
+/*
  * __rtl_memory_merge.
  */
 #if defined(DEBUG) || defined(_DEBUG)
@@ -561,6 +661,7 @@ static void __rtl_memory_merge (memory_type * prev, memory_type * next)
     {
         /* not last, adjust offset */
         register memory_type * succ = queue_cast(prev, prev->m_length);
+        __dbg_memory_verify_chain (succ);
         succ->m_offset = prev->m_length | __rtl_memory_last(succ);
     }
 
@@ -592,6 +693,7 @@ static void __rtl_memory_split (memory_type * prev, memory_type * next)
     {
         /* not last, adjust offset */
         register memory_type * succ = queue_cast(next, next->m_length);
+        __dbg_memory_verify_chain (succ);
         succ->m_offset = next->m_length | __rtl_memory_last(succ);
     }
 
@@ -630,7 +732,9 @@ static memory_type* __rtl_memory_queue (size_t n)
         k = m;
     }
 
-    OSL_ASSERT((0 < k) && (k < __N__));
+    OSL_POSTCOND((0 < k) && (k < __N__),
+                 "__rtl_memory_queue()[2]: "
+                 "internal error: index out of bounds");
     return (&(g_memory.m_queue_head[k]));
 }
 #else  /* PRODUCT */
@@ -654,11 +758,23 @@ static memory_type* __rtl_memory_queue (size_t n)
 static void __rtl_memory_insert (memory_type * memory, size_t n)
 {
     register memory_type *head, *entry;
-
     head = __rtl_memory_queue(n);
+
+    OSL_PRECOND(__dbg_memory_ensure(head->m_flink),
+                "__rtl_memory_insert(): "
+                "static memory corruption.");
+    OSL_PRECOND(__dbg_memory_ensure(head->m_blink),
+                "__rtl_memory_insert(): "
+                "static memory corruption.");
+
     for (entry = head->m_flink; entry != head; entry = entry->m_flink)
+    {
+        __dbg_memory_verify_chain (entry);
+        __dbg_memory_verify_queue (entry);
+
         if (entry->m_length >= n)
             break;
+    }
 
     queue_insert_tail (entry, memory);
 }
@@ -683,25 +799,42 @@ static void __rtl_memory_insert (memory_type * memory, size_t n)
 static void __rtl_memory_resize (memory_type * memory, size_t n)
 {
     register size_t k = (memory->m_length - n);
-    OSL_ASSERT(!(memory->m_length & 0x80000000));
+
+    OSL_ENSURE(!(memory->m_length & 0x80000000),
+               "__rtl_memory_resize(): "
+               "internal logic error.");
+
     if (k >= sizeof(memory_type))
     {
+        /* split */
         register memory_type * remain = queue_cast(memory, n);
 
         remain->m_length = k; remain->m_offset = n;
         __rtl_memory_split (memory, remain);
 
+        /* check postcond */
         if (!(remain->m_offset & 0x80000000))
         {
             /* not last, verify used next entry */
             register memory_type *next;
 
             next = __dbg_memory_succ(remain, remain->m_length);
-            OSL_ASSERT(next->m_length & 0x80000000);
+            __dbg_memory_verify_chain (next);
+
+            OSL_POSTCOND(next->m_length & 0x80000000,
+                         "__rtl_memory_resize(): "
+                         "internal logic error.");
         }
 
+        /* fill w/ 'deinitialized' pattern */
+        memset (
+            ((char*)(remain)  + __C__),
+            DBG_MEMORY_K_ENQFILL,
+            (remain->m_length - __C__));
+
+        /* enqueue */
         __rtl_memory_insert (remain, k);
-        OSL_ASSERT(DBG_MEMORY_VERIFY(remain));
+        __dbg_memory_verify_queue (remain);
     }
 }
 #else  /* PRODUCT */
@@ -729,17 +862,19 @@ static void __rtl_memory_dequeue (memory_type **ppMemory, size_t n)
     register memory_type *head, *entry;
     register size_t       k, m = n;
 
-    OSL_ASSERT(!*ppMemory);
+    OSL_PRECOND(!*ppMemory, "__rtl_memory_dequeue(): internal logic error.");
     for (k = queue(m); k < __N__; k++)
     {
         head = &(g_memory.m_queue_head[k]);
         for (entry = head->m_flink; entry != head; entry = entry->m_flink)
         {
-            OSL_ASSERT(!(entry->m_length & 0x80000000));
+            OSL_ENSURE(!(entry->m_length & 0x80000000),
+                       "__rtl_memory_dequeue(): "
+                       "dynamic memory corruption.");
             if (entry->m_length >= m)
             {
                 /* remove entry */
-                OSL_ASSERT(!(entry == entry->m_flink));
+                __dbg_memory_verify_queue (entry);
                 queue_remove (entry);
 
                 /* assign result */
@@ -760,7 +895,15 @@ static void __rtl_memory_dequeue (memory_type **ppMemory, size_t n)
     }
 
 dequeue_leave:
-    OSL_ASSERT(*ppMemory);
+    OSL_POSTCOND(*ppMemory, "__rtl_memory_dequeue(): out of memory.");
+    if (*ppMemory)
+    {
+        /* fill w/ 'uninitialized' pattern */
+        memset (
+            ((char*)(*ppMemory)    + __C__),
+            DBG_MEMORY_K_DEQFILL,
+            ((*ppMemory)->m_length - __C__));
+    }
 }
 #else  /* PRODUCT */
 #define __rtl_memory_dequeue(ppMemory, n, label) \
@@ -806,28 +949,28 @@ label: \
 #if defined(DEBUG) || defined(_DEBUG)
 static void __rtl_memory_enqueue (memory_type **ppMemory)
 {
-    register memory_type *head;
-    head = *ppMemory;
+    register memory_type *head = *ppMemory;
 
-    OSL_ASSERT(head->m_length & 0x80000000);
-    head->m_length &= 0x7fffffff; /* clear 'used' bit */
+    OSL_ENSURE(!(head->m_length & 0x80000000),
+               "__rtl_memory_enqueue(): "
+               "internal logic error.");
+
     DBG_MEMORY_ENQUEUE(head->m_length);
-
     if (!(head->m_offset & 0x80000000))
     {
         /* not last, try merge w/ next entry */
         register memory_type * next;
 
         next = (memory_type*)((char*)head + head->m_length);
+        __dbg_memory_verify_chain (next);
+
         if (!(next->m_length & 0x80000000))
         {
-            /* next not used, merge */
-            OSL_ASSERT(!(next == next->m_flink));
-
-            OSL_ASSERT(__dbg_memory_ensure(next->m_flink));
-            OSL_ASSERT(__dbg_memory_ensure(next->m_blink));
-
+            /* next not used */
+            __dbg_memory_verify_queue (next);
             queue_remove (next);
+
+            /* merge w/ next */
             __rtl_memory_merge (head, next);
         }
     }
@@ -838,15 +981,15 @@ static void __rtl_memory_enqueue (memory_type **ppMemory)
         register memory_type * prev;
 
         prev = (memory_type*)((char*)head - (head->m_offset & 0x7fffffff));
+        __dbg_memory_verify_chain (prev);
+
         if (!(prev->m_length & 0x80000000))
         {
-            /* prev not used, merge */
-            OSL_ASSERT(!(prev == prev->m_flink));
-
-            OSL_ASSERT(__dbg_memory_ensure(prev->m_flink));
-            OSL_ASSERT(__dbg_memory_ensure(prev->m_blink));
-
+            /* prev not used */
+            __dbg_memory_verify_queue (prev);
             queue_remove (prev);
+
+            /* merge w/ prev */
             __rtl_memory_merge (prev, head);
             head = prev;
         }
@@ -854,6 +997,12 @@ static void __rtl_memory_enqueue (memory_type **ppMemory)
 
     if (!(head->m_offset == 0x80000000))
     {
+        /* fill w/ 'deinitialized' pattern */
+        memset (
+            ((char*)(head)  + __C__),
+            DBG_MEMORY_K_ENQFILL,
+            (head->m_length - __C__));
+
         /* not free, enqueue */
         __rtl_memory_insert (head, head->m_length);
         (*ppMemory) = 0;
@@ -869,7 +1018,6 @@ static void __rtl_memory_enqueue (memory_type **ppMemory)
 #define __rtl_memory_enqueue(ppMemory) \
 { \
     register memory_type *head = *(ppMemory); \
-    head->m_length &= 0x7fffffff; \
 \
     if (!(head->m_offset & 0x80000000)) \
     { \
@@ -928,29 +1076,34 @@ void* SAL_CALL rtl_reallocateMemory (void * p, sal_uInt32 n) SAL_THROW_EXTERN_C(
         n = RTL_MEMORY_ALIGN(n, __Q__) + __C__;
 
         RTL_MEMORY_ENTER();
-        OSL_ASSERT(DBG_MEMORY_VERIFY(memory));
+        DBG_MEMORY_VERIFY(memory);
 
-        OSL_ASSERT(memory->m_length & 0x80000000);
-        memory->m_length &= 0x7fffffff; /* clear 'used' bit */
+        /* clear 'used' bit */
+        memory->m_length &= 0x7fffffff;
 
+        /* dispatch */
         d = n - memory->m_length;
         if (d > 0)
         {
             /* extend */
-            memory_type * next;
             if (!(memory->m_offset & 0x80000000))
             {
                 /* not last, try merge w/ next entry */
+                register memory_type * next;
+
                 next = queue_cast(memory, memory->m_length);
+                __dbg_memory_verify_chain (next);
+
                 if (!(next->m_length & 0x80000000))
                 {
-                    /* not used */
+                    /* next not used */
                     if ((memory->m_length + next->m_length) >= n)
                     {
-                        /* merge */
-                        OSL_ASSERT(!(next == next->m_flink));
+                        /* next does fit */
+                        __dbg_memory_verify_queue (next);
                         queue_remove (next);
 
+                        /* merge w/ next */
                         DBG_MEMORY_ENQUEUE(memory->m_length);
                         __rtl_memory_merge (memory, next);
 
@@ -966,11 +1119,10 @@ void* SAL_CALL rtl_reallocateMemory (void * p, sal_uInt32 n) SAL_THROW_EXTERN_C(
             }
             if (!p)
             {
-                /* set 'used' bit */
+                /* set 'used' bit, allocate */
+                memory_type * next = 0;
                 memory->m_length |= 0x80000000;
 
-                /* allocate */
-                next = 0;
                 RTL_MEMORY_DEQUEUE (&next, n, realloc_label_1);
                 if (next)
                 {
@@ -989,7 +1141,9 @@ void* SAL_CALL rtl_reallocateMemory (void * p, sal_uInt32 n) SAL_THROW_EXTERN_C(
                     p = queue_cast(next, __C__);
                 }
 
-                /* free */
+                /* clear 'used' bit, enqueue */
+                memory->m_length &= 0x7fffffff;
+
                 RTL_MEMORY_ENQUEUE (&memory);
                 if (memory)
                 {
@@ -1008,11 +1162,15 @@ void* SAL_CALL rtl_reallocateMemory (void * p, sal_uInt32 n) SAL_THROW_EXTERN_C(
                 register memory_type * next;
 
                 next = queue_cast(memory, memory->m_length);
+                __dbg_memory_verify_chain (next);
+
                 if (!(next->m_length & 0x80000000))
                 {
-                    /* next not used, merge */
-                    OSL_ASSERT(!(next == next->m_flink));
+                    /* next not used */
+                    __dbg_memory_verify_queue (next);
                     queue_remove (next);
+
+                    /* merge w/ next */
                     __rtl_memory_merge (memory, next);
                 }
             }
@@ -1061,7 +1219,10 @@ void* SAL_CALL rtl_reallocateMemory (void * p, sal_uInt32 n) SAL_THROW_EXTERN_C(
         memory = queue_cast(p, -(__C__)); p = 0;
 
         RTL_MEMORY_ENTER();
-        OSL_ASSERT(DBG_MEMORY_VERIFY(memory));
+        DBG_MEMORY_VERIFY(memory);
+
+        /* clear 'used' bit, enqueue */
+        memory->m_length &= 0x7fffffff;
 
         RTL_MEMORY_ENQUEUE (&memory);
         if (memory)
@@ -1126,12 +1287,10 @@ void SAL_CALL rtl_freeMemory (void * p) SAL_THROW_EXTERN_C()
         memory_type * memory = queue_cast(p, -(__C__));
 
         RTL_MEMORY_ENTER();
-        OSL_ASSERT(DBG_MEMORY_VERIFY(memory));
+        DBG_MEMORY_VERIFY(memory);
 
-#if defined(DEBUG)
-        if (!p)
-            __dbg_memory_usage();
-#endif  /* DEBUG */
+        /* clear 'used' bit, enqueue */
+        memory->m_length &= 0x7fffffff;
 
         RTL_MEMORY_ENQUEUE (&memory);
         if (memory)
@@ -1196,7 +1355,11 @@ void SAL_CALL rtl_freeZeroMemory (void * p, sal_uInt32 n) SAL_THROW_EXTERN_C()
         memory_type * memory = queue_cast(p, -(__C__));
 
         RTL_MEMORY_ENTER();
-        OSL_ASSERT(DBG_MEMORY_VERIFY(memory));
+        DBG_MEMORY_VERIFY(memory);
+
+        /* clear 'used' bit, zero, enqueue */
+        memory->m_length &= 0x7fffffff;
+        memset ((char*)memory + __C__, 0, memory->m_length - __C__);
 
         RTL_MEMORY_ENQUEUE (&memory); /* NYI: demand zero */
         if (memory)
