@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgass.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 14:51:30 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 13:56:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,7 @@
 #ifndef _SV_GDIMTF_HXX
 #include <vcl/gdimtf.hxx>
 #endif
+#include <vcl/wintypes.hxx>
 
 #ifndef _SD_DOCPREV_HXX_
 #include "docprev.hxx"
@@ -171,6 +172,18 @@
 
 #ifndef _COM_SUN_STAR_UNO_RUNTIMEEXCEPTION_HPP_
 #include <com/sun/star/uno/RuntimeException.hpp>
+#endif
+
+#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
+#include <drafts/com/sun/star/frame/XModuleManager.hpp>
+#endif
+
+#ifndef _DRAFTS_COM_SUN_STAR_UI_XMODULEUICONFIGURATIONMANAGERSUPPLIER_HPP_
+#include <drafts/com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
+#endif
+
+#ifndef _DRAFTS_COM_SUN_STAR_UI_XIMAGEMANAGER_HPP_
+#include <drafts/com/sun/star/ui/XImageManager.hpp>
 #endif
 
 #ifndef INCLUDED_SVTOOLS_HISTORYOPTIONS_HXX
@@ -215,6 +228,8 @@
 #endif
 
 using namespace ::com::sun::star;
+using namespace ::drafts::com::sun::star;
+using namespace ::com::sun::star::uno;
 using namespace ::sd;
 
 
@@ -371,6 +386,9 @@ public:
     void ChangePage();
     void LeavePage();
 
+    String GetUiTextForCommand (const ::rtl::OUString& aCommandURL);
+    Image GetUiIconForCommand (const ::rtl::OUString& aCommandURL);
+
     DECL_LINK( StartScanHdl, void * );
     DECL_LINK( SelectFileHdl, ListBox * );
     DECL_LINK( SelectRegionHdl, ListBox * );
@@ -387,6 +405,7 @@ public:
     DECL_LINK( PresTypeHdl, RadioButton * );
     DECL_LINK( UpdateUserDataHdl, Edit* );
     DECL_LINK( SelectEffectHdl, void* );
+    DECL_LINK( OpenButtonHdl, Button * );
 
     // Common
     Assistent           m_aAssistentFunc;
@@ -408,6 +427,7 @@ public:
     ListBox*            m_pPage1TemplateLB;
     RadioButton*        m_pPage1OpenRB;
     ListBox*            m_pPage1OpenLB;
+    PushButton*         m_pPage1OpenPB;
 
     // Seite 2
     FixedBitmap*        m_pPage2FB;
@@ -511,7 +531,42 @@ AssistentDlgImpl::AssistentDlgImpl( Window* pWindow, const Link& rFinishLink, BO
     m_aAssistentFunc.InsertControl(1,
         m_pPage1TemplateLB=new ListBox(pWindow,SdResId(LB_PAGE1_TEMPLATES)));
     m_aAssistentFunc.InsertControl(1,
+        m_pPage1OpenPB=new PushButton(pWindow,SdResId(PB_PAGE1_OPEN)));
+    m_aAssistentFunc.InsertControl(1,
         m_pPage1OpenLB=new ListBox(pWindow,SdResId(LB_PAGE1_OPEN)));
+
+    // Align the button and list box displayed for the "open existing file"
+    // radio button with the text of that radio button.
+    {
+        RadioButton aEmptyRB (m_pWindow);
+        sal_Int32 nIndent (aEmptyRB.CalcMinimumSize(0).Width());
+        sal_Int32 nLeft (m_pPage1OpenRB->GetPosPixel().X() + nIndent);
+        sal_Int32 nWidth (m_pPage1OpenRB->GetSizePixel().Width() - nIndent);
+        m_pPage1OpenPB->SetPosSizePixel(
+            Point(nLeft, m_pPage1OpenPB->GetPosPixel().Y()),
+            Size(m_pPage1OpenPB->GetSizePixel()));
+        m_pPage1OpenLB->SetPosSizePixel(
+            Point(nLeft, m_pPage1OpenLB->GetPosPixel().Y()),
+            Size(nWidth, m_pPage1OpenLB->GetSizePixel().Height()));
+    }
+
+    // Set text and icon of the 'Open...' button.
+    {
+        String sText (GetUiTextForCommand(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:Open"))));
+        // Remove the mnemonic and add a leading space so that icon and text
+        // are not too close together.
+        sText.SearchAndReplaceAll(String(RTL_CONSTASCII_STRINGPARAM("~")),String());
+        sText.Insert(String(RTL_CONSTASCII_STRINGPARAM(" ")),0);
+        m_pPage1OpenPB->SetText(sText);
+        // Place icon left of text and both centered in the button.
+        m_pPage1OpenPB->SetModeImage(
+            GetUiIconForCommand(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:Open"))),
+            BMP_COLOR_NORMAL);
+        m_pPage1OpenPB->EnableImageDisplay(TRUE);
+        m_pPage1OpenPB->EnableTextDisplay(TRUE);
+        m_pPage1OpenPB->SetImageAlign(IMAGEALIGN_LEFT);
+        m_pPage1OpenPB->SetStyle(m_pPage1OpenPB->GetStyle() | WB_CENTER);
+    }
 
     // links&handler
     m_pPage1RegionLB->SetSelectHdl(LINK(this,AssistentDlgImpl,SelectRegionHdl));
@@ -524,7 +579,8 @@ AssistentDlgImpl::AssistentDlgImpl( Window* pWindow, const Link& rFinishLink, BO
     m_pPage1OpenRB->SetClickHdl(LINK(this,AssistentDlgImpl,StartTypeHdl));
     m_pPage1OpenLB->SetSelectHdl(LINK(this,AssistentDlgImpl,SelectFileHdl));
     m_pPage1OpenLB->SetDoubleClickHdl(rFinishLink);
-    m_pPage1OpenLB->InsertEntry(String(SdResId(STR_WIZARD_POSITION)));
+    m_pPage1OpenPB->SetClickHdl(LINK(this,AssistentDlgImpl,OpenButtonHdl));
+    //  m_pPage1OpenLB->InsertEntry(String(SdResId(STR_WIZARD_POSITION)));
 
     // Seite 2
     m_aAssistentFunc.InsertControl(2, &m_aPreview );
@@ -760,6 +816,7 @@ AssistentDlgImpl::~AssistentDlgImpl()
     delete m_pPage1RegionLB;
     delete m_pPage1OpenRB;
     delete m_pPage1OpenLB;
+    delete m_pPage1OpenPB;
 
     // Seite 2
     delete m_pPage2FB;
@@ -996,6 +1053,7 @@ void AssistentDlgImpl::SetStartType( StartType eType )
     m_pPage1RegionLB->Show(eType == ST_TEMPLATE);
     m_pPage1TemplateLB->Show(eType == ST_TEMPLATE);
     m_pPage1OpenLB->Show(eType == ST_OPEN);
+    m_pPage1OpenPB->Show(eType == ST_OPEN);
 }
 
 StartType AssistentDlgImpl::GetStartType()
@@ -1039,8 +1097,8 @@ String AssistentDlgImpl::GetDocFileName()
     else if( GetStartType() == ST_OPEN )
     {
         const USHORT nEntry = m_pPage1OpenLB->GetSelectEntryPos();
-        if(nEntry != (USHORT)-1 && nEntry > 0)
-            aDocFile = *m_aOpenFilesList[nEntry-1];
+        if(nEntry != (USHORT)-1 && nEntry >= 0)
+            aDocFile = *m_aOpenFilesList[nEntry];
     }
 
     if(m_pWindow)
@@ -1229,6 +1287,13 @@ IMPL_LINK( AssistentDlgImpl, SelectEffectHdl, void*, EMPTYARG )
 {
     m_aEffectPrevTimer.Start();
     return 0;
+}
+
+IMPL_LINK( AssistentDlgImpl, OpenButtonHdl, Button*, pButton )
+{
+    // Clear the selection and forward the call.
+    m_pPage1OpenLB->SetNoSelection();
+    return m_pPage1OpenLB->GetDoubleClickHdl().Call(pButton);
 }
 
 IMPL_LINK( AssistentDlgImpl, EffectPreviewHdl, Button *, EMPTYARG )
@@ -1759,6 +1824,126 @@ BOOL AssistentDlgImpl::IsOwnFormat( const String& rPath )
     return !aExt.EqualsIgnoreCaseAscii( "ppt" );
 }
 
+
+
+
+String AssistentDlgImpl::GetUiTextForCommand (const ::rtl::OUString& sCommandURL)
+{
+    String sLabel;
+    Reference<container::XNameAccess> xUICommandLabels;
+
+    try
+    {
+        do
+        {
+            if (sCommandURL.getLength() ==  0)
+                break;
+
+            // Retrieve popup menu labels
+            Reference<lang::XMultiServiceFactory> xFactory (
+                ::comphelper::getProcessServiceFactory ());
+            if ( ! xFactory.is())
+                break;
+
+            ::rtl::OUString sModuleIdentifier (
+                RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.PresentationDocument"));
+            Reference<container::XNameAccess> xNameAccess (
+                xFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "drafts.com.sun.star.frame.UICommandDescription"))),
+                UNO_QUERY);
+            if ( ! xNameAccess.is())
+                break;
+            Any a = xNameAccess->getByName(sModuleIdentifier);
+            a >>= xUICommandLabels;
+            if ( ! xUICommandLabels.is())
+                break;
+
+            ::rtl::OUString sString;
+            Sequence<beans::PropertyValue> aProperties;
+            Any aAny (xUICommandLabels->getByName(sCommandURL));
+            if (aAny >>= aProperties)
+            {
+                sal_Int32 nCount (aProperties.getLength());
+                for (sal_Int32 i=0; i<nCount; i++)
+                {
+                    ::rtl::OUString sPropertyName (aProperties[i].Name);
+                    if (sPropertyName.equalsAscii("Label"))
+                    {
+                        aProperties[i].Value >>= sString;
+                        break;
+                    }
+                }
+            }
+            sLabel = sString;
+        }
+        while(false);
+    }
+    catch (com::sun::star::uno::Exception& rException)
+    {
+        (void)rException;
+    }
+
+    return sLabel;
+}
+
+
+
+
+Image AssistentDlgImpl::GetUiIconForCommand (const ::rtl::OUString& sCommandURL)
+{
+    Image aIcon;
+    Reference<container::XNameAccess> xUICommandLabels;
+
+    try
+    {
+        do
+        {
+            if (sCommandURL.getLength() ==  0)
+                break;
+
+            // Retrieve popup menu labels
+            Reference<lang::XMultiServiceFactory> xFactory (
+                ::comphelper::getProcessServiceFactory ());
+            if ( ! xFactory.is())
+                break;
+
+            ::rtl::OUString sModuleIdentifier (
+                RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.PresentationDocument"));
+
+            Reference<drafts::com::sun::star::ui::XModuleUIConfigurationManagerSupplier> xSupplier (
+                xFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "drafts.com.sun.star.ui.ModuleUIConfigurationManagerSupplier"))),
+                UNO_QUERY_THROW);
+
+            Reference<drafts::com::sun::star::ui::XUIConfigurationManager> xManager (
+                xSupplier->getUIConfigurationManager(sModuleIdentifier));
+            if ( ! xManager.is())
+                break;
+
+            Reference<drafts::com::sun::star::ui::XImageManager> xImageManager (
+                xManager->getImageManager(),
+                UNO_QUERY_THROW);
+
+            Sequence<rtl::OUString> aCommandList(1);
+            aCommandList[0] = sCommandURL;
+            Sequence<Reference<graphic::XGraphic> > xIconList (
+                xImageManager->getImages(0,aCommandList));
+            if ( ! xIconList.hasElements())
+                break;
+
+            aIcon = Graphic(xIconList[0]).GetBitmapEx();
+        }
+        while(false);
+    }
+    catch (com::sun::star::uno::Exception& rException)
+    {
+        (void)rException;
+    }
+
+    return aIcon;
+}
+
+
 //////////////////////////////////////////////
 
 AssistentDlg::AssistentDlg(Window* pParent, BOOL bAutoPilot) :
@@ -1877,4 +2062,3 @@ String AssistentDlg::GetPassword()
 {
     return m_pImpl->GetPassword( m_pImpl->m_aDocFile );
 }
-
