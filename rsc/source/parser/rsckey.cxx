@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rsckey.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-10 11:51:23 $
+ *  last change: $Author: obo $ $Date: 2005-01-03 17:25:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,7 @@ RscNameTable::RscNameTable() {
 *************************************************************************/
 RscNameTable::~RscNameTable() {
     if( pTable )
-        RscMem::Free( pTable );
+        rtl_freeMemory( pTable );
 };
 
 
@@ -167,14 +167,14 @@ void RscNameTable::SetSort( BOOL bSorted ){
 |*    Letzte Aenderung  MM 28.02.91
 |*
 *************************************************************************/
-HASHID RscNameTable::Put( HASHID nName, USHORT nTyp, long nValue ){
+Atom RscNameTable::Put( Atom nName, sal_uInt32 nTyp, long nValue ){
     if( pTable )
         pTable = (KEY_STRUCT *)
-                 RscMem::Realloc( (void *)pTable,
-                 (USHORT)((nEntries +1) * sizeof( KEY_STRUCT )) );
+                 rtl_reallocateMemory( (void *)pTable,
+                 ((nEntries +1) * sizeof( KEY_STRUCT )) );
     else
         pTable = (KEY_STRUCT *)
-                 RscMem::Malloc( (USHORT)((nEntries +1)
+                 rtl_allocateMemory( ((nEntries +1)
                                  * sizeof( KEY_STRUCT )) );
     pTable[ nEntries ].nName  = nName;
     pTable[ nEntries ].nTyp   = nTyp;
@@ -185,32 +185,32 @@ HASHID RscNameTable::Put( HASHID nName, USHORT nTyp, long nValue ){
     return( nName );
 };
 
-HASHID RscNameTable::Put( const char * pName, USHORT nTyp, long nValue )
+Atom RscNameTable::Put( const char * pName, sal_uInt32 nTyp, long nValue )
 {
-    return( Put( pHS->Insert( pName ), nTyp, nValue ) );
+    return( Put( pHS->getID( pName ), nTyp, nValue ) );
 };
 
-HASHID RscNameTable::Put( HASHID nName, USHORT nTyp )
+Atom RscNameTable::Put( Atom nName, sal_uInt32 nTyp )
 {
     return( Put( nName, nTyp, (long)nName ) );
 };
 
-HASHID RscNameTable::Put( const char * pName, USHORT nTyp )
+Atom RscNameTable::Put( const char * pName, sal_uInt32 nTyp )
 {
-    HASHID  nId;
+    Atom  nId;
 
-    nId = pHS->Insert( pName );
+    nId = pHS->getID( pName );
     return( Put( nId, nTyp, (long)nId ) );
 };
 
-HASHID RscNameTable::Put( HASHID nName, USHORT nTyp, RscTop * pClass )
+Atom RscNameTable::Put( Atom nName, sal_uInt32 nTyp, RscTop * pClass )
 {
     return( Put( nName, nTyp, (long)pClass ) );
 };
 
-HASHID RscNameTable::Put( const char * pName, USHORT nTyp, RscTop * pClass )
+Atom RscNameTable::Put( const char * pName, sal_uInt32 nTyp, RscTop * pClass )
 {
-    return( Put( pHS->Insert( pName ), nTyp, (long)pClass ) );
+    return( Put( pHS->getID( pName ), nTyp, (long)pClass ) );
 };
 
 /*************************************************************************
@@ -222,10 +222,10 @@ HASHID RscNameTable::Put( const char * pName, USHORT nTyp, RscTop * pClass )
 |*    Letzte Aenderung  MM 28.02.91
 |*
 *************************************************************************/
-BOOL RscNameTable::Get( HASHID nName, KEY_STRUCT * pEle ){
+BOOL RscNameTable::Get( Atom nName, KEY_STRUCT * pEle ){
     KEY_STRUCT * pKey = NULL;
     KEY_STRUCT  aSearchName;
-    USHORT      i;
+    sal_uInt32  i;
 
     if( bSort ){
         // Suche nach dem Schluesselwort
