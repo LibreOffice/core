@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePageHeaderArea.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-02 14:38:29 $
+ *  last change: $Author: sab $ $Date: 2002-10-02 09:58:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,9 @@
 #endif
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
+#endif
+#ifndef _TOOLKIT_HELPER_CONVERT_HXX_
+#include <toolkit/helper/convert.hxx>
 #endif
 
 using namespace ::com::sun::star;
@@ -353,20 +356,17 @@ Rectangle ScAccessiblePageHeaderArea::GetBoundingBox(void) const
     throw (::com::sun::star::uno::RuntimeException)
 {
     Rectangle aRect;
-    if (mpViewShell)
+    if (mxParent.is())
     {
-        const ScPreviewLocationData& rData = mpViewShell->GetLocationData();
-        if ( mbHeader )
-            rData.GetHeaderPosition( aRect );
-        else
-            rData.GetFooterPosition( aRect );
-
-        // the Rectangle could contain negative coordinates so it should be cliped
-        Rectangle aClipRect(Point(0, 0), aRect.GetSize()); // has the same size and position on screen like the parent and so the pos is (0, 0)
-        aRect = aClipRect.GetIntersection(aRect);
+        uno::Reference<XAccessibleContext> xContext = mxParent->getAccessibleContext();
+        uno::Reference<XAccessibleComponent> xComp(xContext, uno::UNO_QUERY);
+        if (xComp.is())
+        {
+            // has the same size and position on screen like the parent and so the pos is (0, 0)
+            Rectangle aNewRect(Point(0, 0), VCLRectangle(xComp->getBounds()).GetSize());
+            aRect = aNewRect;
+        }
     }
-    if (aRect.IsEmpty())
-        aRect.SetSize(Size(-1, -1));
 
     return aRect;
 }
