@@ -2,9 +2,9 @@
  *
  *  $RCSfile: miscdlgs.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-30 13:31:43 $
+ *  last change: $Author: kz $ $Date: 2001-06-08 22:52:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -237,10 +237,10 @@ ModalDialog RID_SCDLG_DELCELL
         Text [ portuguese ] = "Opções" ;
         Text [ finnish ] = "Valinta" ;
         Text [ danish ] = "Udvalg" ;
-        Text [ french ] = "Options" ;
+        Text [ french ] = "Sélection" ;
         Text [ swedish ] = "Urval" ;
         Text [ dutch ] = "Selectie" ;
-        Text [ spanish ] = "Opciones" ;
+        Text [ spanish ] = "Selección" ;
         Text [ english_us ] = "Selection" ;
         Text[ chinese_simplified ] = "Ñ¡Ôñ";
         Text[ russian ] = "Âûáîğ";
@@ -419,7 +419,7 @@ ModalDialog RID_SCDLG_INSCELL
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "ÏòÏÂÒÆ¶¯µ¥Ôª¸ñ(~D)";
         Text[ russian ] = "Ïåğåìåñòèòü ÿ÷åéêè âíèç";
-        Text[ polish ] = "Przeni~e? komórki w dó³";
+        Text[ polish ] = "Przeni~eœ komórki w dó³";
         Text[ japanese ] = "¾Ù‚ğ‰º‚ÉˆÚ“®(~D)";
         Text[ chinese_traditional ] = "¦V¤U²¾°ÊÀx¦s®æ(~D)";
         Text[ arabic ] = "ÅÒÇÍÉ ÇáÎáÇíÇ Åáì ÃÓİá";
@@ -441,10 +441,10 @@ ModalDialog RID_SCDLG_INSCELL
         Text [ portuguese ] = "Selecção" ;
         Text [ finnish ] = "Valinta" ;
         Text [ danish ] = "Udvalg" ;
-        Text [ french ] = "Options" ;
+        Text [ french ] = "Sélection" ;
         Text [ swedish ] = "Urval" ;
         Text [ dutch ] = "Selectie" ;
-        Text [ spanish ] = "Opciones" ;
+        Text [ spanish ] = "Selección" ;
         Text [ english_us ] = "Selection" ;
         Text[ chinese_simplified ] = "Ñ¡Ôñ";
         Text[ russian ] = "Âûáîğ";
@@ -772,7 +772,7 @@ ModalDialog RID_SCDLG_DELCONT
         Text [ french ] = "Sélection" ;
         Text [ swedish ] = "Urval" ;
         Text [ dutch ] = "Selectie" ;
-        Text [ spanish ] = "Opciones" ;
+        Text [ spanish ] = "Selección" ;
         Text [ english_us ] = "Selection" ;
         Text[ chinese_simplified ] = "Ñ¡Ôñ";
         Text[ russian ] = "Âûáîğ";
@@ -788,7 +788,7 @@ ModalDialog RID_SCDLG_DELCONT
     };
     Text[ chinese_simplified ] = "É¾³ıÄÚÈİ";
     Text[ russian ] = "Óäàëèòü ñîäåğæèìîå";
-    Text[ polish ] = "Usuñ zawarto?ci";
+    Text[ polish ] = "Usuñ zawartoœci";
     Text[ japanese ] = "“à—e‚Ìíœ";
     Text[ chinese_traditional ] = "§R°£¤º®e";
     Text[ arabic ] = "ÍĞİ ãÍÊæíÇÊ";
@@ -1380,7 +1380,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text [ portuguese ] = "~Não mover" ;
         Text[ chinese_simplified ] = "²»ÒÆ¶¯(~I)";
         Text[ russian ] = "Íå ïåğåìåùàòü";
-        Text[ polish ] = "Nie przeno?";
+        Text[ polish ] = "Nie przenoœ";
         Text[ japanese ] = "ˆÚ“®‚µ‚È‚¢(~I)";
         Text[ chinese_traditional ] = "¤£²¾°Ê(~I)";
         Text[ arabic ] = "ÈÏæä ÅÒÇÍÉ";
@@ -1459,12 +1459,12 @@ ModalDialog RID_SCDLG_INSCONT
         Text [ danish ] = "Flyt celler" ;
         Text [ italian ] = "Sposta celle" ;
         Text [ spanish ] = "Desplazar celdas" ;
-        Text [ french ] = "Traitement des cellules" ;
+        Text [ french ] = "Déplacement des cellules" ;
         Text [ dutch ] = "Cellen verplaatsen" ;
         Text [ portuguese ] = "Mover células" ;
         Text[ chinese_simplified ] = "ÒÆ¶¯µ¥Ôª¸ñ";
         Text[ russian ] = "Ïåğåìåñòèòü ÿ÷åéêè";
-        Text[ polish ] = "Przenie? komórki";
+        Text[ polish ] = "Przenieœ komórki";
         Text[ japanese ] = "¾Ù‚ÌˆÚ“®";
         Text[ chinese_traditional ] = "²¾°ÊÀx¦s®æ";
         Text[ arabic ] = "ÅÒÇÍÉ ÇáÎáÇíÇ";
@@ -1487,7 +1487,7 @@ ModalDialog RID_SCDLG_INSCONT
     };
     Text[ chinese_simplified ] = "²åÈëÄÚÈİ";
     Text[ russian ] = "Ñïåöèàëüíàÿ âñòàâêà";
-    Text[ polish ] = "Wklej zawarto?æ";
+    Text[ polish ] = "Wklej zawartoœæ";
     Text[ japanese ] = "Œ`®‚ğ‘I‘ğ‚µ‚Ä“\\‚è•t‚¯";
     Text[ chinese_traditional ] = "´¡¤J¤º®e";
     Text[ arabic ] = "áÕŞ ÎÇÕ";
@@ -1670,7 +1670,7 @@ ModalDialog RID_SCDLG_MOVETAB
     };
     Text[ chinese_simplified ] = "ÒÆ¶¯»ò¸´ÖÆ¹¤×÷±í";
     Text[ russian ] = "Ïåğåìåñòèòü/ñêîïèğîâàòü ëèñò";
-    Text[ polish ] = "Przenie?/Kopiuj arkusz";
+    Text[ polish ] = "Przenieœ/Kopiuj arkusz";
     Text[ japanese ] = "•\\‚ÌˆÚ“®‚Ü‚½‚ÍºËß°";
     Text[ chinese_traditional ] = "²¾°Ê©Î½Æ»s¤u§@ªí";
     Text[ arabic ] = "ÊÍÑíß\\äÓÎ ÇáÌÏæá";
@@ -1886,7 +1886,7 @@ ModalDialog RID_SCDLG_COL_MAN
         Text [ danish ] = "Standardværdi" ;
         Text[ chinese_simplified ] = "Ä¬ÈÏÖµ(~D)";
         Text[ russian ] = "Ñòàíäàğò";
-        Text[ polish ] = "Warto?æ domy?lna";
+        Text[ polish ] = "Wartoœæ domyœlna";
         Text[ japanese ] = "•W€’l(~D)";
         Text[ chinese_traditional ] = "Àq»{­È(~D)";
         Text[ arabic ] = "ŞíãÉ ÇİÊÑÇÖíÉ";
@@ -1898,7 +1898,7 @@ ModalDialog RID_SCDLG_COL_MAN
         Text[ finnish ] = "~Oletusarvo";
     };
     Text[ russian ] = "Øèğèíà ñòîëáöà";
-    Text[ polish ] = "Szeroko?æ kolumn";
+    Text[ polish ] = "Szerokoœæ kolumn";
     Text[ japanese ] = "—ñ•";
     Text[ chinese_traditional ] = "Äæ¼e";
     Text[ arabic ] = "ÚÑÖ ÇáÃÚãÏÉ";
@@ -2011,7 +2011,7 @@ ModalDialog RID_SCDLG_COL_OPT
         Text [ danish ] = "Standardværdi" ;
         Text[ chinese_simplified ] = "Ä¬ÈÏÖµ(~D)";
         Text[ russian ] = "Ñòàíäàğò";
-        Text[ polish ] = "Warto?æ domy?lna";
+        Text[ polish ] = "Wartoœæ domyœlna";
         Text[ japanese ] = "•W€’l(~D)";
         Text[ chinese_traditional ] = "Àq»{­È(~D)";
         Text[ arabic ] = "ŞíãÉ ÇİÊÑÇÖíÉ";
@@ -2023,7 +2023,7 @@ ModalDialog RID_SCDLG_COL_OPT
         Text[ finnish ] = "~Oletusarvo";
     };
     Text[ russian ] = "Îïòèìàëüíàÿ øèğèíà êîëîíêè";
-    Text[ polish ] = "Optymalna szeroko?æ kolumn";
+    Text[ polish ] = "Optymalna szerokoœæ kolumn";
     Text[ japanese ] = "Å“K‚È—ñ•";
     Text[ chinese_traditional ] = "³Ì¾AÄæ¼e";
     Text[ arabic ] = "ÇáÚÑÖ ÇáÃãËá ááÃÚãÏÉ";
@@ -2137,7 +2137,7 @@ ModalDialog RID_SCDLG_ROW_MAN
         Text[ chinese_simplified ] = "Ä¬ÈÏÖµ(~D)";
         Text[ language_user1 ] = " ";
         Text[ russian ] = "Ñòàíäàğò";
-        Text[ polish ] = "Warto?æ domy?lna";
+        Text[ polish ] = "Wartoœæ domyœlna";
         Text[ japanese ] = "•W€’l(~D)";
         Text[ chinese_traditional ] = "Àq»{­È(~D)";
         Text[ arabic ] = "ŞíãÉ ÇİÊÑÇÖíÉ";
@@ -2148,7 +2148,7 @@ ModalDialog RID_SCDLG_ROW_MAN
         Text[ finnish ] = "~Oletusarvo";
     };
     Text[ russian ] = "Âûñîòà ñòğîê";
-    Text[ polish ] = "Wysoko?æ wierszy";
+    Text[ polish ] = "Wysokoœæ wierszy";
     Text[ japanese ] = "s‚Ì‚‚³";
     Text[ chinese_traditional ] = "¦C°ª";
     Text[ arabic ] = "ÇÑÊİÇÚ ÇáÕİ";
@@ -2260,7 +2260,7 @@ ModalDialog RID_SCDLG_ROW_OPT
         Text [ danish ] = "Standardværdi" ;
         Text[ chinese_simplified ] = "Ä¬ÈÏÖµ(~D)";
         Text[ russian ] = "Ñòàíäàğò";
-        Text[ polish ] = "Warto?æ domy?lna";
+        Text[ polish ] = "Wartoœæ domyœlna";
         Text[ japanese ] = "•W€’l(~D)";
         Text[ chinese_traditional ] = "Àq»{­È(~D)";
         Text[ arabic ] = "ŞíãÉ ÇİÊÑÇÖíÉ";
@@ -2272,7 +2272,7 @@ ModalDialog RID_SCDLG_ROW_OPT
         Text[ finnish ] = "~Oletusarvo";
     };
     Text[ russian ] = "Îïòèìàëüíàÿ âûñîòà ñòğîêè";
-    Text[ polish ] = "Optymalna wysoko?æ wierszy";
+    Text[ polish ] = "Optymalna wysokoœæ wierszy";
     Text[ japanese ] = "Å“K‚Ès‚Ì‚‚³";
     Text[ chinese_traditional ] = "³Ì¾A¦C°ª";
     Text[ arabic ] = "ÇáÇÑÊİÇÚ ÇáÃãËá ááÕİ";
@@ -2301,8 +2301,8 @@ ModalDialog RID_SCDLG_SELECTDB
     Text [ portuguese ] = "Selecção" ;
     Text [ finnish ] = "Valitse" ;
     Text [ danish ] = "Vælg" ;
-    Text [ french ] = "Que coller ?" ;
-    Text [ swedish ] = "Urval" ;
+    Text [ french ] = "~Sélection" ;
+    Text [ swedish ] = "Urv~al" ;
     Text [ dutch ] = "Selectie" ;
     Text [ spanish ] = "Selección" ;
     Text [ english_us ] = "Select" ;
@@ -2761,7 +2761,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text[ japanese ] = "•ûŒü";
         Text[ chinese_traditional ] = "¤è¦V";
         Text[ arabic ] = "ÇáÇÊÌÇå";
-        Text[ greek ] = "Êáôåıèõíóç";
+        Text[ greek ] = "Ğñïóáíáôïëéóìüò";
         Text[ korean ] = "¹æÇâ";
         Text[ turkish ] = "Yön";
         Text[ language_user1 ] = " ";
@@ -2906,7 +2906,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text [ spanish ] = "Tipo" ;
         Text [ english_us ] = "Series type" ;
         Text[ chinese_simplified ] = "ÏµÁĞÀàĞÍ";
-        Text[ russian ] = "Òèï";
+        Text[ russian ] = "Òèï ğÿäîâ";
         Text[ polish ] = "Typ serii";
         Text[ japanese ] = "˜A‘±ÃŞ°À‚Ìí—Ş";
         Text[ chinese_traditional ] = "±Æ¦CÃş«¬";
@@ -2944,7 +2944,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text [ portuguese ] = "~Valor inicial" ;
         Text[ chinese_simplified ] = "ÆğÊ¼Öµ(~S)";
         Text[ russian ] = "Íà÷àëüíîå çíà÷åíèå";
-        Text[ polish ] = "Warto?æ pocz¹tk.";
+        Text[ polish ] = "Wartoœæ pocz¹tk.";
         Text[ japanese ] = "ŠJn’l(~S)";
         Text[ chinese_traditional ] = "°_©l­È(~S)";
         Text[ arabic ] = "ŞíãÉ ÇáÈÏÁ";
@@ -2981,7 +2981,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text [ PORTUGUESE ] = "Valor ~final" ;
         Text[ chinese_simplified ] = "ÖÕÖ¹Öµ(~V)";
         Text[ russian ] = "Êîíå÷íîå çíà÷åíèå";
-        Text[ polish ] = "Warto?æ koñcowa";
+        Text[ polish ] = "Wartoœæ koñcowa";
         Text[ japanese ] = "’â~’l(~V)";
         Text[ chinese_traditional ] = "²×¤î­È(~V)";
         Text[ arabic ] = "ÇáŞíãÉ ÇáäåÇÆíÉ";
@@ -3052,7 +3052,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text [ english_us ] = "Invalid value" ;
         Text[ chinese_simplified ] = "ÎŞĞ§Öµ";
         Text[ russian ] = "Íåäîïóñòèìîå çíà÷åíèå";
-        Text[ polish ] = "Nieprawid³owa warto?æ";
+        Text[ polish ] = "Nieprawid³owa wartoœæ";
         Text[ japanese ] = "–³Œø‚È”’l";
         Text[ chinese_traditional ] = "µL®Ä­È";
         Text[ arabic ] = "ŞíãÉ ÛíÑ ÕÇáÍÉ";
@@ -3484,14 +3484,14 @@ ModalDialog RID_SCDLG_NAMES_CREATE
         Text [ ENGLISH ] = "Create names from" ;
         Text [ english_us ] = "Create name from" ;
         Text [ italian ] = "Generare i nomi da" ;
-        Text [ spanish ] = "Nombre a partir de " ;
+        Text [ spanish ] = "Nombre a partir de" ;
         Text [ french ] = "Créer un nom à partir de" ;
         Text [ dutch ] = "Namen definiëren uit" ;
         Text [ swedish ] = "Skapa namn från" ;
         Text [ danish ] = "Opret navn af" ;
         Text [ portuguese_brazilian ] = "Namen erzeugen aus" ;
         Text [ portuguese ] = "Criar nomes a partir de" ;
-        Text[ chinese_simplified ] = "´´½¨Ãû³ÆÌ×ÓÃ";
+        Text[ chinese_simplified ] = "´´½¨Ãû³Æ´Ó";
         Text[ russian ] = "Ñîçäàòü èìÿ èç";
         Text[ polish ] = "Utwórz nazwê z";
         Text[ japanese ] = "“K—p‚·‚é–¼‘O‚ÌˆÊ’u";
@@ -3660,7 +3660,7 @@ FloatingWindow RID_SCDLG_TEAM
     Text = "Das %PRODUCTNAME Calc Team" ;
     Text [ ENGLISH ] = "The %PRODUCTNAME Calc Team" ;
     Text [ ENGLISH_US ] = "The %PRODUCTNAME Calc Team" ;
-    Text [ italian ] = "Entwickleri di %PRODUCTNAME Calci (sansi QS)" ;
+    Text [ italian ] = "Il team %PRODUCTNAME Calc" ;
     Text [ spanish ] = "El equipo de %PRODUCTNAME Calc" ;
     Text [ french ] = "L'équipe de %PRODUCTNAME Calc" ;
     Text [ dutch ] = "Het %PRODUCTNAME Calc Team" ;
@@ -3669,12 +3669,12 @@ FloatingWindow RID_SCDLG_TEAM
     Text [ portuguese ] = "A equipa do %PRODUCTNAME Calc" ;
     Text [ portuguese_brazilian ] = "Das %PRODUCTNAME Calc Team" ;
     Text[ chinese_simplified ] = "%PRODUCTNAME Calc ¹¤×÷×é";
-    Text[ russian ] = "Êîëëåêòèâ %PRODUCTNAME Calc";
+    Text[ russian ] = "Ğàçğàáîò÷èêè %PRODUCTNAME Calc";
     Text[ polish ] = "Zespó³ %PRODUCTNAME Calc";
     Text[ japanese ] = "%PRODUCTNAME Calc Á°Ñ";
     Text[ chinese_traditional ] = "%PRODUCTNAME Calc ¤p²Õ";
     Text[ arabic ] = "İÑíŞ %PRODUCTNAME Calc";
-    Text[ greek ] = "Ç ïìÜäá ôïõ StarCalc";
+    Text[ greek ] = "Ç ïìÜäá ôïõ %PRODUCTNAME Calc";
     Text[ korean ] = "StarCalc ÆÀ";
     Text[ turkish ] = "StarCalc Ekibi";
     Text[ language_user1 ] = " ";
@@ -3760,8 +3760,8 @@ ModalDialog RID_SCDLG_CHARTCOLROW
         Text [ portuguese_brazilian ] = "Beschriftung" ;
         Text [ portuguese ] = "Legenda" ;
         Text[ chinese_simplified ] = "Êı¾İ±êÖ¾";
-        Text[ russian ] = "Íàçâàíèå";
-        Text[ polish ] = "Etykiety";
+        Text[ russian ] = "Ïîäïèñü";
+        Text[ polish ] = "Etykieta";
         Text[ japanese ] = "×ÍŞÙ";
         Text[ chinese_traditional ] = "¼ĞÅÒ";
         Text[ arabic ] = "ÇáÚäæäÉ";
@@ -3802,7 +3802,7 @@ ModalDialog RID_SCDLG_CHARTCOLROW
     Text [ portuguese ] = "Alterar dados fonte" ;
     Text[ chinese_simplified ] = "¸ü¸ÄÔ´Êı¾İÇøÓò";
     Text[ russian ] = "Èçìåíèòü îáëàñòü èñõîäíûõ äàííûõ";
-    Text[ polish ] = "Zmieñ obszar danych ?ród³owych";
+    Text[ polish ] = "Zmieñ obszar danych Ÿród³owych";
     Text[ japanese ] = "¿°½ÃŞ°À”ÍˆÍ‚Ì•ÏX";
     Text[ chinese_traditional ] = "ÅÜ§ó·½¸ê®Æ°Ï°ì";
     Text[ arabic ] = "ÊÛííÑ äØÇŞ ÈíÇäÇÊ ÇáãÕÏÑ";
@@ -3813,4 +3813,5 @@ ModalDialog RID_SCDLG_CHARTCOLROW
     Text[ catalan ] = "Modificar datos fuente";
     Text[ finnish ] = "Vaihda lähdetietoalue";
 };
+
 
