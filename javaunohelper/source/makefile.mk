@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-15 13:40:17 $
+#   last change: $Author: vg $ $Date: 2003-12-17 15:42:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -59,6 +59,7 @@
 #
 #
 #*************************************************************************
+
 PRJ=..
 
 PRJNAME=javaunohelper
@@ -73,6 +74,11 @@ LIBTARGET=NO
 .INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
 .INCLUDE :  sv.mk
+
+.IF "$(SOLAR_JAVA)"==""
+nojava:
+    @echo "Not building javaunohelper because Java is disabled"
+.ENDIF
 
 # ------------------------------------------------------------------
 
@@ -156,3 +162,4 @@ DEF2NAME=$(SHL2TARGET)
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :	target.mk
+
