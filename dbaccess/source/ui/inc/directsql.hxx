@@ -2,9 +2,9 @@
  *
  *  $RCSfile: directsql.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-19 10:54:55 $
+ *  last change: $Author: mh $ $Date: 2001-06-22 14:17:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@
 #ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
 #endif
-#include <stl/deque>
+#include <deque>
 
 #ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
 #include <com/sun/star/sdbc/XConnection.hpp>
@@ -196,6 +196,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/06/19 10:54:55  fs
+ *  initial checkin - dialog for executing SQL statements
+ *
  *
  *  Revision 1.0 18.06.01 15:46:43  fs
  ************************************************************************/
