@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.hxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-16 10:04:32 $
+ *  last change: $Author: sab $ $Date: 2001-05-18 05:19:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,9 +196,6 @@ class ScXMLExport : public SvXMLExport
         rtl::OUString& sOUTemp) const;
     sal_Bool GetCellText (ScMyCell& rMyCell) const;
     sal_Int16 GetCellType(const sal_Int32 nNumberFormat, sal_Bool& bIsStandard);
-    sal_Int32 GetCellNumberFormat(const com::sun::star::uno::Reference <com::sun::star::table::XCell>& xCell) const;
-//  sal_Bool GetCellStyleNameIndex(const ScMyCell& aCell, sal_Int32& nStyleNameIndex, sal_Bool& bIsAutoStyle,
-//      sal_Int32& nValidationIndex, sal_Int32& nNumberFormat);
 
     rtl::OUString GetPrintRanges();
 

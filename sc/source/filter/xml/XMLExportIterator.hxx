@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportIterator.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-17 17:27:59 $
+ *  last change: $Author: sab $ $Date: 2001-05-18 05:19:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -333,6 +333,7 @@ struct ScMyCell
     sal_Int32                   nValidationIndex;
     sal_Int32                   nStyleIndex;
     sal_Int32                   nNumberFormat;
+    com::sun::star::table::CellContentType  nType;
 
     sal_Bool                    bIsAutoStyle : 1;
 

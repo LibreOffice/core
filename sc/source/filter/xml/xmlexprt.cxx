@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.105 $
+ *  $Revision: 1.106 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-17 17:27:59 $
+ *  last change: $Author: sab $ $Date: 2001-05-18 05:19:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2038,32 +2038,6 @@ sal_Int16 ScXMLExport::GetCellType(const sal_Int32 nNumberFormat, sal_Bool& bIsS
     return 0;
 }
 
-sal_Int32 ScXMLExport::GetCellNumberFormat(const com::sun::star::uno::Reference <com::sun::star::table::XCell>& xCell) const
-{
-    uno::Reference <beans::XPropertySet> xPropertySet (xCell, uno::UNO_QUERY);
-    if (xPropertySet.is())
-    {
-        uno::Any aNumberFormatPropertyKey = xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_NUMFMT)));
-        sal_Int32 nNumberFormatPropertyKey;
-        if ( aNumberFormatPropertyKey>>=nNumberFormatPropertyKey )
-            return nNumberFormatPropertyKey;
-    }
-    return 0;
-}
-
-/*sal_Bool ScXMLExport::GetCellStyleNameIndex(const ScMyCell& aCell, sal_Int32& nStyleNameIndex,
-    sal_Bool& bIsAutoStyle, sal_Int32& nValidationIndex, sal_Int32& nNumberFormat)
-{
-    sal_Int32 nIndex = pCellStyles->GetStyleNameIndex(aCell.aCellAddress.Sheet, aCell.aCellAddress.Column, aCell.aCellAddress.Row,
-        bIsAutoStyle, nValidationIndex, nNumberFormat);
-    if (aCell.nIndex > -1)
-    {
-        nStyleNameIndex = aCell.nIndex;
-        return sal_True;
-    }
-    return sal_False;
-}*/
-
 OUString ScXMLExport::GetPrintRanges()
 {
     rtl::OUString sPrintRanges;
@@ -2095,9 +2069,8 @@ void ScXMLExport::WriteCell (ScMyCell& aCell)
         AddAttribute(XML_NAMESPACE_TABLE, sXML_number_matrix_columns_spanned, sColumns.makeStringAndClear());
         AddAttribute(XML_NAMESPACE_TABLE, sXML_number_matrix_rows_spanned, sRows.makeStringAndClear());
     }
-    table::CellContentType xCellType = aCell.xCell->getType();
     sal_Bool bIsEmpty = sal_False;
-    switch (xCellType)
+    switch (aCell.nType)
     {
     case table::CellContentType_EMPTY :
         {
@@ -2141,7 +2114,7 @@ void ScXMLExport::WriteCell (ScMyCell& aCell)
                     }
                     if (pFormulaCell->IsValue())
                     {
-                        sal_Bool bIsStandard = sal_True;
+                        sal_Bool bIsStandard;
                         GetCellType(aCell.nNumberFormat, bIsStandard);
                         if (bIsStandard)
                         {
@@ -2190,7 +2163,7 @@ void ScXMLExport::WriteCell (ScMyCell& aCell)
     WriteDetective(aCell);
     if (!bIsEmpty)
     {
-        if ((xCellType == table::CellContentType_TEXT) && IsEditCell(aCell))
+        if ((aCell.nType == table::CellContentType_TEXT) && IsEditCell(aCell))
         {
             if (!aCell.xText.is())
                 aCell.xText = uno::Reference<text::XText>(aCell.xCell, uno::UNO_QUERY);
@@ -2460,15 +2433,15 @@ void ScXMLExport::SetRepeatAttribute (const sal_Int32 nEqualCellCount)
 sal_Bool ScXMLExport::IsCellTypeEqual (const ScMyCell& aCell1, const ScMyCell& aCell2) const
 {
     if (!aCell1.bHasEmptyDatabase && !aCell2.bHasEmptyDatabase)
-        return (aCell1.xCell->getType() == aCell2.xCell->getType());
+        return (aCell1.nType == aCell2.nType);
     else
         if (aCell1.bHasEmptyDatabase == aCell2.bHasEmptyDatabase && aCell1.bHasEmptyDatabase)
             return sal_True;
         else
             if (aCell1.bHasEmptyDatabase)
-                return (aCell2.xCell->getType() == table::CellContentType_EMPTY);
+                return (aCell2.nType == table::CellContentType_EMPTY);
             else
-                return (aCell1.xCell->getType() == table::CellContentType_EMPTY);
+                return (aCell1.nType == table::CellContentType_EMPTY);
 }
 
 sal_Bool ScXMLExport::IsEditCell(const com::sun::star::uno::Reference <com::sun::star::table::XCell>& xCell) const
@@ -2556,8 +2529,7 @@ sal_Bool ScXMLExport::IsCellEqual (ScMyCell& aCell1, ScMyCell& aCell2)
                     (aCell1.nValidationIndex == aCell2.nValidationIndex) &&
                     IsCellTypeEqual(aCell1, aCell2))
                 {
-                    table::CellContentType eCellType = aCell1.xCell->getType();
-                    switch ( eCellType )
+                    switch ( aCell1.nType )
                     {
                     case table::CellContentType_EMPTY :
                         {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportIterator.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-17 17:27:59 $
+ *  last change: $Author: sab $ $Date: 2001-05-18 05:19:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -646,12 +646,14 @@ void ScMyNotEmptyCellsIterator::SetMatrixCellData( ScMyCell& rMyCell )
     if( xCellRange.is() )
     {
         sal_Bool bIsMatrixBase(sal_False);
-        if( rExport.IsMatrix( xCellRange, xTable, rMyCell.aCellAddress.Column, rMyCell.aCellAddress.Row,
-                rMyCell.aMatrixRange, bIsMatrixBase ) )
-        {
-            rMyCell.bIsMatrixBase = bIsMatrixBase;
-            rMyCell.bIsMatrixCovered = !bIsMatrixBase;
-        }
+        rMyCell.nType = rMyCell.xCell->getType();
+        if (rMyCell.nType == table::CellContentType_FORMULA)
+            if( rExport.IsMatrix( xCellRange, xTable, rMyCell.aCellAddress.Column, rMyCell.aCellAddress.Row,
+                    rMyCell.aMatrixRange, bIsMatrixBase ) )
+            {
+                rMyCell.bIsMatrixBase = bIsMatrixBase;
+                rMyCell.bIsMatrixCovered = !bIsMatrixBase;
+            }
     }
 }
 
@@ -768,8 +770,8 @@ sal_Bool ScMyNotEmptyCellsIterator::GetNext(ScMyCell& aCell, ScFormatRangeStyles
         if( pDetectiveOp )
             pDetectiveOp->SetCellData( aCell );
 
-        SetMatrixCellData( aCell );
         HasAnnotation( aCell );
+        SetMatrixCellData( aCell );
         sal_Bool bIsAutoStyle;
         aCell.nStyleIndex = pCellStyles->GetStyleNameIndex(aCell.aCellAddress.Sheet,
             aCell.aCellAddress.Column, aCell.aCellAddress.Row,
