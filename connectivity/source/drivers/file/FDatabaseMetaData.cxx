@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-29 12:15:31 $
+ *  last change: $Author: fs $ $Date: 2001-10-12 06:51:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,9 @@
 #ifndef _COM_SUN_STAR_UCB_XSORTEDDYNAMICRESULTSETFACTORY_HPP_
 #include <com/sun/star/ucb/XSortedDynamicResultSetFactory.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UCB_XCONTENTPROVIDER_HPP_
+#include <com/sun/star/ucb/XContentProvider.hpp>
+#endif
 #ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #endif
@@ -97,6 +100,12 @@
 #endif
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
+#endif
+#ifndef _UCBHELPER_CONTENT_HXX
+#include <ucbhelper/content.hxx>
+#endif
+#ifndef _UCBHELPER_CONTENTBROKER_HXX
+#include <ucbhelper/contentbroker.hxx>
 #endif
 
 
@@ -170,6 +179,93 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumns(
     pResult->setColumnsMap();
     return xRef;
 }
+
+// -------------------------------------------------------------------------
+namespace
+{
+    sal_Bool isCaseSensitiveParentFolder( const String& _rFolderOrDoc, const String& _rDocName )
+    {
+        sal_Bool bIsCS = sal_True;
+        try
+        {
+            // first get the real content for the URL
+            INetURLObject aContentURL( _rFolderOrDoc );
+            ::ucb::Content aContent1;
+            {
+                ::ucb::Content aFolderOrDoc( _rFolderOrDoc, Reference< XCommandEnvironment >() );
+                if ( aFolderOrDoc.isDocument() )
+                    aContent1 = aFolderOrDoc;
+                else
+                {
+                    aContentURL = INetURLObject( _rFolderOrDoc, INetURLObject::WAS_ENCODED );
+                    aContentURL.Append( _rDocName );
+                    aContent1 = ::ucb::Content( aContentURL.GetMainURL( INetURLObject::NO_DECODE ), Reference< XCommandEnvironment >() );
+                }
+            }
+
+            // get two extensions which differ by case only
+            String sExtension1 = aContentURL.getExtension();
+            String sExtension2( sExtension1 );
+            sExtension2.ToLowerAscii();
+            if ( sExtension2 == sExtension1 )
+                // the extension was already in lower case
+                sExtension2.ToUpperAscii();
+
+            // the complete URL for the second extension
+            INetURLObject aURL2( aContentURL );
+            aURL2.SetExtension( sExtension2 );
+
+            // the second context
+            sal_Bool bCanAccess = sal_False;
+            ::ucb::Content aContent2;
+            try
+            {
+                aContent2 = ::ucb::Content( aURL2.GetMainURL( INetURLObject::NO_DECODE ), Reference< XCommandEnvironment >() );
+                bCanAccess = aContent2.isDocument();
+            }
+            catch( const Exception& )
+            {
+            }
+
+            if ( bCanAccess )
+            {
+                // here we have two contents which's URLs differ by case only.
+                // Now let's check if both really refer to the same object ....
+                Reference< XContent > xContent1 = aContent1.get();
+                Reference< XContent > xContent2 = aContent2.get();
+                OSL_ENSURE( xContent1.is() && xContent2.is(), "isCaseSensitiveParentFolder: invalid content interfaces!" );
+                if ( xContent1.is() && xContent2.is() )
+                {
+                    Reference< XContentIdentifier > xID1 = xContent1->getIdentifier();
+                    Reference< XContentIdentifier > xID2 = xContent2->getIdentifier();
+                    OSL_ENSURE( xID1.is() && xID2.is(), "isCaseSensitiveParentFolder: invalid ID interfaces!" );
+                    if ( xID1.is() && xID2.is() )
+                    {
+                        // get a generic content provider
+                        ::ucb::ContentBroker* pBroker = ::ucb::ContentBroker::get();
+                        Reference< XContentProvider > xProvider;
+                        if ( pBroker )
+                            xProvider = pBroker->getContentProviderInterface();
+                        OSL_ENSURE( xProvider.is(), "isCaseSensitiveParentFolder: invalid content broker!" );
+                        if ( xProvider.is() )
+                        {
+                            if ( 0 == xProvider->compareContentIds( xID1, xID2 ) )
+                                // finally, we know that the folder is not case-sensitive ....
+                                bIsCS = sal_False;
+                        }
+                    }
+                }
+            }
+        }
+        catch( const Exception& )
+        {
+            OSL_ENSURE( sal_False, "isCaseSensitiveParentFolder: caught an unexpected exception!" );
+        }
+
+        return bIsCS;
+    }
+}
+
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
         const Any& catalog, const ::rtl::OUString& schemaPattern,
@@ -224,22 +320,41 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
     Reference<XRow> xRow(xResultSet,UNO_QUERY);
 
     String aFilenameExtension = m_pConnection->getExtension();
+    String sThisContentExtension;
     ODatabaseMetaDataResultSet::ORows aRows;
     // scan the directory for tables
     ::rtl::OUString aName;
     INetURLObject aURL;
     xResultSet->beforeFirst();
+
+    sal_Bool bKnowCaseSensivity = sal_False;
+    sal_Bool bCaseSensitiveDir = sal_True;
+
     while(xResultSet->next())
     {
         aName = xRow->getString(1);
         aURL.SetSmartProtocol(INET_PROT_FILE);
         aURL.SetSmartURL(aName);
+        sThisContentExtension = aURL.getExtension();
+
         ODatabaseMetaDataResultSet::ORow aRow(3);
         aRow.reserve(6);
         sal_Bool bNewRow = sal_False;
+
+        if ( !bKnowCaseSensivity )
+        {
+            bKnowCaseSensivity = sal_True;
+            bCaseSensitiveDir = isCaseSensitiveParentFolder( m_pConnection->getURL(), aURL.getName() );
+            if ( !bCaseSensitiveDir )
+                aFilenameExtension.ToLowerAscii();
+        }
+
         if (aFilenameExtension.Len())
         {
-            if(aURL.getExtension() == aFilenameExtension)
+            if ( !bCaseSensitiveDir )
+                sThisContentExtension.ToLowerAscii();
+
+            if ( sThisContentExtension == aFilenameExtension )
             {
                 aName = aName.replaceAt(aName.getLength()-(aFilenameExtension.Len()+1),aFilenameExtension.Len()+1,::rtl::OUString());
                 sal_Unicode nChar = aName.toChar();
