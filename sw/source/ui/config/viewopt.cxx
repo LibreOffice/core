@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewopt.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-20 09:07:00 $
+ *  last change: $Author: jp $ $Date: 2001-04-27 17:47:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -456,7 +456,6 @@ SwViewOption::SwViewOption() :
                     VIEWOPT_CORE2_INDEX_BACKGROUND | VIEWOPT_CORE2_SECTION_BOUNDS;
     nUIOptions    = VIEWOPT_2_MODIFIED | VIEWOPT_2_EXECHYPERLINKS;
 
-    MeasurementSystem eSys = Application::GetAppInternational().GetMeasurementSystem();
     if(MEASURE_METRIC != GetAppLocaleData().getMeasurementSystemEnum())
         aSnapSize.Width() = aSnapSize.Height() = 720;   // 1/2"
     else
@@ -624,6 +623,9 @@ USHORT      GetHtmlMode(const SwDocShell* pShell)
 /************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.2  2000/11/20 09:07:00  jp
+      should change: use LocaleDataWrapper
+
       Revision 1.1.1.1  2000/09/18 17:14:33  hr
       initial import
 
