@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: jl $ $Date: 2002-04-25 11:37:30 $
+#   last change: $Author: jbu $ $Date: 2002-06-13 09:06:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,7 +80,8 @@ JAVACLASSFILES=	\
     $(CLASSDIR)$/$(PACKAGE)$/MultiTypeInterfaceContainer_Test.class \
     $(CLASSDIR)$/$(PACKAGE)$/ProxyProvider.class \
     $(CLASSDIR)$/$(PACKAGE)$/AWeakBase.class    \
-        $(CLASSDIR)$/$(PACKAGE)$/PropertySet_Test.class
+        $(CLASSDIR)$/$(PACKAGE)$/PropertySet_Test.class \
+    $(CLASSDIR)$/$(PACKAGE)$/UnoUrlTest.class
 
 #JAVAFILES= $(subst,$(CLASSDIR)$/$(PACKAGE)$/, $(subst,.class,.java $(JAVACLASSFILES)))
 
