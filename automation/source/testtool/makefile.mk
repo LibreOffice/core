@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: mh $ $Date: 2002-11-18 15:53:59 $
+#   last change: $Author: obo $ $Date: 2004-01-20 16:15:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,6 +86,9 @@ HXXFILES = $(INCCOM)$/keycodes.hxx			\
     $(INCCOM)$/r_cmds.hxx			\
     $(INCCOM)$/res_type.hxx			
 
+.IF "$(GUI)" == "WNT" 
+OBJFILES += $(OBJ)$/sysdir_win.obj
+.ENDIF
 # --- Targets ------------------------------------------------------------
 
 .INCLUDE :  target.mk
