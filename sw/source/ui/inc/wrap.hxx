@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrap.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-22 07:38:05 $
+ *  last change: $Author: os $ $Date: 2002-05-08 12:46:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,7 @@ class SwWrapTabPage: public SfxTabPage
     CheckBox            aWrapOutsideCB;
 
     ImageList           aWrapIL;
+    ImageList           aWrapILH;
 
     USHORT              nOldLeftMargin;
     USHORT              nOldRightMargin;
@@ -157,9 +158,11 @@ class SwWrapTabPage: public SfxTabPage
     SwWrapTabPage(Window *pParent, const SfxItemSet &rSet);
     ~SwWrapTabPage();
 
+    void            ApplyImageList();
     void            EnableModes(const SfxItemSet& rSet);
     virtual void    ActivatePage(const SfxItemSet& rSet);
     virtual int     DeactivatePage(SfxItemSet *pSet);
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
     DECL_LINK( RangeModifyHdl, MetricField * );
     DECL_LINK( WrapTypeHdl, ImageRadioButton * );

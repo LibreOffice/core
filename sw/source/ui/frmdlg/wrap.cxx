@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrap.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-03 14:11:47 $
+ *  last change: $Author: os $ $Date: 2002-05-08 12:43:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,8 +173,8 @@ SwWrapTabPage::SwWrapTabPage(Window *pParent, const SfxItemSet &rSet) :
     aBottomMarginFT     (this, SW_RES(FT_BOTTOM_MARGIN)),
     aBottomMarginED     (this, SW_RES(ED_BOTTOM_MARGIN)),
     aMarginFL           (this, SW_RES(FL_MARGIN)),
-
     aWrapIL             (SW_RES(IL_WRAP)),
+    aWrapILH            (SW_RES(ILH_WRAP)),
     nHtmlMode(0),
     bNew(TRUE),
     bFormat(FALSE),
@@ -217,8 +217,7 @@ SwWrapTabPage::SwWrapTabPage(Window *pParent, const SfxItemSet &rSet) :
     aWrapParallelRB.SetClickHdl(aLk);
     aWrapThroughRB.SetClickHdl(aLk);
     aIdealWrapRB.SetClickHdl(aLk);
-    aWrapThroughRB.SetImage(aWrapIL.GetImage(IMG_THROUGH));
-
+    ApplyImageList();
     aWrapOutlineCB.SetClickHdl(LINK(this, SwWrapTabPage, ContourHdl));
 }
 
@@ -745,24 +744,8 @@ IMPL_LINK( SwWrapTabPage, ContourHdl, CheckBox *, pBtn )
     bEnable =  !aWrapOutlineCB.IsChecked();
     if (bEnable == bContourImage) // damit es nicht immer flackert
     {
-        if(bEnable)
-        {
-            aNoWrapRB.SetImage(aWrapIL.GetImage(IMG_NONE));
-            aWrapLeftRB.SetImage(aWrapIL.GetImage(IMG_LEFT));
-            aWrapRightRB.SetImage(aWrapIL.GetImage(IMG_RIGHT));
-            aWrapParallelRB.SetImage(aWrapIL.GetImage(IMG_PARALLEL));
-            aIdealWrapRB.SetImage(aWrapIL.GetImage(IMG_IDEAL));
-            bContourImage = FALSE;
-        }
-        else
-        {
-            aNoWrapRB.SetImage(aWrapIL.GetImage( IMG_KON_NONE ));
-            aWrapLeftRB.SetImage(aWrapIL.GetImage( IMG_KON_LEFT ));
-            aWrapRightRB.SetImage(aWrapIL.GetImage( IMG_KON_RIGHT ));
-            aWrapParallelRB.SetImage(aWrapIL.GetImage(IMG_KON_PARALLEL ));
-            aIdealWrapRB.SetImage(aWrapIL.GetImage( IMG_KON_IDEAL ));
-            bContourImage = TRUE;
-        }
+        bContourImage = !bEnable;
+        ApplyImageList();
     }
 
     return 0;
@@ -771,210 +754,45 @@ IMPL_LINK( SwWrapTabPage, ContourHdl, CheckBox *, pBtn )
 /*--------------------------------------------------------------------
     Beschreibung:
  --------------------------------------------------------------------*/
-
-
-
 USHORT* SwWrapTabPage::GetRanges()
 {
     return aWrapPageRg;
 }
-
-/*--------------------------------------------------------------------
-
-   $Log: not supported by cvs2svn $
-   Revision 1.2  2001/05/30 16:38:18  fme
-   Fix #86988#: Redesign of dialogs
-
-   Revision 1.1.1.1  2000/09/18 17:14:38  hr
-   initial import
-
-   Revision 1.61  2000/09/18 16:05:35  willem.vandorp
-   OpenOffice header added.
-
-   Revision 1.60  2000/03/13 16:42:50  jp
-   Bug #73538#: Reset - show or hide the contour checkboxes
-
-   Revision 1.59  1999/09/28 10:24:03  os
-   #68077# :ActivatePage AnchorOnly not enabled in wrap through
-
-   Revision 1.58  1998/09/08 14:57:00  OS
-   #56134# Metric fuer Text und HTML getrennt
-
-
-      Rev 1.57   08 Sep 1998 16:57:00   OS
-   #56134# Metric fuer Text und HTML getrennt
-
-      Rev 1.56   10 Jul 1998 10:14:24   OS
-   Fix im Umlauf fuer HTML
-
-      Rev 1.55   23 Apr 1998 12:58:00   OS
-   noch ein paar HTML-Reste
-
-      Rev 1.54   16 Apr 1998 13:11:04   OS
-   Rahmenanpassung die zweite
-
-      Rev 1.53   07 Apr 1998 12:00:48   OM
-   Maximalwerte fuer Umlauf
-
-      Rev 1.52   06 Apr 1998 09:48:30   OS
-   HTML-Anpassungen
-
-      Rev 1.51   30 Mar 1998 13:20:54   OM
-   Umlauf nicht mehr auf naechsten Rand begrenzen
-
-      Rev 1.50   25 Feb 1998 15:12:36   OM
-   AnchorOnly auch bei Auto-Anker
-
-      Rev 1.49   04 Feb 1998 11:46:30   OM
-   #45775# Keine Maximalwerteinschraenkung bei Rahmenvorlagen
-
-      Rev 1.48   28 Nov 1997 19:49:20   MA
-   basobj
-
-      Rev 1.47   24 Nov 1997 17:39:32   MA
-   include
-
-      Rev 1.46   20 Nov 1997 12:14:58   AMA
-   Opt. SwSurround: GoldCut jetzt als Enum; nicht implementierte Enums entfernt
-
-      Rev 1.45   03 Nov 1997 13:19:50   MA
-   precomp entfernt
-
-      Rev 1.44   30 Sep 1997 18:34:22   MA
-   nicht gepostete MUSS-Aenderung eingebaut
-
-      Rev 1.43   01 Sep 1997 13:26:22   OS
-   DLL-Umstellung
-
-      Rev 1.42   12 Aug 1997 15:58:08   OS
-   frmitems/textitem/paraitem aufgeteilt
-
-      Rev 1.41   07 Aug 1997 14:59:16   OM
-   Headerfile-Umstellung
-
-      Rev 1.40   10 Jul 1997 15:56:44   OM
-   Abstand oben/unten
-
-      Rev 1.39   02 Jul 1997 13:43:50   AMA
-   New: Abstaende nach oben/unten, noch nicht freigeschaltet
-
-      Rev 1.38   05 May 1997 16:37:48   OM
-   Ohne Umlauf kein erster Absatz
-
-      Rev 1.37   11 Mar 1997 15:18:18   OM
-   Bei Html-Mode falsche Umlaufform nicht korrigieren
-
-      Rev 1.36   23 Feb 1997 16:59:34   AMA
-   Fix: Zeichengeb.: Abstand oben/unten zulassen; Outline nicht
-
-      Rev 1.35   20 Feb 1997 13:45:48   AMA
-   Fix #36502#: Rahmenabstaende im HTML-Mode zulassen.
-
-      Rev 1.34   20 Feb 1997 13:42:58   AMA
-   Fix #36502#: Rahmenabstaende im HTML-Mode zulassen.
-
-      Rev 1.33   10 Feb 1997 10:02:24   OM
-   Aufgeraeumt
-
-      Rev 1.31   05 Feb 1997 16:18:20   OS
-   keine Kontur fuer Html
-
-      Rev 1.30   04 Feb 1997 16:28:56   OM
-   Controller disablen
-
-      Rev 1.29   03 Feb 1997 16:30:24   OM
-   Maximalwertberechnung fuer zeichengebundene Rahmen geaendert
-
-      Rev 1.28   03 Feb 1997 16:00:42   OM
-   Maximalwertberechnung fuer zeichengebundene Rahmen geaendert
-
-      Rev 1.27   28 Jan 1997 18:36:22   HJS
-   includes
-
-      Rev 1.26   28 Jan 1997 16:31:50   OS
-   HtmlMode mit GetHtmlMode ermitteln
-
-      Rev 1.25   24 Jan 1997 16:58:26   HJS
-   #35241# GPF gefixed - fuer OM
-
-      Rev 1.25   24 Jan 1997 13:39:56   OM
-   #35241# GPF gefixt
-
-      Rev 1.24   22 Jan 1997 11:32:08   MA
-   Umstellung Put
-
-      Rev 1.23   21 Jan 1997 10:21:28   OM
-   Checkbox fuer: nur aussen
-
-      Rev 1.22   13 Jan 1997 16:59:10   MA
-   Kontur fuer Grafik und OLE
-
-      Rev 1.21   08 Jan 1997 10:56:44   OS
-   SID_HTML_MODE jetzt UInt16Item
-
-      Rev 1.20   07 Jan 1997 08:54:46   MA
-   new_frm_size entfernt
-
-      Rev 1.19   18 Dec 1996 12:15:00   OM
-   Konturumfluss defaulten
-
-      Rev 1.18   17 Dec 1996 16:28:14   OM
-   Kontur defaulten
-
-      Rev 1.17   27 Nov 1996 16:14:38   OM
-   #33427# Zeichenobjekte: automatischer Layerwechsel je nach Umlaufart
-
-      Rev 1.16   19 Nov 1996 11:42:28   OS
-   +ImageList
-
-      Rev 1.15   15 Nov 1996 20:24:52   MA
-   #32280#
-
-      Rev 1.14   14 Nov 1996 12:00:42   OS
-   Zusaetze-Group ausgelagert, Flackern verhindert, keine ContourImage fuer Durchlauf
-
-      Rev 1.13   12 Nov 1996 16:11:20   MA
-   Vorb. Rahmenabstand
-
-      Rev 1.12   11 Nov 1996 10:39:36   MA
-   ResMgr
-
-      Rev 1.11   08 Nov 1996 15:58:52   OM
-   Schuetzen neu organisiert, transparenz im Draw-Mode
-
-      Rev 1.10   06 Nov 1996 15:21:52   OM
-   Kontur enabled
-
-      Rev 1.9   06 Nov 1996 11:31:18   OM
-   #33048# Transparent-CB nur bei Durchlauf enablen
-
-      Rev 1.8   05 Nov 1996 17:44:16   OM
-   #33046# Rand-Maximalwertberechnung korrigiert
-
-      Rev 1.7   04 Nov 1996 16:50:46   OM
-   Maximalwertbegrenzung fuer Umlauf-TP
-
-      Rev 1.6   30 Oct 1996 15:40:00   OM
-   Neue Segs
-
-      Rev 1.5   30 Oct 1996 15:39:40   OM
-   Durchlauf auch bei Draw-Objekten
-
-      Rev 1.4   29 Oct 1996 17:14:40   OM
-   Abstaende auch im Drawmode
-
-      Rev 1.3   29 Oct 1996 15:39:04   OM
-   Controls im Drawmode verstecken
-
-      Rev 1.2   25 Oct 1996 16:01:26   OM
-   Controls im Drawmode verstecken
-
-      Rev 1.1   25 Oct 1996 15:06:42   OM
-   Neue Umfluss-Tabpage in Rahmendialog uebernommen
-
-      Rev 1.0   23 Oct 1996 19:54:46   OM
-   Initial revision.
-
---------------------------------------------------*/
-
-
+/* -----------------------------08.05.2002 14:28------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SwWrapTabPage::DataChanged( const DataChangedEvent& rDCEvt )
+{
+    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
+         (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+            ApplyImageList();
+
+    Window::DataChanged( rDCEvt );
+}
+/* -----------------------------08.05.2002 14:28------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SwWrapTabPage::ApplyImageList()
+{
+    ImageList& rImgLst = GetSettings().GetStyleSettings().GetHighContrastMode() ?
+        aWrapILH : aWrapIL;
+
+    aWrapThroughRB.SetImage(rImgLst.GetImage(IMG_THROUGH));
+    BOOL bWrapOutline =  !aWrapOutlineCB.IsChecked();
+    if(bWrapOutline)
+    {
+        aNoWrapRB.SetImage(rImgLst.GetImage(IMG_NONE));
+        aWrapLeftRB.SetImage(rImgLst.GetImage(IMG_LEFT));
+        aWrapRightRB.SetImage(rImgLst.GetImage(IMG_RIGHT));
+        aWrapParallelRB.SetImage(rImgLst.GetImage(IMG_PARALLEL));
+        aIdealWrapRB.SetImage(rImgLst.GetImage(IMG_IDEAL));
+    }
+    else
+    {
+        aNoWrapRB.SetImage(rImgLst.GetImage( IMG_KON_NONE ));
+        aWrapLeftRB.SetImage(rImgLst.GetImage( IMG_KON_LEFT ));
+        aWrapRightRB.SetImage(rImgLst.GetImage( IMG_KON_RIGHT ));
+        aWrapParallelRB.SetImage(rImgLst.GetImage(IMG_KON_PARALLEL ));
+        aIdealWrapRB.SetImage(rImgLst.GetImage( IMG_KON_IDEAL ));
+    }
+}
