@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdhdl.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 15:40:43 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 13:21:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1161,7 +1161,7 @@ IMPL_LINK(SdrHdlGradient, ColorChangeHdl, SdrHdl*, pHdl)
 {
     if(GetObj())
         FromIAOToItem(GetObj(), TRUE, TRUE);
-    return NULL;
+    return 0;
 }
 
 void SdrHdlGradient::FromIAOToItem(SdrObject* pObj, BOOL bSetItemOnObject, BOOL bUndo)
