@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptEditorForJavaScript.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-19 23:12:25 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 14:04:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,6 +270,26 @@ public class ScriptEditorForJavaScript implements ScriptEditor
         BEING_EDITED.put(url, this);
     }
 
+    /**
+     *  Executes the script edited by the editor
+     *
+     */
+
+    public Object execute() throws Exception
+    {
+        rhinoWindow.toFront();
+        return this.rhinoWindow.runSelectedWindow( scriptURL );
+    }
+
+    /**
+     *  Indicates the line where error occured
+     *
+     */
+    public void indicateErrorLine( int lineNum )
+    {
+        this.rhinoWindow.toFront();
+        this.rhinoWindow.highlighLineInSelectedWindow( scriptURL, lineNum );
+    }
     // This code is based on the main method of the Rhino Debugger Main class
     // We pass in the XScriptContext in the global scope for script execution
     private Main initUI(final XScriptContext xsctxt) {
@@ -284,6 +304,7 @@ public class ScriptEditorForJavaScript implements ScriptEditor
                 });
             sdb.setExitAction(new Runnable() {
                     public void run() {
+                        sdb.clearAllBreakpoints();
                         sdb.dispose();
                         shutdown();
                     }
