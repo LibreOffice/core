@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: sj $ $Date: 2001-05-28 15:20:33 $
+ *  last change: $Author: sj $ $Date: 2001-05-28 17:18:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1333,6 +1333,7 @@ USHORT GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath, SvS
     GfxLinkType             eLinkType = GFX_LINK_TYPE_NONE;
     BOOL                    bDummyContext = ( pContext == (GraphicReader*) 1 );
     const BOOL              bLinkSet = rGraphic.IsLink();
+    FilterConfigItem*       pFilterConfigItem = NULL;
 
     ResetLastError();
 
@@ -1568,7 +1569,27 @@ USHORT GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath, SvS
                 aStartFilterHdlLink.Call( this );
                 aUpdatePercentHdlLink.Call( this );
 
-                if( !(*pFunc)( rIStream, rGraphic, &ImpFilterCallback, &aCallbackData, NULL, sal_False ) )
+                String aShortName;
+                if( nFormat != GRFILTER_FORMAT_DONTKNOW )
+                {
+                    aShortName = GetImportFormatShortName( nFormat ).ToUpperAscii();
+                    if ( aShortName.CompareToAscii( "PCD" ) == COMPARE_EQUAL )
+                    {
+                        sal_Int32 nBase = 2;    // default Base0
+                        String aFilterTypeName( pConfig->GetImportFilterTypeName( nFormat ) );
+                        if ( aFilterTypeName.CompareToAscii( "pcd_Photo_CD_Base4" ) == COMPARE_EQUAL )
+                            nBase = 1;
+                        else if ( aFilterTypeName.CompareToAscii( "pcd_Photo_CD_Base16" ) == COMPARE_EQUAL )
+                            nBase = 0;
+                        if ( !pFilterConfigItem )
+                        {
+                            String aFilterConfigPath( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/Graphic/Import/PCD" ) );
+                            pFilterConfigItem = new FilterConfigItem( aFilterConfigPath );
+                        }
+                        pFilterConfigItem->WriteInt32( String( RTL_CONSTASCII_USTRINGPARAM( "Resolution" ) ), nBase );
+                    }
+                }
+                if( !(*pFunc)( rIStream, rGraphic, &ImpFilterCallback, &aCallbackData, pFilterConfigItem, sal_False ) )
                     nStatus = GRFILTER_FORMATERROR;
                 else
                 {
@@ -1578,8 +1599,6 @@ USHORT GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath, SvS
                     // try to set link type if format matches
                     if( nFormat != GRFILTER_FORMAT_DONTKNOW )
                     {
-                        const String aShortName( GetImportFormatShortName( nFormat ).ToUpperAscii() );
-
                         if( aShortName.CompareToAscii( TIF_SHORTNAME ) == COMPARE_EQUAL )
                             eLinkType = GFX_LINK_TYPE_NATIVE_TIF;
                         else if( aShortName.CompareToAscii( MET_SHORTNAME ) == COMPARE_EQUAL )
@@ -1625,7 +1644,7 @@ USHORT GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath, SvS
         nPercent = 0;
         aEndFilterHdlLink.Call( this );
     }
-
+    delete pFilterConfigItem;
     return nStatus;
 }
 
