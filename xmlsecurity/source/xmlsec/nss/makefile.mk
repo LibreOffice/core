@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: pjunck $ $Date: 2004-10-27 14:57:28 $
+#   last change: $Author: rt $ $Date: 2005-03-30 11:36:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,10 +84,20 @@ LIBTARGET=NO
 
 .IF "$(CRYPTO_ENGINE)" == "nss"
 
+.IF "$(WITH_MOZILLA)" == "NO"
+@all:
+    @echo "No mozilla -> no nss -> no libxmlsec -> no xmlsecurity/nss"
+.ENDIF
+
+.IF "$(SYSTEM_MOZILLA)" != "YES"
 MOZ_INC = $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/mozilla
 NSS_INC = $(MOZ_INC)$/nss
 NSPR_INC = $(MOZ_INC)$/nspr
-
+.ELSE
+# MOZ_INC already defined from environment
+NSS_INC = $(MOZ_NSS_CFLAGS)
+NSPR_INC = $(MOZ_INC)$/nspr
+.ENDIF
 
 .IF "$(GUI)"=="UNX"
 .IF "$(COMNAME)"=="sunpro5"
@@ -136,11 +146,17 @@ CDEFS     += -DTRACING
 CDEFS += -DXMLSEC_CRYPTO_NSS -DXMLSEC_NO_XSLT
 
 # --- Files --------------------------------------------------------
+
 SOLARINC += \
  -I$(MOZ_INC) \
 -I$(NSPR_INC) \
--I$(NSS_INC) \
 -I$(PRJ)$/source$/xmlsec
+
+.IF "$(SYSTEM_MOZILLA)" == "YES"
+SOLARINC += -DSYSTEM_MOZILLA $(NSS_INC)
+.ELSE
+SOLARINC += -I$(NSS_INC)
+.ENDIF
 
 SLOFILES = \
     $(SLO)$/moz_profile.obj \
