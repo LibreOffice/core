@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objitem.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 15:46:13 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 13:16:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,9 @@
  *
  ************************************************************************/
 
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #include "objsh.hxx"
 //#include "objshimp.hxx"
