@@ -2,9 +2,9 @@
  *
  *  $RCSfile: namedlg.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-09-24 17:29:58 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:35:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,9 @@
 #endif
 #ifndef _GROUP_HXX //autogen
 #include <vcl/group.hxx>
+#endif
+#ifndef _SV_FIXED_HXX
+#include <vcl/fixed.hxx>
 #endif
 
 #ifndef SC_RANGENAM_HXX
