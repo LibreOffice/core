@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen7.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:23:07 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 11:29:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,12 +58,6 @@
  *
  *
  ************************************************************************/
-
-#ifdef PCH
-#include "core_pch.hxx"
-#endif
-
-#pragma hdrstop
 
 // INCLUDE ---------------------------------------------------------------
 
@@ -340,8 +334,7 @@ void ScDocument::CalcFormulaTree( BOOL bOnlyForced, BOOL bNoProgress )
                     pCell = pNext;
                 }
                 else
-                {   // andere simpel berechnen, evtl. auch errInterpOverflow
-                    // (Err527) wg. Aufruf aus CellForm dirty setzen
+                {   // andere simpel berechnen
                     pCell->SetDirtyVar();
                     pCell = pCell->GetNext();
                 }
@@ -350,76 +343,58 @@ void ScDocument::CalcFormulaTree( BOOL bOnlyForced, BOOL bNoProgress )
         BOOL bProgress = !bOnlyForced && nFormulaCodeInTree && !bNoProgress;
         if ( bProgress )
             ScProgress::CreateInterpretProgress( this, TRUE );
-        ULONG nLastFormulaCodeInTree;
-        BOOL bErr527 = FALSE;       // damned maxrecursion
-        do
-        {   // while ( bErr527 && nLastFormulaCodeInTree > nFormulaCodeInTree );
-            if ( bErr527 )
+
+        pCell = pFormulaTree;
+        ScFormulaCell* pLastNoGood = 0;
+        while ( pCell )
+        {
+            // Interpret setzt bDirty zurueck und callt Remove, auch der referierten!
+            // bei RECALCMODE_ALWAYS bleibt die Zelle
+            if ( bOnlyForced )
             {
-                bErr527 = FALSE;
-                pLastFormulaTreeTop = 0;        // reset fuer CellForm
-            }
-            pCell = pFormulaTree;
-            nLastFormulaCodeInTree = nFormulaCodeInTree;
-            ScFormulaCell* pLastNoGood = 0;
-            while ( pCell )
-            {
-                if ( pCell->GetCode()->GetError() == errInterpOverflow )
-                    pCell->SetDirtyVar();       // Err527 wieder dirty
-                // Interpret setzt bDirty zurueck und callt Remove, auch der referierten!
-                // bei maxrecursion (Err527) oder RECALCMODE_ALWAYS bleibt die Zelle
-                if ( bOnlyForced )
-                {
-                    if ( pCell->GetCode()->IsRecalcModeForced() )
-                        pCell->Interpret();
-                }
-                else
-                {
+                if ( pCell->GetCode()->IsRecalcModeForced() )
                     pCell->Interpret();
-                }
-                if ( pCell->GetPrevious() || pCell == pFormulaTree )
-                {   // (IsInFormulaTree(pCell)) kein Remove gewesen => next
-                    if ( pCell->GetCode()->GetError() == errInterpOverflow )
-                        bErr527 = TRUE;
-                    pLastNoGood = pCell;
-                    pCell = pCell->GetNext();
-                }
-                else
+            }
+            else
+            {
+                pCell->Interpret();
+            }
+            if ( pCell->GetPrevious() || pCell == pFormulaTree )
+            {   // (IsInFormulaTree(pCell)) kein Remove gewesen => next
+                pLastNoGood = pCell;
+                pCell = pCell->GetNext();
+            }
+            else
+            {
+                if ( pFormulaTree )
                 {
-                    if ( pFormulaTree )
+                    if ( pFormulaTree->GetDirty() && !bOnlyForced )
                     {
-                        if ( pFormulaTree->GetDirty() && !bOnlyForced )
-                        {
-                            pCell = pFormulaTree;
-                            pLastNoGood = 0;
-                        }
-                        else
-                        {
-                            // IsInFormulaTree(pLastNoGood)
-                            if ( pLastNoGood && (pLastNoGood->GetPrevious() ||
-                                    pLastNoGood == pFormulaTree) )
-                                pCell = pLastNoGood->GetNext();
-                            else
-                            {
-                                pCell = pFormulaTree;
-                                while ( pCell && !pCell->GetDirty() &&
-                                        pCell->GetCode()->GetError() != errInterpOverflow )
-                                    pCell = pCell->GetNext();
-                                if ( pCell )
-                                    pLastNoGood = pCell->GetPrevious();
-                            }
-                        }
+                        pCell = pFormulaTree;
+                        pLastNoGood = 0;
                     }
                     else
-                        pCell = 0;
+                    {
+                        // IsInFormulaTree(pLastNoGood)
+                        if ( pLastNoGood && (pLastNoGood->GetPrevious() ||
+                                pLastNoGood == pFormulaTree) )
+                            pCell = pLastNoGood->GetNext();
+                        else
+                        {
+                            pCell = pFormulaTree;
+                            while ( pCell && !pCell->GetDirty() )
+                                pCell = pCell->GetNext();
+                            if ( pCell )
+                                pLastNoGood = pCell->GetPrevious();
+                        }
+                    }
                 }
-                if ( ScProgress::IsUserBreak() )
-                {
+                else
                     pCell = 0;
-                    bErr527 = FALSE;
-                }
             }
-        } while ( bErr527 && nLastFormulaCodeInTree > nFormulaCodeInTree );
+            if ( ScProgress::IsUserBreak() )
+                pCell = 0;
+        }
         if ( bProgress )
             ScProgress::DeleteInterpretProgress();
     }
@@ -504,7 +479,6 @@ void ScDocument::TrackFormulas( ULONG nHintId )
         SvtBroadcaster* pBC;
         ScFormulaCell* pTrack;
         ScFormulaCell* pNext;
-        BOOL bIsChanged = TRUE;
         pTrack = pFormulaTrack;
         do
         {
