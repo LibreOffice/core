@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porfly.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fme $ $Date: 2001-12-17 12:41:31 $
+ *  last change: $Author: fme $ $Date: 2001-12-17 14:19:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -310,6 +310,20 @@ void SwFlyCntPortion::Paint( const SwTxtPaintInfo &rInf ) const
     {
         // Baseline-Ausgabe !
         // 7922: Bei CompletePaint alles painten
+#ifdef VERTICAL_LAYOUT
+        SwRect aRepaintRect( rInf.GetPaintRect() );
+        if ( rInf.GetTxtFrm()->IsVertical() )
+            rInf.GetTxtFrm()->SwitchHorizontalToVertical( aRepaintRect );
+
+        if( (GetFlyFrm()->IsCompletePaint() ||
+             GetFlyFrm()->Frm().IsOver( aRepaintRect )) &&
+             SwFlyFrm::IsPaint( (SdrObject*)GetFlyFrm()->GetVirtDrawObj(),
+                                GetFlyFrm()->GetShell() ))
+        {
+            SwRect aRect( GetFlyFrm()->Frm() );
+            if( !GetFlyFrm()->IsCompletePaint() )
+                aRect._Intersection( aRepaintRect );
+#else
         if( (GetFlyFrm()->IsCompletePaint() ||
              GetFlyFrm()->Frm().IsOver( rInf.GetPaintRect() )) &&
              SwFlyFrm::IsPaint( (SdrObject*)GetFlyFrm()->GetVirtDrawObj(),
@@ -318,6 +332,7 @@ void SwFlyCntPortion::Paint( const SwTxtPaintInfo &rInf ) const
             SwRect aRect( GetFlyFrm()->Frm() );
             if( !GetFlyFrm()->IsCompletePaint() )
                 aRect._Intersection( rInf.GetPaintRect() );
+#endif
 
             GetFlyFrm()->Paint( aRect );
             // Es hilft alles nichts, im zeichengebundenen Frame kann wer weiss
