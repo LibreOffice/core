@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltshell.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 14:09:55 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 14:04:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1451,7 +1451,9 @@ BOOL SwFltOutDoc::BeginTable()
 // create table:
     ASSERT(pTabSavedPos == NULL, "SwFltOutDoc");
     pTabSavedPos = new SwPosition(*pPaM->GetPoint());
-    pTable = GetDoc().InsertTable(*pTabSavedPos, 1, 1, HORI_LEFT);
+    pTable = GetDoc().InsertTable(
+            SwInsertTableOptions( tabopts::HEADLINE_NO_BORDER, 1 ),
+            *pTabSavedPos, 1, 1, HORI_LEFT ); // TODO MULTIHEADER
     nTableWidth = 0;
     ((SwTable*)pTable)->LockModify();   // Nichts automatisch anpassen!
 // set pam in 1. table cell
