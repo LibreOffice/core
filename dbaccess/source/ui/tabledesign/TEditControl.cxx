@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TEditControl.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-14 14:25:54 $
+ *  last change: $Author: oj $ $Date: 2001-02-20 11:00:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1061,7 +1061,7 @@ void OTableEditorCtrl::SetData( long nRow, sal_uInt16 nColId, const OTypeInfo* _
         default:
             OSL_ASSERT(0);
     }
-    SetControlText(nRow,nColId,_pTypeInfo ? _pTypeInfo->aUIName : String());
+    SetControlText(nRow,nColId,_pTypeInfo ? _pTypeInfo->aUIName : ::rtl::OUString());
 }
 //------------------------------------------------------------------------------
 void OTableEditorCtrl::SetData( long nRow, sal_uInt16 nColId, const String& _rNewData )
