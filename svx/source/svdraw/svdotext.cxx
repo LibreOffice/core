@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotext.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 10:12:23 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 11:02:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1237,7 +1237,7 @@ void SdrTextObj::ImpSetCharStretching(SdrOutliner& rOutliner, const Rectangle& r
     }
 }
 
-sal_Bool SdrTextObj::DoPaintObject(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRec) const
+sal_Bool SdrTextObj::DoPaintObject(XOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRec) const
 {
     // #110094#-16 Moved to ViewContactOfSdrObj::ShouldPaintObject(..)
     //// Hidden objects on masterpages, draw nothing
@@ -1515,7 +1515,7 @@ void SdrTextObj::ImpAddTextToBoundRect()
         if (IsFontwork()) {
             if (pModel!=NULL) {
                 VirtualDevice aVD;
-                ExtOutputDevice aXOut(&aVD);
+                XOutputDevice aXOut(&aVD);
                 SdrOutliner& rOutl=ImpGetDrawOutliner();
                 rOutl.SetUpdateMode(TRUE);
                 ImpTextPortionHandler aTPHandler(rOutl,*this);
@@ -2048,171 +2048,171 @@ void SdrTextObj::RestGeoData(const SdrObjGeoData& rGeo)
 // I/O
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void SdrTextObj::WriteData(SvStream& rOut) const
-{
-    SdrAttrObj::WriteData(rOut);
-    SdrDownCompat aCompat(rOut,STREAM_WRITE); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
-#ifdef DBG_UTIL
-    aCompat.SetID("SdrTextObj");
-#endif
-    rOut<<BYTE(eTextKind);
-    rOut<<aRect;
-    rOut<<INT32(aGeo.nDrehWink);
-    rOut<<INT32(aGeo.nShearWink);
+//BFS01void SdrTextObj::WriteData(SvStream& rOut) const
+//BFS01{
+//BFS01 SdrAttrObj::WriteData(rOut);
+//BFS01 SdrDownCompat aCompat(rOut,STREAM_WRITE); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
+//BFS01#ifdef DBG_UTIL
+//BFS01 aCompat.SetID("SdrTextObj");
+//BFS01#endif
+//BFS01 rOut<<BYTE(eTextKind);
+//BFS01 rOut<<aRect;
+//BFS01 rOut<<INT32(aGeo.nDrehWink);
+//BFS01 rOut<<INT32(aGeo.nShearWink);
+//BFS01
+//BFS01 // Wird gerade editiert, also das ParaObject aus dem aktiven Editor verwenden
+//BFS01 // Das war frueher. Jetzt wird beim Speichern sowas aehnliches wie EndTextEdit gemacht! #43095#
+//BFS01 if (pEdtOutl!=NULL) {
+//BFS01     // #43095#
+//BFS01     OutlinerParaObject* pPara=GetEditOutlinerParaObject();
+//BFS01     // casting auf nicht-const
+//BFS01     ((SdrTextObj*)this)->SetOutlinerParaObject(pPara);
+//BFS01
+//BFS01     // #91254# put text to object and set EmptyPresObj to FALSE
+//BFS01     if(pPara && IsEmptyPresObj())
+//BFS01         ((SdrTextObj*)this)->SetEmptyPresObj(FALSE);
+//BFS01 }
+//BFS01 OutlinerParaObject* pPara=pOutlinerParaObject;
+//BFS01
+//BFS01 BOOL bOutlinerParaObjectValid=pPara!=NULL;
+//BFS01 rOut<<bOutlinerParaObjectValid;
+//BFS01
+//BFS01 if (bOutlinerParaObjectValid)
+//BFS01 {
+//BFS01     SdrDownCompat aTextCompat(rOut,STREAM_WRITE); // Ab V11 eingepackt
+//BFS01#ifdef DBG_UTIL
+//BFS01     aTextCompat.SetID("SdrTextObj(OutlinerParaObject)");
+//BFS01#endif
+//BFS01     pPara->Store(rOut); // neues Store am Outliner ab SV303
+//BFS01     pPara->FinishStore();
+//BFS01 }
+//BFS01
+//BFS01 // Ab FileVersion 10 wird das TextBoundRect gestreamt
+//BFS01 BOOL bFormTextBoundRectValid=pFormTextBoundRect!=NULL;
+//BFS01 rOut<<bFormTextBoundRectValid;
+//BFS01 if (bFormTextBoundRectValid) {
+//BFS01     rOut<<*pFormTextBoundRect;
+//BFS01 }
+//BFS01}
 
-    // Wird gerade editiert, also das ParaObject aus dem aktiven Editor verwenden
-    // Das war frueher. Jetzt wird beim Speichern sowas aehnliches wie EndTextEdit gemacht! #43095#
-    if (pEdtOutl!=NULL) {
-        // #43095#
-        OutlinerParaObject* pPara=GetEditOutlinerParaObject();
-        // casting auf nicht-const
-        ((SdrTextObj*)this)->SetOutlinerParaObject(pPara);
-
-        // #91254# put text to object and set EmptyPresObj to FALSE
-        if(pPara && IsEmptyPresObj())
-            ((SdrTextObj*)this)->SetEmptyPresObj(FALSE);
-    }
-    OutlinerParaObject* pPara=pOutlinerParaObject;
-
-    BOOL bOutlinerParaObjectValid=pPara!=NULL;
-    rOut<<bOutlinerParaObjectValid;
-
-    if (bOutlinerParaObjectValid)
-    {
-        SdrDownCompat aTextCompat(rOut,STREAM_WRITE); // Ab V11 eingepackt
-#ifdef DBG_UTIL
-        aTextCompat.SetID("SdrTextObj(OutlinerParaObject)");
-#endif
-        pPara->Store(rOut); // neues Store am Outliner ab SV303
-        pPara->FinishStore();
-    }
-
-    // Ab FileVersion 10 wird das TextBoundRect gestreamt
-    BOOL bFormTextBoundRectValid=pFormTextBoundRect!=NULL;
-    rOut<<bFormTextBoundRectValid;
-    if (bFormTextBoundRectValid) {
-        rOut<<*pFormTextBoundRect;
-    }
-}
-
-void SdrTextObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
-{
-    if (rIn.GetError()!=0) return;
-    if (pOutlinerParaObject!=NULL) {
-        delete pOutlinerParaObject;
-        pOutlinerParaObject=NULL;
-    }
-
-    SdrAttrObj::ReadData(rHead,rIn);
-    SdrDownCompat aCompat(rIn,STREAM_READ); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
-#ifdef DBG_UTIL
-    aCompat.SetID("SdrTextObj");
-#endif
-    BYTE nTmp;
-    rIn>>nTmp;
-    eTextKind=SdrObjKind(nTmp);
-    rIn>>aRect;
-    INT32 n32;
-    rIn>>n32; aGeo.nDrehWink=n32;
-    rIn>>n32; aGeo.nShearWink=n32;
-    aGeo.RecalcSinCos();
-    aGeo.RecalcTan();
-    //rIn>>aText;
-    if (rHead.GetVersion()<=5 && IsOutlText()) { // Das war bis zu diesem Zeitpunkt nicht gespeichert
-        NbcSetAutoGrowHeight(FALSE);
-    }
-
-    BOOL bOutlinerParaObjectValid=FALSE;
-    rIn>>bOutlinerParaObjectValid;
-    if (bOutlinerParaObjectValid)
-    {
-        SfxItemPool* pOutlPool=pModel!=NULL ? &pModel->GetItemPool() : NULL;
-        if (rHead.GetVersion()>=11) {
-            SdrDownCompat aTextCompat(rIn,STREAM_READ); // ab V11 eingepackt
-#ifdef DBG_UTIL
-            aTextCompat.SetID("SdrTextObj(OutlinerParaObject)");
-#endif
-            pOutlinerParaObject=OutlinerParaObject::Create(rIn,pOutlPool);
-        } else {
-            pOutlinerParaObject=OutlinerParaObject::Create(rIn,pOutlPool);
-        }
-    }
-
-    if( pOutlinerParaObject )
-    {
-        if( pOutlinerParaObject->GetOutlinerMode() == OUTLINERMODE_DONTKNOW )
-        {
-            if( eTextKind == OBJ_TITLETEXT )
-                pOutlinerParaObject->SetOutlinerMode( OUTLINERMODE_TITLEOBJECT );
-            else if( eTextKind == OBJ_OUTLINETEXT )
-                pOutlinerParaObject->SetOutlinerMode( OUTLINERMODE_OUTLINEOBJECT );
-            else
-                pOutlinerParaObject->SetOutlinerMode( OUTLINERMODE_TEXTOBJECT );
-        }
-
-        if( pOutlinerParaObject->IsVertical() )
-        {
-            GetProperties().SetObjectItemDirect(SvxWritingModeItem(com::sun::star::text::WritingMode_TB_RL));
-        }
-    }
-
-    if (rHead.GetVersion()>=10) {
-        // Ab FileVersion 10 wird das TextBoundRect gestreamt
-        BOOL bFormTextBoundRectValid=FALSE;
-        rIn>>bFormTextBoundRectValid;
-        if (bFormTextBoundRectValid) {
-            if (pFormTextBoundRect==NULL) pFormTextBoundRect=new Rectangle;
-            rIn>>*pFormTextBoundRect;
-        }
-    }
-
-    if(rHead.GetVersion() < 12 && !bTextFrame)
-    {
-        GetProperties().SetObjectItemDirect(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_CENTER));
-        GetProperties().SetObjectItemDirect(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_CENTER));
-        GetProperties().SetObjectItemDirect(SvxAdjustItem(SVX_ADJUST_CENTER));
-    }
-
-    if (bTextFrame && pOutlinerParaObject!=NULL)
-        NbcAdjustTextFrameWidthAndHeight();
-
-    if ( pOutlinerParaObject &&
-         pOutlinerParaObject->GetTextObject().GetVersion() < 500 &&
-         !pOutlinerParaObject->IsEditDoc() )
-    {
-        pOutlinerParaObject->MergeParaAttribs( GetObjectItemSet() );
-    }
-
-    // #84529# correct gradient rotation for 5.2 and earlier
-    if(aGeo.nDrehWink != 0 && rHead.GetVersion() <= 16)
-    {
-        XFillStyle eStyle = ((const XFillStyleItem&)GetObjectItem(XATTR_FILLSTYLE)).GetValue();
-        if(XFILL_GRADIENT == eStyle)
-        {
-            XFillGradientItem aItem = (XFillGradientItem&)GetObjectItem(XATTR_FILLGRADIENT);
-            XGradient aGradient = aItem.GetValue();
-
-            // calc new angle. aGeo.nDrehWink is 1/100th degree, aGradient.GetAngle()
-            // is 1/10th degree. Match this.
-            sal_Int32 nNewAngle = ((aGeo.nDrehWink + (aGradient.GetAngle() * 10)) + 5) / 10;
-
-            while(nNewAngle < 0)
-                nNewAngle += 3600;
-
-            while(nNewAngle >= 3600)
-                nNewAngle -= 3600;
-
-            // create new item and set
-            aGradient.SetAngle(nNewAngle);
-            aItem.SetValue(aGradient);
-            SetObjectItem(aItem);
-        }
-    }
-
-    ImpSetTextStyleSheetListeners();
-    SetTextSizeDirty();
-    ImpCheckMasterCachable();
-}
+//BFS01void SdrTextObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
+//BFS01{
+//BFS01 if (rIn.GetError()!=0) return;
+//BFS01 if (pOutlinerParaObject!=NULL) {
+//BFS01     delete pOutlinerParaObject;
+//BFS01     pOutlinerParaObject=NULL;
+//BFS01 }
+//BFS01
+//BFS01 SdrAttrObj::ReadData(rHead,rIn);
+//BFS01 SdrDownCompat aCompat(rIn,STREAM_READ); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
+//BFS01#ifdef DBG_UTIL
+//BFS01 aCompat.SetID("SdrTextObj");
+//BFS01#endif
+//BFS01 BYTE nTmp;
+//BFS01 rIn>>nTmp;
+//BFS01 eTextKind=SdrObjKind(nTmp);
+//BFS01 rIn>>aRect;
+//BFS01 INT32 n32;
+//BFS01 rIn>>n32; aGeo.nDrehWink=n32;
+//BFS01 rIn>>n32; aGeo.nShearWink=n32;
+//BFS01 aGeo.RecalcSinCos();
+//BFS01 aGeo.RecalcTan();
+//BFS01 //rIn>>aText;
+//BFS01 if (rHead.GetVersion()<=5 && IsOutlText()) { // Das war bis zu diesem Zeitpunkt nicht gespeichert
+//BFS01     NbcSetAutoGrowHeight(FALSE);
+//BFS01 }
+//BFS01
+//BFS01 BOOL bOutlinerParaObjectValid=FALSE;
+//BFS01 rIn>>bOutlinerParaObjectValid;
+//BFS01 if (bOutlinerParaObjectValid)
+//BFS01 {
+//BFS01     SfxItemPool* pOutlPool=pModel!=NULL ? &pModel->GetItemPool() : NULL;
+//BFS01     if (rHead.GetVersion()>=11) {
+//BFS01         SdrDownCompat aTextCompat(rIn,STREAM_READ); // ab V11 eingepackt
+//BFS01#ifdef DBG_UTIL
+//BFS01         aTextCompat.SetID("SdrTextObj(OutlinerParaObject)");
+//BFS01#endif
+//BFS01         pOutlinerParaObject=OutlinerParaObject::Create(rIn,pOutlPool);
+//BFS01     } else {
+//BFS01         pOutlinerParaObject=OutlinerParaObject::Create(rIn,pOutlPool);
+//BFS01     }
+//BFS01 }
+//BFS01
+//BFS01 if( pOutlinerParaObject )
+//BFS01 {
+//BFS01     if( pOutlinerParaObject->GetOutlinerMode() == OUTLINERMODE_DONTKNOW )
+//BFS01     {
+//BFS01         if( eTextKind == OBJ_TITLETEXT )
+//BFS01             pOutlinerParaObject->SetOutlinerMode( OUTLINERMODE_TITLEOBJECT );
+//BFS01         else if( eTextKind == OBJ_OUTLINETEXT )
+//BFS01             pOutlinerParaObject->SetOutlinerMode( OUTLINERMODE_OUTLINEOBJECT );
+//BFS01         else
+//BFS01             pOutlinerParaObject->SetOutlinerMode( OUTLINERMODE_TEXTOBJECT );
+//BFS01     }
+//BFS01
+//BFS01     if( pOutlinerParaObject->IsVertical() )
+//BFS01     {
+//BFS01         GetProperties().SetObjectItemDirect(SvxWritingModeItem(com::sun::star::text::WritingMode_TB_RL));
+//BFS01     }
+//BFS01 }
+//BFS01
+//BFS01 if (rHead.GetVersion()>=10) {
+//BFS01     // Ab FileVersion 10 wird das TextBoundRect gestreamt
+//BFS01     BOOL bFormTextBoundRectValid=FALSE;
+//BFS01     rIn>>bFormTextBoundRectValid;
+//BFS01     if (bFormTextBoundRectValid) {
+//BFS01         if (pFormTextBoundRect==NULL) pFormTextBoundRect=new Rectangle;
+//BFS01         rIn>>*pFormTextBoundRect;
+//BFS01     }
+//BFS01 }
+//BFS01
+//BFS01 if(rHead.GetVersion() < 12 && !bTextFrame)
+//BFS01 {
+//BFS01     GetProperties().SetObjectItemDirect(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_CENTER));
+//BFS01     GetProperties().SetObjectItemDirect(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_CENTER));
+//BFS01     GetProperties().SetObjectItemDirect(SvxAdjustItem(SVX_ADJUST_CENTER));
+//BFS01 }
+//BFS01
+//BFS01 if (bTextFrame && pOutlinerParaObject!=NULL)
+//BFS01     NbcAdjustTextFrameWidthAndHeight();
+//BFS01
+//BFS01 if ( pOutlinerParaObject &&
+//BFS01      pOutlinerParaObject->GetTextObject().GetVersion() < 500 &&
+//BFS01      !pOutlinerParaObject->IsEditDoc() )
+//BFS01 {
+//BFS01     pOutlinerParaObject->MergeParaAttribs( GetObjectItemSet() );
+//BFS01 }
+//BFS01
+//BFS01 // #84529# correct gradient rotation for 5.2 and earlier
+//BFS01 if(aGeo.nDrehWink != 0 && rHead.GetVersion() <= 16)
+//BFS01 {
+//BFS01     XFillStyle eStyle = ((const XFillStyleItem&)GetObjectItem(XATTR_FILLSTYLE)).GetValue();
+//BFS01     if(XFILL_GRADIENT == eStyle)
+//BFS01     {
+//BFS01         XFillGradientItem aItem = (XFillGradientItem&)GetObjectItem(XATTR_FILLGRADIENT);
+//BFS01         XGradient aGradient = aItem.GetValue();
+//BFS01
+//BFS01         // calc new angle. aGeo.nDrehWink is 1/100th degree, aGradient.GetAngle()
+//BFS01         // is 1/10th degree. Match this.
+//BFS01         sal_Int32 nNewAngle = ((aGeo.nDrehWink + (aGradient.GetAngle() * 10)) + 5) / 10;
+//BFS01
+//BFS01         while(nNewAngle < 0)
+//BFS01             nNewAngle += 3600;
+//BFS01
+//BFS01         while(nNewAngle >= 3600)
+//BFS01             nNewAngle -= 3600;
+//BFS01
+//BFS01         // create new item and set
+//BFS01         aGradient.SetAngle(nNewAngle);
+//BFS01         aItem.SetValue(aGradient);
+//BFS01         SetObjectItem(aItem);
+//BFS01     }
+//BFS01 }
+//BFS01
+//BFS01 ImpSetTextStyleSheetListeners();
+//BFS01 SetTextSizeDirty();
+//BFS01 ImpCheckMasterCachable();
+//BFS01}
 
 // #111096#
 //void SdrTextObj::SetTextAnimationSupervisor( OutputDevice* pDisplayDev, BOOL bObjSupervises )
