@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgctrl.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: cl $ $Date: 2002-06-04 12:56:44 $
+ *  last change: $Author: cl $ $Date: 2002-06-06 15:04:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1944,6 +1944,8 @@ void SvxXLinePreview::DataChanged( const DataChangedEvent& rDCEvt )
         InitSettings( TRUE, TRUE );
     else
         Control::DataChanged( rDCEvt );
+
+   SetDrawMode( GetDisplayBackground().GetColor().IsDark() ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR );
 }
 
 /*************************************************************************
