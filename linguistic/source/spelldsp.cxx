@@ -2,9 +2,9 @@
  *
  *  $RCSfile: spelldsp.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-28 12:46:16 $
+ *  last change: $Author: vg $ $Date: 2003-06-24 07:49:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,9 @@
 #include <cppuhelper/factory.hxx>   // helper for factories
 #include <com/sun/star/registry/XRegistryKey.hpp>
 
+#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
+#include <unotools/localedatawrapper.hxx>
+#endif
 #ifndef _TOOLS_DEBUG_HXX //autogen wg. DBG_ASSERT
 #include <tools/debug.hxx>
 #endif
@@ -318,6 +321,13 @@ BOOL SpellCheckerDispatcher::isValid_Impl(
     {
         OUString aChkWord( rWord );
         Locale aLocale( CreateLocale( nLanguage ) );
+
+        // replace typographical apostroph by ascii apostroph
+        String aSingleQuote( GetLocaleDataWrapper( nLanguage ).getQuotationMarkEnd() );
+        DBG_ASSERT( 1 == aSingleQuote.Len(), "unexpectend length of quotation mark" );
+        if (aSingleQuote.Len())
+            aChkWord = aChkWord.replace( aSingleQuote.GetChar(0), '\'' );
+
         RemoveHyphens( aChkWord );
         if (IsIgnoreControlChars( rProperties, GetPropSet() ))
             RemoveControlChars( aChkWord );
@@ -562,6 +572,13 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
     {
         OUString aChkWord( rWord );
         Locale aLocale( CreateLocale( nLanguage ) );
+
+        // replace typographical apostroph by ascii apostroph
+        String aSingleQuote( GetLocaleDataWrapper( nLanguage ).getQuotationMarkEnd() );
+        DBG_ASSERT( 1 == aSingleQuote.Len(), "unexpectend length of quotation mark" );
+        if (aSingleQuote.Len())
+            aChkWord = aChkWord.replace( aSingleQuote.GetChar(0), '\'' );
+
         RemoveHyphens( aChkWord );
         if (IsIgnoreControlChars( rProperties, GetPropSet() ))
             RemoveControlChars( aChkWord );
