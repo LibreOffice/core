@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swcrsr.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 09:13:23 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 10:28:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1715,10 +1715,6 @@ FASTBOOL SwCursor::UpDown( BOOL bUp, USHORT nCnt,
                 }
             }
         }
-
-        // #i27615#
-        if (GetPoint()->nContent.GetIndex() != 0)
-            SetInFrontOfLabel(FALSE);
     }
 
     return bRet;
@@ -1742,7 +1738,8 @@ FASTBOOL SwCursor::LeftRightMargin( BOOL bLeft, BOOL bAPI )
             FASTBOOL bWasAtLeftMargin = IsAtLeftRightMargin(TRUE, bAPI);
             bRet = pFrm->LeftMargin( this );
 
-            if (! bAPI && bWasAtLeftMargin)
+            const SwTxtNode* pTxtNd = GetNode()->GetTxtNode();
+            if (! bAPI && bWasAtLeftMargin && pTxtNd && pTxtNd->IsNumbered() )
                 SetInFrontOfLabel(TRUE);
         }
         else
