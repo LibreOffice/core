@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportIterator.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-16 18:14:35 $
+ *  last change: $Author: svesik $ $Date: 2000-11-23 13:15:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 #define _SC_XMLEXPORTITERATOR_HXX
 
 #ifndef __SGI_STL_VECTOR
-#include <stl/vector>
+#include <vector>
 #endif
 
 #ifndef _COM_SUN_STAR_SHEET_XSPREADSHEET_HPP_
