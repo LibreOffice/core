@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlideSorterController.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-24 15:06:09 $
+ *  last change: $Author: rt $ $Date: 2005-03-01 08:36:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -312,13 +312,21 @@ void SlideSorterController::Paint (
     const Rectangle& rBBox,
     ::sd::Window* pWindow)
 {
-    if (mbIsMakeSelectionVisiblePending)
+    static bool sbReentranceGuardActive = false;
+    if ( ! sbReentranceGuardActive)
     {
-        MakeSelectionVisible();
-        mbIsMakeSelectionVisiblePending = false;
-    }
+        sbReentranceGuardActive = true;
 
-    GetView().CompleteRedraw(pWindow, Region(rBBox));
+        if (mbIsMakeSelectionVisiblePending)
+        {
+            MakeSelectionVisible();
+            mbIsMakeSelectionVisiblePending = false;
+        }
+
+        GetView().CompleteRedraw(pWindow, Region(rBBox));
+
+        sbReentranceGuardActive = false;
+    }
 }
 
 
