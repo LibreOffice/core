@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databasedocument.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 16:07:41 $
+ *  last change: $Author: vg $ $Date: 2005-02-18 10:58:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1158,16 +1158,6 @@ void ODatabaseSource::commitStorages()
         throw IOException();
     }
 }
-
-void ODatabaseSource::notifyEvent(const ::rtl::OUString& _sEventName)
-{
-    if ( m_xDocEventBroadcaster.is() )
-    {
-        ::com::sun::star::document::EventObject aEvent(*this, _sEventName);
-        m_xDocEventBroadcaster->notifyEvent(aEvent);
-    }
-}
-
 //........................................................................
 }   // namespace dbaccess
 //........................................................................
