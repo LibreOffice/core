@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmload.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:57:03 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 16:10:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -537,6 +537,10 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
     xFrame = REFERENCE< XFrame >();
     xListener = REFERENCE< XLoadEventListener >();
 
+    if ( pLoader )
+        pFrame = pLoader->GetFrame();
+    if ( pFrame )
+        pFrame->SetLoadEnvironment_Impl(0);
     return bLoadState;
 }
 
