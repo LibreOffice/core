@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: as $ $Date: 2002-08-26 13:57:58 $
+ *  last change: $Author: as $ $Date: 2002-10-10 10:31:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -290,7 +290,7 @@ DEFINE_XINTERFACE_13                    (   Desktop                             
                                             DIRECT_INTERFACE( css::beans::XPropertySet              )
                                         )
 
-DEFINE_XTYPEPROVIDER_12                 (   Desktop                                                 ,
+DEFINE_XTYPEPROVIDER_13                 (   Desktop                                                 ,
                                             css::lang::XTypeProvider                                ,
                                             css::lang::XServiceInfo                                 ,
                                             css::frame::XDesktop                                    ,
@@ -302,7 +302,8 @@ DEFINE_XTYPEPROVIDER_12                 (   Desktop                             
                                             css::lang::XComponent                                   ,
                                             css::frame::XDispatchResultListener                     ,
                                             css::lang::XEventListener                               ,
-                                            css::task::XInteractionHandler
+                                            css::task::XInteractionHandler                          ,
+                                            css::beans::XPropertySet
                                         )
 
 DEFINE_XSERVICEINFO_ONEINSTANCESERVICE  (   Desktop                                                 ,
