@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindow.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: pb $ $Date: 2002-03-05 08:22:35 $
+ *  last change: $Author: fs $ $Date: 2002-04-25 11:18:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,7 @@ class VCLXWindow :  public ::com::sun::star::awt::XWindow,
                     public ::com::sun::star::awt::XLayoutConstrains,
                     public ::com::sun::star::awt::XView,
                     public ::drafts::com::sun::star::accessibility::XAccessible,
+                    public ::com::sun::star::lang::XEventListener,
                     public VCLXDevice
 {
 private:
@@ -192,6 +193,9 @@ public:
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
     ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
 
+
+    // ::com::sun::star::lang::XEventListener
+    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::lang::XComponent
     void SAL_CALL dispose(  ) throw(::com::sun::star::uno::RuntimeException);
