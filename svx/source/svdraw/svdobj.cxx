@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdobj.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: kz $ $Date: 2004-11-05 14:16:02 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 09:47:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -480,6 +480,18 @@ void SdrObject::ActionInserted() const
 // DrawContact support: Methods for handling Object changes
 void SdrObject::ActionChanged() const
 {
+    // #i34008#
+    // Forward change call to MasterPageDescriptor if BackgroundObject was changed
+    if(GetPage()
+        && GetPage()->GetBackgroundObj()
+        && GetPage()->GetBackgroundObj() == this)
+    {
+        if(GetPage()->TRG_HasMasterPage())
+        {
+            GetPage()->TRG_GetMasterPageDescriptorViewContact().ActionChanged();
+        }
+    }
+
     // Do necessary ViewContact actions
     GetViewContact().ActionChanged();
 }
