@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doccomp.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:48:41 $
+ *  last change: $Author: vg $ $Date: 2003-10-06 19:01:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -829,7 +829,11 @@ ULONG Compare::CompareSequence::CheckDiag( ULONG nStt1, ULONG nEnd1,
 
 void Compare::ShiftBoundaries( CompareData& rData1, CompareData& rData2 )
 {
+#if defined(_MSC_VER) && (_MSC_VER >= 1310 )
+    for( int iz = 0; iz < 2; ++iz )
+#else
     for( int i = 0; i < 2; ++i )
+#endif
     {
         CompareData* pData = &rData1;
         CompareData* pOtherData = &rData2;
