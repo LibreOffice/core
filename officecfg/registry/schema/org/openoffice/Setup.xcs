@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Setup.xcs,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2002-06-26 14:14:52 $
+ *  last change: $Author: mba $ $Date: 2002-06-27 09:10:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,7 @@
   </templates>
   <component>
     <group oor:name="Product">
-      <!-- Responsible: JH-->
+      <!-- Responsible: MBA-->
       <!--The default must be written by the setup.-->
       <prop oor:name="ooName" oor:type="xs:string">
         <info>
@@ -119,12 +119,11 @@
       </prop>
     </group>
     <group oor:name="Office">
-      <!-- Responsible: PB-->
       <!--The default must be written by the setup.-->
       <prop oor:name="ooSetupInstallPath" oor:type="xs:string">
         <!-- OldPath: Service User/[username] -->
         <!-- OldLocation: userdb.ini -->
-        <!-- Responsible: TPF/BEI -->
+        <!-- Responsible: AS/BEI -->
         <info>
           <desc xml:lang="en-US">The user install path. Directory where the user data is copied to. Must be a valid directory.</desc>
         </info>
@@ -132,7 +131,7 @@
       <prop oor:name="ooSetupInstallURL" oor:type="xs:string">
         <!-- OldPath: Service User/[username] -->
         <!-- OldLocation: userdb.ini -->
-        <!-- Responsible: TPF/BEI -->
+        <!-- Responsible: AS/BEI -->
         <info>
           <desc xml:lang="en-US">The user install path in URL notation. Must match the UCB configuration.</desc>
         </info>
@@ -140,7 +139,7 @@
       <prop oor:name="ooSetupInstCompleted" oor:type="xs:boolean">
         <!-- OldPath: Service User/[username] -->
         <!-- OldLocation: userdb.ini -->
-        <!-- Responsible: TPF/BEI -->
+        <!-- Responsible: IS/BEI -->
         <info>
           <desc xml:lang="en-US">True, if user data is copied successfully</desc>
         </info>
@@ -169,7 +168,7 @@
       <prop oor:name="ooSetupShowIntro" oor:type="xs:boolean">
         <!-- OldPath: Common/Show-Intro -->
         <!-- OldLocation: soffice.ini -->
-        <!-- Responsible: MBA -->
+        <!-- Responsible: CD -->
         <!-- UIHints: Tools - Options - General - View -->
         <info>
           <desc xml:lang="en-US">Setting for displaying the product Logo when starting the program.</desc>
