@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hdu $ $Date: 2002-03-28 16:39:59 $
+ *  last change: $Author: hdu $ $Date: 2002-04-03 16:21:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,7 @@ public:
     virtual void    Draw() const;
     virtual bool    GetOutline( SalGraphics&, PolyPolygon& ) const;
 
+    virtual Point   GetCharPosition( int nCharIndex, bool bRTL ) const;
     virtual long    FillDXArray( long* pDXArray ) const;
     virtual int     GetTextBreak( long nMaxWidth ) const;
 
@@ -250,6 +251,35 @@ int SimpleWinLayout::GetTextBreak( long nMaxWidth ) const
 
 // -----------------------------------------------------------------------
 
+Point SimpleWinLayout::GetCharPosition( int nCharIndex, bool bRTL ) const
+{
+    long nXPos = 0;
+
+    if( !bRTL ) // relative to left edge
+    {
+        int nCharLimit = mnEndCharIndex;
+        if( nCharLimit > nCharIndex )
+            nCharLimit = nCharIndex;
+        nCharLimit -= mnFirstCharIndex;
+        for( int i = 0; i < nCharLimit; ++i )
+            nXPos += mpGlyphAdvances[ i ];
+    }
+    else        // relative to right edge?
+    {
+        // assuming SimpleWinLayout only layed out LTR strings
+        int nCharStart = nCharIndex - mnFirstCharIndex;
+        if( nCharStart < 0 )
+            nCharStart = 0;
+        int nCharLimit = mnEndCharIndex - mnFirstCharIndex;
+        for( int i = nCharStart; i < nCharLimit; ++i )
+            nXPos -= mpGlyphAdvances[ i ];
+    }
+
+    return Point( nXPos, 0 );
+}
+
+// -----------------------------------------------------------------------
+
 void SimpleWinLayout::Justify( long nNewWidth )
 {
     if( mnGlyphCount <= 0 )
@@ -317,6 +347,7 @@ public:
     virtual void    Draw() const;
     virtual bool    GetOutline( SalGraphics&, PolyPolygon& ) const;
 
+    virtual Point   GetCharPosition( int nCharIndex, bool bRTL ) const;
     virtual long    FillDXArray( long* pDXArray ) const;
     virtual int     GetTextBreak( long nMaxWidth ) const;
 
@@ -632,7 +663,9 @@ void UniscribeLayout::Draw() const
             }
             else
             {
-                // TODO: implement adjustment for RTL case
+                i = mnFirstCharIndex;
+                while( (--i >= rScriptItem.iCharPos) && (nMaxIndex == mpLogClusters[i]) )
+                    aRelPos += Point( mpCharWidths[i], 0 );
             }
         }
 
@@ -801,6 +834,89 @@ int UniscribeLayout::GetTextBreak( long nMaxWidth ) const
     }
 
     return STRING_LEN;
+}
+
+// -----------------------------------------------------------------------
+
+Point UniscribeLayout::GetCharPosition( int nCharIndex, bool bRTL ) const
+{
+    int nStartIndex = mnGlyphCapacity;
+    int nGlyphIndex = 0;
+    int nEndIndex = 0;
+
+    int nGlyphsProcessed = 0;
+    for( int nItem = 0; nItem < mnItemCount; ++nItem )
+    {
+        int nGlyphCount = mpGlyphCounts[ nItem ];
+        if( !nGlyphCount )
+            continue;
+
+        SCRIPT_ITEM& rScriptItem = mpScriptItems[ nItem ];
+        int nCharIndexLimit = mpScriptItems[ nItem+1 ].iCharPos;
+
+        if( (rScriptItem.iCharPos < mnFirstCharIndex) || (mnEndCharIndex < nCharIndexLimit) )
+        {
+            nGlyphIndex = mpLogClusters[ nCharIndex - rScriptItem.iCharPos ] + nGlyphsProcessed;
+
+            // get glyph range from char range by looking at cluster boundries
+            int nMaxIndex = 0;
+
+            int i = mnFirstCharIndex;
+            if( i < rScriptItem.iCharPos )
+                i = rScriptItem.iCharPos;
+            if( nCharIndexLimit > mnEndCharIndex )
+                nCharIndexLimit = mnEndCharIndex;
+            for(; i < nCharIndexLimit; ++i )
+            {
+                int n = mpLogClusters[ i ] + nGlyphsProcessed;
+                if( nStartIndex > n )
+                    nStartIndex = n;
+                if( nMaxIndex < n )
+                    nMaxIndex = n;
+            }
+
+            if( bRTL )
+            {
+                // display if there is something to display
+                nEndIndex = nMaxIndex + 1;
+                if( nStartIndex < nEndIndex )
+                {
+                    // account for multiple glyphs at rightmost character
+                    // test only needed when rightmost glyph isn't referenced
+                    nEndIndex -= nGlyphsProcessed;
+                    if( nEndIndex < mpGlyphCounts[ nItem ] )
+                    {
+                        nEndIndex = mpGlyphCounts[ nItem ];
+                        int nCharCount = mpScriptItems[ nItem+1 ].iCharPos - rScriptItem.iCharPos;
+                        for( int i = 0; i < nCharCount; ++i )
+                        {
+                            int n = mpLogClusters[ rScriptItem.iCharPos + i ];
+                            if( (n < nEndIndex) && (n > nMaxIndex) )
+                                nEndIndex = n;
+                        }
+                    }
+                    nEndIndex += nGlyphsProcessed;
+                }
+            }
+        }
+
+        nGlyphsProcessed += nGlyphCount;
+    }
+
+    long nXPos = 0;
+
+    if( !bRTL ) // relative to left edge
+    {
+        for( int i = nStartIndex; i < nGlyphIndex; ++i )
+            nXPos += mpGlyphAdvances[ i ];
+    }
+    else        // relative to right edge?
+    {
+        for( int i = nGlyphIndex; i < nEndIndex; ++i )
+            nXPos -= mpGlyphAdvances[ i ];
+    }
+
+    return Point( nXPos, 0 );
 }
 
 // -----------------------------------------------------------------------
