@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tempfile.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-30 13:49:34 $
+ *  last change: $Author: mba $ $Date: 2000-11-02 10:22:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,32 +61,11 @@
 #ifndef _UNOTOOLS_TEMPFILE_HXX
 #define _UNOTOOLS_TEMPFILE_HXX
 
-#ifndef _STRING_HXX
 #include <tools/string.hxx>
-#endif
+#include <tools/stream.hxx>
 
 namespace utl
 {
-
-class LocalFileHelper
-{
-public:
-                    /**
-                    Converts a "physical" file name into a "UCB compatible" URL ( if possible ).
-                    If no UCP is available for the local file system, sal_False and an empty URL is returned.
-                    Returning sal_True and an empty URL means that the URL doesn't point to a local file.
-                    */
-    static sal_Bool   ConvertPhysicalNameToURL( const String& rName, String& rReturn );
-
-                    /**
-                    Converts a "UCB compatible" URL into a "physical" file name.
-                    If no UCP is available for the local file system, sal_False and an empty file name is returned,
-                    otherwise sal_True and a valid URL, because a file name can always be converted if a UCP for the local
-                    file system is present ( watch: this doesn't mean that this file really exists! )
-                    */
-    static sal_Bool   ConvertURLToPhysicalName( const String& rName, String& rReturn );
-
-};
 
 struct TempFile_Impl;
 
@@ -158,6 +137,13 @@ public:
                     conversion functions for "physical" names into URLs.
                     */
     String          GetFileName() const;
+
+                    /**
+                    Returns a stream to the tempfiles data; the stream is owned by the tempfile object, so you have to keep this
+                    alive as long as you want to use the stream. If the TempFile object is destroyed, it also destroys the
+                    stream object, the underlying file is only deleted if EnableKillingFile( sal_True ) has been called before!
+                    */
+    SvStream*       GetStream( StreamMode eMode );
 
                     /**
                     If enabled the file will be removed from disk when the dtor is called ( default is not enabled )

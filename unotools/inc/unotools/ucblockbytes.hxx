@@ -87,18 +87,15 @@ class UcbLockBytes : public virtual SvLockBytes
 
     DECL_LINK(              DataAvailHdl, void * );
 
-                            UcbLockBytes( UcbLockBytesHandler* pHandler );
+                            UcbLockBytes( UcbLockBytesHandler* pHandler=NULL );
 protected:
     virtual                 ~UcbLockBytes (void);
 
 public:
 
-    static UcbLockBytesRef  CreateInOutputLockBytes( const NS_UNO::Reference < NS_UCB::XContent > xContent,
+    static UcbLockBytesRef  CreateLockBytes( const NS_UNO::Reference < NS_UCB::XContent > xContent, StreamMode eMode,
                                             UcbLockBytesHandler* pHandler=0 );
-    static UcbLockBytesRef  CreateInputLockBytes( const NS_UNO::Reference < NS_UCB::XContent > xContent,
-                                            UcbLockBytesHandler* pHandler=0 );
-    static UcbLockBytesRef  CreateInputLockBytes( const NS_UNO::Reference < NS_IO::XInputStream > xContent,
-                                            UcbLockBytesHandler* pHandler=0 );
+    static UcbLockBytesRef  CreateInputLockBytes( const NS_UNO::Reference < NS_IO::XInputStream > xContent );
 
     // SvLockBytes
     virtual void            SetSynchronMode (BOOL bSynchron);
@@ -132,6 +129,18 @@ public:
                                 return m_xInputStream;
                             }
 
+    NS_UNO::Reference < NS_IO::XOutputStream > getOutputStream_Impl() const
+                            {
+                                vos::OGuard aGuard( SAL_CONST_CAST(UcbLockBytes*, this)->m_aMutex );
+                                return m_xOutputStream;
+                            }
+
+    NS_UNO::Reference < NS_IO::XSeekable > getSeekable_Impl() const
+                            {
+                                vos::OGuard aGuard( SAL_CONST_CAST(UcbLockBytes*, this)->m_aMutex );
+                                return m_xSeekable;
+                            }
+
     sal_Bool                hasInputStream_Impl() const
                             {
                                 vos::OGuard aGuard( SAL_CONST_CAST(UcbLockBytes*, this)->m_aMutex );
@@ -151,14 +160,6 @@ public:
 #endif
 };
 
-class UcbStreamHelper : public SvStream
-{
-public:
-    static SvStream*    CreateStream( const String& rFileName, StreamMode eOpenMode, UcbLockBytesHandler* pHandler=0, sal_Bool bForceSynchron=sal_True );
-    static SvStream*    CreateStream( NS_UNO::Reference < NS_IO::XInputStream > xStream, UcbLockBytesHandler* pHandler=0 );
-};
-
-//----------------------------------------------------------------------------
 SV_IMPL_REF( UcbLockBytes );
 
 };

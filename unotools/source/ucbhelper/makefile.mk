@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: mba $ $Date: 2000-10-30 13:16:36 $
+#   last change: $Author: mba $ $Date: 2000-11-02 10:24:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -94,6 +94,7 @@ ENABLE_EXCEPTIONS=TRUE
 
 SLOFILES=\
                         $(SLO)$/ucblockbytes.obj \
+                        $(SLO)$/ucbstreamhelper.obj \
                         $(SLO)$/tempfile.obj
 
 # NETBSD: somewhere we have to instantiate the static data members.

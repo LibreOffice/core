@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tempfile.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2000-10-30 18:20:54 $
+ *  last change: $Author: mba $ $Date: 2000-11-02 10:24:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,8 +60,9 @@
  ************************************************************************/
 
 #include <unotools/tempfile.hxx>
-
-#include <ucbhelper/fileidentifierconverter.hxx>
+#include <unotools/localfilehelper.hxx>
+#include <unotools/ucbstreamhelper.hxx>
+#include <ucbhelper/Fileidentifierconverter.hxx>
 #include <ucbhelper/contentbroker.hxx>
 #include <rtl/ustring.hxx>
 #include <osl/file.hxx>
@@ -81,7 +82,12 @@ struct TempFile_Impl
 {
     String      aName;
     String      aURL;
+    SvStream*   pStream;
     sal_Bool    bIsDirectory;
+
+                TempFile_Impl()
+                    : pStream(0)
+                    {}
 };
 
 #define TMPNAME_SIZE  ( 1 + 5 + 5 + 4 + 1 )
@@ -268,6 +274,7 @@ TempFile::TempFile( const String& rLeadingChars, const String* pExtension, const
 
 TempFile::~TempFile()
 {
+    delete pImp->pStream;
     if ( bKillingFileEnabled )
     {
         if ( pImp->bIsDirectory )
@@ -308,6 +315,19 @@ String TempFile::GetURL() const
     return pImp->aURL;
 }
 
+SvStream* TempFile::GetStream( StreamMode eMode )
+{
+    if ( !pImp->pStream )
+    {
+        if ( GetURL().Len() )
+            pImp->pStream = UcbStreamHelper::CreateStream( pImp->aURL, eMode );
+        else
+            pImp->pStream = new SvFileStream( pImp->aName, eMode );
+    }
+
+    return pImp->pStream;
+}
+
 String TempFile::SetTempNameBaseDirectory( const String &rBaseName )
 {
     String aName( rBaseName );
@@ -340,41 +360,47 @@ String TempFile::GetTempNameBaseDirectory()
 
 sal_Bool LocalFileHelper::ConvertPhysicalNameToURL( const String& rName, String& rReturn )
 {
+    rtl::OUString aRet;
+    ::rtl::OUString aTmp;
+    FileBase::normalizePath( rName, aTmp );
+
     ::ucb::ContentBroker* pBroker = ::ucb::ContentBroker::get();
     if ( !pBroker )
     {
-        DBG_WARNING( "::unotools::TempFile : UCB not present or not initialized!" );
-        return sal_False;
+        FileBase::getFileURLFromNormalizedPath( aTmp, aRet );
     }
-
-    ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContentProviderManager > xManager =
+    else
+    {
+        ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContentProviderManager > xManager =
                 pBroker->getContentProviderManagerInterface();
 
-    rtl::OUString aHost;
-    osl_getLocalHostname( &aHost.pData );
+        rtl::OUString aHost;
+        osl_getLocalHostname( &aHost.pData );
+        aRet = ::ucb::getFileURLFromNormalizedPath( xManager, aHost, aTmp );
+    }
 
-    ::rtl::OUString aTmp;
-    FileBase::normalizePath( rName, aTmp );
-    rtl::OUString aRet = ::ucb::getFileURLFromNormalizedPath( xManager, aHost, aTmp );
     rReturn = aRet;
-    return sal_True;
+    return aRet.getLength();
 }
 
 sal_Bool LocalFileHelper::ConvertURLToPhysicalName( const String& rName, String& rReturn )
 {
+    rtl::OUString aRet;
     ::ucb::ContentBroker* pBroker = ::ucb::ContentBroker::get();
     if ( !pBroker )
     {
-        DBG_WARNING( "::unotools::TempFile : UCB not present or not initialized!" );
-        return sal_False;
+        FileBase::getNormalizedPathFromFileURL( rName, aRet );
     }
-
-    ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContentProviderManager > xManager =
+    else
+    {
+        ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContentProviderManager > xManager =
                 pBroker->getContentProviderManagerInterface();
 
-    rtl::OUString aHost;
-    osl_getLocalHostname( &aHost.pData );
-    rtl::OUString aRet = ::ucb::getNormalizedPathFromFileURL( xManager, aHost, rName );
+        rtl::OUString aHost;
+        osl_getLocalHostname( &aHost.pData );
+        aRet = ::ucb::getNormalizedPathFromFileURL( xManager, aHost, rName );
+    }
+
     ::rtl::OUString aTmp;
     FileBase::getSystemPathFromNormalizedPath( aRet, aTmp );
     rReturn = aTmp;

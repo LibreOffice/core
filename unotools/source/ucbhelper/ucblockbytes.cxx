@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucblockbytes.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-30 13:16:36 $
+ *  last change: $Author: mba $ $Date: 2000-11-02 10:24:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,9 +62,6 @@
 #include <unotools/ucblockbytes.hxx>
 #include <comphelper/processfactory.hxx>
 
-#ifndef _COM_SUN_STAR_UCB_INSERTCOMMANDARGUMENT_HPP_
-#include <com/sun/star/ucb/InsertCommandArgument.hpp>
-#endif
 #ifndef _COM_SUN_STAR_IO_XACTIVEDATASTREAMER_HPP_
 #include <com/sun/star/io/XActiveDataStreamer.hpp>
 #endif
@@ -131,6 +128,38 @@ using namespace ::com::sun::star::beans;
 namespace utl
 {
 
+/**
+    Helper class for getting a XInputStream when opening a content
+ */
+class UcbDataSink_Impl : public ::cppu::WeakImplHelper2< XActiveDataControl, XActiveDataSink >
+{
+    UcbLockBytesRef         m_xLockBytes;
+
+public:
+                            UcbDataSink_Impl( UcbLockBytes* pLockBytes )
+                                : m_xLockBytes( pLockBytes )
+                            {}
+
+    SvLockBytes*            getLockBytes (void)
+                            { return m_xLockBytes; }
+
+    // XActiveDataControl.
+    virtual void SAL_CALL   addListener ( const Reference<XStreamListener> &rxListener) throw(RuntimeException) {}
+    virtual void SAL_CALL   removeListener ( const Reference<XStreamListener> &rxListener) throw(RuntimeException) {}
+    virtual void SAL_CALL   start (void) throw(RuntimeException) {}
+    virtual void SAL_CALL   terminate (void) throw(RuntimeException)
+                            { m_xLockBytes->terminate_Impl(); }
+
+    // XActiveDataSink.
+    virtual void SAL_CALL   setInputStream ( const Reference<XInputStream> &rxInputStream) throw(RuntimeException)
+                            { m_xLockBytes->setInputStream_Impl (rxInputStream); }
+    virtual Reference<XInputStream> SAL_CALL getInputStream (void) throw(RuntimeException)
+                            { return m_xLockBytes->getInputStream_Impl(); }
+};
+
+/**
+    Helper class for getting a XStream when opening a content
+ */
 class UcbStreamer_Impl : public ::cppu::WeakImplHelper2< XActiveDataStreamer, XActiveDataControl >
 {
     Reference < XStream >   m_xStream;
@@ -143,142 +172,76 @@ public:
                             {}
 
     // XActiveDataControl.
-    virtual void SAL_CALL   addListener ( const Reference<XStreamListener> &rxListener) throw(RuntimeException);
-    virtual void SAL_CALL   removeListener ( const Reference<XStreamListener> &rxListener) throw(RuntimeException);
-    virtual void SAL_CALL   start (void) throw(RuntimeException);
-    virtual void SAL_CALL   terminate (void) throw(RuntimeException);
+    virtual void SAL_CALL   addListener ( const Reference<XStreamListener> &rxListener) throw(RuntimeException) {}
+    virtual void SAL_CALL   removeListener ( const Reference<XStreamListener> &rxListener) throw(RuntimeException) {}
+    virtual void SAL_CALL   start (void) throw(RuntimeException) {}
+    virtual void SAL_CALL   terminate (void) throw(RuntimeException)
+                            { m_xLockBytes->terminate_Impl(); }
 
     // XActiveDataStreamer
-    virtual void SAL_CALL   setStream( const Reference< XStream >& aStream ) throw(RuntimeException);
-    virtual Reference< XStream > SAL_CALL getStream() throw(RuntimeException);
+    virtual void SAL_CALL   setStream( const Reference< XStream >& aStream ) throw(RuntimeException)
+                            { m_xStream = aStream; m_xLockBytes->setStream_Impl( aStream ); }
+    virtual Reference< XStream > SAL_CALL getStream() throw(RuntimeException)
+                            { return m_xStream; }
 };
 
-void SAL_CALL UcbStreamer_Impl::addListener ( const Reference<XStreamListener> &rxListener) throw(RuntimeException)
-{
-    // not supported
-}
-
-void SAL_CALL UcbStreamer_Impl::removeListener ( const Reference<XStreamListener> &rxListener) throw(RuntimeException)
-{
-    // not supported
-}
-
-void SAL_CALL UcbStreamer_Impl::start (void) throw(RuntimeException)
-{
-}
-
-void SAL_CALL UcbStreamer_Impl::terminate (void) throw(RuntimeException)
-{
-    m_xLockBytes->terminate_Impl();
-}
-
-void UcbStreamer_Impl::setStream( const Reference< XStream >& aStream ) throw(RuntimeException)
-{
-    m_xStream = aStream;
-    m_xLockBytes->setStream_Impl( aStream );
-}
-
-Reference< XStream > UcbStreamer_Impl::getStream() throw(RuntimeException)
-{
-    return m_xStream;
-}
-
-class ProgressHandler_Impl: public cppu::OWeakObject, public XProgressHandler
+/**
+    Helper class for progress handling while executing UCB commands
+ */
+class ProgressHandler_Impl: public ::cppu::WeakImplHelper1< XProgressHandler >
 {
     Link                    m_aProgress;
 
 public:
-                            ProgressHandler_Impl() {}
-
-    void                    SetProgressLink( const Link& rLink )
-                                { m_aProgress = rLink; }
-
-    virtual Any SAL_CALL    queryInterface( const Type & rType )
-                                throw (RuntimeException);
-
-    virtual void SAL_CALL   acquire() throw (RuntimeException)
-                                { OWeakObject::acquire(); }
-
-    virtual void SAL_CALL   release() throw (RuntimeException)
-                                { OWeakObject::release(); }
-
-    virtual void SAL_CALL   push(const Any & rStatus) throw (RuntimeException);
-
-    virtual void SAL_CALL   update(const Any & rStatus)
-                                throw (RuntimeException);
-
-    virtual void SAL_CALL   pop() throw (RuntimeException);
+                            ProgressHandler_Impl( const Link& rLink )
+                                : m_aProgress( rLink )
+                            {}
+    // XProgressHandler
+    virtual void SAL_CALL   push(const Any & rStatus) throw (RuntimeException) {}
+    virtual void SAL_CALL   pop() throw (RuntimeException) {}
+    virtual void SAL_CALL   update(const Any & rStatus) throw (RuntimeException)
+                            { if ( m_aProgress.IsSet() ) m_aProgress.Call( 0 ); }
 };
 
-//----------------------------------------------------------------------------
-Any SAL_CALL ProgressHandler_Impl::queryInterface( const Type & rType ) throw (RuntimeException)
-{
-    Any aRet( ::cppu::queryInterface(   rType,
-                                        static_cast< XProgressHandler* >( this )));
-
-    if ( aRet.hasValue() )
-        return aRet ;
-    else
-        return OWeakObject::queryInterface( rType );
-}
-
-//----------------------------------------------------------------------------
-void SAL_CALL ProgressHandler_Impl::push( const Any & rStatus ) throw (RuntimeException)
-{
-}
-
-//----------------------------------------------------------------------------
-void SAL_CALL ProgressHandler_Impl::update( const Any & rStatus ) throw (RuntimeException)
-{
-    if ( m_aProgress.IsSet() )
-        m_aProgress.Call( 0 );
-}
-
-//----------------------------------------------------------------------------
-void SAL_CALL ProgressHandler_Impl::pop() throw (RuntimeException)
-{
-}
-
+/**
+    Helper class for managing interactions and progress when executing UCB commands
+ */
 class UcbTaskEnvironment : public ::cppu::WeakImplHelper1< XCommandEnvironment >
 {
-    Reference< XInteractionHandler >    m_xInteractionHandler;
-    Reference< XProgressHandler >       m_xProgressHandler;
+    Reference< XInteractionHandler >                m_xInteractionHandler;
+    Reference< XProgressHandler >                   m_xProgressHandler;
 
 public:
-            UcbTaskEnvironment( const Reference< XInteractionHandler>& rxInteractionHandler,
-                                const Reference< XProgressHandler>& rxProgressHandler );
+                            UcbTaskEnvironment( const Reference< XInteractionHandler>& rxInteractionHandler,
+                                                const Reference< XProgressHandler>& rxProgressHandler )
+                                : m_xInteractionHandler( rxInteractionHandler )
+                                , m_xProgressHandler( rxProgressHandler )
+                            {}
+
 
     virtual Reference<XInteractionHandler> SAL_CALL getInteractionHandler() throw (RuntimeException)
     { return m_xInteractionHandler; }
 
-    virtual Reference<XProgressHandler> SAL_CALL getProgressHandler() throw (RuntimeException)
+    virtual Reference<XProgressHandler> SAL_CALL    getProgressHandler() throw (RuntimeException)
     { return m_xProgressHandler; }
 };
 
+
+/**
+    Helper class for property change notifies when executing UCB commands
+*/
 class UcbPropertiesChangeListener_Impl : public ::cppu::WeakImplHelper1< XPropertiesChangeListener >
 {
 public:
     UcbLockBytesRef         m_xLockBytes;
 
-                            UcbPropertiesChangeListener_Impl( UcbLockBytesRef rRef );
-                            ~UcbPropertiesChangeListener_Impl();
+                            UcbPropertiesChangeListener_Impl( UcbLockBytesRef rRef )
+                                : m_xLockBytes( rRef )
+                            {}
 
-    virtual void SAL_CALL   disposing ( const EventObject &rEvent) throw(RuntimeException);
+    virtual void SAL_CALL   disposing ( const EventObject &rEvent) throw(RuntimeException) {}
     virtual void SAL_CALL   propertiesChange ( const Sequence<PropertyChangeEvent> &rEvent) throw(RuntimeException);
 };
-
-UcbPropertiesChangeListener_Impl::UcbPropertiesChangeListener_Impl( UcbLockBytesRef rRef )
-    : m_xLockBytes( rRef )
-{
-}
-
-UcbPropertiesChangeListener_Impl::~UcbPropertiesChangeListener_Impl()
-{
-}
-
-void SAL_CALL UcbPropertiesChangeListener_Impl::disposing ( const EventObject &rEvent) throw(RuntimeException)
-{
-}
 
 void SAL_CALL UcbPropertiesChangeListener_Impl::propertiesChange ( const Sequence<PropertyChangeEvent> &rEvent) throw(RuntimeException)
 {
@@ -333,6 +296,9 @@ void SAL_CALL UcbPropertiesChangeListener_Impl::propertiesChange ( const Sequenc
     }
 }
 
+/**
+    Helper class for opening UCB contents synchronously or asynchronously
+ */
 class CommandThread_Impl : public ::vos::OThread
 {
 public:
@@ -347,7 +313,6 @@ public:
     UcbLockBytesHandlerRef                  m_xHandler;
     sal_Bool                                m_bCanceled : 1;
     sal_Bool                                m_bRunning  : 1;
-    sal_Bool                                m_bSimple   : 1;
 
                     CommandThread_Impl( UcbLockBytesRef xLockBytes,
                                         Reference < XContent > xContent,
@@ -356,19 +321,12 @@ public:
                                         Reference < XProgressHandler > xProgress,
                                         UcbLockBytesHandlerRef xRef );
 
-                    CommandThread_Impl( UcbLockBytesRef xLockBytes )
-                        : m_xLockBytes( xLockBytes )
-                        , m_bCanceled( sal_False )
-                        , m_bRunning( sal_False )
-                        , m_bSimple( sal_True )
-                    {}
-
                     ~CommandThread_Impl();
 
     virtual void SAL_CALL   onTerminated();
     virtual void SAL_CALL   run();
     void                    Cancel();
-    void                    DoIt();
+    void                    DoIt( sal_Bool bHandle = sal_True );
 };
 
 //----------------------------------------------------------------------------
@@ -386,11 +344,14 @@ CommandThread_Impl::CommandThread_Impl( UcbLockBytesRef xLockBytes,
     , m_aArgument( rArg )
     , m_bCanceled( sal_False )
     , m_bRunning( sal_False )
-    , m_bSimple( sal_False )
 {
+    m_xLockBytes->setCommandThread_Impl( this );
     m_pContent = new ::ucb::Content( xContent, new UcbTaskEnvironment( m_xInteract, m_xProgress ) );
     Reference < XContentIdentifier > xIdent = xContent->getIdentifier();
     ::rtl::OUString aScheme = xIdent->getContentProviderScheme();
+
+    // http protocol must be handled in a special way: during the opening process the input stream may change
+    // only the last inputstream after notifying the document headers is valid
     if ( aScheme.compareToAscii("http") != COMPARE_EQUAL )
         m_xLockBytes->SetStreamValid_Impl();
 
@@ -411,14 +372,6 @@ CommandThread_Impl::~CommandThread_Impl()
 
 void CommandThread_Impl::run()
 {
-    if ( m_bSimple )
-    {
-        m_bRunning = sal_True;
-        m_xLockBytes->terminate_Impl();
-        m_bRunning = sal_False;
-        return;
-    }
-
     m_bRunning = sal_True;
 
     if( !m_bCanceled && schedule() )
@@ -427,9 +380,9 @@ void CommandThread_Impl::run()
     m_bRunning = sal_False;
 }
 
-
-void CommandThread_Impl::DoIt()
+void CommandThread_Impl::DoIt( sal_Bool bHandle )
 {
+    // create content and execute command
     Any aParam;
     aParam <<= m_aArgument;
     Any aResult;
@@ -451,16 +404,25 @@ void CommandThread_Impl::DoIt()
         bException = true;
     }
 
+    Reference < XActiveDataControl > xControl( m_aArgument.Sink, UNO_QUERY );
     if ( bAborted || bException )
     {
-        if( m_xHandler.Is() )
+        if( bHandle && m_xHandler.Is() )
             m_xHandler->Handle( UcbLockBytesHandler::CANCEL, m_xLockBytes );
 
-        Reference < XInputStream > aDummy;
-        Reference < XActiveDataSink > ::query(m_aArgument.Sink)->setInputStream( aDummy );
-    }
+        Reference < XActiveDataSink > xSink( m_aArgument.Sink, UNO_QUERY );
+        if ( xSink.is() )
+            xSink->setInputStream( Reference < XInputStream >() );
 
-    Reference < XActiveDataControl > ::query(m_aArgument.Sink)->terminate();
+        Reference < XActiveDataStreamer > xStreamer( m_aArgument.Sink, UNO_QUERY );
+        if ( xStreamer.is() )
+            xStreamer->setStream( Reference < XStream >() );
+
+        if ( bHandle && xControl.is() )
+            xControl->terminate();
+    }
+    else if ( xControl.is() )
+        xControl->terminate();
 }
 
 
@@ -478,7 +440,7 @@ void CommandThread_Impl::Cancel()
 
     m_bCanceled = sal_True;
 
-    if ( m_bRunning && !m_bSimple )
+    if ( m_bRunning && m_pContent )
     {
         m_pContent->abortCommand();
         m_bRunning = sal_False;
@@ -589,7 +551,7 @@ ErrCode UcbLockBytes::ReadAt ( ULONG nPos, void *pBuffer, ULONG nCount, ULONG *p
             m_xHandler->Handle( UcbLockBytesHandler::AFTERWAIT, pThis );
     }
 
-    Reference<XInputStream> xStream = getInputStream_Impl();
+    Reference <XInputStream> xStream = getInputStream_Impl();
     if ( !xStream.is() )
     {
         if ( m_bTerminated )
@@ -601,12 +563,13 @@ ErrCode UcbLockBytes::ReadAt ( ULONG nPos, void *pBuffer, ULONG nCount, ULONG *p
     if ( pRead )
         *pRead = 0;
 
-    if ( !m_xSeekable.is() )
+    Reference <XSeekable> xSeekable = getSeekable_Impl();
+    if ( !xSeekable.is() )
         return ERRCODE_IO_CANTREAD;
 
     try
     {
-        m_xSeekable->seek( nPos );
+        xSeekable->seek( nPos );
     }
     catch ( IOException )
     {
@@ -621,7 +584,7 @@ ErrCode UcbLockBytes::ReadAt ( ULONG nPos, void *pBuffer, ULONG nCount, ULONG *p
     {
         if ( !m_bTerminated && !IsSynchronMode() )
         {
-            sal_Int64 nLen = m_xSeekable->getLength();
+            sal_Int64 nLen = xSeekable->getLength();
             if ( nPos + nCount > nLen )
                 return ERRCODE_IO_PENDING;
         }
@@ -647,19 +610,16 @@ ErrCode UcbLockBytes::WriteAt ( ULONG nPos, const void *pBuffer, ULONG nCount, U
         *pWritten = 0;
 
     DBG_ASSERT( IsSynchronMode(), "Writing is only possible in SynchronMode!" );
-    UcbLockBytes* pThis = const_cast < UcbLockBytes* >( this );
-    if ( m_xHandler.Is() )
-        m_xHandler->Handle( UcbLockBytesHandler::BEFOREWAIT, pThis );
-    pThis->m_aInitialized.wait();
-    if ( m_xHandler.Is() )
-        m_xHandler->Handle( UcbLockBytesHandler::AFTERWAIT, pThis );
+    DBG_ASSERT( m_aInitialized.check(), "Writing bevor stream is ready!" );
 
-    if ( !m_xOutputStream.is() || !m_xSeekable.is() )
+    Reference <XSeekable> xSeekable = getSeekable_Impl();
+    Reference <XOutputStream> xOutputStream = getOutputStream_Impl();
+    if ( !xOutputStream.is() || !xSeekable.is() )
         return ERRCODE_IO_CANTWRITE;
 
     try
     {
-        m_xSeekable->seek( nPos );
+        xSeekable->seek( nPos );
     }
     catch ( IOException )
     {
@@ -670,7 +630,7 @@ ErrCode UcbLockBytes::WriteAt ( ULONG nPos, const void *pBuffer, ULONG nCount, U
     Sequence<sal_Int8> aData( pData, nCount );
     try
     {
-        m_xOutputStream->writeBytes( aData );
+        xOutputStream->writeBytes( aData );
         if ( pWritten )
             *pWritten = nCount;
     }
@@ -685,9 +645,10 @@ ErrCode UcbLockBytes::WriteAt ( ULONG nPos, const void *pBuffer, ULONG nCount, U
 //----------------------------------------------------------------------------
 ErrCode UcbLockBytes::Flush() const
 {
-    if ( !m_xOutputStream.is() )
+    Reference <XOutputStream > xOutputStream = getOutputStream_Impl();
+    if ( !xOutputStream.is() )
         return ERRCODE_IO_CANTWRITE;
-    m_xOutputStream->flush();
+    xOutputStream->flush();
     return ERRCODE_NONE;
 }
 
@@ -714,13 +675,14 @@ ErrCode UcbLockBytes::Stat( SvLockBytesStat *pStat, SvLockBytesStatFlag) const
         return ERRCODE_IO_INVALIDPARAMETER;
 
     Reference<XInputStream> xStream = getInputStream_Impl();
+    Reference <XSeekable> xSeekable = getSeekable_Impl();
 
-    if ( !xStream.is() || !m_xSeekable.is() )
+    if ( !xStream.is() || !xSeekable.is() )
         return ERRCODE_IO_INVALIDACCESS;
 
     try
     {
-        pStat->nSize = ULONG(m_xSeekable->getLength());
+        pStat->nSize = ULONG(xSeekable->getLength());
     }
     catch (IOException)
     {
@@ -755,205 +717,69 @@ IMPL_LINK( UcbLockBytes, DataAvailHdl, void*, EMPTYARG )
     return 0;
 }
 
-//----------------------------------------------------------------------------
-// class UcbDataSink_Impl
-//----------------------------------------------------------------------------
-class UcbDataSink_Impl : public ::cppu::WeakImplHelper2< XActiveDataControl, XActiveDataSink >
-{
-    UcbLockBytesRef         m_xLockBytes;
-
-public:
-                            UcbDataSink_Impl( UcbLockBytes* pLockBytes )
-                                : m_xLockBytes( pLockBytes )
-                            {}
-
-    SvLockBytes*            getLockBytes (void)
-                            { return m_xLockBytes; }
-
-    // XActiveDataControl.
-    virtual void SAL_CALL   addListener ( const Reference<XStreamListener> &rxListener) throw(RuntimeException);
-    virtual void SAL_CALL   removeListener ( const Reference<XStreamListener> &rxListener) throw(RuntimeException);
-    virtual void SAL_CALL   start (void) throw(RuntimeException);
-    virtual void SAL_CALL   terminate (void) throw(RuntimeException);
-
-    // XActiveDataSink.
-    virtual void SAL_CALL   setInputStream ( const Reference<XInputStream> &rxInputStream) throw(RuntimeException);
-    virtual Reference<XInputStream> SAL_CALL getInputStream (void) throw(RuntimeException);
-};
-
-void SAL_CALL UcbDataSink_Impl::addListener ( const Reference<XStreamListener> &rxListener) throw(RuntimeException)
-{
-    // not supported
-}
-
-void SAL_CALL UcbDataSink_Impl::removeListener ( const Reference<XStreamListener> &rxListener) throw(RuntimeException)
-{
-    // not supported
-}
-
-void SAL_CALL UcbDataSink_Impl::start (void) throw(RuntimeException)
-{
-}
-
-void SAL_CALL UcbDataSink_Impl::terminate (void) throw(RuntimeException)
-{
-    m_xLockBytes->terminate_Impl();
-}
-
-void SAL_CALL UcbDataSink_Impl::setInputStream ( const Reference<XInputStream> &rxInputStream) throw(RuntimeException)
-{
-    m_xLockBytes->setInputStream_Impl (rxInputStream);
-}
-
-Reference<XInputStream> SAL_CALL UcbDataSink_Impl::getInputStream (void) throw(RuntimeException)
-{
-    return m_xLockBytes->getInputStream_Impl();
-}
-
-//-------------------------------------------------------------------------
-UcbTaskEnvironment::UcbTaskEnvironment( const Reference< XInteractionHandler >& rxInteractionHandler,
-                                        const Reference< XProgressHandler >& rxProgressHandler )
-    : m_xInteractionHandler( rxInteractionHandler )
-    , m_xProgressHandler( rxProgressHandler )
-{
-}
-
-UcbLockBytesRef UcbLockBytes::CreateInputLockBytes( const Reference < XContent > xContent, UcbLockBytesHandler* pHandler )
-{
-    if( !xContent.is() )
-        return NULL;;
-/*
-    Reference<XPropertiesChangeNotifier> xProps ( xContent, UNO_QUERY );
-    if ( xProps.is() )
-    {
-        m_aContentType = getContentType_Impl (xProps);
-        if( !m_aContentType.Len() )
-            m_aContentType = CONTENT_TYPE_STR_APP_OCTSTREAM;
-        m_bMimeAvail = sal_True;
-        xProps->addPropertiesChangeListener ( Sequence< OUString >(), this );
-    }
-*/
-    Reference< XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
-    Reference< XInteractionHandler > xInteractionHandler = Reference< XInteractionHandler > (
-                xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uui.InteractionHandler") ) ), UNO_QUERY );
-
-    UcbLockBytesRef xLockBytes = new UcbLockBytes( pHandler );
-    Reference < XActiveDataSink > xSink = new UcbDataSink_Impl( xLockBytes );
-
-    OpenCommandArgument2 aArgument;
-    aArgument.Sink = xSink;
-    aArgument.Mode = OpenMode::DOCUMENT;
-
-    ProgressHandler_Impl            *pProgressHdl = new ProgressHandler_Impl();
-    Reference< XProgressHandler >    xProgressHdl = pProgressHdl;
-    pProgressHdl->SetProgressLink( LINK( &xLockBytes, UcbLockBytes, DataAvailHdl ) );
-
-    CommandThread_Impl* pThread = new CommandThread_Impl( xLockBytes, xContent, aArgument, xInteractionHandler, xProgressHdl, pHandler );
-    xLockBytes->setCommandThread_Impl( pThread );
-    pThread->create();
-    return xLockBytes;
-}
-
-UcbLockBytesRef UcbLockBytes::CreateInOutputLockBytes( const Reference < XContent > xContent, UcbLockBytesHandler* pHandler )
-{
-    if( !xContent.is() )
-        return NULL;;
-
-    Reference< XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
-    Reference< XInteractionHandler > xInteractionHandler = Reference< XInteractionHandler > (
-                xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uui.InteractionHandler") ) ), UNO_QUERY );
-
-    UcbLockBytesRef xLockBytes = new UcbLockBytes( pHandler );
-    xLockBytes->SetSynchronMode( TRUE );
-    Reference< XActiveDataStreamer > xSink = (XActiveDataStreamer*)new UcbStreamer_Impl( xLockBytes );
-
-    OpenCommandArgument2 aArgument;
-    aArgument.Sink = xSink;
-    aArgument.Mode = OpenMode::DOCUMENT;
-
-    ProgressHandler_Impl            *pProgressHdl = new ProgressHandler_Impl();
-    Reference< XProgressHandler >    xProgressHdl = pProgressHdl;
-    pProgressHdl->SetProgressLink( LINK( &xLockBytes, UcbLockBytes, DataAvailHdl ) );
-
-    CommandThread_Impl aThread( xLockBytes, xContent, aArgument, xInteractionHandler, xProgressHdl, pHandler );
-    xLockBytes->setCommandThread_Impl( &aThread );
-    aThread.DoIt();
-    return xLockBytes;
-}
-
-UcbLockBytesRef UcbLockBytes::CreateInputLockBytes( const Reference< XInputStream > xInputStream, UcbLockBytesHandler* pHandler )
+UcbLockBytesRef UcbLockBytes::CreateInputLockBytes( const Reference< XInputStream > xInputStream )
 {
     if( !xInputStream.is() )
         return NULL;;
 
-    String aCmd( RTL_CONSTASCII_USTRINGPARAM( "Open" ) );
-    UcbLockBytesRef xLockBytes = new UcbLockBytes( pHandler );
-    Reference < XActiveDataSink > xSink = new UcbDataSink_Impl( xLockBytes );
-
+    UcbLockBytesRef xLockBytes = new UcbLockBytes();
     xLockBytes->setDontClose_Impl();
     xLockBytes->setInputStream_Impl( xInputStream );
-
-    // we have to create a thread here so ::terminate() will be called
-    // asynchronously
-    CommandThread_Impl *pThread = new CommandThread_Impl( xLockBytes );
-    pThread->create();
+    xLockBytes->terminate_Impl();
     return xLockBytes;
 }
 
-SvStream* UcbStreamHelper::CreateStream( const String& rFileName, StreamMode eOpenMode, UcbLockBytesHandler* pHandler, sal_Bool bForceSynchron )
+UcbLockBytesRef UcbLockBytes::CreateLockBytes( const Reference < XContent > xContent, StreamMode eOpenMode, UcbLockBytesHandler* pHandler )
 {
-    SvStream* pStream = NULL;
-    ::ucb::ContentBroker* pBroker = ::ucb::ContentBroker::get();
-    if ( pBroker )
+    if( !xContent.is() )
+        return NULL;;
+
+    Reference< XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
+    Reference< XInteractionHandler > xInteractionHandler = Reference< XInteractionHandler > (
+                xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uui.InteractionHandler") ) ), UNO_QUERY );
+
+    UcbLockBytesRef xLockBytes = new UcbLockBytes( pHandler );
+    xLockBytes->SetSynchronMode( !pHandler );
+    Reference< XActiveDataControl > xSink;
+    if ( eOpenMode & STREAM_WRITE )
+        xSink = (XActiveDataControl*) new UcbStreamer_Impl( xLockBytes );
+    else
+        xSink = (XActiveDataControl*) new UcbDataSink_Impl( xLockBytes );
+
+    OpenCommandArgument2 aArgument;
+    aArgument.Sink = xSink;
+    aArgument.Mode = OpenMode::DOCUMENT;
+
+    Reference< XProgressHandler > xProgressHdl = new ProgressHandler_Impl( LINK( &xLockBytes, UcbLockBytes, DataAvailHdl ) );
+    CommandThread_Impl* pThread = new CommandThread_Impl( xLockBytes, xContent, aArgument, xInteractionHandler, xProgressHdl, pHandler );
+
+    if ( eOpenMode & STREAM_WRITE )
     {
-        try
+        // first try read/write mode
+        pThread->DoIt( sal_False );
+        delete pThread;
+        if ( !xLockBytes->getInputStream_Impl().is() )
         {
-            UcbLockBytesRef xLockBytes;
-            ::ucb::Content aContent( rFileName, Reference < XCommandEnvironment >() );
-            if ( eOpenMode & STREAM_WRITE )
-            {
-                sal_Bool bTruncate = ( eOpenMode & STREAM_TRUNC );
-                if ( bTruncate )
-                    aContent.executeCommand( ::rtl::OUString::createFromAscii( "delete" ), makeAny( sal_Bool( sal_True ) ) );
-
-                InsertCommandArgument aInsertArg;
-                aInsertArg.Data = Reference< XInputStream >();
-                aInsertArg.ReplaceExisting = sal_False;
-                Any aCmdArg;
-                aCmdArg <<= aInsertArg;
-                aContent.executeCommand( ::rtl::OUString::createFromAscii( "insert" ), aCmdArg );
-                xLockBytes = UcbLockBytes::CreateInOutputLockBytes( aContent.get(), pHandler );
-            }
-            else
-            {
-                UcbLockBytes::CreateInputLockBytes( aContent.get(), pHandler );
-            }
-
-            if ( xLockBytes.Is() )
-            {
-                xLockBytes->SetSynchronMode( !pHandler || bForceSynchron );
-                pStream = new SvStream( xLockBytes );
-            }
+            // no success: try readonly mode
+            xSink = (XActiveDataControl*) new UcbDataSink_Impl( xLockBytes );
+            aArgument.Sink = xSink;
+            pThread = new CommandThread_Impl( xLockBytes, xContent, aArgument, xInteractionHandler, xProgressHdl, pHandler );
         }
-        catch ( Exception e )
-        {
-            DBG_ERROR( "Any other exception!" );
-        }
+        else
+            return xLockBytes;
+    }
+
+    if ( pHandler )
+    {
+        pThread->create();
     }
     else
-        // if no UCB is present at least conventional file io is supported
-        pStream = new SvFileStream( rFileName, eOpenMode );
+    {
+        pThread->DoIt();
+        delete pThread;
+    }
 
-    return pStream;
+    return xLockBytes;
 }
-
-SvStream* UcbStreamHelper::CreateStream( Reference < XInputStream > xStream, UcbLockBytesHandler* pHandler )
-{
-    UcbLockBytesRef xLockBytes = UcbLockBytes::CreateInputLockBytes( xStream, pHandler );
-    if ( xLockBytes.Is() )
-        return new SvStream( xLockBytes );
-    else
-        return NULL;
-};
 
 };
