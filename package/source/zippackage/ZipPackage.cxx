@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: mtg $ $Date: 2001-06-12 11:24:24 $
+ *  last change: $Author: mtg $ $Date: 2001-06-15 15:26:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,15 +97,15 @@
 #ifndef _COM_SUN_STAR_PACKAGES_MANIFEST_XMANIFESTREADER_HPP_
 #include <com/sun/star/packages/manifest/XManifestReader.hpp>
 #endif
-
-#if SUPD>634
-#ifndef _COM_SUN_STAR_UCB_COMMANDFAILEDEXCEPTION_HPP_
+/*
+ifndef _COM_SUN_STAR_UCB_COMMANDFAILEDEXCEPTION_HPP_
 #include <com/sun/star/ucb/CommandFailedException.hpp>
 #endif
-#endif
+*/
 
 using namespace rtl;
 using namespace std;
+using namespace cppu;
 using namespace com::sun::star::io;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::ucb;
@@ -332,6 +332,7 @@ void SAL_CALL ZipPackage::initialize( const Sequence< Any >& aArguments )
         throw(Exception, RuntimeException)
 {
     aArguments[0] >>= sURL;
+    sal_Bool bBadZipFile = sal_False;
     pContent = new ::ucb::Content(sURL, Reference < com::sun::star::ucb::XCommandEnvironment >() );
     Reference < XActiveDataSink > xSink = new ZipPackageSink;
     try
@@ -339,35 +340,33 @@ void SAL_CALL ZipPackage::initialize( const Sequence< Any >& aArguments )
         if (pContent->openStream ( xSink ) )
             xContentStream = xSink->getInputStream();
         xContentSeek = Reference < XSeekable > (xContentStream, UNO_QUERY);
-        try
-        {
-            pZipFile    = new ZipFile(xContentStream, sal_True);
-            getZipFileContents();
-        }
-        catch (ZipException&)// rException)
-        {
-            // clean up the memory, throw an assertion, and tell the UCB about the error
-            delete pZipFile; pZipFile = NULL;
-            VOS_ENSURE( 0, "ZipException thrown - bad Zip File"); //rException.Message);
-            throw;
-        }
     }
-    catch (CommandAbortedException&)
-    {
-        // Command was aborted by css::ucb:XComandProcessor::abort
-    }
-#if SUPD>634
-    catch (CommandFailedException&)
-    {
-        // error was handled by an interaction handler which cancelled the
-        // command
-    }
-#endif
     catch (com::sun::star::uno::Exception&)
     {
         // Exception derived from uno::Exception thrown. This probably
         // means the file doesn't exist...we'll create it at
         // commitChanges time
+    }
+    try
+    {
+        pZipFile    = new ZipFile(xContentStream, sal_True);
+        getZipFileContents();
+    }
+    catch ( IOException & )
+    {
+        bBadZipFile = sal_True;
+    }
+    catch ( ZipException & )
+    {
+        bBadZipFile = sal_True;
+    }
+    if ( bBadZipFile )
+    {
+        // clean up the memory, and tell the UCB about the error
+        delete pZipFile; pZipFile = NULL;
+        delete pContent; pContent = NULL;
+        throw com::sun::star::uno::Exception ( OUString::createFromAscii ( "Bad Zip File." ),
+            static_cast < ::cppu::OWeakObject * > ( this ) );
     }
 }
 
@@ -584,9 +583,10 @@ void SAL_CALL ZipPackage::commitChanges(  )
     {
         pContent->writeStream( Reference < XInputStream > (pBuffer), sal_True );
     }
-    catch (::com::sun::star::ucb::CommandAbortedException&)
+    catch (::com::sun::star::uno::Exception& r)
     {
-        VOS_ENSURE( 0, "Unable to write Zip File to disk!");
+        throw WrappedTargetException( OUString::createFromAscii( "Unable to write Zip File to disk!" ),
+            static_cast < OWeakObject * > ( this ), makeAny( r ) );
     }
     Reference < XActiveDataSink > xSink = new ZipPackageSink;
     try
@@ -597,21 +597,10 @@ void SAL_CALL ZipPackage::commitChanges(  )
         xContentSeek = Reference < XSeekable > (xContentStream, UNO_QUERY);
         pZipFile->setInputStream ( xContentStream );
     }
-    catch (CommandAbortedException&)
+    catch (com::sun::star::uno::Exception& r)
     {
-        // Command was aborted by css::ucb:XComandProcessor::abort
-    }
-#if SUPD>634
-    catch (CommandFailedException&)
-    {
-        // error was handled by an interaction handler which cancelled the
-        // command
-    }
-#endif
-    catch (com::sun::star::uno::Exception&)
-    {
-        // Exception thrown derived from css::uno::Exception...
-        // exact error unknown
+        throw WrappedTargetException( OUString::createFromAscii( "Unable to read Zip File content!" ),
+            static_cast < OWeakObject * > ( this ), makeAny( r ) );
     }
 }
 
