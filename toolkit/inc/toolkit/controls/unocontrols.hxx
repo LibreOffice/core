@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrols.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2001-09-28 09:52:24 $
+ *  last change: $Author: mt $ $Date: 2001-10-11 15:21:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -333,6 +333,15 @@ class UnoEditControl :  public UnoControlBase,
 {
 private:
     TextListenerMultiplexer maTextListeners;
+
+    // Not all fields derived from UnoEditCOntrol have the property "Text"
+    // They only support ::com::sun::star::awt::XTextComponent, so keep the text
+    // here, maybe there is no Peer when calling setText()...
+    ::rtl::OUString     maText;
+    BOOL                mbSetTextInPeer;
+
+    USHORT              mnMaxTextLen;
+    BOOL                mbSetMaxTextLenInPeer;
 
 public:
 
