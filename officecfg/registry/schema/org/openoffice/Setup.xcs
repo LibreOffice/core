@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Setup.xcs,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cd $ $Date: 2002-07-31 17:50:55 $
+ *  last change: $Author: dg $ $Date: 2002-08-02 16:28:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,8 @@
  ************************************************************************ -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../component-schema.dtd">
 <oor:component-schema oor:name="Setup" oor:package="org.openoffice" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xml:lang="en-US">
+	<!-- Responsible: DG -->
+	<info><desc xml:lang="en-US">Contains Setup related preference settings like the installed UI locales or the available modules.</desc></info>
 	<import oor:component="org.openoffice.Types"/>
 	<templates>
 		<group oor:name="Factory">
@@ -120,10 +122,13 @@
 		</group>
 		<group oor:name="Office">
 			<!--The default must be written by the setup.-->
+			<!-- Responsible: DG -->
+			<info><desc xml:lang="en-US">Specifies the installation location, locales and the available factories for creating documents.</desc></info>			
 			<prop oor:name="ooSetupInstallPath" oor:type="xs:string">
 				<!-- OldPath: Service User/[username] -->
 				<!-- OldLocation: userdb.ini -->
 				<!-- Responsible: AS/BEI -->
+				<!-- Deprecated -->
 				<info>
 					<desc xml:lang="en-US">The user install path. Directory where the user data is copied to. Must be a valid directory.</desc>
 				</info>
@@ -132,6 +137,7 @@
 				<!-- OldPath: Service User/[username] -->
 				<!-- OldLocation: userdb.ini -->
 				<!-- Responsible: AS/BEI -->
+				<!-- Deprecated -->
 				<info>
 					<desc xml:lang="en-US">The user install path in URL notation. Must match the UCB configuration.</desc>
 				</info>
@@ -140,6 +146,7 @@
 				<!-- OldPath: Service User/[username] -->
 				<!-- OldLocation: userdb.ini -->
 				<!-- Responsible: IS/BEI -->
+				<!-- Deprecated -->
 				<info>
 					<desc xml:lang="en-US">True, if user data is copied successfully</desc>
 				</info>

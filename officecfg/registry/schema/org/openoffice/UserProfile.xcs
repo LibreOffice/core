@@ -3,9 +3,9 @@
  *
  *  $RCSfile: UserProfile.xcs,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pb $ $Date: 2002-07-31 10:04:20 $
+ *  last change: $Author: dg $ $Date: 2002-08-02 16:28:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,11 @@
  ************************************************************************ -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../component-schema.dtd">
 <oor:component-schema oor:name="UserProfile" oor:package="org.openoffice" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xml:lang="en-US">
+	<!-- Responsible: DG -->
+	<info><desc xml:lang="en-US">Contains user related informations like firstname, lastname, address ...</desc></info>
 	<component>
 		<group oor:name="Data">
+			<info><desc xml:lang="en-US">Contains user related informations like firstname, lastname, address ...</desc></info>
 			<prop oor:name="o" oor:type="xs:string">
 				<!-- OldPath: User -->
 				<!-- OldLocation: soffice.ini -->
