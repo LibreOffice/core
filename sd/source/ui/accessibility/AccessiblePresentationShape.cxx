@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePresentationShape.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: af $ $Date: 2002-02-08 17:01:33 $
+ *  last change: $Author: af $ $Date: 2002-02-08 18:08:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,8 +145,7 @@ AccessiblePresentationShape::~AccessiblePresentationShape (void)
             sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM ("ImpressHandout"));
             break;
         default:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM (
-                                         "UnknownAccessibleImpressShape"));
+            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM ("UnknownAccessibleImpressShape"));
             uno::Reference<drawing::XShapeDescriptor> xDescriptor (mxShape, uno::UNO_QUERY);
             if (xDescriptor.is())
                 sName += ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM (": "))
