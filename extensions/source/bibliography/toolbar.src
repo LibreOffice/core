@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbar.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 20:12:11 $
+ *  last change: $Author: obo $ $Date: 2001-05-10 06:07:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,7 @@ ToolBox RID_BIB_TOOLBAR
             Text[ turkish ] = "Tablo";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Tabla";
+            Text[ finnish ] = "Taulukko";
         };
         ToolBoxItem
         {
@@ -138,6 +139,7 @@ ToolBox RID_BIB_TOOLBAR
             Text[ arabic ] = "ãÕØáÍ ÇáÈÍË";
             Text[ turkish ] = "Arama ölçütü";
             Text[ catalan ] = "Expresión de búsqueda";
+            Text[ finnish ] = "Hakuavain";
         };
         ToolBoxItem
         {
@@ -179,6 +181,7 @@ ToolBox RID_BIB_TOOLBAR
             Text[ turkish ] = "Otomatik filtre";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "AutoFiltro";
+            Text[ finnish ] = "Automaattinen suodatus";
         };
 
         ToolBoxItem
@@ -209,6 +212,7 @@ ToolBox RID_BIB_TOOLBAR
             Text[ turkish ] = "Standart filtre";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Filtro estándar";
+            Text[ finnish ] = "Vakiosuodatus";
         };
 
         ToolBoxItem
@@ -239,6 +243,7 @@ ToolBox RID_BIB_TOOLBAR
             Text[ turkish ] = "Filtreyi kaldýr";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Eliminar filtro";
+            Text[ finnish ] = "Poista suodatin";
         };
         ToolBoxItem
         {
@@ -268,6 +273,7 @@ ToolBox RID_BIB_TOOLBAR
             Text[ turkish ] = "Sütun düzeni";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Asignación de columnas";
+            Text[ finnish ] = "Sarakejärjestys";
         };
         ToolBoxItem
         {
@@ -298,6 +304,7 @@ ToolBox RID_BIB_TOOLBAR
             Text[ turkish ] = "Veri kaynaðý";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Fuente de datos";
+            Text[ finnish ] = "Tietolähde";
         };
 /*
         ToolBoxItem
