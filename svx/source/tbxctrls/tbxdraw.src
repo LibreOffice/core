@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxdraw.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-29 02:06:42 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 20:43:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -343,7 +343,7 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text[ japanese ] = "‘È‰~Œ`‚ÌîŒ`";
                 Text[ chinese_traditional ] = "®°§Î";
                 Text[ greek ] = "Ôïìİáò İëëåéøçò";
-                Text[ korean ] = "Å¸¿ø¡¡ºÎÃ¤²Ã";
+                Text[ korean ] = "Å¸¿ø ºÎÃ¤²Ã";
                 Text[ arabic ] = "ŞØÇÚ Ôßá ÈíÖæí";
                 Text[ turkish ] = "Elips dilimi";
                 Text[ language_user1 ] = " ";
@@ -372,7 +372,7 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text[ japanese ] = "‰~‚ÌØ•Ğ";
                 Text[ chinese_traditional ] = "¶ê¯Ê";
                 Text[ greek ] = "ÔìŞìá êıêëïõ";
-                Text[ korean ] = "¿øÀÇ¡¡ÀıÆí";
+                Text[ korean ] = "¿ø ¼¼±×¸ÕÆ®";
                 Text[ arabic ] = "ŞØÚÉ ãä ÏÇÆÑÉ";
                 Text[ turkish ] = "Yay dilimi";
                 Text[ language_user1 ] = " ";
@@ -457,7 +457,7 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text[ russian ] = "Áåãóùàÿ ñòğîêà";
                 Text[ polish ] = "Animacje tekstu";
                 Text[ japanese ] = "Ã·½Ä±ÆÒ°¼®İ";
-                Text[ chinese_traditional ] = "²¾°Ê¤å¦r";
+                Text[ chinese_traditional ] = "°ÊºA¤å¦r";
                 Text[ greek ] = "Êéíïıìåíï êåßìåíï";
                 Text[ korean ] = "ÅØ½ºÆ® ¾Ö´Ï¸ŞÀÌ¼Ç";
                 Text[ arabic ] = "äÕ ãÊÍÑß";
@@ -623,7 +623,7 @@ FloatingWindow RID_SVXTBX_ALIGNMENT
                 Text [ english_us ] = "Center" ;
                 Text[ chinese_simplified ] = "¾ÓÖĞ";
                 Text[ russian ] = "Ïî öåíòğó";
-                Text[ polish ] = "Wyœrodkuj";
+                Text[ polish ] = "Do œrodka";
                 Text[ japanese ] = "’†‰›‘µ‚¦";
                 Text[ chinese_traditional ] = "¸m¤¤";
                 Text[ greek ] = "Êåíôñáñéóìİíá";
@@ -764,6 +764,7 @@ FloatingWindow RID_SVXTBX_ALIGNMENT
     Text[ catalan ] = "Alineación";
 };
  // ********************************************************************** EOF
+
 
 
 
