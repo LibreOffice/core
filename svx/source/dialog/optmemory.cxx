@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optmemory.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-29 16:24:26 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 09:02:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,8 +270,6 @@ OfaMemoryOptionsPage::OfaMemoryOptionsPage(Window* pParent, const SfxItemSet& rS
     aQuickLaunchFL.Hide();
     aQuickLaunchCB.Hide();
 #endif
-
-    aUndoEdit.SetMaxTextLen( 3 );
 
     aTfGraphicObjectTime.SetExtFormat( EXTTIMEF_24H_SHORT );
 
