@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.131 $
+ *  $Revision: 1.132 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-15 11:32:25 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 13:21:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,6 +206,10 @@
 #ifndef _OUTLOBJ_HXX //autogen
 #include <outlobj.hxx>
 #endif
+
+//#ifndef _COM_SUN_STAR_BEANS_TOLERANTPROPERTYSETRESULTTYPE_HPP_
+//#include <com/sun/star/beans/TolerantPropertySetResultType.hpp>
+//#endif
 
 #include <vector>
 
@@ -734,6 +738,7 @@ uno::Sequence< uno::Type > SAL_CALL SvxShape::_getTypes()
                     *pTypes++ = ::getCppuType((const uno::Reference< lang::XComponent >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertySet >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< beans::XMultiPropertySet >*)0);
+//                  *pTypes++ = ::getCppuType((const uno::Reference< beans::XTolerantMultiPropertySet >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertyState >*)0);
                     *pTypes++ = beans::XMultiPropertyStates::static_type();
                     *pTypes++ = ::getCppuType((const uno::Reference< drawing::XGluePointsSupplier >*)0);
@@ -766,6 +771,7 @@ uno::Sequence< uno::Type > SAL_CALL SvxShape::_getTypes()
                     *pTypes++ = ::getCppuType((const uno::Reference< lang::XComponent >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertySet >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< beans::XMultiPropertySet >*)0);
+//                  *pTypes++ = ::getCppuType((const uno::Reference< beans::XTolerantMultiPropertySet >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertyState >*)0);
                     *pTypes++ = beans::XMultiPropertyStates::static_type();
                     *pTypes++ = ::getCppuType((const uno::Reference< drawing::XGluePointsSupplier >*)0);
@@ -798,6 +804,7 @@ uno::Sequence< uno::Type > SAL_CALL SvxShape::_getTypes()
                     *pTypes++ = ::getCppuType((const uno::Reference< lang::XComponent >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertySet >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< beans::XMultiPropertySet >*)0);
+//                  *pTypes++ = ::getCppuType((const uno::Reference< beans::XTolerantMultiPropertySet >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertyState >*)0);
                     *pTypes++ = beans::XMultiPropertyStates::static_type();
                     *pTypes++ = ::getCppuType((const uno::Reference< drawing::XGluePointsSupplier >*)0);
@@ -830,6 +837,7 @@ uno::Sequence< uno::Type > SAL_CALL SvxShape::_getTypes()
                     *pTypes++ = ::getCppuType((const uno::Reference< lang::XComponent >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertySet >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< beans::XMultiPropertySet >*)0);
+//                  *pTypes++ = ::getCppuType((const uno::Reference< beans::XTolerantMultiPropertySet >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertyState >*)0);
                     *pTypes++ = beans::XMultiPropertyStates::static_type();
                     *pTypes++ = ::getCppuType((const uno::Reference< drawing::XGluePointsSupplier >*)0);
@@ -867,6 +875,7 @@ uno::Sequence< uno::Type > SAL_CALL SvxShape::_getTypes()
                     *pTypes++ = ::getCppuType((const uno::Reference< lang::XComponent >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertySet >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< beans::XMultiPropertySet >*)0);
+//                  *pTypes++ = ::getCppuType((const uno::Reference< beans::XTolerantMultiPropertySet >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertyState >*)0);
                     *pTypes++ = beans::XMultiPropertyStates::static_type();
                     *pTypes++ = ::getCppuType((const uno::Reference< drawing::XGluePointsSupplier >*)0);
@@ -900,6 +909,7 @@ uno::Sequence< uno::Type > SAL_CALL SvxShape::_getTypes()
                     *pTypes++ = ::getCppuType((const uno::Reference< lang::XComponent >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertySet >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< beans::XMultiPropertySet >*)0);
+//                  *pTypes++ = ::getCppuType((const uno::Reference< beans::XTolerantMultiPropertySet >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertyState >*)0);
                     *pTypes++ = beans::XMultiPropertyStates::static_type();
                     *pTypes++ = ::getCppuType((const uno::Reference< drawing::XGluePointsSupplier >*)0);
@@ -948,6 +958,7 @@ uno::Sequence< uno::Type > SAL_CALL SvxShape::_getTypes()
                     *pTypes++ = ::getCppuType((const uno::Reference< lang::XComponent >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertySet >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< beans::XMultiPropertySet >*)0);
+//                  *pTypes++ = ::getCppuType((const uno::Reference< beans::XTolerantMultiPropertySet >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertyState >*)0);
                     *pTypes++ = beans::XMultiPropertyStates::static_type();
                     *pTypes++ = ::getCppuType((const uno::Reference< drawing::XGluePointsSupplier >*)0);
@@ -996,8 +1007,7 @@ uno::Sequence< sal_Int8 > SAL_CALL SvxShape::getImplementationId()
 
 Reference< uno::XInterface > SvxShape_NewInstance()
 {
-    uno::Reference< uno::XInterface > xShape( (OWeakObject*)new SvxShape(), UNO_QUERY );
-    return xShape;
+    return uno::Reference< drawing::XShape >((OWeakObject*)new SvxShape(), UNO_QUERY );
 }
 
 // SfxListener
@@ -2758,6 +2768,281 @@ void SAL_CALL SvxShape::firePropertiesChangeEvent( const ::com::sun::star::uno::
 
 //----------------------------------------------------------------------
 
+/*// XTolerantMultiPropertySet
+uno::Sequence< beans::SetPropertyTolerantFailed > SAL_CALL SvxShape::setPropertyValuesTolerant(
+    const uno::Sequence< ::rtl::OUString >& aPropertyNames,
+    const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aValues )
+    throw (lang::IllegalArgumentException, uno::RuntimeException)
+{
+    const sal_Int32 nCount = aPropertyNames.getLength();
+
+    if (nCount != aValues.getLength())
+        throw lang::IllegalArgumentException();
+
+    const OUString* pNames = aPropertyNames.getConstArray();
+
+    const uno::Any* pValues = aValues.getConstArray();
+
+    uno::Sequence< beans::SetPropertyTolerantFailed > aRet(nCount);
+    beans::SetPropertyTolerantFailed* pRet = aRet.getArray();
+    sal_Int32 nFailed = 0;
+
+    mbIsMultiPropertyCall = sal_True;
+
+    if( mpImpl->mpMaster )
+    {
+        uno::Reference < beans::XPropertySetInfo > xInfo(getPropertySetInfo());
+        for( sal_Int32 nIdx = 0; nIdx < nCount; nIdx++ )
+        {
+            sal_Bool bHasByName(xInfo->hasPropertyByName(pNames[nIdx]));
+            sal_Bool bReadOnly(sal_True);
+            if (bHasByName)
+            {
+                beans::Property aProp(xInfo->getPropertyByName(pNames[nIdx]));
+                bReadOnly = ((aProp.Attributes & beans::PropertyAttribute::READONLY) == beans::PropertyAttribute::READONLY);
+            }
+            if (bHasByName && !bReadOnly)
+            {
+                try
+                {
+                    setPropertyValue( pNames[nIdx], pValues[nIdx] );
+                }
+                catch (lang::IllegalArgumentException)
+                {
+                    pRet->Result = beans::TolerantPropertySetResultType::ILLEGAL_ARGUMENT;
+                    pRet->Name = pNames[nIdx];
+                    ++pRet;
+                    ++nFailed;
+                }
+                catch (uno::Exception&)
+                {
+                    pRet->Result = beans::TolerantPropertySetResultType::UNKNOWN_FAILURE;
+                    pRet->Name = pNames[nIdx];
+                    ++pRet;
+                    ++nFailed;
+                }
+            }
+            else
+            {
+                if (bHasByName && bReadOnly)
+                    pRet->Result = beans::TolerantPropertySetResultType::PROPERTY_VETO;
+                else
+                    pRet->Result = beans::TolerantPropertySetResultType::UNKNOWN_PROPERTY;
+                pRet->Name = pNames[nIdx];
+                ++pRet;
+                ++nFailed;
+            }
+        }
+    }
+    else
+    {
+        uno::Reference< beans::XPropertySet > xSet(queryInterface( ::getCppuType( (const uno::Reference< beans::XPropertySet >*) 0) ), uno::UNO_QUERY);
+        //xSet.set(queryInterface( ::getCppuType( (const uno::Reference< beans::XPropertySet >*) 0) ), uno::UNO_QUERY);
+        uno::Reference < beans::XPropertySetInfo > xInfo(xSet->getPropertySetInfo());
+
+        for( sal_Int32 nIdx = 0; nIdx < nCount; nIdx++ )
+        {
+            sal_Bool bHasByName(xInfo->hasPropertyByName(pNames[nIdx]));
+            sal_Bool bReadOnly(sal_True);
+            if (bHasByName)
+            {
+                beans::Property aProp(xInfo->getPropertyByName(pNames[nIdx]));
+                bReadOnly = ((aProp.Attributes & beans::PropertyAttribute::READONLY) == beans::PropertyAttribute::READONLY);
+            }
+            if (bHasByName && !bReadOnly)
+            {
+                try
+                {
+                    xSet->setPropertyValue( pNames[nIdx], pValues[nIdx] );
+                }
+                catch (lang::IllegalArgumentException)
+                {
+                    pRet->Result = beans::TolerantPropertySetResultType::ILLEGAL_ARGUMENT;
+                    pRet->Name = pNames[nIdx];
+                    ++pRet;
+                    ++nFailed;
+                }
+                catch (uno::Exception&)
+                {
+                    pRet->Result = beans::TolerantPropertySetResultType::UNKNOWN_FAILURE;
+                    pRet->Name = pNames[nIdx];
+                    ++pRet;
+                    ++nFailed;
+                }
+            }
+            else
+            {
+                if (bHasByName && bReadOnly)
+                    pRet->Result = beans::TolerantPropertySetResultType::PROPERTY_VETO;
+                else
+                    pRet->Result = beans::TolerantPropertySetResultType::UNKNOWN_PROPERTY;
+                pRet->Name = pNames[nIdx];
+                ++pRet;
+                ++nFailed;
+            }
+        }
+    }
+
+    mbIsMultiPropertyCall = sal_False;
+
+    if( mpImpl->mpItemSet )
+    {
+        //pObj->SetItemSetAndBroadcast( *mpImpl->mpItemSet );
+//      pObj->SetMergedItemSetAndBroadcast( *mpImpl->mpItemSet );
+
+        delete mpImpl->mpItemSet;
+        mpImpl->mpItemSet = NULL;
+    }
+
+    aRet.realloc(nFailed);
+
+    return aRet;
+}
+
+uno::Sequence< beans::GetPropertyTolerantResult > SAL_CALL SvxShape::getPropertyValuesTolerant(
+    const uno::Sequence< ::rtl::OUString >& aPropertyNames )
+    throw (uno::RuntimeException)
+{
+    const sal_Int32 nCount = aPropertyNames.getLength();
+    const OUString* pNames = aPropertyNames.getConstArray();
+
+    uno::Sequence< beans::GetPropertyTolerantResult > aRet( nCount );
+    beans::GetPropertyTolerantResult* pValue = aRet.getArray();;
+
+    if( mpImpl->mpMaster )
+    {
+        uno::Sequence < beans::PropertyState > aStates(getPropertyStates( aPropertyNames ));
+        const beans::PropertyState *pStates = aStates.getConstArray();
+        if (aStates.getLength())
+        {
+            for( sal_Int32 nIdx = 0; nIdx < nCount; nIdx++, pValue++, pStates++, pNames++ )
+            {
+                try
+                {
+                    pValue->State = *pStates;
+                    pValue->Value = getPropertyValue( *pNames );
+                    pValue->Result = beans::TolerantPropertySetResultType::SUCCESS;
+                }
+                catch( uno::Exception& )
+                {
+                    pValue->Result = beans::TolerantPropertySetResultType::UNKNOWN_PROPERTY;
+                }
+            }
+        }
+    }
+    else
+    {
+        uno::Reference< beans::XPropertySet > xSet(queryInterface( ::getCppuType( (const uno::Reference< beans::XPropertySet >*) 0) ), uno::UNO_QUERY);
+        uno::Reference< beans::XPropertyState > xState(xSet, uno::UNO_QUERY);
+        uno::Sequence < beans::PropertyState > aStates;
+        const beans::PropertyState *pStates = 0;
+           if( xState.is() )
+        {
+            aStates = xState->getPropertyStates( aPropertyNames );
+            pStates = aStates.getConstArray();
+        }
+
+        if (aStates.getLength())
+        {
+            for( sal_Int32 nIdx = 0; nIdx < nCount; nIdx++, pValue++, pStates++, pNames++ )
+            {
+                try
+                {
+                    pValue->State = *pStates;
+                    pValue->Value = xSet->getPropertyValue( *pNames );
+                    pValue->Result = beans::TolerantPropertySetResultType::SUCCESS;
+                }
+                catch( uno::Exception& )
+                {
+                    pValue->Result = beans::TolerantPropertySetResultType::UNKNOWN_PROPERTY;
+                }
+            }
+        }
+    }
+
+    return aRet;
+}
+
+uno::Sequence< beans::GetDirectPropertyTolerantResult > SAL_CALL SvxShape::getDirectPropertyValuesTolerant(
+    const uno::Sequence< ::rtl::OUString >& aPropertyNames )
+    throw (uno::RuntimeException)
+{
+     const sal_Int32 nCount = aPropertyNames.getLength();
+    const OUString* pNames = aPropertyNames.getConstArray();
+
+    uno::Sequence< beans::GetDirectPropertyTolerantResult > aRet( nCount );
+    beans::GetDirectPropertyTolerantResult* pValue = aRet.getArray();;
+
+    sal_Int32 nDirectCount = 0;
+    if( mpImpl->mpMaster )
+    {
+        uno::Sequence < beans::PropertyState > aStates(getPropertyStates( aPropertyNames ));
+        if (aStates.getLength())
+        {
+            const beans::PropertyState *pStates = aStates.getConstArray();
+            for( sal_Int32 nIdx = 0; nIdx < nCount; nIdx++, pStates++, pNames++ )
+            {
+                try
+                {
+                    pValue->State = *pStates;
+                    if (pValue->State == beans::PropertyState_DIRECT_VALUE)
+                    {
+                        pValue->Value = getPropertyValue( *pNames );
+                        pValue->Name = *pNames;
+                        pValue->Result = beans::TolerantPropertySetResultType::SUCCESS;
+                        pValue++;
+                        nDirectCount++;
+                    }
+                }
+                catch( uno::Exception& )
+                {
+                    pValue->Result = beans::TolerantPropertySetResultType::UNKNOWN_PROPERTY;
+                }
+            }
+        }
+    }
+    else
+    {
+        uno::Reference< beans::XPropertySet > xSet(queryInterface( ::getCppuType( (const uno::Reference< beans::XPropertySet >*) 0) ), uno::UNO_QUERY);
+        uno::Reference< beans::XPropertyState > xState(xSet, uno::UNO_QUERY);
+        uno::Sequence < beans::PropertyState > aStates;
+        const beans::PropertyState *pStates = 0;
+           if( xState.is() )
+        {
+            aStates = xState->getPropertyStates( aPropertyNames );
+            pStates = aStates.getConstArray();
+        }
+
+        if (aStates.getLength())
+        {
+            for( sal_Int32 nIdx = 0; nIdx < nCount; nIdx++, pStates++, pNames++ )
+            {
+                try
+                {
+                    pValue->State = *pStates;
+                    if (pValue->State == beans::PropertyState_DIRECT_VALUE)
+                    {
+                        pValue->Value = xSet->getPropertyValue( *pNames );
+                        pValue->Name = *pNames;
+                        pValue->Result = beans::TolerantPropertySetResultType::SUCCESS;
+                        pValue++;
+                        nDirectCount++;
+                    }
+                }
+                catch( uno::Exception& )
+                {
+                    pValue->Result = beans::TolerantPropertySetResultType::UNKNOWN_PROPERTY;
+                }
+            }
+        }
+    }
+    aRet.realloc(nDirectCount);
+
+    return aRet;
+}*/
+
+//----------------------------------------------------------------------
+
 uno::Any SvxShape::GetAnyForItem( SfxItemSet& aSet, const SfxItemPropertyMap* pMap ) const
 {
     uno::Any aAny;
@@ -4030,7 +4315,7 @@ uno::Any SAL_CALL SvxShapeText::queryAggregation( const uno::Type & rType )
     uno::Any aAny;
 
     if( !SvxShape::queryAggregation( rType, aAny ) )
-        SvxUnoTextBase::queryAggregation( rType, aAny );
+        return SvxUnoTextBase::queryAggregation( rType );
 
     return aAny;
 }
