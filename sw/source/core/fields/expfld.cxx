@@ -2,9 +2,9 @@
  *
  *  $RCSfile: expfld.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:05:27 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:17:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,7 +212,9 @@ void ReplacePoint( String& rTmpName, BOOL bWithCommandType )
     sal_Unicode *pStr = rTmpName.GetBufferAccess(), *pBackStr = pStr + nLen;
 
     long nBackCount = bWithCommandType ? 2 : 1;
-    for( xub_StrLen i = nLen; i; --i, pBackStr-- )
+    xub_StrLen i;
+
+    for( i = nLen; i; --i, pBackStr-- )
         if( '.' == *pBackStr )
         {
             *pBackStr = DB_DELIM;
