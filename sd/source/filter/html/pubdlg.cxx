@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pubdlg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2002-07-16 08:13:01 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 13:07:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1334,7 +1334,7 @@ IMPL_LINK( SdPublishingDlg, FinishHdl, OKButton *, EMPTYARG )
     return 0;
 }
 
-static UINT16 nPreviewBitmapOffests[] = { 1,3,5,7,8,9,10,11 };
+static UINT16 nPreviewBitmapOffests[] = { 0,2,4,6,7,8,9,10 };
 
 // =====================================================================
 // Refresh des Dialogs beim wechsel der Seite
