@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.162 $
+ *  $Revision: 1.163 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 14:32:37 $
+ *  last change: $Author: vg $ $Date: 2003-07-01 14:49:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3183,6 +3183,7 @@ long SalFrameData::HandleReparentEvent( XReparentEvent *pEvent )
     hWM_Parent = GetShellWindow();
     do
     {
+    Children = NULL;
         XQueryTree( pDisplay,
                     hWM_Parent,
                     &hRoot,
