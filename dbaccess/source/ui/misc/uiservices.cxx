@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uiservices.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-15 15:47:46 $
+ *  last change: $Author: fs $ $Date: 2000-12-15 16:46:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@ extern "C" void SAL_CALL createRegistryInfo_OInteractionHandler();
 extern "C" void SAL_CALL createRegistryInfo_SbaXGridControl();
 
 //***************************************************************************************
-extern "C" void SAL_CALL createRegistryInfo()
+extern "C" void SAL_CALL createRegistryInfo_DBU()
 {
     static sal_Bool bInit = sal_False;
     if (!bInit)
@@ -112,7 +112,7 @@ extern "C" void SAL_CALL component_getImplementationEnvironment(
                 uno_Environment **ppEnv
             )
 {
-    createRegistryInfo();
+    createRegistryInfo_DBU();
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 

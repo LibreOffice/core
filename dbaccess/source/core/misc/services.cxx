@@ -2,9 +2,9 @@
  *
  *  $RCSfile: services.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-15 15:38:52 $
+ *  last change: $Author: fs $ $Date: 2000-12-15 16:45:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@ extern "C" void SAL_CALL createRegistryInfo_ORowSet();
 // Die vorgeschriebene C-Api muss erfuellt werden!
 // Sie besteht aus drei Funktionen, die von dem Modul exportiert werden muessen.
 //
-extern "C" void SAL_CALL createRegistryInfo()
+extern "C" void SAL_CALL createRegistryInfo_DBA()
 {
     static sal_Bool bInit = sal_False;
     if (!bInit)
@@ -111,7 +111,7 @@ extern "C" void SAL_CALL component_getImplementationEnvironment(
                 uno_Environment **ppEnv
             )
 {
-    createRegistryInfo();
+    createRegistryInfo_DBA();
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
