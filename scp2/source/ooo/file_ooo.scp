@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_ooo.scp,v $
 *
-*  $Revision: 1.1 $
+*  $Revision: 1.2 $
 *
-*  last change: $Author: is $ $Date: 2004-02-05 18:10:03 $
+*  last change: $Author: rt $ $Date: 2004-02-10 15:40:02 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -190,39 +190,6 @@ File gid_File_Bin_Jvmsetup_Bin
 End
 
 #endif
-
-#endif
-
-#ifdef UNX
-
-File gid_File_Bin_Ooovirg_Bin
-    BIN_FILE_BODY;
-    Dir = gid_Dir_Program;
-    Styles = (PACKED);
-    Name = "ooovirg";
-End
-
-#endif
-
-#ifdef WNT
-
-File gid_File_Bin_Oovirghook
-    BIN_FILE_BODY;
-    Dir = gid_Dir_Program;
-    Styles = (PACKED);
-    Name = "OoVirgHook.dll";
-End
-
-#endif
-
-#ifdef WNT
-
-File gid_File_Bin_Openofficehooktray
-    BIN_FILE_BODY;
-    Dir = gid_Dir_Program;
-    Styles = (PACKED);
-    Name = "OpenOfficeHookTray.exe";
-End
 
 #endif
 
