@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testcppu.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-09 13:51:35 $
+ *  last change: $Author: dbo $ $Date: 2001-03-09 14:25:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -835,36 +835,26 @@ static void testEnvironment(void)
     sal_Int32 nLen;
 
     OUString aUnoEnvTypeName( RTL_CONSTASCII_USTRINGPARAM(UNO_LB_UNO) );
-    uno_getEnvironment( &pEnv, aUnoEnvTypeName.pData, 0 );
+    ::uno_getEnvironment( &pEnv, aUnoEnvTypeName.pData, 0 );
+    ::uno_dumpEnvironment( stderr, pEnv, 0 );
     (*pEnv->pExtEnv->getRegisteredInterfaces)( pEnv->pExtEnv, &ppInterfaces, &nLen, rtl_allocateMemory );
-    if (nLen)
+    while (nLen--)
     {
-        OSL_TRACE( "### UNO interfaces left:\n" );
-        ::uno_dumpEnvironment( stderr, pEnv, 0 );
-
-        while (nLen--)
-        {
-            uno_Interface * pUnoI = (uno_Interface *)ppInterfaces[nLen];
-            (*pUnoI->release)( pUnoI );
-        }
+        uno_Interface * pUnoI = (uno_Interface *)ppInterfaces[nLen];
+        (*pUnoI->release)( pUnoI );
     }
-    rtl_freeMemory( ppInterfaces );
+    ::rtl_freeMemory( ppInterfaces );
 
     OUString aCppEnvTypeName( RTL_CONSTASCII_USTRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME) );
-    uno_getEnvironment( &pEnv, aCppEnvTypeName.pData, 0 );
+    ::uno_getEnvironment( &pEnv, aCppEnvTypeName.pData, 0 );
+    ::uno_dumpEnvironment( stderr, pEnv, 0 );
     (*pEnv->pExtEnv->getRegisteredInterfaces)( pEnv->pExtEnv, &ppInterfaces, &nLen, rtl_allocateMemory );
-    if (nLen)
+    while (nLen--)
     {
-        OSL_TRACE( "### C++ interfaces left:\n" );
-        ::uno_dumpEnvironment( stderr, pEnv, 0 );
-
-        while (nLen--)
-        {
-            XInterface * p = (XInterface *)ppInterfaces[nLen];
-            p->release();
-        }
+        XInterface * p = (XInterface *)ppInterfaces[nLen];
+        p->release();
     }
-    rtl_freeMemory( ppInterfaces );
+    ::rtl_freeMemory( ppInterfaces );
     (*pEnv->release)( pEnv );
 }
 
