@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: nidd $ $Date: 2001-12-25 08:24:12 $
+#   last change: $Author: nidd $ $Date: 2001-12-25 08:48:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,7 +60,7 @@
 #
 #*************************************************************************
 
-PRJ = ..$/..$/..
+PRJ = ..$/..$/..$/..
 
 PRJNAME	= lingucomponent
 TARGET	= hyphen
