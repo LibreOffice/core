@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuprlout.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 11:10:47 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:48:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,13 +109,14 @@
 #include "unmovss.hxx"
 #include "sdattr.hxx"
 #include "sdresid.hxx"
-#include "sdpreslt.hxx"
+//CHINA001 #include "sdpreslt.hxx"
 #ifndef SD_DRAW_VIEW_HXX
 #include "drawview.hxx"
 #endif
 #include "eetext.hxx"
 #include <svx/editdata.hxx>
-
+#include "sdabstdlg.hxx" //CHINA001
+#include "sdpreslt.hrc" //CHINA001
 namespace sd {
 
 #ifndef SO2_DECL_SVSTORAGE_DEFINED
@@ -195,7 +196,11 @@ FuPresentationLayout::FuPresentationLayout (
     aSet.Put( SfxBoolItem( ATTR_PRESLAYOUT_CHECK_MASTERS, bCheckMasters ) );
     aSet.Put( SfxStringItem( ATTR_PRESLAYOUT_NAME, aOldLayoutName));
 
-    SdPresLayoutDlg* pDlg = new SdPresLayoutDlg( pDocSh, pViewSh, NULL, aSet);
+    //CHINA001 SdPresLayoutDlg* pDlg = new SdPresLayoutDlg( pDocSh, pViewSh, NULL, aSet);
+    SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();//CHINA001
+    DBG_ASSERT(pFact, "SdAbstractDialogFactory fail!");//CHINA001
+    AbstractSdPresLayoutDlg* pDlg = pFact->CreateSdPresLayoutDlg(ResId( DLG_PRESLT ), pDocSh, pViewSh, NULL, aSet );
+    DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
     USHORT nResult = pDlg->Execute();
 
     switch (nResult)
