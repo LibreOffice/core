@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bastyp.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-07 14:18:13 $
+ *  last change: $Author: kz $ $Date: 2001-08-13 20:22:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -585,6 +585,7 @@ String STR_HTML_GENERATOR
     Text = "%PRODUCTNAME %PRODUCTVERSION %PRODUCTEXTENSION (%1)" ;
     Text[ language_user1 ] = "pb: no translation";
 };
+
 
 
 
