@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-17 08:14:54 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:24:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,10 @@
  ************************************************************************/
 
 #pragma hdrstop
+
+#ifndef _RTL_LOGFILE_HXX_
+#include <rtl/logfile.hxx>
+#endif
 
 #ifndef _SFXENUMITEM_HXX //autogen
 #include <svtools/eitem.hxx>
@@ -182,6 +186,8 @@ SmToolBoxWindow::SmToolBoxWindow(SfxBindings *pBindings,
     aToolBoxCat(this, ResId(NUM_TBX_CATEGORIES + 1)),
     aToolBoxCat_Delim(this, ResId( FL_TOOLBOX_CAT_DELIM ))
 {
+    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmToolBoxWindow::SmToolBoxWindow" );
+
     // allow for cursor travelling between toolbox and sub-categories
     SetStyle( GetStyle() | WB_DIALOGCONTROL );
 
