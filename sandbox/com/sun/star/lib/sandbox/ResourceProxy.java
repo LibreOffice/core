@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ResourceProxy.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kr $ $Date: 2001-10-24 11:16:00 $
+ *  last change: $Author: kr $ $Date: 2001-11-01 14:51:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,8 +208,6 @@ public class ResourceProxy implements Resource, Cachable {
     }
 
     public synchronized ImageProducer getImageProducer() {
-        Thread.currentThread().dumpStack();
-
         ImageProducer imageProducer = resource.getImageProducer();
 
 
