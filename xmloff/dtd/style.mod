@@ -1,5 +1,5 @@
 <!--
-	$Id: style.mod,v 1.45 2001-12-14 18:47:17 dvo Exp $
+	$Id: style.mod,v 1.46 2002-01-17 12:49:54 mib Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -109,9 +109,12 @@
 											   line|baseline|text) #IMPLIED>
 <!ATTLIST style:properties style:horizontal-pos (left|center|right|from-left|inside|outside|from-inside) #IMPLIED>
 <!ATTLIST style:properties style:horizontal-rel (page|page-content|
-											   frame|frame-content|
-											   paragraph|paragraph-content|
-											   char) #IMPLIED>
+								 page-start-margin|page-end-margin|
+								 frame|frame-content|
+								 frame-start-margin|frame-end-margin|
+								 paragraph|paragraph-content|
+								 paragraph-start-margin|paragraph-end-margin|
+								 char) #IMPLIED>
 <!ATTLIST style:properties svg:width %lengthOrPercentage; #IMPLIED>
 <!ATTLIST style:properties svg:height %lengthOrPercentage; #IMPLIED>
 <!ATTLIST style:properties fo:min-height %lengthOrPercentage; #IMPLIED>
