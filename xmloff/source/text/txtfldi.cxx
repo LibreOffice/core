@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfldi.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: dvo $ $Date: 2002-01-18 11:08:29 $
+ *  last change: $Author: dvo $ $Date: 2002-01-18 14:26:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2704,6 +2704,12 @@ void XMLPageVarGetFieldImportContext::PrepareField(
         nNumType = style::NumberingType::PAGE_DESCRIPTOR;
     aAny <<= nNumType;
     xPropertySet->setPropertyValue(sPropertyNumberingType, aAny);
+
+    // display old content (#96657#)
+    aAny <<= GetContent();
+    xPropertySet->setPropertyValue(
+        OUString(RTL_CONSTASCII_USTRINGPARAM(sAPI_current_presentation)),
+        aAny );
 }
 
 
