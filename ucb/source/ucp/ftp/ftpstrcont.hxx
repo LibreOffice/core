@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpstrcont.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: abi $ $Date: 2002-08-28 07:29:51 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 15:56:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@ namespace ftp {
         FTPOutputStreamContainer(const com::sun::star::uno::Reference<
                                  com::sun::star::io::XOutputStream>& out);
 
-        virtual write(void *buffer,size_t size,size_t nmemb);
+        virtual size_t write(void *buffer,size_t size,size_t nmemb);
 
 
     private:
@@ -103,7 +103,7 @@ namespace ftp {
 
         FTPInputStreamContainer(FTPInputStream* out);
 
-        virtual write(void *buffer,size_t size,size_t nmemb);
+        virtual size_t write(void *buffer,size_t size,size_t nmemb);
 
         com::sun::star::uno::Reference<
         com::sun::star::io::XInputStream> operator()();
