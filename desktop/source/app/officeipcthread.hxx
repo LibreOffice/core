@@ -2,9 +2,9 @@
  *
  *  $RCSfile: officeipcthread.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cd $ $Date: 2001-07-27 11:12:55 $
+ *  last change: $Author: cd $ $Date: 2001-08-07 11:25:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,13 @@ class OfficeIPCThread : public vos::OThread
     virtual void SAL_CALL run();
 
   public:
+    enum Status
+    {
+        IPC_STATUS_OK,
+        IPC_STATUS_2ND_OFFICE,
+        IPC_STATUS_BOOTSTRAP_ERROR
+    };
+
     virtual ~OfficeIPCThread();
 
     // controlling pipe communication during shutdown
@@ -127,7 +134,7 @@ class OfficeIPCThread : public vos::OThread
     static void                 RequestsCompleted( int n = 1 );
 
     // return FALSE if second office
-    static sal_Bool             EnableOfficeIPCThread();
+    static Status               EnableOfficeIPCThread();
     static void                 DisableOfficeIPCThread();
 };
 

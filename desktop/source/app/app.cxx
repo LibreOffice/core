@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: as $ $Date: 2001-08-02 13:34:32 $
+ *  last change: $Author: cd $ $Date: 2001-08-07 11:25:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,6 +143,9 @@
 #ifndef _VOS_REF_HXX_
 #include <vos/ref.hxx>
 #endif
+#ifndef _VOS_PROCESS_HXX_
+#include <vos/process.hxx>
+#endif
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
@@ -196,6 +199,9 @@
 #ifndef _RTL_LOGFILE_HXX_
 #include <rtl/logfile.hxx>
 #endif
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
+#endif
 #ifndef _UTL_CONFIGMGR_HXX_
 #include <unotools/configmgr.hxx>
 #endif
@@ -207,6 +213,9 @@
 #endif
 #ifndef _VCL_STDTEXT_HXX
 #include <vcl/stdtext.hxx>
+#endif
+#ifndef _SV_MSGBOX_HXX
+#include <vcl/msgbox.hxx>
 #endif
 #ifndef _SFX_HRC
 #include <sfx2/sfx.hrc>
@@ -252,7 +261,7 @@ char const INSTALLER_INITFILENAME[] = "initialize.ini";
 void InitTestToolLib()
 {
 #ifndef BUILD_SOSL
-    RTL_LOGFILE_CONTEXT( aLog, "desktop (cd) ::InitTestToolLib" );
+    RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::InitTestToolLib" );
 
     OUString    aFuncName( RTL_CONSTASCII_USTRINGPARAM( "CreateRemoteControl" ));
     OUString    aModulePath;
@@ -330,11 +339,7 @@ BOOL InitializeInstallation( const UniString& rAppFilename )
 {
     UniString aAppPath( rAppFilename );
     rtl::OUString aFinishInstallation;
-#ifdef TF_FILEURL
     osl::FileBase::getFileURLFromSystemPath( aAppPath, aFinishInstallation );
-#else
-    osl::FileBase::normalizePath( aAppPath, aFinishInstallation );
-#endif
     aAppPath = UniString( aFinishInstallation );
 
     xub_StrLen nPos = aAppPath.SearchBackward( '/' );
@@ -367,9 +372,11 @@ BOOL InitializeInstallation( const UniString& rAppFilename )
     return FALSE;
 }
 
+Desktop aDesktop;
+
 void PreloadConfigTrees()
 {
-    RTL_LOGFILE_CONTEXT( aLog, "desktop (dg) ::PreloadConfigTrees" );
+    RTL_LOGFILE_CONTEXT( aLog, "desktop (dg93727) ::PreloadConfigTrees" );
 
     // these tree are preloaded to get a faster startup for the office
     Sequence <rtl::OUString> aPreloadPathList(6);
@@ -383,10 +390,17 @@ void PreloadConfigTrees()
     Reference< XMultiServiceFactory > xProvider(
             ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.configuration.ConfigurationProvider")), UNO_QUERY);
 
-    Any aValue;
-    aValue <<= aPreloadPathList;
+    if ( xProvider.is() )
+    {
+        Any aValue;
+        aValue <<= aPreloadPathList;
 
-    Reference < com::sun::star::beans::XPropertySet > (xProvider, UNO_QUERY)->setPropertyValue(rtl::OUString::createFromAscii("PrefetchNodes"), aValue );
+        Reference < com::sun::star::beans::XPropertySet > (xProvider, UNO_QUERY)->setPropertyValue(rtl::OUString::createFromAscii("PrefetchNodes"), aValue );
+    }
+    else
+    {
+        aDesktop.HandleBootstrapErrors( Desktop::BE_UNO_SERVICE_CONFIG_MISSING );
+    }
 }
 
 
@@ -424,8 +438,6 @@ void ReplaceStringHookProc( UniString& rStr )
     }
 }
 
-Desktop aDesktop;
-
 /*
 BOOL SVMain()
 {
@@ -441,26 +453,37 @@ BOOL SVMain()
 }
 */
 
-Desktop::Desktop() : m_pIntro( 0 )
+Desktop::Desktop() : m_pIntro( 0 ), m_aBootstrapError( BE_OK )
 {
-    RTL_LOGFILE_TRACE( "desktop (cd) ::Desktop::Desktop" );
+    RTL_LOGFILE_TRACE( "desktop (cd100003) ::Desktop::Desktop" );
 }
 
 void Desktop::Init()
 {
-    RTL_LOGFILE_CONTEXT( aLog, "desktop (cd) ::Desktop::Init" );
+    RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::Desktop::Init" );
 
     Reference < XMultiServiceFactory > rSMgr = createApplicationServiceManager();
     if( ! rSMgr.is() )
-        exit(0);
+        m_aBootstrapError = BE_UNO_SERVICEMANAGER;
+
     ::comphelper::setProcessServiceFactory( rSMgr );
 
     if ( !Application::IsRemoteServer() )
     {
         // start ipc thread only for non-remote offices
-        RTL_LOGFILE_CONTEXT( aLog, "desktop (cd) ::OfficeIPCThread::EnableOfficeIPCThread" );
-        if( !OfficeIPCThread::EnableOfficeIPCThread( ) )
+        RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::OfficeIPCThread::EnableOfficeIPCThread" );
+
+        OfficeIPCThread::Status aStatus = OfficeIPCThread::EnableOfficeIPCThread();
+        if ( aStatus == OfficeIPCThread::IPC_STATUS_BOOTSTRAP_ERROR )
+        {
+            m_aBootstrapError = BE_PATHINFO_MISSING;
+        }
+        else if ( aStatus == OfficeIPCThread::IPC_STATUS_2ND_OFFICE )
+        {
+            // 2nd office startup should terminate after sending cmdlineargs through pipe
             exit( 0 );
+        }
+
         pSignalHandler = new SalMainPipeExchangeSignalHandler;
     }
 }
@@ -480,6 +503,141 @@ void Desktop::DeInit()
 BOOL Desktop::QueryExit()
 {
     return TRUE;
+}
+
+void Desktop::StartSetup( const OUString& aParameters )
+{
+    OUString aProgName;
+    OUString aSysPathFileName;
+    OUString aDir;
+
+    ::vos::OStartupInfo aInfo;
+    aInfo.getExecutableFile( aProgName );
+
+    sal_uInt32  lastIndex = aProgName.lastIndexOf('/');
+    if ( lastIndex > 0 )
+    {
+        aProgName   = aProgName.copy( 0, lastIndex+1 );
+        aDir        = aProgName;
+
+        aProgName   += OUString( RTL_CONSTASCII_USTRINGPARAM( "setup" ));
+#ifdef WNT
+        aProgName   += OUString( RTL_CONSTASCII_USTRINGPARAM( ".exe" ));
+#endif
+    }
+
+    OUString                aArgListArray[1];
+    ::vos::OSecurity        aSecurity;
+    ::vos::OEnvironment     aEnv;
+    ::vos::OArgumentList    aArgList;
+
+    aArgListArray[0] = aParameters;
+    OArgumentList aArgumentList( aArgListArray, 1 );
+
+    ::vos::OProcess aProcess( aProgName, aDir );
+    ::vos::OProcess::TProcessError aProcessError =
+        aProcess.execute( OProcess::TOption_Detached,
+                          aSecurity,
+                          aArgumentList,
+                          aEnv );
+
+    if ( aProcessError != OProcess::E_None )
+    {
+        OUString aMessage( RTL_CONSTASCII_USTRINGPARAM( "Couldn't start setup executable! Please start it manually." ));
+        ErrorBox aBootstrapFailedBox( NULL, WB_OK, aMessage );
+        aBootstrapFailedBox.Execute();
+    }
+}
+
+void Desktop::HandleBootstrapErrors( BootstrapError aBootstrapError )
+{
+    if ( aBootstrapError == BE_PATHINFO_MISSING )
+    {
+        ::rtl::OUString         aDiagnosticMessage;
+        utl::Bootstrap::Status  aBootstrapStatus;
+
+        aBootstrapStatus = ::utl::Bootstrap::checkBootstrapStatus( aDiagnosticMessage );
+        if ( aBootstrapStatus != ::utl::Bootstrap::DATA_OK )
+        {
+            if ( Application::IsRemoteServer() )
+            {
+                OString aTmpStr = OUStringToOString( aDiagnosticMessage, RTL_TEXTENCODING_ASCII_US );
+                fprintf( stderr, aTmpStr.getStr() );
+            }
+            else
+            {
+                OUString        aMessage;
+                OUStringBuffer  aBuffer( 100 );
+                aBuffer.append( aDiagnosticMessage );
+
+                if ( aBootstrapStatus == ::utl::Bootstrap::MISSING_USER_INSTALL )
+                {
+                    aBuffer.appendAscii( "Should I start 'setup' to check your installation?" );
+                    aMessage = aBuffer.makeStringAndClear();
+
+                    ErrorBox aBootstrapFailedBox( NULL, WB_YES_NO, aMessage );
+                    int nResult = aBootstrapFailedBox.Execute();
+
+                    if ( nResult == RET_YES )
+                    {
+                        OUString aParameters;
+                        StartSetup( aParameters );
+                    }
+                }
+                else if (( aBootstrapStatus == utl::Bootstrap::INVALID_USER_INSTALL ) ||
+                         ( aBootstrapStatus == utl::Bootstrap::INVALID_BASE_INSTALL )    )
+                {
+                    aBuffer.appendAscii( "Should I start 'setup -repair' to repair your installation?" );
+                    aMessage = aBuffer.makeStringAndClear();
+
+                    ErrorBox aBootstrapFailedBox( NULL, WB_YES_NO, aMessage );
+                    int nResult = aBootstrapFailedBox.Execute();
+
+                    if ( nResult == RET_YES )
+                    {
+                         OUString aParameters( RTL_CONSTASCII_USTRINGPARAM( "-repair" ));
+                        StartSetup( aParameters );
+                    }
+                }
+            }
+        }
+    }
+    else if ( aBootstrapError == BE_UNO_SERVICEMANAGER )
+    {
+        // Uno service manager is not available. VCL needs a uno service manager to display a message box!!!
+        // Currently we are not able to display a message box with a service manager due to this limitations inside VCL.
+
+        if ( Application::IsRemoteServer() )
+        {
+            OString aUnoServiceManagerError( "Couldn't initialize office uno service manager! Please check your installation\n" );
+            fprintf( stderr, aUnoServiceManagerError.getStr() );
+        }
+        else
+        {
+            OUString aUnoServiceManagerError( RTL_CONSTASCII_USTRINGPARAM(
+                "Couldn't initialize office uno service manager! Please start 'setup -repair'." ));
+            Application::Abort( aUnoServiceManagerError );
+        }
+    }
+    else if ( aBootstrapError == BE_UNO_SERVICE_CONFIG_MISSING )
+    {
+        // Uno service manager is initialized correctly. It is not save to call VCL to display a message box because VCL needs
+        // a correctly initialized uno service manager!!!
+
+        if ( Application::IsRemoteServer() )
+        {
+            OString aUnoConfigServiceError( "Couldn't create configuration service! Please check your installation\n" );
+            fprintf( stderr, aUnoConfigServiceError.getStr() );
+        }
+        else
+        {
+            OUString aUnoConfigServiceError( RTL_CONSTASCII_USTRINGPARAM(
+                "Couldn't create configuration service! Please start 'setup -repair'." ));
+            Application::Abort( aUnoConfigServiceError );
+        }
+    }
+
+    exit( -1 );
 }
 
 USHORT Desktop::Exception(USHORT nError)
@@ -660,7 +818,14 @@ void Desktop::AppEvent( const ApplicationEvent& rAppEvent )
 
 void Desktop::Main()
 {
-    RTL_LOGFILE_CONTEXT( aLog, "desktop (cd) ::Desktop::Main" );
+    RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::Desktop::Main" );
+
+    // Error handling inside Desktop::Main() because vcl is not
+    // initialized before!!!
+    if ( m_aBootstrapError != BE_OK )
+    {
+        HandleBootstrapErrors( m_aBootstrapError );
+    }
 
     CommandLineArgs* pCmdLineArgs = GetCommandLineArgs();
 
@@ -705,13 +870,8 @@ void Desktop::Main()
     //  The only step that should be done if terminate flag was specified
     //  Typically called by the plugin only
     {
-        RTL_LOGFILE_CONTEXT( aLog, "setup2 (ok) ::Installer::InitializeInstallation" );
+        RTL_LOGFILE_CONTEXT( aLog, "setup2 (ok93719) ::Installer::InitializeInstallation" );
         InitializeInstallation( Application::GetAppFileName() );
-/*
-        Installer* pInstaller = new Installer;
-        pInstaller->InitializeInstallation( Application::GetAppFileName() );
-        delete pInstaller;
-*/
     }
 
     if( !bTerminate )
@@ -753,7 +913,7 @@ void Desktop::Main()
                 // the shutdown icon sits in the systray and allows the user to keep
                 // the office instance running for quicker restart
                 // this will only be activated if -quickstart was specified on cmdline
-                RTL_LOGFILE_CONTEXT( aLog, "desktop (cd) createInstance com.sun.star.office.Quickstart" );
+                RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) createInstance com.sun.star.office.Quickstart" );
 
                 sal_Bool bQuickstart = pCmdLineArgs->IsQuickstart();
                 Sequence< Any > aSeq( 1 );
@@ -771,7 +931,7 @@ void Desktop::Main()
 
             if ( pCmdLineArgs->IsPlugin() )
             {
-                RTL_LOGFILE_CONTEXT_TRACE( aLog, "desktop (cd) create PluginAcceptThread" );
+                RTL_LOGFILE_CONTEXT_TRACE( aLog, "desktop (cd100003) create PluginAcceptThread" );
 
                 OUString    aAcceptString( RTL_CONSTASCII_USTRINGPARAM( "pipe,name=soffice_plugin" ));
                 OUString    aUserIdent;
@@ -793,7 +953,7 @@ void Desktop::Main()
             if ( !Application::IsRemoteServer() )
             {
                 // Create TypeDetection service to have filter informations for quickstart feature
-                RTL_LOGFILE_CONTEXT( aLog, "desktop (cd) createInstance com.sun.star.document.TypeDetection" );
+                RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) createInstance com.sun.star.document.TypeDetection" );
                 Reference< XTypeDetection > xTypeDetection( xSMgr->createInstance(
                                                                 OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.TypeDetection" ))),
                                                             UNO_QUERY );
@@ -914,7 +1074,7 @@ IMPL_LINK( Desktop, AsyncInitFirstRun, void*, NOTINTERESTEDIN )
 // ========================================================================
 IMPL_LINK( Desktop, OpenClients_Impl, void*, pvoid )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "desktop (cd) ::Desktop::OpenClients_Impl" );
+    RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::Desktop::OpenClients_Impl" );
 
     OpenClients();
     CloseStartupScreen();
@@ -1081,7 +1241,7 @@ void Desktop::OpenClients()
 
 void Desktop::OpenDefault()
 {
-    RTL_LOGFILE_CONTEXT( aLog, "desktop (cd) ::Desktop::OpenDefault" );
+    RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::Desktop::OpenDefault" );
 
     String aName;
     if ( !aName.Len() )
@@ -1298,7 +1458,7 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
 
 void Desktop::OpenStartupScreen()
 {
-     RTL_LOGFILE_CONTEXT( aLog, "desktop (cd) ::Desktop::OpenStartupScreen" );
+     RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::Desktop::OpenStartupScreen" );
 
     ::rtl::OUString     aTmpString;
     CommandLineArgs*    pCmdLine = GetCommandLineArgs();
@@ -1315,13 +1475,15 @@ void Desktop::OpenStartupScreen()
         String          aBmpFileName;
         ::rtl::OUString aProductKey;
         ::rtl::OUString aIniPath;
-        ::rtl::OUString aLogo;
+        ::rtl::OUString aLogo( RTL_CONSTASCII_USTRINGPARAM( "1" ) );
         Bitmap          aIntroBmp;
 
         // load bitmap depends on productname ("StarOffice", "StarSuite",...)
-        ::utl::BootstrapRetVal nRetVal = ::utl::bootstrap_getProductKeyAndLogo( aProductKey, aLogo, aIniPath );
-        sal_Bool        bLogo   = (sal_Bool)aLogo.toInt32();
-        if ( nRetVal == ::utl::BOOTSTRAP_OK && bLogo )
+        aProductKey = ::utl::Bootstrap::getProductKey( aProductKey );
+        aLogo       = ::utl::Bootstrap::getLogoData( aLogo );
+
+        sal_Bool    bLogo   = (sal_Bool)aLogo.toInt32();
+        if ( bLogo )
         {
             xub_StrLen nIndex = 0;
 
@@ -1373,7 +1535,7 @@ void Desktop::CloseStartupScreen()
     // close splash screen and delete window
     delete m_pIntro;
     m_pIntro = 0;
-    RTL_LOGFILE_TRACE( "desktop (cd) ::Desktop::CloseStartupScreen" );
+    RTL_LOGFILE_TRACE( "desktop (cd100003) ::Desktop::CloseStartupScreen" );
 }
 
 

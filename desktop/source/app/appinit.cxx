@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appinit.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jl $ $Date: 2001-08-02 12:21:35 $
+ *  last change: $Author: cd $ $Date: 2001-08-07 11:25:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,7 +145,7 @@ static String aTempBase;
 
 static bool configureUcb(bool bServer, rtl::OUString const & rPortalConnect)
 {
-    RTL_LOGFILE_CONTEXT( aLog, "desktop (sb) ::configureUcb" );
+    RTL_LOGFILE_CONTEXT( aLog, "desktop (sb93797) ::configureUcb" );
     Reference< XMultiServiceFactory >
         xServiceFactory( comphelper::getProcessServiceFactory() );
     if (!xServiceFactory.is())
@@ -182,12 +182,20 @@ static bool configureUcb(bool bServer, rtl::OUString const & rPortalConnect)
 
 Reference< XMultiServiceFactory > createApplicationServiceManager()
 {
-    RTL_LOGFILE_CONTEXT( aLog, "desktop (cd) ::createApplicationServiceManager" );
+    RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::createApplicationServiceManager" );
 
-    Reference<XComponentContext> xComponentContext = ::cppu::defaultBootstrap_InitialComponentContext();
-    Reference<XMultiServiceFactory> xMS(xComponentContext->getServiceManager(), UNO_QUERY);
+    try
+    {
+        Reference<XComponentContext> xComponentContext = ::cppu::defaultBootstrap_InitialComponentContext();
+        Reference<XMultiServiceFactory> xMS(xComponentContext->getServiceManager(), UNO_QUERY);
 
-    return xMS;
+        return xMS;
+    }
+    catch( ::com::sun::star::uno::Exception& )
+    {
+    }
+
+    return Reference< XMultiServiceFactory >();
 
 //      try
 //      {
@@ -255,7 +263,7 @@ void destroyApplicationServiceManager( Reference< XMultiServiceFactory >& xSMgr 
 
 void registerServices( Reference< XMultiServiceFactory >& xSMgr )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "desktop (cd) ::registerServices" );
+    RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::registerServices" );
 
     // read command line parameters
     ::rtl::OUString conDcp;
@@ -287,7 +295,7 @@ void registerServices( Reference< XMultiServiceFactory >& xSMgr )
     if ( conDcp.getLength() > 0 )
     {
         // accept incoming connections (scripting and one rvp)
-        RTL_LOGFILE_CONTEXT( aLog, "desktop (cd) ::OOfficeAcceptorThread::OOfficeAcceptorThread" );
+        RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::OOfficeAcceptorThread::OOfficeAcceptorThread" );
         pOfficeAcceptThread = new OOfficeAcceptorThread( xSMgr, conDcp, bHeadlessMode, aClientDisplay, aUserDir );
         pOfficeAcceptThread->create();
     }
@@ -296,7 +304,7 @@ void registerServices( Reference< XMultiServiceFactory >& xSMgr )
     // servicemanager up -> copy user installation
     if ( Application::IsRemoteServer() )
     {
-        RTL_LOGFILE_CONTEXT( aLog, "desktop (cd) createInstance com.sun.star.portal.InstallUser" );
+        RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) createInstance com.sun.star.portal.InstallUser" );
         Any aAny;
         Reference <XInterface> xRef =  xSMgr->createInstanceWithArguments(
             OUString::createFromAscii( "com.sun.star.portal.InstallUser" ),
@@ -319,7 +327,7 @@ void registerServices( Reference< XMultiServiceFactory >& xSMgr )
 
 void createTemporaryDirectory()
 {
-    RTL_LOGFILE_CONTEXT( aLog, "desktop (cd) ::createTemporaryDirectory" );
+    RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::createTemporaryDirectory" );
 
     // remove old temp dir
     SvtPathOptions aOpt;
@@ -343,7 +351,7 @@ void createTemporaryDirectory()
 
 void removeTemporaryDirectory()
 {
-    RTL_LOGFILE_CONTEXT( aLog, "desktop (cd) ::removeTemporaryDirectory" );
+    RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::removeTemporaryDirectory" );
 
     // remove temp directory
     if ( STRING_NOTFOUND != aTempBase.Search( aTempNameBaseDir ) )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: intro.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cd $ $Date: 2001-07-24 10:24:30 $
+ *  last change: $Author: cd $ $Date: 2001-08-07 11:25:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@
 
 void IntroWindow_Impl::Init()
 {
-    RTL_LOGFILE_CONTEXT( aLog, "desktop (cd) ::IntroWindow_Impl::Init" );
+    RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::IntroWindow_Impl::Init" );
 
     Size aSize = m_aIntroBmp.GetSizePixel();
     SetOutputSizePixel( aSize );
@@ -98,7 +98,7 @@ IntroWindow_Impl::IntroWindow_Impl( const Bitmap& aIntroBitmap ) :
     WorkWindow( NULL, (WinBits)0 ),
     m_aIntroBmp( aIntroBitmap )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "desktop (cd) ::IntroWindow_Impl::IntroWindowImpl" );
+    RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::IntroWindow_Impl::IntroWindowImpl" );
 
     Hide();
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jl $ $Date: 2001-08-02 12:24:24 $
+ *  last change: $Author: cd $ $Date: 2001-08-07 11:24:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,14 @@ class IntroWindow_Impl;
 class Desktop : public Application //public SfxApplicationClass
 {
     public:
+        enum BootstrapError
+        {
+            BE_OK,
+            BE_UNO_SERVICEMANAGER,
+            BE_UNO_SERVICE_CONFIG_MISSING,
+            BE_PATHINFO_MISSING
+        };
+
                             Desktop();
         virtual void        Main( );
         virtual void        Init();
@@ -92,7 +100,11 @@ class Desktop : public Application //public SfxApplicationClass
         static void         HandleAppEvent( const ApplicationEvent& rAppEvent );
         static ResMgr*      GetDesktopResManager();
 
+        void                HandleBootstrapErrors( BootstrapError );
+
     private:
+        void                StartSetup( const ::rtl::OUString& aParameters );
+
         void                OpenStartupScreen();
         void                CloseStartupScreen();
         void                EnableOleAutomation();
@@ -111,6 +123,7 @@ class Desktop : public Application //public SfxApplicationClass
         sal_Bool            m_bInvisible;
         USHORT              m_nAppEvents;
         IntroWindow_Impl*   m_pIntro;
+        BootstrapError      m_aBootstrapError;
 
         static ResMgr*      pResMgr;
 };

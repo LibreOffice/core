@@ -2,9 +2,9 @@
  *
  *  $RCSfile: officeipcthread.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cd $ $Date: 2001-07-27 11:12:55 $
+ *  last change: $Author: cd $ $Date: 2001-08-07 11:25:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,12 +230,12 @@ void OfficeIPCThread::RequestsCompleted( int nCount )
     }
 }
 
-BOOL OfficeIPCThread::EnableOfficeIPCThread()
+OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
 {
     ::osl::MutexGuard   aGuard( GetMutex() );
 
     if( pGlobalOfficeIPCThread )
-        return TRUE;
+        return IPC_STATUS_OK;
 
     ::rtl::OUString aOfficeInstallPath;
     ::rtl::OUString aUserInstallPath;
@@ -249,15 +249,13 @@ BOOL OfficeIPCThread::EnableOfficeIPCThread()
 
     // The name of the named pipe is created with the hashcode of the user installation directory (without /user). We have to retrieve
     // this information from a unotools implementation.
-    ::utl::BootstrapRetVal aLocateResult = ::utl::bootstrap_locateUserInstallationPath( aOfficeInstallPath, aUserInstallPath, aLastIniFile );
-    if ( aLocateResult == ::utl::BOOTSTRAP_OK )
-    {
+    ::utl::Bootstrap::PathStatus aLocateResult = ::utl::Bootstrap::locateUserInstallation( aUserInstallPath );
+    if ( aLocateResult == ::utl::Bootstrap::PATH_EXISTS )
         aDummy = aUserInstallPath;
-    }
     else
     {
         delete pThread;
-        return TRUE;
+        return IPC_STATUS_BOOTSTRAP_ERROR;
     }
 
     // look if we are the first Office: try to open the pipe
@@ -280,7 +278,7 @@ BOOL OfficeIPCThread::EnableOfficeIPCThread()
 
         pThread->maStreamPipe.write( aArguments.GetBuffer(), aArguments.Len() );
         delete pThread;
-        return FALSE;
+        return IPC_STATUS_2ND_OFFICE;
     }
 
     // seems we are the one and only, so start listening thread
@@ -291,7 +289,7 @@ BOOL OfficeIPCThread::EnableOfficeIPCThread()
         pThread->create(); // starts thread
     }
 
-    return TRUE;
+    return IPC_STATUS_OK;
 }
 
 void OfficeIPCThread::DisableOfficeIPCThread()
