@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldata.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 17:35:21 $
+ *  last change: $Author: vg $ $Date: 2003-05-28 12:34:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,6 +140,7 @@ struct SalData
     ULONG                   mnTimerOrgMS;           // Current Original Time (in MS)
     UINT                    mnTimerId;              // windows timer id
     SALTIMERPROC            mpTimerProc;            // timer callback proc
+    BOOL                    mbInTimerProc;          // timer event is currently being dispatched
     HHOOK                   mhSalObjMsgHook;        // hook to get interesting msg for SalObject
     HWND                    mhWantLeaveMsg;         // window handle, that want a MOUSELEAVE message
     AutoTimer*              mpMouseLeaveTimer;      // Timer for MouseLeave Test
