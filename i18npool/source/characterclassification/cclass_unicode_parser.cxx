@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cclass_unicode_parser.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: er $ $Date: 2002-09-20 16:12:55 $
+ *  last change: $Author: khong $ $Date: 2002-11-05 23:35:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -409,8 +409,9 @@ const sal_Unicode* cclass_Unicode::StrChr( const sal_Unicode* pStr, sal_Unicode 
 }
 
 
-sal_Int32 cclass_Unicode::getParseTokensType( sal_Unicode c )
+sal_Int32 cclass_Unicode::getParseTokensType( const sal_Unicode* aStr, sal_Int32 nPos )
 {
+    sal_Unicode c = aStr[nPos];
     if ( c < nDefCnt )
         return pParseTokensType[ sal_uInt8(c) ];
     else
@@ -432,6 +433,10 @@ sal_Int32 cclass_Unicode::getParseTokensType( sal_Unicode c )
                 return KParseTokens::UNI_MODIFIER_LETTER;
             break;
             case UnicodeType::OTHER_LETTER :
+                // Non_Spacing_Mark could not be as leading character
+                if (nPos == 0) break;
+                // fall through, treat it as Other_Letter.
+            case UnicodeType::NON_SPACING_MARK :
                 return KParseTokens::UNI_OTHER_LETTER;
             break;
             case UnicodeType::DECIMAL_DIGIT_NUMBER :
@@ -640,13 +645,14 @@ void cclass_Unicode::destroyParserTable()
 }
 
 
-UPT_FLAG_TYPE cclass_Unicode::getFlags( sal_Unicode c )
+UPT_FLAG_TYPE cclass_Unicode::getFlags( const sal_Unicode* aStr, sal_Int32 nPos )
 {
     UPT_FLAG_TYPE nMask;
+    sal_Unicode c = aStr[nPos];
     if ( c < nDefCnt )
         nMask = pTable[ sal_uInt8(c) ];
     else
-        nMask = getFlagsExtended( c );
+        nMask = getFlagsExtended( aStr, nPos );
     switch ( eState )
     {
         case ssGetChar :
@@ -674,8 +680,9 @@ UPT_FLAG_TYPE cclass_Unicode::getFlags( sal_Unicode c )
 }
 
 
-UPT_FLAG_TYPE cclass_Unicode::getFlagsExtended( sal_Unicode c )
+UPT_FLAG_TYPE cclass_Unicode::getFlagsExtended( const sal_Unicode* aStr, sal_Int32 nPos )
 {
+    sal_Unicode c = aStr[nPos];
     if ( c == cGroupSep )
         return TOKEN_VALUE;
     else if ( c == cDecimalSep )
@@ -708,6 +715,10 @@ UPT_FLAG_TYPE cclass_Unicode::getFlagsExtended( sal_Unicode c )
                 (bStart ? TOKEN_CHAR_WORD : TOKEN_WORD) :
                 TOKEN_ILLEGAL;
         break;
+        case UnicodeType::NON_SPACING_MARK :
+            // Non_Spacing_Mark could not be as leading character
+            if (nPos == 0) break;
+            // fall through, treat it as Other_Letter.
         case UnicodeType::OTHER_LETTER :
             return (nTypes & KParseTokens::UNI_OTHER_LETTER) ?
                 (bStart ? TOKEN_CHAR_WORD : TOKEN_WORD) :
@@ -775,6 +786,7 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
     const sal_Unicode* pSrc = pSym;
     OUString aSymbol;
     sal_Unicode c = *pSrc;
+    sal_Int32 nPosition = 0;
     sal_Unicode cLast = 0;
     int nDecSeps = 0;
     BOOL bQuote = FALSE;
@@ -784,8 +796,7 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
 
     while ( (c != 0) && (eState != ssStop) )
     {
-        pSrc++;
-        UPT_FLAG_TYPE nMask = getFlags( c );
+        UPT_FLAG_TYPE nMask = getFlags( pStart, nPosition );
         if ( nMask & TOKEN_EXCLUDED )
             eState = ssBounce;
         if ( bMightBeWord )
@@ -795,7 +806,9 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
             else
                 bMightBeWord = ((nMask & TOKEN_WORD) != 0);
         }
-        sal_Int32 nParseTokensType = getParseTokensType( c );
+        sal_Int32 nParseTokensType = getParseTokensType( pStart, nPosition );
+        pSrc++;
+        nPosition++;
         switch (eState)
         {
             case ssGetChar :
@@ -889,7 +902,7 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
                 }
                 else if ( c == 'E' || c == 'e' )
                 {
-                    UPT_FLAG_TYPE nNext = getFlags( *pSrc );
+                    UPT_FLAG_TYPE nNext = getFlags( pStart, nPosition );
                     if ( nNext & TOKEN_VALUE_EXP )
                         ;   // keep it going
                     else if ( bMightBeWord && ((nNext & TOKEN_WORD) || !*pSrc) )
@@ -904,7 +917,7 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
                 {
                     if ( (cLast == 'E') || (cLast == 'e') )
                     {
-                        UPT_FLAG_TYPE nNext = getFlags( *pSrc );
+                        UPT_FLAG_TYPE nNext = getFlags( pStart, nPosition );
                         if ( nNext & TOKEN_VALUE_EXP_VALUE )
                             ;   // keep it going
                         else if ( bMightBeWord && ((nNext & TOKEN_WORD) || !*pSrc) )
@@ -978,6 +991,7 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
                     {   // "" => literal " escaped
                         aSymbol += OUString( pSym, pSrc - pSym );
                         pSrc++;
+                        nPosition++;
                     }
                     else
                     {
@@ -1004,6 +1018,7 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
             pSrc = pSym;
             aSymbol = OUString();
             c = *pSrc;
+        nPosition = 0;
             cLast = 0;
             nDecSeps = 0;
             bQuote = FALSE;
@@ -1032,6 +1047,7 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
             if ( eState == ssStopBack )
             {   // put back
                 pSrc--;
+        nPosition--;
                 bMightBeWord = bMightBeWordLast;
                 eState = ssStop;
             }
