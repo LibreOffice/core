@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-12 21:55:27 $
+ *  last change: $Author: kz $ $Date: 2001-01-26 21:17:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1767,7 +1767,7 @@ TabPage RID_SCPAGE_LAYOUT
         Size = MAP_APPFONT ( 100 , 10 ) ;
         Text = "~Einfache Griffe" ;
         Text [ ENGLISH ] = "~Simple Handles" ;
-        Text[ english_us ] = "~Simple control points";
+        Text[ english_us ] = "~Simple Handles";
         Text[ portuguese ] = "Guias ~simples";
         Text[ russian ] = "Ξαϋχνϋε σηλϋ";
         Text[ greek ] = "Απλά σημεία ~ελέγχου";
@@ -1782,7 +1782,7 @@ TabPage RID_SCPAGE_LAYOUT
         Text[ japanese ] = "ΌέΜίΩ‚Θ»²½ή•ΟXΚέΔήΩ(~S)";
         Text[ korean ] = "΄άΌψ ΗΪµι(~S)";
         Text[ chinese_simplified ] = "±κΧΌΏΨµγ(~S)";
-        Text[ chinese_traditional ] = "ΌΠ­γ±±ΒI(~S)";
+        Text[ chinese_traditional ] = "ΌΠ·Η±±ΒI(~S)";
         Text[ arabic ] = "γήΗΘΦ ΘΣνΨΙ";
         Text[ turkish ] = "~Basit ηekme noktalarύ";
         Text[ language_user1 ] = " ";
@@ -1793,7 +1793,7 @@ TabPage RID_SCPAGE_LAYOUT
         Size = MAP_APPFONT ( 100 , 10 ) ;
         Text = "Gr~oίe Griffe" ;
         Text [ ENGLISH ] = "~Big Handles" ;
-        Text[ english_us ] = "~Large control points";
+        Text[ english_us ] = "~Large Handles";
         Text[ portuguese ] = "~Guias grandes";
         Text[ russian ] = "Κπσονϋε σηλϋ";
         Text[ greek ] = "Μεγάλα σημεία ελέγχ~ου";
