@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-26 13:34:12 $
+ *  last change: $Author: pl $ $Date: 2001-10-29 19:15:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,8 +218,24 @@ static BOOL ImplHandleMouseFloatMode( Window* pChild, const Point& rMousePos,
     if ( pSVData->maWinData.mpFirstFloat && !pSVData->maWinData.mpCaptureWin &&
          !pSVData->maWinData.mpFirstFloat->ImplIsFloatPopupModeWindow( pChild ) )
     {
-        USHORT          nHitTest;
-        FloatingWindow* pFloat = pSVData->maWinData.mpFirstFloat->ImplFloatHitTest( rMousePos, nHitTest );
+        /*
+         *  #93895# since floats are system windows, coordinates have
+         *  to be converted to float relative for the hittest
+         *  FIXME: should this be solved by puttingt a refernce frame
+         *  to ImplFloatHitTest
+         */
+        USHORT          nHitTest = IMPL_FLOATWIN_HITTEST_OUTSIDE;
+        FloatingWindow* pFloat = pSVData->maWinData.mpFirstFloat;
+        while( pFloat && pFloat != pChild && ! pChild->ImplIsChild( pFloat ) )
+            pFloat = pFloat->mpNextFloat;
+        if( pFloat )
+        {
+            nHitTest = IMPL_FLOATWIN_HITTEST_WINDOW;
+            Point aTransformMousePos( pChild->OutputToAbsoluteScreenPixel( rMousePos ) );
+            aTransformMousePos = pFloat->AbsoluteScreenToOutputPixel( aTransformMousePos );
+            pFloat = pFloat->ImplFloatHitTest( aTransformMousePos, nHitTest );
+        }
+
         FloatingWindow* pLastLevelFloat;
         ULONG           nPopupFlags;
         if ( nSVEvent == EVENT_MOUSEMOVE )
