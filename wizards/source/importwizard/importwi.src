@@ -2,9 +2,9 @@
  *
  *  $RCSfile: importwi.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-01 20:07:03 $
+ *  last change: $Author: kz $ $Date: 2002-08-05 20:05:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,7 +174,7 @@ String sHelpButton
     Text[ chinese_traditional ] = "èªªæ˜(~H)";
     Text[ arabic ] = "~ãÓÇÚÏÉ";
     Text[ turkish ] = "~Yardım";
-    Text[ catalan ] = "~Help";
+    Text[ catalan ] = "~Ajuda";
     Text[ finnish ] = "~Ohje";
     Text[ thai ] = "~à¸Šà¹ˆà¸§à¸¢à¹€à¸«à¸¥à¸·à¸­";
 };
@@ -203,7 +203,7 @@ String sCancelButton
     Text[ chinese_traditional ] = "å–æ¶ˆ(~C)";
     Text[ arabic ] = "~ÅáÛÇÁ ÇáÃãÑ";
     Text[ turkish ] = "~İptal";
-    Text[ catalan ] = "~Cancel";
+    Text[ catalan ] = "~Cancel.la";
     Text[ finnish ] = "~Peruuta";
     Text[ thai ] = "~à¸¢à¸à¹€à¸¥à¸´à¸";
 };
@@ -232,7 +232,7 @@ String sBackButton
     Text[ chinese_traditional ] = "<< è¿”å›(~B)";
     Text[ arabic ] = "<< ~ÇáÓÇÈŞ";
     Text[ turkish ] = "<< ~Geri";
-    Text[ catalan ] = "<< ~Back";
+    Text[ catalan ] = "<< ~Enrere";
     Text[ finnish ] = "<< Edellinen";
     Text[ thai ] = "<< ~à¸à¸¥à¸±à¸šà¹„à¸›";
 };
@@ -261,7 +261,7 @@ String sNextButton
     Text[ chinese_traditional ] = "ç¹¼çºŒ(~X) >>";
     Text[ arabic ] = "~ÇáÊÇáí >>";
     Text[ turkish ] = "İl~eri >>";
-    Text[ catalan ] = "C~ontinue >>";
+    Text[ catalan ] = "C~ontinua >>";
     Text[ finnish ] = "~Jatka >>";
     Text[ thai ] = "à¸—à¸³à¸•à¹ˆ~à¸­ >>";
 };
@@ -290,7 +290,7 @@ String sBeginButton
     Text[ chinese_traditional ] = "è½‰æ›(~C)";
     Text[ arabic ] = "~ÊÍæíá";
     Text[ turkish ] = "~Al";
-    Text[ catalan ] = "~Convert";
+    Text[ catalan ] = "~Converteix";
     Text[ finnish ] = "~Muunna";
     Text[ thai ] = "à¹~à¸›à¸¥à¸‡";
 };
@@ -318,7 +318,7 @@ String sCloseButton
     Text[ chinese_traditional ] = "é—œé–‰(~C)";
     Text[ turkish ] = "~Close";
     Text[ arabic ] = "~Close";
-    Text[ catalan ] = "~Close";
+    Text[ catalan ] = "~Tanca";
     Text[ thai ] = "~à¸›à¸´à¸”";
 };
 
@@ -346,7 +346,7 @@ String sWelcometextLabel1
     Text[ chinese_traditional ] = "é€™å€‹æª”æ¡ˆåŠ©ç†ç¨‹å¼å°‡ StarOffice èˆŠå¼æ ¼å¼æˆ– Microsoft Office æ–‡ä»¶è½‰æ›æˆæ–°å¼çš„ %PRODUCTNAME XML æ ¼å¼ã€‚";
     Text[ arabic ] = "íŞæã åĞÇ ÇáãÑÔÏ ÇáÂáí ÈÊÍæíá ãÓÊäÏÇÊ StarOffice  ÇáŞÏíãÉ æãÓÊäÏÇÊ Microsoft Office  Åáì ÇáÊäÓíŞ %PRODUCTNAME XML ÇáÌÏíÏ.";
     Text[ turkish ] = "Bu OtoPilot, dizinlerde ve tüm alt dizinlerde Microsoft Office formatında dosyalar arar. Tüm belgeleri ve/veya şablonları %PRODUCTNAME formatına dönüştürebilirsiniz.";
-    Text[ catalan ] = "This AutoPilot converts old StarOffice formats and Microsoft Office documents to the new %PRODUCTNAME XML format.";
+    Text[ catalan ] = "Aquest AutoPilot converteix documents vells d'StarOffice i de Microsoft Office al nou format  %PRODUCTNAME XML.";
     Text[ finnish ] = "Tämä automaattinen ohjaus muuntaa vanhojen versioiden StarOffice-asiakirjat ja Microsoft Office -asiakirjat uuteen %PRODUCTNAME XML -muotoon.";
     Text[ thai ] = "à¸à¸²à¸£à¸™à¸³à¸£à¹ˆà¸­à¸‡à¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´à¸™à¸µà¹‰à¹à¸›à¸¥à¸‡à¹€à¸­à¸à¸ªà¸²à¸£à¹ƒà¸™à¸£à¸¹à¸›à¹à¸šà¸šà¸ªà¸•à¸²à¸£à¹Œà¸­à¸­à¸Ÿà¸Ÿà¸´à¸¨à¹€à¸à¹ˆà¸²à¹à¸¥à¸°à¹€à¸­à¸à¸ªà¸²à¸£à¹„à¸¡à¹‚à¸„à¸£à¸‹à¸­à¸Ÿà¸—à¹Œà¸­à¸­à¸Ÿà¸Ÿà¸´à¸¨à¹€à¸›à¹‡à¸™à¸£à¸¹à¸›à¹à¸šà¸š %PRODUCTNAME XML à¹ƒà¸«à¸¡à¹ˆ";
 };
@@ -376,7 +376,7 @@ String sWelcometextLabel2
     Text[ arabic ] = "ÇáÑÌÇÁ ãáÇÍÙÉ Ãäå ÚäÏ ÊÍæíá ãÓÊäÏÇÊ Microsoft Óæİ ÊİŞÏ æÍÏÇÊ ÇáãÇßÑæ VBA ÇáÊí ŞÏ Êßæä ãÑİŞÉ æÙíİÊåÇ.";
     Text[ turkish ] = "İlerdeki sayfalarda dönüştürülecek Winword metinleri, Excel tabloları ya da Powerpoint sunularını seçebilirsiniz. Microsoft dosyalarının bulunduğu dizini ve yeni oluşturulan %PRODUCTNAME dosyaları için bir hedef dizin seçin.";
     Text[ language_user1 ] = "VBA = Visual Basics for Applications TSM 01.12.00";
-    Text[ catalan ] = "Please note that when converting Microsoft documents any attached VBA macros lose their functionality.";
+    Text[ catalan ] = "Si us plau, tingueu en compte que en convertir documents de Microsoft les macros de VBA adjuntes perden la seva funcionalitat.";
     Text[ finnish ] = "Ota huomioon, että Microsoft-asiakirjojen VBA-makrot eivät enää toimi, jos ne muunnetaan.";
     Text[ thai ] = "à¸à¸£à¸¸à¸“à¸²à¸«à¸¡à¸²à¸¢à¹€à¸«à¸•à¸¸à¸§à¹ˆà¸²à¸à¸²à¸£à¹à¸›à¸¥à¸‡à¹€à¸­à¸à¸ªà¸²à¸£à¹„à¸¡à¹‚à¸„à¸£à¸‹à¸­à¸Ÿà¸—à¹Œà¸—à¸µà¹ˆà¹à¸™à¸šà¸¡à¸²à¹‚à¸„à¸£ VBA à¸ªà¸¹à¸à¹€à¸ªà¸µà¸¢à¸à¸²à¸£à¸—à¸³à¸•à¸²à¸¡à¸«à¸™à¹‰à¸²à¸—à¸µà¹ˆ";
 };
@@ -403,7 +403,7 @@ String sWelcometextLabel3
     Text[ chinese_traditional ] = "è«‹é¸æ“‡è¦è½‰æ›çš„æ–‡ä»¶é¡å‹ï¼š";
     Text[ turkish ] = "Select which kind of documents you wish to convert:";
     Text[ arabic ] = "ÇÎÊÑ ÃäæÇÚ ÇáãÓÊäÏÇÊ ÇáãÑÇÏ ÊÍæíáåÇ:";
-    Text[ catalan ] = "Select the document type for conversion:";
+    Text[ catalan ] = "Seleccioneu el tipus de document:";
     Text[ finnish ] = "Valitse muunnettava asiakirjatyyppi:";
     Text[ thai ] = "à¹€à¸¥à¸·à¸­à¸à¸Šà¸™à¸´à¸”à¹€à¸­à¸à¸ªà¸²à¸£à¹€à¸à¸·à¹ˆà¸­à¸—à¸³à¸à¸²à¸£à¹à¸›à¸¥à¸‡:";
 };
@@ -434,7 +434,7 @@ String sMSTemplateCheckbox_1_
     Text[ chinese_traditional ] = "Word ç¯„æœ¬";
     Text[ arabic ] = "ŞæÇáÈ Word";
     Text[ turkish ] = "Word şablonları";
-    Text[ catalan ] = "Word Templates";
+    Text[ catalan ] = "Plantilles de Word";
     Text[ finnish ] = "Word-asiakirjamalli";
     Text[ thai ] = "à¹à¸¡à¹ˆà¹à¸šà¸šà¹€à¸§à¸´à¸£à¹Œà¸” ";
 };
@@ -463,7 +463,7 @@ String sMSTemplateCheckbox_2_
     Text[ chinese_traditional ] = "Excel ç¯„æœ¬";
     Text[ arabic ] = "ŞæÇáÈ Excel";
     Text[ turkish ] = "Excel şablonları";
-    Text[ catalan ] = "Excel Templates";
+    Text[ catalan ] = "Plantilles d'Excel";
     Text[ finnish ] = "Excel-asiakirjamalli";
     Text[ thai ] = "à¹à¸¡à¹ˆà¹à¸šà¸šà¹€à¸­à¹‡à¸à¹€à¸‹à¸¥ ";
 };
@@ -492,7 +492,7 @@ String sMSTemplateCheckbox_3_
     Text[ chinese_traditional ] = "PowerPoint ç¯„æœ¬";
     Text[ arabic ] = "ŞæÇáÈ PowerPoint";
     Text[ turkish ] = "PowerPoint şablonları";
-    Text[ catalan ] = "PowerPoint Templates";
+    Text[ catalan ] = "Plantilles de PowerPoint";
     Text[ finnish ] = "PowerPoint-asiakirjamalli";
     Text[ thai ] = "à¹à¸¡à¹ˆà¹à¸šà¸šà¹€à¸à¸²à¹€à¸§à¸­à¸£à¹Œà¸à¹‰à¸­à¸¢à¸—à¹Œ ";
 };
@@ -521,7 +521,7 @@ String sMSDocumentCheckbox_1_
     Text[ chinese_traditional ] = "Word æ–‡ä»¶";
     Text[ arabic ] = "ãÓÊäÏÇÊ Word";
     Text[ turkish ] = "Word belgeleri";
-    Text[ catalan ] = "Word Documents";
+    Text[ catalan ] = "Documents de Word";
     Text[ finnish ] = "Word-asiakirja";
     Text[ thai ] = "à¹€à¸­à¸à¸ªà¸²à¸£à¹€à¸§à¸´à¸£à¹Œà¸” ";
 };
@@ -550,7 +550,7 @@ String sMSDocumentCheckbox_2_
     Text[ chinese_traditional ] = "Excel æ–‡ä»¶";
     Text[ arabic ] = "ãÓÊäÏÇÊ Excel";
     Text[ turkish ] = "Excel belgeleri";
-    Text[ catalan ] = "Excel Documents";
+    Text[ catalan ] = "Documents Excel";
     Text[ finnish ] = "Excel-asiakirjat";
     Text[ thai ] = "à¹€à¸­à¸à¸ªà¸²à¸£à¹€à¸­à¹‡à¸à¹€à¸‹à¸¥ ";
 };
@@ -579,7 +579,7 @@ String sMSDocumentCheckbox_3_
     Text[ chinese_traditional ] = "PowerPoint æ–‡ä»¶";
     Text[ arabic ] = "ãÓÊäÏÇÊPowerPoint ";
     Text[ turkish ] = "PowerPoint belgeleri";
-    Text[ catalan ] = "PowerPoint Documents";
+    Text[ catalan ] = "Documents de PowerPoint";
     Text[ finnish ] = "PowerPoint-asiakirjat";
     Text[ thai ] = "à¹€à¸­à¸à¸ªà¸²à¸£à¹€à¸à¸²à¹€à¸§à¸­à¸£à¹Œà¸à¹‰à¸­à¸¢à¸—à¹Œ ";
 };
@@ -609,7 +609,7 @@ String sSearchInSubDir
     Text[ chinese_traditional ] = "åŒ…å«å­ç›®éŒ„";
     Text[ arabic ] = "ÈãÇ İí Ğáß ÇáÏáÇÆá ÇáİÑÚíÉ";
     Text[ turkish ] = "Alt dizinler dahil";
-    Text[ catalan ] = "including subdirectories";
+    Text[ catalan ] = "incloure directoris";
     Text[ finnish ] = "sisällytetään alikansiot";
     Text[ thai ] = "à¸£à¸§à¸¡à¹„à¸”à¹€à¸£à¹‡à¸à¸—à¸­à¸£à¸µà¹ˆà¸¢à¹ˆà¸­à¸¢";
 };
@@ -669,7 +669,7 @@ String sSummaryHeader
     Text[ chinese_traditional ] = "æ¦‚è¦ï¼š";
     Text[ arabic ] = "ÇáÊáÎíÕ:";
     Text[ turkish ] = "Özet:";
-    Text[ catalan ] = "Summary:";
+    Text[ catalan ] = "Resum:";
     Text[ finnish ] = "Yhteenveto:";
     Text[ thai ] = "à¸ªà¸£à¸¸à¸›:";
 };
@@ -696,7 +696,7 @@ String sTextImportLabel
     Text[ chinese_traditional ] = "åŒ¯å…¥å¾ï¼š";
     Text[ turkish ] = "Import from:";
     Text[ arabic ] = "ÇÓÊíÑÇÏ ãä:";
-    Text[ catalan ] = "Import from:";
+    Text[ catalan ] = "Importa des de:";
     Text[ finnish ] = "Lähde:";
     Text[ thai ] = "à¸™à¸³à¹€à¸‚à¹‰à¸²à¸ˆà¸²à¸:";
 };
@@ -726,7 +726,7 @@ String sTextExportLabel
     Text[ chinese_traditional ] = "å„²å­˜åˆ°ï¼š";
     Text[ arabic ] = "ÍİÙ İí:";
     Text[ turkish ] = "Metin şablon grubu:";
-    Text[ catalan ] = "Save to:";
+    Text[ catalan ] = "Desa a:";
     Text[ finnish ] = "Tallenna:";
     Text[ thai ] = "à¸šà¸±à¸™à¸—à¸¶à¸à¹„à¸›à¸¢à¸±à¸‡:";
 };
@@ -756,7 +756,7 @@ String sGroupnameDefault
     Text[ chinese_traditional ] = "åŒ¯å…¥çš„æ¨£å¼";
     Text[ arabic ] = "ŞæÇáÈ_äÕ_ãÓÊæÑÏÉ";
     Text[ turkish ] = "İçe aktarılan metin şablonları";
-    Text[ catalan ] = "Imported_text_templates";
+    Text[ catalan ] = "Plantilles de text importades";
     Text[ language_user1 ] = "Bezeichnet einen Verzeichnis, dass zur Laufzeit angelegt wird";
     Text[ finnish ] = "Tuodut_tekstimallipohjat";
     Text[ thai ] = "à¸™à¸³à¹€à¸‚à¹‰à¸²_à¹à¸¡à¹ˆà¹à¸šà¸š_à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡";
@@ -787,7 +787,7 @@ String sProgressDesc1
     Text[ chinese_traditional ] = "å·²ç¶“å®Œæˆï¼š ";
     Text[ arabic ] = "ÇáÊŞÏã: ";
     Text[ turkish ] = "İlerleme: ";
-    Text[ catalan ] = "Progress: ";
+    Text[ catalan ] = "Progrés: ";
     Text[ finnish ] = "Tilanne:";
     Text[ thai ] = "à¸„à¸§à¸²à¸¡à¸„à¸·à¸šà¸«à¸™à¹‰à¸²: ";
 };
@@ -873,7 +873,7 @@ String sProgressMoreTemplates
     Text[ chinese_traditional ] = "æ¨£å¼";
     Text[ turkish ] = "Templates";
     Text[ arabic ] = "ŞæÇáÈ";
-    Text[ catalan ] = "Templates";
+    Text[ catalan ] = "Plantilles";
     Text[ finnish ] = "Mallipohjat";
     Text[ thai ] = "à¹à¸¡à¹ˆà¹à¸šà¸š";
 };
@@ -903,7 +903,7 @@ String sNoDirCreation
     Text[ chinese_traditional ] = "ç„¡æ³•å»ºç«‹ %1 ç›®éŒ„ï¼š ";
     Text[ arabic ] = "áÇ íãßä ÅäÔÇÁ ÇáÏáíá '%1':";
     Text[ turkish ] = "Aşağıdaki dizin mevcut değil: ";
-    Text[ catalan ] = "The '%1' directory cannot be created: ";
+    Text[ catalan ] = "No es pot crear el directori '%1': ";
     Text[ finnish ] = "Hakemistoa %1 ei voida luoda: ";
     Text[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¸ªà¸£à¹‰à¸²à¸‡à¹„à¸”à¹€à¸£à¹‡à¸à¸—à¸­à¸£à¸µà¹ˆ'%1' à¹„à¸”à¹‰: ";
 };
@@ -933,7 +933,7 @@ String sMsgDirNotThere
     Text[ chinese_traditional ] = "ç›®éŒ„ %1 ä¸å­˜åœ¨ã€‚";
     Text[ arabic ] = "ÇáÏáíá '%1' ÛíÑ ãæÌæÏ.";
     Text[ turkish ] = "Aşağıdaki dizinler mevcut değil:";
-    Text[ catalan ] = "The '%1' directory does not exist.";
+    Text[ catalan ] = "El directori '%1' no existeix.";
     Text[ finnish ] = "Hakemistoa %1 ei ole olemassa:";
     Text[ thai ] = "à¹„à¸¡à¹ˆà¸¡à¸µà¹„à¸”à¹€à¸£à¹‡à¸à¸—à¸­à¸£à¸µà¹ˆ '%1' à¸­à¸¢à¸¹à¹ˆ";
 };
@@ -961,7 +961,7 @@ String sQueryfornewCreation
     Text[ chinese_traditional ] = "è¦å»ºç«‹é€™å€‹ç›®éŒ„ï¼Ÿ";
     Text[ turkish ] = "Do you want to create it now?";
     Text[ arabic ] = "åá ÊÑíÏ ÅäÔÇÄå ÇáÂä¿";
-    Text[ catalan ] = "Do you want to create it now?";
+    Text[ catalan ] = "Voleu crear-lo ara?";
     Text[ finnish ] = "Haluatko luoda sen nyt?";
     Text[ language_user1 ] = "Das 'es' bezieht sich auf ein bestimmtes Verzeichnis";
     Text[ thai ] = "à¸„à¸¸à¸“à¸•à¹‰à¸­à¸‡à¸à¸²à¸£à¸ªà¸£à¹‰à¸²à¸‡à¸¡à¸±à¸™à¸‚à¸“à¸°à¸™à¸µà¹‰à¸«à¸£à¸·à¸­à¹„à¸¡à¹ˆ?";
@@ -992,7 +992,7 @@ String sFileExists
     Text[ chinese_traditional ] = "æª”æ¡ˆ<1>å·²ç¶“å­˜åœ¨ã€‚<CR>è¦è¦†å¯«é€™å€‹æª”æ¡ˆï¼Ÿ";
     Text[ arabic ] = "Çáãáİ '<1>' ãæÌæÏ ãÓÈŞÇğ. <CR>åá ÊÑíÏ ÇáßÊÇÈÉ İæŞå¿";
     Text[ turkish ] = "Bunları değiştirin.";
-    Text[ catalan ] = "The '<1>' file already exists. Do you want to overwrite it?";
+    Text[ catalan ] = "El fitxer '<1>' ja existeix.<CR>Voleu sobreescriure'l?";
     Text[ finnish ] = "Tiedosto <1> on jo olemassa.<CR>Haluatko korvata tiedoston?";
     Text[ thai ] = "à¹à¸Ÿà¹‰à¸¡ '<1>' à¸¡à¸µà¸­à¸¢à¸¹à¹ˆà¹à¸¥à¹‰à¸§<CR>à¸„à¸¸à¸“à¸•à¹‰à¸­à¸‡à¸à¸²à¸£à¹€à¸‚à¸µà¸¢à¸™à¸—à¸±à¸šà¸¡à¸±à¸™à¸«à¸£à¸·à¸­à¹„à¸¡à¹ˆ?";
 };
@@ -1021,7 +1021,7 @@ String sMorePathsError3
     Text[ chinese_traditional ] = "ç›®éŒ„ä¸å­˜åœ¨";
     Text[ arabic ] = "ÏáÇÆá ÛíÑ ãæÌæÏÉ";
     Text[ turkish ] = "Dizinler mevcut değil";
-    Text[ catalan ] = "Directories do not exist";
+    Text[ catalan ] = "Els directoris no existeixen";
     Text[ finnish ] = "Hakemistoja ei ole";
     Text[ thai ] = "à¹„à¸¡à¹ˆà¸¡à¸µà¹„à¸”à¹€à¸£à¹‡à¸à¸—à¸­à¸£à¸µà¹ˆà¸­à¸¢à¸¹à¹ˆ";
 };
@@ -1050,7 +1050,7 @@ String sConvertError1
     Text[ chinese_traditional ] = "çœŸè¦ç«‹åˆ»ä¸­æ–·é€™å€‹è½‰æ›ï¼Ÿ";
     Text[ arabic ] = "åá ÊÑíÏ ÈÇáİÚá ŞØÚ ÚãáíÉ ÇáÊÍæíá İí åĞå ÇáãÑÍáÉ¿";
     Text[ turkish ] = "Dönüştürme işlemini gerçekten bu aşamada iptal etmek istiyor musunuz?";
-    Text[ catalan ] = "Do you really want to terminate conversion at this point?";
+    Text[ catalan ] = "Realment voleu acabar la conversió en aquest punt?";
     Text[ finnish ] = "Haluatko varmasti lopettaa ohjauksen nyt?";
     Text[ thai ] = "à¸„à¸¸à¸“à¸•à¹‰à¸­à¸‡à¸à¸²à¸£à¸¢à¸¸à¸•à¸´à¸à¸²à¸£à¹à¸›à¸¥à¸‡à¸—à¸µà¹ˆà¸ˆà¸¸à¸”à¸™à¸µà¹‰à¸«à¸£à¸·à¸­à¹„à¸¡à¹ˆ?";
 };
@@ -1079,7 +1079,7 @@ String sConvertError2
     Text[ chinese_traditional ] = "å–æ¶ˆè‡ªå‹•æª”æ¡ˆåŠ©ç†";
     Text[ arabic ] = "æŞİ ÊÔÛíá ÇáãÑÔÏ ÇáÂáí";
     Text[ turkish ] = "Otopilot'tan çık";
-    Text[ catalan ] = "Cancel Autopilot";
+    Text[ catalan ] = "Cancel.la Autopilot";
     Text[ finnish ] = "Peruuta automaattinen ohjaus";
     Text[ thai ] = "à¸¢à¸à¹€à¸¥à¸´à¸à¸à¸²à¸£à¸™à¸³à¸£à¹ˆà¸­à¸‡à¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´";
 };
@@ -1108,7 +1108,7 @@ String sRTErrorDesc
     Text[ chinese_traditional ] = "è‡ªå‹•æª”æ¡ˆåŠ©ç†ç™¼ç”Ÿäº†ä¸€å€‹æ„å¤–çš„éŒ¯èª¤ã€‚";
     Text[ arabic ] = "ÍÏË ÎØÃ ÛíÑ ãÊæŞÚ İí ÇáãÑÔÏ ÇáÂáí.";
     Text[ turkish ] = "OtoPilot'ta beklenmeyen bir hata oluştu.";
-    Text[ catalan ] = "An unexpected error has occured in the AutoPilot.";
+    Text[ catalan ] = "S'ha produït un error inesperat a l'AutoPilot.";
     Text[ finnish ] = "Automaattisessa ohjauksessa on ilmennyt odottamaton virhe.";
     Text[ thai ] = "à¹€à¸à¸´à¸”à¸‚à¹‰à¸­à¸œà¸´à¸”à¸à¸¥à¸²à¸”à¸—à¸µà¹ˆà¹„à¸¡à¹ˆà¸„à¸²à¸”à¸„à¸´à¸”à¸‚à¸¶à¹‰à¸™à¹ƒà¸™à¸à¸²à¸£à¸™à¸³à¸£à¹ˆà¸­à¸‡à¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´";
 };
@@ -1167,7 +1167,7 @@ String sPathDialogMessage
     Text[ chinese_traditional ] = "è«‹é¸æ“‡ä¸€å€‹ç›®éŒ„";
     Text[ arabic ] = "ÇáÑÌÇÁ ÇÎÊíÇÑ Ïáíá";
     Text[ turkish ] = "Bir dizin seçin";
-    Text[ catalan ] = "Select a directory";
+    Text[ catalan ] = "Seleccioneu un directori";
     Text[ finnish ] = "Valitse hakemisto";
     Text[ thai ] = "à¹€à¸¥à¸·à¸­à¸à¹„à¸”à¹€à¸£à¹‡à¸à¸—à¸­à¸£à¸µà¹ˆ";
 };
@@ -1194,7 +1194,7 @@ String sDialogTitle
     Text[ chinese_traditional ] = "æ–‡ä»¶è½‰æ›å™¨";
     Text[ arabic ] = "ãÍæá ÇáãÓÊäÏÇÊ";
     Text[ turkish ] = "OtoPilot Microsoft içe aktarma";
-    Text[ catalan ] = "Document Converter";
+    Text[ catalan ] = "Conversor de documents";
     Text[ finnish ] = "Asiakirjan muunto";
     Text[ thai ] = "à¸•à¸±à¸§à¹à¸›à¸¥à¸‡à¹€à¸­à¸à¸ªà¸²à¸£";
 };
@@ -1221,7 +1221,7 @@ String sProgressPage1
     Text[ chinese_traditional ] = "å·²ç¶“å®Œæˆ";
     Text[ turkish ] = "Current Progress";
     Text[ arabic ] = "ÇáÊŞÏã";
-    Text[ catalan ] = "Already completed";
+    Text[ catalan ] = "Progrés";
     Text[ finnish ] = "Valmis";
     Text[ thai ] = "à¹€à¸ªà¸£à¹‡à¸ˆà¸ªà¸¡à¸šà¸¹à¸£à¸“à¹Œà¹à¸¥à¹‰à¸§";
 };
@@ -1248,7 +1248,7 @@ String sProgressPage2
     Text[ chinese_traditional ] = "æ­£åœ¨åŒ¯ç·¨ç›¸é—œçš„æ–‡ä»¶ï¼š";
     Text[ turkish ] = "Retrieval of the relevant documents";
     Text[ arabic ] = "ÊÓÌíá ÇáãÓÊäÏÇÊ æËíŞÉ ÇáÕáÉ:";
-    Text[ catalan ] = "Retrieving the relevant documents:";
+    Text[ catalan ] = "S'estan recuperant els documents rellevants:";
     Text[ finnish ] = "Haetaan asianmukaiset asiakirjat:";
     Text[ thai ] = "à¸à¸³à¸¥à¸±à¸‡à¸„à¹‰à¸™à¸„à¸·à¸™à¹€à¸­à¸à¸ªà¸²à¸£à¸—à¸µà¹ˆà¹€à¸à¸µà¹ˆà¸¢à¸§à¸‚à¹‰à¸­à¸‡:";
 };
@@ -1275,7 +1275,7 @@ String sProgressPage3
     Text[ chinese_traditional ] = "è½‰æ›æ–‡ä»¶";
     Text[ turkish ] = "Converting the documents";
     Text[ arabic ] = "ÊÍæíá ÇáãÓÊäÏÇÊ";
-    Text[ catalan ] = "Document conversion";
+    Text[ catalan ] = "S'estan convertint els documents";
     Text[ finnish ] = "Muunnetaan asiakirjat";
     Text[ thai ] = "à¸à¸³à¸¥à¸±à¸‡à¹à¸›à¸¥à¸‡à¹€à¸­à¸à¸ªà¸²à¸£";
 };
@@ -1303,7 +1303,7 @@ String sProgressFound
     Text[ chinese_traditional ] = "å·²ç¶“æ‰¾åˆ°ï¼š";
     Text[ turkish ] = "Found";
     Text[ arabic ] = "Êã ÇáÚËæÑ Úáì:";
-    Text[ catalan ] = "Found:";
+    Text[ catalan ] = "Trobat:";
     Text[ finnish ] = "Tulokset:";
     Text[ thai ] = "à¸à¸š:";
 };
@@ -1331,7 +1331,7 @@ String sProgressPage5
     Text[ chinese_traditional ] = "%1 è¢«æ‰¾åˆ°";
     Text[ turkish ] = "%1 found";
     Text[ arabic ] = "Êã ÇáÚËæÑ Úáì %1";
-    Text[ catalan ] = "%1 found";
+    Text[ catalan ] = "%1 trobat";
     Text[ finnish ] = "%1 löydetty";
     Text[ language_user1 ] = "RB (15.06.01): %1 bezieht sich auf die Anzahl der gefundenen Dokumente bzw. Vorlagen.";
     Text[ thai ] = "à¸à¸š %1 ";
@@ -1359,7 +1359,7 @@ String sReady
     Text[ chinese_traditional ] = "å®Œæˆ";
     Text[ turkish ] = "Ready!";
     Text[ arabic ] = "Êã!";
-    Text[ catalan ] = "Complete !";
+    Text[ catalan ] = "Acabat!";
     Text[ finnish ] = "Valmis!";
     Text[ thai ] = "à¸ªà¸¡à¸šà¸¹à¸£à¸“à¹Œ!";
 };
@@ -1389,7 +1389,7 @@ String sXMLTemplateCheckbox_1_
     Text[ chinese_traditional ] = "æ–‡å­—æ¨£å¼";
     Text[ arabic ] = "ŞæÇáÈ äÕ";
     Text[ turkish ] = "%PRODUCTNAME Writer şablonları";
-    Text[ catalan ] = "Text templates";
+    Text[ catalan ] = "Plantilles de text";
     Text[ finnish ] = "Tekstimallipohjat";
     Text[ thai ] = "à¹à¸¡à¹ˆà¹à¸šà¸šà¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡";
 };
@@ -1418,7 +1418,7 @@ String sXMLTemplateCheckbox_2_
     Text[ chinese_traditional ] = "å·¥ä½œè¡¨æ¨£å¼";
     Text[ arabic ] = "ŞæÇáÈ ÌÏæá";
     Text[ turkish ] = "%PRODUCTNAME Calc şablonları";
-    Text[ catalan ] = "Spreadsheet templates";
+    Text[ catalan ] = "Plantilles de fulls de càlcul";
     Text[ finnish ] = "Laskentataulukkomallipohjat";
     Text[ thai ] = "à¹à¸¡à¹ˆà¹à¸šà¸šà¸à¸£à¸°à¸”à¸²à¸©à¸„à¸³à¸™à¸§à¸“";
 };
@@ -1447,7 +1447,7 @@ String sXMLTemplateCheckbox_3_
     Text[ chinese_traditional ] = "ç¹ªåœ–/ç°¡å ±æ¨£å¼";
     Text[ arabic ] = "ŞæÇáÈ ÑÓãÉ/ÚÑÖ ÊŞÏíãí";
     Text[ turkish ] = "%PRODUCTNAME Impress/%PRODUCTNAME Draw şablonları";
-    Text[ catalan ] = "Drawing/presentation templates";
+    Text[ catalan ] = "Plantilles de dibuixos/presentacions";
     Text[ finnish ] = "Piirros-/esitysmallipohjat";
     Text[ thai ] = "à¹à¸¡à¹ˆà¹à¸šà¸šà¸à¸²à¸£à¸§à¸²à¸”à¸£à¸¹à¸›/à¸à¸²à¸£à¸™à¸³à¹€à¸ªà¸™à¸­";
 };
@@ -1474,7 +1474,7 @@ String sXMLTemplateCheckbox_4_
     Text[ chinese_traditional ] = "ä¸»æ§æ–‡ä»¶";
     Text[ turkish ] = "%PRODUCTNAME Math Documents";
     Text[ arabic ] = "ãÓÊäÏÇÊ ÔÇãáÉ";
-    Text[ catalan ] = "Master documents";
+    Text[ catalan ] = "Documents mestre";
     Text[ finnish ] = "Pääasiakirjat";
     Text[ thai ] = "à¹€à¸­à¸à¸ªà¸²à¸£à¸•à¹‰à¸™à¸‰à¸šà¸±à¸š";
 };
@@ -1504,7 +1504,7 @@ String sXMLDocumentCheckbox_1_
     Text[ chinese_traditional ] = "æ–‡å­—æ–‡ä»¶";
     Text[ arabic ] = "ãÓÊäÏÇÊ äÕ";
     Text[ turkish ] = "%PRODUCTNAME Writer belgeleri";
-    Text[ catalan ] = "Text documents";
+    Text[ catalan ] = "Documents de text";
     Text[ finnish ] = "Tekstiasiakirjat";
     Text[ thai ] = "à¹€à¸­à¸à¸ªà¸²à¸£à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡";
 };
@@ -1533,7 +1533,7 @@ String sXMLDocumentCheckbox_2_
     Text[ chinese_traditional ] = "å·¥ä½œè¡¨æ–‡ä»¶";
     Text[ arabic ] = "ãÓÊäÏÇÊ ÌÏæá";
     Text[ turkish ] = "%PRODUCTNAME Calc belgeleri";
-    Text[ catalan ] = "Spreadsheet documents";
+    Text[ catalan ] = "Documents de fulls de càlcul";
     Text[ finnish ] = "Laskentataulukkoasiakirjat";
     Text[ thai ] = "à¹€à¸­à¸à¸ªà¸²à¸£à¸à¸£à¸°à¸”à¸²à¸©à¸„à¸³à¸™à¸§à¸“";
 };
@@ -1562,7 +1562,7 @@ String sXMLDocumentCheckbox_3_
     Text[ chinese_traditional ] = "ç¹ªåœ–/ç°¡å ±æ–‡ä»¶";
     Text[ arabic ] = "ãÓÊäÏÇÊ ÑÓãÉ/ÚÑÖ ÊŞÏíãí";
     Text[ turkish ] = "%PRODUCTNAME Impress/%PRODUCTNAME Draw belgeleri";
-    Text[ catalan ] = "Drawing/presentation documents";
+    Text[ catalan ] = "Documents de dibuix/presentacions";
     Text[ finnish ] = "Piirros-/esitysasiakirjat";
     Text[ thai ] = "à¹€à¸­à¸à¸ªà¸²à¸£à¸à¸²à¸£à¸§à¸²à¸”à¸£à¸¹à¸›/à¸à¸²à¸£à¸™à¸³à¹€à¸ªà¸™à¸­";
 };
@@ -1590,7 +1590,7 @@ String sXMLDocumentCheckbox_4_
     Text[ chinese_traditional ] = "ä¸»æ§æ–‡ä»¶/å…¬å¼";
     Text[ turkish ] = "%PRODUCTNAME Math Documents";
     Text[ arabic ] = "ãÓÊäÏÇÊ ÔÇãáÉ/ÕíÛ";
-    Text[ catalan ] = "Master documents/formulas";
+    Text[ catalan ] = "Documents/fórmules mestres";
     Text[ finnish ] = "Pääasiakirjat/kaavat";
     Text[ thai ] = "à¸•à¹‰à¸™à¸‰à¸šà¸±à¸šà¹€à¸­à¸à¸ªà¸²à¸£/à¸ªà¸¹à¸•à¸£à¸„à¸³à¸™à¸§à¸“";
 };
@@ -1618,7 +1618,7 @@ String sXMLHelperApplications_1
     Text[ chinese_traditional ] = "ä¸»æ§æ–‡ä»¶";
     Text[ turkish ] = "Master Documents";
     Text[ arabic ] = "ãÓÊäÏÇÊ ÔÇãáÉ";
-    Text[ catalan ] = "master documents";
+    Text[ catalan ] = "Documents mestre";
     Text[ finnish ] = "pääasiakirjat";
     Text[ thai ] = "à¸•à¹‰à¸™à¸‰à¸šà¸±à¸šà¹€à¸­à¸à¸ªà¸²à¸£";
 };
@@ -1645,7 +1645,7 @@ String sXMLHelperApplications_2
     Text[ chinese_traditional ] = "å…¬å¼";
     Text[ turkish ] = "Formulas";
     Text[ arabic ] = "ÕíÛ";
-    Text[ catalan ] = "Formulas";
+    Text[ catalan ] = "Fórmules";
     Text[ finnish ] = "Kaavat";
     Text[ thai ] = "à¸ªà¸¹à¸•à¸£à¸„à¸³à¸™à¸§à¸“";
 };
@@ -1674,7 +1674,7 @@ String sSourceDocuments
     Text[ chinese_traditional ] = "æºæ–‡ä»¶";
     Text[ turkish ] = "Sourcedocuments";
     Text[ arabic ] = "Sourcedocuments";
-    Text[ catalan ] = "Sourcedocuments";
+    Text[ catalan ] = "Documents font";
     Text[ thai ] = "à¹à¸«à¸¥à¹ˆà¸‡à¹€à¸­à¸à¸ªà¸²à¸£";
 };
 
@@ -1702,7 +1702,7 @@ String sTargetDocuments
     Text[ chinese_traditional ] = "ç›®æ¨™æ–‡ä»¶";
     Text[ turkish ] = "Targetdocuments";
     Text[ arabic ] = "Targetdocuments";
-    Text[ catalan ] = "Targetdocuments";
+    Text[ catalan ] = "Documents destí";
     Text[ thai ] = "à¹€à¸­à¸à¸ªà¸²à¸£à¹€à¸›à¹‰à¸²à¸«à¸¡à¸²à¸¢";
 };
 
@@ -1729,7 +1729,7 @@ String sCreateLogfile
     Text[ chinese_traditional ] = "è£½ä½œæ—¥èªŒæª”æ¡ˆ";
     Text[ turkish ] = "Creae Logfile";
     Text[ arabic ] = "Creae Logfile";
-    Text[ catalan ] = "Creae Logfile";
+    Text[ catalan ] = "Crea fitxer de registre";
     Text[ thai ] = "à¸ªà¸£à¹‰à¸²à¸‡à¹à¸Ÿà¹‰à¸¡à¸¥à¸‡à¸šà¸±à¸™à¸—à¸¶à¸à¹€à¸‚à¹‰à¸²-à¸­à¸­à¸";
 };
 
@@ -1783,7 +1783,7 @@ String sLogfileHelpText
     Text[ chinese_traditional ] = "åœ¨æ‚¨çš„å·¥ä½œç›®éŒ„å…§æ–°å¢ä¸€å€‹æ—¥èªŒæª”æ¡ˆã€‚";
     Text[ turkish ] = "A Logfile will be created within your Working Directory";
     Text[ arabic ] = "A Logfile will be created within your Working Directory";
-    Text[ catalan ] = "A Logfile will be created within your Working Directory";
+    Text[ catalan ] = "El fitxer de registre es crearà al directori de treball";
     Text[ thai ] = "à¹à¸Ÿà¹‰à¸¡à¸¥à¸‡à¸šà¸±à¸™à¸—à¸¶à¸à¹€à¸‚à¹‰à¸²-à¸­à¸­à¸à¸ˆà¸°à¸–à¸¹à¸à¸ªà¸£à¹‰à¸²à¸‡à¹ƒà¸™à¹„à¸”à¹€à¸£à¹‡à¸à¸—à¸­à¸£à¸µà¹ˆà¸à¸²à¸£à¸—à¸³à¸‡à¸²à¸™à¸‚à¸­à¸‡à¸„à¸¸à¸“";
 };
 
@@ -1812,7 +1812,7 @@ String sSumInclusiveSubDir
     Text[ chinese_traditional ] = "åŒ…å«æ‰€æœ‰å­ç›®éŒ„";
     Text[ arabic ] = "ÓíÊã ãÑÇÚÇÉ ßá ÇáÏáÇÆá ÇáİÑÚíÉ";
     Text[ turkish ] = "Tüm alt dizinler dikkate alınacak";
-    Text[ catalan ] = "All directories will be considered";
+    Text[ catalan ] = "Es tindran en compte totes els subdirectoris";
     Text[ finnish ] = "Kaikki alihakemistot huomioidaan";
     Text[ thai ] = "à¹„à¸”à¹€à¸£à¹‡à¸à¸—à¸­à¸£à¸µà¹ˆà¸¢à¹ˆà¸­à¸¢à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”à¸ˆà¸°à¸–à¸¹à¸à¸à¸´à¸ˆà¸²à¸£à¸“à¸²";
 };
@@ -1841,7 +1841,7 @@ String sSumSaveDokumente
     Text[ chinese_traditional ] = "åŒ¯å…¥åˆ°ä»¥ä¸‹ç›®éŒ„ï¼š";
     Text[ arabic ] = "Óæİ íÊã ÊÕÏíÑåÇ Åáì ÇáÏáíá ÇáÊÇáí:";
     Text[ turkish ] = "Bu dosyaların aktarılacağı hedef dizin:";
-    Text[ catalan ] = "These will be exported to the following directory:";
+    Text[ catalan ] = "S'exportaran al següent directori:";
     Text[ finnish ] = "Kohteet viedään seuraavaan hakemistoon:";
     Text[ thai ] = "à¹€à¸«à¸¥à¹ˆà¸²à¸™à¸µà¹‰à¸ˆà¸°à¸–à¸¹à¸à¸ªà¹ˆà¸‡à¸­à¸­à¸à¹„à¸›à¸¢à¸±à¸‡à¹„à¸”à¹€à¸£à¹‡à¸à¸—à¸­à¸£à¸µà¹ˆà¸•à¹ˆà¸­à¹„à¸›à¸™à¸µà¹‰:";
 };
@@ -1871,7 +1871,7 @@ String sSumSOTextDocuments
     Text[ chinese_traditional ] = "å¾ä¸‹åˆ—ç›®éŒ„åŒ¯å…¥å…¨éƒ¨çš„ %PRODUCTNAME æ–‡å­—æ–‡ä»¶ï¼š";
     Text[ arabic ] = "Óæİ íÊã ÇÓÊíÑÇÏ ßá %1 ãä ÇáÏáíá ÇáÊÇáí:";
     Text[ turkish ] = "İçe aktarılacak tüm Word şablonlarını içeren dizin:";
-    Text[ catalan ] = "%1 contained in the following directory will be imported:";
+    Text[ catalan ] = "S'importaran tots els documents %PRODUCTNAME Text del següent directori:";
     Text[ finnish ] = "Kaikki seuraavassa hakemistossa olevat ohjelman %PRODUCTNAME tekstiasiakirjat tuodaan:";
     Text[ thai ] = "à¹€à¸­à¸à¸ªà¸²à¸£à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡ %PRODUCTNAME à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”à¸—à¸µà¹ˆà¸šà¸£à¸£à¸ˆà¸¸à¹ƒà¸™à¹„à¸”à¹€à¸£à¹‡à¸à¸—à¸­à¸£à¸µà¹ˆà¸•à¹ˆà¸­à¹„à¸›à¸™à¸µà¹‰à¸ˆà¸°à¸–à¸¹à¸à¸™à¸³à¹€à¸‚à¹‰à¸²:";
 };
@@ -1901,7 +1901,7 @@ String sSumSOTableDocuments
     Text[ chinese_traditional ] = "å¾ä¸‹åˆ—ç›®éŒ„åŒ¯å…¥å…¨éƒ¨çš„ %PRODUCTNAME å·¥ä½œè¡¨æ–‡ä»¶ï¼š";
     Text[ arabic ] = "Óæİ íÊã ÇÓÊíÑÇÏ ßá %1 ãä ÇáÏáíá ÇáÊÇáí:";
     Text[ turkish ] = "İçe aktarılacak tüm Word şablonlarını içeren dizin:";
-    Text[ catalan ] = "%1 contained in the following directory will be imported:";
+    Text[ catalan ] = "S'importaran tots els documents %PRODUCTNAME Taula del següent directori:";
     Text[ finnish ] = "Kaikki seuraavassa hakemistossa olevat ohjelman %PRODUCTNAME laskentataulukot tuodaan:";
     Text[ thai ] = "à¸à¸£à¸°à¸”à¸²à¸©à¸„à¸³à¸™à¸§à¸“ %PRODUCTNAME à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”à¸—à¸µà¹ˆà¸šà¸£à¸£à¸ˆà¸¸à¹ƒà¸™à¹„à¸”à¹€à¸£à¹‡à¸à¸—à¸­à¸£à¸µà¹ˆà¸•à¹ˆà¸­à¹„à¸›à¸™à¸µà¹‰à¸ˆà¸°à¸–à¸¹à¸à¸™à¸³à¹€à¸‚à¹‰à¸²:";
 };
@@ -1931,7 +1931,7 @@ String sSumSODrawDocuments
     Text[ chinese_traditional ] = "å¾ä¸‹åˆ—ç›®éŒ„åŒ¯å…¥å…¨éƒ¨çš„ %PRODUCTNAME ç¹ªåœ–åŠç°¡å ±æ–‡ä»¶ï¼š";
     Text[ arabic ] = "Óæİ íÊã ÇÓÊíÑÇÏ ßá %1 ãä ÇáÏáíá ÇáÊÇáí:";
     Text[ turkish ] = "İçe aktarılacak tüm Word şablonlarını içeren dizin:";
-    Text[ catalan ] = "%1 contained in the following directory will be imported:";
+    Text[ catalan ] = "S'importaran tots els documents %PRODUCTNAME Impress i Dibuix del següent directori:";
     Text[ finnish ] = "Kaikki seuraavassa hakemistossa olevat ohjelman %PRODUCTNAME piirrokset tuodaan:";
     Text[ thai ] = "à¹€à¸­à¸à¸ªà¸²à¸£à¸à¸²à¸£à¸§à¸²à¸”à¸£à¸¹à¸›à¹à¸¥à¸°à¸à¸²à¸£à¸™à¸³à¹€à¸ªà¸™à¸­ %PRODUCTNAME à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”à¸—à¸µà¹ˆà¸šà¸£à¸£à¸ˆà¸¸à¹ƒà¸™à¹„à¸”à¹€à¸£à¹‡à¸à¸—à¸­à¸£à¸µà¹ˆà¸•à¹ˆà¸­à¹„à¸›à¸™à¸µà¹‰à¸ˆà¸°à¸–à¸¹à¸à¸™à¸³à¹€à¸‚à¹‰à¸²:";
 };
@@ -1961,7 +1961,7 @@ String sSumSOMathDocuments
     Text[ chinese_traditional ] = "å¾ä¸‹åˆ—ç›®éŒ„åŒ¯å…¥å…¨éƒ¨çš„ %PRODUCTNAME å…¬å¼æ–‡ä»¶ï¼š";
     Text[ arabic ] = "Óæİ íÊã ÇÓÊíÑÇÏ ßá %1 ãä ÇáÏáíá ÇáÊÇáí:";
     Text[ turkish ] = "İçe aktarılacak tüm Word şablonlarını içeren dizin:";
-    Text[ catalan ] = "%1 contained in the following directory will be imported:";
+    Text[ catalan ] = "S'importaran tots els documents %PRODUCTNAME Fórmula del següent directori:";
     Text[ finnish ] = "Kaikki seuraavassa hakemistossa olevat ohjelman %PRODUCTNAME kaava-asiakirjat tuodaan:";
     Text[ thai ] = "à¹€à¸­à¸à¸ªà¸²à¸£à¸ªà¸¹à¸•à¸£à¸„à¸³à¸™à¸§à¸“ %PRODUCTNAME à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”à¸—à¸µà¹ˆà¸šà¸£à¸£à¸ˆà¸¸à¹ƒà¸™à¹„à¸”à¹€à¸£à¹‡à¸à¸—à¸­à¸£à¸µà¹ˆà¸•à¹ˆà¸­à¹„à¸›à¸™à¸µà¹‰à¸ˆà¸°à¸–à¸¹à¸à¸™à¸³à¹€à¸‚à¹‰à¸²:";
 };
@@ -1991,7 +1991,7 @@ String sSumSOTextTemplates
     Text[ chinese_traditional ] = "å¾ä¸‹åˆ—ç›®éŒ„åŒ¯å…¥å…¨éƒ¨çš„ %PRODUCTNAME æ–‡å­—æ–‡ä»¶æ¨£å¼ï¼š";
     Text[ arabic ] = "Óæİ íÊã ÇÓÊíÑÇÏ ßá %1 ãä ÇáÏáíá ÇáÊÇáí:";
     Text[ turkish ] = "İçe aktarılacak tüm Word şablonlarını içeren dizin:";
-    Text[ catalan ] = "%1 contained in the following directory will be imported:";
+    Text[ catalan ] = "S'importaran tots els documents %PRODUCTNAME Plantilla del següent directori:";
     Text[ finnish ] = "Kaikki seuraavassa hakemistossa olevat ohjelman %PRODUCTNAME tekstimallipohjat tuodaan:";
     Text[ thai ] = "à¹à¸¡à¹ˆà¹à¸šà¸šà¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡ %PRODUCTNAME à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”à¸—à¸µà¹ˆà¸šà¸£à¸£à¸ˆà¸¸à¹ƒà¸™à¹„à¸”à¹€à¸£à¹‡à¸à¸—à¸­à¸£à¸µà¹ˆà¸•à¹ˆà¸­à¹„à¸›à¸™à¸µà¹‰à¸ˆà¸°à¸–à¸¹à¸à¸™à¸³à¹€à¸‚à¹‰à¸²:";
 };
@@ -2021,7 +2021,7 @@ String sSumSOTableTemplates
     Text[ chinese_traditional ] = "å¾ä¸‹åˆ—ç›®éŒ„åŒ¯å…¥å…¨éƒ¨çš„ %PRODUCTNAME å·¥ä½œè¡¨æ¨£å¼æ–‡ä»¶ï¼š";
     Text[ arabic ] = "Óæİ íÊã ÇÓÊíÑÇÏ ßá %1 ãä ÇáÏáíá ÇáÊÇáí:";
     Text[ turkish ] = "İçe aktarılacak tüm Word şablonlarını içeren dizin:";
-    Text[ catalan ] = "%1 contained in the following directory will be imported:";
+    Text[ catalan ] = "S'importaran totes les plantilles %PRODUCTNAME Taula del següent directori:";
     Text[ finnish ] = "Kaikki seuraavassa hakemistossa olevat ohjelman %PRODUCTNAME taulukkomallipohjat tuodaan:";
     Text[ thai ] = "à¹à¸¡à¹ˆà¹à¸šà¸šà¸•à¸²à¸£à¸²à¸‡ %PRODUCTNAME à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”à¸—à¸µà¹ˆà¸šà¸£à¸£à¸ˆà¸¸à¹ƒà¸™à¹„à¸”à¹€à¸£à¹‡à¸à¸—à¸­à¸£à¸µà¹ˆà¸•à¹ˆà¸­à¹„à¸›à¸™à¸µà¹‰à¸ˆà¸°à¸–à¸¹à¸à¸™à¸³à¹€à¸‚à¹‰à¸²:";
 };
@@ -2051,7 +2051,7 @@ String sSumSODrawTemplates
     Text[ chinese_traditional ] = "å¾ä¸‹åˆ—ç›®éŒ„åŒ¯å…¥å…¨éƒ¨çš„ %PRODUCTNAME ç¹ªåœ–åŠç°¡å ±æ¨£å¼æ–‡ä»¶ï¼š";
     Text[ arabic ] = "Óæİ íÊã ÇÓÊíÑÇÏ ßá %1 ãä ÇáÏáíá ÇáÊÇáí:";
     Text[ turkish ] = "İçe aktarılacak tüm Word şablonlarını içeren dizin:";
-    Text[ catalan ] = "%1 contained in the following directory will be imported:";
+    Text[ catalan ] = "S'importaran totes les plantilles %PRODUCTNAME Impress i Dibuix del següent directori:";
     Text[ finnish ] = "Kaikki seuraavassa hakemistossa olevat ohjelman %PRODUCTNAME esitysmallipohjat tuodaan:";
     Text[ thai ] = "à¹à¸¡à¹ˆà¹à¸šà¸šà¸à¸²à¸£à¸§à¸²à¸”à¸£à¸¹à¸›à¹à¸¥à¸°à¸à¸²à¸£à¸™à¸³à¹€à¸ªà¸™à¸­ %PRODUCTNAME à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”à¸—à¸µà¹ˆà¸šà¸£à¸£à¸ˆà¸¸à¹ƒà¸™à¹„à¸”à¹€à¸£à¹‡à¸à¸—à¸­à¸£à¸µà¹ˆà¸•à¹ˆà¸­à¹„à¸›à¸™à¸µà¹‰à¸ˆà¸°à¸–à¸¹à¸à¸™à¸³à¹€à¸‚à¹‰à¸²:";
 };
@@ -2080,7 +2080,7 @@ String sSumSOGlobalDocuments
     Text[ chinese_traditional ] = "å¾ä¸‹åˆ—ç›®éŒ„åŒ¯å…¥å…¨éƒ¨çš„ %PRODUCTNAME ä¸»æ§æ–‡ä»¶ï¼š";
     Text[ arabic ] = "Óæİ íÊã ÇÓÊíÑÇÏ ßá %1 ãä ÇáÏáíá ÇáÊÇáí:";
     Text[ turkish ] = "İçe aktarılacak tüm Word şablonlarını içeren dizin:";
-    Text[ catalan ] = "%1 contained in the following directory will be imported:";
+    Text[ catalan ] = "S'importaran tots els documents mestres %PRODUCTNAME del següent directori:";
     Text[ finnish ] = "Kaikki seuraavassa hakemistossa olevat ohjelman %PRODUCTNAME pääasiakirjat tuodaan:";
     Text[ finnish ] = "Kaikki seuraavassa hakemistossa olevat ohjelman %PRODUCTNAME pääasiakirjat tuodaan:";
     Text[ thai ] = "à¸•à¹‰à¸™à¸‰à¸šà¸±à¸šà¹€à¸­à¸à¸ªà¸²à¸£ %PRODUCTNAME à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”à¸—à¸µà¹ˆà¸šà¸£à¸£à¸ˆà¸¸à¹ƒà¸™à¹„à¸”à¹€à¸£à¹‡à¸à¸—à¸­à¸£à¸µà¹ˆà¸•à¹ˆà¸­à¹„à¸›à¸™à¸µà¹‰à¸ˆà¸°à¸–à¸¹à¸à¸™à¸³à¹€à¸‚à¹‰à¸²:";
@@ -2111,7 +2111,7 @@ String sSumMSTextDocuments
     Text[ chinese_traditional ] = "å¾ä¸‹åˆ—ç›®éŒ„åŒ¯å…¥å…¨éƒ¨çš„ Word æ–‡ä»¶ï¼š";
     Text[ arabic ] = "Óæİ íÊã ÇÓÊíÑÇÏ ßá %1 ãä ÇáÏáíá ÇáÊÇáí:";
     Text[ turkish ] = "İçe aktarılacak tüm Word şablonlarını içeren dizin:";
-    Text[ catalan ] = "%1 contained in the following directory will be imported:";
+    Text[ catalan ] = "S'importaran tots els documents Word del següent directori:";
     Text[ finnish ] = "Kaikki seuraavassa hakemistossa ovat Word-asiakirjat tuodaan:";
     Text[ thai ] = "à¹€à¸­à¸à¸ªà¸²à¸£à¹€à¸§à¸´à¸£à¹Œà¸”à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”à¸—à¸µà¹ˆà¸šà¸£à¸£à¸ˆà¸¸à¹ƒà¸™à¹„à¸”à¹€à¸£à¹‡à¸à¸—à¸­à¸£à¸µà¹ˆà¸•à¹ˆà¸­à¹„à¸›à¸™à¸µà¹‰à¸ˆà¸°à¸–à¸¹à¸à¸™à¸³à¹€à¸‚à¹‰à¸²:";
 };
@@ -2141,7 +2141,7 @@ String sSumMSTableDocuments
     Text[ chinese_traditional ] = "å¾ä¸‹åˆ—ç›®éŒ„åŒ¯å…¥å…¨éƒ¨çš„ Excel æ–‡ä»¶ï¼š";
     Text[ arabic ] = "Óæİ íÊã ÇÓÊíÑÇÏ ßá %1 ãä ÇáÏáíá ÇáÊÇáí:";
     Text[ turkish ] = "İçe aktarılacak tüm Word şablonlarını içeren dizin:";
-    Text[ catalan ] = "%1 contained in the following directory will be imported:";
+    Text[ catalan ] = "S'importaran tots els documents Excel del següent directori:";
     Text[ finnish ] = "Kaikki seuraavassa hakemistossa ovat Excel-asiakirjat tuodaan:";
     Text[ thai ] = "à¹€à¸­à¸à¸ªà¸²à¸£à¹€à¸­à¹‡à¸à¹€à¸‹à¸¥à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”à¸—à¸µà¹ˆà¸šà¸£à¸£à¸ˆà¸¸à¹ƒà¸™à¹„à¸”à¹€à¸£à¹‡à¸à¸—à¸­à¸£à¸µà¹ˆà¸•à¹ˆà¸­à¹„à¸›à¸™à¸µà¹‰à¸ˆà¸°à¸–à¸¹à¸à¸™à¸³à¹€à¸‚à¹‰à¸²:";
 };
@@ -2171,7 +2171,7 @@ String sSumMSDrawDocuments
     Text[ chinese_traditional ] = "å¾ä¸‹åˆ—ç›®éŒ„åŒ¯å…¥å…¨éƒ¨çš„ PowerPiont æ–‡ä»¶ï¼š";
     Text[ arabic ] = "Óæİ íÊã ÇÓÊíÑÇÏ ßá %1 ãä ÇáÏáíá ÇáÊÇáí:";
     Text[ turkish ] = "İçe aktarılacak tüm Word şablonlarını içeren dizin:";
-    Text[ catalan ] = "%1 contained in the following directory will be imported:";
+    Text[ catalan ] = "S'importaran tots els documents PowerPoint del següent directori:";
     Text[ finnish ] = "Kaikki seuraavassa hakemistossa ovat PowerPoint-asiakirjat tuodaan:";
     Text[ thai ] = "à¹€à¸­à¸à¸ªà¸²à¸£à¹€à¸à¸²à¹€à¸§à¸­à¸£à¹Œà¸à¹‰à¸­à¸¢à¸—à¹Œà¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”à¸—à¸µà¹ˆà¸šà¸£à¸£à¸ˆà¸¸à¹ƒà¸™à¹„à¸”à¹€à¸£à¹‡à¸à¸—à¸­à¸£à¸µà¹ˆà¸•à¹ˆà¸­à¹„à¸›à¸™à¸µà¹‰à¸ˆà¸°à¸–à¸¹à¸à¸™à¸³à¹€à¸‚à¹‰à¸²:";
 };
@@ -2201,7 +2201,7 @@ String sSumMSTextTemplates
     Text[ chinese_traditional ] = "å¾ä¸‹åˆ—ç›®éŒ„åŒ¯å…¥å…¨éƒ¨çš„ Word ç¯„æœ¬ï¼š";
     Text[ arabic ] = "Óæİ íÊã ÇÓÊíÑÇÏ ßá %1 ãä ÇáÏáíá ÇáÊÇáí:";
     Text[ turkish ] = "İçe aktarılacak tüm Word şablonlarını içeren dizin:";
-    Text[ catalan ] = "%1 contained in the following directory will be imported:";
+    Text[ catalan ] = "S'importaran totes les plantilles Word del següent directori:";
     Text[ finnish ] = "Kaikki seuraavassa hakemistossa ovat Word-mallipohjat tuodaan:";
     Text[ thai ] = "à¹à¸¡à¹ˆà¹à¸šà¸šà¹€à¸§à¸´à¸£à¹Œà¸”à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”à¸—à¸µà¹ˆà¸šà¸£à¸£à¸ˆà¸¸à¹ƒà¸™à¹„à¸”à¹€à¸£à¹‡à¸à¸—à¸­à¸£à¸µà¹ˆà¸•à¹ˆà¸­à¹„à¸›à¸™à¸µà¹‰à¸ˆà¸°à¸–à¸¹à¸à¸™à¸³à¹€à¸‚à¹‰à¸²:";
 };
@@ -2231,7 +2231,7 @@ String sSumMSTableTemplates
     Text[ chinese_traditional ] = "å¾ä¸‹åˆ—ç›®éŒ„åŒ¯å…¥å…¨éƒ¨çš„ Excel ç¯„æœ¬ï¼š";
     Text[ arabic ] = "Óæİ íÊã ÇÓÊíÑÇÏ ßá %1 ãä ÇáÏáíá ÇáÊÇáí:";
     Text[ turkish ] = "İçe aktarılacak tüm Word şablonlarını içeren dizin:";
-    Text[ catalan ] = "%1 contained in the following directory will be imported:";
+    Text[ catalan ] = "S'importaran totes les plantilles Excel del següent directori:";
     Text[ finnish ] = "Kaikki seuraavassa hakemistossa ovat Excel-mallipohjat tuodaan:";
     Text[ thai ] = "à¹à¸¡à¹ˆà¹à¸šà¸šà¹€à¸­à¹‡à¸à¹€à¸‹à¸¥à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”à¸—à¸µà¹ˆà¸šà¸£à¸£à¸ˆà¸¸à¹ƒà¸™à¹„à¸”à¹€à¸£à¹‡à¸à¸—à¸­à¸£à¸µà¹ˆà¸•à¹ˆà¸­à¹„à¸›à¸™à¸µà¹‰à¸ˆà¸°à¸–à¸¹à¸à¸™à¸³à¹€à¸‚à¹‰à¸²:";
 };
@@ -2261,7 +2261,7 @@ String sSumMSDrawTemplates
     Text[ chinese_traditional ] = "å¾ä¸‹åˆ—ç›®éŒ„åŒ¯å…¥å…¨éƒ¨çš„ PowerPoint ç¯„æœ¬ï¼š";
     Text[ arabic ] = "Óæİ íÊã ÇÓÊíÑÇÏ ßá %1 ãä ÇáÏáíá ÇáÊÇáí:";
     Text[ turkish ] = "İçe aktarılacak tüm Word şablonlarını içeren dizin:";
-    Text[ catalan ] = "%1 contained in the following directory will be imported:";
+    Text[ catalan ] = "S'importaran totes les plantilles PowerPoint del següent directori:";
     Text[ finnish ] = "Kaikki seuraavassa hakemistossa ovat PowerPoint-mallipohjat tuodaan:";
     Text[ thai ] = "à¹à¸¡à¹ˆà¹à¸šà¸šà¹€à¸à¸²à¹€à¸§à¸­à¸£à¹Œà¸à¹‰à¸­à¸¢à¸—à¹Œà¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”à¸—à¸µà¹ˆà¸šà¸£à¸£à¸ˆà¸¸à¹ƒà¸™à¹„à¸”à¹€à¸£à¹‡à¸à¸—à¸­à¸£à¸µà¹ˆà¸•à¹ˆà¸­à¹„à¸›à¸™à¸µà¹‰à¸ˆà¸°à¸–à¸¹à¸à¸™à¸³à¹€à¸‚à¹‰à¸²:";
 };
