@@ -2,9 +2,9 @@
  *
  *  $RCSfile: generictoolbarcontroller.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-21 13:27:57 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 15:20:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,6 +151,22 @@ static rtl::OUString getEnumCommand( const rtl::OUString& rCommand )
     return aEnumCommand;
 }
 
+static rtl::OUString getMasterCommand( const rtl::OUString& rCommand )
+{
+    rtl::OUString aMasterCommand( rCommand );
+    INetURLObject aURL( rCommand );
+    if ( aURL.GetProtocol() == INET_PROT_UNO )
+    {
+        sal_Int32 nIndex = aURL.GetURLPath().indexOf( '.' );
+        if ( nIndex )
+        {
+            aURL.SetURLPath( aURL.GetURLPath().copy( 0, nIndex ) );
+            aMasterCommand = aURL.GetMainURL( INetURLObject::NO_DECODE );
+        }
+    }
+    return aMasterCommand;
+}
+
 struct ExecuteInfo
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >     xDispatch;
@@ -170,6 +186,8 @@ GenericToolbarController::GenericToolbarController( const Reference< XMultiServi
     ,   m_bMadeInvisible( sal_False )
     ,   m_aEnumCommand( getEnumCommand( aCommand ))
 {
+    if ( m_bEnumCommand )
+        addStatusListener( getMasterCommand( aCommand ) );
 }
 
 GenericToolbarController::~GenericToolbarController()
