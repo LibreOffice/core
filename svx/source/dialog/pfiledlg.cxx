@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pfiledlg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pb $ $Date: 2000-10-12 12:48:45 $
+ *  last change: $Author: obo $ $Date: 2000-10-17 15:29:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,7 +188,7 @@ SvxPluginFileDlg::SvxPluginFileDlg (Window *pParent, sal_uInt16 nKind )
     }
 
     // add the All-Filter
-    String aAllFilter( SVX_RESSTR(STR_EXTFILTER_ALL) );
+    String aAllFilter( ResId( STR_EXTFILTER_ALL, DIALOG_MGR() ) );
     AddFilter( aAllFilter, UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "*.*" ) ) );
 
     // and activate him
