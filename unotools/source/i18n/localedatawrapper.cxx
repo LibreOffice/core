@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localedatawrapper.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: er $ $Date: 2001-08-07 16:01:54 $
+ *  last change: $Author: er $ $Date: 2001-11-12 18:52:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@
 #include <com/sun/star/i18n/CalendarDisplayIndex.hpp>
 #endif
 
-#define LOCALEDATA_LIBRARYNAME "i18n"
+#define LOCALEDATA_LIBRARYNAME "i18npool"
 #define LOCALEDATA_SERVICENAME "com.sun.star.i18n.LocaleData"
 
 static const int nDateFormatInvalid = -1;
