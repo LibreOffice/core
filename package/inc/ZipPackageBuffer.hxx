@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageBuffer.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-04 14:56:14 $
+ *  last change: $Author: mtg $ $Date: 2001-09-05 19:37:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,6 @@ class ZipPackageBuffer : public com::sun::star::io::XInputStream,
                          public com::sun::star::io::XSeekable,
                          public cppu::OWeakObject
 {
-    friend class OutputThread;
 protected:
     com::sun::star::uno::Sequence < sal_Int8 > m_aBuffer;
     sal_Int64 m_nBufferSize, m_nEnd, m_nCurrent;
@@ -95,6 +94,10 @@ public:
     ZipPackageBuffer(sal_Int64 nNewBufferSize);
     ZipPackageBuffer( com::sun::star::uno::Sequence < sal_Int8 > &nNewBuffer );
     virtual ~ZipPackageBuffer(void);
+
+    inline void realloc ( sal_Int32 nSize ) { m_aBuffer.realloc ( nSize ); }
+    inline const sal_Int8 * getConstArray () const { m_aBuffer.getConstArray(); }
+    inline const com::sun::star::uno::Sequence < sal_Int8> & getSequence () const { return m_aBuffer; }
     virtual com::sun::star::uno::Any SAL_CALL queryInterface( const com::sun::star::uno::Type& rType )
         throw(com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL acquire(void)
