@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmsrcimp.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-20 12:42:45 $
+ *  last change: $Author: fs $ $Date: 2001-09-07 13:07:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -686,7 +686,7 @@ INLINE_METHOD FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchRegularApprox(
     SearchOptions aParam;
     aParam.algorithmType = m_bRegular ? SearchAlgorithms_REGEXP : SearchAlgorithms_APPROXIMATE;
     aParam.searchFlag = 0;
-    aParam.transliterateFlags = m_nTransliterationFlags;
+    aParam.transliterateFlags = GetTransliteration() ? m_nTransliterationFlags : 0;
     if (!GetCaseSensitive())
         aParam.searchFlag |= SearchFlags::ALL_IGNORE_CASE;
     if (m_bLevenshtein)
