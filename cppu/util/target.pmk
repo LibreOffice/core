@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.pmk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: dbo $ $Date: 2001-08-01 11:20:02 $
+#   last change: $Author: dbo $ $Date: 2002-06-14 14:11:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,7 +65,7 @@
 
 # msvc++
 .IF "$(COM)" == "MSC"
-CFLAGS += /Ox
+CFLAGS += -Ox
 .ENDIF
 
 # sunpro 5
@@ -82,7 +82,7 @@ CFLAGS += -O
 
 # msvc++: no inlining
 .IF "$(COM)" == "MSC"
-CFLAGS += /Ob0
+CFLAGS += -Ob0
 .ENDIF
 
 .IF "$(cppu_assert)" != ""
