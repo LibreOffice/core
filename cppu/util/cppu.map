@@ -83,13 +83,13 @@ UDK_2_0_0 {
         uno_bindIdToCurrentThread;
         uno_getIdOfCurrentThread;
         uno_releaseIdFromCurrentThread;
-        uno_threadpool_enter
-        uno_threadpool_create
-        uno_threadpool_destroy
-        uno_threadpool_putJob
-        uno_threadpool_dispose
-        uno_threadpool_attach
-        uno_threadpool_detach
+        uno_threadpool_enter;
+        uno_threadpool_create;
+        uno_threadpool_destroy;
+        uno_threadpool_putJob;
+        uno_threadpool_dispose;
+        uno_threadpool_attach;
+        uno_threadpool_detach;
     local:
         *;
 };
