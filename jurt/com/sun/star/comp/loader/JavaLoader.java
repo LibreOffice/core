@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JavaLoader.java,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 14:03:33 $
+ *  last change: $Author: vg $ $Date: 2003-05-26 08:40:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,8 @@ import com.sun.star.uno.XInterface;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 
+import com.sun.star.lib.util.StringHelper;
+
 import com.sun.star.uno.AnyConverter;
 
 import java.io.IOException;
@@ -106,7 +108,7 @@ import java.net.MalformedURLException;
  * service. Therefor the <code>JavaLoader</code> activates external UNO components which are implemented in Java.
  * The loader is used by the <code>ServiceManger</code>.
  * <p>
- * @version     $Revision: 1.12 $ $ $Date: 2003-04-24 14:03:33 $
+ * @version     $Revision: 1.13 $ $ $Date: 2003-05-26 08:40:06 $
  * @author      Markus Herzog
  * @see         com.sun.star.loader.XImplementationLoader
  * @see         com.sun.star.loader.Java
@@ -143,39 +145,49 @@ public class JavaLoader implements XImplementationLoader,
             {
                 if (m_xMacroExpander == null)
                 {
-                    XPropertySet xProps = (XPropertySet)UnoRuntime.queryInterface(
-                        XPropertySet.class, multiServiceFactory );
+                    XPropertySet xProps = (XPropertySet)
+                        UnoRuntime.queryInterface(
+                            XPropertySet.class, multiServiceFactory );
                     if (xProps == null)
                     {
                         throw new com.sun.star.uno.RuntimeException(
-                            "service manager does not support XPropertySet!", this );
+                            "service manager does not support XPropertySet!",
+                            this );
                     }
-                    XComponentContext xContext = (XComponentContext)AnyConverter.toObject(
-                        new Type( XComponentContext.class ),
-                        xProps.getPropertyValue( "DefaultContext" ) );
+                    XComponentContext xContext = (XComponentContext)
+                        AnyConverter.toObject(
+                            new Type( XComponentContext.class ),
+                            xProps.getPropertyValue( "DefaultContext" ) );
                     m_xMacroExpander = (XMacroExpander)AnyConverter.toObject(
                         new Type( XMacroExpander.class ),
-                        xContext.getValueByName( "/singletons/com.sun.star.util.theMacroExpander" ) );
+                        xContext.getValueByName(
+                            "/singletons/com.sun.star.util.theMacroExpander" )
+                        );
                 }
                 // decode uric class chars
                 String macro = URLDecoder.decode(
-                    url.substring( EXPAND_PROTOCOL_PREFIX.length() ) /* cut protocol */ );
+                    StringHelper.replace(
+                        url.substring( EXPAND_PROTOCOL_PREFIX.length() ),
+                        '+', "%2B" ) );
                 // expand macro string
                 String ret = m_xMacroExpander.expandMacros( macro );
                 if (DEBUG)
                 {
                     System.err.println(
-                        "JavaLoader.expand_url(): " + url + " => " + macro + " => " + ret );
+                        "JavaLoader.expand_url(): " + url + " => " +
+                        macro + " => " + ret );
                 }
                 return ret;
             }
             catch (com.sun.star.uno.Exception exc)
             {
-                throw new com.sun.star.uno.RuntimeException( exc.getMessage(), this );
+                throw new com.sun.star.uno.RuntimeException(
+                    exc.getMessage(), this );
             }
             catch (java.lang.Exception exc)
             {
-                throw new com.sun.star.uno.RuntimeException( exc.getMessage(), this );
+                throw new com.sun.star.uno.RuntimeException(
+                    exc.getMessage(), this );
             }
         }
         return url;
@@ -450,8 +462,14 @@ public class JavaLoader implements XImplementationLoader,
 
         try {
 
-            RegistrationClassFinder classFinder = new RegistrationClassFinder(locationUrl);
+            RegistrationClassFinder classFinder =
+                new RegistrationClassFinder(locationUrl);
             Class clazz = classFinder.getRegistrationClass();
+            if (null == clazz)
+            {
+                throw new CannotRegisterImplementationException(
+                    "Cannot determine registration class!" );
+            }
 
             Class[] paramTypes = { XRegistryKey.class };
             Object[] params = { regKey };
