@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkeddocuments.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:00:33 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-27 13:06:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,7 +144,14 @@ namespace dbaui
                             const String& _rObjectName,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection
                         );
-    protected:
+
+        sal_Bool        newTableWithPilot(
+                            const String& _rDataSourceName,
+                            const sal_Int32 _nCommandType,
+                            const String& _rObjectName,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection
+                        );
+
         enum RESULT
         {
             ERROR,
