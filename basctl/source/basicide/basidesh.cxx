@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-13 17:49:19 $
+ *  last change: $Author: vg $ $Date: 2005-02-24 16:58:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,7 @@
 #include <svx/insctrl.hxx>
 #include <svx/srchdlg.hxx>
 #include <svx/lboxctrl.hxx>
+#include <svx/tbcontrl.hxx>
 
 #ifndef _COM_SUN_STAR_SCRIPT_XLIBRARYCONTAINER_HPP_
 #include <com/sun/star/script/XLibraryContainer.hpp>
@@ -198,6 +199,8 @@ void BasicIDEShell::Init()
     SvxPosSizeStatusBarControl::RegisterControl();
     SvxInsertStatusBarControl::RegisterControl();
     XmlSecStatusBarControl::RegisterControl( SID_SIGNATURE );
+    SvxSimpleUndoRedoController::RegisterControl( SID_UNDO );
+    SvxSimpleUndoRedoController::RegisterControl( SID_REDO );
 
     SvxSearchDialogWrapper::RegisterChildWindow( sal_False );
 
