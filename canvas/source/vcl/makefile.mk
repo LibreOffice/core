@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2004-11-26 17:13:59 $
+#   last change: $Author: rt $ $Date: 2005-03-30 07:38:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,6 +77,11 @@ DLLPRE =
 CDEFS+= -DVERBOSE
 .ENDIF
 
+# Disable optimization for SunCC SPARC
+.IF "$(OS)$(CPU)"=="SOLARISS" && "$(COM)"!="GCC"
+NOOPTFILES = $(SLO)$/canvashelper_texturefill.obj 
+.ENDIF
+
 SLOFILES =	$(SLO)$/spritecanvas.obj \
             $(SLO)$/linepolypolygon.obj \
             $(SLO)$/backbuffer.obj \
@@ -86,15 +91,17 @@ SLOFILES =	$(SLO)$/spritecanvas.obj \
             $(SLO)$/canvasbitmap.obj \
             $(SLO)$/canvasbitmaphelper.obj \
             $(SLO)$/canvashelper.obj \
+            $(SLO)$/canvashelper_texturefill.obj \
             $(SLO)$/textlayout.obj \
             $(SLO)$/canvascustomsprite.obj \
+            $(SLO)$/cachedbitmap.obj \
             $(SLO)$/redrawmanager.obj \
             $(SLO)$/impltools.obj \
             $(SLO)$/parametricpolypolygon.obj
 
 SHL1TARGET=$(TARGET).uno
 
-SHL1STDLIBS= $(TOOLSLIB) $(CPPULIB) $(SALLIB) $(VCLLIB) $(COMPHELPERLIB) $(CPPUHELPERLIB) $(BASEGFXLIB) $(CANVASTOOLSLIB)
+SHL1STDLIBS= $(TOOLSLIB) $(CPPULIB) $(SALLIB) $(VCLLIB) $(COMPHELPERLIB) $(CPPUHELPERLIB) $(BASEGFXLIB) $(CANVASTOOLSLIB) $(GOODIESLIB)
 
 SHL1IMPLIB=i$(TARGET)
 SHL1LIBS=$(SLB)$/$(TARGET).lib
