@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dflyobj.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2000-11-25 19:00:47 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:04:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@ const UINT16 SwDrawFirst            = 0x0001;
 
 class SwFlyDrawObj : public SdrObject
 {
-    SfxItemSet*                 mpLocalItemSet;
+    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
 
 public:
     TYPEINFO();
@@ -92,11 +92,7 @@ public:
     SwFlyDrawObj();
     ~SwFlyDrawObj();
 
-    virtual FASTBOOL Paint(ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoRec) const;
-
-    // ItemSet access
-    virtual const SfxItemSet& GetItemSet() const;
-    virtual SfxItemSet* CreateNewItemSet(SfxItemPool& rPool);
+    virtual sal_Bool DoPaintObject(ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoRec) const;
 
     //Damit eine Instanz dieser Klasse beim laden erzeugt werden kann
     //(per Factory).
@@ -122,11 +118,11 @@ public:
 
     //Ueberladene Methoden der Basisklasse SdrVirtObj
     virtual SdrObject* CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const;
-    virtual FASTBOOL Paint(ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoRec) const;
+    virtual sal_Bool DoPaintObject(ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoRec) const;
     virtual void     TakeObjInfo( SdrObjTransformInfoRec& rInfo ) const;
 
     //Wir nehemen die Groessenbehandlung vollstaendig selbst in die Hand.
-    virtual const Rectangle& GetBoundRect() const;
+    virtual const Rectangle& GetCurrentBoundRect() const;
     virtual       void       RecalcBoundRect();
     virtual       void       RecalcSnapRect();
     virtual const Rectangle& GetSnapRect()  const;
