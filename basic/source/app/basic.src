@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basic.src,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 11:46:25 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:50:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -460,6 +460,9 @@ Bitmap MBP_MINUS {
 };
 Bitmap MBP_ASSERT {
         File = "assert.bmp";
+};
+Bitmap MBP_QAERROR {
+        File = "qaerror.bmp";
 };
 
 Menu RID_APPMENUBAR {
