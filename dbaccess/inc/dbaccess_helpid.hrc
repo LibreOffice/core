@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbaccess_helpid.hrc,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 16:53:16 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 14:41:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,24 +66,7 @@
 #include <svtools/solar.hrc>    // HID_DBACCESS_START
 #endif
 
-#define HID_DSADMIN_DATASOURCE_SELECTOR             (HID_DBACCESS_START +  0)
-#define HID_DSADMIN_DATASOURCE_NEWDS                (HID_DBACCESS_START +  1)
-#define HID_DSADMIN_DATASOURCE_DSLIST               (HID_DBACCESS_START +  2)
-
-#define HID_DSADMIN_USER_JDBC                       (HID_DBACCESS_START +  3)
-#define HID_DSADMIN_USER_ODBC                       (HID_DBACCESS_START +  4)
-#define HID_DSADMIN_USER_ADABAS                     (HID_DBACCESS_START +  5)
-#define HID_DSADMIN_PWDREC_JDBC                     (HID_DBACCESS_START +  6)
-#define HID_DSADMIN_PWDREC_ODBC                     (HID_DBACCESS_START +  7)
-#define HID_DSADMIN_PWDREC_ADABAS                   (HID_DBACCESS_START +  8)
-
-#define HID_DSADMIN_CHARSET_JDBC                    (HID_DBACCESS_START +  9)
-#define HID_DSADMIN_CHARSET_ODBC                    (HID_DBACCESS_START + 10)
-#define HID_DSADMIN_CHARSET_DBASE                   (HID_DBACCESS_START + 11)
-#define HID_DSADMIN_CHARSET_TEXT                    (HID_DBACCESS_START + 12)
-#define HID_DSADMIN_CHARSET_ADABAS                  (HID_DBACCESS_START + 13)
-
-#define HID_DSADMIN_CONNURL_JDBCPAGE                (HID_DBACCESS_START + 14)
+#define HID_DSADMIN_CHARSET                         (HID_DBACCESS_START +  9)
 
 #define HID_DLG_FILTERCRIT                          (HID_DBACCESS_START + 15)
 #define HID_DLG_ORDERCRIT                           (HID_DBACCESS_START + 16)
@@ -97,7 +80,6 @@
 #define HID_TLB_TREELISTBOX                         (HID_DBACCESS_START + 23)
 #define HID_DSADMIN_DIALOG                          (HID_DBACCESS_START + 24)
 
-#define HID_ADMINDLG_CONNECTERROR                   (HID_DBACCESS_START + 26)
 
 #define HID_DSADMIN_TABCONTROL                      (HID_DBACCESS_START + 27)
 #define HID_DSADMIN_PAGE_GENERAL                    (HID_DBACCESS_START + 28)
@@ -269,9 +251,9 @@
 #define HID_DSBROWSER_DIRECTSQL                     (HID_DBACCESS_START + 186)
 #define HID_DSADMIN_LDAP_ROWCOUNT                   (HID_DBACCESS_START + 187)
 #define HID_BROWSER_QUERY_EDITSQL                   (HID_DBACCESS_START + 189)
-#define HID_BROWSER_NEW_LINK                        (HID_DBACCESS_START + 190)
-#define HID_BROWSER_EDIT_LINK                       (HID_DBACCESS_START + 191)
-#define HID_BROWSER_DROP_LINK                       (HID_DBACCESS_START + 192)
+// free
+// free
+// free
 #define HID_BROWSER_OPEN_DOCUMENT                   (HID_DBACCESS_START + 193)
 #define HID_BROWSER_EDIT_DOCUMENT                   (HID_DBACCESS_START + 194)
 #define HID_BROWSER_BEW_DOCUMENT                    (HID_DBACCESS_START + 195)
@@ -319,7 +301,7 @@
 #define HID_DSADMIN_RETRIEVE_AUTO                   (HID_DBACCESS_START + 229)
 #define HID_DSADMIN_AUTORETRIEVEENABLED             (HID_DBACCESS_START + 230)
 
-#define HID_DSADMIN_PAGE_MYSQL                      (HID_DBACCESS_START + 231)
+#define HID_DSADMIN_PAGE_MYSQL_ODBC                 (HID_DBACCESS_START + 231)
 #define HID_TAB_PAGE_TABLEPRIVILEGES                (HID_DBACCESS_START + 232)
 
 #define HID_DSADMIN_PAGE_USERDRIVER                 (HID_DBACCESS_START + 233)
@@ -331,7 +313,73 @@
 #define HID_DSADMIN_USESSL_LDAP                     (HID_DBACCESS_START + 239)
 #define HID_BROWSER_QUERY_WIZARD                    (HID_DBACCESS_START + 237)
 
+#define HID_DLG_RENAME                              (HID_DBACCESS_START + 237)
 
+#define HID_DSADMIN_PAGE_MYSQL_JDBC                 (HID_DBACCESS_START + 238)
+
+#define HID_DSADMIN_DBASE_PATH                      (HID_DBACCESS_START + 239)
+#define HID_DSADMIN_MYSQL_DATABASE                  (HID_DBACCESS_START + 240)
+#define HID_DSADMIN_MYSQL_ODBC_DATASOURCE           (HID_DBACCESS_START + 241)
+#define HID_DSADMIN_ODBC_DATASOURCE                 (HID_DBACCESS_START + 242)
+#define HID_DSADMIN_ADABAS_DATABASE                 (HID_DBACCESS_START + 243)
+#define HID_DSADMIN_MSACCESS_MDB_FILE               (HID_DBACCESS_START + 244)
+#define HID_DSADMIN_PAGE_MSACCESS                   (HID_DBACCESS_START + 245)
+#define HID_DSADMIN_FLAT_PATH                       (HID_DBACCESS_START + 246)
+#define HID_DSADMIN_CALC_PATH                       (HID_DBACCESS_START + 247)
+#define HID_DSADMIN_ADVANCED                        (HID_DBACCESS_START + 248)
+#define HID_DSADMIN_BOOLEANCOMPARISON               (HID_DBACCESS_START + 249)
+#define HID_DSADMIN_ORACLE_DATABASE                 (HID_DBACCESS_START + 250)
+
+#define UID_APP_VIEW                                (HID_DBACCESS_START + 251)
+#define HID_APP_TABLE_TREE                          (HID_DBACCESS_START + 252)
+#define HID_APP_FORM_TREE                           (HID_DBACCESS_START + 253)
+#define HID_APP_QUERY_TREE                          (HID_DBACCESS_START + 254)
+#define HID_APP_REPORT_TREE                         (HID_DBACCESS_START + 255)
+#define UID_APP_DETAIL_VIEW                         (HID_DBACCESS_START + 256)
+#define UID_APP_VIEW_VERT_SPLIT                     (HID_DBACCESS_START + 257)
+#define UID_APP_VIEW_BORDER_WIN                     (HID_DBACCESS_START + 258)
+#define HID_APP_CREATION_LIST                       (HID_DBACCESS_START + 259)
+#define UID_APP_SWAP_VIEW                           (HID_DBACCESS_START + 260)
+#define UID_DLG_TABLE_FILTER                        (HID_DBACCESS_START + 261)
+#define HID_APP_SWAP_ICONCONTROL                    (HID_DBACCESS_START + 262)
+
+#define HID_DSADMIN_APPENDTABLEALIAS                (HID_DBACCESS_START + 263)
+#define HID_DSADMIN_PARAMETERNAMESUBST              (HID_DBACCESS_START + 264)
+#define HID_DSADMIN_IGNOREDRIVER_PRIV               (HID_DBACCESS_START + 265)
+#define HID_DSADMIN_HOSTNAME                        (HID_DBACCESS_START + 266)
+#define HID_DSADMIN_PORTNUMBER                      (HID_DBACCESS_START + 267)
+
+#define HID_APP_HELP_TEXT                           (HID_DBACCESS_START + 268)
+#define HID_EXPLORERDLG_COLLECTION                  (HID_DBACCESS_START + 269)
+#define UID_APP_DATABASE_VIEW                       (HID_DBACCESS_START + 270)
+#define UID_APP_TASKS_VIEW                          (HID_DBACCESS_START + 271)
+#define UID_APP_CONTAINER_VIEW                      (HID_DBACCESS_START + 272)
+#define UID_APP_TASKS_WINDOW                        (HID_DBACCESS_START + 273)
+#define HID_APP_DESCRIPTION_TEXT                    (HID_DBACCESS_START + 274)
+#define UID_APP_DETAILPAGE_HELPER                   (HID_DBACCESS_START + 275)
+#define HID_APP_VIEW_PREVIEW_CB                     (HID_DBACCESS_START + 276)
+#define HID_APP_VIEW_PREVIEW_1                      (HID_DBACCESS_START + 277)
+#define HID_APP_VIEW_PREVIEW_2                      (HID_DBACCESS_START + 278)
+#define HID_APP_STATUS_BAR                          (HID_DBACCESS_START + 279)
+#define UID_APP_VIEW_HORZ_SPLIT                     (HID_DBACCESS_START + 280)
+#define UID_APP_VIEW_PREVIEW_1                      (HID_DBACCESS_START + 281)
+#define HID_APP_VIEW_PREVIEW_3                      (HID_DBACCESS_START + 282)
+
+#define HID_DSADMIN_TYPE_DIALOG                     (HID_DBACCESS_START + 283)
+#define HID_DSADMIN_ENABLEOUTERJOIN                 (HID_DBACCESS_START + 284)
+#define HID_DSADMIN_ADABASADMIN                     (HID_DBACCESS_START + 285)
+#define HID_DSADMIN_USERADMIN                       (HID_DBACCESS_START + 286)
+
+#define HID_DBWIZ_PREVIOUS                          (HID_DBACCESS_START + 287)
+#define HID_DBWIZ_NEXT                              (HID_DBACCESS_START + 288)
+#define HID_DBWIZ_CANCEL                            (HID_DBACCESS_START + 289)
+#define HID_DBWIZ_FINISH                            (HID_DBACCESS_START + 290)
+#define UID_DBWIZ_HELP                              (HID_DBACCESS_START + 291)
+
+#define HID_DSADMIN_CATALOG                         (HID_DBACCESS_START + 292)
+#define HID_DSADMIN_SCHEMA                          (HID_DBACCESS_START + 293)
+#define HID_DSADMIN_IGNOREINDEXAPPENDIX             (HID_DBACCESS_START + 294)
+#define HID_DSADMIN_DOSLINEENDS                     (HID_DBACCESS_START + 295)
 
 // don't forget to update the file util/hidother.src
 
