@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hro $ $Date: 2002-08-19 08:31:57 $
+ *  last change: $Author: tra $ $Date: 2002-11-12 14:29:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -275,6 +275,54 @@ public:
     static inline RC getTempDirURL( ::rtl::OUString& ustrTempDirURL )
     {
         return (RC) osl_getTempDirURL( &ustrTempDirURL.pData );
+    }
+
+    /** Creates a temporary file in the directory provided by the caller or the
+        directory returned by getTempDirURL.
+        Under UNIX Operating Systems the file will be created with read and write
+        access for the user exclusively.
+        The caller is responsible for closing and removing the created file on
+        success.<br><br>
+
+        @param  pustrDirectoryURL [in] specifies the full qualified UNC path where
+                the temporary file should be created.
+                If pustrDirectoryURL is 0 the path returned by getTempDirURL will
+                be used.
+
+        @param  pHandle [out] on success receives a handle to the open file.
+                If pHandle is 0 the file will be closed on return and only the
+                file name will be returned.
+
+        @param  ustrTempFileURL [out] on success receives the URL of the
+                temporary file.
+
+        @return E_None   on success or one of the following error codes:<p>
+                E_INVAL  the format of the parameter is invalid
+                E_NOMEM  not enough memory for allocating structures <br>
+                E_ACCES  Permission denied<br>
+                E_NOENT  No such file or directory<br>
+                E_NOTDIR Not a directory<br>
+                E_ROFS   Read-only file system<br>
+                E_NOSPC  No space left on device<br>
+                E_DQUOT  Quota exceeded<p>
+
+        @see    getTempDirURL
+    */
+
+    static inline RC createTempFile(
+        ::rtl::OUString* pustrDirectoryURL,
+        oslFileHandle*   pHandle,
+        ::rtl::OUString& ustrTempFileURL)
+    {
+        RC rc;
+
+        if (pustrDirectoryURL)
+            rc = (RC) osl_createTempFile(
+                pustrDirectoryURL->pData, pHandle, &ustrTempFileURL.pData);
+        else
+            rc = (RC) osl_createTempFile(0, pHandle, &ustrTempFileURL.pData);
+
+        return rc;
     }
 };
 
