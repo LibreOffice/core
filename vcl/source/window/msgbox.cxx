@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msgbox.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 15:19:21 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 13:39:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,7 @@
 #include <mnemonic.hxx>
 #endif
 
-#pragma hdrstop
+
 
 // =======================================================================
 
