@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsc.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 10:22:43 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 13:25:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -774,6 +774,8 @@ USHORT DrawViewShell::GetIdBySubId( USHORT nSId )
         case SID_ATTR_CHAR:
         case SID_TEXT_FITTOSIZE:
         case SID_DRAW_CAPTION:
+        case SID_DRAW_FONTWORK:
+        case SID_DRAW_FONTWORK_VERTICAL:
         {
             nMappedSId = SID_DRAWTBX_TEXT;
         }
