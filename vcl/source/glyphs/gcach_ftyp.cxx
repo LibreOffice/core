@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.79 $
- *  last change: $Author: hdu $ $Date: 2002-10-17 07:02:10 $
+ *  $Revision: 1.80 $
+ *  last change: $Author: hdu $ $Date: 2002-10-29 13:13:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -508,7 +508,7 @@ FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, FtFontIn
         for( int i = maFaceFT->num_charmaps; --i >= 0; )
         {
             const FT_CharMap aCM = maFaceFT->charmaps[i];
-            if( aCM->platform_id == TT_PLATFORM_MICROSOFT)
+            if( aCM->platform_id == TT_PLATFORM_MICROSOFT )
             {
                 switch( aCM->encoding_id )
                 {
@@ -534,6 +534,17 @@ FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, FtFontIn
                         break;
                 }
             }
+            else if( aCM->platform_id == TT_PLATFORM_MACINTOSH )
+            {
+                switch( aCM->encoding_id )
+                {
+                    case TT_MAC_ID_ROMAN:   // better unicode than nothing
+                        eEncoding = ft_encoding_apple_roman;
+                        break;
+                    // TODO: add other encodings when Mac-only non-unicode
+                    //       fonts show up
+                }
+            }
         }
 
         if( FT_Err_Ok != FT_Select_Charmap( maFaceFT, eEncoding ) )
@@ -542,7 +553,8 @@ FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, FtFontIn
             return;
         }
 
-        maRecodeConverter = rtl_createUnicodeToTextConverter( eRecodeFrom );
+        if( eRecodeFrom != RTL_TEXTENCODING_UNICODE )
+            maRecodeConverter = rtl_createUnicodeToTextConverter( eRecodeFrom );
     }
 
     mnWidth = rFSD.mnWidth;
