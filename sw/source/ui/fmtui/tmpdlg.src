@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tmpdlg.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:58:38 $
+ *  last change: $Author: rt $ $Date: 2001-07-19 20:21:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1296,11 +1296,11 @@ TabDialog DLG_TEMPLATE_5
                 Text [ french ] = "Puces" ;
                 Text [ dutch ] = "Opsommingstekens" ;
                 Text [ portuguese ] = "Marcas" ;
-                Text[ chinese_simplified ] = "ÏîÄ¿±àºÅ";
+                Text[ chinese_simplified ] = "ÏîÄ¿·ûºÅ";
                 Text[ russian ] = "Ìàğêåğû";
                 Text[ polish ] = "Znaki wypunktowania";
                 Text[ japanese ] = "‰Óğ‘‚«";
-                Text[ chinese_traditional ] = "¶µ¥Ø½s¸¹";
+                Text[ chinese_traditional ] = "¶µ¥Ø²Å¸¹";
                 Text[ arabic ] = "ÚáÇãÇÊ ÊÚÏÇÏ";
                 Text[ greek ] = "Êïõêßäåò";
                 Text[ korean ] = "±Û¸Ó¸®±âÈ£";
@@ -1428,7 +1428,7 @@ TabDialog DLG_TEMPLATE_5
                 Text [ swedish ] = "Alternativ" ;
                 Text [ danish ] = "Indstillinger" ;
                 Text [ italian ] = "Opzioni" ;
-                Text [ spanish ] = "~Opciones" ;
+                Text [ spanish ] = "Opciones" ;
                 Text [ french ] = "Options" ;
                 Text [ dutch ] = "~Opties" ;
                 Text[ chinese_simplified ] = "Ñ¡Ïî";
@@ -1468,6 +1468,7 @@ TabDialog DLG_TEMPLATE_5
     Text[ catalan ] = "Estilo de numeración";
     Text[ finnish ] = "Numerointityyli";
 };
+
 
 
 
