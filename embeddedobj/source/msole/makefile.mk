@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: kz $ $Date: 2004-10-04 19:54:32 $
+#   last change: $Author: kz $ $Date: 2005-01-18 15:09:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,7 +71,7 @@ TARGET=emboleobj
 .INCLUDE :  settings.mk
 
 LIBTARGET=NO
-USE_DEFFILE=NO
+USE_DEFFILE=YES
 INCPRE+=$(ATL_INCLUDE)
 
 # --- Files --------------------------------------------------------
@@ -87,7 +87,8 @@ SLOFILES =  \
         $(SLO)$/olepersist.obj\
         $(SLO)$/oleembed.obj\
         $(SLO)$/olevisual.obj\
-        $(SLO)$/olemisc.obj
+        $(SLO)$/olemisc.obj\
+        $(SLO)$/ownview.obj
 
 EXCEPTIONSFILES= \
         $(SLO)$/closepreventer.obj\
@@ -96,7 +97,8 @@ EXCEPTIONSFILES= \
         $(SLO)$/olepersist.obj\
         $(SLO)$/oleembed.obj\
         $(SLO)$/olevisual.obj\
-        $(SLO)$/olemisc.obj
+        $(SLO)$/olemisc.obj\
+        $(SLO)$/ownview.obj
 
 .IF "$(GUI)"=="WNT"
 
@@ -123,6 +125,7 @@ SHL1STDLIBS=\
     $(VOSLIB)\
     $(CPPULIB)\
     $(CPPUHELPERLIB)\
+    $(COMPHELPERLIB)\
     $(TOOLSLIB)\
     $(SVTOOLLIB)
 
@@ -130,6 +133,7 @@ SHL1STDLIBS=\
 
 SHL1STDLIBS+=\
     $(VCLLIB)\
+    iembobj.lib\
     ole32.lib\
     gdi32.lib\
     uuid.lib\
