@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: gt $ $Date: 2001-04-06 12:37:56 $
+ *  last change: $Author: dr $ $Date: 2001-04-19 09:57:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,10 +126,10 @@ class ExcArrays;
 class ExcShrdFmla;
 class ExcUPN;
 
-//---------------------------------------------------- class ExcETabNumBuffer -
+//-------------------------------------------------- class XclExpTabNumBuffer -
 // - stores the correct Excel table number for each Calc table
 
-class ExcETabNumBuffer : private UINT16List
+class XclExpTabNumBuffer : private UINT16List
 {
 private:
     UINT32*                     pBuffer;
@@ -145,8 +145,8 @@ private:
 
 protected:
 public:
-                                ExcETabNumBuffer( ScDocument& rDoc );
-                                ~ExcETabNumBuffer();
+                                XclExpTabNumBuffer( ScDocument& rDoc );
+                                ~XclExpTabNumBuffer();
 
     BOOL                        IsExternal( UINT16 nScTab ) const;
     BOOL                        IsExportTable( UINT16 nScTab ) const;
@@ -902,9 +902,15 @@ private:
 
     void                    SaveCont( XclExpStream& rStrm );
 
+protected:
+    void                    SetName( const String& rRangeName );
+    void                    SetUniqueName( const String& rRangeName );
+
 public:
                             ExcName( RootData* pRD, ScRangeData* pRange );
                             ExcName( RootData* pRD, ScDBData* pArea );
+                            ExcName( RootData* pRD, const ScRange& rRange,
+                                    const String& rName );
                             ExcName( RootData* pRD, const ScRange& rRange,
                                     UINT8 nBuiltIn, BOOL bHid = FALSE );
     virtual                 ~ExcName();
@@ -912,7 +918,8 @@ public:
     virtual void            Save( XclExpStream& rStrm );
     virtual ULONG           GetLen( void ) const;
 
-    inline BOOL             IsDummy( void ) const { return bDummy; }
+    const String&           GetName( void ) const   { return aName; }
+    inline BOOL             IsDummy( void ) const   { return bDummy; }
 };
 
 
