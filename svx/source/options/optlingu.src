@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optlingu.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 20:58:01 $
+ *  last change: $Author: kz $ $Date: 2001-07-17 20:26:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -292,7 +292,7 @@ ModalDialog RID_SVXDLG_EDIT_MODULES
         Text[ japanese ] = "ï∂èÕçZê≥";
         Text[ korean ] = "∏¬√„π˝";
         Text[ chinese_simplified ] = "∆¥–¥ºÏ≤È";
-        Text[ chinese_traditional ] = "¿À¨d´˜ºg";
+        Text[ chinese_traditional ] = "´˜ºg¿À¨d";
         Text[ turkish ] = "Spelling";
         Text[ arabic ] = " œﬁÌﬁ ≈„·«∆Ì";
         Text[ catalan ] = "OrtografÌa";
@@ -1190,6 +1190,7 @@ QueryBox RID_SFXQB_DEL_IGNORELIST
     Message[ finnish ] = "Haluatko poistaa ohitettavien luettelon?";
 };
  // ******************************************************************* EOF
+
 
 
 
