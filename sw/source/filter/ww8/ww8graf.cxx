@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: cmc $ $Date: 2001-04-24 16:17:10 $
+ *  last change: $Author: cmc $ $Date: 2001-04-25 12:55:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -827,12 +827,9 @@ void SwWW8ImplReader::GetTxbxPapAndCharAttrs( SfxItemSet& rS,
                 break;
     case      98:
     case  0x2A42:
-                {
-                if (COL_AUTO != GetCol(pData[0]) ) //Temp until auto allowed
-                    rS.Put( SvxColorItem( Color( GetCol( pData[0] ) ),
-                               EE_CHAR_COLOR ) );
-                }
-                 break;
+                rS.Put( SvxColorItem( Color( GetCol( pData[0] ) ),
+                    EE_CHAR_COLOR ) );
+                break;
     case      99:
     case  0x4A43:{
                     USHORT nFSize = SVBT16ToShort( pData );
@@ -1013,9 +1010,6 @@ void SwWW8ImplReader::InsertTxbxStyAttrs( SfxItemSet& rS, USHORT nColl )
                                    aSrcTab[i], TRUE, &pItem ) ){
                 SfxPoolItem* pCopy = pItem->Clone();
                 pCopy->SetWhich( aDstTab[i] );
-                //No auto in sdrtext, temp hack for now
-                if (aDstTab[i] == EE_CHAR_COLOR)
-                    ((SvxColorItem *)pCopy)->SetValue(Color(COL_BLACK));
                 rS.Put( *pCopy );
                 delete pCopy;
             }
@@ -3167,11 +3161,14 @@ void SwWW8ImplReader::EmbeddedFlyFrameSizeLock(SwNodeIndex &rStart,
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf.cxx,v 1.22 2001-04-24 16:17:10 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf.cxx,v 1.23 2001-04-25 12:55:01 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.22  2001/04/24 16:17:10  cmc
+      ##761## workaround. No automatic colour for table borders, cells or sdrtextobjs
+
       Revision 1.21  2001/04/11 15:08:01  jp
       Bug #85614#: SdrOleObject - set InPlaceObject pointer to zero if the object is insert as SW-OleObject
 
