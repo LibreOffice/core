@@ -2,9 +2,9 @@
  *
  *  $RCSfile: runtime.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-15 16:37:32 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 16:09:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,7 @@
 #pragma hdrstop
 #include "sbintern.hxx"
 #include "opcodes.hxx"
+#include "codegen.hxx"
 #include "iosys.hxx"
 #include "image.hxx"
 #include "ddectrl.hxx"
@@ -83,6 +84,10 @@
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
+#ifndef _COM_SUN_STAR_CONTAINER_XENUMERATIONACCESS_HPP_
+#include <com/sun/star/container/XEnumerationAccess.hpp>
+#endif
+#include "sbunoobj.hxx"
 
 // Makro MEMBER()
 #include <macfix.hxx>
@@ -164,7 +169,8 @@ SbiRuntime::pStep0 SbiRuntime::aStep0[] = { // Alle Opcodes ohne Operanden
     MEMBER(SbiRuntime::StepERROR),      // TOS = Fehlercode
     MEMBER(SbiRuntime::StepLSET),       // Speichern Objekt TOS ==> TOS-1
     MEMBER(SbiRuntime::StepRSET),       // Speichern Objekt TOS ==> TOS-1
-    MEMBER(SbiRuntime::StepREDIMP_ERASE)// Copy array object for REDIMP
+    MEMBER(SbiRuntime::StepREDIMP_ERASE),// Copy array object for REDIMP
+    MEMBER(SbiRuntime::StepINITFOREACH),// Init for each loop
 };
 
 SbiRuntime::pStep1 SbiRuntime::aStep1[] = { // Alle Opcodes mit einem Operanden
@@ -573,12 +579,37 @@ void SbiRuntime::SetParameters( SbxArray* pParams )
     refParams = new SbxArray;
     // fuer den Returnwert
     refParams->Put( pMeth, 0 );
-    if( pParams )
+
+    SbxInfo* pInfo = pMeth ? pMeth->GetInfo() : NULL;
+    USHORT nParamCount = pParams ? pParams->Count() : 1;
+    if( nParamCount > 1 )
     {
-        SbxInfo* pInfo = pMeth->GetInfo();
-        for( USHORT i = 1; i < pParams->Count(); i++ )
+        for( USHORT i = 1 ; i < nParamCount ; i++ )
         {
             const SbxParamInfo* p = pInfo ? pInfo->GetParam( i ) : NULL;
+
+            // #111897 ParamArray
+            if( p && (p->nUserData & PARAM_INFO_PARAMARRAY) != 0 )
+            {
+                SbxDimArray* pArray = new SbxDimArray( SbxVARIANT );
+                USHORT nParamArrayParamCount = nParamCount - i;
+                pArray->unoAddDim( 0, nParamArrayParamCount - 1 );
+                for( USHORT j = i ; j < nParamCount ; j++ )
+                {
+                    SbxVariable* v = pParams->Get( j );
+                    short nDimIndex = j - i;
+                    pArray->Put( v, &nDimIndex );
+                }
+                SbxVariable* pArrayVar = new SbxVariable( SbxVARIANT );
+                pArrayVar->SetFlag( SBX_READWRITE );
+                pArrayVar->PutObject( pArray );
+                refParams->Put( pArrayVar, i );
+
+                // Block ParamArray for missing parameter
+                pInfo = NULL;
+                break;
+            }
+
             SbxVariable* v = pParams->Get( i );
             // Methoden sind immer byval!
             BOOL bByVal = v->IsA( TYPE(SbxMethod) );
@@ -613,6 +644,22 @@ void SbiRuntime::SetParameters( SbxArray* pParams )
             }
             if( p )
                 refParams->PutAlias( p->aName, i );
+        }
+    }
+
+    // ParamArray for missing parameter
+    if( pInfo )
+    {
+        // #111897 Check first missing parameter for ParamArray
+        const SbxParamInfo* p = pInfo->GetParam( nParamCount );
+        if( p && (p->nUserData & PARAM_INFO_PARAMARRAY) != 0 )
+        {
+            SbxDimArray* pArray = new SbxDimArray( SbxVARIANT );
+            pArray->unoAddDim( 0, -1 );
+            SbxVariable* pArrayVar = new SbxVariable( SbxVARIANT );
+            pArrayVar->SetFlag( SBX_READWRITE );
+            pArrayVar->PutObject( pArray );
+            refParams->Put( pArrayVar, nParamCount );
         }
     }
 }
@@ -938,6 +985,7 @@ void SbiRuntime::ClearArgvStack()
 void SbiRuntime::PushFor()
 {
     SbiForStack* p = new SbiForStack;
+    p->eForType = FOR_TO;
     p->pNext = pForStk;
     pForStk = p;
     // Der Stack ist wie folgt aufgebaut:
@@ -946,6 +994,78 @@ void SbiRuntime::PushFor()
     SbxVariableRef xBgn = PopVar();
     p->refVar = PopVar();
     *(p->refVar) = *xBgn;
+    nForLvl++;
+}
+
+void SbiRuntime::PushForEach()
+{
+    SbiForStack* p = new SbiForStack;
+    p->pNext = pForStk;
+    pForStk = p;
+
+    SbxVariableRef xObjVar = PopVar();
+    SbxBase* pObj = xObjVar.Is() ? xObjVar->GetObject() : NULL;
+    if( pObj == NULL )
+    {
+        Error( SbERR_NO_OBJECT );
+        return;
+    }
+
+    bool bError = false;
+    BasicCollection* pCollection;
+    SbxDimArray* pArray;
+    SbUnoObject* pUnoObj;
+    if( (pArray = PTR_CAST(SbxDimArray,pObj)) != NULL )
+    {
+        p->eForType = FOR_EACH_ARRAY;
+        p->refEnd = (SbxVariable*)pArray;
+
+        short nDims = pArray->GetDims();
+        p->pArrayLowerBounds = new sal_Int32[nDims];
+        p->pArrayUpperBounds = new sal_Int32[nDims];
+        p->pArrayCurIndices  = new sal_Int32[nDims];
+        sal_Int32 lBound, uBound;
+        for( short i = 0 ; i < nDims ; i++ )
+        {
+            pArray->GetDim32( i+1, lBound, uBound );
+            p->pArrayCurIndices[i] = p->pArrayLowerBounds[i] = lBound;
+            p->pArrayUpperBounds[i] = uBound;
+        }
+    }
+    else if( (pCollection = PTR_CAST(BasicCollection,pObj)) != NULL )
+    {
+        p->eForType = FOR_EACH_COLLECTION;
+        p->refEnd = pCollection;
+        p->nCurCollectionIndex = 0;
+    }
+    else if( (pUnoObj = PTR_CAST(SbUnoObject,pObj)) != NULL )
+    {
+        // XEnumerationAccess?
+        Any aAny = pUnoObj->getUnoAny();
+        Reference< XEnumerationAccess > xEnumerationAccess;
+        if( (aAny >>= xEnumerationAccess) )
+        {
+            p->xEnumeration = xEnumerationAccess->createEnumeration();
+            p->eForType = FOR_EACH_XENUMERATION;
+        }
+        else
+        {
+            bError = true;
+        }
+    }
+    else
+    {
+        bError = true;
+    }
+
+    if( bError )
+    {
+        Error( SbERR_CONVERSION );
+        return;
+    }
+
+    // Container variable
+    p->refVar = PopVar();
     nForLvl++;
 }
 
