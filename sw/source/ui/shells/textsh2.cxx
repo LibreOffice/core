@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh2.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 16:55:57 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:37:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,7 +155,9 @@
 #include "swevent.hxx"
 #include "shells.hrc"
 #include "textsh.hxx"
-#include "dbinsdlg.hxx"
+//CHINA001 #include "dbinsdlg.hxx"
+#include "swabstdlg.hxx" //CHINA001
+#include "dbui.hrc" //CHINA001
 
 using namespace rtl;
 using namespace svx;
@@ -365,11 +367,18 @@ IMPL_STATIC_LINK( SwBaseShell, InsertDBTextHdl, DBTextStruct_Impl*, pDBStruct )
         if( xColSupp.is() )
         {
             SwDBData aDBData = pDBStruct->aDBData;
-            ::std::auto_ptr<SwInsertDBColAutoPilot> pDlg( new SwInsertDBColAutoPilot(
-                    pThis->GetView(),
-                    xSource,
-                    xColSupp,
-                    aDBData ) );
+//CHINA001          ::std::auto_ptr<SwInsertDBColAutoPilot> pDlg( new SwInsertDBColAutoPilot(
+//CHINA001          pThis->GetView(),
+//CHINA001          xSource,
+//CHINA001          xColSupp,
+//CHINA001          aDBData ) );
+            SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
+            DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
+            ::std::auto_ptr<AbstractSwInsertDBColAutoPilot>pDlg (pFact->CreateSwInsertDBColAutoPilot( pThis->GetView(),
+                                                                                                xSource,
+                                                                                                xColSupp,
+                                                                                                aDBData,
+                                                                                                ResId( DLG_AP_INSERT_DB_SEL ))); //CHINA001
             if( RET_OK == pDlg->Execute() )
             {
                 Reference <XResultSet> xResSet = pDBStruct->xCursor;
