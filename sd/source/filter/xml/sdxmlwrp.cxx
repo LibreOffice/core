@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlwrp.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: aw $ $Date: 2001-07-31 16:22:27 $
+ *  last change: $Author: cl $ $Date: 2001-08-06 07:56:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,10 @@
  *
  *
  ************************************************************************/
+
+#ifndef _RTL_LOGFILE_HXX_
+#include <rtl/logfile.hxx>
+#endif
 
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
@@ -210,6 +214,12 @@ SdXMLFilter::SdXMLFilter( SfxMedium& rMedium, SdDrawDocShell& rDocShell, sal_Boo
 
 sal_Bool SdXMLFilter::Import()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sd", "cl93746", "SdXMLFilter::Import" );
+#ifdef TIMELOG
+    ByteString aFile( mrMedium.GetName(), RTL_TEXTENCODING_ASCII_US );
+    RTL_LOGFILE_CONTEXT_TRACE1( aLog, "importing %s", aFile.GetBuffer() );
+#endif
+
     if( !mxModel.is() )
     {
         DBG_ERROR("Got NO Model in XMLImport");
@@ -370,6 +380,8 @@ sal_Bool SdXMLFilter::Import()
 
             for( pServices = aServices; pServices->mpService; pServices++ )
             {
+                RTL_LOGFILE_CONTEXT_TRACE1( aLog, "importing substream %s", pServices->mpStream );
+
                 xml::sax::InputSource                   aParserInput;
                 SvStorageStreamRef                      xIStm;
                 uno::Reference< io::XActiveDataSource > xSource;
@@ -512,6 +524,12 @@ sal_Bool SdXMLFilter::Import()
 
 sal_Bool SdXMLFilter::Export()
 {
+#ifdef TIMELOG
+    RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sd", "cl93746", "SdXMLFilter::Export" );
+    ByteString aFile( mrMedium.GetName(), RTL_TEXTENCODING_ASCII_US );
+    RTL_LOGFILE_CONTEXT_TRACE1( aLog, "exporting %s", aFile.GetBuffer() );
+#endif
+
     SvXMLEmbeddedObjectHelper*  pObjectHelper = NULL;
     SvXMLGraphicHelper*         pGraphicHelper = NULL;
     sal_Bool                    bDocRet = FALSE;
@@ -644,6 +662,8 @@ sal_Bool SdXMLFilter::Export()
             // doc export
             do
             {
+                RTL_LOGFILE_CONTEXT_TRACE1( aLog, "exporting substream %s", pServices->mpStream );
+
                 uno::Reference<io::XOutputStream> xDocOut;
                 SvStorageStreamRef xDocStream;
 
@@ -728,6 +748,7 @@ sal_Bool SdXMLFilter::Export()
 
     if( pObjectHelper )
         SvXMLEmbeddedObjectHelper::Destroy( pObjectHelper );
+
 
     return bDocRet;
 }
