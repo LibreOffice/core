@@ -2,9 +2,9 @@
  *
  *  $RCSfile: preload.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2002-01-25 21:08:22 $
+ *  last change: $Author: pb $ $Date: 2002-03-14 14:10:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -235,33 +235,6 @@ TabPage RID_TP_WELCOME
     Size = MAP_APPFONT ( 260 , 185 ) ;
     Text = "Willkommen" ;
     Text [ ENGLISH ] = "Welcome" ;
-    FixedText FT_INFO
-    {
-        Pos = MAP_APPFONT ( 6 , 14 ) ;
-        Size = MAP_APPFONT ( 248 , 160 ) ;
-        WordBreak = TRUE ;
-        Text = "Herzlich willkommen zu %PRODUCTNAME %PRODUCTVERSION OEM\n\nUm %PRODUCTNAME %PRODUCTVERSION OEM starten zu k�nnen, geben Sie bitte auf der dem Lizenztext folgenden Dialogseite Ihre Benutzerdaten ein.\n\nIn der Readme-Datei im %PRODUCTNAME-Produktverzeichnis finden Sie wichtige Hinweise zum Programm. Bitte lesen Sie diese Hinweise aufmerksam durch.\n\nDes weiteren finden Sie ausf�hrliche Informationen auf der Internetseite von Sun unter\n\nhttp://www.sun.com/staroffice.\n\nWir w�nschen Ihnen viel Spa� und Erfolg mit Ihrem neuen %PRODUCTNAME.\n\nIhr %PRODUCTNAME Team.";
-        Text [ english_us ] = "Welcome to %PRODUCTNAME %PRODUCTVERSION OEM\n\nTo start %PRODUCTNAME %PRODUCTVERSION OEM, please enter your personal data in the dialog following the license text.\n\nImportant information is contained in the readme files which are located in the %PRODUCTNAME product directory. Please read these files carefully.\n\nYou can also find detailed information on the Sun Website at\n\nhttp://www.sun.com/staroffice.\n\nWe hope you enjoy working with %PRODUCTNAME.";
-        Text[ portuguese ] = "Welcome to %PRODUCTNAME %PRODUCTVERSION OEM\n\nTo start %PRODUCTNAME %PRODUCTVERSION OEM, please enter your personal data in the dialog following the license text.\n\nImportant information is contained in the readme files which are located in the StarOffice product directory. Please read these files carefully.\n\nYou can also find detailed information on the Sun Internet pages at\n\nhttp://www.sun.com/staroffice.\n\nWe hope you enjoy working with StarOffice.";
-        Text[ russian ] = "Welcome to %PRODUCTNAME %PRODUCTVERSION OEM\n\nTo start %PRODUCTNAME %PRODUCTVERSION OEM, please enter your personal data in the dialog following the license text.\n\nImportant information is contained in the readme files which are located in the StarOffice product directory. Please read these files carefully.\n\nYou can also find detailed information on the Sun Internet pages at\n\nhttp://www.sun.com/staroffice.\n\nWe hope you enjoy working with StarOffice.";
-        Text[ greek ] = "Welcome to %PRODUCTNAME %PRODUCTVERSION OEM\n\nTo start %PRODUCTNAME %PRODUCTVERSION OEM, please enter your personal data in the dialog following the license text.\n\nImportant information is contained in the readme files which are located in the StarOffice product directory. Please read these files carefully.\n\nYou can also find detailed information on the Sun Internet pages at\n\nhttp://www.sun.com/staroffice.\n\nWe hope you enjoy working with StarOffice.";
-        Text[ dutch ] = "Welcome to %PRODUCTNAME %PRODUCTVERSION OEM\n\nTo start %PRODUCTNAME %PRODUCTVERSION OEM, please enter your personal data in the dialog following the license text.\n\nImportant information is contained in the readme files which are located in the StarOffice product directory. Please read these files carefully.\n\nYou can also find detailed information on the Sun Internet pages at\n\nhttp://www.sun.com/staroffice.\n\nWe hope you enjoy working with StarOffice.";
-        Text[ french ] = "%PRODUCTNAME %PRODUCTVERSION OEM - Bienvenue !\n\nAvant de pouvoir d�marrer %PRODUCTNAME %PRODUCTVERSION OEM, vous devez sp�cifier vos donn�es d'identit� sur la page suivant la licence dans la bo�te de dialogue.\n\nLe fichier Readme (plac� dans le r�pertoire de %PRODUCTNAME) contient des informations importantes sur le programme. Il est vivement conseill� d'en prendre connaissance.\n\nVous trouverez �galement des informations d�taill�es sur le site Internet de Sun � l'adresse\n\nhttp://www.sun.com/staroffice.\n\nL'�quipe de %PRODUCTNAME esp�re que cette nouvelle version r�pondra � vos attentes et vous souhaite un agr�able travail !";
-        Text[ spanish ] = "Bienvenidos a %PRODUCTNAME %PRODUCTVERSION OEM\n\nPara iniciar %PRODUCTNAME %PRODUCTVERSION OEM, introduzca sus datos personales en el di�logo que sigue al texto de licencia.\n\nEn el archivo Readme, en el directorio %PRODUCTNAME-, encontrar� informaci�n importante relativa al programa. Por favor lea el archivo atentamente.\n\nPara m�s informaci�n vaya a la p�gina de Internet de Sun \n\nhttp://www.sun.com/staroffice.\n\nLe deseamos un agradable trabajo con %PRODUCTNAME.\n\nEl equipo de %PRODUCTNAME.";
-        Text[ finnish ] = "Welcome to %PRODUCTNAME %PRODUCTVERSION OEM\n\nTo start %PRODUCTNAME %PRODUCTVERSION OEM, please enter your personal data in the dialog following the license text.\n\nImportant information is contained in the readme files which are located in the StarOffice product directory. Please read these files carefully.\n\nYou can also find detailed information on the Sun Internet pages at\n\nhttp://www.sun.com/staroffice.\n\nWe hope you enjoy working with StarOffice.";
-        Text[ italian ] = "Benvenuti a %PRODUCTNAME %PRODUCTVERSION OEM\n\nPer avviare %PRODUCTNAME %PRODUCTVERSION OEM inserite i vostri dati nel dialogo che segue il testo di licenza.\n\nIl file Readme nella cartella %PRODUCTNAME contiene informazioni importanti sul programma. Leggete il file attentamente.\n\nTroverete informazini dettagliate alla pagina Web di Sun \n\nhttp://www.sun.com/staroffice.\n\nVi auguriamo buon lavoro con %PRODUCTNAME.\n\nIl team %PRODUCTNAME.";
-        Text[ danish ] = "Welcome to %PRODUCTNAME %PRODUCTVERSION OEM\n\nTo start %PRODUCTNAME %PRODUCTVERSION OEM, please enter your personal data in the dialog following the license text.\n\nImportant information is contained in the readme files which are located in the StarOffice product directory. Please read these files carefully.\n\nYou can also find detailed information on the Sun Internet pages at\n\nhttp://www.sun.com/staroffice.\n\nWe hope you enjoy working with StarOffice.";
-        Text[ swedish ] = "V�lkommen till %PRODUCTNAME %PRODUCTVERSION OEM\n\nF�r att kunna starta %PRODUCTNAME %PRODUCTVERSION OEM anger du dina anv�ndardata i dialogrutan som kommer efter licenstexten.\n\nI readmefilen i %PRODUCTNAME-produktkatalogen finns det viktig information. L�s igenom den h�r informationen noggrant.\n\nDet finns dessutom utf�rlig information p� Suns Internetsida p�\n\nhttp://www.sun.com/staroffice.\n\nVi �nskar dig mycket n�je och framg�ngsrikt arbete med %PRODUCTNAME.\n\nDitt %PRODUCTNAME-team.";
-        Text[ polish ] = "Welcome to %PRODUCTNAME %PRODUCTVERSION OEM\n\nTo start %PRODUCTNAME %PRODUCTVERSION OEM, please enter your personal data in the dialog following the license text.\n\nImportant information is contained in the readme files which are located in the StarOffice product directory. Please read these files carefully.\n\nYou can also find detailed information on the Sun Internet pages at\n\nhttp://www.sun.com/staroffice.\n\nWe hope you enjoy working with StarOffice.";
-        Text[ portuguese_brazilian ] = "Welcome to %PRODUCTNAME %PRODUCTVERSION OEM\n\nTo start %PRODUCTNAME %PRODUCTVERSION OEM, please enter your personal data in the dialog following the license text.\n\nImportant information is contained in the readme files which are located in the StarOffice product directory. Please read these files carefully.\n\nYou can also find detailed information on the Sun Internet pages at\n\nhttp://www.sun.com/staroffice.\n\nWe hope you enjoy working with StarOffice.";
-        Text[ japanese ] = "%PRODUCTNAME %PRODUCTVERSION OEM へようこそ\n\n%PRODUCTNAME %PRODUCTVERSION OEM を起動するには、ライセンス許諾書の文章に続くダイアログページでユーザーデータを入力します。\n\nStarSuite の製品がインストールされているディレクトリの Readme ファイルにプログラムについての大切な指示があります。この指示をよく読んでください。\n\nそのほかにも下記の Sun のインターネット上のページに詳細情報があります。\n\nhttp://www.sun.com/staroffice.\n\nStarSuite での充実したお仕事を願っております。";
-        Text[ korean ] = "%PRODUCTNAME %PRODUCTVERSION OEM\n\n에 오신 것을 환영합니다. %PRODUCTNAME %PRODUCTVERSION OEM을 시작하려면 다음 대화 상자의 라이센스 텍스트에 사용자 데이터를 입력하십시오. \n\nIn der -Datei im %PRODUCTNAME 제품 디렉토리의 Readme 파일에는 프로그램에 대한 주요 참고 사항이 수록되어 있습니다. 이 참고 사항들을 주의깊게 읽으십시오.\n\n그 외 자세한 정보는 Sun의 인터넷 사이트인 \n\nhttp://www.sun.com/staroffice에서 볼 수 있습니다.\n\n새로운 %PRODUCTNAME의 사용이 사용자에게 큰 즐거움이 되기를 희망합니다.\n\n %PRODUCTNAME 팀 일동.";
-        Text[ chinese_simplified ] = "欢迎安装 %PRODUCTNAME %PRODUCTVERSION OEM\n\n要启动 %PRODUCTNAME %PRODUCTVERSION OEM ，请在用户许可协议之后出现的对话方框内添入您的个人资料。\n\n在 %PRODUCTNAME 软件目录内您可以找到一个 Readme 文件，请您仔细阅读其中的有关本软件的重要说明。\n\n另外，您还可以通过 Sun 的网页获得更多的相关信息：\n\nhttp://www.sun.com/staroffice\n\n我们预祝您能够顺利、愉快地使用新版本的 %PRODUCTNAME 。\n\n%PRODUCTNAME 工作组";
-        Text[ chinese_traditional ] = "歡迎安裝 %PRODUCTNAME %PRODUCTVERSION OEM\n\n要啟動 %PRODUCTNAME %PRODUCTVERSION OEM ，請在使用許可協定之後出現的對話方塊內填入您的個人資料。\n\n在 %PRODUCTNAME 軟體目錄內您能夠找到一個[Readme]檔案，請您仔細閱讀其中關於本軟體的重要說明。\n\n另外，您還可以透過 Sun 的網頁獲得更多的資訊：\n\nhttp://www.sun.com/staroffice\n\n我們預祝您能夠順利、愉快地使用新版本的 %PRODUCTNAME 。\n\n%PRODUCTNAME 工作組";
-        Text[ turkish ] = "Welcome to %PRODUCTNAME %PRODUCTVERSION OEM\n\nTo start %PRODUCTNAME %PRODUCTVERSION OEM, please enter your personal data in the dialog following the license text.\n\nImportant information is contained in the readme files which are located in the StarOffice product directory. Please read these files carefully.\n\nYou can also find detailed information on the Sun Internet pages at\n\nhttp://www.sun.com/staroffice.\n\nWe hope you enjoy working with StarOffice.";
-        Text[ arabic ] = "Welcome to %PRODUCTNAME %PRODUCTVERSION OEM\n\nTo start %PRODUCTNAME %PRODUCTVERSION OEM, please enter your personal data in the dialog following the license text.\n\nImportant information is contained in the readme files which are located in the StarOffice product directory. Please read these files carefully.\n\nYou can also find detailed information on the Sun Internet pages at\n\nhttp://www.sun.com/staroffice.\n\nWe hope you enjoy working with StarOffice.";
-        Text[ catalan ] = "Welcome to %PRODUCTNAME %PRODUCTVERSION OEM\n\nTo start %PRODUCTNAME %PRODUCTVERSION OEM, please enter your personal data in the dialog following the license text.\n\nImportant information is contained in the readme files which are located in the StarOffice product directory. Please read these files carefully.\n\nYou can also find detailed information on the Sun Internet pages at\n\nhttp://www.sun.com/staroffice.\n\nWe hope you enjoy working with StarOffice.";
-    };
     Text[ english_us ] = "Welcome";
     Text[ portuguese ] = "Welcome";
     Text[ russian ] = "Welcome";
@@ -282,6 +255,34 @@ TabPage RID_TP_WELCOME
     Text[ turkish ] = "Welcome";
     Text[ arabic ] = "Welcome";
     Text[ catalan ] = "Welcome";
+    FixedText FT_INFO
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 248 , 174 ) ;
+        WordBreak = TRUE ;
+        Text [ language_user1 ] = "LHO: Please eliminate any notion about the training in all languages except German, English, French and Japanese";
+        Text = "Herzlich willkommen zu %PRODUCTNAME %PRODUCTVERSION OEM\n\nUm %PRODUCTNAME %PRODUCTVERSION OEM starten zu k�nnen, geben Sie bitte auf der dem Lizenztext folgenden Dialogseite Ihre Benutzerdaten ein. In der Readme-Datei im %PRODUCTNAME-Produktverzeichnis finden Sie wichtige Hinweise zum Programm. Bitte lesen Sie diese Hinweise aufmerksam durch. Des weiteren finden Sie ausf�hrliche Informationen auf der Internetseite von Sun unter\n\nhttp://www.sun.com/staroffice.\n\nSupport und Schulung:\n\nNutzen Sie die M�glichkeit eines kostenlosen Support-Anrufs. Auch eine kostenlose, Web-basierte StarOffice-Schulung des Sun Web Learning Centers wartet auf Sie. Diese Angebote sind 60 Tage ab Kaufdatum g�ltig. Besuchen Sie folgende Webseite f�r weitere Details.\n\nhttp://www.sun.com/star/service\n\nWir w�nschen Ihnen viel Spa� und Erfolg mit Ihrem neuen %PRODUCTNAME.\nIhr %PRODUCTNAME Team.";
+        Text [ english_us ] = "Welcome to %PRODUCTNAME %PRODUCTVERSION OEM\n\nTo start %PRODUCTNAME %PRODUCTVERSION OEM, please enter your personal data in the dialog following the license text. Important information is contained in the readme files which are located in the %PRODUCTNAME product directory. Please read these files carefully. You can also find detailed information on the Sun Website at\n\nhttp://www.sun.com/staroffice.\n\nSupport and Training:\n\nGet one (1) free StarOffice 6.0 support phone call (valid for 60 days from date of purchase) and free access to \"Transitioning to the StarOffice 6.0 Application Suite\" (WO-1605), a web-based training course available through the Sun(tm) Web Learning Center (valid for 60 days from date of purchase). To take advantage of this offer, visit the website below.\n\nhttp://www.sun.com/star/service\n\nWe hope you enjoy working with %PRODUCTNAME.";
+        Text[ portuguese ] = "Welcome to %PRODUCTNAME %PRODUCTVERSION OEM\n\nTo start %PRODUCTNAME %PRODUCTVERSION OEM, please enter your personal data in the dialog following the license text.\n\nImportant information is contained in the readme files which are located in the StarOffice product directory. Please read these files carefully.\n\nYou can also find detailed information on the Sun Internet pages at\n\nhttp://www.sun.com/staroffice.\n\nWe hope you enjoy working with StarOffice.";
+        Text[ russian ] = "Welcome to %PRODUCTNAME %PRODUCTVERSION OEM\n\nTo start %PRODUCTNAME %PRODUCTVERSION OEM, please enter your personal data in the dialog following the license text.\n\nImportant information is contained in the readme files which are located in the StarOffice product directory. Please read these files carefully.\n\nYou can also find detailed information on the Sun Internet pages at\n\nhttp://www.sun.com/staroffice.\n\nWe hope you enjoy working with StarOffice.";
+        Text[ greek ] = "Welcome to %PRODUCTNAME %PRODUCTVERSION OEM\n\nTo start %PRODUCTNAME %PRODUCTVERSION OEM, please enter your personal data in the dialog following the license text.\n\nImportant information is contained in the readme files which are located in the StarOffice product directory. Please read these files carefully.\n\nYou can also find detailed information on the Sun Internet pages at\n\nhttp://www.sun.com/staroffice.\n\nWe hope you enjoy working with StarOffice.";
+        Text[ dutch ] = "Welcome to %PRODUCTNAME %PRODUCTVERSION OEM\n\nTo start %PRODUCTNAME %PRODUCTVERSION OEM, please enter your personal data in the dialog following the license text.\n\nImportant information is contained in the readme files which are located in the StarOffice product directory. Please read these files carefully.\n\nYou can also find detailed information on the Sun Internet pages at\n\nhttp://www.sun.com/staroffice.\n\nWe hope you enjoy working with StarOffice.";
+        Text[ french ] = "%PRODUCTNAME %PRODUCTVERSION OEM - Bienvenue !\n\nAvant de pouvoir d�marrer %PRODUCTNAME %PRODUCTVERSION OEM, vous devez sp�cifier vos donn�es d'identit� sur la page suivant la licence dans la bo�te de dialogue.\n\nLe fichier Readme (plac� dans le r�pertoire de %PRODUCTNAME) contient des informations importantes sur le programme. Il est vivement conseill� d'en prendre connaissance.\n\nVous trouverez �galement des informations d�taill�es sur le site Internet de Sun � l'adresse\n\nhttp://www.sun.com/staroffice.\n\nL'�quipe de %PRODUCTNAME esp�re que cette nouvelle version r�pondra � vos attentes et vous souhaite un agr�able travail !";
+        Text[ spanish ] = "Bienvenidos a %PRODUCTNAME %PRODUCTVERSION OEM\n\nPara iniciar %PRODUCTNAME %PRODUCTVERSION OEM, introduzca sus datos personales en el di�logo que sigue al texto de licencia.\n\nEn el archivo Readme, en el directorio %PRODUCTNAME-, encontrar� informaci�n importante relativa al programa. Por favor lea el archivo atentamente.\n\nPara m�s informaci�n vaya a la p�gina de Internet de Sun \n\nhttp://www.sun.com/staroffice.\n\nLe deseamos un agradable trabajo con %PRODUCTNAME.\n\nEl equipo de %PRODUCTNAME.";
+        Text[ finnish ] = "Welcome to %PRODUCTNAME %PRODUCTVERSION OEM\n\nTo start %PRODUCTNAME %PRODUCTVERSION OEM, please enter your personal data in the dialog following the license text.\n\nImportant information is contained in the readme files which are located in the StarOffice product directory. Please read these files carefully.\n\nYou can also find detailed information on the Sun Internet pages at\n\nhttp://www.sun.com/staroffice.\n\nWe hope you enjoy working with StarOffice.";
+        Text[ italian ] = "Benvenuti a %PRODUCTNAME %PRODUCTVERSION OEM\n\nPer avviare %PRODUCTNAME %PRODUCTVERSION OEM inserite i vostri dati nel dialogo che segue il testo di licenza.\n\nIl file Readme nella cartella %PRODUCTNAME contiene informazioni importanti sul programma. Leggete il file attentamente.\n\nTroverete informazini dettagliate alla pagina Web di Sun \n\nhttp://www.sun.com/staroffice.\n\nVi auguriamo buon lavoro con %PRODUCTNAME.\n\nIl team %PRODUCTNAME.";
+        Text[ danish ] = "Welcome to %PRODUCTNAME %PRODUCTVERSION OEM\n\nTo start %PRODUCTNAME %PRODUCTVERSION OEM, please enter your personal data in the dialog following the license text.\n\nImportant information is contained in the readme files which are located in the StarOffice product directory. Please read these files carefully.\n\nYou can also find detailed information on the Sun Internet pages at\n\nhttp://www.sun.com/staroffice.\n\nWe hope you enjoy working with StarOffice.";
+        Text[ swedish ] = "V�lkommen till %PRODUCTNAME %PRODUCTVERSION OEM\n\nF�r att kunna starta %PRODUCTNAME %PRODUCTVERSION OEM anger du dina anv�ndardata i dialogrutan som kommer efter licenstexten.\n\nI readmefilen i %PRODUCTNAME-produktkatalogen finns det viktig information. L�s igenom den h�r informationen noggrant.\n\nDet finns dessutom utf�rlig information p� Suns Internetsida p�\n\nhttp://www.sun.com/staroffice.\n\nVi �nskar dig mycket n�je och framg�ngsrikt arbete med %PRODUCTNAME.\n\nDitt %PRODUCTNAME-team.";
+        Text[ polish ] = "Welcome to %PRODUCTNAME %PRODUCTVERSION OEM\n\nTo start %PRODUCTNAME %PRODUCTVERSION OEM, please enter your personal data in the dialog following the license text.\n\nImportant information is contained in the readme files which are located in the StarOffice product directory. Please read these files carefully.\n\nYou can also find detailed information on the Sun Internet pages at\n\nhttp://www.sun.com/staroffice.\n\nWe hope you enjoy working with StarOffice.";
+        Text[ portuguese_brazilian ] = "Welcome to %PRODUCTNAME %PRODUCTVERSION OEM\n\nTo start %PRODUCTNAME %PRODUCTVERSION OEM, please enter your personal data in the dialog following the license text.\n\nImportant information is contained in the readme files which are located in the StarOffice product directory. Please read these files carefully.\n\nYou can also find detailed information on the Sun Internet pages at\n\nhttp://www.sun.com/staroffice.\n\nWe hope you enjoy working with StarOffice.";
+        Text[ japanese ] = "%PRODUCTNAME %PRODUCTVERSION OEM へようこそ\n\n%PRODUCTNAME %PRODUCTVERSION OEM を起動するには、ライセンス許諾書の文章に続くダイアログページでユーザーデータを入力します。\n\nStarSuite の製品がインストールされているディレクトリの Readme ファイルにプログラムについての大切な指示があります。この指示をよく読んでください。\n\nそのほかにも下記の Sun のインターネット上のページに詳細情報があります。\n\nhttp://www.sun.com/staroffice.\n\nStarSuite での充実したお仕事を願っております。";
+        Text[ korean ] = "%PRODUCTNAME %PRODUCTVERSION OEM\n\n에 오신 것을 환영합니다. %PRODUCTNAME %PRODUCTVERSION OEM을 시작하려면 다음 대화 상자의 라이센스 텍스트에 사용자 데이터를 입력하십시오. \n\nIn der -Datei im %PRODUCTNAME 제품 디렉토리의 Readme 파일에는 프로그램에 대한 주요 참고 사항이 수록되어 있습니다. 이 참고 사항들을 주의깊게 읽으십시오.\n\n그 외 자세한 정보는 Sun의 인터넷 사이트인 \n\nhttp://www.sun.com/staroffice에서 볼 수 있습니다.\n\n새로운 %PRODUCTNAME의 사용이 사용자에게 큰 즐거움이 되기를 희망합니다.\n\n %PRODUCTNAME 팀 일동.";
+        Text[ chinese_simplified ] = "欢迎安装 %PRODUCTNAME %PRODUCTVERSION OEM\n\n要启动 %PRODUCTNAME %PRODUCTVERSION OEM ，请在用户许可协议之后出现的对话方框内添入您的个人资料。\n\n在 %PRODUCTNAME 软件目录内您可以找到一个 Readme 文件，请您仔细阅读其中的有关本软件的重要说明。\n\n另外，您还可以通过 Sun 的网页获得更多的相关信息：\n\nhttp://www.sun.com/staroffice\n\n我们预祝您能够顺利、愉快地使用新版本的 %PRODUCTNAME 。\n\n%PRODUCTNAME 工作组";
+        Text[ chinese_traditional ] = "歡迎安裝 %PRODUCTNAME %PRODUCTVERSION OEM\n\n要啟動 %PRODUCTNAME %PRODUCTVERSION OEM ，請在使用許可協定之後出現的對話方塊內填入您的個人資料。\n\n在 %PRODUCTNAME 軟體目錄內您能夠找到一個[Readme]檔案，請您仔細閱讀其中關於本軟體的重要說明。\n\n另外，您還可以透過 Sun 的網頁獲得更多的資訊：\n\nhttp://www.sun.com/staroffice\n\n我們預祝您能夠順利、愉快地使用新版本的 %PRODUCTNAME 。\n\n%PRODUCTNAME 工作組";
+        Text[ turkish ] = "Welcome to %PRODUCTNAME %PRODUCTVERSION OEM\n\nTo start %PRODUCTNAME %PRODUCTVERSION OEM, please enter your personal data in the dialog following the license text.\n\nImportant information is contained in the readme files which are located in the StarOffice product directory. Please read these files carefully.\n\nYou can also find detailed information on the Sun Internet pages at\n\nhttp://www.sun.com/staroffice.\n\nWe hope you enjoy working with StarOffice.";
+        Text[ arabic ] = "Welcome to %PRODUCTNAME %PRODUCTVERSION OEM\n\nTo start %PRODUCTNAME %PRODUCTVERSION OEM, please enter your personal data in the dialog following the license text.\n\nImportant information is contained in the readme files which are located in the StarOffice product directory. Please read these files carefully.\n\nYou can also find detailed information on the Sun Internet pages at\n\nhttp://www.sun.com/staroffice.\n\nWe hope you enjoy working with StarOffice.";
+        Text[ catalan ] = "Welcome to %PRODUCTNAME %PRODUCTVERSION OEM\n\nTo start %PRODUCTNAME %PRODUCTVERSION OEM, please enter your personal data in the dialog following the license text.\n\nImportant information is contained in the readme files which are located in the StarOffice product directory. Please read these files carefully.\n\nYou can also find detailed information on the Sun Internet pages at\n\nhttp://www.sun.com/staroffice.\n\nWe hope you enjoy working with StarOffice.";
+    };
 };
 TabPage RID_TP_LICENSE
 {
@@ -292,6 +293,26 @@ TabPage RID_TP_LICENSE
     Size = MAP_APPFONT ( 260 , 185 ) ;
     Text = "Lizenzvertrag" ;
     Text [ ENGLISH ] = "License Agreement" ;
+    Text[ english_us ] = "License Agreement";
+    Text[ portuguese ] = "License Agreement";
+    Text[ russian ] = "License Agreement";
+    Text[ greek ] = "License Agreement";
+    Text[ dutch ] = "License Agreement";
+    Text[ french ] = "Contrat de licence";
+    Text[ spanish ] = "Contrato de licencia";
+    Text[ finnish ] = "License Agreement";
+    Text[ italian ] = "Contratto di licenza";
+    Text[ danish ] = "License Agreement";
+    Text[ swedish ] = "Licensavtal";
+    Text[ polish ] = "License Agreement";
+    Text[ portuguese_brazilian ] = "License Agreement";
+    Text[ japanese ] = "ライセンス許諾書";
+    Text[ korean ] = "라이센스 계약";
+    Text[ chinese_simplified ] = "用户许可协议";
+    Text[ chinese_traditional ] = "使用許可協定";
+    Text[ turkish ] = "License Agreement";
+    Text[ arabic ] = "License Agreement";
+    Text[ catalan ] = "License Agreement";
     FixedText FT_INFO1
     {
         WordBreak = TRUE ;
@@ -356,26 +377,6 @@ TabPage RID_TP_LICENSE
         Text[ catalan ] = "Si acepta las condiciones de este acuerdo de licencia, pulse sobre '%1'. En caso de no ser as� pulse sobre '%2' para cancelar la instalaci�n.";
         Text[ finnish ] = "Jos hyv�ksyt kaikki lisenssisopimuksen ehdot, valitse %1. Muussa tapauksessa peruuta asennus valitsemalla %2.";
     };
-    Text[ english_us ] = "License Agreement";
-    Text[ portuguese ] = "License Agreement";
-    Text[ russian ] = "License Agreement";
-    Text[ greek ] = "License Agreement";
-    Text[ dutch ] = "License Agreement";
-    Text[ french ] = "Contrat de licence";
-    Text[ spanish ] = "Contrato de licencia";
-    Text[ finnish ] = "License Agreement";
-    Text[ italian ] = "Contratto di licenza";
-    Text[ danish ] = "License Agreement";
-    Text[ swedish ] = "Licensavtal";
-    Text[ polish ] = "License Agreement";
-    Text[ portuguese_brazilian ] = "License Agreement";
-    Text[ japanese ] = "ライセンス許諾書";
-    Text[ korean ] = "라이센스 계약";
-    Text[ chinese_simplified ] = "用户许可协议";
-    Text[ chinese_traditional ] = "使用許可協定";
-    Text[ turkish ] = "License Agreement";
-    Text[ arabic ] = "License Agreement";
-    Text[ catalan ] = "License Agreement";
 };
 
 
