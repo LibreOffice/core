@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templdgi.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: gt $ $Date: 2002-05-14 13:19:30 $
+ *  last change: $Author: fs $ $Date: 2002-05-27 09:55:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,6 +183,7 @@ protected:
     SfxModule*                  pModule;
     Timer*                      pTimer;
 
+    ResId*                      m_pStyleFamiliesId;
     SfxStyleFamilies*           pStyleFamilies;
     SfxTemplateItem*            pFamilyState[MAX_FAMILIES];
     SfxStyleSheetBasePool*      pStyleSheetPool;
@@ -224,7 +225,7 @@ protected:
     virtual void        EnableItem( USHORT nMesId, BOOL bCheck = TRUE ) {}
     virtual void        CheckItem( USHORT nMesId, BOOL bCheck = TRUE ) {}
     virtual BOOL        IsCheckedItem( USHORT nMesId ) { return TRUE; }
-    virtual void        Resize() {}
+    virtual void        LoadedFamilies() {}
     virtual void        Update() { UpdateStyles_Impl(UPDATE_FAMILY_LIST); }
     virtual void        InvalidateBindings();
     virtual void        InsertFamilyItem( USHORT nId, const SfxStyleFamilyItem* pIten ) = 0;
@@ -323,12 +324,15 @@ protected:
     virtual void    EnableItem( USHORT nMesId, BOOL bCheck = TRUE );
     virtual void    CheckItem( USHORT nMesId, BOOL bCheck = TRUE );
     virtual BOOL    IsCheckedItem( USHORT nMesId );
+    virtual void    LoadedFamilies();
     virtual void    InsertFamilyItem( USHORT nId, const SfxStyleFamilyItem* pIten );
     virtual void    EnableFamilyItem( USHORT nId, BOOL bEnabled = TRUE );
     virtual void    ClearFamilyList();
 
     void            Resize();
     Size            GetMinOutputSizePixel();
+
+    void            updateFamilyImages();
 
 public:
     friend class SfxTemplateDialog;
