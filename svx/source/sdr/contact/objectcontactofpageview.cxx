@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objectcontactofpageview.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-10 11:33:08 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 14:40:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,14 @@ namespace sdr
         // existing.
         ObjectContactOfPageView::~ObjectContactOfPageView()
         {
+        }
+
+        // A ViewObjectContact was deleted and shall be forgotten.
+        // #i29181# Overload to clear selection at associated view
+        void ObjectContactOfPageView::RemoveViewObjectContact(ViewObjectContact& rVOContact)
+        {
+            // call parent
+            ObjectContact::RemoveViewObjectContact(rVOContact);
         }
 
         // Update Draw Hierarchy data. Take care of everything that is inside
@@ -286,6 +294,9 @@ namespace sdr
             {
                 maPreRenderDevice.SetMapMode(pOriginalOutDev->GetMapMode());
             }
+
+            // #i29186#
+            maPreRenderDevice.SetDrawMode(pOriginalOutDev->GetDrawMode());
 
             // replace values at rDisplayInfo for rendering to PreRenderDevice
             pOriginalExtOutDev->SetOutDev(&maPreRenderDevice);
