@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewuno.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-14 15:21:25 $
+ *  last change: $Author: sab $ $Date: 2002-04-11 09:42:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -237,6 +237,7 @@ private:
     XRangeSelectionListenerArr_Impl         aRangeSelListeners;
     XRangeSelectionChangeListenerArr_Impl   aRangeChgListeners;
     XViewPropertyChangeListenerArr_Impl     aPropertyChgListeners;
+    sal_Bool                                bDrawSelModeSet;
 
     ScViewPaneObj*          GetObjectByIndex_Impl(USHORT nIndex) const;
 
