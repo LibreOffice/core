@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tencinfo.c,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: th $ $Date: 2000-12-13 22:25:19 $
+ *  last change: $Author: th $ $Date: 2001-03-27 11:35:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -340,7 +340,7 @@ rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromMacTextEncoding( sal_uInt32 nMa
         case 0x0FC: eTextEncoding = RTL_TEXTENCODING_SYMBOL; break;       /* MacVT100 - VT100/102 font */
         /* Special Mac OS encodings */
         /* MacHFS = 0xFF */ /* metavalue. */
-        /* Unicode & ISO UCS encodings begin at 0x100
+        /* Unicode & ISO UCS encodings begin at 0x100 */
         case 0x100: eTextEncoding = RTL_TEXTENCODING_UNICODE; break;    /* UnicodeDefault */
         case 0x101: eTextEncoding = RTL_TEXTENCODING_UNICODE; break;    /* UnicodeV1_1 / ISO10646_1993 */
         case 0x103: eTextEncoding = RTL_TEXTENCODING_UNICODE; break;    /* UnicodeV2_1 - new location for Korean Hangul / UnicodeV2_1 */
