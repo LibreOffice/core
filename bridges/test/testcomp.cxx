@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testcomp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2001-11-26 17:01:44 $
+ *  last change: $Author: jbu $ $Date: 2002-04-18 10:09:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,7 +125,7 @@ void parseCommandLine( char *argv[] ,
     }
 }
 
-Any OInstanceProvider::queryInterface( const  Type & aType )
+Any OInstanceProvider::queryInterface( const  Type & aType ) throw ( RuntimeException )
 {
     Any a = ::cppu::queryInterface( aType ,
             SAL_STATIC_CAST( XInstanceProvider * , this ) );
@@ -192,9 +192,9 @@ public:
         }
         return aRet;
     }
-    virtual void SAL_CALL acquire() throw(::com::sun::star::uno::RuntimeException)
+    virtual void SAL_CALL acquire() throw()
         { osl_incrementInterlockedCount( &_nRef ); }
-    virtual void SAL_CALL release() throw(::com::sun::star::uno::RuntimeException)
+    virtual void SAL_CALL release() throw()
         { if (! osl_decrementInterlockedCount( &_nRef )) delete this; }
 
     // XServiceInfo
@@ -325,7 +325,7 @@ Sequence< OUString > ServiceImpl::getSupportedServiceNames()
  *
  *****************/
 
-Any OCallMe::queryInterface( const  Type & aType )
+Any OCallMe::queryInterface( const  Type & aType )  throw ( RuntimeException )
 {
     Any a = ::cppu::queryInterface( aType,
             SAL_STATIC_CAST( XCallMe * , this ) );
@@ -421,7 +421,7 @@ void OCallMe::callAgain( const Reference< ::test::XCallMe >& callAgain,
  * OInterfaceTest
  *
  *******************/
-Any OInterfaceTest::queryInterface( const Type & aType )
+Any OInterfaceTest::queryInterface( const Type & aType )  throw ( RuntimeException )
 {
     Any a = ::cppu::queryInterface( aType,
             SAL_STATIC_CAST( XInterfaceTest * , this ) );
@@ -473,7 +473,7 @@ void OInterfaceTest::call()
 }
 
 
-Any OTestFactory::queryInterface( const Type & aType )
+Any OTestFactory::queryInterface( const Type & aType )  throw ( RuntimeException )
 {
     Any a = ::cppu::queryInterface( aType,
             SAL_STATIC_CAST( XTestFactory * , this ) );

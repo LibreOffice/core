@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testsameprocess.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jbu $ $Date: 2001-05-29 07:09:02 $
+ *  last change: $Author: jbu $ $Date: 2002-04-18 10:09:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,12 +154,12 @@ void MyThread::run()
 }
 
 
-void main( int argc, char *argv[] )
+int main( int argc, char *argv[] )
 {
     if( argc < 2 )
     {
         printf( "usage : testsamprocess host:port\n" );
-        exit(1 );
+        return 1;
     }
 
     {
@@ -246,4 +246,5 @@ void main( int argc, char *argv[] )
         rComp = Reference < XComponent > ( rSMgr , UNO_QUERY );
         rComp->dispose();
     }
+    return 0;
 }

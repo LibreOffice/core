@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testserver.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jbu $ $Date: 2001-05-29 07:09:02 $
+ *  last change: $Author: jbu $ $Date: 2002-04-18 10:09:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,7 +215,7 @@ void MyThread::run()
 }
 
 
-void main( int argc, char *argv[] )
+int main( int argc, char *argv[] )
 {
 //  testserver();
 
@@ -223,7 +223,7 @@ void main( int argc, char *argv[] )
     {
         printf( "usage : testserver [-r] connectionstring\n"
                 "        -r does a reverse test (server calls client)\n" );
-        exit(1 );
+        return 1;
     }
 
     OUString sConnectionString;
@@ -284,4 +284,5 @@ void main( int argc, char *argv[] )
         Reference < XComponent > rComp( rSMgr, UNO_QUERY );
         rComp->dispose();
     }
+    return 0;
 }

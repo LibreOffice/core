@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testclient.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jbu $ $Date: 2002-03-21 16:38:41 $
+ *  last change: $Author: jbu $ $Date: 2002-04-18 10:09:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,7 +162,7 @@ void testLatency( const Reference < XConnection > &r , sal_Bool bReply )
     printf( "System latency per call : %g\n" , (( fEnd-fStart )/2.) / ((double)(nLoop)) );
 }
 
-void main( int argc, char *argv[] )
+int main( int argc, char *argv[] )
 {
     sal_Bool bUseNew = ( 3 == argc );
     if( argc < 2 )
@@ -171,7 +171,7 @@ void main( int argc, char *argv[] )
             "usage : testclient [-r] connectionstring\n"
             "        -r reverse call me test (server calls client)"
              );
-        return;
+        return 1;
     }
 
     OUString sConnectionString;
@@ -288,5 +288,6 @@ void main( int argc, char *argv[] )
         rComp->dispose();
     }
     printf( "Closed\n" );
+    return 0;
 }
 
