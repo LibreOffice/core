@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statusindicator.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2001-09-27 13:06:10 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:50:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -623,7 +623,7 @@ private:
         @onerror    -
     */
 
-    #ifdef DEBUG
+    #if OSL_DEBUG_LEVEL > 1
 
     #endif
 
