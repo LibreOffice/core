@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smres.src,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: kz $ $Date: 2002-04-29 20:15:05 $
+ *  last change: $Author: rt $ $Date: 2002-05-16 14:55:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -600,7 +600,7 @@ ModalDialog RID_FONTSIZEDIALOG
         Text[ chinese_traditional ] = "ζ¨™ζΊ–(~D)";
         Text[ arabic ] = "ΗέΚΡΗΦν";
         Text[ greek ] = "Προεπιλογή";
-        Text[ korean ] = "κΈ°λ³Έ(~D)";
+        Text[ korean ] = "κΈ°λ³Έ κ°’(~D)";
         Text[ turkish ] = "Standart";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Predeterminado";
@@ -950,7 +950,7 @@ ModalDialog RID_FONTTYPEDIALOG
         Text[ polish ] = "F~ixed";
         Text[ portuguese_brazilian ] = "F~ixed";
         Text[ japanese ] = "ε›Ίε®(~I)";
-        Text[ korean ] = "F~ixed";
+        Text[ korean ] = "κ³ μ •(~I)";
         Text[ chinese_simplified ] = "ε›Ίε®η„(~I)";
         Text[ chinese_traditional ] = "ε›Ίε®η„(~I)";
         Text[ turkish ] = "F~ixed";
@@ -1034,7 +1034,7 @@ ModalDialog RID_FONTTYPEDIALOG
         Text [ portuguese_brazilian ] = "~Standard" ;
         Text [ portuguese ] = "~Padrγo" ;
         Text[ greek ] = "Προεπιλογή";
-        Text[ korean ] = "κΈ°λ³Έ(~D)";
+        Text[ korean ] = "κΈ°λ³Έ κ°’(~D)";
         Text[ turkish ] = "Standart";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Predeterminado";
@@ -1280,7 +1280,7 @@ ModalDialog RID_DISTANCEDIALOG
         Text[ chinese_traditional ] = "ζ¨™ζΊ–(~D)";
         Text[ arabic ] = "ΗέΚΡΗΦν";
         Text[ greek ] = "Προεπιλογή";
-        Text[ korean ] = "κΈ°λ³Έ(~D)";
+        Text[ korean ] = "κΈ°λ³Έ κ°’(~D)";
         Text[ turkish ] = "Standart";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Predeterminado";
@@ -2583,7 +2583,7 @@ ModalDialog RID_ALIGNDIALOG
         Text[ chinese_traditional ] = "ζ¨™ζΊ–(~D)";
         Text[ arabic ] = "ΗέΚΡΗΦν";
         Text[ greek ] = "Προεπιλογή";
-        Text[ korean ] = "κΈ°λ³Έ(~D)";
+        Text[ korean ] = "κΈ°λ³Έ κ°’(~D)";
         Text[ turkish ] = "Standart";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Predeterminado";
@@ -2864,7 +2864,7 @@ TabPage RID_PRINTOPTIONPAGE
         Text[ chinese_traditional ] = "ι΅―η¤Ίζ―”δΎ‹(~S)";
         Text[ arabic ] = "ΚΟΡνΜ";
         Text[ greek ] = "~Κλίμακα";
-        Text[ korean ] = "λ°°μ¨(~S)";
+        Text[ korean ] = "ν™•λ€(~S)";
         Text[ turkish ] = "Φlηeklendirme";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Escala";
@@ -2936,7 +2936,7 @@ TabPage RID_PRINTOPTIONPAGE
         Text[ chinese_traditional ] = "εΏ½η•¥θ΅ζ«η„η¬¦θ™ ~~ ε’ `";
         Text[ arabic ] = "ΚΜΗεα ~~ ζ ` ΪδΟ δεΗνΙ ΗαΣΨΡ";
         Text[ greek ] = "Παράβλεψη των ~~ και ` στο τέλος της σειράς";
-        Text[ korean ] = "μ™€ ` μ¤„μ λ§μ§€λ§‰μ—μ„ λ¬΄μ‹(~N)";
+        Text[ korean ] = "~~μ™€ `λ” μ¤„μ λ§μ§€λ§‰μ—μ„ λ¬΄μ‹(~N)";
         Text[ turkish ] = "Satύr sonundaki ~~ ve ` iώaretlerini dikkate alma";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Ignorar ~~ y ` al ~final de lνnea";
@@ -5309,7 +5309,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_traditional ] = "ε°ζ–Ό";
                 Text[ arabic ] = "Γήα γδ";
                 Text[ greek ] = "είναι μικρότερο από";
-                Text[ korean ] = "λ³΄λ‹¤ μ‘λ‹¤";
+                Text[ korean ] = "λ―Έλ§";
                 Text[ turkish ] = "Kόηόktόr";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "es menor que";
@@ -5338,7 +5338,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_traditional ] = "ε¤§ζ–Ό";
                 Text[ arabic ] = "ΓίΘΡ γδ";
                 Text[ greek ] = "είναι μεγαλύτερο από";
-                Text[ korean ] = "λ³΄λ‹¤ ν¬λ‹¤";
+                Text[ korean ] = "μ΄κ³Ό";
                 Text[ turkish ] = "Bόyόktόr";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "es mayor que";
@@ -5460,7 +5460,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_traditional ] = "ε°ζ–Όζ–η­‰ζ–Ό";
                 Text[ arabic ] = "ΓΥΫΡ γδ Γζ νΣΗζν";
                 Text[ greek ] = "είναι μικρότερο ή ίσο με (λοξά)";
-                Text[ korean ] = "μ‘κ±°λ‚ κ°™λ‹¤";
+                Text[ korean ] = "μ΄ν•";
                 Text[ turkish ] = "Kόηόktόr ya da eώittir";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "es menor que o igual a (oblicuo)";
@@ -5584,7 +5584,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_traditional ] = "ε°ζ–Όζ–η­‰ζ–Ό";
                 Text[ arabic ] = "ΓΥΫΡ γδ Γζ νΣΗζν";
                 Text[ greek ] = "είναι μικρότερο ή ίσο με";
-                Text[ korean ] = "μ‘κ±°λ‚ κ°™λ‹¤";
+                Text[ korean ] = "μ΄ν•";
                 Text[ turkish ] = "Kόηόktόr ya da eώittir";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "es menor que o igual a";
