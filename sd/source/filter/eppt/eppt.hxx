@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eppt.hxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-16 13:55:36 $
+ *  last change: $Author: obo $ $Date: 2003-09-01 12:04:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -854,6 +854,7 @@ struct ImplTextObj
     int             mnInstance;
     List*           mpList;
     sal_Bool        mbHasExtendedBullets;
+    sal_Bool        mbFixedCellHeightUsed;
 
                     ImplTextObj( int nInstance );
                     ~ImplTextObj();
@@ -924,6 +925,7 @@ class PPTWriter : public GroupTable, public PropValue, public PPTExBulletProvide
         sal_Int32           mnAngle;
         sal_uInt32          mnTextStyle;
 
+        sal_Bool            mbFontIndependentLineSpacing;
         sal_uInt32          mnTextSize;
 
         SvStorageRef        mrStg;
