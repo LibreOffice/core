@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-06 20:10:57 $
+ *  last change: $Author: cd $ $Date: 2002-08-16 13:54:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -45,7 +45,7 @@
  *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
  *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
  *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
- *  See the License for the specific provisions governing your rights and
+ *  See the License for the specific provisions governing your rights andlp
  *  obligations concerning the Software.
  *
  *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
@@ -60,6 +60,48 @@
  ************************************************************************/
 
 #include "desktop.hrc"
+
+WarningBox WARNINGBOX_JAVANOTCONFIGURED
+{
+    Buttons = WB_OK_CANCEL ;
+    DefButton = WB_DEF_OK ;
+    Message = "%PRODUCTNAME %PRODUCTVERSION hat eine fehlerhafte java.ini Konfiguration gefunden. Diese Konfiguration wird benötigt um mit Java korrekt zusammen zuarbeiten. Klicken Sie 'OK' um das Java Setup zu starten. Mit dem Java Setup können Sie ein JRE installieren oder aus vorhanden JREs eins auswählen. Um die aktuelle Operation, welche Java benötigt, zu beenden klicken Sie auf 'Abbrechen'." ;
+};
+
+WarningBox WARNINGBOX_JAVADISABLED
+{
+    Buttons = WB_OK_CANCEL ;
+    DefButton = WB_DEF_OK ;
+    Message = "Die Java Unterstützung wurde deaktiviert. Um die Java Unterstützung zu reaktivieren klicken Sie 'OK'. Um die aktuelle Operation, welche Java benötigt, zu beenden klicken Sie auf 'Abbrechen'." ;
+};
+
+WarningBox WARNINGBOX_MISSINGJAVARUNTIME
+{
+    Buttons = WB_OK_CANCEL ;
+    DefButton = WB_DEF_OK ;
+    Message = "%PRODUCTNAME %PRODUCTVERSION wurde konfiguriert ein Java Runtime Environment (JRE) im Ordner %s zu verwenden. Dieses JRE konnte nicht gefunden werden.  Klicken Sie 'OK' um das Java Setup zu starten. Mit dem Java Setup können Sie ein JRE installieren oder aus vorhanden JREs eins auswählen. Um die aktuelle Operation, welche Java benötigt, zu beenden klicken Sie auf 'Abbrechen'." ;
+};
+
+WarningBox WARNINGBOX_JVMCREATIONFAILED
+{
+    Buttons = WB_OK_CANCEL ;
+    DefButton = WB_DEF_OK ;
+    Message = "%PRODUCTNAME %PRODUCTVERSION hat eine fehlerhafte Java Installation gefunden.  Bitte installieren Sie Java neu. Klicken Sie 'OK' um das Java Setup zu starten. Mit dem Java Setup können Sie ein JRE installieren oder aus vorhanden JREs eins auswählen. Um die aktuelle Operation, welche Java benötigt, zu beenden klicken Sie auf 'Abbrechen'." ;
+};
+
+WarningBox WARNINGBOX_JVMSETUPNOTSTARTED
+{
+    Buttons = WB_OK ;
+    DefButton = WB_DEF_OK ;
+    Message = "%PRODUCTNAME %PRODUCTVERSION kann das Java Setup nicht starten. Beenden Sie %PRODUCTNAME und starten Sie das Setup. Wählen Sie dann die 'Reparatur' Option um eine  Reparatur durch zu führen." ;
+};
+
+WarningBox WARNINGBOX_JAVALDXNOTSTARTED
+{
+    Buttons = WB_OK ;
+    DefButton = WB_DEF_OK ;
+    Message = "%PRODUCTNAME %PRODUCTVERSION kann das JavaLDX nicht starten. Beenden Sie %PRODUCTNAME und starten Sie das Setup. Wählen Sie dann die 'Reparatur' Option um eine  Reparatur durch zu führen." ;
+};
 
 String STR_RECOVER_QUERY
 {
@@ -542,7 +584,32 @@ String STR_SSO_REQUEST
     Text[ thai ] = "Please enter you Single Signon username and password. ";
 };
 
+String STR_WARNING_FAULTYJAVACFG
+{
+    Text = "Fehlerhafte java.ini Konfiguration" ;
+};
 
+String STR_WARNING_JAVADISABLED
+{
+    Text = "Java Unterstützung deaktiviert" ;
+};
 
+String STR_WARNING_MISSINGJAVARUNTIME
+{
+    Text = "Java Runtime Environment nicht vorhanden" ;
+};
 
+String STR_WARNING_FAULTYJAVAINSTALL
+{
+    Text = "Fehlerhafte Java Installation" ;
+};
 
+String STR_WARNING_CANNOTSTARTJVMSETUP
+{
+    Text = "Java Setup kann nicht gestarted werden" ;
+};
+
+String STR_WARNING_CANNOTSTARTJAVALDX
+{
+    Text = "JavaLDX kann nicht gestarted werden" ;
+};
