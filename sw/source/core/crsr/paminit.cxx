@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paminit.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:43:52 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:05:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,31 +135,31 @@ SwPosRegion fnRegionEnd = &aBwrd;
 SwMoveFn fnMoveBackward = &aBwrd;
 SwMoveFn fnMoveForward  = &aFwrd;
 
-SwWhichPara SwuiGetfnParaCurr() //CHINA001
+SwWhichPara GetfnParaCurr() //CHINA001
 {
     return fnParaCurr;
 }
-SwPosPara SwuiGetfnParaStart() //CHINA001
+SwPosPara GetfnParaStart() //CHINA001
 {
      return  fnParaStart;
 }
-SwPosPara SwuiGetfnParaEnd() //CHINA001
-{
-     return  fnParaEnd;
-}
-SwWhichTable SwuiGetfnTablePrev() //CHINA001
+SwWhichTable GetfnTablePrev() //CHINA001
 {
     return fnTablePrev;
 }
-SwPosTable SwuiGetfnTableStart() //CHINA001
+SwPosPara GetfnParaEnd() //CHINA001
+{
+     return  fnParaEnd;
+}
+SwPosTable GetfnTableStart() //CHINA001
 {
     return fnTableStart;
 }
-SwWhichTable SwuiGetfnTableCurr() //CHINA001
+SwWhichTable GetfnTableCurr() //CHINA001
 {
     return fnTableCurr;
 }
-SwPosTable SwuiGetfnTableEnd() //CHINA001
+SwPosTable GetfnTableEnd() //CHINA001
 {
     return fnTableEnd;
 }
