@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2001-09-28 08:14:50 $
+ *  last change: $Author: cmc $ $Date: 2001-10-16 12:42:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,9 @@ struct WW8FlyPara
     WW8_BRC5 brc;               // Umrandung Top, Left, Bottom, Right, Between
     BOOL bBorderLines;          // Umrandungslinien
     BOOL bBorder;               // Umrandungs-/Schatten-Struct vorhanden
+#if 0
     BOOL bDropCap;              // Rahmen als DropCap
+#endif
     BOOL bGrafApo;              // TRUE: Dieser Rahmen dient allein dazu, die
                                 // enthaltene Grafik anders als zeichengebunden
                                 // zu positionieren

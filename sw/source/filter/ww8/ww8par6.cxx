@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: cmc $ $Date: 2001-10-15 11:57:32 $
+ *  last change: $Author: cmc $ $Date: 2001-10-16 12:42:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1258,6 +1258,7 @@ void SwWW8ImplReader::CreateSep(const long nTxtPos,BOOL bMustHaveBreak)
             // aktuelle Attribute einlesen
             WW8PLCFxDesc aCur;
             pSep->GetSprms( &aCur );
+
             // zu ignorierende Attribute sammeln
             SvUShortsSort aIgnore(9, 1);
             if( bContinuousBreak )
@@ -1297,7 +1298,7 @@ void SwWW8ImplReader::CreateSep(const long nTxtPos,BOOL bMustHaveBreak)
                           && (nCorrIhdt == (nCorrIhdt & nJustCopyHdFt))
                           && (nNfcPgn   == nLastNfcPgn);
 
-            if (bEqual && nBreakCode) //Give continious breaks leniency.
+            if (bEqual) //Give continious breaks leniency.
                 bEqual = pSep->CompareSprms(pOtherMem,nOtherSprmsLen,&aIgnore);
 
             // Kopie der vorigen Attr. wieder freigeben
@@ -2231,8 +2232,9 @@ BOOL WW8FlyPara::Read( const BYTE* pSprm29, WW8PLCFx_Cp_FKP* pPap )
         pS = pPap->HasSprm( 37 );                               // Umfluss          //sprmPWr
         if( pS )
             nSp37 = *pS;
-
-        pS = pPap->HasSprm( 46 );                               // DropCap          //sprmPDcs
+#if 0
+        pS = pPap->HasSprm( 46 );   // DropCap          //sprmPDcs
+#endif
     }
     else
     {
@@ -2246,11 +2248,13 @@ BOOL WW8FlyPara::Read( const BYTE* pSprm29, WW8PLCFx_Cp_FKP* pPap )
         pS = pPap->HasSprm( 0x2423 );                               // Umfluss
         if( pS )
             nSp37 = *pS;
-
+#if 0
         pS = pPap->HasSprm( 0x442C );                               // DropCap
+#endif
     }
-
+#if 0
     bDropCap = pS != 0;
+#endif
 
     if( !nSp29 && !nSp27 && !nSp49 && !nSp37 )      // alles 0 heisst
         return FALSE;                               // Apo ist nicht vorhanden
@@ -2347,8 +2351,9 @@ BOOL WW8FlyPara::Read( const BYTE* pSprm29, WW8RStyle* pStyle )
         pS = pStyle->HasParaSprm( 37 );             // Umfluss
         if( pS )
             nSp37 = *pS;
-
+#if 0
         pS = pStyle->HasParaSprm( 46 );             // DropCap
+#endif
     }
     else
     {
@@ -2362,11 +2367,13 @@ BOOL WW8FlyPara::Read( const BYTE* pSprm29, WW8RStyle* pStyle )
         pS = pStyle->HasParaSprm( 0x2423 );             // Umfluss
         if( pS )
             nSp37 = *pS;
-
+#if 0
         pS = pStyle->HasParaSprm( 0x442C );             // DropCap
+#endif
     }
-
+#if 0
     bDropCap = pS != 0;
+#endif
 
     if( !nSp29 && !nSp27 && !nSp49 && !nSp37 )      // alles 0 heisst
         return FALSE;                               // Apo ist nicht vorhanden
@@ -2423,8 +2430,13 @@ WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM, SwWW8ImplReader& rIo, WW8FlyPara& rWW,
     if( nWidth <= 10 )                              // Auto-Breite
     {
         bAutoWidth = TRUE;
+#if 1
+        nWidth = nNettoWidth = (nPgWidth ? nPgWidth : 2268); // 4 cm
+
+#else
         nWidth = nNettoWidth =
             rWW.bDropCap ? MINFLY : (nPgWidth ? nPgWidth : 2268); // 4 cm
+#endif
     }
     if( nWidth <= MINFLY )
         nWidth = nNettoWidth = MINFLY;              // Minimale Breite

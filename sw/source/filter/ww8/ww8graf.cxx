@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: cmc $ $Date: 2001-10-12 11:14:41 $
+ *  last change: $Author: cmc $ $Date: 2001-10-16 12:42:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1634,28 +1634,30 @@ USHORT SwWW8ImplReader::MatchSdrBoxIntoFlyBoxItem(const Color& rLineColor,
     {
     // zuerst die Einzel-Linien
     case mso_lineSimple:
-        if( nLineThick < 11)
+        if( nLineThick < 20)
             nIdx =            0;//   1 Twip bei uns
-        else if( nLineThick < 46)
+        else if( nLineThick < 50)
             nIdx =            1;//  20 Twips
-        else if( nLineThick < 66)
+        else if( nLineThick < 80)
             nIdx =            2;//  50
-        else if( nLineThick < 91)
+        else if( nLineThick < 100)
             nIdx =            3;//  80
-        else if( nLineThick <126)
+        else if( nLineThick <150)
             nIdx =            4;// 100
         // Pfusch: fuer die ganz dicken Linien muessen wir doppelte Linien
         // malen, weil unsere Einfach-Linie nicht dicker als 5 Punkt wird
-        else if( nLineThick <166)
+        else if( nLineThick <180)
             nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+2;// 150
         else
             nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+5;// 180
     break;
     // dann die Doppel-Linien, fuer die wir feine Entsprechungen haben :-)))
     case mso_lineDouble:
-        if( nLineThick <  46)
+        if( nLineThick <  60)
             nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 0;//  22 Twips bei uns
-        else if( nLineThick < 106)
+        else if( nLineThick < 135)
+            nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 7;// some more space
+        else if( nLineThick < 180)
             nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 1;//  60
         else
             nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 2;// 150
@@ -2629,6 +2631,11 @@ SwFrmFmt * SwWW8ImplReader::ConvertDrawTextToFly(SdrObject* &rpObject,
 
         Rectangle aInnerDist(pRecord->nDxTextLeft, pRecord->nDyTextTop,
             pRecord->nDxTextRight, pRecord->nDyTextBottom);
+
+        rFlySet.Put(
+            SwFmtFrmSize(pRecord->bLastBoxInChain ? ATT_MIN_SIZE : ATT_FIX_SIZE,
+                pF->nXaRight - pF->nXaLeft, pF->nYaBottom - pF->nYaTop));
+
         MatchSdrItemsIntoFlySet( rpObject, rFlySet, pRecord->eLineStyle,
             pRecord->eShapeType, aInnerDist, !pRecord->bLastBoxInChain);
 
