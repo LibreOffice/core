@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eppt.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sj $ $Date: 2000-12-04 14:55:16 $
+ *  last change: $Author: sj $ $Date: 2000-12-07 16:51:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -341,7 +341,7 @@ struct SOParagraph
 
 // ------------------------------------------------------------------------
 
-class _EscherGraphicProvider;
+class EscherGraphicProvider;
 class PPTExBulletProvider
 {
     friend struct PPTExParaSheet;
@@ -352,7 +352,7 @@ class PPTExBulletProvider
         SvMemoryStream          aBuExOutlineStream;
         SvMemoryStream          aBuExMasterStream;
 
-        _EscherGraphicProvider* pGraphicProv;
+        EscherGraphicProvider*  pGraphicProv;
 
     public :
 

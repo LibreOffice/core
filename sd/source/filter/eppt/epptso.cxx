@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epptso.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: sj $ $Date: 2000-12-04 16:07:32 $
+ *  last change: $Author: sj $ $Date: 2000-12-07 16:52:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,7 +232,7 @@ sal_Int16 EncodeAnyTosal_Int16( ::com::sun::star::uno::Any& rAny )
 
 PPTExBulletProvider::PPTExBulletProvider()
 {
-    pGraphicProv = new _EscherGraphicProvider( aBuExPictureStream, _E_GRAPH_PROV_USE_INSTANCES  | _E_GRAPH_PROV_DO_NOT_ROTATE_METAFILES );
+    pGraphicProv = new EscherGraphicProvider( _E_GRAPH_PROV_USE_INSTANCES  | _E_GRAPH_PROV_DO_NOT_ROTATE_METAFILES );
 }
 
 PPTExBulletProvider::~PPTExBulletProvider()
@@ -250,7 +250,7 @@ sal_uInt16 PPTExBulletProvider::GetId( Graphic& rGraphic )
         {
             Rectangle   aRect;
             GraphicObject aGraphicObject( rGraphic );
-            nId = pGraphicProv->ImplGetBlibID( aGraphicObject.GetUniqueID(), aRect, NULL );
+            nId = pGraphicProv->GetBlibID( aBuExPictureStream, aGraphicObject.GetUniqueID(), aRect, NULL );
         }
         else
         {
