@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fucon3d.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 10:57:09 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 08:55:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,9 +186,8 @@ E3dCompoundObject* FuConstruct3dObject::ImpCreateBasic3DShape()
             XPolygon aXPoly(Point (0, 1250), 2500, 2500, 0, 900, FALSE);
             aXPoly.Scale(5.0, 5.0);
 
-            p3DObj = new E3dLatheObj(
-                pView->Get3DDefaultAttributes(),
-                (XPolygon)XOutCreatePolygon (aXPoly, pWindow));
+//BFS09         p3DObj = new E3dLatheObj(pView->Get3DDefaultAttributes(),(XPolygon)XOutCreatePolygon (aXPoly, pWindow));
+            p3DObj = new E3dLatheObj(pView->Get3DDefaultAttributes(),(XPolygon)XOutCreatePolygon (aXPoly));
 
             // Dies ist ein offenes Objekt, muss daher defaultmaessig
             // doppelseitig behandelt werden
@@ -209,17 +208,15 @@ E3dCompoundObject* FuConstruct3dObject::ImpCreateBasic3DShape()
             aXPoly.Insert(0, Point (250*5, 1250*5), XPOLY_NORMAL);
             aXPoly.Insert(0, Point (50*5, 1250*5), XPOLY_NORMAL);
             aXPoly.Insert(0, Point (0*5, 1250*5), XPOLY_NORMAL);
-            p3DObj = new E3dLatheObj(
-                pView->Get3DDefaultAttributes(),
-                (XPolygon)XOutCreatePolygon (aXPoly, pWindow));
+//BFS09         p3DObj = new E3dLatheObj(pView->Get3DDefaultAttributes(),(XPolygon)XOutCreatePolygon (aXPoly, pWindow));
+            p3DObj = new E3dLatheObj(pView->Get3DDefaultAttributes(),(XPolygon)XOutCreatePolygon (aXPoly));
             break;
         }
 
         case SID_3D_TORUS:
         {
-            p3DObj = new E3dLatheObj(
-                pView->Get3DDefaultAttributes(),
-                (XPolygon)XOutCreatePolygon(XPolygon (Point (1000, 0), 500, 500, 0, 3600), pWindow));
+//BFS09         p3DObj = new E3dLatheObj(pView->Get3DDefaultAttributes(),(XPolygon)XOutCreatePolygon(XPolygon (Point (1000, 0), 500, 500, 0, 3600), pWindow));
+            p3DObj = new E3dLatheObj(pView->Get3DDefaultAttributes(),(XPolygon)XOutCreatePolygon(XPolygon (Point (1000, 0), 500, 500, 0, 3600)));
             break;
         }
 
@@ -364,26 +361,26 @@ void FuConstruct3dObject::ImpPrepareBasic3DShape(E3dCompoundObject* p3DObj, E3dS
         break;
     }
 
-    if (nSlotId == SID_3D_SPHERE)
-    {
-        // Keine Sortierung noetig
-        pScene->SetSortingMode(E3D_SORT_NO_SORTING);
-    }
-    else if (nSlotId == SID_3D_CYLINDER)
-    {
-        // Das muss auch ohne aufwendige Sortierung gehen!
-        // Ersteinaml jedoch: Sortierung ueber Lookupfield
-        pScene->SetSortingMode(E3D_SORT_LOOKUP_FIELD |
-                               E3D_SORT_IN_PARENTS   |
-                               E3D_SORT_TEST_LENGTH);
-    }
-    else
-    {
-        // Einfache Sortierung
-        pScene->SetSortingMode(E3D_SORT_FAST_SORTING |
-                               E3D_SORT_IN_PARENTS   |
-                               E3D_SORT_TEST_LENGTH);
-    }
+//BFS02 if (nSlotId == SID_3D_SPHERE)
+//BFS02 {
+//BFS02     // Keine Sortierung noetig
+//BFS02     pScene->SetSortingMode(E3D_SORT_NO_SORTING);
+//BFS02 }
+//BFS02 else if (nSlotId == SID_3D_CYLINDER)
+//BFS02 {
+//BFS02     // Das muss auch ohne aufwendige Sortierung gehen!
+//BFS02     // Ersteinaml jedoch: Sortierung ueber Lookupfield
+//BFS02     pScene->SetSortingMode(E3D_SORT_LOOKUP_FIELD |
+//BFS02                            E3D_SORT_IN_PARENTS   |
+//BFS02                            E3D_SORT_TEST_LENGTH);
+//BFS02 }
+//BFS02 else
+//BFS02 {
+//BFS02     // Einfache Sortierung
+//BFS02     pScene->SetSortingMode(E3D_SORT_FAST_SORTING |
+//BFS02                            E3D_SORT_IN_PARENTS   |
+//BFS02                            E3D_SORT_TEST_LENGTH);
+//BFS02 }
 
     pScene->FitSnapRectToBoundVol();
 
