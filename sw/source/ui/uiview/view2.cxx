@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view2.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-27 21:43:57 $
+ *  last change: $Author: jp $ $Date: 2001-04-12 08:26:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -476,8 +476,7 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
             {
                 const USHORT nCurIdx = pWrtShell->GetCurPageDesc();
                 SwPageDesc aPageDesc( pWrtShell->GetPageDesc( nCurIdx ) );
-                ::ItemSetToPageDesc( *pArgs, aPageDesc,
-                                    pWrtShell );
+                ::ItemSetToPageDesc( *pArgs, aPageDesc );
                 // Den Descriptor der Core veraendern.
                 pWrtShell->ChgPageDesc( nCurIdx, aPageDesc );
             }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uitool.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-14 09:57:44 $
+ *  last change: $Author: jp $ $Date: 2001-04-12 08:25:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,10 +93,7 @@ void SetMetric(MetricFormatter& rCtrl, FieldUnit eUnit);
 void PrepareBoxInfo(SfxItemSet& rSet, const SwWrtShell& rSh);
 
 // SfxItemSets <-> PageDesc
-void ItemSetToPageDesc(const SfxItemSet& rSet,
-                       SwPageDesc& rPageDesc,
-                       SwWrtShell* pShell );
-
+void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc );
 void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet);
 
 // Auffuellen der Tabs mit DefaultTabs

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uitool.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-02-23 12:45:30 $
+ *  last change: $Author: jp $ $Date: 2001-04-12 08:25:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -281,8 +281,7 @@ void FillHdFt(SwFrmFmt* pFmt, const  SfxItemSet& rSet)
  --------------------------------------------------------------------*/
 
 
-void ItemSetToPageDesc(const SfxItemSet& rSet, SwPageDesc& rPageDesc,
-                        SwWrtShell* pShell)
+void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
 {
     SwFrmFmt& rMaster = rPageDesc.GetMaster();
 
@@ -410,15 +409,21 @@ void ItemSetToPageDesc(const SfxItemSet& rSet, SwPageDesc& rPageDesc,
         else if(SFX_ITEM_SET == rSet.GetItemState(
                                 SID_SWREGISTER_COLLECTION, FALSE, &pItem))
         {
-            String sColl = ((const SfxStringItem*)pItem)->GetValue();
-            SwTxtFmtColl* pColl = pShell->GetParaStyle( sColl,
-                                SwWrtShell::GETSTYLE_CREATEANY );
-            if(!rPageDesc.GetRegisterFmtColl())
+            const String& rColl = ((const SfxStringItem*)pItem)->GetValue();
+            SwDoc& rDoc = *rMaster.GetDoc();
+            SwTxtFmtColl* pColl = rDoc.FindTxtFmtCollByName( rColl );
+            if( !pColl )
             {
-                SwRegisterItem aSet(TRUE);
-                pColl->SetAttr( aSet );
+                USHORT nId = rDoc.GetPoolId( rColl, GET_POOLID_TXTCOLL );
+                if( USHRT_MAX != nId )
+                    pColl = rDoc.GetTxtCollFromPool( nId );
+                else
+                    pColl = rDoc.MakeTxtFmtColl( rColl,
+                                (SwTxtFmtColl*)rDoc.GetDfltTxtFmtColl() );
             }
-            rPageDesc.SetRegisterFmtColl(pColl);
+            if( pColl )
+                pColl->SetAttr( SwRegisterItem ( TRUE ));
+            rPageDesc.SetRegisterFmtColl( pColl );
         }
     }
 }
@@ -892,6 +897,9 @@ String GetAppLangDateTimeString( const DateTime& rDT )
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.4  2001/02/23 12:45:30  os
+    Complete use of DefaultNumbering component
+
     Revision 1.3  2001/02/14 09:58:47  jp
     changes: international -> localdatawrapper
 
