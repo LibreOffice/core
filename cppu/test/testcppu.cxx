@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testcppu.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2000-12-14 14:48:58 $
+ *  last change: $Author: dbo $ $Date: 2000-12-21 14:43:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -871,14 +871,14 @@ int SAL_CALL main(int argc, char **argv)
     testMappingCallback();
 
     // security test
-//      void test_security( const Reference< XMultiServiceFactory > & );
+//  void test_security( const Reference< XMultiServiceFactory > & );
 //      test_security( xMgr );
     // perform test
     void test_di(void);
     test_di();
     testAssignment();
     testCppu();
-//  test_cache(); // cache test not possible if types are loaded dynamically...
+//      test_cache(); // cache test not possible if types are loaded dynamically...
     test_interface();
     test_inheritance();
 

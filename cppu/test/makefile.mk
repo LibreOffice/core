@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: pliao $ $Date: 2000-11-17 01:32:35 $
+#   last change: $Author: dbo $ $Date: 2000-12-21 14:43:44 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,12 +83,16 @@ INCPRE+=	$(OUT)$/inc$/test
 
 OBJFILES=	\
         $(OBJ)$/testcppu.obj	\
-        $(OBJ)$/test_di.obj
+        $(OBJ)$/test_di.obj	\
+        $(OBJ)$/test_Cincludes.obj
+#		$(OBJ)$/test_sec.obj	\
 
 
 APP1TARGET=	testcppu
-APP1OBJS=	$(OBJ)$/test_di.obj	\
-        $(OBJ)$/testcppu.obj
+APP1OBJS=	\
+        $(OBJ)$/testcppu.obj	\
+        $(OBJ)$/test_di.obj	
+#		$(OBJ)$/test_sec.obj
 
 # NETBSD: somewhere we have to instantiate the static data members.
 # NETBSD-1.2.1 doesn't know about weak symbols so the default mechanism for GCC won't work.
@@ -100,6 +104,7 @@ APP1OBJS+=$(OBJ)$/staticmbtest.obj
 APP1STDLIBS+=	\
         $(CPPULIB)		\
         $(CPPUHELPERLIB)	\
+        $(VOSLIB)		\
         $(SALLIB)
 
 APP1DEF=	$(MISC)$/$(APP1TARGET).def
@@ -115,9 +120,15 @@ ALL : $(BIN)$/testcppu.rdb unoheader ALLTAR
 ALL: 	ALLDEP
 .ENDIF
 
+.IF "$(COM)" == "MSC"
+.IF "$(debug)" != ""
+CFLAGS += /Ob0
+.ENDIF
+.ENDIF
+
 .INCLUDE :  target.mk
 
-CPPUMAKERFLAGS = -C
+CPPUMAKERFLAGS =
 .IF "$(COM)" == "MSC"
 CPPUMAKERFLAGS = -L
 .ENDIF
@@ -143,6 +154,8 @@ TYPES:=		-Ttest.XLanguageBindingTest \
         -Tcom.sun.star.registry.XImplementationRegistration \
         -Tcom.sun.star.lang.XComponent \
         -Tcom.sun.star.container.XSet \
+        -Tcom.sun.star.container.XNameContainer \
+        -Tcom.sun.star.uno.XCurrentContext \
         -Tcom.sun.star.uno.XReference \
         -Tcom.sun.star.uno.XAdapter \
         -Tcom.sun.star.uno.XAggregation \
@@ -153,6 +166,8 @@ $(BIN)$/testcppu.rdb: $(ALLIDLFILES)
     +unoidl -I$(PRJ) -I$(SOLARIDLDIR) -Burd -OH$(BIN) $?
     +regmerge $@ /UCR $(BIN)$/{$(?:f:s/.idl/.urd/)}
     +regmerge $@ / $(UNOUCRRDB)
+    +regcomp -register -r $@ -c javaloader.dll
+    +regcomp -register -r $@ -c jen.dll
     touch $@
     
 unoheader: $(BIN)$/testcppu.rdb
