@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpaction.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dl $ $Date: 2001-06-29 14:11:43 $
+ *  last change: $Author: tbe $ $Date: 2001-07-17 08:54:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -870,29 +870,29 @@ void SdTPAction::OpenFileDialog()
             Window* pOldWin = Application::GetDefDialogParent();
             Application::SetDefDialogParent( this );
 
-            SbMethod* pMethod = BasicIDE::ChooseMacro(FALSE, TRUE);
+            String aMacroURL = BasicIDE::SelectMacro(FALSE, TRUE);
 
-            if (pMethod)
+            // aMacroURL has the following format:
+            // 'macro:///libname.modulename.macroname(args)'               => Macro via App-BasMgr
+            // 'macro://[docname|.]/libname.modulename.macroname(args)'    => Macro via corresponging Doc-BasMgr
+
+            // but for the UI we need this format:
+            // 'libname.modulename.macroname'
+
+            if ( aMacroURL.Len() != 0 )
             {
-                SbModule* pModule = pMethod->GetModule();
-                SbxObject* pObject = pModule->GetParent();
-                DBG_ASSERT(pObject->IsA(TYPE(StarBASIC)), "Kein Basic gefunden!");
+                sal_uInt16 nHashPos = aMacroURL.Search( '/', 8 );
+                sal_uInt16 nArgsPos = aMacroURL.Search( '(' );
 
-                // the format of "aMacro" has to be internally as following (because of file-format)
-                // "Macroname.Modulname.Libname.Documentname" or
-                // "Macroname.Modulname.Libname.Applicationsname"
+                String aBasMgrName( INetURLObject::decode(aMacroURL.Copy( 8, nHashPos - 8 ), INET_HEX_ESCAPE, INetURLObject::DECODE_WITH_CHARSET) );
+                String aQualifiedName( INetURLObject::decode(aMacroURL.Copy( nHashPos + 1, nArgsPos - nHashPos - 1 ), INET_HEX_ESCAPE, INetURLObject::DECODE_WITH_CHARSET) );
+                String aLibName    = aQualifiedName.GetToken(0, sal_Unicode('.'));
+                String aModuleName = aQualifiedName.GetToken(1, sal_Unicode('.'));
+                String aMacroName  = aQualifiedName.GetToken(2, sal_Unicode('.'));
 
-                // But for the UI we need this format:
-                // "Libname.Modulname.Macroname"
-                String aMacro( pObject->GetName() );
-                aMacro.Append( sal_Unicode('.') );
-                aMacro.Append( pModule->GetName() );
-                aMacro.Append( sal_Unicode('.') );
-                aMacro.Append( pMethod->GetName() );
-
-                SetEditText(aMacro);
-
+                SetEditText( aQualifiedName );
             }
+
             Application::SetDefDialogParent( pOldWin );
         }
         else
