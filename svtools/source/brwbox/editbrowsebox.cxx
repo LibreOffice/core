@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editbrowsebox.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2002-06-21 08:29:15 $
+ *  last change: $Author: oj $ $Date: 2002-06-21 14:04:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1030,13 +1030,13 @@ namespace svt
                 EnableAndShow();
 
                 // activate the cell only of the browser has the focus
-                if (bHasFocus && bCellFocus)
+                if ( bHasFocus && bCellFocus )
                 {
                     CreateAccessibleControl(0);
                     AsynchGetFocus();
                 }
             }
-            else
+            else if ( isAccessibleCreated() )
                 commitTableEvent(ACCESSIBLE_ACTIVE_DESCENDANT_EVENT,
                                  com::sun::star::uno::makeAny(CreateAccessibleCell(nRow,nCol)),
                                  com::sun::star::uno::Any());
@@ -1489,6 +1489,9 @@ namespace svt
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.11  2002/06/21 08:29:15  oj
+ *  #99812# correct event notifications to make the browsebox accessible
+ *
  *  Revision 1.10  2002/06/12 13:41:38  dr
  *  #99812# create an acc. cell before asking for it
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editbrowsebox2.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2002-06-21 08:29:15 $
+ *  last change: $Author: oj $ $Date: 2002-06-21 14:04:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,27 +99,30 @@ sal_Int32 EditBrowseBox::GetAccessibleControlCount() const
 
 Reference< XAccessible > EditBrowseBox::CreateAccessibleControl( sal_Int32 _nIndex )
 {
-    if ( !m_aImpl->m_xActiveCell.is() && IsEditing() && bHasFocus )
+    if ( isAccessibleCreated() )
     {
-        Reference< XAccessible > xCont = aController->GetWindow().GetAccessible();
-        Reference< XAccessible > xMy = GetAccessible();
-        if ( xMy.is() && xCont.is() )
+        if ( !m_aImpl->m_xActiveCell.is() && IsEditing() && bHasFocus )
         {
-            if ( m_aImpl->m_xActiveCell.is() )
+            Reference< XAccessible > xCont = aController->GetWindow().GetAccessible();
+            Reference< XAccessible > xMy = GetAccessible();
+            if ( xMy.is() && xCont.is() )
             {
-                commitBrowseBoxEvent(ACCESSIBLE_CHILD_EVENT,Any(),makeAny(m_aImpl->m_xActiveCell));
-                m_aImpl->disposeCell();
+                if ( m_aImpl->m_xActiveCell.is() )
+                {
+                    commitBrowseBoxEvent(ACCESSIBLE_CHILD_EVENT,Any(),makeAny(m_aImpl->m_xActiveCell));
+                    m_aImpl->disposeCell();
+                }
+
+                m_aImpl->m_pFocusCell  = new EditBrowseBoxTableCell(xMy->getAccessibleContext()->getAccessibleChild(::svt::BBTYPE_BROWSEBOX),
+                                                                    *this,
+                                                                    VCLUnoHelper::GetInterface(&aController->GetWindow()),
+                                                                    GetCurRow(),
+                                                                    GetCurColumnId(),
+                                                                    xCont->getAccessibleContext());
+                m_aImpl->m_xActiveCell = m_aImpl->m_pFocusCell;
+
+                commitBrowseBoxEvent(ACCESSIBLE_CHILD_EVENT,makeAny(m_aImpl->m_xActiveCell),Any());
             }
-
-            m_aImpl->m_pFocusCell  = new EditBrowseBoxTableCell(xMy->getAccessibleContext()->getAccessibleChild(::svt::BBTYPE_BROWSEBOX),
-                                                                *this,
-                                                                VCLUnoHelper::GetInterface(&aController->GetWindow()),
-                                                                GetCurRow(),
-                                                                GetCurColumnId(),
-                                                                xCont->getAccessibleContext());
-            m_aImpl->m_xActiveCell = m_aImpl->m_pFocusCell;
-
-            commitBrowseBoxEvent(ACCESSIBLE_CHILD_EVENT,makeAny(m_aImpl->m_xActiveCell),Any());
         }
     }
 

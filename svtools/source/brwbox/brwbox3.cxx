@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwbox3.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2002-06-21 08:29:15 $
+ *  last change: $Author: oj $ $Date: 2002-06-21 14:04:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,6 +158,7 @@ Reference< XAccessible > BrowseBox::CreateAccessible()
 Reference< XAccessible > BrowseBox::CreateAccessibleCell( sal_Int32 _nRow, sal_uInt16 _nColumnId )
 {
     // BBINDEX_TABLE must be the table
+    OSL_ENSURE(m_pImpl->m_pAccessible,"Invalid call: Accessible is null");
     return new svt::AccessibleBrowseBoxTableCell(m_pImpl->m_pAccessible->getAccessibleChild(::svt::BBINDEX_TABLE),*this,NULL,_nRow,_nColumnId);
 }
 // -----------------------------------------------------------------------------
@@ -412,5 +413,9 @@ void BrowseBox::commitBrowseBoxEvent(sal_Int16 _nEventId,
         m_pImpl->m_pAccessible->commitEvent( _nEventId, _rNewValue, _rOldValue);
 }
 // -----------------------------------------------------------------------------
-
+sal_Bool BrowseBox::isAccessibleCreated() const
+{
+    return m_pImpl->m_pAccessible != NULL;
+}
+// -----------------------------------------------------------------------------
 
