@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biffdump.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: dr $ $Date: 2002-07-18 09:27:12 $
+ *  last change: $Author: dr $ $Date: 2002-08-08 13:27:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -6143,6 +6143,8 @@ _KEYWORD Biff8RecDumper::GetKeyType( const ByteString& r )
         e = Contload;
     else if( t == "BLANKLINE" )
         e = BlankLine;
+    else if( t == "EXPORTBOOKSTREAM" )
+        e = ExportBookStream;
     else if( t == "PARSEP" )
         e = Parsep;
     else if( t == "MAXBODYLINES" )
@@ -6610,12 +6612,13 @@ BOOL Biff8RecDumper::ExecCommand( const UINT32 nL, const ByteString& r, const By
 
     switch( e )
     {
-        case Skipdump:      bSkip = TRUE;           break;
-        case SkipOffset:    bSkipOffset = TRUE;     break;
-        case ReadContRecs:  bReadContRecs = TRUE;   break;
-        case NoWarnings:    bWarnings = FALSE;      break;
-        case Contload:      bEndLoading = TRUE;     break;
-        case BlankLine:     bBlankLine = TRUE;      break;
+        case Skipdump:          bSkip = TRUE;               break;
+        case SkipOffset:        bSkipOffset = TRUE;         break;
+        case ReadContRecs:      bReadContRecs = TRUE;       break;
+        case NoWarnings:        bWarnings = FALSE;          break;
+        case Contload:          bEndLoading = TRUE;         break;
+        case BlankLine:         bBlankLine = TRUE;          break;
+        case ExportBookStream:  bExportBookStream = TRUE;   break;
         case Parsep:
             if( nValLen == 0 )
             {
@@ -7371,6 +7374,28 @@ BOOL Biff8RecDumper::Dump( XclImpStream& r )
     }
     else if( pDumpStream && !bSkip )
     {
+        if( bExportBookStream && pOutName )
+        {
+            ByteString aBookOutName( *pOutName, 0, pOutName->Len() - 4 );
+            aBookOutName.Append( "_book.xls" );
+            SvFileStream aBook( String::CreateFromAscii( aBookOutName.GetBuffer() ), STREAM_WRITE|STREAM_SHARE_DENYWRITE|STREAM_TRUNC );
+            if( aBook.IsOpen() )
+            {
+                const sal_uInt32 nBufLen = 0xFFFF;
+                sal_uInt8 pBuffer[ nBufLen ];
+                r.StoreUserPosition();
+                while( r.StartNextRecord() )
+                {
+                    r.InitializeRecord( false );
+                    sal_uInt16 nRecLen = (sal_uInt16) Min( r.GetRecLen(), nBufLen );
+                    aBook << r.GetRecNum() << nRecLen;
+                    r.Read( pBuffer, nRecLen );
+                    aBook.Write( pBuffer, nRecLen );
+                }
+                r.SeekUserPosition();
+            }
+        }
+
         pPivotCache = pExcRoot->pPivotCacheStorage;
 
         if( pTitle )

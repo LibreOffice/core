@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biffdump.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-01 10:19:41 $
+ *  last change: $Author: dr $ $Date: 2002-08-08 13:27:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,8 @@ struct DUMP_ERR
 
 enum _KEYWORD           { KW_Unknown, Skipdump, Contload, Parsep, Maxbodylines,
                             Include, Exclude, Hex, Body, Comment, Output, Title,
-                            NameOnly, ClearFile, SkipOffset, ReadContRecs, NoWarnings, BlankLine };
+                            NameOnly, ClearFile, SkipOffset, ReadContRecs, NoWarnings,
+                            BlankLine, ExportBookStream };
 
 
 
@@ -190,6 +191,7 @@ protected:
     BOOL                        bWarnings;
     BOOL                        bClearFile;
     BOOL                        bBlankLine;
+    BOOL                        bExportBookStream;
     BOOL                        bBIFF8;
 
     UINT32                      nFieldCnt;
