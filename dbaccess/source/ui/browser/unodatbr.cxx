@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-24 11:49:21 $
+ *  last change: $Author: fs $ $Date: 2001-01-26 14:16:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,9 +225,14 @@
 #ifndef DBAUI_DBTREELISTBOX_HXX
 #include "dbtreelistbox.hxx"
 #endif
+#ifndef _DBA_DBACCESS_HELPID_HRC_
 #include "dbaccess_helpid.hrc"
+#endif
 #ifndef _COM_SUN_STAR_UTIL_XFLUSHABLE_HPP_
 #include <com/sun/star/util/XFlushable.hpp>
+#endif
+#ifndef _DBAUI_QUERYDESIGNACCESS_HXX_
+#include "querydesignaccess.hxx"
 #endif
 
 using namespace ::com::sun::star::uno;
@@ -1472,69 +1477,51 @@ IMPL_LINK(SbaTableQueryBrowser, OnListContextMenu, const CommandEvent*, _pEvent)
                 Reference<XConnection> xConnection;  // supports the service sdb::connection
                 if (pDSData)
                     xConnection = Reference<XConnection>(pDSData->xObject,UNO_QUERY);
-                if(!xConnection.is())
+                if(!xConnection.is() && pDSData)
                 {
                     xConnection = connect(aDSName);
                     pDSData->xObject = xConnection; // share the conenction with the querydesign
                 }
 
-                ::com::sun::star::util::URL aWantToDispatch;
-                aWantToDispatch.Complete = ::rtl::OUString::createFromAscii(".component:DB/QueryDesign");
-
-                Reference< ::com::sun::star::frame::XDispatchProvider> xProv(m_xCurrentFrame, UNO_QUERY);
-                Reference< ::com::sun::star::frame::XDispatch> xDisp;
-                sal_Int32 nSearchFlags = ::com::sun::star::frame::FrameSearchFlag::CHILDREN | ::com::sun::star::frame::FrameSearchFlag::CREATE;
-                if (xProv.is())
-                    xDisp = xProv->queryDispatch(aWantToDispatch, ::rtl::OUString::createFromAscii("_blank"), nSearchFlags);
-                if (xDisp.is())
+                ::rtl::OUString sCurrentQuery;
+                if ((ID_TREE_QUERY_EDIT == nPos) && pEntry)
                 {
-                    sal_Int32 nLen = (nPos == ID_TREE_QUERY_EDIT) ? 3 : 2;
-                    Sequence< PropertyValue> aProps(nLen);
+                    // get the name of the query
+                    SvLBoxItem* pQueryTextItem = pEntry->GetFirstItem(SV_ITEM_ID_DBTEXTITEM);
+                    if (pQueryTextItem)
+                        sCurrentQuery = static_cast<SvLBoxString*>(pQueryTextItem)->GetText();
 
-                    aProps[0].Name = PROPERTY_ACTIVECONNECTION;
-                    aProps[0].Value <<= xConnection;
-                    aProps[1].Name = PROPERTY_DATASOURCENAME;
-                    aProps[1].Value <<= aDSName;
-
-                    if(nLen == 3 && pEntry)
+                    DBTreeListModel::DBTreeListUserData* pData = static_cast<DBTreeListModel::DBTreeListUserData*>(pEntry->GetUserData());
+                    if(!pData)
                     {
-                        aProps[2].Name = PROPERTY_CURRENTQUERY;
+                        // the query has not been accessed before -> create it's user data
+                        pData = new DBTreeListModel::DBTreeListUserData;
+                        pData->bTable = sal_False;
 
-                        // get the name of the query
-                        ::rtl::OUString aName;
-                        SvLBoxItem* pQueryTextItem = pEntry->GetFirstItem(SV_ITEM_ID_DBTEXTITEM);
-                        if (pQueryTextItem)
-                            aName = static_cast<SvLBoxString*>(pQueryTextItem)->GetText();
+                        Reference<XNameAccess> xNameAccess;
+                        Reference<XQueriesSupplier> xSup(xConnection,UNO_QUERY);
+                        if(xSup.is())
+                            xNameAccess = xSup->getQueries();
 
-                        DBTreeListModel::DBTreeListUserData* pData = static_cast<DBTreeListModel::DBTreeListUserData*>(pEntry->GetUserData());
-                        if(!pData)
+                        SvLBoxItem* pTextItem = pEntry->GetFirstItem(SV_ITEM_ID_DBTEXTITEM);
+                        if (pTextItem)
+                            sCurrentQuery = static_cast<SvLBoxString*>(pTextItem)->GetText();
+
+                        if(xNameAccess->hasByName(sCurrentQuery) && (xNameAccess->getByName(sCurrentQuery) >>= pData->xObject)) // remember the table or query object
+                            pEntry->SetUserData(pData);
+                        else
                         {
-                            pData = new DBTreeListModel::DBTreeListUserData;
-                            pData->bTable = sal_False;
-
-                            Reference<XNameAccess> xNameAccess;
-                            Reference<XQueriesSupplier> xSup(xConnection,UNO_QUERY);
-                            if(xSup.is())
-                                xNameAccess = xSup->getQueries();
-
-                            SvLBoxItem* pTextItem = pEntry->GetFirstItem(SV_ITEM_ID_DBTEXTITEM);
-                            if (pTextItem)
-                                aName = static_cast<SvLBoxString*>(pTextItem)->GetText();
-                            if(xNameAccess->hasByName(aName) && (xNameAccess->getByName(aName) >>= pData->xObject)) // remember the table or query object
-                                pEntry->SetUserData(pData);
-                            else
-                            {
-                                delete pData;
-                                pData = NULL;
-                            }
+                            delete pData;
+                            pData = NULL;
                         }
-
-                        if(aName.getLength())
-                            aProps[2].Value <<= aName;
                     }
-
-                    xDisp->dispatch(aWantToDispatch, aProps);
                 }
+
+                OQueryDesignAccess aDispatcher(m_xMultiServiceFacatory);
+                if (ID_TREE_QUERY_EDIT == nPos)
+                    aDispatcher.editQuery(aDSName, sCurrentQuery, xConnection);
+                else
+                    aDispatcher.createQuery(aDSName, xConnection);
             }
             break;
         case ID_TREE_QUERY_DELETE:
@@ -1600,6 +1587,7 @@ IMPL_LINK(SbaTableQueryBrowser, OnExpandEntry, SvLBoxEntry*, _pParent)
         Reference<XConnection> xConnection(pFirstData->xObject,UNO_QUERY);
         if(!pFirstData->xObject.is())
         {
+            WaitObject aWaitCursor(getBrowserView());
             xConnection = connect(pString->GetText());
             pFirstData->xObject = xConnection;
         }
@@ -1618,9 +1606,10 @@ IMPL_LINK(SbaTableQueryBrowser, OnExpandEntry, SvLBoxEntry*, _pParent)
                 Image aImage(ModuleRes(VIEW_TREE_ICON));
                 populateTree(xViewSup->getViews(),_pParent,aImage);
             }
+        }
+        else
             return 0L;
                 // 0 indicates that an error occured
-        }
     }
     else // we have to expand the queries
     {
@@ -1809,17 +1798,27 @@ IMPL_LINK(SbaTableQueryBrowser, OnSelectEntry, SvLBoxEntry*, _pEntry)
             // switch the grid to design mode while loading
             getBrowserView()->getGridControl()->setDesignMode(sal_True);
             InitializeForm(getRowSet());
+
             // load the row set
-            if (xLoadable->isLoaded())
-                // reload does not work if not already loaded
-                xLoadable->reload();
-            else
-                xLoadable->load();
-            // initialize the model
-            InitializeGridModel(getFormComponent());
-            Reference< ::com::sun::star::form::XLoadable >  xLoadable(getRowSet(),UNO_QUERY);
-            xLoadable->reload();
-            FormLoaded(sal_True);
+            {
+                FormErrorHelper aNoticeErrors(this);
+                if (xLoadable->isLoaded())
+                    // reload does not work if not already loaded
+                    xLoadable->reload();
+                else
+                    xLoadable->load();
+
+                sal_Bool bLoadSuccess = !errorOccured();
+                // initialize the model
+                InitializeGridModel(getFormComponent());
+                // reload ...
+                // TODO: why this reload ... me thinks the GridModel can't handle beeing initialized when the form
+                // is already loaded, but I'm not sure ...
+                // have to change this, reloading is much too expensive ...
+                if (xLoadable->isLoaded() && bLoadSuccess)
+                    xLoadable->reload();
+                FormLoaded(sal_True);
+            }
         }
         catch(Exception&)
         {
@@ -1906,7 +1905,7 @@ void SAL_CALL SbaTableQueryBrowser::elementRemoved( const ContainerEvent& _rEven
             // we need to remember the old value
             SvLBoxEntry* pTemp = m_pCurrentlyDisplayed;
             // unload
-            unloadForm(sal_False); // don't dispose the connection
+            unloadForm(sal_False, sal_False); // don't dispose the connection, don't flush
             DBTreeListModel::DBTreeListUserData* pData = static_cast<DBTreeListModel::DBTreeListUserData*>(pTemp->GetUserData());
             OSL_ENSURE(pData,"elementReplaced: There must be user data!");
             delete pData;
@@ -2089,7 +2088,7 @@ void SbaTableQueryBrowser::closeConnection(SvLBoxEntry* _pDSEntry,sal_Bool _bDis
 }
 
 // -------------------------------------------------------------------------
-void SbaTableQueryBrowser::unloadForm(sal_Bool _bDisposeConnection)
+void SbaTableQueryBrowser::unloadForm(sal_Bool _bDisposeConnection, sal_Bool _bFlushData)
 {
     if (!m_pCurrentlyDisplayed)
         // nothing to do
@@ -2100,11 +2099,21 @@ void SbaTableQueryBrowser::unloadForm(sal_Bool _bDisposeConnection)
     // de-select the path for the currently displayed table/query
     if (m_pCurrentlyDisplayed)
     {
-        DBTreeListModel::DBTreeListUserData* pData = static_cast<DBTreeListModel::DBTreeListUserData*>(m_pCurrentlyDisplayed->GetUserData());
-        OSL_ENSURE(pData,"unloadForm: No userdata set!");
-        Reference<XFlushable> xFlush(pData->xObject,UNO_QUERY);
-        if(xFlush.is())
-            xFlush->flush();
+        if (_bFlushData)
+        {
+            DBTreeListModel::DBTreeListUserData* pData = static_cast<DBTreeListModel::DBTreeListUserData*>(m_pCurrentlyDisplayed->GetUserData());
+            OSL_ENSURE(pData,"SbaTableQueryBrowser::unloadForm: no userdata!");
+            try
+            {
+                Reference<XFlushable> xFlush(pData->xObject, UNO_QUERY);
+                if(xFlush.is())
+                    xFlush->flush();
+            }
+            catch (RuntimeException&)
+            {
+                OSL_ENSURE(sal_False, "SbaTableQueryBrowser::unloadForm: could not flush the data (caught a RuntimeException)!");
+            }
+        }
         selectPath(m_pCurrentlyDisplayed, sal_False);
     }
     m_pCurrentlyDisplayed = NULL;
