@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpurl.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:26:48 $
+ *  last change: $Author: vg $ $Date: 2003-07-25 11:38:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,31 +76,13 @@
 #include "ftpinpstr.hxx"
 #include "ftpcfunc.hxx"
 #include "debughelper.hxx"
+#include "ftpcontainer.hxx"
 
 using namespace ftp;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::io;
 
-
-class MemoryContainer {
-
-public:
-
-    MemoryContainer();
-
-    ~MemoryContainer();
-
-    int append(
-        const void* pBuffer,
-        size_t size,
-        size_t nmemb
-    ) throw();
-
-
-    sal_uInt32 m_nLen,m_nWritePos;
-    void *m_pBuffer;
-};
 
 
 MemoryContainer::MemoryContainer()
