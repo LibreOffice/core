@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 14:37:39 $
+#   last change: $Author: hr $ $Date: 2004-08-02 17:39:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -99,7 +99,8 @@ SLOFILES =	\
     $(SLO)$/ShapeTypeHandler.obj				\
     $(SLO)$/SvxShapeTypes.obj					\
     $(SLO)$/AccessibleControlShape.obj			\
-    $(SLO)$/DGColorNameLookUp.obj
+    $(SLO)$/DGColorNameLookUp.obj				\
+    $(SLO)$/AccessibleFrameSelector.obj
 
 SRS2NAME = accessibility
 SRC2FILES = accessibility.src
