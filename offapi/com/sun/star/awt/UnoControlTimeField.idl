@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControlTimeField.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mt $ $Date: 2002-09-05 08:07:16 $
+ *  last change: $Author: tbe $ $Date: 2002-09-24 14:33:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,12 @@
 #ifndef __com_sun_star_awt_UnoTimeFieldControl_idl__
 #define __com_sun_star_awt_UnoTimeFieldControl_idl__
 
-#ifndef __com_sun_star_awt_UnoControlSpinField_idl__
-#include <com/sun/star/awt/UnoControlSpinField.idl>
+#ifndef __com_sun_star_awt_UnoControlEdit_idl__
+#include <com/sun/star/awt/UnoControlEdit.idl>
+#endif
+
+#ifndef __com_sun_star_awt_XSpinField_idl__
+#include <com/sun/star/awt/XSpinField.idl>
 #endif
 
 #ifndef __com_sun_star_awt_XTimeField_idl__
@@ -76,17 +80,16 @@
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::awt::UnoTimeFieldControl
-/** specifies a control to display and edit a time value.
+/** specifies a time field control.
 
     <p>A time field makes it possible to enter, display, and edit time values.</p>
  */
 service UnoControlTimeField
 {
-    // DocMerge: empty anyway
-    service com::sun::star::awt::UnoControlSpinField;
+    service com::sun::star::awt::UnoControlEdit;
 
-    // DocMerge: empty anyway
+    [optional] interface com::sun::star::awt::XSpinField;
+
     interface com::sun::star::awt::XTimeField;
 
 };
@@ -95,30 +98,4 @@ service UnoControlTimeField
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.2  2001/04/09 15:20:00  mt
-    #82889# Changed IDL file name and service name
-
-    Revision 1.1  2001/03/30 16:35:48  mt
-    #82889# Changed IDL file name and service name
-
-    Revision 1.3  2000/11/08 12:42:11  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:34:51  hjs
-    initial import
-
-    Revision 1.4  2000/09/11 11:52:07  mi
-    documentation merged from XML
-
-    Revision 1.2  2000/05/16 12:19:52  mi
-    documentation
-
-    Revision 1.1.1.1  1999/11/11 09:48:40  jsc
-    new
-
-
-=============================================================================*/
 #endif
