@@ -100,7 +100,6 @@ public class AccessibilityWorkBench
         mbInitialized = false;
 
         Layout ();
-        EventLogger.Instance();
 
         MessageArea.println (System.getProperty ("os.name") + " / "
             + System.getProperty ("os.arch") + " / "
@@ -275,6 +274,10 @@ public class AccessibilityWorkBench
         maMenuBar.add (aHelpMenu);
 
         aItem = new JMenuItem ("Help");
+        aHelpMenu.add (aItem);
+        aItem.addActionListener (this);
+
+        aItem = new JMenuItem ("News");
         aHelpMenu.add (aItem);
         aItem.addActionListener (this);
 
@@ -499,11 +502,17 @@ public class AccessibilityWorkBench
         }
         else if (e.getActionCommand().equals ("Help"))
         {
-            HelpWindow.Instance().loadURL ("file://help.html");
+            HelpWindow.Instance().loadFile ("help.html");
+        }
+        else if (e.getActionCommand().equals ("News"))
+        {
+            try{
+                HelpWindow.Instance().loadFile ("news.html");
+            } catch (Exception ex) {}
         }
         else if (e.getActionCommand().equals ("About"))
         {
-            HelpWindow.Instance().loadURL ("file://about.html");
+            HelpWindow.Instance().loadFile ("about.html");
         }
         else
         {
