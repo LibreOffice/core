@@ -2,9 +2,9 @@
  *
  *  $RCSfile: list.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: np $ $Date: 2001-03-23 13:23:17 $
+ *  last change: $Author: mh $ $Date: 2001-09-28 14:32:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,8 +156,8 @@ class DynamicList : public List<XY*>
 
 template <class XX>
 List<XX>::List()
-    :   len(0),
-        inhalt(0)
+    :   inhalt(0),
+        len(0)
 {
     alloc(1);
 }
