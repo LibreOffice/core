@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldfunc.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:36 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 17:47:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -264,7 +264,7 @@ TabPage TP_FLD_FUNC
         Hide = TRUE ;
         Text [ english_us ] = "Then" ;
         Text [ portuguese_brazilian ] = "Dann" ;
-        Text [ swedish ] = "SÂ" ;
+        Text [ swedish ] = "~SÂ" ;
         Text [ danish ] = "SÂ" ;
         Text [ italian ] = "Poi" ;
         Text [ spanish ] = "Entonces" ;
@@ -272,7 +272,7 @@ TabPage TP_FLD_FUNC
         Text [ dutch ] = "~Dan" ;
         Text [ portuguese ] = "~Ent„o" ;
         Text[ chinese_simplified ] = "æÕ";
-        Text[ russian ] = "ƒ‡ÎÂÂ";
+        Text[ russian ] = "“Ó„‰‡";
         Text[ polish ] = "Wtedy";
         Text[ japanese ] = "èåèÇñûÇΩÇ∑Ç∆Ç´";
         Text[ chinese_traditional ] = "¥N";
@@ -301,7 +301,7 @@ TabPage TP_FLD_FUNC
         Hide = TRUE ;
         Text [ english_us ] = "Else" ;
         Text [ portuguese_brazilian ] = "Sonst" ;
-        Text [ swedish ] = "Annars" ;
+        Text [ swedish ] = "A~nnars" ;
         Text [ danish ] = "Ellers" ;
         Text [ italian ] = "Altrimenti" ;
         Text [ spanish ] = "Si no" ;
