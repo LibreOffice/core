@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontcfg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2001-06-28 06:34:49 $
+ *  last change: $Author: os $ $Date: 2001-06-28 09:17:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,9 +168,8 @@ SwStdFontConfig::~SwStdFontConfig()
 BOOL SwStdFontConfig::IsFontDefault(USHORT nFontType) const
 {
     BOOL bSame;
-    LanguageType eLang = ::GetSystemLanguage();
-    String sDefFont(OutputDevice::GetDefaultFont(DEFAULTFONT_LATIN_TEXT, eLang, DEFAULTFONT_FLAGS_ONLYONE).GetName());
-    String sDefFontCJK(OutputDevice::GetDefaultFont(DEFAULTFONT_CJK_TEXT, eLang, DEFAULTFONT_FLAGS_ONLYONE).GetName());
+    String sDefFont(GetDefaultFor(FONT_STANDARD));
+    String sDefFontCJK(GetDefaultFor(FONT_STANDARD_CJK));
     switch( nFontType )
     {
         case FONT_STANDARD:
@@ -180,12 +179,9 @@ BOOL SwStdFontConfig::IsFontDefault(USHORT nFontType) const
             bSame = sDefaultFonts[nFontType] == sDefFontCJK;
         break;
         case FONT_OUTLINE :
-            bSame = sDefaultFonts[nFontType] ==
-                OutputDevice::GetDefaultFont(DEFAULTFONT_LATIN_HEADING, eLang, DEFAULTFONT_FLAGS_ONLYONE).GetName();
-        break;
         case FONT_OUTLINE_CJK :
             bSame = sDefaultFonts[nFontType] ==
-                OutputDevice::GetDefaultFont(DEFAULTFONT_CJK_HEADING, eLang, DEFAULTFONT_FLAGS_ONLYONE).GetName();
+                GetDefaultFor(nFontType);
         break;
         case FONT_LIST    :
         case FONT_CAPTION :
@@ -212,26 +208,27 @@ String  SwStdFontConfig::GetDefaultFor(USHORT nFontType)
 {
     LanguageType eLang = ::GetSystemLanguage();
     String sRet;
+    USHORT nFontId;
     switch( nFontType )
     {
         case FONT_OUTLINE :
-            sRet = OutputDevice::GetDefaultFont(DEFAULTFONT_LATIN_HEADING, eLang, DEFAULTFONT_FLAGS_ONLYONE).GetName();
+            nFontId = DEFAULTFONT_LATIN_HEADING;
         break;
         case FONT_OUTLINE_CJK :
-            sRet = OutputDevice::GetDefaultFont(DEFAULTFONT_CJK_HEADING, eLang, DEFAULTFONT_FLAGS_ONLYONE).GetName();
-        break;
-        case FONT_STANDARD:
-        case FONT_LIST    :
-        case FONT_CAPTION :
-        case FONT_INDEX   :
-            sRet = OutputDevice::GetDefaultFont(DEFAULTFONT_LATIN_TEXT, eLang, DEFAULTFONT_FLAGS_ONLYONE).GetName();
+            nFontId = DEFAULTFONT_CJK_HEADING;
         break;
         case FONT_STANDARD_CJK:
         case FONT_LIST_CJK    :
         case FONT_CAPTION_CJK :
         case FONT_INDEX_CJK   :
-            sRet = OutputDevice::GetDefaultFont(DEFAULTFONT_CJK_TEXT, eLang, DEFAULTFONT_FLAGS_ONLYONE).GetName();
+            nFontId = DEFAULTFONT_CJK_TEXT;
         break;
+//        case FONT_STANDARD:
+//        case FONT_LIST    :
+//        case FONT_CAPTION :
+//        case FONT_INDEX   :
+        default:
+            nFontId = DEFAULTFONT_LATIN_TEXT;
     }
-    return sRet;
+    return  OutputDevice::GetDefaultFont(nFontId, eLang, DEFAULTFONT_FLAGS_ONLYONE).GetName();
 }
