@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.c,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mfe $ $Date: 2000-10-18 16:14:48 $
+ *  last change: $Author: mfe $ $Date: 2000-10-31 15:24:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,16 @@
  *
  ************************************************************************/
 
+
+/*
+ *   ToDo:
+ *      - cleanup of process status things
+ *      - cleanup/reimplementation of argument stuff
+ *      - cleanup of process spawning
+ *      - cleanup of resource transfer
+ */
+
+
 #ifdef LINUX
 #include <asm/param.h>
 #endif
@@ -79,21 +89,8 @@
 #include "sockimpl.h"
 #include "secimpl.h"
 
-oslProcessError SAL_CALL osl_psz_executeProcess(sal_Char *pszImageName,
-                                                sal_Char *pszArguments[],
-                                                oslProcessOption Options,
-                                                oslSecurity Security,
-                                                sal_Char *pszDirectory,
-                                                sal_Char *pszEnvironments[],
-                                                oslIOResource* pResources,
-                                                oslProcess *pProcess);
-oslProcessError SAL_CALL osl_searchPath(const sal_Char* pszName, const sal_Char* pszPath,
-                                        sal_Char Separator, sal_Char *pszBuffer, sal_uInt32 Max);
 
-oslProcessError SAL_CALL osl_psz_getExecutableFile(sal_Char* pszBuffer, sal_uInt32 Max);
-sal_Bool osl_getFullPath(const sal_Char* pszFilename, sal_Char* pszPath, sal_uInt32 MaxLen);
-oslProcessError SAL_CALL osl_psz_getEnvironment(const sal_Char* pszName, sal_Char *pszBuffer, sal_uInt32 Max);
-oslProcessError SAL_CALL osl_getCommandArgs(sal_Char* pszBuffer, sal_uInt32 Max);
+
 
 #define FIFO_MODE       (S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH)
 #define MAX_ARGS        255
@@ -103,9 +100,17 @@ oslProcessError SAL_CALL osl_getCommandArgs(sal_Char* pszBuffer, sal_uInt32 Max)
 #define PIPEALTERNATEPATH   "/var/tmp"
 #define PIPENAMEMASK        "OSL_IOT_%u"
 
-// #ifdef IORESOURCE_TRANSFER_BSD
+#ifdef IORESOURCE_TRANSFER_BSD
 #define CONTROLLEN (sizeof(struct cmsghdr) + sizeof(int))
-// #endif
+#endif
+
+
+
+/******************************************************************************
+ *
+ *                  Data Type Definition
+ *
+ ******************************************************************************/
 
 typedef enum {
     MSG_DATA,
@@ -152,6 +157,39 @@ typedef struct _oslPipeImpl {
 } oslPipeImpl;
 
 
+/******************************************************************************
+ *
+ *                  Function Declarations
+ *
+ *****************************************************************************/
+
+static sal_Char *getCmdLine();
+static Pipe* openPipe(pid_t pid);
+static void closePipe(Pipe* pipe);
+static sal_Bool connectPipe(Pipe* pipe);
+static int send_fd(Pipe* pipe, int fd);
+static int recv_fd(Pipe* pipe);
+static void* socketCloseCallback(void* pArg);
+static sal_Bool sendIOResources(Pipe* pipe, oslIOResource ioRes[]);
+static void ChildStatusProc(void *pData);
+
+oslProcessError SAL_CALL osl_psz_executeProcess(sal_Char *pszImageName,
+                                                sal_Char *pszArguments[],
+                                                oslProcessOption Options,
+                                                oslSecurity Security,
+                                                sal_Char *pszDirectory,
+                                                sal_Char *pszEnvironments[],
+                                                oslIOResource* pResources,
+                                                oslProcess *pProcess);
+oslProcessError SAL_CALL osl_searchPath(const sal_Char* pszName, const sal_Char* pszPath,
+                                        sal_Char Separator, sal_Char *pszBuffer, sal_uInt32 Max);
+
+oslProcessError SAL_CALL osl_psz_getExecutableFile(sal_Char* pszBuffer, sal_uInt32 Max);
+sal_Bool osl_getFullPath(const sal_Char* pszFilename, sal_Char* pszPath, sal_uInt32 MaxLen);
+oslProcessError SAL_CALL osl_psz_getEnvironment(const sal_Char* pszName, sal_Char *pszBuffer, sal_uInt32 Max);
+oslProcessError SAL_CALL osl_getCommandArgs(sal_Char* pszBuffer, sal_uInt32 Max);
+
+
 static oslProcessImpl* ChildList;
 static oslMutex        ChildListMutex;
 
@@ -159,7 +197,18 @@ static sal_Char CmdLine[CMD_ARG_MAX + 1] = "";
 static int nArgCount = -1;
 
 
+/******************************************************************************
+ *
+ *                  Functions for command args
+ *
+ *****************************************************************************/
+
+
 #if defined(CMD_ARG_PRG) && defined(CMD_ARG_ENV)
+/*
+ * mfe: used by FreeBSD, NetBSD, HP-UX, IRIX, MacOS X
+ *      (and which other Unix flavours?)
+ */
 static sal_Char *getCmdLine()
 {
     /* Memory layout of CMD_ARG_PRG:
@@ -183,6 +232,9 @@ static sal_Char *getCmdLine()
 #endif
 
 #if !defined (CMD_ARG_PRG) && defined (CMD_ARG_ENV)
+/*
+ * mfe: not used ???
+ */
 extern sal_Char** CMD_ARG_ENV;
 static sal_Char* pEnviron;
 
@@ -220,6 +272,10 @@ static sal_Char *getCmdLine()
 #endif
 
 #ifdef CMD_ARG_PROC_STREAM
+/*
+ *  mfe: this is for Linux
+ *       (and which other Unix flavours?)
+ */
 static sal_Char *getCmdLine()
 {
     FILE *fp;
@@ -253,6 +309,11 @@ static sal_Char *getCmdLine()
 #endif
 
 #ifdef CMD_ARG_PROC_IOCTL
+/*
+ * mfe: this is for Solaris
+ *       (and which other Unix flavours?)
+ */
+
 static sal_Char *getCmdLine()
 {
     int   fd;
@@ -299,6 +360,11 @@ static sal_Char *getCmdLine()
 #endif
 
 #ifdef CMD_ARG_PS
+/*
+ *  mfe : this is for AIX
+ *       (and which other Unix flavours?)
+ */
+
 static sal_Char *getCmdLine()
 {
     FILE    *fp;
@@ -343,6 +409,202 @@ static sal_Char *getCmdLine()
 }
 #endif
 
+
+oslProcessError SAL_CALL osl_getExecutableFile(rtl_uString **ustrFile)
+{
+    sal_Char pszExecutable[PATH_MAX] = "";
+    sal_Char pszUncPath[PATH_MAX+5] = "";
+    oslProcessError Error;
+
+    Error=osl_psz_getExecutableFile(pszExecutable,sizeof(pszExecutable));
+
+    if ( Error == osl_Process_E_None)
+    {
+        strcpy(pszUncPath,"//.");
+        strcat(pszUncPath,pszExecutable);
+    }
+
+    /*    fprintf(stderr,"Exec file is '%s'\n",pszUncPath);*/
+
+    rtl_string2UString(
+        ustrFile,
+        pszUncPath,
+        rtl_str_getLength( pszUncPath ),
+        osl_getThreadTextEncoding(),
+        OUSTRING_TO_OSTRING_CVTFLAGS );
+
+    return Error;
+}
+
+
+oslProcessError SAL_CALL osl_psz_getExecutableFile(sal_Char* pszBuffer, sal_uInt32 Max)
+{
+    static int  PrgLen = -1;
+    static sal_Char PrgName[PATH_MAX + 1] = "";
+
+    oslProcessError ret = osl_Process_E_None;
+
+    if (PrgLen < 1)
+    {
+        sal_Char *pszCmdLine = getCmdLine();
+
+        if (strchr(pszCmdLine, '/'))
+        {
+            if (! osl_getFullPath(pszCmdLine, PrgName, sizeof(PrgName)))
+                ret = osl_Process_E_Unknown;
+            else
+                PrgLen = strlen(PrgName) + 1;
+        }
+        else
+        {
+            if ((ret = osl_searchPath(pszCmdLine, NULL, '\0', PrgName, sizeof(PrgName)))
+                == osl_Process_E_None)
+                PrgLen = strlen(PrgName) + 1;
+
+        }
+
+        free(pszCmdLine);
+    }
+
+    if (Max >= (sal_uInt32)PrgLen)
+        memcpy(pszBuffer, PrgName, PrgLen);
+    else
+        ret = osl_Process_E_Unknown;
+
+    return (ret);
+}
+
+
+sal_uInt32  SAL_CALL osl_getCommandArgCount()
+{
+    sal_Char pszBuffer[CMD_ARG_MAX+1] = "";
+
+    oslProcessError tErr = osl_Process_E_Unknown;
+
+    if ( nArgCount == -1 )
+    {
+        tErr = osl_getCommandArgs(pszBuffer, sizeof(pszBuffer));
+
+        if ( tErr != osl_Process_E_None)
+        {
+            return 0;
+        }
+    }
+
+    /*    fprintf(stderr,"osl_getCommandArgCount : ArgCount = '%i'\n",nArgCount);*/
+
+    return nArgCount;
+}
+
+oslProcessError SAL_CALL osl_getCommandArg( sal_uInt32 nArg, rtl_uString **strCommandArg)
+{
+    oslProcessError tErr = osl_Process_E_Unknown;
+    sal_Char* pChr=0;
+
+    if ( nArgCount == -1 )
+    {
+        sal_Char pBuffer[CMD_ARG_MAX+1] = "";
+        tErr = osl_getCommandArgs(pBuffer, CMD_ARG_MAX+1);
+        if ( tErr == osl_Process_E_None )
+        {
+            return tErr;
+        }
+    }
+
+/*      fprintf(stderr,"osl_getCommandArg : getting Arg No. '%i'\n",nArg); */
+
+/*  nArg++;*/
+
+    if ( nArg >= 0 && nArg < nArgCount )
+    {
+        int nIndex=0;
+        int nLen;
+
+        pChr=CmdLine;
+
+        while ( nArg != nIndex && nIndex < nArgCount )
+        {
+/*                        fprintf(stderr,"Having arg '%i' '%s'\n",nIndex,pChr); */
+            nLen = strlen(pChr);
+            pChr+=nLen+1;
+            ++nIndex;
+        }
+/*          fprintf(stderr,"osl_getCommandArg : Arg '%i' = '%s'\n",nIndex,pChr); */
+
+        rtl_string2UString(
+            strCommandArg,
+            pChr,
+            rtl_str_getLength( pChr ),
+            osl_getThreadTextEncoding(),
+            OUSTRING_TO_OSTRING_CVTFLAGS );
+
+        tErr=osl_Process_E_None;
+    }
+
+    return tErr;
+}
+
+oslProcessError SAL_CALL osl_getCommandArgs(sal_Char* pszBuffer, sal_uInt32 Max)
+{
+    static int  CmdLen = -1;
+
+    if (CmdLen < 0)
+    {
+        sal_Char *pszCmdLine = getCmdLine();
+        sal_Char *pStr       = pszCmdLine;
+        sal_Char *pBuffer    = CmdLine;
+
+        OSL_ASSERT(pszCmdLine != NULL);
+
+        if ( pszCmdLine == 0 )
+        {
+            return osl_Process_E_Unknown;
+        }
+
+        nArgCount=0;
+
+        /* skip program name */
+        pStr += strlen(pStr) + 1;
+
+        while ((*pStr != '\0') &&
+               ((pBuffer + strlen(pszCmdLine)) < (CmdLine + sizeof(CmdLine) - 2)))
+        {
+/*              fprintf(stderr,"osl_getCommandArgs : Arg %i is '%s'\n",nArgCount,pStr); */
+            strcpy(pBuffer, pStr);
+            pBuffer += strlen(pStr) + 1;
+            pStr    += strlen(pStr) + 1;
+            ++nArgCount;
+        }
+
+        *pBuffer++ = '\0';
+
+        CmdLen = pBuffer - CmdLine;
+        free(pszCmdLine);
+    }
+
+    OSL_ASSERT(pszBuffer);
+
+    if ( pszBuffer == 0 )
+    {
+        return osl_Process_E_Unknown;
+    }
+
+    if (Max < (sal_uInt32)CmdLen)
+        return osl_Process_E_Unknown;
+
+/*      fprintf(stderr,"osl_getCommandArgs : ArgCount is '%i'\n",nArgCount); */
+
+    memcpy(pszBuffer, CmdLine, CmdLen);
+
+    return osl_Process_E_None;
+}
+
+
+/******************************************************************************
+ *
+ *                  Functions pipe stuff and io resource transfer
+ *
+ *****************************************************************************/
 
 static Pipe* openPipe(pid_t pid)
 {
@@ -733,6 +995,322 @@ static sal_Bool sendIOResources(Pipe* pipe, oslIOResource ioRes[])
     return sal_False;
 }
 
+
+oslProcessError SAL_CALL osl_getIOResources(oslIOResource Resources[], sal_uInt32 Max)
+{
+    oslProcessError ret = osl_Process_E_Unknown;
+
+#if defined(IORESOURCE_TRANSFER_SYSV) || defined(IORESOURCE_TRANSFER_BSD)
+    Message msg;
+    int     wait      = 0;
+    int     i         = 0;
+    int     newFd     = -1;
+    Pipe*   pipe      = NULL;
+/*  sal_Bool acceptMsg = sal_False;*/
+
+    pipe = openPipe(getpid());
+
+    while ((read(pipe->m_hPipe, &msg, sizeof(msg)) == sizeof(msg))
+           && (msg.m_Type != MSG_END))
+    {
+        if (i < (int)Max)
+        {
+            switch (msg.m_Type)
+            {
+                case MSG_DATA:
+                    switch (msg.m_Data)
+                    {
+                        case osl_Process_TypeSocket:
+                            if ((newFd = recv_fd(pipe)) >= 0)
+                            {
+                                oslSocketImpl *pImpl = __osl_createSocketImpl(newFd);
+
+                                OSL_ASSERT(i == msg.m_Value);
+
+                                Resources[i].Type  = osl_Process_TypeSocket;
+                                Resources[i].Flags = msg.m_Flags;
+                                Resources[i].Descriptor.Socket = (oslSocket)pImpl;
+
+                                if (msg.m_Flags & osl_Process_DFWAIT)
+                                    wait++;
+                            }
+
+                            i++;
+
+                            break;
+
+                       default:
+                           OSL_TRACE("Not implemented\n");
+                           OSL_ASSERT(sal_False);
+                           break;
+                    }
+            default:
+                break;
+            }
+        }
+    }
+
+    Resources[i].Type = osl_Process_TypeNone;
+
+    if (msg.m_Type == MSG_END)
+    {
+        if (wait > 0)
+        {
+            msg.m_Type  = MSG_ACK;
+            msg.m_Data  = osl_Process_TypeNone;
+            msg.m_Flags = 0;
+            write(pipe->m_hPipe, &msg, sizeof(msg));
+
+            do
+            {
+                if ((read(pipe->m_hPipe, &msg, sizeof(msg)) != sizeof(msg))
+                    || (msg.m_Type != MSG_REL))
+                    break;
+
+                i = msg.m_Value;
+
+                if (Resources[i].Type != osl_Process_TypeNone)
+                {
+                    OSL_ASSERT(Resources[i].Type == msg.m_Data);
+                    OSL_ASSERT(Resources[i].Flags & osl_Process_DFWAIT);
+
+                    Resources[i].Flags &= ~osl_Process_DFWAIT;
+
+                    if (--wait > 0)
+                    {
+                        msg.m_Type  = MSG_ACK;
+                        msg.m_Data  = osl_Process_TypeNone;
+                        msg.m_Flags = 0;
+                        write(pipe->m_hPipe, &msg, sizeof(msg));
+                    }
+                }
+            }
+            while (wait > 0);
+        }
+
+        msg.m_Type  = MSG_END;
+        msg.m_Data  = osl_Process_TypeNone;
+        msg.m_Flags = 0;
+        write(pipe->m_hPipe, &msg, sizeof(msg));
+
+        ret = osl_Process_E_None;
+    }
+
+    closePipe(pipe);
+
+#endif
+
+    return ret;
+}
+
+
+/******************************************************************************
+ *
+ *                  New io resource transfer functions
+ *
+ *****************************************************************************/
+
+
+sal_Bool sendFdPipe(int PipeFD, int SocketFD)
+{
+    sal_Bool bRet = sal_False;
+
+    struct iovec    iov[1];
+    struct msghdr   msg;
+    char            buf[2]; /* send_fd()/recv_fd() 2-byte protocol */
+    int nSend;
+    int RetCode=0;
+
+#if defined(IOCHANNEL_TRANSFER_BSD)
+
+    OSL_TRACE("IOCHANNEL_TRANSFER_BSD send");
+/*      OSL_TRACE("sending fd %i\n",SocketFD); */
+
+    iov[0].iov_base = buf;
+    iov[0].iov_len  = 2;
+    msg.msg_iov     = iov;
+    msg.msg_iovlen  = 1;
+    msg.msg_name    = NULL;
+    msg.msg_namelen = 0;
+
+    msg.msg_accrights    = (caddr_t) &SocketFD; /* addr of descriptor */
+    msg.msg_accrightslen = sizeof(int);     /* pass 1 descriptor */
+    buf[1] = 0;                             /* zero status means OK */
+    buf[0] = 0;                             /* null byte flag to recv_fd() */
+
+#else
+
+    struct cmsghdr* cmptr = (struct cmsghdr*)malloc(CONTROLLEN);
+
+    OSL_TRACE("!!!!!! IOCHANNEL_TRANSFER_BSD_RENO send");
+/*      OSL_TRACE("sending fd %i\n",SocketFD); */
+
+    iov[0].iov_base = buf;
+    iov[0].iov_len = 2;
+    msg.msg_iov = iov;
+    msg.msg_iovlen = 1;
+    msg.msg_name = NULL;
+    msg.msg_namelen = 0;
+    msg.msg_control = (caddr_t) cmptr;
+    msg.msg_controllen = CONTROLLEN;
+
+    cmptr->cmsg_level = SOL_SOCKET;
+    cmptr->cmsg_type = SCM_RIGHTS;
+    cmptr->cmsg_len = CONTROLLEN;
+    *(int*)CMSG_DATA(cmptr) = SocketFD;
+
+#endif
+
+    if ( ( nSend = sendmsg(PipeFD, &msg, 0) ) > 0 )
+    {
+        bRet = sal_True;
+        OSL_TRACE("sendFdPipe : send '%i' bytes\n",nSend);
+
+    }
+    else
+    {
+        OSL_TRACE("sendFdPipe : sending failed (%s)",strerror(errno));
+    }
+
+    nSend=read(PipeFD,&RetCode,sizeof(RetCode));
+
+    if ( nSend > 0 && RetCode == 1 )
+    {
+        OSL_TRACE("sendFdPipe : resource was received\n");
+    }
+    else
+    {
+        OSL_TRACE("sendFdPipe : resource wasn't received\n");
+    }
+
+#if defined(IOCHANNEL_TRANSFER_BSD_RENO)
+    free(cmptr);
+#endif
+
+    return bRet;
+}
+
+
+oslSocketImpl* receiveFdPipe(int PipeFD)
+{
+    oslSocketImpl* pSocket = 0;
+    struct msghdr msghdr;
+    struct iovec iov[1];
+    char buffer[PATH_MAX];
+    sal_Int32 nRead;
+    int newfd=-1;
+    int nRetCode=0;
+/*      char *ptr; */
+
+#if defined(IOCHANNEL_TRANSFER_BSD)
+
+    OSL_TRACE("IOCHANNEL_TRANSFER_BSD receive\n");
+
+    iov[0].iov_base = buffer;
+    iov[0].iov_len = sizeof(buffer);
+    msghdr.msg_name = NULL;
+    msghdr.msg_namelen = 0;
+    msghdr.msg_iov = iov;
+    msghdr.msg_iovlen = 1;
+    msghdr.msg_accrights = (caddr_t) &newfd; /* addr of descriptor   */
+    msghdr.msg_accrightslen = sizeof(int);   /* receive 1 descriptor */
+
+#else
+    struct cmsghdr* cmptr = (struct cmsghdr*)malloc(CONTROLLEN);
+
+    OSL_TRACE(" !!!! IOCHANNEL_TRANSFER_BSD_RENO receive");
+
+    iov[0].iov_base = buffer;
+    iov[0].iov_len = sizeof(buffer);
+    msghdr.msg_name = NULL;
+    msghdr.msg_namelen = 0;
+    msghdr.msg_iov = iov;
+    msghdr.msg_iovlen = 1;
+
+    msghdr.msg_control = (caddr_t) cmptr;
+    msghdr.msg_controllen = CONTROLLEN;
+
+#endif
+
+
+#if defined(IOCHANNEL_TRANSFER_BSD)
+
+    if ( ( nRead = recvmsg(PipeFD, &msghdr, 0) ) > 0 )
+    {
+        OSL_TRACE("receiveFdPipe : received '%i' bytes\n",nRead);
+    }
+#else
+
+    if ( ( ( nRead = recvmsg(PipeFD, &msghdr, 0) ) > 0 ) &&
+         ( msghdr.msg_controllen == CONTROLLEN ) )
+    {
+        OSL_TRACE("receiveFdPipe : received '%i' bytes\n",nRead);
+        newfd = *(int*)CMSG_DATA(cmptr);
+    }
+#endif
+    else
+    {
+        OSL_TRACE("receiveFdPipe : receiving failed (%s)",strerror(errno));
+    }
+
+    if ( newfd >= 0 )
+    {
+        pSocket = __osl_createSocketImpl(newfd);
+        nRetCode=1;
+        OSL_TRACE("received fd %i\n",newfd);
+    }
+
+    OSL_TRACE("receiveFdPipe : writing back %i",nRetCode);
+    nRead=write(PipeFD,&nRetCode,sizeof(nRetCode));
+
+#if defined(IOCHANNEL_TRANSFER_BSD_RENO)
+    free(cmptr);
+#endif
+
+    return pSocket;
+}
+
+sal_Bool osl_sendResourcePipe(oslPipe Pipe, oslSocket Socket)
+{
+    oslSocketImpl* pSocket = (oslSocketImpl*) Socket;
+    oslPipeImpl* pPipe = (oslPipeImpl*) Pipe;
+
+    sal_Bool bRet = sal_False;
+
+    if ( pSocket == 0 || pPipe == 0 )
+    {
+        return sal_False;
+    }
+
+    bRet = sendFdPipe(pPipe->m_Socket,pSocket->m_Socket);
+
+    return bRet;
+}
+
+
+oslSocket osl_receiveResourcePipe(oslPipe Pipe)
+{
+    oslPipeImpl* pPipe = (oslPipeImpl*) Pipe;
+    oslSocketImpl* pSocket=0;
+
+    if ( pPipe ==  0 )
+    {
+        return 0;
+    }
+
+    pSocket = receiveFdPipe(pPipe->m_Socket);
+
+    return (oslSocket) pSocket;
+}
+
+
+
+/******************************************************************************
+ *
+ *                  Functions for starting a process
+ *
+ *****************************************************************************/
+
 static void ChildStatusProc(void *pData)
 {
     int   i;
@@ -800,12 +1378,15 @@ static void ChildStatusProc(void *pData)
             /*      this np function has this purpose ...                              */
             pthread_kill_other_threads_np();
 #endif
+            OSL_TRACE("ChildStatusProc : starting '%s'",data.m_pszArgs[0]);
 
             pid=execv(data.m_pszArgs[0], (sal_Char **)data.m_pszArgs);
 
         }
 
         OSL_TRACE("Failed to exec, errno=%d (%s)\n", errno, strerror(errno));
+
+        OSL_TRACE("ChildStatusProc : starting '%s' failed",data.m_pszArgs[0]);
 
         /* if we reach here, something went wrong */
         write(channel[1], &errno, sizeof(errno));
@@ -881,6 +1462,7 @@ static void ChildStatusProc(void *pData)
         }
         else
         {
+            OSL_TRACE("ChildStatusProc : starting '%s' failed",data.m_pszArgs[0]);
             OSL_TRACE("Failed to launch child process, child reports errno=%d (%s)\n", status, strerror(status));
 
             osl_setCondition(pdata->m_started);
@@ -1017,7 +1599,7 @@ oslProcessError SAL_CALL osl_executeProcess(rtl_uString *ustrImageName,
         rtl_string_release(strImageName);
     }
 
-    if (  strWorkDir != 0 )
+    if ( strWorkDir != 0 )
     {
         rtl_string_release(strWorkDir);
     }
@@ -1133,6 +1715,13 @@ oslProcessError SAL_CALL osl_psz_executeProcess(sal_Char *pszImageName,
 
     return osl_Process_E_Unknown;
 }
+
+
+/******************************************************************************
+ *
+ *                  Functions for processes
+ *
+ *****************************************************************************/
 
 oslProcessError SAL_CALL osl_terminateProcess(oslProcess Process)
 {
@@ -1325,6 +1914,7 @@ struct osl_procStat
     unsigned long vm_exe;     /* executable size */
     unsigned long vm_lib;     /* library size */
 };
+
 
 void
 osl_getProcStat(pid_t pid, struct osl_procStat* procstat)
@@ -1696,183 +2286,13 @@ oslProcessError SAL_CALL osl_joinProcess(oslProcess Process)
     return osl_Process_E_Unknown;
 }
 
-oslProcessError SAL_CALL osl_getExecutableFile(rtl_uString **ustrFile)
-{
-    sal_Char pszExecutable[PATH_MAX] = "";
-    sal_Char pszUncPath[PATH_MAX+5] = "";
-    oslProcessError Error;
-
-    Error=osl_psz_getExecutableFile(pszExecutable,sizeof(pszExecutable));
-
-    if ( Error == osl_Process_E_None)
-    {
-        strcpy(pszUncPath,"//.");
-        strcat(pszUncPath,pszExecutable);
-    }
-
-    /*    fprintf(stderr,"Exec file is '%s'\n",pszUncPath);*/
-
-    rtl_uString_newFromAscii(ustrFile,pszUncPath);
-
-    return Error;
-}
 
 
-oslProcessError SAL_CALL osl_psz_getExecutableFile(sal_Char* pszBuffer, sal_uInt32 Max)
-{
-    static int  PrgLen = -1;
-    static sal_Char PrgName[PATH_MAX + 1] = "";
-
-    oslProcessError ret = osl_Process_E_None;
-
-    if (PrgLen < 1)
-    {
-        sal_Char *pszCmdLine = getCmdLine();
-
-        if (strchr(pszCmdLine, '/'))
-        {
-            if (! osl_getFullPath(pszCmdLine, PrgName, sizeof(PrgName)))
-                ret = osl_Process_E_Unknown;
-            else
-                PrgLen = strlen(PrgName) + 1;
-        }
-        else
-        {
-            if ((ret = osl_searchPath(pszCmdLine, NULL, '\0', PrgName, sizeof(PrgName)))
-                == osl_Process_E_None)
-                PrgLen = strlen(PrgName) + 1;
-
-        }
-
-        free(pszCmdLine);
-    }
-
-    if (Max >= (sal_uInt32)PrgLen)
-        memcpy(pszBuffer, PrgName, PrgLen);
-    else
-        ret = osl_Process_E_Unknown;
-
-    return (ret);
-}
-
-
-sal_uInt32  SAL_CALL osl_getCommandArgCount()
-{
-    sal_Char pszBuffer[CMD_ARG_MAX+1] = "";
-
-    oslProcessError tErr = osl_Process_E_Unknown;
-
-    if ( nArgCount == -1 )
-    {
-        tErr = osl_getCommandArgs(pszBuffer, sizeof(pszBuffer));
-
-        if ( tErr != osl_Process_E_None)
-        {
-            return 0;
-        }
-    }
-
-    /*    fprintf(stderr,"osl_getCommandArgCount : ArgCount = '%i'\n",nArgCount);*/
-
-    return nArgCount;
-}
-
-oslProcessError SAL_CALL osl_getCommandArg( sal_uInt32 nArg, rtl_uString **strCommandArg)
-{
-    oslProcessError tErr = osl_Process_E_Unknown;
-    sal_Char* pChr=0;
-
-    if ( nArgCount == -1 )
-    {
-        sal_Char pBuffer[CMD_ARG_MAX+1] = "";
-        tErr = osl_getCommandArgs(pBuffer, CMD_ARG_MAX+1);
-        if ( tErr == osl_Process_E_None )
-        {
-            return tErr;
-        }
-    }
-
-/*      fprintf(stderr,"osl_getCommandArg : getting Arg No. '%i'\n",nArg); */
-
-/*  nArg++;*/
-
-    if ( nArg >= 0 && nArg < nArgCount )
-    {
-        int nIndex=0;
-        int nLen;
-
-        pChr=CmdLine;
-
-        while ( nArg != nIndex && nIndex < nArgCount )
-        {
-/*                        fprintf(stderr,"Having arg '%i' '%s'\n",nIndex,pChr); */
-            nLen = strlen(pChr);
-            pChr+=nLen+1;
-            ++nIndex;
-        }
-/*          fprintf(stderr,"osl_getCommandArg : Arg '%i' = '%s'\n",nIndex,pChr); */
-
-        rtl_uString_newFromAscii(strCommandArg,pChr);
-        tErr=osl_Process_E_None;
-    }
-
-    return tErr;
-}
-
-oslProcessError SAL_CALL osl_getCommandArgs(sal_Char* pszBuffer, sal_uInt32 Max)
-{
-    static int  CmdLen = -1;
-
-    if (CmdLen < 0)
-    {
-        sal_Char *pszCmdLine = getCmdLine();
-        sal_Char *pStr       = pszCmdLine;
-        sal_Char *pBuffer    = CmdLine;
-
-        OSL_ASSERT(pszCmdLine != NULL);
-
-        if ( pszCmdLine == 0 )
-        {
-            return osl_Process_E_Unknown;
-        }
-
-        nArgCount=0;
-
-        /* skip program name */
-        pStr += strlen(pStr) + 1;
-
-        while ((*pStr != '\0') &&
-               ((pBuffer + strlen(pszCmdLine)) < (CmdLine + sizeof(CmdLine) - 2)))
-        {
-/*              fprintf(stderr,"osl_getCommandArgs : Arg %i is '%s'\n",nArgCount,pStr); */
-            strcpy(pBuffer, pStr);
-            pBuffer += strlen(pStr) + 1;
-            pStr    += strlen(pStr) + 1;
-            ++nArgCount;
-        }
-
-        *pBuffer++ = '\0';
-
-        CmdLen = pBuffer - CmdLine;
-        free(pszCmdLine);
-    }
-
-    OSL_ASSERT(pszBuffer);
-
-    if ( pszBuffer == 0 )
-    {
-        return osl_Process_E_Unknown;
-    }
-
-    if (Max < (sal_uInt32)CmdLen)
-        return osl_Process_E_Unknown;
-
-/*      fprintf(stderr,"osl_getCommandArgs : ArgCount is '%i'\n",nArgCount); */
-
-    memcpy(pszBuffer, CmdLine, CmdLen);
-
-    return osl_Process_E_None;
-}
+/******************************************************************************
+ *
+ *                  Functions for the environment
+ *
+ *****************************************************************************/
 
 oslProcessError SAL_CALL osl_getEnvironment(rtl_uString *ustrVar, rtl_uString **ustrValue)
 {
@@ -1894,7 +2314,12 @@ oslProcessError SAL_CALL osl_getEnvironment(rtl_uString *ustrVar, rtl_uString **
 
     Error=osl_psz_getEnvironment(pszVar,pszValue,sizeof(pszValue));
 
-    rtl_uString_newFromAscii(ustrValue,pszValue);
+    rtl_string2UString(
+        ustrValue,
+        pszValue,
+        rtl_str_getLength( pszValue ),
+        osl_getThreadTextEncoding(),
+        OUSTRING_TO_OSTRING_CVTFLAGS );
 
     if ( strVar != 0 )
     {
@@ -1920,6 +2345,13 @@ oslProcessError SAL_CALL osl_psz_getEnvironment(const sal_Char* pszName, sal_Cha
 
     return osl_Process_E_NotFound;
 }
+
+
+/******************************************************************************
+ *
+ *                  Utilities
+ *
+ *****************************************************************************/
 
 oslProcessError SAL_CALL osl_searchPath(const sal_Char* pszName, const sal_Char* pszPath,
                    sal_Char Separator, sal_Char *pszBuffer, sal_uInt32 Max)
@@ -1976,315 +2408,6 @@ oslProcessError SAL_CALL osl_searchPath(const sal_Char* pszName, const sal_Char*
     }
 
     return osl_Process_E_NotFound;
-}
-
-oslProcessError SAL_CALL osl_getIOResources(oslIOResource Resources[], sal_uInt32 Max)
-{
-    oslProcessError ret = osl_Process_E_Unknown;
-
-#if defined(IORESOURCE_TRANSFER_SYSV) || defined(IORESOURCE_TRANSFER_BSD)
-    Message msg;
-    int     wait      = 0;
-    int     i         = 0;
-    int     newFd     = -1;
-    Pipe*   pipe      = NULL;
-/*  sal_Bool acceptMsg = sal_False;*/
-
-    pipe = openPipe(getpid());
-
-    while ((read(pipe->m_hPipe, &msg, sizeof(msg)) == sizeof(msg))
-           && (msg.m_Type != MSG_END))
-    {
-        if (i < (int)Max)
-        {
-            switch (msg.m_Type)
-            {
-                case MSG_DATA:
-                    switch (msg.m_Data)
-                    {
-                        case osl_Process_TypeSocket:
-                            if ((newFd = recv_fd(pipe)) >= 0)
-                            {
-                                oslSocketImpl *pImpl = __osl_createSocketImpl(newFd);
-
-                                OSL_ASSERT(i == msg.m_Value);
-
-                                Resources[i].Type  = osl_Process_TypeSocket;
-                                Resources[i].Flags = msg.m_Flags;
-                                Resources[i].Descriptor.Socket = (oslSocket)pImpl;
-
-                                if (msg.m_Flags & osl_Process_DFWAIT)
-                                    wait++;
-                            }
-
-                            i++;
-
-                            break;
-
-                       default:
-                           OSL_TRACE("Not implemented\n");
-                           OSL_ASSERT(sal_False);
-                           break;
-                    }
-            default:
-                break;
-            }
-        }
-    }
-
-    Resources[i].Type = osl_Process_TypeNone;
-
-    if (msg.m_Type == MSG_END)
-    {
-        if (wait > 0)
-        {
-            msg.m_Type  = MSG_ACK;
-            msg.m_Data  = osl_Process_TypeNone;
-            msg.m_Flags = 0;
-            write(pipe->m_hPipe, &msg, sizeof(msg));
-
-            do
-            {
-                if ((read(pipe->m_hPipe, &msg, sizeof(msg)) != sizeof(msg))
-                    || (msg.m_Type != MSG_REL))
-                    break;
-
-                i = msg.m_Value;
-
-                if (Resources[i].Type != osl_Process_TypeNone)
-                {
-                    OSL_ASSERT(Resources[i].Type == msg.m_Data);
-                    OSL_ASSERT(Resources[i].Flags & osl_Process_DFWAIT);
-
-                    Resources[i].Flags &= ~osl_Process_DFWAIT;
-
-                    if (--wait > 0)
-                    {
-                        msg.m_Type  = MSG_ACK;
-                        msg.m_Data  = osl_Process_TypeNone;
-                        msg.m_Flags = 0;
-                        write(pipe->m_hPipe, &msg, sizeof(msg));
-                    }
-                }
-            }
-            while (wait > 0);
-        }
-
-        msg.m_Type  = MSG_END;
-        msg.m_Data  = osl_Process_TypeNone;
-        msg.m_Flags = 0;
-        write(pipe->m_hPipe, &msg, sizeof(msg));
-
-        ret = osl_Process_E_None;
-    }
-
-    closePipe(pipe);
-
-#endif
-
-    return ret;
-}
-
-sal_Bool sendFdPipe(int PipeFD, int SocketFD)
-{
-    sal_Bool bRet = sal_False;
-
-    struct iovec    iov[1];
-    struct msghdr   msg;
-    char            buf[2]; /* send_fd()/recv_fd() 2-byte protocol */
-    int nSend;
-    int RetCode=0;
-
-#if defined(IOCHANNEL_TRANSFER_BSD)
-
-    OSL_TRACE("IOCHANNEL_TRANSFER_BSD send");
-/*      OSL_TRACE("sending fd %i\n",SocketFD); */
-
-    iov[0].iov_base = buf;
-    iov[0].iov_len  = 2;
-    msg.msg_iov     = iov;
-    msg.msg_iovlen  = 1;
-    msg.msg_name    = NULL;
-    msg.msg_namelen = 0;
-
-    msg.msg_accrights    = (caddr_t) &SocketFD; /* addr of descriptor */
-    msg.msg_accrightslen = sizeof(int);     /* pass 1 descriptor */
-    buf[1] = 0;                             /* zero status means OK */
-    buf[0] = 0;                             /* null byte flag to recv_fd() */
-
-    if ( ( nSend = sendmsg(PipeFD, &msg, 0)) > 0)
-    {
-        bRet = sal_True;
-/*        fprintf(stderr,"sendFdPipe : send '%i' bytes\n",nSend);*/
-
-    }
-    else
-    {
-        OSL_TRACE("sendFdPipe : sending failed (%s)",strerror(errno));
-    }
-
-    nSend=read(PipeFD,&RetCode,sizeof(RetCode));
-
-    if ( nSend > 0 && RetCode == 1 )
-    {
-        OSL_TRACE("sendFdPipe : resource was received\n");
-    }
-    else
-    {
-        OSL_TRACE("sendFdPipe : resource wasn't received\n");
-    }
-
-
-
-#else
-    struct cmsghdr* cmptr = (struct cmsghdr*)malloc(CONTROLLEN);
-
-/*      OSL_TRACE("!!!!!! IOCHANNEL_TRANSFER_BSD_RENO send"); */
-/*      OSL_TRACE("sending fd %i\n",SocketFD); */
-
-    iov[0].iov_base = buf;
-    iov[0].iov_len = 2;
-    msg.msg_iov = iov;
-    msg.msg_iovlen = 1;
-    msg.msg_name = NULL;
-    msg.msg_namelen = 0;
-    msg.msg_control = (caddr_t) cmptr;
-    msg.msg_controllen = CONTROLLEN;
-
-    cmptr->cmsg_level = SOL_SOCKET;
-    cmptr->cmsg_type = SCM_RIGHTS;
-    cmptr->cmsg_len = CONTROLLEN;
-    *(int*)CMSG_DATA(cmptr) = SocketFD;
-
-    if (sendmsg(PipeFD, &msg, 0) > 0)
-    {
-        bRet = sal_True;
-    }
-    else
-    {
-        OSL_TRACE("sendFdPipe : sending failed (%s)",strerror(errno));
-    }
-
-    free(cmptr);
-#endif
-
-    return bRet;
-}
-
-
-oslSocketImpl* receiveFdPipe(int PipeFD)
-{
-    oslSocketImpl* pSocket = 0;
-    struct msghdr msghdr;
-    struct iovec iov[1];
-    char buffer[PATH_MAX];
-
-#if defined(IOCHANNEL_TRANSFER_BSD)
-    char *ptr;
-    sal_Int32 nread, status;
-    int newfd;
-    int RetCode=0;
-
-
-    OSL_TRACE("IOCHANNEL_TRANSFER_BSD receive\n");
-
-    iov[0].iov_base = buffer;
-    iov[0].iov_len = sizeof(buffer);
-    msghdr.msg_name = NULL;
-    msghdr.msg_namelen = 0;
-    msghdr.msg_iov = iov;
-    msghdr.msg_iovlen = 1;
-    msghdr.msg_accrights = (caddr_t) &newfd; /* addr of descriptor   */
-    msghdr.msg_accrightslen = sizeof(int);   /* receive 1 descriptor */
-
-    if ((nread = recvmsg(PipeFD, &msghdr, 0)) > 0)
-    {
-/*        fprintf(stderr,"receiveFdPipe : received '%i' bytes\n",nread);*/
-
-        if (newfd >= 0)
-        {
-            pSocket = __osl_createSocketImpl(newfd);
-            RetCode=1;
-/*              OSL_TRACE("received fd %i\n",newfd); */
-        }
-    }
-    else
-    {
-        OSL_TRACE("receiveFdPipe : receiving failed (%s)",strerror(errno));
-    }
-
-    OSL_TRACE("receiveFdPipe : writing back %i",RetCode);
-    nread=write(PipeFD,&RetCode,sizeof(RetCode));
-
-#else
-    struct cmsghdr* cmptr = (struct cmsghdr*)malloc(CONTROLLEN);
-    int newfd;
-
-/*      OSL_TRACE(" !!!! IOCHANNEL_TRANSFER_BSD_RENO receive"); */
-
-    iov[0].iov_base = buffer;
-    iov[0].iov_len = sizeof(buffer);
-    msghdr.msg_name = NULL;
-    msghdr.msg_namelen = 0;
-    msghdr.msg_iov = iov;
-    msghdr.msg_iovlen = 1;
-
-    msghdr.msg_control = (caddr_t) cmptr;
-    msghdr.msg_controllen = CONTROLLEN;
-
-    if (
-        (recvmsg(PipeFD, &msghdr, 0) > 0) &&
-        (msghdr.msg_controllen == CONTROLLEN)
-        )
-    {
-        newfd = *(int*)CMSG_DATA(cmptr);
-/*          OSL_TRACE("received fd %i\n",newfd);         */
-        pSocket = __osl_createSocketImpl(newfd);
-
-
-    }
-   else
-    {
-        OSL_TRACE("receiveFdPipe : receiving failed (%s)",strerror(errno));
-    }
-
-    free(cmptr);
-#endif
-
-    return pSocket;
-}
-
-sal_Bool osl_sendResourcePipe(oslPipe Pipe, oslSocket Socket)
-{
-    oslSocketImpl* pSocket = (oslSocketImpl*) Socket;
-    oslPipeImpl* pPipe = (oslPipeImpl*) Pipe;
-
-    sal_Bool bRet = sal_False;
-
-    if ( pSocket == 0 || pPipe == 0 )
-    {
-        return sal_False;
-    }
-
-    bRet = sendFdPipe(pPipe->m_Socket,pSocket->m_Socket);
-
-    return bRet;
-}
-
-
-oslSocket osl_receiveResourcePipe(oslPipe Pipe)
-{
-    oslPipeImpl* pPipe = (oslPipeImpl*) Pipe;
-    oslSocketImpl* pSocket=0;
-
-    if ( pPipe ==  0 )
-    {
-        return 0;
-    }
-
-    pSocket = receiveFdPipe(pPipe->m_Socket);
-
-    return (oslSocket) pSocket;
 }
 
 
