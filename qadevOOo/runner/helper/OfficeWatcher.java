@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OfficeWatcher.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 16:27:33 $
+ *  last change:$Date: 2003-05-27 12:02:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,7 @@ package helper;
 
 import java.lang.Thread;
 import lib.TestParameters;
+import share.LogWriter;
 
 import com.sun.star.frame.XComponentLoader;
 import com.sun.star.uno.UnoRuntime;
@@ -71,11 +72,14 @@ import com.sun.star.beans.PropertyValue;
 
 public class OfficeWatcher extends Thread implements share.Watcher {
 
+    public boolean finish;
+
     TestParameters params;
     String StoredPing = "";
 
     /** Creates new OfficeWatcher */
     public OfficeWatcher(TestParameters param) {
+        finish = false;
         this.params = param;
     }
 
@@ -89,25 +93,34 @@ public class OfficeWatcher extends Thread implements share.Watcher {
     public void run() {
         boolean isDone = false;
         ProcessHandler ph = (ProcessHandler) params.get("AppProvider");
+        int timeOut = params.getInt("TimeOut");
         if (ph == null) {
             isDone = true;
         }
         while (!isDone) {
+            timeOut = params.getInt("TimeOut");
             String previous = StoredPing;
-            shortWait();
-            if (StoredPing.equals(previous)){
+            shortWait(timeOut==0?30000:timeOut);
+            // a timeout with value 0 lets watcher not react.
+            if (StoredPing.equals(previous) && timeOut != 0){
                 isDone = true;
+            }
+            // execute in case the watcher is not needed anymore
+            if (finish) {
+                return;
             }
         }
         if (ph !=null) {
+            System.out.println("OfficeWatcher: the Office is idle for " + timeOut/1000
+                        + " seconds, it probably hangs and is killed NOW.");
             ph.kill();
         }
-        shortWait();
+        shortWait(timeOut==0?30000:timeOut);
     }
 
-    protected void shortWait() {
+    protected void shortWait(int timeOut) {
         try {
-            this.sleep(params.getInt("TimeOut"));
+            this.sleep(timeOut);
         } catch (java.lang.InterruptedException ie) {}
     }
 

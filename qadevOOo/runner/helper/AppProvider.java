@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppProvider.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 16:27:35 $
+ *  last change:$Date: 2003-05-27 12:01:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,4 +77,13 @@ public interface AppProvider {
      */
     public boolean disposeManager(lib.TestParameters param);
 
+    /**
+     * Close an office.
+     * @param param The test parameters.
+     * @param closeIfPossible If true, close even if
+     * it was running before the test
+     * @return True, if close worked.
+     */
+    public boolean closeExistingOffice(lib.TestParameters param,
+                                                boolean closeIfPossible);
 }
