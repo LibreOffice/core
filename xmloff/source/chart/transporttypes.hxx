@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transporttypes.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: bm $ $Date: 2001-03-27 13:24:46 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 12:35:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,10 +120,9 @@ struct SchNumericCellRangeAddress
 
 enum SchXMLAxisClass
 {
-    SCH_XML_AXIS_CATEGORY,
-    SCH_XML_AXIS_DOMAIN,
-    SCH_XML_AXIS_VALUE,
-    SCH_XML_AXIS_SERIES,
+    SCH_XML_AXIS_X,
+    SCH_XML_AXIS_Y,
+    SCH_XML_AXIS_Z,
     SCH_XML_AXIS_UNDEF
 };
 
