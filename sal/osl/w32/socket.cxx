@@ -2,9 +2,9 @@
  *
  *  $RCSfile: socket.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jbu $ $Date: 2001-05-02 11:18:18 $
+ *  last change: $Author: jbu $ $Date: 2001-10-18 12:43:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -414,7 +414,7 @@ BOOL WINAPI __osl_getConnectedState_Impl (LPDWORD lpdwFlags, DWORD dwReserved)
 static oslSocketDialupImpl* __osl_createSocketDialupImpl (void)
 {
     oslSocketDialupImpl *pImpl;
-    pImpl = (oslSocketDialupImpl*)calloc(1, sizeof (oslSocketDialupImpl));
+    pImpl = (oslSocketDialupImpl*)rtl_allocateZeroMemory( sizeof (oslSocketDialupImpl));
 
     InitializeCriticalSection (&pImpl->m_hMutex);
 
@@ -474,7 +474,7 @@ static void __osl_destroySocketDialupImpl (oslSocketDialupImpl *pImpl)
         LeaveCriticalSection (&pImpl->m_hMutex);
         DeleteCriticalSection (&pImpl->m_hMutex);
 
-        free (pImpl);
+        rtl_freeMemory (pImpl);
     }
 }
 
@@ -585,7 +585,7 @@ void __osl_destroySocketImpl(oslSocketImpl *pImpl)
             __osl_destroySocketDialupImpl (pDialupImpl);
             pDialupImpl = NULL;
         }
-        free (pImpl);
+        rtl_freeMemory (pImpl);
     }
 }
 /*****************************************************************************/
@@ -880,7 +880,7 @@ static oslHostAddr __osl_hostentToHostAddr (const struct hostent *he)
         return ((oslHostAddr)NULL);
     }
 
-    pAddr= (oslHostAddr )malloc (sizeof (struct oslHostAddrImpl));
+    pAddr= (oslHostAddr )rtl_allocateMemory (sizeof (struct oslHostAddrImpl));
     OSL_ASSERT(pAddr);
     if (pAddr == NULL)
     {
@@ -917,7 +917,7 @@ oslHostAddr SAL_CALL osl_createHostAddr (
         return ((oslHostAddr)NULL);
     }
 
-    pAddr= (oslHostAddr)malloc (sizeof (struct oslHostAddrImpl));
+    pAddr= (oslHostAddr)rtl_allocateMemory (sizeof (struct oslHostAddrImpl));
     OSL_ASSERT(pAddr);
     if (pAddr == NULL)
     {
@@ -1039,7 +1039,7 @@ void SAL_CALL osl_destroyHostAddr(oslHostAddr pAddr)
         if (pAddr->pSockAddr)
             osl_destroySocketAddr( pAddr->pSockAddr );
 
-        free (pAddr);
+        rtl_freeMemory (pAddr);
     }
 }
 
@@ -2217,7 +2217,7 @@ oslSocketSet SAL_CALL osl_createSocketSet()
 {
     TSocketSetImpl* pSet;
 
-    pSet = (TSocketSetImpl*) malloc(sizeof(TSocketSetImpl));
+    pSet = (TSocketSetImpl*) rtl_allocateMemory(sizeof(TSocketSetImpl));
 
     OSL_ASSERT(pSet);
 
@@ -2235,7 +2235,7 @@ oslSocketSet SAL_CALL osl_createSocketSet()
 void SAL_CALL osl_destroySocketSet (oslSocketSet Set)
 {
     if(Set)
-        free(Set);
+        rtl_freeMemory(Set);
 }
 
 /*****************************************************************************/
