@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-17 16:04:33 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 09:22:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,3 +165,4 @@ hidspecial HID_SD_NAMEDIALOG_LINEEND    { HelpId = HID_SD_NAMEDIALOG_LINEEND; };
 hidspecial HID_SD_TABPAGE_HEADERFOOTER_SLIDE { HelpId = HID_SD_TABPAGE_HEADERFOOTER_SLIDE; };
 hidspecial HID_SD_TABPAGE_HEADERFOOTER_NOTESHANDOUT { HelpId = HID_SD_TABPAGE_HEADERFOOTER_NOTESHANDOUT; };
 
+hidspecial SD_IF_SDDRAWMEDIAOBJECTBAR      { HelpId = SD_IF_SDDRAWMEDIAOBJECTBAR; };
