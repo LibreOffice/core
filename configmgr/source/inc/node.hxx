@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 14:29:07 $
+ *  last change: $Author: jb $ $Date: 2002-06-07 14:14:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,6 +196,8 @@ namespace configmgr
             ValueNode const * valueData() const;
 
             // navigation
+            bool isFragmentRoot() const;
+
             Node        * getParentNode();
             Node const  * getParentNode() const;
 

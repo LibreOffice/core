@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodeaccess.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2002-03-28 08:47:03 $
+ *  last change: $Author: jb $ $Date: 2002-06-07 14:14:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,7 @@ namespace configmgr
             {}
 
             bool isValid() const { return m_pData.is(); }
+            bool isLocalRoot() const { return data().isFragmentRoot(); }
 
             Name getName() const { return wrapName( data().getName(m_aAccessor) ); }
             Attributes getAttributes() const { return data().getAttributes(); }

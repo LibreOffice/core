@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2002-02-19 13:09:06 $
+ *  last change: $Author: jb $ $Date: 2002-06-07 14:14:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -510,6 +510,12 @@ ValueNode       * Node::valueData()
 ValueNode const * Node::valueData() const
 {
     return isValue() ? &this->value : NULL;
+}
+//-----------------------------------------------------------------------------
+
+bool Node::isFragmentRoot() const
+{
+    return ! node.info.parent;
 }
 //-----------------------------------------------------------------------------
 
