@@ -369,6 +369,7 @@ End Sub
 
 Sub FindWholeYearHolidays_TW(YearInt as Integer)
 	CalculateChineseNewYear(YearInt)
+	CalInsertBankholiday(DateSerial(YearInt, 1, 1), &quot;元旦&quot;, cHolidayType_Full)
 	CalInsertBankholiday(DateSerial(YearInt, 2, 28), &quot;和平紀念日&quot;, cHolidayType_Full)
 	CalInsertBankholiday(DateSerial(YearInt, 3, 8), &quot;婦女節&quot;, cHolidayType_Half)
 	CalInsertBankholiday(DateSerial(YearInt, 3, 29), &quot;革命先烈紀念日（青年節）&quot;, cHolidayType_Half)
@@ -404,7 +405,7 @@ End Function
 Sub FindWholeYearHolidays_CN(YearInt as Integer)
 	CalculateChineseNewYear(YearInt)
 	CalInsertBankholiday(DateSerial(YearInt, 1, 1), &quot;元旦&quot;, cHolidayType_Full)			&apos; New Year
-        CalInsertBankholiday(DateSerial(YearInt, 3, 8), &quot;妇女节&quot;, cHolidayType_Half)                       &apos; Women&apos;s Day
+	CalInsertBankholiday(DateSerial(YearInt, 3, 8), &quot;妇女节&quot;, cHolidayType_Half)                       &apos; Women&apos;s Day
 	CalInsertBankholiday(DateSerial(YearInt, 4, 5), &quot;清明节&quot;, cHolidayType_Half)			&apos; Day of the deads
 	CalInsertBankholiday(DateSerial(YearInt, 5, 1), &quot;劳动节&quot;, cHolidayType_Full)			&apos; International Labour Day
 	CalInsertBankholiday(DateSerial(YearInt, 6, 1), &quot;儿童节&quot;, cHolidayType_Half)			&apos; Children&apos;s Day
