@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OFunctiondefs.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-10 14:35:59 $
+ *  last change: $Author: oj $ $Date: 2001-02-13 10:41:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,5 +184,26 @@
 
 
 #endif // UNX
+
+#ifndef SQL_WCHAR
+#define SQL_WCHAR           (-8)
+#endif
+#ifndef SQL_WVARCHAR
+#define SQL_WVARCHAR        (-9)
+#endif
+#ifndef SQL_WLONGVARCHAR
+#define SQL_WLONGVARCHAR    (-10)
+#endif
+#ifndef SQL_C_WCHAR
+#define SQL_C_WCHAR         SQL_WCHAR
+#endif
+
+#ifdef UNICODE
+#define SQL_C_TCHAR     SQL_C_WCHAR
+#else
+#define SQL_C_TCHAR     SQL_C_CHAR
+#endif
+
 #endif // _CONNECTIVITY_OFUNCTIONDEFS_HXX_
+
 
