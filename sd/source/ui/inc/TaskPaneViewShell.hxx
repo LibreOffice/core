@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TaskPaneViewShell.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:02:32 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:14:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,20 @@ public:
     TYPEINFO();
     SFX_DECL_INTERFACE(SD_IF_SDTASKPANEVIEWSHELL);
 
+    /** List of top level panels that can be shown in the task pane.
+    */
+    enum PanelId
+    {
+        PID__START = 0,
+        PID_UNKNOWN = PID__START,
+        PID_MASTER_PAGES,
+        PID_LAYOUT,
+        PID_ANIMATION_SCHEMES,
+        PID_CUSTOM_ANIMATION,
+        PID_SLIDE_TRANSITION,
+        PID__END = PID_SLIDE_TRANSITION
+    };
+
     TaskPaneViewShell (
         SfxViewFrame* pFrame,
         ViewShellBase& rViewShellBase,
@@ -141,7 +155,16 @@ public:
     DECL_LINK(ToolboxClickHandler, ToolBox*);
     DECL_LINK(MenuSelectHandler, Menu*);
 
+    /** Make the specified panel visible.
+        @param nId
+            The id of the panel that is to be made visible.
+    */
+    void ShowPanel (PanelId nId);
+
 private:
+    class Implementation;
+    ::std::auto_ptr<Implementation> mpImpl;
+
     ::std::auto_ptr<ToolPanel> mpTaskPane;
 
     // Control that displays the closer symbol in the title bar.
