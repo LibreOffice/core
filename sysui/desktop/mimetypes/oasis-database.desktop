@@ -2,8 +2,8 @@
 Version=1.0
 Encoding=UTF-8
 Hidden=false
-Icon=database
+Icon=oasis-database
 Type=MimeType
 Patterns=*.odb
-MimeType=application/x-vnd.oasis.openoffice.database
-Comment=Open Office Database
+MimeType=application/vnd.oasis.opendocument.database
+Comment=OpenDocument Database
