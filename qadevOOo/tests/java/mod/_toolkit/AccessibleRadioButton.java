@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleRadioButton.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change:$Date: 2003-04-28 11:21:53 $
+ *  last change:$Date: 2003-05-22 13:32:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -311,6 +311,8 @@ public class AccessibleRadioButton extends TestCase {
 
         tEnv.addObjRelation("EditOnly",
                     "This method isn't supported in this component");
+
+        tEnv.addObjRelation("LimitedBounds", "yes");
 
         final XAccessibleComponent acomp = (XAccessibleComponent)
             UnoRuntime.queryInterface(XAccessibleComponent.class,oObj);
