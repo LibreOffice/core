@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-09 09:49:48 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 12:07:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -326,6 +326,29 @@ using namespace ::comphelper;
 
 namespace
 {
+    void ensureToolbars( OQueryController* _pController, OQueryContainerWindow* _pWindow, sal_Bool _bDesign )
+    {
+        Reference< drafts::com::sun::star::frame::XLayoutManager > xLayoutManager = _pController->getLayoutManager(_pController->getFrame());
+        if ( xLayoutManager.is() )
+        {
+            xLayoutManager->lock();
+            static ::rtl::OUString s_sDesignToolbar(RTL_CONSTASCII_USTRINGPARAM("private:resource/toolbar/designobjectbar"));
+            static ::rtl::OUString s_sSqlToolbar(RTL_CONSTASCII_USTRINGPARAM("private:resource/toolbar/sqlobjectbar"));
+            if ( _bDesign )
+            {
+                xLayoutManager->destroyElement( s_sSqlToolbar );
+                xLayoutManager->createElement( s_sDesignToolbar );
+            }
+            else
+            {
+                xLayoutManager->destroyElement( s_sDesignToolbar );
+                xLayoutManager->createElement( s_sSqlToolbar );
+            }
+            xLayoutManager->unlock();
+            xLayoutManager->doLayout();
+        }
+    }
+
     void switchDesignModeImpl(OQueryController* _pController,OQueryContainerWindow* _pWindow,sal_Bool& _rbDesign)
     {
         if ( !_pWindow->switchView() )
@@ -335,25 +358,7 @@ namespace
         }
         else
         {
-            Reference< drafts::com::sun::star::frame::XLayoutManager > xLayoutManager = _pController->getLayoutManager(_pController->getFrame());
-
-            if ( xLayoutManager.is() )
-            {
-                xLayoutManager->lock();
-                static ::rtl::OUString s_sDesignToolbar(RTL_CONSTASCII_USTRINGPARAM("private:resource/toolbar/designobjectbar"));
-                static ::rtl::OUString s_sSqlToolbar(RTL_CONSTASCII_USTRINGPARAM("private:resource/toolbar/sqlobjectbar"));
-                if ( _rbDesign )
-                {
-                    xLayoutManager->destroyElement( s_sSqlToolbar );
-                    xLayoutManager->createElement( s_sDesignToolbar );
-                }
-                else
-                {
-                    xLayoutManager->destroyElement( s_sDesignToolbar );
-                    xLayoutManager->createElement( s_sSqlToolbar );
-                }
-                xLayoutManager->unlock();
-            }
+            ensureToolbars( _pController, _pWindow, _rbDesign );
         }
     }
 }
@@ -889,6 +894,13 @@ void OQueryController::impl_initialize( const Sequence< Any >& aArguments )
         throw;
     }
 }
+
+// -----------------------------------------------------------------------------
+void OQueryController::onLoadedMenu(const Reference< drafts::com::sun::star::frame::XLayoutManager >& _xLayoutManager)
+{
+    ensureToolbars( this, getContainer(), m_bDesign );
+}
+
 // -----------------------------------------------------------------------------
 void OQueryController::updateTitle()
 {
@@ -964,6 +976,7 @@ void OQueryController::AddSupportedFeatures()
     m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DBClearQuery")]        = SID_BROWSER_CLEAR_QUERY;
     m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:SbaExecuteSql")]       = ID_BROWSER_QUERY_EXECUTE;
     m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DBAddRelation")]       = SID_RELATION_ADD_RELATION;
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DBAddTable")]          = ID_BROWSER_ADDTABLE;
     m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DBQueryPreview")]      = SID_DB_QUERY_PREVIEW;
 #if OSL_DEBUG_LEVEL > 1
     m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DBShowParseTree")] = ID_EDIT_QUERY_SQL;
@@ -1679,12 +1692,6 @@ IMPL_LINK( OQueryController, OnExecuteAddTable, void*, pNotInterestedIn )
 {
     Execute( ID_BROWSER_ADDTABLE,Sequence<PropertyValue>() );
     return 0L;
-}
-// -----------------------------------------------------------------------------
-void OQueryController::loadSubToolbar(const Reference< drafts::com::sun::star::frame::XLayoutManager >& _xLayoutManager)
-{
-    OGenericUnoController::loadSubToolbar(_xLayoutManager);
-    switchDesignModeImpl(this,getContainer(),m_bDesign);
 }
 // -----------------------------------------------------------------------------
 } // namespace dbaui
