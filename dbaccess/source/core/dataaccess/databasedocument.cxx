@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databasedocument.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 08:58:51 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:25:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -596,11 +596,13 @@ Reference<XStorage> ODatabaseSource::getStorage(const ::rtl::OUString& _sStorage
             try
             {
                 xStorage = xMyStorage->openStorageElement(_sStorageName, m_bDocumentReadOnly ? ElementModes::READ : nMode);
+                Reference<XComponent> xComp(xStorage,UNO_QUERY);
+                if ( xComp.is() )
+                    xComp->addEventListener(this);
                 aFind = m_aStorages.insert(TStorages::value_type(_sStorageName,xStorage)).first;
             }
             catch(Exception&)
             {
-                OSL_ENSURE(0,"Stroage could not be accessed!");
             }
         }
     }
