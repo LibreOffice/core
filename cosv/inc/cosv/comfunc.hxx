@@ -2,9 +2,9 @@
  *
  *  $RCSfile: comfunc.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:25:38 $
+ *  last change: $Author: np $ $Date: 2002-03-22 10:19:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,8 +116,8 @@ void
 switch_endian( NUMTYPE &       o_rNumber,
                const NUMTYPE & i_rNumber )
 {
-    char *          pFront = reinterpret< char* >(&o_rNumber);
-    const char *    pBack  = reinterpret< char* >(&i_rNumber) + (sizeof(NUMTYPE) - 1);
+    char *          pFront = reinterpret_cast< char* >(&o_rNumber);
+    const char *    pBack  = reinterpret_cast< char* >(&i_rNumber) + (sizeof(NUMTYPE) - 1);
 
      for ( unsigned int p = sizeof(NUMTYPE); p != 0; --p )
     {
