@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.pmk,v $
 #
-#   $Revision: 1.25 $
+#   $Revision: 1.26 $
 #
-#   last change: $Author: hjs $ $Date: 2004-06-25 15:34:11 $
+#   last change: $Author: obo $ $Date: 2004-07-05 13:48:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,98 +60,131 @@
 #
 #*************************************************************************
 
+PACKAGEDIR*:=$(subst,.,$/ $(PACKAGE))
+
 # --- XCS ---
 
-$(MISC)$/registry$/schema$/%.xcs : %.xcs
+$(MISC)$/registry$/schema$/$(PACKAGEDIR)$/%.xcs : %.xcs
     @+echo -------------+ validating and stripping schema files
     -$(MKDIR) -p $(@:d)
 .IF "$(SOLAR_JAVA)"!=""
     $(JAVA) -classpath $(SOLARBINDIR)$/jaxp.jar$(PATH_SEPERATOR)$(SOLARBINDIR)$/parser.jar$(PATH_SEPERATOR)$(CLASSDIR)$/cfgimport.jar -Djavax.xml.parsers.SAXParserFactory=com.sun.xml.parser.SAXParserFactoryImpl org.openoffice.configuration.Inspector $<
-    $(JAVA) -classpath $(SOLARBINDIR)$/xt.jar$(PATH_SEPERATOR)$(SOLARBINDIR)$/parser.jar -Dcom.jclark.xsl.sax.parser=com.sun.xml.parser.Parser com.jclark.xsl.sax.Driver $< $(PRJ)$/util$/schema_val.xsl $(@:d)$(<:b).val file=$(<:d)$(<:b) pathSeparator=$/	
-    $(JAVA) -classpath $(SOLARBINDIR)$/xt.jar$(PATH_SEPERATOR)$(SOLARBINDIR)$/parser.jar -Dcom.jclark.xsl.sax.parser=com.sun.xml.parser.Parser com.jclark.xsl.sax.Driver $< $(PRJ)$/util$/sanity.xsl $(@:d)$(<:b).san file=$(<:d)$(<:b) pathSeparator=$/
-    $(JAVA) -classpath $(SOLARBINDIR)$/xt.jar$(PATH_SEPERATOR)$(SOLARBINDIR)$/parser.jar -Dcom.jclark.xsl.sax.parser=com.sun.xml.parser.Parser com.jclark.xsl.sax.Driver $< $(PRJ)$/util$/schema_trim.xsl $(@:d)$(<:b).tmp
-    $(JAVA) -classpath $(SOLARBINDIR)$/jaxp.jar$(PATH_SEPERATOR)$(SOLARBINDIR)$/parser.jar$(PATH_SEPERATOR)$(CLASSDIR)$/schema.jar -Djavax.xml.parsers.SAXParserFactory=com.sun.xml.parser.SAXParserFactoryImpl org.openoffice.helper.PrettyPrinter $(@:d)$(<:b).tmp $(@:d)$(<:b).xcs
+    $(JAVA) -classpath $(SOLARBINDIR)$/xt.jar$(PATH_SEPERATOR)$(SOLARBINDIR)$/parser.jar -Dcom.jclark.xsl.sax.parser=com.sun.xml.parser.Parser com.jclark.xsl.sax.Driver $< $(PRJ)$/util$/schema_val.xsl $(@:d)$*.val componentName=$(PACKAGE).$*
+    $(JAVA) -classpath $(SOLARBINDIR)$/xt.jar$(PATH_SEPERATOR)$(SOLARBINDIR)$/parser.jar -Dcom.jclark.xsl.sax.parser=com.sun.xml.parser.Parser com.jclark.xsl.sax.Driver $< $(PRJ)$/util$/sanity.xsl $(@:d)$*.san 
+    $(JAVA) -classpath $(SOLARBINDIR)$/xt.jar$(PATH_SEPERATOR)$(SOLARBINDIR)$/parser.jar -Dcom.jclark.xsl.sax.parser=com.sun.xml.parser.Parser com.jclark.xsl.sax.Driver $< $(PRJ)$/util$/schema_trim.xsl $(@:d)$*.tmp
+    $(JAVA) -classpath $(SOLARBINDIR)$/jaxp.jar$(PATH_SEPERATOR)$(SOLARBINDIR)$/parser.jar$(PATH_SEPERATOR)$(CLASSDIR)$/schema.jar -Djavax.xml.parsers.SAXParserFactory=com.sun.xml.parser.SAXParserFactoryImpl org.openoffice.helper.PrettyPrinter $(@:d)$*.tmp $@
 .ELSE
 # xsltproc already validates against the dtd.  For additional validation,
 # org.openoffice.configuration.Inspector should be replaced and the
 # replacement should be invoked here.
-    $(XSLTPROC) -o $(@:d)$(<:b).val \
-                --stringparam file $(<:d)$(<:b) \
-                --stringparam pathSeparator $/ \
+    $(XSLTPROC) -o $(@:d)$*.val \
+                --stringparam componentName $(PACKAGE).$(<:b) \
                 $(PRJ)$/util$/schema_val.xsl $<
-    $(XSLTPROC) -o $(@:d)$(<:b).san \
-                --stringparam file $(<:d)$(<:b) \
-                --stringparam pathSeparator $/ \
+    $(XSLTPROC) -o $(@:d)$*.san \
                 $(PRJ)$/util$/sanity.xsl $<
-    $(XSLTPROC) -o $(@:d)$(<:b).tmp \
+    $(XSLTPROC) -o $(@:d)$*.tmp \
                 $(PRJ)$/util$/schema_trim.xsl $<
 # xsltproc already seems to pretty-print the xml, so
 # org.openoffice.helper.PrettyPrinter seems to be unnecessary.
-    cp $(@:d)$(<:b).tmp $(@:d)$(<:b).xcs
+    cp $(@:d)$*.tmp $@
 .ENDIF
-    +$(RM) $(@:d)$(<:b).tmp > $(NULLDEV)
-    +$(RM) $(@:d)$(<:b).val > $(NULLDEV)
+    +$(RM) $(@:d)$*.tmp > $(NULLDEV)
+    +$(RM) $(@:d)$*.val > $(NULLDEV)
+    +$(RM) $(@:d)$*.san > $(NULLDEV)
     
-$(MISC)$/registry$/res$/{$(alllangiso)}$/%.properties :| %.xcs
+# Create properties files for localized <info> contents (Currently not built)
+$(MISC)$/registry$/res$/{$(alllangiso)}$/$(PACKAGEDIR)$/%.properties :| %.xcs
     @+echo -------------+ creating locale dependent resource bundles
     -$(MKDIR) -p $(@:d)
 .IF "$(SOLAR_JAVA)"!=""
-    $(JAVA) -classpath $(SOLARBINDIR)$/xt.jar$(PATH_SEPERATOR)$(SOLARBINDIR)$/parser.jar -Dcom.jclark.xsl.sax.parser=com.sun.xml.parser.Parser com.jclark.xsl.sax.Driver $< $(PRJ)$/util$/resource.xsl $(@:d)$(<:b).properties locale={$(subst,$/$<, $(subst,$(MISC)$/registry$/res$/, $(subst,.properties,.xcs $@)))}
+    $(JAVA) -classpath $(SOLARBINDIR)$/xt.jar$(PATH_SEPERATOR)$(SOLARBINDIR)$/parser.jar -Dcom.jclark.xsl.sax.parser=com.sun.xml.parser.Parser com.jclark.xsl.sax.Driver $< $(PRJ)$/util$/resource.xsl $@ locale={$(subst,$/$(PACKAGEDIR)$/$(@:f), $(subst,$(MISC)$/registry$/res$/, $@))}
 .ELSE
-    $(XSLTPROC) -o $(@:d)$(<:b).properties \
-                --stringparam locale {$(subst,$/$<, $(subst,$(MISC)$/registry$/res$/, $(subst,.properties,.xcs $@)))} \
+    $(XSLTPROC) -o $@ \
+                --stringparam locale {$(subst,$/$(PACKAGEDIR)$/$(@:f), $(subst,$(MISC)$/registry$/res$/, $@))} \
                 $(PRJ)$/util$/resource.xsl $<
 .ENDIF
 
 # --- XCU ---
 
-$(MISC)$/registry$/data$/%.xcu : %.xcu
+$(MISC)$/registry$/data$/$(PACKAGEDIR)$/%.xcu : %.xcu
     @+echo -------------+ validating and creating a locale independent file
     -$(MKDIR) -p $(@:d) 
 .IF "$(SOLAR_JAVA)"!=""
     $(JAVA) -classpath $(SOLARBINDIR)$/jaxp.jar$(PATH_SEPERATOR)$(SOLARBINDIR)$/parser.jar$(PATH_SEPERATOR)$(CLASSDIR)$/cfgimport.jar -Djavax.xml.parsers.SAXParserFactory=com.sun.xml.parser.SAXParserFactoryImpl org.openoffice.configuration.Inspector $<
-    $(JAVA) -classpath $(SOLARBINDIR)$/xt.jar$(PATH_SEPERATOR)$(SOLARBINDIR)$/parser.jar$(PATH_SEPERATOR)$(CLASSDIR)$/cfgimport.jar -Dcom.jclark.xsl.sax.parser=com.sun.xml.parser.Parser com.jclark.xsl.sax.Driver $< $(PRJ)$/util$/data_val.xsl $(@:d)$(<:b).val xcs=$(PRJ)$/registry$/schema$/$(<:d)$(<:b).xcs schemaRoot=$(PRJ)$/registry$/schema
-    $(JAVA) -classpath $(SOLARBINDIR)$/xt.jar$(PATH_SEPERATOR)$(SOLARBINDIR)$/parser.jar$(PATH_SEPERATOR)$(CLASSDIR)$/cfgimport.jar -Dcom.jclark.xsl.sax.parser=com.sun.xml.parser.Parser com.jclark.xsl.sax.Driver $< $(PRJ)$/util$/alllang.xsl $(@:d)$(<:b).tmp xcs=$(PRJ)$/registry$/schema$/$(<:d)$(<:b).xcs schemaRoot=$(PRJ)$/registry$/schema
-    $(JAVA) -classpath $(SOLARBINDIR)$/jaxp.jar$(PATH_SEPERATOR)$(SOLARBINDIR)$/parser.jar$(PATH_SEPERATOR)$(CLASSDIR)$/schema.jar -Djavax.xml.parsers.SAXParserFactory=com.sun.xml.parser.SAXParserFactoryImpl org.openoffice.helper.PrettyPrinter $(@:d)$(<:b).tmp $(@:d)$(<:b).xcu
+    $(JAVA) -classpath $(SOLARBINDIR)$/xt.jar$(PATH_SEPERATOR)$(SOLARBINDIR)$/parser.jar$(PATH_SEPERATOR)$(CLASSDIR)$/cfgimport.jar -Dcom.jclark.xsl.sax.parser=com.sun.xml.parser.Parser com.jclark.xsl.sax.Driver $< $(PRJ)$/util$/data_val.xsl $(@:d)$*.val xcs=$(PRJ)$/registry$/schema$/$(PACKAGEDIR)$/$*.xcs schemaRoot=$(PRJ)$/registry$/schema
+    $(JAVA) -classpath $(SOLARBINDIR)$/xt.jar$(PATH_SEPERATOR)$(SOLARBINDIR)$/parser.jar$(PATH_SEPERATOR)$(CLASSDIR)$/cfgimport.jar -Dcom.jclark.xsl.sax.parser=com.sun.xml.parser.Parser com.jclark.xsl.sax.Driver $< $(PRJ)$/util$/alllang.xsl $(@:d)$*.tmp xcs=$(PRJ)$/registry$/schema$/$(PACKAGEDIR)$/$*.xcs schemaRoot=$(PRJ)$/registry$/schema
+    $(JAVA) -classpath $(SOLARBINDIR)$/jaxp.jar$(PATH_SEPERATOR)$(SOLARBINDIR)$/parser.jar$(PATH_SEPERATOR)$(CLASSDIR)$/schema.jar -Djavax.xml.parsers.SAXParserFactory=com.sun.xml.parser.SAXParserFactoryImpl org.openoffice.helper.PrettyPrinter $(@:d)$*.tmp $@
 .ELSE
 # xsltproc already validates against the dtd.  For additional validation,
 # org.openoffice.configuration.Inspector should be replaced and the
 # replacement should be invoked here.
     $(SED) 's|xmlns:filehelper="http://www.jclark.com/xt/java/org.openoffice.configuration.FileHelper"||;s|extension-element-prefixes="filehelper"||;s|filehelper:makeAbs(\(.*\))|\1|' < $(PRJ)$/util$/data_val.xsl > $(PRJ)$/util$/dataval2.xsl
-    $(SED) 's|xmlns:filehelper="http://www.jclark.com/xt/java/org.openoffice.configuration.FileHelper"||;s|extension-element-prefixes="filehelper"||;s|filehelper:makeAbs(\(.*\))|\1|' < $(PRJ)$/util$/alllang.xsl > $(PRJ)$/util$/alllang2.xsl
-    $(XSLTPROC) -o $(@:d)$(<:b).val \
-                --stringparam xcs $(PWD)$/$(PRJ)$/registry$/schema$/$(<:d)$(<:b).xcs \
+    $(SED) 's|xmlns:filehelper="http://www.jclark.com/xt/java/org.openoffice.configuration.FileHelper"||;s|extension-element-prefixes="filehelper"||;s|filehelper:makeAbs(\(.*\))|\1|' < $(PRJ)$/util$/alllang.xsl > $(@:d)allang2.xsl
+    $(XSLTPROC) -o $(@:d)$*.val \
+                --stringparam xcs $(PWD)$/$(PRJ)$/registry$/schema$/$(PACKAGEDIR)$/$*.xcs \
                 --stringparam schemaRoot $(PWD)$/$(PRJ)$/registry$/schema \
                 $(PRJ)$/util$/dataval2.xsl $<
-    $(XSLTPROC) -o $(@:d)$(<:b).tmp \
-                --stringparam xcs $(PWD)$/$(PRJ)$/registry$/schema$/$(<:d)$(<:b).xcs \
+    $(XSLTPROC) -o $(@:d)$*.tmp \
+                --stringparam xcs $(PWD)$/$(PRJ)$/registry$/schema$/$(PACKAGEDIR)$/$*.xcs \
                 --stringparam schemaRoot $(PWD)$/$(PRJ)$/registry$/schema \
-                $(PRJ)$/util$/alllang2.xsl $<
+                $(@:d)allang2.xsl $<
 # xsltproc already seems to pretty-print the xml, so
 # org.openoffice.helper.PrettyPrinter seems to be unnecessary.
-    cp $(@:d)$(<:b).tmp $(@:d)$(<:b).xcu
+    cp $(@:d)$*.tmp $@
     +$(RM) $(PRJ)$/util$/dataval2.xsl > $(NULLDEV)
-    +$(RM) $(PRJ)$/util$/alllang2.xsl > $(NULLDEV)
+    +$(RM) $(@:d)allang2.xsl > $(NULLDEV)
 .ENDIF
-    +$(RM) $(@:d)$(<:b).tmp > $(NULLDEV)
-    +$(RM) $(@:d)$(<:b).val > $(NULLDEV)
+    +$(RM) $(@:d)$*.tmp > $(NULLDEV)
+    +$(RM) $(@:d)$*.val > $(NULLDEV)
 
-$(MISC)$/registry$/res$/{$(alllangiso)}$/%.xcu :| %.xcu
+# --- localizations ---
+
+$(MISC)$/registry$/res$/{$(alllangiso)}$/$(PACKAGEDIR)$/%.xcu :| %.xcu
     @+echo -------------+ creating locale dependent entries
     -$(MKDIR) -p $(@:d)
 .IF "$(SOLAR_JAVA)"!=""
-    $(JAVA) -classpath $(SOLARBINDIR)$/xt.jar$(PATH_SEPERATOR)$(SOLARBINDIR)$/parser.jar$(PATH_SEPERATOR)$(CLASSDIR)$/cfgimport.jar -Dcom.jclark.xsl.sax.parser=com.sun.xml.parser.Parser com.jclark.xsl.sax.Driver $< $(PRJ)$/util$/alllang.xsl $(@:d)$(<:b).tmp xcs=$(PRJ)$/registry$/schema$/$(<:d)$(<:b).xcs schemaRoot=$(PRJ)$/registry$/schema locale={$(subst,$/$<, $(subst,$(MISC)$/registry$/res$/, $@))}	
-    $(JAVA) -classpath $(SOLARBINDIR)$/jaxp.jar$(PATH_SEPERATOR)$(SOLARBINDIR)$/parser.jar$(PATH_SEPERATOR)$(CLASSDIR)$/schema.jar -Djavax.xml.parsers.SAXParserFactory=com.sun.xml.parser.SAXParserFactoryImpl org.openoffice.helper.PrettyPrinter $(@:d)$(<:b).tmp $(@:d)$(<:b).xcu
+    $(JAVA) -classpath $(SOLARBINDIR)$/xt.jar$(PATH_SEPERATOR)$(SOLARBINDIR)$/parser.jar$(PATH_SEPERATOR)$(CLASSDIR)$/cfgimport.jar -Dcom.jclark.xsl.sax.parser=com.sun.xml.parser.Parser com.jclark.xsl.sax.Driver $< $(PRJ)$/util$/alllang.xsl $(@:d)$*.tmp xcs=$(PRJ)$/registry$/schema$/$(PACKAGEDIR)$/$*.xcs schemaRoot=$(PRJ)$/registry$/schema locale={$(subst,$/$(PACKAGEDIR)$/$(@:f), $(subst,$(MISC)$/registry$/res$/, $@))}	
+    $(JAVA) -classpath $(SOLARBINDIR)$/jaxp.jar$(PATH_SEPERATOR)$(SOLARBINDIR)$/parser.jar$(PATH_SEPERATOR)$(CLASSDIR)$/schema.jar -Djavax.xml.parsers.SAXParserFactory=com.sun.xml.parser.SAXParserFactoryImpl org.openoffice.helper.PrettyPrinter $(@:d)$*.tmp $@
 .ELSE
-    $(SED) 's|xmlns:filehelper="http://www.jclark.com/xt/java/org.openoffice.configuration.FileHelper"||;s|extension-element-prefixes="filehelper"||;s|filehelper:makeAbs(\(.*\))|\1|' < $(PRJ)$/util$/alllang.xsl > $(PRJ)$/util$/alllang2.xsl
-    $(XSLTPROC) -o $(@:d)$(<:b).tmp \
-                --stringparam xcs $(PWD)$/$(PRJ)$/registry$/schema$/$(<:d)$(<:b).xcs \
+    $(SED) 's|xmlns:filehelper="http://www.jclark.com/xt/java/org.openoffice.configuration.FileHelper"||;s|extension-element-prefixes="filehelper"||;s|filehelper:makeAbs(\(.*\))|\1|' < $(PRJ)$/util$/alllang.xsl > $(@:d)allang2.xsl
+    $(XSLTPROC) -o $(@:d)$*.tmp \
+                --stringparam xcs $(PWD)$/$(PRJ)$/registry$/schema$/$(PACKAGEDIR)$/$*.xcs \
                 --stringparam schemaRoot $(PWD)$/$(PRJ)$/registry$/schema \
-                --stringparam locale {$(subst,$/$<, $(subst,$(MISC)$/registry$/res$/, $@))} \
-                $(PRJ)$/util$/alllang2.xsl $<
+                --stringparam locale {$(subst,$/$(PACKAGEDIR)$/$(@:f), $(subst,$(MISC)$/registry$/res$/, $@))} \
+                $(@:d)allang2.xsl $<
 # xsltproc already seems to pretty-print the xml, so
 # org.openoffice.helper.PrettyPrinter seems to be unnecessary.
-    cp $(@:d)$(<:b).tmp $(@:d)$(<:b).xcu
-    +$(RM) $(PRJ)$/util$/alllang2.xsl > $(NULLDEV)
+    cp $(@:d)$*.tmp $@
+    +$(RM) $(@:d)allang2.xsl > $(NULLDEV)
 .ENDIF
-    +$(RM) $(@:d)$(<:b).tmp > $(NULLDEV)
+    +$(RM) $(@:d)$*.tmp > $(NULLDEV)
+
+# --- languagepack tag modules ---
+
+$(MISC)$/registry$/spool$/Langpack-%.xcu : Langpack.xcu.tmpl
+    @+echo -------------+ creating a Langpack module for locale $*
+    -$(MKDIR) -p $(@:d) 
+    $(SED) -e "s/__LANGUAGE__/$*/" -e "/^<!--/,/-->/d" $< > $@
+    
+
+# --- modules ---
+
+$(MISC)$/registry$/spool$/$(PACKAGE).%.xcu :| $$(@:b:s!.!$/!:s!-!.!:b).xcu
+    @+echo -------------+ creating a module file
+    -$(MKDIR) -p $(@:d) 
+.IF "$(SOLAR_JAVA)"!=""
+    $(JAVA) -classpath $(SOLARBINDIR)$/xt.jar$(PATH_SEPERATOR)$(SOLARBINDIR)$/parser.jar$(PATH_SEPERATOR)$(CLASSDIR)$/cfgimport.jar -Dcom.jclark.xsl.sax.parser=com.sun.xml.parser.Parser com.jclark.xsl.sax.Driver $< $(PRJ)$/util$/alllang.xsl $(@:d)$(@:f:s/.xcu/.tmp/) xcs=$(PRJ)$/registry$/schema$/$(PACKAGEDIR)$/$(<:b).xcs schemaRoot=$(PRJ)$/registry$/schema module={$(subst,$(<:b)-, $(*))}
+    $(JAVA) -classpath $(SOLARBINDIR)$/jaxp.jar$(PATH_SEPERATOR)$(SOLARBINDIR)$/parser.jar$(PATH_SEPERATOR)$(CLASSDIR)$/schema.jar -Djavax.xml.parsers.SAXParserFactory=com.sun.xml.parser.SAXParserFactoryImpl org.openoffice.helper.PrettyPrinter $(@:d)$(@:f:s/.xcu/.tmp/) $@
+.ELSE
+    $(SED) 's|xmlns:filehelper="http://www.jclark.com/xt/java/org.openoffice.configuration.FileHelper"||;s|extension-element-prefixes="filehelper"||;s|filehelper:makeAbs(\(.*\))|\1|' < $(PRJ)$/util$/alllang.xsl > $(@:d)allang2.xsl
+    $(XSLTPROC) -o $(@:d)$(@:f:s/.xcu/.tmp/) \
+                --stringparam xcs $(PWD)$/$(PRJ)$/registry$/schema$/$(PACKAGEDIR)$/$(<:b).xcs \
+                --stringparam schemaRoot $(PWD)$/$(PRJ)$/registry$/schema \
+                --stringparam module $(subst,$(<:b)-, $(*)) \
+                $(@:d)allang2.xsl $<
+# xsltproc already seems to pretty-print the xml, so
+# org.openoffice.helper.PrettyPrinter seems to be unnecessary.
+    cp $(@:d)$(@:f:s/.xcu/.tmp/) $@
+    +$(RM) $(@:d)allang2.xsl > $(NULLDEV)
+.ENDIF
+    +$(RM) $(@:d)$(@:f:s/.xcu/.tmp/) > $(NULLDEV)
