@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLStylesImportHelper.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2001-11-15 10:19:19 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:11:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,8 +153,8 @@ class ScMyStyleRanges : public SvRefBase
     void AddCurrencyRange(const ScRange& rRange, ScRangeListRef xList,
         const rtl::OUString* pStyleName, const rtl::OUString* pCurrency,
         ScXMLImport& rImport, const sal_uInt32 nMaxRanges);
-    void InsertColRow(const ScRange& rRange, const sal_Int16 nDx, const sal_Int16 nDy,
-        const sal_Int16 nDz, ScDocument* pDoc);
+    void InsertColRow(const ScRange& rRange, const SCsCOL nDx, const SCsROW nDy,
+        const SCsTAB nDz, ScDocument* pDoc);
     void SetStylesToRanges(ScRangeList* pList,
         const rtl::OUString* pStyleName, const sal_Int16 nCellType,
         const rtl::OUString* pCurrency, ScXMLImport& rImport);
