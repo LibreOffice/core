@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-02-09 14:58:22 $
+ *  last change: $Author: kz $ $Date: 2001-02-13 16:15:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,7 @@ const String GetPalettePath()
 
 SwDrawDocument::SwDrawDocument( SwDoc* pD ) :
     FmFormModel( ::GetPalettePath(), &pD->GetAttrPool(),
-                 pD->GetGocShell(), TRUE ),
+                 pD->GetDocShell(), TRUE ),
     pDoc( pD )
 {
     SetScaleUnit( MAP_TWIP );
