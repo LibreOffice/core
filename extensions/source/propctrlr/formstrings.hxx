@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formstrings.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 12:42:44 $
+ *  last change: $Author: kz $ $Date: 2003-12-11 12:27:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,7 +148,6 @@ namespace pcr
     PCR_CONSTASCII_STRING( PROPERTY_VSCROLL,                "VScroll");
     PCR_CONSTASCII_STRING( PROPERTY_TABSTOP,                "Tabstop");
     PCR_CONSTASCII_STRING( PROPERTY_AUTOCOMPLETE,           "Autocomplete");
-    PCR_CONSTASCII_STRING( PROPERTY_HARDLINEBREAKS,         "HardLineBreaks");
     PCR_CONSTASCII_STRING( PROPERTY_PRINTABLE,              "Printable");
     PCR_CONSTASCII_STRING( PROPERTY_ECHO_CHAR,              "EchoChar");
     PCR_CONSTASCII_STRING( PROPERTY_ROWHEIGHT,              "RowHeight");
@@ -192,6 +191,8 @@ namespace pcr
     PCR_CONSTASCII_STRING( PROPERTY_PROGRESSVALUE_MIN,      "ProgressValueMin");
     PCR_CONSTASCII_STRING( PROPERTY_PROGRESSVALUE_MAX,      "ProgressValueMax");
     PCR_CONSTASCII_STRING( PROPERTY_SCROLLVALUE,            "ScrollValue");
+    PCR_CONSTASCII_STRING( PROPERTY_DEFAULT_SCROLLVALUE,    "DefaultScrollValue");
+    PCR_CONSTASCII_STRING( PROPERTY_SCROLLVALUE_MIN,        "ScrollValueMin");
     PCR_CONSTASCII_STRING( PROPERTY_SCROLLVALUE_MAX,        "ScrollValueMax");
     PCR_CONSTASCII_STRING( PROPERTY_LINEINCREMENT,          "LineIncrement");
     PCR_CONSTASCII_STRING( PROPERTY_BLOCKINCREMENT,         "BlockIncrement");
@@ -206,6 +207,14 @@ namespace pcr
     PCR_CONSTASCII_STRING( PROPERTY_PUSHBUTTONTYPE,         "PushButtonType");
     PCR_CONSTASCII_STRING( PROPERTY_EFFECTIVE_VALUE,        "EffectiveValue");
     PCR_CONSTASCII_STRING( PROPERTY_SELECTEDITEMS,          "SelectedItems");
+    PCR_CONSTASCII_STRING( PROPERTY_REPEAT,                 "Repeat");
+    PCR_CONSTASCII_STRING( PROPERTY_REPEAT_DELAY,           "RepeatDelay");
+    PCR_CONSTASCII_STRING( PROPERTY_SYMBOLCOLOR,            "SymbolColor");
+    PCR_CONSTASCII_STRING( PROPERTY_SPINVALUE,              "SpinValue");
+    PCR_CONSTASCII_STRING( PROPERTY_SPINVALUE_MIN,          "SpinValueMin");
+    PCR_CONSTASCII_STRING( PROPERTY_SPINVALUE_MAX,          "SpinValueMax");
+    PCR_CONSTASCII_STRING( PROPERTY_DEFAULT_SPINVALUE,      "DefaultSpinValue");
+    PCR_CONSTASCII_STRING( PROPERTY_SPININCREMENT,          "SpinIncrement");
 
     PCR_CONSTASCII_STRING( PROPERTY_BOUND_CELL,             "BoundCell");
     PCR_CONSTASCII_STRING( PROPERTY_LIST_CELL_RANGE,        "CellRange");
