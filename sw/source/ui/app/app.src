@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-07 15:27:52 $
+ *  last change: $Author: kz $ $Date: 2001-08-10 20:33:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1866,7 +1866,7 @@ String STR_UNBENANNT
     TEXT[ chinese_simplified ] = "未命名";
     TEXT[ russian ] = "��� �����";
     TEXT[ polish ] = "Bez tytu�u";
-    TEXT[ japanese ] = "無題";
+    TEXT[ japanese ] = "無名";
     TEXT[ chinese_traditional ] = "未命名";
     TEXT[ arabic ] = "���� �����";
     TEXT[ dutch ] = "Naamloos";
@@ -2219,7 +2219,7 @@ String STR_STATSTR_SWGREAD
     Text [ portuguese ] = "A carregar documento..." ;
     Text [ finnish ] = "Ladataan asiakirjaa..." ;
     Text [ danish ] = "Indl�ser dokument..." ;
-    Text [ french ] = "Document en cours de chargement..." ;
+    Text [ french ] = "Chargement du document..." ;
     Text [ swedish ] = "Dokument laddas..." ;
     Text [ dutch ] = "Document wordt gemaakt..." ;
     Text [ spanish ] = "Cargando el documento..." ;
@@ -2228,7 +2228,7 @@ String STR_STATSTR_SWGREAD
     Text[ language_user1 ] = " ";
     Text[ russian ] = "�������� �����������...";
     Text[ polish ] = "�adowanie dokumentu...";
-    Text[ japanese ] = "文書の読み込み...";
+    Text[ japanese ] = "ﾄﾞｷｭﾒﾝﾄを読み込んでいます...";
     Text[ chinese_traditional ] = "載入文件...";
     Text[ arabic ] = "���� ����� �������...";
     Text[ dutch ] = "Document wordt gemaakt...";
@@ -2249,7 +2249,7 @@ String STR_STATSTR_SWGWRITE
     Text [ portuguese ] = "A guardar documento..." ;
     Text [ finnish ] = "Tallennetaan asiakirjaa..." ;
     Text [ danish ] = "Gemmer dokument..." ;
-    Text [ french ] = "Enreg. du document en cours..." ;
+    Text [ french ] = "Enregistrement du document..." ;
     Text [ swedish ] = "Dokument sparas..." ;
     Text [ dutch ] = "Document wordt opgeslagen..." ;
     Text [ spanish ] = "Guardando el documento..." ;
@@ -2258,7 +2258,7 @@ String STR_STATSTR_SWGWRITE
     Text[ chinese_simplified ] = "存盘文档...";
     Text[ russian ] = "�������� �����������...";
     Text[ polish ] = "Zapisywanie dokumentu...";
-    Text[ japanese ] = "文書の保存...";
+    Text[ japanese ] = "ﾄﾞｷｭﾒﾝﾄを保存しています...";
     Text[ chinese_traditional ] = "正在儲存文件...";
     Text[ arabic ] = "���� ��� �������...";
     Text[ dutch ] = "Document wordt opgeslagen...";
@@ -2635,7 +2635,7 @@ String STR_STATSTR_SUMMARY
     Text [ danish ] = "Opretter abstract..." ;
     Text [ italian ] = "Il sunto viene creato..." ;
     Text [ spanish ] = "Creando el extracto..." ;
-    Text [ french ] = "Synth�se en cours de cr�ation..." ;
+    Text [ french ] = "Cr�ation de la synth�se..." ;
     Text [ dutch ] = "Overzicht wordt gemaakt..." ;
     Text [ portuguese ] = "A criar Sum�rio..." ;
     Text[ chinese_simplified ] = "制作摘要...";
@@ -3015,7 +3015,7 @@ QueryBox MSG_SAVEAS_HTML_QUERY
     MESSAGE[ polish ] = "Widok tekstu �r�d�owego wy�wietlony zostanie dopiero po zapisaniu dokumentu w formacie HTML.\nZapisa� dokument w formacie HTML?";
     MESSAGE[ portuguese_brazilian ] = "The HTML source can only be shown if the document is saved in HTML format.\nWould you like to save the document as HTML?";
     MESSAGE[ japanese ] = "HTML ｿｰｽはﾄﾞｷｭﾒﾝﾄが HTML 形式で保存されているときしか表示されません。\nﾄﾞｷｭﾒﾝﾄを HTML 形式で保存しますか。";
-    MESSAGE[ korean ] = "The HTML source can only be shown if the document is saved in HTML format.\nWould you like to save the document as HTML?";
+    MESSAGE[ korean ] = "HTML 소스는 문서가 HTML 형식으로 저장되는 경우에만 표시될 수 있습니다.\n문서를 HTML로 저장하시겠습니까?";
     MESSAGE[ chinese_simplified ] = "只有当文档存盘成 HTML 格式时，才能够查看 HTML 的源文件。\n文档要存盘成 HTML 格式?";
     MESSAGE[ chinese_traditional ] = "只有當檔案儲存HTML格式時，才能檢視HTML原始檔。\n要儲存成HTML格式?";
     MESSAGE[ turkish ] = "The HTML source can only be shown if the document is saved in HTML format.\nWould you like to save the document as HTML?";
@@ -3171,7 +3171,7 @@ String STR_WESTERN_FONT
     Text = "Westlicher Text: " ;
     Text [ ENGLISH ] = "Western text:" ;
     Text[ english_us ] = "Western text:";
-    Text[ portuguese ] = "Western text:";
+    Text[ portuguese ] = "Texto ocidental: ";
     Text[ russian ] = "Western text:";
     Text[ greek ] = "Western text:";
     Text[ dutch ] = "Western text:";
@@ -3183,10 +3183,10 @@ String STR_WESTERN_FONT
     Text[ swedish ] = "Western text:";
     Text[ polish ] = "Western text:";
     Text[ portuguese_brazilian ] = "Western text:";
-    Text[ japanese ] = "Western text:";
+    Text[ japanese ] = "英数字: ";
     Text[ korean ] = "Western text:";
     Text[ chinese_simplified ] = "Western text:";
-    Text[ chinese_traditional ] = "Western text:";
+    Text[ chinese_traditional ] = "西文：";
     Text[ turkish ] = "Western text:";
     Text[ arabic ] = "Western text:";
     Text[ catalan ] = "Western text:";
@@ -3196,7 +3196,7 @@ String STR_CJK_FONT
     Text = "Asiatischer Text: " ;
     Text [ ENGLISH ] = "Asian text: " ;
     Text[ english_us ] = "Asian text: ";
-    Text[ portuguese ] = "Asian text: ";
+    Text[ portuguese ] = "Texto asi�tico: ";
     Text[ russian ] = "Asian text: ";
     Text[ greek ] = "Asian text: ";
     Text[ dutch ] = "Asian text: ";
@@ -3208,10 +3208,10 @@ String STR_CJK_FONT
     Text[ swedish ] = "Asian text: ";
     Text[ polish ] = "Asian text: ";
     Text[ portuguese_brazilian ] = "Asian text: ";
-    Text[ japanese ] = "Asian text: ";
+    Text[ japanese ] = "日本語: ";
     Text[ korean ] = "Asian text: ";
     Text[ chinese_simplified ] = "Asian text: ";
-    Text[ chinese_traditional ] = "Asian text: ";
+    Text[ chinese_traditional ] = "中日韓文字：";
     Text[ turkish ] = "Asian text: ";
     Text[ arabic ] = "Asian text: ";
     Text[ catalan ] = "Asian text: ";
@@ -3241,6 +3241,7 @@ String STR_REDLINE_UNKNOWN_AUTHOR
     Text[ catalan ] = "desconocido";
     Text[ finnish ] = "tuntematon";
 };
+
 
 
 
