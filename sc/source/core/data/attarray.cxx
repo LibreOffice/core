@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attarray.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 16:18:57 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:49:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2083,7 +2083,9 @@ void ScAttrArray::DeleteRow( USHORT nStartRow, USHORT nSize )
         BOOL bFirst=TRUE;
         USHORT nStartIndex;
         USHORT nEndIndex;
-        for (USHORT i = 0; i < nCount-1; i++)
+        USHORT i;
+
+        for ( i = 0; i < nCount-1; i++)
             if (pData[i].nRow >= nStartRow && pData[i].nRow <= nStartRow+nSize-1)
             {
                 if (bFirst)
