@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexte.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-08 09:44:55 $
+ *  last change: $Author: mib $ $Date: 2001-01-26 11:22:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,7 +228,8 @@ SwXMLTextParagraphExport::SwXMLTextParagraphExport(
         SwXMLExport& rExp,
          SvXMLAutoStylePoolP& rAutoStylePool ) :
     XMLTextParagraphExport( rExp, rAutoStylePool ),
-    sTextTable( RTL_CONSTASCII_USTRINGPARAM( "TextTable" ) )
+    sTextTable( RTL_CONSTASCII_USTRINGPARAM( "TextTable" ) ),
+    sEmbeddedObjectProtocol( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.EmbeddedObject:" ) )
 {
 }
 
@@ -238,13 +239,14 @@ SwXMLTextParagraphExport::~SwXMLTextParagraphExport()
 
 void SwXMLTextParagraphExport::getTextEmbeddedObjectProperties(
     const Reference < XPropertySet >& rPropSet,
-    OUString& rStreamName,
+    OUString& rURL,
     OUString& rClassId  ) const
 {
     SwOLENode *pOLENd = GetNoTxtNode( rPropSet )->GetOLENode();
     SwOLEObj& rOLEObj = pOLENd->GetOLEObj();
 
-    rStreamName = rOLEObj.GetName();
+    rURL = sEmbeddedObjectProtocol;
+    rURL += rOLEObj.GetName();
     const SvInPlaceObjectRef& rOLERef = rOLEObj.GetOleRef();
     rClassId = rOLERef->GetClassName().GetHexName();
 }

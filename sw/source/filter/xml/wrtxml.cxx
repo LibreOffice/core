@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtxml.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-22 12:31:45 $
+ *  last change: $Author: mib $ $Date: 2001-01-26 11:22:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,9 @@
 #ifndef _XMLGRHLP_HXX
 #include <svx/xmlgrhlp.hxx>
 #endif
+#ifndef _XMLEOHLP_HXX
+#include <svx/xmleohlp.hxx>
+#endif
 
 #ifndef _SFXDOCFILE_HXX //autogen wg. SfxMedium
 #include <sfx2/docfile.hxx>
@@ -140,6 +143,8 @@ sal_uInt32 SwXMLWriter::_Write()
     SvStorageStreamRef xDocStream;
     Reference< document::XGraphicObjectResolver > xGraphicResolver;
     SvXMLGraphicHelper *pGraphicHelper = 0;
+    Reference< document::XEmbeddedObjectResolver > xObjectResolver;
+    SvXMLEmbeddedObjectHelper *pObjectHelper = 0;
 
     if( pStg )
     {
@@ -147,6 +152,16 @@ sal_uInt32 SwXMLWriter::_Write()
                                                      GRAPHICHELPER_MODE_WRITE,
                                                      sal_False );
         xGraphicResolver = pGraphicHelper;
+
+        SvPersist *pPersist = pDoc->GetPersist();
+        if( pPersist )
+        {
+            pObjectHelper = SvXMLEmbeddedObjectHelper::Create(
+                                             *pStg, *pPersist,
+                                             EMBEDDEDOBJECTHELPER_MODE_WRITE,
+                                             sal_False );
+            xObjectResolver = pObjectHelper;
+        }
 
         OUString sDocName( RTL_CONSTASCII_USTRINGPARAM( "Content.xml" ) );
         xDocStream = pStg->OpenStream( sDocName,
@@ -174,10 +189,11 @@ sal_uInt32 SwXMLWriter::_Write()
 
     // get filter
     Reference< xml::sax::XDocumentHandler > xHandler( xWriter, UNO_QUERY );
-    Sequence < Any > aArgs( 2 );
+    Sequence < Any > aArgs( 3 );
     Any *pArgs = aArgs.getArray();
     *pArgs++ <<= xHandler;
     *pArgs++ <<= xGraphicResolver;
+    *pArgs++ <<= xObjectResolver;
     Reference< document::XExporter > xExporter(
             xServiceFactory->createInstanceWithArguments(
                 OUString::createFromAscii("com.sun.star.office.sax.exporter.Writer"),
@@ -223,12 +239,13 @@ sal_uInt32 SwXMLWriter::_Write()
     if( xDocStream.Is() )
         xDocStream->Commit();
 
-    if( pStg )
-        pDoc->GetDocShell()->SaveAsChilds( pStg );
-
     if( pGraphicHelper )
         SvXMLGraphicHelper::Destroy( pGraphicHelper );
     xGraphicResolver = 0;
+
+    if( pObjectHelper )
+        SvXMLEmbeddedObjectHelper::Destroy( pObjectHelper );
+    xObjectResolver = 0;
 
     return 0;
 }
@@ -268,11 +285,14 @@ void GetXMLWriter( const String& rName, WriterRef& xRet )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/wrtxml.cxx,v 1.13 2001-01-22 12:31:45 mib Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/wrtxml.cxx,v 1.14 2001-01-26 11:22:48 mib Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.13  2001/01/22 12:31:45  mib
+      block mode
+
       Revision 1.12  2001/01/17 10:55:18  mib
       XML filter now is a component
 

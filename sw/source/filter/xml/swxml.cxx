@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swxml.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-22 13:47:37 $
+ *  last change: $Author: mib $ $Date: 2001-01-26 11:22:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,9 @@
 #ifndef _XMLGRHLP_HXX
 #include <svx/xmlgrhlp.hxx>
 #endif
+#ifndef _XMLEOHLP_HXX
+#include <svx/xmleohlp.hxx>
+#endif
 
 #ifndef _XMLIMP_HXX
 #include "xmlimp.hxx"
@@ -150,6 +153,8 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
     Reference< XInterface > xPipe;
     Reference< document::XGraphicObjectResolver > xGraphicResolver;
     SvXMLGraphicHelper *pGraphicHelper = 0;
+    Reference< document::XEmbeddedObjectResolver > xObjectResolver;
+    SvXMLEmbeddedObjectHelper *pObjectHelper = 0;
     SvStorageStreamRef xDocStream;
 
      xml::sax::InputSource aParserInput;
@@ -166,6 +171,16 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
                                                      GRAPHICHELPER_MODE_READ,
                                                      sal_False );
         xGraphicResolver = pGraphicHelper;
+
+        SvPersist *pPersist = rDoc.GetPersist();
+        if( pPersist )
+        {
+            pObjectHelper = SvXMLEmbeddedObjectHelper::Create(
+                                           *pStorage, *pPersist,
+                                        EMBEDDEDOBJECTHELPER_MODE_READ,
+                                        sal_False );
+            xObjectResolver = pObjectHelper;
+        }
 
         OUString sDocName( RTL_CONSTASCII_USTRINGPARAM( "Content.xml" ) );
         xDocStream = pStorage->OpenStream( sDocName,
@@ -215,9 +230,10 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
         return ERR_SWG_READ_ERROR;
 
     // get filter
-    Sequence < Any > aArgs( 1 );
+    Sequence < Any > aArgs( 2 );
     Any *pArgs = aArgs.getArray();
     *pArgs++ <<= xGraphicResolver;
+    *pArgs++ <<= xObjectResolver;
     Reference< xml::sax::XDocumentHandler > xFilter(
             xServiceFactory->createInstanceWithArguments(
                 OUString::createFromAscii("com.sun.star.office.sax.importer.Writer"),

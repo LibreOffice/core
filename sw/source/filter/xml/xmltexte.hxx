@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexte.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-03 11:40:56 $
+ *  last change: $Author: mib $ $Date: 2001-01-26 11:22:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,7 @@ namespace com { namespace sun { namespace star { namespace style {
 class SwXMLTextParagraphExport : public XMLTextParagraphExport
 {
     const ::rtl::OUString sTextTable;
+    const ::rtl::OUString sEmbeddedObjectProtocol;
 
     SwNoTxtNode *GetNoTxtNode(
         const ::com::sun::star::uno::Reference <

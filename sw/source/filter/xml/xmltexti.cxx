@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexti.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-25 11:36:37 $
+ *  last change: $Author: mib $ $Date: 2001-01-26 11:22:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,17 +161,13 @@ Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
 {
     Reference < XPropertySet > xPropSet;
 
-    String aObjName;
-    if( 0 == rHRef.compareToAscii( "#./", 3 ) )
-        aObjName = rHRef.copy( 3 );
-    else if( rHRef.getLength() && '#' == rHRef[0] )
-        aObjName = rHRef.copy( 1 );
-
-    if( !aObjName.Len() )
+    sal_Int32 nPos = rHRef.indexOf( ':' );
+    if( -1 == nPos )
         return xPropSet;
 
-    SvGlobalName aClassId;
-    if( !rClassId.getLength() || !aClassId.MakeId( rClassId ) )
+    String aObjName( rHRef.copy( nPos+1) );
+
+    if( !aObjName.Len() )
         return xPropSet;
 
     Reference<XUnoTunnel> xCrsrTunnel( GetCursor(), UNO_QUERY );
@@ -182,37 +178,7 @@ Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
     ASSERT( pTxtCrsr, "SwXTextCursor missing" );
     SwDoc *pDoc = pTxtCrsr->GetDoc();
 
-    SvStorage *pPackage = ((SwXMLImport&)rImport).GetPackage();
-    if( !pPackage || !pDoc->GetPersist() )
-        return xPropSet;
-
-    String aSrcObjName( aObjName );
-    SvPersistRef xDstDoc( pDoc->GetPersist() );
-    SvStorageRef xDst( pDoc->GetPersist()->GetStorage() );
-
-    // Sind Objektname und Storagename eindeutig?
-    if( xDstDoc->GetObjectList() )
-    {
-        for( ULONG i = 0; i < xDstDoc->GetObjectList()->Count(); i++ )
-        {
-            SvInfoObject* pTst = xDstDoc->GetObjectList()->GetObject(i);
-            // TODO: unicode: is this correct?
-            if( aObjName.EqualsIgnoreCaseAscii( pTst->GetObjName() ) ||
-                aObjName.EqualsIgnoreCaseAscii( pTst->GetStorageName() ) )
-            {
-                aObjName = Sw3Io::UniqueName( xDst, "Obj" );
-                break;
-            }
-        }
-    }
-
-    if( !pPackage->CopyTo( aSrcObjName, xDst, aObjName ) )
-        return xPropSet;
-
-    SvInfoObjectRef xInfo = new SvEmbeddedInfoObject( aObjName, aClassId );
-    pDoc->GetPersist()->Insert( xInfo );
-
-    SwFrmFmt *pFrmFmt = pTxtCrsr->GetDoc()->InsertOLE( *pTxtCrsr->GetPaM(),
+    SwFrmFmt *pFrmFmt = pDoc->InsertOLE( *pTxtCrsr->GetPaM(),
                                                        aObjName );
     xPropSet = SwXFrames::GetObject( *pFrmFmt, FLYCNTTYPE_OLE );
     return xPropSet;
