@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shlib.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jl $ $Date: 2001-06-07 10:58:46 $
+ *  last change: $Author: ok $ $Date: 2001-06-28 09:37:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -669,7 +669,10 @@ void SAL_CALL writeSharedLibComponentInfo(
 
     if (! bRet)
     {
-        ::osl_unloadModule( lib );
+//!
+//! OK: please look at #88219#
+//!
+//! ::osl_unloadModule( lib );
 #ifdef DEBUG
         out( "### cannot write component info: " );
         out( aExcMsg );
@@ -678,7 +681,10 @@ void SAL_CALL writeSharedLibComponentInfo(
         throw CannotRegisterImplementationException( aExcMsg, Reference< XInterface >() );
     }
 
-    ::osl_unloadModule( lib);
+//!
+//! OK: please look at #88219#
+//!
+//! ::osl_unloadModule( lib);
 }
 
 }
