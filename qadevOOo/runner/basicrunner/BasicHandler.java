@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BasicHandler.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-11-18 16:13:01 $
+ *  last change:$Date: 2004-03-19 14:28:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -338,6 +338,8 @@ public class BasicHandler implements XServiceInfo, XSingleServiceFactory {
 
         if (!container.hasByName("BASIC_Done")) {
             System.out.println("Operation timed out.");
+                throw new BasicException(
+                            "Operation timed out.");
         }
 
         Object res = container.getByName("BASIC_Done") ;
@@ -415,7 +417,8 @@ public class BasicHandler implements XServiceInfo, XSingleServiceFactory {
     public synchronized void dispose() {
         try {
             if (oHandlerDoc != null) {
-                oHandlerDoc.dispose();
+                //oHandlerDoc.dispose();
+                util.DesktopTools.closeDoc(oHandlerDoc);
                 wait(1000);
             }
         } catch (Exception e) {
