@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configmgr.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: os $ $Date: 2002-09-25 07:59:16 $
+ *  last change: $Author: os $ $Date: 2002-10-07 14:11:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,11 +181,16 @@ Reference< XMultiServiceFactory > ConfigManager::GetConfigurationProvider()
 #ifdef DBG_UTIL
     catch(Exception& rEx)
     {
-        OString sMsg("CreateInstance with arguments exception: ");
-        sMsg += OString(rEx.Message.getStr(),
-                    rEx.Message.getLength(),
-                     RTL_TEXTENCODING_ASCII_US);
-        OSL_ENSURE(sal_False, sMsg.getStr());
+        static sal_Bool bMessage = sal_True;
+        if(bMessage)
+        {
+            OString sMsg("CreateInstance with arguments exception: ");
+            sMsg += OString(rEx.Message.getStr(),
+                        rEx.Message.getLength(),
+                        RTL_TEXTENCODING_ASCII_US);
+            OSL_ENSURE(sal_False, sMsg.getStr());
+            bMessage = sal_False;
+        }
     }
 #else
     catch(Exception&){}
