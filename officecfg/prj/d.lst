@@ -16,12 +16,18 @@ mkdir: %_DEST%\xml%_EXT%\office\instance\org
 mkdir: %_DEST%\xml%_EXT%\office\instance\org\openoffice
 mkdir: %_DEST%\xml%_EXT%\office\instance\org\openoffice\Office
 mkdir: %_DEST%\xml%_EXT%\office\instance\org\openoffice\ucb
+mkdir: %_DEST%\xml%_EXT%\office\ldap
 
 ..\%__SRC%\class\schema.jar %_DEST%\bin%_EXT%\schema.jar
 ..\%__SRC%\class\cfgimport.jar %_DEST%\bin%_EXT%\cfgimport.jar
 
 ..\schema\schema.description.dtd %_DEST%\xml%_EXT%\office\schema\schema.description.dtd
+..\schema\schema.description2.dtd %_DEST%\xml%_EXT%\office\schema\schema.description2.dtd
+..\%__SRC%\misc\oo-mapping-schema.conf %_DEST%\xml%_EXT%\office\ldap\oo-mapping-schema.conf
 ..\util\instance.xsl %_DEST%\xml%_EXT%\office\schema\instance.xsl
+..\util\instance2.xsl %_DEST%\xml%_EXT%\office\schema\instance2.xsl
+..\util\ldif.xsl %_DEST%\xml%_EXT%\office\schema\ldif.xsl
+..\util\ldap-schema.xsl %_DEST%\xml%_EXT%\office\schema\ldap-schema.xsl
 
 ..\data\org\openoffice\Office\Bibliography.xcd %_DEST%\xml%_EXT%\office\definition\org.openoffice.Office.Bibliography.xcd
 ..\data\org\openoffice\Office\Calc.xcd %_DEST%\xml%_EXT%\office\definition\org\openoffice\Office\Calc.xcd
@@ -44,6 +50,8 @@ mkdir: %_DEST%\xml%_EXT%\office\instance\org\openoffice\ucb
 ..\data\org\openoffice\ucb\Hierarchy.xcd %_DEST%\xml%_EXT%\office\definition\org\openoffice\ucb\Hierarchy.xcd
 ..\data\org\openoffice\ucb\Store.xcd %_DEST%\xml%_EXT%\office\definition\org\openoffice\ucb\Store.xcd
 ..\data\org\openoffice\Setup.xcd %_DEST%\xml%_EXT%\office\definition\org\openoffice\Setup.xcd
+..\data\org\openoffice\Types.xcd %_DEST%\xml%_EXT%\office\definition\org\openoffice\Types.xcd
+..\data\org\openoffice\UserProfile.xcd %_DEST%\xml%_EXT%\office\definition\org\openoffice\UserProfile.xcd
 
 ..\%__SRC%\misc\instance\org\openoffice\Office\Bibliography.xml %_DEST%\xml%_EXT%\office\instance\org\openoffice\Office\Bibliography.xml
 ..\%__SRC%\misc\instance\org\openoffice\Office\Calc.xml %_DEST%\xml%_EXT%\office\instance\org\openoffice\Office\Calc.xml
