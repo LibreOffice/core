@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servicefactory.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: jbu $ $Date: 2001-07-10 11:42:56 $
+ *  last change: $Author: kr $ $Date: 2001-07-23 10:10:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -427,19 +427,13 @@ static OUString findBoostrapArgument(const OUString & arg_name, sal_Bool * pFall
     OUString prefixed_arg_name = OUString(RTL_CONSTASCII_USTRINGPARAM("UNO_"));
     prefixed_arg_name += arg_name.toAsciiUpperCase();
 
-    if(pFallenBack)
-        *pFallenBack = sal_False;
-
     if(!rtl_bootstrap_get(prefixed_arg_name.pData, &result.pData, NULL)) // environment not set -> try relative to executable
     {
         if(pFallenBack)
             *pFallenBack = sal_True;
 
-        OUString fileName_url;
-        osl_getExecutableFile(&fileName_url.pData);
-
         OUString fileName;
-        osl::FileBase::getSystemPathFromFileURL(fileName_url, fileName);
+        osl_getExecutableFile(&fileName.pData);
 
         // get rid of a potential executable extension
         OUString progExt = OUString::createFromAscii(SAL_PRGEXTENSION);
@@ -467,20 +461,8 @@ static OUString findBoostrapArgument(const OUString & arg_name, sal_Bool * pFall
     }
     else
     {
-        if(*result == (sal_Unicode)'/') // the path is already absolut, so do nothing
-            ;
-
-        else // it is real-relative, so extend it
-        {
-            OUString fileName;
-            osl_getExecutableFile(&fileName.pData);
-            osl::FileBase::getSystemPathFromFileURL(fileName, fileName);
-
-            fileName = fileName.copy(0, fileName.lastIndexOf('/') + 1);
-            fileName += result;
-
-            result = fileName;
-        }
+        if(pFallenBack)
+            *pFallenBack = sal_False;
 
 #ifdef DEBUG
         OString prefixed_arg_name_dbg = OUStringToOString(prefixed_arg_name, RTL_TEXTENCODING_ASCII_US);
@@ -526,19 +508,23 @@ static Reference<XSimpleRegistry> nestRegistries(const Reference<XSingleServiceF
             lastRegistry = Reference<XSimpleRegistry>();
     }
 
+    // get the directory of the executable
+    OUString exeDir;
+    osl_getExecutableFile(&exeDir.pData);
+    exeDir = exeDir.copy(0, exeDir.lastIndexOf('/') + 1);
+
     do
     {
-        index = csl_rdbs.indexOf((sal_Unicode)SAL_PATHSEPARATOR);
+        index = csl_rdbs.indexOf((sal_Unicode)' ');
         OUString rdb_name = (index == -1) ? csl_rdbs : csl_rdbs.copy(0, index);
         csl_rdbs = (index == -1) ? OUString() : csl_rdbs.copy(index + 1);
 
-        Reference<XSimpleRegistry> simpleRegistry = Reference<XSimpleRegistry>::query(xSimRegFac->createInstance());
         try
         {
-            OUString rdb_name_url;
+            Reference<XSimpleRegistry> simpleRegistry = Reference<XSimpleRegistry>::query(xSimRegFac->createInstance());
 
-            osl::FileBase::getFileURLFromSystemPath(rdb_name, rdb_name_url);
-            simpleRegistry->open(rdb_name_url, sal_True, sal_False);
+            osl::FileBase::getAbsoluteFileURL(exeDir, rdb_name, rdb_name);
+            simpleRegistry->open(rdb_name, sal_True, sal_False);
 
             if(lastRegistry.is())
             {
@@ -565,7 +551,7 @@ static Reference<XSimpleRegistry> nestRegistries(const Reference<XSingleServiceF
 #endif
         }
     }
-    while(index != -1); // are there more rdbs in list?
+    while(index != -1 && csl_rdbs.getLength()); // are there more rdbs in list?
 
     return lastRegistry;
 }
