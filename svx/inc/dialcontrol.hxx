@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialcontrol.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:23:46 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 14:20:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,10 @@
 #include <sfx2/itemconnect.hxx>
 #endif
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 class NumericField;
 
 namespace svx {
@@ -93,7 +97,7 @@ struct DialControl_Impl;
     -   Shows the value entered/modified in the numeric field.
     -   Enables/disables/shows/hides the field according to own state changes.
  */
-class DialControl : public Control
+class SVX_DLLPUBLIC DialControl : public Control
 {
 public:
     explicit            DialControl( Window* pParent, const Size& rSize, const Font& rFont, WinBits nWinStyle = 0 );
@@ -151,7 +155,7 @@ private:
 // ============================================================================
 
 /** Wrapper for usage of a DialControl in item connections. */
-class DialControlWrapper : public sfx::SingleControlWrapper< DialControl, sal_Int32 >
+class SVX_DLLPUBLIC DialControlWrapper : public sfx::SingleControlWrapper< DialControl, sal_Int32 >
 {
 public:
     explicit            DialControlWrapper( DialControl& rDial );
