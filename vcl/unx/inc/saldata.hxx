@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldata.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-16 17:46:41 $
+ *  last change: $Author: kz $ $Date: 2003-08-25 13:54:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,6 +150,8 @@ public:
                                     { pCurDisp_ = pDisp; }
     inline  void                Insert( SalDisplay *pDisplay );
     inline  void                Remove( SalDisplay *pDisplay );
+
+    void                        DeleteDisplays(); // for shutdown
 
     inline  SalXLib            *GetLib() const { return pXLib_; }
     inline  pthread_t       GetMainThread() const { return hMainThread_; }
