@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registrationhelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-11 11:20:45 $
+ *  last change: $Author: fs $ $Date: 2000-12-15 15:22:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,20 +59,8 @@
  *
  ************************************************************************/
 
-#ifndef _DBA_REGISTRATION_HELPER_HXX_
-#define _DBA_REGISTRATION_HELPER_HXX_
-
-#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
-#include <com/sun/star/uno/Sequence.hxx>
-#endif
-#ifndef _COM_SUN_STAR_REGISTRY_XREGISTRYKEY_HPP_
-#include <com/sun/star/registry/XRegistryKey.hpp>
-#endif
-#ifndef _RTL_USTRING_HXX_
-#include <rtl/ustring.hxx>
-#endif
-#ifndef _CPPUHELPER_FACTORY_HXX_
-#include <cppuhelper/factory.hxx>
+#ifndef _REGISTRATIONHELPER_INCLUDED_INDIRECTLY_
+#error "don't include this file directly! use dba_reghelper.hxx or dbu_reghelper.hxx instead!"
 #endif
 
 typedef ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory > (SAL_CALL *FactoryInstantiation)
@@ -210,8 +198,4 @@ OOneInstanceAutoRegistration<TYPE>::~OOneInstanceAutoRegistration()
 {
     OModuleRegistration::revokeComponent(TYPE::getImplementationName_Static());
 }
-
-//==========================================================================
-#endif // _DBA_REGISTRATION_HELPER_HXX_
-
 

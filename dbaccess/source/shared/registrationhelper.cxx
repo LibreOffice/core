@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registrationhelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-11 11:21:40 $
+ *  last change: $Author: fs $ $Date: 2000-12-15 15:24:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,15 +59,8 @@
  *
  ************************************************************************/
 
-#ifndef _DBA_REGISTRATION_HELPER_HXX_
-#include "registrationhelper.hxx"
-#endif
-
-#ifndef _OSL_DIAGNOSE_H_
-#include <osl/diagnose.h>
-#endif
-#ifndef _COMPHELPER_SEQUENCE_HXX_
-#include <comphelper/sequence.hxx>
+#ifndef _REGISTRATIONHELPER_CXX_INCLUDED_INDIRECTLY_
+#error "don't build this file directly! use dba_reghelper.cxx or dbu_reghelper.cxx instead!"
 #endif
 
 using namespace ::com::sun::star::uno;
