@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apinodeaccess.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-10-06 16:10:18 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 15:07:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,10 @@
 #ifndef CONFIGMGR_CONFIGNODE_HXX_
 #include "noderef.hxx"
 #endif
+#endif
+
+#ifndef CONFIGMGR_ACCESSOR_HXX
+#include <accessor.hxx>
 #endif
 
 namespace osl { class Mutex; }
