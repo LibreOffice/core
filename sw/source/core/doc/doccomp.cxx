@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doccomp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2002-05-13 12:09:48 $
+ *  last change: $Author: dvo $ $Date: 2002-11-11 11:45:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1818,7 +1818,11 @@ USHORT _SaveMergeRedlines::InsertRedline( FNInsUndo pFn )
                 (pDoc->*pFn)( pUndo );
         }
         else
+        {
+            // AppendRedline returns false if redline has been deleted!
+            pDestRedl = NULL;
             delete pUndo;
+        }
     }
     return nIns;
 }
