@@ -1,5 +1,5 @@
 <!--
-	$Id: text.mod,v 1.44 2002-01-17 13:18:46 dvo Exp $
+	$Id: text.mod,v 1.45 2002-01-17 14:08:40 dvo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -984,12 +984,12 @@ indices, and there may be only one text:index-title element.
 <!ELEMENT text:index-entry-bibliography EMPTY>
 <!ATTLIST text:index-entry-bibliography text:style-name %styleName; #IMPLIED>
 <!ATTLIST text:index-entry-bibliography text:bibliography-data-field
-							( address | annote | author | bibiliographic_type |
+							( address | annote | author | bibiliographic-type |
 							  booktitle | chapter | custom1 | custom2 | 
 							  custom3 | custom4 | custom5 | edition | editor |
 							  howpublished | identifier | institution | isbn |
 							  journal | month | note | number | organizations |
-							  pages | publisher | report_type | school | 
+							  pages | publisher | report-type | school | 
 							  series | title | url | volume | year ) #REQUIRED>
 
 
@@ -1061,10 +1061,10 @@ indices, and there may be only one text:index-title element.
 
 <!ELEMENT text:sort-key EMPTY>
 <!ATTLIST text:sort-key text:key ( address | annote | author | 
-	bibiliographic_type | booktitle | chapter | custom1 | custom2 | 
+	bibiliographic-type | booktitle | chapter | custom1 | custom2 | 
 	custom3 | custom4 | custom5 | edition | editor | howpublished | 
 	identifier | institution | isbn | journal | month | note | number | 
-	organizations | pages | publisher | report_type | school | series | 
+	organizations | pages | publisher | report-type | school | series | 
 	title | url | volume | year ) #REQUIRED>
 <!ATTLIST text:sort-key text:sort-ascending %boolean; "true">
 
