@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idlcproduce.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 12:11:08 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:47:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,12 +194,12 @@ static sal_Bool cleanPath()
     return sal_True;
 }
 
-void SAL_CALL removeIfExists(const OString& fileName)
+void removeIfExists(const OString& pathname)
 {
-    unlink(fileName.getStr());
+    unlink(pathname.getStr());
 }
 
-sal_Int32 SAL_CALL produceFile(const OString& fileName)
+sal_Int32 produceFile(const OString& filenameBase)
 {
     Options* pOptions = idlc()->getOptions();
 
@@ -213,17 +213,17 @@ sal_Int32 SAL_CALL produceFile(const OString& fileName)
             regFileName += OString::valueOf(SEPARATOR);
     }
 
-    OString strippedFileName(fileName.copy(fileName.lastIndexOf(SEPARATOR) + 1));
-    OString tempName(strippedFileName.copy(0, strippedFileName.indexOf('.')));
+    OString tempName(filenameBase);
     tempName += "_";
-    tempName += strippedFileName.replaceAt(strippedFileName.getLength() -3 , 3, "_idlc_");
+    tempName += filenameBase;
+    tempName += "._idlc_";
     OString regTmpName( makeTempName(tempName, "._idlc_"));
-    regFileName += strippedFileName.replaceAt(strippedFileName.getLength() -3 , 3, "urd");
+    regFileName += filenameBase;
+    regFileName += ".urd";
 
     RegistryLoader              regLoader;
-    RegistryTypeWriterLoader    writerLoader;
 
-    if ( !regLoader.isLoaded() || !writerLoader.isLoaded() )
+    if ( !regLoader.isLoaded() )
     {
         fprintf(stderr, "%s: could not load registry dll.\n",
                 pOptions->getProgramName().getStr());
@@ -258,7 +258,7 @@ sal_Int32 SAL_CALL produceFile(const OString& fileName)
     }
 
     // produce registry file
-    if ( !idlc()->getRoot()->dump(rootKey, &writerLoader) )
+    if ( !idlc()->getRoot()->dump(rootKey) )
     {
         rootKey.closeKey();
         regFile.close();
@@ -296,7 +296,7 @@ sal_Int32 SAL_CALL produceFile(const OString& fileName)
         return 1;
     }
 
-    if ( !copyFile(regTmpName, regFileName) )
+    if ( !copyFile(&regTmpName, regFileName) )
     {
         fprintf(stderr, "%s: cannot copy temporary registry '%s' to '%s'\n",
                 idlc()->getOptions()->getProgramName().getStr(),
