@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.109 $
+ *  $Revision: 1.110 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-17 09:02:07 $
+ *  last change: $Author: rt $ $Date: 2005-04-01 16:15:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2342,7 +2342,11 @@ void SfxHelpTextWindow_Impl::InitOnStartupBox( bool bOnlyText )
     sPath += sCurrentFactory;
     ::rtl::OUString sKey( KEY_HELP_ON_OPEN );
 
-    bool bHideBox = false;
+    // Attention: This check boy knows two states:
+    // 1) Reading of the config key fails with an exception or by getting an empty Any (!) => check box must be hidden
+    // 2) We read TRUE/FALSE => check box must be shown and enabled/disabled
+
+    bool bHideBox = true;
     sal_Bool bHelpAtStartup = sal_False;
     try
     {
@@ -2351,7 +2355,8 @@ void SfxHelpTextWindow_Impl::InitOnStartupBox( bool bOnlyText )
         if ( xConfiguration.is() )
         {
             Any aAny = ConfigurationHelper::readRelativeKey( xConfiguration, sPath, sKey );
-            aAny >>= bHelpAtStartup;
+            if (aAny >>= bHelpAtStartup)
+                bHideBox = false;
         }
     }
     catch( Exception& )
