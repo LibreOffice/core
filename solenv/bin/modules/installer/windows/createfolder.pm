@@ -2,9 +2,9 @@
 #
 #   $RCSfile: createfolder.pm,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: svesik $ $Date: 2004-04-20 12:31:37 $
+#   last change: $Author: kz $ $Date: 2004-06-11 18:18:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -95,6 +95,9 @@ sub get_createfolder_component
     # containing the file "gid_File_Lib_Vcl"
 
     my $vclgid = "gid_File_Lib_Vcl";
+
+    if ($installer::globals::product =~ /ada/i ) { $vclgid = "gid_File_Adabas"; }
+
     my $onefile = installer::existence::get_specified_file($filesref, $vclgid);
 
     return $onefile->{'componentname'};

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: component.pm,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: svesik $ $Date: 2004-04-20 12:31:23 $
+#   last change: $Author: kz $ $Date: 2004-06-11 18:18:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -130,7 +130,14 @@ sub get_file_component_directory
 
     if ($destination eq "")     # files in the installation root
     {
-        $uniquedir = $installer::globals::officefolder;
+        if ($installer::globals::product =~ /ada/i )
+        {
+            $uniquedir = "INSTALLLOCATION";
+        }
+        else
+        {
+            $uniquedir = $installer::globals::officefolder;
+        }
     }
     else
     {
