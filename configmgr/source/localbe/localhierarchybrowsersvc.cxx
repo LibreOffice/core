@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localhierarchybrowsersvc.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-11-28 09:05:16 $
+ *  last change: $Author: jb $ $Date: 2002-11-28 09:37:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -532,10 +532,13 @@ uno::Sequence< ::rtl::OUString > SAL_CALL
         {
             OSL_TRACE("Locating Configuration Components failed - Error (%u) trying to locate files\n", unsigned(errcode));
 
-            OUString sMsg = OUSTRING("LocalHierarchyBrowser - IO Error while scanning for components: ") +
-                            FileHelper::createOSLErrorString(errcode);
+            if (errcode != osl::Directory::E_NOENT)
+            {
+                OUString sMsg = OUSTRING("LocalHierarchyBrowser - IO Error while scanning for components: ") +
+                                FileHelper::createOSLErrorString(errcode);
 
-            throw com::sun::star::io::IOException(sMsg,*this);
+                throw com::sun::star::io::IOException(sMsg,*this);
+            }
         }
 
         return uno::Sequence< OUString >(&components.front(),components.size());
