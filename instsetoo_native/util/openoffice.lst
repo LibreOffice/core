@@ -8,7 +8,7 @@ OpenOffice
 			PRODUCTVERSION 1.9.{milestone}
 			PRODUCTEXTENSION
 			LONG_PRODUCTEXTENSION
-			REGISTRATIONURL http://www.openoffice.org/welcome/registration.html
+			REGISTRATIONURL http://www.openoffice.org/welcome/registration20.html
 			EVAL
 			FILEFORMATVERSION 1.0
 	    }
