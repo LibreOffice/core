@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GraphCtlAccessibleContext.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 12:55:09 $
+ *  last change: $Author: hr $ $Date: 2003-06-26 11:10:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -274,6 +274,12 @@ public:
 
     /// Sets the description
     void setDescription( const ::rtl::OUString& rDescr );
+
+    /** This method is used by the graph control to tell the
+        accessibility object about a new model and view.
+    */
+    void setModelAndView (SdrModel* pModel, SdrView* pView);
+
 private:
     static ::com::sun::star::uno::Sequence< sal_Int8 > getUniqueId( void );
 protected:
