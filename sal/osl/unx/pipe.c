@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pipe.c,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:21 $
+ *  last change: $Author: mfe $ $Date: 2000-10-31 15:21:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,6 +185,11 @@ oslPipe SAL_CALL osl_createPipe(rtl_uString *ustrPipeName, oslPipeOptions Option
                             OUSTRING_TO_OSTRING_CVTFLAGS );
         pszPipeName = rtl_string_getStr(strPipeName);
         pPipe = osl_psz_createPipe(pszPipeName, Options, Security);
+
+        if ( strPipeName != 0 )
+        {
+            rtl_string_release(strPipeName);
+        }
     }
 
     return pPipe;
@@ -253,6 +258,8 @@ oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions 
 
     memset(&addr, 0, sizeof(addr));
 
+    OSL_TRACE("osl_createPipe : Pipe Name '%s'",name);
+
     addr.sun_family = AF_UNIX;
     strcpy(addr.sun_path, name);
     len = sizeof(addr.sun_family) + strlen(addr.sun_path);
@@ -284,6 +291,7 @@ oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions 
             __osl_destroyPipeImpl(pPipeImpl);
             return NULL;
         }
+        chmod(name,S_IRWXU | S_IRWXG |S_IRWXO);
 
 
         strcpy(pPipeImpl->m_Name, name);
