@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msocximex.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cmc $ $Date: 2001-06-15 14:39:10 $
+ *  last change: $Author: cmc $ $Date: 2002-04-09 11:17:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2777,6 +2777,10 @@ sal_Bool OCX_CheckBox::Import(
 
     aTmp <<= ImportColor(nForeColor);
     xPropSet->setPropertyValue( WW8_ASCII2STR("TextColor"), aTmp);
+#if 0
+    aTmp <<= ImportColor(nBackColor);
+    xPropSet->setPropertyValue( WW8_ASCII2STR("BackgroundColor"), aTmp);
+#endif
 
     bTemp = nMultiState;
     aTmp = bool2any(bTemp);
@@ -3035,6 +3039,9 @@ void OCX_FontData::Import(uno::Reference< beans::XPropertySet > &rPropSet)
         aTmp.setValue(&nBold,getCppuType((float *)0));
         rPropSet->setPropertyValue( WW8_ASCII2STR("FontWeight"), aTmp);
     }
+
+    aTmp <<= sal_Int16(nFontSize/20);
+    rPropSet->setPropertyValue( WW8_ASCII2STR("FontHeight"), aTmp);
 }
 
 sal_Bool OCX_FontData::Export(SvStorageStreamRef &rContent,
@@ -3078,6 +3085,16 @@ sal_Bool OCX_FontData::Export(SvStorageStreamRef &rContent,
             *rContent << nTmp;
             *rContent << nTmp;
             *rContent << nTmp;
+        }
+
+        aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("FontHeight"));
+        sal_Int16 nFontHeight;
+        aTmp >>= nFontHeight;
+        if (nFontHeight != 12)
+        {
+            nFlags |= 0x04;
+            nFontSize = nFontHeight*20;
+            *rContent << nFontSize;
         }
 
         if (bHasAlign)
