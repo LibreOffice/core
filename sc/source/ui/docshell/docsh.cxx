@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-04 12:36:58 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:23:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,7 @@
 #include <sfx2/dinfdlg.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
+#include <sfx2/fcontnr.hxx>
 #include <sfx2/evntconf.hxx>
 #include <sfx2/sfx.hrc>
 #include <sfx2/topfrm.hxx>
@@ -159,6 +160,7 @@ SO2_DECL_REF(SvStorageStream)
 #include "refreshtimer.hxx"
 #include "dbcolect.hxx"
 #include "scextopt.hxx"
+#include "cfgids.hxx"
 
 #include "docsh.hxx"
 
@@ -210,8 +212,14 @@ SFX_IMPL_INTERFACE(ScDocShell,SfxObjectShell, ScResId(SCSTR_DOCSHELL))
 {}
 
 //  GlobalName der aktuellen Version:
-SFX_IMPL_OBJECTFACTORY_DLL(ScDocShell, SFXOBJECTSHELL_STD_NORMAL,
-                            SvGlobalName(SO3_SC_CLASSID), Sc)
+SFX_IMPL_OBJECTFACTORY( ScDocShell, SFXOBJECTSHELL_STD_NORMAL, scalc, SvGlobalName(SO3_SC_CLASSID) )
+{
+    Factory().SetDocumentServiceName( rtl::OUString::createFromAscii( "com.sun.star.sheet.SpreadsheetDocument" ) );
+    //Factory().GetFilterContainer()->SetDetectFilter( ScDLL::DetectFilter );
+    Factory().RegisterMenuBar( ScResId(SCCFG_MENUBAR) );
+    Factory().RegisterPluginMenuBar( ScResId(SCCFG_PLUGINMENU) );
+    Factory().RegisterAccel( ScResId(SCCFG_ACCELERATOR) );
+}
 
 TYPEINIT1( ScDocShell, SfxObjectShell );        // SfxInPlaceObject: kein Type-Info ?
 
