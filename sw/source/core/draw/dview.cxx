@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dview.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-27 13:20:44 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:02:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,7 +129,7 @@ BOOL SwSdrHdl::IsFocusHdl() const
 
 const SwFrm *lcl_FindAnchor( const SdrObject *pObj, FASTBOOL bAll )
 {
-    const SwVirtFlyDrawObj *pVirt = pObj->IsWriterFlyFrame() ?
+    const SwVirtFlyDrawObj *pVirt = pObj->ISA(SwVirtFlyDrawObj) ?
                                             (SwVirtFlyDrawObj*)pObj : 0;
     if ( pVirt )
     {
@@ -316,7 +316,7 @@ SdrObject* SwDrawView::GetMaxToBtmObj(SdrObject* pObj) const
 
 inline BOOL lcl_IsChild( SdrObject *pParent, SdrObject *pChild )
 {
-    if ( pParent->IsWriterFlyFrame() )
+    if ( pParent->ISA(SwVirtFlyDrawObj) )
     {
         const SwFrm *pAnch = lcl_FindAnchor( pChild, FALSE );
         if ( pAnch && ((SwVirtFlyDrawObj*)pParent)->GetFlyFrm()->IsAnLower( pAnch ))
@@ -418,7 +418,7 @@ void SwDrawView::ObjOrderChanged( SdrObject* pObj, ULONG nOldPos,
         nNewPos = nMoveTo;
     }
 
-    if ( pObj->IsWriterFlyFrame() )
+    if ( pObj->ISA(SwVirtFlyDrawObj) )
     {
         //Ein Rahmen wurde in seiner Order veraendert. Hier muss nachtraeglich
         //dafuer gesorgt werden, dass seine 'Kinder' nachgezogen werden.
@@ -440,7 +440,7 @@ void SwDrawView::ObjOrderChanged( SdrObject* pObj, ULONG nOldPos,
             if ( pO == pObj )
                 break;
             const SwFrm *pAnch;
-            const BOOL bFly = pO->IsWriterFlyFrame();
+            const BOOL bFly = pO->ISA(SwVirtFlyDrawObj);
             if ( bFly )
                 pAnch = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm()->GetAnchor();
             else
@@ -523,7 +523,7 @@ const SwFrm *SwDrawView::CalcAnchor()
     //der aktuelle Anker. Nur suchen wenn wir gerade draggen.
     const SwFrm *pAnch;
     Rectangle aMyRect;
-    const BOOL bFly = pObj->IsWriterFlyFrame();
+    const BOOL bFly = pObj->ISA(SwVirtFlyDrawObj);
     if ( bFly )
     {
         pAnch = ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm()->GetAnchor();
@@ -737,7 +737,7 @@ void SwDrawView::CheckPossibilities()
     {
         const SdrObject *pObj = rMrkList.GetMark( i )->GetObj();
         const SwFrm *pFrm = NULL;
-        if ( pObj->IsWriterFlyFrame() )
+        if ( pObj->ISA(SwVirtFlyDrawObj) )
         {
             const SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm();
             if ( pFly  )
