@@ -2,9 +2,9 @@
  *
  *  $RCSfile: romenu.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-29 08:10:47 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 13:01:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,9 +58,6 @@
  *
  *
  ************************************************************************/
-
-
-#pragma hdrstop
 
 #include <hintids.hxx>
 
@@ -491,7 +488,7 @@ void SwReadOnlyPopup::Execute( Window* pWin, USHORT nId )
                                              //nicht const. kann bei naechster
                                              //Aenderung dieses Files mit
                                              //erledigt werden.
-void lcl_GetPreferedExtension( String &rExt, /*const*/ Graphic &rGrf )
+static void lcl_GetPreferedExtension( String &rExt, /*const*/ Graphic &rGrf )
 {
     // dann ggfs. ueber die native-Info der Grafik den "besten"
     // Filter vorschlagen
