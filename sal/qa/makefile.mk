@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: obo $ $Date: 2004-03-19 14:45:54 $
+#   last change: $Author: rt $ $Date: 2004-05-03 08:54:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,13 +73,24 @@ TARGET=whole_sal_qa
 # BEGIN ------------------------------------------------------------
 # END --------------------------------------------------------------
 
+
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
 
+.IF "$(runtests)"!=""
+ALLTAR : test_all
+.ENDIF
+
 # OTHER STUFF ------------------------------------------------------
-test : test_all
-test_all: ALLTAR
+# test : test_all
+
+# start tests with consideration of libs2test.txt with 'dmake test'
+# run through all tests directories (from libs2test.txt) and try to start all tests
+# use 'dmake test TESTOPT="buildall"'
+
+# ALLTAR
+test_all: 
         @+echo ----------------------------------------------------------
         @+echo - start sal unit tests
         @+echo ----------------------------------------------------------
