@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BIndexes.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-24 15:54:39 $
+ *  last change: $Author: oj $ $Date: 2000-10-30 07:55:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,9 @@
 #endif
 #ifndef _CONNECTIVITY_ADABAS_TABLE_HXX_
 #include "adabas/BTable.hxx"
+#endif
+#ifndef _CONNECTIVITY_SDBCX_INDEXDESCRIPTOR_HXX_
+#include "connectivity/sdbcx/VIndexDescriptor.hxx"
 #endif
 #ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
 #include <com/sun/star/sdbc/XRow.hpp>
@@ -131,7 +134,7 @@ void OIndexes::impl_refresh() throw(RuntimeException)
 // -------------------------------------------------------------------------
 Reference< XPropertySet > OIndexes::createEmptyObject()
 {
-    OAdabasIndex* pNew = new OAdabasIndex(m_pTable);
+    connectivity::sdbcx::OIndexDescriptor* pNew = new connectivity::sdbcx::OIndexDescriptor(sal_True);
     return pNew;
 }
 // -------------------------------------------------------------------------

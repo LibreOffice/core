@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BIndex.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:19 $
+ *  last change: $Author: oj $ $Date: 2000-10-30 07:55:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,14 +82,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
-// -------------------------------------------------------------------------
-OAdabasIndex::OAdabasIndex( OAdabasTable* _pTable) : connectivity::sdbcx::OIndex(sal_True)
-                 , m_pTable(_pTable)
-{
-    construct();
-    ::std::vector< ::rtl::OUString> aVector;
-    m_pColumns  = new OIndexColumns(this,m_aMutex,aVector);
-}
 // -------------------------------------------------------------------------
 OAdabasIndex::OAdabasIndex( OAdabasTable* _pTable,
                 const ::rtl::OUString& _Name,

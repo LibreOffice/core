@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VKey.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-24 15:40:49 $
+ *  last change: $Author: oj $ $Date: 2000-10-30 07:53:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,25 +63,16 @@
 #ifndef _CONNECTIVITY_SDBCX_KEY_HXX_
 #include "connectivity/sdbcx/VKey.hxx"
 #endif
-
 #ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SDBC_KEYRULE_HPP_
 #include <com/sun/star/sdbc/KeyRule.hpp>
 #endif
-#ifndef _CONNECTIVITY_SDBCX_COLUMN_HXX_
-#include "connectivity/sdbcx/VColumn.hxx"
-#endif
 #ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
 #endif
-#define CONNECTIVITY_PROPERTY_NAME_SPACE dbtools
-#ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
-#include "propertyids.hxx"
-#endif
 // -------------------------------------------------------------------------
-using namespace connectivity::dbtools;
 using namespace connectivity;
 using namespace connectivity::sdbcx;
 using namespace ::com::sun::star::beans;
@@ -93,101 +84,41 @@ using namespace ::com::sun::star::lang;
 
 IMPLEMENT_SERVICE_INFO(OKey,"com.sun.star.sdbcx.VKey","com.sun.star.sdbcx.Key");
 // -------------------------------------------------------------------------
-OKey::OKey(sal_Bool _bCase) :   OColumns_BASE(m_aMutex)
-            ,   ODescriptor(OColumns_BASE::rBHelper,_bCase,sal_True)
-            ,   m_pColumns(NULL)
-{
-}
-// -------------------------------------------------------------------------
 OKey::OKey( const ::rtl::OUString& _Name,
             const ::rtl::OUString& _ReferencedTable,
             sal_Int32       _Type,
             sal_Int32       _UpdateRule,
             sal_Int32       _DeleteRule,
-            sal_Bool _bCase) :  OColumns_BASE(m_aMutex)
-                        ,ODescriptor(OColumns_BASE::rBHelper,_bCase)
-                        ,m_pColumns(NULL)
-                        ,m_ReferencedTable(_ReferencedTable)
-                        ,m_Type(_Type)
-                        ,m_UpdateRule(_UpdateRule)
-                        ,m_DeleteRule(_DeleteRule)
+            sal_Bool _bCase) :  OKeyDescriptor(_Name,_ReferencedTable,_Type,_UpdateRule,_DeleteRule,_bCase)
 {
-    m_Name = _Name;
 }
 // -------------------------------------------------------------------------
 OKey::~OKey( )
 {
-    delete m_pColumns;
 }
 // -------------------------------------------------------------------------
 Any SAL_CALL OKey::queryInterface( const Type & rType ) throw(RuntimeException)
 {
-        Any aRet = ODescriptor::queryInterface( rType);
+    Any aRet = OKeyDescriptor::queryInterface( rType);
     if(aRet.hasValue())
         return aRet;
-    return OColumns_BASE::queryInterface( rType);
+    return cppu::queryInterface( rType,static_cast< ::com::sun::star::sdbcx::XDataDescriptorFactory* >(this));
 }
 // -------------------------------------------------------------------------
 Sequence< Type > SAL_CALL OKey::getTypes(  ) throw(RuntimeException)
 {
-    return ::comphelper::concatSequences(ODescriptor::getTypes(),OColumns_BASE::getTypes());
-}
-// -------------------------------------------------------------------------
-void OKey::construct()
-{
-    ODescriptor::construct();
-
-        sal_Int32 nAttrib = isNew() ? 0 : PropertyAttribute::READONLY;
-
-    registerProperty(PROPERTY_REFERENCEDTABLE,  PROPERTY_ID_REFERENCEDTABLE,    nAttrib,&m_ReferencedTable, ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
-    registerProperty(PROPERTY_TYPE,             PROPERTY_ID_TYPE,               nAttrib,&m_Type,            ::getCppuType(reinterpret_cast<sal_Int32*>(NULL)));
-    registerProperty(PROPERTY_UPDATERULE,       PROPERTY_ID_UPDATERULE,         nAttrib,&m_UpdateRule,      ::getCppuType(reinterpret_cast<sal_Int32*>(NULL)));
-    registerProperty(PROPERTY_DELETERULE,       PROPERTY_ID_DELETERULE,         nAttrib,&m_DeleteRule,      ::getCppuType(reinterpret_cast<sal_Int32*>(NULL)));
-}
-// -------------------------------------------------------------------------
-void OKey::disposing(void)
-{
-    OPropertySetHelper::disposing();
-
-    ::osl::MutexGuard aGuard(m_aMutex);
-
-    if(m_pColumns)
-        m_pColumns->disposing();
-
-    OColumns_BASE::disposing();
-}
-// -------------------------------------------------------------------------
-::cppu::IPropertyArrayHelper* OKey::createArrayHelper( ) const
-{
-        Sequence< Property > aProps;
-    describeProperties(aProps);
-    return new ::cppu::OPropertyArrayHelper(aProps);
-}
-// -------------------------------------------------------------------------
-::cppu::IPropertyArrayHelper & OKey::getInfoHelper()
-{
-    return *const_cast<OKey*>(this)->getArrayHelper();
+    Sequence< Type > aTypes(1);
+    aTypes[0] = ::getCppuType(static_cast< Reference< ::com::sun::star::sdbcx::XDataDescriptorFactory >* >(NULL));
+    return ::comphelper::concatSequences(OKeyDescriptor::getTypes(),aTypes);
 }
 // -------------------------------------------------------------------------
 Reference< XPropertySet > SAL_CALL OKey::createDataDescriptor(  ) throw(RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    if (OColumns_BASE::rBHelper.bDisposed)
-                throw DisposedException();
+    if (rBHelper.bDisposed)
+        throw DisposedException();
 
     return this;
-}
-// -------------------------------------------------------------------------
-Reference< ::com::sun::star::container::XNameAccess > SAL_CALL OKey::getColumns(  ) throw(RuntimeException)
-{
-    ::osl::MutexGuard aGuard(m_aMutex);
-    if (OColumns_BASE::rBHelper.bDisposed)
-                throw DisposedException();
-
-    if(!m_pColumns)
-        refreshColumns();
-
-    return const_cast<OKey*>(this)->m_pColumns;
 }
 // -------------------------------------------------------------------------
 

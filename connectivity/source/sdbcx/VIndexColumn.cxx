@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VIndexColumn.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-24 15:40:49 $
+ *  last change: $Author: oj $ $Date: 2000-10-30 07:53:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,6 @@
  *
  *
  ************************************************************************/
-
-
 #ifndef _CONNECTIVITY_SDBCX_INDEXCOLUMN_HXX_
 #include "connectivity/sdbcx/VIndexColumn.hxx"
 #endif
@@ -71,12 +69,8 @@
 using namespace connectivity::dbtools;
 using namespace connectivity::sdbcx;
 using namespace ::com::sun::star::beans;
-// -------------------------------------------------------------------------
-OIndexColumn::OIndexColumn(sal_Bool _bCase) : OColumn(_bCase)
-                             , m_IsAscending(sal_True)
-{
-    construct();
-}
+using namespace ::com::sun::star::uno;
+IMPLEMENT_SERVICE_INFO(OIndexColumn,"com.sun.star.sdbcx.VIndexColumn","com.sun.star.sdbcx.IndexColumn");
 // -------------------------------------------------------------------------
 OIndexColumn::OIndexColumn( sal_Bool _IsAscending,
                             const ::rtl::OUString&  _Name,
@@ -108,7 +102,7 @@ OIndexColumn::OIndexColumn( sal_Bool _IsAscending,
 // -------------------------------------------------------------------------
 void OIndexColumn::construct()
 {
-        sal_Int32 nAttrib = isNew() ? 0 : PropertyAttribute::READONLY;
+    sal_Int32 nAttrib = isNew() ? 0 : PropertyAttribute::READONLY;
     registerProperty(PROPERTY_ISASCENDING,  PROPERTY_ID_ISASCENDING,    nAttrib,&m_IsAscending, ::getBooleanCppuType());
 }
 

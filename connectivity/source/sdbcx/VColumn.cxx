@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VColumn.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-24 15:40:49 $
+ *  last change: $Author: oj $ $Date: 2000-10-30 07:53:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,19 +85,6 @@ using namespace ::com::sun::star::lang;
 
 IMPLEMENT_SERVICE_INFO(OColumn,"com.sun.star.sdbcx.VColumn","com.sun.star.sdbcx.Column");
 // -------------------------------------------------------------------------
-OColumn::OColumn(sal_Bool _bCase)  :    OColumn_BASE(m_aMutex)
-                    ,   ODescriptor(OColumn_BASE::rBHelper,_bCase,sal_True)
-                    ,   m_Precision(0)
-                    ,   m_Type(0)
-                    ,   m_Scale(0)
-                    ,   m_IsNullable(sal_True)
-                    ,   m_IsAutoIncrement(sal_False)
-                    ,   m_IsRowVersion(sal_False)
-                    ,   m_IsCurrency(sal_False)
-{
-    construct();
-}
-// -------------------------------------------------------------------------
 OColumn::OColumn(   const ::rtl::OUString& _Name,
                     const ::rtl::OUString& _TypeName,
                     const ::rtl::OUString& _DefaultValue,
@@ -109,21 +96,18 @@ OColumn::OColumn(   const ::rtl::OUString& _Name,
                     sal_Bool        _IsRowVersion,
                     sal_Bool        _IsCurrency,
                     sal_Bool        _bCase)
-            :   OColumn_BASE(m_aMutex)
-            ,   ODescriptor(OColumn_BASE::rBHelper,_bCase)
-            ,   m_TypeName(_TypeName)
-            ,   m_DefaultValue(_DefaultValue)
-            ,   m_Precision(_Precision)
-            ,   m_Type(_Type)
-            ,   m_Scale(_Scale)
-            ,   m_IsNullable(_IsNullable)
-            ,   m_IsAutoIncrement(_IsAutoIncrement)
-            ,   m_IsRowVersion(_IsRowVersion)
-            ,   m_IsCurrency(_IsCurrency)
+        : OColumnDescriptor(  _Name,
+                              _TypeName,
+                              _DefaultValue,
+                              _IsNullable,
+                              _Precision,
+                              _Scale,
+                              _Type,
+                              _IsAutoIncrement,
+                              _IsRowVersion,
+                              _IsCurrency,
+                              _bCase)
 {
-    m_Name = _Name;
-
-    construct();
 }
 // -------------------------------------------------------------------------
 OColumn::~OColumn()
@@ -132,61 +116,25 @@ OColumn::~OColumn()
 // -------------------------------------------------------------------------
 Any SAL_CALL OColumn::queryInterface( const Type & rType ) throw(RuntimeException)
 {
-    Any aRet = ODescriptor::queryInterface( rType);
+    Any aRet = OColumnDescriptor::queryInterface( rType);
     if(aRet.hasValue())
         return aRet;
-    return OColumn_BASE::queryInterface( rType);
+    return cppu::queryInterface(rType,static_cast< ::com::sun::star::sdbcx::XDataDescriptorFactory* >(this));
 }
 // -------------------------------------------------------------------------
 Sequence< Type > SAL_CALL OColumn::getTypes(  ) throw(RuntimeException)
 {
-    return ::comphelper::concatSequences(ODescriptor::getTypes(),OColumn_BASE::getTypes());
-}
-// -------------------------------------------------------------------------
-void OColumn::construct()
-{
-    ODescriptor::construct();
-
-    sal_Int32 nAttrib = isNew() ? 0 : PropertyAttribute::READONLY;
-
-    registerProperty(PROPERTY_TYPENAME,         PROPERTY_ID_TYPENAME,           nAttrib,&m_TypeName,        ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
-    registerProperty(PROPERTY_DESCRIPTION,      PROPERTY_ID_DESCRIPTION,        nAttrib,&m_Description,     ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
-    registerProperty(PROPERTY_DEFAULTVALUE,     PROPERTY_ID_DEFAULTVALUE,       nAttrib,&m_DefaultValue,    ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
-    registerProperty(PROPERTY_PRECISION,        PROPERTY_ID_PRECISION,          nAttrib,&m_Precision,       ::getCppuType(reinterpret_cast<sal_Int32*>(NULL)));
-    registerProperty(PROPERTY_TYPE,             PROPERTY_ID_TYPE,               nAttrib,&m_Type,            ::getCppuType(reinterpret_cast<sal_Int32*>(NULL)));
-    registerProperty(PROPERTY_SCALE,            PROPERTY_ID_SCALE,              nAttrib,&m_Scale,           ::getCppuType(reinterpret_cast<sal_Int32*>(NULL)));
-    registerProperty(PROPERTY_ISNULLABLE,       PROPERTY_ID_ISNULLABLE,         nAttrib,&m_IsNullable,      ::getCppuType(reinterpret_cast<sal_Int32*>(NULL)));
-    registerProperty(PROPERTY_ISAUTOINCREMENT,  PROPERTY_ID_ISAUTOINCREMENT,    nAttrib,&m_IsAutoIncrement, ::getBooleanCppuType());
-    registerProperty(PROPERTY_ISROWVERSION,     PROPERTY_ID_ISROWVERSION,       nAttrib,&m_IsRowVersion,    ::getBooleanCppuType());
-    registerProperty(PROPERTY_ISCURRENCY,       PROPERTY_ID_ISCURRENCY,         nAttrib,&m_IsCurrency,      ::getBooleanCppuType());
-}
-// -------------------------------------------------------------------------
-void OColumn::disposing(void)
-{
-    OPropertySetHelper::disposing();
-
-    ::osl::MutexGuard aGuard(m_aMutex);
-    if (OColumn_BASE::rBHelper.bDisposed)
-        throw DisposedException();
-}
-// -------------------------------------------------------------------------
-IPropertyArrayHelper* OColumn::createArrayHelper( ) const
-{
-    Sequence< Property > aProps;
-    describeProperties(aProps);
-    return new OPropertyArrayHelper(aProps);
-}
-// -------------------------------------------------------------------------
-IPropertyArrayHelper & OColumn::getInfoHelper()
-{
-    return *const_cast<OColumn*>(this)->getArrayHelper();
+    Sequence< Type > aTypes(1);
+    aTypes[0] = ::getCppuType(static_cast< Reference< ::com::sun::star::sdbcx::XDataDescriptorFactory >* >(NULL));
+    return ::comphelper::concatSequences(OColumnDescriptor::getTypes(),aTypes);
 }
 // -------------------------------------------------------------------------
 Reference< XPropertySet > SAL_CALL OColumn::createDataDescriptor(  ) throw(RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    if (OColumn_BASE::rBHelper.bDisposed)
+    if (rBHelper.bDisposed)
         throw DisposedException();
     return this;
 }
+// -----------------------------------------------------------------------------
 

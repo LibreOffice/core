@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VTable.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-24 15:40:49 $
+ *  last change: $Author: oj $ $Date: 2000-10-30 07:53:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,25 +66,17 @@
 #ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
 #endif
-#define CONNECTIVITY_PROPERTY_NAME_SPACE dbtools
-#ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
-#include "propertyids.hxx"
-#endif
-#ifndef _CONNECTIVITY_SDBCX_COLUMN_HXX_
-#include "connectivity/sdbcx/VColumn.hxx"
-#endif
-#ifndef _CONNECTIVITY_SDBCX_KEY_HXX_
-#include "connectivity/sdbcx/VKey.hxx"
-#endif
 #ifndef _CONNECTIVITY_SDBCX_INDEX_HXX_
 #include "connectivity/sdbcx/VIndex.hxx"
 #endif
 #ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
 #endif
+#ifndef _CONNECTIVITY_SDBCX_COLLECTION_HXX_
+#include "connectivity/sdbcx/VCollection.hxx"
+#endif
 
 // -------------------------------------------------------------------------
-using namespace connectivity::dbtools;
 using namespace connectivity;
 using namespace connectivity::sdbcx;
 using namespace ::com::sun::star::beans;
@@ -95,41 +87,36 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
 IMPLEMENT_SERVICE_INFO(OTable,"com.sun.star.sdbcx.VTable","com.sun.star.sdbcx.Table");
-// -------------------------------------------------------------------------
-OTable::OTable(sal_Bool _bCase) :   OTable_BASE(m_aMutex)
-                ,ODescriptor(OTable_BASE::rBHelper,_bCase,sal_True)
-                ,m_pIndexes(NULL)
-                ,m_pKeys(NULL)
-                ,m_pColumns(NULL)
+
+
+// --------------------------------------------------------------------------
+OTable::OTable( sal_Bool _bCase) : OTableDescriptor(_bCase)
+    ,m_pIndexes(NULL)
 {
 }
-// --------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 OTable::OTable( sal_Bool _bCase,
                 const ::rtl::OUString& _Name,       const ::rtl::OUString& _Type,
                 const ::rtl::OUString& _Description,const ::rtl::OUString& _SchemaName,
-                const ::rtl::OUString& _CatalogName) :  OTable_BASE(m_aMutex)
-                ,ODescriptor(OTable_BASE::rBHelper,_bCase)
+                const ::rtl::OUString& _CatalogName) :
+                OTableDescriptor(_bCase,
+                                  _Name,
+                                  _Type,
+                                  _Description,
+                                  _SchemaName,
+                                  _CatalogName)
                 ,m_pIndexes(NULL)
-                ,m_pKeys(NULL)
-                ,m_pColumns(NULL)
-                ,m_CatalogName(_CatalogName)
-                ,m_SchemaName(_SchemaName)
-                ,m_Description(_Description)
-                ,m_Type(_Type)
 {
-    m_Name = _Name;
 }
 // -------------------------------------------------------------------------
 OTable::~OTable()
 {
     delete m_pIndexes;
-    delete m_pKeys;
-    delete m_pColumns;
 }
 // -------------------------------------------------------------------------
 Any SAL_CALL OTable::queryInterface( const Type & rType ) throw(RuntimeException)
 {
-        Any aRet = ODescriptor::queryInterface( rType);
+    Any aRet = OTableDescriptor::queryInterface( rType);
     if(aRet.hasValue())
         return aRet;
     return OTable_BASE::queryInterface( rType);
@@ -137,75 +124,34 @@ Any SAL_CALL OTable::queryInterface( const Type & rType ) throw(RuntimeException
 // -------------------------------------------------------------------------
 Sequence< Type > SAL_CALL OTable::getTypes(  ) throw(RuntimeException)
 {
-    return ::comphelper::concatSequences(ODescriptor::getTypes(),OTable_BASE::getTypes());
-}
-// -------------------------------------------------------------------------
-void OTable::construct()
-{
-    ODescriptor::construct();
-
-        sal_Int32 nAttrib = isNew() ? 0 : PropertyAttribute::READONLY;
-
-    registerProperty(PROPERTY_CATALOGNAME,      PROPERTY_ID_CATALOGNAME,nAttrib,&m_CatalogName, ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
-    registerProperty(PROPERTY_SCHEMANAME,       PROPERTY_ID_SCHEMANAME, nAttrib,&m_SchemaName,  ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
-    registerProperty(PROPERTY_DESCRIPTION,      PROPERTY_ID_DESCRIPTION,nAttrib,&m_Description, ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
-    registerProperty(PROPERTY_TYPE,             PROPERTY_ID_TYPE,       nAttrib,&m_Type,        ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
+    return ::comphelper::concatSequences(OTableDescriptor::getTypes(),OTable_BASE::getTypes());
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OTable::disposing(void)
 {
-    ODescriptor::disposing();
+    OTableDescriptor::disposing();
 
     ::osl::MutexGuard aGuard(m_aMutex);
 
     if(m_pIndexes)
         m_pIndexes->disposing();
-    if(m_pKeys)
-        m_pKeys->disposing();
-    if(m_pColumns)
-        m_pColumns->disposing();
-
-}
-// -------------------------------------------------------------------------
-::cppu::IPropertyArrayHelper* OTable::createArrayHelper( ) const
-{
-        Sequence< Property > aProps;
-    describeProperties(aProps);
-    return new ::cppu::OPropertyArrayHelper(aProps);
-}
-// -------------------------------------------------------------------------
-::cppu::IPropertyArrayHelper & OTable::getInfoHelper()
-{
-    return *const_cast<OTable*>(this)->getArrayHelper();
 }
 // -------------------------------------------------------------------------
 Reference< XPropertySet > SAL_CALL OTable::createDataDescriptor(  ) throw(RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    if (OTable_BASE::rBHelper.bDisposed)
-                throw DisposedException();
+    if (rBHelper.bDisposed)
+        throw DisposedException();
 
     return this;
-}
-// XColumnsSupplier
-Reference< XNameAccess > SAL_CALL OTable::getColumns(  ) throw(RuntimeException)
-{
-    ::osl::MutexGuard aGuard(m_aMutex);
-    if (OTable_BASE::rBHelper.bDisposed)
-                throw DisposedException();
-
-    if(!m_pColumns)
-        refreshColumns();
-
-    return const_cast<OTable*>(this)->m_pColumns;
 }
 // -------------------------------------------------------------------------
 // XIndexesSupplier
 Reference< XNameAccess > SAL_CALL OTable::getIndexes(  ) throw(RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    if (OTable_BASE::rBHelper.bDisposed)
-                throw DisposedException();
+    if (rBHelper.bDisposed)
+        throw DisposedException();
 
     if(!m_pIndexes)
         refreshIndexes();
@@ -213,25 +159,12 @@ Reference< XNameAccess > SAL_CALL OTable::getIndexes(  ) throw(RuntimeException)
     return const_cast<OTable*>(this)->m_pIndexes;
 }
 // -------------------------------------------------------------------------
-// XKeysSupplier
-Reference< XIndexAccess > SAL_CALL OTable::getKeys(  ) throw(RuntimeException)
-{
-    ::osl::MutexGuard aGuard(m_aMutex);
-    if (OTable_BASE::rBHelper.bDisposed)
-                throw DisposedException();
-
-    if(!m_pKeys)
-        refreshKeys();
-
-    return const_cast<OTable*>(this)->m_pKeys;
-}
-// -------------------------------------------------------------------------
 // XRename
 void SAL_CALL OTable::rename( const ::rtl::OUString& newName ) throw(SQLException, ElementExistException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    if (OTable_BASE::rBHelper.bDisposed)
-                throw DisposedException();
+    if (rBHelper.bDisposed)
+        throw DisposedException();
 
 }
 // -------------------------------------------------------------------------
@@ -239,18 +172,29 @@ void SAL_CALL OTable::rename( const ::rtl::OUString& newName ) throw(SQLExceptio
 void SAL_CALL OTable::alterColumnByName( const ::rtl::OUString& colName, const Reference< XPropertySet >& descriptor ) throw(SQLException, NoSuchElementException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    if (OTable_BASE::rBHelper.bDisposed)
-                throw DisposedException();
+    if (rBHelper.bDisposed)
+        throw DisposedException();
 
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OTable::alterColumnByIndex( sal_Int32 index, const Reference< XPropertySet >& descriptor ) throw(SQLException, ::com::sun::star::lang::IndexOutOfBoundsException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    if (OTable_BASE::rBHelper.bDisposed)
-                throw DisposedException();
+    if (rBHelper.bDisposed)
+        throw DisposedException();
 
 }
 // -------------------------------------------------------------------------
-
+// -----------------------------------------------------------------------------
+cppu::IPropertyArrayHelper* OTable::createArrayHelper( ) const
+{
+    Sequence< Property > aProps;
+    describeProperties(aProps);
+    return new cppu::OPropertyArrayHelper(aProps);
+}
+// -------------------------------------------------------------------------
+cppu::IPropertyArrayHelper & OTable::getInfoHelper()
+{
+    return *static_cast<OTable_PROP*>(const_cast<OTable*>(this))->getArrayHelper();
+}
 

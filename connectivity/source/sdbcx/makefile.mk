@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:14:29 $
+#   last change: $Author: oj $ $Date: 2000-10-30 07:53:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -134,7 +134,7 @@ UNOTYPES+=	\
         com.sun.star.sdbcx.XAppend						\
         com.sun.star.sdbcx.XDrop						\
         com.sun.star.sdb.XColumnUpdate					\
-        com.sun.star.sdb.XColumn						\
+        com.sun.star.sdb.XColumn
         
 
 
@@ -143,14 +143,20 @@ UNOTYPES+=	\
 SLOFILES=\
         $(SLO)$/VCollection.obj					\
         $(SLO)$/VColumn.obj						\
+        $(SLO)$/VColumnDescriptor.obj			\
         $(SLO)$/VIndexColumn.obj				\
+        $(SLO)$/VIndexColumnDescriptor.obj		\
         $(SLO)$/VKeyColumn.obj					\
+        $(SLO)$/VKeyColumnDescriptor.obj		\
         $(SLO)$/VCatalog.obj					\
         $(SLO)$/VUser.obj						\
         $(SLO)$/VGroup.obj						\
+        $(SLO)$/VTableDescriptor.obj			\
         $(SLO)$/VTable.obj						\
         $(SLO)$/VKey.obj						\
+        $(SLO)$/VKeyDescriptor.obj				\
         $(SLO)$/VIndex.obj						\
+        $(SLO)$/VIndexDescriptor.obj			\
         $(SLO)$/VView.obj
         
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VKeyColumn.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-24 15:40:49 $
+ *  last change: $Author: oj $ $Date: 2000-10-30 07:53:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,12 +70,9 @@
 using namespace connectivity::dbtools;
 using namespace connectivity::sdbcx;
 using namespace ::com::sun::star::beans;
-
-// -------------------------------------------------------------------------
-OKeyColumn::OKeyColumn(sal_Bool _bCase) : OColumn(_bCase)
-{
-    construct();
-}
+using namespace ::com::sun::star::uno;
+using namespace cppu;
+IMPLEMENT_SERVICE_INFO(OKeyColumn,"com.sun.star.sdbcx.VKeyColumn","com.sun.star.sdbcx.KeyColumn");
 // -------------------------------------------------------------------------
 OKeyColumn::OKeyColumn( const ::rtl::OUString&  _ReferencedColumn,
                         const ::rtl::OUString&  _Name,
@@ -114,4 +111,6 @@ void OKeyColumn::construct()
     sal_Int32 nAttrib = isNew() ? 0 : PropertyAttribute::READONLY;
     registerProperty(PROPERTY_REFERENCEDCOLUMN, PROPERTY_ID_REFERENCEDCOLUMN,   nAttrib,&m_ReferencedColumn,    ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
 }
+
+
 

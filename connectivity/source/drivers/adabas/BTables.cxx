@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BTables.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-24 16:04:47 $
+ *  last change: $Author: oj $ $Date: 2000-10-30 07:55:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,9 @@
 #ifndef _COM_SUN_STAR_SDBC_COLUMNVALUE_HPP_
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #endif
+#ifndef _CONNECTIVITY_SDBCX_TABLEDESCRIPTOR_HXX_
+#include "connectivity/sdbcx/VTableDescriptor.hxx"
+#endif
 #ifndef _COM_SUN_STAR_SDBC_KEYRULE_HPP_
 #include <com/sun/star/sdbc/KeyRule.hpp>
 #endif
@@ -142,7 +145,7 @@ void OTables::disposing(void)
 // -------------------------------------------------------------------------
 Reference< XPropertySet > OTables::createEmptyObject()
 {
-    OAdabasTable* pNew = new OAdabasTable(static_cast<OAdabasCatalog&>(m_rParent).getConnection());
+    connectivity::sdbcx::OTableDescriptor* pNew = new connectivity::sdbcx::OTableDescriptor(sal_True);
     return pNew;
 }
 // -------------------------------------------------------------------------
@@ -164,11 +167,11 @@ void SAL_CALL OTables::appendByDescriptor( const Reference< XPropertySet >& desc
                 + ::rtl::OUString::createFromAscii(" (");
 
     // columns
-        Reference<XColumnsSupplier> xColumnSup(descriptor,UNO_QUERY);
-        Reference<XIndexAccess> xColumns(xColumnSup->getColumns(),UNO_QUERY);
-        Reference< XPropertySet > xColProp;
+    Reference<XColumnsSupplier> xColumnSup(descriptor,UNO_QUERY);
+    Reference<XIndexAccess> xColumns(xColumnSup->getColumns(),UNO_QUERY);
+    Reference< XPropertySet > xColProp;
 
-        Any aTypeName;
+    Any aTypeName;
     for(sal_Int32 i=0;i<xColumns->getCount();++i)
     {
         if(xColumns->getByIndex(i) >>= xColProp)
@@ -187,15 +190,15 @@ void SAL_CALL OTables::appendByDescriptor( const Reference< XPropertySet >& desc
 
             switch(getINT32(xColProp->getPropertyValue(PROPERTY_TYPE)))
             {
-                                case DataType::CHAR:
-                                case DataType::VARCHAR:
+                case DataType::CHAR:
+                case DataType::VARCHAR:
                     aSql = aSql + ::rtl::OUString::createFromAscii("(")
                                 + ::rtl::OUString::valueOf(getINT32(xColProp->getPropertyValue(PROPERTY_PRECISION)))
                                 + ::rtl::OUString::createFromAscii(")");
                     break;
 
-                                case DataType::DECIMAL:
-                                case DataType::NUMERIC:
+                case DataType::DECIMAL:
+                case DataType::NUMERIC:
                     aSql = aSql + ::rtl::OUString::createFromAscii("(")
                                 + ::rtl::OUString::valueOf(getINT32(xColProp->getPropertyValue(PROPERTY_PRECISION)))
                                 + ::rtl::OUString::createFromAscii(",")
@@ -204,7 +207,7 @@ void SAL_CALL OTables::appendByDescriptor( const Reference< XPropertySet >& desc
                     break;
             }
             ::rtl::OUString aDefault = getString(xColProp->getPropertyValue(PROPERTY_DEFAULTVALUE));
-                        if(getINT32(xColProp->getPropertyValue(PROPERTY_ISNULLABLE)) == ColumnValue::NO_NULLS)
+            if(getINT32(xColProp->getPropertyValue(PROPERTY_ISNULLABLE)) == ColumnValue::NO_NULLS)
             {
                 aSql = aSql + ::rtl::OUString::createFromAscii(" NOT NULL");
                 if(aDefault.getLength())
@@ -220,9 +223,9 @@ void SAL_CALL OTables::appendByDescriptor( const Reference< XPropertySet >& desc
 
     // keys
 
-        Reference<XKeysSupplier> xKeySup(descriptor,UNO_QUERY);
+    Reference<XKeysSupplier> xKeySup(descriptor,UNO_QUERY);
 
-        Reference<XIndexAccess> xKeys = xKeySup->getKeys();
+    Reference<XIndexAccess> xKeys = xKeySup->getKeys();
     if(xKeys.is())
     {
         sal_Bool bPKey = sal_False;
@@ -233,16 +236,16 @@ void SAL_CALL OTables::appendByDescriptor( const Reference< XPropertySet >& desc
 
                 sal_Int32 nKeyType      = getINT32(xColProp->getPropertyValue(PROPERTY_TYPE));
 
-                                if(nKeyType == KeyType::PRIMARY)
+                if(nKeyType == KeyType::PRIMARY)
                 {
                     if(!bPKey)
-                                                throw SQLException();
+                        throw SQLException();
 
                     bPKey = sal_True;
-                                        xColumnSup = Reference<XColumnsSupplier>(xColProp,UNO_QUERY);
-                                        xColumns = Reference<XIndexAccess>(xColumnSup->getColumns(),UNO_QUERY);
+                    xColumnSup = Reference<XColumnsSupplier>(xColProp,UNO_QUERY);
+                    xColumns = Reference<XIndexAccess>(xColumnSup->getColumns(),UNO_QUERY);
                     if(!xColumns->getCount())
-                                                throw SQLException();
+                        throw SQLException();
 
                     aSql = aSql + ::rtl::OUString::createFromAscii(" PRIMARY KEY (");
                     for(sal_Int32 i=0;i<xColumns->getCount();++i)
@@ -254,12 +257,12 @@ void SAL_CALL OTables::appendByDescriptor( const Reference< XPropertySet >& desc
 
                     aSql = aSql.replaceAt(aSql.getLength()-1,1,::rtl::OUString::createFromAscii(")"));
                 }
-                                else if(nKeyType == KeyType::UNIQUE)
+                else if(nKeyType == KeyType::UNIQUE)
                 {
-                                        xColumnSup = Reference<XColumnsSupplier>(xColProp,UNO_QUERY);
-                                        xColumns = Reference<XIndexAccess>(xColumnSup->getColumns(),UNO_QUERY);
+                    xColumnSup = Reference<XColumnsSupplier>(xColProp,UNO_QUERY);
+                    xColumns = Reference<XIndexAccess>(xColumnSup->getColumns(),UNO_QUERY);
                     if(!xColumns->getCount())
-                                                throw SQLException();
+                        throw SQLException();
 
                     aSql = aSql + ::rtl::OUString::createFromAscii(" UNIQUE (");
                     for(sal_Int32 i=0;i<xColumns->getCount();++i)
@@ -271,14 +274,14 @@ void SAL_CALL OTables::appendByDescriptor( const Reference< XPropertySet >& desc
 
                     aSql = aSql.replaceAt(aSql.getLength()-1,1,::rtl::OUString::createFromAscii(")"));
                 }
-                                else if(nKeyType == KeyType::FOREIGN)
+                else if(nKeyType == KeyType::FOREIGN)
                 {
                     sal_Int32 nDeleteRule   = getINT32(xColProp->getPropertyValue(PROPERTY_DELETERULE));
 
-                                        xColumnSup = Reference<XColumnsSupplier>(xColProp,UNO_QUERY);
-                                        xColumns = Reference<XIndexAccess>(xColumnSup->getColumns(),UNO_QUERY);
+                    xColumnSup = Reference<XColumnsSupplier>(xColProp,UNO_QUERY);
+                    xColumns = Reference<XIndexAccess>(xColumnSup->getColumns(),UNO_QUERY);
                     if(!xColumns->getCount())
-                                                throw SQLException();
+                        throw SQLException();
 
                     aSql = aSql + ::rtl::OUString::createFromAscii(" FOREIGN KEY ");
                     ::rtl::OUString aName,aSchema,aRefTable = getString(xColProp->getPropertyValue(PROPERTY_REFERENCEDTABLE));
@@ -301,16 +304,16 @@ void SAL_CALL OTables::appendByDescriptor( const Reference< XPropertySet >& desc
 
                     switch(nDeleteRule)
                     {
-                                                case KeyRule::CASCADE:
+                        case KeyRule::CASCADE:
                             aSql = aSql + ::rtl::OUString::createFromAscii(" ON DELETE CASCADE ");
                             break;
-                                                case KeyRule::RESTRICT:
+                        case KeyRule::RESTRICT:
                             aSql = aSql + ::rtl::OUString::createFromAscii(" ON DELETE RESTRICT ");
                             break;
-                                                case KeyRule::SET_NULL:
+                        case KeyRule::SET_NULL:
                             aSql = aSql + ::rtl::OUString::createFromAscii(" ON DELETE SET NULL ");
                             break;
-                                                case KeyRule::SET_DEFAULT:
+                        case KeyRule::SET_DEFAULT:
                             aSql = aSql + ::rtl::OUString::createFromAscii(" ON DELETE SET DEFAULT ");
                             break;
                         default:
@@ -349,9 +352,9 @@ void OTables::setComments(const Reference< XPropertySet >& descriptor ) throw(SQ
     xStmt->execute(aSql);
 
     // columns
-        Reference<XColumnsSupplier> xColumnSup(descriptor,UNO_QUERY);
-        Reference<XIndexAccess> xColumns(xColumnSup->getColumns(),UNO_QUERY);
-        Reference< XPropertySet > xColProp;
+    Reference<XColumnsSupplier> xColumnSup(descriptor,UNO_QUERY);
+    Reference<XIndexAccess> xColumns(xColumnSup->getColumns(),UNO_QUERY);
+    Reference< XPropertySet > xColProp;
 
     aSql = ::rtl::OUString::createFromAscii("COMMENT ON COLUMN ")
             + aQuote + getString(descriptor->getPropertyValue(PROPERTY_SCHEMANAME)) + aQuote + aDot
@@ -382,7 +385,7 @@ void SAL_CALL OTables::dropByName( const ::rtl::OUString& elementName ) throw(SQ
     if( aIter == m_aNameMap.end())
         throw NoSuchElementException(elementName,*this);
 
-        Reference< ::com::sun::star::lang::XUnoTunnel> xTunnel(aIter->second.get(),UNO_QUERY);
+    Reference< ::com::sun::star::lang::XUnoTunnel> xTunnel(aIter->second.get(),UNO_QUERY);
     if(xTunnel.is())
     {
         OAdabasTable* pTable = (OAdabasTable*)xTunnel->getSomething(OAdabasTable:: getUnoTunnelImplementationId());
@@ -390,7 +393,7 @@ void SAL_CALL OTables::dropByName( const ::rtl::OUString& elementName ) throw(SQ
         if(!pTable->isNew())
         {
             OAdabasConnection* pConnection = static_cast<OAdabasCatalog&>(m_rParent).getConnection();
-                        Reference< XStatement > xStmt = pConnection->createStatement(  );
+            Reference< XStatement > xStmt = pConnection->createStatement(  );
 
             ::rtl::OUString aName,aSchema;
             sal_Int32 nLen = elementName.indexOf('.');
@@ -411,7 +414,7 @@ void SAL_CALL OTables::dropByIndex( sal_Int32 index ) throw(SQLException, IndexO
 {
     ::osl::MutexGuard aGuard(m_rMutex);
     if (index < 0 || index >= getCount())
-                throw IndexOutOfBoundsException();
+        throw IndexOutOfBoundsException();
 
     dropByName((*m_aElements[index]).first);
 }

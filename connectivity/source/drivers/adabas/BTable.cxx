@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BTable.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-24 15:54:39 $
+ *  last change: $Author: oj $ $Date: 2000-10-30 07:55:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,15 +107,6 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
-OAdabasTable::OAdabasTable(OAdabasConnection* _pConnection) : OTable_TYPEDEF(sal_True)
-                ,m_pConnection(_pConnection)
-{
-    construct();
-    ::std::vector< ::rtl::OUString> aVector;
-    m_pColumns  = new OColumns(this,m_aMutex,aVector);
-    m_pKeys     = new OKeys(this,m_aMutex,aVector);
-    m_pIndexes  = new OIndexes(this,m_aMutex,aVector);
-}
 // -------------------------------------------------------------------------
 OAdabasTable::OAdabasTable( OAdabasConnection* _pConnection,
                     const ::rtl::OUString& _Name,
@@ -139,12 +130,12 @@ OAdabasTable::OAdabasTable( OAdabasConnection* _pConnection,
 void OAdabasTable::refreshColumns()
 {
     ::std::vector< ::rtl::OUString> aVector;
-        Reference< XResultSet > xResult = m_pConnection->getMetaData()->getColumns(Any(),
+    Reference< XResultSet > xResult = m_pConnection->getMetaData()->getColumns(Any(),
                                                     m_SchemaName,m_Name,::rtl::OUString::createFromAscii("%"));
 
     if(xResult.is())
     {
-                Reference< XRow > xRow(xResult,UNO_QUERY);
+        Reference< XRow > xRow(xResult,UNO_QUERY);
         while(xResult->next())
             aVector.push_back(xRow->getString(4));
     }
@@ -156,11 +147,11 @@ void OAdabasTable::refreshColumns()
 // -------------------------------------------------------------------------
 void OAdabasTable::refreshPrimaryKeys(std::vector< ::rtl::OUString>& _rKeys)
 {
-        Reference< XResultSet > xResult = m_pConnection->getMetaData()->getPrimaryKeys(Any(),m_SchemaName,m_Name);
+    Reference< XResultSet > xResult = m_pConnection->getMetaData()->getPrimaryKeys(Any(),m_SchemaName,m_Name);
 
     if(xResult.is())
     {
-                Reference< XRow > xRow(xResult,UNO_QUERY);
+        Reference< XRow > xRow(xResult,UNO_QUERY);
         if(xResult->next()) // there can be only one primary key
         {
             ::rtl::OUString aPkName = xRow->getString(6);
@@ -171,11 +162,11 @@ void OAdabasTable::refreshPrimaryKeys(std::vector< ::rtl::OUString>& _rKeys)
 // -------------------------------------------------------------------------
 void OAdabasTable::refreshForgeinKeys(std::vector< ::rtl::OUString>& _rKeys)
 {
-        Reference< XResultSet > xResult = m_pConnection->getMetaData()->getExportedKeys(Any(),m_SchemaName,m_Name);
+    Reference< XResultSet > xResult = m_pConnection->getMetaData()->getExportedKeys(Any(),m_SchemaName,m_Name);
 
     if(xResult.is())
     {
-                Reference< XRow > xRow(xResult,UNO_QUERY);
+        Reference< XRow > xRow(xResult,UNO_QUERY);
         while(xResult->next())
             _rKeys.push_back(xRow->getString(12));
     }
@@ -196,12 +187,12 @@ void OAdabasTable::refreshIndexes()
 {
     ::std::vector< ::rtl::OUString> aVector;
     // fill indexes
-        Reference< XResultSet > xResult = m_pConnection->getMetaData()->getIndexInfo(Any(),
-        m_SchemaName,m_Name,sal_False,sal_False);
+    Reference< XResultSet > xResult = m_pConnection->getMetaData()->getIndexInfo(Any(),
+    m_SchemaName,m_Name,sal_False,sal_False);
 
     if(xResult.is())
     {
-                Reference< XRow > xRow(xResult,UNO_QUERY);
+        Reference< XRow > xRow(xResult,UNO_QUERY);
         ::rtl::OUString aName,aDot = ::rtl::OUString::createFromAscii(".");
         while(xResult->next())
         {
@@ -221,7 +212,7 @@ void OAdabasTable::refreshIndexes()
 // -------------------------------------------------------------------------
 Any SAL_CALL OAdabasTable::queryInterface( const Type & rType ) throw(RuntimeException)
 {
-        Any aRet = ::cppu::queryInterface(rType,static_cast< ::com::sun::star::lang::XUnoTunnel*> (this));
+    Any aRet = ::cppu::queryInterface(rType,static_cast< ::com::sun::star::lang::XUnoTunnel*> (this));
     if(aRet.hasValue())
         return aRet;
     return OTable_TYPEDEF::queryInterface(rType);
