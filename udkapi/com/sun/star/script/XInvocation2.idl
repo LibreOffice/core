@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XInvocation2.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:28:52 $
+ *  last change: $Author: mi $ $Date: 2000-12-19 15:35:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,11 +100,14 @@ interface XInvocation2: com::sun::star::script::XInvocation
     /** @returns
         Information item for the method or property defined by aName
 
-        @param aName    specifies the name of the method or property
-        @param bExact   specifies the name of the method or property
+        @param aName
+            specifies the name of the method or property
 
-        @exception  IllegalArgumentException if aName is not the name
-                    of a supported method or property
+        @param bExact
+            specifies the name of the method or property
+
+        @throws IllegalArgumentException
+            if aName is not the name of a supported method or property
 
         @see com::sun::star::script::Invocation
      */
@@ -120,6 +123,9 @@ interface XInvocation2: com::sun::star::script::XInvocation
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/11/08 12:28:52  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:36  hjs
     initial import
 

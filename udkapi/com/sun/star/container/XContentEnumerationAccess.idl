@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XContentEnumerationAccess.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-11 16:09:45 $
+ *  last change: $Author: mi $ $Date: 2000-12-19 15:32:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,7 @@ interface XContentEnumerationAccess: com::sun::star::uno::XInterface
     /** @returns
                 all names of services of which instances exist in this object.
 
-        <p><method>XContentEnumerationAccess::createContentEnumeration</method>
+        <p><member>XContentEnumerationAccess::createContentEnumeration</member>
         creates a non-empty enumeration for all the service names which are
         listed here. For all others it creates no enumeration. </p>
      */
@@ -122,6 +122,9 @@ interface XContentEnumerationAccess: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2000/12/11 16:09:45  mi
+    documentation syntax fixed and some minor semantic documentation fixes
+
     Revision 1.4  2000/11/08 12:28:31  mi
     moved from api
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XConnectionPoint.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-13 15:47:01 $
+ *  last change: $Author: mi $ $Date: 2000-12-19 15:32:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,7 +123,7 @@ module com {  module sun {  module star {  module lang {
     <p>Each connection point is a separate sub-object to avoid circular
     reference counting problems.  A connection point controls how many
     connections (one or more) it will allow in its implementation of
-    <method>XConnectionPoint::advise()</method>.  </p>
+    <member>XConnectionPoint::advise()</member>.  </p>
 
     <h4>When to use?</h4>
 
@@ -155,13 +155,13 @@ interface XConnectionPoint: com::sun::star::uno::XInterface
                 the type of the outgoing interface managed by this
                 connection point.
 
-        <p>Using the <method>XConnectionPointContainer::getConnectionPoints</method>
+        <p>Using the <member>XConnectionPointContainer::getConnectionPoints</member>
         method, a client can obtain an <type>XConnectionPoint</type>
         interface.  Using that interface and this method, the client
         can determine the type of each connection point enumerated. The
         type returned from this method must enable the caller to access
         this same connection point through
-        <method>XConnectionPointContainer::findConnectionPoint</method>.
+        <member>XConnectionPointContainer::findConnectionPoint</member>.
 
         @see IConnectionPointContainer::FindConnectionPoint
      */
@@ -187,7 +187,7 @@ interface XConnectionPoint: com::sun::star::uno::XInterface
 
         <p>A few <code>add...Listener</code> methods need additional parameters
         to add listeners or throw exceptions. One of these methods is
-        <method scope="com::sun::star::beans">XPropertySet::addPropertyChangeListener</method>.
+        <member scope="com::sun::star::beans">XPropertySet::addPropertyChangeListener</member>.
         We ignore the problem in this interface. A solution must be provided
         in an additional <type>XConnectionPoint</type> interface.  </p>
 
@@ -215,7 +215,7 @@ interface XConnectionPoint: com::sun::star::uno::XInterface
 
         <p>A few <code>remove...Listener</code> methods need additional
         parameters to add listeners or throw exceptions. One of these methods
-        is <method scope="com::sun::star::beans">XPropertySet::removePropertyChangeListener</method>.
+        is <member scope="com::sun::star::beans">XPropertySet::removePropertyChangeListener</member>.
         We ignore the problem in this interface. A solution must be
         provided in an additional <type>XConnectionPoint</type> interface.  </p>
 
@@ -243,6 +243,9 @@ interface XConnectionPoint: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2000/12/13 15:47:01  mi
+    symtactical documentation and minor semantic documentation flaws fixed
+
     Revision 1.4  2000/11/08 12:28:41  mi
     moved from api
 

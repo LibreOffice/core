@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTest.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:28:57 $
+ *  last change: $Author: mi $ $Date: 2000-12-19 15:36:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,8 +97,8 @@ interface XTest: com::sun::star::uno::XInterface
         between test scenarios.
         @param  TestObject  The instance to be tested.
 
-        @exception IllegalArgumentException  if the test does not support TestName or
-        TestObject is null.
+        @throws IllegalArgumentException
+            if the test does not support TestName or TestObject is null.
     */
     void testInvariant( [in] string TestName,
              [in] com::sun::star::uno::XInterface TestObject )
@@ -122,7 +122,8 @@ interface XTest: com::sun::star::uno::XInterface
             Handle of next test is  returned by the method.
         @return Handle of the next test. -1 if this was the last test.
 
-        @exception IllegalArgumentException if the test does not support TestName
+        @throws IllegalArgumentException
+            if the test does not support TestName
             or TestObject is null.
     */
     long test( [in] string TestName,
@@ -154,8 +155,8 @@ interface XTest: com::sun::star::uno::XInterface
             Handle of next test is  returned by the method.
         @return Handle of the next test. -1 if this was the last test.
 
-        @exception IllegalArgumentException if the test does not support TestName
-            or TestObject is null.
+        @throws IllegalArgumentException
+            if the test does not support TestName or TestObject is null.
     */
     long testMultiThread( [in] string TestName,
              [in] com::sun::star::uno::XInterface TestObject,

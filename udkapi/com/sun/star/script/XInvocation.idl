@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XInvocation.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:28:52 $
+ *  last change: $Author: mi $ $Date: 2000-12-19 15:32:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,7 +167,7 @@ interface XInvocation: com::sun::star::uno::XInterface
                 <TRUE/> if the method with the specified name exists.
 
                 <p>This optimizes the calling sequence
-                ( <method>XInvocation::hasMethod</method>, <method>XInvocation::invoke</method> )!
+                ( <member>XInvocation::hasMethod</member>, <member>XInvocation::invoke</member> )!
 
                 @param aName
                 specifies the name of the method.
@@ -181,11 +181,11 @@ interface XInvocation: com::sun::star::uno::XInterface
                 <TRUE/> if the property with the specified name exists.
 
                 <p>This optimizes the calling sequence
-                ( <method>XInvocation::hasProperty</method>,
-                <method>XInvocation::getValue</method> ) or
+                ( <member>XInvocation::hasProperty</member>,
+                <member>XInvocation::getValue</member> ) or
 
-                ( <method>XInvocation::hasProperty</method>,
-                <method>XInvocation::setValue</method> )!
+                ( <member>XInvocation::hasProperty</member>,
+                <member>XInvocation::setValue</member> )!
 
                 @param aName
                 specifies the name of the property.
@@ -201,6 +201,9 @@ interface XInvocation: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/11/08 12:28:52  mi
+    moved from api
+
     Revision 1.2  2000/10/06 14:43:29  dbo
     added doc for XInvocation::invoke()
 

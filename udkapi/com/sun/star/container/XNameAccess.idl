@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XNameAccess.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-11 16:09:45 $
+ *  last change: $Author: mi $ $Date: 2000-12-19 15:32:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,7 @@ interface XNameAccess: com::sun::star::container::XElementAccess
             <TRUE/> if an element with this name is in
             the container, <FALSE/> otherwise.
 
-        <p>In many cases the next call is <method>XNameAccess::getByName</method>.
+        <p>In many cases the next call is <member>XNameAccess::getByName</member>.
         You should optimize this case.  </p>
 
         @param iaName
@@ -147,6 +147,9 @@ interface XNameAccess: com::sun::star::container::XElementAccess
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2000/12/11 16:09:45  mi
+    documentation syntax fixed and some minor semantic documentation fixes
+
     Revision 1.4  2000/11/08 12:28:31  mi
     moved from api
 
