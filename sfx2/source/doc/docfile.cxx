@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: mba $ $Date: 2000-12-14 10:22:51 $
+ *  last change: $Author: mba $ $Date: 2000-12-19 12:19:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1332,7 +1332,8 @@ void SfxMedium::Transfer_Impl()
 
         UCB_Helper::ExecuteCommand( xContent, WID_INSERT, aAny, &bSuccess );
         delete pStream;
-        GetOutStream();
+        if ( !aStorage.Is() )
+            GetOutStream();
         if ( !bSuccess )
             eError = ERRCODE_IO_GENERAL;
     }
