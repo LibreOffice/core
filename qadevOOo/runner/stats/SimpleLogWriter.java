@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SimpleLogWriter.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-10-06 12:41:39 $
+ *  last change:$Date: 2005-02-02 13:58:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,7 @@ public class SimpleLogWriter extends PrintWriter implements LogWriter {
 
     boolean logging = false;
     share.DescEntry entry = null;
+    share.Watcher ow = null;
 
     public SimpleLogWriter() {
         super(System.out);
@@ -91,14 +92,16 @@ public class SimpleLogWriter extends PrintWriter implements LogWriter {
     public boolean initialize(share.DescEntry entry, boolean logging) {
          this.logging = logging;
          this.entry = entry;
+
          return true;
     }
 
     public void println(String msg) {
-        share.Watcher ow = (share.Watcher)
-                                entry.UserDefinedParams.get("Watcher");
-        if (ow != null) {
-            ow.ping();
+
+        this.ow = (share.Watcher) entry.UserDefinedParams.get("Watcher");
+
+        if (this.ow != null) {
+            this.ow.ping();
         }
         if (logging) {
             super.println("LOG> "+msg);
@@ -108,6 +111,14 @@ public class SimpleLogWriter extends PrintWriter implements LogWriter {
 
     public boolean summary(share.DescEntry entry) {
         return true;
+    }
+
+    public Object getWatcher() {
+        return this.ow;
+    }
+
+    public void setWatcher(Object watcher) {
+        entry.UserDefinedParams.put("Watcher", (share.Watcher) watcher);
     }
 
 }
