@@ -14,7 +14,6 @@ SfxVoidItem CreateSWDrawView SID_CREATE_SW_DRAWVIEW
     RecordAbsolute = FALSE,
     RecordPerSet;
     Synchron;
-
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -9565,4 +9564,30 @@ SfxBoolItem RowSplit FN_TABLE_ROW_SPLIT
         ToolBoxConfig = TRUE,
         GroupId = GID_FORMAT;
 ]
+
+//--------------------------------------------------------------------------
+SfxVoidItem WordCountDialog FN_WORDCOUNT_DIALOG
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = TRUE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Asynchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_OPTIONS;
+]
+
 
