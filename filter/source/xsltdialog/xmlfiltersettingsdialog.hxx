@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfiltersettingsdialog.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-06 14:18:55 $
+ *  last change: $Author: obo $ $Date: 2004-04-29 16:13:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,9 @@
 
 #ifndef _SFXPOOLITEM_HXX
 #include <svtools/poolitem.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
+#include <svtools/moduleoptions.hxx>
 #endif
 
 #include "xmlfiltercommon.hxx"
@@ -206,6 +209,8 @@ private:
 
     ::rtl::OUString sTemplatePath;
     ::rtl::OUString sDocTypePrefix;
+
+    SvtModuleOptions maModuleOpt;
 };
 
 #endif
