@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epptso.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: sj $ $Date: 2001-01-31 17:02:10 $
+ *  last change: $Author: sj $ $Date: 2001-02-07 17:45:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -395,36 +395,200 @@ void GroupTable::SkipCurrentGroup()
 
 // ---------------------------------------------------------------------------------------------
 
-Collection::~Collection()
+SoundEntry::SoundEntry( const String& rString ) :
+    aSoundURL( rString ),
+    nFileSize( 0 )
 {
-    for( void* pStr = List::First(); pStr; pStr = List::Next() )
-        delete (String*) pStr;
+    try
+    {
+        ::ucb::Content aCnt( aSoundURL,
+            ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
+        sal_Int64 nVal;
+        ::cppu::convertPropertyValue( nVal, aCnt.getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Size" ) ) ) );
+        nFileSize = (sal_uInt32)nVal;
+    }
+    catch( const ::com::sun::star::ucb::ContentCreationException& )
+    {
+
+    }
+    catch( const ::com::sun::star::uno::RuntimeException& )
+    {
+
+    }
+    catch( const ::com::sun::star::lang::IllegalArgumentException& )
+    {
+
+    }
+};
+
+String SoundEntry::ImplGetName() const
+{
+    INetURLObject aTmp( aSoundURL );
+    return aTmp.GetName();
 }
 
-sal_uInt32 Collection::GetId( const String& rString )
+String SoundEntry::ImplGetExtension() const
 {
+    INetURLObject aTmp( aSoundURL );
+    String aExtension( aTmp.GetExtension() );
+    if ( aExtension.Len() )
+        aExtension.Insert( (sal_Unicode)'.', 0 );
+    return aExtension;
+}
+
+sal_Bool SoundEntry::IsSameURL( const String& rURL ) const
+{
+    return ( rURL == aSoundURL );
+}
+
+sal_uInt32 SoundEntry::GetSize( sal_uInt32 nId ) const
+{
+    String aName( ImplGetName() );
+    String aExtension( ImplGetExtension() );
+
+    sal_uInt32 nSize = 8;                           // SoundContainer Header
+    if ( aName.Len() )                              // String Atom          ( instance 0 - name of sound )
+        nSize += aName.Len() * 2 + 8;
+    if ( aExtension.Len() )                         // String Atom          ( instance 1 - extension of sound )
+        nSize += aExtension.Len() * 2 + 8;
+
+    String aId( String::CreateFromInt32( nId ) );   // String Atom          ( instance 2 - reference id )
+    nSize += 2 * aId.Len() + 8;
+
+    nSize += nFileSize + 8;                         // SoundData Atom
+
+    return nSize;
+}
+
+void SoundEntry::Write( SvStream& rSt, sal_uInt32 nId )
+{
+    try
+    {
+        ::ucb::Content aCnt( aSoundURL,
+            ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
+
+        // create SoundContainer
+        rSt << (sal_uInt32)( ( EPP_Sound << 16 ) | 0xf ) << (sal_uInt32)( GetSize( nId ) - 8 );
+
+        String aSoundName( ImplGetName() );
+        sal_uInt16 i, nSoundNameLen = aSoundName.Len();
+        if ( nSoundNameLen )
+        {
+            // name of sound ( instance 0 )
+            rSt << (sal_uInt32)( EPP_CString << 16 ) << (sal_uInt32)( nSoundNameLen * 2 );
+            for ( i = 0; i < nSoundNameLen; i++ )
+                rSt << aSoundName.GetChar( i );
+        }
+        String aExtension( ImplGetExtension() );
+        sal_uInt32 nExtensionLen = aExtension.Len();
+        if ( nExtensionLen )
+        {
+            // extension of sound ( instance 1 )
+            rSt << (sal_uInt32)( ( EPP_CString << 16 ) | 16 ) << (sal_uInt32)( nExtensionLen * 2 );
+            for ( i = 0; i < nExtensionLen; i++ )
+                rSt << aExtension.GetChar( i );
+        }
+        // id of sound ( instance 2 )
+        String aId( String::CreateFromInt32( nId ) );
+        sal_uInt32 nIdLen = aId.Len();
+        rSt << (sal_uInt32)( ( EPP_CString << 16 ) | 32 ) << (sal_uInt32)( nIdLen * 2 );
+        for ( i = 0; i < nIdLen; i++ )
+            rSt << aId.GetChar( i );
+
+        rSt << (sal_uInt32)( EPP_SoundData ) << (sal_uInt32)( nFileSize );
+        sal_uInt32 nBytesLeft = nFileSize;
+        SvStream* pSourceFile = ::utl::UcbStreamHelper::CreateStream( aSoundURL, STREAM_READ );
+        if ( pSourceFile )
+        {
+            sal_uInt8* pBuf = new sal_uInt8[ 0x10000 ];   // 64 kB  Buffer
+            while ( nBytesLeft )
+            {
+                sal_uInt32 nToDo = ( nBytesLeft > 0x10000 ) ? 0x10000 : nBytesLeft;
+                pSourceFile->Read( pBuf, nToDo );
+                rSt.Write( pBuf, nToDo );
+                nBytesLeft -= nToDo;
+            }
+            delete pSourceFile;
+            delete pBuf;
+        }
+    }
+    catch( const ::com::sun::star::ucb::ContentCreationException& )
+    {
+
+    }
+    catch( const ::com::sun::star::uno::RuntimeException& )
+    {
+
+    }
+    catch( const ::com::sun::star::lang::IllegalArgumentException& )
+    {
+
+    }
+}
+
+SoundCollection::~SoundCollection()
+{
+    for( void* pPtr = List::First(); pPtr; pPtr = List::Next() )
+        delete (SoundEntry*)pPtr;
+}
+
+sal_uInt32 SoundCollection::GetId( const String& rString )
+{
+    sal_uInt32 nSoundId = 0;
     if( rString.Len() )
     {
-        const sal_uInt32 nCount = GetCount();
+        const sal_uInt32 nCount = Count();
 
-        for( sal_uInt32 i = 0; i < nCount; i++ )
-            if( *GetById( i ) == rString )
-                return i;
-
-        List::Insert( new String( rString ), LIST_APPEND );
-        return nCount;
+        for( ; nSoundId < nCount; nSoundId++ )
+            if( ImplGetByIndex( nSoundId )->IsSameURL( rString ) )
+                break;
+        if ( nSoundId++ == nCount )
+        {
+            SoundEntry* pEntry = new SoundEntry( rString );
+            if ( pEntry->GetFileSize() )
+                List::Insert( pEntry, LIST_APPEND );
+            else
+            {
+                nSoundId = 0;   // only insert sounds that are accessible
+                delete pEntry;
+            }
+        }
     }
-    return 0;
+    return nSoundId;
 }
 
-sal_uInt32 Collection::GetCount() const
+const SoundEntry* SoundCollection::ImplGetByIndex( sal_uInt32 nIndex ) const
 {
-    return List::Count();
+    return (SoundEntry*)List::GetObject( nIndex );
 }
 
-const String* Collection::GetById( sal_uInt32 nId )
+sal_uInt32 SoundCollection::GetSize() const
 {
-    return (String*) List::GetObject( nId );
+    sal_uInt32 nSize = 0;
+    sal_uInt32 i, nCount = Count();
+    if ( nCount )
+    {
+        nSize += 8 + 12;    // size of SoundCollectionContainerHeader + SoundCollAtom
+        for ( i = 0; i < nCount; i++ )
+            nSize += ImplGetByIndex( i )->GetSize( i + 1 );
+    }
+    return nSize;
+}
+
+void SoundCollection::Write( SvStream& rSt )
+{
+    sal_uInt32 i, nCount = Count();
+    if ( nCount )
+    {
+        // create SoundCollection Container
+        rSt << (sal_uInt16)0xf << (sal_uInt16)EPP_SoundCollection << (sal_uInt32)( GetSize() - 8 );
+
+        // create SoundCollAtom ( reference to the next free SoundId );
+        rSt << (sal_uInt32)( EPP_SoundCollAtom << 16 ) << (sal_uInt32)4 << nCount;
+
+        for ( i = 0; i < nCount; i++ )
+            ((SoundEntry*)List::GetObject( i ))->Write( rSt, i + 1 );
+    }
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -709,63 +873,7 @@ sal_Bool PPTWriter::ImplCloseDocument()
         if ( nExEmbedSize )
             nBytesToInsert += nExEmbedSize + 8 + 12;
 
-        // die Gesamtgroesse des evntl. spaeter folgenden Sound Containers ermitteln
-        sal_uInt32 nSound = 0;
-        sal_uInt32 nValidSoundCount = 0;
-        if ( maSoundCollection.GetCount() )
-        {
-            for ( sal_uInt32 i = 0; i < maSoundCollection.GetCount(); i++ )
-            {
-                const String* pSoundFile = maSoundCollection.GetById( i );
-                if ( pSoundFile )
-                {
-                    USHORT nStringLen = pSoundFile->Len();
-                    if ( nStringLen )
-                    {
-                        try
-                        {
-                            ::ucb::Content aCnt( *pSoundFile,
-                                                    ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
-                            sal_Int64 nVal;
-
-                            ::cppu::convertPropertyValue( nVal, aCnt.getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Size" ) ) ) );
-                            sal_uInt32 nSizeOfSound = (sal_uInt32) nVal;
-
-                            if ( nSizeOfSound )
-                            {
-                                nSound += 2 * nStringLen + 8;   // Name Of Sound ( instance 0 )
-                                if ( nStringLen > 4 )
-                                {
-                                    if ( '.' == pSoundFile->GetChar( nStringLen - 4 ) )
-                                        nSound += 16;           // Type Of Sound ( instance 1 )
-                                }
-                                String aString( String::CreateFromInt32( i + 1 ) );
-                                nSound += 2 * aString.Len() + 8;// reference Id  ( instance 2 )
-                                nSound += nSizeOfSound + 8;     // SoundData Atom;
-                                nValidSoundCount++;
-                            }
-                        }
-                        catch( const ::com::sun::star::ucb::ContentCreationException& )
-                        {
-
-                        }
-                        catch( const ::com::sun::star::uno::RuntimeException& )
-                        {
-
-                        }
-                        catch( const ::com::sun::star::lang::IllegalArgumentException& )
-                        {
-
-                        }
-                    }
-                }
-            }
-            if ( nValidSoundCount )
-            {
-                nSound += 12 + nValidSoundCount * 8;    // Size der SoundContainer + SoundCollAtom
-                nBytesToInsert += ( nSound + 8 );       // Size der SoundCollection Container + nSound
-            }
-        }
+        nBytesToInsert += maSoundCollection.GetSize();
         nBytesToInsert += mpPptEscherEx->DrawingGroupContainerSize();
         nBytesToInsert += ImplMasterSlideListContainer( NULL );
         nBytesToInsert += ImplDocumentListContainer( NULL );
@@ -879,87 +987,7 @@ sal_Bool PPTWriter::ImplCloseDocument()
             0x00, 0x00, 0x00, 0x05, 0x00, 0x00, 0x80, 0x04, 0x80, 0x04, 0x00, 0x00, 0x00, 0x00
         };
         mpStrm->Write( &aTxSuStyleAtom, 110 );
-
-        if ( nValidSoundCount )
-        {
-            sal_uInt8* pBuf = new sal_uInt8[ 0x10000 ];   // 64 kB  Buffer
-
-            // Create Sound Container
-            *mpStrm << (sal_uInt16)0xf << (sal_uInt16)EPP_SoundCollection << (sal_uInt32)nSound;
-
-            // Create SoundCollAtom ( Referenz auf die naechste Freie SoundId );
-            mpPptEscherEx->AddAtom( 4, EPP_SoundCollAtom );
-            *mpStrm << (sal_uInt32)( maSoundCollection.GetCount() );
-
-            for ( sal_uInt32 i = 0; i < maSoundCollection.GetCount(); i++ )
-            {
-                const String* pSoundFile = maSoundCollection.GetById( i );
-                if ( pSoundFile )
-                {
-                    USHORT nStringLen = pSoundFile->Len();
-                    if ( nStringLen )
-                    {
-                        try
-                        {
-                            ::ucb::Content aCnt( *pSoundFile,
-                                                 ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
-                            sal_Int64 nVal;
-
-                            ::cppu::convertPropertyValue( nVal, aCnt.getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Size" ) ) ) );
-                            sal_uInt32 nSizeOfSound = (sal_uInt32) nVal;
-
-                            if ( nSizeOfSound )
-                            {
-                                *mpStrm << (sal_uInt16)0xf << (sal_uInt16)EPP_Sound;
-                                sal_uInt32 nOldSoundPos = mpStrm->Tell();
-                                *mpStrm << (sal_uInt32)0;
-
-                                mpPptEscherEx->AddAtom( nStringLen * 2, EPP_CString );        // Name Of Sound ( instance 0 )
-                                for ( USHORT k = 0; k < nStringLen; k++ )
-                                    *mpStrm << pSoundFile->GetChar( k );
-
-                                if ( nStringLen > 4 )
-                                {
-                                    if ( (sal_Char)'.' == pSoundFile->GetChar( nStringLen - 4 ) )
-                                    {
-                                        mpPptEscherEx->AddAtom( 8, EPP_CString, 0, 1 );   // Type Of Sound ( instance 1 )
-                                        for ( k = nStringLen - 4; k < nStringLen; k++ )
-                                            *mpStrm << pSoundFile->GetChar( k );
-                                    }
-                                }
-                                String aString( String::CreateFromInt32( i + 1 ) );
-                                mpPptEscherEx->AddAtom( aString.Len() * 2, EPP_CString, 0, 2 );
-                                for ( k = 0; k < aString.Len(); k++ )
-                                    *mpStrm << aString.GetChar( k );
-                                mpPptEscherEx->AddAtom( nSizeOfSound, EPP_SoundData );
-
-                                sal_uInt32 nBytesLeft = nSizeOfSound;
-                                SvStream* pSourceFile = ::utl::UcbStreamHelper::CreateStream( *pSoundFile, STREAM_READ );
-                                if ( pSourceFile )
-                                {
-                                    while ( nBytesLeft )
-                                    {
-                                        sal_uInt32 nToDo = ( nBytesLeft > 0x10000 ) ? 0x10000 : nBytesLeft;
-                                        pSourceFile->Read( pBuf, nToDo );
-                                        mpStrm->Write( pBuf, nToDo );
-                                        nBytesLeft -= nToDo;
-                                    }
-                                    delete pSourceFile;
-                                }
-                                sal_uInt32 nCurSoundPos = mpStrm->Tell();
-                                mpStrm->Seek( nOldSoundPos );
-                                *mpStrm << (sal_uInt32)( nCurSoundPos - nOldSoundPos - 4 );
-                                mpStrm->Seek( nCurSoundPos );
-                            }
-                        }
-                        catch( ... )
-                        {
-                        }
-                    }
-                }
-            }
-            delete pBuf;
-        }
+        maSoundCollection.Write( *mpStrm );
 
         mpPptEscherEx->WriteDrawingGroupContainer( *mpStrm );
         ImplMasterSlideListContainer( mpStrm );
@@ -1805,7 +1833,8 @@ PortionObj::PortionObj( ::com::sun::star::uno::Reference< ::com::sun::star::text
         }
 
         sal_Bool bSymbol = FALSE;
-        if ( bPropSetsValid && ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharFontCharset" ) ), FALSE ) )
+
+        if ( bPropSetsValid && ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharFontCharSet" ) ), FALSE ) )
         {
             sal_Int16 nCharset;
             mAny >>= nCharset;
@@ -3572,12 +3601,9 @@ void PPTWriter::ImplWriteObjectEffect( SvStream& rSt,
         {
             if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "Sound" ) ) ) )
             {
-                String aString( *(::rtl::OUString*)mAny.getValue() );
-                if ( aString.Len() )
-                {
-                    nSoundRef = maSoundCollection.GetId( aString ) + 1;
+                nSoundRef = maSoundCollection.GetId( *(::rtl::OUString*)mAny.getValue() );
+                if ( nSoundRef )
                     nFlags |= 0x10;
-                }
             }
         }
     }
@@ -3659,10 +3685,7 @@ void PPTWriter::ImplWriteClickAction( SvStream& rSt, ::com::sun::star::presentat
         case ::com::sun::star::presentation::ClickAction_SOUND :
         {
             if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "Bookmark" ) ) ) )
-            {
-                String aString( *(::rtl::OUString*)mAny.getValue() );
-                nSoundRef = maSoundCollection.GetId( aString ) + 1;
-            }
+                nSoundRef = maSoundCollection.GetId( *(::rtl::OUString*)mAny.getValue() );
         }
         break;
         case ::com::sun::star::presentation::ClickAction_PROGRAM :
