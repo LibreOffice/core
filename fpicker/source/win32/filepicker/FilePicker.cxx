@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilePicker.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: tra $ $Date: 2002-02-21 14:46:49 $
+ *  last change: $Author: tra $ $Date: 2002-02-21 15:01:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -278,13 +278,13 @@ OUString SAL_CALL CFilePicker::helpRequested( FilePickerEvent aEvent ) const
             aGuard.clear( );
 
             ::cppu::OInterfaceContainerHelper* pICHelper =
-                rBHelper.aLC.getContainer( getCppuType( ( Reference< XFilePickerListener > * ) 0 ) );
+                rBHelper.getContainer( getCppuType((Reference<XFilePickerListener>*)0));
 
             if ( pICHelper )
             {
-                ::cppu::OInterfaceIteratorHelper iter( *pICHelper );
+                ::cppu::OInterfaceIteratorHelper iter(*pICHelper);
 
-                while( iter.hasMoreElements( ) )
+                while(iter.hasMoreElements())
                 {
                     try
                     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: asynceventnotifier.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tra $ $Date: 2002-02-21 14:45:38 $
+ *  last change: $Author: tra $ $Date: 2002-02-21 15:01:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,11 +248,11 @@ void SAL_CALL CAsyncEventNotifier::run()
                 removeNextEventRecord();
 
                 ::cppu::OInterfaceContainerHelper* pICHelper =
-                    m_rBroadcastHelper.aLC.getContainer(getCppuType((Reference<XFilePickerListener>*)0));
+                    m_rBroadcastHelper.getContainer(getCppuType((Reference<XFilePickerListener>*)0));
 
                 if ( pICHelper )
                 {
-                    ::cppu::OInterfaceIteratorHelper iter( *pICHelper );
+                    ::cppu::OInterfaceIteratorHelper iter(*pICHelper);
 
                     while( iter.hasMoreElements() )
                     {
