@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configmgr.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mba $ $Date: 2000-12-08 08:56:14 $
+ *  last change: $Author: os $ $Date: 2000-12-09 14:59:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,10 +166,25 @@ Reference< XMultiServiceFactory > ConfigManager::GetConfigurationProvider()
         aPValue.Name  = C2U("servertype");
         aPValue.Value <<= C2U("plugin");
         pValues[0] <<= aPValue;
-        xConfigurationProvider = Reference< XMultiServiceFactory >
+        try
+          {
+            xConfigurationProvider = Reference< XMultiServiceFactory >
             (xMSF->createInstanceWithArguments(
                     C2U("com.sun.star.configuration.ConfigurationProvider"), aArgs),
                         UNO_QUERY);
+        }
+#ifdef DBG_UTIL
+    catch(Exception& rEx)
+    {
+        OString sMsg("CreateInstance with arguments exception: ");
+        sMsg += OString(rEx.Message.getStr(),
+                    rEx.Message.getLength(),
+                     RTL_TEXTENCODING_ASCII_US);
+        OSL_DEBUG_ONLY(sMsg.getStr());
+    }
+#else
+    catch(Exception&){}
+#endif
     }
     return xConfigurationProvider;
 }
@@ -194,30 +209,28 @@ Reference< XHierarchicalNameAccess > ConfigManager::AddConfigItem(utl::ConfigIte
 
     Reference< XMultiServiceFactory > xCfgProvider = GetConfigurationProvider();
     Reference< XInterface > xIFace;
-    try
+    if(xCfgProvider.is())
     {
-        xIFace = xCfgProvider->createInstanceWithArguments(
-                C2U(cAccessSrvc),
-                aArgs);
-        pMgrImpl->aItemList.insert(aListIter, ConfigItemListEntry_Impl(&rCfgItem));
-#ifdef DEBUG
-        Reference<XNameAccess> xNA(xIFace, UNO_QUERY);
-        Sequence<OUString> aNames = xNA->getElementNames();
-        const OUString* pNames = aNames.getConstArray();
-#endif
-    }
+        try
+        {
+            xIFace = xCfgProvider->createInstanceWithArguments(
+                    C2U(cAccessSrvc),
+                    aArgs);
+            pMgrImpl->aItemList.insert(aListIter, ConfigItemListEntry_Impl(&rCfgItem));
+        }
 #ifdef DBG_UTIL
-    catch(Exception& rEx)
-    {
-        OString sMsg("CreateInstance exception: ");
-        sMsg += OString(rEx.Message.getStr(),
-                    rEx.Message.getLength(),
-                     RTL_TEXTENCODING_ASCII_US);
-        OSL_DEBUG_ONLY(sMsg.getStr());
-    }
+        catch(Exception& rEx)
+        {
+            OString sMsg("CreateInstance exception: ");
+            sMsg += OString(rEx.Message.getStr(),
+                        rEx.Message.getLength(),
+                         RTL_TEXTENCODING_ASCII_US);
+            OSL_DEBUG_ONLY(sMsg.getStr());
+        }
 #else
-    catch(Exception&){}
+        catch(Exception&){}
 #endif
+    }
     return Reference<XHierarchicalNameAccess>(xIFace, UNO_QUERY);
 }
 /* -----------------------------29.08.00 12:35--------------------------------
@@ -310,6 +323,8 @@ Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
     Sequence< Any > aArgs(1);
     aArgs[0] <<= sPath;
     Reference< XMultiServiceFactory > xCfgProvider = GetConfigManager()->GetConfigurationProvider();
+    if(!xCfgProvider.is())
+        return aRet;
     Reference< XInterface > xIFace;
     try
     {
