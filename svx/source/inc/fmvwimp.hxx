@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmvwimp.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-02 16:33:58 $
+ *  last change: $Author: fs $ $Date: 2002-05-22 17:13:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -269,7 +269,7 @@ private:
     void ObjectRemovedInAliveMode(const SdrObject* pObject);
 
     /// the the auto focus to the first (in terms of the tab order) control
-    void AutoFocus();
+    void AutoFocus( sal_Bool _bSync = sal_False );
     DECL_LINK(OnActivate, void* );
     DECL_LINK(OnAutoFocus, void* );
     DECL_LINK(OnDelayedErrorMessage, void*);
