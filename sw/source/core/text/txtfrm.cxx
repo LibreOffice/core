@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-24 07:52:22 $
+ *  last change: $Author: hjs $ $Date: 2003-09-25 10:49:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -737,7 +737,7 @@ void SwTxtFrm::CalcLineSpace()
         else if ( ! GetTxtNode()->IsWrongDirty() ) \
         { \
             GetTxtNode()->SetWrong( new SwWrongList() ); \
-            GetTxtNode()->GetWrong()->SetInvalid( nPos, nPos + ( nCnt > 0 ? nCnt : 1 ) ); \
+            GetTxtNode()->GetWrong()->SetInvalid( nPos, nPos + (USHORT)( nCnt > 0 ? nCnt : 1 ) ); \
         } \
         GetNode()->SetWrongDirty( sal_True ); \
         GetNode()->SetAutoCompleteWordDirty( sal_True ); \
@@ -1800,7 +1800,7 @@ sal_Bool SwTxtFrm::TestFormat( const SwFrm* pPrv, SwTwips &rMaxHeight, sal_Bool 
 
     SwTestFormat aSave( this, pPrv, rMaxHeight );
 
-    return SwTxtFrm::WouldFit( rMaxHeight, bSplit );
+    return SwTxtFrm::WouldFit( rMaxHeight, bSplit, sal_True );
 }
 
 
@@ -1819,7 +1819,7 @@ sal_Bool SwTxtFrm::TestFormat( const SwFrm* pPrv, SwTwips &rMaxHeight, sal_Bool 
  * Die benoetigte Hoehe wird von nMaxHeight abgezogen!
  */
 
-sal_Bool SwTxtFrm::WouldFit( SwTwips &rMaxHeight, sal_Bool &bSplit )
+sal_Bool SwTxtFrm::WouldFit( SwTwips &rMaxHeight, sal_Bool &bSplit, sal_Bool bTst )
 {
     ASSERT( ! IsVertical() || ! IsSwapped(),
             "SwTxtFrm::WouldFit with swapped frame" );
@@ -1900,7 +1900,7 @@ sal_Bool SwTxtFrm::WouldFit( SwTwips &rMaxHeight, sal_Bool &bSplit )
     aLine.Bottom();
     // Ist Aufspalten ueberhaupt notwendig?
     if ( 0 != ( bSplit = !aFrmBreak.IsInside( aLine ) ) )
-        bRet = !aFrmBreak.IsKeepAlways() && aFrmBreak.WouldFit( aLine, rMaxHeight );
+        bRet = !aFrmBreak.IsKeepAlways() && aFrmBreak.WouldFit( aLine, rMaxHeight, bTst );
     else
     {
         //Wir brauchen die Gesamthoehe inklusive der aktuellen Zeile
