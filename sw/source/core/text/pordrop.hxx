@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pordrop.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fme $ $Date: 2001-10-19 08:38:42 $
+ *  last change: $Author: kz $ $Date: 2003-12-09 11:37:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,7 +142,7 @@ public:
 
     inline void SetY( short nNew )  { nY = nNew; }
 
-    inline SwFont* GetFnt() { return pPart ? &pPart->GetFont() : NULL; }
+    inline SwFont* GetFnt() const { return pPart ? &pPart->GetFont() : NULL; }
 
     static void DeleteDropCapCache();
 
