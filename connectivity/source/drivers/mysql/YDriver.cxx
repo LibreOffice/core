@@ -2,9 +2,9 @@
  *
  *  $RCSfile: YDriver.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-25 09:48:57 $
+ *  last change: $Author: oj $ $Date: 2002-11-26 14:40:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,8 @@ namespace connectivity
 
         for (TWeakPairVector::iterator i = m_aConnections.begin(); m_aConnections.end() != i; ++i)
         {
-            ::comphelper::disposeComponent(i->first.get());
+            Reference<XInterface > xTemp = i->first.get();
+            ::comphelper::disposeComponent(xTemp);
         }
         m_aConnections.clear();
         TWeakPairVector().swap(m_aConnections);
