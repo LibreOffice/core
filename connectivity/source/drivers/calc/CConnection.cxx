@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CConnection.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: nn $ $Date: 2001-01-26 19:05:48 $
+ *  last change: $Author: nn $ $Date: 2001-01-29 19:22:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,6 +163,11 @@ void OCalcConnection::construct(const ::rtl::OUString& url,const Sequence< Prope
     Reference<XComponent> xComponent = xDesktop->loadComponentFromURL(
                             aFileName, ::rtl::OUString::createFromAscii("_blank"), 0, aArgs );
     m_xDoc = Reference<XSpreadsheetDocument>( xComponent, UNO_QUERY );
+
+    //  if the URL is not a spreadsheet document, throw the exception here
+    //  instead of at the first access to it
+    if ( !m_xDoc.is() )
+        throw SQLException();
 
     // file::OConnection::construct (reads the directory) is not called
 }
