@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eppt.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sj $ $Date: 2000-11-17 13:07:35 $
+ *  last change: $Author: sj $ $Date: 2000-11-17 17:51:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1519,6 +1519,20 @@ sal_Bool PPTWriter::ImplCreateSlide( int nPageNum )
                 nTransitionType = PPT_TRANSITION_TYPE_BLINDS;
             break;
 
+            case ::com::sun::star::presentation::FadeEffect_VERTICAL_CHECKERBOARD :
+                nDirection++;
+            case ::com::sun::star::presentation::FadeEffect_HORIZONTAL_CHECKERBOARD :
+                nTransitionType = PPT_TRANSITION_TYPE_CHECKER;
+            break;
+
+            case ::com::sun::star::presentation::FadeEffect_MOVE_FROM_UPPERLEFT :
+                nDirection++;
+            case ::com::sun::star::presentation::FadeEffect_MOVE_FROM_UPPERRIGHT :
+                nDirection++;
+            case ::com::sun::star::presentation::FadeEffect_MOVE_FROM_LOWERLEFT :
+                nDirection++;
+            case ::com::sun::star::presentation::FadeEffect_MOVE_FROM_LOWERRIGHT :
+                nDirection++;
             case ::com::sun::star::presentation::FadeEffect_MOVE_FROM_TOP :
                 nDirection++;
             case ::com::sun::star::presentation::FadeEffect_MOVE_FROM_LEFT :
@@ -1533,20 +1547,20 @@ sal_Bool PPTWriter::ImplCreateSlide( int nPageNum )
                 nTransitionType = PPT_TRANSITION_TYPE_DISSOLVE;
             break;
 
-            case ::com::sun::star::presentation::FadeEffect_FADE_FROM_TOP :
-                nDirection++;
-            case ::com::sun::star::presentation::FadeEffect_FADE_FROM_LEFT :
-                nDirection++;
-            case ::com::sun::star::presentation::FadeEffect_FADE_FROM_BOTTOM :
-                nDirection++;
-            case ::com::sun::star::presentation::FadeEffect_FADE_FROM_RIGHT :
-                nTransitionType = PPT_TRANSITION_TYPE_WIPE;
-            break;
-
             case ::com::sun::star::presentation::FadeEffect_VERTICAL_LINES :
                 nDirection++;
             case ::com::sun::star::presentation::FadeEffect_HORIZONTAL_LINES :
                 nTransitionType = PPT_TRANSITION_TYPE_RANDOM_BARS;
+            break;
+
+            case ::com::sun::star::presentation::FadeEffect_CLOSE_HORIZONTAL :
+                nDirection++;
+            case ::com::sun::star::presentation::FadeEffect_OPEN_HORIZONTAL :
+                nDirection++;
+            case ::com::sun::star::presentation::FadeEffect_CLOSE_VERTICAL :
+                nDirection++;
+            case ::com::sun::star::presentation::FadeEffect_OPEN_VERTICAL :
+                nTransitionType = PPT_TRANSITION_TYPE_SPLIT;
             break;
 
             case ::com::sun::star::presentation::FadeEffect_FADE_FROM_UPPERLEFT :
@@ -1560,15 +1574,34 @@ sal_Bool PPTWriter::ImplCreateSlide( int nPageNum )
                 nTransitionType = PPT_TRANSITION_TYPE_STRIPS;
             break;
 
-            case ::com::sun::star::presentation::FadeEffect_ROLL_FROM_TOP :
+            case ::com::sun::star::presentation::FadeEffect_UNCOVER_TO_LOWERRIGHT :
                 nDirection++;
-            case ::com::sun::star::presentation::FadeEffect_ROLL_FROM_LEFT :
+            case ::com::sun::star::presentation::FadeEffect_UNCOVER_TO_LOWERLEFT :
                 nDirection++;
-            case ::com::sun::star::presentation::FadeEffect_ROLL_FROM_BOTTOM :
+            case ::com::sun::star::presentation::FadeEffect_UNCOVER_TO_UPPERRIGHT :
                 nDirection++;
-            case ::com::sun::star::presentation::FadeEffect_ROLL_FROM_RIGHT :
+            case ::com::sun::star::presentation::FadeEffect_UNCOVER_TO_UPPERLEFT :
+                nDirection++;
+            case ::com::sun::star::presentation::FadeEffect_UNCOVER_TO_TOP :
+                nDirection++;
+            case ::com::sun::star::presentation::FadeEffect_UNCOVER_TO_LEFT :
+                nDirection++;
+            case ::com::sun::star::presentation::FadeEffect_UNCOVER_TO_BOTTOM :
+                nDirection++;
+            case ::com::sun::star::presentation::FadeEffect_UNCOVER_TO_RIGHT :
                 nTransitionType = PPT_TRANSITION_TYPE_PULL;
             break;
+
+            case ::com::sun::star::presentation::FadeEffect_FADE_FROM_TOP :
+                nDirection++;
+            case ::com::sun::star::presentation::FadeEffect_FADE_FROM_LEFT :
+                nDirection++;
+            case ::com::sun::star::presentation::FadeEffect_FADE_FROM_BOTTOM :
+                nDirection++;
+            case ::com::sun::star::presentation::FadeEffect_FADE_FROM_RIGHT :
+                nTransitionType = PPT_TRANSITION_TYPE_WIPE;
+            break;
+
 
             case ::com::sun::star::presentation::FadeEffect_FADE_TO_CENTER :
                 nDirection++;
@@ -1576,15 +1609,6 @@ sal_Bool PPTWriter::ImplCreateSlide( int nPageNum )
                 nTransitionType = PPT_TRANSITION_TYPE_ZOOM;
             break;
 
-            case ::com::sun::star::presentation::FadeEffect_CLOSE_HORIZONTAL :
-                nDirection++;
-            case ::com::sun::star::presentation::FadeEffect_OPEN_HORIZONTAL :
-                nDirection++;
-            case ::com::sun::star::presentation::FadeEffect_CLOSE_VERTICAL :
-                nDirection++;
-            case ::com::sun::star::presentation::FadeEffect_OPEN_VERTICAL :
-                nTransitionType = PPT_TRANSITION_TYPE_SPLIT;
-            break;
             case ::com::sun::star::presentation::FadeEffect_NONE :
                 nDirection = 2;
             break;
