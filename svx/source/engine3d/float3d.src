@@ -2,9 +2,9 @@
  *
  *  $RCSfile: float3d.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2001-09-27 20:23:30 $
+ *  last change: $Author: vg $ $Date: 2001-10-02 20:57:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,7 +254,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText [ portuguese_brazilian ] = "Texturen" ;
         QuickHelpText [ swedish ] = "Texturer" ;
         QuickHelpText [ danish ] = "Teksturer" ;
-        QuickHelpText [ italian ] = "Strutture" ;
+        QuickHelpText [ italian ] = "Motivi" ;
         QuickHelpText [ spanish ] = "Texturas" ;
         QuickHelpText [ french ] = "Textures" ;
         QuickHelpText [ dutch ] = "Texturen" ;
@@ -854,6 +854,26 @@ DockingWindow RID_SVXFLOAT_3D
         DecimalDigits = 1 ;
         CustomUnitText = " Grad" ;
         CustomUnitText [ ENGLISH ] = " degree" ;
+        CustomUnitText[ english_us ] = " degree";
+        CustomUnitText[ portuguese ] = " degree";
+        CustomUnitText[ russian ] = " degree";
+        CustomUnitText[ greek ] = " degree";
+        CustomUnitText[ dutch ] = " degree";
+        CustomUnitText[ french ] = " degr�s";
+        CustomUnitText[ spanish ] = " grado(s)";
+        CustomUnitText[ finnish ] = " degree";
+        CustomUnitText[ italian ] = " degree";
+        CustomUnitText[ danish ] = " degree";
+        CustomUnitText[ swedish ] = " degree";
+        CustomUnitText[ polish ] = " degree";
+        CustomUnitText[ portuguese_brazilian ] = " degree";
+        CustomUnitText[ japanese ] = " 度";
+        CustomUnitText[ korean ] = " degree";
+        CustomUnitText[ chinese_simplified ] = " 度";
+        CustomUnitText[ chinese_traditional ] = " 度";
+        CustomUnitText[ turkish ] = " degree";
+        CustomUnitText[ arabic ] = " degree";
+        CustomUnitText[ catalan ] = " degree";
     };
     FixedText FT_DEPTH
     {
@@ -1433,6 +1453,26 @@ DockingWindow RID_SVXFLOAT_3D
         CustomUnitText = " Grad" ;
         CustomUnitText [ ENGLISH ] = " degree" ;
         Last = 90 ;
+        CustomUnitText[ english_us ] = " degree";
+        CustomUnitText[ portuguese ] = " degree";
+        CustomUnitText[ russian ] = " degree";
+        CustomUnitText[ greek ] = " degree";
+        CustomUnitText[ dutch ] = " degree";
+        CustomUnitText[ french ] = " degr�s";
+        CustomUnitText[ spanish ] = " grado(s)";
+        CustomUnitText[ finnish ] = " degree";
+        CustomUnitText[ italian ] = " degree";
+        CustomUnitText[ danish ] = " degree";
+        CustomUnitText[ swedish ] = " degree";
+        CustomUnitText[ polish ] = " degree";
+        CustomUnitText[ portuguese_brazilian ] = " degree";
+        CustomUnitText[ japanese ] = " 度";
+        CustomUnitText[ korean ] = " degree";
+        CustomUnitText[ chinese_simplified ] = " 度";
+        CustomUnitText[ chinese_traditional ] = " 度";
+        CustomUnitText[ turkish ] = " degree";
+        CustomUnitText[ arabic ] = " degree";
+        CustomUnitText[ catalan ] = " degree";
     };
     FixedLine FL_SHADOW
     {
@@ -3554,6 +3594,7 @@ String RID_SVXFLOAT3D_FIX_B
     Text[ catalan ] = "A:";
     Text[ finnish ] = "B:";
 };
+
 
 
 
