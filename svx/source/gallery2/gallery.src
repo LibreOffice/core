@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gallery.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-06 14:23:53 $
+ *  last change: $Author: obo $ $Date: 2001-01-19 20:31:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1319,7 +1319,7 @@ String RID_SVXSTR_GALLERY_DELETETHEME
     Text = "Mצchten Sie dieses Thema\nwirklich lצschen?" ;
     Text [ ENGLISH ] = "Do you really want to\n delete this theme?" ;
     Text [ english_us ] = "Do you really want to\ndelete this theme?" ;
-    Text[ portuguese ] = "Do you really want to\ndelete this theme?";
+    Text[ portuguese ] = "Eliminar realmente\neste tema?";
     Text[ russian ] = "Âû הויסעגטעוכüםמ ץמעטעו\nףהאכטעü ‎עף עולף?";
     Text[ greek ] = "ÈÝכופו נסבדלבפיךÜ\nםב היבדסÜרופו בץפü פן טÝלב;";
     Text[ dutch ] = "Wilt u dit onderwerp\nwerkelijk wissen?";
