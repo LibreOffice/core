@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagedata.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:06:00 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:25:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,8 @@
 ScPrintRangeData::ScPrintRangeData()
 {
     nPagesX = nPagesY = 0;
-    pPageEndX = pPageEndY = NULL;
+    pPageEndX = NULL;
+    pPageEndY = NULL;
     bTopDown = bAutomatic = TRUE;
     nFirstPage = 1;
 }
@@ -93,26 +94,26 @@ ScPrintRangeData::~ScPrintRangeData()
     delete[] pPageEndY;
 }
 
-void ScPrintRangeData::SetPagesX( USHORT nCount, const USHORT* pData )
+void ScPrintRangeData::SetPagesX( size_t nCount, const SCCOL* pData )
 {
     delete[] pPageEndX;
     if ( nCount )
     {
-        pPageEndX = new USHORT[nCount];
-        memcpy( pPageEndX, pData, nCount * sizeof(USHORT) );
+        pPageEndX = new SCCOL[nCount];
+        memcpy( pPageEndX, pData, nCount * sizeof(SCCOL) );
     }
     else
         pPageEndX = NULL;
     nPagesX = nCount;
 }
 
-void ScPrintRangeData::SetPagesY( USHORT nCount, const USHORT* pData )
+void ScPrintRangeData::SetPagesY( size_t nCount, const SCROW* pData )
 {
     delete[] pPageEndY;
     if ( nCount )
     {
-        pPageEndY = new USHORT[nCount];
-        memcpy( pPageEndY, pData, nCount * sizeof(USHORT) );
+        pPageEndY = new SCROW[nCount];
+        memcpy( pPageEndY, pData, nCount * sizeof(SCROW) );
     }
     else
         pPageEndY = NULL;
@@ -121,7 +122,7 @@ void ScPrintRangeData::SetPagesY( USHORT nCount, const USHORT* pData )
 
 //============================================================================
 
-ScPageBreakData::ScPageBreakData(USHORT nMax)
+ScPageBreakData::ScPageBreakData(size_t nMax)
 {
     nUsed = 0;
     if (nMax)
@@ -136,7 +137,7 @@ ScPageBreakData::~ScPageBreakData()
     delete[] pData;
 }
 
-ScPrintRangeData& ScPageBreakData::GetData(USHORT nPos)
+ScPrintRangeData& ScPageBreakData::GetData(size_t nPos)
 {
     DBG_ASSERT(nPos < nAlloc, "ScPageBreakData::GetData bumm");
 
