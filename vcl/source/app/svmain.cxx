@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svmain.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: th $ $Date: 2001-07-25 11:06:25 $
+ *  last change: $Author: cd $ $Date: 2001-08-07 12:31:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -260,7 +260,7 @@ public:
 // =======================================================================
 BOOL SVMain()
 {
-    RTL_LOGFILE_CONTEXT( aLog, "vcl (ssa) ::SVMain" );
+    RTL_LOGFILE_CONTEXT( aLog, "vcl (ss112471) ::SVMain" );
 
     ImplSVData* pSVData = ImplGetSVData();
 
@@ -296,7 +296,7 @@ public:
 
 BOOL InitVCL( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rSMgr )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "vcl (ssa) ::InitVCL" );
+    RTL_LOGFILE_CONTEXT( aLog, "vcl (ss112471) ::InitVCL" );
 
     if( pExceptionHandler != NULL )
         return FALSE;
