@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lathe3d.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:02:13 $
+ *  last change: $Author: rt $ $Date: 2003-10-27 13:26:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -963,7 +963,7 @@ void E3dLatheObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
             double fTransDepth(rFirstPoint.Z());
             Matrix4D aTransMat;
             aTransMat.TranslateZ(fTransDepth);
-            NbcSetTransform(aTransMat * GetTransform());
+            NbcSetTransform(GetTransform() * aTransMat); // #112587#
 
             // correct polygon itself
             aTransMat.Identity();
