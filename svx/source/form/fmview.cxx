@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmview.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-22 17:16:02 $
+ *  last change: $Author: fs $ $Date: 2002-07-29 14:52:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -269,6 +269,7 @@ void FmFormView::Init()
 //------------------------------------------------------------------------
 FmFormView::~FmFormView()
 {
+    pImpl->notifyViewDying();
     pImpl->release();
 
     // Bei der Shell abmelden
