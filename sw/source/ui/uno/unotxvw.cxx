@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxvw.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 11:49:56 $
+ *  last change: $Author: hr $ $Date: 2003-11-07 15:14:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1712,7 +1712,11 @@ void  SwXTextViewCursor::setPropertyValue( const OUString& rPropertyName, const 
     {
         SwWrtShell& rSh = pView->GetWrtShell();
         SwPaM* pShellCrsr = rSh.GetCrsr();
-        SwXTextCursor::SetPropertyValue(*pShellCrsr, aPropSet, rPropertyName, aValue );
+        SwNode *pNode = pShellCrsr->GetNode();
+        if (pNode && pNode->IsTxtNode())
+            SwXTextCursor::SetPropertyValue(*pShellCrsr, aPropSet, rPropertyName, aValue );
+        else
+            throw RuntimeException();
     }
     else
         throw RuntimeException();
