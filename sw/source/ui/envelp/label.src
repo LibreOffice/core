@@ -2,9 +2,9 @@
  *
  *  $RCSfile: label.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 06:35:01 $
+ *  last change: $Author: kz $ $Date: 2001-05-12 07:14:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1185,7 +1185,7 @@ TabPage TP_PRIVATE_DATA
         Text[ polish ] = "Telefon/Komórka";
         Text[ portuguese_brazilian ] = "Phone/Mobile";
         Text[ japanese ] = "Ž©‘î“d˜b/Œg‘Ñ“d˜b";
-        Text[ korean ] = "Phone/Mobile";
+        Text[ korean ] = "Tel./ÇÚµåÆù";
         Text[ chinese_simplified ] = "µç»°/ÊÖ»ú";
         Text[ chinese_traditional ] = "¹q¸Ü/²¾°Ê¹q¸Ü";
         Text[ turkish ] = "Phone/Mobile";
@@ -1582,7 +1582,7 @@ TabPage TP_BUSINESS_DATA
         Text[ polish ] = "Telefon/Komórka";
         Text[ portuguese_brazilian ] = "Phone/Mobile";
         Text[ japanese ] = "‰ïŽÐ“d˜b/Œg‘Ñ“d˜b";
-        Text[ korean ] = "Phone/Mobile";
+        Text[ korean ] = "Tel./ÇÚµåÆù";
         Text[ chinese_simplified ] = "µç»°/ÊÖ»ú";
         Text[ chinese_traditional ] = "¹q¸Ü/²¾°Ê¹q¸Ü";
         Text[ turkish ] = "Phone/Mobile";
@@ -1627,7 +1627,7 @@ TabPage TP_BUSINESS_DATA
         Text[ turkish ] = "Faks";
         Text[ arabic ] = "ÇáÝÇßÓ";
         Text[ catalan ] = "Fax";
-        Text[ finnish ] = "Fax";
+        Text[ finnish ] = "faksi";
     };
     Edit ED_FAX
     {
