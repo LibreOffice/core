@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xistyle.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 14:04:42 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:35:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,11 +252,9 @@ inline XclImpStream& operator>>( XclImpStream& rStrm, XclEscapement& reEscapem )
 
 XclImpFont::XclImpFont( const XclImpRoot& rRoot ) :
     XclImpRoot( rRoot ),
-    meFontFamily( FAMILY_DONTKNOW ),
-    meFontCharSet( ScfTools::GetSystemCharSet() ),
-    mbIsWestern( true ),
-    mbIsAsian( false ),
-    mbIsComplex( false )
+    mbAscii( true ),
+    mbCjk( false ),
+    mbCtl( false )
 {
 }
 
@@ -274,27 +272,14 @@ XclImpFont::XclImpFont( const XclImpRoot& rRoot, const XclFontData& rFontData ) 
                 if( const FontList* pFontList = pInfoItem->GetFontList() )
                 {
                     FontInfo aFontInfo( pFontList->Get( maData.maName, maData.maStyle ) );
-                    if( aFontInfo.GetWeight() > WEIGHT_NORMAL )
-                        maData.mnWeight = EXC_FONTWGHT_BOLD;
-                    maData.mbItalic = (aFontInfo.GetItalic() != ITALIC_NONE);
+                    maData.SetScWeight( aFontInfo.GetWeight() );
+                    maData.SetScPosture( aFontInfo.GetItalic() );
                 }
             }
         }
+        maData.maStyle.Erase();
     }
-    Update();   /// sets internal font charset/family and script types
-}
-
-long XclImpFont::GetCharWidth() const
-{
-    if( SfxPrinter* pPrinter = GetPrinter() )
-    {
-        Font aFont( maData.maName, Size( 0, maData.mnHeight ) );
-        aFont.SetFamily( meFontFamily );
-        aFont.SetCharSet( meFontCharSet );
-        pPrinter->SetFont( aFont );
-        return pPrinter->GetTextWidth( String( '0' ) );
-    }
-    return 11 * maData.mnHeight / 20;
+    GuessScriptType();
 }
 
 void XclImpFont::ReadFont( XclImpStream& rStrm )
@@ -324,7 +309,7 @@ void XclImpFont::ReadFont( XclImpStream& rStrm )
             DBG_ERROR_BIFF();
             return;
     }
-    Update();
+    GuessScriptType();
 }
 
 void XclImpFont::FillToItemSet( SfxItemSet& rItemSet, XclFontWhichIDMode eMode, bool bSkipPoolDefs ) const
@@ -338,15 +323,16 @@ void XclImpFont::FillToItemSet( SfxItemSet& rItemSet, XclFontWhichIDMode eMode, 
     lcl_xistyle_PutItem( rItemSet, item, (bEE ? (ee_which) : (sc_which)), bSkipPoolDefs )
 
 // Font item - #91658# set only for valid script types
-    CharSet eTempCharSet = (bEE && (meFontCharSet == GetCharSet())) ?
-        ScfTools::GetSystemCharSet() : meFontCharSet;
+    CharSet eFontCharSet = maData.GetScCharSet();
+    CharSet eTempCharSet = (bEE && (eFontCharSet == GetCharSet())) ?
+        ScfTools::GetSystemCharSet() : eFontCharSet;
 
-    SvxFontItem aFontItem( meFontFamily, maData.maName, EMPTY_STRING, PITCH_DONTKNOW, eTempCharSet );
-    if( mbIsWestern )
+    SvxFontItem aFontItem( maData.GetScFamily( GetCharSet() ), maData.maName, EMPTY_STRING, PITCH_DONTKNOW, eTempCharSet );
+    if( mbAscii )
         PUTITEM( aFontItem, ATTR_FONT,      EE_CHAR_FONTINFO );
-    if( mbIsAsian )
+    if( mbCjk )
         PUTITEM( aFontItem, ATTR_CJK_FONT,  EE_CHAR_FONTINFO_CJK );
-    if( mbIsComplex )
+    if( mbCtl )
         PUTITEM( aFontItem, ATTR_CTL_FONT,  EE_CHAR_FONTINFO_CTL );
 
 // Font height (for all script types)
@@ -363,29 +349,29 @@ void XclImpFont::FillToItemSet( SfxItemSet& rItemSet, XclFontWhichIDMode eMode, 
     PUTITEM( SvxColorItem( GetPalette().GetColor( maData.mnColor ) ), ATTR_FONT_COLOR, EE_CHAR_COLOR );
 
 // Font weight (for all script types)
-    SvxWeightItem aWeightItem( GetScFontWeight( maData.mnWeight ) );
+    SvxWeightItem aWeightItem( maData.GetScWeight() );
     PUTITEM( aWeightItem,   ATTR_FONT_WEIGHT,       EE_CHAR_WEIGHT );
     PUTITEM( aWeightItem,   ATTR_CJK_FONT_WEIGHT,   EE_CHAR_WEIGHT_CJK );
     PUTITEM( aWeightItem,   ATTR_CTL_FONT_WEIGHT,   EE_CHAR_WEIGHT_CTL );
 
 // Font underline
-    FontUnderline eUnderl = GetScFontUnderline( maData.meUnderline );
-    PUTITEM( SvxUnderlineItem( eUnderl ), ATTR_FONT_UNDERLINE, EE_CHAR_UNDERLINE );
+    SvxUnderlineItem aUnderlItem( maData.GetScUnderline() );
+    PUTITEM( aUnderlItem,   ATTR_FONT_UNDERLINE,    EE_CHAR_UNDERLINE );
 
 // Font posture (for all script types)
-    SvxPostureItem aPostItem( GetScFontPosture( maData.mbItalic ) );
+    SvxPostureItem aPostItem( maData.GetScPosture() );
     PUTITEM( aPostItem, ATTR_FONT_POSTURE,      EE_CHAR_ITALIC );
     PUTITEM( aPostItem, ATTR_CJK_FONT_POSTURE,  EE_CHAR_ITALIC_CJK );
     PUTITEM( aPostItem, ATTR_CTL_FONT_POSTURE,  EE_CHAR_ITALIC_CTL );
 
 // Boolean attributes crossed out, contoured, shadowed
-    PUTITEM( SvxCrossedOutItem( maData.mbStrikeout ? STRIKEOUT_SINGLE : STRIKEOUT_NONE ), ATTR_FONT_CROSSEDOUT, EE_CHAR_STRIKEOUT );
+    PUTITEM( SvxCrossedOutItem( maData.GetScStrikeout() ), ATTR_FONT_CROSSEDOUT, EE_CHAR_STRIKEOUT );
     PUTITEM( SvxContourItem( maData.mbOutline ), ATTR_FONT_CONTOUR, EE_CHAR_OUTLINE );
     PUTITEM( SvxShadowedItem( maData.mbShadow ), ATTR_FONT_SHADOWED, EE_CHAR_SHADOW );
 
 // Super-/subscript: only on edit engine objects
     if( bEE )
-        rItemSet.Put( SvxEscapementItem( GetScFontEscapement( maData.meEscapem ), EE_CHAR_ESCAPEMENT ) );
+        rItemSet.Put( SvxEscapementItem( maData.GetScEscapement(), EE_CHAR_ESCAPEMENT ) );
 
 #undef PUTITEM
 }
@@ -431,8 +417,8 @@ void XclImpFont::ReadFontName8( XclImpStream& rStrm )
 
 void XclImpFont::GuessScriptType()
 {
-    mbIsWestern = true;
-    mbIsAsian = mbIsComplex = false;
+    mbAscii = true;
+    mbCjk = mbCtl = false;
 
     // #91658# find the script types for which the font contains characters
     if( SfxPrinter* pPrinter = GetPrinter() )
@@ -443,53 +429,15 @@ void XclImpFont::GuessScriptType()
         pPrinter->SetFont( aFont );
         if( pPrinter->GetFontCharMap( aCharMap ) )
         {
-            mbIsAsian = (aCharMap.HasChar( 0x4E01 ) ||      // CJK unified ideographs
-                         aCharMap.HasChar( 0x7E01 ) ||      // CJK unified ideographs
-                         aCharMap.HasChar( 0xAC01 ) ||      // Hangul syllables
-                         aCharMap.HasChar( 0xCC01 ) ||      // Hangul syllables
-                         aCharMap.HasChar( 0xF901 ));       // CJK compatibility ideographs
-            //2do: complex characters
-
-            mbIsWestern = aCharMap.HasChar( 'A' ) || (!mbIsAsian && !mbIsComplex);
+            mbCjk = (aCharMap.HasChar( 0x4E01 ) ||      // CJK unified ideographs
+                     aCharMap.HasChar( 0x7E01 ) ||      // CJK unified ideographs
+                     aCharMap.HasChar( 0xAC01 ) ||      // Hangul syllables
+                     aCharMap.HasChar( 0xCC01 ) ||      // Hangul syllables
+                     aCharMap.HasChar( 0xF901 ));       // CJK compatibility ideographs
+            mbCtl = false;  //! TODO
+            mbAscii = aCharMap.HasChar( 'A' ) || (!mbCjk && !mbCtl);
         }
     }
-}
-
-void XclImpFont::Update()
-{
-    meFontFamily = GetScFontFamily( maData.mnFamily, maData.maName, GetCharSet() );
-    meFontCharSet = GetScFontCharSet( maData.mnCharSet );
-    GuessScriptType();
-}
-
-FontFamily XclImpFont::GetScFontFamily( sal_uInt8 nXclFamily, const String& rName, CharSet eDefCharSet )
-{
-    FontFamily eScFamily;
-    // ! format differs from Windows documentation: family is in lower nibble, pitch unknown
-    switch( nXclFamily & 0x0F )
-    {
-        case EXC_FONTFAM_ROMAN:         eScFamily = FAMILY_ROMAN;       break;
-        case EXC_FONTFAM_SWISS:         eScFamily = FAMILY_SWISS;       break;
-        case EXC_FONTFAM_MODERN:        eScFamily = FAMILY_MODERN;      break;
-        case EXC_FONTFAM_SCRIPT:        eScFamily = FAMILY_SCRIPT;      break;
-        case EXC_FONTFAM_DECORATIVE:    eScFamily = FAMILY_DECORATIVE;  break;
-        default:
-            eScFamily =
-                ((eDefCharSet == RTL_TEXTENCODING_APPLE_ROMAN) &&
-                (rName.EqualsAscii( "Geneva" ) || rName.EqualsAscii( "Chicago" ))) ?
-                FAMILY_SWISS : FAMILY_DONTKNOW;
-    }
-    return eScFamily;
-}
-
-CharSet XclImpFont::GetScFontCharSet( sal_uInt8 nXclCharSet )
-{
-    return rtl_getTextEncodingFromWindowsCharset(nXclCharSet);
-}
-
-FontItalic XclImpFont::GetScFontPosture( bool bXclItalic )
-{
-    return bXclItalic ? ITALIC_NORMAL : ITALIC_NONE;
 }
 
 FontWeight XclImpFont::GetScFontWeight( sal_uInt16 nXclWeight )
@@ -511,40 +459,17 @@ FontWeight XclImpFont::GetScFontWeight( sal_uInt16 nXclWeight )
     return eScWeight;
 }
 
-FontUnderline XclImpFont::GetScFontUnderline( XclUnderline eXclUnderl )
-{
-    FontUnderline eScUnderl = UNDERLINE_NONE;
-    switch( eXclUnderl )
-    {
-        case xlUnderlSingle:
-        case xlUnderlSingleAcc: eScUnderl = UNDERLINE_SINGLE;  break;
-        case xlUnderlDouble:
-        case xlUnderlDoubleAcc: eScUnderl = UNDERLINE_DOUBLE;  break;
-    }
-    return eScUnderl;
-}
-
-SvxEscapement XclImpFont::GetScFontEscapement( XclEscapement eXclEscapem )
-{
-    SvxEscapement eScEscapem = SVX_ESCAPEMENT_OFF;
-    switch( eXclEscapem )
-    {
-        case xlEscSuper:    eScEscapem = SVX_ESCAPEMENT_SUPERSCRIPT;    break;
-        case xlEscSub:      eScEscapem = SVX_ESCAPEMENT_SUBSCRIPT;      break;
-    }
-    return eScEscapem;
-}
-
 
 // ----------------------------------------------------------------------------
 
 XclImpFontBuffer::XclImpFontBuffer( const XclImpRoot& rRoot ) :
     XclImpRoot( rRoot )
 {
-    // application font for column width calculation, filled with first font from font list
+    /*  Application font for column width calculation,
+        later filled with first font from font list. */
     maAppFont.maName.AssignAscii( "Arial" );
     maAppFont.mnHeight = 200;
-    SetCharWidth( 110 );
+    SetCharWidth( maAppFont );
 }
 
 void XclImpFontBuffer::ReadFont( XclImpStream& rStrm )
@@ -561,7 +486,7 @@ void XclImpFontBuffer::ReadFont( XclImpStream& rStrm )
     {
         maAppFont = pFont->GetFontData();
         // #i3006# Calculate the width of '0' from first font and current printer.
-        SetCharWidth( pFont->GetCharWidth() );
+        SetCharWidth( maAppFont );
     }
 }
 
@@ -783,7 +708,7 @@ void XclImpCellAlign::FillFromXF8( sal_uInt16 nAlign, sal_uInt16 nMiscAttrib )
     ::extract_value( meTextDir, nMiscAttrib, 6, 2 );    // new in BIFF8X
 }
 
-void XclImpCellAlign::FillToItemSet( SfxItemSet& rItemSet, bool bSkipPoolDefs ) const
+void XclImpCellAlign::FillToItemSet( SfxItemSet& rItemSet, const XclImpFont* pFont, bool bSkipPoolDefs ) const
 {
     // horizontal alignment
     SvxCellHorJustify eHorJust = SVX_HOR_JUSTIFY_STANDARD;
@@ -849,6 +774,10 @@ void XclImpCellAlign::FillToItemSet( SfxItemSet& rItemSet, bool bSkipPoolDefs ) 
         sal_Int32 nAngle = XclTools::GetScRotation( mnRotation );
         lcl_xistyle_PutItem( rItemSet, SfxInt32Item( ATTR_ROTATE_VALUE, nAngle ), bSkipPoolDefs );
     }
+    // #105933# set "Use asian vertical layout", if cell is stacked and font contains CKJ characters
+    SfxBoolItem aAsianVertItem( ATTR_VERTICAL_ASIAN );
+    aAsianVertItem.SetValue( (eSvxOrient == SVX_ORIENTATION_STACKED) && pFont && pFont->HasCjk() );
+    lcl_xistyle_PutItem( rItemSet, aAsianVertItem, bSkipPoolDefs );
 
     // CTL text direction
     SvxFrameDirection eFrameDir = FRMDIR_ENVIRONMENT;
@@ -1305,7 +1234,7 @@ const ScPatternAttr& XclImpXF::CreatePattern( bool bSkipPoolDefs )
 
     // alignment
     if( mbAlignUsed )
-        maAlignment.FillToItemSet( rItemSet, bSkipPoolDefs );
+        maAlignment.FillToItemSet( rItemSet, GetFontBuffer().GetFont( mnFont ), bSkipPoolDefs );
 
     // border
     if( mbBorderUsed )
@@ -1653,7 +1582,7 @@ void XclImpXFIndexBuffer::SetXF( sal_uInt16 nCol, sal_uInt16 nRow, sal_uInt16 nX
             ScRange* pRange = maMergeList.Last();
             if( pRange && (pRange->aEnd.Row() == nRow) && (pRange->aEnd.Col() + 1 == nCol) && (eMode == xlXFModeBlank) )
                 pRange->aEnd.IncCol();
-            else
+            else if( eMode != xlXFModeBlank )   // #108781# do not merge empty cells
                 SetMerge( nCol, nRow );
         }
     }
