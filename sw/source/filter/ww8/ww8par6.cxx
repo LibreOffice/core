@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: cmc $ $Date: 2001-10-12 11:03:29 $
+ *  last change: $Author: cmc $ $Date: 2001-10-12 11:14:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3563,8 +3563,11 @@ BOOL SwWW8ImplReader::SetNewFontAttr( USHORT nFCode, BOOL bSetEnums,
 
     if( bSetEnums )
     {
-        if( pAktColl && (RES_CHRATR_CJK_FONT != nWhich ) ) // StyleDef
-            pCollA[nAktColl].eFontSrcCharSet = eSrcCharSet;
+        if( pAktColl ) // StyleDef
+        {
+            if (RES_CHRATR_CJK_FONT != nWhich )
+                pCollA[nAktColl].eFontSrcCharSet = eSrcCharSet;
+        }
         else
             eFontSrcCharSet = eSrcCharSet;
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: os $ $Date: 2001-09-28 08:14:50 $
+ *  last change: $Author: cmc $ $Date: 2001-10-12 11:14:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2868,8 +2868,8 @@ void SwWW8ImplReader::EmbeddedFlyFrameSizeLock(SwNodeIndex &rStart,
         const SwSpzFrmFmts& rFmts = *rDoc.GetSpzFrmFmts();
         for( USHORT iN = 0, nN = rFmts.Count(); iN < nN; ++iN )
         {
-            const SwFmtAnchor& rA = rFmts[ iN ]->GetAnchor();
-            if (rA.GetCntntAnchor()->nNode == rStart.GetNode())
+            const SwPosition *pAnchor = rFmts[iN]->GetAnchor().GetCntntAnchor();
+            if ( pAnchor && (pAnchor->nNode == rStart.GetNode()) )
             {
                 const SwFmtFrmSize& rSNew = rFmts[iN]->GetFrmSize();
                 SwFmtFrmSize aSOld = pFrmFmt->GetFrmSize();
