@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javavm.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: jl $ $Date: 2002-03-06 16:00:45 $
+ *  last change: $Author: jbu $ $Date: 2002-04-29 14:32:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,8 +69,12 @@
 
 #include <osl/diagnose.h>
 #include <osl/file.hxx>
+#include <osl/process.h>
 
 #include <rtl/process.h>
+#include <rtl/alloc.h>
+#include <rtl/ustrbuf.hxx>
+#include <rtl/bootstrap.hxx>
 
 #ifndef _OSL_MODULE_HXX_
 #include <osl/module.hxx>
@@ -1032,6 +1036,108 @@ static void getJavaPropsFromConfig(JVM * pjvm,
     xIniManager_simple->close();
 }
 
+static const Bootstrap & getBootstrapHandle()
+{
+    static rtl::Bootstrap *pBootstrap = 0;
+    if( !pBootstrap )
+    {
+        OUString exe;
+        osl_getExecutableFile( &(exe.pData) );
+
+        sal_Int32 nIndex = exe.lastIndexOf( '/' );
+        OUString ret;
+        if( exe.getLength() && nIndex != -1 )
+        {
+            OUStringBuffer buf( exe.getLength() + 10 );
+            buf.append( exe.getStr() , nIndex +1 ).appendAscii( SAL_CONFIGFILE("uno") );
+            ret = buf.makeStringAndClear();
+        }
+#ifdef DEBUG
+        OString o = OUStringToOString( ret , RTL_TEXTENCODING_ASCII_US );
+        printf( "JavaVM: Used ininame %s\n" , o.getStr() );
+#endif
+        static Bootstrap  bootstrap( ret );
+        pBootstrap = &bootstrap;
+    }
+    return *pBootstrap;
+}
+
+
+static OUString retrieveComponentClassPath( const sal_Char *pVariableName )
+{
+    OUString ret;
+    OUStringBuffer buf( 128 );
+    buf.appendAscii( "$" ).appendAscii( pVariableName );
+    OUString path( buf.makeStringAndClear() );
+
+    const Bootstrap & handle = getBootstrapHandle();
+    rtl_bootstrap_expandMacros_from_handle( *(void**)&handle , &(path.pData) );
+    if( path.getLength() )
+    {
+        buf.append( path ).appendAscii( "/java_classpath" );
+
+        OUString fileName( buf.makeStringAndClear() );
+        sal_Char * p = 0;
+
+        DirectoryItem item;
+        if( DirectoryItem::E_None == DirectoryItem::get( fileName , item ) )
+        {
+            FileStatus status ( osl_FileStatus_Mask_FileSize );
+            if( FileBase::E_None == item.getFileStatus( status ) )
+            {
+                sal_Int64 nSize = status.getFileSize();
+                if( nSize )
+                {
+                    sal_Char * p = (sal_Char * ) rtl_allocateMemory( nSize +1 );
+                    if( p )
+                    {
+                        File file( fileName );
+                        if( File::E_None == file.open( OpenFlag_Read ) )
+                        {
+                            sal_uInt64 nRead;
+                            if( File::E_None == file.read( p , nSize , nRead ) && nSize == nRead )
+                            {
+                                buf = OUStringBuffer( 1024 );
+
+                                sal_Int32 nIndex = 0;
+                                sal_Bool bPrepend = sal_False;
+                                while( nIndex < nSize )
+                                {
+                                    while( nIndex < nSize && p[nIndex] == ' ' ) nIndex ++;
+                                    sal_Int32 nStart = nIndex;
+                                    while( nIndex < nSize && p[nIndex] != ' ' ) nIndex ++;
+                                    OUString relativeUrl( &(p[nStart]), nIndex-nStart, RTL_TEXTENCODING_ASCII_US);
+                                    OUString fileurlElement;
+                                    OUString systemPathElement;
+                                    OSL_VERIFY( osl_File_E_None ==
+                                                osl_getAbsoluteFileURL( path.pData, relativeUrl.pData , &(fileurlElement.pData) ) );
+                                    OSL_VERIFY( osl_File_E_None ==
+                                                osl_getSystemPathFromFileURL( fileurlElement.pData, &(systemPathElement.pData) ) );
+                                    if( systemPathElement.getLength() )
+                                    {
+                                        if( bPrepend )
+                                            buf.appendAscii( CLASSPATH_DELIMETER );
+                                        else
+                                            bPrepend = sal_True;
+                                        buf.append( systemPathElement );
+                                    }
+                                }
+                                ret = buf.makeStringAndClear();
+                            }
+                        }
+                        rtl_freeMemory( p );
+                    }
+                }
+            }
+        }
+    }
+#ifdef DEBUG
+    fprintf( stderr, "JavaVM: classpath retrieved from $%s: %s\n", pVariableName,
+             OUStringToOString( ret, RTL_TEXTENCODING_ASCII_US).getStr());
+#endif
+    return ret;
+}
+
 static void getJavaPropsFromSafetySettings(JVM * pjvm,
                                            const Reference<XMultiComponentFactory> & xSMgr,
                                            const Reference<XComponentContext> &xCtx) throw(Exception)
@@ -1061,7 +1167,7 @@ static void getJavaPropsFromSafetySettings(JVM * pjvm,
         if (key_UserClasspath.is())
         {
             OUString sClassPath= key_UserClasspath->getStringValue();
-            pjvm->setUserClasspath( sClassPath);
+            pjvm->addUserClasspath( sClassPath);
         }
                 Reference<XRegistryKey> key_NetAccess= xRegistryRootKey->openKey(OUString(
             RTL_CONSTASCII_USTRINGPARAM("VirtualMachine/NetAccess")));
@@ -1098,11 +1204,14 @@ static void getJavaPropsFromSafetySettings(JVM * pjvm,
     xConfRegistry_simple->close();
 }
 
-static void getJavaPropsFromEnvironment(JVM * pjvm) throw() {
-    // try some defaults for CLASSPATH and runtime lib
-    const char * pClassPath = getenv("CLASSPATH");
-    pjvm->setSystemClasspath(OUString::createFromAscii(pClassPath));
 
+static void getJavaPropsFromEnvironment(JVM * pjvm) throw() {
+
+    const char * pClassPath = getenv("CLASSPATH");
+    if( pClassPath )
+    {
+        pjvm->addSystemClasspath( OUString::createFromAscii(pClassPath) );
+    }
     pjvm->setRuntimeLib(OUString::createFromAscii(DEF_JAVALIB));
     pjvm->setEnabled(1);
 
@@ -1172,6 +1281,9 @@ static void initVMConfiguration(JVM * pjvm,
         OSL_TRACE("javavm.cxx: couldn't get safety settings because of >%s<", message.getStr());
 #endif
     }
+    jvm.addSystemClasspath( retrieveComponentClassPath( "UNO_SHARE_PACKAGES_CACHE" ) );
+    jvm.addUserClasspath( retrieveComponentClassPath( "UNO_USER_PACKAGES_CACHE" ) );
+
     *pjvm= jvm;
     setTimeZone(pjvm);
 
