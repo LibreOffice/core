@@ -2,9 +2,9 @@
  *
  *  $RCSfile: invocation.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dbo $ $Date: 2001-06-29 15:00:31 $
+ *  last change: $Author: dbo $ $Date: 2001-07-27 10:29:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,7 @@
 #include <cppuhelper/implementationentry.hxx>
 #endif
 #include <cppuhelper/typeprovider.hxx>
+#include <cppuhelper/implbase2.hxx>
 
 #include <com/sun/star/script/FailReason.hpp>
 #include <com/sun/star/script/XTypeConverter.hpp>
@@ -1123,25 +1124,11 @@ Sequence< sal_Int8 > SAL_CALL Invocation_Impl::getImplementationId(  ) throw( Ru
 //==================================================================================================
 //==================================================================================================
 class InvocationService
-    : public OWeakObject
-    , public XSingleServiceFactory
-    , public XServiceInfo
-    , public XTypeProvider
+    : public WeakImplHelper2< XSingleServiceFactory, XServiceInfo >
 {
 public:
     InvocationService( const Reference<XComponentContext> & xCtx );
     virtual ~InvocationService();
-
-    // XInterface
-    virtual Any         SAL_CALL queryInterface( const Type & aType ) throw( RuntimeException );
-    virtual void        SAL_CALL acquire() throw() { OWeakObject::acquire(); }
-    virtual void        SAL_CALL release() throw() { OWeakObject::release(); }
-
-    // XTypeProvider
-    virtual Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  )
-       throw(RuntimeException);
-    virtual Sequence< sal_Int8 > SAL_CALL getImplementationId(  )
-       throw( RuntimeException);
 
     // XServiceInfo
     OUString                    SAL_CALL getImplementationName() throw( RuntimeException );
@@ -1185,57 +1172,6 @@ InvocationService::InvocationService( const Reference<XComponentContext> & xCtx 
 InvocationService::~InvocationService()
 {
     g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
-}
-
-//--------------------------------------------------------------------------------------------------
-Any SAL_CALL InvocationService::queryInterface( const Type & aType )
-    throw( RuntimeException )
-{
-    // PropertySet-Implementation
-    Any a =  cppu::queryInterface( aType,
-                                   SAL_STATIC_CAST(XSingleServiceFactory*, this),
-                                   SAL_STATIC_CAST(XTypeProvider*, this),
-                                   SAL_STATIC_CAST(XServiceInfo*, this) );
-    if( a.hasValue() )
-    {
-      return a;
-    }
-
-    return OWeakObject::queryInterface( aType );
-}
-
-// XTypeProvider
-Sequence< Type > SAL_CALL InvocationService::getTypes(void) throw( RuntimeException )
-{
-  static OTypeCollection *pCollection = 0;
-  if( ! pCollection )
-  {
-      MutexGuard guard( Mutex::getGlobalMutex() );
-      if( ! pCollection )
-      {
-          static OTypeCollection collection(
-                    getCppuType( (Reference< XSingleServiceFactory> * )0),
-                    getCppuType( (Reference< XServiceInfo > * ) 0 ) );
-          pCollection = &collection;
-      }
-  }
-
-  return (*pCollection).getTypes();
-}
-
-Sequence< sal_Int8 > SAL_CALL InvocationService::getImplementationId(  ) throw( RuntimeException)
-{
-  static OImplementationId *pId = 0;
-  if( ! pId )
-  {
-      MutexGuard guard( Mutex::getGlobalMutex() );
-      if( ! pId )
-      {
-          static OImplementationId id( sal_False );
-          pId = &id;
-      }
-  }
-  return (*pId).getImplementationId();
 }
 
 // XServiceInfo
