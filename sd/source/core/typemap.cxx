@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typemap.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 13:20:59 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 12:24:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,6 +230,16 @@
 #endif
 #ifndef _SVX_TEXTIT0_HXX //autogen
 #include <svx/xtextit0.hxx>
+#endif
+
+#define ITEMID_DASH_LIST        SID_DASH_LIST
+#define ITEMID_LINEEND_LIST     SID_LINEEND_LIST
+#define ITEMID_COLOR_TABLE      SID_COLOR_TABLE
+#define ITEMID_GRADIENT_LIST    SID_GRADIENT_LIST
+#define ITEMID_HATCH_LIST       SID_HATCH_LIST
+#define ITEMID_BITMAP_LIST      SID_BITMAP_LIST
+#ifndef _SVX_DRAWITEM_HXX
+#include <svx/drawitem.hxx>
 #endif
 
 // #UndoRedo#
