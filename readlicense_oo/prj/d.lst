@@ -120,7 +120,7 @@ mkdir: %_DEST%\pck%_EXT%
 ..\%__SRC%\misc\license\%GUI%\LICENSE %_DEST%\bin%_EXT%\88\osl\LICENSE88
 ..\%__SRC%\misc\license\WNT\license.txt %_DEST%\bin%_EXT%\88\osl\license88.txt
 ..\%__SRC%\misc\license\%GUI%\license.html %_DEST%\bin%_EXT%\88\osl\LICENSE88.html
-..\%__SRC%\misc\cinema\* %_DEST%\pck%_EXT%\*
+..\source\cinema\* %_DEST%\pck%_EXT%\*
 ..\%__SRC%\misc\01\* %_DEST%\bin%_EXT%\01\osl\*
 ..\%__SRC%\misc\01\readme01.txt %_DEST%\bin%_EXT%\01\osl\README01
 ..\%__SRC%\misc\01\readme01.html %_DEST%\bin%_EXT%\01\osl\README01.html
