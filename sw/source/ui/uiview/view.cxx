@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: jp $ $Date: 2001-08-23 14:49:28 $
+ *  last change: $Author: jp $ $Date: 2001-08-30 12:04:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1402,7 +1402,10 @@ void SwView::ShowCursor( FASTBOOL bOn )
 #else
 
     if ( bOn )
-        pWrtShell->ShowCrsr();
+    {
+        if( !pWrtShell->IsFrmSelected() && !pWrtShell->IsObjSelected() )
+            pWrtShell->ShowCrsr();
+    }
     else
         pWrtShell->HideCrsr();
 
