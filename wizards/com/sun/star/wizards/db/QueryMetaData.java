@@ -2,9 +2,9 @@
 *
 *  $RCSfile: QueryMetaData.java,v $
 *
-*  $Revision: 1.3 $
+*  $Revision: 1.4 $
 *
-*  last change: $Author: pjunck $ $Date: 2004-10-27 13:30:34 $
+*  last change: $Author: vg $ $Date: 2005-02-21 13:53:38 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -57,7 +57,6 @@
 *  Contributor(s): _______________________________________
 *
 */
-
 package com.sun.star.wizards.db;
 
 import com.sun.star.lang.XMultiServiceFactory;
@@ -66,9 +65,6 @@ import com.sun.star.container.XNameAccess;
 
 import java.util.*;
 import com.sun.star.lang.Locale;
-import com.sun.star.sdb.CommandType;
-import com.sun.star.util.XNumberFormats;
-import com.sun.star.wizards.common.Properties;
 import com.sun.star.wizards.common.*;
 
 public class QueryMetaData extends CommandMetaData {
@@ -89,8 +85,8 @@ public class QueryMetaData extends CommandMetaData {
 
     }
 
-    public QueryMetaData(XMultiServiceFactory xMSF, Locale CharLocale, XNumberFormats NumberFormats) {
-        super(xMSF, CharLocale, NumberFormats);
+    public QueryMetaData(XMultiServiceFactory xMSF, Locale CharLocale, NumberFormatter oNumberFormatter) {
+        super(xMSF, CharLocale, oNumberFormatter);
         QueryFields = new Vector(0);
     }
 
