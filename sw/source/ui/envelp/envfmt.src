@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envfmt.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-30 16:32:13 $
+ *  last change: $Author: vg $ $Date: 2001-06-08 22:46:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,7 +243,7 @@ TabPage TP_ENV_FMT
         Text[ korean ] = "∆˜∏À";
         Text[ chinese_simplified ] = "∏Ò Ω";
         Text[ chinese_traditional ] = "ÆÊ¶°";
-        Text[ turkish ] = "Format";
+        Text[ turkish ] = "Renk format˝";
         Text[ arabic ] = "«· ‰”Ìﬁ";
         Text[ catalan ] = "Formato";
         Text[ finnish ] = "Muotoile";
@@ -452,7 +452,7 @@ TabPage TP_ENV_FMT
         Text[ korean ] = "∆˜∏À";
         Text[ chinese_simplified ] = "∏Ò Ω";
         Text[ chinese_traditional ] = "ÆÊ¶°";
-        Text[ turkish ] = "Format";
+        Text[ turkish ] = "Renk format˝";
         Text[ arabic ] = "«· ‰”Ìﬁ";
         Text[ catalan ] = "Formato";
         Text[ finnish ] = "Muotoile";
@@ -718,3 +718,4 @@ Menu MNU_EDIT
         };
     };
 };
+
