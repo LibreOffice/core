@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Package.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-05 18:36:41 $
+ *  last change: $Author: mtg $ $Date: 2001-10-02 22:27:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,23 +96,32 @@ module com {  module sun {  module star {  module packages {
 service Package
 {
     /**
-    This interface is used to obtain the URL of the Package
-    file the instance is providing access to. It will throw
-    a css::uno::Exception if the package does not exist or has an invalid
-    format (for example, a corrupt central directory record if the file is
-    a ZIP file).
+    A Package can be initialised with one of the following:
+
+    1. A file URL referring to a package.
+    2. An XInputStream referring to a package (it must also
+       support an XSeekable interface).
+    3. An XStream referring to a package. The XInputStream must support
+       an XSeekable interface, and the XOutputStream must support an
+       XTruncate interface.
+
+    It will throw a css::uno::Exception if initialised with bad data or
+    if the package has an invalid format (for example, a corrupt central d
+    irectory record if the file is a ZIP file).
     */
     interface com::sun::star::lang::XInitialization;
     /**
     This interface is used to get access to any entry within the package
     For example:
-        getByHierarchicalName ("/folder/subfolder/file1.txt");
+        getByHierarchicalName ("folder/subfolder/file1.txt");
     This will return a PackageStream which refers to the specified stream.
     This is also used to get access to a particular folder within the
     Package. For example:
-        getByHierarchicalName ("/folder/subfolder/");
+        getByHierarchicalName ("folder/subfolder/");
     This will return a PackageFolder which describes the contents of the specified
     folder.
+
+    Calls to methods of XHierarchicalNameAccess must NOT have a leading slash.
     */
     interface com::sun::star::container::XHierarchicalNameAccess;
     /**
