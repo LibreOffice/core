@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sortdlg.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-26 20:32:12 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 21:12:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,7 @@ TabPage RID_SCPAGE_SORT_FIELDS
         Text[ korean ] = "¿À¸§Â÷¼ø(~A)";
         Text[ turkish ] = "A~rtan düzende";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Ascendente";
     };
     RadioButton BTN_DOWN1
     {
@@ -131,6 +132,7 @@ TabPage RID_SCPAGE_SORT_FIELDS
         Text[ korean ] = "³»¸²Â÷¼ø(~D)";
         Text[ turkish ] = "A~zalan düzende";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Descendente";
     };
     GroupBox GB_SORT1
     {
@@ -159,6 +161,7 @@ TabPage RID_SCPAGE_SORT_FIELDS
         Text[ korean ] = "·Î Á¤·Ä";
         Text[ turkish ] = "Sýralama esasý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Ordenar según";
     };
     ListBox LB_SORT2
     {
@@ -196,6 +199,7 @@ TabPage RID_SCPAGE_SORT_FIELDS
         Text[ korean ] = "¿À¸§Â÷¼ø(~S)";
         Text[ turkish ] = "Ar~tan düzende";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "A~scendente";
     };
     RadioButton BTN_DOWN2
     {
@@ -225,6 +229,7 @@ TabPage RID_SCPAGE_SORT_FIELDS
         Text[ korean ] = "³»¸²Â÷¼ø(~E)";
         Text[ turkish ] = "Aza~lan düzende";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "D~escendente";
     };
     GroupBox GB_SORT2
     {
@@ -254,6 +259,7 @@ TabPage RID_SCPAGE_SORT_FIELDS
         Text[ korean ] = "ÀÌ¾î¼­";
         Text[ turkish ] = "Sonraki sýralama esasý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Después según";
     };
     ListBox LB_SORT3
     {
@@ -291,6 +297,7 @@ TabPage RID_SCPAGE_SORT_FIELDS
         Text[ korean ] = "¿À¸§Â÷¼ø(~C)";
         Text[ turkish ] = "Art~an düzende";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "As~cendente";
     };
     RadioButton BTN_DOWN3
     {
@@ -320,6 +327,7 @@ TabPage RID_SCPAGE_SORT_FIELDS
         Text[ korean ] = "³»¸²Â÷¼ø(~N)";
         Text[ turkish ] = "Azala~n düzende";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Desce~ndente";
     };
     GroupBox GB_SORT3
     {
@@ -349,6 +357,7 @@ TabPage RID_SCPAGE_SORT_FIELDS
         Text[ korean ] = "ÀÌ¾î¼­";
         Text[ turkish ] = "Sonraki sýralama esasý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Después según";
     };
 };
 TabPage RID_SCPAGE_SORT_OPTIONS
@@ -387,6 +396,7 @@ TabPage RID_SCPAGE_SORT_OPTIONS
         Text[ korean ] = "´ë/¼Ò¹®ÀÚ ±¸ºÐ(~S)";
         Text[ turkish ] = "~Büyük/küçük harf duyarlý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Mayúsculas/minúsculas";
     };
     CheckBox BTN_LABEL
     {
@@ -417,6 +427,7 @@ TabPage RID_SCPAGE_SORT_OPTIONS
         Text[ korean ] = "¹üÀ§¿¡´Â  XX ¸Ó¸®±Û Æ÷ÇÔ.(~A)";
         Text[ turkish ] = "Bölüm  XXbaþlýklarý içeriyor";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Area contiene XX encabezamientos";
     };
     String STR_COL_LABEL
     {
@@ -444,6 +455,7 @@ TabPage RID_SCPAGE_SORT_OPTIONS
         Text[ korean ] = "¹üÀ§¿¡´Â ¿­ ¸Ó¸®±Û Æ÷ÇÔ.(~H)";
         Text[ turkish ] = "Bölüm ~sütun baþlýklarý içeriyor";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Area contiene encabezamientos de ~columnas";
     };
     String STR_ROW_LABEL
     {
@@ -471,6 +483,7 @@ TabPage RID_SCPAGE_SORT_OPTIONS
         Text[ korean ] = "¹üÀ§¿¡´Â Çà ¸Ó¸®±Û Æ÷ÇÔ.(~R)";
         Text[ turkish ] = "Bölüm sa~týr baþlýklarý içeriyor";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Area contiene títulos de ~filas";
     };
     CheckBox BTN_FORMATS
     {
@@ -501,6 +514,7 @@ TabPage RID_SCPAGE_SORT_OPTIONS
         Text[ korean ] = "¼­½Ä Æ÷ÇÔ(~F)";
         Text[ turkish ] = "~Formatlamayý da dikkate al";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Incluir ~formatos";
     };
     CheckBox BTN_COPYRESULT
     {
@@ -530,6 +544,7 @@ TabPage RID_SCPAGE_SORT_OPTIONS
         Text[ korean ] = "Á¤·Ä °á°ú¸¦ ...¿¡(·Î)  Ãâ·Â (~C):";
         Text[ turkish ] = "Sýralama sonuçlarýnýn kopyalanacaðý ~yer";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "C~opiar resultado de clasificación en";
     };
     ListBox LB_OUTAREA
     {
@@ -575,6 +590,7 @@ TabPage RID_SCPAGE_SORT_OPTIONS
         Text[ korean ] = "»ç¿ëÀÚ°¡ Á¤ÀÇÇÑ Á¤·Ä ¼ø¼­(~O)";
         Text[ turkish ] = "~Kullanýcý tanýmlý sýralama düzeni";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Orden de clasificación definida por el ~usuario";
     };
     ListBox LB_SORT_USER
     {
@@ -609,6 +625,7 @@ TabPage RID_SCPAGE_SORT_OPTIONS
         Text[ chinese_traditional ] = "»y¨¥(~L)";
         Text[ turkish ] = "Language Settings";
         Text[ arabic ] = "ÇááÛÉ";
+        Text[ catalan ] = "Language Settings";
     };
     ListBox LB_LANGUAGE
     {
@@ -654,6 +671,7 @@ TabPage RID_SCPAGE_SORT_OPTIONS
         Text[ korean ] = "¹æÇâ";
         Text[ turkish ] = "Yön";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Dirección";
     };
     RadioButton BTN_TOP_DOWN
     {
@@ -683,6 +701,7 @@ TabPage RID_SCPAGE_SORT_OPTIONS
         Text[ korean ] = "À§ ¿¡¼­ ¾Æ·¡·Î (Çà Á¤·Ä)(~T)";
         Text[ turkish ] = "~Yukarýdan aþaðý (satýrlarý sýrala)";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "De ~arriba hacia abajo (ordenar filas)";
     };
     RadioButton BTN_LEFT_RIGHT
     {
@@ -712,6 +731,7 @@ TabPage RID_SCPAGE_SORT_OPTIONS
         Text[ korean ] = "¿ÞÂÊ¿¡¼­ ¿À¸¥ÂÊÀ¸·Î (¿­ Á¤·Ä)(~L)";
         Text[ turkish ] = "S~oldan saða (sütunlarý sýrala)";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "De ~izquierda a derecha (ordenar columnas)";
     };
     FixedText FT_AREA_LABEL
     {
@@ -740,6 +760,7 @@ TabPage RID_SCPAGE_SORT_OPTIONS
         Text[ korean ] = "µ¥ÀÌÅÍ ¿µ¿ª:";
         Text[ turkish ] = "Veri alaný:";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Área de datos:";
     };
 };
 TabDialog RID_SCDLG_SORT
@@ -796,6 +817,7 @@ TabDialog RID_SCDLG_SORT
                 Text[ korean ] = "Á¤·Ä ±âÁØ";
                 Text[ turkish ] = "Sýralama ölçütleri";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Criterios";
             };
             PageItem
             {
@@ -824,6 +846,7 @@ TabDialog RID_SCDLG_SORT
                 Text[ korean ] = "¿É¼Ç";
                 Text[ turkish ] = "Seçenekler";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Opciones";
             };
         };
     };
@@ -862,4 +885,5 @@ TabDialog RID_SCDLG_SORT
     Text[ korean ] = "Á¤·Ä";
     Text[ turkish ] = "Sýrala";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Ordenar";
 };
