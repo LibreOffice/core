@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inettbc.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-09 09:55:13 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 10:18:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,10 +189,34 @@ void SfxURLToolBoxControl_Impl::OpenURL( const String& rName, BOOL bNew ) const
                 aArgs[3].Value = makeAny( OUString( aFilter ));
             }
 
-            xDispatch->dispatch( aTargetURL, aArgs );
+            SfxURLToolBoxControl_Impl::ExecuteInfo* pExecuteInfo = new SfxURLToolBoxControl_Impl::ExecuteInfo;
+            pExecuteInfo->xDispatch     = xDispatch;
+            pExecuteInfo->aTargetURL    = aTargetURL;
+            pExecuteInfo->aArgs         = aArgs;
+            Application::PostUserEvent( STATIC_LINK( 0, SfxURLToolBoxControl_Impl, ExecuteHdl_Impl), pExecuteInfo );
         }
     }
 }
+
+//--------------------------------------------------------------------
+
+IMPL_STATIC_LINK( SfxURLToolBoxControl_Impl, ExecuteHdl_Impl, ExecuteInfo*, pExecuteInfo )
+{
+    try
+    {
+        // Asynchronous execution as this can lead to our own destruction!
+        // Framework can recycle our current frame and the layout manager disposes all user interface
+        // elements if a component gets detached from its frame!
+        pExecuteInfo->xDispatch->dispatch( pExecuteInfo->aTargetURL, pExecuteInfo->aArgs );
+    }
+    catch ( Exception& )
+    {
+    }
+
+    delete pExecuteInfo;
+    return 0;
+}
+
 
 Window* SfxURLToolBoxControl_Impl::CreateItemWindow( Window* pParent )
 {
