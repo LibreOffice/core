@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basprov.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tbe $ $Date: 2003-09-23 10:07:03 $
+ *  last change: $Author: tbe $ $Date: 2003-09-23 15:06:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,8 +143,10 @@ namespace basprov
             ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
             if ( !pNames )
             {
-                static Sequence< ::rtl::OUString > aNames(1);
+                static Sequence< ::rtl::OUString > aNames(3);
                 aNames.getArray()[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "drafts.com.sun.star.script.framework.provider.ScriptProviderForBasic" ) );
+                aNames.getArray()[1] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "drafts.com.sun.star.script.framework.provider.LanguageScriptProvider" ) );
+                aNames.getArray()[2] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "drafts.com.sun.star.script.framework.provider.ScriptProvider" ) );
                 pNames = &aNames;
             }
         }
