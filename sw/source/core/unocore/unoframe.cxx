@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: os $ $Date: 2001-03-06 15:45:11 $
+ *  last change: $Author: os $ $Date: 2001-03-12 10:00:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1382,8 +1382,29 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
 
             aSet.SetParent(&pFmt->GetAttrSet());
             aPropSet.setPropertyValue(*pCur, aValue, aSet);
-            if(COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_ANCHOR_TYPE))
+            if(RES_ANCHOR == pCur->nWID && MID_ANCHOR_ANCHORTYPE == pCur->nMemberId)
+            {
+                SwFmtAnchor aAnchor = (const SwFmtAnchor&)aSet.Get(pCur->nWID);
+                if(aAnchor.GetAnchorId() == FLY_AT_FLY)
+                {
+                    const SwPosition* pPosition = aAnchor.GetCntntAnchor();
+                    SwFrmFmt* pFmt = pPosition ? pPosition->nNode.GetNode().GetFlyFmt() : 0;
+                    if(!pFmt || pFmt->Which() == RES_DRAWFRMFMT)
+                    {
+                        lang::IllegalArgumentException aExcept;
+                        aExcept.Message = C2U("Anchor to frame: no frame found");
+                        throw aExcept;
+                    }
+                    else
+                    {
+                        SwPosition aPos = *pPosition;
+                        aPos.nNode = *pFmt->GetCntnt().GetCntntIdx();
+                        aAnchor.SetAnchor(&aPos);
+                        aSet.Put(aAnchor);
+                    }
+                }
                 pFmt->GetDoc()->SetFlyFrmAttr( *pFmt, aSet );
+            }
             else
                 pFmt->SetAttr(aSet);
         }
