@@ -1,4 +1,4 @@
-qa  qadevOOo    :   unoil jut runner NULL
+qa  qadevOOo    :   unoil jut NULL
 qa  qadevOOo                                             usr1    -   all qa_mkout NULL
 qa  qadevOOo\runner\util                                 nmake   -   all util NULL
 qa  qadevOOo\runner\share                                nmake   -   all share util NULL
@@ -53,18 +53,18 @@ qa  qadevOOo\tests\java\ifc\view                         nmake   -   all ifc_vie
 qa  qadevOOo\tests\java\ifc\xml                          nmake   -   all ifc_xml runner NULL
 qa  qadevOOo\tests\java\ifc\xml\sax                      nmake   -   all ifc_xml_sax runner NULL
 qa  qadevOOo\tests\java\mod\_acceptor                    nmake   -   all mod__acceptor runner NULL
-qa  qadevOOo\tests\java\mod\_acceptor.uno                nmake   -   all mod__acceptor.uno runner NULL
+qa  qadevOOo\tests\java\mod\_acceptor.uno                nmake   -   all mod__acceptoruno runner NULL
 qa  qadevOOo\tests\java\mod\_adabas                      nmake   -   all mod__adabas runner NULL
 qa  qadevOOo\tests\java\mod\_ado                         nmake   -   all mod__ado runner NULL
 qa  qadevOOo\tests\java\mod\_brdgfctr                    nmake   -   all mod__brdgfctr runner NULL
-qa  qadevOOo\tests\java\mod\_bridgefac.uno               nmake   -   all mod__brdgfac.uno runner NULL
+qa  qadevOOo\tests\java\mod\_bridgefac.uno               nmake   -   all mod__brdgfacuno runner NULL
 qa  qadevOOo\tests\java\mod\_cached                      nmake   -   all mod__cached runner NULL
 qa  qadevOOo\tests\java\mod\_cmdmail                     nmake   -   all mod__cmdmail runner NULL
 qa  qadevOOo\tests\java\mod\_cnt                         nmake   -   all mod__cnt runner NULL
 qa  qadevOOo\tests\java\mod\_connectr                    nmake   -   all mod__connectr runner NULL
-qa  qadevOOo\tests\java\mod\_connector.uno               nmake   -   all mod__connector.uno runner NULL
+qa  qadevOOo\tests\java\mod\_connector.uno               nmake   -   all mod__connectoruno runner NULL
 qa  qadevOOo\tests\java\mod\_corefl                      nmake   -   all mod__corefl runner NULL
-qa  qadevOOo\tests\java\mod\_corereflection.uno          nmake   -   all mod__corereflection.uno runner NULL
+qa  qadevOOo\tests\java\mod\_corereflection.uno          nmake   -   all mod__corereflectionuno runner NULL
 qa  qadevOOo\tests\java\mod\_cpld                        nmake   -   all mod__cpld runner NULL
 qa  qadevOOo\tests\java\mod\_dbaccess                    nmake   -   all mod__dbaccess ifc_accessibility ifc_sdbc ifc_form runner NULL
 qa  qadevOOo\tests\java\mod\_dbpool                      nmake   -   all mod__dbpool runner NULL
@@ -82,17 +82,17 @@ qa  qadevOOo\tests\java\mod\_ftransl                     nmake   -   all mod__ft
 qa  qadevOOo\tests\java\mod\_fwk                         nmake   -   all mod__fwk runner NULL
 qa  qadevOOo\tests\java\mod\_fwl                         nmake   -   all mod__fwl runner NULL
 qa  qadevOOo\tests\java\mod\_i18n                        nmake   -   all mod__i18n runner NULL
-qa  qadevOOo\tests\java\mod\_implreg.uno                 nmake   -   all mod__implreg.uno runner NULL
+qa  qadevOOo\tests\java\mod\_implreg.uno                 nmake   -   all mod__implreguno runner NULL
 qa  qadevOOo\tests\java\mod\_impreg                      nmake   -   all mod__impreg runner NULL
 qa  qadevOOo\tests\java\mod\_insp                        nmake   -   all mod__insp runner NULL
-qa  qadevOOo\tests\java\mod\_introspection.uno           nmake   -   all mod__introspection.uno runner NULL
+qa  qadevOOo\tests\java\mod\_introspection.uno           nmake   -   all mod__introspectionuno runner NULL
 qa  qadevOOo\tests\java\mod\_inv                         nmake   -   all mod__inv runner NULL
-qa  qadevOOo\tests\java\mod\_invocation.uno              nmake   -   all mod__invocation.uno runner NULL
+qa  qadevOOo\tests\java\mod\_invocation.uno              nmake   -   all mod__invocationuno runner NULL
 qa  qadevOOo\tests\java\mod\_invadp                      nmake   -   all mod__invadp runner NULL
-qa  qadevOOo\tests\java\mod\_invocadapt.uno              nmake   -   all mod__invocadapt.uno runner NULL
+qa  qadevOOo\tests\java\mod\_invocadapt.uno              nmake   -   all mod__invocadaptuno runner NULL
 qa  qadevOOo\tests\java\mod\_javaloader                  nmake   -   all mod__javaloader runner NULL
-qa  qadevOOo\tests\java\mod\_javaloader.uno              nmake   -   all mod__javaloader.uno runner NULL
-qa  qadevOOo\tests\java\mod\_javavm.uno                  nmake   -   all mod__javavm.uno runner NULL
+qa  qadevOOo\tests\java\mod\_javaloader.uno              nmake   -   all mod__javaloaderuno runner NULL
+qa  qadevOOo\tests\java\mod\_javavm.uno                  nmake   -   all mod__javavmuno runner NULL
 qa  qadevOOo\tests\java\mod\_jdbc                        nmake   -   all mod__jdbc runner NULL
 qa  qadevOOo\tests\java\mod\_jen                         nmake   -   all mod__jen runner NULL
 qa  qadevOOo\tests\java\mod\_lng                         nmake   -   all mod__lng runner NULL
@@ -100,30 +100,30 @@ qa  qadevOOo\tests\java\mod\_lnn                         nmake   -   all mod__ln
 qa  qadevOOo\tests\java\mod\_mcnttype                    nmake   -   all mod__mcnttype runner NULL
 qa  qadevOOo\tests\java\mod\_mozab                       nmake   -   all mod__mozab runner NULL
 qa  qadevOOo\tests\java\mod\_namingservice               nmake   -   all mod__namingservice runner NULL
-qa  qadevOOo\tests\java\mod\_namingservice.uno           nmake   -   all mod__namingservice.uno runner NULL
-qa  qadevOOo\tests\java\mod\_nestedreg.uno               nmake   -   all mod__nestedreg.uno runner NULL
+qa  qadevOOo\tests\java\mod\_namingservice.uno           nmake   -   all mod__namingserviceuno runner NULL
+qa  qadevOOo\tests\java\mod\_nestedreg.uno               nmake   -   all mod__nestedreguno runner NULL
 qa  qadevOOo\tests\java\mod\_odbc                        nmake   -   all mod__odbc runner NULL
 qa  qadevOOo\tests\java\mod\_proxyfac                    nmake   -   all mod__proxyfac runner NULL
-qa  qadevOOo\tests\java\mod\_proxyfac.uno                nmake   -   all mod__proxyfac.uno runner NULL
+qa  qadevOOo\tests\java\mod\_proxyfac.uno                nmake   -   all mod__proxyfacuno runner NULL
 qa  qadevOOo\tests\java\mod\_proxyset                    nmake   -   all mod__proxyset runner NULL
 qa  qadevOOo\tests\java\mod\_rdbtdp                      nmake   -   all mod__rdbtdp runner NULL
-qa  qadevOOo\tests\java\mod\_regtypeprov.uno             nmake   -   all mod__regtypeprov.uno runner NULL
+qa  qadevOOo\tests\java\mod\_regtypeprov.uno             nmake   -   all mod__regtypeprovuno runner NULL
 qa  qadevOOo\tests\java\mod\_remotebridge                nmake   -   all mod__remotebridge runner NULL
-qa  qadevOOo\tests\java\mod\_remotebridge.uno            nmake   -   all mod__remotebridge.uno runner NULL
+qa  qadevOOo\tests\java\mod\_remotebridge.uno            nmake   -   all mod__remotebridgeuno runner NULL
 qa  qadevOOo\tests\java\mod\_sc                          nmake   -   all mod__sc ifc_xml_sax ifc_accessibility ifc_document runner NULL
 qa  qadevOOo\tests\java\mod\_sch                         nmake   -   all mod__sch ifc_accessibility runner NULL
 qa  qadevOOo\tests\java\mod\_sd                          nmake   -   all mod__sd ifc_accessibility runner NULL
 qa  qadevOOo\tests\java\mod\_sfx                         nmake   -   all mod__sfx runner NULL
-qa  qadevOOo\tests\java\mod\_servicemgr.uno              nmake   -   all mod__servicemgr.uno runner NULL
-qa  qadevOOo\tests\java\mod\_shlibloader.uno             nmake   -   all mod__shlibloader.uno runner NULL
+qa  qadevOOo\tests\java\mod\_servicemgr.uno              nmake   -   all mod__servicemgruno runner NULL
+qa  qadevOOo\tests\java\mod\_shlibloader.uno             nmake   -   all mod__shlibloaderuno runner NULL
 qa  qadevOOo\tests\java\mod\_simreg                      nmake   -   all mod__simreg runner NULL
-qa  qadevOOo\tests\java\mod\_simplereg.uno               nmake   -   all mod__simplereg.uno runner NULL
+qa  qadevOOo\tests\java\mod\_simplereg.uno               nmake   -   all mod__simplereguno runner NULL
 qa  qadevOOo\tests\java\mod\_sm                          nmake   -   all mod__sm ifc_xml_sax ifc_document ifc_accessibility runner NULL
 qa  qadevOOo\tests\java\mod\_smgr                        nmake   -   all mod__smgr runner NULL
 qa  qadevOOo\tests\java\mod\_smplmail                    nmake   -   all mod__smplmail runner NULL
 qa  qadevOOo\tests\java\mod\_srtrs                       nmake   -   all mod__srtrs runner NULL
 qa  qadevOOo\tests\java\mod\_stm                         nmake   -   all mod__stm ifc_io runner NULL
-qa  qadevOOo\tests\java\mod\_streams.uno                 nmake   -   all mod__streams.uno ifc_io runner NULL
+qa  qadevOOo\tests\java\mod\_streams.uno                 nmake   -   all mod__streamsuno ifc_io runner NULL
 qa  qadevOOo\tests\java\mod\_svtools                     nmake   -   all mod__svtools ifc_accessibility runner NULL
 qa  qadevOOo\tests\java\mod\_svx                         nmake   -   all mod__svx ifc_accessibility ifc_document runner NULL
 qa  qadevOOo\tests\java\mod\_sw                          nmake   -   all mod__sw ifc_xml_sax ifc_document ifc_accessibility ifc_util runner NULL
@@ -133,8 +133,8 @@ qa  qadevOOo\tests\java\mod\_tcv                         nmake   -   all mod__tc
 qa  qadevOOo\tests\java\mod\_tdmgr                       nmake   -   all mod__tdmgr runner NULL
 qa  qadevOOo\tests\java\mod\_text                        nmake   -   all mod__text runner NULL
 qa  qadevOOo\tests\java\mod\_toolkit                     nmake   -   all mod__toolkit ifc_awt ifc_accessibility runner NULL
-qa  qadevOOo\tests\java\mod\_typeconverter.uno           nmake   -   all mod__typeconverter.uno runner NULL
-qa  qadevOOo\tests\java\mod\_typemgr.uno                 nmake   -   all mod__typemgr.uno runner NULL
+qa  qadevOOo\tests\java\mod\_typeconverter.uno           nmake   -   all mod__typeconverteruno runner NULL
+qa  qadevOOo\tests\java\mod\_typemgr.uno                 nmake   -   all mod__typemgruno runner NULL
 qa  qadevOOo\tests\java\mod\_ucb                         nmake   -   all mod__ucb runner NULL
 qa  qadevOOo\tests\java\mod\_ucpdav                      nmake   -   all mod__ucpdav runner NULL
 qa  qadevOOo\tests\java\mod\_ucpfile                     nmake   -   all mod__ucpfile runner NULL
@@ -143,7 +143,7 @@ qa  qadevOOo\tests\java\mod\_ucppkg                      nmake   -   all mod__uc
 qa  qadevOOo\tests\java\mod\_ucprmt                      nmake   -   all mod__ucprmt runner NULL
 qa  qadevOOo\tests\java\mod\_uui                         nmake   -   all mod__uui runner NULL
 qa  qadevOOo\tests\java\mod\_uuresolver                  nmake   -   all mod__uuresolver runner NULL
-qa  qadevOOo\tests\java\mod\_uuresolver.uno              nmake   -   all mod__uuresolver.uno runner NULL
-qa  qadevOOo\tests\java\mod\_xmloff/Chart                nmake   -   all mod__xmloff_Chart ifc_xml_sax ifc_document runner NULL
-qa  qadevOOo\tests\java\mod\_xmloff/Draw                 nmake   -   all mod__xmloff_Draw ifc_xml_sax ifc_document runner NULL
-qa  qadevOOo\tests\java\mod\_xmloff/Impress              nmake   -   all mod__xmloff_Impress ifc_xml_sax ifc_document runner NULL
+qa  qadevOOo\tests\java\mod\_uuresolver.uno              nmake   -   all mod__uuresolveruno runner NULL
+qa  qadevOOo\tests\java\mod\_xmloff\Chart                nmake   -   all mod__xmloff_Chart ifc_xml_sax ifc_document runner NULL
+qa  qadevOOo\tests\java\mod\_xmloff\Draw                 nmake   -   all mod__xmloff_Draw ifc_xml_sax ifc_document runner NULL
+qa  qadevOOo\tests\java\mod\_xmloff\Impress              nmake   -   all mod__xmloff_Impress ifc_xml_sax ifc_document runner NULL
