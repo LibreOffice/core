@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgejpg.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 05:07:34 $
+ *  last change: $Author: sj $ $Date: 2001-05-11 14:08:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,31 +129,31 @@ ModalDialog DLG_EXPORT_JPG
     {
         Pos = MAP_APPFONT ( 12 , 15 ) ;
         Size = MAP_APPFONT ( 81 , 21 ) ;
-        Text = "0: min. Qualität\n100: max. Qualität" ;
-        Text [ ENGLISH ] = "0: min. quality\n100: max. quality" ;
-        Text [ english_us ] = "0: min. Quality\n100: max. Quality" ;
-        Text [ italian ] = "Q: min. qualità\n100: max. qualità" ;
-        Text [ spanish ] = "0: mín. calidad\n100: máx. calidad" ;
-        Text [ french ] = "0: qualité min.\n100: qualité max." ;
-        Text [ dutch ] = "0: min. kwaliteit\n100: max. kwaliteit" ;
-        Text [ swedish ] = "0: min. kvalitet\n100: max. kvalitet" ;
-        Text [ danish ] = "0: min. kvalitet\n100: maks. kvalitet" ;
-        Text [ portuguese_brazilian ] = "0: min. Qualidade\n100: max. Qualidade" ;
-        Text [ portuguese ] = "0: min. Qualidade\n100: max. Qualidade" ;
-        Text[ chinese_simplified ] = "0: ×î²î \n100: ×î¼Ñ¡¡";
-        Text[ russian ] = "0: íèçêîå êà÷åñòâî\n100: âûñîêîå êà÷åñòâî";
-        Text[ polish ] = "0: min. jakoœæ\n100: max. jakoœæ";
-        Text[ japanese ] = "0: Å’á\n100: Å‚";
-        Text[ chinese_traditional ] = "0: ³Ì®t \n100: ³Ì¨Î¡@";
-        Text[ arabic ] = "0: ÇáÍÏ ÇáÃÏäì ááÌæÏÉ\n100: ÇáÍÏ ÇáÃŞÕì ááÌæÏÉ";
-        Text[ dutch ] = "0: min. kwaliteit\n100: max. kwaliteit";
-        Text[ chinese_simplified ] = "0: ×î²î \n100: ×î¼Ñ¡¡";
-        Text[ greek ] = "0: åëÜ÷éóôç ğïéüôçôá\n100: ìİãéóôç ğïéüôçôá";
-        Text[ korean ] = "0: ÃÖ¼Ò ¼º´É\n100: ÃÖ´ë ¼º´É";
-        Text[ turkish ] = "0: asg. kalite\n100: azm. kalite";
+        Text = "1: min. Qualität\n100: max. Qualität" ;
+        Text [ ENGLISH ] = "1: min. quality\n100: max. quality" ;
+        Text [ english_us ] = "1: min. Quality\n100: max. Quality" ;
+        Text [ italian ] = "1: min. qualità\n100: max. qualità" ;
+        Text [ spanish ] = "1: mín. calidad\n100: máx. calidad" ;
+        Text [ french ] = "1: qualité min.\n100: qualité max." ;
+        Text [ dutch ] = "1: min. kwaliteit\n100: max. kwaliteit" ;
+        Text [ swedish ] = "1: min. kvalitet\n100: max. kvalitet" ;
+        Text [ danish ] = "1: min. kvalitet\n100: maks. kvalitet" ;
+        Text [ portuguese_brazilian ] = "1: min. Qualidade\n100: max. Qualidade" ;
+        Text [ portuguese ] = "1: min. Qualidade\n100: max. Qualidade" ;
+        Text[ chinese_simplified ] = "1: ×î²î \n100: ×î¼Ñ¡¡";
+        Text[ russian ] = "1: íèçêîå êà÷åñòâî\n100: âûñîêîå êà÷åñòâî";
+        Text[ polish ] = "1: min. jakoœæ\n100: max. jakoœæ";
+        Text[ japanese ] = "1: Å’á\n100: Å‚";
+        Text[ chinese_traditional ] = "1: ³Ì®t \n100: ³Ì¨Î¡@";
+        Text[ arabic ] = "1: ÇáÍÏ ÇáÃÏäì ááÌæÏÉ\n100: ÇáÍÏ ÇáÃŞÕì ááÌæÏÉ";
+        Text[ dutch ] = "1: min. kwaliteit\n100: max. kwaliteit";
+        Text[ chinese_simplified ] = "1: ×î²î \n100: ×î¼Ñ¡¡";
+        Text[ greek ] = "1: åëÜ÷éóôç ğïéüôçôá\n100: ìİãéóôç ğïéüôçôá";
+        Text[ korean ] = "1: ÃÖ¼Ò ¼º´É\n100: ÃÖ´ë ¼º´É";
+        Text[ turkish ] = "1: asg. kalite\n100: azm. kalite";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "0: mín. calidad\n100: máx. calidad";
-        Text[ finnish ] = "0: väh. Laatu\n100: Enint. Laatu";
+        Text[ catalan ] = "1: mín. calidad\n100: máx. calidad";
+        Text[ finnish ] = "1: väh. Laatu\n100: Enint. Laatu";
     };
     NumericField NUM_FLD_QUALITY
     {
@@ -162,6 +162,7 @@ ModalDialog DLG_EXPORT_JPG
         Size = MAP_APPFONT ( 50 , 12 ) ;
         TabStop = TRUE ;
         Spin = TRUE ;
+        Minimum = 1;
         Maximum = 100 ;
         StrictFormat = TRUE ;
         Last = 100 ;
