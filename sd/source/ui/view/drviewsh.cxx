@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsh.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:57:57 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:33:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,7 +144,7 @@ void DrawViewShell::MakeVisible(const Rectangle& rRect, ::Window& rWin)
     Rectangle aVisArea(rWin.PixelToLogic(Rectangle(Point(0,0), aVisSizePixel)));
     Size aVisAreaSize(aVisArea.GetSize());
 
-    if(!aVisArea.IsInside(rRect) && !pFuSlideShow)
+    if(!aVisArea.IsInside(rRect) && !mpSlideShow)
     {
         // Objekt liegt nicht komplett im sichtbaren Bereich
         sal_Int32 nFreeSpaceX(aVisAreaSize.Width() - aLogicSize.Width());
