@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registryitem_impress.scp,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 21:48:52 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 15:23:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 
 #include "macros.inc"
 
+// MSOLE embedded object in SO7 file format
 RegistryItem gid_Regitem_Clsid__E5a0b632_Dfba_4549_9346_E414da06e6f8_
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Impress_Bin;
@@ -177,6 +178,126 @@ RegistryItem gid_Regitem_Clsid__E5a0b632_Dfba_4549_9346_E414da06e6f8__Versionind
     Subkey = "CLSID\{E5A0B632-DFBA-4549-9346-E414DA06E6F8}\VersionIndependentProgID";
     Value = "soffice.StarImpressDocument.6";
 End
+
+// MSOLE embedded object in OASIS file format
+RegistryItem gid_Regitem_Clsid__Ee5d1ea4_D445_4289_B2fc_55fc93693917_
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "CLSID\{EE5D1EA4-D445-4289-B2FC-55FC93693917}";
+    REG_VALUE_LNG(OO_PRESENT)
+End
+
+RegistryItem gid_Regitem_Clsid__Ee5d1ea4_D445_4289_B2fc_55fc93693917__Auxusertype_2
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "CLSID\{EE5D1EA4-D445-4289-B2FC-55FC93693917}\AuxUserType\2";
+    Value = "%PRODUCTNAME";
+End
+
+RegistryItem gid_Regitem_Clsid__Ee5d1ea4_D445_4289_B2fc_55fc93693917__Auxusertype_3
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "CLSID\{EE5D1EA4-D445-4289-B2FC-55FC93693917}\AuxUserType\3";
+    REG_VALUE_LNG(OO_PRESENT)
+End
+
+RegistryItem gid_Regitem_Clsid__Ee5d1ea4_D445_4289_B2fc_55fc93693917__Dataformats_Getset_0
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "CLSID\{EE5D1EA4-D445-4289-B2FC-55FC93693917}\DataFormats\GetSet\0";
+    Value = "Embed Source,1,8,1";
+End
+
+RegistryItem gid_Regitem_Clsid__Ee5d1ea4_D445_4289_B2fc_55fc93693917__Dataformats_Getset_1
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "CLSID\{EE5D1EA4-D445-4289-B2FC-55FC93693917}\DataFormats\GetSet\1";
+    Value = "3,1,32,1";
+End
+
+RegistryItem gid_Regitem_Clsid__Ee5d1ea4_D445_4289_B2fc_55fc93693917__Dataformats_Getset_2
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "CLSID\{EE5D1EA4-D445-4289-B2FC-55FC93693917}\DataFormats\GetSet\2";
+    Value = "2,1,16,1";
+End
+
+RegistryItem gid_Regitem_Clsid__Ee5d1ea4_D445_4289_B2fc_55fc93693917__Defaulticon
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "CLSID\{EE5D1EA4-D445-4289-B2FC-55FC93693917}\DefaultIcon";
+    Value = "<progpath>\program\soffice.exe,0";
+End
+
+RegistryItem gid_Regitem_Clsid__Ee5d1ea4_D445_4289_B2fc_55fc93693917__Inprochandler32
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "CLSID\{EE5D1EA4-D445-4289-B2FC-55FC93693917}\InprocHandler32";
+    Value = "ole32.dll";
+End
+
+RegistryItem gid_Regitem_Clsid__Ee5d1ea4_D445_4289_B2fc_55fc93693917__Insertable
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "CLSID\{EE5D1EA4-D445-4289-B2FC-55FC93693917}\Insertable";
+End
+
+RegistryItem gid_Regitem_Clsid__Ee5d1ea4_D445_4289_B2fc_55fc93693917__Localserver32
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "CLSID\{EE5D1EA4-D445-4289-B2FC-55FC93693917}\LocalServer32";
+    Value = "<progpath>\program\soffice.exe -nodefault -nologo";
+End
+
+RegistryItem gid_Regitem_Clsid__Ee5d1ea4_D445_4289_B2fc_55fc93693917__Miscstatus
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "CLSID\{EE5D1EA4-D445-4289-B2FC-55FC93693917}\MiscStatus";
+    Value = "16";
+End
+
+RegistryItem gid_Regitem_Clsid__Ee5d1ea4_D445_4289_B2fc_55fc93693917__Progid
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "CLSID\{EE5D1EA4-D445-4289-B2FC-55FC93693917}\ProgID";
+    Value = "opendocument.ImpressDocument.1";
+End
+
+RegistryItem gid_Regitem_Clsid__Ee5d1ea4_D445_4289_B2fc_55fc93693917__Programmable
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "CLSID\{EE5D1EA4-D445-4289-B2FC-55FC93693917}\Programmable";
+End
+
+RegistryItem gid_Regitem_Clsid__Ee5d1ea4_D445_4289_B2fc_55fc93693917__Verb_0
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "CLSID\{EE5D1EA4-D445-4289-B2FC-55FC93693917}\verb\0";
+    Value = "&Edit,0,0";
+End
+
+RegistryItem gid_Regitem_Clsid__Ee5d1ea4_D445_4289_B2fc_55fc93693917__Verb__1
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "CLSID\{EE5D1EA4-D445-4289-B2FC-55FC93693917}\verb\-1";
+    Value = "Show,0,0";
+End
+
+RegistryItem gid_Regitem_Clsid__Ee5d1ea4_D445_4289_B2fc_55fc93693917__Verb__2
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "CLSID\{EE5D1EA4-D445-4289-B2FC-55FC93693917}\verb\-2";
+    Value = "Open,0,0";
+End
+
+RegistryItem gid_Regitem_Clsid__Ee5d1ea4_D445_4289_B2fc_55fc93693917__Versionindependentprogid
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "CLSID\{EE5D1EA4-D445-4289-B2FC-55FC93693917}\VersionIndependentProgID";
+    Value = "opendocument.ImpressDocument.1";
+End
+
+
 
 RegistryItem gid_Regitem_Sdd_Contenttype
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
@@ -635,7 +756,7 @@ RegistryItem gid_Regitem_Openoffice_Impressdocument_1_Clsid
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Impress_Bin;
     Subkey = "opendocument.ImpressDocument.1\CLSID";
-    Value = "{E5A0B632-DFBA-4549-9346-E414DA06E6F8}";
+    Value = "{EE5D1EA4-D445-4289-B2FC-55FC93693917}";
 End
 
 RegistryItem gid_Regitem_Openoffice_Impressdocument_1_Defaulticon
