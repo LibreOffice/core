@@ -2,9 +2,9 @@
  *
  *  $RCSfile: storage.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:25:45 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 16:52:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,18 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_EMBED_XSTORAGE_HPP_
+#include <com/sun/star/embed/XStorage.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
+#include <com/sun/star/embed/ElementModes.hpp>
+#endif
+
+
 #include <rtl/digest.h>
 #include <osl/file.hxx>
 #include <stg.hxx>
@@ -83,8 +95,13 @@
 #include <tools/urlobj.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <unotools/ucbhelper.hxx>
+#include <comphelper/processfactory.hxx>
+
+#include "unostorageholder.hxx"
 
 #pragma hdrstop
+
+using namespace ::com::sun::star;
 
 /************** class SotStorageStream ***********************************/
 class SotStorageStreamFactory : public SotFactory
@@ -762,6 +779,140 @@ SotStorage::~SotStorage()
         delete pStorStm;
 }
 
+/*************************************************************************
+|*    SotStorage::RemoveUNOStorageHolder()
+|*
+|*    Beschreibung
+*************************************************************************/
+void SotStorage::RemoveUNOStorageHolder( UNOStorageHolder* pHolder )
+{
+    UCBStorage* pStg = PTR_CAST( UCBStorage, pOwnStg );
+    if ( pStg )
+    {
+        pStg->GetUNOStorageHolderList()->remove( pHolder );
+        pHolder->release();
+    }
+    else
+    {
+        DBG_ERROR("Not implemented!")
+    }
+}
+
+/*************************************************************************
+|*    SotStorage::GetUNOAPIDuplicate()
+|*
+|*    Beschreibung
+*************************************************************************/
+uno::Reference< embed::XStorage > SotStorage::GetUNOAPIDuplicate( const String& rEleName, sal_Int32 nUNOStorageMode )
+{
+    // after we create a duplicate we will register wrapper
+    // for storage messages, the wrapper will control the real storage
+    // the real storage will be able to ask the duplicate to dispose if it's parent is disposed
+
+    uno::Reference< embed::XStorage > xResult;
+
+    UCBStorage* pStg = PTR_CAST( UCBStorage, pOwnStg );
+    if ( !pStg )
+        return xResult;
+
+    UNOStorageHolderList* pUNOStorageHolderList = pStg->GetUNOStorageHolderList();
+    if ( !pUNOStorageHolderList )
+        return xResult;
+
+    for ( UNOStorageHolderList::iterator aIter = pUNOStorageHolderList->begin();
+          aIter != pUNOStorageHolderList->end(); aIter++ )
+        if ( (*aIter) && (*aIter)->GetStorageName().Equals( rEleName ) )
+        {
+            // the storage is already in use
+            return xResult;
+        }
+
+    if ( IsStream( rEleName ) )
+        return xResult;
+
+    if ( GetError() == ERRCODE_NONE )
+    {
+        StreamMode nMode = ( ( nUNOStorageMode & embed::ElementModes::ELEMENT_WRITE ) == embed::ElementModes::ELEMENT_WRITE ) ?
+                                    STREAM_WRITE : STREAM_READ;
+
+        sal_Bool bStorageReady = !IsStorage( rEleName );
+        SotStorageRef pChildStorage = OpenUCBStorage( rEleName, nMode, STORAGE_TRANSACTED );
+        if ( pChildStorage->GetError() == ERRCODE_NONE && pChildStorage->pOwnStg )
+        {
+            ::utl::TempFile* pTempFile = new ::utl::TempFile();
+            if ( pTempFile->GetURL().Len() )
+            {
+                    if ( !bStorageReady )
+                    {
+                           UCBStorage* pChildUCBStg = PTR_CAST( UCBStorage, pChildStorage->pOwnStg );
+                        if ( pChildUCBStg )
+                        {
+                            UCBStorage* pTempStorage = new UCBStorage( pTempFile->GetURL(), STREAM_WRITE, FALSE, TRUE );
+                            if ( pTempStorage )
+                            {
+                                pChildUCBStg->CopyTo( pTempStorage );
+
+                                // CopyTo does not transport unknown media type
+                                // just workaround it
+                                uno::Any aMediaType;
+
+                                if ( pChildUCBStg->GetProperty(
+                                                    ::rtl::OUString::createFromAscii( "MediaType" ), aMediaType ) )
+                                    pTempStorage->SetProperty( ::rtl::OUString::createFromAscii( "MediaType" ), aMediaType );
+
+                                bStorageReady = !pChildUCBStg->GetError() && !pTempStorage->GetError()
+                                            && pTempStorage->Commit();
+
+                                delete ((BaseStorage*)pTempStorage);
+                                pTempStorage = NULL;
+                            }
+                        }
+
+                        OSL_ENSURE( bStorageReady, "Problem on storage copy!\n" );
+                    }
+
+                    if ( bStorageReady )
+                    {
+                        try {
+                            uno::Reference< lang::XSingleServiceFactory > xStorageFactory(
+                                    ::comphelper::getProcessServiceFactory()->createInstance(
+                                        ::rtl::OUString::createFromAscii( "com.sun.star.embed.StorageFactory" ) ),
+                                    uno::UNO_QUERY );
+
+                            OSL_ENSURE( xStorageFactory.is(), "Can't create storage factory!\n" );
+                            if ( xStorageFactory.is() )
+                            {
+                                uno::Sequence< uno::Any > aArg( 2 );
+                                aArg[0] <<= ::rtl::OUString( pTempFile->GetURL() );
+                                aArg[1] <<= nUNOStorageMode;
+                                uno::Reference< embed::XStorage > xDuplStorage(
+                                                    xStorageFactory->createInstanceWithArguments( aArg ),
+                                                    uno::UNO_QUERY );
+
+                                OSL_ENSURE( xDuplStorage.is(), "Can't open storage!\n" );
+                                if ( xDuplStorage.is() )
+                                {
+                                    UNOStorageHolder* pHolder =
+                                            new UNOStorageHolder( *this, *pChildStorage, xDuplStorage, pTempFile );
+                                    pHolder->acquire();
+                                    pUNOStorageHolderList->push_back( pHolder );
+                                    xResult = xDuplStorage;
+                                }
+                            }
+                        }
+                        catch( uno::Exception& e )
+                        {
+                            OSL_ENSURE( sal_False, ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ) );
+                        }
+                    }
+            }
+        }
+        else
+            SetError( pChildStorage->GetError() );
+    }
+
+    return xResult;
+}
 
 /*************************************************************************
 |*    SotStorage::CreateMemoryStream()
