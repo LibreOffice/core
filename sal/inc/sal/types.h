@@ -2,9 +2,9 @@
  *
  *  $RCSfile: types.h,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-09 11:18:44 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 13:26:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,21 @@
 
 #include <sal/config.h>
 
+/* Grab __SIZEOFxxx constants from typesconfig tool on Unix */
+#if defined UNX
+  #include <sal/typesizes.h>
+#elif defined WNT
+  /* FIXME: autogeneration of type sizes on Win32/Win64? */
+  #define SAL_TYPES_ALIGNMENT2      1
+  #define SAL_TYPES_ALIGNMENT4      1
+  #define SAL_TYPES_ALIGNMENT8      1
+  #define SAL_TYPES_SIZEOFSHORT     2
+  #define SAL_TYPES_SIZEOFINT       4
+  #define SAL_TYPES_SIZEOFLONG      4
+  #define SAL_TYPES_SIZEOFLONGLONG      8
+  #define SAL_TYPES_SIZEOFPOINTER       4
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -74,80 +89,112 @@ extern "C" {
 
 /* Boolean */
 typedef unsigned char sal_Bool;
-#   define sal_False ((unsigned char)0)
-#   define sal_True  ((unsigned char)1)
+#   define sal_False ((sal_Bool)0)
+#   define sal_True  ((sal_Bool)1)
 
+/* char is assumed to always be 1 byte long */
 typedef signed char         sal_Int8;
 typedef unsigned char       sal_uInt8;
-typedef signed short        sal_Int16;
-typedef unsigned short      sal_uInt16;
 
-/* #i8593#: On 64bit systems, use int for sal_*32 types. */
-#if __SIZEOFLONG == 8
-typedef signed int          sal_Int32;
-typedef unsigned int        sal_uInt32;
+#if SAL_TYPES_SIZEOFSHORT == 2
+    typedef signed short      sal_Int16;
+    typedef unsigned short    sal_uInt16;
 #else
-typedef signed long         sal_Int32;
-typedef unsigned long       sal_uInt32;
+     #error "Could not find 16-bit type, add support for your architecture"
 #endif
 
-#   if (_MSC_VER >= 1000)
-   typedef __int64             sal_Int64;
-   typedef unsigned __int64    sal_uInt64;
-   //  The following are macros that will add the 64 bit constant suffix.
-#  define SAL_CONST_INT64(x)  x##i64
-#  define SAL_CONST_UINT64(x) x##ui64
-
-#   elif defined(__SUNPRO_CC) || defined(__SUNPRO_C) || defined (__GNUC__) || defined (__MWERKS__) || defined(__hpux) || defined (sgi)
-#if __SIZEOFLONG == 8
-   typedef long                sal_Int64;
-   typedef unsigned long       sal_uInt64;
+#if SAL_TYPES_SIZEOFLONG == 4
+    typedef signed long       sal_Int32;
+    typedef unsigned long     sal_uInt32;
+#elif SAL_TYPES_SIZEOFINT == 4
+    typedef signed int        sal_Int32;
+    typedef unsigned int      sal_uInt32;
 #else
-   typedef long long           sal_Int64;
-   typedef unsigned long long  sal_uInt64;
+     #error "Could not find 32-bit type, add support for your architecture"
 #endif
 
-   //  The following are macros that will add the 64 bit constant suffix.
-#  define SAL_CONST_INT64(x)  x##ll
-#  define SAL_CONST_UINT64(x) x##ull
+#if (_MSC_VER >= 1000)
+    typedef __int64                  sal_Int64;
+    typedef unsigned __int64         sal_uInt64;
+
+    /*  The following are macros that will add the 64 bit constant suffix. */
+    #define SAL_CONST_INT64(x)       x##i64
+    #define SAL_CONST_UINT64(x)      x##ui64
+#elif defined(__SUNPRO_CC) || defined(__SUNPRO_C) || defined (__GNUC__) || defined(__hpux) || defined (sgi)
+    #if SAL_TYPES_SIZEOFLONGLONG == 8
+        typedef signed long long    sal_Int64;
+        typedef unsigned long long  sal_uInt64;
+
+        /*  The following are macros that will add the 64 bit constant suffix. */
+        #define SAL_CONST_INT64(x)       x##ll
+        #define SAL_CONST_UINT64(x)      x##ull
+
+    #elif SAL_TYPES_SIZEOFLONG == 8
+        typedef signed long         sal_Int64;
+        typedef unsigned long       sal_uInt64;
+
+
+        /*  The following are macros that will add the 64 bit constant suffix. */
+        #define SAL_CONST_INT64(x)       x##l
+        #define SAL_CONST_UINT64(x)      x##ul
+    #else
+        #error "Could not find 64-bit type, add support for your architecture"
+    #endif
 #else
-#   error "Please define the 64 bit definitions in sal/inc/sal/types.h"
+    #error "Please define the 64-bit types for your architecture/compiler in sal/inc/sal/types.h"
 #endif
+
+typedef char                     sal_Char;
+typedef signed char              sal_sChar;
+typedef unsigned char            sal_uChar;
+
+#if defined(SAL_W32)
+    typedef wchar_t             sal_Unicode;
+#else
+    #define SAL_UNICODE_NOTEQUAL_WCHAR_T
+    typedef sal_uInt16          sal_Unicode;
+#endif
+
+typedef void *                   sal_Handle;
+
+/* sal_Size should currently be the native width of the platform */
+#if SAL_TYPES_SIZEOFLONG == 4
+    typedef sal_uInt32          sal_Size;
+    typedef sal_Int32           sal_sSize;
+#elif SAL_TYPES_SIZEOFLONG == 8
+    typedef sal_uInt64          sal_Size;
+    typedef sal_Int64           sal_sSize;
+#else
+    #error "Please make sure SAL_TYPES_SIZEOFLONG is defined for your architecture/compiler"
+#endif
+
+
+/********************************************************************************/
+/* Useful defines
+ */
 
 /* The following SAL_MIN_INTn defines codify the assumption that the signed
-   sal_Int types use two's complement representation.  Defining them as
-   "-0x7F... - 1" instead of as "-0x80..." prevents warnings about applying the
-   unary minus operator to unsigned quantities. */
-#define SAL_MIN_INT8 ((sal_Int8) (-0x7F - 1))
-#define SAL_MAX_INT8 ((sal_Int8) 0x7F)
-#define SAL_MAX_UINT8 ((sal_uInt8) 0xFF)
-#define SAL_MIN_INT16 ((sal_Int16) (-0x7FFF - 1))
-#define SAL_MAX_INT16 ((sal_Int16) 0x7FFF)
-#define SAL_MAX_UINT16 ((sal_uInt16) 0xFFFF)
-#define SAL_MIN_INT32 ((sal_Int32) (-0x7FFFFFFF - 1))
-#define SAL_MAX_INT32 ((sal_Int32) 0x7FFFFFFF)
-#define SAL_MAX_UINT32 ((sal_uInt32) 0xFFFFFFFF)
-#define SAL_MIN_INT64 ((sal_Int64) (-0x7FFFFFFFFFFFFFFF - 1))
-#define SAL_MAX_INT64 ((sal_Int64) 0x7FFFFFFFFFFFFFFF)
-#define SAL_MAX_UINT64 ((sal_uInt64) 0xFFFFFFFFFFFFFFFF)
+ * sal_Int types use two's complement representation.  Defining them as
+ * "-0x7F... - 1" instead of as "-0x80..." prevents warnings about applying the
+ * unary minus operator to unsigned quantities.
+ */
+#define SAL_MIN_INT8          ((sal_Int8)   (-0x7F - 1))
+#define SAL_MAX_INT8          ((sal_Int8)   0x7F)
+#define SAL_MAX_UINT8         ((sal_uInt8)  0xFF)
+#define SAL_MIN_INT16         ((sal_Int16)  (-0x7FFF - 1))
+#define SAL_MAX_INT16         ((sal_Int16)  0x7FFF)
+#define SAL_MAX_UINT16        ((sal_uInt16) 0xFFFF)
+#define SAL_MIN_INT32         ((sal_Int32)  (-0x7FFFFFFF - 1))
+#define SAL_MAX_INT32         ((sal_Int32)  0x7FFFFFFF)
+#define SAL_MAX_UINT32        ((sal_uInt32) 0xFFFFFFFF)
+#define SAL_MIN_INT64         ((sal_Int64)  (SAL_CONST_INT64(-0x7FFFFFFFFFFFFFFF) - 1))
+#define SAL_MAX_INT64         ((sal_Int64)  SAL_CONST_INT64(0x7FFFFFFFFFFFFFFF))
+#define SAL_MAX_UINT64        ((sal_uInt64) SAL_CONST_UINT64(0xFFFFFFFFFFFFFFFF))
 
-typedef char                sal_Char;
-typedef signed char         sal_sChar;
-typedef unsigned char       sal_uChar;
-#if defined(SAL_W32)
-typedef wchar_t             sal_Unicode;
-#else
-#define SAL_UNICODE_NOTEQUAL_WCHAR_T
-typedef sal_uInt16          sal_Unicode;
-#endif
-
-typedef void*               sal_Handle;
-typedef unsigned long       sal_Size;
-
-#if defined(SAL_W32) || defined(SAL_OS2) || defined(SAL_UNX) || defined(SAL_MAC)
-#define SAL_MAX_ENUM 0x7fffffff
+#if defined(SAL_W32) || defined(SAL_OS2) || defined(SAL_UNX)
+#   define SAL_MAX_ENUM 0x7fffffff
 #elif defined(SAL_W16)
-#define SAL_MAX_ENUM 0x7fff
+#   define SAL_MAX_ENUM 0x7fff
 #endif
 
 #ifdef _MSC_VER
@@ -162,10 +209,6 @@ typedef unsigned long       sal_Size;
 #   define SAL_DLLEXPORT
 #   define SAL_CALL
 #   define SAL_CALL_ELLIPSE
-#elif defined SAL_MAC
-#   define SAL_DLLEXPORT
-#   define SAL_CALL
-#   define SAL_CALL_ELLIPSE
 #else
 #   error("unknown platform")
 #endif
@@ -175,15 +218,15 @@ typedef unsigned long       sal_Size;
     a pure virtual function was called and thus slightly reduces code size.
 */
 #ifdef _MSC_VER
-#define SAL_NO_VTABLE __declspec(novtable)
+#   define SAL_NO_VTABLE __declspec(novtable)
 #else
-#define SAL_NO_VTABLE
+#   define SAL_NO_VTABLE
 #endif
 
 #ifdef SAL_W32
-#pragma pack(push, 8)
+#   pragma pack(push, 8)
 #elif defined(SAL_OS2)
-#pragma pack(8)
+#   pragma pack(8)
 #endif
 
 /** This is the binary specification of a SAL sequence.
