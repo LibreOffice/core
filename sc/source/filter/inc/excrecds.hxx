@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: dr $ $Date: 2001-07-30 11:33:30 $
+ *  last change: $Author: dr $ $Date: 2001-10-18 14:55:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,9 +72,6 @@
 #include "rangelst.hxx"
 #endif
 
-#ifndef _XFBUFF_HXX
-#include "xfbuff.hxx"
-#endif
 #ifndef _ROOT_HXX
 #include "root.hxx"
 #endif
@@ -108,6 +105,8 @@
 #endif
 
 //------------------------------------------------------------------ Forwards -
+
+class SvxBorderLine;
 
 class SvStream;
 class XclExpStream;
@@ -1150,9 +1149,9 @@ protected:
     UINT16                  nDgLeft;
     UINT16                  nDgRight;
 
-    ExcHorizAlign           eAlc;
-    ExcVertAlign            eAlcV;
-    ExcTextOrient           eOri;
+    XclHorAlign             eAlc;
+    XclVerAlign             eAlcV;
+    XclTextOrient           eOri;
     BOOL                    bFWrap;
     BOOL                    bFSxButton;
 

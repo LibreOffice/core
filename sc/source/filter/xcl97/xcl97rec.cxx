@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: dr $ $Date: 2001-07-30 11:37:22 $
+ *  last change: $Author: dr $ $Date: 2001-10-18 15:02:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,6 +142,7 @@
 #include "viewopti.hxx"
 #include "scextopt.hxx"
 #include "docoptio.hxx"
+#include "patattr.hxx"
 
 // --- class XclSstList ----------------------------------------------
 
@@ -1232,7 +1233,7 @@ ExcXf8::ExcXf8( UINT16 nFont, UINT16 nForm, const ScPatternAttr* pPattAttr,
         nIcvDiagSer( 0 ),
         nDgDiag( 0 )
 {
-    if( eOri == ETO_TopBottom )
+    if( eOri == xlTextOrientTopBottom )
         nTrot = 0x00FF;
     else if( pPattAttr )
         nTrot = XclExpHelper::GetRotation( ((const SfxInt32Item&) pPattAttr->GetItem( ATTR_ROTATE_VALUE )).GetValue() );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colrowst.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: gt $ $Date: 2001-06-26 05:56:59 $
+ *  last change: $Author: dr $ $Date: 2001-10-18 14:55:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,6 @@
 
 // ----- forwards --------------------------------------------------------
 
-class XF_Buffer;
 class XclImpStream;
 
 // ----------------------------------------------- class ColRowSettings --
@@ -244,127 +243,6 @@ inline void ColRowSettings::SetRowSettings( const UINT16 nRow, const UINT16 nExc
 
 
 
-
-// ---------------------------------------------------- class FltColumn --
-
-struct FltColumnItem;
-
-class FltColumn : public ExcRoot
-{
-private:
-    friend FltColumnItem;
-    UINT16*                 pData;      // Daten-Array fuer XF-Indizes
-    UINT16                  nLastRow;
-    UINT16                  nCol;       // Column-Nummer
-    const static UINT16     nDefCleared;
-#ifdef DEBUG
-    static UINT16           nSizeFixedArray;
-#else
-    const static UINT16     nSizeFixedArray;
-#endif
-    FltColumnItem*          pFirst;
-    FltColumnItem*          pLast;
-    FltColumnItem*          pAct;
-
-    void                    DeleteList( void );
-    inline FltColumnItem*   First( void );
-    inline FltColumnItem*   Next( void );
-    inline FltColumnItem*   Last( void );
-    inline FltColumnItem*   Prev( void );
-
-    inline void             Append( FltColumnItem* );
-    inline void             InsertBefore( FltColumnItem* pActual, FltColumnItem* pPreAct );
-    void                    InsertIn( FltColumnItem* pActual, FltColumnItem* pInAct );
-    BOOL                    Merge( FltColumnItem* pActual, UINT16 nRow );   // return = TRUE if row could be merged
-    BOOL                    Insert( FltColumnItem* pActual, UINT16 nRow, UINT16 nXF );
-                                                                            // return = TRUE if row could be inserted
-    void                    _SetXF( UINT16 nRow, UINT16 nNewXF );
-public:
-                            FltColumn( RootData* pRD, UINT16 nNewCol );     // fuer den Ersten
-    virtual                 ~FltColumn();
-
-    inline void             SetXF( UINT16 nRow, UINT16 nNewXF );
-    void                    Reset( void );
-    void                    Apply( const UINT16 nTab ) const;
-};
-
-
-inline void FltColumn::SetXF( UINT16 nRow, UINT16 nNewXF )
-{
-    DBG_ASSERT( nRow <= MAXROW, "-FltColumn::SetXF(): Row > MAXROW!" );
-
-    if( nRow > nLastRow )
-        nLastRow = nRow;
-
-    if( nRow < nSizeFixedArray )
-        pData[ nRow ] = nNewXF;
-    else
-        _SetXF( nRow, nNewXF );
-}
-
-
-// --------------------------------------------------- class FltTabelle --
-
-struct FltCellMerge
-{
-    FltCellMerge*           pNext;
-    UINT16                  nFirstCol;
-    UINT16                  nFirstRow;
-    UINT16                  nLastCol;
-    UINT16                  nLastRow;
-
-    inline                  FltCellMerge( UINT16 nCol, UINT16 nRow ) :
-                                pNext( NULL ),
-                                nFirstCol( nCol ), nFirstRow( nRow ),
-                                nLastCol( nCol ), nLastRow( nRow ) {}
-    inline                  FltCellMerge( UINT16 nCol1, UINT16 nRow1, UINT16 nCol2, UINT16 nRow2 ) :
-                                pNext( NULL ),
-                                nFirstCol( nCol1 ), nFirstRow( nRow1 ),
-                                nLastCol( nCol2 ), nLastRow( nRow2 ) {}
-};
-
-class FltTabelle : public ExcRoot
-{
-private:
-    FltColumn**             pData;  // Array mit Column-Daten
-    UINT16                  nSize;
-    UINT16                  nLastCol;
-
-    FltCellMerge*           pFirst;
-    FltCellMerge*           pLast;
-    FltCellMerge*           pCurr;
-
-    inline FltCellMerge*    First() { return (pCurr = pFirst); }
-    inline FltCellMerge*    Next()  { return (pCurr = (pCurr ? pCurr->pNext : NULL)); }
-    inline FltCellMerge*    Last()  { return (pCurr = pLast); }
-    void                    Append( FltCellMerge* pNew );
-    void                    DeleteList();
-
-    inline void             AppendMerge( UINT16 nCol, UINT16 nRow );
-    void                    SetBorderLine( const FltCellMerge& rMerge, USHORT nTab, USHORT nLine );
-
-public:
-                            FltTabelle( RootData* pRD );
-                            ~FltTabelle();
-
-    void                    SetXF( UINT16 nCol, UINT16 nRow, UINT16 nNewXF, const BOOL bBlank = FALSE );
-    inline void             AppendMerge( UINT16 nCol1, UINT16 nRow1, UINT16 nCol2, UINT16 nRow2 );
-
-    void                    Reset( void );
-    void                    Apply( const UINT16 nTab );
-};
-
-inline void FltTabelle::AppendMerge( UINT16 nCol, UINT16 nRow )
-{
-    Append( new FltCellMerge( nCol, nRow ) );
-}
-
-inline void FltTabelle::AppendMerge( UINT16 nCol1, UINT16 nRow1, UINT16 nCol2, UINT16 nRow2 )
-{
-    Append( new FltCellMerge( nCol1, nRow1, nCol2, nRow2 ) );
-}
-
-// -----------------------------------------------------------------------
 
 #endif
 

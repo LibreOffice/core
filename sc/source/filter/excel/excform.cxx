@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excform.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: er $ $Date: 2001-07-12 21:32:50 $
+ *  last change: $Author: dr $ $Date: 2001-10-18 14:59:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,7 +202,7 @@ void ImportExcel::Formula( UINT16 nCol, UINT16 nRow, UINT16 nTab,
         else
             pLastFormCell = NULL;
 
-        pFltTab->SetXF( nCol, nRow, nXF );
+        pCellStyleBuffer->SetXF( nCol, nRow, nXF );
     }
     else
         bTabTruncated = TRUE;

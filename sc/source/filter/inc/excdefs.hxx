@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdefs.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: dr $ $Date: 2001-09-20 14:03:37 $
+ *  last change: $Author: dr $ $Date: 2001-10-18 14:55:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,10 +62,10 @@
 #ifndef _EXCDEFS_HXX
 #define _EXCDEFS_HXX
 
-//_________________________________________________________
+//___________________________________________________________________
 // excdefs.hxx: defines for Excel import/export
 
-//_________________________________________________________
+//___________________________________________________________________
 // unicode strings
 
 #define EXC_STR_16BIT               0x01
@@ -73,7 +73,7 @@
 #define EXC_STR_RICH                0x08
 #define EXC_STR_UNKNOWN             0xF2
 
-//_________________________________________________________
+//___________________________________________________________________
 // in/out stream
 
 #define RECORD_SEEK_TO_BEGIN        0UL
@@ -82,7 +82,7 @@
 #define EXC_MAXRECLEN_BIFF5         2080
 #define EXC_MAXRECLEN_BIFF8         8224
 
-//_________________________________________________________
+//___________________________________________________________________
 // cached values list (EXTERNNAME, ptgArray, ...)
 
 #define EXC_CACHEDVAL_EMPTY         0x00
@@ -91,7 +91,7 @@
 #define EXC_CACHEDVAL_BOOL          0x04
 #define EXC_CACHEDVAL_ERROR         0x10
 
-//_________________________________________________________
+//___________________________________________________________________
 // Supbooks, ExcETabNumBuffer
 
 #define EXC_TAB_INVALID             0xFFFF      // Deleted refs
@@ -102,7 +102,50 @@
 #define EXC_TABBUF_FLAGIGNORE       0x00010000
 #define EXC_TABBUF_FLAGEXT          0x00020000
 
-//_________________________________________________________
+//___________________________________________________________________
+// Style info
+
+enum XclHorAlign
+{
+    xlHAlignGeneral                 = 0x00,
+    xlHAlignLeft                    = 0x01,
+    xlHAlignCenter                  = 0x02,
+    xlHAlignRight                   = 0x03,
+    xlHAlignFill                    = 0x04,
+    xlHAlignJustify                 = 0x05,
+    xlHAlignCenterAcrSel            = 0x06,
+    xlHAlignParent                  = 0xFF
+};
+
+enum XclVerAlign
+{
+    xlVAlignTop                     = 0x00,
+    xlVAlignCenter                  = 0x01,
+    xlVAlignBottom                  = 0x02,
+    xlVAlignJustify                 = 0x03,
+    xlVAlignParent                  = 0xFF
+};
+
+enum XclTextOrient
+{
+    xlTextOrientNoRot               = 0x00,
+    xlTextOrientTopBottom           = 0x01,
+    xlTextOrient90ccw               = 0x02,
+    xlTextOrient90cw                = 0x03,
+    xlTextOrientRot                 = 0x04,
+    xlTextOrientParent              = 0xFF,
+};
+
+enum XclTextWrap
+{
+    xlTextWrapNo                    = 0x00,
+    xlTextWrapYes                   = 0x01,
+    xlTextWrapParent                = 0xFF
+};
+
+#define EXC_ROT_STACKED             0xFF
+
+//___________________________________________________________________
 // (0x0018, 0x0218) NAME
 
 // flags
@@ -132,18 +175,18 @@
 #define EXC_BUILTIN_AUTOFILTER      0x0D
 #define EXC_BUILTIN_UNKNOWN         0x0E
 
-//_________________________________________________________
+//___________________________________________________________________
 // (0x001C) NOTE
 
 #define EXC_NOTE5_MAXTEXT           2048
 
-//_________________________________________________________
+//___________________________________________________________________
 // (0x0023) EXTERNNAME
 
 #define EXC_EXTN_BUILTIN            0x0001
 #define EXC_EXTN_OLE                0x0010
 
-//_________________________________________________________
+//___________________________________________________________________
 // (0x0031) FONT
 
 // attributes
@@ -200,12 +243,47 @@
 #define EXC_FONTCSET_SYSTEM         0x00
 #define EXC_FONTCSET_SYMBOL         0x02
 
-//_________________________________________________________
+//___________________________________________________________________
 // (0x003C) CONTINUE
 
 #define EXC_CONT                    0x003C
 
-//_________________________________________________________
+//___________________________________________________________________
+// (0x0043, 0x00E0) XF
+
+#define EXC_XF_LOCKED               0x0001
+#define EXC_XF_HIDDEN               0x0002
+#define EXC_XF_STYLE                0x0004
+
+#define EXC_XF_DIFF_VALFMT          0x0400
+#define EXC_XF_DIFF_FONT            0x0800
+#define EXC_XF_DIFF_ALIGN           0x1000
+#define EXC_XF_DIFF_BORDER          0x2000
+#define EXC_XF_DIFF_AREA            0x4000
+#define EXC_XF_DIFF_PROT            0x8000
+
+#define EXC_XF2_LLINE               0x08
+#define EXC_XF2_RLINE               0x10
+#define EXC_XF2_TLINE               0x20
+#define EXC_XF2_BLINE               0x40
+#define EXC_XF2_VALFMT_MASK         0x3F
+#define EXC_XF2_LOCKED              0x40
+#define EXC_XF2_HIDDEN              0x80
+
+#define EXC_XF8_SHRINKTOFIT         0x0010
+#define EXC_XF8_MERGE               0x0020
+
+#define EXC_XF_GETPARENT(nFlag)         static_cast< sal_uInt16 >( (nFlag & 0xFFF0) >> 4 )
+#define EXC_XF_GETHORALIGN(nFlag)       static_cast< XclHorAlign >( nFlag & 0x0007 )
+#define EXC_XF_GETVERALIGN(nFlag)       static_cast< XclVerAlign >( (nFlag & 0x0030) >> 4 )
+#define EXC_XF_GETTEXTWRAP(nFlag)       static_cast< XclTextWrap >( (nFlag & 0x0008) >> 3 )
+#define EXC_XF4_GETTEXTORIENT(nFlag)    static_cast< XclTextOrient >( (nFlag & 0x00C0) >> 6 )
+#define EXC_XF5_GETTEXTORIENT(nFlag)    static_cast< XclTextOrient >( (nFlag & 0x0300) >> 8 )
+
+#define EXC_XF8_GETINDENT(nFlag)        (static_cast< sal_uInt16 >( nFlag & 0x000F ) * 200)
+#define EXC_XF8_GETROT(nFlag)           static_cast< sal_uInt8 >( (nFlag & 0xFF00) >> 8 )
+
+//___________________________________________________________________
 // (0x005D) OBJ
 
 #define EXC_OBJT_LINE               0x01
@@ -218,16 +296,19 @@
 #define EXC_OBJT_POLYGON            0x09
 #define EXC_OBJT_NOTE               0x19
 
-//_________________________________________________________
+//___________________________________________________________________
 // (0x007E) RK
 
-#define EXC_RK_DBL                  0x00000000
-#define EXC_RK_DBL100               0x00000001
-#define EXC_RK_INT                  0x00000002
-#define EXC_RK_INT100               0x00000003
+#define EXC_RK_100FLAG              0x01
+#define EXC_RK_INTFLAG              0x02
 
-//_________________________________________________________
-// (0x0092) PALETTE (class ExcPalette2)
+#define EXC_RK_DBL                  0x00
+#define EXC_RK_DBL100               EXC_RK_100FLAG
+#define EXC_RK_INT                  EXC_RK_INTFLAG
+#define EXC_RK_INT100               (EXC_RK_100FLAG|EXC_RK_INTFLAG)
+
+//___________________________________________________________________
+// (0x0092) PALETTE
 
 // color types
 #define EXC_COLOR_CELLTEXT          0x0001
@@ -248,7 +329,13 @@
 #define EXC_PAL2_INDEXBASE          0xFFFF0000
 #define EXC_PAL2_IGNORE             0xFFFFFFFF
 
-//_________________________________________________________
+//___________________________________________________________________
+// (0x0093) STYLE
+
+#define EXC_STYLE_BUILTIN           0x8000
+#define EXC_STYLE_MASK              0x0FFF
+
+//___________________________________________________________________
 // (0x009B, 0x009D, 0x009E) AUTOFILTER
 
 // flags
@@ -280,24 +367,18 @@
 #define EXC_AFOPER_NOTEQUAL         0x05
 #define EXC_AFOPER_GREATEREQUAL     0x06
 
-//_________________________________________________________
+//___________________________________________________________________
 // (0x00AE, 0x00AF) SCENARIO, SCENMAN
 
 #define EXC_SCEN_MAXCELL            32
 #define EXC_SCEN_MAXSTRINGLEN       0xFF
 
-//_________________________________________________________
-// (0x00E0) XF
-
-#define EXC_XF_LOCKED               0x0001
-#define EXC_XF_HIDDEN               0x0002
-
-//_________________________________________________________
+//___________________________________________________________________
 // (0x00E5) CELLMERGING
 
 #define EXC_MERGE_MAXCOUNT          1024
 
-//_________________________________________________________
+//___________________________________________________________________
 // (0x01B8) HLINK
 
 #define EXC_HLINK_BODY              0x00000001  // contains file link or URL
@@ -309,7 +390,7 @@
 #define EXC_HLINK_ID_FILE           0x00000303
 #define EXC_HLINK_ID_URL            0x79EAC9E0
 
-//_________________________________________________________
+//___________________________________________________________________
 // (0x007D) COLINFO
 
 // flags
@@ -320,7 +401,7 @@
 #define EXC_COL_LEVELFLAGS(nOL)     ((nOL & 0x0007) << 8)
 #define EXC_COL_GETLEVEL(nFlag)     ((nFlag & 0x0700) >> 8)
 
-//_________________________________________________________
+//___________________________________________________________________
 // (0x0208) ROW
 
 // flags
@@ -341,14 +422,14 @@
 #define EXC_ROW_VALZEROHEIGHT       0x00FF
 #define EXC_ROW_FLAGDEFHEIGHT       0x8000
 
-//_________________________________________________________
+//___________________________________________________________________
 // (0x0236) TABLE
 
 #define EXC_TABOP_CALCULATE         0x0003
 #define EXC_TABOP_ROW               0x0004
 #define EXC_TABOP_BOTH              0x0008
 
-//_________________________________________________________
+//___________________________________________________________________
 // (0x023E) WINDOW2
 
 #define EXC_WIN2_SHOWFORMULAS       0x0001
@@ -362,13 +443,13 @@
 #define EXC_WIN2_SELECTED           0x0200
 #define EXC_WIN2_DISPLAYED          0x0400
 
-//_________________________________________________________
+//___________________________________________________________________
 // Specials for outlines
 
 #define EXC_OUTLINE_MAX             7
 #define EXC_OUTLINE_COUNT           (EXC_OUTLINE_MAX + 1)
 
-//_________________________________________________________
+//___________________________________________________________________
 // data pilot / pivot tables
 
 // subtotal functions
@@ -420,7 +501,7 @@
 
 #define EXC_SXITEM_
 
-//_________________________________________________________
+//___________________________________________________________________
 // defines for web queries
 // (0x00DC) SXEXT, PARAMQRY, (0x0803) WEBQRYSETTINGS
 
@@ -437,7 +518,7 @@
 #define EXC_WQSETT_FORMATRTF        0x0002
 #define EXC_WQSETT_FORMATFULL       0x0003
 
-//_________________________________________________________
+//___________________________________________________________________
 // defines for change tracking
 
 // opcodes
@@ -470,6 +551,6 @@
 #define EXC_CHTR_ACCEPT             0x0001
 #define EXC_CHTR_REJECT             0x0003
 
-//_________________________________________________________
+//___________________________________________________________________
 
 #endif // _EXCDEFS_HXX

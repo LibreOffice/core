@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.hxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: dr $ $Date: 2001-07-24 13:51:31 $
+ *  last change: $Author: dr $ $Date: 2001-10-18 14:55:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -231,7 +231,6 @@ class ImportExcel8 : public ImportExcel
         void                    SXString( void );               // 0xCD
         void                    SXIdStm( void );                // 0xD5
         void                    SXExt_ParamQry( void );         // 0xDC
-        void                    Xf( void );                     // 0xE0
         void                    SXVs( void );                   // 0xE3
         void                    Cellmerging( void );            // 0xE5     geraten...
         void                    BGPic( void );                  // 0xE9     background picture (guess so, no documentation)
@@ -262,7 +261,6 @@ class ImportExcel8 : public ImportExcel
         void                    Dv( void );                     // 0x01BE
         void                    Dimensions( void );             // 0x0200
         void                    Name( void );                   // 0x0218
-        void                    Style( void );                  // 0x0293
 
         void                    WebQrySettings( void );         // 0x0803
         void                    WebQryTables( void );           // 0x0804

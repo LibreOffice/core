@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filt_pch.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-07-30 16:06:19 $
+ *  last change: $Author: dr $ $Date: 2001-10-18 14:55:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,7 +203,6 @@
 #include <so3/so2ref.hxx>
 #include <so3/so2dll.hxx>
 #include <svx/fhgtitem.hxx>
-#include <xfbuff.hxx>
 #include <vos/types.hxx>
 #include <vos/object.hxx>
 #include <vos/macros.hxx>
@@ -353,7 +352,6 @@
 #include <excsst.hxx>
 #include <excimp8.hxx>
 #include <excscen.hxx>
-#include <excpivot.hxx>
 #include <com/sun/star/frame/XFrameActionListener.hpp>
 #include <com/sun/star/frame/XFrameActionListener.hdl>
 #include <com/sun/star/frame/FrameActionEvent.hdl>

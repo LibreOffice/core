@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdoc.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: dr $ $Date: 2001-07-30 11:28:24 $
+ *  last change: $Author: dr $ $Date: 2001-10-18 14:59:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,7 @@
 #include "olinetab.hxx"
 #include "unonames.hxx"
 #include "convuno.hxx"
+#include "patattr.hxx"
 
 #include "excdoc.hxx"
 #include "excupn.hxx"

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: dr $ $Date: 2001-07-30 11:28:24 $
+#   last change: $Author: dr $ $Date: 2001-10-18 14:59:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,43 +80,11 @@ PROJECTPCHSOURCE=..\pch\filt_pch
 
 # --- Files --------------------------------------------------------
 
-CXXFILES = \
-        XclImpStream.cxx					\
-        XclImpHelper.cxx					\
-        XclImpExternsheet.cxx				\
-        XclExpStream.cxx					\
-        XclExpHelper.cxx					\
-        XclExpExternsheet.cxx				\
-        flttools.cxx						\
-        read.cxx							\
-        readchrt.cxx						\
-        impop.cxx							\
-        excimp8.cxx							\
-        excel.cxx							\
-        excform.cxx							\
-        excform8.cxx						\
-        fontbuff.cxx						\
-        vfbuff.cxx							\
-        xfbuff.cxx							\
-        tokstack.cxx						\
-        namebuff.cxx						\
-        colrowst.cxx						\
-        expop2.cxx							\
-        excrecds.cxx						\
-        excdoc.cxx							\
-        exctools.cxx						\
-        excobj.cxx							\
-        excchart.cxx						\
-        functab.cxx							\
-        frmbase.cxx							\
-        exccomp.cxx							\
-        biffdump.cxx
-
-
 SLOFILES =	\
         $(SLO)$/XclImpStream.obj			\
         $(SLO)$/XclImpHelper.obj			\
         $(SLO)$/XclImpExternsheet.obj		\
+        $(SLO)$/XclImpStyleBuffer.obj		\
         $(SLO)$/XclExpStream.obj			\
         $(SLO)$/XclExpHelper.obj			\
         $(SLO)$/XclExpExternsheet.obj		\
@@ -130,7 +98,6 @@ SLOFILES =	\
         $(SLO)$/excform8.obj				\
         $(SLO)$/fontbuff.obj				\
         $(SLO)$/vfbuff.obj					\
-        $(SLO)$/xfbuff.obj					\
         $(SLO)$/tokstack.obj				\
         $(SLO)$/namebuff.obj				\
         $(SLO)$/colrowst.obj				\

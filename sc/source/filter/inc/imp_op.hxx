@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imp_op.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dr $ $Date: 2001-08-23 09:53:22 $
+ *  last change: $Author: dr $ $Date: 2001-10-18 14:55:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,9 @@
 
 #ifndef _SC_XCLIMPSTREAM_HXX
 #include "XclImpStream.hxx"
+#endif
+#ifndef _SC_XCLIMPSTYLEBUFFER_HXX
+#include "XclImpStyleBuffer.hxx"
 #endif
 #ifndef _FLTTYPES_HXX
 #include "flttypes.hxx"
@@ -162,7 +165,6 @@ private:
 protected:
     static const double     fExcToTwips;        // Umrechnung 1/256 Zeichen -> Twips
 
-    ValueFormBuffer*        pValueFormBuffer;   // ... Number-Formats
     NameBuffer              aExtNameBuff;       // ... externe Namen (Ind.-Basis=1)
     _ScRangeListTabs*       pPrintRanges;
     _ScRangeListTabs*       pPrintTitles;
@@ -173,7 +175,7 @@ protected:
     OutlineBuffer           aColOutlineBuff;    // temporaere Puffer fuer Outline-
     OutlineBuffer           aRowOutlineBuff;    //  Angabe
     ColRowSettings          aColRowBuff;        // Col/Row-Einstellungen 1 Tabelle
-    FltTabelle*             pFltTab;            // Attribute-Optimierung
+    XclImpCellStyleBuffer*  pCellStyleBuffer;   // buffer for cell XF indexes
 
     UINT16                  nIxfeIndex;         // merkt sich Angabe im IXFE-Record
     UINT16                  nLastXF;            // letzter XF in Formula-Record
@@ -224,7 +226,6 @@ protected:
 //      void                Window1( void );                // 0x3D
     void                    Pane( void );                   // 0x41
     void                    Codepage( void );               // 0x42
-    void                    XF2( void );                    // 0x43
     void                    Ixfe( void );                   // 0x44
     void                    DefColWidth( void );            // 0x55
     void                    Builtinfmtcnt( void );          // 0x56
@@ -248,7 +249,6 @@ protected:
     void                    Mulblank( void );               // 0xBE
     void                    Rstring( void );                // 0xD6
     void                    Olesize( void );                // 0xDE
-    void                    XF5( void );                    // 0xE0
     void                    Blank34( void );                // 0x0201
     void                    Number34( void );               // 0x0203
     void                    Label34( void );                // 0x0204
@@ -264,12 +264,10 @@ protected:
     void                    Font34( void );                 // 0x0231
     void                    TableOp( void );                // 0x0236
     void                    Window2_5( void );              // 0x023E
-    void                    XF3( void );                    // 0x0243
     //void                  Rk( void );                     // 0x027E -> 0x7E
     void                    Formula4( void );               // 0x0406       -> excform.cxx
     void                    Bof4( void );                   // 0x0409
     void                    Format4( void );                // 0x041E
-    void                    XF4( void );                    // 0x0443
     void                    Bof5( void );                   // 0x0809
     // ---------------------------------------------------------------
     void                    SetLineStyle( SfxItemSet&, short, short, short );

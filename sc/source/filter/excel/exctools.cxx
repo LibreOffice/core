@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exctools.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: dr $ $Date: 2001-08-15 09:51:58 $
+ *  last change: $Author: dr $ $Date: 2001-10-18 14:59:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,6 @@
 
 #include "root.hxx"
 #include "imp_op.hxx"
-#include "xfbuff.hxx"
 #include "vfbuff.hxx"
 #include "fontbuff.hxx"
 #include "excimp8.hxx"
@@ -100,6 +99,9 @@
 #include "xcl97rec.hxx"
 #include "XclAddInNameTrans.hxx"
 
+#ifndef _SC_XCLIMPSTYLEBUFFER_HXX
+#include "XclImpStyleBuffer.hxx"
+#endif
 #ifndef _SC_XCLIMPEXTERNSHEET_HXX
 #include "XclImpExternsheet.hxx"
 #endif
@@ -178,7 +180,8 @@ RootData::RootData( void )
     pFormTable = NULL;
     pScRangeName = NULL;
     pColor = NULL;
-    pXF_Buffer = NULL;
+    pValueFormBuffer = NULL;
+    pXFBuffer = NULL;
     pFontBuffer = NULL;
     eDefLanguage = ScGlobal::eLnge;
     eDateiTyp = eHauptDateiTyp = eGlobalDateiTyp = BiffX;
@@ -251,7 +254,8 @@ RootData::~RootData()
     delete pRNameBuff;
     delete pShrfmlaBuff;
     delete pExtNameBuff;
-    delete pXF_Buffer;
+    delete pValueFormBuffer;
+    delete pXFBuffer;
 
     if( pAddInNameTranslator )
         delete pAddInNameTranslator;

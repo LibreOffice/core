@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: dr $ $Date: 2001-08-01 13:48:28 $
+ *  last change: $Author: dr $ $Date: 2001-10-18 14:59:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2653,39 +2653,39 @@ ExcXf::ExcXf( UINT16 nFont, UINT16 nForm, const ScPatternAttr* pPattAttr, BOOL& 
         switch( ( SvxCellHorJustify )
             ((const SvxHorJustifyItem&)pPattAttr->GetItem( ATTR_HOR_JUSTIFY )).GetValue() )
         {
-            case SVX_HOR_JUSTIFY_STANDARD:  eAlc = EHA_General; break;
-            case SVX_HOR_JUSTIFY_LEFT:      eAlc = EHA_Left; break;
-            case SVX_HOR_JUSTIFY_CENTER:    eAlc = EHA_Center; break;
-            case SVX_HOR_JUSTIFY_RIGHT:     eAlc = EHA_Right; break;
-            case SVX_HOR_JUSTIFY_BLOCK:     eAlc = EHA_Justify; break;
-            case SVX_HOR_JUSTIFY_REPEAT:    eAlc = EHA_Fill; break;
+            case SVX_HOR_JUSTIFY_STANDARD:  eAlc = xlHAlignGeneral; break;
+            case SVX_HOR_JUSTIFY_LEFT:      eAlc = xlHAlignLeft;    break;
+            case SVX_HOR_JUSTIFY_CENTER:    eAlc = xlHAlignCenter;  break;
+            case SVX_HOR_JUSTIFY_RIGHT:     eAlc = xlHAlignRight;   break;
+            case SVX_HOR_JUSTIFY_BLOCK:     eAlc = xlHAlignJustify; break;
+            case SVX_HOR_JUSTIFY_REPEAT:    eAlc = xlHAlignFill;    break;
             default:
                 DBG_ERROR( "ExcXf::ExcXf(): ATTR_HOR_JUSTIFY unbekannt!" );
-                eAlc = EHA_General;
+                eAlc = xlHAlignGeneral;
         }
 
         switch( ( SvxCellVerJustify )
             ((const SvxVerJustifyItem&)pPattAttr->GetItem( ATTR_VER_JUSTIFY )).GetValue() )
         {
-            case SVX_VER_JUSTIFY_STANDARD:  eAlcV = EVA_Bottom; break;
-            case SVX_VER_JUSTIFY_TOP:       eAlcV = EVA_Top; break;
-            case SVX_VER_JUSTIFY_CENTER:    eAlcV = EVA_Center; break;
-            case SVX_VER_JUSTIFY_BOTTOM:    eAlcV = EVA_Bottom; break;
+            case SVX_VER_JUSTIFY_STANDARD:  eAlcV = xlVAlignBottom; break;
+            case SVX_VER_JUSTIFY_TOP:       eAlcV = xlVAlignTop;    break;
+            case SVX_VER_JUSTIFY_CENTER:    eAlcV = xlVAlignCenter; break;
+            case SVX_VER_JUSTIFY_BOTTOM:    eAlcV = xlVAlignBottom; break;
             default:
                 DBG_ERROR( "ExcXf::ExcXf(): ATTR_VER_JUSTIFY unbekannt!" );
-                eAlcV = EVA_Bottom;
+                eAlcV = xlVAlignBottom;
         }
 
         switch( ( SvxCellOrientation )
             ((const SvxOrientationItem&)pPattAttr->GetItem( ATTR_ORIENTATION )).GetValue() )
         {
-            case SVX_ORIENTATION_STANDARD:  eOri = ETO_NoRot; break;
-            case SVX_ORIENTATION_TOPBOTTOM: eOri = ETO_90cw; break;
-            case SVX_ORIENTATION_BOTTOMTOP: eOri = ETO_90ccw; break;
-            case SVX_ORIENTATION_STACKED:   eOri = ETO_TopBottom; break;
+            case SVX_ORIENTATION_STANDARD:  eOri = xlTextOrientNoRot;       break;
+            case SVX_ORIENTATION_TOPBOTTOM: eOri = xlTextOrient90cw;        break;
+            case SVX_ORIENTATION_BOTTOMTOP: eOri = xlTextOrient90ccw;       break;
+            case SVX_ORIENTATION_STACKED:   eOri = xlTextOrientTopBottom;   break;
             default:
                 DBG_ERROR( "ExcXf::ExcXf(): ATTR_ORIENTATION unbekannt!" );
-                eOri = ETO_NoRot;
+                eOri = xlTextOrientNoRot;
         }
 
         bFWrap = rbWrap ||
@@ -2739,9 +2739,9 @@ ExcXf::ExcXf( UINT16 nFont, UINT16 nForm, const ScPatternAttr* pPattAttr, BOOL& 
     else
     {
         nOffs8 = EXC_XF_LOCKED;
-        eAlc = EHA_General;
-        eAlcV = EVA_Bottom;
-        eOri = ETO_NoRot;
+        eAlc = xlHAlignGeneral;
+        eAlcV = xlVAlignBottom;
+        eOri = xlTextOrientNoRot;
         bFWrap = FALSE;
         nFls = 0x0000;
         nIcvBackSer = pPalette2->InsertIndex( 65 );

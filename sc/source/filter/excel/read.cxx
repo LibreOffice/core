@@ -2,9 +2,9 @@
  *
  *  $RCSfile: read.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: dr $ $Date: 2001-09-25 11:46:10 $
+ *  last change: $Author: dr $ $Date: 2001-10-18 14:59:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,7 +270,7 @@ FltError ImportExcel::Read( void )
                     case 0x31:  Font25(); break;        // FONT         [ 2  5]
                     case 0x41:  Pane(); break;          // PANE         [ 2345]
                     case 0x42:  Codepage(); break;      // CODEPAGE     [ 2345]
-                    case 0x43:  XF2(); break;           // XF           [ 2   ]
+                    case 0x43:  pExcRoot->pXFBuffer->ReadXF2( aIn ); break;
                     case 0x44:  Ixfe(); break;          // IXFE         [ 2   ]
                     case 0x0200: Dimensions(); break;   // DIMENSIONS   [ 2345]
                 }
@@ -328,7 +328,7 @@ FltError ImportExcel::Read( void )
                     case 0x0225: Defrowheight345();break;//DEFAULTROWHEI[  345]
                     case 0x0231: Font34(); break;       // FONT         [  34 ]
                     case 0x023E: Window2_5(); break;    // WINDOW       [    5]
-                    case 0x0243: XF3(); break;          // XF           [  3  ]
+                    case 0x0243: pExcRoot->pXFBuffer->ReadXF3( aIn ); break;
                     case 0x027E: Rk(); break;           // RK           [  34 ]
                 }
             }
@@ -382,7 +382,7 @@ FltError ImportExcel::Read( void )
                     case 0x027E: Rk(); break;           // RK           [  34 ]
                     case 0x0406: Formula4(); break;     // FORMULA      [   4 ]
                     case 0x041E: Format4(); break;      // FORMAT       [   4 ]
-                    case 0x0443: XF4(); break;          // XF           [   4 ]
+                    case 0x0443: pExcRoot->pXFBuffer->ReadXF4( aIn ); break;
                 }
             }
                 break;
@@ -424,7 +424,7 @@ FltError ImportExcel::Read( void )
                             eAkt = Z_Ende;
                         break;
                     case 0x041E: Format4(); break;      // FORMAT       [   4 ]
-                    case 0x0443: XF4(); break;          // XF           [   4 ]
+                    case 0x0443: pExcRoot->pXFBuffer->ReadXF4( aIn ); break;
                 }
 
             }
@@ -498,7 +498,7 @@ FltError ImportExcel::Read( void )
                         Formula4();
                         eAkt = Z_Biff4T;
                     case 0x041E: Format4(); break;      // FORMAT       [   4 ]
-                    case 0x0443: XF4(); break;          // XF           [   4 ]
+                    case 0x0443: pExcRoot->pXFBuffer->ReadXF4( aIn ); break;
                         break;
                 }
 
@@ -605,13 +605,13 @@ FltError ImportExcel::Read( void )
                     case 0x92:  Palette(); break;       // PALETTE      [  345]
                     case 0x99:  Standardwidth(); break; // STANDARDWIDTH[   45]
                     case 0xDE:  Olesize(); break;
-                    case 0xE0:  XF5(); break;           // XF           [    5]
+                    case 0xE0:  pExcRoot->pXFBuffer->ReadXF5( aIn ); break;
                     case 0x0218: Name34(); break;       // NAME         [  34 ]
                     case 0x0225: Defrowheight345();break;//DEFAULTROWHEI[  345]
                     case 0x0231: Font34(); break;       // FONT         [  34 ]
-                    case 0x0243: XF3(); break;          // XF           [  3  ]
+                    case 0x0243: pExcRoot->pXFBuffer->ReadXF3( aIn ); break;
                     case 0x041E: Format4(); break;      // FORMAT       [   4 ]
-                    case 0x0443: XF4(); break;          // XF           [   4 ]
+                    case 0x0443: pExcRoot->pXFBuffer->ReadXF4( aIn ); break;
                 }
 
             }
@@ -820,7 +820,7 @@ FltError ImportExcel::Read( void )
                             case Biff5:
                                 eAkt = Z_Biff5Pre;  // Shrfmla Prefetch, Row-Prefetch
                                 aColRowBuff.Reset();
-                                pFltTab->Reset();
+                                pCellStyleBuffer->Reset();
                                 nBofLevel = 0;
 
                                 aIn.StoreUserPosition();    // und Position merken
@@ -1146,7 +1146,7 @@ FltError ImportExcel8::Read( void )
                     case 0xD3:  bHasBasic = TRUE; break;
                     case 0xD5:  SXIdStm(); break;       // SXIDSTM                ##++##
                     case 0xDE:  Olesize(); break;
-                    case 0xE0:  Xf(); break;            // XF           [    5   ]
+                    case 0xE0:  pExcRoot->pXFBuffer->ReadXF8( aIn ); break;
                     case 0xE3:  SXVs(); break;          // SXVS                   ##++##
                     case 0xEB:  Msodrawinggroup(); break;
                     case 0xFC:  Sst(); break;           // SST      [      8 ]
@@ -1156,7 +1156,7 @@ FltError ImportExcel8::Read( void )
                     case 0x0218: Name(); break;         // NAME         [      8 ]
                     case 0x0225: Defrowheight345();break;//DEFAULTROWHEI[  345   ]
                     case 0x0231: Font34(); break;       // FONT         [  34    ]
-                    case 0x0293: Style(); break;
+                    case 0x0293: pExcRoot->pXFBuffer->ReadStyle8( aIn );break;
                     case 0x041E: Format(); break;       // FORMAT       [   4    ]
                 }
 
@@ -1355,7 +1355,7 @@ FltError ImportExcel8::Read( void )
                             case Biff8:
                                 eAkt = Z_Biff8Pre;  // Shrfmla Prefetch, Row-Prefetch
                                 aColRowBuff.Reset();
-                                pFltTab->Reset();
+                                pCellStyleBuffer->Reset();
                                 nBofLevel = 0;
 
                                 aIn.StoreUserPosition();

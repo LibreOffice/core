@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: gt $ $Date: 2001-08-31 07:12:32 $
+ *  last change: $Author: dr $ $Date: 2001-10-18 14:59:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,7 +143,6 @@
 #endif
 
 #include "excimp8.hxx"
-#include "xfbuff.hxx"
 #include "vfbuff.hxx"
 #include "fontbuff.hxx"
 #include "excform.hxx"
@@ -366,8 +365,8 @@ void ExcCondForm::ReadCf( XclImpStream& rIn, ExcelToSc& rConv )
                 UINT8           nLineB = nLineH >> 4;
                 UINT16          nColB = ( nColH >> 7 ) & 0x007F;
 
-                XF_Buffer::SetBorder( rStyleItemSet, rColBuff,
-                        nLineL, nColL, nLineR, nColR, nLineT, nColT, nLineB, nColB );
+                XclImpXF::SetBorder( rStyleItemSet, rColBuff,
+                    nLineL, nColL, nLineR, nColR, nLineT, nColT, nLineB, nColB );
             }
 
             if( nPosP )     // pattern (fill)
@@ -386,7 +385,7 @@ void ExcCondForm::ReadCf( XclImpStream& rIn, ExcelToSc& rConv )
                     nP = nB; nB = nF; nF = nP; nP = 1;
                 }
 
-                XF_Buffer::SetFill( rStyleItemSet, rColBuff, nP, nF, nB );
+                XclImpXF::SetArea( rStyleItemSet, rColBuff, nP, nF, nB );
             }
 
             // convert formulas
@@ -703,7 +702,7 @@ void ImportExcel8::Note( void )
 void ImportExcel8::Format( void )
 {
     UINT16  nInd = aIn.ReaduInt16();
-    pValueFormBuffer->NewValueFormat( nInd, aIn.ReadUniString() );
+    pExcRoot->pValueFormBuffer->NewValueFormat( nInd, aIn.ReadUniString() );
 }
 
 
@@ -816,106 +815,23 @@ void ImportExcel8::Scenario( void )
 }
 
 
-void ImportExcel8::Xf( void )
-{
-#define HASATTRSET(m)       (!(nW12&m))
-    static UINT16   nXFCnt = 0;
-    UINT16      nW4, nW6, nW8, nW10, nW12, nW14, nW16, nW22;
-    UINT32      nL18;
-    CellBorder  aBorder;
-    CellFill    aFill;
-    XF_Data*    pXFD = new XF_Data;
-
-    aIn >> nW4 >> nW6 >> nW8 >> nW10 >> nW12 >> nW14 >> nW16 >> nL18 >> nW22;
-
-    const BOOL  bCellXF = ( nW8 & 0x0004 ) == 0;
-
-    pXFD->SetCellXF( bCellXF );
-
-    if( bCellXF || HASATTRSET( 0x0800 ) )
-        pXFD->SetFont( nW4 );
-    if( bCellXF || HASATTRSET( 0x0400 ) )
-        pXFD->SetValueFormat( pValueFormBuffer->GetValueFormat( nW6 ) );
-    if( bCellXF || HASATTRSET( 0x8000 ) )
-    {
-        pXFD->SetLocked( TRUEBOOL( nW8 & EXC_XF_LOCKED ) );
-        pXFD->SetHidden( TRUEBOOL( nW8 & EXC_XF_HIDDEN ) );
-    }
-    if( bCellXF )
-        pXFD->SetParent( nW8 >> 4 );
-    if( bCellXF || HASATTRSET( 0x1000 ) )
-    {
-        pXFD->SetAlign( ( ExcHorizAlign ) ( nW10 & 0x0007 ) );
-        if( nW10 & 0x0008 )
-            pXFD->SetWrap( EWT_Wrap );
-        pXFD->SetAlign( ( ExcVertAlign ) ( ( nW10 & 0x0070 ) >> 4 ) );
-        pXFD->SetTextOrient( ( UINT8 ) ( nW10 >> 8 ) );
-    }
-
-    // nW12 >> 5 : 1      fMergeCell
-
-    pXFD->SetIndent( nW12 & 0x000F );
-
-    if( bCellXF || HASATTRSET( 0x2000 ) )
-    {
-        aBorder.nLeftLine = ( BYTE ) nW14 & 0x000F;
-        nW14 >>= 4;
-        aBorder.nRightLine = ( BYTE ) nW14 & 0x000F;
-        nW14 >>= 4;
-        aBorder.nTopLine = ( BYTE ) nW14 & 0x000F;
-        nW14 >>= 4;
-        aBorder.nBottomLine = ( BYTE ) nW14 & 0x000F;
-
-        aBorder.nLeftColor = nW16 & 0x007F;
-        aBorder.nRightColor = ( nW16 >> 7 ) & 0x007F;
-        aBorder.nTopColor = ( UINT16 ) ( nL18 & 0x007F );
-        aBorder.nBottomColor = ( UINT16 ) ( ( nL18 >> 7 ) & 0x007F );
-
-        pXFD->SetBorder( aBorder );
-    }
-
-    if( bCellXF || HASATTRSET( 0x4000 ) )
-    {
-        aFill.nPattern = ( BYTE ) ( nL18 >> 26 );
-        aFill.nForeColor = nW22 & 0x007F;
-        aFill.nBackColor = ( nW22 & 0x3F80 ) >> 7;
-
-        pXFD->SetFill( aFill );
-    }
-
-    if( nW12 & 0x0020 )
-        pXFD->Merge();
-
-    pExcRoot->pXF_Buffer->NewXF( pXFD );
-    nXFCnt++;
-
-#undef  HASATTRSET
-}
-
-
 void ImportExcel8::Cellmerging( void )
 {
-    UINT16  n, nR1, nR2, nC1, nC2;
+    UINT16  nCount, nRow1, nRow2, nCol1, nCol2;
+    aIn >> nCount;
 
-    aIn >> n;
+    DBG_ASSERT( aIn.GetRecLeft() >= (ULONG)(nCount * 8), "ImportExcel8::Cellmerging - wrong record size" );
 
-    DBG_ASSERT( aIn.GetRecLeft() >= (ULONG)(n * 8), "*ImportExcel8::Cellmerging(): in die Hose!" );
-
-    while( n )
+    while( nCount-- )
     {
-        aIn >> nR1 >> nR2 >> nC1 >> nC2;
-
-        if( nR1 > MAXROW )
-            nR1 = MAXROW;
-        if( nR2 > MAXROW )
-            nR2 = MAXROW;
-        if( nC1 > MAXCOL )
-            nC1 = MAXCOL;
-        if( nC2 > MAXCOL )
-            nC2 = MAXCOL;
-
-        pFltTab->AppendMerge( nC1, nR1, nC2, nR2 );
-        n--;
+        aIn >> nRow1 >> nRow2 >> nCol1 >> nCol2;
+        bTabTruncated |= (nRow1 > MAXROW) || (nRow2 > MAXROW) || (nCol1 > MAXCOL) || (nCol2 > MAXCOL);
+        if( (nRow1 <= MAXROW) && (nCol1 <= MAXCOL) )
+        {
+            nRow2 = Min( nRow2, static_cast< UINT16 >( MAXROW ) );
+            nCol2 = Min( nCol2, static_cast< UINT16 >( MAXCOL ) );
+            pCellStyleBuffer->SetMerge( nCol1, nRow1, nCol2, nRow2 );
+        }
     }
 }
 
@@ -1041,7 +957,7 @@ ScBaseCell* ImportExcel8::CreateCellFromShStrTabEntry( const ShStrTabEntry* p, c
 
                 delete pTextObj;
             }
-            else if( pExcRoot->pXF_Buffer->HasAttribSuperOrSubscript( nXF ) )
+            else if( pExcRoot->pXFBuffer->HasSuperOrSubscript( nXF ) )
             {
                 EditTextObject*     pTObj = CreateFormText( 0, p->GetString(), nXF );
 
@@ -1102,7 +1018,7 @@ void ImportExcel8::Labelsst( void )
 
         aColRowBuff.Used( nCol, nRow );
 
-        pFltTab->SetXF( nCol, nRow, nXF );
+        pCellStyleBuffer->SetXF( nCol, nRow, nXF );
     }
     else
         bTabTruncated = TRUE;
@@ -1126,7 +1042,7 @@ void ImportExcel8::Label( void )
 
         aColRowBuff.Used( nCol, nRow );
 
-        pFltTab->SetXF( nCol, nRow, nXF );
+        pCellStyleBuffer->SetXF( nCol, nRow, nXF );
 
         delete p;
     }
@@ -1513,21 +1429,6 @@ void ImportExcel8::Name( void )
     else
         // ohne hidden
         pExcRoot->pRNameBuff->Store( aName, pErgebnis, nSheet, bPrintArea );
-}
-
-
-void ImportExcel8::Style( void )
-{
-    UINT16      nXf;
-
-    aIn >> nXf;
-
-    if( !( nXf & 0x8000 ) )
-    {
-        nXf &= 0x0FFF;  // only bit 0...11 is used for XF-index
-
-        pExcRoot->pXF_Buffer->SetStyle( nXf, aIn.ReadUniString() );
-    }
 }
 
 

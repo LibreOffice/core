@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impop.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: dr $ $Date: 2001-08-23 09:56:17 $
+ *  last change: $Author: dr $ $Date: 2001-10-18 14:59:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,7 +123,6 @@
 #endif
 
 #include "excimp8.hxx"
-#include "xfbuff.hxx"
 #include "vfbuff.hxx"
 #include "fontbuff.hxx"
 #include "excform.hxx"
@@ -226,7 +225,8 @@ ImportExcel::ImportExcel( SvStream& aStream, ScDocument* pDoc ):
     pExcRoot->pProgress = NULL;
     pExcRoot->pEdEng = NULL;
     pExcRoot->pEdEngHF = NULL;
-    pExcRoot->pXF_Buffer = new XF_Buffer( pExcRoot );
+    pExcRoot->pValueFormBuffer = new ValueFormBuffer( pExcRoot );
+    pExcRoot->pXFBuffer = new XclImpXFBuffer( *pExcRoot );
 
     // ab Biff8
     pExcRoot->nCondRangeCnt = ( UINT32 ) -1;    // GetCondFormStyleName() starts with increment!
@@ -234,9 +234,7 @@ ImportExcel::ImportExcel( SvStream& aStream, ScDocument* pDoc ):
     aColRowBuff.Set( pExcRoot );
     aExtNameBuff.Set( pExcRoot );
 
-    pFltTab = new FltTabelle( pExcRoot );
-
-    pValueFormBuffer = new ValueFormBuffer( pExcRoot );
+    pCellStyleBuffer = new XclImpCellStyleBuffer( *pExcRoot );
 
     pFormConv = new ExcelToSc( pExcRoot, aIn, nTab );
 
@@ -272,9 +270,8 @@ ImportExcel::~ImportExcel( void )
     pExcRoot->pDoc->SetSrcCharSet( eQuellChar );
 
     delete pFormConv;
-    delete pValueFormBuffer;
 
-    delete pFltTab;
+    delete pCellStyleBuffer;
 
     delete pExcRoot;
 }
@@ -309,7 +306,7 @@ void ImportExcel::Blank25( void )
     if( nRow <= MAXROW && nCol <= MAXCOL )
     {
         aColRowBuff.Used( nCol, nRow );
-        pFltTab->SetXF( nCol, nRow, nXF, TRUE );
+        pCellStyleBuffer->SetXF( nCol, nRow, nXF, TRUE );
     }
     else
         bTabTruncated = TRUE;
@@ -332,7 +329,7 @@ void ImportExcel::Integer( void )
 
         pD->PutCell( nCol, nRow, nTab, pZelle, (BOOL) TRUE );
         aColRowBuff.Used( nCol, nRow );
-        pFltTab->SetXF( nCol, nRow, 0 );
+        pCellStyleBuffer->SetXF( nCol, nRow, 0 );
     }
     else
         bTabTruncated = TRUE;
@@ -365,7 +362,7 @@ void ImportExcel::Number25( void )
         pD->PutCell( nCol, nRow, nTab, pZelle, (BOOL) TRUE );
         aColRowBuff.Used( nCol, nRow );
 
-        pFltTab->SetXF( nCol, nRow, nXF );
+        pCellStyleBuffer->SetXF( nCol, nRow, nXF );
     }
     else
         bTabTruncated = TRUE;
@@ -443,7 +440,7 @@ void ImportExcel::Boolerr25( void )
 
         aColRowBuff.Used( nCol, nRow );
 
-        pFltTab->SetXF( nCol, nRow, nXF );
+        pCellStyleBuffer->SetXF( nCol, nRow, nXF );
     }
     else
         bTabTruncated = TRUE;
@@ -729,7 +726,7 @@ void ImportExcel::Format235( void )
     if( pExcRoot->eHauptDateiTyp == Biff5 )
         aIn.Ignore( 2 );
 
-    pValueFormBuffer->NewValueFormat( aIn.ReadByteString( FALSE ) );
+    pExcRoot->pValueFormBuffer->NewValueFormat( aIn.ReadByteString( FALSE ) );
 }
 
 
@@ -803,7 +800,7 @@ void ImportExcel::Array25( void )
         for( nColCnt = nFirstCol + 1 ; nColCnt <= nLastCol ; nColCnt++ )
             for( nRowCnt = nFirstRow ; nRowCnt <= nLastRow ; nRowCnt++ )
             {
-                pFltTab->SetXF( nColCnt, nRowCnt, nLastXF );
+                pCellStyleBuffer->SetXF( nColCnt, nRowCnt, nLastXF );
                 aColRowBuff.Used( nColCnt, nRowCnt );
             }*/
     }
@@ -1004,59 +1001,6 @@ void ImportExcel::Codepage( void )
 }
 
 
-void ImportExcel::XF2( void )
-{
-    BYTE        nDummyFormat, nDummyFont, nAttr;
-    UINT16      nIndexFormat, nIndexFont;
-    CellBorder  aBorder;
-    XF_Data*    pXFD = new XF_Data;
-
-    pXFD->SetCellXF();      // keine Style-XFs in Biff2
-
-    aIn >> nDummyFont;
-    aIn.Ignore( 1 );
-    aIn >> nDummyFormat;
-    aIn >> nAttr;
-
-    nIndexFormat = nDummyFormat &  0x3F;
-    nIndexFont = nDummyFont;
-
-    if( nAttr & 0x08 )
-        aBorder.nLeftLine = 1;  // = durchgezogen, duenn
-    else
-        aBorder.nLeftLine = 0;  // = keine Linie
-
-    if( nAttr & 0x10 )
-        aBorder.nRightLine = 1;
-    else
-        aBorder.nRightLine = 0;
-
-    if( nAttr & 0x20 )
-        aBorder.nTopLine = 1;
-    else
-        aBorder.nTopLine = 0;
-
-    if( nAttr & 0x40 )
-        aBorder.nBottomLine = 1;
-    else
-        aBorder.nBottomLine = 0;
-
-    aBorder.nLeftColor = aBorder.nRightColor = aBorder.nTopColor =
-        aBorder.nBottomColor = 8;   // = schwarz?
-
-    pXFD->SetBorder( aBorder );
-    pXFD->SetFont( nIndexFont );
-    pXFD->SetValueFormat( pValueFormBuffer->GetValueFormat( nIndexFormat ) );
-    pXFD->SetAlign( ( ExcHorizAlign ) ( nAttr & 0x07 ) );
-    pXFD->SetAlign( EVA_Top );
-    pXFD->SetTextOrient( ETO_NoRot );
-    pXFD->SetLocked( TRUEBOOL( nDummyFormat & 0x40 ) );
-    pXFD->SetHidden( TRUEBOOL( nDummyFormat & 0x80 ) );
-
-    pExcRoot->pXF_Buffer->NewXF( pXFD );
-}
-
-
 void ImportExcel::Ixfe( void )
 {
     aIn >> nIxfeIndex;
@@ -1116,7 +1060,7 @@ void ImportExcel::Rk( void )
         pD->PutCell( nCol, nRow, nTab, pZelle, (BOOL)TRUE );
         aColRowBuff.Used( nCol, nRow );
 
-        pFltTab->SetXF( nCol, nRow, nXF );
+        pCellStyleBuffer->SetXF( nCol, nRow, nXF );
     }
     else
         bTabTruncated = TRUE;
@@ -1561,7 +1505,7 @@ void ImportExcel::Mulrk( void )
 
                 pD->PutCell( nCol, nRow, nTab, pZelle, (BOOL)TRUE );
                 aColRowBuff.Used( nCol, nRow );
-                pFltTab->SetXF( nCol, nRow, nXF );
+                pCellStyleBuffer->SetXF( nCol, nRow, nXF );
             }
         }
         DBG_ASSERT( aIn.GetRecLeft() == 2, "+ImportExcel::Mulrk(): Was'n das?!!!" );
@@ -1588,7 +1532,7 @@ void ImportExcel::Mulblank( void )
             if( nCol <= MAXCOL )
             {
                 aColRowBuff.Used( nCol, nRow );
-                pFltTab->SetXF( nCol, nRow, nXF, TRUE );
+                pCellStyleBuffer->SetXF( nCol, nRow, nXF, TRUE );
             }
         }
         aIn >> nRow;    // nRow zum Testen von letzter Col missbraucht
@@ -1626,7 +1570,7 @@ void ImportExcel::Rstring( void )
 
         aColRowBuff.Used( nCol, nRow );
 
-        pFltTab->SetXF( nCol, nRow, nXF );
+        pCellStyleBuffer->SetXF( nCol, nRow, nXF );
     }
     else
         bTabTruncated = TRUE;
@@ -1645,63 +1589,6 @@ void ImportExcel::Olesize( void )
 }
 
 
-void ImportExcel::XF5( void )
-{
-    UINT16      nAttr0, nAlign, nIndexFormat, nIndexFont, nFillCol,
-                nFill_Bottom, nBorder0, nBorder1;
-    CellBorder  aBorder;
-    CellFill    aFill;
-    XF_Data*    pXFD = new XF_Data;
-
-    aIn >> nIndexFont >> nIndexFormat >> nAttr0 >> nAlign >> nFillCol
-        >> nFill_Bottom >> nBorder0 >> nBorder1;
-
-    aBorder.nTopLine = ( BYTE ) nBorder0 & 0x0007;              // .............210
-    aBorder.nTopColor = ( nBorder0 & 0xFE00 ) >> 9;             // 5432109.........
-    aBorder.nLeftLine = ( BYTE ) ( ( nBorder0 & 0x0038 ) >> 3 );// ..........543...
-    aBorder.nLeftColor = nBorder1 & 0x007F ;                    // .........6543210
-    aBorder.nBottomLine = ( BYTE ) ((nFill_Bottom & 0x01C0)>>6);// .......876......
-    aBorder.nBottomColor = ( nFill_Bottom & 0xFE00 ) >> 9;      // 5432109.........
-    aBorder.nRightLine = ( BYTE ) ( ( nBorder0 & 0x01C0 ) >> 6);//........876.....
-    aBorder.nRightColor = ( nBorder1& 0x3F80 ) >> 7;            // ..3210987.......
-
-    aFill.nPattern = ( BYTE ) nFill_Bottom & 0x003F;            // ..........543210
-    aFill.nForeColor = nFillCol & 0x007F;                       // .........6543210
-    aFill.nBackColor = ( nFillCol & 0x1F80 ) >> 7;              // ...210987.......
-
-    if( nAttr0 & 0x0004 )
-    {// Style-XF
-        pXFD->SetStyleXF();
-    }
-    else
-    {// Cell-XF
-        pXFD->SetCellXF();
-    }
-
-    pXFD->SetParent( ( nAttr0 & 0xFFF0 ) >> 4 );
-
-    pXFD->SetValueFormat( pValueFormBuffer->GetValueFormat( nIndexFormat ) );
-
-    pXFD->SetFont( nIndexFont );
-
-    pXFD->SetAlign( ( ExcHorizAlign ) ( nAlign & 0x0007 ) );
-    pXFD->SetAlign( ( ExcVertAlign ) ( ( nAlign & 0x0030 ) >> 4 ) );
-            // using 2 instead of 3 Bit, because of lack of Applix to export correct alignment...
-    pXFD->SetTextOrient( ( ExcTextOrient ) ( ( nAlign & 0x0300 ) >> 8 )  );
-
-    pXFD->SetWrap( ( ExcWrapText ) ( ( nAlign & 0x0008 ) >> 3 ) );
-
-    pXFD->SetBorder( aBorder );
-
-    pXFD->SetFill( aFill );
-
-    pXFD->SetLocked( TRUEBOOL( nAttr0 & EXC_XF_LOCKED ) );
-    pXFD->SetHidden( TRUEBOOL( nAttr0 & EXC_XF_HIDDEN ) );
-
-    pExcRoot->pXF_Buffer->NewXF( pXFD );
-}
-
-
 void ImportExcel::Blank34( void )
 {
     UINT16  nRow, nCol, nXF;
@@ -1712,7 +1599,7 @@ void ImportExcel::Blank34( void )
     {
         aColRowBuff.Used( nCol, nRow );
 
-        pFltTab->SetXF( nCol, nRow, nXF, TRUE );
+        pCellStyleBuffer->SetXF( nCol, nRow, nXF, TRUE );
     }
     else
         bTabTruncated = TRUE;
@@ -1737,7 +1624,7 @@ void ImportExcel::Number34( void )
 
         aColRowBuff.Used( nCol, nRow );
 
-        pFltTab->SetXF( nCol, nRow, nXF );
+        pCellStyleBuffer->SetXF( nCol, nRow, nXF );
     }
     else
         bTabTruncated = TRUE;
@@ -1784,7 +1671,7 @@ void ImportExcel::Boolerr34( void )
 
         aColRowBuff.Used( nCol, nRow );
 
-        pFltTab->SetXF( nCol, nRow, nXF );
+        pCellStyleBuffer->SetXF( nCol, nRow, nXF );
     }
     else
         bTabTruncated = TRUE;
@@ -1813,11 +1700,7 @@ void ImportExcel::Row34( void )
         aColRowBuff.SetRowSettings( nRow, nRowHeight, nGrbit );
 
         if( nGrbit & EXC_ROW_GHOSTDIRTY )
-        {
-            nXF &= EXC_ROW_XFMASK;
-            for( UINT16 n = 0 ; n <= MAXCOL ; n++ )
-                pFltTab->SetXF( n, nRow, nXF, TRUE );
-        }
+            pCellStyleBuffer->SetRowDefXF( nRow, nXF & EXC_ROW_XFMASK );
     }
 }
 
@@ -1938,7 +1821,7 @@ void ImportExcel::Array34( void )
         for( nColCnt = nFirstCol + 1 ; nColCnt <= nLastCol ; nColCnt++ )
             for( nRowCnt = nFirstRow ; nRowCnt <= nLastRow ; nRowCnt++ )
             {
-                pFltTab->SetXF( nColCnt, nRowCnt, nLastXF );
+                pCellStyleBuffer->SetXF( nColCnt, nRowCnt, nLastXF );
                 aColRowBuff.Used( nColCnt, nRowCnt );
             }*/
     }
@@ -2027,7 +1910,7 @@ void ImportExcel::TableOp( void )
         for( UINT16 nColCnt = nFirstCol + 1; nColCnt <= nLastCol; nColCnt++ )
             for( UINT16 nRowCnt = nFirstRow; nRowCnt <= nLastRow; nRowCnt++ )
             {
-                pFltTab->SetXF( nColCnt, nRowCnt, nLastXF );
+                pCellStyleBuffer->SetXF( nColCnt, nRowCnt, nLastXF );
                 aColRowBuff.Used( nColCnt, nRowCnt );
             }
     }
@@ -2077,65 +1960,6 @@ void ImportExcel::Window2_5( void )
 }
 
 
-void ImportExcel::XF3( void )
-{
-    BYTE        nDummyFormat, nDummyFont;
-    UINT16      nAttr0, nAttr1, nIndexFormat, nIndexFont, nBorder, nFill;
-    CellBorder  aBorder;
-    CellFill    aFill;
-    XF_Data*    pXFD = new XF_Data;
-
-    aIn >> nDummyFont >> nDummyFormat >> nAttr0 >> nAttr1 >> nFill >> nBorder;
-
-    aBorder.nTopLine = ( BYTE ) nBorder & 0x0007;               // .............210
-    aBorder.nTopColor = ( nBorder & 0x00F8 ) >> 3;              // ........76543...
-    aBorder.nLeftLine = ( BYTE ) ( ( nBorder & 0x0700 ) >> 8 ); // .....098........
-    aBorder.nLeftColor = ( nBorder & 0xF800 ) >> 11;            // 54321...........
-    aIn >> nBorder;
-    aBorder.nBottomLine = ( BYTE ) nBorder & 0x0007;            // .............210
-    aBorder.nBottomColor = ( nBorder & 0x00F8 ) >> 3;           // ........76543...
-    aBorder.nRightLine = ( BYTE ) ( ( nBorder & 0x0700 ) >> 8 );// .....098........
-    aBorder.nRightColor = ( nBorder & 0xF800 ) >> 11;           // 54321...........
-
-    nIndexFormat = nDummyFormat;
-    nIndexFont = nDummyFont;
-    aFill.nPattern = ( BYTE ) ( nFill & 0x003F );               // ..........543210
-    aFill.nForeColor = ( nFill & 0x07C0 ) >> 6;                 // .....09876......
-    aFill.nBackColor = ( nFill & 0xF800 ) >> 11;                // 54321...........
-
-    if( nAttr0 & 0x0004 )
-    {// Style-XF
-        pXFD->SetStyleXF();
-    }
-    else
-    {// Cell-XF
-        pXFD->SetCellXF();
-    }
-
-    pXFD->SetParent( ( nAttr1 & 0xFFF0 ) >> 4 );
-
-    pXFD->SetValueFormat( pValueFormBuffer->GetValueFormat( nIndexFormat ) );
-
-    pXFD->SetFont( nIndexFont );
-
-    pXFD->SetAlign( ( ExcHorizAlign ) ( nAttr1 & 0x0007 ) );
-
-    pXFD->SetWrap( ( ExcWrapText ) ( ( nAttr1 & 0x0008 ) >> 3 ) );
-
-    pXFD->SetAlign( EVA_Top );
-    pXFD->SetTextOrient( ETO_NoRot );
-
-    pXFD->SetBorder( aBorder );
-
-    pXFD->SetFill( aFill );
-
-    pXFD->SetLocked( TRUEBOOL( nAttr0 & EXC_XF_LOCKED ) );
-    pXFD->SetHidden( TRUEBOOL( nAttr0 & EXC_XF_HIDDEN ) );
-
-    pExcRoot->pXF_Buffer->NewXF( pXFD );
-}
-
-
 void ImportExcel::Bof4( void )
 {
     //POST: eDateiTyp = Biff4
@@ -2173,66 +1997,7 @@ void ImportExcel::Bof4( void )
 void ImportExcel::Format4( void )
 {
     aIn.Ignore( 2 );
-    pValueFormBuffer->NewValueFormat( aIn.ReadByteString( FALSE ) );
-}
-
-
-void ImportExcel::XF4( void )
-{
-    BYTE        nDummyFormat, nDummyFont;
-    UINT16      nAttr0, nAttr1, nIndexFormat, nIndexFont, nBorder, nFill;
-    CellBorder  aBorder;
-    CellFill    aFill;
-    XF_Data*    pXFD = new XF_Data;
-
-    aIn >> nDummyFont >> nDummyFormat >> nAttr0 >> nAttr1 >> nFill >> nBorder;
-    aBorder.nTopLine = ( BYTE ) nBorder & 0x0007;               // .............210
-    aBorder.nTopColor = ( nBorder & 0x00F8 ) >> 3;              // ........76543...
-    aBorder.nLeftLine = ( BYTE ) ( ( nBorder & 0x0700 ) >> 8 ); // .....098........
-    aBorder.nLeftColor = ( nBorder & 0xF800 ) >> 11;            // 54321...........
-    aIn >> nBorder;
-    aBorder.nBottomLine = ( BYTE ) nBorder & 0x0007;            // .............210
-    aBorder.nBottomColor = ( nBorder & 0x00F8 ) >> 3;           // ........76543...
-    aBorder.nRightLine = ( BYTE ) ( ( nBorder & 0x0700 ) >> 8 );// .....098........
-    aBorder.nRightColor = ( nBorder & 0xF800 ) >> 11;           // 54321...........
-
-    nIndexFormat = nDummyFormat;
-    nIndexFont = nDummyFont;
-    aFill.nPattern = ( BYTE ) nFill & 0x003F;                   // ..........543210
-    aFill.nForeColor = ( nFill & 0x07C0 ) >> 6;                 // .....09876......
-    aFill.nBackColor = ( nFill & 0xF800 ) >> 11;                // 54321...........
-
-    if( nAttr0 & 0x0004 )
-    {// Style-XF
-        pXFD->SetStyleXF();
-    }
-    else
-    {// Cell-XF
-        pXFD->SetCellXF();
-    }
-
-    pXFD->SetParent( ( nAttr0 & 0xFFF0 ) >> 4 );
-
-    pXFD->SetValueFormat( pValueFormBuffer->GetValueFormat( nIndexFormat ) );
-
-    pXFD->SetFont( nIndexFont );
-
-    pXFD->SetAlign( ( ExcHorizAlign ) ( nAttr1 & 0x0007 ) );
-
-    pXFD->SetWrap( ( ExcWrapText ) ( ( nAttr1 & 0x0008 ) >> 3 ) );
-
-    pXFD->SetAlign( ( ExcVertAlign ) ( ( nAttr1 & 0x0030 ) >> 4 ) );
-    pXFD->SetTextOrient(
-        ( ExcTextOrient ) ( ( nAttr1 & 0x00C0 ) >> 6 )  );
-
-    pXFD->SetBorder( aBorder );
-
-    pXFD->SetFill( aFill );
-
-    pXFD->SetLocked( TRUEBOOL( nAttr0 & EXC_XF_LOCKED ) );
-    pXFD->SetHidden( TRUEBOOL( nAttr0 & EXC_XF_HIDDEN ) );
-
-    pExcRoot->pXF_Buffer->NewXF( pXFD );
+    pExcRoot->pValueFormBuffer->NewValueFormat( aIn.ReadByteString( FALSE ) );
 }
 
 
@@ -2286,7 +2051,7 @@ void ImportExcel::Bof5( void )
 void ImportExcel::ResetBof( void )
 {   // setzt alle Einstellungen fuer neuen Tabellenbeginn zurueck
     aColRowBuff.Reset();
-    pFltTab->Reset();
+    pCellStyleBuffer->Reset();
 }
 
 
@@ -2302,7 +2067,7 @@ void ImportExcel::EndSheet( void )
 
     aColRowBuff.Apply( nTab );
 
-    pFltTab->Apply( nTab );
+    pCellStyleBuffer->Apply( nTab );
 
     pExcRoot->pExtSheetBuff->Reset();
 
@@ -2661,7 +2426,7 @@ EditTextObject* ImportExcel::CreateFormText( BYTE nAnzFrms, const String& rS, co
     rEdEng.SetText( rS );
 
     SfxItemSet      aItemSet( rEdEng.GetEmptyItemSet() );
-    pExcRoot->pFontBuffer->Fill( pExcRoot->pXF_Buffer->GetExcFont( nXF ), aItemSet, FALSE );
+    pExcRoot->pFontBuffer->Fill( pExcRoot->pXFBuffer->GetFont( nXF ), aItemSet, FALSE );
 
     ESelection      aSel( 0, 0 );
 
@@ -2836,7 +2601,7 @@ void ImportExcel::SetTextCell( const UINT16 nC, const UINT16 nR, String& r, cons
         {
             ScBaseCell*             pZelle;
 
-            if( pExcRoot->pXF_Buffer->HasAttribSuperOrSubscript( nXF ) )
+            if( pExcRoot->pXFBuffer->HasSuperOrSubscript( nXF ) )
             {// jetzt kommt 'ne Edit-Engine in's Spiel!
                 EditTextObject*     pTObj = CreateFormText( 0, r, nXF );
 
@@ -2852,7 +2617,7 @@ void ImportExcel::SetTextCell( const UINT16 nC, const UINT16 nR, String& r, cons
 
         aColRowBuff.Used( nC, nR );
 
-        pFltTab->SetXF( nC, nR, nXF );
+        pCellStyleBuffer->SetXF( nC, nR, nXF );
     }
     else
         bTabTruncated = TRUE;
