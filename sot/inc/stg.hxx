@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stg.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:47:54 $
+ *  last change: $Author: vg $ $Date: 2003-07-22 11:12:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,6 +225,8 @@ public:
     virtual BOOL    Equals( const BaseStorageStream& rStream ) const;
 };
 
+class UCBStorageStream;
+
 class Storage : public BaseStorage, public OLEStorageBase
 {
     String                      aName;
@@ -237,6 +239,7 @@ public:
                                 TYPEINFO();
                                 Storage( const String &, StreamMode = STREAM_STD_READWRITE, BOOL bDirect = TRUE );
                                 Storage( SvStream& rStrm, BOOL bDirect = TRUE );
+                                Storage( UCBStorageStream& rStrm, BOOL bDirect = TRUE );
 
     static BOOL                 IsStorageFile( const String & rFileName );
     static BOOL                 IsStorageFile( SvStream* );
@@ -317,6 +320,8 @@ public:
     virtual BOOL                Equals( const BaseStorageStream& rStream ) const;
     BOOL                        SetProperty( const String& rName, const ::com::sun::star::uno::Any& rValue );
     BOOL                        GetProperty( const String& rName, ::com::sun::star::uno::Any& rValue );
+
+    SvStream*                   GetModifySvStream();
 
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > GetXInputStream() const;
 };
@@ -405,7 +410,6 @@ public:
     BOOL                        SetProperty( const String& rName, const ::com::sun::star::uno::Any& rValue );
     BOOL                        GetProperty( const String& rName, ::com::sun::star::uno::Any& rValue );
     BOOL                        GetProperty( const String& rEleName, const String& rName, ::com::sun::star::uno::Any& rValue );
-                                GetXInputStream();
 
 #if _SOLAR__PRIVATE
     UCBStorageElement_Impl*     FindElement_Impl( const String& rName ) const;
