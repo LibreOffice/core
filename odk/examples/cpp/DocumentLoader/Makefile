@@ -34,7 +34,6 @@ TYPES = \
 	com.sun.star.registry.XSimpleRegistry
 
 TYPESLIST = $(foreach t,$(TYPES),-T$(t))
-GENHPPFILES = $(foreach t,$(TYPES),$(OUT_COMP_INC)/$(subst .,/,$(t)).hpp)
 
 # Targets
 .PHONY: ALL
@@ -55,17 +54,12 @@ $(OUT_BIN)/%.rdb : $(OUT_COMP_GEN)
 	-$(DEL) $(subst /,$(PS),$@)
 	regmerge $@ / $(DKREGISTRYNAME) 
 
-$(GENHPPFILES) : $(COMPONENT_RDB) $(OUT_COMP_GEN)
-	-$(DEL) $(subst /,$(PS),$(COMPONENT_TYPEFLAG))
-	cppumaker -Gc -BUCR -O$(OUT_COMP_INC) $(TYPESLIST) $(COMPONENT_RDB)
-	echo flagged > $@
-
 $(COMPONENT_TYPEFLAG) : $(COMPONENT_RDB) $(OUT_COMP_GEN)
 	-$(DEL) $(subst /,$(PS),$(COMPONENT_TYPEFLAG))
 	cppumaker -Gc -BUCR -O$(OUT_COMP_INC) $(TYPESLIST) $(COMPONENT_RDB)
 	echo flagged > $@
 
-$(OUT_COMP_OBJ)/%.$(OBJ_EXT) : %.cxx $(COMPONENT_TYPEFLAG) $(GENHPPFILES) $(OUT_COMP_GEN)
+$(OUT_COMP_OBJ)/%.$(OBJ_EXT) : %.cxx $(COMPONENT_TYPEFLAG) $(OUT_COMP_GEN)
 	$(CC) $(CC_FLAGS) $(CC_INCLUDES) -I$(OUT_COMP_INC) $(CC_DEFINES) $(CC_OUTPUT_SWITCH)$(subst /,$(PS),$@) $<
 
 $(OUT_BIN)/%$(EXE_EXT) : $(OUT_COMP_OBJ)/%.$(OBJ_EXT) $(OUT_COMP_GEN)
@@ -80,7 +74,7 @@ endif
 $(COMPOENNT_ENV_FLAG) : 
 	-$(DEL) $@
 	@echo --------------------------------------------------------------------------------
-	@echo        Register necessrary runtime components in DocumentLoader.rdb for 
+	@echo        Register necessary runtime components in the DocumentLoader.rdb 
 	@echo --------------------------------------------------------------------------------
 	regcomp -register -r $(OUT_BIN)/DocumentLoader.rdb -c $(SHAREDLIB_PRE)connectr.$(SHAREDLIB_EXT)
 	regcomp -register -r $(OUT_BIN)/DocumentLoader.rdb -c $(SHAREDLIB_PRE)remotebridge.$(SHAREDLIB_EXT)
@@ -90,12 +84,11 @@ $(COMPOENNT_ENV_FLAG) :
 
 CppDocumentLoaderExample : $(OUT_BIN)/DocumentLoader$(EXE_EXT) $(COMPOENNT_ENV_FLAG)
 	@echo --------------------------------------------------------------------------------
-	@echo Please use one of the following commands to execute the examples!
+	@echo The example loads the "$(QM)test.sxw$(QM)" document in the DocumentLoader example directory.
+	@echo I you want to load your own document, please use: DocumentLoader "$(QM)filename$(QM)" [connection_url]
+	@echo Use the following command to execute the example!
 	@echo -
 	@echo make DocumentLoader.run
-	@echo ------
-	@echo The example loads a document in the DocumentLoader example directory. If you
-	@echo want to load your own document, please use: DocumentLoader filename [connection_url]
 	@echo --------------------------------------------------------------------------------
 
 %.run: $(OUT_BIN)/DocumentLoader$(EXE_EXT)
