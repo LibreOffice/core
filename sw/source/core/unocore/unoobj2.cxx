@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj2.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:44:10 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 16:10:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -918,9 +918,40 @@ Sequence< OUString > SAL_CALL SwXTextCursor::getAvailableServiceNames(void) thro
 /*-- 09.12.98 14:19:00---------------------------------------------------
 
   -----------------------------------------------------------------------*/
+
+IMPL_STATIC_LINK( SwXTextCursor, RemoveCursor_Impl,
+                  Reference<XInterface>*, pArg )
+{
+    ASSERT( pThis != NULL, "no reference?" );
+    ASSERT( pArg != NULL, "no reference?" );
+
+    SwUnoCrsr* pCursor = pThis->GetCrsr();
+    if( pCursor != NULL )
+    {
+        pCursor->Remove( pThis );
+        delete pCursor;
+    }
+    delete pArg;
+
+    return 0;
+}
+
 void    SwXTextCursor::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew);
+
+    // if the cursor leaves its designated section, it becomes invalid
+    if( ( pOld != NULL ) && ( pOld->Which() == RES_UNOCURSOR_LEAVES_SECTION ) )
+    {
+        // create reference to this object to prevent deletion before
+        // the STATIC_LINK is executed. The link will delete the
+        // reference.
+        Reference<XInterface>* pRef =
+            new Reference<XInterface>( static_cast<XServiceInfo*>( this ) );
+        Application::PostUserEvent(
+            STATIC_LINK( this, SwXTextCursor, RemoveCursor_Impl ), pRef );
+    }
+
     if(!GetRegisteredIn())
         aLstnrCntnr.Disposing();
 
