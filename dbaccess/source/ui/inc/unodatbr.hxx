@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.hxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: fs $ $Date: 2002-01-23 07:26:58 $
+ *  last change: $Author: fs $ $Date: 2002-01-28 11:16:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -260,7 +260,7 @@ namespace dbaui
         virtual void criticalFail();
 
         virtual void            AddSupportedFeatures();
-        virtual FeatureState    GetState(sal_uInt16 nId);
+        virtual FeatureState    GetState(sal_uInt16 nId) const;
         virtual void            Execute(sal_uInt16 nId);
 
         virtual void onToolBoxSelected( sal_uInt16 _nSelectedItem );
@@ -299,6 +299,12 @@ namespace dbaui
         // connect to the external dispatchers (if any)
         void connectExternalDispatches();
 
+        /** get the state of an external slot
+            <p>The slot is available if an external dispatcher is responsible for it, _and_ if this dispatcher
+            told us the slot is available.</p>
+        */
+        sal_Bool    getExternalSlotState( sal_Int32 _nId ) const;
+
         /** add an entry (including the subentries for queries/tables) to the list model
 
             <p>The given names and images may be empty, in this case they're filled with the correct
@@ -317,9 +323,12 @@ namespace dbaui
         */
         void unloadAndCleanup(sal_Bool _bDisposeConnection = sal_True, sal_Bool _bFlushData = sal_True);
 
+        // disposes the connection associated with the given entry (which must represent a data source)
+        void        disposeConnection( SvLBoxEntry* _pDSEntry );
+
         /** close the connection (and collapse the list entries) of the given list entries
         */
-        void closeConnection(SvLBoxEntry* _pEntry,sal_Bool _bDisposeConnection = sal_True);
+        void        closeConnection(SvLBoxEntry* _pEntry,sal_Bool _bDisposeConnection = sal_True);
 
         sal_Bool    populateTree(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _xNameAccess, SvLBoxEntry* _pParent, const EntryType& _rEntryType);
         void        initializeTreeModel();
@@ -345,7 +354,7 @@ namespace dbaui
         TransferableHelper*
                 implCopyObject( SvLBoxEntry* _pApplyTo, sal_Int32 _nCommandType, sal_Bool _bAllowConnection = sal_True );
 
-        EntryType   getEntryType( SvLBoxEntry* _pEntry );
+        EntryType   getEntryType( SvLBoxEntry* _pEntry ) const;
         EntryType   getChildType( SvLBoxEntry* _pEntry );
         sal_Bool    isObject( EntryType _eType ) { return (etTable == _eType) || (etView == _eType) || (etQuery == _eType) || (etBookmark == _eType); }
         sal_Bool    isContainer( EntryType _eType ) { return (etTableContainer == _eType) || (etQueryContainer == _eType) || (etBookmarkContainer == _eType); }
@@ -439,11 +448,6 @@ namespace dbaui
                        const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>& _xMetaData,
                        sal_Bool bIsAutoIncrement) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > connectWithStatus(
-            const ::rtl::OUString& _rDataSourceName,
-            void* _pTreeListUserData    // in rela a DBTreeListModel::DBTreeListUserData*, but we do not know this class here ....
-        );
-
         // set _rsName as title at the frame
         void setTitle(const ::rtl::OUString& _rsDataSourceName,const ::rtl::OUString& _rsName) const;
         void setDefaultTitle() const;
@@ -453,13 +457,14 @@ namespace dbaui
         */
         sal_Bool implGetQuerySignature( ::rtl::OUString& _rCommand, sal_Bool& _bEscapeProcessing );
 
-        sal_Bool isEntryCutAllowed(SvLBoxEntry* _pEntry);
-        sal_Bool isEntryCopyAllowed(SvLBoxEntry* _pEntry);
-        sal_Bool isEntryPasteAllowed(SvLBoxEntry* _pEntry);
+        sal_Bool isEntryCutAllowed(SvLBoxEntry* _pEntry) const;
+        sal_Bool isEntryCopyAllowed(SvLBoxEntry* _pEntry) const;
+        sal_Bool isEntryPasteAllowed(SvLBoxEntry* _pEntry) const;
 
         void cutEntry(SvLBoxEntry* _pEntry);
         void copyEntry(SvLBoxEntry* _pEntry);
         void pasteEntry(SvLBoxEntry* _pEntry);
+
         // check if the connection where this entry belongs to is writeable
         // Entry must be table or view type
         sal_Bool isConnectionWriteAble(SvLBoxEntry* _pEntry) const;
