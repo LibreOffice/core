@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swtypes.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 14:38:10 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 13:58:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,8 @@ typedef long SwTwips;
 #define TWIPS_MAX       (LONG_MAX - 1)
 
 #define MM50   283  // 1/2 cm in TWIPS
+// --> OD 2004-06-18 #i19922# - constant for minimal page header/footer height of 1mm
+const SwTwips cMinHdFtHeight = 56;
 
 #define MINFLY 23   //Minimalgroesse fuer FlyFrms
 #define MINLAY 23   //Minimalgroesse anderer Frms
@@ -317,5 +319,62 @@ CollatorWrapper& GetAppCaseCollator();
 
 const ::utl::TransliterationWrapper& GetAppCmpStrIgnore();
 
+// --> OD 2004-06-30 #i28701# - moved from <frame.hxx>
+//fuer Prepare() zur Benachrichtigung des Inhaltes durch das Layout auf
+//dem kurzen Dienstweg.
+//Der Inhalt sorgt dafuer, dass beim naechsten Aufruf von ::Format() das
+//minimal notwendige berechnet wird.
+enum PrepareHint
+{
+    PREP_BEGIN,             //BEGIN
+    PREP_CLEAR = PREP_BEGIN,//Komplett neuformatieren.
+    PREP_WIDOWS_ORPHANS,    //Nur Witwen- und Waisen-Regelung pruefen und ggf.
+                            //Aufspalten.
+    PREP_FIXSIZE_CHG,       //Die FixSize hat sich veraendert.
+    PREP_FOLLOW_FOLLOWS,    //Follow ist jetzt moeglicherweise direkter
+                            //Nachbar.
+    PREP_ADJUST_FRM,        //Groesse per Grow/Shrink Ausrichten ohne zu
+                            //Formatieren.
+    PREP_FLY_CHGD,          //Ein FlyFrm hat sich (Groesse) veraendert.
+    PREP_FLY_ATTR_CHG,      //Ein FlyFrm hat seine Attribute veraendert
+                            //(z.B. Umlauf)
+    PREP_FLY_ARRIVE,        //Ein FlyFrm ueberlappt den Bereich jetzt neu.
+    PREP_FLY_LEAVE,         //Ein FlyFrm hat den Bereich verlassen.
+    PREP_FTN,               //Fussnoten-Invalidierung
+    PREP_POS_CHGD,          //Position des Frm hat sich verandert
+                            //(Zum Fly-Umbruch pruefen). Im void* des Prepare()
+                            //wird ein BOOL& uebergeben, dieser zeigt mit TRUE,
+                            //dass ein Format ausgefuehrt wurde.
+    PREP_UL_SPACE,          //UL-Space hat sich veraendert, TxtFrms muessen
+                            //den Zeilenabstand neu kalkulieren.
+    PREP_MUST_FIT,          //Frm passen machen (aufspalten) auch wenn die
+                            //Attribute es nicht erlauben (z.B. zusammenhalten).
+    PREP_WIDOWS,            // Ein Follow stellt fest, dass in ihm die Orphans-
+                            // regel zuschlaegt und verschickt an seinen
+                            // Vorgaenger (Master/Follow) ein PREP_WIDOWS
+    PREP_QUOVADIS,          // Wenn eine Fussnote _zwischen_ zwei Absaetzen
+                            // aufgespalten werden muss, dann muss der
+                            // letzte auf der Seite noch ein QUOVADIS bekommen
+                            // damit er den Text hineinformatiert.
+    PREP_BOSS_CHGD,         // Wenn ein Frm die Spalte/Seite wechselt, wird dieses
+                            // Zusatzprepare zum POS_CHGD im MoveFwd/Bwd
+                            // verschickt (Ftn-Nummern joinen etc.)
+                            // Die Richtung wird ueber pVoid mitgeteilt:
+                            //     MoveFwd: pVoid == 0
+                            //     MoveBwd: pVoid == pOldPage
+    PREP_SWAP,              //Grafiken Swappen, fuer Grafiken im sichtbaren
+                            //Bereich.
+    PREP_REGISTER,          //Registerhaltige Frames invalidieren
+    PREP_FTN_GONE,          //Ein Follow verliert eine Fussnote, ggf. kann seine erste
+                            //Zeile hochrutschen
+    PREP_MOVEFTN,           //eine Fussnote wechselt die Seite, der Inhalt bekommt
+                            //zunaechst eine Hoehe von Null, damit nicht zuviel
+                            //Unruhe entsteht. Beim Formatieren prueft er, ob er
+                            //ueberhaupt passt und wechselt ggf. unbemerkt wieder
+                            //die Seite.
+    PREP_ERGOSUM,           //wg. Bewegung in FtnFrms QuoVadis/ErgoSum pruefen
+    PREP_END                //END
+};
+// <--
 
 #endif
