@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:04:46 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 15:10:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1864,6 +1864,19 @@ void SwWW8Writer::EndTOX( const SwSection& rSect )
     bInWriteTOX = false;
 }
 
+void SwapQuotesInField(String &rFmt)
+{
+    //Swap unescaped " and ' with ' and "
+    xub_StrLen nLen = rFmt.Len();
+    for (xub_StrLen nI = 0; nI < nLen; ++nI)
+    {
+        if ((rFmt.GetChar(nI) == '\"') && (!nI || rFmt.GetChar(nI-1) != '\\'))
+            rFmt.SetChar(nI, '\'');
+        else if ((rFmt.GetChar(nI) == '\'') && (!nI || rFmt.GetChar(nI-1) != '\\'))
+            rFmt.SetChar(nI, '\"');
+    }
+}
+
 // GetDatePara, GetTimePara, GetNumberPara modifizieren die String-Ref
 // Es werden die deutschen Format-Spezifier benutzt, da im FIB auch dt. als
 // Creator angegeben ist.
@@ -1884,8 +1897,8 @@ bool SwWW8Writer::GetNumberFmt(const SwField& rFld, String& rStr)
             NfKeywordTable& rKeyMap = *(NfKeywordTable*)pKeyMap;
 //          aKeyMap[ NF_KEY_NONE = 0,
 //          aKeyMap[ NF_KEY_E,
-//          aKeyMap[ NF_KEY_AMPM,
-//          aKeyMap[ NF_KEY_AP,
+            rKeyMap[ NF_KEY_AMPM    ].ASSIGN_CONST_ASC( "AM/PM" );
+            rKeyMap[ NF_KEY_AP      ].ASSIGN_CONST_ASC( "A/P" );
             rKeyMap[ NF_KEY_MI      ].ASSIGN_CONST_ASC( "m" );
             rKeyMap[ NF_KEY_MMI     ].ASSIGN_CONST_ASC( "mm" );
             rKeyMap[ NF_KEY_M       ].ASSIGN_CONST_ASC( "M" );
@@ -1925,9 +1938,11 @@ bool SwWW8Writer::GetNumberFmt(const SwField& rFld, String& rStr)
         }
 
         String sFmt(pNumFmt->GetMappedFormatstring(*(NfKeywordTable*)pKeyMap,
-            aLocDat, true));
-        if( sFmt.Len() )
+            aLocDat));
+        if (sFmt.Len())
         {
+            SwapQuotesInField(sFmt);
+
             rStr.APPEND_CONST_ASC( "\\@\"" );
             rStr += sFmt;
             rStr.APPEND_CONST_ASC( "\" " );
