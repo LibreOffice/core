@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.105 $
+ *  $Revision: 1.106 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-01 12:42:23 $
+ *  last change: $Author: rt $ $Date: 2003-09-25 07:44:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,8 +265,7 @@
 
 // Hilfsroutinen
 
-// inline geht bei BLC leider nicht mit "for"
-/*inline*/ Color WW8TransCol( SVBT32 nWC )
+Color WW8TransCol(SVBT32 nWC)
 {
 #if 1               // 1 = Vordefinierte Farben benutzen, 0 = ignorieren
 
@@ -297,22 +296,26 @@
           && ( nWC[1] == 0 ||  nWC[1]== 0x80 || nWC[1] == 0xff )    // G-Anteil
           && ( nWC[2] == 0 ||  nWC[2]== 0x80 || nWC[2] == 0xff ) ) ){// B-Anteil
         int nIdx = 0;       // und nun: Idx-Berechnung im 3er-System
-        for( int i = 2; i >= 0; i-- ){
+        for (int i = 2; i >= 0; i--)
+        {
             nIdx *= 3;
-            if( nWC[i] )
-                nIdx += ( ( nWC[i] == 0xff ) ? 2 : 1 );
+            if (nWC[i])
+                nIdx += ((nWC[i] == 0xff) ? 2 : 1);
         }
-        if( eColA[ nIdx ] != COL_BLACK )
-            return Color( eColA[ nIdx ] );  // Standard-Color
+        if (eColA[nIdx] != COL_BLACK)
+            return Color(eColA[nIdx]);  // Standard-Color
     }
 #endif
-    if( nWC[3] & 0x1 ){                             // Spezialfarbe: Grau
+
+    if (nWC[3] & 0x1)
+    {
+        //Special colour gray
         register BYTE u = (BYTE)( (ULONG)( 200 - nWC[0] ) * 256 / 200 );
-        return Color( u, u, u );
+        return Color(u, u, u);
     }
-                    // User-Color
-    return Color( (USHORT)nWC[0] << 8, (USHORT)nWC[1] << 8,
-                  (USHORT)nWC[2] << 8 );
+
+    // User-Color
+    return Color(nWC[0], nWC[1], nWC[2]);
 }
 
 void wwFrameNamer::SetUniqueGraphName(SwFrmFmt *pFrmFmt, const String &rFixed)
@@ -412,17 +415,25 @@ static void SetStdAttr( SfxItemSet& rSet, WW8_DP_LINETYPE& rL,
 
 static void SetFill( SfxItemSet& rSet, WW8_DP_FILL& rFill )
 {
-    static BYTE nPatA[] = { 0, 0, 5, 10, 20, 25, 30, 40, 50, 60, 70, 75, 80,
-                        90, 50, 50, 50, 50,50, 50, 33, 33, 33, 33, 33, 33 };
-    register short nPat = SVBT16ToShort( rFill.flpp );
+    static BYTE nPatA[] =
+    {
+             0,  0,  5, 10, 20, 25, 30, 40, 50, 60, 70, 75, 80,
+            90, 50, 50, 50, 50, 50, 50, 33, 33, 33, 33, 33, 33
+    };
+    short nPat = SVBT16ToShort(rFill.flpp);
 
-    if( nPat == 0 ){                            // durchsichtig
-        rSet.Put( XFillStyleItem( XFILL_NONE ) );
-    }else{
-        rSet.Put( XFillStyleItem( XFILL_SOLID ) );  // noetig fuer TextBox
-        if( nPat <= 1 || nPat > sizeof( nPatA ) ){  // solid Bg oder unbekannt
-            rSet.Put( XFillColorItem( aEmptyStr, WW8TransCol( rFill.dlpcBg ) ) );
-        }else{                                      // Brush -> Farbmischung
+    if (nPat == 0) // transparent
+        rSet.Put(XFillStyleItem(XFILL_NONE));
+    else
+    {
+        rSet.Put(XFillStyleItem(XFILL_SOLID));  // necessary for textbox
+        if (nPat <= 1 || nPat > sizeof(nPatA))
+        {
+            // Solid Background or unknown
+            rSet.Put(XFillColorItem(aEmptyStr, WW8TransCol(rFill.dlpcBg)));
+        }
+        else
+        {                                      // Brush -> Farbmischung
             Color aB( WW8TransCol( rFill.dlpcBg ) );
             Color aF( WW8TransCol( rFill.dlpcFg ) );
             aB.SetRed( (BYTE)( ( (ULONG)aF.GetRed() * nPatA[nPat]
@@ -884,7 +895,7 @@ void SwWW8ImplReader::InsertTxbxAttrs(long nStartCp, long nEndCp,
                             nSlotId && nWhich != nSlotId &&
                             0 != (nWhich = pEditPool->GetWhich(nSlotId)) &&
                             nWhich != nSlotId
-                           )
+                        )
                         {
                             SfxPoolItem* pCopy = pItem->Clone();
                             pCopy->SetWhich( nWhich );
@@ -1094,12 +1105,12 @@ SwFrmFmt* SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
         if( bTextWasRead )
             while( STRING_NOTFOUND != aString.SearchAndReplace( 0xb, ' ' ))
                 ;   // HardNewline kann EE noch nicht in der EE-Core
-
-        if (!pDrawEditEngine)
-            pDrawEditEngine = new EditEngine(0);
-        if( pObjSiz )
-            pDrawEditEngine->SetPaperSize( *pObjSiz );
     }
+
+    if (!pDrawEditEngine)
+        pDrawEditEngine = new EditEngine(0);
+    if( pObjSiz )
+        pDrawEditEngine->SetPaperSize( *pObjSiz );
 
     String aOrigString(aString);
     if( bTextWasRead )
@@ -1317,7 +1328,7 @@ SdrObject* SwWW8ImplReader::ReadTxtBox( WW8_DPHEAD* pHd, const WW8_DO* pDo,
     aP1.Y() += (INT16)SVBT16ToShort( pHd->dya );
 
     SdrObject* pObj = new SdrRectObj( OBJ_TEXT, Rectangle( aP0, aP1 ) );
-    pObj->SetModel(pDrawModel);
+    pObj->SetModel( pDrawModel );
     pObj->NbcSetSnapRect(Rectangle(aP0, aP1));
     Size aSize( (INT16)SVBT16ToShort( pHd->dxa ) ,
         (INT16)SVBT16ToShort( pHd->dya ) );
@@ -2310,14 +2321,18 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
     if (pFSPA)
     {
         /*
-        #74188#
-        Strangely in this case the FSPA value seems to be considered before
+        #74188# vs #i15718#
+        Strangely in #74188# the FSPA value seems to be considered before
         the newer escher nXRelTo record.
         */
-        if ((pRecord->nXRelTo == 2) && (pFSPA->nbx != pRecord->nXRelTo))
+        if (
+            ((pRecord->nXRelTo == 2) && (pFSPA->nbx != pRecord->nXRelTo))
+            && ((pRecord->nYRelTo == 2) && (pFSPA->nby != pRecord->nYRelTo))
+           )
+        {
             pRecord->nXRelTo = pFSPA->nbx;
-        if ((pRecord->nYRelTo == 2) && (pFSPA->nby != pRecord->nYRelTo))
             pRecord->nYRelTo = pFSPA->nby;
+        }
     }
 
     UINT32 nXRelTo = nCntRelTo > pRecord->nXRelTo ? pRecord->nXRelTo : 1;
@@ -2345,7 +2360,9 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
 
     //Drawing layer stuff that is not going to be replaced as a fly,
     //ideally we will be able to remove this special check.
-    if (!bOrgObjectWasReplace && !pRecord->bReplaceByFly)
+    bool bDrawingHacks = (!bOrgObjectWasReplace && !pRecord->bReplaceByFly);
+
+    if (bDrawingHacks)
     {
         if (eAnchor == FLY_AUTO_CNTNT)
         {
@@ -2381,8 +2398,9 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
         }
 
         //#109311# Miserable miserable hack.
-        if (bOrgObjectWasReplace || pRecord->bReplaceByFly)
+        if (!bDrawingHacks)
         {
+            //#109311# Miserable miserable hack.
             long nWidth = (pFSPA->nXaRight - pFSPA->nXaLeft);
             if (MiserableRTLGraphicsHack(pFSPA->nXaLeft, nWidth, eHoriOri,
                 eHoriRel))
@@ -2435,7 +2453,8 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
             }
         }
 
-        SwFmtHoriOrient aHoriOri( GetSafePos(pFSPA->nXaLeft), eHoriOri, eHoriRel );
+        SwFmtHoriOrient aHoriOri(GetSafePos(pFSPA->nXaLeft), eHoriOri,
+            eHoriRel);
         if( 4 <= nXAlign )
             aHoriOri.SetPosToggle(true);
         rFlySet.Put( aHoriOri );
@@ -2447,10 +2466,8 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
         else if (eHoriOri == HORI_RIGHT)
             pRecord->nDxWrapDistRight=0;
 
-        SwVertOrient eVertOri;
-        eVertOri = aVertOriTab[ nYAlign ];
-        SwRelationOrient eVertRel;
-        eVertRel = aRelOriTab[  nYRelTo ];
+        SwVertOrient eVertOri = aVertOriTab[nYAlign];
+        SwRelationOrient eVertRel = aRelOriTab[nYRelTo];
         // Make an adjustment for the special case where we want to align
         // vertically to page when horizontally aligned centre to character
         if (((pRecord->nXAlign == 1) ||
@@ -2462,7 +2479,16 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
         if ((eAnchor == FLY_AT_CNTNT) && (eVertRel == REL_CHAR))
             eVertRel = PRTAREA;
 
-        rFlySet.Put(SwFmtVertOrient( GetSafePos(pFSPA->nYaTop),  eVertOri, eVertRel ));
+        rFlySet.Put(SwFmtVertOrient(GetSafePos(pFSPA->nYaTop), eVertOri,
+            eVertRel));
+
+        if (
+            (pFSPA->nYaTop < 0) && (eVertOri == HORI_NONE) &&
+            ((eAnchor == FLY_AT_CNTNT) || (eAnchor == FLY_AUTO_CNTNT))
+           )
+        {
+            maTracer.Log(sw::log::eNegativeVertPlacement);
+        }
     }
 
     return eAnchor;
@@ -3064,7 +3090,7 @@ void SwWW8ImplReader::GrafikCtor()  // Fuer SVDraw und VCControls und Escher
     rDoc.MakeDrawModel( );
     pDrawModel  = rDoc.GetDrawModel();
     ASSERT(pDrawModel, "Kann DrawModel nicht anlegen");
-    pDrawPg     = pDrawModel->GetPage(0);
+    pDrawPg = pDrawModel->GetPage(0);
 
     pWWZOrder = new wwZOrderer(sw::hack::SetLayer(rDoc), pDrawPg,
         pMSDffManager ? pMSDffManager->GetShapeOrders() : 0);
