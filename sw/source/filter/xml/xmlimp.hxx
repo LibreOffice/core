@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: mib $ $Date: 2001-07-04 14:16:19 $
+ *  last change: $Author: mib $ $Date: 2001-08-14 08:07:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,8 @@ class SvXMLImportItemMapper;
 class SfxItemSet;
 class SwNodeIndex;
 class XMLTextImportHelper;
+class SvXMLGraphicHelper;
+class SvXMLEmbeddedObjectHelper;
 
 // define, how many steps ( = paragraphs ) the progress bar should advance
 // for styles, autostyles and settings + meta
@@ -100,6 +102,8 @@ class SwXMLImport: public SvXMLImport
     SvXMLTokenMap           *pDocElemTokenMap;
     SvXMLTokenMap           *pTableElemTokenMap;
     SvXMLTokenMap           *pTableCellAttrTokenMap;
+    SvXMLGraphicHelper      *pGraphicResolver;
+    SvXMLEmbeddedObjectHelper   *pEmbeddedResolver;
 
     SvXMLItemMapEntriesRef  xTableItemMap;
     SvXMLItemMapEntriesRef  xTableColItemMap;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-25 10:16:15 $
+ *  last change: $Author: mib $ $Date: 2001-08-14 08:07:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,18 @@
 #endif
 #ifndef _SVDPAGE_HXX
 #include <svx/svdpage.hxx>
+#endif
+#ifndef _XMLGRHLP_HXX
+#ifndef _XMLGRHLP_HXX
+#include <svx/xmlgrhlp.hxx>
+#endif
+#ifndef _XMLEOHLP_HXX
+#include <svx/xmleohlp.hxx>
+#endif
+#include <svx/xmlgrhlp.hxx>
+#endif
+#ifndef _XMLEOHLP_HXX
+#include <svx/xmleohlp.hxx>
 #endif
 
 #ifndef _XMLOFF_NMSPMAP_HXX
@@ -433,7 +445,34 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
     }
     // else: keep default pClass that we received
 
+    SvXMLGraphicHelper *pGraphicResolver = 0;
+    if( !GetGraphicResolver().is() )
+    {
+        pGraphicResolver = SvXMLGraphicHelper::Create( GRAPHICHELPER_MODE_WRITE );
+        Reference< XGraphicObjectResolver > xGraphicResolver( pGraphicResolver );
+        SetGraphicResolver( xGraphicResolver );
+    }
+
+    SvXMLEmbeddedObjectHelper *pEmbeddedResolver = 0;
+    if( !GetEmbeddedResolver().is() )
+    {
+        SvPersist *pPersist = pDoc->GetPersist();
+        if( pPersist )
+        {
+            pEmbeddedResolver = SvXMLEmbeddedObjectHelper::Create(
+                                            *pPersist,
+                                            EMBEDDEDOBJECTHELPER_MODE_WRITE );
+            Reference< XEmbeddedObjectResolver > xEmbeddedResolver( pEmbeddedResolver );
+            SetEmbeddedResolver( xEmbeddedResolver );
+        }
+    }
+
      sal_uInt32 nRet = SvXMLExport::exportDoc( eClass );
+
+    if( pGraphicResolver )
+        SvXMLGraphicHelper::Destroy( pGraphicResolver );
+    if( pEmbeddedResolver )
+        SvXMLEmbeddedObjectHelper::Destroy( pEmbeddedResolver );
 
     DBG_ASSERT(! bRedlineModeSaved,
                "If Redline mode was changed + saved, it should have been restored by now!")

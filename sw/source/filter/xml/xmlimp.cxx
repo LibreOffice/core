@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: mtg $ $Date: 2001-08-08 21:11:00 $
+ *  last change: $Author: mib $ $Date: 2001-08-14 08:07:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,6 +147,12 @@
 
 #ifndef _UNO_LINGU_HXX
 #include <svx/unolingu.hxx>
+#endif
+#ifndef _XMLGRHLP_HXX
+#include <svx/xmlgrhlp.hxx>
+#endif
+#ifndef _XMLEOHLP_HXX
+#include <svx/xmleohlp.hxx>
 #endif
 
 #ifndef _FORBIDDEN_CHARACTERS_ENUM_HXX
@@ -371,7 +377,9 @@ SwXMLImport::SwXMLImport(sal_uInt16 nImportFlags) :
     pTableItemMapper( 0 ),
     pSttNdIdx( 0 ),
     bShowProgress( sal_True ),
-    bPreserveRedlineMode( sal_True )
+    bPreserveRedlineMode( sal_True ),
+    pGraphicResolver( 0 ),
+    pEmbeddedResolver( 0 )
 {
     _InitItemImport();
 
@@ -526,6 +534,26 @@ void SwXMLImport::startDocument( void )
 
     // We need a draw model to be able to set the z order
     pDoc->MakeDrawModel();
+
+    if( !GetGraphicResolver().is() )
+    {
+        pGraphicResolver = SvXMLGraphicHelper::Create( GRAPHICHELPER_MODE_READ );
+        Reference< document::XGraphicObjectResolver > xGraphicResolver( pGraphicResolver );
+        SetGraphicResolver( xGraphicResolver );
+    }
+
+    if( !GetEmbeddedResolver().is() )
+    {
+        SvPersist *pPersist = pDoc->GetPersist();
+        if( pPersist )
+        {
+            pEmbeddedResolver = SvXMLEmbeddedObjectHelper::Create(
+                                            *pPersist,
+                                            EMBEDDEDOBJECTHELPER_MODE_READ );
+            Reference< document::XEmbeddedObjectResolver > xEmbeddedResolver( pEmbeddedResolver );
+            SetEmbeddedResolver( xEmbeddedResolver );
+        }
+    }
 }
 
 void SwXMLImport::endDocument( void )
@@ -534,6 +562,11 @@ void SwXMLImport::endDocument( void )
     DBG_ASSERT( GetModel().is(), "model missing; maybe startDocument wasn't called?" );
     if( !GetModel().is() )
         return;
+
+    if( pGraphicResolver )
+        SvXMLGraphicHelper::Destroy( pGraphicResolver );
+    if( pEmbeddedResolver )
+        SvXMLEmbeddedObjectHelper::Destroy( pEmbeddedResolver );
 
     SwDoc *pDoc = 0;
     if( (getImportFlags() & IMPORT_CONTENT) != 0 && !IsStylesOnlyMode() )
