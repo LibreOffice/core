@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Controller.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:54:25 $
+ *  last change: $Author: kz $ $Date: 2004-05-19 10:40:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,10 @@
 #include <com/sun/star/ui/XContextMenuInterception.idl>
 #endif
 
+#ifndef __com_sun_star_awt_XUserInputInterception_idl__
+#include <com/sun/star/awt/XUserInputInterception.idl>
+#endif
+
 #ifndef __com_sun_star_view_XSelectionSupplier_idl__
 #include <com/sun/star/view/XSelectionSupplier.idl>
 #endif
@@ -132,6 +136,11 @@ service Controller
         </p>
      */
     [optional] interface com::sun::star::ui::XContextMenuInterception;
+
+    //-------------------------------------------------------------------------
+    /** makes it possible to intercept keyboard and mouse input.
+     */
+    [optional] interface com::sun::star::awt::XUserInputInterception;
 
     //-------------------------------------------------------------------------
     /** makes it possible to access and change the selection in a view
