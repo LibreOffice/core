@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appcfg.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-27 12:43:08 $
+ *  last change: $Author: pb $ $Date: 2001-06-29 08:50:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -370,6 +370,11 @@ BOOL SfxApplication::GetOptions( SfxItemSet& rSet )
                                aHelpOptions.IsHelpAgentAutoStartMode() ) ) )
                         bRet = TRUE;
                     break;
+                case SID_HELPAGENT_TIMEOUT :
+                    if ( rSet.Put( SfxInt32Item( rPool.GetWhich( SID_HELPAGENT_TIMEOUT ),
+                                                 aHelpOptions.GetHelpAgentTimeoutPeriod() ) ) )
+                        bRet = TRUE;
+                    break;
                 case SID_ATTR_WELCOMESCREEN :
                     if(rSet.Put( SfxBoolItem ( rPool.GetWhich( SID_ATTR_WELCOMESCREEN ),
                                aHelpOptions.IsWelcomeScreen() ) ) )
@@ -501,7 +506,6 @@ BOOL SfxApplication::GetOptions( SfxItemSet& rSet )
                         {
                             case SvtPathOptions::PATH_ADDIN:        aValue = aPathCfg.GetAddinPath(); break;
                             case SvtPathOptions::PATH_AUTOCORRECT:  aValue = aPathCfg.GetAutoCorrectPath(); break;
-                            case SvtPathOptions::PATH_AUTOPILOT:    aValue = aPathCfg.GetAutoPilotPath(); break;
                             case SvtPathOptions::PATH_AUTOTEXT:     aValue = aPathCfg.GetAutoTextPath(); break;
                             case SvtPathOptions::PATH_BACKUP:       aValue = aPathCfg.GetBackupPath(); break;
                             case SvtPathOptions::PATH_BASIC:        aValue = aPathCfg.GetBasicPath(); break;
@@ -515,7 +519,6 @@ BOOL SfxApplication::GetOptions( SfxItemSet& rSet )
                             case SvtPathOptions::PATH_HELP:         aValue = aPathCfg.GetHelpPath(); break;
                             case SvtPathOptions::PATH_LINGUISTIC:   aValue = aPathCfg.GetLinguisticPath(); break;
                             case SvtPathOptions::PATH_MODULE:       aValue = aPathCfg.GetModulePath(); break;
-                            case SvtPathOptions::PATH_NEWMENU:      aValue = aPathCfg.GetNewMenuPath(); break;
                             case SvtPathOptions::PATH_PALETTE:      aValue = aPathCfg.GetPalettePath(); break;
                             case SvtPathOptions::PATH_PLUGIN:       aValue = aPathCfg.GetPluginPath(); break;
                             case SvtPathOptions::PATH_STORAGE:      aValue = aPathCfg.GetStoragePath(); break;
@@ -691,13 +694,19 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     }
 
     // AutoHelpAgent-Reset
-    if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_AUTOHELPAGENT_RESET ), TRUE, &pItem))
+    if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_AUTOHELPAGENT_RESET ), TRUE, &pItem) )
     {
         DBG_ASSERT(pItem->ISA(SfxBoolItem), "BoolItem expected");
-        BOOL bReset = ((const SfxBoolItem *)pItem)->GetValue();
-        Help* pHelp = Application::GetHelp();
-//        if ( bReset && pHelp )
-//            ((SfxHelp*)pHelp)->ResetPIStarterList();
+        BOOL bReset = ( (const SfxBoolItem*)pItem )->GetValue();
+        if ( bReset )
+            aHelpOptions.resetAgentIgnoreURLCounter();
+    }
+
+    // help agent timeout
+    if ( SFX_ITEM_SET == rSet.GetItemState( rPool.GetWhich( SID_HELPAGENT_TIMEOUT ), TRUE, &pItem ) )
+    {
+        DBG_ASSERT(pItem->ISA(SfxInt32Item), "Int32Item expected");
+        aHelpOptions.SetHelpAgentTimeoutPeriod( ( (const SfxInt32Item*)pItem )->GetValue() );
     }
 
     // WelcomeScreen
@@ -764,7 +773,7 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_QUICKLAUNCHER), TRUE, &pItem))
     {
         DBG_ASSERT(pItem->ISA(SfxBoolItem), "BoolItem expected");
-        ShutdownIcon::SetAutostart(((const SfxBoolItem *)pItem)->GetValue());
+        ShutdownIcon::SetAutostart( ( (const SfxBoolItem*)pItem )->GetValue() != FALSE );
     }
 
     // Proxy-Type
@@ -1003,15 +1012,11 @@ void SfxApplication::SetOptions(const SfxItemSet &rSet)
                 {
                     case SvtPathOptions::PATH_ADDIN:        aPathOptions.SetAddinPath( sValue );break;
                     case SvtPathOptions::PATH_AUTOCORRECT:  aPathOptions.SetAutoCorrectPath( sValue );break;
-                    case SvtPathOptions::PATH_AUTOPILOT:    aPathOptions.SetAutoPilotPath( sValue );break;
                     case SvtPathOptions::PATH_AUTOTEXT:     aPathOptions.SetAutoTextPath( sValue );break;
                     case SvtPathOptions::PATH_BACKUP:       aPathOptions.SetBackupPath( sValue );break;
                     case SvtPathOptions::PATH_BASIC:        aPathOptions.SetBasicPath( sValue );break;
                     case SvtPathOptions::PATH_BITMAP:       aPathOptions.SetBitmapPath( sValue );break;
                     case SvtPathOptions::PATH_CONFIG:       aPathOptions.SetConfigPath( sValue );break;
-#if SUPD < 615
-                    case SvtPathOptions::PATH_DATABASE:     break;
-#endif
                     case SvtPathOptions::PATH_DICTIONARY:   aPathOptions.SetDictionaryPath( sValue );break;
                     case SvtPathOptions::PATH_FAVORITES:    aPathOptions.SetFavoritesPath( sValue );break;
                     case SvtPathOptions::PATH_FILTER:       aPathOptions.SetFilterPath( sValue );break;
@@ -1020,15 +1025,11 @@ void SfxApplication::SetOptions(const SfxItemSet &rSet)
                     case SvtPathOptions::PATH_HELP:         aPathOptions.SetHelpPath( sValue );break;
                     case SvtPathOptions::PATH_LINGUISTIC:   aPathOptions.SetLinguisticPath( sValue );break;
                     case SvtPathOptions::PATH_MODULE:       aPathOptions.SetModulePath( sValue );break;
-                    case SvtPathOptions::PATH_NEWMENU:      aPathOptions.SetNewMenuPath( sValue );break;
                     case SvtPathOptions::PATH_PALETTE:      aPathOptions.SetPalettePath( sValue );break;
                     case SvtPathOptions::PATH_PLUGIN:       aPathOptions.SetPluginPath( sValue );break;
                     case SvtPathOptions::PATH_STORAGE:      aPathOptions.SetStoragePath( sValue );break;
                     case SvtPathOptions::PATH_TEMP:         aPathOptions.SetTempPath( sValue );break;
                     case SvtPathOptions::PATH_TEMPLATE:     aPathOptions.SetTemplatePath( sValue );break;
-#if SUPD < 615
-                    case SvtPathOptions::PATH_TRASH:        break;
-#endif
                     case SvtPathOptions::PATH_USERCONFIG:   aPathOptions.SetUserConfigPath( sValue );break;
                     case SvtPathOptions::PATH_USERDICTIONARY:aPathOptions.SetUserDictionaryPath( sValue );break;
                     case SvtPathOptions::PATH_WORK:         aPathOptions.SetWorkPath( sValue );break;
