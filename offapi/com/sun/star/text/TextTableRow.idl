@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextTableRow.idl,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 11:44:10 $
+ *  last change: $Author: kz $ $Date: 2004-05-19 10:45:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,10 @@
 #include <com/sun/star/beans/XPropertySet.idl>
 #endif
 
+#ifndef __com_sun_star_util_Color_idl__
+#include <com/sun/star/util/Color.idl>
+#endif
+
 #ifndef __com_sun_star_style_GraphicLocation_idl__
 #include <com/sun/star/style/GraphicLocation.idl>
 #endif
@@ -92,7 +96,7 @@ service TextTableRow
 
     /** specifies the color of the background.
      */
-    [property] long BackColor;
+    [property] com::sun::star::util::Color BackColor;
 
     //-------------------------------------------------------------------------
 
