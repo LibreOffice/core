@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StorageFileAccess.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:06:13 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:36:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ public class StorageFileAccess implements org.hsqldb.lib.FileAccess{
     static {
         if ( System.getProperty( "os.name" ).startsWith( "Windows" ) )
         {
-            NativeLibraryLoader.loadLibrary(StorageNativeOutputStream.class.getClassLoader(), "msvcr70");
+            NativeLibraryLoader.loadLibrary(StorageNativeOutputStream.class.getClassLoader(), "msvcr71");
             NativeLibraryLoader.loadLibrary(StorageNativeOutputStream.class.getClassLoader(), "uwinapi");
             NativeLibraryLoader.loadLibrary(StorageNativeOutputStream.class.getClassLoader(), "sal3");
         //  NativeLibraryLoader.loadLibrary(StorageNativeOutputStream.class.getClassLoader(), "dbtools680mi");
