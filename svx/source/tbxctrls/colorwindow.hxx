@@ -13,12 +13,22 @@
 #ifndef _SFXLSTNER_HXX
 #include <svtools/lstner.hxx>
 #endif
+#include <rtl/ustring.hxx>
 
-class SvxColorWindow_Impl : public SfxPopupWindow, public SfxListener
+#ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
+#include <com/sun/star/frame/XFrame.hpp>
+#endif
+
+//========================================================================
+// class SvxColorWindow_Impl --------------------------------------------------
+//========================================================================
+
+class SvxColorWindow_Impl : public SfxPopupWindow
 {
 private:
-    const USHORT    theSlotId;
-    ValueSet        aColorSet;
+    const USHORT                                                        theSlotId;
+    ValueSet                                                            aColorSet;
+    rtl::OUString                                                       maCommand;
 
 #if _SOLAR__PRIVATE
     DECL_LINK( SelectHdl, void * );
@@ -29,15 +39,15 @@ protected:
     virtual BOOL    Close();
 
 public:
-    SvxColorWindow_Impl( USHORT nId, USHORT nSlotId,
-                    const String& rWndTitle,
-                    SfxBindings& rBindings );
+    SvxColorWindow_Impl( const rtl::OUString& rCommand,
+                         USHORT nSlotId,
+                         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
+                         const String& rWndTitle );
     ~SvxColorWindow_Impl();
-    void            StartSelection();
+    void                StartSelection();
 
-    virtual void    SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
-                            const SfxHint& rHint, const TypeId& rHintType );
     virtual void        KeyInput( const KeyEvent& rKEvt );
+    virtual void        StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState );
 
     virtual SfxPopupWindow* Clone() const;
 };
@@ -53,8 +63,10 @@ public:
 class SvxTbxButtonColorUpdater_Impl
 {
 public:
-                SvxTbxButtonColorUpdater_Impl( USHORT nTbxBtnId,
-                                          ToolBox* ptrTbx, USHORT nMode = 0 );
+                SvxTbxButtonColorUpdater_Impl( USHORT   nSlotId,
+                                               USHORT   nTbxBtnId,
+                                               ToolBox* ptrTbx,
+                                               USHORT   nMode = 0 );
                 ~SvxTbxButtonColorUpdater_Impl();
 
     void        Update( const Color& rColor );
@@ -65,6 +77,7 @@ protected:
 private:
     USHORT      mnDrawMode;
     USHORT      mnBtnId;
+    USHORT      mnSlotId;
     ToolBox*    mpTbx;
     Color       maCurColor;
     Rectangle   maUpdRect;
