@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsitem.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 09:55:59 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 18:19:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -630,6 +630,9 @@ void SdOptionsMisc::SetDefaults()
     // #97016#
     SetDefaultObjectSizeWidth(8000);
     SetDefaultObjectSizeHeight(5000);
+    SetPreviewNewEffects(true);
+    SetPreviewChangedEffects(false);
+    SetPreviewTransitions(true);
 }
 
 // -----------------------------------------------------------------------------
@@ -657,7 +660,12 @@ BOOL SdOptionsMisc::operator==( const SdOptionsMisc& rOpt ) const
             GetPrinterIndependentLayout() == rOpt.GetPrinterIndependentLayout() &&
             // #97016#
             GetDefaultObjectSizeWidth() == rOpt.GetDefaultObjectSizeWidth() &&
-            GetDefaultObjectSizeHeight() == rOpt.GetDefaultObjectSizeHeight()
+            GetDefaultObjectSizeHeight() == rOpt.GetDefaultObjectSizeHeight() &&
+
+            IsPreviewNewEffects() == rOpt.IsPreviewNewEffects() &&
+            IsPreviewChangedEffects() == rOpt.IsPreviewChangedEffects() &&
+            IsPreviewTransitions() == rOpt.IsPreviewTransitions()
+
         );
 }
 
@@ -690,12 +698,16 @@ void SdOptionsMisc::GetPropNameArray( const char**& ppNames, ULONG& rCount ) con
         "Start/CurrentPage",
         "Compatibility/AddBetween",
         // #90356#
-        "ShowUndoDeleteWarning"
+        "ShowUndoDeleteWarning",
+
+        "PreviewNewEffects",
+        "PreviewChangedEffects",
+        "PreviewTransitions"
     };
 
     // #90356# rCount = ( ( GetConfigId() == SDCFG_IMPRESS ) ? 15 : 12 );
     // #97016# rCount = ( ( GetConfigId() == SDCFG_IMPRESS ) ? 16 : 12 );
-    rCount = ( ( GetConfigId() == SDCFG_IMPRESS ) ? 19 : 15 );
+    rCount = ( ( GetConfigId() == SDCFG_IMPRESS ) ? 22 : 15 );
     ppNames = aPropNames;
 }
 
@@ -732,6 +744,16 @@ BOOL SdOptionsMisc::ReadData( const Any* pValues )
         // #90356#
         if( pValues[18].hasValue() )
             SetShowUndoDeleteWarning( *(sal_Bool*) pValues[ 18 ].getValue() );
+
+        if( pValues[19].hasValue() )
+            SetPreviewNewEffects(*(sal_Bool*) pValues[ 19 ].getValue());
+
+        if( pValues[20].hasValue() )
+            SetPreviewChangedEffects(*(sal_Bool*) pValues[ 20 ].getValue());
+
+        if( pValues[21].hasValue() )
+            SetPreviewTransitions(*(sal_Bool*) pValues[ 21 ].getValue());
+
     }
 
     return TRUE;
@@ -766,6 +788,10 @@ BOOL SdOptionsMisc::WriteData( Any* pValues ) const
         pValues[ 17 ] <<= IsSummationOfParagraphs();
         // #90356#
         pValues[ 18 ] <<= IsShowUndoDeleteWarning();
+
+        pValues[ 19 ] <<= IsPreviewNewEffects();
+        pValues[ 20 ] <<= IsPreviewChangedEffects();
+        pValues[ 21 ] <<= IsPreviewTransitions();
     }
 
     return TRUE;
@@ -799,6 +825,10 @@ SdOptionsMiscItem::SdOptionsMiscItem( USHORT nWhich, SdOptions* pOpts,
     // #97016#
     SetDefaultObjectSizeWidth( pOpts->GetDefaultObjectSizeWidth() );
     SetDefaultObjectSizeHeight( pOpts->GetDefaultObjectSizeHeight() );
+
+    SetPreviewNewEffects(pOpts->IsPreviewNewEffects());
+    SetPreviewChangedEffects(pOpts->IsPreviewChangedEffects());
+    SetPreviewTransitions(pOpts->IsPreviewTransitions());
 
     if( pView )
     {
@@ -879,6 +909,10 @@ void SdOptionsMiscItem::SetOptions( SdOptions* pOpts ) const
     // #97016#
     pOpts->SetDefaultObjectSizeWidth( GetDefaultObjectSizeWidth() );
     pOpts->SetDefaultObjectSizeHeight( GetDefaultObjectSizeHeight() );
+
+    pOpts->SetPreviewNewEffects( IsPreviewNewEffects() );
+    pOpts->SetPreviewChangedEffects( IsPreviewChangedEffects() );
+    pOpts->SetPreviewTransitions( IsPreviewTransitions() );
 }
 
 /*************************************************************************
