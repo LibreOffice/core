@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accframe.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mib $ $Date: 2002-02-04 14:07:14 $
+ *  last change: $Author: mib $ $Date: 2002-02-05 15:52:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,14 @@
 
 #pragma hdrstop
 
+#include <hintids.hxx>
+#ifndef _SVX_BRSHITEM_HXX //autogen
+#include <svx/brshitem.hxx>
+#endif
+#ifndef _FLYFRM_HXX
+#include <flyfrm.hxx>
+#endif
+
 #ifndef _LAYFRM_HXX
 #include <layfrm.hxx>
 #endif
@@ -74,8 +82,29 @@
 #ifndef _TXTFRM_HXX
 #include <txtfrm.hxx>
 #endif
+#ifndef _SECTFRM_HXX
+#include <sectfrm.hxx>
+#endif
+#ifndef _FRMSH_HXX
+#include <frmsh.hxx>
+#endif
+#ifndef _SECTION_HXX
+#include <section.hxx>
+#endif
 #ifndef _VIEWSH_HXX
 #include <viewsh.hxx>
+#endif
+#ifndef _VIEWOPT_HXX
+#include <viewopt.hxx>
+#endif
+#ifndef _DOC_HXX
+#include <doc.hxx>
+#endif
+#ifndef _DOCSH_HXX
+#include <docsh.hxx>
+#endif
+#ifndef _FRMATR_HXX
+#include <frmatr.hxx>
 #endif
 
 #ifndef _ACCFRAME_HXX
@@ -111,25 +140,29 @@ const SwFrm *SwAccessibleFrame::GetDescendant( const Rectangle& rVisArea,
                                          const SwFrm *pFrm,
                                          sal_Int32& rPos )
 {
-    const SwFrm *pLower = pFrm->GetLower();
     const SwFrm *pDesc = 0;
-    while( pLower && !pDesc )
+
+    if( rPos >= 0 )
     {
-        if( pLower->PaintArea().IsOver( rVisArea ) )
+        const SwFrm *pLower = pFrm->GetLower();
+        while( pLower && !pDesc )
         {
-            if( IsAccessible( pLower ) )
+            if( pLower->PaintArea().IsOver( rVisArea ) )
             {
-                if( 0 == rPos )
-                    pDesc = pLower;
+                if( IsAccessible( pLower ) )
+                {
+                    if( 0 == rPos )
+                        pDesc = pLower;
+                    else
+                        rPos--;
+                }
                 else
-                    rPos--;
+                {
+                    pDesc = GetDescendant( rVisArea, pLower, rPos );
+                }
             }
-            else
-            {
-                pDesc = GetDescendant( rVisArea, pLower, rPos );
-            }
+            pLower = pLower->GetNext();
         }
-        pLower = pLower->GetNext();
     }
 
     return pDesc;
@@ -247,14 +280,10 @@ Rectangle SwAccessibleFrame::GetBounds( const SwFrm *pFrm )
 Window *SwAccessibleFrame::GetWindow()
 {
     Window *pWin = 0;
-    const SwFrm *pUpper = pFrm;
-    while( pUpper && !pUpper->IsRootFrm() )
-        pUpper = pUpper->GetUpper();
 
-    ASSERT( pUpper, "no root frame" );
-    if( pUpper )
+    if( pFrm )
     {
-        const ViewShell *pVSh = PTR_CAST( SwRootFrm, pUpper )->GetCurrShell();
+        const ViewShell *pVSh = pFrm->GetShell();
         ASSERT( pVSh, "no view shell" );
         if( pVSh )
             pWin = pVSh->GetWin();
@@ -263,6 +292,71 @@ Window *SwAccessibleFrame::GetWindow()
     }
 
     return pWin;
+}
+
+sal_Bool SwAccessibleFrame::IsEditable() const
+{
+    const SwFrm *pFrm = GetFrm();
+    if( !pFrm )
+        return sal_False;
+
+    if( !pFrm->IsRootFrm() && pFrm->IsProtected() )
+        return sal_False;
+
+    ViewShell *pVSh = pFrm->GetShell();
+    ASSERT( pVSh, "no view shell" );
+    if( pVSh )
+    {
+        const SwDoc *pDoc = pVSh->GetDoc();
+        const SwDocShell *pDocSh = pDoc->GetDocShell();
+        ASSERT( pDocSh, "no doc shell" );
+        if( pDocSh && !pDocSh->IsReadOnly() )
+            return sal_True;
+    }
+
+    return sal_False;
+}
+
+sal_Bool SwAccessibleFrame::IsOpaque() const
+{
+    const SwFrm *pFrm = GetFrm();
+    if( !pFrm )
+        return sal_False;
+
+    ViewShell *pVSh = pFrm->GetShell();
+    ASSERT( pVSh, "no view shell" );
+    if( !pVSh )
+        return sal_False;
+
+    const SwViewOption *pVOpt = pVSh->GetViewOptions();
+    do
+    {
+        if( pFrm->IsRootFrm() )
+            return sal_True;
+
+        if( pFrm->IsPageFrm() && !pVOpt->IsPageBack() )
+            return sal_False;
+
+        const SvxBrushItem &rBack = pFrm->GetAttrSet()->GetBackground();
+        if( !rBack.GetColor().GetTransparency() ||
+             rBack.GetGraphicPos() != GPOS_NONE )
+            return sal_True;
+
+        if( pFrm->IsSctFrm() )
+        {
+            const SwSection* pSection = ((SwSectionFrm*)pFrm)->GetSection();
+            if( pSection && ( TOX_HEADER_SECTION == pSection->GetType() ||
+                TOX_CONTENT_SECTION == pSection->GetType() ) &&
+                pVOpt->IsIndexBackground() )
+                return sal_True;
+        }
+        if ( pFrm->IsFlyFrm() )
+            pFrm = ((SwFlyFrm*)pFrm)->GetAnchor();
+        else
+            pFrm = pFrm->GetUpper();
+    } while( pFrm && !IsAccessible( pFrm ) );
+
+    return sal_False;
 }
 
 SwAccessibleFrame::SwAccessibleFrame( const Rectangle& rVisArea,

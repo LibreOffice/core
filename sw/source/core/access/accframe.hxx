@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accframe.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mib $ $Date: 2002-02-04 14:07:14 $
+ *  last change: $Author: mib $ $Date: 2002-02-05 15:52:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,10 @@ protected:
     Rectangle GetBounds( const SwFrm *pFrm=0 );
 
     Window *GetWindow();
+
+    sal_Bool IsEditable() const;
+
+    sal_Bool IsOpaque() const;
 
     void ClearFrm() { pFrm = 0; }
 

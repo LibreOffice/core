@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpara.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mib $ $Date: 2002-02-04 14:07:14 $
+ *  last change: $Author: mib $ $Date: 2002-02-05 15:52:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,12 @@ class SwTxtFrm;
 
 class SwAccessibleParagraph : public    SwAccessibleContext
 {
+
+    // Set states for getAccessibleStateSet.
+    // This drived class additinaly sets MULTILINE(1), SELECTABLE(1) and
+    // SELECTED(0/1)
+    virtual void SetStates( ::utl::AccessibleStateSetHelper& rStateSet );
+
 public:
 
     SwAccessibleParagraph( sal_Int32 nPara, const Rectangle& rVisArea,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accmap.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mib $ $Date: 2002-02-04 14:07:14 $
+ *  last change: $Author: mib $ $Date: 2002-02-05 15:52:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 #ifndef _VOS_REF_HXX_
 #include <vos/ref.hxx>
 #endif
+#ifndef _CPPUHELPER_WEAKREF_HXX_
+#include <cppuhelper/weakref.hxx>
+#endif
 
 #ifndef __SGI_STL_MAP
 #include <map>
@@ -106,7 +109,7 @@ struct SwFrmFunc
     }
 };
 
-typedef ::std::map < const SwFrm *, ::vos::ORef < SwAccessibleContext >, SwFrmFunc > _SwAccessibleMap_Impl;
+typedef ::std::map < const SwFrm *, WeakReference < XAccessible >, SwFrmFunc > _SwAccessibleMap_Impl;
 
 class SwAccessibleMap_Impl: public _SwAccessibleMap_Impl
 {
@@ -129,55 +132,86 @@ Reference< XAccessible > SwAccessibleMap::GetDocumentView(
             const Rectangle& rVisArea,
             const SwRootFrm *pRootFrm )
 {
-    SwAccessibleContext *pAcc = 0;
+    vos::OGuard aGuard( aMutex );
+
+    Reference < XAccessible > xAcc;
 
     SwAccessibleMap_Impl::iterator aIter = pMap->find( pRootFrm );
     if( aIter != pMap->end() )
+        xAcc = (*aIter).second;
+    if( xAcc.is() )
     {
-        pAcc = (*aIter).second.getBodyPtr();
+        SwAccessibleDocument *pAcc = (SwAccessibleDocument *)xAcc.get();
         pAcc->SetVisArea( rVisArea );
     }
     else
     {
-        pAcc = new SwAccessibleDocument( rxParent, rVisArea, pRootFrm );
-        SwAccessibleMap_Impl::value_type aEntry( pRootFrm, pAcc );
-        pMap->insert( aEntry );
-    }
-
-    Reference< XAccessible > xRet( pAcc );
-
-    return xRet;
-}
-
-SwAccessibleContext *SwAccessibleMap::GetContext( const Rectangle& rVisArea,
-                                                   const SwFrm *pFrm )
-{
-    SwAccessibleContext *pAcc = 0;
-
-    SwAccessibleMap_Impl::iterator aIter = pMap->find( pFrm );
-    if( aIter != pMap->end() )
-    {
-        pAcc = (*aIter).second.getBodyPtr();
-    }
-    else
-    {
-        if( pFrm->IsTxtFrm() )
-            pAcc = new SwAccessibleParagraph( nPara++, rVisArea,
-                                              (const SwTxtFrm *)pFrm );
-
-        ASSERT( pAcc, "unknown frame type" );
-        if( pAcc )
+        xAcc = new SwAccessibleDocument( rxParent, rVisArea, pRootFrm );
+        if( aIter != pMap->end() )
         {
-            SwAccessibleMap_Impl::value_type aEntry( pFrm, pAcc );
+            (*aIter).second = xAcc;
+        }
+        else
+        {
+            SwAccessibleMap_Impl::value_type aEntry( pRootFrm, xAcc );
             pMap->insert( aEntry );
         }
     }
 
-    return pAcc;
+    return xAcc;
+}
+
+Reference< XAccessible> SwAccessibleMap::GetContext( const Rectangle& rVisArea,
+                                                      const SwFrm *pFrm )
+{
+    vos::OGuard aGuard( aMutex );
+
+    Reference < XAccessible > xAcc;
+
+    SwAccessibleMap_Impl::iterator aIter = pMap->find( pFrm );
+    if( aIter != pMap->end() )
+        xAcc = (*aIter).second;
+
+    if( !xAcc.is() )
+    {
+        if( pFrm->IsTxtFrm() )
+            xAcc = new SwAccessibleParagraph( nPara++, rVisArea,
+                                              (const SwTxtFrm *)pFrm );
+
+        ASSERT( xAcc.is(), "unknown frame type" );
+        if( xAcc.is() )
+        {
+            if( aIter != pMap->end() )
+            {
+                (*aIter).second = xAcc;
+            }
+            else
+            {
+                SwAccessibleMap_Impl::value_type aEntry( pFrm, xAcc );
+                pMap->insert( aEntry );
+            }
+        }
+    }
+
+    return xAcc;
+}
+
+::vos::ORef < SwAccessibleContext > SwAccessibleMap::GetContextImpl(
+            const Rectangle& rVisArea,
+            const SwFrm *pFrm )
+{
+    Reference < XAccessible > xAcc( GetContext( rVisArea, pFrm ) );
+
+    ::vos::ORef < SwAccessibleContext > xAccImpl(
+         (SwAccessibleDocument *)xAcc.get() );
+
+    return xAccImpl;
 }
 
 void SwAccessibleMap::RemoveContext( SwAccessibleContext *pAcc )
 {
+    vos::OGuard aGuard( aMutex );
+
     SwAccessibleMap_Impl::iterator aIter = pMap->find( pAcc->GetFrm() );
     if( aIter != pMap->end() )
         pMap->erase( aIter );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccontext.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mib $ $Date: 2002-02-04 14:07:14 $
+ *  last change: $Author: mib $ $Date: 2002-02-05 15:52:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,8 @@
 #include <cppuhelper/interfacecontainer.hxx>
 #endif
 
+namespace utl { class AccessibleStateSetHelper; };
+
 class SwAccessibleContext :
     public ::cppu::WeakImplHelper4<
                 ::drafts::com::sun::star::accessibility::XAccessible,
@@ -119,12 +121,19 @@ protected:
     // A child has been moved while setting the vis area
     virtual void LowerMoved( const SwFrm *pFrm );
 
+    // The object is not visible an longer and should be destroyed
     void Dispose();
+
     void PropertyChanged( ::com::sun::star::beans::PropertyChangeEvent& rEvent );
 
     ::rtl::OUString GetResource( sal_uInt16 nResId,
                                  const ::rtl::OUString *pArg1 = 0,
                                  const ::rtl::OUString *pArg2 = 0 ) const;
+
+    // Set states for getAccessibleStateSet.
+    // This base class sets DEFUNC(0/1), EDITABLE(0/1), ENABLED(1),
+    // SHOWING(0/1), OPAQUE(0/1) and VISIBLE(1).
+    virtual void SetStates( ::utl::AccessibleStateSetHelper& rStateSet );
 
 public:
 

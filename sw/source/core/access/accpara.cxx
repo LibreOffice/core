@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpara.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mib $ $Date: 2002-02-04 14:07:14 $
+ *  last change: $Author: mib $ $Date: 2002-02-05 15:52:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,13 @@
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
 #include <drafts/com/sun/star/accessibility/AccessibleRole.hpp>
 #endif
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
+#include <drafts/com/sun/star/accessibility/AccessibleStatetype.hpp>
+#endif
+
+#ifndef _UTL_ACCESSIBLESTATESETHELPER_HXX_
+#include <unotools/accessiblestatesethelper.hxx>
+#endif
 #ifndef _COM_SUN_STAR_I18N_WORDTYPE_HPP_
 #include <com/sun/star/i18n/WordType.hpp>
 #endif
@@ -108,6 +115,20 @@ using namespace ::rtl;
 const sal_Char sServiceName[] = "com.sun.star.text.AccessibleParagraphView";
 const sal_Char sImplementationName[] = "SwAccessibleParagraph";
 const xub_StrLen MAX_DESC_TEXT_LEN = 40;
+
+void SwAccessibleParagraph::SetStates(
+        ::utl::AccessibleStateSetHelper& rStateSet )
+{
+    SwAccessibleContext::SetStates( rStateSet );
+
+    // MULTILINE
+    rStateSet.AddState( AccessibleStateType::MULTILINE );
+
+    // SELECTABLE
+    rStateSet.AddState( AccessibleStateType::SELECTABLE );
+
+    // TODO: SELECTED
+}
 
 SwAccessibleParagraph::SwAccessibleParagraph(
         sal_Int32 nPara,
