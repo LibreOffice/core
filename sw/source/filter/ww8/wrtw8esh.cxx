@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cmc $ $Date: 2001-03-27 12:01:49 $
+ *  last change: $Author: cmc $ $Date: 2001-03-29 13:24:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1954,9 +1954,9 @@ void SwEscherEx::WriteGrfAttr( const SwNoTxtNode& rNd, EscherPropertyContainer& 
     }
 
     if (nMode == GRAPHICDRAWMODE_GREYS)
-        nMode = 4;
+        nMode = 0x40004;
     else if (nMode == GRAPHICDRAWMODE_MONO)
-        nMode = 6;
+        nMode = 0x60006;
     else
         nMode = 0;
     rPropOpt.AddOpt( ESCHER_Prop_pictureActive, nMode );
@@ -2338,11 +2338,14 @@ BOOL SwMSConvertControls::ExportControl(Writer &rWrt, const SdrObject *pObj)
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtw8esh.cxx,v 1.13 2001-03-27 12:01:49 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtw8esh.cxx,v 1.14 2001-03-29 13:24:44 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.13  2001/03/27 12:01:49  cmc
+      brightness, contrast, drawmode {im|ex}port, merge 0x01 and 0x08 graphics systems for escher to replace hack
+
       Revision 1.12  2001/03/20 17:03:58  jp
       use stdarr
 
