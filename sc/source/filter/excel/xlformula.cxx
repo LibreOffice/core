@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlformula.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:39:10 $
+ *  last change: $Author: obo $ $Date: 2004-10-18 15:16:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,10 +189,17 @@ const ScRangeData* XclTokenArrayHelper::GetSharedFormula( const XclRoot& rRoot, 
 
 namespace {
 
-inline void lclGetAddress( ScAddress& rAddress, const ScToken& rToken )
+inline bool lclGetAddress( ScAddress& rAddress, const ScToken& rToken )
 {
-    const SingleRefData& rRef = rToken.GetSingleRef();
-    rAddress.Set( rRef.nCol, rRef.nRow, rRef.nTab );
+    OpCode eOpCode = rToken.GetOpCode();
+    bool bIsSingleRef = (eOpCode == ocPush) && (rToken.GetType() == svSingleRef);
+    if( bIsSingleRef )
+    {
+        const SingleRefData& rRef = rToken.GetSingleRef();
+        rAddress.Set( rRef.nCol, rRef.nRow, rRef.nTab );
+        bIsSingleRef = !rRef.IsDeleted();
+    }
+    return bIsSingleRef;
 }
 
 } // namespace
@@ -219,7 +226,6 @@ bool XclTokenArrayHelper::GetMultipleOpRefs( XclMultipleOpRefs& rRefs, const ScT
                 OpCode eOpCode = pToken->GetOpCode();
                 if( eOpCode != ocSpaces )
                 {
-                    bool bIsSingleRef = (eOpCode == ocPush) && (pToken->GetType() == svSingleRef);
                     bool bIsSep = (eOpCode == ocSep);
                     switch( eState )
                     {
@@ -230,44 +236,32 @@ bool XclTokenArrayHelper::GetMultipleOpRefs( XclMultipleOpRefs& rRefs, const ScT
                             eState = (eOpCode == ocOpen) ? stOpen : stError;
                         break;
                         case stOpen:
-                            eState = bIsSingleRef ? stFormula : stError;
-                            if( bIsSingleRef )
-                                lclGetAddress( rRefs.maFmlaScPos, *pToken );
+                            eState = lclGetAddress( rRefs.maFmlaScPos, *pToken ) ? stFormula : stError;
                         break;
                         case stFormula:
                             eState = bIsSep ? stFormulaSep : stError;
                         break;
                         case stFormulaSep:
-                            eState = bIsSingleRef ? stColFirst : stError;
-                            if( bIsSingleRef )
-                                lclGetAddress( rRefs.maColFirstScPos, *pToken );
+                            eState = lclGetAddress( rRefs.maColFirstScPos, *pToken ) ? stColFirst : stError;
                         break;
                         case stColFirst:
                             eState = bIsSep ? stColFirstSep : stError;
                         break;
                         case stColFirstSep:
-                            eState = bIsSingleRef ? stColRel : stError;
-                            if( bIsSingleRef )
-                                lclGetAddress( rRefs.maColRelScPos, *pToken );
+                            eState = lclGetAddress( rRefs.maColRelScPos, *pToken ) ? stColRel : stError;
                         break;
                         case stColRel:
                             eState = bIsSep ? stColRelSep : ((eOpCode == ocClose) ? stClose : stError);
                         break;
                         case stColRelSep:
-                            eState = bIsSingleRef ? stRowFirst : stError;
-                            if( bIsSingleRef )
-                            {
-                                lclGetAddress( rRefs.maRowFirstScPos, *pToken );
-                                rRefs.mbDblRefMode = true;
-                            }
+                            eState = lclGetAddress( rRefs.maRowFirstScPos, *pToken ) ? stRowFirst : stError;
+                            rRefs.mbDblRefMode = true;
                         break;
                         case stRowFirst:
                             eState = bIsSep ? stRowFirstSep : stError;
                         break;
                         case stRowFirstSep:
-                            eState = bIsSingleRef ? stRowRel : stError;
-                            if( bIsSingleRef )
-                                lclGetAddress( rRefs.maRowRelScPos, *pToken );
+                            eState = lclGetAddress( rRefs.maRowRelScPos, *pToken ) ? stRowRel : stError;
                         break;
                         case stRowRel:
                             eState = (eOpCode == ocClose) ? stClose : stError;
