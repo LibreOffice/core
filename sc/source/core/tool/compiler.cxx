@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 15:55:04 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:34:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -394,63 +394,39 @@ ScCompiler::ScCompiler(ScDocument* pDocument, const ScAddress& rPos )
 }
 
 
-String ScCompiler::MakeColStr( USHORT nCol )
+String ScCompiler::MakeColStr( SCCOL nCol )
 {
-    if ( nCol > MAXCOL )
+    if ( !ValidCol( nCol) )
         return ScGlobal::GetRscString(STR_NO_REF_TABLE);
     else
-    {
-        if (nCol < 26)
-            return String( static_cast< sal_Unicode >('A' + (sal_uChar) nCol) );
-        else
-        {
-            String aString;
-            sal_Unicode* pCol = aString.AllocBuffer( 2 );
-            USHORT nLoCol = nCol % 26;
-            USHORT nHiCol = (nCol / 26) - 1;
-            pCol[0] = 'A' + (sal_uChar)nHiCol;
-            pCol[1] = 'A' + (sal_uChar)nLoCol;
-            // terminating null character is set in AllocBuffer
-            return aString;
-        }
-    }
+        return ::ColToAlpha( nCol);
 }
 
-void ScCompiler::MakeColStr( rtl::OUStringBuffer& rBuffer, USHORT nCol )
+void ScCompiler::MakeColStr( rtl::OUStringBuffer& rBuffer, SCCOL nCol )
 {
-    if ( nCol > MAXCOL )
+    if ( !ValidCol( nCol) )
         rBuffer.append(ScGlobal::GetRscString(STR_NO_REF_TABLE));
     else
-    {
-        if (nCol < 26)
-            rBuffer.append(  sal_Unicode('A' + (sal_uChar) nCol));
-        else
-        {
-            USHORT nLoCol = nCol % 26;
-            USHORT nHiCol = (nCol / 26) - 1;
-            rBuffer.append( sal_Unicode('A' + (sal_uChar)nHiCol) );
-            rBuffer.append( sal_Unicode('A' + (sal_uChar)nLoCol) );
-        }
-    }
+        ::ColToAlpha( rBuffer, nCol);
 }
 
-String ScCompiler::MakeRowStr( USHORT nRow )
+String ScCompiler::MakeRowStr( SCROW nRow )
 {
-    if ( nRow > MAXROW )
+    if ( !ValidRow(nRow) )
         return ScGlobal::GetRscString(STR_NO_REF_TABLE);
     else
         return String::CreateFromInt32( nRow + 1 );
 }
 
-void ScCompiler::MakeRowStr( rtl::OUStringBuffer& rBuffer, USHORT nRow )
+void ScCompiler::MakeRowStr( rtl::OUStringBuffer& rBuffer, SCROW nRow )
 {
-    if ( nRow > MAXROW )
+    if ( !ValidRow(nRow) )
         rBuffer.append(ScGlobal::GetRscString(STR_NO_REF_TABLE));
     else
         rBuffer.append(sal_Int32(nRow + 1));
 }
 
-String ScCompiler::MakeTabStr( USHORT nTab, String& aDoc )
+String ScCompiler::MakeTabStr( SCTAB nTab, String& aDoc )
 {
     String aString;
     if (!pDoc->GetName(nTab, aString))
@@ -993,7 +969,7 @@ BOOL ScCompiler::IsReference( const String& rName )
             // If you can live with these restrictions you may remove the
             // check and return an unconditional FALSE.
             String aTabName( rName.Copy( 0, nPos ) );
-            USHORT nTab;
+            SCTAB nTab;
             if ( !pDoc->GetTable( aTabName, nTab ) )
                 return FALSE;
             // If sheet "1" exists and the expression is 1.E+2 continue as
@@ -1132,7 +1108,7 @@ BOOL ScCompiler::IsColRowName( const String& rName )
     SingleRefData aRef;
     String aName( rName );
     DeQuote( aName );
-    USHORT nThisTab = aPos.Tab();
+    SCTAB nThisTab = aPos.Tab();
     for ( short jThisTab = 1; jThisTab >= 0 && !bInList; jThisTab-- )
     {   // #50300# first check ranges on this sheet, in case of duplicated names
         for ( short jRow=0; jRow<2 && !bInList; jRow++ )
@@ -1233,8 +1209,8 @@ BOOL ScCompiler::IsColRowName( const String& rName )
                 }
                 if ( ScGlobal::pTransliteration->isEqual( aStr, aName ) )
                 {
-                    USHORT nCol = aIter.GetCol();
-                    USHORT nRow = aIter.GetRow();
+                    SCCOL nCol = aIter.GetCol();
+                    SCROW nRow = aIter.GetRow();
                     long nC = nMyCol - nCol;
                     long nR = nMyRow - nRow;
                     if ( bFound )
@@ -1835,13 +1811,13 @@ BOOL ScCompiler::GetToken()
             SetError( errNoRef );
             return TRUE;
         }
-        USHORT nCol = rRef.nCol;
-        USHORT nRow = rRef.nRow;
-        USHORT nTab = rRef.nTab;
+        SCCOL nCol = rRef.nCol;
+        SCROW nRow = rRef.nRow;
+        SCTAB nTab = rRef.nTab;
         ScAddress aLook( nCol, nRow, nTab );
         BOOL bColName = rRef.IsColRel();
-        USHORT nMyCol = aPos.Col();
-        USHORT nMyRow = aPos.Row();
+        SCCOL nMyCol = aPos.Col();
+        SCROW nMyRow = aPos.Row();
         BOOL bInList = FALSE;
         BOOL bValidName = FALSE;
         ScRangePairList* pRL = (bColName ?
@@ -1876,10 +1852,10 @@ BOOL ScCompiler::GetToken()
                 bValidName = TRUE;
                 if ( bColName )
                 {   // ColName
-                    USHORT nStartRow = nRow + 1;
+                    SCROW nStartRow = nRow + 1;
                     if ( nStartRow > MAXROW )
                         nStartRow = MAXROW;
-                    USHORT nMaxRow = MAXROW;
+                    SCROW nMaxRow = MAXROW;
                     if ( nMyCol == nCol )
                     {   // formula cell in same column
                         if ( nMyRow == nStartRow )
@@ -1898,7 +1874,7 @@ BOOL ScCompiler::GetToken()
                         const ScRange& rRange = pR->GetRange(1);
                         if ( rRange.aStart.Col() <= nCol && nCol <= rRange.aEnd.Col() )
                         {   // identical column range
-                            USHORT nTmp = rRange.aStart.Row();
+                            SCROW nTmp = rRange.aStart.Row();
                             if ( nStartRow < nTmp && nTmp <= nMaxRow )
                                 nMaxRow = nTmp - 1;
                         }
@@ -1908,10 +1884,10 @@ BOOL ScCompiler::GetToken()
                 }
                 else
                 {   // RowName
-                    USHORT nStartCol = nCol + 1;
+                    SCCOL nStartCol = nCol + 1;
                     if ( nStartCol > MAXCOL )
                         nStartCol = MAXCOL;
-                    USHORT nMaxCol = MAXCOL;
+                    SCCOL nMaxCol = MAXCOL;
                     if ( nMyRow == nRow )
                     {   // formula cell in same row
                         if ( nMyCol == nStartCol )
@@ -1930,7 +1906,7 @@ BOOL ScCompiler::GetToken()
                         const ScRange& rRange = pR->GetRange(1);
                         if ( rRange.aStart.Row() <= nRow && nRow <= rRange.aEnd.Row() )
                         {   // gleicher Row Bereich
-                            USHORT nTmp = rRange.aStart.Col();
+                            SCCOL nTmp = rRange.aStart.Col();
                             if ( nStartCol < nTmp && nTmp <= nMaxCol )
                                 nMaxCol = nTmp - 1;
                         }
@@ -2043,11 +2019,11 @@ BOOL ScCompiler::GetToken()
         {
             ComplRefData aRefData;
             aRefData.InitFlags();
-            pDBData->GetArea(   (USHORT&) aRefData.Ref1.nTab,
-                                (USHORT&) aRefData.Ref1.nCol,
-                                (USHORT&) aRefData.Ref1.nRow,
-                                (USHORT&) aRefData.Ref2.nCol,
-                                (USHORT&) aRefData.Ref2.nRow);
+            pDBData->GetArea(   (SCTAB&) aRefData.Ref1.nTab,
+                                (SCCOL&) aRefData.Ref1.nCol,
+                                (SCROW&) aRefData.Ref1.nRow,
+                                (SCCOL&) aRefData.Ref2.nCol,
+                                (SCROW&) aRefData.Ref2.nRow);
             aRefData.Ref2.nTab    = aRefData.Ref1.nTab;
             aRefData.CalcRelFromAbs( aPos );
             ScTokenArray* pNew = new ScTokenArray;
@@ -2734,14 +2710,18 @@ BOOL ScCompiler::HasModifiedRange()
 
 //-----------------------------------------------------------------------------
 
-short lcl_adjval( short n, short pos, short max, BOOL bRel )
+template< typename T, typename S >
+S lcl_adjval( S& n, T pos, T max, BOOL bRel )
 {
     max++;
-    if( bRel ) n += pos;
-    if( n < 0 ) n += max;
-    else
-    if( n >= max ) n -= max;
-    if( bRel ) n -= pos;
+    if( bRel )
+        n += pos;
+    if( n < 0 )
+        n += max;
+    else if( n >= max )
+        n -= max;
+    if( bRel )
+        n -= pos;
     return n;
 }
 
@@ -2752,7 +2732,7 @@ void ScCompiler::AdjustReference( SingleRefData& r )
     if( r.IsRowRel() )
         r.nRow = lcl_adjval( r.nRow, aPos.Row(), MAXROW, r.IsRowRel() );
     if( r.IsTabRel() )
-        r.nTab = lcl_adjval( r.nTab, aPos.Tab(), nMaxTab,r.IsTabRel() );
+        r.nTab = lcl_adjval( r.nTab, aPos.Tab(), static_cast<SCTAB>(nMaxTab), r.IsTabRel() );
 }
 
 // reference of named range with relative references
@@ -2809,7 +2789,7 @@ void ScCompiler::MoveRelWrap( ScTokenArray& rArr, ScDocument* pDoc,
 
 ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
                                  const ScAddress& rOldPos, const ScRange& r,
-                                 short nDx, short nDy, short nDz,
+                                 SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
                                  BOOL& rChanged)
 {
     rChanged = FALSE;
@@ -2983,7 +2963,7 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
 
 BOOL ScCompiler::UpdateNameReference(UpdateRefMode eUpdateRefMode,
                                      const ScRange& r,
-                                     short nDx, short nDy, short nDz,
+                                     SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
                                      BOOL& rChanged)
 {
     BOOL bRet = FALSE;                      // set if relative reference
@@ -3013,7 +2993,7 @@ BOOL ScCompiler::UpdateNameReference(UpdateRefMode eUpdateRefMode,
 
 void ScCompiler::UpdateSharedFormulaReference( UpdateRefMode eUpdateRefMode,
                                   const ScAddress& rOldPos, const ScRange& r,
-                                  short nDx, short nDy, short nDz )
+                                  SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
 {
     if ( eUpdateRefMode == URM_COPY )
         return ;
@@ -3081,12 +3061,12 @@ void ScCompiler::UpdateSharedFormulaReference( UpdateRefMode eUpdateRefMode,
 }
 
 
-ScRangeData* ScCompiler::UpdateInsertTab( USHORT nTable, BOOL bIsName )
+ScRangeData* ScCompiler::UpdateInsertTab( SCTAB nTable, BOOL bIsName )
 {
     ScRangeData* pRangeData = NULL;
-    short nTab;
-    USHORT nPosTab = aPos.Tab();    // _after_ incremented!
-    USHORT nOldPosTab = ((nPosTab > nTable) ? (nPosTab - 1) : nPosTab);
+    SCsTAB nTab;
+    SCTAB nPosTab = aPos.Tab();     // _after_ incremented!
+    SCTAB nOldPosTab = ((nPosTab > nTable) ? (nPosTab - 1) : nPosTab);
     BOOL bIsRel = FALSE;
     ScToken* t;
     pArr->Reset();
@@ -3199,13 +3179,13 @@ ScRangeData* ScCompiler::UpdateInsertTab( USHORT nTable, BOOL bIsName )
     return pRangeData;
 }
 
-ScRangeData* ScCompiler::UpdateDeleteTab(USHORT nTable, BOOL bIsMove, BOOL bIsName,
+ScRangeData* ScCompiler::UpdateDeleteTab(SCTAB nTable, BOOL bIsMove, BOOL bIsName,
                                  BOOL& rChanged)
 {
     ScRangeData* pRangeData = NULL;
-    USHORT nTab, nTab2;
-    USHORT nPosTab = aPos.Tab();         // _after_ decremented!
-    USHORT nOldPosTab = ((nPosTab >= nTable) ? (nPosTab + 1) : nPosTab);
+    SCTAB nTab, nTab2;
+    SCTAB nPosTab = aPos.Tab();          // _after_ decremented!
+    SCTAB nOldPosTab = ((nPosTab >= nTable) ? (nPosTab + 1) : nPosTab);
     rChanged = FALSE;
     BOOL bIsRel = FALSE;
     ScToken* t;
@@ -3389,13 +3369,13 @@ ScRangeData* ScCompiler::UpdateDeleteTab(USHORT nTable, BOOL bIsMove, BOOL bIsNa
 }
 
 // aPos.Tab() must be already adjusted!
-ScRangeData* ScCompiler::UpdateMoveTab( USHORT nOldTab, USHORT nNewTab,
+ScRangeData* ScCompiler::UpdateMoveTab( SCTAB nOldTab, SCTAB nNewTab,
         BOOL bIsName )
 {
     ScRangeData* pRangeData = NULL;
-    INT16 nTab;
+    SCsTAB nTab;
 
-    USHORT nStart, nEnd;
+    SCTAB nStart, nEnd;
     short nDir;                         // direction in which others move
     if ( nOldTab < nNewTab )
     {
@@ -3409,8 +3389,8 @@ ScRangeData* ScCompiler::UpdateMoveTab( USHORT nOldTab, USHORT nNewTab,
         nStart = nNewTab;
         nEnd = nOldTab;
     }
-    USHORT nPosTab = aPos.Tab();        // current sheet
-    USHORT nOldPosTab;                  // previously it was this one
+    SCTAB nPosTab = aPos.Tab();        // current sheet
+    SCTAB nOldPosTab;                  // previously it was this one
     if ( nPosTab == nNewTab )
         nOldPosTab = nOldTab;           // look, it's me!
     else if ( nPosTab < nStart || nEnd < nPosTab )
@@ -3470,7 +3450,7 @@ ScRangeData* ScCompiler::UpdateMoveTab( USHORT nOldTab, USHORT nNewTab,
                 }
                 else
                     bIsRel = TRUE;
-                INT16 nTab1, nTab2;
+                SCsTAB nTab1, nTab2;
                 if ( rRef1.IsTabRel() )
                     nTab1 = rRef1.nRelTab + nPosTab;
                 else
@@ -3497,7 +3477,7 @@ ScRangeData* ScCompiler::UpdateMoveTab( USHORT nOldTab, USHORT nNewTab,
     }
     if ( !bIsName )
     {
-        short nMaxTabMod = (short) pDoc->GetTableCount();
+        SCsTAB nMaxTabMod = (SCsTAB) pDoc->GetTableCount();
         pArr->Reset();
         for ( t = pArr->GetNextReferenceRPN(); t;
               t = pArr->GetNextReferenceRPN() )
@@ -3550,7 +3530,7 @@ ScRangeData* ScCompiler::UpdateMoveTab( USHORT nOldTab, USHORT nNewTab,
                             rRef2.nTab = nTab + nDir;
                         rRef2.nRelTab = rRef2.nTab - nPosTab;
                     }
-                    INT16 nTab1, nTab2;
+                    SCsTAB nTab1, nTab2;
                     if ( rRef1.IsTabRel() )
                         nTab1 = rRef1.nRelTab + nPosTab;
                     else
