@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-17 17:28:12 $
+ *  last change: $Author: kz $ $Date: 2004-06-11 15:23:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1137,6 +1137,7 @@ void SwEditWin::ChangeDrawing( BYTE nDir )
  --------------------------------------------------------------------*/
 
 
+
 void SwEditWin::KeyInput(const KeyEvent &rKEvt)
 {
     SfxObjectShell *pObjSh = (SfxObjectShell*)rView.GetViewFrame()->GetObjectShell();
@@ -1647,21 +1648,6 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 case KEY_BACKSPACE | KEY_SHIFT:
                     if( !rSh.HasReadonlySel() )
                     {
-                        // #115901#
-                        if( rSh.NumOrNoNum(
-                                    KEY_BACKSPACE != rKeyCode.GetFullCode(),
-                                    TRUE))
-                            eKeyState = KS_NumOrNoNum;
-
-                        BOOL bOutline = FALSE;
-#ifdef TASK_59308
-                        const SwTxtFmtColl* pColl;
-                        if( !rSh.SwCrsrShell::HasSelection() &&
-                            0 != ( pColl = rSh.GetCurTxtFmtColl() ) &&
-                            NO_NUMBERING != pColl->GetOutlineLevel() &&
-                            NO_NUMBERING == rSh.GetNumLevel( FALSE ) )
-                            bOutline = TRUE;
-#endif
                         // #i23725#
                         BOOL bDone = FALSE;
                         if (rSh.IsSttPara() &&
