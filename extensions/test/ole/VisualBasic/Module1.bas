@@ -22,43 +22,102 @@ Dim ret As Variant
 Dim bError As Boolean
 ret = objOleTest.in_methodByte(10)
 Debug.Print TypeName(ret) & " " & CStr(ret)
+If ret <> 10 Then
+    MsgBox "error"
+End If
+
 ret = objOleTest.in_methodFloat(3.14)
 Debug.Print TypeName(ret) & " " & CStr(ret)
-
+If ret <> 3.14 Then
+    MsgBox "error"
+End If
 Dim d As Double 'try conversion
 d = 3.14
 ret = objOleTest.in_methodFloat(3.14)
 Debug.Print TypeName(ret) & " " & CStr(ret)
+If ret <> 3.14 Then
+    MsgBox "error"
+End If
+
 ret = objOleTest.in_methodDouble(4.14)
 Debug.Print TypeName(ret) & " " & CStr(ret)
+If ret <> 4.14 Then
+    MsgBox "error"
+End If
 Dim s As Single
 s = 4.14
 ret = objOleTest.in_methodDouble(s)
 Debug.Print TypeName(ret) & " " & CStr(ret)
+If (ret < 4.13) And (ret > 4.15) Then
+    MsgBox "error"
+End If
+
 ret = objOleTest.in_methodBool(True)
 Debug.Print TypeName(ret) & " " & CStr(ret)
+If ret <> True Then
+    MsgBox "error"
+End If
+
 ret = objOleTest.in_methodBool(False)
 Debug.Print TypeName(ret) & " " & CStr(ret)
+If ret <> False Then
+    MsgBox "error"
+End If
+
 ret = objOleTest.in_methodShort(-10)
 Debug.Print TypeName(ret) & " " & CStr(ret)
+If ret <> -10 Then
+    MsgBox "error"
+End If
 ret = objOleTest.in_methodUShort(10)
 Debug.Print TypeName(ret) & " " & CStr(ret)
+If ret <> 10 Then
+    MsgBox "error"
+End If
 ret = objOleTest.in_methodLong(-1000000)
 Debug.Print TypeName(ret) & " " & CStr(ret)
+If ret <> -1000000 Then
+    MsgBox "error"
+End If
+
 ret = objOleTest.in_methodULong(1000000)
 Debug.Print TypeName(ret) & " " & CStr(ret)
+If ret <> 1000000 Then
+    MsgBox "error"
+End If
+
 ret = objOleTest.in_methodString("This is a String")
 Debug.Print TypeName(ret) & " " & CStr(ret)
+If CStr(ret) <> "This is a String" Then
+    MsgBox "error"
+End If
+
 'different character tests
 ret = objOleTest.in_methodChar("A")
 Debug.Print TypeName(ret) & " " & CStr(ret)
+If ret <> 65 Then
+    MsgBox "error"
+End If
+'!!!Function returns char, i.e sal_Unicode which VB converts to String
 Dim ret1 As String
 ret1 = objOleTest.in_methodChar("A")
 Debug.Print TypeName(ret1) & " " & CStr(ret1)
+If ret <> 65 Then
+    MsgBox "error"
+End If
+
 ret1 = objOleTest.in_methodChar(65)
 Debug.Print TypeName(ret1) & " " & CStr(ret1)
-ret = objOleTest.in_methodAny("This is a String in an any")
+If ret <> 65 Then
+    MsgBox "error"
+End If
+
+ret = objOleTest.in_methodAny("input string")
 Debug.Print TypeName(ret) & " " & CStr(ret)
+If ret <> "input string" Then
+    MsgBox "error"
+End If
+
 'Call objOleTest.in_methodAll(10, 10.1, 10.111, True, 10, 11, 12, 13, _
 '            "A String", "A", "A String in an Any")
             
@@ -67,34 +126,78 @@ Debug.Print TypeName(ret) & " " & CStr(ret)
 Dim outByte As Byte
 objOleTest.testout_methodByte outByte
 Debug.Print "out byte " & CStr(outByte)
+If outByte <> 111 Then
+    MsgBox "error"
+End If
+
 Dim outFloat As Single
 objOleTest.testout_methodFloat outFloat
 Debug.Print "out float " & CStr(outFloat)
+If outFloat <> 3.14 Then
+    MsgBox "error"
+End If
+
 Dim outDouble As Double
 objOleTest.testout_methodDouble outDouble
 Debug.Print "out double " & CStr(outDouble)
+If outDouble <> 3.14 Then
+    MsgBox "error"
+End If
+
 Dim outBool As Boolean
 objOleTest.testout_methodBool outBool
 Debug.Print "out bool " & CStr(outBool)
+If outBool <> True Then
+    MsgBox "error"
+End If
+
 Dim outInt As Integer
 objOleTest.testout_methodShort outInt
 Debug.Print "out short " & CStr(outInt)
+If outInt <> 222 Then
+    MsgBox "error"
+End If
+
 objOleTest.testout_methodUShort outInt
 Debug.Print "out unsignedshort " & CStr(outInt)
+If outInt <> 333 Then
+    MsgBox "error"
+End If
+
 Dim outLong As Long
 objOleTest.testout_methodLong outLong
-Debug.Print "out long " & CStr(outInt)
+Debug.Print "out long " & CStr(outLong)
+If outLong <> 444 Then
+    MsgBox "error"
+End If
+
 objOleTest.testout_methodULong outLong
-Debug.Print "out unsigned long " & CStr(outInt)
+Debug.Print "out unsigned long " & CStr(outLong)
+If outLong <> 555 Then
+    MsgBox "error"
+End If
+
 Dim outString As String
 objOleTest.testout_methodString outString
 Debug.Print "out string " & CStr(outString)
+If outString <> "a little string" Then
+    MsgBox "error"
+End If
+
 Dim outChar As Integer
 objOleTest.testout_methodChar outChar
 Debug.Print "out char " & CStr(outChar)
+If outChar <> 65 Then
+    MsgBox "error"
+End If
+
 Dim outCharS As String
 objOleTest.testout_methodChar outCharS
 Debug.Print "out char (String) " & CStr(outCharS)
+If outCharS <> "A" Then
+    MsgBox "error"
+End If
+
 objOleTest.testout_methodAny outString
 Debug.Print "out Any " & CStr(outString)
 
@@ -102,65 +205,155 @@ Debug.Print "out Any " & CStr(outString)
 Dim outVar As Variant
 objOleTest.testout_methodByte outVar
 Debug.Print "out Byte (VARIANT) " & CStr(outVar)
+If outVar <> 111 Then
+    MsgBox "error"
+End If
+
 objOleTest.testout_methodFloat outVar
 Debug.Print "out float (VARIANT) " & CStr(outVar)
+If outVar <> 3.14 Then
+    MsgBox "error"
+End If
+
 objOleTest.testout_methodDouble outVar
 Debug.Print "out double (VARIANT) " & CStr(outVar)
+If outVar <> 3.14 Then
+    MsgBox "error"
+End If
+
 objOleTest.testout_methodBool outVar
 Debug.Print "out bool (VARIANT) " & CStr(outVar)
+If outVar <> True Then
+    MsgBox "error"
+End If
+
 objOleTest.testout_methodShort outVar
 Debug.Print "out short (VARIANT) " & CStr(outVar)
+If outVar <> 222 Then
+    MsgBox "error"
+End If
+
 objOleTest.testout_methodUShort outVar
 Debug.Print "out unsigned short (VARIANT) " & CStr(outVar)
+If outVar <> 333 Then
+    MsgBox "error"
+End If
+
 objOleTest.testout_methodLong outVar
 Debug.Print "out long (VARIANT) " & CStr(outVar)
+If outVar <> 444 Then
+    MsgBox "error"
+End If
+
 objOleTest.testout_methodULong outVar
 Debug.Print "out unsigned long (VARIANT) " & CStr(outVar)
+If outVar <> 555 Then
+    MsgBox "error"
+End If
+
 objOleTest.testout_methodString outVar
 Debug.Print "out string (VARIANT) " & CStr(outVar)
+If outVar <> "a little string" Then
+    MsgBox "error"
+End If
+
 objOleTest.testout_methodChar outVar
 Debug.Print "out char (VARIANT) " & CStr(outVar)
+If outVar <> 65 Then
+    MsgBox "error"
+End If
+
 objOleTest.testout_methodAny outVar
 Debug.Print "out any (VARIANT) " & CStr(outVar)
+If outVar <> "I am a string in an any" Then
+    MsgBox "error"
+End If
 
 'In/Out simple types
 '============================================
 outByte = 10
 objOleTest.testinout_methodByte outByte
 Debug.Print "inout byte " & CStr(outByte)
+If outByte <> 11 Then
+    MsgBox "error"
+End If
+
 outFloat = 3.14
 objOleTest.testinout_methodFloat outFloat
 Debug.Print "inout float " & CStr(outFloat)
+If (outFloat > 4.15) And (outFloat < 4.13) Then
+    MsgBox "error"
+End If
+
 outDouble = 4.14
 objOleTest.testinout_methodDouble outDouble
 Debug.Print "inout double " & CStr(outDouble)
+If outDouble <> 5.14 Then
+    MsgBox "error"
+End If
+
 outBool = True
 objOleTest.testinout_methodBool outBool
 Debug.Print "inout bool " & CStr(outBool)
+If outBool <> False Then
+    MsgBox "error"
+End If
+
 outInt = 10
 objOleTest.testinout_methodShort outInt
 Debug.Print "inout short " & CStr(outInt)
+If outInt <> 11 Then
+    MsgBox "error"
+End If
+
 outInt = 20
 objOleTest.testinout_methodUShort outInt
 Debug.Print "inout unsignedshort " & CStr(outInt)
+If outInt <> 21 Then
+    MsgBox "error"
+End If
+
 outLong = 30
 objOleTest.testinout_methodLong outLong
 Debug.Print "inout long " & CStr(outLong)
+If outLong <> 31 Then
+    MsgBox "error"
+End If
+
 outLong = 40
 objOleTest.testinout_methodULong outLong
 Debug.Print "inout unsigned long " & CStr(outLong)
+If outLong <> 41 Then
+    MsgBox "error"
+End If
+
 outString = "this is an in string"
 objOleTest.testinout_methodString outString
 Debug.Print "inout string " & CStr(outString)
+If outString <> "this is an in string out string" Then
+    MsgBox "error"
+End If
+
 'different Char conversions
 objOleTest.testout_methodChar outString
 Debug.Print "out char (in: String)" & CStr(outString)
+If outString <> "A" Then
+    MsgBox "error"
+End If
+
 objOleTest.testout_methodChar outInt
 Debug.Print "out char (in: Int)" & CStr(outInt)
+If outInt <> 65 Then
+    MsgBox "error"
+End If
+
 '--
 outString = "this is another in out string"
 objOleTest.testout_methodAny outString
 Debug.Print "out Any " & CStr(outString)
+If outString <> "I am a string in an any" Then
+    MsgBox "error"
+End If
 
 'Objects
 '
@@ -193,6 +386,10 @@ objOleTest.testout_methodXInterface retObj
 outVar = Null
 retObj.testout_methodAny outVar
 Debug.Print "test out Interface " & CStr(outVar)
+If outVar <> "I am a string in an any" Then
+    MsgBox "error"
+End If
+
 'in out
 ' in: UNO object, the same is expected as out param
 ' the function expects OleTest as parameter and sets a value
@@ -204,6 +401,9 @@ objOleTest.testinout_methodXInterface2 objOleTest2
 tmpVar = Null
 tmpVar = objOleTest2.AttrAny2
 Debug.Print "in: Uno out: the same object // " & CStr(tmpVar)
+If tmpVar <> "VBString  this string was written in the UNO component to the inout pararmeter" Then
+    MsgBox "error"
+End If
 
 
 'create a struct
@@ -213,10 +413,18 @@ Dim structInstance As Object
 structClass.CreateObject structInstance
 structInstance.message = "Now we are in VB"
 Debug.Print "struct out " & structInstance.message
+If structInstance.message <> "Now we are in VB" Then
+    MsgBox "error"
+End If
+
 'put the struct into OleTest. The same struct will be returned with an added String
 Dim structRet As Object
 Set structRet = objOleTest.in_methodStruct(structInstance)
 Debug.Print "struct in - return " & structRet.message
+If structRet.message <> "Now we are in VBThis string was set in OleTest" Then
+    MsgBox "error"
+End If
+
 'inout later
 
 'Arrays
@@ -237,6 +445,9 @@ seq = objOleTest.methodLong(arrLong)
 
 For countvar = 0 To 2
     Debug.Print CStr(seq(countvar))
+    If arrLong(countvar) <> seq(countvar) Then
+        MsgBox "error"
+    End If
 Next
 seq = objOleTest.methodXInterface(arrObj)
 For countvar = 0 To 2
@@ -255,6 +466,9 @@ objOleTest.testout_methodSequence seqX
 Dim key
 For Each key In seqX
     Debug.Print CStr(seqX(key))
+    If seqX(key) <> key Then
+        MsgBox "error"
+    End If
 Next
 'Get a sequence created in UNO, out param is array Variant ( VT_BYREF|VT_VARIANT|VT_ARRAY)
 Dim seqX2() As Variant
@@ -270,6 +484,9 @@ seq7 = objOleTest.methodLong(seqX)
 Dim key2
 For Each key2 In seq7
     Debug.Print CStr(seq7(key2))
+    If seqX2(key) <> key Then
+        MsgBox "error"
+    End If
 Next
 
 'in out Array
@@ -277,14 +494,17 @@ Next
 Dim inoutVar(2) As Variant
 
 For countvar = 0 To 2
-    Debug.Print countvar
     inoutVar(countvar) = countvar + 10
 Next
 
 objOleTest.testinout_methodSequence inoutVar
-Dim key5
-For Each key5 In inoutVar
-    Debug.Print CStr(key5)
+
+countvar = 0
+For countvar = 0 To 2
+    Debug.Print CStr(inoutVar(countvar))
+    If inoutVar(countvar) <> countvar + 11 Then
+        MsgBox "error"
+    End If
 Next
 
 'Multidimensional array
@@ -418,14 +638,5 @@ Debug.Print ret
 If ret <> 65 Then
     MsgBox "error"
 End If
-
-
-
-
-
-Dim var As Boolean
-var = True
-Debug.Print CStr(var)
-
 
 End Sub
