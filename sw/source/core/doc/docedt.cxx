@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docedt.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 13:28:47 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 14:47:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1700,8 +1700,6 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
 {
     SwPosition* pSttPos = rPaM.Start(), *pEndPos = rPaM.End();
     uno::Reference< beans::XPropertySet >  xProp( ::GetLinguPropertySet() );
-    sal_Bool bReverse = (!pConvWrapper && xProp.is()) ?
-            *(sal_Bool*)xProp->getPropertyValue( S2U(UPN_IS_WRAP_REVERSE) ).getValue() : sal_False;
 
     SwSpellArgs      *pSpellArgs = 0;
     SwConversionArgs *pConvArgs  = 0;
@@ -1721,11 +1719,6 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
     {
         SwCntntFrm* pCntFrm;
         sal_uInt32 nCount = nEndNd - nCurrNd;
-        if( bReverse )
-        {
-            nCurrNd = nEndNd;
-            nEndNd = nCurrNd - nCount;
-        }
         sal_Bool bGoOn = sal_True;
         while( bGoOn )
         {
@@ -1739,8 +1732,7 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
                     //ebenfalls
                     if( pCntFrm->IsProtected() )
                     {
-                        nCurrNd = bReverse ? pNd->StartOfSectionIndex()
-                                           : pNd->EndOfSectionIndex();
+                        nCurrNd = pNd->EndOfSectionIndex();
                     }
                     else if( !((SwTxtFrm*)pCntFrm)->IsHiddenNow() )
                     {
@@ -1755,13 +1747,9 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
                             }
                             long nStat;
                             if( nPageNr >= *pPageSt )
-                                nStat = bReverse ?
-                                    *pPageCnt - nPageNr + *pPageSt + 1 :
-                                    nPageNr - *pPageSt + 1;
+                                nStat = nPageNr - *pPageSt + 1;
                             else
-                                nStat = bReverse ?
-                                    *pPageSt - nPageNr + 1 :
-                                    nPageNr + *pPageCnt - *pPageSt + 1;
+                                nStat = nPageNr + *pPageCnt - *pPageSt + 1;
                             ::SetProgressState( nStat, (SwDocShell*)GetDocShell() );
                         }
                         if( (!pConvWrapper &&
@@ -1778,34 +1766,18 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
                 }
                 break;
             case ND_SECTIONNODE:
-                if( !bReverse &&
-                    ( ((SwSectionNode*)pNd)->GetSection().IsProtect() ||
+                if( ( ((SwSectionNode*)pNd)->GetSection().IsProtect() ||
                     ((SwSectionNode*)pNd)->GetSection().IsHidden() ) )
                     nCurrNd = pNd->EndOfSectionIndex();
                 break;
             case ND_ENDNODE:
                 {
-                    SwNode* pTmp;
-                    if( bReverse && 0 != (pTmp = pNd->StartOfSectionNode() ) &&
-                        ND_SECTIONNODE == pTmp->GetNodeType() &&
-                        ( ((SwSectionNode*)pTmp)->GetSection().IsProtect() ||
-                            ((SwSectionNode*)pTmp)->GetSection().IsHidden() ) )
-                        nCurrNd = pNd->StartOfSectionIndex();
                     break;
                 }
             }
 
-            if( bReverse )
-            {
-                bGoOn = nCurrNd > nEndNd;
-                if( bGoOn )
-                    --nCurrNd;
-            }
-            else
-            {
-                bGoOn = nCurrNd < nEndNd;
-                ++nCurrNd;
-            }
+            bGoOn = nCurrNd < nEndNd;
+            ++nCurrNd;
         }
     }
 
