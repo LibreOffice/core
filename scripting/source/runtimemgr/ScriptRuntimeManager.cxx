@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptRuntimeManager.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dfoster $ $Date: 2002-09-20 14:33:31 $
+ *  last change: $Author: aledoux $ $Date: 2002-09-24 12:59:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,7 +125,8 @@ throw(RuntimeException)
     }
     catch (Exception &e)
     {
-        throw RuntimeException(OUSTR("ScriptRuntimeManager::GetScriptRuntime: ") + e.Message, Reference< XInterface >());
+        OUString temp = OUSTR("ScriptRuntimeManager::GetScriptRuntime: ");
+        throw RuntimeException( temp.concat(e.Message), Reference< XInterface >());
     }
 
     return xScriptInvocation;
@@ -152,7 +153,8 @@ throw(RuntimeException)
     }
     catch (Exception &e)
     {
-        throw RuntimeException(OUSTR("ScriptRuntimeManager::GetScriptNameResolver: ") + e.Message, Reference< XInterface >());
+        OUString temp = OUSTR("ScriptRuntimeManager::GetScriptNameResolver: ");
+        throw RuntimeException( temp.concat(e.Message), Reference< XInterface >());
     }
     return xScriptNameResolver;
 }
@@ -184,22 +186,26 @@ Any SAL_CALL ScriptRuntimeManager::invoke(
     }
     catch (lang::IllegalArgumentException & iae)
     {
-        throw lang::IllegalArgumentException(OUSTR("ScriptRuntimeManager::invoke IllegalArgumentException: ")+iae.Message,
+        OUString temp = OUSTR("ScriptRuntimeManager::invoke IllegalArgumentException: ");
+        throw lang::IllegalArgumentException(temp.concat(iae.Message),
                                              Reference<XInterface> (), iae.ArgumentPosition);
     }
     catch (script::CannotConvertException & cce)
     {
-        throw script::CannotConvertException(OUSTR("ScriptRuntimeManager::invoke CannotConvertException: ")+cce.Message,
+        OUString temp = OUSTR("ScriptRuntimeManager::invoke CannotConvertException: ");
+        throw script::CannotConvertException(temp.concat(cce.Message),
                                              Reference<XInterface> (), cce.DestinationTypeClass, cce.Reason, cce.ArgumentIndex);
     }
     catch (reflection::InvocationTargetException & ite)
     {
-        throw reflection::InvocationTargetException(OUSTR("ScriptRuntimeManager::invoke InvocationTargetException: ")+ite.Message,
+        OUString temp = OUSTR("ScriptRuntimeManager::invoke InvocationTargetException: ");
+        throw reflection::InvocationTargetException(temp.concat(ite.Message),
                 Reference<XInterface> (), ite.TargetException);
     }
     catch (RuntimeException & re)
     {
-        throw RuntimeException(OUSTR("ScriptRuntimeManager::invoke RuntimeException: ")+re.Message,
+        OUString temp = OUSTR("ScriptRuntimeManager::invoke RuntimeException: ");
+        throw RuntimeException(temp.concat(re.Message),
                                Reference<XInterface> ());
     }
 #ifdef _DEBUG
@@ -229,17 +235,20 @@ throw(lang::IllegalArgumentException, script::CannotConvertException, RuntimeExc
     }
     catch (lang::IllegalArgumentException & iae)
     {
-        throw lang::IllegalArgumentException(OUSTR("ScriptRuntimeManager::resolve IllegalArgumentException: ")+iae.Message,
+        OUString temp = OUSTR("ScriptRuntimeManager::resolve IllegalArgumentException: ");
+        throw lang::IllegalArgumentException(temp.concat(iae.Message),
                                              Reference<XInterface> (), iae.ArgumentPosition);
     }
     catch (script::CannotConvertException & cce)
     {
-        throw script::CannotConvertException(OUSTR("ScriptRuntimeManager::resolve CannotConvertException: ")+cce.Message,
+        OUString temp = OUSTR("ScriptRuntimeManager::resolve CannotConvertException: ");
+        throw script::CannotConvertException(temp.concat(cce.Message),
                                              Reference<XInterface> (), cce.DestinationTypeClass, cce.Reason, cce.ArgumentIndex);
     }
     catch (RuntimeException & re)
     {
-        throw RuntimeException(OUSTR("ScriptRuntimeManager::resolve RuntimeException: ")+re.Message,
+        OUString temp = OUSTR("ScriptRuntimeManager::resolve RuntimeException: ");
+        throw RuntimeException(temp.concat(re.Message),
                                Reference<XInterface> ());
     }
 #ifdef _DEBUG

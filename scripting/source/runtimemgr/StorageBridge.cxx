@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StorageBridge.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dfoster $ $Date: 2002-09-20 14:33:32 $
+ *  last change: $Author: aledoux $ $Date: 2002-09-24 12:59:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,8 @@ StorageBridge::StorageBridge( const Reference< XComponentContext >& xContext, sa
     }
     catch(RuntimeException& re)
     {
-        throw RuntimeException(OUSTR("StorageBridge::StorageBridge(salIn32&): ") + re.Message, Reference< XInterface >());
+        OUString temp = OUSTR("StorageBridge::StorageBridge(salIn32&): ");
+        throw RuntimeException( temp.concat(re.Message), Reference< XInterface >());
     }
 }
 
@@ -129,7 +130,8 @@ StorageBridge::initStorage() throw (::com::sun::star::uno::RuntimeException)
     }
     catch (Exception e)
     {
-        throw RuntimeException(OUSTR("StorageBridge::StorageBridge: ") + e.Message, Reference< XInterface >());
+        OUString temp = OUSTR("StorageBridge::StorageBridge: ");
+        throw RuntimeException( temp.concat(e.Message), Reference< XInterface >());
     }
 }
 //*************************************************************************
@@ -145,7 +147,8 @@ throw (lang::IllegalArgumentException, RuntimeException)
     }
     catch (Exception e)
     {
-        throw RuntimeException(OUSTR("StorageBridge::getImplementations: ") + e.Message, Reference< XInterface >());
+        OUString temp = OUSTR("StorageBridge::getImplementations: ");
+        throw RuntimeException( temp.concat(e.Message), Reference< XInterface >());
     }
     return results;
 }

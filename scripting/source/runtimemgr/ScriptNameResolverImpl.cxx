@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptNameResolverImpl.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dfoster $ $Date: 2002-09-20 14:33:29 $
+ *  last change: $Author: aledoux $ $Date: 2002-09-24 12:59:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,7 +146,8 @@ throw (lang::IllegalArgumentException, script::CannotConvertException, RuntimeEx
     }
     catch (Exception & e)
     {
-        throw RuntimeException(OUSTR("ScriptNameResolverImpl::resolve : problem with getPropertyValue")+e.Message,
+        OUString temp = OUSTR("ScriptNameResolverImpl::resolve : problem with getPropertyValue");
+        throw RuntimeException(temp.concat(e.Message),
                                Reference<XInterface> ());
     }
 #ifdef _DEBUG
@@ -191,6 +192,7 @@ throw (lang::IllegalArgumentException, script::CannotConvertException, RuntimeEx
             OSL_TRACE("unknown exception thrown by storage %d, failed to match uri",*iter);
         }
 #endif
+
     }
 
 
@@ -279,17 +281,20 @@ ScriptNameResolverImpl::resolveURIFromStorageID(sal_Int16 sid, const Reference< 
     }
     catch (lang::IllegalArgumentException & iae)
     {
-        throw lang::IllegalArgumentException(OUSTR("ScriptRuntimeManager::resolveURIFromStorageID IllegalArgumentException: ")+iae.Message,
+        OUString temp = OUSTR("ScriptRuntimeManager::resolveURIFromStorageID IllegalArgumentException: ");
+        throw lang::IllegalArgumentException(temp.concat(iae.Message),
                                              Reference<XInterface> (), iae.ArgumentPosition);
     }
     catch (RuntimeException & re)
     {
-        throw RuntimeException(OUSTR("ScriptRuntimeManager::resolveURIFromStorageID RuntimeException: ")+re.Message,
+        OUString temp = OUSTR("ScriptRuntimeManager::resolveURIFromStorageID RuntimeException: ");
+        throw RuntimeException(temp.concat(re.Message),
                                Reference<XInterface> ());
     }
     catch (Exception & e)
     {
-        throw RuntimeException(OUSTR("ScriptNameResolverImpl::resolveURIFromStorageID : Unknown Exception caught - RuntimeException rethrown")+e.Message,
+        OUString temp = OUSTR("ScriptNameResolverImpl::resolveURIFromStorageID : Unknown Exception caught - RuntimeException rethrown");
+        throw RuntimeException(temp.concat(e.Message),
                                Reference<XInterface> ());
     }
 #ifdef _DEBUG
