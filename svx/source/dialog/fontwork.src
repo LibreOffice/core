@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontwork.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-01 20:46:13 $
+ *  last change: $Author: kz $ $Date: 2001-03-28 12:45:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -371,7 +371,7 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text [ italian ] = "Centrato" ;
                 Text [ spanish ] = "Centrado" ;
                 Text [ french ] = "Centré" ;
-                Text [ swedish ] = "Centrera" ;
+                Text [ swedish ] = "Centrerat" ;
                 Text [ danish ] = "Centreret" ;
                 Text [ portuguese ] = "Centrado" ;
                 Text [ portuguese_brazilian ] = "Zentriert" ;
