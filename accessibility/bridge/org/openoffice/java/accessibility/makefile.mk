@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: rt $ $Date: 2003-04-17 15:26:48 $
+#   last change: $Author: vg $ $Date: 2003-05-22 12:40:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -152,6 +152,3 @@ $(JAVADIR)$/$(PACKAGE)$/%.java:
 $(CLASSDIR)$/$(PACKAGE)$/Build.class : $(JAVADIR)$/$(PACKAGE)$/Build.java
     -+$(JAVAC) -d $(CLASSDIR) $(JAVADIR)$/$(PACKAGE)$/Build.java
 
-.IF "$(JAVAVER:s/.//)" >= "140" 
-$(JAVACLASSFILES) : $(UCR)$/internal.db
-.ENDIF
