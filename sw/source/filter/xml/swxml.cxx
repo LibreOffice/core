@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swxml.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: mib $ $Date: 2001-05-09 16:25:09 $
+ *  last change: $Author: mtg $ $Date: 2001-05-10 14:07:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -581,14 +581,12 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
                 aOpt.IsFmtsOnly(), nStyleFamilyMask, !aOpt.IsMerge(),
                 sal_False );
 
-#if 0
         nWarn2 = ReadThroughComponent(
             pStorage, xModelComp, "settings.xml", NULL, xServiceFactory,
             "com.sun.star.comp.Writer.XMLSettingsImporter",
             aFilterArgs, rName, sal_False, IsBlockMode(), xInsertTextRange,
             aOpt.IsFmtsOnly(), nStyleFamilyMask, !aOpt.IsMerge(),
             IsOrganizerMode() );
-#endif
 
         // update redline view mode (was set in view settings)
         bTmp = IsShowChanges(rDoc.GetRedlineMode());
