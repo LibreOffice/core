@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sddll.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:20:43 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 08:54:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,7 +178,7 @@ void SdDLL::Init()
     FmFormObjFactory();
 
     // factory for dummy import of old si-controls in 3.1 documents
-    SiImportFactory();
+//BFS02    SiImportFactory();
 
     // Objekt-Factory eintragen
     SdrObjFactory::InsertMakeUserDataHdl(LINK(&aSdObjectFactory, SdObjectFactory, MakeUserData));
