@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SvXMLAutoCorrectImport.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:27:13 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 17:50:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 #define _SV_XMLAUTOCORRECTIMPORT_HXX
 
 #ifndef _SVSTOR_HXX
-#include <so3/svstor.hxx>
+#include <sot/storage.hxx>
 #endif
 
 #ifndef _XMLOFF_XMLICTXT_HXX
