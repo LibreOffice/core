@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mn.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:49:00 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 18:51:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,8 @@ String MN_TEXT_POPUPMENU
     Text[ hebrew ] = "‮טקסט‬";
     Text[ hindi ] = "टेक्स्ट्";
     Text[ slovak ] = "Text";
+    Text[ hungarian ] = "Szöveg";
+    Text[ slovenian ] = "Besedilo";
 };
 
 
@@ -133,6 +135,8 @@ String MN_TAB_POPUPMENU
     Text[ hebrew ] = "‮טבלה‬";
     Text[ hindi ] = "सारणी";
     Text[ slovak ] = "Tabuľka";
+    Text[ hungarian ] = "Táblázat";
+    Text[ slovenian ] = "Tabela";
 };
 
 Menu MN_TAB_POPUPMENU
@@ -169,7 +173,7 @@ Menu MN_TAB_POPUPMENU
             Text [ portuguese_brazilian ] = "Limites da Tabela" ;
             Text [ portuguese ] = "~Limites da tabela" ;
             Text [ finnish ] = "Taulukon rajat" ;
-            Text [ danish ] = "Tabelgr�nse" ;
+            Text [ danish ] = "Tabelgr�nser" ;
             Text [ french ] = "D�limitations de t~ableau" ;
             Text [ swedish ] = "Tabellbegr~�nsning" ;
             Text [ dutch ] = "Tabelbegren~zing" ;
@@ -186,10 +190,12 @@ Menu MN_TAB_POPUPMENU
             Text[ turkish ] = "Tablo s�n�rlamalar�";
             Text[ catalan ] = "~L�mits de la taula";
             Text[ thai ] = "ขีดจำกัดตาราง";
-            Text[ czech ] = "Limity tabulky";
+            Text[ czech ] = "Hranice polí";
             Text[ hebrew ] = "‮גבולות טבלה‬";
             Text[ hindi ] = "सारणी सीमा";
             Text[ slovak ] = "Limity tabuľky";
+            Text[ hungarian ] = "Tábla korlátai";
+            Text[ slovenian ] = "Meje tabele";
         };
         MenuItem
         {
@@ -205,7 +211,7 @@ Menu MN_TAB_POPUPMENU
             Text[ french ] = "~Reconnaissance des nombres";
             Text[ spanish ] = "~Reconocimiento de n�mero";
             Text[ italian ] = "Riconoscim~ento numeri";
-            Text[ danish ] = "Talgenkendelse";
+            Text[ danish ] = "~Talgenkendelse";
             Text[ swedish ] = "Talig~enk�nning";
             Text[ polish ] = "Rozpoznawanie ~liczb";
             Text[ portuguese_brazilian ] = "Reconhecer dados ~num�ricos";
@@ -222,6 +228,8 @@ Menu MN_TAB_POPUPMENU
             Text[ hebrew ] = "‮זיהוי מספרים‬";
             Text[ hindi ] = "~संख्या पहचान";
             Text[ slovak ] = "~Rozpoznávanie čísel";
+            Text[ hungarian ] = "~Számfelismerés";
+            Text[ slovenian ] = "Prepoznavanje š~tevil";
         };
         SEPARATOR ;
         _DEFAULT_TEXT_EDIT_ELEMENTS
@@ -259,6 +267,8 @@ String MN_FRM_POPUPMENU
     Text[ hebrew ] = "‮מסגרת‬";
     Text[ hindi ] = "फ्रेम ";
     Text[ slovak ] = "Rámček";
+    Text[ hungarian ] = "Keret";
+    Text[ slovenian ] = "Okvir";
 };
 
 Menu MN_FRM_POPUPMENU
@@ -304,6 +314,8 @@ String MN_DRAW_POPUPMENU
     Text[ hebrew ] = "Grafik";
     Text[ hindi ] = "सुचित्र";
     Text[ slovak ] = "Obrázok";
+    Text[ hungarian ] = "Kép";
+    Text[ slovenian ] = "Grafika";
 };
 
 Menu MN_DRAW_POPUPMENU
@@ -356,6 +368,8 @@ String MN_DRAWFORM_POPUPMENU
     Text[ hebrew ] = "Kontrollfeld";
     Text[ hindi ] = "नियंत्रण";
     Text[ slovak ] = "Ovládací prvok";
+    Text[ hungarian ] = "Vezérlés";
+    Text[ slovenian ] = "Kontrolnik";
 };
 
 Menu MN_DRAWFORM_POPUPMENU
@@ -406,6 +420,8 @@ String MN_DRWTXT_POPUPMENU
     Text[ hebrew ] = "Zeichenobjekt Text";
     Text[ hindi ] = "चित्रित वस्तु का टेक्स्ट्";
     Text[ slovak ] = "Text kresby";
+    Text[ hungarian ] = "Rajzobjektum szövege";
+    Text[ slovenian ] = "Besedilo risanega predmeta";
 };
 
 Menu MN_DRWTXT_POPUPMENU
@@ -453,6 +469,8 @@ String MN_GRF_POPUPMENU
     Text[ hebrew ] = "Grafik";
     Text[ hindi ] = "सुचित्र";
     Text[ slovak ] = "Obrázok";
+    Text[ hungarian ] = "Kép";
+    Text[ slovenian ] = "Grafika";
 };
 
 Menu MN_GRF_POPUPMENU
@@ -504,6 +522,8 @@ String MN_OLE_POPUPMENU
     Text[ hebrew ] = "‮אוביקט‬";
     Text[ hindi ] = "वस्तु";
     Text[ slovak ] = "Objekt";
+    Text[ hungarian ] = "Objektum";
+    Text[ slovenian ] = "Predmet";
 };
 
 
@@ -532,7 +552,7 @@ String MN_PPREVIEW_POPUPMENU
     Text [ french ] = "Texte objet de dessin" ;
     Text [ dutch ] = "Tekenobject tekst" ;
     Text [ swedish ] = "Ritobjekt text" ;
-    Text [ danish ] = "Tegneobjekt" ;
+    Text [ danish ] = "Tegneobjekt tekst" ;
     Text [ portuguese ] = "Texto do objecto de desenho" ;
     Text [ portuguese_brazilian ] = "Texto do objeto de desenho" ;
     Text[ chinese_simplified ] = "绘图对象 文字";
@@ -551,6 +571,8 @@ String MN_PPREVIEW_POPUPMENU
     Text[ hebrew ] = "Zeichenobjekt Text";
     Text[ hindi ] = "चित्रित वस्तु का टेक्स्ट्";
     Text[ slovak ] = "Text kresby";
+    Text[ hungarian ] = "Rajzobjektum szövege";
+    Text[ slovenian ] = "Besedilo risanega predmeta";
 };
 
 Menu MN_PPREVIEW_POPUPMENU
@@ -588,6 +610,8 @@ Menu MN_PPREVIEW_POPUPMENU
             Text[ hebrew ] = "‮הדף הקודם‬";
             Text[ hindi ] = "पिछला पृष्ठ";
             Text[ slovak ] = "Predchádzajúca strana";
+            Text[ hungarian ] = "Előző oldal";
+            Text[ slovenian ] = "Prejšnja stran";
         };
         MenuItem
         {
@@ -621,6 +645,8 @@ Menu MN_PPREVIEW_POPUPMENU
             Text[ hebrew ] = "‮הדף הבא‬";
             Text[ hindi ] = "अगला पृष्ठ";
             Text[ slovak ] = "Ďalšia strana";
+            Text[ hungarian ] = "Következő oldal";
+            Text[ slovenian ] = "Naslednja stran";
         };
         MenuItem
         {
@@ -640,7 +666,7 @@ Menu MN_PPREVIEW_POPUPMENU
             Text [ spanish ] = "Imprimir vista preliminar" ;
             Text [ french ] = "Imprimer l'aper�u" ;
             Text [ swedish ] = "Skriv ut f�rhandsgranskning" ;
-            Text [ danish ] = "Udskriv sidevisning" ;
+            Text [ danish ] = "Udskriv" ;
             Text [ portuguese ] = "Imprimir Ver p�gina" ;
             Text [ portuguese_brazilian ] = "Imprimir" ;
             Text[ chinese_simplified ] = "打印页面预览";
@@ -660,6 +686,8 @@ Menu MN_PPREVIEW_POPUPMENU
             Text[ hebrew ] = "‮הדפסה‬";
             Text[ hindi ] = "छपाई";
             Text[ slovak ] = "Tlač";
+            Text[ hungarian ] = "Nyomtatás";
+            Text[ slovenian ] = "Natisni";
         };
         MenuItem
         {
@@ -692,6 +720,8 @@ Menu MN_PPREVIEW_POPUPMENU
             Text[ hebrew ] = "Druckoptionen";
             Text[ hindi ] = "छपाई विकल्प";
             Text[ slovak ] = "Nastavenia tlače";
+            Text[ hungarian ] = "Nyomtatási beállítások";
+            Text[ slovenian ] = "Možnosti tiskanja";
         };
         SEPARATOR ;
         MenuItem
@@ -703,12 +733,12 @@ Menu MN_PPREVIEW_POPUPMENU
             Text[ portuguese ] = "Close Preview";
             Text[ russian ] = "Close Preview";
             Text[ greek ] = "Close Preview";
-            Text[ dutch ] = "Close Preview";
+            Text[ dutch ] = "Afdrukvoorbeeld sluiten";
             Text[ french ] = "Fermer l'aper�u";
             Text[ spanish ] = "Cerrar la vista preliminar";
             Text[ finnish ] = "Close Preview";
             Text[ italian ] = "Chiudi anteprima";
-            Text[ danish ] = "Close Preview";
+            Text[ danish ] = "Luk eksempel";
             Text[ swedish ] = "St�ng f�rhandsgranskning";
             Text[ polish ] = "Close Preview";
             Text[ portuguese_brazilian ] = "Fechar visualiza��o";
@@ -724,9 +754,13 @@ Menu MN_PPREVIEW_POPUPMENU
             Text[ hebrew ] = "‮סגירת תצוגה מקדימה‬";
             Text[ hindi ] = "Close Preview";
             Text[ slovak ] = "Zatvoriť náhľad";
+            Text[ hungarian ] = "Nyomtatási kép bezárása";
+            Text[ slovenian ] = "Zapri predogled";
         };
     };
 };
+
+
 
 
 
