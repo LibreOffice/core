@@ -2,9 +2,9 @@
  *
  *  $RCSfile: streamstr.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: np $ $Date: 2002-05-14 08:08:46 $
+ *  last change: $Author: mh $ $Date: 2002-08-13 12:29:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,7 @@
 // NOT FULLY DECLARED SERVICES
 #include <string.h>
 #include <stdio.h>
-#if defined(WNT) || defined(LINUX)
+#if defined(WNT) || defined(LINUX) || defined(MACOSX)
 #include <stdarg.h>
 #else
 #include <sys/varargs.h>
