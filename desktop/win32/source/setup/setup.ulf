@@ -75,8 +75,8 @@ en-US = "Usage:\n   /? :  Shows this dialog.\n   /a :  Performs an administrativ
 de = "Benutzung:\n   /? :  Zeigt diesen Dialog.\n   /a :  Eine Administrative Installation durchführen.\n   /j[u|m] :  Das Produkt auf dem Rechner ankündigen (advertising).\n   /q[n] : Zeige keine Benutzeroberfläche (ohne Rückmeldung).\n"
 
 [%UNKNOWN_ERROR%]
-en-US = "A Unknown Error occured!"
-de = "A Unknown Error occured!"
+en-US = "An Unknown Error occured!"
+de = "An Unknown Error occured!"
 
 [%UNKNOWN_LANG%]
 en-US = "Unknown Language: %d"
