@@ -2,9 +2,9 @@
  *
  *  $RCSfile: facreg.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:06:11 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 08:13:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,6 +197,12 @@ SERVICE( XMLMetaExportComponent );
 // meta import
 SERVICE( XMLMetaImportComponent );
 
+// meta export OOo
+SERVICE( XMLMetaExportOOO );
+
+// meta import OOo
+SERVICE( XMLMetaImportOOO );
+
 // writer autotext event export
 SERVICE( XMLAutoTextEventExport );
 
@@ -351,7 +357,10 @@ sal_Bool SAL_CALL component_writeInfo( void * pServiceManager, void * pRegistryK
             // meta
             WRITEINFO( XMLMetaImportComponent );
             WRITEINFO( XMLMetaExportComponent );
-            WRITEINFO( XMLMetaExportComponent );
+
+            // meta OOo
+            WRITEINFO( XMLMetaImportOOO );
+            WRITEINFO( XMLMetaExportOOO );
 
             // writer auto text events
             WRITEINFO( XMLAutoTextEventExport );
@@ -497,6 +506,10 @@ void * SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServic
         // meta import/export
         else SINGLEFACTORY( XMLMetaExportComponent )
         else SINGLEFACTORY( XMLMetaImportComponent )
+
+        // meta import/export OOo
+        else SINGLEFACTORY( XMLMetaExportOOO )
+        else SINGLEFACTORY( XMLMetaImportOOO )
 
         // auto text import/export
         else SINGLEFACTORY( XMLAutoTextEventExport )
