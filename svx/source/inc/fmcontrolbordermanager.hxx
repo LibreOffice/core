@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmcontrolbordermanager.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 11:29:29 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 12:22:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
 #endif
 /** === end UNO includes === **/
+#ifndef _COMPHELPER_STLTYPES_HXX_
+#include <comphelper/stl_types.hxx>
+#endif
 
 #ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
@@ -112,6 +115,11 @@ namespace svxform
             ,nBorderColor( 0x00000000 )
         {
         }
+        inline void clear()
+        {
+            nBorderType = ::com::sun::star::awt::VisualEffect::FLAT;
+            nBorderColor = 0x00000000;
+        }
     };
 
     //====================================================================
@@ -133,6 +141,12 @@ namespace svxform
             ,nUnderlineColor( _nUnderlineColor )
         {
         }
+
+        inline void clear()
+        {
+            nUnderlineType = ::com::sun::star::awt::FontUnderline::NONE;
+            nUnderlineColor = 0x00000000;
+        }
     };
 
     //====================================================================
@@ -147,6 +161,13 @@ namespace svxform
         ControlData( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& _rxControl )
             :xControl( _rxControl )
         {
+        }
+        void clear()
+        {
+            BorderDescriptor::clear();
+            UnderlineDescriptor::clear();
+            xControl.clear();
+            sOriginalHelpText = ::rtl::OUString();
         }
     };
 
@@ -172,13 +193,19 @@ namespace svxform
         };
 
         typedef ::std::set< ControlData, ControlDataCompare > ControlBag;
+        typedef ::com::sun::star::awt::XVclWindowPeer                                       WindowPeer;
+        typedef ::com::sun::star::uno::Reference< ::com::sun::star::awt::XVclWindowPeer >   WindowPeerRef;
+        typedef ::std::set< WindowPeerRef, ::comphelper::OInterfaceCompare< WindowPeer > >  PeerBag;
 
-        // ----------------
-        // attributes
+        PeerBag     m_aColorableControls;
+        PeerBag     m_aNonColorableControls;
+
         ControlData m_aFocusControl;
         ControlData m_aMouseHoverControl;
         ControlBag  m_aInvalidControls;
 
+        // ----------------
+        // attributes
         sal_Int32   m_nFocusColor;
         sal_Int32   m_nMouseHoveColor;
         sal_Int32   m_nInvalidColor;
