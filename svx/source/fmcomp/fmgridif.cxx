@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmgridif.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:02:19 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 13:48:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,7 +153,9 @@
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
 #endif
-
+#ifndef SVX_FORM_SDBDATACOLUMN_HXX
+#include "sdbdatacolumn.hxx"
+#endif
 // [ed] 6/19/02 Note to future authors in this file:  MACOSX has a very difficult time
 // with this file and it ices on gcc2 without the MACOSX changes.  So please...
 //
@@ -1351,14 +1353,13 @@ Sequence< sal_Bool > SAL_CALL FmXGridPeer::queryFieldDataType( const Type& xType
 
         pCol = aColumns.GetObject(nModelPos);
         const DbGridRowRef xRow = pGrid->GetSeekRow();
-        xFieldContent = (xRow.Is() && xRow->HasField(pCol->GetFieldPos())) ? (const Reference< ::com::sun::star::sdb::XColumn >&)xRow->GetField(pCol->GetFieldPos()) : Reference< ::com::sun::star::sdb::XColumn > ();
+        xFieldContent = (xRow.Is() && xRow->HasField(pCol->GetFieldPos())) ? xRow->GetField(pCol->GetFieldPos()).getColumn() : Reference< ::com::sun::star::sdb::XColumn > ();
         if (!xFieldContent.is())
             // can't supply anything without a field content
             // FS - 07.12.99 - 54391
             continue;
 
-        xCurrentColumn;
-        ::cppu::extractInterface(xCurrentColumn, xColumns->getByIndex(nModelPos));
+        xColumns->getByIndex(nModelPos) >>= xCurrentColumn;
         if (!::comphelper::hasProperty(FM_PROP_CLASSID, xCurrentColumn))
             continue;
 
@@ -1415,7 +1416,7 @@ Sequence< Any > SAL_CALL FmXGridPeer::queryFieldData( sal_Int32 nRow, const Type
         // FS - 30.09.99 - 68644
         pCol = aColumns.GetObject(nModelPos);
         const DbGridRowRef xRow = pGrid->GetSeekRow();
-        xFieldContent = (xRow.Is() && xRow->HasField(pCol->GetFieldPos())) ? (const Reference< ::com::sun::star::sdb::XColumn >&)xRow->GetField(pCol->GetFieldPos()) : Reference< ::com::sun::star::sdb::XColumn > ();
+        xFieldContent = (xRow.Is() && xRow->HasField(pCol->GetFieldPos())) ? xRow->GetField(pCol->GetFieldPos()).getColumn() : Reference< ::com::sun::star::sdb::XColumn > ();
 
         if (xFieldContent.is())
         {
