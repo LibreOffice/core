@@ -2,9 +2,9 @@
  *
  *  $RCSfile: texteng.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 14:13:49 $
+ *  last change: $Author: rt $ $Date: 2004-09-21 09:59:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -354,10 +354,6 @@ String TextEngine::GetTextLines( LineEnd aSeparator ) const
         }
     }
     return aText;
-}
-void  TextEngine::ReplaceText(const TextSelection& rSel, const String& rText)
-{
-    ImpInsertText( rSel, rText );
 }
 
 String TextEngine::GetText( ULONG nPara ) const
