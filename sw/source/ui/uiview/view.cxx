@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: jp $ $Date: 2001-11-23 15:06:14 $
+ *  last change: $Author: tl $ $Date: 2002-02-19 13:32:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,9 @@
 #endif
 #ifndef INCLUDED_SVTOOLS_UNDOOPT_HXX
 #include <svtools/undoopt.hxx>
+#endif
+#ifndef _SVTOOLS_LINGUCFG_HXX_
+#include <svtools/lingucfg.hxx>
 #endif
 #ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
@@ -829,14 +832,13 @@ SwView::SwView( SfxViewFrame *pFrame, SfxViewShell* pOldSh )
 
     const SwMasterUsrPref *pUsrPref = SW_MOD()->GetUsrPref(0 != pWebDShell);
     SwViewOption aUsrPref( *pUsrPref);
-    uno::Reference< beans::XPropertySet >  xProp( ::GetLinguPropertySet() );
-    sal_Bool bVal;
-    bVal = xProp.is() ?
-            *(sal_Bool*)xProp->getPropertyValue( C2U(UPN_IS_SPELL_AUTO)).getValue() : sal_False;
-    aUsrPref.SetOnlineSpell( bVal );
-    bVal = xProp.is() ?
-            *(sal_Bool*)xProp->getPropertyValue( C2U(UPN_IS_SPELL_HIDE)).getValue() : sal_False;
-    aUsrPref.SetHideSpell( bVal );
+
+    //! get lingu options without loading lingu DLL
+    SvtLinguOptions aLinguOpt;
+    SvtLinguConfig().GetOptions( aLinguOpt );
+
+    aUsrPref.SetOnlineSpell( aLinguOpt.bIsSpellAuto );
+    aUsrPref.SetHideSpell( aLinguOpt.bIsSpellHideMarkings );
 
     sal_Bool bOldShellWasPagePreView = FALSE,
              bOldShellWasSrcView = FALSE;
