@@ -2,9 +2,9 @@
  *
  *  $RCSfile: laycache.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ama $ $Date: 2001-05-31 08:43:47 $
+ *  last change: $Author: ama $ $Date: 2001-06-22 07:56:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -526,6 +526,7 @@ SwLayHelper::SwLayHelper( SwDoc *pD, SwFrm* &rpF, SwFrm* &rpP, SwPageFrm* &rpPg,
     pImpl = pDoc->GetLayoutCache() ? pDoc->GetLayoutCache()->LockImpl() : NULL;
     if( pImpl )
     {
+        nMaxParaPerPage = 1000;
         nStartOfContent = pDoc->GetNodes().GetEndOfContent().FindStartNode()
                           ->GetIndex();
         nNodeIndex -= nStartOfContent;
@@ -540,7 +541,6 @@ SwLayHelper::SwLayHelper( SwDoc *pD, SwFrm* &rpF, SwFrm* &rpP, SwPageFrm* &rpPg,
     }
     else
     {
-        pImpl = NULL;
         nIndex = USHRT_MAX;
         nStartOfContent = ULONG_MAX;
     }
@@ -735,7 +735,7 @@ BOOL SwLayHelper::CheckInsert( ULONG nNodeIndex )
                 USHORT nType = SW_LAYCACHE_IO_REC_PAGES;
                 while( nIndex < pImpl->Count() &&
                        pImpl->GetBreakIndex(nIndex) < nNodeIndex)
-                    nIndex += 2;
+                    ++nIndex;
                 if( nIndex < pImpl->Count() &&
                     pImpl->GetBreakIndex(nIndex) == nNodeIndex )
                 {
