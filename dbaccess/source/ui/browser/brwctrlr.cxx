@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-01 10:11:12 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:31:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -560,9 +560,7 @@ SbaXDataBrowserController::SbaXDataBrowserController(const Reference< ::com::sun
 //------------------------------------------------------------------------------
 SbaXDataBrowserController::~SbaXDataBrowserController()
 {
-    delete m_pView;
-    m_pView = NULL;
-
+    //  deleteView();
     // release the aggregated form controller
     if (m_xFormControllerImpl.is())
     {
@@ -570,7 +568,12 @@ SbaXDataBrowserController::~SbaXDataBrowserController()
         m_xFormControllerImpl->setDelegator(xEmpty);
     }
 }
-
+// -----------------------------------------------------------------------------
+void SbaXDataBrowserController::deleteView()
+{
+    ::std::auto_ptr<ODataView> aTemp(m_pView);
+    m_pView = NULL;
+}
 // -----------------------------------------------------------------------
 void SAL_CALL SbaXDataBrowserController::attachFrame(const Reference< ::com::sun::star::frame::XFrame > & xFrame) throw( RuntimeException )
 {
@@ -650,8 +653,8 @@ sal_Bool SbaXDataBrowserController::Construct(Window* pParent)
     if (!m_xRowSet.is())
         return sal_False;
 
-    m_xColumnsSupplier  = Reference< XColumnsSupplier >(m_xRowSet, UNO_QUERY);
-    m_xLoadable         = Reference< XLoadable >(m_xRowSet, UNO_QUERY);
+    m_xColumnsSupplier.set(m_xRowSet,UNO_QUERY);
+    m_xLoadable.set(m_xRowSet,UNO_QUERY);
 
     if (!InitializeForm(m_xRowSet))
         return sal_False;
@@ -666,7 +669,7 @@ sal_Bool SbaXDataBrowserController::Construct(Window* pParent)
 
     // we want to have a grid with a "flat" border
     Reference< XPropertySet >  xGridSet(m_xGridModel, UNO_QUERY);
-    if (xGridSet.is())
+    if ( xGridSet.is() )
         xGridSet->setPropertyValue(PROPERTY_BORDER, makeAny((sal_Int16)2));
 
     // ----------
@@ -676,8 +679,6 @@ sal_Bool SbaXDataBrowserController::Construct(Window* pParent)
         String sText(ModuleRes(STR_DATASOURCE_GRIDCONTROL_NAME));
         xNameCont->insertByName(::rtl::OUString(sText), makeAny(m_xGridModel));
     }
-
-
 
     // ---------------
     // create the view
@@ -702,8 +703,7 @@ sal_Bool SbaXDataBrowserController::Construct(Window* pParent)
 
     if (!bSuccess)
     {
-        delete m_pView;
-        m_pView = NULL;
+        //  deleteView();
         return sal_False;
     }
 
@@ -794,10 +794,10 @@ void SbaXDataBrowserController::addModelListeners(const Reference< ::com::sun::s
     Reference< ::com::sun::star::container::XIndexContainer >  xColumns(getControlModel(), UNO_QUERY);
     if (xColumns.is())
     {
-        for (sal_uInt16 i=0; i<xColumns->getCount(); ++i)
+        sal_Int32 nCount = xColumns->getCount();
+        for (sal_uInt16 i=0; i < nCount; ++i)
         {
-            Reference< XPropertySet >  xCol;
-            xColumns->getByIndex(i) >>= xCol;
+            Reference< XPropertySet >  xCol(xColumns->getByIndex(i),UNO_QUERY);
             AddColumnListener(xCol);
         }
     }
@@ -819,10 +819,10 @@ void SbaXDataBrowserController::removeModelListeners(const Reference< ::com::sun
     Reference< ::com::sun::star::container::XIndexContainer >  xColumns(getControlModel(), UNO_QUERY);
     if (xColumns.is())
     {
-        for (sal_uInt16 i=0; i<xColumns->getCount(); ++i)
+        sal_Int32 nCount = xColumns->getCount();
+        for (sal_uInt16 i=0; i < nCount; ++i)
         {
-            Reference< XPropertySet >  xCol;
-            xColumns->getByIndex(i) >>= xCol;
+            Reference< XPropertySet >  xCol(xColumns->getByIndex(i),UNO_QUERY);
             RemoveColumnListener(xCol);
         }
     }
@@ -1086,9 +1086,9 @@ void SbaXDataBrowserController::elementInserted(const ::com::sun::star::containe
 {
     DBG_ASSERT(Reference< XInterface >(evt.Source, UNO_QUERY).get() == Reference< XInterface >(getControlModel(), UNO_QUERY).get(),
         "SbaXDataBrowserController::elementInserted: where did this come from (not from the grid model)?!");
-    Reference< XPropertySet >  xNewColumn;
-    evt.Element >>= xNewColumn;
-    AddColumnListener(xNewColumn);
+    Reference< XPropertySet >  xNewColumn(evt.Element,UNO_QUERY);
+    if ( xNewColumn.is() )
+        AddColumnListener(xNewColumn);
 }
 
 // -----------------------------------------------------------------------
@@ -1096,9 +1096,9 @@ void SbaXDataBrowserController::elementRemoved(const ::com::sun::star::container
 {
     DBG_ASSERT(Reference< XInterface >(evt.Source, UNO_QUERY).get() == Reference< XInterface >(getControlModel(), UNO_QUERY).get(),
         "SbaXDataBrowserController::elementRemoved: where did this come from (not from the grid model)?!");
-    Reference< XPropertySet >  xOldColumn;
-    evt.Element >>= xOldColumn;
-    RemoveColumnListener(xOldColumn);
+    Reference< XPropertySet >  xOldColumn(evt.Element,UNO_QUERY);
+    if ( xOldColumn.is() )
+        RemoveColumnListener(xOldColumn);
 }
 
 // -----------------------------------------------------------------------
@@ -1106,13 +1106,13 @@ void SbaXDataBrowserController::elementReplaced(const ::com::sun::star::containe
 {
     DBG_ASSERT(Reference< XInterface >(evt.Source, UNO_QUERY).get() == Reference< XInterface >(getControlModel(), UNO_QUERY).get(),
         "SbaXDataBrowserController::elementReplaced: where did this come from (not from the grid model)?!");
-    Reference< XPropertySet >  xOldColumn;
-    evt.ReplacedElement >>= xOldColumn;
-    RemoveColumnListener(xOldColumn);
+    Reference< XPropertySet >  xOldColumn(evt.ReplacedElement,UNO_QUERY);
+    if ( xOldColumn.is() )
+        RemoveColumnListener(xOldColumn);
 
-    Reference< XPropertySet >  xNewColumn;
-    evt.Element >>= xNewColumn;
-    AddColumnListener(xNewColumn);
+    Reference< XPropertySet >  xNewColumn(evt.Element,UNO_QUERY);
+    if ( xNewColumn.is() )
+        AddColumnListener(xNewColumn);
 }
 
 // -----------------------------------------------------------------------
@@ -1232,6 +1232,7 @@ void SbaXDataBrowserController::disposing()
 
     if ( getView() )
     {
+        m_pClipbordNotifier->ClearCallbackLink();
         m_pClipbordNotifier->AddRemoveListener( getView(), sal_False );
         m_pClipbordNotifier->release();
         m_pClipbordNotifier = NULL;
@@ -1264,6 +1265,14 @@ void SbaXDataBrowserController::disposing()
         {
             OSL_ENSURE(0,"Exception thrown by dispose");
         }
+    }
+    try
+    {
+        ::comphelper::disposeComponent(m_xParser);
+    }
+    catch(Exception&)
+    {
+        OSL_ENSURE(0,"Exception thrown by dispose");
     }
 }
 //------------------------------------------------------------------------------
@@ -1710,8 +1719,7 @@ void SbaXDataBrowserController::ExecuteFilterSortCrit(sal_Bool bFilter)
     try
     {
         Reference< ::com::sun::star::sdbcx::XColumnsSupplier> xSup = getColumnsSupplier();
-        Reference< XConnection> xCon;
-        xFormSet->getPropertyValue(PROPERTY_ACTIVECONNECTION) >>= xCon;
+        Reference< XConnection> xCon(xFormSet->getPropertyValue(PROPERTY_ACTIVECONNECTION),UNO_QUERY);
         if(bFilter)
         {
             DlgFilterCrit aDlg( getBrowserView(), m_xMultiServiceFacatory, xCon, m_xParser, xSup->getColumns() );
@@ -1775,15 +1783,13 @@ void SbaXDataBrowserController::ExecuteSearch()
     sal_Int16 nViewCol = xGrid->getCurrentColumnPosition();
     sal_Int16 nModelCol = getBrowserView()->View2ModelPos(nViewCol);
 
-    Reference< XPropertySet >  xCurrentCol;
-    xColumns->getByIndex(nModelCol) >>= xCurrentCol;
+    Reference< XPropertySet >  xCurrentCol(xColumns->getByIndex(nModelCol),UNO_QUERY);
     String sActiveField = ::comphelper::getString(xCurrentCol->getPropertyValue(PROPERTY_CONTROLSOURCE));
 
     // the text within the current cell
     String sInitialText;
     Reference< ::com::sun::star::container::XIndexAccess >  xColControls(xGridPeer, UNO_QUERY);
-    Reference< XInterface >  xCurControl;
-    xColControls->getByIndex(nViewCol) >>= xCurControl;
+    Reference< XInterface >  xCurControl(xColControls->getByIndex(nViewCol),UNO_QUERY);
     ::rtl::OUString aInitialText;
     if (IsSearchableControl(xCurControl, &aInitialText))
         sInitialText = (const sal_Unicode*)aInitialText;
@@ -2237,12 +2243,11 @@ Reference< XPropertySet >  SbaXDataBrowserController::getBoundField(sal_uInt16 n
 
     // get the according column from the model
     Reference< ::com::sun::star::container::XIndexContainer >  xCols(getControlModel(), UNO_QUERY);
-    Reference< XPropertySet >  xCurrentCol;
-    xCols->getByIndex(nCurrentCol) >>= xCurrentCol;
+    Reference< XPropertySet >  xCurrentCol(xCols->getByIndex(nCurrentCol),UNO_QUERY);
     if (!xCurrentCol.is())
         return xEmptyReturn;
 
-    xCurrentCol->getPropertyValue(PROPERTY_BOUNDFIELD) >>= xEmptyReturn;
+    xEmptyReturn.set(xCurrentCol->getPropertyValue(PROPERTY_BOUNDFIELD) ,UNO_QUERY);
     return xEmptyReturn;
 }
 
@@ -2260,8 +2265,7 @@ IMPL_LINK(SbaXDataBrowserController, OnSearchContextRequest, FmSearchContext*, p
     String sFieldList;
     for (sal_Int32 nViewPos=0; nViewPos<xPeerContainer->getCount(); ++nViewPos)
     {
-        Reference< XInterface >  xCurrentColumn;
-        xPeerContainer->getByIndex(nViewPos) >>= xCurrentColumn;
+        Reference< XInterface >  xCurrentColumn(xPeerContainer->getByIndex(nViewPos),UNO_QUERY);
         if (!xCurrentColumn.is())
             continue;
 
@@ -2270,8 +2274,7 @@ IMPL_LINK(SbaXDataBrowserController, OnSearchContextRequest, FmSearchContext*, p
             continue;
 
         sal_uInt16 nModelPos = getBrowserView()->View2ModelPos((sal_uInt16)nViewPos);
-        Reference< XPropertySet >  xCurrentColModel;
-        xModelColumns->getByIndex(nModelPos) >>= xCurrentColModel;
+        Reference< XPropertySet >  xCurrentColModel(xModelColumns->getByIndex(nModelPos),UNO_QUERY);
         ::rtl::OUString aName = ::comphelper::getString(xCurrentColModel->getPropertyValue(PROPERTY_CONTROLSOURCE));
 
         sFieldList += (const sal_Unicode*)aName;
@@ -2281,7 +2284,7 @@ IMPL_LINK(SbaXDataBrowserController, OnSearchContextRequest, FmSearchContext*, p
     }
     sFieldList.EraseTrailingChars(';');
 
-    pContext->xCursor = Reference< XResultSet>(getRowSet(),UNO_QUERY);
+    pContext->xCursor.set(getRowSet(),UNO_QUERY);
     pContext->strUsedFields = sFieldList;
 
     // if the cursor is in a mode other than STANDARD -> reset
@@ -2318,8 +2321,7 @@ IMPL_LINK(SbaXDataBrowserController, OnFoundData, FmFoundRecordInformation*, pIn
 
     for ( nViewPos = 0; nViewPos < aColumnControls->getCount(); ++nViewPos )
     {
-        Reference< XInterface >  xCurrent;
-        aColumnControls->getByIndex(nViewPos) >>= xCurrent;
+        Reference< XInterface >  xCurrent(aColumnControls->getByIndex(nViewPos),UNO_QUERY);
         if (IsSearchableControl(xCurrent))
             if (pInfo->nFieldPos)
                 --pInfo->nFieldPos;
@@ -2387,13 +2389,6 @@ IMPL_LINK(SbaXDataBrowserController, OnOpenFinished, void*, EMPTYARG)
         // so we use an user event
         m_nPendingLoadFinished = Application::PostUserEvent(LINK(this, SbaXDataBrowserController, OnOpenFinishedMainThread));
 
-    return 0L;
-}
-
-//------------------------------------------------------------------------------
-IMPL_LINK(SbaXDataBrowserController, OnAsyncClose, void*, EMPTYARG)
-{
-    EmptyWindow();
     return 0L;
 }
 
@@ -2489,7 +2484,14 @@ void SbaXDataBrowserController::unloaded(const EventObject& aEvent) throw( Runti
         // change as a reaction on that event. as we have no chance to be notified of this change (which is
         // the one we're interested in) we give them time to do what they want to before invalidating our
         // bound-field-dependent slots ....
-    m_xParser.clear();
+    try
+    {
+        ::comphelper::disposeComponent(m_xParser);
+    }
+    catch(Exception&)
+    {
+        OSL_ENSURE(0,"Exception thrown by dispose");
+    }
 }
 
 //------------------------------------------------------------------------------
