@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commonpagesdbp.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-26 19:50:58 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 20:10:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,7 @@ TabPage RID_PAGE_TABLESELECTION
         Text[ chinese_traditional ] = "¸ê®Æ";
         Text[ turkish ] = "Data";
         Text[ arabic ] = "ÇáÈíÇäÇÊ";
+        Text[ catalan ] = "Datos";
     };
     FixedText FT_EXPLANATION
     {
@@ -126,6 +127,7 @@ TabPage RID_PAGE_TABLESELECTION
         Text[ chinese_traditional ] = "·í«e±qÄİ©ó³o­Óªí³æªº±±¨î¶µ©|¥¼(©Î¨S¦³§¹¥ş)©M¤@­Ó¸ê®Æ·½³sµ²¡C\n\n\n½Ğ±z¿ï¾Ü¤@­Ó¸ê®Æ·½©M¤@­Ó¸ê®Æªí®æ¡C\n\n\n½Ğª`·N¡GÖÃ¶}³o­Óªí³æ­¶­±®É©Ò¦³ªº·s³]©w´N·|¥ß¨è¥Í®Ä¡C";
         Text[ turkish ] = "Currently, the form the control belongs to is not (or not completely) bound to a data source.\n\nPlease choose a data source and a table.\n\n\nPlease note that the settings made on this page will take effect immediately upon leaving the page.";
         Text[ arabic ] = "ÇáÇÓÊãÇÑÉ ÇáÊí íäÊãí ÅáíåÇ ÚäÕÑ ÇáÊÍßã ÛíÑ ãÑÊÈØÉ ÇáÂä ÈãÕÏÑ ÈíÇäÇÊ¡ Ãæ áã ÊßÊãá ÚãáíÉ ÇÑÊÈÇØåÇ ÈÚÏ.\n\nÇáÑÌÇÁ ÇÎÊíÇÑ ãÕÏÑ ÈíÇäÇÊ æÌÏæá.\n\n\nÇáÑÌÇÁ ãáÇÍÙÉ Ãä ÇÚÏÇÏÇÊ ÇáÇÓÊãÇÑÉ ÇáÊí ÊŞæã ÈåÇ Úáì åĞå ÇáÕİÍÉ Óæİ ÊÕÈÍ ÓÇÑíÉ ÇáãİÚæá ÈãÌÑÏ ãÛÇÏÑÉ ÇáÕİÍÉ.";
+        Text[ catalan ] = "De momento, el formulario al que pertenece el campo de control no está (quizás no totalmente) conectado a una fuente de datos.\n\nSeleccione una fuente de datos y una tabla.\n\n\nNo olvide que la configuración que realice en este registro tendrá validez inmediatamente después de que abandone el registro.";
     };
     FixedText FT_DATASOURCE
     {
@@ -152,6 +154,7 @@ TabPage RID_PAGE_TABLESELECTION
         Text[ chinese_traditional ] = "¸ê®Æ·½(~D)¡G";
         Text[ turkish ] = "~Data source:";
         Text[ arabic ] = "äæÚ ãÕÏÑ ÇáÈíÇäÇÊ:";
+        Text[ catalan ] = "~Fuente de datos:";
     };
     ListBox LB_DATASOURCE
     {
@@ -187,6 +190,7 @@ TabPage RID_PAGE_TABLESELECTION
         Text[ chinese_traditional ] = "ªí®æ(~T)";
         Text[ turkish ] = "~Table:";
         Text[ arabic ] = "ÌÏæá:";
+        Text[ catalan ] = "~Tabla:";
     };
     ListBox LB_TABLE
     {
@@ -213,6 +217,7 @@ TabPage RID_PAGE_TABLESELECTION
     Text[ chinese_traditional ] = "¸ê®Æ";
     Text[ turkish ] = "Data";
     Text[ arabic ] = "ÇáÈíÇäÇÊ";
+    Text[ catalan ] = "Datos";
 };
 
 TabPage RID_PAGE_OPTION_DBFIELD
@@ -280,6 +285,7 @@ TabPage RID_PAGE_OPTION_DBFIELD
         Text [ greek ] = "Èİëåôå íá ãßíåé ç áğïèŞêåõóç ôçò ôéìŞò óå êÜğïéï ğåäßï âÜóçò äåäïìİíùí;";
         Text [ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º ÇÊµåÀÇ °ªÀ» ÀúÀåÇÏ½Ã°Ú½À´Ï±î?";
         Text [ turkish ] = "Değeri bir veritabanı alanında kaydetmek istiyor musunuz?";
+        Text[ catalan ] = "¿Desea guardar el valor en un campo de base de datos?";
     };
     RadioButton RB_STOREINFIELD_YES
     {
@@ -309,6 +315,7 @@ TabPage RID_PAGE_OPTION_DBFIELD
         Text [ greek ] = "Íáé, óôï áêüëïõèï ğåäßï âÜóçò äåäïìİíùí:";
         Text [ korean ] = "¿¹, ´ÙÀ½ µ¥ÀÌÅÍº£ÀÌ½º ÇÊµå¿¡ ÀúÀåÇÏ½Ê½Ã¿À(~Y):";
         Text [ turkish ] = "Evet, aşağıdaki veritabanı alanında kaydedebilirsiniz :";
+        Text[ catalan ] = "Sí, en el siguiente campo :";
     };
     ListBox LB_STOREINFIELD
     {
@@ -347,11 +354,16 @@ TabPage RID_PAGE_OPTION_DBFIELD
         Text [ greek ] = "¼÷é, èİëù ~íá ãßíåé ç áğïèŞêåõóç ôçò ôéìŞò ìüíï óôç öüñìá.";
         Text [ korean ] = "¾Æ´Ï¿À, °ªÀ» ¼ö½Ä¿¡¸¸ ÀúÀåÇÏ°Ú½À´Ï´Ù(~N).";
         Text [ turkish ] = "Hayır, değeri yalnızca form içinde kaydetmek istiyorum.";
+        Text[ catalan ] = "No, deseo guardar el valor sólo en el formulario.";
     };
+    Text[ catalan ] = "Campo de base de datos";
 };
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.8  2001/04/26 19:50:58  kz
+ *  Merge SRC630: 26.04.01 - 21:50:26 (NoBranch)
+ *
  *  Revision 1.7  2001/03/29 13:51:52  fs
  *  #85477# layout changes
  *
