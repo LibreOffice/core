@@ -31,18 +31,18 @@ class AccTreeNode
     private XAccessibleText mxText;
     private XAccessibleTable mxTable;
 
-    public AccTreeNode (XAccessibleContext xContext, AccessibleTreeNode aParent)
+    public AccTreeNode (XAccessible xAccessible, XAccessibleContext xContext, AccessibleTreeNode aParent)
     {
-        this (xContext, xContext, aParent);
+        this (xAccessible, xContext, xContext, aParent);
     }
 
-    public AccTreeNode (XAccessibleContext xContext, Object aDisplay, AccessibleTreeNode aParent)
+    public AccTreeNode (XAccessible xAccessible, XAccessibleContext xContext, Object aDisplay, AccessibleTreeNode aParent)
     {
         super (aDisplay, aParent);
 
         maHandlers = new Vector(5);
         mxContext = xContext;
-        mxAccessible = null;
+        mxAccessible = xAccessible;
     }
 
     /** Update the internal data extracted from the corresponding accessible

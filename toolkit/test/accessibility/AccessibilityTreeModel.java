@@ -594,17 +594,17 @@ public class AccessibilityTreeModel
                 sDisplay = "<no name>";
                 // Try to determine some usefull name that indicates the
                 // function of the object in question.
-        XServiceName xSN = (XServiceName) UnoRuntime.queryInterface (
-            XServiceName.class, xAccessible);
-        if (xSN != null)
-            sDisplay = xSN.getServiceName ();
-        else
+                XServiceName xSN = (XServiceName) UnoRuntime.queryInterface (
+                    XServiceName.class, xAccessible);
+                if (xSN != null)
+                    sDisplay = xSN.getServiceName ();
+                else
                 {
-            XServiceInfo xSI = (XServiceInfo) UnoRuntime.queryInterface (
-            XServiceInfo.class, xAccessible);
-            if (xSI != null)
-            sDisplay = xSI.getImplementationName ();
-        }
+                    XServiceInfo xSI = (XServiceInfo) UnoRuntime.queryInterface (
+                    XServiceInfo.class, xAccessible);
+                    if (xSI != null)
+                        sDisplay = xSI.getImplementationName ();
+                }
             }
         }
         else
@@ -612,7 +612,7 @@ public class AccessibilityTreeModel
 
 
         // create node, and add default handlers
-        AccTreeNode aNode = new AccTreeNode (xContext, sDisplay, aParent);
+        AccTreeNode aNode = new AccTreeNode (xAccessible, xContext, sDisplay, aParent);
         AccessibilityTreeModel.addDefaultHandlers (aNode, xContext);
 
         if (mbVerbose)
