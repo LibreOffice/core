@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numitem.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:21 $
+ *  last change: $Author: cl $ $Date: 2000-09-28 12:35:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,8 @@
 #endif
 #include <vcl/svapp.hxx>
 
+#include "unonrule.hxx"
+
 SvxNumberFormat     SvxNumRule::aStdNumFmt(SVX_NUM_ARABIC);
 SvxNumberFormat     SvxNumRule::aStdOutlineNumFmt(SVX_NUM_NUMBER_NONE);
 
@@ -90,6 +92,9 @@ SvxNumberFormat     SvxNumRule::aStdOutlineNumFmt(SVX_NUM_NUMBER_NONE);
 
 #define DEF_WRITER_LSPACE   500     //Standardeinrueckung
 #define DEF_DRAW_LSPACE     800     //Standardeinrueckung
+
+using namespace ::rtl;
+using namespace ::com::sun::star;
 
 /* -----------------27.10.98 10:33-------------------
  *
@@ -843,6 +848,14 @@ SvxNumBulletItem::SvxNumBulletItem(const SvxNumBulletItem& rCopy) :
 SvxNumBulletItem::~SvxNumBulletItem()
 {
     delete pNumRule;
+
+    uno::Reference< uno::XInterface > xNumRule( mxUnoNumRule );
+    if(xNumRule.is())
+    {
+        SvxUnoNumberingRules *pNumRules = SvxUnoNumberingRules::getImplementation( xNumRule );
+        if( pNumRules )
+            pNumRules->invalidate();
+    }
 }
 
 /* -----------------27.10.98 10:41-------------------
@@ -883,4 +896,22 @@ USHORT  SvxNumBulletItem::GetVersion( USHORT nFileVersion ) const
     return NUMITEM_VERSION_03;
 }
 
+/* -----------------08.12.98 10:43-------------------
+ *
+ * --------------------------------------------------*/
+uno::Reference< uno::XInterface > SvxNumBulletItem::getUnoNumRule()
+{
+    // try weak reference first
+    uno::Reference< uno::XInterface > xNumRule( mxUnoNumRule );
 
+    if( !xNumRule.is() )
+    {
+        // since there is no uno numrule for this item
+        // create one
+        xNumRule = (::cppu::OWeakObject*)new SvxUnoNumberingRules( this );
+
+        mxUnoNumRule = xNumRule;
+    }
+
+    return xNumRule;
+}

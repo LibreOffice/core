@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoapi.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:03 $
+ *  last change: $Author: cl $ $Date: 2000-09-28 12:34:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,8 @@
 
 class SvxShape;
 class SdrObject;
+class SvxNumBulletItem;
+class SfxItemPool;
 
 /** creates a StarOffice API wrapper with the given type and inventor
     Deprecated: This will be replaced with a function returning XShape.
@@ -86,6 +88,11 @@ SdrObject* GetSdrObjectFromXShape( ::com::sun::star::uno::Reference< ::com::sun:
 
 /** returns a GraphicObject for this URL */
 GraphicObject CreateGraphicObjectFromURL( const ::rtl::OUString &rURL ) throw() ;
+
+/** returns the SvxNumBulletItem with the given name from the pool or a null if there is no item
+    with that name
+*/
+SvxNumBulletItem* SvxGetNumBulletItemByName( SfxItemPool* pPool, const ::rtl::OUString& aName ) throw();
 
 #endif _SVX_UNOAPI_HXX_
 

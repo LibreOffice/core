@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unonrule.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:03 $
+ *  last change: $Author: cl $ $Date: 2000-09-28 12:34:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,9 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
 #endif
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMED_HPP_
+#include <com/sun/star/container/XNamed.hpp>
+#endif
 
 #include <unotools/servicehelper.hxx>
 
@@ -143,18 +146,19 @@
 #include <numitem.hxx>
 #endif
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase2.hxx>
 
 class SdrModel;
 
-class SvxUnoNumberingRules : public ::cppu::WeakAggImplHelper1< ::com::sun::star::container::XIndexReplace >
+class SvxUnoNumberingRules : public ::cppu::WeakAggImplHelper2< ::com::sun::star::container::XIndexReplace, ::com::sun::star::container::XNamed >
 {
 private:
-    SvxNumRule* pNumRule;
+    SvxNumBulletItem* mpBulletItem;
+    sal_Bool mbOwnRule;             // is true if we own this item, would be much nicer if we could set a refcount on items, but we can't
 
 public:
     SvxUnoNumberingRules( SdrModel* pModel ) throw();
-    SvxUnoNumberingRules(const SvxNumRule& rRule) throw();
+    SvxUnoNumberingRules(SvxNumBulletItem* pBulletItem) throw();
     virtual ~SvxUnoNumberingRules() throw();
 
     UNO3_GETIMPLEMENTATION_DECL( SvxUnoNumberingRules )
@@ -170,11 +174,22 @@ public:
     virtual ::com::sun::star::uno::Type SAL_CALL getElementType() throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL hasElements() throw(::com::sun::star::uno::RuntimeException);
 
+    // XNamed
+    virtual ::rtl::OUString SAL_CALL getName(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setName( const ::rtl::OUString& aName ) throw(::com::sun::star::uno::RuntimeException);
+
     //Intern
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue> getNumberingRuleByIndex( sal_Int32 nIndex ) const throw();
     void setNumberingRuleByIndex( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rProperties, sal_Int32 nIndex ) throw(::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException );
 
-    const SvxNumRule* GetNumRule() const throw() { return pNumRule; }
+    sal_Bool isInserted() const { return !mbOwnRule; }
+    void invalidate() { mpBulletItem = NULL; mbOwnRule = sal_False; }
+
+    SvxNumRule* GetNumRule() const throw() { return mpBulletItem ? mpBulletItem->GetNumRule() : NULL; }
+
+    // WARNING: Calling this method while isInserted() returns sal_False will make you
+    //          the owner of this SvxNumBulletItem and isInserted will become sal_True;
+    SvxNumBulletItem* GetNumBulletItem() throw() { if( mbOwnRule ) mbOwnRule = sal_False; return mpBulletItem; }
 };
 
 #endif
