@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.37 $
- *  last change: $Author: jbu $ $Date: 2001-05-14 09:27:39 $
+ *  $Revision: 1.38 $
+ *  last change: $Author: jbu $ $Date: 2001-05-15 11:40:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,8 +181,8 @@ long FreetypeManager::AddFontDir( const String& rUrlName )
         osl::FileStatus aFileStatus( FileStatusMask_NativePath );
 #endif
         rcOSL = aDirItem.getFileStatus( aFileStatus );
-#ifdef TF_FILEURL
         ::rtl::OUString aUSytemPath;
+#ifdef TF_FILEURL
         OSL_VERIFY(
             ::osl::FileBase::getSystemPathFromFileURL( aFileStatus.getFileURL(), aUSytemPath ) == osl_File_E_None);
 #else
