@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdmrkv.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2001-01-26 14:08:54 $
+ *  last change: $Author: ka $ $Date: 2001-06-22 15:43:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2110,12 +2110,12 @@ void SdrMarkView::SetDesignMode(BOOL bOn)
             const SdrPageViewWinList& rWinList = pPV->GetWinList();
             for (ULONG i = 0; i < rWinList.GetCount(); i++)
             {
-                const SdrPageViewWinRec& rWR = rWinList[i];
+                const SdrPageViewWinRec& rWR = rWinList[ (USHORT) i];
                 const SdrUnoControlList& rControlList = rWR.GetControlList();
 
                 for(UINT32 j = 0; j < rControlList.GetCount(); j++)
                 {
-                    rControlList[j].GetControl()->setDesignMode(bOn);
+                    rControlList[ (USHORT) j].GetControl()->setDesignMode(bOn);
                 }
             }
         }

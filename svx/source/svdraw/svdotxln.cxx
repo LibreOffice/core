@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotxln.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-08 21:15:38 $
+ *  last change: $Author: ka $ $Date: 2001-06-22 15:43:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,7 @@ class ImpSdrObjTextLink: public ::so3::SvBaseLink
 
 public:
     ImpSdrObjTextLink( SdrTextObj* pObj1 )
-        : ::so3::SvBaseLink( LINKUPDATE_ONCALL, FORMAT_FILE ),
+        : ::so3::SvBaseLink( ::so3::LINKUPDATE_ONCALL, FORMAT_FILE ),
             pSdrObj( pObj1 )
     {}
     virtual ~ImpSdrObjTextLink();

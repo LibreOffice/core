@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoole2.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cl $ $Date: 2001-06-14 16:30:17 $
+ *  last change: $Author: ka $ $Date: 2001-06-22 15:45:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,15 +76,12 @@
 #include <sfx2/interno.hxx>
 #endif
 #endif
-
 #ifndef _SVDPAGV_HXX
 #include <svdpagv.hxx>
 #endif
-
 #ifndef _GLOBNAME_HXX
 #include <tools/globname.hxx>
 #endif
-
 #ifndef SVX_LIGHT
 #ifndef _IPCLIENT_HXX //autogen
 #include <so3/ipclient.hxx>
@@ -102,13 +99,16 @@
 #ifndef _IPENV_HXX //autogen
 #include <so3/ipenv.hxx>
 #endif
-
 #ifndef _PSEUDO_HXX
 #include <so3/pseudo.hxx>
 #endif
 #ifndef _SVXLINKMGR_HXX //autogen
 #include <linkmgr.hxx>
 #endif
+#ifndef SVTOOLS_TRANSFER_HXX
+#include <svtools/transfer.hxx>
+#endif
+
 
 #include "svdoole2.hxx"
 #include <svtools/solar.hrc>
@@ -846,15 +846,17 @@ const GDIMetaFile* SdrOle2Obj::GetGDIMetaFile() const
 
     if (rIPRef.Is())
     {
-        GDIMetaFile* pMtf=NULL;
-        SvData aSvData(FORMAT_GDIMETAFILE);
-        if (rIPRef->GetData(&aSvData))
+        GDIMetaFile*            pMtf=NULL;
+        TransferableDataHelper  aData(rIPRef->CreateTransferableSnapshot() );
+
+        if( aData.HasFormat( FORMAT_GDIMETAFILE ) )
         {
-            if (aSvData.GetData(&pMtf,TRANSFER_REFERENCE))
-            {
-                // kopieren, weil *pMtf mit ~SvData zerstoert wird!
-                ((SdrOle2Obj*)this)->mpImpl->pMetaFile = new GDIMetaFile(*pMtf);
-            }
+            GDIMetaFile* pNewMtf = new GDIMetaFile;
+
+            if( aData.GetGDIMetaFile( FORMAT_GDIMETAFILE, *pNewMtf ) )
+                ((SdrOle2Obj*)this)->pMetaFile = pNewMtf;
+            else
+                delete pNewMtf;
         }
     }
 #endif // SVX_LIGHT

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdview.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2001-06-11 11:17:51 $
+ *  last change: $Author: ka $ $Date: 2001-06-22 15:43:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -255,36 +255,6 @@ BOOL SdrView::Command(const CommandEvent& rCEvt, Window* pWin)
 {
     SetActualWin(pWin);
     BOOL bRet=SdrCreateView::Command(rCEvt,pWin);
-    if (!bRet && !IsExtendedCommandEventDispatcherEnabled()) {
-        if (pWin!=NULL && rCEvt.GetCommand()==COMMAND_STARTDRAG && HasMarkedObj() &&
-            (eDragMode==SDRDRAG_MOVE || bMarkedHitMovesAlways))
-        {
-            SdrViewEvent aVEvt;
-            SdrHitKind eHit=PickAnything(pWin->PixelToLogic(rCEvt.GetMousePosPixel()),aVEvt);
-            if (eHit==SDRHIT_MARKEDOBJECT) {
-                pWin->ReleaseMouse();
-                DragDropMarked(*pWin);
-                bRet=TRUE;
-            }
-        }
-    }
-    return bRet;
-}
-
-BOOL SdrView::QueryDrop(DropEvent& rDEvt, Window* pWin, ULONG nFormat, USHORT nItemNum)
-{
-    SetActualWin(pWin);
-    return SdrCreateView::QueryDrop(rDEvt,pWin,nFormat,nItemNum);
-}
-
-BOOL SdrView::Drop(const DropEvent& rDEvt, Window* pWin, ULONG nFormat, USHORT nItemNum)
-{
-    SetActualWin(pWin);
-    BOOL bRet=SdrCreateView::Drop(rDEvt,pWin,nFormat,nItemNum);
-    if (bRet && pWin!=NULL) {
-        pWin->SetPointer(GetPreferedPointer(pWin->PixelToLogic(
-                         pWin->ScreenToOutputPixel(pWin->GetPointerPosPixel())),pWin));
-    }
     return bRet;
 }
 

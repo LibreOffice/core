@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdedxv.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dl $ $Date: 2001-02-07 11:23:48 $
+ *  last change: $Author: ka $ $Date: 2001-06-22 15:43:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1182,42 +1182,6 @@ BOOL SdrObjEditView::Paste(Window* pWin, ULONG nFormat)
     } else {
         return SdrGlueEditView::Paste(pWin,nFormat);
     }
-}
-
-BOOL SdrObjEditView::QueryDrop(DropEvent& rDEvt, Window* pWin, ULONG nFormat, USHORT nItemNum)
-{
-    Point aPt(rDEvt.GetPosPixel());
-    if (pWin!=NULL) aPt=pWin->PixelToLogic(aPt);
-    else if (pTextEditWin!=NULL) aPt=pTextEditWin->PixelToLogic(aPt);
-    if (IsTextEditHit(aPt,nHitTolLog)) {
-        OutlinerView* pNewView=ImpFindOutlinerView(pWin);
-        if (pNewView!=NULL) {
-            pNewView->QueryDrop(rDEvt);
-        } else {
-            if (pTextEditOutlinerView!=NULL) pTextEditOutlinerView->QueryDrop(rDEvt);
-        }
-        return TRUE;
-    }
-    return SdrGlueEditView::QueryDrop(rDEvt,pWin,nFormat,nItemNum);
-}
-
-BOOL SdrObjEditView::Drop(const DropEvent& rDEvt, Window* pWin, ULONG nFormat, USHORT nItemNum)
-{
-    Point aPt(rDEvt.GetPosPixel());
-    if (pWin!=NULL) aPt=pWin->PixelToLogic(aPt);
-    else if (pTextEditWin!=NULL) aPt=pTextEditWin->PixelToLogic(aPt);
-    if (IsTextEditHit(aPt,nHitTolLog)) {
-        OutlinerView* pNewView=ImpFindOutlinerView(pWin);
-        if (pNewView!=NULL) {
-            pNewView->Drop(rDEvt);
-        } else {
-            if (pTextEditOutlinerView!=NULL)  pTextEditOutlinerView->Drop(rDEvt);
-        }
-        if (pItemBrowser!=NULL) pItemBrowser->SetDirty();
-        ImpMakeTextCursorAreaVisible();
-        return TRUE;
-    }
-    return SdrGlueEditView::Drop(rDEvt,pWin,nFormat,nItemNum);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xexch.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-20 20:00:15 $
+ *  last change: $Author: ka $ $Date: 2001-06-22 15:46:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,12 +64,6 @@
 #include <sot/formats.hxx>
 #include <tools/vcompat.hxx>
 
-#ifndef _CLIP_HXX
-#include <vcl/clip.hxx>
-#endif
-#ifndef _DRAG_HXX
-#include <vcl/drag.hxx>
-#endif
 #ifndef _SVX_XFLASIT_HXX
 #include <xflasit.hxx>
 #endif
@@ -128,40 +122,6 @@ XFillExchangeData::~XFillExchangeData()
 {
     delete pXFillAttrSetItem;
 }
-
-
-/*************************************************************************
-|*
-|* Laden
-|*
-*************************************************************************/
-void XFillExchangeData::Load( SvStream& rIStm )
-{
-    rIStm >> *this;
-}
-
-
-/*************************************************************************
-|*
-|* Speichern
-|*
-*************************************************************************/
-void XFillExchangeData::Save( SvStream& rOStm )
-{
-    rOStm << *this;
-}
-
-
-/*************************************************************************
-|*
-|* Zuweisen
-|*
-*************************************************************************/
-void XFillExchangeData::Assign( const SvDataCopyStream& rCopyStream )
-{
-    *this = (const XFillExchangeData& ) rCopyStream;
-}
-
 
 /*************************************************************************
 |*

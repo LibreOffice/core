@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdograf.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: ka $ $Date: 2001-06-18 13:21:10 $
+ *  last change: $Author: ka $ $Date: 2001-06-22 15:43:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,7 +134,7 @@ public:
 // -----------------------------------------------------------------------------
 
 SdrGraphicLink::SdrGraphicLink(SdrGrafObj* pObj):
-    so3::SvBaseLink( LINKUPDATE_ONCALL, SOT_FORMATSTR_ID_SVXB ),
+    ::so3::SvBaseLink( ::so3::LINKUPDATE_ONCALL, SOT_FORMATSTR_ID_SVXB ),
     pGrafObj(pObj)
 {
     SetSynchron( FALSE );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xexch.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:04 $
+ *  last change: $Author: ka $ $Date: 2001-06-22 15:40:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ class SfxItemPool;
 
 
 
-class XFillExchangeData : public SvDataCopyStream
+class XFillExchangeData
 {
 private:
     XFillAttrSetItem*   pXFillAttrSetItem;

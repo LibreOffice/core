@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdxcgv.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sj $ $Date: 2001-05-22 10:27:34 $
+ *  last change: $Author: ka $ $Date: 2001-06-22 15:45:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,22 +60,8 @@
  ************************************************************************/
 
 #include "editeng.hxx"
-
 #include "xexch.hxx"
 #include "xflclit.hxx"
-
-#ifndef _SV_EXCHANGE_HXX //autogen
-#include <vcl/exchange.hxx>
-#endif
-
-#ifndef _SV_CLIP_HXX //autogen
-#include <vcl/clip.hxx>
-#endif
-
-#ifndef _SV_DRAG_HXX //autogen
-#include <vcl/drag.hxx>
-#endif
-
 #include "svdxcgv.hxx"
 #include "svdoutl.hxx"
 #include "svditext.hxx"
@@ -522,6 +508,8 @@ void SdrExchangeView::CutMarked(ULONG nFormat)
 
 void SdrExchangeView::ImpYank(ULONG nFormat, BOOL bClp) const
 {
+    DBG_ERROR( "ImpYank: Not supported anymore" );
+/*
     if(HasMarkedObj())
     {
         String aStrEditEngineFormat("EditEngineFormat", gsl_getSystemTextEncoding());
@@ -596,57 +584,40 @@ void SdrExchangeView::ImpYank(ULONG nFormat, BOOL bClp) const
             }
         }
     }
+*/
 }
 
 void SdrExchangeView::YankMarked(ULONG nFormat)
 {
-    if (HasMarkedObj()) {
+    DBG_ERROR( "YankMarked: Not supported anymore" );
+/*
+    if (HasMarkedObj())
+    {
         Clipboard::Clear();
         ImpYank(nFormat,TRUE);
     }
-}
-
-DropAction SdrExchangeView::DragDropMarked(Window& rWin, ULONG nFormat)
-{
-    if (HasMarkedObj()) {
-        DragServer::Clear();
-        BrkAction();
-        ImpYank(nFormat,FALSE);
-        SdrModel* pDragModel=NULL;
-        if (nFormat==SDR_ANYFORMAT || nFormat==FORMAT_PRIVATE) {
-            pDragModel=GetMarkedObjModel();
-            DragServer::CopyPrivateData(pDragModel);
-        }
-        Pointer aCopShape(POINTER_COPYDATA);
-        Pointer aMovShape(POINTER_MOVEDATA);
-        SdrMarkList aOldML(aMark); // alte Marklist merken
-
-        XubString aStr;
-        ImpTakeDescriptionStr(STR_ExchangeDD,aStr);
-        BegUndo(aStr);
-        DropAction eAct=rWin.ExecuteDrag(aMovShape,aCopShape);
-        if (pDragModel!=NULL) delete pDragModel;
-        if (eAct==DROP_MOVE || eAct==DROP_DISCARD) { // alle Objekte loeschen, die vorher markiert waren
-            DeleteMarked(aOldML);
-        }
-        EndUndo();
-        DragServer::Clear();
-        return eAct;
-    } else return DROP_NONE;
+*/
 }
 
 BOOL SdrExchangeView::PasteClipboard(OutputDevice* pOut, ULONG nFormat, UINT32 nOptions)
 {
+    DBG_ERROR( "PasteClipboard: Not supported anymore" );
+/*
+
     BOOL bRet=FALSE;
     if (!IsTextEdit()) UnmarkAllObj();
     BegUndo(ImpGetResStr(STR_ExchangeClpPaste));
     bRet=ImpPaste(nFormat,TRUE,0,GetViewCenter(pOut),nOptions);
     EndUndo();
     return bRet;
+*/
+    return FALSE;
 }
 
 BOOL SdrExchangeView::PasteDragDrop(const Point& rPos, ULONG nFormat, USHORT nItemNum, UINT32 nOptions)
 {
+    DBG_ERROR( "PasteDragDrop: Not supported anymore" );
+/*
     BOOL bRet=FALSE;
     if (!IsTextEdit()) UnmarkAllObj();
     BegUndo(ImpGetResStr(STR_ExchangeDDPaste));
@@ -662,10 +633,14 @@ BOOL SdrExchangeView::PasteDragDrop(const Point& rPos, ULONG nFormat, USHORT nIt
     }
     EndUndo();
     return bRet;
+*/
+    return FALSE;
 }
 
 BOOL SdrExchangeView::IsClipboardFormatSupported(ULONG nFormat) const
 {
+    DBG_ERROR( "IsClipboardFormatSupported: Not supported anymore" );
+/*
     BOOL bOk(FALSE);
 
     if(nFormat == SDR_ANYFORMAT)
@@ -684,12 +659,14 @@ BOOL SdrExchangeView::IsClipboardFormatSupported(ULONG nFormat) const
     {
         bOk = IsExchangeFormatSupported(nFormat);
     }
-
-    return bOk;
+*/
+    return TRUE;
 }
 
 BOOL SdrExchangeView::IsDragDropFormatSupported(ULONG nFormat, USHORT nItemNum) const
 {
+    DBG_ERROR( "IsDragDropFormatSupported: Not supported anymore" );
+/*
     BOOL bOk=FALSE;
     USHORT i=nItemNum;
     USHORT nMax=i;
@@ -725,6 +702,8 @@ BOOL SdrExchangeView::IsDragDropFormatSupported(ULONG nFormat, USHORT nItemNum) 
     }
 
     return bOk;
+*/
+    return TRUE;
 }
 
 BOOL SdrExchangeView::IsExchangeFormatSupported(ULONG nFormat) const
@@ -736,7 +715,7 @@ BOOL SdrExchangeView::IsExchangeFormatSupported(ULONG nFormat) const
             nFormat == FORMAT_RTF         ||
             nFormat == FORMAT_STRING      ||
             nFormat == SOT_FORMATSTR_ID_DRAWING ||
-            nFormat == Exchange::RegisterFormatName(aStrEditEngineFormat));
+            nFormat == SotExchange::RegisterFormatName(aStrEditEngineFormat));
    return bOk;
 }
 
@@ -781,6 +760,9 @@ void SdrExchangeView::ImpPasteObject(SdrObject* pObj, SdrObjList& rLst, const Po
 
 BOOL SdrExchangeView::ImpPaste(ULONG nFormat, BOOL bClp, USHORT nItemNum, const Point& rPos, UINT32 nOptions)
 {
+    DBG_ERROR( "ImpPaste: Not supported anymore" );
+/*
+
     BOOL bRet(FALSE);
     String aStrEditEngineFormat("EditEngineFormat", gsl_getSystemTextEncoding());
     UINT32 nSdrFormat(SOT_FORMATSTR_ID_DRAWING);
@@ -949,6 +931,8 @@ BOOL SdrExchangeView::ImpPaste(ULONG nFormat, BOOL bClp, USHORT nItemNum, const 
         bRet=Paste(aStr,rPos,NULL,nOptions);
     }
     return bRet;
+*/
+    return FALSE;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1167,97 +1151,3 @@ BOOL SdrExchangeView::Paste(Window* pWin, ULONG nFormat)
     if (!bOk) bOk=PasteClipboard(pWin,nFormat);
     return bOk;
 }
-
-BOOL SdrExchangeView::QueryDrop(DropEvent& rDEvt, Window* pWin, ULONG nFormat, USHORT nItemNum)
-{
-    BOOL bOk(FALSE);
-
-    if(!bOk)
-    {
-        if(GetDragMode() == SDRDRAG_GRADIENT || GetDragMode() == SDRDRAG_TRANSPARENCE)
-        {
-            const SdrHdlList& rHdlList = GetHdlList();
-
-            for(UINT32 a=0;a<rHdlList.GetHdlCount();a++)
-            {
-                SdrHdl* pIAOHandle = rHdlList.GetHdl(a);
-
-                if(pIAOHandle && pIAOHandle->GetKind() == HDL_COLR)
-                {
-                    // what was hit?
-                    const B2dIAOGroup& rIAOGroup = pIAOHandle->GetIAOGroup();
-
-                    if(rIAOGroup.IsHit(rDEvt.GetPosPixel()))
-                    {
-                        bOk = TRUE;
-                        ((SdrHdlColor*)pIAOHandle)->SetSize(SDR_HANDLE_COLOR_SIZE_SELECTED);
-                    }
-                    else
-                    {
-                        ((SdrHdlColor*)pIAOHandle)->SetSize(SDR_HANDLE_COLOR_SIZE_NORMAL);
-                    }
-                }
-            }
-
-            // refresh IAO display
-            RefreshAllIAOManagers();
-        }
-    }
-
-    return bOk;
-}
-
-BOOL SdrExchangeView::Drop(const DropEvent& rDEvt, Window* pWin, ULONG nFormat, USHORT nItemNum)
-{
-    BOOL bOk(FALSE);
-
-#ifndef SVX_LIGHT
-    if(!bOk)
-    {
-        if(GetDragMode() == SDRDRAG_GRADIENT || GetDragMode() == SDRDRAG_TRANSPARENCE)
-        {
-            const SdrHdlList& rHdlList = GetHdlList();
-
-            for(UINT32 a=0;!bOk && a<rHdlList.GetHdlCount();a++)
-            {
-                SdrHdl* pIAOHandle = rHdlList.GetHdl(a);
-
-                if(pIAOHandle && pIAOHandle->GetKind() == HDL_COLR)
-                {
-                    // what was hit?
-                    const B2dIAOGroup& rIAOGroup = pIAOHandle->GetIAOGroup();
-
-                    if(rIAOGroup.IsHit(rDEvt.GetPosPixel()))
-                    {
-                        SvData aData(SOT_FORMATSTR_ID_XFA);
-                        XFillExchangeData* pFillData = NULL;
-                        SvDataObjectRef pDataObj = SvDataObject::PasteDragServer(rDEvt);
-                        const SvDataTypeList& rTypeList = pDataObj->GetTypeList();
-
-                        if(rTypeList.Get(SOT_FORMATSTR_ID_XFA) || nFormat == SDR_ANYFORMAT)
-                        {
-                            if(pDataObj->GetData(&aData))
-                            {
-                                if(aData.GetData((SvDataCopyStream**)&pFillData, XFillExchangeData::StaticType(), TRANSFER_MOVE))
-                                {
-                                    XFillAttrSetItem* pSetItem = pFillData->GetXFillAttrSetItem();
-                                    SfxItemSet rSet = pSetItem->GetItemSet();
-                                    const XFillColorItem& rColItem = (XFillColorItem&)rSet.Get(XATTR_FILLCOLOR);
-                                    Color aColor = rColItem.GetValue();
-
-                                    ((SdrHdlColor*)pIAOHandle)->SetColor(aColor, TRUE);
-
-                                    bOk = TRUE;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-#endif // SVX_LIGHT
-    return bOk;
-}
-
