@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtox.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tl $ $Date: 2001-03-12 08:16:26 $
+ *  last change: $Author: tl $ $Date: 2001-03-14 09:00:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -489,6 +489,38 @@ void SwEditShell::ApplyAutoMark()
         Push();
         rtl_TextEncoding eChrSet = ::gsl_getSystemTextEncoding();
 
+        //
+        // SearchOptions to be used in loop below
+        //
+        //SearchAlgorithms eSrchType    = SearchAlgorithms_ABSOLUTE;
+        //OUString aSrchStr = rText;
+        BOOL bCaseSensitive = TRUE;
+        BOOL bWordOnly      = FALSE;
+        BOOL bSrchInSel     = FALSE;
+        BOOL bLEV_Relaxed   = TRUE;
+        INT32 nLEV_Other    = 2;    //  -> changedChars;
+        INT32 nLEV_Longer   = 3;    //! -> deletedChars;
+        INT32 nLEV_Shorter  = 1;    //! -> insertedChars;
+        INT32 nTransliterationFlags = 0;
+        //
+        INT32 nSrchFlags = 0;
+        if (!bCaseSensitive)
+            nSrchFlags |= SearchFlags::ALL_IGNORE_CASE;
+        if ( bWordOnly)
+            nSrchFlags |= SearchFlags::NORM_WORD_ONLY;
+        if ( bLEV_Relaxed)
+            nSrchFlags |= SearchFlags::LEV_RELAXED;
+        if ( bSrchInSel)
+            nSrchFlags |= (SearchFlags::REG_NOT_BEGINOFLINE |
+                            SearchFlags::REG_NOT_ENDOFLINE );
+        //
+        SearchOptions aSearchOpt(
+                            SearchAlgorithms_ABSOLUTE, nSrchFlags,
+                            OUString(), OUString(),
+                            CreateLocale( LANGUAGE_SYSTEM ),
+                            nLEV_Other, nLEV_Longer, nLEV_Shorter,
+                            nTransliterationFlags );
+
         while( !rStrm.GetError() && !rStrm.IsEof() )
         {
             ByteString aRdLine;
@@ -513,34 +545,19 @@ void SwEditShell::ApplyAutoMark()
                     String sWordOnly    = sLine.GetToken(0, ';', nTokenPos);
 
                     //3.
-                    //SearchAlgorithms eSrchType    = SearchAlgorithms_ABSOLUTE;
-                    //OUString aSrchStr = rText;
-                    BOOL bCaseSensitive = sCase.Len() && sCase != sZero;
-                    BOOL bWordOnly      = sWordOnly.Len() && sWordOnly != sZero;
-                    BOOL bSrchInSel     = FALSE;
-                    BOOL bLEV_Relaxed   = TRUE;
-                    INT32 nLEV_Other    = 2;    //  -> changedChars;
-                    INT32 nLEV_Longer   = 3;    //! -> deletedChars;
-                    INT32 nLEV_Shorter  = 1;    //! -> insertedChars;
-                    INT32 nTransliterationFlags = 0;
+                    bCaseSensitive  = sCase.Len() && sCase != sZero;
+                    bWordOnly       = sWordOnly.Len() && sWordOnly != sZero;
                     //
-                    INT32 nSrchFlags = 0;
                     if (!bCaseSensitive)
-                        nSrchFlags |= SearchFlags::ALL_IGNORE_CASE;
+                        aSearchOpt.searchFlag |=  SearchFlags::ALL_IGNORE_CASE;
+                    else
+                        aSearchOpt.searchFlag &= ~SearchFlags::ALL_IGNORE_CASE;
                     if ( bWordOnly)
-                        nSrchFlags |= SearchFlags::NORM_WORD_ONLY;
-                    if ( bLEV_Relaxed)
-                        nSrchFlags |= SearchFlags::LEV_RELAXED;
-                    if ( bSrchInSel)
-                        nSrchFlags |= (SearchFlags::REG_NOT_BEGINOFLINE |
-                                        SearchFlags::REG_NOT_ENDOFLINE );
+                        aSearchOpt.searchFlag |=  SearchFlags::NORM_WORD_ONLY;
+                    else
+                        aSearchOpt.searchFlag &= ~SearchFlags::NORM_WORD_ONLY;
                     //
-                    SearchOptions aSearchOpt(
-                                        SearchAlgorithms_ABSOLUTE, nSrchFlags,
-                                        sToSelect, OUString(),
-                                        CreateLocale( LANGUAGE_SYSTEM ),
-                                        nLEV_Other, nLEV_Longer, nLEV_Shorter,
-                                        nTransliterationFlags );
+                    aSearchOpt.searchString = sToSelect;
 
                     KillPams();
                     ULONG nRet = Find( aSearchOpt,  DOCPOS_START, DOCPOS_END,
