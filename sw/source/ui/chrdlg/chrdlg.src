@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chrdlg.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-11 18:34:45 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 20:34:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,7 @@ String STR_TEXTCOLL_HEADER
     TEXT[ korean ] = "(´Ü¶ô À¯Çü: ";
     TEXT[ turkish ] = "(Paragraf biçimi: ";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "(Estilo de párrafo:  ";
 };
 String STR_PAGEFMT_HEADER
 {
@@ -111,6 +112,7 @@ String STR_PAGEFMT_HEADER
     TEXT[ korean ] = "(ÂÊ À¯Çü: ";
     TEXT[ turkish ] = "(Sayfa biçimi: ";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "(Estilo de página:  ";
 };
 String SW_STR_NONE
 {
@@ -137,6 +139,7 @@ String SW_STR_NONE
     Text[ greek ] = "[ÊáíÝíá]";
     Text[ korean ] = "[¾øÀ½]";
     Text[ turkish ] = "[yok]";
+    Text[ catalan ] = "[Ninguno]";
 };
 InfoBox MSG_ILLEGAL_PAGENUM
 {
@@ -166,4 +169,5 @@ InfoBox MSG_ILLEGAL_PAGENUM
     MESSAGE[ korean ] = "ÂÊ ¹øÈ£´Â ¼³Á¤ÇÒ ¼ö ¾ø½À´Ï´Ù. Â¦¼ö ÂÊ ¹øÈ£´Â ¿ÞÂÊ ÂÊ¿¡¸¸ »ç¿ëµÇ°í, È¦¼ö ÂÊ ¹øÈ£´Â ¿À¸¥ÂÊ ÂÊ¿¡¸¸ »ç¿ëµË´Ï´Ù.";
     MESSAGE[ turkish ] = "Sayfa numarasý verilemiyor. Sol sayfalarda yalnýzca çift sayfa numaralarý, sað sayfalarda ise yalnýzca tek sayfa numaralarý kullanýlabilir.";
     MESSAGE[ language_user1 ] = " ";
+    MESSAGE[ catalan ] = "El número de la página no se puede colocar. En páginas izquierdas se pueden utilizar solo números pares, en las derechas solo impares.";
 };
