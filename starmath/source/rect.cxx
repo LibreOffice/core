@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rect.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tl $ $Date: 2001-08-03 13:54:04 $
+ *  last change: $Author: tl $ $Date: 2002-05-27 14:36:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -801,7 +801,7 @@ void SmDrawFrame(OutputDevice &rDev, const Rectangle &rRec,
 
 BOOL SmGetGlyphBoundRect(const OutputDevice &rDev,
                          const XubString &rText, Rectangle &rRect)
-    // basically the same as 'GetGlyphBoundRect' (in class 'OutputDevice')
+    // basically the same as 'GetTextBoundRect' (in class 'OutputDevice')
     // but with a string as argument.
 {
     // handle special case first
@@ -811,13 +811,13 @@ BOOL SmGetGlyphBoundRect(const OutputDevice &rDev,
         return TRUE;
     }
 
-    // get a device where 'OutputDevice::GetGlyphBoundRect' will be successful
+    // get a device where 'OutputDevice::GetTextBoundRect' will be successful
     OutputDevice *pGlyphDev;
     if (rDev.GetOutDevType() != OUTDEV_PRINTER)
         pGlyphDev = (OutputDevice *) &rDev;
     else
     {
-        // since we format for the printer (where GetGlyphBoundRect will fail)
+        // since we format for the printer (where GetTextBoundRect will fail)
         // we need a virtual device here.
         pGlyphDev = SM_MOD1()->GetRectCache()->GetVirDev();
     }
@@ -825,7 +825,9 @@ BOOL SmGetGlyphBoundRect(const OutputDevice &rDev,
     const FontMetric  aDevFM (rDev.GetFontMetric());
 
     pGlyphDev->Push(PUSH_FONT);
-    pGlyphDev->SetFont(rDev.GetFont());
+    Font aFnt(rDev.GetFont());
+    aFnt.SetAlign(ALIGN_TOP);
+    pGlyphDev->SetFont(aFnt);
     //! Da in der FontMetric die Weite immer != 0 ist (was fuer wide-Attribute
     //! und skalierbare Klammern auch so benötigt wird) kann dies zu einer
     //! Verzerrung der Proportionen im 'pGlyphDev' gegnüber dem 'rDev' kommen!
@@ -842,6 +844,7 @@ BOOL SmGetGlyphBoundRect(const OutputDevice &rDev,
     if (cChar != xub_Unicode(' '))
     {
         bSuccess &= pGlyphDev->GetGlyphBoundRect(cChar, aTmp, bOptimize);
+        //bSuccess &= pGlyphDev->GetTextBoundRect(aTmp, cChar, 0, 0);
         if (!aTmp.IsEmpty())
         {
             // linken Rand am 'rDev' ermitteln
@@ -858,6 +861,7 @@ BOOL SmGetGlyphBoundRect(const OutputDevice &rDev,
     if (cChar != xub_Unicode(' '))
     {
         bSuccess &= pGlyphDev->GetGlyphBoundRect(cChar, aTmp, bOptimize);
+        //bSuccess &= pGlyphDev->GetTextBoundRect(aTmp, cChar, 0, 0);
         if (!aTmp.IsEmpty())
         {
             // rechten Rand am 'rDev' ermitteln (analog wie beim linken Rand)
@@ -883,6 +887,7 @@ BOOL SmGetGlyphBoundRect(const OutputDevice &rDev,
             //! Anmerkung: Leerzeichen *können* leere Rechtecke ergeben, aber
             //! der Returnwert sollte auch dann TRUE sein.
             bSuccess &= pGlyphDev->GetGlyphBoundRect(cChar, aTmp, bOptimize);
+            //bSuccess &= pGlyphDev->GetTextBoundRect(aTmp, cChar, 0, 0);
 
             if (!aTmp.IsEmpty()  &&  aTmp.Top() < nTop)
                 nTop = aTmp.Top();
