@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumfe.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: er $ $Date: 2001-01-26 17:22:23 $
+ *  last change: $Author: nn $ $Date: 2001-03-19 14:52:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1094,8 +1094,12 @@ void SvXMLNumFmtExport::ExportPart_Impl( SvNumberformat& rFormat, sal_uInt32 nKe
                         eBuiltIn == NF_DATE_SYS_DMMMYY      || eBuiltIn == NF_DATE_SYS_DMMMYYYY ||
                         eBuiltIn == NF_DATE_SYS_DMMMMYYYY   || eBuiltIn == NF_DATE_SYS_NNDMMMYY ||
                         eBuiltIn == NF_DATE_SYS_NNDMMMMYYYY || eBuiltIn == NF_DATE_SYS_NNNNDMMMMYYYY );
-    if ( bAutoOrder )
+    if ( bAutoOrder &&
+        ( nFmtType == NUMBERFORMAT_CURRENCY || nFmtType == NUMBERFORMAT_DATE || nFmtType == NUMBERFORMAT_DATETIME ) )
     {
+        //  #85109# format type must be checked to avoid dtd errors if
+        //  locale data contains other format types at the built-in positions
+
         sAttrName = pNamespaceMap->GetQNameByKey( XML_NAMESPACE_NUMBER,
                         OUString::createFromAscii( sXML_automatic_order ) );
         sAttrValue = OUString::createFromAscii( sXML_true );
@@ -1111,8 +1115,12 @@ void SvXMLNumFmtExport::ExportPart_Impl( SvNumberformat& rFormat, sal_uInt32 nKe
     //  test if all date elements match the system settings
     if ( bSystemDate && !lcl_MatchesSystemDate( rFormat, nPart, bLongSysDate ) )
         bSystemDate = sal_False;
-    if ( bSystemDate )
+    if ( bSystemDate &&
+        ( nFmtType == NUMBERFORMAT_DATE || nFmtType == NUMBERFORMAT_DATETIME ) )
     {
+        //  #85109# format type must be checked to avoid dtd errors if
+        //  locale data contains other format types at the built-in positions
+
         sAttrName = pNamespaceMap->GetQNameByKey( XML_NAMESPACE_NUMBER,
                         OUString::createFromAscii( sXML_format_source ) );
         sAttrValue = OUString::createFromAscii( sXML_language );
