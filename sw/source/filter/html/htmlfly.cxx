@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlfly.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:25:59 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 16:26:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,9 +95,8 @@
 #ifndef _GOODIES_IMAPOBJ_HXX
 #include <svtools/imapobj.hxx>
 #endif
-#ifndef _OFA_HTMLCFG_HXX //autogen
-#include <offmgr/htmlcfg.hxx>
-#endif
+
+#include <svx/htmlcfg.hxx>
 
 #ifndef _XOUTBMP_HXX //autogen
 #include <svx/xoutbmp.hxx>
