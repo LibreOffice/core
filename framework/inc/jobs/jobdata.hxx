@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jobdata.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 18:19:45 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 17:12:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,39 +141,35 @@ class JobData : private ThreadHelpBase
     public:
 
         /// specifies the root package and key to find registered jobs
-        static const sal_Char* JOBCFG_ROOT              ;
-        /// define the cfg key "AdminTime" of a job relativ to JOBCFG_ROOT
-        static const sal_Char* JOBCFG_PROP_ADMINTIME    ;
-        /// define the cfg key "Arguments" of a job relativ to JOBCFG_ROOT
-        static const sal_Char* JOBCFG_PROP_ARGUMENTS    ;
-        /// define the cfg key "Async" of a job relativ to JOBCFG_ROOT
-        static const sal_Char* JOBCFG_PROP_ASYNC        ;
-        /// define the cfg key "Service" of a job relativ to JOBCFG_ROOT
-        static const sal_Char* JOBCFG_PROP_SERVICE      ;
-        /// define the cfg key "UserTime" of a job relativ to JOBCFG_ROOT
-        static const sal_Char* JOBCFG_PROP_USERTIME     ;
+        static const sal_Char* JOBCFG_ROOT;
+        /// define the cfg key "Arguments" of a job relativ to JOBCFG_ROOT/<job alias>
+        static const sal_Char* JOBCFG_PROP_ARGUMENTS;
+        /// define the cfg key "Service" of a job relativ to JOBCFG_ROOT/<job alias>
+        static const sal_Char* JOBCFG_PROP_SERVICE;
 
         /// specifies the root package and key to find event registrations
-        static const sal_Char* EVENTCFG_ROOT            ;
-        /// define the cfg key "JobList" of an event relativ to EVENTCFG_ROOT
-        static const sal_Char* EVENTCFG_PROP_JOBLIST    ;
+        static const sal_Char* EVENTCFG_ROOT;
+        /// define the cfg key "JobList" of an event relativ to EVENTCFG_ROOT/<event>
+        static const sal_Char* EVENTCFG_PATH_JOBLIST;
+        /// define the cfg key "AdminTime" of a job registration relativ to EVENTCFG_ROOT/<event>/EVENTCFG_PROP_JOBLIST/<job alias>
+        static const sal_Char* EVENTCFG_PROP_ADMINTIME;
+        /// define the cfg key "UserTime" of a job registration relativ to EVENTCFG_ROOT/<event>/EVENTCFG_PROP_JOBLIST/<job alias>
+        static const sal_Char* EVENTCFG_PROP_USERTIME;
 
         /// mark the starting point of static job data inside argument list of job execution
-        static const sal_Char* PROPSET_CONFIG           ;
+        static const sal_Char* PROPSET_CONFIG;
         /// mark the starting point of job specific data inside argument list of job execution
-        static const sal_Char* PROPSET_OWNCONFIG        ;
+        static const sal_Char* PROPSET_OWNCONFIG;
         /// mark the starting point of environment data inside argument list of job execution
-        static const sal_Char* PROPSET_ENVIRONMENT      ;
+        static const sal_Char* PROPSET_ENVIRONMENT;
         /// mark the starting point of any other dynamic generated data inside argument list of job execution (e.g. from a dispatch() request)
-        static const sal_Char* PROPSET_DYNAMICDATA      ;
+        static const sal_Char* PROPSET_DYNAMICDATA;
 
-        static const sal_Char* PROP_ADMINTIME           ;
-        static const sal_Char* PROP_ALIAS               ;
-        static const sal_Char* PROP_ASYNC               ;
-        static const sal_Char* PROP_EVENT               ;
-        static const sal_Char* PROP_FRAME               ;
-        static const sal_Char* PROP_SERVICE             ;
-        static const sal_Char* PROP_USERTIME            ;
+        static const sal_Char* PROP_ALIAS;
+        static const sal_Char* PROP_EVENTNAME;
+        static const sal_Char* PROP_ENVTYPE;
+        static const sal_Char* PROP_FRAME;
+        static const sal_Char* PROP_SERVICE;
 
     //___________________________________
     // structs
@@ -186,12 +182,28 @@ class JobData : private ThreadHelpBase
          */
         enum EMode
         {
-            /// inidcates a missing initialization
-            E_UNKNOWN,
+            /// indicates a missing initialization
+            E_UNKNOWN_MODE,
             /// indicates a job with configuration (They alias represent the config key name.)
             E_ALIAS,
-            /// indicates a job without configuration (The real UNO servicename is used.)
-            E_SERVICE
+            /// indicates a job without configuration (The pure UNO implementation is used only.)
+            E_SERVICE,
+            /// indicates a job with configuration, which was triggered by an event
+            E_EVENT
+        };
+
+        /** These values represent the environment type, in which a job can run.
+            A job must known, from which binding it will be started. Because
+            it's initialization data depends from that!
+         */
+        enum EEnvironment
+        {
+            /// indicates a missing initialization
+            E_UNKNOWN_ENVIRONMENT,
+            /// this job is used by the global JobExecutor service
+            E_EXECUTION,
+            /// this job is used by the global dispatch framework
+            E_DISPATCH
         };
 
     //___________________________________
@@ -217,6 +229,14 @@ class JobData : private ThreadHelpBase
             The effect: This mode can be detected by this member.
          */
         EMode m_eMode;
+
+        /**
+            Because jobs can be bind to different mechanism inside office, a job
+            should know inside which environment it runs. E.g. a job can be executed
+            by the global JobExecutor service (triggered by an event) or e.g. as part
+            of the global dispatch framework (triggered by an UI control e.g. a menu entry).
+         */
+        EEnvironment m_eEnvironment;
 
         /**
             the alias name of this job.
@@ -249,31 +269,6 @@ class JobData : private ThreadHelpBase
         css::uno::Sequence< css::beans::NamedValue > m_lArguments;
 
         /**
-            time stamp of the admin layer for reactivation of a deactivated job
-            It's readed from the configuration. Don't set it from outside!
-         */
-        DateTime m_aAdminTime;
-
-        /**
-            time stamp of the user layer to deactivate it after finishing his work
-            It's readed from the configuration. Don't set it from outside!
-         */
-        DateTime m_aUserTime;
-
-        /**
-            mark it as an asyncronoues or synchronoues job
-            It's readed from the configuration. Don't set it from outside!
-         */
-        sal_Bool m_bAsync;
-
-        /**
-            if the admin time stamp is newer then the user time ... this job is ready for execute
-            This information is set by comparing the two timetamp values m_aAdminTime & m_aUserTime
-            and saved to perform any reading of it.
-         */
-        sal_Bool m_bEnabled;
-
-        /**
             after a job was sucessfully executed (by any outside code using our
             informations) it can return a result. This member make it part of this
             container too. So it can be used for further things.
@@ -293,22 +288,29 @@ class JobData : private ThreadHelpBase
 
         void operator=( const JobData& rCopy );
 
-        EMode                                        getMode        () const;
-        ::rtl::OUString                              getAlias       () const;
-        ::rtl::OUString                              getService     () const;
-        ::rtl::OUString                              getEvent       () const;
-        css::uno::Sequence< css::beans::NamedValue > getConfig      () const;
-        css::uno::Sequence< css::beans::NamedValue > getJobConfig   () const;
-        JobResult                                    getResult      () const;
-        sal_Bool                                     isAsync        () const;
-        sal_Bool                                     isEnabled      () const;
+        EMode                                        getMode                 () const;
+        EEnvironment                                 getEnvironment          () const;
+        ::rtl::OUString                              getEnvironmentDescriptor() const;
+        ::rtl::OUString                              getAlias                () const;
+        ::rtl::OUString                              getService              () const;
+        ::rtl::OUString                              getEvent                () const;
+        css::uno::Sequence< css::beans::NamedValue > getConfig               () const;
+        css::uno::Sequence< css::beans::NamedValue > getJobConfig            () const;
+        JobResult                                    getResult               () const;
 
-        void                                         setAlias       ( const ::rtl::OUString&                              sAlias     );
-        void                                         setService     ( const ::rtl::OUString&                              sService   );
-        void                                         setEvent       ( const ::rtl::OUString&                              sEvent     );
-        void                                         setJobConfig   ( const css::uno::Sequence< css::beans::NamedValue >& lArguments );
-        void                                         setResult      ( const JobResult&                                    aResult    );
-        void                                         disableJob     (                                                                );
+        sal_Bool                                     hasConfig               () const;
+
+        void                                         setEnvironment (       EEnvironment                                  eEnvironment );
+        void                                         setAlias       ( const ::rtl::OUString&                              sAlias       );
+        void                                         setService     ( const ::rtl::OUString&                              sService     );
+        void                                         setEvent       ( const ::rtl::OUString&                              sEvent       ,
+                                                                      const ::rtl::OUString&                              sAlias       );
+        void                                         setJobConfig   ( const css::uno::Sequence< css::beans::NamedValue >& lArguments   );
+        void                                         setResult      ( const JobResult&                                    aResult      );
+        void                                         disableJob     (                                                                  );
+
+        static css::uno::Sequence< ::rtl::OUString > getEnabledJobsForEvent( const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR  ,
+                                                                             const ::rtl::OUString&                                        sEvent );
 
     //___________________________________
     // private helper
