@@ -646,6 +646,7 @@ mkdir: %_DEST%\inc%_EXT%\svx\sdr\properties
 mkdir: %_DEST%\inc%_EXT%\svx\sdr\contact
 ..\inc\svx\sdr\contact\viewcontact.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\viewcontact.hxx
 ..\inc\svx\sdr\contact\viewobjectcontactlist.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\viewobjectcontactlist.hxx
+..\inc\svx\sdr\contact\displayinfo.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\displayinfo.hxx
 
 ..\xml\SvxDrawPage.xml %_DEST%\xml%_EXT%\SvxDrawPage.xml
 ..\xml\SvxGraphicObject.xml %_DEST%\xml%_EXT%\SvxGraphicObject.xml
