@@ -1,4 +1,6 @@
-mkdir: %_DEST%\inc%_EXT%\jvmaccess
+mkdir: %_DEST%\inc%_EXT%\jvmfwk
+mkdir: %_DEST%\bin%_EXT%\jvmfwk_so_unx
+mkdir: %_DEST%\bin%_EXT%\jvmfwk_so_wnt
 ..\inc\jvmfwk\framework.h %_DEST%\inc%_EXT%\jvmfwk\framework.h
 ..\inc\jvmfwk\vendorplugin.h %_DEST%\inc%_EXT%\jvmfwk\vendorplugin.h
 ..\%__SRC%\lib\ijvmfwk.lib %_DEST%\lib%_EXT%\ijvmfwk.lib
@@ -6,8 +8,10 @@ mkdir: %_DEST%\inc%_EXT%\jvmaccess
 ..\%__SRC%\lib\libjvmfwk*.dylib* %_DEST%\lib%_EXT%\*
 ..\%__SRC%\bin\jvmfwk*.dll %_DEST%\bin%_EXT%\*
 ..\%__SRC%\bin\sunjavaplugin*.dll %_DEST%\bin%_EXT%\*
+..\%__SRC%\bin\javaldx %_DEST%\bin%_EXT%\javaldx
 ..\source\useatjava.txt %_DEST%\bin%_EXT%\useatjava.txt
-..\source\javavendors.xml %_DEST%\bin%_EXT%\javavendors.xml
-..\source\javasettings.xml %_DEST%\bin%_EXT%\javasettings.xml
+..\distributions\StarOffice\javavendors_unx.xml %_DEST%\bin%_EXT%\jvmfwk_so_unx\javavendors.xml
+..\distributions\StarOffice\javavendors_wnt.xml %_DEST%\bin%_EXT%\jvmfwk_so_wnt\javavendors.xml
+
 linklib: libjvmfwk*.so.*.*.*
 

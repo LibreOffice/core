@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sunjavaplugin.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jl $ $Date: 2004-04-30 06:22:14 $
+ *  last change: $Author: jl $ $Date: 2004-05-03 14:29:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,7 @@
 #include "external/boost/scoped_array.hpp"
 #include "osl/diagnose.h"
 #include "rtl/ustring.hxx"
+#include "rtl/ustrbuf.hxx"
 #include "osl/module.hxx"
 #include "osl/mutex.hxx"
 #include "osl/thread.hxx"
@@ -99,11 +100,51 @@ osl::Mutex * getPluginMutex()
             Init(), ::osl::GetGlobalMutex());
 }
 
+JavaInfo* createJavaInfo(const stoc_javadetect::JavaInfo & info)
+{
+    JavaInfo* pInfo = (JavaInfo*) rtl_allocateMemory(sizeof(JavaInfo));
+    if (pInfo == NULL)
+        return NULL;
+    rtl::OUString sVendor(OUSTR("Sun Microsystems Inc."));
+    pInfo->sVendor = sVendor.pData;
+    rtl_uString_acquire(sVendor.pData);
+    pInfo->sLocation = info.usJavaHome.pData;
+    rtl_uString_acquire(pInfo->sLocation);
+    pInfo->sVersion = info.getVersion().pData;
+    rtl_uString_acquire(pInfo->sVersion);
+    pInfo->nFeatures = info.supportsAccessibility() ? 1 : 0;
+#ifdef UNX
+    pInfo->nRequirements = JFW_REQUIRE_NEEDRESTART;
+#else
+    pInfo->nRequirements = 0x0l;
+#endif
+    rtl::OUStringBuffer buf(1024);
+    buf.append(info.usRuntimeLib);
+#ifdef UNX
+    buf.appendAscii("\n");
+    buf.append(info.usLibLocations);
+    buf.appendAscii("\n");
+#endif
+
+    rtl::OUString sVendorData = buf.makeStringAndClear();
+    rtl::ByteSequence byteSeq( (sal_Int8*) sVendorData.pData->buffer,
+                               sVendorData.getLength() * sizeof(sal_Unicode));
+    pInfo->arVendorData = byteSeq.get();
+    rtl_byte_sequence_acquire(pInfo->arVendorData);
+
+    return pInfo;
+}
+
 rtl::OUString getRuntimeLib(const rtl::ByteSequence & data)
 {
     const sal_Unicode* chars = (sal_Unicode*) data.getConstArray();
     sal_Int32 len = data.getLength();
-    return rtl::OUString(chars, len / 2);
+    rtl::OUString sData(chars, len / 2);
+    //the runtime lib is on the first line
+    sal_Int32 index = 0;
+    rtl::OUString aToken = sData.getToken( 0, '\n', index);
+
+    return aToken;
 }
 
 jmp_buf jmp_jvm_abort;
@@ -144,35 +185,13 @@ javaPluginError getAllJavaInfos( rtl_uString *sMinVersion,
             stoc_javadetect::JavaInfo::createAllInfo(sMin, seqExclude, 0);
 
         arInfo = (JavaInfo**) rtl_allocateMemory(vec.size() * sizeof (JavaInfo*));
-//        JavaInfo * (_arInfo[] =  (JavaInfo*(*)[])arInfo;
+
         int j = 0;
-        rtl::OUString sVendor(OUSTR("Sun Microsystems Inc."));
-
-
         typedef std::vector<stoc_javadetect::JavaInfo>::iterator cit;
         for (cit i = vec.begin(); i != vec.end(); i++, j++)
         {
-            arInfo[j] = (JavaInfo*) rtl_allocateMemory(sizeof(JavaInfo));
-           JavaInfo* pInfo = arInfo[j];
-           pInfo->sVendor = sVendor.pData;
-           rtl_uString_acquire(sVendor.pData);
-           pInfo->sLocation = i->usJavaHome.pData;
-           rtl_uString_acquire(i->usJavaHome.pData);
-           pInfo->sVersion = i->getVersion().pData;
-           rtl_uString_acquire(pInfo->sVersion);
-           pInfo->nFeatures = i->supportsAccessibility() ? 1 : 0;
-#ifdef UNX
-           pInfo->nRequirements = JFW_REQUIRE_NEEDRESTART;
-#else
-           pInfo->nRequirements = 0x0l;
-#endif
-           rtl::OUString sRuntimeLib = i->usRuntimeLib;
-           rtl::ByteSequence byteSeq( (sal_Int8*) sRuntimeLib.pData->buffer,
-                                      sRuntimeLib.getLength() * sizeof(sal_Unicode));
-           pInfo->arVendorData = byteSeq.get();
-           rtl_byte_sequence_acquire(pInfo->arVendorData);
+            arInfo[j] = createJavaInfo(*i);
         }
-
         *nLenInfoList = vec.size();
     }
     catch(stoc_javadetect::JavaInfo::MalformedVersionException&)
@@ -236,27 +255,7 @@ javaPluginError getJavaInfoByPath(
             }
         }
 
-        rtl::OUString sVendor(OUSTR("Sun Microsystems Inc."));
-        JavaInfo * pInfo = (JavaInfo*) rtl_allocateMemory(sizeof (JavaInfo));
-        pInfo->sVendor = sVendor.pData;
-        rtl_uString_acquire(sVendor.pData);
-        pInfo->sLocation = info.usJavaHome.pData;
-        rtl_uString_acquire(pInfo->sLocation);
-        pInfo->sVersion = info.getVersion().pData;
-        rtl_uString_acquire(pInfo->sVersion);
-        pInfo->nFeatures = info.supportsAccessibility() ? 1 : 0;
-#ifdef UNX
-        pInfo->nRequirements = JFW_REQUIRE_NEEDRESTART;
-#else
-        pInfo->nRequirements = 0l;
-#endif
-        rtl::OUString sRuntimeLib = info.usRuntimeLib;
-        rtl::ByteSequence byteSeq( (sal_Int8*) sRuntimeLib.pData->buffer,
-                                   sRuntimeLib.getLength() * sizeof(sal_Unicode));
-        pInfo->arVendorData = byteSeq.get();
-        rtl_byte_sequence_acquire(pInfo->arVendorData);
-
-        *ppInfo = pInfo;
+        *ppInfo = createJavaInfo(info);
     }
     catch(stoc_javadetect::JavaInfo::InitException& )
     {
