@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfrm.src,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 12:05:33 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 14:11:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,7 @@
 #include "transfrm.hrc"
  // pragma -------------------------------------------------------------------
 
-#define MA_TABPAGE_HEIGHT       82 + 22 + 48 + RSC_SP_TBPG_INNERBORDER_BOTTOM
+#define MA_TABPAGE_HEIGHT       185
 
  // RID_SVXPAGE_POSITION_SIZE ------------------------------------------------
 TabPage RID_SVXPAGE_POSITION_SIZE
@@ -615,6 +615,40 @@ TabPage RID_SVXPAGE_SLANT
     Text [ x-comment ] = " ";
 };
  // RID_SVXDLG_TRANSFORM -----------------------------------------------------
+#define _POS_SIZE_TEXT \
+    Text = "Position und Grˆﬂe" ;                       \
+    Text [ ENGLISH ] = "Position and Size" ;            \
+    Text [ norwegian ] = "Posisjon og st¯rrelse" ;      \
+    Text [ italian ] = "Posizione e dimensione" ;       \
+    Text [ portuguese_brazilian ] = "PosiÁ„o e Tamanho" ;\
+    Text [ portuguese ] = "PosiÁ„o e tamanho" ;          \
+    Text [ finnish ] = "Sijainti ja koko" ;              \
+    Text [ danish ] = "Placering og st¯rrelse" ;         \
+    Text [ french ] = "Position et taille" ;             \
+    Text [ swedish ] = "Position och storlek" ;          \
+    Text [ dutch ] = "Positie en grootte" ;              \
+    Text [ spanish ] = "PosiciÛn y tamaÒo" ;             \
+    Text [ english_us ] = "Position and Size" ;          \
+    Text[ chinese_simplified ] = "‰ΩçÁΩÆÂíåÂ§ßÂ∞è";      \
+    Text[ russian ] = "œÓÁËˆËˇ Ë ‡ÁÏÂ";                \
+    Text[ polish ] = "Pozycja i rozmiar";                \
+    Text[ japanese ] = "‰ΩçÁΩÆ„Å®„Çµ„Ç§„Ç∫";             \
+    Text[ chinese_traditional ] = "‰ΩçÁΩÆÂíåÂ§ßÂ∞è";     \
+    Text[ arabic ] = "«·„Ê÷⁄ Ê«·ÕÃ„";                    \
+    Text[ greek ] = "»›ÛÁ Í·È Ï›„ÂËÔÚ";                  \
+    Text[ korean ] = "ÏúÑÏπò Î∞è ÌÅ¨Í∏∞";                \
+    Text[ turkish ] = "Konum ve boyut";                  \
+    Text[ language_user1 ] = " ";                        \
+    Text[ catalan ] = "Position and Size";               \
+    Text[ thai ] = "‡∏ï‡∏≥‡πÅ‡∏´‡∏ô‡πà‡∏á‡πÅ‡∏•‡∏∞‡∏Ç‡∏ô‡∏≤‡∏î";\
+    Text[ czech ] = "Um√≠stƒõn√≠ a velikost";                   \
+    Text[ hebrew ] = "Position und Gr√∂√üe";                    \
+    Text[ hindi ] = "Position and Size";                        \
+    Text[ slovak ] = "Umiestnenie a veƒækos≈•";                 \
+    Text[ hungarian ] = "Poz√≠ci√≥ √©s m√©ret";                 \
+    Text[ slovenian ] = "Polo≈æaj in velikost";                 \
+
+
 TabDialog RID_SVXDLG_TRANSFORM
 {
     OutputSize = TRUE ;
@@ -634,9 +668,13 @@ TabDialog RID_SVXDLG_TRANSFORM
             {
                 Identifier = RID_SVXPAGE_POSITION_SIZE ;
                 PageResID = RID_SVXPAGE_POSITION_SIZE ;
-                Text [ de ] = "Position und Grˆﬂe" ;
-                Text [ en-US ] = "Position and Size" ;
-                Text [ x-comment ] = " ";
+                _POS_SIZE_TEXT
+            };
+            PageItem
+            {
+                Identifier = RID_SVXPAGE_SWPOSSIZE;
+                PageResID = RID_SVXPAGE_SWPOSSIZE;
+                _POS_SIZE_TEXT
             };
             PageItem
             {
