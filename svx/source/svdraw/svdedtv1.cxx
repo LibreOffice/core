@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdedtv1.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: aw $ $Date: 2001-02-15 16:11:33 $
+ *  last change: $Author: aw $ $Date: 2001-02-16 12:16:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -768,7 +768,8 @@ void SdrEditView::SetAttrToMarked(const SfxItemSet& rAttr, BOOL bReplaceAll)
                     || nWhich == SDRATTR_3DOBJ_PERCENT_DIAGONAL
                     || nWhich == SDRATTR_3DOBJ_BACKSCALE
                     || nWhich == SDRATTR_3DOBJ_DEPTH
-                    || nWhich == SDRATTR_3DOBJ_END_ANGLE)
+                    || nWhich == SDRATTR_3DOBJ_END_ANGLE
+                    || nWhich == SDRATTR_3DSCENE_DISTANCE)
                 {
                     bPossibleGeomChange = TRUE;
                 }
