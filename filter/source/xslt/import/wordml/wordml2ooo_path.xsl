@@ -49,7 +49,7 @@
    All Rights Reserved.
 
    Contributor(s): _______________________________________
-
+   
  -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:w="http://schemas.microsoft.com/office/word/2003/wordml" xmlns:wx="http://schemas.microsoft.com/office/word/2003/auxHint" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:aml="http://schemas.microsoft.com/aml/2001/core" xmlns:dt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dom="http://www.w3.org/2001/xml-events" exclude-result-prefixes="w wx aml o dt  v">
     <xsl:include href="../../common/math.xsl"/>
@@ -151,7 +151,9 @@
             </xsl:when>
             <xsl:when test="$command = 'r' ">
                 <!-- relative lineto -->
-                <xsl:variable name="new-svg-path" select="concat($svg-path ,' l ' ) "/>
+                <!-- 'l' command is not supported currently, so we use 'L' -->
+                <xsl:message>'l' command is not supported currently, so we use 'L'. This may case problem.</xsl:message>
+                <xsl:variable name="new-svg-path" select="concat($svg-path ,' L ' ) "/>
                 <xsl:variable name="num-and-pos">
                     <xsl:call-template name="get-number-after">
                         <xsl:with-param name="vml-path" select="$vml-path"/>
@@ -159,16 +161,20 @@
                         <xsl:with-param name="count" select="2"/>
                     </xsl:call-template>
                 </xsl:variable>
+                <xsl:variable name="new-x" select=" substring-before( substring-before( $num-and-pos , ':')  , ' ')  + $current-x  "/>
+                <xsl:variable name="new-y" select=" substring-after( substring-before( $num-and-pos , ':')    , ' ')  + $current-y "/>
                 <xsl:call-template name="vmlpath2svgpath">
                     <xsl:with-param name="vml-path" select="$vml-path"/>
-                    <xsl:with-param name="svg-path" select=" concat($new-svg-path , substring-before( $num-and-pos , ':')  , ' ') "/>
+                    <!-- 'l' command is not supported currently-->
+                    <xsl:with-param name="svg-path" select=" concat($new-svg-path , $new-x ,' ' , $new-y  , ' ') "/>
+                    <!-- xsl:with-param name="svg-path" select=" concat($new-svg-path , substring-before( $num-and-pos , ':')  , ' ') "/ -->
                     <xsl:with-param name="position" select=" substring-after( $num-and-pos , ':')  "/>
                     <xsl:with-param name="last-command" select="$command"/>
                     <xsl:with-param name="current-x" select=" substring-before( substring-before( $num-and-pos , ':')  , ' ')  + $current-x  "/>
                     <xsl:with-param name="current-y" select=" substring-after( substring-before( $num-and-pos , ':')    , ' ')  + $current-y "/>
                 </xsl:call-template>
             </xsl:when>
-            <xsl:when test="$command = 'H' ">
+            <xsl:when test="$command = 'dummyH' ">
                 <!-- absolute horizontal  lineto -->
                 <xsl:variable name="new-svg-path" select="concat($svg-path ,' l ' ) "/>
                 <xsl:variable name="num-and-pos">
@@ -187,7 +193,7 @@
                     <xsl:with-param name="current-y" select=" $current-y"/>
                 </xsl:call-template>
             </xsl:when>
-            <xsl:when test="$command = 'h' ">
+            <xsl:when test="$command = 'dummyh' ">
                 <!-- relative horizontal  lineto -->
                 <xsl:variable name="new-svg-path" select="concat($svg-path ,' l ' ) "/>
                 <xsl:variable name="num-and-pos">
@@ -206,7 +212,7 @@
                     <xsl:with-param name="current-y" select=" $current-y"/>
                 </xsl:call-template>
             </xsl:when>
-            <xsl:when test="$command = 'V' ">
+            <xsl:when test="$command = 'dummyV' ">
                 <!-- absolute vertical  lineto -->
                 <xsl:variable name="new-svg-path" select="concat($svg-path ,' l ' ) "/>
                 <xsl:variable name="num-and-pos">
@@ -225,7 +231,7 @@
                     <xsl:with-param name="current-y" select=" substring-before( $num-and-pos , ':')  "/>
                 </xsl:call-template>
             </xsl:when>
-            <xsl:when test="$command = 'v' ">
+            <xsl:when test="$command = 'dummyv' ">
                 <!-- relative horizontal  lineto -->
                 <xsl:variable name="new-svg-path" select="concat($svg-path ,' l ' ) "/>
                 <xsl:variable name="num-and-pos">
@@ -296,7 +302,7 @@
                     <xsl:with-param name="current-y" select=" substring-after( substring-before( $num-and-pos , ':')    , ' ')  + $current-y "/>
                 </xsl:call-template>
             </xsl:when>
-            <xsl:when test="$command = 'S' ">
+            <xsl:when test="$command = 'dummyS' ">
                 <!-- absolute shorthand/smooth curveto -->
                 <xsl:variable name="new-svg-path" select="concat($svg-path ,' c ' ) "/>
                 <xsl:variable name="control-and-pos">
@@ -340,7 +346,7 @@
                     <xsl:with-param name="current-y" select=" substring-after( substring-before( $num-and-pos , ':')   , ' ') "/>
                 </xsl:call-template>
             </xsl:when>
-            <xsl:when test="$command = 's' ">
+            <xsl:when test="$command = 'dummys' ">
                 <!-- absolute shorthand/smooth curveto -->
                 <xsl:variable name="new-svg-path" select="concat($svg-path ,' v ' ) "/>
                 <xsl:variable name="control-and-pos">
@@ -384,7 +390,7 @@
                     <xsl:with-param name="current-y" select=" substring-after( substring-before( $num-and-pos , ':')    , ' ')  + $current-y "/>
                 </xsl:call-template>
             </xsl:when>
-            <xsl:when test="$command = 'Q' ">
+            <xsl:when test="$command = 'dummyQ' ">
                 <!-- absolute quadratic  bézier curves  -->
                 <xsl:variable name="new-svg-path" select="concat($svg-path ,' qb ' ) "/>
                 <xsl:variable name="control-and-pos">
@@ -410,7 +416,7 @@
                     <xsl:with-param name="current-y" select=" substring-after( substring-before( $num-and-pos , ':')   , ' ') "/>
                 </xsl:call-template>
             </xsl:when>
-            <xsl:when test="$command = 'q' ">
+            <xsl:when test="$command = 'dummyq' ">
                 <!-- relative  quadratic  bézier curves -->
                 <xsl:variable name="control-and-pos">
                     <xsl:call-template name="get-number-after">
@@ -439,9 +445,10 @@
                     <xsl:with-param name="current-y" select=" substring-after( $absolute-number   , ' ') "/>
                 </xsl:call-template>
             </xsl:when>
-            <xsl:when test="$command = 'x' or $command = 'z' ">
+            <xsl:when test="$command = 'x' ">
+                <!--dummy or $command = 'z' "-->
                 <!-- closepath -->
-                <xsl:variable name="new-svg-path" select="concat($svg-path ,' z ' ) "/>
+                <xsl:variable name="new-svg-path" select="concat($svg-path ,' Z ' ) "/>
                 <xsl:call-template name="vmlpath2svgpath">
                     <xsl:with-param name="vml-path" select="$vml-path"/>
                     <xsl:with-param name="svg-path" select=" concat($new-svg-path , ' ') "/>
@@ -451,13 +458,741 @@
                     <xsl:with-param name="current-y" select=" $current-y"/>
                 </xsl:call-template>
             </xsl:when>
+            <xsl:when test="$command = 'e' ">
+                <!-- end path -->
+                <xsl:variable name="new-svg-path" select="concat($svg-path ,' N ' )"/>
+                <xsl:call-template name="vmlpath2svgpath">
+                    <xsl:with-param name="vml-path" select="$vml-path"/>
+                    <xsl:with-param name="svg-path" select=" concat($new-svg-path , ' ') "/>
+                    <xsl:with-param name="position" select=" $newpos  "/>
+                    <xsl:with-param name="last-command" select="$command"/>
+                    <xsl:with-param name="current-x" select=" $current-x "/>
+                    <xsl:with-param name="current-y" select=" $current-y"/>
+                </xsl:call-template>
+            </xsl:when>
+            <!--Code below is for the support of h-command like ha,hb....hi, maybe still need to revise-->
+            <xsl:when test="$command = 'ha' ">
+                <xsl:variable name="new-svg-path" select="$svg-path"/>
+                <!--simply did nothing which might be wrong-->
+                <xsl:call-template name="vmlpath2svgpath">
+                    <xsl:with-param name="vml-path" select="$vml-path"/>
+                    <xsl:with-param name="svg-path" select=" concat($new-svg-path , ' ') "/>
+                    <xsl:with-param name="position" select=" $newpos  "/>
+                    <xsl:with-param name="last-command" select="$command"/>
+                    <xsl:with-param name="current-x" select=" $current-x "/>
+                    <xsl:with-param name="current-y" select=" $current-y"/>
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:when test="$command = 'hb' ">
+                <xsl:variable name="new-svg-path" select="$svg-path"/>
+                <!--simply did nothing which might be wrong-->
+                <xsl:call-template name="vmlpath2svgpath">
+                    <xsl:with-param name="vml-path" select="$vml-path"/>
+                    <xsl:with-param name="svg-path" select=" concat($new-svg-path , ' ') "/>
+                    <xsl:with-param name="position" select=" $newpos  "/>
+                    <xsl:with-param name="last-command" select="$command"/>
+                    <xsl:with-param name="current-x" select=" $current-x "/>
+                    <xsl:with-param name="current-y" select=" $current-y"/>
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:when test="$command = 'hc' ">
+                <xsl:variable name="new-svg-path" select="$svg-path"/>
+                <!--simply did nothing which might be wrong-->
+                <xsl:call-template name="vmlpath2svgpath">
+                    <xsl:with-param name="vml-path" select="$vml-path"/>
+                    <xsl:with-param name="svg-path" select=" concat($new-svg-path , ' ') "/>
+                    <xsl:with-param name="position" select=" $newpos  "/>
+                    <xsl:with-param name="last-command" select="$command"/>
+                    <xsl:with-param name="current-x" select=" $current-x "/>
+                    <xsl:with-param name="current-y" select=" $current-y"/>
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:when test="$command = 'hd' ">
+                <xsl:variable name="new-svg-path" select="$svg-path"/>
+                <!--simply did nothing which might be wrong-->
+                <xsl:call-template name="vmlpath2svgpath">
+                    <xsl:with-param name="vml-path" select="$vml-path"/>
+                    <xsl:with-param name="svg-path" select=" concat($new-svg-path , ' ') "/>
+                    <xsl:with-param name="position" select=" $newpos  "/>
+                    <xsl:with-param name="last-command" select="$command"/>
+                    <xsl:with-param name="current-x" select=" $current-x "/>
+                    <xsl:with-param name="current-y" select=" $current-y"/>
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:when test="$command = 'he' ">
+                <xsl:variable name="new-svg-path" select="$svg-path"/>
+                <!--simply did nothing which might be wrong-->
+                <xsl:call-template name="vmlpath2svgpath">
+                    <xsl:with-param name="vml-path" select="$vml-path"/>
+                    <xsl:with-param name="svg-path" select=" concat($new-svg-path , ' ') "/>
+                    <xsl:with-param name="position" select=" $newpos  "/>
+                    <xsl:with-param name="last-command" select="$command"/>
+                    <xsl:with-param name="current-x" select=" $current-x "/>
+                    <xsl:with-param name="current-y" select=" $current-y"/>
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:when test="$command = 'hf' ">
+                <xsl:variable name="new-svg-path" select="$svg-path"/>
+                <!--simply did nothing which might be wrong-->
+                <xsl:call-template name="vmlpath2svgpath">
+                    <xsl:with-param name="vml-path" select="$vml-path"/>
+                    <xsl:with-param name="svg-path" select=" concat($new-svg-path , ' ') "/>
+                    <xsl:with-param name="position" select=" $newpos  "/>
+                    <xsl:with-param name="last-command" select="$command"/>
+                    <xsl:with-param name="current-x" select=" $current-x "/>
+                    <xsl:with-param name="current-y" select=" $current-y"/>
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:when test="$command = 'hg' ">
+                <xsl:variable name="new-svg-path" select="$svg-path"/>
+                <!--simply did nothing which might be wrong-->
+                <xsl:call-template name="vmlpath2svgpath">
+                    <xsl:with-param name="vml-path" select="$vml-path"/>
+                    <xsl:with-param name="svg-path" select=" concat($new-svg-path , ' ') "/>
+                    <xsl:with-param name="position" select=" $newpos  "/>
+                    <xsl:with-param name="last-command" select="$command"/>
+                    <xsl:with-param name="current-x" select=" $current-x "/>
+                    <xsl:with-param name="current-y" select=" $current-y"/>
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:when test="$command = 'hh' ">
+                <xsl:variable name="new-svg-path" select="$svg-path"/>
+                <!--simply did nothing which might be wrong-->
+                <xsl:call-template name="vmlpath2svgpath">
+                    <xsl:with-param name="vml-path" select="$vml-path"/>
+                    <xsl:with-param name="svg-path" select=" concat($new-svg-path , ' ') "/>
+                    <xsl:with-param name="position" select=" $newpos  "/>
+                    <xsl:with-param name="last-command" select="$command"/>
+                    <xsl:with-param name="current-x" select=" $current-x "/>
+                    <xsl:with-param name="current-y" select=" $current-y"/>
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:when test="$command = 'hi' ">
+                <xsl:variable name="new-svg-path" select="$svg-path"/>
+                <!--simply did nothing which might be wrong-->
+                <xsl:call-template name="vmlpath2svgpath">
+                    <xsl:with-param name="vml-path" select="$vml-path"/>
+                    <xsl:with-param name="svg-path" select=" concat($new-svg-path , ' ') "/>
+                    <xsl:with-param name="position" select=" $newpos  "/>
+                    <xsl:with-param name="last-command" select="$command"/>
+                    <xsl:with-param name="current-x" select=" $current-x "/>
+                    <xsl:with-param name="current-y" select=" $current-y"/>
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:when test="$command = 'nf' or $command = 'ns' ">
+                <xsl:variable name="new-svg-path" select="$svg-path"/>
+                <!--simply did nothing which might be wrong-->
+                <xsl:call-template name="vmlpath2svgpath">
+                    <xsl:with-param name="vml-path" select="$vml-path"/>
+                    <xsl:with-param name="svg-path" select=" concat($new-svg-path , ' ') "/>
+                    <xsl:with-param name="position" select=" $newpos  "/>
+                    <xsl:with-param name="last-command" select="$command"/>
+                    <xsl:with-param name="current-x" select=" $current-x "/>
+                    <xsl:with-param name="current-y" select=" $current-y"/>
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:when test="$command = 'al' ">
+                <!-- absolute moveto -->
+                <xsl:variable name="new-svg-path" select="concat($svg-path ,' W ' ) "/>
+                <xsl:variable name="num-and-pos">
+                    <xsl:call-template name="get-number-after">
+                        <xsl:with-param name="vml-path" select="$vml-path"/>
+                        <xsl:with-param name="position" select="$newpos"/>
+                        <xsl:with-param name="count" select="6"/>
+                    </xsl:call-template>
+                </xsl:variable>
+                <xsl:call-template name="vmlpath2svgpath">
+                    <xsl:with-param name="vml-path" select="$vml-path"/>
+                    <xsl:with-param name="svg-path" select=" concat($new-svg-path , substring-before( $num-and-pos , ':')  , ' ') "/>
+                    <xsl:with-param name="position" select=" substring-after( $num-and-pos , ':')  "/>
+                    <xsl:with-param name="last-command" select="$command"/>
+                    <xsl:with-param name="current-x" select=" substring-before( substring-before( $num-and-pos , ':')   , ' ') "/>
+                    <xsl:with-param name="current-y" select=" substring-after( substring-before( $num-and-pos , ':')   , ' ') "/>
+                </xsl:call-template>
+            </xsl:when>
             <xsl:otherwise>
                 <xsl:value-of select="$svg-path"/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
+    <!-- 
+    **Template vmlpath2enhancedpath**
+    The template is resposible for converting the vml-path to enhanced-path, because the svg:path 
+    cann't support command a now.(But heard that will be supported in OOo3.0)
+    And  the 2nd reason of using an enhanced-path is that enhanced-path have a perfect maping to 
+    vmlpath.(You will find out that often,we  even don't need to change the parameters).
+    -->
+    <xsl:template name="vmlpath2enhancedpath">
+        <xsl:param name="vml-path"/>
+        <xsl:param name="enhanced-path" select="''"/>
+        <xsl:param name="position" select="1"/>
+        <xsl:param name="last-command" select="'m'"/>
+        <xsl:param name="current-x" select="'0'"/>
+        <xsl:param name="current-y" select="'0'"/>
+        <xsl:variable name="command-and-newpos">
+            <xsl:call-template name="get-path-command">
+                <xsl:with-param name="vml-path" select="$vml-path"/>
+                <xsl:with-param name="position" select="$position"/>
+                <xsl:with-param name="last-command" select="$last-command"/>
+            </xsl:call-template>
+        </xsl:variable>
+        <xsl:variable name="command" select="substring-before($command-and-newpos , ':')"/>
+        <xsl:variable name="newpos" select="substring-after($command-and-newpos , ':')"/>
+        <xsl:choose>
+            <xsl:when test="$command = 'm' ">
+                <!--####Notice that the "m 0,0,1,1,1,1" means two lines-->
+                <!-- absolute moveto -->
+                <xsl:variable name="new-enhanced-path" select="concat($enhanced-path ,' M ' ) "/>
+                <xsl:variable name="num-and-pos">
+                    <xsl:call-template name="get-number-after">
+                        <xsl:with-param name="vml-path" select="$vml-path"/>
+                        <xsl:with-param name="position" select="$newpos"/>
+                        <xsl:with-param name="count" select="2"/>
+                    </xsl:call-template>
+                </xsl:variable>
+                <xsl:call-template name="vmlpath2enhancedpath">
+                    <xsl:with-param name="vml-path" select="$vml-path"/>
+                    <xsl:with-param name="enhanced-path" select=" concat($new-enhanced-path , substring-before( $num-and-pos , ':')  , ' ') "/>
+                    <xsl:with-param name="position" select=" substring-after( $num-and-pos , ':')  "/>
+                    <xsl:with-param name="last-command" select="$command"/>
+                    <xsl:with-param name="current-x" select=" substring-before( substring-before( $num-and-pos , ':')   , ' ') "/>
+                    <xsl:with-param name="current-y" select=" substring-after( substring-before( $num-and-pos , ':')   , ' ') "/>
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:when test="$command = 'l' ">
+                <!-- absolute lineto -->
+                <xsl:variable name="new-enhanced-path" select="concat($enhanced-path ,' L ' ) "/>
+                <xsl:variable name="num-and-pos">
+                    <xsl:call-template name="get-number-after">
+                        <xsl:with-param name="vml-path" select="$vml-path"/>
+                        <xsl:with-param name="position" select="$newpos"/>
+                        <xsl:with-param name="count" select="2"/>
+                    </xsl:call-template>
+                </xsl:variable>
+                <xsl:call-template name="vmlpath2enhancedpath">
+                    <xsl:with-param name="vml-path" select="$vml-path"/>
+                    <xsl:with-param name="enhanced-path" select=" concat($new-enhanced-path , substring-before( $num-and-pos , ':')  , ' ') "/>
+                    <xsl:with-param name="position" select=" substring-after( $num-and-pos , ':')  "/>
+                    <xsl:with-param name="last-command" select="$command"/>
+                    <xsl:with-param name="current-x" select=" substring-before( substring-before( $num-and-pos , ':')   , ' ') "/>
+                    <xsl:with-param name="current-y" select=" substring-after( substring-before( $num-and-pos , ':')   , ' ') "/>
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:when test="$command = 'x' ">
+                <!--dummy or $command = 'z' "-->
+                <!-- closepath -->
+                <xsl:variable name="new-enhanced-path" select="concat($enhanced-path ,' Z ' ) "/>
+                <xsl:call-template name="vmlpath2enhancedpath">
+                    <xsl:with-param name="vml-path" select="$vml-path"/>
+                    <xsl:with-param name="enhanced-path" select=" concat($new-enhanced-path , ' ') "/>
+                    <xsl:with-param name="position" select=" $newpos  "/>
+                    <xsl:with-param name="last-command" select="$command"/>
+                    <xsl:with-param name="current-x" select=" $current-x "/>
+                    <xsl:with-param name="current-y" select=" $current-y"/>
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:when test="$command = 'e' ">
+                <!-- end path -->
+                <xsl:variable name="new-enhanced-path" select="concat($enhanced-path ,' N ' )"/>
+                <xsl:call-template name="vmlpath2enhancedpath">
+                    <xsl:with-param name="vml-path" select="$vml-path"/>
+                    <xsl:with-param name="enhanced-path" select=" concat($new-enhanced-path , ' ') "/>
+                    <xsl:with-param name="position" select=" $newpos  "/>
+                    <xsl:with-param name="last-command" select="$command"/>
+                    <xsl:with-param name="current-x" select=" $current-x "/>
+                    <xsl:with-param name="current-y" select=" $current-y"/>
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:when test="$command = 'c' ">
+                <!-- absolute curveto -->
+                <xsl:variable name="new-enhanced-path" select="concat($enhanced-path ,' C ' ) "/>
+                <xsl:variable name="control-and-pos">
+                    <xsl:call-template name="get-number-after">
+                        <xsl:with-param name="vml-path" select="$vml-path"/>
+                        <xsl:with-param name="position" select="$newpos"/>
+                        <xsl:with-param name="count" select="4"/>
+                    </xsl:call-template>
+                </xsl:variable>
+                <xsl:variable name="num-and-pos">
+                    <xsl:call-template name="get-number-after">
+                        <xsl:with-param name="vml-path" select="$vml-path"/>
+                        <xsl:with-param name="position" select="substring-after( $control-and-pos , ':') "/>
+                        <xsl:with-param name="count" select="2"/>
+                    </xsl:call-template>
+                </xsl:variable>
+                <xsl:call-template name="vmlpath2enhancedpath">
+                    <xsl:with-param name="vml-path" select="$vml-path"/>
+                    <xsl:with-param name="enhanced-path" select=" concat($new-enhanced-path , substring-before( $control-and-pos , ':')  , ' ' ,  substring-before( $num-and-pos , ':')  , ' ') "/>
+                    <xsl:with-param name="position" select=" substring-after( $num-and-pos , ':')  "/>
+                    <xsl:with-param name="last-command" select="$command"/>
+                    <xsl:with-param name="current-x" select=" substring-before( substring-before( $num-and-pos , ':')   , ' ') "/>
+                    <xsl:with-param name="current-y" select=" substring-after( substring-before( $num-and-pos , ':')   , ' ') "/>
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:when test="$command = 't' ">
+                <!-- relative moveto -->
+                <xsl:variable name="new-enhanced-path" select="concat($enhanced-path ,' M ' ) "/>
+                <!--####maybe this is not crect because t r and v hasn't direct image in enhaced-path-->
+                <xsl:variable name="num-and-pos">
+                    <xsl:call-template name="get-number-after">
+                        <xsl:with-param name="vml-path" select="$vml-path"/>
+                        <xsl:with-param name="position" select="$newpos"/>
+                        <xsl:with-param name="count" select="2"/>
+                    </xsl:call-template>
+                </xsl:variable>
+                <xsl:call-template name="vmlpath2enhancedpath">
+                    <xsl:with-param name="vml-path" select="$vml-path"/>
+                    <xsl:with-param name="enhanced-path" select=" concat($new-enhanced-path , substring-before( $num-and-pos , ':')  , ' ') "/>
+                    <xsl:with-param name="position" select=" substring-after( $num-and-pos , ':')  "/>
+                    <xsl:with-param name="last-command" select="$command"/>
+                    <xsl:with-param name="current-x" select=" substring-before( substring-before( $num-and-pos , ':')    , ' ')  + $current-x"/>
+                    <xsl:with-param name="current-y" select=" substring-after( substring-before( $num-and-pos , ':')    , ' ') + $current-y "/>
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:when test="$command = 'r' ">
+                <!-- relative lineto -->
+                <!--####maybe this is not crect because 't' 'r' and 'v' hasn't direct image in enhaced-path-->
+                <!-- 'l' command is not supported currently, so we use 'L' -->
+                <xsl:message>'l' command is not supported currently, so we use 'L'. This may case problem.</xsl:message>
+                <xsl:variable name="new-enhanced-path" select="concat($enhanced-path ,' L ' ) "/>
+                <xsl:variable name="num-and-pos">
+                    <xsl:call-template name="get-number-after">
+                        <xsl:with-param name="vml-path" select="$vml-path"/>
+                        <xsl:with-param name="position" select="$newpos"/>
+                        <xsl:with-param name="count" select="2"/>
+                    </xsl:call-template>
+                </xsl:variable>
+                <xsl:variable name="new-x" select=" substring-before( substring-before( $num-and-pos , ':')  , ' ')  + $current-x  "/>
+                <xsl:variable name="new-y" select=" substring-after( substring-before( $num-and-pos , ':')    , ' ')  + $current-y "/>
+                <xsl:call-template name="vmlpath2enhancedpath">
+                    <xsl:with-param name="vml-path" select="$vml-path"/>
+                    <!-- 'l' command is not supported currently-->
+                    <xsl:with-param name="enhanced-path" select=" concat($new-enhanced-path , $new-x ,' ' , $new-y  , ' ') "/>
+                    <!-- xsl:with-param name="enhanced-path" select=" concat($new-enhanced-path , substring-before( $num-and-pos , ':')  , ' ') "/ -->
+                    <xsl:with-param name="position" select=" substring-after( $num-and-pos , ':')  "/>
+                    <xsl:with-param name="last-command" select="$command"/>
+                    <xsl:with-param name="current-x" select=" substring-before( substring-before( $num-and-pos , ':')  , ' ')  + $current-x  "/>
+                    <xsl:with-param name="current-y" select=" substring-after( substring-before( $num-and-pos , ':')    , ' ')  + $current-y "/>
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:when test="$command = 'v' ">
+                <!-- relative curveto -->
+                <!--####maybe this is not crect because 't' 'r' and 'v' hasn't direct image in enhaced-path-->
+                <xsl:variable name="new-enhanced-path" select="concat($enhanced-path ,' C ' ) "/>
+                <!--<xsl:variable name="control-and-pos">
+                    <xsl:call-template name="get-number-after">
+                        <xsl:with-param name="vml-path" select="$vml-path"/>
+                        <xsl:with-param name="position" select="$newpos"/>
+                        <xsl:with-param name="count" select="4"/>
+                    </xsl:call-template>
+                </xsl:variable>
+                <xsl:variable name="num-and-pos">
+                    <xsl:call-template name="get-number-after">
+                        <xsl:with-param name="vml-path" select="$vml-path"/>
+                        <xsl:with-param name="position" select="substring-after( $control-and-pos , ':') "/>
+                        <xsl:with-param name="count" select="2"/>
+                    </xsl:call-template>
+                </xsl:variable>
+				<xsl:call-template name="vmlpath2enhancedpath">
+                    <xsl:with-param name="vml-path" select="$vml-path"/>
+                    <xsl:with-param name="enhanced-path" select=" concat($new-enhanced-path , substring-before( $control-and-pos , ':')  , ' ' ,  substring-before( $num-and-pos , ':')  , ' ') "/>
+                    <xsl:with-param name="position" select=" substring-after( $num-and-pos , ':')  "/>
+                    <xsl:with-param name="last-command" select="$command"/>
+                    <xsl:with-param name="current-x" select=" substring-before( substring-before( $num-and-pos , ':')  , ' ')  + $current-x  "/>
+                    <xsl:with-param name="current-y" select=" substring-after( substring-before( $num-and-pos , ':')    , ' ')  + $current-y "/>
+                </xsl:call-template>-
+                -->
+                <xsl:variable name="x1">
+                    <xsl:call-template name="get-number-after">
+                        <xsl:with-param name="vml-path" select="$vml-path"/>
+                        <xsl:with-param name="position" select="$newpos"/>
+                        <xsl:with-param name="count" select="1"/>
+                    </xsl:call-template>
+                </xsl:variable>
+                <xsl:variable name="y1">
+                    <xsl:call-template name="get-number-after">
+                        <xsl:with-param name="vml-path" select="$vml-path"/>
+                        <xsl:with-param name="position" select="substring-after( $x1 , ':')"/>
+                        <xsl:with-param name="count" select="1"/>
+                    </xsl:call-template>
+                </xsl:variable>
+                <xsl:variable name="x2">
+                    <xsl:call-template name="get-number-after">
+                        <xsl:with-param name="vml-path" select="$vml-path"/>
+                        <xsl:with-param name="position" select="substring-after( $y1 , ':')"/>
+                        <xsl:with-param name="count" select="1"/>
+                    </xsl:call-template>
+                </xsl:variable>
+                <xsl:variable name="y2">
+                    <xsl:call-template name="get-number-after">
+                        <xsl:with-param name="vml-path" select="$vml-path"/>
+                        <xsl:with-param name="position" select="substring-after( $x2 , ':')"/>
+                        <xsl:with-param name="count" select="1"/>
+                    </xsl:call-template>
+                </xsl:variable>
+                <xsl:variable name="x">
+                    <xsl:call-template name="get-number-after">
+                        <xsl:with-param name="vml-path" select="$vml-path"/>
+                        <xsl:with-param name="position" select="substring-after( $y2 , ':')"/>
+                        <xsl:with-param name="count" select="1"/>
+                    </xsl:call-template>
+                </xsl:variable>
+                <xsl:variable name="y">
+                    <xsl:call-template name="get-number-after">
+                        <xsl:with-param name="vml-path" select="$vml-path"/>
+                        <xsl:with-param name="position" select="substring-after( $x , ':')"/>
+                        <xsl:with-param name="count" select="1"/>
+                    </xsl:call-template>
+                </xsl:variable>
+                <xsl:variable name="val_x1">
+                    <xsl:value-of select="substring-before( $x1 , ':')+$current-x"/>
+                </xsl:variable>
+                <xsl:variable name="val_y1">
+                    <xsl:value-of select="substring-before( $y1 , ':')+$current-y"/>
+                </xsl:variable>
+                <xsl:variable name="val_x2">
+                    <xsl:value-of select="substring-before( $x2 , ':')+$current-x"/>
+                </xsl:variable>
+                <xsl:variable name="val_y2">
+                    <xsl:value-of select="substring-before( $y2 , ':')+$current-y"/>
+                </xsl:variable>
+                <xsl:variable name="val_x">
+                    <xsl:value-of select="substring-before( $x , ':')+$current-x"/>
+                </xsl:variable>
+                <xsl:variable name="val_y">
+                    <xsl:value-of select="substring-before( $y , ':')+$current-y"/>
+                </xsl:variable>
+                <xsl:variable name="control-and-pos">
+                    <xsl:value-of select="concat($val_x1, ' ',$val_y1, ' ',$val_x2, ' ',$val_y2, ' ' )"/>
+                </xsl:variable>
+                <xsl:variable name="num-and-pos">
+                    <xsl:value-of select="concat($val_x, ' ',$val_y, ' ' )"/>
+                </xsl:variable>
+                <xsl:call-template name="vmlpath2enhancedpath">
+                    <xsl:with-param name="vml-path" select="$vml-path"/>
+                    <xsl:with-param name="enhanced-path" select=" concat($new-enhanced-path , ' ',$control-and-pos , ' ' , $num-and-pos , ' ') "/>
+                    <xsl:with-param name="position" select=" substring-after( $y , ':')  "/>
+                    <xsl:with-param name="last-command" select="$command"/>
+                    <xsl:with-param name="current-x" select=" $val_x  "/>
+                    <xsl:with-param name="current-y" select=" $val_y "/>
+                </xsl:call-template>
+            </xsl:when>
+            <!--Code below is for the support of h-command like ha,hb....hi, maybe still need to revise-->
+            <xsl:when test="$command = 'ha' ">
+                <xsl:variable name="new-enhanced-path" select="$enhanced-path"/>
+                <!--simply did nothing which might be wrong-->
+                <xsl:call-template name="vmlpath2enhancedpath">
+                    <xsl:with-param name="vml-path" select="$vml-path"/>
+                    <xsl:with-param name="enhanced-path" select=" concat($new-enhanced-path , ' ') "/>
+                    <xsl:with-param name="position" select=" $newpos  "/>
+                    <xsl:with-param name="last-command" select="$command"/>
+                    <xsl:with-param name="current-x" select=" $current-x "/>
+                    <xsl:with-param name="current-y" select=" $current-y"/>
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:when test="$command = 'hb' ">
+                <xsl:variable name="new-enhanced-path" select="$enhanced-path"/>
+                <!--simply did nothing which might be wrong-->
+                <xsl:call-template name="vmlpath2enhancedpath">
+                    <xsl:with-param name="vml-path" select="$vml-path"/>
+                    <xsl:with-param name="enhanced-path" select=" concat($new-enhanced-path , ' ') "/>
+                    <xsl:with-param name="position" select=" $newpos  "/>
+                    <xsl:with-param name="last-command" select="$command"/>
+                    <xsl:with-param name="current-x" select=" $current-x "/>
+                    <xsl:with-param name="current-y" select=" $current-y"/>
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:when test="$command = 'hc' ">
+                <xsl:variable name="new-enhanced-path" select="$enhanced-path"/>
+                <!--simply did nothing which might be wrong-->
+                <xsl:call-template name="vmlpath2enhancedpath">
+                    <xsl:with-param name="vml-path" select="$vml-path"/>
+                    <xsl:with-param name="enhanced-path" select=" concat($new-enhanced-path , ' ') "/>
+                    <xsl:with-param name="position" select=" $newpos  "/>
+                    <xsl:with-param name="last-command" select="$command"/>
+                    <xsl:with-param name="current-x" select=" $current-x "/>
+                    <xsl:with-param name="current-y" select=" $current-y"/>
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:when test="$command = 'hd' ">
+                <xsl:variable name="new-enhanced-path" select="$enhanced-path"/>
+                <!--simply did nothing which might be wrong-->
+                <xsl:call-template name="vmlpath2enhancedpath">
+                    <xsl:with-param name="vml-path" select="$vml-path"/>
+                    <xsl:with-param name="enhanced-path" select=" concat($new-enhanced-path , ' ') "/>
+                    <xsl:with-param name="position" select=" $newpos  "/>
+                    <xsl:with-param name="last-command" select="$command"/>
+                    <xsl:with-param name="current-x" select=" $current-x "/>
+                    <xsl:with-param name="current-y" select=" $current-y"/>
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:when test="$command = 'he' ">
+                <xsl:variable name="new-enhanced-path" select="$enhanced-path"/>
+                <!--simply did nothing which might be wrong-->
+                <xsl:call-template name="vmlpath2enhancedpath">
+                    <xsl:with-param name="vml-path" select="$vml-path"/>
+                    <xsl:with-param name="enhanced-path" select=" concat($new-enhanced-path , ' ') "/>
+                    <xsl:with-param name="position" select=" $newpos  "/>
+                    <xsl:with-param name="last-command" select="$command"/>
+                    <xsl:with-param name="current-x" select=" $current-x "/>
+                    <xsl:with-param name="current-y" select=" $current-y"/>
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:when test="$command = 'hf' ">
+                <xsl:variable name="new-enhanced-path" select="$enhanced-path"/>
+                <!--simply did nothing which might be wrong-->
+                <xsl:call-template name="vmlpath2enhancedpath">
+                    <xsl:with-param name="vml-path" select="$vml-path"/>
+                    <xsl:with-param name="enhanced-path" select=" concat($new-enhanced-path , ' ') "/>
+                    <xsl:with-param name="position" select=" $newpos  "/>
+                    <xsl:with-param name="last-command" select="$command"/>
+                    <xsl:with-param name="current-x" select=" $current-x "/>
+                    <xsl:with-param name="current-y" select=" $current-y"/>
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:when test="$command = 'hg' ">
+                <xsl:variable name="new-enhanced-path" select="$enhanced-path"/>
+                <!--simply did nothing which might be wrong-->
+                <xsl:call-template name="vmlpath2enhancedpath">
+                    <xsl:with-param name="vml-path" select="$vml-path"/>
+                    <xsl:with-param name="enhanced-path" select=" concat($new-enhanced-path , ' ') "/>
+                    <xsl:with-param name="position" select=" $newpos  "/>
+                    <xsl:with-param name="last-command" select="$command"/>
+                    <xsl:with-param name="current-x" select=" $current-x "/>
+                    <xsl:with-param name="current-y" select=" $current-y"/>
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:when test="$command = 'hh' ">
+                <xsl:variable name="new-enhanced-path" select="$enhanced-path"/>
+                <!--simply did nothing which might be wrong-->
+                <xsl:call-template name="vmlpath2enhancedpath">
+                    <xsl:with-param name="vml-path" select="$vml-path"/>
+                    <xsl:with-param name="enhanced-path" select=" concat($new-enhanced-path , ' ') "/>
+                    <xsl:with-param name="position" select=" $newpos  "/>
+                    <xsl:with-param name="last-command" select="$command"/>
+                    <xsl:with-param name="current-x" select=" $current-x "/>
+                    <xsl:with-param name="current-y" select=" $current-y"/>
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:when test="$command = 'hi' ">
+                <xsl:variable name="new-enhanced-path" select="$enhanced-path"/>
+                <!--simply did nothing which might be wrong-->
+                <xsl:call-template name="vmlpath2enhancedpath">
+                    <xsl:with-param name="vml-path" select="$vml-path"/>
+                    <xsl:with-param name="enhanced-path" select=" concat($new-enhanced-path , ' ') "/>
+                    <xsl:with-param name="position" select=" $newpos  "/>
+                    <xsl:with-param name="last-command" select="$command"/>
+                    <xsl:with-param name="current-x" select=" $current-x "/>
+                    <xsl:with-param name="current-y" select=" $current-y"/>
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:when test="$command = 'nf' ">
+                <xsl:variable name="new-enhanced-path" select="concat($enhanced-path ,' F ' )"/>
+                <!--simply did nothing which might be wrong-->
+                <xsl:call-template name="vmlpath2enhancedpath">
+                    <xsl:with-param name="vml-path" select="$vml-path"/>
+                    <xsl:with-param name="enhanced-path" select=" concat($new-enhanced-path , ' ') "/>
+                    <xsl:with-param name="position" select=" $newpos  "/>
+                    <xsl:with-param name="last-command" select="$command"/>
+                    <xsl:with-param name="current-x" select=" $current-x "/>
+                    <xsl:with-param name="current-y" select=" $current-y"/>
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:when test="$command = 'ns' ">
+                <xsl:variable name="new-enhanced-path" select="concat($enhanced-path ,' S ' )"/>
+                <!--simply did nothing which might be wrong-->
+                <xsl:call-template name="vmlpath2enhancedpath">
+                    <xsl:with-param name="vml-path" select="$vml-path"/>
+                    <xsl:with-param name="enhanced-path" select=" concat($new-enhanced-path , ' ') "/>
+                    <xsl:with-param name="position" select=" $newpos  "/>
+                    <xsl:with-param name="last-command" select="$command"/>
+                    <xsl:with-param name="current-x" select=" $current-x "/>
+                    <xsl:with-param name="current-y" select=" $current-y"/>
+                </xsl:call-template>
+            </xsl:when>
+            <!--The following is 6 command which deal with arcs:
+                ae   ->T    	al -> U
+                at   -> A		ar  -> B
+				wa -> W 	wr  ->V 
+			  These pairs of commands have shown the perfect mapping from vml-path to enhanced-path-->
+            <xsl:when test="$command = 'ae' ">
+                <!-- arc on the screen with the start and end angles -->
+                <xsl:variable name="new-enhanced-path" select="concat($enhanced-path ,' T ' ) "/>
+                <xsl:variable name="num-and-pos">
+                    <xsl:call-template name="get-number-after">
+                        <xsl:with-param name="vml-path" select="$vml-path"/>
+                        <xsl:with-param name="position" select="$newpos"/>
+                        <xsl:with-param name="count" select="6"/>
+                    </xsl:call-template>
+                </xsl:variable>
+                <xsl:call-template name="vmlpath2enhancedpath">
+                    <xsl:with-param name="vml-path" select="$vml-path"/>
+                    <xsl:with-param name="enhanced-path" select=" concat($new-enhanced-path , substring-before( $num-and-pos , ':')  , ' ') "/>
+                    <xsl:with-param name="position" select=" substring-after( $num-and-pos , ':')  "/>
+                    <xsl:with-param name="last-command" select="$command"/>
+                    <xsl:with-param name="current-x" select=" substring-before( substring-before( $num-and-pos , ':')   , ' ') "/>
+                    <xsl:with-param name="current-y" select=" substring-after( substring-before( $num-and-pos , ':')   , ' ') "/>
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:when test="$command = 'al' ">
+                <!-- ae command plus a implicitly moveto startpoint-->
+                <xsl:variable name="new-enhanced-path" select="concat($enhanced-path ,' U ' ) "/>
+                <xsl:variable name="num-and-pos">
+                    <xsl:call-template name="get-number-after">
+                        <xsl:with-param name="vml-path" select="$vml-path"/>
+                        <xsl:with-param name="position" select="$newpos"/>
+                        <xsl:with-param name="count" select="6"/>
+                    </xsl:call-template>
+                </xsl:variable>
+                <xsl:call-template name="vmlpath2enhancedpath">
+                    <xsl:with-param name="vml-path" select="$vml-path"/>
+                    <xsl:with-param name="enhanced-path" select=" concat($new-enhanced-path , substring-before( $num-and-pos , ':')  , ' ') "/>
+                    <xsl:with-param name="position" select=" substring-after( $num-and-pos , ':')  "/>
+                    <xsl:with-param name="last-command" select="$command"/>
+                    <xsl:with-param name="current-x" select=" substring-before( substring-before( $num-and-pos , ':')   , ' ') "/>
+                    <xsl:with-param name="current-y" select=" substring-after( substring-before( $num-and-pos , ':')   , ' ') "/>
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:when test="$command = 'at' ">
+                <!-- arc on the screen with the edge box ,start points and end points(Notice it's counter-clockwise)-->
+                <xsl:variable name="new-enhanced-path" select="concat($enhanced-path ,' A ' ) "/>
+                <xsl:variable name="num-and-pos">
+                    <xsl:call-template name="get-number-after">
+                        <xsl:with-param name="vml-path" select="$vml-path"/>
+                        <xsl:with-param name="position" select="$newpos"/>
+                        <xsl:with-param name="count" select="8"/>
+                    </xsl:call-template>
+                </xsl:variable>
+                <xsl:call-template name="vmlpath2enhancedpath">
+                    <xsl:with-param name="vml-path" select="$vml-path"/>
+                    <xsl:with-param name="enhanced-path" select=" concat($new-enhanced-path , substring-before( $num-and-pos , ':')  , ' ') "/>
+                    <xsl:with-param name="position" select=" substring-after( $num-and-pos , ':')  "/>
+                    <xsl:with-param name="last-command" select="$command"/>
+                    <xsl:with-param name="current-x" select=" substring-before( substring-before( $num-and-pos , ':')   , ' ') "/>
+                    <xsl:with-param name="current-y" select=" substring-after( substring-before( $num-and-pos , ':')   , ' ') "/>
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:when test="$command = 'ar' ">
+                <!-- at command plus a implicitly moveto startpoint-->
+                <xsl:variable name="new-enhanced-path" select="concat($enhanced-path ,' B ' ) "/>
+                <xsl:variable name="num-and-pos">
+                    <xsl:call-template name="get-number-after">
+                        <xsl:with-param name="vml-path" select="$vml-path"/>
+                        <xsl:with-param name="position" select="$newpos"/>
+                        <xsl:with-param name="count" select="8"/>
+                    </xsl:call-template>
+                </xsl:variable>
+                <xsl:call-template name="vmlpath2enhancedpath">
+                    <xsl:with-param name="vml-path" select="$vml-path"/>
+                    <xsl:with-param name="enhanced-path" select=" concat($new-enhanced-path , substring-before( $num-and-pos , ':')  , ' ') "/>
+                    <xsl:with-param name="position" select=" substring-after( $num-and-pos , ':')  "/>
+                    <xsl:with-param name="last-command" select="$command"/>
+                    <xsl:with-param name="current-x" select=" substring-before( substring-before( $num-and-pos , ':')   , ' ') "/>
+                    <xsl:with-param name="current-y" select=" substring-after( substring-before( $num-and-pos , ':')   , ' ') "/>
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:when test="$command = 'wa' ">
+                <!-- arc on the screen with the edge box ,start points and end points(Notice it's clockwise)-->
+                <xsl:variable name="new-enhanced-path" select="concat($enhanced-path ,' W ' ) "/>
+                <xsl:variable name="num-and-pos">
+                    <xsl:call-template name="get-number-after">
+                        <xsl:with-param name="vml-path" select="$vml-path"/>
+                        <xsl:with-param name="position" select="$newpos"/>
+                        <xsl:with-param name="count" select="8"/>
+                    </xsl:call-template>
+                </xsl:variable>
+                <xsl:call-template name="vmlpath2enhancedpath">
+                    <xsl:with-param name="vml-path" select="$vml-path"/>
+                    <xsl:with-param name="enhanced-path" select=" concat($new-enhanced-path , substring-before( $num-and-pos , ':')  , ' ') "/>
+                    <xsl:with-param name="position" select=" substring-after( $num-and-pos , ':')  "/>
+                    <xsl:with-param name="last-command" select="$command"/>
+                    <xsl:with-param name="current-x" select=" substring-before( substring-before( $num-and-pos , ':')   , ' ') "/>
+                    <xsl:with-param name="current-y" select=" substring-after( substring-before( $num-and-pos , ':')   , ' ') "/>
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:when test="$command = 'wr' ">
+                <!-- wa command plus a implicitly moveto startpoint-->
+                <xsl:variable name="new-enhanced-path" select="concat($enhanced-path ,' V ' ) "/>
+                <xsl:variable name="num-and-pos">
+                    <xsl:call-template name="get-number-after">
+                        <xsl:with-param name="vml-path" select="$vml-path"/>
+                        <xsl:with-param name="position" select="$newpos"/>
+                        <xsl:with-param name="count" select="8"/>
+                    </xsl:call-template>
+                </xsl:variable>
+                <xsl:call-template name="vmlpath2enhancedpath">
+                    <xsl:with-param name="vml-path" select="$vml-path"/>
+                    <xsl:with-param name="enhanced-path" select=" concat($new-enhanced-path , substring-before( $num-and-pos , ':')  , ' ') "/>
+                    <xsl:with-param name="position" select=" substring-after( $num-and-pos , ':')  "/>
+                    <xsl:with-param name="last-command" select="$command"/>
+                    <xsl:with-param name="current-x" select=" substring-before( substring-before( $num-and-pos , ':')   , ' ') "/>
+                    <xsl:with-param name="current-y" select=" substring-after( substring-before( $num-and-pos , ':')   , ' ') "/>
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:when test="$command = 'qx' ">
+                <!-- Draw a quarter ellipse retated to the x-axis-->
+                <xsl:variable name="new-enhanced-path" select="concat($enhanced-path ,' X ' ) "/>
+                <xsl:variable name="num-and-pos">
+                    <xsl:call-template name="get-number-after">
+                        <xsl:with-param name="vml-path" select="$vml-path"/>
+                        <xsl:with-param name="position" select="$newpos"/>
+                        <xsl:with-param name="count" select="2"/>
+                    </xsl:call-template>
+                </xsl:variable>
+                <xsl:call-template name="vmlpath2enhancedpath">
+                    <xsl:with-param name="vml-path" select="$vml-path"/>
+                    <xsl:with-param name="enhanced-path" select=" concat($new-enhanced-path , substring-before( $num-and-pos , ':')  , ' ') "/>
+                    <xsl:with-param name="position" select=" substring-after( $num-and-pos , ':')  "/>
+                    <xsl:with-param name="last-command" select="$command"/>
+                    <xsl:with-param name="current-x" select=" substring-before( substring-before( $num-and-pos , ':')   , ' ') "/>
+                    <xsl:with-param name="current-y" select=" substring-after( substring-before( $num-and-pos , ':')   , ' ') "/>
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:when test="$command = 'qy' ">
+                <!-- Draw a quarter ellipse retated to the y-axis-->
+                <xsl:variable name="new-enhanced-path" select="concat($enhanced-path ,' Y ' ) "/>
+                <xsl:variable name="num-and-pos">
+                    <xsl:call-template name="get-number-after">
+                        <xsl:with-param name="vml-path" select="$vml-path"/>
+                        <xsl:with-param name="position" select="$newpos"/>
+                        <xsl:with-param name="count" select="2"/>
+                    </xsl:call-template>
+                </xsl:variable>
+                <xsl:call-template name="vmlpath2enhancedpath">
+                    <xsl:with-param name="vml-path" select="$vml-path"/>
+                    <xsl:with-param name="enhanced-path" select=" concat($new-enhanced-path , substring-before( $num-and-pos , ':')  , ' ') "/>
+                    <xsl:with-param name="position" select=" substring-after( $num-and-pos , ':')  "/>
+                    <xsl:with-param name="last-command" select="$command"/>
+                    <xsl:with-param name="current-x" select=" substring-before( substring-before( $num-and-pos , ':')   , ' ') "/>
+                    <xsl:with-param name="current-y" select=" substring-after( substring-before( $num-and-pos , ':')   , ' ') "/>
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:when test="$command = 'qb' ">
+                <!-- quadratic Bezier-->
+                <xsl:variable name="new-enhanced-path" select="concat($enhanced-path ,' Q ' ) "/>
+                <xsl:variable name="num-and-pos">
+                    <xsl:call-template name="get-number-after">
+                        <xsl:with-param name="vml-path" select="$vml-path"/>
+                        <xsl:with-param name="position" select="$newpos"/>
+                        <xsl:with-param name="count" select="4"/>
+                    </xsl:call-template>
+                </xsl:variable>
+                <xsl:call-template name="vmlpath2enhancedpath">
+                    <xsl:with-param name="vml-path" select="$vml-path"/>
+                    <xsl:with-param name="enhanced-path" select=" concat($new-enhanced-path , substring-before( $num-and-pos , ':')  , ' ') "/>
+                    <xsl:with-param name="position" select=" substring-after( $num-and-pos , ':')  "/>
+                    <xsl:with-param name="last-command" select="$command"/>
+                    <xsl:with-param name="current-x" select=" substring-before( substring-before( $num-and-pos , ':')   , ' ') "/>
+                    <xsl:with-param name="current-y" select=" substring-after( substring-before( $num-and-pos , ':')   , ' ') "/>
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$enhanced-path"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
     <xsl:template name="get-number-before">
-        <!--  get $count number of number before current position , output format:number1 number2 ... numberN:newpostion
+        <!--  get $count number of number before current position , output format:number1 number2 ... numberN:newpostion 
             skip $skipcount of numbers
         -->
         <xsl:param name="vml-path"/>
@@ -582,7 +1317,7 @@
                     </xsl:if>
                 </xsl:variable>
                 <xsl:choose>
-                    <xsl:when test="string-length(translate($curr-char ,  '+-.0123456789' ,'')) = 0 ">
+                    <xsl:when test="string-length(translate($curr-char ,  '+-.0123456789@' ,'')) = 0 ">
                         <!-- number start-->
                         <xsl:value-of select="$position"/>
                     </xsl:when>
@@ -604,7 +1339,6 @@
         <xsl:param name="vml-path"/>
         <xsl:param name="position"/>
         <xsl:param name="skip-comma" select="'yes'"/>
-
         <xsl:variable name="curr-char" select="substring($vml-path, $position , 1)"/>
         <xsl:choose>
             <xsl:when test="$curr-char = ',' and $skip-comma = 'yes'">
@@ -626,6 +1360,18 @@
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
+    <xsl:template name="format-number-pos">
+        <xsl:param name="number"/>
+        <xsl:param name="position"/>
+        <xsl:choose>
+            <xsl:when test="contains($number,'@')">
+                <xsl:value-of select="concat('?f',translate($number,'@',''),':' , $position ) "/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select=" concat(round($number) ,  ':' , $position) "/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
     <xsl:template name="get-next-number">
         <!-- get the next number from current position-->
         <xsl:param name="vml-path"/>
@@ -633,7 +1379,10 @@
         <xsl:param name="number" select=" '' "/>
         <xsl:choose>
             <xsl:when test="$position &gt; string-length($vml-path) ">
-                <xsl:value-of select=" concat(round($number) ,  ':' , $position) "/>
+                <xsl:call-template name="format-number-pos">
+                    <xsl:with-param name="number" select="$number"/>
+                    <xsl:with-param name="position" select="$position"/>
+                </xsl:call-template>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:variable name="curr-char" select="substring($vml-path, $position , 1)"/>
@@ -646,7 +1395,7 @@
                             <xsl:with-param name="number" select="concat( $number, $curr-char) "/>
                         </xsl:call-template>
                     </xsl:when>
-                    <xsl:when test="string-length(translate($curr-char ,  '+-' ,'') ) = 0  and string-length($number) = 0">
+                    <xsl:when test="string-length(translate($curr-char ,  '@+-' ,'') ) = 0  and string-length($number) = 0">
                         <!-- is number -->
                         <xsl:call-template name="get-next-number">
                             <xsl:with-param name="vml-path" select="$vml-path"/>
@@ -679,7 +1428,10 @@
                                 <xsl:with-param name="position" select="$position"/>
                             </xsl:call-template>
                         </xsl:variable>
-                        <xsl:value-of select="concat( round($number) ,  ':' , $new-pos)"/>
+                        <xsl:call-template name="format-number-pos">
+                            <xsl:with-param name="number" select="$number"/>
+                            <xsl:with-param name="position" select="$new-pos"/>
+                        </xsl:call-template>
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:otherwise>
@@ -692,7 +1444,10 @@
         <xsl:param name="number" select="''"/>
         <xsl:choose>
             <xsl:when test="not($position &gt; 0)">
-                <xsl:value-of select="concat( round($number ),  ':0')"/>
+                <xsl:call-template name="format-number-pos">
+                    <xsl:with-param name="number" select="$number"/>
+                    <xsl:with-param name="position" select="'0'"/>
+                </xsl:call-template>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:variable name="curr-char" select="substring($vml-path, $position -1 , 1)"/>
@@ -705,7 +1460,7 @@
                             <xsl:with-param name="number" select="concat($curr-char ,  $number) "/>
                         </xsl:call-template>
                     </xsl:when>
-                    <xsl:when test="string-length(translate($curr-char ,  '+-' ,'') ) = 0  and string-length($number) = 0">
+                    <xsl:when test="string-length(translate($curr-char ,  '@+-' ,'') ) = 0  and string-length($number) = 0">
                         <!-- skip it -->
                         <xsl:call-template name="get-previous-number">
                             <xsl:with-param name="vml-path" select="$vml-path"/>
@@ -715,16 +1470,22 @@
                     </xsl:when>
                     <xsl:when test="string-length(translate($curr-char ,  '+-' ,'') ) = 0  and string-length($number) &gt; 0">
                         <!-- finsh it with +/- -->
-                        <xsl:value-of select="concat( round( concat( $curr-char, $number)) ,  ':' , $position)"/>
+                        <xsl:call-template name="format-number-pos">
+                            <xsl:with-param name="number" select="$number"/>
+                            <xsl:with-param name="position" select="$position"/>
+                        </xsl:call-template>
                     </xsl:when>
                     <xsl:otherwise>
-                        <xsl:value-of select="concat( round($number) ,  ':' , $position)"/>
+                        <xsl:call-template name="format-number-pos">
+                            <xsl:with-param name="number" select="$number"/>
+                            <xsl:with-param name="position" select="$position"/>
+                        </xsl:call-template>
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
-    <xsl:template name="get-path-command">
+    <xsl:template name="get-path-command_dummy">
         <xsl:param name="vml-path"/>
         <xsl:param name="position" select="1"/>
         <xsl:param name="last-command"/>
@@ -737,12 +1498,155 @@
                         <!-- "MmZzLlHhVvCcSsQqTtAa" are all possiable  command chars -->
                         <xsl:value-of select="concat( $curr-char , ':'  , $position +1)"/>
                     </xsl:when>
-                    <xsl:when test="string-length(translate($curr-char ,  '+-.0123456789' ,'')) = 0 ">
+                    <xsl:when test="string-length(translate($curr-char ,  '+-.0123456789@' ,'')) = 0 ">
                         <!-- number start, use last command -->
                         <xsl:if test="string-length($last-command) = 0">
                             <xsl:message>ooo2wordml_path.xsl: Find undefined command</xsl:message>
                         </xsl:if>
                         <xsl:value-of select="concat( $last-command  , ':'  , $position )"/>
+                    </xsl:when>
+                    <xsl:when test="string-length(translate($curr-char ,  ',&#9;&#10;&#13;&#32;' ,'')) = 0 ">
+                        <!-- space or ',' should be skip -->
+                        <xsl:call-template name="get-path-command">
+                            <xsl:with-param name="vml-path" select="$vml-path"/>
+                            <xsl:with-param name="position" select="$position +1"/>
+                            <xsl:with-param name="last-command" select="$last-command"/>
+                        </xsl:call-template>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:message>ooo2wordml_path.xsl: Find undefined command:<xsl:value-of select="$curr-char"/>
+                        </xsl:message>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+    <!--
+        **get-path- command**
+		This function will collect the next command from a string. If the input string should has a start of number character,
+		we here implictly think the command is the last-command
+        All of the command of vml is listed as following:
+        __Basic commands:__
+		m		l		c		x		e		t		r		v		nf		ns		ae		al		at		ar		wa		wr		qx		qy		qb	
+		__Edit behavior extensions commands__
+		ha 	hb	hc	hd	he	hf	hg	hh	hi
+
+		So we know the longest command should be four character.The function is implemented on this basis:
+     -->
+    <xsl:template name="get-path-command">
+        <xsl:param name="vml-path"/>
+        <xsl:param name="position" select="1"/>
+        <xsl:param name="last-command"/>
+        <xsl:choose>
+            <xsl:when test="$position &gt; string-length($vml-path) "/>
+            <xsl:otherwise>
+                <xsl:variable name="curr-char" select="substring($vml-path, $position , 1)"/>
+                <xsl:variable name="curr-2char" select="substring($vml-path, $position - 1 , 2)"/>
+                <xsl:choose>
+                    <xsl:when test="$curr-char = 'a' ">
+                        <!--process the commands ae al at ar-->
+                        <xsl:variable name="second-char" select="substring($vml-path, $position+1 , 1)"/>
+                        <xsl:variable name="isvalid">
+                            <xsl:choose>
+                                <xsl:when test="$second-char='e' ">1</xsl:when>
+                                <xsl:when test="$second-char='l' ">1</xsl:when>
+                                <xsl:when test="$second-char='t' ">1</xsl:when>
+                                <xsl:when test="$second-char='r' ">1</xsl:when>
+                                <xsl:otherwise>0</xsl:otherwise>
+                            </xsl:choose>
+                        </xsl:variable>
+                        <xsl:if test="$isvalid = '1' ">
+                            <xsl:value-of select="concat( $curr-char,$second-char , ':'  , $position +2)"/>
+                        </xsl:if>
+                        <xsl:if test="$isvalid = '0' ">
+                            <xsl:message>ooo2wordml_path.xsl: Error command occured </xsl:message>
+                        </xsl:if>
+                    </xsl:when>
+                    <xsl:when test="$curr-char = 'n' ">
+                        <!--process the commands nf ns -->
+                        <xsl:variable name="second-char" select="substring($vml-path, $position+1 , 1)"/>
+                        <xsl:variable name="isvalid">
+                            <xsl:choose>
+                                <xsl:when test="$second-char='f' ">1</xsl:when>
+                                <xsl:when test="$second-char='s' ">1</xsl:when>
+                                <xsl:otherwise>0</xsl:otherwise>
+                            </xsl:choose>
+                        </xsl:variable>
+                        <xsl:if test="$isvalid = '1' ">
+                            <xsl:value-of select="concat( $curr-char,$second-char , ':'  , $position +2)"/>
+                        </xsl:if>
+                        <xsl:if test="$isvalid = '0' ">
+                            <xsl:message>ooo2wordml_path.xsl: Error command occured </xsl:message>
+                        </xsl:if>
+                    </xsl:when>
+                    <xsl:when test="$curr-char = 'w' ">
+                        <!--process the commands wa wr-->
+                        <xsl:variable name="second-char" select="substring($vml-path, $position+1 , 1)"/>
+                        <xsl:variable name="isvalid">
+                            <xsl:choose>
+                                <xsl:when test="$second-char='a' ">1</xsl:when>
+                                <xsl:when test="$second-char='r' ">1</xsl:when>
+                                <xsl:otherwise>0</xsl:otherwise>
+                            </xsl:choose>
+                        </xsl:variable>
+                        <xsl:if test="$isvalid = '1' ">
+                            <xsl:value-of select="concat( $curr-char,$second-char , ':'  , $position +2)"/>
+                        </xsl:if>
+                        <xsl:if test="$isvalid = '0' ">
+                            <xsl:message>ooo2wordml_path.xsl: Error command occured </xsl:message>
+                        </xsl:if>
+                    </xsl:when>
+                    <xsl:when test="$curr-char = 'q' ">
+                        <!--process the commands qx qy qb-->
+                        <xsl:variable name="second-char" select="substring($vml-path, $position+1 , 1)"/>
+                        <xsl:variable name="isvalid">
+                            <xsl:choose>
+                                <xsl:when test="$second-char='x' ">1</xsl:when>
+                                <xsl:when test="$second-char='y' ">1</xsl:when>
+                                <xsl:when test="$second-char='b' ">1</xsl:when>
+                                <xsl:otherwise>0</xsl:otherwise>
+                            </xsl:choose>
+                        </xsl:variable>
+                        <xsl:if test="$isvalid = '1' ">
+                            <xsl:value-of select="concat( $curr-char,$second-char , ':'  , $position +2)"/>
+                        </xsl:if>
+                        <xsl:if test="$isvalid = '0' ">
+                            <xsl:message>ooo2wordml_path.xsl: Error command occured </xsl:message>
+                        </xsl:if>
+                    </xsl:when>
+                    <xsl:when test="$curr-char = 'h' ">
+                        <!--process the edit behavior extensions commands-->
+                        <xsl:variable name="second-char" select="substring($vml-path, $position+1 , 1)"/>
+                        <xsl:variable name="isvalid">
+                            <xsl:choose>
+                                <xsl:when test="string-length(translate($second-char ,  'abcdefghi' ,'')) = 0">1</xsl:when>
+                                <xsl:otherwise>0</xsl:otherwise>
+                            </xsl:choose>
+                        </xsl:variable>
+                        <xsl:if test="$isvalid = '1' ">
+                            <xsl:value-of select="concat( $curr-char,$second-char , ':'  , $position +2)"/>
+                        </xsl:if>
+                        <xsl:if test="$isvalid = '0' ">
+                            <xsl:message>ooo2wordml_path.xsl: Error command occured </xsl:message>
+                        </xsl:if>
+                    </xsl:when>
+                    <xsl:when test="string-length(translate($curr-char ,  'mlcxetrv' ,'')) = 0 ">
+                        <!--process the single character commands m l c x e t r v -->
+                        <xsl:value-of select="concat( $curr-char , ':'  , $position +1)"/>
+                    </xsl:when>
+                    <xsl:when test="string-length(translate($curr-char ,  '+-.0123456789@' ,'')) = 0 ">
+                        <!-- number start, use last command -->
+                        <xsl:if test="string-length($last-command) = 0">
+                            <xsl:message>ooo2wordml_path.xsl: Find undefined command</xsl:message>
+                        </xsl:if>
+                        <xsl:value-of select="concat( $last-command  , ':'  , $position )"/>
+                    </xsl:when>
+                    <xsl:when test="$curr-2char=',,' ">
+                        <!-- here are two ',' -->
+                        <xsl:if test="string-length($last-command) = 0">
+                            <xsl:message>ooo2wordml_path.xsl: Find undefined command</xsl:message>
+                        </xsl:if>
+                        <xsl:value-of select="concat( $last-command  , ':'  , $position  )"/>
                     </xsl:when>
                     <xsl:when test="string-length(translate($curr-char ,  ',&#9;&#10;&#13;&#32;' ,'')) = 0 ">
                         <!-- space or ',' should be skip -->
