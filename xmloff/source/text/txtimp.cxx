@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: mib $ $Date: 2001-04-30 08:38:31 $
+ *  last change: $Author: mib $ $Date: 2001-04-30 09:04:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -835,7 +835,7 @@ SvXMLImportPropertyMapper *XMLTextImportHelper::CreateCharExtPropMapper(XMLFontS
 SvXMLImportPropertyMapper *XMLTextImportHelper::CreateParaExtPropMapper(XMLFontStylesContext *pFontDecls)
 {
     XMLPropertySetMapper *pPropMapper =
-        new XMLTextPropertySetMapper( TEXT_PROP_MAP_PARA );
+        new XMLTextPropertySetMapper( TEXT_PROP_MAP_SHAPE_PARA );
     return new XMLTextImportPropertyMapper( pPropMapper, pFontDecls );
 }
 
