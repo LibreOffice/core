@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thesdlg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tl $ $Date: 2000-12-22 12:38:41 $
+ *  last change: $Author: tl $ $Date: 2001-03-22 10:44:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,9 +92,14 @@
 
 #include "dialogs.hrc"
 #include "thesdlg.hrc"
+
 #ifndef _UNO_LINGU_HXX
 #include <unolingu.hxx>
 #endif
+#ifndef _SVX_LANGBOX_HXX
+#include <langbox.hxx>
+#endif
+
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -130,21 +135,23 @@ ThesDlg_Impl::ThesDlg_Impl(Reference< XThesaurus > & xThes) :
 class SvxThesaurusLanguageDlg_Impl : public ModalDialog
 {
 private:
-    ListBox         aLangLB;
+    SvxLanguageBox  aLangLB;
     GroupBox        aLangBox;
     OKButton        aOKBtn;
     CancelButton    aCancelBtn;
     HelpButton      aHelpBtn;
 
+#if SUPD <= 626
     Reference< XThesaurus >         xThesaurus;
     uno::Sequence< lang::Locale >   aSuppLang;      // supported languages
+#endif
 
     DECL_LINK( DoubleClickHdl_Impl, ListBox * );
 
 public:
     SvxThesaurusLanguageDlg_Impl( Window* pParent );
 
-    sal_uInt16          GetLanguage() const;
+    sal_uInt16      GetLanguage() const;
     void            SetLanguage( sal_uInt16 nLang );
 };
 
@@ -163,26 +170,9 @@ SvxThesaurusLanguageDlg_Impl::SvxThesaurusLanguageDlg_Impl( Window* pParent ) :
 {
     FreeResource();
 
+    aLangLB.SetLanguageList( LANG_LIST_THES_AVAIL, FALSE, FALSE );
     aLangLB.SetDoubleClickHdl(
         LINK( this, SvxThesaurusLanguageDlg_Impl, DoubleClickHdl_Impl ) );
-
-    // Sprachen-Box initialisieren
-    SvxThesaurusDialog *pMyParentDlg = (SvxThesaurusDialog *) pParent;
-    xThesaurus = pMyParentDlg->pImpl->xThesaurus;
-    if (xThesaurus.is())
-        aSuppLang  = xThesaurus->getLocales();
-
-    const sal_Int32 nLangCount  = aSuppLang.getLength();
-    const lang::Locale    *pLocale  = aSuppLang.getConstArray();
-    for ( sal_Int32 i = 0; i < nLangCount; ++i )
-    {
-        sal_Int16 nLang = SvxLocaleToLanguage( pLocale[i] );
-        if (nLang != LANGUAGE_NONE)
-        {
-            sal_uInt16 nPos = aLangLB.InsertEntry( ::GetLanguageString( nLang ) );
-            aLangLB.SetEntryData( nPos, (void*)(sal_uInt32)i );
-        }
-    }
 }
 
 
@@ -190,38 +180,15 @@ SvxThesaurusLanguageDlg_Impl::SvxThesaurusLanguageDlg_Impl( Window* pParent ) :
 
 sal_uInt16 SvxThesaurusLanguageDlg_Impl::GetLanguage() const
 {
-    sal_uInt16 nLPos = aLangLB.GetSelectEntryPos();
-    sal_uInt16 nLang = (sal_uInt16)(sal_uInt32)aLangLB.GetEntryData(nLPos);
-
-    DBG_ASSERT(nLang < (sal_uInt16) aSuppLang.getLength(), "index out of range");
-    return SvxLocaleToLanguage( aSuppLang.getConstArray()[ nLang ] );
+    sal_uInt16 nLang = aLangLB.GetSelectLanguage();
+    return nLang;
 }
 
 // -----------------------------------------------------------------------
 
 void SvxThesaurusLanguageDlg_Impl::SetLanguage( sal_uInt16 nLang )
 {
-
-    sal_uInt16 nPos = -1;
-    const lang::Locale *pLocale = aSuppLang.getConstArray();
-    sal_Int32 nLocaleCount = aSuppLang.getLength();
-    for (sal_Int32 i = 0;  i < nLocaleCount;  i++)
-    {
-        if (SvxLocaleToLanguage( pLocale[i] ) == nLang)
-            break;
-    }
-    DBG_ASSERT(nPos != -1, "Sprache nicht gefunden");
-    nPos = i;
-
-    for (i = 0; i < aLangLB.GetEntryCount(); ++i )
-    {
-        if ( (sal_uInt16)(sal_uInt32)aLangLB.GetEntryData(i) == nPos )
-        {
-            aLangLB.SelectEntryPos(i);
-            break;
-        }
-    }
-
+    aLangLB.SelectLanguage( nLang );
 }
 
 // -----------------------------------------------------------------------
