@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfexport.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 17:57:51 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 15:00:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,7 +154,7 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
             VCLXDevice*                 pXDevice = new VCLXDevice;
             OUString                    aPageRange;
             Any                         aSelection;
-            sal_Int32                   nCompressMode = 0;
+            sal_Int32                   nCompressMode = 1;
             sal_Int32                   nPageCount = 0;
             PDFWriter::Compression      eCompressMode;
 
@@ -173,11 +173,11 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
 
             switch( nCompressMode )
             {
-                case( 1 ): eCompressMode = PDFWriter::Print; break;
+                case( 0 ): eCompressMode = PDFWriter::Screen; break;
                 case( 2 ): eCompressMode = PDFWriter::Press; break;
 
                 default:
-                    eCompressMode = PDFWriter::Screen;
+                    eCompressMode = PDFWriter::Print;
                 break;
             }
 
