@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 12:36:00 $
+ *  last change: $Author: mt $ $Date: 2004-09-08 08:55:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1978,38 +1978,45 @@ sal_uInt16 SfxObjectShell::ImplGetSignatureState( sal_Bool bScriptingContent )
     {
         *pState = SIGNATURESTATE_NOSIGNATURES;
 
-        if ( GetMedium() && GetMedium()->GetName().Len() )
+        // XMLSEC05: MT: When MAV09 is integrated, remove GetName().Len().
+        if ( GetMedium() && GetMedium()->GetName().Len() && IsOwnStorageFormat_Impl( *GetMedium()) )
         {
-            uno::Reference< security::XDocumentDigitalSignatures > xD(
-                comphelper::getProcessServiceFactory()->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.security.DocumentDigitalSignatures" ) ) ), uno::UNO_QUERY );
-
-            if ( xD.is() )
+            try
             {
-                // HACK: No Storage API befoer CWS MAV09
-                rtl::OUString aDocFileNameURL = GetMedium()->GetName();
-                uno::Reference < embed::XStorage > xStore = ::comphelper::OStorageHelper::GetStorageFromURL(
-                        aDocFileNameURL, embed::ElementModes::READ, comphelper::getProcessServiceFactory() );
-                if ( xStore.is() )
+                uno::Reference< security::XDocumentDigitalSignatures > xD(
+                    comphelper::getProcessServiceFactory()->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.security.DocumentDigitalSignatures" ) ) ), uno::UNO_QUERY );
+
+                if ( xD.is() )
                 {
-                    ::com::sun::star::uno::Sequence< security::DocumentSignaturesInformation > aInfos;
-                    if ( bScriptingContent )
-                        aInfos = xD->VerifyScriptingContentSignatures( xStore );
-                    else
-                        aInfos = xD->VerifyDocumentContentSignatures( xStore );
-                    int nInfos = aInfos.getLength();
-                    if( nInfos )
+                    // HACK: No Storage API befoer CWS MAV09
+                    rtl::OUString aDocFileNameURL = GetMedium()->GetName();
+                    uno::Reference < embed::XStorage > xStore = ::comphelper::OStorageHelper::GetStorageFromURL(
+                            aDocFileNameURL, embed::ElementModes::READ, comphelper::getProcessServiceFactory() );
+                    if ( xStore.is() )
                     {
-                        *pState = SIGNATURESTATE_SIGNATURES_OK;
-                        for ( int n = 0; n < nInfos; n++ )
+                        ::com::sun::star::uno::Sequence< security::DocumentSignaturesInformation > aInfos;
+                        if ( bScriptingContent )
+                            aInfos = xD->VerifyScriptingContentSignatures( xStore );
+                        else
+                            aInfos = xD->VerifyDocumentContentSignatures( xStore );
+                        int nInfos = aInfos.getLength();
+                        if( nInfos )
                         {
-                            if ( !aInfos[n].SignatureIsValid )
+                            *pState = SIGNATURESTATE_SIGNATURES_OK;
+                            for ( int n = 0; n < nInfos; n++ )
                             {
-                                *pState = SIGNATURESTATE_SIGNATURES_BROKEN;
-                                break; // we know enough
+                                if ( !aInfos[n].SignatureIsValid )
+                                {
+                                    *pState = SIGNATURESTATE_SIGNATURES_BROKEN;
+                                    break; // we know enough
+                                }
                             }
                         }
                     }
                 }
+            }
+            catch( com::sun::star::uno::Exception& )
+            {
             }
         }
     }
