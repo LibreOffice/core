@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtools.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-12 06:28:34 $
+ *  last change: $Author: fs $ $Date: 2001-04-12 09:49:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,9 @@
 #endif
 #ifndef _COMPHELPER_DATETIME_HXX_
 #include <comphelper/datetime.hxx>
+#endif
+#ifndef _CONNECTIVITY_CONNCLEANUP_HXX_
+#include <connectivity/conncleanup.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
@@ -496,13 +499,8 @@ Reference< XConnection> calcConnection(
             {
                 try
                 {
-                    ::rtl::OUString aTemp(::rtl::OUString::createFromAscii("ActiveConnection"));
-                    // dispose the old active connection
-                    Reference<XComponent>  xAggregationComponent;
-                    xRowSetProps->getPropertyValue(aTemp) >>= xAggregationComponent;
-                    if(xAggregationComponent.is())
-                        xAggregationComponent->dispose();
-                    xRowSetProps->setPropertyValue(aTemp, makeAny(xReturn));
+                    OAutoConnectionDisposer* pAutoDispose = new OAutoConnectionDisposer(_rxRowSet, xReturn);
+                    Reference< XPropertyChangeListener > xEnsureDelete(pAutoDispose);
                 }
                 catch(Exception&)
                 {
@@ -1258,6 +1256,9 @@ void showError(const SQLExceptionInfo& _rInfo,
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.19  2001/04/12 06:28:34  fs
+ *  #84694# allow calcConnection to throw an SQLexception when using getConnection
+ *
  *  Revision 1.18  2001/03/19 09:35:26  oj
  *  new dir for unotypes
  *
