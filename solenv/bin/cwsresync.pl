@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: cwsresync.pl,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: obo $ $Date: 2004-11-19 11:41:08 $
+#   last change: $Author: hr $ $Date: 2004-12-13 17:26:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -108,7 +108,7 @@ use CwsConfig;
 ( my $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
 my $script_rev;
-my $id_str = ' $Revision: 1.11 $ ';
+my $id_str = ' $Revision: 1.12 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -131,19 +131,20 @@ $obligatory_modules{'smoketestoo_native'}++;
 
 #### global #####
 
-my $is_debug        = 0;    # misc traces for debugging purposes
-my $opt_commit      = 0;    # commit changes
-my $opt_merge       = 0;    # merge from MWS into CWS
-my $opt_link        = 0;    # relink modules, update solver
-my $remove_trees    = 0;    # remove output trees & solver (OO option)
-my %global_stats    = ();   # some overall stats
-my @args_bak = @ARGV;      # store the @ARGS here for logging
+my $is_debug         = 0;    # misc traces for debugging purposes
+my $opt_commit       = 0;    # commit changes
+my $opt_merge        = 0;    # merge from MWS into CWS
+my $opt_link         = 0;    # relink modules, update solver
+my $opt_remove_trees = 0;    # remove output trees & solver (OO option)
+my %global_stats     = ();   # some overall stats
+my @args_bak = @ARGV;        # store the @ARGS here for logging
 
 my $umask = umask();
 if ( !defined($umask) ) {
     $umask = 22;
 }
-my $force_checkout = '';
+my $opt_force_checkout = '';
+my $opt_skip_update = 0;
 
 #### main #####
 my $parameter_list = $log->array2string(";",@args_bak) if (defined $log);
@@ -167,7 +168,7 @@ sub log_stats
     $statistic_log_message .= "merge mode : " if $opt_merge;
     $statistic_log_message .= "commit mode : " if $opt_commit;
     $statistic_log_message .= "link mode : " if $opt_link;
-    $statistic_log_message .= "remove output trees mode : " if $remove_trees;
+    $statistic_log_message .= "remove output trees mode : " if $opt_remove_trees;
     $statistic_log_message .= "new: $global_stats{'new'} " if $global_stats{'new'};
     $statistic_log_message .= "removed: $global_stats{'removed'} " if $global_stats{'removed'};
     $statistic_log_message .= "merged: $global_stats{'merged'} " if $global_stats{'merged'};
@@ -209,14 +210,15 @@ sub parse_options
     my $help = 0;
     my $success = GetOptions('h' => \$help, 'd=s' => \$dir,
                              'm=s' => \$opt_merge, 'c' => \$opt_commit, 'l=s' => \$opt_link,
-                             '-a' => \$force_checkout, '-r' => \$remove_trees);
+                             'a' => \$opt_force_checkout, 'r' => \$opt_remove_trees,
+                             'f' => \$opt_skip_update );
     if ( !$success || $help ) {
         usage();
         exit(1);
     }
 
     # some sanity checks
-    if ( !($opt_merge || $opt_commit || $opt_link || $remove_trees) ) {
+    if ( !($opt_merge || $opt_commit || $opt_link || $opt_remove_trees) ) {
         print_error("Please specify one of '-m', '-c', '-l'.", 0) if defined($log);
         print_error("Please specify one of '-m', '-c', '-l', '-r'.", 0) if !defined($log);
         usage();
@@ -257,7 +259,7 @@ sub parse_options
     return ($dir, $milestone, @ARGV);
 }
 
-# Parse and verify args. Check that all necessary preconditions are fullfilled
+# Parse and verify args. Check that all necessary preconditions are fulfilled
 # and fill the action_list
 sub parse_args
 {
@@ -279,14 +281,14 @@ sub parse_args
     # The 'merge' and 'commit' modes share quite a bit of logic. The 'link' mode
     # is completely independent
 
-    if ( (@args > 0) && ($opt_link || $remove_trees)) {
+    if ( (@args > 0) && ($opt_link || $opt_remove_trees)) {
         print_error("Invalid argument.", 0);
         usage();
         exit(1);
     }
     if ( $opt_link ) {
         push(@action_list, [undef, 'relink_cws_action']);
-    } elsif ($remove_trees) {
+    } elsif ($opt_remove_trees) {
         push(@action_list, [undef, 'remove_output_trees']);
     }
     else {
@@ -353,7 +355,7 @@ sub check_or_exit
     }
     if ( $error ) {
         print_error("Please run '$script_name -m' either in an empty scratch directory,", 0);
-        print_error("or in a diretory containing all specified modules,", 0);
+        print_error("or in a directory containing all specified modules,", 0);
         print_error("or, if inside a module,", 0);
         print_error("make certain that all specified files/directories exist.", 2);
     }
@@ -466,6 +468,11 @@ sub resync_module_action
     my ($master_branch_tag, $cws_branch_tag, $cws_anchor_tag) = $cws->get_tags();
     my $milestone_tag = get_milestone_tag($cws, $qualified_milestone);
     my $cvs_module = get_cvs_module($cws, $module);
+    if ( !defined($cvs_module) ) {
+        print_warning("This might happen if '$module' is obsolete.");
+        print_warning("Skipping '$module' ...");
+        return;
+    }
     STDOUT->autoflush(1);
     print_message("Check out module '$module' ...");
     $cvs_module->verbose(1);
@@ -473,7 +480,7 @@ sub resync_module_action
     STDOUT->autoflush(0);
     if ( !@{$co_ref} ) {
         print_error("Was not able to checkout module '$module',", 0);
-        print_error("this might be caused by connection failures or authentication problems. That also can be caused by cvs mirror. If you recently added this module, please wait for your mirror server to syncronize", 0);
+        print_error("this might be caused by connection failures or authentification problems. That also can be caused by cvs mirror. If you recently added this module, please wait for your mirror server to syncronize", 0);
         print_error("Please check your \$HOME/.cvspass for missing entries!", 50);
     }
 
@@ -564,7 +571,9 @@ sub commit_dir_action
 
     # chdir into module
     if ( !chdir("$dir/$cvs_dir") ) {
-        print_error("Can't chdir() to '$cvs_dir'", 6);
+        print_warning("Can't chdir() to '$cvs_dir'.");
+        print_warning("Skipping '$cvs_dir'.");
+        return;
     }
 
     local @main::changed_files;
@@ -689,7 +698,7 @@ sub copyprj_module
     $ENVHASH{'i_server'} = '';
     $ENVHASH{'current_dir'} = cwd();
     $ENVHASH{'remote'} = '';
-    $ENVHASH{'force_checkout'} = 1 if ($force_checkout);
+    $ENVHASH{'opt_force_checkout'} = 1 if ($opt_force_checkout);
 
     $projects_to_copy{$module_name}++;
 
@@ -770,6 +779,11 @@ sub update_sources {
     my $cvs_module = CvsModule->new();
     my %cvs_aliases = $cvs_module->get_aliases_hash();
     my $result = '';
+
+    if ($opt_skip_update) {
+        print "Skipping main tree update\n";
+        @found_dirs = ();
+    }
     foreach my $module (@found_dirs) {
         next if (!-d $stand_dir . "/$module/CVS");
         print "\tUpdating '$module'";
@@ -785,7 +799,7 @@ sub update_sources {
             print_warning("... Unknown module. Skipping...");
             next;
         };
-        $cvs_module->handle_update_infomation($result);
+        $cvs_module->handle_update_information($result);
     };
     register_cws_milestone($cws, $new_master, $milestone);
     return;
@@ -844,7 +858,7 @@ sub relink_cws_action
 
     print_message("Doing some checks ...");
 
-    # hack to get the mileston :-(((((
+    # hack to get the milestone :-(((((
     if ( ! defined($cws->milestone()))
     {
         $cws->milestone($ENV{UPDMINOR});# = $ENV{UPDMINOR};
@@ -975,7 +989,7 @@ sub relink_cws_action
         my $btarget = "finalize";
         foreach my $platform ( @found_platforms )
         {
-            # don't copy tree that was already successfull
+            # don't copy tree that was already successful
             next if ( -f "$sourceroot/$cws_master/$platform/inc.$milestone/$platform_resynced_flag" );
             %sync_dir::done_hash = ();
             print "Create copy of solver for $platform ( ~ 1GB disk space needed !)\n";
@@ -1236,7 +1250,7 @@ sub merge_file
             print "removed in CWS, but changes in MWS are pending. Please check!.\n";
             return 'alert';
         }
-        if ( $status eq 'unkownfailure' ) {
+        if ( $status eq 'unknownfailure' ) {
             print_error("can't get status of '$file': $status", 0);
             return 'failure';
         }
@@ -1351,7 +1365,7 @@ sub commit_file
         }
         else {
             # can't happen
-            print_error("internal_error commit_file(): unkown type: $type", 0);
+            print_error("internal_error commit_file(): unknown type: $type", 0);
         }
 
         # prepare commit comment
@@ -1694,7 +1708,7 @@ sub get_cvs_root
     my $cvsroot = $workspace_db->get_value($key);
 
     if ( !$cvsroot  ) {
-        print_error("No such module '$module' for '$master' in workspace database.", 0);
+        print_warning("No such module '$module' for '$master' in workspace database.");
         return (undef, undef, undef, undef);
     }
 
@@ -1725,7 +1739,7 @@ sub print_warning
     my $message     = shift;
 
     print STDERR "$script_name: ";
-    print STDERR "WARNING $message\n";
+    print STDERR "WARNING: $message\n";
     return;
 }
 
@@ -1747,10 +1761,13 @@ sub print_error
 
 sub usage
 {
+    my $sw_force_update = defined($log) ? " [-a] " : " ";
+    my $sw_skip_checkout = !defined($log) ? " [-f] " : " ";
     print STDERR "Usage:\n";
-    print STDERR "cwsresync [-h] [-a] [-d dir] -m <milest.> <all|mod.|dir|file> [mod.|dir|file ...]\n";
+    print STDERR "cwsresync [-h]" . $sw_force_update .
+                 "[-d dir] -m <milest.> <all|mod.|dir|file> [mod.|dir|file ...]\n";
     print STDERR "cwsresync [-h] [-d dir] -r|-c <all|module|dir|file> [module|dir|file ...]\n";
-    print STDERR "cwsresync [-h] -l <milestone>\n";
+    print STDERR "cwsresync [-h]" . $sw_skip_checkout ."-l <milestone>\n";
     print STDERR "Synchronize child workspace mod./dirs/files ";
     print STDERR "with the latest master workspace changes \n";
     print STDERR "Options:\n";
@@ -1762,6 +1779,7 @@ sub usage
     print STDERR "\t-l milestone\tregister new milestone with database\n" if !defined($log);
     print STDERR "\t-r\t\tremove solver and module output trees, update milestone information\n" if !defined($log);
     print STDERR "\t-a\t\tuse cvs checkout instead of copying\n" if defined($log);
+    print STDERR "\t-f\t\tavoid updating entire tree\n" if !defined($log);
     print STDERR "Notes:\n";
     print STDERR "\tA Milestone on a different MWS can be specified as <MWS:milestone>.\n";
     print STDERR "Examples:\n";
