@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocumentViewBase.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: af $ $Date: 2002-06-12 12:41:09 $
+ *  last change: $Author: af $ $Date: 2002-08-05 11:34:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,6 +218,11 @@ public:
 
 
     //=====  XAccessibleComponent  ============================================
+
+    virtual ::com::sun::star::uno::Reference<
+        ::drafts::com::sun::star::accessibility::XAccessible > SAL_CALL
+        getAccessibleAt (const ::com::sun::star::awt::Point& aPoint)
+        throw (::com::sun::star::uno::RuntimeException);
 
     virtual ::com::sun::star::awt::Rectangle SAL_CALL getBounds (void)
         throw (::com::sun::star::uno::RuntimeException);
