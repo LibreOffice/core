@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.147 $
+ *  $Revision: 1.148 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:37:34 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 11:58:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2294,12 +2294,16 @@ WW8FlySet::WW8FlySet(SwWW8ImplReader& rReader, const WW8FlyPara* pFW,
 
     if (pFS->nUpMgn || pFS->nLoMgn)
         Put(SvxULSpaceItem(pFS->nUpMgn, pFS->nLoMgn));
-
+#if 0
     //This is only a hack: #110876#
     if ((rReader.bIsHeader || rReader.bIsFooter))
         Put(SwFmtSurround(SURROUND_THROUGHT));
     else
         Put(SwFmtSurround(pFS->eSurround));
+#else
+    //we no longer need to hack around the header/footer problems
+    Put(SwFmtSurround(pFS->eSurround));
+#endif
 
     short aSizeArray[5]={0};
     rReader.SetFlyBordersShadow(*this,(const WW8_BRC*)pFW->brc,&aSizeArray[0]);
@@ -2559,6 +2563,7 @@ bool SwWW8ImplReader::StartApo(const ApoTestResults &rApo,
     if (IsDropCap())
     {
         bDropCap = true;
+        pAktItemSet = new SfxItemSet( rDoc.GetAttrPool(), RES_CHRATR_BEGIN, RES_PARATR_END - 1 );
         return false;
     }
 
@@ -2729,14 +2734,23 @@ void SwWW8ImplReader::StopApo()
         */
         else if( !pWFlyPara->nSp28 )
         {
+            using namespace sw::util;
             SfxItemSet aFlySet( pSFlyPara->pFlyFmt->GetAttrSet() );
-            aFlySet.ClearItem( RES_FRM_SIZE );
-            CalculateFlySize( aFlySet, pSFlyPara->pMainTextPos->nNode,
-                pSFlyPara->nWidth );
-            pSFlyPara->pFlyFmt->SetAttr( aFlySet.Get( RES_FRM_SIZE ) );
+
+            SwFmtFrmSize aSize(ItemGet<SwFmtFrmSize>(aFlySet, RES_FRM_SIZE));
+            aFlySet.ClearItem(RES_FRM_SIZE);
+
+            CalculateFlySize(aFlySet, pSFlyPara->pMainTextPos->nNode,
+                pSFlyPara->nWidth);
+
+            nNewWidth = ItemGet<SwFmtFrmSize>(aFlySet, RES_FRM_SIZE).GetWidth();
+
+            aSize.SetWidth(nNewWidth);
+
+            pSFlyPara->pFlyFmt->SetAttr(aSize);
         }
 
-        DELETEZ( pSFlyPara->pMainTextPos );
+        delete pSFlyPara->pMainTextPos, pSFlyPara->pMainTextPos = 0;
 
 // Damit die Frames bei Einfuegen in existierendes Doc erzeugt werden,
 // wird in fltshell.cxx beim Setzen des FltAnchor-Attributes
@@ -3548,7 +3562,7 @@ bool SwWW8ImplReader::SetNewFontAttr(USHORT nFCode, bool bSetEnums,
         //If we fail (and are not doing a style) then put something into the
         //character encodings stack anyway so that the property end that pops
         //off the stack will keep in sync
-        if (!pAktColl && !pAktItemSet)
+        if (!pAktColl && IsListOrDropcap())
         {
             if (!maFontSrcCharSets.empty())
                 eSrcCharSet = maFontSrcCharSets.top();
@@ -3581,7 +3595,7 @@ bool SwWW8ImplReader::SetNewFontAttr(USHORT nFCode, bool bSetEnums,
                     break;
             }
         }
-        else if (!pAktItemSet)
+        else if (IsListOrDropcap())
         {
             //Add character text encoding to stack
             maFontSrcCharSets.push(eSrcCharSet);
@@ -4132,6 +4146,15 @@ sal_uInt16 SwWW8ImplReader::GetParagraphAutoSpace(bool fDontUseHTMLAutoSpacing)
         return 100;  //Seems to be always 5points in this case
     else
         return 280;  //Seems to be always 14points in this case
+}
+
+void SwWW8ImplReader::Read_DontAddEqual(USHORT, const BYTE *pData, short nLen)
+{
+    if (nLen < 0)
+        return;
+
+    if (*pData)
+        maTracer.Log(sw::log::eDontAddSpaceForEqualStyles);
 }
 
 void SwWW8ImplReader::Read_ParaAutoBefore(USHORT, const BYTE *pData, short nLen)
@@ -4753,6 +4776,8 @@ void SwWW8ImplReader::Read_Border(USHORT , const BYTE* , short nLen)
 
                 Rectangle aInnerDist;
                 GetBorderDistance( aBrcs, aInnerDist );
+
+                maTracer.Log(sw::log::eBorderDistOutside);
 
                 aBox.SetDistance( (USHORT)aInnerDist.Left(), BOX_LINE_LEFT );
                 aBox.SetDistance( (USHORT)aInnerDist.Top(), BOX_LINE_TOP );
@@ -5917,8 +5942,8 @@ SprmReadInfo aSprmReadTab[] = {
     {0xCA71, &SwWW8ImplReader::Read_TxtBackColor},//undocumented
     {0x303C, (FNReadRecord)0},                   //undocumented
     {0x245B, &SwWW8ImplReader::Read_ParaAutoBefore},//undocumented, para
-    {0x245C, &SwWW8ImplReader::Read_ParaAutoAfter}//undocumented, para
-                                                 //autobefore ?
+    {0x245C, &SwWW8ImplReader::Read_ParaAutoAfter},//undocumented, para
+    {0x246D, &SwWW8ImplReader::Read_DontAddEqual}//undocumented, para
 };
 
 //-----------------------------------------
