@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Linguistic.xcs,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 23:02:50 $
+ *  last change: $Author: hr $ $Date: 2005-04-04 12:39:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -424,7 +424,15 @@
 			<info>
 				<desc>Contains settings for the service manager that are used to access/configure the usage of the various linguistic service implementations.</desc>
 			</info>
-			<group oor:name="SpellCheckerList" oor:extensible="true">
+            <prop oor:name="DataFilesChangedCheckValue" oor:type="xs:int">
+                <info>
+                    <author>TL</author>
+                    <desc>Value used to check if the data files of the linguistic have changed and thus the configuration needs to be updated.</desc>
+                    <label>Data files changed check value</label>
+                </info>
+                <value>-1</value>
+            </prop>
+            <group oor:name="SpellCheckerList" oor:extensible="true">
 				<info>
 					<desc>Contains a list of languages and spell-checking-service entries. Only languages listed will be supported.</desc>
 				</info>
