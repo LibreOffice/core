@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accdoc.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mib $ $Date: 2002-03-05 08:15:32 $
+ *  last change: $Author: mib $ $Date: 2002-03-18 12:49:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,10 +117,10 @@ using namespace ::com::sun::star::uno;
 using namespace ::drafts::com::sun::star::accessibility;
 using namespace ::rtl;
 
-void SwAccessibleDocument::SetStates(
+void SwAccessibleDocument::GetStates(
         ::utl::AccessibleStateSetHelper& rStateSet )
 {
-    SwAccessibleContext::SetStates( rStateSet );
+    SwAccessibleContext::GetStates( rStateSet );
 
     // MULTISELECTABLE
     rStateSet.AddState( AccessibleStateType::MULTISELECTABLE );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpara.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mib $ $Date: 2002-03-11 11:52:41 $
+ *  last change: $Author: mib $ $Date: 2002-03-18 12:49:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,6 +204,35 @@ OUString SwAccessibleParagraph::GetDescription()
     return GetResource( nResId, &sArg1 );
 }
 
+sal_Int32 SwAccessibleParagraph::GetCaretPos()
+{
+    sal_Int32 nRet = -1;
+
+    // get the selection's point, and test whether it's in our node
+    SwPaM* pCaret = GetCrsr();  // caret is first PaM in PaM-ring
+    if( pCaret != NULL )
+    {
+        const SwTxtNode* pNode = GetTxtNode();
+
+        // check whether the point points into 'our' node
+        SwPosition* pPoint = pCaret->GetPoint();
+        if( pNode->GetIndex() == pPoint->nNode.GetIndex() )
+        {
+            // Yes, it's us!
+            nRet = GetPortionData().GetAccessiblePosition(
+                pPoint->nContent.GetIndex() );
+
+            DBG_ASSERT( nRet >= 0, "invalid cursor?" );
+            DBG_ASSERT( nRet <= GetPortionData().GetAccessibleString().
+                                              getLength(), "invalid cursor?" );
+        }
+        // else: not in this paragraph
+    }
+    // else: no cursor -> no caret
+
+    return nRet;
+}
+
 sal_Bool SwAccessibleParagraph::GetSelection(
     sal_Int32& nStart, sal_Int32& nEnd)
 {
@@ -295,10 +324,10 @@ sal_Bool SwAccessibleParagraph::IsHeading() const
     return (pTxtNd->GetOutlineNum() && !pTxtNd->GetNum());
 }
 
-void SwAccessibleParagraph::SetStates(
+void SwAccessibleParagraph::GetStates(
         ::utl::AccessibleStateSetHelper& rStateSet )
 {
-    SwAccessibleContext::SetStates( rStateSet );
+    SwAccessibleContext::GetStates( rStateSet );
 
     // MULTILINE
     rStateSet.AddState( AccessibleStateType::MULTILINE );
@@ -364,13 +393,40 @@ void SwAccessibleParagraph::_InvalidateContent( sal_Bool bVisibleDataFired )
     }
 }
 
+void SwAccessibleParagraph::_InvalidateCaretPos()
+{
+    // The text is changed
+    sal_Int32 nNew = GetCaretPos();
+    sal_Int32 nOld;
+    {
+        vos::OGuard aGuard( aMutex );
+        nOld = nOldCaretPos;
+        nOldCaretPos = nNew;
+    }
+    if( -1 != nNew )
+    {
+        ::vos::ORef < SwAccessibleContext > xThis( this );
+        GetMap()->SetCaretContext( xThis );
+    }
+
+    if( nOld != nNew )
+    {
+        AccessibleEventObject aEvent;
+        aEvent.EventId = AccessibleEventId::ACCESSIBLE_CARET_EVENT;
+        aEvent.OldValue <<= nOld;
+        aEvent.NewValue <<= nNew;
+
+        FireAccessibleEvent( aEvent );
+    }
+}
 
 SwAccessibleParagraph::SwAccessibleParagraph(
         SwAccessibleMap *pMap,
         sal_Int32 nPara,
         const SwTxtFrm *pTxtFrm ) :
     SwAccessibleContext( pMap, AccessibleRole::PARAGRAPH, pTxtFrm ),
-    pPortionData( NULL )
+    pPortionData( NULL ),
+    nOldCaretPos( -1 )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
@@ -599,32 +655,16 @@ sal_Int32 SwAccessibleParagraph::getCaretPosition()
 
     CHECK_FOR_DEFUNC( XAccessibleContext );
 
-    sal_Int32 nRet = -1;
-
-    // get the selection's point, and test whether it's in our node
-    SwPaM* pCaret = GetCrsr();  // caret is first PaM in PaM-ring
-    if( pCaret != NULL )
+    sal_Int32 nRet = GetCaretPos();
     {
-        const SwTxtNode* pNode = GetTxtNode();
-
-        // get SwPosition for my node
-        ULONG nHere = pNode->GetIndex();
-
-        // check whether the point points into 'our' node
-        SwPosition* pPoint = pCaret->GetPoint();
-        if( pNode->GetIndex() == pPoint->nNode.GetIndex() )
-        {
-            // Yes, it's us!
-            nRet = GetPortionData().GetAccessiblePosition(
-                pPoint->nContent.GetIndex() );
-
-            DBG_ASSERT( nRet >= 0, "invalid cursor?" );
-            DBG_ASSERT( nRet <= GetPortionData().GetAccessibleString().
-                                              getLength(), "invalid cursor?" );
-        }
-        // else: not in this paragraph
+        vos::OGuard aGuard( aMutex );
+        nOldCaretPos = nRet;
     }
-    // else: no cursor -> no caret
+    if( -1 != nRet )
+    {
+        ::vos::ORef < SwAccessibleContext > xThis( this );
+        GetMap()->SetCaretContext( xThis );
+    }
 
     return nRet;
 }

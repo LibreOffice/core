@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccontext.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mib $ $Date: 2002-03-11 11:52:41 $
+ *  last change: $Author: mib $ $Date: 2002-03-18 12:49:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,9 @@
 #ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
 #endif
+#ifndef _VOS_REF_HXX_
+#include <vos/ref.hxx>
+#endif
 #ifndef _CPPUHELPER_IMPLBASE5_HXX_
 #include <cppuhelper/implbase5.hxx>
 #endif
@@ -131,11 +134,21 @@ private:
 
     sal_Int16 nRole;        // immutable outside constructor
 
+    // The current states (protected by mutex)
+    sal_Bool bIsShowingState : 1;
+    sal_Bool bIsEditableState : 1;
+    sal_Bool bIsOpaqueState : 1;
+    sal_Bool bIsDefuncState : 1;
+
+    void InitStates();
+
 protected:
     void SetName( const ::rtl::OUString& rName ) { sName = rName; }
     sal_Int16 GetRole() const { return nRole; }
 
     void SetParent( SwAccessibleContext *pParent );
+
+    void UpdateStateSet( sal_Bool bSetToDefunc=sal_False );
 
     // A child has been added while setting the vis area
     virtual sal_Bool ChildScrolledIn( const SwFrm *pFrm );
@@ -145,6 +158,9 @@ protected:
 
     // A child has been moved while setting the vis area
     virtual sal_Bool ChildScrolled( const SwFrm *pFrm );
+
+    // The editable state of a child should be checked
+    virtual sal_Bool CheckEditableStateChild( const SwFrm *pFrm );
 
     // A child shall be disposed
     virtual sal_Bool DisposeChild( const SwFrm *pFrm,
@@ -159,12 +175,17 @@ protected:
     // Set states for getAccessibleStateSet.
     // This base class sets DEFUNC(0/1), EDITABLE(0/1), ENABLED(1),
     // SHOWING(0/1), OPAQUE(0/1) and VISIBLE(1).
-    virtual void SetStates( ::utl::AccessibleStateSetHelper& rStateSet );
+    virtual void GetStates( ::utl::AccessibleStateSetHelper& rStateSet );
 
     virtual void _InvalidateContent( sal_Bool bVisibleDataFired );
 
+    virtual void _InvalidateCaretPos();
+
     // broadcast visual data event
     void FireVisibleDataEvent();
+
+    // broadcast state change event
+    void FireStateChangedEvent( sal_Int16 nState, sal_Bool bNewState );
 
     Window *GetWindow();
     SwAccessibleMap *GetMap() { return pMap; }
@@ -331,10 +352,16 @@ public:
     void ChildPosChanged( const SwFrm *pFrm, const SwRect& rFrm );
 
     // The content may have changed (but it hasn't tohave changed)
-    virtual void InvalidateContent();
+    void InvalidateContent();
+
+    // The caretPos has changed
+    void InvalidateCaretPos();
 
     // Scroll (update vis area)
     virtual void SetVisArea( const Rectangle& rNewVisArea );
+
+    // Check editable state
+    void CheckEditableState();
 
     const ::rtl::OUString& GetName() const { return sName; }
 };

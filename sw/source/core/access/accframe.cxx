@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accframe.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mib $ $Date: 2002-03-11 11:52:41 $
+ *  last change: $Author: mib $ $Date: 2002-03-18 12:49:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -296,6 +296,36 @@ void SwAccessibleFrame::SetVisArea( const SwFrm *pFrm,
     }
 }
 
+void SwAccessibleFrame::CheckEditableStateChildren( const SwFrm *pFrm,
+                                                const Rectangle& rOldVisArea,
+                                                SwAccessibleFrame *pAcc )
+{
+    const SwFrm *pLower = pFrm->GetLower();
+    while( pLower )
+    {
+        SwRect aFrm( pLower->Frm() );
+        if( pLower->IsAccessibleFrm() )
+        {
+            sal_Bool bCheckLower = sal_False;
+            if( aFrm.IsOver( rOldVisArea ) )
+            {
+                if( pAcc )
+                    bCheckLower = pAcc->CheckEditableStateChild( pLower );
+                else
+                    bCheckLower = sal_True;
+            }
+            if( bCheckLower )
+                CheckEditableStateChildren( pLower, rOldVisArea );
+        }
+        else if( aFrm.IsOver( rOldVisArea ) )
+        {
+            CheckEditableStateChildren( pLower, rOldVisArea, pAcc );
+        }
+
+        pLower = pLower->GetNext();
+    }
+}
+
 void SwAccessibleFrame::DisposeChildren( const SwFrm *pFrm,
                                          const Rectangle& rOldVisArea,
                                          sal_Bool bRecursive,
@@ -342,6 +372,12 @@ sal_Bool SwAccessibleFrame::ChildScrolled( const SwFrm *pFrm )
 {
     return sal_True;
 }
+
+sal_Bool SwAccessibleFrame::CheckEditableStateChild( const SwFrm *pFrm )
+{
+    return sal_True;
+}
+
 sal_Bool SwAccessibleFrame::DisposeChild( const SwFrm *pFrm,
                                           sal_Bool bRecursive )
 {
@@ -366,20 +402,14 @@ sal_Bool SwAccessibleFrame::IsEditable( ViewShell *pVSh ) const
     if( !pFrm )
         return sal_False;
 
+    ASSERT( pVSh, "no view shell" );
+    if( pVSh && pVSh->GetViewOptions()->IsReadonly() )
+        return sal_False;
+
     if( !pFrm->IsRootFrm() && pFrm->IsProtected() )
         return sal_False;
 
-    ASSERT( pVSh, "no view shell" );
-    if( pVSh )
-    {
-        const SwDoc *pDoc = pVSh->GetDoc();
-        const SwDocShell *pDocSh = pDoc->GetDocShell();
-        ASSERT( pDocSh, "no doc shell" );
-        if( pDocSh && !pDocSh->IsReadOnly() )
-            return sal_True;
-    }
-
-    return sal_False;
+    return sal_True;
 }
 
 sal_Bool SwAccessibleFrame::IsOpaque( ViewShell *pVSh ) const

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccontext.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mib $ $Date: 2002-03-11 11:52:41 $
+ *  last change: $Author: mib $ $Date: 2002-03-18 12:49:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,6 +150,21 @@ void SwAccessibleContext::FireVisibleDataEvent()
     DBG_MSG( "AccessibleVisibleData" )
 }
 
+void SwAccessibleContext::FireStateChangedEvent( sal_Int16 nState,
+                                                 sal_Bool bNewState )
+{
+    AccessibleEventObject aEvent;
+
+    aEvent.EventId = AccessibleEventId::ACCESSIBLE_STATE_EVENT;
+    if( bNewState )
+        aEvent.NewValue <<= nState;
+    else
+        aEvent.OldValue <<= nState;
+
+    FireAccessibleEvent( aEvent );
+    DBG_MSG( "StateChanged" )
+}
+
 void SwAccessibleContext::SetParent( SwAccessibleContext *pParent )
 {
     vos::OGuard aGuard( aMutex );
@@ -227,9 +242,17 @@ sal_Bool SwAccessibleContext::ChildScrolledOut( const SwFrm *pFrm )
 
             pChildImpl = xChildImpl.getBodyPtr();
             xWeakChild = Reference < XAccessible >( pChildImpl );
+
+            // If the child is existing, we broadcast a state changed event
+            // for the showing state. If it is not eixting, no event
+            // is required.
+            xChildImpl->FireStateChangedEvent( AccessibleStateType::SHOWING,
+                                               sal_False );
         }
     }
 
+    // When disposing the child, the child's context must exist,
+    // because we have to broadcast a child event!
     Reference < XAccessible > xChild( xWeakChild );
     if( !xChild.is() && GetMap() )
     {
@@ -270,6 +293,29 @@ sal_Bool SwAccessibleContext::ChildScrolled( const SwFrm *pFrm )
     return bUpdateChildren;
 }
 
+sal_Bool SwAccessibleContext::CheckEditableStateChild( const SwFrm *pFrm )
+{
+    sal_Bool bCheckChildren = sal_True;
+
+    if( GetMap() )
+    {
+        // If the child is existing, the child's chilren have to be
+        // checked, too. If not, some grandchildren might exist anyway.
+        // They are checked by seeking the SwFrm tree. This is indicated
+        // by the return value.
+        ::vos::ORef < SwAccessibleContext > xChildImpl(
+            GetMap()->GetContextImpl( pFrm, sal_False ) );
+
+        if( xChildImpl.isValid() )
+        {
+            xChildImpl->CheckEditableState();
+            bCheckChildren = sal_False;
+        }
+    }
+
+    return bCheckChildren;
+}
+
 sal_Bool SwAccessibleContext::DisposeChild( const SwFrm *pFrm,
                                              sal_Bool bRecursive )
 {
@@ -294,6 +340,30 @@ sal_Bool SwAccessibleContext::DisposeChild( const SwFrm *pFrm,
     return bDisposeChildren;
 }
 
+void SwAccessibleContext::CheckEditableState()
+{
+    if( GetMap() )
+    {
+        ViewShell *pVSh = GetMap()->GetShell();
+        if( pVSh )
+        {
+            sal_Bool bIsOldEditableState;
+            sal_Bool bIsNewEditableState = IsEditable( pVSh );
+            {
+                vos::OGuard aGuard( aMutex );
+                bIsOldEditableState = bIsEditableState;
+                bIsEditableState = bIsNewEditableState;
+            }
+
+            if( bIsOldEditableState != bIsNewEditableState )
+                FireStateChangedEvent( AccessibleStateType::EDITABLE,
+                                       bIsNewEditableState  );
+        }
+    }
+
+    CheckEditableStateChildren();
+}
+
 void SwAccessibleContext::Dispose( sal_Bool bRecursive )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
@@ -310,6 +380,7 @@ void SwAccessibleContext::Dispose( sal_Bool bRecursive )
     }
     Reference < XAccessibleContext > xThis( this );
 
+    // send child event at parent
     if( xParent.is() )
     {
         SwAccessibleContext *pAcc = (SwAccessibleContext *)xParent.get();
@@ -321,6 +392,16 @@ void SwAccessibleContext::Dispose( sal_Bool bRecursive )
         DBG_MSG_THIS_PARAM( "AccessibleChild (removed)", pAcc, this )
     }
 
+    // set defunc state
+    {
+        vos::OGuard aGuard( aMutex );
+        bIsDefuncState = sal_True;
+    }
+
+    // broadcast state change
+    FireStateChangedEvent( AccessibleStateType::DEFUNC, sal_True );
+
+    // broadcast dispose event
     {
         EventObject aEvent;
         aEvent.Source = xThis;
@@ -349,6 +430,15 @@ void SwAccessibleContext::PosChanged()
     }
     else
     {
+        // set object not showing
+        {
+            vos::OGuard aGuard( aMutex );
+            bIsShowingState = sal_False;
+        }
+
+        // Fire state change event for showing state
+        FireStateChangedEvent( AccessibleStateType::SHOWING, sal_False );
+
         // The frame is now invisible -> dispose it
         Dispose();
     }
@@ -389,6 +479,13 @@ void SwAccessibleContext::InvalidateContent()
     _InvalidateContent( sal_False );
 }
 
+void SwAccessibleContext::InvalidateCaretPos()
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+
+    _InvalidateCaretPos();
+}
+
 void SwAccessibleContext::SetVisArea( const Rectangle& rNewVisArea )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
@@ -424,44 +521,40 @@ void SwAccessibleContext::FireAccessibleEvent( AccessibleEventObject& rEvent )
 
 }
 
-void SwAccessibleContext::SetStates(
+void SwAccessibleContext::GetStates(
         ::utl::AccessibleStateSetHelper& rStateSet )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
-    // DEFUNC and SHOWING
-    if( GetFrm() && GetMap() )
-    {
-        ASSERT(  IsShowing(),
-                "invisible object is not disposed" );
+    // SHOWING
+    if( bIsShowingState )
         rStateSet.AddState( AccessibleStateType::SHOWING );
 
-        // EDITABLE
-        ViewShell *pVSh = GetMap()->GetShell();
-        if( IsEditable( pVSh ) )
-            rStateSet.AddState( AccessibleStateType::EDITABLE );
+    // EDITABLE
+    if( bIsEditableState )
+        rStateSet.AddState( AccessibleStateType::EDITABLE );
 
-        // ENABLED
-        rStateSet.AddState( AccessibleStateType::ENABLED );
+    // ENABLED
+    rStateSet.AddState( AccessibleStateType::ENABLED );
 
-        // OPAQUE
-        if( IsOpaque( pVSh ) )
-            rStateSet.AddState( AccessibleStateType::OPAQUE );
+    // OPAQUE
+    if( bIsOpaqueState )
+        rStateSet.AddState( AccessibleStateType::OPAQUE );
 
-        // VISIBLE
-        rStateSet.AddState( AccessibleStateType::VISIBLE );
-    }
-    else
-    {
+    // VISIBLE
+    rStateSet.AddState( AccessibleStateType::VISIBLE );
+
+    if( bIsDefuncState )
         rStateSet.AddState( AccessibleStateType::DEFUNC );
-    }
 }
 
 void SwAccessibleContext::_InvalidateContent( sal_Bool )
 {
 }
 
-
+void SwAccessibleContext::_InvalidateCaretPos()
+{
+}
 
 OUString SwAccessibleContext::GetResource( sal_uInt16 nResId,
                                            const OUString *pArg1,
@@ -507,6 +600,16 @@ Window *SwAccessibleContext::GetWindow()
     return pWin;
 }
 
+void SwAccessibleContext::InitStates()
+{
+    bIsShowingState = IsShowing();
+
+    ViewShell *pVSh = GetMap()->GetShell();
+    bIsEditableState = pVSh &&  IsEditable( pVSh );
+    bIsOpaqueState = pVSh && IsOpaque( pVSh );
+    bIsDefuncState = sal_False;
+}
+
 
 SwAccessibleContext::SwAccessibleContext( SwAccessibleMap *pM,
                                           sal_Int16 nR,
@@ -517,6 +620,7 @@ SwAccessibleContext::SwAccessibleContext( SwAccessibleMap *pM,
     pMap( pM ),
     nRole( nR )
 {
+    InitStates();
     DBG_MSG_CD( "constructed" )
 }
 
@@ -531,6 +635,7 @@ SwAccessibleContext::SwAccessibleContext( SwAccessibleMap *pM,
     pMap( pM ),
     nRole( nR )
 {
+    InitStates();
     DBG_MSG_CD( "constructed" )
 }
 
@@ -678,11 +783,11 @@ Reference<XAccessibleStateSet> SAL_CALL
 {
     ::utl::AccessibleStateSetHelper *pStateSet =
         new ::utl::AccessibleStateSetHelper;
-    Reference<XAccessibleStateSet> xRet( pStateSet );
 
-    SetStates( *pStateSet );
+    Reference<XAccessibleStateSet> xStateSet( pStateSet );
+    GetStates( *pStateSet );
 
-    return xRet;
+    return xStateSet;
 }
 
 Locale SAL_CALL SwAccessibleContext::getLocale (void)
@@ -865,6 +970,7 @@ awt::Point SAL_CALL SwAccessibleContext::getLocation()
 sal_Bool SAL_CALL SwAccessibleContext::isShowing()
         throw (RuntimeException)
 {
+    vos::OGuard aGuard(Application::GetSolarMutex());
     return IsShowing();
 }
 

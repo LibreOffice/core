@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accheaderfooter.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mib $ $Date: 2002-02-27 09:30:30 $
+ *  last change: $Author: mib $ $Date: 2002-03-18 12:49:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,10 +114,10 @@ const sal_Char sServiceNameHeader[] = "com.sun.star.text.AccessibleHeaderView";
 const sal_Char sServiceNameFooter[] = "com.sun.star.text.AccessibleFooterView";
 const sal_Char sImplementationName[] = "SwAccessibleHeaderFooter";
 
-void SwAccessibleHeaderFooter::SetStates(
+void SwAccessibleHeaderFooter::GetStates(
         ::utl::AccessibleStateSetHelper& rStateSet )
 {
-    SwAccessibleContext::SetStates( rStateSet );
+    SwAccessibleContext::GetStates( rStateSet );
 
     // MULTISELECTABLE
     rStateSet.AddState( AccessibleStateType::MULTISELECTABLE );

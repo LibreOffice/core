@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accmap.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mib $ $Date: 2002-03-11 11:52:41 $
+ *  last change: $Author: mib $ $Date: 2002-03-18 12:49:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,35 +128,52 @@ typedef ::std::map < const SwFrm *, WeakReference < XAccessible >, SwFrmFunc > _
 
 class SwAccessibleContextMap_Impl: public _SwAccessibleContextMap_Impl
 {
+public:
+    sal_Bool bLocked;
+    WeakReference < XAccessible > xCaretContext;
 };
 
 struct SwAccessibleEvent_Impl
 {
 public:
-    enum EventType { INVALID_CONTENT, POS_CHANGED, CHILD_POS_CHANGED, DISPOSE };
+    enum EventType { INVALID_CONTENT, POS_CHANGED, CHILD_POS_CHANGED, DISPOSE,
+                         CARET_POS };
 
 private:
-    EventType   eType;                  // The event type
-    WeakReference < XAccessible > xAcc; // The object that fires the event
     SwRect      aOldFrm;                // the old bounds for CHILD_POS_CHANGED
+    WeakReference < XAccessible > xAcc; // The object that fires the event
     const SwFrm *pFrm;                  // the child for CHILD_POS_CHANGED and
                                         // the same as xAcc for any other
                                         // event type
+    EventType   eType;                  // The event type
+    sal_Bool    bUpdateCaretPos;        // Send UpdateCaretPos event
+
+    SwAccessibleEvent_Impl& operator==( const SwAccessibleEvent_Impl& );
 
 public:
     SwAccessibleEvent_Impl( EventType eT, SwAccessibleContext *pA,
                              const SwFrm *pF ) :
-        eType( eT ), xAcc( pA ), pFrm( pF ) {}
+        eType( eT ), xAcc( pA ), pFrm( pF ),
+        bUpdateCaretPos( CARET_POS==eType )
+    {}
     SwAccessibleEvent_Impl( EventType eT, const SwFrm *pF ) :
-        eType( eT ), pFrm( pF ) {}
+        eType( eT ), pFrm( pF ),
+        bUpdateCaretPos( CARET_POS==eType )
+    {}
     SwAccessibleEvent_Impl( EventType eT, SwAccessibleContext *pA,
                             const SwFrm *pF, const SwRect& rR ) :
-        eType( eT ), xAcc( pA ), pFrm( pF ), aOldFrm( rR ) {}
+        eType( eT ), xAcc( pA ), pFrm( pF ), aOldFrm( rR ),
+        bUpdateCaretPos( CARET_POS==eType )
+    {}
 
     inline EventType    GetType() const { return eType; }
     inline ::vos::ORef < SwAccessibleContext > GetContext() const;
     inline const SwRect& GetOldFrm() const { return aOldFrm; }
     inline const SwFrm *GetFrm() const { return pFrm; }
+    inline SetUpdateCaretPos() { bUpdateCaretPos = sal_True; }
+    inline sal_Bool IsUpdateCaretPos() const { return bUpdateCaretPos; }
+
+    SwAccessibleEvent_Impl& Merge( const SwAccessibleEvent_Impl& );
 };
 
 inline ::vos::ORef < SwAccessibleContext >
@@ -167,6 +184,18 @@ inline ::vos::ORef < SwAccessibleContext >
          static_cast< SwAccessibleContext * >( xTmp.get() ) );
 
     return xAccImpl;
+}
+
+SwAccessibleEvent_Impl& SwAccessibleEvent_Impl::Merge(
+        const SwAccessibleEvent_Impl& r )
+{
+    aOldFrm = r.aOldFrm;
+    DBG_ASSERT( xAcc == r.xAcc, "illegal merge op" );
+    DBG_ASSERT( pFrm == r.pFrm, "illegal merge op" );
+    eType = r.eType;
+    bUpdateCaretPos |= r.bUpdateCaretPos;
+
+    return *this;
 }
 
 typedef ::std::list < SwAccessibleEvent_Impl > _SwAccessibleEventList_Impl;
@@ -254,7 +283,7 @@ void SwAccessibleMap::AppendEvent( const SwAccessibleEvent_Impl& rEvent )
             ASSERT( aEvent.GetType() != SwAccessibleEvent_Impl::DISPOSE,
                     "dispose events should not be stored" );
             if( aEvent.GetType() != SwAccessibleEvent_Impl::DISPOSE )
-                aEvent = rEvent;
+                aEvent.Merge( rEvent );
             break;
         case SwAccessibleEvent_Impl::CHILD_POS_CHANGED:
             // CHILD_POS_CHANGED events can only follow CHILD_POS_CHANGED
@@ -274,6 +303,16 @@ void SwAccessibleMap::AppendEvent( const SwAccessibleEvent_Impl& rEvent )
             ASSERT( aEvent.GetType() != SwAccessibleEvent_Impl::DISPOSE,
                     "dispose events should not be stored" );
             bAppendEvent = sal_False;
+            break;
+        case SwAccessibleEvent_Impl::CARET_POS:
+            // A CARET_POS event is added to any other devnt only. It is
+            // broadcasted after any other event, so the event should be
+            // put to the back.
+            ASSERT( aEvent.GetType()!=SwAccessibleEvent_Impl::CHILD_POS_CHANGED,
+                    "invalid event combination" );
+            ASSERT( aEvent.GetType() != SwAccessibleEvent_Impl::DISPOSE,
+                    "dispose events should not be stored" );
+            aEvent.SetUpdateCaretPos();
             break;
         }
         if( bAppendEvent )
@@ -303,7 +342,13 @@ Reference< XAccessible > SwAccessibleMap::GetDocumentView()
     Reference < XAccessible > xAcc;
 
     if( !pMap )
+    {
         pMap = new SwAccessibleContextMap_Impl;
+        pMap->bLocked = sal_False;
+    }
+    ASSERT( !pMap->bLocked, "Map is locked" );
+    pMap->bLocked = sal_True;
+
     const SwRootFrm *pRootFrm = GetShell()->GetDoc()->GetRootFrm();
     SwAccessibleContextMap_Impl::iterator aIter = pMap->find( pRootFrm );
     if( aIter != pMap->end() )
@@ -327,6 +372,8 @@ Reference< XAccessible > SwAccessibleMap::GetDocumentView()
             pMap->insert( aEntry );
         }
     }
+
+    pMap->bLocked = sal_False;
 
     return xAcc;
 }
@@ -562,6 +609,76 @@ void SwAccessibleMap::InvalidateFrmContent( const SwFrm *pFrm )
     }
 }
 
+void SwAccessibleMap::InvalidateCaretPosition( const SwFrm *pFrm )
+{
+    ASSERT( pFrm->IsAccessibleFrm(),
+            "Unnecessary call to InvalidateCaretPosition" );
+
+    if( pFrm->IsAccessibleFrm() )
+    {
+        Reference < XAccessible > xOldAcc;
+        Reference < XAccessible > xAcc;
+
+        {
+            vos::OGuard aGuard( aMutex );
+
+            if( pMap )
+            {
+                xOldAcc = pMap->xCaretContext;
+                pMap->xCaretContext = xAcc; // clear reference
+
+                SwAccessibleContextMap_Impl::iterator aIter =
+                    pMap->find( pFrm );
+                if( aIter != pMap->end() )
+                    xAcc = (*aIter).second;
+            }
+        }
+        if( xOldAcc.is() && xOldAcc != xAcc )
+        {
+            SwAccessibleContext *pOldAccImpl =
+                static_cast< SwAccessibleContext *>( xOldAcc.get() );
+            if( GetShell()->ActionPend() )
+            {
+                SwAccessibleEvent_Impl aEvent(
+                    SwAccessibleEvent_Impl::CARET_POS, pOldAccImpl,
+                    pOldAccImpl->GetFrm() );
+                AppendEvent( aEvent );
+            }
+            else
+            {
+                pOldAccImpl->InvalidateCaretPos();
+            }
+        }
+        if( xAcc.is() )
+        {
+            SwAccessibleContext *pAccImpl =
+                static_cast< SwAccessibleContext *>( xAcc.get() );
+            if( GetShell()->ActionPend() )
+            {
+                SwAccessibleEvent_Impl aEvent(
+                    SwAccessibleEvent_Impl::CARET_POS, pAccImpl,
+                    pFrm );
+                AppendEvent( aEvent );
+            }
+            else
+            {
+                pAccImpl->InvalidateCaretPos();
+            }
+        }
+    }
+}
+
+void SwAccessibleMap::SetCaretContext(
+        const ::vos::ORef < SwAccessibleContext >& rCaretContext )
+{
+    vos::OGuard aGuard( aMutex );
+    if( pMap )
+    {
+        Reference < XAccessible > xAcc( rCaretContext.getBodyPtr() );
+        pMap->xCaretContext = xAcc;
+    }
+}
+
 void SwAccessibleMap::FireEvents()
 {
     vos::OGuard aGuard( aEventMutex );
@@ -590,6 +707,9 @@ void SwAccessibleMap::FireEvents()
                             "dispose event has been stored" );
                     break;
                 }
+                if( SwAccessibleEvent_Impl::DISPOSE != (*aIter).GetType() &&
+                    (*aIter).IsUpdateCaretPos() )
+                    xAccImpl->InvalidateCaretPos();
             }
 
             aIter++;

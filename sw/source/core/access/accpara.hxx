@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpara.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mib $ $Date: 2002-03-11 11:52:41 $
+ *  last change: $Author: mib $ $Date: 2002-03-18 12:49:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,10 @@ class SwAccessibleParagraph : public    SwAccessibleContext,
     /// Get/Clear/Has/UpdatePortionData() methods
     SwAccessiblePortionData* pPortionData;
 
+    sal_Int32 nOldCaretPos; // The 'old' caret pos. It's only valid as long
+                            // as the cursor is inside this object (protected by
+                            // mutex)
+
     sal_Bool bIsHeading;    // protected by base classes mutex
 
     /// get the SwTxtNode (requires frame; check before)
@@ -106,11 +110,15 @@ class SwAccessibleParagraph : public    SwAccessibleContext,
 
     ::rtl::OUString GetDescription();
 
+    // get the current care position
+    sal_Int32 GetCaretPos();
+
     /// determine whether the current selection. Fill the values with
     /// -1 if there is no selection in the this paragraph
     sal_Bool GetSelection(sal_Int32& nStart, sal_Int32& nEnd);
     SwPaM* GetCrsr();          /// helper for GetSelection and getCaretPosition
     SwCrsrShell* GetCrsrShell();    /// helper for GetCrsr and setSelection
+
 
     sal_Bool IsHeading() const;
 
@@ -119,9 +127,11 @@ protected:
     // Set states for getAccessibleStateSet.
     // This drived class additinaly sets MULTILINE(1), SELECTABLE(1) and
     // SELECTED(0/1)
-    virtual void SetStates( ::utl::AccessibleStateSetHelper& rStateSet );
+    virtual void GetStates( ::utl::AccessibleStateSetHelper& rStateSet );
 
     virtual void _InvalidateContent( sal_Bool bVisibleDataFired );
+
+    virtual void _InvalidateCaretPos();
 
     virtual ~SwAccessibleParagraph();
 

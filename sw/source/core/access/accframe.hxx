@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accframe.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mib $ $Date: 2002-03-11 11:52:41 $
+ *  last change: $Author: mib $ $Date: 2002-03-18 12:49:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,9 @@ protected:
     // A child has been moved while setting the vis area
     virtual sal_Bool ChildScrolled( const SwFrm *pFrm );
 
+    // The editable state of a child should be checked
+    virtual sal_Bool CheckEditableStateChild( const SwFrm *pFrm );
+
     // A child shall be disposed
     virtual sal_Bool DisposeChild( const SwFrm *pFrm, sal_Bool bRecursive );
 
@@ -122,8 +125,10 @@ protected:
                        const SwFrm *pFrm );
     virtual ~SwAccessibleFrame();
 
+public:
     // Return the SwFrm this context is attached to.
     const SwFrm *GetFrm() const { return pFrm; };
+protected:
 
     // Return the bounding box of the frame clipped to the vis area. If
     // no frame is specified, use this' frame.
@@ -146,6 +151,10 @@ protected:
                             SwAccessibleFrame *pAcc = 0 );
     virtual void SetVisArea( const Rectangle& rNewVisArea );
 
+    static void CheckEditableStateChildren( const SwFrm *pFrm,
+                                  const Rectangle& rOldVisArea,
+                                  SwAccessibleFrame *pAcc = 0 );
+    inline void CheckEditableStateChildren();
     static void DisposeChildren( const SwFrm *pFrm,
                                   const Rectangle& rOldVisArea,
                                  sal_Bool bRecursive,
@@ -185,6 +194,11 @@ inline sal_Int32 SwAccessibleFrame::GetChildIndex( const SwFrm *pChild ) const
 inline const SwFrm *SwAccessibleFrame::GetChildAt( const Point& rPos ) const
 {
     return GetChildAt( aVisArea, pFrm, rPos );
+}
+
+inline void SwAccessibleFrame::CheckEditableStateChildren()
+{
+    CheckEditableStateChildren( GetFrm(), aVisArea, this );
 }
 
 inline void SwAccessibleFrame::DisposeChildren( sal_Bool bRecursive )

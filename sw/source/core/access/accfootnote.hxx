@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accfootnote.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2002-03-11 11:52:41 $
+ *  last change: $Author: mib $ $Date: 2002-03-18 12:49:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ protected:
 
     // Set states for getAccessibleStateSet.
     // This drived class additinaly sets MULTISELECTABLE(1)
-    virtual void SetStates( ::utl::AccessibleStateSetHelper& rStateSet );
+    virtual void GetStates( ::utl::AccessibleStateSetHelper& rStateSet );
 
     virtual ~SwAccessibleFootnote();
 
