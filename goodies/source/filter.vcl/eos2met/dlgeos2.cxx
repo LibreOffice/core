@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgeos2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2001-03-07 20:06:27 $
+ *  last change: $Author: mh $ $Date: 2001-10-17 18:19:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,10 +68,6 @@
 #include "dlgeos2.hxx"
 #include "dlgeos2.hrc"
 #include "strings.hrc"
-
-#include <segmentc.hxx>
-
-SEG_EOFGLOBALS()
 
 /*************************************************************************
 |*
@@ -210,46 +206,4 @@ IMPL_LINK( DlgExportEMET, ClickRbSize, void*, EMPTYARG )
 
     return 0;
 }
-
-
-/*************************************************************************
-
-      Source Code Control System - History
-
-      $Log: not supported by cvs2svn $
-      Revision 1.1.1.1  2000/09/18 16:30:12  hr
-      initial import
-
-      Revision 1.6  2000/09/15 15:27:06  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.5  2000/07/26 17:24:45  willem.vandorp
-      Headers/footers replaced
-
-      Revision 1.4  2000/04/16 11:17:23  sj
-      #75046# displaying different metrics
-
-      Revision 1.3  2000/04/07 11:31:47  sj
-      unicode changes
-
-      Revision 1.2  1998/01/17 11:56:14  KA
-      Includes
-
-
-      Rev 1.1   17 Jan 1998 12:56:14   KA
-   Includes
-
-      Rev 1.0   26 Aug 1997 11:36:48   KA
-   Initial revision.
-
-      Rev 1.2   06 Feb 1996 12:38:06   KA
-   #25026#: Defaultgroesse fuer Export auf 10*10 cm angehoben
-
-      Rev 1.1   22 Jan 1996 15:25:10   KA
-   Dialoge umgestellt / erweitert
-
-      Rev 1.0   19 Jan 1996 20:09:16   KA
-   Dialoganbindung
-
-*************************************************************************/
 

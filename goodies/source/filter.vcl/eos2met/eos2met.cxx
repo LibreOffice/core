@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eos2met.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: thb $ $Date: 2001-07-10 11:11:34 $
+ *  last change: $Author: mh $ $Date: 2001-10-17 18:19:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,12 +59,7 @@
  *
  ************************************************************************/
 
-#if SUPD <= 364
-#include <tools/mtf.hxx>
-#include <fltcall.hxx>
-#else
 #include <svtools/fltcall.hxx>
-#endif
 
 #include <math.h>
 #include <tools/stream.hxx>
