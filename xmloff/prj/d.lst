@@ -3,6 +3,7 @@ mkdir: %_DEST%\inc%_EXT%\xmloff
 ..\%__SRC%\misc\*.map %_DEST%\bin%_EXT%\*.map
 ..\%__SRC%\lib\ixo.lib %_DEST%\lib%_EXT%\ixo.lib
 ..\%__SRC%\lib\xol.lib %_DEST%\lib%_EXT%\xol.lib
+..\%__SRC%\lib\libxol.a %_DEST%\lib%_EXT%\libxol.a
 ..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*.dll
 ..\%__SRC%\lib\*.so %_DEST%\lib%_EXT%\*.so
 ..\dtd\*.* %_DEST%\bin%_EXT%\*.*
