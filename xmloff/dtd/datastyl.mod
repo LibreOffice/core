@@ -1,6 +1,6 @@
 <!--
 
-   $Id: datastyl.mod,v 1.5 2000-11-30 10:15:16 nn Exp $
+   $Id: datastyl.mod,v 1.6 2000-12-02 15:57:54 nn Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -80,18 +80,25 @@
 <!ELEMENT number:date-style ( style:properties?, %date-style-content;, style:map* )>
 <!ELEMENT number:day EMPTY>
 <!ATTLIST number:day number:style (short|long) "short">
+<!ATTLIST number:day number:calendar CDATA #IMPLIED>
 <!ELEMENT number:month EMPTY>
 <!ATTLIST number:month number:textual %boolean; "false">
 <!ATTLIST number:month number:style (short|long) "short">
+<!ATTLIST number:month number:calendar CDATA #IMPLIED>
 <!ELEMENT number:year EMPTY>
 <!ATTLIST number:year number:style (short|long) "short">
+<!ATTLIST number:year number:calendar CDATA #IMPLIED>
 <!ELEMENT number:era EMPTY>
 <!ATTLIST number:era number:style (short|long) "short">
+<!ATTLIST number:era number:calendar CDATA #IMPLIED>
 <!ELEMENT number:day-of-week EMPTY>
 <!ATTLIST number:day-of-week number:style (short|long) "short">
+<!ATTLIST number:day-of-week number:calendar CDATA #IMPLIED>
 <!ELEMENT number:week-of-year EMPTY>
+<!ATTLIST number:week-of-year number:calendar CDATA #IMPLIED>
 <!ELEMENT number:quarter EMPTY>
 <!ATTLIST number:quarter number:style (short|long) "short">
+<!ATTLIST number:quarter number:calendar CDATA #IMPLIED>
 
 <!ENTITY % any-time "( number:hours | number:am-pm | number:minutes | number:seconds )">
 <!ENTITY % time-style-content "( (number:text,(%any-time;,number:text?)+) | (%any-time;,number:text?)+)">
