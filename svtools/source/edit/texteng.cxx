@@ -2,9 +2,9 @@
  *
  *  $RCSfile: texteng.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mt $ $Date: 2002-08-15 14:26:09 $
+ *  last change: $Author: mt $ $Date: 2002-08-23 12:34:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -528,7 +528,7 @@ void TextEngine::ImpRemoveText()
     for ( USHORT nView = 0; nView < mpViews->Count(); nView++ )
     {
         TextView* pView = mpViews->GetObject( nView );
-        pView->maSelection = aEmptySel;
+        pView->ImpSetSelection( aEmptySel );
     }
     ResetUndo();
 }
@@ -551,10 +551,7 @@ void TextEngine::SetText( const XubString& rText )
     for ( USHORT nView = 0; nView < mpViews->Count(); nView++ )
     {
         TextView* pView = mpViews->GetObject( nView );
-//      if ( !pView->IsReadOnly() )
-//          pView->maSelection = aPaM;
-//      else
-            pView->maSelection = aEmptySel;
+        pView->ImpSetSelection( aEmptySel );
 
         // Wenn kein Text, dann auch Kein Format&Update
         // => Der Text bleibt stehen.
@@ -889,7 +886,8 @@ Rectangle TextEngine::PaMtoEditCursor( const TextPaM& rPaM, BOOL bSpecial )
 
 Rectangle TextEngine::GetEditCursor( const TextPaM& rPaM, BOOL bSpecial, BOOL bPreferPortionStart )
 {
-    DBG_ASSERT( IsFormatted(), "GetEditCursor: Nicht formatiert" );
+    if ( !IsFormatted() && !IsFormatting() )
+        FormatDoc();
 
     TEParaPortion* pPortion = mpTEParaPortions->GetObject( rPaM.GetPara() );
     TextNode* pNode = mpDoc->GetNodes().GetObject( rPaM.GetPara() );
@@ -2516,7 +2514,7 @@ BOOL TextEngine::Read( SvStream& rInput, const TextSelection* pSel )
 
     // Damit bei FormatAndUpdate nicht auf die ungueltige Selektion zugegriffen wird.
     if ( GetActiveView() )
-        GetActiveView()->maSelection = aNewSel;
+        GetActiveView()->ImpSetSelection( aNewSel );
 
     SetUpdateMode( bUpdate );
     FormatAndUpdate( GetActiveView() );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textview.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: mt $ $Date: 2002-08-15 14:26:09 $
+ *  last change: $Author: mt $ $Date: 2002-08-23 12:34:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -321,7 +321,7 @@ void TextView::SetSelection( const TextSelection& rTextSel, BOOL bGotoCursor )
     mpTextEngine->CheckIdleFormatter();
 
     HideSelection();
-    maSelection = rTextSel;
+    ImpSetSelection( rTextSel );
     mpTextEngine->ValidateSelection( maSelection );
     ShowSelection();
     ShowCursor( bGotoCursor );
@@ -345,7 +345,7 @@ void TextView::DeleteSelected()
     TextPaM aPaM = mpTextEngine->ImpDeleteText( maSelection );
     mpTextEngine->UndoActionEnd( TEXTUNDO_DELETE );
 
-    maSelection = aPaM;
+    ImpSetSelection( aPaM );
     mpTextEngine->FormatAndUpdate( this );
     ShowCursor();
 }
@@ -528,6 +528,14 @@ void TextView::ImpHighlight( const TextSelection& rSel )
     }
 }
 
+void TextView::ImpSetSelection( const TextSelection& rSelection )
+{
+    if ( rSelection != maSelection )
+    {
+        maSelection = rSelection;
+        mpTextEngine->Broadcast( TextHint( TEXT_HINT_VIEWSCROLLED ) );
+    }
+}
 
 void TextView::ShowSelection()
 {
@@ -756,8 +764,7 @@ BOOL TextView::KeyInput( const KeyEvent& rKeyEvent )
         }
     }
 
-    if ( aCurSel != aOldSel )
-        maSelection = aCurSel;
+    ImpSetSelection( aCurSel );
 
     mpTextEngine->UpdateSelections();
 
@@ -820,7 +827,7 @@ void TextView::MouseButtonDown( const MouseEvent& rMouseEvent )
         if ( rMouseEvent.IsMod2() )
         {
             HideSelection();
-            maSelection.GetStart() = maSelection.GetEnd();
+            ImpSetSelection( maSelection.GetEnd() );
             SetCursorAtPoint( rMouseEvent.GetPosPixel() );  // Wird von SelectionEngine bei MOD2 nicht gesetzt
         }
 
@@ -833,8 +840,10 @@ void TextView::MouseButtonDown( const MouseEvent& rMouseEvent )
                 TextNode* pNode = mpTextEngine->mpDoc->GetNodes().GetObject(  maSelection.GetEnd().GetPara() );
                 uno::Reference < i18n::XBreakIterator > xBI = mpTextEngine->GetBreakIterator();
                 i18n::Boundary aBoundary = xBI->getWordBoundary( pNode->GetText(), maSelection.GetEnd().GetIndex(), mpTextEngine->GetLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES, sal_True );
-                maSelection.GetStart().GetIndex() = (USHORT)aBoundary.startPos;
-                maSelection.GetEnd().GetIndex() = (USHORT)aBoundary.endPos;
+                TextSelection aNewSel( maSelection );
+                aNewSel.GetStart().GetIndex() = (USHORT)aBoundary.startPos;
+                aNewSel.GetEnd().GetIndex() = (USHORT)aBoundary.endPos;
+                ImpSetSelection( aNewSel );
                 ShowSelection();
                 ShowCursor( TRUE, TRUE );
             }
@@ -842,11 +851,13 @@ void TextView::MouseButtonDown( const MouseEvent& rMouseEvent )
         else if ( rMouseEvent.GetClicks() == 3 )
         {
             // Absatz selektieren
-            if ( maSelection.GetEnd().GetIndex() < mpTextEngine->GetTextLen( maSelection.GetEnd().GetPara() ) )
+            if ( maSelection.GetStart().GetIndex() || ( maSelection.GetEnd().GetIndex() < mpTextEngine->GetTextLen( maSelection.GetEnd().GetPara() ) ) )
             {
                 HideSelection();
-                maSelection.GetStart().GetIndex() = 0;
-                maSelection.GetEnd().GetIndex() = mpTextEngine->mpDoc->GetNodes().GetObject( maSelection.GetEnd().GetPara() )->GetText().Len();
+                TextSelection aNewSel( maSelection );
+                aNewSel.GetStart().GetIndex() = 0;
+                aNewSel.GetEnd().GetIndex() = mpTextEngine->mpDoc->GetNodes().GetObject( maSelection.GetEnd().GetPara() )->GetText().Len();
+                ImpSetSelection( aNewSel );
                 ShowSelection();
                 ShowCursor( TRUE, TRUE );
             }
@@ -1223,15 +1234,18 @@ TextSelection TextView::ImpMoveCursor( const KeyEvent& rKeyEvent )
 
 
         TextSelection aOldSelection( maSelection );
-        maSelection.GetEnd() = aPaM;
+        TextSelection aNewSelection( maSelection );
+        aNewSelection.GetEnd() = aPaM;
         if ( aTranslatedKeyEvent.GetKeyCode().IsShift() )
         {
             // Dann wird die Selektion erweitert...
+            ImpSetSelection( aNewSelection );
             ShowSelection( TextSelection( aOldEnd, aPaM ) );
         }
         else
         {
-            maSelection.GetStart() = aPaM;
+            aNewSelection.GetStart() = aPaM;
+            ImpSetSelection( aNewSelection );
         }
     }
 
@@ -1252,10 +1266,13 @@ void TextView::InsertText( const XubString& rStr, BOOL bSelect )
     {
         aNewSel.Justify();
         aNewSel.GetEnd() = aPaM;
-        maSelection = aNewSel;
     }
     else
-        maSelection = aPaM;
+    {
+        aNewSel = aPaM;
+    }
+
+    ImpSetSelection( maSelection );
 
     mpTextEngine->FormatAndUpdate( this );
 }
@@ -1727,16 +1744,19 @@ BOOL TextView::SetCursorAtPoint( const Point& rPosPixel )
 
     // aTmpNewSel: Diff zwischen alt und neu, nicht die neue Selektion
     TextSelection aTmpNewSel( maSelection.GetEnd(), aPaM );
-    maSelection.GetEnd() = aPaM;
+    TextSelection aNewSel( maSelection );
+    aNewSel.GetEnd() = aPaM;
 
     if ( !mpSelEngine->HasAnchor() )
     {
         if ( maSelection.GetStart() != aPaM )
             mpTextEngine->CursorMoved( maSelection.GetStart().GetPara() );
-        maSelection.GetStart() = aPaM;
+        aNewSel.GetStart() = aPaM;
+        ImpSetSelection( aNewSel );
     }
     else
     {
+        ImpSetSelection( aNewSel );
         ShowSelection( aTmpNewSel );
     }
 
@@ -1939,7 +1959,7 @@ void TextView::drop( const ::com::sun::star::datatransfer::dnd::DropTargetDropEv
             bStarterOfDD = mpTextEngine->GetView( --nView )->mpDDInfo ? mpTextEngine->GetView( nView )->mpDDInfo->mbStarterOfDD : FALSE;
 
         HideSelection();
-        maSelection = mpDDInfo->maDropPos;
+        ImpSetSelection( mpDDInfo->maDropPos );
 
         mpTextEngine->UndoActionStart( TEXTUNDO_DRAGANDDROP );
 
@@ -1963,7 +1983,7 @@ void TextView::drop( const ::com::sun::star::datatransfer::dnd::DropTargetDropEv
             aText.Erase( aText.Len()-1 );
 
         if ( ImplCheckTextLen( aText ) )
-            maSelection = mpTextEngine->ImpInsertText( mpDDInfo->maDropPos, aText );
+            ImpSetSelection( mpTextEngine->ImpInsertText( mpDDInfo->maDropPos, aText ) );
 
         if ( aPrevSel.HasRange() &&
                 ( rDTDE.DropAction & datatransfer::dnd::DNDConstants::ACTION_MOVE ) || !bStarterOfDD )
@@ -2000,7 +2020,7 @@ void TextView::drop( const ::com::sun::star::datatransfer::dnd::DropTargetDropEv
                     if ( aPrevSel.GetStart().GetPara() == mpDDInfo->maDropPos.GetPara() )
                         aPaM.GetIndex() += aPrevSel.GetStart().GetIndex();
                 }
-                maSelection = aPaM;
+                ImpSetSelection( aPaM );
 
             }
             mpTextEngine->ImpDeleteText( aPrevSel );
@@ -2143,7 +2163,7 @@ void __EXPORT TextSelFunctionSet::CreateAnchor()
 
     // Es darf kein ShowCursor folgen:
     mpView->HideSelection();
-    mpView->maSelection.GetStart() = mpView->maSelection.GetEnd();
+    mpView->ImpSetSelection( mpView->maSelection.GetEnd() );
 }
 
 BOOL __EXPORT TextSelFunctionSet::SetCursorAtPoint( const Point& rPointPixel, BOOL )

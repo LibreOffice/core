@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xtextedt.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mt $ $Date: 2001-12-18 11:14:27 $
+ *  last change: $Author: mt $ $Date: 2002-08-23 12:34:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -436,7 +436,7 @@ BOOL ExtTextView::ImpIndentBlock( BOOL bRight )
             aSel.GetEnd().GetIndex()--;
     }
 
-    maSelection = aSel;
+    ImpSetSelection( aSel );
     GetTextEngine()->FormatAndUpdate( this );
 
     return bDone;
