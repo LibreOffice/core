@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flddok.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:36 $
+ *  last change: $Author: kz $ $Date: 2001-01-12 22:26:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -279,7 +279,7 @@ TabPage TP_FLD_DOK
         Text [ dutch ] = "~Inhoud fixeren" ;
         Text [ portuguese ] = "Conteъdo ~fixo" ;
         Text[ chinese_simplified ] = "№М¶ЁДЪИЭ(~F)";
-        Text[ russian ] = "Зафиксировать содержание";
+        Text[ russian ] = "Фикс. содержимое";
         Text[ polish ] = "Staіa treњж";
         Text[ japanese ] = "“а—e‚МЊЕ’и(~F)";
         Text[ chinese_traditional ] = "©T©w¤є®e(~F)";
