@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FileAccess.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ab $ $Date: 2000-11-16 13:11:28 $
+ *  last change: $Author: ab $ $Date: 2000-11-30 11:21:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -366,9 +366,17 @@ void OFileAccess::createFolder( const OUString& NewFolderURL )
 
     // SfxContentHelper::MakeFolder
     INetURLObject aURL( NewFolderURL, INET_PROT_FILE );
-    String aNewFolderURLObj = aURL.GetMainURL();
+    String aNewFolderURLStr = aURL.GetMainURL();
     String aTitle = aURL.getName();
     aURL.removeSegment();
+
+    // Does the base folder exist? Otherwise create it first
+    String aBaseFolderURLStr = aURL.GetMainURL();
+    if( !isFolder( aBaseFolderURLStr ) )
+    {
+        createFolder( aBaseFolderURLStr );
+    }
+
     Sequence<OUString> aNames(2);
     OUString* pNames = aNames.getArray();
     pNames[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) );
@@ -380,7 +388,7 @@ void OFileAccess::createFolder( const OUString& NewFolderURL )
     Reference< XCommandEnvironment > aCmdEnv;
 
     Content aCnt( aURL.GetMainURL(), aCmdEnv );
-    Content aNewFolder( aNewFolderURLObj, aCmdEnv );
+    Content aNewFolder( aNewFolderURLStr, aCmdEnv );
     OUString aType( RTL_CONSTASCII_USTRINGPARAM( "application/vnd.sun.staroffice.fsys-folder" ) );
     aCnt.insertNewContent( aType, aNames, aValues, aNewFolder );
 }
