@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glossary.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-10 06:48:35 $
+ *  last change: $Author: kz $ $Date: 2001-05-12 07:21:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -927,7 +927,7 @@ InfoBox MSG_DOUBLE_SHORTNAME
     MESSAGE[ chinese_traditional ] = "¤w¸g¨Ï¥Î¤F³o­ÓÁY¼g¡C½Ğ±z¿é¤J¤@­Ó¤£¦Pªº¦WºÙ¡T";
     MESSAGE[ arabic ] = "åĞÇ ÇáÇÎÊÕÇÑ ãæÌæÏ ÈÇáİÚá. ÇáÑÌÇÁ ÇÓÊÎÏÇã ÇÓã ÌÏíÏ!";
     MESSAGE[ greek ] = "Ôá áñ÷éêÜ õğÜñ÷ïõí Şäç. Ğáñáêáëş åéóÜãåôå êÜğïéï Üëëï üíïìá!";
-    MESSAGE[ korean ] = "¹Ù·Î°¡±â ÀÌ¸§ÀÌ ÀÌ¹Ì »ç¿ëÁßÀÔ´Ï´Ù. ´Ù¸¥ ÀÌ¸§À» ¼±ÅÃÇÏ¿© ÁÖ½Ê½Ã¿À";
+    MESSAGE[ korean ] = "¹Ù·Î°¡±â ÀÌ¸§ÀÌ ÀÌ¹Ì »ç¿ëÁßÀÔ´Ï´Ù. ´Ù¸¥ ÀÌ¸§À» ¼±ÅÃÇÏ½Ê½Ã¿À";
     MESSAGE[ turkish ] = "Bu kısaltma mevcut durumda. Başka bir ad seçin!";
     MESSAGE[ language_user1 ] = " ";
     MESSAGE[ catalan ] = "Esta abreviatura ya está en uso. ¡Elija otro nombre por favor!";
