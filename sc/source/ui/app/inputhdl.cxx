@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputhdl.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-27 15:08:27 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 14:37:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1716,16 +1716,17 @@ BOOL ScInputHandler::DataChanging( sal_Unicode cTyped, BOOL bFromCommand )      
         return FALSE;
 }
 
-void ScInputHandler::DataChanged()
+void ScInputHandler::DataChanged( BOOL bFromTopNotify )
 {
     ImplCreateEditEngine();
 
     if (eMode==SC_INPUT_NONE)
         eMode = SC_INPUT_TYPE;
 
-    if ( eMode == SC_INPUT_TOP && pTopView )
+    if ( eMode == SC_INPUT_TOP && pTopView && !bFromTopNotify )
     {
         //  table EditEngine is formatted below, input line needs formatting after paste
+        //  #i20282# not when called from the input line's modify handler
         pTopView->GetEditEngine()->QuickFormatDoc( TRUE );
     }
 
@@ -3113,16 +3114,19 @@ void ScInputHandler::InputSelection( EditView* pView )
     ResetAutoPar();
 }
 
-void ScInputHandler::InputChanged( EditView* pView )
+void ScInputHandler::InputChanged( EditView* pView, BOOL bFromNotify )
 {
     ESelection aSelection = pView->GetSelection();
 
     UpdateActiveView();
 
+    // #i20282# DataChanged needs to know if this is from the input line's modify handler
+    BOOL bFromTopNotify = ( bFromNotify && pView == pTopView );
+
     BOOL bNewView = DataChanging();                     //! kann das hier ueberhaupt sein?
     aCurrentText = pView->GetEditEngine()->GetText();   // auch den String merken
     pEngine->SetText( aCurrentText );
-    DataChanged();
+    DataChanged( bFromTopNotify );
     bTextValid = TRUE;      // wird in DataChanged auf FALSE gesetzt
 
     if ( pActiveViewSh )
