@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_java2uno.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2003-03-20 12:42:02 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:27:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,13 +132,13 @@ void Bridge::handle_uno_exc( JNI_context const & jni, uno_Any * uno_exc ) const
 {
     if (typelib_TypeClass_EXCEPTION == uno_exc->pType->eTypeClass)
     {
-#if defined _DEBUG
+#if OSL_DEBUG_LEVEL > 0
         // append java stack trace to Message member
         reinterpret_cast< ::com::sun::star::uno::Exception * >( uno_exc->pData )->Message +=
             jni.get_stack_trace();
 #endif
 
-#if defined DEBUG
+#if OSL_DEBUG_LEVEL > 1
         OUStringBuffer buf( 128 );
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("exception occured java->uno: [") );
         buf.append( *reinterpret_cast< OUString const * >( &uno_exc->pType->pTypeName ) );
@@ -372,7 +372,7 @@ JNIEXPORT jobject JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_dispatch
     try
     {
         method_name = jstring_to_oustring( jni, jo_method );
-#if defined DEBUG
+#if OSL_DEBUG_LEVEL > 1
         OUStringBuffer trace_buf( 64 );
         trace_buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("java->uno call: ") );
         trace_buf.append( method_name );
@@ -612,7 +612,7 @@ JNIEXPORT void JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_finalize__J
     typelib_TypeDescription * td = reinterpret_cast< typelib_TypeDescription * >(
         jni->GetLongField( jo_proxy, jni_info->m_field_JNI_proxy_m_td_handle ) );
 
-#if defined DEBUG
+#if OSL_DEBUG_LEVEL > 1
     JLocalAutoRef jo_oid(
         jni, jni->GetObjectField( jo_proxy, jni_info->m_field_JNI_proxy_m_oid ) );
     OUString oid( jstring_to_oustring( jni, (jstring)jo_oid.get() ) );
