@@ -848,6 +848,36 @@ sub get_all_directories
 }
 
 ##############################################################
+# Collecting all files inside one directory
+##############################################################
+
+sub get_all_files_from_one_directory
+{
+    my ($basedir) = @_;
+
+    my @allfiles = ();
+    my $direntry;
+
+    $basedir =~ s/\Q$installer::globals::separator\E\s*$//;
+
+    opendir(DIR, $basedir);
+
+    foreach $direntry (readdir (DIR))
+    {
+        next if $direntry eq ".";
+        next if $direntry eq "..";
+
+        my $completeentry = $basedir . $installer::globals::separator . $direntry;
+
+        if ( -f $completeentry ) { push(@allfiles, $completeentry); }
+    }
+
+    closedir(DIR);
+
+    return \@allfiles;
+}
+
+##############################################################
 # Trying to create a directory, no error if this fails
 ##############################################################
 
@@ -988,6 +1018,26 @@ sub create_unique_directory
     while ( ! $created );
 
     return $localdirectory;
+}
+
+######################################################
+# Creating a unique directory with pid extension
+######################################################
+
+sub create_pid_directory
+{
+    my ($directory) = @_;
+
+    $directory =~ s/\Q$installer::globals::separator\E\s*$//;
+    my $pid = $$;           # process id
+    my $time = time();      # time
+
+    $directory = $directory . "_" . $pid . $time;
+
+    if ( ! -d $directory ) { create_directory($directory); }
+    else { installer::exiter::exit_program("ERROR: Directory $directory already exists!", "create_pid_directory"); }
+
+    return $directory;
 }
 
 1;
