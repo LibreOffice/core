@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layctrl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2002-05-21 14:26:37 $
+ *  last change: $Author: gt $ $Date: 2002-07-31 10:29:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,7 +142,8 @@ TableWindow::TableWindow( USHORT nId, SfxBindings& rBind, ToolBox& rParentTbx ) 
     nTextHeight = GetTextHeight()+1;
     SetBackgroundBrush( Brush( BRUSH_NULL ) );
     Font aFont = GetFont();
-    aFont.SetFillColor( Color( COL_WHITE ) );
+    aFont.SetColor( aLineColor );
+    aFont.SetFillColor( aFillColor );
     aFont.SetTransparent( FALSE );
     SetFont( aFont );
 
@@ -489,8 +490,9 @@ ColumnsWindow::ColumnsWindow( USHORT nId, SfxBindings& rBind,
 
     nTextHeight = GetTextHeight()+1;
     SetBackgroundBrush( Brush( BRUSH_NULL ) );
-    Font aFont = GetFont();
-    aFont.SetFillColor( Color( COL_WHITE ) );
+    Font aFont( GetFont() );
+    aFont.SetColor( aLineColor );
+    aFont.SetFillColor( aFillColor );
     aFont.SetTransparent( FALSE );
     SetFont( aFont );
 
