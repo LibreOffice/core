@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backgrnd.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: thb $ $Date: 2001-05-17 14:08:54 $
+ *  last change: $Author: rt $ $Date: 2001-05-30 19:38:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -589,7 +589,7 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text [ DANISH ] = "Baggrundsfarve" ;
         Text [ ENGLISH_US ] = "Background color" ;
         Text [ SPANISH ] = "C~olor de fondo" ;
-        Text [ FINNISH ] = "Hintergrundfarbe" ;
+        Text [ FINNISH ] = "Taustaväri" ;
         Text [ FRENCH ] = "Couleur d'arrière-plan" ;
         Text [ ITALIAN ] = "Colore di sfondo" ;
         Text [ DUTCH ] = "Achtergrondkleur" ;
@@ -643,6 +643,8 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text[ korean ] = "ÆÄÀÏ";
         Text[ turkish ] = "Dosya";
         Text[ language_user1 ] = " ";
+        Text[ finnish ] = "Tiedosto";
+        Text[ catalan ] = "File";
     };
     PushButton BTN_BROWSE
     {
@@ -687,7 +689,7 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text [ french ] = "~Lien" ;
         Text [ swedish ] = "Län~ka" ;
         Text [ danish ] = "Kæd" ;
-        Text [ portuguese_brazilian ] = "~Verknüpfen" ;
+        Text [ portuguese_brazilian ] = "~Verkn?fen" ;
         Text [ portuguese ] = "~Ligar" ;
         Text[ chinese_simplified ] = "Á´½Ó(~L)";
         Text[ russian ] = "Ñâÿçàòü";
@@ -699,6 +701,8 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text[ korean ] = "¿¬°á(~L)";
         Text[ turkish ] = "Bağla";
         Text[ language_user1 ] = " ";
+        Text[ finnish ] = "~Linkitä";
+        Text[ catalan ] = "~Vincular";
     };
     FixedText FT_FILE
     {
@@ -733,8 +737,8 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text[ korean ] = "Çü½Ä";
         Text[ turkish ] = "Tür";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "File";
-        Text[ finnish ] = "Datei";
+        Text[ catalan ] = "Type";
+        Text[ finnish ] = "Tyyppi";
     };
     RadioButton BTN_POSITION
     {
@@ -865,15 +869,17 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text[ greek ] = "Ğñïåğéóêüğçóç";
         Text[ korean ] = "¹Ì¸® º¸±â(~V)";
         Text[ turkish ] = "Ö~nizleme";
-        Text [ portuguese_brazilian ] = "Grafikvorschau" ;
-        Text [ portuguese ] = "Previsualizar" ;
-        Text[ chinese_simplified ] = "Ô¤ÀÀÍ¼ĞÎ";
-        Text[ russian ] = "Ïğîñìîòğ ãğàôèêè";
-        Text[ polish ] = "Podgl¹d grafiki";
-        Text[ japanese ] = "}‚ÌÌßÚËŞ­°";
-        Text[ chinese_traditional ] = "¹Ï§Î¹wÄı";
-        Text[ arabic ] = "ãÚÇíäÉ ÇáÕæÑÉ";
+        Text [ portuguese_brazilian ] = "V~orschau" ;
+        Text [ portuguese ] = "~Previsualizar" ;
+        Text[ chinese_simplified ] = "Ô¤ÀÀ(~V)";
+        Text[ russian ] = "Ïğîñìîòğ";
+        Text[ polish ] = "P~odgl¹d";
+        Text[ japanese ] = "ÌßÚËŞ­°(~V)";
+        Text[ chinese_traditional ] = "¹wÄı(~V)";
+        Text[ arabic ] = "ãÚÇíäÉ";
         Text[ language_user1 ] = " ";
+        Text[ finnish ] = "~Esikatselu";
+        Text[ catalan ] = "Previsuali~zación";
     };
     String STR_BROWSE
     {
