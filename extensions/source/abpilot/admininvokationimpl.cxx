@@ -2,9 +2,9 @@
  *
  *  $RCSfile: admininvokationimpl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 16:00:45 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 17:10:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,7 +158,7 @@ namespace abp
                 // the DriverManager service
                 // If this context has never been accessed before, this may be expensive (it includes loading of
                 // at least one library).
-                // As this AutoPilot is intended to run on the first office start, it is very likely that the
+                // As this wizard is intended to run on the first office start, it is very likely that the
                 // context needs to be freshly created
                 // Thus, we access the context here (within the WaitCursor), which means the user sees a waitcursor
                 // while his/her office blocks a few seconds ....
