@@ -2,9 +2,9 @@
  *
  *  $RCSfile: error.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-19 20:45:57 $
+ *  last change: $Author: kz $ $Date: 2001-01-26 21:31:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@ String STR_COMCORE_READERROR
     TEXT [ swedish ] = "Lδsfel" ;
     TEXT [ dutch ] = "Leesfout" ;
     TEXT [ spanish ] = "Error de lectura" ;
-    TEXT [ english_us ] = "Read Error" ;
+    TEXT [ english_us ] = "Read-Error" ;
     TEXT[ chinese_simplified ] = "¶ΑΞΔΌώΚ±·ΆΙϊ΄νΞσ";
     TEXT[ russian ] = "Ξψθακΰ οπθ χςενθθ";
     TEXT[ polish ] = "B³Ήd odczytu";
@@ -591,7 +591,7 @@ Resource RID_SW_ERRHDL
         Text[ russian ] = "Δξκσμενς ρξηδΰςό νεβξημξζνξ";
         Text[ polish ] = "Dokumentu nie moΏna utworzyζ";
         Text[ japanese ] = "‚±‚ΜΔή·­ÒέΔ‚Νμ¬‚Ε‚«‚ά‚Ή‚ρB";
-        Text[ chinese_traditional ] = "µLªk¥Ν¦¨³o­Σ¤ε¥σ";
+        Text[ chinese_traditional ] = "µLªk«Ψ¥ί³o­Σ¤ε¥σ";
         Text[ arabic ] = "αΗ νγίδ ΕδΤΗΑ ΗαγΣΚδΟ";
         Text[ greek ] = "Δεν ήταν δυνατή η δημιουργία του εγγράφου";
         Text[ korean ] = "Ή®Ό­°΅ ΈΈµιΎξΑϊΌφ Ύψ½ΐ΄Ο΄Ω.";
