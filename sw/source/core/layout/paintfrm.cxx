@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: od $ $Date: 2002-09-25 13:18:48 $
+ *  last change: $Author: od $ $Date: 2002-10-11 11:50:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -911,7 +911,9 @@ void SwLineRects::PaintLines( OutputDevice *pOut )
                     ULONG nOldDrawMode = pOut->GetDrawMode();
                     if( pGlobalShell->GetWin() &&
                         Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
+                    {
                         pOut->SetDrawMode( 0 );
+                    }
 
                     pOut->SetFillColor( *pLast );
                     pOut->SetDrawMode( nOldDrawMode );
@@ -1010,30 +1012,6 @@ void SwSubsRects::PaintSubsidiary( OutputDevice *pOut,
 //-------------------------------------------------------------------------
 //Diverse Functions die in diesem File so verwendet werden.
 
-void MA_FASTCALL SizeBorderRect( SwRect &rRect )
-{
-    //Das Rechteck um einen Pixel ausdehnen, damit die aligned'en Umrandungen
-    //korrekt gemalt werden.
-    if ( pGlobalShell->GetOut()->GetOutDevType() != OUTDEV_PRINTER )
-    {
-        rRect.Pos().Y() = Max( 0L, rRect.Top() - nPixelSzH );
-        rRect.Pos().X() = Max( 0L, rRect.Left()- nPixelSzW );
-        rRect.SSize().Width() += nPixelSzW * 2;
-        rRect.SSize().Height()+= nPixelSzH* 2;
-    }
-}
-
-void MA_FASTCALL InvertSizeBorderRect( SwRect &rRect, ViewShell *pSh )
-{
-    if ( pSh->GetOut()->GetOutDevType() != OUTDEV_PRINTER )
-    {
-        rRect.Pos().Y() = rRect.Top() + nPixelSzH;
-        rRect.Pos().X() = rRect.Left()+ nPixelSzW;
-        rRect.SSize().Width() -= nPixelSzW * 2;
-        rRect.SSize().Height()-= nPixelSzH* 2;
-    }
-}
-
 void MA_FASTCALL SwAlignRect( SwRect &rRect, ViewShell *pSh )
 {
     if( !rRect.HasArea() )
@@ -1085,6 +1063,22 @@ void MA_FASTCALL SwAlignRect( SwRect &rRect, ViewShell *pSh )
         rRect.Right( aRect.Right() - nHalfPixelSzW );
     else
         rRect.Right( aRect.Right() );
+
+    /// OD 11.10.2002 #103636# - consider negative width/height
+    /// check, if aligned SwRect has negative width/height.
+    /// If Yes, adjust it to width/height = 0 twip.
+    /// NOTE: A SwRect with negative width/height can occur, if the width/height
+    ///     of the given SwRect in twip was less than a pixel in twip and that
+    ///     the alignment calculates that the aligned SwRect should not contain
+    ///     the pixels the width/height is on.
+    if ( rRect.Width() < 0 )
+    {
+        rRect.Width(0);
+    }
+    if ( rRect.Height() < 0 )
+    {
+        rRect.Height(0);
+    }
 }
 
 /** OD 25.09.2002 #99739# - method to pixel-align rectangle for drawing graphic object
@@ -1148,7 +1142,6 @@ long MA_FASTCALL lcl_MinWidthDist( const long nDist )
 
 
 //Ermittelt PrtArea plus Umrandung plus Schatten.
-
 void MA_FASTCALL lcl_CalcBorderRect( SwRect &rRect, const SwFrm *pFrm,
                                         const SwBorderAttrs &rAttrs,
                                         const BOOL bShadow )
@@ -1323,10 +1316,6 @@ void MA_FASTCALL lcl_SubtractFlys( const SwFrm *pFrm, const SwPageFrm *pPage,
         //er steht im Hell-Layer (#31941#)
         BOOL bHell = pO->GetLayer() == pFly->GetFmt()->GetDoc()->GetHellId();
         if ( (bStopOnHell && bHell) ||
-             /// OD 05.08.2002 #99657# - add condition:
-             ///    if the background or the shadow of the fly frame is transparent,
-             ///    then this frame will not be substracted from given region
-             ( pFly->IsBackgroundTransparent() || pFly->IsShadowTransparent() ) ||
              /// OD 05.08.2002 - change internal order of condition
              ///    first check "!bHell", then "..->Lower()" and "..->IsNoTxtFrm()"
              ///    have not to be performed, if frame is in "Hell"
@@ -1339,6 +1328,43 @@ void MA_FASTCALL lcl_SubtractFlys( const SwFrm *pFrm, const SwPageFrm *pPage,
            )
             continue;
 
+        /// OD 08.10.2002 #103898#
+        /// Own if-statements for transparent background/shadow of fly frames
+        /// (#99657#) in order to handle special conditions.
+        if ( pFly->IsBackgroundTransparent() )
+        {
+            /// Background <pFly> is transparent drawn. Thus normally, its region
+            /// have not to be substracted from given region.
+            /// But, if method is called for a fly frame and
+            /// <pFly> is a direct lower of this fly frame and
+            /// <pFly> inherites its transparent background brush from its parent,
+            /// then <pFly> frame area have to be subtracted from given region.
+            /// NOTE: Because in Status Quo transparent backgrounds can only be
+            ///     assigned to fly frames, the handle of this special case
+            ///     avoids drawing of transparent areas more than once, if
+            ///     a fly frame inherites a transparent background from its
+            ///     parent fly frame.
+            if ( pFrm->IsFlyFrm() &&
+                 (pFly->GetAnchor()->FindFlyFrm() == pFrm) &&
+                 static_cast<const SwFlyFrmFmt*>(pFly->GetFmt())->IsBackgroundBrushInherited()
+               )
+            {
+                SwRect aRect;
+                SwBorderAttrAccess aAccess( SwFrm::GetCache(), (SwFrm*)pFly );
+                const SwBorderAttrs &rAttrs = *aAccess.Get();
+                ::lcl_CalcBorderRect( aRect, pFly, rAttrs, TRUE );
+                rRegion -= aRect;
+                continue;
+            }
+            else
+            {
+                continue;
+            }
+        }
+        if ( pFly->IsShadowTransparent() )
+        {
+            continue;
+        }
 
         if ( bHell && pFly->GetAnchor()->IsInFly() )
         {
@@ -1356,7 +1382,6 @@ void MA_FASTCALL lcl_SubtractFlys( const SwFrm *pFrm, const SwPageFrm *pPage,
             aRect += pFly->Frm().Pos();
             rRegion -= aRect;
         }
-        continue;
     }
     if ( pRetoucheFly == pRetoucheFly2 )
         pRetoucheFly = 0;
@@ -1725,8 +1750,16 @@ void MA_FASTCALL DrawGraphic( const SvxBrushItem *pBrush, OutputDevice *pOut,
             {
                 if ( !bGrfIsTransparent )
                 {
-                    Polygon aGrfPoly( aGrf.SVRect() );
-                    aDrawPoly.Insert( aGrfPoly );
+                    /// substract area of background graphic from draw area
+                    /// OD 08.10.2002 #103898# - consider only that part of the
+                    ///     graphic area that is overlapping with draw area.
+                    SwRect aTmpGrf = aGrf;
+                    aTmpGrf.Intersection( rOut );
+                    if ( aTmpGrf.HasArea() )
+                    {
+                        Polygon aGrfPoly( aTmpGrf.SVRect() );
+                        aDrawPoly.Insert( aGrfPoly );
+                    }
                 }
                 else
                     bGrfBackgrdAlreadyDrawn = true;
@@ -1774,6 +1807,99 @@ void MA_FASTCALL DrawGraphic( const SvxBrushItem *pBrush, OutputDevice *pOut,
 }
 
 //------------------------------------------------------------------------
+
+/** local help method for SwRootFrm::Paint(..) - Adjust given rectangle to pixel size
+
+    By OD at 27.09.2002 for #103636#
+    In order to avoid paint errors caused by multiple alignments - e.g. method
+    ::SwAlignRect(..) - and other changes to the rectangle to be painted,
+    this method is called for the rectangle to be painted in order to
+    adjust it to the pixel it is overlapping.
+
+    @author OD
+*/
+void lcl_AdjustRectToPixelSize( SwRect& io_aSwRect, const OutputDevice &aOut )
+{
+    /// local constant object of class <Size> to determine number of Twips
+    /// representing a pixel.
+    const Size aTwipToPxSize( aOut.PixelToLogic( Size( 1,1 )) );
+
+    /// local object of class <Rectangle> in Twip coordinates
+    /// calculated from given rectangle aligned to pixel centers.
+    const Rectangle aPxCenterRect = aOut.PixelToLogic(
+            aOut.LogicToPixel( io_aSwRect.SVRect() ) );
+
+    /// local constant object of class <Rectangle> representing given rectangle
+    /// in pixel.
+    const Rectangle aOrgPxRect = aOut.LogicToPixel( io_aSwRect.SVRect() );
+
+    /// calculate adjusted rectangle from pixel centered rectangle.
+    /// Due to rounding differences <aPxCenterRect> doesn't exactly represents
+    /// the Twip-centers. Thus, adjust borders by half of pixel width/height plus 1.
+    /// Afterwards, adjust calculated Twip-positions of the all borders.
+    Rectangle aSizedRect = aPxCenterRect;
+    aSizedRect.Left() -= (aTwipToPxSize.Width()/2 + 1);
+    aSizedRect.Right() += (aTwipToPxSize.Width()/2 + 1);
+    aSizedRect.Top() -= (aTwipToPxSize.Height()/2 + 1);
+    aSizedRect.Bottom() += (aTwipToPxSize.Height()/2 + 1);
+
+    /// adjust left()
+    while ( (aOut.LogicToPixel(aSizedRect)).Left() < aOrgPxRect.Left() )
+    {
+        ++aSizedRect.Left();
+    }
+    /// adjust right()
+    while ( (aOut.LogicToPixel(aSizedRect)).Right() > aOrgPxRect.Right() )
+    {
+        --aSizedRect.Right();
+    }
+    /// adjust top()
+    while ( (aOut.LogicToPixel(aSizedRect)).Top() < aOrgPxRect.Top() )
+    {
+        ++aSizedRect.Top();
+    }
+    /// adjust bottom()
+    while ( (aOut.LogicToPixel(aSizedRect)).Bottom() > aOrgPxRect.Bottom() )
+    {
+        --aSizedRect.Bottom();
+    }
+
+    io_aSwRect = SwRect( aSizedRect );
+
+#ifndef PRODUCT
+    Rectangle aTestOrgPxRect = aOut.LogicToPixel( io_aSwRect.SVRect() );
+    Rectangle aTestNewPxRect = aOut.LogicToPixel( aSizedRect );
+    ASSERT( aTestOrgPxRect == aTestNewPxRect,
+            "Error in lcl_AlignRectToPixelSize(..): Adjusted rectangle has incorrect position or size");
+#ifdef DEBUG
+    Rectangle aTestNewRect( aSizedRect );
+    /// check Left()
+    --aSizedRect.Left();
+    aTestNewPxRect = aOut.LogicToPixel( aSizedRect );
+    ASSERT( aTestOrgPxRect.Left() == (aTestNewPxRect.Left()+1),
+            "Error in lcl_AlignRectToPixelSize(..): Left() not correct adjusted");
+    ++aSizedRect.Left();
+    /// check Right()
+    ++aSizedRect.Right();
+    aTestNewPxRect = aOut.LogicToPixel( aSizedRect );
+    ASSERT( aTestOrgPxRect.Right() == (aTestNewPxRect.Right()-1),
+            "Error in lcl_AlignRectToPixelSize(..): Right() not correct adjusted");
+    --aSizedRect.Right();
+    /// check Top()
+    --aSizedRect.Top();
+    aTestNewPxRect = aOut.LogicToPixel( aSizedRect );
+    ASSERT( aTestOrgPxRect.Top() == (aTestNewPxRect.Top()+1),
+            "Error in lcl_AlignRectToPixelSize(..): Top() not correct adjusted");
+    ++aSizedRect.Top();
+    /// check Bottom()
+    ++aSizedRect.Bottom();
+    aTestNewPxRect = aOut.LogicToPixel( aSizedRect );
+    ASSERT( aTestOrgPxRect.Bottom() == (aTestNewPxRect.Bottom()-1),
+            "Error in lcl_AlignRectToPixelSize(..): Bottom() not correct adjusted");
+    --aSizedRect.Bottom();
+#endif
+#endif
+}
 
 /*************************************************************************
 |*
@@ -1874,13 +2000,17 @@ void SwRootFrm::Paint( const SwRect& rRect ) const
                 aPaintRect._Intersection( pSh->VisArea() );
             }
 
+            /// OD 27.09.2002 #103636# - changed method SwLayVout::Enter(..)
+            /// 2nd parameter is no longer <const> and will be set to the
+            /// rectangle the virtual output device is calculated from <aPaintRect>,
+            /// if the virtual output is used.
             pVout->Enter( pSh, aPaintRect, !bNoVirDev );
 
-               SwRect aBorderRect( aPaintRect );
-               ::SizeBorderRect( aBorderRect );
+            /// OD 27.09.2002 #103636# - adjust paint rectangle to pixel size
+            /// Thus, all objects overlapping on pixel level with the unadjusted
+            /// paint rectangle will be considered in the paint.
+            lcl_AdjustRectToPixelSize( aPaintRect, *(pSh->GetOut()) );
 
-            aPaintRect.Top(  Max( 0L, aPaintRect.Top() - nPixelSzH ));
-            aPaintRect.Left( Max( 0L, aPaintRect.Left()- nPixelSzW ));
             pVout->SetOrgRect( aPaintRect );
 
             pPage->PaintBaBo( aPaintRect, pPage, TRUE );
@@ -1894,7 +2024,7 @@ void SwRootFrm::Paint( const SwRect& rRect ) const
             {
                 pLines->LockLines( TRUE );
                 /// OD 29.08.2002 #102450# - add 3rd parameter
-                pSh->Imp()->PaintLayer( pSh->GetDoc()->GetHellId(), aBorderRect,
+                pSh->Imp()->PaintLayer( pSh->GetDoc()->GetHellId(), aPaintRect,
                                         &aPageBackgrdColor );
                 pLines->PaintLines( pSh->GetOut() );
                 pLines->LockLines( FALSE );
@@ -1909,27 +2039,27 @@ void SwRootFrm::Paint( const SwRect& rRect ) const
             if ( pSh->Imp()->HasDrawView() )
             {
                 /// OD 29.08.2002 #102450# - add 3rd parameter
-                pSh->Imp()->PaintLayer( pSh->GetDoc()->GetHeavenId(), aBorderRect,
+                pSh->Imp()->PaintLayer( pSh->GetDoc()->GetHeavenId(), aPaintRect,
                                         &aPageBackgrdColor );
                 if( pVout->IsFlushable() )
                     bControlExtra = TRUE;
                 else
-                    pSh->Imp()->PaintLayer( pSh->GetDoc()->GetControlsId(), aBorderRect );
+                    pSh->Imp()->PaintLayer( pSh->GetDoc()->GetControlsId(), aPaintRect );
                 pLines->PaintLines( pSh->GetOut() );
             }
 
             if ( bExtraData )
-                pPage->RefreshExtraData( aBorderRect );
+                pPage->RefreshExtraData( aPaintRect );
 
             if ( pSh->GetWin() )
             {
-                pPage->RefreshSubsidiary( aBorderRect );
+                pPage->RefreshSubsidiary( aPaintRect );
                 pSubsLines->PaintSubsidiary( pSh->GetOut(), pLines );
                 DELETEZ( pSubsLines );
             }
             pVout->Leave();
             if( bControlExtra )
-                pSh->Imp()->PaintLayer( pSh->GetDoc()->GetControlsId(), aBorderRect );
+                pSh->Imp()->PaintLayer( pSh->GetDoc()->GetControlsId(), aPaintRect );
         }
         ASSERT( !pPage->GetNext() || pPage->GetNext()->IsPageFrm(),
                 "Nachbar von Seite keine Seite." );
@@ -2176,15 +2306,54 @@ void SwLayoutFrm::Paint( const SwRect& rRect ) const
     OD 12.08.2002
     determines, if background of fly frame has to be drawn transparent
     declaration found in /core/inc/flyfrm.cxx
+    OD 08.10.2002 #103898# - If the background of the fly frame itself is not
+    transparent and the background is inherited from its parent/grandparent,
+    the background brush, used for drawing, has to be investigated for transparency.
 
     @author OD
 
-    @return true, if background color is transparent, but not "no fill"/"auto fill",
-    or the transparency value of a existing background graphic is set.
+    @return true, if background is transparent drawn.
 */
 const sal_Bool SwFlyFrm::IsBackgroundTransparent() const
 {
-    return GetFmt()->IsBackgroundTransparent();
+    sal_Bool bBackgroundTransparent = GetFmt()->IsBackgroundTransparent();
+    if ( !bBackgroundTransparent &&
+         static_cast<const SwFlyFrmFmt*>(GetFmt())->IsBackgroundBrushInherited() )
+    {
+        const SvxBrushItem* pBackgrdBrush = 0;
+        const Color* pSectionTOXColor = 0;
+        SwRect aDummyRect;
+        if ( GetBackgroundBrush( pBackgrdBrush, pSectionTOXColor, aDummyRect, false) )
+        {
+            if ( pSectionTOXColor &&
+                 (pSectionTOXColor->GetTransparency() != 0) &&
+                 (pSectionTOXColor->GetColor() != COL_TRANSPARENT) )
+            {
+                bBackgroundTransparent = sal_True;
+            }
+            else if ( pBackgrdBrush )
+            {
+                if ( (pBackgrdBrush->GetColor().GetTransparency() != 0) &&
+                     (pBackgrdBrush->GetColor() != COL_TRANSPARENT) )
+                {
+                    bBackgroundTransparent = sal_True;
+                }
+                else
+                {
+                    const GraphicObject *pTmpGrf =
+                            static_cast<const GraphicObject*>(pBackgrdBrush->GetGraphicObject());
+                    if ( (pTmpGrf) &&
+                         (pTmpGrf->GetAttr().GetTransparency() != 0)
+                       )
+                    {
+                        bBackgroundTransparent = sal_True;
+                    }
+                }
+            }
+        }
+    }
+
+    return bBackgroundTransparent;
 };
 
 /** FlyFrm::IsShadowTransparent - for feature #99657#
@@ -2312,8 +2481,6 @@ void SwFlyFrm::Paint( const SwRect& rRect ) const
     pLines->LockLines(TRUE);
 
     SwRect aRect( rRect );
-    if ( !IsFlyInCntFrm() )
-        ::InvertSizeBorderRect( aRect, pGlobalShell );
     aRect._Intersection( Frm() );
 
     OutputDevice *pOut = pGlobalShell->GetOut();
@@ -2394,8 +2561,6 @@ void SwFlyFrm::Paint( const SwRect& rRect ) const
             /// paint border
             {
                 SwRect aTmp( rRect );
-                if ( IsFlyInCntFrm() )
-                    ::SizeBorderRect( aTmp );
 //??        aTmp._Intersection( Frm() );
                 PaintBorder( aTmp, pPage, rAttrs );
 /*          if ( bUnlock )
@@ -2665,7 +2830,15 @@ void SwFrm::PaintShadow( const SwRect& rRect, SwRect& rOutRect,
     {
         SwRect &rOut = aRegion[i];
         aOut = rOut;
+        /// OD 30.09.2002 #103636# - no SwAlign of shadow rectangle
+        /// no alignment necessary, because (1) <rRect> is already aligned
+        /// and because (2) paint of border and background will occur later.
+        /// Thus, (1) assures that no conflicts with neighbour object will occure
+        /// and (2) assures that border and background is not affected by the
+        /// shadow paint.
+        /*
         ::SwAlignRect( aOut, pGlobalShell );
+        */
         if ( rRect.IsOver( aOut ) && aOut.Height() > 0 && aOut.Width() > 0 )
         {
             aOut._Intersection( rRect );
@@ -2701,8 +2874,10 @@ void SwFrm::PaintBorderLine( const SwRect& rRect,
     if( pColor && pGlobalShell->GetWin() &&
         Application::GetSettings().GetStyleSettings().GetHighContrastMode() &&
         pGlobalShell->GetViewOptions()->IsUseAutomaticBorderColor() )
+    {
         pColor = &pGlobalShell->GetWin()->GetSettings().GetStyleSettings()
                                                        .GetWindowTextColor();
+    }
 
     if ( pPage->GetSortedObjs() )
     {
@@ -2921,8 +3096,31 @@ void SwFrm::PaintBorder( const SwRect& rRect, const SwPageFrm *pPage,
         SwRect aRect( Prt() );
         aRect += Frm().Pos();
         ::SwAlignRect( aRect, pGlobalShell );
+        /// OD 27.09.2002 #103636# - new local boolean variable in order to
+        /// suspend border paint under special cases - see below.
+        /// NOTE: This is a fix for the implementation of feature #99657#.
+        bool bDrawOnlyShadowForTransparentFrame = false;
         if ( aRect.IsInside( rRect ) )
-            return;
+        {
+            /// OD 27.09.2002 #103636# - paint shadow, if background is transparent.
+            /// Because of introduced transparent background for fly frame #99657#,
+            /// the shadow have to be drawn if the background is transparent,
+            /// in spite the fact that the paint rectangle <rRect> lies fully
+            /// in the printing area.
+            /// NOTE to chosen solution:
+            ///     On transparent background, continue processing, but suspend
+            ///     drawing of border by setting <bDrawOnlyShadowForTransparentFrame>
+            ///     to true.
+            if ( IsLayoutFrm() &&
+                 static_cast<const SwLayoutFrm*>(this)->GetFmt()->IsBackgroundTransparent() )
+            {
+                 bDrawOnlyShadowForTransparentFrame = true;
+            }
+            else
+            {
+                return;
+            }
+        }
 
         if ( !pPage )
             pPage = FindPageFrm();
@@ -2931,7 +3129,9 @@ void SwFrm::PaintBorder( const SwRect& rRect, const SwPageFrm *pPage,
         rAttrs.SetGetCacheLine( TRUE );
         if ( bShadow )
             PaintShadow( rRect, aRect, pPage, rAttrs );
-        if ( bLine )
+        /// OD 27.09.2002 #103636# - suspend drawing of border
+        /// add condition < NOT bDrawOnlyShadowForTransparentFrame > - see above
+        if ( bLine && !bDrawOnlyShadowForTransparentFrame )
         {
             SWRECTFN( this )
             ::lcl_PaintLeftLine  ( this, pPage, aRect, rRect, rAttrs, fnRect );
@@ -3445,7 +3645,6 @@ void SwFrm::PaintBaBo( const SwRect& rRect, const SwPageFrm *pPage,
     /// paint grid for page frame and paint border
     {
         SwRect aRect( rRect );
-        ::SizeBorderRect( aRect );
         if( IsPageFrm() )
             ((SwPageFrm*)this)->PaintGrid( pOut, aRect );
         PaintBorder( aRect, pPage, rAttrs );
@@ -3632,7 +3831,6 @@ void SwFrm::PaintBackground( const SwRect &rRect, const SwPageFrm *pPage,
         SwRect aRect( PaintArea() );
         aRect._Intersection( rRect );
         SwRect aBorderRect( aRect );
-        ::SizeBorderRect( aBorderRect );
         SwShortCut aShortCut( *pFrm, aBorderRect );
         do
         {   if ( pProgress )
@@ -4110,7 +4308,6 @@ void SwFrm::Retouche( const SwPageFrm * pPage, const SwRect &rRect ) const
             //zurueckgesetzt werden!
             ResetRetouche();
             SwRect aRetouchePart( rRetouche );
-            ::SizeBorderRect( aRetouchePart );
             if ( aRetouchePart.HasArea() )
             {
                 /// OD 30.08.2002 #102450#
