@@ -165,10 +165,10 @@ URLPREFIX=file://
 # Include UDK version numbers
 include $(PRJ)/include/udkversion.mk
 
-SALLIB=-lsal
-CPPULIB=-lcppu
-CPPUHELPERLIB=-lcppuhelperC52
-SALHELPERLIB=-lsalhelperC52
+SALLIB=-luno_sal
+CPPULIB=-luno_cppu
+CPPUHELPERLIB=-luno_cppuhelperC52
+SALHELPERLIB=-luno_salhelperC52
 STLPORTLIB=-lstlport_sunpro
 
 EMPTYSTRING=
@@ -254,10 +254,10 @@ URLPREFIX=file://
 # Include UDK version numbers
 include $(PRJ)/include/udkversion.mk
 
-SALLIB=-lsal
-CPPULIB=-lcppu
-CPPUHELPERLIB=-lcppuhelper$(COMID)
-SALHELPERLIB=-lsalhelper$(COMID)
+SALLIB=-luno_sal
+CPPULIB=-luno_cppu
+CPPUHELPERLIB=-luno_cppuhelper$(COMID)
+SALHELPERLIB=-luno_salhelper$(COMID)
 STLPORTLIB=-lstlport_gcc
 
 EMPTYSTRING=
@@ -342,10 +342,10 @@ URLPREFIX=file://
 # Include UDK version numbers
 include $(PRJ)/include/udkversion.mk
 
-SALLIB=-lsal
-CPPULIB=-lcppu
-CPPUHELPERLIB=-lcppuhelper$(COMID)
-SALHELPERLIB=-lsalhelper$(COMID)
+SALLIB=-luno_sal
+CPPULIB=-luno_cppu
+CPPUHELPERLIB=-luno_cppuhelper$(COMID)
+SALHELPERLIB=-luno_salhelper$(COMID)
 STLPORTLIB=-lstlport_gcc -lstdc++
 
 EMPTYSTRING=
