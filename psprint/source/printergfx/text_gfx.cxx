@@ -2,9 +2,9 @@
   *
   *  $RCSfile: text_gfx.cxx,v $
   *
-  *  $Revision: 1.4 $
+  *  $Revision: 1.5 $
   *
-  *  last change: $Author: jbu $ $Date: 2001-05-14 08:52:59 $
+  *  last change: $Author: pl $ $Date: 2001-05-21 17:18:03 $
   *
   *  The Contents of this file are made available subject to the terms of
   *  either of the following licenses
@@ -205,21 +205,15 @@ PrinterGfx::SetFont(
                     bool bVertical
                     )
 {
-    if (   (nFontID   != mnFontID)
-           || (nHeight   != mnTextHeight)
-           || (nWidth    != mnTextWidth)
-           || (bVertical != mbTextVertical))
-    {
-        maCurrentFont = "";
-    }
-    if( bVertical && nAngle != mnTextAngle )
-        maCurrentFont = "";
-
-    mnFontID        = nFontID;
-    mnTextHeight    = nHeight;
-    mnTextWidth     = nWidth;
-    mnTextAngle     = nAngle;
-    mbTextVertical  = bVertical;
+    // font and encoding will be set by drawText again immediately
+    // before PSShowText
+    mnFontID                          = nFontID;
+    maVirtualStatus.maFont            = rtl::OString();
+    maVirtualStatus.maEncoding        = RTL_TEXTENCODING_DONTKNOW;
+    maVirtualStatus.mnTextHeight      = nHeight;
+    maVirtualStatus.mnTextWidth       = nWidth;
+    mnTextAngle                       = nAngle;
+    mbTextVertical                    = bVertical;
 
     return 0;
 }
@@ -259,7 +253,7 @@ PrinterGfx::DrawText (
     fontID    *pFontMap   = (fontID*)    alloca(nLen * sizeof(fontID));
     sal_Int32 *pCharWidth = (sal_Int32*) alloca(nLen * sizeof(sal_Int32));
 
-    int nScale = mnTextWidth ? mnTextWidth : mnTextHeight;
+    int nScale = maVirtualStatus.mnTextWidth ? maVirtualStatus.mnTextWidth : maVirtualStatus.mnTextHeight;
     for( int n = 0; n < nLen; n++ )
     {
         CharacterMetric aBBox;
@@ -284,8 +278,7 @@ PrinterGfx::DrawText (
 
     // move and rotate the user coordinate system
     sal_Int32 nOrigAngle = mnTextAngle;
-    WritePS (mpPageBody, "gsave\n");
-    maCurrentFont = ""; // enforce new setfont
+    PSGSave ();
     PSTranslate (rPoint);
     if (mnTextAngle != 0)
     {
@@ -306,7 +299,7 @@ PrinterGfx::DrawText (
             nTo++ ;
         }
 
-        SetFont( nFont, mnTextHeight, mnTextWidth, mnTextAngle, mbTextVertical );
+        SetFont( nFont, maVirtualStatus.mnTextHeight, maVirtualStatus.mnTextWidth, mnTextAngle, mbTextVertical );
 
         if (mbTextVertical)
         {
@@ -322,10 +315,10 @@ PrinterGfx::DrawText (
     }
 
     // restore the user coordinate system
-    WritePS (mpPageBody, "grestore\n");
+    PSGRestore ();
     mnTextAngle = nOrigAngle;
 
-    SetFont( nRestoreFont, mnTextHeight, mnTextWidth, mnTextAngle, mbTextVertical );
+    SetFont( nRestoreFont, maVirtualStatus.mnTextHeight, maVirtualStatus.mnTextWidth, mnTextAngle, mbTextVertical );
 }
 
 void PrinterGfx::drawVerticalizedText(
@@ -337,7 +330,7 @@ void PrinterGfx::drawVerticalizedText(
 {
     sal_Int32* pDelta = (sal_Int32*)alloca( nLen * sizeof(sal_Int32) );
 
-    int nTextScale   = mnTextWidth ? mnTextWidth : mnTextHeight;
+    int nTextScale   = maVirtualStatus.mnTextWidth ? maVirtualStatus.mnTextWidth : maVirtualStatus.mnTextHeight;
     int nNormalAngle = mnTextAngle;
     int nDeltaAngle, nLastPos = 0;
 
@@ -355,7 +348,7 @@ void PrinterGfx::drawVerticalizedText(
             for( int n = nLastPos; n < i; n++ )
                 pDelta[n] = pDeltaArray[n] - (aPoint.X() - rPoint.X() );
 
-            SetFont( mnFontID, mnTextHeight, mnTextWidth, nNormalAngle, mbTextVertical );
+            SetFont( mnFontID, maVirtualStatus.mnTextHeight, maVirtualStatus.mnTextWidth, nNormalAngle, mbTextVertical );
             drawText( aPoint, pStr + nLastPos, i - nLastPos, pDelta + nLastPos );
 
             aPoint.X() = rPoint.X() + ((double)pDeltaArray[i-1] * fCos);
@@ -363,7 +356,7 @@ void PrinterGfx::drawVerticalizedText(
         }
         if( i < nLen )
         {
-            SetFont( mnFontID, mnTextHeight, mnTextWidth, nNormalAngle + nDeltaAngle,
+            SetFont( mnFontID, maVirtualStatus.mnTextHeight, maVirtualStatus.mnTextWidth, nNormalAngle + nDeltaAngle,
                      mbTextVertical );
 
             CharacterMetric aMetric;
@@ -522,7 +515,7 @@ PrinterGfx::GetCharWidth (sal_Unicode nFrom, sal_Unicode nTo, long *pWidthArray)
         nTo   += 0xF000;
     }
 
-    int nScale = mnTextWidth ? mnTextWidth : mnTextHeight;
+    int nScale = maVirtualStatus.mnTextWidth ? maVirtualStatus.mnTextWidth : maVirtualStatus.mnTextHeight;
     for( int n = 0; n < (nTo - nFrom + 1); n++ )
     {
         CharacterMetric aBBox;

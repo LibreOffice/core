@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printergfx.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cp $ $Date: 2001-05-18 13:54:39 $
+ *  last change: $Author: pl $ $Date: 2001-05-21 17:17:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,6 +139,8 @@ public:
             && mnGreen == aColor.mnGreen
             && mnBlue  == aColor.mnBlue;
     }
+    sal_Bool        operator!= (const PrinterColor& aColor) const
+    { return ! (aColor==*this); }
     PrinterColor&   operator= (const PrinterColor& aColor)
     {
         meColorspace = aColor.meColorspace;
@@ -204,6 +206,18 @@ typedef enum {
  * printer raster operations
  */
 
+struct GraphicsStatus
+{
+    rtl::OString        maFont;
+    rtl_TextEncoding    maEncoding;
+    sal_Int32           mnTextHeight;
+    sal_Int32           mnTextWidth;
+    PrinterColor        maColor;
+    double             mfLineWidth;
+
+    GraphicsStatus();
+};
+
 class PrinterGfx
 {
 private:
@@ -242,11 +256,8 @@ private:
 
     sal_Int32       mnFontID;
     sal_Int32       mnFallbackID;
-    sal_Int32       mnTextHeight;
-    sal_Int32       mnTextWidth;
     sal_Int32       mnTextAngle;
-    bool            mbTextVertical;
-    rtl::OString    maCurrentFont;
+    bool           mbTextVertical;
     PrintFontManager& mrFontMgr;
 
     /* bitmap drawing implementation */
@@ -268,16 +279,14 @@ private:
                                          Point& aOldPoint, sal_Int32& nColumn );
 
     /* color settings */
-
-    sal_Bool        mbCurrentColorValid;
-    PrinterColor    maCurrentColor;
-
-    sal_Bool        mbCurrentLineWidthValid;
-    double          mfLineWidth;
-
     PrinterColor    maFillColor;
     PrinterColor    maTextColor;
     PrinterColor    maLineColor;
+
+    /* graphics state */
+    GraphicsStatus                  maVirtualStatus;
+    std::list< GraphicsStatus >     maGraphicsStack;
+    GraphicsStatus& currentState() { return maGraphicsStack.front(); }
 
     /* font / font substitution */
     friend class Font3;
@@ -290,7 +299,26 @@ private:
     fontID          getFallbackID () const { return mnFallbackID; }
 
 public:
+    /* grahics status update */
+    void            PSSetColor ();
+    void            PSSetLineWidth ();
+    void            PSSetFont ();
 
+    /* graphics status functions */
+    void            PSSetColor (const PrinterColor& rColor)
+    { maVirtualStatus.maColor = rColor; }
+
+    void            PSUploadPS1Font (sal_Int32 nFontID);
+    void            PSSetFont (rtl::OString& rName,
+                               rtl_TextEncoding nEncoding = RTL_TEXTENCODING_DONTKNOW)
+    { maVirtualStatus.maFont = rName; maVirtualStatus.maEncoding = nEncoding; }
+
+    /* graphics status stack */
+    void            PSGSave ();
+    void            PSGRestore ();
+
+
+    /* PS helpers */
     enum pspath_t { moveto = 0, lineto = 1 };
     void            PSBinLineTo (const Point& rCurrent, Point& rOld,
                                  sal_Int32& nColumn);
@@ -302,12 +330,6 @@ public:
     void            PSBinPath (const Point& rCurrent, Point& rOld,
                                pspath_t eType, sal_Int32& nColumn);
 
-    void            PSSetColor (const PrinterColor& rColor);
-    void            PSSetLineWidth ();
-
-    void            PSUploadPS1Font (sal_Int32 nFontID);
-    void            PSSetFont (rtl::OString& rName,
-                               rtl_TextEncoding nEncoding = RTL_TEXTENCODING_DONTKNOW);
     void            PSRotate (sal_Int32 nAngle);
     void            PSTranslate (const Point& rPoint);
     void            PSMoveTo (const Point& rPoint);
@@ -320,11 +342,9 @@ public:
     void            PSShowText (const sal_uChar* pString,
                                 sal_Int16 nGlyphs, sal_Int16 nBytes,
                                 const sal_Int32* pDeltaArray = NULL);
-    void            PSGSave ();
-    void            PSGRestore ();
 
     void            OnEndPage ();
-    PrintFontManager& GetFontMgr ();
+    PrintFontManager& GetFontMgr () { return mrFontMgr; }
 
     void            drawVerticalizedText (const Point& rPoint,
                                           const sal_Unicode* pStr,
@@ -396,9 +416,9 @@ public:
     sal_Int32       GetFontID () const
     { return mnFontID; }
     sal_Int32       GetFontHeight () const
-    { return mnTextHeight; }
+    { return maVirtualStatus.mnTextHeight; }
     sal_Int32       GetFontWidth () const
-    { return mnTextWidth; }
+    { return maVirtualStatus.mnTextWidth; }
     void            DrawText (const Point& rPoint,
                               const sal_Unicode* pStr, sal_Int16 nLen,
                               const sal_Int32* pDeltaArray = NULL);

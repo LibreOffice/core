@@ -2,9 +2,9 @@
  *
  *  $RCSfile: common_gfx.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-08 17:09:13 $
+ *  last change: $Author: pl $ $Date: 2001-05-21 17:18:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,13 @@ using namespace psp ;
 
 static const sal_Int32 nMaxTextColumn = 80;
 
+GraphicsStatus::GraphicsStatus() :
+        mnTextHeight( 0 ),
+        mnTextWidth( 0 ),
+        mfLineWidth( -1 )
+{
+}
+
 /*
  * non graphics graphics routines
  */
@@ -164,15 +171,15 @@ PrinterGfx::PrinterGfx() :
         maLineColor (0, 0xff, 0),
         maFillColor (0xff,0,0),
         maTextColor (0,0,0),
-        mnTextHeight (12),
-        mnTextWidth (0),
         mbTextVertical (false),
-        mbCurrentColorValid (sal_False),
-        mbCurrentLineWidthValid (sal_False),
-        mfLineWidth (1.0),
         mrFontMgr (PrintFontManager::get()),
         mbCompressBmp (sal_True)
 {
+    maVirtualStatus.mfLineWidth = 1.0;
+    maVirtualStatus.mnTextHeight = 12;
+    maVirtualStatus.mnTextWidth = 0;
+
+    maGraphicsStack.push_back( GraphicsStatus() );
 }
 
 PrinterGfx::~PrinterGfx()
@@ -184,16 +191,14 @@ PrinterGfx::Clear()
     mpPageHeader                    = NULL;
     mpPageBody                      = NULL;
     mnFontID                        = 0;
-    mnTextHeight                    = 12;
-    mnTextWidth                     = 0;
+    maVirtualStatus                 = GraphicsStatus();
+    maVirtualStatus.mnTextHeight    = 12;
+    maVirtualStatus.mnTextWidth     = 0;
+    maVirtualStatus.mfLineWidth     = 1.0;
     mbTextVertical                  = false;
-    maCurrentColor                  = PrinterColor();
     maLineColor                     = PrinterColor();
     maFillColor                     = PrinterColor();
     maTextColor                     = PrinterColor();
-    mbCurrentColorValid             = sal_False;
-    mbCurrentLineWidthValid         = sal_False;
-    mfLineWidth                     = 1.0;
     mbCompressBmp                   = sal_True;
     mnDpiX                          = 300;
     mnDpiY                          = 300;
@@ -201,17 +206,12 @@ PrinterGfx::Clear()
     mnPSLevel                       = 2;
     mbColor                         = sal_True;
     mnTextAngle                     = 0;
-    maCurrentFont                   = rtl::OString();
 
     maPS1Font.clear();
     maPS3Font.clear();
     maClipRegion.clear();
-}
-
-PrintFontManager&
-PrinterGfx::GetFontMgr ()
-{
-    return mrFontMgr;
+    maGraphicsStack.clear();
+    maGraphicsStack.push_back( GraphicsStatus() );
 }
 
 /*
@@ -401,12 +401,14 @@ PrinterGfx::DrawRect (const Rectangle& rRectangle )
     if( maFillColor.Is() )
     {
         PSSetColor (maFillColor);
+        PSSetColor ();
         WritePS (mpPageBody, pRect, nChar);
         WritePS (mpPageBody, "rectfill\n");
     }
     if( maLineColor.Is() )
     {
         PSSetColor (maLineColor);
+        PSSetColor ();
         PSSetLineWidth ();
         WritePS (mpPageBody, pRect, nChar);
         WritePS (mpPageBody, "rectstroke\n");
@@ -419,6 +421,7 @@ PrinterGfx::DrawLine (const Point& rFrom, const Point& rTo)
     if( maLineColor.Is() )
     {
         PSSetColor (maLineColor);
+        PSSetColor ();
         PSSetLineWidth ();
 
         PSMoveTo (rFrom);
@@ -433,6 +436,7 @@ PrinterGfx::DrawPixel (const Point& rPoint, const PrinterColor& rPixelColor)
     if( rPixelColor.Is() )
     {
         PSSetColor (rPixelColor);
+        PSSetColor ();
 
         PSMoveTo (rPoint);
         PSLineTo (Point (rPoint.X ()+1, rPoint.Y ()));
@@ -448,6 +452,7 @@ PrinterGfx::DrawPolyLine (sal_uInt32 nPoints, const Point* pPath)
     if( maLineColor.Is() && nPoints && pPath )
     {
         PSSetColor (maLineColor);
+        PSSetColor ();
         PSSetLineWidth ();
 
         PSBinCurrentPath (nPoints, pPath);
@@ -463,23 +468,40 @@ PrinterGfx::DrawPolygon (sal_uInt32 nPoints, const Point* pPath)
     if (!(nPoints > 1) || (pPath == NULL) || !(maFillColor.Is() || maLineColor.Is()))
         return;
 
-    // create the path
-    PSBinCurrentPath (nPoints, pPath);
+    // setup closed path
+    Point aPoint( 0, 0 );
+    sal_Int32 nColumn( 0 );
+
+    PSBinStartPath();
+    PSBinMoveTo( pPath[0], aPoint, nColumn );
+    for( int n = 1; n < nPoints; n++ )
+        PSBinLineTo( pPath[n], aPoint, nColumn );
+    if( pPath[0] != pPath[nPoints-1] )
+        PSBinLineTo( pPath[0], aPoint, nColumn );
+    PSBinEndPath();
 
     // fill the polygon first, then draw the border, note that fill and
     // stroke reset the currentpath
-    if (maLineColor.Is() && maFillColor.Is())
-        PSGSave ();
+
+    // if fill and stroke, save the current path
+    if( maFillColor.Is() && maLineColor.Is())
+        PSGSave();
+
     if (maFillColor.Is ())
     {
         PSSetColor (maFillColor);
+        PSSetColor ();
         WritePS (mpPageBody, "fill\n");
     }
-    if (maLineColor.Is() && maFillColor.Is())
-        PSGRestore ();
+
+    // restore the current path
+    if( maFillColor.Is() && maLineColor.Is())
+        PSGRestore();
+
     if (maLineColor.Is ())
     {
         PSSetColor (maLineColor);
+        PSSetColor ();
         PSSetLineWidth ();
         WritePS (mpPageBody, "stroke\n");
     }
@@ -492,8 +514,23 @@ PrinterGfx::DrawPolyPolygon (sal_uInt32 nPoly, const sal_uInt32* pSizes, const P
     if ( !nPoly || !pPaths || !(maFillColor.Is() || maLineColor.Is()))
         return;
 
-    // could optimize for different line-color/fill-color that consecutively
-    // invalidate each other
+
+    // setup closed path
+    for( int i = 0; i < nPoly; i++ )
+    {
+        Point aPoint( 0, 0 );
+        sal_Int32 nColumn( 0 );
+
+        PSBinStartPath();
+        PSBinMoveTo( pPaths[i][0], aPoint, nColumn );
+        for( int n = 1; n < pSizes[i]; n++ )
+            PSBinLineTo( pPaths[i][n], aPoint, nColumn );
+        if( pPaths[i][0] != pPaths[i][pSizes[i]-1] )
+                PSBinLineTo( pPaths[i][0], aPoint, nColumn );
+        PSBinEndPath();
+    }
+
+    // if eofill and stroke, save the current path
     if( maFillColor.Is() && maLineColor.Is())
         PSGSave();
 
@@ -501,19 +538,11 @@ PrinterGfx::DrawPolyPolygon (sal_uInt32 nPoly, const sal_uInt32* pSizes, const P
     if( maFillColor.Is() )
     {
         PSSetColor (maFillColor);
-        for( int i = 0; i < nPoly; i++ )
-        {
-            Point aPoint( 0, 0 );
-            sal_Int32 nColumn( 0 );
-
-            PSBinStartPath();
-            PSBinMoveTo( pPaths[i][0], aPoint, nColumn );
-            for( int n = 0; n < pSizes[i]; n++ )
-                PSBinLineTo( pPaths[i][n], aPoint, nColumn );
-            PSBinEndPath();
-        }
+        PSSetColor ();
         WritePS (mpPageBody, "eofill\n");
     }
+
+    // restore the current path
     if( maFillColor.Is() && maLineColor.Is())
         PSGRestore();
 
@@ -521,20 +550,8 @@ PrinterGfx::DrawPolyPolygon (sal_uInt32 nPoly, const sal_uInt32* pSizes, const P
     if( maLineColor.Is() )
     {
         PSSetColor (maLineColor);
+        PSSetColor ();
         PSSetLineWidth ();
-        for( int i = 0; i < nPoly; i++ )
-        {
-            Point aPoint( 0, 0 );
-            sal_Int32 nColumn( 0 );
-
-            PSBinStartPath();
-            PSBinMoveTo( pPaths[i][0], aPoint, nColumn );
-            for( int n = 0; n < pSizes[i]; n++ )
-                PSBinLineTo( pPaths[i][n], aPoint, nColumn );
-            if( pPaths[i][0] != pPaths[i][pSizes[i]-1] )
-                PSBinLineTo( pPaths[i][0], aPoint, nColumn );
-            PSBinEndPath();
-        }
         WritePS (mpPageBody, "stroke\n");
     }
 }
@@ -547,36 +564,46 @@ void
 PrinterGfx::PSGSave ()
 {
     WritePS (mpPageBody, "gsave\n" );
+    GraphicsStatus aNewState;
+    if( maGraphicsStack.begin() != maGraphicsStack.end() )
+        aNewState = maGraphicsStack.front();
+    maGraphicsStack.push_front( aNewState );
 }
 
 void
 PrinterGfx::PSGRestore ()
 {
     WritePS (mpPageBody, "grestore\n" );
-    mbCurrentColorValid = FALSE;
-    maCurrentFont       = "";
+    if( maGraphicsStack.begin() == maGraphicsStack.end() )
+        WritePS (mpPageBody, "Error: too many grestores\n" );
+    else
+        maGraphicsStack.pop_front();
 }
 
 void
 PrinterGfx::PSSetLineWidth ()
 {
-    if( ! mbCurrentLineWidthValid )
+    if( currentState().mfLineWidth != maVirtualStatus.mfLineWidth )
     {
         char pBuffer[128];
         sal_Int32 nChar = 0;
 
-        nChar  = psp::getValueOfDouble (pBuffer, mfLineWidth, 5);
+        currentState().mfLineWidth = maVirtualStatus.mfLineWidth;
+        nChar  = psp::getValueOfDouble (pBuffer, maVirtualStatus.mfLineWidth, 5);
         nChar += psp::appendStr (" setlinewidth\n", pBuffer + nChar);
         WritePS (mpPageBody, pBuffer, nChar);
-        mbCurrentLineWidthValid = sal_True;
     }
 }
 
 void
-PrinterGfx::PSSetColor (const PrinterColor& rColor)
+PrinterGfx::PSSetColor ()
 {
-    if( ! ( mbCurrentColorValid && maCurrentColor == rColor ) )
+    PrinterColor& rColor( maVirtualStatus.maColor );
+
+    if( currentState().maColor != rColor )
     {
+        currentState().maColor = rColor;
+
         char pBuffer[128];
         sal_Int32 nChar = 0;
 
@@ -591,41 +618,49 @@ PrinterGfx::PSSetColor (const PrinterColor& rColor)
         nChar += psp::appendStr (" setrgbcolor\n", pBuffer + nChar );
 
         WritePS (mpPageBody, pBuffer, nChar);
-
-        maCurrentColor = rColor;
-        mbCurrentColorValid = sal_True;
     }
 }
+
 void
-PrinterGfx::PSSetFont (rtl::OString& rName, rtl_TextEncoding nEncoding)
+PrinterGfx::PSSetFont ()
 {
-    if (maCurrentFont == rName)
-        return;
-    maCurrentFont = rName;
-
-    sal_Char  pSetFont [256];
-    sal_Int32 nChar = 0;
-
-    nChar  = psp::appendStr  ("/",              pSetFont);
-    nChar += psp::appendStr  (rName.getStr(),   pSetFont + nChar);
-    switch (nEncoding)
+    GraphicsStatus& rCurrent( currentState() );
+    if( maVirtualStatus.maFont          != rCurrent.maFont          ||
+        maVirtualStatus.mnTextHeight     != rCurrent.mnTextHeight   ||
+        maVirtualStatus.maEncoding       != rCurrent.maEncoding     ||
+        maVirtualStatus.mnTextWidth      != rCurrent.mnTextWidth )
     {
-        case RTL_TEXTENCODING_MS_1252:
-        case RTL_TEXTENCODING_ISO_8859_1:
-            nChar += psp::appendStr  (" findfont1252 ", pSetFont + nChar);
-            break;
-        default:
-            nChar += psp::appendStr  (" findfont ",     pSetFont + nChar);
-            break;
-    }
-    nChar += psp::getValueOf (mnTextWidth ? mnTextWidth : mnTextHeight,
-                              pSetFont + nChar);
-    nChar += psp::appendStr  (" ",              pSetFont + nChar);
-    nChar += psp::getValueOf (-mnTextHeight,    pSetFont + nChar);
-    nChar += psp::appendStr  (" matrix scale makefont setfont\n",
-                              pSetFont + nChar);
+        rCurrent.maFont              = maVirtualStatus.maFont;
+        rCurrent.maEncoding          = maVirtualStatus.maEncoding;
+        rCurrent.mnTextWidth         = maVirtualStatus.mnTextWidth;
+        rCurrent.mnTextHeight        = maVirtualStatus.mnTextHeight;
 
-    WritePS (mpPageBody, pSetFont);
+        sal_Int32 nTextHeight = rCurrent.mnTextHeight;
+        sal_Int32 nTextWidth  = rCurrent.mnTextWidth ? rCurrent.mnTextWidth : rCurrent.mnTextHeight;
+
+        sal_Char  pSetFont [256];
+        sal_Int32 nChar = 0;
+
+        nChar  = psp::appendStr  ("/",                        pSetFont);
+        nChar += psp::appendStr  (rCurrent.maFont.getStr(),   pSetFont + nChar);
+        switch (rCurrent.maEncoding)
+        {
+            case RTL_TEXTENCODING_MS_1252:
+            case RTL_TEXTENCODING_ISO_8859_1:
+                nChar += psp::appendStr  (" findfont1252 ", pSetFont + nChar);
+                break;
+            default:
+                nChar += psp::appendStr  (" findfont ",     pSetFont + nChar);
+                break;
+        }
+        nChar += psp::getValueOf (nTextWidth,   pSetFont + nChar);
+        nChar += psp::appendStr  (" ",              pSetFont + nChar);
+        nChar += psp::getValueOf (-nTextHeight,     pSetFont + nChar);
+        nChar += psp::appendStr  (" matrix scale makefont setfont\n",
+                                  pSetFont + nChar);
+
+        WritePS (mpPageBody, pSetFont);
+    }
 }
 
 void
@@ -884,10 +919,12 @@ PrinterGfx::PSShowText (const sal_uChar* pStr, sal_Int16 nGlyphs, sal_Int16 nByt
                         const sal_Int32* pDeltaArray)
 {
     PSSetColor (maTextColor);
+    PSSetColor ();
+    PSSetFont  ();
     // rotate the user coordinate system
     if (mnTextAngle != 0)
     {
-        WritePS (mpPageBody, "gsave\n");
+        PSGSave ();
         PSRotate (mnTextAngle);
     }
 
@@ -906,9 +943,7 @@ PrinterGfx::PSShowText (const sal_uChar* pStr, sal_Int16 nGlyphs, sal_Int16 nByt
 
     // restore the user coordinate system
     if (mnTextAngle != 0)
-    {
-        WritePS (mpPageBody, "grestore\n");
-    }
+        PSGRestore ();
 }
 
 sal_Bool
