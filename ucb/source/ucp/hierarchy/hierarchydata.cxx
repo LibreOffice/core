@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchydata.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kso $ $Date: 2000-12-07 08:09:47 $
+ *  last change: $Author: kso $ $Date: 2000-12-07 11:15:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,27 +242,27 @@ sal_Bool HierarchyEntry::getData( HierarchyEntryData& rData )
                 //       relatively 'expensive'. Checking for availability of
                 //       title value is sufficient here, because if it is
                 //       there, the other values will be available too.
-                if ( xRootHierAccess->hasByHierarchicalName( aTitlePath ) )
-                {
-                    // Get Title value.
-                    if ( !( xRootHierAccess->getByHierarchicalName(
-                                aTitlePath ) >>= rData.aTitle ) )
-                    {
-                        VOS_ENSURE( sal_False,
-                                    "HierarchyEntry::getData - "
-                                    "Got no Title value!" );
-                        return sal_False;
-                    }
+                if ( !xRootHierAccess->hasByHierarchicalName( aTitlePath ) )
+                    return sal_False;
 
-                    // Get TargetURL value.
-                    if ( !( xRootHierAccess->getByHierarchicalName(
+                // Get Title value.
+                if ( !( xRootHierAccess->getByHierarchicalName(
+                                aTitlePath ) >>= rData.aTitle ) )
+                {
+                    VOS_ENSURE( sal_False,
+                                "HierarchyEntry::getData - "
+                                "Got no Title value!" );
+                    return sal_False;
+                }
+
+                // Get TargetURL value.
+                if ( !( xRootHierAccess->getByHierarchicalName(
                                 aTargetURLPath ) >>= rData.aTargetURL ) )
-                    {
-                        VOS_ENSURE( sal_False,
-                                    "HierarchyEntry::getData - "
-                                    "Got no TargetURL value!" );
-                        return sal_False;
-                    }
+                {
+                    VOS_ENSURE( sal_False,
+                                "HierarchyEntry::getData - "
+                                "Got no TargetURL value!" );
+                    return sal_False;
                 }
                 return sal_True;
             }
