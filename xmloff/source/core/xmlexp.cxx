@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.109 $
+ *  $Revision: 1.110 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-02 14:38:12 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:14:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,10 +120,6 @@
 
 #ifndef _XMLOFF_XMLMETAE_HXX
 #include "xmlmetae.hxx"
-#endif
-
-#ifndef _XMLOFF_XMLBASICE_HXX
-#include "xmlscripte.hxx"
 #endif
 
 #ifndef _XMLOFF_FAMILIES_HXX_
@@ -1349,17 +1345,16 @@ void SvXMLExport::_ExportConfigurationSettings(const XMLSettingsExportHelper& rS
 
 void SvXMLExport::_ExportScripts()
 {
-// There is no script support at the moment, so we don't need this
     // <office:script>
-//  SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE, XML_SCRIPTS,
-//                          sal_True, sal_True );
+    SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE, XML_SCRIPTS,
+                            sal_True, sal_True );
 
-//  XMLBasicExport aBasicExp( *this );
-//  aBasicExp.Export();
+    // embedded scripts are not implemented, but would have to go here.
+
 
     // export document events
-//  Reference<document::XEventsSupplier> xEvents(GetModel(), UNO_QUERY);
-//  GetEventExport().Export(xEvents, sal_True);
+    Reference<document::XEventsSupplier> xEvents(GetModel(), UNO_QUERY);
+    GetEventExport().Export(xEvents, sal_True);
 }
 
 void SvXMLExport::_ExportFontDecls()
