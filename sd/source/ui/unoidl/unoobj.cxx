@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-09 15:56:17 $
+ *  last change: $Author: cl $ $Date: 2001-05-23 11:59:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,6 +182,7 @@ static SdShapeImplementationIdMap aImplementationIdMap;
 
 ///////////////////////////////////////////////////////////////////////
 
+
 #define WID_EFFECT          1
 #define WID_SPEED           2
 #define WID_TEXTEFFECT      3
@@ -199,6 +200,7 @@ static SdShapeImplementationIdMap aImplementationIdMap;
 #define WID_STYLE           15
 #define WID_ANIMPATH        16
 #define WID_IMAGEMAP        17
+#define WID_ISANIMATION     18
 
 #define WID_ISEMPTYPRESOBJ  20
 #define WID_ISPRESOBJ       21
@@ -231,6 +233,7 @@ const SfxItemPropertyMap* ImplGetShapePropertyMap( sal_Bool bImpress, sal_Bool b
         { MAP_CHAR_LEN(UNO_NAME_OBJ_TEXTEFFECT),    WID_TEXTEFFECT,      &::getCppuType((const presentation::AnimationEffect*)0),   0, 0},
         { MAP_CHAR_LEN(UNO_NAME_OBJ_BLUESCREEN),    WID_BLUESCREEN,      &::getCppuType((const sal_Int32*)0),                       0, 0},
         { MAP_CHAR_LEN(UNO_NAME_OBJ_VERB),          WID_VERB,            &::getCppuType((const sal_Int32*)0),                       0, 0},
+        { MAP_CHAR_LEN("IsAnimation"),              WID_ISANIMATION,     &::getBooleanCppuType(),                                   0, 0},
         { 0,0,0,0,0}
     };
 
@@ -606,6 +609,15 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
                 case WID_SPEED:
                     ::cppu::any2enum< presentation::AnimationSpeed >( pInfo->eSpeed, aValue);
                     break;
+                case WID_ISANIMATION:
+                {
+                    sal_Bool bIsAnimation;
+                    if(!(aValue >>= bIsAnimation))
+                        throw lang::IllegalArgumentException();
+
+                    pInfo->bIsMovie = bIsAnimation;
+                    break;
+                }
                 case WID_BOOKMARK:
                 {
                     OUString aString;
@@ -811,16 +823,19 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
             aRet = ::cppu::enum2any< presentation::AnimationEffect >( pInfo?pInfo->eTextEffect:presentation::AnimationEffect_NONE );
             break;
         case WID_ISPRESOBJ:
-            aRet = ::cppu::bool2any(IsPresObj());
+            aRet <<= (sal_Bool)IsPresObj();
             break;
         case WID_ISEMPTYPRESOBJ:
-            aRet = ::cppu::bool2any(IsEmptyPresObj());
+            aRet <<= (sal_Bool)IsEmptyPresObj();
             break;
         case WID_MASTERDEPEND:
-            aRet = ::cppu::bool2any(IsMasterDepend());
+            aRet <<= (sal_Bool)IsMasterDepend();
             break;
         case WID_SPEED:
             aRet = ::cppu::enum2any< presentation::AnimationSpeed >( pInfo?pInfo->eSpeed:presentation::AnimationSpeed_MEDIUM );
+            break;
+        case WID_ISANIMATION:
+            aRet <<= (sal_Bool)( pInfo && pInfo->bIsMovie);
             break;
         case WID_BOOKMARK:
         {
@@ -834,7 +849,7 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
             aRet = ::cppu::enum2any< presentation::ClickAction >( pInfo?pInfo->eClickAction:presentation::ClickAction_NONE );
             break;
         case WID_PLAYFULL:
-            aRet = ::cppu::bool2any( pInfo && pInfo->bPlayFull );
+            aRet <<= (sal_Bool)( pInfo && pInfo->bPlayFull );
             break;
         case WID_SOUNDFILE:
         {
@@ -845,7 +860,7 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
             break;
         }
         case WID_SOUNDON:
-            aRet = ::cppu::bool2any( pInfo && pInfo->bSoundOn );
+            aRet <<= (sal_Bool)( pInfo && pInfo->bSoundOn );
             break;
         case WID_BLUESCREEN:
             aRet <<= (sal_Int32)( pInfo?pInfo->aBlueScreen.GetColor():0x00ffffff );
@@ -857,10 +872,10 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
             aRet <<= (sal_Int32)( pInfo?pInfo->aDimColor.GetColor():0x00ffffff );
             break;
         case WID_DIMHIDE:
-            aRet = ::cppu::bool2any( pInfo && pInfo->bDimHide );
+            aRet <<= (sal_Bool)( pInfo && pInfo->bDimHide );
             break;
         case WID_DIMPREV:
-            aRet = ::cppu::bool2any( pInfo && pInfo->bDimPrevious );
+            aRet <<= (sal_Bool)( pInfo && pInfo->bDimPrevious );
             break;
         case WID_PRESORDER:
             aRet <<= (sal_Int32)( GetPresentationOrderPos() );
