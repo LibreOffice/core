@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtools2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-12 09:16:18 $
+ *  last change: $Author: oj $ $Date: 2002-11-15 08:59:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,9 @@
 #endif
 #ifndef _COM_SUN_STAR_SDBC_COLUMNVALUE_HPP_
 #include <com/sun/star/sdbc/ColumnValue.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBC_DATATYPE_HPP_
+#include <com/sun/star/sdbc/DataType.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
 #include <com/sun/star/sdbc/XRow.hpp>
@@ -476,6 +479,8 @@ Reference<XPropertySet> createSDBCXColumn(const Reference<XPropertySet>& _xTable
                         Reference<XResultSetMetaData> xMD = Reference<XResultSetMetaDataSupplier>(xResult,UNO_QUERY)->getMetaData();
                         bAutoIncrement = xMD->isAutoIncrement(1);
                         bIsCurrency    = xMD->isCurrency(1);
+                        if ( DataType::OTHER == nField5 )
+                            nField5 = xMD->getColumnType(1);
 
                         ::comphelper::disposeComponent(xStmt);
                     }
