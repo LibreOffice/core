@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-14 14:17:48 $
+ *  last change: $Author: oj $ $Date: 2000-11-15 14:49:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -245,6 +245,9 @@
 #endif
 #ifndef _DBA_REGISTRATION_HELPER_HXX_
 #include "registrationhelper.hxx"
+#endif
+#ifndef DBAUI_DBEXCHANGE_HXX
+#include "dbexchange.hxx"
 #endif
 
 
@@ -1674,18 +1677,19 @@ void SbaGridControl::DoColumnDrag(sal_uInt16 nColumnPos)
     }
 
     XubString aCopyData = sDBAlias;
-    aCopyData   += char(11);
+    aCopyData   += sal_Unicode(11);
     aCopyData   += sDataSource;
-    aCopyData   += char(11);
+    aCopyData   += sal_Unicode(11);
     aCopyData   += sObjectKind;
-    aCopyData   += char(11);
+    aCopyData   += sal_Unicode(11);
 
     XubString sField;
     try
     {
         sal_uInt16 nModelPos = GetModelColumnPos(GetColumnIdFromViewPos(nColumnPos));
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >  xCols(GetPeer()->getColumns(), ::com::sun::star::uno::UNO_QUERY);
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xAffectedCol = *(::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > *)xCols->getByIndex(nModelPos).getValue();
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xAffectedCol;
+        xCols->getByIndex(nModelPos) >>= xAffectedCol;
         sField = (const sal_Unicode*)::comphelper::getString(xAffectedCol->getPropertyValue(PROPERTY_CONTROLSOURCE));
     }
     catch(Exception&)
@@ -1696,8 +1700,9 @@ void SbaGridControl::DoColumnDrag(sal_uInt16 nColumnPos)
 
     aCopyData   += sField;
 
+    //  ByteString aData(aCopyData,gsl_getSystemTextEncoding());
     DragServer::Clear();
-    if (!DragServer::CopyData(aCopyData.GetBuffer(), aCopyData.Len() + 1, RegisterColumnExchangeFormatName()))
+    if (!DragServer::CopyData(aCopyData.GetBuffer(), 2*(aCopyData.Len() + 1), RegisterColumnExchangeFormatName()))
         return;
 
     Pointer aMovePtr(POINTER_MOVEDATA),
@@ -1799,17 +1804,9 @@ void SbaGridControl::DoRowDrag(sal_uInt16 nRowPos)
             aCopyPtr(POINTER_COPYDATA),
             aLinkPtr(POINTER_LINKDATA);
 
-    // for the SbaExplorerExchObj we need a SBA-descrition of the data source
-//  DBObject dbType = (::com::sun::star::sdb::CommandType::TABLE == nDataType) ? dbTable : dbQuery;
-//  SbaDatabase* pDB = SBA_MOD()->GetDatabase(sDBAlias);
-//  if (!pDB)
-//  {
-//      DBG_ERROR("SbaGridControl::DoRowDrag : could not get an SBA-database !");
-//      return;
-//  }
-//
-//  SbaExplorerExchObjRef xExchange = new SbaExplorerExchObj( pDB, dbType, sDataSource, aCopyData );
-//  xExchange->ExecuteDrag( this, aMovePtr, aCopyPtr, aLinkPtr, DRAG_COPYABLE | DRAG_LINKABLE );
+    // send the data to clipboard
+    ODataExchange* pDataExchange = new ODataExchange(aCopyData);
+    pDataExchange->ExecuteDrag( this, aMovePtr, aCopyPtr, aLinkPtr, DRAG_COPYABLE | DRAG_LINKABLE );
 
     return;
 }
