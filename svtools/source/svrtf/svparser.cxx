@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svparser.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mib $ $Date: 2001-11-22 10:47:38 $
+ *  last change: $Author: hr $ $Date: 2002-04-03 08:53:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,9 @@
 #include <svstdarr.hxx>
 #ifndef _RTL_TEXTCVT_H
 #include <rtl/textcvt.h>
+#endif
+#ifndef _RTL_TENCINFO_H
+#include <rtl/tencinfo.h>
 #endif
 
 #define SVPAR_CSM_
@@ -234,7 +237,7 @@ void SvParser::SetSrcEncoding( rtl_TextEncoding eEnc )
             pImplData->hContext = (rtl_TextToUnicodeContext )1;
         }
 
-        if( eEnc < RTL_TEXTENCODING_STD_COUNT ||
+        if( rtl_isOctetTextEncoding(eEnc) ||
             RTL_TEXTENCODING_UCS2 == eEnc  )
         {
             eSrcEnc = eEnc;
