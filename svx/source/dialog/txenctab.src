@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txenctab.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: er $ $Date: 2002-06-06 10:25:53 $
+ *  last change: $Author: kz $ $Date: 2002-06-10 15:59:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -735,23 +735,23 @@ ItemList [ language_user1 ] =
         < "Chinois traditionnel (GBT-12345)"                ; RTL_TEXTENCODING_GBT_12345        ; > ;
         < "Chinois simplifi� (GBK/GB-2312-80)"          ; RTL_TEXTENCODING_GBK              ; > ;
         < "Chinois traditionnel (BIG5)"                 ; RTL_TEXTENCODING_BIG5             ; > ;
-        < "Japonais (EUC-JP)"            ; RTL_TEXTENCODING_BIG5_HKSCS       ; > ;
-        < "Chinois simplifi� (EUC-CN)"                              ; RTL_TEXTENCODING_EUC_JP           ; > ;
-        < "Chinois traditionnel (EUC-TW)"                   ; RTL_TEXTENCODING_EUC_CN           ; > ;
-        < "Japonais (ISO-2022-JP)"                ; RTL_TEXTENCODING_EUC_TW           ; > ;
-        < "Chinois simplifi� (ISO-2022-CN)"                         ; RTL_TEXTENCODING_ISO_2022_JP      ; > ;
-        < "Cyrillique (KOI8-R)"            ; RTL_TEXTENCODING_ISO_2022_CN      ; > ;
-        < "Unicode (UTF-7)"                             ; RTL_TEXTENCODING_KOI8_R           ; > ;
-        < "Unicode (UTF-8)"                                 ; RTL_TEXTENCODING_UTF7             ; > ;
-        < "Europe centrale (ISO-8859-10)"                                   ; RTL_TEXTENCODING_UTF8             ; > ;
-        < "Europe centrale (ISO-8859-13)"                           ; RTL_TEXTENCODING_ISO_8859_10      ; > ;
-        < "Cor�en (EUC-KR)"                         ; RTL_TEXTENCODING_ISO_8859_13      ; > ;
-        < "Cor�en (ISO-2022-KR)"                                ; RTL_TEXTENCODING_EUC_KR           ; > ;
-        < "Cor�en (Windows-Johab-1361)"                        ; RTL_TEXTENCODING_ISO_2022_KR      ; > ;
-        < "Unicode"                 ; RTL_TEXTENCODING_MS_1361          ; > ;
+        < "Chinois traditionnel (BIG5-HKSCS)"            ; RTL_TEXTENCODING_BIG5_HKSCS       ; > ;
+        < "Japonais (EUC-JP)"                               ; RTL_TEXTENCODING_EUC_JP           ; > ;
+        < "Chinois simplifi� (EUC-CN)"                  ; RTL_TEXTENCODING_EUC_CN           ; > ;
+        < "Chinois traditionnel (EUC-TW)"                ; RTL_TEXTENCODING_EUC_TW           ; > ;
+        < "Japonais (ISO-2022-JP)"                         ; RTL_TEXTENCODING_ISO_2022_JP      ; > ;
+        < "Chinois simplifi� (ISO-2022-CN)"            ; RTL_TEXTENCODING_ISO_2022_CN      ; > ;
+        < "Cyrillique (KOI8-R)"                             ; RTL_TEXTENCODING_KOI8_R           ; > ;
+        < "Unicode (UTF-7)"                                 ; RTL_TEXTENCODING_UTF7             ; > ;
+        < "Unicode (UTF-8)"                                 ; RTL_TEXTENCODING_UTF8             ; > ;
+        < "Europe centrale (ISO-8859-10)"                           ; RTL_TEXTENCODING_ISO_8859_10      ; > ;
+        < "Europe centrale (ISO-8859-13)"                           ; RTL_TEXTENCODING_ISO_8859_13      ; > ;
+        < "Cor�en (EUC-KR)"                             ; RTL_TEXTENCODING_EUC_KR           ; > ;
+        < "Cor�en (ISO-2022-KR)"                        ; RTL_TEXTENCODING_ISO_2022_KR      ; > ;
+        < "Cor�en (Windows-Johab-1361)"                 ; RTL_TEXTENCODING_MS_1361          ; > ;
         < "Unicode"                                         ; RTL_TEXTENCODING_UCS2             ; > ;
-        < "Thai (ISO-8859-11/TIS-620)"                                  ; RTL_TEXTENCODING_TIS_620          ; > ;
-        < "Thai (Windows-874)"                              ; RTL_TEXTENCODING_MS_874           ; > ;
+        < "Tha� (ISO-8859-11/TIS-620)"                                  ; RTL_TEXTENCODING_TIS_620          ; > ;
+        < "Tha� (Windows-874)"                              ; RTL_TEXTENCODING_MS_874           ; > ;
     };
     ItemList [ spanish ] =
     {
@@ -806,7 +806,7 @@ ItemList [ language_user1 ] =
         < "Chino simplificado (GB-18030)"               ; RTL_TEXTENCODING_GB_18030         ; > ;
         < "Chino tradicional (GBT-12345)"               ; RTL_TEXTENCODING_GBT_12345        ; > ;
         < "Chino simplificado (GBK/GB-2312-80)"         ; RTL_TEXTENCODING_GBK              ; > ;
-        < "Chino tradicional (BIG5)"                    ; RTL_TEXTENCODING_BIG5             ; > ;
+        < "Chino tradicional (Big5)"                    ; RTL_TEXTENCODING_BIG5             ; > ;
         < "Chino tradicional (BIG5-HKSCS)"            ; RTL_TEXTENCODING_BIG5_HKSCS       ; > ;
         < "Japon�s (EUC-JP)"                                ; RTL_TEXTENCODING_EUC_JP           ; > ;
         < "Chino simplificado (EUC-CN)"                 ; RTL_TEXTENCODING_EUC_CN           ; > ;
@@ -892,7 +892,7 @@ ItemList [ language_user1 ] =
         < "Korealainen (EUC-KR)"                            ; RTL_TEXTENCODING_ISO_8859_13      ; > ;
         < "Korealainen (ISO-2022-KR)"                               ; RTL_TEXTENCODING_EUC_KR           ; > ;
         < "Korealainen (Windows-Johab-1361)"                        ; RTL_TEXTENCODING_ISO_2022_KR      ; > ;
-        < "Koreanisch (Windows-Johab-1361)"                 ; RTL_TEXTENCODING_MS_1361          ; > ;
+        < "Korealainen (Windows-Johab-1361)"                    ; RTL_TEXTENCODING_MS_1361          ; > ;
         < "Unicode"                                         ; RTL_TEXTENCODING_UCS2             ; > ;
         < "Thai (ISO-8859-11/TIS-620)"                                  ; RTL_TEXTENCODING_TIS_620          ; > ;
         < "Thai (Windows-874)"                              ; RTL_TEXTENCODING_MS_874           ; > ;
@@ -951,20 +951,20 @@ ItemList [ language_user1 ] =
         < "Cinese tradizionale (GBT-12345)"             ; RTL_TEXTENCODING_GBT_12345        ; > ;
         < "Cinese semplificato (GBK/GB-2312-80)"            ; RTL_TEXTENCODING_GBK              ; > ;
         < "Cinese tradizionale (BIG5)"                  ; RTL_TEXTENCODING_BIG5             ; > ;
-        < "Giapponese (EUC-JP)"            ; RTL_TEXTENCODING_BIG5_HKSCS       ; > ;
-        < "Cinese semplificato (EUC-CN)"                                ; RTL_TEXTENCODING_EUC_JP           ; > ;
-        < "Conese tradizionale (EUC-TW)"                    ; RTL_TEXTENCODING_EUC_CN           ; > ;
-        < "Giapponese(ISO-2022-JP)"                ; RTL_TEXTENCODING_EUC_TW           ; > ;
-        < "Cinese semplificato (ISO-2022-CN)"                         ; RTL_TEXTENCODING_ISO_2022_JP      ; > ;
-        < "Cirillico (KOI8-R)"            ; RTL_TEXTENCODING_ISO_2022_CN      ; > ;
-        < "Unicode (UTF-7)"                             ; RTL_TEXTENCODING_KOI8_R           ; > ;
-        < "Unicode (UTF-8)"                                 ; RTL_TEXTENCODING_UTF7             ; > ;
-        < "Europa dell'est (ISO-8859-10)"                                   ; RTL_TEXTENCODING_UTF8             ; > ;
-        < "Europa dell'est (ISO-8859-13)"                           ; RTL_TEXTENCODING_ISO_8859_10      ; > ;
-        < "Coreano (EUC-KR)"                            ; RTL_TEXTENCODING_ISO_8859_13      ; > ;
-        < "Coreano (ISO-2022-KR)"                               ; RTL_TEXTENCODING_EUC_KR           ; > ;
-        < "Coreano (Windows-Johab-1361)"                        ; RTL_TEXTENCODING_ISO_2022_KR      ; > ;
-        < "Unicode"                 ; RTL_TEXTENCODING_MS_1361          ; > ;
+        < "Cinese tradizionale (BIG5-HKSCS)"            ; RTL_TEXTENCODING_BIG5_HKSCS       ; > ;
+        < "Giapponese (EUC-JP)"                             ; RTL_TEXTENCODING_EUC_JP           ; > ;
+        < "Cinese semplificato (EUC-CN)"                    ; RTL_TEXTENCODING_EUC_CN           ; > ;
+        < "Cinese tradizionale (EUC-TW)"                ; RTL_TEXTENCODING_EUC_TW           ; > ;
+        < "Giapponese (ISO-2022-JP)"                         ; RTL_TEXTENCODING_ISO_2022_JP      ; > ;
+        < "Cinese semplificato (ISO-2022-CN)"            ; RTL_TEXTENCODING_ISO_2022_CN      ; > ;
+        < "Cirillico (KOI8-R)"                              ; RTL_TEXTENCODING_KOI8_R           ; > ;
+        < "Unicode (UTF-7)"                                 ; RTL_TEXTENCODING_UTF7             ; > ;
+        < "Unicode (UTF-8)"                                 ; RTL_TEXTENCODING_UTF8             ; > ;
+        < "Europa dell'est (ISO-8859-10)"                           ; RTL_TEXTENCODING_ISO_8859_10      ; > ;
+        < "Europa dell'est (ISO-8859-13)"                           ; RTL_TEXTENCODING_ISO_8859_13      ; > ;
+        < "Coreano (EUC-KR)"                                ; RTL_TEXTENCODING_EUC_KR           ; > ;
+        < "Coreano (ISO-2022-KR)"                        ; RTL_TEXTENCODING_ISO_2022_KR      ; > ;
+        < "Coreano (Windows-Johab-1361)"                    ; RTL_TEXTENCODING_MS_1361          ; > ;
         < "Unicode"                                         ; RTL_TEXTENCODING_UCS2             ; > ;
         < "Thai (ISO-8859-11/TIS-620)"                                  ; RTL_TEXTENCODING_TIS_620          ; > ;
         < "Thai (Windows-874)"                              ; RTL_TEXTENCODING_MS_874           ; > ;
@@ -1094,21 +1094,21 @@ ItemList [ language_user1 ] =
         < "Kinesisk f�renklad (GB-18030)"               ; RTL_TEXTENCODING_GB_18030         ; > ;
         < "Kinesisk traditionell (GBT-12345)"               ; RTL_TEXTENCODING_GBT_12345        ; > ;
         < "Kinesisk f�renklad (GBK/GB-2312-80)"         ; RTL_TEXTENCODING_GBK              ; > ;
-        < "Kinesisk traditionell (BIG5)"                    ; RTL_TEXTENCODING_BIG5             ; > ;
-        < "Japansk (EUC-JP)"            ; RTL_TEXTENCODING_BIG5_HKSCS       ; > ;
-        < "Kinesisk f�renklad (EUC-CN)"                             ; RTL_TEXTENCODING_EUC_JP           ; > ;
-        < "Kinesisk traditionell (EUC-TW)"                  ; RTL_TEXTENCODING_EUC_CN           ; > ;
-        < "Japansk (ISO-2022-JP)"                ; RTL_TEXTENCODING_EUC_TW           ; > ;
-        < "Kinesisk f�renklad (ISO-2022-CN)"                         ; RTL_TEXTENCODING_ISO_2022_JP      ; > ;
-        < "Kyrillisk (KOI8-R)"            ; RTL_TEXTENCODING_ISO_2022_CN      ; > ;
-        < "Unicode (UTF-7)"                             ; RTL_TEXTENCODING_KOI8_R           ; > ;
-        < "Unicode (UTF-8)"                                 ; RTL_TEXTENCODING_UTF7             ; > ;
-        < "�steuropa (ISO-8859-10)"                                 ; RTL_TEXTENCODING_UTF8             ; > ;
-        < "�steuropa (ISO-8859-13)"                         ; RTL_TEXTENCODING_ISO_8859_10      ; > ;
-        < "Koreansk (EUC-KR)"                           ; RTL_TEXTENCODING_ISO_8859_13      ; > ;
-        < "Koreansk (ISO-2022-KR)"                              ; RTL_TEXTENCODING_EUC_KR           ; > ;
-        < "Koreansk (Windows-Johab-1361)"                        ; RTL_TEXTENCODING_ISO_2022_KR      ; > ;
-        < "Unicode"                 ; RTL_TEXTENCODING_MS_1361          ; > ;
+        < "Kinesisk traditionell (Big5)"                    ; RTL_TEXTENCODING_BIG5             ; > ;
+        < "Kinesisk traditionell (Big5-HKSCS)"            ; RTL_TEXTENCODING_BIG5_HKSCS       ; > ;
+        < "Japansk (EUC-JP)"                                ; RTL_TEXTENCODING_EUC_JP           ; > ;
+        < "Kinesisk f�renklad (EUC-CN)"                 ; RTL_TEXTENCODING_EUC_CN           ; > ;
+        < "Kinesisk traditionell (EUC-TW)"                ; RTL_TEXTENCODING_EUC_TW           ; > ;
+        < "Japansk (ISO-2022-JP)"                         ; RTL_TEXTENCODING_ISO_2022_JP      ; > ;
+        < "Kinesisk f�renklad (ISO-2022-CN)"            ; RTL_TEXTENCODING_ISO_2022_CN      ; > ;
+        < "Kyrillisk (KOI8-R)"                              ; RTL_TEXTENCODING_KOI8_R           ; > ;
+        < "Unicode (UTF-7)"                                 ; RTL_TEXTENCODING_UTF7             ; > ;
+        < "Unicode (UTF-8)"                                 ; RTL_TEXTENCODING_UTF8             ; > ;
+        < "�steuropa (ISO-8859-10)"                         ; RTL_TEXTENCODING_ISO_8859_10      ; > ;
+        < "�steuropa (ISO-8859-13)"                         ; RTL_TEXTENCODING_ISO_8859_13      ; > ;
+        < "Koreansk (EUC-KR)"                               ; RTL_TEXTENCODING_EUC_KR           ; > ;
+        < "Koreansk (ISO-2022-KR)"                        ; RTL_TEXTENCODING_ISO_2022_KR      ; > ;
+        < "Koreansk (Windows-Johab-1361)"                   ; RTL_TEXTENCODING_MS_1361          ; > ;
         < "Unicode"                                         ; RTL_TEXTENCODING_UCS2             ; > ;
         < "Thai (ISO-8859-11/TIS-620)"                                  ; RTL_TEXTENCODING_TIS_620          ; > ;
         < "Thai (Windows-874)"                              ; RTL_TEXTENCODING_MS_874           ; > ;
@@ -1180,7 +1180,7 @@ ItemList [ language_user1 ] =
         < "Korea�ski (EUC-KR)"                          ; RTL_TEXTENCODING_ISO_8859_13      ; > ;
         < "Korea�ski (ISO-2022-KR)"                             ; RTL_TEXTENCODING_EUC_KR           ; > ;
         < "Korea�ski (Windows-Johab-1361)"                        ; RTL_TEXTENCODING_ISO_2022_KR      ; > ;
-        < "Koreanisch (Windows-Johab-1361)"                 ; RTL_TEXTENCODING_MS_1361          ; > ;
+        < "Korea�ski (Windows-Johab-1361)"                  ; RTL_TEXTENCODING_MS_1361          ; > ;
         < "Unicode"                                         ; RTL_TEXTENCODING_UCS2             ; > ;
         < "Thai (ISO-8859-11/TIS-620)"                                  ; RTL_TEXTENCODING_TIS_620          ; > ;
         < "Thai (Windows-874)"                              ; RTL_TEXTENCODING_MS_874           ; > ;
@@ -1310,24 +1310,24 @@ ItemList [ language_user1 ] =
         < "簡体字中国語(GB-18030)"               ; RTL_TEXTENCODING_GB_18030         ; > ;
         < "簡体字中国語(GBT-12345)"               ; RTL_TEXTENCODING_GBT_12345        ; > ;
         < "簡体字中国語(GBK/GB-2312-80)"          ; RTL_TEXTENCODING_GBK              ; > ;
-        < "繁体字中国語(BIG5)"                    ; RTL_TEXTENCODING_BIG5             ; > ;
-        < "日本語(EUC-JP)"            ; RTL_TEXTENCODING_BIG5_HKSCS       ; > ;
-        < "簡体字中国語(EUC-CN)"                              ; RTL_TEXTENCODING_EUC_JP           ; > ;
-        < "繁体字中国語(EUC-TW)"                  ; RTL_TEXTENCODING_EUC_CN           ; > ;
-        < "日本語(ISO-2022-JP)"                ; RTL_TEXTENCODING_EUC_TW           ; > ;
-        < "簡体字中国語(ISO-2022-CN)"                         ; RTL_TEXTENCODING_ISO_2022_JP      ; > ;
-        < "キリル語(KOI8-R)"            ; RTL_TEXTENCODING_ISO_2022_CN      ; > ;
-        < "Unicode (UTF-7)"                             ; RTL_TEXTENCODING_KOI8_R           ; > ;
-        < "Unicode (UTF-8)"                                 ; RTL_TEXTENCODING_UTF7             ; > ;
-        < "東欧(ISO-8859-10)"                                 ; RTL_TEXTENCODING_UTF8             ; > ;
-        < "東欧(ISO-8859-13)"                         ; RTL_TEXTENCODING_ISO_8859_10      ; > ;
-        < "韓国語(EUC-KR)"                           ; RTL_TEXTENCODING_ISO_8859_13      ; > ;
-        < "韓国語(ISO-2022-KR)"                              ; RTL_TEXTENCODING_EUC_KR           ; > ;
-        < "韓国語(Windows-Johab-1361)"                        ; RTL_TEXTENCODING_ISO_2022_KR      ; > ;
-        < "Unicode"                 ; RTL_TEXTENCODING_MS_1361          ; > ;
-        < "ﾕﾆｺｰﾄﾞ"                                          ; RTL_TEXTENCODING_UCS2             ; > ;
-        < "Thai (ISO-8859-11/TIS-620)"                                  ; RTL_TEXTENCODING_TIS_620          ; > ;
-        < "Thai (Windows-874)"                              ; RTL_TEXTENCODING_MS_874           ; > ;
+        < "繁体字中国語 (BIG5)"                   ; RTL_TEXTENCODING_BIG5             ; > ;
+        < "繁体字中国語 (BIG5-HKSCS)"            ; RTL_TEXTENCODING_BIG5_HKSCS       ; > ;
+        < "日本語 (EUC-JP)"                              ; RTL_TEXTENCODING_EUC_JP           ; > ;
+        < "簡体字中国語 (EUC-CN)"                 ; RTL_TEXTENCODING_EUC_CN           ; > ;
+        < "繁体字中国語 (EUC-TW)"                ; RTL_TEXTENCODING_EUC_TW           ; > ;
+        < "日本語 (ISO-2022-JP)"                         ; RTL_TEXTENCODING_ISO_2022_JP      ; > ;
+        < "簡体字中国語 (ISO-2022-CN)"            ; RTL_TEXTENCODING_ISO_2022_CN      ; > ;
+        < "キリル語 (KOI8-R)"                               ; RTL_TEXTENCODING_KOI8_R           ; > ;
+        < "Unicode (UTF-7)"                                 ; RTL_TEXTENCODING_UTF7             ; > ;
+        < "Unicode (UTF-8)"                                 ; RTL_TEXTENCODING_UTF8             ; > ;
+        < "東欧 (ISO-8859-10)"                            ; RTL_TEXTENCODING_ISO_8859_10      ; > ;
+        < "東欧 (ISO-8859-13)"                            ; RTL_TEXTENCODING_ISO_8859_13      ; > ;
+        < "韓国語 (EUC-KR)"                              ; RTL_TEXTENCODING_EUC_KR           ; > ;
+        < "韓国語 (ISO-2022-KR)"                        ; RTL_TEXTENCODING_ISO_2022_KR      ; > ;
+        < "韓国語 (Windows-Johab-1361)"                  ; RTL_TEXTENCODING_MS_1361          ; > ;
+        < "Unicode"                                         ; RTL_TEXTENCODING_UCS2             ; > ;
+        < "タイ語 (ISO-8859-11/TIS-620)"                                  ; RTL_TEXTENCODING_TIS_620          ; > ;
+        < "タイ語 (Windows-874)"                             ; RTL_TEXTENCODING_MS_874           ; > ;
     };
     ItemList [ korean ] =
     {
@@ -1399,7 +1399,7 @@ ItemList [ language_user1 ] =
         < "한국어 (Windows-Johab-1361)"                  ; RTL_TEXTENCODING_MS_1361          ; > ;
         < "유니코드"                                            ; RTL_TEXTENCODING_UCS2             ; > ;
         < "타이어 (ISO-8859-11/TIS-620)"                                  ; RTL_TEXTENCODING_TIS_620          ; > ;
-        < "Thai (Windows-874)"                              ; RTL_TEXTENCODING_MS_874           ; > ;
+        < "타이어 (Windows-874)"                             ; RTL_TEXTENCODING_MS_874           ; > ;
     };
     ItemList [ chinese_simplified ] =
     {
@@ -1471,7 +1471,7 @@ ItemList [ language_user1 ] =
         < "韩文 (Windows-Johab-1361)"                 ; RTL_TEXTENCODING_MS_1361          ; > ;
         < "统一码"                                           ; RTL_TEXTENCODING_UCS2             ; > ;
         < "泰语 (ISO-8859-11/TIS-620)"                                  ; RTL_TEXTENCODING_TIS_620          ; > ;
-        < "Thai (Windows-874)"                              ; RTL_TEXTENCODING_MS_874           ; > ;
+        < "泰语 (Windows-874)"                                ; RTL_TEXTENCODING_MS_874           ; > ;
     };
     ItemList [ chinese_traditional ] =
     {
@@ -1526,7 +1526,7 @@ ItemList [ language_user1 ] =
         < "中文簡體(GB-18030)"               ; RTL_TEXTENCODING_GB_18030         ; > ;
         < "中文繁體(GBT-12345)"             ; RTL_TEXTENCODING_GBT_12345        ; > ;
         < "中文簡體(GBK/GB-2312-80)"            ; RTL_TEXTENCODING_GBK              ; > ;
-        < "中文繁體(BIG5)"                  ; RTL_TEXTENCODING_BIG5             ; > ;
+        < "中文繁體 (BIG5)"                 ; RTL_TEXTENCODING_BIG5             ; > ;
         < "中文繁體 (BIG5-HKSCS)"            ; RTL_TEXTENCODING_BIG5_HKSCS       ; > ;
         < "日文 (EUC-JP)"                             ; RTL_TEXTENCODING_EUC_JP           ; > ;
         < "中文簡體 (EUC-CN)"                   ; RTL_TEXTENCODING_EUC_CN           ; > ;
@@ -1543,7 +1543,7 @@ ItemList [ language_user1 ] =
         < "韓文 (Windows-Johab-1361)"                 ; RTL_TEXTENCODING_MS_1361          ; > ;
         < "統一碼"                                           ; RTL_TEXTENCODING_UCS2             ; > ;
         < "泰語 (ISO-8859-11/TIS-620)"                                  ; RTL_TEXTENCODING_TIS_620          ; > ;
-        < "Thai (Windows-874)"                              ; RTL_TEXTENCODING_MS_874           ; > ;
+        < "泰語 (Windows-874)"                                ; RTL_TEXTENCODING_MS_874           ; > ;
     };
     ItemList [ turkish ] =
     {
