@@ -2,9 +2,9 @@
  *
  *  $RCSfile: miscopt.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dbo $ $Date: 2000-11-29 12:35:45 $
+ *  last change: $Author: mba $ $Date: 2001-06-05 08:22:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,9 @@
 #include <tools/wldcrd.hxx>
 #endif
 
+#include <tools/link.hxx>
+#include <tools/list.hxx>
+
 //_________________________________________________________________________________________________________________
 //  namespaces
 //_________________________________________________________________________________________________________________
@@ -113,9 +116,14 @@ using namespace ::com::sun::star::uno   ;
 
 #define PROPERTYNAME_PLUGINSENABLED     OUString(RTL_CONSTASCII_USTRINGPARAM("PluginsEnabled"))
 #define PROPERTYHANDLE_PLUGINSENABLED   0
+#define PROPERTYNAME_SYMBOLSET          OUString(RTL_CONSTASCII_USTRINGPARAM("SymbolSet"))
+#define PROPERTYHANDLE_SYMBOLSET        1
+#define PROPERTYNAME_TOOLBOXSTYLE       OUString(RTL_CONSTASCII_USTRINGPARAM("ToolboxStyle"))
+#define PROPERTYHANDLE_TOOLBOXSTYLE     2
 
-#define PROPERTYCOUNT                   1
+#define PROPERTYCOUNT                   3
 
+DECLARE_LIST( LinkList, Link * );
 
 //_________________________________________________________________________________________________________________
 //  private declarations!
@@ -123,6 +131,15 @@ using namespace ::com::sun::star::uno   ;
 
 class SvtMiscOptions_Impl : public ConfigItem
 {
+    //-------------------------------------------------------------------------------------------------------------
+    //  private member
+    //-------------------------------------------------------------------------------------------------------------
+
+    private:
+    LinkList    aList;
+    sal_Bool    m_bPluginsEnabled;
+    sal_Int16   m_nSymbolSet;
+    sal_Int16   m_nToolboxStyle;
     //-------------------------------------------------------------------------------------------------------------
     //  public methods
     //-------------------------------------------------------------------------------------------------------------
@@ -185,7 +202,8 @@ class SvtMiscOptions_Impl : public ConfigItem
             @onerror    No error should occurre!
         *//*-*****************************************************************************************************/
 
-        sal_Bool IsPluginsEnabled() const;
+        sal_Bool IsPluginsEnabled() const
+        { return m_bPluginsEnabled; }
 
         /*-****************************************************************************************************//**
             @short      Method to set if plugins are enabled.
@@ -196,7 +214,23 @@ class SvtMiscOptions_Impl : public ConfigItem
 
             @onerror    No error should occurre!
         *//*-*****************************************************************************************************/
-        void SetPluginsEnabled( sal_Bool bEnable );
+        void SetPluginsEnabled( sal_Bool bEnable )
+        { m_bPluginsEnabled = bEnable; SetModified(); }
+
+        sal_Int16 GetSymbolSet()
+        { return m_nSymbolSet; }
+
+        void SetSymbolSet( sal_Int16 nSet )
+        { m_nSymbolSet = nSet; SetModified(); }
+
+        sal_Int16 GetToolboxStyle()
+        { return m_nToolboxStyle; }
+
+        void SetToolboxStyle( sal_Int16 nStyle )
+        { m_nToolboxStyle = nStyle; SetModified(); }
+
+        void AddListener( const Link& rLink );
+        void RemoveListener( const Link& rLink );
 
     //-------------------------------------------------------------------------------------------------------------
     //  private methods
@@ -218,14 +252,6 @@ class SvtMiscOptions_Impl : public ConfigItem
         *//*-*****************************************************************************************************/
 
         static Sequence< OUString > GetPropertyNames();
-
-    //-------------------------------------------------------------------------------------------------------------
-    //  private member
-    //-------------------------------------------------------------------------------------------------------------
-
-    private:
-
-    sal_Bool m_bPluginsEnabled;
 };
 
 //_________________________________________________________________________________________________________________
@@ -238,6 +264,8 @@ class SvtMiscOptions_Impl : public ConfigItem
 SvtMiscOptions_Impl::SvtMiscOptions_Impl()
     // Init baseclasses first
     : ConfigItem( ROOTNODE_MISC )
+    , m_nToolboxStyle( 4 )      // TOOLBOX_STYLE_FLAT
+    , m_nSymbolSet( 0 )
 {
     // Use our static list of configuration keys to get his values.
     Sequence< OUString >    seqNames    = GetPropertyNames  (           );
@@ -258,9 +286,19 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
         switch( nProperty )
         {
             case PROPERTYHANDLE_PLUGINSENABLED      :   {
-                                                        DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_BOOLEAN), "SvtMiscOptions_Impl_Impl::SvtMiscOptions_Impl()\nWho has changed the value type of \"Misc\\PluginsEnabled\"?" );
-                                                        seqValues[nProperty] >>= m_bPluginsEnabled;
-                                                    }
+                                                            if( !(seqValues[nProperty] >>= m_bPluginsEnabled) )
+                                                                DBG_ERROR("Wrong type of \"Misc\\PluginsEnabled\"!" );
+                                                        }
+                                                    break;
+            case PROPERTYHANDLE_SYMBOLSET           :   {
+                                                            if( !(seqValues[nProperty] >>= m_nSymbolSet) )
+                                                                DBG_ERROR("Wrong type of \"Misc\\SymbolSet\"!" );
+                                                        }
+                                                    break;
+            case PROPERTYHANDLE_TOOLBOXSTYLE        :   {
+                                                            if( !(seqValues[nProperty] >>= m_nToolboxStyle) )
+                                                                DBG_ERROR("Wrong type of \"Misc\\ToolboxStyle\"!" );
+                                                        }
                                                     break;
         }
     }
@@ -280,6 +318,26 @@ SvtMiscOptions_Impl::~SvtMiscOptions_Impl()
     {
         Commit();
     }
+
+    for ( USHORT n=0; n<aList.Count(); )
+        delete aList.Remove(n);
+}
+
+void SvtMiscOptions_Impl::AddListener( const Link& rLink )
+{
+    aList.Insert( new Link( rLink ) );
+}
+
+void SvtMiscOptions_Impl::RemoveListener( const Link& rLink )
+{
+    for ( USHORT n=0; n<aList.Count(); n++ )
+    {
+        if ( (*aList.GetObject(n) ) == rLink )
+        {
+            delete aList.Remove(n);
+            break;
+        }
+    }
 }
 
 //*****************************************************************************************************************
@@ -296,15 +354,27 @@ void SvtMiscOptions_Impl::Notify( const Sequence< OUString >& seqPropertyNames )
     sal_Int32 nCount = seqPropertyNames.getLength();
     for( sal_Int32 nProperty=0; nProperty<nCount; ++nProperty )
     {
-        if( seqPropertyNames[nProperty] == PROPERTYNAME_PLUGINSENABLED )
+        switch( nProperty )
         {
-            DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_BOOLEAN), "SvtMiscOptions_Impl::Notify()\nWho has changed the value type of \"Misc\\PluginsEnabled\"?" );
-            seqValues[nProperty] >>= m_bPluginsEnabled;
+            case PROPERTYHANDLE_PLUGINSENABLED      :   {
+                                                            if( !(seqValues[nProperty] >>= m_bPluginsEnabled) )
+                                                                DBG_ERROR("Wrong type of \"Misc\\PluginsEnabled\"!" );
+                                                        }
+                                                    break;
+            case PROPERTYHANDLE_SYMBOLSET           :   {
+                                                            if( !(seqValues[nProperty] >>= m_nSymbolSet) )
+                                                                DBG_ERROR("Wrong type of \"Misc\\SymbolSet\"!" );
+                                                        }
+                                                    break;
+            case PROPERTYHANDLE_TOOLBOXSTYLE        :   {
+                                                            if( !(seqValues[nProperty] >>= m_nToolboxStyle) )
+                                                                DBG_ERROR("Wrong type of \"Misc\\ToolboxStyle\"!" );
+                                                        }
+                                                    break;
+            default:
+                DBG_ERROR( "SvtMiscOptions_Impl::Notify()\nUnkown property detected ... I can't handle these!\n" );
+                break;
         }
-        // else if ...
-        #ifdef DEBUG
-        else DBG_ASSERT( sal_False, "SvtMiscOptions_Impl::Notify()\nUnkown property detected ... I can't handle these!\n" );
-        #endif
     }
 }
 
@@ -325,23 +395,19 @@ void SvtMiscOptions_Impl::Commit()
                                                         seqValues[nProperty] <<= m_bPluginsEnabled;
                                                     }
                                                     break;
+            case PROPERTYHANDLE_SYMBOLSET           :   {
+                                                        seqValues[nProperty] <<= m_nSymbolSet;
+                                                    }
+                                                    break;
+            case PROPERTYHANDLE_TOOLBOXSTYLE        :   {
+                                                        seqValues[nProperty] <<= m_nToolboxStyle;
+                                                    }
+                                                    break;
         }
     }
     // Set properties in configuration.
     PutProperties( seqNames, seqValues );
 }
-
-
-sal_Bool SvtMiscOptions_Impl::IsPluginsEnabled() const
-{
-    return m_bPluginsEnabled;
-}
-void SvtMiscOptions_Impl::SetPluginsEnabled( sal_Bool bEnable )
-{
-    m_bPluginsEnabled = bEnable;
-    SetModified();
-}
-
 
 //*****************************************************************************************************************
 //  private method
@@ -351,8 +417,11 @@ Sequence< OUString > SvtMiscOptions_Impl::GetPropertyNames()
     // Build static list of configuration key names.
     static const OUString pProperties[] =
     {
-        PROPERTYNAME_PLUGINSENABLED
+        PROPERTYNAME_PLUGINSENABLED,
+        PROPERTYNAME_SYMBOLSET,
+        PROPERTYNAME_TOOLBOXSTYLE
     };
+
     // Initialize return sequence with these list ...
     static const Sequence< OUString > seqPropertyNames( pProperties, PROPERTYCOUNT );
     // ... and return it.
@@ -405,9 +474,30 @@ sal_Bool SvtMiscOptions::IsPluginsEnabled() const
 {
     return m_pDataContainer->IsPluginsEnabled();
 }
+
 void SvtMiscOptions::SetPluginsEnabled( sal_Bool bEnable )
 {
     m_pDataContainer->SetPluginsEnabled( bEnable );
+}
+
+sal_Int16 SvtMiscOptions::GetSymbolSet() const
+{
+    return m_pDataContainer->GetSymbolSet();
+}
+
+void SvtMiscOptions::SetSymbolSet( sal_Int16 nSet )
+{
+    m_pDataContainer->SetSymbolSet( nSet );
+}
+
+sal_Int16 SvtMiscOptions::GetToolboxStyle() const
+{
+    return m_pDataContainer->GetToolboxStyle();
+}
+
+void SvtMiscOptions::SetToolboxStyle( sal_Int16 nStyle )
+{
+    m_pDataContainer->SetToolboxStyle( nStyle );
 }
 
 //*****************************************************************************************************************
@@ -433,4 +523,14 @@ Mutex & SvtMiscOptions::GetInitMutex()
     }
     // Return new created or already existing mutex object.
     return *pMutex;
+}
+
+void SvtMiscOptions::AddListener( const Link& rLink )
+{
+    m_pDataContainer->AddListener( rLink );
+}
+
+void SvtMiscOptions::RemoveListener( const Link& rLink )
+{
+    m_pDataContainer->RemoveListener( rLink );
 }
