@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.29 $
+#   $Revision: 1.30 $
 #
-#   last change: $Author: hjs $ $Date: 2004-06-25 12:41:58 $
+#   last change: $Author: rt $ $Date: 2004-07-13 13:53:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -227,8 +227,7 @@ APP8OBJS=   $(OBJ)$/utf8conv.obj $(OBJ)$/txtconv.obj $(OBJ)$/hw2fw.obj
 APP8STDLIBS=$(TOOLSLIB) $(SALLIB)
 
 # localizer for l10n framework
-#APP9TARGET= localize_u
-APP9TARGET= localize
+APP9TARGET= localize_sl
 EXCEPTIONSFILES=                            \
                     $(OBJ)$/localize.obj
 APP9OBJS=   $(OBJ)$/localize.obj $(OBJ)$/utf8conv.obj $(OBJ)$/srciter.obj $(OBJ)$/export2.obj
