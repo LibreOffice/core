@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj2.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 14:18:29 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 15:42:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -289,6 +289,9 @@
 #endif
 #ifndef _UNOFRAME_HXX
 #include <unoframe.hxx>
+#endif
+#ifndef _UNOCRSRHELPER_HXX
+#include <unocrsrhelper.hxx>
 #endif
 #ifndef _FMTHDFT_HXX //autogen
 #include <fmthdft.hxx>
@@ -1241,6 +1244,35 @@ uno::Reference< XTextContent > SAL_CALL SwXParagraphEnumeration::NextElement_Imp
     SwUnoCrsr* pUnoCrsr = GetCrsr();
     if(pUnoCrsr)
     {
+        // check for end of iteration
+        if(!bFirstParagraph)
+        {
+            sal_Bool bNext;     // true if there is another paragraph
+                                // to travel through
+            SwPosition* pStart = pUnoCrsr->Start();
+            SwUnoCrsr* pNewCrsr = pUnoCrsr->GetDoc()->CreateUnoCrsr(*pStart, sal_False);
+            //man soll hier auch in Tabellen landen duerfen
+            if(CURSOR_TBLTEXT != eCursorType && CURSOR_SELECTION_IN_TABLE != eCursorType)
+                pNewCrsr->SetRemainInSection( sal_False );
+
+            //was mache ich, wenn ich schon in einer Tabelle stehe?
+            SwTableNode* pTblNode = pNewCrsr->GetNode()->FindTableNode();
+            if((CURSOR_TBLTEXT != eCursorType && CURSOR_SELECTION_IN_TABLE != eCursorType) && pTblNode)
+            {
+                pNewCrsr->GetPoint()->nNode = pTblNode->EndOfSectionIndex();
+                bNext = pNewCrsr->Move(fnMoveForward, fnGoNode);
+            }
+            else
+                bNext = pNewCrsr->MovePara(fnParaNext, fnParaStart);
+            if((CURSOR_SELECTION == eCursorType || CURSOR_SELECTION_IN_TABLE == eCursorType)
+                        && nEndIndex < pNewCrsr->Start()->nNode.GetIndex())
+                bNext = FALSE;
+            delete pNewCrsr;
+
+            if (!bNext)
+                return aRef;    // empty reference
+        }
+
         XText* pText = xParentText.get();
         sal_Bool bInTable = sal_False;
         if(!bFirstParagraph)
@@ -1299,6 +1331,7 @@ uno::Reference< XTextContent > SAL_CALL SwXParagraphEnumeration::NextElement_Imp
         }
 //        else
 //            throw container::NoSuchElementException();
+
     }
     else
         throw uno::RuntimeException();
@@ -1549,8 +1582,8 @@ void    SwXTextRange::DeleteAndInsert(const String& rText) throw( uno::RuntimeEx
     SwBookmark* pBkm = GetBookmark();
     if(pBkm )
     {
-        const SwPosition& rPoint = pBkm->GetPos();
-        const SwPosition* pMark = pBkm->GetOtherPos();
+        const SwPosition& rPoint = *pBkm->Start();
+        const SwPosition* pMark = pBkm->End();
         SwCursor aNewCrsr( rPoint);
         SwDoc* pDoc = aNewCrsr.GetDoc();
         if(pMark)
@@ -1566,26 +1599,7 @@ void    SwXTextRange::DeleteAndInsert(const String& rText) throw( uno::RuntimeEx
 
         if(rText.Len())
         {
-
-            // scan for CR characters in order to insert paragraph breaks
-            // at those positions by calling SplitNode
-            OUString aTxt;
-            xub_StrLen nStartIdx = 0;
-            xub_StrLen nIdx = rText.Search( '\r', nStartIdx );
-            while (nIdx != STRING_NOTFOUND)
-            {
-                DBG_ASSERT( nIdx - nStartIdx >= 0, "index negative!" );
-                aTxt = rText.Copy( nStartIdx, nIdx - nStartIdx );
-                if (aTxt.getLength() && !pDoc->Insert( aNewCrsr, aTxt ))
-                    DBG_ERROR( "Doc->Insert(Str) failed." );
-                if (!pDoc->SplitNode( *aNewCrsr.GetPoint() ))
-                    DBG_ERROR( "SplitNode failed" );
-                nStartIdx = nIdx + 1;
-                nIdx = rText.Search( '\r', nStartIdx );
-            }
-            aTxt = rText.Copy( nStartIdx );
-            if (aTxt.getLength() && !pDoc->Insert( aNewCrsr, aTxt ))
-                DBG_ERROR( "Doc->Insert(Str) failed." );
+            SwUnoCursorHelper::DocInsertStringSplitCR( *pDoc, aNewCrsr, rText );
 
             SwXTextCursor::SelectPam(aNewCrsr, sal_True);
             aNewCrsr.Left(rText.Len(), CRSR_SKIP_CHARS, FALSE, FALSE);
@@ -2478,7 +2492,7 @@ uno::Any SwXTextRanges::getByIndex(sal_Int32 nIndex)
     vos::OGuard aGuard(Application::GetSolarMutex());
     uno::Reference< XTextRange >  aRef;
     XTextRangeArr* pArr = ((SwXTextRanges*)this)->GetRangesArray();
-    if(pArr && pArr->Count() > nIndex)
+    if(pArr && 0 <= nIndex && nIndex < pArr->Count())
     {
         XTextRangeRefPtr pRef = pArr->GetObject( USHORT( nIndex ));
         aRef = *pRef;
@@ -2548,10 +2562,9 @@ void SwXTextCursor::SetString(SwCursor& rCrsr, const OUString& rString)
         pDoc->DeleteAndJoin(rCrsr);
     if(nTxtLen)
     {
-        //OPT: GetSystemCharSet
-        if( !pDoc->Insert(rCrsr, aText) )
+        if( !SwUnoCursorHelper::DocInsertStringSplitCR( *pDoc, rCrsr, aText ) )
         {
-            ASSERT( sal_False, "Doc->Insert(Str) failed." )
+            DBG_ASSERT( sal_False, "DocInsertStringSplitCR" )
         }
         SwXTextCursor::SelectPam(rCrsr, sal_True);
         rCrsr.Left(nTxtLen, CRSR_SKIP_CHARS, FALSE, FALSE);
