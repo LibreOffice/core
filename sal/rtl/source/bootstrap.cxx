@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mhu $ $Date: 2002-07-23 13:47:54 $
+ *  last change: $Author: dbo $ $Date: 2002-08-19 07:59:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -482,7 +482,9 @@ static void fillFromIniFile(Bootstrap_Impl * pBootstrap_Impl, const OUString & i
 
                 OString name_tmp = OUStringToOString(nameValue.sName, RTL_TEXTENCODING_ASCII_US);
                 OString value_tmp = OUStringToOString(nameValue.sValue, RTL_TEXTENCODING_UTF8);
+#ifdef DEBUG
                 OSL_TRACE("bootstrap.cxx: pushing: name=%s value=%s\n", name_tmp.getStr(), value_tmp.getStr());
+#endif
 
                 pBootstrap_Impl->_nameValueList.push_back(nameValue);
             }
