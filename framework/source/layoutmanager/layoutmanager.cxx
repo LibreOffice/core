@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layoutmanager.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2004-12-16 12:35:24 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 09:51:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,6 +208,9 @@
 #include <toolkit/awt/vclxmenu.hxx>
 #endif
 #include <comphelper/mediadescriptor.hxx>
+#ifndef _RTL_LOGFILE_HXX_
+#include <rtl/logfile.hxx>
+#endif
 
 #include <algorithm>
 
@@ -452,11 +455,13 @@ LayoutManager::~LayoutManager()
 // Internal helper function
 void LayoutManager::impl_clearUpMenuBar()
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    implts_lock();
 
     // Clear up VCL menu bar to prepare shutdown
     if ( m_xContainerWindow.is() )
     {
+        vos::OGuard aGuard( Application::GetSolarMutex() );
+
         Window* pWindow = VCLUnoHelper::GetWindow( m_xContainerWindow );
         while ( pWindow && !pWindow->IsSystemWindow() )
             pWindow = pWindow->GetParent();
@@ -509,6 +514,8 @@ void LayoutManager::impl_clearUpMenuBar()
     if ( xComp.is() )
         xComp->dispose();
     m_xMenuBar.clear();
+
+    implts_unlock();
 }
 
 sal_Bool LayoutManager::impl_parseResourceURL( const rtl::OUString aResourceURL, rtl::OUString& aElementType, rtl::OUString& aElementName )
@@ -532,6 +539,26 @@ sal_Bool LayoutManager::impl_parseResourceURL( const rtl::OUString aResourceURL,
     return sal_False;
 }
 
+void LayoutManager::implts_lock()
+{
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+    WriteGuard aWriteLock( m_aLock );
+    ++m_nLockCount;
+    aWriteLock.unlock();
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+}
+
+sal_Bool LayoutManager::implts_unlock()
+{
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+    WriteGuard aWriteLock( m_aLock );
+    --m_nLockCount;
+    if ( m_nLockCount < 0 )
+        m_nLockCount = 0;
+    return ( m_nLockCount == 0 );
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+}
+
 void LayoutManager::implts_reset( sal_Bool bAttached )
 {
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
@@ -550,6 +577,8 @@ void LayoutManager::implts_reset( sal_Bool bAttached )
     OUString aModuleIdentifier( m_aModuleIdentifier );
     aReadLock.unlock();
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+
+    implts_lock();
 
     Reference< XModel > xModel;
     if ( xFrame.is() )
@@ -661,30 +690,32 @@ void LayoutManager::implts_reset( sal_Bool bAttached )
         aWriteLock.unlock();
         /* SAFE AREA ----------------------------------------------------------------------------------------------- */
 
-        implts_destroyElements();
-
         if ( bAttached )
         {
+            // reset docking area windows back to zero size
+            try
+            {
+                if ( xTopDockingWindow.is() )
+                    xTopDockingWindow->setPosSize( 0, 0, 0, 0, css::awt::PosSize::POSSIZE );
+                if ( xLeftDockingWindow.is() )
+                    xLeftDockingWindow->setPosSize( 0, 0, 0, 0, css::awt::PosSize::POSSIZE );
+                if ( xRightDockingWindow.is() )
+                    xRightDockingWindow->setPosSize( 0, 0, 0, 0, css::awt::PosSize::POSSIZE );
+                if ( xBottomDockingWindow.is() )
+                    xBottomDockingWindow->setPosSize( 0, 0, 0, 0, css::awt::PosSize::POSSIZE );
+            }
+            catch ( Exception& )
+            {
+            }
+
             implts_createCustomToolBars();
             implts_createAddonsToolBars();
         }
-
-        // reset docking area windows back to zero size
-        try
-        {
-            if ( xTopDockingWindow.is() )
-                xTopDockingWindow->setPosSize( 0, 0, 0, 0, css::awt::PosSize::POSSIZE );
-            if ( xLeftDockingWindow.is() )
-                xLeftDockingWindow->setPosSize( 0, 0, 0, 0, css::awt::PosSize::POSSIZE );
-            if ( xRightDockingWindow.is() )
-                xRightDockingWindow->setPosSize( 0, 0, 0, 0, css::awt::PosSize::POSSIZE );
-            if ( xBottomDockingWindow.is() )
-                xBottomDockingWindow->setPosSize( 0, 0, 0, 0, css::awt::PosSize::POSSIZE );
-        }
-        catch ( Exception& )
-        {
-        }
+        else
+            implts_destroyElements();
     }
+
+    implts_unlock();
 }
 
 void LayoutManager::implts_destroyElements()
@@ -2746,12 +2777,19 @@ void LayoutManager::implts_setVisibleState( sal_Bool bShow )
      /* SAFE AREA ----------------------------------------------------------------------------------------------- */
 
     implts_updateUIElementsVisibleState( bShow );
-    implts_doLayout( sal_False );
+    //implts_doLayout( sal_False );
 }
 
 void LayoutManager::implts_updateUIElementsVisibleState( sal_Bool bSetVisible )
 {
     std::vector< Reference< css::awt::XWindow > > aWinVector;
+    sal_Bool bOld;
+
+    {
+        WriteGuard aWriteLock( m_aLock );
+        m_bDoLayout = sal_True;
+        bOld = m_bDoLayout;
+    }
 
     ReadGuard aReadLock( m_aLock );
     UIElementVector::iterator pIter;
@@ -2772,6 +2810,7 @@ void LayoutManager::implts_updateUIElementsVisibleState( sal_Bool bSetVisible )
             }
         }
     }
+
     aReadLock.unlock();
 
     try
@@ -2826,6 +2865,12 @@ void LayoutManager::implts_updateUIElementsVisibleState( sal_Bool bSetVisible )
             else
                 pSysWindow->SetMenuBar( 0 );
         }
+    }
+
+    if ( !bOld )
+    {
+        WriteGuard aWriteLock( m_aLock );
+        m_bDoLayout = sal_False;
     }
 
     doLayout();
@@ -3221,10 +3266,12 @@ throw ( RuntimeException )
 
         // #i37884# set initial visibility state - in the plugin case the container window is already shown
         // and we get no notification anymore
-        vos::OGuard aGuard( Application::GetSolarMutex() );
-        Window* pContainerWindow = VCLUnoHelper::GetWindow( m_xContainerWindow );
-        if( pContainerWindow )
-            m_bParentWindowVisible = pContainerWindow->IsVisible();
+        {
+            vos::OGuard aGuard( Application::GetSolarMutex() );
+            Window* pContainerWindow = VCLUnoHelper::GetWindow( m_xContainerWindow );
+            if( pContainerWindow )
+                m_bParentWindowVisible = pContainerWindow->IsVisible();
+        }
 
         css::uno::Reference< css::awt::XWindowPeer > xParent( m_xContainerWindow, UNO_QUERY );
         xTopDockWindow = Reference< css::awt::XWindow >( implts_createToolkitWindow( xParent ), UNO_QUERY );
@@ -3354,6 +3401,8 @@ IMPL_LINK( LayoutManager, WindowEventListener, VclSimpleEvent*, pEvent )
 void SAL_CALL LayoutManager::createElement( const ::rtl::OUString& aName )
 throw (RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT( aLog, "framework (cd100003) ::LayoutManager::createElement" );
+
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     ReadGuard aReadLock( m_aLock );
     Reference< XFrame > xFrame = m_xFrame;
@@ -3386,6 +3435,7 @@ throw (RuntimeException)
             if ( !bFound  )
             {
                 xUIElement = implts_createElement( aName );
+                sal_Bool bVisible( sal_False );
                 if ( xUIElement.is() )
                 {
                     Reference< css::awt::XWindow > xWindow( xUIElement->getRealInterface(), UNO_QUERY );
@@ -3412,6 +3462,7 @@ throw (RuntimeException)
                         // UI changes for this document.
                         implts_setElementData( rElement, xDockWindow );
                         rElement.m_xUIElement = xUIElement;
+                        bVisible = rElement.m_bVisible;
                     }
                     else
                     {
@@ -3420,12 +3471,15 @@ throw (RuntimeException)
                         implts_readWindowStateData( aName, aNewToolbar );
                         implts_setElementData( aNewToolbar, xDockWindow );
                         m_aUIElements.push_back( aNewToolbar );
+                        bVisible = aNewToolbar.m_bVisible;
                     }
                 }
                 aWriteLock.unlock();
 
                 implts_sortUIElements();
-                doLayout();
+
+                if ( bVisible )
+                    doLayout();
             }
         }
         else if ( aElementType.equalsIgnoreAsciiCaseAscii( "menubar" ))
@@ -3505,6 +3559,8 @@ throw (RuntimeException)
 void SAL_CALL LayoutManager::destroyElement( const ::rtl::OUString& aName )
 throw (RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT( aLog, "framework (cd100003) ::LayoutManager::destroyElement" );
+
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     WriteGuard aWriteLock( m_aLock );
 
@@ -3621,6 +3677,8 @@ throw (RuntimeException)
 ::sal_Bool SAL_CALL LayoutManager::requestElement( const ::rtl::OUString& ResourceURL )
 throw (::com::sun::star::uno::RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT( aLog, "framework (cd100003) ::LayoutManager::requestElement" );
+
     OUString                  aElementType;
     OUString                  aElementName;
     UIElementVector::iterator pIter;
@@ -3628,6 +3686,9 @@ throw (::com::sun::star::uno::RuntimeException)
     WriteGuard aWriteLock( m_aLock );
     if ( impl_parseResourceURL( ResourceURL, aElementType, aElementName ))
     {
+        OString aResName = rtl::OUStringToOString( aElementName, RTL_TEXTENCODING_ASCII_US );
+        RTL_LOGFILE_CONTEXT_TRACE1( aLog, "framework (cd100003) Element %s", aResName.getStr() );
+
         if (( aElementType.equalsIgnoreAsciiCaseAscii( "statusbar" ) &&
               aElementName.equalsIgnoreAsciiCaseAscii( "statusbar" )) ||
             ( m_aStatusBarElement.m_aName == ResourceURL ))
@@ -3657,36 +3718,71 @@ throw (::com::sun::star::uno::RuntimeException)
         }
         else
         {
-            for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); pIter++ )
+            if ( m_bVisible )
             {
-                if (( pIter->m_aName == ResourceURL ) &&
-                    ( pIter->m_xUIElement.is() ))
+                bool bFound( sal_False );
+                for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); pIter++ )
                 {
-                    Reference< css::awt::XWindow > xWindow( pIter->m_xUIElement->getRealInterface(), UNO_QUERY );
-                    Reference< css::awt::XDockableWindow > xDockWindow( xWindow, UNO_QUERY );
-
-                    sal_Bool bShowElement( pIter->m_bVisible &&
-                                           !pIter->m_bMasterHide &&
-                                           m_bParentWindowVisible );
-
-                    if ( xWindow.is() && xDockWindow.is() && bShowElement )
+                    if ( pIter->m_aName == ResourceURL )
                     {
-                        pIter->m_bVisible = sal_True;
-                        aWriteLock.unlock();
+                        if ( pIter->m_xUIElement.is() )
+                        {
+                            Reference< css::awt::XWindow > xWindow( pIter->m_xUIElement->getRealInterface(), UNO_QUERY );
+                            Reference< css::awt::XDockableWindow > xDockWindow( xWindow, UNO_QUERY );
 
-                        // we need VCL here to pass special flags to Show()
-                        vos::OGuard aGuard( Application::GetSolarMutex() );
-                        Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
-                        if( pWindow )
-                            pWindow->Show( TRUE, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
-                        implts_writeNewStateData( ResourceURL, xWindow );
+                            sal_Bool bShowElement( pIter->m_bVisible &&
+                                                !pIter->m_bMasterHide &&
+                                                m_bParentWindowVisible );
 
-                        if ( xDockWindow.is() && !xDockWindow->isFloating() )
-                            doLayout();
+                            if ( xWindow.is() && xDockWindow.is() && bShowElement )
+                            {
+                                pIter->m_bVisible = sal_True;
+                                aWriteLock.unlock();
 
-                        return sal_True;
+                                // we need VCL here to pass special flags to Show()
+                                vos::OGuard aGuard( Application::GetSolarMutex() );
+                                Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
+                                if( pWindow && !pWindow->IsReallyVisible() )
+                                {
+                                    pWindow->Show( TRUE, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
+                                    implts_writeNewStateData( ResourceURL, xWindow );
+
+                                    if ( xDockWindow.is() && !xDockWindow->isFloating() )
+                                        doLayout();
+                                    return sal_True;
+                                }
+
+                                return sal_False;
+                            }
+                        }
+
+                        bFound = sal_True;
+                        break;
                     }
                 }
+
+                // Create toolbar on demand when it's visible
+                Reference< drafts::com::sun::star::ui::XUIElement > xUIElement;
+                if ( !bFound )
+                {
+                    UIElement aNewToolbar( aElementName, aElementType, xUIElement );
+                    aNewToolbar.m_aName = ResourceURL;
+                    implts_readWindowStateData( ResourceURL, aNewToolbar );
+                    m_aUIElements.push_back( aNewToolbar );
+                    aWriteLock.unlock();
+
+                    implts_sortUIElements();
+                    if ( aNewToolbar.m_bVisible )
+                        createElement( ResourceURL );
+                }
+                else if ( pIter->m_bVisible )
+                {
+                    aWriteLock.unlock();
+
+                    createElement( ResourceURL );
+                }
+
+                return sal_True;
             }
         }
     }
@@ -3748,11 +3844,16 @@ throw (::com::sun::star::uno::RuntimeException)
 sal_Bool SAL_CALL LayoutManager::showElement( const ::rtl::OUString& aName )
 throw (RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT( aLog, "framework (cd100003) ::LayoutManager::showElement" );
+
     OUString    aElementType;
     OUString    aElementName;
 
     if ( impl_parseResourceURL( aName, aElementType, aElementName ))
     {
+        OString aResName = rtl::OUStringToOString( aElementName, RTL_TEXTENCODING_ASCII_US );
+        RTL_LOGFILE_CONTEXT_TRACE1( aLog, "framework (cd100003) Element %s", aResName.getStr() );
+
         if ( aElementType.equalsIgnoreAsciiCaseAscii( "menubar" ) &&
              aElementName.equalsIgnoreAsciiCaseAscii( "menubar" ))
         {
@@ -3867,11 +3968,16 @@ throw (RuntimeException)
 sal_Bool SAL_CALL LayoutManager::hideElement( const ::rtl::OUString& aName )
 throw (RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT( aLog, "framework (cd100003) ::LayoutManager::hideElement" );
+
     OUString            aElementType;
     OUString            aElementName;
 
     if ( impl_parseResourceURL( aName, aElementType, aElementName ))
     {
+        OString aResName = rtl::OUStringToOString( aElementName, RTL_TEXTENCODING_ASCII_US );
+        RTL_LOGFILE_CONTEXT_TRACE1( aLog, "framework (cd100003) Element %s", aResName.getStr() );
+
         if ( aElementType.equalsIgnoreAsciiCaseAscii( "menubar" ) &&
              aElementName.equalsIgnoreAsciiCaseAscii( "menubar" ))
         {
@@ -4526,28 +4632,16 @@ throw (RuntimeException)
 void SAL_CALL LayoutManager::lock()
 throw (RuntimeException)
 {
-    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    WriteGuard aWriteLock( m_aLock );
-    ++m_nLockCount;
-    aWriteLock.unlock();
-    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+    implts_lock();
+    RTL_LOGFILE_TRACE1( "framework (cd100003) ::LayoutManager::lock lockCount=%d", m_nLockCount );
 }
 
 void SAL_CALL LayoutManager::unlock()
 throw (RuntimeException)
 {
-    sal_Bool bDoLayout( sal_False );
+    sal_Bool bDoLayout( implts_unlock() );
 
-    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    WriteGuard aWriteLock( m_aLock );
-
-    --m_nLockCount;
-    if ( m_nLockCount < 0 )
-        m_nLockCount = 0;
-    bDoLayout = ( m_nLockCount == 0 );
-
-    aWriteLock.unlock();
-    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+    RTL_LOGFILE_TRACE1( "framework (cd100003) ::LayoutManager::unlock lockCount=%d", m_nLockCount );
 
     // conform to documentation: unlock with lock count == 0 means force a layout
     if ( bDoLayout )
@@ -4562,6 +4656,8 @@ throw (RuntimeException)
 
 void LayoutManager::implts_doLayout( sal_Bool bForceRequestBorderSpace )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "framework (cd100003) ::LayoutManager::implts_doLayout" );
+
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     sal_Bool bNoLock( sal_False );
     css::awt::Rectangle aCurrBorderSpace;
@@ -4569,6 +4665,9 @@ void LayoutManager::implts_doLayout( sal_Bool bForceRequestBorderSpace )
     Reference< XDockingAreaAcceptor > xDockingAreaAcceptor;
 
     ReadGuard aReadLock( m_aLock );
+    if ( !m_bParentWindowVisible )
+        return;
+
     bNoLock = ( m_nLockCount == 0 );
     xContainerWindow = m_xContainerWindow;
     xDockingAreaAcceptor = m_xDockingAreaAcceptor;
@@ -5940,7 +6039,7 @@ throw( css::uno::RuntimeException )
         {
             // Do not do anything if we are in the middle of a docking process. This would interfere all other
             // operations. We will store the new position and size in the docking handlers.
-            // Do not do anything if we are in the middle of our layouting process. We will adopt the position
+            // Do not do anything if we are in the middle of our layouting process. We will adapt the position
             // and size of the user interface elements.
             UIElement aUIElement;
             if ( implts_findElement( aEvent.Source, aUIElement ))
@@ -5985,7 +6084,7 @@ void SAL_CALL LayoutManager::windowShown( const css::lang::EventObject& aEvent )
         if ( bSetVisible )
         {
             implts_updateUIElementsVisibleState( sal_True );
-            implts_doLayout( sal_False );
+            //implts_doLayout( sal_False );
         }
     }
 }
@@ -6051,12 +6150,16 @@ throw ( RuntimeException )
     if (( aEvent.Action == FrameAction_COMPONENT_ATTACHED   ) ||
         ( aEvent.Action == FrameAction_COMPONENT_REATTACHED ))
     {
+        RTL_LOGFILE_CONTEXT( aLog, "framework (cd100003) ::LayoutManager::frameAction (COMPONENT_ATTACHED|REATTACHED)" );
+
         implts_reset( sal_True );
         implts_doLayout( sal_True );
     }
     else if (( aEvent.Action == FrameAction_FRAME_UI_ACTIVATED      ) ||
              ( aEvent.Action == FrameAction_FRAME_UI_DEACTIVATING   ))
     {
+        RTL_LOGFILE_CONTEXT( aLog, "framework (cd100003) ::LayoutManager::frameAction (FRAME_UI_ACTIVATED|DEACTIVATING)" );
+
         /* SAFE AREA ----------------------------------------------------------------------------------------------- */
         WriteGuard aWriteLock( m_aLock );
         m_bActive = ( aEvent.Action == FrameAction_FRAME_UI_ACTIVATED );
@@ -6064,10 +6167,11 @@ throw ( RuntimeException )
         /* SAFE AREA ----------------------------------------------------------------------------------------------- */
 
         implts_toggleFloatingUIElementsVisibility( aEvent.Action == FrameAction_FRAME_UI_ACTIVATED );
-        doLayout();
+//        doLayout();
     }
     else if ( aEvent.Action == FrameAction_COMPONENT_DETACHING )
     {
+        RTL_LOGFILE_CONTEXT( aLog, "framework (cd100003) ::LayoutManager::frameAction (COMPONENT_DETACHING)" );
         implts_reset( sal_False );
     }
 }
