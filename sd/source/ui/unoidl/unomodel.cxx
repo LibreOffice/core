@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 16:03:30 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:39:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,8 @@
 #ifndef _COM_SUN_STAR_AWT_XDEVICE_HPP_
 #include <com/sun/star/awt/XDevice.hpp>
 #endif
+
+#include <com/sun/star/embed/Aspects.hpp>
 
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
@@ -1098,8 +1100,7 @@ uno::Reference< uno::XInterface > SAL_CALL SdXImpressDocument::createInstance( c
 
     if( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.document.ExportEmbeddedObjectResolver") ) )
     {
-        SvPersist *pPersist = pDoc ? pDoc->GetPersist() : NULL;
-
+        SfxObjectShell *pPersist = pDoc ? pDoc->GetPersist() : NULL;
         if( NULL == pPersist )
             throw lang::DisposedException();
 
@@ -1108,8 +1109,7 @@ uno::Reference< uno::XInterface > SAL_CALL SdXImpressDocument::createInstance( c
 
     if( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.document.ImportEmbeddedObjectResolver") ) )
     {
-        SvPersist *pPersist = pDoc ? pDoc->GetPersist() : NULL;
-
+        SfxObjectShell *pPersist = pDoc ? pDoc->GetPersist() : NULL;
         if( NULL == pPersist )
             throw lang::DisposedException();
 
@@ -1366,7 +1366,7 @@ void SAL_CALL SdXImpressDocument::setPropertyValue( const OUString& aPropertyNam
         }
         case WID_MODEL_VISAREA:
             {
-                SvEmbeddedObject* pEmbeddedObj = pDoc->GetDocSh();
+                SfxObjectShell* pEmbeddedObj = pDoc->GetDocSh();
                 if( !pEmbeddedObj )
                     break;
 
@@ -1431,7 +1431,7 @@ uno::Any SAL_CALL SdXImpressDocument::getPropertyValue( const OUString& Property
             break;
         case WID_MODEL_VISAREA:
             {
-                SvEmbeddedObject* pEmbeddedObj = pDoc->GetDocSh();
+                SfxObjectShell* pEmbeddedObj = pDoc->GetDocSh();
                 if( !pEmbeddedObj )
                     break;
 
@@ -1444,7 +1444,7 @@ uno::Any SAL_CALL SdXImpressDocument::getPropertyValue( const OUString& Property
             break;
         case WID_MODEL_MAPUNIT:
             {
-                SvEmbeddedObject* pEmbeddedObj = pDoc->GetDocSh();
+                SfxObjectShell* pEmbeddedObj = pDoc->GetDocSh();
                 if( !pEmbeddedObj )
                     break;
 
@@ -1582,7 +1582,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SdXImpressDocument::getRenderer( 
         }
         else
         {
-            const Rectangle aVisArea( pDocShell->GetVisArea( ASPECT_DOCPRINT ) );
+            const Rectangle aVisArea( pDocShell->GetVisArea( embed::Aspects::MSOLE_DOCPRINT ) );
             aPageSize = awt::Size( aVisArea.GetWidth(), aVisArea.GetHeight() );
         }
         aRenderer.realloc( 1 );
