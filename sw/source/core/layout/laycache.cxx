@@ -2,9 +2,9 @@
  *
  *  $RCSfile: laycache.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:06:47 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 11:18:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -317,8 +317,13 @@ void SwLayoutCache::Write( SvStream &rStream, const SwDoc& rDoc )
                             // If the table is a follow, we have to look for the
                             // master and to count all rows to get the row number
                             nOfst = 0;
+#ifdef FRANK_TEST
+                            if( pTab->IsFollow() )
+                                pTab = pTab->FindMaster( true );
+#else
                             while( pTab->IsFollow() )
                                 pTab = pTab->FindMaster();
+#endif
                             while( pTab != pTmp )
                             {
                                 SwFrm* pSub = pTab->Lower();
@@ -472,8 +477,13 @@ sal_Bool SwLayoutCache::CompareLayout( const SwDoc& rDoc ) const
                     if( pTab->IsFollow() )
                     {
                         nOfst = 0;
+#ifdef FRANK_TEST
+                        if( pTab->IsFollow() )
+                            pTab = pTab->FindMaster( true );
+#else
                         while( pTab->IsFollow() )
                             pTab = pTab->FindMaster();
+#endif
                         while( pTab != pTmp )
                         {
                             SwFrm* pSub = pTab->Lower();
