@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolboxdocumenthandler.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 17:55:57 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 17:04:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,8 +75,20 @@
 //  interface includes
 //_________________________________________________________________________________________________________________
 
-#ifndef __COM_SUN_STAR_XML_SAX_XEXTENDEDDOCUMENTHANDLER_HPP_
+#ifndef _COM_SUN_STAR_XML_SAX_XEXTENDEDDOCUMENTHANDLER_HPP_
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
+#endif
+
+#ifndef _DRAFTS_COM_SUN_STAR_UI_ITEMTYPE_HPP_
+#include <drafts/com/sun/star/ui/ItemType.hpp>
+#endif
+
+#ifndef _DRAFTS_COM_SUN_STAR_UI_ITEMSTYLE_HPP_
+#include <drafts/com/sun/star/ui/ItemStyle.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -103,6 +115,8 @@
 
 using namespace ::rtl;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::xml::sax;
 
 
@@ -110,6 +124,46 @@ using namespace ::com::sun::star::xml::sax;
 
 namespace framework
 {
+
+// Property names of a menu/menu item ItemDescriptor
+static const char ITEM_DESCRIPTOR_COMMANDURL[]  = "CommandURL";
+static const char ITEM_DESCRIPTOR_HELPURL[]     = "HelpURL";
+static const char ITEM_DESCRIPTOR_LABEL[]       = "Label";
+static const char ITEM_DESCRIPTOR_TYPE[]        = "Type";
+static const char ITEM_DESCRIPTOR_STYLE[]       = "Style";
+static const char ITEM_DESCRIPTOR_VISIBLE[]     = "IsVisible";
+
+static void ExtractToolbarParameters( const Sequence< PropertyValue > rProp,
+                                      OUString&                       rCommandURL,
+                                      OUString&                       rLabel,
+                                      OUString&                       rHelpURL,
+                                      sal_Bool&                       rVisible,
+                                      sal_Int16&                      rType )
+{
+    for ( sal_Int32 i = 0; i < rProp.getLength(); i++ )
+    {
+        if ( rProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_COMMANDURL ))
+        {
+            rProp[i].Value >>= rCommandURL;
+        }
+        else if ( rProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_HELPURL ))
+        {
+            rProp[i].Value >>= rHelpURL;
+        }
+        else if ( rProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_LABEL ))
+        {
+            rProp[i].Value >>= rLabel;
+        }
+        else if ( rProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_TYPE ))
+        {
+            rProp[i].Value >>= rType;
+        }
+        else if ( rProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_VISIBLE ))
+        {
+            rProp[i].Value >>= rVisible;
+        }
+    }
+}
 
 struct ToolBarEntryProperty
 {
@@ -132,12 +186,14 @@ ToolBarEntryProperty ToolBoxEntries[OReadToolBoxDocumentHandler::TB_XML_ENTRY_CO
     { OReadToolBoxDocumentHandler::TB_NS_TOOLBAR,   ATTRIBUTE_WIDTH             },
     { OReadToolBoxDocumentHandler::TB_NS_TOOLBAR,   ATTRIBUTE_USER              },
     { OReadToolBoxDocumentHandler::TB_NS_TOOLBAR,   ATTRIBUTE_HELPID            },
-    { OReadToolBoxDocumentHandler::TB_NS_TOOLBAR,   ATTRIBUTE_ITEMSTYLE         }
+    { OReadToolBoxDocumentHandler::TB_NS_TOOLBAR,   ATTRIBUTE_ITEMSTYLE         },
+    { OReadToolBoxDocumentHandler::TB_NS_TOOLBAR,   ATTRIBUTE_UINAME            }
 };
 
-
-OReadToolBoxDocumentHandler::OReadToolBoxDocumentHandler( ToolBoxDescriptor& aToolBoxItems ) :
-    ThreadHelpBase( &Application::GetSolarMutex() ), ::cppu::OWeakObject(),     m_aToolBoxItems( aToolBoxItems )
+OReadToolBoxDocumentHandler::OReadToolBoxDocumentHandler( const Reference< XIndexContainer >& rItemContainer ) :
+    ThreadHelpBase( &Application::GetSolarMutex() ),
+    ::cppu::OWeakObject(),
+    m_rItemContainer( rItemContainer )
 {
     OUString aNamespaceToolBar( RTL_CONSTASCII_USTRINGPARAM( XMLNS_TOOLBAR ));
     OUString aNamespaceXLink( RTL_CONSTASCII_USTRINGPARAM( XMLNS_XLINK ));
@@ -233,6 +289,40 @@ throw(  SAXException, RuntimeException )
                     aErrorMessage += OUString( RTL_CONSTASCII_USTRINGPARAM( "Element 'toolbar:toolbar' cannot be embeded into 'toolbar:toolbar'!" ));
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
+                else
+                {
+                    // Check if we have a UI name set in our XML file
+                    OUString aUIName;
+                    for ( int n = 0; n < xAttribs->getLength(); n++ )
+                    {
+                        pToolBoxEntry = m_aToolBoxMap.find( xAttribs->getNameByIndex( n ) );
+                        if ( pToolBoxEntry != m_aToolBoxMap.end() )
+                        {
+                            switch ( pToolBoxEntry->second )
+                            {
+                                case TB_ATTRIBUTE_UINAME:
+                                    aUIName = xAttribs->getValueByIndex( n );
+                                break;
+                            }
+                        }
+                    }
+
+                    if ( aUIName.getLength() > 0 )
+                    {
+                        // Try to set UI name as a container property
+                        Reference< XPropertySet > xPropSet( m_rItemContainer, UNO_QUERY );
+                        if ( xPropSet.is() )
+                        {
+                            try
+                            {
+                                xPropSet->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "UIName" )), makeAny( aUIName ) );
+                            }
+                            catch ( UnknownPropertyException& )
+                            {
+                            }
+                        }
+                    }
+                }
 
                 m_bToolBarStartFound = sal_True;
             }
@@ -261,11 +351,15 @@ throw(  SAXException, RuntimeException )
                 sal_Bool bAttributeURL  = sal_False;
 
                 m_bToolBarItemStartFound = sal_True;
-
-                ToolBoxItemDescriptor* pItem = new ToolBoxItemDescriptor;
-
-                m_aToolBoxItems.Insert( pItem, m_aToolBoxItems.Count() );
-                pItem->nItemType = TOOLBOXITEM_BUTTON;
+                sal_Int16       nItemType( drafts::com::sun::star::ui::ItemType::DEFAULT );
+                OUString        aLabel;
+                OUString        aCommandURL;
+                OUString        aHelpURL;
+                OUString        aBitmapName;
+                sal_uInt16      nItemBits( 0 );
+                sal_uInt16      nWidth( 0 );
+                sal_uInt16      nUserDef( 0 );
+                sal_Bool        bVisible( sal_True );
 
                 for ( int n = 0; n < xAttribs->getLength(); n++ )
                 {
@@ -276,36 +370,35 @@ throw(  SAXException, RuntimeException )
                         {
                             case TB_ATTRIBUTE_TEXT:
                             {
-                                pItem->aItemText = xAttribs->getValueByIndex( n );
+                                aLabel = xAttribs->getValueByIndex( n );
                             }
                             break;
 
                             case TB_ATTRIBUTE_BITMAP:
                             {
-                                pItem->aBitmapName = xAttribs->getValueByIndex( n );
+                                aBitmapName = xAttribs->getValueByIndex( n );
                             }
                             break;
 
                             case TB_ATTRIBUTE_URL:
                             {
                                 bAttributeURL   = sal_True;
-                                pItem->aURL     = xAttribs->getValueByIndex( n );
+                                aCommandURL     = xAttribs->getValueByIndex( n );
                             }
                             break;
 
                             case TB_ATTRIBUTE_ITEMBITS:
                             {
-                                pItem->nItemBits = (USHORT)(xAttribs->getValueByIndex( n ).toInt32());
+                                nItemBits = (USHORT)(xAttribs->getValueByIndex( n ).toInt32());
                             }
                             break;
 
                             case TB_ATTRIBUTE_VISIBLE:
                             {
-                                pItem->nVisible = 0;
                                 if ( xAttribs->getValueByIndex( n ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ATTRIBUTE_BOOLEAN_TRUE )) )
-                                    pItem->nVisible = 1;
+                                    bVisible = sal_True;
                                 else if ( xAttribs->getValueByIndex( n ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ATTRIBUTE_BOOLEAN_FALSE )) )
-                                    pItem->nVisible = 0;
+                                    bVisible = sal_False;
                                 else
                                 {
                                     OUString aErrorMessage = getErrorLineString();
@@ -317,19 +410,19 @@ throw(  SAXException, RuntimeException )
 
                             case TB_ATTRIBUTE_WIDTH:
                             {
-                                pItem->nWidth = (USHORT)(xAttribs->getValueByIndex( n ).toInt32());
+                                nWidth = (USHORT)(xAttribs->getValueByIndex( n ).toInt32());
                             }
                             break;
 
                             case TB_ATTRIBUTE_USER:
                             {
-                                pItem->nUserDef = (USHORT)(xAttribs->getValueByIndex( n ).toInt32());
+                                nUserDef = (USHORT)(xAttribs->getValueByIndex( n ).toInt32());
                             }
                             break;
 
                             case TB_ATTRIBUTE_HELPID:
                             {
-                                pItem->aHelpId = xAttribs->getValueByIndex( n );
+                                aHelpURL = xAttribs->getValueByIndex( n );
                             }
                             break;
 
@@ -339,7 +432,6 @@ throw(  SAXException, RuntimeException )
                                 OUString aTemp = xAttribs->getValueByIndex( n );
                                 sal_Int32 nIndex = 0;
 
-                                pItem->nItemBits = 0;
                                 do
                                 {
                                     OUString aToken = aTemp.getToken( 0, ' ', nIndex );
@@ -347,17 +439,15 @@ throw(  SAXException, RuntimeException )
                                     {
                                         sal_Int32 nHashCode = aToken.hashCode();
                                         if ( nHashCode == m_nHashCode_Style_Radio )
-                                            pItem->nItemBits |= TIB_RADIOCHECK;
-                                        else if ( nHashCode == m_nHashCode_Style_Auto )
-                                            pItem->nItemBits |= TIB_AUTOCHECK;
+                                            nItemBits |= drafts::com::sun::star::ui::ItemStyle::RADIO_CHECK;
                                         else if ( nHashCode == m_nHashCode_Style_Left )
-                                            pItem->nItemBits |= TIB_LEFT;
+                                            nItemBits |= drafts::com::sun::star::ui::ItemStyle::ALIGN_LEFT;
                                         else if ( nHashCode == m_nHashCode_Style_AutoSize )
-                                            pItem->nItemBits |= TIB_AUTOSIZE;
+                                            nItemBits |= drafts::com::sun::star::ui::ItemStyle::AUTO_SIZE;
                                         else if ( nHashCode == m_nHashCode_Style_DropDown )
-                                            pItem->nItemBits |= TIB_DROPDOWN;
+                                            nItemBits |= drafts::com::sun::star::ui::ItemStyle::DROP_DOWN;
                                         else if ( nHashCode == m_nHashCode_Style_Repeat )
-                                            pItem->nItemBits |= TIB_REPEAT;
+                                            nItemBits |= drafts::com::sun::star::ui::ItemStyle::REPEAT;
                                     }
                                 }
                                 while ( nIndex >= 0 );
@@ -372,6 +462,26 @@ throw(  SAXException, RuntimeException )
                     OUString aErrorMessage = getErrorLineString();
                     aErrorMessage += OUString( RTL_CONSTASCII_USTRINGPARAM( "Required attribute toolbar:url must have a value!" ));
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
+                }
+
+                if ( aCommandURL.getLength() > 0 )
+                {
+                    Sequence< PropertyValue > aToolbarItemProp( 6 );
+                    aToolbarItemProp[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_COMMANDURL ));
+                    aToolbarItemProp[1].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_HELPURL ));
+                    aToolbarItemProp[2].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_LABEL ));
+                    aToolbarItemProp[3].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_TYPE ));
+                    aToolbarItemProp[4].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_STYLE ));
+                    aToolbarItemProp[5].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_VISIBLE ));
+
+                    aToolbarItemProp[0].Value = makeAny( aCommandURL );
+                    aToolbarItemProp[1].Value = makeAny( aHelpURL );
+                    aToolbarItemProp[2].Value = makeAny( aLabel );
+                    aToolbarItemProp[3].Value = makeAny( drafts::com::sun::star::ui::ItemType::DEFAULT );
+                    aToolbarItemProp[4].Value = makeAny( nItemBits );
+                    aToolbarItemProp[5].Value = makeAny( bVisible );
+
+                    m_rItemContainer->insertByIndex( m_rItemContainer->getCount(), makeAny( aToolbarItemProp ) );
                 }
             }
             break;
@@ -389,9 +499,15 @@ throw(  SAXException, RuntimeException )
                 }
 
                 m_bToolBarSpaceStartFound = sal_True;
-                ToolBoxItemDescriptor* pItem = new ToolBoxItemDescriptor;
-                pItem->nItemType = TOOLBOXITEM_SPACE;
-                m_aToolBoxItems.Insert( pItem, m_aToolBoxItems.Count() );
+
+                Sequence< PropertyValue > aToolbarItemProp( 2 );
+                aToolbarItemProp[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_COMMANDURL ));
+                aToolbarItemProp[1].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_TYPE ));
+
+                aToolbarItemProp[0].Value <<= rtl::OUString();
+                aToolbarItemProp[1].Value <<= drafts::com::sun::star::ui::ItemType::SEPARATOR_SPACE;
+
+                m_rItemContainer->insertByIndex( m_rItemContainer->getCount(), makeAny( aToolbarItemProp ) );
             }
             break;
 
@@ -408,9 +524,15 @@ throw(  SAXException, RuntimeException )
                 }
 
                 m_bToolBarBreakStartFound = sal_True;
-                ToolBoxItemDescriptor* pItem = new ToolBoxItemDescriptor;
-                pItem->nItemType = TOOLBOXITEM_BREAK;
-                m_aToolBoxItems.Insert( pItem, m_aToolBoxItems.Count() );
+
+                Sequence< PropertyValue > aToolbarItemProp( 2 );
+                aToolbarItemProp[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_COMMANDURL ));
+                aToolbarItemProp[1].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_TYPE ));
+
+                aToolbarItemProp[0].Value <<= rtl::OUString();
+                aToolbarItemProp[1].Value <<= drafts::com::sun::star::ui::ItemType::SEPARATOR_LINEBREAK;
+
+                m_rItemContainer->insertByIndex( m_rItemContainer->getCount(), makeAny( aToolbarItemProp ) );
             }
             break;
 
@@ -427,9 +549,15 @@ throw(  SAXException, RuntimeException )
                 }
 
                 m_bToolBarSeparatorStartFound = sal_True;
-                ToolBoxItemDescriptor* pItem = new ToolBoxItemDescriptor;
-                pItem->nItemType = TOOLBOXITEM_SEPARATOR;
-                m_aToolBoxItems.Insert( pItem, m_aToolBoxItems.Count() );
+
+                Sequence< PropertyValue > aToolbarItemProp( 2 );
+                aToolbarItemProp[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_COMMANDURL ));
+                aToolbarItemProp[1].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_TYPE ));
+
+                aToolbarItemProp[0].Value <<= rtl::OUString();
+                aToolbarItemProp[1].Value <<= drafts::com::sun::star::ui::ItemType::SEPARATOR_LINE;
+
+                m_rItemContainer->insertByIndex( m_rItemContainer->getCount(), makeAny( aToolbarItemProp ) );
             }
             break;
         }
@@ -560,10 +688,10 @@ throw(  SAXException, RuntimeException )
 //_________________________________________________________________________________________________________________
 
 OWriteToolBoxDocumentHandler::OWriteToolBoxDocumentHandler(
-    const ToolBoxDescriptor& aToolBoxItems,
-    Reference< XDocumentHandler > rWriteDocumentHandler ) :
+    const Reference< XIndexAccess >& rItemAccess,
+    Reference< XDocumentHandler >& rWriteDocumentHandler ) :
     ThreadHelpBase( &Application::GetSolarMutex() ),
-    m_aToolBoxItems( aToolBoxItems ),
+    m_rItemAccess( rItemAccess ),
     m_xWriteDocumentHandler( rWriteDocumentHandler )
 {
     m_xEmptyList        = Reference< XAttributeList >( (XAttributeList *)new AttributeListImpl, UNO_QUERY );
@@ -591,6 +719,20 @@ void OWriteToolBoxDocumentHandler::WriteToolBoxDocument() throw
         m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
     }
 
+    OUString aUIName;
+    Reference< XPropertySet > xPropSet( m_rItemAccess, UNO_QUERY );
+    if ( xPropSet.is() )
+    {
+        try
+        {
+            Any a = xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "UIName" )));
+            a >>= aUIName;
+        }
+        catch ( UnknownPropertyException& )
+        {
+        }
+    }
+
     AttributeListImpl* pList = new AttributeListImpl;
     Reference< XAttributeList > xList( (XAttributeList *) pList , UNO_QUERY );
 
@@ -602,40 +744,45 @@ void OWriteToolBoxDocumentHandler::WriteToolBoxDocument() throw
                          m_aAttributeType,
                          OUString( RTL_CONSTASCII_USTRINGPARAM( XMLNS_XLINK )) );
 
+    if ( aUIName.getLength() > 0 )
+        pList->addAttribute( m_aXMLToolbarNS + OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_UINAME )),
+                             m_aAttributeType,
+                             aUIName );
+
     m_xWriteDocumentHandler->startElement( OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_NS_TOOLBAR )), pList );
     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
 
-    for ( int i = 0; i < m_aToolBoxItems.Count(); i++ )
-    {
-        ToolBoxItemDescriptor* pItem = m_aToolBoxItems[i];
-        switch ( pItem->nItemType )
-        {
-            case TOOLBOXITEM_BUTTON:
-            {
-                WriteToolBoxItem( pItem );
-            }
-            break;
+    sal_Int32  nItemCount = m_rItemAccess->getCount();
+    Any        aAny;
 
-            case TOOLBOXITEM_SPACE:
+    for ( sal_Int32 nItemPos = 0; nItemPos < nItemCount; nItemPos++ )
+    {
+        Sequence< PropertyValue > aProps;
+        aAny = m_rItemAccess->getByIndex( nItemPos );
+        if ( aAny >>= aProps )
+        {
+            OUString    aCommandURL;
+            OUString    aLabel;
+            OUString    aHelpURL;
+            sal_Bool    bVisible( sal_True );
+            sal_Int16   nType( drafts::com::sun::star::ui::ItemType::DEFAULT );
+
+            ExtractToolbarParameters( aProps, aCommandURL, aLabel, aHelpURL, bVisible, nType );
+            if ( nType == drafts::com::sun::star::ui::ItemType::DEFAULT )
+            {
+                WriteToolBoxItem( aCommandURL, aLabel, aHelpURL, bVisible );
+            }
+            else if ( nType == drafts::com::sun::star::ui::ItemType::SEPARATOR_SPACE )
             {
                 WriteToolBoxSpace();
             }
-            break;
-
-            case TOOLBOXITEM_SEPARATOR:
+            else if ( nType == drafts::com::sun::star::ui::ItemType::SEPARATOR_LINE )
             {
                 WriteToolBoxSeparator();
             }
-            break;
-
-            case TOOLBOXITEM_BREAK:
+            else if ( nType == drafts::com::sun::star::ui::ItemType::SEPARATOR_LINEBREAK )
             {
                 WriteToolBoxBreak();
-            }
-            break;
-
-            default:
-            {
             }
         }
     }
@@ -650,8 +797,12 @@ void OWriteToolBoxDocumentHandler::WriteToolBoxDocument() throw
 //  protected member functions
 //_________________________________________________________________________________________________________________
 
-void OWriteToolBoxDocumentHandler::WriteToolBoxItem( const ToolBoxItemDescriptor* pItem ) throw
-( SAXException, RuntimeException )
+void OWriteToolBoxDocumentHandler::WriteToolBoxItem(
+    const OUString& rCommandURL,
+    const OUString& rLabel,
+    const OUString& rHelpURL,
+    sal_Bool        bVisible )
+throw ( SAXException, RuntimeException )
 {
     AttributeListImpl* pList = new AttributeListImpl;
     Reference< XAttributeList > xList( (XAttributeList *) pList , UNO_QUERY );
@@ -663,110 +814,27 @@ void OWriteToolBoxDocumentHandler::WriteToolBoxItem( const ToolBoxItemDescriptor
     }
 
     // save required attribute (URL)
-    pList->addAttribute( m_aAttributeURL, m_aAttributeType, pItem->aURL );
+    pList->addAttribute( m_aAttributeURL, m_aAttributeType, rCommandURL );
 
-    if ( pItem->aItemText.Len() > 0 )
+    if ( rLabel.getLength() > 0 )
     {
         pList->addAttribute( m_aXMLToolbarNS + OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_TEXT )),
                              m_aAttributeType,
-                             pItem->aItemText );
+                             rLabel );
     }
 
-    if ( pItem->aBitmapName.Len() > 0 )
-    {
-        pList->addAttribute( m_aXMLToolbarNS + OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_BITMAP )),
-                             m_aAttributeType,
-                             pItem->aBitmapName );
-    }
-
-    if ( pItem->nItemBits != 0 )
-    {
-        sal_Bool        bBlankNeeded = sal_False;
-        OUStringBuffer aItemStyleBuffer( 30 );
-
-        if ( pItem->nItemBits & TIB_RADIOCHECK )
-        {
-            aItemStyleBuffer.appendAscii( ATTRIBUTE_ITEMSTYLE_RADIO );
-            bBlankNeeded = sal_True;
-        }
-
-        if ( pItem->nItemBits & TIB_AUTOCHECK )
-        {
-            if ( bBlankNeeded )
-                aItemStyleBuffer.appendAscii( " " );
-            else
-                bBlankNeeded = sal_True;
-            aItemStyleBuffer.appendAscii( ATTRIBUTE_ITEMSTYLE_AUTO );
-        }
-
-        if ( pItem->nItemBits & TIB_LEFT )
-        {
-            if ( bBlankNeeded )
-                aItemStyleBuffer.appendAscii( " " );
-            else
-                bBlankNeeded = sal_True;
-            aItemStyleBuffer.appendAscii( ATTRIBUTE_ITEMSTYLE_LEFT );
-        }
-
-        if ( pItem->nItemBits & TIB_AUTOSIZE )
-        {
-            if ( bBlankNeeded )
-                aItemStyleBuffer.appendAscii( " " );
-            else
-                bBlankNeeded = sal_True;
-            aItemStyleBuffer.appendAscii( ATTRIBUTE_ITEMSTYLE_AUTOSIZE );
-        }
-
-        if ( pItem->nItemBits & TIB_DROPDOWN )
-        {
-            if ( bBlankNeeded )
-                aItemStyleBuffer.appendAscii( " " );
-            else
-                bBlankNeeded = sal_True;
-            aItemStyleBuffer.appendAscii( ATTRIBUTE_ITEMSTYLE_DROPDOWN );
-        }
-
-        if ( pItem->nItemBits & TIB_REPEAT )
-        {
-            if ( bBlankNeeded )
-                aItemStyleBuffer.appendAscii( " " );
-            else
-                bBlankNeeded = sal_True;
-            aItemStyleBuffer.appendAscii( ATTRIBUTE_ITEMSTYLE_REPEAT );
-        }
-
-        OUString aValue = aItemStyleBuffer.makeStringAndClear();
-        pList->addAttribute( m_aXMLToolbarNS + OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_ITEMSTYLE )),
-                             m_aAttributeType,
-                             aValue );
-    }
-
-    if ( pItem->nVisible == sal_False )
+    if ( bVisible == sal_False )
     {
         pList->addAttribute( m_aXMLToolbarNS + OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_VISIBLE )),
                              m_aAttributeType,
                              OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_BOOLEAN_FALSE )) );
     }
 
-    if ( pItem->nWidth > 0 )
-    {
-        pList->addAttribute( m_aXMLToolbarNS + OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_WIDTH )),
-                             m_aAttributeType,
-                             OUString::valueOf( (sal_Int32)pItem->nWidth ) );
-    }
-
-    if ( pItem->nUserDef != 0 )
-    {
-        pList->addAttribute( m_aXMLToolbarNS + OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_USER )),
-                             m_aAttributeType,
-                             OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_BOOLEAN_TRUE )) );
-    }
-
-    if ( pItem->aHelpId.Len() > 0 )
+    if ( rHelpURL.getLength() > 0 )
     {
         pList->addAttribute( m_aXMLToolbarNS + OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_HELPID )),
                              m_aAttributeType,
-                            pItem->aHelpId );
+                             rHelpURL );
     }
 
     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
