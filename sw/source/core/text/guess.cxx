@@ -2,9 +2,9 @@
  *
  *  $RCSfile: guess.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-20 16:27:07 $
+ *  last change: $Author: ama $ $Date: 2000-11-21 11:36:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -421,9 +421,19 @@ sal_Bool SwTxtGuess::Guess( const SwTxtFormatInfo &rInf, const KSHORT nPorHeight
                 xHyph = ::GetHyphenator();
                 aHyphOpt = LineBreakHyphenationOptions( xHyph, nHyphPos );
             }
+
+#ifdef ON_YOUR_OWN_RISK
+            ::rtl::OUString aForbidden( ::rtl::OUString::createFromAscii(".") );
+            LineBreakUserOptions aUserOpt( aForbidden, aForbidden, sal_True,
+                                           sal_True, sal_False );
+            LineBreakResults aResult = pBreakIt->xBreak->getLineBreak( rInf.GetTxt(),
+                nRightPos, pBreakIt->GetLocale( rInf.GetFont()->GetLanguage() ),
+                rInf.GetIdx(), aHyphOpt, aUserOpt );
+#else
             LineBreakResults aResult = pBreakIt->xBreak->getLineBreak( rInf.GetTxt(),
                 nRightPos, pBreakIt->GetLocale( rInf.GetFont()->GetLanguage() ),
                 rInf.GetIdx(), aHyphOpt, LineBreakUserOptions() );
+#endif
             nLeftPos = aResult.breakIndex;
             if( nLeftPos == STRING_LEN )
                 nLeftPos = 0;
@@ -439,6 +449,12 @@ sal_Bool SwTxtGuess::Guess( const SwTxtFormatInfo &rInf, const KSHORT nPorHeight
                 while( nX && IsDelim( rInf.GetChar( --nX ) ) )
                     nLeftPos = nX;
             }
+            if( nLeftPos > nRightPos )
+            {
+                SwPosSize aTmpSize = rInf.GetTxtSize( --nLeftPos, 1 );
+                ASSERT( !pHanging, "A hanging portion is hanging around" );
+                pHanging = new SwHangingPortion( aTmpSize );
+            }
         }
     }
 
@@ -449,7 +465,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtFormatInfo &rInf, const KSHORT nPorHeight
         nRightPos = GetNextEnd( rInf, nRightPos );
 
     nLeftWidth =
-    rInf.GetTxtSize( rInf.GetIdx(), nLeftPos - rInf.GetIdx() ).Width();
+        rInf.GetTxtSize( rInf.GetIdx(), nLeftPos - rInf.GetIdx() ).Width();
 
     bHyph = bHyph && ( nHyphPos > nLeftPos );
 
@@ -465,8 +481,11 @@ sal_Bool SwTxtGuess::Guess( const SwTxtFormatInfo &rInf, const KSHORT nPorHeight
         nLeftWidth =
             rInf.GetTxtSize( rInf.GetIdx(), nLeftPos - rInf.GetIdx() + 1 ).Width();
     }
+
     nLeftWidth += nItalic;
     nRightWidth = nLeftWidth;
+    if( pHanging )
+        --nLeftPos;
     return sal_False;
 }
 
