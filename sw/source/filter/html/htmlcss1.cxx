@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlcss1.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:54:07 $
+ *  last change: $Author: hr $ $Date: 2004-03-12 12:27:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,7 +195,8 @@ void SwCSS1Parser::ChgPageDesc( const SwPageDesc *pPageDesc,
                                 const SwPageDesc& rNewPageDesc )
 {
     USHORT nPageDescs = pDoc->GetPageDescCnt();
-    for( USHORT i=0; i<nPageDescs; i++ )
+    USHORT i;
+    for( i=0; i<nPageDescs; i++ )
         if( pPageDesc == &(pDoc->GetPageDesc(i)) )
         {
             pDoc->ChgPageDesc( i, rNewPageDesc );
