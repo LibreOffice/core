@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryTextView.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-08 08:41:35 $
+ *  last change: $Author: oj $ $Date: 2001-08-15 13:13:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,8 @@ namespace dbaui
         void initialize(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _xFrame);
         OQueryViewSwitch* getView() { return m_pView; }
         void switchView();
+
+        virtual void GetFocus();
     };
     // end of temp classes
 
@@ -126,6 +128,8 @@ namespace dbaui
     public:
         OQueryTextView(Window* pParent,ToolBox* _pToolBox);
         virtual ~OQueryTextView();
+
+        virtual void GetFocus();
 
         virtual sal_Bool isCutAllowed();
         virtual sal_Bool isPasteAllowed();

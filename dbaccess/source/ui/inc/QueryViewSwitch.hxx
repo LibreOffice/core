@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryViewSwitch.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-18 13:19:01 $
+ *  last change: $Author: oj $ $Date: 2001-08-15 13:13:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,7 @@ namespace dbaui
         void zoomTableView(const Fraction& _rFraction);
         void SaveUIConfig();
         void clearDesignView();
+        void GetFocus();
 
         OQueryDesignView*   getRealView() const { return m_pDesignView; }
 
