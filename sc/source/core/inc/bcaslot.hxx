@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bcaslot.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2002-11-27 21:12:54 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:30:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,11 @@
 #ifndef _SC_BCASLOT_HXX
 #define _SC_BCASLOT_HXX
 
-#ifndef _SFXBRDCST_HXX //autogen
-#include <svtools/brdcst.hxx>
+#include <set>
+#include <functional>
+
+#ifndef _SVT_BROADCAST_HXX
+#include <svtools/broadcast.hxx>
 #endif
 #ifndef _SVARRAY_HXX //autogen
 #include <svtools/svarray.hxx>
@@ -72,70 +75,79 @@
 #include "global.hxx"
 #include "brdcst.hxx"
 
-class ScBroadcastArea;
-class ScBroadcastAreaList;
-
-#define BCA_INITGROWSIZE 16
-typedef ScBroadcastArea* ScBroadcastAreaPtr;
-SV_DECL_PTRARR_SORT( ScBroadcastAreas, ScBroadcastAreaPtr,
-    BCA_INITGROWSIZE, BCA_INITGROWSIZE );
-
-// wird in einem nach Objekten sortierten SV_PTRARR_SORT benutzt
-class ScBroadcastArea : public ScRange, public SfxBroadcaster
+/// Used in a Unique Sorted Associative Container
+class ScBroadcastArea
 {
 private:
     ScBroadcastArea*    pUpdateChainNext;
-    USHORT              nRefCount;
+    SvtBroadcaster      aBroadcaster;
+    ScRange             aRange;
+    ULONG               nRefCount;
     BOOL                bInUpdateChain;
 
 public:
             ScBroadcastArea( const ScRange& rRange )
-                : ScRange( rRange ), SfxBroadcaster(), pUpdateChainNext( NULL ),
+                : pUpdateChainNext( NULL ), aRange( rRange ),
                 nRefCount( 0 ), bInUpdateChain( FALSE ) {}
+    inline SvtBroadcaster&       GetBroadcaster()       { return aBroadcaster; }
+    inline const SvtBroadcaster& GetBroadcaster() const { return aBroadcaster; }
     inline void         UpdateRange( const ScRange& rNewRange )
-            { aStart = rNewRange.aStart; aEnd = rNewRange.aEnd; }
-    inline ScAddress    GetStart() const { return aStart; }
-    inline ScAddress    GetEnd() const { return aEnd; }
+                            { aRange = rNewRange; }
+    inline const ScRange&   GetRange() const { return aRange; }
+    inline const ScAddress& GetStart() const { return aRange.aStart; }
+    inline const ScAddress& GetEnd() const { return aRange.aEnd; }
     inline void         IncRef() { ++nRefCount; }
-    inline USHORT       DecRef() { return --nRefCount; }
+    inline ULONG        DecRef() { return --nRefCount; }
     inline ScBroadcastArea* GetUpdateChainNext() const { return pUpdateChainNext; }
     inline void         SetUpdateChainNext( ScBroadcastArea* p ) { pUpdateChainNext = p; }
     inline BOOL         IsInUpdateChain() const { return bInUpdateChain; }
     inline void         SetInUpdateChain( BOOL b ) { bInUpdateChain = b; }
 
-            // zur Sortierung wird die linke obere Ecke herangezogen,
-            // ist diese gleich, zaehlt auch die rechte untere Ecke
-    BOOL    operator < ( const ScBroadcastArea& rArea ) const
-                { return aStart < rArea.aStart ||
-                    (aStart == rArea.aStart && aEnd < rArea.aEnd) ; }
-    BOOL    operator ==( const ScBroadcastArea& rArea ) const
-                { return aStart == rArea.aStart && aEnd == rArea.aEnd; }
+    /** Strict weak sorting order, upper left corner and then lower right */
+    inline  bool        operator<( const ScBroadcastArea& rArea ) const;
 };
+
+inline bool ScBroadcastArea::operator<( const ScBroadcastArea& rArea ) const
+{
+    return aRange < rArea.aRange;
+}
+
+
+struct ScBroadcastAreaSort
+{
+    bool operator()( const ScBroadcastArea* p1, const ScBroadcastArea* p2) const
+    {
+        return *p1 < *p2;
+    }
+};
+
+typedef ::std::set< ScBroadcastArea*, ScBroadcastAreaSort > ScBroadcastAreas;
+
+
 class ScBroadcastAreaSlotMachine;
 
-// Sammlung von BroadcastAreas
+/// Collection of BroadcastAreas
 class ScBroadcastAreaSlot
 {
 private:
-    ScBroadcastAreas*   pBroadcastAreaTbl;
-    ScBroadcastArea*    pTmpSeekBroadcastArea;          // fuer Seek_Entry
+    ScBroadcastAreas    aBroadcastAreaTbl;
+    mutable ScBroadcastArea aTmpSeekBroadcastArea;      // for FindBroadcastArea()
     ScDocument*         pDoc;
     ScBroadcastAreaSlotMachine* pBASM;
 
-    USHORT              FindBroadcastArea( const ScRange& rRange ) const;
-    ScBroadcastArea*    GetBroadcastArea( const ScRange& rRange ) const;
+    ScBroadcastAreas::iterator  FindBroadcastArea( const ScRange& rRange ) const;
 
 public:
                         ScBroadcastAreaSlot( ScDocument* pDoc,
                                         ScBroadcastAreaSlotMachine* pBASM );
                         ~ScBroadcastAreaSlot();
     const ScBroadcastAreas& GetBroadcastAreas() const
-                                            { return *pBroadcastAreaTbl; }
+                                            { return aBroadcastAreaTbl; }
     void                StartListeningArea( const ScRange& rRange,
-                                            SfxListener* pListener,
+                                            SvtListener* pListener,
                                             ScBroadcastArea*& rpArea );
     void                EndListeningArea( const ScRange& rRange,
-                                            SfxListener* pListener,
+                                            SvtListener* pListener,
                                             ScBroadcastArea*& rpArea );
     BOOL                AreaBroadcast( const ScHint& rHint ) const;
         // return: mindestens ein Broadcast gewesen
@@ -144,7 +156,7 @@ public:
     void                DelBroadcastAreasInRange( const ScRange& rRange );
     void                UpdateRemove( UpdateRefMode eUpdateRefMode,
                                         const ScRange& rRange,
-                                        short nDx, short nDy, short nDz );
+                                        SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
     void                UpdateInsert( ScBroadcastArea* pArea );
 };
 
@@ -163,30 +175,30 @@ class  ScBroadcastAreaSlotMachine
 {
 private:
     ScBroadcastAreaSlot**   ppSlots;
+    SvtBroadcaster*     pBCAlways;      // for the RC_ALWAYS special range
     ScDocument*         pDoc;
-    ScBroadcastAreaList*    pBCAlwaysList;  // fuer den RC_ALWAYS Spezialbereich
     ScBroadcastArea*    pUpdateChain;
     ScBroadcastArea*    pEOUpdateChain;
 
-    inline USHORT       ComputeSlotOffset( const ScAddress& rAddress ) const;
+    inline SCSIZE       ComputeSlotOffset( const ScAddress& rAddress ) const;
     void                ComputeAreaPoints( const ScRange& rRange,
-                                            USHORT& nStart, USHORT& nEnd,
-                                            USHORT& nRowBreak ) const;
+                                            SCSIZE& nStart, SCSIZE& nEnd,
+                                            SCSIZE& nRowBreak ) const;
 
 public:
                         ScBroadcastAreaSlotMachine( ScDocument* pDoc );
                         ~ScBroadcastAreaSlotMachine();
     void                StartListeningArea( const ScRange& rRange,
-                                            SfxListener* pListener );
+                                            SvtListener* pListener );
     void                EndListeningArea( const ScRange& rRange,
-                                            SfxListener* pListener );
+                                            SvtListener* pListener );
     BOOL                AreaBroadcast( const ScHint& rHint ) const;
         // return: mindestens ein Broadcast gewesen
     BOOL                AreaBroadcastInRange( const ScRange& rRange, const ScHint& rHint ) const;
     void                DelBroadcastAreasInRange( const ScRange& rRange );
     void                UpdateBroadcastAreas( UpdateRefMode eUpdateRefMode,
                                             const ScRange& rRange,
-                                            short nDx, short nDy, short nDz );
+                                            SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
     inline ScBroadcastArea* GetUpdateChain() const { return pUpdateChain; }
     inline void SetUpdateChain( ScBroadcastArea* p ) { pUpdateChain = p; }
     inline ScBroadcastArea* GetEOUpdateChain() const { return pEOUpdateChain; }
