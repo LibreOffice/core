@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: cmc $ $Date: 2001-10-18 10:11:13 $
+ *  last change: $Author: cmc $ $Date: 2001-10-18 14:41:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3622,11 +3622,15 @@ void SwWW8ImplReader::Read_FontCode( USHORT nId, const BYTE* pData, short nLen )
     {                               // (siehe sprmCSymbol) gesetzte Font !
         switch( nId )
         {
-        case 93:
         case 0x4a51:
-        case 0x4a4f:    nId = RES_CHRATR_FONT;      break;
-        case 0x4a50:    nId = RES_CHRATR_CJK_FONT;  break;
 //          nId = RES_CHRATR_CTL_FONT;  break;
+        case 93:
+        case 0x4a4f:
+            nId = RES_CHRATR_FONT;
+            break;
+        case 0x4a50:
+            nId = RES_CHRATR_CJK_FONT;
+            break;
         default:
             return ;
         }

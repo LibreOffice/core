@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: os $ $Date: 2001-09-28 08:14:50 $
+ *  last change: $Author: cmc $ $Date: 2001-10-18 14:41:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -700,7 +700,13 @@ static Writer& OutWW8_SwFont( Writer& rWrt, const SfxPoolItem& rHt )
 
     if( rWrtWW8.bWrtWW8 )
     {
-        // what about sprmCIdctHint (286F) ??
+#if 0
+        if (nIdPreferred = RES_CHRATR_FONT)
+        {
+            rWrtWW8.InsUInt16( 0x286f );
+            rWrtWW8.pO->Insert( 0, rWrtWW8.pO->Count() );
+        }
+#endif
         rWrtWW8.InsUInt16( 0x4a4f );
         rWrtWW8.InsUInt16( nFontID );
         rWrtWW8.InsUInt16( 0x4a51 );
@@ -716,8 +722,13 @@ static Writer& OutWW8_SwCJKFont( Writer& rWrt, const SfxPoolItem& rHt )
     SwWW8Writer& rWrtWW8 = (SwWW8Writer&)rWrt;
     if( rWrtWW8.bWrtWW8 )
     {
-        rWrtWW8.InsUInt16( 0x286f );
-        rWrtWW8.pO->Insert( 1, rWrtWW8.pO->Count() );
+#if 0
+        if (nIdPreferred = RES_CHRATR_CJK_FONT)
+        {
+            rWrtWW8.InsUInt16( 0x286f );
+            rWrtWW8.pO->Insert( 1, rWrtWW8.pO->Count() );
+        }
+#endif
         rWrtWW8.InsUInt16( 0x4a50 );
         rWrtWW8.InsUInt16( rWrtWW8.GetId( (const SvxFontItem&)rHt ) );
     }
