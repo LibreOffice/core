@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impop.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:52:15 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:23:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1451,6 +1451,9 @@ void ImportExcel::Window2_5( void )
         pD->SetViewOptions( aOpts );
         GetTracer().TraceInvisibleGrid(TRUEBOOL( nOpt & EXC_WIN2_SHOWGRID ));
     }
+
+    // #106948# RTL layout
+    GetDoc().SetLayoutRTL( GetScTab(), ::get_flag( nOpt, EXC_WIN2_MIRRORED ) );
 }
 
 
