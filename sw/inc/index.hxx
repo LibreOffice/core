@@ -2,9 +2,9 @@
  *
  *  $RCSfile: index.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-09-28 07:07:05 $
+ *  last change: $Author: rt $ $Date: 2004-06-11 08:53:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,7 +168,7 @@ class SwIndexReg
 
 protected:
     virtual void Update( const SwIndex & aPos, xub_StrLen nLen,
-                        BOOL bNegativ = FALSE );
+                         BOOL bNegativ = FALSE, BOOL bDelete = FALSE );
 
     void ChkArr();
 
