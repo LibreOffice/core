@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodechangeimpl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jb $ $Date: 2001-07-05 17:05:51 $
+ *  last change: $Author: hr $ $Date: 2001-09-27 18:51:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -365,7 +365,8 @@ void ValueChangeImpl::doApply( Node& rTarget)
     OSL_ENSURE(aValueTarget.isValid(), "ERROR: Configuration: Target missing: could not find the changing value");
 
     doApplyChange(aValueTarget);
-    postCheckValue(aValueTarget.getNode(), m_aNewValue); // Sideeffect: m_aNewValue will be changed
+    configmgr::configuration::ValueMemberNode aNode(aValueTarget.getNode());
+    postCheckValue(aNode, m_aNewValue); // Sideeffect: m_aNewValue will be changed
 }
 //-----------------------------------------------------------------------------
 
