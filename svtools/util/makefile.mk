@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.3 $
+#*  $Revision: 1.4 $
 #*
-#*  last change: $Author: mh $ $Date: 2000-10-24 07:45:24 $
+#*  last change: $Author: jp $ $Date: 2000-10-26 11:36:30 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -93,7 +93,6 @@ LIB2OBJFILES= $(OBJ)$/filearch.obj
 LIB3TARGET= $(LB)$/svtool.lib
 LIB3FILES=	$(LB)$/_svt.lib
 LIB3OBJFILES=\
-    $(OBJ)$/wordsel2.obj	\
     $(OBJ)$/rtfkey2.obj
 .ENDIF
 

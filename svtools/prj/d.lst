@@ -17,7 +17,6 @@ mkdir: %_DEST%\inc%_EXT%\svtools
 ..\%__SRC%\lib\svdde.lib %_DEST%\lib%_EXT%\svdde.lib
 ..\%__SRC%\lib\svtool.lib %_DEST%\lib%_EXT%\svtool.lib
 ..\%__SRC%\slb\svt.lib %_DEST%\lib%_EXT%\xsvtool.lib
-..\%__SRC%\obj\wordsel2.obj %_DEST%\lib%_EXT%\xword2.obj
 ..\%__SRC%\lib\filearch.lib %_DEST%\lib%_EXT%\filearch.lib
 ..\%__SRC%\bin\dllver.exe %_DEST%\bin%_EXT%\dllver.exe
 ..\%__SRC%\bin\dllver %_DEST%\bin%_EXT%\dllver
@@ -163,7 +162,6 @@ hedabu: ..\inc\sbxobj.hxx %_DEST%\inc%_EXT%\svtools\sbxobj.hxx
 hedabu: ..\inc\sbxprop.hxx %_DEST%\inc%_EXT%\svtools\sbxprop.hxx
 hedabu: ..\inc\sbxvar.hxx %_DEST%\inc%_EXT%\svtools\sbxvar.hxx
 hedabu: ..\source\search\levdis.hxx %_DEST%\inc%_EXT%\svtools\levdis.hxx
-hedabu: ..\source\search\wordsel.hxx %_DEST%\inc%_EXT%\svtools\wordsel.hxx
 hedabu: ..\inc\txtcmp.hxx %_DEST%\inc%_EXT%\svtools\txtcmp.hxx
 hedabu: ..\inc\urlbmk.hxx %_DEST%\inc%_EXT%\svtools\urlbmk.hxx
 hedabu: ..\source\urlobj\inetimg.hxx %_DEST%\inc%_EXT%\svtools\inetimg.hxx
