@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _GraphicObjectShape.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-09-08 10:28:40 $
+ *  last change:$Date: 2004-11-02 11:54:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,10 @@ import lib.MultiPropertyTest;
 
 import com.sun.star.awt.XBitmap;
 import com.sun.star.container.XIndexContainer;
+import com.sun.star.uno.Any;
+import com.sun.star.uno.Type;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
 
 /**
 * Testing <code>com.sun.star.drawing.GraphicObjectShape</code>
@@ -120,7 +124,7 @@ public class _GraphicObjectShape extends MultiPropertyTest {
         }
     } ;
 
-    public XIndexContainer set = null;
+    public Any set = null;
 
     /**
      * Property tester which returns new <code>XIndexAccess</code> object.
@@ -161,12 +165,26 @@ public class _GraphicObjectShape extends MultiPropertyTest {
             return;
         }
         try {
-            Object imap = tEnv.getObjRelation("IMAP");
-            XIndexContainer get = (XIndexContainer)
-                oObj.getPropertyValue("ImageMap");
-            set = get;
-            set.insertByIndex(0,imap);
-            testProperty("ImageMap", ImapTester) ;
+            boolean result = true;
+            Object imapObject = tEnv.getObjRelation("ImapObject");
+
+            Object o = oObj.getPropertyValue("ImageMap");
+            XIndexContainer xIndexContainer = (XIndexContainer)UnoRuntime.queryInterface(XIndexContainer.class, o);
+            util.dbg.printInterfaces(xIndexContainer);
+            int elementCountFirst = xIndexContainer.getCount();
+            xIndexContainer.insertByIndex(elementCountFirst, imapObject);
+
+            // this does not really change the property: the implementation
+            // behind "ImageMap" stays the same, but for a real change a C++
+            // implementation is needed. See css.lang.XUnoTunnel
+            oObj.setPropertyValue("ImageMap", xIndexContainer);
+            Object newObject = oObj.getPropertyValue("ImageMap");
+            xIndexContainer = (XIndexContainer)UnoRuntime.queryInterface(XIndexContainer.class, newObject);
+
+            int elementCountSecond = xIndexContainer.getCount();
+            result = (elementCountFirst + 1 == elementCountSecond);
+
+            tRes.tested("ImageMap", result);
         } catch (com.sun.star.beans.UnknownPropertyException e) {
             log.println("Exception while checking 'ImageMap'");
             e.printStackTrace(log);
@@ -175,14 +193,13 @@ public class _GraphicObjectShape extends MultiPropertyTest {
             log.println("Exception while checking 'ImageMap'");
             e.printStackTrace(log);
             tRes.tested("ImageMap",false);
-        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            log.println("Exception while checking 'ImageMap'");
-            e.printStackTrace(log);
-            tRes.tested("ImageMap",false);
         } catch (com.sun.star.lang.IllegalArgumentException e) {
             log.println("Exception while checking 'ImageMap'");
             e.printStackTrace(log);
             tRes.tested("ImageMap",false);
+        }
+        catch(Exception e) {
+            e.printStackTrace(log);
         }
     }
 
