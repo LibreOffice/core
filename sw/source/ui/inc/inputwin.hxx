@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputwin.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-11 09:18:10 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 09:22:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,7 @@ protected:
     virtual void    Resize();
     virtual void    Click();
     DECL_LINK( MenuHdl, Menu * );
+    DECL_LINK( DropdownClickHdl, ToolBox* );
     void            ApplyFormula();
     void            CancelFormula();
 public:
