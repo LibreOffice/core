@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iahndl.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: mav $ $Date: 2002-09-25 10:45:00 $
+ *  last change: $Author: mav $ $Date: 2002-10-25 09:04:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,6 +159,9 @@
 #endif
 #ifndef _COM_SUN_STAR_UCB_INTERACTIVEAPPEXCEPTION_HPP_
 #include "com/sun/star/ucb/InteractiveAppException.hpp"
+#endif
+#ifndef _COM_SUN_STAR_UCB_NAMECLASHEXCEPTION_HPP_
+#include "com/sun/star/ucb/NameClashException.hpp"
 #endif
 #ifndef _COM_SUN_STAR_UCB_XINTERACTIONCOOKIEHANDLING_HPP_
 #include "com/sun/star/ucb/XInteractionCookieHandling.hpp"
@@ -572,6 +575,26 @@ UUIInteractionHandler::handle(
         {
             handleFilterOptionsRequest(aFilterOptionsRequest,
                                        rRequest->getContinuations());
+            return;
+        }
+
+        star::ucb::NameClashException aNCException;
+        if (aAnyRequest >>= aNCException)
+        {
+            ErrCode nErrorCode = ERRCODE_UUI_IO_TARGETALREADYEXISTS;
+            std::vector< rtl::OUString > aArguments;
+
+            if( aNCException.Name.getLength() )
+            {
+                nErrorCode = ERRCODE_UUI_IO_ALREADYEXISTS;
+                aArguments.push_back( aNCException.Name );
+            }
+
+            handleErrorRequest( aNCException.Classification,
+                                nErrorCode,
+                                aArguments,
+                                rRequest->getContinuations());
+
             return;
         }
 
