@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.hrc,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-26 11:40:21 $
+ *  last change: $Author: fs $ $Date: 2001-05-10 13:37:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,7 @@
 #define FT_TABLESUBSCRIPTION    14
 #define FT_SPECIAL_MESSAGE      15
 #define FT_LOGINTIMEOUT         16
+#define FT_FILTER_EXPLANATION   17
 
 #define LB_DATATYPE             1
 #define LB_DATASOURCES          2
@@ -99,15 +100,11 @@
 #define PB_INDICIES             2
 #define PB_ADDALLTABLES         3
 #define PB_NEW_DATASOURCE       4
-#define PB_NEWQUERY             5
-#define PB_EDITQUERY            6
-#define PB_DELETEQUERY          7
-#define PB_CREATEDATABASE       8
+#define PB_CREATEDATABASE       5
 
 #define GB_CONNECTION           1
 #define GB_DBASE_MAIN           2
 #define GB_TABLESUBSCRIPTION    3
-#define GB_COLLECTION           4
 
 #define CB_PASSWORD_REQUIRED    1
 #define CB_SHOWDELETEDROWS      2
@@ -117,6 +114,7 @@
 
 #define FL_SEPARATOR1           1
 #define FL_SEPARATOR2           2
+#define FL_COLLECTION           3
 
 #define CM_FIELDSEPARATOR       1
 #define CM_TEXTSEPARATOR        2
@@ -168,6 +166,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.14  2001/04/26 11:40:21  fs
+ *  file is alive, again - added support for data source associated bookmarks
+ *
  *  Revision 1.13  2001/04/20 13:38:06  oj
  *  #85736# new checkbox for odbc
  *
