@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfiltertabpagexslt.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 15:27:59 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 11:19:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,8 +86,8 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
     HelpId                  = HID_XML_FILTER_TABPAGE_XSLT;
     Hide                    = TRUE;
     Size                    = MAP_APPFONT ( TAB_PAGE_WIDTH , TAB_PAGE_HEIGHT );
-    Text                    = "Transformation" ;
-    Text [ English_us ]     = "Transformation";
+    Text [ de ] = "Transformation" ;
+    Text [ en-US ]      = "Transformation";
 
     // DocType --------------------------------------------------------
 
@@ -95,34 +95,8 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
     {
         Pos                 = MAP_APPFONT ( FIRST_ROW_X , FIRST_ROW_Y + 0 * ROW_HEIGHT + 0 * SPACING + FIXED_TEXT_OFFSET ) ;
         Size                = MAP_APPFONT ( FIRST_ROW_WIDTH , 8 ) ;
-        Text                = "DocType";
-        Text [english_us]   = "DocType";
-        Text[ french ] = "DocType";
-        Text[ spanish ] = "DocType";
-        Text[ italian ] = "DocType";
-        Text[ swedish ] = "DocType";
-        Text[ japanese ] = "DocType";
-        Text[ korean ] = "DocType";
-        Text[ chinese_simplified ] = "文件类型";
-        Text[ chinese_traditional ] = "檔案類型";
-        Text[ slovak ] = "Doc typ";
-        Text[ portuguese_brazilian ] = "DocType";
-        Text[ greek ] = "DocType";
-        Text[ dutch ] = "DocType";
-        Text[ finnish ] = "DocType";
-        Text[ czech ] = "DocType";
-        Text[ danish ] = "DocType";
-        Text[ arabic ] = "DocType";
-        Text[ hebrew ] = "DocType";
-        Text[ catalan ] = "DocType";
-        Text[ hindi ] = "DocType";
-        Text[ portuguese ] = "DocType";
-        Text[ russian ] = "DocType";
-        Text[ polish ] = "DocType";
-        Text[ turkish ] = "DocType";
-        Text[ thai ] = "DocType";
-        Text[ hungarian ] = "DocType   ";
-        Text[ slovenian ] = "VrstaDok";
+        Text [ de ] = "DocType";
+        Text [ en-US ]  = "DocType";
     };
 
     Edit ED_XML_DOCTYPE
@@ -139,34 +113,8 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
     {
         Pos                 = MAP_APPFONT ( FIRST_ROW_X , FIRST_ROW_Y + 1 * ROW_HEIGHT + 1 * SPACING + FIXED_TEXT_OFFSET ) ;
         Size                = MAP_APPFONT ( FIRST_ROW_WIDTH , 8 ) ;
-        Text                = "DTD";
-        Text [english_us]   = "DTD";
-        Text[ french ] = "DTD";
-        Text[ spanish ] = "DTD";
-        Text[ italian ] = "DTD";
-        Text[ swedish ] = "DTD";
-        Text[ japanese ] = "DTD";
-        Text[ korean ] = "DTD";
-        Text[ chinese_simplified ] = "DTD";
-        Text[ chinese_traditional ] = "DTD";
-        Text[ slovak ] = "DTD";
-        Text[ portuguese_brazilian ] = "DTD";
-        Text[ greek ] = "DTD";
-        Text[ dutch ] = "DTD";
-        Text[ finnish ] = "DTD";
-        Text[ czech ] = "DTD";
-        Text[ danish ] = "DTD";
-        Text[ arabic ] = "DTD";
-        Text[ hebrew ] = "DTD";
-        Text[ catalan ] = "DTD";
-        Text[ hindi ] = "DTD";
-        Text[ portuguese ] = "DTD";
-        Text[ russian ] = "DTD";
-        Text[ polish ] = "DTD";
-        Text[ turkish ] = "DTD";
-        Text[ thai ] = "DTD";
-        Text[ hungarian ] = "DTD";
-        Text[ slovenian ] = "DTD";
+        Text [ de ] = "DTD";
+        Text [ en-US ]  = "DTD";
     };
 
     ComboBox ED_XML_DTD_SCHEMA
@@ -183,34 +131,8 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
         Pos                 = MAP_APPFONT ( SECOND_ROW_X + SECOND_ROW_WIDTH - BROWSE_WIDTH , FIRST_ROW_Y + 1 * ROW_HEIGHT + 1 * SPACING ) ;
         Size                = MAP_APPFONT ( BROWSE_WIDTH , 12 ) ;
         HelpId              = HID_XML_FILTER_DTD_BROWSE;
-        Text                = "Ausw�hlen...";
-        Text [english_us]   = "Browse...";
-        Text[ french ] = "Parcourir...";
-        Text[ spanish ] = "Buscar...";
-        Text[ italian ] = "Sfoglia...";
-        Text[ swedish ] = "Genoms�k...";
-        Text[ japanese ] = "検索...";
-        Text[ korean ] = "찾아보기...";
-        Text[ chinese_simplified ] = "浏览...";
-        Text[ chinese_traditional ] = "瀏覽...";
-        Text[ portuguese ] = "Pesquisar...";
-        Text[ russian ] = "�����...";
-        Text[ greek ] = "���������...";
-        Text[ dutch ] = "Bladeren...";
-        Text[ finnish ] = "Selaa";
-        Text[ czech ] = "Procházet...";
-        Text[ danish ] = "Gennemse...";
-        Text[ polish ] = "Przegl�daj...";
-        Text[ portuguese_brazilian ] = "Navegar...";
-        Text[ turkish ] = "Tara...";
-        Text[ arabic ] = "�������...";
-        Text[ hebrew ] = "‮דפדוף...‬";
-        Text[ catalan ] = "Navega...";
-        Text[ thai ] = "เรียกดู...";
-        Text[ slovak ] = "Prehliadať...";
-        Text[ hindi ] = "ब्रउज़...";
-        Text[ hungarian ] = "Tallózás...";
-        Text[ slovenian ] = "Prebrskaj...";
+        Text [ de ] = "Ausw�hlen...";
+        Text [ en-US ]  = "Browse...";
     };
 
     // Export XSLT ----------------------------------------------------
@@ -219,34 +141,8 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
     {
         Pos                 = MAP_APPFONT ( FIRST_ROW_X , FIRST_ROW_Y + 2 * ROW_HEIGHT + 2 * SPACING + FIXED_TEXT_OFFSET ) ;
         Size                = MAP_APPFONT ( FIRST_ROW_WIDTH, 8 ) ;
-        Text                = "Export-XSLT";
-        Text[ english_us ]  = "XSLT for export";
-        Text[ french ] = "XSLT pour export";
-        Text[ spanish ] = "XSLT para exportaci�n";
-        Text[ italian ] = "XSLT per esportazione";
-        Text[ swedish ] = "XSLT f�r export";
-        Text[ japanese ] = "エクスポート用 XSLT";
-        Text[ korean ] = "내보내기용 XSLT";
-        Text[ chinese_simplified ] = "用于输出的 XSLT";
-        Text[ chinese_traditional ] = "用於匯出的 XSLT";
-        Text[ slovak ] = "XSLT pre export";
-        Text[ portuguese_brazilian ] = "XSLT para exportar";
-        Text[ greek ] = "XSLT ��� ��� �������";
-        Text[ dutch ] = "XSLT voor exporteren";
-        Text[ finnish ] = "XSLT for export";
-        Text[ czech ] = "XSLT pro export";
-        Text[ danish ] = "XSLT til eksportering";
-        Text[ arabic ] = "XSLT for export";
-        Text[ hebrew ] = "XSLT for export";
-        Text[ catalan ] = "XSLT for export";
-        Text[ hindi ] = "XSLT for export";
-        Text[ portuguese ] = "XSLT for export";
-        Text[ russian ] = "XSLT for export";
-        Text[ polish ] = "XSLT for export";
-        Text[ turkish ] = "XSLT for export";
-        Text[ thai ] = "XSLT for export";
-        Text[ hungarian ] = "Exportáló XSLT";
-        Text[ slovenian ] = "XSLT za izvoz";
+        Text [ de ] = "Export-XSLT";
+        Text [ en-US ]  = "XSLT for export";
     };
 
     ComboBox ED_XML_EXPORT_XSLT
@@ -262,34 +158,8 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
         Pos                 = MAP_APPFONT ( SECOND_ROW_X + SECOND_ROW_WIDTH - BROWSE_WIDTH , FIRST_ROW_Y + 2 * ROW_HEIGHT + 2 * SPACING ) ;
         Size                = MAP_APPFONT ( BROWSE_WIDTH , 12 ) ;
         HelpId              = HID_XML_FILTER_EXPORT_XSLT_BROWSE;
-        Text                = "Ausw�hlen...";
-        Text [english_us]   = "Browse...";
-        Text[ french ] = "Parcourir...";
-        Text[ spanish ] = "Buscar...";
-        Text[ italian ] = "Sfoglia...";
-        Text[ swedish ] = "Genoms�k...";
-        Text[ japanese ] = "検索...";
-        Text[ korean ] = "찾아보기...";
-        Text[ chinese_simplified ] = "浏览...";
-        Text[ chinese_traditional ] = "瀏覽...";
-        Text[ portuguese ] = "Pesquisar...";
-        Text[ russian ] = "�����...";
-        Text[ greek ] = "���������...";
-        Text[ dutch ] = "Bladeren...";
-        Text[ finnish ] = "Selaa";
-        Text[ czech ] = "Procházet...";
-        Text[ danish ] = "Gennemse...";
-        Text[ polish ] = "Przegl�daj...";
-        Text[ portuguese_brazilian ] = "Navegar...";
-        Text[ turkish ] = "Tara...";
-        Text[ arabic ] = "�������...";
-        Text[ hebrew ] = "‮דפדוף...‬";
-        Text[ catalan ] = "Navega...";
-        Text[ thai ] = "เรียกดู...";
-        Text[ slovak ] = "Prehliadať...";
-        Text[ hindi ] = "ब्रउज़...";
-        Text[ hungarian ] = "Tallózás...";
-        Text[ slovenian ] = "Prebrskaj...";
+        Text [ de ] = "Ausw�hlen...";
+        Text [ en-US ]  = "Browse...";
     };
 
     // Import XSLT ----------------------------------------------------
@@ -298,34 +168,8 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
     {
         Pos                 = MAP_APPFONT ( FIRST_ROW_X , FIRST_ROW_Y + 3 * ROW_HEIGHT + 3 * SPACING + FIXED_TEXT_OFFSET ) ;
         Size                = MAP_APPFONT ( FIRST_ROW_WIDTH , 8 ) ;
-        Text                = "Import-XSLT";
-        Text[ english_us ]  = "XSLT for import";
-        Text[ french ] = "XSLT pour import";
-        Text[ spanish ] = "XSLT para importaci�n";
-        Text[ italian ] = "XSLT per importazione";
-        Text[ swedish ] = "XSLT f�r import";
-        Text[ japanese ] = "インポート用 XSLT";
-        Text[ korean ] = "가져오기용 XSLT";
-        Text[ chinese_simplified ] = "用于输入的 XSLT";
-        Text[ chinese_traditional ] = "用於匯入的 XSLT";
-        Text[ slovak ] = "XSLT pre import";
-        Text[ portuguese_brazilian ] = "XSLT para importar";
-        Text[ greek ] = "XSLT for import";
-        Text[ dutch ] = "XSLT voor importeren";
-        Text[ finnish ] = "XSLT for import";
-        Text[ czech ] = "XSLT pro import";
-        Text[ danish ] = "XSLT til importering";
-        Text[ arabic ] = "XSLT for import";
-        Text[ hebrew ] = "XSLT for import";
-        Text[ catalan ] = "XSLT for import";
-        Text[ hindi ] = "XSLT for import";
-        Text[ portuguese ] = "XSLT for import";
-        Text[ russian ] = "XSLT for import";
-        Text[ polish ] = "XSLT for import";
-        Text[ turkish ] = "XSLT for import";
-        Text[ thai ] = "XSLT for import";
-        Text[ hungarian ] = "Importáló XSLT";
-        Text[ slovenian ] = "XSLT za uvoz";
+        Text [ de ] = "Import-XSLT";
+        Text [ en-US ]  = "XSLT for import";
     };
 
     ComboBox ED_XML_IMPORT_XSLT
@@ -341,34 +185,8 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
         Pos                 = MAP_APPFONT ( SECOND_ROW_X + SECOND_ROW_WIDTH - BROWSE_WIDTH , FIRST_ROW_Y + 3 * ROW_HEIGHT + 3 * SPACING ) ;
         Size                = MAP_APPFONT ( BROWSE_WIDTH , 12 ) ;
         HelpId              = HID_XML_FILTER_IMPORT_XSLT_BROWSE;
-        Text                = "Ausw�hlen...";
-        Text [english_us]   = "Browse...";
-        Text[ french ] = "Parcourir...";
-        Text[ spanish ] = "Buscar...";
-        Text[ italian ] = "Sfoglia...";
-        Text[ swedish ] = "Genoms�k...";
-        Text[ japanese ] = "検索...";
-        Text[ korean ] = "찾아보기...";
-        Text[ chinese_simplified ] = "浏览...";
-        Text[ chinese_traditional ] = "瀏覽...";
-        Text[ portuguese ] = "Pesquisar...";
-        Text[ russian ] = "�����...";
-        Text[ greek ] = "���������...";
-        Text[ dutch ] = "Bladeren...";
-        Text[ finnish ] = "Selaa";
-        Text[ czech ] = "Procházet...";
-        Text[ danish ] = "Gennemse...";
-        Text[ polish ] = "Przegl�daj...";
-        Text[ portuguese_brazilian ] = "Navegar...";
-        Text[ turkish ] = "Tara...";
-        Text[ arabic ] = "�������...";
-        Text[ hebrew ] = "‮דפדוף...‬";
-        Text[ catalan ] = "Navega...";
-        Text[ thai ] = "เรียกดู...";
-        Text[ slovak ] = "Prehliadať...";
-        Text[ hindi ] = "ब्रउज़...";
-        Text[ hungarian ] = "Tallózás...";
-        Text[ slovenian ] = "Prebrskaj...";
+        Text [ de ] = "Ausw�hlen...";
+        Text [ en-US ]  = "Browse...";
     };
 
     // Import Template ------------------------------------------------
@@ -377,34 +195,8 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
     {
         Pos                 = MAP_APPFONT ( FIRST_ROW_X , FIRST_ROW_Y + 4 * ROW_HEIGHT + 4 * SPACING + FIXED_TEXT_OFFSET ) ;
         Size                = MAP_APPFONT ( FIRST_ROW_WIDTH , 8 ) ;
-        Text                = "Import-Dokumentvorlage";
-        Text[ english_us ]  = "Template for import";
-        Text[ french ] = "Mod�le pour import";
-        Text[ spanish ] = "Plantilla para importaci�n";
-        Text[ italian ] = "Modello per importazione";
-        Text[ swedish ] = "Dokumentmall f�r import";
-        Text[ japanese ] = "インポート用テンプレート";
-        Text[ korean ] = "가져오기용 서식 파일";
-        Text[ chinese_simplified ] = "用于输入的文档样式";
-        Text[ chinese_traditional ] = "用於匯入的文件樣式";
-        Text[ slovak ] = "Šablóna pre import";
-        Text[ portuguese_brazilian ] = "Modelo para importar";
-        Text[ greek ] = "Template for import";
-        Text[ dutch ] = "Sjabloon voor importeren";
-        Text[ finnish ] = "Template for import";
-        Text[ czech ] = "Šablona pro import";
-        Text[ danish ] = "Skabelon til import";
-        Text[ arabic ] = "Template for import";
-        Text[ hebrew ] = "Template for import";
-        Text[ catalan ] = "Template for import";
-        Text[ hindi ] = "Template for import";
-        Text[ portuguese ] = "Template for import";
-        Text[ russian ] = "Template for import";
-        Text[ polish ] = "Template for import";
-        Text[ turkish ] = "Template for import";
-        Text[ thai ] = "Template for import";
-        Text[ hungarian ] = "Importáló sablon";
-        Text[ slovenian ] = "Predloga za uvoz";
+        Text [ de ] = "Import-Dokumentvorlage";
+        Text [ en-US ]  = "Template for import";
     };
 
     ComboBox ED_XML_IMPORT_TEMPLATE
@@ -420,61 +212,9 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
         Pos                 = MAP_APPFONT ( SECOND_ROW_X + SECOND_ROW_WIDTH - BROWSE_WIDTH , FIRST_ROW_Y + 4 * ROW_HEIGHT + 4 * SPACING ) ;
         Size                = MAP_APPFONT ( BROWSE_WIDTH , 12 ) ;
         HelpId              = HID_XML_FILTER_IMPORT_TEMPLATE_BROWSE;
-        Text                = "Ausw�hlen...";
-        Text [english_us]   = "Browse...";
-        Text[ french ] = "Parcourir...";
-        Text[ spanish ] = "Buscar...";
-        Text[ italian ] = "Sfoglia...";
-        Text[ swedish ] = "Genoms�k...";
-        Text[ japanese ] = "検索...";
-        Text[ korean ] = "찾아보기...";
-        Text[ chinese_simplified ] = "浏览...";
-        Text[ chinese_traditional ] = "瀏覽...";
-        Text[ portuguese ] = "Pesquisar...";
-        Text[ russian ] = "�����...";
-        Text[ greek ] = "���������...";
-        Text[ dutch ] = "Bladeren...";
-        Text[ finnish ] = "Selaa";
-        Text[ czech ] = "Procházet...";
-        Text[ danish ] = "Gennemse...";
-        Text[ polish ] = "Przegl�daj...";
-        Text[ portuguese_brazilian ] = "Navegar...";
-        Text[ turkish ] = "Tara...";
-        Text[ arabic ] = "�������...";
-        Text[ hebrew ] = "‮דפדוף...‬";
-        Text[ catalan ] = "Navega...";
-        Text[ thai ] = "เรียกดู...";
-        Text[ slovak ] = "Prehliadať...";
-        Text[ hindi ] = "ब्रउज़...";
-        Text[ hungarian ] = "Tallózás...";
-        Text[ slovenian ] = "Prebrskaj...";
+        Text [ de ] = "Ausw�hlen...";
+        Text [ en-US ]  = "Browse...";
     };
-    Text[ french ] = "Transformation";
-    Text[ spanish ] = "Transformaci�n";
-    Text[ italian ] = "Trasformazione";
-    Text[ swedish ] = "Transformering";
-    Text[ japanese ] = "変換";
-    Text[ korean ] = "변환";
-    Text[ chinese_simplified ] = "转换";
-    Text[ chinese_traditional ] = "轉換";
-    Text[ slovak ] = "Transformácia";
-    Text[ portuguese_brazilian ] = "Transforma��o";
-    Text[ greek ] = "Transformation";
-    Text[ dutch ] = "Transformatie";
-    Text[ finnish ] = "Transformation";
-    Text[ czech ] = "Transformace";
-    Text[ danish ] = "Transformering";
-    Text[ arabic ] = "Transformation";
-    Text[ hebrew ] = "Transformation";
-    Text[ catalan ] = "Transformation";
-    Text[ hindi ] = "Transformation";
-    Text[ portuguese ] = "Transformation";
-    Text[ russian ] = "Transformation";
-    Text[ polish ] = "Transformation";
-    Text[ turkish ] = "Transformation";
-    Text[ thai ] = "Transformation";
-    Text[ hungarian ] = "Átalakítás";
-    Text[ slovenian ] = "Pretvorba";
 };
 
 
