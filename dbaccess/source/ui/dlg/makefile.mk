@@ -2,9 +2,9 @@
  #
  #  $RCSfile: makefile.mk,v $
  #
- #  $Revision: 1.8 $
+ #  $Revision: 1.9 $
  #
- #  last change: $Author: oj $ $Date: 2001-01-09 16:06:51 $
+ #  last change: $Author: fs $ $Date: 2001-01-26 16:14:29 $
  #
  #  The Contents of this file are made available subject to the terms of
  #  either of the following licenses
@@ -104,6 +104,8 @@ SLOFILES=	\
         $(SLO)$/odbcconfig.obj	\
         $(SLO)$/dsselect.obj	\
         $(SLO)$/dbadmin.obj		\
+        $(SLO)$/commonpages.obj	\
+        $(SLO)$/detailpages.obj	\
         $(SLO)$/adminpages.obj	\
         $(SLO)$/sqlmessage.obj	\
         $(SLO)$/dbfindex.obj
@@ -116,6 +118,9 @@ SLOFILES=	\
  #########################################################################
  # history:
  #	$Log: not supported by cvs2svn $
+ #	Revision 1.8  2001/01/09 16:06:51  oj
+ #	#81232#
+ #	
  #	Revision 1.7  2000/12/12 12:47:56  oj
  #	#80933# some new files
  #	
