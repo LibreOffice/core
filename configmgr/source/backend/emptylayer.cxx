@@ -2,9 +2,9 @@
 *
 *  $RCSfile: emptylayer.cxx,v $
 *
-*  $Revision: 1.4 $
+*  $Revision: 1.5 $
 *
-*  last change: $Author: cyrillem $ $Date: 2002-11-29 14:07:06 $
+*  last change: $Author: rt $ $Date: 2003-04-17 13:14:41 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -110,14 +110,15 @@ namespace configmgr
 
         void SAL_CALL
             EmptyLayer::readData( const uno::Reference< backenduno::XLayerHandler >& aHandler )
-            throw (uno::RuntimeException)
+                throw (backenduno::MalformedDataException, lang::NullPointerException, lang::WrappedTargetException, uno::RuntimeException)
         {
             if (aHandler.is())
             {
                 aHandler->startLayer();
                 aHandler->endLayer();
             }
-            // else throw uno::RuntimeException("Null Handler",*this);
+            else
+                throw lang::NullPointerException(OUString::createFromAscii("EmptyLayer: Null Handler"),*this);
         }
         // -----------------------------------------------------------------------------
         // -----------------------------------------------------------------------------
@@ -155,7 +156,7 @@ namespace configmgr
         }
         // -----------------------------------------------------------------------------
 
-        void SAL_CALL RequireEmptyLayer::overrideNode( const OUString& aName, sal_Int16 aAttributes )
+        void SAL_CALL RequireEmptyLayer::overrideNode( const OUString& aName, sal_Int16 aAttributes, sal_Bool bClear )
             throw (backenduno::MalformedDataException, uno::RuntimeException)
         {
             failNotEmpty();
@@ -204,7 +205,7 @@ namespace configmgr
         }
         // -----------------------------------------------------------------------------
 
-        void SAL_CALL RequireEmptyLayer::overrideProperty( const OUString& aName, sal_Int16 aAttributes, const uno::Type& aType )
+        void SAL_CALL RequireEmptyLayer::overrideProperty( const OUString& aName, sal_Int16 aAttributes, const uno::Type& aType, sal_Bool bClear )
             throw (backenduno::MalformedDataException, uno::RuntimeException)
         {
             failNotEmpty();
@@ -241,7 +242,7 @@ namespace configmgr
             OSL_ASSERT(pMsg);
             OUString sMsg = OUString::createFromAscii(pMsg);
 
-            throw backenduno::MalformedDataException( sMsg, *this );
+            throw backenduno::MalformedDataException( sMsg, *this, uno::Any() );
         }
 
         // -----------------------------------------------------------------------------
