@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rangenam.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 17:54:56 $
+ *  last change: $Author: kz $ $Date: 2005-01-14 11:59:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,6 @@ ScRangeData::ScRangeData( ScDocument* pDok,
                 eType       ( nType ),
                 pDoc        ( pDok ),
                 nIndex      ( 0 ),
-                nExportIndex( 0 ),
                 pCode       ( NULL ),
                 bModified   ( FALSE )
 {
@@ -142,7 +141,6 @@ ScRangeData::ScRangeData( ScDocument* pDok,
                 eType       ( nType ),
                 pDoc        ( pDok ),
                 nIndex      ( 0 ),
-                nExportIndex( 0 ),
                 pCode       ( new ScTokenArray( rArr ) ),
                 bModified   ( FALSE )
 {
@@ -177,7 +175,6 @@ ScRangeData::ScRangeData( ScDocument* pDok,
                 eType       ( RT_NAME ),
                 pDoc        ( pDok ),
                 nIndex      ( 0 ),
-                nExportIndex( 0 ),
                 pCode       ( new ScTokenArray ),
                 bModified   ( FALSE )
 {
