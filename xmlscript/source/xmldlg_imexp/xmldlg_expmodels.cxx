@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_expmodels.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: tbe $ $Date: 2002-08-20 14:39:57 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 16:48:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,18 +63,35 @@
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 
 
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+using ::rtl::OUString;
+
 namespace xmlscript
 {
 
+static inline bool readBorderProps(
+    ElementDescriptor * element, Style & style )
+{
+    if (element->readProp( &style._border, OUSTR("Border") )) {
+        if (style._border == BORDER_SIMPLE /* simple */)
+        {
+            if (element->readProp( &style._borderColor, OUSTR("BorderColor") ))
+                style._border = BORDER_SIMPLE_COLOR;
+        }
+        return true;
+    }
+    return false;
+}
+
 static inline bool readFontProps( ElementDescriptor * element, Style & style )
 {
-    bool ret = false;
-    ret |= (sal_False != (element->readProp(
-        OUString( RTL_CONSTASCII_USTRINGPARAM("FontDescriptor") ) ) >>= style._descr));
-    ret |= (sal_False != (element->readProp(
-        OUString( RTL_CONSTASCII_USTRINGPARAM("FontEmphasisMark") ) ) >>= style._fontEmphasisMark));
-    ret |= (sal_False != (element->readProp(
-        OUString( RTL_CONSTASCII_USTRINGPARAM("FontRelief") ) ) >>= style._fontRelief));
+    bool ret = element->readProp(
+        &style._descr, OUSTR("FontDescriptor") );
+    ret |= element->readProp(
+        &style._fontEmphasisMark, OUSTR("FontEmphasisMark") );
+    ret |= element->readProp(
+        &style._fontRelief, OUSTR("FontRelief") );
     return ret;
 }
 
@@ -112,6 +129,13 @@ void ElementDescriptor::readButtonModel( StyleBag * all_styles )
                     OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":image-src") ) );
     readImageAlignAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("ImageAlign") ),
                         OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":image-align") ) );
+    if (extract_throw<bool>( _xProps->getPropertyValue( OUSTR("Repeat") ) ))
+        readLongAttr( OUSTR("RepeatDelay"),
+                      OUSTR(XMLNS_DIALOGS_PREFIX ":repeat"), true /* force */ );
+    if (extract_throw<bool>( _xProps->getPropertyValue( OUSTR("Toggle") ) ))
+        addAttribute( OUSTR(XMLNS_DIALOGS_PREFIX ":toggled"), OUSTR("1") );
+    readBoolAttr( OUSTR("FocusOnClick"),
+                  OUSTR(XMLNS_DIALOGS_PREFIX ":grab-focus") );
 
     // State
     sal_Int16 nState;
@@ -140,13 +164,15 @@ void ElementDescriptor::readCheckBoxModel( StyleBag * all_styles )
     SAL_THROW( (Exception) )
 {
     // collect styles
-    Style aStyle( 0x2 | 0x8 | 0x20 );
+    Style aStyle( 0x2 | 0x8 | 0x20 | 0x40 );
     if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("TextColor") ) ) >>= aStyle._backgroundColor)
         aStyle._set |= 0x2;
     if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("TextLineColor") ) ) >>= aStyle._textLineColor)
         aStyle._set |= 0x20;
     if (readFontProps( this, aStyle ))
         aStyle._set |= 0x8;
+    if (readProp( OUSTR("VisualEffect") ) >>= aStyle._visualEffect)
+        aStyle._set |= 0x40;
     if (aStyle._set)
     {
         addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":style-id") ),
@@ -201,7 +227,7 @@ void ElementDescriptor::readComboBoxModel( StyleBag * all_styles )
         aStyle._set |= 0x2;
     if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("TextLineColor") ) ) >>= aStyle._textLineColor)
         aStyle._set |= 0x20;
-    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("Border") ) ) >>= aStyle._border)
+    if (readBorderProps( this, aStyle ))
         aStyle._set |= 0x4;
     if (readFontProps( this, aStyle ))
         aStyle._set |= 0x8;
@@ -221,6 +247,8 @@ void ElementDescriptor::readComboBoxModel( StyleBag * all_styles )
                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":autocomplete") ) );
     readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("ReadOnly") ),
                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":readonly") ) );
+    readBoolAttr( OUSTR("HideInactiveSelection"),
+                  OUSTR(XMLNS_DIALOGS_PREFIX ":hide-inactive-selection") );
     readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Dropdown") ),
                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":spin") ) );
     readShortAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("MaxTextLen") ),
@@ -264,7 +292,7 @@ void ElementDescriptor::readListBoxModel( StyleBag * all_styles )
         aStyle._set |= 0x2;
     if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("TextLineColor") ) ) >>= aStyle._textLineColor)
         aStyle._set |= 0x20;
-    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("Border") ) ) >>= aStyle._border)
+    if (readBorderProps( this, aStyle ))
         aStyle._set |= 0x4;
     if (readFontProps( this, aStyle ))
         aStyle._set |= 0x8;
@@ -330,13 +358,15 @@ void ElementDescriptor::readRadioButtonModel( StyleBag * all_styles )
     SAL_THROW( (Exception) )
 {
     // collect styles
-    Style aStyle( 0x2 | 0x8 | 0x20 );
+    Style aStyle( 0x2 | 0x8 | 0x20 | 0x40 );
     if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("TextColor") ) ) >>= aStyle._textColor)
         aStyle._set |= 0x2;
     if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("TextLineColor") ) ) >>= aStyle._textLineColor)
         aStyle._set |= 0x20;
     if (readFontProps( this, aStyle ))
         aStyle._set |= 0x8;
+    if (readProp( OUSTR("VisualEffect") ) >>= aStyle._visualEffect)
+        aStyle._set |= 0x40;
     if (aStyle._set)
     {
         addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":style-id") ),
@@ -415,7 +445,7 @@ void ElementDescriptor::readFixedTextModel( StyleBag * all_styles )
         aStyle._set |= 0x2;
     if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("TextLineColor") ) ) >>= aStyle._textLineColor)
         aStyle._set |= 0x20;
-    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("Border") ) ) >>= aStyle._border)
+    if (readBorderProps( this, aStyle ))
         aStyle._set |= 0x4;
     if (readFontProps( this, aStyle ))
         aStyle._set |= 0x8;
@@ -449,7 +479,7 @@ void ElementDescriptor::readEditModel( StyleBag * all_styles )
         aStyle._set |= 0x2;
     if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("TextLineColor") ) ) >>= aStyle._textLineColor)
         aStyle._set |= 0x20;
-    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("Border") ) ) >>= aStyle._border)
+    if (readBorderProps( this, aStyle ))
         aStyle._set |= 0x4;
     if (readFontProps( this, aStyle ))
         aStyle._set |= 0x8;
@@ -463,6 +493,8 @@ void ElementDescriptor::readEditModel( StyleBag * all_styles )
     readDefaults();
     readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Tabstop") ),
                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":tabstop") ) );
+    readBoolAttr( OUSTR("HideInactiveSelection"),
+                  OUSTR(XMLNS_DIALOGS_PREFIX ":hide-inactive-selection") );
     readAlignAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Align") ),
                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":align") ) );
     readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("HardLineBreaks") ),
@@ -496,7 +528,7 @@ void ElementDescriptor::readImageControlModel( StyleBag * all_styles )
     Style aStyle( 0x1 | 0x4 );
     if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("BackgroundColor") ) ) >>= aStyle._backgroundColor)
         aStyle._set |= 0x1;
-    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("Border") ) ) >>= aStyle._border)
+    if (readBorderProps( this, aStyle ))
         aStyle._set |= 0x4;
     if (aStyle._set)
     {
@@ -524,7 +556,7 @@ void ElementDescriptor::readFileControlModel( StyleBag * all_styles )
         aStyle._set |= 0x2;
     if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("TextLineColor") ) ) >>= aStyle._textLineColor)
         aStyle._set |= 0x20;
-    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("Border") ) ) >>= aStyle._border)
+    if (readBorderProps( this, aStyle ))
         aStyle._set |= 0x4;
     if (readFontProps( this, aStyle ))
         aStyle._set |= 0x8;
@@ -538,6 +570,8 @@ void ElementDescriptor::readFileControlModel( StyleBag * all_styles )
     readDefaults();
     readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Tabstop") ),
                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":tabstop") ) );
+    readBoolAttr( OUSTR("HideInactiveSelection"),
+                  OUSTR(XMLNS_DIALOGS_PREFIX ":hide-inactive-selection") );
     readStringAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Text") ),
                     OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":value") ) );
     readEvents();
@@ -554,7 +588,7 @@ void ElementDescriptor::readCurrencyFieldModel( StyleBag * all_styles )
         aStyle._set |= 0x2;
     if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("TextLineColor") ) ) >>= aStyle._textLineColor)
         aStyle._set |= 0x20;
-    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("Border") ) ) >>= aStyle._border)
+    if (readBorderProps( this, aStyle ))
         aStyle._set |= 0x4;
     if (readFontProps( this, aStyle ))
         aStyle._set |= 0x8;
@@ -570,6 +604,8 @@ void ElementDescriptor::readCurrencyFieldModel( StyleBag * all_styles )
                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":tabstop") ) );
     readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("ReadOnly") ),
                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":readonly") ) );
+    readBoolAttr( OUSTR("HideInactiveSelection"),
+                  OUSTR(XMLNS_DIALOGS_PREFIX ":hide-inactive-selection") );
     readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("StrictFormat") ),
                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":strict-format") ) );
     readStringAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("CurrencySymbol") ),
@@ -588,6 +624,9 @@ void ElementDescriptor::readCurrencyFieldModel( StyleBag * all_styles )
                     OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":value-step") ) );
     readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Spin") ),
                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":spin") ) );
+    if (extract_throw<bool>( _xProps->getPropertyValue( OUSTR("Repeat") ) ))
+        readLongAttr( OUSTR("RepeatDelay"),
+                      OUSTR(XMLNS_DIALOGS_PREFIX ":repeat"), true /* force */ );
     readBoolAttr(
         OUString( RTL_CONSTASCII_USTRINGPARAM("PrependCurrencySymbol") ),
         OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":prepend-symbol") ) );
@@ -605,7 +644,7 @@ void ElementDescriptor::readDateFieldModel( StyleBag * all_styles )
         aStyle._set |= 0x2;
     if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("TextLineColor") ) ) >>= aStyle._textLineColor)
         aStyle._set |= 0x20;
-    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("Border") ) ) >>= aStyle._border)
+    if (readBorderProps( this, aStyle ))
         aStyle._set |= 0x4;
     if (readFontProps( this, aStyle ))
         aStyle._set |= 0x8;
@@ -621,6 +660,8 @@ void ElementDescriptor::readDateFieldModel( StyleBag * all_styles )
                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":tabstop") ) );
     readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("ReadOnly") ),
                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":readonly") ) );
+    readBoolAttr( OUSTR("HideInactiveSelection"),
+                  OUSTR(XMLNS_DIALOGS_PREFIX ":hide-inactive-selection") );
     readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("StrictFormat") ),
                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":strict-format") ) );
     readDateFormatAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("DateFormat") ),
@@ -635,6 +676,9 @@ void ElementDescriptor::readDateFieldModel( StyleBag * all_styles )
                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":value-max") ) );
     readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Spin") ),
                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":spin") ) );
+    if (extract_throw<bool>( _xProps->getPropertyValue( OUSTR("Repeat") ) ))
+        readLongAttr( OUSTR("RepeatDelay"),
+                      OUSTR(XMLNS_DIALOGS_PREFIX ":repeat"), true /* force */ );
     readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Dropdown") ),
                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":dropdown") ) );
     readEvents();
@@ -651,7 +695,7 @@ void ElementDescriptor::readNumericFieldModel( StyleBag * all_styles )
         aStyle._set |= 0x2;
     if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("TextLineColor") ) ) >>= aStyle._textLineColor)
         aStyle._set |= 0x20;
-    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("Border") ) ) >>= aStyle._border)
+    if (readBorderProps( this, aStyle ))
         aStyle._set |= 0x4;
     if (readFontProps( this, aStyle ))
         aStyle._set |= 0x8;
@@ -667,6 +711,8 @@ void ElementDescriptor::readNumericFieldModel( StyleBag * all_styles )
                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":tabstop") ) );
     readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("ReadOnly") ),
                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":readonly") ) );
+    readBoolAttr( OUSTR("HideInactiveSelection"),
+                  OUSTR(XMLNS_DIALOGS_PREFIX ":hide-inactive-selection") );
     readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("StrictFormat") ),
                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":strict-format") ) );
     readShortAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("DecimalAccuracy") ),
@@ -683,6 +729,9 @@ void ElementDescriptor::readNumericFieldModel( StyleBag * all_styles )
                     OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":value-step") ) );
     readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Spin") ),
                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":spin") ) );
+    if (extract_throw<bool>( _xProps->getPropertyValue( OUSTR("Repeat") ) ))
+        readLongAttr( OUSTR("RepeatDelay"),
+                      OUSTR(XMLNS_DIALOGS_PREFIX ":repeat"), true /* force */ );
     readEvents();
 }
 //__________________________________________________________________________________________________
@@ -697,7 +746,7 @@ void ElementDescriptor::readTimeFieldModel( StyleBag * all_styles )
         aStyle._set |= 0x2;
     if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("TextLineColor") ) ) >>= aStyle._textLineColor)
         aStyle._set |= 0x20;
-    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("Border") ) ) >>= aStyle._border)
+    if (readBorderProps( this, aStyle ))
         aStyle._set |= 0x4;
     if (readFontProps( this, aStyle ))
         aStyle._set |= 0x8;
@@ -713,6 +762,8 @@ void ElementDescriptor::readTimeFieldModel( StyleBag * all_styles )
                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":tabstop") ) );
     readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("ReadOnly") ),
                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":readonly") ) );
+    readBoolAttr( OUSTR("HideInactiveSelection"),
+                  OUSTR(XMLNS_DIALOGS_PREFIX ":hide-inactive-selection") );
     readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("StrictFormat") ),
                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":strict-format") ) );
     readTimeFormatAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("TimeFormat") ),
@@ -725,6 +776,9 @@ void ElementDescriptor::readTimeFieldModel( StyleBag * all_styles )
                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":value-max") ) );
     readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Spin") ),
                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":spin") ) );
+    if (extract_throw<bool>( _xProps->getPropertyValue( OUSTR("Repeat") ) ))
+        readLongAttr( OUSTR("RepeatDelay"),
+                      OUSTR(XMLNS_DIALOGS_PREFIX ":repeat"), true /* force */ );
     readEvents();
 }
 //__________________________________________________________________________________________________
@@ -739,7 +793,7 @@ void ElementDescriptor::readPatternFieldModel( StyleBag * all_styles )
         aStyle._set |= 0x2;
     if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("TextLineColor") ) ) >>= aStyle._textLineColor)
         aStyle._set |= 0x20;
-    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("Border") ) ) >>= aStyle._border)
+    if (readBorderProps( this, aStyle ))
         aStyle._set |= 0x4;
     if (readFontProps( this, aStyle ))
         aStyle._set |= 0x8;
@@ -755,6 +809,8 @@ void ElementDescriptor::readPatternFieldModel( StyleBag * all_styles )
                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":tabstop") ) );
     readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("ReadOnly") ),
                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":readonly") ) );
+    readBoolAttr( OUSTR("HideInactiveSelection"),
+                  OUSTR(XMLNS_DIALOGS_PREFIX ":hide-inactive-selection") );
     readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("StrictFormat") ),
                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":strict-format") ) );
     readStringAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Text") ),
@@ -779,7 +835,7 @@ void ElementDescriptor::readFormattedFieldModel( StyleBag * all_styles )
         aStyle._set |= 0x2;
     if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("TextLineColor") ) ) >>= aStyle._textLineColor)
         aStyle._set |= 0x20;
-    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("Border") ) ) >>= aStyle._border)
+    if (readBorderProps( this, aStyle ))
         aStyle._set |= 0x4;
     if (readFontProps( this, aStyle ))
         aStyle._set |= 0x8;
@@ -795,6 +851,8 @@ void ElementDescriptor::readFormattedFieldModel( StyleBag * all_styles )
                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":tabstop") ) );
     readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("ReadOnly") ),
                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":readonly") ) );
+    readBoolAttr( OUSTR("HideInactiveSelection"),
+                  OUSTR(XMLNS_DIALOGS_PREFIX ":hide-inactive-selection") );
     readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("StrictFormat") ),
                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":strict-format") ) );
     readStringAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Text") ),
@@ -805,6 +863,9 @@ void ElementDescriptor::readFormattedFieldModel( StyleBag * all_styles )
                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":maxlength") ) );
     readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Spin") ),
                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":spin") ) );
+    if (extract_throw<bool>( _xProps->getPropertyValue( OUSTR("Repeat") ) ))
+        readLongAttr( OUSTR("RepeatDelay"),
+                      OUSTR(XMLNS_DIALOGS_PREFIX ":repeat"), true /* force */ );
 
     Any a( readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("EffectiveDefault") ) ) );
     switch (a.getValueTypeClass())
@@ -879,7 +940,7 @@ void ElementDescriptor::readProgressBarModel( StyleBag * all_styles )
     Style aStyle( 0x1 | 0x4 | 0x10 );
     if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("BackgroundColor") ) ) >>= aStyle._backgroundColor)
         aStyle._set |= 0x1;
-    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("Border") ) ) >>= aStyle._border)
+    if (readBorderProps( this, aStyle ))
         aStyle._set |= 0x4;
     if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("FillColor") ) ) >>= aStyle._descr)
         aStyle._set |= 0x10;
@@ -905,7 +966,7 @@ void ElementDescriptor::readScrollBarModel( StyleBag * all_styles )
 {
     // collect styles
     Style aStyle( 0x4 );
-    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("Border") ) ) >>= aStyle._border)
+    if (readBorderProps( this, aStyle ))
         aStyle._set |= 0x4;
     if (aStyle._set)
     {
@@ -925,8 +986,11 @@ void ElementDescriptor::readScrollBarModel( StyleBag * all_styles )
                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":curpos") ) );
     readLongAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("ScrollValueMax") ),
                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":maxpos") ) );
+    readLongAttr( OUSTR("ScrollValueMin"),
+                  OUSTR(XMLNS_DIALOGS_PREFIX ":minpos") );
     readLongAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("VisibleSize") ),
                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":visible-size") ) );
+    readLongAttr( OUSTR("RepeatDelay"), OUSTR(XMLNS_DIALOGS_PREFIX ":repeat") );
     readEvents();
 }
 //__________________________________________________________________________________________________
