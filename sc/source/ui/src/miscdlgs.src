@@ -2,9 +2,9 @@
  *
  *  $RCSfile: miscdlgs.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-23 10:48:29 $
+ *  last change: $Author: dr $ $Date: 2001-05-25 10:43:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3169,7 +3169,7 @@ ModalDialog RID_SCDLG_GROUP
          // HelpID, weil die generierten aus den Ableitungen nicht in die hid.lst kommen
         HelpId = HID_SC_GROUP_ROWS ;
         Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Size = MAP_APPFONT ( 71 , 10 ) ;
         TXT_ROWS
         TabStop = TRUE ;
     };
@@ -3177,15 +3177,15 @@ ModalDialog RID_SCDLG_GROUP
     {
          // HelpID, weil die generierten aus den Ableitungen nicht in die hid.lst kommen
         HelpId = HID_SC_GROUP_COLS ;
-        Pos = MAP_APPFONT ( 12 , 27 ) ;
-        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 28 ) ;
+        Size = MAP_APPFONT ( 71 , 10 ) ;
         TXT_COLS
         TabStop = TRUE ;
     };
-    GroupBox GB_FRAME
+    FixedLine FL_FRAME
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 80 , 40 ) ;
+        Size = MAP_APPFONT ( 80 , 8 ) ;
         Text = "Aktivieren für" ;
     };
     String STR_GROUP

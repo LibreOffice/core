@@ -2,9 +2,9 @@
  *
  *  $RCSfile: groupdlg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:02 $
+ *  last change: $Author: dr $ $Date: 2001-05-25 10:45:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,12 +82,12 @@ ScGroupDlg::ScGroupDlg( Window* pParent,
     //
     aBtnRows        ( this, ScResId( BTN_GROUP_ROWS ) ),
     aBtnCols        ( this, ScResId( BTN_GROUP_COLS ) ),
-    aGbFrame        ( this, ScResId( GB_FRAME ) ),
+    aFlFrame        ( this, ScResId( FL_FRAME ) ),
     aBtnOk          ( this, ScResId( BTN_OK ) ),
     aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
     aBtnHelp        ( this, ScResId( BTN_HELP ) )
 {
-    aGbFrame.SetText( String( ScResId(bUngroup ? STR_UNGROUP : STR_GROUP) ) );
+    aFlFrame.SetText( String( ScResId(bUngroup ? STR_UNGROUP : STR_GROUP) ) );
 
     if ( bRows )
         aBtnRows.Check();
