@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pathoptions.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 16:32:52 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 17:24:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,9 @@
 #endif
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+#ifndef INCLUDED_RTL_INSTANCE_HXX
+#include <rtl/instance.hxx>
 #endif
 
 #include <vector>
@@ -278,8 +281,7 @@ class SvtPathOptions_Impl
 // global ----------------------------------------------------------------
 
 static SvtPathOptions_Impl* pOptions = NULL;
-static sal_Int32            nRefCount = 0;
-static ::osl::Mutex aMutex;
+static sal_Int32 nRefCount = 0;
 
 // functions -------------------------------------------------------------
 struct PropertyStruct
@@ -613,10 +615,12 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() :
 
 // class SvtPathOptions --------------------------------------------------
 
+namespace { struct lclMutex : public rtl::Static< ::osl::Mutex, lclMutex > {}; }
+
 SvtPathOptions::SvtPathOptions()
 {
     // Global access, must be guarded (multithreading)
-    ::osl::MutexGuard aGuard( aMutex );
+    ::osl::MutexGuard aGuard( lclMutex::get() );
     if ( !pOptions )
         pOptions = new SvtPathOptions_Impl;
     ++nRefCount;
@@ -628,7 +632,7 @@ SvtPathOptions::SvtPathOptions()
 SvtPathOptions::~SvtPathOptions()
 {
     // Global access, must be guarded (multithreading)
-    ::osl::MutexGuard aGuard( aMutex );
+    ::osl::MutexGuard aGuard( lclMutex::get() );
     if ( !--nRefCount )
     {
         DELETEZ( pOptions );
