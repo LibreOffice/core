@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 05:20:50 $
+ *  last change: $Author: ssa $ $Date: 2001-05-11 16:42:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4212,6 +4212,22 @@ String STR_KEY_LINGUISTIC_DIR
     Text[ finnish ] = "Kirjoituksen aputyökalut";
 };
 #endif // STR_KEY_LINGUISTIC_DIR
+
+String STR_QUICKSTART_EXIT
+{
+    Text = "%PRODUCTNAME QuickStart beenden" ;
+    Text [ English ] = "Exit %PRODUCTNAME QuickStart" ;
+};
+String STR_QUICKSTART_TIP
+{
+    Text = "%PRODUCTNAME QuickStart aktiv" ;
+    Text [ English ] = "%PRODUCTNAME QuickStart active" ;
+};
+String STR_QUICKSTART_FILEOPEN
+{
+    Text = "Datei öffnen..." ;
+    Text [ English ] = "File open..." ;
+};
 
 
  // ********************************************************************** EOF
