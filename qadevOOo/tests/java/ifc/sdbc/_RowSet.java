@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _RowSet.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-02-27 12:24:35 $
+ *  last change:$Date: 2003-09-08 10:52:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,6 @@ package ifc.sdbc;
 
 import lib.MultiPropertyTest;
 
-import com.sun.star.container.XNameAccess;
 import com.sun.star.uno.Any;
 
 
