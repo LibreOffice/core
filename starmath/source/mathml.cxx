@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cmc $ $Date: 2001-02-08 09:18:59 $
+ *  last change: $Author: cmc $ $Date: 2001-02-19 08:27:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3357,6 +3357,8 @@ void SmXMLExport::ExportMatrix(const SmNode *pNode, int nLevel)
 
 void SmXMLExport::ExportNodes(const SmNode *pNode, int nLevel)
 {
+    if (!pNode)
+        return;
     switch(pNode->GetType())
     {
         case NTABLE:
