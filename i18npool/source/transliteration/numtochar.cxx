@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numtochar.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: khong $ $Date: 2002-05-30 06:54:40 $
+ *  last change: $Author: svesik $ $Date: 2002-08-27 12:11:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,7 @@
  ************************************************************************/
 
 // prevent internal compiler error with MSVC6SP3
-#include <stl/utility>
+#include <utility>
 
 #define TRANSLITERATION_ALL
 #include <numtochar.hxx>

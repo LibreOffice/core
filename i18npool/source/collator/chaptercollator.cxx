@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chaptercollator.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: khong $ $Date: 2002-06-20 06:11:16 $
+ *  last change: $Author: svesik $ $Date: 2002-08-27 12:11:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 #include <assert.h>
 
 // prevent internal compiler error with MSVC6SP3
-#include <stl/utility>
+#include <utility>
 
 #include <chaptercollator.hxx>
 #include <com/sun/star/i18n/KCharacterType.hpp>

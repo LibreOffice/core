@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ignoreKana.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2002-03-26 17:13:19 $
+ *  last change: $Author: svesik $ $Date: 2002-08-27 12:11:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,7 @@
  ************************************************************************/
 
 // prevent internal compiler error with MSVC6SP3
-#include <stl/utility>
+#include <utility>
 
 #define TRANSLITERATION_Kana
 #include <transliteration_Ignore.hxx>
