@@ -2,9 +2,9 @@
  *
  *  $RCSfile: errtxt.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 05:10:32 $
+ *  last change: $Author: kz $ $Date: 2001-05-12 05:44:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2276,7 +2276,7 @@ Resource RID_ERRHDL
         Text[ dutch ] = "Er kon geen link worden gecreλerd.";
         Text[ chinese_simplified ] = "Ξή·¨Ιϊ³ΙΑ΄½Σ";
         Text[ greek ] = "Δεν ήταν δυνατόν να δημιουργηθεί η σύνδεση";
-        Text[ korean ] = "Ώ¬°αΐ» ΈΈµιΑφ ΈψΗί½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "ΈµΕ©Έ¦ ΈΈµιΑφ ΈψΗί½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Baπlantύ oluώturulamadύ";
         Text[ catalan ] = "No se pudo crear el vνnculo.";
         Text[ finnish ] = "Linkin luominen ei onnistunut.";
@@ -2303,7 +2303,7 @@ Resource RID_ERRHDL
         Text[ dutch ] = "Ongeldig link-formaat";
         Text[ chinese_simplified ] = "ΞήΠ§µΔΑ΄½ΣΈρΚ½";
         Text[ greek ] = "Η μορφή της σύνδεσης δεν είναι έγκυρη.";
-        Text[ korean ] = "Ώ¬°αΐΗ ΖχΈΛΐΜ΅΅ΐ―ΘΏΗΟΑφ ΎΚ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "ΈµΕ©ΐΗ ΖχΈΛΐΜ΅΅ΐ―ΘΏΗΟΑφ ΎΚ½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Baπlantύnύn formatύ geηerli deπil";
         Text[ catalan ] = "El formato del vνnculo no es vαlido";
         Text[ finnish ] = "Linkkimuoto on virheellinen.";
@@ -2872,7 +2872,7 @@ Resource RID_ERRHDL
         Text[ dutch ] = "Functie niet mogelijk. Pad bevat actuele directory";
         Text[ chinese_simplified ] = "Ξή·¨Φ΄ΠΠΉ¦Δά£ΊΒ·Ύ¶Ί¬ΣΠµ±Η°µΔΔΏΒΌ";
         Text[ greek ] = "Δεν είναι δυνατόν να εκτελεστεί η λειτουργία: Η διαδρομή περιέχει τον τρέχων κατάλογο";
-        Text[ korean ] = "±β΄Ι ΊÒ°΅΄Ι: °ζ·ΞΏ΅ Ηφΐη µπ·ΊΕδΈ® ΖχΗΤ";
+        Text[ korean ] = "±β΄Ι ΊÒ°΅΄Ι: °ζ·ΞΏ΅ Ηφΐη µπ·ΊΕδΈ®°΅ ΖχΗΤµΗΎξ ΐΦΐ½";
         Text[ turkish ] = "έώlev olanaklύ deπil: Veri yolu yόrόrlόkteki dizini iηeriyor";
         Text[ catalan ] = "Funciσn imposible: La ruta contiene el directorio actual.";
         Text[ finnish ] = "Toimintoa ei voi toteuttaa: polku sisδltδδ nykyisen hakemiston.";
