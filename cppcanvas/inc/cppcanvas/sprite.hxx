@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sprite.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 16:58:21 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:52:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,13 @@ namespace cppcanvas
             no viewstate/renderstate transformations are applied to
             the specified clip polygon. The given polygon is
             interpreted in device coordinates (i.e. screen pixel)
+         */
+        virtual void setClipPixel( const ::basegfx::B2DPolyPolygon& rClipPoly ) = 0;
+
+        /** Set output clipping
+
+            This method applies the clip poly-polygon interpreted in
+            the view coordinate system of the parent canvas.
          */
         virtual void setClip( const ::basegfx::B2DPolyPolygon& rClipPoly ) = 0;
 
