@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confapifactory.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:18:55 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 13:28:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,13 +141,7 @@ namespace configmgr
             getDefaultBackendSingleton( CreationContext const& xContext );
 
         uno::Reference<uno::XInterface> SAL_CALL
-            getDefaultSingleBackendSingleton( CreationContext const& xContext );
-
-        uno::Reference<uno::XInterface> SAL_CALL
             instantiateDefaultBackend( CreationContext const& xContext );
-
-        uno::Reference<uno::XInterface> SAL_CALL
-            instantiateDefaultSingleBackend( CreationContext const& xContext );
 
         uno::Reference< uno::XInterface > SAL_CALL
             instantiateUpdateMerger( CreationContext const& xContext );
@@ -162,10 +156,7 @@ namespace configmgr
             instantiateCopyImporter( CreationContext const& xContext );
 
         const SingletonRegistrationInfo * getDefaultBackendSingletonInfo();
-        const SingletonRegistrationInfo * getDefaultSingleBackendSingletonInfo();
-
         const ServiceRegistrationInfo   * getDefaultBackendServiceInfo();
-        const ServiceRegistrationInfo   * getDefaultSingleBackendServiceInfo();
 
         const ServiceRegistrationInfo * getUpdateMergerServiceInfo();
         const ServiceRegistrationInfo * getSingleBackendAdapterServiceInfo();
