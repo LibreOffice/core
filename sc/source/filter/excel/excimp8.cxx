@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dr $ $Date: 2000-12-18 14:24:35 $
+ *  last change: $Author: dr $ $Date: 2001-01-11 09:36:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2533,138 +2533,108 @@ static void lcl_GetAbs( String& rPath, UINT16 nDl, SfxObjectShell* pDocShell )
 
 void ImportExcel8::Hlink( void )
 {
-    UINT16      nRF, nRL, nCF, nCL;
-
+    UINT16 nRF, nRL, nCF, nCL;
     ReadX( nRF );
     ReadX( nRL );
     ReadX( nCF );
     ReadX( nCL );
+    Ignore( 20 );
 
-    Ignore( 24 );                   // flags are not realy interresting
+    UINT32 nFlags;
+    ReadX( nFlags );
 
-    UINT16          nDl = 0;        // counter for level to climb down in path
-    String*         pL = NULL;      // link / file name
-    String*         p8 = NULL;      // 8.3-representation from file name
-    String*         pM = NULL;      // mark
+    UINT16  nLevel = 0;             // counter for level to climb down in path
+    String* pLongname = NULL;       // link / file name
+    String* pShortname = NULL;      // 8.3-representation from file name
+    String* pTextmark = NULL;       // text mark
+    UINT32  nStrLen = 0;
 
-    while( nBytesLeft > 0 )
+    // description (ignore)
+    if( nFlags & EXC_HLINK_DESCR )
     {
-        UINT32      nStartPos = aIn.Tell();
-        UINT32      n1, n2;
-
-        aIn >> n1 >> n2;
-        nBytesLeft -= sizeof( n1 ) + sizeof( n2 );
-
-        if( n1 == 0x00000303 && n2 == 0x00000000 )
-        {   // 8.3 file name or something else...
-            Ignore( 8 );
-            aIn >> nDl >> n1;
-            nBytesLeft -= sizeof( nDl ) + sizeof( n1 );
-
-            if( p8 )
-                *p8 = ReadCString( n1, TRUE );
-            else
-                p8 = new String( ReadCString( n1, TRUE ) );
-
-            lcl_GetAbs( *p8, nDl, pD->GetDocumentShell() );
-        }
-        else if( n1 == 0xDEADFFFF && n2 == 0x00000000 )
-        {   // file name
-            Ignore( 16 );
-            aIn >> n2 >> n1;
-            nBytesLeft -= sizeof( n1 ) + sizeof( n2 );
-            Ignore( 2 );
-
-            if( nBytesLeft > 0 )
-            {
-                if( pL )
-                    *pL = ReadWString( n1, TRUE );
-                else
-                    pL = new String( ReadWString( n1, TRUE ) );
-
-                lcl_GetAbs( *pL, nDl, pD->GetDocumentShell() );
-            }
-            else
-                nBytesLeft = 0;
-        }
-        else if( n1 == 0x79EAC9E0 && n2 == 0x11CEBAF9 )
-        {   // URL
-            Ignore( 8 );
-            aIn >> n1;
-            nBytesLeft -= sizeof( n1 );
-
-            if( pL )
-                *pL = ReadWString( n1, TRUE );
-            else
-                pL = new String( ReadWString( n1, TRUE ) );
-        }
-        else
-        {   // text or mark
-            nBytesLeft += 4;
-            aIn.Seek( nStartPos + 4 );  // n1 still valid!
-            n1 *= 2;                    // n1 was number of chars
-
-            if( p8 || pL )
-            {
-                if( pM )
-                    *pM = ReadWString( n1, TRUE );
-                else
-                    pM = new String( ReadWString( n1, TRUE ) );
-            }
-            else
-                Ignore( n1 );
-        }
+        ReadX( nStrLen );
+        Ignore( nStrLen << 1 );
     }
 
-
-    String*         pHlink = NULL;
-
-    if( pL )
+    // network path
+    if( nFlags & EXC_HLINK_NET )
     {
-        pHlink = pL;
-        pL = NULL;
+        ReadX( nStrLen );
+        pLongname = new String( ReadWString( (UINT16)(nStrLen << 1), TRUE ) );
+        lcl_GetAbs( *pLongname, 0, pD->GetDocumentShell() );
     }
-    else if( p8 )
+    // file link or URL
+    else if( nFlags & EXC_HLINK_BODY )
     {
-        pHlink = p8;
-        p8 = NULL;
-    }
-
-    if( pHlink )
-    {
-        if( pM )
+        UINT32 nID;
+        ReadX( nID );
+        switch( nID )
         {
-            *pHlink += '#';
-            *pHlink += *pM;
+            case EXC_HLINK_ID_FILE:
+            {
+                Ignore( 12 );
+                ReadX( nLevel );
+                ReadX( nStrLen );
+                pShortname = new String( ReadCString( (UINT16) nStrLen, TRUE ) );
+                Ignore( 24 );
+                ReadX( nStrLen );
+                if( nStrLen )
+                {
+                    ReadX( nStrLen );
+                    Ignore( 2 );
+                    pLongname = new String( ReadWString( (UINT16) nStrLen, TRUE ) );
+                    lcl_GetAbs( *pLongname, nLevel, pD->GetDocumentShell() );
+                }
+                else
+                    lcl_GetAbs( *pShortname, nLevel, pD->GetDocumentShell() );
+            }
+            break;
+            case EXC_HLINK_ID_URL:
+            {
+                Ignore( 12 );
+                ReadX( nStrLen );
+                pLongname = new String( ReadWString( (UINT16) nStrLen, TRUE ) );
+            }
+            break;
+            default:
+                DBG_ERROR( "ImportExcel8::HLink - unknown content id" );
+        }
+    }
+
+    // text mark
+    if( nFlags & EXC_HLINK_MARK )
+    {
+        ReadX( nStrLen );
+        pTextmark = new String( ReadWString( (UINT16)(nStrLen << 1), TRUE ) );
+    }
+
+    DBG_ASSERT( !nBytesLeft, "ImportExcel8::HLink - record size mismatch" );
+
+    if( !pLongname && pShortname )
+    {
+        pLongname = pShortname;
+        pShortname = NULL;
+    }
+
+    if( pLongname )
+    {
+        if( pTextmark )
+        {
+            *pLongname += '#';
+            *pLongname += *pTextmark;
         }
 
         for( UINT16 nCol = nCF ; nCol <= nCL ; nCol++ )
-        {
             for( UINT16 nRow = nRF ; nRow <= nRL ; nRow++ )
-                InsertHyperlink( nCol, nRow, *pHlink );
-        }
+                InsertHyperlink( nCol, nRow, *pLongname );
     }
 
-    if( pL )
-        delete pL;
-    if( p8 )
-        delete p8;
-    if( pM )
-        delete pM;
-    if( pHlink )
-        delete pHlink;
-}
-
-
-String* ImportExcel8::ReadFileHlink( void )
-{   // 2 B deleted
-    return NULL;
-}
-
-
-String* ImportExcel8::ReadURLHlink( void )
-{   // 2 B deleted
-    return NULL;
+    if( pLongname )
+        delete pLongname;
+    if( pShortname )
+        delete pShortname;
+    if( pTextmark )
+        delete pTextmark;
 }
 
 
