@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdstring.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 20:34:38 $
+ *  last change: $Author: kz $ $Date: 2001-03-01 21:05:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,7 +183,7 @@ String STR_ASK_DEL_GRADIENT
     Text [ dutch ] = "Wilt u het kleurverloop werkelijk wissen?" ;
     Text [ spanish ] = "¿Desea realmente eliminar el gradiente de color?" ;
     Text [ english_us ] = "Do you want to delete the gradient?" ;
-    Text[ chinese_simplified ] = "ÄúÕæµÄÒªÉ¾³ıÕâ¸ö²ÊÉ«Í¼°¸Âğ£¿";
+    Text[ chinese_simplified ] = "ÕæµÄÒªÉ¾³ıÕâ¸ö²ÊÉ«Í¼°¸Âğ£¿";
     Text[ russian ] = "Âû äåéñòâèòåëüíî õîòèòå óäàëèòü ıòó ãğàäèåíòíóş?";
     Text[ polish ] = "Chcesz na pewno usun¹æ gradient?";
     Text[ japanese ] = "¸Ş×ÃŞ°¼®İ‚ğ–{“–‚Éíœ‚µ‚Ü‚·‚©?";
@@ -344,7 +344,7 @@ String STR_ASK_DEL_BITMAP
     Text [ dutch ] = "Wilt u de bitmap werkelijk wissen?" ;
     Text [ spanish ] = "¿Desea realmente eliminar la bitmap?" ;
     Text [ english_us ] = "Do you want to delete the bitmap?" ;
-    Text[ chinese_simplified ] = "ÄúÕæµÄÒªÉ¾³ıÕâ¸öÎ»Í¼Âğ£¿";
+    Text[ chinese_simplified ] = "ÕæÒªÉ¾³ıÕâ¸öÎ»Í¼Âğ£¿";
     Text[ russian ] = "Âû äåéñòâèòåëüíî õîòèòå óäàëèòü âûáğàííûé bitmap?";
     Text[ polish ] = "Chcesz na pewno usun¹æ mapê bitow¹?";
     Text[ japanese ] = "ËŞ¯ÄÏ¯Ìß‚ğ–{“–‚Éíœ‚µ‚Ä‚æ‚ë‚µ‚¢‚Å‚·‚©?";
@@ -481,7 +481,7 @@ String STR_ASK_DEL_LINESTYLE
     Text[ chinese_simplified ] = "ÄúÕæµÄÒªÉ¾³ıÕâ¸öÏßÌõÊ½ÑùÂğ£¿";
     Text[ russian ] = "Âû äåéñòâèòåëüíî õîòèòå óäàëèòü ıòîò ñòèëü ëèíèè?";
     Text[ polish ] = "Chcesz na pewno usun¹æ styl linii?";
-    Text[ japanese ] = "ü‚Ìí—Ş‚ğ–{“–‚Éíœ‚µ‚Ä‚æ‚ë‚µ‚¢‚Å‚·‚©?";
+    Text[ japanese ] = "ü‚Ìí—Ş‚ğ–{“–‚Éíœ‚µ‚Ü‚·‚©H";
     Text[ chinese_traditional ] = "±z¯u­n§R°£³o­Ó½u±ø¼Ë¦¡¡H";
     Text[ arabic ] = "åá ÊÑíÏ ÈÇáİÚá ÍĞİ äãØ ÇáÎØ¿";
     Text[ greek ] = "Èİëåôå óßãïõñá íá äéáãñáöåß ôï óôõë ãñáììŞò;";
@@ -505,7 +505,7 @@ String STR_ASK_CHANGE_LINESTYLE
     Text [ dutch ] = "De wijzigingen in het lijntype werden niet opgeslagen. \nU kunt het geselecteerde lijntype wijzigen \nof een nieuw lijntype toevoegen." ;
     Text [ spanish ] = "El estilo de línea ha sido modificado sin guardar.\nUsted puede modificar el estilo de línea seleccionado\no añadir uno nuevo." ;
     Text [ english_us ] = "The line style was modified without saving. \nYou can change the selected line style \nor add a new one." ;
-    Text[ chinese_simplified ] = "ÏßÌõÊ½ÑùÒÑ¾­±»¸ü¸Ä£¬µ«ÊÇÉĞÎ´±»±£´æ¡£ \nÄúÄÜ¹»¸ü¸ÄÑ¡ÖĞµÄÏßÌõÊ½Ñù\n»òÕßĞÂÔöÒ»¸öÏßÌõÊ½Ñù¡£";
+    Text[ chinese_simplified ] = "ÏßÌõÊ½ÑùÒÑ¾­¸ü¸Ä£¬µ«ÊÇÉĞÎ´±£´æ¡£ \nÄúÄÜ¹»¸ü¸ÄÑ¡ÖĞµÄÏßÌõÊ½Ñù\n»òÕßĞÂÔöÒ»¸öÏßÌõÊ½Ñù¡£";
     Text[ russian ] = "Ñòèëü ëèíèè áûë èçìåíåí, íî íå ñîõğàíåí. \nÂû ìîæåòå èçìåíèòü âûáğàííûé ñòèëü ëèíèè \nèëè äîáàâèòü íîâûé ñòèëü ëèíèè.";
     Text[ polish ] = "Styl linii zosta³ zmieniony i nie zapisany. \nMo¿esz zmieniæ zaznaczony styl linii \nlub dodaæ nowy styl linii.";
     Text[ japanese ] = "ü‚Ì½À²Ù‚ª•ÏX‚³‚ê•Û‘¶‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB\n‘I‘ğ‚µ‚½ü‚Ì½À²Ù‚ğ•ÏX‚Å‚«‚Ü‚·\n‚Ü‚½‚ÍV‚µ‚¢ü‚Ì½À²Ù‚ğ’Ç‰Á‚Å‚«‚Ü‚·B";
