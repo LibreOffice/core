@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 17:29:11 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:05:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,14 +90,14 @@
 #endif
 
 #define ENABLE_COMPRESSION
-#ifndef DEBUG
+#if OSL_DEBUG_LEVEL < 2
 #define COMPRESS_PAGES
 #endif
 
 using namespace vcl;
 using namespace rtl;
 
-#if defined DEBUG || defined DBG_UTIL
+#if (OSL_DEBUG_LEVEL > 1) || defined DBG_UTIL
 #define MARK( x ) emitComment( x )
 #else
 #define MARK( x )
