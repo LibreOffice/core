@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prntopts.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dl $ $Date: 2001-03-19 11:52:37 $
+ *  last change: $Author: dl $ $Date: 2001-04-02 08:37:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -299,17 +299,13 @@ IMPL_LINK( SdPrintOptions, ClickCheckboxHdl, CheckBox *, pCbx )
         !aCbxOutline.IsChecked() )
     {
         if ( !aCbxHandout.IsChecked() )
-        {
             pCbx->Check();
-        }
-        else
-        {
-            bPageNameAllowed = FALSE;
-            aCbxPagename.Check( FALSE );
-        }
-    }
 
-    aCbxPagename.Enable( bPageNameAllowed );
+        aCbxPagename.Check( FALSE );
+        aCbxPagename.Enable( FALSE );
+    }
+    else
+        aCbxPagename.Enable( TRUE );
 
     return 0;
 }
