@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: nf $ $Date: 2001-12-05 11:30:49 $
+#   last change: $Author: nf $ $Date: 2001-12-19 11:54:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -157,7 +157,6 @@ APP9TARGET= localize
 APP9STACK=  16000
 APP9OBJS=   $(OBJ)$/localize.obj $(OBJ)$/utf8conv.obj $(OBJ)$/srciter.obj $(OBJ)$/export2.obj
 APP9STDLIBS+=$(BTSTRPLIB) $(STATIC_LIBS) 
-APP9LIBS+=	$(LB)$/$(TARGET).lib
 
 DEPOBJFILES=$(APP1OBJS) $(APP2OBJS) $(APP3OBJS) $(APP4OBJS) $(APP5OBJS) $(APP6OBJS) $(APP7OBJS) $(APP8OBJS) $(APP9OBJS)
 
