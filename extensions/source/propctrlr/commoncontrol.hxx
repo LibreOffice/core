@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commoncontrol.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 16:03:49 $
+ *  last change: $Author: obo $ $Date: 2003-10-21 09:04:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,8 @@ namespace pcr
             virtual void                    SetCtrPos(const Point& aPoint)              { m_pMeAsWindow->SetPosPixel(aPoint); }
             virtual Point                   GetCtrPos() const                           { return m_pMeAsWindow->GetPosPixel(); }
             virtual Size                    GetCtrSize() const                          { return m_pMeAsWindow->GetSizePixel(); }
-            virtual void                    ShowCtr(sal_Bool bFlag=sal_True)            { m_pMeAsWindow->Show(bFlag); }
+            virtual void                    ShowCtr( sal_Bool bFlag )                   { m_pMeAsWindow->Show( bFlag ); }
+            virtual void                    EnableControl( sal_Bool _bDoEnable )        { m_pMeAsWindow->Enable( _bDoEnable ); }
             virtual void                    HideCtr()                                   { m_pMeAsWindow->Hide(); }
 
             virtual void                    SetCtrHelpId(sal_uInt32 nHelpId)                    { m_pMeAsWindow->SetHelpId(nHelpId); }
