@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ssa $ $Date: 2002-03-14 08:53:53 $
+ *  last change: $Author: ssa $ $Date: 2002-03-14 10:06:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4665,7 +4665,7 @@ void ToolBox::KeyInput( const KeyEvent& rKEvt )
         break;
         case KEY_SPACE:
         {
-            if( mnHighItemId )
+            if( mnHighItemId &&  ImplGetItem( mnHighItemId ) && (ImplGetItem( mnHighItemId )->mnBits & TIB_DROPDOWN) )
             {
                 // close last popup toolbox (see also:
                 // ImplHandleMouseFloatMode(...) in winproc.cxx )
