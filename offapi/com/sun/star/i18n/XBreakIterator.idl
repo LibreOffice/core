@@ -1,0 +1,340 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XBreakIterator.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: bustamam $ $Date: 2000-11-19 00:34:22 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_i18n_BreakIterator_idl__
+#define __com_sun_star_i18n_BreakIterator_idl__
+
+#ifndef __com_sun_star_linguistic2_XHyphenator_idl__
+#include <com/sun/star/linguistic2/XHyphenator.idl>
+#endif
+#ifndef __com_sun_star_linguistic2_XHyphenatedWord_idl__
+#include <com/sun/star/linguistic2/XHyphenatedWord.idl>
+#endif
+
+#ifndef __com_sun_star_lang_Locale_idl__
+#include <com/sun/star/lang/Locale.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module i18n {
+
+//=============================================================================
+
+// DocMerge: empty anyway
+constants CharacterIteratorMode
+{
+    // Iteration mode can be either character or cell based
+
+    // DocMerge: empty anyway
+    const short SKIPCHARACTER           = 0;
+
+    // DocMerge: empty anyway
+    const short SKIPCELL                = 1;
+
+    // DocMerge: empty anyway
+    const short SKIPCONTROLCHARACTER    = 2;
+};
+
+// DocMerge: empty anyway
+constants BreakType
+{
+    // DocMerge: empty anyway
+    const short WORDBOUNDARY            = 1;
+
+    // DocMerge: empty anyway
+    const short HYPHENATION             = 2;
+
+    // DocMerge: empty anyway
+    const short HANGINGPUNCTUATION      = 3;
+};
+
+// DocMerge: empty anyway
+constants ScriptType
+{
+    // DocMerge: empty anyway
+    const short LATIN                   = 1;
+
+    // DocMerge: empty anyway
+    const short ASIAN                   = 2;
+
+    // DocMerge: empty anyway
+    const short COMPLEX                 = 3;
+
+    // DocMerge: empty anyway
+    const short WEAK                    = 4;
+};
+
+// DocMerge: empty anyway
+constants WordType
+{
+    // DocMerge: empty anyway
+    const short ANY_WORD                 = 0;
+
+    // DocMerge: empty anyway
+    const short ANYWORD_IGNOREWHITESPACES= 1;
+
+    // DocMerge: empty anyway
+    const short DICTIONARY_WORD          = 2;
+};
+
+// DocMerge: empty anyway
+constants CharType
+{
+    // DocMerge: empty anyway
+    const short ANY_CHAR                 = 0;
+
+    // DocMerge: empty anyway
+    const short LOWER_CASE_CHAR          = 1;
+};
+
+// DocMerge: empty anyway
+struct LineBreakUserOptions
+{
+    // DocMerge: empty anyway
+    string forbiddenBeginCharacters;
+
+    // DocMerge: empty anyway
+    string forbiddenEndCharacters;
+
+    // DocMerge: empty anyway
+    boolean applyForbiddenRules;
+
+    // DocMerge: empty anyway
+    boolean allowPunctuationOutsideMargin;
+
+    // DocMerge: empty anyway
+    boolean allowHyphenateEnglish;
+
+};
+
+// DocMerge: empty anyway
+struct LineBreakHyphenationOptions
+{
+    // DocMerge: empty anyway
+    ::com::sun::star::linguistic2::XHyphenator rHyphenator;
+
+    // DocMerge: empty anyway
+    long  hyphenIndex;
+};
+
+// DocMerge: empty anyway
+struct LineBreakResults
+{
+    // DocMerge: empty anyway
+    short breakType;
+
+    // DocMerge: empty anyway
+    long  breakIndex;
+
+    // DocMerge: empty anyway
+    ::com::sun::star::linguistic2::XHyphenatedWord rHyphenatedWord;
+};
+
+// DocMerge: empty anyway
+struct Boundary
+{
+    // DocMerge: empty anyway
+    long startPos ; // Inclusive
+
+    // DocMerge: empty anyway
+    long endPos   ; // exclusive
+};
+
+
+// DocMerge: empty anyway
+[ uik(779C6834-2510-40b7-8480B56E-D912E71C), ident( "XBreakIterator", 1.0 ) ]
+interface XBreakIterator: com::sun::star::uno::XInterface
+{
+
+
+// Assumption - StartPos is inclusive and EndPos is exclusive.
+
+    // Traverses nCount characters in Text from nStartPos. Iteration mode can be cell based or
+    // character based.A cell is made of more than one character.
+
+    // DocMerge: empty anyway
+    [const] long    nextCharacters( [in] string Text, [in] long nStartPos, [in] ::com::sun::star::lang::Locale rLocale,
+                                    [in] short nCharacterIteratorMode, [in] long nCount, [out] long nDone );
+
+    // DocMerge: empty anyway
+    [const] long    previousCharacters( [in] string Text, [in] long nStartPos, [in] ::com::sun::star::lang::Locale nLocale,
+                                        [in] short nCharacterIteratorMode, [in] long nCount, [out] long nDone );
+
+    /*
+        traverses nCount words forward and returns word boundary both start and end position of the word. To process
+        control +right Use pos  = nextWords (text, pos, locale, ANYWORD_IGNOREWHITESPACES, 1, &nDone);pos.startPos should have
+        cursor position.
+    */
+    // DocMerge: empty anyway
+    [const] Boundary    nextWord( [in] string Text, [in] long nStartPos, [in] ::com::sun::star::lang::Locale nLocale, [in] short WordType);
+
+    // DocMerge: empty anyway
+    [const] Boundary    previousWord( [in] string Text, [in] long nStartPos, [in] ::com::sun::star::lang::Locale nLocale, [in] short WordType);
+
+    /* identifies StartPos and EndPos of current word. If nPos is the boundary of a word, it is
+    startPos of one word and endPos of previous word.In this situation, the outcome of the algorithm can be indeterminate.
+    In this sitution, bPreferForward flag  is used,if bPreferForward == 0, nPos is considered end of word and looks for beginning of word on left
+    otherwise nPos is considered beginning of next word and looks right for end of the word.
+    */
+    // DocMerge: empty anyway
+    [const] Boundary getWordBoundary( [in] string Text, [in] long nPos, [in] ::com::sun::star::lang::Locale nLocale, [in] short WordType, [in] boolean bPreferForward);
+
+    // DocMerge: empty anyway
+    [const] short   getWordType  ([in] string Text, [in] long nPos, [in] ::com::sun::star::lang::Locale nLocale);
+
+    // DocMerge: empty anyway
+    [const] boolean isBeginWord  ([in] string Text, [in] long nPos, [in] ::com::sun::star::lang::Locale nLocale, [in] short WordType);
+
+    // DocMerge: empty anyway
+    [const] boolean isEndWord    ([in] string Text, [in] long nPos, [in] ::com::sun::star::lang::Locale nLocale, [in] short WordType);
+
+    // DocMerge: empty anyway
+    [const] long    beginOfSentence( [in] string Text, [in] long nStartPos, [in] ::com::sun::star::lang::Locale nLocale );
+
+    // DocMerge: empty anyway
+    [const] long    endOfSentence( [in] string Text, [in] long nStartPos, [in] ::com::sun::star::lang::Locale nLocale );
+
+
+    // DocMerge: empty anyway
+    [const] LineBreakResults getLineBreak( [in] string Text, [in] long nStartPos, [in] ::com::sun::star::lang::Locale nLocale, [in] long nMinBreakPos,
+                                  [in] LineBreakHyphenationOptions hOptions, [in]LineBreakUserOptions bOptions );
+
+
+    // DocMerge: empty anyway
+    [const] long    beginOfScript( [in] string Text, [in] long nStartPos, [in] short ScriptType );
+
+    // DocMerge: empty anyway
+    [const] long    endOfScript( [in] string Text, [in] long nStartPos, [in] short ScriptType );
+
+    // DocMerge: empty anyway
+    [const] long    nextScript( [in] string Text, [in] long nStartPos, [in] short ScriptType );
+
+    // DocMerge: empty anyway
+    [const] long    previousScript ( [in] string Text, [in] long nStartPos, [in] short ScriptType );
+
+    // DocMerge: empty anyway
+    [const] short   getScriptType  ([in] string Text, [in] long nPos);
+
+
+    // DocMerge: empty anyway
+    [const] long    beginOfCharBlock( [in] string Text, [in] long nStartPos,[in] ::com::sun::star::lang::Locale nLocale, [in] short CharType );
+
+    // DocMerge: empty anyway
+    [const] long    endOfCharBlock( [in] string Text, [in] long nStartPos, [in] ::com::sun::star::lang::Locale nLocale, [in] short CharType );
+
+    // DocMerge: empty anyway
+    [const] long    nextCharBlock( [in] string Text, [in] long nStartPos,[in] ::com::sun::star::lang::Locale nLocale, [in] short CharType );
+
+    // DocMerge: empty anyway
+    [const] long    previousCharBlock ( [in] string Text, [in] long nStartPos, [in] ::com::sun::star::lang::Locale nLocale, [in] short CharType );
+};
+
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+    $Log: not supported by cvs2svn $
+    Revision 1.2  2000/10/25 13:26:03  tl
+    linguistic => linguistic2
+
+    Revision 1.1.1.1  2000/09/18 23:36:04  hjs
+    initial import
+
+    Revision 1.11  2000/09/11 11:53:02  mi
+    documentation merged from XML
+
+    Revision 1.9  2000/07/24 13:27:18  st
+    copy right removed
+
+    Revision 1.8  2000/07/04 07:41:18  ama
+    Chg: XHyphenator instead XHyphenator1
+
+    Revision 1.7  2000/07/03 14:04:04  ama
+    More information about hyphenation
+
+    Revision 1.6  2000/06/23 11:40:28  gmu
+    changed previouswords to previousword, nextWords to nextWord
+
+    Revision 1.5  2000/06/14 13:22:59  sse
+    Merged Begin & End word routines
+
+    Revision 1.4  2000/06/14 08:24:19  sse
+    Moved the constants in package context
+
+    Revision 1.3  2000/06/13 08:12:03  sse
+    New breakiterator APIs
+
+    Revision 1.2  2000/06/09 12:58:59  mt
+    XInterface!
+
+    Revision 1.1  2000/06/07 10:56:23  mt
+    XBreakIterator
+
+    Revision 1.1.1.1  1999/11/11 09:48:40  jsc
+    new
+
+
+=============================================================================*/
+#endif

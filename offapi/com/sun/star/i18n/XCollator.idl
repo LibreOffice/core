@@ -1,0 +1,184 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XCollator.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: bustamam $ $Date: 2000-11-19 00:34:22 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_i18n_XCollator_idl__
+#define __com_sun_star_i18n_XCollator_idl__
+
+#include <com/sun/star/uno/Exception.idl>
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/lang/Locale.idl>
+#include <com/sun/star/i18n/XTransliteration.idl>
+//=============================================================================
+
+module com { module sun { module star { module i18n {
+
+/** Interface for Collator Objects
+
+*/
+[ uik(31300AE7-68BD-11D4-B9BB0080-5FD90AC3), ident( "XCollator", 1.0 ) ]
+interface XCollator: com::sun::star::uno::XInterface
+{
+    /** compares 2 sub-strings
+
+        @param s1
+            first String
+
+        @param off1
+            offset (from 0) of the first substring
+
+        @param len1
+            length (from offset) of the first substring
+
+        @param s2
+            second String
+
+        @param off2
+            offset (from 0) of the second substring
+
+        @param len2
+            length (from offset) of the second substring
+
+        @param rLocale
+            the locale to use for this comparison
+
+        @param trans
+            the transliteration object to use for this comparison
+
+        @returns
+            1 if the first string is more than second string
+            0 if the first string is equals to second string
+            -1 if the first string is less than second string
+    */
+    long compareSubstring([in] string s1, [in] long off1, [in] long len1, [in] string s2, [in] long off2, [in] long len2, [in] com::sun::star::lang::Locale rLocale, [in] com::sun::star::i18n::XTransliteration trans);
+
+    /** compares 2 strings
+
+        @param s1
+            first String
+
+        @param s2
+            second String
+
+        @param rLocale
+            the locale to use for this comparison
+
+        @param trans
+            the transliteration object to use for this comparison
+
+        @returns
+            1 if the first string is more than second string
+            0 if the first string is equals to second string
+            -1 if the first string is less than second string
+    */
+    long compareString([in] string s1, [in] string s2, [in] com::sun::star::lang::Locale rLocale, [in] com::sun::star::i18n::XTransliteration trans);
+
+    /** loads the Default Collator Implementation
+
+        @param rLocale
+            the locale for this Collator
+
+        @returns
+            TODO
+    */
+    long loadDefaultCollator([in] ::com::sun::star::lang::Locale rLocale);
+
+    /** loads a particular Collator Implementation
+
+        @param impl
+            the implementation name to load
+
+        @returns
+            TODO
+    */
+    long loadCollatorImplementation([in] string impl);
+
+    /** list all collator Implementations
+
+        @param rLocale
+            the locale for this Collator
+
+        @returns
+            an array of implementations (string)
+    */
+    sequence <string> listCollatorImplementations([in] ::com::sun::star::lang::Locale rLocale);
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+    $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 23:36:20  hjs
+    initial import
+
+    Revision 1.2  2000/09/12 22:09:21  gmu
+    Change name of methods and put comments
+
+    Revision 1.1  2000/09/08 01:21:10  gmu
+    Change classname and method
+
+    Revision 1.1  2000/08/23 19:32:52  gmu
+    Add new IDL: XCollator.idl
+
+
+=============================================================================*/
+#endif

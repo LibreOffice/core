@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: er $ $Date: 2000-11-08 17:49:27 $
+#   last change: $Author: bustamam $ $Date: 2000-11-19 00:36:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,10 +84,13 @@ IDLFILES=\
     Months.idl \
     NumberFormatIndex.idl \
     Weekdays.idl \
+    XBreakIterator.idl \
     XCalendar.idl \
     XCharacterClassification.idl \
+    XCollator.idl \
     XLocaleData.idl \
-    XNumberFormatCode.idl
+    XNumberFormatCode.idl \
+    XTransliteration.idl
 
 # ------------------------------------------------------------------
 

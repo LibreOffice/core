@@ -1,0 +1,321 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XTransliteration.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: bustamam $ $Date: 2000-11-19 00:34:22 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_i18n_XTransliteration_idl__
+#define __com_sun_star_i18n_XTransliteration_idl__
+
+#include <com/sun/star/lang/Locale.idl>
+#include <com/sun/star/uno/XInterface.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module i18n {
+
+//=============================================================================
+/*  Transliteration is a character to character translation but it is
+not always one to one mapping between characters. Transliteration
+modules are primarily used by collation, search and replace modules to
+perform approximate search. It can also be used to format the numbers
+in different numbering systems also.In order to select transliteration
+modules for different purposes, it is classified with two attributes
+namely ONE_TO_ONE and NUMERIC, A transliteration module is
+ONE_TO_ONE if and only if it mapping between characters is one to one
+like a-z to A-Z. Transliteration module of this type can be used as
+choice in regular expressions based search/replace. If you choose a
+transliterator IGNORE_CASE, the regular expression A-Z can be
+transformed to a-z. A transliteration module can have attribute
+NUMERIC if it tranliteates numbers in different languages like chinese
+numbers to arabic numbers and vice versa. This mapping need not be one
+to one it should be primaily used by number formatting and parsing
+methods.A transliteration module is ONE_TO_ONE_NUMERIC if it offers
+both 1-1 mapping and handles number also.  There could be a three
+transliteration module for each pair of formats say uppercase ,
+lowercase ie upper to lower , lower to uppper and ignore case.Search,
+Collation module present the user with option ignore case*/
+
+/* comment:
+ * 0.
+ * All the IGNORE-type functionalities (Range, Equals) are based on mapping.
+ * except Equals() method in IGNORE_CASE, which is based on Locale-independent
+ * casefolding
+ * ( This second assumption is very complicated and may cause confusion of use)
+ *
+
+
+
+
+
+
+
+ * 1.
+ * We are assuming Upper to Lower mapping as one of transliteration.
+ * The mapping depends on Locale.
+ * Upper <-> Lower methods are just wrappers to provide Equals() and Range()
+ *
+ * 2.
+ * Equals() in IGNORE_CASE module is locale-independent and
+ * we don't provide locale-sensitive ones.
+ * The reason we provided locale-independent ones is that IGNORE_CASE is mainly
+ * dedicated to StarOffice internal code.
+ *
+ * 3.
+ * TransliterationModules is used just for convenience without calling
+ * getAvailableModule.
+ *
+ * 4.
+ * Implmentation name is the methods below is not the same as
+ * the true implemenation name registered.
+ * In particular, for generic modules:"UPPERCASE_LOWERCASE",
+ * "LOWERCASE_UPPERCASE", "IGNORE_CASE", there is no registered name.
+ */
+
+/* Typical calling sequence of Transliteration is
+ *
+ * (1) getAvailableModules ()
+ *
+ * (2) loadModulesByImplNames ()
+ *
+ * (3) equals ()
+ *
+ * Or another one is
+ * (1) loadModule ()
+ *
+ * (2) transliterate ()
+ *
+ */
+
+enum TransliterationModules
+{
+   UPPERCASE_LOWERCASE = 1,
+   LOWERCASE_UPPERCASE = 2,
+   HALFWIDTH_FULLWIDTH = 3,
+   FULLWIDTH_HALFWIDTH = 4,
+   KATAKANA_HIRAGANA   = 5,
+   HIRAGANA_KATAKANA   = 6,
+   NON_IGNORE_MASK  = 0x000000ff,
+   IGNORE_MASK      = 0xffffff00,
+   IGNORE_CASE      = 0x00000100,
+   IGNORE_KANA      = 0x00000200, // ja_JP
+   IGNORE_WIDTH     = 0x00000400, // ja_JP
+//  not yet use   0x00000800
+   ignoreTraditionalKanji_ja_JP = 0x00001000,
+   ignoreTraditionalKana_ja_JP  = 0x00002000,
+   ignoreMinusSign_ja_JP    = 0x00004000,
+   ignoreIterationMark_ja_JP    = 0x00008000,
+   ignoreSeparator_ja_JP    = 0x00010000,
+   ignoreZiZu_ja_JP = 0x00020000,
+   ignoreBaFa_ja_JP = 0x00040000,
+   ignoreTiJi_ja_JP = 0x00080000,
+   ignoreHyuByu_ja_JP   = 0x00100000,
+   ignoreSeZe_ja_JP         = 0x00200000,
+   ignoreIandEfollowedByYa_ja_JP    = 0x00400000,
+   ignoreKiKuFollowedBySa_ja_JP     = 0x00800000,
+   ignoreSize_ja_JP         = 0x01000000,
+   ignoreProlongedSoundMark_ja_JP   = 0x02000000,
+   ignoreMiddleDot_ja_JP        = 0x04000000,
+   ignoreSpace_ja_JP            = 0x08000000,
+   END_OF_MODULE    = 0
+};
+
+/*
+  the first 3 modules above are implemented depending on Locale.
+       UPPERCASE_LOWERCASE
+       LOWERCASE_UPPERCASE
+       IGNORE_CASE
+ */
+
+constants TransliterationType
+{
+  const short NONE= 0;
+  const short ONE_TO_ONE = 1;
+  const short NUMERIC = 2;
+  const short ONE_TO_ONE_NUMERIC = 3;
+  const short IGNORE = 4;
+  const short CASCADE = 8;
+};
+
+/*
+    non-IGNORE type module provide transliterate()
+    IGNORE type moudule provide equals(),  transliterateRang()
+ */
+
+
+[ uik(A6E5EB84-3184-49ec-8A9D3355-700064EA), ident( "XTransliteration", 1.0 ) ]
+interface XTransliteration: com::sun::star::uno::XInterface
+{
+
+  /*
+   Unique name to idenify this module in ASCII ; This name is used to get its localized name
+   for Menu, dialog etc
+   For CASCADE, behavior is undefined.
+  */
+
+  [const] string getName ();
+
+
+  /*
+     Return the attribute associated with this transliterator object as
+     defined in TransliterationType
+     This value is determined by the TransliterationModules or implName.
+     For example, for UPPERCASE_LOWERCASE,  ONE_TO_ONE is returned;
+     for IGNORE_CASE, IGNORE is returned.
+  */
+  [const] short  getType ();
+
+
+  /* Transliteration modules can be created by different APIs.Each
+     transliteration module is registered under different service
+     name. The convention for the service name is
+     com.sun.star.L10N.transliteration.<implname>. The <implname> is a
+     unique name used to identify this module. This implName is used
+     to get localized name for this transliteration module. This
+     implname is used in locael data to list the available
+     transliteration modules for this locale. There are some
+     transliteration modules which are always available.The name of
+     those modules are listed in enum TransliterationModules. These
+     modules need be loaded as separate UNO service.This exception is
+     to load upper/lower while installing staroffice (at this moment
+     UNO is not available) */
+
+  /* Load instance of predefined module */
+  void    loadModule([in] TransliterationModules modType,
+             [in] ::com::sun::star::lang::Locale rLocale);
+
+  /* Load instance from UNO */
+  void    loadModuleByImplName( [in] string implName,
+             [in] ::com::sun::star::lang::Locale rLocale);
+
+  /* Create a instance of transliteration module from existing
+     transliteration module. Output of one module is given as input to
+     next one in the sequence.
+     the object created by this call has CASCADE and IGNORE type.
+     Only IGNORE type object can be specified as implNameList
+  */
+  void    loadModulesByImplNames ([in] sequence <string> implNamelist,
+                 [in] ::com::sun::star::lang::Locale rLocale);
+
+  /* List the available transliteration module for given locale. It
+     can be filtered based on its type. sType is a bitmask field and
+     can have one of the values defined in TransliterationModules
+  */
+  sequence<string>
+  getAvailableModules ( [in] ::com::sun::star::lang::Locale rLocale ,[in] short sType );
+
+
+  /* Transliterate input string and return a output string, nCount is
+     number of codepoints to be transliterated. To find the grapheme of inStr
+     corresponding to the grapheme of output string, offset provide the
+     offset array whose index is the offset of output string.
+     This method can be called when the object doesn't have IGNORE attribute.
+     Returning String length is nCount
+  */
+  string transliterate    ([in] string inStr, [in] long startPos,[in]  long nCount,
+                    [out]  sequence <long> offset);
+
+  /*
+     For internal use, this method is supported to get the 'trasliteration',
+     which Equals is based on.
+  */
+  string folding([in] string inStr, [in] long startPos,[in]  long nCount,
+                    [out]  sequence <long> offset);
+
+
+
+  /* Match the two strings and find if the two strings are equivalent
+     as per this transliteration.  Return the number of matched code
+     points as arguments nMatch1, nMatch2
+     If the returned value is True, the strings are equivalent
+     as per this transliteration
+     This method can be called when the object has IGNORE attribute.
+   */
+  boolean  equals ([in] string str1, [in] long pos1, [in] long nCount1, [out] long nMatch1,
+           [in] string str2, [in] long pos2, [in] long nCount2, [out] long nMatch2);
+
+  /*
+     fuzzy pattern matching. return the position of content.
+   */
+  // long transliterateMatch (
+  //            [in] string content, [in] long pos1, [in] long nCount1,
+  //        [in] string pattern, [in] long pos2, [in] long nCount2);
+
+
+  /*
+     Transliterates one set of characters by another.
+     return string sequences contains coressponding transliterated
+     paris of characters for representing range.
+     ex: generic CASE_IGNORE transliterateRange ("a", "i") returns
+     "A","I","a", and "i".
+     e.g.: transliterateRange ("a", "a") may return 'A', 'A', 'a', 'a'.
+     This method can be called when the object has IGNORE attribute.
+
+     This method is intended for getting corresponding ranges.
+     User use transliteration to create reg exp like  [a-i] --> [A-Ia-i].
+     After that he or she search [A-Ia-i] pattern in some content.
+  */
+  sequence <string>  transliterateRange ([in] string str1, [in] string str2);
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+
+#endif
