@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.hxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: mav $ $Date: 2002-02-27 15:51:57 $
+ *  last change: $Author: mav $ $Date: 2002-04-29 14:31:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,7 @@
 #ifndef _OSL_FILE_H_
 #include <osl/file.h>
 #endif
+class ZipOutputStream;
 class ZipPackageFolder;
 class ZipFile;
 class ByteGrabber;
@@ -149,6 +150,7 @@ protected:
     void getZipFileContents();
     sal_Bool writeFileIsTemp();
     ::com::sun::star::uno::Reference < ::com::sun::star::io::XActiveDataStreamer > openOriginalForOutput();
+    void WriteMimetypeMagicFile( ZipOutputStream& aZipOut );
 
 public:
     ZipPackage (const ::com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > &xNewFactory);

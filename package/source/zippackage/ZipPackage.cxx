@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: mav $ $Date: 2002-04-11 14:29:37 $
+ *  last change: $Author: mav $ $Date: 2002-04-29 14:30:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -432,8 +432,12 @@ void ZipPackage::getZipFileContents()
         }
     }
     const OUString sMeta ( RTL_CONSTASCII_USTRINGPARAM ( "META-INF" ) );
-    if (xRootFolder->hasByName( sMeta ) )
+    if ( xRootFolder->hasByName( sMeta ) )
         xRootFolder->removeByName( sMeta );
+
+    const OUString sMimetype ( RTL_CONSTASCII_USTRINGPARAM ( "mimetype" ) );
+    if ( xRootFolder->hasByName( sMimetype ) )
+        xRootFolder->removeByName( sMimetype );
 }
 // XInitialization
 void SAL_CALL ZipPackage::initialize( const Sequence< Any >& aArguments )
@@ -711,6 +715,37 @@ Reference< XInterface > SAL_CALL ZipPackage::createInstanceWithArguments( const 
     return xRef;
 }
 
+void ZipPackage::WriteMimetypeMagicFile( ZipOutputStream& aZipOut )
+{
+    const OUString sMime ( RTL_CONSTASCII_USTRINGPARAM ( "mimetype" ) );
+    if (xRootFolder->hasByName( sMime ) )
+        xRootFolder->removeByName( sMime );
+
+    ZipEntry * pEntry = new ZipEntry;
+    sal_Int32 nBufferLength = pRootFolder->GetMediaType( ).getLength();
+    OString sMediaType = OUStringToOString( pRootFolder->GetMediaType(), RTL_TEXTENCODING_ASCII_US );
+    Sequence< sal_Int8 > aType( (sal_Int8*)sMediaType.getStr(),
+                                nBufferLength );
+
+    pEntry->sName = sMime;
+    pEntry->nMethod = STORED;
+    pEntry->nCrc =
+    pEntry->nSize = pEntry->nCompressedSize = nBufferLength;
+    pEntry->nTime = ZipOutputStream::getCurrentDosTime();
+
+    try
+    {
+        vos::ORef < EncryptionData > xEmpty;
+        aZipOut.putNextEntry( *pEntry, xEmpty );
+        aZipOut.write( aType, 0, nBufferLength );
+        aZipOut.closeEntry();
+    }
+    catch (::com::sun::star::io::IOException & )
+    {
+        VOS_ENSURE( 0, "Error adding mimetype to the ZipOutputStream" );
+    }
+}
+
 sal_Bool ZipPackage::writeFileIsTemp()
 {
     // In case the target local file does not exist or empty
@@ -755,6 +790,9 @@ sal_Bool ZipPackage::writeFileIsTemp()
     if (xRootFolder->hasByName( sMeta ) )
         xRootFolder->removeByName( sMeta );
 
+    // Write a magic file with mimetype
+    WriteMimetypeMagicFile( aZipOut );
+
     // Create a vector to store data for the manifest.xml file
     vector < Sequence < PropertyValue > > aManList;
 
@@ -779,6 +817,7 @@ sal_Bool ZipPackage::writeFileIsTemp()
     osl_getSystemTime( &aTime );
     rtlRandomPool aRandomPool = rtl_random_createPool ();
     rtl_random_addBytes ( aRandomPool, &aTime, 8 );
+
 
     // call saveContents (it will recursively save sub-directories
     OUString aEmptyString;
