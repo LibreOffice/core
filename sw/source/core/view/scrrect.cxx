@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scrrect.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:47:08 $
+ *  last change: $Author: vg $ $Date: 2003-07-22 08:29:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -666,7 +666,10 @@ void lcl_CalcVirtHeight( OutputDevice *pOut, Size &rSz )
 
     long nKB = MAXKB * 1000;
     nKB /= nBytes;
-    rSz.Height() = nKB / rSz.Width();
+    if ( rSz.Width() > 0 )
+        rSz.Height() = nKB / rSz.Width();
+    else
+        rSz.Height() = nKB;
 
     rSz = pOut->PixelToLogic( rSz );
 }
