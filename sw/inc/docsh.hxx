@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:42:16 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 12:47:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,7 @@ class SwDocShell: public SfxObjectShell, public SfxInPlaceObject,
 
     SvPersistRef            xOLEChildList;  // fuers RemoveOLEObjects
     sal_Int16               nUpdateDocMode; // contains the com::sun::star::document::UpdateDocMode
-
+    bool                    bInUpdateFontList; //prevent nested calls of UpdateFontList
     // Methoden fuer den Zugriff aufs Doc
     void                    AddLink();
     void                    RemoveLink();
