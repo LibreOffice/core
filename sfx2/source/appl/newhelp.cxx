@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: pb $ $Date: 2001-08-16 11:28:56 $
+ *  last change: $Author: pb $ $Date: 2001-08-16 14:06:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -787,6 +787,7 @@ SearchTabPage_Impl::SearchTabPage_Impl( Window* pParent ) :
     aSearchFT   ( this, ResId( FT_SEARCH ) ),
     aSearchED   ( this, ResId( ED_SEARCH ) ),
     aSearchBtn  ( this, ResId( PB_SEARCH ) ),
+    aFullWordsCB( this, ResId( CB_FULLWORDS ) ),
     aScopeCB    ( this, ResId( CB_SCOPE ) ),
     aResultsLB  ( this, ResId( LB_RESULT ) ),
     aOpenBtn    ( this, ResId( PB_OPEN_SEARCH ) )
@@ -806,9 +807,11 @@ SearchTabPage_Impl::SearchTabPage_Impl( Window* pParent ) :
     {
         String aUserData = aViewOpt.GetUserData();
         BOOL bChecked = ( 1 == aUserData.GetToken(0).ToInt32() ) ? TRUE : FALSE;
+        aFullWordsCB.Check( bChecked );
+        bChecked = ( 1 == aUserData.GetToken(1).ToInt32() ) ? TRUE : FALSE;
         aScopeCB.Check( bChecked );
 
-        for ( USHORT i = 1; i < aUserData.GetTokenCount(); ++i )
+        for ( USHORT i = 2; i < aUserData.GetTokenCount(); ++i )
         {
             String aToken = aUserData.GetToken(i);
             aSearchED.InsertEntry( INetURLObject::decode(
@@ -825,8 +828,11 @@ SearchTabPage_Impl::SearchTabPage_Impl( Window* pParent ) :
 SearchTabPage_Impl::~SearchTabPage_Impl()
 {
     SvtViewOptions aViewOpt( E_TABPAGE, CONFIGNAME_SEARCHPAGE );
-    sal_Int32 nChecked = aScopeCB.IsChecked() ? 1 : 0;
+    sal_Int32 nChecked = aFullWordsCB.IsChecked() ? 1 : 0;
     String aUserData = String::CreateFromInt32( nChecked );
+    aUserData += ';';
+    nChecked = aScopeCB.IsChecked() ? 1 : 0;
+    aUserData += String::CreateFromInt32( nChecked );
     aUserData += ';';
     USHORT nCount = Min( aSearchED.GetEntryCount(), (USHORT)10 );  // save only 10 entries
 
@@ -875,12 +881,41 @@ IMPL_LINK( SearchTabPage_Impl, SearchHdl, PushButton*, EMPTYARG )
 {
     EnterWait();
     ClearSearchResults();
-    String aSearchText = aSearchED.GetText();
+    String aSearchText = TRIM( aSearchED.GetText() );
     RememberSearchText( aSearchText );
     String aSearchURL = HELP_URL;
     aSearchURL += aFactory;
     aSearchURL += String( HELP_SEARCH_TAG );
-    aSearchURL += aSearchText;
+    if ( aFullWordsCB.IsChecked() )
+        aSearchURL += aSearchText;
+    else if ( aSearchText.Len() > 0 )
+    {
+        xub_StrLen nPos = aSearchText.Search( ' ' );
+        if ( nPos != STRING_NOTFOUND )
+        {
+            String aNewSearchText;
+            while ( nPos != STRING_NOTFOUND )
+            {
+                aNewSearchText += aSearchText.Copy( 0, nPos );
+                aNewSearchText += '*';
+                aNewSearchText += ' ';
+                aSearchText.Erase( 0, nPos + 1 );
+                aSearchText.EraseTrailingChars();
+                nPos = aSearchText.Search( ' ' );
+                if ( STRING_NOTFOUND == nPos )
+                {
+                    aNewSearchText += aSearchText;
+                    aNewSearchText += '*';
+                }
+            }
+            aSearchURL += aNewSearchText;
+        }
+        else
+        {
+            aSearchURL += aSearchText;
+            aSearchURL += '*';
+        }
+    }
     AppendConfigToken_Impl( aSearchURL, sal_False );
     if ( aScopeCB.IsChecked() )
         aSearchURL += DEFINE_CONST_UNICODE("&Scope=Heading");
@@ -921,6 +956,7 @@ IMPL_LINK( SearchTabPage_Impl, OpenHdl, PushButton*, EMPTYARG )
 
 void SearchTabPage_Impl::Resize()
 {
+    Size a6Size = LogicToPixel( Size( 6, 6 ), MAP_APPFONT );
     Size aSize = GetSizePixel();
     if ( aSize.Width() < aMinSize.Width() )
         aSize.Width() = aMinSize.Width();
@@ -930,20 +966,25 @@ void SearchTabPage_Impl::Resize()
     aSearchFT.SetSizePixel( aNewSize );
     aNewSize.Height() = aResultsLB.GetSizePixel().Height();
     aResultsLB.SetSizePixel( aNewSize );
-    aNewSize.Height() = aScopeCB.GetSizePixel().Height();
+    aNewSize.Height() = aFullWordsCB.GetSizePixel().Height();
+    long nW = ( aNewSize.Width() - ( a6Size.Width() / 2 ) ) / 2;
+    aNewSize.Width() = nW;
+    aFullWordsCB.SetSizePixel( aNewSize );
+    Point aNewPnt = aFullWordsCB.GetPosPixel();
+    aNewPnt.X() += ( nW + ( a6Size.Width() / 2 ) );
+    aScopeCB.SetPosPixel( aNewPnt );
     aScopeCB.SetSizePixel( aNewSize );
 
     aNewSize = aSearchED.GetSizePixel();
     aNewSize.Width() = aSize.Width() - ( aPnt.X() * 2 ) -
                         ( aSearchBtn.GetSizePixel().Width() + ( aPnt.X() / 2 ) );
     aSearchED.SetSizePixel( aNewSize );
-    Point aNewPnt = aSearchBtn.GetPosPixel();
+    aNewPnt = aSearchBtn.GetPosPixel();
     aNewPnt.X() = aPnt.X() + aNewSize.Width() + ( aPnt.X() / 2 );
     aSearchBtn.SetPosPixel( aNewPnt );
 
     if ( aSize.Height() > aMinSize.Height() )
     {
-        Size a6Size = LogicToPixel( Size( 6, 6 ), MAP_APPFONT );
         long n3Height = a6Size.Height() / 2;
         Size aBtnSize = aOpenBtn.GetSizePixel();
         long nExtraHeight = aBtnSize.Height() + n3Height;

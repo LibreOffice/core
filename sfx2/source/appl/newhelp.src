@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.src,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: pb $ $Date: 2001-08-16 11:28:56 $
+ *  last change: $Author: pb $ $Date: 2001-08-16 14:06:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -327,11 +327,18 @@ TabPage TP_HELP_SEARCH
         Text[ catalan ] = "Buscar";
         Text[ finnish ] = "~Etsi";
     };
-    CheckBox CB_SCOPE
+    CheckBox CB_FULLWORDS
     {
         Pos = MAP_APPFONT ( 6, 34 ) ;
-        Size = MAP_APPFONT ( 108 , 10 ) ;
-        Text = "~Nur in Titeln suchen" ;
+        Size = MAP_APPFONT ( 60 , 10 ) ;
+        Text = "~Nur ganze Wцrter" ;
+        Text [ english_us ] = "~Complete words only";
+    };
+    CheckBox CB_SCOPE
+    {
+        Pos = MAP_APPFONT ( 69, 34 ) ;
+        Size = MAP_APPFONT ( 45 , 10 ) ;
+        Text = "N~ur in Titeln suchen" ;
         Text [ english_us ] = "Find in ~headings only";
         Text[ portuguese ] = "~Procurar sу em tнtulos";
         Text[ russian ] = "~»скать только в заголовках";

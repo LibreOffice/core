@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: pb $ $Date: 2001-08-16 11:28:56 $
+ *  last change: $Author: pb $ $Date: 2001-08-16 14:06:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,6 +238,7 @@ private:
     FixedText               aSearchFT;
     SearchBox_Impl          aSearchED;
     PushButton              aSearchBtn;
+    CheckBox                aFullWordsCB;
     CheckBox                aScopeCB;
     SearchResultsBox_Impl   aResultsLB;
     PushButton              aOpenBtn;
