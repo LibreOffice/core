@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srcview.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: os $ $Date: 2001-12-06 14:48:03 $
+ *  last change: $Author: os $ $Date: 2002-01-11 09:43:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -414,7 +414,8 @@ SwSrcView::SwSrcView(SfxViewFrame* pFrame, const SwSrcView&) :
     aEditWin( &pFrame->GetWindow(), this ),
     pSearchItem(0),
     pSrcViewConfig(0),
-    bSourceSaved(FALSE)
+    bSourceSaved(FALSE),
+    eLoadEncoding(RTL_TEXTENCODING_DONTKNOW)
 {
     Init();
 }
@@ -429,7 +430,8 @@ SwSrcView::SwSrcView(SfxViewFrame* pFrame, SfxViewShell*) :
     SfxViewShell( pFrame, SWSRCVIEWFLAGS ),
     aEditWin( &pFrame->GetWindow(), this ),
     pSearchItem(0),
-    bSourceSaved(FALSE)
+    bSourceSaved(FALSE),
+    eLoadEncoding(RTL_TEXTENCODING_DONTKNOW)
 {
     Init();
 }
@@ -517,9 +519,15 @@ SwDocShell*     SwSrcView::GetDocShell()
 void SwSrcView::SaveContent(const String& rTmpFile)
 {
     SfxMedium aMedium( rTmpFile,    STREAM_WRITE, TRUE);
-    const sal_Char *pCharSet =
-        rtl_getBestMimeCharsetFromTextEncoding( gsl_getSystemTextEncoding() );
-    rtl_TextEncoding eDestEnc = rtl_getTextEncodingFromMimeCharset( pCharSet );
+    rtl_TextEncoding eDestEnc = eLoadEncoding;
+
+    if(RTL_TEXTENCODING_DONTKNOW == eDestEnc)
+    {
+        const sal_Char *pCharSet =
+            rtl_getBestMimeCharsetFromTextEncoding( gsl_getSystemTextEncoding() );
+        eDestEnc = rtl_getTextEncodingFromMimeCharset( pCharSet );
+    }
+
     SvStream* pOutStream = aMedium.GetOutStream();
     pOutStream->SetStreamCharSet( eDestEnc );
     aEditWin.Write(*pOutStream);//, EE_FORMAT_TEXT);
@@ -1087,6 +1095,7 @@ void SwSrcView::Load(SwDocShell* pDocShell)
                                             pDocShell->GetHeaderAttributes() );
     if( RTL_TEXTENCODING_DONTKNOW != eHeaderEnc )
         eDestEnc = eHeaderEnc;
+    eLoadEncoding = eDestEnc;
 
     aEditWin.SetReadonly(pDocShell->IsReadOnly());
     SfxMedium* pMedium = pDocShell->GetMedium();

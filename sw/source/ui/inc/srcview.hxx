@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srcview.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:42 $
+ *  last change: $Author: os $ $Date: 2002-01-11 09:43:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,7 @@ class SwSrcView: public SfxViewShell
     SwSrcViewConfig*    pSrcViewConfig;
 
     BOOL                bSourceSaved    :1;
+    rtl_TextEncoding    eLoadEncoding;
     void                Init();
 
     // fuer Readonly-Umschaltung
