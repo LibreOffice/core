@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2000-10-27 17:56:17 $
+ *  last change: $Author: kz $ $Date: 2000-11-03 16:53:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -841,7 +841,7 @@ String STR_READONLY_SEL
 {
     TEXT = "schreibgeschützt" ;
     TEXT [ English ] = "readonly" ;
-    TEXT[ english_us ] = "read only";
+    TEXT[ english_us ] = "read-only";
     TEXT[ portuguese ] = "só leitura";
     TEXT[ russian ] = "òîëüêî äëÿ ÷òåíèÿ";
     TEXT[ dutch ] = "schrijfbeveiligd";
