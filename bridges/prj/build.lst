@@ -16,6 +16,7 @@ br	bridges\source\cpp_uno\gcc3_linux_powerpc	nmake	-	u	br_gcclp3 br_unotypes NUL
 br	bridges\source\cpp_uno\gcc3_linux_s390		nmake	-	u	br_gccl33 br_unotypes NULL
 br	bridges\source\cpp_uno\gcc3_linux_sparc		nmake	-	u	br_gccl3s br_unotypes NULL
 br	bridges\source\cpp_uno\gcc2_macosx_powerpc			nmake	-	u	br_gccmacoxp br_unotypes NULL
+br	bridges\source\cpp_uno\gcc3_macosx_powerpc			nmake	-	u	br_gcc3macoxp br_unotypes NULL
 br	bridges\source\cpp_uno\cc50_solaris_sparc			nmake	-	u	br_cc50sols br_unotypes NULL
 br	bridges\source\cpp_uno\cc50_solaris_intel			nmake	-	u	br_cc50soli br_unotypes NULL
 br	bridges\source\cpp_uno\gcc2_solaris_sparc			nmake	-	u	br_gccsols br_unotypes NULL
