@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 14:04:20 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 16:47:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,10 +221,10 @@
 #include "module.hxx"
 #include "tbxctrl.hxx"
 #include "sfxdlg.hxx"
+#include "stbitem.hxx"
 
 #ifdef DBG_UTIL
 #include "tbxctrl.hxx"
-#include "stbitem.hxx"
 #include "mnuitem.hxx"
 #endif
 
@@ -257,6 +257,8 @@
 #include <svtools/ttprops.hxx>
 #endif
 #include <svtools/extendedsecurityoptions.hxx>
+
+using namespace ::com::sun::star;
 
 // Static member
 SfxApplication* SfxApplication::pApp = NULL;
@@ -429,6 +431,7 @@ SfxApplication* SfxApplication::GetOrCreate()
         ::framework::SetCommandURLFromKeyCode( GetCommandURLFromKeyCode );
         ::framework::SetKeyCodeFromCommandURL( GetKeyCodeFromCommandURL );
         ::framework::SetToolBoxControllerCreator( SfxToolBoxControllerFactory );
+        ::framework::SetStatusBarControllerCreator( SfxStatusBarControllerFactory );
 
         SfxHelp* pSfxHelp = new SfxHelp;
         Application::SetHelp( pSfxHelp );
@@ -1250,6 +1253,7 @@ void SfxApplication::GrabFocus( Window *pAlternate )
 
 SfxStatusBarManager* SfxApplication::GetStatusBarManager() const
 {
+    // OBSOLETE: This will always return ZERO!
     if ( !pViewFrame )
         return NULL;
 
@@ -1258,6 +1262,18 @@ SfxStatusBarManager* SfxApplication::GetStatusBarManager() const
         pTop = pTop->GetParentViewFrame_Impl();
 
     return pTop->GetFrame()->GetWorkWindow_Impl()->GetStatusBarManager_Impl();
+}
+
+uno::Reference< task::XStatusIndicator > SfxApplication::GetStatusIndicator() const
+{
+    if ( !pViewFrame )
+        return uno::Reference< task::XStatusIndicator >();
+
+    SfxViewFrame *pTop = pViewFrame;
+    while ( pTop->GetParentViewFrame_Impl() )
+        pTop = pTop->GetParentViewFrame_Impl();
+
+    return pTop->GetFrame()->GetWorkWindow_Impl()->GetStatusIndicator();
 }
 
 SfxViewFrame* SfxApplication::GetViewFrame()
