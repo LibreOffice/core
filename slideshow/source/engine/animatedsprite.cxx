@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animatedsprite.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 18:46:26 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:54:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,8 +169,18 @@ namespace presentation
 
             if( bNeedResize )
             {
+                // as the old sprite might have already been altered
+                // (and therefore been placed in the update list of
+                // the spritecanvas for this frame), must hide it
+                // here, to ensure it's not visible on screen any
+                // longer.
+                mpSprite->hide();
+
                 maEffectiveSpriteSizePixel = aNewSize;
                 mpSprite = mpViewLayer->createSprite( maEffectiveSpriteSizePixel );
+
+                ENSURE_AND_THROW( mpSprite.get(),
+                                  "AnimatedSprite::resize(): Could not create new sprite" );
 
                 // set attributes similar to previous sprite
                 if( mpSprite.get() && mbSpriteVisible )
