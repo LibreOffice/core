@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appenv.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jp $ $Date: 2002-02-01 12:43:37 $
+ *  last change: $Author: mba $ $Date: 2002-07-03 16:48:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -281,7 +281,7 @@ void lcl_CopyCollAttr(SwWrtShell* pOldSh, SwWrtShell* pNewSh, USHORT nCollId)
 // ----------------------------------------------------------------------------
 
 
-void SwModule::InsertEnv()
+void SwModule::InsertEnv( SfxRequest& rReq )
 {
 static USHORT nTitleNo = 0;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apphdl.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: os $ $Date: 2002-06-28 12:08:28 $
+ *  last change: $Author: mba $ $Date: 2002-07-03 16:48:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -816,7 +816,7 @@ void SwModule::ExecOther(SfxRequest& rReq)
     switch (nWhich)
     {
         case FN_ENVELOP:
-            InsertEnv();
+            InsertEnv( rReq );
             break;
 
         case FN_BUSINESS_CARD:
