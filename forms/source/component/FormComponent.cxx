@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormComponent.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-11 12:28:53 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 11:52:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1996,13 +1996,28 @@ void OBoundControlModel::reset() throw (RuntimeException)
         // we have to access the field content at least once to get a reliable result by XColumn::wasNull
         try
         {
-            // TODO: this is expensive in the case of binary fields
-            m_xColumn->getString();
+            // normally, we'd do a getString here. However, this is extremely expensive in the case
+            // of binary fields. Unfortunately, getString is the only method which is guaranteed
+            // to *always* succeed, all other getXXX methods may fail if the column is asked for a
+            // non-convertible type
+            sal_Int32 nFieldType = DataType::OBJECT;
+            getField()->getPropertyValue( PROPERTY_FIELDTYPE ) >>= nFieldType;
+            if  (  ( nFieldType == DataType::BINARY        )
+                || ( nFieldType == DataType::VARBINARY     )
+                || ( nFieldType == DataType::LONGVARBINARY )
+                || ( nFieldType == DataType::OBJECT        )
+                || ( nFieldType == DataType::BLOB          )
+                || ( nFieldType == DataType::CLOB          )
+                )
+                m_xColumn->getBinaryStream();
+            else
+                m_xColumn->getString();
+
             bIsNull = m_xColumn->wasNull();
         }
         catch(Exception&)
         {
-            DBG_ERROR("OBoundControlModel::reset : XColumn::getString and wasNull are expected to always succeed !");
+            DBG_ERROR("OBoundControlModel::reset: this should have succeeded in all cases!");
         }
 
         sal_Bool bNeedValueTransfer = sal_True;
