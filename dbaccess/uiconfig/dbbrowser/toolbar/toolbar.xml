@@ -24,4 +24,6 @@
  <toolbar:toolbaritem xlink:href=".uno:FilterCrit" toolbar:helpid="helpid:10715" toolbar:text="" />
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:RemoveFilterSort" toolbar:helpid="helpid:10711" toolbar:text="" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:DSBrowserExplorer" toolbar:helpid="helpid:10764" toolbar:text="" toolbar:style="" />
 </toolbar:toolbar>
