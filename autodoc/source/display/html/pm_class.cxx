@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pm_class.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 13:32:53 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 08:59:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -428,7 +428,7 @@ PageMaker_Class::Setup_MemberSegment_Out( E_MemberProtection i_eMpr )
     pProtectionArea[i_eMpr] = pDefList;
 
     pDefList->AddTerm()
-        << new html::BgColorAttr("#CCCCFF")
+        << new html::ClassAttr("subtitle")
         >> *new html::Label( C_sMprPrefixes[i_eMpr] )
                 >> *new html::Headline(3)
                         << C_sMprTitles[i_eMpr];
@@ -770,7 +770,8 @@ Node::Write2( csi::xml::Element &           o_rOut,
     if ( Derived() == 0 )
     {
         o_rOut
-            >> *new html::Strong
+            >> *new xml::AnElement("span")
+                << new html::ClassAttr("btself")
                 << pClass->LocalName();
         return;
     }
@@ -780,25 +781,30 @@ Node::Write2( csi::xml::Element &           o_rOut,
     switch ( eProtection )
     {
          case ary::cpp::PROTECT_public:
-                    *pOut << new html::StyleAttr("color:#33ff33;");
+                     if (bVirtual)
+                        *pOut << new html::ClassAttr("btvpubl");
+                    else
+                        *pOut << new html::ClassAttr("btpubl");
                     break;
         case ary::cpp::PROTECT_protected:
-                    *pOut << new html::StyleAttr("color:#cc9933;");
+                     if (bVirtual)
+                        *pOut << new html::ClassAttr("btvprot");
+                    else
+                        *pOut << new html::ClassAttr("btprot");
                     break;
         case ary::cpp::PROTECT_private:
-                    *pOut << new html::StyleAttr("color:#ff6666;");
+                     if (bVirtual)
+                        *pOut << new html::ClassAttr("btvpriv");
+                    else
+                        *pOut << new html::ClassAttr("btpriv");
                     break;
         default:    // do nothing.
                     ;
     }   // end switch
 
-    if ( bVirtual )
-         pOut = & (*pOut >> *new html::Italic);
-
     csi::xml::Element & rOut = *pOut;
 
     Get_LinkedTypeText( rOut, i_rEnv, nClassType, false );
-
     rOut << " (";
     if ( bVirtual )
         rOut << "virtual ";
