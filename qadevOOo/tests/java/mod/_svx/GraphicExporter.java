@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GraphicExporter.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:18:11 $
+ *  last change:$Date: 2003-05-27 13:35:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,7 @@ import com.sun.star.beans.XPropertySet;
 import com.sun.star.document.XExporter;
 import com.sun.star.drawing.XShape;
 import com.sun.star.lang.XComponent;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.ucb.XSimpleFileAccess;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
@@ -115,7 +116,7 @@ public class GraphicExporter extends TestCase {
     protected void initialize( TestParameters tParam, PrintWriter log ) {
 
         log.println( "creating a drawdoc" );
-        xDrawDoc = DrawTools.createDrawDoc(tParam.getMSF());
+        xDrawDoc = DrawTools.createDrawDoc((XMultiServiceFactory)tParam.getMSF());
     }
 
     /**
@@ -165,7 +166,7 @@ public class GraphicExporter extends TestCase {
         // first we write what we are intend to do to log file
         log.println( "creating a test environment" );
         try {
-            go = tParam.getMSF().createInstance
+            go = ((XMultiServiceFactory)tParam.getMSF()).createInstance
                 ("com.sun.star.drawing.GraphicExportFilter");
         } catch (com.sun.star.uno.Exception e) {
             log.println("Couldn't create instance");
@@ -173,7 +174,7 @@ public class GraphicExporter extends TestCase {
         }
 
         // create testobject here
-        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF());
         oShape = SOF.createShape(xDrawDoc,5000,5000,1500,1000,"GraphicObject");
         DrawTools.getShapes(DrawTools.getDrawPage(xDrawDoc,0)).add(oShape);
         XPropertySet oShapeProps = (XPropertySet)
@@ -202,11 +203,11 @@ public class GraphicExporter extends TestCase {
         }
 
         final URL aURL = new URL() ;
-        aURL.Complete = util.utils.getOfficeTemp(tParam.getMSF())+"picture.jpg";
+        aURL.Complete = util.utils.getOfficeTemp((XMultiServiceFactory)tParam.getMSF())+"picture.jpg";
 
         final XSimpleFileAccess fAcc ;
         try {
-            Object oFAcc = tParam.getMSF().createInstance
+            Object oFAcc = ((XMultiServiceFactory)tParam.getMSF()).createInstance
                 ("com.sun.star.ucb.SimpleFileAccess") ;
             fAcc = (XSimpleFileAccess) UnoRuntime.queryInterface
                 (XSimpleFileAccess.class, oFAcc) ;
