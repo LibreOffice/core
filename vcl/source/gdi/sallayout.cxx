@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sallayout.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hdu $ $Date: 2002-09-25 17:59:34 $
+ *  last change: $Author: hdu $ $Date: 2002-09-26 10:28:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -327,6 +327,7 @@ void GenericSalLayout::SetGlyphItems( GlyphItem* pGlyphItems, int nGlyphCount )
 {
     mpGlyphItems = pGlyphItems;
     mnGlyphCount = nGlyphCount;
+    mnGlyphCapacity = mnGlyphCount;
 }
 
 // -----------------------------------------------------------------------
@@ -504,6 +505,9 @@ long GenericSalLayout::GetTextWidth() const
 
 void GenericSalLayout::ApplyDXArray( const long* pDXArray )
 {
+    if( mnGlyphCount <= 0 )
+        return;
+
     // determine cluster boundaries and x base offset
     int nChars = mnEndCharPos - mnMinCharPos;
     int* pLogCluster = (int*)alloca( nChars * sizeof(int) );
@@ -553,22 +557,21 @@ void GenericSalLayout::ApplyDXArray( const long* pDXArray )
     for( i = 0; i < mnGlyphCount; ++i, ++pG )
     {
         if( pG->IsClusterStart() )
+        {
             nDelta = nBasePointX + (nNewPos - pG->maLinearPos.X());
+            // right align in new space for RTL glyphs
+            if( pG->IsRTLGlyph() )
+                pG->maLinearPos.X() += pNewClusterWidths[i] - pG->mnOrigWidth;
+        }
 
         pG->maLinearPos.X() += nDelta;
-        nNewPos += pNewClusterWidths[ i ];
+        nNewPos += pNewClusterWidths[i];
     }
 
-    // adjust glyph widths to results above and align them in this space
+    // adjust visual glyph widths to results above
     pG = mpGlyphItems;
     for( i = 1; i < mnGlyphCount; ++i, ++pG )
-    {
         pG->mnNewWidth = pG[1].maLinearPos.X() - pG[0].maLinearPos.X();
-
-        // right align in new space for RTL glyphs
-        if( pG->IsRTLGlyph() )
-            pG[0].maLinearPos.X() += pG->mnNewWidth - pG->mnOrigWidth;
-    }
 }
 
 // -----------------------------------------------------------------------
@@ -642,21 +645,25 @@ void GenericSalLayout::KashidaJustify( long nKashidaIndex, int nKashidaWidth )
     if( !nKashidaCount )
         return;
 
-    GlyphItem* pNewGlyphItems = new GlyphItem[ mnGlyphCount + nKashidaCount ];
+    mnGlyphCapacity = mnGlyphCount + nKashidaCount;
+    GlyphItem* pNewGlyphItems = new GlyphItem[ mnGlyphCapacity ];
     GlyphItem* pG2 = pNewGlyphItems;
     pG1 = mpGlyphItems;
-
-    for( i = mnGlyphCount; --i >= 0; )
+    for( i = mnGlyphCount; --i >= 0; ++pG1 )
     {
+        *(pG2++) = *pG1;
         if( pG1->IsRTLGlyph() )
         {
             int nDelta = pG1->mnNewWidth - pG1->mnOrigWidth;
             if( 2*nDelta >= nKashidaWidth )
             {
+                pG1->mnNewWidth = pG1->mnOrigWidth;
+
                 // insert kashidas
+                nKashidaCount = 0;
                 Point aPos = pG1->maLinearPos;
-                aPos.X() -= nDelta;
-                for(; nDelta > 0; nDelta -= nKashidaWidth )
+                aPos.X() += pG1->mnOrigWidth;
+                for(; nDelta > 0; nDelta -= nKashidaWidth, ++nKashidaCount )
                 {
                     *(pG2++) = GlyphItem( pG1->mnCharPos, nKashidaIndex, aPos,
                         GlyphItem::IS_IN_CLUSTER|GlyphItem::IS_RTL_GLYPH, nKashidaWidth );
@@ -665,13 +672,9 @@ void GenericSalLayout::KashidaJustify( long nKashidaIndex, int nKashidaWidth )
 
                 // fixup rightmost kashida
                 if( nDelta < 0 )
-                    (pG2-1)->maLinearPos.X() += nDelta;
-
-                pG1->mnNewWidth = pG1->mnOrigWidth;
+                    (pG2-1)->maLinearPos.X() += (nKashidaCount>1) ? nDelta : nDelta/2;
             }
         }
-
-        *(pG2++) = *(pG1++);
     }
 
     delete[] mpGlyphItems;
