@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2004-05-19 08:05:29 $
+#   last change: $Author: obo $ $Date: 2004-07-06 17:01:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,20 +77,27 @@ BOOTSTRAP_SERVICE=	FALSE
 # --- Generate -----------------------------------------------------
 
 SLOFILES=			\
-                    $(SLO)$/menubarwrapper.obj          \
-                    $(SLO)$/menubarmanager.obj          \
-                    $(SLO)$/fontmenucontroller.obj      \
-                    $(SLO)$/fontsizemenucontroller.obj  \
-                    $(SLO)$/formatmenucontroller.obj    \
-                    $(SLO)$/objectmenucontroller.obj    \
-                    $(SLO)$/headermenucontroller.obj    \
-                    $(SLO)$/footermenucontroller.obj    \
-                    $(SLO)$/controlmenucontroller.obj   \
+                    $(SLO)$/menubarwrapper.obj              \
+                    $(SLO)$/menubarmanager.obj              \
+                    $(SLO)$/fontmenucontroller.obj          \
+                    $(SLO)$/fontsizemenucontroller.obj      \
+                    $(SLO)$/formatmenucontroller.obj        \
+                    $(SLO)$/objectmenucontroller.obj        \
+                    $(SLO)$/headermenucontroller.obj        \
+                    $(SLO)$/footermenucontroller.obj        \
+                    $(SLO)$/controlmenucontroller.obj       \
                     $(SLO)$/macrosmenucontroller.obj   \
-                    $(SLO)$/uicommanddescription.obj    \
-                    $(SLO)$/itemcontainer.obj           \
-                    $(SLO)$/constitemcontainer.obj      \
-                    $(SLO)$/rootitemcontainer.obj
+                    $(SLO)$/uicommanddescription.obj        \
+                    $(SLO)$/itemcontainer.obj               \
+                    $(SLO)$/constitemcontainer.obj          \
+                    $(SLO)$/rootitemcontainer.obj           \
+                    $(SLO)$/toolbarwrapper.obj              \
+                    $(SLO)$/toolbar.obj                     \
+                    $(SLO)$/toolbarmanager.obj              \
+                    $(SLO)$/addonstoolbarwrapper.obj        \
+                    $(SLO)$/addonstoolbarmanager.obj        \
+                    $(SLO)$/generictoolbarcontroller.obj    \
+                    $(SLO)$/toolbarsmenucontroller.obj
 
 # --- Targets ------------------------------------------------------
 
