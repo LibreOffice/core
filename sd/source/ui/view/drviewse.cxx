@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewse.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:38:04 $
+ *  last change: $Author: vg $ $Date: 2005-02-24 15:09:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,9 +227,6 @@
 #ifndef SD_VIEW_SHELL_BASE_HXX
 #include "ViewShellBase.hxx"
 #endif
-#ifndef SD_LAYER_DIALOG_CHILD_WINDOW_HXX
-#include "LayerDialogChildWindow.hxx"
-#endif
 
 // #97016#
 #ifndef _SD_OPTSITEM_HXX
@@ -250,8 +247,6 @@
 #endif
 
 #include "Window.hxx"
-
-#include <memory>
 
 
 using namespace ::rtl;
@@ -852,12 +847,14 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
                 {
                     pFrameView->SetPreviousViewShellType(GetShellType());
 
-                    std::auto_ptr<Slideshow> pSlideShow(
-                        new Slideshow( this, pDrView, GetDoc() ) );
-                    pSlideShow->setRehearseTimings(
+                    mpSlideShow = new Slideshow( this, pDrView, GetDoc() );
+                    mpSlideShow->setRehearseTimings(
                         nSId == SID_REHEARSE_TIMINGS );
-                    if (pSlideShow->startShow())
-                        mpSlideShow = pSlideShow.release();
+                    if (!mpSlideShow->startShow())
+                    {
+                        delete mpSlideShow;
+                        mpSlideShow = 0;
+                    }
                 }
             }
 
@@ -1841,9 +1838,10 @@ void DrawViewShell::ShowUIControls (bool bVisible)
 {
     ViewShell::ShowUIControls (bVisible);
 
-    GetViewFrame()->SetChildWindow(
-        LayerDialogChildWindow::GetChildWindowId(),
-        IsLayerModeActive() && bVisible);
+    //AF: The LayerDialogChildWindow is not used anymore (I hope).
+    //    GetViewFrame()->SetChildWindow(
+    //        LayerDialogChildWindow::GetChildWindowId(),
+    //        IsLayerModeActive() && bVisible);
     aTabControl.Show (bVisible);
 }
 
