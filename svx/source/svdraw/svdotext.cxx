@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotext.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: aw $ $Date: 2001-08-30 16:56:02 $
+ *  last change: $Author: aw $ $Date: 2001-09-18 14:54:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1142,25 +1142,42 @@ FASTBOOL SdrTextObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
                     }
                     else
                     {
-                    // hier mal vereinheitlichen:
-                    // - Grundsaetzlich selbst Clippen
-                    // - nicht mehr die Methode mit dem PaintRect verwenden
                         if (!bFitKorreg)
                         {
                             if(IsVerticalWriting())
                             {
-                                // #91744# for vertical writing the fix #82826#
+                                // new try for #82826#
+                                if(aAnchorRect.GetWidth() > aPaintRect.GetWidth())
+                                {
+                                    aPaintRect = Rectangle(
+                                        aPaintRect.Right() - aAnchorRect.GetWidth(), aPaintRect.Top(),
+                                        aPaintRect.Right(), aPaintRect.Bottom());
+                                }
+
+                                // #91744# for vertical writing the original fix #82826#
                                 // needs to be taken out.
                                 rOutliner.Draw(pOutDev, aPaintRect);
                             }
                             else
                             {
+                                // new try for #82826#
+                                if(aAnchorRect.GetHeight() > aPaintRect.GetHeight())
+                                {
+                                    aPaintRect = Rectangle(
+                                        aPaintRect.Left(), aPaintRect.Top(),
+                                        aPaintRect.Right(), aPaintRect.Top() + aAnchorRect.GetHeight());
+                                }
+
+                                // #91809# for horizontal writing the original fix #82826#
+                                // needs to be taken out, too.
+                                rOutliner.Draw(pOutDev, aPaintRect);
+
                                 // #82826# for correct preview of outliner views
-                                // rOutliner.Draw(pOutDev,aPaintRect);
-                                if(aPaintRect.Top() > aAnchorRect.Top())
-                                    rOutliner.Draw(pOutDev, aPaintRect);
-                                else
-                                    rOutliner.Draw(pOutDev, aAnchorRect);
+                                //// rOutliner.Draw(pOutDev,aPaintRect);
+                                //if(aPaintRect.Top() > aAnchorRect.Top())
+                                //  rOutliner.Draw(pOutDev, aPaintRect);
+                                //else
+                                //  rOutliner.Draw(pOutDev, aAnchorRect);
                             }
                         }
                         else
