@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formcontroller.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-05 10:13:24 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 14:00:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1712,7 +1712,7 @@ class EventsNameReplace_Impl:
                                 //SvxMacro* pMacro = aTab.Get( nIndex++ );
                                 Sequence< css::beans::PropertyValue > props;
                                 ::rtl::OUString macroURL;
-                                if( xNameReplace->getByName( *pMethods ) >>= props )
+                                if( sal_True == ( xNameReplace->getByName( *pMethods ) >>= props ) )
                                 {
                                     sal_Int32 nCount = props.getLength();
                                     for( sal_Int32 index = 0; index < nCount ; ++index )
