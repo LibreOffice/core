@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontdialog.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-20 13:02:44 $
+ *  last change: $Author: fs $ $Date: 2001-08-15 15:00:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -694,6 +694,7 @@ namespace pcr
                 static_cast<SvxCharNamePage&>(_rPage).SetFontList(
                     static_cast<const SvxFontListItem&>(GetInputSetImpl()->Get(CFID_FONTLIST))
                 );
+                static_cast<SvxCharNamePage&>(_rPage).DisableControls( DISABLE_HIDE_LANGUAGE );
                 break;
         }
     }
@@ -705,6 +706,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2001/07/20 13:02:44  fs
+ *  #90040# use LocaleDataWrapper instead of International class
+ *
  *  Revision 1.4  2001/06/27 07:48:59  fs
  *  #88275# correctly initialize the SvxFontItems
  *
