@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docoptio.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-02 19:12:16 $
+ *  last change: $Author: er $ $Date: 2001-05-15 18:17:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,8 @@ ScDocOptions::ScDocOptions( const ScDocOptions& rCpy )
             bCalcAsShown( rCpy.bCalcAsShown ),
             bMatchWholeCell( rCpy.bMatchWholeCell ),
             bDoAutoSpell( rCpy.bDoAutoSpell ),
-            bLookUpColRowNames( rCpy.bLookUpColRowNames )
+            bLookUpColRowNames( rCpy.bLookUpColRowNames ),
+            bFormulaRegexEnabled( rCpy.bFormulaRegexEnabled )
 {
 }
 
@@ -237,6 +238,7 @@ void ScDocOptions::ResetDocOptions()
     bMatchWholeCell     = TRUE;
     bDoAutoSpell        = FALSE;
     bLookUpColRowNames  = TRUE;
+    bFormulaRegexEnabled= TRUE;
 }
 
 //========================================================================
@@ -311,7 +313,8 @@ SfxPoolItem* __EXPORT ScTpCalcItem::Clone( SfxItemPool * ) const
 #define SCCALCOPT_PRECISION         8
 #define SCCALCOPT_SEARCHCRIT        9
 #define SCCALCOPT_FINDLABEL         10
-#define SCCALCOPT_COUNT             11
+#define SCCALCOPT_REGEX             11
+#define SCCALCOPT_COUNT             12
 
 #define CFGPATH_DOCLAYOUT   "Office.Calc/Layout/Other"
 
@@ -333,7 +336,8 @@ Sequence<OUString> ScDocCfg::GetCalcPropertyNames()
         "Other/CaseSensitive",              // SCCALCOPT_CASESENSITIVE
         "Other/Precision",                  // SCCALCOPT_PRECISION
         "Other/SearchCriteria",             // SCCALCOPT_SEARCHCRIT
-        "Other/FindLabel"                   // SCCALCOPT_FINDLABEL
+        "Other/FindLabel",                  // SCCALCOPT_FINDLABEL
+        "Other/RegularExpressions"          // SCCALCOPT_REGEX
     };
     Sequence<OUString> aNames(SCCALCOPT_COUNT);
     OUString* pNames = aNames.getArray();
@@ -423,6 +427,9 @@ ScDocCfg::ScDocCfg() :
                     case SCCALCOPT_FINDLABEL:
                         SetLookUpColRowNames( ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
                         break;
+                    case SCCALCOPT_REGEX :
+                        SetFormulaRegexEnabled( ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
+                        break;
                 }
             }
         }
@@ -506,6 +513,8 @@ IMPL_LINK( ScDocCfg, CalcCommitHdl, void *, EMPTYARG )
             case SCCALCOPT_FINDLABEL:
                 ScUnoHelpFunctions::SetBoolInAny( pValues[nProp], IsLookUpColRowNames() );
                 break;
+            case SCCALCOPT_REGEX :
+                ScUnoHelpFunctions::SetBoolInAny( pValues[nProp], IsFormulaRegexEnabled() );
         }
     }
     aCalcItem.PutProperties(aNames, aValues);
