@@ -2,9 +2,9 @@
  *
  *  $RCSfile: about.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 15:39:35 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 15:17:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -422,7 +422,10 @@ void AboutDialog::Paint( const Rectangle& rRect )
     if ( nCount )
     {
         // use deactive color for some headers
-        Color aGrayColor = GetSettings().GetStyleSettings().GetDeactiveColor();
+        Color aGrayColor = GetSettings().GetStyleSettings().GetDeactiveTextColor();
+        if ( GetBackground().GetColor() == aGrayColor )
+            aGrayColor = GetFont().GetColor();
+
         USHORT nEmptyString = 0;
 
         for ( USHORT i = 0; i < nCount; ++i )
@@ -443,19 +446,7 @@ void AboutDialog::Paint( const Rectangle& rRect )
                 nVal = Developer_Impl[nDev]._nValue;
             }
 #endif
-            if ( nVal )
-            {
-                // Versionsnummern gibt es nur in den fetten Zeilen
-//              USHORT nProductVersion = (USHORT)ProductVersion::GetVersion().ToInt32();
-//              String aVersion = String::CreateFromInt32( nProductVersion / 10 );
-                String aVersion = String::CreateFromInt32( 0 );
-//              aVersion += '.';
-//              aVersion += String::CreateFromInt32( nProductVersion % 10 );
-                USHORT nSPos = aStr.SearchAndReplaceAscii( "$(VER)", aVersion );
-//              while ( STRING_NOTFOUND != nSPos )
-//                  nSPos = aStr.SearchAndReplaceAscii( "$(VER)", aVersion, nSPos );
-                DBG_ASSERT(STRING_NOTFOUND != nSPos, "$(VER) still used?");
-            }
+
             aSize = Size( GetTextWidth( aStr ), GetTextHeight() );
             aPnt = Point( nW - ( aSize.Width() / 2 ), nPos );
             nPos1 = aPnt.Y();
