@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews5.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: af $ $Date: 2002-04-22 09:12:57 $
+ *  last change: $Author: ka $ $Date: 2002-04-25 07:13:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -563,7 +563,7 @@ void SdDrawViewShell::Paint(const Rectangle& rRect, SdWindow* pWin)
 
             pWin->SetDrawMode( DRAWMODE_DEFAULT );
             pWin->SetLineColor();
-            pWin->SetFillColor( Color( 234, 234, 234 ) );
+            pWin->SetFillColor( pWin->GetSettings().GetStyleSettings().GetWorkspaceColor() );
 
             Rectangle aSdRect( pWin->PixelToLogic( Point(0, 0) ), pWin->GetOutputSize() );
             Rectangle aPgRect( Point(0, 0), pActualPage->GetSize() );
