@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wizardmachine.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-07 09:50:10 $
+ *  last change: $Author: kz $ $Date: 2001-11-16 22:14:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,6 +147,9 @@ String STR_WIZDLG_PREVIOUS
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.22  2001/11/07 09:50:10  kz
+ *  Merge SRC638: 07.11.01 - 10:50:15
+ *
  *  Revision 1.21  2001/08/29 20:08:52  kz
  *  Merge SRC638: 08/29/01 - 22:08:32
  *
@@ -213,6 +216,7 @@ String STR_WIZDLG_PREVIOUS
  *
  *  Revision 1.0 14.02.01 11:46:26  fs
  ************************************************************************/
+
 
 
 
