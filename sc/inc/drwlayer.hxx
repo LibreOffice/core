@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwlayer.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:23:37 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:10:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,7 @@ private:
                                 const Point& rTopLeft );
     void            MoveCells( USHORT nTab, USHORT nCol1,USHORT nRow1, USHORT nCol2,USHORT nRow2,
                                 short nDx,short nDy );
-    void            RecalcPos( SdrObject* pObj, ScDrawObjData* pData );
+    void            RecalcPos( SdrObject* pObj, ScDrawObjData* pData, BOOL bNegativePage );
 
 public:
                     ScDrawLayer( ScDocument* pDocument, const String& rName );
@@ -192,6 +192,10 @@ public:
 
     void            SetPageSize( USHORT nPageNo, const Size& rSize );
     ULONG           GetDefTextHeight() const;
+
+                    //  mirror or move between positive and negative positions for RTL
+    void            MirrorRTL( SdrObject* pObj );
+    static void     MirrorRectRTL( Rectangle& rRect );      // for bounding rectangles etc.
 
                     //  GetVisibleName: name for navigator etc: GetPersistName or GetName
                     //  (ChartListenerCollection etc. must use GetPersistName directly)
