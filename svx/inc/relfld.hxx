@@ -2,9 +2,9 @@
  *
  *  $RCSfile: relfld.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-04-25 06:52:14 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 15:10:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,10 @@
 #include <vcl/field.hxx>
 #endif
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 
 // class SvxRelativeField ------------------------------------------------
 /*
@@ -76,7 +80,7 @@
     Zus"atzliche Funktionalit"at: relative Angaben.
 */
 
-class SvxRelativeField : public MetricField
+class SVX_DLLPUBLIC SvxRelativeField : public MetricField
 {
 private:
     USHORT          nRelMin;
