@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: obo $ $Date: 2004-11-16 10:07:03 $
+#   last change: $Author: rt $ $Date: 2004-11-26 19:30:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,6 +84,7 @@ LIB2OBJFILES  =$(OBJFILES)
 # --- Files --------------------------------------------------------
 
 SLOFILES =	\
+        $(SLO)$/unointerfacetouniqueidentifiermapper.obj \
         $(SLO)$/facreg.obj		\
         $(SLO)$/xmlcnitm.obj	\
         $(SLO)$/attrlist.obj	\
