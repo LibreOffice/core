@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ama $ $Date: 2001-02-01 14:00:12 $
+ *  last change: $Author: ama $ $Date: 2001-02-15 13:27:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,8 @@ class SwTxtFormatter : public SwTxtPainter
     SwMultiPortion* pMulti; // during formatting a multi-portion
     sal_uInt8 nCntEndHyph;  // zaehlt aufeinanderfolgende Hyphens am Zeilenende
     sal_uInt8 nCntMidHyph;  // zaehlt aufeinanderfolgende Hyphens vor Flies
+    xub_StrLen nLeftScanIdx; // for increasing performance during
+    xub_StrLen nRightScanIdx;     // scanning for portion ends
     sal_Bool bOnceMore : 1; // noch 'ne Runde?
     sal_Bool bFlyInCntBase : 1; // Base-Referenz der zeichengeb. Rahmen setzen
     sal_Bool bChanges : 1; // Flag, fuer die Berechnung des Repaint-Rechtecks

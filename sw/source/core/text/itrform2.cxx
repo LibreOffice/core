@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ama $ $Date: 2001-02-06 15:26:49 $
+ *  last change: $Author: ama $ $Date: 2001-02-15 13:30:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,6 +179,8 @@ void SwTxtFormatter::CtorInit( SwTxtFrm *pFrm, SwTxtFormatInfo *pNewInf )
     bTruncLines = sal_False;
     nCntEndHyph = 0;
     nCntMidHyph = 0;
+    nLeftScanIdx = STRING_LEN;
+    nRightScanIdx = 0;
 
     if( nStart > GetInfo().GetTxt().Len() )
     {
@@ -358,19 +360,16 @@ void SwTxtFormatter::Recycle( SwTxtFormatInfo &rInf )
 
     // bBrkBefore ist sal_True, wenn die BrkPos vor oder auf nReformat liegt,
     // d.h. dass die pPos in jedem Fall neuformatiert werden muss.
-    SwTxtGuess aGuess;
     rInf.SetLen( nReformat );
 
     // 6736: Worte hinter Flys, Blank einfuegen.
     // 6820: Rechtstabs und Blanks
-    xub_StrLen nPrevEnd = nReformat ?
-        aGuess.GetPrevEnd( rInf, nReformat - 1 ) + 1: 0;
-    if ( 1 == nPrevEnd )
-        --nPrevEnd;
+    xub_StrLen nWordStart = nReformat ?
+        SwTxtGuess::GetWordStart( rInf, nReformat - 1 ) : 0;
 
     const sal_Bool bBrkBefore = bTabFlag || pLast->InTabnLftGrp() ||
         pPos->IsQuoVadisPortion() ||
-        ( pLast->IsFlyPortion() && (!nReformat || rInf.GetIdx() >= nPrevEnd) );
+        (pLast->IsFlyPortion() && (!nReformat || rInf.GetIdx() >= nWordStart) );
     // Wenn pLast nicht recyclebar ist (R/Z/D-Tabs und SoftHyphs etc)
     // dann muss diese Portion mit in die Neuformatierung aufgenommen
     // werden. D.h: pLast wandert um einen zurueck und rInf muss
@@ -401,11 +400,11 @@ void SwTxtFormatter::Recycle( SwTxtFormatInfo &rInf )
     // Zeile, wo es gleich weiter geht.
     long nPOfst = 0;
 
-    if ( pPos->InTxtGrp() && rInf.GetIdx() < nPrevEnd &&
-         rInf.GetIdx() + pPos->GetLen() > nPrevEnd )
+    if ( pPos->InTxtGrp() && rInf.GetIdx() < --nWordStart &&
+         rInf.GetIdx() + pPos->GetLen() > nWordStart )
     {
         SwRect aRect;
-        GetCharRect( &aRect, nPrevEnd );
+        GetCharRect( &aRect, nWordStart );
         nPOfst = aRect.Left();
     }
     else
@@ -572,6 +571,8 @@ SwLinePortion *SwTxtFormatter::UnderFlow( SwTxtFormatInfo &rInf )
     // nach dem Format() ein Insert erfolgt.
     SeekAndChg( rInf );
 
+    // line width is adjusted, so that pPor does not fit to current
+    // line anymore
     rInf.Width( rInf.X() + (pPor->Width() ? pPor->Width() - 1 : 0) );
     rInf.SetLen( pPor->GetLen() );
     rInf.SetFull( sal_False );
@@ -998,7 +999,21 @@ SwTxtPortion *SwTxtFormatter::NewTxtPortion( SwTxtFormatInfo &rInf )
                 nNextChg = Min( nMaxChg, rInf.GetTxt().Len() );
         }
     }
-    nNextChg = rInf.ScanPortionEnd( nNextChg );
+
+    // we keep an invariant during method calls:
+    // there are no portion ending characters like hard spaces
+    // or tabs in [ nLeftScanIdx, nRightScanIdx ]
+    if ( nLeftScanIdx <= rInf.GetIdx() && rInf.GetIdx() <= nRightScanIdx )
+    {
+        if ( nNextChg > nRightScanIdx )
+            nNextChg = nRightScanIdx = rInf.ScanPortionEnd( nRightScanIdx, nNextChg );
+    }
+    else
+    {
+        nLeftScanIdx = rInf.GetIdx();
+        nNextChg = nRightScanIdx = rInf.ScanPortionEnd( rInf.GetIdx(), nNextChg );
+    }
+
     pPor->SetLen( nNextChg - rInf.GetIdx() );
     rInf.SetLen( pPor->GetLen() );
     return pPor;
@@ -1201,23 +1216,6 @@ SwLinePortion *SwTxtFormatter::NewPortion( SwTxtFormatInfo &rInf )
             }
         }
 
-        // Wenn die Zeile voll ist und ein Blank am Zeilenende
-        // steht, dann muss es in einer HolePortion verborgen werden
-        // (trailing blank).
-        // 8518: keine HolePortions bei mehrzeiligen Feldern.
-        if( rInf.GetIdx() < rInf.GetTxt().Len() &&
-            rInf.GetIdx() && ' ' == rInf.GetChar( rInf.GetIdx() )
-            && !rInf.GetLast()->IsHolePortion() && !rInf.GetRest()
-            && CH_BREAK != rInf.GetChar( rInf.GetIdx() - 1 ) )
-        {
-            SwHolePortion *pHole = new SwHolePortion( *rInf.GetLast() );
-            xub_StrLen nCnt = rInf.GetIdx();
-            xub_StrLen nLen = rInf.GetTxt().Len();
-            while ( nCnt < nLen && ' ' == rInf.GetChar( nCnt ) )
-                nCnt++;
-            pHole->SetLen( nCnt - rInf.GetIdx() );
-            return pHole;
-        }
         return 0;
     }
 
