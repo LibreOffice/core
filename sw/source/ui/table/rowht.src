@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rowht.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:44:32 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:25:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@ ModalDialog DLG_ROW_HEIGHT
     Text [ ENGLISH ] = "Row height" ;
     Text [ norwegian ] = "Cellehøyde" ;
     Text [ italian ] = "Altezza riga" ;
-    Text [ portuguese_brazilian ] = "Altura da c?lula" ;
+    Text [ portuguese_brazilian ] = "Altura da Linha" ;
     Text [ portuguese ] = "Altura da linha" ;
     Text [ finnish ] = "Rivin korkeus" ;
     Text [ danish ] = "Rækkehøjde" ;
@@ -135,20 +135,23 @@ ModalDialog DLG_ROW_HEIGHT
         Text [ spanish ] = "~Ajuste dinámico" ;
         Text [ french ] = "Adaptation dynamique" ;
         Text [ dutch ] = "~dynamisch aanpassen" ;
-        Text [ portuguese_brazilian ] = "~dynamisch anpassen" ;
+        Text [ portuguese_brazilian ] = "A~justar ao tamanho" ;
         Text [ portuguese ] = "Ajuste ~dinâmico" ;
         Text[ chinese_simplified ] = "è‡ªåŠ¨è°ƒæ•´(~F)";
         Text[ russian ] = "Ïîäáîğ ğàçìåğà";
-        Text[ polish ] = "Dostosuj dynamicznie";
+        Text[ polish ] = "~Dopasuj do rozmiaru";
         Text[ japanese ] = "å¢—åŠ ã‚’èªã‚ã‚‹(~F)";
         Text[ chinese_traditional ] = "è‡ªå‹•æœ€é©èª¿æ•´(~F)";
         Text[ arabic ] = "ãáÇÁãÉ ÊáŞÇÆíÉ ááÍÌã";
         Text[ greek ] = "ÄõíáìéêŞ ğñïóáñìïãŞ";
         Text[ korean ] = "í¬ê¸°ì— ë§ì¶¤(~F)";
-        Text[ turkish ] = "i~çerik boyuna uydur";
+        Text[ turkish ] = "~Boyuna sığdır";
         Text[ catalan ] = "~Ajusta a la mida";
         Text[ finnish ] = "~Sovita kokoon";
         Text[ thai ] = "~à¸ˆà¸±à¸”à¸à¸­à¸”à¸µà¸‚à¸™à¸²à¸”";
+        Text[ czech ] = "PÅ™izpÅ¯sobit velikosti";
+        Text[ hebrew ] = "~dynamisch anpassen";
+        Text[ hindi ] = "~à¤ªà¤°à¤¿à¤®à¤¾à¤£ à¤•à¥‡à¤²à¤¿à¤ à¤¯à¥‹à¤—à¥à¤¯";
     };
     FixedLine FL_HEIGHT
     {
@@ -178,6 +181,9 @@ ModalDialog DLG_ROW_HEIGHT
         Text[ turkish ] = "Yükseklik";
         Text[ catalan ] = "Alçada";
         Text[ thai ] = "à¸„à¸§à¸²à¸¡à¸ªà¸¹à¸‡";
+        Text[ czech ] = "VÃ½Å¡ka";
+        Text[ hebrew ] = "â€®×’×•×‘×”â€¬";
+        Text[ hindi ] = "à¤Šà¤à¤šà¤¾à¤ˆ";
     };
     Text[ chinese_simplified ] = "è¡Œé«˜";
     Text[ russian ] = "Âûñîòà ñòğîêè";
@@ -190,7 +196,19 @@ ModalDialog DLG_ROW_HEIGHT
     Text[ turkish ] = "Satır yüksekliği";
     Text[ catalan ] = "Alçada de fila";
     Text[ thai ] = "à¸„à¸§à¸²à¸¡à¸ªà¸¹à¸‡à¸‚à¸­à¸‡à¹à¸–à¸§";
+    Text[ czech ] = "VÃ½Å¡ka Å™Ã¡dku";
+    Text[ hebrew ] = "â€®×’×•×‘×” ×©×•×¨×”â€¬";
+    Text[ hindi ] = "à¤ªà¤‚à¤•à¥à¤¤à¤¿ à¤Šà¤à¤šà¤¾à¤ˆ";
 };
+
+
+
+
+
+
+
+
+
 
 
 
