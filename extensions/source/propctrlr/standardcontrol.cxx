@@ -2,9 +2,9 @@
  *
  *  $RCSfile: standardcontrol.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-24 14:12:53 $
+ *  last change: $Author: tbe $ $Date: 2001-02-05 12:24:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,10 @@
 #include <vcl/svapp.hxx>
 #endif
 //==================================================================
+
+#ifndef _OFF_APP_HXX
+#include <offmgr/app.hxx>
+#endif
 
 //............................................................................
 namespace pcr
@@ -509,21 +513,27 @@ namespace pcr
 
         if (pDocSh)
         {
+            XColorTable* pColorTbl;
             const SfxPoolItem* pColorItem = pDocSh->GetItem( SID_COLOR_TABLE );
             if (pColorItem)
             {
                 DBG_ASSERT(pColorItem->ISA(SvxColorTableItem), "OColorControl::OColorControl: invalid color item!");
                 SvxColorTableItem aItem( *static_cast< const SvxColorTableItem*>( pColorItem ) );
-                XColorTable* pColorTbl = aItem.GetColorTable();
-                DBG_ASSERT(pColorTbl, "OColorControl::OColorControl: no color table!");
+                pColorTbl = aItem.GetColorTable();
+            }
+            else    // BasicDocShell has no color item
+            {
+                pColorTbl = OFF_APP()->GetStdColorTable();
+            }
 
-                if (pColorTbl)
+            DBG_ASSERT(pColorTbl, "OColorControl::OColorControl: no color table!");
+
+            if (pColorTbl)
+            {
+                for (sal_uInt16 i = 0; i < pColorTbl->Count(); ++i)
                 {
-                    for (sal_uInt16 i = 0; i < pColorTbl->Count(); ++i)
-                    {
-                        XColorEntry* pEntry = pColorTbl->Get( i );
-                        InsertEntry( pEntry->GetColor(), pEntry->GetName() );
-                    }
+                    XColorEntry* pEntry = pColorTbl->Get( i );
+                    InsertEntry( pEntry->GetColor(), pEntry->GetName() );
                 }
             }
         }
@@ -1236,6 +1246,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2001/01/24 14:12:53  fs
+ *  recognize and tolerate a missing SID_COLOR_TABLE item
+ *
  *  Revision 1.1  2001/01/12 11:33:20  fs
  *  initial checkin - outsourced the form property browser
  *
