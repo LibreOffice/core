@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: kz $ $Date: 2003-11-18 16:40:07 $
+#   last change: $Author: obo $ $Date: 2004-03-19 14:50:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,7 +62,7 @@
 PRJ=..$/..$/..
 
 PRJNAME=sal
-TARGET=qa
+TARGET=qa_osl_process
 # this is removed at the moment because we need some enhancements
 # TESTDIR=TRUE
 
@@ -90,6 +90,9 @@ SHL1STDLIBS+=	$(SOLARLIBDIR)$/cppunit.lib
 .ENDIF
 .IF "$(GUI)" == "UNX"
 SHL1STDLIBS+=$(SOLARLIBDIR)$/libcppunit$(DLLPOSTFIX).a
+# .IF "$(OS)" == "SOLARIS"
+# SHL1STDLIBS += -lrt -laio
+# .ENDIF
 .ENDIF
 
 SHL1IMPLIB= i$(SHL1TARGET)
@@ -103,7 +106,7 @@ SHL1VERSIONMAP = export.map
 
 # END ------------------------------------------------------------------
 
-.IF "$(GUI)" == "WNT"
+#.IF "$(GUI)" == "WNT"
 
 SHL2OBJS=$(SLO)$/osl_process.obj
 SHL2TARGET=osl_process
@@ -121,7 +124,7 @@ SHL2DEF=$(MISC)$/$(SHL2TARGET).def
 DEF2NAME=$(SHL2TARGET)
 DEF2EXPORTFILE=export.exp
 
-#
+# END ------------------------------------------------------------------
 
 OBJ3FILES=$(OBJ)$/osl_process_child.obj 
 APP3TARGET=osl_process_child
@@ -134,7 +137,7 @@ APP3STDLIBS=$(LB)$/libsal.so
 APP3STDLIBS=kernel32.lib $(LB)$/isal.lib
 .ENDIF
 
-.ENDIF # "$(GUI)" == "WNT"
+#.ENDIF # "$(GUI)" == "WNT"
 
 #------------------------------- All object files -------------------------------
 # do this here, so we get right dependencies
