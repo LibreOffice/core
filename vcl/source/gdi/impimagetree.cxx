@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impimagetree.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 13:47:33 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:44:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -364,6 +364,37 @@ bool ImplImageTree::implLoadFromStream( SvStream& rIStm,
 
 // ------------------------------------------------------------------------------
 
+::std::auto_ptr< SvStream > ImplImageTree::implGetStream( const uno::Reference< io::XInputStream >& rxIStm ) const
+{
+    ::std::auto_ptr< SvStream > apRet;
+
+    // create a seekable memory stream from the non-seekable XInputStream
+    if( rxIStm.is() )
+    {
+        const sal_Int32             nBufferSize = 32768;
+        sal_Int32                   nRead;
+        uno::Sequence < sal_Int8 >  aReadSeq( nBufferSize );
+
+        apRet.reset( new SvMemoryStream( nBufferSize, nBufferSize ) );
+
+        do
+        {
+            nRead = rxIStm->readBytes ( aReadSeq, nBufferSize );
+            apRet->Write( aReadSeq.getConstArray(), nRead );
+        }
+        while ( nRead == nBufferSize );
+
+        if( apRet->Tell() > 0 )
+            apRet->Seek( 0 );
+        else
+            apRet.reset();
+    }
+
+    return apRet;
+}
+
+// ------------------------------------------------------------------------------
+
 bool ImplImageTree::loadImage( const ::rtl::OUString& rName, BitmapEx& rReturn, bool bSearchLanguageDependent )
 {
     const BmpExHashMap::const_iterator  aBmpExFindIter( aBmpExHashMap.find( rName ) );
@@ -420,15 +451,12 @@ bool ImplImageTree::loadImage( const ::rtl::OUString& rName, BitmapEx& rReturn, 
                                 {
                                     uno::Reference< io::XInputStream > xIStm;
 
-                                    if( ( mxNameAcc->getByName( aLocaleName ) >>= xIStm ) && xIStm.is() )
+                                    if( mxNameAcc->getByName( aLocaleName ) >>= xIStm )
                                     {
-                                        SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( xIStm );
+                                        ::std::auto_ptr< SvStream > apRet( implGetStream( xIStm ) );
 
-                                        if( pIStm )
-                                        {
-                                            implLoadFromStream( *pIStm, aLocaleName, rReturn );
-                                            delete pIStm;
-                                        }
+                                        if( apRet.get() )
+                                            implLoadFromStream( *apRet, aLocaleName, rReturn );
                                     }
                                 }
                                 catch( const uno::Exception & )
@@ -446,15 +474,12 @@ bool ImplImageTree::loadImage( const ::rtl::OUString& rName, BitmapEx& rReturn, 
                 {
                     uno::Reference< io::XInputStream > xIStm;
 
-                    if( ( mxNameAcc->getByName( rName ) >>= xIStm ) && xIStm.is() )
+                    if( mxNameAcc->getByName( rName ) >>= xIStm )
                     {
-                        SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( xIStm );
+                        ::std::auto_ptr< SvStream > apRet( implGetStream( xIStm ) );
 
-                        if( pIStm )
-                        {
-                            implLoadFromStream( *pIStm, rName, rReturn );
-                            delete pIStm;
-                        }
+                        if( apRet.get() )
+                            implLoadFromStream( *apRet, rName, rReturn );
                     }
                 }
                 catch( const uno::Exception & )
@@ -464,13 +489,10 @@ bool ImplImageTree::loadImage( const ::rtl::OUString& rName, BitmapEx& rReturn, 
 
             if( rReturn.IsEmpty() )
             {
-                SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( implGetUserFileURL( rName ), STREAM_READ );
+                ::std::auto_ptr< SvStream > apIStm( ::utl::UcbStreamHelper::CreateStream( implGetUserFileURL( rName ), STREAM_READ ));
 
-                if( pIStm )
-                {
-                    *pIStm >> rReturn;
-                    delete pIStm;
-                }
+                if( apIStm.get() )
+                    *apIStm >> rReturn;
             }
         }
         else
@@ -486,7 +508,9 @@ bool ImplImageTree::loadImage( const ::rtl::OUString& rName, BitmapEx& rReturn, 
             {
                 String aURLStr;
 
-                if( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( ( aAppDir = aAppDir.copy( 0, nPos  ) ), aURLStr ) )
+                aAppDir = aAppDir.copy( 0, nPos  );
+
+                if( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aAppDir, aURLStr ) )
                 {
                     INetURLObject   aURL( aURLStr );
                     sal_Int32       nIndex = 0;
@@ -498,12 +522,13 @@ bool ImplImageTree::loadImage( const ::rtl::OUString& rName, BitmapEx& rReturn, 
                     while( nIndex >= 0 );
 
                     aURLStr = aURL.GetMainURL( INetURLObject::NO_DECODE );
-                    SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aURLStr, STREAM_READ );
 
-                    if( pIStm )
+                    ::std::auto_ptr< SvStream > apIStm( ::utl::UcbStreamHelper::CreateStream( aURLStr, STREAM_READ ) );
+
+                    if( apIStm.get() )
                     {
-                        implLoadFromStream( *pIStm, aURLStr, rReturn );
-                        delete pIStm;
+                        implLoadFromStream( *apIStm, aURLStr, rReturn );
+                        apIStm.reset();
                     }
 
                     if( rReturn.IsEmpty() )
@@ -514,7 +539,9 @@ bool ImplImageTree::loadImage( const ::rtl::OUString& rName, BitmapEx& rReturn, 
                         if( -1 == nPos )
                             nPos = aAppDir.lastIndexOf( '\\' );
 
-                        if( ( -1 != nPos ) && ::utl::LocalFileHelper::ConvertPhysicalNameToURL( ( aAppDir = aAppDir.copy( 0, nPos  ) ), aURLStr ) )
+                        aAppDir = aAppDir.copy( 0, nPos );
+
+                        if( ( -1 != nPos ) && ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aAppDir, aURLStr ) )
                         {
                             aURL = INetURLObject( aURLStr );
                             aURL.Append( String( RTL_CONSTASCII_USTRINGPARAM( "share" ) ) );
@@ -528,13 +555,11 @@ bool ImplImageTree::loadImage( const ::rtl::OUString& rName, BitmapEx& rReturn, 
                             while( nIndex >= 0 );
 
                             aURLStr = aURL.GetMainURL( INetURLObject::NO_DECODE );
-                            SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aURLStr, STREAM_READ );
 
-                            if( pIStm )
-                            {
-                                implLoadFromStream( *pIStm, aURLStr, rReturn );
-                                delete pIStm;
-                            }
+                            apIStm.reset( ::utl::UcbStreamHelper::CreateStream( aURLStr, STREAM_READ ) );
+
+                            if( apIStm.get() )
+                                implLoadFromStream( *apIStm, aURLStr, rReturn );
                         }
                     }
                 }
@@ -556,12 +581,9 @@ void ImplImageTree::addUserImage( const ::rtl::OUString& rName, const BitmapEx& 
 
     if( aFileName.getLength() )
     {
-        SvStream* pOStm = ::utl::UcbStreamHelper::CreateStream( aFileName, STREAM_WRITE | STREAM_TRUNC );
+        ::std::auto_ptr< SvStream > apOStm( ::utl::UcbStreamHelper::CreateStream( aFileName, STREAM_WRITE | STREAM_TRUNC ) );
 
-        if( pOStm )
-        {
-            *pOStm << rBmpEx;
-            delete pOStm;
-        }
+        if( apOStm.get() )
+            *apOStm << rBmpEx;
     }
 }
