@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futext.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: dl $ $Date: 2001-06-29 13:07:04 $
+ *  last change: $Author: aw $ $Date: 2001-08-24 15:46:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -632,32 +632,54 @@ BOOL FuText::MouseButtonUp(const MouseEvent& rMEvt)
             || nSlotId == SID_TEXT_FITTOSIZE_VERTICAL);
         rOutl.SetVertical(bVertical);
 
-        if ( pTextObj && pDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS )
+        // #91508# and #91510#
+        if(pTextObj)
         {
-            if( nSlotId == SID_ATTR_CHAR )
+            if(pDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS)
             {
-                // Impress-Textobjekt wird erzeugt (faellt auf Zeilenhoehe zusammen)
-                // Damit das Objekt beim anschliessenden Erzeugen gleich die richtige
-                // Hoehe bekommt (sonst wird zuviel gepainted)
-                SfxItemSet aSet(pViewShell->GetPool());
-                aSet.Put(SdrTextMinFrameHeightItem(0));
-                aSet.Put(SdrTextAutoGrowWidthItem(FALSE));
-                aSet.Put(SdrTextAutoGrowHeightItem(TRUE));
-                pTextObj->SetItemSet(aSet);
-                pTextObj->AdjustTextFrameWidthAndHeight();
-                aSet.Put(SdrTextMaxFrameHeightItem(pTextObj->GetLogicRect().GetSize().Height()));
-                pTextObj->SetItemSet(aSet);
+                if( nSlotId == SID_ATTR_CHAR )
+                {
+                    // Impress-Textobjekt wird erzeugt (faellt auf Zeilenhoehe zusammen)
+                    // Damit das Objekt beim anschliessenden Erzeugen gleich die richtige
+                    // Hoehe bekommt (sonst wird zuviel gepainted)
+                    SfxItemSet aSet(pViewShell->GetPool());
+                    aSet.Put(SdrTextMinFrameHeightItem(0));
+                    aSet.Put(SdrTextAutoGrowWidthItem(FALSE));
+                    aSet.Put(SdrTextAutoGrowHeightItem(TRUE));
+                    pTextObj->SetItemSet(aSet);
+                    pTextObj->AdjustTextFrameWidthAndHeight();
+                    aSet.Put(SdrTextMaxFrameHeightItem(pTextObj->GetLogicRect().GetSize().Height()));
+                    pTextObj->SetItemSet(aSet);
+                }
+                else if( nSlotId == SID_ATTR_CHAR_VERTICAL )
+                {
+                    SfxItemSet aSet(pViewShell->GetPool());
+                    aSet.Put(SdrTextMinFrameWidthItem(0));
+                    aSet.Put(SdrTextAutoGrowWidthItem(TRUE));
+                    aSet.Put(SdrTextAutoGrowHeightItem(FALSE));
+                    pTextObj->SetItemSet(aSet);
+                    pTextObj->AdjustTextFrameWidthAndHeight();
+                    aSet.Put(SdrTextMaxFrameWidthItem(pTextObj->GetLogicRect().GetSize().Width()));
+                    pTextObj->SetItemSet(aSet);
+                }
             }
-            else if( nSlotId == SID_ATTR_CHAR_VERTICAL )
+            else
             {
-                SfxItemSet aSet(pViewShell->GetPool());
-                aSet.Put(SdrTextMinFrameWidthItem(0));
-                aSet.Put(SdrTextAutoGrowWidthItem(TRUE));
-                aSet.Put(SdrTextAutoGrowHeightItem(FALSE));
-                pTextObj->SetItemSet(aSet);
-                pTextObj->AdjustTextFrameWidthAndHeight();
-                aSet.Put(SdrTextMaxFrameWidthItem(pTextObj->GetLogicRect().GetSize().Width()));
-                pTextObj->SetItemSet(aSet);
+                if( nSlotId == SID_ATTR_CHAR_VERTICAL )
+                {
+                    // draw text object, needs to be initialized when vertical text is used
+                    SfxItemSet aSet(pViewShell->GetPool());
+
+                    // #91510#
+                    aSet.Put(SdrTextAutoGrowWidthItem(TRUE));
+                    aSet.Put(SdrTextAutoGrowHeightItem(FALSE));
+
+                    // #91508#
+                    aSet.Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_TOP));
+                    aSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_RIGHT));
+
+                    pTextObj->SetItemSet(aSet);
+                }
             }
         }
 
@@ -791,7 +813,20 @@ BOOL FuText::MouseButtonUp(const MouseEvent& rMEvt)
                 aSet.Put(SdrTextMinFrameWidthItem(0));
                 aSet.Put(SdrTextAutoGrowHeightItem(TRUE));
                 aSet.Put(SdrTextAutoGrowWidthItem(TRUE));
-                aSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_LEFT));
+
+                // #91508#
+                if(nSlotId == SID_ATTR_CHAR_VERTICAL)
+                {
+                    // #91508#
+                    aSet.Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_TOP));
+                    aSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_RIGHT));
+                }
+                else
+                {
+                    // as before
+                    aSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_LEFT));
+                }
+
                 pTextObj->SetItemSet(aSet);
 
                 pTextObj->SetDisableAutoWidthOnDragging(TRUE);
