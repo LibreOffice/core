@@ -2,9 +2,9 @@
  *
  *  $RCSfile: virtmenu.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: pb $ $Date: 2001-08-14 12:51:46 $
+ *  last change: $Author: mba $ $Date: 2001-08-16 15:49:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,7 @@
 #include "viewsh.hxx"
 #include "imgmgr.hxx"
 #include "sfxpicklist.hxx"
+#include "macrconf.hxx"
 
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::frame;
@@ -391,6 +392,8 @@ void SfxVirtualMenu::CreateFromSVMenu()
                     String aCmd( pSVMenu->GetItemCommand( nId ) );
                     if ( aCmd.CompareToAscii("slot:", 5) == 0 )
                     {
+                        if ( SfxMacroConfig::IsMacroSlot( nId ) )
+                            SFX_APP()->GetMacroConfig()->RegisterSlotId( nId );
                         pSVMenu->SetItemCommand( nId, String() );
                         aCmd.Erase();
                     }

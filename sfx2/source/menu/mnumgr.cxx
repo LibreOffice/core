@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mnumgr.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mba $ $Date: 2001-08-15 15:12:45 $
+ *  last change: $Author: mba $ $Date: 2001-08-16 15:48:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -601,19 +601,26 @@ void SfxMenuManager::ConstructSvMenu( Menu* pSuper, SfxMenuCfgItemArr& rCfg)
     for ( USHORT n = 0; n < rCfg.Count(); ++n )
     {
         SfxMenuCfgItem *pmIt=rCfg[n];
+        USHORT nId = rCfg[n]->nId;
         if ( rCfg[n]->pPopup )
         {
-            pSuper->InsertItem( rCfg[n]->nId, rCfg[n]->aTitle );
-            pSuper->SetHelpId( rCfg[n]->nId, (ULONG) rCfg[n]->nId );
+            pSuper->InsertItem( nId, rCfg[n]->aTitle );
+            pSuper->SetHelpId( nId, (ULONG) nId );
             PopupMenu *pPopupMenu;
             pPopupMenu = new PopupMenu;
-            pSuper->SetPopupMenu( rCfg[n]->nId, pPopupMenu );
+            pSuper->SetPopupMenu( nId, pPopupMenu );
             ConstructSvMenu( pPopupMenu, *(rCfg[n]->pPopup) );
         }
-        else if ( rCfg[n]->nId )
+        else if ( nId )
         {
-            pSuper->InsertItem( rCfg[n]->nId, rCfg[n]->aTitle );
-            pSuper->SetHelpId( rCfg[n]->nId, (ULONG) rCfg[n]->nId );
+            pSuper->InsertItem( nId, rCfg[n]->aTitle );
+            pSuper->SetHelpId( nId, (ULONG) nId );
+            if ( SfxMacroConfig::IsMacroSlot( nId ) )
+            {
+                SFX_APP()->GetMacroConfig()->RegisterSlotId( nId );
+                pSuper->SetItemCommand( nId, SFX_APP()->GetMacroConfig()->GetMacroInfo(nId)->GetURL() );
+            }
+
         }
         else
         {
@@ -753,8 +760,6 @@ void SfxMenuManager::AppendItem(const String &rText,
 {
     SfxMenuCfgItem* pItem = new SfxMenuCfgItem;
     pItem->nId = nId;
-    if (nId >= SID_MACRO_START && nId <= SID_MACRO_END)
-        SFX_APP()->GetMacroConfig()->RegisterSlotId(nId);
     pItem->aTitle = rText;
     pItem->aHelpText = rHelpText;
     pItem->pPopup = 0;
