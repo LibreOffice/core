@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdem.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jbu $ $Date: 2002-01-15 17:25:59 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 19:35:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -358,7 +358,7 @@ void ShowFont::Paint( const Rectangle& )
 // -----------------------------------------------------------------------
 
 MyFontDialog::MyFontDialog( Window* pParent ) :
-    ModalDialog( pParent, WB_SVLOOK | WB_STDMODAL ),
+    ModalDialog( pParent, WB_3DLOOK | WB_STDMODAL ),
     aFontBox( this ),
     aStyleBox( this ),
     aSizeBox( this ),
@@ -536,7 +536,7 @@ void MyFontDialog::SetAttr()
     aFont.SetSize( Size( 0, aSizeBox.GetValue() ) );
     aFont.SetUnderline( (FontUnderline)aUnderlineBox.GetSelectEntryPos() );
     aFont.SetStrikeout( (FontStrikeout)aStrikeoutBox.GetSelectEntryPos() );
-    aFont.SetColor( Color( (ColorName)aColorBox.GetSelectEntryPos() ) );
+    aFont.SetColor( Color( (ColorData)aColorBox.GetSelectEntryPos() ) );
     aFont.SetWordLineMode( aWordLineBox.IsChecked() );
     aFont.SetShadow( aShadowBox.IsChecked() );
     aFont.SetOutline( aOutlineBox.IsChecked() );
@@ -709,10 +709,10 @@ void MyCalendar::Resize()
 // -----------------------------------------------------------------------
 
 MyWin::MyWin( Window* pParent, WinBits aWinStyle ) :
-    WorkWindow(pParent, aWinStyle | WB_SVLOOK ),
-    aBox( this, WB_BORDER | WB_SVLOOK ),
-    aBar( this, WB_BORDER | WB_SVLOOK | WB_RIGHT ),
-    aHeadBar( this, WB_BORDER | WB_SVLOOK | WB_DRAG | WB_BUTTONSTYLE ),
+    WorkWindow(pParent, aWinStyle | WB_3DLOOK ),
+    aBox( this, WB_BORDER | WB_3DLOOK ),
+    aBar( this, WB_BORDER | WB_3DLOOK | WB_RIGHT ),
+    aHeadBar( this, WB_BORDER | WB_3DLOOK | WB_DRAG | WB_BUTTONSTYLE ),
     aColorList( this ),
     aLineList( this ),
     aValueSet( this, WB_TABSTOP | WB_NAMEFIELD | WB_NONEFIELD | WB_BORDER | WB_ITEMBORDER | WB_VSCROLL /* | WB_FLATVALUESET */ ),
