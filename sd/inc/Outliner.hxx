@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Outliner.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 11:53:50 $
+ *  last change: $Author: kz $ $Date: 2004-06-10 10:23:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,7 @@
 #include "OutlinerIterator.hxx"
 #endif
 
+class Dialog;
 class SdPage;
 class SdrObject;
 class SdrTextObj;
@@ -243,9 +244,8 @@ private:
     bool mbOwnOutlineView;
 
     /** The outline view used for searching and spelling.  If searching or
-        spell checking an outline view this data member points to that
-        view.  For all other views a new outline view is created used only
-        for searching or spell checking.  The
+        spell checking an outline view this data member points to that view.
+        For all other views an instance is created.  The
         <member>mbOwnOutlineView</member> distinguishes between both cases.
     */
     OutlinerView* mpOutlineView;
@@ -579,6 +579,19 @@ private:
         the current() iterator.
     */
     void HandleChangedSelection (void);
+
+    /** Show the given message box and make it modal.  It is assumed that
+        the parent of the given dialog is NULL, i.e. the application
+        window.  This function makes sure that the otherwise non-modal
+        search dialog, if visible, is locked, too.
+    */
+    USHORT ShowModalMessageBox (Dialog& rMessageBox);
+
+    /** Provide in the member mpOutlineView an instance of OutlinerView that
+        is either taken from the ViewShell, when it is an OutlineViewShell,
+        or is created.  When an OutlinerView already exists it is initialied.
+    */
+    void ProvideOutlinerView (void);
 };
 
 } // end of namespace sd
