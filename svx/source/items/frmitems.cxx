@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmitems.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:55:45 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 13:16:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1901,9 +1901,9 @@ table::BorderLine lcl_SvxLineToLine(const SvxBorderLine* pLine, sal_Bool bConver
     if(pLine)
     {
         aLine.Color          = pLine->GetColor().GetColor() ;
-        aLine.InnerLineWidth = bConvert ? TWIP_TO_MM100(pLine->GetInWidth() ): pLine->GetInWidth()  ;
-        aLine.OuterLineWidth = bConvert ? TWIP_TO_MM100(pLine->GetOutWidth()): pLine->GetOutWidth() ;
-        aLine.LineDistance   = bConvert ? TWIP_TO_MM100(pLine->GetDistance()): pLine->GetDistance() ;
+        aLine.InnerLineWidth = sal_uInt16( bConvert ? TWIP_TO_MM100(pLine->GetInWidth() ): pLine->GetInWidth() );
+        aLine.OuterLineWidth = sal_uInt16( bConvert ? TWIP_TO_MM100(pLine->GetOutWidth()): pLine->GetOutWidth() );
+        aLine.LineDistance   = sal_uInt16( bConvert ? TWIP_TO_MM100(pLine->GetDistance()): pLine->GetDistance() );
     }
     else
         aLine.Color          = aLine.InnerLineWidth = aLine.OuterLineWidth = aLine.LineDistance  = 0;
@@ -1920,6 +1920,23 @@ sal_Bool SvxBoxItem::QueryValue( uno::Any& rVal, BYTE nMemberId  ) const
     sal_Bool bSerialize = sal_False;
     switch(nMemberId)
     {
+        case 0:
+        {
+            // 4 Borders and 5 distances
+            uno::Sequence< uno::Any > aSeq( 9 );
+            aSeq[0] = uno::makeAny( lcl_SvxLineToLine(GetLeft(), bConvert) );
+            aSeq[1] = uno::makeAny( lcl_SvxLineToLine(GetRight(), bConvert) );
+            aSeq[2] = uno::makeAny( lcl_SvxLineToLine(GetBottom(), bConvert) );
+            aSeq[3] = uno::makeAny( lcl_SvxLineToLine(GetTop(), bConvert) );
+            aSeq[4] <<= uno::makeAny( (sal_Int32)(bConvert ? TWIP_TO_MM100( GetDistance()) : GetDistance()));
+            aSeq[5] <<= uno::makeAny( (sal_Int32)(bConvert ? TWIP_TO_MM100( nTopDist ) : nTopDist ));
+            aSeq[6] <<= uno::makeAny( (sal_Int32)(bConvert ? TWIP_TO_MM100( nBottomDist ) : nBottomDist ));
+            aSeq[7] <<= uno::makeAny( (sal_Int32)(bConvert ? TWIP_TO_MM100( nLeftDist ) : nLeftDist ));
+            aSeq[8] <<= uno::makeAny( (sal_Int32)(bConvert ? TWIP_TO_MM100( nRightDist ) : nRightDist ));
+            rVal = uno::makeAny( aSeq );
+            return sal_True;
+            break;
+        }
         case MID_LEFT_BORDER:
             bSerialize = sal_True;      // intentionally no break!
         case LEFT_BORDER:
@@ -1988,9 +2005,9 @@ sal_Bool SvxBoxItem::QueryValue( uno::Any& rVal, BYTE nMemberId  ) const
 sal_Bool lcl_LineToSvxLine(const ::com::sun::star::table::BorderLine& rLine, SvxBorderLine& rSvxLine, sal_Bool bConvert)
 {
     rSvxLine.SetColor(   Color(rLine.Color));
-    rSvxLine.SetInWidth( bConvert ? MM100_TO_TWIP(rLine.InnerLineWidth) : rLine.InnerLineWidth  );
-    rSvxLine.SetOutWidth(bConvert ? MM100_TO_TWIP(rLine.OuterLineWidth) : rLine.OuterLineWidth  );
-    rSvxLine.SetDistance(bConvert ? MM100_TO_TWIP(rLine.LineDistance    )  : rLine.LineDistance  );
+    rSvxLine.SetInWidth( sal_uInt16( bConvert ? MM100_TO_TWIP(rLine.InnerLineWidth) : rLine.InnerLineWidth  ));
+    rSvxLine.SetOutWidth( sal_uInt16( bConvert ? MM100_TO_TWIP(rLine.OuterLineWidth) : rLine.OuterLineWidth  ));
+    rSvxLine.SetDistance( sal_uInt16( bConvert ? MM100_TO_TWIP(rLine.LineDistance   )  : rLine.LineDistance  ));
     sal_Bool bRet = rLine.InnerLineWidth > 0 || rLine.OuterLineWidth > 0;
     return bRet;
 }
@@ -2005,6 +2022,68 @@ sal_Bool SvxBoxItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
     nMemberId &= ~CONVERT_TWIPS;
     switch(nMemberId)
     {
+        case 0:
+        {
+            uno::Sequence< uno::Any > aSeq;
+            if (( rVal >>= aSeq ) && ( aSeq.getLength() == 9 ))
+            {
+                // 4 Borders and 5 distances
+                sal_Int32 nDist;
+                SvxBorderLine aLine;
+                table::BorderLine aBorderLine;
+                if ( aSeq[0] >>= aBorderLine )
+                {
+                    sal_Bool bSet = lcl_LineToSvxLine(aBorderLine, aLine, bConvert);
+                    SetLine(bSet ? &aLine : 0, BOX_LINE_LEFT );
+                }
+                else
+                    return sal_False;
+
+                if ( aSeq[1] >>= aBorderLine )
+                {
+                    sal_Bool bSet = lcl_LineToSvxLine(aBorderLine, aLine, bConvert);
+                    SetLine(bSet ? &aLine : 0, BOX_LINE_RIGHT );
+                }
+                else
+                    return sal_False;
+
+                if ( aSeq[2] >>= aBorderLine )
+                {
+                    sal_Bool bSet = lcl_LineToSvxLine(aBorderLine, aLine, bConvert);
+                    SetLine(bSet ? &aLine : 0, BOX_LINE_BOTTOM );
+                }
+                else
+                    return sal_False;
+
+                if ( aSeq[3] >>= aBorderLine )
+                {
+                    sal_Bool bSet = lcl_LineToSvxLine(aBorderLine, aLine, bConvert);
+                    SetLine(bSet ? &aLine : 0, BOX_LINE_TOP );
+                }
+                else
+                    return sal_False;
+
+                sal_uInt16 nLines[4] = { BOX_LINE_TOP, BOX_LINE_BOTTOM, BOX_LINE_LEFT, BOX_LINE_RIGHT };
+                for ( sal_Int32 n = 4; n < 9; n++ )
+                {
+                    if ( aSeq[n] >>= nDist )
+                    {
+                        if( bConvert )
+                            nDist = MM100_TO_TWIP(nDist);
+                        if ( n == 4 )
+                            SetDistance( sal_uInt16( nDist ));
+                        else
+                            SetDistance( sal_uInt16( nDist ), nLines[n-5] );
+                    }
+                    else
+                        return sal_False;
+                }
+
+                return sal_True;
+            }
+            else
+                return sal_False;
+        }
         case LEFT_BORDER_DISTANCE:
             bDistMember = sal_True;
         case LEFT_BORDER:
@@ -2042,9 +2121,9 @@ sal_Bool SvxBoxItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
             if( bConvert )
                 nDist = MM100_TO_TWIP(nDist);
             if( nMemberId == BORDER_DISTANCE )
-                SetDistance( nDist );
+                SetDistance( sal_uInt16( nDist ));
             else
-                SetDistance( nDist, nLine );
+                SetDistance( sal_uInt16( nDist ), nLine );
         }
     }
     else
@@ -2778,6 +2857,26 @@ sal_Bool SvxBoxInfoItem::QueryValue( uno::Any& rVal, BYTE nMemberId  ) const
     sal_Bool bSerialize = sal_False;
     switch(nMemberId)
     {
+        case 0:
+        {
+            // 2 BorderLines, flags, valid flags and distance
+            ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > aSeq( 5 );
+            aSeq[0] = ::com::sun::star::uno::makeAny( lcl_SvxLineToLine( pHori, bConvert) );
+            aSeq[1] = ::com::sun::star::uno::makeAny( lcl_SvxLineToLine( pVert, bConvert) );
+            if ( IsTable() )
+                nVal |= 0x01;
+            if ( IsDist() )
+                nVal |= 0x02;
+            if ( IsMinDist() )
+                nVal |= 0x04;
+            aSeq[2] = ::com::sun::star::uno::makeAny( nVal );
+            nVal = nValidFlags;
+            aSeq[3] = ::com::sun::star::uno::makeAny( nVal );
+            aSeq[4] = ::com::sun::star::uno::makeAny( (sal_Int32)(bConvert ? TWIP_TO_MM100(GetDefDist()) : GetDefDist()) );
+            rVal = ::com::sun::star::uno::makeAny( aSeq );
+            return sal_True;
+        }
+
         case MID_HORIZONTAL:
             bSerialize = sal_True;
             aRetLine = lcl_SvxLineToLine( pHori, bConvert);
@@ -2839,6 +2938,54 @@ sal_Bool SvxBoxInfoItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
     sal_Bool bRet;
     switch(nMemberId)
     {
+        case 0:
+        {
+            ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > aSeq;
+            if (( rVal >>= aSeq ) && ( aSeq.getLength() == 5 ))
+            {
+                // 2 BorderLines, flags, valid flags and distance
+                table::BorderLine aBorderLine;
+                SvxBorderLine aLine;
+                sal_Int16 nFlags( 0 );
+                sal_Int32 nVal( 0 );
+                if ( aSeq[0] >>= aBorderLine )
+                {
+                    sal_Bool bSet = lcl_LineToSvxLine(aBorderLine, aLine, bConvert);
+                    if ( bSet )
+                        SetLine( &aLine, BOXINFO_LINE_HORI );
+                }
+                else
+                    return sal_False;
+                if ( aSeq[1] >>= aBorderLine )
+                {
+                    sal_Bool bSet = lcl_LineToSvxLine(aBorderLine, aLine, bConvert);
+                    if ( bSet )
+                        SetLine( &aLine, BOXINFO_LINE_VERT );
+                }
+                else
+                    return sal_False;
+                if ( aSeq[2] >>= nFlags )
+                {
+                    SetTable  ( ( nFlags & 0x01 ) != 0 );
+                    SetDist   ( ( nFlags & 0x02 ) != 0 );
+                    SetMinDist( ( nFlags & 0x04 ) != 0 );
+                }
+                else
+                    return sal_False;
+                if ( aSeq[3] >>= nFlags )
+                    nValidFlags = (BYTE)nFlags;
+                else
+                    return sal_False;
+                if (( aSeq[4] >>= nVal ) && ( nVal >= 0 ))
+                {
+                    if( bConvert )
+                        nVal = MM100_TO_TWIP(nVal);
+                    SetDist( nVal );
+                }
+            }
+            return sal_True;
+        }
+
         case MID_HORIZONTAL:
         case MID_VERTICAL:
         {
@@ -2918,7 +3065,7 @@ sal_Bool SvxBoxInfoItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
             sal_Int16 nFlags;
             bRet = (rVal >>= nFlags);
             if ( bRet )
-                nValidFlags = nFlags;
+                nValidFlags = (BYTE)nFlags;
             break;
         }
         case MID_DISTANCE:
@@ -3188,7 +3335,29 @@ sal_Bool SvxLineItem::QueryValue( uno::Any& rVal, BYTE nMemId ) const
     sal_Bool bConvert = 0!=(nMemId&CONVERT_TWIPS);
     nMemId &= ~CONVERT_TWIPS;
     sal_Int32 nVal = 0;
-    if( pLine )
+    if ( nMemId == 0 )
+    {
+        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > aSeq( 4 );
+        if( pLine )
+        {
+            aSeq[0] = ::com::sun::star::uno::makeAny( sal_Int32( pLine->GetColor().GetColor() ));
+            aSeq[1] = ::com::sun::star::uno::makeAny( sal_Int32( pLine->GetOutWidth() ));
+            aSeq[2] = ::com::sun::star::uno::makeAny( sal_Int32( pLine->GetInWidth( ) ));
+            aSeq[3] = ::com::sun::star::uno::makeAny( sal_Int32( pLine->GetDistance() ));
+            rVal = ::com::sun::star::uno::makeAny( aSeq );
+        }
+        else
+        {
+            // Special case: We have to recognize the empty case which is different to the one
+            // where all members are 0 (means default!). For this special purpose we send an
+            // empty sequence!
+            ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > aSeq;
+            rVal = ::com::sun::star::uno::makeAny( aSeq );
+        }
+
+        return sal_True;
+    }
+    else if ( pLine )
     {
         switch ( nMemId )
         {
@@ -3213,10 +3382,50 @@ sal_Bool SvxLineItem::PutValue( const uno::Any& rVal, BYTE nMemId )
     sal_Bool bConvert = 0!=(nMemId&CONVERT_TWIPS);
     nMemId &= ~CONVERT_TWIPS;
     sal_Int32 nVal;
-    if ( rVal >>= nVal )
+    if ( nMemId == 0 )
+    {
+        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > aSeq;
+        if ( rVal >>= aSeq )
+        {
+            if ( aSeq.getLength() == 4 )
+            {
+                if ( !pLine )
+                    pLine = new SvxBorderLine;
+
+                if ( aSeq[0] >>= nVal )
+                    pLine->SetColor( Color(nVal) );
+                else
+                    return sal_False;
+                if ( aSeq[1] >>= nVal )
+                    pLine->SetOutWidth( USHORT( nVal ));
+                else
+                    return sal_False;
+                if ( aSeq[2] >>= nVal )
+                    pLine->SetInWidth( USHORT( nVal ));
+                else
+                    return sal_False;
+                if ( aSeq[3] >>= nVal )
+                    pLine->SetDistance( USHORT( nVal ));
+                else
+                    return sal_False;
+
+                return sal_True;
+            }
+            else if ( aSeq.getLength() == 0 )
+            {
+                // Special case: No line at all! See PutValue
+                SetLine( 0 );
+                return sal_True;
+            }
+        }
+        else
+            return sal_False;
+    }
+    else if ( rVal >>= nVal )
     {
         if ( !pLine )
             pLine = new SvxBorderLine;
+
         switch ( nMemId )
         {
             case MID_FG_COLOR:      pLine->SetColor( Color(nVal) ); break;
