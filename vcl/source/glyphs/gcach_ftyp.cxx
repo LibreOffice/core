@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.18 $
- *  last change: $Author: hdu $ $Date: 2001-03-14 16:41:48 $
+ *  $Revision: 1.19 $
+ *  last change: $Author: hdu $ $Date: 2001-03-14 18:52:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,6 @@
 #include <bitmap.hxx>
 #include <bmpacc.hxx>
 
-//#include <rtl/ustring>        // used only for string=>hashvalue
 #include <osl/file.hxx>
 #include <poly.hxx>
 
@@ -286,7 +285,6 @@ FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, const Ft
         // TODO for FT>200b8 use "ft_encoding_symbol"
         //### TODO: some PS symbol fonts don't map their symbols correctly
         eEncoding = ft_encoding_none;
-eEncoding = ft_encoding_symbol;//###
     }
     rc = FT_Select_Charmap( maFaceFT, eEncoding );
 
@@ -306,6 +304,10 @@ eEncoding = ft_encoding_symbol;//###
     //  mnLoadFlags |= FT_LOAD_NO_HINTING;
     //if( rFSD.mbVertical )
     //  mnLoadFlags |= FT_LOAD_VERTICAL_LAYOUT;
+
+#ifndef TT_CONFIG_OPTION_BYTECODE_INTERPRETER
+    mnLoadFlags |= FT_LOAD_NO_HINTING;  // TODO: enable when AH improves
+#endif
 }
 
 // -----------------------------------------------------------------------
@@ -326,7 +328,7 @@ void FreetypeServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor
 
     const FT_Size_Metrics& rMetrics = maFaceFT->size->metrics;
     rTo.mnAscent            = (+rMetrics.ascender + 32) >> 6;
-    // TODO: change +desc to -desc for FT_Version>2.0beta8
+    // TODO: change +desc to -desc for FT>20b8
     rTo.mnDescent           = (+rMetrics.descender + 32) >> 6;
     rTo.mnLeading           = ((rMetrics.height + 32) >> 6) - (rTo.mnAscent + rTo.mnDescent);
     rTo.mnSlant             = 0;
