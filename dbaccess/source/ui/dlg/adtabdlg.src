@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adtabdlg.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: avy $ $Date: 2001-03-09 20:37:40 $
+ *  last change: $Author: rt $ $Date: 2001-05-04 19:51:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,7 @@ ModelessDialog DLG_JOIN_TABADD
         Text[ korean ] = "Å×ÀÌºí ÀÌ¸§(~T)";
         Text[ turkish ] = "Tablo adý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Nombre de la tabla";
     };
     Control LB_TABLE
     {
@@ -161,6 +162,7 @@ ModelessDialog DLG_JOIN_TABADD
         Text[ korean ] = "Ãß°¡(~A)";
         Text[ turkish ] = "Ekle";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Añadir";
     };
     CancelButton PB_CLOSE
     {
@@ -194,6 +196,7 @@ ModelessDialog DLG_JOIN_TABADD
         Text[ korean ] = "´Ý±â(~C)";
         Text[ turkish ] = "Kapat";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Cerrar";
     };
     HelpButton PB_HELP
     {
@@ -230,6 +233,7 @@ ModelessDialog DLG_JOIN_TABADD
         Text[ korean ] = "Å×ÀÌºí";
         Text[ turkish ] = "Tablo";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Tabla";
     };
     String STR_DEFAULT
     {
@@ -258,6 +262,7 @@ ModelessDialog DLG_JOIN_TABADD
         Text[ korean ] = "<±âº»>";
         Text[ turkish ] = "<Standart>";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "<predeterminado>";
     };
     Text[ chinese_simplified ] = "ÐÂÔö±í¸ñ";
     Text[ russian ] = "Äîáàâèòü òàáëèöû";
@@ -271,4 +276,5 @@ ModelessDialog DLG_JOIN_TABADD
     Text[ korean ] = "Å×ÀÌºí Ãß°¡";
     Text[ turkish ] = "Tablo ekle";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Añadir tablas";
 };
