@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdraw.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-27 12:31:43 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:43:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,6 +180,13 @@
 // #108784#
 #ifndef _SVDPAGV_HXX
 #include <svx/svdpagv.hxx>
+#endif
+
+#ifndef _SVX_EXTRUSION_BAR_HXX
+#include <svx/extrusionbar.hxx>
+#endif
+#ifndef _SVX_FONTWORK_BAR_HXX
+#include <svx/fontworkbar.hxx>
 #endif
 
 using namespace ::com::sun::star;
@@ -511,7 +518,13 @@ void SwView::ExitDraw()
 {
     NoRotate();
 
-    if (pShell && !pShell->ISA(SwDrawBaseShell) && !pShell->ISA(SwBezierShell))
+    if (pShell &&
+        // don't call LeaveSelFrmMode() etc. for the below,
+        // because objects may still be selected:
+        !pShell->ISA(SwDrawBaseShell) &&
+        !pShell->ISA(SwBezierShell) &&
+        !pShell->ISA(svx::ExtrusionBar) &&
+        !pShell->ISA(svx::FontworkBar))
     {
         SdrView *pSdrView = pWrtShell->GetDrawView();
 
