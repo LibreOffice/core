@@ -2,9 +2,9 @@
  *
  *  $RCSfile: image.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 11:01:17 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 16:26:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -314,7 +314,9 @@ BOOL SbiImage::Save( SvStream& r )
         nPos = SbiOpenRecord( r, B_STRINGPOOL, nStrings );
         // Fuer jeden String:
         //  UINT32 Offset des Strings im Stringblock
-        for( short i = 0; i < nStrings && SbiGood( r ); i++ )
+        short i;
+
+        for( i = 0; i < nStrings && SbiGood( r ); i++ )
             r << (UINT32) pStringOff[ i ];
 
         // Danach der String-Block
