@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: mba $ $Date: 2001-03-05 12:42:20 $
+ *  last change: $Author: dv $ $Date: 2001-03-08 09:37:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1335,7 +1335,7 @@ sal_Bool SfxObjectShell::DoSave_Impl( const SfxItemSet* pArgs )
 
         const SfxFilter* pFilter = GetMedium()->GetFilter();
         SfxMedium* pMediumTmp = new SfxMedium( pMedium->GetName(), nFlags, bDirect, pFilter, pSet );
-        pMediumTmp->CreateTempFile();
+        pMediumTmp->CreateTempFileNoCopy();
         pMediumTmp->SetLongName( aLongName );
 
         // Nat"urlich keine Version in einem neuen Medium!
