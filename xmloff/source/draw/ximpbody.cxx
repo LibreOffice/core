@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpbody.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-14 12:01:12 $
+ *  last change: $Author: rt $ $Date: 2005-02-07 14:10:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -329,6 +329,7 @@ SvXMLImportContext *SdXMLDrawPageContext::CreateChildContext( USHORT nPrefix,
                     }
                 }
             }
+            break;
         }
         case XML_TOK_DRAWPAGE_PAR:
         case XML_TOK_DRAWPAGE_SEQ:
@@ -339,6 +340,7 @@ SvXMLImportContext *SdXMLDrawPageContext::CreateChildContext( USHORT nPrefix,
                 if(xNodeSupplier.is())
                     pContext = new xmloff::AnimationNodeContext( xNodeSupplier->getAnimationNode(), GetSdImport(), nPrefix, rLocalName, xAttrList );
             }
+            break;
         }
     }
 
