@@ -5871,7 +5871,7 @@ SfxBoolItem IsLoadingImages SID_IMG_LOADING
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
+    ToolBoxConfig = FALSE,
     GroupId = GID_VIEW;
 ]
 
