@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduleimagemanager.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-19 09:42:38 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:25:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,10 @@
  *
  *
  ************************************************************************/
+
+#ifndef _RTL_LOGFILE_HXX_
+#include <rtl/logfile.hxx>
+#endif
 
 #ifndef __FRAMEWORK_UICONFIGURATION_MODULEIMAGEMANAGER_HXX_
 #include <uiconfiguration/moduleimagemanager.hxx>
@@ -240,6 +244,8 @@ CmdImageList::~CmdImageList()
 
 void CmdImageList::impl_fillCommandToImageNameMap()
 {
+    RTL_LOGFILE_CONTEXT( aLog, "framework: CmdImageList::impl_fillCommandToImageNameMap" );
+
     if ( !m_bVectorInit )
     {
         const rtl::OUString aCommandImageList( RTL_CONSTASCII_USTRINGPARAM( UICOMMANDDESCRIPTION_NAMEACCESS_COMMANDIMAGELIST ));
@@ -304,6 +310,8 @@ void CmdImageList::impl_fillCommandToImageNameMap()
 
 ImageList* CmdImageList::impl_getImageList( sal_Int16 nImageType )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "framework: CmdImageList::impl_getImageList" );
+
     if ( !m_pImageList[nImageType] )
     {
         impl_fillCommandToImageNameMap();
@@ -944,6 +952,8 @@ Sequence< uno::Reference< XGraphic > > SAL_CALL ModuleImageManager::getImages(
     const Sequence< ::rtl::OUString >& aCommandURLSequence )
 throw ( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "framework: ModuleImageManager::getImages" );
+
     ResetableGuard aLock( m_aLock );
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
