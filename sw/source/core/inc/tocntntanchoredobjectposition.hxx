@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tocntntanchoredobjectposition.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 13:58:51 $
+ *  last change: $Author: rt $ $Date: 2004-03-31 15:08:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,122 +121,6 @@ namespace objectpositioning
                 horizontal position is determined.
             */
             const SwFrm& _GetHoriVirtualAnchor( const SwLayoutFrm& _pProposedFrm ) const;
-
-        // *********************************************************************
-            /** adjust calculated horizontal position in order to draw object
-                aside other objects with same positioning
-
-                @author OD
-
-                @param _rHoriOrientFrm
-                input parameter - frame the horizontal position of the object
-                is oriented at.
-
-                @param _nProposedRelPosX
-                input parameter - proposed relative horizontal position, which
-                will be adjusted.
-
-                @param _nRelPosY
-                input parameter - relative vertical position
-
-                @param _eHoriOrient
-                input parameter - horizontal position of object
-
-                @param _eRelOrient
-                inpt parameter - alignment of object
-
-                @param _rLRSpacing
-                input parameter - left and right spacing of the object to the text
-
-                @param _rULSpacing
-                input parameter - upper and lower spacing of the object to the text
-
-                @param _bEvenPage
-                input parameter - boolean indicating, if object is on an even page.
-
-                @return adjusted relative horizontal position in SwTwips
-            */
-            SwTwips _AdjustHoriRelPosForDrawAside( const SwFrm&  _rHoriOrientFrm,
-                                                   const SwTwips _nProposedRelPosX,
-                                                   const SwTwips _nRelPosY,
-                                                   const SwHoriOrient _eHoriOrient,
-                                                   const SwRelationOrient _eRelOrient,
-                                                   const SvxLRSpaceItem& _rLRSpacing,
-                                                   const SvxULSpaceItem& _rULSpacing,
-                                                   const bool _bEvenPage
-                                                 ) const;
-
-        // *********************************************************************
-            /** detemine, if object has to draw aside given fly frame
-
-                OD 11.08.2003 #110978#
-                method used by <_AdjustHoriRelPosForDrawAside(..)>
-
-                @author OD
-
-                @param _pFly
-                input parameter - fly frame the draw aside check is done for.
-
-                @param _rObjRect
-                input parameter - proposed object rectangle
-
-                @param _pObjContext
-                input parameter - context of the object
-
-                @param _nObjIndex
-                input parameter - index of the anchor frame of the object
-
-                @param _bEvenPage
-                input parameter - boolean indicating, if object is on an even page.
-
-                @param _eHoriOrient
-                input parameter - horizontal position of object
-
-                @param _eRelOrient
-                inpt parameter - alignment of object
-
-                @return boolean indicating, if object has to be drawn aside
-                given fly frame.
-            */
-            bool _DrawAsideFly( const SwFlyFrm* _pFly,
-                                const SwRect&   _rObjRect,
-                                const SwFrm*    _pObjContext,
-                                const ULONG     _nObjIndex,
-                                const bool      _bEvenPage,
-                                const SwHoriOrient _eHoriOrient,
-                                const SwRelationOrient _eRelOrient
-                              ) const;
-
-        // *********************************************************************
-            /** determine, if object has to draw aside another object
-
-                OD 04.08.2003
-                the different alignments of the objects determines, if one has
-                to draw aside another one. Thus, the given alignment are checked
-                against each other, which one has to be drawn aside the other one.
-                depending on parameter _bLeft check is done for left or right
-                positioning.
-                method used by <_DrawAsideFly(..)>
-
-                @author OD
-
-                @param _eRelOrient1
-                input parameter - alignment 1
-
-                @param _eRelOrient2
-                input parameter - alignment 2
-
-                @param _bLeft
-                input parameter - boolean indicating, if check is done for left
-                or for right positioning.
-
-                @return boolean indicating, if an object with an alignment
-                <_eRelOrient1> has to be drawn aside an object with an
-                alignment <_eRelOrient2>
-            */
-            bool _Minor( SwRelationOrient _eRelOrient1,
-                         SwRelationOrient _eRelOrient2,
-                         bool             _bLeft ) const;
 
         public:
             SwToCntntAnchoredObjectPosition( SdrObject& _rDrawObj );
