@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MetaExportComponent.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:30:26 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 08:11:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,8 @@ public:
     // #110680#
     // XMLMetaExportComponent();
     XMLMetaExportComponent(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory
+        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+        sal_uInt16 nFlags
         );
 
     ~XMLMetaExportComponent();
