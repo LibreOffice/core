@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appdata.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 16:20:50 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:32:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,40 +115,39 @@
 
 SfxAppData_Impl::SfxAppData_Impl( SfxApplication* pApp ) :
         bServer( false ),
-        pProgress(0),
-        pPool(0),
-        pFactArr(0),
         pDdeService( 0 ),
         pDocTopics( 0 ),
-        pEventConfig(0),
-        nAsynchronCalls(0),
-        pVerbs(0),
-        nBasicCallLevel(0),
-        nRescheduleLocks(0),
-        nInReschedule(0),
-        pInitLinkList(0),
-        pMatcher( 0 ),
-        pSfxPlugInObjectShellFactory( 0 ),
-        pDefFocusWin( 0 ),
-        pSfxFrameObjectFactoryPtr( 0 ),
-        pCancelMgr( 0 ),
-        nDocModalMode(0),
-        pDisabledSlotList( 0 ),
-        pFilterIni( 0 ),
-        pSfxPluginObjectFactoryPtr( 0 ),
-        pTemplateCommon( 0 ),
-        pLabelResMgr( 0 ),
-        pTopFrames( new SfxFrameArr_Impl ),
-        pSecureURLs(0),
-        nAutoTabPageId(0),
-        nExecutingSID( 0 ),
-        pAppDispatch(NULL),
         pTriggerTopic(0),
         pDdeService2(0),
+        pFactArr(0),
+        pSfxPluginObjectFactoryPtr( 0 ),
+        pSfxPlugInObjectShellFactory( 0 ),
+        pSfxFrameObjectFactoryPtr( 0 ),
+        pTopFrames( new SfxFrameArr_Impl ),
+        pInitLinkList(0),
+        pMatcher( 0 ),
+        pCancelMgr( 0 ),
+        pLabelResMgr( 0 ),
+        pAppDispatch(NULL),
+        pTemplates( 0 ),
+        pVerbs(0),
+        pFilterIni( 0 ),
+        pPool(0),
+        pEventConfig(0),
+        pDisabledSlotList( 0 ),
+        pSecureURLs(0),
         pMiscConfig(0),
+        pSaveOptions( 0 ),
+        pUndoOptions( 0 ),
+        pHelpOptions( 0 ),
         pThisDocument(0),
+        pProgress(0),
+        pDefFocusWin( 0 ),
+        pTemplateCommon( 0 ),
+        nDocModalMode(0),
+        nAutoTabPageId(0),
+        nExecutingSID( 0 ),
         bPlugged(sal_False),
-        bOLEResize(sal_False),
         bDirectAliveCount(sal_False),
         bInQuit(sal_False),
         bInvalidateOnUnlock(sal_False),
@@ -157,10 +156,6 @@ SfxAppData_Impl::SfxAppData_Impl( SfxApplication* pApp ) :
         bInvisible( sal_False ),
         bInException( sal_False ),
         nAppEvent( 0 ),
-        pTemplates( 0 ),
-        pSaveOptions( 0 ),
-        pUndoOptions( 0 ),
-        pHelpOptions( 0 ),
         m_xImeStatusWindow(new sfx2::appl::ImeStatusWindow(
                                *pApp, comphelper::getProcessServiceFactory()))
 {
