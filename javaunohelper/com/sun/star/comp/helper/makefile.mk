@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: dbo $ $Date: 2001-06-14 11:58:23 $
+#   last change: $Author: rt $ $Date: 2004-05-03 07:36:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,7 +79,9 @@ JAVAFILES=	\
     ComponentContext.java			\
     Bootstrap.java				\
     SharedLibraryLoader.java		\
-    RegistryServiceFactory.java
+    RegistryServiceFactory.java		\
+    BootstrapException.java			\
+    UnoInfo.java
 
 JAVACLASSFILES=	$(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
 
