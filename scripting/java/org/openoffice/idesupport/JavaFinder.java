@@ -1,7 +1,9 @@
 package org.openoffice.idesupport;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.Vector;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -60,7 +62,7 @@ public class JavaFinder implements MethodFinder {
             ClassLoader classloader;
 
             if (classpath == null)
-                classloader = getClassLoader(basedir.getAbsolutePath());
+                classloader = getClassLoader(basedir);
             else
                 classloader = getClassLoader();
 
@@ -127,17 +129,41 @@ public class JavaFinder implements MethodFinder {
         return new URLClassLoader((URL[])urls.toArray(new URL[0]));
     }
 
-    private ClassLoader getClassLoader(String path) {
-        URL[] urls = new URL[1];
+    private ClassLoader getClassLoader(File basedir) {
+        ArrayList files = findFiles(basedir, ".jar");
+        files.add(basedir);
 
         try {
-            path = SVersionRCFile.toFileURL(path);
+            Enumeration offices = SVersionRCFile.createInstance().getVersions();
 
-            if (path != null)
-                urls[0] = new URL(path);
+            while (offices.hasMoreElements()) {
+                OfficeInstallation oi = (OfficeInstallation)offices.nextElement();
+                String unoil = SVersionRCFile.getPathForUnoil(oi.getPath());
+
+                if (unoil != null) {
+                    files.add(new File(unoil, "unoil.jar"));
+                    break;
+                }
+            }
         }
-        catch (MalformedURLException mue) {
+        catch (IOException ioe) {
             return null;
+        }
+
+        URL[] urls = new URL[files.size()];
+        String urlpath;
+        File f;
+        for (int i = 0; i < urls.length; i++) {
+            try {
+                f = (File)files.get(i);
+                urlpath = SVersionRCFile.toFileURL(f.getAbsolutePath());
+
+                if (urlpath != null)
+                    urls[i] = new URL(urlpath);
+            }
+            catch (MalformedURLException mue) {
+                // do nothing, go on to next file
+            }
         }
 
         return new URLClassLoader(urls);

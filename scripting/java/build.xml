@@ -3,9 +3,9 @@
 #
 #   $RCSfile: build.xml,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: toconnor $ $Date: 2003-02-20 17:37:33 $
+#   last change: $Author: toconnor $ $Date: 2003-02-21 10:58:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -134,7 +134,6 @@
       <exclude name="${idesupport.dir}/localoffice/**/*"/>
       <include name="${idesupport.dir}/*.java"/>
       <include name="${idesupport.dir}/*/*.java"/>
-      <include name="${netbeans.dir}/utils/CommandLineTools.java"/>
     </javac>
   </target>
 
@@ -206,7 +205,7 @@
     <jar jarfile="${jardir}/idesupport.jar">
       <fileset dir="${jardir}">
           <include name="${idesupport.dir}/**/*.class"/>
-          <include name="CommandLineTools.class"/>
+          <include name="CommandLineTools*"/>
           <exclude name="${idesupport.dir}/localoffice/*.class"/>
       </fileset>
       <fileset dir=".">

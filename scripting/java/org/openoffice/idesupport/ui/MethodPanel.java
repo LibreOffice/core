@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MethodPanel.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-02-04 13:37:46 $
+ *  last change: $Author: toconnor $ $Date: 2003-02-21 10:56:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ import java.net.MalformedURLException;
 
 import org.openoffice.idesupport.ScriptEntry;
 import org.openoffice.idesupport.MethodFinder;
-import org.openoffice.idesupport.BeanShellFinder;
+import org.openoffice.idesupport.ExtensionFinder;
 import org.openoffice.idesupport.JavaFinder;
 
 public class MethodPanel extends JPanel {
@@ -145,7 +145,7 @@ public class MethodPanel extends JPanel {
         if (language == null)
             finder = JavaFinder.getInstance(classpath);
         else if (language.toLowerCase().equals("beanshell"))
-            finder = BeanShellFinder.getInstance();
+            finder = new ExtensionFinder(language, new String[] {".bsh"});
         else
             finder = JavaFinder.getInstance(classpath);
 
