@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-22 08:26:09 $
+ *  last change: $Author: hr $ $Date: 2003-11-07 14:50:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,8 @@ class Desktop : public Application
             BE_OK,
             BE_UNO_SERVICEMANAGER,
             BE_UNO_SERVICE_CONFIG_MISSING,
-            BE_PATHINFO_MISSING
+            BE_PATHINFO_MISSING,
+            BE_USERINSTALL_FAILED
         };
 
                                 Desktop();
