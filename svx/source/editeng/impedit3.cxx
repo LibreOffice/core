@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: mt $ $Date: 2002-04-18 16:20:46 $
+ *  last change: $Author: mt $ $Date: 2002-05-03 12:40:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2319,7 +2319,10 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_uInt16 nPos, SvxFont& rF
 
     if ( rFont.GetColor() == COL_AUTO )
     {
-        rFont.SetColor( GetAutoColor() );
+        if ( IsAutoColorEnabled() && pOut && ( pOut->GetOutDevType() != OUTDEV_PRINTER ) )
+            rFont.SetColor( GetAutoColor() );
+        else
+            rFont.SetColor( COL_BLACK );
     }
 
     if ( mpIMEInfos && mpIMEInfos->pAttribs && ( mpIMEInfos->aPos.GetNode() == pNode ) &&
@@ -2535,12 +2538,16 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                 aTmpFont.SetPhysFont( pOutDev );
 
                                 XubString aText;
+                                USHORT nTextStart = 0;
+                                USHORT nTextLen = 0;
                                 const long* pDXArray = 0;
                                 long* pTmpDXArray = 0;
 
                                 if ( pTextPortion->GetKind() == PORTIONKIND_TEXT )
                                 {
-                                    aText = XubString( *(pPortion->GetNode()), nIndex, pTextPortion->GetLen() );
+                                    aText = *pPortion->GetNode();
+                                    nTextStart = nIndex;
+                                    nTextLen = pTextPortion->GetLen();
                                     pDXArray = pLine->GetCharPosArray().GetData()+( nIndex-pLine->GetStart() );
                                 }
                                 else if ( pTextPortion->GetKind() == PORTIONKIND_FIELD )
@@ -2549,6 +2556,8 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                     DBG_ASSERT( pAttr, "Feld nicht gefunden" );
                                     DBG_ASSERT( pAttr && pAttr->GetItem()->ISA( SvxFieldItem ), "Feld vom falschen Typ!" );
                                     aText = ((EditCharAttribField*)pAttr)->GetFieldValue();
+                                    nTextStart = 0;
+                                    nTextLen = aText.Len();
 
                                     if ( pOutDev != GetRefDevice() )
                                     {
@@ -2568,6 +2577,8 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                     if ( pTextPortion->GetExtraValue() )
                                         aText = pTextPortion->GetExtraValue();
                                     aText += CH_HYPH;
+                                    nTextStart = 0;
+                                    nTextLen = aText.Len();
                                 }
 
                                 long nTxtWidth = pTextPortion->GetSize().Width();
@@ -2575,6 +2586,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                 if ( bStripOnly )
                                 {
                                     // VERT???
+                                    GetEditEnginePtr()->DrawingText( aTmpPos, aText, nTextStart, nTextLen, pDXArray, aTmpFont, n, nIndex );
                                     GetEditEnginePtr()->DrawingText( aTmpPos, aText, pDXArray, aTmpFont, n, nIndex );
                                 }
                                 else
@@ -2631,17 +2643,17 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                             }
                                             if ( bSpecialUnderline )
                                             {
-                                                Size aSz = aTmpFont.GetPhysTxtSize( pOutDev, aText, 0, aText.Len() );
+                                                Size aSz = aTmpFont.GetPhysTxtSize( pOutDev, aText, nTextStart, nTextLen );
                                                 BYTE nProp = aTmpFont.GetPropr();
                                                 aTmpFont.SetEscapement( 0 );
                                                 aTmpFont.SetPropr( 100 );
                                                 aTmpFont.SetPhysFont( pOutDev );
                                                 String aBlanks;
-                                                aBlanks.Fill( aText.Len(), ' ' );
+                                                aBlanks.Fill( nTextLen, ' ' );
                                                 Point aUnderlinePos( aOutPos );
                                                 if ( nOrientation )
                                                     aUnderlinePos = lcl_ImplCalcRotatedPos( aTmpPos, aOrigin, nSin, nCos );
-                                                pOutDev->DrawStretchText( aUnderlinePos, aSz.Width(), aBlanks, 0, aText.Len() );
+                                                pOutDev->DrawStretchText( aUnderlinePos, aSz.Width(), aBlanks, 0, nTextLen );
 
                                                 aTmpFont.SetUnderline( UNDERLINE_NONE );
                                                 if ( !nOrientation )
@@ -2657,7 +2669,12 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                         {
                                             aRealOutPos.X() += pTextPortion->GetExtraInfos()->nPortionOffsetX;
                                         }
-                                        aTmpFont.QuickDrawText( pOutDev, aRealOutPos, aText, 0, aText.Len(), pDXArray );
+                                        ULONG nOldLayoutMode = pOutDev->GetLayoutMode();
+                                        short nScriptType = GetScriptType( EditPaM( pPortion->GetNode(), nIndex+1 ) );
+                                        if ( nScriptType != i18n::ScriptType::COMPLEX )
+                                            pOutDev->SetLayoutMode( TEXT_LAYOUT_COMPLEX_DISABLED );
+                                        aTmpFont.QuickDrawText( pOutDev, aRealOutPos, aText, nTextStart, nTextLen, pDXArray );
+                                        pOutDev->SetLayoutMode( nOldLayoutMode );
                                     }
 
 #ifndef SVX_LIGHT
