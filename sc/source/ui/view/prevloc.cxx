@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prevloc.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2002-03-11 19:28:00 $
+ *  last change: $Author: sab $ $Date: 2002-04-08 14:59:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -676,4 +676,38 @@ void ScPreviewLocationData::GetTableInfo( const Rectangle& rVisiblePixel, ScPrev
     rInfo.LimitToArea( rVisiblePixel );
 }
 
+Rectangle ScPreviewLocationData::GetHeaderCellOutputRect(const Rectangle& rVisRect, const ScAddress& rCellPos, sal_Bool bColHeader) const
+{
+    // first a stupid implementation
+    // NN says here should be done more
+    Rectangle aClipRect;
+    ScPreviewTableInfo aTableInfo;
+    GetTableInfo( rVisRect, aTableInfo );
 
+    if ( (rCellPos.Col() >= 0) &&
+        (rCellPos.Row() >= 0) && (rCellPos.Col() < aTableInfo.GetCols()) &&
+        (rCellPos.Row() < aTableInfo.GetRows()) )
+    {
+        sal_Int16 nCol(0);
+        sal_Int16 nRow(0);
+        if (bColHeader)
+            nCol = rCellPos.Col();
+        else
+            nRow = rCellPos.Row();
+        const ScPreviewColRowInfo& rColInfo = aTableInfo.GetColInfo()[nCol];
+        const ScPreviewColRowInfo& rRowInfo = aTableInfo.GetRowInfo()[nRow];
+
+        if ( rColInfo.bIsHeader || rRowInfo.bIsHeader )
+            aClipRect = Rectangle( rColInfo.nPixelStart, rRowInfo.nPixelStart, rColInfo.nPixelEnd, rRowInfo.nPixelEnd );
+    }
+    return aClipRect;
+}
+
+Rectangle ScPreviewLocationData::GetCellOutputRect(const ScAddress& rCellPos) const
+{
+    // first a stupid implementation
+    // NN says here should be done more
+    Rectangle aRect;
+    GetCellPosition(rCellPos, aRect);
+    return aRect;
+}

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prevloc.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2002-03-11 19:21:12 $
+ *  last change: $Author: sab $ $Date: 2002-04-08 14:58:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,6 +154,12 @@ public:
 
     BOOL    GetCell( const Point& rPos, ScAddress& rCellPos, Rectangle& rCellRect ) const;
     BOOL    GetCellPosition( const ScAddress& rCellPos, Rectangle& rCellRect ) const;
+
+    // returns the rectangle where the EditEngine draws the text of a Header Cell
+    // if bColHeader is true it returns the rectangle of the header of the column in rCellPos
+    // otherwise of the header of the row in rCellPos
+    Rectangle GetHeaderCellOutputRect(const Rectangle& rVisRect, const ScAddress& rCellPos, sal_Bool bColHeader) const;
+    Rectangle GetCellOutputRect(const ScAddress& rCellPos) const;
 };
 
 #endif
