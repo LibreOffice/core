@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: fme $ $Date: 2001-04-12 07:47:48 $
+ *  last change: $Author: fme $ $Date: 2001-04-12 16:22:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,7 +193,7 @@ public:
  *                      class SwTxtSizeInfo
  *************************************************************************/
 
-DECLARE_TABLE( SwTxtPortionTable, USHORT )
+DECLARE_TABLE( SwTxtPortionTable, INT32 )
 
 class SwTxtSizeInfo : public SwTxtInfo
 {
