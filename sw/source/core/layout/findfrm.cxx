@@ -2,9 +2,9 @@
  *
  *  $RCSfile: findfrm.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mib $ $Date: 2002-04-11 14:03:47 $
+ *  last change: $Author: ama $ $Date: 2002-05-06 10:05:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -561,6 +561,16 @@ const SwFtnFrm* SwFtnContFrm::FindEndNote() const
     while( pRet && !pRet->GetAttr()->GetFtn().IsEndNote() )
         pRet = (SwFtnFrm*)pRet->GetNext();
     return pRet;
+}
+
+BOOL SwRootFrm::IsPageAtPos( const Point &rPt ) const
+{
+    if( !Frm().IsInside( rPt ) )
+        return FALSE;
+    const SwFrm* pPage = Lower();
+    while( pPage && rPt.Y() > pPage->Frm().Bottom() )
+        pPage = pPage->GetNext();
+    return pPage && pPage->Frm().IsInside( rPt );
 }
 
 /*************************************************************************

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crstrvl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2002-02-14 17:20:09 $
+ *  last change: $Author: ama $ $Date: 2002-05-06 10:01:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1101,6 +1101,12 @@ FASTBOOL SwCrsrShell::GotoRefMark( const String& rRefMark, USHORT nSubType,
     return FALSE;
 }
 
+FASTBOOL SwCrsrShell::IsPageAtPos( const Point &rPt ) const
+{
+    if( GetLayout() )
+        return GetLayout()->IsPageAtPos( rPt );
+    return FALSE;
+}
 
 FASTBOOL SwCrsrShell::GetContentAtPos( const Point& rPt,
                                         SwContentAtPos& rCntntAtPos,
