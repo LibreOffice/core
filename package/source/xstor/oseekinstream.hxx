@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oseekinstream.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2003-09-11 10:15:14 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 17:58:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,12 @@ public:
 
     OInputSeekStream( OWriteStream_Impl& pImpl,
                       ::com::sun::star::uno::Reference < ::com::sun::star::io::XStream > xStream,
+                      const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aProps );
+
+    OInputSeekStream( ::com::sun::star::uno::Reference < ::com::sun::star::io::XInputStream > xStream,
+                      const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aProps );
+
+    OInputSeekStream( ::com::sun::star::uno::Reference < ::com::sun::star::io::XStream > xStream,
                       const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aProps );
 
     virtual ~OInputSeekStream();
