@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexdialog.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-13 21:08:32 $
+ *  last change: $Author: kz $ $Date: 2001-08-21 22:30:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -558,7 +558,7 @@ String STR_CONFIRM_DROP_INDEX
     Text[ japanese ] = "ｲﾝﾃﾞｯｸｽ '$name$' を削除しますか。";
     Text[ korean ] = "색인 '$name$'(을)를 정말 삭제하시겠습니까?";
     Text[ chinese_simplified ] = "真要删除索引'$name$'？";
-    Text[ chinese_traditional ] = "真要刪除索引'$name$'？";
+    Text[ chinese_traditional ] = "真要刪除索引<$name$>？";
     Text[ turkish ] = "Do you really want to drop the index '$name$'?";
     Text[ arabic ] = "�� ���� ������ ��� ������ '$name$'�";
     Text[ catalan ] = "Do you really want to drop the index '$name$'?";
@@ -719,7 +719,7 @@ String STR_INDEX_NAME_ALREADY_USED
     Text[ japanese ] = "\"$name$\" のｲﾝﾃﾞｯｸｽ名はすでにあります。";
     Text[ korean ] = "이미 \"$name$\"라는 다른 색인 이름이 존재합니다";
     Text[ chinese_simplified ] = "There's already another index named \"$name$\".";
-    Text[ chinese_traditional ] = "已經存在一個索引 \"$name$\"。";
+    Text[ chinese_traditional ] = "已經存在一個索引<$name$>。";
     Text[ turkish ] = "There's already another index named \"$name$\".";
     Text[ arabic ] = "There's already another index named \"$name$\".";
     Text[ catalan ] = "There's already another index named \"$name$\".";
@@ -746,7 +746,7 @@ String STR_INDEXDESIGN_DOUBLE_COLUMN_NAME
     Text[ japanese ] = "ｲﾝﾃﾞｯｸｽの定義では、ﾃｰﾌﾞﾙの列の見出しは各一回ずつしか使えません。列の見出し \"$name$\" は、二回目の入力です。";
     Text[ korean ] = "색인 정의에서, 각 도표 열은 최대 한번 입력할 수 있지만, 사용자는 열 \"$name$\"(을)를 두번 입력하였습니다.";
     Text[ chinese_simplified ] = "在一个索引定义之中仅允许一次使用一个列名称。但是您第二次使用列名称 \"$name$\" 。";
-    Text[ chinese_traditional ] = "在一個索引定義之中僅允許最多一次使用一個欄名稱。但是您第二次使用欄名稱 \"$name$\" 。";
+    Text[ chinese_traditional ] = "在一個索引定義之中僅允許最多一次使用一個欄名稱。但現在是第二次使用欄名稱<$name$>。";
     Text[ turkish ] = "In a index definition, every table column may occur at most once, but you entered column \"$name$\" twice.";
     Text[ arabic ] = "�� ����� �������� ���� ���� ���� �� ��� �� ����� �����ӡ ��� ��� ������� ������ \"$name$\" �����.";
     Text[ catalan ] = "In a index definition, every table column may occur at most once, but you entered column \"$name$\" twice.";
@@ -756,6 +756,9 @@ String STR_INDEXDESIGN_DOUBLE_COLUMN_NAME
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.18  2001/08/13 21:08:32  kz
+ *  Merge SRC638: 13.08.01 - 23:07:53
+ *
  *  Revision 1.17  2001/08/07 15:12:57  kz
  *  Merge SRC638: 07.08.01 - 17:12:33
  *
@@ -810,6 +813,7 @@ String STR_INDEXDESIGN_DOUBLE_COLUMN_NAME
  *
  *  Revision 1.0 07.03.01 12:17:10  fs
  ************************************************************************/
+
 
 
 
