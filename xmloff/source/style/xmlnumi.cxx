@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumi.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: cl $ $Date: 2001-07-04 13:21:53 $
+ *  last change: $Author: mib $ $Date: 2001-07-25 06:52:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,6 +233,10 @@ static __FAR_DATA SvXMLTokenMapEntry aLevelAttrTokenMap[] =
 class SvxXMLListLevelStyleContext_Impl : public SvXMLImportContext
 {
     friend class SvxXMLListLevelStyleAttrContext_Impl;
+#ifdef CONV_STAR_FONTS
+    const OUString      sStarBats;
+    const OUString      sStarMath;
+#endif
 
     OUString            sPrefix;
     OUString            sSuffix;
@@ -333,6 +337,10 @@ SvxXMLListLevelStyleContext_Impl::SvxXMLListLevelStyleContext_Impl(
     bImage( sal_False ),
     bHasColor( sal_False ),
     aColor( 0 )
+#ifdef CONV_STAR_FONTS
+    ,sStarBats( RTL_CONSTASCII_USTRINGPARAM( "StarBats" ) ),
+    sStarMath( RTL_CONSTASCII_USTRINGPARAM( "StarMath" ) )
+#endif
 {
     if( IsXMLToken( rLName, XML_LIST_LEVEL_STYLE_NUMBER ) ||
         IsXMLToken( rLName, XML_OUTLINE_LEVEL_STYLE )        )
@@ -451,11 +459,6 @@ SvXMLImportContext *SvxXMLListLevelStyleContext_Impl::CreateChildContext(
     return pContext;
 }
 
-#ifdef CONV_STAR_FONTS
-extern sal_Unicode lcl_xmloff_convFromStarBats( sal_Unicode c );
-extern sal_Unicode lcl_xmloff_convFromStarMath( sal_Unicode c );
-#endif
-
 Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties(
         const SvI18NMap *pI18NMap )
 {
@@ -546,14 +549,14 @@ Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties(
                 //aFDesc.Transparant = sal_True;
 #ifdef CONV_STAR_FONTS
                 sal_Bool bStarSymbol = sal_False;
-                if( aFDesc.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("StarBats") ) )
+                if( aFDesc.Name.equalsIgnoreAsciiCase( sStarBats ) )
                 {
-                    cBullet = lcl_xmloff_convFromStarBats( cBullet );
+                    cBullet = GetImport().ConvStarBatsCharToStarSymbol( cBullet );
                     bStarSymbol = sal_True;
                 }
-                if( aFDesc.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("StarMath") ) )
+                else if( aFDesc.Name.equalsIgnoreAsciiCase( sStarMath ) )
                 {
-                    cBullet = lcl_xmloff_convFromStarMath( cBullet );
+                    cBullet = GetImport().ConvStarMathCharToStarSymbol( cBullet );
                     bStarSymbol = sal_True;
                 }
                 if( bStarSymbol )
