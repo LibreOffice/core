@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PaneDockingWindow.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 16:12:50 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 14:52:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,7 @@ public:
             callback to the value of GetCurItemId() when called at the given
             tool box.
     */
-    USHORT AddMenu (const String& rsMenuName, const Link& rCallback);
+    USHORT AddMenu (const String& rsMenuName, ULONG nHelpId, const Link& rCallback);
 
     /** Set the title of the docking window to the given string.  Use this
         method when the title is not yet known at the time of construction
