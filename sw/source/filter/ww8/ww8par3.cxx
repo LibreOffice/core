@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par3.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 13:29:23 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 16:06:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1727,8 +1727,13 @@ void SwWW8ImplReader::RegisterNumFmtOnTxtNode(sal_uInt16 nActLFO,
                             SwNumRuleItem(pRule->GetName()));
                     }
                 }
-                pTxtNd->UpdateNum(aNum);
+
             }
+
+            if (pTxtNd->IsOutline() && pTxtNd->Len() == 0)
+                aNum.SetNoNum(TRUE);
+
+            pTxtNd->UpdateNum(aNum);
 
             SfxItemSet aListIndent(rDoc.GetAttrPool(), RES_LR_SPACE,
                     RES_LR_SPACE);
@@ -1869,8 +1874,9 @@ void SwWW8ImplReader::Read_LFOPosition(sal_uInt16, const sal_uInt8* pData,
                 {
                     pTxtNode->SwCntntNode::SetAttr(
                         *GetDfltAttr(RES_PARATR_NUMRULE));
-                    pTxtNode->UpdateNum(SwNodeNum(NO_NUMBERING));
+                    pTxtNode->UpdateNum(SwNodeNum(NO_NUMLEVEL));
                 }
+
                 /*
                 #i24553#
                 Hmm, I can't remove outline numbering on a per txtnode basis,
@@ -1888,10 +1894,10 @@ void SwWW8ImplReader::Read_LFOPosition(sal_uInt16, const sal_uInt8* pData,
                     {
                         pTxtNode->SwCntntNode::SetAttr(
                             SwNumRuleItem(mpChosenOutlineNumRule->GetName()));
-                        pTxtNode->UpdateNum(SwNodeNum());
+                        pTxtNode->UpdateNum(SwNodeNum(NO_NUMLEVEL));
                     }
                     else
-                        pTxtNode->UpdateNum(SwNodeNum());
+                        pTxtNode->UpdateNum(SwNodeNum(NO_NUMLEVEL));
                 }
 
                 //#94672#
