@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fews.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-01 12:34:58 $
+ *  last change: $Author: ama $ $Date: 2001-03-02 10:17:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -845,7 +845,7 @@ void SwFEShell::CalcBoundRect( SwRect &rRect, RndStdIds nAnchorId,
         pFrm = pFly ? pFly->GetAnchor() : GetCurrFrm();
     }
     SwPageFrm* pPage = pFrm->FindPageFrm();
-    bMirror = bMirror && !( pPage->GetVirtPageNum() % 2 );
+    bMirror = bMirror && !pPage->OnRightPage();
 
     Point aPos;
     if( FLY_PAGE == nAnchorId || FLY_AT_FLY == nAnchorId ) // LAYER_IMPL

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndgrf.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-26 15:34:21 $
+ *  last change: $Author: ama $ $Date: 2001-03-02 10:13:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1126,8 +1126,7 @@ GraphicAttr& SwGrfNode::GetGraphicAttr( GraphicAttr& rGA,
 
     const SwMirrorGrf & rMirror = rSet.GetMirrorGrf();
     ULONG nMirror = BMP_MIRROR_NONE;
-    if( rMirror.IsGrfToggle() && pFrm &&
-        !(pFrm->FindPageFrm()->GetVirtPageNum() % 2 ) )
+    if( rMirror.IsGrfToggle() && pFrm && !pFrm->FindPageFrm()->OnRightPage() )
     {
         switch( rMirror.GetValue() )
         {
