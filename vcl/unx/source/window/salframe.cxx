@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.137 $
+ *  $Revision: 1.138 $
  *
- *  last change: $Author: pl $ $Date: 2002-06-18 11:26:23 $
+ *  last change: $Author: pl $ $Date: 2002-06-27 18:07:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3279,7 +3279,10 @@ long SalFrameData::Dispatch( XEvent *pEvent )
                         }
                     }
 
-                    if( nStyle_ & SAL_FRAME_STYLE_CHILD )
+                    /*  #99570# another workaround for sawfish: if a transient window for the same parent is shown
+                     *  sawfish does not set the focus to it. Applies only for click to focus mode.
+                     */
+                    if( ! (nStyle_ & SAL_FRAME_STYLE_FLOAT ) )
                         XSetInputFocus( GetXDisplay(), GetShellWindow(), RevertToParent, CurrentTime );
                     /*
                      *  sometimes a message box/dialogue is brought up when a frame is not mapped
