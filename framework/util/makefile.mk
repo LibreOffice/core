@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.80 $
+#   $Revision: 1.81 $
 #
-#   last change: $Author: obo $ $Date: 2004-07-06 18:04:02 $
+#   last change: $Author: obo $ $Date: 2004-07-07 13:43:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -292,7 +292,7 @@ SHL4OBJS=       \
                 $(SLO)$/contenthandler.obj          \
                 $(SLO)$/containerquery.obj          \
                 $(SLO)$/loadenv.obj                 \
-                $(SLO)$/license.obj
+                $(SLO)$/license.obj                 \
                 $(SLO)$/targethelper.obj            \
                 $(SLO)$/windowstateconfiguration.obj    \
                 $(SLO)$/toolboxfactory.obj          \
