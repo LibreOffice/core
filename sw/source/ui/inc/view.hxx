@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 12:48:57 $
+ *  last change: $Author: hr $ $Date: 2004-04-07 12:45:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,7 @@ class SvGlobalName;
 class SvtAccessibilityOptions;
 class SwPrtOptions;
 class SwTransferable;
+class SwTxtNode; // #i23726#
 struct SwPrintData;
 
 namespace com{ namespace sun { namespace star {
@@ -240,6 +241,8 @@ class SwView: public SfxViewShell
 
     Point               aTabColFromDocPos;  //Verschieben von Tabellenspalten aus
                                             //aus dem Dokument heraus.
+    SwTxtNode           * pNumRuleNodeFromDoc; // Moving indent of numrule #i23726#
+
     Size                aDocSz;         // aktuelle Dokumentgroesse
     Rectangle           aVisArea;       // sichtbarer Bereich
 
@@ -287,6 +290,7 @@ class SwView: public SfxViewShell
                     bTopCrsr : 1,
                     bAllwaysShowSel : 1,
                     bTabColFromDoc : 1,
+                    bNumIndentFromDoc : 1, // #i23726#
                     bTabRowFromDoc : 1,
                     bSetTabColFromDoc : 1 ,
                     bSetTabRowFromDoc : 1,
@@ -490,7 +494,14 @@ public:
     void            SetTabRowFromDoc( BOOL b ) { bTabRowFromDoc = b; }
     BOOL            IsTabRowFromDoc() const    { return bTabRowFromDoc; }
 
-            void    DocSzChgd( const Size& rNewSize );
+    // -> #i23726#
+    void            SetNumRuleNodeFromDoc( SwTxtNode * pNumRuleNode )
+                    { pNumRuleNodeFromDoc = pNumRuleNode; }
+    void            SetNumIndentFromDoc(BOOL b) { bNumIndentFromDoc = b; }
+    BOOL            IsNumIndentFromDoc() const { return NULL != pNumRuleNodeFromDoc; }
+    // <- #i23726#
+
+    void    DocSzChgd( const Size& rNewSize );
     const   Size&   GetDocSz() const { return aDocSz; }
     virtual void    SetVisArea( const Rectangle&, BOOL bUpdateScrollbar = TRUE);
             void    SetVisArea( const Point&, BOOL bUpdateScrollbar = TRUE);
