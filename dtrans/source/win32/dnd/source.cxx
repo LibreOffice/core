@@ -2,9 +2,9 @@
  *
  *  $RCSfile: source.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:10:15 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 07:54:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,6 @@
 #include "sourcecontext.hxx"
 #include "../../inc/DtObjFactory.hxx"
 #include <rtl/ustring.h>
-#include <comdef.h>
 #include <process.h>
 #include <winuser.h>
 #include <stdio.h>
@@ -435,7 +434,7 @@ unsigned __stdcall DndOleSTAFunc(LPVOID pParams)
 
         DWORD dwEffect= 0;
         hr= DoDragDrop(
-            pSource->m_spDataObject,
+            pSource->m_spDataObject.get(),
             static_cast<IDropSource*>(pSource),
             dndActionsToDropEffects( pSource->m_sourceActions),
             &dwEffect);
