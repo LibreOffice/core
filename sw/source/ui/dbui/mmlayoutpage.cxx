@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mmlayoutpage.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-29 09:31:31 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 16:59:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -439,7 +439,9 @@ SwFrmFmt* SwMailMergeLayoutPage::InsertAddressFrame(
         // paragraph has to be hidden depending on the
         // IsIncludeCountry()/GetExcludeCountry() settings
 
-        bool bContainsCountryOnly = true;
+        sal_Bool bIncludeCountry = rConfigItem.IsIncludeCountry();
+        const ::rtl::OUString rExcludeCountry = rConfigItem.GetExcludeCountry();
+        bool bSpecialReplacementForCountry = (!bIncludeCountry || rExcludeCountry.getLength());
 
         const ResStringArray& rHeaders = rConfigItem.GetDefaultAddressHeaders();
         String sCountryColumn = rHeaders.GetString(MM_PART_COUNTRY);
@@ -469,9 +471,38 @@ SwFrmFmt* SwMailMergeLayoutPage::InsertAddressFrame(
                 }
                 String sDB(sDBName);
                 sDB += sConvertedColumn;
-                bContainsCountryOnly &= TRUE == (aItem.sText == sCountryColumn);
-                SwInsertFld_Data aData(TYP_DBFLD, 0, sDB, aEmptyStr, 0, &rShell );
-                aFldMgr.InsertFld( aData );
+
+                if( bSpecialReplacementForCountry && sCountryColumn == sConvertedColumn )
+                {
+                    // now insert a hidden paragraph field
+                    String sExpression;
+                    if( rExcludeCountry.getLength() )
+                    {
+                        sCountryColumnBase.SearchAndReplaceAll(DB_DELIM, '.');
+                        sExpression = sCountryColumnBase;
+                        sExpression.Insert('[', 0);
+                        sExpression += sCountryColumn;
+                        sExpression.AppendAscii("]");
+
+                        String sCondition(sExpression);
+                        sCondition.AppendAscii(" != \"");
+                        sCondition += String(rExcludeCountry);
+                        sCondition += '\"';
+
+                        SwInsertFld_Data aData(TYP_CONDTXTFLD, 0, sCondition, sExpression, 0, &rShell );
+                        aFldMgr.InsertFld( aData );
+                    }
+                    else
+                    {
+                        SwInsertFld_Data aData(TYP_HIDDENPARAFLD, 0, sExpression, aEmptyStr, 0, &rShell );
+                        aFldMgr.InsertFld( aData );
+                    }
+                }
+                else
+                {
+                    SwInsertFld_Data aData(TYP_DBFLD, 0, sDB, aEmptyStr, 0, &rShell );
+                    aFldMgr.InsertFld( aData );
+                }
             }
             else if(!aItem.bIsReturn)
             {
@@ -479,30 +510,8 @@ SwFrmFmt* SwMailMergeLayoutPage::InsertAddressFrame(
             }
             else
             {
-                sal_Bool bIncludeCountry = rConfigItem.IsIncludeCountry();
-                const ::rtl::OUString rCountry = rConfigItem.GetExcludeCountry();
-                if( bContainsCountryOnly && (!bIncludeCountry || rCountry.getLength()))
-                {
-                    // now insert a hidden paragraph field
-                    String sExpression;
-                    if(!bIncludeCountry)
-                        sExpression = String::CreateFromAscii("true");
-                    else
-                    {
-                        sCountryColumnBase.SearchAndReplaceAll(DB_DELIM, '.');
-                        sExpression = sCountryColumnBase;
-                        sExpression.Insert('[', 0);
-                        sExpression += sCountryColumn;
-                        sExpression.AppendAscii("] == \"");
-                        sExpression += String(rCountry);
-                        sExpression += '\"';
-                    }
-                    SwInsertFld_Data aData(TYP_HIDDENPARAFLD, 0, sExpression, aEmptyStr, 0, &rShell );
-                    aFldMgr.InsertFld( aData );
-                }
                 //now add a new paragraph
                 rShell.SplitNode();
-                bContainsCountryOnly = true;
             }
         }
     }
