@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndgrf.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 13:25:19 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 11:10:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -390,8 +390,18 @@ SwGrfNode::~SwGrfNode()
     }
     else
     {
-        if( !pDoc->IsInDtor() && HasStreamName() )
-            DelStreamName();
+        // --> OD 2005-01-19 #i40014# - A graphic node, which are in linked
+        // section, whose link is another section is the document, doesn't
+        // have to remove the stream from the storage.
+        // Because it's hard to detect this case here and it would only fix
+        // one problem with shared graphic files - there are also problems,
+        // a certain graphic file is referenced by two independent graphic nodes,
+        // brush item or drawing objects, the stream isn't no longer removed here.
+        // To do this stuff correct, a reference counting on shared streams
+        // inside one document have to be implemented.
+//        if( !pDoc->IsInDtor() && HasStreamName() )
+//          DelStreamName();
+        // <--
     }
     //#39289# Die Frames muessen hier bereits geloescht weil der DTor der
     //Frms die Grafik noch fuer StopAnimation braucht.
