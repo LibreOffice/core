@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 17:10:36 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 10:37:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2014,6 +2014,7 @@ String SwNewDBMgr::GetDBField(uno::Reference<XPropertySet> xColumnProps,
             sRet = xColumn->getString();
         break;
         case DataType::BIT:
+        case DataType::BOOLEAN:
         case DataType::TINYINT:
         case DataType::SMALLINT:
         case DataType::INTEGER:
