@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BTables.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-04 09:58:40 $
+ *  last change: $Author: pl $ $Date: 2001-05-11 18:11:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -283,7 +283,7 @@ void OTables::createTable( const Reference< XPropertySet >& descriptor )
     if(sSchema.getLength())
         aSql += ::dbtools::quoteName(aQuote, sSchema) + aDot;
     else
-        descriptor->setPropertyValue(PROPERTY_SCHEMANAME,makeAny(static_cast<OAdabasCatalog&>(m_rParent).getConnection()->getUserName().toUpperCase()));
+        descriptor->setPropertyValue(PROPERTY_SCHEMANAME,makeAny(static_cast<OAdabasCatalog&>(m_rParent).getConnection()->getUserName().toAsciiUpperCase()));
 
     aSql += ::dbtools::quoteName(aQuote, getString(descriptor->getPropertyValue(PROPERTY_NAME)))
                 + ::rtl::OUString::createFromAscii(" (");
