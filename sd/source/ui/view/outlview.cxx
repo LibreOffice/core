@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlview.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 15:18:56 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 14:55:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1774,139 +1774,25 @@ void OutlineView::FillOutliner()
 
 IMPL_LINK( OutlineView, RemovingPagesHdl, OutlinerView *, pOutlinerView )
 {
-    long nResult = 0;
-    USHORT nNumOfPages = 0;
-    Paragraph* pTitlePara = NULL;  // der Titel (falls nur eine Seite betroffen)
-    Paragraph* pPara      = NULL;
+    USHORT nNumOfPages = pOutliner->GetSelPageCount();
 
-    /*************************************************************************
-    |* Befinden sich Objekte auf der/den Seite(n), die der Benutzer nicht
-    |* so einfach neu erzeugen kann?
-    |* Kriterium: <mehr Objekte als Praesentationsobjekte>   oder
-    |*            <wenigstens ein nicht-leeres Praesentationsobjekt>
-    \**********************************************************************/
-    BOOL bValuableObjectsFound = FALSE;
-    List* pList = pOutlinerView->CreateSelectionList();
-    pPara = (Paragraph*)pList->First();
-    while (pPara)
+    if (nNumOfPages > PROCESS_WITH_PROGRESS_THRESHOLD)
     {
-        if ( pOutliner->GetDepth( (USHORT) pOutlinerView->GetOutliner()->GetAbsPos( pPara ) ) == 0 )
-        {
-            // welche Seite?
-            USHORT nPage = 0;
-            Paragraph* pScan = pPara;
-            while (pScan)
-            {
-                pScan = GetPrevTitle(pScan);
-                if (pScan)
-                    nPage++;
-            }
-
-            SdPage* pPage = pDoc->GetSdPage(nPage, PK_STANDARD);
-            if (pPage->GetObjCount() > pPage->GetPresObjList().size())
-            {
-                bValuableObjectsFound = TRUE;
-            }
-            else
-            {
-                sd::PresentationObjectList::iterator aIter( pPage->GetPresObjList().begin() );
-                const sd::PresentationObjectList::iterator aEnd( pPage->GetPresObjList().end() );
-
-                while( (aIter != aEnd) && !bValuableObjectsFound)
-                {
-                    bValuableObjectsFound = !(*aIter++).mpObject->IsEmptyPresObj();
-                }
-            }
-        }
-        pPara = (Paragraph*)pList->Next();
-    }
-    delete pList;
-
-    /*************************************************************************
-    |* nichts "wertvolles" gefunden: es darf ohne Rueckfrage geloescht werden
-    \************************************************************************/
-    if (!bValuableObjectsFound)
-    {
-        nResult = 1;
-    }
-    /*************************************************************************
-    |* lieber vorher nachfragen
-    \************************************************************************/
-    else
-    {
-        nNumOfPages = pOutliner->GetSelPageCount();
-        DBG_ASSERT(nNumOfPages > 0, "0 Seiten werden geloescht ???");
-
-        String aWarnStr;
-        if (nNumOfPages == 1)
-        {
-            // wie heisst die betroffene Seite?
-            USHORT nPage = 0;
-            ULONG nPara = pOutliner->GetFirstSelPage();
-            pPara = pOutliner->GetParagraph(nPara);
-            while (pPara)
-            {
-                pPara = GetPrevTitle(pPara);
-                if (pPara)
-                    nPage++;
-            }
-
-            String aPageName = ((SdPage*)pDoc->GetSdPage(nPage, PK_STANDARD))->
-                                                 GetName();
-
-            // dynamische Seitentitel beachten
-            if (aPageName.Len() == 0)
-            {
-                aPageName += String(SdResId(STR_PAGE));
-                aPageName += String::CreateFromInt32( nPage + 1 );      // an der UI beginnen Seiten bei 1
-            }
-
-            aWarnStr = String(SdResId(STR_WARN_DEL_PAGE));
-
-            // Platzhalter durch Seitennamen ersetzen
-            xub_StrLen nPos = aWarnStr.Search(sal_Unicode('$'));
-            aWarnStr.Erase(nPos, 1);
-            aWarnStr.Insert(aPageName, nPos);
-        }
-        else if (nNumOfPages > 1)
-        {
-            aWarnStr = String(SdResId(STR_WARN_DEL_SEL_PAGES));
-
-        }
-
-        // Warnung ausgeben
-        WarningBox aWarningBox( pOutlineViewShell->GetActiveWindow(),
-                               (WinBits)WB_OK_CANCEL | WB_DEF_CANCEL, aWarnStr);
-        short nDlgResult = aWarningBox.Execute();
-        if (nDlgResult == RET_OK)
-        {
-            nResult = 1;
-        }
+        nPagesToProcess = nNumOfPages;
+        nPagesProcessed  = 0;
     }
 
-    /*************************************************************************
-    |* Es soll geloescht werden: ggfs. Fortschrittsanzeige vorbereiten
-    \************************************************************************/
-    if (nResult == 1)
+    if (nPagesToProcess)
     {
-        if (nNumOfPages > PROCESS_WITH_PROGRESS_THRESHOLD)
-        {
-            nPagesToProcess = nNumOfPages;
-            nPagesProcessed  = 0;
-        }
+        if( mpProgress )
+            delete mpProgress;
 
-        if (nPagesToProcess)
-        {
-            if( mpProgress )
-                delete mpProgress;
-
-            String aStr(SdResId(STR_DELETE_PAGES));
-            mpProgress = new SfxProgress( GetDocSh(), aStr, nPagesToProcess );
-        }
-        pOutliner->UpdateFields();
+        String aStr(SdResId(STR_DELETE_PAGES));
+        mpProgress = new SfxProgress( GetDocSh(), aStr, nPagesToProcess );
     }
+    pOutliner->UpdateFields();
 
-    return nResult;
+    return 1;
 }
 
 /*************************************************************************
