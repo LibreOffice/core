@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgenrl.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: vg $ $Date: 2002-06-11 12:29:09 $
+ *  last change: $Author: rt $ $Date: 2002-06-13 14:54:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -355,7 +355,7 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ portuguese ] = "~País";
         Text[ russian ] = "Ñòðàíà";
         Text[ dutch ] = "~Land";
-        Text[ french ] = "Pays";
+        Text[ french ] = "Pays/Région";
         Text[ spanish ] = "~País/Región";
         Text[ italian ] = "Paese/Regione";
         Text[ danish ] = "Land";
