@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: os $ $Date: 2001-06-08 13:47:29 $
+ *  last change: $Author: os $ $Date: 2001-06-19 07:42:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1955,7 +1955,7 @@ void SwNewDBMgr::ExecuteFormLetter( SwWrtShell& rSh,
     if(pMergeDialog)
         return ;
     OUString sDataSource, sDataTableOrQuery;
-    Sequence<sal_Int32> aSelection;
+    Sequence<Any> aSelection;
     BOOL bHasSelectionProperty = FALSE;
     sal_Int32 nSelectionPos = 0;
     sal_Int32 nResultSetIdx = -1;
@@ -1986,13 +1986,22 @@ void SwNewDBMgr::ExecuteFormLetter( SwWrtShell& rSh,
         DBG_ERROR("PropertyValues missing or unset")
         return;
     }
+    Sequence<sal_Int32> aDlgSelection(aSelection.getLength());
+    if(aSelection.getLength())
+    {
+        sal_Int32* pDlgSelection = aDlgSelection.getArray();
+        const Any* pGridSelection = aSelection.getConstArray();
+        for(sal_Int32 nSel = 0; nSel < aSelection.getLength(); nSel++)
+            pGridSelection[nSel] >>= pDlgSelection[nSel];
+
+    }
     pMergeDialog = new SwMailMergeDlg(
                     &rSh.GetView().GetViewFrame()->GetWindow(), rSh,
                     sDataSource,
                     sDataTableOrQuery,
                     nCmdType,
                     xConnection,
-                    bHasSelectionProperty ? &aSelection : 0 );
+                    bHasSelectionProperty ? &aDlgSelection : 0 );
 
     if(pMergeDialog->Execute() == RET_OK)
     {
