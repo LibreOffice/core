@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xprintext.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2002-08-27 17:46:28 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:11:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+
+#if OSL_DEBUG_LEVEL == 0
+#define NDEBUG
+#endif
 #include <assert.h>
+
 #include <prex.h>
 #include <X11/extensions/Print.h>
 #include <postx.h>
