@@ -2,9 +2,9 @@
  *
  *  $RCSfile: applab.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ama $ $Date: 2001-07-05 13:19:49 $
+ *  last change: $Author: os $ $Date: 2001-07-17 08:18:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -562,6 +562,7 @@ static sal_uInt16 nBCTitleNo = 0;
             ASSERT(pDisp, "Heute kein Dispatcher am Frame?");
             pDisp->Execute(FN_SYNC_LABELS, SFX_CALLMODE_ASYNCHRON);
         }
+        rReq.SetReturnValue(SfxVoidItem(bLabel ? FN_LABEL : FN_BUSINESS_CARD));
     }
     delete pDlg;
 
