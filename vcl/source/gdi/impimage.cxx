@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impimage.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-10 17:53:28 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 14:37:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef _SV_OUTDEV_HXX
 #include <outdev.hxx>
 #endif
@@ -394,7 +393,17 @@ void ImplImageBmp::ColorTransform( BmpColorMode eColorMode )
 BitmapEx ImplImageBmp::GetBitmapEx( USHORT nPosCount, USHORT* pPosAry ) const
 {
     const Bitmap    aNewBmp( Size( nPosCount * maSize.Width(), maSize.Height() ),  maBmpEx.GetBitmap().GetBitCount() );
-    BitmapEx        aRet( aNewBmp );
+    BitmapEx        aRet;
+    if( maBmpEx.IsAlpha() )
+    {
+        // initialize target bitmap with an empty alpha mask
+        // which allows for using an optimized copypixel later on (see AlphaMask::CopyPixel)
+        // that avoids palette lookups
+        AlphaMask aAlpha( Size( nPosCount * maSize.Width(), maSize.Height() ) );
+        aRet = BitmapEx( aNewBmp, aAlpha );
+    }
+    else
+        aRet  = BitmapEx( aNewBmp );
 
     for( USHORT i = 0; i < nPosCount; i++ )
     {
