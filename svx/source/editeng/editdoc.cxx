@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editdoc.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: mt $ $Date: 2001-11-26 15:38:21 $
+ *  last change: $Author: mt $ $Date: 2001-11-27 17:31:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1263,8 +1263,15 @@ void CreateFont( SvxFont& rFont, const SfxItemSet& rSet, BOOL bSearchInParent )
         rFont.SetShadow( ((const SvxShadowedItem&)rSet.Get( EE_CHAR_SHADOW )).GetValue() );
     if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_ESCAPEMENT ) == SFX_ITEM_ON ) )
     {
-        rFont.SetEscapement( ((const SvxEscapementItem&)rSet.Get( EE_CHAR_ESCAPEMENT)).GetEsc() );
-        rFont.SetPropr( ((const SvxEscapementItem&)rSet.Get( EE_CHAR_ESCAPEMENT)).GetProp() );
+        USHORT nProp = ((const SvxEscapementItem&)rSet.Get( EE_CHAR_ESCAPEMENT)).GetProp();
+        rFont.SetPropr( (BYTE)nProp );
+
+        short nEsc = ((const SvxEscapementItem&)rSet.Get( EE_CHAR_ESCAPEMENT)).GetEsc();
+        if ( nEsc == DFLT_ESC_AUTO_SUPER )
+            nEsc = 100 - nProp;
+        else if ( nEsc == DFLT_ESC_AUTO_SUB )
+            nEsc = -( 100 - nProp );
+        rFont.SetEscapement( nEsc );
     }
     if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_PAIRKERNING ) == SFX_ITEM_ON ) )
         rFont.SetKerning( ((const SvxAutoKernItem&)rSet.Get( EE_CHAR_PAIRKERNING )).GetValue() );
