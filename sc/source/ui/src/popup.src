@@ -2,9 +2,9 @@
  *
  *  $RCSfile: popup.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: dr $ $Date: 2002-08-07 14:11:59 $
+ *  last change: $Author: kz $ $Date: 2002-08-15 20:24:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -336,11 +336,11 @@ Menu RID_POPUP_CELLS
             Text [ dutch ] = "~Invoegen" ;
             Text [ spanish ] = "P~egar" ;
             Text [ english_us ] = "~Paste" ;
-            Text[ chinese_simplified ] = "æ’å…¥(~P)";
+            Text[ chinese_simplified ] = "ç²˜è´´(~P)";
             Text[ russian ] = "~Âñòàâèòü";
             Text[ polish ] = "~Wstaw";
             Text[ japanese ] = "è²¼ã‚Šä»˜ã‘(~P)";
-            Text[ chinese_traditional ] = "æ’å…¥(~P)";
+            Text[ chinese_traditional ] = "è²¼ä¸Š(~P)";
             Text[ arabic ] = "áÕŞ";
             Text[ greek ] = "Å~éóáãùãŞ";
             Text[ korean ] = "ë¶™ì—¬ë„£ê¸°(~P)";
@@ -367,11 +367,11 @@ Menu RID_POPUP_CELLS
             Text [ dutch ] = "~Plakken speciaal..." ;
             Text [ spanish ] = "Pega~do especial..." ;
             Text [ english_us ] = "P~aste Special..." ;
-            Text[ chinese_simplified ] = "æ’å…¥å†…å®¹(~A)...";
+            Text[ chinese_simplified ] = "ç²˜è´´å†…å®¹(~A)...";
             Text[ russian ] = "Ñï~åöèàëüíàÿ âñòàâêà...";
             Text[ polish ] = "~Wstaw zawartoœæ...";
             Text[ japanese ] = "å½¢å¼ã‚’é¸æŠã—ã¦è²¼ã‚Šä»˜ã‘(~A)...";
-            Text[ chinese_traditional ] = "æ’å…¥å…§å®¹(~A)...";
+            Text[ chinese_traditional ] = "è²¼ä¸Šå…§å®¹(~A)...";
             Text[ arabic ] = "áÕŞ ÎÇÕ...";
             Text[ greek ] = "ÅéäéêŞ åğéêüëë~çóç...";
             Text[ korean ] = "ì„ íƒí•˜ì—¬ ë¶™ì—¬ë„£ê¸°(~A)...";
@@ -487,24 +487,24 @@ Menu RID_POPUP_TAB
             Text = "Tabelle ~einfügen..." ;
             Text [ ENGLISH ] = "~Insert..." ;
             Text [ norwegian ] = "Insert..." ;
-            Text [ italian ] = "~Inserisci..." ;
+            Text [ italian ] = "~Inserisci tabella..." ;
             Text [ portuguese_brazilian ] = "~Inserir..." ;
             Text [ portuguese ] = "~Inserir..." ;
             Text [ finnish ] = "~Lisää" ;
             Text [ danish ] = "~Indsæt..." ;
-            Text [ french ] = "~Insérer..." ;
+            Text [ french ] = "~Insérer une feuille..." ;
             Text [ swedish ] = "~Infoga..." ;
             Text [ dutch ] = "~Invoegen..." ;
             Text [ spanish ] = "~Insertar..." ;
-            Text [ english_us ] = "~Insert..." ;
-            Text[ chinese_simplified ] = "æ’å…¥(~I)...";
+            Text [ english_us ] = "~Insert Sheet..." ;
+            Text[ chinese_simplified ] = "æ’å…¥å·¥ä½œè¡¨(~I)...";
             Text[ russian ] = "Âñòàâêà...";
             Text[ polish ] = "W~staw...";
-            Text[ japanese ] = "æŒ¿å…¥(~I)...";
-            Text[ chinese_traditional ] = "æ’å…¥(~I)...";
+            Text[ japanese ] = "è¡¨ã®æŒ¿å…¥(~I)...";
+            Text[ chinese_traditional ] = "æ’å…¥å·¥ä½œè¡¨(~I)...";
             Text[ arabic ] = "ÅÏÑÇÌ...";
             Text[ greek ] = "~ÅéóáãùãŞ...";
-            Text[ korean ] = "ì‚½ì…(~I)...";
+            Text[ korean ] = "ì‹œíŠ¸ ì‚½ì…(~I)...";
             Text[ turkish ] = "~Ekle...";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Insereix...";
@@ -517,24 +517,24 @@ Menu RID_POPUP_TAB
             Text = "Tabelle ~löschen..." ;
             Text [ ENGLISH ] = "~Delete..." ;
             Text [ norwegian ] = "Slett..." ;
-            Text [ italian ] = "Elimina..." ;
+            Text [ italian ] = "Elimina tabella..." ;
             Text [ portuguese_brazilian ] = "Apagar..." ;
             Text [ portuguese ] = "E~liminar..." ;
             Text [ finnish ] = "~Poista" ;
             Text [ danish ] = "Slet..." ;
-            Text [ french ] = "~Supprimer..." ;
+            Text [ french ] = "~Supprimer la feuille..." ;
             Text [ swedish ] = "~Radera..." ;
             Text [ dutch ] = "~Wissen..." ;
             Text [ spanish ] = "~Eliminar..." ;
-            Text [ english_us ] = "~Delete..." ;
-            Text[ chinese_simplified ] = "åˆ é™¤(~D)...";
+            Text [ english_us ] = "~Delete Sheet..." ;
+            Text[ chinese_simplified ] = "åˆ é™¤å·¥ä½œè¡¨(~D)...";
             Text[ russian ] = "Óäàëèòü...";
             Text[ polish ] = "Usuñ...";
-            Text[ japanese ] = "å‰Šé™¤(~D)...";
-            Text[ chinese_traditional ] = "åˆªé™¤(~D)...";
+            Text[ japanese ] = "è¡¨ã®å‰Šé™¤(~D)...";
+            Text[ chinese_traditional ] = "åˆªé™¤å·¥ä½œè¡¨(~D)...";
             Text[ arabic ] = "ÍĞİ...";
             Text[ greek ] = "Äéáãñá~öŞ...";
-            Text[ korean ] = "ì‚­ì œ(~D)...";
+            Text[ korean ] = "ì‹œíŠ¸ ì‚­ì œ(~D)...";
             Text[ turkish ] = "~Sil...";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Su~primeix...";
@@ -547,24 +547,24 @@ Menu RID_POPUP_TAB
             Text = "Tabelle ~umbenennen..." ;
             Text [ ENGLISH ] = "~Rename..." ;
             Text [ norwegian ] = "Rename..." ;
-            Text [ italian ] = "Rinomina..." ;
+            Text [ italian ] = "Rinomina tabella..." ;
             Text [ portuguese_brazilian ] = "Rename..." ;
             Text [ portuguese ] = "~Mudar nome..." ;
             Text [ finnish ] = "~Nimeä uudelleen..." ;
             Text [ danish ] = "Omdøb..." ;
-            Text [ french ] = "Ren~ommer..." ;
+            Text [ french ] = "Ren~ommer la feuille..." ;
             Text [ swedish ] = "~Byt namn..." ;
             Text [ dutch ] = "~Naam wijzigen..." ;
             Text [ spanish ] = "~Cambiar nombre..." ;
-            Text [ english_us ] = "~Rename..." ;
-            Text[ chinese_simplified ] = "é‡å‘½å(~R)...";
+            Text [ english_us ] = "~Rename Sheet..." ;
+            Text[ chinese_simplified ] = "é‡å‘½åå·¥ä½œè¡¨(~R)...";
             Text[ russian ] = "Ïåğåèìåíîâàòü...";
             Text[ polish ] = "Zmieñ nazwê...";
-            Text[ japanese ] = "åå‰ã®å¤‰æ›´(~R)...";
-            Text[ chinese_traditional ] = "é‡æ–°å‘½å(~R)...";
+            Text[ japanese ] = "è¡¨ã®åå‰ã®å¤‰æ›´(~R)...";
+            Text[ chinese_traditional ] = "é‡æ–°å‘½åå·¥ä½œè¡¨(~R)...";
             Text[ arabic ] = "ÅÚÇÏÉ ÊÓãíÉ...";
             Text[ greek ] = "Ìåôïíïìáóßá...";
-            Text[ korean ] = "ì´ë¦„ ë°”ê¾¸ê¸°(~R)...";
+            Text[ korean ] = "ì‹œíŠ¸ ì´ë¦„ ë°”ê¾¸ê¸°(~R)...";
             Text[ turkish ] = "Ye~niden adlandır...";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Reanomena...";
@@ -577,24 +577,24 @@ Menu RID_POPUP_TAB
             Text = "Tabelle ~verschieben/kopieren..." ;
             Text [ ENGLISH ] = "~Move/Copy..." ;
             Text [ norwegian ] = "Move/Copy..." ;
-            Text [ italian ] = "Sposta/copia..." ;
+            Text [ italian ] = "Sposta/copia tabella..." ;
             Text [ portuguese_brazilian ] = "Move/Copy..." ;
             Text [ portuguese ] = "~Mover/Copiar..." ;
             Text [ finnish ] = "~Siirrä/kopioi..." ;
             Text [ danish ] = "Flyt/kopier..." ;
-            Text [ french ] = "~Déplacer/Copier..." ;
+            Text [ french ] = "~Déplacer/Copier la feuille..." ;
             Text [ swedish ] = "~Flytta/kopiera..." ;
             Text [ dutch ] = "~Verplaatsen/kopiëren..." ;
             Text [ spanish ] = "~Desplazar/Copiar..." ;
-            Text [ english_us ] = "~Move/Copy..." ;
-            Text[ chinese_simplified ] = "ç§»åŠ¨/å¤åˆ¶(~M)...";
+            Text [ english_us ] = "~Move/Copy Sheet..." ;
+            Text[ chinese_simplified ] = "ç§»åŠ¨/å¤åˆ¶å·¥ä½œè¡¨(~M)...";
             Text[ russian ] = "Ïåğåìåñòèòü/ñêîïèğîâàòü...";
             Text[ polish ] = "Przesuñ/Kopiuj...";
-            Text[ japanese ] = "ç§»å‹•ã¾ãŸã¯ã‚³ãƒ”ãƒ¼(~M)...";
-            Text[ chinese_traditional ] = "ç§»å‹•/è¤‡è£½(~M)...";
+            Text[ japanese ] = "è¡¨ã®ç§»å‹•ã¾ãŸã¯ã‚³ãƒ”ãƒ¼(~M)...";
+            Text[ chinese_traditional ] = "ç§»å‹•/è¤‡è£½å·¥ä½œè¡¨(~M)...";
             Text[ arabic ] = "ÅÒÇÍÉ/äÓÎ...";
             Text[ greek ] = "Ìåôáêßíçóç/Á~íôéãñáöŞ...";
-            Text[ korean ] = "ì´ë™/ë³µì‚¬(~M)...";
+            Text[ korean ] = "ì‹œíŠ¸ ì´ë™/ë³µì‚¬(~M)...";
             Text[ turkish ] = "Taşı/kopyala...";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Mou/Copia...";
