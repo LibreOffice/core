@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtffly.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 14:20:09 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:28:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1016,8 +1016,9 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
     pSet->Put( aVert );
 
     // --> OD 2004-06-30 #i27767# - set wrapping style influence
+    // --> OD 2004-10-18 #i35017# - constant name has changed
     pSet->Put( SwFmtWrapInfluenceOnObjPos(
-                    text::WrapInfluenceOnPosition::NONE_SUCCESSIVE_POSITIONED ));
+                    text::WrapInfluenceOnPosition::ONCE_SUCCESSIVE ));
     // <--
 
     if( !( aFrmDir == pSet->Get( RES_FRAMEDIR )) )
