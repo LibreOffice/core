@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridctrl.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 05:32:42 $
+ *  last change: $Author: kz $ $Date: 2001-05-16 15:13:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@ Menu RID_SVXMNU_ROWS
             Text = "Zeilen löschen" ;
             Text [ ENGLISH ] = "Delete rows" ;
             Text [ english_us ] = "Delete Rows" ;
-            Text [ portuguese_brazilian ] = "Zeilen löschen" ;
+            Text [ portuguese_brazilian ] = "Zeilen l?chen" ;
             Text [ swedish ] = "Radera rader" ;
             Text [ danish ] = "Slet rækker" ;
             Text [ italian ] = "Elimina riga" ;
@@ -133,7 +133,7 @@ Menu RID_SVXMNU_ROWS
             Text [ ENGLISH ] = "Undo: Data entry" ;
             Text [ english_us ] = "Undo: Data entry" ;
             Text [ portuguese ] = "Anular: entrada de dados" ;
-            Text [ portuguese_brazilian ] = "Rückgängig: Dateneingabe" ;
+            Text [ portuguese_brazilian ] = "R?kg?ngig: Dateneingabe" ;
             Text [ swedish ] = "Ångra: datainmatning" ;
             Text [ danish ] = "Fortryd: Datainput" ;
             Text [ italian ] = "Annulla: Immissione dati" ;
@@ -168,7 +168,7 @@ Menu RID_SVXMNU_COLS
             Text [ ENGLISH ] = "~Insert column" ;
             Text [ english_us ] = "Insert ~Column" ;
             Text [ portuguese ] = "~Inserir coluna" ;
-            Text [ portuguese_brazilian ] = "~Spalte einfügen" ;
+            Text [ portuguese_brazilian ] = "~Spalte einf?en" ;
             Text [ swedish ] = "I~nfoga kolumn" ;
             Text [ danish ] = "Indsæt kolonne" ;
             Text [ italian ] = "~Inserisci colonna" ;
@@ -390,7 +390,7 @@ Menu RID_SVXMNU_COLS
                         Text [ ENGLISH ] = "CurrencyField" ;
                         Text [ portuguese ] = "Campo para moeda" ;
                         Text [ english_us ] = "Currency Field" ;
-                        Text [ portuguese_brazilian ] = "Währungsfeld" ;
+                        Text [ portuguese_brazilian ] = "W?hrungsfeld" ;
                         Text [ swedish ] = "Valutafält" ;
                         Text [ danish ] = "Valutafelt" ;
                         Text [ italian ] = "Campo di valuta" ;
@@ -518,7 +518,7 @@ Menu RID_SVXMNU_COLS
             Text = "~Ersetzen durch" ;
             Text [ ENGLISH ] = "~Replace with" ;
             Text [ english_us ] = "~Replace with" ;
-            Text [ portuguese_brazilian ] = "~¦ndern zu" ;
+            Text [ portuguese_brazilian ] = "~?ndern zu" ;
             Text [ swedish ] = "Ersätt med" ;
             Text [ danish ] = "Erstat med" ;
             Text [ italian ] = "~Sostituisci con" ;
@@ -547,7 +547,7 @@ Menu RID_SVXMNU_COLS
             Text = "Spalte ~löschen" ;
             Text [ ENGLISH ] = "~Delete column" ;
             Text [ english_us ] = "Delete Column" ;
-            Text [ portuguese_brazilian ] = "Spalte ~löschen" ;
+            Text [ portuguese_brazilian ] = "Spalte ~l?chen" ;
             Text [ swedish ] = "Radera ~kolumn" ;
             Text [ danish ] = "Slet kolonne" ;
             Text [ italian ] = "Elimina colonna" ;
@@ -677,7 +677,7 @@ Menu RID_SVXMNU_COLS
             Text[ russian ] = "Ïîêàçàòü êîëîíêè";
             Text[ italian ] = "~Mostra colonne";
             Text[ danish ] = "Vis kolonner";
-            Text[ polish ] = "Wyœwietl kolumny";
+            Text[ polish ] = "Wy?wietl kolumny";
             Text[ portuguese_brazilian ] = "~Show columns";
             Text[ japanese ] = "—ñ‚ð•\\Ž¦‚·‚é(~S)";
             Text[ korean ] = "¿­ ³ªÅ¸³»±â(~S)";
