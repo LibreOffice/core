@@ -17,7 +17,7 @@
 <ThousandSeparator> </ThousandSeparator>
 <DecimalSeparator>,</DecimalSeparator>
 <TimeSeparator>:</TimeSeparator>
-<Time100SecSeparator>.</Time100SecSeparator>
+<Time100SecSeparator>,</Time100SecSeparator>
 <ListSeparator>;</ListSeparator>
 <LongDateDayOfWeekSeparator> </LongDateDayOfWeekSeparator>
 <LongDateDaySeparator>.</LongDateDaySeparator>
@@ -25,22 +25,22 @@
 <LongDateYearSeparator> </LongDateYearSeparator>
 </Separators>
 <Markers>
-<QuotationStart>‘</QuotationStart>
+<QuotationStart>’</QuotationStart>
 <QuotationEnd>’</QuotationEnd>
-<DoubleQuotationStart>“</DoubleQuotationStart>
-<DoubleQuotationEnd>”</DoubleQuotationEnd>
+<DoubleQuotationStart>«</DoubleQuotationStart>
+<DoubleQuotationEnd>»</DoubleQuotationEnd>
 </Markers>
-<TimeAM>AM</TimeAM>
-<TimePM>PM</TimePM>
+<TimeAM>a.m.</TimeAM>
+<TimePM>p.m.</TimePM>
 <MeasurementSystem>Metric</MeasurementSystem>
 </LC_CTYPE>
 <LC_FORMAT replaceFrom="[CURRENCY]" replaceTo="[$kr-14]">
 <FormatElement msgid="DateFormatskey1" default="true" type="short" usage="DATE" formatindex="18">
-<FormatCode>M.D.YY</FormatCode>
+<FormatCode>DD.MM.YY</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey2" default="false" type="medium" usage="DATE" formatindex="28">
-<FormatCode>NN DD.MMM YY</FormatCode>
+<FormatCode>NN DD. MMM YY</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey3" default="false" type="medium" usage="DATE" formatindex="34">
@@ -48,7 +48,7 @@
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey4" default="false" type="medium" usage="DATE" formatindex="35">
-<FormatCode>MMM DD</FormatCode>
+<FormatCode>DD. MMMM</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey5" default="false" type="medium" usage="DATE" formatindex="36">
@@ -59,40 +59,40 @@
 <FormatCode>QQ YY</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
-<FormatElement msgid="DateFormatskey7" default="false" type="medium" usage="DATE" formatindex="21">
-<FormatCode>MM.DD.YYYY</FormatCode>
+<FormatElement msgid="DateFormatskey7" default="true" type="medium" usage="DATE" formatindex="21">
+<FormatCode>DD.MM.YYYY</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
-<FormatElement msgid="DateFormatskey8" default="true" type="medium" usage="DATE" formatindex="20">
-<FormatCode>MM.DD.YY</FormatCode>
+<FormatElement msgid="DateFormatskey8" default="false" type="medium" usage="DATE" formatindex="20">
+<FormatCode>DD.MM.YY</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey9" default="true" type="long" usage="DATE" formatindex="19">
-<FormatCode>NNNNMMMM DD. YYYY</FormatCode>
+<FormatCode>NNNN DD. MMMM YYYY</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey10" default="false" type="long" usage="DATE" formatindex="22">
-<FormatCode>MMM D. YY</FormatCode>
+<FormatCode>D. MMM YY</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey11" default="false" type="long" usage="DATE" formatindex="23">
-<FormatCode>MMM D. YYYY</FormatCode>
+<FormatCode>D. MMM YYYY</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey12" default="false" type="long" usage="DATE" formatindex="25">
-<FormatCode>MMMM D. YYYY</FormatCode>
+<FormatCode>D. MMMM YYYY</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey13" default="false" type="long" usage="DATE" formatindex="27">
-<FormatCode>NN. MMM D. YY</FormatCode>
+<FormatCode>NN D. MMM YY</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey14" default="false" type="long" usage="DATE" formatindex="29">
-<FormatCode>NN. MMMM D. YYYY</FormatCode>
+<FormatCode>NN D. MMMM YYYY</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey15" default="false" type="long" usage="DATE" formatindex="30">
-<FormatCode>NNNNMMMM D. YYYY</FormatCode>
+<FormatCode>NNNN D. MMMM YYYY</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey16" default="false" type="long" usage="DATE" formatindex="24">
@@ -140,19 +140,19 @@
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="TimeFormatskey6" default="false" type="short" usage="TIME"  formatindex="44">
-<FormatCode>MM:SS.00</FormatCode>
+<FormatCode>MM:SS,00</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="TimeFormatskey7" default="false" type="medium" usage="TIME"  formatindex="45">
-<FormatCode>[TT]:MM:SS.00</FormatCode>
+<FormatCode>[TT]:MM:SS,00</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateTimeFormatskey1" default="true" type="medium" usage="DATE_TIME"  formatindex="46">
-<FormatCode>MM.DD.YY TT:MM</FormatCode>
+<FormatCode>DD.MM.YY TT:MM</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateTimeFormatskey2" default="false" type="medium" usage="DATE_TIME"  formatindex="47">
-<FormatCode>MM.DD.YYYY TT:MM:SS</FormatCode>
+<FormatCode>DD.MM.YYYY TT:MM:SS</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="FixedFormatskey1" default="true" type="medium" usage="FIXED_NUMBER"  formatindex="0">
@@ -180,19 +180,19 @@
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey1" default="true" type="short" usage="CURRENCY"  formatindex="12">
-<FormatCode>[CURRENCY]# ##0;-[CURRENCY]# ##0</FormatCode>
+<FormatCode>[CURRENCY] # ##0;-[CURRENCY] # ##0</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey2" default="false" type="medium" usage="CURRENCY"  formatindex="13">
-<FormatCode>[CURRENCY]# ##0,00;-[CURRENCY]# ##0,00</FormatCode>
+<FormatCode>[CURRENCY] # ##0,00;-[CURRENCY] # ##0,00</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey3" default="false" type="medium" usage="CURRENCY"  formatindex="14">
-<FormatCode>[CURRENCY]# ##0;[RED]-[CURRENCY]# ##0</FormatCode>
+<FormatCode>[CURRENCY] # ##0;[RED]-[CURRENCY] # ##0</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey4" default="true" type="medium" usage="CURRENCY"  formatindex="15">
-<FormatCode>[CURRENCY]# ##0,00;[RED]-[CURRENCY]# ##0,00</FormatCode>
+<FormatCode>[CURRENCY] # ##0,00;[RED]-[CURRENCY] # ##0,00</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey5" default="false" type="medium" usage="CURRENCY"  formatindex="16">
@@ -200,7 +200,7 @@
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey6" default="false" type="medium" usage="CURRENCY"  formatindex="17">
-<FormatCode>[CURRENCY]# ##0,--;[RED]-[CURRENCY]# ##0,--</FormatCode>
+<FormatCode>[CURRENCY] # ##0,--;[RED]-[CURRENCY] # ##0,--</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="PercentFormatskey1" default="true" type="short" usage="PERCENT_NUMBER"  formatindex="8">
@@ -236,59 +236,59 @@
 <DaysOfWeek>
 <Day>
 <DayID>sun</DayID>
-<DefaultAbbrvName>sø</DefaultAbbrvName>
+<DefaultAbbrvName>sø.</DefaultAbbrvName>
 <DefaultFullName>søndag</DefaultFullName>
 </Day>
 <Day>
 <DayID>mon</DayID>
-<DefaultAbbrvName>ma</DefaultAbbrvName>
+<DefaultAbbrvName>ma.</DefaultAbbrvName>
 <DefaultFullName>mandag</DefaultFullName>
 </Day>
 <Day>
 <DayID>tue</DayID>
-<DefaultAbbrvName>ti</DefaultAbbrvName>
+<DefaultAbbrvName>ti.</DefaultAbbrvName>
 <DefaultFullName>tirsdag</DefaultFullName>
 </Day>
 <Day>
 <DayID>wed</DayID>
-<DefaultAbbrvName>on</DefaultAbbrvName>
+<DefaultAbbrvName>on.</DefaultAbbrvName>
 <DefaultFullName>onsdag</DefaultFullName>
 </Day>
 <Day>
 <DayID>thu</DayID>
-<DefaultAbbrvName>to</DefaultAbbrvName>
+<DefaultAbbrvName>to.</DefaultAbbrvName>
 <DefaultFullName>torsdag</DefaultFullName>
 </Day>
 <Day>
 <DayID>fri</DayID>
-<DefaultAbbrvName>fr</DefaultAbbrvName>
+<DefaultAbbrvName>fr.</DefaultAbbrvName>
 <DefaultFullName>fredag</DefaultFullName>
 </Day>
 <Day>
 <DayID>sat</DayID>
-<DefaultAbbrvName>lø</DefaultAbbrvName>
+<DefaultAbbrvName>lø.</DefaultAbbrvName>
 <DefaultFullName>lørdag</DefaultFullName>
 </Day>
 </DaysOfWeek>
 <MonthsOfYear>
 <Month>
 <MonthID>jan</MonthID>
-<DefaultAbbrvName>jan</DefaultAbbrvName>
+<DefaultAbbrvName>jan.</DefaultAbbrvName>
 <DefaultFullName>januar</DefaultFullName>
 </Month>
 <Month>
 <MonthID>feb</MonthID>
-<DefaultAbbrvName>feb</DefaultAbbrvName>
+<DefaultAbbrvName>feb.</DefaultAbbrvName>
 <DefaultFullName>februar</DefaultFullName>
 </Month>
 <Month>
 <MonthID>mar</MonthID>
-<DefaultAbbrvName>mar</DefaultAbbrvName>
+<DefaultAbbrvName>mars</DefaultAbbrvName>
 <DefaultFullName>mars</DefaultFullName>
 </Month>
 <Month>
 <MonthID>apr</MonthID>
-<DefaultAbbrvName>apr</DefaultAbbrvName>
+<DefaultAbbrvName>april</DefaultAbbrvName>
 <DefaultFullName>april</DefaultFullName>
 </Month>
 <Month>
@@ -298,37 +298,37 @@
 </Month>
 <Month>
 <MonthID>jun</MonthID>
-<DefaultAbbrvName>jun</DefaultAbbrvName>
+<DefaultAbbrvName>juni</DefaultAbbrvName>
 <DefaultFullName>juni</DefaultFullName>
 </Month>
 <Month>
 <MonthID>jul</MonthID>
-<DefaultAbbrvName>jul</DefaultAbbrvName>
+<DefaultAbbrvName>juli</DefaultAbbrvName>
 <DefaultFullName>juli</DefaultFullName>
 </Month>
 <Month>
 <MonthID>aug</MonthID>
-<DefaultAbbrvName>aug</DefaultAbbrvName>
+<DefaultAbbrvName>aug.</DefaultAbbrvName>
 <DefaultFullName>august</DefaultFullName>
 </Month>
 <Month>
 <MonthID>sep</MonthID>
-<DefaultAbbrvName>sep</DefaultAbbrvName>
+<DefaultAbbrvName>sep.</DefaultAbbrvName>
 <DefaultFullName>september</DefaultFullName>
 </Month>
 <Month>
 <MonthID>oct</MonthID>
-<DefaultAbbrvName>okt</DefaultAbbrvName>
+<DefaultAbbrvName>okt.</DefaultAbbrvName>
 <DefaultFullName>oktober</DefaultFullName>
 </Month>
 <Month>
 <MonthID>nov</MonthID>
-<DefaultAbbrvName>nov</DefaultAbbrvName>
+<DefaultAbbrvName>nov.</DefaultAbbrvName>
 <DefaultFullName>november</DefaultFullName>
 </Month>
 <Month>
 <MonthID>dec</MonthID>
-<DefaultAbbrvName>des</DefaultAbbrvName>
+<DefaultAbbrvName>des.</DefaultAbbrvName>
 <DefaultFullName>desember</DefaultFullName>
 </Month>
 </MonthsOfYear>
@@ -362,18 +362,18 @@
 <LC_TRANSLITERATION ref="en_US"/>
 <LC_MISC>
 <ReservedWords>
-<trueWord>Sant</trueWord>
-<falseWord>Usant</falseWord>
-<quarter1Word>1. en fjerdedel</quarter1Word>
-<quarter2Word>2. en fjerdedel</quarter2Word>
-<quarter3Word>3. en fjerdedel</quarter3Word>
-<quarter4Word>4. en fjerdedel</quarter4Word>
+<trueWord>sann</trueWord>
+<falseWord>usann</falseWord>
+<quarter1Word>1. kvartal</quarter1Word>
+<quarter2Word>2. kvartal</quarter2Word>
+<quarter3Word>3. kvartal</quarter3Word>
+<quarter4Word>4. kvartal</quarter4Word>
 <aboveWord>over</aboveWord>
 <belowWord>under</belowWord>
-<quarter1Abbreviation>F1</quarter1Abbreviation>
-<quarter2Abbreviation>F2</quarter2Abbreviation>
-<quarter3Abbreviation>F3</quarter3Abbreviation>
-<quarter4Abbreviation>F4</quarter4Abbreviation>
+<quarter1Abbreviation>K1</quarter1Abbreviation>
+<quarter2Abbreviation>K2</quarter2Abbreviation>
+<quarter3Abbreviation>K3</quarter3Abbreviation>
+<quarter4Abbreviation>K4</quarter4Abbreviation>
 </ReservedWords>
 </LC_MISC>
 <LC_NumberingLevel ref="en_US"/>
