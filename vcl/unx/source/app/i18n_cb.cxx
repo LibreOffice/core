@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_cb.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 14:26:47 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:37:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,13 +164,13 @@ Preedit_DeleteText(preedit_text_t *ptext, int from, int howmuch)
 
     int to = from + howmuch;
 
-      if (to == ptext->nLength)
+      if (to == (int)ptext->nLength)
     {
         // delete from the end of the text
         ptext->nLength = from;
       }
     else
-    if (to < ptext->nLength)
+        if (to < (int)ptext->nLength)
     {
         // cut out of the middle of the text
         memmove( (void*)(ptext->pUnicodeBuffer + from),
@@ -203,7 +203,7 @@ enlarge_buffer ( preedit_text_t *ptext, int nnewlimit )
 {
       size_t nnewsize = ptext->nSize;
 
-      while ( nnewsize <= nnewlimit )
+      while ( nnewsize <= (size_t)nnewlimit )
         nnewsize *= 2;
 
       ptext->nSize = nnewsize;
@@ -322,7 +322,7 @@ void
 Preedit_UpdateAttributes ( preedit_text_t* ptext, XIMFeedback* feedback,
         int from, int amount )
 {
-    if ( (from + amount) > ptext->nLength )
+    if ( (from + amount) > (int)ptext->nLength )
     {
         // XXX this indicates an error, are we out of sync ?
         fprintf (stderr, "Preedit_UpdateAttributes( %i + %i > %i )\n",
@@ -591,7 +591,7 @@ PreeditCaretCallback ( XIC ic, XPointer client_data,
 Bool
 IsControlCode(sal_Unicode nChar)
 {
-    if (   (0x00 <= nChar && nChar <= 0x1F) // C0 controls
+    if ( nChar <= 0x1F // C0 controls
      /* || (0x80 <= nChar && nChar <= 0x9F) C1 controls */ )
         return True;
     else
@@ -711,17 +711,24 @@ StatusDrawCallback (XIC ic, XPointer client_data, XIMStatusDrawCallbackStruct *c
             size_t nLength = 0;
             if( call_data->data.text->encoding_is_wchar )
             {
-                wchar_t* pWString = call_data->data.text->string.wide_char;
-                size_t nBytes = wcstombs( NULL, pWString, 1024 );
-                pMBString = (sal_Char*)alloca( nBytes+1 );
-                nLength = wcstombs( pMBString, pWString, nBytes+1 );
+                if( call_data->data.text->string.wide_char )
+                {
+                    wchar_t* pWString = call_data->data.text->string.wide_char;
+                    size_t nBytes = wcstombs( NULL, pWString, 1024 );
+                    pMBString = (sal_Char*)alloca( nBytes+1 );
+                    nLength = wcstombs( pMBString, pWString, nBytes+1 );
+                }
             }
             else
             {
+                if( call_data->data.text->string.multi_byte )
+                {
                     pMBString = call_data->data.text->string.multi_byte;
                     nLength = strlen( pMBString );
+                }
             }
-            aText = String( pMBString, nLength, gsl_getSystemTextEncoding() );
+            if( nLength )
+                aText = String( pMBString, nLength, gsl_getSystemTextEncoding() );
         }
         ::vcl::I18NStatus::get().setStatusText( aText );
     }
