@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: mav $ $Date: 2002-10-11 08:43:51 $
+ *  last change: $Author: gt $ $Date: 2002-10-15 11:13:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,6 +174,9 @@
 #ifndef _SVT_HELPID_HRC
 #include <svtools/helpid.hrc>
 #endif
+#ifndef _SVX_SVXIDS_HRC
+#include <svx/svxids.hrc>
+#endif
 #ifndef _UCBHELPER_CONTENT_HXX
 #include <ucbhelper/content.hxx>
 #endif
@@ -228,6 +231,20 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::rtl;
 using namespace ::cppu;
+
+//-----------------------------------------------------------------------------
+
+const short FILEOPEN_SIMPLE = TemplateDescription::FILEOPEN_SIMPLE;
+const short FILESAVE_SIMPLE = TemplateDescription::FILESAVE_SIMPLE;
+const short FILESAVE_AUTOEXTENSION_PASSWORD = TemplateDescription::FILESAVE_AUTOEXTENSION_PASSWORD;
+const short FILESAVE_AUTOEXTENSION_PASSWORD_FILTEROPTIONS = TemplateDescription::FILESAVE_AUTOEXTENSION_PASSWORD_FILTEROPTIONS;
+const short FILESAVE_AUTOEXTENSION_SELECTION = TemplateDescription::FILESAVE_AUTOEXTENSION_SELECTION;
+const short FILESAVE_AUTOEXTENSION_TEMPLATE = TemplateDescription::FILESAVE_AUTOEXTENSION_TEMPLATE;
+const short FILEOPEN_LINK_PREVIEW_IMAGE_TEMPLATE = TemplateDescription::FILEOPEN_LINK_PREVIEW_IMAGE_TEMPLATE;
+const short FILEOPEN_PLAY = TemplateDescription::FILEOPEN_PLAY;
+const short FILEOPEN_READONLY_VERSION = TemplateDescription::FILEOPEN_READONLY_VERSION;
+const short FILEOPEN_LINK_PREVIEW = TemplateDescription::FILEOPEN_LINK_PREVIEW;
+const short FILESAVE_AUTOEXTENSION = TemplateDescription::FILESAVE_AUTOEXTENSION;
 
 //-----------------------------------------------------------------------------
 
@@ -896,10 +913,9 @@ sal_Bool lcl_isSystemFilePicker( const Reference< XFilePicker >& _rxFP )
 // -----------      FileDialogHelper_Impl       ---------------------------
 // ------------------------------------------------------------------------
 
-FileDialogHelper_Impl::FileDialogHelper_Impl( FileDialogHelper* pParent,
-                                              const short nDialogType,
-                                              sal_uInt32 nFlags )
-    :m_nDialogType( nDialogType )
+FileDialogHelper_Impl::FileDialogHelper_Impl( FileDialogHelper* pParent, const short nDialogType, sal_uInt32 nFlags )
+    :m_nDialogType  ( nDialogType )
+    ,meContext      ( FileDialogHelper::UNKNOWN_CONTEXT )
 {
     OUString aService( RTL_CONSTASCII_USTRINGPARAM( FILE_OPEN_SERVICE_NAME ) );
 
@@ -1955,6 +1971,22 @@ OUString FileDialogHelper_Impl::getFilterWithExtension( const OUString& rFilter 
     return sRet;
 }
 
+void FileDialogHelper_Impl::SetContext( FileDialogHelper::Context _eNewContext )
+{
+    meContext = _eNewContext;
+
+    sal_Int32   nNewHelpId;
+
+    switch( _eNewContext )
+    {
+        case FileDialogHelper::SW_INSERT_GRAPHIC:       nNewHelpId = SID_INSERT_GRAPHIC;        break;
+        default:                                        nNewHelpId = 0;
+    }
+
+    if( nNewHelpId )
+        this->setDialogHelpId( nNewHelpId );
+}
+
 // ------------------------------------------------------------------------
 // -----------          FileDialogHelper        ---------------------------
 // ------------------------------------------------------------------------
@@ -2025,6 +2057,11 @@ void FileDialogHelper::SetControlHelpIds( const sal_Int16* _pControlId, const sa
 void FileDialogHelper::SetDialogHelpId( const sal_Int32 _nHelpId )
 {
     mpImp->setDialogHelpId( _nHelpId );
+}
+
+void FileDialogHelper::SetContext( Context _eNewContext )
+{
+    mpImp->SetContext( _eNewContext );
 }
 
 // ------------------------------------------------------------------------
