@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodes.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:57:49 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:38:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2642,3 +2642,32 @@ void SwNodes::Insert(const SwNodePtr pNode, ULONG nPos)
     BigPtrArray::Insert( pIns, nPos );
 }
 
+// ->#112139#
+SwNode * SwNodes::DocumentSectionStartNode(SwNode * pNode) const
+{
+    if (NULL != pNode)
+    {
+        SwNodeIndex aIdx(*pNode);
+
+        if (aIdx <= (*this)[0]->EndOfSectionIndex())
+            pNode = (*this)[0];
+        else
+        {
+            while ((*this)[0] != pNode->StartOfSectionNode())
+                pNode = pNode->StartOfSectionNode();
+        }
+    }
+
+    return pNode;
+}
+
+SwNode * SwNodes::DocumentSectionEndNode(SwNode * pNode) const
+{
+    return DocumentSectionStartNode(pNode)->EndOfSectionNode();
+}
+
+SwNode * SwNodes::operator[](int n) const
+{
+    return operator[]((ULONG) n);
+}
+// <-#112139#
