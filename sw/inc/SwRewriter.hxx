@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwRewriter.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 13:55:37 $
+ *  last change: $Author: rt $ $Date: 2004-05-26 10:00:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,13 +66,11 @@
 #include <iostream>
 #include <tools/string.hxx>
 
-using namespace std;
-
-typedef pair<String, String> SwRewriteRule;
+typedef std::pair<String, String> SwRewriteRule;
 
 class SwRewriter
 {
-    vector<SwRewriteRule> mRules;
+    std::vector<SwRewriteRule> mRules;
 
 public:
     SwRewriter();
@@ -83,9 +81,10 @@ public:
     void AddRewriter(const SwRewriter & rRewriter);
 
     String Apply(const String & rStr) const;
-    vector<String> Apply(const vector<String> & rStrs) const;
+    std::vector<String> Apply(const std::vector<String> & rStrs) const;
 
-    friend ostream & operator << (ostream & o, const SwRewriter & rRewriter);
+    friend std::ostream & operator << (std::ostream & o,
+                                       const SwRewriter & rRewriter);
 };
 
 #endif // _SW_REWRITER_HXX
