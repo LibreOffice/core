@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: pl $ $Date: 2002-04-29 17:46:18 $
+ *  last change: $Author: pl $ $Date: 2002-05-03 13:04:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1322,7 +1322,7 @@ void Edit::KeyInput( const KeyEvent& rKEvt )
 void Edit::FillLayoutData() const
 {
     mpLayoutData = new vcl::ControlLayoutData();
-    const_cast<Edit*>(this)->ImplRepaint( true );
+    const_cast<Edit*>(this)->ImplRepaint( 0, STRING_LEN, true );
 }
 
 // -----------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lstbox.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: pl $ $Date: 2002-04-19 12:11:57 $
+ *  last change: $Author: pl $ $Date: 2002-05-03 13:04:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,9 @@
 #endif
 #ifndef _SV_COMBOBOX_HXX
 #include <combobox.hxx>
+#endif
+#ifndef _VCL_CONTROLLAYOUT_HXX
+#include <controllayout.hxx>
 #endif
 
 #pragma hdrstop
@@ -601,6 +604,30 @@ void ListBox::Resize()
     // weil KEY_PGUP/DOWN ausgewertet wird...
     if ( mpFloatWin )
         mpFloatWin->SetSizePixel( mpFloatWin->CalcFloatSize() );
+}
+
+// -----------------------------------------------------------------------
+
+void ListBox::FillLayoutData() const
+{
+    mpLayoutData = new vcl::ControlLayoutData();
+    const Control* pMainWin = mpImplLB->GetMainWindow();
+    if( mpFloatWin )
+    {
+        // dropdown mode
+        AppendLayoutData( *mpImplWin );
+        mpImplWin->SetLayoutDataParent( this );
+        if( mpFloatWin->IsReallyVisible() )
+        {
+            AppendLayoutData( *pMainWin );
+            pMainWin->SetLayoutDataParent( this );
+        }
+    }
+    else
+    {
+        AppendLayoutData( *pMainWin );
+        pMainWin->SetLayoutDataParent( this );
+    }
 }
 
 // -----------------------------------------------------------------------

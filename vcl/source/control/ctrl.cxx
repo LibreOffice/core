@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pl $ $Date: 2002-04-29 17:46:18 $
+ *  last change: $Author: pl $ $Date: 2002-05-03 13:04:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,7 @@ Control::Control( Window* pParent, const ResId& rResId ) :
 
 Control::~Control()
 {
-    delete mpLayoutData;
+    delete mpLayoutData, mpLayoutData = NULL;
 }
 
 // -----------------------------------------------------------------------
@@ -201,7 +201,11 @@ long Control::GetLineCount() const
     if( ! mpLayoutData )
         FillLayoutData();
     if( mpLayoutData )
+    {
         nLines = mpLayoutData->m_aLineIndices.size();
+        if( nLines == 0 && mpLayoutData->m_aDisplayText.Len() )
+            nLines = 1;
+    }
     return nLines;
 }
 
@@ -221,7 +225,7 @@ Pair Control::GetLineStartEnd( long nLine ) const
             if( nLine+1 < mpLayoutData->m_aLineIndices.size() )
                 aPair.B() = mpLayoutData->m_aLineIndices[nLine+1]-1;
             else
-                aPair.B() = GetText().Len()-1;
+                aPair.B() = mpLayoutData->m_aDisplayText.Len()-1;
         }
         else if( nLine == 0 && nDisplayLines == 0 && mpLayoutData->m_aDisplayText.Len() )
         {
@@ -303,4 +307,56 @@ void Control::StateChanged( StateChangedType nStateChange )
         mpLayoutData = NULL;
     }
     Window::StateChanged( nStateChange );
+}
+
+// -----------------------------------------------------------------------
+
+void Control::AppendLayoutData( const Control& rSubControl ) const
+{
+    if( ! rSubControl.mpLayoutData )
+        rSubControl.FillLayoutData();
+    if( ! rSubControl.mpLayoutData || ! rSubControl.mpLayoutData->m_aDisplayText.Len() )
+        return;
+
+    long nCurrentIndex = mpLayoutData->m_aDisplayText.Len();
+    mpLayoutData->m_aDisplayText.Append( rSubControl.mpLayoutData->m_aDisplayText );
+    int nLines = rSubControl.mpLayoutData->m_aLineIndices.size();
+    int n;
+    mpLayoutData->m_aLineIndices.push_back( nCurrentIndex );
+    for( n = 1; n < nLines; n++ )
+        mpLayoutData->m_aLineIndices.push_back( rSubControl.mpLayoutData->m_aLineIndices[n] + nCurrentIndex );
+    int nRectangles = rSubControl.mpLayoutData->m_aUnicodeBoundRects.size();
+    for( n = 0; n < nRectangles; n++ )
+    {
+        Rectangle aRect = rSubControl.LogicToPixel( rSubControl.mpLayoutData->m_aUnicodeBoundRects[n] );
+        Point aTL = aRect.TopLeft();
+        aTL = rSubControl.OutputToAbsoluteScreenPixel( aTL );
+        aTL = AbsoluteScreenToOutputPixel( aTL );
+        aRect.SetPos( aTL );
+        aRect = PixelToLogic( aRect );
+        mpLayoutData->m_aUnicodeBoundRects.push_back( aRect );
+    }
+}
+
+// -----------------------------------------------------------------
+
+void Control::SetLayoutDataParent( const Control* pParent ) const
+{
+    if( mpLayoutData )
+        mpLayoutData->m_pParent = pParent;
+}
+
+// -----------------------------------------------------------------
+
+void Control::ImplSubControlLayoutChanged() const
+{
+    delete mpLayoutData, mpLayoutData = NULL;
+}
+
+// -----------------------------------------------------------------
+
+ControlLayoutData::~ControlLayoutData()
+{
+    if( m_pParent )
+        m_pParent->ImplSubControlLayoutChanged();
 }

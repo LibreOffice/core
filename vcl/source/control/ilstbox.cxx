@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ilstbox.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: pl $ $Date: 2002-04-29 17:46:18 $
+ *  last change: $Author: pl $ $Date: 2002-05-03 13:04:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2397,35 +2397,40 @@ void ImplWin::MouseButtonDown( const MouseEvent& rMEvt )
 
 void ImplWin::FillLayoutData() const
 {
+    mpLayoutData = new vcl::ControlLayoutData();
+    const_cast<ImplWin*>(this)->ImplDraw( true );
 }
 
 // -----------------------------------------------------------------------
 
-void ImplWin::Paint( const Rectangle& rRect )
+void ImplWin::ImplDraw( bool bLayout )
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
-    if( IsEnabled() )
+    if( ! bLayout )
     {
-        if( HasFocus() )
+        if( IsEnabled() )
         {
-            SetTextColor( rStyleSettings.GetHighlightTextColor() );
-            SetFillColor( rStyleSettings.GetHighlightColor() );
-            DrawRect( maFocusRect );
+            if( HasFocus() )
+            {
+                SetTextColor( rStyleSettings.GetHighlightTextColor() );
+                SetFillColor( rStyleSettings.GetHighlightColor() );
+                DrawRect( maFocusRect );
+            }
+            else
+            {
+                Color aColor = rStyleSettings.GetFieldTextColor();
+                if( IsControlForeground() )
+                    aColor = GetControlForeground();
+                SetTextColor( aColor );
+                Erase( maFocusRect );
+            }
         }
-        else
+        else // Disabled
         {
-            Color aColor = rStyleSettings.GetFieldTextColor();
-            if( IsControlForeground() )
-                aColor = GetControlForeground();
-            SetTextColor( aColor );
+            SetTextColor( rStyleSettings.GetDisableColor() );
             Erase( maFocusRect );
         }
-    }
-    else // Disabled
-    {
-        SetTextColor( rStyleSettings.GetDisableColor() );
-        Erase( maFocusRect );
     }
 
     if ( IsUserDrawEnabled() )
@@ -2437,19 +2442,26 @@ void ImplWin::Paint( const Rectangle& rRect )
     }
     else
     {
-        DrawEntry( TRUE, TRUE );
+        DrawEntry( TRUE, TRUE, FALSE, bLayout );
     }
 }
 
 // -----------------------------------------------------------------------
 
-void ImplWin::DrawEntry( BOOL bDrawImage, BOOL bDrawText, BOOL bDrawTextAtImagePos )
+void ImplWin::Paint( const Rectangle& rRect )
+{
+    ImplDraw();
+}
+
+// -----------------------------------------------------------------------
+
+void ImplWin::DrawEntry( BOOL bDrawImage, BOOL bDrawText, BOOL bDrawTextAtImagePos, bool bLayout )
 {
     long nBorder = 1;
     Size aOutSz = GetOutputSizePixel();
 
     BOOL bImage = !!maImage;
-    if( bDrawImage && bImage )
+    if( bDrawImage && bImage && !bLayout )
     {
         USHORT nStyle = 0;
         Size aImgSz = maImage.GetSizePixel();
@@ -2499,10 +2511,12 @@ void ImplWin::DrawEntry( BOOL bDrawImage, BOOL bDrawText, BOOL bDrawTextAtImageP
             long nMaxWidth = Max( maImage.GetSizePixel().Width(), maUserItemSize.Width() );
             aPtTxt.X() += nMaxWidth + IMG_TXT_DISTANCE;
         }
-        DrawText( aPtTxt, maString );
+        MetricVector* pVector = bLayout ? &mpLayoutData->m_aUnicodeBoundRects : NULL;
+        String* pDisplayText = bLayout ? &mpLayoutData->m_aDisplayText : NULL;
+        DrawText( aPtTxt, maString, 0, STRING_LEN, pVector, pDisplayText );
     }
 
-    if( HasFocus() )
+    if( HasFocus() && !bLayout )
         ShowFocus( maFocusRect );
 }
 
@@ -2510,6 +2524,7 @@ void ImplWin::DrawEntry( BOOL bDrawImage, BOOL bDrawText, BOOL bDrawTextAtImageP
 
 void ImplWin::Resize()
 {
+    delete mpLayoutData, mpLayoutData = NULL;
     maFocusRect.SetSize( GetOutputSizePixel() );
     Invalidate();
 }

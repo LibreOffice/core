@@ -2,9 +2,9 @@
  *
  *  $RCSfile: combobox.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mt $ $Date: 2002-04-24 14:49:10 $
+ *  last change: $Author: pl $ $Date: 2002-05-03 13:04:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,9 @@
 #endif
 #ifndef _SV_COMBOBOX_HXX
 #include <combobox.hxx>
+#endif
+#ifndef _VCL_CONTROLLAYOUT_HXX
+#include <controllayout.hxx>
 #endif
 
 #pragma hdrstop
@@ -633,6 +636,30 @@ void ComboBox::Resize()
     // weil KEY_PGUP/DOWN ausgewertet wird...
     if ( mpFloatWin )
         mpFloatWin->SetSizePixel( mpFloatWin->CalcFloatSize() );
+}
+
+// -----------------------------------------------------------------------
+
+void ComboBox::FillLayoutData() const
+{
+    mpLayoutData = new vcl::ControlLayoutData();
+    AppendLayoutData( *mpSubEdit );
+    mpSubEdit->SetLayoutDataParent( this );
+    Control* pMainWindow = mpImplLB->GetMainWindow();
+    if( mpFloatWin )
+    {
+        // dropdown mode
+        if( mpFloatWin->IsReallyVisible() )
+        {
+            AppendLayoutData( *pMainWindow );
+            pMainWindow->SetLayoutDataParent( this );
+        }
+    }
+    else
+    {
+        AppendLayoutData( *pMainWindow );
+        pMainWindow->SetLayoutDataParent( this );
+    }
 }
 
 // -----------------------------------------------------------------------

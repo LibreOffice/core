@@ -2,9 +2,9 @@
  *
  *  $RCSfile: spinfld.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mt $ $Date: 2001-11-27 09:54:45 $
+ *  last change: $Author: pl $ $Date: 2002-05-03 13:04:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,9 @@
 #endif
 #ifndef _SV_SPINFLD_HXX
 #include <spinfld.hxx>
+#endif
+#ifndef _VCL_CONTROLLAYOUT_HXX
+#include <controllayout.hxx>
 #endif
 
 // =======================================================================
@@ -491,6 +494,20 @@ long SpinField::Notify( NotifyEvent& rNEvt )
 void SpinField::Command( const CommandEvent& rCEvt )
 {
     Edit::Command( rCEvt );
+}
+
+// --------------------------------------------------------------------
+
+void SpinField::FillLayoutData() const
+{
+    if( mbSpin )
+    {
+        mpLayoutData = new vcl::ControlLayoutData();
+        AppendLayoutData( *GetSubEdit() );
+        GetSubEdit()->SetLayoutDataParent( this );
+    }
+    else
+        Edit::FillLayoutData();
 }
 
 // --------------------------------------------------------------------
