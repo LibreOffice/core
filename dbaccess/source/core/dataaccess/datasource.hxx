@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasource.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-18 16:15:16 $
+ *  last change: $Author: fs $ $Date: 2000-10-20 09:51:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,6 +192,7 @@ protected:
     sal_Int32                                           m_nLoginTimeout;
     sal_Bool                                            m_bReadOnly : 1;
     sal_Bool                                            m_bPasswordRequired : 1;
+    sal_Bool                                            m_bSuppressVersionColumns : 1;
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
                                                         m_aInfo;
 // </properties>
