@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crsrsh.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-20 09:22:18 $
+ *  last change: $Author: jp $ $Date: 2000-11-26 17:02:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2256,7 +2256,8 @@ SwCrsrShell::SwCrsrShell( SwCrsrShell& rShell, Window *pWin )
      */
     nCrsrMove = 0;
     bAllProtect = bVisPortChgd = bChgCallFlag = bInCMvVisportChgd =
-    bGCAttr = bIgnoreReadonly = bSelTblCells = bBasicHideCrsr = FALSE;
+    bGCAttr = bIgnoreReadonly = bSelTblCells = bBasicHideCrsr =
+    bOverwriteCrsr = FALSE;
     bCallChgLnk = bHasFocus = bSVCrsrVis = bAutoUpdateCells = TRUE;
     bSetCrsrInReadOnly = TRUE;
     eMvState = MV_NONE;     // Status fuers Crsr-Travelling - GetCrsrOfst
@@ -2302,7 +2303,8 @@ SwCrsrShell::SwCrsrShell( SwDoc& rDoc, Window *pWin, SwRootFrm *pRoot,
      */
     nCrsrMove = 0;
     bAllProtect = bVisPortChgd = bChgCallFlag = bInCMvVisportChgd =
-    bGCAttr = bIgnoreReadonly = bSelTblCells = bBasicHideCrsr = FALSE;
+    bGCAttr = bIgnoreReadonly = bSelTblCells = bBasicHideCrsr =
+    bOverwriteCrsr = FALSE;
     bCallChgLnk = bHasFocus = bSVCrsrVis = bAutoUpdateCells = TRUE;
     bSetCrsrInReadOnly = TRUE;
     eMvState = MV_NONE;     // Status fuers Crsr-Travelling - GetCrsrOfst

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crsrsh.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-20 09:20:40 $
+ *  last change: $Author: jp $ $Date: 2000-11-26 17:03:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -290,7 +290,7 @@ private:
     BOOL bAutoUpdateCells : 1;  // TRUE -> Zellen werden autoformatiert
     BOOL bBasicHideCrsr : 1;    // TRUE -> HideCrsr vom Basic
     BOOL bSetCrsrInReadOnly : 1;// TRUE -> Cursor darf in ReadOnly-Bereiche
-
+    BOOL bOverwriteCrsr : 1;    // TRUE -> show Overwrite Crsr
 
     void UpdateCrsr( USHORT eFlags
                             =SwCrsrShell::SCROLLWIN|SwCrsrShell::CHKRANGE,
@@ -492,6 +492,9 @@ public:
     void BasicHideCrsrs()
         { HideCrsrs(); bBasicHideCrsr = TRUE; bSVCrsrVis = FALSE; }
     FASTBOOL IsBasicHideCrsr() const { return bBasicHideCrsr; }
+
+    FASTBOOL IsOverwriteCrsr() const { return bOverwriteCrsr; }
+    void SetOverwriteCrsr( FASTBOOL bFlag ) { bOverwriteCrsr = bFlag; }
 
     // gebe den aktuellen Frame, in dem der Cursor steht, zurueck
     SwCntntFrm *GetCurrFrm( const BOOL bCalcFrm = TRUE ) const;

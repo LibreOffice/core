@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-20 14:46:04 $
+ *  last change: $Author: jp $ $Date: 2000-11-26 17:02:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1042,6 +1042,9 @@ void SwEditShell::DeleteExtTextInput( SwExtTextInput* pDel, BOOL bInsText )
         StartAllAction();
         pDel->SetInsText( bInsText );
         GetDoc()->DeleteExtTextInput( pDel );
+
+        SetOverwriteCrsr( FALSE );
+
         EndAllAction();
     }
 }
@@ -1071,18 +1074,19 @@ void SwEditShell::SetExtTextInputData( const CommandExtTextInputData& rData )
         xub_StrLen nNewCrsrPos = rStt.nContent.GetIndex() + rData.GetCursorPos();
 
         // zwar unschoen aber was hilfts
+        ShowCrsr();
         long nDiff = nNewCrsrPos - rPos.nContent.GetIndex();
         if( 0 > nDiff )
             Left( (xub_StrLen)-nDiff );
         else if( 0 < nDiff )
             Right( (xub_StrLen)nDiff );
 
-        if( rData.IsCursorVisible() )
-            ShowCrsr();
-        else
-            HideCrsr();
+        SetOverwriteCrsr( rData.IsCursorOverwrite() );
 
         EndAllAction();
+
+        if( !rData.IsCursorVisible() )  // must be called after the EndAction
+            HideCrsr();
     }
 }
 
