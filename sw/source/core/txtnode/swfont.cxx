@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfont.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: fme $ $Date: 2001-10-29 16:45:52 $
+ *  last change: $Author: fme $ $Date: 2001-10-30 09:37:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,6 +219,7 @@ Color* SwFont::XChgBackColor( Color* pNewColor )
 
 #ifdef VERTICAL_LAYOUT
 
+// maps directions for vertical layout
 USHORT MapDirection( USHORT nDir, const BOOL bVertFormat )
 {
     if ( bVertFormat )
@@ -233,6 +234,33 @@ USHORT MapDirection( USHORT nDir, const BOOL bVertFormat )
             break;
         case 2700 :
             nDir = 1800;
+            break;
+#ifdef DEBUG
+        default :
+            ASSERT( sal_False, "Unsupported direction" );
+            break;
+#endif
+        }
+    }
+    return nDir;
+}
+
+// maps the absolute direction set at the font to its logical conterpart
+// in the rotated environment
+USHORT UnMapDirection( USHORT nDir, const BOOL bVertFormat )
+{
+    if ( bVertFormat )
+    {
+        switch ( nDir )
+        {
+        case 0 :
+            nDir = 900;
+            break;
+        case 1800 :
+            nDir = 2700;
+            break;
+        case 2700 :
+            nDir = 0;
             break;
 #ifdef DEBUG
         default :
@@ -1144,6 +1172,11 @@ void SwSubFont::CalcEsc( SwDrawTextInfo& rInf, Point& rPos )
 {
     long nOfst;
 
+#ifdef VERTICAL_LAYOUT
+    USHORT nDir = UnMapDirection(
+                GetOrientation(), rInf.GetFrm() && rInf.GetFrm()->IsVertical() );
+#endif
+
     switch ( GetEscapement() )
     {
     case DFLT_ESC_AUTO_SUB :
@@ -1151,7 +1184,11 @@ void SwSubFont::CalcEsc( SwDrawTextInfo& rInf, Point& rPos )
             pLastFont->GetHeight( rInf.GetShell(), rInf.GetpOut() ) +
             pLastFont->GetAscent( rInf.GetShell(), rInf.GetpOut() );
 
+#ifdef VERTICAL_LAYOUT
+        switch ( nDir )
+#else
         switch ( GetOrientation() )
+#endif
         {
         case 0 :
             rPos.Y() += nOfst;
@@ -1169,7 +1206,12 @@ void SwSubFont::CalcEsc( SwDrawTextInfo& rInf, Point& rPos )
         nOfst = pLastFont->GetAscent( rInf.GetShell(), rInf.GetpOut() ) -
                 nOrgAscent;
 
+
+#ifdef VERTICAL_LAYOUT
+        switch ( nDir )
+#else
         switch ( GetOrientation() )
+#endif
         {
         case 0 :
             rPos.Y() += nOfst;
@@ -1186,7 +1228,11 @@ void SwSubFont::CalcEsc( SwDrawTextInfo& rInf, Point& rPos )
     default :
         nOfst = ((long)nOrgHeight * GetEscapement()) / 100L;
 
+#ifdef VERTICAL_LAYOUT
+        switch ( nDir )
+#else
         switch ( GetOrientation() )
+#endif
         {
         case 0 :
             rPos.Y() -= nOfst;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntcache.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: fme $ $Date: 2001-10-29 11:23:31 $
+ *  last change: $Author: fme $ $Date: 2001-10-30 09:37:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,7 +135,7 @@ MapMode* SwFntObj::pPixMap = NULL;
 OutputDevice* SwFntObj::pPixOut = NULL;
 
 #ifdef VERTICAL_LAYOUT
-extern USHORT MapDirection( USHORT nDir, const BOOL bVertFormat );
+extern USHORT UnMapDirection( USHORT nDir, const BOOL bVertFormat );
 #endif
 
 #ifdef _RVP_MARK_HXX
@@ -1120,7 +1120,7 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
                         long nKernVal = pKernArray[ USHORT( rInf.GetLen() - 1 ) ];
 
 #ifdef VERTICAL_LAYOUT
-                        switch ( MapDirection( GetFont()->GetOrientation(),
+                        switch ( UnMapDirection( GetFont()->GetOrientation(),
                                  bSwitchH2V ) )
 #else
                         switch ( GetFont()->GetOrientation() )
@@ -1209,7 +1209,7 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
                                 long nKernEnd = pKernArray[ USHORT( nEnd - 1 ) ];
 
 #ifdef VERTICAL_LAYOUT
-                                switch ( MapDirection( GetFont()->GetOrientation(),
+                                switch ( UnMapDirection( GetFont()->GetOrientation(),
                                          bSwitchH2V ) )
 #else
                                 switch ( GetFont()->GetOrientation() )
@@ -1673,6 +1673,11 @@ void SwDrawTextInfo::Shift( USHORT nDir )
 {
     ASSERT( bPos, "DrawTextInfo: Undefined Position" );
     ASSERT( bSize, "DrawTextInfo: Undefined Width" );
+
+#ifdef VERTICAL_LAYOUT
+    if ( GetFrm() && GetFrm()->IsVertical() )
+        nDir = UnMapDirection( nDir, sal_True );
+#endif
 
     switch ( nDir )
     {
