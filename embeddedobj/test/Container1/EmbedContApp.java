@@ -950,7 +950,8 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
                     Object oEmbObj = xEmbedFactory.createInstanceInitNew( pClassID,
                                                                         "Dummy name",
                                                                         m_xStorage,
-                                                                        "EmbedSub" );
+                                                                        "EmbedSub",
+                                                                        new PropertyValue[0] );
                     xEmbObj = (XEmbeddedObject)UnoRuntime.queryInterface( XEmbeddedObject.class, oEmbObj );
                 }
                 else
@@ -986,7 +987,7 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
                 aMedDescr[0].Value = (Object) aLinkURL;
                 aMedDescr[1].Name = "ReadOnly";
                 aMedDescr[1].Value = (Object) new Boolean( false );
-                Object oEmbObj = xLinkCreator.createInstanceLink( m_xStorage, "EmbedSub", aMedDescr );
+                Object oEmbObj = xLinkCreator.createInstanceLink( m_xStorage, "EmbedSub", aMedDescr, new PropertyValue[0] );
                 xEmbObj = (XEmbeddedObject)UnoRuntime.queryInterface( XEmbeddedObject.class, oEmbObj );
             }
             else
@@ -1022,7 +1023,8 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
                 aMedDescr[1].Value = (Object) new Boolean( false );
                 Object oEmbObj = xEmbedCreator.createInstanceInitFromMediaDescriptor( m_xStorage,
                                                                                     "EmbedSub",
-                                                                                    aMedDescr );
+                                                                                    aMedDescr,
+                                                                                    new PropertyValue[0] );
                 xEmbObj = (XEmbeddedObject)UnoRuntime.queryInterface( XEmbeddedObject.class, oEmbObj );
             }
             else
@@ -1123,7 +1125,7 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
                     Object oStorage = xStorageFactory.createInstanceWithArguments( aArgs );
                     XStorage xTargetStorage = (XStorage)UnoRuntime.queryInterface( XStorage.class, oStorage );
 
-                    xPersist.storeAsEntry( xTargetStorage, "EmbedSub", new PropertyValue[0] );
+                    xPersist.storeAsEntry( xTargetStorage, "EmbedSub", new PropertyValue[0], new PropertyValue[0] );
                     xPersist.saveCompleted( true );
 
                     // the object must be already based on new storage

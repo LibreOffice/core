@@ -2,9 +2,9 @@
  *
  *  $RCSfile: persistence.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mav $ $Date: 2003-11-26 16:44:03 $
+ *  last change: $Author: mav $ $Date: 2003-12-08 12:49:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -535,13 +535,16 @@ void SAL_CALL OCommonEmbeddedObject::setPersistentEntry(
                     const uno::Reference< embed::XStorage >& xStorage,
                     const ::rtl::OUString& sEntName,
                     sal_Int32 nEntryConnectionMode,
-                    const uno::Sequence< beans::PropertyValue >& lArguments )
+                    const uno::Sequence< beans::PropertyValue >& lArguments,
+                    const uno::Sequence< beans::PropertyValue >& lObjArgs )
         throw ( lang::IllegalArgumentException,
                 embed::WrongStateException,
                 io::IOException,
                 uno::Exception,
                 uno::RuntimeException )
 {
+    // TODO: use lObjArgs
+
     // the type of the object must be already set
     // a kind of typedetection should be done in the factory
 
@@ -719,13 +722,16 @@ void SAL_CALL OCommonEmbeddedObject::storeOwn()
 //------------------------------------------------------
 void SAL_CALL OCommonEmbeddedObject::storeToEntry( const uno::Reference< embed::XStorage >& xStorage,
                             const ::rtl::OUString& sEntName,
-                            const uno::Sequence< beans::PropertyValue >& lArguments )
+                            const uno::Sequence< beans::PropertyValue >& lArguments,
+                            const uno::Sequence< beans::PropertyValue >& lObjArgs )
         throw ( lang::IllegalArgumentException,
                 embed::WrongStateException,
                 io::IOException,
                 uno::Exception,
                 uno::RuntimeException )
 {
+    // TODO: use lObjArgs
+
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
@@ -758,13 +764,16 @@ void SAL_CALL OCommonEmbeddedObject::storeToEntry( const uno::Reference< embed::
 //------------------------------------------------------
 void SAL_CALL OCommonEmbeddedObject::storeAsEntry( const uno::Reference< embed::XStorage >& xStorage,
                             const ::rtl::OUString& sEntName,
-                            const uno::Sequence< beans::PropertyValue >& lArguments )
+                            const uno::Sequence< beans::PropertyValue >& lArguments,
+                            const uno::Sequence< beans::PropertyValue >& lObjArgs )
         throw ( lang::IllegalArgumentException,
                 embed::WrongStateException,
                 io::IOException,
                 uno::Exception,
                 uno::RuntimeException )
 {
+    // TODO: use lObjArgs
+
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
@@ -935,13 +944,16 @@ sal_Bool SAL_CALL OCommonEmbeddedObject::isReadonly()
 
 //------------------------------------------------------
 void SAL_CALL OCommonEmbeddedObject::reload(
-                const uno::Sequence< beans::PropertyValue >& lArguments )
+                const uno::Sequence< beans::PropertyValue >& lArguments,
+                const uno::Sequence< beans::PropertyValue >& lObjArgs )
         throw ( lang::IllegalArgumentException,
                 embed::WrongStateException,
                 io::IOException,
                 uno::Exception,
                 uno::RuntimeException )
 {
+    // TODO: use lObjArgs
+
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO

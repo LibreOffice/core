@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcreator.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mav $ $Date: 2003-12-01 08:41:13 $
+ *  last change: $Author: mav $ $Date: 2003-12-08 12:49:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,7 +213,8 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
                                                         xStorage,
                                                         sEntName,
                                                         embed::EntryInitModes::ENTRY_DEFAULT_INIT,
-                                                        aTempMediaDescr );
+                                                        aTempMediaDescr,
+                                                        uno::Sequence< beans::PropertyValue >() );
     }
     else
     {
@@ -277,12 +278,15 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
 uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInstanceInitFromMediaDescriptor(
         const uno::Reference< embed::XStorage >& xStorage,
         const ::rtl::OUString& sEntName,
-        const uno::Sequence< beans::PropertyValue >& aMediaDescr )
+        const uno::Sequence< beans::PropertyValue >& aMediaDescr,
+        const uno::Sequence< beans::PropertyValue >& lObjArgs )
     throw ( lang::IllegalArgumentException,
             io::IOException,
             uno::Exception,
             uno::RuntimeException)
 {
+    // TODO: use lObjArgs
+
     if ( !xStorage.is() )
         throw lang::IllegalArgumentException( ::rtl::OUString::createFromAscii( "No parent storage is provided!\n" ),
                                             uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ),
@@ -342,7 +346,8 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
                                                          xStorage,
                                                          sEntName,
                                                          embed::EntryInitModes::ENTRY_MEDIA_DESCRIPTOR_INIT,
-                                                         aTempMedDescr );
+                                                         aTempMedDescr,
+                                                         lObjArgs );
     }
     else
     {
@@ -362,7 +367,7 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
         if ( !xOleEmbCreator.is() )
             throw uno::RuntimeException(); // TODO:
 
-        xResult = xOleEmbCreator->createInstanceInitFromMediaDescriptor( xStorage, sEntName, aTempMedDescr );
+        xResult = xOleEmbCreator->createInstanceInitFromMediaDescriptor( xStorage, sEntName, aTempMedDescr, lObjArgs );
     }
 
     return xResult;
@@ -372,7 +377,8 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
 uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInstanceLink(
                                             const uno::Reference< embed::XStorage >& xStorage,
                                             const ::rtl::OUString& sEntName,
-                                            const uno::Sequence< beans::PropertyValue >& aMediaDescr )
+                                            const uno::Sequence< beans::PropertyValue >& aMediaDescr,
+                                            const uno::Sequence< beans::PropertyValue >& lObjArgs )
         throw ( lang::IllegalArgumentException,
                 io::IOException,
                 uno::Exception,
@@ -438,7 +444,8 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
                                                          GetClassNameFromServName( aDocServiceName ),
                                                          xStorage,
                                                          sEntName,
-                                                         aTempMedDescr );
+                                                         aTempMedDescr,
+                                                         lObjArgs );
     }
     else
     {
@@ -470,7 +477,7 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
         if ( !xLinkCreator.is() )
             throw uno::RuntimeException(); // TODO:
 
-        xResult = xLinkCreator->createInstanceLink( xStorage, sEntName, aTempMedDescr );
+        xResult = xLinkCreator->createInstanceLink( xStorage, sEntName, aTempMedDescr, lObjArgs );
     }
 
     return xResult;

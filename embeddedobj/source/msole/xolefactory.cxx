@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xolefactory.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mav $ $Date: 2003-11-28 17:27:12 $
+ *  last change: $Author: mav $ $Date: 2003-12-08 12:49:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,6 +155,7 @@ uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInsta
     xPersist->setPersistentEntry( xStorage,
                                     sEntName,
                                     embed::EntryInitModes::ENTRY_DEFAULT_INIT,
+                                    uno::Sequence< beans::PropertyValue >(),
                                     uno::Sequence< beans::PropertyValue >() );
 
     return xResult;
@@ -164,7 +165,8 @@ uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInsta
 uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInstanceInitFromMediaDescriptor(
         const uno::Reference< embed::XStorage >& xStorage,
         const ::rtl::OUString& sEntName,
-        const uno::Sequence< beans::PropertyValue >& aMediaDescr )
+        const uno::Sequence< beans::PropertyValue >& aMediaDescr,
+        const uno::Sequence< beans::PropertyValue >& lObjArgs )
     throw ( lang::IllegalArgumentException,
             io::IOException,
             uno::Exception,
@@ -192,7 +194,8 @@ uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInsta
     xPersist->setPersistentEntry( xStorage,
                                     sEntName,
                                     embed::EntryInitModes::ENTRY_MEDIA_DESCRIPTOR_INIT,
-                                    aMediaDescr );
+                                    aMediaDescr,
+                                    lObjArgs );
 
     return xResult;
 }
@@ -202,7 +205,8 @@ uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInsta
                                             const uno::Sequence< sal_Int8 >& aClassID,
                                             const ::rtl::OUString& aClassName,
                                             const uno::Reference< embed::XStorage >& xStorage,
-                                            const ::rtl::OUString& sEntName )
+                                            const ::rtl::OUString& sEntName,
+                                            const uno::Sequence< beans::PropertyValue >& lObjArgs )
     throw ( lang::IllegalArgumentException,
             io::IOException,
             uno::Exception,
@@ -230,7 +234,8 @@ uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInsta
     xPersist->setPersistentEntry( xStorage,
                                     sEntName,
                                     embed::EntryInitModes::ENTRY_TRUNCATE_INIT,
-                                    uno::Sequence< beans::PropertyValue >() );
+                                    uno::Sequence< beans::PropertyValue >(),
+                                    lObjArgs );
 
     return xResult;
 }
@@ -239,7 +244,8 @@ uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInsta
 uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInstanceLink(
                                             const uno::Reference< embed::XStorage >& xStorage,
                                             const ::rtl::OUString& sEntName,
-                                            const uno::Sequence< beans::PropertyValue >& aMediaDescr )
+                                            const uno::Sequence< beans::PropertyValue >& aMediaDescr,
+                                            const uno::Sequence< beans::PropertyValue >& lObjArgs )
         throw ( lang::IllegalArgumentException,
                 io::IOException,
                 uno::Exception,
@@ -269,7 +275,8 @@ uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInsta
     xPersist->setPersistentEntry( xStorage,
                                     sEntName,
                                     embed::EntryInitModes::ENTRY_MEDIA_DESCRIPTOR_INIT,
-                                    aMediaDescr );
+                                    aMediaDescr,
+                                    lObjArgs );
 
     return xResult;
 }
@@ -281,7 +288,8 @@ uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInsta
             const uno::Reference< embed::XStorage >& xStorage,
             const ::rtl::OUString& sEntName,
             sal_Int32 nEntryConnectionMode,
-            const uno::Sequence< beans::PropertyValue >& lArguments )
+            const uno::Sequence< beans::PropertyValue >& lArguments,
+            const uno::Sequence< beans::PropertyValue >& lObjArgs )
     throw ( lang::IllegalArgumentException,
             io::IOException,
             uno::Exception,
@@ -308,7 +316,8 @@ uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInsta
         xPersist->setPersistentEntry( xStorage,
                                     sEntName,
                                     embed::EntryInitModes::ENTRY_DEFAULT_INIT,
-                                    uno::Sequence< beans::PropertyValue >() );
+                                    uno::Sequence< beans::PropertyValue >(),
+                                    lObjArgs );
 
     }
     else

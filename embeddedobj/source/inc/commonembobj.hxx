@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commonembobj.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mav $ $Date: 2003-11-25 13:21:46 $
+ *  last change: $Author: mav $ $Date: 2003-12-08 12:49:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -344,7 +344,8 @@ public:
                     const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage,
                     const ::rtl::OUString& sEntName,
                     sal_Int32 nEntryConnectionMode,
-                    const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lArguments )
+                    const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lArguments,
+                    const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lObjArgs )
         throw ( ::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::embed::WrongStateException,
                 ::com::sun::star::io::IOException,
@@ -357,7 +358,7 @@ public:
                 ::com::sun::star::uno::Exception,
                 ::com::sun::star::uno::RuntimeException );
 
-    virtual void SAL_CALL storeToEntry( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage, const ::rtl::OUString& sEntName, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lArguments )
+    virtual void SAL_CALL storeToEntry( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage, const ::rtl::OUString& sEntName, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lArguments, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lObjArgs )
         throw ( ::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::embed::WrongStateException,
                 ::com::sun::star::io::IOException,
@@ -367,7 +368,8 @@ public:
     virtual void SAL_CALL storeAsEntry(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage,
                 const ::rtl::OUString& sEntName,
-                const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lArguments )
+                const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lArguments,
+                const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lObjArgs )
         throw ( ::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::embed::WrongStateException,
                 ::com::sun::star::io::IOException,
@@ -392,7 +394,8 @@ public:
                 ::com::sun::star::uno::RuntimeException );
 
     virtual void SAL_CALL reload(
-                const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lArguments )
+                const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lArguments,
+                const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lObjArgs )
         throw ( ::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::embed::WrongStateException,
                 ::com::sun::star::io::IOException,
