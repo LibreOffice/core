@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tblafmt.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-09-28 07:03:31 $
+ *  last change: $Author: dr $ $Date: 2001-11-14 15:05:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,10 @@ JP 20.07.95:
     Sollte sich doch mal eine Aenderung nicht vermeiden lassen, dann auf
     jedenfall in beiden Applikationen aendern.
 
+    The structure of table auto formatting should not changed. It is used
+    by different code of Writer and Calc. If a change is necessary, the
+    source code of both applications must be changed!
+
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 **************************************************************************/
 
@@ -138,12 +142,23 @@ class SvNumberFormatter;
 
 class SwBoxAutoFmt
 {
-    // gemeinsamer Teil von StarCalc und StarWriter
+    // common attributes of Calc and Writer
+    // --- from 641 on: CJK and CTL font settings
     SvxFontItem         aFont;
-
     SvxFontHeightItem   aHeight;
     SvxWeightItem       aWeight;
     SvxPostureItem      aPosture;
+
+    SvxFontItem         aCJKFont;
+    SvxFontHeightItem   aCJKHeight;
+    SvxWeightItem       aCJKWeight;
+    SvxPostureItem      aCJKPosture;
+
+    SvxFontItem         aCTLFont;
+    SvxFontHeightItem   aCTLHeight;
+    SvxWeightItem       aCTLWeight;
+    SvxPostureItem      aCTLPosture;
+
     SvxUnderlineItem    aUnderline;
     SvxCrossedOutItem   aCrossedOut;
     SvxContourItem      aContour;
@@ -152,10 +167,10 @@ class SwBoxAutoFmt
     SvxBoxItem          aBox;
     SvxBrushItem        aBackground;
 
-    // StarWriter spezifisches
+    // Writer specific
     SvxAdjustItem       aAdjust;
 
-    // StarCalc spezifisches
+    // Calc specific
     SvxHorJustifyItem   aHorJustify;
     SvxVerJustifyItem   aVerJustify;
     SvxOrientationItem  aOrientation;
@@ -164,7 +179,7 @@ class SwBoxAutoFmt
     SfxInt32Item        aRotateAngle;
     SvxRotateModeItem   aRotateMode;
 
-        // und als letzes das Zahlenformat fuer die Box
+    // number format
     String              sNumFmtString;
     LanguageType        eSysLanguage, eNumFmtLanguage;
 
@@ -181,6 +196,14 @@ public:
     const SvxFontHeightItem &GetHeight() const      { return aHeight; }
     const SvxWeightItem     &GetWeight() const      { return aWeight; }
     const SvxPostureItem    &GetPosture() const     { return aPosture; }
+    const SvxFontItem       &GetCJKFont() const     { return aCJKFont; }
+    const SvxFontHeightItem &GetCJKHeight() const   { return aCJKHeight; }
+    const SvxWeightItem     &GetCJKWeight() const   { return aCJKWeight; }
+    const SvxPostureItem    &GetCJKPosture() const  { return aCJKPosture; }
+    const SvxFontItem       &GetCTLFont() const     { return aCTLFont; }
+    const SvxFontHeightItem &GetCTLHeight() const   { return aCTLHeight; }
+    const SvxWeightItem     &GetCTLWeight() const   { return aCTLWeight; }
+    const SvxPostureItem    &GetCTLPosture() const  { return aCTLPosture; }
     const SvxUnderlineItem  &GetUnderline() const   { return aUnderline; }
     const SvxCrossedOutItem &GetCrossedOut() const  { return aCrossedOut; }
     const SvxContourItem    &GetContour() const     { return aContour; }
@@ -197,6 +220,14 @@ public:
     void SetHeight( const SvxFontHeightItem& rNew )     { aHeight = rNew; }
     void SetWeight( const SvxWeightItem& rNew )         { aWeight = rNew; }
     void SetPosture( const SvxPostureItem& rNew )       { aPosture = rNew; }
+    void SetCJKFont( const SvxFontItem& rNew )          { aCJKFont = rNew; }
+    void SetCJKHeight( const SvxFontHeightItem& rNew )  { aCJKHeight = rNew; }
+    void SetCJKWeight( const SvxWeightItem& rNew )      { aCJKWeight = rNew; }
+    void SetCJKPosture( const SvxPostureItem& rNew )    { aCJKPosture = rNew; }
+    void SetCTLFont( const SvxFontItem& rNew )          { aCTLFont = rNew; }
+    void SetCTLHeight( const SvxFontHeightItem& rNew )  { aCTLHeight = rNew; }
+    void SetCTLWeight( const SvxWeightItem& rNew )      { aCTLWeight = rNew; }
+    void SetCTLPosture( const SvxPostureItem& rNew )    { aCTLPosture = rNew; }
     void SetUnderline( const SvxUnderlineItem& rNew )   { aUnderline = rNew; }
     void SetCrossedOut( const SvxCrossedOutItem& rNew ) { aCrossedOut = rNew; }
     void SetContour( const SvxContourItem& rNew )       { aContour = rNew; }
@@ -230,13 +261,15 @@ class SwTableAutoFmt
 
     String aName;
     USHORT nStrResId;
+
+    // common flags of Calc and Writer
     BOOL bInclFont : 1;
     BOOL bInclJustify : 1;
     BOOL bInclFrame : 1;
     BOOL bInclBackground : 1;
     BOOL bInclValueFormat : 1;
 
-    // StarCalc Spezifisches
+    // Calc specific flags
     BOOL bInclWidthHeight : 1;
 
     SwBoxAutoFmt* aBoxAutoFmt[ 16 ];

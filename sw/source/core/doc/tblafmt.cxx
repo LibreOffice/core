@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tblafmt.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-27 17:09:37 $
+ *  last change: $Author: dr $ $Date: 2001-11-14 15:05:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,9 +140,13 @@ const USHORT AUTOFORMAT_DATA_ID_504 = 9802;
 const USHORT AUTOFORMAT_ID_552      = 9901;
 const USHORT AUTOFORMAT_DATA_ID_552 = 9902;
 
-// aktuelle Version
-const USHORT AUTOFORMAT_ID          = AUTOFORMAT_ID_552;
-const USHORT AUTOFORMAT_DATA_ID     = AUTOFORMAT_DATA_ID_552;
+// --- from 641 on: CJK and CTL font settings
+const USHORT AUTOFORMAT_ID_641      = 10001;
+const USHORT AUTOFORMAT_DATA_ID_641 = 10002;
+
+// current version
+const USHORT AUTOFORMAT_ID          = AUTOFORMAT_ID_641;
+const USHORT AUTOFORMAT_DATA_ID     = AUTOFORMAT_DATA_ID_641;
 
 
 #ifdef READ_OLDVERS
@@ -248,6 +252,14 @@ void SwAfVersions::Load( SvStream& rStream, USHORT nVer )
 
 SwBoxAutoFmt::SwBoxAutoFmt()
     : aFont( *(SvxFontItem*)GetDfltAttr( RES_CHRATR_FONT ) ),
+    aCJKFont( *(SvxFontItem*)GetDfltAttr( RES_CHRATR_CJK_FONT ) ),
+    aCJKHeight( 240, 100, RES_CHRATR_CJK_FONTSIZE ),
+    aCJKWeight( WEIGHT_NORMAL, RES_CHRATR_CJK_WEIGHT ),
+    aCJKPosture( ITALIC_NONE, RES_CHRATR_CJK_POSTURE ),
+    aCTLFont( *(SvxFontItem*)GetDfltAttr( RES_CHRATR_CTL_FONT ) ),
+    aCTLHeight( 240, 100, RES_CHRATR_CTL_FONTSIZE ),
+    aCTLWeight( WEIGHT_NORMAL, RES_CHRATR_CTL_WEIGHT ),
+    aCTLPosture( ITALIC_NONE, RES_CHRATR_CTL_POSTURE ),
     aRotateMode( SVX_ROTATE_MODE_STANDARD, 0 )
 {
     eSysLanguage = eNumFmtLanguage = ::GetAppLanguage();
@@ -260,6 +272,14 @@ SwBoxAutoFmt::SwBoxAutoFmt( const SwBoxAutoFmt& rNew )
     aHeight( rNew.aHeight ),
     aWeight( rNew.aWeight ),
     aPosture( rNew.aPosture ),
+    aCJKFont( rNew.aCJKFont ),
+    aCJKHeight( rNew.aCJKHeight ),
+    aCJKWeight( rNew.aCJKWeight ),
+    aCJKPosture( rNew.aCJKPosture ),
+    aCTLFont( rNew.aCTLFont ),
+    aCTLHeight( rNew.aCTLHeight ),
+    aCTLWeight( rNew.aCTLWeight ),
+    aCTLPosture( rNew.aCTLPosture ),
     aUnderline( rNew.aUnderline ),
     aCrossedOut( rNew.aCrossedOut ),
     aContour( rNew.aContour ),
@@ -294,6 +314,14 @@ int SwBoxAutoFmt::operator==( const SwBoxAutoFmt& rCmp ) const
             aHeight == rCmp.aHeight &&
             aWeight == rCmp.aWeight &&
             aPosture == rCmp.aPosture &&
+            aCJKFont == rCmp.aCJKFont &&
+            aCJKHeight == rCmp.aCJKHeight &&
+            aCJKWeight == rCmp.aCJKWeight &&
+            aCJKPosture == rCmp.aCJKPosture &&
+            aCTLFont == rCmp.aCTLFont &&
+            aCTLHeight == rCmp.aCTLHeight &&
+            aCTLWeight == rCmp.aCTLWeight &&
+            aCTLPosture == rCmp.aCTLPosture &&
             aUnderline == rCmp.aUnderline &&
             aCrossedOut == rCmp.aCrossedOut &&
             aContour == rCmp.aContour &&
@@ -312,6 +340,14 @@ SwBoxAutoFmt& SwBoxAutoFmt::operator=( const SwBoxAutoFmt& rNew )
     aHeight = rNew.aHeight;
     aWeight = rNew.aWeight;
     aPosture = rNew.aPosture;
+    aCJKFont = rNew.aCJKFont;
+    aCJKHeight = rNew.aCJKHeight;
+    aCJKWeight = rNew.aCJKWeight;
+    aCJKPosture = rNew.aCJKPosture;
+    aCTLFont = rNew.aCTLFont;
+    aCTLHeight = rNew.aCTLHeight;
+    aCTLWeight = rNew.aCTLWeight;
+    aCTLPosture = rNew.aCTLPosture;
     aUnderline = rNew.aUnderline;
     aCrossedOut = rNew.aCrossedOut;
     aContour = rNew.aContour;
@@ -353,6 +389,18 @@ BOOL SwBoxAutoFmt::Load( SvStream& rStream, const SwAfVersions& rVersions, USHOR
     READ( aHeight,      SvxFontHeightItem   , rVersions.nFontHeightVersion)
     READ( aWeight,      SvxWeightItem       , rVersions.nWeightVersion)
     READ( aPosture,     SvxPostureItem      , rVersions.nPostureVersion)
+    // --- from 641 on: CJK and CTL font settings
+    if( AUTOFORMAT_DATA_ID_641 <= nVer )
+    {
+        READ( aCJKFont,        SvxFontItem         , rVersions.nFontVersion)
+        READ( aCJKHeight,      SvxFontHeightItem   , rVersions.nFontHeightVersion)
+        READ( aCJKWeight,      SvxWeightItem       , rVersions.nWeightVersion)
+        READ( aCJKPosture,     SvxPostureItem      , rVersions.nPostureVersion)
+        READ( aCTLFont,        SvxFontItem         , rVersions.nFontVersion)
+        READ( aCTLHeight,      SvxFontHeightItem   , rVersions.nFontHeightVersion)
+        READ( aCTLWeight,      SvxWeightItem       , rVersions.nWeightVersion)
+        READ( aCTLPosture,     SvxPostureItem      , rVersions.nPostureVersion)
+    }
     READ( aUnderline,   SvxUnderlineItem    , rVersions.nUnderlineVersion)
     READ( aCrossedOut,  SvxCrossedOutItem   , rVersions.nCrossedOutVersion)
     READ( aContour,     SvxContourItem      , rVersions.nContourVersion)
@@ -437,6 +485,14 @@ BOOL SwBoxAutoFmt::Save( SvStream& rStream ) const
     aHeight.Store( rStream, aHeight.GetVersion(SOFFICE_FILEFORMAT_40) );
     aWeight.Store( rStream, aWeight.GetVersion(SOFFICE_FILEFORMAT_40) );
     aPosture.Store( rStream, aPosture.GetVersion(SOFFICE_FILEFORMAT_40) );
+    aCJKFont.Store( rStream, aCJKFont.GetVersion(SOFFICE_FILEFORMAT_40)  );
+    aCJKHeight.Store( rStream, aCJKHeight.GetVersion(SOFFICE_FILEFORMAT_40) );
+    aCJKWeight.Store( rStream, aCJKWeight.GetVersion(SOFFICE_FILEFORMAT_40) );
+    aCJKPosture.Store( rStream, aCJKPosture.GetVersion(SOFFICE_FILEFORMAT_40) );
+    aCTLFont.Store( rStream, aCTLFont.GetVersion(SOFFICE_FILEFORMAT_40)  );
+    aCTLHeight.Store( rStream, aCTLHeight.GetVersion(SOFFICE_FILEFORMAT_40) );
+    aCTLWeight.Store( rStream, aCTLWeight.GetVersion(SOFFICE_FILEFORMAT_40) );
+    aCTLPosture.Store( rStream, aCTLPosture.GetVersion(SOFFICE_FILEFORMAT_40) );
     aUnderline.Store( rStream, aUnderline.GetVersion(SOFFICE_FILEFORMAT_40) );
     aCrossedOut.Store( rStream, aCrossedOut.GetVersion(SOFFICE_FILEFORMAT_40) );
     aContour.Store( rStream, aContour.GetVersion(SOFFICE_FILEFORMAT_40) );
@@ -602,6 +658,14 @@ SwBoxAutoFmt& SwTableAutoFmt::UpdateFromSet( BYTE nPos,
         pFmt->SetHeight( (SvxFontHeightItem&)rSet.Get( RES_CHRATR_FONTSIZE ) );
         pFmt->SetWeight( (SvxWeightItem&)rSet.Get( RES_CHRATR_WEIGHT ) );
         pFmt->SetPosture( (SvxPostureItem&)rSet.Get( RES_CHRATR_POSTURE ) );
+        pFmt->SetCJKFont( (SvxFontItem&)rSet.Get( RES_CHRATR_CJK_FONT ) );
+        pFmt->SetCJKHeight( (SvxFontHeightItem&)rSet.Get( RES_CHRATR_CJK_FONTSIZE ) );
+        pFmt->SetCJKWeight( (SvxWeightItem&)rSet.Get( RES_CHRATR_CJK_WEIGHT ) );
+        pFmt->SetCJKPosture( (SvxPostureItem&)rSet.Get( RES_CHRATR_CJK_POSTURE ) );
+        pFmt->SetCTLFont( (SvxFontItem&)rSet.Get( RES_CHRATR_CTL_FONT ) );
+        pFmt->SetCTLHeight( (SvxFontHeightItem&)rSet.Get( RES_CHRATR_CTL_FONTSIZE ) );
+        pFmt->SetCTLWeight( (SvxWeightItem&)rSet.Get( RES_CHRATR_CTL_WEIGHT ) );
+        pFmt->SetCTLPosture( (SvxPostureItem&)rSet.Get( RES_CHRATR_CTL_POSTURE ) );
         pFmt->SetUnderline( (SvxUnderlineItem&)rSet.Get( RES_CHRATR_UNDERLINE ) );
         pFmt->SetCrossedOut( (SvxCrossedOutItem&)rSet.Get( RES_CHRATR_CROSSEDOUT ) );
         pFmt->SetContour( (SvxContourItem&)rSet.Get( RES_CHRATR_CONTOUR ) );
@@ -648,6 +712,14 @@ void SwTableAutoFmt::UpdateToSet( BYTE nPos, SfxItemSet& rSet,
             rSet.Put( rChg.GetHeight() );
             rSet.Put( rChg.GetWeight() );
             rSet.Put( rChg.GetPosture() );
+            rSet.Put( rChg.GetCJKFont() );
+            rSet.Put( rChg.GetCJKHeight() );
+            rSet.Put( rChg.GetCJKWeight() );
+            rSet.Put( rChg.GetCJKPosture() );
+            rSet.Put( rChg.GetCTLFont() );
+            rSet.Put( rChg.GetCTLHeight() );
+            rSet.Put( rChg.GetCTLWeight() );
+            rSet.Put( rChg.GetCTLPosture() );
             rSet.Put( rChg.GetUnderline() );
             rSet.Put( rChg.GetCrossedOut() );
             rSet.Put( rChg.GetContour() );
