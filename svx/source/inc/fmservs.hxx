@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmservs.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:03:16 $
+ *  last change: $Author: kz $ $Date: 2003-12-11 12:21:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,8 @@ namespace svxform
     DECLARE_CONSTASCII_USTRING(FM_SUN_COMPONENT_HIDDENCONTROL);
     DECLARE_CONSTASCII_USTRING(FM_SUN_COMPONENT_IMAGECONTROL);
     DECLARE_CONSTASCII_USTRING(FM_SUN_COMPONENT_FORMATTEDFIELD);
+    DECLARE_CONSTASCII_USTRING(FM_SUN_COMPONENT_SCROLLBAR);
+    DECLARE_CONSTASCII_USTRING(FM_SUN_COMPONENT_SPINBUTTON);
 
     DECLARE_CONSTASCII_USTRING(FM_SUN_CONTROL_GRIDCONTROL);
 
