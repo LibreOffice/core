@@ -2,9 +2,9 @@
  *
  *  $RCSfile: seinitializer_nssimpl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mmi $ $Date: 2004-08-05 07:13:30 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 18:13:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,15 +80,6 @@
     #undef DEBUG_WAS_DEFINED
 #endif
 
-/*
- * header files needed for getCurrentProfilePath
- */
-/*
-#include "nsIServiceManager.h"
-#include "nsIProfileInternal.h"
-#include "nsString.h"
-#include "nsEmbedAPI.h"
-*/
 
 #include <sal/types.h>
 
@@ -97,6 +88,10 @@
 #include "seinitializer_nssimpl.hxx"
 
 #include "securityenvironment_nssimpl.hxx"
+
+#ifndef _COM_SUN_STAR_MOZILLA_XMOZILLABOOTSTRAP_HPP_
+#include <com/sun/star/mozilla/XMozillaBootstrap.hpp>
+#endif
 
 #include "nspr.h"
 #include "prtypes.h"
@@ -116,96 +111,6 @@ using namespace com::sun::star;
 #define IMPLEMENTATION_NAME "com.sun.star.xml.security.bridge.xmlsec.SEInitializer_NssImpl"
 #define SECURITY_ENVIRONMENT "com.sun.star.xml.crypto.SecurityEnvironment"
 #define SECURITY_CONTEXT "com.sun.star.xml.crypto.XMLSecurityContext"
-
-/*
- * MM : get the current user profile
- */
-
-// MM : By now, the XPCOM is initialized only once in the current thread, and it will
-//      not be shutdown until StarOffice exits.
-//      This is a bug, because any other component who will initialize the XPCOM afterward
-//      will always fail.
-//      This bug will be fixed when there is solution.
-#if 0
-static nsIServiceManager           *sServiceManager = nsnull;
-static nsIDirectoryServiceProvider *appFileLocProvider = nsnull;
-static NS_DEFINE_CID(kProfileCID, NS_PROFILE_CID);
-
-char* getCurrentProfilePath( )
-{
-/*
-        nsCOMPtr<nsILocalFile> binDir;
-
-        // Note: if getenv() returns NULL, mozilla will default to using MOZILLA_FIVE_HOME in the NS_InitXPCOM2()
-        // The NS_NewNativeLocalFile() will accept NULL as its first parameter.
-        char * env = getenv("OPENOFFICE_MOZILLA_FIVE_HOME");
-        if (env)
-        {
-        nsDependentCString sPath(env);
-        nsresult rv = NS_NewNativeLocalFile(sPath, PR_TRUE, getter_AddRefs(binDir));
-        if (NS_FAILED(rv))
-            return NULL;
-        }
-
-    if (sServiceManager == nsnull)
-    {
-        NS_InitXPCOM2(&sServiceManager, binDir, appFileLocProvider);
-    }
-
-    if (!sServiceManager)
-        return NULL;
-
-    nsresult rv;
-    nsCOMPtr< nsIProfile > theProfile = do_GetService( kProfileCID, &rv );
-    if (NS_SUCCEEDED(rv))
-    {
-        nsXPIDLString profileName;
-        rv = theProfile->GetCurrentProfile(getter_Copies(profileName));
-        if (NS_SUCCEEDED(rv))
-        {
-            nsCOMPtr<nsIFile> curProfileDir;
-            PRBool exists = PR_FALSE;
-            nsCOMPtr<nsIProfileInternal> profileInternal=do_QueryInterface(theProfile);
-            if (NS_SUCCEEDED(rv))
-            {
-                rv = profileInternal->GetProfileDir(profileName, getter_AddRefs(curProfileDir));
-                if (NS_SUCCEEDED(rv))
-                {
-                    nsCOMPtr<nsILocalFile> localFile(do_QueryInterface(curProfileDir));
-
-                    nsAutoString path;
-                    rv = localFile->GetPath(path);
-                    if (NS_SUCCEEDED(rv))
-                    {
-                        char cs[1024];
-                        path.ToCString(cs, 1024);
-
-                        // MM : I can't shutdown, because the XPCom can't be initialized twice in
-                        //      one program
-                        //NS_RELEASE(sServiceManager);
-                        //NS_ShutdownXPCOM(sServiceManager);
-
-                        return (strdup(cs));
-                    }
-                }
-            }
-        }
-    }
-
-    // MM : I can't shutdown, because the XPCom can't be initialized twice in
-    //      one program
-    //NS_RELEASE(sServiceManager);
-    //NS_ShutdownXPCOM(sServiceManager);
-    */
-
-    return NULL;
-}
-
-/*
- * get the current user profile (end)
- */
-
-#endif
 
 bool nsscrypto_initialize( const char* token ) {
     static char initialized = 0 ;
@@ -228,7 +133,11 @@ void nsscrypto_finalize() {
     NSS_Shutdown();
 }
 
-bool getMozillaCurrentProfile(rtl::OUString& profilePath);
+//bool getMozillaCurrentProfile(rtl::OUString& profilePath);
+bool getMozillaCurrentProfile(
+    const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > &rxMSF,
+    rtl::OUString& profilePath);
+
 
 SEInitializer_NssImpl::SEInitializer_NssImpl(
     const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > &rxMSF)
@@ -246,8 +155,10 @@ cssu::Reference< cssxc::XXMLSecurityContext > SAL_CALL
     const rtl::OUString& sCertDB )
     throw (cssu::RuntimeException)
 {
-    CERTCertDBHandle*   pCertHandle = NULL ;
-    PK11SlotInfo*       pSlot = NULL ;
+    CERTCertDBHandle    *pCertHandle = NULL ;
+    PK11SlotInfo        *pSlot = NULL , *pInternalSlot = NULL ;
+    PK11SymKey          *pSymKey = NULL ;
+    PRBool              found;
 
     rtl::OString sCertDir;
     if( sCertDB.getLength() )
@@ -261,7 +172,57 @@ cssu::Reference< cssxc::XXMLSecurityContext > SAL_CALL
         {
             pDefaultCertDir = new rtl::OString;
             rtl::OUString ouCertDir;
-            if ( getMozillaCurrentProfile(ouCertDir) )
+
+#if 0
+            /*
+             * a dialog should be displayed to let user select a product, from
+             * 1) Mozilla (mozilla::MozillaProductType_Mozilla),
+             * 2) Thunderbird (mozilla::MozillaProductType_Thunderbird),
+             * 3) Firefox(mozilla::MozillaProductType_Firefox),
+             *
+             * At this moment, I just use Mozilla
+             */
+            mozilla::MozillaProductType profileType = mozilla::MozillaProductType_Firefox;
+
+            char* productNames[4] = {
+                "Mozilla","Thunderbird","Firefox","Default"
+            };
+
+            mozilla::MozillaProductType productTypes[4] = {
+                mozilla::MozillaProductType_Mozilla,
+                mozilla::MozillaProductType_Thunderbird,
+                mozilla::MozillaProductType_Firefox,
+                mozilla::MozillaProductType_Default };
+
+            int nProduct = 4;
+
+            fprintf( stdout, "\nSelect a product from the following list\n" ) ;
+            fprintf( stdout, "================================================================================" ) ;
+            for( int i = 0; i < nProduct; ++i )
+            {
+                fprintf( stdout, "%d : [%s]\n", i+1, productNames[i]);
+            }
+
+            fprintf( stdout, "================================================================================\n" ) ;
+            bool bInvalid = false;
+            int sel = 0;
+
+            do
+            {
+                if (bInvalid)
+                {
+                    fprintf( stdout, "Invalid value! " );
+                }
+
+                fprintf( stdout, "Select <1-%d>:", nProduct ) ;
+                fscanf( stdin, "%d", &sel ) ;
+                bInvalid = true;
+            }while(sel<1 || sel>nProduct);
+
+            profileType = productTypes[sel-1];
+#endif
+
+            if ( getMozillaCurrentProfile(mxMSF, ouCertDir) )
                 *pDefaultCertDir = rtl::OString(ouCertDir, ouCertDir.getLength(), RTL_TEXTENCODING_ASCII_US);
         }
         sCertDir = *pDefaultCertDir;
@@ -289,68 +250,22 @@ cssu::Reference< cssxc::XXMLSecurityContext > SAL_CALL
         atexit( nsscrypto_finalize ) ;
 
     pCertHandle = CERT_GetDefaultCertDB() ;
-    pSlot = PK11_GetInternalKeySlot() ;
 
-    if (pSlot == NULL)
+    /*- i39448 - we will get all slots defined in the profile
+    * ---------- and alloc them in each SecurityEnviroment .
+    * ---------- By CP/20050105
+    --------------------------*/
+    pInternalSlot = PK11_GetInternalKeySlot() ;
+    if (pInternalSlot == NULL)
     {
     //  PK11_LogoutAll();
     //  NSS_Shutdown();
         return NULL;
     }
-
-    PK11SymKey* pSymKey = PK11_KeyGen( pSlot , CKM_DES3_CBC, NULL, 128, NULL ) ;
-    if( pSymKey == NULL )
-    {
-        PK11_FreeSlot( pSlot ) ;
-    //  PK11_LogoutAll();
-    //  NSS_Shutdown();
-        return NULL;
-    }
-
     try
     {
-        /* Build Security Environment */
-        const rtl::OUString sSecyrutyEnvironment ( RTL_CONSTASCII_USTRINGPARAM( SECURITY_ENVIRONMENT ) );
-        cssu::Reference< cssxc::XSecurityEnvironment > xSecEnv( mxMSF->createInstance ( sSecyrutyEnvironment ), cssu::UNO_QUERY );
-        if( !xSecEnv.is() )
-        {
-            PK11_FreeSymKey( pSymKey ) ;
-            PK11_FreeSlot( pSlot ) ;
-        //  PK11_LogoutAll();
-        //  NSS_Shutdown();
-            return NULL;
-        }
-
-        /* Setup key slot and certDb */
-        cssu::Reference< cssl::XUnoTunnel > xEnvTunnel( xSecEnv , cssu::UNO_QUERY ) ;
-        if( !xEnvTunnel.is() )
-        {
-            PK11_FreeSymKey( pSymKey ) ;
-            PK11_FreeSlot( pSlot ) ;
-        //  PK11_LogoutAll();
-        //  NSS_Shutdown();
-            return NULL;
-        }
-
-        SecurityEnvironment_NssImpl* pSecEnv = ( SecurityEnvironment_NssImpl* )xEnvTunnel->getSomething( SecurityEnvironment_NssImpl::getUnoTunnelId() ) ;
-        if( pSecEnv == NULL )
-        {
-            PK11_FreeSymKey( pSymKey ) ;
-            PK11_FreeSlot( pSlot ) ;
-        //  PK11_LogoutAll();
-        //  NSS_Shutdown();
-            return NULL;
-        }
-
-        pSecEnv->setCryptoSlot( pSlot ) ;
-        PK11_FreeSlot( pSlot ) ;
-        pSlot = NULL;
-
-        pSecEnv->setCertDb( pCertHandle ) ;
-
-        pSecEnv->adoptSymKey( pSymKey ) ;
-        PK11_FreeSymKey( pSymKey ) ;
-        pSymKey = NULL;
+        PK11SlotList* soltList ;
+        PK11SlotListElement* soltEle ;
 
         /* Build XML Security Context */
         const rtl::OUString sSecyrutyContext ( RTL_CONSTASCII_USTRINGPARAM( SECURITY_CONTEXT ) );
@@ -362,7 +277,94 @@ cssu::Reference< cssxc::XXMLSecurityContext > SAL_CALL
             return NULL;
         }
 
-        xSecCtx->setSecurityEnvironment( xSecEnv ) ;
+        soltList = PK11_GetAllTokens( CKM_INVALID_MECHANISM, PR_FALSE, PR_FALSE, NULL ) ;
+        if( soltList != NULL ) {
+            for( soltEle = soltList->head ; soltEle != NULL; soltEle = soltEle->next ) {
+
+                found = PR_FALSE;
+
+                pSlot = soltEle->slot ;
+
+                if(pSlot != NULL){
+
+                    pSymKey = PK11_KeyGen( pSlot , CKM_DES3_CBC, NULL, 128, NULL ) ;
+                    if( pSymKey == NULL )
+                    {
+                        PK11_FreeSlot( pSlot ) ;
+                    //  PK11_LogoutAll();
+                    //  NSS_Shutdown();
+                        return NULL;
+                    }
+
+                    /* Build Security Environment */
+                    const rtl::OUString sSecyrutyEnvironment ( RTL_CONSTASCII_USTRINGPARAM( SECURITY_ENVIRONMENT ) );
+                    cssu::Reference< cssxc::XSecurityEnvironment > xSecEnv( mxMSF->createInstance ( sSecyrutyEnvironment ), cssu::UNO_QUERY );
+                    if( !xSecEnv.is() )
+                    {
+                        PK11_FreeSymKey( pSymKey ) ;
+                        PK11_FreeSlot( pSlot ) ;
+                    //  PK11_LogoutAll();
+                    //  NSS_Shutdown();
+                        return NULL;
+                    }
+
+                    /* Setup key slot and certDb */
+                    cssu::Reference< cssl::XUnoTunnel > xEnvTunnel( xSecEnv , cssu::UNO_QUERY ) ;
+                    if( !xEnvTunnel.is() )
+                    {
+                        PK11_FreeSymKey( pSymKey ) ;
+                        PK11_FreeSlot( pSlot ) ;
+                    //  PK11_LogoutAll();
+                    //  NSS_Shutdown();
+                        return NULL;
+                    }
+
+                    SecurityEnvironment_NssImpl* pSecEnv = ( SecurityEnvironment_NssImpl* )xEnvTunnel->getSomething( SecurityEnvironment_NssImpl::getUnoTunnelId() ) ;
+                    if( pSecEnv == NULL )
+                    {
+                        PK11_FreeSymKey( pSymKey ) ;
+                        PK11_FreeSlot( pSlot ) ;
+                    //  PK11_LogoutAll();
+                    //  NSS_Shutdown();
+                        return NULL;
+                    }
+
+                    // search the internal slot.
+                    //PR_fprintf(PR_STDOUT, "Token:%s\n",PK11_GetSlotName(pSlot));
+                    //found = PK11_IsInternal(pSlot) ; //This method will return two true result.
+                    if((!strcmp(PK11_GetSlotName(pInternalSlot),PK11_GetSlotName(pSlot))&&(!strcmp(PK11_GetTokenName(pInternalSlot),PK11_GetTokenName(pSlot)))))
+                    {
+                        found = PR_TRUE;
+                    }
+
+                    pSecEnv->setCryptoSlot( pSlot ) ;
+                    PK11_FreeSlot( pSlot ) ;
+                    pSlot = NULL;
+
+                    pSecEnv->setCertDb( pCertHandle ) ;
+
+                    pSecEnv->adoptSymKey( pSymKey ) ;
+                    PK11_FreeSymKey( pSymKey ) ;
+                    pSymKey = NULL;
+
+                    sal_Int32 n = xSecCtx->addSecurityEnvironment( xSecEnv ) ;
+
+                    if(found != PR_FALSE)
+                    {
+                        xSecCtx->setDefaultSecurityEnvironmentIndex( n ) ;
+                    }
+
+
+                }// end of if(pSlot != NULL)
+            }// end of for
+        }// end of if( soltList != NULL )
+
+        if(pInternalSlot != NULL)
+        {
+            PK11_FreeSlot(pInternalSlot) ;
+            pInternalSlot = NULL ;
+        }
+
         return xSecCtx;
     }
     catch( cssu::Exception& )
@@ -377,8 +379,14 @@ cssu::Reference< cssxc::XXMLSecurityContext > SAL_CALL
             PK11_FreeSlot( pSlot ) ;
         }
 
-    //  PK11_LogoutAll();
-    //  NSS_Shutdown();
+        if(pInternalSlot != NULL)
+        {
+            PK11_FreeSlot(pInternalSlot) ;
+            pInternalSlot = NULL ;
+        }
+
+        //PK11_LogoutAll();
+        //NSS_Shutdown();
         return NULL;
     }
 }
