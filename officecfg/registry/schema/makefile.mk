@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: tpf $ $Date: 2002-08-02 14:08:45 $
+#   last change: $Author: tpf $ $Date: 2002-08-02 14:40:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -90,11 +90,11 @@ XCSFILES= \
     org$/openoffice$/Office$/Writer.xcs \
     org$/openoffice$/Office$/WriterWeb.xcs \
     org$/openoffice$/Setup.xcs \
-    org$/openoffice$/UserProfile.xcs
+    org$/openoffice$/UserProfile.xcs \
     org$/openoffice$/VCL.xcs \
     org$/openoffice$/ucb$/Configuration.xcs \
     org$/openoffice$/ucb$/Hierarchy.xcs \
-    org$/openoffice$/ucb$/Store.xcs \
+    org$/openoffice$/ucb$/Store.xcs
 
 # trans form component schemas into old xcd format
 XCDTRANSFORM=$(foreach,i,$(XCSFILES) $(MISC)$/xcdformat$/{$(subst,.xcs,.xcd $i)})
