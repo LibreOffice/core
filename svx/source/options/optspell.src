@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optspell.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-16 22:43:18 $
+ *  last change: $Author: os $ $Date: 2002-12-02 14:00:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@ TabPage RID_SFXPAGE_SPELL
     HelpId = HID_OPTIONS_SPELL ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 221 , 185 ) ;
-    Text = "Rechtschreibung" ;
+    Text = "Rechtschreibprüfung" ;
     Text [ ENGLISH ] = "Spell checking" ;
     Text [ norwegian ] = "Stavekontroll" ;
     Text [ italian ] = "Controllo ortografico" ;

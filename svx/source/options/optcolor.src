@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optcolor.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: pb $ $Date: 2002-11-28 08:43:12 $
+ *  last change: $Author: os $ $Date: 2002-12-02 14:01:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -620,7 +620,7 @@ TabPage RID_SVXPAGE_COLORCONFIG
             FixedText FT_SPELL
             {
                 FT_POS_SIZE( 9 );
-                Text = "AutoRechtschreibung" ;
+                Text = "AutoRechtschreibprüfung" ;
                 Text [ ENGLISH ] = "AutoSpellcheck" ;
                 Text[ english_us ] = "AutoSpellcheck";
                 Text[ portuguese ] = "AutoSpellcheck";
