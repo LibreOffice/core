@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLImport.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: bm $ $Date: 2002-05-06 07:24:33 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:32:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -514,15 +514,21 @@ void SchXMLImportHelper::ResizeChartData( sal_Int32 nSeries, sal_Int32 nDataPoin
 
 // ========================================
 
-SchXMLImport::SchXMLImport( sal_uInt16 nImportFlags ) :
-        SvXMLImport( nImportFlags )
+// #110680#
+SchXMLImport::SchXMLImport(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+    sal_uInt16 nImportFlags )
+:   SvXMLImport( xServiceFactory, nImportFlags )
 {
 }
 
-SchXMLImport::SchXMLImport( uno::Reference< frame::XModel > xModel,
-                            uno::Reference< com::sun::star::document::XGraphicObjectResolver >& rGrfContainer,
-                            sal_Bool bLoadDoc, sal_Bool bShowProgress ) :
-        SvXMLImport( xModel, rGrfContainer )
+// #110680#
+SchXMLImport::SchXMLImport(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+    uno::Reference< frame::XModel > xModel,
+    uno::Reference< com::sun::star::document::XGraphicObjectResolver >& rGrfContainer,
+    sal_Bool bLoadDoc, sal_Bool bShowProgress )
+:   SvXMLImport( xServiceFactory, xModel, rGrfContainer )
 {
     // get status indicator (if requested)
     if( bShowProgress )
@@ -616,7 +622,9 @@ OUString SAL_CALL SchXMLImport_getImplementationName() throw()
 
 uno::Reference< uno::XInterface > SAL_CALL SchXMLImport_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
 {
-    return (cppu::OWeakObject*)new SchXMLImport();
+    // #110680#
+    // return (cppu::OWeakObject*)new SchXMLImport();
+    return (cppu::OWeakObject*)new SchXMLImport(rSMgr);
 }
 
 // ============================================================
@@ -637,7 +645,9 @@ OUString SAL_CALL SchXMLImport_Styles_getImplementationName() throw()
 
 uno::Reference< uno::XInterface > SAL_CALL SchXMLImport_Styles_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
 {
-    return (cppu::OWeakObject*)new SchXMLImport( IMPORT_STYLES );
+    // #110680#
+    // return (cppu::OWeakObject*)new SchXMLImport( IMPORT_STYLES );
+    return (cppu::OWeakObject*)new SchXMLImport( rSMgr, IMPORT_STYLES );
 }
 
 // ------------------------------------------------------------
@@ -656,7 +666,9 @@ OUString SAL_CALL SchXMLImport_Content_getImplementationName() throw()
 
 uno::Reference< uno::XInterface > SAL_CALL SchXMLImport_Content_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
 {
-    return (cppu::OWeakObject*)new SchXMLImport( IMPORT_CONTENT | IMPORT_AUTOSTYLES | IMPORT_FONTDECLS );
+    // #110680#
+    // return (cppu::OWeakObject*)new SchXMLImport( IMPORT_CONTENT | IMPORT_AUTOSTYLES | IMPORT_FONTDECLS );
+    return (cppu::OWeakObject*)new SchXMLImport( rSMgr, IMPORT_CONTENT | IMPORT_AUTOSTYLES | IMPORT_FONTDECLS );
 }
 
 // ------------------------------------------------------------
@@ -675,7 +687,9 @@ OUString SAL_CALL SchXMLImport_Meta_getImplementationName() throw()
 
 uno::Reference< uno::XInterface > SAL_CALL SchXMLImport_Meta_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
 {
-    return (cppu::OWeakObject*)new SchXMLImport( IMPORT_META );
+    // #110680#
+    // return (cppu::OWeakObject*)new SchXMLImport( IMPORT_META );
+    return (cppu::OWeakObject*)new SchXMLImport( rSMgr, IMPORT_META );
 }
 
 // XServiceInfo
