@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: lla $ $Date: 2001-05-31 14:10:42 $
+#   last change: $Author: dg $ $Date: 2001-09-18 19:14:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,6 +75,7 @@ ENABLE_EXCEPTIONS=TRUE
 
 
 SLOFILES=\
+    $(SLO)$/lookupcontext.obj \
     $(SLO)$/attributeparser.obj \
     $(SLO)$/valuenodebuilder.obj \
     $(SLO)$/localizednodebuilder.obj \
@@ -89,7 +90,6 @@ SLOFILES=\
     $(SLO)$/localsession.obj \
     $(SLO)$/saxadapter.obj \
     $(SLO)$/updatehandler.obj \
-    $(SLO)$/updatetree.obj \
     $(SLO)$/namehelper.obj \
     $(SLO)$/binarywritehandler.obj \
     $(SLO)$/writesubtreeasbinaryhandler.obj \
@@ -97,7 +97,6 @@ SLOFILES=\
     $(SLO)$/binaryreader.obj \
     $(SLO)$/simpletypehelper.obj \
     $(SLO)$/binarydecide.obj \
-    $(SLO)$/pathhelper.obj \
     $(SLO)$/binarybasereader.obj \
     $(SLO)$/generatecache.obj \
 
