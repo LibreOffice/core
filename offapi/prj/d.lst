@@ -19,6 +19,7 @@ mkdir: %_DEST%\idl%_EXT%\com\sun\star\installation
 mkdir: %_DEST%\idl%_EXT%\com\sun\star\linguistic2
 mkdir: %_DEST%\idl%_EXT%\com\sun\star\mozilla
 mkdir: %_DEST%\idl%_EXT%\com\sun\star\packages
+mkdir: %_DEST%\idl%_EXT%\com\sun\star\packages\manifest
 mkdir: %_DEST%\idl%_EXT%\com\sun\star\pgp
 mkdir: %_DEST%\idl%_EXT%\com\sun\star\plugin
 mkdir: %_DEST%\idl%_EXT%\com\sun\star\presentation
