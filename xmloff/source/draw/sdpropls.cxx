@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-08 12:17:41 $
+ *  last change: $Author: cl $ $Date: 2000-11-23 19:25:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,21 +176,20 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     // text attributes
     { "CharColor",      XML_NAMESPACE_FO,       sXML_color,                 XML_TYPE_COLOR, 0 },
     { "CharCrossedOut", XML_NAMESPACE_STYLE,    sXML_text_crossing_out,     XML_SD_TYPE_TEXT_CROSSEDOUT,    0},
-//  { "CharEscapement",      XML_NAMESPACE_STYLE, sXML_text_position,   XML_TYPE_TEXT_ESCAPEMENT|MID_FLAG_MERGE_ATTRIBUTE, 0 }, BugID #76842#
-//  { "CharEscapementHeight", XML_NAMESPACE_STYLE, sXML_text_position,  XML_TYPE_TEXT_ESCAPEMENT_HEIGHT|MID_FLAG_MERGE_ATTRIBUTE, 0 },
-// ??   { "CharContoured",  XML_NAMESPACE_STYLE,    sXML_text_outline,      XML_TYPE_BOOL,  0 },
-/// { "CharFontName",   XML_NAMESPACE_FO,       sXML_font_family,       XML_TYPE_TEXT_FONTFAMILYNAME, 0 },
+    { "CharEscapement",      XML_NAMESPACE_STYLE, sXML_text_position,   XML_TYPE_TEXT_ESCAPEMENT|MID_FLAG_MERGE_ATTRIBUTE|MID_FLAG_MULTI_PROPERTY, 0 },
+    { "CharEscapementHeight", XML_NAMESPACE_STYLE, sXML_text_position,  XML_TYPE_TEXT_ESCAPEMENT_HEIGHT|MID_FLAG_MERGE_ATTRIBUTE|MID_FLAG_MULTI_PROPERTY, 0 },
+    { "CharFontName",   XML_NAMESPACE_FO,       sXML_font_family,       XML_TYPE_TEXT_FONTFAMILYNAME, 0 },
     { "CharFontStyleName",XML_NAMESPACE_STYLE,  sXML_font_style_name,   XML_TYPE_STRING, 0 },
     { "CharFontFamily", XML_NAMESPACE_STYLE,    sXML_font_family_generic,XML_TYPE_TEXT_FONTFAMILY, 0 },
-// ??   { "CharFontPitch",  XML_NAMESPACE_STYLE,    sXML_font_pitch,            XML_TYPE_TEXT_FONTPITCH, 0 },
+    { "CharFontPitch",  XML_NAMESPACE_STYLE,    sXML_font_pitch,            XML_TYPE_TEXT_FONTPITCH, 0 },
     { "CharFontCharSet",    XML_NAMESPACE_STYLE,    sXML_font_charset,      XML_TYPE_TEXT_FONTENCODING, 0 },
     { "CharHeight",       XML_NAMESPACE_FO, sXML_font_size,         XML_TYPE_CHAR_HEIGHT|MID_FLAG_MULTI_PROPERTY, CTF_CHARHEIGHT },
 // ??   { "CharPropFontHeight",XML_NAMESPACE_FO,    sXML_font_size,         XML_TYPE_CHAR_HEIGHT_PROP|MID_FLAG_MULTI_PROPERTY, CTF_CHARHEIGHT_REL },
 // ??   { "CharKerning",        XML_NAMESPACE_FO,       sXML_letter_spacing,        XML_TYPE_TEXT_KERNING, 0 },
-//  { "CharLocale",     XML_NAMESPACE_FO,       sXML_language,          XML_TYPE_CHAR_LANGUAGE|MID_FLAG_MERGE_PROPERTY, 0 }, not supported yet
-//  { "CharLocale",     XML_NAMESPACE_FO,       sXML_country,           XML_TYPE_CHAR_COUNTRY|MID_FLAG_MERGE_PROPERTY, 0 }, not supported yet
+    { "CharLocale",     XML_NAMESPACE_FO,       sXML_language,          XML_TYPE_CHAR_LANGUAGE|MID_FLAG_MERGE_PROPERTY, 0 },
+    { "CharLocale",     XML_NAMESPACE_FO,       sXML_country,           XML_TYPE_CHAR_COUNTRY|MID_FLAG_MERGE_PROPERTY, 0 },
     { "CharPosture",        XML_NAMESPACE_FO,       sXML_font_style,            XML_TYPE_TEXT_POSTURE, 0 },
-/// { "CharShadowed",   XML_NAMESPACE_FO,       sXML_text_shadow,       XML_TYPE_TEXT_SHADOWED, 0 },
+    { "CharShadowed",   XML_NAMESPACE_FO,       sXML_text_shadow,       XML_TYPE_TEXT_SHADOWED, 0 },
     { "CharUnderline",  XML_NAMESPACE_STYLE,    sXML_text_underline,        XML_TYPE_TEXT_UNDERLINE, 0 },
     { "CharWeight",     XML_NAMESPACE_FO,       sXML_font_weight,       XML_TYPE_TEXT_WEIGHT, 0 },
 // ??   { "WordMode",       XML_NAMESPACE_STYLE,    sXML_decorate_words_only,XML_TYPE_BOOL, 0 },
@@ -211,7 +210,7 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
 // ??   { "ParaRightMarginRelative",    XML_NAMESPACE_FO,   sXML_margin_right,      XML_TYPE_PERCENT, CTF_PARARIGHTMARGIN_REL },
 // ??   { "ParaFirstLineIndent",        XML_NAMESPACE_FO,   sXML_text_indent,       XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, CTF_PARAFIRSTLINE },
 // ??   { "ParaFirstLineIndentRelative",    XML_NAMESPACE_FO,   sXML_text_indent,   XML_TYPE_PERCENT, CTF_PARAFIRSTLINE_REL },
-// ??   { "ParaLastLineAdjust", XML_NAMESPACE_STYLE, sXML_auto_text_indent,     XML_TYPE_BOOL, 0 },
+    { "ParaLastLineAdjust", XML_NAMESPACE_FO, sXML_text_align_last,     XML_TYPE_TEXT_ADJUSTLAST, 0 },
 
     { "ParaTopMargin",          XML_NAMESPACE_FO,   sXML_margin_top,            XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, CTF_PARATOPMARGIN },
 // ??   { "ParaTopMarginRelative",  XML_NAMESPACE_FO,   sXML_margin_top,            XML_TYPE_PERCENT, CTF_PARATOPMARGIN_REL },
