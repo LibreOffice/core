@@ -1,0 +1,237 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XSprite.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2005-03-10 12:35:30 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_rendering_XSprite_idl__
+#define __com_sun_star_rendering_XSprite_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#endif
+#ifndef __com_sun_star_geometry_RealPoint2D_idl__
+#include <com/sun/star/geometry/RealPoint2D.idl>
+#endif
+#ifndef __com_sun_star_geometry_AffineMatrix2D_idl__
+#include <com/sun/star/geometry/AffineMatrix2D.idl>
+#endif
+#ifndef __com_sun_star_rendering_ViewState_idl__
+#include <com/sun/star/rendering/ViewState.idl>
+#endif
+#ifndef __com_sun_star_rendering_RenderState_idl__
+#include <com/sun/star/rendering/RenderState.idl>
+#endif
+
+module com { module sun { module star { module rendering {
+
+/** Interface to control a sprite object.<p>
+
+    This is the basic interface to control a sprite object on a
+    <type>XSpriteCanvas</type>. Sprites are moving, back-buffered
+    objects.<p>
+ */
+interface XSprite : ::com::sun::star::uno::XInterface
+{
+    /** Set overall transparency of the sprite.<p>
+
+        This method is useful for e.g. fading in/out of animations.<p>
+
+        Please note that if this sprite is not animated, the
+        associated <type>XSpriteCanvas</type> does not update changed
+        sprites automatically, but has to be told to do so via
+        <member>XSpriteCanvas::updateScreen()</member>.<p>
+
+        @param nAlpha
+        New global alpha value to composite this sprite with the
+        background. Valid range is [0,1].
+
+        @throws com::sun::star::lang::IllegalArgumentException
+        if nAlpha is not within the permissible range.
+     */
+    void setAlpha( [in] double nAlpha )
+        raises (com::sun::star::lang::IllegalArgumentException);
+
+    //-------------------------------------------------------------------------
+
+    /** Move sprite to the specified position.<p>
+
+        The position specified here is first transformed by the
+        combined view and render transformation. The resulting
+        position is then used as the output position (also in device
+        coordinates) of the rendered sprite content.<p>
+
+        Please note that if this sprite is not animated, the
+        associated <type>XSpriteCanva</type> does not update changed sprites
+        automatically, but has to be told to do so via
+        <member>XSpriteCanvas::updateScreen()</member>.<p>
+
+        @param aNewPos
+        The new position, in user coordinate space, to move the sprite to.
+
+        @param aViewState
+        The viewstate to be used when interpreting aNewPos.
+
+        @param aRenderState
+        The renderstate to be used when interpreting aNewPos.
+
+        @throws com::sun::star::lang::IllegalArgumentException
+        if one of the view and renderstate parameters are outside the
+        specified range.
+     */
+    void move( [in] ::com::sun::star::geometry::RealPoint2D aNewPos, [in] ViewState aViewState, [in] RenderState aRenderState )
+        raises (com::sun::star::lang::IllegalArgumentException);
+
+    //-------------------------------------------------------------------------
+
+    /** Apply a local transformation to the sprite.<p>
+
+        The given transformation matrix locally transforms the sprite
+        shape. If this transformation contains translational
+        components, be aware that sprite content moved beyond the
+        sprite area (a box from (0,0) to (spriteWidth,spriteHeight))
+        might be clipped. Use <member>XSprite::move</member> to change
+        the sprite location on screen. The canvas implementations are
+        free, if they have a cached representation of the sprite at
+        hand, to transform only this cached representation (e.g. a
+        bitmap), instead of re-rendering the sprite from first
+        principles. This is usually the case for an implementation of
+        a <type>XCustomSprite</type> interface, since it typically has
+        no other cached pictorial information at hand.<p>
+
+        Please note that if this sprite is not animated, the
+        associated <type>XSpriteCanvas</type> does not update changed sprites
+        automatically, but has to be told to do so via
+        <member>XSpriteCanvas::updateScreen()</member>.<p>
+
+        @param aTransformation
+        The transformation to apply to the sprite shape.
+
+        @throws com::sun::star::lang::IllegalArgumentException
+        if the given transformation matrix is singular.
+     */
+    void transform( [in] com::sun::star::geometry::AffineMatrix2D aTransformation )
+        raises (com::sun::star::lang::IllegalArgumentException);
+
+    //-------------------------------------------------------------------------
+
+    /** Apply a clipping to the shape output.<p>
+
+        The given clip poly-polygon is always interpreted in device
+        coordinate space. As the sprite has its own local coordinate
+        system, with its origin on screen being equal to its current
+        position, the clip poly-polygon's origin will always coincide
+        with the sprite's origin. The implementation is free, if it
+        has a cached representation of the sprite at hand, to
+        clip-output only this cached representation (e.g. a bitmap),
+        instead of re-rendering the sprite from first principles. This
+        is usually the case for an implementation of a
+        <type>XCustomSprite</type> interface, since it typically has
+        no other cached pictorial information at hand.<p>
+
+        Please note that if this sprite is not animated, the
+        associated <type>XSpriteCanvas</type> does not update changed
+        sprites automatically, but has to be told to do so via
+        <member>XSpriteCanvas::updateScreen()</member>.<p>
+
+        @param aClip
+        The clip poly-polygon to apply.
+     */
+    void clip( [in] XPolyPolygon2D aClip );
+
+    //-------------------------------------------------------------------------
+
+    /** Set sprite priority.<p>
+
+        The sprite priority determines the order of rendering relative
+        to all other sprites of the associated canvas. The higher the
+        priority, the later will the sprite be rendered, or, in other
+        words, the closer to the screen surface the sprite is shown.<p>
+
+        @param nPriority
+        New sprite priority value to serve as the sort key when
+        determining sprite rendering order. Avoid NaNs and other
+        irregular floating point values here, the order position for
+        sprites with such a priority value is undefined.
+     */
+    void setPriority( [in] double nPriority );
+
+    //-------------------------------------------------------------------------
+
+    /** Make the sprite visible.<p>
+
+        This method makes the sprite visible on the canvas it was
+        created on.<p>
+     */
+    void show();
+
+    //-------------------------------------------------------------------------
+
+    /** Make the sprite invisible.<p>
+
+        This method makes the sprite invisible.<p>
+     */
+    void hide();
+
+};
+
+}; }; }; };
+
+#endif
