@@ -2,9 +2,9 @@
  *
  *  $RCSfile: data.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dbo $ $Date: 2001-10-12 10:55:46 $
+ *  last change: $Author: dbo $ $Date: 2001-10-12 11:05:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -295,6 +295,15 @@ sal_Bool SAL_CALL uno_assignData(
 
 #define OFFSET_OF( s, m ) ((sal_Size)((char *)&((s *)16)->m -16))
 
+struct C
+{
+    sal_Int16 d;
+};
+struct C2 : public C
+{
+    sal_Int32 e;
+};
+
 struct D
 {
     sal_Int16 d;
@@ -417,6 +426,16 @@ BinaryCompatible_Impl::BinaryCompatible_Impl()
         abort();
     }
     if( OFFSET_OF( E, d ) != 4 || OFFSET_OF( E, e ) != 8 )
+    {
+        OSL_ENSURE( 0, "### unexpected struct alignment?!" );
+        abort();
+    }
+    if( sizeof(C) != 2 || sizeof(C2) != 8 )
+    {
+        OSL_ENSURE( 0, "### unexpected struct alignment?!" );
+        abort();
+    }
+    if( OFFSET_OF( C2, e ) != 4 )
     {
         OSL_ENSURE( 0, "### unexpected struct alignment?!" );
         abort();
