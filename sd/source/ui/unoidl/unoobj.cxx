@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-14 16:29:08 $
+ *  last change: $Author: cl $ $Date: 2001-03-15 12:16:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -697,6 +697,30 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
                 aAny <<= aName;
             }
         }
+        else if( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_shape_zorder ) ) )
+        {
+            SdrObject* pObj = GetSdrObject();
+            SdPage* pPage = pObj ? (SdPage*)pObj->GetPage() : NULL;
+            if( pPage && pPage->IsMasterPage() && pPage->GetPageKind() == PK_STANDARD )
+            {
+                sal_Int32 nOrdNum;
+                if( aAny >>= nOrdNum )
+                {
+                    // if this is a masterpage, there is always a background shape with the ord num 0
+                    // so we add one to the api ordnum to hide the background shape over the api
+                    if( nOrdNum > 0 )
+                    {
+                        nOrdNum++;
+                        aAny <<= nOrdNum;
+                    }
+                    else
+                    {
+                        DBG_ERROR( "Masterpage without a background shape, ZOrder property will be corrupt!" );
+                    }
+                }
+            }
+        }
+
         uno::Reference< beans::XPropertySet >  xPrSet;
         mxShapeAgg->queryAggregation( ITYPE( beans::XPropertySet ) ) >>= xPrSet;
         if( xPrSet.is() )
@@ -834,6 +858,29 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
                 {
                     aName = SdLayer::convertToExternalName( aName );
                     aRet <<= aName;
+                }
+            }
+            else if( PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_shape_zorder ) ) )
+            {
+                SdrObject* pObj = GetSdrObject();
+                SdPage* pPage = pObj ? (SdPage*)pObj->GetPage() : NULL;
+                if( pPage && pPage->IsMasterPage() && pPage->GetPageKind() == PK_STANDARD )
+                {
+                    sal_Int32 nOrdNum;
+                    if( aRet >>= nOrdNum )
+                    {
+                        // if this is a masterpage, there is always a background shape with the ord num 0
+                        // so we add one to the api ordnum to hide the background shape over the api
+                        if( nOrdNum > 0 )
+                        {
+                            nOrdNum--;
+                            aRet <<= nOrdNum;
+                        }
+                        else
+                        {
+                            DBG_ERROR( "Masterpage without a background shape, ZOrder property will be corrupt!" );
+                        }
+                    }
                 }
             }
         }
