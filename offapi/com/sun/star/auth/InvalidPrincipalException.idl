@@ -63,6 +63,8 @@
 module com { module sun { module star { module auth {
 
 /** indicates an invalid principal was specified.
+
+    @since #107627#
  */
 
 exception InvalidPrincipalException : ::com::sun::star::uno::Exception
