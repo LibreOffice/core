@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objdraw.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-09 12:39:53 $
+ *  last change: $Author: nn $ $Date: 2000-11-25 14:56:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1167,6 +1167,15 @@ ToolBox RID_GRAPHIC_OBJECTBAR
     {
         ToolBoxItem
         {
+            Identifier = SID_GRFFILTER;
+            HelpID = SID_GRFFILTER;
+            DropDown = TRUE ;
+            Checkable = FALSE ;
+            RadioCheck = FALSE ;
+        };
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+        ToolBoxItem
+        {
             Identifier = SID_ATTR_GRAF_MODE;
             HelpID = SID_ATTR_GRAF_MODE;
         };
@@ -1177,11 +1186,13 @@ ToolBox RID_GRAPHIC_OBJECTBAR
             Identifier = SID_ATTR_GRAF_RED;
             HelpID = SID_ATTR_GRAF_RED;
         };
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
         ToolBoxItem
         {
             Identifier = SID_ATTR_GRAF_GREEN;
             HelpID = SID_ATTR_GRAF_GREEN;
         };
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
         ToolBoxItem
         {
             Identifier = SID_ATTR_GRAF_BLUE;
@@ -1201,6 +1212,7 @@ ToolBox RID_GRAPHIC_OBJECTBAR
             Identifier = SID_ATTR_GRAF_CONTRAST;
             HelpID = SID_ATTR_GRAF_CONTRAST;
         };
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
         ToolBoxItem
         {
             Identifier = SID_ATTR_GRAF_GAMMA;
