@@ -2,9 +2,9 @@
  *
  *  $RCSfile: test_di.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dbo $ $Date: 2001-04-12 13:39:24 $
+ *  last change: $Author: dbo $ $Date: 2001-04-16 16:21:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -545,9 +545,9 @@ sal_Bool raiseException( const Reference< XLanguageBindingTest > & xLBT )
     {
         try
         {
+            test::TestData aRet, aRet2;
             try
             {
-                test::TestData aRet, aRet2;
                 xLBT->raiseException(
                     aRet.Bool, aRet.Char, aRet.Byte, aRet.Short, aRet.UShort,
                     aRet.Long, aRet.ULong, aRet.Hyper, aRet.UHyper, aRet.Float, aRet.Double,
@@ -590,12 +590,16 @@ sal_Bool raiseException( const Reference< XLanguageBindingTest > & xLBT )
 }
 
 //==================================================================================================
-static bool perform_test( Reference< XInterface > const & xObj, Reference< XInterface > const & xDummy )
+static bool perform_test(
+    Reference< XLanguageBindingTest > const & xObj,
+    Reference< XInterface > const & xDummy )
 {
-    Reference< XLanguageBindingTest > xLBT( xObj, UNO_QUERY );
-    if (xLBT.is() && performTest( xLBT, xDummy ))
+    Any aRet( xObj->queryInterface( ::getCppuType( (const IllegalArgumentException *)0 ) ) );
+    OSL_ASSERT( ! aRet.hasValue() );
+
+    if (performTest( xObj, xDummy ))
     {
-        if (raiseException( xLBT ))
+        if (raiseException( xObj ))
         {
             ::fprintf( stderr, "> dynamic invocation test succeeded!\n" );
             return true;
@@ -605,15 +609,13 @@ static bool perform_test( Reference< XInterface > const & xObj, Reference< XInte
             ::fprintf( stderr, "> exception test failed!\n" );
         }
     }
-    else
-    {
-        ::fprintf( stderr, "> dynamic invocation test failed!\n" );
-    }
+
+    ::fprintf( stderr, "> dynamic invocation test failed!\n" );
     return false;
 }
 
 //==================================================================================================
-void test_Cpp(void)
+void test_CppBridge(void)
 {
     // C++-UNO test
     {
@@ -621,22 +623,35 @@ void test_Cpp(void)
     Reference< XInterface > xDummy( *p );
     {
         Test_Impl * p = new Test_Impl();
-        Reference< XInterface > xOriginal( *p );
+        Reference< XLanguageBindingTest > xOriginal( p );
         {
-            Reference< XInterface > xMapped;
+            Reference< XLanguageBindingTest > xMapped;
+            {
+            uno_Interface * pUnoI = 0;
 
-            uno_Environment * pCppEnv1 = 0;
-            uno_Environment * pCppEnv2 = 0;
             OUString aCppEnvTypeName( RTL_CONSTASCII_USTRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME) );
-            ::uno_getEnvironment( &pCppEnv1, aCppEnvTypeName.pData, 0 );
-            ::uno_createEnvironment( &pCppEnv2, aCppEnvTypeName.pData, 0 ); // anonymous
+            OUString aUnoEnvTypeName( RTL_CONSTASCII_USTRINGPARAM(UNO_LB_UNO) );
 
-            Mapping aMapping( pCppEnv1, pCppEnv2, OUString( RTL_CONSTASCII_USTRINGPARAM("prot") ) );
-            OSL_ENSURE( aMapping.is(), "### cannot get mapping C++ <-> prot <-> C++!" );
-            aMapping.mapInterface( (void **)&xMapped, xOriginal.get(), ::getCppuType( &xMapped ) );
+            // C++ -> UNO
+            uno_Environment * pCppEnv = 0;
+            uno_Environment * pUnoEnv = 0;
+            ::uno_getEnvironment( &pCppEnv, aCppEnvTypeName.pData, 0 );
+            ::uno_getEnvironment( &pUnoEnv, aUnoEnvTypeName.pData, 0 );
+            Mapping aCpp2Uno( pCppEnv, pUnoEnv );
+            aCpp2Uno.mapInterface( (void **)&pUnoI, xOriginal.get(), ::getCppuType( &xOriginal ) );
+            (*pCppEnv->release)( pCppEnv );
 
-            (*pCppEnv1->release)( pCppEnv1 );
-            (*pCppEnv2->release)( pCppEnv2 );
+            // ano UNO -> ano C++
+            uno_Environment * pAnoUnoEnv = 0;
+            uno_Environment * pAnoCppEnv = 0;
+            ::uno_createEnvironment( &pAnoUnoEnv, aUnoEnvTypeName.pData, 0 );
+            ::uno_createEnvironment( &pAnoCppEnv, aCppEnvTypeName.pData, 0 );
+            Mapping aUno2Cpp( pAnoUnoEnv, pAnoCppEnv );
+            (*pAnoCppEnv->release)( pAnoCppEnv );
+            (*pAnoUnoEnv->release)( pAnoUnoEnv );
+            aUno2Cpp.mapInterface( (void **)&xMapped, pUnoI, ::getCppuType( &xOriginal ) );
+            (*pUnoI->release)( pUnoI );
+            }
 
             if (perform_test( xMapped, xDummy ))
             {
@@ -655,7 +670,7 @@ void test_Cpp(void)
 }
 
 //==================================================================================================
-void test_C(void)
+void test_CBridge(void)
 {
     // C-UNO test
     {
@@ -663,32 +678,52 @@ void test_C(void)
     Reference< XInterface > xDummy( *p );
     {
         Test_Impl * p = new Test_Impl();
-        Reference< XInterface > xOriginal( *p );
+        Reference< XLanguageBindingTest > xOriginal( p );
         {
-            Reference< XInterface > xMapped;
+            Reference< XLanguageBindingTest > xMapped;
+            {
+            uno_Interface * pUnoI2 = 0;
+            void * pC = 0;
+            uno_Interface * pUnoI1 = 0;
 
-            uno_Environment * pCppEnv1 = 0;
-            uno_Environment * pCppEnv2 = 0;
-            uno_Environment * pCEnv1 = 0;
-            uno_Environment * pCEnv2 = 0;
             OUString aCppEnvTypeName( RTL_CONSTASCII_USTRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME) );
             OUString aCEnvTypeName( RTL_CONSTASCII_USTRINGPARAM(UNO_LB_C) );
-            ::uno_getEnvironment( &pCEnv1, aCEnvTypeName.pData, 0 );
-            ::uno_createEnvironment( &pCEnv2, aCEnvTypeName.pData, 0 ); // anonymous
-            ::uno_getEnvironment( &pCppEnv1, aCppEnvTypeName.pData, 0 );
-            ::uno_createEnvironment( &pCppEnv2, aCppEnvTypeName.pData, 0 ); // anonymous
-            Mapping aCpp1ToC1( pCppEnv1, pCEnv1 );
-            Mapping aC2ToCpp2( pCEnv2, pCppEnv2 );
+            OUString aUnoEnvTypeName( RTL_CONSTASCII_USTRINGPARAM(UNO_LB_UNO) );
 
-            void * pC = 0;
-            aCpp1ToC1.mapInterface( &pC, xOriginal.get(), ::getCppuType( &xOriginal ) );
-            aC2ToCpp2.mapInterface( (void **)&xMapped, pC, ::getCppuType( &xOriginal ) );
-            (*pCEnv1->pExtEnv->releaseInterface)( pCEnv1->pExtEnv, pC );
+            // C++ -> UNO
+            uno_Environment * pCppEnv = 0;
+            uno_Environment * pUnoEnv = 0;
+            ::uno_getEnvironment( &pCppEnv, aCppEnvTypeName.pData, 0 );
+            ::uno_getEnvironment( &pUnoEnv, aUnoEnvTypeName.pData, 0 );
+            Mapping aCpp2Uno( pCppEnv, pUnoEnv );
+            aCpp2Uno.mapInterface( (void **)&pUnoI1, xOriginal.get(), ::getCppuType( &xOriginal ) );
+            (*pCppEnv->release)( pCppEnv );
 
-            (*pCppEnv1->release)( pCppEnv1 );
-            (*pCppEnv2->release)( pCppEnv2 );
-            (*pCEnv1->release)( pCEnv1 );
-            (*pCEnv2->release)( pCEnv2 );
+            // UNO -> C
+            uno_Environment * pCEnv = 0;
+            ::uno_getEnvironment( &pCEnv, aCEnvTypeName.pData, 0 );
+            Mapping aUno2C( pUnoEnv, pCEnv );
+            aUno2C.mapInterface( &pC, pUnoI1, ::getCppuType( &xOriginal ) );
+            (*pUnoI1->release)( pUnoI1 );
+            (*pUnoEnv->release)( pUnoEnv );
+
+            // C -> ano UNO
+            uno_Environment * pAnoUnoEnv = 0;
+            ::uno_createEnvironment( &pAnoUnoEnv, aUnoEnvTypeName.pData, 0 ); // anonymous
+            Mapping aC2Uno( pCEnv, pAnoUnoEnv );
+            aC2Uno.mapInterface( (void **)&pUnoI2, pC, ::getCppuType( &xOriginal ) );
+            (*pCEnv->pExtEnv->releaseInterface)( pCEnv->pExtEnv, pC );
+            (*pCEnv->release)( pCEnv );
+
+            // ano UNO -> ano C++
+            uno_Environment * pAnoCppEnv = 0;
+            ::uno_createEnvironment( &pAnoCppEnv, aCppEnvTypeName.pData, 0 );
+            Mapping aUno2Cpp( pAnoUnoEnv, pAnoCppEnv );
+            (*pAnoCppEnv->release)( pAnoCppEnv );
+            (*pAnoUnoEnv->release)( pAnoUnoEnv );
+            aUno2Cpp.mapInterface( (void **)&xMapped, pUnoI2, ::getCppuType( &xOriginal ) );
+            (*pUnoI2->release)( pUnoI2 );
+            }
 
             if (perform_test( xMapped, xDummy ))
             {
