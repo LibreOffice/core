@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.h,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-13 08:58:19 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 13:37:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,8 @@ class X11SalFrame : public SalFrame
     // window to fall back to when no longer in fullscreen mode
     XLIB_Window     mhStackingWindow;
     // window to listen for CirculateNotify events
+
+    Pixmap          mhBackgroundPixmap;
 
     XLIB_Cursor     hCursor_;
     int             nCaptured_;         // is captured
@@ -274,6 +276,7 @@ public:
     virtual SalPointerState     GetPointerState();
     virtual void                SetParent( SalFrame* pNewParent );
     virtual bool                SetPluginParent( SystemParentData* pNewParent );
+    virtual void                SetBackgroundBitmap( SalBitmap* pBitmap );
 
     static void SaveYourselfDone( SalFrame* );
 };
