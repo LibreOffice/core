@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ccoll.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: avy $ $Date: 2001-03-09 20:57:00 $
+ *  last change: $Author: kz $ $Date: 2001-03-21 20:45:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,21 +77,21 @@ TabPage TP_CONDCOLL
         Size = MAP_APPFONT ( 248 , 179 ) ;
         Text = "Optionen" ;
         Text [ English ] = "Settings" ;
-        Text[ english_us ] = "Settings";
+        Text[ english_us ] = "Options";
         Text[ portuguese ] = "Settings";
         Text[ russian ] = "Ïàðàìåòðû";
         Text[ greek ] = "ÅðéëïãÝò";
         Text[ dutch ] = "Settings";
-        Text[ french ] = "Settings";
-        Text[ spanish ] = "Settings";
+        Text[ french ] = "Options";
+        Text[ spanish ] = "Opciones";
         Text[ italian ] = "Opzioni";
         Text[ danish ] = "Settings";
         Text[ swedish ] = "Alternativ";
         Text[ polish ] = "Opcje";
         Text[ portuguese_brazilian ] = "Settings";
-        Text[ japanese ] = "Settings";
+        Text[ japanese ] = "µÌß¼®Ý";
         Text[ korean ] = "Settings";
-        Text[ chinese_simplified ] = "Settings";
+        Text[ chinese_simplified ] = "Ñ¡Ïî";
         Text[ chinese_traditional ] = "¿ï¶µ";
         Text[ turkish ] = "Settings";
         Text[ arabic ] = "ÎíÇÑÇÊ";
@@ -196,11 +196,11 @@ TabPage TP_CONDCOLL
         Text [ English ] = "Styles" ;
         Disable = TRUE ;
         Text [ dutch ] = "Alineaprofielen" ;
-        Text [ english_us ] = "Paragraph Styles" ;
+        Text [ english_us ] = "~Paragraph Styles" ;
         Text [ italian ] = "Modelli di paragrafo" ;
-        Text [ spanish ] = "Estilos de párrafo" ;
-        Text [ french ] = "Styles de paragraphe" ;
-        Text [ swedish ] = "Styckeformatmallar" ;
+        Text [ spanish ] = "Es~tilos de párrafo" ;
+        Text [ french ] = "Styles de ~paragraphe" ;
+        Text [ swedish ] = "St~yckeformatmallar" ;
         Text [ danish ] = "Afsnitstypografier" ;
         Text [ portuguese ] = "Estilos de parágrafo" ;
         Text [ portuguese_brazilian ] = "Absatzvorlagen" ;
