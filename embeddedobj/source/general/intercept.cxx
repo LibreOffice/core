@@ -2,9 +2,9 @@
  *
  *  $RCSfile: intercept.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mav $ $Date: 2003-10-27 12:58:20 $
+ *  last change: $Author: mav $ $Date: 2003-10-29 12:59:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@ using namespace ::com::sun::star;
 #define IUL 5
 
 
-uno::Sequence<::rtl::OUString> Interceptor::m_aInterceptedURL(IUL);
+uno::Sequence< ::rtl::OUString > Interceptor::m_aInterceptedURL(IUL);
 
 struct equalOUString
 {
@@ -147,6 +147,7 @@ Interceptor::removeEventListener(
 
 
 void SAL_CALL Interceptor::dispose()
+    throw( uno::RuntimeException )
 {
     lang::EventObject aEvt;
     aEvt.Source = static_cast< frame::XDispatch* >( this );
