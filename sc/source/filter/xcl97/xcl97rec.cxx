@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: gt $ $Date: 2000-10-25 13:15:17 $
+ *  last change: $Author: gt $ $Date: 2000-10-25 13:46:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2870,111 +2870,3 @@ UINT16 XclHlink::GetLen() const
 }
 
 
-
-
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.2  2000/09/29 10:15:48  nn
-    ini manager replaced by options
-
-    Revision 1.1.1.1  2000/09/18 16:45:15  hr
-    initial import
-
-    Revision 1.32  2000/09/17 14:08:51  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.31  2000/09/01 10:00:45  gt
-    export hyperlink
-
-    Revision 1.29  2000/08/14 11:29:05  dr
-    Chart export, part 1: common formats: chart & axis titles, legend, colors, fonts
-
-    Revision 1.28  2000/07/28 15:08:42  gt
-    export print range/title + im-/export styles
-
-    Revision 1.27  2000/07/14 07:55:34  dr
-    export: external references
-
-    Revision 1.26  2000/07/11 13:51:56  er
-    merged from src594 branch
-
-    Revision 1.25  2000/07/11 10:04:04  er
-    NOOLDSV
-
-    Revision 1.24  2000/07/04 07:33:42  dr
-    export: scenarios
-
-    Revision 1.23  2000/06/23 11:35:04  dr
-    add: class XclObjDropDown
-
-    Revision 1.22  2000/06/06 12:14:55  hr
-    syntax
-
-    Revision 1.21  2000/05/29 14:32:01  dr
-    class ExcPalette2 - color reduction algorithm
-
-    Revision 1.20  2000/05/15 16:28:09  nn
-    include
-
-    Revision 1.19  2000/05/08 14:02:20  gt
-    #75548# merge from branch
-
-    Revision 1.18  2000/05/05 18:53:22  nn
-    src569 changes merged
-
-    Revision 1.17  2000/05/05 15:29:18  dr
-    new: XclCellMerging, XclCellMergingList
-
-    Revision 1.16  2000/05/05 12:20:59  gt
-    UNICODE
-
-    Revision 1.15  2000/04/27 08:11:37  dr
-    pivot tables export
-
-    Revision 1.14  2000/04/27 06:27:14  gt
-    #75275# references in conditional format formulas as in shared formulas
-
-    Revision 1.13  2000/02/25 12:00:08  gt
-    #73585# Filter Options and VBA-recognition by Excel
-
-    Revision 1.12  2000/02/17 15:32:49  er
-    #73145# XclObjAny: write ftGmo subrecord if otGroup
-
-    Revision 1.11  2000/02/07 19:09:50  er
-    #72775# new: XclObjOle
-
-    Revision 1.10  2000/01/31 08:44:58  gt
-    #72481# export conditional format
-
-    Revision 1.9  1999/09/29 16:02:36  er
-    new: ExcBofC8
-
-    Revision 1.8  1999/09/22 19:12:10  er
-    chg: OBJ records
-
-    Revision 1.7  1999/08/06 22:34:38  ER
-    add: XclObjComment: temporary test code erDebugEscherExAddSdr
-
-
-      Rev 1.6   07 Aug 1999 00:34:38   ER
-   add: XclObjComment: temporary test code erDebugEscherExAddSdr
-
-      Rev 1.5   27 Jul 1999 16:55:32   ER
-   new: Msodrawinggroup, Msodrawing, Obj, ObjComment, Note, NoteList, Txo
-
-      Rev 1.4   01 Jul 1999 17:21:56   ER
-   chg: WINDOW2 sets selected sheet tab, ExcDummy_03 only SELECTION
-
-      Rev 1.3   16 Jun 1999 19:58:18   ER
-   new: XclObjList, XclObj, XclObjComment, XclTxo, XclNote
-
-      Rev 1.2   11 Jun 1999 20:08:12   ER
-   xcl97exp Formula: References, SupbookList, ExtsheetList, literal Strings
-
-      Rev 1.1   03 Jun 1999 18:42:38   ER
-   xcl97exp Font, Format, RichStr
-
-      Rev 1.0   01 Jun 1999 13:43:38   ER
-   Xcl97 Export Zwischenstand
-------------------------------------------------------------------------*/
