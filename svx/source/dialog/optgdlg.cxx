@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgdlg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 10:10:17 $
+ *  last change: $Author: obo $ $Date: 2004-04-29 16:22:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,9 @@
 #endif
 #ifndef _FILEDLGHELPER_HXX
 #include <sfx2/filedlghelper.hxx>
+#endif
+#ifndef _SFXIMGMGR_HXX
+#include <sfx2/imgmgr.hxx>
 #endif
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
@@ -187,10 +190,18 @@
 #endif
 
 #include "dialmgr.hxx"
+#ifndef INCLUDED_SVTOOLS_HELPOPT_HXX
+#include <svtools/helpopt.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_SAVEOPT_HXX
+#include <svtools/saveopt.hxx>
+#endif
 #include "optgdlg.hrc"
 #include "optgdlg.hxx"
 #include "ofaitem.hxx"
+#ifndef _SVT_APEARCFG_HXX
 #include <svtools/apearcfg.hxx>
+#endif
 
 #define CONFIG_LANGUAGES "OfficeLanguages"
 
@@ -318,27 +329,23 @@ BOOL OfaMiscTabPage::FillItemSet( SfxItemSet& rSet )
     }
 
     // help agent
+    SvtHelpOptions aHelpOptions;
     BOOL bChecked = aHelpAgentCB.IsChecked();
     if ( bChecked != aHelpAgentCB.GetSavedValue() )
     {
-        rSet.Put( SfxBoolItem( SID_ATTR_AUTOHELPAGENT, aHelpAgentCB.IsChecked() ) );
-        bModified = TRUE;
+        aHelpOptions.SetHelpAgentAutoStartMode(aHelpAgentCB.IsChecked() );
     }
 
     if ( bChecked && aHelpAgentTimeED.GetText() != aHelpAgentTimeED.GetSavedValue() )
     {
         sal_Int32 nNewTime = aHelpAgentTimeED.GetValue();
-        rSet.Put( SfxInt32Item( SID_HELPAGENT_TIMEOUT, nNewTime ) );
-        bModified = TRUE;
+        aHelpOptions.SetHelpAgentTimeoutPeriod(nNewTime );
     }
     USHORT nStyleSheetPos = aStyleSheetLB.GetSelectEntryPos();
     if( nStyleSheetPos != LISTBOX_ENTRY_NOTFOUND &&
         nStyleSheetPos != aStyleSheetLB.GetSavedValue())
     {
-        rSet.Put(
-            SfxStringItem( SID_HELP_STYLESHEET,
-            *(String*)aStyleSheetLB.GetEntryData( nStyleSheetPos )));
-        bModified = TRUE;
+        aHelpOptions.SetHelpStyleSheet(*(String*)aStyleSheetLB.GetEntryData( nStyleSheetPos ));
     }
 
     if ( aFileDlgCB.IsChecked() != aFileDlgCB.GetSavedValue() )
@@ -376,24 +383,17 @@ void OfaMiscTabPage::Reset( const SfxItemSet& rSet )
         aFtTo.Enable(FALSE);
     }
 
-    // Undo-Schritte
-    USHORT nWhich = GetWhich( SID_ATTR_UNDO_COUNT );
+    SvtHelpOptions aHelpOptions;
+    aHelpAgentCB.Check( aHelpOptions.IsHelpAgentAutoStartMode() );
 
-    // help agent
-    if ( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_AUTOHELPAGENT, FALSE, &pItem ) )
-        aHelpAgentCB.Check( ( (SfxBoolItem*)pItem )->GetValue() );
-    if ( SFX_ITEM_SET == rSet.GetItemState( SID_HELPAGENT_TIMEOUT, FALSE, &pItem ) )
-        aHelpAgentTimeED.SetValue( ( (SfxInt32Item*)pItem )->GetValue() );
-    if ( SFX_ITEM_SET == rSet.GetItemState( SID_HELP_STYLESHEET, FALSE, &pItem ) )
+    aHelpAgentTimeED.SetValue( aHelpOptions.GetHelpAgentTimeoutPeriod() );
+    String sStyleSheet = aHelpOptions.GetHelpStyleSheet();
+    for(USHORT i = 0; i < aStyleSheetLB.GetEntryCount(); i++)
     {
-        String sStyleSheet = ((SfxStringItem*)pItem)->GetValue();
-        for(USHORT i = 0; i < aStyleSheetLB.GetEntryCount(); i++)
+        if(*(String*)aStyleSheetLB.GetEntryData( i ) == sStyleSheet)
         {
-            if(*(String*)aStyleSheetLB.GetEntryData( i ) == sStyleSheet)
-            {
-                aStyleSheetLB.SelectEntryPos(i);
-                break;
-            }
+            aStyleSheetLB.SelectEntryPos(i);
+            break;
         }
     }
 
@@ -510,11 +510,7 @@ OfaViewTabPage::OfaViewTabPage(Window* pParent, const SfxItemSet& rSet ) :
     a3DShowFullCB       ( this, ResId( CB_3D_SHOWFULL ) ),
     aWorkingSetBox      ( this, ResId( GB_WORKINGSET ) ),
     aDocViewBtn         ( this, ResId( BTN_DOCVIEW ) ),
-    aOpenWinBtn         ( this, ResId( BTN_OPENWIN ) ),
-
-    nBigLB_InitialSelection( 1 ),       // something, what doesn't really matter 'cause it's set in Reset()
-    bSfxSymbolsAuto( FALSE )
-
+    aOpenWinBtn         ( this, ResId( BTN_OPENWIN ) )
 {
     a3DOpenGLCB.SetClickHdl( LINK( this, OfaViewTabPage, OpenGLHdl ) );
 
@@ -578,8 +574,6 @@ OfaViewTabPage::OfaViewTabPage(Window* pParent, const SfxItemSet& rSet ) :
 
 OfaViewTabPage::~OfaViewTabPage()
 {
-    if( bSfxSymbolsAuto )
-        SvtMiscOptions().SetSymbolSet( SFX_SYMBOLS_AUTO );
 }
 
 #if defined( UNX ) || defined ( FS_PRIV_DEBUG )
@@ -618,41 +612,33 @@ BOOL OfaViewTabPage::FillItemSet( SfxItemSet& rSet )
     BOOL bModified = FALSE;
     BOOL bMenuOptModified = FALSE;
 
-    SfxBoolItem *pItem = PTR_CAST( SfxBoolItem, GetOldItem( rSet, SID_ATTR_BUTTON_OUTSTYLE3D ) );
-    if ( pItem->GetValue() == aStyleCB.IsChecked() )
+    SvtMiscOptions aMiscOptions;
+    if ( (aMiscOptions.GetToolboxStyle() != TOOLBOX_STYLE_FLAT) == aStyleCB.IsChecked() )
     {
-        bModified = TRUE;
-        rSet.Put( SfxBoolItem( SID_ATTR_BUTTON_OUTSTYLE3D, !aStyleCB.IsChecked() ) );
+        aMiscOptions.SetToolboxStyle( aStyleCB.IsChecked() ? TOOLBOX_STYLE_FLAT : 0);
     }
 
-    pItem = PTR_CAST( SfxBoolItem, GetOldItem( rSet, SID_ATTR_BUTTON_BIGSIZE ) );
     UINT16 nBigLB_NewSelection = aBigLB.GetSelectEntryPos();
     if( nBigLB_InitialSelection != nBigLB_NewSelection )
     {
         // from now on it's modified, even if via auto setting the same size was set as now selected in the LB
-        BOOL bBig;
+        sal_Int16 eSet = SFX_SYMBOLS_AUTO;
         switch( nBigLB_NewSelection )
         {
-            case 0:
-                {
-                    bBig = ( Application::GetSettings().GetStyleSettings().GetToolbarIconSize() == STYLE_TOOLBAR_ICONSIZE_LARGE );
-                    //SvtMiscOptions().SetSymbolSet( SFX_SYMBOLS_AUTO );    has no long effect, because this is changed when
-                    // applying the item set! -> so done in Dtor!! It's a hack, but doesn't potentially break other code
-                    bSfxSymbolsAuto = TRUE;     // ... will trigger this
-                }
-                break;
-            case 1: bBig = FALSE;   break;
-            case 2: bBig = TRUE;    break;
+            case 0: eSet = SFX_SYMBOLS_AUTO;  break;
+            case 1: eSet = SFX_SYMBOLS_SMALL; break;
+            case 2: eSet = SFX_SYMBOLS_LARGE; break;
             default:
                 DBG_ERROR( "OfaViewTabPage::FillItemSet(): This state should not be possible!" );
         }
-
-        rSet.Put( SfxBoolItem( SID_ATTR_BUTTON_BIGSIZE, bBig ) );
+        aMiscOptions.SetSymbolSet( eSet );
     }
 
+    SvtTabAppearanceCfg aAppearanceCfg;
+    BOOL bAppearanceChanged = FALSE;
+
     // Look & Feel Group
-    SfxUInt16Item *pU16Item = PTR_CAST( SfxUInt16Item, GetOldItem(rSet, SID_OPT_SYSTEMLOOK));
-    SystemLook eOldLook = (SystemLook)pU16Item->GetValue();
+    SystemLook eOldLook = (SystemLook)aAppearanceCfg.GetLookNFeel();
     SystemLook eNewLook;
 
     switch (aAppearanceLB.GetSelectEntryPos())
@@ -666,76 +652,73 @@ BOOL OfaViewTabPage::FillItemSet( SfxItemSet& rSet )
 
     if ( eNewLook != eOldLook )
     {
-        bModified = TRUE;
-        rSet.Put( SfxUInt16Item( SID_OPT_SYSTEMLOOK, (UINT16)eNewLook ) );
+        aAppearanceCfg.SetLookNFeel( eNewLook );
+        bAppearanceChanged = TRUE;
     }
 
     // Screen Scaling
-    pU16Item = PTR_CAST( SfxUInt16Item, GetOldItem(rSet, SID_OPT_SCREENSCALING));
-    UINT16 nOldScale = (UINT16)pU16Item->GetValue();
+    UINT16 nOldScale = aAppearanceCfg.GetScaleFactor();
     UINT16 nNewScale = (UINT16)aScalingMF.GetValue();
 
     if ( nNewScale != nOldScale )
     {
-        bModified = TRUE;
-        rSet.Put( SfxUInt16Item( SID_OPT_SCREENSCALING, nNewScale ) );
+        aAppearanceCfg.SetScaleFactor(nNewScale);
+        bAppearanceChanged = TRUE;
     }
 
     // Mouse Snap Mode
-    SfxInt16Item* p16Item = PTR_CAST( SfxInt16Item, GetOldItem(rSet, SID_OPT_SNAPTYPE) );
-    short eOldSnap = (SnapType)p16Item->GetValue();
+    short eOldSnap = aAppearanceCfg.GetSnapMode();
     short eNewSnap = aMousePosLB.GetSelectEntryPos();
     if(eNewSnap > 2)
         eNewSnap = 2;
 
     if ( eNewSnap != eOldSnap )
     {
-        bModified = TRUE;
-        rSet.Put( SfxInt16Item( SID_OPT_SNAPTYPE, eNewSnap ) );
+        aAppearanceCfg.SetSnapMode(eNewSnap );
+        bAppearanceChanged = TRUE;
     }
 
     // Middle Mouse Button
-    p16Item = PTR_CAST( SfxInt16Item, GetOldItem(rSet, SID_OPT_MIDDLE_MOUSE) );
-    short eOldMiddleMouse = p16Item->GetValue();
+    short eOldMiddleMouse = aAppearanceCfg.GetMiddleMouseButton();
     short eNewMiddleMouse = aMouseMiddleLB.GetSelectEntryPos();
     if(eNewMiddleMouse > 2)
         eNewMiddleMouse = 2;
 
     if ( eNewMiddleMouse != eOldMiddleMouse )
     {
-        bModified = TRUE;
-        rSet.Put( SfxInt16Item( SID_OPT_MIDDLE_MOUSE, eNewMiddleMouse ) );
+        aAppearanceCfg.SetMiddleMouseButton( eNewMiddleMouse );
+        bAppearanceChanged = TRUE;
     }
 
 #if defined( UNX ) || defined ( FS_PRIV_DEBUG )
     if ( aFontAntiAliasing.IsChecked() != aFontAntiAliasing.GetSavedValue() )
     {
-        rSet.Put( SfxBoolItem( SID_OPT_FONT_ANTIALIASING_ENABLED, aFontAntiAliasing.IsChecked() ) );
-        bModified = TRUE;
+        aAppearanceCfg.SetFontAntiAliasing( aFontAntiAliasing.IsChecked() );
+        bAppearanceChanged = TRUE;
     }
 
     if ( aAAPointLimit.GetValue() != aAAPointLimit.GetSavedValue().ToInt32() )
     {
-        rSet.Put( SfxUInt16Item( SID_OPT_FONT_ANTIALIASING_MINPIXELS, aAAPointLimit.GetValue() ) );
-        bModified = TRUE;
+        aAppearanceCfg.SetFontAntialiasingMinPixelHeight( aAAPointLimit.GetValue() );
+        bAppearanceChanged = TRUE;
     }
 #endif
 
     if ( aMouseFollowCB.IsChecked() != aMouseFollowCB.GetSavedValue() )
     {
-        rSet.Put( SfxBoolItem( SID_APPEAR_MENUE_MOUSE_FOLLOW, aMouseFollowCB.IsChecked() ) );
-        bModified = TRUE;
+        aAppearanceCfg.SetMenuMouseFollow( aMouseFollowCB.IsChecked() );
+        bAppearanceChanged = TRUE;
     }
     if ( aFlatTabCtrlCB.IsChecked() != aFlatTabCtrlCB.GetSavedValue() )
     {
-        rSet.Put( SfxBoolItem( SID_APPEAR_SINGLE_LINE_TABCTRL, aFlatTabCtrlCB.IsChecked() ) );
-        bModified = TRUE;
+        aAppearanceCfg.SetSingleLineTabCtrl(aFlatTabCtrlCB.IsChecked() );
+        bAppearanceChanged = TRUE;
     }
 
     if ( aColorTabCtrlCB.IsChecked() != aColorTabCtrlCB.GetSavedValue() )
     {
-        rSet.Put( SfxBoolItem( SID_APPEAR_COLORED_TABCTRL, aColorTabCtrlCB.IsChecked() ) );
-        bModified = TRUE;
+        aAppearanceCfg.SetColoredTabCtrl(aColorTabCtrlCB.IsChecked() );
+        bAppearanceChanged = TRUE;
     }
 
     if ( aFontShowCB.IsChecked() != aFontShowCB.GetSavedValue() )
@@ -762,19 +745,20 @@ BOOL OfaViewTabPage::FillItemSet( SfxItemSet& rSet )
         aFontOpt.EnableFontHistory( aFontHistoryCB.IsChecked() );
         bModified = TRUE;
     }
+    if ( bAppearanceChanged )
+    {
+        aAppearanceCfg.SetApplicationDefaults ( GetpApp() );
+    }
     // Workingset
+    SvtSaveOptions aSaveOptions;
     if ( aDocViewBtn.IsChecked() != aDocViewBtn.GetSavedValue() )
     {
-        rSet.Put( SfxBoolItem( GetWhich( SID_ATTR_SAVEDOCVIEW ),
-                               aDocViewBtn.IsChecked() ) );
-        bModified |= TRUE;
+        aSaveOptions.SetSaveDocView(aDocViewBtn.IsChecked());
     }
 
     if ( aOpenWinBtn.IsChecked() != aOpenWinBtn.GetSavedValue() )
     {
-        rSet.Put( SfxBoolItem( GetWhich( SID_ATTR_SAVEDOCWINS ),
-                               aOpenWinBtn.IsChecked() ) );
-        bModified |= TRUE;
+        aSaveOptions.SetSaveDocWins(aOpenWinBtn.IsChecked() );
     }
     SvtOptions3D a3DOpt;
     BOOL bTemp = a3DOpt.IsOpenGL();
@@ -824,7 +808,6 @@ BOOL OfaViewTabPage::FillItemSet( SfxItemSet& rSet )
 
 void OfaViewTabPage::Reset( const SfxItemSet& rSet )
 {
-    const SfxPoolItem* pItem;
 
     SvtOptions3D a3DOpt;
     a3DOpenGLCB.Check( a3DOpt.IsOpenGL() );
@@ -833,91 +816,62 @@ void OfaViewTabPage::Reset( const SfxItemSet& rSet )
     a3DDitheringCB.Check( a3DOpt.IsDithering() );
     a3DShowFullCB.Check( a3DOpt.IsShowFull() );
 
-    if( SFX_ITEM_SET == rSet.GetItemState(SID_ATTR_BUTTON_OUTSTYLE3D, FALSE, &pItem) )
-        aStyleCB.Check( !((SfxBoolItem*)pItem)->GetValue() );
+    SvtMiscOptions aMiscOptions;
+    aStyleCB.Check( aMiscOptions.GetToolboxStyle() == TOOLBOX_STYLE_FLAT );
 
-    if( SvtMiscOptions().GetSymbolSet() == SFX_SYMBOLS_AUTO )
-        nBigLB_InitialSelection = 0;
-    else if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_BUTTON_BIGSIZE, FALSE, &pItem ) )
-        nBigLB_InitialSelection = ( ( ( SfxBoolItem* ) pItem )->GetValue() )? 2 : 1;
-    else
-        nBigLB_InitialSelection = 0;
-    aBigLB.SelectEntryPos( nBigLB_InitialSelection );
+    sal_Int16 nSelect = 0;
+    if( aMiscOptions.GetSymbolSet() != SFX_SYMBOLS_AUTO )
+        nSelect = ( SfxImageManager::GetCurrentSymbolSet() == SFX_SYMBOLS_LARGE )? 2 : 1;
+    aBigLB.SelectEntryPos( nSelect );
+    aBigLB.SaveValue();
 
     // Look & Feel
-    if ( SFX_ITEM_SET ==
-         rSet.GetItemState( SID_OPT_SYSTEMLOOK, FALSE, &pItem ) )
+    SvtTabAppearanceCfg aAppearanceCfg;
+    sal_uInt16 nPos;
+    switch(aAppearanceCfg.GetLookNFeel())
     {
-        SystemLook eLook = (SystemLook)((const SfxUInt16Item*)pItem)->GetValue();
-        USHORT nPos;
-
-        switch (eLook)
-        {
-            case LookMacintosh:     nPos = 1;   break;
-            case LookMotif:         nPos = 2;   break;
-            case LookOSTwo:         nPos = 3;   break;
-            case LookStardivision:
-            default:                nPos = 0;   break;
-        }
-        aAppearanceLB.SelectEntryPos(nPos);
+        case LookMacintosh:     nPos = 1;   break;
+        case LookMotif:         nPos = 2;   break;
+        case LookOSTwo:         nPos = 3;   break;
+        case LookStardivision:
+        default:                nPos = 0;   break;
     }
+    aAppearanceLB.SelectEntryPos(nPos);
     aAppearanceLB.SaveValue();
 
     // Screen Scaling
-    if ( SFX_ITEM_SET ==
-         rSet.GetItemState( SID_OPT_SCREENSCALING, FALSE, &pItem ) )
-    {
-        UINT16 nScaleFactor = (UINT16)((const SfxUInt16Item*)pItem )->GetValue();
-        aScalingMF.SetValue ( nScaleFactor );
-    }
+    aScalingMF.SetValue ( aAppearanceCfg.GetScaleFactor() );
     aScalingMF.SaveValue();
 
     // Mouse Snap
-    if ( SFX_ITEM_SET ==
-         rSet.GetItemState( SID_OPT_SNAPTYPE, FALSE, &pItem ) )
-    {
-        short nSnap = (SnapType)((const SfxInt16Item*)pItem )->GetValue();
-        aMousePosLB.SelectEntryPos(nSnap);
-    }
+    aMousePosLB.SelectEntryPos(aAppearanceCfg.GetSnapMode());
     aMousePosLB.SaveValue();
 
     // Mouse Snap
-    if ( SFX_ITEM_SET ==
-         rSet.GetItemState( SID_OPT_MIDDLE_MOUSE, FALSE, &pItem ) )
-    {
-        short nMiddle = ((const SfxInt16Item*)pItem )->GetValue();
-        aMouseMiddleLB.SelectEntryPos(nMiddle);
-    }
+    aMouseMiddleLB.SelectEntryPos(aAppearanceCfg.GetMiddleMouseButton());
     aMouseMiddleLB.SaveValue();
 
 #if defined( UNX ) || defined ( FS_PRIV_DEBUG )
-    if( SFX_ITEM_SET == rSet.GetItemState( SID_OPT_FONT_ANTIALIASING_ENABLED, FALSE, &pItem ) )
-        aFontAntiAliasing.Check( static_cast< const SfxBoolItem* >( pItem )->GetValue() );
-
-    if( SFX_ITEM_SET == rSet.GetItemState( SID_OPT_FONT_ANTIALIASING_MINPIXELS, FALSE, &pItem ) )
-        aAAPointLimit.SetValue( static_cast< const SfxUInt16Item* >( pItem )->GetValue() );
+    aFontAntiAliasing.Check( aAppearanceCfg.IsFontAntiAliasing() );
+    aAAPointLimit.SetValue( aAppearanceCfg.GetFontAntialiasingMinPixelHeight() );
 #endif
 
-    if(SFX_ITEM_SET == rSet.GetItemState(SID_APPEAR_MENUE_MOUSE_FOLLOW, FALSE, &pItem))
-        aMouseFollowCB.Check( ((const SfxBoolItem*)pItem)->GetValue() );
+    AllSettings   hAppSettings = Application::GetSettings();
+    MouseSettings hMouseSettings = hAppSettings.GetMouseSettings();
+    sal_uInt32 nFollow = hMouseSettings.GetFollow();
+    sal_uInt16 nTabStyle = hAppSettings.GetStyleSettings().GetTabControlStyle();
 
-    if(SFX_ITEM_SET == rSet.GetItemState(SID_APPEAR_SINGLE_LINE_TABCTRL, FALSE, &pItem))
-        aFlatTabCtrlCB.Check( ((const SfxBoolItem*)pItem)->GetValue() );
-
-    if(SFX_ITEM_SET == rSet.GetItemState(SID_APPEAR_COLORED_TABCTRL, FALSE, &pItem))
-        aColorTabCtrlCB.Check(((const SfxBoolItem*)pItem)->GetValue() );
+    aMouseFollowCB.Check( 0 != (nFollow&MOUSE_FOLLOW_MENU) );
+    aFlatTabCtrlCB.Check( 0 !=(nTabStyle&STYLE_TABCONTROL_SINGLELINE) );
+    aColorTabCtrlCB.Check(0 !=(nTabStyle&STYLE_TABCONTROL_COLOR) );
 
     // WorkingSet
-    USHORT nWhich = GetWhich( SID_ATTR_SAVEDOCVIEW );
+    SvtSaveOptions aSaveOptions;
+    aDocViewBtn.Enable(!aSaveOptions.IsReadOnly(SvtSaveOptions::E_SAVEDOCVIEW));
+    aDocViewBtn.Check( aSaveOptions.IsSaveDocView() );
 
-    if ( SFX_ITEM_SET == rSet.GetItemState( nWhich, FALSE, &pItem ) )
-        aDocViewBtn.Check( ( (const SfxBoolItem*)pItem )->GetValue() );
-
-    nWhich = GetWhich( SID_ATTR_SAVEDOCWINS );
-
-    if ( SFX_ITEM_SET == rSet.GetItemState( nWhich, FALSE, &pItem ) )
-        aOpenWinBtn.Check( ( (const SfxBoolItem*)pItem )->GetValue() );
-
+    aOpenWinBtn.Enable(!aSaveOptions.IsReadOnly(SvtSaveOptions::E_SAVEDOCWINS));
+    aOpenWinBtn.Check( aSaveOptions.IsSaveDocWins() );
 
     SvtFontOptions aFontOpt;
     aFontShowCB.Check( aFontOpt.IsFontWYSIWYGEnabled() );
@@ -990,65 +944,15 @@ void LangConfigItem_Impl::Commit()
     aValues.getArray()[0] = aValue;
     PutProperties(aNames, aValues);
 }
-/* -----------------------------23.11.00 14:47--------------------------------
+/* -----------------22.07.2003 10:33-----------------
 
- ---------------------------------------------------------------------------*/
-/*class LanguageConfig_Impl
+ --------------------------------------------------*/
+struct LanguageConfig_Impl
 {
-    LangConfigItem_Impl aSetup;
-    LangConfigItem_Impl aProfile;
-public:
-    LanguageConfig_Impl();
-    ~LanguageConfig_Impl();
-
-    Sequence<OUString>  GetInstalledLanguages();
-    OUString            GetCurrentLanguage();
-    void                SetCurrentLanguage(const OUString& rSet);
-
+    SvtLanguageOptions aLanguageOptions;
+    SvtSysLocaleOptions aSysLocaleOptions;
+    SvtLinguConfig aLinguConfig;
 };
-/* -----------------------------23.11.00 14:53--------------------------------
-
- ---------------------------------------------------------------------------*/
-/*LanguageConfig_Impl::LanguageConfig_Impl() :
-    aSetup(C2U("Setup/Office"), C2U("Locales")),
-    aProfile(C2U("UserProfile/International"), C2U("Locale"))
-{
-}
-/* -----------------------------23.11.00 14:53--------------------------------
-
- ---------------------------------------------------------------------------*/
-/*LanguageConfig_Impl::~LanguageConfig_Impl()
-{
-    if(aProfile.IsModified())
-        aProfile.Commit();
-}
-/* -----------------------------23.11.00 15:12--------------------------------
-
- ---------------------------------------------------------------------------*/
-/*Sequence<OUString>  LanguageConfig_Impl::GetInstalledLanguages()
-{
-    Sequence<OUString> aRet;
-    aSetup.GetValue() >>= aRet;
-    return aRet;
-}
-/* -----------------------------23.11.00 15:12--------------------------------
-
- ---------------------------------------------------------------------------*/
-/*OUString LanguageConfig_Impl::GetCurrentLanguage()
-{
-    OUString sRet;
-    aProfile.GetValue() >>= sRet;
-    return sRet;
-}
-/* -----------------------------23.11.00 15:12--------------------------------
-
- ---------------------------------------------------------------------------*/
-/*void LanguageConfig_Impl::SetCurrentLanguage(const OUString& rSet)
-{
-    Any aSet;
-    aSet <<= rSet;
-    aProfile.SetValue(aSet);
-}
 /* -----------------------------23.11.00 13:06--------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -1056,27 +960,36 @@ static sal_Bool bLanguageCurrentDoc_Impl = sal_False;
 OfaLanguagesTabPage::OfaLanguagesTabPage( Window* pParent, const SfxItemSet& rSet ) :
     SfxTabPage( pParent, ResId( OFA_TP_LANGUAGES, DIALOG_MGR() ), rSet ),
     aUILanguageGB(this,         ResId(GB_UI_LANG        )),
+    aLocaleSettingFI(this,      ResId(FI_LOCALESETTING)),
     aLocaleSettingFT(this,      ResId(FT_LOCALESETTING)),
     aLocaleSettingLB(this,      ResId(LB_LOCALESETTING)),
+    aCurrencyFI( this,          ResId(FI_CURRENCY       )),
     aDecimalSeparatorFT(this,   ResId(FT_DECIMALSEPARATOR)),
     aDecimalSeparatorCB(this,   ResId(CB_DECIMALSEPARATOR)),
     aCurrencyFT( this,          ResId(FT_CURRENCY       )),
     aCurrencyLB( this,          ResId(LB_CURRENCY       )),
     aLinguLanguageGB(this,      ResId(GB_LINGU_LANG     )),
+    aWesternLanguageFI(this,    ResId(FI_WEST_LANG      )),
     aWesternLanguageFT(this,    ResId(FT_WEST_LANG      )),
     aWesternLanguageLB(this,    ResId(LB_WEST_LANG      )),
+    aAsianLanguageFI(this,      ResId(FI_ASIAN_LANG     )),
     aAsianLanguageFT(this,      ResId(FT_ASIAN_LANG     )),
     aAsianLanguageLB(this,      ResId(LB_ASIAN_LANG     )),
+    aComplexLanguageFI(this,    ResId(FI_COMPLEX_LANG   )),
     aComplexLanguageFT(this,    ResId(FT_COMPLEX_LANG   )),
     aComplexLanguageLB(this,    ResId(LB_COMPLEX_LANG   )),
     aCurrentDocCB(this,         ResId(CB_CURRENT_DOC    )),
+    aAsianSupportFI(this,       ResId(FI_ASIANSUPPORT   )),
     aAsianSupportFL(this,       ResId(FL_ASIANSUPPORT    )),
     aAsianSupportCB(this,       ResId(CB_ASIANSUPPORT   )),
+    aCTLSupportFI(this,         ResId(FI_CTLSUPPORT    )),
     aCTLSupportFL(this,         ResId(FL_CTLSUPPORT    )),
     aCTLSupportCB(this,         ResId(CB_CTLSUPPORT   )),
-    sDecimalSeparatorLabel(aDecimalSeparatorCB.GetText())
+    pLangConfig(new LanguageConfig_Impl)
 {
     FreeResource();
+
+    sal_Bool bHighContrast = GetDisplayBackground().GetColor().IsDark();
 
     aWesternLanguageLB.SetLanguageList( LANG_LIST_WESTERN | LANG_LIST_ONLY_KNOWN, TRUE,  FALSE, TRUE );
     aAsianLanguageLB  .SetLanguageList( LANG_LIST_CJK     | LANG_LIST_ONLY_KNOWN, TRUE,  FALSE, TRUE );
@@ -1111,15 +1024,18 @@ OfaLanguagesTabPage::OfaLanguagesTabPage( Window* pParent, const SfxItemSet& rSe
     aAsianSupportCB.SetClickHdl( aLink );
     aCTLSupportCB.SetClickHdl( aLink );
 
-    SvtLanguageOptions aLanguageOptions;
-    aAsianSupportCB.Check( m_bOldAsian = aLanguageOptions.IsAnyEnabled() );
+    aAsianSupportCB.Check( m_bOldAsian = pLangConfig->aLanguageOptions.IsAnyEnabled() );
     aAsianSupportCB.SaveValue();
-    aAsianSupportCB.Enable(!aLanguageOptions.IsReadOnly(SvtLanguageOptions::E_ALLCJK));
+    sal_Bool bReadonly = pLangConfig->aLanguageOptions.IsReadOnly(SvtLanguageOptions::E_ALLCJK);
+    aAsianSupportCB.Enable(!bReadonly);
+    aAsianSupportFI.Show(bReadonly);
     SupportHdl( &aAsianSupportCB );
 
-    aCTLSupportCB.Check( m_bOldCtl = aLanguageOptions.IsCTLFontEnabled() );
+    aCTLSupportCB.Check( m_bOldCtl = pLangConfig->aLanguageOptions.IsCTLFontEnabled() );
     aCTLSupportCB.SaveValue();
-    aCTLSupportCB.Enable(!aLanguageOptions.IsReadOnly(SvtLanguageOptions::E_CTLFONT));
+    bReadonly = pLangConfig->aLanguageOptions.IsReadOnly(SvtLanguageOptions::E_CTLFONT);
+    aCTLSupportCB.Enable(!bReadonly);
+    aCTLSupportFI.Show(bReadonly);
     SupportHdl( &aCTLSupportCB );
 }
 /*-- 23.11.00 13:06:40---------------------------------------------------
@@ -1127,7 +1043,7 @@ OfaLanguagesTabPage::OfaLanguagesTabPage( Window* pParent, const SfxItemSet& rSe
   -----------------------------------------------------------------------*/
 OfaLanguagesTabPage::~OfaLanguagesTabPage()
 {
-//    delete pLangConfig;
+    delete pLangConfig;
 }
 /*-- 23.11.00 13:06:40---------------------------------------------------
 
@@ -1205,29 +1121,9 @@ void lcl_UpdateAndDelete(SfxVoidItem* pInvalidItems[], SfxBoolItem* pBoolItems[]
 
 BOOL OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
 {
-    SvtSysLocaleOptions aSysLocaleOptions;
-    aSysLocaleOptions.BlockBroadcasts( TRUE );
+    pLangConfig->aSysLocaleOptions.BlockBroadcasts( TRUE );
 
-    // user interface language
-//    OUString sLang = pLangConfig->GetCurrentLanguage();
-//    LanguageType eOldLang = lcl_LangStringToLangType( sLang );
-//    LanguageType eUILang = aUILanguageLB.GetSelectLanguage();
-//    if ( eOldLang != eUILang )
-//    {
-//        Locale aLocale;
-//        // DO use lcl_LanguageToLocale() for country independence
-//        lcl_LanguageToLocale( aLocale, eUILang );
-//        OUString sNewLang = aLocale.Language;
-//        if ( aLocale.Country.getLength() > 0 )
-//        {
-//            sNewLang += C2U("-");
-//            sNewLang += aLocale.Country;
-//        }
-//        if ( sNewLang.getLength() > 1 )
-//            pLangConfig->SetCurrentLanguage( sNewLang );
-//    }
-
-    OUString sLang = aSysLocaleOptions.GetLocaleConfigString();
+    OUString sLang = pLangConfig->aSysLocaleOptions.GetLocaleConfigString();
     LanguageType eOldLocale = (sLang.getLength() ?
         lcl_LangStringToLangType( sLang ) : LANGUAGE_SYSTEM);
     LanguageType eNewLocale = aLocaleSettingLB.GetSelectLanguage();
@@ -1252,18 +1148,18 @@ BOOL OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
         AllSettings aSettings( Application::GetSettings() );
         aSettings.SetLanguage( eNewLocale );
         Application::SetSettings( aSettings );
-        aSysLocaleOptions.SetLocaleConfigString( sNewLang );
+        pLangConfig->aSysLocaleOptions.SetLocaleConfigString( sNewLang );
         rSet.Put( SfxBoolItem( SID_OPT_LOCALE_CHANGED, TRUE ) );
     }
 
     //
     if(aDecimalSeparatorCB.GetSavedValue() != aDecimalSeparatorCB.IsChecked())
-        aSysLocaleOptions.SetDecimalSeparatorAsLocale(aDecimalSeparatorCB.IsChecked());
+        pLangConfig->aSysLocaleOptions.SetDecimalSeparatorAsLocale(aDecimalSeparatorCB.IsChecked());
 
     // Configured currency, for example, USD-en-US or EUR-de-DE, or empty for
     // locale default. This must be set _after_ the locale above in order to
     // have a valid locale for broadcasting the currency change.
-    OUString sOldCurr = aSysLocaleOptions.GetCurrencyConfigString();
+    OUString sOldCurr = pLangConfig->aSysLocaleOptions.GetCurrencyConfigString();
     USHORT nCurrPos = aCurrencyLB.GetSelectEntryPos();
     const NfCurrencyEntry* pCurr = (const NfCurrencyEntry*)
         aCurrencyLB.GetEntryData( nCurrPos );
@@ -1272,12 +1168,11 @@ BOOL OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
         sNewCurr = SvtSysLocaleOptions::CreateCurrencyConfigString(
             pCurr->GetBankSymbol(), pCurr->GetLanguage() );
     if ( sOldCurr != sNewCurr )
-        aSysLocaleOptions.SetCurrencyConfigString( sNewCurr );
+        pLangConfig->aSysLocaleOptions.SetCurrencyConfigString( sNewCurr );
 
     BOOL bRet = FALSE;
     SfxObjectShell* pCurrentDocShell = SfxObjectShell::Current();
     Reference< XPropertySet > xLinguProp( LinguMgr::GetLinguPropertySet(), UNO_QUERY );
-    SvtLinguConfig  aLinguCfg;
     BOOL bCurrentDocCBChecked = aCurrentDocCB.IsChecked();
     if(aCurrentDocCB.IsEnabled())
         bLanguageCurrentDoc_Impl = bCurrentDocCBChecked;
@@ -1293,7 +1188,7 @@ BOOL OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
             Locale aLocale = SvxCreateLocale( eSelectLang );
             aValue <<= aLocale;
             OUString aPropName( C2U("DefaultLocale") );
-            aLinguCfg.SetProperty( aPropName, aValue );
+            pLangConfig->aLinguConfig.SetProperty( aPropName, aValue );
             if (xLinguProp.is())
                 xLinguProp->setPropertyValue( aPropName, aValue );
         }
@@ -1313,7 +1208,7 @@ BOOL OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
             Locale aLocale = SvxCreateLocale( eSelectLang );
             aValue <<= aLocale;
             OUString aPropName( C2U("DefaultLocale_CJK") );
-            aLinguCfg.SetProperty( aPropName, aValue );
+            pLangConfig->aLinguConfig.SetProperty( aPropName, aValue );
             if (xLinguProp.is())
                 xLinguProp->setPropertyValue( aPropName, aValue );
         }
@@ -1333,7 +1228,7 @@ BOOL OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
             Locale aLocale = SvxCreateLocale( eSelectLang );
             aValue <<= aLocale;
             OUString aPropName( C2U("DefaultLocale_CTL") );
-            aLinguCfg.SetProperty( aPropName, aValue );
+            pLangConfig->aLinguConfig.SetProperty( aPropName, aValue );
             if (xLinguProp.is())
                 xLinguProp->setPropertyValue( aPropName, aValue );
         }
@@ -1344,12 +1239,10 @@ BOOL OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
         }
     }
 
-    SvtLanguageOptions aLanguageOptions;
-
     if(aAsianSupportCB.GetSavedValue() != aAsianSupportCB.IsChecked() )
     {
         sal_Bool bChecked = aAsianSupportCB.IsChecked();
-        aLanguageOptions.SetAll(bChecked);
+        pLangConfig->aLanguageOptions.SetAll(bChecked);
         //iterate over all bindings to invalidate vertical text direction
 
       const sal_uInt16 STATE_COUNT = 2;
@@ -1367,7 +1260,7 @@ BOOL OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
 
     if ( aCTLSupportCB.GetSavedValue() != aCTLSupportCB.IsChecked() )
     {
-        aLanguageOptions.SetCTLFontEnabled( aCTLSupportCB.IsChecked() );
+        pLangConfig->aLanguageOptions.SetCTLFontEnabled( aCTLSupportCB.IsChecked() );
 
         const sal_uInt16 STATE_COUNT = 1;
         SfxBoolItem* pBoolItems[STATE_COUNT];
@@ -1377,38 +1270,27 @@ BOOL OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
         lcl_UpdateAndDelete(pInvalidItems, pBoolItems, STATE_COUNT);
     }
 
-    if ( aSysLocaleOptions.IsModified() )
-        aSysLocaleOptions.Commit();
-    aSysLocaleOptions.BlockBroadcasts( FALSE );
+    if ( pLangConfig->aSysLocaleOptions.IsModified() )
+        pLangConfig->aSysLocaleOptions.Commit();
+    pLangConfig->aSysLocaleOptions.BlockBroadcasts( FALSE );
 
     return FALSE;
 }
 //-----------------------------------------------------------------------------
 void OfaLanguagesTabPage::Reset( const SfxItemSet& rSet )
 {
-    SvtSysLocaleOptions aSysLocaleOptions;
-
-    //user interface languages
-//    Sequence <OUString> aLangs = pLangConfig->GetInstalledLanguages();
-//    const OUString* pLangs = aLangs.getConstArray();
-//    aUILanguageLB.Clear();
-//    for(int i = 0; i < aLangs.getLength(); i++)
-//    {
-//        if(pLangs[i].getLength() >= 2)
-//            aUILanguageLB.InsertLanguage( lcl_LangStringToLangType(pLangs[i]) );
-//    }
-//    OUString sLang =  pLangConfig->GetCurrentLanguage();
-//    aUILanguageLB.SelectLanguage(lcl_LangStringToLangType(sLang));
-
-    OUString sLang = aSysLocaleOptions.GetLocaleConfigString();
+    OUString sLang = pLangConfig->aSysLocaleOptions.GetLocaleConfigString();
     if ( sLang.getLength() )
         aLocaleSettingLB.SelectLanguage(lcl_LangStringToLangType(sLang));
     else
         aLocaleSettingLB.SelectLanguage( LANGUAGE_SYSTEM );
-    aLocaleSettingLB.Enable(!aSysLocaleOptions.IsReadOnly(SvtSysLocaleOptions::E_LOCALE));
+    sal_Bool bReadonly = pLangConfig->aSysLocaleOptions.IsReadOnly(SvtSysLocaleOptions::E_LOCALE);
+    aLocaleSettingLB.Enable(!bReadonly);
+    aLocaleSettingFT.Enable(!bReadonly);
+    aLocaleSettingFI.Show(bReadonly);
 
     //
-    aDecimalSeparatorCB.Check( aSysLocaleOptions.IsDecimalSeparatorAsLocale());
+    aDecimalSeparatorCB.Check( pLangConfig->aSysLocaleOptions.IsDecimalSeparatorAsLocale());
     aDecimalSeparatorCB.SaveValue();
 
     // let LocaleSettingHdl enable/disable checkboxes for CJK/CTL support
@@ -1420,7 +1302,7 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet& rSet )
     String aAbbrev;
     LanguageType eLang;
     const NfCurrencyEntry* pCurr = NULL;
-    sLang = aSysLocaleOptions.GetCurrencyConfigString();
+    sLang = pLangConfig->aSysLocaleOptions.GetCurrencyConfigString();
     if ( sLang.getLength() )
     {
         SvtSysLocaleOptions::GetCurrencyAbbrevAndLanguage( aAbbrev, eLang, sLang );
@@ -1429,7 +1311,10 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet& rSet )
     // if pCurr==NULL the SYSTEM entry is selected
     USHORT nPos = aCurrencyLB.GetEntryPos( (void*) pCurr );
     aCurrencyLB.SelectEntryPos( nPos );
-    aCurrencyLB.Enable(!aSysLocaleOptions.IsReadOnly(SvtSysLocaleOptions::E_CURRENCY));
+    bReadonly = pLangConfig->aSysLocaleOptions.IsReadOnly(SvtSysLocaleOptions::E_CURRENCY);
+    aCurrencyLB.Enable(!bReadonly);
+    aCurrencyFT.Enable(!bReadonly);
+    aCurrencyFI.Show(bReadonly);
 
     //western/CJK/CLK language
     LanguageType eCurLang = LANGUAGE_NONE;
@@ -1439,20 +1324,19 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet& rSet )
     //collect the configuration values first
     aCurrentDocCB.Enable(FALSE);
     //
-    SvtLinguConfig  aLinguCfg;
     Any aWestLang;
     Any aCJKLang;
     Any aCTLLang;
     try
     {
-        aWestLang = aLinguCfg.GetProperty(C2U("DefaultLocale"));
+        aWestLang = pLangConfig->aLinguConfig.GetProperty(C2U("DefaultLocale"));
         Locale aLocale;
         aWestLang >>= aLocale;
         eCurLang = SvxLocaleToLanguage( aLocale );
-        aCJKLang = aLinguCfg.GetProperty(C2U("DefaultLocale_CJK"));
+        aCJKLang = pLangConfig->aLinguConfig.GetProperty(C2U("DefaultLocale_CJK"));
         aCJKLang >>= aLocale;
         eCurLangCJK = SvxLocaleToLanguage( aLocale );
-        aCTLLang = aLinguCfg.GetProperty(C2U("DefaultLocale_CTL"));
+        aCTLLang = pLangConfig->aLinguConfig.GetProperty(C2U("DefaultLocale_CTL"));
         aCTLLang >>= aLocale;
         eCurLangCTL = SvxLocaleToLanguage( aLocale );
     }
@@ -1494,17 +1378,18 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet& rSet )
     aComplexLanguageLB.SaveValue();
     aCurrentDocCB.SaveValue();
 
-    sal_Bool bEnable = !aLinguCfg.IsReadOnly( C2U("DefaultLocale") );
+    sal_Bool bEnable = !pLangConfig->aLinguConfig.IsReadOnly( C2U("DefaultLocale") );
     aWesternLanguageFT.Enable( bEnable );
     aWesternLanguageLB.Enable( bEnable );
+    aWesternLanguageFI.Show(!bEnable);
 
     // #i15812# controls for CJK/CTL already enabled/disabled from LocaleSettingHdl
 #if 0
-    bEnable = ( !aLinguCfg.IsReadOnly( C2U("DefaultLocale_CJK") ) && aAsianSupportCB.IsChecked() );
+    bEnable = ( !pLangConfig->aLinguConfig.IsReadOnly( C2U("DefaultLocale_CJK") ) && aAsianSupportCB.IsChecked() );
     aAsianLanguageFT.Enable( bEnable );
     aAsianLanguageLB.Enable( bEnable );
 
-    bEnable = ( !aLinguCfg.IsReadOnly( C2U("DefaultLocale_CTL") ) && aCTLSupportCB.IsChecked() );
+    bEnable = ( !pLangConfig->aLinguConfig.IsReadOnly( C2U("DefaultLocale_CTL") ) && aCTLSupportCB.IsChecked() );
     aComplexLanguageFT.Enable( bEnable );
     aComplexLanguageLB.Enable( bEnable );
 #endif
@@ -1519,17 +1404,21 @@ IMPL_LINK(  OfaLanguagesTabPage, SupportHdl, CheckBox*, pBox )
     sal_Bool bCheck = pBox->IsChecked();
     if ( &aAsianSupportCB == pBox )
     {
-        bCheck = ( bCheck && !SvtLinguConfig().IsReadOnly( C2U("DefaultLocale_CJK") ) );
+        sal_Bool bReadonly = pLangConfig->aLinguConfig.IsReadOnly( C2U("DefaultLocale_CJK"));
+        bCheck = ( bCheck && !bReadonly );
         aAsianLanguageFT.Enable( bCheck );
         aAsianLanguageLB.Enable( bCheck );
+        aAsianLanguageFI.Show(bReadonly);
         if( pBox->IsEnabled() )
             m_bOldAsian = bCheck;
     }
     else if ( &aCTLSupportCB == pBox )
     {
-        bCheck = ( bCheck && !SvtLinguConfig().IsReadOnly( C2U("DefaultLocale_CTL") ) );
+        sal_Bool bReadonly = pLangConfig->aLinguConfig.IsReadOnly( C2U("DefaultLocale_CTL"));
+        bCheck = ( bCheck && !bReadonly  );
         aComplexLanguageFT.Enable( bCheck );
         aComplexLanguageLB.Enable( bCheck );
+        aComplexLanguageFI.Show(bReadonly);
         if( pBox->IsEnabled() )
             m_bOldCtl = bCheck;
     }
@@ -1563,13 +1452,21 @@ IMPL_LINK( OfaLanguagesTabPage, LocaleSettingHdl, SvxLanguageBox*, pBox )
     LanguageType eLang = pBox->GetSelectLanguage();
     sal_uInt16 nType = SvtLanguageOptions::GetScriptTypeOfLanguage(eLang);
     // first check if CTL must be enabled
-    sal_Bool bIsCTLFixed = nType & SCRIPTTYPE_COMPLEX;
-    lcl_checkLanguageCheckBox(aCTLSupportCB,aCTLSupportFL,bIsCTLFixed,m_bOldCtl);
-    SupportHdl( &aCTLSupportCB );
+    // #103299# - if CTL font setting is not readonly
+    if(!pLangConfig->aLanguageOptions.IsReadOnly(SvtLanguageOptions::E_CTLFONT))
+    {
+        sal_Bool bIsCTLFixed = nType & SCRIPTTYPE_COMPLEX;
+        lcl_checkLanguageCheckBox(aCTLSupportCB,aCTLSupportFL,bIsCTLFixed,m_bOldCtl);
+        SupportHdl( &aCTLSupportCB );
+    }
     // second check if CJK must be enabled
-    sal_Bool bIsCJKFixed = nType & SCRIPTTYPE_ASIAN;
-    lcl_checkLanguageCheckBox(aAsianSupportCB,aAsianSupportFL,bIsCJKFixed,m_bOldAsian);
-    SupportHdl( &aAsianSupportCB );
+    // #103299# - if CJK support is not readonly
+    if(!pLangConfig->aLanguageOptions.IsReadOnly(SvtLanguageOptions::E_ALLCJK))
+    {
+        sal_Bool bIsCJKFixed = nType & SCRIPTTYPE_ASIAN;
+        lcl_checkLanguageCheckBox(aAsianSupportCB,aAsianSupportFL,bIsCJKFixed,m_bOldAsian);
+        SupportHdl( &aAsianSupportCB );
+    }
 
     USHORT nPos;
     if ( eLang == LANGUAGE_SYSTEM )
@@ -1922,25 +1819,31 @@ OfaHelperProgramsTabPage::OfaHelperProgramsTabPage(Window* pParent, const SfxIte
     SfxTabPage(pParent, ResId( OFA_TP_HELPERPROG, DIALOG_MGR() ), rSet),
     aHelpFI(this,           ResId(FI_HELP           )),
     aMailFL(this,           ResId(FL_MAIL           )),
+    aProgramFI(this,        ResId(FI_PROGRAM        )),
     aProgramFT(this,        ResId(FT_PROGRAM        )),
     aAdditionalMailFT(this, ResId(FT_ADD_MAIL       )),
     aProfilesLB(this,       ResId(LB_PROFILES       )),
     aMailerURLED(this,      ResId(ED_MAILERURL      )),
     aMailerURLPB(this,      ResId(PB_MAILERURL      )),
     aLinkFL(this,           ResId(FL_LINK           )),
+    aHTTPFI(this,           ResId(FI_HTTP           )),
     aHTTPFT(this,           ResId(FT_HTTP           )),
     aHTTPED(this,           ResId(ED_HTTP           )),
     aHTTPPB(this,           ResId(PB_HTTP           )),
+    aHTTPSFI(this,          ResId(FI_HTTPS          )),
     aHTTPSFT(this,          ResId(FT_HTTPS          )),
     aHTTPSED(this,          ResId(ED_HTTPS          )),
     aHTTPSPB(this,          ResId(PB_HTTPS          )),
+    aFTPFI(this,            ResId(FI_FTP            )),
     aFTPFT(this,            ResId(FT_FTP            )),
     aFTPED(this,            ResId(ED_FTP            )),
     aFTPPB(this,            ResId(PB_FTP            )),
+    aMailerFI(this,         ResId(FI_MAILER         )),
     aMailerFT(this,         ResId(FT_MAILER         )),
     aMailerED(this,         ResId(ED_MAILER         )),
     aMailerPB(this,         ResId(PB_MAILER         )),
     aDocManagerFL(this,     ResId(FL_DOCMANAGER     )),
+    aDocManagerFI(this,     ResId(FI_DOCMANAGER     )),
     aDocManagerFT(this,     ResId(FT_DOCMANAGER     )),
     aDocManagerED(this,     ResId(ED_DOCMANAGER     )),
     aDocManagerPB(this,     ResId(PB_DOCMANAGER     )),
@@ -1950,6 +1853,8 @@ OfaHelperProgramsTabPage::OfaHelperProgramsTabPage(Window* pParent, const SfxIte
     pImpl(new OfaHelperProgramsTabPage_Impl)
 {
     FreeResource();
+
+    sal_Bool bHighContrast = GetDisplayBackground().GetColor().IsDark();
 
     Link aLink(LINK(this, OfaHelperProgramsTabPage, FileDialogHdl_Impl));
     aMailerURLPB.SetClickHdl(aLink);
@@ -2049,6 +1954,8 @@ void OfaHelperProgramsTabPage::Reset( const SfxItemSet& rSet )
     aProfilesLB.RemoveEntry(0);
 #endif // HELPER_PAGE_COMPLETE
 
+    if(pImpl->aMailConfig.bROCommandProfile)
+        aProgramFI.Show();
     const OUString* pProfiles   = pImpl->aMailConfig.aProfiles.getConstArray();
     const OUString* pEnd        = pProfiles + pImpl->aMailConfig.aProfiles.getLength();
     for(; pProfiles != pEnd ; ++pProfiles)
@@ -2105,7 +2012,12 @@ void OfaHelperProgramsTabPage::Reset( const SfxItemSet& rSet )
     aFTPED.SaveValue();
     aMailerED.SaveValue();
 #ifdef HELPER_PAGE_COMPLETE
+    aHTTPFI.Show(pImpl->aAppConfig.bROHttp);
+    aHTTPSFI.Show(pImpl->aAppConfig.bROHttps);
+    aFTPFI.Show(pImpl->aAppConfig.bROFtp);
+    aMailerFI.Show(pImpl->aAppConfig.bROMailto);
     aDocManagerED.SaveValue();
+    aDocManagerFI.Show(pImpl->aAppConfig.bROFile);
 #endif
 
     aHTTPED.Enable(!pImpl->aAppConfig.bROHttp);
@@ -2251,7 +2163,6 @@ IMPL_LINK(  OfaHelperProgramsTabPage, ProfileHdl_Impl, ListBox*, pLB )
 #endif // HELPER_PAGE_COMPLETE
     bEnable = bEnable && !pImpl->aMailConfig.bROProgram;
 
-    aProfilesLB.Enable(!pImpl->aMailConfig.bROCommandProfile);
 
     aAdditionalMailFT.Enable(bEnable);
     aMailerURLED.Enable(bEnable);
