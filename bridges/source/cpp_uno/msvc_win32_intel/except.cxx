@@ -2,9 +2,9 @@
  *
  *  $RCSfile: except.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:26:49 $
+ *  last change: $Author: vg $ $Date: 2003-10-06 13:15:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,28 +65,17 @@
 #include <malloc.h>
 #include <new.h>
 #include <typeinfo.h>
-#ifndef _RTL_ALLOC_H_
-#include <rtl/alloc.h>
-#endif
+#include <signal.h>
 
-#ifndef _RTL_STRBUF_HXX_
-#include <rtl/strbuf.hxx>
-#endif
+#include "rtl/alloc.h"
+#include "rtl/strbuf.hxx"
+#include "rtl/ustrbuf.hxx"
 
-#ifndef _BRIDGES_CPP_UNO_BRIDGE_HXX_
-#include <bridges/cpp_uno/bridge.hxx>
-#endif
-#ifndef _COM_SUN_STAR_UNO_ANY_HXX_
-#include <com/sun/star/uno/Any.hxx>
-#endif
+#include "bridges/cpp_uno/bridge.hxx"
+#include "com/sun/star/uno/Any.hxx"
 
 #include "msci.hxx"
 
-#if OSL_DEBUG_LEVEL > 1
-#define TRACE(x) OSL_TRACE(x)
-#else
-#define TRACE(x)
-#endif
 
 #pragma pack(push, 8)
 
@@ -159,7 +148,8 @@ public:
 class __type_info
 {
     friend type_info * RTTInfos::getRTTI( OUString const & ) throw ();
-    friend sal_Int32 msci_filterCppException( LPEXCEPTION_POINTERS, uno_Any *, uno_Mapping * );
+    friend int msci_filterCppException(
+        LPEXCEPTION_POINTERS, uno_Any *, uno_Mapping * );
 
 public:
     virtual ~__type_info() throw ();
@@ -212,10 +202,13 @@ RTTInfos::RTTInfos() throw ()
 //__________________________________________________________________________________________________
 RTTInfos::~RTTInfos() throw ()
 {
-    TRACE( "> freeing generated RTTI infos... <\n" );
+#if OSL_DEBUG_LEVEL > 1
+    OSL_TRACE( "> freeing generated RTTI infos... <\n" );
+#endif
 
     MutexGuard aGuard( _aMutex );
-    for ( t_string2PtrMap::const_iterator iPos( _allRTTI.begin() ); iPos != _allRTTI.end(); ++iPos )
+    for ( t_string2PtrMap::const_iterator iPos( _allRTTI.begin() );
+          iPos != _allRTTI.end(); ++iPos )
     {
         __type_info * pType = (__type_info *)iPos->second;
         pType->~__type_info(); // obsolete, but good style...
@@ -280,7 +273,7 @@ static void * __cdecl __destruct( void * pExcThis, ObjectFunction * pThis )
 // these are non virtual object methods; there is no this ptr on stack => ecx supplies _this_ ptr
 
 //==================================================================================================
-static __declspec(naked) copyConstruct() throw ()
+static __declspec(naked) void copyConstruct() throw ()
 {
     __asm
     {
@@ -293,7 +286,7 @@ static __declspec(naked) copyConstruct() throw ()
     }
 }
 //==================================================================================================
-static __declspec(naked) destruct() throw ()
+static __declspec(naked) void destruct() throw ()
 {
     __asm
     {
@@ -404,7 +397,9 @@ ExceptionInfos::ExceptionInfos() throw ()
 //__________________________________________________________________________________________________
 ExceptionInfos::~ExceptionInfos() throw ()
 {
-    TRACE( "> freeing exception infos... <\n" );
+#if OSL_DEBUG_LEVEL > 1
+    OSL_TRACE( "> freeing exception infos... <\n" );
+#endif
 
     MutexGuard aGuard( _aMutex );
     for ( t_string2PtrMap::const_iterator iPos( _allRaiseInfos.begin() );
@@ -465,7 +460,7 @@ void * ExceptionInfos::getRaiseInfo( typelib_TypeDescription * pTypeDescr ) thro
 
 
 //##################################################################################################
-type_info * msci_getRTTI( OUString const & rUNOname ) throw ()
+type_info * msci_getRTTI( OUString const & rUNOname )
 {
     static RTTInfos * s_pRTTIs = 0;
     if (! s_pRTTIs)
@@ -499,9 +494,11 @@ void msci_raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
     ::uno_copyAndConvertData( pCppExc, pUnoExc->pData, pTypeDescr, pUno2Cpp );
 
     // a must be
-    OSL_ENSURE( sizeof(sal_Int32) == sizeof(void *), "### pointer size differs from sal_Int32!" );
+    OSL_ENSURE(
+        sizeof(sal_Int32) == sizeof(void *),
+        "### pointer size differs from sal_Int32!" );
     DWORD arFilterArgs[3];
-    arFilterArgs[0] = 0x19930520L;
+    arFilterArgs[0] = MSVC_magic_number;
     arFilterArgs[1] = (DWORD)pCppExc;
     arFilterArgs[2] = (DWORD)ExceptionInfos::getRaiseInfo( pTypeDescr );
 
@@ -513,62 +510,118 @@ void msci_raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
     RaiseException( MSVC_ExceptionCode, EXCEPTION_NONCONTINUABLE, 3, arFilterArgs );
 }
 
-//##################################################################################################
-sal_Int32 msci_filterCppException(
-    LPEXCEPTION_POINTERS pPointers, uno_Any * pUnoExc, uno_Mapping * pCpp2Uno )
+//##############################################################################
+int msci_filterCppException(
+    EXCEPTION_POINTERS * pPointers, uno_Any * pUnoExc, uno_Mapping * pCpp2Uno )
 {
-    PEXCEPTION_RECORD pRecord = pPointers->ExceptionRecord;
-    if (pRecord->ExceptionCode == MSVC_ExceptionCode &&
-        pRecord->ExceptionFlags == EXCEPTION_NONCONTINUABLE &&
-        pRecord->NumberParameters == 3 &&
-//          pRecord->ExceptionInformation[0] == 0x19930520 &&
-        pRecord->ExceptionInformation[1] &&
-        pRecord->ExceptionInformation[2])
-    {
-        void * types = ((RaiseInfo *)pRecord->ExceptionInformation[2])->_types;
-        if (types && *(sal_Int32 *)types) // count
-        {
-            ExceptionType * pType = *(ExceptionType **)((sal_Int32 *)types +1);
-            if (pType && pType->_pTypeInfo)
-            {
-                OUString aRTTIname( OStringToOUString(
-                    ((__type_info *)pType->_pTypeInfo)->_m_d_name, RTL_TEXTENCODING_ASCII_US ) );
-                OUString aUNOname( toUNOname( aRTTIname ) );
-                typelib_TypeDescription * pExcTypeDescr = 0;
-                ::typelib_typedescription_getByName( &pExcTypeDescr, aUNOname.pData );
+    if (pPointers == 0)
+        return EXCEPTION_CONTINUE_SEARCH;
+    EXCEPTION_RECORD * pRecord = pPointers->ExceptionRecord;
+    // handle only C++ exceptions:
+    if (pRecord == 0 || pRecord->ExceptionCode != MSVC_ExceptionCode)
+        return EXCEPTION_CONTINUE_SEARCH;
 
-                if (pExcTypeDescr)
+#if _MSC_VER < 1300 // MSVC -6
+    bool rethrow = (pRecord->NumberParameters < 3 ||
+                    pRecord->ExceptionInformation[ 2 ] == 0);
+#else
+    bool rethrow = __CxxDetectRethrow( &pRecord );
+    OSL_ASSERT( pRecord == pPointers->ExceptionRecord );
+#endif
+    if (rethrow && pRecord == pPointers->ExceptionRecord)
+    {
+        // hack to get msvcrt internal _curexception field:
+        pRecord = *reinterpret_cast< EXCEPTION_RECORD ** >(
+            reinterpret_cast< char * >( __pxcptinfoptrs() ) +
+            // crt\src\mtdll.h:
+            // offsetof (_tiddata, _curexception) -
+            // offsetof (_tiddata, _tpxcptinfoptrs):
+#if _MSC_VER < 1300
+            0x18 // msvcrt,dll
+#elif _MSC_VER < 1310
+            0x20 // msvcr70.dll
+#else
+            0x24 // msvcr71.dll
+#endif
+            );
+    }
+    // rethrow: handle only C++ exceptions:
+    if (pRecord == 0 || pRecord->ExceptionCode != MSVC_ExceptionCode)
+        return EXCEPTION_CONTINUE_SEARCH;
+
+    if (pRecord->NumberParameters == 3 &&
+//          pRecord->ExceptionInformation[ 0 ] == MSVC_magic_number &&
+        pRecord->ExceptionInformation[ 1 ] != 0 &&
+        pRecord->ExceptionInformation[ 2 ] != 0)
+    {
+        void * types = reinterpret_cast< RaiseInfo * >(
+            pRecord->ExceptionInformation[ 2 ] )->_types;
+        if (types != 0 && *reinterpret_cast< DWORD * >( types ) > 0) // count
+        {
+            ExceptionType * pType = *reinterpret_cast< ExceptionType ** >(
+                reinterpret_cast< DWORD * >( types ) + 1 );
+            if (pType != 0 && pType->_pTypeInfo != 0)
+            {
+                OUString aRTTIname(
+                    OStringToOUString(
+                        reinterpret_cast< __type_info * >(
+                            pType->_pTypeInfo )->_m_d_name,
+                        RTL_TEXTENCODING_ASCII_US ) );
+                OUString aUNOname( toUNOname( aRTTIname ) );
+
+                typelib_TypeDescription * pExcTypeDescr = 0;
+                typelib_typedescription_getByName(
+                    &pExcTypeDescr, aUNOname.pData );
+                if (pExcTypeDescr == 0)
+                {
+                    OUStringBuffer buf;
+                    buf.appendAscii(
+                        RTL_CONSTASCII_STRINGPARAM(
+                            "[msci_uno bridge error] UNO type of "
+                            "C++ exception unknown: \"") );
+                    buf.append( aUNOname );
+                    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(
+                                         "\", RTTI-name=\"") );
+                    buf.append( aRTTIname );
+                    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\"!") );
+                    RuntimeException exc(
+                        buf.makeStringAndClear(), Reference< XInterface >() );
+                    uno_type_any_constructAndConvert(
+                        pUnoExc, &exc,
+                        ::getCppuType( &exc ).getTypeLibType(), pCpp2Uno );
+                    // though this unknown exception leaks now, no user-defined
+                    // exception is ever thrown thru the binary C-UNO dispatcher
+                    // call stack.
+                }
+                else
                 {
                     // construct uno exception any
-                    ::uno_any_constructAndConvert(
-                        pUnoExc, (void *)pRecord->ExceptionInformation[1],
+                    uno_any_constructAndConvert(
+                        pUnoExc, (void *) pRecord->ExceptionInformation[1],
                         pExcTypeDescr, pCpp2Uno );
-                    ::uno_destructData(
-                        (void *)pRecord->ExceptionInformation[1],
-                        pExcTypeDescr, cpp_release );
-                    ::typelib_typedescription_release( pExcTypeDescr );
+                    if (! rethrow)
+                    {
+                        uno_destructData(
+                            (void *) pRecord->ExceptionInformation[1],
+                            pExcTypeDescr, cpp_release );
+                    }
+                    typelib_typedescription_release( pExcTypeDescr );
                 }
-                else // type not found!
-                {
-                    RuntimeException aRE(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM("exception type not found: ") ) + aUNOname,
-                        Reference< XInterface >() );
-                    Type const & rType = ::getCppuType( &aRE );
-                    ::uno_type_any_constructAndConvert(
-                        pUnoExc, &aRE, rType.getTypeLibType(), pCpp2Uno );
-#if OSL_DEBUG_LEVEL > 0
-                    OString aStr( OUStringToOString( aUNOname, RTL_TEXTENCODING_ASCII_US ) );
-                    aStr += OString(" : unkonwn exception has been thrown: don't know how to handle, thus leaking!");
-                    OSL_ENSURE( 0, aStr.getStr() );
-#endif
-                    // though this unknown exception leaks now, no user-defined exception
-                    // is ever thrown thru the binary C-UNO dispatcher call stack.
-                }
+
                 return EXCEPTION_EXECUTE_HANDLER;
             }
         }
     }
-    return EXCEPTION_CONTINUE_SEARCH;
+    // though this unknown exception leaks now, no user-defined exception
+    // is ever thrown thru the binary C-UNO dispatcher call stack.
+    RuntimeException exc(
+        OUString( RTL_CONSTASCII_USTRINGPARAM(
+                      "[msci_uno bridge error] unexpected "
+                      "C++ exception occured!") ),
+        Reference< XInterface >() );
+    uno_type_any_constructAndConvert(
+        pUnoExc, &exc, ::getCppuType( &exc ).getTypeLibType(), pCpp2Uno );
+    return EXCEPTION_EXECUTE_HANDLER;
 }
 
 }
