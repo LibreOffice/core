@@ -2,9 +2,9 @@
  *
  *  $RCSfile: core_resource.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:15:41 $
+ *  last change: $Author: fs $ $Date: 2001-03-02 17:02:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@ namespace dba
 
         LanguageType nType = Application::GetAppInternational().GetLanguage();
 
-        ByteString sFileName("dbac");
+        ByteString sFileName("dba");
         sFileName += ByteString::CreateFromInt32( (sal_Int32)SOLARUPD );
 
         m_pImpl = SimpleResMgr::Create(sFileName.GetBuffer(), nType);
