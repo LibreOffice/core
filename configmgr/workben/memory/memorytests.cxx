@@ -2,9 +2,9 @@
  *
  *  $RCSfile: memorytests.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2001-06-20 15:03:39 $
+ *  last change: $Author: jb $ $Date: 2001-06-20 17:22:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -292,6 +292,10 @@ rtl::OUString enterValue(const char* _aStr, const char* _aDefault, bool _bIsAPas
 }
 //=============================================================================
 
+uno::Reference< lang::XMultiServiceFactory > getORB();
+// -----------------------------------------------------------------------------
+
+
 Reference< XChangesBatch > xChangesBatch = NULL;
 void commit()
 {
@@ -315,8 +319,8 @@ static const sal_Char*      s_pServer       =   "";
 static const sal_Char*      s_pUser         =   "";
 static const sal_Char*      s_pPassword     =   "";
 #else
-static const sal_Char*      s_pSourcePath   =   "g:/src/configmgr/workben/local_io/share";
-static const sal_Char*      s_pUpdatePath   =   "g:/src/configmgr/workben/local_io/user";
+static const sal_Char*      s_pSourcePath   =   "file:///g:/src/configmgr/workben/local_io/share";
+static const sal_Char*      s_pUpdatePath   =   "file:///g:/src/configmgr/workben/local_io/user";
 static const sal_Char*      s_pRootNode     =   "org.openoffice.test";
 static const sal_Char*      s_pServerType   =   "local";
 static const sal_Char*      s_pLocale       =   "de-DE";
@@ -420,7 +424,6 @@ Sequence<Any> createSequence(const OUString &sUser, const OUString &sPasswd)
 // -----------------------------------------------------------------------------
 
 void test_configuration_provider(uno::Reference<lang::XMultiServiceFactory> _xCfgProvider,
-                                 rtl::OUString const& _sPath,
                                  rtl::OUString const& _sUser, bool _bLocal, sal_Int32 _nCount);
 
 
@@ -506,96 +509,42 @@ getProvider(
 }
 
 // -----------------------------------------------------------------------------
-sal_Int32 m_nCount = 1;
+sal_Int32 m_nCount = 0;
 
 void test(uno::Reference<lang::XMultiServiceFactory> _xORB, rtl::OUString const& _sSharePath,
-          rtl::OUString const& _sUserPath, rtl::OUString const& _sPath)
+          rtl::OUString const& _sUserPath)
 {
 
     rtl::OUString sUser;
     bool bLocal;
-    cout << m_nCount << ". start test with: " << _sPath << endl;
+    cout << ++m_nCount << ". start test with  new provider\n";
  {
      uno::Reference<lang::XMultiServiceFactory>xCfgProvider =
          getProvider(_xORB, ASCII("local"), _sSharePath, _sUserPath,
                      bLocal);
 
-     test_configuration_provider(xCfgProvider, _sPath, sUser, bLocal, m_nCount); // xml
+     START_MEMORYMEASURE( aMemoryInfo );
+     MAKE_MEMORY_SNAPSHOT( aMemoryInfo, "initialisierung in API test" );
+
+     MAKE_MEMORY_SNAPSHOT( aMemoryInfo, "- Habe Provider, starte Test" );
+
+     test_configuration_provider(xCfgProvider, sUser, bLocal, 0); // xml
+
+     MAKE_MEMORY_SNAPSHOT( aMemoryInfo, "- Test gelaufen, starte erneut" );
+
+     test_configuration_provider(xCfgProvider, sUser, bLocal, 0); // xml
+
+     MAKE_MEMORY_SNAPSHOT( aMemoryInfo, "- Test gelaufen, entsorge Provider" );
 
      uno::Reference<lang::XComponent>xComponent(xCfgProvider,UNO_QUERY);
      xComponent->dispose();
+
+     MAKE_MEMORY_SNAPSHOT( aMemoryInfo, "- Provider disposed" );
+
+     LOG_MEMORYMEASURE( "---------------- API Memory Test 2-----------------------------", "- Inner memory traces.", aMemoryInfo );
  }
 
-/*
- // If m_nCount == 1:
- // sal_Int16 will increase by 1
- ++ m_nCount;
-    cout << m_nCount << ". start test with: " << _sPath << endl;
- {
-     uno::Reference<lang::XMultiServiceFactory>xCfgProvider =
-         getProvider(_xORB, ASCII("local"), _sSharePath, _sUserPath,
-                     bLocal);
-
-     test_configuration_provider(xCfgProvider, _sPath, sUser, bLocal, m_nCount); // binary
-
-     uno::Reference<lang::XComponent>xComponent(xCfgProvider,UNO_QUERY);
-     xComponent->dispose();
- }
- // if m_nCount == 2:
- // sal_Int16 will decrease by 1
- ++m_nCount;
- cout << m_nCount << ". start test with: " << _sPath << endl;
- {
-     uno::Reference<lang::XMultiServiceFactory>xCfgProvider =
-         getProvider(_xORB, ASCII("local"), _sSharePath, _sUserPath,
-                     bLocal);
-
-     test_configuration_provider(xCfgProvider, _sPath, sUser, bLocal, m_nCount); // binary
-
-     uno::Reference<lang::XComponent>xComponent(xCfgProvider,UNO_QUERY);
-     xComponent->dispose();
- }
-
- ++m_nCount;
- cout << m_nCount << ". start test with: " << _sPath << endl;
- {
-     uno::Reference<lang::XMultiServiceFactory>xCfgProvider =
-         getProvider(_xORB, ASCII("local"), _sSharePath, _sUserPath,
-                     bLocal);
-
-     test_configuration_provider(xCfgProvider, _sPath, sUser, bLocal, m_nCount); // binary
-
-     uno::Reference<lang::XComponent>xComponent(xCfgProvider,UNO_QUERY);
-     xComponent->dispose();
- }
-
- ++m_nCount;
- cout << m_nCount << ". start test with: " << _sPath << endl;
- {
-     uno::Reference<lang::XMultiServiceFactory>xCfgProvider =
-         getProvider(_xORB, ASCII("local"), _sSharePath, _sUserPath,
-                     bLocal);
-
-     test_configuration_provider(xCfgProvider, _sPath, sUser, bLocal, m_nCount); // binary
-
-     uno::Reference<lang::XComponent>xComponent(xCfgProvider,UNO_QUERY);
-     xComponent->dispose();
- }
-
- ++m_nCount;
- cout << m_nCount << ". start test with: " << _sPath << endl;
- {
-     uno::Reference<lang::XMultiServiceFactory>xCfgProvider =
-         getProvider(_xORB, ASCII("local"), _sSharePath, _sUserPath,
-                     bLocal);
-
-     test_configuration_provider(xCfgProvider, _sPath, sUser, bLocal, m_nCount); // binary
-
-     uno::Reference<lang::XComponent>xComponent(xCfgProvider,UNO_QUERY);
-     xComponent->dispose();
- }
-*/
- cout << "finish" << endl;
+ cout << "finish provider test\n";
 
  // Test Version 1 and 3, it MUST be equal
 }
@@ -603,7 +552,33 @@ void test(uno::Reference<lang::XMultiServiceFactory> _xORB, rtl::OUString const&
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
+static rtl::OUString makeFileURL(OUString const& sMaybeURL)
+{
+    rtl::OUString const fileURLStart(RTL_CONSTASCII_USTRINGPARAM("file:/"));
 
+    if ( 0 != fileURLStart.compareTo(sMaybeURL, fileURLStart.getLength()) )
+    {
+        OUString sURL;
+        if (!osl_getFileURLFromSystemPath(sMaybeURL.pData, &sURL.pData))
+            return sURL;
+    }
+
+    return sMaybeURL;
+}
+// -----------------------------------------------------------------------------
+static rtl::OUString makeSystemPath(OUString const& sMaybeURL)
+{
+    rtl::OUString const fileURLStart(RTL_CONSTASCII_USTRINGPARAM("file:/"));
+
+    if ( 0 == fileURLStart.compareTo(sMaybeURL, fileURLStart.getLength()) )
+    {
+        OUString sSysPath;
+        if (!osl_getSystemPathFromFileURL(sMaybeURL.pData, &sSysPath.pData))
+            return sSysPath;
+    }
+
+    return sMaybeURL;
+}
 // -----------------------------------------------------------------------------
 // ---------------------------------- M A I N ----------------------------------
 // -----------------------------------------------------------------------------
@@ -620,30 +595,12 @@ int main( int argc, char * argv[] )
     {
         loadDefaults();
 
-        OUString const sServiceRegistry = OUString::createFromAscii( "applicat.rdb" );
-        Reference< XMultiServiceFactory > xORB;
-        try
-        {
-            xORB = createRegistryServiceFactory( sServiceRegistry, ::rtl::OUString() );
-            if (!xORB.is())
-            {
-                ::flush(cout);
-                cerr << "Could not create the service factory !\n\n";
-                return 0;
-            }
-        }
-        catch (uno::Exception &e)
-        {
-            cout << "Error: can't get ServiceFactory" << sServiceRegistry << endl;
-        }
+        Reference< XMultiServiceFactory > xORB = getORB();
 
-        rtl::OUString sSharePath = enterValue("share path: ", s_pSourcePath, false);
+        rtl::OUString sSharePath =  makeSystemPath(enterValue("share path: ", s_pSourcePath, false));
         cout << endl;
-        rtl::OUString sUserPath =   enterValue("user path : ", s_pUpdatePath, false);
+        rtl::OUString sUserPath =    makeSystemPath(enterValue("user path : ", s_pUpdatePath, false));
         cout << endl;
-
-        // OUString sPath = enterValue("nodepath: ", s_pRootNode, false);
-        // cout << endl;
 
         // test(xORB, sSharePath, sUserPath, ASCII("org.openoffice.test"));
 
@@ -658,17 +615,16 @@ int main( int argc, char * argv[] )
 
         MAKE_MEMORY_SNAPSHOT( aMemoryInfo, "initialisierung weil beim ersten mal falsch!" );
 
-        for (char const * const * ppTestModule = configtest::s_aTestModules; *ppTestModule; ++ppTestModule)
-            test(xORB, sSharePath, sUserPath, OUString::createFromAscii(*ppTestModule));
+        test(xORB, sSharePath, sUserPath);
 
         MAKE_MEMORY_SNAPSHOT( aMemoryInfo, "ich habe fertig!" );
 
         // stop the programm clear.
         Reference< XComponent > xComponent(xORB, UNO_QUERY);
         xComponent->dispose();
-        MAKE_MEMORY_SNAPSHOT( aMemoryInfo, "after dispose component." );
+        MAKE_MEMORY_SNAPSHOT( aMemoryInfo, "after dispose orb." );
 
-        LOG_MEMORYMEASURE( "FirstTest_of_memusage", "Values of memory access for standard filters.", aMemoryInfo );
+        LOG_MEMORYMEASURE( "---------------- API Memory Test-------------------------------", "Outer memory traces.", aMemoryInfo );
     }
     return 0;
 }
@@ -766,9 +722,9 @@ Reference< XInterface > readaccess(uno::Reference< lang::XMultiServiceFactory > 
             }
             else if ('0' <= buf[0] && buf[0] <= '9' && xAccess.is())
             {
-                unsigned int n = unsigned(atoi(buf));
+                int n = atoi(buf);
                 Sequence<OUString> aNames = xAccess->getElementNames();
-                if (n < aNames.getLength())
+                if (0 <= n && n < aNames.getLength())
                     aName = aNames[n];
             }
 
@@ -991,15 +947,17 @@ void test_read_access( uno::Reference< lang::XMultiServiceFactory > &xMSF,
 
 // -----------------------------------------------------------------------------
 void test_configuration_provider(uno::Reference<lang::XMultiServiceFactory> _xCfgProvider,
-                                 rtl::OUString const& _sPath,
                                  rtl::OUString const& _sUser, bool _bLocal,
                                  sal_Int32 _nCount)
 {
+    START_MEMORYMEASURE( aMemoryInfo );
+    MAKE_MEMORY_SNAPSHOT( aMemoryInfo, "initialisierung in Provider test" );
+
+    std::vector< Reference< XInterface > > aLoadedModules;
+    aLoadedModules.reserve(configtest::s_nTestModules);
+
     Sequence< Any > aArgs;
     aArgs = createSequence(_sUser, ASCII(""));
-
-    aArgs.realloc(aArgs.getLength() + 1);
-    aArgs[aArgs.getLength() - 1] <<= configmgr::createPropertyValue(ASCII("nodepath"), _sPath);
 
     if (!_bLocal)
     {
@@ -1009,28 +967,59 @@ void test_configuration_provider(uno::Reference<lang::XMultiServiceFactory> _xCf
         aArgs[aArgs.getLength() - 1] <<= configmgr::createPropertyValue(ASCII("locale"), sLocale);
     }
 
+#if 0
     sal_Bool bLazyWrite = true;
     aArgs.realloc(aArgs.getLength() + 1);
     aArgs[aArgs.getLength() - 1] <<= configmgr::createPropertyValue(ASCII("lazywrite"), bLazyWrite);
+#else
+    sal_Bool bNoCache = true;
+    aArgs.realloc(aArgs.getLength() + 1);
+    aArgs[aArgs.getLength() - 1] <<= configmgr::createPropertyValue(ASCII("nocache"), bNoCache);
+#endif
 
-    Reference< XInterface > xIFace = _xCfgProvider->createInstanceWithArguments(
-        /* OUString::createFromAscii("com.sun.star.configuration.ConfigurationUpdateAccess"), */
-        OUString::createFromAscii("com.sun.star.configuration.ConfigurationAccess"),
-        aArgs);
-    // cout << "---------------------------------------------------------------\n Configuration Read/Write Access created !\n---------------------------------------------------------------" << endl;
+    sal_Int32 nPathIdx = aArgs.getLength();
+    aArgs.realloc(nPathIdx + 1);
 
-    xChangesBatch = Reference< XChangesBatch >(xIFace, UNO_QUERY);
+    MAKE_MEMORY_SNAPSHOT( aMemoryInfo, "- - Lade Module" );
 
-    Sequence<OUString> aSeq = _xCfgProvider->getAvailableServiceNames();
+    for (char const * const * ppTestModule = configtest::s_aTestModules; *ppTestModule; ++ppTestModule)
+    {
+        OUString sPath = OUString::createFromAscii(*ppTestModule);
+        cout << "\t" << ++_nCount << ". test with node: " << sPath << endl;
 
-    OString sPath;
-    sPath <<= _sPath;
+        aArgs[nPathIdx] <<= configmgr::createPropertyValue(ASCII("nodepath"), sPath);
 
-    OString aFilename = "c:\\temp\\fileout_";
-    aFilename += sPath;
-    aFilename += OString::valueOf(_nCount);
-    aFilename += ".txt";
-    test_read_access(_xCfgProvider, xIFace, aFilename);
+        Reference< XInterface > xIFace = _xCfgProvider->createInstanceWithArguments(
+            /* OUString::createFromAscii("com.sun.star.configuration.ConfigurationUpdateAccess"), */
+            OUString::createFromAscii("com.sun.star.configuration.ConfigurationAccess"),
+            aArgs);
+        // cout << "---------------------------------------------------------------\n Configuration Read/Write Access created !\n---------------------------------------------------------------" << endl;
+
+        aLoadedModules.push_back(xIFace);
+    /*
+        xChangesBatch = Reference< XChangesBatch >(xIFace, UNO_QUERY);
+
+        Sequence<OUString> aSeq = _xCfgProvider->getAvailableServiceNames();
+
+        OString sPath;
+        sPath <<= _sPath;
+
+        OString aFilename = "c:\\temp\\fileout_";
+        aFilename += sPath;
+        aFilename += OString::valueOf(_nCount);
+        aFilename += ".txt";
+        test_read_access(_xCfgProvider, xIFace, aFilename);
+    */
+    }
+
+    MAKE_MEMORY_SNAPSHOT( aMemoryInfo, "- - Module geladen" );
+
+    aLoadedModules.clear();
+
+    MAKE_MEMORY_SNAPSHOT( aMemoryInfo, "- - Module entsorgt" );
+
+    LOG_MEMORYMEASURE( "---------------- API Memory Test 3 -----------------------------", "- - Provider memory traces.", aMemoryInfo );
+
 }
 
 
@@ -1050,26 +1039,11 @@ int requestTest( int argc, char * argv[] )
     {
         loadDefaults();
 
-        OUString const sServiceRegistry = OUString::createFromAscii( "applicat.rdb" );
-        Reference< XMultiServiceFactory > xORB;
-        try
-        {
-            xORB = createRegistryServiceFactory( sServiceRegistry, ::rtl::OUString() );
-            if (!xORB.is())
-            {
-                ::flush(cout);
-                cerr << "Could not create the service factory !\n\n";
-                return 0;
-            }
-        }
-        catch (uno::Exception &e)
-        {
-            cout << "Error: can't get ServiceFactory" << sServiceRegistry << endl;
-        }
+        Reference< XMultiServiceFactory > xORB = getORB();
 
-        rtl::OUString sSharePath = enterValue("share path: ", s_pSourcePath, false);
+        rtl::OUString sSharePath = makeFileURL(enterValue("share path: ", s_pSourcePath, false));
         cout << endl;
-        rtl::OUString sUserPath =   enterValue("user path : ", s_pUpdatePath, false);
+        rtl::OUString sUserPath =   makeFileURL(enterValue("user path : ", s_pUpdatePath, false));
         cout << endl;
 
         START_MEMORYMEASURE( aMemoryInfo );
@@ -1093,7 +1067,7 @@ int requestTest( int argc, char * argv[] )
             aTreeLoad.releaseSubtree( OUString::createFromAscii(*ppReleaseModule));
 
         MAKE_MEMORY_SNAPSHOT( aMemoryInfo, "ich habe fertig." );
-        LOG_MEMORYMEASURE( "FirstTest_of_memusage", "Values of memory access for standard filters.", aMemoryInfo );
+        LOG_MEMORYMEASURE( "---------------- Request Memory Test ---------------------------", "Direct Cache Access memory traces.", aMemoryInfo );
 
         volatile int dummy = 0;
     }
@@ -1106,22 +1080,11 @@ int requestTest( int argc, char * argv[] )
 
 int trust( int argc, char * argv[] )
 {
-    rtl::OUString const sServiceRegistry = OUString::createFromAscii( "applicat.rdb" );
-    uno::Reference< lang::XMultiServiceFactory > xORB;
-    try
-    {
-        xORB = createRegistryServiceFactory( sServiceRegistry, ::rtl::OUString() );
-        if (!xORB.is())
-        {
-            ::flush(cout);
-            cerr << "Could not create the service factory !\n\n";
-            return 0;
-        }
-    }
-    catch (uno::Exception &e)
-    {
-        cout << "Error: can't get ServiceFactory" << sServiceRegistry << endl;
-    }
+    Reference< XMultiServiceFactory > xORB = getORB();
+
+    std::vector<char*> aMemHolder;
+    aMemHolder.reserve(1024);
+
     START_MEMORYMEASURE( aMemoryInfo );
 
     MAKE_MEMORY_SNAPSHOT( aMemoryInfo, "initialisierung" );
@@ -1137,11 +1100,10 @@ int trust( int argc, char * argv[] )
 
     MAKE_MEMORY_SNAPSHOT( aMemoryInfo, "get 8 MB as 1024 pieces" );
 
-    std::vector<char*> aMemHolder;
 
     for (sal_Int32 i=0;i<1024;i++)
     {
-        pChar = new char[8192];
+        pChar = new char[8 * 1024];
         aMemHolder.push_back(pChar);
     }
 
@@ -1155,20 +1117,79 @@ int trust( int argc, char * argv[] )
         pChar = *it;
         delete []pChar;
     }
+    aMemHolder.clear();
+
+    MAKE_MEMORY_SNAPSHOT( aMemoryInfo, "get another 8 MB as 1024 pieces" );
+
+
+    for (sal_Int32 j=0;j<1024;j++)
+    {
+        pChar = new char[8 * 1024];
+        aMemHolder.push_back(pChar);
+    }
+
+    MAKE_MEMORY_SNAPSHOT( aMemoryInfo, "free second set of pieces" );
+
+    pChar = NULL;
+    for (std::vector<char*>::iterator jt = aMemHolder.begin();
+         jt != aMemHolder.end();
+         jt++)
+    {
+        pChar = *jt;
+        delete []pChar;
+    }
+    aMemHolder.clear();
 
     MAKE_MEMORY_SNAPSHOT( aMemoryInfo, "ich habe fertig." );
-    LOG_MEMORYMEASURE( "FirstTest_of_memusage", "Values of memory access for standard filters.", aMemoryInfo );
+    LOG_MEMORYMEASURE( "---------------- Trust Memory Test ----------------------------", "Cross-checked memory traces.", aMemoryInfo );
 
     volatile int dummy = 0;
     return 0;
 }
+
+// -----------------------------------------------------------------------------
+static uno::Reference< lang::XMultiServiceFactory > g_xORB;
+static void createORB(char const* pRegistry)
+{
+    if (!g_xORB.is())
+        try
+        {
+            rtl::OUString const sServiceRegistry = OUString::createFromAscii(pRegistry);
+
+            g_xORB = createRegistryServiceFactory( sServiceRegistry, ::rtl::OUString() );
+
+        }
+        catch (uno::Exception &e)
+        {
+            cerr << "Exception creating the service factory: " << e.Message << "\n";
+        }
+    else
+        cerr << "Trying to recreate the service factory\n";
+
+    if (!g_xORB.is())
+    {
+        ::flush(cout);
+        cerr << "Could not create the service factory '" << pRegistry << "' !\n";
+        exit(-2);
+    }
+}
+uno::Reference< lang::XMultiServiceFactory > getORB()
+{
+    if (!g_xORB.is())
+    {
+        createORB( "applicat.rdb" );
+    }
+    return g_xORB;
+}
+// -----------------------------------------------------------------------------
+
 
 } // namespace configmgr
 // -----------------------------------------------------------------------------
 void usage()
 {
     cerr << "Wrong or missing parameters.\nUsage:\n"
-            "\tmemorytest (all | trust | request | api)+ [clear] [(+<module>|-<module>)+]\n";
+            "\tmemorytest [-r <registry.rdb>] (all | trust | request | api)+ [clear] [(+<module>|-<module>)+]\n";
 
     exit(-1);
 }
@@ -1182,15 +1203,26 @@ int main( int argc, char * argv[] )
 int _cdecl main( int argc, char * argv[] )
 #endif
 {
+    if (argc > 1 && !::rtl_str_compare(argv[1], "-r"  ) )
+    {
+        if (!argv[2]) usage();
+
+        configmgr::createORB(argv[2]);
+
+        argv += 2;
+        argc -= 2;
+    }
+    configmgr::getORB(); // ensures there is one
+
     enum TestSelect { TEST_TRUST = 01, TEST_REQUEST = 02, TEST_API = 04, TEST_ALL = 07 };
 
     unsigned nSelect = 0;
     while (argc >= 1 && argv[1] != NULL)
     {
-             if ( ::rtl_str_compareIgnoreAsciiCase(argv[1], "trust"  ) ) nSelect |= TEST_TRUST;
-        else if ( ::rtl_str_compareIgnoreAsciiCase(argv[1], "request") ) nSelect |= TEST_REQUEST;
-        else if ( ::rtl_str_compareIgnoreAsciiCase(argv[1], "api"    ) ) nSelect |= TEST_API;
-        else if ( ::rtl_str_compareIgnoreAsciiCase(argv[1], "all"    ) ) nSelect |= TEST_ALL;
+             if ( !::rtl_str_compareIgnoreAsciiCase(argv[1], "trust"  ) ) nSelect |= TEST_TRUST;
+        else if ( !::rtl_str_compareIgnoreAsciiCase(argv[1], "request") ) nSelect |= TEST_REQUEST;
+        else if ( !::rtl_str_compareIgnoreAsciiCase(argv[1], "api"    ) ) nSelect |= TEST_API;
+        else if ( !::rtl_str_compareIgnoreAsciiCase(argv[1], "all"    ) ) nSelect |= TEST_ALL;
         else break;
 
         // here we found a known selector, so look on
@@ -1208,7 +1240,7 @@ int _cdecl main( int argc, char * argv[] )
         if (int nRet = func(argc, argv))        \
             cerr << "Test: " << test_name << " returned with error code " << nRet << endl;  \
         else                                                                                \
-            cerr << "Test: " << test_name << " finished without error !" ;                  \
+            cerr << "Test: " << test_name << " finished without error !\n" ;                  \
     } else // to allow a semicolon
 //--------------------
 
@@ -1216,8 +1248,6 @@ int _cdecl main( int argc, char * argv[] )
     DO_TEST( REQUEST , configmgr::requestTest );
     DO_TEST( API     , configmgr::main );
 
-    return configmgr::main(argc, argv); // API
-//  return configmgr::requestTest(argc, argv);
-//  return configmgr::trust(argc, argv);
+    return 0;
 }
 
