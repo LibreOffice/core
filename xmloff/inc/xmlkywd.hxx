@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.120 $
+ *  $Revision: 1.121 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-26 15:03:11 $
+ *  last change: $Author: cl $ $Date: 2001-02-28 11:26:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1601,6 +1601,8 @@ XML_CONSTASCII_ACTION( sXML_text_style, "text-style" );
 XML_CONSTASCII_ACTION( sXML_text_transform, "text-transform" );
 XML_CONSTASCII_ACTION( sXML_text_underline, "text-underline" );
 XML_CONSTASCII_ACTION( sXML_text_underline_color, "text-underline-color" );
+XML_CONSTASCII_ACTION( sXML_textarea_horizontal_align, "textarea-horizontal-align" );
+XML_CONSTASCII_ACTION( sXML_textarea_vertical_align, "textarea-vertical-align" );
 XML_CONSTASCII_ACTION( sXML_textual, "textual" );
 XML_CONSTASCII_ACTION( sXML_thick, "thick" );
 XML_CONSTASCII_ACTION( sXML_thin, "thin" );
