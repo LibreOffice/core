@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rootfrm.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:21 $
+ *  last change: $Author: ama $ $Date: 2001-09-13 15:18:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,7 @@ struct SwCrsrMoveState;
 #define INV_TABLE   8
 #define INV_SECTION 16
 #define INV_LINENUM 32
+#define INV_VERTICAL 64
 
 class SwRootFrm: public SwLayoutFrm
 {

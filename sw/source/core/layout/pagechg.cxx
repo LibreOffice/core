@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagechg.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ama $ $Date: 2001-09-13 08:22:14 $
+ *  last change: $Author: ama $ $Date: 2001-09-13 15:19:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -309,7 +309,8 @@ void SwPageFrm::CheckDirection( BOOL bVert )
 {
     if( bVert )
     {
-        if( pDesc && pDesc->GetLandscape() )
+        if( ( pDesc && pDesc->GetLandscape() ) ||
+            GetFmt()->GetDoc()->IsBrowseMode() )
             bVertical = 0;
         else
             bVertical = 1;

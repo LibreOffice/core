@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-06-20 11:12:32 $
+ *  last change: $Author: ama $ $Date: 2001-09-13 15:21:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1673,7 +1673,7 @@ void ViewShell::CheckBrowseView( FASTBOOL bBrowseChgd )
     // Beim BrowseModus-Wechsel benoetigen die CntntFrms
     // wg. der Drucker/Bildschirmformatierung eine Size-Invalidierung
     if( bBrowseChgd )
-        nInv |= INV_SIZE;
+        nInv |= INV_SIZE | INV_VERTICAL;
 
     GetLayout()->InvalidateAllCntnt( nInv );
 

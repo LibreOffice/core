@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wsfrm.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ama $ $Date: 2001-09-13 08:21:45 $
+ *  last change: $Author: ama $ $Date: 2001-09-13 15:20:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3373,7 +3373,13 @@ void lcl_InvalidateAllCntnt( SwCntntFrm *pCnt, BYTE nInv )
         {
             SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
             if ( pFly->IsFlyInCntFrm() )
+            {
                 ::lcl_InvalidateCntnt( pFly->ContainsCntnt(), nInv );
+#ifdef VERTICAL_LAYOUT
+                if( nInv & INV_VERTICAL )
+                    pFly->CheckVertical();
+#endif
+            }
         }
     }
 }
@@ -3398,10 +3404,20 @@ void SwRootFrm::InvalidateAllCntnt( BYTE nInv )
             {
                 SdrObject *pO = rObjs[i];
                 if ( pO->IsWriterFlyFrame() )
+                {
                     ::lcl_InvalidateCntnt( ((SwVirtFlyDrawObj*)pO)->GetFlyFrm()->ContainsCntnt(),
                                          nInv );
+#ifdef VERTICAL_LAYOUT
+                    if( nInv & INV_VERTICAL )
+                        ((SwVirtFlyDrawObj*)pO)->GetFlyFrm()->CheckVertical();
+#endif
+                }
             }
         }
+#ifdef VERTICAL_LAYOUT
+        if( nInv & INV_VERTICAL )
+            pPage->CheckVertical();
+#endif
         pPage = (SwPageFrm*)(pPage->GetNext());
     }
 
