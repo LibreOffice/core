@@ -602,6 +602,14 @@ xmlns:office="http://openoffice.org/2000/office" xmlns:style="http://openoffice.
 	<xsl:apply-templates/>
 </xsl:template>
 
+<xsl:template match="sect5">
+	<xsl:element name="text:h">
+		<xsl:attribute name="text:level">5</xsl:attribute> 
+			<xsl:value-of select="child::title"/> 
+	</xsl:element>
+	<xsl:apply-templates/>
+</xsl:template>
+
 <!--<xsl:template match="sect5">
 	<xsl:element name="text:section">
 		<xsl:attribute name="text:style-name">Sect1</xsl:attribute> 
