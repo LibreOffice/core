@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: mba $ $Date: 2001-10-01 09:27:34 $
+ *  last change: $Author: pb $ $Date: 2001-10-08 12:36:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,15 @@
 #ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
 #include <com/sun/star/lang/XComponent.hpp>
 #endif
+#ifndef _COM_SUN_STAR_TEXT_XTEXT_HPP_
+#include <com/sun/star/text/XText.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_XTEXTCURSOR_HPP_
+#include <com/sun/star/text/XTextCursor.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_XTEXTRANGE_HPP_
+#include <com/sun/star/text/XTextRange.hpp>
+#endif
 #ifndef _COM_SUN_STAR_UCB_COMMANDABORTEDEXCEPTION_HPP_
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 #endif
@@ -137,12 +146,19 @@
 #include <com/sun/star/view/XViewSettingsSupplier.hpp>
 #endif
 
-#ifndef INCLUDED_SVTOOLS_VIEWOPTIONS_HXX
-#include <svtools/viewoptions.hxx>
+#ifndef INCLUDED_SVTOOLS_DYNAMICMENUOPTIONS_HXX
+#include <svtools/dynamicmenuoptions.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_MENUOPTIONS_HXX
+#include <svtools/menuoptions.hxx>
 #endif
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <svtools/pathoptions.hxx>
 #endif
+#ifndef INCLUDED_SVTOOLS_VIEWOPTIONS_HXX
+#include <svtools/viewoptions.hxx>
+#endif
+
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
 #endif
@@ -151,9 +167,6 @@
 #endif
 #ifndef _UNOTOOLS_STREAMHELPER_HXX_
 #include <unotools/streamhelper.hxx>
-#endif
-#ifndef INCLUDED_SVTOOLS_DYNAMICMENUOPTIONS_HXX
-#include <svtools/dynamicmenuoptions.hxx>
 #endif
 #ifndef _SVTOOLS_IMAGEMGR_HXX
 #include <svtools/imagemgr.hxx>
@@ -171,6 +184,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::view;
@@ -1707,6 +1721,46 @@ SfxHelpTextWindow_Impl::~SfxHelpTextWindow_Impl()
 
 // -----------------------------------------------------------------------
 
+sal_Bool SfxHelpTextWindow_Impl::HasSelection() const
+{
+    // is there any selection in the text and not only a cursor?
+    sal_Bool bRet = sal_False;
+
+    try
+    {
+        Reference < XSelectionSupplier > xSelSup( xFrame->getController(), UNO_QUERY );
+        if ( xSelSup.is() )
+        {
+            // we have a selection, but perhaps it's only a cursor (a collapsed selection)
+            bRet = sal_True;
+            Any aAny = xSelSup->getSelection();
+            Reference < XIndexAccess > xSelection;
+            if ( aAny >>= xSelection )
+            {
+                if ( xSelection->getCount() == 1 )
+                {
+                    aAny = xSelection->getByIndex(0);
+                    Reference < XTextRange > xRange;
+                    if ( aAny >>= xRange )
+                    {
+                        Reference < XText > xText = xRange->getText();
+                        Reference < XTextCursor > xCursor = xText->createTextCursorByRange( xRange );
+                        bRet = !xCursor->isCollapsed();
+                    }
+                }
+            }
+        }
+    }
+    catch( Exception& )
+    {
+        DBG_ERROR( "SfxHelpTextWindow_Impl::HasSelection(): unexpected exception" );
+    }
+
+    return bRet;
+}
+
+// -----------------------------------------------------------------------
+
 IMPL_LINK( SfxHelpTextWindow_Impl, SelectHdl, Timer*, EMPTYARG )
 {
     try
@@ -1772,7 +1826,8 @@ long SfxHelpTextWindow_Impl::PreNotify( NotifyEvent& rNEvt )
              pCmdEvt->GetCommand() == COMMAND_CONTEXTMENU && pCmdWin != this && pCmdWin != &aToolBox )
         {
             // link at current mouse position ?
-            const Point&  rPos = pCmdEvt->GetMousePosPixel();
+            Point aPos = pCmdEvt->GetMousePosPixel();
+            aPos.Y() += pTextWin->GetPosPixel().Y();
             PopupMenu aMenu;
             if ( bIsIndexOn )
                 aMenu.InsertItem( TBI_INDEX, aIndexOffText, aIndexOffImage );
@@ -1798,6 +1853,7 @@ long SfxHelpTextWindow_Impl::PreNotify( NotifyEvent& rNEvt )
             aMenu.InsertSeparator();
             aMenu.InsertItem( TBI_COPY, GET_SLOT_NAME( SID_COPY ), Image( SfxResId( IMG_HELP_TOOLBOX_COPY ) ) );
             aMenu.SetHelpId( TBI_COPY, SID_COPY );
+            aMenu.EnableItem( TBI_COPY, HasSelection() );
 
             if ( bIsDebug )
             {
@@ -1805,7 +1861,10 @@ long SfxHelpTextWindow_Impl::PreNotify( NotifyEvent& rNEvt )
                 aMenu.InsertItem( TBI_SOURCEVIEW, String( SfxResId( STR_HELP_BUTTON_SOURCEVIEW ) ) );
             }
 
-            USHORT nId = aMenu.Execute( this, rPos );
+            if( SvtMenuOptions().IsEntryHidingEnabled() == sal_False )
+                aMenu.SetMenuFlags( aMenu.GetMenuFlags() | MENU_FLAG_HIDEDISABLEDENTRIES );
+
+            USHORT nId = aMenu.Execute( this, aPos );
             pHelpWin->DoAction( nId );
             nDone = 1;
         }
