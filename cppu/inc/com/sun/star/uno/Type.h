@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Type.h,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dbo $ $Date: 2001-11-09 09:14:30 $
+ *  last change: $Author: dbo $ $Date: 2002-06-20 11:04:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,6 +234,15 @@ public:
         { return (! ::typelib_typedescriptionreference_equals( _pType, rType._pType )); }
 };
 
+/** Helper class to specify a type pointer for idl arrays.
+*/
+template< class T >
+class Array
+{
+public:
+    static typelib_TypeDescriptionReference * s_pType;
+};
+
 }
 }
 }
@@ -353,5 +362,48 @@ inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const float * )
     @return type of IDL type double
 */
 inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const double * ) SAL_THROW( () );
+
+/** Array template function to get meta type for one-dimensional arrays.
+
+    @param pT array pointer
+    @return type of array
+*/
+template< class T >
+inline const ::com::sun::star::uno::Type & SAL_CALL getCppuArrayType1( T * pT ) SAL_THROW( () );
+/** Array template function to get meta type for two-dimensional arrays.
+
+    @param pT array pointer
+    @return type of array
+*/
+template< class T >
+inline const ::com::sun::star::uno::Type & SAL_CALL getCppuArrayType2( T * pT ) SAL_THROW( () );
+/** Array template function to get meta type for three-dimensional arrays.
+
+    @param pT array pointer
+    @return type of array
+*/
+template< class T >
+inline const ::com::sun::star::uno::Type & SAL_CALL getCppuArrayType3( T * pT ) SAL_THROW( () );
+/** Array template function to get meta type for four-dimensional arrays.
+
+    @param pT array pointer
+    @return type of array
+*/
+template< class T >
+inline const ::com::sun::star::uno::Type & SAL_CALL getCppuArrayType4( T * pT ) SAL_THROW( () );
+/** Array template function to get meta type for five-dimensional arrays.
+
+    @param pT array pointer
+    @return type of array
+*/
+template< class T >
+inline const ::com::sun::star::uno::Type & SAL_CALL getCppuArrayType5( T * pT ) SAL_THROW( () );
+/** Array template function to get meta type for six-dimensional arrays.
+
+    @param pT array pointer
+    @return type of array
+*/
+template< class T >
+inline const ::com::sun::star::uno::Type & SAL_CALL getCppuArrayType6( T * pT ) SAL_THROW( () );
 
 #endif

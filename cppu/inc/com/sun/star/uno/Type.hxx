@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Type.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dbo $ $Date: 2001-11-09 09:14:30 $
+ *  last change: $Author: dbo $ $Date: 2002-06-20 11:04:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,10 @@ inline Type & Type::operator = ( const Type & rType ) SAL_THROW( () )
     return *this;
 }
 
+//__________________________________________________________________________________________________
+template< class T >
+typelib_TypeDescriptionReference * Array< T >::s_pType = 0;
+
 }
 }
 }
@@ -241,56 +245,43 @@ inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const double * 
         ::typelib_static_type_getByTypeClass( typelib_TypeClass_DOUBLE ) );
 }
 
-// help class to specify an unique type pointer
-template<class T>
-class Array
-{
-public:
-    static typelib_TypeDescriptionReference * s_pType;
-};
-
-template<class T>
-typelib_TypeDescriptionReference * Array<T>::s_pType = 0;
-
-// generic array template
 template< class T >
-inline const ::com::sun::star::uno::Type &
-SAL_CALL getCppuArrayType1( T * pT ) SAL_THROW( () )
+inline const ::com::sun::star::uno::Type & SAL_CALL getCppuArrayType1( T * pT ) SAL_THROW( () )
 {
-    if (! Array< T >::s_pType)
+    if (! ::com::sun::star::uno::Array< T >::s_pType)
     {
         const ::com::sun::star::uno::Type & rElementType = ::getCppuType( *pT );
         sal_Int32 size = sizeof( **pT );
         sal_Int32 dim1 = sizeof( *pT ) / size;
         ::typelib_static_array_type_init(
-            & Array< T >::s_pType, rElementType.getTypeLibType(), 1, dim1 );
+            & ::com::sun::star::uno::Array< T >::s_pType, rElementType.getTypeLibType(),
+            1, dim1 );
     }
     return * reinterpret_cast< const ::com::sun::star::uno::Type * >(
-        & Array< T >::s_pType );
+        & ::com::sun::star::uno::Array< T >::s_pType );
 }
 
 template< class T >
-inline const ::com::sun::star::uno::Type &
-SAL_CALL getCppuArrayType2( T * pT ) SAL_THROW( () )
+inline const ::com::sun::star::uno::Type & SAL_CALL getCppuArrayType2( T * pT ) SAL_THROW( () )
 {
-    if (! Array< T >::s_pType)
+    if (! ::com::sun::star::uno::Array< T >::s_pType)
     {
         const ::com::sun::star::uno::Type & rElementType = ::getCppuType( **pT );
         sal_Int32 size = sizeof( ***pT );
         sal_Int32 dim2 = sizeof( **pT ) / size;
         sal_Int32 dim1 = sizeof( *pT ) / dim2 / size;
         ::typelib_static_array_type_init(
-            & Array< T >::s_pType, rElementType.getTypeLibType(), 2, dim1, dim2 );
+            & ::com::sun::star::uno::Array< T >::s_pType, rElementType.getTypeLibType(),
+            2, dim1, dim2 );
     }
     return * reinterpret_cast< const ::com::sun::star::uno::Type * >(
-        & Array< T >::s_pType );
+        & ::com::sun::star::uno::Array< T >::s_pType );
 }
 
 template< class T >
-inline const ::com::sun::star::uno::Type &
-SAL_CALL getCppuArrayType3( T * pT ) SAL_THROW( () )
+inline const ::com::sun::star::uno::Type & SAL_CALL getCppuArrayType3( T * pT ) SAL_THROW( () )
 {
-    if (! Array< T >::s_pType)
+    if (! ::com::sun::star::uno::Array< T >::s_pType)
     {
         const ::com::sun::star::uno::Type & rElementType = ::getCppuType( ***pT );
         sal_Int32 size = sizeof( ****pT );
@@ -298,17 +289,17 @@ SAL_CALL getCppuArrayType3( T * pT ) SAL_THROW( () )
         sal_Int32 dim2 = sizeof( **pT ) / dim3 / size;
         sal_Int32 dim1 = sizeof( *pT ) / (dim2 * dim3)/ size;
         ::typelib_static_array_type_init(
-            & Array< T >::s_pType, rElementType.getTypeLibType(), 3, dim1, dim2, dim3 );
+            & ::com::sun::star::uno::Array< T >::s_pType, rElementType.getTypeLibType(),
+            3, dim1, dim2, dim3 );
     }
     return * reinterpret_cast< const ::com::sun::star::uno::Type * >(
-        & Array< T >::s_pType );
+        & ::com::sun::star::uno::Array< T >::s_pType );
 }
 
 template< class T >
-inline const ::com::sun::star::uno::Type &
-SAL_CALL getCppuArrayType4( T * pT ) SAL_THROW( () )
+inline const ::com::sun::star::uno::Type & SAL_CALL getCppuArrayType4( T * pT ) SAL_THROW( () )
 {
-    if (! Array< T >::s_pType)
+    if (! ::com::sun::star::uno::Array< T >::s_pType)
     {
         const ::com::sun::star::uno::Type & rElementType = ::getCppuType( ****pT );
         sal_Int32 size = sizeof( *****pT );
@@ -317,17 +308,17 @@ SAL_CALL getCppuArrayType4( T * pT ) SAL_THROW( () )
         sal_Int32 dim2 = sizeof( **pT ) / (dim3 * dim4) / size;
         sal_Int32 dim1 = sizeof( *pT ) / (dim2 * dim3 * dim4) / size;
         ::typelib_static_array_type_init(
-            & Array< T >::s_pType, rElementType.getTypeLibType(), 4, dim1, dim2, dim3, dim4 );
+            & ::com::sun::star::uno::Array< T >::s_pType, rElementType.getTypeLibType(),
+            4, dim1, dim2, dim3, dim4 );
     }
     return * reinterpret_cast< const ::com::sun::star::uno::Type * >(
-        & Array< T >::s_pType );
+        & ::com::sun::star::uno::Array< T >::s_pType );
 }
 
 template< class T >
-inline const ::com::sun::star::uno::Type &
-SAL_CALL getCppuArrayType5( T * pT ) SAL_THROW( () )
+inline const ::com::sun::star::uno::Type & SAL_CALL getCppuArrayType5( T * pT ) SAL_THROW( () )
 {
-    if (! Array< T >::s_pType)
+    if (! ::com::sun::star::uno::Array< T >::s_pType)
     {
         const ::com::sun::star::uno::Type & rElementType = ::getCppuType( *****pT );
         sal_Int32 size = sizeof( ******pT );
@@ -337,17 +328,17 @@ SAL_CALL getCppuArrayType5( T * pT ) SAL_THROW( () )
         sal_Int32 dim2 = sizeof( **pT ) / (dim3 * dim4 * dim5) / size;
         sal_Int32 dim1 = sizeof( *pT ) / (dim2 * dim3 * dim4 * dim5) / size;
         ::typelib_static_array_type_init(
-            & Array< T >::s_pType, rElementType.getTypeLibType(), 5, dim1, dim2, dim3, dim4, dim5 );
+            & ::com::sun::star::uno::Array< T >::s_pType, rElementType.getTypeLibType(),
+            5, dim1, dim2, dim3, dim4, dim5 );
     }
     return * reinterpret_cast< const ::com::sun::star::uno::Type * >(
-        & Array< T >::s_pType );
+        & ::com::sun::star::uno::Array< T >::s_pType );
 }
 
 template< class T >
-inline const ::com::sun::star::uno::Type &
-SAL_CALL getCppuArrayType6( T * pT ) SAL_THROW( () )
+inline const ::com::sun::star::uno::Type & SAL_CALL getCppuArrayType6( T * pT ) SAL_THROW( () )
 {
-    if (! Array< T >::s_pType)
+    if (! ::com::sun::star::uno::Array< T >::s_pType)
     {
         const ::com::sun::star::uno::Type & rElementType = ::getCppuType( ******pT );
         sal_Int32 size = sizeof( *******pT );
@@ -358,10 +349,11 @@ SAL_CALL getCppuArrayType6( T * pT ) SAL_THROW( () )
         sal_Int32 dim2 = sizeof( **pT ) / (dim3 * dim4 * dim5 * dim6) / size;
         sal_Int32 dim1 = sizeof( *pT ) / (dim2 * dim3 * dim4 * dim5 * dim6) / size;
         ::typelib_static_array_type_init(
-            & Array< T >::s_pType, rElementType.getTypeLibType(), 6, dim1, dim2, dim3, dim4, dim5, dim6 );
+            & ::com::sun::star::uno::Array< T >::s_pType, rElementType.getTypeLibType(),
+            6, dim1, dim2, dim3, dim4, dim5, dim6 );
     }
     return * reinterpret_cast< const ::com::sun::star::uno::Type * >(
-        & Array< T >::s_pType );
+        & ::com::sun::star::uno::Array< T >::s_pType );
 }
 
 #endif
