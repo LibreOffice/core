@@ -1,0 +1,137 @@
+/*************************************************************************
+ *
+ *  $RCSfile: GraphicExportFilter.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: cl $ $Date: 2001-06-12 14:11:09 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_drawing_GraphicExportFilter_idl__
+#define __com_sun_star_drawing_GraphicExportFilter_idl__
+
+#ifndef __com_sun_star_document_XFilter_idl__
+#include <com/sun/star/document/XFilter.idl>
+#endif
+
+#ifndef __com_sun_star_document_XExporter_idl__
+#include <com/sun/star/document/XExporter.idl>
+#endif
+
+#ifndef __com_sun_star_document_XMimeTypeInfo_idl__
+#include <com/sun/star/document/XMimeTypeInfo.idl>
+#endif
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module drawing {
+
+//=============================================================================
+
+/** a component that supports this service lets you export pages, shapes or
+    groups of shapes from a DrawingDocument to a file in one of the file formats
+    supported by the component.
+*/
+service GraphicExportFilter
+{
+    /** calling <method scope=scope="com::sun::star::document">XFilter::filter
+        </method> starts the export of the graphic file. The following properties
+        from the        <type scope="com::sun::star::document">MediaDescriptor
+        </type> are supported:<p>
+
+        <member scope="com::sun::star::document">MediaDescriptor::MediaType
+        </member><b>
+
+        Depending on the export filters supported by this component this is
+        the mime type of the target graphic file. Possible values are<b>
+        image/x-MS-bmp<b>
+        application/dxf<b>
+        application/postscript<b>
+        image/gif<b>
+        image/jpeg<b>
+        image/png<b>
+        image/x-pict<b>
+        image/x-pcx<b>
+        image/x-portable-bitmap<b>
+        image/x-portable-graymap<b>
+        image/x-portable-pixmap<b>
+        image/x-cmu-raster<b>
+        image/targa<b>
+        image/tiff<b>
+        image/x-xbitmap<b>
+        image/x-xpixmap<b>
+        image/svg+xml<p>
+        Ask the interface <type scope="com::sun::star::document">XMimeTypeInfo
+        </type> for all values supported by the component.
+
+        <member scope="com::sun::star::document">MediaDescriptor::URL</member><b>
+        This is the target url of the file that will be created during export.
+    */
+    interface ::com::sun::star::document::XFilter;
+
+    /** sets the source component for this export filter.
+        This could either be a <type>DrawPage</type>, a <type>Shape</type>
+        or a <type>Shapes</type>.
+     */
+    interface ::com::sun::star::document::XExporter;
+
+    /** lets you query the supported mime types by this component */
+    interface ::com::sun::star::document::XMimeTypeInfo;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
