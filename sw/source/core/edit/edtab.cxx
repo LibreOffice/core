@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtab.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:45:06 $
+ *  last change: $Author: obo $ $Date: 2004-06-01 07:42:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -276,9 +276,6 @@ void SwEditShell::InsertDDETable( const SwInsertTableOptions& rInsTblOpts,
                                   SwHoriOrient eAdj )
 {
     SwPosition* pPos = GetCrsr()->GetPoint();
-
-    ASSERT( !GetDoc()->IsIdxInTbl( pPos->nNode ),
-            "Tabelle in Tabelle nicht erlaubt" );
 
     StartAllAction();
 
