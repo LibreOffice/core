@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyexport.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 18:20:26 $
+ *  last change: $Author: kz $ $Date: 2003-12-11 12:10:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -486,6 +486,30 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
+    void OPropertyExport::exportInt32PropertyAttribute( const sal_uInt16 _nNamespaceKey, const sal_Char* _pAttributeName,
+        const ::rtl::OUString& _rPropertyName, const sal_Int32 _nDefault )
+    {
+        DBG_CHECK_PROPERTY( _rPropertyName, sal_Int32 );
+
+        // get the value
+        sal_Int32 nCurrentValue( _nDefault );
+        m_xProps->getPropertyValue( _rPropertyName ) >>= nCurrentValue;
+
+        // add the attribute
+        if ( _nDefault != nCurrentValue )
+        {
+            // let the formatter of the export context build a string
+            ::rtl::OUStringBuffer sBuffer;
+            m_rContext.getGlobalContext().GetMM100UnitConverter().convertNumber( sBuffer, nCurrentValue );
+
+            AddAttribute( _nNamespaceKey, _pAttributeName, sBuffer.makeStringAndClear() );
+        }
+
+        // the property does not need to be handled anymore
+        exportedProperty( _rPropertyName );
+    }
+
+    //---------------------------------------------------------------------
     void OPropertyExport::exportEnumPropertyAttribute(
             const sal_uInt16 _nNamespaceKey, const sal_Char* _pAttributeName,
             const sal_Char* _pPropertyName, const SvXMLEnumMapEntry* _pValueMap,
@@ -541,7 +565,8 @@ namespace xmloff
         DBG_CHECK_PROPERTY( _sPropertyName, ::rtl::OUString );
 
         ::rtl::OUString sTargetLocation = comphelper::getString(m_xProps->getPropertyValue(_sPropertyName));
-        sTargetLocation = m_rContext.getGlobalContext().GetRelativeReference(sTargetLocation);
+        if ( sTargetLocation.getLength() )
+            sTargetLocation = m_rContext.getGlobalContext().GetRelativeReference(sTargetLocation);
         AddAttribute(getCommonControlAttributeNamespace(_nProperty), getCommonControlAttributeName(_nProperty), sTargetLocation);
 
         exportedProperty(_sPropertyName);
