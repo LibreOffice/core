@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lngsvcmgr.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tl $ $Date: 2000-12-08 14:08:10 $
+ *  last change: $Author: tl $ $Date: 2001-01-25 10:54:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,10 @@ using namespace linguistic;
 SV_DECL_VARARR_SORT( SortedINT16Array, INT16, 32, 32);
 SV_IMPL_VARARR_SORT( SortedINT16Array, INT16 );
 
+// forward declarations
+Sequence< OUString > GetLangSvcList( const Any &rVal );
+Sequence< OUString > GetLangSvc( const Any &rVal );
+
 ///////////////////////////////////////////////////////////////////////////
 
 static Sequence< Locale > GetAvailLocales(
@@ -209,8 +213,12 @@ SV_IMPL_PTRARR( SvcInfoArray, PTR_SVCINFO * );
 ///////////////////////////////////////////////////////////////////////////
 
 
-void SetAvailableServiceLists( const SvcInfoArray &rInfoArray,
-        LinguDispatcher &rDispatcher )
+#ifdef NEVER
+
+// not used anymore (see SetAvailableCfgServiceLists)
+
+static void SetAvailableServiceLists( LinguDispatcher &rDispatcher,
+        const SvcInfoArray &rInfoArray )
 {
     USHORT nSvcs = rInfoArray.Count();
 
@@ -248,6 +256,94 @@ void SetAvailableServiceLists( const SvcInfoArray &rInfoArray,
         aSvcImplNames.realloc( nSeqCnt );
 
         rDispatcher.SetServiceList( CreateLocale( nActLang ), aSvcImplNames );
+    }
+}
+
+#endif
+
+
+void SetAvailableCfgServiceLists( LinguDispatcher &rDispatcher,
+        const SvcInfoArray &rAvailSvcs )
+{
+    String aRoot( String::CreateFromAscii( "Office.Linguistic/ServiceManager" ) );
+    LinguOptConfig aCfg( aRoot );
+
+    // get list of nodenames to look at for their service list
+    const char *pEntryName = 0;
+    BOOL bHasLangSvcList = TRUE;
+    switch (rDispatcher.GetDspType())
+    {
+        case LinguDispatcher::DSP_SPELL : pEntryName = "SpellCheckerList";  break;
+        case LinguDispatcher::DSP_HYPH  : pEntryName = "HyphenatorList";
+                                          bHasLangSvcList = FALSE;
+                                          break;
+        case LinguDispatcher::DSP_THES  : pEntryName = "ThesaurusList"; break;
+        default :
+            DBG_ERROR( "unexpected case" );
+    }
+    String  aNode( String::CreateFromAscii( pEntryName ) );
+    Sequence < OUString > aNodeNames( aCfg.GetNodeNames( aNode ) );
+
+
+    INT32 nLen = aNodeNames.getLength();
+    const OUString *pNodeNames = aNodeNames.getConstArray();
+    for (INT32 i = 0;  i < nLen;  ++i)
+    {
+        Sequence< OUString >    aSvcImplNames;
+
+        Sequence< OUString >    aName( 1 );
+        OUString *pNames = aName.getArray();
+
+        OUString aPropName( aNode );
+        aPropName += OUString::valueOf( (sal_Unicode) '/' );
+        aPropName += pNodeNames[i];
+        pNames[0] = aPropName;
+
+        Sequence< Any > aValues = aCfg.GetProperties( aName );
+        if (aValues.getLength())
+        {
+            // get list of configured service names for the
+            // current node (language)
+            const Any &rValue = aValues.getConstArray()[0];
+            if (bHasLangSvcList)
+                aSvcImplNames = GetLangSvcList( rValue );
+            else
+                aSvcImplNames = GetLangSvc( rValue );
+
+            INT32 nSvcs = aSvcImplNames.getLength();
+            if (nSvcs)
+            {
+                const OUString *pImplNames = aSvcImplNames.getConstArray();
+
+                INT16 nLang = CfgLocaleStrToLanguage( pNodeNames[i] );
+
+                // build list of available services from those
+                INT32 nCnt = 0;
+                Sequence< OUString > aAvailSvcs( nSvcs );
+                OUString *pAvailSvcs = aAvailSvcs.getArray();
+                for (INT32 k = 0;  k < nSvcs;  ++k)
+                {
+                    // check for availability of the service
+                    USHORT nAvailSvcs = rAvailSvcs.Count();
+                    for (USHORT m = 0;  m < nAvailSvcs;  ++m)
+                    {
+                        const SvcInfo &rSvcInfo = *rAvailSvcs[m];
+                        if (rSvcInfo.aSvcImplName == pImplNames[k]  &&
+                            rSvcInfo.HasLanguage( nLang ))
+                        {
+                            pAvailSvcs[ nCnt++ ] = rSvcInfo.aSvcImplName;
+                            break;
+                        }
+                    }
+                }
+
+                if (nCnt)
+                {
+                    aAvailSvcs.realloc( nCnt );
+                    rDispatcher.SetServiceList( CreateLocale( nLang ), aAvailSvcs );
+                }
+            }
+        }
     }
 }
 
@@ -536,9 +632,9 @@ LngSvcMgr::LngSvcMgr() :
     pHyphDsp    = 0;
     pThesDsp    = 0;
 
-    pSpellSvcs  = 0;
-    pHyphSvcs   = 0;
-    pThesSvcs   = 0;
+    pAvailSpellSvcs = 0;
+    pAvailHyphSvcs  = 0;
+    pAvailThesSvcs  = 0;
     pListenerHelper = 0;
 
     aSaveTimer.SetTimeout( 5000 );
@@ -552,9 +648,9 @@ LngSvcMgr::~LngSvcMgr()
     // will be freed in the destructor of the respective Reference's
     // xSpellDsp, xHyphDsp, xThesDsp
 
-    delete pSpellSvcs;
-    delete pHyphSvcs;
-    delete pThesSvcs;
+    delete pAvailSpellSvcs;
+    delete pAvailHyphSvcs;
+    delete pAvailThesSvcs;
 }
 
 
@@ -604,9 +700,9 @@ void LngSvcMgr::GetThesaurusDsp_Impl()
 
 void LngSvcMgr::GetAvailableSpellSvcs_Impl()
 {
-    if (!pSpellSvcs)
+    if (!pAvailSpellSvcs)
     {
-        pSpellSvcs = new SvcInfoArray;
+        pAvailSpellSvcs = new SvcInfoArray;
 
         Reference< XMultiServiceFactory >  xFac( getProcessServiceFactory() );
         if (xFac.is())
@@ -643,8 +739,8 @@ void LngSvcMgr::GetAvailableSpellSvcs_Impl()
                         if (xSuppLoc.is())
                             aLanguages = LocaleSeqToLangSeq( xSuppLoc->getLocales() );
 
-                        pSpellSvcs->Insert( new SvcInfo( aImplName, aLanguages ),
-                                            pSpellSvcs->Count() );
+                        pAvailSpellSvcs->Insert( new SvcInfo( aImplName, aLanguages ),
+                                            pAvailSpellSvcs->Count() );
 
                         // TL_TODO:
                         // when HRO has the functionality provided to unload
@@ -659,9 +755,9 @@ void LngSvcMgr::GetAvailableSpellSvcs_Impl()
 
 void LngSvcMgr::GetAvailableHyphSvcs_Impl()
 {
-    if (!pHyphSvcs)
+    if (!pAvailHyphSvcs)
     {
-        pHyphSvcs = new SvcInfoArray;
+        pAvailHyphSvcs = new SvcInfoArray;
 
         Reference< XMultiServiceFactory >  xFac( getProcessServiceFactory() );
         if (xFac.is())
@@ -698,8 +794,8 @@ void LngSvcMgr::GetAvailableHyphSvcs_Impl()
                         if (xSuppLoc.is())
                             aLanguages = LocaleSeqToLangSeq( xSuppLoc->getLocales() );
 
-                        pHyphSvcs->Insert( new SvcInfo( aImplName, aLanguages ),
-                                            pHyphSvcs->Count() );
+                        pAvailHyphSvcs->Insert( new SvcInfo( aImplName, aLanguages ),
+                                            pAvailHyphSvcs->Count() );
 
                         // TL_TODO:
                         // when HRO has the functionality provided to unload
@@ -714,9 +810,9 @@ void LngSvcMgr::GetAvailableHyphSvcs_Impl()
 
 void LngSvcMgr::GetAvailableThesSvcs_Impl()
 {
-    if (!pThesSvcs)
+    if (!pAvailThesSvcs)
     {
-        pThesSvcs = new SvcInfoArray;
+        pAvailThesSvcs = new SvcInfoArray;
 
         Reference< XMultiServiceFactory >  xFac( getProcessServiceFactory() );
         if (xFac.is())
@@ -753,8 +849,8 @@ void LngSvcMgr::GetAvailableThesSvcs_Impl()
                         if (xSuppLoc.is())
                             aLanguages = LocaleSeqToLangSeq( xSuppLoc->getLocales() );
 
-                        pThesSvcs->Insert( new SvcInfo( aImplName, aLanguages ),
-                                            pThesSvcs->Count() );
+                        pAvailThesSvcs->Insert( new SvcInfo( aImplName, aLanguages ),
+                                            pAvailThesSvcs->Count() );
 
                         // TL_TODO:
                         // when HRO has the functionality provided to unload
@@ -769,34 +865,25 @@ void LngSvcMgr::GetAvailableThesSvcs_Impl()
 
 void LngSvcMgr::SetCfgServiceLists( SpellCheckerDispatcher &rSpellDsp )
 {
-    // TL_TODO:
-    // the services obtained from the configuration should be set here
-
-    if (!pSpellSvcs)
+    if (!pAvailSpellSvcs)
         GetAvailableSpellSvcs_Impl();
-    SetAvailableServiceLists( *pSpellSvcs, rSpellDsp );
+    SetAvailableCfgServiceLists( rSpellDsp, *pAvailSpellSvcs );
 }
 
 
 void LngSvcMgr::SetCfgServiceLists( HyphenatorDispatcher &rHyphDsp )
 {
-    // TL_TODO:
-    // the services obtained from the configuration should be set here
-
-    if (!pHyphSvcs)
+    if (!pAvailHyphSvcs)
         GetAvailableHyphSvcs_Impl();
-    SetAvailableServiceLists( *pHyphSvcs, rHyphDsp );
+    SetAvailableCfgServiceLists( rHyphDsp, *pAvailHyphSvcs );
 }
 
 
 void LngSvcMgr::SetCfgServiceLists( ThesaurusDispatcher &rThesDsp )
 {
-    // TL_TODO:
-    // the services obtained from the configuration should be set here
-
-    if (!pThesSvcs)
+    if (!pAvailThesSvcs)
         GetAvailableThesSvcs_Impl();
-    SetAvailableServiceLists( *pThesSvcs, rThesDsp );
+    SetAvailableCfgServiceLists( rThesDsp, *pAvailThesSvcs );
 }
 
 
@@ -910,21 +997,21 @@ Sequence< OUString > SAL_CALL
 
     if (0 == rServiceName.compareToAscii( SN_SPELLCHECKER ))
     {
-        if (!pSpellSvcs)
+        if (!pAvailSpellSvcs)
             GetAvailableSpellSvcs_Impl();
-        pInfoArray = pSpellSvcs;
+        pInfoArray = pAvailSpellSvcs;
     }
     else if (0 == rServiceName.compareToAscii( SN_HYPHENATOR ))
     {
-        if (!pHyphSvcs)
+        if (!pAvailHyphSvcs)
             GetAvailableHyphSvcs_Impl();
-        pInfoArray = pHyphSvcs;
+        pInfoArray = pAvailHyphSvcs;
     }
     else if (0 == rServiceName.compareToAscii( SN_THESAURUS ))
     {
-        if (!pThesSvcs)
+        if (!pAvailThesSvcs)
             GetAvailableThesSvcs_Impl();
-        pInfoArray = pThesSvcs;
+        pInfoArray = pAvailThesSvcs;
     }
 
     if (pInfoArray)
@@ -984,13 +1071,13 @@ Sequence< Locale > SAL_CALL
 
     if (pAvailLocales  &&  pHasAvailLocales)
     {
-        if (*pHasAvailLocales)
-            aRes = *pAvailLocales;
+        if (!*pHasAvailLocales)
         {
             *pAvailLocales = GetAvailLocales(
                     getAvailableServices( rServiceName, Locale() ) );
             *pHasAvailLocales = TRUE;
         }
+        aRes = *pAvailLocales;
     }
 
     return aRes;
@@ -1006,9 +1093,6 @@ void SAL_CALL
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    // TL_TODO:
-    // write code to access the configuration and set the following
-    // variable accordingly
     BOOL bCfgChgSuccess = TRUE;
     INT16 nLanguage = LocaleToLanguage( rLocale );
 
@@ -1036,7 +1120,7 @@ void SAL_CALL
             bIsModified = TRUE;
         }
         if( bIsModified )
-            aSaveTimer.Start();
+            aSaveTimer.Start(); // in order to write changes to the configuration
     }
 }
 
@@ -1072,12 +1156,6 @@ BOOL LngSvcMgr::SaveCfgSvcs( const String &rServiceName )
 
     if (pDsp  &&  aLocales.getLength())
     {
-#ifdef DEBUG
-        //! workaround for bug in configuration of 614 a
-        {
-            LinguOptConfig aCfg( String::CreateFromAscii( "Office.Linguistic" ) );
-        }
-#endif
         String aRoot( String::CreateFromAscii( "Office.Linguistic/ServiceManager" ) );
         LinguOptConfig aCfg( aRoot );
 
@@ -1101,7 +1179,7 @@ BOOL LngSvcMgr::SaveCfgSvcs( const String &rServiceName )
             if (pDsp == pHyphDsp)
             {
                 if (aSvcImplNames.getLength())
-                aCfgAny <<= aSvcImplNames.getConstArray()[0];
+                    aCfgAny <<= aSvcImplNames.getConstArray()[0];
             }
             else
                 aCfgAny <<= aSvcImplNames;
@@ -1156,7 +1234,6 @@ IMPL_LINK( LngSvcMgr, TimeOut, Timer*, p )
     return 0;
 }
 
-
 static Sequence< OUString > GetLangSvcList( const Any &rVal )
 {
     Sequence< OUString > aRes;
@@ -1172,9 +1249,6 @@ static Sequence< OUString > GetLangSvcList( const Any &rVal )
             for (INT32 j = 0;  j < nSvcs;  ++j)
             {
                 OUString aImplName( pSvcName[j] );
-
-                // TL TODO: services needs to be set when new
-                // configuration dialogue is available
             }
         }
 #endif
@@ -1184,7 +1258,7 @@ static Sequence< OUString > GetLangSvcList( const Any &rVal )
 }
 
 
-static Sequence< OUString >  GetLangSvc( const Any &rVal )
+static Sequence< OUString > GetLangSvc( const Any &rVal )
 {
     Sequence< OUString > aRes(1);
 
@@ -1220,12 +1294,6 @@ Sequence< OUString > SAL_CALL
     INT16 nLanguage = LocaleToLanguage( rLocale );
     String aCfgLocale( LanguageToCfgLocaleStr( nLanguage ) );
 
-#ifdef DEBUG
-    //! workaround for bug in configuration of 614 a
-    {
-        LinguOptConfig aCfg( String::CreateFromAscii( "Office.Linguistic" ) );
-    }
-#endif
     String aRoot( String::CreateFromAscii( "Office.Linguistic/ServiceManager" ) );
     LinguOptConfig aCfg( aRoot );
 
