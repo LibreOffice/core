@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charmap.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: pb $ $Date: 2001-07-05 08:25:05 $
+ *  last change: $Author: hdu $ $Date: 2001-07-06 12:23:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,69 +90,82 @@
 #include "charmap.hxx"
 #include "dialmgr.hxx"
 
-// =======================================================================
-// TODO: LastInMap(), UnicodeToMapIndex() and MapIndexToUnicode() should be in Font,
-// we let them mature here though because it is currently the only use
+class SubsetMap;
 
-static int          FirstInMap( const Font& );
-static int          LastInMap( const Font& );
-static int          UnicodeToMapIndex( const Font&, sal_Unicode c );
-static sal_Unicode  MapIndexToUnicode( const Font&, int );
-static bool         ContainsSurrogates( const Font& );
-static int          CountGlyphs( const Font& );
+// class SvxCharMapData ==================================================
 
-#define FIRST_UNICODE   sal_Unicode(0x0020)     /* ASCII space code */
-#define LAST_UNICODE    sal_Unicode(0xFFFD)     /* end of UCS2 */
-#define FIRST_SYMBOL    sal_Unicode(0xF020)
-#define LAST_SYMBOL     sal_Unicode(0xF0FF)
-#define FIRST_SURROGATE sal_Unicode(0xD800)
-#define LAST_SURROGATE  sal_Unicode(0xDFFF)
-#define COUNT_SURROGATES    (LAST_SURROGATE - FIRST_SURROGATE + 1);
+class SvxCharMapData
+{
+public:
+                    SvxCharMapData( class SfxModalDialog* pDialog, BOOL bOne_ );
+
+    void            SetCharFont( const Font& rFont );
+
+private:
+friend class SvxCharacterMap;
+    SfxModalDialog* mpDialog;
+
+    SvxShowCharSet  aShowSet;
+    OKButton        aOKBtn;
+    CancelButton    aCancelBtn;
+    HelpButton      aHelpBtn;
+    PushButton      aDeleteBtn;
+    FixedText       aFontText;
+    ListBox         aFontLB;
+    FixedText       aSubsetText;
+    ListBox         aSubsetLB;
+    FixedText       aSymbolText;
+    SvxShowText     aShowText;
+    SvxShowText     aShowChar;
+    FixedText       aCharCodeText;
+
+    Font            aFont;
+    BOOL            bOne;
+    const SubsetMap* pSubsetMap;
+
+    DECL_LINK( OKHdl, OKButton* );
+    DECL_LINK( FontSelectHdl, ListBox* );
+    DECL_LINK( SubsetSelectHdl, ListBox* );
+    DECL_LINK( CharDoubleClickHdl, Control* pControl );
+    DECL_LINK( CharSelectHdl, Control* pControl );
+    DECL_LINK( CharHighlightHdl, Control* pControl );
+    DECL_LINK( CharPreSelectHdl, Control* pControl );
+    DECL_LINK( DeleteHdl, PushButton* pBtn );
+};
 
 // -----------------------------------------------------------------------
 
-static bool ContainsSurrogates( const Font& rFont )
+static int UnicodeToMapIndex( const FontCharMap& rMap, sal_UCS4 cChar )
 {
-    return (rFont.GetCharSet() != RTL_TEXTENCODING_SYMBOL );
+    int nIndex = 0;
+    ULONG nRanges = rMap.GetRangeCount();
+    for( ULONG i = 0; i < nRanges; ++i )
+    {
+        sal_UCS4 cFirst, cLast;
+        rMap.GetRange( i, cFirst, cLast );
+        if( cChar < cLast )
+            return nIndex + (cChar - cFirst);
+        nIndex += cLast - cFirst;
+    }
+    return 0;
 }
 
-static int FirstInMap( const Font& rFont )
-{
-    if( rFont.GetCharSet() == RTL_TEXTENCODING_SYMBOL )
-        return FIRST_SYMBOL;
-    return FIRST_UNICODE;
-}
+// -----------------------------------------------------------------------
 
-static int LastInMap( const Font& rFont )
+static sal_UCS4 MapIndexToUnicode( const FontCharMap& rMap, int nIndex )
 {
-    int n = LAST_UNICODE;
-    if( rFont.GetCharSet() == RTL_TEXTENCODING_SYMBOL )
-        n = LAST_SYMBOL;
-    if( (n >= FIRST_SURROGATE) && ContainsSurrogates( rFont ) )
-        n -= COUNT_SURROGATES;
-    return n;
-}
+    ULONG nRanges = rMap.GetRangeCount();
+    for( ULONG i = 0; i < nRanges; ++i )
+    {
+        sal_UCS4 cFirst, cLast;
+        rMap.GetRange( i, cFirst, cLast );
+        if( nIndex < cLast - cFirst )
+            return (cFirst + nIndex);
+        nIndex -= cLast - cFirst;
+    }
 
-static int UnicodeToMapIndex( const Font& rFont, sal_Unicode c )
-{
-    int nMapIndex = c;
-    if( (c > LAST_SURROGATE) && ContainsSurrogates( rFont ) )   // surrogates are not in map
-        nMapIndex -= COUNT_SURROGATES;
-    return nMapIndex;
-}
-
-static sal_Unicode MapIndexToUnicode( const Font& rFont, int nMapIndex )
-{
-    sal_Unicode c = nMapIndex;
-    if( (c >= FIRST_SURROGATE) && ContainsSurrogates( rFont ) ) // surrogates are not in map
-        c += COUNT_SURROGATES;
-    return c;
-}
-
-static int CountGlyphs( const Font& rFont )
-{
-    int nCount = LastInMap(rFont) - FirstInMap(rFont) + 1;
-    return nCount;
+    // we should never get here
+    return rMap.GetFirstChar();
 }
 
 // class SvxShowCharSet ==================================================
@@ -230,8 +243,8 @@ void SvxShowCharSet::MouseButtonDown( const MouseEvent& rMEvt )
             bDrag = TRUE;
             CaptureMouse();
 
-            int index = PixelToMapIndex( rMEvt.GetPosPixel());
-            SelectIndex( index);
+            int nIndex = PixelToMapIndex( rMEvt.GetPosPixel() );
+            SelectIndex( nIndex );
         }
 
         if ( !(rMEvt.GetClicks() % 2) )
@@ -288,18 +301,22 @@ void SvxShowCharSet::Command( const CommandEvent& rCEvt )
 
 inline int SvxShowCharSet::FirstInView( void ) const
 {
-    int nIndex = FirstInMap( GetFont() );
+    int nIndex = 0;
     if( aVscrollSB.IsVisible() )
         nIndex += aVscrollSB.GetThumbPos() * COLUMN_COUNT;
     return nIndex;
 }
 
+// -----------------------------------------------------------------------
+
 inline int SvxShowCharSet::LastInView( void ) const
 {
-    int nIndex = FirstInView();
+    ULONG nIndex = FirstInView();
     nIndex += ROW_COUNT * COLUMN_COUNT - 1;
-    return Min( nIndex, LastInMap( GetFont() ) );
+    return Min( nIndex, maFontCharMap.GetCharCount() - 1 );
 }
+
+// -----------------------------------------------------------------------
 
 inline Point SvxShowCharSet::MapIndexToPixel( int nIndex ) const
 {
@@ -308,6 +325,8 @@ inline Point SvxShowCharSet::MapIndexToPixel( int nIndex ) const
     int y = ((nIndex - nBase) / COLUMN_COUNT) * nY;
     return Point( x, y );
 }
+
+// -----------------------------------------------------------------------
 
 int SvxShowCharSet::PixelToMapIndex( const Point point) const
 {
@@ -328,8 +347,8 @@ void SvxShowCharSet::KeyInput( const KeyEvent& rKEvt )
     }
 
     sal_Unicode cChar = (sal_Unicode)rKEvt.GetCharCode();
-    int mapIndex = UnicodeToMapIndex( GetFont(), cChar );
-    if ( mapIndex>FirstInMap( GetFont() ) && mapIndex<=LastInMap( GetFont() ))
+    int mapIndex = UnicodeToMapIndex( maFontCharMap, cChar );
+    if ( mapIndex >= 0 && mapIndex < maFontCharMap.GetCharCount() )
     {
         SelectIndex( mapIndex );
         aPreSelectHdl.Call( this );
@@ -362,18 +381,19 @@ void SvxShowCharSet::KeyInput( const KeyEvent& rKEvt )
             tmpSelected += ROW_COUNT * COLUMN_COUNT;
             break;
         case KEY_HOME:
-            tmpSelected = FirstInMap( GetFont() );
+            tmpSelected = 0;
             break;
         case KEY_END:
-            tmpSelected = LastInMap( GetFont() );
+            tmpSelected = maFontCharMap.GetCharCount() - 1;
             break;
         default:
             Control::KeyInput( rKEvt );
-            tmpSelected = FirstInMap(  GetFont() ) - 1; // mark as invalid
+            tmpSelected = - 1;  // mark as invalid
     }
 
-    if ( tmpSelected >= FirstInMap( GetFont() ) && tmpSelected <= LastInMap( GetFont() ) ) {
-        SelectIndex( tmpSelected, TRUE);
+    if ( tmpSelected >= 0 )
+    {
+        SelectIndex( tmpSelected, TRUE );
         aPreSelectHdl.Call( this );
     }
 }
@@ -408,7 +428,7 @@ void SvxShowCharSet::DrawChars_Impl( int n1, int n2)
         int x = pix.X();
         int y = pix.Y();
 
-        if ( i == nSelectedIndex && HasFocus() )
+        if ( i == nSelectedIndex /*&& HasFocus()*/ )
         {
             const StyleSettings& rStyleSettings =
                 Application::GetSettings().GetStyleSettings();
@@ -428,7 +448,7 @@ void SvxShowCharSet::DrawChars_Impl( int n1, int n2)
             SetFillColor( aFillCol );
         }
 
-        String aCharStr( MapIndexToUnicode( GetFont(), i ) );
+        String aCharStr( MapIndexToUnicode( maFontCharMap, i ) );
         x += ( nX - GetTextWidth(aCharStr) ) / 2;
         y += ( nY - GetTextHeight() ) / 2;
         DrawText( Point( x, y ), aCharStr );
@@ -465,7 +485,7 @@ void SvxShowCharSet::InitSettings( BOOL bForeground, BOOL bBackground )
 
 sal_Unicode SvxShowCharSet::GetSelectCharacter() const
 {
-    return MapIndexToUnicode( GetFont(), nSelectedIndex );
+    return MapIndexToUnicode( maFontCharMap, nSelectedIndex );
 }
 
 // -----------------------------------------------------------------------
@@ -473,22 +493,24 @@ sal_Unicode SvxShowCharSet::GetSelectCharacter() const
 void SvxShowCharSet::SetFont( const Font& rFont )
 {
     // save last selected unicode
-    sal_Unicode cSelectedChar = MapIndexToUnicode( GetFont(), nSelectedIndex );
+    sal_Unicode cSelectedChar = MapIndexToUnicode( maFontCharMap, nSelectedIndex );
 
     Font aFont = rFont;
     aFont.SetWeight( WEIGHT_LIGHT );
-    aFont.SetSize( Size( 0, 12 ) );
+    int nFontHeight = (aOrigSize.Height() - 5) * 2 / (3 * ROW_COUNT);
+    aFont.SetSize( PixelToLogic( Size( 0, nFontHeight ) ) );
     aFont.SetTransparent( TRUE );
     Control::SetFont( aFont );
+    GetFontCharMap( maFontCharMap );
 
     // restore last selected unicode
-    int nMapIndex = UnicodeToMapIndex( aFont, cSelectedChar );
+    int nMapIndex = UnicodeToMapIndex( maFontCharMap, cSelectedChar );
     if( nMapIndex < FirstInView() || nMapIndex > LastInView() )
-        cSelectedChar = MapIndexToUnicode( aFont, FirstInView() );
+        cSelectedChar = MapIndexToUnicode( maFontCharMap, FirstInView() );
     SelectIndex( nMapIndex );
 
     // hide scrollbar when there is nothing to scroll
-    BOOL bNeedVscroll = (CountGlyphs(aFont) > ROW_COUNT*COLUMN_COUNT);
+    BOOL bNeedVscroll = (maFontCharMap.GetCharCount() > ROW_COUNT*COLUMN_COUNT);
 
     nX = (aOrigSize.Width() - (bNeedVscroll ? SBWIDTH : 0)) / COLUMN_COUNT;
     nY = aOrigSize.Height() / ROW_COUNT;
@@ -497,7 +519,7 @@ void SvxShowCharSet::SetFont( const Font& rFont )
     {
         aVscrollSB.SetPosSizePixel( nX * COLUMN_COUNT, 0, SBWIDTH, nY * ROW_COUNT );
         aVscrollSB.SetRangeMin( 0 );
-        int nLastRow = (CountGlyphs( aFont ) - 1 + COLUMN_COUNT) / COLUMN_COUNT;
+        int nLastRow = (maFontCharMap.GetCharCount() - 1 + COLUMN_COUNT) / COLUMN_COUNT;
         aVscrollSB.SetRangeMax( nLastRow );
         aVscrollSB.SetPageSize( ROW_COUNT-1 );
         aVscrollSB.SetVisibleSize( ROW_COUNT );
@@ -520,7 +542,8 @@ void SvxShowCharSet::SelectIndex( int nNewIndex, BOOL bFocus )
     if ( (nSelectedIndex == nNewIndex) && !bFocus )
         return;
 
-    if( nNewIndex < FirstInView()) {
+    if( nNewIndex < FirstInView() )
+    {
         // need to scroll up to see selected item
         int nNewPos = aVscrollSB.GetThumbPos();
         nNewPos -= (FirstInView() - nNewIndex + COLUMN_COUNT-1) / COLUMN_COUNT;
@@ -528,14 +551,18 @@ void SvxShowCharSet::SelectIndex( int nNewIndex, BOOL bFocus )
         nSelectedIndex = nNewIndex;
         Invalidate();
     }
-    else if( nNewIndex > LastInView()) {
+    else if( nNewIndex > LastInView() )
+    {
         // need to scroll down to see selected item
         int nNewPos = aVscrollSB.GetThumbPos();
         nNewPos += (nNewIndex - LastInView() + COLUMN_COUNT) / COLUMN_COUNT;
         aVscrollSB.SetThumbPos( nNewPos );
-        nSelectedIndex = nNewIndex;
+        if( nNewIndex < maFontCharMap.GetCharCount() )
+            nSelectedIndex = nNewIndex;
         Invalidate();
-    } else {
+    }
+    else
+    {
         // remove highlighted view
         Color aLineCol = GetLineColor();
         Color aFillCol = GetFillColor();
@@ -561,40 +588,40 @@ void SvxShowCharSet::SelectIndex( int nNewIndex, BOOL bFocus )
 
 void SvxShowCharSet::SelectCharacter( sal_Unicode cNew, BOOL bFocus )
 {
-    int nMapIndex = UnicodeToMapIndex( GetFont(), cNew );
-    SelectIndex( nMapIndex, bFocus);
-    if( !bFocus) {
+    int nMapIndex = UnicodeToMapIndex( maFontCharMap, cNew );
+    SelectIndex( nMapIndex, bFocus );
+    if( !bFocus )
+    {
         // move selected item to top row if not in focus
-        aVscrollSB.SetThumbPos( (nMapIndex - FirstInMap( GetFont() )) / COLUMN_COUNT );
+        aVscrollSB.SetThumbPos( nMapIndex / COLUMN_COUNT );
         Invalidate();
     }
 }
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK_INLINE_START( SvxShowCharSet, VscrollHdl, ScrollBar *, EMPTYARG )
+IMPL_LINK( SvxShowCharSet, VscrollHdl, ScrollBar *, EMPTYARG )
 {
-    if( nSelectedIndex < FirstInView() || nSelectedIndex > LastInView() )
-        SelectIndex( FirstInView() );
+    if( nSelectedIndex < FirstInView() )
+        SelectIndex( FirstInView() + (nSelectedIndex % COLUMN_COUNT) );
+    else if( nSelectedIndex > LastInView() )
+        SelectIndex( (LastInView() - COLUMN_COUNT + 1) + (nSelectedIndex % COLUMN_COUNT) );
 
     Invalidate();
     return 0;
 }
-IMPL_LINK_INLINE_END( SvxShowCharSet, VscrollHdl, ScrollBar *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
 SvxShowCharSet::~SvxShowCharSet()
-{
-}
+{}
 
 // class SvxShowText =====================================================
 
 SvxShowText::SvxShowText( Window* pParent, const ResId& rResId, BOOL _bCenter )
 :   Control( pParent, rResId ),
     bCenter( _bCenter)
-{
-}
+{}
 
 // -----------------------------------------------------------------------
 
@@ -604,7 +631,7 @@ void SvxShowText::Paint( const Rectangle& )
     {
         String aText = GetText();
         DrawText( Point( (GetOutputSizePixel().Width() - GetTextWidth(aText))/2, nY),
-                  aText );
+            aText );
     }
     else
         DrawText( Point( 2, nY ), GetText() );
@@ -619,7 +646,7 @@ void SvxShowText::SetFont( const Font& rFont )
     long nWinHeight = GetOutputSizePixel().Height();
     Font aFont = rFont;
     aFont.SetWeight( WEIGHT_NORMAL );
-    aFont.SetSize( Size( 0, nWinHeight-6 ) );
+    aFont.SetSize( PixelToLogic( Size( 0, nWinHeight-6 ) ) );
     aFont.SetTransparent( TRUE );
     Control::SetFont( aFont );
     nY = ( nWinHeight - GetTextHeight() ) / 2;
@@ -641,40 +668,78 @@ SvxShowText::~SvxShowText()
 // class SvxCharacterMap =================================================
 
 SvxCharacterMap::SvxCharacterMap( Window* pParent, BOOL bOne ) :
-
     SfxModalDialog( pParent, SVX_RES( RID_SVXDLG_CHARMAP ) ),
-
-    aShowSet        ( this, ResId( CT_SHOWSET ) ),
-    aFontText       ( this, ResId( FT_FONT ) ),
-    aFontLB         ( this, ResId( LB_FONT ) ),
-    aSubsetText     ( this, ResId( FT_SUBSET ) ),
-    aSubsetLB       ( this, ResId( LB_SUBSET ) ),
-    aSymbolText     ( this, ResId( FT_SYMBOLE ) ),
-    aShowText       ( this, ResId( CT_SHOWTEXT ) ),
-    aShowChar       ( this, ResId( CT_SHOWCHAR ), TRUE ),
-    aCharCodeText   ( this, ResId( FT_CHARCODE ) ),
-    aOKBtn          ( this, ResId( BTN_CHAR_OK ) ),
-    aCancelBtn      ( this, ResId( BTN_CHAR_CANCEL ) ),
-    aHelpBtn        ( this, ResId( BTN_CHAR_HELP ) ),
-    aDeleteBtn      ( this, ResId( BTN_DELETE ) ),
-    pSubsetMap( 0)
-
+    mpCharMapData( new SvxCharMapData( this, bOne ) )
 {
     FreeResource();
+}
 
-    aFont = GetFont();
+// -----------------------------------------------------------------------
+
+SvxCharacterMap::~SvxCharacterMap()
+{
+    delete mpCharMapData;
+}
+
+// -----------------------------------------------------------------------
+
+const Font& SvxCharacterMap::GetCharFont() const
+{
+    return mpCharMapData->aFont;
+}
+
+// -----------------------------------------------------------------------
+
+void SvxCharacterMap::SetChar( sal_Unicode c )
+{
+    mpCharMapData->aShowSet.SelectCharacter( c );
+}
+
+// -----------------------------------------------------------------------
+
+sal_Unicode SvxCharacterMap::GetChar() const
+{
+    return mpCharMapData->aShowSet.GetSelectCharacter();
+}
+
+// -----------------------------------------------------------------------
+
+String SvxCharacterMap::GetCharacters() const
+{
+    return mpCharMapData->aShowText.GetText();
+}
+
+// =======================================================================
+
+SvxCharMapData::SvxCharMapData( SfxModalDialog* pDialog, BOOL bOne_ )
+:   mpDialog( pDialog ),
+    aShowSet        ( pDialog, ResId( CT_SHOWSET ) ),
+    aFontText       ( pDialog, ResId( FT_FONT ) ),
+    aFontLB         ( pDialog, ResId( LB_FONT ) ),
+    aSubsetText     ( pDialog, ResId( FT_SUBSET ) ),
+    aSubsetLB       ( pDialog, ResId( LB_SUBSET ) ),
+    aSymbolText     ( pDialog, ResId( FT_SYMBOLE ) ),
+    aShowText       ( pDialog, ResId( CT_SHOWTEXT ) ),
+    aShowChar       ( pDialog, ResId( CT_SHOWCHAR ), TRUE ),
+    aCharCodeText   ( pDialog, ResId( FT_CHARCODE ) ),
+    aOKBtn          ( pDialog, ResId( BTN_CHAR_OK ) ),
+    aCancelBtn      ( pDialog, ResId( BTN_CHAR_CANCEL ) ),
+    aHelpBtn        ( pDialog, ResId( BTN_CHAR_HELP ) ),
+    aDeleteBtn      ( pDialog, ResId( BTN_DELETE ) ),
+    pSubsetMap( NULL ),
+    bOne( bOne_ )
+{
+    aFont = pDialog->GetFont();
     aFont.SetTransparent( TRUE );
     aFont.SetFamily( FAMILY_DONTKNOW );
     aFont.SetPitch( PITCH_DONTKNOW );
     aFont.SetCharSet( RTL_TEXTENCODING_DONTKNOW );
 
-    SvxCharacterMap::bOne = bOne;
-
     if ( bOne )
     {
-        Size aDlgSize = GetSizePixel();
-        SetSizePixel( Size( aDlgSize.Width(),
-                               aDlgSize.Height()-aShowText.GetSizePixel().Height() ) );
+        Size aDlgSize = pDialog->GetSizePixel();
+        pDialog->SetSizePixel( Size( aDlgSize.Width(),
+            aDlgSize.Height()-aShowText.GetSizePixel().Height() ) );
         aSymbolText.Hide();
         aShowText.Hide();
         aDeleteBtn.Hide();
@@ -683,10 +748,10 @@ SvxCharacterMap::SvxCharacterMap( Window* pParent, BOOL bOne ) :
     String aDefStr( aFont.GetName() );
     String aLastName;
     xub_StrLen i;
-    xub_StrLen nCount = GetDevFontCount();
+    xub_StrLen nCount = mpDialog->GetDevFontCount();
     for ( i = 0; i < nCount; i++ )
     {
-        String aFontName( GetDevFont( i ).GetName() );
+        String aFontName( mpDialog->GetDevFont( i ).GetName() );
         if ( aFontName != aLastName )
         {
             aLastName = aFontName;
@@ -703,7 +768,6 @@ SvxCharacterMap::SvxCharacterMap( Window* pParent, BOOL bOne ) :
         for ( i = 0; i < aDefStr.GetTokenCount(); ++i )
         {
             String aToken = aDefStr.GetToken(i);
-
             if ( aFontLB.GetEntryPos( aToken ) != LISTBOX_ENTRY_NOTFOUND )
             {
                 aDefStr = aToken;
@@ -719,42 +783,34 @@ SvxCharacterMap::SvxCharacterMap( Window* pParent, BOOL bOne ) :
         aFontLB.SelectEntryPos(0);
     FontSelectHdl( &aFontLB );
 
-    aOKBtn.SetClickHdl( LINK( this, SvxCharacterMap, OKHdl ) );
-    aFontLB.SetSelectHdl( LINK( this, SvxCharacterMap, FontSelectHdl ) );
-    aSubsetLB.SetSelectHdl( LINK( this, SvxCharacterMap, SubsetSelectHdl ) );
-    aShowSet.SetDoubleClickHdl( LINK( this, SvxCharacterMap, CharDoubleClickHdl ) );
-    aShowSet.SetSelectHdl( LINK( this, SvxCharacterMap, CharSelectHdl ) );
-    aShowSet.SetHighlightHdl( LINK( this, SvxCharacterMap, CharHighlightHdl ) );
-    aShowSet.SetPreSelectHdl( LINK( this, SvxCharacterMap, CharPreSelectHdl ) );
-    aDeleteBtn.SetClickHdl( LINK( this, SvxCharacterMap, DeleteHdl ) );
+    aOKBtn.SetClickHdl( LINK( this, SvxCharMapData, OKHdl ) );
+    aFontLB.SetSelectHdl( LINK( this, SvxCharMapData, FontSelectHdl ) );
+    aSubsetLB.SetSelectHdl( LINK( this, SvxCharMapData, SubsetSelectHdl ) );
+    aShowSet.SetDoubleClickHdl( LINK( this, SvxCharMapData, CharDoubleClickHdl ) );
+    aShowSet.SetSelectHdl( LINK( this, SvxCharMapData, CharSelectHdl ) );
+    aShowSet.SetHighlightHdl( LINK( this, SvxCharMapData, CharHighlightHdl ) );
+    aShowSet.SetPreSelectHdl( LINK( this, SvxCharMapData, CharPreSelectHdl ) );
+    aDeleteBtn.SetClickHdl( LINK( this, SvxCharMapData, DeleteHdl ) );
 
-    SetChar( FIRST_UNICODE );
     aOKBtn.Disable();
-}
-
-// -----------------------------------------------------------------------
-
-void SvxCharacterMap::SetFont( const Font& rFont )
-{
-    SetCharFont( rFont );
 }
 
 // -----------------------------------------------------------------------
 
 void SvxCharacterMap::DisableFontSelection()
 {
-    aFontText.Disable();
-    aFontLB.Disable();
+    mpCharMapData->aFontText.Disable();
+    mpCharMapData->aFontLB.Disable();
 }
 
 // -----------------------------------------------------------------------
 
-void SvxCharacterMap::SetCharFont( const Font& rFont )
+void SvxCharMapData::SetCharFont( const Font& rFont )
 {
     //Font ersteinmal ermitteln lassen, damit auch auch Fonts mit dem
     //Namen "Times New Roman;Times" auf der jeweiligen Plattform richtig
     //funktionieren.
-    Font aTmp( GetFontMetric( rFont ) );
+    Font aTmp( mpDialog->GetFontMetric( rFont ) );
 
     if ( aFontLB.GetEntryPos( aTmp.GetName() ) == LISTBOX_ENTRY_NOTFOUND )
         return;
@@ -764,12 +820,19 @@ void SvxCharacterMap::SetCharFont( const Font& rFont )
     FontSelectHdl( &aFontLB );
 
     // for compatibility reasons
-    ModalDialog::SetFont( aFont );
+    mpDialog->ModalDialog::SetFont( aFont );
 }
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxCharacterMap, OKHdl, OKButton *, EMPTYARG )
+void SvxCharacterMap::SetCharFont( const Font& rFont )
+{
+    mpCharMapData->SetCharFont( rFont );
+}
+
+// -----------------------------------------------------------------------
+
+IMPL_LINK( SvxCharMapData, OKHdl, OKButton *, EMPTYARG )
 {
     String aStr = aShowText.GetText();
 
@@ -779,17 +842,17 @@ IMPL_LINK( SvxCharacterMap, OKHdl, OKButton *, EMPTYARG )
             aStr = aShowSet.GetSelectCharacter();
         aShowText.SetText( aStr );
     }
-    EndDialog( TRUE );
+    mpDialog->EndDialog( TRUE );
     return 0;
 }
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxCharacterMap, FontSelectHdl, ListBox *, EMPTYARG )
+IMPL_LINK( SvxCharMapData, FontSelectHdl, ListBox *, EMPTYARG )
 {
     USHORT nPos = aFontLB.GetSelectEntryPos(),
-           nFont = (USHORT)(ULONG)aFontLB.GetEntryData( nPos );
-    aFont = GetDevFont( nFont );
+        nFont = (USHORT)(ULONG)aFontLB.GetEntryData( nPos );
+    aFont = mpDialog->GetDevFont( nFont );
 
     // notify children using this font
     aShowSet.SetFont( aFont );
@@ -827,7 +890,7 @@ IMPL_LINK( SvxCharacterMap, FontSelectHdl, ListBox *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxCharacterMap, SubsetSelectHdl, ListBox *, EMPTYARG )
+IMPL_LINK( SvxCharMapData, SubsetSelectHdl, ListBox *, EMPTYARG )
 {
     USHORT nPos = aSubsetLB.GetSelectEntryPos();
     const Subset* subset = reinterpret_cast<const Subset*> (aSubsetLB.GetEntryData(nPos));
@@ -840,16 +903,15 @@ IMPL_LINK( SvxCharacterMap, SubsetSelectHdl, ListBox *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK_INLINE_START( SvxCharacterMap, CharDoubleClickHdl, Control *, EMPTYARG )
+IMPL_LINK( SvxCharMapData, CharDoubleClickHdl, Control *, EMPTYARG )
 {
-    EndDialog( TRUE );
+    mpDialog->EndDialog( TRUE );
     return 0;
 }
-IMPL_LINK_INLINE_END( SvxCharacterMap, CharDoubleClickHdl, Control *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxCharacterMap, CharSelectHdl, Control *, EMPTYARG )
+IMPL_LINK( SvxCharMapData, CharSelectHdl, Control *, EMPTYARG )
 {
     if ( !bOne )
     {
@@ -863,6 +925,7 @@ IMPL_LINK( SvxCharacterMap, CharSelectHdl, Control *, EMPTYARG )
                 aText += aShowSet.GetSelectCharacter();
             aShowText.SetText( aText );
         }
+
     }
     aOKBtn.Enable();
     return 0;
@@ -870,7 +933,7 @@ IMPL_LINK( SvxCharacterMap, CharSelectHdl, Control *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxCharacterMap, CharHighlightHdl, Control *, EMPTYARG )
+IMPL_LINK( SvxCharMapData, CharHighlightHdl, Control *, EMPTYARG )
 {
     String aTemp;
     sal_Unicode c = aShowSet.GetSelectCharacter();
@@ -904,27 +967,20 @@ IMPL_LINK( SvxCharacterMap, CharHighlightHdl, Control *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK_INLINE_START( SvxCharacterMap, CharPreSelectHdl, Control *, EMPTYARG )
+IMPL_LINK( SvxCharMapData, CharPreSelectHdl, Control *, EMPTYARG )
 {
     aOKBtn.Enable();
     return 0;
 }
-IMPL_LINK_INLINE_END( SvxCharacterMap, CharPreSelectHdl, Control *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK_INLINE_START( SvxCharacterMap, DeleteHdl, PushButton *, EMPTYARG )
+IMPL_LINK( SvxCharMapData, DeleteHdl, PushButton *, EMPTYARG )
 {
     aShowText.SetText( String() );
     aOKBtn.Disable();
     return 0;
 }
-IMPL_LINK_INLINE_END( SvxCharacterMap, DeleteHdl, PushButton *, EMPTYARG )
-
-// -----------------------------------------------------------------------
-
-SvxCharacterMap::~SvxCharacterMap()
-{}
 
 // class SubsetMap =======================================================
 // TODO: should be moved into Font Attributes stuff
