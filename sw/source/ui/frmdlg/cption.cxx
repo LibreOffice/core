@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cption.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:46:02 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:26:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,10 +144,14 @@
 #endif
 using namespace ::com::sun::star;
 
-extern String* pOldGrfCat;
-extern String* pOldTabCat;
-extern String* pOldFrmCat;
-extern String* pOldDrwCat;
+//CHINA001 extern String* pOldGrfCat;
+//CHINA001 extern String* pOldTabCat;
+//CHINA001 extern String* pOldFrmCat;
+//CHINA001 extern String* pOldDrwCat;
+extern String* GetOldGrfCat();
+extern String* GetOldTabCat();
+extern String* GetOldFrmCat();
+extern String* GetOldDrwCat();
 
 class SwSequenceOptionDialog : public SvxStandardDialog
 {
@@ -231,7 +235,7 @@ SwCaptionDialog::SwCaptionDialog( Window *pParent, SwView &rV ) :
     if (eType & SwWrtShell::SEL_GRF)
     {
         nPoolId = RES_POOLCOLL_LABEL_ABB;
-        pString = pOldGrfCat;
+        pString = ::GetOldGrfCat(); //CHINA001 pString = pOldGrfCat;
         aCopyAttributesCB.Show();
         aCopyAttributesCB.Check(sal_True);
         sObjectName = rSh.GetFlyName();
@@ -246,15 +250,15 @@ SwCaptionDialog::SwCaptionDialog( Window *pParent, SwView &rV ) :
     else if( eType & SwWrtShell::SEL_TBL )
     {
         nPoolId = RES_POOLCOLL_LABEL_TABLE;
-        pString = pOldTabCat;
-     uno::Reference< text::XTextTablesSupplier >  xTables(xModel, uno::UNO_QUERY);
+        pString = ::GetOldTabCat(); //CHINA001 pString = pOldTabCat;
+        uno::Reference< text::XTextTablesSupplier >  xTables(xModel, uno::UNO_QUERY);
         xNameAccess = xTables->getTextTables();
         sObjectName = rSh.GetTableFmt()->GetName();
     }
     else if( eType & SwWrtShell::SEL_FRM )
     {
         nPoolId = RES_POOLCOLL_LABEL_FRAME;
-        pString = pOldFrmCat;
+        pString = ::GetOldFrmCat(); //CHINA001 pString = pOldFrmCat;
          uno::Reference< text::XTextFramesSupplier >  xFrms(xModel, uno::UNO_QUERY);
         xNameAccess = xFrms->getTextFrames();
         sObjectName = rSh.GetFlyName();
@@ -262,14 +266,14 @@ SwCaptionDialog::SwCaptionDialog( Window *pParent, SwView &rV ) :
     else if( eType == SwWrtShell::SEL_TXT )
     {
         nPoolId = RES_POOLCOLL_LABEL_FRAME;
-        pString = pOldFrmCat;
+        pString = ::GetOldFrmCat(); //CHINA001 pString = pOldFrmCat;
         aObjectNameED.Show(sal_False);
         aObjectNameFT.Show(sal_False);
     }
     else if( eType & SwWrtShell::SEL_DRW )
     {
         nPoolId = RES_POOLCOLL_LABEL_DRAWING;
-        pString = pOldDrwCat;
+        pString = ::GetOldDrwCat(); //CHINA001 pString = pOldDrwCat;
         aObjectNameED.Show(sal_False);
         aObjectNameFT.Show(sal_False);
     }
