@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.14 $
+#  $Revision: 1.15 $
 #
-#  last change: $Author: rt $ $Date: 2005-01-31 17:12:41 $
+#  last change: $Author: rt $ $Date: 2005-03-29 12:16:58 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -191,7 +191,7 @@ JavaMinimalComponentExample : $(COMP_REGISTERFLAG) $(APP1_JAR)
 	@echo --------------------------------------------------------------------------------
 	@echo Please use the following command to execute the example!
 	@echo -
-	@echo make $(APP1_NAME).run
+	@echo $(MAKE) $(APP1_NAME).run
 	@echo ------
 	@echo The $(COMP_NAME) component was installed if SDK_AUTO_DEPLOYMENT = YES.
 	@echo You can use this component inside your office installation, see the example
