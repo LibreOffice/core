@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ShapeFactory.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:33 $
+ *  last change: $Author: iha $ $Date: 2003-11-10 17:55:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,8 @@ public:
             createCube(   const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::drawing::XShapes >& xTarget
                         , const DataPointGeometry& rGeometry
-                        , const ShapeAppearance& rAppearance );
+                        , const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xSourceProp
+                        , const tPropertyNameMap& rPropertyNameMap );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
         createRoundedCube(const ::com::sun::star::uno::Reference<
@@ -147,7 +148,8 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
         createStripe( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xTarget
                     , const Stripe& rStripe
-                    , const ShapeAppearance& rAppearance
+                    , const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xSourceProp
+                    , const tPropertyNameMap& rPropertyNameMap
                     , sal_Bool bDoubleSided = true);
 
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >

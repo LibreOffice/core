@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ShapeFactory.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: iha $ $Date: 2003-11-03 16:44:49 $
+ *  last change: $Author: iha $ $Date: 2003-11-10 17:56:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -585,11 +585,13 @@ uno::Reference<drawing::XShape>
         ShapeFactory::createCube(
             const uno::Reference<drawing::XShapes>& xTarget
             , const DataPointGeometry& rGeometry
-            , const ShapeAppearance& rAppearance)
+            , const uno::Reference< beans::XPropertySet >& xSourceProp
+            , const tPropertyNameMap& rPropertyNameMap )
 {
     uno::Reference<drawing::XShape> xShape = impl_createCube( xTarget, rGeometry, FALSE );
     uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
-    ShapeFactory::setShapeAppearance( rAppearance, xProp );
+    if( xSourceProp.is())
+        PropertyMapper::setMappedProperties( xProp, xSourceProp, rPropertyNameMap );
     return xShape;
 }
 
@@ -1245,7 +1247,8 @@ uno::Reference< drawing::XShape >
 uno::Reference< drawing::XShape >
         ShapeFactory::createStripe( const uno::Reference< drawing::XShapes >& xTarget
                     , const Stripe& rStripe
-                    , const ShapeAppearance& rAppearance
+                    , const uno::Reference< beans::XPropertySet >& xSourceProp
+                    , const tPropertyNameMap& rPropertyNameMap
                     , sal_Bool bDoubleSided )
 {
     //create shape
@@ -1281,7 +1284,8 @@ uno::Reference< drawing::XShape >
             xProp->setPropertyValue( C2U( UNO_NAME_3D_DOUBLE_SIDED )
                 , uno::makeAny(bDoubleSided) );
 
-            ShapeFactory::setShapeAppearance( rAppearance, xProp );
+            if( xSourceProp.is())
+                PropertyMapper::setMappedProperties( xProp, xSourceProp, rPropertyNameMap );
         }
         catch( uno::Exception& e )
         {
