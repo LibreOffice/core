@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: fme $ $Date: 2002-03-27 08:30:48 $
+ *  last change: $Author: fme $ $Date: 2002-04-10 06:12:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -703,6 +703,29 @@ void SwTxtPaintInfo::_DrawText( const XubString &rText, const SwLinePortion &rPo
     short nSpaceAdd = ( rPor.IsBlankPortion() || rPor.IsDropPortion() ||
                         rPor.InNumberGrp() ) ? 0 : GetSpaceAdd();
 
+#ifdef BIDI
+
+    // The SwScriptInfo object is useless if we are inside a field portion
+    SwScriptInfo* pSI = 0;
+    if ( ! rPor.InFldGrp() )
+        pSI = &GetParaPortion()->GetScriptInfo();
+
+    // in some cases, kana compression is not allowed or surpressed for
+    // performance reasons
+    USHORT nComp = 0;
+    if ( ! IsMulti() )
+        nComp = GetKanaComp();
+
+    const sal_Bool bBullet = OnWin() && GetOpt().IsBlank() && IsNoSymbol();
+    sal_Bool bTmpWrong = bWrong && OnWin() && GetOpt().IsOnlineSpell()
+                             && !GetOpt().IsHideSpell();
+    SwParaPortion* pPara = GetParaPortion();
+    ASSERT( pPara, "No paragraph!");
+    SwDrawTextInfo aDrawInf( pFrm->GetShell(), *pOut, pSI, rText, nStart, nLen,
+                             rPor.Width(), bBullet );
+
+#else
+
     const SwScriptInfo& rSI =
                      ( (SwParaPortion*)GetParaPortion() )->GetScriptInfo();
 
@@ -722,6 +745,9 @@ void SwTxtPaintInfo::_DrawText( const XubString &rText, const SwLinePortion &rPo
     ASSERT( pPara, "No paragraph!");
     SwDrawTextInfo aDrawInf( pFrm->GetShell(), *pOut, &pPara->GetScriptInfo(),
                              rText, nStart, nLen, rPor.Width(), bBullet );
+
+#endif
+
     aDrawInf.SetLeft( GetPaintRect().Left() );
     aDrawInf.SetRight( GetPaintRect().Right() );
     aDrawInf.SetUnderFnt( pUnderFnt );

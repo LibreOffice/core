@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: fme $ $Date: 2002-02-27 17:17:57 $
+ *  last change: $Author: fme $ $Date: 2002-04-10 06:12:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -387,6 +387,14 @@ void SwTxtFrm::SwitchRTLtoLTR( Point& rPoint ) const
 {
     rPoint.X() = 2 * Frm().Left() + Frm().Width() - rPoint.X();
 }
+
+SwScriptInfo* SwTxtFrm::GetScriptInfo()
+{
+    SwParaPortion* pPara = GetPara();
+    if ( pPara ) return &pPara->GetScriptInfo();
+    else return 0;
+}
+
 #endif
 
 /*************************************************************************

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: svesik $ $Date: 2001-05-14 12:03:47 $
+#   last change: $Author: fme $ $Date: 2002-04-10 06:12:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,6 +78,7 @@ PROJECTPCHSOURCE=..$/core_1st$/core_pch
 .INCLUDE :  $(PRJ)$/inc$/sw.mk
 
 INCEXT=s:\solar\inc\hm
+INCEXT=d:\icu\include\
 
 .IF "$(mydebug)" != ""
 CDEFS+=-Dmydebug

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrcrsr.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: fme $ $Date: 2002-03-21 08:58:28 $
+ *  last change: $Author: fme $ $Date: 2002-04-10 06:12:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses

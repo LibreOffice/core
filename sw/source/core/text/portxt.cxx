@@ -2,9 +2,9 @@
  *
  *  $RCSfile: portxt.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: fme $ $Date: 2002-03-26 08:10:10 $
+ *  last change: $Author: fme $ $Date: 2002-04-10 06:12:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,33 +172,12 @@ USHORT lcl_AddSpace( const SwTxtSizeInfo &rInf, const XubString* pStr,
     }
 
 #ifdef BIDI
-    // Now we check for kashida justification
-    if ( nEnd > nPos && ::com::sun::star::i18n::ScriptType::COMPLEX == nScript )
-    {
-        for ( ; nPos < nEnd; ++nPos )
-        {
-            xub_Unicode nCh = pStr->GetChar( nPos );
-
-            // Seen and Sad
-            if ( 0x633 == nCh || 0x634 == nCh )
-            {
-                ++nCnt;
-                break;
-            }
-
-            // Taa Marbutah, Haa, Dal, Alef, Tah Lam, Caf
-            if ( 0x629 == nCh || 0x62D == nCh || 0x62F == nCh ||
-                 0x627 == nCh || 0x644 == nCh || 0x643 == nCh )
-            {
-                if ( pStr->Len() > nPos + 1 &&
-                     CH_BLANK == pStr->GetChar( nPos + 1 ) )
-                {
-                    ++nCnt;
-                    break;
-                }
-            }
-        }
-    }
+    // Now we look for kashidas
+    if ( nEnd > nPos && pSI &&
+         ::com::sun::star::i18n::ScriptType::COMPLEX == nScript &&
+         ( LANGUAGE_HEBREW !=
+           rInf.GetTxtFrm()->GetTxtNode()->GetLang( rInf.GetIdx(), 1, nScript ) ) )
+        return pSI->KashidaJustify( 0, 0, nPos, nEnd - nPos );
 #endif
 
     // now we search for ordinary blanks

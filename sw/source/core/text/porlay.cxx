@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlay.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: fme $ $Date: 2002-03-21 09:07:34 $
+ *  last change: $Author: fme $ $Date: 2002-04-10 06:12:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,24 +104,46 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::i18n::ScriptType;
 
 #ifdef BIDI
+#ifndef _SVX_ADJITEM_HXX //autogen
+#include <svx/adjitem.hxx>
+#endif
 #ifndef _UNOTOOLS_CHARCLASS_HXX
 #include <unotools/charclass.hxx>
 #endif
 #include <unicode/ubidi.h>
 
-//class TrivialStack
-//{
-//    BYTE aEntries[ 61 ];
-//    BYTE nCounter;
+/*************************************************************************
+ *                 lcl_IsLigature
+ *
+ * Checks if cCh + cNectCh builds a ligature (used for Kashidas)
+ *************************************************************************/
 
-//public:
-//    TrivialStack( BYTE nDefault ) : nCounter( 1 ) { aEntries[ 0 ] = nDefault; }
-//    ~TrivialStack() {}
+sal_Bool lcl_IsLigature( xub_Unicode cCh, xub_Unicode cNextCh )
+{
+    // Lam + Alef
+    // Beh + Reh
+    return ( 0x644 == cCh && 0x627 == cNextCh ) ||
+           ( 0x628 == cCh && 0x631 == cNextCh );
+}
 
-//    void Push( BYTE nVal ) { aEntries[ nCounter++ ] = nVal; }
-//    void Pop() { if ( nCounter > 1 ) --nCounter; }
-//    BYTE Top() { return aEntries[ nCounter - 1 ]; }
-//};
+/*************************************************************************
+ *                 lcl_ConnectToPrev
+ *
+ * Checks if cCh is connectable to cPrevCh (used for Kashidas)
+ *************************************************************************/
+
+sal_Bool lcl_ConnectToPrev( xub_Unicode cCh, xub_Unicode cPrevCh )
+{
+    // Alef, Dal, Thal, Reh, Zain, and Waw do not connect to the left
+    sal_Bool bRet = 0x627 != cPrevCh && 0x62F != cPrevCh && 0x630 != cPrevCh &&
+                    0x631 != cPrevCh && 0x632 != cPrevCh && 0x648 != cPrevCh;
+
+    // check for ligatures cPrevChar + cChar
+    if ( bRet )
+        bRet = ! lcl_IsLigature( cPrevCh, cCh );
+
+    return bRet;
+}
 
 #endif
 
@@ -544,17 +566,18 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, SwAttrHandler& rAH,
     nInvalidityPos = STRING_LEN;
 
     USHORT nCnt = 0;
+    USHORT nCntComp = 0;
 #ifdef BIDI
     USHORT nCntDir = 0;
-#endif
-    USHORT nCntComp = 0;
-    BYTE nScript;
-#ifdef BIDI
+    USHORT nCntKash = 0;
+
     BYTE nDir = 0;
 #endif
+    BYTE nScript;
+
+    const String& rTxt = rNode.GetTxt();
 
     // compression type
-    const String& rTxt = rNode.GetTxt();
     SwCharCompressType aCompEnum = rNode.GetDoc()->GetCharCompressType();
 
     // delete invalid data from arrays
@@ -585,18 +608,13 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, SwAttrHandler& rAH,
             }
         }
 #ifdef BIDI
-// !!! Optimization required !!! For now we always restart calculating embedding
-// levels at position 0
-//        while( nCntDir < CountDirChg() )
-//        {
-//            if ( nChg <= GetDirChg( nCntDir ) )
-//            {
-//                nDir = GetDirType( nCntDir );
-//                break;
-//            }
-//            else
-//                nCntDir++;
-//        }
+        while( nCntKash < CountKashida() )
+        {
+            if ( nChg <= GetKashida( nCntKash ) )
+                break;
+            else
+                nCntKash++;
+        }
 #endif
     }
     else
@@ -630,12 +648,19 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, SwAttrHandler& rAH,
 #ifdef BIDI
     // this value is used later to determine direction changes
     xub_StrLen nChgDir = 0; //nChg;
-#endif
+
+    // we go back in our group until we reach the first character of
+    // type nScript
+    while ( nChg > nGrpStart &&
+            nScript != pBreakIt->xBreak->getScriptType( rTxt, nChg ) )
+        --nChg;
+#else
 
     // we go back in our group until we reach a non-weak character
     while ( nChg > nGrpStart &&
             WEAK == pBreakIt->xBreak->getScriptType( rTxt, nChg ) )
         --nChg;
+#endif
 
     // the current group only contains weak characters
     if( WEAK == pBreakIt->xBreak->getScriptType( rTxt, nChg ) )
@@ -743,15 +768,14 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, SwAttrHandler& rAH,
     aCompType.Remove( nCntComp, nCompRemove );
 
 #ifdef BIDI
-    // one loop for direction changes
-//    const CharClass& rCC = GetAppCharClass();
-//    BYTE nCurrDir = nDir;
-//    // this is the LTR level
-//    BYTE nLTR = nDir ? 2 : 0;
-//    // this is the RTL level
-//    BYTE nRTL = 1;
-//    // Stack for explicit directional settings
-//    TrivialStack aStack( nDir );
+    // remove entries from kashida array
+    USHORT nLastKashida;
+    if( nCntKash )
+        nLastKashida = GetKashida( nCntKash - 1 );
+    else
+        nLastKashida = 0;
+
+    aKashida.Remove( nCntKash, aKashida.Count() - nCntKash );
 
     //
     // Bidi functions from icu 2.0
@@ -776,86 +800,6 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, SwAttrHandler& rAH,
     }
 
     ubidi_close( pBidi );
-
-//    do
-//    {
-        // for now this must be sufficient
-//        while ( nChgDir < rTxt.Len() )
-//        {
-//            nCurrDir = (BYTE)rCC.getCharacterDirection( rTxt, nChgDir );
-//            nCurrDir = aBidi.getLevelAt( nChgDir );
-
-//            switch ( nCurrDir )
-//            {
-//                // DirectionProperty_LEFT_TO_RIGHT
-//                case 0 :
-//                    nCurrDir = nLTR;
-//                    break;
-//                // DirectionProperty_EUROPEAN_NUMBER
-//                // DirectionProperty_ARABIC_NUMBER
-//                case 2 :
-//                case 5 :
-//                    if ( nDir % 2 )
-//                        nCurrDir = nDir + 1;
-//                    else
-//                        nCurrDir = nLTR;
-//                    break;
-//                // DirectionProperty_RIGHT_TO_LEFT
-//                // DirectionProperty_RIGHT_TO_LEFT_ARABIC
-//                case 1 :
-//                case 13 :
-//                    nCurrDir = nRTL;
-//                    break;
-//                // DirectionProperty_LEFT_TO_RIGHT_EMBEDDING
-//                case 11 :
-//                    nCurrDir = nLTR;
-//                    aStack.Push( nCurrDir );
-//                    nRTL += 2;
-//                    break;
-//                // DirectionProperty_RIGHT_TO_LEFT_EMBEDDING
-//                case 14 :
-//                    nCurrDir = nRTL;
-//                    aStack.Push( nCurrDir );
-//                    nLTR += 2;
-//                    break;
-//                // DirectionProperty_POP_DIRECTIONAL_FORMAT
-//                case 16 :
-//                {
-//                    BYTE nStackDir = aStack.Top();
-//                    aStack.Pop();
-//                    nCurrDir = aStack.Top();
-//                    if ( nStackDir % 2 )
-//                        nLTR -= 2;
-//                    else
-//                        nRTL -= 2;
-//                    break;
-//                }
-//                // Keep direction
-//                default:
-//                    nCurrDir = nDir;
-//                    break;
-//            }
-
-//            if ( nCurrDir != nDir )
-//                break;
-//            else
-//                ++nChgDir;
-//        }
-
-//        if ( nChgDir > rTxt.Len() )
-//            nChgDir = rTxt.Len();
-
-//        aDirChg.Insert( nChgDir, nCntDir );
-//        aDirType.Insert( nDir, nCntDir++ );
-
-//        if ( nChgDir >= rTxt.Len() )
-//            break;
-
-//        ++nChgDir;
-
-//        nDir = nCurrDir;
-////        nDir = (BYTE)pBreakIt->xBreak->getDirectionType( rTxt, nChgDir );
-//    } while ( TRUE );
 #endif
 
     if ( WEAK == nScript )
@@ -871,7 +815,22 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, SwAttrHandler& rAH,
                 "Inserting WEAK into SwScriptInfo structure" );
         ASSERT( STRING_LEN != nChg, "65K? Strange length of script section" );
 
+#ifdef BIDI
+        // for performance reasons we regard a single blank as a weak character
+        do
+        {
+            nChg = (xub_StrLen)pBreakIt->xBreak->endOfScript( rTxt, nChg, nScript );
+
+            if ( nChg < rTxt.Len() && CH_BLANK == rTxt.GetChar( nChg ) &&
+                 ( nChg + 1 == rTxt.Len() ||
+                   (BYTE)pBreakIt->xBreak->getScriptType( rTxt, nChg + 1 ) == nScript ) )
+                ++nChg;
+            else
+                break;
+        } while ( TRUE );
+#else
         nChg = (xub_StrLen)pBreakIt->xBreak->endOfScript( rTxt, nChg, nScript );
+#endif
 
         if ( nChg > rTxt.Len() )
             nChg = rTxt.Len();
@@ -951,12 +910,120 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, SwAttrHandler& rAH,
                 }
             }
         }
+#ifdef BIDI
+        // we search for connecting opportunities (kashida)
+        else if ( i18n::ScriptType::COMPLEX == nScript )
+        {
+            SwScanner aScanner( ((SwTxtNode*)&rNode), 0, nLastKashida,
+                                nChg, sal_False, sal_False );
+            LanguageType eActLang = LANGUAGE_GERMAN;
+
+            // the search has to be performed on a per word base
+            while ( aScanner.NextWord( eActLang ) )
+            {
+                const XubString& rWord = aScanner.GetWord();
+                xub_StrLen nIdx = 0;
+                xub_StrLen nKashidaPos = STRING_LEN;
+                xub_Unicode cCh;
+                xub_Unicode cPrevCh = 0;
+
+                while ( nIdx < rWord.Len() )
+                {
+                    cCh = rWord.GetChar( nIdx );
+
+                    // 1. Priority:
+                    // after user inserted kashida
+                    if ( 0x640 == cCh )
+                    {
+                        nKashidaPos = aScanner.GetBegin() + nIdx;
+                        break;
+                    }
+
+                    // 2. Priority:
+                    // after a Seen or Sad
+                    if ( nIdx + 1 < rWord.Len() &&
+                         ( 0x633 == cCh || 0x635 == cCh ) )
+                    {
+                        nKashidaPos = aScanner.GetBegin() + nIdx;
+                        break;
+                    }
+
+                    // 3. Priority:
+                    // before final form of Teh Marbuta, Hah, Dal
+                    // 4. Priority:
+                    // before final form of Alef, Lam or Kaf
+                    if ( nIdx && nIdx + 1 == rWord.Len() &&
+                         ( 0x629 == cCh || 0x62D == cCh || 0x62F == cCh ||
+                           0x627 == cCh || 0x644 == cCh || 0x643 == cCh ) )
+                    {
+                        ASSERT( 0 != cPrevCh, "No previous character" )
+
+                        // check if character is connectable to previous character,
+                        if ( lcl_ConnectToPrev( cCh, cPrevCh ) )
+                        {
+                            nKashidaPos = aScanner.GetBegin() + nIdx - 1;
+                            break;
+                        }
+                    }
+
+                    // 5. Priority:
+                    // before media Bah
+                    if ( nIdx && nIdx + 1 < rWord.Len() && 0x628 == cCh )
+                    {
+                        ASSERT( 0 != cPrevCh, "No previous character" )
+
+                        // check if next character is Reh, Yeh or Alef Maksura
+                        xub_Unicode cNextCh = rWord.GetChar( nIdx + 1 );
+
+                        if ( 0x631 == cNextCh || 0x64a == cNextCh ||
+                             0x649 == cNextCh )
+                        {
+                            // check if character is connectable to previous character,
+                            if ( lcl_ConnectToPrev( cCh, cPrevCh ) )
+                                nKashidaPos = aScanner.GetBegin() + nIdx - 1;
+                        }
+                    }
+
+                    // 6. Priority:
+                    // other connecting possibilities
+                    if ( nIdx && nIdx + 1 == rWord.Len() )
+                    {
+                        ASSERT( 0 != cPrevCh, "No previous character" )
+
+                        // check if character is connectable to previous character,
+                        if ( lcl_ConnectToPrev( cCh, cPrevCh ) )
+                        {
+                            // only choose this position if we did not find
+                            // a better one:
+                            if ( STRING_LEN == nKashidaPos )
+                                nKashidaPos = aScanner.GetBegin() + nIdx - 1;
+                            break;
+                        }
+                    }
+
+                    // Do not consider Fathatan, Dammatan, Kasratan, Fatha,
+                    // Damma, Kasra, Shadda and Sukun when checking if
+                    // a character can be connected to previous character.
+                    if ( cCh < 0x64B || cCh > 0x652 )
+                        cPrevCh = cCh;
+
+                    ++nIdx;
+                } // end of current word
+
+                if ( STRING_LEN != nKashidaPos )
+                    aKashida.Insert( nKashidaPos, nCntKash++ );
+            } // end of kashida search
+        }
+#endif
 
         if ( nChg >= rTxt.Len() )
             break;
 
         nScript = (BYTE)pBreakIt->xBreak->getScriptType( rTxt, nChg );
         nLastChg = nChg;
+#ifdef BIDI
+        nLastKashida = nChg;
+#endif
 
     } while ( TRUE );
 }
@@ -1193,6 +1260,80 @@ long SwScriptInfo::Compress( long* pKernArray, xub_StrLen nIdx, xub_StrLen nLen,
     } while( nIdx < nLen );
     return nSub;
 }
+
+#ifdef BIDI
+
+/*************************************************************************
+ *                      SwScriptInfo::KashidaJustify()
+ *************************************************************************/
+
+USHORT SwScriptInfo::KashidaJustify( long* pKernArray, long* pScrArray,
+                                     xub_StrLen nStt, xub_StrLen nLen,
+                                     const USHORT nSpace ) const
+{
+    ASSERT( nLen, "Kashida justification without text?!" )
+
+    // evaluate kashida informatin in collected in SwScriptInfo
+
+    USHORT nCntKash = 0;
+    while( nCntKash < CountKashida() )
+    {
+        if ( nStt <= GetKashida( nCntKash ) )
+            break;
+        else
+            nCntKash++;
+    }
+
+    const xub_StrLen nEnd = nStt + nLen;
+
+    if ( ! pKernArray )
+    {
+        USHORT nCntKashEnd = nCntKash;
+        while ( nCntKashEnd < CountKashida() )
+        {
+            if ( nEnd <= GetKashida( nCntKashEnd ) )
+                break;
+            else
+                nCntKashEnd++;
+        }
+
+        return nCntKashEnd - nCntKash;
+    }
+
+    // do nothing if there is no more kashida
+    if ( nCntKash < CountKashida() )
+    {
+        xub_StrLen nKashidaPos = GetKashida( nCntKash );
+        xub_StrLen nIdx = nKashidaPos;
+        USHORT nSpaceAdd = nSpace;
+
+        while ( nIdx < nEnd )
+        {
+            USHORT nArrayPos = nIdx - nStt;
+
+            // next kashida position
+            nIdx = ++nCntKash  < CountKashida() ? GetKashida( nCntKash ) : nEnd;
+            if ( nIdx > nEnd )
+                nIdx = nEnd;
+
+            const USHORT nArrayEnd = nIdx - nStt;
+
+            while ( nArrayPos < nArrayEnd )
+            {
+                pKernArray[ nArrayPos ] += nSpaceAdd;
+                if ( pScrArray )
+                   pScrArray[ nArrayPos ] += nSpaceAdd;
+                ++nArrayPos;
+            }
+
+            nSpaceAdd += nSpace;
+        }
+    }
+
+    return 0;
+}
+
+#endif
 
 /*************************************************************************
  *                      class SwParaPortion
