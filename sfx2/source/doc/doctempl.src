@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctempl.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:28:12 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 17:56:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,27 +242,27 @@ StringArray TEMPLATE_LONG_NAMES_ARY
     {
         < "Domy�lnie" ; > ;
         < "Korespondencja s�u�bowa" ; > ;
-        < "Pozosta�e dokumenty s�u�bowe" ; > ;
-        < "Korespondecja i dokumenty prywatne" ; > ;
+        < "Inne dokumenty s�u�bowe" ; > ;
+        < "Korespondencja i dokumenty osobiste" ; > ;
         < "Formularze i umowy" ; > ;
         < "Finanse" ; > ;
         < "Nauka" ; > ;
         < "T�a prezentacji" ; > ;
         < "Prezentacje" ; > ;
-        < "R�ne" ; > ;
+        < "Inne" ; > ;
     };
     ItemList[ portuguese_brazilian ] =
     {
-        < "Padr?o" ; > ;
-        < "Correspond?ncia comercial" ; > ;
-        < "Correspond?ncia comercial diversa" ; > ;
-        < "Correspond?ncia e documentos particulares" ; > ;
-        < "Formul?rios e contratos" ; > ;
-        < "Finan?as" ; > ;
-        < "Educa??o/Forma??o" ; > ;
-        < "Planos de fundo para apresenta??s" ; > ;
-        < "Apresenta??s" ; > ;
-        < "Diversos" ; > ;
+        < "Padr�o" ; > ;
+        < "Correspond�ncia Comercial" ; > ;
+        < "Outros documentos comerciais" ; > ;
+        < "Correspond�ncia e documentos pessoais" ; > ;
+        < "Formul�rios e Contratos" ; > ;
+        < "Finan�as" ; > ;
+        < "Educa��o" ; > ;
+        < "Fundo da apresenta��o" ; > ;
+        < "Apresenta��es" ; > ;
+        < "Miscelânea" ; > ;
     };
     ItemList[ japanese ] =
     {
@@ -331,16 +331,16 @@ StringArray TEMPLATE_LONG_NAMES_ARY
     };
     ItemList[ turkish ] =
     {
-        < "Normal" ; > ;
-        < "Gesch�ftliche Korrespondenz" ; > ;
-        < "Sonstige gesch�ftliche Dokumente" ; > ;
-        < "Private Korrespondenz und Dokumente" ; > ;
-        < "Formulare und Vertr�ge" ; > ;
-        < "Finanzen" ; > ;
-        < "Bildung" ; > ;
-        < "Pr�sentationshintergr�nde" ; > ;
-        < "Pr�sentationen" ; > ;
-        < "Diverses" ; > ;
+        < "�ntan�ml�" ; > ;
+        < "Mesleki Ugunluk" ; > ;
+        < "Di�er Mesleki belgeleri" ; > ;
+        < "Ki�isel Uygunluk ve Belgeler" ; > ;
+        < "Formlar ve Anla�malar" ; > ;
+        < "Mali ��ler" ; > ;
+        < "E�itim" ; > ;
+        < "Sunu Artalanlar�" ; > ;
+        < "Sunular" ; > ;
+        < "Di�er" ; > ;
     };
 
 ItemList [ language_user1 ] =
@@ -395,6 +395,45 @@ ItemList [ language_user1 ] =
         < "การนำเสนอ" ; > ;
         < "เบ็ดเตล็ด" ; > ;
     };
+    ItemList [ czech ] =
+    {
+         < "Výchozí" ; > ;
+        < "Obchodní korespondence" ; > ;
+        < "Jiné obchodní dokumenty" ; > ;
+        < "Osobní korespondence a dokumenty" ; > ;
+        < "Formuláře a smlouvy" ; > ;
+        < "Finance" ; > ;
+        < "Vzdělání" ; > ;
+        < "Pozadí prezentace" ; > ;
+        < "Prezentace" ; > ;
+        < "Různé" ; > ;
+    };
+    ItemList [ hebrew ] =
+    {
+         < "‮ברירת מחדל‬" ; > ;
+        < "‮התכתבות עיסקית‬" ; > ;
+        < "‮מסמכים עיסקיים אחרים‬" ; > ;
+        < "‮התכתבות אישית ומסמכים‬" ; > ;
+        < "‮טפסים וחוזים‬" ; > ;
+        < "‮כספים‬" ; > ;
+        < "‮חינוך‬" ; > ;
+        < "‮רקעים למצגות‬" ; > ;
+        < "‮מצגות‬" ; > ;
+        < "‮שונות‬" ; > ;
+    };
+    ItemList [ hindi ] =
+    {
+         < "अनुपस्थिति" ; > ;
+        < "व्यवहार पत्र-व्यवहार" ; > ;
+        < "अन्य व्यवहार लेखपत्रें " ; > ;
+        < "वैयक्तिक पत्र-व्यवहार और लेखपत्रें " ; > ;
+        < "फ़ॉर्म् और संविदा" ; > ;
+        < "आर्थिक व्यवस्था" ; > ;
+        < "शिक्षा" ; > ;
+        < "प्रस्तुति पृष्ठभागें" ; > ;
+        < "प्रस्तुति" ; > ;
+        < "मिला जुला" ; > ;
+    };
     };
 
 String RID_CNT_STR_WAITING
@@ -412,18 +451,30 @@ String RID_CNT_STR_WAITING
     Text[ italian ] = "Inizializzazione dei modelli per il primo utilizzo del programma.";
     Text[ danish ] = "Skabelonerne initialiseres nu til f�rste brug.";
     Text[ swedish ] = "Mallarna initieras nu f�r den f�rsta anv�ndningen.";
-    Text[ polish ] = "Rozpocznie si� teraz inicjalizacja u�ytych pierwszy raz szablon�w";
-    Text[ portuguese_brazilian ] = "Die %PRODUCTNAME Komponenten werden initialisiert";
+    Text[ polish ] = "Szablony s� teraz inicjowane do pierwszego u�ycia";
+    Text[ portuguese_brazilian ] = "Os modelos est�o sendo inicializados para a primeira utiliza��o...";
     Text[ japanese ] = "テンプレートは今回初めて使用するにあたって、まず初期化されます。";
     Text[ korean ] = "지금 서식 파일이 처음 사용을 위해 설치되고 있습니다.";
     Text[ chinese_simplified ] = "现在首次初始化需要使用的样式文件。";
     Text[ chinese_traditional ] = "現在首次初始化需要使用的樣式檔案。";
-    Text[ turkish ] = "Kurulumdan sonra %PRODUCTNAME bile�enleri �imdi yeniden ba�lat�lacak.";
+    Text[ turkish ] = "�lk kullan�m i�in �ablonlar haz�rlan�yor";
     Text[ arabic ] = "���� ���� ����� ������ %PRODUCTNAME ����� ������ ��� ������ ����� �������.";
     Text[ catalan ] = "Els components d'%PRODUCTNAME s'inicialitzaran despr�s de la instal.laci�.";
     Text[ finnish ] = "Malleja alustetaan ensimm�ist� k�ytt�kertaa varten.";
     Text[ thai ] = "เริ่มแม่แบบสำหรับการใช้ครั้งแรก";
+    Text[ czech ] = "Šablony jsou inicializovány pro první použití.";
+    Text[ hebrew ] = "‮מתבצעת תיחול התבניות לשימושן בפעם הראשונה‬";
+    Text[ hindi ] = "नमूनों को पहिले बार उपयोग करने केलिए इनिश्यलैज़ किया है ।";
 };
+
+
+
+
+
+
+
+
+
 
 
 
