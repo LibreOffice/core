@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 17:14:49 $
+#   last change: $Author: os $ $Date: 2000-11-07 14:42:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,6 +81,7 @@ PROJECTPCHSOURCE=..$/ui_1st$/ui_pch
 
 
 CXXFILES = \
+        unodispatch.cxx  \
         unotxdoc.cxx  \
         unoatxt.cxx  \
         unomod.cxx  \
@@ -89,6 +90,7 @@ CXXFILES = \
 
 
 SLOFILES =  \
+        $(SLO)$/unodispatch.obj\
         $(SLO)$/unotxdoc.obj\
         $(SLO)$/unoatxt.obj \
         $(SLO)$/unomod.obj \
@@ -96,6 +98,7 @@ SLOFILES =  \
         $(SLO)$/dlelstnr.obj
 
 EXCEPTIONSFILES= \
+        $(SLO)$/unodispatch.obj\
         $(SLO)$/dlelstnr.obj \
         $(SLO)$/unotxdoc.obj \
         $(SLO)$/unoatxt.obj \
@@ -103,7 +106,7 @@ EXCEPTIONSFILES= \
         $(SLO)$/unotxvw.obj
 
 
-# --- Tagets -------------------------------------------------------
+# --- Targets -------------------------------------------------------
 
 .INCLUDE :  target.mk
 
