@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctempl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dv $ $Date: 2000-12-01 11:03:15 $
+ *  last change: $Author: dv $ $Date: 2000-12-04 09:28:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,29 +60,12 @@
  ************************************************************************/
 
 #include <limits.h>
-#if ! defined( MAC ) && ! defined( UNX )
-#include <io.h>
-#endif
 
 #ifndef _COM_SUN_STAR_UNO_ANY_H_
 #include <com/sun/star/uno/Any.h>
 #endif
-#ifndef _SYSTEM_HXX //autogen
-#include <vcl/system.hxx>
-#endif
-#ifndef _MSGBOX_HXX //autogen
-#endif
 #ifndef _SV_RESARY_HXX
 #include <vcl/resary.hxx>
-#endif
-#ifndef _SVSTOR_HXX //autogen
-#include <so3/svstor.hxx>
-#endif
-#ifndef _SFXECODE_HXX
-#include <svtools/sfxecode.hxx>
-#endif
-#ifndef _EHDL_HXX
-#include <svtools/ehdl.hxx>
 #endif
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <svtools/pathoptions.hxx>
@@ -182,22 +165,10 @@ using namespace ucb;
 #include "objsh.hxx"
 #include "sfxtypes.hxx"
 #include "app.hxx"
-#include "inimgr.hxx"
 #include "sfxresid.hxx"
-#include "docfilt.hxx"
-#include "fltfnc.hxx"
 #include "doc.hrc"
-#include "ucbhelp.hxx"
-#include "openflag.hxx"
-#include "ucbhelp.hxx"
 
 //========================================================================
-
-const char __FAR_DATA   pHeader[] =         "Sfx Document Template Directory";
-const char __FAR_DATA   pFileFileName[] =   "sfx.tpl";
-const char __FAR_DATA   pDirFileName[] =    "sfx.tlx";
-const char              pMGName[] =         "mg.bad";
-const char              cDefWildcard =      '*';
 
 #define HIERARCHIE_ROOT_URL     "vnd.sun.star.hier:/"
 #define TEMPLATE_ROOT_URL       "vnd.sun.star.hier:/templates"
@@ -373,31 +344,6 @@ public:
 SfxDocTemplate_Impl *gpTemplateData = 0;
 String  gaEmptyString;
 
-// ------------------------------------------------------------------------
-
-#define VERSION 4
-
-// Wird nur noch gebraucht, um die Datein beim Scannen zu "uberspringen
-// LongNameList_Impl needs this function, too!
-const String FileName_Impl(BOOL bDir)
-{
-    return bDir ? String::CreateFromAscii( pDirFileName ) :
-                  String::CreateFromAscii( pFileFileName );
-}
-
-// ------------------------------------------------------------------------
-class LongNameList_Impl : public List
-{
-    List*   mpNames;
-
-public:
-             LongNameList_Impl( const String& rDirName );
-            ~LongNameList_Impl();
-
-    String  GetLongName( const String& rShortName ) const;
-    BOOL    ReadHeader( SvStream& rStream ) const;
-};
-
 //------------------------------------------------------------------------
 class OpenNotifier_Impl : public SfxListener
 {
@@ -442,18 +388,6 @@ void OpenNotifier_Impl::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     }
 #endif  //(dv)
 }
-
-//------------------------------------------------------------------------
-#if 0
-//dv!
-void MakeFileName_Impl(const String &rLongName, BOOL bDir)
-{
-    String aFName(rLongName);
-    if(!bDir)
-        aFName+= DEFINE_CONST_UNICODE( ".vor" );
-    rEntry.MakeShortName(aFName, FSYS_KIND_NONE);
-}
-#endif
 
 //------------------------------------------------------------------------
 #if 0
@@ -594,6 +528,7 @@ BOOL SfxTemplateDirEntry::DeleteObjectShell()
     return bRet;
 }
 #endif
+
 //========================================================================
 //========================================================================
 //========================================================================
@@ -1341,7 +1276,7 @@ BOOL SfxDocumentTemplates::CopyTo
     OUString aTitle( aTargetURL.GetName() );
     aTargetURL.CutName();
 
-    OUString aParentURL = aTargetURL.GetFull();
+    OUString aParentURL = aTargetURL.GetMainURL();
 
     Reference< XCommandEnvironment > aCmdEnv;
     Content aTarget;
@@ -1982,7 +1917,7 @@ BOOL SfxDocumentTemplates::GetLogicNames
     aFullPath.SetURL( rPath );
     aFullPath.CutLastName();
 
-    OUString aPathTo = aFullPath.GetFull();
+    OUString aPathTo = aFullPath.GetMainURL();
 
     RegionData_Impl *pData = NULL;
     EntryData_Impl  *pEntry = NULL;
@@ -2059,129 +1994,6 @@ SfxDocumentTemplates::~SfxDocumentTemplates()
 {
     delete pImp;
 }
-
-// ------------------------------------------------------------------------
-// ------------------------------------------------------------------------
-// ------------------------------------------------------------------------
-struct LongNameListRec
-{
-    String maShortName;
-    String maLongName;
-
-    LongNameListRec( const String& rShort,
-                     const String& rLong )
-            : maShortName( rShort )
-            , maLongName( rLong )
-    {}
-};
-
-// ------------------------------------------------------------------------
-LongNameList_Impl::LongNameList_Impl( const String& rDirName )
-{
-    String aName = rDirName;
-
-    aName.Append( FileName_Impl( TRUE ) );
-
-    mpNames = 0;
-
-    SfxMedium aMedium( aName, STREAM_STD_READ, TRUE );
-    SvStream *pStream = aMedium.GetInStream();
-
-    if ( pStream )
-    {
-        char        cDir;
-        USHORT      nCount, i;
-        ByteString  aLongName;  // logischer Name des Benutzers
-        ByteString  aFileName;  // Dateiname (ohne Pfad)
-        LongNameListRec *pNew;
-
-        if ( ! ReadHeader( *pStream ) )
-            return;
-
-        *pStream >> cDir;
-        *pStream >> nCount;
-
-        mpNames = new List( nCount, 10 );
-
-        CharSet eCharSet = pStream->GetStreamCharSet();
-
-        for( i = 0; i < nCount; ++i )
-        {
-            pStream->ReadByteString( aLongName );
-            pStream->ReadByteString( aFileName );
-            pNew = new LongNameListRec( String( aFileName, eCharSet ),
-                                        String( aLongName, eCharSet ) );
-            mpNames->Insert( pNew );
-        }
-    }
-}
-
-// ------------------------------------------------------------------------
-LongNameList_Impl::~LongNameList_Impl()
-{
-    if ( mpNames )
-    {
-        LongNameListRec *pData = (LongNameListRec *) mpNames->First();
-
-        while ( pData )
-        {
-            delete pData;
-            pData = (LongNameListRec *) mpNames->Next();
-        }
-
-        delete mpNames;
-    }
-}
-
-// ------------------------------------------------------------------------
-String LongNameList_Impl::GetLongName( const String& rShortName ) const
-{
-    String aLongName;
-    LongNameListRec *pData;
-
-    if ( mpNames )
-        pData = (LongNameListRec *) mpNames->First();
-    else
-        pData = NULL;
-
-    while ( pData )
-    {
-        if ( pData->maShortName == rShortName )
-        {
-            aLongName = pData->maLongName;
-            break;
-        }
-        else
-            pData = (LongNameListRec *) mpNames->Next();
-    }
-
-    return aLongName;
-}
-
-// ------------------------------------------------------------------------
-BOOL LongNameList_Impl::ReadHeader( SvStream& rStream ) const
-{
-    ByteString  aHeader;
-    USHORT      nUS = strlen( pHeader );
-    USHORT      nVersion;
-    CharSet     eCharSet;
-    char        c;
-
-    rStream.Read( aHeader.AllocBuffer( nUS ), nUS );
-    rStream >> c >> nVersion >> nUS;
-
-    // CharSet einlesen und am Stream setzen
-    eCharSet = (CharSet)nUS;
-    rStream.SetStreamCharSet(eCharSet);
-
-    if( aHeader != pHeader )
-        return FALSE;
-    if( nVersion != VERSION )
-        return FALSE;
-
-    return TRUE;
-}
-
 
 // -----------------------------------------------------------------------
 // -----------------------------------------------------------------------
@@ -2346,8 +2158,17 @@ EntryData_Impl* RegionData_Impl::AddEntry( Content& rParentFolder,
 {
     Content aLink;
     Reference< XCommandEnvironment > aCmdEnv;
-    OUString aLinkURL( RTL_CONSTASCII_USTRINGPARAM( TEMPLATE_ROOT_URL ) );
-    aLinkURL += OUString( '/' ) + maTitle + OUString( '/' ) + rTitle;
+    INetURLObject aLinkObj( TEMPLATE_ROOT_URL );
+    aLinkObj.insertName( maTitle, true,
+                      INetURLObject::LAST_SEGMENT, true,
+                      INetURLObject::ENCODE_ALL );
+    aLinkObj.insertName( rTitle, false,
+                      INetURLObject::LAST_SEGMENT, true,
+                      INetURLObject::ENCODE_ALL );
+    OUString aLinkURL = aLinkObj.GetMainURL();
+
+//  OUString aLinkURL( RTL_CONSTASCII_USTRINGPARAM( TEMPLATE_ROOT_URL ) );
+//  aLinkURL += OUString( '/' ) + maTitle + OUString( '/' ) + rTitle;
 
     try
     {
@@ -2866,9 +2687,14 @@ void SfxDocTemplate_Impl::GetFolders( Content& rRoot,
                     continue;
 
                 aTitle = GetLongName( aTitle );
-
                 OUString aURLTitle = aTitle + aIndex;
-                OUString aNewFolderURL = aRootURL + aURLTitle;
+
+                INetURLObject aNewFolderObj( aRootURL );
+                aNewFolderObj.insertName( aURLTitle, false,         // aURLTitle?
+                      INetURLObject::LAST_SEGMENT, true,
+                      INetURLObject::ENCODE_ALL );
+
+                OUString aNewFolderURL = aNewFolderObj.GetMainURL();
                 OUString aId = xContentAccess->queryContentIdentifierString();
 
                 try
@@ -2877,7 +2703,7 @@ void SfxDocTemplate_Impl::GetFolders( Content& rRoot,
                 }
                 catch( ContentCreationException& )
                 {
-                    pValues[0] = makeAny( aURLTitle );
+                    pValues[0] = makeAny( aURLTitle );              // aURLTitle?
                     pValues[1] = makeAny( sal_Bool( sal_True ) );
 
                     try
@@ -3301,8 +3127,6 @@ OUString SfxDocTemplate_Impl::GetTypeFromURL( const OUString& rURL )
         pValues->Value = makeAny( sal_Bool( sal_True ) );
 
         aTypeName = xTypeDetection->searchFilter( rURL, aValues );
-
-//      Sequence < OUString > testing = xTypeDetection->getAvailableFilterNames();
     }
     return aTypeName;
 #endif
