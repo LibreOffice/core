@@ -2,9 +2,9 @@
  *
  *  $RCSfile: concustomshape.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:15:58 $
+ *  last change: $Author: hr $ $Date: 2004-11-27 12:31:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,12 +152,29 @@
 ConstCustomShape::ConstCustomShape( SwWrtShell* pWrtShell, SwEditWin* pEditWin, SwView* pSwView, SfxRequest& rReq )
     : SwDrawBase( pWrtShell, pEditWin, pSwView )
 {
+    aCustomShape = ConstCustomShape::GetShapeTypeFromRequest( rReq );
+}
+
+/*************************************************************************
+|*
+\************************************************************************/
+
+rtl::OUString ConstCustomShape::GetShapeType() const
+{
+    return aCustomShape;
+}
+
+//static
+rtl::OUString ConstCustomShape::GetShapeTypeFromRequest( SfxRequest& rReq )
+{
+    rtl::OUString aRet;
     const SfxItemSet* pArgs = rReq.GetArgs();
     if ( pArgs )
     {
         const SfxStringItem& rItm = (const SfxStringItem&)pArgs->Get( rReq.GetSlot() );
-        aCustomShape = rItm.GetValue();
+        aRet = rItm.GetValue();
     }
+    return aRet;
 }
 
 /*************************************************************************
