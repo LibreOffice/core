@@ -48,26 +48,6 @@ $(SDI$(TNR)TARGET): $(SVSDI$(TNR)DEPEND)
     -fz$(MISCX)$/$(SDI$(TNR)NAME).sid	\
     $(SDI$(TNR)NAME).sdi -I$(MISCX) -I$(SVSDIINC) -I$(INC) -I$(INCLUDE) -I$(SOLARVER)$/$(UPD)$/$(INPATH)$/inc )
 
-.IF "$(NO_SRS_PATCH)"==""
-        @+$(COPY) $(SRSX)$/$(SDI$(TNR)NAME).srs $(TEMP)$/$(SDI$(TNR)NAME).srs
-.IF "$(GUI)" != "MAC"
-        @+-$(RM) $(SRSX)$/$(SDI$(TNR)NAME).srs
-.ENDIF
-.IF "$(GUI)" == "OS2"
-        @+gawk -f r:\bat\srspatch.awk $(TEMP)$/$(SDI$(TNR)NAME).srs > $(SRSX)$/$(SDI$(TNR)NAME).srs
-        @+$(COPY) $(SRSX)$/$(SDI$(TNR)NAME).srs $(TEMP)$/$(SDI$(TNR)NAME).srs
-        @+-$(RM) $(SRSX)$/$(SDI$(TNR)NAME).srs
-        @+sed -f r:\bat\sichern.sed $(TEMP)$/$(SDI$(TNR)NAME).srs > $(SRSX)$/$(SDI$(TNR)NAME).srs
-.ELSE
-.IF "$(GUI)" == "UNX"
-        @+$(AWK) -f $(SOLARROOT)$/scripts$/unx$/srspatch.awk $(TEMP)$/$(SDI$(TNR)NAME).srs > $(SRSX)$/$(SDI$(TNR)NAME).srs
-.ELSE
-        @+awk -f r:\bat\srspatch.awk $(TEMP)$/$(SDI$(TNR)NAME).srs > $(SRSX)$/$(SDI$(TNR)NAME).srs
-.ENDIF
-.ENDIF
-        @+-$(RM) $(TEMP)$/$(SDI$(TNR)NAME).srs
-.ENDIF			# "$(NO_SRS_PATCH)"!=""
-
 .ELSE			# "$(make_srs_deps)"==""
 $(SDI$(TNR)TARGET): $(SVSDI$(TNR)DEPEND)
     @+echo jetzt nicht...
