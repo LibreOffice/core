@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.65 $
+#   $Revision: 1.66 $
 #
-#   last change: $Author: hjs $ $Date: 2001-08-28 12:23:18 $
+#   last change: $Author: hjs $ $Date: 2001-08-28 12:25:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -2550,14 +2550,18 @@ $(EXCEPTIONSNOOPTFILES):
 # ----------------------------------
 
 .IF "$(UPDATER)"!=""
+.IF "$(BUILD_SOSL)"==""
 .IF "$(PRJNAME)"=="vcl"
 .IF "$(REMOTE_BUILD_FLAG)" == ""
+.IF "$(remote)" == ""
 $(REMOTE_BUILD):
     @+echo --- REMOTE_BUILD ---
     @dmake $(MFLAGS) remote=true REMOTE_BUILD_FLAG=TRUE $(CALLMACROS) $(PROJECTPCHTARGET:s/.pc/.xc/)
     @+echo --- REMOTE_BUILD OVER ---
+.ENDIF          # "$(remote)" == ""
 .ENDIF          # "$(REMOTE_BUILD_FLAG)" == ""
 .ENDIF          # "$(PRJNAME)"=="vcl"
+.ENDIF          # "$(BUILD_SOSL)"==""
 .ENDIF          # "$(UPDATER)"!=""
 
 .IF "$(LAZY_DEPS)"!=""
