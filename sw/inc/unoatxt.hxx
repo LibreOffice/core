@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoatxt.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-03 14:27:43 $
+ *  last change: $Author: mtg $ $Date: 2002-01-09 11:57:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -256,8 +256,14 @@ class SwXAutoTextEntry : public cppu::WeakImplHelper5
     String          sEntryName;
     SwDocShellRef   xDocSh;
     SwXBodyText*    pBodyText;
-    sal_Bool        bIsModified;
     com::sun::star::uno::Reference < com::sun::star::lang::XServiceInfo> xBodyText;
+
+    void EnsureBodyText ()
+    {
+        if ( !pBodyText )
+            GetBodyText();
+    }
+    void GetBodyText ();
 
 public:
     SwXAutoTextEntry(SwGlossaries* , const String& rGroupName, const String& rEntryName);
