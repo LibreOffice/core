@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConfigurationAccess.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jb $ $Date: 2001-02-01 14:31:41 $
+ *  last change: $Author: jb $ $Date: 2001-02-02 15:50:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@
 #include <com/sun/star/configuration/SetElement.idl>
 #endif
 
-#ifndef __com_sun_star_configuration_GroupElement _idl__
+#ifndef __com_sun_star_configuration_GroupElement_idl__
 #include <com/sun/star/configuration/GroupElement.idl>
 #endif
 
