@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpages.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-01-31 12:23:10 $
+ *  last change: $Author: os $ $Date: 2001-05-11 07:41:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,17 +97,16 @@
 
 #define BT_BULLET       213
 
-#define BG_VALUES       220
+#define FL_VALUES               220
 #define VS_VALUES       221
 #define ST_CUSTOMIZE    222
 #define FT_ERROR        223
 #define CB_LINKED       224
 
-#define GB_LEVEL        150
-#define LB_LEVEL        151
-#define GB_FORMAT       152
-#define GB_PREVIEW      153
-#define GB_POSITION     154
+#define FT_LEVEL            151
+#define LB_LEVEL            152
+#define FL_FORMAT           153
+#define FL_POSITION         154
 #define FT_PREFIX       155
 #define ED_PREFIX       156
 #define FT_FMT          157
@@ -142,7 +141,7 @@
 #define FT_ALL_LEVEL    186
 #define PB_STANDARD     187
 #define CB_SAME_LEVEL   188
-#define GB_SAME_LEVEL   189
+#define FL_SAME_LEVEL   189
 #define FT_BUL_COLOR    190
 #define LB_BUL_COLOR    191
 #define FT_BUL_REL_SIZE 192

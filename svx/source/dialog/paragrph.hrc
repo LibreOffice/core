@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.hrc,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-04-24 08:34:33 $
+ *  last change: $Author: os $ $Date: 2001-05-11 07:41:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,47 +69,46 @@
 #define ED_FLINEINDENT          13
 #define FT_RIGHTINDENT          14
 #define ED_RIGHTINDENT          15
-#define GB_INDENT               16
+#define FL_INDENT                       16
 
-#define FT_TOPDIST              20
-#define ED_TOPDIST              21
+#define FT_TOPDIST                      20
+#define ED_TOPDIST                      21
 #define FT_BOTTOMDIST           22
 #define ED_BOTTOMDIST           23
-#define GB_DIST                 24
+#define FL_DIST                         24
 
 #define BTN_LEFTALIGN           30
 #define BTN_RIGHTALIGN          31
 #define BTN_CENTERALIGN         32
 #define BTN_JUSTIFYALIGN        33
-#define GB_ALIGN                34
-#define FL_VERTALIGN            35
-#define LB_VERTALIGN            36
-#define FL_VERTEX               37
+#define FL_ALIGN                        34
+#define FL_VERTALIGN                    35
+#define LB_VERTALIGN                    36
+#define FL_VERTEX                       37
 
-#define LB_LINEDIST             40
-#define FT_LINEDIST             41
+#define LB_LINEDIST                     40
+#define FT_LINEDIST                     41
 #define ED_LINEDISTPERCENT      42
 #define ED_LINEDISTMETRIC       43
-#define GB_LINEDIST             44
-#define WN_EXAMPLE              46
-#define GB_EXAMPLE              47
+#define FL_LINEDIST                     44
+#define WN_EXAMPLE                      46
 
-#define CB_AUTO                 48
-#define FT_LASTLINE                             49
-#define LB_LASTLINE                             50
-#define CB_EXPAND                               51
-#define ST_LINEDIST_ABS                         52
+#define CB_AUTO                         48
+#define FT_LASTLINE                     49
+#define LB_LASTLINE                     50
+#define CB_EXPAND                       51
+#define ST_LINEDIST_ABS                 52
 
 // ExtendedTabPage ----------------------------------------------------------
 
-#define BTN_HYPHEN              50
-#define FT_BEFORE               51
+#define BTN_HYPHEN                      50
+#define FT_BEFORE                       51
 #define ED_HYPHENBEFORE         52
 #define FT_HYPHENBEFORE         53
-#define FT_AFTER                54
+#define FT_AFTER                        54
 #define ED_HYPHENAFTER          55
 #define FT_HYPHENAFTER          56
-#define GB_HYPHEN               57
+#define GB_HYPHEN                       57
 
 #define BTN_PAGEBREAK           60
 #define BTN_BREAKPAGE           61
@@ -117,36 +116,36 @@
 #define BTN_PAGEBREAKBEFORE     63
 #define BTN_PAGEBREAKAFTER      64
 #define BTN_PAGECOLL            65
-#define LB_PAGECOLL             66
+#define LB_PAGECOLL                     66
 #define BTN_KEEPTOGETHER        67
-#define BTN_WIDOWS              68
-#define ED_WIDOWS               69
-#define FT_WIDOWS               70
-#define BTN_ORPHANS             71
-#define ED_ORPHANS              72
-#define FT_ORPHANS              73
-#define GB_OPTIONS              74
-#define FT_PAGENUM              75
-#define ED_PAGENUM              76
+#define BTN_WIDOWS                      68
+#define ED_WIDOWS                       69
+#define FT_WIDOWS                       70
+#define BTN_ORPHANS                     71
+#define ED_ORPHANS                      72
+#define FT_ORPHANS                      73
+#define GB_OPTIONS                      74
+#define FT_PAGENUM                      75
+#define ED_PAGENUM                      76
 
-#define CB_KEEPTOGETHER         80
+#define CB_KEEPTOGETHER                 80
 #define FT_MAXHYPH              81
-#define ED_MAXHYPH              83
+#define ED_MAXHYPH                      83
 
-#define CB_REGISTER             84
-#define GB_REGISTER             85
+#define CB_REGISTER                     84
+#define FL_REGISTER                     85
 
 //asian typography
-#define GB_AS_OPTIONS           1
-#define CB_AS_HANG_PUNC         2
-#define CB_AS_ALLOW_WORD_BREAK  3
-#define CB_AS_FORBIDDEN         4
-#define GB_AS_CHAR_DIST         5
-#define CB_AS_PUNCTUATION       6
+#define FL_AS_OPTIONS                   1
+#define CB_AS_HANG_PUNC                 2
+#define CB_AS_ALLOW_WORD_BREAK          3
+#define CB_AS_FORBIDDEN                 4
+#define FL_AS_CHAR_DIST                 5
+#define CB_AS_PUNCTUATION               6
 #define CB_AS_SCRIPT_SPACE          7
-#define CB_AS_ADJUST_NUMBERS    8
-#define FT_TEXT_ALIGN           9
-#define LB_TEXT_ALIGN          10
+#define CB_AS_ADJUST_NUMBERS            8
+#define FT_TEXT_ALIGN                   9
+#define LB_TEXT_ALIGN                   10
 
 #endif
 

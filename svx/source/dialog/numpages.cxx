@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpages.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2001-02-23 12:29:29 $
+ *  last change: $Author: os $ $Date: 2001-05-11 07:41:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -315,7 +315,7 @@ Font& lcl_GetDefaultBulletFont()
 SvxSingleNumPickTabPage::SvxSingleNumPickTabPage(Window* pParent,
                                const SfxItemSet& rSet)  :
     SfxTabPage( pParent, SVX_RES( RID_SVXPAGE_PICK_SINGLE_NUM ), rSet ),
-    aValuesGB(      this, ResId(BG_VALUES) ),
+    aValuesFL(      this, ResId(FL_VALUES) ),
     pExamplesVS(    new SvxNumValueSet(this, ResId(VS_VALUES), NUM_PAGETYPE_SINGLENUM )),
     pActNum(0),
     pSaveNum(0),
@@ -540,7 +540,7 @@ IMPL_LINK(SvxSingleNumPickTabPage, DoubleClickHdl_Impl, ValueSet*, EMPTYARG)
 SvxBulletPickTabPage::SvxBulletPickTabPage(Window* pParent,
                                const SfxItemSet& rSet)  :
     SfxTabPage( pParent, SVX_RES( RID_SVXPAGE_PICK_BULLET ), rSet ),
-    aValuesGB(      this, ResId(BG_VALUES) ),
+    aValuesFL(      this, ResId(FL_VALUES) ),
     pExamplesVS(    new SvxNumValueSet(this, ResId(VS_VALUES), NUM_PAGETYPE_BULLET )),
     pActNum(0),
     pSaveNum(0),
@@ -724,7 +724,7 @@ IMPL_LINK(SvxBulletPickTabPage, DoubleClickHdl_Impl, ValueSet*, EMPTYARG)
 SvxNumPickTabPage::SvxNumPickTabPage(Window* pParent,
                                const SfxItemSet& rSet) :
     SfxTabPage( pParent, SVX_RES( RID_SVXPAGE_PICK_NUM ), rSet ),
-    aValuesGB(      this, ResId(BG_VALUES) ),
+    aValuesFL(      this, ResId(FL_VALUES) ),
     pExamplesVS(    new SvxNumValueSet(this, ResId(VS_VALUES), NUM_PAGETYPE_NUM )),
     pActNum(0),
     pSaveNum(0),
@@ -1216,7 +1216,7 @@ void SvxNumValueSet::SetOutlineNumberingSettings(
 SvxBitmapPickTabPage::SvxBitmapPickTabPage(Window* pParent,
                                const SfxItemSet& rSet) :
     SfxTabPage( pParent, SVX_RES( RID_SVXPAGE_PICK_BMP ), rSet ),
-    aValuesGB(      this, ResId(BG_VALUES) ),
+    aValuesFL(      this, ResId(FL_VALUES) ),
     pExamplesVS(    new SvxBmpNumValueSet(this, ResId(VS_VALUES), aGrfNames )),
     aErrorText(     this, ResId(FT_ERROR)),
     aLinkedCB(      this, ResId(CB_LINKED)),
@@ -1604,9 +1604,9 @@ SvxNumOptionsTabPage::SvxNumOptionsTabPage(Window* pParent,
                                const SfxItemSet& rSet) :
     SfxTabPage( pParent, SVX_RES( RID_SVXPAGE_NUM_OPTIONS ), rSet ),
 
-    aLevelGB(       this, ResId(GB_LEVEL    )),
+    aFormatFL(      this, ResId(FL_FORMAT   )),
+    aLevelFT(       this, ResId(FT_LEVEL    )),
     aLevelLB(       this, ResId(LB_LEVEL    )),
-    aFormatGB(      this, ResId(GB_FORMAT   )),
     aPrefixFT(      this, ResId(FT_PREFIX   )),
     aPrefixED(      this, ResId(ED_PREFIX   )),
     aFmtFT(         this, ResId(FT_FMT      )),
@@ -1623,7 +1623,7 @@ SvxNumOptionsTabPage::SvxNumOptionsTabPage(Window* pParent,
     aAllLevelNF(    this, ResId(NF_ALL_LEVEL)),
     aStartFT(       this, ResId(FT_START    )),
     aStartED(       this, ResId(ED_START    )),
-    aSameLevelGB(   this, ResId(GB_SAME_LEVEL)),
+    aSameLevelFL(   this, ResId(FL_SAME_LEVEL)),
     aSameLevelCB(   this, ResId(CB_SAME_LEVEL)),
     aBulletPB(      this, ResId(PB_BULLET   )),
     aBitmapFT(      this, ResId(FT_BITMAP   )),
@@ -1635,7 +1635,6 @@ SvxNumOptionsTabPage::SvxNumOptionsTabPage(Window* pParent,
     aHeightMF(      this, ResId(MF_HEIGHT   )),
     aOrientFT(      this, ResId(FT_ORIENT   )),
     aOrientLB(      this, ResId(LB_ORIENT   )),
-    aPreviewGB(     this, ResId(GB_PREVIEW  )),
     aUseBulletCB(   this, ResId(CB_USE_BULLET)),
     aAlignFT(       this, ResId(FT_ALIGN    )),
     aAlignLB(       this, ResId(LB_ALIGN    )),
@@ -1938,7 +1937,7 @@ void    SvxNumOptionsTabPage::Reset( const SfxItemSet& rSet )
     aAllLevelFT.Show(bAllLevel);
     aAllLevelNF.Show(bAllLevel);
 
-    aSameLevelGB.Show(bContinuous);
+    aSameLevelFL.Show(bContinuous);
     aSameLevelCB.Show(bContinuous);
     //wieder Missbrauch: im Draw gibt es die Numerierung nur bis zum Bitmap
     // without SVX_NUM_NUMBER_NONE
@@ -1970,18 +1969,18 @@ void    SvxNumOptionsTabPage::Reset( const SfxItemSet& rSet )
     }
     if(pActNum->IsFeatureSupported(NUM_HIDDEN_SYMBOLS))
     {
-        Size aSz(aFormatGB.GetSizePixel());
-        aSz.Height() = aLevelGB.GetSizePixel().Height();
-        aFormatGB.SetSizePixel(aSz);
+        Size aSz(aFormatFL.GetSizePixel());
+        aSz.Height() = aLevelFT.GetSizePixel().Height();
+        aFormatFL.SetSizePixel(aSz);
         aUseBulletCB.Show(TRUE);
     }
     if(pActNum->IsFeatureSupported(NUM_SYMBOL_ALIGNMENT))
     {
         aAlignFT.Show();
         aAlignLB.Show();
-        Size aSz(aFormatGB.GetSizePixel());
-        aSz.Height() = aLevelGB.GetSizePixel().Height();
-        aFormatGB.SetSizePixel(aSz);
+        Size aSz(aFormatFL.GetSizePixel());
+        aSz.Height() = aLevelFT.GetSizePixel().Height();
+        aFormatFL.SetSizePixel(aSz);
         aAlignLB.SetSelectHdl(LINK(this, SvxNumOptionsTabPage, EditModifyHdl_Impl));
     }
 
@@ -3175,9 +3174,9 @@ void NumMenuButton::MouseButtonDown( const MouseEvent& rMEvt )
 SvxNumPositionTabPage::SvxNumPositionTabPage(Window* pParent,
                                const SfxItemSet& rSet) :
     SfxTabPage( pParent, SVX_RES( RID_SVXPAGE_NUM_POSITION ), rSet ),
-    aLevelGB(       this, ResId(GB_LEVEL    )),
+    aPositionFL(    this, ResId(FL_POSITION )),
+    aLevelFT(       this, ResId(FT_LEVEL    )),
     aLevelLB(       this, ResId(LB_LEVEL    )),
-    aPositionGB(    this, ResId(GB_POSITION )),
     aAlignFT(       this, ResId(FT_ALIGN    )),
     aAlignLB(       this, ResId(LB_ALIGN    )),
     aDistBorderFT(  this, ResId(FT_BORDERDIST   )),
@@ -3188,7 +3187,6 @@ SvxNumPositionTabPage::SvxNumPositionTabPage(Window* pParent,
     aIndentFT(      this, ResId(FT_INDENT       )),
     aIndentMF(      this, ResId(MF_INDENT       )),
     aStandardPB(    this, ResId(PB_STANDARD     )),
-    aPreviewGB(     this, ResId(GB_PREVIEW      )),
     pPreviewWIN(    new SvxNumberingPreview(this, ResId(WIN_PREVIEW ))),
     bInInintControl(FALSE),
     nActNumLvl( USHRT_MAX ),

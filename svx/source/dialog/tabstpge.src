@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabstpge.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 07:54:58 $
+ *  last change: $Author: os $ $Date: 2001-05-11 07:41:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,10 +92,10 @@ TabPage RID_SVXPAGE_TABULATOR
         DecimalDigits = 2 ;
         Unit = FUNIT_CM ;
     };
-    GroupBox GB_TABPOS
+    FixedLine FL_TABPOS
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 57 , 112 ) ;
+        Size = MAP_APPFONT ( 57 , 8 ) ;
         Text = "Position" ;
         Text [ ENGLISH ] = "Position" ;
         Text [ norwegian ] = "Posisjon" ;
@@ -120,6 +120,11 @@ TabPage RID_SVXPAGE_TABULATOR
         Text[ turkish ] = "Konum";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Posición";
+    };
+    FixedLine FL_TABPOS_VERT
+    {
+        Pos = MAP_APPFONT ( 63 , 14 ) ;
+        Size = MAP_APPFONT ( 4 , 101 ) ;
     };
     RadioButton BTN_TABTYPE_LEFT
     {
@@ -294,10 +299,10 @@ TabPage RID_SVXPAGE_TABULATOR
         Size = MAP_APPFONT ( 9 , 12 ) ;
         Left = TRUE ;
     };
-    GroupBox GB_TABTYPE
+    FixedLine FL_TABTYPE
     {
         Pos = MAP_APPFONT ( 69 , 3 ) ;
-        Size = MAP_APPFONT ( 61 , 112 ) ;
+        Size = MAP_APPFONT ( 61 , 8 ) ;
         Text = "Typ" ;
         Text [ ENGLISH ] = "Type" ;
         Text [ norwegian ] = "Type" ;
@@ -322,6 +327,11 @@ TabPage RID_SVXPAGE_TABULATOR
         Text[ turkish ] = "Tip";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Tipo";
+    };
+    FixedLine FL_TABTYPE_VERT
+    {
+        Pos = MAP_APPFONT ( 130 , 14 ) ;
+        Size = MAP_APPFONT ( 4  , 101) ;
     };
     RadioButton BTN_FILLCHAR_NO
     {
@@ -407,10 +417,10 @@ TabPage RID_SVXPAGE_TABULATOR
         Size = MAP_APPFONT ( 9 , 12 ) ;
         Left = TRUE ;
     };
-    GroupBox GB_FILLCHAR
+    FixedLine FL_FILLCHAR
     {
         Pos = MAP_APPFONT ( 136 , 3 ) ;
-        Size = MAP_APPFONT ( 65 , 112 ) ;
+        Size = MAP_APPFONT ( 65 , 8 ) ;
         Text = "Füllzeichen" ;
         Text [ ENGLISH ] = "Fill character" ;
         Text [ norwegian ] = "Fylltegn" ;

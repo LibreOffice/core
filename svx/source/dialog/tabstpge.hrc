@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabstpge.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:12 $
+ *  last change: $Author: os $ $Date: 2001-05-11 07:41:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,11 +63,12 @@
 
 // defines ------------------------------------------------------------------
 
-#define ED_TABPOS               10
-#define GB_TABPOS               11
+#define ED_TABPOS                       10
+#define FL_TABPOS                       11
+#define FL_TABPOS_VERT                  12
 
 #define BTN_TABTYPE_LEFT        20
-#define WIN_TABLEFT             21
+#define WIN_TABLEFT                     21
 #define BTN_TABTYPE_RIGHT       22
 #define WIN_TABRIGHT            23
 #define BTN_TABTYPE_CENTER      24
@@ -76,19 +77,21 @@
 #define WIN_TABDECIMAL          27
 #define ED_TABTYPE_DECCHAR      28
 #define FT_TABTYPE_DECCHAR      29
-#define GB_TABTYPE              30
+#define FL_TABTYPE                      30
+#define FL_TABTYPE_VERT                 31
+
 
 #define BTN_FILLCHAR_NO         40
 #define BTN_FILLCHAR_POINTS     41
-#define BTN_FILLCHAR_DASHLINE   42
-#define BTN_FILLCHAR_UNDERSCORE 43
+#define BTN_FILLCHAR_DASHLINE           42
+#define BTN_FILLCHAR_UNDERSCORE         43
 #define BTN_FILLCHAR_OTHER      44
 #define ED_FILLCHAR_OTHER       45
-#define GB_FILLCHAR             46
+#define FL_FILLCHAR                     46
 
-#define BTN_NEW                 50
-#define BTN_DEL                 51
-#define BTN_DELALL              52
+#define BTN_NEW                         50
+#define BTN_DEL                         51
+#define BTN_DELALL                      52
 
 
 #endif

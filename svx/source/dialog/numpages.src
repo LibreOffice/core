@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpages.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 07:13:24 $
+ *  last change: $Author: os $ $Date: 2001-05-11 07:41:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,10 +74,10 @@ TabPage RID_SVXPAGE_PICK_BULLET
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
     Hide = TRUE;
-    GroupBox BG_VALUES
+    FixedLine FL_VALUES
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 248 , 179 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Auswahl" ;
         Text [ ENGLISH ] = "Selection" ;
         Text [ english_us ] = "Selection" ;
@@ -120,10 +120,10 @@ TabPage RID_SVXPAGE_PICK_SINGLE_NUM
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
     Hide = TRUE;
-    GroupBox BG_VALUES
+    FixedLine FL_VALUES
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 248 , 179 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Auswahl" ;
         Text [ ENGLISH ] = "Selection" ;
         Text [ english_us ] = "Selection" ;
@@ -166,10 +166,10 @@ TabPage RID_SVXPAGE_PICK_NUM
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
     Hide = TRUE;
-    GroupBox BG_VALUES
+    FixedLine FL_VALUES
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 248 , 179 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Auswahl" ;
         Text [ ENGLISH ] = "Selection" ;
         Text [ english_us ] = "Selection" ;
@@ -212,10 +212,10 @@ TabPage RID_SVXPAGE_PICK_BMP
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
     Hide = TRUE;
-    GroupBox BG_VALUES
+    FixedLine FL_VALUES
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 248 , 129 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Auswahl" ;
         Text [ ENGLISH ] = "Selection" ;
         Text [ portuguese ] = "Selecção" ;
@@ -318,10 +318,10 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
     Hide = TRUE;
-    GroupBox GB_LEVEL
+    FixedText FT_LEVEL
     {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 38 , 179 ) ;
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT (50 ,  8 ) ;
         Text = "Ebene" ;
         Text [ ENGLISH ] = "Level" ;
         Text [ norwegian ] = "Level" ;
@@ -349,17 +349,17 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
     };
     MultiListBox LB_LEVEL
     {
-        Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 26 , 165 ) ;
+        Pos = MAP_APPFONT ( 12 , 25 ) ;
+        Size = MAP_APPFONT ( 26 , 154 ) ;
         TabStop = TRUE ;
         DropDown = FALSE ;
         Border = TRUE ;
         SimpleMode = TRUE ;
     };
-    GroupBox GB_FORMAT
+    FixedLine FL_FORMAT
     {
-        Pos = MAP_APPFONT ( 47 , 3 ) ;
-        Size = MAP_APPFONT ( 126 , 150 ) ;
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Format" ;
         Text [ ENGLISH ] = "Format" ;
         Text [ english_us ] = "Format" ;
@@ -386,8 +386,8 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
     };
     FixedText FT_FMT
     {
-        Pos = MAP_APPFONT ( 50 , 16 ) ;
-        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Pos = MAP_APPFONT ( 50 , 27 ) ;
+        Size = MAP_APPFONT ( 50, 10 ) ;
         Text = "~Nummerierung" ;
         Text [ ENGLISH ] = "Numbering" ;
         Text [ english_us ] = "~Numbering" ;
@@ -414,7 +414,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
     };
     ListBox LB_FMT
     {
-        Pos = MAP_APPFONT ( 103 , 14 ) ;
+        Pos = MAP_APPFONT ( 103 , 25 ) ;
         Size = MAP_APPFONT ( 67 , 70 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -744,8 +744,8 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
     };
     FixedText FT_PREFIX
     {
-        Pos = MAP_APPFONT ( 50 , 32 ) ;
-        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Pos = MAP_APPFONT ( 50 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
         Text = "~Davor" ;
         Text [ ENGLISH ] = "Before" ;
         Text [ norwegian ] = "Før" ;
@@ -775,7 +775,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
     Edit ED_PREFIX
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 103 , 30 ) ;
+        Pos = MAP_APPFONT ( 103 , 41 ) ;
         Size = MAP_APPFONT ( 67 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -783,8 +783,8 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
     };
     FixedText FT_SUFFIX
     {
-        Pos = MAP_APPFONT ( 50 , 48 ) ;
-        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Pos = MAP_APPFONT ( 50 , 59 ) ;
+        Size = MAP_APPFONT ( 50 ,10 ) ;
         Text = "Dahin~ter" ;
         Text [ ENGLISH ] = "Behind" ;
         Text [ norwegian ] = "Bak" ;
@@ -814,7 +814,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
     Edit ED_SUFFIX
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 103 , 46 ) ;
+        Pos = MAP_APPFONT ( 103 , 57 ) ;
         Size = MAP_APPFONT ( 67 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -822,8 +822,8 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
     };
     FixedText FT_CHARFMT
     {
-        Pos = MAP_APPFONT ( 50 , 64 ) ;
-        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Pos = MAP_APPFONT ( 50 , 75 ) ;
+        Size = MAP_APPFONT ( 50 ,10 ) ;
         Text = "Zeichenv~orlage:" ;
         Text [ ENGLISH ] = "Character style" ;
         Text [ english_us ] = "~Character Style:" ;
@@ -852,12 +852,12 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
     {
         TabStop = TRUE ;
         DropDown = TRUE ;
-        Pos = MAP_APPFONT ( 103 , 62 ) ;
+        Pos = MAP_APPFONT ( 103 , 73 ) ;
         Size = MAP_APPFONT ( 67 , 50 ) ;
     };
     FixedText FT_BUL_COLOR
     {
-        Pos = MAP_APPFONT ( 50 , 64 ) ;
+        Pos = MAP_APPFONT ( 50 , 75 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
         Text = "~Farbe:" ;
         Text [ ENGLISH ] = "~Color:" ;
@@ -888,13 +888,13 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
     {
         TabStop = TRUE ;
         DropDown = TRUE ;
-        Pos = MAP_APPFONT ( 103 , 62 ) ;
+        Pos = MAP_APPFONT ( 103 , 73 ) ;
         Size = MAP_APPFONT ( 67 , 50 ) ;
         Hide = TRUE;
     };
     FixedText FT_BUL_REL_SIZE
     {
-        Pos = MAP_APPFONT ( 50 , 80 ) ;
+        Pos = MAP_APPFONT ( 50 , 91 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
         Text = "~Relative Größe:" ;
         Text [ ENGLISH ] = "~Relatize size:" ;
@@ -923,7 +923,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
     };
     MetricField MF_BUL_REL_SIZE
     {
-        Pos = MAP_APPFONT ( 103 , 78 ) ;
+        Pos = MAP_APPFONT ( 103 , 89 ) ;
         Size = MAP_APPFONT ( 67 , 12 ) ;
         Border = TRUE ;
         Group = TRUE ;
@@ -939,7 +939,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
     };
     FixedText FT_ALL_LEVEL
     {
-        Pos = MAP_APPFONT ( 50 , 80 ) ;
+        Pos = MAP_APPFONT ( 50 , 91 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
         Text = "~Vollständig" ;
         Text [ ENGLISH ] = "~Complete" ;
@@ -969,7 +969,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
     NumericField NF_ALL_LEVEL
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 103 , 78 ) ;
+        Pos = MAP_APPFONT ( 103 , 89 ) ;
         Size = MAP_APPFONT ( 67 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -983,7 +983,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
     };
     FixedText FT_START
     {
-        Pos = MAP_APPFONT ( 50 , 96 ) ;
+        Pos = MAP_APPFONT ( 50 , 107 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
         Text = "~Beginn bei" ;
         Text [ ENGLISH ] = "~Start at" ;
@@ -1014,7 +1014,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
     NumericField ED_START
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 103 , 94 ) ;
+        Pos = MAP_APPFONT ( 103 , 105 ) ;
         Size = MAP_APPFONT ( 67 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -1029,7 +1029,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
     TriStateBox CB_USE_BULLET
     {
         Hide = TRUE ;
-        Pos = MAP_APPFONT ( 50 , 108 ) ;
+        Pos = MAP_APPFONT ( 50 , 119 ) ;
         Size = MAP_APPFONT ( 120 , 10 ) ;
         Text = "~Symbol anzeigen" ;
         Text [ English ] = "~Show symbol" ;
@@ -1058,7 +1058,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
     };
     FixedText FT_ALIGN
     {
-        Pos = MAP_APPFONT ( 50 , 124 ) ;
+        Pos = MAP_APPFONT ( 50 , 135 ) ;
         Size = MAP_APPFONT ( 77 , 10 ) ;
         Text = "Ausri~chtung" ;
         Text [ ENGLISH ] = "Alignment" ;
@@ -1088,7 +1088,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
     };
     ListBox LB_ALIGN
     {
-        Pos = MAP_APPFONT ( 130 , 122 ) ;
+        Pos = MAP_APPFONT ( 103 , 133 ) ;
         Size = MAP_APPFONT ( 40 , 40 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -1262,7 +1262,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
     PushButton PB_BULLET
     {
         Hide = TRUE ;
-        Pos = MAP_APPFONT ( 158 , 94 ) ;
+        Pos = MAP_APPFONT ( 103 , 105 ) ;
         Size = MAP_APPFONT ( 12 , 12 ) ;
         Text = "..." ;
         TabStop = TRUE ;
@@ -1270,7 +1270,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
     FixedText FT_BITMAP
     {
         Hide = TRUE ;
-        Pos = MAP_APPFONT ( 50 , 32 ) ;
+        Pos = MAP_APPFONT ( 50 , 43 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
         Text = "Grafik" ;
         Text [ English ] = "Graphic" ;
@@ -1299,7 +1299,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
     MenuButton MB_BITMAP
     {
         Hide = TRUE ;
-        Pos = MAP_APPFONT ( 120 , 30 ) ;
+        Pos = MAP_APPFONT ( 103 , 41 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
         Text = "Aus~wahl..." ;
@@ -1369,7 +1369,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
     FixedText FT_SIZE
     {
         Hide = TRUE ;
-        Pos = MAP_APPFONT ( 50 , 50 ) ;
+        Pos = MAP_APPFONT ( 50 , 61 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
         Text = "~Breite" ;
         Text [ English ] = "~Width" ;
@@ -1397,7 +1397,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
     };
     MetricField MF_WIDTH
     {
-        Pos = MAP_APPFONT ( 103 , 48 ) ;
+        Pos = MAP_APPFONT ( 103 , 59 ) ;
         Size = MAP_APPFONT ( 67 , 12 ) ;
         Border = TRUE ;
         TabStop = TRUE ;
@@ -1417,7 +1417,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
     FixedText FT_MULT
     {
         Hide = TRUE ;
-        Pos = MAP_APPFONT ( 50 , 66 ) ;
+        Pos = MAP_APPFONT ( 50 , 77 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
         Text = "~Höhe" ;
         Text [ English ] = "Height" ;
@@ -1445,7 +1445,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
     };
     MetricField MF_HEIGHT
     {
-        Pos = MAP_APPFONT ( 103 , 64 ) ;
+        Pos = MAP_APPFONT ( 103 , 75 ) ;
         Size = MAP_APPFONT ( 67 , 12 ) ;
         Border = TRUE ;
         TabStop = TRUE ;
@@ -1465,7 +1465,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
     CheckBox CB_RATIO
     {
         Hide = TRUE ;
-        Pos = MAP_APPFONT ( 50 , 80 ) ;
+        Pos = MAP_APPFONT ( 50 , 91 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         Text = "Abg~leich" ;
         Text [ English ] = "Fixed ratio" ;
@@ -1494,7 +1494,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
     FixedText FT_ORIENT
     {
         Hide = TRUE ;
-        Pos = MAP_APPFONT ( 50 , 94 ) ;
+        Pos = MAP_APPFONT ( 50 , 105 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
         Text = "A~usrichtung" ;
         Text [ English ] = "Orientation" ;
@@ -1523,7 +1523,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
     ListBox LB_ORIENT
     {
         Hide = TRUE ;
-        Pos = MAP_APPFONT ( 103 , 92 ) ;
+        Pos = MAP_APPFONT ( 103 , 103 ) ;
         Size = MAP_APPFONT ( 67 , 50 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -1805,10 +1805,10 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         < "Viivan alaosa" ; > ;
     };
     };
-    GroupBox GB_SAME_LEVEL
+    FixedLine FL_SAME_LEVEL
     {
         Pos = MAP_APPFONT ( 47 , 156 ) ;
-        Size = MAP_APPFONT ( 126 , 26 ) ;
+        Size = MAP_APPFONT ( 126 , 8 ) ;
         Text = "Alle Ebenen" ;
         Text [ ENGLISH ] = "All levels" ;
         Text [ english_us ] = "All levels" ;
@@ -1861,38 +1861,10 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ catalan ] = "Numeración c~onsecutiva";
         Text[ finnish ] = "~Jatkuva numerointi";
     };
-    GroupBox GB_PREVIEW
-    {
-        Pos = MAP_APPFONT ( 176 , 1 ) ;
-        Size = MAP_APPFONT ( 78 , 181 ) ;
-        Text = "Vorschau" ;
-        Text [ ENGLISH ] = "Preview" ;
-        Text [ english_us ] = "Preview" ;
-        Text [ portuguese_brazilian ] = "Vorschau" ;
-        Text [ swedish ] = "Förhandsvisning" ;
-        Text [ danish ] = "Eksempel" ;
-        Text [ italian ] = "Anteprima" ;
-        Text [ spanish ] = "Previsualización" ;
-        Text [ french ] = "Aperçu" ;
-        Text [ dutch ] = "Voorbeeld" ;
-        Text [ portuguese ] = "Previsualizar" ;
-        Text[ chinese_simplified ] = "Ô¤ÀÀ";
-        Text[ russian ] = "Ïðîñìîòð";
-        Text[ polish ] = "Podgl¹d";
-        Text[ japanese ] = "ÌßÚËÞ­°";
-        Text[ chinese_traditional ] = "¹wÄý";
-        Text[ arabic ] = "ÇáãÚÇíäÉ";
-        Text[ greek ] = "Ðñïåðéóêüðçóç";
-        Text[ korean ] = "¹Ì¸®º¸±â";
-        Text[ turkish ] = "Önizleme";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Previsualización";
-        Text[ finnish ] = "Esikatselu";
-    };
     Window WIN_PREVIEW
     {
-        Pos = MAP_APPFONT ( 179 , 12 ) ;
-        Size = MAP_APPFONT ( 72 , 164 ) ;
+        Pos = MAP_APPFONT ( 179 , 25 ) ;
+        Size = MAP_APPFONT ( 72 , 154 ) ;
     };
     String ST_POPUP_EMPTY_ENTRY
     {
@@ -1932,10 +1904,10 @@ TabPage RID_SVXPAGE_NUM_POSITION
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
     Hide = TRUE;
-    GroupBox GB_LEVEL
+    FixedText FT_LEVEL
     {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 38 , 179 ) ;
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 50, 8 ) ;
         Text = "Ebene" ;
         Text [ ENGLISH ] = "Level" ;
         Text [ norwegian ] = "Level" ;
@@ -1963,17 +1935,17 @@ TabPage RID_SVXPAGE_NUM_POSITION
     };
     MultiListBox LB_LEVEL
     {
-        Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 26 , 163 ) ;
+        Pos = MAP_APPFONT ( 12 , 25 ) ;
+        Size = MAP_APPFONT ( 26 , 154 ) ;
         TabStop = TRUE ;
         DropDown = FALSE ;
         Border = TRUE ;
         SimpleMode = TRUE ;
     };
-    GroupBox GB_POSITION
+    FixedLine FL_POSITION
     {
-        Pos = MAP_APPFONT ( 47 , 3 ) ;
-        Size = MAP_APPFONT ( 207 , 92 ) ;
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Position und Abstand" ;
         Text [ ENGLISH ] = "Position and distance" ;
         Group = TRUE ;
@@ -2001,7 +1973,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
     };
     FixedText FT_BORDERDIST
     {
-        Pos = MAP_APPFONT ( 50 , 16 ) ;
+        Pos = MAP_APPFONT ( 50 , 27 ) ;
         Size = MAP_APPFONT ( 105 , 10 ) ;
         Text = "Ein~rückung";
 //        Text = "Abstand Text <-> Rand" ;
@@ -2030,7 +2002,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
     };
     CheckBox CB_RELATIVE
     {
-        Pos = MAP_APPFONT ( 201 , 16 ) ;
+        Pos = MAP_APPFONT ( 201 , 27 ) ;
         Size = MAP_APPFONT ( 49 , 10 ) ;
         Text = "Relati~v" ;
         Text [ ENGLISH ] = "Relati~ve" ;
@@ -2058,7 +2030,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
     };
     MetricField MF_BORDERDIST
     {
-        Pos = MAP_APPFONT ( 158 , 14 ) ;
+        Pos = MAP_APPFONT ( 158 , 25 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         Border = TRUE ;
         TabStop = TRUE ;
@@ -2076,7 +2048,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
     };
     FixedText FT_INDENT
     {
-        Pos = MAP_APPFONT ( 50 , 32 ) ;
+        Pos = MAP_APPFONT ( 50 , 43 ) ;
         Size = MAP_APPFONT ( 105 , 10 ) ;
         Text = "Abstand zum Te~xt" ;
 //        Text = "Einr~ückung" ;
@@ -2105,7 +2077,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
     };
     MetricField MF_INDENT
     {
-        Pos = MAP_APPFONT ( 158 , 30 ) ;
+        Pos = MAP_APPFONT ( 158 , 41 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         Border = TRUE ;
         TabStop = TRUE ;
@@ -2123,7 +2095,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
     };
     FixedText FT_NUMDIST
     {
-        Pos = MAP_APPFONT ( 50 , 48 ) ;
+        Pos = MAP_APPFONT ( 50 , 59 ) ;
         Size = MAP_APPFONT ( 105 , 10 ) ;
         Text = "~Mindestabstand Nummer <-> Text" ;
         Text [ ENGLISH ] = "Distance text <-> numbering" ;
@@ -2151,7 +2123,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
     };
     MetricField MF_NUMDIST
     {
-        Pos = MAP_APPFONT ( 158 , 46 ) ;
+        Pos = MAP_APPFONT ( 158 , 57 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         Left = TRUE ;
         Repeat = TRUE ;
@@ -2169,7 +2141,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
     };
     FixedText FT_ALIGN
     {
-        Pos = MAP_APPFONT ( 50 , 64 ) ;
+        Pos = MAP_APPFONT ( 50 , 75 ) ;
         Size = MAP_APPFONT ( 105 , 10 ) ;
         Text = "Ausri~chtung der Nummerierung" ;
         Text [ ENGLISH ] = "Alignment of the numbering" ;
@@ -2198,7 +2170,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
     };
     ListBox LB_ALIGN
     {
-        Pos = MAP_APPFONT ( 158 , 62 ) ;
+        Pos = MAP_APPFONT ( 158 , 73 ) ;
         Size = MAP_APPFONT ( 40 , 40 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -2343,7 +2315,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
     };
     PushButton PB_STANDARD
     {
-        Pos = MAP_APPFONT ( 201 , 78 ) ;
+        Pos = MAP_APPFONT ( 201 , 165 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text = "~Standard" ;
         Text [ ENGLISH ] = "~Standard" ;
@@ -2369,38 +2341,10 @@ TabPage RID_SVXPAGE_NUM_POSITION
         Text[ catalan ] = "~Predeterminado";
         Text[ finnish ] = "Oletusarvo";
     };
-    GroupBox GB_PREVIEW
-    {
-        Pos = MAP_APPFONT ( 47 , 98 ) ;
-        Size = MAP_APPFONT ( 207 , 84 ) ;
-        Text = "Vorschau" ;
-        Text [ ENGLISH ] = "Preview" ;
-        Text [ english_us ] = "Preview" ;
-        Text [ portuguese_brazilian ] = "Vorschau" ;
-        Text [ swedish ] = "Förhandsvisning" ;
-        Text [ danish ] = "Eksempel" ;
-        Text [ italian ] = "Anteprima" ;
-        Text [ spanish ] = "Previsualización" ;
-        Text [ french ] = "Aperçu" ;
-        Text [ dutch ] = "Voorbeeld" ;
-        Text [ portuguese ] = "Previsualizar" ;
-        Text[ chinese_simplified ] = "Ô¤ÀÀ";
-        Text[ russian ] = "Ïðîñìîòð";
-        Text[ polish ] = "Podgl¹d";
-        Text[ japanese ] = "ÌßÚËÞ­°";
-        Text[ chinese_traditional ] = "¹wÄý";
-        Text[ arabic ] = "ÇáãÚÇíäÉ";
-        Text[ greek ] = "Ðñïåðéóêüðçóç";
-        Text[ korean ] = "¹Ì¸®º¸±â";
-        Text[ turkish ] = "Önizleme";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Previsualización";
-        Text[ finnish ] = "Esikatselu";
-    };
     Window WIN_PREVIEW
     {
-        Pos = MAP_APPFONT ( 50 , 109 ) ;
-        Size = MAP_APPFONT ( 201 , 70 ) ;
+        Pos = MAP_APPFONT (   49 , 92 ) ;
+        Size = MAP_APPFONT ( 202 , 67 ) ;
     };
 };
 

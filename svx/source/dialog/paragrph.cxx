@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ama $ $Date: 2001-04-25 10:35:29 $
+ *  last change: $Author: os $ $Date: 2001-05-11 07:41:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -630,7 +630,7 @@ void SvxStdParagraphTabPage::Reset( const SfxItemSet& rSet )
     if(nHtmlMode & HTMLMODE_ON)
     {
         aRegisterCB.Hide();
-        aRegisterGB.Hide();
+        aRegisterFL.Hide();
         aAutoCB.Hide();
         if(!(nHtmlMode & HTMLMODE_SOME_STYLES)) // IE oder SW
         {
@@ -690,21 +690,20 @@ SvxStdParagraphTabPage::SvxStdParagraphTabPage( Window* pParent,
     aAutoCB                 ( this, ResId( CB_AUTO ) ),
     aRightLabel             ( this, ResId( FT_RIGHTINDENT ) ),
     aRightIndent            ( this, ResId( ED_RIGHTINDENT ) ),
-    aIndentFrm              ( this, ResId( GB_INDENT ) ),
+    aIndentFrm              ( this, ResId( FL_INDENT ) ),
     aTopLabel               ( this, ResId( FT_TOPDIST ) ),
     aTopDist                ( this, ResId( ED_TOPDIST ) ),
     aBottomLabel            ( this, ResId( FT_BOTTOMDIST ) ),
     aBottomDist             ( this, ResId( ED_BOTTOMDIST ) ),
-    aDistFrm                ( this, ResId( GB_DIST ) ),
+    aDistFrm                ( this, ResId( FL_DIST ) ),
     aLineDist               ( this, ResId( LB_LINEDIST ) ),
     aLineDistAtLabel        ( this, ResId( FT_LINEDIST ) ),
     aLineDistAtPercentBox   ( this, ResId( ED_LINEDISTPERCENT ) ),
     aLineDistAtMetricBox    ( this, ResId( ED_LINEDISTMETRIC ) ),
-    aLineDistFrm            ( this, ResId( GB_LINEDIST ) ),
+    aLineDistFrm            ( this, ResId( FL_LINEDIST ) ),
     aExampleWin             ( this, ResId( WN_EXAMPLE ) ),
-    aExampleFrm             ( this, ResId( GB_EXAMPLE ) ),
     aRegisterCB             ( this, ResId( CB_REGISTER ) ),
-    aRegisterGB             ( this, ResId( GB_REGISTER ) ),
+    aRegisterFL             ( this, ResId( FL_REGISTER ) ),
     sAbsDist                ( ResId(ST_LINEDIST_ABS) ),
     nMinFixDist(0L),
 
@@ -982,7 +981,7 @@ void SvxStdParagraphTabPage::UpdateExample_Impl( BOOL bAll )
 void SvxStdParagraphTabPage::EnableRegisterMode()
 {
     aRegisterCB.Show();
-    aRegisterGB.Show();
+    aRegisterFL.Show();
 }
 
 /*-----------------16.01.97 19.54-------------------
@@ -1040,18 +1039,15 @@ SvxParaAlignTabPage::SvxParaAlignTabPage( Window* pParent, const SfxItemSet& rSe
     aRight                  ( this, ResId( BTN_RIGHTALIGN ) ),
     aCenter                 ( this, ResId( BTN_CENTERALIGN ) ),
     aJustify                ( this, ResId( BTN_JUSTIFYALIGN ) ),
-    aAlignFrm               ( this, ResId( GB_ALIGN ) ),
+    aAlignFrm               ( this, ResId( FL_ALIGN ) ),
     aLastLineFT             ( this, ResId( FT_LASTLINE ) ),
     aLastLineLB             ( this, ResId( LB_LASTLINE ) ),
     aExpandCB               ( this, ResId( CB_EXPAND ) ),
-    aVertExFL               ( this, ResId( FL_VERTEX ) ),
     aExampleWin             ( this, ResId( WN_EXAMPLE ) ),
-    aExampleFrm             ( this, ResId( GB_EXAMPLE ) ),
     aVertAlignFL            ( this, ResId( FL_VERTALIGN ) ),
     aVertAlignLB            ( this, ResId( LB_VERTALIGN ) )
 {
     FreeResource();
-    aVertExFL.SetStyle(aVertExFL.GetStyle()|WB_VERT);
     Link aLink = LINK( this, SvxParaAlignTabPage, AlignHdl_Impl );
     aLeft.SetClickHdl( aLink );
     aRight.SetClickHdl( aLink );
@@ -2141,11 +2137,11 @@ IMPL_LINK( SvxExtParagraphTabPage, PageBreakTypeHdl_Impl, RadioButton *, pBtn )
   -----------------------------------------------------------------------*/
 SvxAsianTabPage::SvxAsianTabPage( Window* pParent, const SfxItemSet& rSet ) :
     SfxTabPage(pParent, ResId( RID_SVXPAGE_PARA_ASIAN, DIALOG_MGR() ), rSet),
-    aOptionsGB(         this, ResId(GB_AS_OPTIONS       )),
+    aOptionsFL(         this, ResId(FL_AS_OPTIONS       )),
     aHangingPunctCB(    this, ResId(CB_AS_HANG_PUNC     )),
     aAllowWordBreakCB(  this, ResId(CB_AS_ALLOW_WORD_BREAK)),
     aForbiddenRulesCB(  this, ResId(CB_AS_FORBIDDEN     )),
-    aCharDistGB(        this, ResId(GB_AS_CHAR_DIST     )),
+    aCharDistFL(        this, ResId(FL_AS_CHAR_DIST     )),
     aPuntuationCB(      this, ResId(CB_AS_PUNCTUATION   )),
     aScriptSpaceCB(     this, ResId(CB_AS_SCRIPT_SPACE  )),
     aAdjustNumbersCB(   this, ResId(CB_AS_ADJUST_NUMBERS)),
@@ -2161,7 +2157,7 @@ SvxAsianTabPage::SvxAsianTabPage( Window* pParent, const SfxItemSet& rSet ) :
 
 //JP 28.3.2001 - these options currently not available!
     aAllowWordBreakCB.Hide();
-    aCharDistGB.Hide();
+    aCharDistFL.Hide();
     aPuntuationCB.Hide();
     aAdjustNumbersCB.Hide();
     aTextAlignFT.Hide();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 07:20:28 $
+ *  last change: $Author: os $ $Date: 2001-05-11 07:41:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,10 +248,10 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Text[ catalan ] = "Auto~mático";
         Text[ finnish ] = "~Automaattinen";
     };
-    GroupBox GB_INDENT
+    FixedLine FL_INDENT
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 172 , 71 ) ;
+        Size = MAP_APPFONT ( 173 , 8 ) ;
         Text = "Einzug" ;
         Text [ ENGLISH ] = "Indent" ;
         Text [ norwegian ] = "Innrykk" ;
@@ -367,10 +367,10 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Last = 9999 ;
         SpinSize = 10 ;
     };
-    GroupBox GB_DIST
+    FixedLine FL_DIST
     {
         Pos = MAP_APPFONT ( 6 , 77 ) ;
-        Size = MAP_APPFONT ( 172 , 42 ) ;
+        Size = MAP_APPFONT ( 173 , 8 ) ;
         Text = "Abstand" ;
         Text [ ENGLISH ] = "Distance" ;
         Text [ norwegian ] = "Avstand" ;
@@ -712,10 +712,10 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Last = 9999 ;
         SpinSize = 10 ;
     };
-    GroupBox GB_LINEDIST
+    FixedLine FL_LINEDIST
     {
         Pos = MAP_APPFONT ( 6 , 122 ) ;
-        Size = MAP_APPFONT ( 172 , 26 ) ;
+        Size = MAP_APPFONT ( 173 , 8 ) ;
         Text = "Zeilenabstand" ;
         Text [ ENGLISH ] = "Line spacing" ;
         Text [ norwegian ] = "Linjeavstand" ;
@@ -743,37 +743,8 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
     };
     Window WN_EXAMPLE
     {
-        Pos = MAP_APPFONT ( 191 , 14 ) ;
-        Size = MAP_APPFONT ( 56 , 128 ) ;
-    };
-    GroupBox GB_EXAMPLE
-    {
-        Pos = MAP_APPFONT ( 185 , 3 ) ;
-        Size = MAP_APPFONT ( 68 , 145 ) ;
-        Text = "Vorschau" ;
-        Text [ ENGLISH ] = "Example" ;
-        Text [ norwegian ] = "Eksempel" ;
-        Text [ italian ] = "Anteprima" ;
-        Text [ portuguese_brazilian ] = "Exemplo" ;
-        Text [ portuguese ] = "Previsualizar" ;
-        Text [ finnish ] = "Esikatselu" ;
-        Text [ danish ] = "Eksempel" ;
-        Text [ french ] = "Aperçu" ;
-        Text [ swedish ] = "Förhandsvisning" ;
-        Text [ dutch ] = "Voorbeeld" ;
-        Text [ spanish ] = "Previsualización" ;
-        Text [ english_us ] = "Preview" ;
-        Text[ chinese_simplified ] = "Ô¤ÀÀ";
-        Text[ russian ] = "Ïðîñìîòð";
-        Text[ polish ] = "Podgl¹d";
-        Text[ japanese ] = "ÌßÚËÞ­°";
-        Text[ chinese_traditional ] = "¹wÄý";
-        Text[ arabic ] = "ãÚÇíäÉ";
-        Text[ greek ] = "Ðñïåðéóêüðçóç";
-        Text[ korean ] = "¹Ì¸® º¸±â";
-        Text[ turkish ] = "Önizleme";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Previsualización";
+        Pos = MAP_APPFONT ( 185 , 7 ) ;
+        Size = MAP_APPFONT ( 68 , 112 ) ;
     };
     CheckBox CB_REGISTER
     {
@@ -804,10 +775,10 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Text[ catalan ] = "Con~siderar";
         Text[ finnish ] = "~Aktivoi";
     };
-    GroupBox GB_REGISTER
+    FixedLine FL_REGISTER
     {
         Pos = MAP_APPFONT ( 6 , 151 ) ;
-        Size = MAP_APPFONT ( 247 , 24 ) ;
+        Size = MAP_APPFONT ( 173 , 8 ) ;
         Text = "Registerhaltigkeit" ;
         Text [ ENGLISH ] = "" ;
         Hide = TRUE ;
@@ -862,7 +833,7 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
     Text [ dutch ] = "Uitlijning" ;
     Text [ portuguese ] = "Alinhamento" ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
-    FixedLine GB_ALIGN
+    FixedLine FL_ALIGN
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 173 , 8 ) ;
@@ -1212,49 +1183,17 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Text[ catalan ] = "E~xpandir una palabra";
         Text[ finnish ] = "~Laajenna yksittäinen sana";
     };
-    FixedLine FL_VERTEX
-    {
-        Pos = MAP_APPFONT ( 179 , 14 ) ;
-        Size = MAP_APPFONT ( 4 , 128 ) ;
-    };
     Window WN_EXAMPLE
     {
-        Pos = MAP_APPFONT ( 191 , 14 ) ;
+//        Pos = MAP_APPFONT ( 185 , 7 ) ;
+//        Size = MAP_APPFONT ( 68 , 112 ) ;
+        Pos = MAP_APPFONT ( 185 , 7 ) ;
         Size = MAP_APPFONT ( 56 , 128 ) ;
-    };
-    FixedLine GB_EXAMPLE
-    {
-        Pos = MAP_APPFONT ( 185 , 3 ) ;
-        Size = MAP_APPFONT ( 68 , 8 ) ;
-        Text = "Vorschau" ;
-        Text [ ENGLISH ] = "Example" ;
-        Text [ norwegian ] = "Eksempel" ;
-        Text [ italian ] = "Anteprima" ;
-        Text [ portuguese_brazilian ] = "Exemplo" ;
-        Text [ portuguese ] = "Previsualizar" ;
-        Text [ finnish ] = "Vorschau" ;
-        Text [ danish ] = "Eksempel" ;
-        Text [ french ] = "Aperçu" ;
-        Text [ swedish ] = "Förhandsvisning" ;
-        Text [ dutch ] = "Voorbeeld" ;
-        Text [ spanish ] = "Previsualización" ;
-        Text [ english_us ] = "Preview" ;
-        Text[ chinese_simplified ] = "Ô¤ÀÀ";
-        Text[ russian ] = "Ïðîñìîòð";
-        Text[ polish ] = "Podgl¹d";
-        Text[ japanese ] = "ÌßÚËÞ­°";
-        Text[ chinese_traditional ] = "¹wÄý";
-        Text[ arabic ] = "ãÚÇíäÉ";
-        Text[ greek ] = "Ðñïåðéóêüðçóç";
-        Text[ korean ] = "¹Ì¸® º¸±â";
-        Text[ turkish ] = "Önizleme";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Preview";
     };
     FixedLine FL_VERTALIGN
     {
         Pos = MAP_APPFONT ( 6 , 146 ) ;
-        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Size = MAP_APPFONT ( 173 , 8 ) ;
         Text = "Vertikale Textausrichtung" ;
         Text [ ENGLISH ] = "Vertical text alignment" ;
         Hide = TRUE;
@@ -2256,10 +2195,10 @@ TabPage RID_SVXPAGE_PARA_ASIAN
     Text = "Asiatische Typographie" ;
     Text [ English ] = "Asian typography" ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
-    GroupBox GB_AS_OPTIONS
+    FixedLine FL_AS_OPTIONS
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 248 , 52 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Z~eilenwechsel" ;
         Text [ ENGLISH ] = "Line break" ;
         Text[ english_us ] = "L~ine change";
@@ -2364,10 +2303,10 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Text[ catalan ] = "Permitir puntuación libre";
         Text[ finnish ] = "Hängende ~Interpunktion zulassen";
     };
-    GroupBox GB_AS_CHAR_DIST
+    FixedLine FL_AS_CHAR_DIST
     {
         Pos = MAP_APPFONT ( 6 , 58 ) ;
-        Size = MAP_APPFONT ( 248 , 68 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Zeichenabstand" ;
         Text [ ENGLISH ] = "Character distance" ;
         Text[ english_us ] = "Character spacing";

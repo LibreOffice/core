@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabstpge.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2000-10-24 12:20:14 $
+ *  last change: $Author: os $ $Date: 2001-05-11 07:41:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,7 +151,8 @@ SvxTabulatorTabPage::SvxTabulatorTabPage( Window* pParent,
     SfxTabPage( pParent, ResId( RID_SVXPAGE_TABULATOR, DIALOG_MGR() ), rAttr ),
 
     aTabBox         ( this, ResId( ED_TABPOS ) ),
-    aTabLabel       ( this, ResId( GB_TABPOS ) ),
+    aTabLabel       ( this, ResId( FL_TABPOS ) ),
+    aTabLabelVert   ( this, ResId( FL_TABPOS_VERT ) ),
     aLeftTab        ( this, ResId( BTN_TABTYPE_LEFT ) ),
     aRightTab       ( this, ResId( BTN_TABTYPE_RIGHT ) ),
     aCenterTab      ( this, ResId( BTN_TABTYPE_CENTER ) ),
@@ -162,14 +163,15 @@ SvxTabulatorTabPage::SvxTabulatorTabPage( Window* pParent,
     pDezWin         ( new TabWin_Impl( this, ResId( WIN_TABDECIMAL ), RULER_TAB_DECIMAL ) ),
     aDezChar        ( this, ResId( ED_TABTYPE_DECCHAR ) ),
     aDezCharLabel   ( this, ResId( FT_TABTYPE_DECCHAR ) ),
-    aTabTypeLabel   ( this, ResId( GB_TABTYPE ) ),
+    aTabTypeLabel   ( this, ResId( FL_TABTYPE ) ),
+    aTabTypeLabelVert ( this, ResId( FL_TABTYPE_VERT ) ),
     aNoFillChar     ( this, ResId( BTN_FILLCHAR_NO ) ),
     aFillPoints     ( this, ResId( BTN_FILLCHAR_POINTS ) ),
     aFillDashLine   ( this, ResId( BTN_FILLCHAR_DASHLINE ) ),
     aFillSolidLine  ( this, ResId( BTN_FILLCHAR_UNDERSCORE ) ),
     aFillSpecial    ( this, ResId( BTN_FILLCHAR_OTHER ) ),
     aFillChar       ( this, ResId( ED_FILLCHAR_OTHER ) ),
-    aFillLabel      ( this, ResId( GB_FILLCHAR ) ),
+    aFillLabel      ( this, ResId( FL_FILLCHAR ) ),
     aNewBtn         ( this, ResId( BTN_NEW ) ),
     aDelAllBtn      ( this, ResId( BTN_DELALL ) ),
     aDelBtn         ( this, ResId( BTN_DEL ) ),
@@ -188,6 +190,10 @@ SvxTabulatorTabPage::SvxTabulatorTabPage( Window* pParent,
     // Metrik einstellen
     FieldUnit eFUnit = GetModuleFieldUnit( &rAttr );
     SetFieldUnit( aTabBox, eFUnit );
+
+    // vertical separators
+    aTabLabelVert.SetStyle( aTabLabelVert.GetStyle() | WB_VERT );
+    aTabTypeLabelVert.SetStyle( aTabTypeLabelVert.GetStyle() | WB_VERT );
 
     // Buttons initialisieren
     aNewBtn.SetClickHdl( LINK( this,SvxTabulatorTabPage, NewHdl_Impl ) );
