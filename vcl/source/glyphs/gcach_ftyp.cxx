@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.95 $
- *  last change: $Author: hdu $ $Date: 2003-07-02 11:53:37 $
+ *  $Revision: 1.96 $
+ *  last change: $Author: vg $ $Date: 2003-07-02 14:31:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,8 +96,10 @@
 
 // TODO: move file mapping stuff to OSL
 #if defined(UNX)
-    #ifdef LINUX
+    #if !defined(MACOSX) && !defined(HPUX)
         #include <dlfcn.h>
+    #else
+        // PORTERS: dlfcn is used below to determine FT version
     #endif
     #include <unistd.h>
     #include <fcntl.h>
@@ -161,6 +163,7 @@ FtFontFile* FtFontFile::FindFontFile( const ::rtl::OString& rNativeFileName )
 
     // no => create new one
     FtFontFile* pFontFile = new FtFontFile( rNativeFileName );
+    pFileName = pFontFile->maNativeFileName.getStr();
     aFontFileList[ pFileName ] = pFontFile;
     return pFontFile;
 }
@@ -181,7 +184,7 @@ bool FtFontFile::Map()
         fstat( nFile, &aStat );
         mnFileSize = aStat.st_size;
         mpFileMap = (const unsigned char*)
-            mmap( NULL, mnFileSize, PROT_READ, MAP_SHARED, nFile, NULL );
+            mmap( NULL, mnFileSize, PROT_READ, MAP_SHARED, nFile, 0 );
         close( nFile );
 #elif defined(WIN32)
         void* pFileDesc = CreateFile( pFileName, GENERIC_READ, FILE_SHARE_READ,
@@ -190,8 +193,8 @@ bool FtFontFile::Map()
             return false;
 
         mnFileSize = GetFileSize( pFileDesc, NULL );
-        HANDLE aHandle = CreateFileMapping( pFileDesc, NULL, PAGE_READONLY, 0, mnFileSize, "TTF" );
-        mpFileMap = (const unsigned char*) MapViewOfFile( aHandle, FILE_MAP_READ, 0, 0, mnFileSize );
+        HANDLE aHandle = ::CreateFileMapping( pFileDesc, NULL, PAGE_READONLY, 0, mnFileSize, "TTF" );
+        mpFileMap = (const unsigned char*)::MapViewOfFile( aHandle, FILE_MAP_READ, 0, 0, mnFileSize );
         CloseHandle( pFileDesc );
 #else
         FILE* pFile = fopen( pFileName, "rb" );
@@ -240,7 +243,9 @@ FtFontInfo::FtFontInfo( const ImplFontData& rFontData,
     maFontData( rFontData ),
     mnFaceNum( nFaceNum ),
     mnFontId( nFontId ),
-    mnSynthetic( nSynthetic )
+    mnSynthetic( nSynthetic ),
+    maFaceFT( NULL ),
+    mnRefCount( 0 )
 {
     maFontData.mpSysData = (void*)nFontId;
     maFontData.mpNext    = NULL;
@@ -288,6 +293,35 @@ FtFontInfo::FtFontInfo( const ImplFontData& rFontData,
 
 // -----------------------------------------------------------------------
 
+FT_FaceRec_* FtFontInfo::GetFaceFT()
+{
+    if( !maFaceFT && mpFontFile->Map() )
+    {
+        FT_Error rc = FT_New_Memory_Face( aLibFT,
+            (FT_Byte*)mpFontFile->GetBuffer(),
+            mpFontFile->GetFileSize(), mnFaceNum, &maFaceFT );
+        if( (rc != FT_Err_Ok) || (maFaceFT->num_glyphs <= 0) )
+            maFaceFT = NULL;
+    }
+
+    ++mnRefCount;
+    return maFaceFT;
+}
+
+// -----------------------------------------------------------------------
+
+void FtFontInfo::ReleaseFaceFT()
+{
+    if( --mnRefCount <= 0 )
+    {
+        FT_Done_Face( maFaceFT );
+        maFaceFT = NULL;
+        mpFontFile->Unmap();
+    }
+}
+
+// -----------------------------------------------------------------------
+
 static unsigned GetUInt( const unsigned char* p ) { return((p[0]<<24)+(p[1]<<16)+(p[2]<<8)+p[3]);}
 static unsigned GetUShort( const unsigned char* p ){ return((p[0]<<8)+p[1]);}
 static signed GetSShort( const unsigned char* p ){ return((short)((p[0]<<8)+p[1]));}
@@ -296,8 +330,8 @@ static signed GetSShort( const unsigned char* p ){ return((short)((p[0]<<8)+p[1]
 
 const unsigned char* FtFontInfo::GetTable( const char* pTag, ULONG* pLength ) const
 {
-    const unsigned char* pBuffer = GetBuffer();
-    int nFileSize = GetFileSize();
+    const unsigned char* pBuffer = mpFontFile->GetBuffer();
+    int nFileSize = mpFontFile->GetFileSize();
     if( !pBuffer || nFileSize<1024 )
         return NULL;
 
@@ -321,7 +355,7 @@ const unsigned char* FtFontInfo::GetTable( const char* pTag, ULONG* pLength ) co
             if( pLength != NULL )
                 *pLength = nLength;
             const unsigned char* pTable = pBuffer + GetUInt( p + 8 );
-            if( (pTable + nLength) <= (GetBuffer() + nFileSize) )
+            if( (pTable + nLength) <= (mpFontFile->GetBuffer() + nFileSize) )
                 return pTable;
         }
     }
@@ -337,9 +371,11 @@ FreetypeManager::FreetypeManager()
 {
     FT_Error rcFT = FT_Init_FreeType( &aLibFT );
 
-    #ifdef LINUX
-    // XXX hack to enable usage of system freetype library.
-    // freetype prior to 2.0.9 does not have FT_Library_Version
+#ifdef RTLD_DEFAULT
+    // Get version of freetype library to enable workarounds.
+    // Freetype <= 2.0.9 does not have FT_Library_Version().
+    // Using dl_sym() instead of osl_getSymbol() because latter
+    // doesn't work for oslModule=NULL
     void (*pft_library_version)(FT_Library library,
         FT_Int *amajor, FT_Int *aminor, FT_Int *apatch);
     pft_library_version = (void (*)(FT_Library library,
@@ -355,7 +391,10 @@ FreetypeManager::FreetypeManager()
         if( nFTVERSION == 2103 )
             nPrioEmbedded = 0;
     }
-    #endif
+#else // RTLD_DEFAULT
+    // assume systems without dlsym use supplied library
+    nFTVERSION = FTVERSION;
+#endif
 
     // TODO: remove when the priorities are selected by UI
     char* pEnv;
@@ -390,6 +429,9 @@ void FreetypeManager::AddFontFile( const rtl::OString& rNormalizedName,
     int nFaceNum, int nFontId, const ImplFontData* pData )
 {
     if( !rNormalizedName.getLength() )
+        return;
+
+    if( maFontList.find( nFontId ) != maFontList.end() )
         return;
 
     FtFontInfo* pFI = new FtFontInfo( *pData, rNormalizedName, nFaceNum, nFontId, 0 );
@@ -528,21 +570,19 @@ FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, FtFontIn
 :   ServerFont( rFSD ),
     mpFontInfo( pFI ),
     maFaceFT( NULL ),
+    maSizeFT( NULL ),
     maRecodeConverter( NULL ),
     mpLayoutEngine( NULL )
 {
-    if( !pFI->MapFile() )
+    maFaceFT = pFI->GetFaceFT();
+    if( !maFaceFT )
         return;
 
 #ifdef HDU_DEBUG
-    printf( "FTSF::FTSF(\"%s\", h=%d, w=%d)\n",
-        pFI->GetFontFileName()->getStr(), rFSD.mnHeight, rFSD.mnWidth );
+    fprintf( stderr, "FTSF::FTSF(\"%s\", h=%d, w=%d, cs=%d)\n",
+        pFI->GetFontFileName()->getStr(), rFSD.mnHeight, rFSD.mnWidth,
+        pFI->GetFontData().meCharSet );
 #endif
-
-    FT_Error rc = FT_New_Memory_Face( aLibFT, (FT_Byte*)pFI->GetBuffer(),
-        pFI->GetFileSize(), mpFontInfo->GetFaceNum(), &maFaceFT );
-    if( rc != FT_Err_Ok || maFaceFT->num_glyphs == 0 )
-        return;
 
     FT_Encoding eEncoding = ft_encoding_unicode;
     if( mpFontInfo->GetFontData().meCharSet == RTL_TEXTENCODING_SYMBOL )
@@ -556,7 +596,7 @@ FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, FtFontIn
             eEncoding = ft_encoding_adobe_custom; // freetype wants this for PS symbol fonts
 #endif
     }
-    rc = FT_Select_Charmap( maFaceFT, eEncoding );
+    FT_Error rc = FT_Select_Charmap( maFaceFT, eEncoding );
 
     // no standard encoding applies => we need an encoding converter
     if( rc != FT_Err_Ok )
@@ -614,6 +654,9 @@ FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, FtFontIn
             maRecodeConverter = rtl_createUnicodeToTextConverter( eRecodeFrom );
     }
 
+    rc = FT_New_Size( maFaceFT, &maSizeFT );
+    rc = FT_Activate_Size( maSizeFT );
+
     mnWidth = rFSD.mnWidth;
     if( !mnWidth )
         mnWidth = rFSD.mnHeight;
@@ -655,10 +698,10 @@ FreetypeServerFont::~FreetypeServerFont()
     if( maRecodeConverter )
         rtl_destroyUnicodeToTextConverter( maRecodeConverter );
 
-    if( maFaceFT )
-        FT_Done_Face( maFaceFT );
+    if( maSizeFT )
+        FT_Done_Size( maSizeFT );
 
-    mpFontInfo->Unmap();
+    mpFontInfo->ReleaseFaceFT();
 }
 
  // -----------------------------------------------------------------------
@@ -672,6 +715,8 @@ int FreetypeServerFont::GetEmUnits() const
 
 void FreetypeServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor ) const
 {
+    FT_Activate_Size( maSizeFT );
+
     rFactor = 0x100;
 
     rTo.mnWidth             = mnWidth;
@@ -741,6 +786,8 @@ void FreetypeServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor
     }
 }
 
+// -----------------------------------------------------------------------
+
 static inline void SplitGlyphFlags( const FreetypeServerFont& rFont, int& nGlyphIndex, int& nGlyphFlags )
 {
     nGlyphFlags = nGlyphIndex & GF_FLAGMASK;
@@ -750,6 +797,8 @@ static inline void SplitGlyphFlags( const FreetypeServerFont& rFont, int& nGlyph
     else
         nGlyphIndex = rFont.GetRawGlyphIndex( nGlyphIndex & GF_IDXMASK );
 }
+
+// -----------------------------------------------------------------------
 
 int FreetypeServerFont::ApplyGlyphTransform( int nGlyphFlags, FT_GlyphRec_* pGlyphFT ) const
 {
@@ -833,7 +882,7 @@ int FreetypeServerFont::GetRawGlyphIndex( sal_Unicode aChar ) const
             aChar |= 0xF000;    // emulate W2K high/low mapping of symbols
         else
         {
-            if( (aChar&0xFF00) == 0xF000 )
+            if( (aChar & 0xFF00) == 0xF000 )
                 aChar &= 0xFF;    // PS font symbol mapping
             else if( aChar > 0xFF )
                 return 0;
@@ -930,6 +979,8 @@ int FreetypeServerFont::GetGlyphIndex( sal_Unicode aChar ) const
 
 void FreetypeServerFont::InitGlyphData( int nGlyphIndex, GlyphData& rGD ) const
 {
+    FT_Activate_Size( maSizeFT );
+
     int nGlyphFlags;
     SplitGlyphFlags( *this, nGlyphIndex, nGlyphFlags );
 
@@ -1007,6 +1058,8 @@ bool FreetypeServerFont::GetAntialiasAdvice( void ) const
 
 bool FreetypeServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& rRawBitmap ) const
 {
+    FT_Activate_Size( maSizeFT );
+
     int nGlyphFlags;
     SplitGlyphFlags( *this, nGlyphIndex, nGlyphFlags );
 
@@ -1099,6 +1152,8 @@ bool FreetypeServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& rRawBitmap
 
 bool FreetypeServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& rRawBitmap ) const
 {
+    FT_Activate_Size( maSizeFT );
+
     int nGlyphFlags;
     SplitGlyphFlags( *this, nGlyphIndex, nGlyphFlags );
 
@@ -1327,6 +1382,8 @@ ULONG FreetypeServerFont::GetFontCodeRanges( sal_uInt32* pCodes ) const
 
 int FreetypeServerFont::GetGlyphKernValue( int nGlyphLeft, int nGlyphRight ) const
 {
+    FT_Activate_Size( maSizeFT );
+
     FT_Vector aKernVal;
     FT_Error rcFT = FT_Get_Kerning( maFaceFT, nGlyphLeft, nGlyphRight,
                 ft_kerning_default, &aKernVal );
@@ -1338,6 +1395,8 @@ int FreetypeServerFont::GetGlyphKernValue( int nGlyphLeft, int nGlyphRight ) con
 
 ULONG FreetypeServerFont::GetKernPairs( ImplKernPairData** ppKernPairs ) const
 {
+    FT_Activate_Size( maSizeFT );
+
     *ppKernPairs = NULL;
     if( !FT_HAS_KERNING( maFaceFT ) || !FT_IS_SFNT( maFaceFT ) )
         return 0;
