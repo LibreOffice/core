@@ -46,6 +46,7 @@ Dim oDataSource as Object
 Dim bExitLoop as Boolean
 Dim bGetConnection as Boolean
 Dim iMsg as Integer
+Dim Nulllist()
 	oDatabase = oDBContext.GetByName(sDBName)
 	If Not oDatabase.IsPasswordRequired Then
 		oDBConnection = oDBContext.GetByName(sDBName).GetConnection(&quot;&quot;,&quot;&quot;)
@@ -59,12 +60,26 @@ Dim iMsg as Integer
 			oDBConnection = oDataSource.ConnectWithCompletion(oInteractionHandler) 
 			NOCONNECTION:
 			bGetConnection = Err = 0
+			If bGetConnection Then
+				bGetConnection = Not IsNull(oDBConnection)
+				If Not bGetConnection Then
+					Exit Do
+				End If
+			End If
 			If Not bGetConnection Then
 				iMsg = Msgbox (sMsgNoConnection,32 + 2, sMsgWizardName)	&apos; &apos;?&apos; &amp; &apos; Repeat and Cancel&apos;
 				bExitLoop = iMsg = SBCANCEL
+				Resume CLERROR
+				CLERROR:
 			End If
-			On Local Error Goto 0		
 		Loop Until bExitLoop
+		On Local Error Goto 0		
+		If Not bGetConnection Then
+			oDialogModel.lstDatabases.SelectedItems() = Nulllist()
+			oDialogModel.lstTables.StringItemList() = NullList()
+			oDialogModel.lstFields.StringItemList() = NullList()
+			oDialogModel.lstSelFields.StringItemList() = NullList()
+		End If
 		GetConnection() = bGetConnection
 	End If
 End Function
