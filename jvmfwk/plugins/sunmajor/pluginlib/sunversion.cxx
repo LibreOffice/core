@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sunversion.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 09:50:23 $
+ *  last change: $Author: obo $ $Date: 2005-03-18 11:18:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,8 +233,10 @@ bool SunVersion::init(const char *szVersion)
         if (m_preRelease == Rel_NONE)
             return false;
 #if defined(FREEBSD)
-        if (m_preRelease == Rel_FreeBSD)
-            return true;
+      if (m_preRelease == Rel_FreeBSD) {
+         m_nUpdateSpecial = *pCur;
+    return true;
+      }
 #endif
     }
     else
@@ -273,6 +275,14 @@ SunVersion::PreRelease SunVersion::getPreRelease(const char *szRelease)
     else if (! strcmp(szRelease, "rc3"))
         return Rel_RC3;
 #if defined (FREEBSD)
+    else if (! strcmp(szRelease, "p1"))
+        return Rel_FreeBSD;
+    else if (! strcmp(szRelease, "p2"))
+        return Rel_FreeBSD;
+    else if (! strcmp(szRelease, "p3"))
+        return Rel_FreeBSD;
+    else if (! strcmp(szRelease, "p4"))
+        return Rel_FreeBSD;
     else if (! strcmp(szRelease, "p5"))
         return Rel_FreeBSD;
     else if (! strcmp(szRelease, "p6"))
