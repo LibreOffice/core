@@ -32,7 +32,7 @@
     <menu:menu menu:id=".uno:ViewMenu" menu:label="" >
         <menu:menupopup>
             <menu:menuitem menu:id=".uno:DBViewFunctions" menu:helpid="12235" menu:label="" />
-            <menu:menuitem menu:id=".uno:DBViewTables" menu:helpid="12236" menu:label="" />
+            <menu:menuitem menu:id=".uno:DBViewTableNames" menu:helpid="12236" menu:label="" />
             <menu:menuitem menu:id=".uno:DBViewAliases" menu:helpid="12237" menu:label="" />
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:AvailableToolbars" menu:label="" />
