@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module_winexplorerext.scp,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 08:08:01 $
+ *  last change: $Author: rt $ $Date: 2005-04-04 10:16:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,5 +66,5 @@ Module gid_Module_Optional_Winexplorerext
     Default = YES;
     Minimal = YES;
     ParentID = gid_Module_Optional;
-    Files = (gid_File_Lib_Shlxthdl, gid_File_Lib_Shlxtmsi);    
+    Files = (gid_File_Lib_Shlxthdl, gid_File_Lib_Shlxtmsi, gid_File_Tmp_Userinstall_Winexplorerext_Inf);    
 End
