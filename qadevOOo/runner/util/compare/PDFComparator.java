@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PDFComparator.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Date: 2004-11-02 11:52:38 $
+ *  last change: $Date: 2004-12-10 17:02:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ class PDFComparator extends GraphicalComparator implements DocComparator
 
     static DocComparator getInstance(TestParameters aParams)
         {
-            aParams.put(convwatch.PropertyName.REFERENCE_TYPE, "pdf");
+            aParams.put(convwatch.PropertyName.DOC_COMPARATOR_REFERENCE_TYPE, "pdf");
             PDFComparator a = new PDFComparator(aParams);
             return a;
         }
