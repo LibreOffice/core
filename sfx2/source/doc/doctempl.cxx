@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctempl.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: dv $ $Date: 2000-12-15 15:14:25 $
+ *  last change: $Author: dv $ $Date: 2000-12-21 11:56:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,6 +181,8 @@ using namespace ucb;
 
 //========================================================================
 
+#define DONT_USE_HIERARCHY
+
 #define HIERARCHIE_ROOT_URL     "vnd.sun.star.hier:/"
 #define TEMPLATE_ROOT_URL       "vnd.sun.star.hier:/templates"
 #define TEMPLATE_DIR_NAME       "templates"
@@ -202,7 +204,7 @@ using namespace ucb;
 #define TYPEDETECTION_PARAMETER         "FileName"
 #define SERVICENAME_OLD_TYPEDETECTION   "com.sun.star.frame.FrameLoaderFactory"
 #define PARAMETER_OLD_TYPEDETECTION     "DeepDetection"
-#define SERVICENAME_DOCINFO             "com.sun.star.document.StandaloneDocumentInfo"
+#define SERVICENAME_DOCINFO             "com.sun.star.document.DocumentProperties"
 
 #define C_DELIM                 ';'
 
@@ -478,7 +480,7 @@ String SfxDocumentTemplates::GetFullRegionName
 */
 
 {
-    DBG_ASSERT( pImp, "not initialized" );
+    pImp->Construct( aDirs );
 
     // First: find the RegionData for the index
     String aName;
@@ -541,6 +543,8 @@ const String& SfxDocumentTemplates::GetRegionName
 {
     static String maTmpString;
 
+    pImp->Construct( aDirs );
+
     RegionData_Impl *pData = pImp->GetRegion( nIdx );
 
     if ( pData )
@@ -570,6 +574,8 @@ USHORT SfxDocumentTemplates::GetRegionNo
 
 */
 {
+    pImp->Construct( aDirs );
+
     sal_Bool    bFound;
     ULONG       nIndex = pImp->GetRegionPos( rRegion, bFound );
 
@@ -595,10 +601,9 @@ USHORT SfxDocumentTemplates::GetRegionCount() const
 
 */
 {
-    ULONG nCount = 0;
+    pImp->Construct( aDirs );
 
-    if ( pImp )
-        nCount = pImp->GetRegionCount();
+    ULONG nCount = pImp->GetRegionCount();
 
     return (USHORT) nCount;
 }
@@ -624,7 +629,7 @@ USHORT SfxDocumentTemplates::GetCount
 */
 
 {
-    DBG_ASSERT( pImp, "not initialized" );
+    pImp->Construct( aDirs );
 
     RegionData_Impl *pData = pImp->GetRegion( rName );
     ULONG            nCount = 0;
@@ -639,6 +644,8 @@ USHORT SfxDocumentTemplates::GetCount
 
 BOOL SfxDocumentTemplates::IsRegionLoaded( USHORT nIdx ) const
 {
+    pImp->Construct( aDirs );
+
     RegionData_Impl *pData = pImp->GetRegion( nIdx );
 
     if ( pData )
@@ -666,7 +673,7 @@ USHORT SfxDocumentTemplates::GetCount
 */
 
 {
-    DBG_ASSERT( pImp, "not initialized" );
+    pImp->Construct( aDirs );
 
     RegionData_Impl *pData = pImp->GetRegion( nRegion );
     ULONG            nCount = 0;
@@ -697,7 +704,7 @@ const String& SfxDocumentTemplates::GetName
 */
 
 {
-    DBG_ASSERT( pImp, "not initialized" );
+    pImp->Construct( aDirs );
 
     static String maTmpString;
 
@@ -731,7 +738,7 @@ String SfxDocumentTemplates::GetFileName
 
 */
 {
-    DBG_ASSERT( pImp, "not initialized" );
+    pImp->Construct( aDirs );
 
     EntryData_Impl  *pEntry = NULL;
     RegionData_Impl *pRegion = pImp->GetRegion( nRegion );
@@ -768,7 +775,7 @@ String SfxDocumentTemplates::GetPath
 
 */
 {
-    DBG_ASSERT( pImp, "not initialized" );
+    pImp->Construct( aDirs );
 
     EntryData_Impl  *pEntry = NULL;
     RegionData_Impl *pRegion = pImp->GetRegion( nRegion );
@@ -802,7 +809,7 @@ String SfxDocumentTemplates::GetTemplatePath
 
 */
 {
-    DBG_ASSERT( pImp, "not initialized" );
+    pImp->Construct( aDirs );
 
     EntryData_Impl  *pEntry = NULL;
     RegionData_Impl *pRegion = pImp->GetRegion( nRegion );
@@ -842,7 +849,8 @@ String SfxDocumentTemplates::GetDefaultTemplatePath
 
 */
 {
-    DBG_ASSERT( pImp, "not initialized" );
+    pImp->Construct( aDirs );
+
     DBG_ASSERT( aDirs.GetTokenCount( cDelim ), "Keine Bereiche" );
 
     USHORT  nCount = aDirs.GetTokenCount(cDelim);
@@ -933,7 +941,7 @@ void SfxDocumentTemplates::NewTemplate
 */
 
 {
-    DBG_ASSERT( pImp, "not initialized" );
+    pImp->Construct( aDirs );
 
     EntryData_Impl  *pEntry;
     RegionData_Impl *pRegion = pImp->GetRegion( nRegion );
@@ -1003,6 +1011,8 @@ BOOL SfxDocumentTemplates::CopyOrMove
        ...
     */
 
+    pImp->Construct( aDirs );
+
     // Don't copy or move any folders
     if( nSourceIdx == USHRT_MAX )
         return FALSE ;
@@ -1056,7 +1066,6 @@ BOOL SfxDocumentTemplates::CopyOrMove
     try
     {
         aTarget = Content( pTargetRgn->GetTargetURL(), aCmdEnv );
-        aHierTarget = Content( pTargetRgn->GetHierarchyURL(), aCmdEnv );
 
         TransferInfo aTransferInfo;
         aTransferInfo.MoveData = bMove;
@@ -1069,9 +1078,12 @@ BOOL SfxDocumentTemplates::CopyOrMove
 
         aTarget.executeCommand( aCmd, aArg );
 
+#ifndef DONT_USE_HIERARCHY
+        aHierTarget = Content( pTargetRgn->GetHierarchyURL(), aCmdEnv );
         aTransferInfo.SourceURL = pSource->GetHierarchyURL();
         aArg = makeAny( aTransferInfo );
         aHierTarget.executeCommand( aCmd, aArg );
+#endif
     }
     catch ( ContentCreationException& )
     { return FALSE; }
@@ -1195,6 +1207,8 @@ BOOL SfxDocumentTemplates::CopyTo
 */
 
 {
+    pImp->Construct( aDirs );
+
     RegionData_Impl *pSourceRgn = pImp->GetRegion( nRegion );
     if ( !pSourceRgn )
         return FALSE;
@@ -1270,6 +1284,8 @@ BOOL SfxDocumentTemplates::CopyFrom
 */
 
 {
+    pImp->Construct( aDirs );
+
     RegionData_Impl *pTargetRgn = pImp->GetRegion( nRegion );
 
     if ( !pTargetRgn )
@@ -1320,7 +1336,9 @@ BOOL SfxDocumentTemplates::CopyFrom
         EntryData_Impl *pEntry;
 
         pImp->GetTitleFromURL( rName, aTitle, aType );
+#ifndef DONT_USE_HIERARCHY
         aTarget = Content( pTargetRgn->GetHierarchyURL(), aCmdEnv );
+#endif
         pEntry = pTargetRgn->AddEntry( aTarget, aTitle,
                                        aTmp.GetMainURL(),
                                        &nIdx );
@@ -1373,6 +1391,7 @@ BOOL SfxDocumentTemplates::Delete
        template folder by sending a delete command to the content.
        Then remove the data from the lists
     */
+    pImp->Construct( aDirs );
 
     sal_Bool bRet = sal_False;
     RegionData_Impl *pRegion = pImp->GetRegion( nRegion );
@@ -1404,7 +1423,9 @@ BOOL SfxDocumentTemplates::Delete
 
     try
     {
+#ifndef DONT_USE_HIERARCHY
         aHierCont = Content( aHierURL, aCmdEnv );
+#endif
         aFolderCont = Content( aTargetURL, aCmdEnv );
     }
     catch ( ContentCreationException& )
@@ -1420,7 +1441,9 @@ BOOL SfxDocumentTemplates::Delete
         OUString aCmd( RTL_CONSTASCII_USTRINGPARAM( COMMAND_DELETE ) );
         Any aArg = makeAny( sal_Bool( sal_True ) );
 
+#ifndef DONT_USE_HIERARCHY
         aHierCont.executeCommand( aCmd, aArg );
+#endif
         aFolderCont.executeCommand( aCmd, aArg );
 
         bRet = sal_True;
@@ -1474,6 +1497,8 @@ BOOL SfxDocumentTemplates::InsertDir
     // create a new entry in hierarchy and another entry in
     // the (first?) template direktory, then update
     // RegionData_Impl list
+
+    pImp->Construct( aDirs );
 
     Content     aTemplateRoot;
     Content     aTemplateDir;
@@ -1534,6 +1559,8 @@ BOOL SfxDocumentTemplates::SetName
 {
     // find the data entry and rename the entry in the hierarchy as
     // well as the corresponding folder or file
+
+    pImp->Construct( aDirs );
 
     RegionData_Impl *pRegion = pImp->GetRegion( nRegion );
     EntryData_Impl *pEntry = NULL;
@@ -1597,6 +1624,8 @@ BOOL SfxDocumentTemplates::SetName
     catch ( Exception& )
     { return FALSE; }
 
+#ifndef DONT_USE_HIERARCHY
+
     // Create a hierarchy Content with the old title and
     // rename it, then set the new target URL
     try
@@ -1613,6 +1642,7 @@ BOOL SfxDocumentTemplates::SetName
     }
     catch ( Exception& )
     { return FALSE; }
+#endif
 
     // Update the internal data structures
     if ( pEntry )
@@ -1659,12 +1689,9 @@ BOOL SfxDocumentTemplates::Rescan()
     <SfxTemplateDir::Freshen(const SfxTemplateDir &rNew)>
 */
 {
-    if ( pImp.Is() )
-    {
-        return pImp->Rescan( sal_True );
-    }
+    pImp->Construct( aDirs );
 
-    return FALSE;
+    return pImp->Rescan( sal_True );
 
 #if 0   //dv!
 
@@ -1733,8 +1760,7 @@ SfxObjectShellRef SfxDocumentTemplates::CreateObjectShell
 */
 
 {
-    if ( !pImp )
-        return NULL;
+    pImp->Construct( aDirs );
 
     RegionData_Impl *pRegion = pImp->GetRegion( nRegion );
     EntryData_Impl *pEntry = NULL;
@@ -1776,8 +1802,7 @@ BOOL SfxDocumentTemplates::DeleteObjectShell
 */
 
 {
-    if ( !pImp )
-        return NULL;
+    pImp->Construct( aDirs );
 
     RegionData_Impl *pRegion = pImp->GetRegion( nRegion );
     EntryData_Impl *pEntry = NULL;
@@ -1821,6 +1846,8 @@ BOOL SfxDocumentTemplates::GetFull
 */
 
 {
+    pImp->Construct( aDirs );
+
     const EntryData_Impl* pEntry = NULL;
     const USHORT nCount = GetRegionCount();
     BOOL bFQ = FALSE;
@@ -1883,6 +1910,8 @@ BOOL SfxDocumentTemplates::GetLogicNames
 */
 
 {
+    pImp->Construct( aDirs );
+
     INetURLObject aFullPath;
 
     aFullPath.SetSmartProtocol( INET_PROT_FILE );
@@ -1933,11 +1962,14 @@ SfxDocumentTemplates::SfxDocumentTemplates()
 
     Konstruktor
 */
-
-:   pImp(0)
 {
     aDirs = SvtPathOptions().GetTemplatePath();
     cDelim = ';'; // absichtlich hart verdrahtet
+
+    if ( !gpTemplateData )
+        gpTemplateData = new SfxDocTemplate_Impl;
+
+    pImp = gpTemplateData;
 }
 
 //-------------------------------------------------------------------------
@@ -1947,12 +1979,7 @@ void SfxDocumentTemplates::Construct()
 //  verz"ogerter Aufbau der Verwaltungsdaten
 
 {
-    if ( !gpTemplateData )
-        gpTemplateData = new SfxDocTemplate_Impl;
-
-    pImp = gpTemplateData;
-
-    pImp->Construct( aDirs );
+//  pImp->Construct( aDirs );
 }
 
 //------------------------------------------------------------------------
@@ -2272,13 +2299,16 @@ EntryData_Impl* RegionData_Impl::AddEntry( Content& rParentFolder,
                                            const OUString& rTargetURL,
                                            USHORT *pPos )
 {
-    Content aLink;
-    Reference< XCommandEnvironment > aCmdEnv;
     INetURLObject aLinkObj( GetHierarchyURL() );
     aLinkObj.insertName( rTitle, false,
                       INetURLObject::LAST_SEGMENT, true,
                       INetURLObject::ENCODE_ALL );
     OUString aLinkURL = aLinkObj.GetMainURL();
+
+#ifndef DONT_USE_HIERARCHY
+
+    Content aLink;
+    Reference< XCommandEnvironment > aCmdEnv;
 
     if ( ! Content::create( aLinkURL, aCmdEnv, aLink ) )
     {
@@ -2318,6 +2348,7 @@ EntryData_Impl* RegionData_Impl::AddEntry( Content& rParentFolder,
             return NULL;
         }
     }
+#endif
 
     EntryData_Impl *pEntry;
     sal_Bool        bFound = sal_False;
@@ -2545,7 +2576,9 @@ void SfxDocTemplate_Impl::AddRegion( const OUString& rTitle,
     pRegion = new RegionData_Impl( rTitle );
     pRegion->SetHierarchyContent( rContent );
     pRegion->SetTargetURL( rTargetURL );
+#ifndef DONT_USE_HIERARCHY
     pRegion->SetHierarchyURL( rContent.get()->getIdentifier()->getContentIdentifier() );
+#endif
 
     if ( InsertOrMarkRegion( pRegion ) )
     {
@@ -2673,7 +2706,9 @@ void SfxDocTemplate_Impl::Construct( const String& rDirs )
 
     if ( bNewRoot )
     {
+#ifndef DONT_USE_HIERARCHY
         WaitWindow_Impl aWindow;
+#endif
         Rescan( sal_True );
     }
     else
@@ -2688,11 +2723,13 @@ void SfxDocTemplate_Impl::Construct( const String& rDirs )
 sal_Bool SfxDocTemplate_Impl::GetTemplateRoot( Content &rTemplRoot,
                                                sal_Bool &rNew ) const
 {
+#ifndef DONT_USE_HIERARCHY
     Reference < XCommandEnvironment > aCmdEnv;
     OUString    aTemplRootURL( RTL_CONSTASCII_USTRINGPARAM( TEMPLATE_ROOT_URL ) );
     sal_Bool    bRet = sal_False;
 
     rNew = sal_False;
+
 
     try
     {
@@ -2729,6 +2766,10 @@ sal_Bool SfxDocTemplate_Impl::GetTemplateRoot( Content &rTemplRoot,
     catch ( Exception& ) {}
 
     return bRet;
+#else
+    rNew = sal_True;
+    return sal_True;
+#endif
 }
 
 // -----------------------------------------------------------------------
@@ -2790,8 +2831,11 @@ void SfxDocTemplate_Impl::GetFolders( Content& rRoot,
         Reference< XRow > xRow( xResultSet, UNO_QUERY );
 
         OUString aFolderURL = rFolder.get()->getIdentifier()->getContentIdentifier();
+
+#ifndef DONT_USE_HIERARCHY
         OUString aRootURL = rRoot.get()->getIdentifier()->getContentIdentifier();
         aRootURL += OUString( '/' );
+#endif
 
         Content aFolder;
         Sequence< OUString > aNames(2);
@@ -2810,7 +2854,8 @@ void SfxDocTemplate_Impl::GetFolders( Content& rRoot,
         {
             while ( xResultSet->next() )
             {
-                OUString    aTitle( xRow->getString(1) );
+                OUString aTitle( xRow->getString(1) );
+                OUString aId = xContentAccess->queryContentIdentifierString();
 
                 if ( aTitle.compareToAscii( "wizard" ) == 0 )
                     continue;
@@ -2819,13 +2864,14 @@ void SfxDocTemplate_Impl::GetFolders( Content& rRoot,
 
                 aTitle = GetLongName( aTitle );
 
+#ifndef DONT_USE_HIERARCHY
+
                 INetURLObject aNewFolderObj( aRootURL );
                 aNewFolderObj.insertName( aTitle, false,
                       INetURLObject::LAST_SEGMENT, true,
                       INetURLObject::ENCODE_ALL );
 
                 OUString aNewFolderURL = aNewFolderObj.GetMainURL();
-                OUString aId = xContentAccess->queryContentIdentifierString();
 
                 if ( ! Content::create( aNewFolderURL, aCmdEnv, aFolder ) )
                 {
@@ -2864,13 +2910,17 @@ void SfxDocTemplate_Impl::GetFolders( Content& rRoot,
                     }
                 }
 
+#endif
+
                 RegionData_Impl *pRegion = GetRegion( aTitle );
 
                 if ( !pRegion )
                 {
                     pRegion = new RegionData_Impl( aTitle );
                     pRegion->SetTargetURL( aId );
+#ifndef DONT_USE_HIERARCHY
                     pRegion->SetHierarchyURL( aNewFolderURL );
+#endif
                 }
 
                 InsertOrMarkRegion( pRegion );
@@ -2892,17 +2942,21 @@ void SfxDocTemplate_Impl::GetFolders( Content& rRoot,
 void SfxDocTemplate_Impl::AddToStandard( Content& rRoot,
                                          Content& rFolder )
 {
+    OUString aNewFolderURL;
     OUString aTitle = GetLongName( OUString( RTL_CONSTASCII_USTRINGPARAM( STANDARD_FOLDER ) ) );
-    OUString aRootURL = rRoot.get()->getIdentifier()->getContentIdentifier();
     OUString aFolderURL = rFolder.get()->getIdentifier()->getContentIdentifier();
+    Content  aFolder;
+
+#ifndef DONT_USE_HIERARCHY
+
+    OUString aRootURL = rRoot.get()->getIdentifier()->getContentIdentifier();
 
     INetURLObject aNewFolderObj( aRootURL );
     aNewFolderObj.insertName( aTitle, false,
           INetURLObject::LAST_SEGMENT, true,
           INetURLObject::ENCODE_ALL );
 
-    OUString aNewFolderURL = aNewFolderObj.GetMainURL();
-    Content aFolder;
+    aNewFolderURL = aNewFolderObj.GetMainURL();
 
     Reference< XCommandEnvironment > aCmdEnv;
 
@@ -2932,6 +2986,8 @@ void SfxDocTemplate_Impl::AddToStandard( Content& rRoot,
         }
         catch( Exception& ) { return; }
     }
+
+#endif
 
     // Always set the target URL, because the last one should win!
 
@@ -3197,6 +3253,8 @@ sal_Bool SfxDocTemplate_Impl::InsertNewRegionToHierarchy(
     //dv!  hier muss ein URLObject benutzt werden
     OUString aNewFolderURL = aRootURL + rTitle;
 
+#ifndef DONT_USE_HIERARCHY
+
     Content aFolder;
 
     try
@@ -3244,6 +3302,7 @@ sal_Bool SfxDocTemplate_Impl::InsertNewRegionToHierarchy(
     catch ( Exception& )
     { return FALSE; }
 
+#endif
 
     if ( !bExists )
     {
@@ -3285,6 +3344,8 @@ sal_Bool SfxDocTemplate_Impl::InsertNewRegionToFolder(
 
     sal_Bool bExists = sal_False;
 
+#ifndef DONT_USE_HIERARCHY
+
     Content aFolder;
 
     try
@@ -3298,6 +3359,8 @@ sal_Bool SfxDocTemplate_Impl::InsertNewRegionToFolder(
     }
     catch ( Exception& )
     { return FALSE; }
+
+#endif
 
     return bExists;
 }
