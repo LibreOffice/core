@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: cmc $ $Date: 2001-07-23 09:07:42 $
+ *  last change: $Author: cmc $ $Date: 2001-07-23 09:12:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,10 +162,6 @@ using namespace ::xmloff::token;
 #define EXPORT_SVC_NAME RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.XMLExportFilter")
 
 #undef WANTEXCEPT
-sal_Unicode UnicodeToStarMath(sal_uInt16 rChar)
-{
-    return rChar;
-}
 
 /// read a component (file + filter version)
 ULONG SmXMLWrapper::ReadThroughComponent(
@@ -1329,7 +1325,7 @@ void SmXMLFencedContext_Impl::EndElement()
     aToken.nLevel = 5;
 
     aToken.eType = TLPARENT;
-    aToken.cMathChar = UnicodeToStarMath(cBegin);
+    aToken.cMathChar = cBegin;
     SmStructureNode *pSNode = new SmBraceNode(aToken);
 #ifdef USE_POLYGON
     SmNode *pLeft = new SmPolygonNode(aToken);
@@ -1337,7 +1333,7 @@ void SmXMLFencedContext_Impl::EndElement()
     SmNode *pLeft = new SmMathSymbolNode(aToken);
 #endif
 
-    aToken.cMathChar = UnicodeToStarMath(cEnd);
+    aToken.cMathChar = cEnd;
     aToken.eType = TRPARENT;
 #ifdef USE_POLYGON
     SmNode *pRight = new SmPolygonNode(aToken);
@@ -1596,7 +1592,7 @@ void SmXMLOperatorContext_Impl::TCharacters(const ::rtl::OUString &rChars)
     SmToken aToken;
     aToken.nGroup = 0;
 
-    aToken.cMathChar = UnicodeToStarMath(rChars[0]);
+    aToken.cMathChar = rChars[0];
 
     aToken.eType = TSPECIAL;
     aToken.nLevel = 5;
