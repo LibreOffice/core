@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moptions.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:09:44 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 11:30:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,6 +140,7 @@ ModalDialog RID_MACROOPTIONS
         Text[ czech ] = "Popis";
         Text[ hebrew ] = "‮תאור‬";
         Text[ hindi ] = "विवरण";
+        Text[ slovak ] = "Popis";
     };
     MultiLineEdit RID_ME_DESCR
     {
@@ -183,6 +184,7 @@ ModalDialog RID_MACROOPTIONS
         Text[ czech ] = "Nápověda";
         Text[ hebrew ] = "Hilfe-Informationen";
         Text[ hindi ] = "सहायता सूचना";
+        Text[ slovak ] = "Pomocník";
     };
     FixedText RID_FT_HELPID
     {
@@ -217,6 +219,7 @@ ModalDialog RID_MACROOPTIONS
         Text[ czech ] = "Určení nápovědy";
         Text[ hebrew ] = "Hilfe-Identifikation";
         Text[ hindi ] = "सहायता ID";
+        Text[ slovak ] = "ID Pomocníka";
     };
     NumericField RID_NF_HELPID
     {
@@ -261,6 +264,7 @@ ModalDialog RID_MACROOPTIONS
         Text[ czech ] = "Název souboru s nápovědou";
         Text[ hebrew ] = "Hilfe-Dateiname";
         Text[ hindi ] = "सहायता फाइल का नाम";
+        Text[ slovak ] = "Meno súboru obsahujúceho pomocníka";
     };
     Edit RID_ED_HELPNAME
     {
@@ -284,7 +288,10 @@ ModalDialog RID_MACROOPTIONS
     Text[ czech ] = "Popis";
     Text[ hebrew ] = "‮תאור‬";
     Text[ hindi ] = "विवरण";
+    Text[ slovak ] = "Popis";
 };
+
+
 
 
 
