@@ -9410,3 +9410,8 @@ _real@4@3ffdaaaaaaaaaaaaa800
 ?set@?$Reference@VXDispatchProvider@frame@star@sun@com@@@uno@star@sun@com@@QAAEPAVXDispatchProvider@frame@345@@Z
 ?set@?$Reference@VXFrame@frame@star@sun@com@@@uno@star@sun@com@@QAAEPAVXFrame@frame@345@@Z
 ?GetStandardName@SvNumberFormatter@@QAE?AVString@@G@Z
+??0TransferableClipboardListener@@QAE@ABVLink@@@Z
+??1TransferableClipboardListener@@UAE@XZ
+?AddRemoveListener@TransferableClipboardListener@@QAEXPAVWindow@@E@Z
+?changedContents@TransferableClipboardListener@@UAAXABUClipboardEvent@clipboard@datatransfer@star@sun@com@@@Z
+?disposing@TransferableClipboardListener@@UAAXABUEventObject@lang@star@sun@com@@@Z
