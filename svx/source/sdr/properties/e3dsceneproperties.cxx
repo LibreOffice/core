@@ -2,9 +2,9 @@
  *
  *  $RCSfile: e3dsceneproperties.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-16 13:10:12 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 10:50:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -413,6 +413,15 @@ namespace sdr
                     rObj.GetLightGroup().SetDirection( rObj.GetLightDirection8(), Base3DLight7);
                     break;
                 }
+
+                // these are Item changes which may shrink/expand the object, e.g. line
+                // size and line on/off
+                case XATTR_LINESTYLE :
+                case XATTR_LINEWIDTH :
+                {
+                    rObj.CorrectSceneDimensions();
+                    break;
+                }
             }
         }
 
@@ -455,27 +464,27 @@ namespace sdr
             return pRetval;
         }
 
-        void E3dSceneProperties::PreProcessSave()
-        {
-            const SdrObjList* pSub = ((const E3dScene&)GetSdrObject()).GetSubList();
-            const sal_uInt32 nCount(pSub->GetObjCount());
+//BFS01     void E3dSceneProperties::PreProcessSave()
+//BFS01     {
+//BFS01         const SdrObjList* pSub = ((const E3dScene&)GetSdrObject()).GetSubList();
+//BFS01         const sal_uInt32 nCount(pSub->GetObjCount());
+//BFS01
+//BFS01         for(sal_uInt32 a(0L); a < nCount; a++)
+//BFS01         {
+//BFS01             pSub->GetObj(a)->GetProperties().PreProcessSave();
+//BFS01         }
+//BFS01     }
 
-            for(sal_uInt32 a(0L); a < nCount; a++)
-            {
-                pSub->GetObj(a)->GetProperties().PreProcessSave();
-            }
-        }
-
-        void E3dSceneProperties::PostProcessSave()
-        {
-            const SdrObjList* pSub = ((const E3dScene&)GetSdrObject()).GetSubList();
-            const sal_uInt32 nCount(pSub->GetObjCount());
-
-            for(sal_uInt32 a(0L); a < nCount; a++)
-            {
-                pSub->GetObj(a)->GetProperties().PostProcessSave();
-            }
-        }
+//BFS01     void E3dSceneProperties::PostProcessSave()
+//BFS01     {
+//BFS01         const SdrObjList* pSub = ((const E3dScene&)GetSdrObject()).GetSubList();
+//BFS01         const sal_uInt32 nCount(pSub->GetObjCount());
+//BFS01
+//BFS01         for(sal_uInt32 a(0L); a < nCount; a++)
+//BFS01         {
+//BFS01             pSub->GetObj(a)->GetProperties().PostProcessSave();
+//BFS01         }
+//BFS01     }
 
         void E3dSceneProperties::MoveToItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool, SdrModel* pNewModel)
         {
