@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editbrowsebox2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-31 13:25:17 $
+ *  last change: $Author: oj $ $Date: 2002-06-21 08:29:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,49 +86,44 @@ namespace svt
     using namespace drafts::com::sun::star::accessibility::AccessibleEventId;
 
 // -----------------------------------------------------------------------------
-Reference< XAccessible > EditBrowseBox::CreateAccessibleCell( sal_Int32 nRow, sal_uInt16 nColumnId )
+Reference< XAccessible > EditBrowseBox::CreateAccessibleCell( sal_Int32 _nRow, sal_uInt16 _nColumnId )
 {
-    Reference< XAccessible > xRet;
-    if ( nRow == GetCurRow() && IsEditing() && nColumnId == GetCurColumnId() )
-    {
-        //CellController* pController = GetController(nRow, nColumnId);
-        if ( aController.Is() )
-        {
-            Reference< XAccessible > xCont = aController->GetWindow().GetAccessible();
-            Reference< XAccessible > xMy = GetAccessible();
-            if ( xMy.is() && xCont.is() )
-            {
-                m_aImpl->m_xActiveCell = new EditBrowseBoxTableCell(xMy->getAccessibleContext()->getAccessibleChild(::svt::BBINDEX_TABLE),
-                                                                    *this,
-                                                                    VCLUnoHelper::GetInterface(&aController->GetWindow()),
-                                                                    nRow,
-                                                                    nColumnId,
-                                                                    xCont->getAccessibleContext());
-                xRet = m_aImpl->m_xActiveCell;
-/*              commitTableEvent(ACCESSIBLE_ACTIVE_DESCENDANT_EVENT,
-                             com::sun::star::uno::Any(),
-                             com::sun::star::uno::makeAny(m_aImpl->m_xActiveCell));
-*/          }
-        }
-    }
-    else
-        xRet = BrowseBox::CreateAccessibleCell( nRow, nColumnId );
-    return xRet;
+    return BrowseBox::CreateAccessibleCell( _nRow, _nColumnId );
 }
 // -----------------------------------------------------------------------------
 sal_Int32 EditBrowseBox::GetAccessibleControlCount() const
 {
-    return GetRowCount() * (ColCount()-1);
+    return (IsEditing() && bHasFocus) ? 1 : 0;
 }
 // -----------------------------------------------------------------------------
 
 Reference< XAccessible > EditBrowseBox::CreateAccessibleControl( sal_Int32 _nIndex )
 {
-    sal_uInt16 nColCount = ColCount()-1;
-    sal_uInt16 nColID   = _nIndex % nColCount;
-    sal_Int32 nRow      = _nIndex / nColCount;
+    if ( !m_aImpl->m_xActiveCell.is() && IsEditing() && bHasFocus )
+    {
+        Reference< XAccessible > xCont = aController->GetWindow().GetAccessible();
+        Reference< XAccessible > xMy = GetAccessible();
+        if ( xMy.is() && xCont.is() )
+        {
+            if ( m_aImpl->m_xActiveCell.is() )
+            {
+                commitBrowseBoxEvent(ACCESSIBLE_CHILD_EVENT,Any(),makeAny(m_aImpl->m_xActiveCell));
+                m_aImpl->disposeCell();
+            }
 
-    return CreateAccessibleCell(nRow, nColID+1);
+            m_aImpl->m_pFocusCell  = new EditBrowseBoxTableCell(xMy->getAccessibleContext()->getAccessibleChild(::svt::BBTYPE_BROWSEBOX),
+                                                                *this,
+                                                                VCLUnoHelper::GetInterface(&aController->GetWindow()),
+                                                                GetCurRow(),
+                                                                GetCurColumnId(),
+                                                                xCont->getAccessibleContext());
+            m_aImpl->m_xActiveCell = m_aImpl->m_pFocusCell;
+
+            commitBrowseBoxEvent(ACCESSIBLE_CHILD_EVENT,makeAny(m_aImpl->m_xActiveCell),Any());
+        }
+    }
+
+    return m_aImpl->m_xActiveCell;//CreateAccessibleCell(nRow, nColID+1);
 }
 // -----------------------------------------------------------------------------
 Reference<XAccessible > EditBrowseBox::CreateAccessibleRowHeader( sal_Int32 _nRow )
@@ -152,6 +147,32 @@ void EditBrowseBox::GrabTableFocus()
     if ( aController.Is() )
         aController->GetWindow().GrabFocus();
 }
+//------------------------------------------------------------------------------
+void EditBrowseBox::DetermineFocus()
+{
+    sal_Bool bFocus = sal_False;
+    for (Window* pWindow = Application::GetFocusWindow();
+         pWindow && !bFocus;
+         pWindow = pWindow->GetParent())
+         bFocus = pWindow == this;
+
+    if (bFocus != bHasFocus)
+    {
+        bHasFocus = bFocus;
+        if ( bHasFocus )
+            CreateAccessibleControl(0);
+        else
+        {
+            commitBrowseBoxEvent(ACCESSIBLE_CHILD_EVENT,Any(),makeAny(m_aImpl->m_xActiveCell));
+            m_aImpl->disposeCell();
+
+            m_aImpl->m_pFocusCell  = NULL;
+            m_aImpl->m_xActiveCell = NULL;
+        }
+    }
+}
+
+
 // -----------------------------------------------------------------------------
 } // namespace svt
 // -----------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwbox3.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-31 13:25:17 $
+ *  last change: $Author: oj $ $Date: 2002-06-21 08:29:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -256,13 +256,31 @@ OUString BrowseBox::GetAccessibleName( ::svt::AccessibleBrowseBoxObjType eObjTyp
             aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "ColumnHeaderBar" ) );
             break;
         case ::svt::BBTYPE_TABLECELL:
-            aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "TableCell" ) );
+            aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "TableCell[ " ) );
+#ifdef DEBUG
+            aRetText += OUString::valueOf(sal_Int32(GetCurRow()));
+            aRetText += OUString( RTL_CONSTASCII_USTRINGPARAM( "," ) );
+            aRetText += OUString::valueOf(sal_Int32(GetCurColumnId()));
+            aRetText += OUString( RTL_CONSTASCII_USTRINGPARAM( "]" ) );
+#endif
             break;
         case ::svt::BBTYPE_ROWHEADERCELL:
             aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "RowHeaderCell" ) );
+#ifdef DEBUG
+            aRetText += OUString::valueOf(sal_Int32(GetCurRow()));
+            aRetText += OUString( RTL_CONSTASCII_USTRINGPARAM( "," ) );
+            aRetText += OUString::valueOf(sal_Int32(GetCurColumnId()));
+            aRetText += OUString( RTL_CONSTASCII_USTRINGPARAM( "]" ) );
+#endif
             break;
         case ::svt::BBTYPE_COLUMNHEADERCELL:
             aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "ColumnHeaderCell" ) );
+#ifdef DEBUG
+            aRetText += OUString::valueOf(sal_Int32(GetCurRow()));
+            aRetText += OUString( RTL_CONSTASCII_USTRINGPARAM( "," ) );
+            aRetText += OUString::valueOf(sal_Int32(GetCurColumnId()));
+            aRetText += OUString( RTL_CONSTASCII_USTRINGPARAM( "]" ) );
+#endif
             break;
         default:
             OSL_ENSURE(0,"BrowseBox::GetAccessibleName: invalid enum!");
@@ -328,18 +346,23 @@ void BrowseBox::FillAccessibleStateSet(
                 rStateSet.AddState( AccessibleStateType::ENABLED );
             if ( IsReallyVisible() )
                 rStateSet.AddState( AccessibleStateType::VISIBLE );
+            if ( eObjType == ::svt::BBTYPE_TABLE )
+                rStateSet.AddState( AccessibleStateType::CHILDREN_TRANSIENT );
+
             break;
         case ::svt::BBTYPE_ROWHEADERBAR:
             rStateSet.AddState( AccessibleStateType::FOCUSABLE );
             rStateSet.AddState( AccessibleStateType::VISIBLE );
             if ( GetSelectRowCount() )
                 rStateSet.AddState( AccessibleStateType::FOCUSED );
+            rStateSet.AddState( AccessibleStateType::CHILDREN_TRANSIENT );
             break;
         case ::svt::BBTYPE_COLUMNHEADERBAR:
             rStateSet.AddState( AccessibleStateType::FOCUSABLE );
             rStateSet.AddState( AccessibleStateType::VISIBLE );
             if ( GetSelectColumnCount() )
                 rStateSet.AddState( AccessibleStateType::FOCUSED );
+            rStateSet.AddState( AccessibleStateType::CHILDREN_TRANSIENT );
             break;
         case ::svt::BBTYPE_TABLECELL:
             {
@@ -356,6 +379,7 @@ void BrowseBox::FillAccessibleStateSet(
         case ::svt::BBTYPE_COLUMNHEADERCELL:
             rStateSet.AddState( AccessibleStateType::VISIBLE );
             rStateSet.AddState( AccessibleStateType::FOCUSABLE );
+            rStateSet.AddState( AccessibleStateType::TRANSIENT );
             break;
     }
 }
@@ -378,6 +402,14 @@ void BrowseBox::commitTableEvent(sal_Int16 _nEventId,
 {
     if ( m_pImpl->m_pAccessible )
         m_pImpl->commitTableEvent(  _nEventId, _rNewValue, _rOldValue);
+}
+// -----------------------------------------------------------------------------
+void BrowseBox::commitBrowseBoxEvent(sal_Int16 _nEventId,
+            const ::com::sun::star::uno::Any& _rNewValue,
+            const ::com::sun::star::uno::Any& _rOldValue)
+{
+    if ( m_pImpl->m_pAccessible )
+        m_pImpl->m_pAccessible->commitEvent( _nEventId, _rNewValue, _rOldValue);
 }
 // -----------------------------------------------------------------------------
 

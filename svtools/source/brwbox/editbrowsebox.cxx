@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editbrowsebox.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dr $ $Date: 2002-06-12 13:41:38 $
+ *  last change: $Author: oj $ $Date: 2002-06-21 08:29:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,9 @@
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
 #endif
+#ifndef _SVTOOLS_ACCESSIBILEEDITBROWSEBOXTABLECELL_HXX
+#include "editbrowseboxcell.hxx"
+#endif
 // .......................................................................
 namespace svt
 {
@@ -200,6 +203,7 @@ namespace svt
     void EditBrowseBox::Construct()
     {
         m_aImpl = ::std::auto_ptr<EditBrowseBoxImpl>(new EditBrowseBoxImpl());
+        m_aImpl->m_pFocusCell = NULL;
         m_aImpl->m_bHiContrast = isHiContrast(&GetDataWindow());
 
         SetCompoundControl(sal_True);
@@ -329,19 +333,6 @@ namespace svt
     {
         nPaintRow = nRow;
         return sal_True;
-    }
-
-    //------------------------------------------------------------------------------
-    void EditBrowseBox::DetermineFocus()
-    {
-        sal_Bool bFocus = sal_False;
-        for (Window* pWindow = Application::GetFocusWindow();
-             pWindow && !bFocus;
-             pWindow = pWindow->GetParent())
-             bFocus = pWindow == this;
-
-        if (bFocus != bHasFocus)
-            bHasFocus = bFocus;
     }
 
     //------------------------------------------------------------------------------
@@ -994,7 +985,8 @@ namespace svt
         }
         ActivateCell();
         GetDataWindow().EnablePaint(sal_True);
-        BrowseBox::CursorMoved();
+        // should not be called here because the descant event is not needed here
+        //BrowseBox::CursorMoved();
     }
 
     //------------------------------------------------------------------------------
@@ -1040,20 +1032,14 @@ namespace svt
                 // activate the cell only of the browser has the focus
                 if (bHasFocus && bCellFocus)
                 {
+                    CreateAccessibleControl(0);
                     AsynchGetFocus();
-
-                    Reference< XAccessible > xOldCell = m_aImpl->m_xActiveCell;
-                    CreateAccessibleCell(nRow,nCol);
-                    if ( m_aImpl->m_xActiveCell.is() )
-                    {
-                        commitTableEvent(ACCESSIBLE_ACTIVE_DESCENDANT_EVENT,
-                                 com::sun::star::uno::makeAny(xOldCell),
-                                 com::sun::star::uno::makeAny(m_aImpl->m_xActiveCell));
-
-                        ::comphelper::disposeComponent(xOldCell);
-                    }
                 }
             }
+            else
+                commitTableEvent(ACCESSIBLE_ACTIVE_DESCENDANT_EVENT,
+                                 com::sun::star::uno::makeAny(CreateAccessibleCell(nRow,nCol)),
+                                 com::sun::star::uno::Any());
         }
     }
 
@@ -1062,10 +1048,11 @@ namespace svt
     {
         if (IsEditing())
         {
-//          commitTableEvent(ACCESSIBLE_ACTIVE_DESCENDANT_EVENT,
-//                           com::sun::star::uno::makeAny(m_aImpl->m_xActiveCell),
-//                           com::sun::star::uno::Any());
-//          m_aImpl->disposeCell();
+            commitBrowseBoxEvent(ACCESSIBLE_CHILD_EVENT,com::sun::star::uno::Any(),com::sun::star::uno::makeAny(m_aImpl->m_xActiveCell));
+            m_aImpl->disposeCell();
+
+            m_aImpl->m_pFocusCell  = NULL;
+            m_aImpl->m_xActiveCell = NULL;
 
             aOldController = aController;
             aController.Clear();
@@ -1502,6 +1489,9 @@ namespace svt
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.10  2002/06/12 13:41:38  dr
+ *  #99812# create an acc. cell before asking for it
+ *
  *  Revision 1.9  2002/05/31 13:25:17  oj
  *  #99812# accessible adjustments
  *
