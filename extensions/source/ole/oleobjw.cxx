@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oleobjw.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jl $ $Date: 2000-10-16 12:56:07 $
+ *  last change: $Author: jl $ $Date: 2000-10-19 13:22:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -481,7 +481,7 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdUnoTlb(DISPID dispID,
         {
             pVarParamsRef= new CComVariant[ outParameterCount];
             // build up the parameters for IDispatch::Invoke
-            sal_Int32 inParamIndex=0;
+//          sal_Int32 inParamIndex=0;
             sal_Int32 outParamIndex=0;
 
             for( i= 0; i < parameterCount; i++)
@@ -490,7 +490,7 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdUnoTlb(DISPID dispID,
                 // In parameter
                 if( pMethod->pParams[i].bIn == sal_True && ! pMethod->pParams[i].bOut)
                 {
-                    bConvOk= anyToVariant( &pVarParams[parameterCount - i -1], Params[inParamIndex++]);
+                    bConvOk= anyToVariant( &pVarParams[parameterCount - i -1], Params.getConstArray()[i]);
                 }
                 // Out parameter + in/out parameter
                 else if( pMethod->pParams[i].bOut == sal_True)
@@ -634,13 +634,13 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdUnoTlb(DISPID dispID,
         }
         else // it is an JScriptObject
         {
-            sal_Int32 inParamIndex= 0;
+//          sal_Int32 inParamIndex= 0;
             for( sal_Int32 i= 0; i< parameterCount; i++)
             {
                 // In parameter
                 if( pMethod->pParams[i].bIn == sal_True && ! pMethod->pParams[i].bOut)
                 {
-                    bConvOk= anyToVariant( &pVarParams[parameterCount - i -1], Params[inParamIndex++]);
+                    bConvOk= anyToVariant( &pVarParams[parameterCount - i -1], Params.getConstArray()[i]);
                 }
                 // Out parameter + in/out parameter
                 else if( pMethod->pParams[i].bOut == sal_True)
@@ -658,7 +658,7 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdUnoTlb(DISPID dispID,
                         if( pMethod->pParams[i].bIn == sal_True ) // in / out
                         {
                             CComVariant varParam;
-                            bConvOk= anyToVariant( &varParam, Params[ inParamIndex++]);
+                            bConvOk= anyToVariant( &varParam, Params.getConstArray()[i]);
                             if( bConvOk)
                             {
                                 CComDispatchDriver dispDriver( pDisp);
