@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basesh.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-22 16:29:19 $
+ *  last change: $Author: mtg $ $Date: 2001-06-26 11:42:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -288,6 +288,9 @@
 #ifndef _GLOBALS_H
 #include <globals.h>
 #endif
+#ifndef _UNOTXDOC_HXX
+#include <unotxdoc.hxx>
+#endif
 
 #ifdef OS2
 #include <vcl/sysdep.hxx>
@@ -327,6 +330,12 @@ static BYTE nFooterPos;
 #define SWIMAPDLG(rView) ( (SvxIMapDlg*) ( rView.GetViewFrame()->GetChildWindow(        \
                         SvxIMapDlgChildWindow::GetChildWindowId() )->   \
                         GetWindow() ) )
+
+
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::lang;
+
 
 SFX_IMPL_INTERFACE(SwBaseShell, SfxShell, SW_RES(0))
 {
@@ -724,7 +733,13 @@ void SwBaseShell::Execute(SfxRequest &rReq)
     switch(nSlot)
     {
         case FN_REPAGINATE:
-            rSh.CalcLayout();
+            {
+                Reference < XModel > & xModel = GetView().GetDocShell()->GetModel();
+                Reference < XUnoTunnel > xDocTunnel ( xModel, UNO_QUERY );
+                SwXTextDocument *pDoc = reinterpret_cast < SwXTextDocument * > ( xDocTunnel->getSomething ( SwXTextDocument::getUnoTunnelId() ) );
+                pDoc->notifyRefreshListeners();
+                rSh.CalcLayout();
+            }
             break;
         case FN_UPDATE_FIELDS:
             {
