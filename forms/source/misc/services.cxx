@@ -2,9 +2,9 @@
  *
  *  $RCSfile: services.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 12:48:15 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 10:47:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,11 @@ DECLARE_SERVICE_INFO(OImageButtonModel)
 DECLARE_SERVICE_INFO(OImageControlControl)
 DECLARE_SERVICE_INFO(OImageControlModel)
 DECLARE_SERVICE_INFO(OGridControlModel)
+
+// XForms objects
+DECLARE_SERVICE_INFO(Binding)
+DECLARE_SERVICE_INFO(Model)
+DECLARE_SERVICE_INFO(XForms)
 
 // some special handling for the FormattedFieldWrapper which can act as FormattedModel or as EditModel
 DECLARE_SERVICE_INFO(OFormattedFieldWrapper);
@@ -308,6 +313,17 @@ void ensureClassInfos()
     // ========================================================================
     // = various
     REGISTER_CLASS1(OFormsCollection, FRM_SUN_FORMS_COLLECTION);
+
+    // ========================================================================
+    // = XForms core
+#define REGISTER_XFORMS_CLASS(name) \
+    aServices.realloc(1); \
+    aServices.getArray()[0] = rtl::OUString::createFromAscii( "com.sun.star.xforms." #name ); \
+    REGISTER_CLASS_CORE(name)
+
+    REGISTER_XFORMS_CLASS(Model);
+    REGISTER_XFORMS_CLASS(XForms);
+
 }
 
 //---------------------------------------------------------------------------------------
@@ -339,6 +355,7 @@ void SAL_CALL createRegistryInfo_ONavigationBarModel();
 void SAL_CALL createRegistryInfo_ONavigationBarControl();
 void SAL_CALL createRegistryInfo_ORichTextModel();
 void SAL_CALL createRegistryInfo_ORichTextControl();
+void SAL_CALL createRegistryInfo_CLibxml2XFormsExtension();
 
 //---------------------------------------------------------------------------------------
 void SAL_CALL createRegistryInfo_FORMS()
@@ -354,6 +371,7 @@ void SAL_CALL createRegistryInfo_FORMS()
         createRegistryInfo_ONavigationBarControl();
         createRegistryInfo_ORichTextModel();
         createRegistryInfo_ORichTextControl();
+        createRegistryInfo_CLibxml2XFormsExtension();;
         bInit = sal_True;
     }
 }
