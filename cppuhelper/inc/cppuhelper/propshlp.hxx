@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propshlp.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dbo $ $Date: 2001-06-11 08:10:34 $
+ *  last change: $Author: jbu $ $Date: 2001-10-29 15:27:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -347,22 +347,16 @@ private:
 
 
 /**
-   This abstract class map the methods of the interfaces XMultiPropertySet, XFastPropertySet
+   This abstract class maps the methods of the interfaces XMultiPropertySet, XFastPropertySet
    and XPropertySet to the methods getInfoHelper, convertFastPropertyValue,
-   setFastPropertyValue_NoBroadcast and getFastPropertyValue. You must subclass
-   this one and overload the methods.<BR>
-   It provide a standard implementation of the XPropertySetInfo.<BR>
-   The XPropertiesChangeListener are inserted in the rBHelper.aLC structure.<BR>
+   setFastPropertyValue_NoBroadcast and getFastPropertyValue. You must derive from
+   this class and overload the methods.
+   It provides a standard implementation of the XPropertySetInfo.
+   The XPropertiesChangeListener are inserted in the rBHelper.aLC structure.
    The XPropertyChangeListener and XVetoableChangeListener with no names are inserted
    in the rBHelper.aLC structure. So it is possible to advise property listeners with
    the connection point interfaces. But only listeners that listen to all property changes.
-   The subclass must explicite allow the access through the XConnectionPoint interface.<BR>
-   <B>Not tested under MT conditions</B>
 
-   @see     OConnectionPointContainerHelper
-   @see     createPropertySetInfo
-   @author  Markus Meyer
-   @since   12/04/98
  */
 class OPropertySetHelper : public ::com::sun::star::beans::XMultiPropertySet,
                            public ::com::sun::star::beans::XFastPropertySet,
@@ -370,11 +364,9 @@ class OPropertySetHelper : public ::com::sun::star::beans::XMultiPropertySet,
 {
 public:
     /**
-       Create empty property listener container and hold the helper structure.
-
        @param rBHelper  this structure containes the basic members of
                           a broadcaster.
-                          The lifetime must be longer as the lifetime
+                          The lifetime must be longer than the lifetime
                           of this object. Stored in the variable rBHelper.
      */
     OPropertySetHelper( OBroadcastHelper & rBHelper ) SAL_THROW( () );
@@ -384,9 +376,8 @@ public:
     ~OPropertySetHelper() SAL_THROW( () );
 
     /**
-       Only return a reference to XMultiPropertySet, XFastPropertySet, XPropertySet and
+       Only returns a reference to XMultiPropertySet, XFastPropertySet, XPropertySet and
        XEventListener.
-       <B>Do not return a reference to XInterface.</B>
      */
     ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType )
         throw (::com::sun::star::uno::RuntimeException);
@@ -399,8 +390,6 @@ public:
      */
     void SAL_CALL disposing() SAL_THROW( () );
 
-    // XPropertySet
-    //XPropertySetInfoRef getPropertySetInfo() const;
     /**
        Throw UnknownPropertyException or PropertyVetoException if the property with the name
        rPropertyName does not exist or is readonly. Otherwise rPropertyName is changed to its handle
@@ -438,11 +427,10 @@ public:
         const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener > & aListener )
         throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
-    // XFastPropertySet
     /**
        Throw UnknownPropertyException or PropertyVetoException if the property with the name
        rPropertyName does not exist or is readonly. Otherwise the method convertFastPropertyValue
-       is called, than the vetoable listeners are notified. After this the value of the property
+       is called, then the vetoable listeners are notified. After this the value of the property
        is changed with the setFastPropertyValue_NoBroadcast method and the bound listeners are
        notified.
       */
@@ -450,8 +438,8 @@ public:
         throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
     /**
-       Throw UnknownPropertyException if the property with the handle
-       nHandle does not exist.
+       @exception com::sun::star::beans::UnknownPropertyException
+         if the property with the handle nHandle does not exist.
      */
     virtual ::com::sun::star::uno::Any SAL_CALL getFastPropertyValue( sal_Int32 nHandle )
         throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
@@ -480,7 +468,7 @@ public:
         const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertiesChangeListener > & Listener )
         throw(::com::sun::star::uno::RuntimeException);
     /**
-       The property sequence is create in the call. The interface isn't used after the call.
+       The property sequence is created in the call. The interface isn't used after the call.
      */
     static ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySetInfo > SAL_CALL
         createPropertySetInfo( IPropertyArrayHelper & rProperties ) SAL_THROW( () );
@@ -502,7 +490,7 @@ protected:
         sal_Bool bVetoable );
 
     /**
-       Set multible properties with the handles.
+       Set multiple properties with the handles.
        @param nSeqLen   the length of the arrays pHandles and Values.
        @param pHandles the handles of the properties. The number of elements
               in the Values sequence is the length of the handle array. A value of -1
@@ -542,8 +530,7 @@ protected:
         throw (::com::sun::star::lang::IllegalArgumentException) = 0;
     /**
        The same as setFastProperyValue, but no exception is thrown and nHandle
-       is always valid. You must not broadcast the changes in this method.<BR>
-       <B>You type is correct you need't test it.</B>
+       is always valid. The changes must not be broadcasted in this method.
        The method is not implemented in this class.
      */
     virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
@@ -562,15 +549,11 @@ protected:
     /** The common data of a broadcaster. Use the mutex, disposing state and the listener container. */
     OBroadcastHelper    &rBHelper;
     /**
-       Container for the XProperyChangedListener. The listeners are inserted by handle.<BR>
-       Listeners added without name are inserted in the rBHelper.aLC container under
-       the Uik XPropertyChangeListener::getSmartUik().
+       Container for the XProperyChangedListener. The listeners are inserted by handle.
      */
     OMultiTypeInterfaceContainerHelperInt32  aBoundLC;
     /**
        Container for the XPropertyVetoableListener. The listeners are inserted by handle.
-       Listeners added without name are inserted in the rBHelper.aLC container under
-       the Uik XVetoableChangeListener::getSmartUik().
      */
     OMultiTypeInterfaceContainerHelperInt32 aVetoableLC;
 

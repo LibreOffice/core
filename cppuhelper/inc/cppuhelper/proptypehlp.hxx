@@ -2,9 +2,9 @@
  *
  *  $RCSfile: proptypehlp.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-09 12:15:26 $
+ *  last change: $Author: jbu $ $Date: 2001-10-29 15:27:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,13 +66,16 @@
 namespace cppu
 {
 
+/** Converts the value stored in an any to a concrete C++ type.
+    The function does the same as the operator >>= () at the
+    Any class, except that it throws an IllegalArgumentException in case of
+    failures (the value cannot be extracted without data loss )
+
+   @exception com::sun::star::lang::IllegalArgumentException when the type could not be converted.
+ */
 template < class target >
 inline void SAL_CALL convertPropertyValue( target &value , const  ::com::sun::star::uno::Any & a)
-//      SAL_THROW( (::com::sun::star::lang::IllegalArgumentException) )
 {
-//  any sense ?
-//  const ::com::sun::star::uno::Type &t = ::getCppuType( &value );
-//  enum TypeClass tc = t.getTypeClass();
 
     if( !( a >>= value ) ) {
         throw ::com::sun::star::lang::IllegalArgumentException();
@@ -83,11 +86,13 @@ inline void SAL_CALL convertPropertyValue( target &value , const  ::com::sun::st
 // This template is needed at least for msci4 compiler
 template < class target >
 inline void SAL_CALL convertPropertyValue( target &value ,  ::com::sun::star::uno::Any & a)
-//      SAL_THROW( (::com::sun::star::lang::IllegalArgumentException) )
 {
     convertPropertyValue( value ,  (const ::com::sun::star::uno::Any & )  a );
 }
 
+/**
+  conversion of basic types
+*/
 inline void SAL_CALL convertPropertyValue( sal_Bool & b   , const ::com::sun::star::uno::Any & a )
     SAL_THROW( (::com::sun::star::lang::IllegalArgumentException) )
 {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stdidlclass.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jsc $ $Date: 2001-05-28 13:22:46 $
+ *  last change: $Author: jbu $ $Date: 2001-10-29 15:27:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,13 +67,8 @@
 
 namespace cppu {
 
-/**
-  Standardfunction to create a XIdlClass for a component.
-  This method is usually used as a helper class. ( Better use the methods below  ).
-
-  HACK : Function returns pointer to XIdlClass instead of
-         a reference. This is because of a MSC 4.x bug.
-
+/*
+  @deprecated
 */
 ::com::sun::star::reflection::XIdlClass * SAL_CALL createStandardClassWithSequence(
     const ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory > &rSMgr ,
@@ -84,44 +79,18 @@ namespace cppu {
 
 
 
-/*--------------------------------------------------
-* Standardfunction to create an XIdlClass for a component. There is a function for each number of supported
-* interfaces up to 10.
-*
-* HACK : Function returns pointer to XIdlClass instead of
-*        a reference. This is because of a MSC 4.x bug.
-*
-* Sample use for an XIdlClassProvider :
-*
-* // XIdlClassProvider
-*Sequence< Reference < XIdlClass > > SAL_CALL MyComponent::getIdlClasses(void)
-*{
-*   // weak reference to cache the standard class
-*   static WeakReference< XIdlClass >   weakRef;
-*
-*   // try to make weakref hard
-*   Reference < XIdlClass > r = weakRef;
-*
-*   if( ! r.is() ) {
-*       // xidlclass has not been initialized before or has been destroyed already.
-*       r = ::cppu::createStandardClass(
-*                                       m_rSMgr ,                               // Servicemanager
-*                                       L"com.sun.star.comp.cppuhelper.OStdIdlClass" ,  // ImplementationName
-*                                       Reference < XIdlClass > () ,            // Base classes
-*                                       STATIC_CAST(XIdlClassProvider *, this),                 // Supported Interfaces
-*                                       STATIC_CAST(XServiceInfo *, this ) ,
-*                                       STATIC_CAST(XMyService * , this )
-*                                       // ....
-*                                       );
-*
-*       // store reference for later use
-*       weakRef = r;
-*   }
-*
-*   return Sequence < Reference < XIdlClass > > ( &r , 1 );
-*}
-*
-*--------------------------------------------------*/
+/**
+   Standardfunction to create an XIdlClass for a component.
+   There is a function for each number of supported interfaces up to 10.
+
+   Since the switch to the final component model, there are no use cases anymore, where
+   these functions should be used. Instead use the implementation helpers directly
+   (see cppuhelper/implbase1.hxx).
+
+   @see OTypeCollection
+
+   @deprecated
+ */
 template < class Interface1 >
 inline ::com::sun::star::reflection::XIdlClass * SAL_CALL
 //inline ::com::sun::star::uno::Reference < ::com::sun::star::reflection::XIdlClass >

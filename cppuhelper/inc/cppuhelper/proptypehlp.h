@@ -2,9 +2,9 @@
  *
  *  $RCSfile: proptypehlp.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-05-28 13:22:46 $
+ *  last change: $Author: jbu $ $Date: 2001-10-29 15:27:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,29 +67,21 @@
 
 namespace cppu {
 
-/**
-   Convert a property value to the specified type of the property.
-   Look at the XPropertySet interface about the conversion rules.<BR>
+/** Converts the value stored in an any to a concrete C++ type.
+    The function does the same as the operator >>= () at the
+    Any class, except that it throws an IllegalArgumentException in case of
+    failures (the value cannot be extracted without data loss )
 
-   If a property could not be converted a IllegalArgumentException is thrown.
-
+   @exception com::sun::star::lang::IllegalArgumentException when the type could not be converted.
  */
+template < class target >
+inline void SAL_CALL convertPropertyValue( target &value , const  ::com::sun::star::uno::Any & a);
 
 template < class target >
-inline void SAL_CALL convertPropertyValue( target &value , const  ::com::sun::star::uno::Any & a)
-//      SAL_THROW( (::com::sun::star::lang::IllegalArgumentException) )
-        ;
+inline void SAL_CALL convertPropertyValue( target &value ,  ::com::sun::star::uno::Any & a);
 
-// This template is needed at least for msci4 compiler
-template < class target >
-inline void SAL_CALL convertPropertyValue( target &value ,  ::com::sun::star::uno::Any & a)
-//      SAL_THROW( (::com::sun::star::lang::IllegalArgumentException) )
-        ;
-
-/*
-
+/**
   conversion of basic types
-
 */
 inline void SAL_CALL convertPropertyValue( sal_Int64 & target ,  const ::com::sun::star::uno::Any & source )
     SAL_THROW( (::com::sun::star::lang::IllegalArgumentException) );

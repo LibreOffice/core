@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interfacecontainer.h,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dbo $ $Date: 2001-06-07 11:11:28 $
+ *  last change: $Author: jbu $ $Date: 2001-10-29 15:27:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,40 +90,45 @@ namespace cppu
 //===================================================================
 class OInterfaceContainerHelper;
 /**
-  This is the iterator of a InterfaceContainerHelper. The iterator
-  ist is not thread save. It is not allowed to assign or copy an
-  instance of this class.
+  This is the iterator of a InterfaceContainerHelper. Typically
+  one constructs an instance on the stack for one firing session.
+  It is not allowed to assign or copy an instance of this class.
 
-  @version      0.1
-  @author       Markus Meyer
-  @since        03/12/98
   @see OInterfaceContainerHelper
  */
 class OInterfaceIteratorHelper
 {
 public:
+    /** not useful
+       @deprecated
+     */
     OInterfaceIteratorHelper() SAL_THROW( () );
     /**
        Create an iterator over the elements of the container. The iterator
-       copies the elements of the conatainer. A change to the container does not
-       affect the iterator.<BR>
+       copies the elements of the conatainer. A change to the container
+       during the lifetime of an iterator is allowed and does not
+       affect the iterator-instance. The iterator and the container take cares
+       themself for concurrent access, no additional guarding is necessary.
+
        Remark: The copy is on demand. The iterator copy the elements only if the container
-       change the contents. It is not allowed to destroy the container if a iterator exist.
+       change the contents. It is not allowed to destroy the container as long
+       as an iterator exist.
 
        @param rCont the container of the elements.
      */
     OInterfaceIteratorHelper( OInterfaceContainerHelper & rCont ) SAL_THROW( () );
 
     /**
-      Release the connection to the container.
+      Releases the connection to the container.
      */
     ~OInterfaceIteratorHelper() SAL_THROW( () );
 
-    /** Return true, if there are more elements in the iterator. */
+    /** Return sal_True, if there are more elements in the iterator. */
     sal_Bool SAL_CALL hasMoreElements() const SAL_THROW( () )
         { return nRemain != 0; }
     /** Return the next element of the iterator. Calling this method if
-        hasMoreElements return false, is an error.
+        hasMoreElements() has returned sal_False, is an error. Cast the
+        returned pointer to the
      */
     ::com::sun::star::uno::XInterface * SAL_CALL next() SAL_THROW( () );
 
@@ -148,12 +153,8 @@ private:
 //===================================================================
 /**
   A container of interfaces. To access the elements use an iterator.
-  This implementation is thread save.<BR>
-  <B>Inserting null pointers is allowed, but is not tested and does not work.</B>
+  This implementation is thread save.
 
-  @version      0.1
-  @author       Markus Meyer
-  @since        03/12/98
   @see OInterfaceIteratorHelper
  */
 class OInterfaceContainerHelper
@@ -170,22 +171,20 @@ public:
         {}
 
     /**
-       Create an interface container. The internal representation
-       is an array, so it is not effective to store a large number
-       of elements.
+       Create an interface container.
 
        @param rMutex    the mutex to protect multi thread access.
-                         The lifetime must be longer than the lifetime
-                         of this object.
+       The lifetime must be longer than the lifetime
+       of this object.
      */
     OInterfaceContainerHelper( ::osl::Mutex & rMutex ) SAL_THROW( () );
     /**
       Release all interfaces. All iterators must be destroyed before
-      the container.
+      the container is destructed.
      */
     ~OInterfaceContainerHelper() SAL_THROW( () );
     /**
-      Return the number of Elements in the container. Only usefull if you are acquire
+      Return the number of Elements in the container. Only useful if you have acquired
       the mutex.
      */
     sal_Int32 SAL_CALL getLength() const SAL_THROW( () );
@@ -215,7 +214,7 @@ public:
      */
     void SAL_CALL disposeAndClear( const ::com::sun::star::lang::EventObject & rEvt ) SAL_THROW( () );
     /**
-      Remove all elements.
+      Clears the container without calling disposing().
      */
     void SAL_CALL clear() SAL_THROW( () );
 
@@ -235,8 +234,8 @@ friend class OInterfaceIteratorHelper;
     OInterfaceContainerHelper( const OInterfaceContainerHelper & ) SAL_THROW( () );
     OInterfaceContainerHelper & operator = ( const OInterfaceContainerHelper & ) SAL_THROW( () );
 
-    /**
-      Dulicate content of the conaitner and release the old one without destroing.
+    /*
+      Dulicate content of the conaitner and release the old one without destroying.
       The mutex must be locked and the memberbInUse must be true.
      */
     void copyAndResetInUse() SAL_THROW( () );
@@ -247,14 +246,8 @@ public:
 
 //===================================================================
 /**
-  A generic class to support the implementation of the XConnectionPointContainer interface.
-  This class holds a STL hash_map to acces the InterfaceContainerHelper through a generic
-  key value.
-  The InterfaceContainerHelper you get with the method getContainer( ... ) exist
-  until the whole PropertyListenerContainer is destroyed.
+  A helper class to store interface references of different types.
 
-  @author       Markus Meyer
-  @since        03/12/98
   @see OInterfaceIteratorHelper
   @see OInterfaceContainerHelper
  */
@@ -281,7 +274,7 @@ public:
      */
     inline OMultiTypeInterfaceContainerHelperVar( ::osl::Mutex & ) SAL_THROW( () );
     /**
-      Delete all containers.
+      Deletes all containers.
      */
     inline ~OMultiTypeInterfaceContainerHelperVar() SAL_THROW( () );
 
@@ -292,15 +285,16 @@ public:
 
     /**
       Return the container created under this key.
+      The InterfaceContainerHelper exists until the whole MultiTypeContainer is destroyed.
       @return the container created under this key. If the container
                  was not created, null was returned.
      */
     inline OInterfaceContainerHelper * SAL_CALL getContainer( const key & ) const SAL_THROW( () );
 
     /**
-      Insert an element in the container specified with the key. The position is not specified.
+      Inserts an element in the container specified with the key. The position is not specified.
       @param rKey       the id of the container.
-      @param rxIFace    the added interface. It is allowed to insert null or
+      @param rxIFace    the added interface. It is allowed, to insert null or
                          the same pointer more than once.
       @return the new count of elements in the container.
      */
@@ -310,7 +304,7 @@ public:
         SAL_THROW( () );
 
     /**
-      Remove an element from the container specified with the key.
+      Removes an element from the container specified with the key.
       It uses the equal definition of uno objects to remove the interfaces.
       @param rKey       the id of the container.
       @param rxIFace    the removed interface.
@@ -322,8 +316,9 @@ public:
         SAL_THROW( () );
 
     /**
-      Call disposing on all object in the container that
-      support XEventListener. Than clear the container.
+      Call disposing on all references in the container, that
+      support XEventListener. Then clears the container.
+      @param rEvt the event object which is passed during disposing() call
      */
     inline void SAL_CALL disposeAndClear( const ::com::sun::star::lang::EventObject & rEvt ) SAL_THROW( () );
     /**
