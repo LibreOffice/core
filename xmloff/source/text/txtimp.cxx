@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-02 14:02:29 $
+ *  last change: $Author: mib $ $Date: 2001-03-06 11:17:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -501,6 +501,7 @@ static __FAR_DATA SvXMLTokenMapEntry aTextMasterPageElemTokenMap[] =
 // maximum allowed length of combined characters field
 #define MAX_COMBINED_CHARACTERS 6
 
+#if SUPD < 625
 XMLTextImportHelper::XMLTextImportHelper(
         const Reference < XModel >& rModel,
         sal_Bool bInsertM, sal_Bool bStylesOnlyM,
@@ -523,6 +524,139 @@ XMLTextImportHelper::XMLTextImportHelper(
     bBlockMode( bBlockM ),
     bStylesOnlyMode( bStylesOnlyM ),
     bProgress( bPrg ),
+    bOrganizerMode( sal_False ),
+    pFootnoteBackpatcher( NULL ),
+    pSequenceIdBackpatcher( NULL ),
+    pSequenceNameBackpatcher( NULL ),
+    xServiceFactory( rModel, UNO_QUERY ),
+    sParaStyleName(RTL_CONSTASCII_USTRINGPARAM("ParaStyleName")),
+    sCharStyleName(RTL_CONSTASCII_USTRINGPARAM("CharStyleName")),
+    sHeadingStyleName(RTL_CONSTASCII_USTRINGPARAM("HeadingStyleName")),
+    sNumberingLevel(RTL_CONSTASCII_USTRINGPARAM("NumberingLevel")),
+    sNumberingStartValue(RTL_CONSTASCII_USTRINGPARAM("NumberingStartValue")),
+    sParaIsNumberingRestart(RTL_CONSTASCII_USTRINGPARAM("ParaIsNumberingRestart")),
+    sNumberingRules(RTL_CONSTASCII_USTRINGPARAM("NumberingRules")),
+    sSequenceNumber(RTL_CONSTASCII_USTRINGPARAM("SequenceNumber")),
+    sSourceName(RTL_CONSTASCII_USTRINGPARAM("SourceName")),
+    sCurrentPresentation(RTL_CONSTASCII_USTRINGPARAM("CurrentPresentation")),
+    sNumberingIsNumber(RTL_CONSTASCII_USTRINGPARAM("NumberingIsNumber")),
+    sChainNextName(RTL_CONSTASCII_USTRINGPARAM("ChainNextName")),
+    sChainPrevName(RTL_CONSTASCII_USTRINGPARAM("ChainPrevName")),
+    sHyperLinkURL(RTL_CONSTASCII_USTRINGPARAM("HyperLinkURL")),
+    sHyperLinkName(RTL_CONSTASCII_USTRINGPARAM("HyperLinkName")),
+    sHyperLinkTarget(RTL_CONSTASCII_USTRINGPARAM("HyperLinkTarget")),
+    sUnvisitedCharStyleName(RTL_CONSTASCII_USTRINGPARAM("UnvisitedCharStyleName")),
+    sVisitedCharStyleName(RTL_CONSTASCII_USTRINGPARAM("VisitedCharStyleName")),
+    sTextFrame(RTL_CONSTASCII_USTRINGPARAM("TextFrame")),
+    sPageDescName(RTL_CONSTASCII_USTRINGPARAM("PageDescName")),
+    sServerMap(RTL_CONSTASCII_USTRINGPARAM("ServerMap")),
+    sHyperLinkEvents(RTL_CONSTASCII_USTRINGPARAM("HyperLinkEvents")),
+    sContent(RTL_CONSTASCII_USTRINGPARAM("Content")),
+    sServiceCombinedCharacters(RTL_CONSTASCII_USTRINGPARAM(
+        "com.sun.star.text.TextField.CombinedCharacters"))
+{
+    Reference< XChapterNumberingSupplier > xCNSupplier( rModel, UNO_QUERY );
+
+    if( xCNSupplier.is() )
+        xChapterNumbering = xCNSupplier->getChapterNumberingRules();
+
+    Reference< XStyleFamiliesSupplier > xFamiliesSupp( rModel, UNO_QUERY );
+    DBG_ASSERT( xFamiliesSupp.is(), "no chapter numbering supplier" );
+
+    if( xFamiliesSupp.is() )
+    {
+        Reference< XNameAccess > xFamilies = xFamiliesSupp->getStyleFamilies();
+
+        const OUString aParaStyles(RTL_CONSTASCII_USTRINGPARAM("ParagraphStyles"));
+        if( xFamilies->hasByName( aParaStyles ) )
+        {
+            Any aAny( xFamilies->getByName( aParaStyles ) );
+            aAny >>= xParaStyles;
+        }
+
+        const OUString aCharStyles(RTL_CONSTASCII_USTRINGPARAM("CharacterStyles"));
+        if( xFamilies->hasByName( aCharStyles ) )
+        {
+            Any aAny( xFamilies->getByName( aCharStyles ) );
+            aAny >>= xTextStyles;
+        }
+
+        const OUString aNumStyles(RTL_CONSTASCII_USTRINGPARAM("NumberingStyles"));
+        if( xFamilies->hasByName( aNumStyles ) )
+        {
+            Any aAny( xFamilies->getByName( aNumStyles ) );
+            aAny >>= xNumStyles;
+        }
+
+        const OUString aFrameStyles(RTL_CONSTASCII_USTRINGPARAM("FrameStyles"));
+        if( xFamilies->hasByName( aFrameStyles ) )
+        {
+            Any aAny( xFamilies->getByName( aFrameStyles ) );
+            aAny >>= xFrameStyles;
+        }
+
+        const OUString aPageStyles(RTL_CONSTASCII_USTRINGPARAM("PageStyles"));
+        if( xFamilies->hasByName( aPageStyles ) )
+        {
+            Any aAny( xFamilies->getByName( aPageStyles ) );
+            aAny >>= xPageStyles;
+        }
+    }
+
+    Reference < XTextFramesSupplier > xTFS( rModel, UNO_QUERY );
+    if( xTFS.is() )
+        xTextFrames = xTFS->getTextFrames();
+
+    Reference < XTextGraphicObjectsSupplier > xTGOS( rModel, UNO_QUERY );
+    if( xTGOS.is() )
+        xGraphics = xTGOS->getGraphicObjects();
+
+    Reference < XTextEmbeddedObjectsSupplier > xTEOS( rModel, UNO_QUERY );
+    if( xTEOS.is() )
+        xObjects = xTEOS->getEmbeddedObjects();
+
+    XMLPropertySetMapper *pPropMapper =
+            new XMLTextPropertySetMapper( TEXT_PROP_MAP_PARA );
+    xParaImpPrMap = new XMLTextImportPropertyMapper( pPropMapper );
+
+    pPropMapper = new XMLTextPropertySetMapper( TEXT_PROP_MAP_TEXT );
+    xTextImpPrMap = new XMLTextImportPropertyMapper( pPropMapper );
+
+    pPropMapper = new XMLTextPropertySetMapper( TEXT_PROP_MAP_FRAME );
+    xFrameImpPrMap = new XMLTextImportPropertyMapper( pPropMapper );
+
+    pPropMapper = new XMLTextPropertySetMapper( TEXT_PROP_MAP_SECTION );
+    xSectionImpPrMap = new XMLTextImportPropertyMapper( pPropMapper );
+
+    pPropMapper = new XMLTextPropertySetMapper( TEXT_PROP_MAP_RUBY );
+    xRubyImpPrMap = new SvXMLImportPropertyMapper( pPropMapper );
+}
+#endif
+
+XMLTextImportHelper::XMLTextImportHelper(
+        const Reference < XModel >& rModel,
+        sal_Bool bInsertM, sal_Bool bStylesOnlyM,
+        sal_Bool bPrg,
+        sal_Bool bBlockM,
+        sal_Bool bOrganizerM ) :
+    pTextElemTokenMap( 0 ),
+    pTextPElemTokenMap( 0 ),
+    pTextPAttrTokenMap( 0 ),
+    pTextListBlockAttrTokenMap( 0 ),
+    pTextListBlockElemTokenMap( 0 ),
+    pTextFieldAttrTokenMap( 0 ),
+    pTextFrameAttrTokenMap( 0 ),
+    pTextHyperlinkAttrTokenMap( 0 ),
+    pTextMasterPageElemTokenMap( 0 ),
+    pPrevFrmNames( 0 ),
+    pNextFrmNames( 0 ),
+    pRenameMap( 0 ),
+    pOutlineStyles( 0 ),
+    bInsertMode( bInsertM ),
+    bBlockMode( bBlockM ),
+    bStylesOnlyMode( bStylesOnlyM ),
+    bProgress( bPrg ),
+    bOrganizerMode( bOrganizerM ),
     pFootnoteBackpatcher( NULL ),
     pSequenceIdBackpatcher( NULL ),
     pSequenceNameBackpatcher( NULL ),

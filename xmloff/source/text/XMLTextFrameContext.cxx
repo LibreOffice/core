@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextFrameContext.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-02 14:02:29 $
+ *  last change: $Author: mib $ $Date: 2001-03-06 11:17:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -752,7 +752,8 @@ XMLTextFrameContext::XMLTextFrameContext(
             GetImport().GetTextImport();
         sal_Bool bForceLoad = xTxtImport->IsInsertMode() ||
                               xTxtImport->IsBlockMode() ||
-                              xTxtImport->IsStylesOnlyMode();
+                              xTxtImport->IsStylesOnlyMode() ||
+                              xTxtImport->IsOrganizerMode();
         aAny <<= GetImport().ResolveGraphicObjectURL( sHRef, !bForceLoad );
         xPropSet->setPropertyValue( sGraphicURL, aAny );
 
