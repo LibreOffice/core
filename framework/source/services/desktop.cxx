@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: cd $ $Date: 2001-11-13 14:07:52 $
+ *  last change: $Author: mba $ $Date: 2001-11-21 14:58:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,6 +169,13 @@
 #include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_FRAME_XNOTIFYINGDISPATCH_HPP_
+#include <com/sun/star/frame/XNotifyingDispatch.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_FRAME_DISPATCHRESULTSTATE_HPP_
+#include <com/sun/star/frame/DispatchResultState.hpp>
+#endif
 //_________________________________________________________________________________________________________________
 //  includes of other projects
 //_________________________________________________________________________________________________________________
@@ -246,7 +253,7 @@ DEFINE_XINTERFACE_12                    (   Desktop                             
                                             DIRECT_INTERFACE( css::frame::XFramesSupplier           ),
                                             DIRECT_INTERFACE( css::frame::XFrame                    ),
                                             DIRECT_INTERFACE( css::lang::XComponent                 ),
-                                            DIRECT_INTERFACE( css::frame::XStatusListener           ),
+                                            DIRECT_INTERFACE( css::frame::XDispatchResultListener           ),
                                             DIRECT_INTERFACE( css::lang::XEventListener             ),
                                             DIRECT_INTERFACE( css::task::XInteractionHandler        )
                                         )
@@ -261,7 +268,7 @@ DEFINE_XTYPEPROVIDER_12                 (   Desktop                             
                                             css::frame::XFramesSupplier                             ,
                                             css::frame::XFrame                                      ,
                                             css::lang::XComponent                                   ,
-                                            css::frame::XStatusListener                             ,
+                                            css::frame::XDispatchResultListener                             ,
                                             css::lang::XEventListener                               ,
                                             css::task::XInteractionHandler
                                         )
@@ -839,9 +846,6 @@ css::uno::Reference< css::lang::XComponent > SAL_CALL Desktop::loadComponentFrom
     {
         // ... dispatch URL at this dispatcher.
         // Set us as listener for status events from this dispatcher.
-        // The dispatcher get a event loadFinished() or loadCancelled() from his frameloader
-        // and map this information for us! (see classes DispatchProvider/BaseDispatcher for further informations)
-        xDispatcher->addStatusListener( static_cast< css::frame::XStatusListener* >( this ), aURL );
 
         // We should set us as interaction handler for possible exceptions during load proccess ...
         // But we shouldn't do that - if anyone already is set!
@@ -862,7 +866,11 @@ css::uno::Reference< css::lang::XComponent > SAL_CALL Desktop::loadComponentFrom
         aWriteLock.unlock();
         /* UNSAFE AREA ----------------------------------------------------------------------------------------- */
 
-        xDispatcher->dispatch( aURL, lOwnArguments );
+        css::uno::Reference< css::frame::XNotifyingDispatch > xNotifyer( xDispatcher, css::uno::UNO_QUERY );
+        if ( xNotifyer.is() )
+            xNotifyer->dispatchWithNotification( aURL, lOwnArguments, this );
+        else
+            xDispatcher->dispatch( aURL, lOwnArguments );
 
         // ... we must wait for asynchron result of this dispatch()-operation!
         // Attention: Don't use lock here ... dispatcher call us back!
@@ -870,10 +878,6 @@ css::uno::Reference< css::lang::XComponent > SAL_CALL Desktop::loadComponentFrom
         {
             Application::Yield();
         }
-
-        // We should have all informations about result state of loading document.
-        // We can remove us as listener!
-        xDispatcher->removeStatusListener( static_cast< css::frame::XStatusListener* >( this ), aURL );
 
         // Which reaction was detected ... interaction request or loading state?
         // Test it ...
@@ -1466,7 +1470,7 @@ void SAL_CALL Desktop::removeEventListener( const css::uno::Reference< css::lang
 }
 
 /*-************************************************************************************************************//**
-    @interface  XStatusListener
+    @interface  XDispatchResultListener
     @short      callback for dispatches
     @descr      To support our method "loadComponentFromURL()" we are listener on temp. created dispatcher.
                 They call us back in this method "statusChanged()". As source of given state event, they give us a
@@ -1481,36 +1485,26 @@ void SAL_CALL Desktop::removeEventListener( const css::uno::Reference< css::lang
     @onerror    -
     @threadsafe yes
 *//*-*************************************************************************************************************/
-void SAL_CALL Desktop::statusChanged( const css::frame::FeatureStateEvent& aEvent ) throw( css::uno::RuntimeException )
+void SAL_CALL Desktop::dispatchFinished( const css::frame::DispatchResultEvent& aEvent ) throw( css::uno::RuntimeException )
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
-    // Safe impossible cases
-    // Method not defined for all incoming parameter.
-    LOG_ASSERT2( implcp_statusChanged( aEvent ), "Desktop::statusChanged()", "Invalid parameter detected!" )
     // Register transaction and reject wrong calls.
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
-    // Is message for me?
-    if( aEvent.FeatureDescriptor == FEATUREDESCRIPTOR_LOADSTATE )
+    /* SAFE AREA ------------------------------------------------------------------------------------------- */
+    WriteGuard aWriteLock( m_aLock );
+    if( m_eLoadState != E_INTERACTION )
     {
-        // Yes ... Map state of event to internal notation.
-        /* SAFE AREA ------------------------------------------------------------------------------------------- */
-        WriteGuard aWriteLock( m_aLock );
-
-        if( m_eLoadState != E_INTERACTION )
+        m_xLastFrame = css::uno::Reference< css::frame::XFrame >();
+        m_eLoadState = E_FAILED                                   ;
+        if( aEvent.State == css::frame::DispatchResultState::SUCCESS )
         {
-            m_xLastFrame = css::uno::Reference< css::frame::XFrame >();
-            m_eLoadState = E_FAILED                                   ;
-            if(
-                ( aEvent.IsEnabled  == sal_True     )    &&
-                ( aEvent.State     >>= m_xLastFrame )
-              )
-            {
+            css::uno::Reference < css::frame::XFrame > xFrame;
+            if ( aEvent.Result >>= m_xLastFrame )
                 m_eLoadState = E_SUCCESSFUL;
-            }
         }
-        /* UNSAFE AREA ----------------------------------------------------------------------------------------- */
     }
+    /* UNSAFE AREA ----------------------------------------------------------------------------------------- */
 }
 
 /*-************************************************************************************************************//**
@@ -1578,7 +1572,7 @@ void SAL_CALL Desktop::handle( const css::uno::Reference< css::task::XInteractio
             xAbort = css::uno::Reference< css::task::XInteractionAbort >( lContinuations[nStep], css::uno::UNO_QUERY );
             if( xAbort.is() == sal_True )
             {
-                xAbort->select;
+                xAbort->select();
                 break;
             }
         }

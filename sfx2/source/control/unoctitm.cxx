@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoctitm.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-21 12:39:32 $
+ *  last change: $Author: mba $ $Date: 2001-11-21 14:55:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,7 @@
 #endif
 
 #include <comphelper/processfactory.hxx>
+#include <vos/mutex.hxx>
 
 #include "unoctitm.hxx"
 #include "viewfrm.hxx"
@@ -143,6 +144,7 @@ void SfxUnoControllerItem::UnBind()
 
 void SAL_CALL SfxUnoControllerItem::statusChanged(const ::com::sun::star::frame::FeatureStateEvent& rEvent) throw ( ::com::sun::star::uno::RuntimeException )
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     DBG_ASSERT( pCtrlItem, "Dispatch hat den StatusListener nicht entfern!" );
 
     if ( rEvent.Requery )
@@ -496,6 +498,7 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs,
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchResultListener >& rListener ) throw( ::com::sun::star::uno::RuntimeException )
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( pDispatch && aURL == aDispatchURL )
     {
         if ( !GetId() && pBindings )
@@ -582,14 +585,15 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
         if ( rListener.is() )
         {
             ::com::sun::star::frame::DispatchResultEvent aEvent;
-            aEvent.DispatchURL = aURL;
             if ( bSuccess )
                 aEvent.State = com::sun::star::frame::DispatchResultState::SUCCESS;
-            else if ( bFailure )
-                aEvent.State = com::sun::star::frame::DispatchResultState::FAILURE;
+//            else if ( bFailure )
             else
-                aEvent.State = com::sun::star::frame::DispatchResultState::DONTKNOW;
+                aEvent.State = com::sun::star::frame::DispatchResultState::FAILURE;
+//            else
+//                aEvent.State = com::sun::star::frame::DispatchResultState::DONTKNOW;
 
+            aEvent.Source = (::com::sun::star::frame::XDispatch*) pDispatch;
             if ( bSuccess && pItem && !pItem->ISA(SfxVoidItem) )
                 pItem->QueryValue( aEvent.Result );
 
@@ -607,6 +611,7 @@ SfxDispatcher* SfxDispatchController_Impl::GetDispatcher()
 
 void SAL_CALL SfxDispatchController_Impl::addStatusListener(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & aListener, const ::com::sun::star::util::URL& aURL) throw ( ::com::sun::star::uno::RuntimeException )
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( !pDispatch )
         return;
 

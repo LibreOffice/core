@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cd $ $Date: 2001-11-13 14:07:15 $
+ *  last change: $Author: mba $ $Date: 2001-11-21 14:56:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,8 +182,8 @@
 #include <com/sun/star/lang/Locale.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_FRAME_XSTATUSLISTENER_HPP_
-#include <com/sun/star/frame/XStatusListener.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XDISPATCHRESULTLISTENER_HPP_
+#include <com/sun/star/frame/XDispatchResultListener.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_LANG_XEVENTLISTENER_HPP_
@@ -254,7 +254,7 @@ enum ELoadState
                 XPropertySet
                 XFastPropertySet
                 XMultiPropertySet
-                XStatusListener
+                XDispatchResultListener
                 XEventListener
                 XInteractionHandler
 
@@ -274,7 +274,7 @@ class Desktop   :   // interfaces
                     public  css::frame::XTasksSupplier           ,
                     public  css::frame::XDispatchProvider        ,
                     public  css::frame::XFramesSupplier          ,   // => XFrame => XComponent
-                    public  css::frame::XStatusListener          ,   // => XEventListener
+                    public  css::frame::XDispatchResultListener  ,   // => XEventListener
                     public  css::task::XInteractionHandler       ,
                     // base classes
                     // Order is neccessary for right initialization!
@@ -356,8 +356,8 @@ class Desktop   :   // interfaces
         virtual void                                                                SAL_CALL addEventListener           ( const css::uno::Reference< css::lang::XEventListener >&        xListener        ) throw( css::uno::RuntimeException          );
         virtual void                                                                SAL_CALL removeEventListener        ( const css::uno::Reference< css::lang::XEventListener >&        xListener        ) throw( css::uno::RuntimeException          );
 
-        //   XStatusListener
-        virtual void                                                                SAL_CALL statusChanged              ( const css::frame::FeatureStateEvent&                           aEvent           ) throw( css::uno::RuntimeException          );
+        //   XDispatchResultListener
+        virtual void SAL_CALL dispatchFinished      ( const css::frame::DispatchResultEvent&                    aEvent     ) throw( css::uno::RuntimeException );
 
         //   XEventListener
         virtual void                                                                SAL_CALL disposing                  ( const css::lang::EventObject&                                  aSource          ) throw( css::uno::RuntimeException          );

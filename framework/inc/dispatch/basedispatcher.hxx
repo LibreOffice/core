@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basedispatcher.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-21 12:45:30 $
+ *  last change: $Author: mba $ $Date: 2001-11-21 14:56:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -261,6 +261,7 @@ struct LoadBinding
         css::util::URL                                      aURL        ;   // dispatched URL - neccessary to find listener for status event!
         css::uno::Sequence< css::beans::PropertyValue >     lDescriptor ;   // dispatched arguments - neccessary for "reactForLoadingState()"!
         css::uno::Any                                       aAsyncInfo  ;   // superclasses could use them to save her own user specific data for these asynchron call-info
+        css::uno::Reference< css::frame::XDispatchResultListener > xListener;
 };
 
 //*****************************************************************************************************************
@@ -285,14 +286,13 @@ class LoaderThreads : private ::std::vector< LoadBinding >
 
         //---------------------------------------------------------------------------------------------------------
         /// search for handler thread in list wich match given parameter and delete it
-        inline sal_Bool searchAndForget( const css::util::URL& aURL     ,
-                                               LoadBinding&    aBinding )
+        inline sal_Bool searchAndForget( const css::uno::Reference < css::frame::XDispatchResultListener >& rListener, LoadBinding& aBinding )
         {
             ResetableGuard aGuard( m_aLock );
             sal_Bool bFound = sal_False;
             for( iterator pItem=begin(); pItem!=end(); ++pItem )
             {
-                if( pItem->aURL.Complete == aURL.Complete )
+                if( pItem->xListener == rListener )
                 {
                     aBinding = *pItem;
                     erase( pItem );
@@ -305,8 +305,7 @@ class LoaderThreads : private ::std::vector< LoadBinding >
 
         //---------------------------------------------------------------------------------------------------------
         /// search for loader thread in list wich match given parameter and delete it
-        inline sal_Bool searchAndForget( const css::uno::Reference< css::frame::XFrameLoader > xLoader  ,
-                                               LoadBinding&                                    aBinding )
+        inline sal_Bool searchAndForget( const css::uno::Reference< css::frame::XFrameLoader > xLoader, LoadBinding& aBinding )
         {
             ResetableGuard aGuard( m_aLock );
             sal_Bool bFound = sal_False;
@@ -346,7 +345,6 @@ class LoaderThreads : private ::std::vector< LoadBinding >
 
     @implements     XInterface
                     XDispatch
-                    XDispatchResultListener
                     XLoadEventListener
                     XEventListener
 
@@ -360,7 +358,6 @@ class LoaderThreads : private ::std::vector< LoadBinding >
 class BaseDispatcher    :   // interfaces
                             public    css::lang::XTypeProvider                 ,
                             public    css::frame::XNotifyingDispatch           ,
-                            public    css::frame::XDispatchResultListener      ,   // => XEventListener
                             public    css::frame::XLoadEventListener           ,   // => XEventListener too!
                             // baseclasses
                             // Order is neccessary for right initialization!
@@ -376,6 +373,8 @@ class BaseDispatcher    :   // interfaces
         //  constructor / destructor
         BaseDispatcher( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory    ,
                         const css::uno::Reference< css::frame::XFrame >&              xOwnerFrame );
+
+        void dispatchFinished ( const css::frame::DispatchResultEvent& aEvent, const css::uno::Reference < css::frame::XDispatchResultListener >& rListener );
 
         //  XInterface
         DECLARE_XINTERFACE
@@ -393,9 +392,6 @@ class BaseDispatcher    :   // interfaces
                                                       const css::util::URL&                                     aURL       ) throw( css::uno::RuntimeException );
         virtual void SAL_CALL removeStatusListener  ( const css::uno::Reference< css::frame::XStatusListener >& xListener  ,
                                                       const css::util::URL&                                     aURL       ) throw( css::uno::RuntimeException );
-
-        //   XDispatchResultListener
-        virtual void SAL_CALL dispatchFinished      ( const css::frame::DispatchResultEvent&                    aEvent     ) throw( css::uno::RuntimeException );
 
         //   XLoadEventListener
         virtual void SAL_CALL loadFinished          ( const css::uno::Reference< css::frame::XFrameLoader >&    xLoader    ) throw( css::uno::RuntimeException );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shutdownicon.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-21 12:34:23 $
+ *  last change: $Author: mba $ $Date: 2001-11-21 14:54:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,9 @@
 #include <svtools/imagemgr.hxx>
 #include <cmdlineargs.hxx>
 
-
+#ifndef _COM_SUN_STAR_FRAME_XDISPATCHRESULTLISTENER_HPP_
+#include <com/sun/star/frame/XDispatchResultListener.hpp>
+#endif
 #ifndef _COM_SUN_STAR_FRAME_XNOTIFYINGDISPATCH_HPP_
 #include <com/sun/star/frame/XNotifyingDispatch.hpp>
 #endif
@@ -103,6 +105,9 @@
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
 #endif
+#ifndef _CPPUHELPER_COMPBASE1_HXX_
+#include <cppuhelper/compbase1.hxx>
+#endif
 #include "dispatch.hxx"
 #include <comphelper/extract.hxx>
 
@@ -117,6 +122,22 @@ using namespace ::com::sun::star::ui::dialogs;
 using namespace ::vos;
 using namespace ::rtl;
 using namespace ::sfx2;
+
+class SfxNotificationListener_Impl : public cppu::WeakImplHelper1< XDispatchResultListener >
+{
+public:
+    virtual void SAL_CALL dispatchFinished( const DispatchResultEvent& aEvent ) throw( RuntimeException );
+    virtual void SAL_CALL disposing( const EventObject& aEvent ) throw( RuntimeException );
+};
+
+void SAL_CALL SfxNotificationListener_Impl::dispatchFinished( const DispatchResultEvent& aEvent ) throw( RuntimeException )
+{
+    ShutdownIcon* pIcon = ShutdownIcon::getInstance();
+}
+
+void SAL_CALL SfxNotificationListener_Impl::disposing( const EventObject& aEvent ) throw( RuntimeException )
+{
+}
 
 SFX_IMPL_XSERVICEINFO( ShutdownIcon, "com.sun.star.office.Quickstart", "com.sun.star.comp.desktop.QuickstartWrapper" )  \
 SFX_IMPL_ONEINSTANCEFACTORY( ShutdownIcon );
@@ -320,7 +341,7 @@ void ShutdownIcon::FromTemplate()
             pArg[0].Value <<= ::rtl::OUString::createFromAscii("private:user");
             Reference< ::com::sun::star::frame::XNotifyingDispatch > xNotifyer( xDisp, UNO_QUERY );
             if ( xNotifyer.is() )
-                xNotifyer->dispatchWithNotification( aTargetURL, aArgs, getInstance() );
+                xNotifyer->dispatchWithNotification( aTargetURL, aArgs, new SfxNotificationListener_Impl() );
             else
                 xDisp->dispatch( aTargetURL, aArgs );
         }
@@ -407,15 +428,6 @@ void SAL_CALL ShutdownIcon::disposing( const ::com::sun::star::lang::EventObject
     throw(::com::sun::star::uno::RuntimeException)
 {
 }
-
-// ---------------------------------------------------------------------------
-// XStatusListener
-
-void SAL_CALL ShutdownIcon::dispatchFinished( const ::com::sun::star::frame::DispatchResultEvent& Event )
-    throw(::com::sun::star::uno::RuntimeException)
-{
-}
-
 
 // ---------------------------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pluginframe.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: as $ $Date: 2001-10-09 09:08:55 $
+ *  last change: $Author: mba $ $Date: 2001-11-21 14:56:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,8 +98,8 @@
 #include <com/sun/star/awt/XWindow.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_FRAME_XSTATUSLISTENER_HPP_
-#include <com/sun/star/frame/XStatusListener.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XDISPATCHRESULTLISTENER_HPP_
+#include <com/sun/star/frame/XDispatchResultListener.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_FRAME_FEATURESTATEEVENT_HPP_
@@ -138,13 +138,13 @@ namespace framework{
 
     @implements XInitialization
                 XPluginInstance
-                XStatusListener
+                XDispatchResultListener
     @base       Task
 *//*-*************************************************************************************************************/
 
 class PlugInFrame   :   public css::lang::XInitialization   ,
                         public css::mozilla::XPluginInstance,
-                        public css::frame::XStatusListener  ,   // => XEVENTLISTENER
+                        public css::frame::XDispatchResultListener  ,   // => XEVENTLISTENER
                         public Task                             // Order of baseclasses is neccessary for right initialization!
 {
     //-------------------------------------------------------------------------------------------------------------
@@ -375,7 +375,7 @@ class PlugInFrame   :   public css::lang::XInitialization   ,
         virtual css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor >& seqDescripts ) throw( css::uno::RuntimeException );
 
         //---------------------------------------------------------------------------------------------------------
-        //   XStatusListener
+        //   XDispatchResultListener
         //---------------------------------------------------------------------------------------------------------
 
         /*-****************************************************************************************************//**
@@ -390,7 +390,7 @@ class PlugInFrame   :   public css::lang::XInitialization   ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& aEvent ) throw( css::uno::RuntimeException );
+        virtual void SAL_CALL dispatchFinished      ( const css::frame::DispatchResultEvent&                    aEvent     ) throw( css::uno::RuntimeException );
 
         //---------------------------------------------------------------------------------------------------------
         //   XEventListener
