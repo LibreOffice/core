@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshel.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 12:00:00 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 16:27:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -405,42 +405,42 @@ void ViewShell::Construct(void)
 
     if( !this->ISA(GraphicViewShell ) )
     {
-        aDrawBtn.SetImage( Image( Bitmap( SdResId( BMP_SW_DRAW ) ), IMAGE_STDBTN_COLOR ) );
+        aDrawBtn.SetModeImage( Image( Bitmap( SdResId( BMP_SW_DRAW ) ), IMAGE_STDBTN_COLOR ) );
         aDrawBtn.SetModeImage( Image( Bitmap( SdResId( BMP_SW_DRAW_H ) ), IMAGE_STDBTN_COLOR_HC ), BMP_COLOR_HIGHCONTRAST );
         aDrawBtn.SetClickHdl(LINK(this, ViewShell, ModeBtnHdl));
         aDrawBtn.SetQuickHelpText( String( SdResId( STR_DRAW_MODE ) ) );
         aDrawBtn.SetHelpId( HID_SD_BTN_DRAW );
         aDrawBtn.Show();
 
-        aSlideBtn.SetImage( Image( Bitmap( SdResId( BMP_SW_SLIDE ) ), IMAGE_STDBTN_COLOR ) );
+        aSlideBtn.SetModeImage( Image( Bitmap( SdResId( BMP_SW_SLIDE ) ), IMAGE_STDBTN_COLOR ) );
         aSlideBtn.SetModeImage( Image( Bitmap( SdResId( BMP_SW_SLIDE_H ) ), IMAGE_STDBTN_COLOR_HC ), BMP_COLOR_HIGHCONTRAST );
         aSlideBtn.SetClickHdl(LINK(this, ViewShell, ModeBtnHdl));
         aSlideBtn.SetQuickHelpText( String( SdResId( STR_SLIDE_MODE ) ) );
         aSlideBtn.SetHelpId( HID_SD_BTN_SLIDE );
         aSlideBtn.Show();
 
-        aOutlineBtn.SetImage( Image( Bitmap( SdResId( BMP_SW_OUTLINE ) ), IMAGE_STDBTN_COLOR ) );
+        aOutlineBtn.SetModeImage( Image( Bitmap( SdResId( BMP_SW_OUTLINE ) ), IMAGE_STDBTN_COLOR ) );
         aOutlineBtn.SetModeImage( Image( Bitmap( SdResId( BMP_SW_OUTLINE_H ) ), IMAGE_STDBTN_COLOR_HC ), BMP_COLOR_HIGHCONTRAST );
         aOutlineBtn.SetClickHdl(LINK(this, ViewShell, ModeBtnHdl));
         aOutlineBtn.SetQuickHelpText( String( SdResId( STR_OUTLINE_MODE ) ) );
         aOutlineBtn.SetHelpId( HID_SD_BTN_OUTLINE );
         aOutlineBtn.Show();
 
-        aNotesBtn.SetImage( Image( Bitmap( SdResId( BMP_SW_NOTES ) ), IMAGE_STDBTN_COLOR ) );
+        aNotesBtn.SetModeImage( Image( Bitmap( SdResId( BMP_SW_NOTES ) ), IMAGE_STDBTN_COLOR ) );
         aNotesBtn.SetModeImage( Image( Bitmap( SdResId( BMP_SW_NOTES_H ) ), IMAGE_STDBTN_COLOR_HC ), BMP_COLOR_HIGHCONTRAST );
         aNotesBtn.SetClickHdl(LINK(this, ViewShell, ModeBtnHdl));
         aNotesBtn.SetQuickHelpText( String( SdResId( STR_NOTES_MODE ) ) );
         aNotesBtn.SetHelpId( HID_SD_BTN_NOTES );
         aNotesBtn.Show();
 
-        aHandoutBtn.SetImage( Image( Bitmap( SdResId( BMP_SW_HANDOUT ) ), IMAGE_STDBTN_COLOR ) );
+        aHandoutBtn.SetModeImage( Image( Bitmap( SdResId( BMP_SW_HANDOUT ) ), IMAGE_STDBTN_COLOR ) );
         aHandoutBtn.SetModeImage( Image( Bitmap( SdResId( BMP_SW_HANDOUT_H ) ), IMAGE_STDBTN_COLOR_HC ), BMP_COLOR_HIGHCONTRAST );
         aHandoutBtn.SetClickHdl(LINK(this, ViewShell, ModeBtnHdl));
         aHandoutBtn.SetQuickHelpText( String( SdResId( STR_HANDOUT_MODE ) ) );
         aHandoutBtn.SetHelpId( HID_SD_BTN_HANDOUT );
         aHandoutBtn.Show();
 
-        aPresentationBtn.SetImage( Image( Bitmap( SdResId( BMP_SW_PRESENTATION ) ), IMAGE_STDBTN_COLOR ) );
+        aPresentationBtn.SetModeImage( Image( Bitmap( SdResId( BMP_SW_PRESENTATION ) ), IMAGE_STDBTN_COLOR ) );
         aPresentationBtn.SetModeImage( Image( Bitmap( SdResId( BMP_SW_PRESENTATION_H ) ), IMAGE_STDBTN_COLOR_HC ), BMP_COLOR_HIGHCONTRAST );
         aPresentationBtn.SetClickHdl(LINK(this, ViewShell, ModeBtnHdl));
         aPresentationBtn.SetQuickHelpText( String( SdResId( STR_START_PRESENTATION ) ) );
