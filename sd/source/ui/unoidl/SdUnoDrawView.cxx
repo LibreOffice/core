@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SdUnoDrawView.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cl $ $Date: 2002-07-12 10:44:08 $
+ *  last change: $Author: af $ $Date: 2002-08-02 12:16:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,7 @@
 #include "presvish.hxx"
 #include "prvwshll.hxx"
 #include "sdpage.hxx"
+#include "unolayer.hxx"
 
 using namespace ::std;
 using namespace ::rtl;
@@ -177,6 +178,64 @@ void SdUnoDrawView::setLayerMode(sal_Bool LayerMode_) throw()
     if(mpViewSh && (mpViewSh->GetLayerMode() != LayerMode_))
         mpViewSh->ChangeEditMode(mpViewSh->GetEditMode(),LayerMode_);
 }
+
+
+Reference<drawing::XLayer> SdUnoDrawView::getActiveLayer (void) throw ()
+{
+    OGuard aGuard( Application::GetSolarMutex() );
+
+    Reference<drawing::XLayer> xCurrentLayer;
+
+    // Retrieve the layer manager from the model.
+    SdXImpressDocument* pModel = getModel();
+    if (pModel != NULL)
+    {
+        SdDrawDocument* pSdModel = pModel->GetDoc();
+        if (pSdModel != NULL)
+        {
+            // From the model get the current SdrLayer object via the layer admin.
+            SdrLayerAdmin& rLayerAdmin = pSdModel->GetLayerAdmin ();
+            SdrLayer* pLayer = rLayerAdmin.GetLayer (mpView->GetActiveLayer(), TRUE);
+            if (pLayer != NULL)
+            {
+                // Get the corresponding XLayer object from the
+                // implementation object of the layer manager.
+                Reference<drawing::XLayerManager> xManager (pModel->getLayerManager(), uno::UNO_QUERY);
+                SdLayerManager* pManager = SdLayerManager::getImplementation (xManager);
+                if (pManager != NULL)
+                    xCurrentLayer = pManager->GetLayer (pLayer);
+            }
+        }
+    }
+
+    return xCurrentLayer;
+}
+
+
+
+
+void SdUnoDrawView::setActiveLayer (const Reference<drawing::XLayer>& rxLayer) throw ()
+{
+    OGuard aGuard( Application::GetSolarMutex() );
+
+    // Get the SdrLayer object corresponding to the given reference.
+    if (rxLayer.is())
+    {
+        SdLayer* pLayer = SdLayer::getImplementation (rxLayer);
+        if (pLayer != NULL)
+        {
+            SdrLayer* pSdrLayer = pLayer->GetSdrLayer();
+            if (pSdrLayer != NULL)
+            {
+                // Set the new active layer and make the change visible.
+                mpView->SetActiveLayer (pSdrLayer->GetName());
+                mpViewSh->ResetActualLayer ();
+            }
+        }
+    }
+}
+
+
 
 //----------------------------------------------------------------------
 
@@ -590,6 +649,7 @@ enum properties
     PROPERTY_CURRENTPAGE = 0,
     PROPERTY_MASTERPAGEMODE,
     PROPERTY_LAYERMODE,
+    PROPERTY_ACTIVE_LAYER,
     PROPERTY_WORKAREA,
 
     PROPERTY_COUNT
@@ -613,6 +673,7 @@ static beans::Property * getBasicProps()
                 beans::Property( OUString( RTL_CONSTASCII_USTRINGPARAM("CurrentPage") ),        PROPERTY_CURRENTPAGE,   ::getCppuType((const Reference< drawing::XDrawPage > *)0), beans::PropertyAttribute::BOUND ),
                 beans::Property( OUString( RTL_CONSTASCII_USTRINGPARAM("IsLayerMode") ),        PROPERTY_LAYERMODE,      ::getCppuBooleanType(),    beans::PropertyAttribute::BOUND ),
                 beans::Property( OUString( RTL_CONSTASCII_USTRINGPARAM("IsMasterPageMode") ),   PROPERTY_MASTERPAGEMODE,     ::getCppuBooleanType(),    beans::PropertyAttribute::BOUND ),
+                beans::Property( OUString( RTL_CONSTASCII_USTRINGPARAM("ActiveLayer") ),    PROPERTY_ACTIVE_LAYER,   ::getCppuBooleanType(),    beans::PropertyAttribute::BOUND ),
                 beans::Property( OUString( RTL_CONSTASCII_USTRINGPARAM("VisibleArea") ),        PROPERTY_WORKAREA,          ::getCppuType((const ::com::sun::star::awt::Rectangle*)0), beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY )
             };
             pTable = aBasicProps;
@@ -708,6 +769,22 @@ sal_Bool SdUnoDrawView::convertFastPropertyValue
             else
                 return sal_False;
             }
+        case PROPERTY_ACTIVE_LAYER:
+            {
+                Reference<drawing::XLayer> xOldLayer (getActiveLayer());
+                Reference<drawing::XLayer> xNewLayer;
+                convertPropertyValue (xNewLayer, rValue);
+                if (xOldLayer != xNewLayer)
+                {
+                    rConvertedValue <<= xNewLayer;
+                    rOldValue <<= xOldLayer;
+                    return sal_True;
+                }
+                else
+                {
+                    return sal_False;
+                }
+            }
         default:
             return sal_False;
     }
@@ -750,6 +827,13 @@ void SdUnoDrawView::setFastPropertyValue_NoBroadcast
                 rValue >>= bValue;
                 setLayerMode( bValue );
             }
+
+        case PROPERTY_ACTIVE_LAYER:
+            {
+                Reference<drawing::XLayer> xLayer;
+                rValue >>= xLayer;
+                setActiveLayer (xLayer);
+            }
             break;
     }
 }
@@ -772,6 +856,10 @@ void SdUnoDrawView::getFastPropertyValue( Any & rRet, sal_Int32 nHandle ) const
 
         case PROPERTY_LAYERMODE:
             rRet <<= getLayerMode();
+            break;
+
+        case PROPERTY_ACTIVE_LAYER:
+            rRet <<= (const_cast<SdUnoDrawView*>(this))->getActiveLayer();
             break;
 
         case PROPERTY_WORKAREA:
