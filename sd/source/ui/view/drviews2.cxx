@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews2.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-23 10:47:21 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 10:18:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,10 +144,11 @@
 #ifndef _SVX_XLNEDWIT_HXX
 #include <svx/xlnedwit.hxx>
 #endif
-#ifndef _SVX_DLG_NAME_HXX
-#include <svx/dlgname.hxx>
-#endif
-
+//CHINA001 #ifndef _SVX_DLG_NAME_HXX
+//CHINA001 #include <svx/dlgname.hxx>
+//CHINA001 #endif
+#include <svx/svxdlg.hxx> //CHINA001
+#include <svx/dialogs.hrc> //CHINA001
 #pragma hdrstop
 
 #include "app.hrc"
@@ -346,7 +347,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
                 if (nSId == SID_ATTR_FILL_SHADOW)
                 {
-                    // Ggf. werden transparente Objekte weiá gefuellt
+                    // Ggf. werden transparente Objekte wei?gefuellt
                     SdrObject* pObj = NULL;
                     const SdrMarkList& rMarkList = pDrView->GetMarkList();
                     ULONG nCount = rMarkList.GetMarkCount();
@@ -731,21 +732,29 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 String aDescr( SdResId( STR_DESC_RENAMESLIDE ) );
                 String aPageName = pCurrentPage->GetName();
 
-                SvxNameDialog aNameDlg( pWindow, aPageName, aDescr );
-                aNameDlg.SetText( aTitle );
-                aNameDlg.SetCheckNameHdl( LINK( this, DrawViewShell, RenameSlideHdl ), true );
-                aNameDlg.SetEditHelpId( HID_SD_NAMEDIALOG_PAGE );
+                //CHINA001 SvxNameDialog aNameDlg( pWindow, aPageName, aDescr );
+                SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+                DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+                AbstractSvxNameDialog* aNameDlg = pFact->CreateSvxNameDialog( pWindow, aPageName, aDescr, ResId(RID_SVXDLG_NAME) );
+                DBG_ASSERT(aNameDlg, "Dialogdiet fail!");//CHINA001
+                //CHINA001 aNameDlg.SetText( aTitle );
+                //CHINA001 aNameDlg.SetCheckNameHdl( LINK( this, SdDrawViewShell, RenameSlideHdl ), true );
+                //CHINA001 aNameDlg.SetEditHelpId( HID_SD_NAMEDIALOG_PAGE );
+                aNameDlg->SetText( aTitle );
+                aNameDlg->SetCheckNameHdl( LINK( this, DrawViewShell, RenameSlideHdl ), true );
+                aNameDlg->SetEditHelpId( HID_SD_NAMEDIALOG_PAGE );
 
-                if( aNameDlg.Execute() == RET_OK )
+                if( aNameDlg->Execute() == RET_OK ) //CHINA001 if( aNameDlg.Execute() == RET_OK )
                 {
                     String aNewName;
-                    aNameDlg.GetName( aNewName );
+                    aNameDlg->GetName( aNewName ); //CHINA001 aNameDlg.GetName( aNewName );
                     if( ! aNewName.Equals( aPageName ) )
                     {
                         bool bResult = RenameSlide( nPageId, aNewName );
                         DBG_ASSERT( bResult, "Couldn't rename slide" );
                     }
                 }
+                delete aNameDlg; //add by CHINA001
             }
 
             Cancel();
