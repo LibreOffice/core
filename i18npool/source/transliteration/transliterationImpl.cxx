@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transliterationImpl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-12 10:49:43 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 12:35:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -490,7 +490,7 @@ TransliterationImpl::equals(
     if (caseignoreOnly && caseignore.is())
         return caseignore->equals(str1, pos1, nCount1, nMatch1, str2, pos2, nCount2, nMatch2);
 
-    Sequence<long> offset1, offset2;
+    Sequence<sal_Int32> offset1, offset2;
 
     OUString tmpStr1 = folding(str1, pos1, nCount1, offset1);
     OUString tmpStr2 = folding(str2, pos2, nCount2, offset2);
@@ -569,7 +569,7 @@ TransliterationImpl::compareSubstring(
     if (caseignoreOnly && caseignore.is())
         return caseignore->compareSubstring(str1, off1, len1, str2, off2, len2);
 
-    Sequence <long> offset;
+    Sequence <sal_Int32> offset;
 
     OUString in_str1 = this->transliterate(str1, off1, len1, offset);
     OUString in_str2 = this->transliterate(str2, off2, len2, offset);
