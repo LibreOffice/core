@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mnumgr.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 18:25:01 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 16:32:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,9 +67,6 @@
 #include <string>   // HACK: prevent conflict between STLPORT and Workshop headers
 #include <cstdarg>  // std::va_list
 
-#ifndef _SYSTEM_HXX //autogen
-#include <vcl/system.hxx>
-#endif
 #ifndef _PSEUDO_HXX //autogen
 #include <so3/pseudo.hxx>
 #endif
