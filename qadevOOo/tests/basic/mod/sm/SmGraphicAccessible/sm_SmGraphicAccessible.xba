@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: sm_SmGraphicAccessible.xba,v $ 
 '*
-'*  $Revision: 1.2 $ 
+'*  $Revision: 1.3 $ 
 '*
-'*  last change:$Date: 2003-05-27 12:15:24 $ 
+'*  last change:$Date: 2003-06-11 16:27:46 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -75,7 +75,7 @@ option explicit
 
 'Required for XAccessibleText
 Global accText As String
-
+Global readOnly as Boolean
 
 Sub CreateObj()
 
@@ -86,7 +86,7 @@ Sub CreateObj()
 On Error Goto ErrHndl
     oDoc = utils.createDocument("smath", cObjectName)
 
-    accText = "sum hat a"
+    accText = "sum a cdot b"
     oDoc.Formula = accText
 
     wait(2000)
@@ -98,6 +98,7 @@ On Error Goto ErrHndl
     xRoot = utils.at_getAccessibleObject(oWin)
 
     oObj = utils.at_getAccessibleObjectForRole(xRoot, com.sun.star.accessibility.AccessibleRole.DOCUMENT, "Formula")
+    readOnly = false
 Exit Sub
 ErrHndl:
     Test.Exception()
