@@ -2,9 +2,9 @@
  *
  *  $RCSfile: number.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:19:02 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 13:52:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -285,6 +285,13 @@ void SwNumFmt::NotifyGraphicArrived()
 // #i22362#
 BOOL SwNumFmt::IsEnumeration() const
 {
+    // --> FME 2004-08-12 #i30655# native numbering did not work any longer
+    // using this code. Therefore HBRINKM and I agreed upon defining
+    // IsEnumeration() as !IsItemize()
+    return !IsItemize();
+    // <--
+
+    /*
     BOOL bResult;
 
     switch(GetNumberingType())
@@ -306,7 +313,7 @@ BOOL SwNumFmt::IsEnumeration() const
     }
 
     return bResult;
-
+     */
 }
 
 // #i29560#
