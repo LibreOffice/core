@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formres.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-30 15:20:02 $
+ *  last change: $Author: fs $ $Date: 2001-11-08 11:43:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1282,32 +1282,6 @@ String RID_STR_DECIMAL_ACCURACY
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Desimaalitarkkuus";
     Text[ catalan ] = "Precisió decimal";
-};
-String RID_STR_DATE_SHOW_CENTURY
-{
-    Text = "Jahrhundert zeigen" ;
-    Text [ English ] = "Show Century" ;
-    Text [ portuguese ] = "Mostrar século" ;
-    Text [ english_us ] = "Show century" ;
-    Text [ portuguese_brazilian ] = "Jahrhundert zeigen" ;
-    Text [ swedish ] = "Visa århundrade" ;
-    Text [ danish ] = "Vis århundrede" ;
-    Text [ italian ] = "Mostra secolo" ;
-    Text [ spanish ] = "Mostrar siglo" ;
-    Text [ french ] = "Afficher le siècle" ;
-    Text [ dutch ] = "Eeuw weergeven" ;
-    Text[ chinese_simplified ] = "æ˜¾ç¤º4ä½æ•°å¹´ä»½";
-    Text[ russian ] = "Ïîêàçàòü âåê";
-    Text[ polish ] = "Poka¿ stulecie";
-    Text[ japanese ] = "ä¸–ç´€ã®è¡¨ç¤º";
-    Text[ chinese_traditional ] = "é¡¯ç¤º4ä½æ•¸å¹´ä»½";
-    Text[ greek ] = "ÅìöÜíéóç áéşíá";
-    Text[ korean ] = "ì„¸ê¸° í‘œì‹œ";
-    Text[ arabic ] = "ÅÙåÇÑ ÇáŞÑä";
-    Text[ turkish ] = "Yüzyılı görüntüle";
-    Text[ language_user1 ] = " ";
-    Text[ finnish ] = "Näytä vuosisata";
-    Text[ catalan ] = "Mostra el segle";
 };
 String RID_STR_IMAGE_URL
 {
@@ -4843,6 +4817,9 @@ String RID_STR_UNABLETOCONNECT
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.33  2001/10/30 15:20:02  fs
+ *  +RID_STR_UNABLETOCONNECT
+ *
  *  Revision 1.32  2001/10/25 20:32:04  kz
  *  Merge SRC641: 25.10.01 - 22:32:38
  *

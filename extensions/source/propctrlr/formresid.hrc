@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formresid.hrc,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-30 15:18:13 $
+ *  last change: $Author: fs $ $Date: 2001-11-08 11:43:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,7 @@
 #define RID_STR_DATEMIN                     ( RID_FORMBROWSER_START +  62 )
 #define RID_STR_DATEMAX                     ( RID_FORMBROWSER_START +  63 )
 #define RID_STR_DATEFORMAT                  ( RID_FORMBROWSER_START +  64 )
-#define RID_STR_DATE_SHOW_CENTURY           ( RID_FORMBROWSER_START +  65 )
+    // FREE
 #define RID_STR_TIMEMIN                     ( RID_FORMBROWSER_START +  66 )
 #define RID_STR_TIMEMAX                     ( RID_FORMBROWSER_START +  67 )
 #define RID_STR_TIMEFORMAT                  ( RID_FORMBROWSER_START +  68 )
@@ -293,6 +293,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.13  2001/10/30 15:18:13  fs
+ *  +RID_STR_UNABLETOCONNECT
+ *
  *  Revision 1.12  2001/10/19 12:58:51  tbe
  *  #92755# Assign Standard Values for Basic Controls in Designmode
  *
