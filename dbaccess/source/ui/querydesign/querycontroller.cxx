@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-12 14:10:25 $
+ *  last change: $Author: oj $ $Date: 2001-03-12 15:09:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -409,12 +409,22 @@ void OQueryController::Execute(sal_uInt16 _nId)
                             }
                             // now set the properties
                             m_sStatement = m_pWindow->getView()->getStatement();
+                            ::rtl::OUString sTranslatedStmt;
                             if(m_sStatement.getLength() && m_xComposer.is() && m_bEsacpeProcessing)
                             {
                                 try
                                 {
-                                    m_xComposer->setQuery(m_sStatement);
-                                    m_sStatement = m_xComposer->getComposedQuery();
+                                    ::rtl::OUString aErrorMsg;
+                                    ::connectivity::OSQLParseNode* pNode = m_pSqlParser->parseTree(aErrorMsg,m_sStatement,sal_True);
+                                    //  m_pParseNode = pNode;
+                                    if(pNode)
+                                    {
+                                        pNode->parseNodeToStr(  sTranslatedStmt,
+                                                                m_xConnection->getMetaData());
+                                        delete pNode;
+                                    }
+                                    m_xComposer->setQuery(sTranslatedStmt);
+                                    sTranslatedStmt = m_xComposer->getComposedQuery();
                                 }
                                 catch(SQLException& e)
                                 {
@@ -423,13 +433,15 @@ void OQueryController::Execute(sal_uInt16 _nId)
                                     break;
                                 }
                             }
+                            else if(!m_bEsacpeProcessing && m_sStatement.getLength())
+                                sTranslatedStmt = m_sStatement;
                             else if(!m_sStatement.getLength())
                             {
                                 ErrorBox aBox( getQueryView(), ModuleRes( ERR_QRY_NOSELECT ) );
                                 aBox.Execute();
                                 break;
                             }
-                            xQuery->setPropertyValue(PROPERTY_COMMAND,makeAny(m_sStatement));
+                            xQuery->setPropertyValue(PROPERTY_COMMAND,makeAny(sTranslatedStmt));
                             xQuery->setPropertyValue(CONFIGKEY_QRYDESCR_USE_ESCAPE_PROCESSING,::cppu::bool2any(m_bEsacpeProcessing));
                             xQuery->setPropertyValue(CONFIGKEY_QRYDESCR_UPDATE_TABLENAME,makeAny(m_sUpdateTableName));
                             xQuery->setPropertyValue(CONFIGKEY_QRYDESCR_UPDATE_CATALOGNAME,makeAny(m_sUpdateCatalogName));
@@ -582,6 +594,7 @@ void OQueryController::Execute(sal_uInt16 _nId)
                         {
                             pNode->parseNodeToStr(  sTranslatedStmt,
                                                     m_xConnection->getMetaData());
+                            delete pNode;
                         }
                         m_xComposer->setQuery(sTranslatedStmt);
                         sTranslatedStmt = m_xComposer->getComposedQuery();
@@ -691,7 +704,7 @@ void SAL_CALL OQueryController::initialize( const Sequence< Any >& aArguments ) 
 {
     try
     {
-        OGenericUnoController::initialize(aArguments);
+        OJoinController::initialize(aArguments);
 
         //  m_pWindow->initialize(m_xCurrentFrame);
 
@@ -818,7 +831,7 @@ void SAL_CALL OQueryController::initialize( const Sequence< Any >& aArguments ) 
         }
         m_pWindow->getView()->initialize();
         getUndoMgr()->Clear();
-        if(m_bDesign)
+        if(m_bDesign && !m_sName.getLength())
             Execute(ID_BROWSER_ADDTABLE);
         setModified(sal_False);
     }
