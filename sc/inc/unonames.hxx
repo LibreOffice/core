@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unonames.hxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:13:12 $
+ *  last change: $Author: rt $ $Date: 2004-02-11 09:56:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,7 @@
 #define SC_SERVICENAME_LISTSOURCE   "drafts.com.sun.star.table.CellRangeListSource"
 #define SC_SERVICENAME_CELLADDRESS  "com.sun.star.table.CellAddressConversion"
 #define SC_SERVICENAME_RANGEADDRESS "com.sun.star.table.CellRangeAddressConversion"
+#define SC_SERVICENAME_CHDATAPROV   "com.sun.star.chart2.DataProvider"
 
 //  document
 #define SC_UNO_AREALINKS            "AreaLinks"
