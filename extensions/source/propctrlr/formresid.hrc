@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formresid.hrc,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 12:07:25 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:26:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,7 +240,7 @@
 #define RID_STR_VISIBLESIZE                 ( RID_FORMBROWSER_START + 178 )
 #define RID_STR_ORIENTATION                 ( RID_FORMBROWSER_START + 179 )
 #define RID_STR_ENUM_ORIENTATION            ( RID_FORMBROWSER_START + 180 )
-    // FREE
+#define RID_STR_VERTICAL_ALIGN              ( RID_FORMBROWSER_START + 181 )
 #define RID_STR_EVT_ADJUSTMENTVALUECHANGED  ( RID_FORMBROWSER_START + 182 )
 #define RID_STR_DATE                        ( RID_FORMBROWSER_START + 183 )
 #define RID_STR_STATE                       ( RID_FORMBROWSER_START + 184 )
@@ -339,6 +339,7 @@
 #define RID_RSC_ENUM_IMAGE_POSITION         ( RID_PROPCONTROLLER_START +  5 )
 #define RID_RSC_BUTTON_IMAGES               ( RID_PROPCONTROLLER_START +  6 )
 #define RID_RSC_ENUM_WHITESPACE_HANDLING    ( RID_PROPCONTROLLER_START +  7 )
+#define RID_RSC_ENUM_VERTICAL_ALIGN         ( RID_PROPCONTROLLER_START +  8 )
 
 // -----------------------------------------------------------------------
 // - ImageList - local ids
