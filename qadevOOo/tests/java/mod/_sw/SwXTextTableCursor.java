@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXTextTableCursor.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-09-08 12:54:22 $
+ *  last change:$Date: 2003-11-18 16:31:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,6 +147,9 @@ public class SwXTextTableCursor extends TestCase {
 
         log.println( "adding TextDocument as mod relation to environment" );
         tEnv.addObjRelation("TEXTDOC", xTextDoc);
+
+        tEnv.addObjRelation("STYLENAME1", "Table");
+        tEnv.addObjRelation("STYLENAME2", "Text");
 
         return tEnv;
     } // finish method getTestEnvironment
