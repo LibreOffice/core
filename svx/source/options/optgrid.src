@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgrid.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-26 20:39:35 $
+ *  last change: $Author: os $ $Date: 2001-02-08 16:47:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,13 +70,12 @@ TabPage RID_SVXPAGE_GRID
     HelpId = HID_OPTIONS_GRID ;
     SVLook = TRUE ;
     Hide = TRUE ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     CheckBox CBX_USE_GRIDSNAP
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 102 , 12 ) ;
+        Size = MAP_APPFONT ( 102 , 10 ) ;
         TabStop = TRUE ;
-        /* ### ACHTUNG: Neuer Text in Resource? ~Fangraster benutzen : ~Rasterfang benutzen */
         Text = "~Fangraster benutzen" ;
         Text [ ENGLISH ] = "Snap to ~Grid" ;
         Text [ NORWEGIAN ] = "Snap to ~Grid" ;
@@ -101,100 +100,215 @@ TabPage RID_SVXPAGE_GRID
         Text[ turkish ] = "Kavrama k˝lavuz Áizgileri kullan";
         Text[ language_user1 ] = " ";
     };
-    MetricField MTR_FLD_SNAP_X
+    CheckBox CBX_GRID_VISIBLE
     {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 199 , 87 ) ;
-        Size = MAP_APPFONT ( 43 , 12 ) ;
+        Pos = MAP_APPFONT ( 12 , 26 ) ;
+        Size = MAP_APPFONT ( 102 , 10 ) ;
         TabStop = TRUE ;
-        Repeat = TRUE ;
-        Spin = TRUE ;
-        Minimum = 10 ;
-        First = 10 ;
-        Maximum = 10000 ;
-        Last = 10000 ;
-        StrictFormat = TRUE ;
-        DecimalDigits = 2 ;
-        Unit = FUNIT_MM ;
-        SpinSize = 50 ;
+        Text = "Ras~ter sichtbar" ;
+        Text [ ENGLISH ] = "~Visible grid" ;
+        Text [ NORWEGIAN ] = "~Visible grid" ;
+        Text [ DANISH ] = "Synligt gitter" ;
+        Text [ ENGLISH_US ] = "~Visible grid" ;
+        Text [ SPANISH ] = "~CuadrÌcula visible" ;
+        Text [ FINNISH ] = "~Visible grid" ;
+        Text [ FRENCH ] = "Grille ~visible" ;
+        Text [ ITALIAN ] = "Griglia ~visibile" ;
+        Text [ DUTCH ] = "~Raster zichtbaar" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "~Visible grid" ;
+        Text [ SWEDISH ] = "Synligt ~raster" ;
+        Text [ PORTUGUESE ] = "~QuadrÌcula visÌvel" ;
+        Text[ chinese_simplified ] = "œ‘ æÕ¯∏Òœﬂ(~V)";
+        Text[ russian ] = "œÓÍ‡Á‡Ú¸ ÒÂÚÍÛ";
+        Text[ polish ] = "Raster widoczny";
+        Text[ japanese ] = "∏ﬁÿØƒﬁÇï\\é¶Ç∑ÇÈ(~V)";
+        Text[ chinese_traditional ] = "≈„•‹∫ÙÆÊΩu(~V)";
+        Text[ arabic ] = "‘»ﬂ… „—∆Ì…";
+        Text[ greek ] = "–Î›„Ï· ÔÒ·~Ù‹";
+        Text[ korean ] = "¥´±›¿ª ∫∏¿Ã∞‘(~V)";
+        Text[ turkish ] = "K˝lavuz Áizgileri gˆster";
+        Text[ language_user1 ] = " ";
     };
-    MetricField MTR_FLD_SNAP_Y
+    GroupBox GRP_OPTIONS
     {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 199 , 102 ) ;
-        Size = MAP_APPFONT ( 43 , 12 ) ;
-        TabStop = TRUE ;
-        Repeat = TRUE ;
-        Spin = TRUE ;
-        Minimum = 10 ;
-        First = 10 ;
-        Maximum = 10000 ;
-        Last = 10000 ;
-        StrictFormat = TRUE ;
-        DecimalDigits = 2 ;
-        Unit = FUNIT_MM ;
-        SpinSize = 50 ;
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 248 , 38 ) ;
+        Text = "Optionen" ;
+        Text [ ENGLISH ] = "Options" ;
+        Text [ NORWEGIAN ] = "Options" ;
+        Text [ DANISH ] = "Indstillinger" ;
+        Text [ ENGLISH_US ] = "Options" ;
+        Text [ SPANISH ] = "Opciones" ;
+        Text [ FINNISH ] = "M‰‰ritykset" ;
+        Text [ FRENCH ] = "Options" ;
+        Text [ ITALIAN ] = "Opzioni" ;
+        Text [ DUTCH ] = "Opties" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "Op˛ßes" ;
+        Text [ SWEDISH ] = "Alternativ" ;
+        Text [ PORTUGUESE ] = "OpÁıes" ;
+        Text[ chinese_simplified ] = "—°œÓ";
+        Text[ russian ] = "œ‡‡ÏÂÚ˚";
+        Text[ polish ] = "Opcje";
+        Text[ japanese ] = "µÃﬂºÆ›";
+        Text[ chinese_traditional ] = "øÔ∂µ";
+        Text[ arabic ] = "«·ŒÌ«—« ";
+        Text[ greek ] = "≈ÈÎÔ„›Ú";
+        Text[ korean ] = "ø…º«";
+        Text[ turkish ] = "SeÁenekler";
+        Text[ language_user1 ] = " ";
     };
-    FixedText FT_SNAP_X
+    FixedText FT_RESOLUTION
     {
-        Pos = MAP_APPFONT ( 162 , 89 ) ;
-        Size = MAP_APPFONT ( 29 , 10 ) ;
-        Text = "X-A~chse" ;
-        Text [ ENGLISH ] = "X-Ax~is" ;
-        Text [ NORWEGIAN ] = "X-Ax~is" ;
+        Pos = MAP_APPFONT ( 89 , 55 ) ;
+        Size = MAP_APPFONT ( 45 , 10 ) ;
+        Center = TRUE;
+        Text = "Aufl~ˆsung" ;
+        Text [ ENGLISH ] = "~Resolution" ;
+        Text [ NORWEGIAN ] = "~Resolution" ;
+        Text [ DANISH ] = "Opl¯sning" ;
+        Text [ ENGLISH_US ] = "~Resolution" ;
+        Text [ SPANISH ] = "R~esoluciÛn" ;
+        Text [ FINNISH ] = "~Tarkkuus" ;
+        Text [ FRENCH ] = "~RÈsolution" ;
+        Text [ ITALIAN ] = "~Risoluzione" ;
+        Text [ DUTCH ] = "Resol~utie" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "~Resolu˛“o" ;
+        Text [ SWEDISH ] = "Uppl~ˆsning" ;
+        Text [ PORTUGUESE ] = "~ResoluÁ„o" ;
+        Text[ chinese_simplified ] = "∑÷±Ê¬ ";
+        Text[ russian ] = "–‡ÁÂ¯ÂÌËÂ";
+        Text[ polish ] = "RozdzielczoúÊ";
+        Text[ japanese ] = "âëúìx";
+        Text[ chinese_traditional ] = "∏—™R´◊";
+        Text[ arabic ] = "«·«” »«‰…";
+        Text[ greek ] = "¡Ì‹ÎıÛÁ";
+        Text[ korean ] = "«ÿªÛµµ";
+        Text[ turkish ] = "«ˆz¸n¸rl¸k";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_DIVISION
+    {
+        Pos = MAP_APPFONT ( 171 , 55 ) ;
+        Size = MAP_APPFONT ( 45 , 10 ) ;
+        Center = TRUE;
+        Text = "~Unterteilung" ;
+        Text [ ENGLISH ] = "~Division" ;
+        Text [ NORWEGIAN ] = "~Division" ;
+        Text [ DANISH ] = "Inddeling" ;
+        Text [ ENGLISH_US ] = "S~ubdivision" ;
+        Text [ SPANISH ] = "S~ubdivisiÛn" ;
+        Text [ FINNISH ] = "~Jako" ;
+        Text [ FRENCH ] = "~Finesse" ;
+        Text [ ITALIAN ] = "Suddivisione" ;
+        Text [ DUTCH ] = "~Onderverdeling" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "~Divis“o" ;
+        Text [ SWEDISH ] = "Indelning" ;
+        Text [ PORTUGUESE ] = "~Subdivis„o" ;
+        Text[ chinese_simplified ] = "œﬂµ„º‰∏Ù(~S)";
+        Text[ russian ] = "–‡Á‰ÂÎÂÌËÂ";
+        Text[ polish ] = "Podpodzia≥";
+        Text[ japanese ] = "ì_ÇÃä‘äu(~S)";
+        Text[ chinese_traditional ] = "Ωu¬I∂°πj(~S)";
+        Text[ arabic ] = "«· ﬁ”Ì„ «·›—⁄Ì";
+        Text[ greek ] = "~’Ô‰È·ﬂÒÂÛÁ";
+        Text[ korean ] = "ºº∫–»≠(~S)";
+        Text[ turkish ] = "Bˆl¸mleme";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_DRAW_X
+    {
+        Pos = MAP_APPFONT ( 12 , 70 ) ;
+        Size = MAP_APPFONT ( 49 , 10 ) ;
+        Text = "~X-Achse" ;
+        Text [ ENGLISH ] = "~X-Axis" ;
+        Text [ NORWEGIAN ] = "~X-Axis" ;
         Text [ DANISH ] = "X-akse" ;
-        Text [ ENGLISH_US ] = "X ax~is" ;
-        Text [ SPANISH ] = "~Eje X" ;
-        Text [ FINNISH ] = "X-~akseli" ;
-        Text [ FRENCH ] = "~Axe X" ;
-        Text [ ITALIAN ] = "As~se X" ;
-        Text [ DUTCH ] = "X - A~s" ;
-        Text [ PORTUGUESE_BRAZILIAN ] = "Eix~o X" ;
-        Text [ SWEDISH ] = "X-axe~l" ;
-        Text [ PORTUGUESE ] = "Eix~o X" ;
-        Text[ chinese_simplified ] = "X ÷·(~I)";
+        Text [ ENGLISH_US ] = "~X axis" ;
+        Text [ SPANISH ] = "Eje ~X" ;
+        Text [ FINNISH ] = "~X-akseli" ;
+        Text [ FRENCH ] = "Axe ~X" ;
+        Text [ ITALIAN ] = "Asse ~X" ;
+        Text [ DUTCH ] = "~X-as" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "~Eixo X" ;
+        Text [ SWEDISH ] = "~X-axel" ;
+        Text [ PORTUGUESE ] = "~Eixo X" ;
+        Text[ chinese_simplified ] = "~X ÷·";
         Text[ russian ] = "ŒÒ¸ X";
         Text[ polish ] = "Oú X";
-        Text[ japanese ] = "Xé≤(~I)";
-        Text[ chinese_traditional ] = "X-∂b(~I)";
+        Text[ japanese ] = "~Xé≤";
+        Text[ chinese_traditional ] = "~X-∂b";
         Text[ arabic ] = "«·„ÕÊ— ”";
         Text[ greek ] = "¢ÓÔÌ·Ú X";
-        Text[ korean ] = "X √‡(~I)";
+        Text[ korean ] = "X √‡(~X)";
         Text[ turkish ] = "X ekseni";
         Text[ language_user1 ] = " ";
     };
-    FixedText FT_SNAP_Y
+    FixedText FT_DRAW_Y
     {
-        Pos = MAP_APPFONT ( 162 , 104 ) ;
-        Size = MAP_APPFONT ( 27 , 10 ) ;
-        Text = "Y-Achs~e" ;
-        Text [ ENGLISH ] = "Y-Axi~s" ;
-        Text [ NORWEGIAN ] = "Y-Axi~s" ;
+        Pos = MAP_APPFONT ( 12 , 85 ) ;
+        Size = MAP_APPFONT ( 49 , 10 ) ;
+        Text = "~Y-Achse" ;
+        Text [ ENGLISH ] = "~Y-Axis" ;
+        Text [ NORWEGIAN ] = "~Y-Axis" ;
         Text [ DANISH ] = "Y-akse" ;
-        Text [ ENGLISH_US ] = "Y ~axis" ;
-        Text [ SPANISH ] = "E~je Y" ;
-        Text [ FINNISH ] = "Y-a~kseli" ;
-        Text [ FRENCH ] = "A~xe Y" ;
-        Text [ ITALIAN ] = "Ass~e Y" ;
-        Text [ DUTCH ] = "Y - ~as" ;
-        Text [ PORTUGUESE_BRAZILIAN ] = "Eix~o Y" ;
-        Text [ SWEDISH ] = "Y-ax~el" ;
-        Text [ PORTUGUESE ] = "Eix~o Y" ;
-        Text[ chinese_simplified ] = "Y ÷·(~A)";
+        Text [ ENGLISH_US ] = "~Y axis" ;
+        Text [ SPANISH ] = "Eje ~Y" ;
+        Text [ FINNISH ] = "~Y-akseli" ;
+        Text [ FRENCH ] = "Axe ~Y" ;
+        Text [ ITALIAN ] = "Asse ~Y" ;
+        Text [ DUTCH ] = "~Y-as" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "~Eixo Y" ;
+        Text [ SWEDISH ] = "~Y-axel" ;
+        Text [ PORTUGUESE ] = "~Eixo Y" ;
+        Text[ chinese_simplified ] = "~Y ÷·";
         Text[ russian ] = "ŒÒ¸ Y";
         Text[ polish ] = "Oú Y";
-        Text[ japanese ] = "Yé≤(~A)";
-        Text[ chinese_traditional ] = "Y-∂b(~A)";
+        Text[ japanese ] = "~Yº¥";
+        Text[ chinese_traditional ] = "~Y-∂b";
         Text[ arabic ] = "«·„ÕÊ— ’";
-        Text[ greek ] = "¢ÓÔÌ~·Ú ’";
-        Text[ korean ] = "Y √‡(~A)";
+        Text[ greek ] = "¢ÓÔÌ·Ú ~’";
+        Text[ korean ] = "Y √‡(~Y)";
         Text[ turkish ] = "Y ekseni";
         Text[ language_user1 ] = " ";
+    };
+    MetricField MTR_FLD_DRAW_X
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 89 , 68 ) ;
+        Size = MAP_APPFONT ( 45 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 10 ;
+        First = 10 ;
+        Maximum = 10000 ;
+        Last = 10000 ;
+        StrictFormat = TRUE ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_MM ;
+        SpinSize = 50 ;
+    };
+    MetricField MTR_FLD_DRAW_Y
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 89 , 83 ) ;
+        Size = MAP_APPFONT ( 45 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 10 ;
+        First = 10 ;
+        Maximum = 10000 ;
+        Last = 10000 ;
+        StrictFormat = TRUE ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_MM ;
+        SpinSize = 50 ;
     };
     MetricField MTR_FLD_DIVISION_X
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 99 , 87 ) ;
+        Pos = MAP_APPFONT ( 171 , 68 ) ;
         Size = MAP_APPFONT ( 45 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
@@ -228,68 +342,10 @@ TabPage RID_SVXPAGE_GRID
         CustomUnitText[ turkish ] = "Noktalar";
         CustomUnitText[ language_user1 ] = " ";
     };
-    FixedText FT_RESOLUTION
-    {
-        Pos = MAP_APPFONT ( 48 , 74 ) ;
-        Size = MAP_APPFONT ( 40 , 10 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? Aufl~ˆsung : Aufl~˜sung */
-        /* ### ACHTUNG: Neuer Text in Resource? Aufl~ˆsung : Aufl~˜sung */
-        Text = "Aufl~ˆsung" ;
-        Text [ ENGLISH ] = "~Resolution" ;
-        Text [ NORWEGIAN ] = "~Resolution" ;
-        Text [ DANISH ] = "Opl¯sning" ;
-        Text [ ENGLISH_US ] = "~Resolution" ;
-        Text [ SPANISH ] = "R~esoluciÛn" ;
-        Text [ FINNISH ] = "~Tarkkuus" ;
-        Text [ FRENCH ] = "~RÈsolution" ;
-        Text [ ITALIAN ] = "~Risoluzione" ;
-        Text [ DUTCH ] = "Resol~utie" ;
-        Text [ PORTUGUESE_BRAZILIAN ] = "~Resolu˛“o" ;
-        Text [ SWEDISH ] = "Uppl~ˆsning" ;
-        Text [ PORTUGUESE ] = "~ResoluÁ„o" ;
-        Text[ chinese_simplified ] = "∑÷±Ê¬ ";
-        Text[ russian ] = "–‡ÁÂ¯ÂÌËÂ";
-        Text[ polish ] = "RozdzielczoúÊ";
-        Text[ japanese ] = "âëúìx";
-        Text[ chinese_traditional ] = "∏—™R´◊";
-        Text[ arabic ] = "«·«” »«‰…";
-        Text[ greek ] = "¡Ì‹ÎıÛÁ";
-        Text[ korean ] = "«ÿªÛµµ";
-        Text[ turkish ] = "«ˆz¸n¸rl¸k";
-        Text[ language_user1 ] = " ";
-    };
-    FixedText FT_DIVISION
-    {
-        Pos = MAP_APPFONT ( 99 , 74 ) ;
-        Size = MAP_APPFONT ( 48 , 10 ) ;
-        Text = "~Unterteilung" ;
-        Text [ ENGLISH ] = "~Division" ;
-        Text [ NORWEGIAN ] = "~Division" ;
-        Text [ DANISH ] = "Inddeling" ;
-        Text [ ENGLISH_US ] = "S~ubdivision" ;
-        Text [ SPANISH ] = "S~ubdivisiÛn" ;
-        Text [ FINNISH ] = "~Jako" ;
-        Text [ FRENCH ] = "~Finesse" ;
-        Text [ ITALIAN ] = "Suddivisione" ;
-        Text [ DUTCH ] = "~Onderverdeling" ;
-        Text [ PORTUGUESE_BRAZILIAN ] = "~Divis“o" ;
-        Text [ SWEDISH ] = "Indelning" ;
-        Text [ PORTUGUESE ] = "~Subdivis„o" ;
-        Text[ chinese_simplified ] = "œﬂµ„º‰∏Ù(~S)";
-        Text[ russian ] = "–‡Á‰ÂÎÂÌËÂ";
-        Text[ polish ] = "Podpodzia≥";
-        Text[ japanese ] = "ì_ÇÃä‘äu(~S)";
-        Text[ chinese_traditional ] = "Ωu¬I∂°πj(~S)";
-        Text[ arabic ] = "«· ﬁ”Ì„ «·›—⁄Ì";
-        Text[ greek ] = "~’Ô‰È·ﬂÒÂÛÁ";
-        Text[ korean ] = "ºº∫–»≠(~S)";
-        Text[ turkish ] = "Bˆl¸mleme";
-        Text[ language_user1 ] = " ";
-    };
     MetricField MTR_FLD_DIVISION_Y
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 99 , 102 ) ;
+        Pos = MAP_APPFONT ( 171 , 83 ) ;
         Size = MAP_APPFONT ( 45 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
@@ -325,8 +381,8 @@ TabPage RID_SVXPAGE_GRID
     };
     CheckBox CBX_SYNCHRONIZE
     {
-        Pos = MAP_APPFONT ( 12 , 44 ) ;
-        Size = MAP_APPFONT ( 102 , 12 ) ;
+        Pos = MAP_APPFONT ( 12 , 98 ) ;
+        Size = MAP_APPFONT ( 102 , 10 ) ;
         TabStop = TRUE ;
         Text = "Achsen ~synchronisieren" ;
         Text [ ENGLISH ] = "~Synchronize axis" ;
@@ -352,158 +408,10 @@ TabPage RID_SVXPAGE_GRID
         Text[ turkish ] = "Eksenleri e˛itle";
         Text[ language_user1 ] = " ";
     };
-    CheckBox CBX_GRID_VISIBLE
-    {
-        Pos = MAP_APPFONT ( 12 , 26 ) ;
-        Size = MAP_APPFONT ( 102 , 12 ) ;
-        TabStop = TRUE ;
-        Text = "Ras~ter sichtbar" ;
-        Text [ ENGLISH ] = "~Visible grid" ;
-        Text [ NORWEGIAN ] = "~Visible grid" ;
-        Text [ DANISH ] = "Synligt gitter" ;
-        Text [ ENGLISH_US ] = "~Visible grid" ;
-        Text [ SPANISH ] = "~CuadrÌcula visible" ;
-        Text [ FINNISH ] = "~Visible grid" ;
-        Text [ FRENCH ] = "Grille ~visible" ;
-        Text [ ITALIAN ] = "Griglia ~visibile" ;
-        Text [ DUTCH ] = "~Raster zichtbaar" ;
-        Text [ PORTUGUESE_BRAZILIAN ] = "~Visible grid" ;
-        Text [ SWEDISH ] = "Synligt ~raster" ;
-        Text [ PORTUGUESE ] = "~QuadrÌcula visÌvel" ;
-        Text[ chinese_simplified ] = "œ‘ æÕ¯∏Òœﬂ(~V)";
-        Text[ russian ] = "œÓÍ‡Á‡Ú¸ ÒÂÚÍÛ";
-        Text[ polish ] = "Raster widoczny";
-        Text[ japanese ] = "∏ﬁÿØƒﬁÇï\\é¶Ç∑ÇÈ(~V)";
-        Text[ chinese_traditional ] = "≈„•‹∫ÙÆÊΩu(~V)";
-        Text[ arabic ] = "‘»ﬂ… „—∆Ì…";
-        Text[ greek ] = "–Î›„Ï· ÔÒ·~Ù‹";
-        Text[ korean ] = "¥´±›¿ª ∫∏¿Ã∞‘(~V)";
-        Text[ turkish ] = "K˝lavuz Áizgileri gˆster";
-        Text[ language_user1 ] = " ";
-    };
-    CheckBox CBX_EQUAL_GRID
-    {
-        Pos = MAP_APPFONT ( 162 , 74 ) ;
-        Size = MAP_APPFONT ( 83 , 12 ) ;
-        Text = "Mit Raster ~abgleichen" ;
-        Text [ ENGLISH ] = "E~qual snapgrid" ;
-        Text [ NORWEGIAN ] = "E~qual snapgrid" ;
-        Text [ DANISH ] = "Tilpas til gitter" ;
-        Text [ ENGLISH_US ] = "Si~ze to grid" ;
-        Text [ SPANISH ] = "Aj~ustar a la cuadrÌcula" ;
-        Text [ FINNISH ] = "Y~ht‰ suuri kohdistusruudukko" ;
-        Text [ FRENCH ] = "~Synchroniser avec la grille" ;
-        Text [ ITALIAN ] = "Adatta alla griglia" ;
-        Text [ DUTCH ] = "S~ynchroon met raster" ;
-        Text [ PORTUGUESE_BRAZILIAN ] = "Grade fixa I~gual" ;
-        Text [ SWEDISH ] = "~Anpassa till raster" ;
-        Text [ PORTUGUESE ] = "Ajustar ‡ quadrÌcula" ;
-        TabStop = TRUE ;
-        Text[ chinese_simplified ] = "∫ÕÕ¯∏Ò◊¯±ÍÕ¨≤Ω(~T)";
-        Text[ russian ] = "œÓ ‡ÁÏÂÛ ÒÂÚÍË";
-        Text[ polish ] = "Ustaw wed≥ug rastra";
-        Text[ japanese ] = "∏ﬁÿØƒﬁÇ…çáÇÌÇπÇÈ(~T)";
-        Text[ chinese_traditional ] = "©M∫ÙÆÊÆyº–¶P®B(~T)";
-        Text[ arabic ] = "„·«∆„… «·ÕÃ„ ··‘»ﬂ…";
-        Text[ greek ] = "–ÒÔÛ·ÒÏÔ„ﬁ ÛÂ Î›„Ï·";
-        Text[ korean ] = "≈©±‚∏¶ ¥´±›ø° ∏¬√„(~Z)";
-        Text[ turkish ] = "K˝lavuz Áizgilere gˆre hizala";
-        Text[ language_user1 ] = " ";
-    };
-    FixedText FT_DRAW_X
-    {
-        Pos = MAP_APPFONT ( 12 , 89 ) ;
-        Size = MAP_APPFONT ( 29 , 10 ) ;
-        Text = "~X-Achse" ;
-        Text [ ENGLISH ] = "~X-Axis" ;
-        Text [ NORWEGIAN ] = "~X-Axis" ;
-        Text [ DANISH ] = "X-akse" ;
-        Text [ ENGLISH_US ] = "~X axis" ;
-        Text [ SPANISH ] = "Eje ~X" ;
-        Text [ FINNISH ] = "~X-akseli" ;
-        Text [ FRENCH ] = "Axe ~X" ;
-        Text [ ITALIAN ] = "Asse ~X" ;
-        Text [ DUTCH ] = "~X-as" ;
-        Text [ PORTUGUESE_BRAZILIAN ] = "~Eixo X" ;
-        Text [ SWEDISH ] = "~X-axel" ;
-        Text [ PORTUGUESE ] = "~Eixo X" ;
-        Text[ chinese_simplified ] = "~X ÷·";
-        Text[ russian ] = "ŒÒ¸ X";
-        Text[ polish ] = "Oú X";
-        Text[ japanese ] = "~Xé≤";
-        Text[ chinese_traditional ] = "~X-∂b";
-        Text[ arabic ] = "«·„ÕÊ— ”";
-        Text[ greek ] = "¢ÓÔÌ·Ú X";
-        Text[ korean ] = "X √‡(~X)";
-        Text[ turkish ] = "X ekseni";
-        Text[ language_user1 ] = " ";
-    };
-    FixedText FT_DRAW_Y
-    {
-        Pos = MAP_APPFONT ( 12 , 104 ) ;
-        Size = MAP_APPFONT ( 29 , 10 ) ;
-        Text = "~Y-Achse" ;
-        Text [ ENGLISH ] = "~Y-Axis" ;
-        Text [ NORWEGIAN ] = "~Y-Axis" ;
-        Text [ DANISH ] = "Y-akse" ;
-        Text [ ENGLISH_US ] = "~Y axis" ;
-        Text [ SPANISH ] = "Eje ~Y" ;
-        Text [ FINNISH ] = "~Y-akseli" ;
-        Text [ FRENCH ] = "Axe ~Y" ;
-        Text [ ITALIAN ] = "Asse ~Y" ;
-        Text [ DUTCH ] = "~Y-as" ;
-        Text [ PORTUGUESE_BRAZILIAN ] = "~Eixo Y" ;
-        Text [ SWEDISH ] = "~Y-axel" ;
-        Text [ PORTUGUESE ] = "~Eixo Y" ;
-        Text[ chinese_simplified ] = "~Y ÷·";
-        Text[ russian ] = "ŒÒ¸ Y";
-        Text[ polish ] = "Oú Y";
-        Text[ japanese ] = "~Yº¥";
-        Text[ chinese_traditional ] = "~Y-∂b";
-        Text[ arabic ] = "«·„ÕÊ— ’";
-        Text[ greek ] = "¢ÓÔÌ·Ú ~’";
-        Text[ korean ] = "Y √‡(~Y)";
-        Text[ turkish ] = "Y ekseni";
-        Text[ language_user1 ] = " ";
-    };
-    MetricField MTR_FLD_DRAW_Y
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 47 , 102 ) ;
-        Size = MAP_APPFONT ( 43 , 12 ) ;
-        TabStop = TRUE ;
-        Repeat = TRUE ;
-        Spin = TRUE ;
-        Minimum = 10 ;
-        First = 10 ;
-        Maximum = 10000 ;
-        Last = 10000 ;
-        StrictFormat = TRUE ;
-        DecimalDigits = 2 ;
-        Unit = FUNIT_MM ;
-        SpinSize = 50 ;
-    };
-    MetricField MTR_FLD_DRAW_X
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 47 , 87 ) ;
-        Size = MAP_APPFONT ( 43 , 12 ) ;
-        TabStop = TRUE ;
-        Repeat = TRUE ;
-        Spin = TRUE ;
-        Minimum = 10 ;
-        First = 10 ;
-        Maximum = 10000 ;
-        Last = 10000 ;
-        StrictFormat = TRUE ;
-        DecimalDigits = 2 ;
-        Unit = FUNIT_MM ;
-        SpinSize = 50 ;
-    };
     GroupBox GRP_DRAWGRID
     {
-        Pos = MAP_APPFONT ( 6 , 65 ) ;
-        Size = MAP_APPFONT ( 144 , 64 ) ;
+        Pos = MAP_APPFONT ( 6 , 44 ) ;
+        Size = MAP_APPFONT ( 248 , 67 ) ;
         Text = "Raster" ;
         Text [ ENGLISH ] = "Drawgrid" ;
         Text [ NORWEGIAN ] = "Drawgrid" ;
@@ -526,62 +434,6 @@ TabPage RID_SVXPAGE_GRID
         Text[ greek ] = "–Î›„Ï·";
         Text[ korean ] = "¥´±›";
         Text[ turkish ] = "K˝lavuz Áizgiler";
-        Text[ language_user1 ] = " ";
-    };
-    GroupBox GRP_SNAPGRID
-    {
-        Pos = MAP_APPFONT ( 156 , 65 ) ;
-        Size = MAP_APPFONT ( 98 , 64 ) ;
-        Text = "Fangraster" ;
-        Text [ ENGLISH ] = "Snapgrid" ;
-        Text [ NORWEGIAN ] = "Snapgrid" ;
-        Text [ DANISH ] = "Fanggitter" ;
-        Text [ ENGLISH_US ] = "Snap grid" ;
-        Text [ SPANISH ] = "CuadrÌcula de captura" ;
-        Text [ FINNISH ] = "Kohdistusruudukko" ;
-        Text [ FRENCH ] = "Grille de capture" ;
-        Text [ ITALIAN ] = "Griglia" ;
-        Text [ DUTCH ] = "Vangraster" ;
-        Text [ PORTUGUESE_BRAZILIAN ] = "Grade fixa" ;
-        Text [ SWEDISH ] = "Stˆdraster" ;
-        Text [ PORTUGUESE ] = "Grelha fixa" ;
-        Text[ chinese_simplified ] = "Õ¯∏Ò◊¯±Í";
-        Text[ russian ] = "—ÂÚÍ‡ ÔË‚ˇÁÍË";
-        Text[ polish ] = "Siatka zaczepu";
-        Text[ japanese ] = "Ω≈ØÃﬂñ‘ñ⁄Ω∏ÿ∞›";
-        Text[ chinese_traditional ] = "∫ÙÆÊÆyº–";
-        Text[ arabic ] = "‘»ﬂ… «·Õ»”";
-        Text[ greek ] = "–Î›„Ï· ÒÔÛÍ¸ÎÎÁÛÁÚ";
-        Text[ korean ] = "∏¬√„ ¥´±›º±";
-        Text[ turkish ] = "Kavrama k˝lavuz Áizgileri";
-        Text[ language_user1 ] = " ";
-    };
-    GroupBox GRP_OPTIONS
-    {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 248 , 58 ) ;
-        Text = "Optionen" ;
-        Text [ ENGLISH ] = "Options" ;
-        Text [ NORWEGIAN ] = "Options" ;
-        Text [ DANISH ] = "Indstillinger" ;
-        Text [ ENGLISH_US ] = "Options" ;
-        Text [ SPANISH ] = "Opciones" ;
-        Text [ FINNISH ] = "M‰‰ritykset" ;
-        Text [ FRENCH ] = "Options" ;
-        Text [ ITALIAN ] = "Opzioni" ;
-        Text [ DUTCH ] = "Opties" ;
-        Text [ PORTUGUESE_BRAZILIAN ] = "Op˛ßes" ;
-        Text [ SWEDISH ] = "Alternativ" ;
-        Text [ PORTUGUESE ] = "OpÁıes" ;
-        Text[ chinese_simplified ] = "—°œÓ";
-        Text[ russian ] = "œ‡‡ÏÂÚ˚";
-        Text[ polish ] = "Opcje";
-        Text[ japanese ] = "µÃﬂºÆ›";
-        Text[ chinese_traditional ] = "øÔ∂µ";
-        Text[ arabic ] = "«·ŒÌ«—« ";
-        Text[ greek ] = "≈ÈÎÔ„›Ú";
-        Text[ korean ] = "ø…º«";
-        Text[ turkish ] = "SeÁenekler";
         Text[ language_user1 ] = " ";
     };
 };

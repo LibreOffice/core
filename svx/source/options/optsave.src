@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsave.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-26 20:43:26 $
+ *  last change: $Author: os $ $Date: 2001-02-08 16:47:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,11 +95,11 @@ TabPage RID_SFXPAGE_SAVE
     SVLook = TRUE ;
     Hide = TRUE ;
     TEXT_SAVEPAGE
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     GroupBox GB_SAVE
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 174 , 59 ) ;
+        Size = MAP_APPFONT ( 248 , 68 ) ;
         Text = "Speichern" ;
         Text [ English ] = "Save" ;
         Text [ norwegian ] = "Save" ;
@@ -125,7 +125,7 @@ TabPage RID_SFXPAGE_SAVE
     };
     CheckBox BTN_DOCINFO
     {
-        Pos = MAP_APPFONT ( 12 , 12 ) ;
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 162 , 10 ) ;
         Text = "E~igenschaften vorher bearbeiten" ;
         Text [ English ] = "~Edit document info before" ;
@@ -153,7 +153,7 @@ TabPage RID_SFXPAGE_SAVE
     };
     CheckBox BTN_BACKUP
     {
-        Pos = MAP_APPFONT ( 12 , 24 ) ;
+        Pos = MAP_APPFONT ( 12 , 28 ) ;
         Size = MAP_APPFONT ( 162 , 10 ) ;
         Text = "~Sicherungskopie immer erstellen" ;
         Text [ English ] = "~Backup copy always" ;
@@ -180,7 +180,7 @@ TabPage RID_SFXPAGE_SAVE
     };
     CheckBox BTN_AUTOSAVE
     {
-        Pos = MAP_APPFONT ( 12 , 37 ) ;
+        Pos = MAP_APPFONT ( 12 , 43 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         Text = "~Automatisch speichern alle" ;
         Text [ English ] = "~Automatic save every" ;
@@ -208,7 +208,7 @@ TabPage RID_SFXPAGE_SAVE
     NumericField ED_AUTOSAVE
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 115 , 36 ) ;
+        Pos = MAP_APPFONT ( 115 , 42 ) ;
         Size = MAP_APPFONT ( 21 , 12 ) ;
         Left = TRUE ;
         Repeat = TRUE ;
@@ -223,8 +223,8 @@ TabPage RID_SFXPAGE_SAVE
     };
     FixedText FT_MINUTE
     {
-        Pos = MAP_APPFONT ( 139 , 37 ) ;
-        Size = MAP_APPFONT ( 35 , 10 ) ;
+        Pos = MAP_APPFONT ( 139 , 44 ) ;
+        Size = MAP_APPFONT ( 35 , 8 ) ;
         Text = "Minuten" ;
         Text [ English ] = "minutes" ;
         Text [ norwegian ] = "...minutter" ;
@@ -250,7 +250,7 @@ TabPage RID_SFXPAGE_SAVE
     };
     CheckBox BTN_AUTOSAVEPROMPT
     {
-        Pos = MAP_APPFONT ( 22 , 50 ) ;
+        Pos = MAP_APPFONT ( 22 , 58 ) ;
         Size = MAP_APPFONT ( 152 , 10 ) ;
         Text = "Mit ~R¸ckfrage" ;
         Text [ English ] = "~Prompt to save" ;
@@ -275,110 +275,10 @@ TabPage RID_SFXPAGE_SAVE
         Text[ korean ] = "¿˙¿Â«“ ∂ß »Æ¿Œ(~P)";
         Text[ turkish ] = "~÷nce sor";
     };
-    GroupBox GB_SAVEGRAPHICS
-    {
-        Pos = MAP_APPFONT ( 186 , 3 ) ;
-        Size = MAP_APPFONT ( 68 , 59 ) ;
-        Text = "Grafiken speichern" ;
-        Text [ English ] = "Save graphics" ;
-        Text [ portuguese ] = "Guardar imagens" ;
-        Text [ english_us ] = "Save graphics" ;
-        Text [ portuguese_brazilian ] = "Grafiken speichern/sichern" ;
-        Text [ swedish ] = "Spara grafik" ;
-        Text [ danish ] = "Gem grafik" ;
-        Text [ italian ] = "Salva le immagini" ;
-        Text [ spanish ] = "Guardar im·genes" ;
-        Text [ french ] = "Images" ;
-        Text [ dutch ] = "Afbeeldingen opslaan" ;
-        Text[ chinese_simplified ] = "¥Ê≈ÃÕº–Œ";
-        Text[ russian ] = "—Óı‡ÌÂÌËÂ „‡ÙËÍË";
-        Text[ polish ] = "Zapisz grafiki";
-        Text[ japanese ] = "∏ﬁ◊Ã≤Ø∏ÇÃï€ë∂";
-        Text[ chinese_traditional ] = "¿x¶sπœßŒ";
-        Text[ arabic ] = "Õ›Ÿ «·’Ê—";
-        Text[ greek ] = "¡ÔËﬁÍÂıÛÁ „Ò·ˆÈÍ˛Ì";
-        Text[ korean ] = "±◊∑°«» ¿˙¿Â";
-        Text[ turkish ] = "Grafikleri kaydet";
-    };
-    RadioButton RB_SAVENORMAL
-    {
-        Pos = MAP_APPFONT ( 192 , 14 ) ;
-        Size = MAP_APPFONT ( 56 , 10 ) ;
-        Text = "Nor~mal" ;
-        Text [ English ] = "Nor~mal" ;
-        Text [ portuguese ] = "~Padr„o" ;
-        Text [ english_us ] = "~Normal" ;
-        Text [ portuguese_brazilian ] = "~Normal" ;
-        Text [ swedish ] = "Nor~malt" ;
-        Text [ danish ] = "Normalt" ;
-        Text [ italian ] = "~Normale" ;
-        Text [ spanish ] = "~Normal" ;
-        Text [ french ] = "~Normal" ;
-        Text [ dutch ] = "~Normaal" ;
-        Text[ chinese_simplified ] = "∆’Õ®(~N)";
-        Text[ russian ] = "Œ·˚˜ÌÓÂ";
-        Text[ polish ] = "Normalny";
-        Text[ japanese ] = "í èÌ(~N)";
-        Text[ chinese_traditional ] = "¥∂≥q(~N)";
-        Text[ arabic ] = "⁄«œÌ";
-        Text[ greek ] = " ·ÌÔÌÈÍ‹";
-        Text[ korean ] = "±‚∫ª(~N)";
-        Text[ turkish ] = "Normal";
-    };
-    RadioButton RB_SAVECOMPRESS
-    {
-        Pos = MAP_APPFONT ( 192 , 27 ) ;
-        Size = MAP_APPFONT ( 56 , 10 ) ;
-        Text = "~Komprimiert" ;
-        Text [ English ] = "~Compressed" ;
-        Text [ portuguese ] = "~Comprimido" ;
-        Text [ english_us ] = "~Compressed" ;
-        Text [ portuguese_brazilian ] = "~Komprimiert" ;
-        Text [ swedish ] = "~Komprimerat" ;
-        Text [ danish ] = "Komprimeret" ;
-        Text [ italian ] = "~Compresso" ;
-        Text [ spanish ] = "Co~mprimido" ;
-        Text [ french ] = "~ComprimÈ" ;
-        Text [ dutch ] = "~Gecomprimeerd" ;
-        Text[ chinese_simplified ] = "—πÀı(~C)";
-        Text[ russian ] = "”Ê‡ÚÓÂ";
-        Text[ polish ] = "Skompresowany";
-        Text[ japanese ] = "à≥èk(~C)";
-        Text[ chinese_traditional ] = "¿£¡Y(~C)";
-        Text[ arabic ] = "„÷€Êÿ";
-        Text[ greek ] = "”ıÏÈÂÛÏ›Ì·";
-        Text[ korean ] = "æ–√‡(~C)";
-        Text[ turkish ] = "S˝k˝˛t˝r˝lm˝˛";
-    };
-    RadioButton RB_SAVEORIGINAL
-    {
-        Pos = MAP_APPFONT ( 192 , 40 ) ;
-        Size = MAP_APPFONT ( 56 , 10 ) ;
-        Text = "Im Original~format" ;
-        Text [ English ] = "In ~original format" ;
-        Text [ portuguese ] = "Formato ~original" ;
-        Text [ english_us ] = "O~riginal format" ;
-        Text [ portuguese_brazilian ] = "~Originalformat" ;
-        Text [ swedish ] = "I original~format" ;
-        Text [ danish ] = "I originalformat" ;
-        Text [ italian ] = "Formato originale" ;
-        Text [ spanish ] = "~Formato original" ;
-        Text [ french ] = "~Format d'origine" ;
-        Text [ dutch ] = "~Origineel formaat" ;
-        Text[ chinese_simplified ] = "‘≠º˛∏Ò Ω(~F)";
-        Text[ russian ] = "¬ ÓË„ËÌ‡ÎÂ";
-        Text[ polish ] = "W oryg. formacie";
-        Text[ japanese ] = "ÇªÇÃÇ‹Ç‹(~R)";
-        Text[ chinese_traditional ] = "≠Ï•ÛÆÊ¶°(~F)";
-        Text[ arabic ] = " ‰”Ìﬁ √’·Ì";
-        Text[ greek ] = "¡Ò˜ÈÍﬁ ÏÔÒ~ˆﬁ";
-        Text[ korean ] = "ø¯∑° º≠Ωƒ(~R)";
-        Text[ turkish ] = "As˝l format˝nda";
-    };
     GroupBox GB_WORKINGSET
     {
-        Pos = MAP_APPFONT ( 6 , 64 ) ;
-        Size = MAP_APPFONT ( 136 , 45 ) ;
+        Pos = MAP_APPFONT ( 6 , 74 ) ;
+        Size = MAP_APPFONT ( 136 , 52 ) ;
         Text = "Bearbeitungsansicht wiederherstellen" ;
         Text [ English ] = "Restore Workingview" ;
         Text [ english_us ] = "Restore editing view" ;
@@ -402,7 +302,7 @@ TabPage RID_SFXPAGE_SAVE
     };
     CheckBox BTN_DOCVIEW
     {
-        Pos = MAP_APPFONT ( 12 , 73 ) ;
+        Pos = MAP_APPFONT ( 12 , 85 ) ;
         Size = MAP_APPFONT ( 124 , 10 ) ;
         Text = "D~okumentansicht" ;
         Text [ English ] = "Document~view" ;
@@ -427,7 +327,7 @@ TabPage RID_SFXPAGE_SAVE
     };
     CheckBox BTN_OPENWIN
     {
-        Pos = MAP_APPFONT ( 12 , 85 ) ;
+        Pos = MAP_APPFONT ( 12 , 99 ) ;
         Size = MAP_APPFONT ( 124 , 10 ) ;
         Text = "~Geˆffnete Fenster" ;
         Text [ English ] = "Open ~Windows" ;
@@ -452,7 +352,7 @@ TabPage RID_SFXPAGE_SAVE
     };
     CheckBox BTN_OPENDOC
     {
-        Pos = MAP_APPFONT ( 12 , 97 ) ;
+        Pos = MAP_APPFONT ( 12 , 113 ) ;
         Size = MAP_APPFONT ( 124 , 10 ) ;
         Text = "Geˆffnete ~Dokumente" ;
         Text [ English ] = "Open ~Documents" ;
@@ -475,10 +375,76 @@ TabPage RID_SFXPAGE_SAVE
         Text[ korean ] = "ø≠∏∞ πÆº≠(~D)";
         Text[ turkish ] = "AÁ˝k belgeler";
     };
+    GroupBox GB_UNDO
+    {
+        Pos = MAP_APPFONT ( 148 , 74 ) ;
+        Size = MAP_APPFONT ( 106 , 52 ) ;
+        Text = "R¸ckg‰ngig" ;
+        Text [ English ] = "Undo" ;
+        Text [ english_us ] = "Undo " ;
+        Text [ italian ] = "Annulla" ;
+        Text [ spanish ] = "Deshacer " ;
+        Text [ french ] = "Annuler " ;
+        Text [ dutch ] = "Ongedaan" ;
+        Text [ swedish ] = "≈ngra" ;
+        Text [ danish ] = "Fortryd" ;
+        Text [ portuguese_brazilian ] = "R¸ckg‰ngig" ;
+        Text [ portuguese ] = "Desfazer" ;
+        Text[ chinese_simplified ] = "≥∑œ˚√¸¡Ó";
+        Text[ russian ] = "ŒÚÏÂÌËÚ¸";
+        Text[ polish ] = "Cofnij";
+        Text[ japanese ] = "å≥Ç…ñﬂÇ∑";
+        Text[ chinese_traditional ] = "¥_≠Ï";
+        Text[ arabic ] = " —«Ã⁄";
+        Text[ greek ] = "¡Ì·ﬂÒÂÛÁ";
+        Text[ korean ] = "Ω««‡ √Îº“";
+        Text[ turkish ] = "Geri al";
+    };
+    FixedText FT_UNDO
+    {
+        Pos = MAP_APPFONT ( 154 , 87 ) ;
+        Size = MAP_APPFONT ( 65 , 8 ) ;
+        Text = "A~nzahl der Schritte" ;
+        Text [ English ] = "~Count of steps" ;
+        Text[ italian ] = "~Numero operazioni";
+        Text[ portuguese_brazilian ] = "~Count of steps";
+        Text[ portuguese ] = "~Contar etapas";
+        Text[ danish ] = "Antal trin";
+        Text[ french ] = "~Nombre de pas";
+        Text[ swedish ] = "A~ntal steg";
+        Text[ dutch ] = "~Aantal stappen";
+        Text[ spanish ] = "~Cantidad de pasos";
+        Text[ english_us ] = "Number of steps";
+        Text[ chinese_simplified ] = "≤Ω ˝";
+        Text[ russian ] = " ÓÎË˜ÂÒÚ‚Ó ¯‡„Ó‚";
+        Text[ polish ] = "Liczba krokÛw";
+        Text[ japanese ] = "Ω√ØÃﬂêî";
+        Text[ chinese_traditional ] = "®Bº∆";
+        Text[ arabic ] = "⁄œœ «·ŒÿÊ« ";
+        Text[ greek ] = "¡~ÒÈËÏ¸Ú ‚ÁÏ‹Ù˘Ì";
+        Text[ korean ] = "¥‹∞Ë ºˆ";
+        Text[ turkish ] = "›˛lem say˝s˝";
+    };
+    NumericField ED_UNDO
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 224 , 85 ) ;
+        Size = MAP_APPFONT ( 24 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 1 ;
+        First = 1 ;
+        Maximum = 100 ;
+        Value = 100 ;
+        Last = 100 ;
+        SpinSize = 1 ;
+    };
     GroupBox GB_RELATIVE
     {
-        Pos = MAP_APPFONT ( 148 , 64 ) ;
-        Size = MAP_APPFONT ( 106 , 45 ) ;
+        Pos = MAP_APPFONT ( 6 , 129 ) ;
+        Size = MAP_APPFONT ( 121 , 51 ) ;
         Text = "URLs relativ speichern" ;
         Text [ English ] = "Save URLs relative" ;
         Text [ english_us ] = "Save URLs relative to" ;
@@ -502,7 +468,7 @@ TabPage RID_SFXPAGE_SAVE
     };
     CheckBox BTN_RELATIVE_FSYS
     {
-        Pos = MAP_APPFONT ( 154 , 73 ) ;
+        Pos = MAP_APPFONT ( 12 , 140 ) ;
         Size = MAP_APPFONT ( 94 , 10 ) ;
         Text = "im Da~teisystem" ;
         Text [ English ] = "on ~filesystem" ;
@@ -529,7 +495,7 @@ TabPage RID_SFXPAGE_SAVE
     };
     CheckBox BTN_RELATIVE_INET
     {
-        Pos = MAP_APPFONT ( 154 , 85 ) ;
+        Pos = MAP_APPFONT ( 12 , 154 ) ;
         Size = MAP_APPFONT ( 94 , 10 ) ;
         Text = "im Int~ernet" ;
         Text [ English ] = "~Internet" ;
@@ -552,71 +518,105 @@ TabPage RID_SFXPAGE_SAVE
         Text[ korean ] = "¿Œ≈Õ≥›(~I)";
         Text[ turkish ] = "Internet";
     };
-    GroupBox GB_UNDO
+    GroupBox GB_SAVEGRAPHICS
     {
-        Pos = MAP_APPFONT ( 6 , 110 ) ;
-        Size = MAP_APPFONT ( 248 , 21 ) ;
-        Text = "R¸ckg‰ngig" ;
-        Text [ English ] = "Undo" ;
-        Text [ english_us ] = "Undo " ;
-        Text [ italian ] = "Annulla" ;
-        Text [ spanish ] = "Deshacer " ;
-        Text [ french ] = "Annuler " ;
-        Text [ dutch ] = "Ongedaan" ;
-        Text [ swedish ] = "≈ngra" ;
-        Text [ danish ] = "Fortryd" ;
-        Text [ portuguese_brazilian ] = "R¸ckg‰ngig" ;
-        Text [ portuguese ] = "Desfazer" ;
-        Text[ chinese_simplified ] = "≥∑œ˚√¸¡Ó";
-        Text[ russian ] = "ŒÚÏÂÌËÚ¸";
-        Text[ polish ] = "Cofnij";
-        Text[ japanese ] = "å≥Ç…ñﬂÇ∑";
-        Text[ chinese_traditional ] = "¥_≠Ï";
-        Text[ arabic ] = " —«Ã⁄";
-        Text[ greek ] = "¡Ì·ﬂÒÂÛÁ";
-        Text[ korean ] = "Ω««‡ √Îº“";
-        Text[ turkish ] = "Geri al";
+        Pos = MAP_APPFONT ( 133 , 129 ) ;
+        Size = MAP_APPFONT ( 121 , 51 ) ;
+        Text = "Grafiken speichern" ;
+        Text [ English ] = "Save graphics" ;
+        Text [ portuguese ] = "Guardar imagens" ;
+        Text [ english_us ] = "Save graphics" ;
+        Text [ portuguese_brazilian ] = "Grafiken speichern/sichern" ;
+        Text [ swedish ] = "Spara grafik" ;
+        Text [ danish ] = "Gem grafik" ;
+        Text [ italian ] = "Salva le immagini" ;
+        Text [ spanish ] = "Guardar im·genes" ;
+        Text [ french ] = "Images" ;
+        Text [ dutch ] = "Afbeeldingen opslaan" ;
+        Text[ chinese_simplified ] = "¥Ê≈ÃÕº–Œ";
+        Text[ russian ] = "—Óı‡ÌÂÌËÂ „‡ÙËÍË";
+        Text[ polish ] = "Zapisz grafiki";
+        Text[ japanese ] = "∏ﬁ◊Ã≤Ø∏ÇÃï€ë∂";
+        Text[ chinese_traditional ] = "¿x¶sπœßŒ";
+        Text[ arabic ] = "Õ›Ÿ «·’Ê—";
+        Text[ greek ] = "¡ÔËﬁÍÂıÛÁ „Ò·ˆÈÍ˛Ì";
+        Text[ korean ] = "±◊∑°«» ¿˙¿Â";
+        Text[ turkish ] = "Grafikleri kaydet";
     };
-    FixedText FT_UNDO
+    RadioButton RB_SAVENORMAL
     {
-        Pos = MAP_APPFONT ( 12 , 118 ) ;
-        Size = MAP_APPFONT ( 70 , 10 ) ;
-        Text = "A~nzahl der Schritte" ;
-        Text [ English ] = "~Count of steps" ;
-        Text[ italian ] = "~Numero operazioni";
-        Text[ portuguese_brazilian ] = "~Count of steps";
-        Text[ portuguese ] = "~Contar etapas";
-        Text[ danish ] = "Antal trin";
-        Text[ french ] = "~Nombre de pas";
-        Text[ swedish ] = "A~ntal steg";
-        Text[ dutch ] = "~Aantal stappen";
-        Text[ spanish ] = "~Cantidad de pasos";
-        Text[ english_us ] = "Number of steps";
-        Text[ chinese_simplified ] = "≤Ω ˝";
-        Text[ russian ] = " ÓÎË˜ÂÒÚ‚Ó ¯‡„Ó‚";
-        Text[ polish ] = "Liczba krokÛw";
-        Text[ japanese ] = "Ω√ØÃﬂêî";
-        Text[ chinese_traditional ] = "®Bº∆";
-        Text[ arabic ] = "⁄œœ «·ŒÿÊ« ";
-        Text[ greek ] = "¡~ÒÈËÏ¸Ú ‚ÁÏ‹Ù˘Ì";
-        Text[ korean ] = "¥‹∞Ë ºˆ";
-        Text[ turkish ] = "›˛lem say˝s˝";
+        Pos = MAP_APPFONT ( 139 , 140 ) ;
+        Size = MAP_APPFONT ( 110 , 10 ) ;
+        Text = "Nor~mal" ;
+        Text [ English ] = "Nor~mal" ;
+        Text [ portuguese ] = "~Padr„o" ;
+        Text [ english_us ] = "~Normal" ;
+        Text [ portuguese_brazilian ] = "~Normal" ;
+        Text [ swedish ] = "Nor~malt" ;
+        Text [ danish ] = "Normalt" ;
+        Text [ italian ] = "~Normale" ;
+        Text [ spanish ] = "~Normal" ;
+        Text [ french ] = "~Normal" ;
+        Text [ dutch ] = "~Normaal" ;
+        Text[ chinese_simplified ] = "∆’Õ®(~N)";
+        Text[ russian ] = "Œ·˚˜ÌÓÂ";
+        Text[ polish ] = "Normalny";
+        Text[ japanese ] = "í èÌ(~N)";
+        Text[ chinese_traditional ] = "¥∂≥q(~N)";
+        Text[ arabic ] = "⁄«œÌ";
+        Text[ greek ] = " ·ÌÔÌÈÍ‹";
+        Text[ korean ] = "±‚∫ª(~N)";
+        Text[ turkish ] = "Normal";
     };
-    NumericField ED_UNDO
+    RadioButton RB_SAVECOMPRESS
     {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 85 , 117 ) ;
-        Size = MAP_APPFONT ( 24 , 12 ) ;
-        TabStop = TRUE ;
-        Left = TRUE ;
-        Repeat = TRUE ;
-        Spin = TRUE ;
-        Minimum = 1 ;
-        First = 1 ;
-        Maximum = 100 ;
-        Value = 100 ;
-        Last = 100 ;
-        SpinSize = 1 ;
+        Pos = MAP_APPFONT ( 139 , 153 ) ;
+        Size = MAP_APPFONT ( 110, 10 ) ;
+        Text = "~Komprimiert" ;
+        Text [ English ] = "~Compressed" ;
+        Text [ portuguese ] = "~Comprimido" ;
+        Text [ english_us ] = "~Compressed" ;
+        Text [ portuguese_brazilian ] = "~Komprimiert" ;
+        Text [ swedish ] = "~Komprimerat" ;
+        Text [ danish ] = "Komprimeret" ;
+        Text [ italian ] = "~Compresso" ;
+        Text [ spanish ] = "Co~mprimido" ;
+        Text [ french ] = "~ComprimÈ" ;
+        Text [ dutch ] = "~Gecomprimeerd" ;
+        Text[ chinese_simplified ] = "—πÀı(~C)";
+        Text[ russian ] = "”Ê‡ÚÓÂ";
+        Text[ polish ] = "Skompresowany";
+        Text[ japanese ] = "à≥èk(~C)";
+        Text[ chinese_traditional ] = "¿£¡Y(~C)";
+        Text[ arabic ] = "„÷€Êÿ";
+        Text[ greek ] = "”ıÏÈÂÛÏ›Ì·";
+        Text[ korean ] = "æ–√‡(~C)";
+        Text[ turkish ] = "S˝k˝˛t˝r˝lm˝˛";
+    };
+    RadioButton RB_SAVEORIGINAL
+    {
+        Pos = MAP_APPFONT ( 139, 167 ) ;
+        Size = MAP_APPFONT ( 110, 10 ) ;
+        Text = "Im Original~format" ;
+        Text [ English ] = "In ~original format" ;
+        Text [ portuguese ] = "Formato ~original" ;
+        Text [ english_us ] = "O~riginal format" ;
+        Text [ portuguese_brazilian ] = "~Originalformat" ;
+        Text [ swedish ] = "I original~format" ;
+        Text [ danish ] = "I originalformat" ;
+        Text [ italian ] = "Formato originale" ;
+        Text [ spanish ] = "~Formato original" ;
+        Text [ french ] = "~Format d'origine" ;
+        Text [ dutch ] = "~Origineel formaat" ;
+        Text[ chinese_simplified ] = "‘≠º˛∏Ò Ω(~F)";
+        Text[ russian ] = "¬ ÓË„ËÌ‡ÎÂ";
+        Text[ polish ] = "W oryg. formacie";
+        Text[ japanese ] = "ÇªÇÃÇ‹Ç‹(~R)";
+        Text[ chinese_traditional ] = "≠Ï•ÛÆÊ¶°(~F)";
+        Text[ arabic ] = " ‰”Ìﬁ √’·Ì";
+        Text[ greek ] = "¡Ò˜ÈÍﬁ ÏÔÒ~ˆﬁ";
+        Text[ korean ] = "ø¯∑° º≠Ωƒ(~R)";
+        Text[ turkish ] = "As˝l format˝nda";
     };
 };
 

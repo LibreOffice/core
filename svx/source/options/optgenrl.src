@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgenrl.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-02 16:14:46 $
+ *  last change: $Author: os $ $Date: 2001-02-08 16:47:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ TabPage RID_SFXPAGE_GENERAL
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Hide = TRUE ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     Text = "Benutzerdaten" ;
     Text [ ENGLISH ] = "User data" ;
     Text [ english_us ] = "User Data" ;
@@ -94,7 +94,7 @@ TabPage RID_SFXPAGE_GENERAL
     FixedText FT_COMPANY
     {
         Pos = MAP_APPFONT ( LEFT , FLINE ( 0 ) ) ;
-        Size = MAP_APPFONT ( MID-LEFT , FLINEH ) ;
+        Size = MAP_APPFONT ( MID-LEFT-3 , FLINEH ) ;
         LeftLabel = TRUE ;
         Text = "~Firma" ;
         Text [ ENGLISH ] = "~Company" ;
@@ -129,7 +129,7 @@ TabPage RID_SFXPAGE_GENERAL
     FixedText FT_NAME
     {
         Pos = MAP_APPFONT ( LEFT , FLINE ( 1 ) ) ;
-        Size = MAP_APPFONT ( MID-LEFT , FLINEH ) ;
+        Size = MAP_APPFONT ( MID-LEFT-3 , FLINEH ) ;
         LeftLabel = TRUE ;
         Text = "~Vor-/Name/Kürzel" ;
         Text [ ENGLISH ] = "~First/Last/Id" ;
@@ -158,7 +158,7 @@ TabPage RID_SFXPAGE_GENERAL
     FixedText FT_NAME_RUSS
     {
         Pos = MAP_APPFONT ( LEFT , FLINE ( 1 ) ) ;
-        Size = MAP_APPFONT ( MID-LEFT , FLINEH ) ;
+        Size = MAP_APPFONT ( MID-LEFT-3 , FLINEH ) ;
         LeftLabel = TRUE ;
         Hide = TRUE;
         Text = "~Vor-/Vaters-/Name/Kürzel" ;
@@ -204,7 +204,7 @@ TabPage RID_SFXPAGE_GENERAL
     FixedText FT_STREET
     {
         Pos = MAP_APPFONT ( LEFT , FLINE ( 2 ) ) ;
-        Size = MAP_APPFONT ( MID-LEFT , FLINEH ) ;
+        Size = MAP_APPFONT ( MID-LEFT-3 , FLINEH ) ;
         LeftLabel = TRUE ;
         Text = "~Straße" ;
         Text [ ENGLISH ] = "~Street" ;
@@ -233,7 +233,7 @@ TabPage RID_SFXPAGE_GENERAL
     FixedText FT_STREET_RUSS
     {
         Pos = MAP_APPFONT ( LEFT , FLINE ( 2 ) ) ;
-        Size = MAP_APPFONT ( MID-LEFT , FLINEH ) ;
+        Size = MAP_APPFONT ( MID-LEFT-3 , FLINEH ) ;
         LeftLabel = TRUE ;
         Hide = TRUE;
         Text = "~Straße/Wohnungsnummer" ;
@@ -268,7 +268,7 @@ TabPage RID_SFXPAGE_GENERAL
     FixedText FT_CITY
     {
         Pos = MAP_APPFONT ( LEFT , FLINE ( 3 ) ) ;
-        Size = MAP_APPFONT ( MID-LEFT , FLINEH ) ;
+        Size = MAP_APPFONT ( MID-LEFT-3 , FLINEH ) ;
         LeftLabel = TRUE ;
         Text = "PL~Z/Ort" ;
         Text [ ENGLISH ] = "~Zip/City" ;
@@ -325,7 +325,7 @@ TabPage RID_SFXPAGE_GENERAL
     FixedText FT_COUNTRY
     {
         Pos = MAP_APPFONT ( LEFT , FLINE ( 4 ) ) ;
-        Size = MAP_APPFONT ( MID-LEFT , FLINEH ) ;
+        Size = MAP_APPFONT ( MID-LEFT-3 , FLINEH ) ;
         LeftLabel = TRUE ;
         Text = "~Land" ;
         Text [ ENGLISH ] = "~Country" ;
@@ -358,7 +358,7 @@ TabPage RID_SFXPAGE_GENERAL
     FixedText FT_TITLEPOS
     {
         Pos = MAP_APPFONT ( LEFT , FLINE ( 5 ) ) ;
-        Size = MAP_APPFONT ( MID-LEFT , FLINEH ) ;
+        Size = MAP_APPFONT ( MID-LEFT-3 , FLINEH ) ;
         LeftLabel = TRUE ;
         Text = "~Titel/Position" ;
         Text [ ENGLISH ] = "~Title/Position" ;
@@ -397,7 +397,7 @@ TabPage RID_SFXPAGE_GENERAL
     FixedText FT_PHONE
     {
         Pos = MAP_APPFONT ( LEFT , FLINE ( 6 ) ) ;
-        Size = MAP_APPFONT ( MID-LEFT , FLINEH ) ;
+        Size = MAP_APPFONT ( MID-LEFT-3 , FLINEH ) ;
         Text = "T~el. (Priv/Ge.)" ;
         Text [ ENGLISH ] = "Pho~ne (Priv./Co.)" ;
         Text [ norwegian ] = "Tele~fon (Priv./Arbeid.)" ;
@@ -438,7 +438,7 @@ TabPage RID_SFXPAGE_GENERAL
     FixedText FT_FAXMAIL
     {
         Pos = MAP_APPFONT ( LEFT , FLINE ( 7 ) ) ;
-        Size = MAP_APPFONT ( MID-LEFT , FLINEH ) ;
+        Size = MAP_APPFONT ( MID-LEFT-3 , FLINEH ) ;
         LeftLabel = TRUE ;
         Text = "Fa~x/E-Mail" ;
         Text [ ENGLISH ] = "Fa~x" ;
@@ -478,8 +478,8 @@ TabPage RID_SFXPAGE_GENERAL
     };
     GroupBox GB_ADDRESS
     {
-        Pos = MAP_APPFONT ( 6 , 2 ) ;
-        Size = MAP_APPFONT ( 248 , 129 ) ;
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 248 , 131 ) ;
         Text = " Anschrift " ;
         Text [ ENGLISH ] = " Address " ;
         Text [ norwegian ] = " Adresse " ;

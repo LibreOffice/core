@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optspell.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-08 17:53:27 $
+ *  last change: $Author: os $ $Date: 2001-02-08 16:47:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@ TabPage RID_SFXPAGE_SPELL
 {
     HelpId = HID_OPTIONS_SPELL ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 221 , 135 ) ;
+    Size = MAP_APPFONT ( 221 , 185 ) ;
     Text = "Rechtschreibung" ;
     Text [ ENGLISH ] = "Spell checking" ;
     Text [ norwegian ] = "Stavekontroll" ;

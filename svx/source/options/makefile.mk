@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: os $ $Date: 2001-01-18 09:44:23 $
+#   last change: $Author: os $ $Date: 2001-02-08 16:47:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -95,7 +95,6 @@ CXXFILES = \
         optpath.cxx		\
         optdict.cxx		\
         optitems.cxx	\
-        optspell.cxx	\
         optgenrl.cxx	\
         optsave.cxx		\
         adritem.cxx		\
@@ -110,7 +109,6 @@ CXXFILES = \
 SRCFILES =  \
         optasian.src	\
         optgenrl.src	\
-        optspell.src	\
         optdict.src		\
         optsave.src		\
         optpath.src		\
@@ -126,7 +124,6 @@ SLOFILES=	\
         $(SLO)$/optpath.obj	\
         $(SLO)$/optdict.obj	\
         $(SLO)$/optitems.obj	\
-        $(SLO)$/optspell.obj	\
         $(SLO)$/optgenrl.obj	\
         $(SLO)$/optsave.obj	\
         $(SLO)$/adritem.obj	\

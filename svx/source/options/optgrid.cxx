@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgrid.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2000-10-24 11:49:59 $
+ *  last change: $Author: os $ $Date: 2001-02-08 16:47:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,17 +224,8 @@ SvxGridTabPage::SvxGridTabPage( Window* pParent, const SfxItemSet& rCoreSet) :
     aCbxSynchronize ( this, ResId( CBX_SYNCHRONIZE ) ),
     aCbxGridVisible ( this, ResId( CBX_GRID_VISIBLE ) ),
     aGrpOptions     ( this, ResId( GRP_OPTIONS ) ),
-    aFtSnapX        ( this, ResId( FT_SNAP_X ) ),
-    aMtrFldSnapX    ( this, ResId( MTR_FLD_SNAP_X ) ),
-    aFtSnapY        ( this, ResId( FT_SNAP_Y ) ),
-    aMtrFldSnapY    ( this, ResId( MTR_FLD_SNAP_Y ) ),
-    aCbxEqualGrid   ( this, ResId( CBX_EQUAL_GRID ) ),
-    aGrpSnapGrid    ( this, ResId( GRP_SNAPGRID ) ),
-
     bAttrModified( FALSE )
 {
-    HideSnapGrid();
-
     // diese Page braucht ExchangeSupport
     SetExchangeSupport();
 
@@ -252,21 +243,11 @@ SvxGridTabPage::SvxGridTabPage( Window* pParent, const SfxItemSet& rCoreSet) :
     SetFieldUnit( aMtrFldDrawY, eFUnit, TRUE );
     lcl_SetMinMax(aMtrFldDrawY, nFirst, nLast, nMin, nMax);
 
-    lcl_GetMinMax(aMtrFldSnapX, nFirst, nLast, nMin, nMax);
-    SetFieldUnit( aMtrFldSnapX, eFUnit, TRUE );
-    lcl_SetMinMax(aMtrFldSnapX, nFirst, nLast, nMin, nMax);
-
-    lcl_GetMinMax(aMtrFldSnapY, nFirst, nLast, nMin, nMax);
-    SetFieldUnit( aMtrFldSnapY, eFUnit, TRUE );
-    lcl_SetMinMax(aMtrFldSnapY, nFirst, nLast, nMin, nMax);
-
 
     Link aLink = LINK( this, SvxGridTabPage, ChangeGridsnapHdl_Impl );
     aCbxUseGridsnap.SetClickHdl( aLink );
     aCbxSynchronize.SetClickHdl( aLink );
     aCbxGridVisible.SetClickHdl( aLink );
-    aCbxEqualGrid.SetClickHdl(
-        LINK( this, SvxGridTabPage, ChangeEqualGridHdl_Impl ) );
     aMtrFldDrawX.SetModifyHdl(
         LINK( this, SvxGridTabPage, ChangeDrawXHdl_Impl ) );
     aMtrFldDrawY.SetModifyHdl(
@@ -275,10 +256,6 @@ SvxGridTabPage::SvxGridTabPage( Window* pParent, const SfxItemSet& rCoreSet) :
         LINK( this, SvxGridTabPage, ChangeDivisionXHdl_Impl ) );
     aMtrFldDivisionY.SetModifyHdl(
         LINK( this, SvxGridTabPage, ChangeDivisionYHdl_Impl ) );
-    aMtrFldSnapX.SetModifyHdl(
-        LINK( this, SvxGridTabPage, ChangeSnapXHdl_Impl ) );
-    aMtrFldSnapY.SetModifyHdl(
-        LINK( this, SvxGridTabPage, ChangeSnapYHdl_Impl ) );
 }
 
 //------------------------------------------------------------------------
@@ -299,7 +276,6 @@ BOOL SvxGridTabPage::FillItemSet( SfxItemSet& rCoreSet )
         aGridItem.bUseGridsnap  = aCbxUseGridsnap.IsChecked();
         aGridItem.bSynchronize  = aCbxSynchronize.IsChecked();
         aGridItem.bGridVisible  = aCbxGridVisible.IsChecked();
-        aGridItem.bEqualGrid    = aCbxEqualGrid.IsChecked();
 
         SfxMapUnit eUnit =
             rCoreSet.GetPool()->GetMetric( GetWhich( SID_ATTR_GRID_OPTIONS ) );
@@ -310,9 +286,6 @@ BOOL SvxGridTabPage::FillItemSet( SfxItemSet& rCoreSet )
         aGridItem.nFldDrawY    = (UINT32) nY;
         aGridItem.nFldDivisionX = aMtrFldDivisionX.GetValue();
         aGridItem.nFldDivisionY = aMtrFldDivisionY.GetValue();
-
-        aGridItem.nFldSnapX    = (UINT32) GetCoreValue( aMtrFldSnapX, eUnit );
-        aGridItem.nFldSnapY    = (UINT32) GetCoreValue( aMtrFldSnapY, eUnit );
 
         rCoreSet.Put( aGridItem );
     }
@@ -332,7 +305,6 @@ void SvxGridTabPage::Reset( const SfxItemSet& rSet )
         aCbxUseGridsnap.Check( pGridAttr->bUseGridsnap == 1 );
         aCbxSynchronize.Check( pGridAttr->bSynchronize == 1 );
         aCbxGridVisible.Check( pGridAttr->bGridVisible == 1 );
-        aCbxEqualGrid.Check( pGridAttr->bEqualGrid == 1 );
 
         SfxMapUnit eUnit =
             rSet.GetPool()->GetMetric( GetWhich( SID_ATTR_GRID_OPTIONS ) );
@@ -345,8 +317,6 @@ void SvxGridTabPage::Reset( const SfxItemSet& rSet )
 //      aMtrFldDivisionY.SetValue( nFineY ? (pGridAttr->nFldDrawY / nFineY - 1) : 0 );
         aMtrFldDivisionX.SetValue( pGridAttr->nFldDivisionX );
         aMtrFldDivisionY.SetValue( pGridAttr->nFldDivisionY );
-        SetMetricValue( aMtrFldSnapX , pGridAttr->nFldSnapX, eUnit );
-        SetMetricValue( aMtrFldSnapY , pGridAttr->nFldSnapY, eUnit );
     }
 
     ChangeGridsnapHdl_Impl( &aCbxUseGridsnap );
@@ -396,17 +366,6 @@ void SvxGridTabPage::ActivatePage( const SfxItemSet& rSet )
             lcl_SetMinMax(aMtrFldDrawY, nFirst, nLast, nMin, nMax);
             aMtrFldDrawY.SetValue( aMtrFldDrawY.Normalize( nVal ), FUNIT_TWIP );
 
-            nVal = aMtrFldSnapX.Denormalize( aMtrFldSnapX.GetValue( FUNIT_TWIP ) );
-            lcl_GetMinMax(aMtrFldSnapX, nFirst, nLast, nMin, nMax);
-            SetFieldUnit( aMtrFldSnapX, eFUnit, TRUE );
-            lcl_SetMinMax(aMtrFldSnapX, nFirst, nLast, nMin, nMax);
-            aMtrFldSnapX.SetValue( aMtrFldSnapX.Normalize( nVal ), FUNIT_TWIP );
-
-            nVal = aMtrFldSnapY.Denormalize( aMtrFldSnapY.GetValue( FUNIT_TWIP ) );
-            lcl_GetMinMax(aMtrFldSnapY, nFirst, nLast, nMin, nMax);
-            SetFieldUnit( aMtrFldSnapY, eFUnit, TRUE );
-            lcl_SetMinMax(aMtrFldSnapY, nFirst, nLast, nMin, nMax);
-            aMtrFldSnapY.SetValue( aMtrFldSnapY.Normalize( nVal ), FUNIT_TWIP );
         }
     }
 }
@@ -429,17 +388,6 @@ IMPL_LINK( SvxGridTabPage, ChangeDrawXHdl_Impl, void *, EMPTYARG )
     {
         aMtrFldDrawY.SetValue( aMtrFldDrawX.GetValue() );
     }
-    if( aCbxEqualGrid.IsChecked() )
-    {
-        aMtrFldSnapX.SetValue( aMtrFldDrawX.GetValue() /
-                            ( aMtrFldDivisionX.GetValue() + 1 ) );
-    }
-    if( aCbxSynchronize.IsChecked() &&
-        aCbxEqualGrid.IsChecked() )
-    {
-        aMtrFldSnapY.SetValue( aMtrFldDrawX.GetValue() /
-                            ( aMtrFldDivisionY.GetValue() + 1 ) );
-    }
     return 0;
 }
 
@@ -451,17 +399,6 @@ IMPL_LINK( SvxGridTabPage, ChangeDrawYHdl_Impl, void *, EMPTYARG )
     if( aCbxSynchronize.IsChecked() )
     {
         aMtrFldDrawX.SetValue( aMtrFldDrawY.GetValue() );
-    }
-    if( aCbxEqualGrid.IsChecked() )
-    {
-        aMtrFldSnapY.SetValue( aMtrFldDrawY.GetValue() /
-                            ( aMtrFldDivisionY.GetValue() + 1 ) );
-    }
-    if( aCbxSynchronize.IsChecked() &&
-        aCbxEqualGrid.IsChecked() )
-    {
-        aMtrFldSnapX.SetValue( aMtrFldDrawY.GetValue() /
-                            ( aMtrFldDivisionX.GetValue() + 1 ) );
     }
     return 0;
 }
@@ -475,17 +412,6 @@ IMPL_LINK( SvxGridTabPage, ChangeDivisionXHdl_Impl, void *, EMPTYARG )
     {
         aMtrFldDivisionY.SetValue( aMtrFldDivisionX.GetValue() );
     }
-    if( aCbxEqualGrid.IsChecked() )
-    {
-        aMtrFldSnapX.SetValue( aMtrFldDrawX.GetValue() /
-                            ( aMtrFldDivisionX.GetValue() + 1 ) );
-    }
-    if( aCbxSynchronize.IsChecked() &&
-        aCbxEqualGrid.IsChecked() )
-    {
-        aMtrFldSnapY.SetValue( aMtrFldDrawY.GetValue() /
-                            ( aMtrFldDivisionY.GetValue() + 1 ) );
-    }
     return 0;
 }
 
@@ -498,17 +424,6 @@ IMPL_LINK( SvxGridTabPage, ChangeDivisionYHdl_Impl, void *, EMPTYARG )
     {
         aMtrFldDivisionX.SetValue( aMtrFldDivisionY.GetValue() );
     }
-    if( aCbxEqualGrid.IsChecked() )
-    {
-        aMtrFldSnapY.SetValue( aMtrFldDrawY.GetValue() /
-                            ( aMtrFldDivisionY.GetValue() + 1 ) );
-    }
-    if( aCbxSynchronize.IsChecked() &&
-        aCbxEqualGrid.IsChecked() )
-    {
-        aMtrFldSnapX.SetValue( aMtrFldDrawX.GetValue() /
-                            ( aMtrFldDivisionX.GetValue() + 1 ) );
-    }
     return 0;
 }
 
@@ -517,12 +432,6 @@ IMPL_LINK( SvxGridTabPage, ChangeDivisionYHdl_Impl, void *, EMPTYARG )
 IMPL_LINK( SvxGridTabPage, ChangeSnapXHdl_Impl, void *, EMPTYARG )
 {
     bAttrModified = TRUE;
-    if( aCbxSynchronize.IsChecked() )
-    {
-        aMtrFldSnapY.SetValue( aMtrFldSnapX.GetValue() );
-    }
-    if( aCbxEqualGrid.IsChecked() )
-        aCbxEqualGrid.Check( FALSE );
     return 0;
 }
 
@@ -531,34 +440,6 @@ IMPL_LINK( SvxGridTabPage, ChangeSnapXHdl_Impl, void *, EMPTYARG )
 IMPL_LINK( SvxGridTabPage, ChangeSnapYHdl_Impl, void *, EMPTYARG )
 {
     bAttrModified = TRUE;
-    if( aCbxSynchronize.IsChecked() )
-    {
-        aMtrFldSnapX.SetValue( aMtrFldSnapY.GetValue() );
-    }
-    if( aCbxEqualGrid.IsChecked() )
-        aCbxEqualGrid.Check( FALSE );
-    return 0;
-}
-
-//------------------------------------------------------------------------
-
-IMPL_LINK( SvxGridTabPage, ChangeEqualGridHdl_Impl, void *, EMPTYARG )
-{
-    bAttrModified = TRUE;
-    if( aCbxEqualGrid.IsChecked() )
-    {
-        aFtSnapX.Disable();
-        aMtrFldSnapX.Disable();
-        aFtSnapY.Disable();
-        aMtrFldSnapY.Disable();
-    }
-    else
-    {
-        aFtSnapX.Enable();
-        aMtrFldSnapX.Enable();
-        aFtSnapY.Enable();
-        aMtrFldSnapY.Enable();
-    }
     return 0;
 }
 
@@ -566,47 +447,8 @@ IMPL_LINK( SvxGridTabPage, ChangeEqualGridHdl_Impl, void *, EMPTYARG )
 
 IMPL_LINK( SvxGridTabPage, ChangeGridsnapHdl_Impl, void *, p )
 {
-    // Als Hack, damit bei den anderen CBXen auch das
-    // ModifiedFlag gesetzt werden kann
-    if( p == &aCbxUseGridsnap )
-    {
-        if( aCbxUseGridsnap.IsChecked() )
-        {
-            aGrpSnapGrid.Enable();
-            aCbxEqualGrid.Enable();
-
-            ChangeEqualGridHdl_Impl( this );
-        }
-        else
-        {
-            aFtSnapX.Disable();
-            aMtrFldSnapX.Disable();
-            aFtSnapY.Disable();
-            aMtrFldSnapY.Disable();
-            aGrpSnapGrid.Disable();
-            aCbxEqualGrid.Disable();
-        }
-    }
     bAttrModified = TRUE;
     return 0;
-}
-
-//------------------------------------------------------------------------
-
-void SvxGridTabPage::HideSnapGrid()
-{
-    aFtSnapX.Hide();
-    aMtrFldSnapX.Hide();
-    aFtSnapY.Hide();
-    aMtrFldSnapY.Hide();
-    aGrpSnapGrid.Hide();
-    aCbxEqualGrid.Hide();
-    aGrpSnapGrid.Hide();
-
-    Size aSize = aGrpDrawGrid.GetSizePixel();
-    aSize = PixelToLogic( aSize, MAP_APPFONT); // Sollte in MAP_APPFONT sein
-    aSize.Width() = 248;
-    aGrpDrawGrid.SetSizePixel( LogicToPixel(aSize, MAP_APPFONT ));
 }
 
 

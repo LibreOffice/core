@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optinet2.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-02 16:16:20 $
+ *  last change: $Author: os $ $Date: 2001-02-08 16:47:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@ TabPage RID_SVXPAGE_INET_PROXY
 {
     HelpId = HID_OPTIONS_PROXY ;
     OutputSize = TRUE ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     SVLook = TRUE ;
     Hide = TRUE ;
     Text = "Proxy" ;
@@ -93,7 +93,7 @@ TabPage RID_SVXPAGE_INET_PROXY
     GroupBox GB_SETTINGS
     {
         Pos = MAP_APPFONT ( GB_TYPES_LEFT , GB_TYPES_TOP ) ;
-        Size = MAP_APPFONT ( 251 , 130 ) ;
+        Size = MAP_APPFONT ( 251 , 90 ) ;
         Text = "Einstellungen" ;
         Text [ English ] = "Settings" ;
         Text [ english_us ] = "Settings" ;
@@ -118,8 +118,8 @@ TabPage RID_SVXPAGE_INET_PROXY
     };
     FixedText FT_PROXYMODE
     {
-        Pos = MAP_APPFONT ( 12 , GB_TYPES_TOP + 14 ) ;
-        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , GB_TYPES_TOP + 13 ) ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
         Text = "Pro~xy Server" ;
         Text [ English ] = "Proxy S~erver" ;
         Text [ english_us ] = "Proxy S~erver" ;
@@ -144,7 +144,7 @@ TabPage RID_SVXPAGE_INET_PROXY
     };
     ListBox LB_PROXYMODE
     {
-        Pos = MAP_APPFONT ( 65 , GB_TYPES_TOP + 13 ) ;
+        Pos = MAP_APPFONT ( 65 , GB_TYPES_TOP + 11 ) ;
         Size = MAP_APPFONT ( 49 , 48 ) ;
         Border = TRUE ;
         DropDown = TRUE ;
@@ -277,8 +277,8 @@ TabPage RID_SVXPAGE_INET_PROXY
     };
     FixedText FT_HTTP_PROXY
     {
-        Pos = MAP_APPFONT ( 12 , GB_TYPES_TOP + 40 ) ;
-        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , GB_TYPES_TOP + 29 ) ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
         Text = "~Http Proxy" ;
         Text [ English ] = "Http Pro~xy" ;
         Text [ english_us ] = "~Http Proxy" ;
@@ -303,14 +303,14 @@ TabPage RID_SVXPAGE_INET_PROXY
     };
     Edit ED_HTTP_PROXY
     {
-        Pos = MAP_APPFONT ( 65 , GB_TYPES_TOP + 39 ) ;
+        Pos = MAP_APPFONT ( 65 , GB_TYPES_TOP + 27 ) ;
         Size = MAP_APPFONT ( 123 , 12 ) ;
         Border = TRUE ;
     };
     FixedText FT_HTTP_PORT
     {
-        Pos = MAP_APPFONT ( 199 , GB_TYPES_TOP + 40 ) ;
-        Size = MAP_APPFONT ( 20 , 10 ) ;
+        Pos = MAP_APPFONT ( 199 , GB_TYPES_TOP + 29 ) ;
+        Size = MAP_APPFONT ( 20 , 8 ) ;
         Text = "~Port" ;
         Text [ English ] = "~Port" ;
         Text [ english_us ] = "~Port" ;
@@ -335,14 +335,14 @@ TabPage RID_SVXPAGE_INET_PROXY
     };
     Edit ED_HTTP_PORT
     {
-        Pos = MAP_APPFONT ( 221 , GB_TYPES_TOP + 39 ) ;
+        Pos = MAP_APPFONT ( 221 , GB_TYPES_TOP + 27 ) ;
         Size = MAP_APPFONT ( 25 , 12 ) ;
         Border = TRUE ;
     };
     FixedText FT_FTP_PROXY
     {
-        Pos = MAP_APPFONT ( 12 , GB_TYPES_TOP + 55 ) ;
-        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , GB_TYPES_TOP + 45 ) ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
         Text = "~Ftp Proxy" ;
         Text [ English ] = "~Ftp Proxy" ;
         Text [ english_us ] = "~Ftp Proxy" ;
@@ -367,14 +367,14 @@ TabPage RID_SVXPAGE_INET_PROXY
     };
     Edit ED_FTP_PROXY
     {
-        Pos = MAP_APPFONT ( 65 , GB_TYPES_TOP + 54 ) ;
+        Pos = MAP_APPFONT ( 65 , GB_TYPES_TOP + 43 ) ;
         Size = MAP_APPFONT ( 123 , 12 ) ;
         Border = TRUE ;
     };
     FixedText FT_FTP_PORT
     {
-        Pos = MAP_APPFONT ( 199 , GB_TYPES_TOP + 55 ) ;
-        Size = MAP_APPFONT ( 20 , 10 ) ;
+        Pos = MAP_APPFONT ( 199 , GB_TYPES_TOP + 45 ) ;
+        Size = MAP_APPFONT ( 20 , 8 ) ;
         Text = "P~ort" ;
         Text [ English ] = "P~ort" ;
         Text [ english_us ] = "P~ort" ;
@@ -399,13 +399,13 @@ TabPage RID_SVXPAGE_INET_PROXY
     };
     Edit ED_FTP_PORT
     {
-        Pos = MAP_APPFONT ( 221 , GB_TYPES_TOP + 54 ) ;
+        Pos = MAP_APPFONT ( 221 , GB_TYPES_TOP + 43 ) ;
         Size = MAP_APPFONT ( 25 , 12 ) ;
         Border = TRUE ;
     };
     FixedText FT_SOCKS_PROXY
     {
-        Pos = MAP_APPFONT ( 12 , GB_TYPES_TOP + 70 ) ;
+        Pos = MAP_APPFONT ( 12 , GB_TYPES_TOP + 61 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
         Text = "~Socks Proxy" ;
         Text [ English ] = "~Socks Proxy" ;
@@ -431,14 +431,14 @@ TabPage RID_SVXPAGE_INET_PROXY
     };
     Edit ED_SOCKS_PROXY
     {
-        Pos = MAP_APPFONT ( 65 , GB_TYPES_TOP + 69 ) ;
+        Pos = MAP_APPFONT ( 65 , GB_TYPES_TOP + 59 ) ;
         Size = MAP_APPFONT ( 123 , 12 ) ;
         Border = TRUE ;
     };
     FixedText FT_SOCKS_PORT
     {
-        Pos = MAP_APPFONT ( 199 , GB_TYPES_TOP + 70 ) ;
-        Size = MAP_APPFONT ( 20 , 10 ) ;
+        Pos = MAP_APPFONT ( 199 , GB_TYPES_TOP + 61 ) ;
+        Size = MAP_APPFONT ( 20 , 8 ) ;
         Text = "Po~rt" ;
         Text [ English ] = "Po~rt" ;
         Text [ english_us ] = "Po~rt" ;
@@ -463,15 +463,14 @@ TabPage RID_SVXPAGE_INET_PROXY
     };
     Edit ED_SOCKS_PORT
     {
-        Pos = MAP_APPFONT ( 221 , GB_TYPES_TOP + 69 ) ;
+        Pos = MAP_APPFONT ( 221 , GB_TYPES_TOP + 59 ) ;
         Size = MAP_APPFONT ( 25 , 12 ) ;
         Border = TRUE ;
     };
     FixedText FT_NOPROXYFOR
     {
-        Pos = MAP_APPFONT ( 12 , GB_TYPES_TOP + 111 ) ;
-        Size = MAP_APPFONT ( 50 , 10 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? ~Kein Proxy f¸r : ~Kein Proxy f≥r */
+        Pos = MAP_APPFONT ( 12 , GB_TYPES_TOP + 77 ) ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
         Text = "~Kein Proxy f¸r" ;
         Text [ English ] = "~No Proxy for" ;
         Text [ dutch ] = "~Geen Proxy voor:" ;
@@ -496,13 +495,13 @@ TabPage RID_SVXPAGE_INET_PROXY
     };
     Edit ED_NOPROXYFOR
     {
-        Pos = MAP_APPFONT ( 65 , GB_TYPES_TOP + 110 ) ;
+        Pos = MAP_APPFONT ( 65 , GB_TYPES_TOP + 75 ) ;
         Size = MAP_APPFONT ( 123 , 12 ) ;
         Border = TRUE ;
     };
     FixedText ED_NOPROXYDESC
     {
-        Pos = MAP_APPFONT ( 194 , GB_TYPES_TOP + 111 ) ;
+        Pos = MAP_APPFONT ( 194 , GB_TYPES_TOP + 77 ) ;
         Size = MAP_APPFONT ( 52 , 8 ) ;
         Text = "Trennzeichen ;" ;
         Text [ English ] = "Separator ;" ;
@@ -546,7 +545,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
 {
     HelpId = HID_OPTIONS_SEARCH ;
     OutputSize = TRUE ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     SVLook = TRUE ;
     Hide = TRUE ;
     Text = "Suche" ;
@@ -1175,7 +1174,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
 TabPage RID_SVXPAGE_BROWSER_OTHER
 {
     OutputSize = TRUE ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     SVLook = TRUE ;
     Hide = TRUE ;
     Text = "Sonstiges" ;
@@ -1199,19 +1198,19 @@ TabPage RID_SVXPAGE_BROWSER_OTHER
     Text[ korean ] = "±‚≈∏";
 
     #define GB_JAVA_X 6
-    #define GB_JAVA_Y 2
+    #define GB_JAVA_Y 3
 
     GroupBox GB_JAVA
     {
         Pos = MAP_APPFONT ( GB_JAVA_X , GB_JAVA_Y ) ;
-        Size = MAP_APPFONT ( 171 , 70 ) ;
+        Size = MAP_APPFONT ( 248 , 70 ) ;
         Text = "Java" ;
     };
     CheckBox CB_ENABLEJAVA
     {
-        Pos = MAP_APPFONT ( GB_JAVA_X + 6 , GB_JAVA_Y + 10 ) ;
+        Pos = MAP_APPFONT ( GB_JAVA_X + 6 , GB_JAVA_Y + 11 ) ;
         Size = MAP_APPFONT ( 159 , 10 ) ;
-        Text = "~freischalten" ;
+        Text = "~Freischalten" ;
         Text [ English ] = "~Enable" ;
         Text [ english_us ] = "~Enable" ;
         Text [ italian ] = "A~bilita" ;
@@ -1235,7 +1234,7 @@ TabPage RID_SVXPAGE_BROWSER_OTHER
     };
     CheckBox CB_JAVASECURITY
     {
-        Pos = MAP_APPFONT ( GB_JAVA_X + 6 , GB_JAVA_Y + 23 ) ;
+        Pos = MAP_APPFONT ( GB_JAVA_X + 6 , GB_JAVA_Y + 24 ) ;
         Size = MAP_APPFONT ( 159 , 10 ) ;
         Text = "S~icherheits¸berpr¸fungen";
         Text [ English ] = "Enable ~security checks";
@@ -1261,8 +1260,8 @@ TabPage RID_SVXPAGE_BROWSER_OTHER
     };
     FixedText FT_NETACCESS
     {
-        Pos = MAP_APPFONT ( GB_JAVA_X + 6 , GB_JAVA_Y + 36 ) ;
-        Size = MAP_APPFONT ( 42 , 10 ) ;
+        Pos = MAP_APPFONT ( GB_JAVA_X + 6 , GB_JAVA_Y + 39 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
         Text = "~Netzzugriff" ;
         Text [ English ] = "~Netaccess" ;
         Text [ english_us ] = "Net ~access" ;
@@ -1287,8 +1286,8 @@ TabPage RID_SVXPAGE_BROWSER_OTHER
     };
     ListBox LB_NETACCESS
     {
-        Pos = MAP_APPFONT ( GB_JAVA_X + 51 , GB_JAVA_Y + 35 ) ;
-        Size = MAP_APPFONT ( 72 , 48 ) ;
+        Pos = MAP_APPFONT ( GB_JAVA_X + 128 , GB_JAVA_Y + 36 ) ;
+        Size = MAP_APPFONT ( 100 , 48 ) ;
         Border = TRUE ;
         DropDown = TRUE ;
         StringList =
@@ -1420,8 +1419,8 @@ TabPage RID_SVXPAGE_BROWSER_OTHER
     };
     FixedText FT_CLASSPATH
     {
-        Pos = MAP_APPFONT ( GB_JAVA_X + 6 , GB_JAVA_Y + 52 ) ;
-        Size = MAP_APPFONT ( 42 , 10 ) ;
+        Pos = MAP_APPFONT ( GB_JAVA_X + 6 , GB_JAVA_Y + 54 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
         Text = "~ClassPath" ;
         Text [ English ] = "~ClassPath" ;
         Text [ english_us ] = "~Class path" ;
@@ -1446,24 +1445,24 @@ TabPage RID_SVXPAGE_BROWSER_OTHER
     };
     Edit ED_CLASSPATH
     {
-        Pos = MAP_APPFONT ( GB_JAVA_X + 51 , GB_JAVA_Y + 51 ) ;
-        Size = MAP_APPFONT ( 97 , 12 ) ;
+        Pos = MAP_APPFONT ( GB_JAVA_X + 58 , GB_JAVA_Y + 52 ) ;
+        Size = MAP_APPFONT ( 170 , 12 ) ;
         Border = TRUE ;
     };
     PushButton PB_CLASSPATH
     {
-        Pos = MAP_APPFONT ( GB_JAVA_X + 151 , GB_JAVA_Y + 50 ) ;
+        Pos = MAP_APPFONT ( GB_JAVA_X + 231 , GB_JAVA_Y + 51 ) ;
         Size = MAP_APPFONT ( 14 , 14 ) ;
         Text = "~...";
     };
 
-    #define GB_EXECUTE_X 183
-    #define GB_EXECUTE_Y 2
+    #define GB_EXECUTE_X 6
+    #define GB_EXECUTE_Y 76
 
     GroupBox GB_EXECUTE
     {
         Pos = MAP_APPFONT ( GB_EXECUTE_X , GB_EXECUTE_Y ) ;
-        Size = MAP_APPFONT ( 71 , 33 ) ;
+        Size = MAP_APPFONT ( 121 , 24 ) ;
         Text = "PlugIns" ;
         Text [ English ] = "PlugIns" ;
         Text [ english_us ] = "Plug-Ins" ;
@@ -1488,9 +1487,9 @@ TabPage RID_SVXPAGE_BROWSER_OTHER
     };
     CheckBox CB_EXECUTE_PLUGINS
     {
-        Pos = MAP_APPFONT ( GB_EXECUTE_X + 6 , GB_EXECUTE_Y + 13 ) ;
-        Size = MAP_APPFONT ( 59 , 10 ) ;
-        Text = "f~reischalten" ;
+        Pos = MAP_APPFONT ( GB_EXECUTE_X + 6 , GB_EXECUTE_Y + 11 ) ;
+        Size = MAP_APPFONT ( 100 , 10 ) ;
+        Text = "F~reischalten" ;
         Text [ English ] = "~enable" ;
         Text [ english_us ] = "E~nable" ;
         Text [ portuguese_brazilian ] = "~Plugins" ;
@@ -1513,13 +1512,13 @@ TabPage RID_SVXPAGE_BROWSER_OTHER
         Text[ language_user1 ] = " ";
     };
 
-    #define GB_EXECUTE_APPLETS_X 183
-    #define GB_EXECUTE_APPLETS_Y 39
+    #define GB_EXECUTE_APPLETS_X 133
+    #define GB_EXECUTE_APPLETS_Y 76
 
     GroupBox GB_EXECUTE_APPLETS
     {
         Pos = MAP_APPFONT ( GB_EXECUTE_APPLETS_X , GB_EXECUTE_APPLETS_Y ) ;
-        Size = MAP_APPFONT ( 71 , 33 ) ;
+        Size = MAP_APPFONT ( 121 , 24 ) ;
         Text = "Applets" ;
         Text [ English ] = "Applets" ;
         Text [ english_us ] = "Applets" ;
@@ -1545,8 +1544,8 @@ TabPage RID_SVXPAGE_BROWSER_OTHER
 
     CheckBox CB_EXECUTE_APPLETS
     {
-        Pos = MAP_APPFONT ( GB_EXECUTE_APPLETS_X + 6 , GB_EXECUTE_APPLETS_Y + 13 ) ;
-        Size = MAP_APPFONT ( 59 , 10 ) ;
+        Pos = MAP_APPFONT ( GB_EXECUTE_APPLETS_X + 6 , GB_EXECUTE_APPLETS_Y + 11 ) ;
+        Size = MAP_APPFONT ( 100 , 10 ) ;
         Text = "freisch~alten" ;
         Text [ English ] = "~enable" ;
         Text [ english_us ] = "Enab~le" ;
@@ -1584,7 +1583,7 @@ TabPage RID_SVXPAGE_BROWSER_OTHER
 TabPage RID_SVXPAGE_INET_OTHER
 {
     OutputSize = TRUE ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     SVLook = TRUE ;
     Hide = TRUE ;
     Text = "Protokolle" ;
@@ -1631,7 +1630,7 @@ TabPage RID_SVXPAGE_INET_OTHER
     };
     RadioButton RB_DNS_AUTO
     {
-        Pos = MAP_APPFONT( 12, 13 );
+        Pos = MAP_APPFONT( 12, 14 );
         Size = MAP_APPFONT( 236, 10 );
         Text = "~Automatisch" ;
         Text [ English ] = "~Auto" ;
@@ -1657,7 +1656,7 @@ TabPage RID_SVXPAGE_INET_OTHER
     };
     RadioButton RB_DNS_MANUAL
     {
-        Pos = MAP_APPFONT( 12, 24 );
+        Pos = MAP_APPFONT( 12, 29 );
         Size = MAP_APPFONT( 75, 10 );
         Text = "~Manuell" ;
         Text [ English ] = "~Manual" ;
@@ -1683,7 +1682,7 @@ TabPage RID_SVXPAGE_INET_OTHER
     };
     PatternField ED_DNS
     {
-        Pos = MAP_APPFONT( 90, 25 );
+        Pos = MAP_APPFONT( 90, 27 );
         Size = MAP_APPFONT( 66, 12 );
         Border = TRUE ;
         LiteralMask = "   .   .   .   " ;
@@ -1693,7 +1692,7 @@ TabPage RID_SVXPAGE_INET_OTHER
     GroupBox GB_SERVER
     {
         Pos = MAP_APPFONT ( 6 , 45 ) ;
-        Size = MAP_APPFONT ( 248 , 24 ) ;
+        Size = MAP_APPFONT ( 248 , 26 ) ;
         Text = "Mail-Server" ;
         Text [ English ] = "Mail server" ;
         Text [ english_us ] = "Mail Server" ;
@@ -1718,7 +1717,7 @@ TabPage RID_SVXPAGE_INET_OTHER
     };
     FixedText FT_SEND
     {
-        Pos = MAP_APPFONT ( 12 , 55 ) ;
+        Pos = MAP_APPFONT ( 12 , 58 ) ;
         Size = MAP_APPFONT ( 75 , 10 ) ;
         Text = "~Nachrichtenversand" ;
         Text [ English ] = "Message ~dispatch " ;
@@ -1744,7 +1743,7 @@ TabPage RID_SVXPAGE_INET_OTHER
     };
     Edit ED_SEND
     {
-        Pos = MAP_APPFONT ( 90 , 54 ) ;
+        Pos = MAP_APPFONT ( 90 , 56 ) ;
         Size = MAP_APPFONT ( 96 , 12 ) ;
         Border = TRUE ;
     };
@@ -1811,7 +1810,7 @@ TabPage RID_SVXPAGE_INET_OTHER
 TabPage RID_SVXPAGE_INET_SCRIPTING
 {
     OutputSize = TRUE ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     SVLook = TRUE ;
     Hide = TRUE ;
     Text = "Scripting" ;
@@ -1830,8 +1829,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
     GroupBox GB_SCRIPT_EXEC
     {
         Pos = MAP_APPFONT ( GB_SCRIPT_EXEC_X , GB_SCRIPT_EXEC_Y ) ;
-        Size = MAP_APPFONT ( 171 , 126 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? Star Basic-Scripts ausf¸hren von : Star Basic-Scripts ausf≥hren von */
+        Size = MAP_APPFONT ( 248 , 107 ) ;
         Text = "StarBasic-Scripts ausf¸hren von" ;
         Text [ English ] = "Execute StarBasic Scripts from" ;
         Text [ english_us ] = "Execute %PRODUCTNAME Basic Scripts from" ;
@@ -1856,22 +1854,21 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
     };
     Edit ED_SCRIPT_EXEC
     {
-        Pos = MAP_APPFONT ( GB_SCRIPT_EXEC_X + 6 , GB_SCRIPT_EXEC_Y + 10 ) ;
-        Size = MAP_APPFONT ( 159 , 12 ) ;
+        Pos = MAP_APPFONT ( GB_SCRIPT_EXEC_X + 6 , GB_SCRIPT_EXEC_Y + 11 ) ;
+        Size = MAP_APPFONT ( 186 , 12 ) ;
         Border = TRUE ;
     };
     ListBox LB_SCRIPT_EXEC
     {
-        Pos = MAP_APPFONT ( GB_SCRIPT_EXEC_X + 8 , GB_SCRIPT_EXEC_Y + 24 ) ;
-        Size = MAP_APPFONT ( 156 , 77 ) ;
+        Pos = MAP_APPFONT ( GB_SCRIPT_EXEC_X + 8 , GB_SCRIPT_EXEC_Y + 25 ) ;
+        Size = MAP_APPFONT ( 183 , 63 ) ;
         Border = TRUE ;
         Sort = TRUE ;
     };
     PushButton PB_SCRIPT_INSERT
     {
-        Pos = MAP_APPFONT ( GB_SCRIPT_EXEC_X + 8 , GB_SCRIPT_EXEC_Y + 106 ) ;
+        Pos = MAP_APPFONT ( 201 , GB_SCRIPT_EXEC_Y + 11 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? H~inzuf¸gen : H~inzuf≥gen */
         Text = "H~inzuf¸gen" ;
         Text [ English ] = "A~dd" ;
         Text [ english_us ] = "~Add" ;
@@ -1896,9 +1893,8 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
     };
     PushButton PB_SCRIPT_DELETE
     {
-        Pos = MAP_APPFONT ( GB_SCRIPT_EXEC_X + 61 , GB_SCRIPT_EXEC_Y + 106 ) ;
+        Pos = MAP_APPFONT ( 201 , GB_SCRIPT_EXEC_Y + 28 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? ~Lˆschen : ~L˜schen */
         Text = "~Lˆschen" ;
         Text [ English ] = "~Delete" ;
         Text [ english_us ] = "~Delete" ;
@@ -1923,7 +1919,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
     };
     PushButton PB_SCRIPT_DEFAULT
     {
-        Pos = MAP_APPFONT ( GB_SCRIPT_EXEC_X + 114 , GB_SCRIPT_EXEC_Y + 106 ) ;
+        Pos = MAP_APPFONT ( 201 , GB_SCRIPT_EXEC_Y + 45 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text = "~Standard" ;
         Text [ English ] = "D~efault" ;
@@ -1947,12 +1943,12 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ turkish ] = "Standart";
         Text[ language_user1 ] = " ";
     };
-                                    #define GB_SCRIPTING_X 181
-                                    #define GB_SCRIPTING_Y 3
+                                    #define GB_SCRIPTING_X 6
+                                    #define GB_SCRIPTING_Y 113
     GroupBox GB_STARBASIC
     {
         Pos = MAP_APPFONT ( GB_SCRIPTING_X , GB_SCRIPTING_Y ) ;
-        Size = MAP_APPFONT ( 73 , 126 ) ;
+        Size = MAP_APPFONT ( 248 , 69 ) ;
         Text = "StarBasic-Script" ;
         Text [ English ] = "StarBasic Script" ;
         Text [ english_us ] = "%PRODUCTNAME Basic Script" ;
@@ -1977,9 +1973,8 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
     };
     RadioButton RBT_STARBASIC_ALWAYS
     {
-        Pos = MAP_APPFONT ( GB_SCRIPTING_X + 3 , GB_SCRIPTING_Y + 10 ) ;
-        Size = MAP_APPFONT ( 69 , 10 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? i~mmer ausf¸hren : i~mmer ausf≥hren */
+        Pos = MAP_APPFONT ( GB_SCRIPTING_X + 6 , GB_SCRIPTING_Y + 11 ) ;
+        Size = MAP_APPFONT ( 150 , 10 ) ;
         Text = "i~mmer ausf¸hren" ;
         Text [ English ] = "execute ~always" ;
         Text [ english_us ] = "Always e~xecute" ;
@@ -2004,9 +1999,8 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
     };
     RadioButton RBT_STARBASIC_LIST
     {
-        Pos = MAP_APPFONT ( GB_SCRIPTING_X + 3 , GB_SCRIPTING_Y + 20 ) ;
-        Size = MAP_APPFONT ( 69 , 10 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? ~gem‰ﬂ Liste : ~gemıò Liste */
+        Pos = MAP_APPFONT ( GB_SCRIPTING_X + 6 , GB_SCRIPTING_Y + 24 ) ;
+        Size = MAP_APPFONT ( 150 , 10 ) ;
         Text = "~gem‰ﬂ Liste" ;
         Text [ English ] = "like ~list" ;
         Text [ english_us ] = "~From list" ;
@@ -2031,9 +2025,8 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
     };
     RadioButton RBT_STARBASIC_NEVER
     {
-        Pos = MAP_APPFONT ( GB_SCRIPTING_X + 3 , GB_SCRIPTING_Y + 30 ) ;
+        Pos = MAP_APPFONT ( GB_SCRIPTING_X + 6 , GB_SCRIPTING_Y + 37 ) ;
         Size = MAP_APPFONT ( 69 , 10 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? ~nie ausf¸hren : ~nie ausf≥hren */
         Text = "~nie ausf¸hren" ;
         Text [ English ] = "execute ~never" ;
         Text [ english_us ] = "~Never execute" ;
@@ -2058,11 +2051,10 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
     };
     FixedText FI_STARBASIC_DISCRIPTION_ALWAYS
     {
-        Pos = MAP_APPFONT ( GB_SCRIPTING_X + 3 , GB_SCRIPTING_Y + 42 ) ;
-        Size = MAP_APPFONT ( 64 , 75 ) ;
+        Pos = MAP_APPFONT ( GB_SCRIPTING_X + 6 , GB_SCRIPTING_Y + 50 ) ;
+        Size = MAP_APPFONT ( 240 , 16 ) ;
         WordBreak = TRUE ;
         Hide = TRUE ;
-        /* ### ACHTUNG: Neuer Text in Resource? ACHTUNG: StarBasic-Scripte aus dem Internet werden ohne ‹berpr¸fung ausgef¸hrt! : ACHTUNG: StarBasic-Scripte aus dem Internet werden ohne öberpr≥fung ausgef≥hrt! */
         Text = "ACHTUNG: StarBasic-Scripte aus dem Internet werden ohne ‹berpr¸fung ausgef¸hrt!" ;
         Text [ English ] = "ATTENTION: StarBasic scripts from the Internet will be executet without check!" ;
         Text [ english_us ] = "NOTE: %PRODUCTNAME Basic scripts from the Internet will be executed without confirming!" ;
@@ -2087,11 +2079,10 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
     };
     FixedText FI_STARBASIC_DISCRIPTION_LIST
     {
-        Pos = MAP_APPFONT ( GB_SCRIPTING_X + 3 , GB_SCRIPTING_Y + 42 ) ;
-        Size = MAP_APPFONT ( 64 , 75 ) ;
+        Pos = MAP_APPFONT ( GB_SCRIPTING_X + 6 , GB_SCRIPTING_Y + 50 ) ;
+        Size = MAP_APPFONT ( 240 , 16 ) ;
         WordBreak = TRUE ;
         Hide = TRUE ;
-        /* ### ACHTUNG: Neuer Text in Resource? StarBasic-Scripte werden nur aus Verzeichnissen der Liste ausgef¸hrt. : StarBasic-Scripte werden nur aus Verzeichnissen der Liste ausgef≥hrt. */
         Text = "StarBasic-Scripte werden nur aus Verzeichnissen der Liste ausgef¸hrt." ;
         Text [ English ] = "StarBasic scripts will be executet only from directories from the list." ;
         Text [ english_us ] = "%PRODUCTNAME Basic scripts will be executed only from directories in the list." ;
@@ -2116,11 +2107,10 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
     };
     FixedText FI_STARBASIC_DISCRIPTION_NEVER
     {
-        Pos = MAP_APPFONT ( GB_SCRIPTING_X + 3 , GB_SCRIPTING_Y + 42 ) ;
-        Size = MAP_APPFONT ( 64 , 75 ) ;
+        Pos = MAP_APPFONT ( GB_SCRIPTING_X + 6 , GB_SCRIPTING_Y + 50 ) ;
+        Size = MAP_APPFONT ( 240 , 16 ) ;
         WordBreak = TRUE ;
         Hide = TRUE ;
-        /* ### ACHTUNG: Neuer Text in Resource? Es werden kein StarBasic-Scripte ausgef¸hrt. : Es werden kein StarBasic-Scripte ausgef≥hrt. */
         Text = "Es werden kein StarBasic-Scripte ausgef¸hrt." ;
         Text [ English ] = "StarBasic scripts won't be executed." ;
         Text [ english_us ] = "%PRODUCTNAME Basic scripts won't be executed." ;
@@ -2152,412 +2142,6 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
     Text[ greek ] = "Scripting";
     Text[ korean ] = "Ω∫≈©∏≥∆√";
     Text[ turkish ] = "Scripting";
-    Text[ language_user1 ] = " ";
-};
-/************************************************************************/
-/*                                                                      */
-/*  SSLSite Configuration                                               */
-/*                                                                      */
-/************************************************************************/
-TabPage RID_SVXPAGE_INET_SSLSITE
-{
-    HelpId = HID_OPTIONS_SSLSITE ;
-    OutputSize = TRUE ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
-    SVLook = TRUE ;
-    Hide = TRUE ;
-    Text = "Site Zertifikate" ;
-    Text [ English ] = "Site Certificates" ;
-    Text [ dutch ] = "Site certificaten" ;
-    Text [ english_us ] = "Site Certificates" ;
-    Text [ swedish ] = "Webbplatscertifikat" ;
-    Text [ danish ] = "Site beviser" ;
-    Text [ italian ] = "Certificati di sito" ;
-    Text [ spanish ] = "Certificados de sitios" ;
-    Text [ french ] = "Certificats de site" ;
-    Text [ portuguese ] = "Certificados de Site" ;
-    Text [ portuguese_brazilian ] = "Site Zertifikate" ;
-                                    #define GB_SITE_CERT_X 6
-                                    #define GB_SITE_CERT_Y 3
-    GroupBox GB_SITECERT
-    {
-        Pos = MAP_APPFONT ( GB_SITE_CERT_X , GB_SITE_CERT_Y ) ;
-        Size = MAP_APPFONT ( 248 , 130 ) ;
-        Text = "Akzeptierte Site Zertifikate" ;
-        Text [ English ] = "Accepted Site Certificates" ;
-        Text [ dutch ] = "Geaccepteerde Site-certificaten" ;
-        Text [ english_us ] = "Accepted site certificates" ;
-        Text [ swedish ] = "Accepterade webbplatscertifikat" ;
-        Text [ danish ] = "Accepter site beviser" ;
-        Text [ italian ] = "Accetta certificati di sito" ;
-        Text [ spanish ] = "Certificado de sitios aceptados" ;
-        Text [ french ] = "Certificats de site acceptÈs" ;
-        Text [ portuguese ] = "Certificados de sites aceites" ;
-        Text [ portuguese_brazilian ] = "Akzeptierte Site Zertifikate" ;
-        Text[ chinese_simplified ] = "“—æ≠Ω” ‹µƒ’æµ„÷§ È";
-        Text[ russian ] = "œËÁÌ‡ÌÌ˚Â ÒÂÚËÙËÍ‡Ú˚ ÛÁÎ‡";
-        Text[ polish ] = "Zaakceptowane certyfikaty Site";
-        Text[ japanese ] = "è≥îFÇ≥ÇÍÇΩª≤ƒèÿñæ";
-        Text[ chinese_traditional ] = "§w∏g±µ®¸™∫Ø∏¬I√“Æ—";
-        Text[ arabic ] = "‘Â«œ«  ’›Õ«  „ﬁ»Ê·…";
-        Text[ greek ] = "¡Ô‰Ô˜ﬁ ÈÛÙÔÔÈÁÙÈÍ˛Ì ÙÔÔËÂÛﬂ·Ú";
-        Text[ korean ] = "¿Œ¡§πﬁ¿∫ ªÁ¿Ã∆Æ ¿Œ¡ıº≠";
-        Text[ turkish ] = "Kabul edilen site sertifikalar˝";
-        Text[ language_user1 ] = " ";
-    };
-    ListBox LB_SITECERT
-    {
-        Pos = MAP_APPFONT ( GB_SITE_CERT_X + 6 , GB_SITE_CERT_Y + 12 ) ;
-        Size = MAP_APPFONT ( 130 , 95 ) ;
-        Border = TRUE ;
-        DropDown = FALSE ;
-    };
-    ListBox LB_FILTERCERT
-    {
-        Pos = MAP_APPFONT ( GB_SITE_CERT_X + 6 , GB_SITE_CERT_Y + 110 ) ;
-        Size = MAP_APPFONT ( 130 , 48 ) ;
-        Border = TRUE ;
-        DropDown = TRUE ;
-        StringList =
-        {
-            < "Alle Zertifikate" ; > ;
-            < "Site Zertifikate" ; > ;
-            /* ### ACHTUNG: Neuer Eintrag in Liste? 3 : Zertifikatbehˆrde*/
-            < "Zertifikatbehˆrde" ; > ;
-        };
-        StringList [ English ] =
-        {
-            < "Alle Zertifikate" ; > ;
-            < "Site Zertifikate" ; > ;
-            < "Zertifikatbehˆrde" ; > ;
-        };
-        stringlist [ english_us ] =
-        {
-            < "All Certificates" ; > ;
-            < "Site Certificate" ; > ;
-            < "Certificate Issuer" ; > ;
-        };
-        stringlist [ portuguese_brazilian ] =
-        {
-            < "Alle Zertifikate" ; > ;
-            < "Site Zertifikate" ; > ;
-            < "Zertifikatbehˆrde" ; > ;
-        };
-        stringlist [ swedish ] =
-        {
-            < "Alla certifikat" ; > ;
-            < "Webbplatscertifikat" ; > ;
-            < "Certifikatsutf‰rdare" ; > ;
-        };
-        stringlist [ danish ] =
-        {
-            < "Alle beviser" ; > ;
-            < "Site beviser" ; > ;
-            < "Bevisudsteder" ; > ;
-        };
-        stringlist [ italian ] =
-        {
-            < "Tutti i certificati" ; > ;
-            < "Certificati di sito" ; > ;
-            < "Ufficio di certificazione" ; > ;
-        };
-        stringlist [ spanish ] =
-        {
-            < "Todos los certificados" ; > ;
-            < "Certificado de sitio" ; > ;
-            < "Autoridad del certificado" ; > ;
-        };
-        stringlist [ french ] =
-        {
-            < "Tous les certificats" ; > ;
-            < "Certificats de site" ; > ;
-            < "…metteur du certification" ; > ;
-        };
-        stringlist [ dutch ] =
-        {
-            < "Alle certificaten" ; > ;
-            < "Site certificaten" ; > ;
-            < "Certificatenbeheer" ; > ;
-        };
-        stringlist [ portuguese ] =
-        {
-            < "Todos os certificados" ; > ;
-            < "Certificados de Site" ; > ;
-            < "Autoridade emitente" ; > ;
-        };
-    StringList [ chinese_simplified ] =
-    {
-            < "À˘”–µƒ÷§ È" ; > ;
-        < "’æµ„÷§ È" ; > ;
-        < "∑¢÷§ª˙πÿ" ; > ;
-    };
-    StringList [ russian ] =
-    {
-            < "¬ÒÂ ÒÂÚËÙËÍ‡Ú˚" ; > ;
-        < "—ÂÚËÙËÍ‡Ú˚ ÛÁÎ‡" ; > ;
-        < "”˜ÂÊ‰ÂÌËÂ, ‚˚‰‡‚¯ÂÂ ÒÂÚËÙËÍ‡Ú" ; > ;
-    };
-    StringList [ polish ] =
-    {
-            < "Wszystkie certyfikaty" ; > ;
-        < "Certyfikaty Site" ; > ;
-        < "Urzπd certyfikacji" ; > ;
-    };
-    StringList [ japanese ] =
-    {
-            < "Ç∑Ç◊ÇƒÇÃèÿñæ" ; > ;
-        < "ª≤ƒèÿñæ" ; > ;
-        < "îFèÿã«" ; > ;
-    };
-    StringList [ chinese_traditional ] =
-    {
-            < "©“¶≥™∫√“Æ—" ; > ;
-        < "Ø∏¬I√“Æ—" ; > ;
-        < "µo√“æ˜Ã€" ; > ;
-    };
-    StringList [ arabic ] =
-    {
-            < "ﬂ· «·‘Â«œ« " ; > ;
-        < "‘Â«œ«  ’›Õ…" ; > ;
-        < "ÃÂ…  Õ—Ì— «·‘Â«œ…" ; > ;
-    };
-    StringList [ greek ] =
-    {
-            < "ºÎ· Ù· ÈÛÙÔÔÈÁÙÈÍ‹" ; > ;
-        < "–ÈÛÙÔÔÈÁÙÈÍ‹ ÙÔÔËÂÛﬂ·Ú" ; > ;
-        < "≈Í‰¸ÙÁÚ ÈÛÙÔÔÈÁÙÈÍÔ˝" ; > ;
-    };
-    StringList [ korean ] =
-    {
-            < "∏µÁ ¿Œ¡ıº≠" ; > ;
-        < "ªÁ¿Ã∆Æ ¿Œ¡ıº≠" ; > ;
-        < "¿Œ¡ıº≠ πﬂ±ﬁ√≥" ; > ;
-    };
-    StringList [ turkish ] =
-    {
-            < "T¸m sertifikalar" ; > ;
-        < "Site sertifikalar˝" ; > ;
-        < "Sertifika d¸zenleyen" ; > ;
-    };
-    StringList [ language_user1 ] =
-    {
-            < " " ; > ;
-        < " " ; > ;
-        < " " ; > ;
-    };
-    };
-    PushButton PB_EDIT_CERT
-    {
-        Pos = MAP_APPFONT ( GB_SITE_CERT_X + 192 , GB_SITE_CERT_Y + 90 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text = "~Bearbeiten..." ;
-        Text [ English ] = "~Edit..." ;
-        Text [ english_us ] = "~Edit..." ;
-        Text [ swedish ] = "~Redigera..." ;
-        Text [ danish ] = "Rediger..." ;
-        Text [ italian ] = "Modifica..." ;
-        Text [ spanish ] = "~Editar..." ;
-        Text [ french ] = "~Modifier..." ;
-        Text [ dutch ] = "~Bewerken..." ;
-        Text [ portuguese_brazilian ] = "Bearbeiten..." ;
-        Text [ portuguese ] = "~Editar..." ;
-        Text[ chinese_simplified ] = "±‡º≠(~E)...";
-        Text[ russian ] = "œ‡‚Í‡...";
-        Text[ polish ] = "Edytuj...";
-        Text[ japanese ] = "ï“èW(~E)...";
-        Text[ chinese_traditional ] = "ΩsøË(~E)...";
-        Text[ arabic ] = " Õ—Ì—...";
-        Text[ greek ] = "~≈ÂÓÂÒ„·Ûﬂ·...";
-        Text[ korean ] = "∆Ì¡˝(~E)...";
-        Text[ turkish ] = "D¸zenle...";
-        Text[ language_user1 ] = " ";
-    };
-    PushButton PB_DELETE_CERT
-    {
-        Pos = MAP_APPFONT ( GB_SITE_CERT_X + 192 , GB_SITE_CERT_Y + 109 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? ~Lˆschen : ~L˜schen */
-        Text = "~Lˆschen" ;
-        Text [ English ] = "~Delete" ;
-        Text [ english_us ] = "~Delete" ;
-        Text [ swedish ] = "~Radera" ;
-        Text [ danish ] = "Slet" ;
-        Text [ italian ] = "E~limina" ;
-        Text [ spanish ] = "~Eliminar" ;
-        Text [ french ] = "~Supprimer" ;
-        Text [ dutch ] = "~Wissen" ;
-        Text [ portuguese_brazilian ] = "Lˆschen" ;
-        Text [ portuguese ] = "E~liminar" ;
-        Text[ chinese_simplified ] = "…æ≥˝(~D)";
-        Text[ russian ] = "”‰‡ÎËÚ¸";
-        Text[ polish ] = "UsuÒ";
-        Text[ japanese ] = "çÌèú(~D)";
-        Text[ chinese_traditional ] = "ßR∞£(~D)";
-        Text[ arabic ] = "Õ–›";
-        Text[ greek ] = "ƒÈ·„Ò·ˆﬁ";
-        Text[ korean ] = "ªË¡¶(~D)";
-        Text[ turkish ] = "Sil";
-        Text[ language_user1 ] = " ";
-    };
-    Text[ chinese_simplified ] = "’æµ„÷§ È";
-    Text[ russian ] = "—ÂÚËÙËÍ‡Ú˚ ÛÁÎ‡";
-    Text[ polish ] = "Certyfikaty Site ";
-    Text[ japanese ] = "ª≤ƒèÿñæ";
-    Text[ chinese_traditional ] = "Ø∏¬I√“Æ—";
-    Text[ arabic ] = "‘Â«œ«  ’›Õ…";
-    Text[ greek ] = "–ÈÛÙÔÔÈÁÙÈÍ‹ ÙÔÔËÂÛﬂ·Ú";
-    Text[ korean ] = "ªÁ¿Ã∆Æ ¿Œ¡ıº≠";
-    Text[ turkish ] = "Site sertifikalar˝";
-    Text[ language_user1 ] = " ";
-};
-/************************************************************************/
-/*                                                                      */
-/*  SSLPersonal Configuration                                           */
-/*                                                                      */
-/************************************************************************/
-TabPage RID_SVXPAGE_INET_SSLPERSONAL
-{
-    HelpId = HID_OPTIONS_SSLPERSONAL ;
-    OutputSize = TRUE ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
-    SVLook = TRUE ;
-    Hide = TRUE ;
-    /* ### ACHTUNG: Neuer Text in Resource? Persˆnliche Zertifikate : Pers˜nliche Zertifikate */
-    Text = "Persˆnliche Zertifikate" ;
-    Text [ English ] = "Personal Certificates" ;
-    Text [ dutch ] = "Persoonlijke certificaten" ;
-    Text [ english_us ] = "Personal Certificates" ;
-    Text [ swedish ] = "Personliga certifikat" ;
-    Text [ danish ] = "Personlige beviser" ;
-    Text [ italian ] = "Certificati personali" ;
-    Text [ spanish ] = "Certificados personales" ;
-    Text [ french ] = "Certificats personnels" ;
-    Text [ portuguese ] = "Certificados pessoais" ;
-    Text [ portuguese_brazilian ] = "Persˆnliche Zertifikate" ;
-                                    #define GB_PERS_CERT_X 6
-                                    #define GB_PERS_CERT_Y 3
-    GroupBox GB_PERSCERT
-    {
-        Pos = MAP_APPFONT ( GB_PERS_CERT_X , GB_PERS_CERT_Y ) ;
-        Size = MAP_APPFONT ( 248 , 130 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? Ihre persˆnlichen Zertifikate : Ihre pers˜nlichen Zertifikate */
-        Text = "Ihre persˆnlichen Zertifikate" ;
-        Text [ English ] = "Your Personal Certificates" ;
-        Text [ dutch ] = "Uw persoonlijke certificaten" ;
-        Text [ english_us ] = "Your personal certificates" ;
-        Text [ swedish ] = "Dina personliga certifikat" ;
-        Text [ danish ] = "Dine personlige beviser" ;
-        Text [ italian ] = "I propri certificati personali" ;
-        Text [ spanish ] = "Sus certificados personales" ;
-        Text [ french ] = "Vos certificats personnels" ;
-        Text [ portuguese ] = "Os seus certificados pessoais" ;
-        Text [ portuguese_brazilian ] = "Ihre persˆnlichen Zertifikate" ;
-        Text[ chinese_simplified ] = "ƒ˙µƒ∏ˆ»À÷§ È";
-        Text[ russian ] = "¬‡¯Ë ÎË˜Ì˚Â ÒÂÚËÙËÍ‡Ú˚";
-        Text[ polish ] = "PaÒskie osobiste certyfikaty";
-        Text[ japanese ] = "Ç®ãqólÇÃå¬êlèÿñæ";
-        Text[ chinese_traditional ] = "±z™∫≠”§H√“Æ—";
-        Text[ arabic ] = "‘Â«œ« ﬂ «·Œ«’…";
-        Text[ greek ] = "‘· ÒÔÛ˘ÈÍ‹ Û·Ú ÈÛÙÔÔÈÁÙÈÍ‹";
-        Text[ korean ] = "∞≥¿Œ ¿Œ¡ıº≠";
-        Text[ turkish ] = "÷zel sertifikalar˝n˝z";
-        Text[ language_user1 ] = " ";
-    };
-    ListBox LB_PERSCERT
-    {
-        Pos = MAP_APPFONT ( GB_PERS_CERT_X + 6 , GB_PERS_CERT_Y + 12 ) ;
-        Size = MAP_APPFONT ( 130 , 95 ) ;
-        Border = TRUE ;
-        DropDown = FALSE ;
-    };
-    PushButton PB_INFO_PERSCERT
-    {
-        Pos = MAP_APPFONT ( GB_PERS_CERT_X + 192 , GB_PERS_CERT_Y + 90 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text = "~Mehr Info..." ;
-        Text [ English ] = "~More Info..." ;
-        Text [ english_us ] = "~More Info..." ;
-        Text [ swedish ] = "~Mer info..." ;
-        Text [ danish ] = "Mere info..." ;
-        Text [ italian ] = "Pi˘ info..." ;
-        Text [ spanish ] = "~M·s informaciÛn..." ;
-        Text [ french ] = "Pl~us d'infos..." ;
-        Text [ dutch ] = "~Meer info..." ;
-        Text [ portuguese_brazilian ] = "Mehr Info..." ;
-        Text [ portuguese ] = "Mais informaÁıes...." ;
-        Text[ chinese_simplified ] = "∆‰À˚–≈œ¢(~M)...";
-        Text[ russian ] = "¡ÓÎ¸¯Â ËÌÙÓÏ‡ˆËË...";
-        Text[ polish ] = "WiÍcej informacji...";
-        Text[ japanese ] = "í«â¡èÓïÒ(~M)...";
-        Text[ chinese_traditional ] = "®‰•L∏Í∞T(~M)...";
-        Text[ arabic ] = "„“Ìœ „‰ «·„⁄·Ê„« ...";
-        Text[ greek ] = "–ÂÒÈÛÛ¸ÙÂÒÂÚ ÎÁÒÔˆÔÒﬂÂÚ...";
-        Text[ korean ] = "¿⁄ºº«— ¡§∫∏(~M)...";
-        Text[ turkish ] = "Ek bilgi...";
-        Text[ language_user1 ] = " ";
-    };
-    PushButton PB_DELETE_PERSCERT
-    {
-        Pos = MAP_APPFONT ( GB_PERS_CERT_X + 192 , GB_PERS_CERT_Y + 109 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? ~Lˆschen : ~L˜schen */
-        Text = "~Lˆschen" ;
-        Text [ English ] = "~Delete" ;
-        Text [ english_us ] = "~Delete" ;
-        Text [ swedish ] = "~Radera" ;
-        Text [ danish ] = "Slet" ;
-        Text [ italian ] = "Elimina" ;
-        Text [ spanish ] = "~Eliminar" ;
-        Text [ french ] = "~Supprimer" ;
-        Text [ dutch ] = "~Wissen" ;
-        Text [ portuguese_brazilian ] = "Lˆschen" ;
-        Text [ portuguese ] = "E~liminar" ;
-        Text[ chinese_simplified ] = "…æ≥˝(~D)";
-        Text[ russian ] = "”‰‡ÎËÚ¸";
-        Text[ polish ] = "UsuÒ";
-        Text[ japanese ] = "çÌèú(~D)";
-        Text[ chinese_traditional ] = "ßR∞£(~D)";
-        Text[ arabic ] = "Õ–›";
-        Text[ greek ] = "ƒÈ·„Ò·ˆﬁ";
-        Text[ korean ] = "ªË¡¶(~D)";
-        Text[ turkish ] = "Sil";
-        Text[ language_user1 ] = " ";
-    };
-    PushButton PB_NEW_PERSCERT
-    {
-        Pos = MAP_APPFONT ( GB_PERS_CERT_X + 6 , GB_PERS_CERT_Y + 110 ) ;
-        Size = MAP_APPFONT ( 130 , 14 ) ;
-        Text = "~Neues Zertifikat beantragen" ;
-        Text [ English ] = "~Obtain new Certificate" ;
-        Text [ english_us ] = "~Obtain New Certificate" ;
-        Text [ swedish ] = "Ansˆk om ~nytt certifikat" ;
-        Text [ danish ] = "Anmod om nyt bevis" ;
-        Text [ italian ] = "Richiedi nuovo certificato" ;
-        Text [ spanish ] = "Solicitar un ~nuevo certificado" ;
-        Text [ french ] = "~Demander nouveau certificat" ;
-        Text [ dutch ] = "~Nieuw certificaat aanvragen" ;
-        Text [ portuguese_brazilian ] = "Neues Zertifikat beantragen" ;
-        Text [ portuguese ] = "Solicitar novo certificado" ;
-        Text[ chinese_simplified ] = "…Í«Î–¬µƒ÷§ È(~O)";
-        Text[ russian ] = "œÓ‰‡Ú¸ Á‡ˇ‚ÎÂÌËÂ Ì‡ ÌÓ‚˚È ÒÂÚËÙËÍ‡Ú";
-        Text[ polish ] = "Z≥Ûø wniosek o nowy certyfikat";
-        Text[ japanese ] = "êVÇµÇ¢îFèÿÇÃê\\êø(~O)";
-        Text[ chinese_traditional ] = "•”Ω–∑s√“Æ—(~O)";
-        Text[ arabic ] = "«·Õ’Ê· ⁄·Ï ‘Â«œ… ÃœÌœ…";
-        Text[ greek ] = "¡ﬂÙÁÛÁ „È· ~Ì›Ô ÈÛÙÔÔÈÁÙÈÍ¸";
-        Text[ korean ] = "ªı ¿Œ¡ıº≠ Ω≈√ª(~O)";
-        Text[ turkish ] = "Yeni sertifika talebi";
-        Text[ language_user1 ] = " ";
-    };
-    Text[ chinese_simplified ] = "∏ˆ»À÷§ È";
-    Text[ russian ] = "ÀË˜Ì˚Â ÒÂÚËÙËÍ‡Ú˚";
-    Text[ polish ] = "Certyfikaty osobiste";
-    Text[ japanese ] = "å¬êlèÿñæèë";
-    Text[ chinese_traditional ] = "≠”§H√“Æ—";
-    Text[ arabic ] = "‘Â«œ«  ‘Œ’Ì…";
-    Text[ greek ] = "–ÒÔÛ˘ÈÍ‹ ÈÛÙÔÔÈÁÙÈÍ‹";
-    Text[ korean ] = "∞≥¿Œ ¿Œ¡ıº≠";
-    Text[ turkish ] = "÷zel sertifikalar";
     Text[ language_user1 ] = " ";
 };
 

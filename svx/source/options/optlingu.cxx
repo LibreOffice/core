@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optlingu.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: tl $ $Date: 2001-02-02 15:43:56 $
+ *  last change: $Author: os $ $Date: 2001-02-08 16:47:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1491,223 +1491,18 @@ void SvxLinguTabPage::HideGroups( sal_uInt16 nGrp )
     }
 #endif
 }
-
-/*-- 27.01.00 12:17:13---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-
-SvxExternalLinguTabPage::SvxExternalLinguTabPage(Window* pParent, const SfxItemSet& rSet) :
-    SfxTabPage(pParent, ResId( RID_SVXPAGE_EXTERNAL_LINGU, DIALOG_MGR() ), rSet),
-    aOptionsPB( this, ResId(PB_OPTIONS)),
-    aLinguGB(   this, ResId(GB_LINGU    )),
-    aLinguLB(   this, ResId(LB_LINGU    )),
-    aStdSpellCB(this, ResId(CB_STDSPELL)),
-    aStdThesCB( this, ResId(CB_STDTHES)),
-    aStdHyphCB( this, ResId(CB_STDHYPH)),
-    aSettingsGB(this, ResId(GB_SETTINGS))
-{
-    FreeResource();
-    Reference< lang::XMultiServiceFactory >  xMgr = ::comphelper::getProcessServiceFactory();
-    Reference< XInterface >  xInst = xMgr->createInstance(
-            C2U("com.sun.star.linguistic2.OtherLingu") );
-    xOtherLingu = Reference< XOtherLingu > (xInst, UNO_QUERY);
-    if(xOtherLingu.is())
-    {
-        sal_Int16 nLinguCount = xOtherLingu->getCount();
-        for(sal_uInt16 i = 0; i < nLinguCount; i++)
-        {
-            aLinguLB.InsertEntry(xOtherLingu->getIdentifier(i));
-        }
-        aLinguLB.SelectEntryPos(0);
-
-        aLinguLB.SetSelectHdl(LINK(this, SvxExternalLinguTabPage, LBSelectHdl_Impl));
-        aOptionsPB.SetClickHdl(LINK(this, SvxExternalLinguTabPage, OptDlgHdl_Impl));
-
-        xInst = xMgr->createInstance(
-                C2U("com.sun.star.linguistic2.LinguProperties") );
-        xLinguProps = Reference< XPropertySet > (xInst, UNO_QUERY);
-        if(xLinguProps.is())
-        {
-            Any aIndex = xLinguProps->getPropertyValue(C2U("OtherLinguIndex"));
-            sal_Int16 nIndex;
-            aIndex >>= nIndex;;
-            if(nIndex >= 0 && nIndex < nLinguCount)
-            {
-                aLinguLB.SelectEntryPos(nIndex + 1);
-
-                Any aStdSpell = xLinguProps->getPropertyValue(C2U("IsStandardSpellChecker"));
-                aStdSpellCB.Check(lcl_Bool2Any(aStdSpell));
-
-                Any aStdThes = xLinguProps->getPropertyValue(C2U("IsStandardThesaurus"));
-                aStdThesCB.Check(lcl_Bool2Any(aStdThes));
-
-                Any aStdHyph = xLinguProps->getPropertyValue(C2U("IsStandardHyphenator"));
-                aStdHyphCB.Check(lcl_Bool2Any(aStdHyph));
-            }
-
-        }
-        LBSelectHdl_Impl(&aLinguLB);
-/*
-    virtual sal_Int16           getCount() throw( RuntimeException );
-    virtual ::rtl::OUString         getIdentifier(sal_Int16 nIndex) throw( IllegalArgumentException, RuntimeException );
-    virtual sal_Bool            hasOptionDialog(sal_Int16 nIndex) throw( IllegalArgumentException, RuntimeException );
-    virtual sal_Int32           startOptionDialog(sal_Int16 nIndex, sal_Int32 pParent) throw( IllegalArgumentException, RuntimeException );
-    virtual Reference< XHyphenator >    getHyphenator(sal_Int16 nIndex) throw( IllegalArgumentException, RuntimeException );
-    virtual Reference< XSpellChecker >      getSpellChecker(sal_Int16 nIndex) throw( IllegalArgumentException, RuntimeException );
-    virtual Reference< XThesaurus >     getThesaurus(sal_Int16 nIndex) throw( IllegalArgumentException, RuntimeException );
-
-*/
-    }
-    else
-    {
-        aOptionsPB  .Enable(sal_False);
-        aLinguGB    .Enable(sal_False);
-        aLinguLB    .Enable(sal_False);
-        aStdSpellCB .Enable(sal_False);
-        aStdThesCB  .Enable(sal_False);
-        aStdHyphCB  .Enable(sal_False);
-        aSettingsGB .Enable(sal_False);
-    }
-}
-/*-- 27.01.00 12:17:13---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-SvxExternalLinguTabPage::~SvxExternalLinguTabPage()
-{
-}
-/*-- 27.01.00 12:17:14---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-SfxTabPage* SvxExternalLinguTabPage::Create( Window* pParent, const SfxItemSet& rSet )
-{
-    return new SvxExternalLinguTabPage(pParent, rSet);
-}
-/*-- 27.01.00 12:17:14---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-sal_Bool    SvxExternalLinguTabPage::FillItemSet( SfxItemSet& rSet )
-{
-    sal_uInt16 nSelectPos = aLinguLB.GetSelectEntryPos();
-    if( xLinguProps.is() &&
-        nSelectPos != aLinguLB.GetSavedValue() ||
-        (nSelectPos &&
-            (   aStdSpellCB.IsChecked() != aStdSpellCB.GetSavedValue() ||
-                aStdHyphCB.IsChecked() != aStdHyphCB.GetSavedValue() ||
-                aStdThesCB.IsChecked() != aStdThesCB.GetSavedValue())
-            )
-        )
-    {
-        sal_Int16 nTmpIndex = nSelectPos ? nSelectPos - 1: -1;
-
-        Any aOldIndex = xLinguProps->getPropertyValue(C2U("OtherLinguIndex"));
-        sal_Int16 nOldIndex;
-        aOldIndex >>= nOldIndex;
-        if (nOldIndex != nTmpIndex)
-        {
-            // force new spelling and flushing of spell caches
-            //! current implementation is a workaround until the correct
-            //! interface is implemented.
-            //TL:TODO: use XPropertyChangeListener mechanism to do this
-            Reference< XDictionary1 >  xDic( SvxGetIgnoreAllList() );
-            if (xDic.is())
-            {
-                OUString aTmp( C2U("v_7xj4") );
-                sal_Bool bOk = xDic->add( aTmp, sal_False, OUString() );
-                if (bOk)
-                    xDic->remove( aTmp );
-            }
-        }
-
-        if (xOtherLingu.is())
-            xOtherLingu->selectLinguisticByIndex( nTmpIndex );
-
-        Any aIndex;
-        aIndex <<= nTmpIndex;
-        xLinguProps->setPropertyValue(C2U("OtherLinguIndex"), aIndex);
-        if(aStdSpellCB.IsEnabled())
-        {
-            xLinguProps->setPropertyValue(C2U("IsStandardSpellChecker"),
-                    lcl_Bool2Any(aStdSpellCB.IsChecked()));
-        }
-
-        if(aStdThesCB.IsEnabled())
-        {
-            xLinguProps->setPropertyValue(C2U("IsStandardThesaurus"),
-                                lcl_Bool2Any(aStdThesCB.IsChecked()));
-        }
-
-        if(aStdHyphCB.IsEnabled())
-        {
-            xLinguProps->setPropertyValue(C2U("IsStandardHyphenator"),
-                lcl_Bool2Any(aStdHyphCB.IsChecked()));
-        }
-
-    }
-
-    // The spellchecker may have changed or an external linguistics option
-    // page may have changed relevant options or have added/deleted words from
-    // their dictionaries.
-    // Thus the only safe choice is to trigger spellchecking again.
-    //TL:TODO: should only be called if the external linguistics
-    //  option dialog was used or the item-state has changed.
-    if ( SfxViewFrame::Current() && SfxViewFrame::Current()->GetDispatcher() )
-        SfxViewFrame::Current()->GetDispatcher()->Execute( SID_SPELLCHECKER_CHANGED, SFX_CALLMODE_ASYNCHRON );
-
-    return sal_True;
-}
-/*-- 27.01.00 12:17:14---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-void    SvxExternalLinguTabPage::Reset( const SfxItemSet& rSet )
-{
-    aStdHyphCB.SaveValue();
-    aStdThesCB.SaveValue();
-    aStdSpellCB.SaveValue();
-    aLinguLB.SaveValue();
-}
-/* -----------------------------27.01.00 13:26--------------------------------
+/* -----------------------------27.01.00 12:14--------------------------------
 
  ---------------------------------------------------------------------------*/
-IMPL_LINK(SvxExternalLinguTabPage, LBSelectHdl_Impl, ListBox*, pLB)
+void SvxLinguTabPage::EnableAutoSpelling()
 {
-    if(!xOtherLingu.is())
-        return 0;
-
-    sal_uInt16 nSel = pLB->GetSelectEntryPos();
-
-    aOptionsPB.Enable(nSel > 0 && xOtherLingu->hasOptionDialog( nSel - 1));
-    sal_uInt8 nUse = 0;
-    if( nSel > 0 )
-    {
-        --nSel;
-        aStdSpellCB.Enable( xOtherLingu->hasSpellChecker(nSel) );
-        aStdThesCB.Enable( xOtherLingu->hasThesaurus(nSel) );
-        aStdHyphCB.Enable( xOtherLingu->hasHyphenator(nSel) );
-    }
-    else
-    {
-        aStdSpellCB.Enable( sal_False );
-        aStdThesCB.Enable( sal_False );
-        aStdHyphCB.Enable( sal_False );
-    }
-    return 0;
+#ifdef NEVER
+    aAutoCheckBtn.Show();
+    aMarkOffBtn.Show();
+    aAutoSpellBox.Show();
+#endif
 }
-/* -----------------------------27.01.00 13:26--------------------------------
 
- ---------------------------------------------------------------------------*/
-IMPL_LINK(SvxExternalLinguTabPage, OptDlgHdl_Impl, PushButton*, pButton)
-{
-    sal_uInt16 nSel = aLinguLB.GetSelectEntryPos();
-    if(nSel && xOtherLingu.is())
-    {
-        if(xOtherLingu->hasOptionDialog( nSel - 1 ))
-        {
-            xOtherLingu->selectLinguisticByIndex( nSel - 1 );
-            xOtherLingu->startOptionDialog( 0 );
-        }
-    }
-    return 0;
-}
 
 /*--------------------------------------------------
 --------------------------------------------------*/

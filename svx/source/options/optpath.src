@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optpath.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:23 $
+ *  last change: $Author: os $ $Date: 2001-02-08 16:47:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ TabPage RID_SFXPAGE_PATH
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Hide = TRUE ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     Text = "Pfade" ;
     Text [ English ] = "Paths" ;
     Text [ norwegian ] = "Baner" ;
@@ -152,13 +152,13 @@ TabPage RID_SFXPAGE_PATH
     Control LB_PATH
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 236 , 89 ) ;
+        Size = MAP_APPFONT ( 236 , 147 ) ;
         Border = TRUE ;
         TabStop = TRUE;
     };
     PushButton BTN_PATH
     {
-        Pos = MAP_APPFONT ( 183 , 110 ) ;
+        Pos = MAP_APPFONT ( 183 , 165 ) ;
         Size = MAP_APPFONT ( 65 , 14 ) ;
         Text = "~Bearbeiten..." ;
         Text [ English ] = "~Edit..." ;
@@ -186,7 +186,7 @@ TabPage RID_SFXPAGE_PATH
     };
     PushButton BTN_STANDARD
     {
-        Pos = MAP_APPFONT ( 115 , 110 ) ;
+        Pos = MAP_APPFONT ( 115 , 165 ) ;
         Size = MAP_APPFONT ( 65 , 14 ) ;
         Text = "~Standard" ;
         Text [ English ] = "~Standard" ;
@@ -213,7 +213,7 @@ TabPage RID_SFXPAGE_PATH
     GroupBox GB_STD
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 248 , 126 ) ;
+        Size = MAP_APPFONT ( 248 , 179 ) ;
         Text = "Standard" ;
         Text [ English ] = "Standard" ;
         Text [ norwegian ] = "Standard" ;

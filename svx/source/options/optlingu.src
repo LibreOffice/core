@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optlingu.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: os $ $Date: 2000-12-09 14:44:32 $
+ *  last change: $Author: os $ $Date: 2001-02-08 16:47:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,9 +136,9 @@ ModalDialog RID_SVXDLG_EDIT_MODULES
     FixedText FT_EDIT_MODULES_LANGUAGE
     {
         Left = TRUE ;
-        Pos = MAP_APPFONT ( 10 , 13 ) ;
-        Size = MAP_APPFONT ( 70 , 8 ) ;
-        Text = "Sprache" ;
+        Pos = MAP_APPFONT ( 12 , 16 ) ;
+        Size = MAP_APPFONT ( 68 , 8 ) ;
+        Text = "~Sprache" ;
         Text [ English ] = "Language" ;
         Text[ english_us ] = "Language";
         Text[ portuguese ] = "Language";
@@ -162,25 +162,25 @@ ModalDialog RID_SVXDLG_EDIT_MODULES
     ListBox LB_EDIT_MODULES_LANGUAGE
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 90 , 13 ) ;
-        Size = MAP_APPFONT ( 95 , 35 ) ;
+        Pos = MAP_APPFONT ( 87 , 14 ) ;
+        Size = MAP_APPFONT ( 95 , 80 ) ;
         DropDown = TRUE ;
         Sort = TRUE ;
     };
     Control CLB_EDIT_MODULES_MODULES
     {
-        Pos = MAP_APPFONT ( 10 , 30 ) ;
-        Size = MAP_APPFONT ( 175 , 60 ) ;
+        Pos = MAP_APPFONT ( 12 , 32 ) ;
+        Size = MAP_APPFONT ( 170 , 63 ) ;
         Border = TRUE ;
         TabStop = TRUE ;
     };
     PushButton PB_EDIT_MODULES_PRIO_UP
     {
-        Pos = MAP_APPFONT ( 190 , 30 ) ;
+        Pos = MAP_APPFONT ( 187 , 30 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
         Text = "Prio +" ;
-        Text [ English ] = "Prio +" ;
+        Text [ English ] = "~Prio +" ;
         Text[ english_us ] = "Move Up";
         Text[ portuguese ] = "Prio +";
         Text[ russian ] = "Ïğèîğèòåò +";
@@ -202,11 +202,11 @@ ModalDialog RID_SVXDLG_EDIT_MODULES
     };
     PushButton PB_EDIT_MODULES_PRIO_DOWN
     {
-        Pos = MAP_APPFONT ( 190 , 47 ) ;
+        Pos = MAP_APPFONT ( 187 , 47 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
         Text = "Prio -" ;
-        Text [ English ] = "Prio -" ;
+        Text [ English ] = "P~rio -" ;
         Text[ english_us ] = "Move Down";
         Text[ portuguese ] = "Prio -";
         Text[ russian ] = "Ïğèîğèòåò -";
@@ -228,10 +228,10 @@ ModalDialog RID_SVXDLG_EDIT_MODULES
     };
     PushButton PB_EDIT_MODULES_PRIO_BACK
     {
-        Pos = MAP_APPFONT ( 190 , 64 ) ;
+        Pos = MAP_APPFONT ( 187 , 64 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
-        Text = "Zurück" ;
+        Text = "~Zurück" ;
         Text [ English ] = "Back" ;
         Text[ english_us ] = "Back";
         Text[ portuguese ] = "Back";
@@ -280,18 +280,18 @@ ModalDialog RID_SVXDLG_EDIT_MODULES
     };
     Control CLB_EDIT_MODULES_DICS
     {
-        Pos = MAP_APPFONT ( 10 , 110 ) ;
-        Size = MAP_APPFONT ( 175 , 55 ) ;
+        Pos = MAP_APPFONT ( 12 , 110 ) ;
+        Size = MAP_APPFONT ( 170 , 58 ) ;
         Border = TRUE ;
         TabStop = TRUE ;
     };
     PushButton PB_EDIT_MODULES_NEW_DIC
     {
-        Pos = MAP_APPFONT ( 190 , 110 ) ;
+        Pos = MAP_APPFONT ( 187 , 110 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
-        Text = "Neu..." ;
-        Text [ English ] = "New..." ;
+        Text = "~Neu..." ;
+        Text [ English ] = "~New..." ;
         Text[ english_us ] = "New...";
         Text[ portuguese ] = "New...";
         Text[ russian ] = "Ñîçäàòü...";
@@ -313,10 +313,10 @@ ModalDialog RID_SVXDLG_EDIT_MODULES
     };
     PushButton PB_EDIT_MODULES_PRIO_EDIT_DIC
     {
-        Pos = MAP_APPFONT ( 190 , 127 ) ;
+        Pos = MAP_APPFONT ( 187 , 127 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
-        Text = "Bearbeiten..." ;
+        Text = "~Bearbeiten..." ;
         Text [ English ] = "Edit..." ;
         Text[ english_us ] = "Edit...";
         Text[ portuguese ] = "Edit...";
@@ -339,10 +339,10 @@ ModalDialog RID_SVXDLG_EDIT_MODULES
     };
     PushButton PB_EDIT_MODULES_PRIO_DEL_DIC
     {
-        Pos = MAP_APPFONT ( 190 , 144 ) ;
+        Pos = MAP_APPFONT ( 187 , 144 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
-        Text = "Löschen" ;
+        Text = "~Löschen" ;
         Text [ English ] = "Delete" ;
         Text[ english_us ] = "Delete";
         Text[ portuguese ] = "Delete";
@@ -544,11 +544,11 @@ TabPage RID_SFXPAGE_LINGU
     HelpId = HID_OPTIONS_LINGU ;
     SVLook = TRUE ;
     Hide = TRUE ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     GroupBox GB_LINGUISTIC
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 248 , 130 ) ;
+        Size = MAP_APPFONT ( 248 , 179 ) ;
         Text = "Linguistik" ;
         Text [ ENGLISH ] = "Linguistic" ;
         Text[ english_us ] = "Writing Aids";
@@ -573,9 +573,9 @@ TabPage RID_SFXPAGE_LINGU
     FixedText FT_LINGU_MODULES
     {
         Left = TRUE ;
-        Pos = MAP_APPFONT ( 10 , 13 ) ;
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 175 , 8 ) ;
-        Text = "Verfügbare Sprachmodule:" ;
+        Text = "~Verfügbare Sprachmodule:" ;
         Text [ English ] = "Available language modules:" ;
         Text[ english_us ] = "Available language modules:";
         Text[ portuguese ] = "Available language modules:";
@@ -598,14 +598,14 @@ TabPage RID_SFXPAGE_LINGU
     };
     Control CLB_LINGU_MODULES
     {
-        Pos = MAP_APPFONT ( 10 , 23 ) ;
-        Size = MAP_APPFONT ( 175 , 35 ) ;
+        Pos = MAP_APPFONT ( 12 , 25 ) ;
+        Size = MAP_APPFONT ( 183 , 35 ) ;
         Border = TRUE ;
         TabStop = TRUE ;
     };
     PushButton PB_LINGU_MODULES_EDIT
     {
-        Pos = MAP_APPFONT ( 190 , 23 ) ;
+        Pos = MAP_APPFONT ( 198 , 25 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
         Text = "~Bearbeiten..." ;
@@ -632,7 +632,7 @@ TabPage RID_SFXPAGE_LINGU
     FixedText FT_LINGU_OPTIONS
     {
         Left = TRUE ;
-        Pos = MAP_APPFONT ( 10 , 60 ) ;
+        Pos = MAP_APPFONT ( 12 , 64 ) ;
         Size = MAP_APPFONT ( 175 , 8 ) ;
         Text = "Optionen:" ;
         Text [ English ] = "Options:" ;
@@ -657,14 +657,14 @@ TabPage RID_SFXPAGE_LINGU
     };
     Control CLB_LINGU_OPTIONS
     {
-        Pos = MAP_APPFONT ( 10 , 70 ) ;
-        Size = MAP_APPFONT ( 175 , 55 ) ;
+        Pos = MAP_APPFONT ( 12 , 75 ) ;
+        Size = MAP_APPFONT ( 183 , 104 ) ;
         Border = TRUE ;
         TabStop = TRUE ;
     };
     PushButton PB_LINGU_OPTIONS_EDIT
     {
-        Pos = MAP_APPFONT ( 190 , 70 ) ;
+        Pos = MAP_APPFONT ( 198 , 75 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
         Text = "B~earbeiten..." ;
@@ -1041,277 +1041,5 @@ QueryBox RID_SFXQB_DEL_IGNORELIST
     Message[ greek ] = "Èİëåôå íá äéáãñáöåß ç ëßóôá ğáñÜâëåøçò;";
     Message[ korean ] = "¹«½Ã¸ñ·ÏÀ» »èÁ¦ÇÏ½Ã°Ú½À´Ï±î?";
     Message[ turkish ] = "\"Yok say\" listesini silmek istiyor musunuz?";
-};
- // RID_SVXPAGE_EXTERNAL_LINGU --------------------------------------------------------
-TabPage RID_SVXPAGE_EXTERNAL_LINGU
-{
-    HelpId = HID_OPTIONS_EXTERNAL_LINGU ;
-    OutputSize = TRUE ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
-    SVLook = TRUE ;
-    Hide = TRUE ;
-    Text = "Externe Linguistik" ;
-    Text [ ENGLISH ] = "External linguistic" ;
-    PushButton PB_OPTIONS
-    {
-        Pos = MAP_APPFONT ( 207 , 60 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text = "~Optionen" ;
-        Text [ ENGLISH ] = "~Options" ;
-        Disable = TRUE ;
-        Text [ english_us ] = "~Options" ;
-        Text [ portuguese_brazilian ] = "~Optionen" ;
-        Text [ swedish ] = "~Alternativ" ;
-        Text [ danish ] = "Indstillinger" ;
-        Text [ italian ] = "~Opzioni" ;
-        Text [ spanish ] = "~Opciones" ;
-        Text [ french ] = "~Options" ;
-        Text [ dutch ] = "~Opties" ;
-        Text [ portuguese ] = "~Opções" ;
-        Text[ chinese_simplified ] = "Ñ¡Ïî(~O)";
-        Text[ russian ] = "Ïàğàìåòğû";
-        Text[ polish ] = "~Opcje";
-        Text[ japanese ] = "µÌß¼®İ(~O)";
-        Text[ chinese_traditional ] = "¿ï¶µ(~O)";
-        Text[ arabic ] = "ÎíÇÑÇÊ";
-        Text[ greek ] = "Åğéë~ïãİò";
-        Text[ korean ] = "¿É¼Ç(~O)";
-        Text[ turkish ] = "Seçenekler";
-    };
-    GroupBox GB_LINGU
-    {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 198 , 75 ) ;
-        Text = "Auswahl" ;
-        Text [ ENGLISH ] = "Selection" ;
-        Text [ portuguese ] = "Selecção" ;
-        Text [ english_us ] = "Select" ;
-        Text [ portuguese_brazilian ] = "Auswahl" ;
-        Text [ swedish ] = "Urval" ;
-        Text [ danish ] = "Udvalg" ;
-        Text [ italian ] = "Seleziona" ;
-        Text [ spanish ] = "Selección" ;
-        Text [ french ] = "Sélection" ;
-        Text [ dutch ] = "Selectie" ;
-        Text[ chinese_simplified ] = "Ñ¡Ôñ";
-        Text[ russian ] = "Âûáîğ";
-        Text[ polish ] = "Wybór";
-        Text[ japanese ] = "‘I‘ğ";
-        Text[ chinese_traditional ] = "¿ï¾Ü";
-        Text[ arabic ] = "ÊÍÏíÏ";
-        Text[ greek ] = "ÅğéëïãŞ";
-        Text[ korean ] = "¼±ÅÃ";
-        Text[ turkish ] = "Seçim";
-    };
-    ListBox LB_LINGU
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 12 ) ;
-        Size = MAP_APPFONT ( 186 , 60 ) ;
-        StringList =
-        {
-            < "Standard" ; Default ; > ;
-        };
-        stringlist [ ENGLISH ] =
-        {
-            < "Standard" ; Default ; > ;
-        };
-        stringlist [ english_us ] =
-        {
-            < "Default" ; Default ; > ;
-        };
-        stringlist [ portuguese_brazilian ] =
-        {
-            < "Standard" ; Default ; > ;
-        };
-        stringlist [ swedish ] =
-        {
-            < "Standard" ; Default ; > ;
-        };
-        stringlist [ danish ] =
-        {
-            < "Standard" ; Default ; > ;
-        };
-        stringlist [ italian ] =
-        {
-            < "Standard" ; Default ; > ;
-        };
-        stringlist [ spanish ] =
-        {
-            < "Predeterminado" ; Default ; > ;
-        };
-        stringlist [ french ] =
-        {
-            < "Par défaut" ; Default ; > ;
-        };
-        stringlist [ dutch ] =
-        {
-            < "Standaard" ; Default ; > ;
-        };
-        stringlist [ portuguese ] =
-        {
-            < "Padrão" ; Default ; > ;
-        };
-    StringList [ chinese_simplified ] =
-    {
-             < "±ê×¼" ; Default ; > ;
-    };
-    StringList [ russian ] =
-    {
-             < "Ñòàíäàğò" ; Default ; > ;
-    };
-    StringList [ polish ] =
-    {
-             < "Standard" ; Default ; > ;
-    };
-    StringList [ japanese ] =
-    {
-             < "•W€" ; Default ; > ;
-    };
-    StringList [ chinese_traditional ] =
-    {
-             < "¼Ğ·Ç" ; Default ; > ;
-    };
-    StringList [ arabic ] =
-    {
-             < "ŞíÇÓí" ; Default ; > ;
-    };
-    StringList [ greek ] =
-    {
-             < "ĞñïåğéëïãŞ" ; Default ; > ;
-    };
-    StringList [ korean ] =
-    {
-             < "±âº»" ; Default ; > ;
-    };
-    StringList [ language_user1 ] =
-    {
-             < "Standard" ; Default ; > ;
-    };
-    StringList [ turkish ] =
-    {
-             < "Standart" ; Default ; > ;
-    };
-    };
-    CheckBox CB_STDSPELL
-    {
-        Pos = MAP_APPFONT ( 12 , 95 ) ;
-        Size = MAP_APPFONT ( 186 , 10 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? ~Rechtschreibprüfung zuerst im Standardmodul : ~Rechtschreibpr³fung zuerst im Standardmodul */
-        /* ### ACHTUNG: Neuer Text in Resource? ~Rechtschreibprüfung zuerst im Standardmodul : ~Rechtschreibpr³fung zuerst im Standardmodul */
-        Text = "~Rechtschreibprüfung zuerst im Standardmodul" ;
-        Text [ ENGLISH ] = "Spell in standard module first" ;
-        Text [ english_us ] = "~Spellcheck in default module first" ;
-        Text [ portuguese_brazilian ] = "~Rechtschreibprüfung zuerst im Standardmodul" ;
-        Text [ swedish ] = "~Rättstavningskontroll först i standardmodul" ;
-        Text [ danish ] = "Stavekontrol først i standardmodulet" ;
-        Text [ italian ] = "Ini~zia controllo ortografico nel modulo standard" ;
-        Text [ spanish ] = "~Corrección ortográfica primero en módulo estándar" ;
-        Text [ french ] = "~Commencer la vérification orthographique dans le module par défaut" ;
-        Text [ dutch ] = "~Spellingcontrole eerst in standaardmodule" ;
-        Text [ portuguese ] = "~Verificação ortográfica primeiro no módulo-padrão" ;
-        Text[ chinese_simplified ] = "Ê×ÏÈ²ÉÓÃ±ê×¼µÄÕı×Ö·¨¼ì²éÄ£Ê½(~S)";
-        Text[ russian ] = "Ïğîâåğêà ïğàâîïèñàíèÿ ñíà÷àëà â ñòàíäàğòíîì ìîäóëå";
-        Text[ polish ] = "Sprawdzanie pisowni najpierw w module standardowym";
-        Text[ japanese ] = "‚Ü‚¸•W€Ó¼Ş­°Ù‚Å½ÍßÙÁª¯¸(~S)";
-        Text[ chinese_traditional ] = "¥ı¨Ï¥Î¼Ğ·Ç¼Ò¦¡ªº«÷¦rªk(~S)";
-        Text[ arabic ] = "ÇáÊÏŞíŞ ÇáÃãáÇÆí İí ÇáæÍÏÉ ÇáŞíÇÓíÉ ÃæáÇğ";
-        Text[ greek ] = "¸ëåã÷ïò ïñèïã~ñáößáò ğñşôá óôç âáóéêŞ ëåéôïõñãéêŞ ìïíÜäá";
-        Text[ korean ] = "±âº»¸ğµâ¿¡¼­ ¿ì¼± ¸ÂÃã¹ı °Ë»ç";
-        Text[ turkish ] = "Önce standart modülde yazım denetimi";
-    };
-    CheckBox CB_STDTHES
-    {
-        Pos = MAP_APPFONT ( 12 , 108 ) ;
-        Size = MAP_APPFONT ( 186 , 10 ) ;
-        Text = "Standard ~Thesaurus verwenden" ;
-        Text [ ENGLISH ] = "Use standard thesaurus" ;
-        Text [ english_us ] = "U~se default thesaurus" ;
-        Text [ portuguese_brazilian ] = "Standard ~Thesaurus verwenden" ;
-        Text [ swedish ] = "Använd ~standard-synonymordlista" ;
-        Text [ danish ] = "Brug standard-synonymordbog" ;
-        Text [ italian ] = "Usa il ~dizionario sinonimi standard" ;
-        Text [ spanish ] = "Utilizar diccionario de ~sinónimos estándar" ;
-        Text [ french ] = "Utiliser le ~dict. des synonymes standard" ;
-        Text [ dutch ] = "Standaard ~Thesaurus toepassen" ;
-        Text [ portuguese ] = "Usar dicionário de ~sinónimos padrão" ;
-        Text[ chinese_simplified ] = "Ê¹ÓÃ±ê×¼´Êµä(~S)";
-        Text[ russian ] = "Èñïîëüçîâàòü ñòàíäàğòíûé òåçàóğóñ";
-        Text[ polish ] = "Zastosuj standardowy Tezaurus";
-        Text[ japanese ] = "•W€—ŞŒê«“T‚Ìg—p(~S)";
-        Text[ chinese_traditional ] = "¨Ï¥Î¼Ğ·Çµü¨å(~S)";
-        Text[ arabic ] = "ÇÓÊÎÏÇã ŞÇãæÓ ÇáãÑÇÏİÇÊ ÇáÇİÊÑÇÖí";
-        Text[ greek ] = "×ñŞóç ğñïåğéëåãìİíïõ ~èçóáõñïı ëİîåùí";
-        Text[ korean ] = "±âº» µ¿ÀÇ¾î»çÀü »ç¿ë(~S)";
-        Text[ turkish ] = "Standart eşanlamlıları kullan";
-    };
-    CheckBox CB_STDHYPH
-    {
-        Pos = MAP_APPFONT ( 12 , 121 ) ;
-        Size = MAP_APPFONT ( 186 , 10 ) ;
-        Text = "Standard ~Silbentrennung verwenden" ;
-        Text [ ENGLISH ] = "Use standard hyphenation" ;
-        Text [ portuguese ] = "Usar ~divisão silábica padrão" ;
-        Text [ english_us ] = "Use default h~yphenation" ;
-        Text [ portuguese_brazilian ] = "Standard ~Silbentrennung verwenden" ;
-        Text [ swedish ] = "Använd standard~avstavning" ;
-        Text [ danish ] = "Brug standard-orddeling" ;
-        Text [ italian ] = "Usa la ~sillabazione standard" ;
-        Text [ spanish ] = "Usar ~separación silábica estándar" ;
-        Text [ french ] = "Utiliser la ~coupure de mots par défaut" ;
-        Text [ dutch ] = "Standaard ~woordafbreking toepassen" ;
-        Text[ chinese_simplified ] = "Ê¹ÓÃ±ê×¼Á¬×Ö¹æÔò(~Y)";
-        Text[ russian ] = "Èñïîëüçîâàòü ñòàíäàğòíûé ïåğåíîñ ñëîâ";
-        Text[ polish ] = "U¿yj standardowego dzielenia wyrazów na sylaby";
-        Text[ japanese ] = "•W€Ê²ÌÈ°¼®İ‚Ìg—p(~Y)";
-        Text[ chinese_traditional ] = "¨Ï¥Î¼Ğ·Ç³s¦r³W«h(~Y)";
-        Text[ arabic ] = "ÇÓÊÎÏÇã ÇáİÕá ÇáŞíÇÓí ááãŞÇØÚ";
-        Text[ greek ] = "×ñŞóç ğñïåğéëåãìİíïõ ~óõëëáâéóìïı";
-        Text[ korean ] = "±âº» ÇÏÀÌÇÂ »ç¿ë(~Y)";
-        Text[ turkish ] = "Standart hecelemeyi kullan";
-    };
-    GroupBox GB_SETTINGS
-    {
-        Pos = MAP_APPFONT ( 6 , 84 ) ;
-        Size = MAP_APPFONT ( 198 , 50 ) ;
-        Text = "Einstellungen" ;
-        Text [ ENGLISH ] = "Settings" ;
-        Text [ english_us ] = "Settings" ;
-        Text [ portuguese_brazilian ] = "Einstellungen" ;
-        Text [ swedish ] = "Inställningar" ;
-        Text [ danish ] = "Indstillinger" ;
-        Text [ italian ] = "Impostazioni" ;
-        Text [ spanish ] = "Configuración" ;
-        Text [ french ] = "Paramètres" ;
-        Text [ dutch ] = "Instellingen" ;
-        Text [ portuguese ] = "Predefinições" ;
-        Text[ chinese_simplified ] = "Éè¶¨";
-        Text[ russian ] = "Íàñòğîéêè";
-        Text[ polish ] = "Ustawienia";
-        Text[ japanese ] = "İ’è";
-        Text[ chinese_traditional ] = "³]©w";
-        Text[ arabic ] = "ÅÚÏÇÏÇÊ";
-        Text[ greek ] = "Ñõèìßóåéò";
-        Text[ korean ] = "¼³Á¤";
-        Text[ turkish ] = "Ayarlar";
-    };
-    Text[ english_us ] = "External Language";
-    Text[ portuguese ] = "Linguística externa";
-    Text[ russian ] = "Âíåøíÿÿ ëèíãâèñòèêà";
-    Text[ greek ] = "ÅîùôåñéêŞ ãëùóóïëïãßá";
-    Text[ dutch ] = "Externe linguïstiek";
-    Text[ french ] = "Linguistique externe";
-    Text[ spanish ] = "Lingüística externa";
-    Text[ italian ] = "Linguistica esterna";
-    Text[ danish ] = "Ekstern lingvistik";
-    Text[ swedish ] = "Extern lingvistik";
-    Text[ polish ] = "Zwenêtrzna lingwistyka";
-    Text[ portuguese_brazilian ] = "External linguistic";
-    Text[ japanese ] = "ŠO•”Œ¾Œê";
-    Text[ korean ] = "¿ÜºÎ ¾ğ¾î";
-    Text[ chinese_simplified ] = "Íâ²¿ÓïÑÔ";
-    Text[ chinese_traditional ] = "¥~³¡¦r¨å";
-    Text[ arabic ] = "ãæÇÏ áÛæíÉ ÎÇÑÌíÉ";
-    Text[ turkish ] = "Harici sözlükler";
 };
  // ******************************************************************* EOF
