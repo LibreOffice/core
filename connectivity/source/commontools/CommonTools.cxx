@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CommonTools.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mh $ $Date: 2000-11-29 12:15:49 $
+ *  last change: $Author: oj $ $Date: 2000-12-07 12:33:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,7 +248,7 @@ namespace connectivity
                 aRes = ::rtl::OUString::valueOf(*(double*)rValue.getValue());
                 break;
             case TypeClass_BOOLEAN:
-                aRes = ::rtl::OUString::valueOf(*(sal_Bool*)rValue.getValue());
+                aRes = ::rtl::OUString::valueOf((sal_Int32)*(sal_Bool*)rValue.getValue());
                 break;
             case TypeClass_BYTE:
             case TypeClass_SHORT:
