@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EDriver.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-14 09:15:20 $
+ *  last change: $Author: oj $ $Date: 2002-08-01 07:15:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 #ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
 #endif
+#ifndef _DBHELPER_DBEXCEPTION_HXX_
+#include "connectivity/dbexception.hxx"
+#endif
 
 using namespace connectivity::flat;
 using namespace connectivity::file;
@@ -101,7 +104,10 @@ Reference< XConnection > SAL_CALL ODriver::connect( const ::rtl::OUString& url, 
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if (ODriver_BASE::rBHelper.bDisposed)
-                throw DisposedException();
+       throw DisposedException();
+
+    if ( ! acceptsURL(url) )
+        ::dbtools::throwGenericSQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid URL!")) ,*this);
 
     OFlatConnection* pCon = new OFlatConnection(this);
     pCon->construct(url,info);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FDriver.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-05 07:46:24 $
+ *  last change: $Author: oj $ $Date: 2002-08-01 07:16:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #endif
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
+#endif
+#ifndef _DBHELPER_DBEXCEPTION_HXX_
+#include "connectivity/dbexception.hxx"
 #endif
 
 using namespace connectivity::file;
@@ -166,6 +169,8 @@ sal_Bool SAL_CALL OFileDriver::acceptsURL( const ::rtl::OUString& url )
 // --------------------------------------------------------------------------------
 Sequence< DriverPropertyInfo > SAL_CALL OFileDriver::getPropertyInfo( const ::rtl::OUString& url, const Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)
 {
+    if ( ! acceptsURL(url) )
+        ::dbtools::throwGenericSQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid URL!")) ,*this);
     return Sequence< DriverPropertyInfo >();
 }
 // --------------------------------------------------------------------------------
@@ -210,6 +215,8 @@ Reference< XTablesSupplier > SAL_CALL OFileDriver::getDataDefinitionByConnection
 // --------------------------------------------------------------------------------
 Reference< XTablesSupplier > SAL_CALL OFileDriver::getDataDefinitionByURL( const ::rtl::OUString& url, const Sequence< PropertyValue >& info ) throw(::com::sun::star::sdbc::SQLException, RuntimeException)
 {
+    if ( ! acceptsURL(url) )
+        ::dbtools::throwGenericSQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid URL!")) ,*this);
     return getDataDefinitionByConnection(connect(url,info));
 }
 // -----------------------------------------------------------------------------
