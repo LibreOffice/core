@@ -23,23 +23,46 @@ namespace configmgr
     //= Basic (POD) data structure for representing a single value in an AnyPair
     //==========================================================================
 
-    typedef uno_Any cfgmgr_AnyPair_Data;
+    typedef const void * cfgmgr_AnyPair_Data;
 
-    inline bool cfgmgr_AnyPair_Data_hasValue(cfgmgr_AnyPair_Data const* _pData)
-    { return (typelib_TypeClass_VOID != _pData->pType->eTypeClass); }
     //==========================================================================
-    //= cfgmgr_AnyPair Basic (POD) data structure for an AnyPair
+    //= flags for handling the state of an Anypair
+    //==========================================================================
+    enum {
+        cfgmgr_SELECT_FIRST  = 0x01,
+        cfgmgr_SELECT_SECOND = 0x02,
+        cfgmgr_SELECT_BOTH = cfgmgr_SELECT_FIRST | cfgmgr_SELECT_SECOND
+    };
+    typedef sal_uInt8 cfgmgr_SelectorType;
+
+    //==========================================================================
+    //= data structure for descriptive data for an AnyPair
+    //==========================================================================
+    struct cfgmgr_AnyPair_Desc
+    {
+        typelib_TypeDescriptionReference *  pType;
+        cfgmgr_SelectorType nState;
+    };
+
+    inline bool cfgmgr_AnyPair_isNull(cfgmgr_AnyPair_Desc const* _pDesc, cfgmgr_SelectorType nSelect)
+    { return (_pDesc->nState & nSelect) == 0; }
+
+    inline bool cfgmgr_AnyPair_isEmpty(cfgmgr_AnyPair_Desc const* _pDesc)
+    { return (typelib_TypeClass_VOID == _pDesc->pType->eTypeClass); }
+
+    //==========================================================================
+    //= cfgmgr_AnyPair Basic (POD) data structure for a nullable pair of Anys
     //==========================================================================
 
     struct cfgmgr_AnyPair
     {
-        typelib_TypeDescriptionReference *  pType;
-        cfgmgr_AnyPair_Data                 m_first;
-        cfgmgr_AnyPair_Data                 m_second;
-    };
+        typedef cfgmgr_AnyPair_Data  Data;
+        typedef cfgmgr_AnyPair_Desc  Desc;
 
-    inline bool cfgmgr_AnyPair_isEmpty(cfgmgr_AnyPair const* _pPair)
-    { return (typelib_TypeClass_VOID == _pPair->pType->eTypeClass); }
+        Desc                desc;
+        cfgmgr_AnyPair_Data first;
+        cfgmgr_AnyPair_Data second;
+    };
 
 // -----------------------------------------------------------------------------
     //==========================================================================
@@ -77,11 +100,21 @@ namespace configmgr
         uno::Any getSecond() const;
         uno::Type getValueType() const;
 
-        bool hasFirst()  const { return cfgmgr_AnyPair_Data_hasValue(&m_aAnyPair.m_first);}
-        bool hasSecond() const { return cfgmgr_AnyPair_Data_hasValue(&m_aAnyPair.m_second);}
-        bool hasValue()  const { return hasFirst() || hasSecond(); }
+        bool hasFirst()  const
+        {
+            return !cfgmgr_AnyPair_isNull(&m_aAnyPair.desc, cfgmgr_SELECT_FIRST);
+        }
+        bool hasSecond() const
+        {
+            return !cfgmgr_AnyPair_isNull(&m_aAnyPair.desc, cfgmgr_SELECT_SECOND);
+        }
+        bool hasValue() const
+        {
+            return !cfgmgr_AnyPair_isNull(&m_aAnyPair.desc, cfgmgr_SELECT_BOTH);
+        }
         bool isNull  ()  const { return ! hasValue(); }
-        bool isEmpty()   const { return cfgmgr_AnyPair_isEmpty(&m_aAnyPair); }
+
+        bool isEmpty()   const { return cfgmgr_AnyPair_isEmpty(&m_aAnyPair.desc); }
 
         void check_init() {};
         void init() {};
