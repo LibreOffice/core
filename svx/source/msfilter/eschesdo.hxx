@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eschesdo.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sj $ $Date: 2000-12-21 17:32:58 $
+ *  last change: $Author: sj $ $Date: 2001-01-08 18:23:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,94 +110,6 @@ struct ImplEESdrSOParagraph
         nBulletFlags = 0;
     };
 };
-
-
-// -------------------------------------------------------------------
-
-struct ImplEESdrConnectorRule
-{
-    UINT32  nRuleId;
-    UINT32  nShapeA;        // SPID of shape A
-    UINT32  nShapeB;        // SPID of shape B
-    UINT32  nShapeC;        // SPID of connector shape
-    UINT32  ncptiA;         // Connection site Index of shape A
-    UINT32  ncptiB;         // Connection site Index of shape B
-};
-
-
-// -------------------------------------------------------------------
-
-class ImplEESdrShapeListEntry
-{
-
-    friend class ImplEESdrSolverContainer;
-
-protected:
-
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >       aXShape;
-    UINT32          nEscherId;
-
-public:
-                    ImplEESdrShapeListEntry( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& rShape,
-                                                UINT32 nId )
-                        :aXShape    ( rShape ),
-                        nEscherId   ( nId )
-                    {}
-};
-
-
-// -------------------------------------------------------------------
-
-class ImplEESdrConnectorListEntry
-{
-
-    friend class ImplEESdrSolverContainer;
-
-protected:
-
-    Point           maPointA;
-    Point           maPointB;
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >       mXConnector;
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >       mXConnectToA;
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >       mXConnectToB;
-
-public:
-
-    UINT32          GetConnectorRule( BOOL bFirst );
-                    ImplEESdrConnectorListEntry( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& rC,
-                                    const Point& rPA, const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& rSA,
-                                    const Point& rPB, const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& rSB )
-                        : mXConnector( rC ),
-                        maPointA    ( rPA ),
-                        maPointB    ( rPB ),
-                        mXConnectToA( rSA ),
-                        mXConnectToB( rSB )
-                    {}
-};
-
-
-// -------------------------------------------------------------------
-
-class EscherEx;
-class ImplEESdrSolverContainer
-{
-    List                maShapeList;
-    List                maConnectorList;
-
-    UINT32              ImplGetId( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& rShape );
-
-public:
-    void                AddShape( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >&, UINT32 nId );
-    void                AddConnector( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& rConnector,
-                                    const Point& rA, const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& rConA,
-                                    const Point& rB, const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& rConB );
-
-    void                WriteSolver( EscherEx& );
-
-                        ImplEESdrSolverContainer(){};
-                        ~ImplEESdrSolverContainer();
-};
-
 
 // -------------------------------------------------------------------
 
@@ -315,12 +227,12 @@ protected:
             BOOL                ImplInitPageValues();
 
             void                ImplWritePage(
-                                    ImplEESdrSolverContainer& rSolver,
+                                    EscherSolverContainer& rSolver,
                                     ImplEESdrPageType ePageType,
                                     BOOL bBackGround = FALSE );
 
             UINT32              ImplWriteShape( ImplEESdrObject& rObj,
-                                    ImplEESdrSolverContainer& rSolver,
+                                    EscherSolverContainer& rSolver,
                                     ImplEESdrPageType ePageType );  // returns ShapeID
 
             void                ImplFlipBoundingBox( ImplEESdrObject& rObj, EscherPropertyContainer& rPropOpt,
@@ -350,8 +262,8 @@ class SdrPage;
 class ImplEscherExSdr : public ImplEESdrWriter
 {
 private:
-        const SdrPage*      mpSdrPage;
-        ImplEESdrSolverContainer*   mpSolverContainer;
+        const SdrPage*          mpSdrPage;
+        EscherSolverContainer*  mpSolverContainer;
 
 public:
                                 ImplEscherExSdr( EscherEx& rEx );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eschesdo.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sj $ $Date: 2000-12-21 17:32:13 $
+ *  last change: $Author: sj $ $Date: 2001-01-08 18:23:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,9 +127,6 @@
 #ifndef _COM_SUN_STAR_DRAWING_CIRCLEKIND_HPP_
 #include <com/sun/star/drawing/CircleKind.hpp>
 #endif
-#ifndef _COM_SUN_STAR_DRAWING_CONNECTORTYPE_HPP_
-#include <com/sun/star/drawing/ConnectorType.hpp>
-#endif
 #ifndef _COM_SUN_STAR_DRAWING_FILLSTYLE_HPP_
 #include <com/sun/star/drawing/FillStyle.hpp>
 #endif
@@ -171,239 +168,6 @@ BOOL ConvertGDIMetaFileToEMF( const GDIMetaFile & rMTF, SvStream & rTargetStream
                               PFilterCallback pCallback, void * pCallerData );
 
 #define EES_MAP_FRACTION 1440   // 1440 dpi
-
-#define ANY_FLAGS_LINE          0x01
-#define ANY_FLAGS_POLYLINE      0x02
-#define ANY_FLAGS_POLYPOLYGON   0x04
-
-// ===================================================================
-
-// ---------------------------------------------------------------------------------------------
-// bei Rechtecken           bei Ellipsen    bei Polygonen
-//
-// nRule =  0 ->Top         0 ->Top         nRule = Index auf ein (Poly)Polygon Punkt
-//          1 ->Left        2 ->Left
-//          2 ->Bottom      4 ->Bottom
-//          3 ->Right       6 ->Right
-
-UINT32 ImplEESdrConnectorListEntry::GetConnectorRule( BOOL bFirst )
-{
-    UINT32 nRule = 0;
-
-    Point aRefPoint( ( bFirst ) ? maPointA : maPointB );
-    Reference< XShape > aXShape( ( bFirst ) ? mXConnectToA : mXConnectToB );
-
-    String aType( aXShape->getShapeType() );
-    aType.Erase( 0, 12 );   // "stardiv.one.drawing." entfernen
-    xub_StrLen nPos = aType.SearchAscii( "Shape" );
-    aType.Erase( nPos, 5 );
-
-    if( aType.EqualsAscii( "drawing.PolyPolygon" ) ||
-        aType.EqualsAscii( "drawing.PolyLine" ) )
-    {
-        Reference< XPropertySet > aPropertySet( aXShape, uno::UNO_QUERY );
-        if ( aPropertySet.is() )
-        {
-            try
-            {
-                Any aAny( aPropertySet->getPropertyValue( rtl::OUString::createFromAscii("PolyPolygon") ) );
-                if ( aAny.getValue() )
-                {
-                    PointSequenceSequence* pSourcePolyPolygon = (PointSequenceSequence*)aAny.getValue();
-                    INT32 nOuterSequenceCount = pSourcePolyPolygon->getLength();
-                    PointSequence* pOuterSequence = pSourcePolyPolygon->getArray();
-
-                    if ( pOuterSequence )
-                    {
-                        INT32 a, b, nIndex = 0;
-                        UINT32 nDistance = 0xffffffff;
-                        for( a = 0; a < nOuterSequenceCount; a++ )
-                        {
-                            PointSequence* pInnerSequence = pOuterSequence++;
-                            if ( pInnerSequence )
-                            {
-                                awt::Point* pArray = pInnerSequence->getArray();
-                                if ( pArray )
-                                {
-                                    for ( b = 0; b < pInnerSequence->getLength(); b++, nIndex++, pArray++ )
-                                    {
-                                        UINT32 nDist = (UINT32)hypot( aRefPoint.X() - pArray->X, aRefPoint.Y() - pArray->Y );
-                                        if ( nDist < nDistance )
-                                        {
-                                            nRule = nIndex;
-                                            nDistance = nDist;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            catch(...)
-            {
-            }
-        }
-    }
-    else if ( aType.EqualsAscii( "drawing.OpenBezier" ) ||
-              aType.EqualsAscii( "drawing.OpenFreeHand" ) ||
-              aType.EqualsAscii( "drawing.PolyLinePath" ) ||
-              aType.EqualsAscii( "drawing.ClosedBezier" ) ||
-              aType.EqualsAscii("drawing.ClosedFreeHand" ) ||
-              aType.EqualsAscii("drawing.PolyPolygonPath" ) )
-    {
-        Reference< XPropertySet > aPropertySet( aXShape, uno::UNO_QUERY );
-        if( aPropertySet.is() )
-        {
-            try
-            {
-                Any aAny( aPropertySet->getPropertyValue( rtl::OUString::createFromAscii("PolyPolygonBezier") ) );
-                if ( aAny.getValue() )
-                {
-                    PolyPolygonBezierCoords* pSourcePolyPolygon = (PolyPolygonBezierCoords*)aAny.getValue();
-                    INT32 nOuterSequenceCount = pSourcePolyPolygon->Coordinates.getLength();
-
-                    // Zeiger auf innere sequences holen
-                    PointSequence* pOuterSequence = pSourcePolyPolygon->Coordinates.getArray();
-                    FlagSequence*  pOuterFlags = pSourcePolyPolygon->Flags.getArray();
-
-                    if ( pOuterSequence && pOuterFlags )
-                    {
-                        INT32 a, b, nIndex = 0;
-                        UINT32 nDistance = 0xffffffff;
-
-                        for ( a = 0; a < nOuterSequenceCount; a++ )
-                        {
-                            PointSequence* pInnerSequence = pOuterSequence++;
-                            FlagSequence*  pInnerFlags = pOuterFlags++;
-                            if ( pInnerSequence && pInnerFlags )
-                            {
-                                awt::Point* pArray = pInnerSequence->getArray();
-                                PolygonFlags* pFlags = pInnerFlags->getArray();
-                                if ( pArray && pFlags )
-                                {
-                                    for ( b = 0; b < pInnerSequence->getLength(); b++, pArray++ )
-                                    {
-                                        PolyFlags ePolyFlags = *( (PolyFlags*)pFlags++ );
-                                        if ( ePolyFlags == POLY_CONTROL )
-                                            continue;
-                                        UINT32 nDist = (UINT32)hypot( aRefPoint.X() - pArray->X, aRefPoint.Y() - pArray->Y );
-                                        if ( nDist < nDistance )
-                                        {
-                                            nRule = nIndex;
-                                            nDistance = nDist;
-                                        }
-                                        nIndex++;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            catch(...)
-            {
-            }
-        }
-    }
-    else
-    {
-        Rectangle aRect( aXShape->getPosition().X, aXShape->getPosition().Y, aXShape->getSize().Width, aXShape->getSize().Height );
-        nRule = 0;
-        if ( aRefPoint.X() == aRect.Left() )
-            nRule++;
-        else if ( aRefPoint.Y() == aRect.Bottom() )
-            nRule = 2;
-        else if ( aRefPoint.X() == aRect.Right() )
-            nRule = 3;
-    }
-    if( aType.EqualsAscii( "drawing.Ellipse" ))
-        nRule <<= 1;    // In PPT hat eine Ellipse 8 Möglichkeiten sich zu connecten
-
-    return nRule;
-}
-
-// ---------------------------------------------------------------------------------------------
-
-ImplEESdrSolverContainer::~ImplEESdrSolverContainer()
-{
-    void *pP;
-    for( pP = maShapeList.First(); pP; pP = maShapeList.Next() )
-        delete (ImplEESdrShapeListEntry*)pP;
-    for( pP = maConnectorList.First(); pP; pP = maConnectorList.Next() )
-        delete (ImplEESdrConnectorListEntry*)pP;
-}
-
-// ---------------------------------------------------------------------------------------------
-
-void ImplEESdrSolverContainer::AddShape( const Reference< XShape >& rXShape, UINT32 nId )
-{
-    maShapeList.Insert( new ImplEESdrShapeListEntry( rXShape, nId ),
-                        LIST_APPEND );
-}
-
-// ---------------------------------------------------------------------------------------------
-
-void ImplEESdrSolverContainer::AddConnector( const Reference< XShape >& rConnector,
-                            const Point& rPA, const Reference< XShape >& rConA,
-                            const Point& rPB, const Reference< XShape >& rConB )
-{
-    maConnectorList.Insert( new ImplEESdrConnectorListEntry(
-                        rConnector, rPA, rConA, rPB, rConB ), LIST_APPEND );
-}
-
-// ---------------------------------------------------------------------------------------------
-
-UINT32 ImplEESdrSolverContainer::ImplGetId( const Reference< XShape >& rXShape )
-{
-    for ( ImplEESdrShapeListEntry* pPtr = (ImplEESdrShapeListEntry*)maShapeList.First(); pPtr; pPtr = (ImplEESdrShapeListEntry*)maShapeList.Next() )
-    {
-        if ( rXShape == pPtr->aXShape )
-            return ( pPtr->nEscherId );
-    }
-    return 0;
-}
-
-// ---------------------------------------------------------------------------------------------
-
-void ImplEESdrSolverContainer::WriteSolver( EscherEx& rEscherEx )
-{
-    UINT32 nCount = maConnectorList.Count();
-    if ( nCount )
-    {
-        SvStream& rStrm = rEscherEx.GetStream();
-        rEscherEx.OpenContainer( ESCHER_SolverContainer, nCount );
-
-        ImplEESdrConnectorRule aConnectorRule;
-        aConnectorRule.nRuleId = 2;
-        for ( ImplEESdrConnectorListEntry* pPtr = (ImplEESdrConnectorListEntry*)maConnectorList.First(); pPtr; pPtr = (ImplEESdrConnectorListEntry*)maConnectorList.Next() )
-        {
-            aConnectorRule.ncptiA = aConnectorRule.ncptiB = 0xffffffff;
-            aConnectorRule.nShapeC = ImplGetId( pPtr->mXConnector );
-            aConnectorRule.nShapeA = ImplGetId( pPtr->mXConnectToA );
-            aConnectorRule.nShapeB = ImplGetId( pPtr->mXConnectToB );
-
-            if ( aConnectorRule.nShapeC )
-            {
-                if ( aConnectorRule.nShapeA )
-                    aConnectorRule.ncptiA = pPtr->GetConnectorRule( TRUE );
-                if ( aConnectorRule.nShapeB )
-                    aConnectorRule.ncptiB = pPtr->GetConnectorRule( FALSE );
-            }
-            rEscherEx.AddAtom( 24, ESCHER_ConnectorRule, 1 );
-            rStrm   << aConnectorRule.nRuleId
-                    << aConnectorRule.nShapeA
-                    << aConnectorRule.nShapeB
-                    << aConnectorRule.nShapeC
-                    << aConnectorRule.ncptiA
-                    << aConnectorRule.ncptiB;
-
-            aConnectorRule.nRuleId += 2;
-        }
-        rEscherEx.CloseContainer(); // ESCHER_SolverContainer
-    }
-}
-
 
 // ===================================================================
 
@@ -598,7 +362,7 @@ void ImplEESdrWriter::ImplFlipBoundingBox( ImplEESdrObject& rObj, EscherProperty
 }
 
 UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
-                                ImplEESdrSolverContainer& rSolverContainer,
+                                EscherSolverContainer& rSolverContainer,
                                 ImplEESdrPageType ePageType )
 {
     UINT32 nShapeID = 0;
@@ -777,105 +541,16 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
         }
         else if ( rObj.GetType().EqualsAscii( "drawing.Connector" ))
         {
-            Reference< XShape > aShapeA, aShapeB;
-
-            Point aStartPoint, aEndPoint;
-
-            if ( !rObj.ImplGetPropertyValue( ::rtl::OUString::createFromAscii("EdgeKind") ) )
-                break;
-            ConnectorType eCt;
-            ::cppu::any2enum< ConnectorType >( eCt, rObj.GetUsrAny() );
-
-            if ( !rObj.ImplGetPropertyValue( ::rtl::OUString::createFromAscii("EdgeStartPoint") ) )
-                break;
-            aStartPoint = *(Point*)rObj.GetUsrAny().getValue();
-
-            if ( !rObj.ImplGetPropertyValue( ::rtl::OUString::createFromAscii("EdgeEndPoint") ) )
-                break;
-            aEndPoint = *(Point*)rObj.GetUsrAny().getValue();
-
-            UINT32 nAdjustValue1, nAdjustValue2, nAdjustValue3;
-            nAdjustValue1 = nAdjustValue2 = nAdjustValue3 = 0x2a30;
-
-            if ( rObj.ImplGetPropertyValue( ::rtl::OUString::createFromAscii("EdgeStartConnection") ) )
-            {
-                aShapeA = *(Reference< XShape >*)rObj.GetUsrAny().getValue();
-            }
-            if ( rObj.ImplGetPropertyValue( ::rtl::OUString::createFromAscii("EdgeEndConnection") ) )
-            {
-                aShapeB = *(Reference< XShape >*)rObj.GetUsrAny().getValue();
-            }
-
-/*          if ( ImplGetPropertyValue( L"EdgeLine1Delta" ) )
-            {
-            }
-            if ( ImplGetPropertyValue( L"EdgeLine2Delta" ) )
-            {
-            }
-            if ( ImplGetPropertyValue( L"EdgeLine3Delta" ) )
-            {
-            }
-            if ( ImplGetPropertyValue( L"EdgeNode1HorzDist" ) )
-            {
-            }
-            if ( ImplGetPropertyValue( L"EdgeNode1VertDist" ) )
-            {
-            }
-            if ( ImplGetPropertyValue( L"EdgeNode2HorzDist" ) )
-            {
-            }
-            if ( ImplGetPropertyValue( L"EdgeNode2VertDist" ) )
-            {
-            }
-*/
-            rSolverContainer.AddConnector( rObj.GetShapeRef(), aStartPoint,
-                                            aShapeA, aEndPoint, aShapeB );
-
+            sal_uInt16 nSpType, nSpFlags;
             ::com::sun::star::awt::Rectangle aNewRect;
-            aPropOpt.CreatePolygonProperties( rObj.mXPropSet, ESCHER_CREATEPOLYGON_LINE, sal_False, aNewRect, NULL );
+            if ( aPropOpt.CreateConnectorProperties( rObj.GetShapeRef(),
+                            rSolverContainer, aNewRect, nSpType, nSpFlags ) == sal_False )
+                break;
             rObj.SetRect( Rectangle( ImplMapPoint( Point( aNewRect.X, aNewRect.Y ) ),
                                         ImplMapSize( Size( aNewRect.Width, aNewRect.Height ) ) ) );
-            const Rectangle& rRect = rObj.GetRect();
+
             mpEscherEx->OpenContainer( ESCHER_SpContainer );
-            UINT32 nFlags = 0xa00;                  // Flags: Connector | HasSpt
-            if( rRect.Top() > rRect.Bottom() )
-                nFlags |= 0x80;                     // Flags: VertMirror
-            if( rRect.Left() > rRect.Right() )
-                nFlags |= 0x40;                     // Flags: HorzMirror
-
-            Rectangle aJustifiedRect( rRect );
-            aJustifiedRect.Justify();
-
-            switch ( eCt )
-            {
-                case ConnectorType_CURVE :
-                {
-                    ADD_SHAPE( ESCHER_ShpInst_CurvedConnector3, nFlags );
-                    aPropOpt.AddOpt( ESCHER_Prop_cxstyle, ESCHER_cxstyleCurved );
-                    aPropOpt.AddOpt( ESCHER_Prop_adjustValue, nAdjustValue1 );
-                    aPropOpt.AddOpt( ESCHER_Prop_adjust2Value, -(sal_Int32)nAdjustValue2 );
-                }
-                break;
-
-                case ConnectorType_STANDARD :   // Connector 2->5
-                {
-                    ADD_SHAPE( ESCHER_ShpInst_BentConnector3, nFlags );
-                    aPropOpt.AddOpt( ESCHER_Prop_cxstyle, ESCHER_cxstyleBent );
-                }
-                break;
-
-                default:
-                case ConnectorType_LINE :
-                case ConnectorType_LINES :      // Connector 2->5
-                {
-                    nFlags |= 0x100;
-                    ADD_SHAPE( ESCHER_ShpInst_StraightConnector1, nFlags );
-                    aPropOpt.AddOpt( ESCHER_Prop_cxstyle, ESCHER_cxstyleStraight );
-                }
-                break;
-            }
-            aPropOpt.CreateLineProperties( rObj.mXPropSet, sal_False );
-            rObj.SetAngle( 0 );
+            ADD_SHAPE( nSpType, nSpFlags );
         }
         else if ( rObj.GetType().EqualsAscii( "drawing.Measure" ))
         {
@@ -1358,7 +1033,7 @@ BOOL ImplEESdrWriter::ImplInitPageValues()
 // -------------------------------------------------------------------
 
 void ImplEESdrWriter::ImplWritePage(
-            ImplEESdrSolverContainer& rSolverContainer,
+            EscherSolverContainer& rSolverContainer,
             ImplEESdrPageType ePageType, BOOL bBackGround )
 {
     ImplInitPageValues();
@@ -1430,7 +1105,7 @@ SvxDrawPage* ImplEscherExSdr::ImplInitPage( const SdrPage& rPage )
                 break;
             mpSdrPage = &rPage;
 
-            mpSolverContainer = new ImplEESdrSolverContainer;
+            mpSolverContainer = new EscherSolverContainer;
         }
         else
             pSvxDrawPage = SvxDrawPage::getImplementation(mXDrawPage);
@@ -1457,7 +1132,7 @@ void ImplEscherExSdr::ImplFlushSolverContainer()
 {
     if ( mpSolverContainer )
     {
-        mpSolverContainer->WriteSolver( *mpEscherEx );
+        mpSolverContainer->WriteSolver( mpEscherEx->GetStream() );
         delete mpSolverContainer;
         mpSolverContainer = NULL;
     }
