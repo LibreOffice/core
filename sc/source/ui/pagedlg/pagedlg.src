@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagedlg.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-13 14:38:34 $
+ *  last change: $Author: kz $ $Date: 2002-11-04 17:25:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -322,7 +322,7 @@ ModelessDialog RID_SCDLG_AREAS
         Text [ NORWEGIAN ] = "Row to repeat at top" ;
         Text [ DANISH ] = "Gentagelses~række" ;
         Text [ ENGLISH_US ] = "Rows to repeat" ;
-        Text [ SPANISH ] = "Fila ~a repetir" ;
+        Text [ SPANISH ] = "Fil~a que repetir" ;
         Text [ FINNISH ] = "Toistettavat rivit" ;
         Text [ FRENCH ] = "~Ligne à répéter" ;
         Text [ ITALIAN ] = "Riga da ripetere" ;
