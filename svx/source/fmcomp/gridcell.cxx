@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridcell.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 15:49:34 $
+ *  last change: $Author: rt $ $Date: 2004-07-06 13:33:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,17 +196,23 @@ namespace
         {
             sal_Int16 nLineEndFormat = awt::LineEndFormat::LINE_FEED;
 
-            OSL_ENSURE( _rxModel.is(), "getModelLineEndSetting: invalid column model!" );
+            Reference< XPropertySetInfo > xPSI;
             if ( _rxModel.is() )
+                xPSI = _rxModel->getPropertySetInfo();
+
+            OSL_ENSURE( xPSI.is(), "getModelLineEndSetting: invalid column model!" );
+            if ( xPSI.is() && xPSI->hasPropertyByName( FM_PROP_LINEENDFORMAT ) )
+            {
                 OSL_VERIFY( _rxModel->getPropertyValue( FM_PROP_LINEENDFORMAT ) >>= nLineEndFormat );
 
-            switch ( nLineEndFormat )
-            {
-            case awt::LineEndFormat::CARRIAGE_RETURN:            eFormat = LINEEND_CR; break;
-            case awt::LineEndFormat::LINE_FEED:                  eFormat = LINEEND_LF; break;
-            case awt::LineEndFormat::CARRIAGE_RETURN_LINE_FEED:  eFormat = LINEEND_CRLF; break;
-            default:
-                OSL_ENSURE( sal_False, "getModelLineEndSetting: what's this?" );
+                switch ( nLineEndFormat )
+                {
+                case awt::LineEndFormat::CARRIAGE_RETURN:            eFormat = LINEEND_CR; break;
+                case awt::LineEndFormat::LINE_FEED:                  eFormat = LINEEND_LF; break;
+                case awt::LineEndFormat::CARRIAGE_RETURN_LINE_FEED:  eFormat = LINEEND_CRLF; break;
+                default:
+                    OSL_ENSURE( sal_False, "getModelLineEndSetting: what's this?" );
+                }
             }
         }
         catch( const Exception& )
