@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olevisual.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 12:05:35 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 11:39:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,10 @@
 #include <com/sun/star/io/XSeekable.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_EMBED_NOVISUALAREASIZEEXCEPTION_HPP_
+#include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
+#endif
+
 #include <oleembobj.hxx>
 #include <olecomponent.hxx>
 
@@ -130,7 +134,7 @@ void SAL_CALL OleEmbeddedObject::setVisualAreaSize( sal_Int64 nAspect, const awt
                 uno::Exception,
                 uno::RuntimeException )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::osl::ResettableMutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
 
@@ -143,6 +147,7 @@ void SAL_CALL OleEmbeddedObject::setVisualAreaSize( sal_Int64 nAspect, const awt
     if ( m_nObjectState == embed::EmbedStates::LOADED
       && ( getStatus( nAspect ) & embed::EmbedMisc::MS_EMBED_RECOMPOSEONRESIZE ) )
     {
+        aGuard.clear();
         try {
             changeState( embed::EmbedStates::RUNNING );
         }
@@ -150,10 +155,12 @@ void SAL_CALL OleEmbeddedObject::setVisualAreaSize( sal_Int64 nAspect, const awt
         {
             OSL_ENSURE( sal_False, "The object should not be resized without activation!\n" );
         }
+        aGuard.reset();
     }
 
     if ( m_pOleComponent && m_nObjectState != embed::EmbedStates::LOADED )
     {
+        aGuard.clear();
         try {
             m_pOleComponent->SetExtent( aSize, nAspect ); // will throw an exception in case of failure
         }
@@ -162,12 +169,9 @@ void SAL_CALL OleEmbeddedObject::setVisualAreaSize( sal_Int64 nAspect, const awt
             // some objects do not allow to set the size even in running state
             m_bHasSizeToSet = sal_True;
         }
+        aGuard.reset();
     }
-    else
 #endif
-    {
-        m_bHasSizeToSet = sal_True;
-    }
 
     // cache the values
     m_bHasCachedSize = sal_True;
@@ -181,7 +185,7 @@ awt::Size SAL_CALL OleEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
                 uno::Exception,
                 uno::RuntimeException )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::osl::ResettableMutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
 
@@ -207,22 +211,21 @@ awt::Size SAL_CALL OleEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
             {
                 // there is no internal cache
                 // try to switch the object to RUNNONG state and request the value again
+                awt::Size aSize;
+                aGuard.clear();
                 try {
                     changeState( embed::EmbedStates::RUNNING );
-                    m_aCachedSize = m_pOleComponent->GetExtent( nAspect ); // will throw an exception in case of failure
+                    aSize = m_pOleComponent->GetExtent( nAspect ); // will throw an exception in case of failure
                 }
                 catch( uno::Exception& )
                 {
-                    // TODO/LATER: this workaround must be implemented in the application
-                    OSL_ENSURE( sal_False, "The workaround must be implemented in application, not in embedded object!\n" );
-                    return awt::Size( 5000, 5000 );
-
-                    //OSL_ENSURE( sal_False, "The size of the OLE object that can't be activated is requested!\nNo size was provided to the object for caching!\n" );
-                    //throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "Illegal call!\n" ),
-                    //              uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
-
+                    throw embed::NoVisualAreaSizeException(
+                                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "No size available!\n" ) ),
+                                    uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
                 }
+                aGuard.reset();
 
+                m_aCachedSize = aSize;
                 m_nCachedAspect = nAspect;
                 m_bHasCachedSize = sal_True;
             }
@@ -233,9 +236,9 @@ awt::Size SAL_CALL OleEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
         }
         catch ( uno::Exception& )
         {
-            // TODO/LATER: this workaround must be implemented in the application
-            OSL_ENSURE( sal_False, "The workaround must be implemented in application, not in embedded object!\n" );
-            return awt::Size( 5000, 5000 );
+            throw embed::NoVisualAreaSizeException(
+                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "No size available!\n" ) ),
+                            uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
         }
     }
     else
@@ -248,13 +251,9 @@ awt::Size SAL_CALL OleEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
         }
         else
         {
-            // TODO/LATER: this workaround must be implemented in the application
-            OSL_ENSURE( sal_False, "The workaround must be implemented in application, not in embedded object!\n" );
-            return awt::Size( 5000, 5000 );
-
-            // OSL_ENSURE( sal_False, "The size of the OLE object that can't be activated is requested!\nNo size was provided to the object for caching!\n" );
-            // throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "Illegal call!\n" ),
-            //                      uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
+            throw embed::NoVisualAreaSizeException(
+                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "No size available!\n" ) ),
+                            uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
         }
     }
 
