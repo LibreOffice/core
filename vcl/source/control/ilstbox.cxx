@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ilstbox.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: pl $ $Date: 2002-05-03 13:04:12 $
+ *  last change: $Author: ssa $ $Date: 2002-05-08 12:50:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -521,7 +521,7 @@ ImplListBoxWindow::ImplListBoxWindow( Window* pParent, WinBits nWinStyle ) :
     SetTextFillColor();
     SetBackground( Wallpaper( GetSettings().GetStyleSettings().GetFieldColor() ) );
 
-    maSearchTimeout.SetTimeout( 500 );
+    maSearchTimeout.SetTimeout( 2500 );
     maSearchTimeout.SetTimeoutHdl( LINK( this, ImplListBoxWindow, SearchStringTimeout ) );
 
     ImplInitSettings( TRUE, TRUE, TRUE );
@@ -774,6 +774,7 @@ void ImplListBoxWindow::ImplHideFocusRect()
 void ImplListBoxWindow::MouseButtonDown( const MouseEvent& rMEvt )
 {
     mbMouseMoveSelect = FALSE;  // Nur bis zum ersten MouseButtonDown
+    maSearchStr.Erase();
 
     if ( !IsReadOnly() )
     {
@@ -1296,6 +1297,7 @@ BOOL ImplListBoxWindow::ProcessKeyInput( const KeyEvent& rKEvt )
 
                 bDone = TRUE;
             }
+            maSearchStr.Erase();
         }
         break;
 
@@ -1317,6 +1319,7 @@ BOOL ImplListBoxWindow::ProcessKeyInput( const KeyEvent& rKEvt )
 
                 bDone = TRUE;
             }
+            maSearchStr.Erase();
         }
         break;
 
@@ -1340,6 +1343,7 @@ BOOL ImplListBoxWindow::ProcessKeyInput( const KeyEvent& rKEvt )
                 }
                 bDone = TRUE;
             }
+            maSearchStr.Erase();
         }
         break;
 
@@ -1369,6 +1373,7 @@ BOOL ImplListBoxWindow::ProcessKeyInput( const KeyEvent& rKEvt )
                 }
                 bDone = TRUE;
             }
+            maSearchStr.Erase();
         }
         break;
 
@@ -1389,6 +1394,7 @@ BOOL ImplListBoxWindow::ProcessKeyInput( const KeyEvent& rKEvt )
                     bDone = TRUE;
                 }
             }
+            maSearchStr.Erase();
         }
         break;
 
@@ -1411,6 +1417,7 @@ BOOL ImplListBoxWindow::ProcessKeyInput( const KeyEvent& rKEvt )
                 }
                 bDone = TRUE;
             }
+            maSearchStr.Erase();
         }
         break;
 
@@ -1421,6 +1428,7 @@ BOOL ImplListBoxWindow::ProcessKeyInput( const KeyEvent& rKEvt )
                 ScrollHorz( -HORZ_SCROLL );
                 bDone = TRUE;
             }
+            maSearchStr.Erase();
         }
         break;
 
@@ -1431,6 +1439,7 @@ BOOL ImplListBoxWindow::ProcessKeyInput( const KeyEvent& rKEvt )
                 ScrollHorz( HORZ_SCROLL );
                 bDone = TRUE;
             }
+            maSearchStr.Erase();
         }
         break;
 
@@ -1442,6 +1451,7 @@ BOOL ImplListBoxWindow::ProcessKeyInput( const KeyEvent& rKEvt )
                 ImplCallSelect();
                 bDone = FALSE;  // RETURN nicht abfangen.
             }
+            maSearchStr.Erase();
         }
         break;
 
@@ -1456,6 +1466,7 @@ BOOL ImplListBoxWindow::ProcessKeyInput( const KeyEvent& rKEvt )
                 }
                 bDone = TRUE;
             }
+            maSearchStr.Erase();
         }
         break;
 
