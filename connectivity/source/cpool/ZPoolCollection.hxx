@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZPoolCollection.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 10:49:12 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 18:20:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,7 +148,7 @@ namespace connectivity
     private:
         OPoolCollection();                          // never implemented
         OPoolCollection(const OPoolCollection&);    // never implemented
-        operator= (const OPoolCollection&);         // never implemented
+        int operator= (const OPoolCollection&);         // never implemented
 
         OPoolCollection(
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory);
