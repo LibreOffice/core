@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: obo $ $Date: 2004-03-19 14:43:08 $
+#   last change: $Author: rt $ $Date: 2004-07-23 10:51:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -149,6 +149,15 @@ APP7STDLIBS=$(SALLIB)
 
 APP7DEPN=
 APP7LIBS= 
+#-------------------------------------------------------------------------------
+
+APP8TARGET= test_preproc
+APP8OBJS=$(OBJ)$/test_preproc.obj
+
+APP8STDLIBS=$(SALLIB)
+
+APP8DEPN=
+APP8LIBS= 
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
