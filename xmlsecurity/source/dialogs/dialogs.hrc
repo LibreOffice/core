@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialogs.hrc,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 15:22:10 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 18:04:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,26 +63,9 @@
 #define _DIALOGS_HRC
 
 #include <svtools/controldims.hrc>
-
+#include <xmlsecurity/global.hrc>
 
 #define STD_MASKCOLOR                   Color{Red=0xffff;Green=0x0000;Blue=0xffff;}
-
-// --------- general dialog ids ---------
-
-#define RID_XMLSECDLG_DIGSIG            1000
-#define RID_XMLSECDLG_CERTCHOOSER       1001
-#define RID_XMLSECDLG_CERTVIEWER        1002
-#define RID_XMLSECTP_GENERAL            1003
-#define RID_XMLSECTP_DETAILS            1004
-#define RID_XMLSECTP_CERTPATH           1005
-#define RID_XMLSECTP_MACROSEC           1006
-#define RID_XMLSECTP_SECLEVEL           1007
-#define RID_XMLSECTP_TRUSTSOURCES       1008
-#define RID_XMLSECTP_MACROWARN          1009
-#define RID_XMLSECTP_READONLY_CONFIG_TIP 1010
-#define RID_XMLSECTP_LOCK                1011
-#define RID_XMLSECTP_LOCK_HC             1012
-
 
 #define FL_BOTTOM_SEP                   50
 #define BTN_OK                          51
@@ -115,7 +98,7 @@
 #define DLGS_BOTTOM_LAST_CTRL_L(dlgh)   (DLGS_BOTTOM_BTN_Y(dlgh)-2*SEP_FL_SPACE_Y-3)
 #define DLGS_BOTTOM_HELP_X(dlgw)        (dlgw-RSC_SP_DLG_INNERBORDER_RIGHT-RSC_CD_PUSHBUTTON_WIDTH)
 #define DLGS_BOTTOM_CANCEL_X(dlgw)      (DLGS_BOTTOM_HELP_X(dlgw)-RSC_SP_CTRL_X-RSC_CD_PUSHBUTTON_WIDTH)
-#define DLGS_BOTTOM_OK_X(dlgw)          (DLGS_BOTTOM_CANCEL_X(dlgw)-RSC_SP_CTRL_X-RSC_CD_PUSHBUTTON_WIDTH)
+#define DLGS_BOTTOM_OK_X(dlgw)          (DLGS_BOTTOM_CANCEL_X(dlgw)-RSC_SP_CTRL_DESC_X-RSC_CD_PUSHBUTTON_WIDTH)
 
 
 // --------- dialog Digital Signatures ---------
@@ -128,7 +111,8 @@
 #define FI_STATE_VALID                  8
 #define IMG_STATE_BROKEN                9
 #define FI_STATE_BROKEN                 10
-
+#define IMG_STATE_VALID_HC              11
+#define IMG_STATE_BROKEN_HC             12
 
 //#define DS_WIDTH                      DLGS_WIDTH
 //#define DS_HEIGHT                     DLGS_HEIGHT
@@ -390,3 +374,4 @@
 #define MW_ROW_3                        (MW_ROW_4-4*RSC_CD_FIXEDTEXT_HEIGHT+RSC_SP_CTRL_Y)
 
 #endif
+
