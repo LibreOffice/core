@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgeps.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-24 05:58:05 $
+ *  last change: $Author: pb $ $Date: 2001-12-19 13:16:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,7 @@ ModalDialog DLG_EXPORT_EPS
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 251, 147 ) ;
+    Size = MAP_APPFONT ( 230, 185 ) ;
     Moveable = TRUE ;
     Closeable = TRUE ;
     Text = "EPS Export Optionen" ;
@@ -80,25 +80,25 @@ ModalDialog DLG_EXPORT_EPS
     Text[ polish ] = "Opcje eksportowe EPS";
     Text[ english_us ] = "EPS Export Options";
     Text[ portuguese_brazilian ] = "EPS Export Optionen";
-    Text[ japanese ] = "EPS ï½´ï½¸ï½½ï¾ï¾Ÿï½°ï¾„ï½µï¾Œï¾Ÿï½¼ï½®ï¾";
+    Text[ japanese ] = "EPS ã‚¨ã‚¯ã‚¹ãƒãƒ¼ãƒˆã‚ªãƒ—ã‚·ãƒ§ãƒ³";
     Text[ chinese_simplified ] = "EPS è¾“å‡ºé€‰é¡¹";
     Text[ chinese_traditional ] = "EPS åŒ¯å‡ºé¸é …";
     OKButton BTN_OK
     {
-        Pos = MAP_APPFONT ( 197 , 6 ) ;
+        Pos = MAP_APPFONT ( 174 , 6 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
         DefButton = TRUE ;
     };
     CancelButton BTN_CANCEL
     {
-        Pos = MAP_APPFONT ( 197, 23 ) ;
+        Pos = MAP_APPFONT ( 174, 23 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
     HelpButton BTN_HELP
     {
-        Pos = MAP_APPFONT ( 197 , 43 ) ;
+        Pos = MAP_APPFONT ( 174 , 43 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
@@ -106,7 +106,7 @@ ModalDialog DLG_EXPORT_EPS
     FixedLine GRP_PREVIEW
     {
         Pos = MAP_APPFONT ( 6 , 3  ) ;
-        Size = MAP_APPFONT ( 88 , 8 ) ;
+        Size = MAP_APPFONT ( 162 , 8 ) ;
         Text = "Vorschau";
         Text [ ENGLISH ] = "Preview";
         Text[ italian ] = "Anteprima";
@@ -121,7 +121,7 @@ ModalDialog DLG_EXPORT_EPS
         Text[ chinese_simplified ] = "é¢„è§ˆ";
         Text[ russian ] = "Ïğîñìîòğ";
         Text[ polish ] = "Podgl¹d";
-        Text[ japanese ] = "ï¾Œï¾Ÿï¾šï¾‹ï¾ï½­ï½°";
+        Text[ japanese ] = "ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼";
         Text[ chinese_traditional ] = "é è¦½";
         Text[ arabic ] = "ãÚÇíäÉ";
         Text[ dutch ] = "Voorbeeld";
@@ -129,13 +129,13 @@ ModalDialog DLG_EXPORT_EPS
         Text[ greek ] = "Ğñïåğéóêüğçóç";
         Text[ korean ] = "ë¯¸ë¦¬ë³´ê¸°";
         Text[ turkish ] = "Önizleme";
-        Text[ catalan ] = "Preview";
+        Text[ catalan ] = "Visualització prèvia";
         Text[ finnish ] = "Esikatselu";
     };
     CheckBox CB_PREVIEW_TIFF
     {
         Pos = MAP_APPFONT ( 12, 14 ) ;
-        Size = MAP_APPFONT ( 82 , 10 ) ;
+        Size = MAP_APPFONT ( 150 , 10 ) ;
         Text = "~Vorschau Bild (Tiff)" ;
         Text [ ENGLISH ] = "~Preview picture (Tiff)" ;
         TabStop = TRUE ;
@@ -151,7 +151,7 @@ ModalDialog DLG_EXPORT_EPS
         Text[ chinese_simplified ] = "å›¾åƒé¢„è§ˆ(TIFF)(~P)";
         Text[ russian ] = "Ïğîñìîòğ êàğòèíêè (TIFF)";
         Text[ polish ] = "Podgl¹d rysunku (Tiff)";
-        Text[ japanese ] = "ï½²ï¾’ï½°ï½¼ï¾ç”»åƒã®ï¾Œï¾Ÿï¾šï¾‹ï¾ï½­ï½° (Tiff)(~P)";
+        Text[ japanese ] = "ã‚¤ãƒ¡ãƒ¼ã‚¸ç”»åƒã®ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ (Tiff)(~P)";
         Text[ arabic ] = "ãÚÇíäÉ ÇáÕæÑÉ(TIFF) ";
         Text[ dutch ] = "~Voorbeeldvenster (TIFF)";
         Text[ chinese_simplified ] = "å›¾åƒé¢„è§ˆ(TIFF)(~P)";
@@ -160,12 +160,12 @@ ModalDialog DLG_EXPORT_EPS
         Text[ chinese_traditional ] = "åœ–ç‰‡é è¦½(TIFF)(~P)";
         Text[ turkish ] = "Resim önizleme (TIFF)";
         Text[ finnish ] = "Kuvan ~esikatselu (TIFF)";
-        Text[ catalan ] = "~Previsualización (Tiff)";
+        Text[ catalan ] = "~Visualització prèvia d'imatge (TIFF)";
     };
     CheckBox CB_PREVIEW_EPSI
     {
         Pos = MAP_APPFONT ( 12 , 28 ) ;
-        Size = MAP_APPFONT ( 82, 10 ) ;
+        Size = MAP_APPFONT ( 150, 10 ) ;
         Text = "~Interchange (EPSI)" ;
         Text [ ENGLISH ] = "~Interchange (EPSI)" ;
         TabStop = TRUE ;
@@ -181,19 +181,19 @@ ModalDialog DLG_EXPORT_EPS
         Text[ swedish ] = "Interchange (EPSI)";
         Text[ polish ] = "~Interchange (EPSI)";
         Text[ portuguese_brazilian ] = "~Interchange (EPSI)";
-        Text[ japanese ] = "ï½²ï¾ï¾€ï½°ï¾ï½ªï¾ï½¼ï¾(EPS~I)";
+        Text[ japanese ] = "ã‚¤ãƒ³ã‚¿ãƒ¼ãƒã‚§ãƒ³ã‚¸(EPS~I)";
         Text[ korean ] = "ì¸í„°ì²´ì¸ì§€ (EPS~I)";
         Text[ chinese_simplified ] = "äº’æ¢(EPS~I)";
         Text[ chinese_traditional ] = "äº’æ›(EPS~I)";
         Text[ arabic ] = "~Interchange (EPSI)";
         Text[ turkish ] = "Interchange (EPSI)";
         Text[ finnish ] = "~Liitäntä (EPSI)";
-        Text[ catalan ] = "~Interchange (EPSI)";
+        Text[ catalan ] = "~Intercanvi (EPSI)";
     };
     FixedLine GRP_VERSION
     {
         Pos = MAP_APPFONT ( 6, 41 ) ;
-        Size = MAP_APPFONT ( 88 , 8 ) ;
+        Size = MAP_APPFONT ( 162 , 8 ) ;
         Text = "Version";
         Text [ ENGLISH ] = "Version";
         Text[ italian ] = "Versione";
@@ -208,7 +208,7 @@ ModalDialog DLG_EXPORT_EPS
         Text[ chinese_simplified ] = "ç‰ˆæœ¬";
         Text[ russian ] = "Âåğñèÿ";
         Text[ polish ] = "Wersja";
-        Text[ japanese ] = "ï¾Šï¾ï½°ï½¼ï¾ï½®ï¾";
+        Text[ japanese ] = "ãƒãƒ¼ã‚¸ãƒ§ãƒ³";
         Text[ chinese_traditional ] = "ç‰ˆæœ¬";
         Text[ arabic ] = "ÅÕÏÇÑ";
         Text[ dutch ] = "Versie";
@@ -216,13 +216,13 @@ ModalDialog DLG_EXPORT_EPS
         Text[ greek ] = "¸êäïóç";
         Text[ korean ] = "ë²„ì „";
         Text[ turkish ] = "Sürüm";
-        Text[ catalan ] = "Version";
+        Text[ catalan ] = "Versió";
         Text[ finnish ] = "Versio";
     };
     RadioButton RB_LEVEL1
     {
         Pos = MAP_APPFONT ( 12 , 52 ) ;
-        Size = MAP_APPFONT ( 82 , 10 ) ;
+        Size = MAP_APPFONT ( 150 , 10 ) ;
         Text = "Level ~1" ;
         Text [ ENGLISH ] = "Level ~1" ;
         TabStop = TRUE ;
@@ -238,21 +238,21 @@ ModalDialog DLG_EXPORT_EPS
         Text[ chinese_simplified ] = "çº§åˆ« ~1";
         Text[ russian ] = "Óğîâåíü 1";
         Text[ polish ] = "Poziom 1";
-        Text[ japanese ] = "ï¾šï¾ï¾ï¾™ ~1";
+        Text[ japanese ] = "ãƒ¬ãƒ™ãƒ« ~1";
         Text[ chinese_traditional ] = "ç´šåˆ¥ ~1";
         Text[ arabic ] = "ÇáãÓÊæì 1";
         Text[ dutch ] = "Level ~1";
         Text[ chinese_simplified ] = "çº§åˆ« ~1";
         Text[ greek ] = "Åğßğåäï ~1";
-        Text[ korean ] = "ë ˆë²¨ 1";
+        Text[ korean ] = "ë ˆë²¨ 1(1)";
         Text[ turkish ] = "Düzey ~1";
         Text[ finnish ] = "Taso ~1";
-        Text[ catalan ] = "Nivel ~1";
+        Text[ catalan ] = "Nivell ~1";
     };
     RadioButton RB_LEVEL2
     {
         Pos = MAP_APPFONT ( 12 , 66 ) ;
-        Size = MAP_APPFONT ( 82, 10 ) ;
+        Size = MAP_APPFONT ( 150, 10 ) ;
         Text = "Level ~2" ;
         Text [ ENGLISH ] = "Level ~2" ;
         TabStop = TRUE ;
@@ -268,22 +268,22 @@ ModalDialog DLG_EXPORT_EPS
         Text[ chinese_simplified ] = "çº§åˆ« ~2";
         Text[ russian ] = "Óğîâåíü 2";
         Text[ polish ] = "Poziom 2";
-        Text[ japanese ] = "ï¾šï¾ï¾ï¾™ ~2";
+        Text[ japanese ] = "ãƒ¬ãƒ™ãƒ« ~2";
         Text[ chinese_traditional ] = "ç´šåˆ¥ ~2";
         Text[ arabic ] = "ÇáãÓÊæì 2";
         Text[ dutch ] = "Level ~2";
         Text[ chinese_simplified ] = "çº§åˆ« ~2";
         Text[ greek ] = "Åğßğåäï ~2";
-        Text[ korean ] = "ë ˆë²¨ ~2";
+        Text[ korean ] = "ë ˆë²¨ 2(2)";
         Text[ turkish ] = "Düzey ~2";
         Text[ finnish ] = "Taso ~2";
-        Text[ catalan ] = "Nivel ~2";
+        Text[ catalan ] = "Nivell ~2";
     };
 
     FixedLine GRP_COLOR
     {
         Pos = MAP_APPFONT ( 6 , 79 ) ;
-        Size = MAP_APPFONT ( 88 , 8 ) ;
+        Size = MAP_APPFONT ( 162 , 8 ) ;
         Text = "Farb Format";
         Text [ ENGLISH ] = "Color Type";
         Text[ italian ] = "Formato colore";
@@ -299,20 +299,20 @@ ModalDialog DLG_EXPORT_EPS
         Text[ russian ] = "Ôîğìàò öâåòà";
         Text[ polish ] = "Format koloru";
         Text[ japanese ] = "è‰²ã®æ›¸å¼";
-        Text[ chinese_traditional ] = "é¡”è‰²æ ¼å¼";
+        Text[ chinese_traditional ] = "é¡è‰²æ ¼å¼";
         Text[ arabic ] = "ÊäÓíŞ Çááæä";
         Text[ dutch ] = "Kleuropmaak";
         Text[ chinese_simplified ] = "é¢œè‰²æ ¼å¼";
         Text[ greek ] = "ÌïñöŞ ÷ñşìáôïò";
-        Text[ korean ] = "ìƒ‰ í¬ë§·";
+        Text[ korean ] = "ìƒ‰ í˜•ì‹";
         Text[ turkish ] = "Renk formatı";
-        Text[ catalan ] = "Color format";
+        Text[ catalan ] = "Format del color";
         Text[ finnish ] = "Värimuoto";
     };
     RadioButton RB_COLOR
     {
         Pos = MAP_APPFONT ( 12 , 90 ) ;
-        Size = MAP_APPFONT ( 82, 10 ) ;
+        Size = MAP_APPFONT ( 150, 10 ) ;
         Text = "~Farbe" ;
         Text [ ENGLISH ] = "~Color" ;
         TabStop = TRUE ;
@@ -329,7 +329,7 @@ ModalDialog DLG_EXPORT_EPS
         Text[ russian ] = "Öâåò";
         Text[ polish ] = "Kolor";
         Text[ japanese ] = "è‰²(~C)";
-        Text[ chinese_traditional ] = "é¡”è‰²(~C)";
+        Text[ chinese_traditional ] = "é¡è‰²(~C)";
         Text[ arabic ] = "Çááæä";
         Text[ dutch ] = "~Kleur";
         Text[ chinese_simplified ] = "é¢œè‰²(~C)";
@@ -342,7 +342,7 @@ ModalDialog DLG_EXPORT_EPS
     RadioButton RB_GRAYSCALE
     {
         Pos = MAP_APPFONT ( 12 , 104 ) ;
-        Size = MAP_APPFONT ( 82, 10 ) ;
+        Size = MAP_APPFONT ( 150, 10 ) ;
         Text = "~Graustufen" ;
         Text [ ENGLISH ] = "~Grayscale" ;
         TabStop = TRUE ;
@@ -358,7 +358,7 @@ ModalDialog DLG_EXPORT_EPS
         Text[ chinese_simplified ] = "ç°åº¦(~G)";
         Text[ russian ] = "Îòòåíêè ñåğîãî";
         Text[ polish ] = "Odcienie szaroœci";
-        Text[ japanese ] = "ï½¸ï¾ï¾šï½°ï½½ï½¹ï½°ï¾™(~G)";
+        Text[ japanese ] = "ã‚°ãƒ¬ãƒ¼ã‚¹ã‚±ãƒ¼ãƒ«(~G)";
         Text[ chinese_traditional ] = "ç°éš(~G)";
         Text[ arabic ] = "ÏÑÌÇÊ ÇáÑãÇÏí";
         Text[ dutch ] = "~Grijswaarden";
@@ -367,13 +367,13 @@ ModalDialog DLG_EXPORT_EPS
         Text[ korean ] = "íšŒìƒ‰ë„(~G)";
         Text[ turkish ] = "Gri tonları";
         Text[ finnish ] = "~Harmaasävy";
-        Text[ catalan ] = "~Escala de grises";
+        Text[ catalan ] = "~Escala de grisos";
     };
 
     FixedLine  GRP_COMPRESSION
     {
-        Pos = MAP_APPFONT ( 100 , 79 ) ;
-        Size = MAP_APPFONT ( 88 , 8 ) ;
+        Pos = MAP_APPFONT ( 6 , 117 ) ;
+        Size = MAP_APPFONT ( 162 , 8 ) ;
         Text = "Kompression";
         Text [ ENGLISH ] = "Compression";
         Text[ italian ] = "Compressione";
@@ -396,13 +396,13 @@ ModalDialog DLG_EXPORT_EPS
         Text[ greek ] = "Óõìğßåóç";
         Text[ korean ] = "ì••ì¶•";
         Text[ turkish ] = "Sıkıştırma";
-        Text[ catalan ] = "Compression";
+        Text[ catalan ] = "Compressió";
         Text[ finnish ] = "Tiivistys";
     };
     RadioButton RB_COMPRESSION_LZW
     {
-        Pos = MAP_APPFONT ( 106, 90 );
-        Size = MAP_APPFONT ( 82, 10 ) ;
+        Pos = MAP_APPFONT ( 12, 128 );
+        Size = MAP_APPFONT ( 150, 10 ) ;
         Text = "LZW Kodierung" ;
         Text [ ENGLISH ] = "LZW Compression" ;
         TabStop = TRUE ;
@@ -418,7 +418,7 @@ ModalDialog DLG_EXPORT_EPS
         Text[ chinese_simplified ] = "LZW ç¼–ç ";
         Text[ russian ] = "Êîäèğîâêà LZW";
         Text[ polish ] = "Kodowanie LZW";
-        Text[ japanese ] = "LZW ï½´ï¾ï½ºï½°ï¾„ï¾";
+        Text[ japanese ] = "LZW ã‚¨ãƒ³ã‚³ãƒ¼ãƒ‰";
         Text[ chinese_traditional ] = "LZW ç·¨ç¢¼";
         Text[ arabic ] = "LZW ÊÑãíÒ";
         Text[ dutch ] = "LZW-codering";
@@ -427,12 +427,12 @@ ModalDialog DLG_EXPORT_EPS
         Text[ korean ] = "LZW ì¸ì½”ë”©";
         Text[ turkish ] = "LZW kodlaması";
         Text[ finnish ] = "LZW-koodaus";
-        Text[ catalan ] = "Codificación LZW";
+        Text[ catalan ] = "Codificació LZW";
     };
     RadioButton RB_COMPRESSION_NONE
     {
-        Pos = MAP_APPFONT ( 106, 104 ) ;
-        Size = MAP_APPFONT ( 82, 10 ) ;
+        Pos = MAP_APPFONT ( 12, 141 ) ;
+        Size = MAP_APPFONT ( 150, 10 ) ;
         Text = "Keine" ;
         Text [ ENGLISH ] = "None" ;
         TabStop = TRUE ;
@@ -457,13 +457,13 @@ ModalDialog DLG_EXPORT_EPS
         Text[ korean ] = "ì—†ìŒ";
         Text[ turkish ] = "Yok";
         Text[ finnish ] = "Ei mitään";
-        Text[ catalan ] = "Ninguno";
+        Text[ catalan ] = "Cap";
     };
 
     FixedLine  GRP_TEXT
     {
-        Pos = MAP_APPFONT ( 6 , 117 ) ;
-        Size = MAP_APPFONT ( 182, 8 ) ;
+        Pos = MAP_APPFONT ( 6 , 154 ) ;
+        Size = MAP_APPFONT ( 162, 8 ) ;
         Text = "Text Einstellungen";
         Text [ ENGLISH ] = "TextMode";
         Text[ english_us ] = "Text settings";
@@ -484,14 +484,14 @@ ModalDialog DLG_EXPORT_EPS
         Text[ chinese_traditional ] = "è¨­å®šæ–‡å­—";
         Text[ turkish ] = "TextMode";
         Text[ arabic ] = "TextMode";
-        Text[ catalan ] = "TextMode";
-        Text[ finnish ] = "Text Einstellungen";
+        Text[ catalan ] = "Paràmetres de text";
+        Text[ finnish ] = "Tekstin asetukset";
     };
     ListBox LB_TEXT_MODE
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT( 12, 128 );
-        Size = MAP_APPFONT( 170, 48 );
+        Pos = MAP_APPFONT( 12, 165 );
+        Size = MAP_APPFONT( 150, 48 );
         TabStop = TRUE ;
         DropDown = TRUE ;
         StringList =
@@ -504,115 +504,112 @@ ModalDialog DLG_EXPORT_EPS
             < "always export glyph outlines" ; > ;
             < "newer export glyph outlines " ; > ;
         };
-    StringList [ language_user1 ] =
-    {
+        StringList [ language_user1 ] =
+        {
             < "Glyph Outlines immer exportieren" ; > ;
-        < "Glyph Outlines niemals exportieren" ; > ;
-    };
-    StringList [ english_us ] =
-    {
+            < "Glyph Outlines niemals exportieren" ; > ;
+        };
+        StringList [ english_us ] =
+        {
             < "Always export glyph outlines" ; > ;
-        < "Never export glyph outlines" ; > ;
-    };
-    StringList [ portuguese ] =
-    {
+            < "Never export glyph outlines" ; > ;
+        };
+        StringList [ portuguese ] =
+        {
             < "Exportar sempre Glyph Outlines" ; > ;
-        < "Nunca exportar Glyph Outlines" ; > ;
-    };
-    StringList [ russian ] =
-    {
+            < "Nunca exportar Glyph Outlines" ; > ;
+        };
+        StringList [ russian ] =
+        {
             < "Âñåãäà ıêñïîğòèğîâàòü Glyph Outlines" ; > ;
-        < "Íèêîãäà íå ıêñïîğòèğîâàòü Glyph Outlines" ; > ;
-    };
-    StringList [ greek ] =
-    {
+            < "Íèêîãäà íå ıêñïîğòèğîâàòü Glyph Outlines" ; > ;
+        };
+        StringList [ greek ] =
+        {
             < "ĞÜíôá åîáãùãŞ ôùí Glyph Outlines" ; > ;
-        < "Ğïôİ åîáãùãŞ ôùí Glyph Outlines" ; > ;
-    };
-    StringList [ dutch ] =
-    {
+            < "Ğïôİ åîáãùãŞ ôùí Glyph Outlines" ; > ;
+        };
+        StringList [ dutch ] =
+        {
             < "Glyph Outlines altijd exporteren" ; > ;
-        < "Glyph Outlines nooit exporteren" ; > ;
-    };
-    StringList [ french ] =
-    {
+            < "Glyph Outlines nooit exporteren" ; > ;
+        };
+        StringList [ french ] =
+        {
             < "Toujours exporter les contours glyphes" ; > ;
-        < "Ne jamais exporter les contours glyphes" ; > ;
-    };
-    StringList [ spanish ] =
-    {
+            < "Ne jamais exporter les contours glyphes" ; > ;
+        };
+        StringList [ spanish ] =
+        {
             < "Exportar siempre Glyph Outlines" ; > ;
-        < "No exportar nunca Glyph Outlines" ; > ;
-    };
-    StringList [ italian ] =
-    {
+            < "No exportar nunca Glyph Outlines" ; > ;
+        };
+        StringList [ italian ] =
+        {
             < "Esporta sempre Glyph Outlines" ; > ;
-        < "Non esportare mai Glyph Outlines" ; > ;
-    };
-    StringList [ danish ] =
-    {
+            < "Non esportare mai Glyph Outlines" ; > ;
+        };
+        StringList [ danish ] =
+        {
             < "Glyph Outlines immer exportieren" ; > ;
-        < "Glyph Outlines niemals exportieren" ; > ;
-    };
-    StringList [ swedish ] =
-    {
+            < "Glyph Outlines niemals exportieren" ; > ;
+        };
+        StringList [ swedish ] =
+        {
             < "Exportera alltid glyfkonturer" ; > ;
-        < "Exportera aldrig glyfkonturer" ; > ;
-    };
-    StringList [ polish ] =
-    {
+            < "Exportera aldrig glyfkonturer" ; > ;
+        };
+        StringList [ polish ] =
+        {
             < "Eksportuj zawsze kontury glifów (glyph outlines)" ; > ;
-        < "Nie nigdy eksportuj konturów glifów (glyph outlines)" ; > ;
-    };
-    StringList [ portuguese_brazilian ] =
-    {
+            < "Nie nigdy eksportuj konturów glifów (glyph outlines)" ; > ;
+        };
+        StringList [ portuguese_brazilian ] =
+        {
             < "Glyph Outlines immer exportieren" ; > ;
-        < "Glyph Outlines niemals exportieren" ; > ;
-    };
-    StringList [ japanese ] =
-    {
-            < "ï½¸ï¾ï¾˜ï¾Œï½¥ï½±ï½³ï¾„ï¾—ï½²ï¾ã¯å¸¸ã«ï½´ï½¸ï½½ï¾ï¾Ÿï½°ï¾„ã™ã‚‹" ; > ;
-        < "ï½¸ï¾ï¾˜ï¾Œï½¥ï½±ï½³ï¾„ï¾—ï½²ï¾ã¯çµ¶å¯¾ã«ï½´ï½¸ï½½ï¾ï¾Ÿï½°ï¾„ã—ãªã„" ; > ;
-    };
-    StringList [ korean ] =
-    {
+            < "Glyph Outlines niemals exportieren" ; > ;
+        };
+        StringList [ japanese ] =
+        {
+            < "ã‚°ãƒªãƒ•ãƒ»ã‚¢ã‚¦ãƒˆãƒ©ã‚¤ãƒ³ã¯å¸¸ã«ã‚¨ã‚¯ã‚¹ãƒãƒ¼ãƒˆã™ã‚‹" ; > ;
+            < "ã‚°ãƒªãƒ•ãƒ»ã‚¢ã‚¦ãƒˆãƒ©ã‚¤ãƒ³ã¯çµ¶å¯¾ã«ã‚¨ã‚¯ã‚¹ãƒãƒ¼ãƒˆã—ãªã„" ; > ;
+        };
+        StringList [ korean ] =
+        {
             < "ê¸€ë¦¬í”„ ì•„ì›ƒë¼ì¸ í•­ìƒ ë‚´ë³´ë‚´ê¸°" ; > ;
-        < "ê¸€ë¦¬í”„ ì•„ì›ƒ ë¼ì¸ ì ˆëŒ€ ë‚´ë³´ë‚´ì§€ ì•Šê¸°" ; > ;
-    };
-    StringList [ chinese_simplified ] =
-    {
+            < "ê¸€ë¦¬í”„ ì•„ì›ƒ ë¼ì¸ ì ˆëŒ€ ë‚´ë³´ë‚´ì§€ ì•Šê¸°" ; > ;
+        };
+        StringList [ chinese_simplified ] =
+        {
             < "è‡ªåŠ¨è¾“å‡ºå­—ä½“è½®å»“" ; > ;
-        < "æ°¸ä¸è¾“å‡ºå­—ä½“è½®å»“" ; > ;
-    };
-    StringList [ chinese_traditional ] =
-    {
+            < "æ°¸ä¸è¾“å‡ºå­—ä½“è½®å»“" ; > ;
+        };
+        StringList [ chinese_traditional ] =
+        {
             < "è‡ªå‹•åŒ¯å‡ºå­—å‹è¼ªå»“" ; > ;
-        < "æ°¸ä¸åŒ¯å‡ºå­—å‹è¼ªå»“" ; > ;
-    };
-    StringList [ turkish ] =
-    {
+            < "æ°¸ä¸åŒ¯å‡ºå­—å‹è¼ªå»“" ; > ;
+        };
+        StringList [ turkish ] =
+        {
             < "Glyph Outlines immer exportieren" ; > ;
-        < "Glyph Outlines niemals exportieren" ; > ;
-    };
-    StringList [ arabic ] =
-    {
+            < "Glyph Outlines niemals exportieren" ; > ;
+        };
+        StringList [ arabic ] =
+        {
             < "Glyph Outlines immer exportieren" ; > ;
-        < "Glyph Outlines niemals exportieren" ; > ;
+            < "Glyph Outlines niemals exportieren" ; > ;
+        };
+        StringList [ catalan ] =
+        {
+            < "Exporta sempre els contorns dels gravats" ; > ;
+            < "No exportis mai els contorns dels gravats" ; > ;
+        };
+        StringList [ finnish ] =
+        {
+             < "Vie symbolien jäsennys aina" ; > ;
+            < "Älä vie symbolien jäsennystä koskaan" ; > ;
+        };
     };
-    StringList [ catalan ] =
-    {
-            < "Glyph Outlines immer exportieren" ; > ;
-        < "Glyph Outlines niemals exportieren" ; > ;
-    };
-    StringList [ finnish ] =
-    {
-             < "Glyph Outlines immer exportieren" ; > ;
-        < "Glyph Outlines niemals exportieren" ; > ;
-    };
-    };
-
-
-
     Text[ italian ] = "Opzioni d'esportazione EPS";
     Text[ portuguese_brazilian ] = "EPS Export Optionen";
     Text[ portuguese ] = "Opções exportação EPS";
@@ -625,7 +622,7 @@ ModalDialog DLG_EXPORT_EPS
     Text[ chinese_simplified ] = "EPS è¾“å‡ºé€‰é¡¹";
     Text[ russian ] = "Ïàğàìåòğû ıêñïîğòà EPS";
     Text[ polish ] = "Opcje eksportowe EPS";
-    Text[ japanese ] = "EPS ï½´ï½¸ï½½ï¾ï¾Ÿï½°ï¾„ï½µï¾Œï¾Ÿï½¼ï½®ï¾";
+    Text[ japanese ] = "EPS ã‚¨ã‚¯ã‚¹ãƒãƒ¼ãƒˆã‚ªãƒ—ã‚·ãƒ§ãƒ³";
     Text[ chinese_traditional ] = "EPS åŒ¯å‡ºé¸é …";
     Text[ arabic ] = "EPS ÎíÇÑÇÊ ÊÕÏíÑ";
     Text[ dutch ] = "EPS export opties";
@@ -634,17 +631,5 @@ ModalDialog DLG_EXPORT_EPS
     Text[ korean ] = "EPS ë‚´ë³´ë‚´ê¸° ì˜µì…˜";
     Text[ turkish ] = "EPS dışa aktarma seçenekleri";
     Text[ finnish ] = "EPS-vientiasetukset";
-    Text[ catalan ] = "Opciones Exportación EPS";
+    Text[ catalan ] = "Opcions d'exportació EPS";
 };
-
-
-
-
-
-
-
-
-
-
-
-
