@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.4 $
+#  $Revision: 1.5 $
 #
-#  last change: $Author: vg $ $Date: 2003-07-09 10:38:56 $
+#  last change: $Author: rt $ $Date: 2004-05-18 13:28:17 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -63,11 +63,7 @@ CXXFILES = object_lifetime.cxx
 
 OBJFILES = $(patsubst %.cxx,$(OUT_COMP_OBJ)/%.$(OBJ_EXT),$(CXXFILES))
 
-SDK_CLASSPATH = $(subst $(EMPTYSTRING) $(PATH_SEPARATOR),$(PATH_SEPARATOR),$(OFFICE_CLASSES_DIR)/jurt.jar\
-		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)/unoil.jar\
-		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)/ridl.jar\
-		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)/sandbox.jar\
-		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)/juh.jar\
+SDK_CLASSPATH = $(subst $(EMPTYSTRING) $(PATH_SEPARATOR),$(PATH_SEPARATOR),$(CLASSPATH)\
 		$(PATH_SEPARATOR)$(OUT_COMP_CLASS))
 
 TYPES := \
@@ -99,11 +95,11 @@ include $(SETTINGS)/stdtarget.mk
 
 $(OUT_COMP_CLASS)/%.class : %.java
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	javac $(JAVAC_FLAGS) -classpath "$(SDK_CLASSPATH)" -d $(OUT_COMP_CLASS) $<
+	$(SDK_JAVAC) $(JAVAC_FLAGS) -classpath "$(SDK_CLASSPATH)" -d $(OUT_COMP_CLASS) $<
 
 $(GENHPPFILES) :
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	cppumaker -Gc -BUCR -O$(OUT_COMP_INC) $(TYPESLIST) $(DKREGISTRYNAME)
+	$(CPPUMAKER) -Gc -BUCR -O$(OUT_COMP_INC) $(TYPESLIST) $(DKREGISTRYNAME)
 
 $(OUT_COMP_OBJ)/%.$(OBJ_EXT) : %.cxx $(GENHPPFILES)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
@@ -129,7 +125,7 @@ ProUNOLifetimeExamples : $(OUT_BIN)/$(COMPONENT_NAME)$(EXE_EXT) $(OUT_COMP_CLASS
 	@echo --------------------------------------------------------------------------------
 
 %.run: $(OUT_COMP_CLASS)/%.class
-	java -classpath "$(SDK_CLASSPATH)" $(basename $@)
+	$(SDK_JAVA) -classpath "$(SDK_CLASSPATH)" $(basename $@)
 
 %.runexe: $(OUT_BIN)/%$(EXE_EXT) 
 	cd $(subst /,$(PS),$(OUT_BIN)) && $(basename $@)
@@ -140,4 +136,4 @@ clean :
 	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_CLASS))
 	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_GEN))
 	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_OBJ))
-	-$(DEL) $(subst /,$(PS),$(OUT_BIN)/$(COMPONENT_NAME).*)
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(OUT_BIN)/$(COMPONENT_NAME).*))
