@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shutdownicon.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: mav $ $Date: 2002-07-09 07:28:24 $
+ *  last change: $Author: mav $ $Date: 2002-07-17 14:39:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,8 +108,8 @@
 #ifndef _COM_SUN_STAR_DOCUMENT_MACROEXECMODE_HPP_
 #include <com/sun/star/document/MacroExecMode.hpp>
 #endif
-#ifndef _COM_SUN_STAR_DOCUMENT_CONFIGITEMAPIMODE_HPP_
-#include <com/sun/star/document/ConfigItemAPIMode.hpp>
+#ifndef _COM_SUN_STAR_DOCUMENT_UPDATEDOCMODE_HPP_
+#include <com/sun/star/document/UpdateDocMode.hpp>
 #endif
 #ifndef _FILEDLGHELPER_HXX
 #include <filedlghelper.hxx>
@@ -287,8 +287,8 @@ void ShutdownIcon::FileOpen()
                     aArgs[1].Name = OUString::createFromAscii( "MacroExecutionMode" );
                     aArgs[1].Value <<= nMacroExecMode;
 
-                    sal_Int16 nUpdateDoc = ::com::sun::star::document::ConfigItemAPIMode::USE_CONFIG_VALUE;
-                    aArgs[2].Name = OUString::createFromAscii( "UpdateDocFromTemplate" );
+                    sal_Int16 nUpdateDoc = ::com::sun::star::document::UpdateDocMode::ACCORDING_TO_CONFIG;
+                    aArgs[2].Name = OUString::createFromAscii( "UpdateDocMode" );
                     aArgs[2].Value <<= nUpdateDoc;
 
                     OUString                    aFilterName;
