@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crefl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2001-05-10 14:36:45 $
+ *  last change: $Author: jbu $ $Date: 2001-06-22 15:41:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,9 @@
 #ifndef _CPPUHELPER_QUERYINTERFACE_HXX_
 #include <cppuhelper/queryinterface.hxx>
 #endif
+#ifndef _CPPUHELPER_IMPLEMENTATIONENTRY_HXX_
+#include <cppuhelper/implementationentry.hxx>
+#endif
 
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -69,6 +72,9 @@
 
 using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
+using namespace cppu;
+using namespace osl;
+using namespace rtl;
 
 #include "base.hxx"
 
@@ -81,13 +87,40 @@ static const sal_Int32 CACHE_SIZE = 256;
 #define SERVICENAME "com.sun.star.reflection.CoreReflection"
 #define IMPLNAME    "com.sun.star.comp.stoc.CoreReflection"
 
-//--------------------------------------------------------------------------------------------------
-inline static Sequence< OUString > getSupportedServiceNames()
+// can be static, as every client of the core reflection keeps a reference to the
+// core reflection, so refcounting can be done here.
+static rtl_StandardModuleCount g_moduleCount = MODULE_COUNT_INIT;
+
+static Sequence< OUString > core_getSupportedServiceNames()
 {
-    OUString aName( OUString( RTL_CONSTASCII_USTRINGPARAM(SERVICENAME) ) );
-    return Sequence< OUString >( &aName, 1 );
+    static Sequence < OUString > *pNames = 0;
+    if( ! pNames )
+    {
+        MutexGuard guard( Mutex::getGlobalMutex() );
+        if( !pNames )
+        {
+            static Sequence< OUString > seqNames(1);
+            seqNames.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM(SERVICENAME) );
+            pNames = &seqNames;
+        }
+    }
+    return *pNames;
 }
 
+static OUString core_getImplementationName()
+{
+    static OUString *pImplName = 0;
+    if( ! pImplName )
+    {
+        MutexGuard guard( Mutex::getGlobalMutex() );
+        if( ! pImplName )
+        {
+            static OUString implName( RTL_CONSTASCII_USTRINGPARAM( IMPLNAME ) );
+            pImplName = &implName;
+        }
+    }
+    return *pImplName;
+}
 //__________________________________________________________________________________________________
 IdlReflectionServiceImpl::IdlReflectionServiceImpl(
     const Reference< XComponentContext > & xContext )
@@ -95,6 +128,7 @@ IdlReflectionServiceImpl::IdlReflectionServiceImpl(
     , _xMgr( xContext->getServiceManager(), UNO_QUERY )
     , _aElements( CACHE_SIZE )
 {
+    g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
     xContext->getValueByName( OUString(
         RTL_CONSTASCII_USTRINGPARAM("com.sun.star.reflection.TypeDescriptionManager") ) ) >>= _xTDMgr;
     OSL_ENSURE( _xTDMgr.is(), "### cannot get \"com.sun.star.reflection.TypeDescriptionManager\"!" );
@@ -103,6 +137,7 @@ IdlReflectionServiceImpl::IdlReflectionServiceImpl(
 IdlReflectionServiceImpl::~IdlReflectionServiceImpl()
 {
     TRACE( "> IdlReflectionServiceImpl dtor <\n" );
+    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 }
 
 // XInterface
@@ -195,7 +230,7 @@ void IdlReflectionServiceImpl::dispose()
 OUString IdlReflectionServiceImpl::getImplementationName()
     throw(::com::sun::star::uno::RuntimeException)
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM(IMPLNAME) );
+    return core_getImplementationName();
 }
 //__________________________________________________________________________________________________
 sal_Bool IdlReflectionServiceImpl::supportsService( const OUString & rServiceName )
@@ -214,7 +249,7 @@ sal_Bool IdlReflectionServiceImpl::supportsService( const OUString & rServiceNam
 Sequence< OUString > IdlReflectionServiceImpl::getSupportedServiceNames()
     throw(::com::sun::star::uno::RuntimeException)
 {
-    return stoc_corefl::getSupportedServiceNames();
+    return core_getSupportedServiceNames();
 }
 
 // XIdlReflection
@@ -426,9 +461,25 @@ Reference< XInterface > SAL_CALL IdlReflectionServiceImpl_create(
 //##################################################################################################
 //##################################################################################################
 
+using namespace stoc_corefl;
+
+static struct ImplementationEntry g_entries[] =
+{
+    {
+        IdlReflectionServiceImpl_create, core_getImplementationName,
+        core_getSupportedServiceNames, createSingleComponentFactory,
+        &g_moduleCount.modCnt , 0
+    },
+    { 0, 0, 0, 0, 0, 0 }
+};
 
 extern "C"
 {
+sal_Bool SAL_CALL component_canUnload( TimeValue *pTime )
+{
+    return g_moduleCount.canUnload( &g_moduleCount , pTime );
+}
+
 //==================================================================================================
 void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
@@ -439,50 +490,12 @@ void SAL_CALL component_getImplementationEnvironment(
 sal_Bool SAL_CALL component_writeInfo(
     void * pServiceManager, void * pRegistryKey )
 {
-    if (pRegistryKey)
-    {
-        try
-        {
-            Reference< XRegistryKey > xNewKey(
-                reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM("/" IMPLNAME "/UNO/SERVICES") ) ) );
-
-            const Sequence< OUString > & rSNL = stoc_corefl::getSupportedServiceNames();
-            const OUString * pArray = rSNL.getConstArray();
-            for ( sal_Int32 nPos = rSNL.getLength(); nPos--; )
-                xNewKey->createKey( pArray[nPos] );
-
-            return sal_True;
-        }
-        catch (InvalidRegistryException &)
-        {
-            OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
-        }
-    }
-    return sal_False;
+    return component_writeInfoHelper( pServiceManager, pRegistryKey, g_entries );
 }
 //==================================================================================================
 void * SAL_CALL component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
 {
-    void * pRet = 0;
-
-    if (pServiceManager && rtl_str_compare( pImplName, IMPLNAME ) == 0)
-    {
-        Reference< XSingleServiceFactory > xFactory( createSingleComponentFactory(
-            stoc_corefl::IdlReflectionServiceImpl_create,
-            OUString( RTL_CONSTASCII_USTRINGPARAM(IMPLNAME) ),
-            stoc_corefl::getSupportedServiceNames() ), UNO_QUERY );
-
-        if (xFactory.is())
-        {
-            xFactory->acquire();
-            pRet = xFactory.get();
-        }
-    }
-
-    return pRet;
+    return component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey , g_entries );
 }
 }
-
-
