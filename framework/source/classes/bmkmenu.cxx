@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bmkmenu.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pb $ $Date: 2001-05-11 10:12:07 $
+ *  last change: $Author: cd $ $Date: 2001-06-15 09:06:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,30 +177,7 @@ USHORT BmkMenu_Impl::GetMID()
     return m_nMID;
 }
 
-/*
-String BmkMenu_Impl::GetTitle( const String& rStr )
-{
-    // "_..._" vorne rausschneiden
-    String aTitle( rStr );
-    if ( aTitle.Len() && aTitle.GetChar(0) == 0x005f)
-    {
-        aTitle.Erase( 0, 1 );
-        while ( aTitle.Len() && aTitle.GetChar(0) != 0x005f )
-            aTitle.Erase( 0, 1 );
-        if ( aTitle.Len() )
-            aTitle.Erase( 0, 1 );
-        else
-            aTitle = rStr;
-    }
-
-    return aTitle;
-}
-*/
-
 // ------------------------------------------------------------------------
-
-//ImageList* BmkMenu::_pSmallImages = NULL;
-//ImageList* BmkMenu::_pBigImages = NULL;
 
 BmkMenu::BmkMenu( Reference< XFrame >& xFrame, BmkMenu::BmkMenuType nType, BmkMenu* pRoot ) :
     m_xFrame( xFrame ), m_nType( nType )
@@ -208,26 +185,6 @@ BmkMenu::BmkMenu( Reference< XFrame >& xFrame, BmkMenu::BmkMenuType nType, BmkMe
     _pImp = new BmkMenu_Impl( pRoot );
     Initialize();
 }
-
-/*
-Image BmkMenu::GetImage( USHORT nId, BOOL bBig )
-{
-    ImageList* pList = NULL;
-    if ( bBig )
-    {
-        if ( !_pBigImages )
-            _pBigImages = new ImageList( SfxResId( RID_IMGLST_BIG ) );
-        pList = _pBigImages;
-    }
-    else
-    {
-        if ( !_pSmallImages )
-            _pSmallImages = new ImageList( SfxResId( RID_IMGLST_SMALL ) );
-        pList = _pSmallImages;
-    }
-    return pList->GetImage( nId );
-}
-*/
 
 BmkMenu::BmkMenu( Reference< XFrame >& xFrame, BmkMenu::BmkMenuType nType ) :
     m_nType( nType ), m_xFrame( xFrame )
@@ -239,6 +196,14 @@ BmkMenu::BmkMenu( Reference< XFrame >& xFrame, BmkMenu::BmkMenuType nType ) :
 BmkMenu::~BmkMenu()
 {
     delete _pImp;
+
+    for ( int i = 0; i < GetItemCount(); i++ )
+    {
+        // delete user attributes created with new!
+        USHORT nId = GetItemId( i );
+        BmkMenu::Attributes* pUserAttributes = (BmkMenu::Attributes*)GetUserValue( nId );
+        delete pUserAttributes;
+    }
 }
 
 void BmkMenu::Initialize()
