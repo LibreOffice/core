@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swxml.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:21:27 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:32:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,9 +163,6 @@
 #ifndef _SW_XMLSECTIONLIST_HXX
 #include <SwXMLSectionList.hxx>
 #endif
-#ifndef _XMLIMP_HXX
-#include <xmlimp.hxx>
-#endif
 
 #ifndef _STATSTR_HRC
 #include <statstr.hrc>
@@ -231,14 +228,6 @@ sal_Int32 ReadThroughComponent(
     Sequence<Any> rFilterArguments,
     const OUString& rName,
     sal_Bool bMustBeSuccessfull,
-
-    // parameters for special modes
-    sal_Bool bBlockMode,
-    Reference<XTextRange> & rInsertTextRange,
-    sal_Bool bFormatsOnly,
-    sal_uInt16 nStyleFamilyMask,
-    sal_Bool bMergeStyles,
-    sal_Bool bOrganizerMode,
     sal_Bool bEncrypted )
 {
     DBG_ASSERT(xInputStream.is(), "input stream missing");
@@ -280,32 +269,6 @@ sal_Int32 ReadThroughComponent(
     Reference < XImporter > xImporter( xFilter, UNO_QUERY );
     xImporter->setTargetDocument( xModelComponent );
 
-    // prepare filter for special modes
-    if( bBlockMode || bFormatsOnly || rInsertTextRange.is() || bOrganizerMode )
-    {
-        Reference<XUnoTunnel> xFilterTunnel( xFilter, UNO_QUERY );
-        if (xFilterTunnel.is())
-        {
-            SwXMLImport* pFilter = (SwXMLImport *)xFilterTunnel->getSomething(
-                SwXMLImport::getUnoTunnelId() );
-
-            if ( NULL != pFilter )
-            {
-                // In formats only mode the reader's bInsertMode is set
-                if ( bFormatsOnly )
-                    pFilter->setStyleInsertMode( nStyleFamilyMask,
-                                                 !bMergeStyles );
-                if ( rInsertTextRange.is() )
-                    pFilter->setTextInsertMode( rInsertTextRange );
-
-                if ( bBlockMode )
-                    pFilter->setBlockMode();
-
-                if ( bOrganizerMode )
-                    pFilter->setOrganizerMode();
-            }
-        }
-    }
 
 #ifdef TIMELOG
     // if we do profiling, we want to know the stream
@@ -403,15 +366,7 @@ sal_Int32 ReadThroughComponent(
     const sal_Char* pFilterName,
     Sequence<Any> rFilterArguments,
     const OUString& rName,
-    sal_Bool bMustBeSuccessfull,
-
-    // parameters for special modes
-    sal_Bool bBlockMode,
-    Reference<XTextRange> & rInsertTextRange,
-    sal_Bool bFormatsOnly,
-    sal_uInt16 nStyleFamilyMask,
-    sal_Bool bMergeStyles,
-    sal_Bool bOrganizerMode )
+    sal_Bool bMustBeSuccessfull)
 {
     DBG_ASSERT(xStorage.is(), "Need storage!");
     DBG_ASSERT(NULL != pStreamName, "Please, please, give me a name!");
@@ -479,8 +434,7 @@ sal_Int32 ReadThroughComponent(
         return ReadThroughComponent(
             xInputStream, xModelComponent, sStreamName, rFactory,
             pFilterName, rFilterArguments,
-            rName, bMustBeSuccessfull, bBlockMode, rInsertTextRange, bFormatsOnly,
-            nStyleFamilyMask, bMergeStyles, bOrganizerMode, bEncrypted );
+            rName, bMustBeSuccessfull, bEncrypted );
     }
     catch ( packages::WrongPasswordException& )
     {
@@ -591,6 +545,22 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
         { "StreamName", sizeof("StreamName")-1, 0,
               &::getCppuType( (OUString *)0 ),
               beans::PropertyAttribute::MAYBEVOID, 0 },
+        // properties for insert modes
+        { "StyleInsertModeFamilies", sizeof("StyleInsertModeFamilies")-1, 0,
+              &::getCppuType((Sequence<OUString>*)0),
+              beans::PropertyAttribute::MAYBEVOID, 0 },
+        { "StyleInsertModeOverwrite", sizeof("StyleInsertModeOverwrite")-1, 0,
+              &::getBooleanCppuType(),
+              beans::PropertyAttribute::MAYBEVOID, 0 },
+        { "TextInsertModeRange", sizeof("TextInsertModeRange")-1, 0,
+              &::getCppuType( (Reference<text::XTextRange> *) 0),
+              beans::PropertyAttribute::MAYBEVOID, 0},
+        { "AutoTextMode", sizeof("AutoTextMode")-1, 0,
+              &::getBooleanCppuType(),
+              beans::PropertyAttribute::MAYBEVOID, 0 },
+        { "OrganizerMode", sizeof("OrganizerMode")-1, 0,
+              &::getBooleanCppuType(),
+              beans::PropertyAttribute::MAYBEVOID, 0 },
         // --> OD 2004-08-10 #i28749# - Add property, which indicates, if the
         // shape position attributes are given in horizontal left-to-right layout.
         // This is the case for the OpenOffice.org file format.
@@ -646,28 +616,77 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
     *pArgs++ <<= xStatusIndicator;
 
     // prepare for special modes
-    sal_uInt16 nStyleFamilyMask = 0U;
-    Reference<XTextRange> xInsertTextRange = NULL;
     if( aOpt.IsFmtsOnly() )
     {
+        sal_Int32 nCount =
+            (aOpt.IsFrmFmts() ? 1 : 0) +
+            (aOpt.IsPageDescs() ? 1 : 0) +
+            (aOpt.IsTxtFmts() ? 2 : 0) +
+            (aOpt.IsNumRules() ? 1 : 0);
+
+        Sequence< OUString> aFamiliesSeq( nCount );
+        OUString *pSeq = aFamiliesSeq.getArray();
         if( aOpt.IsFrmFmts() )
-            nStyleFamilyMask |= SFX_STYLE_FAMILY_FRAME;
+            // SFX_STYLE_FAMILY_FRAME;
+            *pSeq++ = OUString::createFromAscii("FrameStyles");
         if( aOpt.IsPageDescs() )
-            nStyleFamilyMask |= SFX_STYLE_FAMILY_PAGE;
+            // SFX_STYLE_FAMILY_PAGE;
+            *pSeq++ = OUString::createFromAscii("PageStyles");
         if( aOpt.IsTxtFmts() )
-            nStyleFamilyMask |= (SFX_STYLE_FAMILY_CHAR|SFX_STYLE_FAMILY_PARA);
+        {
+            // (SFX_STYLE_FAMILY_CHAR|SFX_STYLE_FAMILY_PARA);
+            *pSeq++ = OUString::createFromAscii("CharacterStyles");
+            *pSeq++ = OUString::createFromAscii("ParagraphStyles");
+        }
         if( aOpt.IsNumRules() )
-            nStyleFamilyMask |= SFX_STYLE_FAMILY_PSEUDO;
+            // SFX_STYLE_FAMILY_PSEUDO;
+            *pSeq++ = OUString::createFromAscii("NumberingStyles");
+
+        OUString sStyleInsertModeFamilies(
+                RTL_CONSTASCII_USTRINGPARAM("StyleInsertModeFamilies"));
+        xInfoSet->setPropertyValue( sStyleInsertModeFamilies,
+                                    makeAny(aFamiliesSeq) );
+
+        OUString sStyleInsertModeOverwrite(
+                RTL_CONSTASCII_USTRINGPARAM("StyleInsertModeOverwrite"));
+        sal_Bool bTmp = !aOpt.IsMerge();
+        Any aAny;
+        aAny.setValue( &bTmp, ::getBooleanCppuType() );
+        xInfoSet->setPropertyValue( sStyleInsertModeOverwrite, aAny );
     }
     else if( bInsertMode )
     {
-        xInsertTextRange = SwXTextRange::CreateTextRangeFromPosition(
-            &rDoc, *rPaM.GetPoint(), 0 );
+        Reference<XTextRange> xInsertTextRange =
+            SwXTextRange::CreateTextRangeFromPosition( &rDoc, *rPaM.GetPoint(),
+                                                           0 );
+        OUString sTextInsertModeRange(
+                RTL_CONSTASCII_USTRINGPARAM("TextInsertModeRange"));
+        xInfoSet->setPropertyValue( sTextInsertModeRange,
+                                    makeAny(xInsertTextRange) );
     }
     else
     {
         rPaM.GetBound(true).nContent.Assign(0, 0);
         rPaM.GetBound(false).nContent.Assign(0, 0);
+    }
+
+    if( IsBlockMode() )
+    {
+        OUString sAutoTextMode(
+                RTL_CONSTASCII_USTRINGPARAM("AutoTextMode"));
+        sal_Bool bTmp = sal_True;
+        Any aAny;
+        aAny.setValue( &bTmp, ::getBooleanCppuType() );
+        xInfoSet->setPropertyValue( sAutoTextMode, aAny );
+    }
+    if( IsOrganizerMode() )
+    {
+        OUString sOrganizerMode(
+                RTL_CONSTASCII_USTRINGPARAM("OrganizerMode"));
+        sal_Bool bTmp = sal_True;
+        Any aAny;
+        aAny.setValue( &bTmp, ::getBooleanCppuType() );
+        xInfoSet->setPropertyValue( sOrganizerMode, aAny );
     }
 
     // Set base URI
@@ -747,35 +766,27 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
             xStorage, xModelComp, "meta.xml", "Meta.xml", xServiceFactory,
             (bOASIS ? "com.sun.star.comp.Writer.XMLOasisMetaImporter"
                     : "com.sun.star.comp.Writer.XMLMetaImporter"),
-            aEmptyArgs, rName, sal_False, IsBlockMode(), xInsertTextRange,
-            aOpt.IsFmtsOnly(), nStyleFamilyMask, aOpt.IsMerge(),
-            sal_False );
+            aEmptyArgs, rName, sal_False );
 
         nWarn2 = ReadThroughComponent(
             xStorage, xModelComp, "settings.xml", NULL, xServiceFactory,
             (bOASIS ? "com.sun.star.comp.Writer.XMLOasisSettingsImporter"
                     : "com.sun.star.comp.Writer.XMLSettingsImporter"),
-            aFilterArgs, rName, sal_False, IsBlockMode(), xInsertTextRange,
-            aOpt.IsFmtsOnly(), nStyleFamilyMask, aOpt.IsMerge(),
-            IsOrganizerMode() );
+            aFilterArgs, rName, sal_False );
     }
 
     nRet = ReadThroughComponent(
         xStorage, xModelComp, "styles.xml", NULL, xServiceFactory,
         (bOASIS ? "com.sun.star.comp.Writer.XMLOasisStylesImporter"
                 : "com.sun.star.comp.Writer.XMLStylesImporter"),
-        aFilterArgs, rName, sal_True, IsBlockMode(), xInsertTextRange,
-        aOpt.IsFmtsOnly(), nStyleFamilyMask, aOpt.IsMerge(),
-        IsOrganizerMode() );
+        aFilterArgs, rName, sal_True );
 
     if( !nRet && !(IsOrganizerMode() || aOpt.IsFmtsOnly()) )
         nRet = ReadThroughComponent(
            xStorage, xModelComp, "content.xml", "Content.xml", xServiceFactory,
             (bOASIS ? "com.sun.star.comp.Writer.XMLOasisContentImporter"
                     : "com.sun.star.comp.Writer.XMLContentImporter"),
-           aFilterArgs, rName, sal_True, IsBlockMode(), xInsertTextRange,
-           aOpt.IsFmtsOnly(), nStyleFamilyMask, aOpt.IsMerge(),
-           sal_False );
+           aFilterArgs, rName, sal_True );
 
     if( !(IsOrganizerMode() || IsBlockMode() || bInsertMode ||
           aOpt.IsFmtsOnly() ) )
