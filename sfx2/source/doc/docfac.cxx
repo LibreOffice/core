@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfac.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mba $ $Date: 2001-12-03 17:44:08 $
+ *  last change: $Author: mba $ $Date: 2002-07-09 14:54:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,15 +97,18 @@
 #include "doc.hrc"
 
 //========================================================================
-
 DECL_PTRARRAY( SfxViewFactoryArr_Impl, SfxViewFactory*, 2, 2 );
 
+typedef SfxViewFactory* SfxViewFactoryPtr;
+SV_DECL_PTRARR_DEL(SfxGlobalViewFactoryArr_Impl, SfxViewFactoryPtr, 2, 2);
+SV_IMPL_PTRARR(SfxGlobalViewFactoryArr_Impl, SfxViewFactoryPtr);
 //========================================================================
 
 DBG_NAME(SfxObjectFactory);
 TYPEINIT1(SfxObjectFactory,SvFactory);
 
 static SfxObjectFactoryArr_Impl* pObjFac = 0;
+static SfxGlobalViewFactoryArr_Impl* pViewFac = 0;
 
 //========================================================================
 
@@ -339,12 +342,15 @@ SfxObjectFactory::~SfxObjectFactory()
 
 void SfxObjectFactory::RemoveAll_Impl()
 {
+    GetObjFacArray_Impl();
     for( USHORT n=0; n<pObjFac->Count(); )
     {
         SfxObjectFactoryPtr pFac = pObjFac->GetObject(n);
         pObjFac->Remove( n );
         delete pFac;
     }
+
+    DELETEZ( pViewFac );
 }
 
 //--------------------------------------------------------------------
@@ -360,7 +366,14 @@ void SfxObjectFactory::RegisterViewFactory
           pImpl->aViewFactoryArr[nPos]->GetOrdinal() <= rFactory.GetOrdinal();
           ++nPos )
     /* empty loop */;
-    pImpl->aViewFactoryArr.Insert(nPos, &rFactory);
+    SfxViewFactoryPtr pFact = &rFactory;
+    pImpl->aViewFactoryArr.Insert( nPos, pFact );
+
+    if ( !pViewFac )
+        pViewFac = new SfxGlobalViewFactoryArr_Impl;
+
+    if ( !pViewFac->GetPos( pFact ) )
+        pViewFac->Insert( pFact, nPos );
 }
 
 //--------------------------------------------------------------------
@@ -638,7 +651,7 @@ sal_Bool SfxObjectFactory::HasObjectFactories()
     return ( GetObjFacArray_Impl().Count() != 0 );
 }
 
-SfxObjectFactoryArr_Impl&   SfxObjectFactory::GetObjFacArray_Impl()
+SfxObjectFactoryArr_Impl& SfxObjectFactory::GetObjFacArray_Impl()
 {
     if ( !pObjFac )
         pObjFac = new SfxObjectFactoryArr_Impl;
