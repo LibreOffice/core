@@ -2,9 +2,9 @@
  *
  *  $RCSfile: digitalsignaturesdialog.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-15 07:16:10 $
+ *  last change: $Author: mt $ $Date: 2004-07-19 06:45:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -286,7 +286,7 @@ IMPL_LINK( DigitalSignaturesDialog, RemoveButtonHdl, Button*, EMPTYARG )
 {
     if( maSignaturesLB.FirstSelected() )
     {
-        USHORT nSelected = (USHORT) maSignaturesLB.FirstSelected()->GetUserData();
+        USHORT nSelected = (USHORT) (sal_Int32) maSignaturesLB.FirstSelected()->GetUserData();
         aCurrentSignatureInformations.erase( aCurrentSignatureInformations.begin()+nSelected );
 
         // Export all other signatures...
@@ -394,7 +394,7 @@ void DigitalSignaturesDialog::ImplShowSignaturesDetails()
 {
     if( maSignaturesLB.FirstSelected() )
     {
-        USHORT nSelected = (USHORT) maSignaturesLB.FirstSelected()->GetUserData();
+        USHORT nSelected = (USHORT) (sal_Int32) maSignaturesLB.FirstSelected()->GetUserData();
         const SignatureInformation& rInfo = aCurrentSignatureInformations[ nSelected ];
         uno::Reference< dcss::security::XCertificate > xCert = maSignatureHelper.GetSecurityEnvironment()->getCertificate( rInfo.ouX509IssuerName, numericStringToBigInteger( rInfo.ouX509SerialNumber ) );
 
