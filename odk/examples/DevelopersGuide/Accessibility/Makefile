@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.4 $
+#  $Revision: 1.5 $
 #
-#  last change: $Author: rt $ $Date: 2004-05-18 13:19:56 $
+#  last change: $Author: rt $ $Date: 2005-01-31 16:02:50 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -49,47 +49,67 @@ include $(SETTINGS)/std.mk
 include $(SETTINGS)/dk.mk
 
 # Define non-platform/compiler specific settings
-COMPONENT_NAME =SSR
-OUT_COMP_CLASS = $(OUT_CLASS)/$(COMPONENT_NAME)
+EXAMPLE_NAME=DevGuideAccessibilityExample
+OUT_APP_CLASS = $(OUT_CLASS)/$(EXAMPLE_NAME)
+
+APP1_NAME =SSR
+APP1_JAR =$(OUT_APP_CLASS)/$(APP1_NAME).jar
 
 JAVAFILES = \
+		MessageArea.java \
 		ConnectionTask.java	\
 		EventHandler.java \
 		EventListenerProxy.java	\
 		GraphicalDisplay.java \
-		MessageArea.java \
 		NameProvider.java \
 		IAccessibleObjectDisplay.java \
 		RegistrationThread.java \
 		SSR.java \
 		TextualDisplay.java
 
-CLASSFILES = $(patsubst %.java,$(OUT_COMP_CLASS)/%.class,$(JAVAFILES))
+APP1_CLASSFILES = $(patsubst %.java,$(OUT_APP_CLASS)/%.class,$(JAVAFILES))
+APP1_CLASSNAMES = $(patsubst %.java,%.class,$(JAVAFILES))
 
 SDK_CLASSPATH = $(subst $(EMPTYSTRING) $(PATH_SEPARATOR),$(PATH_SEPARATOR),$(CLASSPATH)\
-		$(PATH_SEPARATOR)$(OUT_COMP_CLASS))
+		$(PATH_SEPARATOR)$(OUT_APP_CLASS))
 
 
 # Targets
 .PHONY: ALL
-ALL : SSR
+ALL : $(EXAMPLE_NAME)
 
 include $(SETTINGS)/stdtarget.mk
 
-$(CLASSFILES) : $(JAVAFILES)
+$(OUT_APP_CLASS)/%.class : %.java
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(SDK_JAVAC) $(JAVAC_FLAGS) -classpath "$(SDK_CLASSPATH)" -d $(OUT_COMP_CLASS) $(JAVAFILES) 
+	$(SDK_JAVAC) $(JAVAC_FLAGS) -classpath "$(SDK_CLASSPATH)" -d $(OUT_APP_CLASS) $(JAVAFILES)
 
-SSR : $(CLASSFILES)
+$(OUT_APP_CLASS)/%.mf :
+	-$(MKDIR) $(subst /,$(PS),$(@D))
+	@echo Main-Class: com.sun.star.lib.loader.Loader> $@
+	$(ECHOLINE)>> $@
+	@echo Name: com/sun/star/lib/loader/Loader.class>> $@
+	@echo Application-Class: $*>> $@
+
+$(APP1_JAR) : $(OUT_APP_CLASS)/$(APP1_NAME).mf $(APP1_CLASSFILES)
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
+	-$(MKDIR) $(subst /,$(PS),$(@D))
+	+cd $(subst /,$(PS),$(OUT_APP_CLASS)) && $(SDK_JAR) cvfm $(@F) $(basename $(@F)).mf $(APP1_CLASSNAMES)
+	+$(SDK_JAR) uvf $@ $(SDK_JAVA_UNO_BOOTSTRAP_FILES)
+
+
+$(EXAMPLE_NAME) : $(APP1_JAR)
 	@echo --------------------------------------------------------------------------------
+	@echo Before you run this example you should start your office with at least a 
+	@echo new empty document and you should have enabled the accessibility support.
 	@echo Please use the following command to execute the Simple Screen Reader example!
 	@echo -
-	@echo make SSR.run
+	@echo make $(APP1_NAME).run
 	@echo --------------------------------------------------------------------------------
 
-%.run: $(OUT_COMP_CLASS)/%.class
-	$(SDK_JAVA) -classpath "$(SDK_CLASSPATH)" $(basename $@)
+%.run: $(OUT_APP_CLASS)/%.jar
+	$(SDK_JAVA) -Dcom.sun.star.lib.loader.unopath="$(OFFICE_PROGRAM_PATH)" -jar $<
 
 .PHONY: clean
 clean :
-	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_CLASS))
+	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_APP_CLASS))
