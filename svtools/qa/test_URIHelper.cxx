@@ -2,9 +2,9 @@
  *
  *  $RCSfile: test_URIHelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sb $ $Date: 2002-08-13 08:27:02 $
+ *  last change: $Author: sb $ $Date: 2002-08-22 14:33:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,35 +114,38 @@ extern "C" sal_Bool SAL_CALL test_URIHelper_FindFirstURLInText(
     };
     static Test const aTests[]
         = {{ "...ftp://bla.bla.bla/blubber/...",
-              "ftp://bla.bla.bla/blubber/", 3, 29 },
-            { "..\\ftp://bla.bla.bla/blubber/...", 0, 0, 0 },
-            { "..\\ftp:\\\\bla.bla.bla\\blubber/...",
-              "file://bla.bla.bla/blubber%2F", 7, 29 },
-            { "http://sun.com", "http://sun.com/", 0, 14 },
-            { "http://sun.com/", "http://sun.com/", 0, 15 },
-            { "Version.1.2.3", 0, 0, 0 },
-            { "Version:1.2.3", 0, 0, 0 },
-            { "a.b.c", 0, 0, 0 },
-            { "file:///a|...", "file:///a:", 0, 10 },
-            { "file:///a||...", "file:///a%7C%7C", 0, 11 },
-            { "file:///a|/bc#...", "file:///a:/bc", 0, 13 },
-            { "file:///a|/bc#de...", "file:///a:/bc#de", 0, 16 },
-            { "abc.def.ghi,ftp.xxx.yyy/zzz...",
-              "ftp://ftp.xxx.yyy/zzz", 12, 27 },
-            { "abc.def.ghi,Ftp.xxx.yyy/zzz...",
-              "ftp://Ftp.xxx.yyy/zzz", 12, 27 },
-            { "abc.def.ghi,www.xxx.yyy...", "http://www.xxx.yyy/", 12, 23 },
-            { "abc.def.ghi,wwww.xxx.yyy...", 0, 0, 0 },
-            { "abc.def.ghi,wWW.xxx.yyy...", "http://wWW.xxx.yyy/", 12, 23 },
-            { "Bla {mailto.me@abc.def.g.h.i}...",
-              "mailto:%7Bmailto.me@abc.def.g.h.i", 4, 28 },
-            { "abc@def@ghi", 0, 0, 0 },
-            { "lala@sun.com", "mailto:lala@sun.com", 0, 12 },
-            { "1lala@sun.com", "mailto:1lala@sun.com", 0, 13 },
-            { "aaa_bbb@xxx.yy", "mailto:aaa_bbb@xxx.yy", 0, 14 },
-            { "{a:\\bla/bla/bla...}", "file:///a:/bla/bla/bla", 1, 15 },
-            { "#b:/c/d#e#f#", "file:///b:/c/d", 1, 7 },
-            { "a:/", "file:///a:/", 0, 3 } };
+             "ftp://bla.bla.bla/blubber/", 3, 29 },
+           { "..\\ftp://bla.bla.bla/blubber/...", 0, 0, 0 },
+           { "..\\ftp:\\\\bla.bla.bla\\blubber/...",
+             "file://bla.bla.bla/blubber%2F", 7, 29 },
+           { "http://sun.com", "http://sun.com/", 0, 14 },
+           { "http://sun.com/", "http://sun.com/", 0, 15 },
+           { "http://www.xerox.com@www.pcworld.com/go/3990332.htm", 0, 0, 0 },
+           { "ftp://www.xerox.com@www.pcworld.com/go/3990332.htm",
+             "ftp://www.xerox.com@www.pcworld.com/go/3990332.htm", 0, 50 },
+           { "Version.1.2.3", 0, 0, 0 },
+           { "Version:1.2.3", 0, 0, 0 },
+           { "a.b.c", 0, 0, 0 },
+           { "file:///a|...", "file:///a:", 0, 10 },
+           { "file:///a||...", "file:///a%7C%7C", 0, 11 },
+           { "file:///a|/bc#...", "file:///a:/bc", 0, 13 },
+           { "file:///a|/bc#de...", "file:///a:/bc#de", 0, 16 },
+           { "abc.def.ghi,ftp.xxx.yyy/zzz...",
+             "ftp://ftp.xxx.yyy/zzz", 12, 27 },
+           { "abc.def.ghi,Ftp.xxx.yyy/zzz...",
+             "ftp://Ftp.xxx.yyy/zzz", 12, 27 },
+           { "abc.def.ghi,www.xxx.yyy...", "http://www.xxx.yyy/", 12, 23 },
+           { "abc.def.ghi,wwww.xxx.yyy...", 0, 0, 0 },
+           { "abc.def.ghi,wWW.xxx.yyy...", "http://wWW.xxx.yyy/", 12, 23 },
+           { "Bla {mailto.me@abc.def.g.h.i}...",
+             "mailto:%7Bmailto.me@abc.def.g.h.i", 4, 28 },
+           { "abc@def@ghi", 0, 0, 0 },
+           { "lala@sun.com", "mailto:lala@sun.com", 0, 12 },
+           { "1lala@sun.com", "mailto:1lala@sun.com", 0, 13 },
+           { "aaa_bbb@xxx.yy", "mailto:aaa_bbb@xxx.yy", 0, 14 },
+           { "{a:\\bla/bla/bla...}", "file:///a:/bla/bla/bla", 1, 15 },
+           { "#b:/c/d#e#f#", "file:///b:/c/d", 1, 7 },
+           { "a:/", "file:///a:/", 0, 3 } };
 
     bool bReturn = true;
     for (int i = 0; i < sizeof aTests / sizeof (Test); ++i)
