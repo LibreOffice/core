@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tracer.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-25 07:41:19 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 11:53:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,13 +84,22 @@ namespace sw
             eDontUseHTMLAutoSpacing,
             eAutoWidthFrame,
             eRowCanSplit,
+            eSpacingBetweenCells,
             eTabInNumbering,
-            eNegativeVertPlacement
+            eNegativeVertPlacement,
+            eAutoColorBg,
+            eTooWideAsChar,
+            eAnimatedText,
+            eDontAddSpaceForEqualStyles,
+            eBorderDistOutside,
+            eContainsVisualBasic,
+            eContainsWordBasic
         };
 
         enum Environment
         {
             eDocumentProperties,
+            eMacros,
             eMainText,
             eSubDoc,
             eTable
