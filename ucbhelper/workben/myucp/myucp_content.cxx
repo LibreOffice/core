@@ -2,9 +2,9 @@
  *
  *  $RCSfile: myucp_content.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2000-11-17 15:38:10 $
+ *  last change: $Author: kso $ $Date: 2001-02-22 10:51:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -429,11 +429,10 @@ Any SAL_CALL Content::execute( const Command& aCommand,
     else
     {
         //////////////////////////////////////////////////////////////////
-        // Unknown command
+        // Unsupported command
         //////////////////////////////////////////////////////////////////
 
-        VOS_ENSURE( sal_False,
-                    "Content::execute - unknown command!" );
+        VOS_ENSURE( sal_False, "Content::execute - unsupported command!" );
         throw CommandAbortedException();
     }
 
@@ -659,16 +658,15 @@ void Content::setPropertyValues( const Sequence< PropertyValue >& rValues )
             {
                 if ( aNewValue != m_aProps.aTitle )
                 {
-                    osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
-                    m_aProps.aTitle = aNewValue;
-
-                    aGuard.clear();
+                    osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
                     aEvent.PropertyName = rValue.Name;
                     aEvent.OldValue     = makeAny( m_aProps.aTitle );
                     aEvent.NewValue     = makeAny( aNewValue );
 
                     aChanges.getArray()[ nChanged ] = aEvent;
+
+                    m_aProps.aTitle = aNewValue;
                     nChanged++;
                 }
             }
@@ -703,11 +701,11 @@ void Content::setPropertyValues( const Sequence< PropertyValue >& rValues )
                 {
                     Any aOldValue = xAdditionalPropSet->getPropertyValue(
                                                                 rValue.Name );
-                    xAdditionalPropSet->setPropertyValue(
-                                                rValue.Name, rValue.Value );
-
                     if ( aOldValue != rValue.Value )
                     {
+                        xAdditionalPropSet->setPropertyValue(
+                                                rValue.Name, rValue.Value );
+
                         aEvent.PropertyName = rValue.Name;
                         aEvent.OldValue     = aOldValue;
                         aEvent.NewValue     = rValue.Value;
