@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docdraw.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-31 16:51:57 $
+ *  last change: $Author: aw $ $Date: 2001-10-08 13:32:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -463,6 +463,10 @@ _ZSortFly::_ZSortFly( const SwFrmFmt* pFrmFmt, const SwFmtAnchor* pFlyAn,
 // des Drawing Layers auftrat. In diesem Fall wird der Layer komplett
 // neu aufgebaut.
 
+// #75371#
+#ifndef _SXENDITM_HXX
+#include <svx/sxenditm.hxx>
+#endif
 
 void SwDoc::InitDrawModel()
 {
@@ -481,6 +485,18 @@ void SwDoc::InitDrawModel()
      SdrEngineDefaults::SetFontHeight(240);
      SfxItemPool *pSdrPool = new SdrItemPool( &aAttrPool, SDRATTR_START,
                                             SDRATTR_END, FALSE );
+
+    // #75371# change DefaultItems for the SdrEdgeObj distance items
+    // to TWIPS.
+    if(pSdrPool)
+    {
+        const long nDefEdgeDist = ((500 * 72) / 127); // 1/100th mm in twips
+        pSdrPool->SetPoolDefaultItem(SdrEdgeNode1HorzDistItem(nDefEdgeDist));
+        pSdrPool->SetPoolDefaultItem(SdrEdgeNode1VertDistItem(nDefEdgeDist));
+        pSdrPool->SetPoolDefaultItem(SdrEdgeNode2HorzDistItem(nDefEdgeDist));
+        pSdrPool->SetPoolDefaultItem(SdrEdgeNode2VertDistItem(nDefEdgeDist));
+    }
+
     SfxItemPool *pEEgPool = EditEngine::CreatePool( FALSE );
     pSdrPool->SetSecondaryPool( pEEgPool );
      if ( !aAttrPool.GetFrozenIdRanges () )
