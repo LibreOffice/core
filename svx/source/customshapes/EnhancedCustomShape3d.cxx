@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EnhancedCustomShape3d.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 14:11:15 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 10:33:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -526,7 +526,8 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
                 sal_uInt16 i;
                 const XPolyPolygon& rPolyPolygon = ((SdrPathObj*)pNext)->GetPathPoly();
                 for ( i = 0; i < rPolyPolygon.Count(); i++ )
-                    aXPolyPoly.Insert( XOutCreatePolygon( rPolyPolygon.GetObject( i ), NULL, 100 ), XPOLYPOLY_APPEND );
+                    aXPolyPoly.Insert( XOutCreatePolygon( rPolyPolygon.GetObject( i )), XPOLYPOLY_APPEND );
+//BFS09                 aXPolyPoly.Insert( XOutCreatePolygon( rPolyPolygon.GetObject( i ), NULL, 100 ), XPOLYPOLY_APPEND );
             }
             else
             {

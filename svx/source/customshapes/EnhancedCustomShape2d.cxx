@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EnhancedCustomShape2d.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 14:11:00 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 10:33:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,6 +139,10 @@
 #endif
 #ifndef __drafts_com_sun_star_drawing_EnhancedCustomShapeOperation_hpp__
 #include <drafts/com/sun/star/drawing/EnhancedCustomShapeOperation.hpp>
+#endif
+
+#ifndef _BGFX_POLYPOLYGON_B2DPOLYGONTOOLS_HXX
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
 #endif
 
 using namespace ::com::sun::star::uno;
@@ -2025,7 +2029,8 @@ SdrObject* EnhancedCustomShape2d::CreatePathObj( sal_Bool bLineGeometryNeededOnl
     if ( vObjectList.size() )
     {
         sal_Bool    bShadow = (((SdrShadowItem&)pCustomShapeObj->GetMergedItem( SDRATTR_SHADOW )).GetValue());
-        PolyPolygon aShadowUnion;
+//BFS09     PolyPolygon aShadowUnion;
+        ::basegfx::B2DPolyPolygon aShadowUnion;
 
         // inserting all filled objects
         Color           aBasicColor( COL_WHITE );
@@ -2058,9 +2063,19 @@ SdrObject* EnhancedCustomShape2d::CreatePathObj( sal_Bool bLineGeometryNeededOnl
                     if ( bShadow )
                     {
                         const XPolyPolygon& rPathPoly = pObj->GetPathPoly();
-                        PolyPolygon aVCLPolyPoly( XOutCreatePolyPolygonBezier( rPathPoly, NULL ) );
-                        PolyPolygon aSource( aShadowUnion );
-                        aVCLPolyPoly.GetUnion( aSource, aShadowUnion );
+                        ::basegfx::B2DPolyPolygon aCandidate(rPathPoly.getB2DPolyPolygon());
+                        if(aCandidate.areControlPointsUsed())
+                        {
+                            aCandidate = ::basegfx::tools::adaptiveSubdivideByAngle(aCandidate);
+                        }
+                        aCandidate = ::basegfx::tools::correctOrientations(aCandidate);
+                        aShadowUnion.append(aCandidate);
+
+//BFS09                     const XPolyPolygon& rPathPoly = pObj->GetPathPoly();
+//BFS09//BFS09                      PolyPolygon aVCLPolyPoly( XOutCreatePolyPolygonBezier( rPathPoly, NULL ) );
+//BFS09                     PolyPolygon aVCLPolyPoly( XOutCreatePolyPolygonBezier( rPathPoly ) );
+//BFS09                     PolyPolygon aSource( aShadowUnion );
+//BFS09                     aVCLPolyPoly.GetUnion( aSource, aShadowUnion );
                     }
                 }
             }
@@ -2092,16 +2107,31 @@ SdrObject* EnhancedCustomShape2d::CreatePathObj( sal_Bool bLineGeometryNeededOnl
                     if ( bShadow )
                     {
                         const XPolyPolygon& rPathPoly = pObj->GetPathPoly();
-                        PolyPolygon aVCLPolyPoly( XOutCreatePolyPolygonBezier( rPathPoly, NULL ) );
-                        PolyPolygon aSource( aShadowUnion );
-                        aVCLPolyPoly.GetUnion( aSource, aShadowUnion );
+                        ::basegfx::B2DPolyPolygon aCandidate(rPathPoly.getB2DPolyPolygon());
+                        if(aCandidate.areControlPointsUsed())
+                        {
+                            aCandidate = ::basegfx::tools::adaptiveSubdivideByAngle(aCandidate);
+                        }
+                        aCandidate = ::basegfx::tools::correctOrientations(aCandidate);
+                        aShadowUnion.append(aCandidate);
+
+//BFS09                     const XPolyPolygon& rPathPoly = pObj->GetPathPoly();
+//BFS09//BFS09                      PolyPolygon aVCLPolyPoly( XOutCreatePolyPolygonBezier( rPathPoly, NULL ) );
+//BFS09                     PolyPolygon aVCLPolyPoly( XOutCreatePolyPolygonBezier( rPathPoly ) );
+//BFS09                     PolyPolygon aSource( aShadowUnion );
+//BFS09                     aVCLPolyPoly.GetUnion( aSource, aShadowUnion );
                     }
                 }
             }
         }
 
+        //BFS09
+        aShadowUnion = ::basegfx::tools::removeAllIntersections(aShadowUnion);
+        aShadowUnion = ::basegfx::tools::removeNeutralPolygons(aShadowUnion, sal_True);
+
         // set the shadow object
-        if ( !bLineGeometryNeededOnly && bShadow && aShadowUnion.Count() )
+//BFS09     if ( !bLineGeometryNeededOnly && bShadow && aShadowUnion.Count() )
+        if ( !bLineGeometryNeededOnly && bShadow && aShadowUnion.count() )
         {
             XPolyPolygon aXShadowPolyPoly( aShadowUnion );
             SdrPathObj* pShadow = new SdrPathObj( OBJ_POLY, aXShadowPolyPoly );
