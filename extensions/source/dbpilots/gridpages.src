@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridpages.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-12 06:51:34 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 07:45:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,7 +176,7 @@ TabPage RID_PAGE_GW_FIELDSELECTION
         Text [ danish ] = "Valgte felter";
         Text [ swedish ] = "Utvalda f鋖t";
         Text [ polish ] = "Wybrane pola";
-        Text [ portuguese_brazilian ] = "Ausgew鋒lte Felder";
+        Text [ portuguese_brazilian ] = "Ausgew?hlte Felder";
         Text [ japanese ] = "慖戰偟偨台百霓";
         Text [ chinese_simplified ] = "已经选择的字段";
         Text [ chinese_traditional ] = "匡い逆";
@@ -262,6 +262,9 @@ String RID_STR_TIMEPOSTFIX
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.6  2001/05/12 06:51:34  rt
+ *  Merge SRC631: 12.05.01 - 08:51:55 (NoBranch)
+ *
  *  Revision 1.5  2001/05/10 06:07:51  kz
  *  Merge SRC631: 05/10/01 - 08:08:06 (NoBranch)
  *
