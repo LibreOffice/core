@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewShellManager.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:38:00 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-28 13:34:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -324,6 +324,7 @@ void ViewShellManager::MoveToTop (const ViewShell* pShell)
     if (bMove)
     {
         UpdateLocker aLock (*this);
+        InvalidateShellStack();
 
         ViewShell* pNonConstViewShell = aI->mpViewShell;
         ShellId nId = aI->mnId;
