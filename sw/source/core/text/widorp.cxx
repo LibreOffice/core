@@ -2,9 +2,9 @@
  *
  *  $RCSfile: widorp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mh $ $Date: 2001-10-25 17:29:37 $
+ *  last change: $Author: fme $ $Date: 2001-11-14 11:03:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,12 +177,7 @@ SwTxtFrmBreak::SwTxtFrmBreak( SwTxtFrm *pFrm, const SwTwips nRst )
 const sal_Bool SwTxtFrmBreak::IsInside( SwTxtMargin &rLine ) const
 {
 #ifdef VERTICAL_LAYOUT
-    sal_Bool bUndoSwap = sal_False;
-    if ( pFrm->IsVertical() && pFrm->IsSwapped() )
-    {
-        ((SwTxtFrm*)pFrm)->SwapWidthAndHeight();
-        bUndoSwap = sal_True;
-    }
+    SWAP_IF_SWAPPED( pFrm )
 #endif
 
     register sal_Bool bFit = sal_False;
@@ -208,7 +203,7 @@ const sal_Bool SwTxtFrmBreak::IsInside( SwTxtMargin &rLine ) const
 #ifdef VERTICAL_LAYOUT
         SwTwips nHeight;
         if ( pFrm->IsVertical() )
-            nHeight = pFrm->Frm().Right()
+            nHeight = pFrm->Frm().Left() + pFrm->Frm().Width()
                     - pFrm->GetUpper()->Frm().Left()
                     - pFrm->GetUpper()->Prt().Left();
         else
@@ -239,8 +234,7 @@ const sal_Bool SwTxtFrmBreak::IsInside( SwTxtMargin &rLine ) const
     }
 
 #ifdef VERTICAL_LAYOUT
-    if ( pFrm->IsVertical() && bUndoSwap )
-        ((SwTxtFrm*)pFrm)->SwapWidthAndHeight();
+    UNDO_SWAP( pFrm );
 #endif
 
     return bFit;
