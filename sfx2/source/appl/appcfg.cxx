@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appcfg.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2000-11-30 13:42:06 $
+ *  last change: $Author: as $ $Date: 2000-12-01 14:17:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -339,9 +339,13 @@ BOOL SfxApplication::GetOptions( SfxItemSet& rSet )
                     break;
 
                 case SID_INET_REVEAL_MAILADDR :
+#if SUPD<615
                     if(rSet.Put( SfxBoolItem ( rPool.GetWhich( SID_INET_REVEAL_MAILADDR),
                                 aInetOptions.GetProtocolRevealMailAddress() ) ) )
                         bRet = TRUE;
+#else
+                    bRet = FALSE;
+#endif
                     break;
                 case SID_SAVEREL_INET :
                     if(rSet.Put( SfxBoolItem ( rPool.GetWhich( SID_SAVEREL_INET ),
@@ -863,12 +867,14 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
 #endif
     }
 
+#if SUPD<615
     if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_INET_REVEAL_MAILADDR), TRUE, &pItem))
     {
         DBG_ASSERT( pItem->ISA(SfxBoolItem), "BoolItem expected" );
         aInetOptions.SetProtocolRevealMailAddress( ((const SfxBoolItem*)pItem)->GetValue() );
         bResetSession = TRUE;
     }
+#endif
 
     // SMTP-Server
     if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_INET_SMTPSERVER), TRUE, &pItem))
