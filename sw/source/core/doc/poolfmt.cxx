@@ -2,9 +2,9 @@
  *
  *  $RCSfile: poolfmt.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 14:54:03 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 14:46:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2411,12 +2411,12 @@ USHORT GetPoolParent( USHORT nId )
             switch( nId )
             {
             case RES_POOLCOLL_FRAME:
-            case RES_POOLCOLL_TABLE:
                     nRet = RES_POOLCOLL_TEXT;                   break;
 
             case RES_POOLCOLL_TABLE_HDLN:
                     nRet = RES_POOLCOLL_TABLE;                  break;
 
+            case RES_POOLCOLL_TABLE:
             case RES_POOLCOLL_FOOTNOTE:
             case RES_POOLCOLL_ENDNOTE:
             case RES_POOLCOLL_JAKETADRESS:
