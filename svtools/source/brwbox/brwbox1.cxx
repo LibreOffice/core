@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwbox1.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:28:01 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 17:03:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,6 +194,7 @@ void BrowseBox::Construct( BrowserMode nMode )
     m_bFocusOnlyCursor = TRUE;
     m_aCursorColor = COL_TRANSPARENT;
     m_nCurrentMode = 0;
+    nControlAreaWidth = USHRT_MAX;
 
     aHScroll.SetLineSize(1);
     aHScroll.SetScrollHdl( LINK( this, BrowseBox, ScrollHdl ) );
@@ -2481,6 +2482,7 @@ void BrowseBox::ReserveControlArea( USHORT nWidth )
 
     if ( nWidth != nControlAreaWidth )
     {
+        OSL_ENSURE(nWidth,"Control aera of 0 is not allowed, Use USHRT_MAX instead!");
         nControlAreaWidth = nWidth;
         UpdateScrollbars();
     }
@@ -2542,12 +2544,9 @@ void BrowseBox::SetMode( BrowserMode nMode )
         getDataWindow()->bNoVScroll = FALSE;
 
     if ( getDataWindow()->bNoHScroll )
-    {
         aHScroll.Hide();
-        nControlAreaWidth = 0;
-    }
-    else
-        nControlAreaWidth = USHRT_MAX;
+
+    nControlAreaWidth = USHRT_MAX;
 
     getDataWindow()->bNoScrollBack =
             BROWSER_NO_SCROLLBACK == ( nMode & BROWSER_NO_SCROLLBACK);
