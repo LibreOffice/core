@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: sj $ $Date: 2001-08-07 14:08:46 $
+ *  last change: $Author: pb $ $Date: 2001-08-10 08:28:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,9 @@
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
 #endif
+#ifndef _SV_HELP_HXX
+#include <vcl/help.hxx>
+#endif
 
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/ucbhelper.hxx>
@@ -149,9 +152,11 @@
 #ifndef _FILTER_HXX
 #include <svtools/filter.hxx>
 #endif
-
 #ifndef INCLUDED_SVTOOLS_VIEWOPTIONS_HXX
 #include <svtools/viewoptions.hxx>
+#endif
+#ifndef _SVT_HELPID_HRC
+#include <svtools/helpid.hrc>
 #endif
 
 #ifndef _SFXAPP_HXX
@@ -315,8 +320,64 @@ void SAL_CALL FileDialogHelper_Impl::directoryChanged( const FilePickerEvent& aE
 // ------------------------------------------------------------------------
 OUString SAL_CALL FileDialogHelper_Impl::helpRequested( const FilePickerEvent& aEvent ) throw ( RuntimeException )
 {
-    OUString aHelpText;
+    //!!! todo: cache the help strings (here or TRA)
 
+    ULONG nHelpId = 0;
+    // mapping frrom element id -> help id
+    switch ( aEvent.ElementId )
+    {
+        case ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION :
+            nHelpId = HID_FILESAVE_AUTOEXTENSION;
+            break;
+
+        case ExtendedFilePickerElementIds::CHECKBOX_PASSWORD :
+            nHelpId = HID_FILESAVE_SAVEWITHPASSWORD;
+            break;
+
+        case ExtendedFilePickerElementIds::CHECKBOX_FILTEROPTIONS :
+            nHelpId = HID_FILESAVE_CUSTOMIZEFILTER;
+            break;
+
+        case ExtendedFilePickerElementIds::CHECKBOX_READONLY :
+            nHelpId = HID_FILEOPEN_READONLY;
+            break;
+
+        case ExtendedFilePickerElementIds::CHECKBOX_LINK :
+            nHelpId = HID_FILEDLG_LINK_CB;
+            break;
+
+        case ExtendedFilePickerElementIds::CHECKBOX_PREVIEW :
+            nHelpId = HID_FILEDLG_PREVIEW_CB;
+            break;
+
+        case ExtendedFilePickerElementIds::PUSHBUTTON_PLAY :
+            nHelpId = HID_FILESAVE_DOPLAY;
+            break;
+
+        case ExtendedFilePickerElementIds::LISTBOX_VERSION :
+            nHelpId = HID_FILEOPEN_VERSION;
+            break;
+
+        case ExtendedFilePickerElementIds::LISTBOX_TEMPLATE :
+            nHelpId = HID_FILESAVE_TEMPLATE;
+            break;
+
+        case ExtendedFilePickerElementIds::LISTBOX_IMAGE_TEMPLATE :
+            nHelpId = HID_FILEOPEN_IMAGE_TEMPLATE;
+            break;
+
+        case ExtendedFilePickerElementIds::CHECKBOX_SELECTION :
+            nHelpId = HID_FILESAVE_SELECTION;
+            break;
+
+        default:
+            DBG_ERRORFILE( "invalid element id" );
+    }
+
+    OUString aHelpText;
+    Help* pHelp = Application::GetHelp();
+    if ( pHelp )
+        aHelpText = String( pHelp->GetHelpText( nHelpId, NULL ) );
     return aHelpText;
 }
 
