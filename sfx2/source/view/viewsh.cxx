@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 11:59:51 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 16:39:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -850,20 +850,6 @@ void SfxViewShell::SetWindow
 
 Size SfxViewShell::GetOptimalSizePixel() const
 {
-    DBG_CHKTHIS(SfxViewShell, 0);
-    DBG_ASSERT(pWindow, "Kein Fenster");
-/*
-    Rectangle aAppWinRect ( SfxApplicationWindow::Get()->GetClientAreaPixel() );
-    if ( aAppWinRect.IsEmpty() )
-        // Bei Hochfahren der Applikation ist die ClientArea noch
-        // nicht berechnet worden, wenn das erste Dokument erzeugt
-        // wird
-        aAppWinRect = Rectangle(Point(), Application::GetAppWindow()->GetOutputSizePixel());
-    else
-        aAppWinRect.Move( -aAppWinRect.Left(), -aAppWinRect.Top() );
-    Point aPoint( aAppWinRect.BottomRight() );
- */
-
     DBG_ERROR( "Useless call!" );
     return Size();
 }
@@ -1247,17 +1233,6 @@ void SfxViewShell::SFX_NOTIFY( SfxBroadcaster& rBC,
                             const SfxHint& rHint,
                             const TypeId& rHintType )
 {
-//! (pb) do we need here new implementation?
-#ifndef NOOLDSV
-    if ( rHint.ISA(SfxSysChangeHint) && SETTINGS_CHANGE_PRINTER ==
-         ( (const SfxSysChangeHint &)rHint ).GetChangeType() )
-    {
-        SfxPrinter *pPrinter = GetPrinter();
-        if ( pPrinter && pPrinter->IsDefPrinter() )
-            SetPrinter_Impl( new SfxPrinter(pPrinter->GetOptions().Clone()) );
-    }
-#endif
-
     if ( rHint.IsA(TYPE(SfxEventHint)) )
     {
         switch ( ((SfxEventHint&)rHint).GetEventId() )
@@ -1497,7 +1472,7 @@ void SfxViewShell::CheckIPClient_Impl( SvInPlaceClient *pIPClient,
 
     BOOL bApplets = SvtJavaOptions().IsExecuteApplets();
     BOOL bActive = pIPClient->IsInPlaceActive();
-    BOOL bPlugIn = Application::IsRemoteServer() ? FALSE : SvtMiscOptions().IsPluginsEnabled();
+    BOOL bPlugIn = SvtMiscOptions().IsPluginsEnabled();
 
     SvAppletObjectRef aAppRef = pIPClient->GetIPObj();
     SvPlugInObjectRef aPlugRef = pIPClient->GetIPObj();
