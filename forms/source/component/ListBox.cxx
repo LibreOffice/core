@@ -2,9 +2,9 @@
 *
 *   $RCSfile: ListBox.cxx,v $
 *
-*   $Revision: 1.38 $
+*   $Revision: 1.39 $
 *
-*   last change: $Author: vg $ $Date: 2005-02-17 10:42:10 $
+*   last change: $Author: vg $ $Date: 2005-03-23 11:30:12 $
 *
 *   The Contents of this file are made available subject to the terms of
 *   either of the following licenses
@@ -1320,7 +1320,7 @@ namespace frm
     }
 
     //--------------------------------------------------------------------
-    Any OListBoxModel::translateExternalValueToControlValue( )
+    Any OListBoxModel::translateExternalValueToControlValue( ) const
     {
         OSL_PRECOND( hasExternalValueBinding(),
             "OListBoxModel::translateExternalValueToControlValue: precondition not met!" );
@@ -1459,12 +1459,12 @@ namespace frm
     }
 
     //--------------------------------------------------------------------
-    Any OListBoxModel::translateControlValueToExternalValue( )
+    Any OListBoxModel::translateControlValueToExternalValue( ) const
     {
         OSL_PRECOND( hasExternalValueBinding(), "OListBoxModel::translateControlValueToExternalValue: no binding!" );
 
         Sequence< sal_Int16 > aSelectSequence;
-        getPropertyValue( PROPERTY_SELECT_SEQ ) >>= aSelectSequence;
+        const_cast< OListBoxModel* >( this )->getPropertyValue( PROPERTY_SELECT_SEQ ) >>= aSelectSequence;
 
         Any aReturn;
         switch ( m_eTransferSelectionAs )
