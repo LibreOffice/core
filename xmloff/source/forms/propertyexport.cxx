@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyexport.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-06 17:28:05 $
+ *  last change: $Author: fs $ $Date: 2000-12-12 11:58:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -732,24 +732,19 @@ namespace xmloff
         {
             case TypeClass_STRING:
                 return s_sTypeString;
-                break;
             case TypeClass_DOUBLE:
                 return s_sTypeDouble;
-                break;
             case TypeClass_BOOLEAN:
                 return s_sTypeBoolean;
-                break;
             case TypeClass_BYTE:
             case TypeClass_SHORT:
+                return s_sTypeShort;
             case TypeClass_LONG:
                 return s_sTypeInteger;
-                break;
             case TypeClass_HYPER:
                 return s_sTypeLong;
-                break;
             case TypeClass_ENUM:
                 return s_sTypeInteger;
-                break;
             default:
                 return s_sTypeDouble;
         }
@@ -801,6 +796,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2000/12/06 17:28:05  fs
+ *  changes for the formlayer import - still under construction
+ *
  *  Revision 1.3  2000/11/29 10:36:05  mh
  *  add: stdio.h for Solaris8
  *
