@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: fme $ $Date: 2001-04-26 10:37:23 $
+ *  last change: $Author: fme $ $Date: 2001-05-03 13:33:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -788,6 +788,10 @@ void SwTxtPaintInfo::DrawTab( const SwLinePortion &rPor ) const
     if( OnWin() )
     {
         const SwRect aRect( lcl_CalcRect( this, rPor ) );
+
+        if ( ! aRect.HasArea() )
+            return;
+
 #ifndef PRODUCT
 #ifdef DEBUG
         if( IsOptDbg() )
