@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fillctrl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-09-06 14:42:49 $
+ *  last change: $Author: cl $ $Date: 2002-03-01 09:15:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -550,7 +550,7 @@ Window* SvxFillToolBoxControl::CreateItemWindow( Window *pParent )
 \************************************************************************/
 
 FillControl::FillControl( Window* pParent, WinBits nStyle ) :
-    Window( pParent, nStyle )
+    Window( pParent, nStyle | WB_DIALOGCONTROL )
 {
 #ifdef OS2
     WinBits nBits = WB_BORDER | WB_DROPDOWN | WB_AUTOHSCROLL;
