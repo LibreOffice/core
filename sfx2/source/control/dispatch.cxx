@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatch.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 13:35:10 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 15:43:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1616,7 +1616,10 @@ void SfxDispatcher::SetMenu_Impl()
         if ( pTop && pTop->GetBindings().GetDispatcher() == this )
         {
             SfxTopFrame* pFrm = pTop->GetTopFrame_Impl();
-            SfxMenuBarManager* pMenuBar = pImp->pFrame->GetViewShell()->GetMenuBar_Impl();
+            SfxMenuBarManager* pMenuBar = pImp->pFrame->GetViewShell()->GetMenuBar_Impl(); // GetOrCreate!
+        }
+    }
+/*
             if ( pMenuBar )
             {
                 MenuBar* pMenu = (MenuBar*) pMenuBar->GetMenu()->GetSVMenu();
@@ -1630,6 +1633,7 @@ void SfxDispatcher::SetMenu_Impl()
             }
         }
     }
+*/
 }
 
 long SfxDispatcher::Update_Impl( sal_Bool bForce )
@@ -1694,8 +1698,10 @@ long SfxDispatcher::Update_Impl( sal_Bool bForce )
     if ( bUIActive && !pIPFrame && ( !pClient || !pClient->GetProtocol().IsUIActive() ) )
     {
         SetMenu_Impl();
-        pAppMenu = pImp->pFrame->GetViewShell()->GetMenuBar_Impl();
-        pAppMenu->ResetObjectMenus();
+//        pAppMenu = pImp->pFrame->GetViewShell()->GetMenuBar_Impl();
+//        pAppMenu->ResetObjectMenus();
+        pBindings->Invalidate( SID_FORMATMENUSTATE );
+        pBindings->Update( SID_FORMATMENUSTATE );
     }
 
     // Environment
@@ -1759,8 +1765,11 @@ long SfxDispatcher::Update_Impl( sal_Bool bForce )
     {
         pWorkWin->UpdateObjectBars_Impl();
 
-        if ( pAppMenu )
-            pAppMenu->UpdateObjectMenus();
+//        if ( pAppMenu )
+        {
+            pBindings->Invalidate( SID_FORMATMENUSTATE );
+//            pAppMenu->UpdateObjectMenus();
+        }
 
         if ( bUIActive )
         {
@@ -2019,12 +2028,16 @@ sal_uInt32 SfxDispatcher::_Update_Impl( sal_Bool bUIActive, sal_Bool bIsMDIApp,
                 pImp->aChildWins.Insert( nId, pImp->aChildWins.Count());
         }
 
-        if ( pAppMenu )
+//      if ( pAppMenu )
         {
             // update Object-Menus
+            if ( pIFace && pIFace->GetObjectMenuCount() > 0 )
+                pWorkWin->GetBindings().Invalidate( SID_FORMATMENUSTATE );
+/*
             for ( nNo = 0; pIFace && nNo<pIFace->GetObjectMenuCount(); ++nNo )
                 pAppMenu->SetObjectMenu( pIFace->GetObjectMenuPos(nNo),
                                             pIFace->GetObjectMenuResId(nNo));
+*/
         }
 
         if ( bIsMDIApp || bIsIPOwner )
@@ -2089,7 +2102,7 @@ long SfxDispatcher::UpdateObjectMenus_Impl( SfxMenuBarManager *pMenuMgr )
     SFX_STACK(SfxDispatcher::UpdateObjecteMenus_Impl);
 
     Flush();
-
+/*
     if (!pImp->pFrame && !IsAppDispatcher())
     {
         DBG_ERROR( "Dispatcher ohne Frame aber mit Parent?!?" );
@@ -2098,7 +2111,9 @@ long SfxDispatcher::UpdateObjectMenus_Impl( SfxMenuBarManager *pMenuMgr )
 
     // Bindings und App besorgen
     SfxApplication *pSfxApp = SFX_APP();
+*/
     SfxBindings* pBindings = GetBindings();
+/*
     if ( pBindings )
         pBindings->DENTERREGISTRATIONS();
     pMenuMgr->ResetObjectMenus();
@@ -2131,9 +2146,13 @@ long SfxDispatcher::UpdateObjectMenus_Impl( SfxMenuBarManager *pMenuMgr )
                                      pIFace->GetObjectMenuResId(nNo));
     }
 
-    pMenuMgr->UpdateObjectMenus();
+//  pMenuMgr->UpdateObjectMenus();
     if ( pBindings )
         pBindings->DLEAVEREGISTRATIONS();
+*/
+    pBindings->Invalidate( SID_FORMATMENUSTATE );
+    pBindings->Update( SID_FORMATMENUSTATE );
+
     return 0;
 }
 
