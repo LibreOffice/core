@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XMimeContentTypeFactory.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:08:51 $
+ *  last change:$Date: 2003-09-08 10:24:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,10 @@
 
 package ifc.datatransfer;
 
+import lib.MultiMethodTest;
+
 import com.sun.star.datatransfer.XMimeContentType;
 import com.sun.star.datatransfer.XMimeContentTypeFactory;
-import lib.MultiMethodTest;
 
 /**
 * Testing <code>com.sun.star.datatransfer.XMimeContentTypeFactory</code>
@@ -89,9 +90,10 @@ public class _XMimeContentTypeFactory extends MultiMethodTest {
     */
     public void _createMimeContentType() {
         boolean result = true ;
+        XMimeContentType type = null;
 
         try {
-            XMimeContentType type = oObj.createMimeContentType("image/jpeg") ;
+            type = oObj.createMimeContentType("image/jpeg") ;
 
             if (type != null) {
                 String typeS = type.getFullMediaType() ;
@@ -112,7 +114,7 @@ public class _XMimeContentTypeFactory extends MultiMethodTest {
         }
 
         try {
-            XMimeContentType type = oObj.createMimeContentType("nosuchtype") ;
+            type = oObj.createMimeContentType("nosuchtype") ;
 
             log.println("!!! No exception was thrown on wrong MIME type !!!") ;
             result = false ;
