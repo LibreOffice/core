@@ -140,6 +140,8 @@ Dim SelCount as Integer
 	ImportStyles()
 	ToggleWindow(True)
 	oDialogModel.imgTheme.ImageURL = FormPath &amp; &quot;FormWizard_1.bmp&quot;
+	oDialogModel.cmdBack.Enabled = False
+
 	DlgFormDB.Execute()
 	DlgFormDB.Dispose
 	If Not IsNull(oDBConnection) Then
@@ -165,16 +167,19 @@ End Sub
 Sub FillUpFieldsListbox(bGetCommandType as Boolean)
 Dim n as Integer
 Dim SelIndex as Integer
+Dim QueryIndex as Integer
 	n = Ubound(oDialogModel.lstTables.SelectedItems())
 	If n &gt; -1 Then
 		SelIndex = oDialogModel.lstTables.SelectedItems(0)
 		If bGetCommandType Then
 			CurCommandType = iCommandTypes(SelIndex)
 		End If
-		Tablename = Tablenames(SelIndex)
 		If CurCommandType = com.sun.star.sdb.CommandType.QUERY Then
+			QueryIndex = SelIndex - Ubound(Tablenames()) - 1
+			Tablename = QueryNames(QueryIndex)
 			oColumns = oDBConnection.Queries.GetByName(TableName).Columns
 		Else
+			Tablename = Tablenames(SelIndex)
 			oColumns = oDBConnection.Tables.GetByName(Tablename).Columns
 		End If
 		GetSpecificFieldNames()

@@ -240,7 +240,7 @@ Dim iColRightX as Long
 		nDBWidth = 2000
 		nDBHeight = 2000
 	Else
-		If bIsVeryFirstValueField Then		
+		If bIsVeryFirstValueField Then
 			nDBRefWidth = GetPreferredWidth(oDBModel,True)
 			&apos; Todo: Hier wird vereinfachend davon ausgegangen, dass es sich bei DB-Feldern immer um Textfelder handelt!
 			nDBRefHeight = GetPreferredHeight(oDBModel)

@@ -229,7 +229,7 @@ Dim LocCommandTypes(MaxTableIndex + MaxQueryIndex + 1) as Integer
 	For i = 0 To MaxTableIndex
 		LocCommandTypes(i) = com.sun.star.sdb.CommandType.TABLE
 	Next i  	
-	a = i + 1
+	a = i
 	For i = 0 To MaxQueryIndex
 		LocCommandTypes(a) = com.sun.star.sdb.CommandType.QUERY
 	Next i

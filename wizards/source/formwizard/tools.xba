@@ -49,16 +49,21 @@ Dim oPeer as Object
 Dim aPeerSize as new com.sun.star.awt.Size
 	oControl = oController.GetControl(oModel)
 	oPeer = oControl.GetPeer()
-	
+&apos; Todo: Wie geht es bei Image Controls?	
 	If oControl.Model.PropertySetInfo.HasPropertybyName(&quot;EffectiveMax&quot;) Then
-&apos; Todo: Remove this Hack due to Bug #88391
-Dim Blubber		
-		blubber = oControl.Model.EffectiveMax
-		oControl.Model.EffectiveValue = oControl.Model.EffectiveMax
+		If oControl.Model.EffectiveMax = 0 Then
+			oControl.Model.EffectiveValue = 999.9999			
+		Else
+			oControl.Model.EffectiveValue = oControl.Model.EffectiveMax
+		End If
 		aPeerSize = oPeer.PreferredSize()
+
 	ElseIf Not IsMissing(LocText) Then
 		oControl.Text = LocText
 		aPeerSize = oPeer.PreferredSize()
+	ElseIf CurFieldType = com.sun.star.sdbc.DataType.BIT Then
+		oPeer.PreferredSize
+		aPeerSize = oPeer.PreferredSize
 	Else
 		oControl.Text = &quot;2222222222&quot;
 		aPeerSize = oPeer.PreferredSize()
@@ -150,7 +155,7 @@ Function SetNumerics(ByVal oLocObject as Object) as Object
 			oLocObject.EffectiveMin = -128
 		Case com.sun.star.sdbc.DataType.FLOAT, com.sun.star.sdbc.DataType.REAL, com.sun.star.sdbc.DataType.DOUBLE, com.sun.star.sdbc.DataType.DECIMAL, com.sun.star.sdbc.DataType.NUMERIC
 		&apos; Todo: Hier sollte der Numberformatter angeworfen werden um die Nachkommastellen
-		&apos; festzulegen
+		&apos; festzulegen, da ein EffectiveMax/EffectiveMin hier keinen Sinn macht
 &apos;			oLocObject.DecimalAccuracy = FieldDecimalAccuracy%(n%) &apos; Nachkommastellen
 	End Select
 End Function
