@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adc_cl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:37:11 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:37:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,11 +97,11 @@ class CommandLine : public csv::CommandLine_Ifc
     bool                DebugStyle_ShowTokens() const;
 
         // @since tags
-    bool                Display_SinceTag() const;
+    bool                DoesTransform_SinceTag() const;
 
-    /// @see command::SinceTagTransformationData::StripSinceTagValue()
-    bool                Strip_SinceTagText(
-                            String &            io_sSinceTagValue ) const;
+//    /// @see command::SinceTagTransformationData::StripSinceTagValue()
+//    bool                Strip_SinceTagText(
+//                            String &            io_sSinceTagValue ) const;
 
     /// @see command::SinceTagTransformationData::DisplayOf()
     const String &      DisplayOf_SinceTagValue(
