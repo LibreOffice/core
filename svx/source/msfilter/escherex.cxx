@@ -2,9 +2,9 @@
  *
  *  $RCSfile: escherex.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: sj $ $Date: 2001-03-15 15:32:03 $
+ *  last change: $Author: jp $ $Date: 2001-03-16 16:14:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,8 +151,8 @@
 #ifndef _COM_SUN_STAR_TEXT_GRAPHICCROP_HPP_
 #include <com/sun/star/text/GraphicCrop.hpp>
 #endif
-#ifndef _CPPUHELPER_EXTRACT_HXX_
-#include <cppuhelper/extract.hxx>
+#ifndef _COMPHELPER_EXTRACT_HXX_
+#include <comphelper/extract.hxx>
 #endif
 #ifndef _TOOLKIT_UNOHLP_HXX
 #include <toolkit/unohlp.hxx>

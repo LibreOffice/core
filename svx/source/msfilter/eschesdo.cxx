@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eschesdo.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: sj $ $Date: 2001-03-15 15:47:14 $
+ *  last change: $Author: jp $ $Date: 2001-03-16 16:14:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,8 +139,9 @@
 #ifndef _COM_SUN_STAR_DRAWING_TEXTHORIZONTALADJUST_HPP_
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
 #endif
-
-#include <cppuhelper/extract.hxx>
+#ifndef _COMPHELPER_EXTRACT_HXX_
+#include <comphelper/extract.hxx>
+#endif
 
 #ifndef _XCEPTION_HXX_ //autogen wg. TRY
 #include <vos/xception.hxx>
