@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtrtf.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-01 12:38:34 $
+ *  last change: $Author: kz $ $Date: 2003-10-15 09:59:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,9 @@
 #endif
 #ifndef _SVX_FRMDIRITEM_HXX
 #include <svx/frmdiritem.hxx>
+#endif
+#ifndef _COM_SUN_STAR_DOCUMENT_PRINTERINDEPENDENTLAYOUT_HPP_
+#include <com/sun/star/document/PrinterIndependentLayout.hpp>
 #endif
 
 #ifndef _FMTPDSC_HXX //autogen
@@ -483,7 +486,7 @@ void SwRTFWriter::MakeHeader()
                     pDoc->GetAttrPool().GetDefaultItem( RES_PARATR_TABSTOP );
         Strm() << sRTF_DEFTAB;
         OutLong( rTabs[0].GetTabPos() );
-        if (!pDoc->IsUseVirtualDevice())
+        if (com::sun::star::document::PrinterIndependentLayout::DISABLED == pDoc->IsUseVirtualDevice())
             Strm() << sRTF_LYTPRTMET;
     }
 
