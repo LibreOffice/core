@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optspell.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-02 23:54:31 $
+ *  last change: $Author: kz $ $Date: 2001-07-03 22:55:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -292,6 +292,7 @@ TabPage RID_SFXPAGE_SPELL
     Text[ catalan ] = "Ortografía";
 };
  // ********************************************************************** EOF
+
 
 
 
