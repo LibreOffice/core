@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:52:43 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 17:10:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,13 +102,8 @@
 #include <osl/conditn.hxx>
 #endif
 
-#ifndef __SGI_STL_HASH_MAP
 #include <hash_map>
-#endif
-
-#ifndef __SGI_STL_LIST
 #include <list>
-#endif
 
 #include <X11/Xlib.h>
 
