@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ActiveMSPList.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-10-29 15:00:52 $
+ *  last change: $Author: rt $ $Date: 2004-05-19 08:27:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@
 
 #include <osl/mutex.hxx>
 #include <rtl/ustring>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
@@ -102,7 +102,7 @@ typedef ::std::hash_map< ::rtl::OUString,
     ::rtl::OUStringHash,
             ::std::equal_to< ::rtl::OUString > > Msp_hash;
 
-class ActiveMSPList : public ::cppu::WeakImplHelper2< css::lang::XEventListener , dcsss::browse::XBrowseNode >
+class ActiveMSPList : public ::cppu::WeakImplHelper1< css::lang::XEventListener  >
 {
 
 public:
@@ -118,23 +118,27 @@ public:
     virtual void SAL_CALL disposing( const css::lang::EventObject& Source )
         throw ( css::uno::RuntimeException );
 
-    //XBrowseNode implementation
-    //======================================================================
-
-    virtual ::rtl::OUString SAL_CALL getName()
-        throw ( css::uno::RuntimeException );
-    virtual css::uno::Sequence< css::uno::Reference< dcsss::browse::XBrowseNode > > SAL_CALL getChildNodes()
-        throw ( css::uno::RuntimeException );
-    virtual sal_Bool SAL_CALL hasChildNodes()
-        throw ( css::uno::RuntimeException );
-    virtual sal_Int16 SAL_CALL getType()
-        throw ( css::uno::RuntimeException );
-
+    // Factory method for create MasterScriptProviders
+    css::uno::Reference< dcsss::provider::XScriptProvider >
+        createMSP( const css::uno::Any& context )
+            throw ( css::uno::RuntimeException );
 private:
     ActiveMSPList(  const css::uno::Reference<
         css::uno::XComponentContext > & xContext  );
     ::rtl::OUString
         getDocNameOrURLFromModel( const css::uno::Reference< css::frame::XModel >& xModel  );
+
+    css::uno::Reference< dcsss::provider::XScriptProvider >
+        createMSP( const ::rtl::OUString& context )
+            throw ( css::uno::RuntimeException );
+
+    css::uno::Reference< dcsss::provider::XScriptProvider >
+        createMSP( const css::uno::Reference< css::frame::XModel >& xModel )
+            throw ( css::uno::RuntimeException );
+
+    css::uno::Reference< dcsss::provider::XScriptProvider >
+        createNewMSP(  const css::uno::Any& )
+            throw ( css::uno::RuntimeException );
 
     void createNonDocMSPs();
     Msp_hash m_hMsps;
