@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scmod.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-29 16:33:52 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:26:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 
 #ifndef SC_SCMOD_HXX
 #define SC_SCMOD_HXX
+
+#ifndef INCLUDED_SCDLLAPI_H
+#include "scdllapi.h"
+#endif
 
 #ifndef SC_SCDLL_HXX
 #include "scdll.hxx"
@@ -231,12 +235,12 @@ public:
     // Options:
     const ScViewOptions&    GetViewOptions  ();
     const ScDocOptions&     GetDocOptions   ();
-    const ScAppOptions&     GetAppOptions   ();
+SC_DLLPUBLIC    const ScAppOptions&     GetAppOptions   ();
     const ScInputOptions&   GetInputOptions ();
-    const ScPrintOptions&   GetPrintOptions ();
+SC_DLLPUBLIC    const ScPrintOptions&   GetPrintOptions ();
     void                    SetViewOptions  ( const ScViewOptions& rOpt );
     void                    SetDocOptions   ( const ScDocOptions& rOpt );
-    void                    SetAppOptions   ( const ScAppOptions& rOpt );
+SC_DLLPUBLIC    void                    SetAppOptions   ( const ScAppOptions& rOpt );
     void                    SetInputOptions ( const ScInputOptions& rOpt );
     void                    SetPrintOptions ( const ScPrintOptions& rOpt );
     void                    InsertEntryToLRUList(USHORT nFIndex);
