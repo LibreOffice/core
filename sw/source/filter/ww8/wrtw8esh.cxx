@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cmc $ $Date: 2000-10-10 16:54:06 $
+ *  last change: $Author: khz $ $Date: 2000-11-13 10:11:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -970,6 +970,7 @@ public:
     virtual ~SwEscherEx();
 
     void FinishEscher();
+    void WriteFrmExtraData( const SwFrmFmt& rFmt );
     void WritePictures();
 };
 
@@ -1192,6 +1193,482 @@ void SwEscherEx::FinishEscher()
 }
 
 
+static int
+#if defined( WNT )
+ __cdecl
+#endif
+#if defined( ICC )
+ _Optlink
+#endif
+    CompUINT32( const void *pFirst, const void *pSecond)
+{
+    return( (*((UINT32*)pFirst ) & 0xFFFFFF00) - (*((UINT32*)pSecond)  & 0xFFFFFF00) );
+}
+
+void SwEscherEx::WriteFrmExtraData( const SwFrmFmt& rFmt )
+{
+    const RndStdIds eAnchor = rFmt.GetAnchor().GetAnchorId();
+
+    const SwFmtHoriOrient&  rHoriOri = rFmt.GetHoriOrient();
+    const SwFmtVertOrient&  rVertOri = rFmt.GetVertOrient();
+
+    const SwHoriOrient eHOri = rHoriOri.GetHoriOrient();
+    const SwVertOrient eVOri = rVertOri.GetVertOrient();
+
+    SwRelationOrient   eHRel = rHoriOri.GetRelationOrient();
+    SwRelationOrient   eVRel = rVertOri.GetRelationOrient();
+
+    UINT32 nHIndex = 0;
+    UINT32 nVIndex = 0;
+
+    switch( eAnchor )
+    {
+        case FLY_PAGE:
+            nHIndex = 0x00000000;
+            nVIndex = 0x10000000;
+            // match eHRel ?
+            if(      REL_PG_PRTAREA == eHRel ) eHRel = PRTAREA;
+            else if( REL_PG_FRAME   == eHRel ) eHRel = FRAME;
+            // match eVRel ?
+            if(      REL_PG_PRTAREA == eVRel ) eVRel = PRTAREA;
+            else
+            if(      REL_PG_FRAME   == eVRel ) eVRel = FRAME;
+            break;
+        case FLY_AT_CNTNT:
+            nHIndex = 0x01000000;
+            nVIndex = 0x11000000;
+            break;
+        case FLY_AUTO_CNTNT:
+            nVIndex = 0x12000000;
+            break;
+        case FLY_IN_CNTNT:
+            nHIndex = 0x02000000;
+            nVIndex = 0x13000000;
+            break;
+        default:
+            nHIndex = 0x01000000; // FLY_AT_CNTNT
+            nVIndex = 0x11000000;
+            break;
+    }
+
+    switch( eHRel )
+    {
+        case FRAME:
+        //  nHIndex |= 0x00000000;
+            break;
+        case PRTAREA:
+            nHIndex |= 0x00010000;
+            break;
+        case REL_PG_LEFT:
+            nHIndex |= 0x00020000;
+            break;
+        case REL_PG_RIGHT:
+            nHIndex |= 0x00030000;
+            break;
+        case REL_FRM_LEFT:
+            nHIndex |= 0x00040000;
+            break;
+        case REL_FRM_RIGHT:
+            nHIndex |= 0x00050000;
+            break;
+        case REL_PG_FRAME:
+            nHIndex |= 0x00060000;
+            break;
+        case REL_PG_PRTAREA:
+            nHIndex |= 0x00070000;
+            break;
+        case REL_CHAR:
+            nHIndex |= 0x00080000;
+            break;
+        default:
+            nHIndex |= 0x00090000; // PRTAREA
+            break;
+    }
+
+    switch( eHOri )
+    {
+        case HORI_LEFT:
+        //  nHIndex |= 0x00000000;
+            break;
+        case HORI_INSIDE:
+            nHIndex |= 0x00000100;
+            break;
+        case HORI_RIGHT:
+            nHIndex |= 0x00000200;
+            break;
+        case HORI_OUTSIDE:
+            nHIndex |= 0x00000300;
+            break;
+        case HORI_CENTER:
+            nHIndex |= 0x00000400;
+            break;
+        case HORI_NONE:
+            nHIndex |= 0x00000500;
+            break;
+        default:
+        //  nHIndex |= 0x00000000; // HORI_LEFT
+            break;
+    }
+
+    switch( eVRel )
+    {
+        case FRAME:
+        //  nVIndex |= 0x00000000;
+            break;
+        case PRTAREA:
+            nVIndex |= 0x00010000;
+            break;
+        case REL_CHAR:
+            nVIndex |= 0x00020000;
+            break;
+        default:
+            nVIndex |= 0x00030000; // PRTAREA
+            break;
+    }
+
+    switch( eVOri )
+    {
+        case VERT_TOP:
+        //  nVIndex |= 0x00000000;
+            break;
+        case VERT_BOTTOM:
+            nVIndex |= 0x00000100;
+            break;
+        case VERT_CENTER:
+            nVIndex |= 0x00000200;
+            break;
+        case VERT_NONE:
+            nVIndex |= 0x00000300;
+            break;
+        case VERT_CHAR_TOP:
+            nVIndex |= 0x00000400;
+            break;
+        case VERT_CHAR_CENTER:
+            nVIndex |= 0x00000500;
+            break;
+        case VERT_CHAR_BOTTOM:
+            nVIndex |= 0x00000600;
+            break;
+        case VERT_LINE_TOP:
+            nVIndex |= 0x00000700;
+            break;
+        case VERT_LINE_CENTER:
+            nVIndex |= 0x00000800;
+            break;
+        case VERT_LINE_BOTTOM:
+            nVIndex |= 0x00000900;
+            break;
+        default:
+        //  nVIndex |= 0x00000000; // VERT_TOP
+            break;
+    }
+
+/*
+    Note: the following table MUST be sorted in ascendent order!
+
+        nXAlign - abs. Position, Left,  Centered,  Right,  Inside, Outside
+        nYAlign - abs. Position, Top,   Centered,  Bottom, Inside, Outside
+
+        nXRelTo - Page printable area, Page,  Column,    Character
+        nYRelTo - Page printable area, Page,  Paragraph, Line
+
+        Match:  0x99 99 99 9 9
+                   |  |  | | |
+                   |  |  | | +-- ord of nXRelTo
+                   |  |  | +---- ord of nXAlign
+                   |  |  |
+                   |  |  +------ SwHoriOrient
+                   |  +--------- SwRelationOrient (horizontal)
+                   +------------ RndStdIds
+*/
+    static const UINT32 aHVMatcher [] = {
+
+//     H O R I Z O N T A L    SwHoriOrient:   HORI_LEFT, HORI_INSIDE, HORI_RIGHT, HORI_OUTSIDE, HORI_CENTER, HORI_NONE
+//                                                0          1            2           3             4            5
+
+    // RndStdIds: FLY_PAGE: 0
+
+    // SwRelationOrient: REL_PG_LEFT: 2
+    //               |
+                0x00020011,  // SwHoriOrient: HORI_LEFT
+                0x00020111,  //               HORI_INSIDE
+                0x00020211,  //               HORI_RIGHT
+                0x00020311,  //               HORI_OUTSIDE
+                0x00020411,  //               HORI_CENTER
+                0x00020511,  //               HORI_NONE
+    // SwRelationOrient: REL_PG_RIGHT: 3
+    //               |
+                0x00030031,
+                0x00030131,
+                0x00030231,
+                0x00030331,
+                0x00030431,
+                0x00030531,
+    // SwRelationOrient: REL_PG_FRAME: 6
+    //               |
+                0x00060011,
+                0x00060141,
+                0x00060231,
+                0x00060351,
+                0x00060421,
+                0x00060501,
+    // SwRelationOrient: REL_PG_PRTAREA: 7
+    //               |
+                0x00070010,
+                0x00070140,
+                0x00070230,
+                0x00070350,
+                0x00070420,
+                0x00070500,
+
+    // RndStdIds: FLY_AT_CNTNT: 1
+    //
+    // SwRelationOrient: FRAME: 0
+    //               |
+                0x01000012,
+                0x01000112,
+                0x01000232,
+                0x01000332,
+                0x01000422,
+                0x01000502,
+    // SwRelationOrient: PRTAREA: 1
+    //               |
+                0x01010012,
+                0x01010112,
+                0x01010232,
+                0x01010332,
+                0x01010422,
+                0x01010502,
+    // SwRelationOrient: REL_PG_LEFT: 2
+    //               |
+                0x01020011,
+                0x01020111,
+                0x01020211,
+                0x01020311,
+                0x01020411,
+                0x01020511,
+    // SwRelationOrient: REL_PG_RIGHT: 3
+    //               |
+                0x01030031,
+                0x01030131,
+                0x01030231,
+                0x01030331,
+                0x01030431,
+                0x01030531,
+    // SwRelationOrient: REL_FRM_LEFT: 4
+    //               |
+                0x01040012,
+                0x01040112,
+                0x01040212,
+                0x01040312,
+                0x01040412,
+                0x01040512,
+    // SwRelationOrient: REL_FRM_RIGHT: 5
+    //               |
+                0x01050032,
+                0x01050132,
+                0x01050232,
+                0x01050332,
+                0x01050432,
+                0x01050532,
+    // SwRelationOrient: REL_PG_FRAME: 6
+    //               |
+                0x01060011,
+                0x01060141,
+                0x01060231,
+                0x01060351,
+                0x01060421,
+                0x01060501,
+    // SwRelationOrient: REL_PG_PRTAREA: 7
+    //               |
+                0x01070010,
+                0x01070140,
+                0x01070230,
+                0x01070350,
+                0x01070420,
+                0x01070500,
+
+    // RndStdIds: FLY_IN_CNTNT: 2
+    //
+    // SwRelationOrient: FRAME: 0
+    //               |
+                0x02000012,
+                0x02000112,
+                0x02000232,
+                0x02000332,
+                0x02000422,
+                0x02000502,
+    // SwRelationOrient: PRTAREA: 1
+    //               |
+                0x02010012,
+                0x02010112,
+                0x02010232,
+                0x02010332,
+                0x02010422,
+                0x02010502,
+    // SwRelationOrient: REL_PG_LEFT: 2
+    //               |
+                0x02020011,
+                0x02020111,
+                0x02020211,
+                0x02020311,
+                0x02020411,
+                0x02020511,
+    // SwRelationOrient: REL_PG_RIGHT: 3
+    //               |
+                0x02030031,
+                0x02030131,
+                0x02030231,
+                0x02030331,
+                0x02030431,
+                0x02030531,
+    // SwRelationOrient: REL_FRM_LEFT: 4
+    //               |
+                0x02040012,
+                0x02040112,
+                0x02040212,
+                0x02040312,
+                0x02040412,
+                0x02040512,
+    // SwRelationOrient: REL_FRM_RIGHT: 5
+    //               |
+                0x02050032,
+                0x02050132,
+                0x02050232,
+                0x02050332,
+                0x02050432,
+                0x02050532,
+    // SwRelationOrient: REL_PG_FRAME: 6
+    //               |
+                0x02060011,
+                0x02060141,
+                0x02060231,
+                0x02060351,
+                0x02060421,
+                0x02060501,
+    // SwRelationOrient: REL_PG_PRTAREA: 7
+    //               |
+                0x02070010,
+                0x02070140,
+                0x02070230,
+                0x02070350,
+                0x02070420,
+                0x02070500,
+    // SwRelationOrient: REL_CHAR: 8
+    //               |
+                0x02080013,
+                0x02080113,
+                0x02080233,
+                0x02080333,
+                0x02080423,
+                0x02080503,
+
+//     V E R T I C A L   SwVertOrient:   VERT_TOP, VERT_BOTTOM, VERT_CENTER, VERT_NONE, VERT_CHAR_TOP, VERT_CHAR_CENTER, VERT_CHAR_BOTTOM, VERT_LINE_TOP, VERT_LINE_CENTER, VERT_LINE_BOTTOM
+//                                           0         1            2            3          4              5                 6 == "below"      7              8                 9
+
+    // RndStdIds: FLY_PAGE: 0x10
+    //
+    // SwRelationOrient: REL_PG_FRAME (or FRAME resp.): 0
+    //               |
+                0x10000010,  // SwVertOrient: VERT_TOP
+                0x10000130,  //               VERT_BOTTOM
+                0x10000220,  //               VERT_CENTER
+                0x10000301,  //               VERT_NONE
+    // SwRelationOrient: REL_PG_PRTAREA (or PRTAREA resp.): 1
+    //               |
+                0x10010011,  // SwVertOrient: VERT_TOP
+                0x10010131,  //               VERT_BOTTOM
+                0x10010221,  //               VERT_CENTER
+                0x10010301,  //               VERT_NONE
+
+    // RndStdIds: FLY_AT_CNTNT: 0x11
+    //
+    // SwRelationOrient: FRAME: 0
+    //               |
+                0x11000013,  // SwVertOrient: VERT_TOP
+                0x11000133,  //               VERT_BOTTOM
+                0x11000223,  //               VERT_CENTER
+                0x11000302,  //               VERT_NONE
+    // SwRelationOrient: PRTAREA: 1
+    //               |
+                0x11010013,  // SwVertOrient: VERT_TOP
+                0x11010133,  //               VERT_BOTTOM
+                0x11010223,  //               VERT_CENTER
+                0x11010302,  //               VERT_NONE
+
+    // RndStdIds: "to character" == FLY_AUTO_CNTNT: 0x12
+    //
+    // SwRelationOrient: "Margin" == FRAME: 0
+    //               |
+                0x12000013,  // SwVertOrient: VERT_TOP
+                0x12000133,  //               VERT_BOTTOM
+                0x12000223,  //               VERT_CENTER
+                0x12000302,  //               VERT_NONE
+    // SwRelationOrient: "Textarea" == PRTAREA: 1
+    //               |
+                0x12010013,  // SwVertOrient: VERT_TOP
+                0x12010133,  //               VERT_BOTTOM
+                0x12010223,  //               VERT_CENTER
+                0x12010302,  //               VERT_NONE
+    // SwRelationOrient: "Character" == REL_CHAR: 2
+    //               |
+                0x12020013,  // SwVertOrient: VERT_TOP
+                0x12020133,  //               VERT_BOTTOM
+                0x12020223,  //               VERT_CENTER
+                0x12020302,  //               VERT_NONE
+                0x12020633,  //               VERT_CHAR_BOTTOM (value: 6)
+
+    // RndStdIds: "as character" == FLY_IN_CNTNT: 0x13
+    //
+    // SwRelationOrient: FRAME: 0
+    //               |
+                0x13000013,  // SwVertOrient: VERT_TOP        (baseline)
+                0x13000133,  //               VERT_BOTTOM
+                0x13000223,  //               VERT_CENTER
+                0x13000302,  //               VERT_NONE        == "from bottom"
+
+                0x13000413,  //               VERT_CHAR_TOP   (character)
+                0x13000533,  //               VERT_CHAR_CENTER
+                0x13000623,  //               VERT_CHAR_BOTTOM == "below"
+
+                0x13000713,  //               VERT_LINE_TOP   (row)
+                0x13000813,  //               VERT_LINE_CENTER
+                0x13000923,  //               VERT_LINE_BOTTOM
+        };
+
+    // find horizontal values
+    UINT32* pFound
+          = (UINT32*)bsearch( (BYTE*) &nHIndex,
+                              (void*) aHVMatcher,
+                              sizeof( aHVMatcher ) / sizeof( aHVMatcher[0] ),
+                              sizeof( aHVMatcher[0] ),
+                              CompUINT32 );
+    if( !pFound )
+        pFound = (UINT32*)aHVMatcher; // take Element #0 if none found
+    UINT32 nXAlign = (*pFound & 0x000000F0) >> 4;
+    UINT32 nXRelTo = (*pFound & 0x0000000F);
+
+    // find vertical values
+    pFound= (UINT32*)bsearch( (BYTE*) &nVIndex,
+                              (void*) aHVMatcher,
+                              sizeof( aHVMatcher ) / sizeof( aHVMatcher[0] ),
+                              sizeof( aHVMatcher[0] ),
+                              CompUINT32 );
+    if( !pFound )
+        pFound = (UINT32*)aHVMatcher; // take Element #0 if none found
+    UINT32 nYAlign = (*pFound & 0x000000F0) >> 4;
+    UINT32 nYRelTo = (*pFound & 0x0000000F);
+
+    AddAtom(24, ESCHER_UDefProp, 3, 4 );
+    SvStream& rSt = GetStream();
+
+    rSt << (UINT16)0x038F << nXAlign;
+    rSt << (UINT16)0x0390 << nXRelTo;
+    rSt << (UINT16)0x0391 << nYAlign;
+    rSt << (UINT16)0x0392 << nYRelTo;
+}
+
+
 UINT32 SwEscherEx::WriteFlyFrm( const SwFrmFmt& rFmt )
 {
     // check for textflyframe and if it is the first in a Chain
@@ -1286,6 +1763,9 @@ void SwEscherEx::WriteTxtFlyFrame( const SwFrmFmt& rFmt, UINT32 nShapeId,
 
     EndCount( ESCHER_OPT, 3 );
 
+    // store anchor attribute
+    WriteFrmExtraData( rFmt );
+
     AddAtom( 4, ESCHER_ClientAnchor );  GetStream() << 0L;
     AddAtom( 4, ESCHER_ClientData );    GetStream() << 1L;
     AddAtom( 4, ESCHER_ClientTextbox ); GetStream() << nTxtBox;
@@ -1334,6 +1814,9 @@ void SwEscherEx::WriteGrfFlyFrame( const SwFrmFmt& rFmt, UINT32 nShapeId )
 
     EndCount( ESCHER_OPT, 3 );
 
+    // store anchor attribute
+    WriteFrmExtraData( rFmt );
+
     AddAtom( 4, ESCHER_ClientAnchor );      GetStream() << 0L;
     AddAtom( 4, ESCHER_ClientData );        GetStream() << 1L;
 
@@ -1366,6 +1849,9 @@ void SwEscherEx::WriteOCXControl( const SwFrmFmt& rFmt, UINT32 nShapeId )
         WriteFlyFrameAttr( rFmt );
 
         EndCount( ESCHER_OPT, 3 );
+
+        // store anchor attribute
+        WriteFrmExtraData( rFmt );
 
         AddAtom( 4, ESCHER_ClientAnchor );      GetStream() << 0L;
         AddAtom( 4, ESCHER_ClientData );        GetStream() << 1L;
@@ -1414,6 +1900,9 @@ void SwEscherEx::WriteOLEFlyFrame( const SwFrmFmt& rFmt, UINT32 nShapeId )
         WriteGrfAttr( rOLENd );
 
         EndCount( ESCHER_OPT, 3 );
+
+        // store anchor attribute
+        WriteFrmExtraData( rFmt );
 
         AddAtom( 4, ESCHER_ClientAnchor );      GetStream() << 0L;
         AddAtom( 4, ESCHER_ClientData );        GetStream() << 1L;
@@ -1750,11 +2239,14 @@ BOOL SwMSConvertControls::ExportControl(Writer &rWrt, const SdrObject *pObj)
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtw8esh.cxx,v 1.3 2000-10-10 16:54:06 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtw8esh.cxx,v 1.4 2000-11-13 10:11:28 khz Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.3  2000/10/10 16:54:06  cmc
+      MSOffice 97/2000 Controls {Im|Ex}port
+
       Revision 1.2  2000/09/21 12:18:55  khz
       #78753# Avoid dividing by zero.
 

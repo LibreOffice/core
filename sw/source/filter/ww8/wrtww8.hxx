@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cmc $ $Date: 2000-10-10 16:54:06 $
+ *  last change: $Author: khz $ $Date: 2000-11-13 10:11:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,6 +191,9 @@ struct WW8_SHD;
 #define TXT_ATN         5
 #define TXT_TXTBOX      6
 #define TXT_HFTXTBOX    7
+
+// special Atom (no property!) to store extended WW9 frame Anchor data
+#define ESCHER_UDefProp 0xF122
 
 
 extern SwNodeFnTab aWW8NodeFnTab;
