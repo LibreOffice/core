@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documentdefinition.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:04:28 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 11:04:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1070,7 +1070,26 @@ void ODocumentDefinition::loadEmbeddedObject(const Sequence< sal_Int8 >& _aClass
             xCommon->reload(aArgs,aEmbeddedObjectDescriptor);
         m_xEmbeddedObject->changeState(EmbedStates::RUNNING);
     }
+
     Reference<XModel> xModel(getComponent(),UNO_QUERY);
+    // set the OfficeDatabaseDocument instance as parent of the embedded document
+    // #i40358# / 2005-01-19 / frank.schoenheit@sun.com
+    Reference< XChild > xDepdendDocAsChild( xModel, UNO_QUERY );
+    if ( xDepdendDocAsChild.is() )
+    {
+        try
+        {
+            if ( !xDepdendDocAsChild->getParent().is() )
+            {   // first encounter
+                xDepdendDocAsChild->setParent( getDataSource( m_xParentContainer ) );
+            }
+        }
+        catch( const Exception& )
+        {
+            OSL_ENSURE( sal_False, "ODocumentDefinition::loadEmbeddedObject: caught an exception while setting the parent of the embedded object!" );
+        }
+    }
+
     if ( xModel.is() )
     {
         Sequence<PropertyValue> aArgs = xModel->getArgs();
