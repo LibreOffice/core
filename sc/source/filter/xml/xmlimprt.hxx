@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.hxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-01 17:38:06 $
+ *  last change: $Author: sab $ $Date: 2001-02-05 13:43:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@
 #include <tools/time.hxx>
 #include <com/sun/star/util/DateTime.hpp>
 #ifndef __SGI_STL_VECTOR
-#include <stl/vector>
+#include <vector>
 #endif
 #include "xmlsubti.hxx"
 #include "global.hxx"

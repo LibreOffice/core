@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportIterator.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2001-01-05 10:30:19 $
+ *  last change: $Author: sab $ $Date: 2001-02-05 13:43:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@
 #include <vector>
 #endif
 #ifndef __SGI_STL_LIST
-#include <stl/list>
+#include <list>
 #endif
 
 #ifndef _COM_SUN_STAR_SHEET_XSPREADSHEET_HPP_

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLStylesExportHelper.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2001-01-11 06:57:04 $
+ *  last change: $Author: sab $ $Date: 2001-02-05 13:43:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,10 +63,10 @@
 #define _SC_XMLSTYLESEXPORTHELPER_HXX
 
 #ifndef __SGI_STL_VECTOR
-#include <stl/vector>
+#include <vector>
 #endif
 #ifndef __SGI_STL_LIST
-#include <stl/list>
+#include <list>
 #endif
 
 #ifndef _COM_SUN_STAR_UNO_ANY_H_

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLDetectiveContext.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-18 14:14:24 $
+ *  last change: $Author: sab $ $Date: 2001-02-05 13:44:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@
 #endif
 
 #ifndef __SGI_STL_LIST
-#include <stl/list>
+#include <list>
 #endif
 
 class ScXMLImport;
