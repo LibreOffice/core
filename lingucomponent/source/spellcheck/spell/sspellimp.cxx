@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sspellimp.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:03:04 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 17:05:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,7 @@
 #include <svtools/useroptions.hxx>
 #endif
 #include <osl/file.hxx>
-
+#include <rtl/ustrbuf.hxx>
 
 
 using namespace utl;
@@ -330,9 +330,19 @@ INT16 SpellChecker::GetSpellFailure( const OUString &rWord, const Locale &rLocal
 
 
     INT16 nRes = -1;
-    String aTmp( rWord );
 
-    if (aTmp.Len())
+        // first handle smart quotes both single and double
+    OUStringBuffer rBuf(rWord);
+        sal_Int32 n = rBuf.getLength();
+        sal_Unicode c;
+    for (sal_Int32 ix=0; ix < n; ix++) {
+        c = rBuf.charAt(ix);
+            if ((c == 0x201C) || (c == 0x201D)) rBuf.setCharAt(ix,(sal_Unicode)0x0022);
+            if ((c == 0x2018) || (c == 0x2019)) rBuf.setCharAt(ix,(sal_Unicode)0x0027);
+        }
+        OUString nWord(rBuf.makeStringAndClear());
+
+    if (n)
     {
 
             for (int i =0; i < numdict; i++) {
@@ -362,7 +372,7 @@ INT16 SpellChecker::GetSpellFailure( const OUString &rWord, const Locale &rLocal
         }
             if (pMS)
                 {
-            OString aWrd(OU2ENC(rWord,aEnc));
+            OString aWrd(OU2ENC(nWord,aEnc));
                 int rVal = pMS->spell((char*)aWrd.getStr());
                  if (rVal != 1)
                     {
@@ -438,8 +448,18 @@ Reference< XSpellAlternatives >
     int count;
         int numsug = 0;
 
-    String aTmp( rWord );
-    if (aTmp.Len())
+        // first handle smart quotes (single and double)
+    OUStringBuffer rBuf(rWord);
+        sal_Int32 n = rBuf.getLength();
+        sal_Unicode c;
+    for (sal_Int32 ix=0; ix < n; ix++) {
+         c = rBuf.charAt(ix);
+             if ((c == 0x201C) || (c == 0x201D)) rBuf.setCharAt(ix,(sal_Unicode)0x0022);
+             if ((c == 0x2018) || (c == 0x2019)) rBuf.setCharAt(ix,(sal_Unicode)0x0027);
+        }
+        OUString nWord(rBuf.makeStringAndClear());
+
+    if (n)
     {
         INT16 nLang = LocaleToLanguage( rLocale );
 
@@ -460,7 +480,7 @@ Reference< XSpellAlternatives >
             if (pMS)
             {
                 char ** suglst = NULL;
-                    OString aWrd(OU2ENC(rWord,aEnc));
+            OString aWrd(OU2ENC(nWord,aEnc));
                     count = pMS->suggest(&suglst, (const char *) aWrd.getStr());
 
                     if (count) {
@@ -482,6 +502,7 @@ Reference< XSpellAlternatives >
 
             // now return an empty alternative for no suggestions or the list of alternatives if some found
         SpellAlternatives *pAlt = new SpellAlternatives;
+            String aTmp(rWord);
         pAlt->SetWordLanguage( aTmp, nLang );
         pAlt->SetFailureType( SpellFailure::SPELLING_ERROR );
         pAlt->SetAlternatives( aStr );
