@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLPlotAreaContext.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 08:53:24 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 12:35:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,10 +140,9 @@ using ::rtl::OUString;
 
 static __FAR_DATA SvXMLEnumMapEntry aXMLAxisClassMap[] =
 {
-    { XML_CATEGORY,     SCH_XML_AXIS_CATEGORY   },
-    { XML_DOMAIN,       SCH_XML_AXIS_DOMAIN     },
-    { XML_VALUE,        SCH_XML_AXIS_VALUE      },
-    { XML_SERIES,       SCH_XML_AXIS_SERIES     },
+    { XML_X,  SCH_XML_AXIS_X  },
+    { XML_Y,  SCH_XML_AXIS_Y  },
+    { XML_Z,  SCH_XML_AXIS_Z  },
     { XML_TOKEN_INVALID, 0 }
 };
 
@@ -641,8 +640,7 @@ uno::Reference< drawing::XShape > SchXMLAxisContext::getTitleShape()
 
     switch( maCurrentAxis.eClass )
     {
-        case SCH_XML_AXIS_CATEGORY:
-        case SCH_XML_AXIS_DOMAIN:
+        case SCH_XML_AXIS_X:
             if( maCurrentAxis.nIndexInCategory == 0 )
             {
                 uno::Reference< chart::XAxisXSupplier > xSuppl( mxDiagram, uno::UNO_QUERY );
@@ -654,7 +652,7 @@ uno::Reference< drawing::XShape > SchXMLAxisContext::getTitleShape()
                 }
             }
             break;
-        case SCH_XML_AXIS_VALUE:
+        case SCH_XML_AXIS_Y:
             if( maCurrentAxis.nIndexInCategory == 0 )
             {
                 uno::Reference< chart::XAxisYSupplier > xSuppl( mxDiagram, uno::UNO_QUERY );
@@ -666,7 +664,7 @@ uno::Reference< drawing::XShape > SchXMLAxisContext::getTitleShape()
                 }
             }
             break;
-        case SCH_XML_AXIS_SERIES:
+        case SCH_XML_AXIS_Z:
             uno::Reference< chart::XAxisZSupplier > xSuppl( mxDiagram, uno::UNO_QUERY );
             if( xSuppl.is())
             {
@@ -693,8 +691,7 @@ void SchXMLAxisContext::CreateGrid( ::rtl::OUString sAutoStyleName,
 
     switch( maCurrentAxis.eClass )
     {
-        case SCH_XML_AXIS_CATEGORY:
-        case SCH_XML_AXIS_DOMAIN:
+        case SCH_XML_AXIS_X:
             {
                 uno::Reference< chart::XAxisXSupplier > xSuppl( xDia, uno::UNO_QUERY );
                 if( xSuppl.is())
@@ -712,7 +709,7 @@ void SchXMLAxisContext::CreateGrid( ::rtl::OUString sAutoStyleName,
                 }
             }
             break;
-        case SCH_XML_AXIS_VALUE:
+        case SCH_XML_AXIS_Y:
             {
                 uno::Reference< chart::XAxisYSupplier > xSuppl( xDia, uno::UNO_QUERY );
                 if( xSuppl.is())
@@ -730,7 +727,7 @@ void SchXMLAxisContext::CreateGrid( ::rtl::OUString sAutoStyleName,
                 }
             }
             break;
-        case SCH_XML_AXIS_SERIES:
+        case SCH_XML_AXIS_Z:
             {
                 uno::Reference< chart::XAxisZSupplier > xSuppl( xDia, uno::UNO_QUERY );
                 if( xSuppl.is())
@@ -802,7 +799,7 @@ void SchXMLAxisContext::StartElement( const uno::Reference< xml::sax::XAttribute
 
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ))
         {
-            case XML_TOK_AXIS_CLASS:
+            case XML_TOK_AXIS_DIMENSION:
                 {
                     USHORT nEnumVal;
                     if( rImport.GetMM100UnitConverter().convertEnum( nEnumVal, aValue, aXMLAxisClassMap ))
@@ -843,8 +840,7 @@ void SchXMLAxisContext::EndElement()
 
     switch( maCurrentAxis.eClass )
     {
-        case SCH_XML_AXIS_CATEGORY:
-        case SCH_XML_AXIS_DOMAIN:
+        case SCH_XML_AXIS_X:
             if( maCurrentAxis.nIndexInCategory == 0 )
             {
                 try
@@ -908,7 +904,7 @@ void SchXMLAxisContext::EndElement()
             }
             break;
 
-        case SCH_XML_AXIS_VALUE:
+        case SCH_XML_AXIS_Y:
             if( maCurrentAxis.nIndexInCategory == 0 )
             {
                 try
@@ -972,7 +968,7 @@ void SchXMLAxisContext::EndElement()
             }
             break;
 
-        case SCH_XML_AXIS_SERIES:
+        case SCH_XML_AXIS_Z:
             {
                 try
                 {
@@ -1168,7 +1164,7 @@ void SchXMLSeriesContext::StartElement( const uno::Reference< xml::sax::XAttribu
                     for( sal_Int32 nCurrent = 0; nCurrent < nNumOfAxes; nCurrent++ )
                     {
                         if( aValue.equals( mrAxes[ nCurrent ].aName ) &&
-                            mrAxes[ nCurrent ].eClass == SCH_XML_AXIS_VALUE )
+                            mrAxes[ nCurrent ].eClass == SCH_XML_AXIS_Y )
                         {
                             mpAttachedAxis = &( mrAxes[ nCurrent ] );
                         }
