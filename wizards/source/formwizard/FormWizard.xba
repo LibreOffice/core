@@ -310,7 +310,8 @@ Dim bLinkExists as Boolean
 Dim i as Integer	
 Dim sBaseBookmarkName as String
 	oMasterKey = GetRegistryKeyContent(&quot;org.openoffice.Office.TypeDetection/&quot;)
-	oFilters() = oMasterKey.Filters
+&apos; Todo: Hier &quot;Filters&quot; als key angeben
+	oFilters() = oMasterKey.Types
 	FilterNames(0,0) = oFilters.GetByName(&quot;writer_StarOffice_XML_Writer&quot;).UIName
 	FilterNames(0,1) = &quot;*.sxw&quot;
 	FilterNames(0,2) = &quot;&quot;

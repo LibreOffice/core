@@ -89,9 +89,9 @@ Sub SetDialogLanguage ()
 		.hlnAlign.Label = GetResText(RID_FORM + 32)
 		.hlnArrangements.Label = GetResText(RID_FORM + 35)
 
-		WizardTitle(1) = GetResText(RID_FORM + 45)
-		WizardTitle(2) = GetResText(RID_FORM + 46)
-		WizardTitle(3) = GetResText(RID_FORM + 47)
+		WizardTitle(1) = sMsgWizardName &amp; &quot;: &quot; &amp; GetResText(RID_FORM + 45)
+		WizardTitle(2) = sMsgWizardName &amp; &quot;: &quot; &amp; GetResText(RID_FORM + 46)
+		WizardTitle(3) = sMsgWizardName &amp; &quot;: &quot; &amp; GetResText(RID_FORM + 47)
 
 		.hlnBinaries.Label = GetResText(RID_FORM + 50)
 		.optIgnoreBinaries.Label = GetResText(RID_FORM + 51)

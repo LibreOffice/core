@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbwizres.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-20 21:22:23 $
+ *  last change: $Author: bc $ $Date: 2001-11-01 16:59:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1154,8 +1154,8 @@ String RID_DB_GROUP_WIZARD_START + 23
 
 String RID_DB_FORM_WIZARD_START + 0
 {
-    Text = "AutoPilot Formulare";
-    Text [ english_us ] = "AutoPilot Forms";
+    Text = "AutoPilot Formular";
+    Text [ english_us ] = "AutoPilot Form";
     Text[ portuguese ] = "AutoPiloto - Formulбrios";
     Text[ russian ] = "јвтопилот формул€ров";
     Text[ dutch ] = "AutoPiloot Formulieren";
