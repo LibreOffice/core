@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:54:02 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:18:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,14 +70,16 @@
 #include <svx/zoomitem.hxx>
 #endif
 
-#ifndef _IPCLIENT_HXX //autogen
-#include <so3/ipclient.hxx>
-#endif
+//REMOVE    #ifndef _IPCLIENT_HXX //autogen
+//REMOVE    #include <so3/ipclient.hxx>
+//REMOVE    #endif
 
-#ifndef SO2_DECL_SVINPLACECLIENT_DEFINED
-#define SO2_DECL_SVINPLACECLIENT_DEFINED
-SO2_DECL_REF(SvInPlaceClient)
-#endif
+//REMOVE    #ifndef SO2_DECL_SVINPLACECLIENT_DEFINED
+//REMOVE    #define SO2_DECL_SVINPLACECLIENT_DEFINED
+//REMOVE    SO2_DECL_REF(SvInPlaceClient)
+//REMOVE    #endif
+
+#include <sfx2/ipclient.hxx>
 
 #include "viewutil.hxx"
 #include "select.hxx"
@@ -143,7 +145,7 @@ private:
     ScHeaderSelectionEngine* pHdrSelEng;
     ScHeaderFunctionSet      aHdrFunc;
 
-    SvInPlaceClientRef  aIPClient;
+    SfxInPlaceClient*   pIPClient;
 
     ScDrawView*         pDrawView;
 
