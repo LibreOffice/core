@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbhelper.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:39:53 $
+ *  last change: $Author: hr $ $Date: 2004-12-13 12:48:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -781,7 +781,7 @@ sal_Bool UCBContentHelper::Find( const String& rFolder, const String& rName, Str
         // get the last name of the URLs and compare it with rName
         INetURLObject aFileObject( pFiles[i] );
         String aFile = aFileObject.getName(
-            INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET ).ToLowerAscii();
+            INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET ).toAsciiLowerCase();
         if ( bWild && WildCard( rName ).Matches( aFile ) || aFile == rName )
         {
             // names match
@@ -818,7 +818,7 @@ sal_Bool UCBContentHelper::Exists( const String& rURL )
     sal_Bool bRet = sal_False;
     INetURLObject aObj( rURL );
     ::rtl::OUString aFileName = aObj.getName(
-        INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET ).ToLowerAscii();
+        INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET ).toAsciiLowerCase();
     aObj.removeSegment();
     aObj.removeFinalSlash();
 
@@ -832,7 +832,7 @@ sal_Bool UCBContentHelper::Exists( const String& rURL )
         // get the last name of the URLs and compare it with rName
         INetURLObject aFileObject( pFiles[i] );
         ::rtl::OUString aFile = aFileObject.getName(
-            INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET ).ToLowerAscii();
+            INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET ).toAsciiLowerCase();
         if ( aFile == aFileName )
         {
             // names match
