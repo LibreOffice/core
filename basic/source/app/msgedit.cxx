@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msgedit.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 17:17:22 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 19:40:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,16 +89,9 @@ Version 3           Changed Charset from CHARSET_IBMPC to RTL_TEXTENCODING_UTF8
 #ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
 #include <svtools/syslocale.hxx>
 #endif
-#ifndef NOOLDSV //autogen
-#include <vcl/system.hxx>
-#endif
 #ifndef _BASIC_TTRESHLP_HXX
 #include "ttstrhlp.hxx"
 #endif
-#ifndef _SV_SYSTEM_HXX
-#include <vcl/system.hxx>
-#endif
-
 #include "basic.hrc"
 #include "msgedit.hxx"
 #include "app.hxx"
