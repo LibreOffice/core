@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:56:35 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 13:15:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1156,11 +1156,6 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
     SFX_REQUEST_ARG( rReq, pRefererItem, SfxStringItem, SID_REFERER, FALSE );
     if ( pRefererItem )
         aReferer = pRefererItem->GetValue();
-
-    // #105259#: opening templates in UI should open the template, not use it
-    SFX_REQUEST_ARG( rReq, pTemplItem, SfxBoolItem, SID_TEMPLATE, FALSE);
-    if ( !pTemplItem )
-        rReq.AppendItem( SfxBoolItem( SID_TEMPLATE, FALSE ) );
 
     // Mark without URL cannot be handled by hyperlink code
     if ( bHyperlinkUsed && aFileName.Len() && aFileName.GetChar(0) != '#' )
