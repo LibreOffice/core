@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinTableView.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: oj $ $Date: 2002-06-21 07:06:38 $
+ *  last change: $Author: oj $ $Date: 2002-06-24 07:56:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -510,7 +510,8 @@ namespace
                     _nScrollX = aLowerRight.X() - aSize.Width() + TABWIN_SPACING_X;
 
                 // ensure the visibility of the left border (higher priority)
-                if ( (aUpperLeft.X() - _nScrollX) < 0 )
+                //  if ( (aUpperLeft.X() - _nScrollX) < 0 )
+                if ( aUpperLeft.X() < 0 )
                     _nScrollX = aUpperLeft.X() - TABWIN_SPACING_X;
             }
 
@@ -520,14 +521,15 @@ namespace
                 if ( aLowerRight.Y() > aSize.Height() )
                     _nScrollY = aLowerRight.Y() - aSize.Height() + TABWIN_SPACING_Y;
                 // upper border
-                if ( (aUpperLeft.Y() - _nScrollY) < 0 )
+                //  if ( (aUpperLeft.Y() - _nScrollY) < 0 )
+                if ( aUpperLeft.Y() < 0 )
                     _nScrollY = aUpperLeft.Y() - TABWIN_SPACING_Y;
             }
 
-            if (aSize.Width() > _rSize.Width() && _nScrollX )
+            if ( _nScrollX ) // aSize.Width() > _rSize.Width() &&
                 bVisbile = isScrollAllowed(_pView,_nScrollX, TRUE);
 
-            if (aSize.Height() > _rSize.Height() && _nScrollY )
+            if ( _nScrollY ) // aSize.Height() > _rSize.Height() &&
                 bVisbile = bVisbile && isScrollAllowed(_pView,_nScrollY, FALSE);
 
             if ( bVisbile )
@@ -897,42 +899,7 @@ void OJoinTableView::Tracking( const TrackingEvent& rTEvt )
         if( m_pSizingWin )
         {
             Point aMousePos = rTEvt.GetMouseEvent().GetPosPixel();
-            m_aSizingRect = Rectangle( m_pSizingWin->GetPosPixel(), m_pSizingWin->GetSizePixel() );
-            UINT16 nSizingFlags = m_pSizingWin->GetSizingFlags();
-
-            if( nSizingFlags & SIZING_TOP )
-            {
-                if( aMousePos.Y() < 0 )
-                    m_aSizingRect.Top() = 0;
-                else
-                    m_aSizingRect.Top() = aMousePos.Y();
-            }
-
-            if( nSizingFlags & SIZING_BOTTOM )
-            {
-                if( aMousePos.Y() > m_aOutputSize.Height() )
-                    m_aSizingRect.Bottom() = m_aOutputSize.Height();
-                else
-                    m_aSizingRect.Bottom() = aMousePos.Y();
-            }
-
-
-            if( nSizingFlags & SIZING_RIGHT )
-            {
-                if( aMousePos.X() > m_aOutputSize.Width() )
-                    m_aSizingRect.Right() = m_aOutputSize.Width();
-                else
-                    m_aSizingRect.Right() = aMousePos.X();
-            }
-
-            if( nSizingFlags & SIZING_LEFT )
-            {
-                if( aMousePos.X() < 0 )
-                    m_aSizingRect.Left() = 0;
-                else
-                    m_aSizingRect.Left() = aMousePos.X();
-            }
-
+            m_aSizingRect = m_pSizingWin->getSizingRect(aMousePos,m_aOutputSize);
             Update();
             ShowTracking( m_aSizingRect, SHOWTRACK_SMALL | SHOWTRACK_WINDOW );
         }
