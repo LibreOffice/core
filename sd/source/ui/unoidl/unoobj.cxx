@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-20 20:41:13 $
+ *  last change: $Author: cl $ $Date: 2001-04-03 11:38:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,11 @@
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
 #endif
+
+#ifndef _COMPHELPER_STLTYPES_HXX_
+#include <comphelper/stl_types.hxx>
+#endif
+
 #ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
 #endif
@@ -93,13 +98,11 @@
 #include <svtools/style.hxx>
 #endif
 
-#if SUPD>=626
 #ifndef _SVTOOLS_UNOIMAP_HXX
 #include <svtools/unoimap.hxx>
 #endif
 #ifndef _SVTOOLS_UNOEVENT_HXX_
 #include <svtools/unoevent.hxx>
-#endif
 #endif
 
 #ifndef _SFX_BINDINGS_HXX
@@ -168,6 +171,14 @@ using namespace ::vos;
 using namespace ::rtl;
 using namespace ::com::sun::star;
 
+///////////////////////////////////////////////////////////////////////
+
+DECLARE_STL_USTRINGACCESS_MAP( uno::Sequence< sal_Int8 > *, SdShapeImplementationIdMap );
+
+static SdShapeImplementationIdMap aImplementationIdMap;
+
+///////////////////////////////////////////////////////////////////////
+
 #define WID_EFFECT          1
 #define WID_SPEED           2
 #define WID_TEXTEFFECT      3
@@ -194,16 +205,10 @@ using namespace ::com::sun::star;
 
 const SfxItemPropertyMap* ImplGetShapePropertyMap( sal_Bool bImpress, sal_Bool bGraphicObj )
 {
-#if SUPD<626
-    bGraphicObj = sal_False;
-#endif
-
     // Achtung: Der erste Parameter MUSS sortiert vorliegen !!!
     static const SfxItemPropertyMap aImpress_SdXShapePropertyMap_Impl[] =
     {
-#if SUPD>=626
         { MAP_CHAR_LEN("ImageMap"),             WID_IMAGEMAP,        &::getCppuType((const uno::Reference< container::XIndexContainer >*)0),    0, 0 },
-#endif
         { MAP_CHAR_LEN(UNO_NAME_OBJ_ANIMATIONPATH), WID_ANIMPATH,        &ITYPE(drawing::XShape),                                   0, 0},
         { MAP_CHAR_LEN(UNO_NAME_OBJ_BOOKMARK),      WID_BOOKMARK,        &::getCppuType((const OUString*)0),                        0, 0},
         { MAP_CHAR_LEN(UNO_NAME_OBJ_DIMCOLOR),      WID_DIMCOLOR,        &::getCppuType((const sal_Int32*)0),                       0, 0},
@@ -228,9 +233,7 @@ const SfxItemPropertyMap* ImplGetShapePropertyMap( sal_Bool bImpress, sal_Bool b
 
     static const SfxItemPropertyMap aDraw_SdXShapePropertyMap_Impl[] =
     {
-#if SUPD>=626
         { MAP_CHAR_LEN("ImageMap"),             WID_IMAGEMAP,        &ITYPE(container::XIndexContainer),    0, 0 },
-#endif
         { MAP_CHAR_LEN(UNO_NAME_OBJ_BOOKMARK),      WID_BOOKMARK,       &::getCppuType((const OUString*)0),                 0, 0},
         { MAP_CHAR_LEN(UNO_NAME_OBJ_CLICKACTION),   WID_CLICKACTION,    &::getCppuType((const presentation::ClickAction*)0),0, 0},
         { MAP_CHAR_LEN(UNO_NAME_OBJ_STYLE),         WID_STYLE,          &ITYPE(style::XStyle),                              ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
@@ -248,7 +251,6 @@ SfxItemPropertyMap aEmpty_SdXShapePropertyMap_Impl[] =
     { 0,0,0,0,0}
 };
 
-#if SUPD>=626
 const SvEventDescription* ImplGetSupportedMacroItems()
 {
     static const SvEventDescription aMacroDescriptionsImpl[] =
@@ -260,7 +262,6 @@ const SvEventDescription* ImplGetSupportedMacroItems()
 
     return aMacroDescriptionsImpl;
 }
-#endif
 
 /*************************************************************************
 |*
@@ -281,7 +282,8 @@ extern "C" int __LOADONCALLAPI SortFunc( const void* p1, const void* p2 );
 SdXShape::SdXShape() throw()
 :   maPropSet(aEmpty_SdXShapePropertyMap_Impl),
     mpMap(aEmpty_SdXShapePropertyMap_Impl),
-    mpModel(NULL)
+    mpModel(NULL),
+    mpImplementationId(NULL)
 {
 }
 
@@ -292,7 +294,8 @@ SdXShape::SdXShape(uno::Reference< drawing::XShape > & xShape, SdXImpressDocumen
     mpMap( pModel?
                     ImplGetShapePropertyMap(pModel->IsImpressDocument(), xShape->getShapeType().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sUNO_Service_GraphicObjectShape)))
                 :   aEmpty_SdXShapePropertyMap_Impl ),
-    mpModel(pModel)
+    mpModel(pModel),
+    mpImplementationId( NULL )
 {
     m_refCount++;
     {
@@ -490,16 +493,51 @@ uno::Any SAL_CALL SdXShape::getPropertyDefault( const OUString& aPropertyName ) 
     return aRet;
 }
 
+/** return a unique implementation id depending on the type of the agregated shape */
 uno::Sequence< sal_Int8 > SAL_CALL SdXShape::getImplementationId()
     throw (uno::RuntimeException)
 {
-    static uno::Sequence< sal_Int8 > aId;
-    if( aId.getLength() == 0 )
+    OGuard aGuard( Application::GetSolarMutex() );
+
+    // do we need to compute the implementation id for this instance?
+    if( NULL == mpImplementationId )
     {
-        aId.realloc( 16 );
-        rtl_createUuid( (sal_uInt8 *)aId.getArray(), 0, sal_True );
+        uno::Reference< drawing::XShape > xAggShape;
+        mxShapeAgg->queryAggregation( ITYPE( drawing::XShape ) ) >>= xAggShape;
+        if( xAggShape.is() )
+        {
+            const OUString aShapeType( xAggShape->getShapeType() );
+
+            // did we already computed an implementation id for the agregated shape type?
+            SdShapeImplementationIdMap::iterator aIter( aImplementationIdMap.find( aShapeType ) );
+            if( aIter == aImplementationIdMap.end() )
+            {
+                // we need to create a new implementation id for this
+                // note: this memory is not free'd until application exists
+                //       but since we have a fixed set of shapetypes and the
+                //       memory will be reused this is ok.
+                mpImplementationId = new uno::Sequence< sal_Int8 >( 16 );
+                rtl_createUuid( (sal_uInt8 *)mpImplementationId->getArray(), 0, sal_True );
+                aImplementationIdMap[ aShapeType ] = mpImplementationId;
+            }
+            else
+            {
+                // use the already computed implementation id
+                mpImplementationId = (*aIter).second;
+            }
+        }
     }
-    return aId;
+
+    if( NULL == mpImplementationId )
+    {
+        DBG_ERROR( "Could not create an implementation id for a SdXShape!" );
+        uno::Sequence< sal_Int8 > aEmptyId;
+        return aEmptyId;
+    }
+    else
+    {
+        return *mpImplementationId;
+    }
 }
 
 void SAL_CALL SdXShape::acquire()
@@ -670,7 +708,6 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
 
                     break;
                 }
-#if SUPD>=626
                 case WID_IMAGEMAP:
                 {
                     SdDrawDocument* pDoc = mpModel?mpModel->GetDoc():NULL;
@@ -696,7 +733,6 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
                         }
                     }
                 }
-#endif
             }
         }
     }

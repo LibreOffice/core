@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-14 16:29:08 $
+ *  last change: $Author: cl $ $Date: 2001-04-03 11:38:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,8 @@ private:
     SdrObject* GetSdrObject() const throw();
     sal_Int32 GetPresentationOrderPos() const throw();
     void SetPresentationOrderPos( sal_Int32 nPos ) throw();
+
+    com::sun::star::uno::Sequence< sal_Int8 >* mpImplementationId;
 
 public:
     SdXShape() throw();
