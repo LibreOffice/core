@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cupsmgr.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 16:35:33 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 17:46:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,7 @@ class CUPSManager : public PrinterInfoManager
 
     virtual void initialize();
 
+    void getOptionsFromDocumentSetup( const JobData& rJob, int& rNumOptions, void** rOptions ) const;
     void runDests();
     static void runDestThread(void* pMgr);
 public:
@@ -116,7 +117,7 @@ public:
     const char* authenticateUser( const char* );
 
     virtual FILE* startSpool( const rtl::OUString& rPrinterName );
-    virtual int endSpool( const rtl::OUString& rPrinterName, const rtl::OUString& rJobTitle, FILE* pFile );
+    virtual int endSpool( const rtl::OUString& rPrinterName, const rtl::OUString& rJobTitle, FILE* pFile, const JobData& rDocumentJobData );
     virtual void setupJobContextData( JobData& rData );
 
     // changes the info about a named printer
