@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dcontact.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ama $ $Date: 2001-12-05 13:56:01 $
+ *  last change: $Author: jp $ $Date: 2001-12-10 17:39:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,15 @@
 #endif
 #ifndef _SVDMODEL_HXX //autogen
 #include <svx/svdmodel.hxx>
+#endif
+#ifndef _SVDPAGV_HXX //autogen
+#include <svx/svdpagv.hxx>
+#endif
+#ifndef _SVDVITER_HXX
+#include <svx/svdviter.hxx>
+#endif
+#ifndef _SVDVIEW_HXX
+#include <svx/svdview.hxx>
 #endif
 
 
@@ -597,8 +606,15 @@ void SwDrawContact::DisconnectFromLayout( BOOL bRemoveFromPage )
         pAnchor->RemoveDrawObj( this );
 
     if ( bRemoveFromPage && GetMaster() && GetMaster()->IsInserted() )
+    {
+        SdrViewIter aIter( GetMaster() );
+        for( SdrView* pView = aIter.FirstView(); pView;
+                    pView = aIter.NextView() )
+            pView->MarkObj( GetMaster(), pView->GetPageViewPvNum(0), TRUE );
+
         ((SwFrmFmt*)pRegisteredIn)->GetDoc()->GetDrawModel()->GetPage(0)->
                                     RemoveObject( GetMaster()->GetOrdNum() );
+    }
 }
 
 /*************************************************************************
