@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unusedf.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hjs $ $Date: 2003-09-25 10:49:33 $
+ *  last change: $Author: rt $ $Date: 2004-05-17 16:17:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@ sal_Bool SwCntntFrm::WouldFit( SwTwips &, sal_Bool&, sal_Bool )
     return FALSE;
 }
 
-BOOL SwFrm::GetCrsrOfst( SwPosition *, Point&, const SwCrsrMoveState*  ) const
+BOOL SwFrm::GetCrsrOfst( SwPosition *, Point&, SwCrsrMoveState*  ) const
 {
     ASSERT( FALSE, "GetCrsrOfst der Basisklasse, hi!" );
     return FALSE;
