@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuspell.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dl $ $Date: 2001-12-14 07:44:30 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 11:18:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,24 +61,35 @@
 
 #pragma hdrstop
 
+#include "fuspell.hxx"
+
 #include <svx/outliner.hxx>
 #ifndef _SFX_BINDINGS_HXX //autogen
 #include <sfx2/bindings.hxx>
 #endif
 
+#ifndef SD_FU_POOR_HXX
 #include "fupoor.hxx"
-#include "fuspell.hxx"
-#include "sdoutl.hxx"
+#endif
+#ifndef SD_OUTLINER_HXX
+#include "Outliner.hxx"
+#endif
 #include "drawdoc.hxx"
-#include "drviewsh.hxx"
-#include "outlnvsh.hxx"
+#ifndef SD_DRAW_VIEW_SHELL_HXX
+#include "DrawViewShell.hxx"
+#endif
+#ifndef SD_OUTLINE_VIEW_SHELL_HXX
+#include "OutlineViewShell.hxx"
+#endif
+#ifndef SD_VIEW_SHELL_BASE_HXX
+#include "ViewShellBase.hxx"
+#endif
 
 #include "app.hrc"
 
-class SdView;
-class SdViewShell;
-class SdWindow;
 class SfxRequest;
+
+namespace sd {
 
 USHORT SidArraySpell[] = {
                 SID_DRAWINGMODE,
@@ -96,20 +107,24 @@ TYPEINIT1( FuSpell, FuPoor );
 |*
 \************************************************************************/
 
-FuSpell::FuSpell( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
-                  SdDrawDocument* pDoc, SfxRequest& rReq )
-       : FuPoor(pViewSh, pWin, pView, pDoc, rReq),
-    pSdOutliner(NULL),
-    bOwnOutliner(FALSE)
+FuSpell::FuSpell (
+    ViewShell* pViewSh,
+    ::sd::Window* pWin,
+    ::sd::View* pView,
+    SdDrawDocument* pDoc,
+    SfxRequest& rReq )
+    : FuPoor(pViewSh, pWin, pView, pDoc, rReq),
+      pSdOutliner(NULL),
+      bOwnOutliner(FALSE)
 {
     pViewShell->GetViewFrame()->GetBindings().Invalidate( SidArraySpell );
 
-    if ( pViewShell->ISA(SdDrawViewShell) )
+    if ( pViewShell->ISA(DrawViewShell) )
     {
         bOwnOutliner = TRUE;
-        pSdOutliner = new SdOutliner( pDoc, OUTLINERMODE_TEXTOBJECT );
+        pSdOutliner = new ::sd::Outliner( pDoc, OUTLINERMODE_TEXTOBJECT );
     }
-    else if ( pViewShell->ISA(SdOutlineViewShell) )
+    else if ( pViewShell->ISA(OutlineViewShell) )
     {
         bOwnOutliner = FALSE;
         pSdOutliner = pDoc->GetOutliner();
@@ -146,19 +161,21 @@ FuSpell::~FuSpell()
 
 void FuSpell::StartSpelling()
 {
-    pViewShell = PTR_CAST( SdViewShell, SfxViewShell::Current() );
+    // Get current main view shell.
+    pViewShell = ::sd::ViewShellBase::GetMainViewShell (
+        pDocSh->GetViewShell()->GetViewFrame());
 
     if( pViewShell )
     {
-        if ( pSdOutliner && pViewShell->ISA(SdDrawViewShell) && !bOwnOutliner )
+        if ( pSdOutliner && pViewShell->ISA(DrawViewShell) && !bOwnOutliner )
         {
             pSdOutliner->EndSpelling();
 
             bOwnOutliner = TRUE;
-            pSdOutliner = new SdOutliner( pDoc, OUTLINERMODE_TEXTOBJECT );
+            pSdOutliner = new ::sd::Outliner( pDoc, OUTLINERMODE_TEXTOBJECT );
             pSdOutliner->PrepareSpelling();
         }
-        else if ( pSdOutliner && pViewShell->ISA(SdOutlineViewShell) && bOwnOutliner )
+        else if ( pSdOutliner && pViewShell->ISA(OutlineViewShell) && bOwnOutliner )
         {
             pSdOutliner->EndSpelling();
             delete pSdOutliner;
@@ -175,3 +192,4 @@ void FuSpell::StartSpelling()
 
 
 
+} // end of namespace sd
