@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.18 $
+#*  $Revision: 1.19 $
 #*
-#*  last change: $Author: mav $ $Date: 2001-05-14 16:40:52 $
+#*  last change: $Author: pb $ $Date: 2001-06-06 08:34:24 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -269,8 +269,8 @@ APP1TARGET	=	bmpgui
 APP1BASE	=	0x10000000
 APP1DEPN	=   $(L)$/itools.lib  $(SVLIBDEPEND)
 APP1OBJS	=   $(OBJ)$/bmpgui.obj	\
-                $(OBJ)$/bmpcore.obj	
-            
+                $(OBJ)$/bmpcore.obj
+
 APP1STDLIBS	=	$(SVLIB)		\
                 $(TOOLSLIB)		\
                 $(VOSLIB) 		\
@@ -279,8 +279,8 @@ APP1STDLIBS	=	$(SVLIB)		\
 .IF "$(GUI)"!="UNX"
 APP1STDLIBS+= svtool.lib
 .ELSE
-APP1STDLIBS+= -lsvt$(UPD)$(DLLSUFFIX) 
-APP1STDLIBS+= -lsvl$(UPD)$(DLLSUFFIX) 
+APP1STDLIBS+= -lsvt$(UPD)$(DLLSUFFIX)
+APP1STDLIBS+= -lsvl$(UPD)$(DLLSUFFIX)
 .ENDIF
 
 # --- Targets ------------------------------------------------------
@@ -299,7 +299,18 @@ ALL: $(SLB)$/svl.lib \
     $(MISC)$/$(SHL2TARGET).def \
     $(MISC)$/$(SHL1TARGET).def \
     $(SVTTARGETS) \
+    $(SRS)$/hidother.hid \
     ALLTAR
+
+$(SRS)$/hidother.hid: hidother.src
+.IF "$(GUI)$(CPU)"=="WNTI"
+.IF "$(BUILD_SOSL)"==""
+    @+echo no hids
+    @+-mhids hidother.src ..\$(INPATH)$/srs sfx2 hidother
+.ENDIF
+.ELSE
+    @echo nix
+.ENDIF
 
 .INCLUDE :	target.mk
 
