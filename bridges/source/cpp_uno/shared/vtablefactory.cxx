@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vtablefactory.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:53:10 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 13:26:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,7 +179,8 @@ void VtableFactory::createVtables(
         bridges::cpp_uno::shared::GuardedArray< char > block(
             createBlock(slotCount, &slots));
         slots += slotCount;
-        unsigned char * code = reinterpret_cast< unsigned char * >(slots);
+        unsigned char * codeBegin = reinterpret_cast< unsigned char * >(slots);
+        unsigned char * code = codeBegin;
         sal_Int32 vtableOffset = blocks.size() * sizeof (void **);
         for (typelib_InterfaceTypeDescription const * type2 = type; type2 != 0;
              type2 = type2->pBaseTypeDescription)
@@ -192,6 +193,7 @@ void VtableFactory::createVtables(
                 baseOffset.getFunctionOffset(type2->aBase.pTypeName),
                 functionCount, vtableOffset);
         }
+        flushCode(codeBegin, code);
         blocks.push_back(block.get());
         block.release();
     }
