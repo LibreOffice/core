@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docedt.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:49:29 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 17:49:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1679,18 +1679,27 @@ sal_Bool SwDoc::Delete( SwPaM & rPam )
     return sal_True;
 }
 
-uno::Reference< uno::XInterface >  SwDoc::Spell( SwPaM& rPaM,
+
+uno::Any SwDoc::Spell( SwPaM& rPaM,
                     uno::Reference< XSpellChecker1 >  &xSpeller,
-                    sal_uInt16* pPageCnt, sal_uInt16* pPageSt ) const
+                    sal_uInt16* pPageCnt, sal_uInt16* pPageSt,
+                    sal_Bool bIsConversion ) const
 {
     SwPosition* pSttPos = rPaM.Start(), *pEndPos = rPaM.End();
     uno::Reference< beans::XPropertySet >  xProp( ::GetLinguPropertySet() );
-    sal_Bool bReverse = xProp.is() ?
+    sal_Bool bReverse = (!bIsConversion && xProp.is()) ?
             *(sal_Bool*)xProp->getPropertyValue( S2U(UPN_IS_WRAP_REVERSE) ).getValue() : sal_False;
 
-    SwSpellArgs aSpellArg( xSpeller,
-        pSttPos->nNode.GetNode().GetTxtNode(), pSttPos->nContent,
-        pEndPos->nNode.GetNode().GetTxtNode(), pEndPos->nContent );
+    SwSpellArgs      *pSpellArgs = 0;
+    SwConversionArgs *pConvArgs  = 0;
+    if (bIsConversion)
+        pConvArgs =  new SwConversionArgs(
+                            pSttPos->nNode.GetNode().GetTxtNode(), pSttPos->nContent,
+                            pEndPos->nNode.GetNode().GetTxtNode(), pEndPos->nContent );
+    else
+        pSpellArgs = new SwSpellArgs( xSpeller,
+                            pSttPos->nNode.GetNode().GetTxtNode(), pSttPos->nContent,
+                            pEndPos->nNode.GetNode().GetTxtNode(), pEndPos->nContent );
 
     sal_uInt32 nCurrNd = pSttPos->nNode.GetIndex();
     sal_uInt32 nEndNd = pEndPos->nNode.GetIndex();
@@ -1742,7 +1751,10 @@ uno::Reference< uno::XInterface >  SwDoc::Spell( SwPaM& rPaM,
                                     nPageNr + *pPageCnt - *pPageSt + 1;
                             ::SetProgressState( nStat, (SwDocShell*)GetDocShell() );
                         }
-                        if( ((SwTxtNode*)pNd)->Spell( &aSpellArg ) )
+                        if( (!bIsConversion &&
+                                ((SwTxtNode*)pNd)->Spell( pSpellArgs )) ||
+                            ( bIsConversion &&
+                                ((SwTxtNode*)pNd)->Convert( *pConvArgs )))
                         {
                             // Abbrechen und Position merken
                             pSttPos->nNode = nCurrNd;
@@ -1783,7 +1795,16 @@ uno::Reference< uno::XInterface >  SwDoc::Spell( SwPaM& rPaM,
             }
         }
     }
-    return aSpellArg.xSpellAlt;
+
+    uno::Any aRes;
+    if (bIsConversion)
+        aRes <<= pConvArgs->aConvText;
+    else
+        aRes <<= pSpellArgs->xSpellAlt;
+    delete pSpellArgs;
+    delete pConvArgs;
+
+    return aRes;
 }
 
 class SwHyphArgs : public SwInterHyphInfo
