@@ -2,9 +2,9 @@
  *
  *  $RCSfile: access_control.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dbo $ $Date: 2002-01-25 09:36:50 $
+ *  last change: $Author: dbo $ $Date: 2002-04-11 08:42:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,12 +102,17 @@ public:
     AccessControl( ::cppu::AccessControl const & ac )
         SAL_THROW( (::com::sun::star::uno::RuntimeException) );
 
+    /** Clears the access controller reference being used.
+    */
+    inline void SAL_CALL clear() SAL_THROW( () )
+        { m_xController.clear(); }
+
     /** Returns access to the access controller reference being used.
 
         @return access controller
     */
-    inline ::com::sun::star::uno::Reference< ::com::sun::star::security::XAccessController > const &
-    get() SAL_THROW( () )
+    inline ::com::sun::star::uno::Reference<
+        ::com::sun::star::security::XAccessController > const & SAL_CALL get() const SAL_THROW( () )
         { return m_xController; }
 
 
