@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfflt.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-04 11:03:11 $
+ *  last change: $Author: kz $ $Date: 2002-02-05 21:40:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,7 +196,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_MOSAIC
         Text[ portuguese ] = "~Altura" ;
         Text[ finnish ] = "K~orkeus" ;
         Text[ danish ] = "Højde" ;
-        Text[ french ] = "~Hauteur" ;
+        Text[ french ] = "Hauteur" ;
         Text[ swedish ] = "~Höjd" ;
         Text[ dutch ] = "~Hoogte" ;
         Text[ spanish ] = "A~ltura" ;
