@@ -2,9 +2,9 @@
 #
 #   $RCSfile: par2script.pl,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kz $ $Date: 2004-01-29 11:41:25 $
+#   last change: $Author: rt $ $Date: 2004-02-10 14:27:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,6 +69,7 @@ use par2script::globals;
 use par2script::parameter;
 use par2script::module;
 use par2script::shortcut;
+use par2script::undefine;
 use par2script::work;
 
 ####################################
@@ -84,7 +85,11 @@ my $parfiles = par2script::work::setparfiles($par2script::globals::parfilelist);
 
 par2script::work::make_complete_pathes_for_parfiles($parfiles, $includes);
 
-my $setupscript = par2script::work::collect_all_items($parfiles);
+my $parfilecontent = par2script::work::read_all_parfiles($parfiles);
+
+my $setupscript = par2script::work::collect_all_items($parfilecontent);
+
+par2script::undefine::undefine_gids($setupscript, $parfilecontent);
 
 par2script::shortcut::shift_shortcut_positions($setupscript);
 par2script::module::remove_from_modules($setupscript);
@@ -93,7 +98,9 @@ par2script::module::add_to_root_module($setupscript);
 # checking the setup script
 
 par2script::check::check_needed_directories($setupscript);
-par2script::check::check_directories_in_file_definitions($setupscript);
+par2script::check::check_directories_in_item_definitions($setupscript, "File");
+par2script::check::check_directories_in_item_definitions($setupscript, "Shortcut");
+par2script::check::check_directories_in_item_definitions($setupscript, "Profile");
 par2script::check::check_module_existence($setupscript);
 par2script::check::check_registry_at_files($setupscript);
 par2script::check::check_moduleid_at_items($setupscript);
