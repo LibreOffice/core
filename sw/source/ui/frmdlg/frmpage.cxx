@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:27:48 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:56:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2918,9 +2918,16 @@ IMPL_LINK( SwFrmURLPage, InsertFileHdl, PushButton *, pBtn )
     FileDialogHelper aDlgHelper( TemplateDescription::FILEOPEN_SIMPLE, 0 );
     Reference < XFilePicker > xFP = aDlgHelper.GetFilePicker();
 
-    String sTemp(aURLED.GetText());
-    if(sTemp.Len())
-        xFP->setDisplayDirectory(sTemp);
+    try
+    {
+        String sTemp(aURLED.GetText());
+        if(sTemp.Len())
+            xFP->setDisplayDirectory(sTemp);
+    }
+    catch( const uno::Exception& rEx )
+    {
+        rEx;
+    }
     if( aDlgHelper.Execute() == ERRCODE_NONE )
     {
         aURLED.SetText( URIHelper::SmartRelToAbs( xFP->getFiles().getConstArray()[0], FALSE,
