@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExporter.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:16:50 $
+ *  last change:$Date: 2003-02-05 10:25:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,9 @@ import lib.TestParameters;
 import util.SOfficeFactory;
 import util.XMLTools;
 
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
+
 /**
  * Test for object which is represented by service
  * <code>com.sun.star.comp.Calc.XMLExporter</code>. <p>
@@ -150,9 +153,7 @@ public class XMLExporter extends TestCase {
     *      {@link ifc.document._XExporter} interface </li>
     * </ul>
     */
-    public synchronized TestEnvironment createTestEnvironment( TestParameters tParam,
-                                                  PrintWriter log )
-                                                    throws StatusException {
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
 
         XMultiServiceFactory xMSF = tParam.getMSF() ;
         XInterface oObj = null;
@@ -173,7 +174,8 @@ public class XMLExporter extends TestCase {
             XSpreadsheets xSpreadsheets = xSpreadsheetDoc.getSheets();
             XIndexAccess xSheetsIndexArray = (XIndexAccess)
                 UnoRuntime.queryInterface(XIndexAccess.class, xSpreadsheets);
-            XSpreadsheet xSheet = (XSpreadsheet) xSheetsIndexArray.getByIndex(0);
+            XSpreadsheet xSheet = (XSpreadsheet) AnyConverter.toObject(
+                    new Type(XSpreadsheet.class),xSheetsIndexArray.getByIndex(0));
             XNamed xSheetNamed = (XNamed)
                 UnoRuntime.queryInterface(XNamed.class, xSheet);
             xSheetNamed.setName(SHEET_NAME);
