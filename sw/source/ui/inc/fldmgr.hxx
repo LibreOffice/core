@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldmgr.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-19 08:52:22 $
+ *  last change: $Author: kz $ $Date: 2004-06-29 08:11:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ class SbModule;
 class SvxMacroItem;
 class ListBox;
 class SvNumberFormatter;
-
+class Window;
 /*--------------------------------------------------------------------
     Beschreibung: Die Gruppen von Feldern
  --------------------------------------------------------------------*/
@@ -133,6 +133,7 @@ struct SwInsertFld_Data
     ::com::sun::star::uno::Any aDBDataSource;
     ::com::sun::star::uno::Any aDBConnection;
     ::com::sun::star::uno::Any aDBColumn;
+    Window* pParent; // parent dialog used for SwWrtShell::StartInputFldDlg()
 
     SwInsertFld_Data(USHORT nType, USHORT nSub, const String& rPar1, const String& rPar2,
                     ULONG nFmtId, SwWrtShell* pShell = NULL, sal_Unicode cSep = ' ', BOOL bIsAutoLanguage = TRUE) :
@@ -143,7 +144,8 @@ struct SwInsertFld_Data
         nFormatId(nFmtId),
         pSh(pShell),
         cSeparator(cSep),
-        bIsAutomaticLanguage(bIsAutoLanguage) {}
+        bIsAutomaticLanguage(bIsAutoLanguage),
+        pParent(0) {}
 
     SwInsertFld_Data() :
         pSh(0),
