@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpagv.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: aw $ $Date: 2002-02-28 13:09:17 $
+ *  last change: $Author: ka $ $Date: 2002-03-06 11:17:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1423,8 +1423,11 @@ void SdrPageView::DrawPaper(OutputDevice& rOut)
     if (pPage==NULL)
         return;
 
-    rOut.SetLineColor( Color( COL_GRAY ) );
-    rOut.SetFillColor( Color( COL_WHITE ) );
+    const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
+
+    rOut.SetLineColor( rSettings.GetWindowTextColor() );
+    rOut.SetFillColor( rSettings.GetWindowColor() );
+
     Rectangle aRect(GetPageRect());
     rOut.DrawRect(aRect);
 }
@@ -1435,8 +1438,7 @@ void SdrPageView::DrawBorder(OutputDevice& rOut)
     if (pPage==NULL)
         return;
 
-    Color aGrayColor( COL_GRAY );
-    rOut.SetLineColor( aGrayColor );
+    rOut.SetLineColor( Application::GetSettings().GetStyleSettings().GetWindowTextColor() );
     rOut.SetFillColor();
 
     Rectangle aRect(GetPageRect());
@@ -1543,7 +1545,7 @@ void SdrPageView::DrawGrid(OutputDevice& rOut, const Rectangle& rRect)
         FASTBOOL bHoriLines=bHoriSolid || bHoriFine || !bVertFine;
         FASTBOOL bVertLines=bVertSolid || bVertFine;
 
-        Color aCol(COL_GRAY);
+        Color aCol( Application::GetSettings().GetStyleSettings().GetWindowTextColor() );
         Color aColorMerk( rOut.GetLineColor() );
         rOut.SetLineColor( aCol );
 

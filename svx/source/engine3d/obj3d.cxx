@@ -2,9 +2,9 @@
  *
  *  $RCSfile: obj3d.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: aw $ $Date: 2001-09-20 16:33:33 $
+ *  last change: $Author: ka $ $Date: 2002-03-06 11:19:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,6 +142,14 @@
 
 #ifndef _SVX_XFLCLIT_HXX
 #include "xflclit.hxx"
+#endif
+
+#ifndef _SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
+
+#ifndef _SETTINGS_HXX
+#include <vcl/settings.hxx>
 #endif
 
 #ifndef _B3D_BASE3D_HXX
@@ -3377,6 +3385,24 @@ void E3dCompoundObject::ImpSet3DParForFill(ExtOutputDevice& rOut, Base3D* pBase3
                     // Color stays white, just set render mode
                     pBase3D->SetRenderMode(Base3DRenderFill);
                 }
+                else if((pBase3D->GetOutputDevice()->GetDrawMode() & DRAWMODE_SETTINGSFILL) != 0)
+                {
+                    Color aColorFill(Application::GetSettings().GetStyleSettings().GetWindowColor());
+                    Color aColorFillWithTransparency(aColorFill);
+                    aColorFillWithTransparency.SetTransparency((UINT8)(nFillTrans * 255 / 100));
+
+                    // set material to black and white mode
+                    pBase3D->SetMaterial(aColorFill, Base3DMaterialAmbient);
+                    pBase3D->SetMaterial(aColorFillWithTransparency, Base3DMaterialDiffuse);
+                    if(GetUseDifferentBackMaterial())
+                    {
+                        pBase3D->SetMaterial(aColorFill, Base3DMaterialAmbient, Base3DMaterialBack);
+                        pBase3D->SetMaterial(aColorFillWithTransparency, Base3DMaterialDiffuse, Base3DMaterialBack);
+                    }
+
+                    // Color stays solid, just set render mode
+                    pBase3D->SetRenderMode(Base3DRenderFill);
+                }
                 else if(eFillStyle == XFILL_BITMAP)
                 {
                     // bitmap fill, use bitmap texture from 2D defines
@@ -3718,7 +3744,7 @@ void E3dCompoundObject::ImpSet3DParForLine(ExtOutputDevice& rOut, Base3D* pBase3
 
     // special mode for black/white drawing
     // Linecolor is set to boack before (Base3d::SetColor())
-    if((!bDrawOutline) && ((pBase3D->GetOutputDevice()->GetDrawMode() & DRAWMODE_WHITEFILL) != 0))
+    if((!bDrawOutline) && ((pBase3D->GetOutputDevice()->GetDrawMode() & (DRAWMODE_WHITEFILL|DRAWMODE_SETTINGSFILL)) != 0))
     {
         bDrawOutline = TRUE;
     }
