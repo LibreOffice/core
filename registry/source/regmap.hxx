@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regmap.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-14 09:36:00 $
+ *  last change: $Author: hjs $ $Date: 2002-08-07 19:55:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,15 +62,9 @@
 #ifndef _REGMAP_HXX_
 #define _REGMAP_HXX_
 
-#if STLPORT_VERSION<321
-#include <hash_map.h>
-#include <list.h>
-#include <set.h>
-#else
 #include <hash_map>
 #include <list>
 #include <set>
-#endif
 
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
