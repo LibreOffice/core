@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshel.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:21:16 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 10:10:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,9 @@
 #endif
 #ifndef SD_WINDOW_UPDATER_HXX
 #include "WindowUpdater.hxx"
+#endif
+#ifndef _SD_SDXFER_HXX
+#include <sdxfer.hxx>
 #endif
 
 #include "app.hrc"
@@ -515,6 +518,12 @@ void SdViewShell::UIDeactivate( SvInPlaceObject *pIPObj )
 
 void SdViewShell::Deactivate(BOOL bIsMDIActivate)
 {
+    // remove view from a still active drag'n'drop session
+    SdTransferable* pDragTransferable = SD_MOD()->pTransferDrag;
+
+    if( pDragTransferable )
+        pDragTransferable->SetView( NULL );
+
     // View-Attribute an der FrameView merken
     WriteFrameViewData();
 
