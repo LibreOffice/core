@@ -2,9 +2,9 @@
 *
 *  $RCSfile: TextStyleHandler.java,v $
 *
-*  $Revision: 1.2 $
+*  $Revision: 1.3 $
 *
-*  last change: $Author: kz $ $Date: 2004-05-19 12:49:26 $
+*  last change: $Author: pjunck $ $Date: 2004-10-27 13:40:10 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -57,25 +57,39 @@
 *  Contributor(s): _______________________________________
 *
 */
+
 package com.sun.star.wizards.text;
+
+import com.sun.star.awt.Size;
+import com.sun.star.beans.PropertyVetoException;
+import com.sun.star.beans.UnknownPropertyException;
+import com.sun.star.beans.XPropertySet;
+import com.sun.star.container.XNameAccess;
+import com.sun.star.lang.IllegalArgumentException;
+import com.sun.star.lang.WrappedTargetException;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.style.XStyleFamiliesSupplier;
+import com.sun.star.style.XStyleLoader;
+import com.sun.star.text.XTextDocument;
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Exception;
+import com.sun.star.uno.UnoRuntime;
 
 public class TextStyleHandler {
     public XStyleFamiliesSupplier xStyleFamiliesSupplier;
-    private com.sun.star.lang.XMultiServiceFactory xMSFDoc;
-    private com.sun.star.text.XTextDocument xTextDocument;
+    private XMultiServiceFactory xMSFDoc;
+    private XTextDocument xTextDocument;
 
     /** Creates a new instance of TextStyleHandler */
-    public TextStyleHandler(com.sun.star.lang.XMultiServiceFactory xMSF, com.sun.star.text.XTextDocument xTextDocument) {
+    public TextStyleHandler(com.sun.star.lang.XMultiServiceFactory xMSF, XTextDocument xTextDocument) {
         this.xMSFDoc = xMSF;
         this.xTextDocument = xTextDocument;
-        xStyleFamiliesSupplier = (XStyleFamiliesSupplier) com.sun.star.uno.UnoRuntime.queryInterface(XStyleFamiliesSupplier.class, xTextDocument);
+        xStyleFamiliesSupplier = (XStyleFamiliesSupplier) UnoRuntime.queryInterface(XStyleFamiliesSupplier.class, xTextDocument);
     }
 
     public void loadStyleTemplates(String sTemplateUrl, String OptionString) {
         try {
-            XStyleFamiliesSupplier xStyleFamiliesSupplier = (XStyleFamiliesSupplier) com.sun.star.uno.UnoRuntime.queryInterface(XStyleFamiliesSupplier.class, xTextDocument);
-            com.sun.star.style.XStyleLoader xStyleLoader = (com.sun.star.style.XStyleLoader) com.sun.star.uno.UnoRuntime.queryInterface(com.sun.star.style.XStyleLoader.class, xStyleFamiliesSupplier.getStyleFamilies());
+            XStyleLoader xStyleLoader = (XStyleLoader) UnoRuntime.queryInterface(XStyleLoader.class, xStyleFamiliesSupplier.getStyleFamilies());
             com.sun.star.beans.PropertyValue[] StyleOptions = xStyleLoader.getStyleLoaderOptions();
             String CurOptionName = "";
             int PropCount = StyleOptions.length;
@@ -84,9 +98,38 @@ public class TextStyleHandler {
                 StyleOptions[i].Value = new Boolean((CurOptionName.compareTo(OptionString) == 0) || (CurOptionName.compareTo("OverwriteStyles") == 0));
             }
             xStyleLoader.loadStylesFromURL(sTemplateUrl, StyleOptions);
-        } catch (com.sun.star.uno.Exception exception) {
+        } catch (Exception exception) {
             exception.printStackTrace(System.out);
         }
     }
 
+    public XPropertySet getStyleByName(String sStyleFamily, String sStyleName){
+    try {
+        XPropertySet xPropertySet = null;
+        Object oStyleFamily = xStyleFamiliesSupplier.getStyleFamilies().getByName(sStyleFamily);
+        XNameAccess xNameAccess = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, oStyleFamily);
+        if (xNameAccess.hasByName(sStyleName))
+            xPropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xNameAccess.getByName(sStyleName));
+        return xPropertySet;
+    } catch (Exception e) {
+        e.printStackTrace(System.out);
+    }
+    return null;
+    }
+
+
+    public Size changePageAlignment(XPropertySet _xPropPageStyle, boolean _bIsLandscape){
+        try {
+            _xPropPageStyle.setPropertyValue("IsLandscape", new Boolean(_bIsLandscape));
+            Size aPageSize = (Size) AnyConverter.toObject(Size.class, _xPropPageStyle.getPropertyValue("Size"));
+            int nPageWidth = aPageSize.Width;
+            int nPageHeight = aPageSize.Height;
+            Size aSize = new Size(nPageHeight, nPageWidth);
+            _xPropPageStyle.setPropertyValue("Size", aSize);
+            return (Size) AnyConverter.toObject(Size.class,_xPropPageStyle.getPropertyValue("Size"));
+        } catch (Exception e) {
+            e.printStackTrace(System.out);
+            return null;
+        }
+    }
 }
