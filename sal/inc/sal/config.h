@@ -2,9 +2,9 @@
  *
  *  $RCSfile: config.h,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obr $ $Date: 2001-05-28 07:15:42 $
+ *  last change: $Author: kr $ $Date: 2001-05-29 13:57:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,7 @@ extern "C" {
 #define SAL_W32
 #define SAL_DLLEXTENSION ".dll"
 #define SAL_PRGEXTENSION ".exe"
+#define SAL_PATHSEPARATOR ';'
 #define SAL_CONFIGFILE( name ) name ".ini"
 #define SAL_SYSCONFIGFILE( name ) name ".ini"
 
@@ -115,6 +116,7 @@ extern "C" {
 #define SAL_DLLEXTENSION ".so"
 #define SAL_DLLPREFIX "lib"
 #define SAL_PRGEXTENSION ".bin"
+#define SAL_PATHSEPARATOR ':'
 #define SAL_CONFIGFILE( name ) name "rc"
 #define SAL_SYSCONFIGFILE( name ) "." name "rc"
 #endif
