@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valueset.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: pl $ $Date: 2002-06-05 11:18:22 $
+ *  last change: $Author: ka $ $Date: 2002-06-06 07:42:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,9 @@
 #endif
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
 #include <drafts/com/sun/star/accessibility/AccessibleEventId.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
+#include <drafts/com/sun/star/accessibility/AccessibleStateType.hpp>
 #endif
 
 #include "valueimp.hxx"
@@ -1483,70 +1486,83 @@ void ValueSet::KeyInput( const KeyEvent& rKEvt )
         case KEY_UP:
         case KEY_PAGEUP:
         {
-            const long nLineCount = ( ( KEY_UP == rKEvt.GetKeyCode().GetCode() ) ? 1 : mnVisLines );
-            do
+            if( rKEvt.GetKeyCode().GetCode() != KEY_PAGEUP ||
+                ( !rKEvt.GetKeyCode().IsShift() && !rKEvt.GetKeyCode().IsMod1() && !rKEvt.GetKeyCode().IsMod2() ) )
             {
-                if ( nCalcPos == VALUESET_ITEM_NONEITEM )
+                const long nLineCount = ( ( KEY_UP == rKEvt.GetKeyCode().GetCode() ) ? 1 : mnVisLines );
+                do
                 {
-                    if ( nLastItem+1 <= mnCols )
-                        nItemPos = mnCurCol;
-                    else
-                    {
-                        nItemPos = ((((nLastItem+1)/mnCols)-1)*mnCols)+(mnCurCol%mnCols);
-                        if ( nItemPos+mnCols <= nLastItem )
-                            nItemPos += mnCols;
-                    }
-                }
-                else if ( nCalcPos >= ( nLineCount * mnCols ) )
-                    nItemPos = nCalcPos - ( nLineCount * mnCols );
-                else
-                {
-                    if ( mpNoneItem )
-                    {
-                        mnCurCol  = nCalcPos%mnCols;
-                        nItemPos = VALUESET_ITEM_NONEITEM;
-                    }
-                    else
+                    if ( nCalcPos == VALUESET_ITEM_NONEITEM )
                     {
                         if ( nLastItem+1 <= mnCols )
-                            nItemPos = nCalcPos;
+                            nItemPos = mnCurCol;
                         else
                         {
-                            nItemPos = ((((nLastItem+1)/mnCols)-1)*mnCols)+(nCalcPos%mnCols);
+                            nItemPos = ((((nLastItem+1)/mnCols)-1)*mnCols)+(mnCurCol%mnCols);
                             if ( nItemPos+mnCols <= nLastItem )
                                 nItemPos += mnCols;
                         }
                     }
+                    else if ( nCalcPos >= ( nLineCount * mnCols ) )
+                        nItemPos = nCalcPos - ( nLineCount * mnCols );
+                    else
+                    {
+                        if ( mpNoneItem )
+                        {
+                            mnCurCol  = nCalcPos%mnCols;
+                            nItemPos = VALUESET_ITEM_NONEITEM;
+                        }
+                        else
+                        {
+                            if ( nLastItem+1 <= mnCols )
+                                nItemPos = nCalcPos;
+                            else
+                            {
+                                nItemPos = ((((nLastItem+1)/mnCols)-1)*mnCols)+(nCalcPos%mnCols);
+                                if ( nItemPos+mnCols <= nLastItem )
+                                    nItemPos += mnCols;
+                            }
+                        }
+                    }
+                    nCalcPos = nItemPos;
                 }
-                nCalcPos = nItemPos;
+                while ( ImplGetItem( nItemPos )->meType == VALUESETITEM_SPACE );
             }
-            while ( ImplGetItem( nItemPos )->meType == VALUESETITEM_SPACE );
+            else
+                Control::KeyInput( rKEvt );
         }
         break;
 
         case KEY_DOWN:
         case KEY_PAGEDOWN:
         {
-            const long nLineCount = ( ( KEY_DOWN == rKEvt.GetKeyCode().GetCode() ) ? 1 : mnVisLines );
-            do
+            if( rKEvt.GetKeyCode().GetCode() != KEY_PAGEDOWN ||
+                ( !rKEvt.GetKeyCode().IsShift() && !rKEvt.GetKeyCode().IsMod1() && !rKEvt.GetKeyCode().IsMod2() ) )
             {
-                if ( nCalcPos == VALUESET_ITEM_NONEITEM )
-                    nItemPos = mnCurCol;
-                else if ( nCalcPos + ( nLineCount * mnCols ) <= nLastItem )
-                    nItemPos = nCalcPos + ( nLineCount * mnCols );
-                else
+                const long nLineCount = ( ( KEY_DOWN == rKEvt.GetKeyCode().GetCode() ) ? 1 : mnVisLines );
+                do
                 {
-                    if ( mpNoneItem )
-                    {
-                        mnCurCol  = nCalcPos%mnCols;
-                        nItemPos = VALUESET_ITEM_NONEITEM;
-                    }
+                    if ( nCalcPos == VALUESET_ITEM_NONEITEM )
+                        nItemPos = mnCurCol;
+                    else if ( nCalcPos + ( nLineCount * mnCols ) <= nLastItem )
+                        nItemPos = nCalcPos + ( nLineCount * mnCols );
                     else
-                        nItemPos = nCalcPos%mnCols;
+                    {
+                        if ( mpNoneItem )
+                        {
+                            mnCurCol  = nCalcPos%mnCols;
+                            nItemPos = VALUESET_ITEM_NONEITEM;
+                        }
+                        else
+                            nItemPos = nCalcPos%mnCols;
+                    }
+                    nCalcPos = nItemPos;
                 }
-                nCalcPos = nItemPos;
+                while ( ImplGetItem( nItemPos )->meType == VALUESETITEM_SPACE );
             }
-            while ( ImplGetItem( nItemPos )->meType == VALUESETITEM_SPACE );
+            else
+                Control::KeyInput( rKEvt );
+
         }
         break;
         case KEY_RETURN:
@@ -2142,7 +2158,43 @@ void ValueSet::SelectItem( USHORT nItemId )
 
         if( ImplHasAccessibleListeners() )
         {
-            // notify listeners
+            // focus event (deselect)
+            if( nOldItem )
+            {
+                const USHORT nPos = GetItemPos( nItemId );
+
+                if( nPos != VALUESET_ITEM_NOTFOUND )
+                {
+                    ValueItemAcc* pItemAcc = ValueItemAcc::getImplementation( mpItemList->GetObject( nPos )->GetAccessible() );
+
+                    if( pItemAcc )
+                    {
+                        ::com::sun::star::uno::Any aOldAny, aNewAny;
+                        aOldAny <<= ::drafts::com::sun::star::accessibility::AccessibleStateType::FOCUSED;
+                        pItemAcc->FireAccessibleEvent( ::drafts::com::sun::star::accessibility::AccessibleEventId::ACCESSIBLE_STATE_EVENT, aOldAny, aNewAny );
+                    }
+                }
+            }
+
+            // focus event (select)
+            if( mnSelItemId )
+            {
+                const USHORT nPos = GetItemPos( mnSelItemId );
+
+                if( nPos != VALUESET_ITEM_NOTFOUND )
+                {
+                    ValueItemAcc* pItemAcc = ValueItemAcc::getImplementation( mpItemList->GetObject( nPos )->GetAccessible() );
+
+                    if( pItemAcc )
+                    {
+                        ::com::sun::star::uno::Any aOldAny, aNewAny;
+                        aNewAny <<= ::drafts::com::sun::star::accessibility::AccessibleStateType::FOCUSED;
+                        pItemAcc->FireAccessibleEvent( ::drafts::com::sun::star::accessibility::AccessibleEventId::ACCESSIBLE_STATE_EVENT, aOldAny, aNewAny );
+                    }
+                }
+            }
+
+            // selection event
             ::com::sun::star::uno::Any aOldAny, aNewAny;
             ImplFireAccessibleEvent( ::drafts::com::sun::star::accessibility::AccessibleEventId::ACCESSIBLE_SELECTION_EVENT, aOldAny, aNewAny );
         }
