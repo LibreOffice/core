@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cell.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2004-09-07 10:38:27 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:40:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 #ifndef SC_TOKENARRAY_HXX
 #include "tokenarray.hxx"
 #endif
+#ifndef SC_POSTIT_HXX
+#include "postit.hxx"
+#endif
 
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
@@ -140,7 +143,7 @@ public:
     inline void     ForgetBroadcaster();
     inline void     SwapBroadcaster(ScBaseCell& rOther);    // zum Sortieren
 
-    void            LoadNote( SvStream& rStream );
+    void            LoadNote( SvStream& rStream, ScDocument* pDoc );
 
                         // String- oder EditCell
     static ScBaseCell* CreateTextCell( const String& rString, ScDocument* );
