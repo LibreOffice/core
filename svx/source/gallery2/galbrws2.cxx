@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galbrws2.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ka $ $Date: 2001-06-27 10:17:54 $
+ *  last change: $Author: ka $ $Date: 2001-07-03 10:51:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,6 @@
 #include <svtools/intitem.hxx>
 #include <svtools/eitem.hxx>
 #include <svtools/transfer.hxx>
-//#include <sfx2/exchobj.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
