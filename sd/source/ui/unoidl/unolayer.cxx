@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unolayer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-19 16:19:32 $
+ *  last change: $Author: cl $ $Date: 2001-03-04 23:03:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -592,7 +592,7 @@ uno::Any SAL_CALL SdLayerManager::getByIndex( sal_Int32 nLayer )
     if( rModel.pDoc )
     {
         SdrLayerAdmin& rLayerAdmin = rModel.pDoc->GetLayerAdmin();
-        uno::Reference< drawing::XLayer > xLM( new SdLayer( (SdLayerManager*)this, rLayerAdmin.GetLayer(nLayer) ) );
+        uno::Reference< drawing::XLayer > xLM( new SdLayer( (SdLayerManager*)this, rLayerAdmin.GetLayer((sal_uInt16)nLayer) ) );
         aAny <<= xLM;
     }
     return aAny;
