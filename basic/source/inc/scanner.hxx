@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scanner.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 13:35:14 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 07:43:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ protected:
     short  nCol;                        // aktuelle Spaltennummer
     short  nErrors;                     // Anzahl Fehler
     short  nColLock;                    // Lock-Zaehler fuer Col1
-    USHORT nBufPos;                     // aktuelle Buffer-Pos
+    INT32  nBufPos;                     // aktuelle Buffer-Pos
     USHORT nLine;                       // aktuelle Zeile
     USHORT nCol1, nCol2;                // aktuelle 1. und 2. Spalte
     BOOL   bSymbol;                     // TRUE: Symbol gescannt
@@ -134,23 +134,24 @@ public:
     double    GetDbl()              { return nVal;  }
 };
 
-class IsoLatinLetterTable
+class LetterTable
 {
-    bool    IsLetterTab[256];
+    bool        IsLetterTab[256];
 
 public:
-    IsoLatinLetterTable( void );
+    LetterTable( void );
 
     inline bool isLetter( sal_Unicode c )
     {
-        bool bRet = IsLetterTab[c];
+        bool bRet = (c < 256) ? IsLetterTab[c] : isLetterUnicode( c );
         return bRet;
     }
+    bool isLetterUnicode( sal_Unicode c );
 };
 
 class BasicSimpleCharClass
 {
-    static IsoLatinLetterTable aLetterTable;
+    static LetterTable aLetterTable;
 
 public:
     static BOOL isAlpha( sal_Unicode c, bool bCompatible )
