@@ -2,9 +2,9 @@
  *
  *  $RCSfile: APNDataObject.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tra $ $Date: 2001-07-26 11:47:57 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 07:55:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,8 @@
 #include <osl/diagnose.h>
 #endif
 
+#include <systools/win32/comtools.hxx>
+
 //------------------------------------------------------------------------
 // defines
 //------------------------------------------------------------------------
@@ -87,86 +89,66 @@ CAPNDataObject::CAPNDataObject( IDataObjectPtr rIDataObject ) :
     m_hGlobal( NULL ),
     m_nRefCnt( 0 )
 {
-    try
+
+    OSL_ENSURE( m_rIDataObjectOrg.get( ), "constructing CAPNDataObject with empty data object" );
+
+    // we marshal the IDataObject interface pointer here so
+    // that it can be unmarshaled multiple times when this
+    // class will be used from another apartment
+    IStreamPtr pStm;
+    HRESULT hr = CreateStreamOnHGlobal( 0, KEEP_HGLOB_ON_RELEASE, &pStm );
+
+    OSL_ENSURE( E_INVALIDARG != hr, "invalid args passed to CreateStreamOnHGlobal" );
+
+    if ( SUCCEEDED( hr ) )
     {
-        OSL_ENSURE( m_rIDataObjectOrg.GetInterfacePtr( ), "constructing CAPNDataObject with empty data object" );
+        HRESULT hr_marshal = CoMarshalInterface(
+            pStm.get(),
+            __uuidof(IDataObject),
+            static_cast<LPUNKNOWN>(m_rIDataObjectOrg.get()),
+            MSHCTX_LOCAL,
+            NULL,
+            MSHLFLAGS_TABLEWEAK );
 
-        // we marshal the IDataObject interface pointer here so
-        // that it can be unmarshaled multiple times when this
-        // class will be used from another apartment
-        IStreamPtr pStm;
-        HRESULT hr = CreateStreamOnHGlobal( 0, KEEP_HGLOB_ON_RELEASE, &pStm );
+        OSL_ENSURE( CO_E_NOTINITIALIZED != hr_marshal, "COM is not initialized" );
 
-        OSL_ENSURE( E_INVALIDARG != hr, "invalid args passed to CreateStreamOnHGlobal" );
+        // marshalling may fail if COM is not initialized
+        // for the calling thread which is a program time
+        // error or because of stream errors which are runtime
+        // errors for instance E_OUTOFMEMORY etc.
 
-        if ( SUCCEEDED( hr ) )
+        hr = GetHGlobalFromStream(pStm.get(), &m_hGlobal );
+
+        OSL_ENSURE( E_INVALIDARG != hr, "invalid stream passed to GetHGlobalFromStream" );
+
+        // if the marshalling failed we free the
+        // global memory again and set m_hGlobal
+        // to a defined value
+        if (FAILED(hr_marshal))
         {
-            HRESULT hr_marshal = CoMarshalInterface(
-                pStm,
-                __uuidof( IDataObject ),
-                m_rIDataObjectOrg,
-                MSHCTX_LOCAL,
-                NULL,
-                MSHLFLAGS_TABLEWEAK );
+            OSL_ENSURE(sal_False, "marshalling failed");
 
-            OSL_ENSURE( CO_E_NOTINITIALIZED != hr_marshal, "COM is not initialized" );
-
-            // marshalling may fail if COM is not initialized
-            // for the calling thread which is a program time
-            // error or because of stream errors which are runtime
-            // errors for instance E_OUTOFMEMORY etc.
-
-            hr = GetHGlobalFromStream( pStm, &m_hGlobal );
-
-            OSL_ENSURE( E_INVALIDARG != hr, "invalid stream passed to GetHGlobalFromStream" );
-
-            // if the marshalling failed we free the
-            // global memory again and set m_hGlobal
-            // to a defined value
-            if ( FAILED( hr_marshal ) )
-            {
-                OSL_ENSURE( sal_False, "marshalling failed" );
-
-                HGLOBAL hGlobal = GlobalFree( m_hGlobal );
-
-                OSL_ENSURE( NULL == hGlobal, "GlobalFree failed" );
-
-                m_hGlobal = NULL;
-            }
+            HGLOBAL hGlobal = GlobalFree(m_hGlobal);
+            OSL_ENSURE(NULL == hGlobal, "GlobalFree failed");
+            m_hGlobal = NULL;
         }
-    }
-    catch( _com_error& )
-    {
-        OSL_ENSURE( sal_False, "com exception caught" );
     }
 }
 
-//------------------------------------------------------------------------
-// dtor
-//------------------------------------------------------------------------
-
 CAPNDataObject::~CAPNDataObject( )
 {
-    try
+    if (m_hGlobal)
     {
-        if ( m_hGlobal )
+        IStreamPtr pStm;
+        HRESULT  hr = CreateStreamOnHGlobal(m_hGlobal, FREE_HGLOB_ON_RELEASE, &pStm);
+
+        OSL_ENSURE( E_INVALIDARG != hr, "invalid args passed to CreateStreamOnHGlobal" );
+
+        if (SUCCEEDED(hr))
         {
-            IStreamPtr pStm;
-            HRESULT  hr = CreateStreamOnHGlobal( m_hGlobal, FREE_HGLOB_ON_RELEASE, &pStm );
-
-            OSL_ENSURE( E_INVALIDARG != hr, "invalid args passed to CreateStreamOnHGlobal" );
-
-            if ( SUCCEEDED( hr ) )
-            {
-                hr = CoReleaseMarshalData( pStm );
-
-                OSL_ENSURE( SUCCEEDED( hr ), "CoReleaseMarshalData failed" );
-            }
+            hr = CoReleaseMarshalData(pStm.get());
+            OSL_ENSURE(SUCCEEDED(hr), "CoReleaseMarshalData failed");
         }
-    }
-    catch( _com_error& )
-    {
-        OSL_ENSURE( sal_False, "com exception caught" );
     }
 }
 
@@ -225,27 +207,16 @@ STDMETHODIMP_(ULONG) CAPNDataObject::Release( )
 
 STDMETHODIMP CAPNDataObject::GetData( LPFORMATETC pFormatetc, LPSTGMEDIUM pmedium )
 {
-    HRESULT hr;
+    HRESULT hr = m_rIDataObjectOrg->GetData( pFormatetc, pmedium );
 
-    try
+    if (RPC_E_WRONG_THREAD == hr)
     {
-        hr = m_rIDataObjectOrg->GetData( pFormatetc, pmedium );
+        IDataObjectPtr pIDOTmp;
+        hr = MarshalIDataObjectIntoCurrentApartment(&pIDOTmp);
 
-        if ( RPC_E_WRONG_THREAD == hr )
-        {
-            IDataObjectPtr pIDOTmp;
-            hr = MarshalIDataObjectIntoCurrentApartment( &pIDOTmp );
-
-            if ( SUCCEEDED( hr ) )
-                hr = pIDOTmp->GetData( pFormatetc, pmedium );
-        }
+        if (SUCCEEDED(hr))
+            hr = pIDOTmp->GetData(pFormatetc, pmedium);
     }
-    catch( _com_error& ex )
-    {
-        OSL_ENSURE( sal_False, "com exception caught" );
-        hr = ex.Error( );
-    }
-
     return hr;
 }
 
@@ -255,27 +226,16 @@ STDMETHODIMP CAPNDataObject::GetData( LPFORMATETC pFormatetc, LPSTGMEDIUM pmediu
 
 STDMETHODIMP CAPNDataObject::EnumFormatEtc( DWORD dwDirection, IEnumFORMATETC** ppenumFormatetc )
 {
-    HRESULT hr = E_FAIL;
+    HRESULT hr = m_rIDataObjectOrg->EnumFormatEtc(dwDirection, ppenumFormatetc);
 
-    try
+    if (RPC_E_WRONG_THREAD == hr)
     {
-        hr = m_rIDataObjectOrg->EnumFormatEtc( dwDirection, ppenumFormatetc );
+        IDataObjectPtr pIDOTmp;
+        hr = MarshalIDataObjectIntoCurrentApartment(&pIDOTmp);
 
-        if ( RPC_E_WRONG_THREAD == hr )
-        {
-            IDataObjectPtr pIDOTmp;
-            hr = MarshalIDataObjectIntoCurrentApartment( &pIDOTmp );
-
-            if ( SUCCEEDED( hr ) )
-                hr = pIDOTmp->EnumFormatEtc( dwDirection, ppenumFormatetc );
-        }
+        if (SUCCEEDED(hr))
+            hr = pIDOTmp->EnumFormatEtc(dwDirection, ppenumFormatetc);
     }
-    catch( _com_error& ex )
-    {
-        OSL_ENSURE( sal_False, "com exception caught" );
-        hr = ex.Error( );
-    }
-
     return hr;
 }
 
@@ -285,27 +245,16 @@ STDMETHODIMP CAPNDataObject::EnumFormatEtc( DWORD dwDirection, IEnumFORMATETC** 
 
 STDMETHODIMP CAPNDataObject::QueryGetData( LPFORMATETC pFormatetc )
 {
-    HRESULT hr = E_FAIL;
+    HRESULT hr = m_rIDataObjectOrg->QueryGetData( pFormatetc );
 
-    try
+    if (RPC_E_WRONG_THREAD == hr)
     {
-        hr = m_rIDataObjectOrg->QueryGetData( pFormatetc );
+        IDataObjectPtr pIDOTmp;
+        hr = MarshalIDataObjectIntoCurrentApartment( &pIDOTmp );
 
-        if ( RPC_E_WRONG_THREAD == hr )
-        {
-            IDataObjectPtr pIDOTmp;
-            hr = MarshalIDataObjectIntoCurrentApartment( &pIDOTmp );
-
-            if ( SUCCEEDED( hr ) )
-                hr = pIDOTmp->QueryGetData( pFormatetc );
-        }
+        if (SUCCEEDED(hr))
+            hr = pIDOTmp->QueryGetData(pFormatetc);
     }
-    catch( _com_error& ex )
-    {
-        OSL_ENSURE( sal_False, "com exception caught" );
-        hr = ex.Error( );
-    }
-
     return hr;
 }
 
@@ -315,27 +264,16 @@ STDMETHODIMP CAPNDataObject::QueryGetData( LPFORMATETC pFormatetc )
 
 STDMETHODIMP CAPNDataObject::GetDataHere( LPFORMATETC pFormatetc, LPSTGMEDIUM pmedium )
 {
-    HRESULT hr = E_FAIL;
+    HRESULT hr = m_rIDataObjectOrg->GetDataHere(pFormatetc, pmedium);
 
-    try
+    if (RPC_E_WRONG_THREAD == hr)
     {
-        hr = m_rIDataObjectOrg->GetDataHere( pFormatetc, pmedium );
+        IDataObjectPtr pIDOTmp;
+        hr = MarshalIDataObjectIntoCurrentApartment(&pIDOTmp);
 
-        if ( RPC_E_WRONG_THREAD == hr )
-        {
-            IDataObjectPtr pIDOTmp;
-            hr = MarshalIDataObjectIntoCurrentApartment( &pIDOTmp );
-
-            if ( SUCCEEDED( hr ) )
-                hr = pIDOTmp->GetDataHere( pFormatetc, pmedium );
-        }
+        if (SUCCEEDED(hr))
+            hr = pIDOTmp->GetDataHere(pFormatetc, pmedium);
     }
-    catch( _com_error& ex )
-    {
-        OSL_ENSURE( sal_False, "com exception caught" );
-        hr = ex.Error( );
-    }
-
     return hr;
 }
 
@@ -343,29 +281,18 @@ STDMETHODIMP CAPNDataObject::GetDataHere( LPFORMATETC pFormatetc, LPSTGMEDIUM pm
 // IDataObject->GetCanonicalFormatEtc
 //------------------------------------------------------------------------
 
-STDMETHODIMP CAPNDataObject::GetCanonicalFormatEtc( LPFORMATETC pFormatectIn, LPFORMATETC pFormatetcOut )
+STDMETHODIMP CAPNDataObject::GetCanonicalFormatEtc(LPFORMATETC pFormatectIn, LPFORMATETC pFormatetcOut)
 {
-    HRESULT hr = E_FAIL;
+    HRESULT hr = m_rIDataObjectOrg->GetCanonicalFormatEtc( pFormatectIn, pFormatetcOut );
 
-    try
+    if (RPC_E_WRONG_THREAD == hr)
     {
-        hr = m_rIDataObjectOrg->GetCanonicalFormatEtc( pFormatectIn, pFormatetcOut );
+        IDataObjectPtr pIDOTmp;
+        hr = MarshalIDataObjectIntoCurrentApartment(&pIDOTmp);
 
-        if ( RPC_E_WRONG_THREAD == hr )
-        {
-            IDataObjectPtr pIDOTmp;
-            hr = MarshalIDataObjectIntoCurrentApartment( &pIDOTmp );
-
-            if ( SUCCEEDED( hr ) )
-                hr = pIDOTmp->GetCanonicalFormatEtc( pFormatectIn, pFormatetcOut );
-        }
+        if (SUCCEEDED(hr))
+            hr = pIDOTmp->GetCanonicalFormatEtc(pFormatectIn, pFormatetcOut);
     }
-    catch( _com_error& ex )
-    {
-        OSL_ENSURE( sal_False, "com exception caught" );
-        hr = ex.Error( );
-    }
-
     return hr;
 }
 
@@ -375,27 +302,16 @@ STDMETHODIMP CAPNDataObject::GetCanonicalFormatEtc( LPFORMATETC pFormatectIn, LP
 
 STDMETHODIMP CAPNDataObject::SetData( LPFORMATETC pFormatetc, LPSTGMEDIUM pmedium, BOOL fRelease )
 {
-    HRESULT hr = E_FAIL;
+    HRESULT hr = m_rIDataObjectOrg->SetData( pFormatetc, pmedium, fRelease );
 
-    try
+    if (RPC_E_WRONG_THREAD == hr)
     {
-        hr = m_rIDataObjectOrg->SetData( pFormatetc, pmedium, fRelease );
+        IDataObjectPtr pIDOTmp;
+        hr = MarshalIDataObjectIntoCurrentApartment(&pIDOTmp);
 
-        if ( RPC_E_WRONG_THREAD == hr )
-        {
-            IDataObjectPtr pIDOTmp;
-            hr = MarshalIDataObjectIntoCurrentApartment( &pIDOTmp );
-
-            if ( SUCCEEDED( hr ) )
-                hr = pIDOTmp->SetData( pFormatetc, pmedium, fRelease );
-        }
+        if (SUCCEEDED(hr))
+            hr = pIDOTmp->SetData(pFormatetc, pmedium, fRelease);
     }
-    catch( _com_error& ex )
-    {
-        OSL_ENSURE( sal_False, "com exception caught" );
-        hr = ex.Error( );
-    }
-
     return hr;
 }
 
@@ -405,27 +321,16 @@ STDMETHODIMP CAPNDataObject::SetData( LPFORMATETC pFormatetc, LPSTGMEDIUM pmediu
 
 STDMETHODIMP CAPNDataObject::DAdvise( LPFORMATETC pFormatetc, DWORD advf, LPADVISESINK pAdvSink, DWORD * pdwConnection )
 {
-    HRESULT hr = E_FAIL;
+    HRESULT hr = m_rIDataObjectOrg->DAdvise(pFormatetc, advf, pAdvSink, pdwConnection);
 
-    try
+    if (RPC_E_WRONG_THREAD == hr)
     {
-        hr = m_rIDataObjectOrg->DAdvise( pFormatetc, advf, pAdvSink, pdwConnection );
+        IDataObjectPtr pIDOTmp;
+        hr = MarshalIDataObjectIntoCurrentApartment(&pIDOTmp);
 
-        if ( RPC_E_WRONG_THREAD == hr )
-        {
-            IDataObjectPtr pIDOTmp;
-            hr = MarshalIDataObjectIntoCurrentApartment( &pIDOTmp );
-
-            if ( SUCCEEDED( hr ) )
-                hr = pIDOTmp->DAdvise( pFormatetc, advf, pAdvSink, pdwConnection );
-        }
+        if (SUCCEEDED(hr))
+            hr = pIDOTmp->DAdvise(pFormatetc, advf, pAdvSink, pdwConnection);
     }
-    catch( _com_error& ex )
-    {
-        OSL_ENSURE( sal_False, "com exception caught" );
-        hr = ex.Error( );
-    }
-
     return hr;
 }
 
@@ -435,27 +340,16 @@ STDMETHODIMP CAPNDataObject::DAdvise( LPFORMATETC pFormatetc, DWORD advf, LPADVI
 
 STDMETHODIMP CAPNDataObject::DUnadvise( DWORD dwConnection )
 {
-    HRESULT hr = E_FAIL;
+    HRESULT hr = m_rIDataObjectOrg->DUnadvise( dwConnection );
 
-    try
+    if (RPC_E_WRONG_THREAD == hr)
     {
-        hr = m_rIDataObjectOrg->DUnadvise( dwConnection );
+        IDataObjectPtr pIDOTmp;
+        hr = MarshalIDataObjectIntoCurrentApartment(&pIDOTmp);
 
-        if ( RPC_E_WRONG_THREAD == hr )
-        {
-            IDataObjectPtr pIDOTmp;
-            hr = MarshalIDataObjectIntoCurrentApartment( &pIDOTmp );
-
-            if ( SUCCEEDED( hr ) )
-                hr = pIDOTmp->DUnadvise( dwConnection );
-        }
+        if (SUCCEEDED(hr))
+            hr = pIDOTmp->DUnadvise(dwConnection);
     }
-    catch( _com_error& ex )
-    {
-        OSL_ENSURE( sal_False, "com exception caught" );
-        hr = ex.Error( );
-    }
-
     return hr;
 }
 
@@ -465,27 +359,16 @@ STDMETHODIMP CAPNDataObject::DUnadvise( DWORD dwConnection )
 
 STDMETHODIMP CAPNDataObject::EnumDAdvise( LPENUMSTATDATA * ppenumAdvise )
 {
-    HRESULT hr = E_FAIL;
+    HRESULT hr = m_rIDataObjectOrg->EnumDAdvise(ppenumAdvise);
 
-    try
+    if (RPC_E_WRONG_THREAD == hr)
     {
-        hr = m_rIDataObjectOrg->EnumDAdvise( ppenumAdvise );
+        IDataObjectPtr pIDOTmp;
+        hr = MarshalIDataObjectIntoCurrentApartment(&pIDOTmp);
 
-        if ( RPC_E_WRONG_THREAD == hr )
-        {
-            IDataObjectPtr pIDOTmp;
-            hr = MarshalIDataObjectIntoCurrentApartment( &pIDOTmp );
-
-            if ( SUCCEEDED( hr ) )
-                hr = pIDOTmp->EnumDAdvise( ppenumAdvise );
-        }
+        if (SUCCEEDED(hr))
+            hr = pIDOTmp->EnumDAdvise(ppenumAdvise);
     }
-    catch( _com_error& ex )
-    {
-        OSL_ENSURE( sal_False, "com exception caught" );
-        hr = ex.Error( );
-    }
-
     return hr;
 }
 
@@ -504,35 +387,23 @@ CAPNDataObject::operator IDataObject*( )
 
 HRESULT CAPNDataObject::MarshalIDataObjectIntoCurrentApartment( IDataObject** ppIDataObj )
 {
-    OSL_ASSERT( NULL != ppIDataObj );
+    OSL_ASSERT(NULL != ppIDataObj);
 
     *ppIDataObj = NULL;
-
     HRESULT hr = E_FAIL;
 
-    try
+    if (m_hGlobal)
     {
-        if ( m_hGlobal )
+        IStreamPtr pStm;
+        hr = CreateStreamOnHGlobal(m_hGlobal, KEEP_HGLOB_ON_RELEASE, &pStm);
+
+        OSL_ENSURE(E_INVALIDARG != hr, "CreateStreamOnHGlobal with invalid args called");
+
+        if (SUCCEEDED(hr))
         {
-            IStreamPtr pStm;
-            hr = CreateStreamOnHGlobal( m_hGlobal, KEEP_HGLOB_ON_RELEASE, &pStm );
-
-            OSL_ENSURE( E_INVALIDARG != hr, "CreateStreamOnHGlobal with invalid args called" );
-
-            if ( SUCCEEDED( hr ) )
-            {
-                hr = CoUnmarshalInterface(
-                    pStm, __uuidof( IDataObject ), (void**)ppIDataObj );
-
-                OSL_ENSURE( CO_E_NOTINITIALIZED != hr, "COM is not initialized" );
-            }
+            hr = CoUnmarshalInterface(pStm.get(), __uuidof(IDataObject), (void**)ppIDataObj);
+            OSL_ENSURE(CO_E_NOTINITIALIZED != hr, "COM is not initialized");
         }
     }
-    catch( _com_error& ex )
-    {
-        OSL_ENSURE( sal_False, "com exception caught" );
-        hr = ex.Error( );
-    }
-
     return hr;
 }
