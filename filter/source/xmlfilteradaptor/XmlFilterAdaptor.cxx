@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XmlFilterAdaptor.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aidan $ $Date: 2002-05-21 09:50:05 $
+ *  last change: $Author: aidan $ $Date: 2002-07-02 12:11:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,25 +138,21 @@ sal_Bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< ::com::sun::star
     Reference < XImporter > xImporter( xHandler, UNO_QUERY );
     xImporter->setTargetDocument ( mxDoc );
 
-
-
-    // Creating a ConverterBridge instance
-    //fprintf(stderr, "now creating the xConverter instance \n");
     Reference< XInterface > xConvBridge;
 
     xConvBridge = mxMSF->createInstance( udConvertClass );
     try{
       if(! xConvBridge.is()){
-        fprintf (stderr, "XMLReader::Read: %s service missing\n",udConvertClass );
+        //fprintf (stderr, "XMLReader::Read: %s service missing\n",udConvertClass );
         return sal_False;
       }
     }
     catch( Exception& e)
       {
-        fprintf (stderr, "XMLReader::Read: %s Unable to create service instance\n" );
+        //fprintf (stderr, "XMLReader::Read: %s Unable to create service instance\n" );
         return sal_False;
      }
-    //fprintf(stderr, "now creating the ConverterBridge instance\n");
+
 
 
     Reference< com::sun::star::xml::XImportFilter > xConverter;
@@ -165,12 +161,11 @@ sal_Bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< ::com::sun::star
     }
     catch( Exception& e)
       {
-        fprintf(stderr, "Fell into the catch block!: %s\n",::rtl::OUStringToOString(
-                                         e.Message, RTL_TEXTENCODING_ASCII_US).getStr() );
-        fprintf(stderr, "Casting failure!\n");
+        //fprintf(stderr, "Fell into the catch block!: %s\n",::rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US).getStr() );
+        //fprintf(stderr, "Casting failure!\n");
       }
 
-    //fprintf(stderr, "Created ConverterBridge instance\n");
+
      sal_Bool xconv_ret =xConverter->importer(aDescriptor,xHandler,msUserData);
      return sal_True;
 }
@@ -184,18 +179,18 @@ sal_Bool SAL_CALL XmlFilterAdaptor::exportImpl( const Sequence< ::com::sun::star
 
         // Set up converter bridge.
     //
-    //fprintf(stderr, "going to create converterbridge!\n");
+
     Reference< XInterface > xConvBridge;
 
     xConvBridge = mxMSF->createInstance(
                         udConvertClass );
     if(! xConvBridge.is()){
-      fprintf (stderr, "XMLReader::Read: %s service missing\n",::rtl::OUStringToOString(
-                  msUserData[0], RTL_TEXTENCODING_ASCII_US).getStr() );
+      //fprintf (stderr, "XMLReader::Read: %s service missing\n",::rtl::OUStringToOString(
+      //                msUserData[0], RTL_TEXTENCODING_ASCII_US).getStr() );
       return sal_False;
     }
 
-        //fprintf(stderr, "now creating the xConverter instance\n");
+
 
     Reference< com::sun::star::xml::XExportFilter > xConverter;
 
@@ -203,12 +198,11 @@ sal_Bool SAL_CALL XmlFilterAdaptor::exportImpl( const Sequence< ::com::sun::star
       xConverter = Reference< com::sun::star::xml::XExportFilter > ( xConvBridge, UNO_QUERY );
     }
     catch( Exception& e){
-      fprintf(stderr, "Fell into the catch block!: %s\n",::rtl::OUStringToOString(
-                                           e.Message, RTL_TEXTENCODING_ASCII_US).getStr() );
-      fprintf(stderr, "Casting failure!\n");
+      //fprintf(stderr, "Fell into the catch block!: %s\n",::rtl::OUStringToOString(
+      //                                   e.Message, RTL_TEXTENCODING_ASCII_US).getStr() );
+
     }
 
-    //fprintf(stderr, "created converterbridge\n");
 
     sal_Bool xconv_ret=xConverter->exporter(aDescriptor,msUserData);
 
