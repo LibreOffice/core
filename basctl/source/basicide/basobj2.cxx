@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basobj2.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: tbe $ $Date: 2001-11-14 22:43:37 $
+ *  last change: $Author: tbe $ $Date: 2001-12-12 18:11:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -673,12 +673,10 @@ void BasicIDE::UpdateModule( SfxObjectShell* pShell, const String& rLibName, con
                             if ( pShell )
                             {
                                 // document basic
+                                aLocation = String::CreateFromAscii("document");
+
                                 SfxObjectShell* pCurrShell = SfxObjectShell::Current();
-                                if ( pShell == pCurrShell )
-                                {
-                                    aLocation = String::CreateFromAscii("document");
-                                }
-                                else
+                                if ( !bExecute && pShell != pCurrShell )
                                 {
                                     // error
                                     bError = TRUE;
