@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objdraw.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 06:10:03 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 07:48:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@
         Text [ portuguese_brazilian ] = "Standar~d" ; \
         Text[ chinese_simplified ] = "±ê×¼(~D)";\
         Text[ russian ] = "~Ñòàíäàğò";\
-        Text[ polish ] = "~Domyœlnie";\
+        Text[ polish ] = "~Domy?lnie";\
         Text[ japanese ] = "•W€(~D)";\
         Text[ chinese_traditional ] = "¼Ğ·Ç(~D)";\
         Text[ arabic ] = "~ŞíÇÓí";\
@@ -308,7 +308,7 @@
         Text [ English ] = "~Line Spacing" ; \
         Text [ norwegian ] = "~Linjeavstand" ; \
         Text [ italian ] = "Interli~nea" ; \
-        Text [ portuguese_brazilian ] = "~Espaçamento de linha" ; \
+        Text [ portuguese_brazilian ] = "~Espa?amento de linha" ; \
         Text [ portuguese ] = "~Entrelinhas" ; \
         Text [ finnish ] = "~Riviväli" ; \
         Text [ danish ] = "~Linjeafstand" ; \
@@ -1588,7 +1588,7 @@ Menu RID_POPUP_CHART
             Text [ dutch ] = "~Gegevensbereik veranderen..." ;
             Text [ swedish ] = "Ändra ~dataområde..." ;
             Text [ danish ] = "Rediger dataområde..." ;
-            Text [ portuguese_brazilian ] = "Datenbereich ändern..." ;
+            Text [ portuguese_brazilian ] = "Datenbereich ?ndern..." ;
             Text [ portuguese ] = "~Modificar área de dados..." ;
             Text[ chinese_simplified ] = "¸ü¸ÄÊı¾İÇøÓò(~M)...";
                                                 Text[ russian ] = "Èçìåíèòü îáëàñòü äàííûõ...";
@@ -1626,7 +1626,7 @@ String RID_POPUP_DRAWTEXT
     Text [ dutch ] = "PopUp-menu voor tekstobjecten" ;
     Text [ swedish ] = "Popup-meny för textobjekt" ;
     Text [ danish ] = "Popup-menu for tekstobjekter" ;
-    Text [ portuguese_brazilian ] = "Popup-Menü für Text-Objekte" ;
+    Text [ portuguese_brazilian ] = "Popup-Men?f? Text-Objekte" ;
     Text [ portuguese ] = "Menu instantâneo para objectos de texto" ;
     Text[ chinese_simplified ] = "ÎÄ×Ö¶ÔÏóµÄµ¯³öÊ½²Ëµ¥";
                                         Text[ russian ] = "Âñïëûâàşùåå ìåíş äëÿ îáúåêòîâ òåêñòà";
