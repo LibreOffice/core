@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_resource_ooo.scp,v $
 *
-*  $Revision: 1.4 $
+*  $Revision: 1.5 $
 *
-*  last change: $Author: rt $ $Date: 2004-05-26 16:22:11 $
+*  last change: $Author: rt $ $Date: 2004-06-07 08:36:13 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -99,12 +99,6 @@ STD_RES_FILE( gid_File_Res_Gal, gal )
 
 STD_RES_FILE( gid_File_Res_Imp, imp )
 
-#ifdef SOLAR_JAVA
-
-STD_SETUPZIP_RES_FILE( gid_File_Res_Jvm, jvm )
-
-#endif
-
 STD_RES_FILE( gid_File_Res_Langselect, langselect)
 
 STD_RES_FILE( gid_File_Res_Lgd, lgd )
@@ -145,7 +139,7 @@ STD_RES_FILE( gid_File_Res_Sch, sch )
 
 //
 // start binfilter #110743#
-// 
+//
 
 STD_RES_FILE( gid_File_Res_Bf_Sch, bf_sch )
 STD_RES_FILE( gid_File_Res_Bf_Svx, bf_svx )
@@ -157,7 +151,7 @@ STD_RES_FILE( gid_File_Res_Bf_Sfx, bf_sfx )
 
 //
 // end binfilter #110743#
-// 
+//
 
 STD_RES_FILE( gid_File_Res_Sd, sd )
 
