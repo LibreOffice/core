@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dfa.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-01 20:56:51 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 20:26:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ greek ] = "Ημερομηνία 1";
         Text[ korean ] = "³―Β¥ 1";
         Text[ turkish ] = "Tarih 1";
+        Text[ catalan ] = "Fecha 1";
     };
     String DFA_PAR_DATE2_NAME // Name of Date2 Parameter
     {
@@ -112,6 +113,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ greek ] = "Ημερομηνία 2";
         Text[ korean ] = "³―Β¥ 2";
         Text[ turkish ] = "Tarih 2";
+        Text[ catalan ] = "Fecha 2";
     };
     String DFA_PAR_MODE_NAME // Name of Mode Parameter
     {
@@ -137,6 +139,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ greek ] = "Τρόπος";
         Text[ korean ] = "Έπµε";
         Text[ turkish ] = "Tόr";
+        Text[ catalan ] = "Modo";
     };
 
     String DFA_PAR_DATE_NAME // Name of Date Parameter
@@ -163,6 +166,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ greek ] = "Ημερομηνία";
         Text[ korean ] = "³―Β¥";
         Text[ turkish ] = "Tarih";
+        Text[ catalan ] = "Fecha";
     };
 
     String DFA_PAR_DATE_DESC // Description of Date Parameter
@@ -189,6 +193,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ greek ] = "Εσωτερικός αριθμός της ημερομηνίας";
         Text[ korean ] = "³―Β¥ΐΗ ³»ΊΞ ΌύΐΪ";
         Text[ turkish ] = "Dahili tarih sayύsύ";
+        Text[ catalan ] = "Nϊmero interno de la fecha";
     };
 
 /*-=======================================================================*/
@@ -216,6 +221,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ greek ] = "Εβδομάδες";
         Text[ korean ] = "ΑΦ";
         Text[ turkish ] = "Hafta";
+        Text[ catalan ] = "Semanas";
     };
     String DFA_WEEK_DESC // Description
     {
@@ -241,6 +247,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ greek ] = "Ορίζει την διαφορά εβδομάδων δύο ημερομηνιών";
         Text[ korean ] = "µΞ ³―Β¥ »ηΐΜΐΗ ΑΦ ΌφΈ¦ °αΑ¤";
         Text[ turkish ] = "έki veri arasύndaki hafta farkύnύ bulur";
+        Text[ catalan ] = "Determina la diferencia en semanas de dos fechas";
     };
     String DFA_WEEK_PAR1_DESC // Description of Parameter 1
     {
@@ -267,6 +274,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ greek ] = "Τελική ημερομηνία για τον υπολογισμό της διαφοράς σε εβδομάδες";
         Text[ korean ] = "µΞ ³―Β¥ »ηΐΜ °θ»κΏ΅Ό­ΐΗ Έ¶ΑφΈ· ³―Β¥";
         Text[ turkish ] = "Hafta farkύ hesabύ iηin daha geη olan tarih";
+        Text[ catalan ] = "Fecha mαs reciente para la diferencia en semanas";
     };
     String DFA_WEEK_PAR2_DESC // Description of Parameter 2
     {
@@ -292,6 +300,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ greek ] = "Αρχική ημερομηνία για τον υπολογισμό της διαφοράς σε εβδομάδες";
         Text[ korean ] = "µΞ ³―Β¥ »ηΐΜ °θ»κΏ΅Ό­ΐΗ  ½ΓΐΫ΅΅³―Β¥";
         Text[ turkish ] = "Hafta farkύ hesabύ iηin daha erken olan tarih";
+        Text[ catalan ] = "Fecha mαs antigua para la diferencia en semanas";
     };
     String DFA_WEEK_PAR3_DESC // Description of Parameter 3
     {
@@ -317,6 +326,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ greek ] = "Τρόπος υπολογισμού της διαφοράς: Τρόπος=0 σημαίνει διάστημα, Τρόπος=1 σημαίνει ημερολογιακές εβδομάδες";
         Text[ korean ] = "ΒχΐΜ °θ»κ ΗόΕΒ: Έπµε=0 ΐΊ  °£°έΐ» ΐΗΉΜΗΟ°ν, Έπµε=1 ΐΊ ΑΦΈ¦ ΐΗΉΜΗΡ΄Ω";
         Text[ turkish ] = "Fark hesabύ tόrό, tόr=0 aralύk, tόr=1 ise takvim haftasύ cinsinden anlamύna gelir";
+        Text[ catalan ] = "Tipo de formaciσn de diferencia: Tipo=0 significa intervalo; tipo=1, semanas del aρo";
     };
 
 /*-=======================================================================*/
@@ -345,6 +355,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ greek ] = "Μήνες";
         Text[ korean ] = "Ώω";
         Text[ turkish ] = "Ay";
+        Text[ catalan ] = "Meses";
     };
     String DFA_MONTHS_DESC // Description
     {
@@ -370,6 +381,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ greek ] = "Ορίζει την διαφορά δύο ημερομηνιών σε μήνες";
         Text[ korean ] = "µΞ ³―Β¥ »ηΐΜΐΗ °³ΏωΌφΈ¦ °αΑ¤";
         Text[ turkish ] = "έki veri arasύndaki ay farkύnύ belirler";
+        Text[ catalan ] = "Determina la diferencia en meses entre dos fechas";
     };
     String DFA_MONTHS_PAR1_DESC // Description of Parameter 1
     {
@@ -395,6 +407,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ greek ] = "Τελική ημερομηνία για τον υπολογισμό της διαφοράς σε μήνες";
         Text[ korean ] = "°³Ώω Όφ °θ»κΏ΅Ό­ΐΗ Έ¶ΑφΈ· ³―Β¥";
         Text[ turkish ] = "Ay farkύ hesabύ iηin daha geη olan tarih";
+        Text[ catalan ] = "Fecha mαs reciente para la diferencia mensual";
     };
     String DFA_MONTHS_PAR2_DESC // Description of Parameter 2
     {
@@ -420,6 +433,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ greek ] = "Αρχική ημερομηνία για τον υπολογισμό της διαφοράς σε μήνες";
         Text[ korean ] = "°³Ώω Όφ °θ»κΏ΅Ό­ΐΗ ½ΓΐΫ ³―Β¥";
         Text[ turkish ] = "Ay farkύ hesabύ iηin daha erken olan tarih";
+        Text[ catalan ] = "Fecha mαs antigua para la diferencia mensual";
     };
     String DFA_MONTHS_PAR3_DESC // Description of Parameter 2
     {
@@ -445,6 +459,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ greek ] = "Τρόπος υπολογισμού διαφοράς: Τρόπος=0 σημαίνει διάστημα, Τρόπος=1 σημαίνει ημερολογιακοί μήνες";
         Text[ korean ] = "ΒχΐΜ °θ»κ ΗόΕΒ: Έπµε=0 ΐΊ  °£°έΐ» ΐΗΉΜΗΟ°ν, Έπµε=1ΐΊ °³Ώωΐ» ΐΗΉΜΗΡ΄Ω";
         Text[ turkish ] = "Fark hesabύ tόrό, tόr=0 aralύk, tόr=1 ise takvim ayύ cinsinden anlamύna gelir";
+        Text[ catalan ] = "Tipo de formaciσn de diferencia: Tipo=0 significa intervalo; tipo=1, meses del aρo";
     };
 
 /*-=======================================================================*/
@@ -473,6 +488,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ greek ] = "Χρόνια";
         Text[ korean ] = "³βµµ";
         Text[ turkish ] = "Yύl";
+        Text[ catalan ] = "Aρos";
     };
     String DFA_YEARS_DESC // Description
     {
@@ -498,6 +514,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ greek ] = "Ορίζει την διαφορά δύο ημερομηνιών σε έτη";
         Text[ korean ] = "µΞ ³―Β¥ »ηΐΜΐΗ ³βµµ ΒχΐΜ °αΑ¤";
         Text[ turkish ] = "έki veri arasύndaki yύl farkύnύ bulur";
+        Text[ catalan ] = "Determina la diferencia en aρos de dos fechas";
     };
     String DFA_YEARS_PAR1_DESC // Description of Parameter 1
     {
@@ -523,6 +540,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ greek ] = "Τελική ημερομηνία για τον υπολογισμό της διαφοράς σε έτη";
         Text[ korean ] = "³β ΒχΐΜ °θ»κΏ΅Ό­ΐΗ Έ¶ΑφΈ· ³―Β¥";
         Text[ turkish ] = "Yύl farkύ hesabύ iηin daha geη olan tarih";
+        Text[ catalan ] = "Fecha mαs reciente para la diferencia en aρos";
     };
     String DFA_YEARS_PAR2_DESC // Description of Parameter 2
     {
@@ -548,6 +566,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ greek ] = "Αρχική ημερομηνία για τον υπολογισμό της διαφοράς σε έτη";
         Text[ korean ] = "³β ΒχΐΜ °θ»κΏ΅Ό­ΐΗ ½ΓΐΫ ³―Β¥";
         Text[ turkish ] = "Yύl farkύ hesabύ iηin daha erken olan tarih";
+        Text[ catalan ] = "Fecha mαs antigua para la diferencia en aρos";
     };
     String DFA_YEARS_PAR3_DESC // Description of Parameter 2
     {
@@ -573,6 +592,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ greek ] = "Τρόπος του υπολογισμού της διαφοράς: Τρόπος=0 σημαίνει διάστημα, Τρόπος=1 σημαίνει σε ημερολογιακά έτη";
         Text[ korean ] = "ΒχΐΜ °θ»κ ΗόΕΒ: Έπµε=0 ΐΊ  °£°έΐ» ΐΗΉΜΗΟ°ν, Έπµε=1ΐΊ ³βΐ» ΐΗΉΜΗΡ΄Ω.";
         Text[ turkish ] = "Fark hesabύ tόrό, tόr=0 aralύk, tόr=1 ise takvim yύlύ cinsinden anlamύna gelir";
+        Text[ catalan ] = "Tipo de formaciσn de diferencia: Tipo=0 significa intervalo; tipo=1, aρos naturales";
     };
 
 /*-=======================================================================*/
@@ -601,6 +621,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ greek ] = "ΕίναιΔίσεκτοΈτος";
         Text[ korean ] = "ΐ±³β";
         Text[ turkish ] = "Artύkyύldύr";
+        Text[ catalan ] = "EsAρoBisiesto";
     };
     String DFA_ISLEAPYEAR_DESC // Description
     {
@@ -626,6 +647,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ greek ] = "Αποδίδει 1 (ΑΛΗΘΗΣ) όταν πρόκειται για δίσεκτο έτος, αλλιώς 0 (ΨΕΥΔΗΣ)";
         Text[ korean ] = "ΐ±³βΐΜΈι 1(Βό)ΐΜ΅΅µΗ°ν, ±Χ·ΈΑφ  ΎΚΐΈΈι 0(°ΕΑώ)ΐΜµΘ΄Ω.";
         Text[ turkish ] = "Yύl, artύkyύl ise 1(DOΠRU) aksi halde 0(YANLIή) verir";
+        Text[ catalan ] = "Devuelve 1(VERDADERO) si el aρo es bisiesto; si no, 0(FALSO)";
     };
 
 /*-=======================================================================*/
@@ -654,6 +676,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ greek ] = "ΗμέρεςΑνάΜήνα";
         Text[ korean ] = "ΏωΐΗ ³―Β¥ Όφ";
         Text[ turkish ] = "AydakiGόnSayύsύ";
+        Text[ catalan ] = "DνasEnMes";
     };
     String DFA_DAYSINMONTH_DESC // Description
     {
@@ -679,6 +702,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ greek ] = "Ορίζει για μια ημερομηνία τον αριθμό ημερών ανά μήνα";
         Text[ korean ] = "³―Β¥ΏΝ °ό·Γ, ±Χ ΄ήΏ΅Ό­ΐΗ ³―Β¥ ΌφΈ¦ °αΑ¤";
         Text[ turkish ] = "Girilen tarihe gφre ayύn gόn sayύsύnύ bulur";
+        Text[ catalan ] = "Determina la cantidad de dνas en un mes para una fecha";
     };
 
 /*-=======================================================================*/
@@ -707,6 +731,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ greek ] = "ΗμέρεςΣτοΈτος";
         Text[ korean ] = "³βΐΗ ³―Β¥ Όφ";
         Text[ turkish ] = "YύldakiGόnSayύsύ";
+        Text[ catalan ] = "DνasEnAρo";
     };
     String DFA_DAYSINYEAR_DESC // Description
     {
@@ -732,6 +757,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ greek ] = "Ορίζει τον αριθμό ημερών ανά έτος για μία ημερομηνία";
         Text[ korean ] = "³―Β¥ΏΝ °ό·Γ, ³βΐΗ ³―Β¥ ΌφΈ¦ °αΑ¤";
         Text[ turkish ] = "Girilen tarihe gφre yύlύn gόn sayύsύnύ bulur";
+        Text[ catalan ] = "Determina la cantidad de dνas en un aρo para una fecha";
     };
 
 /*-=======================================================================*/
@@ -760,6 +786,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ greek ] = "ΕβδομάδεςΑνάΈτος";
         Text[ korean ] = "³βΐΗ ΑΦ Όφ";
         Text[ turkish ] = "YύldakiHaftaSayύsύ";
+        Text[ catalan ] = "SemanasEnAρo";
     };
     String DFA_WEEKSINYEAR_DESC // Description
     {
@@ -785,6 +812,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ greek ] = "Ορίζει για μία ημερομηνία τον αριθμό εβδομάδων ανά έτος";
         Text[ korean ] = "³―Β¥ΏΝ °ό·Γ,³βΐΗ ΑΦ ΌφΈ¦ °αΑ¤";
         Text[ turkish ] = "Girilen tarihe gφre yύlύn hafta sayύsύnύ bulur";
+        Text[ catalan ] = "Determina la cantidad de semanas en un aρo para una fecha";
     };
 
 };
