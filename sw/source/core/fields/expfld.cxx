@@ -2,9 +2,9 @@
  *
  *  $RCSfile: expfld.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2001-07-20 12:49:50 $
+ *  last change: $Author: jp $ $Date: 2001-10-17 09:48:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,13 +65,12 @@
 
 #pragma hdrstop
 
-#include <float.h>
+#ifndef _HINTIDS_HXX
+#include <hintids.hxx>
+#endif
 
 #ifndef _UNOTOOLS_COLLATORWRAPPER_HXX
 #include <unotools/collatorwrapper.hxx>
-#endif
-#ifndef _TOOLS_RESID_HXX
-#include <tools/resid.hxx>
 #endif
 #ifndef _UNOTOOLS_CHARCLASS_HXX
 #include <unotools/charclass.hxx>
@@ -79,41 +78,40 @@
 #ifndef _UNO_LINGU_HXX
 #include <svx/unolingu.hxx>
 #endif
-#ifndef _UNOFIELD_HXX
-#include <unofield.hxx>
+#ifndef _SVX_PAGEITEM_HXX
+#include <svx/pageitem.hxx>
+#endif
+#ifndef _SVX_LANGITEM_HXX
+#include <svx/langitem.hxx>
+#endif
+#ifndef _SVX_FONTITEM_HXX
+#include <svx/fontitem.hxx>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_SETVARIABLETYPE_HPP_
+#include <com/sun/star/text/SetVariableType.hpp>
 #endif
 
-#ifndef _FMTFLD_HXX //autogen
-#include <fmtfld.hxx>
-#endif
-#ifndef _TXTFLD_HXX //autogen
-#include <txtfld.hxx>
-#endif
-#ifndef _FMTANCHR_HXX //autogen
-#include <fmtanchr.hxx>
-#endif
-#ifndef _TXTFTN_HXX //autogen
-#include <txtftn.hxx>
-#endif
-#ifndef _FRMFMT_HXX //autogen
-#include <frmfmt.hxx>
-#endif
-#ifndef _CHARATR_HXX
-#include <charatr.hxx>
-#endif
-#ifndef _SVX_PAGEITEM_HXX //autogen
-#include <svx/pageitem.hxx>
+#ifndef _UNOFIELD_HXX
+#include <unofield.hxx>
 #endif
 #ifndef _UNOPRNMS_HXX
 #include <unoprnms.hxx>
 #endif
-#ifndef _SVX_LANGITEM_HXX //autogen wg. SvxLanguageItem
-#include <svx/langitem.hxx>
+#ifndef _FMTFLD_HXX
+#include <fmtfld.hxx>
 #endif
-#ifndef _SVX_FONTITEM_HXX //autogen wg. SvxFontItem
-#include <svx/fontitem.hxx>
+#ifndef _TXTFLD_HXX
+#include <txtfld.hxx>
 #endif
-
+#ifndef _FMTANCHR_HXX
+#include <fmtanchr.hxx>
+#endif
+#ifndef _TXTFTN_HXX
+#include <txtftn.hxx>
+#endif
+#ifndef _FRMFMT_HXX
+#include <frmfmt.hxx>
+#endif
 #ifndef _DOC_HXX
 #include <doc.hxx>
 #endif
@@ -129,6 +127,15 @@
 #ifndef _ROOTFRM_HXX
 #include <rootfrm.hxx>
 #endif
+#ifndef _TABFRM_HXX
+#include <tabfrm.hxx>
+#endif
+#ifndef _FLYFRM_HXX
+#include <flyfrm.hxx>
+#endif
+#ifndef _FTNFRM_HXX
+#include <ftnfrm.hxx>
+#endif
 #ifndef _EXPFLD_HXX
 #include <expfld.hxx>
 #endif
@@ -138,26 +145,23 @@
 #ifndef _NDTXT_HXX
 #include <ndtxt.hxx>
 #endif
-#ifndef _FLYFRM_HXX
-#include <flyfrm.hxx>
-#endif
-#ifndef _FTNFRM_HXX
-#include <ftnfrm.hxx>
-#endif
 #ifndef _CALC_HXX
-#include <calc.hxx>         // SwGetExpField
+#include <calc.hxx>
 #endif
 #ifndef _PAM_HXX
-#include <pam.hxx>          // SwGet-/SetExpField
+#include <pam.hxx>
 #endif
 #ifndef _DOCFLD_HXX
-#include <docfld.hxx>       // SwGet-/SetExpField
+#include <docfld.hxx>
 #endif
 #ifndef _SWCACHE_HXX
-#include <swcache.hxx>      // SwGet-/SetExpField
+#include <swcache.hxx>
 #endif
-#ifndef _COM_SUN_STAR_TEXT_SETVARIABLETYPE_HPP_
-#include <com/sun/star/text/SetVariableType.hpp>
+#ifndef _SWTABLE_HXX
+#include <swtable.hxx>
+#endif
+#ifndef _BREAKIT_HXX
+#include <breakit.hxx>
 #endif
 #ifndef _SWSTYLENAMEMAPPER_HXX
 #include <SwStyleNameMapper.hxx>
@@ -315,7 +319,19 @@ const SwTxtNode* GetBodyTxtNode( const SwDoc& rDoc, SwPosition& rPos,
             const SwCntntFrm* pCntFrm;
             const SwPageFrm* pPgFrm = pLayout->FindPageFrm();
             if( pLayout->IsHeaderFrm() )
-                pCntFrm = pPgFrm->FindFirstBodyCntnt();
+            {
+                const SwTabFrm *pTab;
+                if( 0 != ( pCntFrm = pPgFrm->FindFirstBodyCntnt()) &&
+                    0 != (pTab = pCntFrm->FindTabFrm()) && pTab->IsFollow() &&
+                       pTab->GetTable()->IsHeadlineRepeat() &&
+                       ((SwLayoutFrm*)pTab->Lower())->IsAnLower( pCntFrm ))
+                {
+                    // take the next line
+                    const SwLayoutFrm* pRow = (SwLayoutFrm*)pTab->Lower();
+                    pRow = (SwLayoutFrm*)pRow->GetNext();
+                    pCntFrm = pRow->ContainsCntnt();
+                }
+            }
             else
                 pCntFrm = pPgFrm->FindLastBodyCntnt();
 
@@ -973,18 +989,26 @@ xub_StrLen SwGetExpField::GetReferenceTextPos( const SwFmtFld& rFmt, SwDoc& rDoc
     if(sNodeText.Len())
     {
         //now check if sNodeText starts with a non-alphanumeric character plus a blank
+        USHORT nSrcpt = pBreakIt->GetRealScriptOfText( sNodeText, 0 );
+
         static USHORT nIds[] =
         {
             RES_CHRATR_LANGUAGE, RES_CHRATR_LANGUAGE,
             RES_CHRATR_FONT, RES_CHRATR_FONT,
+            RES_CHRATR_CJK_LANGUAGE, RES_CHRATR_CJK_LANGUAGE,
+            RES_CHRATR_CJK_FONT, RES_CHRATR_CJK_FONT,
+            RES_CHRATR_CTL_LANGUAGE, RES_CHRATR_CTL_LANGUAGE,
+            RES_CHRATR_CTL_FONT, RES_CHRATR_CTL_FONT,
             0, 0
         };
         SwAttrSet aSet(rDoc.GetAttrPool(), nIds);
         rTxtNode.GetAttr(aSet, nRet, nRet+1);
 
-        LanguageType eLang = aSet.GetLanguage().GetLanguage();
-        if( RTL_TEXTENCODING_SYMBOL != aSet.GetFont().GetCharSet())
+        if( RTL_TEXTENCODING_SYMBOL != ((SvxFontItem&)aSet.Get(
+                GetWhichOfScript( RES_CHRATR_FONT, nSrcpt )) ).GetCharSet() )
         {
+            LanguageType eLang = ((SvxLanguageItem&)aSet.Get(
+                GetWhichOfScript( RES_CHRATR_LANGUAGE, nSrcpt )) ).GetLanguage();
             CharClass aCC( SvxCreateLocale( eLang ));
             sal_Unicode c0 = sNodeText.GetChar(0);
             BOOL bIsAlphaNum = aCC.isAlphaNumeric( sNodeText, 0 );
