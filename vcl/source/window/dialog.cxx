@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 12:22:28 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 09:19:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -798,16 +798,25 @@ void Dialog::SetModalInputMode( BOOL bModal )
         if ( mpPrevExecuteDlg && !mpPrevExecuteDlg->IsWindowOrChild( this, TRUE ) )
             mpPrevExecuteDlg->EnableInput( FALSE, TRUE, TRUE, this );
 
-         // determine next overlap dialog parent
-         Window* pParent = GetParent();
-         if ( pParent )
-         {
-             //mpDialogParent = pParent->ImplGetFirstOverlapWindow();
-             // #103716# dialogs should always be modal to the whole frame window
-             mpDialogParent = pParent->mpFrameWindow;
-             if ( mpDialogParent )
-                 mpDialogParent->EnableInput( FALSE, TRUE, TRUE, this );
-         }
+        // determine next overlap dialog parent
+        Window* pParent = GetParent();
+        if ( pParent )
+        {
+            // #103716# dialogs should always be modal to the whole frame window
+            mpDialogParent = pParent->mpFrameWindow;
+
+            // #115933# disable the whole frame hierarchie, useful if our parent
+            // is a modeless dialog
+            Window *pFrame = mpDialogParent;
+            while( pFrame )
+            {
+                pFrame->EnableInput( FALSE, TRUE, TRUE, this );
+                if( pFrame->GetParent() )
+                    pFrame = pFrame->GetParent()->mpFrameWindow;
+                else
+                    pFrame = NULL;
+            }
+        }
 
     }
     else
@@ -815,7 +824,22 @@ void Dialog::SetModalInputMode( BOOL bModal )
         pSVData->maAppData.mnModalDialog--;
 
         if ( mpDialogParent )
-            mpDialogParent->EnableInput( TRUE, TRUE, TRUE, this );
+        {
+            // #115933# re-enable the whole frame hierarchie again (see above)
+            // note that code in getfocus assures that we do not accidentally enable
+            // windows that were disabled before
+            Window *pFrame = mpDialogParent;
+            while( pFrame )
+            {
+                pFrame->EnableInput( TRUE, TRUE, TRUE, this );
+                if( pFrame->GetParent() )
+                    pFrame = pFrame->GetParent()->mpFrameWindow;
+                else
+                    pFrame = NULL;
+            }
+
+        }
+
         // Enable the prev Modal Dialog
         if ( mpPrevExecuteDlg && !mpPrevExecuteDlg->IsWindowOrChild( this, TRUE ) )
         {
