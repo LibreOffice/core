@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-16 14:59:14 $
+ *  last change: $Author: ssa $ $Date: 2001-06-08 08:08:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4215,78 +4215,28 @@ String STR_KEY_LINGUISTIC_DIR
 
 String STR_QUICKSTART_EXIT
 {
-    Text = "%PRODUCTNAME QuickStart beenden" ;
-    Text [ English ] = "Exit %PRODUCTNAME QuickStart" ;
-    Text[ english_us ] = "Exit %PRODUCTNAME QuickStart";
-    Text[ portuguese ] = "Exit %PRODUCTNAME QuickStart";
-    Text[ russian ] = "Exit %PRODUCTNAME QuickStart";
-    Text[ greek ] = "Exit %PRODUCTNAME QuickStart";
-    Text[ dutch ] = "Exit %PRODUCTNAME QuickStart";
-    Text[ french ] = "Exit %PRODUCTNAME QuickStart";
-    Text[ spanish ] = "Exit %PRODUCTNAME QuickStart";
-    Text[ finnish ] = "Exit %PRODUCTNAME QuickStart";
-    Text[ italian ] = "Exit %PRODUCTNAME QuickStart";
-    Text[ danish ] = "Exit %PRODUCTNAME QuickStart";
-    Text[ swedish ] = "Exit %PRODUCTNAME QuickStart";
-    Text[ polish ] = "Exit %PRODUCTNAME QuickStart";
-    Text[ portuguese_brazilian ] = "Exit %PRODUCTNAME QuickStart";
-    Text[ japanese ] = "Exit %PRODUCTNAME QuickStart";
-    Text[ korean ] = "Exit %PRODUCTNAME QuickStart";
-    Text[ chinese_simplified ] = "Exit %PRODUCTNAME QuickStart";
-    Text[ chinese_traditional ] = "Exit %PRODUCTNAME QuickStart";
-    Text[ turkish ] = "Exit %PRODUCTNAME QuickStart";
-    Text[ arabic ] = "Exit %PRODUCTNAME QuickStart";
-    Text[ catalan ] = "Exit %PRODUCTNAME QuickStart";
+    Text = "SchnellStarter beenden" ;
+    Text [ English ] = "Exit QuickLauncher" ;
 };
 String STR_QUICKSTART_TIP
 {
-    Text = "%PRODUCTNAME QuickStart aktiv" ;
-    Text [ English ] = "%PRODUCTNAME QuickStart active" ;
-    Text[ english_us ] = "%PRODUCTNAME QuickStart active";
-    Text[ portuguese ] = "%PRODUCTNAME QuickStart active";
-    Text[ russian ] = "%PRODUCTNAME QuickStart active";
-    Text[ greek ] = "%PRODUCTNAME QuickStart active";
-    Text[ dutch ] = "%PRODUCTNAME QuickStart active";
-    Text[ french ] = "%PRODUCTNAME QuickStart active";
-    Text[ spanish ] = "%PRODUCTNAME QuickStart active";
-    Text[ finnish ] = "%PRODUCTNAME QuickStart active";
-    Text[ italian ] = "%PRODUCTNAME QuickStart active";
-    Text[ danish ] = "%PRODUCTNAME QuickStart active";
-    Text[ swedish ] = "%PRODUCTNAME QuickStart active";
-    Text[ polish ] = "%PRODUCTNAME QuickStart active";
-    Text[ portuguese_brazilian ] = "%PRODUCTNAME QuickStart active";
-    Text[ japanese ] = "%PRODUCTNAME QuickStart active";
-    Text[ korean ] = "%PRODUCTNAME QuickStart active";
-    Text[ chinese_simplified ] = "%PRODUCTNAME QuickStart active";
-    Text[ chinese_traditional ] = "%PRODUCTNAME QuickStart active";
-    Text[ turkish ] = "%PRODUCTNAME QuickStart active";
-    Text[ arabic ] = "%PRODUCTNAME QuickStart active";
-    Text[ catalan ] = "%PRODUCTNAME QuickStart active";
+    Text = "%PRODUCTNAME %PRODUCTVERSION SchnellStarter" ;
+    Text [ English ] = "%PRODUCTNAME %PRODUCTVERSION QuickLauncher" ;
 };
 String STR_QUICKSTART_FILEOPEN
 {
     Text = "Datei öffnen..." ;
     Text [ English ] = "File open..." ;
-    Text[ english_us ] = "File open...";
-    Text[ portuguese ] = "File open...";
-    Text[ russian ] = "File open...";
-    Text[ greek ] = "File open...";
-    Text[ dutch ] = "File open...";
-    Text[ french ] = "File open...";
-    Text[ spanish ] = "File open...";
-    Text[ finnish ] = "File open...";
-    Text[ italian ] = "File open...";
-    Text[ danish ] = "File open...";
-    Text[ swedish ] = "File open...";
-    Text[ polish ] = "File open...";
-    Text[ portuguese_brazilian ] = "File open...";
-    Text[ japanese ] = "File open...";
-    Text[ korean ] = "File open...";
-    Text[ chinese_simplified ] = "File open...";
-    Text[ chinese_traditional ] = "File open...";
-    Text[ turkish ] = "File open...";
-    Text[ arabic ] = "File open...";
-    Text[ catalan ] = "File open...";
+};
+String STR_QUICKSTART_FROMTEMPLATE
+{
+    Text = "Aus Vorlage..." ;
+    Text [ English ] = "From template..." ;
+};
+String STR_QUICKSTART_PRELAUNCH
+{
+    Text = "%PRODUCTNAME beim Systemstart laden" ;
+    Text [ English ] = "Pre-launch %PRODUCTNAME during system start" ;
 };
 
 

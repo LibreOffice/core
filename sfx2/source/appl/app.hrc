@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.hrc,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ssa $ $Date: 2001-05-11 16:37:57 $
+ *  last change: $Author: ssa $ $Date: 2001-06-08 08:08:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -264,6 +264,8 @@
 #define STR_QUICKSTART_EXIT                     (RID_SFX_APP_START+134)
 #define STR_QUICKSTART_TIP                      (RID_SFX_APP_START+135)
 #define STR_QUICKSTART_FILEOPEN                 (RID_SFX_APP_START+136)
+#define STR_QUICKSTART_FROMTEMPLATE             (RID_SFX_APP_START+137)
+#define STR_QUICKSTART_PRELAUNCH                (RID_SFX_APP_START+138)
 #endif // #ifndef _SFX_APP_HRC
 
 // ******************************************************************* EOF

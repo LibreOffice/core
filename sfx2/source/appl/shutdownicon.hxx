@@ -37,6 +37,8 @@ class ShutdownIcon :    public ::com::sun::star::frame::XTerminateListener,
 #ifdef WNT
         void initSystray();
         void deInitSystray();
+        static void SetAutostartW32( bool bActivate );
+        static bool GetAutostartW32( );
 #endif
 
     public:
@@ -52,7 +54,11 @@ class ShutdownIcon :    public ::com::sun::star::frame::XTerminateListener,
         static void FileOpen();
         static void OpenURL( ::rtl::OUString& aURL );
 
+        static void SetAutostart( bool bActivate );
+        static bool GetAutostart();
+
         ::rtl::OUString GetResString( int id );
+        ::rtl::OUString GetUrlDescription( const ::rtl::OUString& aUrl );
 
         void SetVeto( bool bVeto )  { m_bVeto = bVeto;}
         bool GetVeto()              { return m_bVeto; }

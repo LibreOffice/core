@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shutdownicon.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ssa $ $Date: 2001-05-11 16:41:27 $
+ *  last change: $Author: ssa $ $Date: 2001-06-08 08:06:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 #include <shutdownicon.hxx>
 #include <app.hxx>
 #include <vos/mutex.hxx>
+#include <svtools/imagemgr.hxx>
 
 #ifndef _COM_SUN_STAR_FRAME_XTASKSSUPPLIER_HPP_
 #include <com/sun/star/frame/XTasksSupplier.hpp>
@@ -128,6 +129,25 @@ ShutdownIcon* ShutdownIcon::getInstance()
 
 // ---------------------------------------------------------------------------
 
+void ShutdownIcon::SetAutostart( bool bActivate )
+{
+#ifdef WNT
+    SetAutostartW32( bActivate );
+#endif
+}
+
+bool ShutdownIcon::GetAutostart( )
+{
+#ifdef WNT
+    return GetAutostartW32();
+#else
+    return false;
+#endif
+}
+
+
+// ---------------------------------------------------------------------------
+
 void ShutdownIcon::OpenURL( ::rtl::OUString& aURL )
 {
     if ( getInstance() && getInstance()->m_xDesktop.is() )
@@ -181,6 +201,13 @@ OUString ShutdownIcon::GetResString( int id )
 
     UniString aRes( ResId(id, m_pResMgr) );
     return OUString( aRes );
+}
+
+// ---------------------------------------------------------------------------
+
+OUString ShutdownIcon::GetUrlDescription( const OUString& aUrl )
+{
+    return OUString( SvFileInformationManager::GetDescription( INetURLObject( aUrl ) ) );
 }
 
 // ---------------------------------------------------------------------------

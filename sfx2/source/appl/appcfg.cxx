@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appcfg.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: os $ $Date: 2001-05-18 12:51:53 $
+ *  last change: $Author: ssa $ $Date: 2001-06-08 08:07:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,6 +170,7 @@
 #include "helper.hxx"   // SfxContentHelper::...
 #include "app.hrc"
 #include "sfxresid.hxx"
+#include "shutdownicon.hxx"
 
 //-------------------------------------------------------------------------
 
@@ -385,6 +386,11 @@ BOOL SfxApplication::GetOptions( SfxItemSet& rSet )
                 case SID_ATTR_UNDO_COUNT :
                     if(rSet.Put( SfxUInt16Item ( rPool.GetWhich( SID_ATTR_UNDO_COUNT ),
                                  (UINT16)aUndoOptions.GetUndoCount() ) ) )
+                        bRet = TRUE;
+                    break;
+                case SID_ATTR_QUICKLAUNCHER :
+                    if(rSet.Put( SfxBoolItem ( rPool.GetWhich( SID_ATTR_QUICKLAUNCHER ),
+                        ShutdownIcon::GetAutostart()  ) ) )
                         bRet = TRUE;
                     break;
 
@@ -844,6 +850,13 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
                     pUndoMgr->SetMaxUndoActionCount( nUndoCount );
             }
         }
+    }
+
+    // Office autostart
+    if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_QUICKLAUNCHER), TRUE, &pItem))
+    {
+        DBG_ASSERT(pItem->ISA(SfxBoolItem), "BoolItem expected");
+        ShutdownIcon::SetAutostart(((const SfxBoolItem *)pItem)->GetValue());
     }
 
     if(
