@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScIndexEnumeration_TableAutoFormatEnumeration.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:16:21 $
+ *  last change:$Date: 2003-05-27 13:09:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 package mod._sc;
 
 import com.sun.star.container.XEnumerationAccess;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.frame.XComponentLoader;
 import com.sun.star.frame.XDesktop;
 import com.sun.star.lang.XComponent;
@@ -83,7 +84,7 @@ public class ScIndexEnumeration_TableAutoFormatEnumeration extends TestCase{
     * Creates Spreadsheet document.
     */
     protected void initialize( TestParameters tParam, PrintWriter log ) {
-        SOF = SOfficeFactory.getFactory( tParam.getMSF() );
+        SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF() );
 
         try {
             log.println( "creating a Spreadsheet document" );
@@ -117,7 +118,7 @@ public class ScIndexEnumeration_TableAutoFormatEnumeration extends TestCase{
             // get AutoFormats
             XComponent xComp = (XComponent)UnoRuntime.queryInterface
                 (XComponent.class, xSheetDoc);
-            oObj = (XInterface)Param.getMSF().createInstance
+            oObj = (XInterface)((XMultiServiceFactory)Param.getMSF()).createInstance
                 ("com.sun.star.sheet.TableAutoFormats");
 
             XEnumerationAccess ea = (XEnumerationAccess)
