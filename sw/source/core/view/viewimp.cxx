@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewimp.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mib $ $Date: 2002-04-11 14:01:21 $
+ *  last change: $Author: os $ $Date: 2002-04-12 10:36:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,15 @@
 #include "swregion.hxx"
 #include "dflyobj.hxx"
 #include "dview.hxx"
-
+#ifndef _SVX_COLORCFG_HXX
+#include <svx/colorcfg.hxx>
+#endif
+#ifndef _SHL_HXX
+#include <tools/shl.hxx>
+#endif
+#ifndef _SWMODULE_HXX
+#include <swmodule.hxx>
+#endif
 #ifndef _SVDPAGE_HXX //autogen
 #include <svx/svdpage.hxx>
 #endif
@@ -374,7 +382,7 @@ Color SwViewImp::GetRetoucheColor() const
              COL_TRANSPARENT != rSh.GetViewOptions()->GetRetoucheColor().GetColor() )
             aRet = rSh.GetViewOptions()->GetRetoucheColor();
         else
-            aRet = rSh.GetWin()->GetSettings().GetStyleSettings().GetWindowColor();
+            aRet = SW_MOD()->GetColorConfig().GetColorValue(svx::DOCCOLOR).nColor;
     }
     return aRet;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntcache.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: fme $ $Date: 2002-04-10 15:48:32 $
+ *  last change: $Author: os $ $Date: 2002-04-12 10:34:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,7 +134,6 @@ SwFntObj *pLastFont = NULL;
 // Die "MagicNumber", die den Fonts zur Identifizierung verpasst wird
 BYTE* pMagicNo = NULL;
 
-Color *pSpellCol = 0;
 Color *pWaveCol = 0;
 
 long SwFntObj::nPixWidth;
@@ -2198,9 +2197,9 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
                                 ( WRONG_SHOW_SMALL < nHght ? WAVE_SMALL :
                                 WAVE_FLAT );
                             Color aCol( rInf.GetOut().GetLineColor() );
-                            BOOL bColSave = aCol != *pSpellCol;
+                            BOOL bColSave = aCol != SwViewOption::GetSpellColor();
                             if ( bColSave )
-                                rInf.GetOut().SetLineColor( *pSpellCol );
+                                rInf.GetOut().SetLineColor( SwViewOption::GetSpellColor() );
 
                             do
                             {

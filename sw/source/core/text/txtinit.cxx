@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtinit.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2001-10-01 14:33:00 $
+ *  last change: $Author: os $ $Date: 2002-04-12 10:33:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,6 @@ void _TextInit()
 {
     pFntCache = new SwFntCache;
     pSwFontCache = new SwFontCache;
-    pSpellCol = new Color( COL_LIGHTRED );
     pWaveCol = new Color( COL_GRAY );
 
     //Pauschale groesse 250, plus 100 pro Shell
@@ -141,7 +140,6 @@ void _TextFinit()
     delete pFntCache;
     delete pTempAuto;
     delete pBlink;
-    delete pSpellCol;
     delete pWaveCol;
     delete pContourCache;
     SwDropPortion::DeleteDropCapCache();
