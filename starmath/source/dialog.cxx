@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: tl $ $Date: 2001-10-02 12:58:49 $
+ *  last change: $Author: tl $ $Date: 2001-10-04 12:25:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,8 +178,10 @@ SmFontStyles::SmFontStyles() :
 
 const String & SmFontStyles::GetStyleName( const Font &rFont ) const
 {
-    BOOL bBold   = rFont.GetWeight() == WEIGHT_BOLD,
-         bItalic = rFont.GetItalic() == ITALIC_NORMAL;
+    //! compare also SmSpecialNode::Prepare
+    BOOL bBold   = rFont.GetWeight() > WEIGHT_NORMAL,
+         bItalic = rFont.GetItalic() != ITALIC_NONE;
+
     if (bBold && bItalic)
         return aBoldItalic;
     else if (bItalic)
@@ -1855,9 +1857,11 @@ IMPL_LINK( SmSymDefineDialog, ChangeClickHdl, Button *, pButton )
     SmSym *pSym    = (SmSym *) &pOldSymSet->GetSymbol(nSymbol);
     DBG_ASSERT(pSym, "Sm : NULL pointer");
 
-    // Änderungen durchführen;
+    // apply changes
     pSym->SetName( aSymbols.GetText() );
-    pSym->SetFace( aCharsetDisplay.GetFont() );
+    //! get font from symbol-display since charset-display does not keep
+    //! the bold attribut.
+    pSym->SetFace( aSymbolDisplay.GetFont() );
     pSym->SetCharacter( aCharsetDisplay.GetSelectCharacter() );
 
     // das SymbolSet wechseln wenn nötig

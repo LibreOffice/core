@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: tl $ $Date: 2001-09-13 11:21:27 $
+ *  last change: $Author: tl $ $Date: 2001-10-04 12:25:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2738,6 +2738,8 @@ void SmSpecialNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell
     //! daher vergleichen wir hier mit  >  statt mit  !=  .
     //! (Langfristig sollte die Notwendigkeit für 'PrepareAttribut', und damit
     //! für dieses hier, mal entfallen.)
+    //
+    //! see also SmFontStyles::GetStyleName
     if (GetFont().GetWeight() > WEIGHT_NORMAL)
         SetAttribut(ATTR_BOLD);
     if (GetFont().GetItalic() != ITALIC_NONE)
