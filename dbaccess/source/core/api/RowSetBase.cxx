@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetBase.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-14 13:18:24 $
+ *  last change: $Author: oj $ $Date: 2001-02-23 15:22:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,6 +163,7 @@ ORowSetBase::ORowSetBase(::cppu::OBroadcastHelper   &_rBHelper,::osl::Mutex& _rM
             , m_bRowCountFinal(sal_False)
             , m_bClone(sal_False)
             , m_nPosition(-1)
+            , m_bIgnoreResult(sal_False)
 {
     sal_Int32 nRBT  = PropertyAttribute::READONLY   | PropertyAttribute::BOUND      | PropertyAttribute::TRANSIENT;
 
@@ -507,7 +508,7 @@ sal_Bool SAL_CALL ORowSetBase::moveToBookmark( const Any& bookmark ) throw(SQLEx
 //      m_pCache->moveToBookmark(m_aBookmark);
 
     ORowSetMatrix::iterator aOldValues = NULL;
-    if(!bWasNew)
+    if(!bWasNew && m_aOldRow.isValid())
         aOldValues = &m_aOldRow;     // remember the old values
 
     sal_Bool bRet = m_pCache->moveToBookmark(bookmark);
@@ -548,7 +549,7 @@ sal_Bool SAL_CALL ORowSetBase::moveRelativeToBookmark( const Any& bookmark, sal_
     notifyAllListenersCursorBeforeMove();
 
     ORowSetMatrix::iterator aOldValues = NULL;
-    if(!bWasNew)
+    if(!bWasNew && m_aOldRow.isValid())
         aOldValues = &m_aOldRow;     // remember the old values
 
     sal_Bool bRet = m_pCache->moveRelativeToBookmark(bookmark,rows);
@@ -667,7 +668,7 @@ sal_Bool SAL_CALL ORowSetBase::next(  ) throw(SQLException, RuntimeException)
     notifyAllListenersCursorBeforeMove();
 
     ORowSetMatrix::iterator aOldValues = NULL;
-    if(!bWasNew)
+    if(!bWasNew && m_aOldRow.isValid())
     {
         aOldValues = &m_aOldRow;     // remember the old values
     }
@@ -829,7 +830,7 @@ sal_Bool SAL_CALL ORowSetBase::first(  ) throw(SQLException, RuntimeException)
 //      m_pCache->moveToBookmark(m_aBookmark);
 
     ORowSetMatrix::iterator aOldValues = NULL;
-    if(!bWasNew)
+    if(!bWasNew && m_aOldRow.isValid())
         aOldValues = &m_aOldRow;     // remember the old values
 
     m_bAfterLast = m_bBeforeFirst = sal_False; // all false
@@ -879,7 +880,7 @@ sal_Bool SAL_CALL ORowSetBase::last(  ) throw(SQLException, RuntimeException)
 //      m_pCache->moveToBookmark(m_aBookmark);
 
     ORowSetMatrix::iterator aOldValues = NULL;
-    if(!bWasNew)
+    if(!bWasNew && m_aOldRow.isValid())
         aOldValues = &m_aOldRow;     // remember the old values
 
     m_bAfterLast = m_bBeforeFirst = sal_False; // all false
@@ -965,7 +966,7 @@ sal_Bool SAL_CALL ORowSetBase::absolute( sal_Int32 row ) throw(SQLException, Run
 //  }
     m_bAfterLast = m_bBeforeFirst = sal_False; // all false
     ORowSetMatrix::iterator aOldValues = NULL;
-    if(!bWasNew)
+    if(!bWasNew && m_aOldRow.isValid())
         aOldValues = &m_aOldRow;     // remember the old values
 
     notifyAllListenersCursorBeforeMove();
@@ -1018,7 +1019,7 @@ sal_Bool SAL_CALL ORowSetBase::relative( sal_Int32 rows ) throw(SQLException, Ru
 //      m_pCache->moveToBookmark(m_aBookmark);
 
     ORowSetMatrix::iterator aOldValues = NULL;
-    if(!bWasNew)
+    if(!bWasNew && m_aOldRow.isValid())
         aOldValues = &m_aOldRow;     // remember the old values
 
     notifyAllListenersCursorBeforeMove();
@@ -1072,7 +1073,7 @@ sal_Bool SAL_CALL ORowSetBase::previous(  ) throw(SQLException, RuntimeException
 //      m_pCache->moveToBookmark(m_aBookmark);
 
     ORowSetMatrix::iterator aOldValues = NULL;
-    if(!bWasNew)
+    if(!bWasNew && m_aOldRow.isValid())
         aOldValues = &m_aOldRow;     // remember the old values
 
     notifyAllListenersCursorBeforeMove();

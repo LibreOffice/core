@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablecontainer.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-14 13:15:44 $
+ *  last change: $Author: oj $ $Date: 2001-02-23 15:22:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -761,13 +761,21 @@ void SAL_CALL OTableContainer::appendByDescriptor( const Reference< XPropertySet
 
         ::dbtools::composeTableName(m_xMetaData,sCatalog,sSchema,sTable,sComposedName,sal_False);
 
-        if(!m_aTablesConfig.hasByName(sComposedName))
+        OConfigurationNode aTableConfig;
+        if(m_aTablesConfig.hasByName(sComposedName))
+            aTableConfig = m_aTablesConfig.openNode(sComposedName);
+        else
         {
-            m_aTablesConfig.createNode(sComposedName);
+            aTableConfig = m_aTablesConfig.createNode(sComposedName);
             m_aCommitLocation.commit();
         }
+        // here I know that the table is saved
+        // to get a table with a valid config node we have to recreate the table
+        Reference<XPropertySet> xNewTable(createObject(sComposedName),UNO_QUERY);
+        OCollection::appendByDescriptor(xNewTable);
     }
-    OCollection::appendByDescriptor(descriptor);
+    else
+        OCollection::appendByDescriptor(descriptor);
 }
 // -------------------------------------------------------------------------
 // XDrop

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querydescriptor.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 08:58:23 $
+ *  last change: $Author: oj $ $Date: 2001-02-23 15:22:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,9 @@
 #endif
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#endif
+#ifndef _DBACORE_DEFINITIONCOLUMN_HXX_
+#include "definitioncolumn.hxx"
 #endif
 
 using namespace ::com::sun::star::uno;
@@ -363,6 +366,17 @@ void OQueryDescriptor::initializeFrom(const OConfigurationNode& _rConfigLocation
     // the command base stuff
     OCommandBase::initializeFrom(_rConfigLocation);
 
+    readColumnSettings(_rConfigLocation);
+}
+
+//------------------------------------------------------------------------------
+OColumn* OQueryDescriptor::createColumn(const ::rtl::OUString& _rName) const
+{
+    return new OTableColumn(_rName);
+}
+// -----------------------------------------------------------------------------
+void OQueryDescriptor::readColumnSettings(const OConfigurationNode& _rConfigLocation)
+{
     // --------------------------
     // the columns UI information
     OConfigurationNode aColumnsNode = _rConfigLocation.openNode(CONFIGKEY_QRYDESCR_COLUMNS);
@@ -370,13 +384,7 @@ void OQueryDescriptor::initializeFrom(const OConfigurationNode& _rConfigLocation
     if (aColumnsNode.isValid())
         m_aColumns.loadSettings(aColumnsNode, this);
 }
-
-//------------------------------------------------------------------------------
-OColumn* OQueryDescriptor::createColumn(const ::rtl::OUString& _rName) const
-{
-    return new ODescriptorColumn(_rName);
-}
-
+// -----------------------------------------------------------------------------
 //==========================================================================
 //= ODescriptorColumn
 //==========================================================================

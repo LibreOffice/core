@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-14 13:15:44 $
+ *  last change: $Author: oj $ $Date: 2001-02-23 15:22:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -652,5 +652,18 @@ void ODBTable::refreshIndexes()
     return aVal;
 }
 // -----------------------------------------------------------------------------
+sal_Int64 SAL_CALL ODBTable::getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException)
+{
+    sal_Int64 nRet = OTable_Base::getSomething(aIdentifier);
+    if(nRet == 0)
+    {
+        Reference<XUnoTunnel> xTunnel(m_xTable,UNO_QUERY);
+        if(xTunnel.is())
+            nRet = xTunnel->getSomething(aIdentifier);
+    }
+    return nRet;
+}
+// -----------------------------------------------------------------------------
+
 
 

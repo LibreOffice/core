@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetBase.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-14 13:18:24 $
+ *  last change: $Author: oj $ $Date: 2001-02-23 15:22:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,6 +171,7 @@ namespace dbaccess
         sal_Int32                               m_nPosition;        // is set only when a row was deleted
         sal_Bool                                m_bClone;           // I'm clone or not
         sal_Bool                                m_bRowCountFinal;
+        sal_Bool                                m_bIgnoreResult ;
         sal_Bool                                m_bBeforeFirst  : 1;
         sal_Bool                                m_bAfterLast    : 1;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: definitioncolumn.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 14:32:31 $
+ *  last change: $Author: oj $ $Date: 2001-02-23 15:22:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -334,6 +334,22 @@ void OTableColumnDescriptor::setFastPropertyValue_NoBroadcast(
 //============================================================
 //= OTableColumn
 //============================================================
+// -------------------------------------------------------------------------
+OTableColumn::OTableColumn(const Reference<XPropertySet>& _xColumn)
+{
+    m_aTypeName = (::comphelper::getString(_xColumn->getPropertyValue(PROPERTY_TYPENAME)));
+    if(_xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_DEFAULTVALUE))
+        m_aDefaultValue = (::comphelper::getString(_xColumn->getPropertyValue(PROPERTY_DEFAULTVALUE)));
+    m_nIsNullable = (::comphelper::getINT32(_xColumn->getPropertyValue(PROPERTY_ISNULLABLE)));
+    m_nPrecision = (::comphelper::getINT32(_xColumn->getPropertyValue(PROPERTY_PRECISION)));
+    m_nScale = (::comphelper::getINT32(_xColumn->getPropertyValue(PROPERTY_SCALE)));
+    m_nType = (::comphelper::getINT32(_xColumn->getPropertyValue(PROPERTY_TYPE)));
+    m_bAutoIncrement = (::comphelper::getBOOL(_xColumn->getPropertyValue(PROPERTY_ISAUTOINCREMENT)));
+    m_bRowVersion = (sal_False);
+    m_bCurrency = (::comphelper::getBOOL(_xColumn->getPropertyValue(PROPERTY_ISCURRENCY)));
+    _xColumn->getPropertyValue(PROPERTY_NAME) >>= m_sName;
+}
+
 // com::sun::star::lang::XTypeProvider
 //--------------------------------------------------------------------------
 Sequence< sal_Int8 > OTableColumn::getImplementationId() throw (RuntimeException)

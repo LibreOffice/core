@@ -2,9 +2,9 @@
  *
  *  $RCSfile: query.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-14 13:18:24 $
+ *  last change: $Author: oj $ $Date: 2001-02-23 15:22:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,9 @@
 #ifndef _COMPHELPER_PROPERTY_HXX_
 #include <comphelper/property.hxx>
 #endif
+#ifndef _DBACORE_DEFINITIONCOLUMN_HXX_
+#include "definitioncolumn.hxx"
+#endif
 
 using namespace dbaccess;
 using namespace ::com::sun::star::uno;
@@ -176,43 +179,35 @@ Reference< XNameAccess > SAL_CALL OQuery_LINUX::getColumns(  ) throw(RuntimeExce
         m_aColumns.clearColumns();
 
         // fill the columns with columns from teh statement
-        try
+        Reference< XStatement > xStmt = m_xConnection->createStatement();
+        OSL_ENSURE(xStmt.is(),"No Statement created!");
+        if(xStmt.is())
         {
-            Reference< XStatement > xStmt = m_xConnection->createStatement();
-            OSL_ENSURE(xStmt.is(),"No Statement created!");
-            if(xStmt.is())
+            Reference< XColumnsSupplier > xRs(xStmt->executeQuery(m_sCommand),UNO_QUERY);
+            OSL_ENSURE(xRs.is(),"No Resultset created!");
+            if(xRs.is())
             {
-                Reference< XColumnsSupplier > xRs(xStmt->executeQuery(m_sCommand),UNO_QUERY);
-                OSL_ENSURE(xRs.is(),"No Resultset created!");
-                if(xRs.is())
+                Reference< XNameAccess > xColumns = xRs->getColumns();
+                if(xColumns.is())
                 {
-                    Reference< XNameAccess > xColumns = xRs->getColumns();
-                    if(xColumns.is())
+                    Sequence< ::rtl::OUString> aNames = xColumns->getElementNames();
+                    const ::rtl::OUString* pBegin = aNames.getConstArray();
+                    const ::rtl::OUString* pEnd   = pBegin + aNames.getLength();
+                    for(;pBegin != pEnd;++pBegin)
                     {
-                        Sequence< ::rtl::OUString> aNames = xColumns->getElementNames();
-                        const ::rtl::OUString* pBegin = aNames.getConstArray();
-                        const ::rtl::OUString* pEnd   = pBegin + aNames.getLength();
-                        for(;pBegin != pEnd;++pBegin)
-                        {
-                            ODescriptorColumn* pColumn = new ODescriptorColumn(*pBegin);
-                            Reference<XPropertySet> xSet = pColumn;
-                            Reference<XPropertySet> xSource;
-                            ::cppu::extractInterface(xSource,xColumns->getByName(*pBegin));
-                            ::comphelper::copyProperties(xSource,xSet);
-                            m_aColumns.append(*pBegin,pColumn);
-                        }
+                        Reference<XPropertySet> xSource;
+                        xColumns->getByName(*pBegin) >>= xSource;
+                        OTableColumn* pColumn = new OTableColumn(xSource);
+                        m_aColumns.append(*pBegin,pColumn);
                     }
-                    ::comphelper::disposeComponent(xRs);
                 }
-                ::comphelper::disposeComponent(xStmt);
+                ::comphelper::disposeComponent(xRs);
             }
+            ::comphelper::disposeComponent(xStmt);
+        }
 
-            m_bColumnsOutOfDate = sal_False;
-            m_aColumns.setInitialized();
-        }
-        catch(SQLException&)
-        {
-        }
+        m_bColumnsOutOfDate = sal_False;
+        m_aColumns.setInitialized();
     }
     return &m_aColumns;
 }
@@ -339,6 +334,53 @@ Reference< XPropertySetInfo > SAL_CALL OQuery_LINUX::getPropertySetInfo(  ) thro
     // our own props
     describeProperties(aProps);
     return new ::cppu::OPropertyArrayHelper(aProps);
+}
+// -----------------------------------------------------------------------------
+OColumn* OQuery_LINUX::createColumn(const ::rtl::OUString& _rName) const
+{
+    ::std::map< ::rtl::OUString,OColumn*,::comphelper::UStringMixLess>::const_iterator aIter = m_aColumnMap.find(_rName);
+    if(aIter == m_aColumnMap.end())
+        return NULL;
+    return aIter->second;
+}
+
+// -----------------------------------------------------------------------------
+void OQuery_LINUX::readColumnSettings(const OConfigurationNode& _rConfigLocation)
+{
+    try
+    {
+        Reference< XStatement > xStmt = m_xConnection->createStatement();
+        OSL_ENSURE(xStmt.is(),"No Statement created!");
+        if(xStmt.is())
+        {
+            Reference< XColumnsSupplier > xRs(xStmt->executeQuery(m_sCommand),UNO_QUERY);
+            OSL_ENSURE(xRs.is(),"No Resultset created!");
+            if(xRs.is())
+            {
+                Reference< XNameAccess > xColumns = xRs->getColumns();
+                if(xColumns.is())
+                {
+                    Sequence< ::rtl::OUString> aNames = xColumns->getElementNames();
+                    const ::rtl::OUString* pBegin = aNames.getConstArray();
+                    const ::rtl::OUString* pEnd   = pBegin + aNames.getLength();
+                    for(;pBegin != pEnd;++pBegin)
+                    {
+                        Reference<XPropertySet> xSource;
+                        xColumns->getByName(*pBegin) >>= xSource;
+                        OTableColumn* pColumn = new OTableColumn(xSource);
+                        m_aColumnMap[*pBegin] = pColumn;
+                    }
+                }
+                ::comphelper::disposeComponent(xRs);
+            }
+            ::comphelper::disposeComponent(xStmt);
+        }
+    }
+    catch(SQLException&)
+    {
+    }
+    OQueryDescriptor::readColumnSettings(_rConfigLocation);
+    m_aColumnMap.clear();
 }
 
 //........................................................................

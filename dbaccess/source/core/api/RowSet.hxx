@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-26 15:00:05 $
+ *  last change: $Author: oj $ $Date: 2001-02-23 15:22:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,7 +176,6 @@ namespace dbaccess
         sal_Int32                   m_nAsyncUpdateRowCount;
         sal_Bool                    m_bUseEscapeProcessing ;
         sal_Bool                    m_bApplyFilter ;
-        sal_Bool                    m_bIgnoreResult ;
         sal_Bool                    m_bFirst ;
         sal_Bool                    m_bLast ;
         sal_Bool                    m_bCreateStatement ;    // determines we to create a new prepared statement
@@ -459,6 +458,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.16  2001/01/26 15:00:05  oj
+    dispose connection when it's our
+
     Revision 1.15  2001/01/24 09:50:49  oj
     #82628# rowset modifications
 

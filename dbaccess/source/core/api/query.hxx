@@ -2,9 +2,9 @@
  *
  *  $RCSfile: query.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-18 16:16:39 $
+ *  last change: $Author: oj $ $Date: 2001-02-23 15:22:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,9 @@
 #ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
 #include <com/sun/star/sdbc/XConnection.hpp>
 #endif
+#ifndef _MAP_
+#include <map>
+#endif
 
 //........................................................................
 namespace dbaccess
@@ -95,12 +98,14 @@ typedef ::cppu::ImplHelper2 <   ::com::sun::star::sdbcx::XDataDescriptorFactory,
                                 ::com::sun::star::beans::XPropertyChangeListener
                             >   OQuery_Base;
 class OQuery;
+class OColumn;
 typedef ::comphelper::OPropertyArrayUsageHelper< OQuery >   OQuery_ArrayHelperBase;
 class OQuery_LINUX  :public OQueryDescriptor
                 ,public OQuery_Base
                 ,public OConfigurationFlushable
 {
 protected:
+    ::std::map< ::rtl::OUString,OColumn*,::comphelper::UStringMixLess> m_aColumnMap;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                         m_xCommandDefinition;
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
@@ -179,6 +184,9 @@ public:
 protected:
 // OConfigurationFlushable
     virtual void flush_NoBroadcast_NoCommit();
+    virtual OColumn* createColumn(const ::rtl::OUString& _rName) const;
+
+    virtual void readColumnSettings(const OConfigurationNode& _rConfigLocation);
 
 };
 class OQuery : public OQuery_LINUX
