@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdoc_content.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-05-28 15:14:49 $
+ *  last change: $Author: kz $ $Date: 2004-06-11 12:31:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,7 @@
 #include "com/sun/star/io/XActiveDataStreamer.hpp"
 #include "com/sun/star/lang/IllegalAccessException.hpp"
 #include "com/sun/star/sdbc/XRow.hpp"
+#include "com/sun/star/ucb/ContentAction.hpp"
 #include "com/sun/star/ucb/ContentInfoAttribute.hpp"
 #include "com/sun/star/ucb/InsertCommandArgument.hpp"
 #include "com/sun/star/ucb/InteractiveBadTransferURLException.hpp"
@@ -1857,7 +1858,7 @@ void Content::destroy( sal_Bool bDeletePhysical,
 }
 
 //=========================================================================
-void Content::notifyDocumentClosure()
+void Content::notifyDocumentClosed()
 {
     osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
 
@@ -1865,11 +1866,93 @@ void Content::notifyDocumentClosure()
 
     // @@@ anything else to reset or such?
 
+    // callback follows!
     aGuard.clear();
 
     // Propagate destruction to content event listeners
     // Remove this from provider's content list.
     deleted();
+}
+
+//=========================================================================
+uno::Reference< star::ucb::XContent >
+Content::queryChildContent( const rtl::OUString & rRelativeChildUri )
+{
+    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+
+    const rtl::OUString aMyId = getIdentifier()->getContentIdentifier();
+    rtl::OUStringBuffer aBuf( aMyId );
+    if ( aMyId.getStr()[ aMyId.getLength() - 1 ] != sal_Unicode( '/' ) )
+        aBuf.appendAscii( "/" );
+    if ( rRelativeChildUri.getStr()[ 0 ] != sal_Unicode( '/' ) )
+        aBuf.append( rRelativeChildUri );
+    else
+        aBuf.append( rRelativeChildUri.copy( 1 ) );
+
+    uno::Reference< star::ucb::XContentIdentifier > xChildId
+        = new ::ucb::ContentIdentifier( m_xSMgr, aBuf.makeStringAndClear() );
+
+    uno::Reference< star::ucb::XContent > xChild;
+    try
+    {
+        xChild = m_pProvider->queryContent( xChildId );
+    }
+    catch ( star::ucb::IllegalIdentifierException const & )
+    {
+        // handled below.
+    }
+
+    OSL_ENSURE( xChild.is(),
+                "Content::queryChildContent - unable to create child content!" );
+    return xChild;
+}
+
+//=========================================================================
+void Content::notifyChildRemoved( const rtl::OUString & rRelativeChildUri )
+{
+    osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
+
+    // Ugly! Need to create child content object, just to fill event properly.
+    uno::Reference< star::ucb::XContent > xChild
+        = queryChildContent( rRelativeChildUri );
+
+    if ( xChild.is() )
+    {
+        // callback follows!
+        aGuard.clear();
+
+        // Notify "REMOVED" event.
+        star::ucb::ContentEvent aEvt(
+            static_cast< cppu::OWeakObject * >( this ),
+            star::ucb::ContentAction::REMOVED,
+            xChild,
+            getIdentifier() );
+        notifyContentEvent( aEvt );
+    }
+}
+
+//=========================================================================
+void Content::notifyChildInserted( const rtl::OUString & rRelativeChildUri )
+{
+    osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
+
+    // Ugly! Need to create child content object, just to fill event properly.
+    uno::Reference< star::ucb::XContent > xChild
+        = queryChildContent( rRelativeChildUri );
+
+    if ( xChild.is() )
+    {
+        // callback follows!
+        aGuard.clear();
+
+        // Notify "INSERTED" event.
+        star::ucb::ContentEvent aEvt(
+            static_cast< cppu::OWeakObject * >( this ),
+            star::ucb::ContentAction::INSERTED,
+            xChild,
+            getIdentifier() );
+        notifyContentEvent( aEvt );
+    }
 }
 
 //=========================================================================
