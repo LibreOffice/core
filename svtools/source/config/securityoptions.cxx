@@ -2,9 +2,9 @@
  *
  *  $RCSfile: securityoptions.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mba $ $Date: 2002-01-09 17:08:40 $
+ *  last change: $Author: mba $ $Date: 2002-08-21 10:17:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -504,10 +504,6 @@ void SvtSecurityOptions_Impl::SetConfirmationEnabled( sal_Bool bSet )
 sal_Bool SvtSecurityOptions_Impl::IsSecureURL(  const   OUString&   sURL    ,
                                                 const   OUString&   sReferer) const
 {
-    //  Scripting always allowed
-    if( m_eBasicMode == eALWAYS_EXECUTE )
-        return sal_True;
-
     sal_Bool bState = sal_False;
 
     // Check for uncritical protocols first
@@ -523,7 +519,7 @@ sal_Bool SvtSecurityOptions_Impl::IsSecureURL(  const   OUString&   sURL    ,
         // security check only for "macro" ( without app basic ) or "slot" protocols
         bState = sal_True;
     }
-    else if( m_eBasicMode == eFROM_LIST )
+    else
     {
         //  check list of allowed URL patterns
         // Trusted referer given?
@@ -536,7 +532,7 @@ sal_Bool SvtSecurityOptions_Impl::IsSecureURL(  const   OUString&   sURL    ,
             sal_uInt32 nCount = m_seqSecureURLs.getLength();
             for( sal_uInt32 nItem=0; nItem<nCount; ++nItem )
             {
-                OUString sCheckURL = m_seqSecureURLs[nItem];
+                OUString sCheckURL = m_seqSecureURLs[nItem].toAsciiLowerCase();
                 sCheckURL += OUString(RTL_CONSTASCII_USTRINGPARAM("*"));
                 if( WildCard( sCheckURL ).Matches( sRef ) == sal_True )
                 {
@@ -544,10 +540,11 @@ sal_Bool SvtSecurityOptions_Impl::IsSecureURL(  const   OUString&   sURL    ,
                     break;
                 }
             }
+
+            if ( !bState )
+                bState = sRef.compareToAscii("private:user") == COMPARE_EQUAL;
         }
     }
-    else if ( m_eBasicMode == eNEVER_EXECUTE )
-        bState = sal_False;
 
     // Return result of operation.
     return bState;
