@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unostyle.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:14:31 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:28:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1950,6 +1950,15 @@ void lcl_SetStyleProperty(const SfxItemPropertyMap* pMap,
                 throw lang::IllegalArgumentException();
         }
         break;
+        case FN_UNO_DEFAULT_OUTLINE_LEVEL:
+        {
+            sal_Int8 nLevel;
+            if( rValue >>= nLevel )
+                rBase.pNewBase->GetCollection()->SetOutlineLevel( nLevel );
+            else
+                rBase.pNewBase->GetCollection()->SetOutlineLevel( NO_NUMBERING );
+        }
+        break;
         case FN_UNO_FOLLOW_STYLE:
         {
             OUString sTmp;
@@ -2279,6 +2288,14 @@ Any lcl_GetStyleProperty(const SfxItemPropertyMap* pMap,
                 DBG_ASSERT(pRule, "Wo ist die NumRule?")
                 Reference< container::XIndexReplace >  xRules = new SwXNumberingRules(*pRule);
                 aRet.setValue(&xRules, ::getCppuType((Reference<container::XIndexReplace>*)0));
+            }
+            break;
+            case FN_UNO_DEFAULT_OUTLINE_LEVEL:
+            {
+                DBG_ASSERT( SFX_STYLE_FAMILY_PARA == eFamily, "only paras" );
+                BYTE nLevel = rBase.pNewBase->GetCollection()->GetOutlineLevel();
+                if( nLevel != NO_NUMBERING )
+                    aRet <<= static_cast<sal_Int8>( nLevel );
             }
             break;
             case FN_UNO_FOLLOW_STYLE:
@@ -2636,6 +2653,14 @@ Sequence< PropertyState > SwXStyle::getPropertyStates(
                 {
                     pStates[i] = PropertyState_DIRECT_VALUE;
                 }
+                else if( FN_UNO_DEFAULT_OUTLINE_LEVEL == pMap->nWID )
+                {
+                    pStates[i] =
+                        ( aStyle.GetCollection()->GetOutlineLevel()
+                          == NO_NUMBERING )
+                        ? PropertyState_DEFAULT_VALUE
+                        : PropertyState_DIRECT_VALUE;
+                }
                 else if(SFX_STYLE_FAMILY_PAGE == eFamily &&
                         (rPropName.EqualsAscii("Header", 0, 6)
                             || rPropName.EqualsAscii("Footer", 0, 6)))
@@ -2754,7 +2779,10 @@ void SAL_CALL SwXStyle::setPropertiesToDefault( const Sequence< OUString >& aPro
             if ( pMap->nFlags & PropertyAttribute::READONLY )
                 throw RuntimeException( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "setPropertiesToDefault: property is read-only: " ) ) + pNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
 
-            pTargetFmt->ResetAttr ( pMap->nWID );
+            if( pMap->nWID == FN_UNO_DEFAULT_OUTLINE_LEVEL )
+                static_cast<SwTxtFmtColl*>(pTargetFmt)->SetOutlineLevel( NO_NUMBERING );
+            else
+                pTargetFmt->ResetAttr ( pMap->nWID );
         }
     }
     else if ( bIsDescriptor )
@@ -2787,7 +2815,10 @@ void SAL_CALL SwXStyle::setAllPropertiesToDefault(  )
                 pTargetFmt = aStyle.GetCharFmt();
                 break;
             case SFX_STYLE_FAMILY_PARA :
-                pTargetFmt = aStyle.GetCollection();
+                {
+                    pTargetFmt = aStyle.GetCollection();
+                    aStyle.GetCollection()->SetOutlineLevel( NO_NUMBERING );
+                }
                 break;
             case SFX_STYLE_FAMILY_FRAME:
                 pTargetFmt = aStyle.GetFrmFmt();
