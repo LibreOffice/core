@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: nn $ $Date: 2002-05-29 13:36:53 $
+ *  last change: $Author: er $ $Date: 2002-07-17 17:28:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,13 @@
 
 #include "scitems.hxx"
 #include <svx/eeitem.hxx>
+#ifndef _SVX_SVXENUM_HXX
+#include <svx/svxenum.hxx>
+#endif
+#ifndef _SVX_ALGITEM_HXX
+#include <svx/algitem.hxx>
+#endif
+
 #define ITEMID_FIELD EE_FEATURE_FIELD
 
 #include <svtools/securityoptions.hxx>
@@ -540,8 +547,8 @@ BOOL ScDocShell::LoadXML( SfxMedium* pMedium, SvStorage* pStor )
                     String aName;
                     aDocument.GetName(i, aName);
                     String aLinkTabName = aDocument.GetLinkTab(i);
-                    sal_Int32 nLinkTabNameLength = aLinkTabName.Len();
-                    sal_Int32 nNameLength = aName.Len();
+                    xub_StrLen nLinkTabNameLength = aLinkTabName.Len();
+                    xub_StrLen nNameLength = aName.Len();
                     if (nLinkTabNameLength < nNameLength)
                     {
 
@@ -565,7 +572,7 @@ BOOL ScDocShell::LoadXML( SfxMedium* pMedium, SvStorage* pStor )
 
                             if( *pNameBuffer == SC_COMPILER_FILE_TAB_SEP )  // after the last quote of the docname should be the # char
                             {
-                                sal_Int32 nIndex = nNameLength - nLinkTabNameLength;
+                                xub_StrLen nIndex = nNameLength - nLinkTabNameLength;
                                 INetURLObject aINetURLObject(aDocURLBuffer.makeStringAndClear());
                                 if( aName.Equals(aLinkTabName, nIndex, nLinkTabNameLength) &&
                                     (aName.GetChar(nIndex - 1) == '#') && // before the table name should be the # char
@@ -1321,9 +1328,78 @@ BOOL __EXPORT ScDocShell::IsInformationLost()
 }
 
 
-void ScDocShell::AsciiSave( SvStream& rStream, sal_Unicode cDelim, sal_Unicode cStrDelim,
-                            CharSet eCharSet)
+// Xcl-like column width measured in characters of standard font.
+xub_StrLen lcl_ScDocShell_GetColWidthInChars( USHORT nWidth )
 {
+    // double fColScale = 1.0;
+    double  f = nWidth;
+    f *= 1328.0 / 25.0;
+    f += 90.0;
+    f *= 1.0 / 23.0;
+    // f /= fColScale * 256.0;
+    f /= 256.0;
+
+    return xub_StrLen( f );
+}
+
+
+void lcl_ScDocShell_GetFixedWidthString( String& rStr, const ScDocument& rDoc,
+        USHORT nTab, USHORT nCol, BOOL bValue, SvxCellHorJustify eHorJust )
+{
+    xub_StrLen nLen = lcl_ScDocShell_GetColWidthInChars(
+            rDoc.GetColWidth( nCol, nTab ) );
+    if ( nLen < rStr.Len() )
+    {
+        if ( bValue )
+            rStr.AssignAscii( "###" );
+        rStr.Erase( nLen );
+    }
+    if ( nLen > rStr.Len() )
+    {
+        if ( bValue && eHorJust == SVX_HOR_JUSTIFY_STANDARD )
+            eHorJust = SVX_HOR_JUSTIFY_RIGHT;
+        switch ( eHorJust )
+        {
+            case SVX_HOR_JUSTIFY_RIGHT:
+            {
+                String aTmp;
+                aTmp.Fill( nLen - rStr.Len() );
+                rStr.Insert( aTmp, 0 );
+            }
+            break;
+            case SVX_HOR_JUSTIFY_CENTER:
+            {
+                xub_StrLen nLen2 = (nLen - rStr.Len()) / 2;
+                String aTmp;
+                aTmp.Fill( nLen2 );
+                rStr.Insert( aTmp, 0 );
+                rStr.Expand( nLen );
+            }
+            break;
+            default:
+                rStr.Expand( nLen );
+        }
+    }
+}
+
+
+void lcl_ScDocShell_WriteEmptyFixedWidthString( SvStream& rStream,
+        const ScDocument& rDoc, USHORT nTab, USHORT nCol )
+{
+    String aString;
+    lcl_ScDocShell_GetFixedWidthString( aString, rDoc, nTab, nCol, FALSE,
+            SVX_HOR_JUSTIFY_STANDARD );
+    rStream.WriteUnicodeOrByteText( aString );
+}
+
+
+void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt )
+{
+    sal_Unicode cDelim    = rAsciiOpt.nFieldSepCode;
+    sal_Unicode cStrDelim = rAsciiOpt.nTextSepCode;
+    CharSet eCharSet      = rAsciiOpt.eCharSet;
+    BOOL bFixedWidth      = rAsciiOpt.bFixedWidth;
+
     CharSet eOldCharSet = rStream.GetStreamCharSet();
     rStream.SetStreamCharSet( eCharSet );
     USHORT nOldNumberFormatInt = rStream.GetNumberFormatInt();
@@ -1363,37 +1439,48 @@ void ScDocShell::AsciiSave( SvStream& rStream, sal_Unicode cDelim, sal_Unicode c
         if ( nNextRow < nRow )
         {   // empty rows or/and empty columns up to end of row
             bProgress = TRUE;
-            if(cDelim!=0) //@ BugId 55355
-                for ( nEmptyCol = nNextCol; nEmptyCol < nEndCol; nEmptyCol++ )
-                {   // remaining columns of last row
+            for ( nEmptyCol = nNextCol; nEmptyCol < nEndCol; nEmptyCol++ )
+            {   // remaining columns of last row
+                if ( bFixedWidth )
+                    lcl_ScDocShell_WriteEmptyFixedWidthString( rStream,
+                            aDocument, nTab, nEmptyCol );
+                else if ( cDelim != 0 )
                     rStream.WriteUniOrByteChar( cDelim );
-                }
-
+            }
             endlub( rStream );
             nNextRow++;
             for ( nEmptyRow = nNextRow; nEmptyRow < nRow; nEmptyRow++ )
             {   // completely empty rows
-                if(cDelim!=0) //@ BugId 55355
-                    for ( nEmptyCol = nStartCol; nEmptyCol < nEndCol; nEmptyCol++ )
-                    {
+                for ( nEmptyCol = nStartCol; nEmptyCol < nEndCol; nEmptyCol++ )
+                {
+                    if ( bFixedWidth )
+                        lcl_ScDocShell_WriteEmptyFixedWidthString( rStream,
+                                aDocument, nTab, nEmptyCol );
+                    else if ( cDelim != 0 )
                         rStream.WriteUniOrByteChar( cDelim );
-                    }
+                }
                 endlub( rStream );
             }
-            if(cDelim!=0) //@ BugId 55355
-                for ( nEmptyCol = nStartCol; nEmptyCol < nCol; nEmptyCol++ )
-                {   // empty columns at beginning of row
+            for ( nEmptyCol = nStartCol; nEmptyCol < nCol; nEmptyCol++ )
+            {   // empty columns at beginning of row
+                if ( bFixedWidth )
+                    lcl_ScDocShell_WriteEmptyFixedWidthString( rStream,
+                            aDocument, nTab, nEmptyCol );
+                else if ( cDelim != 0 )
                     rStream.WriteUniOrByteChar( cDelim );
-                }
+            }
             nNextRow = nRow;
         }
         else if ( nNextCol < nCol )
         {   // empty columns in same row
-            if(cDelim!=0) //@ BugId 55355
-                for ( nEmptyCol = nNextCol; nEmptyCol < nCol; nEmptyCol++ )
-                {   // columns in between
+            for ( nEmptyCol = nNextCol; nEmptyCol < nCol; nEmptyCol++ )
+            {   // columns in between
+                if ( bFixedWidth )
+                    lcl_ScDocShell_WriteEmptyFixedWidthString( rStream,
+                            aDocument, nTab, nEmptyCol );
+                else if ( cDelim != 0 )
                     rStream.WriteUniOrByteChar( cDelim );
-                }
+            }
         }
         if ( nCol == nEndCol )
         {
@@ -1409,10 +1496,10 @@ void ScDocShell::AsciiSave( SvStream& rStream, sal_Unicode cDelim, sal_Unicode c
         {
             const ScProtectionAttr* pProtAttr =
                 (const ScProtectionAttr*) aDocument.GetAttr(
-                nCol, nRow, nTab, ATTR_PROTECTION );
+                                                            nCol, nRow, nTab, ATTR_PROTECTION );
             if ( pProtAttr->GetHideCell() ||
-                        ( eType == CELLTYPE_FORMULA && bShowFormulas &&
-                            pProtAttr->GetHideFormula() ) )
+                    ( eType == CELLTYPE_FORMULA && bShowFormulas &&
+                      pProtAttr->GetHideFormula() ) )
                 eType = CELLTYPE_NONE;  // hide
         }
         BOOL bString;
@@ -1422,57 +1509,69 @@ void ScDocShell::AsciiSave( SvStream& rStream, sal_Unicode cDelim, sal_Unicode c
             case CELLTYPE_NONE:
                 aString.Erase();
                 bString = FALSE;
-            break;
+                break;
             case CELLTYPE_FORMULA :
-            {
-                USHORT nErrCode;
-                if ( bShowFormulas )
                 {
-                    ((ScFormulaCell*)pCell)->GetFormula( aString );
-                    bString = TRUE;
+                    USHORT nErrCode;
+                    if ( bShowFormulas )
+                    {
+                        ((ScFormulaCell*)pCell)->GetFormula( aString );
+                        bString = TRUE;
+                    }
+                    else if ( nErrCode = ((ScFormulaCell*)pCell)->GetErrCode() )
+                    {
+                        aString = ScGlobal::GetErrorString( nErrCode );
+                        bString = TRUE;
+                    }
+                    else if ( ((ScFormulaCell*)pCell)->IsValue() )
+                    {
+                        ULONG nFormat;
+                        aDocument.GetNumberFormat( nCol, nRow, nTab, nFormat );
+                        if ( bFixedWidth )
+                        {
+                            Color* pDummy;
+                            ScCellFormat::GetString( pCell, nFormat, aString, &pDummy, rFormatter );
+                        }
+                        else
+                            ScCellFormat::GetInputString( pCell, nFormat, aString, rFormatter );
+                        bString = FALSE;
+                    }
+                    else
+                    {
+                        ((ScFormulaCell*)pCell)->GetString( aString );
+                        bString = TRUE;
+                    }
                 }
-                else if ( nErrCode = ((ScFormulaCell*)pCell)->GetErrCode() )
-                {
-                    aString = ScGlobal::GetErrorString( nErrCode );
-                    bString = TRUE;
-                }
-                else if ( ((ScFormulaCell*)pCell)->IsValue() )
-                {
-                    ULONG nFormat;
-                    aDocument.GetNumberFormat( nCol, nRow, nTab, nFormat );
-                    ScCellFormat::GetInputString( pCell, nFormat, aString, rFormatter );
-                    bString = FALSE;
-                }
-                else
-                {
-                    ((ScFormulaCell*)pCell)->GetString( aString );
-                    bString = TRUE;
-                }
-            }
-            break;
+                break;
             case CELLTYPE_STRING :
                 ((ScStringCell*)pCell)->GetString( aString );
                 bString = TRUE;
-            break;
+                break;
             case CELLTYPE_EDIT :
                 ((ScEditCell*)pCell)->GetString( aString );
                 bString = TRUE;
-            break;
+                break;
             case CELLTYPE_VALUE :
-            {
-                ULONG nFormat;
-                aDocument.GetNumberFormat( nCol, nRow, nTab, nFormat );
-                ScCellFormat::GetInputString( pCell, nFormat, aString, rFormatter );
-                bString = FALSE;
-            }
-            break;
+                {
+                    ULONG nFormat;
+                    aDocument.GetNumberFormat( nCol, nRow, nTab, nFormat );
+                    if ( bFixedWidth )
+                    {
+                        Color* pDummy;
+                        ScCellFormat::GetString( pCell, nFormat, aString, &pDummy, rFormatter );
+                    }
+                    else
+                        ScCellFormat::GetInputString( pCell, nFormat, aString, rFormatter );
+                    bString = FALSE;
+                }
+                break;
             default:
                 DBG_ERROR( "ScDocShell::AsciiSave: unknown CellType" );
                 aString.Erase();
                 bString = FALSE;
         }
 
-        if ( bString )
+        if ( bString && !bFixedWidth )
         {
             if(cStrDelim!=0) //@ BugId 55355
             {
@@ -1488,6 +1587,15 @@ void ScDocShell::AsciiSave( SvStream& rStream, sal_Unicode cDelim, sal_Unicode c
                 aString.Insert( cStrDelim, 0 );
                 aString += cStrDelim;
             }
+        }
+
+        if ( bFixedWidth )
+        {
+            SvxCellHorJustify eHorJust = (SvxCellHorJustify)
+                ((const SvxHorJustifyItem*) aDocument.GetAttr( nCol, nRow,
+                nTab, ATTR_HOR_JUSTIFY ))->GetValue();
+            lcl_ScDocShell_GetFixedWidthString( aString, aDocument, nTab, nCol,
+                    !bString, eHorJust );
         }
         rStream.WriteUnicodeOrByteText( aString );
 
@@ -1506,21 +1614,27 @@ void ScDocShell::AsciiSave( SvStream& rStream, sal_Unicode cDelim, sal_Unicode c
     // write out empty if requested
     if ( nNextRow <= nEndRow )
     {
-        if(cDelim!=0) //@ BugId 55355
-            for ( nEmptyCol = nNextCol; nEmptyCol < nEndCol; nEmptyCol++ )
-            {   // remaining empty columns of last row
+        for ( nEmptyCol = nNextCol; nEmptyCol < nEndCol; nEmptyCol++ )
+        {   // remaining empty columns of last row
+            if ( bFixedWidth )
+                lcl_ScDocShell_WriteEmptyFixedWidthString( rStream,
+                        aDocument, nTab, nEmptyCol );
+            else if ( cDelim != 0 )
                 rStream.WriteUniOrByteChar( cDelim );
-            }
+        }
         endlub( rStream );
         nNextRow++;
     }
     for ( nEmptyRow = nNextRow; nEmptyRow <= nEndRow; nEmptyRow++ )
     {   // entire empty rows
-        if(cDelim!=0) //@ BugId 55355
-            for ( nEmptyCol = nStartCol; nEmptyCol < nEndCol; nEmptyCol++ )
-            {
+        for ( nEmptyCol = nStartCol; nEmptyCol < nEndCol; nEmptyCol++ )
+        {
+            if ( bFixedWidth )
+                lcl_ScDocShell_WriteEmptyFixedWidthString( rStream,
+                        aDocument, nTab, nEmptyCol );
+            else if ( cDelim != 0 )
                 rStream.WriteUniOrByteChar( cDelim );
-            }
+        }
         endlub( rStream );
     }
 
@@ -1646,9 +1760,7 @@ BOOL __EXPORT ScDocShell::ConvertTo( SfxMedium &rMed )
 
             WaitObject aWait( GetDialogParent() );
             ScImportOptions aOptions( sItStr );
-            sal_Unicode cAsciiDel = (sal_Unicode)aOptions.nFieldSepCode;
-            sal_Unicode cStrDel   = (sal_Unicode)aOptions.nTextSepCode;
-            AsciiSave( *pStream, cAsciiDel, cStrDel, aOptions.eCharSet );
+            AsciiSave( *pStream, aOptions );
             bRet = TRUE;
 
             if (aDocument.GetTableCount() > 1)
