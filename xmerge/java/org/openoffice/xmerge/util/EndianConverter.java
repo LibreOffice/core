@@ -123,10 +123,10 @@ public class EndianConverter {
      * @return  <code>short</code> containing the converted value.
      */
     public static short readShort (byte[] value) {
-        short high, low;
+        int high, low;
 
-        high = value[1];
-        low  = value[0];
+        high = value[1] & 0xFF;
+        low  = value[0] & 0xFF;
 
         return (short)(high << 8 | low);
     }
@@ -148,7 +148,7 @@ public class EndianConverter {
         int number = 0;
 
         for (int i = 0; i < 4; i++) {
-            number |= value[i] << ( i* 8);
+            number |= (value[i] & 0xFF) << ( i * 8);
         }
 
         return number;
