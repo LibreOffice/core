@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgass.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cl $ $Date: 2002-01-08 14:22:24 $
+ *  last change: $Author: cl $ $Date: 2002-03-20 14:10:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -735,12 +735,14 @@ void AssistentDlgImpl::CloseDocShell()
         uno::Reference< lang::XComponent > xModel( xDocShell->GetModel(), uno::UNO_QUERY );
         if( xModel.is() )
         {
+            xDocShell = NULL;
             xModel->dispose();
         }
         else
+        {
             xDocShell->DoClose();
-//      xDocShell->OwnerLock(FALSE);
-        xDocShell = NULL;
+            xDocShell = NULL;
+        }
     }
 }
 
