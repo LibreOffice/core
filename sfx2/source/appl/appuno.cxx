@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: mba $ $Date: 2001-12-21 13:32:35 $
+ *  last change: $Author: mba $ $Date: 2002-04-09 08:18:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,6 +242,8 @@ static const String sStatusInd      = String::CreateFromAscii( "StatusIndicator"
 static const String sModel          = String::CreateFromAscii( "Model" );
 static const String sFrame          = String::CreateFromAscii( "Frame" );
 static const String sViewData       = String::CreateFromAscii( "ViewData" );
+static const String sFilterData     = String::CreateFromAscii( "FilterData" );
+static const String sSelectionOnly  = String::CreateFromAscii( "SelectionOnly" );
 
 void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& rArgs, SfxAllItemSet& rSet, const SfxSlot* pSlot )
 {
@@ -307,6 +309,9 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
             else if ( aName == sViewData )
                 rSet.Put( SfxUnoAnyItem( SID_VIEW_DATA, rProp.Value ) );
 
+            else if ( aName == sFilterData )
+                rSet.Put( SfxUnoAnyItem( SID_FILTER_DATA, rProp.Value ) );
+
             else if ( aName == sInputStream && rProp.Value.getValueType() == ::getCppuType( (Reference < XInputStream >*)0 ) )
                 rSet.Put( SfxUnoAnyItem( SID_INPUTSTREAM, rProp.Value ) );
 
@@ -332,6 +337,9 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
             // ReadOnly-Property?
             else if ( aName == sReadOnly && rProp.Value.getValueType() == ::getBooleanCppuType() )
                 rSet.Put( SfxBoolItem( SID_DOC_READONLY, *((sal_Bool*)rProp.Value.getValue()) ) );
+
+            else if ( aName == sSelectionOnly && rProp.Value.getValueType() == ::getBooleanCppuType() )
+                rSet.Put( SfxBoolItem( SID_SELECTION, *((sal_Bool*)rProp.Value.getValue()) ) );
 
             else if ( aName == sHidden && rProp.Value.getValueType() == ::getBooleanCppuType() )
                 rSet.Put( SfxBoolItem( SID_HIDDEN, *((sal_Bool*)rProp.Value.getValue()) ) );
@@ -422,9 +430,13 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
             nItems++;
         if ( rSet.GetItemState( SID_VIEW_DATA ) == SFX_ITEM_SET )
             nItems++;
+        if ( rSet.GetItemState( SID_FILTER_DATA ) == SFX_ITEM_SET )
+            nItems++;
         if ( rSet.GetItemState( SID_PLUGIN_MODE ) == SFX_ITEM_SET )
             nItems++;
         if ( rSet.GetItemState( SID_DOC_READONLY ) == SFX_ITEM_SET )
+            nItems++;
+        if ( rSet.GetItemState( SID_SELECTION ) == SFX_ITEM_SET )
             nItems++;
         if ( rSet.GetItemState( SID_CONTENTTYPE ) == SFX_ITEM_SET )
             nItems++;
@@ -478,6 +490,11 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
             pValue[nItems].Name = sViewData;
             pValue[nItems++].Value = ( ((SfxUnoAnyItem*)pItem)->GetValue() );
         }
+        if ( rSet.GetItemState( SID_FILTER_DATA, sal_False, &pItem ) == SFX_ITEM_SET )
+        {
+            pValue[nItems].Name = sFilterData;
+            pValue[nItems++].Value = ( ((SfxUnoAnyItem*)pItem)->GetValue() );
+        }
         if ( rSet.GetItemState( SID_DOCUMENT, sal_False, &pItem ) == SFX_ITEM_SET )
         {
             pValue[nItems].Name = sModel;
@@ -516,6 +533,11 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
         if ( rSet.GetItemState( SID_DOC_READONLY, sal_False, &pItem ) == SFX_ITEM_SET )
         {
             pValue[nItems].Name = sReadOnly;
+            pValue[nItems++].Value <<= ( ((SfxBoolItem*)pItem)->GetValue() );
+        }
+        if ( rSet.GetItemState( SID_SELECTION, sal_False, &pItem ) == SFX_ITEM_SET )
+        {
+            pValue[nItems].Name = sSelectionOnly;
             pValue[nItems++].Value <<= ( ((SfxBoolItem*)pItem)->GetValue() );
         }
         if ( rSet.GetItemState( SID_HIDDEN, sal_False, &pItem ) == SFX_ITEM_SET )
