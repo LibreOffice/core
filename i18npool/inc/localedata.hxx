@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localedata.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-10-06 18:27:24 $
+ *  last change: $Author: rt $ $Date: 2004-01-20 13:19:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,8 +82,7 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <rtl/ustring.hxx>
-#include <tools/string.hxx>
-#include <tools/list.hxx>
+#include <vector>
 #include <osl/module.hxx>
 
 //
@@ -167,7 +166,7 @@ private :
         return (rLocale == aLocale);
         }
     };
-    List lookupTable;
+    std::vector<lookupTableItem*> lookupTable;
     lookupTableItem *cachedItem;
 
     void* SAL_CALL getFunctionSymbol( const com::sun::star::lang::Locale& rLocale, const sal_Char* pFunction ) throw( com::sun::star::uno::RuntimeException );
