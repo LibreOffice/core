@@ -1,0 +1,578 @@
+/*************************************************************************
+ *
+ *  $RCSfile: jvmfwk.cxx,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: obo $ $Date: 2004-11-15 15:51:02 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "cppuhelper/implbase4.hxx"
+#include "cppuhelper/implementationentry.hxx"
+#include "rtl/ustrbuf.hxx"
+#include "rtl/ustring.h"
+#include "rtl/ustring.hxx"
+#include "rtl/bootstrap.hxx"
+#include "sal/types.h"
+#include "sal/config.h"
+#include "external/boost/scoped_array.hpp"
+#include "com/sun/star/lang/XServiceInfo.hpp"
+#include "com/sun/star/lang/XInitialization.hpp"
+#include "com/sun/star/lang/WrappedTargetException.hpp"
+#include "com/sun/star/task/XJob.hpp"
+#include "com/sun/star/configuration/backend/XLayer.hpp"
+#include "com/sun/star/configuration/backend/XLayerHandler.hpp"
+#include "com/sun/star/configuration/backend/MalformedDataException.hpp"
+#include "com/sun/star/configuration/backend/TemplateIdentifier.hpp"
+#include "jvmfwk/framework.h"
+#include "jvmfwk.hxx"
+#include <stack>
+
+#define OUSTR(x) rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( x ))
+
+#define SERVICE_NAME "com.sun.star.desktop.MigrationOO2"
+#define IMPL_NAME "com.sun.star.comp.desktop.MigrationOO2"
+
+#define ENABLE_JAVA     1
+#define USER_CLASS_PATH 2
+
+namespace css = com::sun::star;
+using namespace rtl;
+using namespace com::sun::star::uno;
+using namespace com::sun::star::beans;
+using namespace com::sun::star::lang;
+using namespace com::sun::star::configuration::backend;
+
+namespace migration
+{
+
+class CJavaInfo
+{
+    CJavaInfo(const CJavaInfo&);
+    CJavaInfo& operator = (const CJavaInfo&);
+public:
+    JavaInfo* pData;
+    CJavaInfo();
+    ~CJavaInfo();
+    operator JavaInfo* ();
+};
+
+CJavaInfo::CJavaInfo(): pData(NULL)
+{
+}
+
+CJavaInfo::~CJavaInfo()
+{
+    jfw_freeJavaInfo(pData);
+}
+
+CJavaInfo::operator JavaInfo*()
+{
+    return pData;
+}
+
+
+class JavaMigration : public ::cppu::WeakImplHelper4<
+    css::lang::XServiceInfo,
+    css::lang::XInitialization,
+    css::task::XJob,
+    css::configuration::backend::XLayerHandler>
+{
+public:
+    // XServiceInfo
+    virtual OUString SAL_CALL getImplementationName()
+        throw (css::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService( const OUString & rServiceName )
+        throw (css::uno::RuntimeException);
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
+        throw (css::uno::RuntimeException);
+
+    //XInitialization
+    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
+        throw(css::uno::Exception, css::uno::RuntimeException);
+
+    //XJob
+    virtual css::uno::Any SAL_CALL execute(
+        const css::uno::Sequence<css::beans::NamedValue >& Arguments )
+        throw (css::lang::IllegalArgumentException, css::uno::Exception,
+               css::uno::RuntimeException);
+
+        // XLayerHandler
+    virtual void SAL_CALL startLayer()
+        throw(::com::sun::star::lang::WrappedTargetException);
+
+    virtual void SAL_CALL endLayer()
+        throw(
+            ::com::sun::star::configuration::backend::MalformedDataException,
+            ::com::sun::star::lang::WrappedTargetException );
+
+    virtual void SAL_CALL overrideNode(
+            const rtl::OUString& aName,
+            sal_Int16 aAttributes,
+            sal_Bool bClear)
+        throw(
+            ::com::sun::star::configuration::backend::MalformedDataException,
+            ::com::sun::star::lang::WrappedTargetException );
+
+    virtual void SAL_CALL addOrReplaceNode(
+            const rtl::OUString& aName,
+            sal_Int16 aAttributes)
+        throw(
+            ::com::sun::star::configuration::backend::MalformedDataException,
+            ::com::sun::star::lang::WrappedTargetException );
+
+    virtual void SAL_CALL  addOrReplaceNodeFromTemplate(
+            const rtl::OUString& aName,
+            const ::com::sun::star::configuration::backend::TemplateIdentifier& aTemplate,
+            sal_Int16 aAttributes )
+        throw(
+            ::com::sun::star::configuration::backend::MalformedDataException,
+            ::com::sun::star::lang::WrappedTargetException );
+
+    virtual void SAL_CALL  endNode()
+        throw(
+            ::com::sun::star::configuration::backend::MalformedDataException,
+            ::com::sun::star::lang::WrappedTargetException );
+
+    virtual void SAL_CALL  dropNode(
+            const rtl::OUString& aName )
+        throw(
+            ::com::sun::star::configuration::backend::MalformedDataException,
+            ::com::sun::star::lang::WrappedTargetException );
+
+    virtual void SAL_CALL  overrideProperty(
+            const rtl::OUString& aName,
+            sal_Int16 aAttributes,
+            const css::uno::Type& aType,
+            sal_Bool bClear )
+        throw(
+            ::com::sun::star::configuration::backend::MalformedDataException,
+            ::com::sun::star::lang::WrappedTargetException );
+
+    virtual void SAL_CALL  setPropertyValue(
+            const css::uno::Any& aValue )
+        throw(
+            ::com::sun::star::configuration::backend::MalformedDataException,
+            ::com::sun::star::lang::WrappedTargetException );
+
+    virtual void SAL_CALL setPropertyValueForLocale(
+            const css::uno::Any& aValue,
+            const rtl::OUString& aLocale )
+        throw(
+            ::com::sun::star::configuration::backend::MalformedDataException,
+            ::com::sun::star::lang::WrappedTargetException );
+
+    virtual void SAL_CALL  endProperty()
+        throw(
+            ::com::sun::star::configuration::backend::MalformedDataException,
+            ::com::sun::star::lang::WrappedTargetException );
+
+    virtual void SAL_CALL  addProperty(
+            const rtl::OUString& aName,
+            sal_Int16 aAttributes,
+            const css::uno::Type& aType )
+        throw(
+            ::com::sun::star::configuration::backend::MalformedDataException,
+            ::com::sun::star::lang::WrappedTargetException );
+
+    virtual void SAL_CALL  addPropertyWithValue(
+            const rtl::OUString& aName,
+            sal_Int16 aAttributes,
+            const css::uno::Any& aValue )
+        throw(
+            ::com::sun::star::configuration::backend::MalformedDataException,
+            ::com::sun::star::lang::WrappedTargetException );
+
+
+
+    //----------------
+    ~JavaMigration();
+
+private:
+    OUString m_sUserDir;
+    css::uno::Reference< ::css::configuration::backend::XLayer> m_xLayer;
+
+    void migrateJavarc();
+    typedef ::std::pair< ::rtl::OUString,   sal_Int16>  TElementType;
+    typedef ::std::stack< TElementType > TElementStack;
+    TElementStack m_aStack;
+
+};
+
+JavaMigration::~JavaMigration()
+{
+    OSL_ASSERT(m_aStack.empty());
+}
+
+OUString jvmfwk_getImplementationName()
+{
+    return OUSTR(IMPL_NAME);
+}
+
+css::uno::Sequence< OUString > jvmfwk_getSupportedServiceNames()
+{
+    OUString str_name = OUSTR(SERVICE_NAME);
+    return css::uno::Sequence< OUString >( &str_name, 1 );
+}
+
+css::uno::Reference< css::uno::XInterface > SAL_CALL jvmfwk_create(
+    css::uno::Reference< css::uno::XComponentContext > const & )
+    throw (css::uno::Exception)
+{
+    return static_cast< ::cppu::OWeakObject * >(new JavaMigration);
+
+}
+
+
+// XServiceInfo
+OUString SAL_CALL JavaMigration::getImplementationName()
+    throw (css::uno::RuntimeException)
+{
+    return jvmfwk_getImplementationName();
+}
+
+sal_Bool SAL_CALL JavaMigration::supportsService( const OUString & rServiceName )
+        throw (css::uno::RuntimeException)
+{
+    css::uno::Sequence< OUString > const & rSNL = getSupportedServiceNames();
+    OUString const * pArray = rSNL.getConstArray();
+    for ( sal_Int32 nPos = rSNL.getLength(); nPos--; )
+    {
+        if (rServiceName.equals( pArray[ nPos ] ))
+            return true;
+    }
+    return false;
+
+}
+
+css::uno::Sequence< OUString > SAL_CALL JavaMigration::getSupportedServiceNames()
+        throw (css::uno::RuntimeException)
+{
+    return jvmfwk_getSupportedServiceNames();
+}
+
+//XInitialization ----------------------------------------------------------------------
+void SAL_CALL JavaMigration::initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
+        throw(css::uno::Exception, css::uno::RuntimeException)
+{
+    const css::uno::Any* pIter = aArguments.getConstArray();
+    const css::uno::Any* pEnd = pIter + aArguments.getLength();
+    css::uno::Sequence<css::beans::NamedValue> aOldConfigValues;
+    css::beans::NamedValue aValue;
+    for(;pIter != pEnd;++pIter)
+    {
+        *pIter >>= aValue;
+        if (aValue.Name.equalsAscii("OldConfiguration"))
+        {
+            sal_Bool bSuccess = aValue.Value >>= aOldConfigValues;
+            OSL_ENSURE(bSuccess == sal_True, "[Service implementation " IMPL_NAME
+                       "] XInitialization::initialize: Argument OldConfiguration has wrong type.");
+            if (bSuccess)
+            {
+                const css::beans::NamedValue* pIter = aOldConfigValues.getConstArray();
+                const css::beans::NamedValue* pEnd = pIter + aOldConfigValues.getLength();
+                for(;pIter != pEnd;++pIter)
+                {
+                    if ( pIter->Name.equalsAscii("org.openoffice.Office.Java") )
+                    {
+                        pIter->Value >>= m_xLayer;
+                        break;
+                    }
+                }
+            }
+        }
+        else if (aValue.Name.equalsAscii("UserData"))
+        {
+            sal_Bool bSuccess = aValue.Value >>= m_sUserDir;
+            OSL_ENSURE(bSuccess == sal_True, "[Service implementation " IMPL_NAME
+                       "] XInitialization::initialize: Argument UserData has wrong type.");
+        }
+    }
+
+}
+
+//XJob
+css::uno::Any SAL_CALL JavaMigration::execute(
+        const css::uno::Sequence<css::beans::NamedValue >& Arguments )
+        throw (css::lang::IllegalArgumentException, css::uno::Exception,
+               css::uno::RuntimeException)
+{
+    migrateJavarc();
+    m_xLayer->readData(this);
+
+    return css::uno::Any();
+}
+
+void JavaMigration::migrateJavarc()
+{
+    if (m_sUserDir.getLength() == 0)
+        return;
+
+    OUString sValue;
+    rtl::Bootstrap javaini(m_sUserDir + OUSTR("/user/config/"SAL_CONFIGFILE("java")));
+    sal_Bool bSuccess = javaini.getFrom(OUSTR("RuntimeLib"), sValue);
+    OSL_ENSURE(bSuccess, "[Service implementation " IMPL_NAME
+                       "] XJob::execute: Could not get RuntimeLib entry from java.ini/javarc.");
+    if (bSuccess == sal_True && sValue.getLength() > 0)
+    {
+        //get the directory
+        sal_Int32 index;
+        while ((index = sValue.lastIndexOf('/')) != -1)
+        {
+            sValue = sValue.copy(0, index);
+            CJavaInfo aInfo;
+            javaFrameworkError err = jfw_getJavaInfoByPath(sValue.pData, &aInfo.pData);
+
+            if (err == JFW_E_NONE)
+            {
+                if (jfw_setSelectedJRE(aInfo) != JFW_E_NONE)
+                {
+                    OSL_ENSURE(0, "[Service implementation " IMPL_NAME
+                       "] XJob::execute: jfw_setSelectedJRE failed.");
+                    fprintf(stderr, "\nCannot migrate Java. An error occured.\n");
+                }
+                break;
+            }
+            else if (err == JFW_E_NOT_RECOGNIZED)
+            {
+                continue;
+            }
+            else if (err == JFW_E_FAILED_VERSION)
+            {
+                fprintf(stderr, "\nCannot migrate Java settings because the version of the Java  "
+                        "is not supported anymore.\n");
+                break;
+            }
+            else
+            {
+                OSL_ASSERT(0);
+                break;
+            }
+        }
+    }
+}
+
+
+// XLayerHandler
+void SAL_CALL JavaMigration::startLayer()
+    throw(css::lang::WrappedTargetException)
+{
+}
+// -----------------------------------------------------------------------------
+
+void SAL_CALL JavaMigration::endLayer()
+    throw(
+        MalformedDataException,
+        WrappedTargetException )
+{
+}
+// -----------------------------------------------------------------------------
+
+void SAL_CALL JavaMigration::overrideNode(
+        const ::rtl::OUString& aName,
+        sal_Int16 aAttributes,
+        sal_Bool bClear)
+    throw(
+        MalformedDataException,
+        WrappedTargetException )
+
+{
+
+}
+// -----------------------------------------------------------------------------
+
+void SAL_CALL JavaMigration::addOrReplaceNode(
+        const ::rtl::OUString& aName,
+        sal_Int16 aAttributes)
+    throw(
+        MalformedDataException,
+        WrappedTargetException )
+{
+
+}
+void SAL_CALL  JavaMigration::endNode()
+    throw(
+        MalformedDataException,
+        WrappedTargetException )
+{
+}
+// -----------------------------------------------------------------------------
+
+void SAL_CALL  JavaMigration::dropNode(
+        const ::rtl::OUString& aName )
+    throw(
+        MalformedDataException,
+        WrappedTargetException )
+{
+}
+// -----------------------------------------------------------------------------
+
+void SAL_CALL  JavaMigration::overrideProperty(
+        const ::rtl::OUString& aName,
+        sal_Int16 aAttributes,
+        const Type& aType,
+        sal_Bool bClear )
+    throw(
+        MalformedDataException,
+        WrappedTargetException )
+{
+    if (aName.equalsAscii("Enable"))
+        m_aStack.push(TElementStack::value_type(aName,ENABLE_JAVA));
+    else if (aName.equalsAscii("UserClassPath"))
+        m_aStack.push(TElementStack::value_type(aName, USER_CLASS_PATH));
+}
+// -----------------------------------------------------------------------------
+
+void SAL_CALL  JavaMigration::setPropertyValue(
+        const Any& aValue )
+    throw(
+        MalformedDataException,
+        WrappedTargetException )
+{
+    if ( !m_aStack.empty())
+    {
+        switch (m_aStack.top().second)
+        {
+        case ENABLE_JAVA:
+        {
+            sal_Bool val;
+            if ((aValue >>= val) == sal_False)
+                throw MalformedDataException(
+                    OUSTR("[Service implementation " IMPL_NAME
+                       "] XLayerHandler::setPropertyValue received wrong type for Enable property"), 0, Any());
+            if (jfw_setEnabled(val) != JFW_E_NONE)
+                throw WrappedTargetException(
+                    OUSTR("[Service implementation " IMPL_NAME
+                       "] XLayerHandler::setPropertyValue: jfw_setEnabled failed."), 0, Any());
+
+            break;
+        }
+        case USER_CLASS_PATH:
+         {
+             OUString cp;
+             if ((aValue >>= cp) == sal_False)
+                 throw MalformedDataException(
+                     OUSTR("[Service implementation " IMPL_NAME
+                           "] XLayerHandler::setPropertyValue received wrong type for UserClassPath property"), 0, Any());
+
+             if (jfw_setUserClassPath(cp.pData) != JFW_E_NONE)
+                 throw WrappedTargetException(
+                     OUSTR("[Service implementation " IMPL_NAME
+                       "] XLayerHandler::setPropertyValue: jfw_setUserClassPath failed."), 0, Any());
+             break;
+         }
+        default:
+            OSL_ASSERT(0);
+        }
+    }
+}
+// -----------------------------------------------------------------------------
+
+void SAL_CALL JavaMigration::setPropertyValueForLocale(
+        const Any& aValue,
+        const ::rtl::OUString& aLocale )
+    throw(
+        MalformedDataException,
+        WrappedTargetException )
+{
+}
+// -----------------------------------------------------------------------------
+
+void SAL_CALL  JavaMigration::endProperty()
+    throw(
+        MalformedDataException,
+        WrappedTargetException )
+{
+            if (!m_aStack.empty())
+                m_aStack.pop();
+}
+// -----------------------------------------------------------------------------
+
+void SAL_CALL  JavaMigration::addProperty(
+        const rtl::OUString& aName,
+        sal_Int16 aAttributes,
+        const Type& aType )
+    throw(
+        MalformedDataException,
+        WrappedTargetException )
+{
+}
+// -----------------------------------------------------------------------------
+
+void SAL_CALL  JavaMigration::addPropertyWithValue(
+        const rtl::OUString& aName,
+        sal_Int16 aAttributes,
+        const Any& aValue )
+    throw(
+        MalformedDataException,
+        WrappedTargetException )
+{
+}
+
+void SAL_CALL JavaMigration::addOrReplaceNodeFromTemplate(
+        const rtl::OUString& aName,
+        const TemplateIdentifier& aTemplate,
+        sal_Int16 aAttributes )
+    throw(
+        MalformedDataException,
+        WrappedTargetException )
+{
+}
+
+// -----------------------------------------------------------------------------
+//ToDo enable java, user class path
+
+} //end namespace jfw
+
