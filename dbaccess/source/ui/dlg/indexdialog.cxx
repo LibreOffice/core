@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexdialog.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-11 15:22:33 $
+ *  last change: $Author: fs $ $Date: 2001-05-11 16:23:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -329,7 +329,7 @@ namespace dbaui
             // is the current entry modified?
             OIndexCollection::const_iterator aSelectedPos = reinterpret_cast<OIndexCollection::const_iterator>(pSelected->GetUserData());
             m_aActions.EnableItem(ID_INDEX_SAVE, aSelectedPos->isModified() || aSelectedPos->isNew());
-            m_aActions.EnableItem(ID_INDEX_RESET, aSelectedPos->isModified() && !aSelectedPos->isNew());
+            m_aActions.EnableItem(ID_INDEX_RESET, aSelectedPos->isModified() || aSelectedPos->isNew());
         }
         else
         {
@@ -453,7 +453,7 @@ namespace dbaui
     }
 
     //------------------------------------------------------------------
-    void DbaIndexDialog::OnDropIndex()
+    void DbaIndexDialog::OnDropIndex(sal_Bool _bConfirm)
     {
         // the selected index
         SvLBoxEntry* pSelected = m_aIndexes.FirstSelected();
@@ -461,11 +461,14 @@ namespace dbaui
         if (pSelected)
         {
             // let the user confirm the drop
-            String sConfirm(ModuleRes(STR_CONFIRM_DROP_INDEX));
-            sConfirm.SearchAndReplaceAscii("$name$", m_aIndexes.GetEntryText(pSelected));
-            QueryBox aConfirm(this, WB_YES_NO, sConfirm);
-            if (RET_YES != aConfirm.Execute())
-                return;
+            if (_bConfirm)
+            {
+                String sConfirm(ModuleRes(STR_CONFIRM_DROP_INDEX));
+                sConfirm.SearchAndReplaceAscii("$name$", m_aIndexes.GetEntryText(pSelected));
+                QueryBox aConfirm(this, WB_YES_NO, sConfirm);
+                if (RET_YES != aConfirm.Execute())
+                    return;
+            }
 
             // do the drop
             implDropIndex(pSelected, sal_True);
@@ -562,6 +565,12 @@ namespace dbaui
         DBG_ASSERT(pSelected, "DbaIndexDialog::OnResetIndex: invalid call!");
 
         OIndexCollection::iterator aResetPos = static_cast< OIndexCollection::iterator >(pSelected->GetUserData());
+
+        if (aResetPos->isNew())
+        {
+            OnDropIndex(sal_False);
+            return;
+        }
 
         SQLExceptionInfo aExceptionInfo;
         try
@@ -875,6 +884,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.9  2001/05/11 15:22:33  fs
+ *  #86788# recognize an active editing when closing / #86860# property check for index name conflicts
+ *
  *  Revision 1.8  2001/05/02 11:44:34  fs
  *  #86434# don't allow to enter an already used index name
  *
