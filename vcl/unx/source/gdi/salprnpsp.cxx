@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salprnpsp.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 14:39:52 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:27:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,11 @@
 #include <saldata.hxx>
 #endif
 
+#ifdef MACOSX
+#include <rtl/ustring.hxx>
+#include <osl/module.h>
+#endif
+
 #ifndef _PSPRINT_PRINTERINFOMANAGER_HXX_
 #include <psprint/printerinfomanager.hxx>
 #endif
@@ -115,6 +120,7 @@ using namespace rtl;
  *  static helpers
  */
 
+#ifndef MACOSX
 // NETBSD has no RTLD_GLOBAL
 #ifndef RTLD_GLOBAL
 #define DLOPEN_MODE (RTLD_LAZY)
@@ -122,6 +128,7 @@ using namespace rtl;
 #define DLOPEN_MODE (RTLD_GLOBAL | RTLD_LAZY)
 #endif
 #include <dlfcn.h>
+#endif
 #include <rtsname.hxx>
 
 static void* driverLib                      = NULL;
@@ -153,23 +160,57 @@ static void getPaLib()
 
     if( ! driverLib )
     {
-        driverLib   = dlopen( _XSALSET_LIBNAME, DLOPEN_MODE );
-        pErr        = dlerror();
-        if ( !driverLib )
-        {
-            fprintf( stderr, "%s: when opening %s\n", pErr, _XSALSET_LIBNAME );
-            return;
-        }
+        #ifdef MACOSX
+            // Use OSL module loading for MacOS X
+            OUString        printerDriverLibName( RTL_CONSTASCII_USTRINGPARAM(_XSALSET_LIBNAME) );
+            oslModule       pPrinterDriverLib = osl_loadModule( printerDriverLibName.pData, SAL_LOADMODULE_DEFAULT );
+            if( !pPrinterDriverLib )
+            {
+                fprintf( stderr, "salprnpsp.cxx: Cannot load printer setup library %s.\n", printerDriverLibName.pData );
+                return;
+            }
 
-        pSetupFunction  = (int(*)(PrinterInfo&))dlsym( driverLib, "Sal_SetupPrinterDriver" );
-        pErr        = dlerror();
-        if ( !pSetupFunction )
-            fprintf( stderr, "%s: when getting Sal_SetupPrinterDriver\n", pErr );
+            // Get the address of Sal_SetupPrinterDriver
+            OUString        setupPrinterDriverFuncName( RTL_CONSTASCII_USTRINGPARAM("Sal_SetupPrinterDriver") );
+            void            *pSetupPrinterDriverFunc;
+            pSetupPrinterDriverFunc = osl_getSymbol( pPrinterDriverLib, setupPrinterDriverFuncName.pData );
+            if( !pSetupPrinterDriverFunc )
+            {
+                fprintf( stderr, "salprnpsp.cxx: Cannot get address of symbol 'Sal_SetupPrinterDriver'.\n" );
+                return;
+            }
+            pSetupFunction = (int(*)(PrinterInfo&))pSetupPrinterDriverFunc;
 
-        pFaxNrFunction = (int(*)(String&))dlsym( driverLib, "Sal_queryFaxNumber" );
-        pErr        = dlerror();
-        if ( !pFaxNrFunction )
-            fprintf( stderr, "%s: when getting Sal_queryFaxNumber\n", pErr );
+            // Get the address of Sal_queryFaxNumber
+            OUString        queryFaxNumFuncName( RTL_CONSTASCII_USTRINGPARAM("Sal_queryFaxNumber") );
+            void            *pQueryFaxNumFunc;
+            pQueryFaxNumFunc = osl_getSymbol( pPrinterDriverLib, queryFaxNumFuncName.pData );
+            if( !pQueryFaxNumFunc )
+            {
+                fprintf( stderr, "salprnpsp.cxx: Cannot get address of symbol 'Sal_queryFaxNumber'.\n" );
+                return;
+            }
+            pFaxNrFunction = (int(*)(String&))pQueryFaxNumFunc;
+
+        #else
+            driverLib   = dlopen( _XSALSET_LIBNAME, DLOPEN_MODE );
+            pErr        = dlerror();
+            if ( !driverLib )
+            {
+                fprintf( stderr, "%s: when opening %s\n", pErr, _XSALSET_LIBNAME );
+                return;
+            }
+
+            pSetupFunction  = (int(*)(PrinterInfo&))dlsym( driverLib, "Sal_SetupPrinterDriver" );
+            pErr        = dlerror();
+            if ( !pSetupFunction )
+                fprintf( stderr, "%s: when getting Sal_SetupPrinterDriver\n", pErr );
+
+            pFaxNrFunction = (int(*)(String&))dlsym( driverLib, "Sal_queryFaxNumber" );
+            pErr        = dlerror();
+            if ( !pFaxNrFunction )
+                fprintf( stderr, "%s: when getting Sal_queryFaxNumber\n", pErr );
+        #endif
     }
 }
 
@@ -683,12 +724,59 @@ BOOL PspSalInfoPrinter::SetData(
                 nHeight = pJobSetup->mnPaperWidth;
             }
             String aPaper;
-            if( pJobSetup->mePaperFormat == PAPER_USER )
-                aPaper = aData.m_pParser->matchPaper(
-                    TenMuToPt( pJobSetup->mnPaperWidth ),
-                    TenMuToPt( pJobSetup->mnPaperHeight ) );
+
+#ifdef MACOSX
+            // For Mac OS X, many printers are directly attached
+            // USB/Serial printers with a stripped-down PPD that gives us
+            // problems.  We need to do PS->PDF conversion for these printers
+            // but they are not able to handle multiple page sizes in the same
+            // document at all, since we must pass -o media=... to them to get
+            // a good printout.
+            // So, we must find a match between the paper size from OOo and what
+            // the PPD of the printer has, and pass that paper size to -o media=...
+            // If a match cannot be found (ie the paper size from Format->Page is
+            // nowhere near anything in the PPD), we default to what has been
+            // chosen in File->Print->Properties.
+            //
+            // For printers capable of directly accepting PostScript data, none
+            // of this occurs and we default to the normal OOo behavior.
+            const PPDKey    *pCupsFilterKey;
+            const PPDValue  *pCupsFilterValue;
+            BOOL            bIsCUPSPrinter = TRUE;
+
+            // Printers that need PS->PDF conversion have a "cupsFilter" key and
+            // a value of "application/pdf" in that key
+            pCupsFilterKey = aData.m_pParser->getKey( String(RTL_CONSTASCII_USTRINGPARAM("cupsFilter")) );
+            pCupsFilterValue = pCupsFilterKey != NULL ? aData.m_aContext.getValue( pCupsFilterKey ) : NULL;
+            if ( pCupsFilterValue )
+            {
+                // PPD had a cupsFilter key, check for PS->PDF conversion requirement
+                ByteString    aCupsFilterString( pCupsFilterValue->m_aOption, RTL_TEXTENCODING_ISO_8859_1 );
+                if ( aCupsFilterString.Search("application/pdf") == 0 )
+                    bIsCUPSPrinter = FALSE;
+            }
             else
-                aPaper = String( ByteString( aPaperTab[ pJobSetup->mePaperFormat ].name ), RTL_TEXTENCODING_ISO_8859_1 );
+                bIsCUPSPrinter = FALSE;
+
+            if ( TRUE == bIsCUPSPrinter )
+            {
+                // If its a directly attached printer, with a
+                // stripped down PPD (most OS X printers are) always
+                // match the paper size.
+                 aPaper = aData.m_pParser->matchPaper(
+                     TenMuToPt( pJobSetup->mnPaperWidth ),
+                     TenMuToPt( pJobSetup->mnPaperHeight ) );
+            }
+             else
+#endif
+            {
+                if( pJobSetup->mePaperFormat == PAPER_USER )
+                    aPaper = aData.m_pParser->matchPaper(
+                        TenMuToPt( pJobSetup->mnPaperWidth ),
+                        TenMuToPt( pJobSetup->mnPaperHeight ) );
+                else
+                    aPaper = String( ByteString( aPaperTab[ pJobSetup->mePaperFormat ].name ), RTL_TEXTENCODING_ISO_8859_1 );
+            }
             pKey = aData.m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "PageSize" ) ) );
             pValue = pKey ? pKey->getValue( aPaper ) : NULL;
             if( ! ( pKey && pValue && aData.m_aContext.setValue( pKey, pValue, false ) == pValue ) )
