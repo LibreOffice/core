@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewcontactofsdrpage.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-10 11:33:34 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 14:42:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,19 +135,7 @@ namespace sdr
         // that number if the model does not have any MasterPages.
         sal_uInt32 ViewContactOfSdrPage::ImpGetCorrectedMasterPageCount() const
         {
-            sal_uInt32 nRetval(GetSdrPage().GetMasterPageCount());
-
-            // If there is no model or the model has no MasterPages, forget MasterPageCount
-            if(nRetval)
-            {
-                SdrModel* pModel = GetSdrPage().GetModel();
-
-                if(!pModel || !pModel->GetMasterPageCount())
-                {
-                    nRetval = 0L;
-                }
-            }
-
+            sal_uInt32 nRetval(GetSdrPage().TRG_HasMasterPage() ? 1L : 0L);
             return nRetval;
         }
 
@@ -456,12 +444,11 @@ namespace sdr
             if(nIndex < nMasterPageCount)
             {
                 // return the added MasterPage as sub-hierarchy of the draw page
-                SdrPage* pMasterPage = GetSdrPage().GetMasterPage((sal_uInt16)nIndex);
-                DBG_ASSERT(pMasterPage, "ViewContactOfMasterPage::GetViewContact: Corrupt MasterPage List (!)");
-                ViewContact& rViewContactOfMasterPage = pMasterPage->GetViewContact();
+                SdrPage& rMasterPage = GetSdrPage().TRG_GetMasterPage();
+                ViewContact& rViewContactOfMasterPage = rMasterPage.GetViewContact();
 
                 // set visible layers from MasterPage Layer info
-                SetOfByte aMasterPageVisibleLayers = GetSdrPage().GetMasterPageVisibleLayers((sal_uInt16)nIndex);
+                SetOfByte aMasterPageVisibleLayers = GetSdrPage().TRG_GetMasterPageVisibleLayers();
                 rViewContactOfMasterPage.SetVisibleLayers(aMasterPageVisibleLayers);
 
                 return rViewContactOfMasterPage;
