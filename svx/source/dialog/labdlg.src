@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labdlg.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 16:36:24 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 11:19:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1188,6 +1188,10 @@ TabDialog RID_SVXDLG_CAPTION
     Text[ slovak ] = "Bubliny";
 };
  // ********************************************************************** EOF
+
+
+
+
 
 
 
