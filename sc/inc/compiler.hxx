@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: er $ $Date: 2002-11-19 22:06:34 $
+ *  last change: $Author: er $ $Date: 2002-11-21 16:10:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,23 +138,25 @@
 
 
 // flag values of CharTable
-#define SC_COMPILER_C_ILLEGAL       0x0000
-#define SC_COMPILER_C_CHAR          0x0001
-#define SC_COMPILER_C_CHAR_BOOL     0x0002
-#define SC_COMPILER_C_CHAR_WORD     0x0004
-#define SC_COMPILER_C_CHAR_VALUE    0x0008
-#define SC_COMPILER_C_CHAR_STRING   0x0010
-#define SC_COMPILER_C_CHAR_DONTCARE 0x0020
-#define SC_COMPILER_C_BOOL          0x0040
-#define SC_COMPILER_C_WORD          0x0080      // auch in spstring.cxx dekl.
-#define SC_COMPILER_C_WORD_SEP      0x0100      // und rangenam.cxx (WORD und CHAR_WORD)
-#define SC_COMPILER_C_VALUE         0x0200
-#define SC_COMPILER_C_VALUE_SEP     0x0400
-#define SC_COMPILER_C_VALUE_EXP     0x0800
-#define SC_COMPILER_C_VALUE_SIGN    0x1000
-#define SC_COMPILER_C_VALUE_VALUE   0x2000
-#define SC_COMPILER_C_STRING_SEP    0x4000
-#define SC_COMPILER_C_NAME_SEP      0x8000      // es kann nur einen geben! '\''
+#define SC_COMPILER_C_ILLEGAL       0x00000000
+#define SC_COMPILER_C_CHAR          0x00000001
+#define SC_COMPILER_C_CHAR_BOOL     0x00000002
+#define SC_COMPILER_C_CHAR_WORD     0x00000004
+#define SC_COMPILER_C_CHAR_VALUE    0x00000008
+#define SC_COMPILER_C_CHAR_STRING   0x00000010
+#define SC_COMPILER_C_CHAR_DONTCARE 0x00000020
+#define SC_COMPILER_C_BOOL          0x00000040
+#define SC_COMPILER_C_WORD          0x00000080  // auch in spstring.cxx dekl.
+#define SC_COMPILER_C_WORD_SEP      0x00000100  // und rangenam.cxx (WORD und CHAR_WORD)
+#define SC_COMPILER_C_VALUE         0x00000200
+#define SC_COMPILER_C_VALUE_SEP     0x00000400
+#define SC_COMPILER_C_VALUE_EXP     0x00000800
+#define SC_COMPILER_C_VALUE_SIGN    0x00001000
+#define SC_COMPILER_C_VALUE_VALUE   0x00002000
+#define SC_COMPILER_C_STRING_SEP    0x00004000
+#define SC_COMPILER_C_NAME_SEP      0x00008000  // es kann nur einen geben! '\''
+#define SC_COMPILER_C_CHAR_IDENT    0x00010000  // identifier (built-in function) start
+#define SC_COMPILER_C_IDENT         0x00020000  // identifier continuation
 
 #define SC_COMPILER_FILE_TAB_SEP    '#'         // 'Doc'#Tab  auch in global2.cxx
 
@@ -499,7 +501,7 @@ public:
     static ScOpCodeHashMap* pSymbolHashMapNative;   // hash map of native symbols
     static ScOpCodeHashMap* pSymbolHashMapEnglish;  // hash map of English symbols
 private:
-    static USHORT*  pCharTable;                     // char[];
+    static ULONG*   pCharTable;                     // array of ASCII character flags
     ScDocument* pDoc;
     ScAddress   aPos;
     String      cFormula;                           // String -> TokenArray
@@ -639,7 +641,7 @@ public:
     static inline BOOL HasCharTable() { return pCharTable != NULL; }
 
     /// Access the CharTable flags
-    static inline USHORT GetCharTableFlags( sal_Unicode c )
+    static inline ULONG GetCharTableFlags( sal_Unicode c )
         { return c < 128 ? pCharTable[ UINT8(c) ] : 0; }
 
     /// If the character is allowed as first character in sheet names or references

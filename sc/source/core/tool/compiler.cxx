@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: er $ $Date: 2002-11-21 14:27:30 $
+ *  last change: $Author: er $ $Date: 2002-11-21 16:11:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,14 +109,18 @@
 String* ScCompiler::pSymbolTableNative = NULL;
 String* ScCompiler::pSymbolTableEnglish = NULL;
 USHORT  ScCompiler::nAnzStrings = 0;
-USHORT* ScCompiler::pCharTable = 0;
+ULONG* ScCompiler::pCharTable = 0;
 ScOpCodeHashMap* ScCompiler::pSymbolHashMapNative = NULL;
 ScOpCodeHashMap* ScCompiler::pSymbolHashMapEnglish = NULL;
 
 enum ScanState
 {
-    ssGetChar, ssGetBool, ssGetString,
-    ssSkipString, ssStop
+    ssGetChar,
+    ssGetBool,
+    ssGetString,
+    ssSkipString,
+    ssGetIdent,
+    ssStop
 };
 
 struct ScArrayStack
@@ -246,7 +250,7 @@ void ScCompiler::Init()
             *pSymbolHashMapNative );
     nAnzStrings = SC_OPCODE_LAST_OPCODE_ID+1;
 
-    pCharTable = new USHORT [128];
+    pCharTable = new ULONG [128];
     USHORT i;
     for (i = 0; i < 128; i++)
         pCharTable[i] = SC_COMPILER_C_ILLEGAL;
@@ -254,7 +258,7 @@ void ScCompiler::Init()
     /* ! */     pCharTable[33] = SC_COMPILER_C_CHAR | SC_COMPILER_C_WORD_SEP | SC_COMPILER_C_VALUE_SEP;
     /* " */     pCharTable[34] = SC_COMPILER_C_CHAR_STRING | SC_COMPILER_C_STRING_SEP;
     /* # */     pCharTable[35] = SC_COMPILER_C_WORD_SEP;
-    /* $ */     pCharTable[36] = SC_COMPILER_C_CHAR_WORD | SC_COMPILER_C_WORD;
+    /* $ */     pCharTable[36] = SC_COMPILER_C_CHAR_WORD | SC_COMPILER_C_WORD | SC_COMPILER_C_CHAR_IDENT | SC_COMPILER_C_IDENT;
     /* % */     pCharTable[37] = SC_COMPILER_C_VALUE;
     /* & */     pCharTable[38] = SC_COMPILER_C_CHAR | SC_COMPILER_C_WORD_SEP | SC_COMPILER_C_VALUE_SEP;
     /* ' */     pCharTable[39] = SC_COMPILER_C_NAME_SEP;
@@ -264,12 +268,11 @@ void ScCompiler::Init()
     /* + */     pCharTable[43] = SC_COMPILER_C_CHAR | SC_COMPILER_C_WORD_SEP | SC_COMPILER_C_VALUE_EXP | SC_COMPILER_C_VALUE_SIGN;
     /* , */     pCharTable[44] = SC_COMPILER_C_CHAR_VALUE | SC_COMPILER_C_VALUE;
     /* - */     pCharTable[45] = SC_COMPILER_C_CHAR | SC_COMPILER_C_WORD_SEP | SC_COMPILER_C_VALUE_EXP | SC_COMPILER_C_VALUE_SIGN;
-    /* . */     pCharTable[46] = SC_COMPILER_C_WORD | SC_COMPILER_C_CHAR_VALUE | SC_COMPILER_C_VALUE;
+    /* . */     pCharTable[46] = SC_COMPILER_C_WORD | SC_COMPILER_C_CHAR_VALUE | SC_COMPILER_C_VALUE | SC_COMPILER_C_IDENT;
     /* / */     pCharTable[47] = SC_COMPILER_C_CHAR | SC_COMPILER_C_WORD_SEP | SC_COMPILER_C_VALUE_SEP;
     for (i = 48; i < 58; i++)
-    /* 0-9 */   pCharTable[i] = SC_COMPILER_C_CHAR_VALUE | SC_COMPILER_C_WORD | SC_COMPILER_C_VALUE
-                                     | SC_COMPILER_C_VALUE_EXP | SC_COMPILER_C_VALUE_VALUE;
-    /* : */     pCharTable[58] = SC_COMPILER_C_WORD;
+    /* 0-9 */   pCharTable[i] = SC_COMPILER_C_CHAR_VALUE | SC_COMPILER_C_WORD | SC_COMPILER_C_VALUE | SC_COMPILER_C_VALUE_EXP | SC_COMPILER_C_VALUE_VALUE | SC_COMPILER_C_IDENT;
+    /* : */     pCharTable[58] = SC_COMPILER_C_WORD | SC_COMPILER_C_IDENT;
     /* ; */     pCharTable[59] = SC_COMPILER_C_CHAR | SC_COMPILER_C_WORD_SEP | SC_COMPILER_C_VALUE_SEP;
     /* < */     pCharTable[60] = SC_COMPILER_C_CHAR_BOOL | SC_COMPILER_C_WORD_SEP | SC_COMPILER_C_VALUE_SEP;
     /* = */     pCharTable[61] = SC_COMPILER_C_CHAR | SC_COMPILER_C_BOOL | SC_COMPILER_C_WORD_SEP | SC_COMPILER_C_VALUE_SEP;
@@ -277,15 +280,15 @@ void ScCompiler::Init()
     /* ? */     pCharTable[63] = SC_COMPILER_C_CHAR_WORD | SC_COMPILER_C_WORD;
     /* @ */     // FREI
     for (i = 65; i < 91; i++)
-    /* A-Z */   pCharTable[i] = SC_COMPILER_C_CHAR_WORD | SC_COMPILER_C_WORD;
+    /* A-Z */   pCharTable[i] = SC_COMPILER_C_CHAR_WORD | SC_COMPILER_C_WORD | SC_COMPILER_C_CHAR_IDENT | SC_COMPILER_C_IDENT;
     /* [ */     // FREI
     /* \ */     // FREI
     /* ] */     // FREI
     /* ^ */     pCharTable[94] = SC_COMPILER_C_CHAR | SC_COMPILER_C_WORD_SEP | SC_COMPILER_C_VALUE_SEP;
-    /* _ */     pCharTable[95] = SC_COMPILER_C_CHAR_WORD | SC_COMPILER_C_WORD;
+    /* _ */     pCharTable[95] = SC_COMPILER_C_CHAR_WORD | SC_COMPILER_C_WORD | SC_COMPILER_C_CHAR_IDENT | SC_COMPILER_C_IDENT;
     /* ` */     // FREI
     for (i = 97; i < 123; i++)
-    /* a-z */   pCharTable[i] = SC_COMPILER_C_CHAR_WORD | SC_COMPILER_C_WORD;
+    /* a-z */   pCharTable[i] = SC_COMPILER_C_CHAR_WORD | SC_COMPILER_C_WORD | SC_COMPILER_C_CHAR_IDENT | SC_COMPILER_C_IDENT;
     /* { */     // FREI
     /* | */     // FREI
     /* } */     // FREI
@@ -660,7 +663,7 @@ xub_StrLen ScCompiler::NextSymbol()
     while ((c != 0) && (eState != ssStop) )
     {
         pSrc++;
-        USHORT nMask = GetCharTableFlags( c );
+        ULONG nMask = GetCharTableFlags( c );
         switch (eState)
         {
             case ssGetChar :
@@ -684,9 +687,36 @@ xub_StrLen ScCompiler::NextSymbol()
                 {
                     nSpaces++;
                 }
+                else if( nMask & SC_COMPILER_C_CHAR_IDENT )
+                {   // try to get a simple ASCII identifier before calling
+                    // i18n, to gain performance during import
+                    *pSym++ = c;
+                    eState = ssGetIdent;
+                }
                 else
                 {
                     bi18n = TRUE;
+                    eState = ssStop;
+                }
+            }
+            break;
+            case ssGetIdent:
+            {
+                if ( nMask & SC_COMPILER_C_IDENT )
+                {   // this catches also $Sheet1.A1:A$2, for example
+                    *pSym++ = c;
+                }
+                else if ( 128 <= c )
+                {   // high values need reparsing with i18n
+                    pSrc =  pStart + nSrcPos + nSpaces;
+                    pSym = cSymbol;
+                    c = *pSrc;
+                    bi18n = TRUE;
+                    eState = ssStop;
+                }
+                else
+                {
+                    pSrc--;
                     eState = ssStop;
                 }
             }
@@ -748,7 +778,7 @@ xub_StrLen ScCompiler::NextSymbol()
         sal_Int32 nContFlags = nStartFlags | KParseTokens::ASC_DOT |
             KParseTokens::ASC_COLON;
         // '?' allowed in range names because of Xcl :-/
-        String aAddAllowed( '?' );
+        static const String aAddAllowed( '?' );
         String aSymbol;
         USHORT nErr = 0;
         do
@@ -833,7 +863,7 @@ BOOL ScCompiler::IsOpCode( const String& rName )
         {
             // bLocalFirst=FALSE for english
             String aIntName = ScGlobal::GetAddInCollection()->
-                    FindFunction( cSymbol, ( pSymbolTable != pSymbolTableEnglish ) );
+                    FindFunction( rName, ( pSymbolTable != pSymbolTableEnglish ) );
             if (aIntName.Len())
             {
                 ScRawToken aToken;
@@ -1503,20 +1533,26 @@ BOOL ScCompiler::NextNewToken()
         }
         if( !IsString() )
         {
-            String aTmpStr( cSymbol[0] );
             BOOL bMayBeFuncName;
-            if ( ScGlobal::pCharClass->isLetter( aTmpStr, 0 ) )
-            {   // Einem Namen muss eine Klammer folgen
+            if ( cSymbol[0] < 128 )
+                bMayBeFuncName = CharClass::isAsciiAlpha( cSymbol[0] );
+            else
+            {
+                String aTmpStr( cSymbol[0] );
+                bMayBeFuncName = ScGlobal::pCharClass->isLetter( aTmpStr, 0 );
+            }
+            if ( bMayBeFuncName )
+            {   // a function name must be followed by a parenthesis
                 const sal_Unicode* p = aFormula.GetBuffer() + nSrcPos;
                 while( *p == ' ' )
                     p++;
                 bMayBeFuncName = ( *p == '(' );
             }
             else
-                bMayBeFuncName = TRUE;      // Operatoren etc.
+                bMayBeFuncName = TRUE;      // operators and other opcodes
+
             String aOrg( cSymbol ); // evtl. Dateinamen in IsReference erhalten
-            String aUpper( aOrg );
-            ScGlobal::pCharClass->toUpper( aUpper );
+            String aUpper( ScGlobal::pCharClass->upper( aOrg ) );
             // Spalte DM konnte nicht referiert werden, IsReference vor IsValue
             // #42016# italian ARCTAN.2 gab #REF! => IsOpCode vor IsReference
             if ( !(bMayBeFuncName && IsOpCode( aUpper ))
