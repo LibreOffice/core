@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charmap.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 18:17:08 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 13:46:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,8 @@
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
 #endif
+
+#include "rtl/ustrbuf.hxx"
 
 using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::uno;
@@ -522,8 +524,9 @@ void SvxShowCharSet::DrawChars_Impl( int n1, int n2 )
         int x = pix.X();
         int y = pix.Y();
 
-        sal_Unicode cChar = MapIndexToUnicode( maFontCharMap, i );
-        String aCharStr( cChar );
+        rtl::OUStringBuffer buf;
+        buf.appendUtf32(MapIndexToUnicode(maFontCharMap, i));
+        String aCharStr(buf.makeStringAndClear());
         int nTextWidth = GetTextWidth(aCharStr);
         int tx = x + (nX - nTextWidth + 1) / 2;
         int ty = y + (nY - nTextHeight + 1) / 2;
@@ -842,7 +845,9 @@ void SvxShowCharSet::ReleaseAccessible()
     {
         OSL_ENSURE(m_pAccessible,"Who wants to create a child of my table without a parent?");
         aFind = m_aItems.insert(ItemsMap::value_type(_nPos,new ::svx::SvxShowCharSetItem(*this,m_pAccessible->getTable(),_nPos))).first;
-        aFind->second->maText = MapIndexToUnicode(maFontCharMap,_nPos);
+        rtl::OUStringBuffer buf;
+        buf.appendUtf32(MapIndexToUnicode(maFontCharMap, _nPos));
+        aFind->second->maText = buf.makeStringAndClear();
         Point pix = MapIndexToPixel( _nPos );
         aFind->second->maRect = Rectangle( Point( pix.X() + 1, pix.Y() + 1 ), Size(nX-1,nY-1) );
     }
