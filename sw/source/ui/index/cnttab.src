@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.src,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-27 16:45:02 $
+ *  last change: $Author: kz $ $Date: 2002-12-05 10:28:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1091,7 +1091,7 @@ TabPage TP_TOX_SELECT
         Text[ polish ] = "Konspekt";
         Text[ portuguese_brazilian ] = "Outline";
         Text[ japanese ] = "アウトライン";
-        Text[ korean ] = "아웃트라인";
+        Text[ korean ] = "제목 차례";
         Text[ chinese_simplified ] = "大纲";
         Text[ chinese_traditional ] = "大綱";
         Text[ arabic ] = "�������";
@@ -2000,8 +2000,8 @@ TabPage TP_TOX_SELECT
         {
             < " " ;                 1;> ;
             < " " ;             2;> ;
-            < "TSM: 23.10.00 En is correct D is wrong." ;               8;> ;
-            < "TSM 23.10.00 En is correct / D is wrong" ;   16;> ;
+            < "TSM:; TSM: 23.10.00 En is correct D is wrong." ;                 8;> ;
+            < "TSM ; TSM 23.10.00 En is correct / D is wrong" ;     16;> ;
             < " ";  128;> ;
             };
         ItemList [ english_us ] =
