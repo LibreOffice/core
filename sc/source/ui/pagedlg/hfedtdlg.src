@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hfedtdlg.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-06 17:37:07 $
+ *  last change: $Author: obo $ $Date: 2001-03-09 20:50:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@
     Text[ russian ] = "Âåğõíèé/Íèæíèé êîëîíòèòóëû"; \
     Text[ polish ] = "Nag³ówki-/Stopki";    \
     Text[ japanese ] = "Í¯ÀŞ/Ì¯À";  \
-    Text[ chinese_traditional ] = "­¶­º/­¶§À";  \
+    Text[ chinese_traditional ] = "­¶­º©M­¶§À"; \
     Text[ arabic ] = "ÑÄæÓ/ÊĞííáÇÊ ÇáÕİÍÇÊ";    \
     Text[ dutch ] = "Kop-/voettekst";   \
     Text[ chinese_simplified ] = "Ò³Ã¼/Ò³½Å";   \
@@ -716,7 +716,7 @@ TabPage RID_HFBASE
         Text[ dutch ] = "~Linker bereik";
         Text[ chinese_simplified ] = "×ó±ßÇøÓò(~L)";
         Text[ greek ] = "ÁñéóôåñŞ ğåñéï÷Ş";
-        Text[ korean ] = "¿ŞÂÊ ¿µ¿ª(~L)";
+        Text[ korean ] = "¿ŞÂÊ ¿µ¿ª";
         Text[ turkish ] = "~Sol bölüm";
         Text[ language_user1 ] = " ";
     };
@@ -755,7 +755,7 @@ TabPage RID_HFBASE
         Text[ dutch ] = "~Middelste bereik";
         Text[ chinese_simplified ] = "ÖĞ¼äÇøÓò(~C)";
         Text[ greek ] = "ÊåíôñéêŞ ğåñéï÷Ş";
-        Text[ korean ] = "Áß½É ¿µ¿ª(~C)";
+        Text[ korean ] = "Áß½É ¿µ¿ª";
         Text[ turkish ] = "~Orta bölüm";
         Text[ language_user1 ] = " ";
     };
@@ -794,7 +794,7 @@ TabPage RID_HFBASE
         Text[ dutch ] = "~Rechter bereik";
         Text[ chinese_simplified ] = "ÓÒ±ßÇøÓò(~R)";
         Text[ greek ] = "Ğåñéï÷Ş äåîéÜ";
-        Text[ korean ] = "¿À¸¥ÂÊ ¿µ¿ª(~R)";
+        Text[ korean ] = "¿À¸¥ÂÊ ¿µ¿ª";
         Text[ turkish ] = "~Sağ bölüm";
         Text[ language_user1 ] = " ";
     };
@@ -841,7 +841,7 @@ TabPage RID_HFBASE
         QuickHelpText[ dutch ] = "Tekstattributen";
         QuickHelpText[ chinese_simplified ] = "ÕıÎÄÊôĞÔ";
         QuickHelpText[ greek ] = "Éäéüôçôåò êåéìİíïõ";
-        QuickHelpText[ korean ] = "Text Attributes";
+        QuickHelpText[ korean ] = "ÅØ½ºÆ®¡¡¼Ó¼º!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Textattribute";
     };
@@ -879,7 +879,7 @@ TabPage RID_HFBASE
         QuickHelpText[ dutch ] = "Bestandsnaam";
         QuickHelpText[ chinese_simplified ] = "ÎÄ¼şÃû";
         QuickHelpText[ greek ] = "¼íïìá áñ÷åßïõ";
-        QuickHelpText[ korean ] = "File name";
+        QuickHelpText[ korean ] = "ÆÄÀÏ¡¡ÀÌ¸§!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Dateiname";
     };
@@ -970,7 +970,7 @@ TabPage RID_HFBASE
                 Text[ dutch ] = "Pad/Bestandsnaam";
                 Text[ chinese_simplified ] = "Â·¾¶/ÎÄ¼şÃû";
                 Text[ greek ] = "¼íïìá äéáäñïìŞò/ïíüìáôïò";
-                Text[ korean ] = "°æ·Î/ÆÄÀÏ ¸í";
+                Text[ korean ] = "°æ·Î/ÆÄÀÏ¡¡ÀÌ¸§";
                 Text[ turkish ] = "Yol/dosya adı";
                 Text[ language_user1 ] = " ";
             };
@@ -1011,7 +1011,7 @@ TabPage RID_HFBASE
         QuickHelpText[ dutch ] = "Tabelnaam";
         QuickHelpText[ chinese_simplified ] = "±í¸ñÃû³Æ";
         QuickHelpText[ greek ] = "¼íïìá ğßíáêá";
-        QuickHelpText[ korean ] = "Sheet Name";
+        QuickHelpText[ korean ] = "Ç¥¡¡ÀÌ¸§!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Tabellenname";
     };
@@ -1049,7 +1049,7 @@ TabPage RID_HFBASE
         QuickHelpText[ dutch ] = "Pagina";
         QuickHelpText[ chinese_simplified ] = "Ò³Ãæ";
         QuickHelpText[ greek ] = "Óåëßäá";
-        QuickHelpText[ korean ] = "Sheet";
+        QuickHelpText[ korean ] = "ÂÊ!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Seite";
     };
@@ -1087,7 +1087,7 @@ TabPage RID_HFBASE
         QuickHelpText[ dutch ] = "Pagina's";
         QuickHelpText[ chinese_simplified ] = "Ò³Êı";
         QuickHelpText[ greek ] = "Óåëßäåò";
-        QuickHelpText[ korean ] = "Number of Pages";
+        QuickHelpText[ korean ] = "ÂÊµé!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Seiten";
     };
@@ -1125,7 +1125,7 @@ TabPage RID_HFBASE
         QuickHelpText[ dutch ] = "Datum";
         QuickHelpText[ chinese_simplified ] = "ÈÕÆÚ";
         QuickHelpText[ greek ] = "Çìåñïìçíßá";
-        QuickHelpText[ korean ] = "Date";
+        QuickHelpText[ korean ] = "³¯Â¥!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Datum";
     };
@@ -1163,7 +1163,7 @@ TabPage RID_HFBASE
         QuickHelpText[ dutch ] = "Tijd";
         QuickHelpText[ chinese_simplified ] = "Ê±¼ä";
         QuickHelpText[ greek ] = "¿ñá";
-        QuickHelpText[ korean ] = "Time";
+        QuickHelpText[ korean ] = "½Ã°£!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Uhrzeit";
     };
