@@ -2,9 +2,9 @@
  *
  *  $RCSfile: loadenv.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-02-02 13:53:53 $
+ *  last change: $Author: kz $ $Date: 2005-03-04 00:14:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -530,6 +530,23 @@ class LoadEnv : private ThreadHelpBase
         /** TODO document me ... */
         css::uno::Reference< css::uno::XInterface > impl_searchLoader();
 
+        //_______________________________________
+
+        /** @short  it means; show the frame, bring it to front,
+                    might set the right icon etcpp. in case loading was
+                    successfully or reactivate a might existing old document or
+                    close the frame if it was created before in case loading failed.
+
+            @throw  A LoadEnvException only in cases, where an internal error indicates,
+                    that the complete load environment seems to be not useable in general.
+                    In such cases a RuntimeException would be to hard for the outside code :-)
+
+            @throw  A RuntimeException in case any internal process indicates, that
+                    the whole runtime cant be used any longer.
+         */
+        void impl_reactForLoadingState()
+            throw(LoadEnvException, css::uno::RuntimeException);
+
     //___________________________________________
     // private helper
 
@@ -678,20 +695,33 @@ class LoadEnv : private ThreadHelpBase
 
         //_______________________________________
 
-        /** @short  it means; show the frame, bring it to front,
-                    might set the right icon etcpp. in case loading was
-                    successfully or reactivate a might existing old document or
-                    close the frame if it was created before in case loading failed.
+        /** @short  because showing of a frame is needed more then once ...
+                    it's implemented as an seperate method .-)
 
-            @throw  A LoadEnvException only in cases, where an internal error indicates,
-                    that the complete load environment seems to be not useable in general.
-                    In such cases a RuntimeException would be to hard for the outside code :-)
+            @descr  Note: Showing of a frame is bound to a special feature ...
+                    a) If we recycle any existing frame, we must bring it to front.
+                       Showing of such frame isnt needed realy .. because we recycle
+                       visible frames only!
+                    b) If the document was already shown (e.g. by our progress implementation)
+                       we do nothing here. The reason  behind: The document was already shown ..
+                       and it was already make a top window ...
+                       If the user activated another frame inbetween (because loading needed some time)
+                       it's not allowed to disturb the user again. Then the frame must resists in the background.
+                    c) If the frame was not shown before ... but loading of a visible document into this frame
+                       was finished ... we need both actions: setVisible() and toFront().
 
-            @throw  A RuntimeException in case any internal process indicates, that
-                    the whole runtime cant be used any longer.
+            @param  xWindow
+                    points to the container window of a frame.
+
+            @param  bForceToFront
+                    if it's set to FALSE ... showing of the window is done more intelligent.
+                    setVisible() is called only if the window was not shown before.
+                    This mode is needed by b) and c)
+                    If it's set to TRUE ... both actions has to be done: setVisible(), toFront()!
+                    This mode is needed by a)
          */
-        void impl_reactForLoadingState()
-            throw(LoadEnvException, css::uno::RuntimeException);
+        void impl_makeFrameWindowVisible(const css::uno::Reference< css::awt::XWindow >& xWindow      ,
+                                               sal_Bool                                  bForceToFront);
 };
 
 } // namespace framework
