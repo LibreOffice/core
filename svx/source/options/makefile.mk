@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: os $ $Date: 2001-01-17 16:09:55 $
+#   last change: $Author: os $ $Date: 2001-01-18 09:44:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -147,6 +147,7 @@ SLOFILES+=	\
 .ENDIF
 
 EXCEPTIONSFILES= \
+        $(SLO)$/optasian.obj \
         $(SLO)$/optdict.obj \
         $(SLO)$/optlingu.obj
 
