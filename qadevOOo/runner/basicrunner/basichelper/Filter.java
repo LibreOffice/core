@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Filter.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 16:27:28 $
+ *  last change:$Date: 2003-11-18 16:13:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,7 +203,7 @@ class FilterImpl implements XInitialization, XTypeProvider, XNameAccess {
         if (name.equals("State"))
             return aState;
         else if (name.equals("Result"))
-            return new Boolean(bResult);
+            return Boolean.valueOf(bResult);
         else
             throw new NoSuchElementException();
     }
