@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageFolder.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: mav $ $Date: 2002-05-13 10:47:30 $
+ *  last change: $Author: hr $ $Date: 2002-08-20 12:58:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,11 @@ using vos::ORef;
 
 Sequence < sal_Int8 > ZipPackageFolder::aImplementationId = Sequence < sal_Int8 > ();
 
+#ifdef MACOSX
+#include <cppuhelper/typeprovider.hxx>
+static ::cppu::OImplementationId * pId = 0;
+#endif
+
 ZipPackageFolder::ZipPackageFolder ()
 {
     SetFolder ( sal_True );
@@ -132,7 +137,22 @@ ZipPackageFolder::ZipPackageFolder ()
     aEntry.nSize        = 0;
     aEntry.nOffset      = -1;
     if ( !aImplementationId.getLength() )
+        {
+#ifdef MACOSX
+                if (! pId)
+                {
+                        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+                        if (! pId)
+                        {
+                                static ::cppu::OImplementationId aId;
+                                pId = &aId;
+                        }
+                }
+                aImplementationId=pId->getImplementationId();
+#else
         aImplementationId = getImplementationId();
+#endif
+        }
 }
 
 
@@ -151,6 +171,41 @@ void ZipPackageFolder::copyZipEntry( ZipEntry &rDest, const ZipEntry &rSource)
     rDest.nOffset           = rSource.nOffset;
     rDest.sName             = rSource.sName;
 }
+
+#ifdef MACOSX
+Any SAL_CALL ZipPackageFolder::queryInterface( const Type& rType )
+    throw(RuntimeException)
+{
+    // cppu::queryInterface is an inline template so it's fast
+    // unfortunately, it always creates an Any...we should be able to optimise
+    // this with a class static containing supported interfaces
+    // ...will research this further ...mtg 15/12/00
+    return ::cppu::queryInterface ( rType                                       ,
+                                        // OWeakObject interfaces
+                                        reinterpret_cast< XInterface*       > ( this )  ,
+                                        static_cast< XWeak*         > ( this )  ,
+                                        // ZipPackageEntry interfaces
+                                        static_cast< XNamed*        > ( this )  ,
+                                        static_cast< XChild*        > ( this )  ,
+                                        static_cast< XUnoTunnel*        > ( this )  ,
+                                        // my own interfaces
+                                        static_cast< XNameContainer*        > ( this )  ,
+                                        static_cast< XEnumerationAccess*        > ( this )  ,
+                                        static_cast< XPropertySet*  > ( this ) );
+
+}
+
+void SAL_CALL ZipPackageFolder::acquire(  )
+    throw()
+{
+    OWeakObject::acquire();
+}
+void SAL_CALL ZipPackageFolder::release(  )
+    throw()
+{
+    OWeakObject::release();
+}
+#endif
 
     // XNameContainer
 void SAL_CALL ZipPackageFolder::insertByName( const OUString& aName, const Any& aElement )
