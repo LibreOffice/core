@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: ssa $ $Date: 2002-10-01 16:21:40 $
+ *  last change: $Author: ssa $ $Date: 2002-10-02 07:24:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3973,7 +3973,7 @@ void MenuBarWindow::SetMenu( MenuBar* pMen )
     ImplInitMenuWindow( this, TRUE, TRUE );
     if ( pMen )
     {
-        aCloser.Show( TRUE /*pMen->HasCloser()*/ );
+        aCloser.Show( pMen->HasCloser() );
         aFloatBtn.Show( pMen->HasFloatButton() );
         aHideBtn.Show( pMen->HasHideButton() );
     }
