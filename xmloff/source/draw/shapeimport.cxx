@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeimport.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-06 12:08:07 $
+ *  last change: $Author: cl $ $Date: 2000-11-06 12:16:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -586,7 +586,6 @@ SvXMLImportContext* XMLShapeImportHelper::CreateGroupChildContext(
 
 
 void XMLShapeImportHelper::addShape( uno::Reference< drawing::XShape >& rShape, const uno::Reference< xml::sax::XAttributeList >& xAttrList, uno::Reference< drawing::XShapes >& rShapes)
-    throw()
 {
     if( rShape.is() && rShapes.is() )
     {
