@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlnode.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-27 09:47:41 $
+ *  last change: $Author: oj $ $Date: 2001-10-01 11:24:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,15 +176,7 @@ OSQLParseNode::SQLParseNodeParameter::SQLParseNodeParameter(const ::rtl::OUStrin
 //-----------------------------------------------------------------------------
 ::rtl::OUString OSQLParseNode::convertDateString(const SQLParseNodeParameter& rParam, const ::rtl::OUString& rString) const
 {
-    // get the token out of a string
-    static sal_Unicode sDateSep = '-';
-
-    sal_Int32 nIndex = 0;
-    sal_uInt16 nYear    = (sal_uInt16)rString.getToken(0,sDateSep,nIndex).toInt32();
-    sal_uInt16 nMonth   = (sal_uInt16)rString.getToken(0,sDateSep,nIndex).toInt32();
-    sal_uInt16 nDay     = (sal_uInt16)rString.getToken(0,sDateSep,nIndex).toInt32();
-
-    Date aDate(nDay,nMonth,nYear);
+    Date aDate = DBTypeConversion::toDate(rString);
     Reference< XNumberFormatsSupplier > xSupplier(rParam.xFormatter->getNumberFormatsSupplier());
     Reference< XNumberFormatTypes >     xTypes(xSupplier->getNumberFormats(), UNO_QUERY);
 
@@ -196,18 +188,7 @@ OSQLParseNode::SQLParseNodeParameter::SQLParseNodeParameter(const ::rtl::OUStrin
 //-----------------------------------------------------------------------------
 ::rtl::OUString OSQLParseNode::convertDateTimeString(const SQLParseNodeParameter& rParam, const ::rtl::OUString& rString) const
 {
-    static sal_Unicode sDateSep = '-';
-    static sal_Unicode sTimeSep = ':';
-
-    sal_Int32 nIndex = 0;
-    sal_uInt16 nYear    = (sal_uInt16)rString.getToken(0,sDateSep,nIndex).toInt32();
-    sal_uInt16 nMonth   = (sal_uInt16)rString.getToken(0,sDateSep,nIndex).toInt32();
-    sal_uInt16 nDay     = (sal_uInt16)rString.getToken(0,sDateSep,nIndex).toInt32();
-    sal_uInt16 nHour    = (sal_uInt16)rString.getToken(0,sTimeSep,nIndex).toInt32();
-    sal_uInt16 nMinute  = (sal_uInt16)rString.getToken(0,sTimeSep,nIndex).toInt32();
-    sal_uInt16 nSecond  = (sal_uInt16)rString.getToken(0,sTimeSep,nIndex).toInt32();
-
-    DateTime aDate(0,nSecond,nMinute,nHour,nDay,nMonth,nYear);
+    DateTime aDate = DBTypeConversion::toDateTime(rString);
     Reference< XNumberFormatsSupplier >  xSupplier(rParam.xFormatter->getNumberFormatsSupplier());
     Reference< XNumberFormatTypes >  xTypes(xSupplier->getNumberFormats(), UNO_QUERY);
 
@@ -219,14 +200,7 @@ OSQLParseNode::SQLParseNodeParameter::SQLParseNodeParameter(const ::rtl::OUStrin
 //-----------------------------------------------------------------------------
 ::rtl::OUString OSQLParseNode::convertTimeString(const SQLParseNodeParameter& rParam, const ::rtl::OUString& rString) const
 {
-    static sal_Unicode sTimeSep = ':';
-
-    sal_Int32 nIndex = 0;
-    sal_uInt16 nHour    = (sal_uInt16)rString.getToken(0,sTimeSep,nIndex).toInt32();
-    sal_uInt16 nMinute  = (sal_uInt16)rString.getToken(0,sTimeSep,nIndex).toInt32();
-    sal_uInt16 nSecond  = (sal_uInt16)rString.getToken(0,sTimeSep,nIndex).toInt32();
-
-    Time aTime(0,nHour,nMinute,nSecond);
+    Time aTime = DBTypeConversion::toTime(rString);
     Reference< XNumberFormatsSupplier >  xSupplier(rParam.xFormatter->getNumberFormatsSupplier());
 
     Reference< XNumberFormatTypes >  xTypes(xSupplier->getNumberFormats(), UNO_QUERY);

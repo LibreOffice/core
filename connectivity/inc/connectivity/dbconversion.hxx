@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbconversion.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2001-09-27 13:58:19 $
+ *  last change: $Author: oj $ $Date: 2001-10-01 11:24:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,8 +163,12 @@ namespace dbtools
                                         sal_Int16 nKeyType);
 
         static ::com::sun::star::util::Date     toDate(double dVal, const ::com::sun::star::util::Date& _rNullDate = getStandardDate());
+        static ::com::sun::star::util::Date     toDate(const ::rtl::OUString& _sSQLDate);
         static ::com::sun::star::util::Time     toTime(double dVal);
+        static ::com::sun::star::util::Time     toTime(const ::rtl::OUString& _sSQLDate);
         static ::com::sun::star::util::DateTime toDateTime(double dVal, const ::com::sun::star::util::Date& _rNullDate = getStandardDate());
+        static ::com::sun::star::util::DateTime toDateTime(const ::rtl::OUString& _sSQLDate);
+
 
         /** return the given DateTime as JDBC compliant 64 bit value
         */

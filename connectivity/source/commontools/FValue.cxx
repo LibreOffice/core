@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FValue.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-20 12:51:56 $
+ *  last change: $Author: oj $ $Date: 2001-10-01 11:24:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,7 @@
 #endif
 
 using namespace connectivity;
+using namespace dbtools;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
@@ -1288,35 +1289,86 @@ Sequence<sal_Int8>  ORowSetValue::getSequence() const
 // -----------------------------------------------------------------------------
 ::com::sun::star::util::Date ORowSetValue::getDate()        const
 {
-    switch(m_eTypeKind)
+    ::com::sun::star::util::Date aValue;
+    if(!m_bNull)
     {
-        case DataType::DATE:
-            if(!m_bNull)
-                return *(::com::sun::star::util::Date*)m_aValue.m_pValue;
+        switch(m_eTypeKind)
+        {
+            case DataType::CHAR:
+            case DataType::VARCHAR:
+                aValue = DBTypeConversion::toDate(getString());
+                break;
+            case DataType::DECIMAL:
+            case DataType::NUMERIC:
+                aValue = DBTypeConversion::toDate((double)*this);
+                break;
+            case DataType::FLOAT:
+            case DataType::DOUBLE:
+            case DataType::REAL:
+                aValue = DBTypeConversion::toDate((double)*this);
+                break;
+
+            case DataType::DATE:
+                aValue = *(::com::sun::star::util::Date*)m_aValue.m_pValue;
+        }
     }
-    return ::com::sun::star::util::Date();
+    return aValue;
 }
 // -----------------------------------------------------------------------------
 ::com::sun::star::util::Time ORowSetValue::getTime()        const
 {
-    switch(m_eTypeKind)
+    ::com::sun::star::util::Time aValue;
+    if(!m_bNull)
     {
-        case DataType::TIME:
-            if(!m_bNull)
-                return *(::com::sun::star::util::Time*)m_aValue.m_pValue;
+        switch(m_eTypeKind)
+        {
+            case DataType::CHAR:
+            case DataType::VARCHAR:
+                aValue = DBTypeConversion::toTime(getString());
+                break;
+            case DataType::DECIMAL:
+            case DataType::NUMERIC:
+                aValue = DBTypeConversion::toTime((double)*this);
+                break;
+            case DataType::FLOAT:
+            case DataType::DOUBLE:
+            case DataType::REAL:
+                aValue = DBTypeConversion::toTime((double)*this);
+                break;
+
+            case DataType::TIME:
+                    aValue = *(::com::sun::star::util::Time*)m_aValue.m_pValue;
+        }
     }
-    return ::com::sun::star::util::Time();
+    return aValue;
 }
 // -----------------------------------------------------------------------------
 ::com::sun::star::util::DateTime ORowSetValue::getDateTime()    const
 {
-    switch(m_eTypeKind)
+    ::com::sun::star::util::DateTime aValue;
+    if(!m_bNull)
     {
-        case DataType::TIMESTAMP:
-            if(!m_bNull)
-                return *(::com::sun::star::util::DateTime*)m_aValue.m_pValue;
+        switch(m_eTypeKind)
+        {
+            case DataType::CHAR:
+            case DataType::VARCHAR:
+                aValue = DBTypeConversion::toDateTime(getString());
+                break;
+            case DataType::DECIMAL:
+            case DataType::NUMERIC:
+                aValue = DBTypeConversion::toDateTime((double)*this);
+                break;
+            case DataType::FLOAT:
+            case DataType::DOUBLE:
+            case DataType::REAL:
+                aValue = DBTypeConversion::toDateTime((double)*this);
+                break;
+            case DataType::TIMESTAMP:
+                aValue = *(::com::sun::star::util::DateTime*)m_aValue.m_pValue;
+                break;
+        }
     }
-    return ::com::sun::star::util::DateTime();
+    return aValue;
 }
 // -----------------------------------------------------------------------------
 

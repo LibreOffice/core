@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FStatement.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-29 12:15:31 $
+ *  last change: $Author: oj $ $Date: 2001-10-01 11:24:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,7 @@ OStatement_Base::OStatement_Base(OConnection* _pConnection ) :  OStatement_BASE(
     ,m_pSQLAnalyzer(NULL)
     ,m_xDBMetaData(_pConnection->getMetaData())
     ,m_pTable(NULL)
+    ,m_pEvaluationKeySet(NULL)
 {
     m_pConnection->acquire();
 
@@ -194,6 +195,7 @@ void OStatement_BASE2::disposing()
 
     if (m_pConnection)
         m_pConnection->release();
+
 
     dispose_ChildImpl();
     OStatement_Base::disposing();
@@ -378,6 +380,12 @@ void SAL_CALL OStatement::release() throw(::com::sun::star::uno::RuntimeExceptio
 // -----------------------------------------------------------------------------
 void SAL_CALL OStatement_Base::disposing(void)
 {
+    if(m_aEvaluateRow.isValid())
+    {
+        m_aEvaluateRow->clear();
+        m_aEvaluateRow = NULL;
+    }
+    delete m_pEvaluationKeySet;
     OStatement_BASE::disposing();
 }
 // -----------------------------------------------------------------------------
@@ -492,7 +500,14 @@ void OStatement_Base::construct(const ::rtl::OUString& sql)  throw(SQLException,
         m_aRow          = new OValueVector(xNames->getCount());
         (*m_aRow)[0].setBound(sal_True);
         ::std::for_each(m_aRow->begin()+1,m_aRow->end(),TSetBound(sal_False));
-        // create teh column mapping
+
+        // set the binding of the resultrow
+        m_aEvaluateRow  = new OValueVector(xNames->getCount());
+
+        (*m_aEvaluateRow)[0].setBound(sal_True);
+        ::std::for_each(m_aEvaluateRow->begin()+1,m_aEvaluateRow->end(),TSetBound(sal_False));
+
+        // create the column mapping
         createColumnMapping();
 
         m_pSQLAnalyzer  = createAnalyzer();
@@ -528,8 +543,10 @@ void OStatement_Base::initializeResultSet(OResultSet* _pResult)
     _pResult->setOrderByAscending(m_aOrderbyAscending);
     _pResult->setBindingRow(m_aRow);
     _pResult->setColumnMapping(m_aColMapping);
-    //  _pResult->setTable(m_pTable);
+    _pResult->setEvaluationRow(m_aEvaluateRow);
 
+    m_pEvaluationKeySet = m_pSQLAnalyzer->bindResultRow(m_aEvaluateRow);    // Werte im Code des Compilers setzen
+    _pResult->setEvaluationKeySet(m_pEvaluationKeySet);
 }
     }
 }

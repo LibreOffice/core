@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbconversion.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-06 06:21:03 $
+ *  last change: $Author: oj $ $Date: 2001-10-01 11:24:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -446,6 +446,54 @@ DateTime DBTypeConversion::toDateTime(double dVal, const Date& _rNullDate)
     return xRet;
 }
 //------------------------------------------------------------------------------
+Date DBTypeConversion::toDate(const ::rtl::OUString& _sSQLString)
+{
+    // get the token out of a string
+    static sal_Unicode sDateSep = '-';
+
+    sal_Int32 nIndex    = 0;
+    sal_uInt16  nYear   = 0,
+                nMonth  = 0,
+                nDay    = 0;
+    nYear   = (sal_uInt16)_sSQLString.getToken(0,sDateSep,nIndex).toInt32();
+    if(nIndex != -1)
+    {
+        nMonth = (sal_uInt16)_sSQLString.getToken(0,sDateSep,nIndex).toInt32();
+        if(nIndex != -1)
+            nDay = (sal_uInt16)_sSQLString.getToken(0,sDateSep,nIndex).toInt32();
+    }
+
+    return Date(nDay,nMonth,nYear);
+}
+
+//-----------------------------------------------------------------------------
+DateTime DBTypeConversion::toDateTime(const ::rtl::OUString& _sSQLString)
+{
+    Date aDate = toDate(_sSQLString);
+    Time aTime = toTime(_sSQLString);
+
+    return DateTime(0,aTime.Seconds,aTime.Minutes,aTime.Hours,aDate.Day,aDate.Month,aDate.Year);
+}
+
+//-----------------------------------------------------------------------------
+Time DBTypeConversion::toTime(const ::rtl::OUString& _sSQLString)
+{
+    static sal_Unicode sTimeSep = ':';
+
+    sal_Int32 nIndex    = 0;
+    sal_uInt16  nHour   = 0,
+                nMinute = 0,
+                nSecond = 0;
+    nHour   = (sal_uInt16)_sSQLString.getToken(0,sTimeSep,nIndex).toInt32();
+    if(nIndex != -1)
+    {
+        nMinute = (sal_uInt16)_sSQLString.getToken(0,sTimeSep,nIndex).toInt32();
+        if(nIndex != -1)
+            nSecond = (sal_uInt16)_sSQLString.getToken(0,sTimeSep,nIndex).toInt32();
+    }
+    return Time(0,nHour,nMinute,nSecond);
+}
+// -----------------------------------------------------------------------------
 
 
 //.........................................................................
@@ -456,6 +504,9 @@ DateTime DBTypeConversion::toDateTime(double dVal, const Date& _rNullDate)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.16  2001/08/06 06:21:03  oj
+ *  #89430# overflow corrected
+ *
  *  Revision 1.15  2001/05/25 13:09:29  oj
  *  #86839# flush scanner buffer
  *

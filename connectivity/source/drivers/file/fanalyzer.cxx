@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fanalyzer.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-24 06:08:38 $
+ *  last change: $Author: oj $ $Date: 2001-10-01 11:24:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,7 +200,7 @@ void OSQLAnalyzer::start(OSQLParseNode* pSQLParseNode)
     }
 
     // Keyset erzeugen mit kleinster Liste
-    if(aEvaluateSetList.size())
+    if(!aEvaluateSetList.empty())
     {
         // welche Liste hat den kleinsten count ?
         OEvaluateSetList::iterator i = aEvaluateSetList.begin();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FStatement.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-29 12:14:43 $
+ *  last change: $Author: oj $ $Date: 2001-10-01 11:24:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,8 +154,11 @@ namespace connectivity
             connectivity::OSQLParseNode*                m_pParseTree;
             OSQLAnalyzer*                               m_pSQLAnalyzer; //the sql analyzer used by the resultset
 
+            ::std::vector<sal_Int32>*                   m_pEvaluationKeySet;
+
             OFileTable*                                 m_pTable;       // the current table
             OValueRow                                   m_aRow;
+            OValueRow                                   m_aEvaluateRow; // contains all values of a row
 
 
             ::rtl::OUString                             m_aCursorName;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FPreparedStatement.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-24 06:08:38 $
+ *  last change: $Author: oj $ $Date: 2001-10-01 11:24:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,6 @@ IMPLEMENT_SERVICE_INFO(OPreparedStatement,"com.sun.star.sdbc.driver.file.Prepare
 OPreparedStatement::OPreparedStatement( OConnection* _pConnection)
     : OStatement_BASE2( _pConnection )
     ,m_pResultSet(NULL)
-    ,m_pEvaluationKeySet(NULL)
 {
 }
 // -------------------------------------------------------------------------
@@ -138,12 +137,7 @@ void OPreparedStatement::disposing()
         m_aParameterRow->clear();
         m_aParameterRow = NULL;
     }
-    if(m_aEvaluateRow.isValid())
-    {
-        m_aEvaluateRow->clear();
-        m_aEvaluateRow = NULL;
-    }
-    delete m_pEvaluationKeySet;
+
     m_xParamColumns = NULL;
 }
 // -------------------------------------------------------------------------
@@ -156,11 +150,6 @@ void OPreparedStatement::construct(const ::rtl::OUString& sql)  throw(SQLExcepti
     m_xParamColumns = new OSQLColumns();
 
     Reference<XIndexAccess> xNames(m_xColNames,UNO_QUERY);
-    // set the binding of the resultrow
-    m_aEvaluateRow  = new OValueVector(xNames->getCount());
-
-    (*m_aEvaluateRow)[0].setBound(sal_True);
-    ::std::for_each(m_aEvaluateRow->begin()+1,m_aEvaluateRow->end(),TSetBound(sal_False));
 
     // describe all parameters need for the resultset
     describeParameter();
@@ -856,10 +845,10 @@ void OPreparedStatement::describeParameter()
 void OPreparedStatement::initializeResultSet(OResultSet* _pResult)
 {
     OStatement_Base::initializeResultSet(_pResult);
+
     m_pResultSet->setParameterColumns(m_xParamColumns);
     m_pResultSet->setParameterRow(m_aParameterRow);
     m_pResultSet->setAssignValues(m_aAssignValues);
-    m_pResultSet->setEvaluationRow(m_aEvaluateRow);
 
     // Parameter substituieren (AssignValues und Kriterien):
     if (!m_xParamColumns->empty())
@@ -887,8 +876,8 @@ void OPreparedStatement::initializeResultSet(OResultSet* _pResult)
         }
     }
 
-    m_pEvaluationKeySet = m_pSQLAnalyzer->bindResultRow(m_aEvaluateRow);    // Werte im Code des Compilers setzen
-    m_pResultSet->setEvaluationKeySet(m_pEvaluationKeySet);
+//  m_pEvaluationKeySet = m_pSQLAnalyzer->bindResultRow(m_aEvaluateRow);    // Werte im Code des Compilers setzen
+//  m_pResultSet->setEvaluationKeySet(m_pEvaluationKeySet);
 }
 // -----------------------------------------------------------------------------
 

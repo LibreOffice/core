@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FPreparedStatement.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-24 06:00:38 $
+ *  last change: $Author: oj $ $Date: 2001-10-01 11:24:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,6 @@ namespace connectivity
             //====================================================================
             ::std::vector<sal_Int32>                            m_aParameterIndexes; // maps the parameter index to column index
             ::rtl::OUString                                     m_aSql;
-            OValueRow                                           m_aEvaluateRow; // contains all values of a row
             OValueRow                                           m_aParameterRow;
             ORefAssignValues                                    m_aAssignValues; // needed for insert,update and parameters
                                                                     // to compare with the restrictions
@@ -112,7 +111,6 @@ namespace connectivity
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData>   m_xMetaData;
 
             OResultSet*                                         m_pResultSet;
-            TIntVector*                                         m_pEvaluationKeySet;
             ::vos::ORef<connectivity::OSQLColumns>              m_xParamColumns;    // the parameter columns
 
             // factory method for resultset's
