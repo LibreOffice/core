@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printdlg.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 10:02:33 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 19:25:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -433,23 +433,19 @@ bool PrintDialog::ImplGetFilename()
             {
 #ifdef UNX
                 // add PostScript and PDF
-                if( ! Application::IsRemoteServer() )
-                    // sensible only for Unix local
+                Printer* pPrinter = TEMPPRINTER() ? TEMPPRINTER() : mpPrinter;
+                bool bPS = true, bPDF = true;
+                if( pPrinter )
                 {
-                    Printer* pPrinter = TEMPPRINTER() ? TEMPPRINTER() : mpPrinter;
-                    bool bPS = true, bPDF = true;
-                    if( pPrinter )
-                    {
-                        if( pPrinter->GetCapabilities( PRINTER_CAPABILITIES_PDF ) )
-                            bPS = false;
-                        else
-                            bPDF = false;
-                    }
-                    if( bPS )
-                        xFilterMgr->appendFilter( OUString( RTL_CONSTASCII_USTRINGPARAM( "PostScript" ) ), OUString( RTL_CONSTASCII_USTRINGPARAM( "*.ps" ) ) );
-                    if( bPDF )
-                        xFilterMgr->appendFilter( OUString( RTL_CONSTASCII_USTRINGPARAM( "Portable Document Format" ) ), OUString( RTL_CONSTASCII_USTRINGPARAM( "*.pdf" ) ) );
+                    if( pPrinter->GetCapabilities( PRINTER_CAPABILITIES_PDF ) )
+                        bPS = false;
+                    else
+                        bPDF = false;
                 }
+                if( bPS )
+                    xFilterMgr->appendFilter( OUString( RTL_CONSTASCII_USTRINGPARAM( "PostScript" ) ), OUString( RTL_CONSTASCII_USTRINGPARAM( "*.ps" ) ) );
+                if( bPDF )
+                    xFilterMgr->appendFilter( OUString( RTL_CONSTASCII_USTRINGPARAM( "Portable Document Format" ) ), OUString( RTL_CONSTASCII_USTRINGPARAM( "*.pdf" ) ) );
 #elif defined WNT
                 xFilterMgr->appendFilter( OUString( RTL_CONSTASCII_USTRINGPARAM( "*.PRN" ) ), OUString( RTL_CONSTASCII_USTRINGPARAM( "*.prn" ) ) );
 #endif
