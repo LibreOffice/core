@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImplChartModel.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 12:54:15 $
+ *  last change: $Author: bm $ $Date: 2003-10-17 14:48:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,7 @@
 // #include "SplitLayoutContainer.hxx"
 #include "LayoutDefaults.hxx"
 #include "ChartDocumentWrapper.hxx"
+#include "PageBackground.hxx"
 
 #ifndef _CPPUHELPER_COMPONENT_CONTEXT_HXX_
 #include <cppuhelper/component_context.hxx>
@@ -94,6 +95,9 @@
 #ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
 #include <com/sun/star/uno/XComponentContext.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
+#include <com/sun/star/lang/DisposedException.hpp>
+#endif
 
 #include <vector>
 #include <algorithm>
@@ -116,7 +120,8 @@ ImplChartModel::ImplChartModel( Reference< uno::XComponentContext > const & xCon
         m_xChartTypeManager(
             xContext->getServiceManager()->createInstanceWithContext(
                 C2U( "drafts.com.sun.star.chart2.ChartTypeManager" ),
-                xContext ), uno::UNO_QUERY )
+                xContext ), uno::UNO_QUERY ),
+        m_bIsDisposed( false )
 //         m_xLayoutContainer( new SplitLayoutContainer() )
 {
     GetStyleFamilies();
@@ -133,6 +138,8 @@ ImplChartModel::ImplChartModel( Reference< uno::XComponentContext > const & xCon
             m_xChartTypeTemplate.set( xFact->createInstance( aServiceName ), uno::UNO_QUERY );
         }
     }
+
+    m_xPageBackground = new PageBackground( m_xContext );
 }
 
 // ImplChartModel::CreateStyles()
@@ -389,6 +396,52 @@ uno::Reference< ::com::sun::star::chart::XChartDocument > ImplChartModel::GetOld
     }
 
     return xRef;
+}
+
+void ImplChartModel::dispose()
+{
+    // exception is thrown by ChartModel
+    if( m_bIsDisposed )
+        return;
+
+    m_bIsDisposed = true;
+
+    // It is a problem to put the weak ref into a strong one (machine hangs
+    // memory consumption increases, but the debugger does not yield why and
+    // where
+
+//     try
+//     {
+//         // put weak reference into a strong one
+//         uno::Reference< ::com::sun::star::chart::XChartDocument > xRef( m_xOldModel );
+//         uno::Reference< lang::XComponent > xComp( xRef, uno::UNO_QUERY  );
+
+//         if( xComp.is())
+//         {
+//             try
+//             {
+//                 xComp->dispose();
+//             }
+//             catch( lang::DisposedException )
+//             {
+//                 // this may be ok, if the wrapper was disposed before the new chart
+//                 // model
+//             }
+//             catch( uno::Exception & ex )
+//             {
+//                 ASSERT_EXCEPTION( ex );
+//             }
+//         }
+//     }
+//     catch( uno::Exception & ex )
+//     {
+//         ASSERT_EXCEPTION( ex );
+//     }
+}
+
+uno::Reference< beans::XPropertySet > ImplChartModel::GetPageBackground()
+{
+    return m_xPageBackground;
 }
 
 }  // namespace impl

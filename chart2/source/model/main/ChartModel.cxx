@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartModel.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:30 $
+ *  last change: $Author: bm $ $Date: 2003-10-17 14:48:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,6 @@ ChartModel::ChartModel(uno::Reference<uno::XComponentContext > const & xContext)
     , m_nControllerLockCount(0)
     , m_pImplChartModel( new impl::ImplChartModel( xContext ) )
 {
-    OSL_TRACE( "ChartModel: CTOR" );
 }
 
 ChartModel::~ChartModel()
@@ -418,6 +417,10 @@ APPHELPER_XSERVICEINFO_IMPL(ChartModel,CHART_MODEL_SERVICE_IMPLEMENTATION_NAME)
 
     //--release all resources and references
     //// @todo
+    if( m_pImplChartModel.get() != NULL )
+    {
+        m_pImplChartModel->dispose();
+    }
 }
 
         void SAL_CALL ChartModel
@@ -880,7 +883,16 @@ APPHELPER_XSERVICEINFO_IMPL(ChartModel,CHART_MODEL_SERVICE_IMPLEMENTATION_NAME)
 //     // \--
 // }
 
-
+    uno::Reference< beans::XPropertySet > SAL_CALL ChartModel
+::getPageBackground()
+    throw (uno::RuntimeException)
+{
+    OSL_ASSERT( m_pImplChartModel.get() != 0 );
+    // /--
+    MutexGuard aGuard( m_aModelMutex );
+    return m_pImplChartModel->GetPageBackground();
+    // \--
+}
 
 // ____ XTitled ____
 uno::Reference< chart2::XTitle > SAL_CALL ChartModel::getTitle()

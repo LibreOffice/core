@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartModel.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:30 $
+ *  last change: $Author: bm $ $Date: 2003-10-17 14:48:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -498,8 +498,11 @@ public:
 //     virtual ::com::sun::star::uno::Reference<
 //             ::drafts::com::sun::star::layout::XSplitLayoutContainer > SAL_CALL getSplitLayoutContainer()
 //         throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > SAL_CALL
+        getPageBackground()
+            throw (::com::sun::star::uno::RuntimeException);
 
-    // ____ XTitled ____
+// ____ XTitled ____
     virtual ::com::sun::star::uno::Reference<
         ::drafts::com::sun::star::chart2::XTitle > SAL_CALL getTitle()
         throw (::com::sun::star::uno::RuntimeException);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImplChartModel.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:31 $
+ *  last change: $Author: bm $ $Date: 2003-10-17 14:48:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,6 +185,14 @@ public:
             const ::com::sun::star::uno::Reference<
             ::drafts::com::sun::star::chart2::XChartDocument > & xNewModel );
 
+    /** Is called by the ChartModel's XComponent::dispose() to notify the
+        impl-class to release resources
+     */
+    void dispose();
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
+        GetPageBackground();
+
 private:
     void ReadData( const ::rtl::OUString & rRangeRepresentation );
     void CreateDefaultChart();
@@ -220,6 +228,9 @@ private:
 
     ::com::sun::star::uno::WeakReference< ::com::sun::star::chart::XChartDocument >
                                           m_xOldModel;
+    bool                                  m_bIsDisposed;
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
+                                          m_xPageBackground;
 };
 
 }  // namespace impl
