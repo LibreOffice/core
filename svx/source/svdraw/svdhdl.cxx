@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdhdl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:04:30 $
+ *  last change: $Author: rt $ $Date: 2003-10-27 13:27:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,175 +108,189 @@
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+// #i15222#
+// Due to the ressource problems in Win95/98 with bitmap ressources i
+// will change this handle bitmap provinging class. Old version was splitting
+// and preparing all small handle bitmaps in device bitmap format, now this will
+// be done on the fly. Thus, tehre is only the one big bitmap remembered. With
+// three source bitmaps, this will be 3 system bitmap ressources instead of hundreds.
+// The price for that needs to be evaluated. Maybe we will need another change here
+// if this is too expensive.
 class SdrHdlBitmapSet
 {
-    BitmapEx                aRect_7x7[5];
-    BitmapEx                aRect_9x9[5];
-    BitmapEx                aRect_11x11[5];
-    BitmapEx                aRect_13x13[5];
-    BitmapEx                aCirc_7x7[5];
-    BitmapEx                aCirc_9x9[5];
-    BitmapEx                aCirc_11x11[5];
-    BitmapEx                aElli_7x9[5];
-    BitmapEx                aElli_9x11[5];
-    BitmapEx                aElli_9x7[5];
-    BitmapEx                aElli_11x9[5];
-    BitmapEx                aRectPlus_7x7[5];
-    BitmapEx                aRectPlus_9x9[5];
-    BitmapEx                aRectPlus_11x11[5];
-    BitmapEx                aCrosshair;
-    BitmapEx                aGlue;
-    BitmapEx                aAnchor;
-    BitmapEx                aAnchorPressed;
+    // the bitmap holding all infos
+    BitmapEx                maMarkersBitmap;
 
-    void FillBitmapsFromResource(UINT16 nResId);
+//  void FillBitmapsFromResource(sal_uInt16 nResId);
 
 public:
     SdrHdlBitmapSet(UINT16 nResId);
     ~SdrHdlBitmapSet();
 
-    BitmapEx& GetBitmapEx(BitmapMarkerKind eKindOfMarker, UINT16 nInd=0);
+    BitmapEx GetBitmapEx(BitmapMarkerKind eKindOfMarker, UINT16 nInd=0);
 };
+
+//void SdrHdlBitmapSet::FillBitmapsFromResource(sal_uInt16 nResId)
+//{
+//  // ?!?!
+//  sal_Bool bBla;
+//}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 SdrHdlBitmapSet::SdrHdlBitmapSet(UINT16 nResId)
 {
-    FillBitmapsFromResource(nResId);
+    // #101928# change color used for transparent parts to 0x00ff00ff (ImageList standard)
+    Color aColTransparent(0x00ff00ff);
+    Bitmap aBitmap(ResId(nResId, ImpGetResMgr()));
+    maMarkersBitmap = BitmapEx(aBitmap, aColTransparent);
 }
 
 SdrHdlBitmapSet::~SdrHdlBitmapSet()
 {
 }
 
-void SdrHdlBitmapSet::FillBitmapsFromResource(UINT16 nResId)
+// #i15222#
+// change getting of bitmap to use the big ressource bitmap
+BitmapEx SdrHdlBitmapSet::GetBitmapEx(BitmapMarkerKind eKindOfMarker, UINT16 nInd)
 {
-    // #101928# change color used for transparent parts to 0x00ff00ff (ImageList standard)
-    Color aColTransparent(0x00ff00ff);
-    OutputDevice* pOut = Application::GetDefaultDevice();
-    Bitmap aBitmap(ResId(nResId, ImpGetResMgr()));
-    BitmapEx aMarkersBitmap(aBitmap, aColTransparent);
+    // fill in size and source position in maMarkersBitmap
+    const sal_uInt16 nYPos(nInd * 11);
+    Rectangle aSourceRect;
 
-    for(UINT16 a=0;a<5;a++)
-    {
-        UINT16 nYPos = a * 11;
-
-        aRect_7x7[a] = aMarkersBitmap; aRect_7x7[a].Crop(Rectangle(Point(0, nYPos), Size(7, 7)));
-        aRect_7x7[a] = BitmapEx( aRect_7x7[a].GetBitmap().CreateDisplayBitmap( pOut ),
-            aRect_7x7[a].GetMask().CreateDisplayBitmap( pOut ) );
-
-        aRect_9x9[a] = aMarkersBitmap; aRect_9x9[a].Crop(Rectangle(Point(7, nYPos), Size(9, 9)));
-        aRect_9x9[a] = BitmapEx( aRect_9x9[a].GetBitmap().CreateDisplayBitmap( pOut ),
-            aRect_9x9[a].GetMask().CreateDisplayBitmap( pOut ) );
-
-        aRect_11x11[a] = aMarkersBitmap; aRect_11x11[a].Crop(Rectangle(Point(16, nYPos), Size(11, 11)));
-        aRect_11x11[a] = BitmapEx( aRect_11x11[a].GetBitmap().CreateDisplayBitmap( pOut ),
-            aRect_11x11[a].GetMask().CreateDisplayBitmap( pOut ) );
-
-        aCirc_7x7[a] = aMarkersBitmap; aCirc_7x7[a].Crop(Rectangle(Point(27, nYPos), Size(7, 7)));
-        aCirc_7x7[a] = BitmapEx( aCirc_7x7[a].GetBitmap().CreateDisplayBitmap( pOut ),
-            aCirc_7x7[a].GetMask().CreateDisplayBitmap( pOut ) );
-
-        aCirc_9x9[a] = aMarkersBitmap; aCirc_9x9[a].Crop(Rectangle(Point(34, nYPos), Size(9, 9)));
-        aCirc_9x9[a] = BitmapEx( aCirc_9x9[a].GetBitmap().CreateDisplayBitmap( pOut ),
-            aCirc_9x9[a].GetMask().CreateDisplayBitmap( pOut ) );
-
-        aCirc_11x11[a] = aMarkersBitmap; aCirc_11x11[a].Crop(Rectangle(Point(43, nYPos), Size(11, 11)));
-        aCirc_11x11[a] = BitmapEx( aCirc_11x11[a].GetBitmap().CreateDisplayBitmap( pOut ),
-            aCirc_11x11[a].GetMask().CreateDisplayBitmap( pOut ) );
-
-        aElli_7x9[a] = aMarkersBitmap; aElli_7x9[a].Crop(Rectangle(Point(54, nYPos), Size(7, 9)));
-        aElli_7x9[a] = BitmapEx( aElli_7x9[a].GetBitmap().CreateDisplayBitmap( pOut ),
-            aElli_7x9[a].GetMask().CreateDisplayBitmap( pOut ) );
-
-        aElli_9x11[a] = aMarkersBitmap; aElli_9x11[a].Crop(Rectangle(Point(61, nYPos), Size(9, 11)));
-        aElli_9x11[a] = BitmapEx( aElli_9x11[a].GetBitmap().CreateDisplayBitmap( pOut ),
-            aElli_9x11[a].GetMask().CreateDisplayBitmap( pOut ) );
-
-        aElli_9x7[a] = aMarkersBitmap; aElli_9x7[a].Crop(Rectangle(Point(70, nYPos), Size(9, 7)));
-        aElli_9x7[a] = BitmapEx( aElli_9x7[a].GetBitmap().CreateDisplayBitmap( pOut ),
-            aElli_9x7[a].GetMask().CreateDisplayBitmap( pOut ) );
-
-        aElli_11x9[a] = aMarkersBitmap; aElli_11x9[a].Crop(Rectangle(Point(79, nYPos), Size(11, 9)));
-        aElli_11x9[a] = BitmapEx( aElli_11x9[a].GetBitmap().CreateDisplayBitmap( pOut ),
-            aElli_11x9[a].GetMask().CreateDisplayBitmap( pOut ) );
-
-        aRectPlus_7x7[a] = aMarkersBitmap; aRectPlus_7x7[a].Crop(Rectangle(Point(90, nYPos), Size(7, 7)));
-        aRectPlus_7x7[a] = BitmapEx( aRectPlus_7x7[a].GetBitmap().CreateDisplayBitmap( pOut ),
-            aRectPlus_7x7[a].GetMask().CreateDisplayBitmap( pOut ) );
-
-        aRectPlus_9x9[a] = aMarkersBitmap; aRectPlus_9x9[a].Crop(Rectangle(Point(97, nYPos), Size(9, 9)));
-        aRectPlus_9x9[a] = BitmapEx( aRectPlus_9x9[a].GetBitmap().CreateDisplayBitmap( pOut ),
-            aRectPlus_9x9[a].GetMask().CreateDisplayBitmap( pOut ) );
-
-        aRectPlus_11x11[a] = aMarkersBitmap; aRectPlus_11x11[a].Crop(Rectangle(Point(106, nYPos), Size(11, 11)));
-        aRectPlus_11x11[a] = BitmapEx( aRectPlus_11x11[a].GetBitmap().CreateDisplayBitmap( pOut ),
-            aRectPlus_11x11[a].GetMask().CreateDisplayBitmap( pOut ) );
-    }
-
-    aRect_13x13[0] = aMarkersBitmap; aRect_13x13[0].Crop(Rectangle(Point(71, 53), Size(13, 13)));
-    aRect_13x13[0] = BitmapEx( aRect_13x13[0].GetBitmap().CreateDisplayBitmap( pOut ),
-        aRect_13x13[0].GetMask().CreateDisplayBitmap( pOut ) );
-    aRect_13x13[1] = aMarkersBitmap; aRect_13x13[1].Crop(Rectangle(Point(85, 53), Size(13, 13)));
-    aRect_13x13[1] = BitmapEx( aRect_13x13[1].GetBitmap().CreateDisplayBitmap( pOut ),
-        aRect_13x13[1].GetMask().CreateDisplayBitmap( pOut ) );
-    aRect_13x13[2] = aMarkersBitmap; aRect_13x13[2].Crop(Rectangle(Point(72, 65), Size(13, 13)));
-    aRect_13x13[2] = BitmapEx( aRect_13x13[2].GetBitmap().CreateDisplayBitmap( pOut ),
-        aRect_13x13[2].GetMask().CreateDisplayBitmap( pOut ) );
-    aRect_13x13[3] = aMarkersBitmap; aRect_13x13[3].Crop(Rectangle(Point(85, 65), Size(13, 13)));
-    aRect_13x13[3] = BitmapEx( aRect_13x13[3].GetBitmap().CreateDisplayBitmap( pOut ),
-        aRect_13x13[3].GetMask().CreateDisplayBitmap( pOut ) );
-    aRect_13x13[4] = aMarkersBitmap; aRect_13x13[4].Crop(Rectangle(Point(98, 65), Size(13, 13)));
-    aRect_13x13[4] = BitmapEx( aRect_13x13[4].GetBitmap().CreateDisplayBitmap( pOut ),
-        aRect_13x13[4].GetMask().CreateDisplayBitmap( pOut ) );
-
-    aCrosshair = aMarkersBitmap; aCrosshair.Crop(Rectangle(Point(0, 55), Size(15, 15)));
-    aCrosshair = BitmapEx( aCrosshair.GetBitmap().CreateDisplayBitmap( pOut ),
-        aCrosshair.GetMask().CreateDisplayBitmap( pOut ) );
-
-    aGlue = aMarkersBitmap; aGlue.Crop(Rectangle(Point(15, 61), Size(9, 9)));
-    aGlue = BitmapEx( aGlue.GetBitmap().CreateDisplayBitmap( pOut ),
-        aGlue.GetMask().CreateDisplayBitmap( pOut ) );
-
-    aAnchor = aMarkersBitmap; aAnchor.Crop(Rectangle(Point(24, 55), Size(24, 23)));
-    aAnchor = BitmapEx( aAnchor.GetBitmap().CreateDisplayBitmap( pOut ),
-        aAnchor.GetMask().CreateDisplayBitmap( pOut ) );
-
-    aAnchorPressed = aMarkersBitmap; aAnchorPressed.Crop(Rectangle(Point(48, 55), Size(24, 23)));
-    aAnchorPressed = BitmapEx( aAnchorPressed.GetBitmap().CreateDisplayBitmap( pOut ),
-        aAnchorPressed.GetMask().CreateDisplayBitmap( pOut ) );
-}
-
-BitmapEx& SdrHdlBitmapSet::GetBitmapEx(BitmapMarkerKind eKindOfMarker, UINT16 nInd)
-{
     switch(eKindOfMarker)
     {
-        case Rect_7x7: return aRect_7x7[nInd]; break;
-        case Rect_9x9: return aRect_9x9[nInd]; break;
-        case Rect_11x11: return aRect_11x11[nInd]; break;
-        case Rect_13x13: return aRect_13x13[nInd]; break;
-        case Circ_7x7: return aCirc_7x7[nInd]; break;
-        case Circ_9x9: return aCirc_9x9[nInd]; break;
-        case Circ_11x11: return aCirc_11x11[nInd]; break;
-        case Elli_7x9: return aElli_7x9[nInd]; break;
-        case Elli_9x11: return aElli_9x11[nInd]; break;
-        case Elli_9x7: return aElli_9x7[nInd]; break;
-        case Elli_11x9: return aElli_11x9[nInd]; break;
-        case RectPlus_7x7: return aRectPlus_7x7[nInd]; break;
-        case RectPlus_9x9: return aRectPlus_9x9[nInd]; break;
-        case RectPlus_11x11: return aRectPlus_11x11[nInd]; break;
-        case Crosshair: return aCrosshair; break;
-        case Glue: return aGlue; break;
-        case Anchor: return aAnchor; break;
-        // #98388# add AnchorPressed to be able to aninate anchor control
-        case AnchorPressed: return aAnchorPressed; break;
+        default:
+        {
+            DBG_ERROR( "unknown kind of marker" );
+            // no break here, return Rect_7x7 as default
+        }
+        case Rect_7x7:
+        {
+            aSourceRect = Rectangle(Point(0, nYPos), Size(7, 7));
+            break;
+        }
 
+        case Rect_9x9:
+        {
+            aSourceRect = Rectangle(Point(7, nYPos), Size(9, 9));
+            break;
+        }
+
+        case Rect_11x11:
+        {
+            aSourceRect = Rectangle(Point(16, nYPos), Size(11, 11));
+            break;
+        }
+
+        case Rect_13x13:
+        {
+            switch(nInd)
+            {
+                case 0: aSourceRect = Rectangle(Point(72, 53), Size(13, 13)); break;
+                case 1: aSourceRect = Rectangle(Point(85, 53), Size(13, 13)); break;
+                case 2: aSourceRect = Rectangle(Point(72, 65), Size(13, 13)); break;
+                case 3: aSourceRect = Rectangle(Point(85, 65), Size(13, 13)); break;
+                case 4: aSourceRect = Rectangle(Point(98, 65), Size(13, 13)); break;
+            }
+
+            break;
+        }
+
+        case Circ_7x7:
+        {
+            aSourceRect = Rectangle(Point(27, nYPos), Size(7, 7));
+            break;
+        }
+
+        case Circ_9x9:
+        {
+            aSourceRect = Rectangle(Point(34, nYPos), Size(9, 9));
+            break;
+        }
+
+        case Circ_11x11:
+        {
+            aSourceRect = Rectangle(Point(43, nYPos), Size(11, 11));
+            break;
+        }
+
+        case Elli_7x9:
+        {
+            aSourceRect = Rectangle(Point(54, nYPos), Size(7, 9));
+            break;
+        }
+
+        case Elli_9x11:
+        {
+            aSourceRect = Rectangle(Point(61, nYPos), Size(9, 11));
+            break;
+        }
+
+        case Elli_9x7:
+        {
+            aSourceRect = Rectangle(Point(70, nYPos), Size(9, 7));
+            break;
+        }
+
+        case Elli_11x9:
+        {
+            aSourceRect = Rectangle(Point(79, nYPos), Size(11, 9));
+            break;
+        }
+
+        case RectPlus_7x7:
+        {
+            aSourceRect = Rectangle(Point(90, nYPos), Size(7, 7));
+            break;
+        }
+
+        case RectPlus_9x9:
+        {
+            aSourceRect = Rectangle(Point(97, nYPos), Size(9, 9));
+            break;
+        }
+
+        case RectPlus_11x11:
+        {
+            aSourceRect = Rectangle(Point(106, nYPos), Size(11, 11));
+            break;
+        }
+
+        case Crosshair:
+        {
+            aSourceRect = Rectangle(Point(0, 55), Size(15, 15));
+            break;
+        }
+
+        case Glue:
+        {
+            aSourceRect = Rectangle(Point(15, 61), Size(9, 9));
+            break;
+        }
+
+        case Anchor:
         // #101688# AnchorTR for SW
-        case AnchorTR: return aAnchor; break;
-        case AnchorPressedTR: return aAnchorPressed; break;
+        case AnchorTR:
+        {
+            aSourceRect = Rectangle(Point(24, 55), Size(24, 23));
+            break;
+        }
 
-        default: DBG_ERROR( "unknown kind of marker" ); return aRect_7x7[nInd]; break;
+        // #98388# add AnchorPressed to be able to aninate anchor control
+        case AnchorPressed:
+        case AnchorPressedTR:
+        {
+            aSourceRect = Rectangle(Point(48, 55), Size(24, 23));
+            break;
+        }
     }
+
+    // construct return bitmap
+    BitmapEx aRetval(maMarkersBitmap);
+    aRetval.Crop(aSourceRect);
+
+    return aRetval;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -633,7 +647,7 @@ BitmapMarkerKind SdrHdl::GetNextBigger(BitmapMarkerKind eKnd) const
 }
 
 // #101928#
-BitmapEx& SdrHdl::ImpGetBitmapEx(BitmapMarkerKind eKindOfMarker, sal_uInt16 nInd, sal_Bool bFine, sal_Bool bIsHighContrast)
+BitmapEx SdrHdl::ImpGetBitmapEx(BitmapMarkerKind eKindOfMarker, sal_uInt16 nInd, sal_Bool bFine, sal_Bool bIsHighContrast)
 {
     if(bIsHighContrast)
     {
@@ -713,54 +727,54 @@ B2dIAObject* SdrHdl::CreateMarkerObject(B2dIAOManager* pMan, Point aPos, BitmapC
 
         // create animated hdl
         // #101928# use ImpGetBitmapEx(...) now
-        BitmapEx& rBmpEx1 = ImpGetBitmapEx(eKindOfMarker, (sal_uInt16)eColIndex, bIsFineHdl, bIsHighContrast);
-        BitmapEx& rBmpEx2 = ImpGetBitmapEx(eNextBigger, (sal_uInt16)eColIndex, bIsFineHdl, bIsHighContrast);
+        BitmapEx aBmpEx1 = ImpGetBitmapEx(eKindOfMarker, (sal_uInt16)eColIndex, bIsFineHdl, bIsHighContrast);
+        BitmapEx aBmpEx2 = ImpGetBitmapEx(eNextBigger, (sal_uInt16)eColIndex, bIsFineHdl, bIsHighContrast);
 
         if(eKindOfMarker == Anchor || eKindOfMarker == AnchorPressed)
         {
             // #98388# when anchor is used take upper left as reference point inside the handle
-            pRetval = new B2dIAOAnimBmapExRef(pMan, aPos, &rBmpEx1, &rBmpEx2);
+            pRetval = new B2dIAOAnimatedBitmapEx(pMan, aPos, aBmpEx1, aBmpEx2);
         }
         else if(eKindOfMarker == AnchorTR || eKindOfMarker == AnchorPressedTR)
         {
             // #101688# AnchorTR for SW, take top right as (0,0)
-            pRetval = new B2dIAOAnimBmapExRef(pMan, aPos, &rBmpEx1, &rBmpEx2,
-                (UINT16)(rBmpEx1.GetSizePixel().Width() - 1), 0,
-                (UINT16)(rBmpEx2.GetSizePixel().Width() - 1), 0);
+            pRetval = new B2dIAOAnimatedBitmapEx(pMan, aPos, aBmpEx1, aBmpEx2,
+                (UINT16)(aBmpEx1.GetSizePixel().Width() - 1), 0,
+                (UINT16)(aBmpEx2.GetSizePixel().Width() - 1), 0);
         }
         else
         {
             // create centered handle as default
-            pRetval = new B2dIAOAnimBmapExRef(pMan, aPos, &rBmpEx1, &rBmpEx2,
-                (UINT16)(rBmpEx1.GetSizePixel().Width() - 1) >> 1,
-                (UINT16)(rBmpEx1.GetSizePixel().Height() - 1) >> 1,
-                (UINT16)(rBmpEx2.GetSizePixel().Width() - 1) >> 1,
-                (UINT16)(rBmpEx2.GetSizePixel().Height() - 1) >> 1);
+            pRetval = new B2dIAOAnimatedBitmapEx(pMan, aPos, aBmpEx1, aBmpEx2,
+                (UINT16)(aBmpEx1.GetSizePixel().Width() - 1) >> 1,
+                (UINT16)(aBmpEx1.GetSizePixel().Height() - 1) >> 1,
+                (UINT16)(aBmpEx2.GetSizePixel().Width() - 1) >> 1,
+                (UINT16)(aBmpEx2.GetSizePixel().Height() - 1) >> 1);
         }
     }
     else
     {
         // create normal handle
         // #101928# use ImpGetBitmapEx(...) now
-        BitmapEx& rBmpEx = ImpGetBitmapEx(eKindOfMarker, (sal_uInt16)eColIndex, bIsFineHdl, bIsHighContrast);
+        BitmapEx aBmpEx = ImpGetBitmapEx(eKindOfMarker, (sal_uInt16)eColIndex, bIsFineHdl, bIsHighContrast);
 
         if(eKindOfMarker == Anchor || eKindOfMarker == AnchorPressed)
         {
             // #98388# upper left as reference point inside the handle for AnchorPressed, too
-            pRetval = new B2dIAOBitmapExReference(pMan, aPos, &rBmpEx);
+            pRetval = new B2dIAOBitmapEx(pMan, aPos, aBmpEx);
         }
         else if(eKindOfMarker == AnchorTR || eKindOfMarker == AnchorPressedTR)
         {
             // #101688# AnchorTR for SW, take top right as (0,0)
-            pRetval = new B2dIAOBitmapExReference(pMan, aPos, &rBmpEx,
-                (UINT16)(rBmpEx.GetSizePixel().Width() - 1), 0);
+            pRetval = new B2dIAOBitmapEx(pMan, aPos, aBmpEx,
+                (UINT16)(aBmpEx.GetSizePixel().Width() - 1), 0);
         }
         else
         {
             // create centered handle as default
-            pRetval = new B2dIAOBitmapExReference(pMan, aPos, &rBmpEx,
-                (UINT16)(rBmpEx.GetSizePixel().Width() - 1) >> 1,
-                (UINT16)(rBmpEx.GetSizePixel().Height() - 1) >> 1);
+            pRetval = new B2dIAOBitmapEx(pMan, aPos, aBmpEx,
+                (UINT16)(aBmpEx.GetSizePixel().Width() - 1) >> 1,
+                (UINT16)(aBmpEx.GetSizePixel().Height() - 1) >> 1);
         }
     }
 
