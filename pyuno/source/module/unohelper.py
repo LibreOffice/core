@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unohelper.py,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: jbu $ $Date: 2003-03-23 12:12:59 $
+#   last change: $Author: jbu $ $Date: 2003-05-24 23:23:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -59,9 +59,97 @@
 #*************************************************************************
 import uno
 import pyuno
+import os
 
 from com.sun.star.lang import XTypeProvider, XSingleComponentFactory, XServiceInfo
 from com.sun.star.uno import RuntimeException
+from com.sun.star.beans.MethodConcept import ALL as METHOD_CONCEPT_ALL
+from com.sun.star.beans.PropertyConcept import ALL as PROPERTY_CONCEPT_ALL
+
+from com.sun.star.reflection.ParamMode import \
+     IN as PARAM_MODE_IN, \
+     OUT as PARAM_MODE_OUT, \
+     INOUT as PARAM_MODE_INOUT
+
+from com.sun.star.beans.PropertyAttribute import \
+     MAYBEVOID as PROP_ATTR_MAYBEVOID, \
+     BOUND as PROP_ATTR_BOUND, \
+     CONSTRAINED as PROP_ATTR_CONSTRAINED, \
+     TRANSIENT as PROP_ATTR_TRANSIENT, \
+     READONLY as PROP_ATTR_READONLY, \
+     MAYBEAMBIGUOUS as PROP_ATTR_MAYBEAMBIGUOUS, \
+     MAYBEDEFAULT as PROP_ATTR_MAYBEDEFAULT, \
+     REMOVEABLE as PROP_ATTR_REMOVEABLE
+
+def _mode_to_str( mode ):
+    ret = "[]"
+    if mode == PARAM_MODE_INOUT:
+        ret = "[inout]"
+    elif mode == PARAM_MODE_OUT:
+        ret = "[out]"
+    elif mode == PARAM_MODE_IN:
+        ret = "[in]"
+    return ret
+
+def _propertymode_to_str( mode ):
+    ret = ""
+    if PROP_ATTR_REMOVEABLE & mode:
+        ret = ret + "removeable "
+    if PROP_ATTR_MAYBEDEFAULT & mode:
+        ret = ret + "maybedefault "
+    if PROP_ATTR_MAYBEAMBIGUOUS & mode:
+        ret = ret + "maybeambigous "
+    if PROP_ATTR_READONLY & mode:
+        ret = ret + "readonly "
+    if PROP_ATTR_TRANSIENT & mode:
+        ret = ret + "tranient "
+    if PROP_ATTR_CONSTRAINED & mode:
+        ret = ret + "constrained "
+    if PROP_ATTR_BOUND & mode:
+        ret = ret + "bound "
+    if PROP_ATTR_MAYBEVOID & mode:
+        ret = ret + "maybevoid "
+    return ret.rstrip()
+    
+def inspect( obj , out ):
+    ctx = uno.getComponentContext()
+    introspection = \
+         ctx.ServiceManager.createInstanceWithContext( "com.sun.star.beans.Introspection", ctx )
+
+    out.write( "Supported services:\n" )
+    if hasattr( obj, "getSupportedServiceNames" ):
+        names = obj.getSupportedServiceNames()
+        for ii in names:
+            out.write( "  " + ii + "\n" )
+    else:
+        out.write( "  unknown\n" )
+
+    out.write( "Interfaces:\n" )
+    if hasattr( obj, "getTypes" ):
+        interfaces = obj.getTypes()
+        for ii in interfaces:
+            out.write( "  " + ii.typeName + "\n" )
+    else:
+        out.write( "  unknown\n" )
+        
+    access = introspection.inspect( obj )
+    methods = access.getMethods( METHOD_CONCEPT_ALL )
+    out.write( "Methods:\n" )
+    for ii in methods:
+        out.write( "  " + ii.ReturnType.Name + " " + ii.Name )
+        args = ii.ParameterTypes
+        infos = ii.ParameterInfos
+        out.write( "( " )
+        for i in range( 0, len( args ) ):
+            if i > 0:
+                out.write( ", " )
+            out.write( _mode_to_str( infos[i].aMode ) + " " + args[i].Name + " " + infos[i].aName )
+        out.write( " )\n" )
+
+    props = access.getProperties( PROPERTY_CONCEPT_ALL )
+    out.write ("Properties:\n" )
+    for ii in props:
+        out.write( "  ("+_propertymode_to_str( ii.Attributes ) + ") "+ii.Type.typeName+" "+ii.Name+ "\n" )
 
 def createSingleServiceFactory( clazz, implementationName, serviceNames ):
     return _FactoryHelper_( clazz, implementationName, serviceNames )
@@ -139,11 +227,14 @@ def addComponentsToContext( toBeExtendedContext, contextRuntime, componentUrls, 
     smgr = contextRuntime.ServiceManager
     loader = smgr.createInstanceWithContext( loaderName, contextRuntime )
     implReg = smgr.createInstanceWithContext( "com.sun.star.registry.ImplementationRegistration",contextRuntime)
-    
+
+    isWin = os.name == 'nt' or os.name == 'dos'
     #   create a temporary registry
     for componentUrl in componentUrls:
         reg = smgr.createInstanceWithContext( "com.sun.star.registry.SimpleRegistry", contextRuntime )
 	reg.open( "", 0, 1 )
+        if not isWin and componentUrl.endswith( ".uno" ):  # still allow platform independent naming
+            componentUrl = componentUrl + ".so"
 	implReg.registerImplementation( loaderName,componentUrl, reg )
 	rootKey = reg.getRootKey()
 	implementationKey = rootKey.openKey( "IMPLEMENTATIONS" )
