@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDatabaseMetaData.idl,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:55:29 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 21:59:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,8 +72,8 @@
 
  module com {  module sun {  module star {  module sdbc {
 
-interface XResultSet;
-interface XConnection;
+ published interface XResultSet;
+ published interface XConnection;
 
 // DocMerge from xml: interface com::sun::star::sdbc::XDatabaseMetaData
 /** provides comprehensive information about the database as a whole.
@@ -108,7 +108,7 @@ interface XConnection;
     either an XResultSet (which may be empty) is returned or a
     SQLException is thrown.</p>
  */
-interface XDatabaseMetaData: com::sun::star::uno::XInterface
+published interface XDatabaseMetaData: com::sun::star::uno::XInterface
 {
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::allProceduresAreCallable
