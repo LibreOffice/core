@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlview.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:19:27 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 12:52:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,8 @@
  *
  *
  ************************************************************************/
+
+#include "OutlineView.hxx"
 
 #ifndef _FORBIDDENCHARACTERSTABLE_HXX
 #include <svx/forbiddencharacterstable.hxx>
@@ -140,18 +142,26 @@
 
 #pragma hdrstop
 
-#include "docshell.hxx"
+#include "DrawDocShell.hxx"
 #include "drawdoc.hxx"
-#include "sdwindow.hxx"
-#include "outlview.hxx"
+#ifndef SD_WINDOW_HXX
+#include "Window.hxx"
+#endif
 #include "sdpage.hxx"
 #include "pres.hxx"
-#include "outlnvsh.hxx"
+#ifndef SD_OUTLINE_VIEW_SHELL_HXX
+#include "OutlineViewShell.hxx"
+#endif
 #include "app.hrc"
 #include "glob.hrc"
 #include "sdresid.hxx"
-#include "sdoutl.hxx"
+#ifndef SD_OUTLINER_HXX
+#include "Outliner.hxx"
+#endif
 #include "strings.hrc"
+
+
+namespace sd {
 
 #pragma code_seg("STATICS")
 static USHORT SidArray[] = {
@@ -180,7 +190,7 @@ struct SdParaAndPos
     USHORT     nPos;
 };
 
-TYPEINIT1( SdOutlineView, SdView );
+TYPEINIT1( OutlineView, ::sd::View );
 
 /*************************************************************************
 |*
@@ -188,9 +198,11 @@ TYPEINIT1( SdOutlineView, SdView );
 |*
 \************************************************************************/
 
-SdOutlineView::SdOutlineView(SdDrawDocShell* pDocSh, Window* pWindow,
-                             SdOutlineViewShell* pOutlineViewSh)
-    : SdView(pDocSh->GetDoc(), pWindow, pOutlineViewSh),
+OutlineView::OutlineView (
+    DrawDocShell* pDocSh,
+    ::Window* pWindow,
+    OutlineViewShell* pOutlineViewSh)
+    : ::sd::View(pDocSh->GetDoc(), pWindow, pOutlineViewSh),
       pOutlineViewShell(pOutlineViewSh),
       pOutliner( pDoc->GetOutliner(TRUE) ),
       pOldParaOrder(NULL),
@@ -267,7 +279,7 @@ SdOutlineView::SdOutlineView(SdDrawDocShell* pDocSh, Window* pWindow,
 
     pWindow->GrabFocus();
 
-    Application::AddEventListener( LINK( this, SdOutlineView, AppEventListenerHdl ) );
+    Application::AddEventListener( LINK( this, OutlineView, AppEventListenerHdl ) );
 }
 
 /*************************************************************************
@@ -276,9 +288,9 @@ SdOutlineView::SdOutlineView(SdDrawDocShell* pDocSh, Window* pWindow,
 |*
 \************************************************************************/
 
-SdOutlineView::~SdOutlineView()
+OutlineView::~OutlineView()
 {
-    Application::RemoveEventListener( LINK( this, SdOutlineView, AppEventListenerHdl ) );
+    Application::RemoveEventListener( LINK( this, OutlineView, AppEventListenerHdl ) );
 
     if( mpProgress )
         delete mpProgress;
@@ -316,7 +328,7 @@ SdOutlineView::~SdOutlineView()
 |*
 \************************************************************************/
 
-void SdOutlineView::Paint(const Rectangle& rRect, SdWindow* pWin)
+void OutlineView::Paint(const Rectangle& rRect, ::sd::Window* pWin)
 {
     OutlinerView* pOlView = GetViewByWindow(pWin);
 
@@ -335,8 +347,10 @@ void SdOutlineView::Paint(const Rectangle& rRect, SdWindow* pWin)
 |*
 \************************************************************************/
 
-void SdOutlineView::AdjustPosSizePixel(const Point &rNewPos,
-                                       const Size &rNewSize, SdWindow* pWindow)
+void OutlineView::AdjustPosSizePixel(
+    const Point &rNewPos,
+    const Size &rNewSize,
+    ::sd::Window* pWindow)
 {
 
 }
@@ -347,7 +361,7 @@ void SdOutlineView::AdjustPosSizePixel(const Point &rNewPos,
 |*
 \************************************************************************/
 
-void SdOutlineView::AddWin(SdWindow* pWin)
+void OutlineView::AddWin (::sd::Window* pWin)
 {
     BOOL bAdded = FALSE;
     BOOL bValidArea = FALSE;
@@ -381,7 +395,7 @@ void SdOutlineView::AddWin(SdWindow* pWin)
     // weisser Hintergrund im Outliner
     pWin->SetBackground( Wallpaper( aWhiteColor ) );
 
-    SdView::AddWin(pWin);
+    ::sd::View::AddWin(pWin);
 }
 
 /*************************************************************************
@@ -390,11 +404,11 @@ void SdOutlineView::AddWin(SdWindow* pWin)
 |*
 \************************************************************************/
 
-void SdOutlineView::DelWin(SdWindow* pWin)
+void OutlineView::DelWin (::sd::Window* pWin)
 {
     BOOL bRemoved = FALSE;
     USHORT nView = 0;
-    Window* pWindow;
+    ::Window* pWindow;
 
     while (nView < MAX_OUTLINERVIEWS && !bRemoved)
     {
@@ -414,7 +428,7 @@ void SdOutlineView::DelWin(SdWindow* pWin)
         nView++;
     }
 
-    SdView::DelWin(pWin);
+    ::sd::View::DelWin(pWin);
 }
 
 /*************************************************************************
@@ -423,7 +437,7 @@ void SdOutlineView::DelWin(SdWindow* pWin)
 |*
 \************************************************************************/
 
-OutlinerView* SdOutlineView::GetViewByWindow(Window* pWin) const
+OutlinerView* OutlineView::GetViewByWindow (::Window* pWin) const
 {
     OutlinerView* pOlView = NULL;
     for (USHORT nView = 0; nView < MAX_OUTLINERVIEWS; nView++)
@@ -446,7 +460,7 @@ OutlinerView* SdOutlineView::GetViewByWindow(Window* pWin) const
 |*
 \************************************************************************/
 
-Paragraph* SdOutlineView::GetPrevTitle(const Paragraph* pPara)
+Paragraph* OutlineView::GetPrevTitle(const Paragraph* pPara)
 {
     Paragraph* pResult = NULL;
     ULONG      nPos    = pOutliner->GetAbsPos((Paragraph*)pPara);
@@ -472,7 +486,7 @@ Paragraph* SdOutlineView::GetPrevTitle(const Paragraph* pPara)
 |*
 \************************************************************************/
 
-Paragraph* SdOutlineView::GetNextTitle(const Paragraph* pPara)
+Paragraph* OutlineView::GetNextTitle(const Paragraph* pPara)
 {
     ULONG nPos = pOutliner->GetAbsPos((Paragraph*)pPara);
 
@@ -496,7 +510,7 @@ Paragraph* SdOutlineView::GetNextTitle(const Paragraph* pPara)
 |*
 \************************************************************************/
 
-IMPL_LINK( SdOutlineView, ParagraphInsertedHdl, Outliner *, pOutliner )
+IMPL_LINK( OutlineView, ParagraphInsertedHdl, ::Outliner *, pOutliner )
 {
     Paragraph* pPara = pOutliner->GetHdlParagraph();
 
@@ -624,7 +638,7 @@ IMPL_LINK( SdOutlineView, ParagraphInsertedHdl, Outliner *, pOutliner )
 |*
 \************************************************************************/
 
-IMPL_LINK( SdOutlineView, ParagraphRemovingHdl, Outliner *, pOutliner )
+IMPL_LINK( OutlineView, ParagraphRemovingHdl, ::Outliner *, pOutliner )
 {
     Paragraph* pPara = pOutliner->GetHdlParagraph();
     if ( pOutliner->GetDepth( (USHORT) pOutliner->GetAbsPos( pPara ) ) == 0 )
@@ -687,7 +701,7 @@ IMPL_LINK( SdOutlineView, ParagraphRemovingHdl, Outliner *, pOutliner )
 |*
 \************************************************************************/
 
-IMPL_LINK( SdOutlineView, DepthChangedHdl, Outliner *, pOutliner )
+IMPL_LINK( OutlineView, DepthChangedHdl, ::Outliner *, pOutliner )
 {
     Paragraph* pPara = pOutliner->GetHdlParagraph();
     if ( pOutliner->GetDepth( (USHORT) pOutliner->GetAbsPos( pPara ) ) == 0 )
@@ -899,9 +913,9 @@ IMPL_LINK( SdOutlineView, DepthChangedHdl, Outliner *, pOutliner )
 |*
 \************************************************************************/
 
-IMPL_LINK( SdOutlineView, StatusEventHdl, EditStatus *, pEditStatus )
+IMPL_LINK( OutlineView, StatusEventHdl, EditStatus *, pEditStatus )
 {
-    SdWindow*     pWin          = pOutlineViewShell->GetActiveWindow();
+    ::sd::Window*   pWin = pOutlineViewShell->GetActiveWindow();
     OutlinerView* pOutlinerView = GetViewByWindow(pWin);
     Rectangle     aVis          = pOutlinerView->GetVisArea();
 
@@ -930,7 +944,7 @@ IMPL_LINK( SdOutlineView, StatusEventHdl, EditStatus *, pEditStatus )
 |*
 \************************************************************************/
 
-IMPL_LINK( SdOutlineView, BeginMovingHdl, Outliner *, pOutliner )
+IMPL_LINK( OutlineView, BeginMovingHdl, ::Outliner *, pOutliner )
 {
     DBG_ASSERT(!pSelectedParas, "Absatzliste nicht geloescht");
     DBG_ASSERT(!pOldParaOrder, "Absatzliste nicht geloescht");
@@ -983,7 +997,7 @@ IMPL_LINK( SdOutlineView, BeginMovingHdl, Outliner *, pOutliner )
 |*
 \************************************************************************/
 
-IMPL_LINK( SdOutlineView, EndMovingHdl, Outliner *, pOutliner )
+IMPL_LINK( OutlineView, EndMovingHdl, ::Outliner *, pOutliner )
 {
     DBG_ASSERT(pSelectedParas, "keine Absatzliste");
     DBG_ASSERT(pOldParaOrder, "keine Absatzliste");
@@ -1045,7 +1059,7 @@ IMPL_LINK( SdOutlineView, EndMovingHdl, Outliner *, pOutliner )
 |*
 \************************************************************************/
 
-SdrTextObj* SdOutlineView::GetTitleTextObject(SdrPage* pPage)
+SdrTextObj* OutlineView::GetTitleTextObject(SdrPage* pPage)
 {
     ULONG           nObjectCount = pPage->GetObjCount();
     SdrObject*      pObject      = NULL;
@@ -1071,7 +1085,7 @@ SdrTextObj* SdOutlineView::GetTitleTextObject(SdrPage* pPage)
 |*
 \************************************************************************/
 
-SdrTextObj* SdOutlineView::GetLayoutTextObject(SdrPage* pPage)
+SdrTextObj* OutlineView::GetLayoutTextObject(SdrPage* pPage)
 {
     ULONG           nObjectCount = pPage->GetObjCount();
     SdrObject*      pObject      = NULL;
@@ -1096,7 +1110,7 @@ SdrTextObj* SdOutlineView::GetLayoutTextObject(SdrPage* pPage)
 |*
 \************************************************************************/
 
-BOOL SdOutlineView::PrepareClose(BOOL bUI)
+BOOL OutlineView::PrepareClose(BOOL bUI)
 {
     if( pOutliner->IsModified() )
     {
@@ -1560,7 +1574,7 @@ BOOL SdOutlineView::PrepareClose(BOOL bUI)
 |*
 \************************************************************************/
 
-BOOL SdOutlineView::SetAttributes(const SfxItemSet& rSet, BOOL bReplaceAll)
+BOOL OutlineView::SetAttributes(const SfxItemSet& rSet, BOOL bReplaceAll)
 {
     FASTBOOL bOk = FALSE;
 
@@ -1583,7 +1597,7 @@ BOOL SdOutlineView::SetAttributes(const SfxItemSet& rSet, BOOL bReplaceAll)
 |*
 \************************************************************************/
 
-BOOL SdOutlineView::GetAttributes( SfxItemSet& rTargetSet, BOOL bOnlyHardAttr ) const
+BOOL OutlineView::GetAttributes( SfxItemSet& rTargetSet, BOOL bOnlyHardAttr ) const
 {
     OutlinerView* pOlView = GetViewByWindow(
                                 pOutlineViewShell->GetActiveWindow());
@@ -1599,7 +1613,7 @@ BOOL SdOutlineView::GetAttributes( SfxItemSet& rTargetSet, BOOL bOnlyHardAttr ) 
 |*
 \************************************************************************/
 
-BOOL SdOutlineView::HasMarkedObj() const
+BOOL OutlineView::HasMarkedObj() const
 {
     BOOL bResult = FALSE;
     OutlinerView* pOlView = GetViewByWindow(
@@ -1619,7 +1633,7 @@ BOOL SdOutlineView::HasMarkedObj() const
 |*
 \************************************************************************/
 
-void SdOutlineView::FillOutliner()
+void OutlineView::FillOutliner()
 {
     ResetLinks();
     pOutliner->SetMinDepth(0);
@@ -1750,7 +1764,7 @@ void SdOutlineView::FillOutliner()
 |*
 \************************************************************************/
 
-IMPL_LINK( SdOutlineView, RemovingPagesHdl, OutlinerView *, pOutlinerView )
+IMPL_LINK( OutlineView, RemovingPagesHdl, OutlinerView *, pOutlinerView )
 {
     long nResult = 0;
     USHORT nNumOfPages = 0;
@@ -1894,11 +1908,11 @@ IMPL_LINK( SdOutlineView, RemovingPagesHdl, OutlinerView *, pOutlinerView )
 |*
 \************************************************************************/
 
-IMPL_LINK_INLINE_START( SdOutlineView, IndentingPagesHdl, OutlinerView *, pOutlinerView )
+IMPL_LINK_INLINE_START( OutlineView, IndentingPagesHdl, OutlinerView *, pOutlinerView )
 {
     return RemovingPagesHdl(pOutlinerView);
 }
-IMPL_LINK_INLINE_END( SdOutlineView, IndentingPagesHdl, OutlinerView *, pOutlinerView )
+IMPL_LINK_INLINE_END( OutlineView, IndentingPagesHdl, OutlinerView *, pOutlinerView )
 
 
 /*************************************************************************
@@ -1907,15 +1921,15 @@ IMPL_LINK_INLINE_END( SdOutlineView, IndentingPagesHdl, OutlinerView *, pOutline
 |*
 \************************************************************************/
 
-SdPage* SdOutlineView::GetActualPage()
+SdPage* OutlineView::GetActualPage()
 {
     /**************************************************************************
     |* Die Seite, in deren Titel oder Gliederung der Cursor (bzw. der
     |* Selektionsbeginn) steht, soll selektiert werden.
     \*************************************************************************/
-    SdWindow*      pWin             = pOutlineViewShell->GetActiveWindow();
+    ::sd::Window* pWin  = pOutlineViewShell->GetActiveWindow();
     OutlinerView*  pActiveView      = GetViewByWindow(pWin);
-    Outliner*      pOutl            = pActiveView->GetOutliner();
+    ::Outliner*      pOutl            = pActiveView->GetOutliner();
     List*          pSelList         = (List*)pActiveView->CreateSelectionList();
     Paragraph*     pPara            = (Paragraph*)pSelList->First();
     if ( pOutl->GetDepth( (USHORT) pOutl->GetAbsPos( pPara ) ) > 0 )
@@ -1937,7 +1951,7 @@ SdPage* SdOutlineView::GetActualPage()
 }
 
 /** selects the paragraph for the given page at the outliner view*/
-void SdOutlineView::SetActualPage( SdPage* pActual )
+void OutlineView::SetActualPage( SdPage* pActual )
 {
     if( pActual )
     {
@@ -1977,9 +1991,9 @@ void SdOutlineView::SetActualPage( SdPage* pActual )
 |*
 \************************************************************************/
 
-SfxStyleSheet* SdOutlineView::GetStyleSheet() const
+SfxStyleSheet* OutlineView::GetStyleSheet() const
 {
-    SdWindow*     pActWin = pOutlineViewShell->GetActiveWindow();
+     ::sd::Window* pActWin = pOutlineViewShell->GetActiveWindow();
     OutlinerView* pOlView = GetViewByWindow(pActWin);
     SfxStyleSheet* pResult = pOlView->GetStyleSheet();
     return pResult;
@@ -1993,7 +2007,7 @@ SfxStyleSheet* SdOutlineView::GetStyleSheet() const
 |*
 \************************************************************************/
 
-void SdOutlineView::SetSelectedPages()
+void OutlineView::SetSelectedPages()
 {
     // Liste der selektierten Titelabsaetze
     List* pSelParas = pOutlinerView[0]->CreateSelectionList();
@@ -2044,18 +2058,18 @@ void SdOutlineView::SetSelectedPages()
 |*
 \************************************************************************/
 
-void SdOutlineView::SetLinks()
+void OutlineView::SetLinks()
 {
     // Benachrichtigungs-Links setzen
-    pOutliner->SetParaInsertedHdl(LINK(this, SdOutlineView, ParagraphInsertedHdl));
-    pOutliner->SetParaRemovingHdl(LINK(this, SdOutlineView, ParagraphRemovingHdl));
-    pOutliner->SetDepthChangedHdl(LINK(this, SdOutlineView, DepthChangedHdl));
-    pOutliner->SetBeginMovingHdl(LINK(this, SdOutlineView, BeginMovingHdl));
-    pOutliner->SetEndMovingHdl(LINK(this, SdOutlineView, EndMovingHdl));
-    pOutliner->SetRemovingPagesHdl(LINK(this, SdOutlineView, RemovingPagesHdl));
-    pOutliner->SetIndentingPagesHdl(LINK(this, SdOutlineView, IndentingPagesHdl));
+    pOutliner->SetParaInsertedHdl(LINK(this, OutlineView, ParagraphInsertedHdl));
+    pOutliner->SetParaRemovingHdl(LINK(this, OutlineView, ParagraphRemovingHdl));
+    pOutliner->SetDepthChangedHdl(LINK(this, OutlineView, DepthChangedHdl));
+    pOutliner->SetBeginMovingHdl(LINK(this, OutlineView, BeginMovingHdl));
+    pOutliner->SetEndMovingHdl(LINK(this, OutlineView, EndMovingHdl));
+    pOutliner->SetRemovingPagesHdl(LINK(this, OutlineView, RemovingPagesHdl));
+    pOutliner->SetIndentingPagesHdl(LINK(this, OutlineView, IndentingPagesHdl));
     pOutliner->SetMinDepth(0);
-    pOutliner->SetStatusEventHdl(LINK(this, SdOutlineView, StatusEventHdl));
+    pOutliner->SetStatusEventHdl(LINK(this, OutlineView, StatusEventHdl));
 }
 
 
@@ -2066,7 +2080,7 @@ void SdOutlineView::SetLinks()
 |*
 \************************************************************************/
 
-void SdOutlineView::ResetLinks() const
+void OutlineView::ResetLinks() const
 {
     // alte Links restaurieren
     Link aEmptyLink;
@@ -2087,8 +2101,12 @@ void SdOutlineView::ResetLinks() const
 |*
 \************************************************************************/
 
-sal_Int8 SdOutlineView::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTargetHelper,
-                                    SdWindow* pTargetWindow, USHORT nPage, USHORT nLayer )
+sal_Int8 OutlineView::AcceptDrop (
+    const AcceptDropEvent& rEvt,
+    DropTargetHelper& rTargetHelper,
+    ::sd::Window* pTargetWindow,
+    USHORT nPage,
+    USHORT nLayer)
 {
     return DND_ACTION_NONE;
 }
@@ -2099,16 +2117,20 @@ sal_Int8 SdOutlineView::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelpe
 |*
 \************************************************************************/
 
-sal_Int8 SdOutlineView::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTargetHelper,
-                                     SdWindow* pTargetWindow, USHORT nPage, USHORT nLayer )
+sal_Int8 OutlineView::ExecuteDrop (
+    const ExecuteDropEvent& rEvt,
+    DropTargetHelper& rTargetHelper,
+    ::sd::Window* pTargetWindow,
+    USHORT nPage,
+    USHORT nLayer)
 {
     return DND_ACTION_NONE;
 }
 
 // #97766# Re-implement GetScriptType for this view to get correct results
-sal_uInt16 SdOutlineView::GetScriptType() const
+sal_uInt16 OutlineView::GetScriptType() const
 {
-    sal_uInt16 nScriptType = SdView::GetScriptType();
+    sal_uInt16 nScriptType = ::sd::View::GetScriptType();
 
     if(pOutliner)
     {
@@ -2124,7 +2146,7 @@ sal_uInt16 SdOutlineView::GetScriptType() const
     return nScriptType;
 }
 
-void SdOutlineView::onUpdateStyleSettings( bool bForceUpdate /* = false */ )
+void OutlineView::onUpdateStyleSettings( bool bForceUpdate /* = false */ )
 {
     const bool bHighContrastMode = Application::GetSettings().GetStyleSettings().GetHighContrastMode() != 0;
     if( bForceUpdate || (mbHighContrastMode != bHighContrastMode) )
@@ -2148,7 +2170,7 @@ void SdOutlineView::onUpdateStyleSettings( bool bForceUpdate /* = false */ )
             {
                 pOutlinerView[nView]->SetBackgroundColor( aDocColor );
 
-                Window* pWindow = pOutlinerView[nView]->GetWindow();
+                ::Window* pWindow = pOutlinerView[nView]->GetWindow();
 
                 if( pWindow )
                     pWindow->SetBackground( Wallpaper( aDocColor ) );
@@ -2163,10 +2185,10 @@ void SdOutlineView::onUpdateStyleSettings( bool bForceUpdate /* = false */ )
     }
 }
 
-IMPL_LINK( SdOutlineView, AppEventListenerHdl, void *, EMPTYARG )
+IMPL_LINK( OutlineView, AppEventListenerHdl, void *, EMPTYARG )
 {
     onUpdateStyleSettings();
     return 0;
 }
 
-// eof
+} // end of namespace sd
