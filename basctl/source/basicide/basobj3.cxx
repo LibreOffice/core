@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basobj3.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: tbe $ $Date: 2001-09-25 09:12:40 $
+ *  last change: $Author: tbe $ $Date: 2001-09-26 15:25:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -735,9 +735,15 @@ void BasicIDE::MarkDocShellModified( StarBASIC* pBasic )
             SfxObjectShell* pShell = BasicIDE::FindDocShell( pBasMgr );
             // Muss ja nicht aus einem Document kommen...
             if ( pShell )
+            {
                 pShell->SetModified();
+            }
             else
-                IDE_DLL()->GetShell()->SetAppBasicModified();
+            {
+                BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+                if ( pIDEShell )
+                    pIDEShell->SetAppBasicModified();
+            }
 
             SfxBindings& rBindings = BasicIDE::GetBindings();
             rBindings.Invalidate( SID_SAVEDOC );
@@ -757,9 +763,15 @@ void BasicIDE::MarkDocShellModified( SfxObjectShell* pShell )
 {
     // Muss ja nicht aus einem Document kommen...
     if ( pShell )
+    {
         pShell->SetModified();
+    }
     else
-        IDE_DLL()->GetShell()->SetAppBasicModified();
+    {
+        BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+        if ( pIDEShell )
+            pIDEShell->SetAppBasicModified();
+    }
 
     SfxBindings& rBindings = BasicIDE::GetBindings();
     rBindings.Invalidate( SID_SAVEDOC );
