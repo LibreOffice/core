@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventsupplier.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 13:36:56 $
+ *  last change: $Author: rt $ $Date: 2005-02-02 14:02:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,9 @@
 #ifndef _CPPUHELPER_IMPLBASE3_HXX_
 #include <cppuhelper/implbase3.hxx>
 #endif
+#ifndef _CPPUHELPER_IMPLBASE4_HXX_
+#include <cppuhelper/implbase4.hxx>
+#endif
 
 #ifndef  _SFX_SFXUNO_HXX
 #include <sfxuno.hxx>
@@ -188,8 +191,9 @@ public:
     static void                 BlowUpMacro( const ANY& rIn, ANY& rOut, SfxObjectShell* pDoc );
 };
 
-class SfxGlobalEvents_Impl : public ::cppu::WeakImplHelper3< ::com::sun::star::document::XEventsSupplier,
-                        ::com::sun::star::document::XEventBroadcaster, ::com::sun::star::lang::XServiceInfo >,
+class SfxGlobalEvents_Impl : public ::cppu::WeakImplHelper4< ::com::sun::star::document::XEventsSupplier,
+                        ::com::sun::star::document::XEventBroadcaster, ::com::sun::star::lang::XServiceInfo,
+                        ::com::sun::star::document::XEventListener >,
                         public SfxListener
 {
     GlobalEventConfig*             pImp;
@@ -206,6 +210,8 @@ public:
     virtual REFERENCE< XNAMEREPLACE > SAL_CALL getEvents() throw( RUNTIMEEXCEPTION );
     virtual void SAL_CALL addEventListener( const REFERENCE< XDOCEVENTLISTENER >& xListener ) throw( RUNTIMEEXCEPTION );
     virtual void SAL_CALL removeEventListener( const REFERENCE< XDOCEVENTLISTENER >& xListener ) throw( RUNTIMEEXCEPTION );
+    virtual void SAL_CALL notifyEvent( const ::com::sun::star::document::EventObject& Event ) throw ( RUNTIMEEXCEPTION );
+    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Event ) throw ( RUNTIMEEXCEPTION );
 };
 
 #endif
