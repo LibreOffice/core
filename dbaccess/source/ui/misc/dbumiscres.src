@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbumiscres.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-10 05:46:03 $
+ *  last change: $Author: fs $ $Date: 2001-05-10 12:20:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,25 +121,6 @@ Resource RSC_CHARSETS
         Text [ english_us ] = "Ansi;Mac;IBMPC (437);IBMPC (850)/DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);System;UTF-8" ;
 
         Text[ language_user1 ] = "Please be carefull with the number/ordering of (semicolon-separated) tokens in the string.";
-        Text[ portuguese ] = "Ansi;Mac;IBMPC (437);IBMPC (850)/DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);Sistema;UTF-8";
-        Text[ russian ] = "Ansi;Mac;IBMPC (437);IBMPC (850)/DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);Ñèñòåìà;UTF-8";
-        Text[ greek ] = "Ansi;Mac;IBMPC (437);IBMPC (850)/ DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);Óýóôçìá";
-        Text[ dutch ] = "Ansi;Mac;IBMPC (437);IBMPC (850)/DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);Systeem;UTF-8";
-        Text[ french ] = "Ansi;Mac;IBMPC (437);IBMPC (850)/ DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);Système;UTF-8";
-        Text[ spanish ] = "Ansi;Mac;IBMPC (437);IBMPC (850)/DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);Sistema;UTF-8";
-        Text[ italian ] = "Ansi;Mac;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);Sistema";
-        Text[ danish ] = "Ansi;Mac;Dos;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);System";
-        Text[ swedish ] = "Ansi;Mac;IBMPC (437);IBMPC (850)/DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);System;UTF-8";
-        Text[ polish ] = "Ansi;Mac;IBMPC(437);IBMPC (850)/DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);System;UTF-8";
-        Text[ portuguese_brazilian ] = "Ansi;Mac;Dos;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);Sistema";
-        Text[ japanese ] = "Ansi;Mac;IBMPC (437);IBMPC (850)/ DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);¼½ÃÑ;UTF-8";
-        Text[ korean ] = "Ansi;Mac;Dos;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);System";
-        Text[ chinese_simplified ] = "Ansi;Mac;IBMPC (437);IBMPC (850)/ DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);ÏµÍ³;UTF-8";
-        Text[ chinese_traditional ] = "Ansi;Mac;IBMPC (437);IBMPC (850)/ DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);¨t²Î;UTF-8";
-        Text[ turkish ] = "Ansi;Mac;Dos;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);Sistem";
-        Text[ arabic ] = "Ansi;Mac;IBMPC (437);IBMPC (850)/ DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);äÙÇã";
-        Text[ finnish ] = "Ansi;Mac;DOS;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);System";
-        Text[ catalan ] = "Ansi;Mac;IBMPC (437);IBMPC (850)/DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);Sistema";
     };
 };
 
@@ -248,9 +229,28 @@ String STR_COULDNOTOPEN_LINKEDDOC
     Text[ catalan ] = "Th document\n\n$file$\n\ncould not be opened.";
 };
 
+String STR_MISSING_TABLES_XDROP
+{
+    Text = "Die Tabelle kann nicht gelöscht werden, da die Datenbankverbindung diese nicht unterstützt.";
+    Text [ english ] = "The table can't be dropped, 'cause the database connection does not support this.";
+    Text [ english_us ] = "The table can't be dropped, 'cause the database connection does not support this.";
+};
+
+String STR_BUTTON_TEXT_ALL
+{
+    Text = "~Alle";
+    Text [ english ] = "~All";
+    Text [ english_us ] = "~All";
+
+    Text[ language_user1 ] = "This will be a button text in a dialog asking for confirmation. Something like 'Yes/All/No/Cancel'";
+};
+
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.19  2001/05/10 05:46:03  rt
+ *  Merge SRC631: 10.05.01 - 07:45:14 (NoBranch)
+ *
  *  Revision 1.18  2001/05/03 19:16:38  rt
  *  Merge SRC630: 03.05.01 - 21:15:59 (NoBranch)
  *
