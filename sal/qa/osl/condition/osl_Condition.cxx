@@ -2,9 +2,9 @@
  *
  *  $RCSfile: osl_Condition.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $  $Date: 2003-12-11 12:30:22 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 14:47:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,8 +79,8 @@ using namespace rtl;
 */
 inline void printBool( sal_Bool bOk )
 {
-    printf( "#printBool# " );
-    ( sal_True == bOk ) ? printf( "TRUE!\n" ): printf( "FALSE!\n" );
+    t_print("#printBool# " );
+    ( sal_True == bOk ) ? t_print("TRUE!\n" ): t_print("FALSE!\n" );
 }
 
 /** print a UNI_CODE String.
@@ -89,9 +89,9 @@ inline void printUString( const ::rtl::OUString & str )
 {
     rtl::OString aString;
 
-    printf( "#printUString_u# " );
+    t_print("#printUString_u# " );
     aString = ::rtl::OUStringToOString( str, RTL_TEXTENCODING_ASCII_US );
-    printf( "%s\n", aString.getStr( ) );
+    t_print("%s\n", aString.getStr( ) );
 }
 
 /** wait _nSec seconds.
@@ -99,7 +99,7 @@ inline void printUString( const ::rtl::OUString & str )
 void thread_sleep( sal_Int32 _nSec )
 {
     /// print statement in thread process must use fflush() to force display.
-    printf( "# wait %d seconds. ", _nSec );
+    t_print("# wait %d seconds. ", _nSec );
     fflush( stdout );
 
 #ifdef WNT                               //Windows
@@ -108,7 +108,7 @@ void thread_sleep( sal_Int32 _nSec )
 #if ( defined UNX ) || ( defined OS2 )   //Unix
     sleep( _nSec );
 #endif
-    printf( "# done\n" );
+    t_print("# done\n" );
 }
 
 enum ConditionType
