@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwAccessibleDocumentPageView.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $
+ *  last change: $Author: pjunck $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,7 +180,10 @@ public class SwAccessibleDocumentPageView extends TestCase {
         tEnv.addObjRelation("EventProducer",
             new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer() {
                 public void fireEvent() {
+                    String oldText = the_text.getString();
                     the_text.setString("EVENT FIRED");
+                    shortWait();
+                    the_text.setString(oldText);
                 }
             });
 
@@ -195,7 +198,7 @@ public class SwAccessibleDocumentPageView extends TestCase {
     */
     private void shortWait() {
         try {
-            Thread.sleep(1000) ;
+            Thread.sleep(2000) ;
         } catch (InterruptedException e) {
             log.println("While waiting :" + e) ;
         }
