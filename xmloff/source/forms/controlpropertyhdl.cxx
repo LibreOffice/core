@@ -2,9 +2,9 @@
  *
  *  $RCSfile: controlpropertyhdl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:14 $
+ *  last change: $Author: fs $ $Date: 2001-07-16 07:34:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,8 @@ namespace xmloff
         ,m_pControlBorderHandler(NULL)
         ,m_pRotationAngleHandler(NULL)
         ,m_pFontWidthHandler(NULL)
+        ,m_pFontEmphasisHandler(NULL)
+        ,m_pFontReliefHandler(NULL)
     {
     }
 
@@ -125,6 +127,8 @@ namespace xmloff
         delete m_pControlBorderHandler;
         delete m_pRotationAngleHandler;
         delete m_pFontWidthHandler;
+        delete m_pFontEmphasisHandler;
+        delete m_pFontReliefHandler;
     }
 
     //---------------------------------------------------------------------
@@ -167,7 +171,7 @@ namespace xmloff
             case XML_TYPE_TEXT_FONT_RELIEF:
                 if (!m_pFontReliefHandler)
                     m_pFontReliefHandler = new XMLConstantsPropertyHandler( OEnumMapper::getEnumMap(OEnumMapper::epFontRelief), XML_NONE );
-                pHandler = m_pFontEmphasisHandler;
+                pHandler = m_pFontReliefHandler;
                 break;
         }
 
@@ -384,6 +388,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.9  2001/06/29 21:07:14  dvo
+ *  #86004# changes sXML_* strings to XML_* tokens
+ *
  *  Revision 1.8  2001/06/15 12:35:28  dvo
  *  #86004# changes sXML_* string to XML_* tokens continued
  *
