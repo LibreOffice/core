@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2005-01-28 15:55:35 $
+#   last change: $Author: vg $ $Date: 2005-02-21 13:49:50 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -59,7 +59,6 @@
 #
 #
 #*************************************************************************
-
 PRJ		= ..$/..$/..$/..
 PRJNAME = wizards
 TARGET  = wizards_common
@@ -79,6 +78,7 @@ JARTARGET	= commonwizards.jar
 
 JAVAFILES=							\
     common$/Desktop.java	                		\
+    common$/NumberFormatter.java                 		\
     common$/FileAccess.java                 		\
     common$/Helper.java                     		\
     common$/InvalidQueryException.java      		\
@@ -103,9 +103,12 @@ JAVAFILES=							\
     db$/QueryMetaData.java					\
     db$/BlindtextCreator.java				\
     db$/FieldColumn.java					\
+    db$/CommandName.java					\
     db$/RecordParser.java					\
-    db$/SQLQueryComposer.java				\
+    db$/TypeInspector.java					\
+    db$/ColumnPropertySet.java				\
     db$/TableDescriptor.java				\
+    db$/SQLQueryComposer.java				\
     ui$/event$/AbstractListener.java			\
     ui$/event$/CommonListener.java				\
     ui$/event$/DataAware.java				\
@@ -129,7 +132,6 @@ JAVAFILES=							\
     ui$/ImageList.java					\
     ui$/PathSelection.java					\
     ui$/PeerConfig.java					\
-    ui$/PeerConfigHelper.java				\
     ui$/SortingComponent.java				\
     ui$/TitlesComponent.java				\
     ui$/WizardDialog.java					\
@@ -139,6 +141,7 @@ JAVAFILES=							\
     ui$/XCommandSelectionListener.java			\
     ui$/XFieldSelectionListener.java			\
     ui$/XPathSelectionListener.java				\
+    ui$/XCompletion.java					\
     document$/Control.java					\
     document$/DatabaseControl.java				\
     document$/FormHandler.java				\
