@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-26 18:04:33 $
+#   last change: $Author: rt $ $Date: 2003-05-21 07:57:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -91,6 +91,7 @@ SLOFILES =	\
         $(SLO)$/xilink.obj					\
         $(SLO)$/xicontent.obj				\
         $(SLO)$/xistyle.obj					\
+        $(SLO)$/xiescher.obj				\
         $(SLO)$/xestream.obj				\
         $(SLO)$/xerecord.obj				\
         $(SLO)$/xeroot.obj					\
@@ -99,7 +100,6 @@ SLOFILES =	\
         $(SLO)$/xecontent.obj				\
         $(SLO)$/xestyle.obj					\
         $(SLO)$/XclChartsApiHelper.obj		\
-        $(SLO)$/XclImpObjects.obj			\
         $(SLO)$/XclImpCharts.obj			\
         $(SLO)$/XclImpChartsApi.obj			\
         $(SLO)$/XclExpCharts.obj			\
