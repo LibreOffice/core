@@ -2,9 +2,9 @@
  *
  *  $RCSfile: merge.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 15:39:44 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 11:57:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@ BOOL PFormEntrys::GetText( ByteString &rReturn,
     USHORT nTyp, USHORT nLangIndex, BOOL bDel )
 /*****************************************************************************/
 {
-    BOOL bReturn;
+    BOOL bReturn = false;
     switch ( nTyp ) {
         case STRING_TYP_TEXT :
             rReturn = sText[ nLangIndex ];
@@ -347,7 +347,7 @@ void MergeDataFile::InsertEntry(
                     const ByteString &rQHTEXT, const ByteString &rTITLE )
 /*****************************************************************************/
 {
-    MergeData *pData;
+    MergeData *pData = NULL;
     BOOL bFound = FALSE;
     long int i;
 
@@ -366,7 +366,7 @@ void MergeDataFile::InsertEntry(
     }
 
     bFound = FALSE;
-    PFormEntrys *pFEntrys;
+    PFormEntrys *pFEntrys = NULL;
 
     // search for PFormEntrys
     for ( i = pData->Count() - 1; i >= 0 && !bFound; i-- ) {
