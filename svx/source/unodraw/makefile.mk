@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: cl $ $Date: 2001-10-12 16:08:30 $
+#   last change: $Author: kz $ $Date: 2003-08-25 14:39:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -68,40 +68,10 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 # --- Files --------------------------------------------------------
-
-CXXFILES =				\
-        UnoNamespaceMap.cxx \
-        UnoGraphicExporter.cxx \
-        unopool.cxx \
-        XPropertyTable.cxx \
-        UnoNameItemTable.cxx \
-        unoipset.cxx	\
-        unoshape.cxx	\
-        unoshap2.cxx	\
-        unoshap3.cxx	\
-        unoshap4.cxx	\
-        unopage.cxx		\
-        unoshtxt.cxx	\
-        unoshcol.cxx	\
-        unoprov.cxx		\
-        unomod.cxx      \
-        unonrule.cxx	\
-        unofdesc.cxx	\
-        unoctabl.cxx	\
-        unomlstr.cxx	\
-        unogtabl.cxx	\
-        unohtabl.cxx	\
-        unobtabl.cxx	\
-        unottabl.cxx	\
-        unomtabl.cxx	\
-        unodtabl.cxx	\
-        gluepts.cxx
 
 SVXLIGHTOBJFILES=\
         $(OBJ)$/unopool.obj \
@@ -157,8 +127,8 @@ SLOFILES =	\
         $(SLO)$/unodtabl.obj	\
         $(SLO)$/gluepts.obj
 
-SRSNAME=unodraw
-SRCFILES =  \
+SRS1NAME=unodraw
+SRC1FILES =  \
         unodraw.src
 
 # --- Tagets -------------------------------------------------------
