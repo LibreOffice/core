@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementexport.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 18:20:21 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:32:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -712,7 +712,7 @@ namespace xmloff
     //---------------------------------------------------------------------
     void OControlExport::exportDatabaseAttributes()
     {
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
         sal_Int32 nIncludeDatabase = m_nIncludeDatabase;
 #endif
         // the only string property: DataField
@@ -722,7 +722,7 @@ namespace xmloff
                 getDatabaseAttributeNamespace(DA_DATA_FIELD),
                 getDatabaseAttributeName(DA_DATA_FIELD),
                 PROPERTY_DATAFIELD);
-        #ifdef _DEBUG
+        #if OSL_DEBUG_LEVEL > 0
             //  reset the bit for later checking
             nIncludeDatabase = nIncludeDatabase & ~DA_DATA_FIELD;
         #endif
@@ -736,7 +736,7 @@ namespace xmloff
                 getDatabaseAttributeName(DA_BOUND_COLUMN),
                 PROPERTY_BOUNDCOLUMN,
                 0);
-        #ifdef _DEBUG
+        #if OSL_DEBUG_LEVEL > 0
             //  reset the bit for later checking
             nIncludeDatabase = nIncludeDatabase & ~DA_BOUND_COLUMN;
         #endif
@@ -751,7 +751,7 @@ namespace xmloff
                 PROPERTY_EMPTY_IS_NULL,
                 BOOLATTR_DEFAULT_FALSE
                 );
-        #ifdef _DEBUG
+        #if OSL_DEBUG_LEVEL > 0
             //  reset the bit for later checking
             nIncludeDatabase = nIncludeDatabase & ~DA_CONVERT_EMPTY;
         #endif
@@ -767,7 +767,7 @@ namespace xmloff
                 OEnumMapper::getEnumMap(OEnumMapper::epListSourceType),
                 ListSourceType_VALUELIST
                 );
-        #ifdef _DEBUG
+        #if OSL_DEBUG_LEVEL > 0
             //  reset the bit for later checking
             nIncludeDatabase = nIncludeDatabase & ~DA_LIST_SOURCE_TYPE;
         #endif
@@ -776,13 +776,13 @@ namespace xmloff
         if (m_nIncludeDatabase & DA_LIST_SOURCE)
         {
             exportListSourceAsAttribute();
-        #ifdef _DEBUG
+        #if OSL_DEBUG_LEVEL > 0
             //  reset the bit for later checking
             nIncludeDatabase = nIncludeDatabase & ~DA_LIST_SOURCE;
         #endif
         }
 
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
         OSL_ENSURE(0 == nIncludeDatabase,
             "OControlExport::exportDatabaseAttributes: forgot some flags!");
             // in the dbg_util version, we should have removed every bit we handled from the mask, so it should
@@ -1266,7 +1266,7 @@ namespace xmloff
                     // for a list box, if the ListSourceType is VALUE_LIST, no ListSource is stored, but instead
                     // a sequence of pairs which is build from the StringItemList and the ValueList
                     ListSourceType eListSourceType = ListSourceType_VALUELIST;
-                #ifdef _DEBUG
+                #if OSL_DEBUG_LEVEL > 0
                     sal_Bool bSuccess =
                 #endif
                     m_xProps->getPropertyValue(PROPERTY_LISTSOURCETYPE) >>= eListSourceType;
