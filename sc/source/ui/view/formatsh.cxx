@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formatsh.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:32:33 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 13:53:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -925,7 +925,7 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
             case FID_DEFINE_NAME:
             case FID_USE_NAME:
             case FID_INSERT_NAME:
-            case SID_SPELLING:
+            case SID_SPELL_DIALOG:
             case SID_HANGUL_HANJA_CONVERSION:
 
             pScMod->InputEnterHandler();
