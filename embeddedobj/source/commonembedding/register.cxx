@@ -2,9 +2,9 @@
  *
  *  $RCSfile: register.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mav $ $Date: 2003-12-15 15:42:59 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:50:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,13 @@ void * SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServic
                                                 OOoEmbeddedObjectFactory::impl_staticCreateSelfInstance,
                                                 OOoEmbeddedObjectFactory::impl_staticGetSupportedServiceNames() );
         }
+        else if ( aImplName.equals( OOoSpecialEmbeddedObjectFactory::impl_staticGetImplementationName() ) )
+        {
+            xFactory= ::cppu::createOneInstanceFactory( reinterpret_cast< lang::XMultiServiceFactory*>( pServiceManager ),
+                                                OOoSpecialEmbeddedObjectFactory::impl_staticGetImplementationName(),
+                                                OOoSpecialEmbeddedObjectFactory::impl_staticCreateSelfInstance,
+                                                OOoSpecialEmbeddedObjectFactory::impl_staticGetSupportedServiceNames() );
+        }
         else if ( aImplName.equals( UNOEmbeddedObjectCreator::impl_staticGetImplementationName() ) )
         {
             xFactory= ::cppu::createOneInstanceFactory( reinterpret_cast< lang::XMultiServiceFactory*>( pServiceManager ),
@@ -132,16 +139,20 @@ sal_Bool SAL_CALL component_writeInfo( void * pServiceManager, void * pRegistryK
             xNewKey = xKey->createKey( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/") ) +
                                         OOoEmbeddedObjectFactory::impl_staticGetImplementationName() +
                                         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES") )  );
-
             uno::Sequence< ::rtl::OUString > rServices = OOoEmbeddedObjectFactory::impl_staticGetSupportedServiceNames();
             for( nInd = 0; nInd < rServices.getLength(); nInd++ )
                 xNewKey->createKey( rServices.getConstArray()[nInd] );
 
+            xNewKey = xKey->createKey( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/") ) +
+                                        OOoSpecialEmbeddedObjectFactory::impl_staticGetImplementationName() +
+                                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES") )  );
+            rServices = OOoSpecialEmbeddedObjectFactory::impl_staticGetSupportedServiceNames();
+            for( nInd = 0; nInd < rServices.getLength(); nInd++ )
+                xNewKey->createKey( rServices.getConstArray()[nInd] );
 
             xNewKey = xKey->createKey( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/") ) +
                                         UNOEmbeddedObjectCreator::impl_staticGetImplementationName() +
                                         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES") )  );
-
             rServices = UNOEmbeddedObjectCreator::impl_staticGetSupportedServiceNames();
             for( nInd = 0; nInd < rServices.getLength(); nInd++ )
                 xNewKey->createKey( rServices.getConstArray()[nInd] );
