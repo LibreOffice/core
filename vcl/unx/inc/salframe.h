@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.h,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2004-02-20 08:55:33 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:54:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,6 @@ class X11SalFrame : public SalFrame
 
     static X11SalFrame* s_pSaveYourselfFrame;
 
-    X11SalFrame*    mpNextFrame;        // pointer to next frame
     X11SalFrame*    mpParent;            // pointer to parent frame
                                     // which should never obscur this frame
     bool            mbTransientForRoot;
@@ -241,7 +240,6 @@ public:
     XLIB_Window             GetStackingWindow() const { return mhStackingWindow; }
     long                    ShutDown() const { return CallCallback( SALEVENT_SHUTDOWN, 0 ); }
     long                    Close() const { return CallCallback( SALEVENT_CLOSE, 0 ); }
-    X11SalFrame*            GetNextFrame() const { return mpNextFrame; }
               ULONG           GetStyle() const { return nStyle_; }
 
     inline  XLIB_Cursor     GetCursor() const { return hCursor_; }
