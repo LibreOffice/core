@@ -2,9 +2,9 @@
  *
  *  $RCSfile: common_gfx.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: pl $ $Date: 2002-11-13 20:15:45 $
+ *  last change: $Author: pl $ $Date: 2002-11-14 12:25:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,7 @@
 #endif
 
 #include <tools/debug.hxx>
+#include <tools/color.hxx>
 
 using namespace psp ;
 
@@ -620,15 +621,25 @@ PrinterGfx::PSSetColor ()
         char pBuffer[128];
         sal_Int32 nChar = 0;
 
-        nChar  = psp::getValueOfDouble (pBuffer,
-                                        (double)rColor.GetRed() / 255.0, 5);
-        nChar += psp::appendStr (" ", pBuffer + nChar);
-        nChar += psp::getValueOfDouble (pBuffer + nChar,
-                                        (double)rColor.GetGreen() / 255.0, 5);
-        nChar += psp::appendStr (" ", pBuffer + nChar);
-        nChar += psp::getValueOfDouble (pBuffer + nChar,
-                                        (double)rColor.GetBlue() / 255.0, 5);
-        nChar += psp::appendStr (" setrgbcolor\n", pBuffer + nChar );
+        if( mbColor )
+        {
+            nChar  = psp::getValueOfDouble (pBuffer,
+                                            (double)rColor.GetRed() / 255.0, 5);
+            nChar += psp::appendStr (" ", pBuffer + nChar);
+            nChar += psp::getValueOfDouble (pBuffer + nChar,
+                                            (double)rColor.GetGreen() / 255.0, 5);
+            nChar += psp::appendStr (" ", pBuffer + nChar);
+            nChar += psp::getValueOfDouble (pBuffer + nChar,
+                                            (double)rColor.GetBlue() / 255.0, 5);
+            nChar += psp::appendStr (" setrgbcolor\n", pBuffer + nChar );
+        }
+        else
+        {
+            Color aColor( rColor.GetRed(), rColor.GetGreen(), rColor.GetBlue() );
+            sal_uInt8 nCol = aColor.GetLuminance();
+            nChar  = psp::getValueOfDouble( pBuffer, (double)nCol / 255.0, 5 );
+            nChar += psp::appendStr( " setgray\n", pBuffer + nChar );
+        }
 
         WritePS (mpPageBody, pBuffer, nChar);
     }
