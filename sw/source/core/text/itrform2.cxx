@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2000-09-27 11:52:01 $
+ *  last change: $Author: ama $ $Date: 2000-09-28 13:55:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -696,6 +696,35 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
                 rInf.GetIdx() <= rInf.GetTxt().Len(),
                 "SwTxtFormatter::BuildPortions: bad length in info" );
         DBG_LOOP;
+        BYTE nNxtActual;
+        if( pPor->InFldGrp() )
+        {
+            ((SwFldPortion*)pPor)->CheckScript( rInf );
+            const SwFont* pTmpFnt = ((SwFldPortion*)pPor)->GetFont();
+            if( !pTmpFnt )
+                pTmpFnt = rInf.GetFont();
+            nNxtActual = pTmpFnt->GetActual();
+        }
+        else
+            nNxtActual = rInf.GetFont()->GetActual();
+        if( rInf.GetLast() && rInf.GetLast()->InTxtGrp() &&
+            rInf.GetLast()->Width() && !rInf.GetLast()->InNumberGrp() )
+        {
+            BYTE nLstActual;
+            if( rInf.GetLast()->InFldGrp() &&
+                ((SwFldPortion*)rInf.GetLast())->GetFont() )
+                nLstActual = ((SwFldPortion*)rInf.GetLast())->GetFont()->
+                             GetActual();
+            else
+                nLstActual = rInf.GetFont()->GetActual();
+            if( nNxtActual != nLstActual )
+            {
+                SwKernPortion* pKrn = new SwKernPortion( *rInf.GetLast(), 284 );
+                rInf.GetLast()->SetPortion( NULL );
+                InsertPortion( rInf, pKrn );
+            }
+        }
+
         bFull = pPor->Format( rInf );
 
         // Vorsicht: ein Fly im Blocksatz, dann kann das Repaint nur komplett
@@ -718,7 +747,7 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
         if ( !bFull )
         {
             rInf.ClrUnderFlow();
-            if( pPor->InTxtGrp() && pPor->GetLen() )
+            if( pPor->InTxtGrp() && pPor->GetLen() && !pPor->InFldGrp() )
             {
                 xub_StrLen nTmp = rInf.GetIdx() + pPor->GetLen();
                 // For the moment I insert a distance from 1/2 cm between
