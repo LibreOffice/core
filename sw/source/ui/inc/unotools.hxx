@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotools.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-04-26 19:32:49 $
+ *  last change: $Author: os $ $Date: 2001-04-27 10:58:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,8 +169,8 @@ public:
  --------------------------------------------------*/
 #define EX_SHOW_ONLINE_LAYOUT   0x001
 
-//online layout and hard zoom value
-#define EX_SHOW_BUSINESS_CARDS  0x003
+// hard zoom value
+#define EX_SHOW_BUSINESS_CARDS  0x02
 
 class SwView;
 class SwOneExampleFrame
