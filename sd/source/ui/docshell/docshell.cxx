@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshell.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-16 17:35:59 $
+ *  last change: $Author: ka $ $Date: 2001-03-23 11:37:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -528,7 +528,7 @@ SvStream* SdDrawDocShell::GetDocumentStream(SdrDocumentStreamInfo& rStreamInfo)
                     if( pStor->IsContained( aPictureStorageName ) &&
                         pStor->IsStorage( aPictureStorageName )  )
                     {
-                        xPictureStorage = pStor->OpenUCBStorage( aPictureStorageName, STREAM_READ | STREAM_WRITE );
+                        xPictureStorage = pStor->OpenUCBStorage( aPictureStorageName, STREAM_READ );
                     }
                 }
 
@@ -536,7 +536,7 @@ SvStream* SdDrawDocShell::GetDocumentStream(SdrDocumentStreamInfo& rStreamInfo)
                     xPictureStorage->IsContained( aPictureStreamName ) &&
                     xPictureStorage->IsStream( aPictureStreamName ) )
                 {
-                    pRet = xPictureStorage->OpenStream( aPictureStreamName );
+                    pRet = xPictureStorage->OpenStream( aPictureStreamName, STREAM_READ );
 
                     if( pRet )
                     {
@@ -559,7 +559,7 @@ SvStream* SdDrawDocShell::GetDocumentStream(SdrDocumentStreamInfo& rStreamInfo)
                     DBG_ASSERT(bOK, "Umbenennung des Streams gescheitert");
                 }
 
-                xDocStream =  pStor->OpenStream( pStarDrawDoc3, STREAM_READ | STREAM_WRITE | STREAM_TRUNC );
+                xDocStream =  pStor->OpenStream( pStarDrawDoc3, STREAM_READ );
                 xDocStream->SetVersion( pStor->GetVersion() );
                 xDocStream->SetKey( pStor->GetKey() );
                 pDocStor = pStor;
@@ -569,6 +569,23 @@ SvStream* SdDrawDocShell::GetDocumentStream(SdrDocumentStreamInfo& rStreamInfo)
             rStreamInfo.mbDeleteAfterUse = FALSE;
         }
     }
+
+#ifdef DEBUG
+    if( pRet )
+    {
+        // try to get some information from stream
+        const ULONG nStartPos = pRet->Tell();
+        const ULONG nEndPos = pRet->Seek( STREAM_SEEK_TO_END );
+        const ULONG nStmLen = nEndPos - nStartPos;
+        sal_uChar   aTestByte;
+
+        // try to read one byte
+        if( nStmLen )
+            *pRet >> aTestByte;
+
+        pRet->Seek( nStartPos );
+    }
+#endif
 
     return pRet;
 }
