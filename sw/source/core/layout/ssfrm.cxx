@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ssfrm.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: ama $ $Date: 2002-07-11 16:06:38 $
+ *  last change: $Author: fme $ $Date: 2002-09-16 08:47:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -342,6 +342,22 @@ void SwFrm::CheckDirChange()
                                 if( pFly->GetAnchor() == this )
                                     pFly->CheckDirChange();
                             }
+                            else
+                            {
+                                // change anchor position
+                                pObj->SetAnchorPos( GetAnchorPos() );
+                                // check if the new position
+                                // would not exceed the margins of the page
+                                Rectangle aRect( pObj->GetBoundRect() );
+                                Point aNewRel( 0, pObj->GetRelativePos().Y() );
+                                if ( aRect.Left() < Frm().Left() )
+                                    pObj->SetRelativePos( aNewRel );
+                                else if ( aRect.Right() > Frm().Right() )
+                                {
+                                    aNewRel.X() = aRect.Left() - aRect.Right();
+                                    pObj->SetRelativePos( aNewRel );
+                                }
+                            }
                         }
                     }
                 }
@@ -373,10 +389,44 @@ void SwFrm::CheckDirChange()
                 SdrObject *pObj = (*pObjs)[i];
                 if( pObj->IsWriterFlyFrame() )
                     ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm()->CheckDirChange();
+                else
+                {
+                    // change anchor position
+                    pObj->SetAnchorPos( GetAnchorPos() );
+                    SwPageFrm* pPage = FindPageFrm();
+                    if ( pPage )
+                    {
+                        // check if the new position
+                        // would not exceed the margins of the page
+                        Rectangle aRect( pObj->GetBoundRect() );
+                        Point aNewRel( 0, pObj->GetRelativePos().Y() );
+                        if ( aRect.Left() < pPage->Frm().Left() )
+                            pObj->SetRelativePos( aNewRel );
+                        else if ( aRect.Right() > pPage->Frm().Right() )
+                        {
+                            aNewRel.X() = aRect.Left() - aRect.Right();
+                            pObj->SetRelativePos( aNewRel );
+                        }
+                    }
+                }
             }
         }
     }
 }
+
+/*-----------------13.9.2002 11:11------------------
+ * SwFrm::GetAnchorPos(..)
+ * returns the position for anchors based on frame direction
+ * --------------------------------------------------*/
+
+Point SwFrm::GetAnchorPos() const
+{
+    Point aAnchor = Frm().Pos();
+    if ( IsVertical() || IsRightToLeft() )
+        aAnchor.X() += Frm().Width();
+    return aAnchor;
+}
+
 
 /*************************************************************************
 |*

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfly.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2002-09-09 14:29:27 $
+ *  last change: $Author: fme $ $Date: 2002-09-16 08:44:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -709,7 +709,7 @@ BOOL SwDoc::ChgAnchor( const SdrMarkList& rMrkList, int eAnchorId,
                     pOldAnch = pContact->GetAnchor();
                 }
                 pOldAnch->Calc();
-                pObj->ImpSetAnchorPos( pOldAnch->Frm().Pos() );
+                pObj->ImpSetAnchorPos( pOldAnch->GetAnchorPos() );
             }
 
             if ( bSameOnly )
@@ -858,12 +858,12 @@ BOOL SwDoc::ChgAnchor( const SdrMarkList& rMrkList, int eAnchorId,
                 SetAttr( aNewAnch, *pContact->GetFmt() );
                 if( bPosCorr )
                 {
-                    const Point aTmpRel( aPt - pNewAnch->Frm().Pos() );
+                    const Point aTmpRel( aPt - pNewAnch->GetAnchorPos() );
                     pObj->NbcSetRelativePos( aTmpRel );
                 }
 #ifndef PRODUCT
                 const Point aIstA( pObj->GetAnchorPos() );
-                ASSERT( aIstA == pNewAnch->Frm().Pos(),
+                ASSERT( aIstA == pNewAnch->GetAnchorPos(),
                                 "ChgAnchor: Wrong Anchor-Pos." );
 #endif
             }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: ama $ $Date: 2002-09-12 12:19:52 $
+ *  last change: $Author: fme $ $Date: 2002-09-16 08:47:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -418,7 +418,7 @@ SwFrmNotify::~SwFrmNotify()
                     if( !pFrmFmt ||
                         FLY_IN_CNTNT != pFrmFmt->GetAnchor().GetAnchorId() )
                     {
-                        pObj->SetAnchorPos( pFrm->Frm().Pos() );
+                        pObj->SetAnchorPos( pFrm->GetAnchorPos() );
                         ((SwDrawContact*)GetUserCall(pObj))->ChkPage();
                     }
                 }

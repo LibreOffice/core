@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layact.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: od $ $Date: 2002-08-28 13:11:42 $
+ *  last change: $Author: fme $ $Date: 2002-09-16 08:47:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1743,7 +1743,7 @@ void MA_FASTCALL lcl_ValidateLowers( SwLayoutFrm *pLay, const SwTwips nOfst,
                     }
                     else
                     {
-                        pO->SetAnchorPos( pLow->Frm().Pos() );
+                        pO->SetAnchorPos( pLow->GetAnchorPos() );
                         SwFrmFmt *pFrmFmt = FindFrmFmt( pO );
                         if( !pFrmFmt ||
                             FLY_IN_CNTNT != pFrmFmt->GetAnchor().GetAnchorId() )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: ama $ $Date: 2002-08-23 11:24:36 $
+ *  last change: $Author: fme $ $Date: 2002-09-16 08:47:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3129,7 +3129,7 @@ BOOL lcl_ArrangeLowers( SwLayoutFrm *pLay, long lYStart, BOOL bInva )
                             pFly->SetCompletePaint();
                     }
                     else
-                        pO->SetAnchorPos( (pFrm->Frm().*fnRect->fnGetPos)() );
+                        pO->SetAnchorPos( pFrm->GetAnchorPos() );
                 }
             }
         }

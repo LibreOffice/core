@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fecopy.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ama $ $Date: 2002-06-21 10:15:00 $
+ *  last change: $Author: fme $ $Date: 2002-09-16 08:46:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1247,8 +1247,10 @@ void SwFEShell::Paste( SvStream& rStrm, USHORT nAction, const Point* pPt )
                         aNullPt = ((SdrCaptionObj*)pOldObj)->GetTailPos();
                     else
                         aNullPt = aOldObjRect.TopLeft();
-                    pNewObj->NbcSetRelativePos( aNullPt - pAnchor->Frm().Pos() );
-                    pNewObj->NbcSetAnchorPos( pAnchor->Frm().Pos() );
+
+                    Point aNewAnchor = pAnchor->GetAnchorPos();
+                    pNewObj->NbcSetRelativePos( aNullPt - aNewAnchor );
+                    pNewObj->NbcSetAnchorPos( aNewAnchor );
 
                     UINT32 nOrdNum = pOldObj->GetOrdNum();
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fefly1.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2002-09-03 10:05:05 $
+ *  last change: $Author: fme $ $Date: 2002-09-16 08:46:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -619,7 +619,7 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, sal_Bool bMoveIt )
         if( !pCheck &&
             pFooterOrHeader == pNewAnch->FindFooterOrHeader() )
         {
-            aRet = pNewAnch->Frm().Pos();
+            aRet = pNewAnch->GetAnchorPos();
             if( bMoveIt || nAnchorId == FLY_AUTO_CNTNT )
             {
                 SwFmtAnchor aAnch( pFmt->GetAnchor() );

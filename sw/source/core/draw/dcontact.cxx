@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dcontact.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: od $ $Date: 2002-08-22 08:06:53 $
+ *  last change: $Author: fme $ $Date: 2002-09-16 08:45:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -746,7 +746,7 @@ void SwDrawContact::ConnectToLayout( const SwFmtAnchor *pAnch )
     if ( GetAnchor() )
     {
         if( bSetAnchorPos )
-            GetMaster()->SetAnchorPos( GetAnchor()->Frm().Pos() );
+            GetMaster()->SetAnchorPos( GetAnchor()->GetAnchorPos() );
 
         //verankerte Objekte gehoeren immer auch in die Page,
         if ( !GetMaster()->IsInserted() )
@@ -803,9 +803,11 @@ void SwDrawContact::ChangeMasterObject( SdrObject *pNewMaster )
     GetMaster()->SetUserCall( 0 );
     SetMaster( pNewMaster );
     GetMaster()->SetUserCall( this );
+
+    Point aNewAnchor( pAnch->GetAnchorPos() );
     GetMaster()->NbcSetRelativePos( GetMaster()->GetSnapRect().TopLeft() -
-                                   pAnch->Frm().Pos() );
-    GetMaster()->NbcSetAnchorPos( pAnch->Frm().Pos() );
+                                    aNewAnchor );
+    GetMaster()->NbcSetAnchorPos( aNewAnchor );
 
     //Hier wird der neue Master ggf. in die Page eingefuegt, was das Drawing
     //aber gar nicht gut haben kann. Deshalb nehmen wir das Objekt hinterher

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: feshview.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: od $ $Date: 2002-09-03 08:15:48 $
+ *  last change: $Author: fme $ $Date: 2002-09-16 08:46:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1880,8 +1880,11 @@ BOOL SwFEShell::ImpEndCreate()
             } while( pTmp->IsFollow() );
             pAnch = pTmp;
         }
-        rSdrObj.NbcSetRelativePos( aRelNullPt - pAnch->Frm().Pos() );
-        rSdrObj.NbcSetAnchorPos( pAnch->Frm().Pos() );
+        Point aNewAnchor = pAnch->GetAnchorPos();
+        Point aRelPos( aRelNullPt - aNewAnchor );
+        rSdrObj.NbcSetRelativePos( aRelPos );
+        rSdrObj.NbcSetAnchorPos( aNewAnchor );
+
         pContact->ConnectToLayout();
 
         Imp()->GetDrawView()->MarkObj( &rSdrObj, Imp()->GetPageView(),
@@ -2597,8 +2600,11 @@ void SwFEShell::CheckUnboundObjects()
 
             SwDrawContact *pContact = new SwDrawContact(
                                             (SwDrawFrmFmt*)pFmt, pObj );
-            pObj->NbcSetRelativePos( aRelNullPt - pAnch->Frm().Pos() );
-            pObj->NbcSetAnchorPos  ( pAnch->Frm().Pos() );
+
+            Point aNewAnchor = pAnch->GetAnchorPos();
+            pObj->NbcSetRelativePos( aRelNullPt - aNewAnchor );
+            pObj->NbcSetAnchorPos  ( aNewAnchor );
+
             pContact->ConnectToLayout();
 
             EndAllAction();

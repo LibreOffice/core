@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dview.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ama $ $Date: 2002-05-28 14:03:33 $
+ *  last change: $Author: fme $ $Date: 2002-09-16 08:45:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,13 +107,14 @@
 class SwSdrHdl : public SdrHdl
 {
 public:
-    SwSdrHdl(const Point& rPnt ) : SdrHdl( rPnt, HDL_ANCHOR ) {}
+    SwSdrHdl(const Point& rPnt, bool bTopRight ) :
+        SdrHdl( rPnt, bTopRight ? HDL_ANCHOR_TR : HDL_ANCHOR ) {}
     virtual BOOL IsFocusHdl() const;
 };
 
 BOOL SwSdrHdl::IsFocusHdl() const
 {
-    if( HDL_ANCHOR == eKind )
+    if( HDL_ANCHOR == eKind || HDL_ANCHOR_TR == eKind )
         return TRUE;
     return SdrHdl::IsFocusHdl();
 }
@@ -208,7 +209,8 @@ void SwDrawView::AddCustomHdl()
     }
 
     // add anchor handle:
-    aHdl.AddHdl( new SwSdrHdl( aPos ) );
+    aHdl.AddHdl( new SwSdrHdl( aPos, pAnch->IsVertical() ||
+                                     pAnch->IsRightToLeft() ) );
 }
 
 /*************************************************************************
@@ -554,7 +556,7 @@ const SwFrm *SwDrawView::CalcAnchor()
         }
     }
     if( pAnch && !pAnch->IsProtected() )
-        aAnchorPoint = pAnch->Frm().Pos();
+        aAnchorPoint = pAnch->GetAnchorPos();
     else
         pAnch = 0;
     return pAnch;
