@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-17 15:56:01 $
+#   last change: $Author: kz $ $Date: 2003-08-25 14:57:54 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,8 +65,6 @@ PRJ=..$/..$/..
 PRJNAME=sw
 TARGET=utlui
 
-AUTOSEG=true
-
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  $(PRJ)$/inc$/swpre.mk
@@ -79,27 +77,9 @@ BMP_IN=$(PRJ)$/win/imglst
 
 # --- Files --------------------------------------------------------
 
-CXXFILES = \
-        bookctrl.cxx \
-        condedit.cxx \
-        content.cxx \
-        gloslst.cxx \
-        glbltree.cxx \
-        initui.cxx \
-        navipi.cxx \
-        navicfg.cxx \
-        numfmtlb.cxx \
-        prcntfld.cxx \
-        tmplctrl.cxx \
-        uitool.cxx \
-        uiitems.cxx \
-        attrdesc.cxx \
-        swstbctl.cxx \
-        shdwcrsr.cxx \
-        unotools.cxx \
-        zoomctrl.cxx
 
-SRCFILES =  \
+SRS1NAME=$(TARGET)
+SRC1FILES =  \
         initui.src \
         gloslst.src \
         navipi.src \
