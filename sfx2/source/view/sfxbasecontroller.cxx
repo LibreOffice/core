@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasecontroller.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: mba $ $Date: 2002-10-24 12:22:20 $
+ *  last change: $Author: mba $ $Date: 2002-10-24 12:47:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -477,7 +477,7 @@ void SAL_CALL IMPL_SfxBaseController_ListenerHelper::frameAction( const FRAMEACT
 void SAL_CALL IMPL_SfxBaseController_ListenerHelper::disposing( const EVENTOBJECT& aEvent ) throw( ::com::sun::star::uno::RuntimeException )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if ( m_pController )
+    if ( m_pController && m_pController->getFrame().is() )
         m_pController->getFrame()->removeFrameActionListener( this ) ;
 }
 
@@ -637,12 +637,18 @@ void SAL_CALL SfxBaseController::attachFrame( const REFERENCE< XFRAME >& xFrame 
         xTemp->removeFrameActionListener( m_pData->m_xListener ) ;
         REFERENCE < ::com::sun::star::util::XCloseBroadcaster > xCloseable( xTemp, com::sun::star::uno::UNO_QUERY );
         if ( xCloseable.is() )
-            xCloseable->addCloseListener( m_pData->m_xCloseListener );
+            xCloseable->removeCloseListener( m_pData->m_xCloseListener );
     }
 
     m_pData->m_xFrame = xFrame;
+
     if ( xFrame.is() )
+    {
         xFrame->addFrameActionListener( m_pData->m_xListener ) ;
+        REFERENCE < ::com::sun::star::util::XCloseBroadcaster > xCloseable( xFrame, com::sun::star::uno::UNO_QUERY );
+        if ( xCloseable.is() )
+            xCloseable->addCloseListener( m_pData->m_xCloseListener );
+    }
 }
 
 //________________________________________________________________________________________________________
