@@ -2,9 +2,9 @@
  *
  *  $RCSfile: symtbl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-25 10:43:02 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 13:33:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -335,6 +335,7 @@ SbiSymDef::SbiSymDef( const String& rName ) : aName( rName )
     bGlobal  = FALSE;
     pIn      =
     pPool    = NULL;
+    nDefaultId = 0;
 }
 
 SbiSymDef::~SbiSymDef()
@@ -371,7 +372,9 @@ void SbiSymDef::SetType( SbxDataType t )
         char ch = (char)aName.GetBuffer()[0];
         if( ch == '_' ) ch = 'Z';
         ch = toupper( ch );
-        t = pIn->pParser->eDefTypes[ ch - 'A' ];
+        unsigned char c = (unsigned char)ch;
+        if( c > 0 && c < 128 )
+            t = pIn->pParser->eDefTypes[ ch - 'A' ];
     }
     eType = t;
 }
