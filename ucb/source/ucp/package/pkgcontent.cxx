@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgcontent.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kso $ $Date: 2001-04-30 10:18:31 $
+ *  last change: $Author: kso $ $Date: 2001-05-04 10:51:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -808,6 +808,7 @@ Reference< XRow > Content::getPropertyValues(
             {
                 xRow->appendString ( rProp, rData.aMediaType );
             }
+#if SUPD>614
             else if ( rProp.Name.compareToAscii( "Size" ) == 0 )
             {
                 // Property only available for streams.
@@ -816,7 +817,6 @@ Reference< XRow > Content::getPropertyValues(
                 else
                     xRow->appendVoid( rProp );
             }
-#if SUPD>614
             else if ( rProp.Name.compareToAscii( "Compressed" ) == 0 )
             {
                 // Property only available for streams.
@@ -832,6 +832,11 @@ Reference< XRow > Content::getPropertyValues(
                     xRow->appendBoolean( rProp, rData.bEncrypted );
                 else
                     xRow->appendVoid( rProp );
+            }
+#else
+            else if ( rProp.Name.compareToAscii( "Size" ) == 0 )
+            {
+                xRow->appendLong( rProp, rData.nSize );
             }
 #endif
             else
@@ -899,8 +904,10 @@ Reference< XRow > Content::getPropertyValues(
                       getCppuType( static_cast< const OUString * >( 0 ) ),
                       PropertyAttribute::BOUND ),
             rData.aMediaType );
-        // Property only available for streams.
+#if SUPD>614
+        // Properties only available for streams.
         if ( rData.bIsDocument )
+        {
             xRow->appendLong   (
                 Property( OUString::createFromAscii( "Size" ),
                           -1,
@@ -909,9 +916,6 @@ Reference< XRow > Content::getPropertyValues(
                               | PropertyAttribute::READONLY ),
                 rData.nSize );
 
-#if SUPD>614
-        // Property only available for streams.
-        if ( rData.bIsDocument )
             xRow->appendBoolean(
                 Property( OUString::createFromAscii( "Compressed" ),
                           -1,
@@ -919,14 +923,21 @@ Reference< XRow > Content::getPropertyValues(
                           PropertyAttribute::BOUND ),
                 rData.bCompressed );
 
-        // Property only available for streams.
-        if ( rData.bIsDocument )
             xRow->appendBoolean(
                 Property( OUString::createFromAscii( "Encrypted" ),
                           -1,
                           getCppuBooleanType(),
                           PropertyAttribute::BOUND ),
                 rData.bEncrypted );
+        }
+#else
+        xRow->appendLong   (
+            Property( OUString::createFromAscii( "Size" ),
+                      -1,
+                      getCppuType( static_cast< const sal_Int64 * >( 0 ) ),
+                      PropertyAttribute::BOUND
+                          | PropertyAttribute::READONLY ),
+            rData.nSize );
 #endif
 
         // Append all Additional Core Properties.
@@ -975,6 +986,7 @@ void Content::setPropertyValues( const Sequence< PropertyValue >& rValues )
     sal_Bool bTriedToGetAdditonalPropSet = sal_False;
     sal_Bool bExchange = sal_False;
     sal_Bool bStore    = sal_False;
+    OUString aNewTitle;
 
     for ( sal_Int32 n = 0; n < nCount; ++n )
     {
@@ -999,20 +1011,12 @@ void Content::setPropertyValues( const Sequence< PropertyValue >& rValues )
             {
                 if ( aNewValue != m_aProps.aTitle )
                 {
-                    osl::Guard< osl::Mutex > aGuard( m_aMutex );
-
                     // modified title -> modified URL -> exchange !
                     if ( m_eState == PERSISTENT )
                         bExchange = sal_True;
 
-                    aEvent.PropertyName = rValue.Name;
-                    aEvent.OldValue     = makeAny( m_aProps.aTitle );
-                    aEvent.NewValue     = makeAny( aNewValue );
-
-                    aChanges.getArray()[ nChanged ] = aEvent;
-
-                    m_aProps.aTitle = aNewValue;
-                    nChanged++;
+                    // new value will be set later...
+                    aNewTitle = aNewValue;
                 }
             }
         }
@@ -1023,8 +1027,6 @@ void Content::setPropertyValues( const Sequence< PropertyValue >& rValues )
             {
                 if ( aNewValue != m_aProps.aMediaType )
                 {
-                    osl::Guard< osl::Mutex > aGuard( m_aMutex );
-
                     aEvent.PropertyName = rValue.Name;
                     aEvent.OldValue     = makeAny( m_aProps.aMediaType );
                     aEvent.NewValue     = makeAny( aNewValue );
@@ -1051,8 +1053,6 @@ void Content::setPropertyValues( const Sequence< PropertyValue >& rValues )
                 {
                     if ( bNewValue != m_aProps.bCompressed )
                     {
-                        osl::Guard< osl::Mutex > aGuard( m_aMutex );
-
                         aEvent.PropertyName = rValue.Name;
                         aEvent.OldValue     = makeAny( m_aProps.bCompressed );
                         aEvent.NewValue     = makeAny( bNewValue );
@@ -1075,8 +1075,6 @@ void Content::setPropertyValues( const Sequence< PropertyValue >& rValues )
                 {
                     if ( bNewValue != m_aProps.bEncrypted )
                     {
-                        osl::Guard< osl::Mutex > aGuard( m_aMutex );
-
                         aEvent.PropertyName = rValue.Name;
                         aEvent.OldValue     = makeAny( m_aProps.bEncrypted );
                         aEvent.NewValue     = makeAny( bNewValue );
@@ -1184,7 +1182,7 @@ void Content::setPropertyValues( const Sequence< PropertyValue >& rValues )
         // Assemble new content identifier...
         OUString aNewURL = m_aUri.getParentUri();
         aNewURL += OUString::createFromAscii( "/" );
-        aNewURL += m_aProps.aTitle;
+        aNewURL += aNewTitle;
         Reference< XContentIdentifier > xNewId
                         = new ::ucb::ContentIdentifier( m_xSMgr, aNewURL );
 
@@ -1200,6 +1198,23 @@ void Content::setPropertyValues( const Sequence< PropertyValue >& rValues )
                             xNewId->getContentIdentifier(),
                             sal_True );
         }
+        else
+        {
+            // Do not set new title!
+            aNewTitle = OUString();
+        }
+    }
+
+    if ( aNewTitle.getLength() )
+    {
+        aEvent.PropertyName = OUString::createFromAscii( "Title" );
+        aEvent.OldValue     = makeAny( m_aProps.aTitle );
+        aEvent.NewValue     = makeAny( aNewTitle );
+
+        m_aProps.aTitle = aNewTitle;
+
+        aChanges.getArray()[ nChanged ] = aEvent;
+        nChanged++;
     }
 
     if ( nChanged > 0 )
@@ -1937,6 +1952,7 @@ sal_Bool Content::loadData( ContentProvider* pProvider,
                 rProps.bIsFolder = sal_False;
             }
 
+#if SUPD>614
             if ( rProps.bIsDocument )
             {
                 // Size ( only available for streams )
@@ -1964,7 +1980,7 @@ sal_Bool Content::loadData( ContentProvider* pProvider,
                                 "Content::loadData - Got no Size value!" );
                     return sal_False;
                 }
-#if SUPD>614
+
                 // Compressed ( only available for streams )
                 try
                 {
@@ -2016,8 +2032,34 @@ sal_Bool Content::loadData( ContentProvider* pProvider,
                             "Content::loadData - Got no Encrypted value!" );
                     return sal_False;
                 }
-#endif
             }
+#else
+            // Size
+              try
+              {
+                  Any aSize
+                      = xPropSet->getPropertyValue(
+                          OUString::createFromAscii( "Size" ) );
+                  if ( !( aSize >>= rProps.nSize ) )
+                  {
+                      VOS_ENSURE( sal_False,
+                                  "Content::loadData - Got no Size value!" );
+                      return sal_False;
+                  }
+              }
+              catch ( UnknownPropertyException & )
+              {
+                  VOS_ENSURE( sal_False,
+                              "Content::loadData - Got no Size value!" );
+                  return sal_False;
+              }
+              catch ( WrappedTargetException & )
+              {
+                  VOS_ENSURE( sal_False,
+                              "Content::loadData - Got no Size value!" );
+                  return sal_False;
+              }
+#endif
             return sal_True;
         }
     }
