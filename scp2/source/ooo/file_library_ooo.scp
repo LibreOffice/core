@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_library_ooo.scp,v $
 *
-*  $Revision: 1.46 $
+*  $Revision: 1.47 $
 *
-*  last change: $Author: rt $ $Date: 2004-09-17 13:06:27 $
+*  last change: $Author: rt $ $Date: 2004-09-17 13:58:23 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -1693,6 +1693,7 @@ UNO_SETUPZIP_LIB_FILE( gid_File_Lib_Svl, svl )
 UNO_SETUPZIP_LIB_FILE( gid_File_Lib_Svtools, svt )
 
 STD_UNO_LIB_FILE( gid_File_Lib_Svx, svx)
+STD_UNO_LIB_FILE( gid_File_Lib_TextConversionDlgs, textconversiondlgs)
 
 STD_UNO_LIB_FILE( gid_File_Lib_Sw , sw)
 STD_LIB_FILE( gid_File_Lib_Swui, swui)
