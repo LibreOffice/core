@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fews.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-20 09:36:41 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:03:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,6 +146,10 @@
 #endif
 #ifndef _FMTANCHR_HXX
 #include <fmtanchr.hxx>
+#endif
+
+#ifndef _DFLYOBJ_HXX
+#include <dflyobj.hxx>
 #endif
 
 TYPEINIT1(SwFEShell,SwEditShell)
@@ -645,7 +649,7 @@ void SwFEShell::InsertLabel( const SwLabelType eType, const String &rTxt,
                 for( ULONG i=0; i < nCount; i++ )
                 {
                     SdrObject *pObj = rMrkList.GetMark(i)->GetObj();
-                    if( !pObj->IsWriterFlyFrame() )
+                    if( !pObj->ISA(SwVirtFlyDrawObj) )
                     {
                         SwFlyFrmFmt *pFmt =
                             GetDoc()->InsertDrawLabel( rTxt, nId, *pObj );
