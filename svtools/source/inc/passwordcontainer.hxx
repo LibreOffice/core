@@ -2,9 +2,9 @@
  *
  *  $RCSfile: passwordcontainer.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mav $ $Date: 2001-05-14 14:35:52 $
+ *  last change: $Author: mav $ $Date: 2001-05-15 09:43:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,7 +127,7 @@ struct NamePassRecord
     NamePassRecord() : mStatus( EMPTY_RECORD ) {}
 };
 
-typedef ::std::pair< ::rtl::OUString, ::std::vector< NamePassRecord > > PairUrlRecord;
+typedef ::std::pair< const ::rtl::OUString, ::std::vector< NamePassRecord > > PairUrlRecord;
 typedef ::std::map< ::rtl::OUString, ::std::vector< NamePassRecord > > PassMap;
 
 
@@ -172,7 +172,7 @@ private:
                               char  aMode );
 
 public:
-    PasswordContainer( const ::com::sun::star::uno::Reference<::com::sun::star::lang::XMultiServiceFactory>& );
+    PasswordContainer( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& );
     ~PasswordContainer();
 
     virtual void SAL_CALL add( const ::rtl::OUString& aUrl,
