@@ -2,9 +2,9 @@
  *
  *  $RCSfile: border.hrc,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 13:46:12 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:41:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,15 +105,27 @@
 // ImageListe fuer ValueSets:
 #define IL_PRE_BITMAPS          1400
 #define ILH_PRE_BITMAPS         1401
-#define IID_PRENONE             1
-#define IID_TABLE_PRE1          2
-#define IID_TABLE_PRE2          3
-#define IID_TABLE_PRE3          4
-#define IID_TABLE_PRE4          5
-#define IID_PARAGRAPH_PRE1      6
-#define IID_PARAGRAPH_PRE2      7
-#define IID_PARAGRAPH_PRE3      8
-#define IID_PARAGRAPH_PRE4      9
+#define IID_PRE_CELL_NONE       1
+#define IID_PRE_CELL_ALL        2
+#define IID_PRE_CELL_LR         3
+#define IID_PRE_CELL_TB         4
+#define IID_PRE_CELL_L          5
+#define IID_PRE_CELL_DIAG       6
+#define IID_PRE_HOR_NONE        7
+#define IID_PRE_HOR_OUTER       8
+#define IID_PRE_HOR_HOR         9
+#define IID_PRE_HOR_ALL         10
+#define IID_PRE_HOR_OUTER2      11
+#define IID_PRE_VER_NONE        12
+#define IID_PRE_VER_OUTER       13
+#define IID_PRE_VER_VER         14
+#define IID_PRE_VER_ALL         15
+#define IID_PRE_VER_OUTER2      16
+#define IID_PRE_TABLE_NONE      17
+#define IID_PRE_TABLE_OUTER     18
+#define IID_PRE_TABLE_OUTERH    19
+#define IID_PRE_TABLE_ALL       20
+#define IID_PRE_TABLE_OUTER2    21
 
 #define IL_SDW_BITMAPS          1500
 #define ILH_SDW_BITMAPS         1501
