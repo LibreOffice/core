@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.hrc,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mba $ $Date: 2002-04-22 16:57:45 $
+ *  last change: $Author: sb $ $Date: 2002-07-03 15:40:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,14 +75,12 @@
 #ifndef _SVX_NOIDERESIDS
 
 #define RID_BASICIDE_OBJECTBAR          ( RID_BASICIDE_START +  0 )
-
-#define RID_BMP_APPICON                 ( RID_BASICIDE_START +  1 )
-#define RID_BMP_BRKPNT0                 ( RID_BASICIDE_START +  2 )
-#define RID_BMP_BRKPNT1                 ( RID_BASICIDE_START +  3 )
-
+#define RID_IMGLST_OBJECTS_HC (RID_BASICIDE_START + 1)
+#define RID_IMGLST_LAYOUT_HC (RID_BASICIDE_START + 2)
+#define RID_IMG_REMOVEWATCH_HC (RID_BASICIDE_START + 3)
 #define RID_EDT_WATCHEDIT               ( RID_BASICIDE_START +  4 )
 #define RID_ICO_MDIWINDOW               ( RID_BASICIDE_START +  5 )
-#define RID_IMG_MARKER                  ( RID_BASICIDE_START +  6 )
+#define RID_IMG_LOCKED_HC (RID_BASICIDE_START + 6)
 #define RID_IMGLST_OBJECTS              ( RID_BASICIDE_START +  7 )
 #define RID_IMGBTN_REMOVEWATCH          ( RID_BASICIDE_START +  8 )
 #define RID_IMGBTN_GOTOCALL             ( RID_BASICIDE_START +  9 )
@@ -92,7 +90,6 @@
 #define RID_TD_ORGANIZE                 ( RID_BASICIDE_START + 36 )
 #define RID_TP_MODULS                   ( RID_BASICIDE_START + 37 )
 #define RID_TP_LIBS                     ( RID_BASICIDE_START + 38 )
-#define RID_RES_CHECKBITMAPS            ( RID_BASICIDE_START + 39 )
 #define RID_DLG_LIBS                    ( RID_BASICIDE_START + 40 )
 #define RID_IMG_LOCKED                  ( RID_BASICIDE_START + 41 )
 #define RID_DLG_NEWLIB                  ( RID_BASICIDE_START + 42 )
