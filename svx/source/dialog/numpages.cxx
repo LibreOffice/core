@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpages.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: os $ $Date: 2002-05-28 13:21:15 $
+ *  last change: $Author: os $ $Date: 2002-06-03 13:28:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1639,9 +1639,9 @@ void    SvxBmpNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
     int nRectHeight = aRect.GetHeight();
     Size aSize(nRectHeight/8, nRectHeight/8);
 
-    Bitmap aThumb;
+    Graphic aGraphic;
     if(!GalleryExplorer::GetGraphicObj( sBullets, nItemId - 1,
-                        NULL, &aThumb))
+                        &aGraphic, NULL))
     {
         bGrfNotFound = TRUE;
     }
@@ -1652,7 +1652,7 @@ void    SvxBmpNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
         {
             USHORT nY = 11 + i * 33;
             aPos.Y() = aBLPos.Y() + nRectHeight  * nY / 100;
-            pDev->DrawBitmap( aPos, aSize, aThumb );
+            aGraphic.Draw( pDev, aPos, aSize );
         }
     }
 }
@@ -3228,23 +3228,6 @@ void    SvxNumberingPreview::Paint( const Rectangle& rRect )
     delete pVDev;
 
 }
-
-/*-----------------02.12.97 12:55-------------------
-
---------------------------------------------------*/
-//NumMenuButton::~NumMenuButton()
-//{
-//}
-
-/*-----------------02.12.97 12:55-------------------
-
---------------------------------------------------*/
-//void NumMenuButton::MouseButtonDown( const MouseEvent& rMEvt )
-//{
-//    if(maClickHdl_Impl.IsSet())
-//        maClickHdl_Impl.Call(this);
-//    MenuButton::MouseButtonDown( rMEvt );
-//}
 
 /*-----------------03.12.97 10:02-------------------
 
