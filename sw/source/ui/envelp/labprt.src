@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labprt.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 06:38:31 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 08:25:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ TabPage TP_LAB_PRT
         Text [ FRENCH ] = "~Page entière" ;
         Text [ ITALIAN ] = "Pagina ~intera" ;
         Text [ DUTCH ] = "~Hele pagina" ;
-        Text [ PORTUGUESE_BRAZILIAN ] = "Pßgina inteira" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "P?gina inteira" ;
         Text [ SWEDISH ] = "H~ela sidan" ;
         Text [ PORTUGUESE ] = "Página ~inteira" ;
         Text[ chinese_simplified ] = "ÕûÒ³(~E)";
@@ -227,7 +227,7 @@ TabPage TP_LAB_PRT
         Text [ portuguese ] = "~Sincronizar conteúdos" ;
         Text[ chinese_simplified ] = "ÄÚÈÝÍ¬²½»¯(~Z)";
         Text[ russian ] = "Ñèíõðîíèçàöèÿ ñîäåðæèìîãî";
-        Text[ polish ] = "Synchronizacja treœci";
+        Text[ polish ] = "Synchronizacja tre?ci";
         Text[ japanese ] = "“à—e‚ð“¯Šú‚³‚¹‚é(~Z)";
         Text[ chinese_traditional ] = "¤º®e¦P¨B¤Æ(~Z)";
         Text[ arabic ] = "ÊÒÇãä ÇáãÍÊæíÇÊ";
