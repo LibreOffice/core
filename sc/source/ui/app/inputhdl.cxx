@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputhdl.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-03 11:35:19 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:47:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1565,6 +1565,12 @@ BOOL ScInputHandler::StartTable( sal_Unicode cTyped, BOOL bFromCommand )
 
                     nAttrAdjust = ((const SvxHorJustifyItem&)pPattern->
                                     GetItem(ATTR_HOR_JUSTIFY)).GetValue();
+                    if ( nAttrAdjust == SVX_HOR_JUSTIFY_REPEAT &&
+                         static_cast<const SfxBoolItem&>(pPattern->GetItem(ATTR_LINEBREAK)).GetValue() )
+                    {
+                        // #i31843# "repeat" with "line breaks" is treated as default alignment
+                        nAttrAdjust = SVX_HOR_JUSTIFY_STANDARD;
+                    }
                 }
 
                 //  UpdateSpellSettings enables online spelling if needed
