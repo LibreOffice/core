@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localmultistratum.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-07 16:23:57 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 16:47:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,8 +102,6 @@ rtl::OUString const & impl_getLayerDataDirectory(rtl::OUString const & aLayerBas
 static //inline
 rtl::OUString makeLayerId(rtl::OUString const & aComponent,rtl::OUString const & aParticleFile)
 {
-    const sal_Unicode k_cLayerIdSeparator = '/'; // must be converted to '/' by componentToPath
-
     OSL_ASSERT(aParticleFile.endsWithIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM(kLocalDataSuffix)));
     const sal_Int32 kExtLength = RTL_CONSTASCII_LENGTH(kLocalDataSuffix);
     rtl::OUString const aParticleName = aParticleFile.copy(0,aParticleFile.getLength() - kExtLength);
