@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sj $ $Date: 2000-11-09 19:49:57 $
+ *  last change: $Author: sj $ $Date: 2001-02-22 11:32:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,12 +66,12 @@
 #include <vcl/outdev.hxx>
 #include <vcl/config.hxx>
 #include "filter.hxx"
+#include "FilterConfigCache.hxx"
 #ifndef _UNTOOLS_UCBSTREAMHELPER_HXX
 #include <unotools/ucbstreamhelper.hxx>
 #endif
 
 #define DATA_SIZE           640
-#define IMP_FILTERSECTION   "Graphics Filters - Import"
 
 /*************************************************************************
 |*
@@ -1376,13 +1376,10 @@ BOOL GraphicDescriptor::ImpDetectEMF( SvStream& rStm, BOOL bExtendedInfo )
 |*
 \************************************************************************/
 
-USHORT GraphicDescriptor::GetImportFormatNumber( USHORT nFormat, Config& rConfig )
+String GraphicDescriptor::GetImportFormatShortName( sal_uInt16 nFormat )
 {
     ByteString          aKeyName;
-    const ByteString    aOldGroup( rConfig.GetGroup() );
     USHORT              nKeyNumber = GRFILTER_FORMAT_NOTFOUND;
-
-    rConfig.SetGroup( IMP_FILTERSECTION );
 
     switch( nFormat )
     {
@@ -1411,20 +1408,12 @@ USHORT GraphicDescriptor::GetImportFormatNumber( USHORT nFormat, Config& rConfig
         case( GFF_WMF ) :   aKeyName = "wmf";   break;
         case( GFF_EMF ) :   aKeyName = "emf";   break;
     }
+    return String( RTL_CONSTASCII_USTRINGPARAM( aKeyName ) );
 
-    if( aKeyName.Len() )
+    if ( aKeyName.Len() )
     {
-        for( USHORT i = 0, nCount = rConfig.GetKeyCount(); i < nCount; i++ )
-        {
-            if( rConfig.GetKeyName( i ).CompareIgnoreCaseToAscii( aKeyName ) == COMPARE_EQUAL )
-            {
-                nKeyNumber = i;
-                break;
-            }
-        }
+        FilterConfigCache aFilterConfigCache;
+        nKeyNumber = aFilterConfigCache.GetImportFormatNumberForShortName( String( RTL_CONSTASCII_USTRINGPARAM( aKeyName ) ) );
     }
-
-    rConfig.SetGroup( aOldGroup );
-
     return nKeyNumber;
 }
