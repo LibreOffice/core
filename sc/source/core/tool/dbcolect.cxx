@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbcolect.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: er $ $Date: 2001-07-11 15:28:50 $
+ *  last change: $Author: sab $ $Date: 2002-03-22 15:59:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -795,6 +795,9 @@ void ScDBData::SetSortParam( const ScSortParam& rSortParam )
     }
     aSortLocale = rSortParam.aCollatorLocale;
     aSortAlgorithm = rSortParam.aCollatorAlgorithm;
+
+    //#98317#; set the orientation
+    bByRow = rSortParam.bByRow;
 }
 
 void ScDBData::GetQueryParam( ScQueryParam& rQueryParam ) const
