@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Hierarchy.xcs,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kso $ $Date: 2002-07-31 10:01:30 $
+ *  last change: $Author: kso $ $Date: 2002-07-31 10:13:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
 <oor:component-schema oor:name="Hierarchy" oor:package="org.openoffice.ucb" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xml:lang="en-US">
     <info>
-        <desc xml:lang="en-US">Components and templates used by UCB's Hirarchy Content Provider (HCP) </desc>
+        <desc xml:lang="en-US">Components and templates used by UCB's Hierarchy Content Provider (HCP) </desc>
     </info>
     <!--Responsible: KSO -->
     <templates>
@@ -79,7 +79,7 @@
             </prop>
             <prop oor:name="Type" oor:type="xs:int">
                 <info>
-                    <desc xml:lang="en-US">The type of the hirarchy entry. Currently supported: Link (0) and Folder (1)</desc>
+                    <desc xml:lang="en-US">The type of the hierarchy entry. Currently supported: Link (0) and Folder (1)</desc>
                 </info>
             </prop>
             <info>
