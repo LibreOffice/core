@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: er $ $Date: 2001-08-31 14:53:05 $
+ *  last change: $Author: vg $ $Date: 2001-09-06 15:43:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -474,7 +474,7 @@ String ScCompiler::MakeRefStr( ComplRefData& rRef, BOOL bSingleRef )
 {
     rtl::OUStringBuffer aBuffer;
     MakeRefStr( aBuffer, rRef, bSingleRef );
-    return aBuffer;
+    return String( aBuffer );
 }
 
 void ScCompiler::MakeRefStr( rtl::OUStringBuffer& rBuffer, ComplRefData& rRef, BOOL bSingleRef )
