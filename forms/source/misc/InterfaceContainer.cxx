@@ -2,9 +2,9 @@
  *
  *  $RCSfile: InterfaceContainer.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fs $ $Date: 2002-10-04 08:10:23 $
+ *  last change: $Author: rt $ $Date: 2002-10-09 13:48:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -731,7 +731,7 @@ void OInterfaceContainer::implInsert(sal_Int32 _nIndex, const Reference< XProper
     if ( !pElementMetaData )
     {   // not yet approved by the caller -> do ourself
         pElementMetaData = createElementMetaData();
-        DBG_ASSERT( aElementMetaData.get(), "OInterfaceContainer::implInsert: createElementMetaData returned nonsense!" );
+        DBG_ASSERT( pElementMetaData, "OInterfaceContainer::implInsert: createElementMetaData returned nonsense!" );
 
         // ensure that the meta data structure will be deleted later on
         aAutoDeleteMetaData = ::std::auto_ptr< ElementDescription >( pElementMetaData );
