@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewtab.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:36:18 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 11:41:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,9 @@
 #endif
 #ifndef _FRMATR_HXX
 #include <frmatr.hxx>
+#endif
+#ifndef _EDTWIN_HXX
+#include <edtwin.hxx>
 #endif
 #include "view.hxx"
 #include "wrtsh.hxx"
@@ -469,6 +472,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
 
     BOOL bUnlockView = FALSE;
     rSh.StartAllAction();
+    BOOL bSect = 0 != (nFrmType & FRMTYPE_COLSECT);
 
     switch  ( nSlot )
     {
@@ -478,7 +482,6 @@ void SwView::ExecTabWin( SfxRequest& rReq )
                                                     Get( SID_ATTR_LONG_LRSPACE ) );
         SvxLRSpaceItem aLR;
         DEBUGLRSPACE(aLongLR);
-        BOOL bSect = 0 != (nFrmType & FRMTYPE_COLSECT);
         if ( !bSect && (bFrmSelection || nFrmType & FRMTYPE_FLY_ANY) )
         {
             SwFrmFmt* pFmt = ((SwFrmFmt*)rSh.GetFlyFrmFmt());
@@ -662,6 +665,34 @@ void SwView::ExecTabWin( SfxRequest& rReq )
             aRect.Top( aLongULSpace.GetUpper() + rPageRect.Top() );
             aRect.Bottom( rPageRect.Bottom() - aLongULSpace.GetLower() );
             rSh.SetObjRect( aRect ) ;
+        }
+        else if(bVerticalWriting && (bSect || rSh.IsDirectlyInSection()))
+        {
+            //change the section indents and the columns if available
+            //at first determine the changes
+            SwRect aSectRect = rSh.GetAnyCurRect(RECT_SECTION_PRT, 0);
+            const SwRect aTmpRect = rSh.GetAnyCurRect(RECT_SECTION, 0);
+            aSectRect.Pos() += aTmpRect.Pos();
+            long nLeftDiff = aLongULSpace.GetUpper() - (long)(aSectRect.Top() - rPrtRect.Top());
+            long nRightDiff = aLongULSpace.GetLower() - (long)(nPageHeight - aSectRect.Bottom() + rPrtRect.Top());
+            //change the LRSpaceItem of the section accordingly
+            const SwSection* pCurrSect = rSh.GetCurrSection();
+            const SwSectionFmt* pSectFmt = pCurrSect->GetFmt();
+            SvxLRSpaceItem aLR = pSectFmt->GetLRSpace();
+            aLR.SetLeft(aLR.GetLeft() + nLeftDiff);
+            aLR.SetRight(aLR.GetRight() + nRightDiff);
+            SfxItemSet aSet(rSh.GetAttrPool(), RES_LR_SPACE, RES_LR_SPACE, RES_COL, RES_COL, 0L);
+            aSet.Put(aLR);
+            //change the first/last column
+            if(bSect)
+            {
+                SwFmtCol aCols( pSectFmt->GetCol() );
+                long nDiffWidth = nLeftDiff + nRightDiff;
+                ::ResizeFrameCols(aCols, aSectRect.Height(), aSectRect.Height() - nDiffWidth, nLeftDiff );
+                aSet.Put( aCols );
+            }
+            rSh.ChgSection( rSh.GetSectionFmtPos(*pSectFmt), *pCurrSect, &aSet );
+
         }
         else
         {   SwPageDesc aDesc( rDesc );
@@ -881,7 +912,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
                              (long(aTabCols.GetLeftMin()) - DOCUMENTBORDER);
             aTabCols.SetLeft( nBorder );
 
-            nBorder = nPageWidth - aTabCols.GetLeftMin() +
+            nBorder = (bVerticalWriting ? nPageHeight : nPageWidth) - aTabCols.GetLeftMin() +
                               DOCUMENTBORDER - aColItem.GetRight();
 
 #ifdef DEBUG
@@ -954,8 +985,8 @@ void SwView::ExecTabWin( SfxRequest& rReq )
                     bSect ?
                         pSectFmt->GetCol() :
                             (const SwFmtCol&)aSet.Get( RES_COL, FALSE ));
-
-                const long lWidth = rSh.GetAnyCurRect(bSect ? RECT_SECTION_PRT : RECT_FLY_PRT_EMBEDDED).Width();
+                SwRect aCurRect = rSh.GetAnyCurRect(bSect ? RECT_SECTION_PRT : RECT_FLY_PRT_EMBEDDED);
+                const long lWidth = bVerticalWriting ? aCurRect.Height() : aCurRect.Width();
                 ::lcl_ConvertToCols( aColItem, USHORT(lWidth), aCols );
                 DEBUGCOLITEMS(aColItem);
                 aSet.Put( aCols );
@@ -991,6 +1022,77 @@ void SwView::ExecTabWin( SfxRequest& rReq )
         }
         break;
     }
+        case SID_RULER_ROWS :
+        case SID_RULER_ROWS_VERTICAL:
+        {
+            SvxColumnItem aColItem((const SvxColumnItem&)rReq.
+                                                GetArgs()->Get(nSlot));
+
+            BOOL bSect = 0 != (nFrmType & FRMTYPE_COLSECT);
+            if( bSetTabColFromDoc || !bSect && rSh.GetTableFmt() )
+            {
+                ASSERT(aColItem.Count(), "ColDesc ist leer!!");
+
+                DEBUGCOLITEMS(aColItem);
+                SwTabCols aTabCols;
+                if ( bSetTabRowFromDoc )
+                    rSh.GetMouseTabRows( aTabCols, aTabColFromDocPos );
+                else
+                    rSh.GetTabRows(aTabCols);
+                DEBUGTABCOLS(aTabCols);
+
+                if ( bVerticalWriting )
+                {
+                    aTabCols.SetRight(nPageWidth - aColItem.GetRight() - aColItem.GetLeft());
+                    aTabCols.SetLeftMin(aColItem.GetLeft() + DOCUMENTBORDER);
+                }
+                else
+                {
+                    long nBorder = nPageHeight - aTabCols.GetLeftMin() +
+                              DOCUMENTBORDER - aColItem.GetRight();
+                    aTabCols.SetRight( nBorder );
+                }
+
+                if(bVerticalWriting)
+                {
+                    const long nPixelTwip = pEditWin->PixelToLogic(Size(1,1), MAP_TWIP).Width();
+                    for ( USHORT i = aColItem.Count() - 1; i; --i )
+                    {
+                        const SvxColumnDescription& rCol = aColItem[i - 1];
+                        long nColumnPos = aTabCols.GetRight() - rCol.nEnd ;
+                        aTabCols[i - 1] = nColumnPos;
+                        aTabCols.SetHidden( i - 1, !rCol.bVisible );
+                    }
+                }
+                else
+                {
+                    for ( USHORT i = 0; i < aColItem.Count()-1; ++i )
+                    {
+                        const SvxColumnDescription& rCol = aColItem[i];
+                        aTabCols[i] = rCol.nEnd + aTabCols.GetLeft();
+                        aTabCols.SetHidden( i, !rCol.bVisible );
+                    }
+                }
+                DEBUGTABCOLS(aTabCols);
+
+                BOOL bSingleLine = FALSE;
+                const SfxPoolItem* pSingleLine;
+                if( SFX_ITEM_SET == rReq.GetArgs()->GetItemState(SID_RULER_ACT_LINE_ONLY, FALSE, &pSingleLine))
+                    bSingleLine = ((const SfxBoolItem*)pSingleLine)->GetValue();
+                if ( bSetTabRowFromDoc )
+                {
+                    if( !rSh.IsViewLocked() )
+                    {
+                        bUnlockView = TRUE;
+                        rSh.LockView( TRUE );
+                    }
+                    rSh.SetMouseTabRows( aTabCols, bSingleLine, aTabColFromDocPos );
+                }
+                else
+                    rSh.SetTabRows(aTabCols, bSingleLine);
+            }
+        }
+        break;
     default:
         ASSERT( !this, "Falsche SlotId");
     }
@@ -999,7 +1101,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
     if( bUnlockView )
         rSh.LockView( FALSE );
 
-    bSetTabColFromDoc = bTabColFromDoc = FALSE;
+    bSetTabColFromDoc = bSetTabRowFromDoc = bTabColFromDoc = bTabRowFromDoc = FALSE;
 }
 
 /*--------------------------------------------------------------------
@@ -1013,7 +1115,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
 {
     SwWrtShell &rSh         = GetWrtShell();
 
-    const Point* pPt = IsTabColFromDoc() ? &aTabColFromDocPos : 0;
+    const Point* pPt = IsTabColFromDoc() || IsTabRowFromDoc() ? &aTabColFromDocPos : 0;
     const USHORT nFrmType   = rSh.IsObjSelected()
                 ? FRMTYPE_DRAWOBJ
                 : rSh.GetFrmType( pPt, TRUE );
@@ -1028,7 +1130,8 @@ void SwView::StateTabWin(SfxItemSet& rSet)
     const long nPageHeight = rPageRect.Height();
 
     const SwPageDesc& rDesc = rSh.GetPageDesc(
-                IsTabColFromDoc() ? rSh.GetMousePageDesc(aTabColFromDocPos) : rSh.GetCurPageDesc() );
+                IsTabColFromDoc() || bTabRowFromDoc ?
+                    rSh.GetMousePageDesc(aTabColFromDocPos) : rSh.GetCurPageDesc() );
 
     const SvxFrameDirectionItem& rFrameDir = rDesc.GetMaster().GetFrmDir();
     const BOOL bVerticalWriting = rSh.IsInVerticalText();
@@ -1050,6 +1153,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
 
     SfxWhichIter aIter( rSet );
     USHORT nWhich = aIter.FirstWhich();
+    sal_Bool bPutContentProtection = sal_False;
 
     while ( nWhich )
     {
@@ -1165,6 +1269,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
         {
             if ( ISA( SwWebView ) ||
                  IsTabColFromDoc() ||
+                 IsTabRowFromDoc() ||
                  ( nSelectionType & SwWrtShell::SEL_GRF) ||
                     (nSelectionType & SwWrtShell::SEL_FRM) ||
                     (nSelectionType & SwWrtShell::SEL_OLE) ||
@@ -1341,9 +1446,12 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                 {
                     for ( USHORT i = aTabCols.Count(); i ; --i )
                     {
-                        nEnd  = aTabCols.GetRight();
-                        nEnd  -=  aTabCols[i-1];
+                        const SwTabColsEntry& rEntry = aTabCols.GetEntry( i - 1 );
+                        nEnd  = (USHORT)aTabCols.GetRight();
+                        nEnd  -=  (USHORT)rEntry.nPos;
                         SvxColumnDescription aColDesc( nStart, nEnd,
+                                    (USHORT(aTabCols.GetRight() - rEntry.nMax)),
+                                    (USHORT(aTabCols.GetRight() - rEntry.nMin)),
                                                     !aTabCols.IsHidden(i - 1) );
                         aColItem.Append(aColDesc);
                         nStart = nEnd;
@@ -1356,14 +1464,17 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                 {
                     for ( USHORT i = 0; i < aTabCols.Count(); ++i )
                     {
-                        nEnd  = aTabCols[i] - aTabCols.GetLeft();
+                        const SwTabColsEntry& rEntry = aTabCols.GetEntry( i );
+                        nEnd  = rEntry.nPos - aTabCols.GetLeft();
                         SvxColumnDescription aColDesc( nStart, nEnd,
+                                rEntry.nMin - aTabCols.GetLeft(), rEntry.nMax - aTabCols.GetLeft(),
                                                     !aTabCols.IsHidden(i) );
                         aColItem.Append(aColDesc);
                         nStart = nEnd;
                     }
-                    SvxColumnDescription aColDesc(nStart,
-                                    aTabCols.GetRight() - aTabCols.GetLeft(), TRUE);
+                    SvxColumnDescription aColDesc(nStart, aTabCols.GetRight() - aTabCols.GetLeft(),
+                                0, 0,
+                                    TRUE);
                     aColItem.Append(aColDesc);
                 }
                 rSet.Put(aColItem, nWhich);
@@ -1392,6 +1503,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                     if( pSect )
                     {
                         SwSectionFmt *pFmt = pSect->GetFmt();
+                        const SvxLRSpaceItem& rLRSpaceItem = pFmt->GetLRSpace();
                         const SwFmtCol& rCol = pFmt->GetCol();
                         if(rSh.IsInRightToLeftText())
                             nNum = rCol.GetColumns().Count() - nNum;
@@ -1400,18 +1512,19 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                         SvxColumnItem aColItem(nNum);
                         SwRect aRect = rSh.GetAnyCurRect(RECT_SECTION_PRT, pPt);
                         const SwRect aTmpRect = rSh.GetAnyCurRect(RECT_SECTION, pPt);
-                        aRect.Pos() += aTmpRect.Pos();
 
                         ::lcl_FillSvxColumn(rCol, USHORT(bVerticalWriting ? aRect.Height() : aRect.Width()), aColItem, 0);
 
                         if(bVerticalWriting)
                         {
-                            aColItem.SetLeft ((USHORT)(aRect.Top() - DOCUMENTBORDER ));
-                            aColItem.SetRight((USHORT)(nPageHeight  - aRect.Bottom() +
-                                                                        DOCUMENTBORDER ));
+                            aRect.Pos() += Point(aTmpRect.Left(), aTmpRect.Top());
+                            aRect.Pos().Y() -= rPageRect.Top();
+                            aColItem.SetLeft ((USHORT)(aRect.Top()));
+                            aColItem.SetRight((USHORT)(nPageHeight   - aRect.Bottom() ));
                         }
                         else
                         {
+                            aRect.Pos() += aTmpRect.Pos();
                             aColItem.SetLeft ((USHORT)(aRect.Left() - DOCUMENTBORDER ));
                             aColItem.SetRight((USHORT)(nPageWidth   - aRect.Right() +
                                                                         DOCUMENTBORDER ));
@@ -1448,9 +1561,8 @@ void SwView::StateTabWin(SfxItemSet& rSet)
 
                         if(bUseVertical)
                         {
-                            aColItem.SetLeft ((USHORT)(rRect.Top() - DOCUMENTBORDER ));
-                            aColItem.SetRight((USHORT)(nPageHeight  - rRect.Bottom() +
-                                                                        DOCUMENTBORDER ));
+                            aColItem.SetLeft ((USHORT)(rRect.Top()- rPageRect.Top()));
+                            aColItem.SetRight((USHORT)(nPageHeight + rPageRect.Top() - rRect.Bottom() ));
                         }
                         else
                         {
@@ -1504,6 +1616,92 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                 rSet.DisableItem(nWhich);
             break;
         }
+        case SID_RULER_ROWS :
+        case SID_RULER_ROWS_VERTICAL:
+        {
+            BOOL bFrameRTL;
+            BOOL bFrameHasVerticalColumns =  rSh.IsFrmVertical(FALSE, bFrameRTL) && bFrmSelection;
+
+            if((SID_RULER_ROWS == nWhich) &&
+                    ((!bVerticalWriting && !bFrmSelection) || (bFrmSelection && !bFrameHasVerticalColumns)) ||
+                ((SID_RULER_ROWS_VERTICAL == nWhich) &&
+                    ((bVerticalWriting && !bFrmSelection) || bFrameHasVerticalColumns)))
+                rSet.DisableItem(nWhich);
+            else if ( IsTabRowFromDoc() ||
+                    ( rSh.GetTableFmt() && !bFrmSelection &&
+                    !(nFrmType & FRMTYPE_COLSECT ) ) )
+            {
+                SwTabCols aTabCols;
+                //no current value necessary
+                USHORT    nNum = 0;
+                if ( 0 != ( bSetTabRowFromDoc = IsTabRowFromDoc() ) )
+                {
+                    rSh.GetMouseTabRows( aTabCols, aTabColFromDocPos );
+                }
+                else
+                {
+                    rSh.GetTabRows( aTabCols );
+                }
+
+//                ASSERT(nNum <= aTabCols.Count(), "TabCol not found");
+                int nLft = aTabCols.GetLeftMin() -
+                                  USHORT(DOCUMENTBORDER);
+
+                int nRgt = (USHORT)(bVerticalWriting ? nPageWidth : nPageHeight) -
+                                  (aTabCols.GetLeftMin() +
+                                  aTabCols.GetRight() -
+                                  USHORT(DOCUMENTBORDER) );
+
+                const USHORT nL = nLft > 0 ? nLft : 0;
+                const USHORT nR = nRgt > 0 ? nRgt : 0;
+
+                SvxColumnItem aColItem(nNum, nL, nR);
+
+                USHORT nStart = 0,
+                       nEnd;
+
+                for ( USHORT i = 0; i < aTabCols.Count(); ++i )
+                {
+                    const SwTabColsEntry& rEntry = aTabCols.GetEntry( i );
+                    if(bVerticalWriting)
+                    {
+                        nEnd  = USHORT(aTabCols.GetRight() - rEntry.nPos);
+                        SvxColumnDescription aColDesc( nStart, nEnd,
+                            aTabCols.GetRight() - rEntry.nMax, aTabCols.GetRight() - rEntry.nMin,
+                                                    !aTabCols.IsHidden(i) );
+                        aColItem.Append(aColDesc);
+                    }
+                    else
+                    {
+                        nEnd  = USHORT(rEntry.nPos - aTabCols.GetLeft());
+                        SvxColumnDescription aColDesc( nStart, nEnd,
+                                USHORT(rEntry.nMin - aTabCols.GetLeft()), USHORT(rEntry.nMax - aTabCols.GetLeft()),
+                                                    !aTabCols.IsHidden(i) );
+                        aColItem.Append(aColDesc);
+                    }
+                    nStart = nEnd;
+                }
+                if(bVerticalWriting)
+                    nEnd = aTabCols.GetRight();
+                else
+                    nEnd = aTabCols.GetLeft();
+                // put a position protection when the last row cannot be moved
+                // due to a page break inside of a row
+                if(!aTabCols.IsLastRowAllowedToChange())
+                    bPutContentProtection = sal_True;
+
+                SvxColumnDescription aColDesc( nStart, nEnd,
+                    aTabCols.GetRight(), aTabCols.GetRight(),
+                                            FALSE );
+                aColItem.Append(aColDesc);
+
+                rSet.Put(aColItem, nWhich);
+                DEBUGCOLITEMS(aColItem);
+            }
+            else
+                rSet.DisableItem(nWhich);
+        }
+        break;
         case SID_RULER_PAGE_POS:
         {
             SvxPagePosSizeItem aPagePosSize(
@@ -1772,6 +1970,12 @@ void SwView::StateTabWin(SfxItemSet& rSet)
         break;
         }
         nWhich = aIter.NextWhich();
+    }
+    if(bPutContentProtection)
+    {
+        SvxProtectItem aProtect(SID_RULER_PROTECT);
+        aProtect.SetCntntProtect(TRUE);
+        rSet.Put(aProtect);
     }
 }
 
