@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paramdialog.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:36:17 $
+ *  last change: $Author: kz $ $Date: 2001-08-07 15:15:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,10 +98,10 @@ ModalDialog DLG_PARAMETERS
         Text[ swedish ] = "~Parametrar";
         Text[ polish ] = "Parametr";
         Text[ portuguese_brazilian ] = "~Parameters";
-        Text[ japanese ] = "Êß×Ò°À(~P)";
-        Text[ korean ] = "ÆÄ¶ó¹ÌÅÍ(~P)";
-        Text[ chinese_simplified ] = "²ÎÊı(~P)";
-        Text[ chinese_traditional ] = "°Ñ¼Æ(~P)";
+        Text[ japanese ] = "ï¾Šï¾Ÿï¾—ï¾’ï½°ï¾€(~P)";
+        Text[ korean ] = "íŒŒë¼ë¯¸í„°(~P)";
+        Text[ chinese_simplified ] = "å‚æ•°(~P)";
+        Text[ chinese_traditional ] = "åƒæ•¸(~P)";
         Text[ arabic ] = "ÇáãÚáãÇÊ";
         Text[ turkish ] = "Parametre";
         Text[ language_user1 ] = " ";
@@ -133,10 +133,10 @@ ModalDialog DLG_PARAMETERS
         Text[ swedish ] = "~Värde";
         Text[ polish ] = "Wartoœæ";
         Text[ portuguese_brazilian ] = "~Value";
-        Text[ japanese ] = "’l(~V)";
-        Text[ korean ] = "°ª(~V)";
-        Text[ chinese_simplified ] = "ÊıÖµ(~V)";
-        Text[ chinese_traditional ] = "¼Æ­È(~V)";
+        Text[ japanese ] = "å€¤(~V)";
+        Text[ korean ] = "ê°’(~V)";
+        Text[ chinese_simplified ] = "æ•°å€¼(~V)";
+        Text[ chinese_traditional ] = "æ•¸å€¼(~V)";
         Text[ arabic ] = "ÇáŞíãÉ";
         Text[ turkish ] = "Değer";
         Text[ language_user1 ] = " ";
@@ -169,10 +169,10 @@ ModalDialog DLG_PARAMETERS
         Text[ swedish ] = "~nästa";
         Text[ polish ] = "~nastêpny";
         Text[ portuguese_brazilian ] = "~next";
-        Text[ japanese ] = "Ÿ‚Ö(~N)";
-        Text[ korean ] = "´ÙÀ½(~N)";
-        Text[ chinese_simplified ] = "ÏÂÒ»¸ö(~N)";
-        Text[ chinese_traditional ] = "¤U¤@­Ó(~N)";
+        Text[ japanese ] = "æ¬¡ã¸(~N)";
+        Text[ korean ] = "ë‹¤ìŒ(~N)";
+        Text[ chinese_simplified ] = "ä¸‹ä¸€ä¸ª(~N)";
+        Text[ chinese_traditional ] = "ä¸‹ä¸€å€‹(~N)";
         Text[ arabic ] = "ÇáÊÇáí";
         Text[ turkish ] = "Sonraki";
         Text[ catalan ] = "~siguiente";
@@ -201,14 +201,14 @@ ModalDialog DLG_PARAMETERS
     Text [ french ] = "Saisie de paramètre" ;
     Text [ dutch ] = "Parameter aangeven" ;
     Text [ portuguese ] = "Entrada de parâmetros" ;
-    Text[ chinese_simplified ] = "ÊäÈë²ÎÊıÖµ";
+    Text[ chinese_simplified ] = "è¾“å…¥å‚æ•°å€¼";
     Text[ russian ] = "Ââîä ïàğàìåòğà";
     Text[ polish ] = "Wpisanie parametru";
-    Text[ japanese ] = "Êß×Ò°À‚Ì“ü—Í";
-    Text[ chinese_traditional ] = "¿é¤J°Ñ¼Æ­È";
+    Text[ japanese ] = "ï¾Šï¾Ÿï¾—ï¾’ï½°ï¾€ã®å…¥åŠ›";
+    Text[ chinese_traditional ] = "è¼¸å…¥åƒæ•¸å€¼";
     Text[ arabic ] = "ÅÏÎÇá ÇáãÚáãÉ";
     Text[ greek ] = "ÅéóáãùãŞ ğáñáìİôñùí";
-    Text[ korean ] = "ÆÄ¶ó¹ÌÅÍ ÀÔ·Â";
+    Text[ korean ] = "íŒŒë¼ë¯¸í„° ì…ë ¥";
     Text[ turkish ] = "Parametre girişi";
 
     String STR_COULD_NOT_CONVERT_PARAM
@@ -227,10 +227,10 @@ ModalDialog DLG_PARAMETERS
         Text[ swedish ] = "Inmatningen kunde inte omvandlas till ett giltigt värde för kolumnen \"$name$\".";
         Text[ polish ] = "Nie mo¿na by³o zamieniæ wpisu na wa¿n¹ wartoœæ kolumny \"$name$\".";
         Text[ portuguese_brazilian ] = "The given input could no be converted into a valid value for column \"$value$\".";
-        Text[ japanese ] = "“ü—Í’l‚Í <$name$> —ñ‚Å—LŒø‚È’l‚É•ÏŠ·‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B";
-        Text[ korean ] = "ÀÔ·ÂÀº ¿­\"$name$\"ÀÇ À¯È¿ÇÑ °ªÀ¸·Î º¯È¯µÉ ¼ö ¾ø¾ú½À´Ï´Ù.";
-        Text[ chinese_simplified ] = "ÊäÈëµÄÄÚÈİÎŞ·¨×ª»»³ÉÒ»¸öÓÃÓÚÁĞ\"$name$\"µÄÓĞĞ§ÊıÖµ¡£";
-        Text[ chinese_traditional ] = "³o­Ó¿é¤J­ÈµLªkÂà´«¦¨Äæ\"$name$\"ªº¦³®Ä­È¡C";
+        Text[ japanese ] = "å…¥åŠ›å€¤ã¯ <$name$> åˆ—ã§æœ‰åŠ¹ãªå€¤ã«å¤‰æ›ã§ãã¾ã›ã‚“ã§ã—ãŸã€‚";
+        Text[ korean ] = "ì…ë ¥ì€ ì—´\"$name$\"ì˜ ìœ íš¨í•œ ê°’ìœ¼ë¡œ ë³€í™˜ë  ìˆ˜ ì—†ì—ˆìŠµë‹ˆë‹¤.";
+        Text[ chinese_simplified ] = "è¾“å…¥çš„å†…å®¹æ— æ³•è½¬æ¢æˆä¸€ä¸ªç”¨äºåˆ—\"$name$\"çš„æœ‰æ•ˆæ•°å€¼ã€‚";
+        Text[ chinese_traditional ] = "é€™å€‹è¼¸å…¥å€¼ç„¡æ³•è½‰æ›æˆæ¬„\"$name$\"çš„æœ‰æ•ˆå€¼ã€‚";
         Text[ arabic ] = "ÊÚĞÑ ÊÍæíá ÇáÅÏÎÇá Åáì ŞíãÉ ÕÇáÍÉ ááÚãæÏ \"$name$\".";
         Text[ turkish ] = "Giriş, \"$name$\" sütunu için geçerli bir değere dönüştürülemedi.";
         Text[ catalan ] = "La entrada no se pudo convertir en un valor válido para la columna \"$name$\".";
@@ -243,6 +243,9 @@ ModalDialog DLG_PARAMETERS
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.16  2001/07/13 21:36:17  kz
+ *  Merge SRC638: 13.07.01 - 23:36:00
+ *
  *  Revision 1.15  2001/06/29 02:15:11  kz
  *  Merge SRC633: 29.06.01 - 04:14:48
  *
@@ -291,6 +294,7 @@ ModalDialog DLG_PARAMETERS
  *
  *  Revision 1.0 26.10.00 15:14:44  fs
  ************************************************************************/
+
 
 
 
