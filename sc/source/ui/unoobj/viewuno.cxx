@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewuno.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: sab $ $Date: 2002-10-01 08:40:59 $
+ *  last change: $Author: sab $ $Date: 2002-10-01 15:10:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -735,6 +735,7 @@ sal_Bool SAL_CALL ScTabViewObj::select( const uno::Any& aSelection )
                 long nCount = xShapeColl->getCount();
                 if (nCount)
                 {
+                    sal_Bool bAllMarked(sal_True);
                     for ( long i = 0; i < nCount; i++ )
                     {
                         uno::Reference<drawing::XShape> xShapeInt;
@@ -761,13 +762,17 @@ sal_Bool SAL_CALL ScTabViewObj::select( const uno::Any& aSelection )
                                     }
                                     if ( pPV && pObj->GetPage() == pPV->GetPage() )
                                     {
-                                        pDrawView->MarkObj( pObj, pPV );
-                                        bRet = TRUE;
+                                        if (pDrawView->IsObjMarkable( pObj, pPV ))
+                                            pDrawView->MarkObj( pObj, pPV );
+                                        else
+                                            bAllMarked = sal_False;
                                     }
                                 }
                             }
                         }
                     }
+                    if (bAllMarked)
+                        bRet = TRUE;
                 }
                 else
                     bRet = TRUE; // empty XShapes (all shapes are deselected)
