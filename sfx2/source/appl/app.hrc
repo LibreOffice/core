@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.hrc,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: pb $ $Date: 2001-07-14 12:37:42 $
+ *  last change: $Author: pb $ $Date: 2001-08-08 08:41:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,6 +194,7 @@
 #define TP_HELP_BOOKMARKS                       (RID_SFX_APP_START+103)
 #define DLG_HELP_ADDBOOKMARK                    (RID_SFX_APP_START+104)
 #define MENU_HELP_BOOKMARKS                     (RID_SFX_APP_START+105)
+#define RID_INFO_NOSEARCHRESULTS                (RID_SFX_APP_START+106)
 
 #define IMG_HELP_TOOLBOX_INDEX_ON               (RID_SFX_APP_START+110)
 #define IMG_HELP_TOOLBOX_INDEX_OFF              (RID_SFX_APP_START+111)
