@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BridgeFactory.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kr $ $Date: 2001-01-22 17:35:05 $
+ *  last change: $Author: kr $ $Date: 2001-05-04 11:37:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,6 @@ import com.sun.star.lib.util.WeakTable;
 import com.sun.star.registry.XRegistryKey;
 
 import com.sun.star.uno.IBridge;
-import com.sun.star.uno.MappingException;
 import com.sun.star.uno.UnoRuntime;
 
 
@@ -97,7 +96,7 @@ import com.sun.star.uno.UnoRuntime;
  * <p>
  * This component is only usable for remote bridges.
  * <p>
- * @version     $Revision: 1.6 $ $ $Date: 2001-01-22 17:35:05 $
+ * @version     $Revision: 1.7 $ $ $Date: 2001-05-04 11:37:36 $
  * @author      Kay Ramme
  * @see         com.sun.star.uno.UnoRuntime
  * @since       UDK1.0
