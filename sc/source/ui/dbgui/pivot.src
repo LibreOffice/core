@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pivot.src,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 17:16:31 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 12:50:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1052,6 +1052,8 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
     Text[ hindi ] = "ड़ॉटापैलट्";
     Text[ slovak ] = "Sprievodca dátami";
 };
+
+
 
 
 
