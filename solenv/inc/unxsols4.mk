@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxsols4.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hr $ $Date: 2003-04-28 16:48:57 $
+#   last change: $Author: vg $ $Date: 2003-06-12 10:02:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,12 +77,15 @@ JAVA_RUNTIME=-ljava_g
 .ENDIF
 .ENDIF
 
-CXX=CC
-CC=cc
+CXX*=CC
+CC*=cc
 
-CFLAGS=$(PREENVCFLAGS) -c -temp=/tmp $(INCLUDE) -g0
+CFLAGS=$(PREENVCFLAGS) -c -temp=/tmp $(INCLUDE)
 CFLAGSCC=-xCC
 CFLAGSCXX=-features=no%altspell,no%localfor -library=no%Cstd
+
+# flags required for crashdump feature
+CFLAGSCRASHDUMP=-g0
 
 CFLAGSEXCEPTIONS=
 CFLAGS_NO_EXCEPTIONS=-noex
