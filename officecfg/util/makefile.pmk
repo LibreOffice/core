@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.pmk,v $
 #
-#   $Revision: 1.29 $
+#   $Revision: 1.30 $
 #
-#   last change: $Author: obo $ $Date: 2004-11-15 13:32:49 $
+#   last change: $Author: rt $ $Date: 2005-01-07 10:04:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -63,6 +63,12 @@
 PACKAGEDIR*:=$(subst,.,$/ $(PACKAGE))
 
 # --- XCS ---
+.IF "$(XCS_TRIM)" != ""
+$(XCS_TRIM) :   $(PRJ)$/registry$/component-schema.dtd \
+                $(PRJ)$/util$/schema_val.xsl \
+                $(PRJ)$/util$/sanity.xsl \
+                $(PRJ)$/util$/schema_trim.xsl 
+.ENDIF
 
 $(MISC)$/registry$/schema$/$(PACKAGEDIR)$/%.xcs : %.xcs
     @+echo -------------+ validating and stripping schema files
@@ -98,6 +104,10 @@ $(MISC)$/merge$/$(PACKAGEDIR)$/%.xcs : %.xcs
     +$(COPY) $< $@
 
 # Create properties files for localized <info> contents (Currently not built)
+.IF "$(XCS_RESOURCES)" != ""
+$(XCS_RESOURCES) :   $(PRJ)$/util$/resource.xsl 
+.ENDIF
+
 $(MISC)$/registry$/res$/{$(alllangiso)}$/$(PACKAGEDIR)$/%.properties :| $(MISC)$/merge$/$(PACKAGEDIR)$/%.xcs
     @+echo -------------+ creating locale dependent resource bundles
     -$(MKDIRHIER) $(@:d)
@@ -110,6 +120,11 @@ $(MISC)$/registry$/res$/{$(alllangiso)}$/$(PACKAGEDIR)$/%.properties :| $(MISC)$
 .ENDIF
 
 # --- XCU ---
+.IF "$(XCU_DEFAULT)" != ""
+$(XCU_DEFAULT) : $(PRJ)$/registry$/component-update.dtd \
+                 $(PRJ)$/util$/data_val.xsl \
+                 $(PRJ)$/util$/alllang.xsl 
+.ENDIF
 
 $(MISC)$/registry$/data$/$(PACKAGEDIR)$/%.xcu : %.xcu
     @+echo -------------+ validating and creating a locale independent file
@@ -144,6 +159,10 @@ $(MISC)$/merge$/$(PACKAGEDIR)$/%.xcu : %.xcu
     +$(MKDIRHIER) $(@:d)
     $(WRAPCMD) $(CFGEX) -p $(PRJNAME) -i $(@:f) -o $@ -m localize.sdf -l all
 
+.IF "$(XCU_LANG)" != ""
+$(XCU_LANG) : $(PRJ)$/util$/alllang.xsl 
+.ENDIF
+
 $(MISC)$/registry$/res$/{$(alllangiso)}$/$(PACKAGEDIR)$/%.xcu :| $(MISC)$/merge$/$(PACKAGEDIR)$/%.xcu
     @+echo -------------+ creating locale dependent entries
     -$(MKDIRHIER) $(@:d)
@@ -163,6 +182,10 @@ $(MISC)$/registry$/res$/{$(alllangiso)}$/$(PACKAGEDIR)$/%.xcu :| $(MISC)$/merge$
     +$(RM) $(@:d)$*.tmp > $(NULLDEV)
 
 # --- languagepack tag modules ---
+.IF "$(LANGUAGEPACKS)" != ""
+$(LANGUAGEPACKS) : $(PRJ)$/util$/delcomment.sed 
+.ENDIF
+
 
 $(MISC)$/registry$/spool$/Langpack-%.xcu : Langpack.xcu.tmpl
     @+echo -------------+ creating a Langpack module for locale $*
@@ -171,8 +194,12 @@ $(MISC)$/registry$/spool$/Langpack-%.xcu : Langpack.xcu.tmpl
     
 
 # --- modules ---
+.IF "$(XCU_MODULES)" != ""
+$(XCU_MODULES) : $(PRJ)$/util$/alllang.xsl 
+.ENDIF
 
-$(MISC)$/registry$/spool$/$(PACKAGE).%.xcu :| $$(@:b:s!.!$/!:s!-!.!:b).xcu
+
+$(MISC)$/registry$/spool$/$(PACKAGEDIR)/%.xcu :| $$(@:b:s/-/./:b).xcu
     @+echo -------------+ creating a module file
     -$(MKDIRHIER) $(@:d) 
 .IF "$(SOLAR_JAVA)"!=""
