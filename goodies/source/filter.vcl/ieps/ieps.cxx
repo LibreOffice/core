@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ieps.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sj $ $Date: 2001-10-24 16:37:22 $
+ *  last change: $Author: ka $ $Date: 2002-05-29 13:11:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -479,13 +479,13 @@ extern "C" BOOL GraphicImport(SvStream & rStream, Graphic & rGraphic,
                                 bRetValue = TRUE;
                             }
                             else
-                                delete pLinkBuf;
+                                delete[] pLinkBuf;
                         }
                     }
                 }
             }
         }
-        delete pBuf;
+        delete[] pBuf;
     }
     rStream.SetNumberFormatInt(nOldFormat);
     rStream.Seek( nOrigPos );

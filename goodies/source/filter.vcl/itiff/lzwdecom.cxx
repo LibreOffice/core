@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lzwdecom.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:16 $
+ *  last change: $Author: ka $ $Date: 2002-05-29 13:11:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,8 +82,8 @@ LZWDecompressor::LZWDecompressor()
 
 LZWDecompressor::~LZWDecompressor()
 {
-    delete pOutBuf;
-    delete pTable;
+    delete[] pOutBuf;
+    delete[] pTable;
 }
 
 

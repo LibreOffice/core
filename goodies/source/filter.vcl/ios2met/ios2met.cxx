@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ios2met.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sj $ $Date: 2001-03-08 15:45:23 $
+ *  last change: $Author: ka $ $Date: 2002-05-29 13:11:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -758,7 +758,7 @@ void OS2METReader::SetPalette0RGB(USHORT nIndex, ULONG nCol)
             else if (i==0) pPaletteStack->p0RGB[i]=0x00ffffff;
             else pPaletteStack->p0RGB[i]=0;
         }
-        if (pOld0RGB!=NULL) delete pOld0RGB;
+        if (pOld0RGB!=NULL) delete[] pOld0RGB;
     }
     pPaletteStack->p0RGB[nIndex]=nCol;
 }
@@ -1052,7 +1052,7 @@ void OS2METReader::ReadChrStr(BOOL bGivenPos, BOOL bMove, BOOL bExtra, USHORT nO
         aCalcBndRect.Union( Rectangle( aDummyPoly.GetPoint( 0 ), aDummyPoly.GetPoint( 3 ) ) );
         aCalcBndRect.Union( Rectangle( aDummyPoly.GetPoint( 1 ), aDummyPoly.GetPoint( 2 ) ) );
     }
-    delete pChr;
+    delete[] pChr;
 }
 
 void OS2METReader::ReadArc(BOOL bGivenPos)
@@ -2267,7 +2267,7 @@ void OS2METReader::ReadImageData(USHORT nDataID, USHORT nDataLen)
             }
             p->pBMP->Write(pBuf,nDataLen);
             p->nMapPos+=nDataLen;
-            delete pBuf;
+            delete[] pBuf;
             break;
         }
         case 0x0093:   // End Image Content
@@ -2439,7 +2439,7 @@ void OS2METReader::ReadField(USHORT nFieldType, USHORT nFieldSize)
             OSPalette * pP=pPaletteStack;
             if (pP!=NULL) {
                 pPaletteStack=pP->pSucc;
-                if (pP->p0RGB!=NULL) delete pP->p0RGB;
+                if (pP->p0RGB!=NULL) delete[] pP->p0RGB;
                 delete pP;
             }
             break;
@@ -2566,7 +2566,7 @@ void OS2METReader::ReadField(USHORT nFieldType, USHORT nFieldSize)
             BYTE * pBuf; pBuf = new BYTE[nFieldSize];
             pOS2MET->Read(pBuf,nFieldSize);
             pOrdFile->Write(pBuf,nFieldSize);
-            delete pBuf;
+            delete[] pBuf;
             break;
         }
         case MapCodFntMagic:
@@ -2758,7 +2758,7 @@ void OS2METReader::ReadOS2MET( SvStream & rStreamOS2MET, GDIMetaFile & rGDIMetaF
     while (pPaletteStack!=NULL) {
         OSPalette * p=pPaletteStack;
         pPaletteStack=p->pSucc;
-        if (p->p0RGB!=NULL) delete p->p0RGB;
+        if (p->p0RGB!=NULL) delete[] p->p0RGB;
         delete p;
     }
 

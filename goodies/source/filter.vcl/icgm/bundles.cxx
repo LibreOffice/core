@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bundles.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2002-02-08 11:23:51 $
+ *  last change: $Author: ka $ $Date: 2002-05-29 13:11:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -279,7 +279,7 @@ void CGMFList::InsertName( sal_uInt8* pSource, sal_uInt32 nSize )
     pFontEntry->pFontName = new sal_Int8[ nSize + 1 ];
     pFontEntry->pFontName[ nSize ] = 0;
     memcpy( pFontEntry->pFontName, pBuf, nSize );
-    delete pBuf;
+    delete[] pBuf;
 }
 
 //--------------------------------------------------------------------------

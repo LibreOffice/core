@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dxfreprd.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:15 $
+ *  last change: $Author: ka $ $Date: 2002-05-29 13:11:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,9 +151,9 @@ DXFPalette::DXFPalette()
 
 DXFPalette::~DXFPalette()
 {
-    delete pBlue;
-    delete pGreen;
-    delete pRed;
+    delete[] pBlue;
+    delete[] pGreen;
+    delete[] pRed;
 }
 
 

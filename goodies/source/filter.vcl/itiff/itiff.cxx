@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itiff.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2001-03-08 15:52:53 $
+ *  last change: $Author: ka $ $Date: 2002-05-29 13:11:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -382,7 +382,7 @@ void TIFFReader::ReadTagData( USHORT nTagType, ULONG nDataLen)
             for ( i = nOldNumSO; i < nNumStripOffsets; i++ )
                 pStripOffsets[ i ] = ReadIntData() + nOrigPos;
             if ( pOldSO != NULL )
-                delete pOldSO;
+                delete[] pOldSO;
             OOODEBUG("StripOffsets (Anzahl:)",nDataLen);
             break;
         }
@@ -413,7 +413,7 @@ void TIFFReader::ReadTagData( USHORT nTagType, ULONG nDataLen)
             for ( i = nOldNumSBC; i < nNumStripByteCounts; i++)
                 pStripByteCounts[ i ] = ReadIntData();
             if ( pOldSBC != NULL )
-                delete pOldSBC;
+                delete[] pOldSBC;
             OOODEBUG("StripByteCounts (Anzahl:)",nDataLen);
             break;
         }
@@ -1266,9 +1266,9 @@ BOOL TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic,
                     for ( i = 0; i < 4; i++ )
                         delete[] pMap[ i ];
 
-                    delete pColorMap;
-                    delete pStripOffsets;
-                    delete pStripByteCounts;
+                    delete[] pColorMap;
+                    delete[] pStripOffsets;
+                    delete[] pStripByteCounts;
                 }
             }
         }

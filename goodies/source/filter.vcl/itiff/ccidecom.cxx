@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ccidecom.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2001-07-06 12:55:18 $
+ *  last change: $Author: ka $ $Date: 2002-05-29 13:11:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -641,12 +641,12 @@ CCIDecompressor::CCIDecompressor( ULONG nOpts, UINT32 nImageWidth ) :
 
 CCIDecompressor::~CCIDecompressor()
 {
-    delete pByteSwap;
-    delete pLastLine;
-    delete pWhiteLookUp;
-    delete pBlackLookUp;
-    delete p2DModeLookUp;
-    delete pUncompLookUp;
+    delete[] pByteSwap;
+    delete[] pLastLine;
+    delete[] pWhiteLookUp;
+    delete[] pBlackLookUp;
+    delete[] p2DModeLookUp;
+    delete[] pUncompLookUp;
 }
 
 
@@ -712,7 +712,7 @@ BOOL CCIDecompressor::DecompressScanline( BYTE * pTarget, ULONG nTargetBits )
         if ( pLastLine == NULL || nLastLineSize != ( ( nTargetBits + 7 ) >> 3 ) )
         {
             if ( pLastLine == NULL )
-                delete pLastLine;
+                delete[] pLastLine;
             nLastLineSize = ( nTargetBits + 7 ) >> 3;
             pLastLine = new BYTE[ nLastLineSize ];
             pDst = pLastLine;

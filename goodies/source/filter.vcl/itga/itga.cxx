@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itga.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2001-03-08 15:51:27 $
+ *  last change: $Author: ka $ $Date: 2002-05-29 13:11:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,7 +166,7 @@ TGAReader::TGAReader() :
 
 TGAReader::~TGAReader()
 {
-    delete mpColorMap;
+    delete[] mpColorMap;
     delete mpFileHeader;
     delete mpExtension;
     delete mpFileFooter;

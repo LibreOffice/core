@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eos2met.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mh $ $Date: 2001-10-17 18:19:45 $
+ *  last change: $Author: ka $ $Date: 2002-05-29 13:11:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -719,9 +719,9 @@ void METWriter::WriteImageObject(const Bitmap & rBitmap)
         if (aTemp.GetError() || pMET->GetError()) bStatus=FALSE;
         nActBitmapPercent=(ny+1)*100/nHeight;
         MayCallback();
-        if (bStatus==FALSE) { delete pBuf; return; }
+        if (bStatus==FALSE) { delete[] pBuf; return; }
     }
-    delete pBuf;
+    delete[] pBuf;
 
     // End Image Content:
     *pMET << (BYTE)0x93 << (BYTE)0x00;
