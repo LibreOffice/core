@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dllentry.c,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obr $ $Date: 2001-04-06 14:32:01 $
+ *  last change: $Author: obr $ $Date: 2001-06-07 09:23:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,9 +223,6 @@ sal_Bool WINAPI DllMain( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved
                         lpfnFindNextFile              = FindNextFileW;
                         lpfnSetFileAttributes         = SetFileAttributesW;
                         lpfnSearchPath                = SearchPathW;
-                        lpfnCreateProcess             = CreateProcessW;
-                        lpfnCreateProcessAsUser       = CreateProcessAsUserW;
-                        lpfnGetEnvironmentVariable    = GetEnvironmentVariableW;
                         lpfnWNetAddConnection2        = WNetAddConnection2W;
                         lpfnWNetCancelConnection2     = WNetCancelConnection2W;
                         lpfnWNetGetUser               = WNetGetUserW;
