@@ -2,9 +2,9 @@
  *
  *  $RCSfile: structpg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2002-07-19 14:24:57 $
+ *  last change: $Author: dr $ $Date: 2002-07-22 12:42:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,19 @@ ScStructListBox::ScStructListBox(Window* pParent, const ResId& rResId ):
     bActiveFlag=FALSE;
 }
 
+SvLBoxEntry* ScStructListBox::InsertStaticEntry(
+        const XubString& rText,
+        const Image& rEntryImg, const Image& rEntryImgHC,
+        SvLBoxEntry* pParent, ULONG nPos, ScToken* pToken )
+{
+    SvLBoxEntry* pEntry = InsertEntry( rText, rEntryImg, rEntryImg, pParent, FALSE, nPos, pToken );
+    SvLBoxContextBmp* pBmpItem = static_cast< SvLBoxContextBmp* >( pEntry->GetFirstItem( SV_ITEM_ID_LBOXCONTEXTBMP ) );
+    DBG_ASSERT( pBmpItem, "ScStructListBox::InsertStaticEntry - missing item" );
+    pBmpItem->SetBitmap1( pEntry, rEntryImgHC, BMP_COLOR_HIGHCONTRAST );
+    pBmpItem->SetBitmap2( pEntry, rEntryImgHC, BMP_COLOR_HIGHCONTRAST );
+    return pEntry;
+}
+
 void ScStructListBox::SetActiveFlag(BOOL bFlag)
 {
     bActiveFlag=bFlag;
@@ -142,9 +155,7 @@ ScStructPage::ScStructPage(Window* pParent):
     aTlbStruct.SetWindowBits(WB_HASLINES|WB_CLIPCHILDREN|
                         WB_HASBUTTONS|WB_HSCROLL|WB_NOINITIALSELECTION);
 
-    Bitmap aExpBmp( ScResId( RID_BMP_EXPAND ) );
-    Bitmap aCollBmp( ScResId( RID_BMP_COLLAPSE ) );
-    aTlbStruct.SetNodeBitmaps( aExpBmp, aCollBmp );
+    aTlbStruct.SetNodeDefaultImages();
     aTlbStruct.SetDefaultExpandedEntryBmp( Image( ScResId( BMP_STR_OPEN ) ) );
     aTlbStruct.SetDefaultCollapsedEntryBmp( Image( ScResId( BMP_STR_CLOSE ) ) );
     aTlbStruct.SetDefaultExpandedEntryBmp( Image( ScResId( BMP_STR_OPEN_H ) ), BMP_COLOR_HIGHCONTRAST );
@@ -170,15 +181,15 @@ void ScStructPage::ClearStruct()
 SvLBoxEntry* ScStructPage::InsertEntryWithError(USHORT nError,SvLBoxEntry* pParent,ULONG nPos)
 {
 
-    SvLBoxEntry* pEntry;
-    switch(nError)
+    SvLBoxEntry* pEntry = NULL;
+    switch( nError )
     {
         case STRUCT_ERR_C1:
-                    pEntry=InsertEntry( STR_STRUCT_ERR1,pParent,STRUCT_ERROR,nPos);
-                    break;
+            pEntry = InsertEntry( STR_STRUCT_ERR1, pParent, STRUCT_ERROR, nPos );
+        break;
         case STRUCT_ERR_C2:
-                    pEntry=InsertEntry( STR_STRUCT_ERR2,pParent,STRUCT_ERROR,nPos);
-                    break;
+            pEntry = InsertEntry( STR_STRUCT_ERR2, pParent, STRUCT_ERROR, nPos );
+        break;
     }
     return pEntry;
 }
@@ -187,26 +198,24 @@ SvLBoxEntry* ScStructPage::InsertEntryWithError(USHORT nError,SvLBoxEntry* pPare
 SvLBoxEntry* ScStructPage::InsertEntry( const XubString& rText, SvLBoxEntry* pParent,
                                        USHORT nFlag,ULONG nPos,ScToken* pScToken)
 {
-    aTlbStruct.SetActiveFlag(FALSE);
+    aTlbStruct.SetActiveFlag( FALSE );
 
-    SvLBoxEntry *pEntry=NULL;
-    switch(nFlag)
+    SvLBoxEntry* pEntry = NULL;
+    switch( nFlag )
     {
         case STRUCT_FOLDER:
-                    pEntry=aTlbStruct.InsertEntry(rText,pParent,FALSE,nPos,pScToken);
-                    if(pParent!=NULL) aTlbStruct.Expand(pParent);
-                    break;
+            pEntry = aTlbStruct.InsertEntry( rText, pParent, FALSE, nPos, pScToken );
+        break;
         case STRUCT_END:
-                    pEntry=aTlbStruct.InsertEntry(rText,maImgEnd,maImgEnd,
-                                        pParent,FALSE,nPos,pScToken);
-                    if(pParent!=NULL) aTlbStruct.Expand(pParent);
-                    break;
+            pEntry = aTlbStruct.InsertStaticEntry( rText, maImgEnd, maImgEndHC, pParent, nPos, pScToken );
+        break;
         case STRUCT_ERROR:
-                    pEntry=aTlbStruct.InsertEntry(rText,maImgError,maImgError,
-                                        pParent,FALSE,nPos,pScToken);
-                    if(pParent!=NULL) aTlbStruct.Expand(pParent);
-                    break;
+            pEntry = aTlbStruct.InsertStaticEntry( rText, maImgError, maImgErrorHC, pParent, nPos, pScToken );
+        break;
     }
+
+    if( pEntry && pParent )
+        aTlbStruct.Expand( pParent );
     return pEntry;
 }
 

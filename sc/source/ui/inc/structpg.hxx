@@ -2,9 +2,9 @@
  *
  *  $RCSfile: structpg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2002-07-19 14:25:53 $
+ *  last change: $Author: dr $ $Date: 2002-07-22 12:43:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,6 +146,15 @@ protected:
 public:
 
                     ScStructListBox(Window* pParent, const ResId& rResId );
+
+    /** Inserts an entry with static image (no difference between collapsed/expanded). */
+    SvLBoxEntry*    InsertStaticEntry(
+                        const XubString& rText,
+                        const Image& rEntryImg,
+                        const Image& rEntryImgHC,
+                        SvLBoxEntry* pParent = NULL,
+                        ULONG nPos = LIST_APPEND,
+                        ScToken* pToken = NULL );
 
     void            SetActiveFlag(BOOL bFlag=TRUE);
     BOOL            GetActiveFlag();
