@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpputype.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-10 20:07:30 $
+ *  last change: $Author: jsc $ $Date: 2001-05-17 13:51:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1554,7 +1554,7 @@ sal_Bool InterfaceType::dumpHFile(FileStream& o)
 sal_Bool InterfaceType::dumpDeclaration(FileStream& o)
     throw( CannotDumpException )
 {
-    o << "\nclass " << m_name;
+    o << "\nclass SAL_NO_VTABLE " << m_name;
 
     OString superType(m_reader.getSuperTypeName());
     if (superType.getLength() > 0)
