@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: avy $ $Date: 2001-03-09 21:11:53 $
+ *  last change: $Author: kz $ $Date: 2001-03-21 21:02:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -386,24 +386,24 @@ InfoBox MSG_ERR_NO_FAX
     MESSAGE = "Kein Fax-Drucker unter Extras/Optionen/%1/Drucken eingestellt." ;
     MESSAGE [ English ] = "No fax printer at Settings/Options/%1/Printer configured." ;
     Message [ dutch ] = "Geen faxprinter geconfigureerd onder: Extra/Opties/Afdrukken." ;
-    Message [ english_us ] = "No fax printer has been set under Tools/Options/Printing." ;
+    Message [ english_us ] = "No fax printer has been set under Tools/Options/%1/Print." ;
     Message [ italian ] = "Nessuna stampante-fax installata in Strumenti/Opzioni/Stampa." ;
-    Message [ spanish ] = "En Herramientas/Opciones/Imprimir no se ha configurado ninguna impresora fax." ;
+    Message [ spanish ] = "En Herramientas/Opciones/%1/Imprimir no se ha configurado ninguna impresora fax." ;
     Message [ french ] = "Aucune imprimante (fax) n'a été paramétrée sous Outils/Options/Imprimer" ;
-    Message [ swedish ] = "Ingen faxskrivare inställd under Verktyg/Alternativ/Skriva ut." ;
+    Message [ swedish ] = "Ingen faxskrivare har ställts in under Verktyg/Alternativ/%1/Skriv ut." ;
     Message [ danish ] = "Der er ingen faxprinter indstillet under Funktioner/Indstillinger/Udskriv." ;
     Message [ portuguese_brazilian ] = "Kein Fax-Drucker unter Extras/Optionen/Drucken eingestellt." ;
     Message [ portuguese ] = "Não foi configurada nenhuma impressora para fax em Ferramentas/Opções/Imprimir." ;
-    Message[ polish ] = "Brak ustawienia dla faksu i drukarki pod has³em Narzêdzia/Opcje/Drukuj.";
+    Message[ polish ] = "W sekwencji Narzêdzia/Opcje/%1/Drukuj nie ustawiono drukarki faksu.";
     Message[ turkish ] = "Araçlar/Seçenekler/Yazdırma altında faks konfigürasyonu yapılmadı.";
     Message[ language_user1 ] = " ";
-    Message[ russian ] = "Â Ñåğâèñ/Ïàğàìåòğû/Ïå÷àòü ôàêñ-ïğèíòåğ íå óñòàíîâëåí.";
+    Message[ russian ] = "Â Ñåğâèñ/Ïàğàìåòğû/%1/Ïå÷àòü ôàêñ-ïğèíòåğ íå óñòàíîâëåí.";
     Message[ greek ] = "Äåí İ÷åé ïñéóôåß åêôõğùôŞò ãéá Fax óôç äéáäñïìŞ Åñãáëåßá/Åğéëïãİò/%1/Åêôığùóç.";
-    Message[ japanese ] = "mÂ°Ù ¨ µÌß¼®İ ¨ ˆóün‚Å Fax ÌßØİÀ‚ªİ’è‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB";
+    Message[ japanese ] = "Â°Ù ¨ µÌß¼®İ ¨ %1 ¨ ˆóü‚Å Fax ÌßØİÀ‚ªİ’è‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB";
     Message[ korean ] = "µµ±¸/¿É¼Ç/ÀÎ¼âÇÏ¿¡¼­  ÆÑ½º ÇÁ¸°ÅÍ°¡ ¼³Á¤µÇÁö ¾Ê¾Ò½À´Ï´Ù.";
-    Message[ chinese_simplified ] = "ÔÚ¹¤¾ß/Ñ¡Ïî/´òÓ¡»ú´¦Ã»ÓĞÉè¶¨´«Õæ´òÓ¡»ú¡£";
-    Message[ chinese_traditional ] = "¦b¤u¨ã/¿ï¶µ/¾÷¦Lªí¾÷³B¨S¦³³]©w¦C¦L¶Ç¯uªºÅX°Ê³n¥ó¡C";
-    Message[ arabic ] = "áíÓÊ åäÇß ÅÚÏÇÏÇÊ ØÇÈÚÉ İÇßÓ ÊÍÊ \"ÃÏæÇÊ/ÎíÇÑÇÊ/ØÈÇÚÉ\".";
+    Message[ chinese_simplified ] = "ÔÚ¹¤¾ß/Ñ¡Ïî/%1/´òÓ¡»ú´¦Ã»ÓĞÉè¶¨´«Õæ´òÓ¡»ú¡£";
+    Message[ chinese_traditional ] = "¦b¤u¨ã/¿ï¶µ/%1/¾÷¦Lªí¾÷³B¨S¦³³]©w¦C¦L¶Ç¯uªºÅX°Êµ{¦¡¡C";
+    Message[ arabic ] = "áíÓÊ åäÇß ÅÚÏÇÏÇÊ ØÇÈÚÉ İÇßÓ ÊÍÊ \"ÃÏæÇÊ/ÎíÇÑÇÊ/%1/ØÈÇÚÉ\".";
 };
 String STR_WEBOPTIONS
 {
@@ -411,22 +411,22 @@ String STR_WEBOPTIONS
     TEXT [ English ] = "HTML document" ;
     TEXT[ english_us ] = "HTML document";
     TEXT[ portuguese ] = "HTML document";
-    TEXT[ russian ] = "HTML document";
+    TEXT[ russian ] = "Äîêóìåíò HTML";
     TEXT[ greek ] = "¸ããñáöï HTML";
     TEXT[ dutch ] = "HTML document";
     TEXT[ french ] = "HTML document";
-    TEXT[ spanish ] = "HTML document";
+    TEXT[ spanish ] = "Documento HTML";
     TEXT[ italian ] = "HTML document";
     TEXT[ danish ] = "HTML document";
-    TEXT[ swedish ] = "HTML document";
-    TEXT[ polish ] = "HTML document";
+    TEXT[ swedish ] = "HTML-dokument";
+    TEXT[ polish ] = "Dokument HTML";
     TEXT[ portuguese_brazilian ] = "HTML document";
-    TEXT[ japanese ] = "HTML document";
+    TEXT[ japanese ] = "HTML Œ`®ÄŞ·­ÒİÄ";
     TEXT[ korean ] = "HTML document";
-    TEXT[ chinese_simplified ] = "HTML document";
-    TEXT[ chinese_traditional ] = "HTML document";
+    TEXT[ chinese_simplified ] = "HTML ÎÄµµ";
+    TEXT[ chinese_traditional ] = "HTML ¤å¥ó";
     TEXT[ turkish ] = "HTML document";
-    TEXT[ arabic ] = "HTML document";
+    TEXT[ arabic ] = "HTML ãÓÊäÏ";
 };
 String STR_TEXTOPTIONS
 {
@@ -434,22 +434,22 @@ String STR_TEXTOPTIONS
     TEXT [ English ] = "Text document" ;
     TEXT[ english_us ] = "Text document";
     TEXT[ portuguese ] = "Text document";
-    TEXT[ russian ] = "Text document";
+    TEXT[ russian ] = "Òåêñòîâûé äîêóìåíò";
     TEXT[ greek ] = "¸ããñáöï êåéìİíïõ";
     TEXT[ dutch ] = "Text document";
     TEXT[ french ] = "Text document";
-    TEXT[ spanish ] = "Text document";
+    TEXT[ spanish ] = "Documento de texto";
     TEXT[ italian ] = "Text document";
     TEXT[ danish ] = "Text document";
-    TEXT[ swedish ] = "Text document";
-    TEXT[ polish ] = "Text document";
+    TEXT[ swedish ] = "Textdokument";
+    TEXT[ polish ] = "Dokument tekstowy";
     TEXT[ portuguese_brazilian ] = "Text document";
-    TEXT[ japanese ] = "Text document";
+    TEXT[ japanese ] = "•¶‘ÄŞ·­ÒİÄ";
     TEXT[ korean ] = "Text document";
-    TEXT[ chinese_simplified ] = "Text document";
-    TEXT[ chinese_traditional ] = "Text document";
+    TEXT[ chinese_simplified ] = "ÎÄ×ÖÎÄµµ";
+    TEXT[ chinese_traditional ] = "¤å¦r¤å¥ó";
     TEXT[ turkish ] = "Text document";
-    TEXT[ arabic ] = "Text document";
+    TEXT[ arabic ] = "ãÓÊäÏ äÕ";
 };
 InfoBox MSG_NOT_FOUND
 {
