@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxmacxp.mk,v $
 #
-#   $Revision: 1.29 $
+#   $Revision: 1.30 $
 #
-#   last change: $Author: pluby $ $Date: 2001-03-08 18:49:34 $
+#   last change: $Author: pluby $ $Date: 2001-03-09 07:52:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -89,7 +89,7 @@ CDEFS+=-DinitRegistry_Api=lib$(REGLIB:s/-l//)initRegistry_Api \
 .ENDIF
 
 # Name of library where static data members are initialized
-STATICLIBNAME=static$(UPD)$(DLLPOSTFIX)
+STATICLIBNAME=static$(DLLPOSTFIX)
 STATICLIB=-l$(STATICLIBNAME)
 
 .IF "$(SOLAR_JAVA)"!=""
