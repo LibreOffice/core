@@ -7,28 +7,28 @@
  <toolbar:toolbaritem xlink:href=".uno:ArrowShapes.down-arrow" toolbar:helpid="helpid:11004" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:ArrowShapes.left-right-arrow" toolbar:helpid="helpid:11004" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:ArrowShapes.up-down-arrow" toolbar:helpid="helpid:11004" toolbar:text="" />
- <toolbar:toolbarseparator/>
+ <toolbar:toolbarbreak/>
  <toolbar:toolbaritem xlink:href=".uno:ArrowShapes.up-right-arrow" toolbar:helpid="helpid:11004" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:ArrowShapes.up-right-down-arrow" toolbar:helpid="helpid:11004" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:ArrowShapes.quad-arrow" toolbar:helpid="helpid:11004" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:ArrowShapes.corner-right-arrow" toolbar:helpid="helpid:11004" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:ArrowShapes.split-arrow" toolbar:helpid="helpid:11004" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:ArrowShapes.striped-right-arrow" toolbar:helpid="helpid:11004" toolbar:text="" />
- <toolbar:toolbarseparator/>
+ <toolbar:toolbarbreak/>
  <toolbar:toolbaritem xlink:href=".uno:ArrowShapes.notched-right-arrow" toolbar:helpid="helpid:11004" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:ArrowShapes.pentagon-right" toolbar:helpid="helpid:11004" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:ArrowShapes.chevron" toolbar:helpid="helpid:11004" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:ArrowShapes.right-arrow-callout" toolbar:helpid="helpid:11004" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:ArrowShapes.left-arrow-callout" toolbar:helpid="helpid:11004" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:ArrowShapes.up-arrow-callout" toolbar:helpid="helpid:11004" toolbar:text="" />
- <toolbar:toolbarseparator/>
+ <toolbar:toolbarbreak/>
  <toolbar:toolbaritem xlink:href=".uno:ArrowShapes.down-arrow-callout" toolbar:helpid="helpid:11004" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:ArrowShapes.left-right-arrow-callout" toolbar:helpid="helpid:11004" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:ArrowShapes.up-down-arrow-callout" toolbar:helpid="helpid:11004" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:ArrowShapes.up-right-arrow-callout" toolbar:helpid="helpid:11004" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:ArrowShapes.quad-arrow-callout" toolbar:helpid="helpid:11004" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:ArrowShapes.circular-arrow" toolbar:helpid="helpid:11004" toolbar:text="" />
- <toolbar:toolbarseparator/>
+ <toolbar:toolbarbreak/>
  <toolbar:toolbaritem xlink:href=".uno:ArrowShapes.split-round-arrow" toolbar:helpid="helpid:11004" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:ArrowShapes.s-sharped-arrow" toolbar:helpid="helpid:11004" toolbar:text="" />
 </toolbar:toolbar>
