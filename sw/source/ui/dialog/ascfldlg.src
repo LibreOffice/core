@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ascfldlg.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:14:40 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 11:51:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,7 @@ ModalDialog DLG_ASCII_FILTER
         Text[ czech ] = "Vlastnosti";
         Text[ hebrew ] = "‮מאפינים‬";
         Text[ hindi ] = "विशेषतायें";
+        Text[ slovak ] = "Vlastnosti";
     };
     FixedText FT_CHARSET
     {
@@ -116,7 +117,7 @@ ModalDialog DLG_ASCII_FILTER
         Text[ dutch ] = "~Tekenset";
         Text[ french ] = "~Jeu de caract�res";
         Text[ spanish ] = "~Juego de caracteres";
-        Text[ italian ] = "Ti~po di carattere";
+        Text[ italian ] = "Set di caratteri";
         Text[ danish ] = "Tegns�t";
         Text[ swedish ] = "Teckenupps�ttning";
         Text[ polish ] = "Z~estaw znak�w";
@@ -133,6 +134,7 @@ ModalDialog DLG_ASCII_FILTER
         Text[ czech ] = "Znaková sada";
         Text[ hebrew ] = "Z~eichensatz";
         Text[ hindi ] = "~अक्षर";
+        Text[ slovak ] = "~Znaková sada";
     };
     ListBox LB_CHARSET
     {
@@ -172,6 +174,7 @@ ModalDialog DLG_ASCII_FILTER
         Text[ czech ] = "Výchozí písma";
         Text[ hebrew ] = "~Grundschrift";
         Text[ hindi ] = "अनुपस्थिति अक्षर";
+        Text[ slovak ] = "Východzie písma";
     };
     ListBox LB_FONT
     {
@@ -212,6 +215,7 @@ ModalDialog DLG_ASCII_FILTER
         Text[ czech ] = "Jazyk";
         Text[ hebrew ] = "~Sprache";
         Text[ hindi ] = "भा~षा";
+        Text[ slovak ] = "Ja~zyk";
     };
     ListBox LB_LANGUAGE
     {
@@ -252,6 +256,7 @@ ModalDialog DLG_ASCII_FILTER
         Text[ czech ] = "Zalomení odstavce";
         Text[ hebrew ] = "~Absatzumbruch";
         Text[ hindi ] = "~परिच्छेद खण्डन";
+        Text[ slovak ] = "Zalomenie o~dstavca";
     };
     RadioButton RB_CRLF
     {
@@ -286,6 +291,7 @@ ModalDialog DLG_ASCII_FILTER
         Text[ czech ] = "CR & LF";
         Text[ hebrew ] = "~CR & LF";
         Text[ hindi ] = "~CR और LF";
+        Text[ slovak ] = "~CR & LF";
     };
     RadioButton RB_CR
     {
@@ -319,6 +325,7 @@ ModalDialog DLG_ASCII_FILTER
         Text[ czech ] = "CR";
         Text[ hebrew ] = "C~R";
         Text[ hindi ] = "C~R";
+        Text[ slovak ] = "C~R";
     };
     RadioButton RB_LF
     {
@@ -352,6 +359,7 @@ ModalDialog DLG_ASCII_FILTER
         Text[ czech ] = "LF";
         Text[ hebrew ] = "~LF";
         Text[ hindi ] = "~LF";
+        Text[ slovak ] = "~LF";
     };
 
     OKButton PB_OK
@@ -402,6 +410,7 @@ ModalDialog DLG_ASCII_FILTER
         Text[ czech ] = "Systém";
         Text[ hebrew ] = "System";
         Text[ hindi ] = "सिस्टम";
+        Text[ slovak ] = "Systém";
     };
     Text[ english_us ] = "ASCII Filter Options";
     Text[ portuguese ] = "Op��es de filtro ASCII";
@@ -416,7 +425,7 @@ ModalDialog DLG_ASCII_FILTER
     Text[ polish ] = "Opcje filtra ASCII";
     Text[ portuguese_brazilian ] = "Op��es do filtro ASCII";
     Text[ japanese ] = "ASCIIフィルタオプション";
-    Text[ korean ] = "아스키 필터 옵션";
+    Text[ korean ] = "텍스트 전용 필터 옵션(ASCII)";
     Text[ chinese_simplified ] = "ASCII 转换器选项";
     Text[ chinese_traditional ] = "ASCII 轉換器選項";
     Text[ arabic ] = "����� ���� ASCII";
@@ -428,7 +437,10 @@ ModalDialog DLG_ASCII_FILTER
     Text[ czech ] = "Volby pro ASCII filtr";
     Text[ hebrew ] = "ASCII Filter Optionen";
     Text[ hindi ] = "ASCII फिल्टर विकल्प";
+    Text[ slovak ] = "Nastavenia pre ASCII filter";
 };
+
+
 
 
 
