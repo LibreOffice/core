@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BTable.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: oj $ $Date: 2002-03-21 13:40:24 $
+ *  last change: $Author: oj $ $Date: 2002-04-02 07:07:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,12 +191,20 @@ void OAdabasTable::refreshPrimaryKeys(std::vector< ::rtl::OUString>& _rKeys)
 void OAdabasTable::refreshForgeinKeys(std::vector< ::rtl::OUString>& _rKeys)
 {
     Reference< XResultSet > xResult = m_pConnection->getMetaData()->getImportedKeys(Any(),m_SchemaName,m_Name);
+    Reference< XRow > xRow(xResult,UNO_QUERY);
 
-    if(xResult.is())
+    if ( xRow.is() )
     {
-        Reference< XRow > xRow(xResult,UNO_QUERY);
-        while(xResult->next())
-            _rKeys.push_back(xRow->getString(12));
+        while( xResult->next() )
+        {
+            sal_Int32 nKeySeq = xRow->getInt(9);
+            if ( nKeySeq == 1 )
+            { // only append when the sequnce number is 1 to forbid serveral inserting the same key name
+                ::rtl::OUString sFkName = xRow->getString(12);
+                if ( !xRow->wasNull() && sFkName.getLength() )
+                    _rKeys.push_back(sFkName);
+            }
+        }
         ::comphelper::disposeComponent(xResult);
     }
 }

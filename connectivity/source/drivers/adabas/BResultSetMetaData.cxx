@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BResultSetMetaData.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-02 10:49:44 $
+ *  last change: $Author: oj $ $Date: 2002-04-02 07:07:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,12 @@
 #ifndef _COM_SUN_STAR_SDBC_DATATYPE_HPP_
 #include <com/sun/star/sdbc/DataType.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDBC_COLUMNVALUE_HPP_
+#include <com/sun/star/sdbc/ColumnValue.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
+#include <com/sun/star/sdbc/XRow.hpp>
+#endif
 
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::uno;
@@ -96,6 +102,30 @@ sal_Int32 SAL_CALL OAdabasResultSetMetaData::getColumnType( sal_Int32 column ) t
     OAdabasCatalog::correctColumnProperties(getPrecision(column),nType,sTypeName);
 
     return nType;
+}
+// -----------------------------------------------------------------------------
+sal_Int32 SAL_CALL OAdabasResultSetMetaData::isNullable( sal_Int32 column ) throw(SQLException, RuntimeException)
+{
+    // adabas return values, so we have to ask the table itself
+    sal_Int32 nNullable = ColumnValue::NULLABLE;
+    ::rtl::OUString sSchema = getSchemaName( column );
+    ::rtl::OUString sTable  = getTableName( column );
+    ::rtl::OUString sColumn = getColumnName( column );
+    Reference< XResultSet> xRes = m_pConnection->getMetaData()->getColumns(Any(),sSchema,sTable,sColumn);
+    Reference< XRow > xRow(xRes,UNO_QUERY);
+    if ( xRes.is() && xRow.is() )
+    {
+        sal_Int32 nType = getColumnType( column );
+        while ( xRes->next() )
+        {
+            if ( nType == xRow->getInt(5) )
+                nNullable = xRow->getInt( 11 );
+        }
+    }
+    else
+        nNullable = OAdabasResultSetMetaData_BASE::isNullable( column );
+
+    return nNullable;
 }
 // -----------------------------------------------------------------------------
 
