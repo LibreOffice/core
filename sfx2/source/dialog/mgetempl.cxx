@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mgetempl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:31 $
+ *  last change: $Author: mba $ $Date: 2000-09-28 11:43:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,7 +149,7 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage( Window* pParent, const SfxItem
     // diese Page braucht ExchangeSupport
     SetExchangeSupport();
 
-    ResMgr* pResMgr = SFX_APP()->GetISfxModule()->GetResMgr();
+    ResMgr* pResMgr = SFX_APP()->GetModule_Impl()->GetResMgr();
     DBG_ASSERT( pResMgr, "kein ResMgr am Modul" );
     pFamilies = new SfxStyleFamilies( ResId( DLG_STYLE_DESIGNER, pResMgr ) );
 
