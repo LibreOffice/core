@@ -68,7 +68,7 @@ Dim oDocSettings as Object
 	If bDBFields Then
 		oDBAccess = GetRegistryKeyContent(&quot;org.openoffice.Office.DataAccess/AddressBook/&quot;)
 		sAddressbook = oDBAccess.DataSourceName
-		
+
 		If sAddressbook = &quot;&quot; Then                       &apos;If there is no field mapping
 			If Not odBAccess.AutoPilotCompleted Then                 &apos;If the Mapping Pilot never ran
 				oAddressPilot = createUnoService(&quot;com.sun.star.ui.dialogs.AddressBookSourcePilot&quot;)
@@ -110,7 +110,7 @@ Dim oDocSettings as Object
 	oFoundall = oDocument.FindAll(oSearchDesc)
 
 	&apos;Loop over the foundings
-	For i = 0 To oFoundAll.Count - 1
+  For i = oFoundAll.Count -1 To 0 Step -1
 		oFound = oFoundAll.GetByIndex(i)
 		sFoundString = oFound.String
 		&apos;Extract the string inside the brackets
