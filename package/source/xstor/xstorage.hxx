@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xstorage.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 20:46:00 $
+ *  last change: $Author: vg $ $Date: 2005-02-25 09:38:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -241,6 +241,7 @@ struct OStorage_Impl
 
     sal_Bool        m_bControlMediaType;
     ::rtl::OUString m_aMediaType;
+    sal_Bool        m_bMTFallbackUsed;
 
     //////////////////////////////////////////
     // Constructors
