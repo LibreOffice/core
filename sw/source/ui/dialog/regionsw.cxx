@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regionsw.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-03 14:04:38 $
+ *  last change: $Author: os $ $Date: 2001-06-20 11:20:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -418,7 +418,6 @@ SwEditRegionDlg::SwEditRegionDlg( Window* pParent, SwWrtShell& rWrtSh )
     aTree.SetHelpId(HID_REGION_TREE);
     aTree.SetSelectionMode( MULTIPLE_SELECTION );
     aTree.SetWindowBits(WB_HASBUTTONSATROOT|WB_CLIPCHILDREN|WB_HSCROLL);
-    aTree.SetFont(Application::GetSettings().GetStyleSettings().GetAppFont());
     aTree.SetNodeBitmaps( aExpNode,aCollNode );
     aTree.SetSpaceBetweenEntries(0);
 
@@ -2367,6 +2366,9 @@ void SwSectionPropertyTabDialog::PageCreated( USHORT nId, SfxTabPage &rPage )
 
 /*-------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.11  2001/06/03 14:04:38  fme
+    Fix #86988#: Redesign of dialogs
+
     Revision 1.10  2001/05/30 07:35:37  os
     #87559# password handling corrected
 
