@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olinefun.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-14 15:31:48 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:25:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,21 +98,21 @@ void lcl_InvalidateOutliner( SfxBindings* pBindings )
 
 //! PaintWidthHeight zur DocShell verschieben?
 
-void lcl_PaintWidthHeight( ScDocShell& rDocShell, USHORT nTab,
-                                    BOOL bColumns, USHORT nStart, USHORT nEnd )
+void lcl_PaintWidthHeight( ScDocShell& rDocShell, SCTAB nTab,
+                                    BOOL bColumns, SCCOLROW nStart, SCCOLROW nEnd )
 {
     ScDocument* pDoc = rDocShell.GetDocument();
 
     USHORT nParts = PAINT_GRID;
-    USHORT nStartCol = 0;
-    USHORT nStartRow = 0;
-    USHORT nEndCol = MAXCOL;            // fuer Test auf Merge
-    USHORT nEndRow = MAXROW;
+    SCCOL nStartCol = 0;
+    SCROW nStartRow = 0;
+    SCCOL nEndCol = MAXCOL;         // fuer Test auf Merge
+    SCROW nEndRow = MAXROW;
     if ( bColumns )
     {
         nParts |= PAINT_TOP;
-        nStartCol = nStart;
-        nEndCol = nEnd;
+        nStartCol = static_cast<SCCOL>(nStart);
+        nEndCol = static_cast<SCCOL>(nEnd);
     }
     else
     {
@@ -134,11 +134,11 @@ void lcl_PaintWidthHeight( ScDocShell& rDocShell, USHORT nTab,
 BOOL ScOutlineDocFunc::MakeOutline( const ScRange& rRange, BOOL bColumns, BOOL bRecord, BOOL bApi )
 {
     BOOL bSuccess = FALSE;
-    USHORT nStartCol = rRange.aStart.Col();
-    USHORT nStartRow = rRange.aStart.Row();
-    USHORT nEndCol = rRange.aEnd.Col();
-    USHORT nEndRow = rRange.aEnd.Row();
-    USHORT nTab = rRange.aStart.Tab();
+    SCCOL nStartCol = rRange.aStart.Col();
+    SCROW nStartRow = rRange.aStart.Row();
+    SCCOL nEndCol = rRange.aEnd.Col();
+    SCROW nEndRow = rRange.aEnd.Row();
+    SCTAB nTab = rRange.aStart.Tab();
 
     ScDocument* pDoc = rDocShell.GetDocument();
     ScOutlineTable* pTable = pDoc->GetOutlineTable( nTab, TRUE );
@@ -196,11 +196,11 @@ BOOL ScOutlineDocFunc::RemoveOutline( const ScRange& rRange, BOOL bColumns, BOOL
 {
     BOOL bDone = FALSE;
 
-    USHORT nStartCol = rRange.aStart.Col();
-    USHORT nStartRow = rRange.aStart.Row();
-    USHORT nEndCol = rRange.aEnd.Col();
-    USHORT nEndRow = rRange.aEnd.Row();
-    USHORT nTab = rRange.aStart.Tab();
+    SCCOL nStartCol = rRange.aStart.Col();
+    SCROW nStartRow = rRange.aStart.Row();
+    SCCOL nEndCol = rRange.aEnd.Col();
+    SCROW nEndRow = rRange.aEnd.Row();
+    SCTAB nTab = rRange.aStart.Tab();
 
     ScDocument* pDoc = rDocShell.GetDocument();
 
@@ -257,7 +257,7 @@ BOOL ScOutlineDocFunc::RemoveOutline( const ScRange& rRange, BOOL bColumns, BOOL
     return bDone;
 }
 
-BOOL ScOutlineDocFunc::RemoveAllOutlines( USHORT nTab, BOOL bRecord, BOOL bApi )
+BOOL ScOutlineDocFunc::RemoveAllOutlines( SCTAB nTab, BOOL bRecord, BOOL bApi )
 {
     BOOL bSuccess = FALSE;
     ScDocument* pDoc = rDocShell.GetDocument();
@@ -267,15 +267,16 @@ BOOL ScOutlineDocFunc::RemoveAllOutlines( USHORT nTab, BOOL bRecord, BOOL bApi )
     ScOutlineTable* pTable = pDoc->GetOutlineTable( nTab );
     if (pTable)
     {
-        USHORT nStartCol;
-        USHORT nStartRow;
-        USHORT nEndCol;
-        USHORT nEndRow;
-        pTable->GetColArray()->GetRange( nStartCol, nEndCol );
-        pTable->GetRowArray()->GetRange( nStartRow, nEndRow );
-
         if (bRecord)
         {
+            SCCOLROW nCol1, nCol2, nRow1, nRow2;
+            pTable->GetColArray()->GetRange( nCol1, nCol2 );
+            pTable->GetRowArray()->GetRange( nRow1, nRow2 );
+            SCCOL nStartCol = static_cast<SCCOL>(nCol1);
+            SCROW nStartRow = nRow1;
+            SCCOL nEndCol = static_cast<SCCOL>(nCol2);
+            SCROW nEndRow = nRow2;
+
             ScDocument* pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
             pUndoDoc->InitUndo( pDoc, nTab, nTab, TRUE, TRUE );
             pDoc->CopyToDocument( nStartCol, 0, nTab, nEndCol, MAXROW, nTab, IDF_NONE, FALSE, pUndoDoc );
@@ -312,11 +313,11 @@ BOOL ScOutlineDocFunc::RemoveAllOutlines( USHORT nTab, BOOL bRecord, BOOL bApi )
 
 BOOL ScOutlineDocFunc::AutoOutline( const ScRange& rRange, BOOL bRecord, BOOL bApi )
 {
-    USHORT nStartCol = rRange.aStart.Col();
-    USHORT nStartRow = rRange.aStart.Row();
-    USHORT nEndCol = rRange.aEnd.Col();
-    USHORT nEndRow = rRange.aEnd.Row();
-    USHORT nTab = rRange.aStart.Tab();
+    SCCOL nStartCol = rRange.aStart.Col();
+    SCROW nStartRow = rRange.aStart.Row();
+    SCCOL nEndCol = rRange.aEnd.Col();
+    SCROW nEndRow = rRange.aEnd.Row();
+    SCTAB nTab = rRange.aStart.Tab();
 
     ScDocument* pDoc = rDocShell.GetDocument();
 
@@ -333,12 +334,13 @@ BOOL ScOutlineDocFunc::AutoOutline( const ScRange& rRange, BOOL bRecord, BOOL bA
         {
             pUndoTab = new ScOutlineTable( *pTable );
 
-            USHORT nOutStartCol;
-            USHORT nOutStartRow;
-            USHORT nOutEndCol;
-            USHORT nOutEndRow;
-            pTable->GetColArray()->GetRange( nOutStartCol, nOutEndCol );
-            pTable->GetRowArray()->GetRange( nOutStartRow, nOutEndRow );
+            SCCOLROW nCol1, nCol2, nRow1, nRow2;
+            pTable->GetColArray()->GetRange( nCol1, nCol2 );
+            pTable->GetRowArray()->GetRange( nRow1, nRow2 );
+            SCCOL nOutStartCol = static_cast<SCCOL>(nCol1);;
+            SCROW nOutStartRow = nRow1;
+            SCCOL nOutEndCol = static_cast<SCCOL>(nCol2);;
+            SCROW nOutEndRow = nRow2;
 
             pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
             pUndoDoc->InitUndo( pDoc, nTab, nTab, TRUE, TRUE );
@@ -372,7 +374,7 @@ BOOL ScOutlineDocFunc::AutoOutline( const ScRange& rRange, BOOL bRecord, BOOL bA
 
 //------------------------------------------------------------------------
 
-BOOL ScOutlineDocFunc::SelectLevel( USHORT nTab, BOOL bColumns, USHORT nLevel,
+BOOL ScOutlineDocFunc::SelectLevel( SCTAB nTab, BOOL bColumns, USHORT nLevel,
                                     BOOL bRecord, BOOL bPaint, BOOL bApi )
 {
     ScDocument* pDoc = rDocShell.GetDocument();
@@ -386,8 +388,7 @@ BOOL ScOutlineDocFunc::SelectLevel( USHORT nTab, BOOL bColumns, USHORT nLevel,
     if (!pArray)
         return FALSE;
 
-    USHORT nStart;
-    USHORT nEnd;
+    SCCOLROW nStart, nEnd;
     pArray->GetRange( nStart, nEnd );
 
     if ( bRecord )
@@ -397,7 +398,9 @@ BOOL ScOutlineDocFunc::SelectLevel( USHORT nTab, BOOL bColumns, USHORT nLevel,
         if (bColumns)
         {
             pUndoDoc->InitUndo( pDoc, nTab, nTab, TRUE, FALSE );
-            pDoc->CopyToDocument( nStart, 0, nTab, nEnd, MAXROW, nTab, IDF_NONE, FALSE, pUndoDoc );
+            pDoc->CopyToDocument( static_cast<SCCOL>(nStart), 0, nTab,
+                    static_cast<SCCOL>(nEnd), MAXROW, nTab, IDF_NONE, FALSE,
+                    pUndoDoc );
         }
         else
         {
@@ -433,12 +436,12 @@ BOOL ScOutlineDocFunc::SelectLevel( USHORT nTab, BOOL bColumns, USHORT nLevel,
             pEntry->SetVisible( FALSE );
         }
 
-        USHORT nThisStart = pEntry->GetStart();
-        USHORT nThisEnd   = pEntry->GetEnd();
-        for (USHORT i=nThisStart; i<=nThisEnd; i++)
+        SCCOLROW nThisStart = pEntry->GetStart();
+        SCCOLROW nThisEnd   = pEntry->GetEnd();
+        for (SCCOLROW i=nThisStart; i<=nThisEnd; i++)
         {
             if ( bColumns )
-                pDoc->ShowCol( i, nTab, bShow );
+                pDoc->ShowCol( static_cast<SCCOL>(i), nTab, bShow );
             else
                 if ( !bShow || !pDoc->IsFiltered( i,nTab ) )
                     pDoc->ShowRow( i, nTab, bShow );
@@ -462,11 +465,11 @@ BOOL ScOutlineDocFunc::ShowMarkedOutlines( const ScRange& rRange, BOOL bRecord, 
 {
     BOOL bDone = FALSE;
 
-    USHORT nStartCol = rRange.aStart.Col();
-    USHORT nStartRow = rRange.aStart.Row();
-    USHORT nEndCol = rRange.aEnd.Col();
-    USHORT nEndRow = rRange.aEnd.Row();
-    USHORT nTab = rRange.aStart.Tab();
+    SCCOL nStartCol = rRange.aStart.Col();
+    SCROW nStartRow = rRange.aStart.Row();
+    SCCOL nEndCol = rRange.aEnd.Col();
+    SCROW nEndRow = rRange.aEnd.Row();
+    SCTAB nTab = rRange.aStart.Tab();
 
     ScDocument* pDoc = rDocShell.GetDocument();
 
@@ -478,11 +481,11 @@ BOOL ScOutlineDocFunc::ShowMarkedOutlines( const ScRange& rRange, BOOL bRecord, 
     {
         ScOutlineArray* pArray;
         ScOutlineEntry* pEntry;
-        USHORT nStart;
-        USHORT nEnd;
-        USHORT nMin;
-        USHORT nMax;
-        USHORT i;
+        SCCOLROW nStart;
+        SCCOLROW nEnd;
+        SCCOLROW nMin;
+        SCCOLROW nMax;
+        SCCOLROW i;
 
         if ( bRecord )
         {
@@ -517,7 +520,7 @@ BOOL ScOutlineDocFunc::ShowMarkedOutlines( const ScRange& rRange, BOOL bRecord, 
             }
         }
         for ( i=nMin; i<=nMax; i++ )
-            pDoc->ShowCol( i, nTab, TRUE );
+            pDoc->ShowCol( static_cast<SCCOL>(i), nTab, TRUE );
 
         //  Zeilen
 
@@ -561,11 +564,11 @@ BOOL ScOutlineDocFunc::HideMarkedOutlines( const ScRange& rRange, BOOL bRecord, 
 {
     BOOL bDone = FALSE;
 
-    USHORT nStartCol = rRange.aStart.Col();
-    USHORT nStartRow = rRange.aStart.Row();
-    USHORT nEndCol = rRange.aEnd.Col();
-    USHORT nEndRow = rRange.aEnd.Row();
-    USHORT nTab = rRange.aStart.Tab();
+    SCCOL nStartCol = rRange.aStart.Col();
+    SCROW nStartRow = rRange.aStart.Row();
+    SCCOL nEndCol = rRange.aEnd.Col();
+    SCROW nEndRow = rRange.aEnd.Row();
+    SCTAB nTab = rRange.aStart.Tab();
 
     ScDocument* pDoc = rDocShell.GetDocument();
 
@@ -579,17 +582,17 @@ BOOL ScOutlineDocFunc::HideMarkedOutlines( const ScRange& rRange, BOOL bRecord, 
         USHORT nColLevel;
         USHORT nRowLevel;
         USHORT nCount;
-        USHORT nStart;
-        USHORT nEnd;
+        SCCOLROW nStart;
+        SCCOLROW nEnd;
         USHORT i;
 
-        USHORT nEffStartCol = nStartCol;
-        USHORT nEffEndCol   = nEndCol;
+        SCCOLROW nEffStartCol = nStartCol;
+        SCCOLROW nEffEndCol   = nEndCol;
         ScOutlineArray* pColArray = pTable->GetColArray();
         pColArray->FindTouchedLevel( nStartCol, nEndCol, nColLevel );
         pColArray->ExtendBlock( nColLevel, nEffStartCol, nEffEndCol );
-        USHORT nEffStartRow = nStartRow;
-        USHORT nEffEndRow   = nEndRow;
+        SCCOLROW nEffStartRow = nStartRow;
+        SCCOLROW nEffEndRow   = nEndRow;
         ScOutlineArray* pRowArray = pTable->GetRowArray();
         pRowArray->FindTouchedLevel( nStartRow, nEndRow, nRowLevel );
         pRowArray->ExtendBlock( nRowLevel, nEffStartRow, nEffEndRow );
@@ -599,7 +602,9 @@ BOOL ScOutlineDocFunc::HideMarkedOutlines( const ScRange& rRange, BOOL bRecord, 
             ScOutlineTable* pUndoTab = new ScOutlineTable( *pTable );
             ScDocument* pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
             pUndoDoc->InitUndo( pDoc, nTab, nTab, TRUE, TRUE );
-            pDoc->CopyToDocument( nEffStartCol, 0, nTab, nEffEndCol, MAXROW, nTab, IDF_NONE, FALSE, pUndoDoc );
+            pDoc->CopyToDocument( static_cast<SCCOL>(nEffStartCol), 0, nTab,
+                    static_cast<SCCOL>(nEffEndCol), MAXROW, nTab, IDF_NONE,
+                    FALSE, pUndoDoc );
             pDoc->CopyToDocument( 0, nEffStartRow, nTab, MAXCOL, nEffEndRow, nTab, IDF_NONE, FALSE, pUndoDoc );
 
             rDocShell.GetUndoManager()->AddUndoAction(
@@ -617,7 +622,7 @@ BOOL ScOutlineDocFunc::HideMarkedOutlines( const ScRange& rRange, BOOL bRecord, 
             nStart = pEntry->GetStart();
             nEnd   = pEntry->GetEnd();
 
-            if ( nStartCol<=nEnd && nEndCol>=nStart )
+            if ( static_cast<SCCOLROW>(nStartCol)<=nEnd && static_cast<SCCOLROW>(nEndCol)>=nStart )
                 HideOutline( nTab, TRUE, nColLevel, i, FALSE, FALSE, bApi );
         }
 
@@ -652,7 +657,7 @@ BOOL ScOutlineDocFunc::HideMarkedOutlines( const ScRange& rRange, BOOL bRecord, 
 
 //------------------------------------------------------------------------
 
-BOOL ScOutlineDocFunc::ShowOutline( USHORT nTab, BOOL bColumns, USHORT nLevel, USHORT nEntry,
+BOOL ScOutlineDocFunc::ShowOutline( SCTAB nTab, BOOL bColumns, USHORT nLevel, USHORT nEntry,
                                     BOOL bRecord, BOOL bPaint, BOOL bApi )
 {
     ScDocument* pDoc = rDocShell.GetDocument();
@@ -662,8 +667,8 @@ BOOL ScOutlineDocFunc::ShowOutline( USHORT nTab, BOOL bColumns, USHORT nLevel, U
     ScOutlineTable* pTable = pDoc->GetOutlineTable( nTab );
     ScOutlineArray* pArray = bColumns ? pTable->GetColArray() : pTable->GetRowArray();
     ScOutlineEntry* pEntry = pArray->GetEntry( nLevel, nEntry );
-    USHORT nStart = pEntry->GetStart();
-    USHORT nEnd   = pEntry->GetEnd();
+    SCCOLROW nStart = pEntry->GetStart();
+    SCCOLROW nEnd   = pEntry->GetEnd();
 
     if ( bRecord )
     {
@@ -671,7 +676,9 @@ BOOL ScOutlineDocFunc::ShowOutline( USHORT nTab, BOOL bColumns, USHORT nLevel, U
         if (bColumns)
         {
             pUndoDoc->InitUndo( pDoc, nTab, nTab, TRUE, FALSE );
-            pDoc->CopyToDocument( nStart, 0, nTab, nEnd, MAXROW, nTab, IDF_NONE, FALSE, pUndoDoc );
+            pDoc->CopyToDocument( static_cast<SCCOL>(nStart), 0, nTab,
+                    static_cast<SCCOL>(nEnd), MAXROW, nTab, IDF_NONE, FALSE,
+                    pUndoDoc );
         }
         else
         {
@@ -688,11 +695,11 @@ BOOL ScOutlineDocFunc::ShowOutline( USHORT nTab, BOOL bColumns, USHORT nLevel, U
 //! HideCursor();
 
     pEntry->SetHidden(FALSE);
-    USHORT i;
+    SCCOLROW i;
     for ( i = nStart; i <= nEnd; i++ )
     {
         if ( bColumns )
-            pDoc->ShowCol( i, nTab, TRUE );
+            pDoc->ShowCol( static_cast<SCCOL>(i), nTab, TRUE );
         else
             if ( !pDoc->IsFiltered( i,nTab ) )              // weggefilterte nicht einblenden
                 pDoc->ShowRow( i, nTab, TRUE );
@@ -703,12 +710,12 @@ BOOL ScOutlineDocFunc::ShowOutline( USHORT nTab, BOOL bColumns, USHORT nLevel, U
     {
         if ( pEntry->IsHidden() )
         {
-            USHORT nSubStart = pEntry->GetStart();
-            USHORT nSubEnd   = pEntry->GetEnd();
+            SCCOLROW nSubStart = pEntry->GetStart();
+            SCCOLROW nSubEnd   = pEntry->GetEnd();
             for ( i = nSubStart; i <= nSubEnd; i++ )
             {
                 if ( bColumns )
-                    pDoc->ShowCol( i, nTab, FALSE );
+                    pDoc->ShowCol( static_cast<SCCOL>(i), nTab, FALSE );
                 else
                     pDoc->ShowRow( i, nTab, FALSE );
             }
@@ -733,7 +740,7 @@ BOOL ScOutlineDocFunc::ShowOutline( USHORT nTab, BOOL bColumns, USHORT nLevel, U
     return TRUE;        //! immer ???
 }
 
-BOOL ScOutlineDocFunc::HideOutline( USHORT nTab, BOOL bColumns, USHORT nLevel, USHORT nEntry,
+BOOL ScOutlineDocFunc::HideOutline( SCTAB nTab, BOOL bColumns, USHORT nLevel, USHORT nEntry,
                                     BOOL bRecord, BOOL bPaint, BOOL bApi )
 {
     ScDocument* pDoc = rDocShell.GetDocument();
@@ -743,8 +750,8 @@ BOOL ScOutlineDocFunc::HideOutline( USHORT nTab, BOOL bColumns, USHORT nLevel, U
     ScOutlineTable* pTable = pDoc->GetOutlineTable( nTab );
     ScOutlineArray* pArray = bColumns ? pTable->GetColArray() : pTable->GetRowArray();
     ScOutlineEntry* pEntry = pArray->GetEntry( nLevel, nEntry );
-    USHORT nStart = pEntry->GetStart();
-    USHORT nEnd   = pEntry->GetEnd();
+    SCCOLROW nStart = pEntry->GetStart();
+    SCCOLROW nEnd   = pEntry->GetEnd();
 
     if ( bRecord )
     {
@@ -752,7 +759,9 @@ BOOL ScOutlineDocFunc::HideOutline( USHORT nTab, BOOL bColumns, USHORT nLevel, U
         if (bColumns)
         {
             pUndoDoc->InitUndo( pDoc, nTab, nTab, TRUE, FALSE );
-            pDoc->CopyToDocument( nStart, 0, nTab, nEnd, MAXROW, nTab, IDF_NONE, FALSE, pUndoDoc );
+            pDoc->CopyToDocument( static_cast<SCCOL>(nStart), 0, nTab,
+                    static_cast<SCCOL>(nEnd), MAXROW, nTab, IDF_NONE, FALSE,
+                    pUndoDoc );
         }
         else
         {
@@ -769,11 +778,11 @@ BOOL ScOutlineDocFunc::HideOutline( USHORT nTab, BOOL bColumns, USHORT nLevel, U
 //! HideCursor();
 
     pEntry->SetHidden(TRUE);
-    USHORT i;
+    SCCOLROW i;
     for ( i = nStart; i <= nEnd; i++ )
     {
         if ( bColumns )
-            pDoc->ShowCol( i, nTab, FALSE );
+            pDoc->ShowCol( static_cast<SCCOL>(i), nTab, FALSE );
         else
             pDoc->ShowRow( i, nTab, FALSE );
     }
