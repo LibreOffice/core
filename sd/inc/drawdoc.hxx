@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: aw $ $Date: 2001-09-27 10:12:46 $
+ *  last change: $Author: ka $ $Date: 2001-11-23 14:04:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,7 @@ class EditStatus;
 class Graphic;
 class Point;
 class Window;
+class SdTransferable;
 struct SpellCallbackInfo;
 struct StyleRequestData;
 
@@ -192,6 +193,7 @@ private:
     List*             pFrameViewList;
     List*             pCustomShowList;
     SdDrawDocShell*   pDocSh;
+    SdTransferable *  pCreatingTransferable;
     BOOL              bHasOnlineSpellErrors;
     BOOL              bInitialOnlineSpellingEnabled;
     String            aBookmarkFile;      // Zum Laden von Bookmarks
@@ -212,7 +214,6 @@ private:
     BOOL              bPresFullScreen;
     ULONG             nPresPause;
     BOOL              bPresShowLogo;
-    BOOL              bSdDataObj;
     BOOL              bOnlineSpell;
     BOOL              bHideSpell;
     BOOL              bCustomShow;
@@ -281,7 +282,7 @@ public:
     void            SetAllocDocSh(BOOL bAlloc);
 #endif
 
-    void     CreatingDataObj(BOOL bDataObj) { bSdDataObj = bDataObj; }
+    void     CreatingDataObj( SdTransferable* pTransferable ) { pCreatingTransferable = pTransferable; }
 
     void     CreateFirstPages();
     BOOL     CreateMissingNotesAndHandoutPages();
