@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sspellimp.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-12 10:41:01 $
+ *  last change: $Author: khendricks $ $Date: 2003-06-24 19:48:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -359,6 +359,10 @@ INT16 SpellChecker::GetSpellFailure( const OUString &rWord, const Locale &rLocal
                       aDEncs[i] = 0;
                       if (aDicts[i]) {
             aDEncs[i] = rtl_getTextEncodingFromUnixCharset(aDicts[i]->get_dic_encoding());
+                        if ((aDEncs[i] == RTL_TEXTENCODING_DONTKNOW)
+                && (strcmp("ISCII-DEVANAGARI",aDicts[i]->get_dic_encoding()) == 0)) {
+              aDEncs[i] = RTL_TEXTENCODING_ISCII_DEVANAGARI;
+                        }
                       }
                }
                pMS = aDicts[i];
