@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: pluby $ $Date: 2001-03-02 07:18:41 $
+#   last change: $Author: jsc $ $Date: 2001-03-07 10:05:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,11 +62,12 @@
 
 PRJ=..$/..
 
-PRJNAME=bridges
+PRJNAME=stoc
 TARGET=javaloader
 ENABLE_EXCEPTIONS=TRUE
 USE_DEFFILE=TRUE
 NO_BSYMBOLIC=TRUE
+COMP1TYPELIST=$(TARGET)
 
 # --- Settings -----------------------------------------------------
 
@@ -74,32 +75,16 @@ NO_BSYMBOLIC=TRUE
 
 # ------------------------------------------------------------------
 
-CPPUMAKERFLAGS += -C
-UNOUCRDEP=$(SOLARBINDIR)$/udkapi.rdb
-UNOUCRRDB=$(SOLARBINDIR)$/udkapi.rdb 
-
-# output directory (one dir for each project)
-UNOUCROUT=$(OUT)$/inc
-
-# adding to inludepath
-INCPRE+=$(UNOUCROUT)
-
-UNOTYPES= \
-    com.sun.star.java.XJavaThreadRegister_11	\
-    com.sun.star.java.XJavaVM					\
-    com.sun.star.lang.IllegalArgumentException	\
-    com.sun.star.lang.XInitialization			\
-    com.sun.star.lang.XMultiServiceFactory		\
-    com.sun.star.lang.XServiceInfo				\
-    com.sun.star.lang.XSingleServiceFactory		\
-    com.sun.star.lang.XTypeProvider				\
-    com.sun.star.loader.XImplementationLoader	\
-    com.sun.star.registry.XRegistryKey			\
-    com.sun.star.uno.TypeClass					\
-    com.sun.star.uno.XAggregation				\
-    com.sun.star.uno.XWeak
+.INCLUDE :  ..$/cppumaker.mk
 
 SLOFILES= 	$(SLO)$/javaloader.obj
+
+# NETBSD: somewhere we have to instantiate the static data members.
+# NETBSD-1.2.1 doesn't know about weak symbols so the default mechanism for GCC won't work.
+# SCO and MACOSX: the linker does know about weak symbols, but we can't ignore multiple defined symbols
+.IF "$(OS)"=="NETBSD" || "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX"
+SLOFILES+=$(SLO)$/staticmbjavaloader.obj
+.ENDIF
 
 SHL1TARGET= $(TARGET)
 
@@ -109,22 +94,15 @@ SHL1STDLIBS=\
         $(VOSLIB)			\
         $(SALLIB)
 
+SHL1DEPN=		
+SHL1IMPLIB=		i$(TARGET)
+SHL1LIBS= 		$(SLB)$/$(TARGET).lib 
+SHL1DEF= 		$(MISC)$/$(SHL1TARGET).def
 
-SHL1LIBS=\
-            $(SLB)$/$(TARGET).lib 
-
+DEF1NAME=		$(SHL1TARGET)
+DEF1EXPORTFILE=	exports.dxp
 
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :	target.mk
-
-
-$(MISC)$/$(SHL1TARGET).def: makefile.mk
-    @echo ------------------------------
-    @echo Making: $@
-    @echo LIBRARY     $(SHL1TARGET)                 >$@
-    @echo EXPORTS                                   >>$@
-    @echo component_getImplementationEnvironment    >>$@
-    @echo component_writeInfo                       >>$@
-    @echo component_getFactory					    >>$@
 
