@@ -2,9 +2,9 @@
  *
  *  $RCSfile: measure.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-29 02:27:43 $
+ *  last change: $Author: kz $ $Date: 2001-07-14 20:18:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,9 +103,9 @@ TabPage RID_SVXPAGE_MEASURE
         Text[ polish ] = "Lina";
         Text[ portuguese_brazilian ] = "Line";
         Text[ japanese ] = "ü";
-        Text[ korean ] = "Line";
+        Text[ korean ] = "¼±";
         Text[ chinese_simplified ] = "ÏßÌõ";
-        Text[ chinese_traditional ] = "?±ø";
+        Text[ chinese_traditional ] = "½u±ø";
         Text[ turkish ] = "Line";
         Text[ arabic ] = "Line";
         Text[ catalan ] = "Line";
@@ -351,12 +351,13 @@ TabPage RID_SVXPAGE_MEASURE
         Text[ polish ] = "Linia wymiarowa pod obiektem";
         Text[ portuguese_brazilian ] = "Anzeige ~unterhalb";
         Text[ japanese ] = "µÌŞ¼Şª¸Ä‰º•û‚É¡–@ü‚Ì•\\¦(~B)";
-        Text[ korean ] = "¾Æ·¡¿¡ Ç¥½Ã(~B)";
+        Text[ korean ] = "´ë»ó ¾Æ·¡¿¡ Ç¥½Ã(~B)";
         Text[ chinese_simplified ] = "³ß´çÏßÌõÏÔÊ¾ÔÚ¶ÔÏóÏÂ·½(~B)";
-        Text[ chinese_traditional ] = "¤Ø¤o?±øÅã¥Ü¦bª«¥ó¤U¤è(~B)";
+        Text[ chinese_traditional ] = "¤Ø¤o½u±øÅã¥Ü¦bª«¥ó¤U¤è(~B)";
         Text[ turkish ] = "Altta ~görüntüle";
         Text[ arabic ] = "ÅÙåÇÑ ÇáŞíÇÓ ÈÇáÃÓİá";
         Text[ catalan ] = "Mostrar ~abajo";
+        Text[ language_user1 ] = " ";
     };
     FixedLine FL_VERT
     {
@@ -384,7 +385,7 @@ TabPage RID_SVXPAGE_MEASURE
         Text[ polish ] = "Etykieta";
         Text[ portuguese_brazilian ] = "Legend";
         Text[ japanese ] = "×ÍŞÙ";
-        Text[ korean ] = "Legend";
+        Text[ korean ] = "¶óº§";
         Text[ chinese_simplified ] = "±êÇ©";
         Text[ chinese_traditional ] = "¼ĞÅÒ";
         Text[ turkish ] = "Legend";
@@ -406,14 +407,14 @@ TabPage RID_SVXPAGE_MEASURE
         Text [ danish ] = "Tekstplacering" ;
         Text [ portuguese_brazilian ] = "Textposition" ;
         Text [ portuguese ] = "~Posição do texto" ;
-        Text[ chinese_simplified ] = "ÕıÎÄÎ»ÖÃ";
+        Text[ chinese_simplified ] = "ÕıÎÄÎ»ÖÃ(~T)";
         Text[ russian ] = "Ïîëîæåíèå òåêñòà";
         Text[ polish ] = "Pozycja tekstu";
-        Text[ japanese ] = "Ã·½Ä‚ÌˆÊ’u";
-        Text[ chinese_traditional ] = "¤å¦r¦ì¸m";
+        Text[ japanese ] = "Ã·½Ä‚ÌˆÊ’u(~T)";
+        Text[ chinese_traditional ] = "¤å¦r¦ì¸m(~T)";
         Text[ arabic ] = "ãæÖÚ ÇáäÕ";
         Text[ greek ] = "Èİóç êåéìİíïõ";
-        Text[ korean ] = "ÅØ½ºÆ® À§Ä¡";
+        Text[ korean ] = "ÅØ½ºÆ® À§Ä¡(~T)";
         Text[ turkish ] = "Metin konumu";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Posición del texto";
@@ -447,7 +448,7 @@ TabPage RID_SVXPAGE_MEASURE
         Text[ polish ] = "Automatycznie pionowo";
         Text[ portuguese_brazilian ] = "~Automatic vertical";
         Text[ japanese ] = "©“®“I‚Éc•ûŒü‚Ö(~A)";
-        Text[ korean ] = "ÀÚµ¿ ¼öÁ÷(~A)";
+        Text[ korean ] = "¼öÁ÷, ÀÚµ¿(~A)";
         Text[ chinese_simplified ] = "×Ô¶¯´¹Ö±(~A)";
         Text[ chinese_traditional ] = "¦Û°Ê««ª½(~A)";
         Text[ arabic ] = "ÚãæÏí ÊáŞÇÆíÇğ";
@@ -476,7 +477,7 @@ TabPage RID_SVXPAGE_MEASURE
         Text[ polish ] = "Automatycznie poziomo";
         Text[ portuguese_brazilian ] = "~Automatic horizontal";
         Text[ japanese ] = "©“®“I‚É‰¡•ûŒü‚Ö(~U)";
-        Text[ korean ] = "ÀÚµ¿ ¼öÆò(~U)";
+        Text[ korean ] = "¼öÆò, ÀÚµ¿(~U)";
         Text[ chinese_simplified ] = "×Ô¶¯Ë®Æ½(~U)";
         Text[ chinese_traditional ] = "¦Û°Ê¤ô¥­(~U)";
         Text[ arabic ] = "ÃİŞí ÊáŞÇÆíÇğ";
@@ -508,7 +509,7 @@ TabPage RID_SVXPAGE_MEASURE
         Text[ chinese_traditional ] = "Åã¥Ü¤Ø¤o³æ¦ì(~M)";
         Text[ arabic ] = "ÅÙåÇÑ æÍÏÇÊ ÇáŞíÇÓ";
         Text[ greek ] = "ÅìöÜíéóç ìïíÜäùí ìİôñçóçò";
-        Text[ korean ] = "´ÜÀ§ Ç¥½Ã(~M)";
+        Text[ korean ] = "´ÜÀ§ ³ªÅ¸³»±â(~M)";
         Text[ turkish ] = "~Ölçüm birimlerini görüntüle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Mostrar métrica";
@@ -531,11 +532,11 @@ TabPage RID_SVXPAGE_MEASURE
         Text = "~Parallel zur Hilfslinie" ;
         Text [ ENGLISH ] = "~Parallel to help line" ;
         Text[ english_us ] = "~Parallel to line";
-        Text[ portuguese ] = "Legenda paralela à linha";
-        Text[ russian ] = "Ïîäïèñü ïàğàëëåëüíî äîï. ëèíèè";
+        Text[ portuguese ] = "~Paralelo à linha";
+        Text[ russian ] = "Ïàğàëëåëüíî ëèíèè";
         Text[ greek ] = "ĞáñÜëëçëç ğñïâïëŞ";
         Text[ dutch ] = "Weergave ~parallel";
-        Text[ french ] = "Affichage ~parallèle";
+        Text[ french ] = "Affichage parallèle";
         Text[ spanish ] = "Paralela a línea auxiliar";
         Text[ finnish ] = "~Samansuuntainen";
         Text[ italian ] = "~Parallela alla griglia";
@@ -544,12 +545,13 @@ TabPage RID_SVXPAGE_MEASURE
         Text[ polish ] = "Równolegle do linii pomocniczej";
         Text[ portuguese_brazilian ] = "Anzeige ~parallel";
         Text[ japanese ] = "¡–@ü‚Æ•½s‚É•\\¦(~P)";
-        Text[ korean ] = "ÆòÇàÀ¸·Î Ç¥½Ã(~P)";
+        Text[ korean ] = "Ä¸¼ÇÀ» ¾È³»¼±°ú ÆòÇàÀ¸·Î (~P)";
         Text[ chinese_simplified ] = "±êÇ©ºÍ¸¨ÖúÏßÆ½ĞĞ(~P)";
         Text[ chinese_traditional ] = "¼ĞÅÒ©M»²§U½u¥­¦æ(~P)";
         Text[ turkish ] = "Paralel ~görüntüle";
         Text[ arabic ] = "ÅÙåÇÑ ÇáŞíÇÓ ãÊæÇÒíÇğ";
         Text[ catalan ] = "M~ostrar paralelamente";
+        Text[ language_user1 ] = " ";
     };
     Control CTL_PREVIEW
     {
@@ -598,6 +600,7 @@ TabPage RID_SVXPAGE_MEASURE
     Text[ finnish ] = "Mitoitus";
 };
  // ********************************************************************** EOF
+
 
 
 
