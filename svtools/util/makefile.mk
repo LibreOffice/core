@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.48 $
+#*  $Revision: 1.49 $
 #*
-#*  last change: $Author: rt $ $Date: 2004-05-21 11:41:06 $
+#*  last change: $Author: kz $ $Date: 2004-06-28 16:13:19 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -108,7 +108,6 @@ LIB7FILES=	\
         $(SLB)$/unoiface.lib	\
         $(SLB)$/filter.lib		\
         $(SLB)$/igif.lib		\
-        $(SLB)$/ipng.lib		\
         $(SLB)$/jpeg.lib		\
         $(SLB)$/ixpm.lib		\
         $(SLB)$/ixbm.lib		\
