@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageMasterPropMapper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2000-10-19 12:25:47 $
+ *  last change: $Author: dr $ $Date: 2000-10-20 16:30:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,75 +98,55 @@ inline sal_Bool operator==( const table::BorderLine& rLine1, const table::Border
 }
 
 //______________________________________________________________________________
-XMLPageMasterPropSetMapper::XMLPageMasterPropSetMapper(
-        const XMLPropertyMapEntry* pEntries,
-        const UniReference< XMLPropertyHandlerFactory >& rFactory ) :
-    XMLPropertySetMapper( pEntries, rFactory )
+// helper struct to handle equal XMLPropertyState's for page, header and footer
+
+struct XMLPropertyStateBuffer
+{
+    XMLPropertyState*       pPMBorderAll;
+    XMLPropertyState*       pPMBorderTop;
+    XMLPropertyState*       pPMBorderBottom;
+    XMLPropertyState*       pPMBorderLeft;
+    XMLPropertyState*       pPMBorderRight;
+
+    XMLPropertyState*       pPMBorderWidthAll;
+    XMLPropertyState*       pPMBorderWidthTop;
+    XMLPropertyState*       pPMBorderWidthBottom;
+    XMLPropertyState*       pPMBorderWidthLeft;
+    XMLPropertyState*       pPMBorderWidthRight;
+
+    XMLPropertyState*       pPMPaddingAll;
+    XMLPropertyState*       pPMPaddingTop;
+    XMLPropertyState*       pPMPaddingBottom;
+    XMLPropertyState*       pPMPaddingLeft;
+    XMLPropertyState*       pPMPaddingRight;
+
+                            XMLPropertyStateBuffer();
+    void                    ContextFilter( ::std::vector< XMLPropertyState >& rPropState );
+};
+
+XMLPropertyStateBuffer::XMLPropertyStateBuffer() :
+        pPMBorderAll( NULL ),
+        pPMBorderTop( NULL ),
+        pPMBorderBottom( NULL ),
+        pPMBorderLeft( NULL ),
+        pPMBorderRight( NULL ),
+
+        pPMBorderWidthAll( NULL ),
+        pPMBorderWidthTop( NULL ),
+        pPMBorderWidthBottom( NULL ),
+        pPMBorderWidthLeft( NULL ),
+        pPMBorderWidthRight( NULL ),
+
+        pPMPaddingAll( NULL ),
+        pPMPaddingTop( NULL ),
+        pPMPaddingBottom( NULL ),
+        pPMPaddingLeft( NULL ),
+        pPMPaddingRight( NULL )
 {
 }
 
-XMLPageMasterPropSetMapper::~XMLPageMasterPropSetMapper()
+void XMLPropertyStateBuffer::ContextFilter( ::std::vector< XMLPropertyState >& rPropState )
 {
-}
-
-void XMLPageMasterPropSetMapper::ContextFilter(
-        ::std::vector< XMLPropertyState >& rPropState,
-        Reference< XPropertySet > rPropSet ) const
-{
-    XMLPropertyState*   pPMBorderAll            = NULL;
-    XMLPropertyState*   pPMBorderTop            = NULL;
-    XMLPropertyState*   pPMBorderBottom         = NULL;
-    XMLPropertyState*   pPMBorderLeft           = NULL;
-    XMLPropertyState*   pPMBorderRight          = NULL;
-
-    XMLPropertyState*   pPMBorderWidthAll       = NULL;
-    XMLPropertyState*   pPMBorderWidthTop       = NULL;
-    XMLPropertyState*   pPMBorderWidthBottom    = NULL;
-    XMLPropertyState*   pPMBorderWidthLeft      = NULL;
-    XMLPropertyState*   pPMBorderWidthRight     = NULL;
-
-    XMLPropertyState*   pPMPaddingAll           = NULL;
-    XMLPropertyState*   pPMPaddingTop           = NULL;
-    XMLPropertyState*   pPMPaddingBottom        = NULL;
-    XMLPropertyState*   pPMPaddingLeft          = NULL;
-    XMLPropertyState*   pPMPaddingRight         = NULL;
-
-    XMLPropertyState*   pPMHeaderHeight         = NULL;
-    XMLPropertyState*   pPMHeaderMinHeight      = NULL;
-    XMLPropertyState*   pPMHeaderDynamic        = NULL;
-
-    XMLPropertyState*   pPMFooterHeight         = NULL;
-    XMLPropertyState*   pPMFooterMinHeight      = NULL;
-    XMLPropertyState*   pPMFooterDynamic        = NULL;
-
-    for( ::std::vector< XMLPropertyState >::iterator pProp = rPropState.begin(); pProp != rPropState.end(); pProp++ )
-    {
-        switch( GetEntryContextId( pProp->mnIndex ) )
-        {
-            case CTF_PM_BORDERALL:          pPMBorderAll            = pProp;    break;
-            case CTF_PM_BORDERTOP:          pPMBorderTop            = pProp;    break;
-            case CTF_PM_BORDERBOTTOM:       pPMBorderBottom         = pProp;    break;
-            case CTF_PM_BORDERLEFT:         pPMBorderLeft           = pProp;    break;
-            case CTF_PM_BORDERRIGHT:        pPMBorderRight          = pProp;    break;
-            case CTF_PM_BORDERWIDTHALL:     pPMBorderWidthAll       = pProp;    break;
-            case CTF_PM_BORDERWIDTHTOP:     pPMBorderWidthTop       = pProp;    break;
-            case CTF_PM_BORDERWIDTHBOTTOM:  pPMBorderWidthBottom    = pProp;    break;
-            case CTF_PM_BORDERWIDTHLEFT:    pPMBorderWidthLeft      = pProp;    break;
-            case CTF_PM_BORDERWIDTHRIGHT:   pPMBorderWidthRight     = pProp;    break;
-            case CTF_PM_PADDINGALL:         pPMPaddingAll           = pProp;    break;
-            case CTF_PM_PADDINGTOP:         pPMPaddingTop           = pProp;    break;
-            case CTF_PM_PADDINGBOTTOM:      pPMPaddingBottom        = pProp;    break;
-            case CTF_PM_PADDINGLEFT:        pPMPaddingLeft          = pProp;    break;
-            case CTF_PM_PADDINGRIGHT:       pPMPaddingRight         = pProp;    break;
-            case CTF_PM_HEADERHEIGHT:       pPMHeaderHeight         = pProp;    break;
-            case CTF_PM_HEADERMINHEIGHT:    pPMHeaderMinHeight      = pProp;    break;
-            case CTF_PM_HEADERDYNAMIC:      pPMHeaderDynamic        = pProp;    break;
-            case CTF_PM_FOOTERHEIGHT:       pPMFooterHeight         = pProp;    break;
-            case CTF_PM_FOOTERMINHEIGHT:    pPMFooterMinHeight      = pProp;    break;
-            case CTF_PM_FOOTERDYNAMIC:      pPMFooterDynamic        = pProp;    break;
-        }
-    }
-
     if( pPMBorderAll )
     {
         if( pPMBorderTop && pPMBorderBottom && pPMBorderLeft && pPMBorderRight )
@@ -243,6 +223,84 @@ void XMLPageMasterPropSetMapper::ContextFilter(
         else
             lcl_RemoveState( pPMPaddingAll );
     }
+}
+
+
+//______________________________________________________________________________
+XMLPageMasterPropSetMapper::XMLPageMasterPropSetMapper(
+        const XMLPropertyMapEntry* pEntries,
+        const UniReference< XMLPropertyHandlerFactory >& rFactory ) :
+    XMLPropertySetMapper( pEntries, rFactory )
+{
+}
+
+XMLPageMasterPropSetMapper::~XMLPageMasterPropSetMapper()
+{
+}
+
+void XMLPageMasterPropSetMapper::ContextFilter(
+        ::std::vector< XMLPropertyState >& rPropState,
+        Reference< XPropertySet > rPropSet ) const
+{
+    XMLPropertyStateBuffer  aPageBuffer;
+    XMLPropertyStateBuffer  aHeaderBuffer;
+    XMLPropertyStateBuffer  aFooterBuffer;
+
+    XMLPropertyState*       pPMHeaderHeight     = NULL;
+    XMLPropertyState*       pPMHeaderMinHeight  = NULL;
+    XMLPropertyState*       pPMHeaderDynamic    = NULL;
+
+    XMLPropertyState*       pPMFooterHeight     = NULL;
+    XMLPropertyState*       pPMFooterMinHeight  = NULL;
+    XMLPropertyState*       pPMFooterDynamic    = NULL;
+
+    for( ::std::vector< XMLPropertyState >::iterator pProp = rPropState.begin(); pProp != rPropState.end(); pProp++ )
+    {
+        sal_Int16 nContextId    = GetEntryContextId( pProp->mnIndex );
+        sal_Int16 nFlag         = nContextId & CTF_PM_FLAGMASK;
+        sal_Int16 nSimpleId     = nContextId & ~CTF_PM_FLAGMASK;
+
+        XMLPropertyStateBuffer* pBuffer;
+        switch( nFlag )
+        {
+            case CTF_PM_HEADERFLAG:         pBuffer = &aHeaderBuffer;   break;
+            case CTF_PM_FOOTERFLAG:         pBuffer = &aFooterBuffer;   break;
+            default:                        pBuffer = &aPageBuffer;     break;
+        }
+
+        switch( nSimpleId )
+        {
+            case CTF_PM_BORDERALL:          pBuffer->pPMBorderAll           = pProp;    break;
+            case CTF_PM_BORDERTOP:          pBuffer->pPMBorderTop           = pProp;    break;
+            case CTF_PM_BORDERBOTTOM:       pBuffer->pPMBorderBottom        = pProp;    break;
+            case CTF_PM_BORDERLEFT:         pBuffer->pPMBorderLeft          = pProp;    break;
+            case CTF_PM_BORDERRIGHT:        pBuffer->pPMBorderRight         = pProp;    break;
+            case CTF_PM_BORDERWIDTHALL:     pBuffer->pPMBorderWidthAll      = pProp;    break;
+            case CTF_PM_BORDERWIDTHTOP:     pBuffer->pPMBorderWidthTop      = pProp;    break;
+            case CTF_PM_BORDERWIDTHBOTTOM:  pBuffer->pPMBorderWidthBottom   = pProp;    break;
+            case CTF_PM_BORDERWIDTHLEFT:    pBuffer->pPMBorderWidthLeft     = pProp;    break;
+            case CTF_PM_BORDERWIDTHRIGHT:   pBuffer->pPMBorderWidthRight    = pProp;    break;
+            case CTF_PM_PADDINGALL:         pBuffer->pPMPaddingAll          = pProp;    break;
+            case CTF_PM_PADDINGTOP:         pBuffer->pPMPaddingTop          = pProp;    break;
+            case CTF_PM_PADDINGBOTTOM:      pBuffer->pPMPaddingBottom       = pProp;    break;
+            case CTF_PM_PADDINGLEFT:        pBuffer->pPMPaddingLeft         = pProp;    break;
+            case CTF_PM_PADDINGRIGHT:       pBuffer->pPMPaddingRight        = pProp;    break;
+        }
+
+        switch( nContextId )
+        {
+            case CTF_PM_HEADERHEIGHT:       pPMHeaderHeight     = pProp;    break;
+            case CTF_PM_HEADERMINHEIGHT:    pPMHeaderMinHeight  = pProp;    break;
+            case CTF_PM_HEADERDYNAMIC:      pPMHeaderDynamic    = pProp;    break;
+            case CTF_PM_FOOTERHEIGHT:       pPMFooterHeight     = pProp;    break;
+            case CTF_PM_FOOTERMINHEIGHT:    pPMFooterMinHeight  = pProp;    break;
+            case CTF_PM_FOOTERDYNAMIC:      pPMFooterDynamic    = pProp;    break;
+        }
+    }
+
+    aPageBuffer.ContextFilter( rPropState );
+    aHeaderBuffer.ContextFilter( rPropState );
+    aFooterBuffer.ContextFilter( rPropState );
 
     if( pPMHeaderHeight && pPMHeaderMinHeight )
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlaustp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dr $ $Date: 2000-10-19 12:26:13 $
+ *  last change: $Author: dr $ $Date: 2000-10-20 16:30:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,12 @@
 #ifndef _XMLOFF_PAGEMASTERSTYLEMAP_HXX
 #include "PageMasterStyleMap.hxx"
 #endif
+#ifndef _XMLOFF_PAGEMASTEREXPORTPROPMAPPER_HXX
+#include "PageMasterExportPropMapper.hxx"
+#endif
+#ifndef _XMLBACKGROUNDIMAGEEXPORT_HXX
+#include "XMLBackgroundImageExport.hxx"
+#endif
 
 #ifndef _COM_SUN_STAR_XML_SAX_XATTRIBUTELIST_HPP_
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
@@ -150,29 +156,75 @@ void SvXMLAutoStylePoolP::exportStyleContent(
         OUString sType( RTL_CONSTASCII_USTRINGPARAM( sXML_CDATA ) );
         OUString sWS( RTL_CONSTASCII_USTRINGPARAM( sXML_WS ) );
 
+        sal_Int32       nHeaderIndex;
+        const uno::Any* pHeaderURL      = NULL;
+        const uno::Any* pHeaderPos      = NULL;
+        const uno::Any* pHeaderFilter   = NULL;
+        sal_Int32       nFooterIndex;
+        const uno::Any* pFooterURL      = NULL;
+        const uno::Any* pFooterPos      = NULL;
+        const uno::Any* pFooterFilter   = NULL;
+
+        UniReference< XMLPropertySetMapper > aPropMapper = rPropExp.getPropertySetMapper();
+
+        XMLBackgroundImageExport& rBGExport =
+            ((XMLPageMasterExportPropMapper&) rPropExp).GetBackgroundImageExport();
+
         for( ::std::vector< XMLPropertyState >::const_iterator pProp = rProperties.begin(); pProp != rProperties.end(); pProp++ )
         {
-            UniReference< XMLPropertySetMapper > aPropMapper = rPropExp.getPropertySetMapper();
-            sal_Int32 nIndex = pProp->mnIndex;
-            sal_Int32 nId = aPropMapper->GetEntryContextId( nIndex );
+            sal_Int32 nIndex        = pProp->mnIndex;
+            sal_Int16 nContextId    = aPropMapper->GetEntryContextId( nIndex );
+            sal_Int16 nFlag         = nContextId & CTF_PM_FLAGMASK;
+            sal_Int16 nSimpleId     = nContextId & ~CTF_PM_FLAGMASK;
 
-            if( nId & (CTF_PM_HEADERFLAG | CTF_PM_FOOTERFLAG) )
+            switch( nContextId )
             {
-                OUString sName( rNamespaceMap.GetQNameByKey(
-                    aPropMapper->GetEntryNameSpace( nIndex ), aPropMapper->GetEntryXMLName( nIndex ) ) );
-                OUString sValue;
-                const XMLPropertyHandler* pPropHdl = aPropMapper->GetPropertyHandler( nIndex );
-                if( pPropHdl )
+                case CTF_PM_HEADERGRAPHICURL:
                 {
-                    if( pPropHdl->exportXML( sValue, pProp->maValue, rUnitConverter ) &&
-                        (pProp->mnIndex >= 0) )
-                    {
-                        if( nId & CTF_PM_HEADERFLAG )
-                            pHeaderAttr->AddAttribute( sName, sType, sValue );
-                        else
-                            pFooterAttr->AddAttribute( sName, sType, sValue );
-                    }
+                    pHeaderURL = &pProp->maValue;
+                    nHeaderIndex = nIndex;
                 }
+                break;
+                case CTF_PM_HEADERGRAPHICPOSITION:
+                    pHeaderPos = &pProp->maValue;
+                break;
+                case CTF_PM_HEADERGRAPHICFILTER:
+                    pHeaderFilter = &pProp->maValue;
+                break;
+
+                case CTF_PM_FOOTERGRAPHICURL:
+                {
+                    pFooterURL = &pProp->maValue;
+                    nFooterIndex = nIndex;
+                }
+                break;
+                case CTF_PM_FOOTERGRAPHICPOSITION:
+                    pFooterPos = &pProp->maValue;
+                break;
+                case CTF_PM_FOOTERGRAPHICFILTER:
+                    pFooterFilter = &pProp->maValue;
+                break;
+
+                default:
+                    if( nFlag )
+                    {
+                        OUString sName( rNamespaceMap.GetQNameByKey(
+                            aPropMapper->GetEntryNameSpace( nIndex ), aPropMapper->GetEntryXMLName( nIndex ) ) );
+                        OUString sValue;
+                        const XMLPropertyHandler* pPropHdl = aPropMapper->GetPropertyHandler( nIndex );
+                        if( pPropHdl && pPropHdl->exportXML( sValue, pProp->maValue, rUnitConverter ) && (pProp->mnIndex >= 0) )
+                        {
+                            switch( nFlag )
+                            {
+                                case CTF_PM_HEADERFLAG:
+                                    pHeaderAttr->AddAttribute( sName, sType, sValue );
+                                break;
+                                case CTF_PM_FOOTERFLAG:
+                                    pFooterAttr->AddAttribute( sName, sType, sValue );
+                                break;
+                            }
+                        }
+                    }
             }
         }
 
@@ -186,6 +238,13 @@ void SvXMLAutoStylePoolP::exportStyleContent(
             rHandler->startElement( sNameHeader, xEmptyList );
             rHandler->ignorableWhitespace( sWS );
             rHandler->startElement( sNameProp, xHeaderAttrList );
+            if( pHeaderURL )
+            {
+                DBG_ASSERT( pHeaderPos && pHeaderFilter, "footer graphic pos or filter missing" );
+                rBGExport.exportXML( *pHeaderURL, pHeaderPos, pHeaderFilter,
+                    aPropMapper->GetEntryNameSpace( nHeaderIndex ),
+                    aPropMapper->GetEntryXMLName( nHeaderIndex ) );
+            }
             rHandler->ignorableWhitespace( sWS );
             rHandler->endElement( sNameProp );
             rHandler->ignorableWhitespace( sWS );
@@ -200,6 +259,13 @@ void SvXMLAutoStylePoolP::exportStyleContent(
             rHandler->startElement( sNameFooter, xEmptyList );
             rHandler->ignorableWhitespace( sWS );
             rHandler->startElement( sNameProp, xFooterAttrList );
+            if( pHeaderURL )
+            {
+                DBG_ASSERT( pFooterPos && pFooterFilter, "footer graphic pos or filter missing" );
+                rBGExport.exportXML( *pFooterURL, pFooterPos, pFooterFilter,
+                    aPropMapper->GetEntryNameSpace( nFooterIndex ),
+                    aPropMapper->GetEntryXMLName( nFooterIndex ) );
+            }
             rHandler->ignorableWhitespace( sWS );
             rHandler->endElement( sNameProp );
             rHandler->ignorableWhitespace( sWS );

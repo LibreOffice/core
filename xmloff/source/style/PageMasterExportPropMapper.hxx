@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageMasterExportPropMapper.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-20 06:14:52 $
+ *  last change: $Author: dr $ $Date: 2000-10-20 16:30:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,23 +65,46 @@
 #ifndef _XMLOFF_XMLEXPPR_HXX
 #include "xmlexppr.hxx"
 #endif
+#ifndef _XMLBACKGROUNDIMAGEEXPORT_HXX
+#include "XMLBackgroundImageExport.hxx"
+#endif
 
 
 //______________________________________________________________________________
 
 class XMLPageMasterExportPropMapper : public SvXMLExportPropertyMapper
 {
+protected:
+    XMLBackgroundImageExport aBackgroundImageExport;
+
 public:
                         XMLPageMasterExportPropMapper(
-                             const UniReference< XMLPropertySetMapper >& rMapper );
+                             const UniReference< XMLPropertySetMapper >& rMapper,
+                            SvXMLExport& rExport
+                            );
     virtual             ~XMLPageMasterExportPropMapper();
 
+    virtual void        handleElementItem(
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler >& rHandler,
+                            const XMLPropertyState& rProperty,
+                            const SvXMLUnitConverter& rUnitConverter,
+                            const SvXMLNamespaceMap& rNamespaceMap,
+                            sal_uInt16 nFlags,
+                            const ::std::vector< XMLPropertyState >* pProperties = 0,
+                            sal_uInt32 nIdx = 0
+                            ) const;
     virtual void        handleSpecialItem(
                             SvXMLAttributeList& rAttrList,
                             const XMLPropertyState& rProperty,
                             const SvXMLUnitConverter& rUnitConverter,
-                            const SvXMLNamespaceMap& rNamespaceMap
+                            const SvXMLNamespaceMap& rNamespaceMap,
+                            const ::std::vector< XMLPropertyState >* pProperties = 0,
+                            sal_uInt32 nIdx = 0
                             ) const;
+
+    inline XMLBackgroundImageExport& GetBackgroundImageExport()
+                                { return aBackgroundImageExport; }
+
 };
 
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageMasterExportPropMapper.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dr $ $Date: 2000-10-18 11:30:51 $
+ *  last change: $Author: dr $ $Date: 2000-10-20 16:30:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,14 +63,25 @@
 #include "PageMasterExportPropMapper.hxx"
 #endif
 
+#ifndef _XMLOFF_PAGEMASTERSTYLEMAP_HXX
+#include "PageMasterStyleMap.hxx"
+#endif
+
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
+
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
 
 
 //______________________________________________________________________________
 
 XMLPageMasterExportPropMapper::XMLPageMasterExportPropMapper(
-        const UniReference< XMLPropertySetMapper >& rMapper ) :
-    SvXMLExportPropertyMapper( rMapper )
+        const UniReference< XMLPropertySetMapper >& rMapper,
+        SvXMLExport& rExport ) :
+    SvXMLExportPropertyMapper( rMapper ),
+    aBackgroundImageExport( rExport )
 {
 }
 
@@ -78,11 +89,53 @@ XMLPageMasterExportPropMapper::~XMLPageMasterExportPropMapper()
 {
 }
 
+void XMLPageMasterExportPropMapper::handleElementItem(
+        const uno::Reference< xml::sax::XDocumentHandler >& rHandler,
+        const XMLPropertyState& rProperty,
+        const SvXMLUnitConverter& rUnitConverter,
+        const SvXMLNamespaceMap& rNamespaceMap,
+        sal_uInt16 nFlags,
+        const ::std::vector< XMLPropertyState >* pProperties,
+        sal_uInt32 nIdx ) const
+{
+    XMLPageMasterExportPropMapper* pThis = (XMLPageMasterExportPropMapper*) this;
+
+    switch( getPropertySetMapper()->GetEntryContextId( rProperty.mnIndex ) )
+    {
+        case CTF_PM_GRAPHICURL:
+        {
+            DBG_ASSERT( pProperties && (nIdx >= 2), "property vector missing" );
+            const Any*  pPos    = NULL;
+            const Any*  pFilter = NULL;
+            if( pProperties && (nIdx >= 2) )
+            {
+                const XMLPropertyState& rPos = (*pProperties)[nIdx - 2];
+                DBG_ASSERT( getPropertySetMapper()->GetEntryContextId( rPos.mnIndex ) == CTF_PM_GRAPHICPOSITION,
+                            "invalid property map: pos expected" );
+                if( getPropertySetMapper()->GetEntryContextId( rPos.mnIndex ) == CTF_PM_GRAPHICPOSITION )
+                    pPos = &rPos.maValue;
+
+                const XMLPropertyState& rFilter = (*pProperties)[nIdx - 1];
+                DBG_ASSERT( getPropertySetMapper()->GetEntryContextId( rFilter.mnIndex ) == CTF_PM_GRAPHICFILTER,
+                            "invalid property map: filter expected" );
+                if( getPropertySetMapper()->GetEntryContextId( rFilter.mnIndex ) == CTF_PM_GRAPHICFILTER )
+                    pFilter = &rFilter.maValue;
+            }
+            sal_uInt32 nPropIndex = rProperty.mnIndex;
+            pThis->aBackgroundImageExport.exportXML( rProperty.maValue, pPos, pFilter,
+                getPropertySetMapper()->GetEntryNameSpace( nPropIndex ),
+                getPropertySetMapper()->GetEntryXMLName( nPropIndex ) );
+        }
+    }
+}
+
 void XMLPageMasterExportPropMapper::handleSpecialItem(
         SvXMLAttributeList& rAttrList,
         const XMLPropertyState& rProperty,
         const SvXMLUnitConverter& rUnitConverter,
-        const SvXMLNamespaceMap& rNamespaceMap ) const
+        const SvXMLNamespaceMap& rNamespaceMap,
+        const ::std::vector< XMLPropertyState >* pProperties,
+        sal_uInt32 nIdx) const
 {
 }
 

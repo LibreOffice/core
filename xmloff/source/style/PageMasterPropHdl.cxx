@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageMasterPropHdl.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dr $ $Date: 2000-10-18 11:30:51 $
+ *  last change: $Author: dr $ $Date: 2000-10-20 16:30:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,10 +87,15 @@
 #include <com/sun/star/style/PageStyleLayout.hpp>
 #endif
 
+#ifndef _COMPHELPER_TYPES_HXX_
+#include <comphelper/types.hxx>
+#endif
+
 using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::style;
+using namespace ::comphelper;
 
 
 //______________________________________________________________________________
@@ -99,7 +104,7 @@ using namespace ::com::sun::star::style;
 
 
 //______________________________________________________________________________
-// property handler for style::PageStyleLayout
+// property handler for style:page-usage (style::PageStyleLayout)
 
 XMLPMPropHdl_PageStyleLayout::~XMLPMPropHdl_PageStyleLayout()
 {
@@ -167,7 +172,7 @@ sal_Bool XMLPMPropHdl_PageStyleLayout::exportXML(
 
 
 //______________________________________________________________________________
-// property handler for style::NumberingType (num-format)
+// property handler for style:num-format (style::NumberingType)
 
 XMLPMPropHdl_NumFormat::~XMLPMPropHdl_NumFormat()
 {
@@ -227,7 +232,7 @@ sal_Bool XMLPMPropHdl_NumFormat::exportXML(
 
 
 //______________________________________________________________________________
-// property handler for style::NumberingType (num-letter-sync)
+// property handler for style:num-letter-sync (style::NumberingType)
 
 XMLPMPropHdl_NumLetterSync::~XMLPMPropHdl_NumLetterSync()
 {
@@ -284,7 +289,7 @@ sal_Bool XMLPMPropHdl_NumLetterSync::exportXML(
 
 
 //______________________________________________________________________________
-// property handler for paper-tray-number
+// property handler for style:paper-tray-number
 
 XMLPMPropHdl_PaperTrayNumber::~XMLPMPropHdl_PaperTrayNumber()
 {
@@ -340,44 +345,45 @@ sal_Bool XMLPMPropHdl_PaperTrayNumber::exportXML(
 
 
 //______________________________________________________________________________
-// property handler for print-orientation
+// property handler for style:print
 
-XMLPMPropHdl_PrintOrientation::~XMLPMPropHdl_PrintOrientation()
+XMLPMPropHdl_Print::XMLPMPropHdl_Print( const sal_Char* sValue ) :
+    sAttrValue( OUString::createFromAscii( sValue ) )
 {
 }
 
-sal_Bool XMLPMPropHdl_PrintOrientation::importXML(
+XMLPMPropHdl_Print::~XMLPMPropHdl_Print()
+{
+}
+
+sal_Bool XMLPMPropHdl_Print::importXML(
         const OUString& rStrImpValue,
         Any& rValue,
         const SvXMLUnitConverter& rUnitConverter ) const
 {
-    sal_Bool bRet = sal_True;
+    sal_Unicode cToken  = ' ';
+    sal_Int32   nCount  = rStrImpValue.getTokenCount( cToken );
+    sal_Bool    bFound  = sal_False;
 
-    if( rStrImpValue.compareToAscii( sXML_landscape ) == 0 )
-        rValue <<= sal_True;
-    else if( rStrImpValue.compareToAscii( sXML_portrait ) == 0 )
-        rValue <<= sal_False;
-    else
-        bRet = sal_False;
+    for( sal_Int32 nIndex = 0; (nIndex < nCount) && !bFound; nIndex++ )
+        bFound = (sAttrValue == rStrImpValue.getToken( nIndex, cToken ));
 
-    return bRet;
+    setBOOL( rValue, bFound );
+    return sal_True;
 }
 
-sal_Bool XMLPMPropHdl_PrintOrientation::exportXML(
+sal_Bool XMLPMPropHdl_Print::exportXML(
         OUString& rStrExpValue,
         const Any& rValue,
         const SvXMLUnitConverter& rUnitConverter ) const
 {
-    sal_Bool bRet = sal_False;
-    sal_Bool bOrientation;
-
-    if( rValue >>= bOrientation )
+    if( getBOOL( rValue ) )
     {
-        rStrExpValue = bOrientation ?
-            OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_landscape ) ) :
-            OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_portrait ) );
-        bRet = sal_True;
+        if( rStrExpValue.getLength() )
+            rStrExpValue += OUString( RTL_CONSTASCII_USTRINGPARAM( " " ) );
+        rStrExpValue += sAttrValue;
     }
-    return bRet;
+
+    return sal_True;
 }
 

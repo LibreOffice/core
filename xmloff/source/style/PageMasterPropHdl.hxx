@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageMasterPropHdl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-20 12:31:42 $
+ *  last change: $Author: dr $ $Date: 2000-10-20 16:30:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,33 +66,37 @@
 #include "xmlprhdl.hxx"
 #endif
 
+#ifndef _RTL_USTRING_
+#include <rtl/ustring>
+#endif
+
 
 //______________________________________________________________________________
-// property handler for page-usage (style::PageStyleLayout)
+// property handler for style:page-usage (style::PageStyleLayout)
 
 class XMLPMPropHdl_PageStyleLayout : public XMLPropertyHandler
 {
 public:
-    virtual             ~XMLPMPropHdl_PageStyleLayout();
-    virtual sal_Bool    equals(
-                            const ::com::sun::star::uno::Any& rAny1,
-                            const ::com::sun::star::uno::Any& rAny2
-                            ) const;
-    virtual sal_Bool    importXML(
-                            const ::rtl::OUString& rStrImpValue,
-                            ::com::sun::star::uno::Any& rValue,
-                            const SvXMLUnitConverter& rUnitConverter
-                            ) const;
-    virtual sal_Bool    exportXML(
-                            ::rtl::OUString& rStrExpValue,
-                            const ::com::sun::star::uno::Any& rValue,
-                            const SvXMLUnitConverter& rUnitConverter
-                            ) const;
+    virtual                 ~XMLPMPropHdl_PageStyleLayout();
+    virtual sal_Bool        equals(
+                                const ::com::sun::star::uno::Any& rAny1,
+                                const ::com::sun::star::uno::Any& rAny2
+                                ) const;
+    virtual sal_Bool        importXML(
+                                const ::rtl::OUString& rStrImpValue,
+                                ::com::sun::star::uno::Any& rValue,
+                                const SvXMLUnitConverter& rUnitConverter
+                                ) const;
+    virtual sal_Bool        exportXML(
+                                ::rtl::OUString& rStrExpValue,
+                                const ::com::sun::star::uno::Any& rValue,
+                                const SvXMLUnitConverter& rUnitConverter
+                                ) const;
 };
 
 
 //______________________________________________________________________________
-// property handler for num-format (style::NumberingType)
+// property handler for style:num-format (style::NumberingType)
 
 class XMLPMPropHdl_NumFormat : public XMLPropertyHandler
 {
@@ -112,7 +116,7 @@ public:
 
 
 //______________________________________________________________________________
-// property handler for num-letter-sync (style::NumberingType)
+// property handler for style:num-letter-sync (style::NumberingType)
 
 class XMLPMPropHdl_NumLetterSync : public XMLPropertyHandler
 {
@@ -132,7 +136,7 @@ public:
 
 
 //______________________________________________________________________________
-// property handler for paper-tray-number
+// property handler for style:paper-tray-number
 
 class XMLPMPropHdl_PaperTrayNumber : public XMLPropertyHandler
 {
@@ -152,12 +156,17 @@ public:
 
 
 //______________________________________________________________________________
-// property handler for print-orientation
+// property handler for style:print
 
-class XMLPMPropHdl_PrintOrientation : public XMLPropertyHandler
+class XMLPMPropHdl_Print : public XMLPropertyHandler
 {
+protected:
+    ::rtl::OUString         sAttrValue;
+
 public:
-    virtual                 ~XMLPMPropHdl_PrintOrientation();
+                            XMLPMPropHdl_Print( const sal_Char* sValue );
+    virtual                 ~XMLPMPropHdl_Print();
+
     virtual sal_Bool        importXML(
                                 const ::rtl::OUString& rStrImpValue,
                                 ::com::sun::star::uno::Any& rValue,
@@ -169,6 +178,7 @@ public:
                                 const SvXMLUnitConverter& rUnitConverter
                                 ) const;
 };
+
 
 #endif
 

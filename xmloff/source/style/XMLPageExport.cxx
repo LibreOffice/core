@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLPageExport.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-20 05:36:28 $
+ *  last change: $Author: dr $ $Date: 2000-10-20 16:30:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,7 +243,7 @@ XMLPageExport::XMLPageExport( SvXMLExport& rExp ) :
             pPageMasterPropSetMapper->acquire();
     }
     const UniReference< XMLPropertySetMapper > aPageMasterMapperRef = pPageMasterPropSetMapper;
-    pPageMasterExportPropMapper = new XMLPageMasterExportPropMapper(aPageMasterMapperRef);
+    pPageMasterExportPropMapper = new XMLPageMasterExportPropMapper(aPageMasterMapperRef, rExp);
 
     rExport.GetAutoStylePool()->AddFamily( XML_STYLE_FAMILY_PAGE_MASTER, OUString( RTL_CONSTASCII_USTRINGPARAM( XML_STYLE_FAMILY_PAGE_MASTER_NAME ) ),
         pPageMasterPropSetMapper, OUString( RTL_CONSTASCII_USTRINGPARAM( XML_STYLE_FAMILY_PAGE_MASTER_PREFIX ) ), sal_False );
