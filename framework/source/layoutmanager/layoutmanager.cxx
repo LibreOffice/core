@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layoutmanager.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-15 11:36:22 $
+ *  last change: $Author: obo $ $Date: 2005-03-18 11:09:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -720,6 +720,23 @@ void LayoutManager::implts_reset( sal_Bool bAttached )
     }
 
     implts_unlock();
+}
+
+sal_Bool LayoutManager::implts_isEmbeddedLayoutManager() const
+{
+    // check if this layout manager is currently using the embedded feature
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+    ReadGuard aReadLock( m_aLock );
+    Reference< XFrame > xFrame = m_xFrame;
+    Reference< css::awt::XWindow > xContainerWindow( m_xContainerWindow );
+    aReadLock.unlock();
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+
+    Reference< css::awt::XWindow > xFrameContainerWindow = xFrame->getContainerWindow();
+    if ( xFrameContainerWindow == xContainerWindow )
+        return sal_False;
+    else
+        return sal_True;
 }
 
 void LayoutManager::implts_destroyElements()
@@ -3116,11 +3133,13 @@ void LayoutManager::implts_setStatusBarPosSize( const ::Point& rPos, const ::Siz
 {
      Reference< XUIElement > xStatusBar;
     Reference< XUIElement > xProgressBar;
+    Reference< css::awt::XWindow > xContainerWindow;
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     ReadGuard aReadLock( m_aLock );
     xStatusBar = Reference< XUIElement >( m_aStatusBarElement.m_xUIElement, UNO_QUERY );
     xProgressBar = Reference< XUIElement >( m_aProgressBarElement.m_xUIElement, UNO_QUERY );
+    xContainerWindow = m_xContainerWindow;
 
     Reference< css::awt::XWindow > xWindow;
     if ( xStatusBar.is() )
@@ -3136,9 +3155,14 @@ void LayoutManager::implts_setStatusBarPosSize( const ::Point& rPos, const ::Siz
 
     if ( xWindow.is() )
     {
-        xWindow->setPosSize( rPos.X(), rPos.Y(),
-                             rSize.Width(), rSize.Height(),
-                             css::awt::PosSize::POSSIZE );
+        vos::OGuard aGuard( Application::GetSolarMutex() );
+        Window* pParentWindow = VCLUnoHelper::GetWindow( xContainerWindow );
+        Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
+        if ( pParentWindow && ( pWindow && pWindow->GetType() == WINDOW_STATUSBAR ))
+        {
+            pWindow->SetParent( pParentWindow );
+            ((StatusBar *)pWindow)->SetPosSizePixel( rPos, rSize );
+        }
     }
 }
 
@@ -3716,7 +3740,7 @@ throw (RuntimeException)
             }
             aWriteLock.unlock();
         }
-        else if ( aElementType.equalsIgnoreAsciiCaseAscii( "statusbar" ) && xFrame->isTop() )
+        else if ( aElementType.equalsIgnoreAsciiCaseAscii( "statusbar" ) && ( xFrame->isTop() || implts_isEmbeddedLayoutManager() ))
         {
             implts_createStatusBar( aName );
         }
