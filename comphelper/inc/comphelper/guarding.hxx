@@ -2,9 +2,9 @@
  *
  *  $RCSfile: guarding.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-09-29 11:28:15 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 15:34:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,18 +115,18 @@ public:
 
     const OReusableGuard& operator= (const OReusableGuard& _rMaster)
     {
-        clear();
-        pT = _rMaster.pT;
-        if (pT)
-            pT->acquire();
+        this->clear();
+        this->pT = _rMaster.pT;
+        if (this->pT)
+            this->pT->acquire();
         return *this;
     }
 
     void attach(T& rMutex)
     {
-        clear();
-        pT = &rMutex;
-        pT->acquire();
+        this->clear();
+        this->pT = &rMutex;
+        this->pT->acquire();
     }
 };
 
