@@ -242,7 +242,12 @@ public class AccessibilityWorkBench
         aCBItem = new CheckboxMenuItem ("Show Descriptions", maCanvas.getShowDescriptions());
         aOptionsMenu.add (aCBItem);
         aCBItem.addActionListener (this);
+
         aCBItem = new CheckboxMenuItem ("Show Names", maCanvas.getShowNames());
+        aOptionsMenu.add (aCBItem);
+        aCBItem.addActionListener (this);
+
+        aCBItem = new CheckboxMenuItem ("Antialiased Rendering", maCanvas.getAntialiasing());
         aOptionsMenu.add (aCBItem);
         aCBItem.addActionListener (this);
 
@@ -314,6 +319,8 @@ public class AccessibilityWorkBench
                     maCanvas.setShowDescriptions (sValue.compareTo ("true")==0);
                 else if (sOptionName.compareTo ("ShowNames") == 0)
                     maCanvas.setShowNames (sValue.compareTo ("true")==0);
+                else if (sOptionName.compareTo ("Antialiasing") == 0)
+                    maCanvas.setAntialiasing (sValue.compareTo ("true")==0);
                 else
                     System.out.println ("option " + sOptionName + " unknown");
 
@@ -335,6 +342,7 @@ public class AccessibilityWorkBench
             PrintWriter aOut = new PrintWriter (new FileWriter (aOptionsFile));
             aOut.println ("ShowDescriptions = " + maCanvas.getShowDescriptions());
             aOut.println ("ShowNames = " + maCanvas.getShowNames());
+            aOut.println ("Antialiasing = " + maCanvas.getAntialiasing());
             aOut.close();
         }
         catch (Exception e)
@@ -459,6 +467,11 @@ public class AccessibilityWorkBench
         else if (e.getActionCommand().equals ("Show Names"))
         {
             maCanvas.setShowNames ( ! maCanvas.getShowNames());
+            SaveOptions ();
+        }
+        else if (e.getActionCommand().equals ("Antialiased Rendering"))
+        {
+            maCanvas.setAntialiasing ( ! maCanvas.getAntialiasing());
             SaveOptions ();
         }
         else
@@ -657,11 +670,21 @@ public class AccessibilityWorkBench
     */
     public void message (String message)
     {
-        maMessageArea.setText (message);
+        msMessage = message;
+        maMessageArea.setText (msMessage);
         //        System.out.println (message);
 
         // Show the new message string immediately.
         maMessageArea.paintImmediately (maMessageArea.getVisibleRect());
+    }
+
+
+
+
+    public void message_append (String message)
+    {
+        msMessage += message;
+        message (msMessage);
     }
 
 
@@ -715,4 +738,6 @@ public class AccessibilityWorkBench
         aTextButton;
     private MenuBar
         maMenuBar;
+    private String
+        msMessage;
 }
