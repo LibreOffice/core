@@ -2,9 +2,9 @@
  *
  *  $RCSfile: asciiopt.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2000-12-20 12:08:36 $
+ *  last change: $Author: er $ $Date: 2000-12-22 01:23:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,7 +180,11 @@ class ScImportAsciiDlg : public ModalDialog
 {
     SvStream*       pDatStream;
     ULONG*          pRowPosArray;
+    ULONG*          pRowPosArrayUnicode;
     USHORT          nArrayEndPos;
+    USHORT          nArrayEndPosUnicode;
+    ULONG           nStreamPos;
+    ULONG           nStreamPosUnicode;
 
     BOOL            bVFlag;
 
@@ -227,6 +231,8 @@ class ScImportAsciiDlg : public ModalDialog
 
     // aPreviewLine contains the byte string as read from the file
     ByteString      aPreviewLine[SC_ASCIIOPT_PREVIEW_LINES];
+    // same for Unicode
+    String          aPreviewLineUnicode[SC_ASCIIOPT_PREVIEW_LINES];
 
     USHORT          nScrollPos;
     USHORT          nUsedCols;
@@ -239,7 +245,7 @@ class ScImportAsciiDlg : public ModalDialog
     void        CheckColTypes(BOOL bReadVal,void *pCtr=NULL);
     void        CheckScrollRange();
     void        CheckScrollPos();
-    void        UpdateVertical();
+    void        UpdateVertical( BOOL bSwitchToFromUnicode = FALSE );
     void        DelimitedPreview();
     void        GetCharSet();
 
