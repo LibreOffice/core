@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: kz $ $Date: 2004-02-25 17:58:23 $
+#   last change: $Author: rt $ $Date: 2004-05-07 16:17:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -132,7 +132,6 @@ $(MISC)$/$(SHL1TARGET).flt: makefile.mk
     @echo ------------------------------
     @echo Making: $@
     @echo Provider> $@
-    @echo UnoEditControl>> $@
     @echo UnoControlEditModel>> $@
     @echo UnoFixedTextControl>> $@
     @echo UnoControlFixedTextModel>> $@
