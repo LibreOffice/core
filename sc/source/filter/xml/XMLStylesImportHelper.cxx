@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLStylesImportHelper.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: sab $ $Date: 2002-04-12 08:16:27 $
+ *  last change: $Author: hjs $ $Date: 2003-08-18 14:43:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -357,8 +357,6 @@ void ScMyStyleRanges::SetStylesToRanges(const rtl::OUString* pStyleName, ScXMLIm
 
 ScMyStylesImportHelper::ScMyStylesImportHelper(ScXMLImport& rTempImport)
     :
-    aCellStyles(),
-    aColDefaultStyles(),
     bPrevRangeAdded(sal_True),
     rImport(rTempImport),
     nMaxRanges(0),
@@ -499,6 +497,7 @@ void ScMyStylesImportHelper::AddColumnStyle(const rtl::OUString& sStyleName, con
     DBG_ASSERT(static_cast<sal_uInt32>(nColumn) == aColDefaultStyles.size(), "some columns are absent");
     ScMyStylesSet::iterator aItr = GetIterator(&sStyleName);
     DBG_ASSERT(aItr != aCellStyles.end(), "no column default style")
+    aColDefaultStyles.reserve(aColDefaultStyles.size() + nRepeat);
     for (sal_Int32 i = 0; i < nRepeat; i++)
         aColDefaultStyles.push_back(aItr);
 }
@@ -629,8 +628,8 @@ void ScMyStylesImportHelper::SetStylesToRanges()
         aItr->xRanges->SetStylesToRanges(&aItr->sStyleName, rImport);
         aItr++;
     }
-    aCellStyles.clear();
     aColDefaultStyles.clear();
+    aCellStyles.clear();
     nMaxRanges = 0;
 }
 
