@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmctrler.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 11:01:04 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 16:59:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,8 +131,8 @@
 #ifndef _COM_SUN_STAR_FORM_ERROREVENT_HPP_
 #include <com/sun/star/form/ErrorEvent.hpp>
 #endif
-#ifndef _COM_SUN_STAR_FORM_XDATABASEPARAMETERBROADCASTER_HPP_
-#include <com/sun/star/form/XDatabaseParameterBroadcaster.hpp>
+#ifndef _COM_SUN_STAR_FORM_XDATABASEPARAMETERBROADCASTER2_HPP_
+#include <com/sun/star/form/XDatabaseParameterBroadcaster2.hpp>
 #endif
 #ifndef _COM_SUN_STAR_FORM_XFORMCONTROLLER_HPP_
 #include <com/sun/star/form/XFormController.hpp>
@@ -296,7 +296,7 @@ typedef ::cppu::ImplHelper12<               ::com::sun::star::util::XModeSelecto
                             ,   ::com::sun::star::sdb::XRowSetApproveListener
                             ,   ::com::sun::star::sdb::XRowSetApproveBroadcaster
                             ,   ::com::sun::star::form::XDatabaseParameterListener
-                            ,   ::com::sun::star::form::XDatabaseParameterBroadcaster
+                            ,   ::com::sun::star::form::XDatabaseParameterBroadcaster2
                             ,   ::com::sun::star::lang::XServiceInfo
                             ,   ::com::sun::star::form::XResetListener
                             >   FmXFormController_BASE2;
@@ -520,6 +520,10 @@ public:
 // XSQLErrorListener
     virtual void SAL_CALL addSQLErrorListener(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLErrorListener>& _rListener) throw( ::com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL removeSQLErrorListener(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLErrorListener>& _rListener) throw( ::com::sun::star::uno::RuntimeException );
+
+// XDatabaseParameterBroadcaster2
+    virtual void SAL_CALL addDatabaseParameterListener(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XDatabaseParameterListener>& aListener) throw( ::com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL removeDatabaseParameterListener(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XDatabaseParameterListener>& aListener) throw( ::com::sun::star::uno::RuntimeException );
 
 // XDatabaseParameterBroadcaster
     virtual void SAL_CALL addParameterListener(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XDatabaseParameterListener>& aListener) throw( ::com::sun::star::uno::RuntimeException );
