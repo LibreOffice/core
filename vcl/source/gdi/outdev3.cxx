@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.183 $
+ *  $Revision: 1.184 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 16:07:56 $
+ *  last change: $Author: hr $ $Date: 2004-10-13 08:50:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3004,6 +3004,7 @@ ImplFontEntry* ImplFontCache::GetFallback( ImplDevFontList* pFontList,
     {
         // TODO: implement dynamic lists or improve static lists
         #define FALLBACKFONT_NAMELIST \
+            "eudc;" \
             "arialunicodems;andalesansui;cyberbit;starsymbol;opensymbol;lucidatypewriter;"  \
             "msmincho;fzmingti;sunbatang;sundotum;baekmukdotum;"                     \
             "kochimincho;sazanamimincho;"    \
@@ -3505,7 +3506,7 @@ void OutputDevice::ImplDrawTextRect( long nBaseX, long nBaseY,
 
 void OutputDevice::ImplDrawTextBackground( const SalLayout& rSalLayout )
 {
-    long nWidth = rSalLayout.GetTextWidth();
+    long nWidth = rSalLayout.GetTextWidth() / rSalLayout.GetUnitsPerPixel();
     Point aBase = rSalLayout.GetDrawPosition();
     long nX = aBase.X();
     long nY = aBase.Y();
@@ -5143,7 +5144,7 @@ void OutputDevice::SetFont( const Font& rNewFont )
         // Optimization MT/HDU: COL_TRANSPARENT means SetFont should ignore the font color,
         // because SetTextColor() is used for this.
         // #i28759# maTextColor might have been changed behind our back, commit then, too.
-        if ( ( aFont.GetColor() != COL_TRANSPARENT ) &&
+        if ( ( aFont.GetColor() != COL_TRANSPARENT && !aFont.IsTransparent() ) &&
              ( maFont.GetColor() != aFont.GetColor() || aFont.GetColor() != maTextColor ) )
         {
             maTextColor = aFont.GetColor();
