@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resource.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pl $ $Date: 2002-05-06 14:48:44 $
+ *  last change: $Author: pl $ $Date: 2002-05-29 14:58:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@ public:
     static Sequence< OUString >  getSupportedServiceNames_Static(void) throw();
     static OUString             getImplementationName_Static() throw()
                                 {
-                                    return OUString::createFromAscii("com.sun.star.comp.extensions.ResourceService");
+                                    return OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.extensions.ResourceService"));
                                 }
 
     // XExactName
@@ -173,7 +173,7 @@ Sequence< OUString > SAL_CALL ResourceService::getSupportedServiceNames(void) th
 Sequence< OUString > ResourceService::getSupportedServiceNames_Static(void) throw()
 {
     Sequence< OUString > aSNS( 1 );
-    aSNS.getArray()[0] = OUString::createFromAscii("com.sun.star.resource.VclStringResourceLoader");
+    aSNS.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.resource.VclStringResourceLoader"));
     return aSNS;
 }
 
@@ -183,7 +183,7 @@ Reference< XTypeConverter > ResourceService::getTypeConverter() const
     OGuard aGuard( Application::GetSolarMutex() );
     if( xSMgr.is() )
     {
-        Reference< XTypeConverter > xConv( xSMgr->createInstance( OUString::createFromAscii("com.sun.star.script.Converter" )), UNO_QUERY );
+        Reference< XTypeConverter > xConv( xSMgr->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.Converter" ))), UNO_QUERY );
         ((ResourceService*)this)->xTypeConverter = xConv;
     }
     return xTypeConverter;
@@ -215,12 +215,16 @@ OUString    SAL_CALL ResourceService::getExactName( const OUString & Approximate
 {
     OUString aName( ApproximateName );
     aName = aName.toAsciiLowerCase();
-    if( aName == OUString::createFromAscii("filename") )
-        return OUString::createFromAscii("FileName");
-    else if( aName == OUString::createFromAscii("getstring" ))
-        return OUString::createFromAscii("getString");
-    else if( aName == OUString::createFromAscii("hasstring") )
-        return OUString::createFromAscii("hasString");
+    if( aName.equalsAscii("filename") )
+        return OUString(RTL_CONSTASCII_USTRINGPARAM("FileName"));
+    else if( aName.equalsAscii("getstring" ))
+        return OUString(RTL_CONSTASCII_USTRINGPARAM("getString"));
+    else if( aName.equalsAscii("getstrings" ))
+        return OUString(RTL_CONSTASCII_USTRINGPARAM("getStrings"));
+    else if( aName.equalsAscii("hasstring") )
+        return OUString(RTL_CONSTASCII_USTRINGPARAM("hasString"));
+    else if( aName.equalsAscii("hasstrings") )
+        return OUString(RTL_CONSTASCII_USTRINGPARAM("hasStrings"));
     Reference< XExactName > xEN( getDefaultInvocation(), UNO_QUERY );
     if( xEN.is() )
         return xEN->getExactName( ApproximateName );
@@ -248,20 +252,28 @@ Any SAL_CALL ResourceService::invoke
     throw(IllegalArgumentException, CannotConvertException, InvocationTargetException, RuntimeException)
 {
     Any aRet;
-    if( FunctionName == OUString::createFromAscii("getString") || FunctionName == OUString::createFromAscii("hasString" ))
+    if( FunctionName.equalsAscii("getString")
+        || FunctionName.equalsAscii("getStrings" )
+        || FunctionName.equalsAscii("hasString" )
+        || FunctionName.equalsAscii("hasStrings" )
+        )
     {
         sal_Int32 nElements = Params.getLength();
         if( nElements < 1 )
             throw IllegalArgumentException();
+        if( nElements > 1 && (FunctionName.equalsAscii("getString") || FunctionName.equalsAscii("hasString") ) )
+            throw IllegalArgumentException();
         if( !pResMgr )
             throw IllegalArgumentException();
 
-        OutParam.realloc( nElements );
-        OutParamIndex.realloc( nElements );
+        Sequence< OUString > aStrings( Params.getLength() );
+        Sequence< sal_Bool > aBools( Params.getLength() );
         const Any* pIn = Params.getConstArray();
-        Any* pOut = OutParam.getArray();
-        sal_Int16* pIndex = OutParamIndex.getArray();
+        OUString* pOutString = aStrings.getArray();
+        sal_Bool* pOutBool = aBools.getArray();
+
         Reference< XTypeConverter > xC = getTypeConverter();
+        bool bGetBranch = FunctionName.equalsAscii( "getString" ) || FunctionName.equalsAscii( "getStrings" );
 
         OGuard aGuard( Application::GetSolarMutex() );
         for( sal_Int32 n = 0; n < nElements; n++ )
@@ -279,20 +291,19 @@ Any SAL_CALL ResourceService::invoke
             if( nId > 0xFFFF || nId < 0 )
                 throw IllegalArgumentException();
 
-            if( FunctionName == OUString::createFromAscii("getString" ))
+            if( bGetBranch )
             {
                 ResId aId( (USHORT)nId, pResMgr );
                 aId.SetRT( RSC_STRING );
                 if( pResMgr->IsAvailable( aId ) )
                 {
                     String aStr( aId );
-                    pOut[n] = makeAny( OUString( aStr ) );
-                    pIndex[n] = n;
+                    pOutString[n] = aStr;
                 }
                 else
                     throw IllegalArgumentException();
             }
-            else //if( FunctionName == OUString::createFromAscii("hasString") )
+            else // hasString(s)
             {
                 sal_Bool bRet = sal_False;
                 if( pResMgr )
@@ -301,12 +312,17 @@ Any SAL_CALL ResourceService::invoke
                     aId.SetRT( RSC_STRING );
                     bRet = pResMgr->IsAvailable( aId );
                 }
-                pOut[n] = Any( &bRet, getBooleanCppuType() );
-                pIndex[n] = n;
+                pOutBool[n] = bRet;
             }
-            if( n == 0)
-                aRet = pOut[n];
         }
+        if( FunctionName.equalsAscii("getString") )
+            aRet <<= pOutString[0];
+        else if( FunctionName.equalsAscii("getStrings" ) )
+            aRet <<= aStrings;
+        else if( FunctionName.equalsAscii("hasString" ) )
+            aRet <<= pOutBool[0];
+        else
+            aRet <<= aBools;
     }
     else
     {
@@ -323,7 +339,7 @@ Any SAL_CALL ResourceService::invoke
 void SAL_CALL ResourceService::setValue(const OUString& PropertyName, const Any& Value)
     throw(UnknownPropertyException, CannotConvertException, InvocationTargetException, RuntimeException)
 {
-    if( PropertyName == OUString::createFromAscii("FileName") )
+    if( PropertyName == OUString(RTL_CONSTASCII_USTRINGPARAM("FileName")) )
     {
         OUString aName;
         if( !(Value >>= aName) )
@@ -362,7 +378,7 @@ Any SAL_CALL ResourceService::getValue(const OUString& PropertyName)
     throw(UnknownPropertyException, RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
-    if( PropertyName == OUString::createFromAscii("FileName" ))
+    if( PropertyName.equalsAscii("FileName" ))
         return makeAny( aFileName );
     else
     {
@@ -379,7 +395,7 @@ Any SAL_CALL ResourceService::getValue(const OUString& PropertyName)
 BOOL SAL_CALL ResourceService::hasMethod(const OUString& Name)
     throw(RuntimeException)
 {
-    if( Name == OUString::createFromAscii("getString") || Name == OUString::createFromAscii("hasString") )
+    if( Name.equalsAscii("getString") || Name.equalsAscii("getStrings") || Name.equalsAscii("hasString") )
         return TRUE;
     else
     {
@@ -395,7 +411,7 @@ BOOL SAL_CALL ResourceService::hasMethod(const OUString& Name)
 BOOL SAL_CALL ResourceService::hasProperty(const OUString& Name)
     throw(RuntimeException)
 {
-    if( Name == OUString::createFromAscii("FileName") )
+    if( Name.equalsAscii("FileName") )
         return TRUE;
     else
     {
@@ -422,7 +438,7 @@ sal_Bool SAL_CALL component_writeInfo( void * /*pServiceManager*/, XRegistryKey 
     {
         Reference< XRegistryKey > xNewKey =
             pRegistryKey->createKey(
-            OUString::createFromAscii( "/" ) + ResourceService::getImplementationName_Static() + OUString::createFromAscii( "/UNO/SERVICES" ) );
+            OUString(RTL_CONSTASCII_USTRINGPARAM("/")) + ResourceService::getImplementationName_Static() + OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES" )));
         Sequence< OUString > aServices = ResourceService::getSupportedServiceNames_Static();
         for( sal_Int32 i = 0; i < aServices.getLength(); i++ )
             xNewKey->createKey( aServices.getConstArray()[i]);
