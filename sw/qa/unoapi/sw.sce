@@ -12,8 +12,8 @@
 -o sw.SwAccessibleTextFrameView
 -o sw.SwAccessibleTextGraphicObject
 -o sw.SwXAutoTextContainer
--o sw.SwXAutoTextEntry
--o sw.SwXAutoTextGroup
+#i26146#-o sw.SwXAutoTextEntry
+#i26146#-o sw.SwXAutoTextGroup
 -o sw.SwXBodyText
 -o sw.SwXBookmark
 -o sw.SwXBookmarks
@@ -88,3 +88,7 @@
 -o sw.SwXTextFrame
 -o sw.SwXTextGraphicObject
 -o sw.SwXTextDocument
+-o sw.ParagraphStyle
+-o sw.PageStyle
+-o sw.ConditionalParagraphStyle
+-o sw.CharacterStyle
