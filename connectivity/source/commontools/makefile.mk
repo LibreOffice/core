@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: oj $ $Date: 2002-10-25 09:03:30 $
+#   last change: $Author: vg $ $Date: 2003-04-11 14:38:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -94,6 +94,7 @@ EXCEPTIONSFILES=\
         $(SLO)$/FDatabaseMetaDataResultSetMetaData.obj	\
         $(SLO)$/FDatabaseMetaDataResultSet.obj			\
         $(SLO)$/TDatabaseMetaDataBase.obj				\
+        $(SLO)$/TPrivilegesResultSet.obj				\
         $(SLO)$/TSkipDeletedSet.obj
 
 SLOFILES=\
