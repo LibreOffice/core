@@ -3,9 +3,9 @@
  *
  *  $RCSfile: UserProfile.xcs,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dg $ $Date: 2002-05-19 23:03:10 $
+ *  last change: $Author: pb $ $Date: 2002-07-31 10:04:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,153 +61,153 @@
  ************************************************************************ -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../component-schema.dtd">
 <oor:component-schema oor:name="UserProfile" oor:package="org.openoffice" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xml:lang="en-US">
-  <component>
-    <group oor:name="Data">
-      <prop oor:name="o" oor:type="xs:string">
-        <!-- OldPath: User -->
-        <!-- OldLocation: soffice.ini -->
-        <!-- Responsible: PB -->
-        <!-- UIHints: Tools - Options - General - User Data -->
-        <info>
-          <desc xml:lang="en-US">The name of the user&amp;apos;s company</desc>
-        </info>
-      </prop>
-      <prop oor:name="givenname" oor:type="xs:string">
-        <!-- OldPath: User -->
-        <!-- OldLocation: soffice.ini -->
-        <!-- Responsible: PB -->
-        <!-- UIHints: Tools - Options - General - User Data -->
-        <info>
-          <desc xml:lang="en-US">The first name of the user</desc>
-        </info>
-      </prop>
-      <prop oor:name="sn" oor:type="xs:string">
-        <!-- OldPath: User -->
-        <!-- OldLocation: soffice.ini -->
-        <!-- Responsible: PB -->
-        <!-- UIHints: Tools - Options - General - User Data -->
-        <info>
-          <desc xml:lang="en-US">The last name of the user</desc>
-        </info>
-      </prop>
-      <prop oor:name="initials" oor:type="xs:string">
-        <!-- OldPath: User -->
-        <!-- OldLocation: soffice.ini -->
-        <!-- Responsible: PB -->
-        <!-- UIHints: Tools - Options - General - User Data -->
-        <info>
-          <desc xml:lang="en-US">The initials of the user</desc>
-        </info>
-      </prop>
-      <prop oor:name="street" oor:type="xs:string">
-        <!-- OldPath: User -->
-        <!-- OldLocation: soffice.ini -->
-        <!-- Responsible: PB -->
-        <!-- UIHints: Tools - Options - General - User Data -->
-        <info>
-          <desc xml:lang="en-US">The street of the user&amp;apos;s address</desc>
-        </info>
-      </prop>
-      <prop oor:name="l" oor:type="xs:string">
-        <!-- OldPath: User -->
-        <!-- OldLocation: soffice.ini -->
-        <!-- Responsible: PB -->
-        <!-- UIHints: Tools - Options - General - User Data -->
-        <info>
-          <desc xml:lang="en-US">The city of the user&amp;apos;s address</desc>
-        </info>
-      </prop>
-      <prop oor:name="st" oor:type="xs:string">
-        <!-- OldPath: User -->
-        <!-- OldLocation: soffice.ini -->
-        <!-- Responsible: PB -->
-        <!-- UIHints: Tools - Options - General - User Data -->
-        <info>
-          <desc xml:lang="en-US">The state of the user&amp;apos;s address</desc>
-        </info>
-      </prop>
-      <prop oor:name="postalcode" oor:type="xs:string">
-        <!-- OldPath: User -->
-        <!-- OldLocation: soffice.ini -->
-        <!-- Responsible: PB -->
-        <!-- UIHints: Tools - Options - General - User Data -->
-        <info>
-          <desc xml:lang="en-US">The ZIP-code of the user&amp;apos;s address</desc>
-        </info>
-      </prop>
-      <prop oor:name="c" oor:type="xs:string">
-        <!-- OldPath: User -->
-        <!-- OldLocation: soffice.ini -->
-        <!-- Responsible: PB -->
-        <!-- UIHints: Tools - Options - General - User Data -->
-        <info>
-          <desc xml:lang="en-US">The country of the user&amp;apos;s address</desc>
-        </info>
-      </prop>
-      <prop oor:name="title" oor:type="xs:string">
-        <!-- OldPath: User -->
-        <!-- OldLocation: soffice.ini -->
-        <!-- Responsible: PB -->
-        <!-- UIHints: Tools - Options - General - User Data -->
-        <info>
-          <desc xml:lang="en-US">The title of the user</desc>
-        </info>
-      </prop>
-      <prop oor:name="position" oor:type="xs:string">
-        <!-- OldPath: User -->
-        <!-- OldLocation: soffice.ini -->
-        <!-- Responsible: PB -->
-        <!-- UIHints: Tools - Options - General - User Data -->
-        <info>
-          <desc xml:lang="en-US">The users position, this field is present only for backward compatibility. It is not defined for ldap orgPerson.</desc>
-        </info>
-      </prop>
-      <prop oor:name="homephone" oor:type="xs:string">
-        <!-- OldPath: User -->
-        <!-- OldLocation: soffice.ini -->
-        <!-- Responsible: PB -->
-        <!-- UIHints: Tools - Options - General - User Data -->
-        <info>
-          <desc xml:lang="en-US">The user&amp;apos;s private telephone number</desc>
-        </info>
-      </prop>
-      <prop oor:name="telephonenumber" oor:type="xs:string">
-        <!-- OldPath: User -->
-        <!-- OldLocation: soffice.ini -->
-        <!-- Responsible: PB -->
-        <!-- UIHints: Tools - Options - General - User Data -->
-        <info>
-          <desc xml:lang="en-US">The user&amp;apos;s work telephone number</desc>
-        </info>
-      </prop>
-      <prop oor:name="facsimiletelephonenumber" oor:type="xs:string">
-        <!-- OldPath: User -->
-        <!-- OldLocation: soffice.ini -->
-        <!-- Responsible: PB -->
-        <!-- UIHints: Tools - Options - General - User Data -->
-        <info>
-          <desc xml:lang="en-US">The user&amp;apos;s fax number</desc>
-        </info>
-      </prop>
-      <prop oor:name="mail" oor:type="xs:string">
-        <!-- OldPath: User -->
-        <!-- OldLocation: soffice.ini -->
-        <!-- Responsible: PB -->
-        <!-- UIHints: Tools - Options - General - User Data -->
-        <info>
-          <desc xml:lang="en-US">The user&amp;apos;s e-mail address</desc>
-        </info>
-      </prop>
-      <prop oor:name="UserGroup" oor:type="xs:string">
-        <!-- OldPath: User -->
-        <!-- OldLocation: soffice.ini -->
-        <!-- Responsible: PB -->
-        <!-- UIHints: Tools - Options - General - User Data -->
-        <value>UserGroup</value>
-        <info>
-          <desc xml:lang="en-US">This field is just kept for backward compatibility. It will be dropped as soon as possible.</desc>
-        </info>
-      </prop>
-    </group>
-  </component>
+	<component>
+		<group oor:name="Data">
+			<prop oor:name="o" oor:type="xs:string">
+				<!-- OldPath: User -->
+				<!-- OldLocation: soffice.ini -->
+				<!-- Responsible: PB -->
+				<!-- UIHints: Tools - Options - General - User Data -->
+				<info>
+					<desc xml:lang="en-US">The name of the user's company</desc>
+				</info>
+			</prop>
+			<prop oor:name="givenname" oor:type="xs:string">
+				<!-- OldPath: User -->
+				<!-- OldLocation: soffice.ini -->
+				<!-- Responsible: PB -->
+				<!-- UIHints: Tools - Options - General - User Data -->
+				<info>
+					<desc xml:lang="en-US">The first name of the user</desc>
+				</info>
+			</prop>
+			<prop oor:name="sn" oor:type="xs:string">
+				<!-- OldPath: User -->
+				<!-- OldLocation: soffice.ini -->
+				<!-- Responsible: PB -->
+				<!-- UIHints: Tools - Options - General - User Data -->
+				<info>
+					<desc xml:lang="en-US">The last name of the user</desc>
+				</info>
+			</prop>
+			<prop oor:name="initials" oor:type="xs:string">
+				<!-- OldPath: User -->
+				<!-- OldLocation: soffice.ini -->
+				<!-- Responsible: PB -->
+				<!-- UIHints: Tools - Options - General - User Data -->
+				<info>
+					<desc xml:lang="en-US">The initials of the user</desc>
+				</info>
+			</prop>
+			<prop oor:name="street" oor:type="xs:string">
+				<!-- OldPath: User -->
+				<!-- OldLocation: soffice.ini -->
+				<!-- Responsible: PB -->
+				<!-- UIHints: Tools - Options - General - User Data -->
+				<info>
+					<desc xml:lang="en-US">The street of the user's address</desc>
+				</info>
+			</prop>
+			<prop oor:name="l" oor:type="xs:string">
+				<!-- OldPath: User -->
+				<!-- OldLocation: soffice.ini -->
+				<!-- Responsible: PB -->
+				<!-- UIHints: Tools - Options - General - User Data -->
+				<info>
+					<desc xml:lang="en-US">The city of the user's address</desc>
+				</info>
+			</prop>
+			<prop oor:name="st" oor:type="xs:string">
+				<!-- OldPath: User -->
+				<!-- OldLocation: soffice.ini -->
+				<!-- Responsible: PB -->
+				<!-- UIHints: Tools - Options - General - User Data -->
+				<info>
+					<desc xml:lang="en-US">The state of the user's address</desc>
+				</info>
+			</prop>
+			<prop oor:name="postalcode" oor:type="xs:string">
+				<!-- OldPath: User -->
+				<!-- OldLocation: soffice.ini -->
+				<!-- Responsible: PB -->
+				<!-- UIHints: Tools - Options - General - User Data -->
+				<info>
+					<desc xml:lang="en-US">The ZIP-code of the user's address</desc>
+				</info>
+			</prop>
+			<prop oor:name="c" oor:type="xs:string">
+				<!-- OldPath: User -->
+				<!-- OldLocation: soffice.ini -->
+				<!-- Responsible: PB -->
+				<!-- UIHints: Tools - Options - General - User Data -->
+				<info>
+					<desc xml:lang="en-US">The country of the user's address</desc>
+				</info>
+			</prop>
+			<prop oor:name="title" oor:type="xs:string">
+				<!-- OldPath: User -->
+				<!-- OldLocation: soffice.ini -->
+				<!-- Responsible: PB -->
+				<!-- UIHints: Tools - Options - General - User Data -->
+				<info>
+					<desc xml:lang="en-US">The title of the user</desc>
+				</info>
+			</prop>
+			<prop oor:name="position" oor:type="xs:string">
+				<!-- OldPath: User -->
+				<!-- OldLocation: soffice.ini -->
+				<!-- Responsible: PB -->
+				<!-- UIHints: Tools - Options - General - User Data -->
+				<info>
+					<desc xml:lang="en-US">The users position, this field is present only for backward compatibility. It is not defined for ldap orgPerson.</desc>
+				</info>
+			</prop>
+			<prop oor:name="homephone" oor:type="xs:string">
+				<!-- OldPath: User -->
+				<!-- OldLocation: soffice.ini -->
+				<!-- Responsible: PB -->
+				<!-- UIHints: Tools - Options - General - User Data -->
+				<info>
+					<desc xml:lang="en-US">The user's private telephone number</desc>
+				</info>
+			</prop>
+			<prop oor:name="telephonenumber" oor:type="xs:string">
+				<!-- OldPath: User -->
+				<!-- OldLocation: soffice.ini -->
+				<!-- Responsible: PB -->
+				<!-- UIHints: Tools - Options - General - User Data -->
+				<info>
+					<desc xml:lang="en-US">The user's work telephone number</desc>
+				</info>
+			</prop>
+			<prop oor:name="facsimiletelephonenumber" oor:type="xs:string">
+				<!-- OldPath: User -->
+				<!-- OldLocation: soffice.ini -->
+				<!-- Responsible: PB -->
+				<!-- UIHints: Tools - Options - General - User Data -->
+				<info>
+					<desc xml:lang="en-US">The user's fax number</desc>
+				</info>
+			</prop>
+			<prop oor:name="mail" oor:type="xs:string">
+				<!-- OldPath: User -->
+				<!-- OldLocation: soffice.ini -->
+				<!-- Responsible: PB -->
+				<!-- UIHints: Tools - Options - General - User Data -->
+				<info>
+					<desc xml:lang="en-US">The user's e-mail address</desc>
+				</info>
+			</prop>
+			<prop oor:name="UserGroup" oor:type="xs:string">
+				<!-- OldPath: User -->
+				<!-- OldLocation: soffice.ini -->
+				<!-- Responsible: PB -->
+				<!-- UIHints: Tools - Options - General - User Data -->
+				<value>UserGroup</value>
+				<info>
+					<desc xml:lang="en-US">This field is just kept for backward compatibility. It will be dropped as soon as possible.</desc>
+				</info>
+			</prop>
+		</group>
+	</component>
 </oor:component-schema>
