@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swslots.src,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-15 20:33:53 $
+ *  last change: $Author: kz $ $Date: 2002-09-05 13:28:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4148,10 +4148,10 @@ SfxSlotInfo FN_INSERT_OBJ_CTRL
     SlotName[ russian ] = "¬ÒÚ‡‚ËÚ¸ Ó·˙ÂÍÚ";
     SlotName[ greek ] = "≈ÈÛ·„˘„ﬁ ·ÌÙÈÍÂÈÏ›Ì˘Ì";
     SlotName[ dutch ] = "Objecten invoegen";
-    SlotName[ french ] = "InsÈrer des objets";
-    SlotName[ spanish ] = "Insertar objetos";
+    SlotName[ french ] = "InsÈrer un objet";
+    SlotName[ spanish ] = "Insertar objeto";
     SlotName[ finnish ] = "Lis‰‰ objektit";
-    SlotName[ italian ] = "Inserisci oggetti";
+    SlotName[ italian ] = "Inserisci oggetto";
     SlotName[ danish ] = "IndsÊt objekt";
     SlotName[ swedish ] = "Infoga objekt";
     SlotName[ polish ] = "Wstaw obiekty";
@@ -4745,7 +4745,7 @@ SfxSlotInfo FN_NEW_GLOBAL_DOC
 };
 SfxSlotInfo FN_NEW_HTML_DOC
 {
-    SlotName = "HTML Dokument erzeugen";
+    SlotName = "HTML-Dokument erzeugen";
     SlotName [ english ] =  "HTML Dokument erzeugen";
     SlotName[ english_us ] = "Create HTML Document";
     SlotName[ portuguese ] = "Criar documento HTML";
@@ -9907,17 +9907,17 @@ SfxSlotInfo FN_TO_FOOTNOTE_AREA
     SlotName[ russian ] = "Edit Footnote/Endnote";
     SlotName[ greek ] = "Edit Footnote/Endnote";
     SlotName[ dutch ] = "Edit Footnote/Endnote";
-    SlotName[ french ] = "Edit Footnote/Endnote";
-    SlotName[ spanish ] = "Edit Footnote/Endnote";
+    SlotName[ french ] = "…diter les notes de bas de page / notes de fin";
+    SlotName[ spanish ] = "Editar nota al pie / nota al final";
     SlotName[ finnish ] = "Edit Footnote/Endnote";
-    SlotName[ italian ] = "Edit Footnote/Endnote";
+    SlotName[ italian ] = "Modifica note a piË pagina/di chiusura";
     SlotName[ danish ] = "Edit Footnote/Endnote";
-    SlotName[ swedish ] = "Edit Footnote/Endnote";
+    SlotName[ swedish ] = "Redigera fotnot/slutnot";
     SlotName[ polish ] = "Edit Footnote/Endnote";
     SlotName[ portuguese_brazilian ] = "Edit Footnote/Endnote";
-    SlotName[ japanese ] = "Edit Footnote/Endnote";
-    SlotName[ korean ] = "Edit Footnote/Endnote";
-    SlotName[ chinese_simplified ] = "Edit Footnote/Endnote";
+    SlotName[ japanese ] = "ËÑöÊ≥®„Å®ÊñáÊú´ËÑöÊ≥®„ÅÆÁ∑®ÈõÜ";
+    SlotName[ korean ] = "Í∞ÅÏ£º/ÎØ∏Ï£º Ìé∏Ïßë";
+    SlotName[ chinese_simplified ] = "ÁºñËæëÊ≥®ËÑö/Â∞æÊ≥®";
     SlotName[ chinese_traditional ] = "Á∑®ËºØË®ªËÖ≥/È†ÅÂ∞æ";
     SlotName[ turkish ] = "Edit Footnote/Endnote";
     SlotName[ arabic ] = "Edit Footnote/Endnote";
@@ -9933,17 +9933,17 @@ SfxSlotInfo FN_READONLY_SELECTION_MODE
     SlotName[ russian ] = "Select text";
     SlotName[ greek ] = "Select text";
     SlotName[ dutch ] = "Select text";
-    SlotName[ french ] = "Select text";
-    SlotName[ spanish ] = "Select text";
+    SlotName[ french ] = "SÈlectionner le texte";
+    SlotName[ spanish ] = "Seleccionar texto";
     SlotName[ finnish ] = "Select text";
-    SlotName[ italian ] = "Select text";
+    SlotName[ italian ] = "Seleziona testo";
     SlotName[ danish ] = "Select text";
-    SlotName[ swedish ] = "Select text";
+    SlotName[ swedish ] = "Markera text";
     SlotName[ polish ] = "Select text";
     SlotName[ portuguese_brazilian ] = "Select text";
-    SlotName[ japanese ] = "Select text";
-    SlotName[ korean ] = "Select text";
-    SlotName[ chinese_simplified ] = "Select text";
+    SlotName[ japanese ] = "„ÉÜ„Ç≠„Çπ„Éà„ÅÆÈÅ∏Êäû";
+    SlotName[ korean ] = "ÌÖçÏä§Ìä∏ ÏÑ†ÌÉù";
+    SlotName[ chinese_simplified ] = "ÈÄâÊã©ÊñáÂ≠ó";
     SlotName[ chinese_traditional ] = "ÈÅ∏ÂèñÊñáÂ≠ó";
     SlotName[ turkish ] = "Select text";
     SlotName[ arabic ] = "Select text";
