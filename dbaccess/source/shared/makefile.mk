@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: fs $ $Date: 2000-12-15 15:43:50 $
+#   last change: $Author: fs $ $Date: 2001-04-27 06:44:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,7 +79,6 @@ LIB2TARGET=$(SLB)$/dbushared.lib
 # --- Files -------------------------------------
 
 SLOFILES=	\
-        $(SLO)$/stubs.obj	\
         $(SLO)$/dba_reghelper.obj	\
         $(SLO)$/dbu_reghelper.obj	\
         $(SLO)$/dbastrings.obj	\
@@ -89,17 +88,14 @@ SLOFILES=	\
 EXCEPTIONSFILES=	\
         $(SLO)$/apitools.obj	\
         $(SLO)$/dba_reghelper.obj	\
-        $(SLO)$/dbu_reghelper.obj	\
-        $(SLO)$/stubs.obj
+        $(SLO)$/dbu_reghelper.obj
 
 LIB1OBJFILES=	\
-        $(SLO)$/stubs.obj	\
         $(SLO)$/dba_reghelper.obj	\
         $(SLO)$/dbastrings.obj	\
         $(SLO)$/apitools.obj
         
 LIB2OBJFILES=	\
-        $(SLO)$/stubs.obj	\
         $(SLO)$/dbu_reghelper.obj	\
         $(SLO)$/dbustrings.obj	\
         $(SLO)$/apitools.obj
