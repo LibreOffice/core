@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxctl.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: tbe $ $Date: 2001-05-17 15:17:09 $
+ *  last change: $Author: kz $ $Date: 2001-05-18 11:40:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,7 @@ ToolBox RID_TOOLBOX
             RadioCheck = TRUE ;
             Text = "Schaltfläche" ;
             Text [ english ] = "CommandButton" ;
-            Text [ english_us ] = "CommandButton" ;
+            Text [ english_us ] = "Command Button" ;
             Text [ italian ] = "Pulsante di comando" ;
             Text [ spanish ] = "Botón de comando" ;
             Text [ french ] = "Bouton de commande" ;
@@ -163,7 +163,7 @@ ToolBox RID_TOOLBOX
             RadioCheck = TRUE ;
             Text = "Markierfeld" ;
             Text [ english ] = "CheckBox" ;
-            Text [ english_us ] = "CheckBox" ;
+            Text [ english_us ] = "Check Box" ;
             Text [ italian ] = "Casella di controllo" ;
             Text [ spanish ] = "Casilla de verificación" ;
             Text [ french ] = "Case à cocher" ;
@@ -223,7 +223,7 @@ ToolBox RID_TOOLBOX
             RadioCheck = TRUE ;
             Text = "Listenfeld" ;
             Text [ english ] = "ListBox" ;
-            Text [ english_us ] = "ListBox" ;
+            Text [ english_us ] = "List Box" ;
             Text [ italian ] = "Casella di riepilogo" ;
             Text [ spanish ] = "Listado" ;
             Text [ french ] = "Zone de liste" ;
@@ -253,7 +253,7 @@ ToolBox RID_TOOLBOX
             RadioCheck = TRUE ;
             Text = "Horizontale Bildlaufleiste" ;
             Text [ english ] = "Horizontal ScrollBar" ;
-            Text [ english_us ] = "Horizontal ScrollBar" ;
+            Text [ english_us ] = "Horiz. Scroll Bar" ;
             Text [ dutch ] = "HScrollBar" ;
             Text [ italian ] = "Barra di scorrimento oriz." ;
             Text [ spanish ] = "BarraDesplazHoriz." ;
@@ -283,7 +283,7 @@ ToolBox RID_TOOLBOX
             RadioCheck = TRUE ;
             Text = "Gruppierungsrahmen" ;
             Text [ english ] = "FrameControl" ;
-            Text [ english_us ] = "FrameControl" ;
+            Text [ english_us ] = "Frame Control" ;
             Text [ dutch ] = "FrameControl" ;
             Text [ italian ] = "FrameControl" ;
             Text [ spanish ] = "FrameControl" ;
@@ -313,7 +313,26 @@ ToolBox RID_TOOLBOX
             RadioCheck = TRUE ;
             Text = "Horizontale Linie" ;
             Text [ english ] = "Horizontal FixedLine" ;
-            Text [ english_us ] = "Horizontal FixedLine" ;
+            Text [ english_us ] = "HFixedLine" ;
+            Text[ portuguese ] = "HFixedLine";
+            Text[ russian ] = "HFixedLine";
+            Text[ greek ] = "HFixedLine";
+            Text[ dutch ] = "HFixedLine";
+            Text[ french ] = "HFixedLine";
+            Text[ spanish ] = "HFixedLine";
+            Text[ finnish ] = "HFixedLine";
+            Text[ italian ] = "HFixedLine";
+            Text[ danish ] = "HFixedLine";
+            Text[ swedish ] = "HFixedLine";
+            Text[ polish ] = "HFixedLine";
+            Text[ portuguese_brazilian ] = "HFixedLine";
+            Text[ japanese ] = "HFixedLine";
+            Text[ korean ] = "HFixedLine";
+            Text[ chinese_simplified ] = "HFixedLine";
+            Text[ chinese_traditional ] = "HFixedLine";
+            Text[ turkish ] = "HFixedLine";
+            Text[ arabic ] = "HFixedLine";
+            Text[ catalan ] = "HFixedLine";
         };
         ToolBoxItem { Type = TOOLBOXITEM_SPACE ; };
         ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
@@ -336,7 +355,7 @@ ToolBox RID_TOOLBOX
             Text [ spanish ] = "Propiedades" ;
             Text[ chinese_simplified ] = "ÊôÐÔ";
             Text[ russian ] = "Ñâîéñòâà";
-            Text[ polish ] = "W³aœciwoœci";
+            Text[ polish ] = "W³a?ciwo?ci";
             Text[ japanese ] = "ÌßÛÊßÃ¨";
             Text[ chinese_traditional ] = "ÄÝ©Ê";
             Text[ arabic ] = "ÎÕÇÆÕ";
@@ -355,6 +374,25 @@ ToolBox RID_TOOLBOX
             Text = "Grafisches Kontrollfeld" ;
             Text [ english ] = "ImageControl" ;
             Text [ english_us ] = "ImageControl" ;
+            Text[ portuguese ] = "ImageControl";
+            Text[ russian ] = "ImageControl";
+            Text[ greek ] = "ImageControl";
+            Text[ dutch ] = "ImageControl";
+            Text[ french ] = "ImageControl";
+            Text[ spanish ] = "ImageControl";
+            Text[ finnish ] = "ImageControl";
+            Text[ italian ] = "ImageControl";
+            Text[ danish ] = "ImageControl";
+            Text[ swedish ] = "ImageControl";
+            Text[ polish ] = "ImageControl";
+            Text[ portuguese_brazilian ] = "ImageControl";
+            Text[ japanese ] = "ImageControl";
+            Text[ korean ] = "ImageControl";
+            Text[ chinese_simplified ] = "ImageControl";
+            Text[ chinese_traditional ] = "ImageControl";
+            Text[ turkish ] = "ImageControl";
+            Text[ arabic ] = "ImageControl";
+            Text[ catalan ] = "ImageControl";
         };
         ToolBoxItem
         {
@@ -363,7 +401,7 @@ ToolBox RID_TOOLBOX
             RadioCheck = TRUE ;
             Text = "Optionsfeld" ;
             Text [ english ] = "OptionButton" ;
-            Text [ english_us ] = "OptionButton" ;
+            Text [ english_us ] = "Option Button" ;
             Text [ dutch ] = "OptionButton" ;
             Text [ italian ] = "Pulsante di scelta" ;
             Text [ spanish ] = "Botón de opción" ;
@@ -393,8 +431,8 @@ ToolBox RID_TOOLBOX
             RadioCheck = TRUE ;
             Text = "Textfeld" ;
             Text [ english ] = "TextField" ;
-            Text [ english_us ] = "TextField" ;
-            Text [ dutch ] = "TextField" ;
+            Text [ english_us ] = "Text Box" ;
+            Text [ dutch ] = "TextBox" ;
             Text [ italian ] = "Casella di testo" ;
             Text [ spanish ] = "Cuadro de texto" ;
             Text [ french ] = "Zone de texte" ;
@@ -423,7 +461,7 @@ ToolBox RID_TOOLBOX
             RadioCheck = TRUE ;
             Text = "Kombinationsfeld" ;
             Text [ english ] = "ComboBox" ;
-            Text [ english_us ] = "ComboBox" ;
+            Text [ english_us ] = "Combo Box" ;
             Text [ dutch ] = "ComboBox" ;
             Text [ italian ] = "Casella combinata" ;
             Text [ spanish ] = "Cuadro combinado" ;
@@ -453,7 +491,7 @@ ToolBox RID_TOOLBOX
             RadioCheck = TRUE ;
             Text = "Vertikale Bildlaufleiste" ;
             Text [ english ] = "Vertical ScrollBar" ;
-            Text [ english_us ] = "Vertical ScrollBar" ;
+            Text [ english_us ] = "Vert. Scroll Bar" ;
             Text [ italian ] = "Barra di scorrimento vert." ;
             Text [ spanish ] = "Barra de desplazamiento vert." ;
             Text [ french ] = "Barre de défilement vert." ;
@@ -484,6 +522,25 @@ ToolBox RID_TOOLBOX
             Text = "Fortschrittsbalken" ;
             Text [ english ] = "ProgressBar" ;
             Text [ english_us ] = "ProgressBar" ;
+            Text[ portuguese ] = "ProgressBar";
+            Text[ russian ] = "ProgressBar";
+            Text[ greek ] = "ProgressBar";
+            Text[ dutch ] = "ProgressBar";
+            Text[ french ] = "ProgressBar";
+            Text[ spanish ] = "ProgressBar";
+            Text[ finnish ] = "ProgressBar";
+            Text[ italian ] = "ProgressBar";
+            Text[ danish ] = "ProgressBar";
+            Text[ swedish ] = "ProgressBar";
+            Text[ polish ] = "ProgressBar";
+            Text[ portuguese_brazilian ] = "ProgressBar";
+            Text[ japanese ] = "ProgressBar";
+            Text[ korean ] = "ProgressBar";
+            Text[ chinese_simplified ] = "ProgressBar";
+            Text[ chinese_traditional ] = "ProgressBar";
+            Text[ turkish ] = "ProgressBar";
+            Text[ arabic ] = "ProgressBar";
+            Text[ catalan ] = "ProgressBar";
         };
         ToolBoxItem
         {
@@ -492,7 +549,26 @@ ToolBox RID_TOOLBOX
             RadioCheck = TRUE ;
             Text = "Vertikale Linie" ;
             Text [ english ] = "Vertical FixedLine" ;
-            Text [ english_us ] = "Vertical FixedLine" ;
+            Text [ english_us ] = "VFixedLine" ;
+            Text[ portuguese ] = "VFixedLine";
+            Text[ russian ] = "VFixedLine";
+            Text[ greek ] = "VFixedLine";
+            Text[ dutch ] = "VFixedLine";
+            Text[ french ] = "VFixedLine";
+            Text[ spanish ] = "VFixedLine";
+            Text[ finnish ] = "VFixedLine";
+            Text[ italian ] = "VFixedLine";
+            Text[ danish ] = "VFixedLine";
+            Text[ swedish ] = "VFixedLine";
+            Text[ polish ] = "VFixedLine";
+            Text[ portuguese_brazilian ] = "VFixedLine";
+            Text[ japanese ] = "VFixedLine";
+            Text[ korean ] = "VFixedLine";
+            Text[ chinese_simplified ] = "VFixedLine";
+            Text[ chinese_traditional ] = "VFixedLine";
+            Text[ turkish ] = "VFixedLine";
+            Text[ arabic ] = "VFixedLine";
+            Text[ catalan ] = "VFixedLine";
         };
         ToolBoxItem
         {
