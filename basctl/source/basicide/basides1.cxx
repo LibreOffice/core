@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basides1.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tbe $ $Date: 2001-07-04 12:18:27 $
+ *  last change: $Author: tbe $ $Date: 2001-07-17 08:43:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -350,7 +350,7 @@ void __EXPORT BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
         break;
         case SID_BASICIDE_CHOOSEMACRO:
         {
-            BasicIDE::ChooseMacro();
+            BasicIDE::SelectMacro();
         }
         break;
         case SID_BASICIDE_CREATEMACRO:

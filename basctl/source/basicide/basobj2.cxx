@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basobj2.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: tbe $ $Date: 2001-07-09 16:25:19 $
+ *  last change: $Author: tbe $ $Date: 2001-07-17 08:43:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,12 +227,15 @@ void BasicIDE::DecBasicDialogCount()
 
 //----------------------------------------------------------------------------
 
-String BasicIDE::SelectMacro( BOOL bExecute, BOOL bChooseOnly )
+String BasicIDE::SelectMacro( BOOL bExecute, BOOL bChooseOnly, const String& rPreferredMacroDesciption )
 {
+    if ( rPreferredMacroDesciption.Len() )
+        IDE_DLL()->GetExtraData()->GetLastMacro() = rPreferredMacroDesciption;
+
     IDE_DLL()->GetExtraData()->ChoosingMacro() = TRUE;
     SFX_APP()->EnterBasicCall();
 
-    String aURL;
+    String aMacroURL;
     SbMethod* pMethod = NULL;
 
     Window* pParent = Application::GetDefDialogParent();
@@ -266,16 +269,43 @@ String BasicIDE::SelectMacro( BOOL bExecute, BOOL bChooseOnly )
                         if ( pBasMgr )
                         {
                             SfxObjectShell* pShell = BasicIDE::FindDocShell( pBasMgr );
-                            aURL = String::CreateFromAscii("macro://");
+                            aMacroURL = String::CreateFromAscii("macro://");
                             if ( pShell )
-                                aURL += pShell->GetTitle( SFX_TITLE_APINAME );
-                            aURL += '/';
-                            aURL += pBasic->GetName();
-                            aURL += '.';
-                            aURL += pModule->GetName();
-                            aURL += '.';
-                            aURL += pMethod->GetName();
-                            aURL += String::CreateFromAscii("()");
+                                aMacroURL += pShell->GetTitle( SFX_TITLE_APINAME );
+                            aMacroURL += '/';
+                            aMacroURL += pBasic->GetName();
+                            aMacroURL += '.';
+                            aMacroURL += pModule->GetName();
+                            aMacroURL += '.';
+                            aMacroURL += pMethod->GetName();
+                            aMacroURL += String::CreateFromAscii("()");
+
+                            /*
+                            if ( bChooseOnly )  // !bExecute ?
+                            {
+                                //if ( pShell )
+                                //{
+                                //  String aBasMgrName = pShell->GetTitle( SFX_TITLE_APINAME );
+
+                                sal_uInt16 nHashPos = aMacroURL.Search( '/', 8 );
+                                String aBasMgrName( INetURLObject::decode(aMacroURL.Copy( 8, nHashPos-8 ), INET_HEX_ESCAPE, INetURLObject::DECODE_WITH_CHARSET) );
+
+                                if ( aBasMgrName.Len() )
+                                {
+                                    String aCurrentName = SfxObjectShell::Current()->GetTitle(SFX_TITLE_APINAME);
+
+                                    if ( aBasMgrName == aCurrentName )
+                                    {
+                                        aMacroURL.SearchAndReplace( aBasMgrName , '.' );
+                                    }
+                                    else
+                                    {
+                                        aMacroURL = String();
+                                        ErrorBox( NULL, WB_OK | WB_DEF_OK, String( IDEResId( RID_STR_ERRORSELECTMACRO ) ) ).Execute();
+                                    }
+                                }
+                            }
+                            */
                         }
                     }
                 }
@@ -294,16 +324,7 @@ String BasicIDE::SelectMacro( BOOL bExecute, BOOL bChooseOnly )
 
     SFX_APP()->LeaveBasicCall();
 
-    return aURL;
-}
-
-//----------------------------------------------------------------------------
-
-String BasicIDE::SelectMacro( BOOL bExecute, BOOL bChooseOnly, const String& rPreferredMacroDesciption )
-{
-    if ( rPreferredMacroDesciption.Len() )
-        IDE_DLL()->GetExtraData()->GetLastMacro() = rPreferredMacroDesciption;
-    return BasicIDE::SelectMacro( bExecute, bChooseOnly );
+    return aMacroURL;
 }
 
 //----------------------------------------------------------------------------
