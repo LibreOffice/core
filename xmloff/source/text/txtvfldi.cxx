@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtvfldi.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:37:47 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:42:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,8 +248,18 @@ void XMLVarFieldImportContext::ProcessAttribute(
             bDescriptionOK = sal_True;
             break;
         case XML_TOK_TEXTFIELD_FORMULA:
-            sFormula = sAttrValue;
-            bFormulaOK = sal_True;
+            {
+                OUString sTmp;
+                sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
+                        GetKeyByAttrName( sAttrValue, &sTmp );
+                if( XML_NAMESPACE_OOOW == nPrefix )
+                {
+                    sFormula = sTmp;
+                    bFormulaOK = sal_True;
+                }
+                else
+                    sFormula = sAttrValue;
+            }
             break;
         case XML_TOK_TEXTFIELD_DISPLAY:
             if (IsXMLToken(sAttrValue, XML_FORMULA))
@@ -933,7 +943,7 @@ XMLVariableDeclImportContext::XMLVariableDeclImportContext(
                                                                    getCount());
                     if (bRet)
                     {
-                        nNumLevel = nLevel-1; // API numbers -1..9
+                        nNumLevel = static_cast< sal_Int8 >( nLevel-1 ); // API numbers -1..9
                     }
                     break;
                 }
@@ -1436,14 +1446,24 @@ void XMLValueImportHelper::ProcessAttribute(
             break;
 
         case XML_TOK_TEXTFIELD_FORMULA:
-            sFormula = sAttrValue;
-            bFormulaOK = sal_True;
+            {
+                OUString sTmp;
+                sal_uInt16 nPrefix = rImport.GetNamespaceMap().
+                        GetKeyByAttrName( sAttrValue, &sTmp );
+                if( XML_NAMESPACE_OOOW == nPrefix )
+                {
+                    sFormula = sTmp;
+                    bFormulaOK = sal_True;
+                }
+                else
+                    sFormula = sAttrValue;
+            }
             break;
 
         case XML_TOK_TEXTFIELD_DATA_STYLE_NAME:
         {
-            sal_Int32 nKey = rHelper.GetDataStyleKey(sAttrValue,
-                                                     &bIsDefaultLanguage);
+            sal_Int32 nKey = rHelper.GetDataStyleKey(
+                                          sAttrValue, &bIsDefaultLanguage);
             if (-1 != nKey)
             {
                 nFormatKey = nKey;
