@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldmgr.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2001-04-03 07:32:18 $
+ *  last change: $Author: jp $ $Date: 2001-05-22 08:30:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,24 +81,6 @@
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XDATASOURCE_HPP_
-#include <com/sun/star/sdbc/XDataSource.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_DATATYPE_HPP_
-#include <com/sun/star/sdbc/DataType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XTABLESSUPPLIER_HPP_
-#include <com/sun/star/sdbcx/XTablesSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XCOLUMNSSUPPLIER_HPP_
-#include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XQUERIESSUPPLIER_HPP_
-#include <com/sun/star/sdb/XQueriesSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
-#include <com/sun/star/beans/XPropertySet.hpp>
 #endif
 #ifndef _COM_SUN_STAR_TEXT_XDEFAULTNUMBERINGPROVIDER_HPP_
 #include <com/sun/star/text/XDefaultNumberingProvider.hpp>
@@ -243,13 +225,9 @@ using namespace rtl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::container;
 using namespace com::sun::star::lang;
-using namespace com::sun::star::sdb;
-using namespace com::sun::star::sdbc;
-using namespace com::sun::star::sdbcx;
-using namespace com::sun::star::beans;
+//using namespace com::sun::star::beans;
 using namespace com::sun::star::text;
 using namespace com::sun::star::style;
-#define C2U(cChar) rtl::OUString::createFromAscii(cChar)
 
 /*--------------------------------------------------------------------
     Beschreibung: Gruppen der Felder
@@ -1753,111 +1731,6 @@ String SwFldMgr::GetDataBaseFieldValue(const String &rDBName, const String &rFie
 }
 #endif
 
-/*--------------------------------------------------------------------
-     Beschreibung: Ist das Datenbankfeld numerisch?
-     Anm: Im Fehlerfall wird TRUE returnt.
- --------------------------------------------------------------------*/
-
-BOOL SwFldMgr::IsDBNumeric(const String& rDBName, const String& rTblQryName,
-                                    BOOL bIsTable, const String& rFldName)
-{
-    BOOL bNumeric = TRUE;
-    if(!GetDBContext().is() || !xDBContext->hasByName(rDBName))
-        return bNumeric;
-    Any aDBSource = xDBContext->getByName(rDBName);
-    Reference<XDataSource>* pxSource = (Reference<XDataSource>*)aDBSource.getValue();
-    Reference<XConnection> xConnection;
-    try
-    {
-        OUString sDummy;
-        xConnection = (*pxSource)->getConnection(sDummy, sDummy);
-    }
-    catch(...) {}
-    Reference<XColumnsSupplier> xColsSupplier;
-
-    if(bIsTable)
-    {
-        Reference<XTablesSupplier> xTSupplier = Reference<XTablesSupplier>(xConnection, UNO_QUERY);
-        if(xTSupplier.is())
-        {
-            Reference<XNameAccess> xTbls = xTSupplier->getTables();
-            DBG_ASSERT(xTbls->hasByName(rTblQryName), "table not available anymore?")
-            try
-            {
-                Any aTable = xTbls->getByName(rTblQryName);
-                Reference<XPropertySet> xPropSet = *(Reference<XPropertySet>*)aTable.getValue();
-                xColsSupplier = Reference<XColumnsSupplier>(xPropSet, UNO_QUERY);
-            }
-            catch(...){}
-        }
-    }
-    else
-    {
-        Reference<XQueriesSupplier> xQSupplier = Reference<XQueriesSupplier>(xConnection, UNO_QUERY);
-        if(xQSupplier.is())
-        {
-            Reference<XNameAccess> xQueries = xQSupplier->getQueries();
-            DBG_ASSERT(xQueries->hasByName(rTblQryName), "table not available anymore?")
-            try
-            {
-                Any aQuery = xQueries->getByName(rTblQryName);
-                Reference<XPropertySet> xPropSet = *(Reference<XPropertySet>*)aQuery.getValue();
-                xColsSupplier = Reference<XColumnsSupplier>(xPropSet, UNO_QUERY);
-            }
-            catch(...){}
-        }
-    }
-
-    if(xColsSupplier.is())
-    {
-        Reference <XNameAccess> xCols = xColsSupplier->getColumns();
-        if(xCols.is() && xCols->hasByName(rFldName))
-        {
-            Any aCol = xCols->getByName(rFldName);
-            Reference <XPropertySet> xCol = *(Reference <XPropertySet>*)aCol.getValue();
-            Any aType = xCol->getPropertyValue(C2S("Type"));
-            sal_Int32 eDataType;
-            aType >>= eDataType;
-            switch(eDataType)
-            {
-                case DataType::BIT:
-                case DataType::TINYINT:
-                case DataType::SMALLINT:
-                case DataType::INTEGER:
-                case DataType::BIGINT:
-                case DataType::FLOAT:
-                case DataType::REAL:
-                case DataType::DOUBLE:
-                case DataType::NUMERIC:
-                case DataType::DECIMAL:
-                case DataType::DATE:
-                case DataType::TIME:
-                case DataType::TIMESTAMP:
-                    break;
-
-                case DataType::BINARY:
-                case DataType::VARBINARY:
-                case DataType::LONGVARBINARY:
-                case DataType::SQLNULL:
-                case DataType::OTHER:
-                case DataType::OBJECT:
-                case DataType::DISTINCT:
-                case DataType::STRUCT:
-                case DataType::ARRAY:
-                case DataType::BLOB:
-                case DataType::CLOB:
-                case DataType::REF:
-                case DataType::CHAR:
-                case DataType::VARCHAR:
-                case DataType::LONGVARCHAR:
-                default:
-                    bNumeric = FALSE;
-            }
-        }
-    }
-    return bNumeric;
-}
-
 
 /*--------------------------------------------------------------------
     Beschreibung: ExpressionFields explizit evaluieren
@@ -2119,7 +1992,9 @@ Reference<XNameAccess> SwFldMgr::GetDBContext()
         Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
         if( xMgr.is() )
         {
-            Reference<XInterface> xInstance = xMgr->createInstance( C2U( "com.sun.star.sdb.DatabaseContext" ));
+            Reference<XInterface> xInstance = xMgr->createInstance(
+                    rtl::OUString::createFromAscii(
+                                    "com.sun.star.sdb.DatabaseContext" ));
             xDBContext = Reference<XNameAccess>(xInstance, UNO_QUERY) ;
         }
         DBG_ASSERT(xDBContext.is(), "com.sun.star.sdb.DataBaseContext: service not available")
@@ -2135,7 +2010,8 @@ Reference<XNumberingTypeInfo> SwFldMgr::GetNumberingInfo() const
     {
         Reference< XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
         Reference < XInterface > xI = xMSF->createInstance(
-            ::rtl::OUString::createFromAscii( "com.sun.star.text.DefaultNumberingProvider" ) );
+            ::rtl::OUString::createFromAscii(
+                            "com.sun.star.text.DefaultNumberingProvider" ));
         Reference<XDefaultNumberingProvider> xDefNum(xI, UNO_QUERY);
         DBG_ASSERT(xDefNum.is(), "service missing: \"com.sun.star.text.DefaultNumberingProvider\"")
         ((SwFldMgr*)this)->xNumberingInfo = Reference<XNumberingTypeInfo>(xDefNum, UNO_QUERY);
