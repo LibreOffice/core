@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpages.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: os $ $Date: 2001-07-11 11:38:17 $
+ *  last change: $Author: jp $ $Date: 2001-07-20 19:27:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -245,17 +245,17 @@ SvxNumSettings_ImplPtr lcl_CreateNumSettingsPtr(const Sequence<PropertyValue>& r
 /* -----------------28.10.98 08:32-------------------
  *
  * --------------------------------------------------*/
-// Die Auswahl an Bullets aus den StarBats
+// Die Auswahl an Bullets aus den StarSymbol
 static const sal_Unicode aBulletTypes[] =
 {
-    149 + 0xf000,
-    34 + 0xf000,
-    65 + 0xf000,
-    61 + 0xf000,
-    49 + 0xf000,
-    47 + 0xf000,
-    79 + 0xf000,
-    58 + 0xf000
+    0x2022,
+    0x25cf,
+    0xe00c,
+    0xe00a,
+    0x2794,
+    0x27a2,
+    0x2717,
+    0x2714
 };
 /* -----------------28.10.98 09:42-------------------
  *
@@ -288,17 +288,12 @@ BOOL lcl_IsNumFmtSet(SvxNumRule* pNum, USHORT nLevelMask)
 /* -----------------28.10.98 08:50-------------------
  *
  * --------------------------------------------------*/
-#if defined UNX
-#define BULLET_FONT_NAME "starbats"
-#else
-#define BULLET_FONT_NAME  "StarBats"
-#endif
 
 Font& lcl_GetDefaultBulletFont()
 {
     static BOOL bInit = 0;
     static Font aDefBulletFont( UniString::CreateFromAscii(
-                                RTL_CONSTASCII_STRINGPARAM( BULLET_FONT_NAME ) ),
+                                RTL_CONSTASCII_STRINGPARAM( "StarSymbol" ) ),
                                 String(), Size( 0, 14 ) );
     if(!bInit)
     {
