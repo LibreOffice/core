@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XSortedDynamicResultSetFactory.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-02-06 09:56:09 $
+ *  last change:$Date: 2003-05-27 12:30:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,7 @@ public class _XSortedDynamicResultSetFactory extends MultiMethodTest {
     public void _createSortedDynamicResultSet() {
         boolean result = true ;
 
-        XMultiServiceFactory xMSF = tParam.getMSF();
+        XMultiServiceFactory xMSF = (XMultiServiceFactory)tParam.getMSF();
         XDynamicResultSet dynResSet = null ;
         try {
             Object oUCB = xMSF.createInstanceWithArguments
