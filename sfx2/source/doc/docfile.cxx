@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.158 $
+ *  $Revision: 1.159 $
  *
- *  last change: $Author: mba $ $Date: 2005-01-20 09:31:18 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 08:53:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -669,8 +669,6 @@ void SfxMedium::CloseInStream_Impl()
     }
 
     DELETEZ( pInStream );
-    //pImp->xInputStream = Reference < XInputStream >();
-    //pImp->xLockBytes.Clear();
     if ( pSet )
         pSet->ClearItem( SID_INPUTSTREAM );
 
@@ -1193,10 +1191,8 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage()
                 DBG_ASSERT( xSub.is(), "Versionsliste, aber keine Versionen!" );
 
                 // Dort ist die Version als gepackter Stream gespeichert
-                uno::Reference < io::XStream > xStr = pImp->xStorage->openStreamElement( aVersionStream,
-                        embed::ElementModes::READ );
+                uno::Reference < io::XStream > xStr = xSub->openStreamElement( aVersionStream, embed::ElementModes::READ );
                 SvStream* pStream = utl::UcbStreamHelper::CreateStream( xStr );
-
                 if ( pStream && pStream->GetError() == SVSTREAM_OK )
                 {
                     // Stream ins TempDir auspacken
@@ -1210,6 +1206,7 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage()
                     // Datei als Storage "offnen
                     nStorOpenMode = SFX_STREAM_READONLY;
                     pImp->xStorage = comphelper::OStorageHelper::GetStorageFromURL( aTmpName, embed::ElementModes::READ );
+                    pImp->bStorageBasedOnInStream = sal_False;
                     String aTemp;
                     ::utl::LocalFileHelper::ConvertURLToPhysicalName( aTmpName, aTemp );
                     SetPhysicalName_Impl( aTemp );
@@ -1932,6 +1929,8 @@ void SfxMedium::GetMedium_Impl()
                 aFileName = GetName();
 
             GetItemSet()->Put( SfxStringItem( SID_FILE_NAME, aFileName ) );
+            if( !(nStorOpenMode & STREAM_WRITE ) )
+                GetItemSet()->Put( SfxBoolItem( SID_DOC_READONLY, TRUE ) );
             if (xInteractionHandler.is())
                 GetItemSet()->Put( SfxUnoAnyItem( SID_INTERACTIONHANDLER, makeAny(xInteractionHandler) ) );
             TransformItems( SID_OPENDOC, *GetItemSet(), xProps );
@@ -1939,7 +1938,7 @@ void SfxMedium::GetMedium_Impl()
             aMedium.addInputStream();
             sal_Bool bReadOnly = aMedium.isStreamReadOnly();
             if (bReadOnly)
-                GetItemSet()->Put( SfxUsrAnyItem( SID_DOC_READONLY, makeAny( sal_True ) ) );
+                GetItemSet()->Put( SfxBoolItem( SID_DOC_READONLY, sal_True ) );
 
             //TODO/MBA: what happens if property is not there?!
             GetContent();
@@ -1957,7 +1956,7 @@ void SfxMedium::GetMedium_Impl()
 
         //TODO/MBA: ErrorHandling - how to transport error from MediaDescriptor
         if ( !GetError() && !pImp->xStream.is() && !pImp->xInputStream.is() )
-            SetError( ERRCODE_IO_NOTSUPPORTED );
+            SetError( ERRCODE_IO_ACCESSDENIED );
 
         if ( !GetError() )
         {
@@ -2279,6 +2278,47 @@ void SfxMedium::Close()
     CloseStreams_Impl();
 }
 
+void SfxMedium::CloseAndRelease()
+{
+    if ( pImp->xStorage.is() )
+    {
+        // don't close the streams if they belong to the
+        // storage
+        //TODO/MBA: how to?! Do we need the flag?!
+        /*
+        const SvStream *pStream = aStorage->GetSvStream();
+        if ( pStream && pStream == pInStream )
+        {
+            pInStream = NULL;
+            pImp->xInputStream = Reference < XInputStream >();
+            pImp->xLockBytes.Clear();
+            if ( pSet )
+                pSet->ClearItem( SID_INPUTSTREAM );
+            aStorage->SetDeleteStream( TRUE );
+        }
+        else if ( pStream && pStream == pOutStream )
+        {
+            pOutStream = NULL;
+            aStorage->SetDeleteStream( TRUE );
+        } */
+
+        CloseStorage();
+    }
+
+    try
+    {
+        if ( pImp->xInputStream.is() )
+            pImp->xInputStream->closeInput();
+        if ( pImp->xStream.is() && pImp->xStream->getOutputStream().is() )
+            pImp->xStream->getOutputStream()->closeOutput();
+    }
+    catch ( uno::Exception& )
+    {
+    }
+
+    CloseStreams_Impl();
+}
+
 //------------------------------------------------------------------
 void SfxMedium::CloseStreams_Impl()
 {
@@ -2471,7 +2511,8 @@ void SfxMedium::CompleteReOpen()
             delete pImp->pTempFile;
         }
         pImp->pTempFile = pTmpFile;
-        aName = pImp->pTempFile->GetFileName();
+        if ( pImp->pTempFile )
+            aName = pImp->pTempFile->GetFileName();
     }
     else
     {
