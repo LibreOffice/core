@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msvbasic.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-01 12:49:47 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 17:41:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,21 @@ http://www.virusbtn.com/vb2000/Programme/papers/bontchev.pdf
  * cmc
  * */
 const int MINVBASTRING = 6;
+
+VBA_Impl::VBA_Impl(SvStorage &rIn, bool bCmmntd)
+    : aVBAStrings(0),
+    sComment(String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("Rem "))),
+    xStor(&rIn), pOffsets(0), nOffsets(0), meCharSet(RTL_TEXTENCODING_MS_1252),
+    bCommented(bCmmntd), mbMac(false), nLines(0)
+{
+}
+
+VBA_Impl::~VBA_Impl()
+{
+    delete [] pOffsets;
+    for (ULONG i=0;i<aVBAStrings.GetSize();++i)
+        delete aVBAStrings.Get(i);
+}
 
 sal_uInt8 VBA_Impl::ReadPString(SvStorageStreamRef &xVBAProject,
     bool bIsUnicode)
