@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysishelper.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: dr $ $Date: 2001-08-16 11:10:37 $
+ *  last change: $Author: gt $ $Date: 2001-08-17 07:22:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1542,7 +1542,132 @@ double GetYieldmat( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_
 }
 
 
-double GetOddfyield( sal_Int32 nNullDate,  sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nIssue,
+double GetOddfprice( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nIssue,
+    sal_Int32 nFirstCoup, double fRate, double fYield, double fRedemp, sal_Int32 nFreq,
+    sal_Int32 nBase ) THROWDEF_RTE_IAE
+{
+    double      fN = GetCoupnum( nNullDate, nSettle, nMat, nFreq, nBase ) - 1.0;
+    double      fNq = GetCoupnum( nNullDate, nSettle, nFirstCoup, nFreq, nBase ) - 1.0;
+    double      fDSC_E = GetCoupdaysnc( nNullDate, nSettle, nFirstCoup, nFreq, nBase ) /
+                        GetCoupdays( nNullDate, nSettle, nMat, nFreq, nBase );
+    double      fNC = GetCoupnum( nNullDate, nIssue, nFirstCoup, nFreq, nBase );
+    sal_uInt32  nNC = sal_uInt32( fNC );
+
+
+    sal_uInt32  i;
+    double      f1YieldFreq = 1.0 + fYield / double( nFreq );
+    double      f100RateFreq = 100.0 * fRate / double( nFreq );
+
+    double*     pDC = nNC? new double[ nNC + 1 ] : NULL;
+    double*     pNL = nNC? new double[ nNC + 1 ] : NULL;
+    double*     pA = nNC? new double[ nNC + 1 ] : NULL;
+    for( i = 0 ; i <= nNC ; i++ )
+        pDC[ i ] = pNL[ i ] = pA[ i ] = 0.0;
+
+    double      fT1 = fRedemp / pow( f1YieldFreq, fN + fNq + fDSC_E );
+
+    double      fT2 = 0.0;
+    for( i = 1 ; i <= nNC ; i++ )
+        fT2 += pDC[ i ] / pNL[ i ];
+    fT2 *= f100RateFreq / pow( f1YieldFreq, fNq + fDSC_E );
+
+    double      fT3 = 0.0;
+    for( double k = 2.0 ; k <= fN ; k++ )
+        fT3 += 1.0 / pow( f1YieldFreq, k - fNq + fDSC_E );
+    fT3 *= f100RateFreq;
+
+    double      fT4 = 0.0;
+    for( i = 1 ; i <= nNC ; i++ )
+        fT4 += pA[ i ] / pNL[ i ];
+    fT4 *= f100RateFreq;
+
+    if( nNC )
+    {
+        delete pDC;
+        delete pNL;
+        delete pA;
+    }
+
+    return fT1 + fT2 + fT3 - fT4;
+}
+
+
+double getYield_( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, double fCoup, double fPrice,
+                    double fRedemp, sal_Int32 nFreq, sal_Int32 nBase ) THROWDEF_RTE_IAE
+{
+    double      fRate = fCoup;
+    double      fPriceN = 0.0;
+    double      fYield1 = 0.0;
+    double      fYield2 = 1.0;
+    double      fPrice1 = getPrice_( nNullDate, nSettle, nMat, fRate, fYield1, fRedemp, nFreq, nBase );
+    double      fPrice2 = getPrice_( nNullDate, nSettle, nMat, fRate, fYield2, fRedemp, nFreq, nBase );
+    double      fYieldN = ( fYield2 - fYield1 ) * 0.5;
+
+    for( sal_uInt32 nIter = 0 ; nIter < 100 && fPriceN != fPrice ; nIter++ )
+    {
+        fPriceN = getPrice_( nNullDate, nSettle, nMat, fRate, fYieldN, fRedemp, nFreq, nBase );
+
+        if( fPrice == fPrice1 )
+            return fYield1;
+        else if( fPrice == fPrice2 )
+            return fYield2;
+        else if( fPrice == fPriceN )
+            return fYieldN;
+        else if( fPrice < fPrice2 )
+        {
+            fYield2 *= 2.0;
+            fPrice2 = getPrice_( nNullDate, nSettle, nMat, fRate, fYield2, fRedemp, nFreq, nBase );
+
+            fYieldN = ( fYield2 - fYield1 ) * 0.5;
+        }
+        else
+        {
+            if( fPrice < fPriceN )
+            {
+                fYield1 = fYieldN;
+                fPrice1 = fPriceN;
+            }
+            else
+            {
+                fYield2 = fYieldN;
+                fPrice2 = fPriceN;
+            }
+
+            fYieldN = fYield2 - ( fYield2 - fYield1 ) * ( ( fPrice - fPrice2 ) / ( fPrice1 - fPrice2 ) );
+        }
+    }
+
+    if( fabs( fPrice - fPriceN ) > fPrice / 100.0 )
+        THROW_IAE;      // result not precise enough
+
+    return fYieldN;
+}
+
+
+double getPrice_( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, double fRate, double fYield,
+                    double fRedemp, sal_Int32 nFreq, sal_Int32 nBase ) THROWDEF_RTE_IAE
+{
+    double      fFreq = nFreq;
+
+    double      fE = GetCoupdays( nNullDate, nSettle, nMat, nFreq, nBase );
+    double      fDSC_E = GetCoupdaysnc( nNullDate, nSettle, nMat, nFreq, nBase ) / fE;
+    double      fN = GetCoupnum( nNullDate, nSettle, nMat, nFreq, nBase );
+    double      fA = nSettle - GetCouppcd( nNullDate, nSettle, nMat, nFreq, nBase );
+
+    double      fRet = fRedemp / ( pow( 1.0 + fYield / fFreq, fN - 1.0 + fDSC_E ) );
+    fRet -= 100.0 * fRate / fFreq * fA / fE;
+
+    double      fT1 = 100.0 * fRate / fFreq;
+    double      fT2 = 1.0 + fYield / fFreq;
+
+    for( double fK = 0.0 ; fK < fN ; fK++ )
+        fRet += fT1 / pow( fT2, fK + fDSC_E );
+
+    return fRet;
+}
+
+
+double GetOddfyield( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nIssue,
     sal_Int32 nFirstCoup, double fRate, double fPrice, double fRedemp, sal_Int32 nFreq,
     sal_Int32 nBase ) THROWDEF_RTE_IAE
 {

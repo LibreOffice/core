@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysishelper.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dr $ $Date: 2001-08-16 11:10:36 $
+ *  last change: $Author: gt $ $Date: 2001-08-17 07:22:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,6 +163,10 @@ double              GetDuration( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int
                                 double fYield, sal_Int32 nFreq, sal_Int32 nBase ) THROWDEF_RTE_IAE;
 double              GetYieldmat( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nIssue,
                                 double fRate, double fPrice, sal_Int32 nBase ) THROWDEF_RTE_IAE;
+double              getYield_( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, double fCoup, double fPrice,
+                                double fRedemp, sal_Int32 nFreq, sal_Int32 nBase ) THROWDEF_RTE_IAE;
+double              getPrice_( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, double fRate, double fYield,
+                                double fRedemp, sal_Int32 nFreq, sal_Int32 nBase ) THROWDEF_RTE_IAE;
 double              GetOddfyield( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nIssue,
                                 sal_Int32 nFirstCoup, double fRate, double fPrice, double fRedemp,
                                 sal_Int32 nFreq, sal_Int32 nBase ) THROWDEF_RTE_IAE;

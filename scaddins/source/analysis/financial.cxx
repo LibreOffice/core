@@ -2,9 +2,9 @@
  *
  *  $RCSfile: financial.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dr $ $Date: 2001-08-16 11:10:37 $
+ *  last change: $Author: gt $ $Date: 2001-08-17 07:22:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,26 +234,7 @@ double SAL_CALL AnalysisAddIn::getPrice( constREFXPS& xOpt,
     if( fYield < 0.0 || fRate < 0.0 || fRedemp <= 0 || CHK_Freq || nSettle >= nMat )
         THROW_IAE;
 
-    sal_Int32   nBase = GetOptBase( rOB );
-    sal_Int32   nNullDate = GetNullDate( xOpt );
-    double      fFreq = nFreq;
-
-//  double      fDSC = 1.0;
-    double      fE = GetCoupdays( nNullDate, nSettle, nMat, nFreq, nBase );
-    double      fDSC_E = GetCoupdaysnc( nNullDate, nSettle, nMat, nFreq, nBase ) / fE;
-    double      fN = GetCoupnum( nNullDate, nSettle, nMat, nFreq, nBase );
-    double      fA = nSettle - GetCouppcd( nNullDate, nSettle, nMat, nFreq, nBase );
-
-    double      fRet = fRedemp / ( pow( 1.0 + fYield / fFreq, fN - 1.0 + fDSC_E ) );
-    fRet -= 100.0 * fRate / fFreq * fA / fE;
-
-    double      fT1 = 100.0 * fRate / fFreq;
-    double      fT2 = 1.0 + fYield / fFreq;
-
-    for( double fK = 0.0 ; fK < fN ; fK++ )
-        fRet += fT1 / pow( fT2, fK + fDSC_E );
-
-    return fRet;
+    return getPrice_( GetNullDate( xOpt ), nSettle, nMat, fRate, fYield, fRedemp, nFreq, GetOptBase( rOB ) );
 }
 
 
@@ -370,21 +351,7 @@ double SAL_CALL AnalysisAddIn::getYield( constREFXPS& xOpt,
     if( fCoup < 0.0 || fPrice <= 0.0 || fRedemp <= 0.0 || CHK_Freq || nSettle >= nMat )
         THROW_IAE;
 
-    sal_Int32   nBase = GetOptBase( rOB );
-    sal_Int32   nNullDate = GetNullDate( xOpt );
-
-    fPrice /= 100.0;    // Price/100
-    fCoup /= nFreq;     // Coupon/Frequency
-
-    double      fA = nSettle - GetCouppcd( nNullDate, nSettle, nMat, nFreq, nBase );
-    double      fE = GetCoupdays( nNullDate, nSettle, nMat, nFreq, nBase );
-    double      fDSR = GetCoupdaysnc( nNullDate, nSettle, nMat, nFreq, nBase );
-
-    double      fRet = fRedemp / 100.0 + fCoup;
-    fRet /= fPrice + fA / fE * fCoup;
-    fRet--;
-    fRet *= double( nFreq ) * fE / fDSR;
-    return fRet;
+    return getYield_( GetNullDate( xOpt ), nSettle, nMat, fCoup, fPrice, fRedemp, nFreq, GetOptBase( rOB ) );
 }
 
 
