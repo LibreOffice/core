@@ -2,9 +2,9 @@
  *
  *  $RCSfile: page.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ma $ $Date: 2001-04-12 15:16:42 $
+ *  last change: $Author: kz $ $Date: 2001-04-26 20:12:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,13 +98,13 @@ TabPage RID_SVXPAGE_PAGE
         Text = "~Format" ;
         Text [ ENGLISH ] = "~Format" ;
         Text[ english_us ] = "~Format";
-        Text[ portuguese ] = "~Format";
+        Text[ portuguese ] = "~Formato";
         Text[ russian ] = "‘Ó~Ï‡Ú";
         Text[ greek ] = "ÃÔÒ~ˆﬁ";
         Text[ dutch ] = "~Formaat";
         Text[ french ] = "~Format";
         Text[ spanish ] = "~Formato";
-        Text[ italian ] = "~Format";
+        Text[ italian ] = "F~ormato";
         Text[ danish ] = "~Format";
         Text[ swedish ] = "~Format";
         Text[ polish ] = "~Format";
@@ -359,10 +359,10 @@ TabPage RID_SVXPAGE_PAGE
         };
         StringList [ italian ] =
         {
-            < "Tutti" ; Default ; > ;
+            < "Destra e sinistra" ; Default ; > ;
             < "Rispecchiato" ; Default ; > ;
-            < "Destra" ; Default ; > ;
-            < "Sinistra" ; Default ; > ;
+            < "Solo destra" ; Default ; > ;
+            < "Solo sinistra" ; Default ; > ;
         };
         StringList [ portuguese_brazilian ] =
         {
@@ -373,10 +373,10 @@ TabPage RID_SVXPAGE_PAGE
         };
         StringList [ portuguese ] =
         {
-            < "Tudo" ; Default ; > ;
+            < "Direita e esquerda" ; Default ; > ;
             < "Invertido" ; Default ; > ;
-            < "Direita" ; Default ; > ;
-            < "Esquerda" ; Default ; > ;
+            < "SÛ direita" ; Default ; > ;
+            < "SÛ esquerda" ; Default ; > ;
         };
         StringList [ finnish ] =
         {
@@ -404,7 +404,7 @@ TabPage RID_SVXPAGE_PAGE
             < "Hˆger och v‰nster" ; Default ; > ;
             < "Spegelv‰nt" ; Default ; > ;
             < "Bara hˆger" ; Default ; > ;
-            < "Bara till v‰nster" ; Default ; > ;
+            < "Bara v‰nster" ; Default ; > ;
         };
         StringList [ dutch ] =
         {
@@ -635,7 +635,7 @@ TabPage RID_SVXPAGE_PAGE
         Left = TRUE ;
         Text[ chinese_simplified ] = "…œ(~T)";
         Text[ russian ] = "—‚ÂıÛ";
-        Text[ polish ] = "W gÛrze";
+        Text[ polish ] = "~Na gÛrze";
         Text[ japanese ] = "è„(~T)";
         Text[ chinese_traditional ] = "¶V§W(~T)";
         Text[ arabic ] = "√⁄·Ï";
@@ -678,7 +678,7 @@ TabPage RID_SVXPAGE_PAGE
         Left = TRUE ;
         Text[ chinese_simplified ] = "œ¬(~B)";
         Text[ russian ] = "¬ÌËÁÛ";
-        Text[ polish ] = "W dole";
+        Text[ polish ] = "~Na dole";
         Text[ japanese ] = "â∫(~B)";
         Text[ chinese_traditional ] = "¶V§U(~B)";
         Text[ arabic ] = "√”›·";
@@ -737,13 +737,13 @@ TabPage RID_SVXPAGE_PAGE
         Text = "For~mat" ;
         Text [ ENGLISH ] = "For~mat" ;
         Text[ english_us ] = "For~mat";
-        Text[ portuguese ] = "For~mat";
+        Text[ portuguese ] = "For~mato";
         Text[ russian ] = "‘ÓÏ‡Ú";
         Text[ greek ] = "~ÃÔÒˆﬁ";
         Text[ dutch ] = "Op~maak";
         Text[ french ] = "For~mat";
         Text[ spanish ] = "For~mato";
-        Text[ italian ] = "For~mat";
+        Text[ italian ] = "For~mato";
         Text[ danish ] = "For~mat";
         Text[ swedish ] = "For~mat";
         Text[ polish ] = "For~mat";
