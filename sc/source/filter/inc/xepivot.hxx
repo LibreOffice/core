@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xepivot.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-14 12:10:06 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:42:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -400,7 +400,7 @@ public:
     const XclExpPCField* GetCacheField( sal_uInt16 nCacheIdx ) const;
 
     /** Returns the output range of the pivot table. */
-    SCTAB               GetScTab() const;
+    inline SCTAB         GetScTab() const { return mnOutScTab; }
 
     /** Returns a pivot table field by its name. */
     const XclExpPTField* GetField( sal_uInt16 nFieldIdx ) const;
@@ -463,7 +463,7 @@ private:
     ScfUInt16Vec        maPageFields;       /// Page field indexes.
     XclPTDataFieldPosVec maDataFields;      /// Data field indexes.
     XclExpPTField       maDataOrientField;  /// Special data field orientation field.
-    ScRange             maOutputRange;      /// Output range in the Calc document.
+    SCTAB               mnOutScTab;         /// Sheet index of the output range.
     bool                mbValid;            /// true = The pivot table is valid for export.
     bool                mbFilterBtn;        /// true = DataPilot has filter button.
 };
