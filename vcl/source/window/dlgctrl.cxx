@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgctrl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: th $ $Date: 2001-06-15 13:26:49 $
+ *  last change: $Author: ssa $ $Date: 2001-12-06 11:37:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -274,7 +274,7 @@ Window* Window::ImplGetDlgWindow( USHORT nIndex, USHORT nType,
                 {
                     if ( pWindow->GetStyle() & WB_TABSTOP )
                         break;
-                    if ( (i >= nFormEnd) || (i < nFormStart) )
+                    if ( (i > nFormEnd) || (i < nFormStart) )
                         pWindow = ImplGetChildWindow( this, nFormStart, i, TRUE );
                     else
                         pWindow = ImplGetNextWindow( this, i, i, TRUE );
