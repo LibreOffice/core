@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glyphcache.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2004-02-20 08:52:00 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 10:55:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,10 +219,12 @@ void GlyphCache::AddFontPath( const String& rFontPath )
 // -----------------------------------------------------------------------
 
 void GlyphCache::AddFontFile( const rtl::OString& rNormalizedName, int nFaceNum,
-    int nFontId, const ImplFontData* pFontData )
+                              int nFontId, const ImplFontData* pFontData,
+                              const unicodeKernMap* pKern
+                              )
 {
     if( mpFtManager )
-        mpFtManager->AddFontFile( rNormalizedName, nFaceNum, nFontId, pFontData );
+        mpFtManager->AddFontFile( rNormalizedName, nFaceNum, nFontId, pFontData, pKern );
 }
 
 // -----------------------------------------------------------------------
@@ -401,7 +403,7 @@ inline void GlyphCache::RemovingGlyph( ServerFont& rSF, GlyphData& rGD, int nGly
 // ServerFont
 // =======================================================================
 
-ServerFont::ServerFont( const ImplFontSelectData& rFSD )
+ServerFont::ServerFont( const ImplFontSelectData& rFSD, const glyphKernMap* pKern, const unicodeKernMap* pUniKern )
 :   maFontSelData(rFSD),
     mnExtInfo(0),
     mnRefCount(1),
@@ -409,7 +411,9 @@ ServerFont::ServerFont( const ImplFontSelectData& rFSD )
     mpPrevGCFont( NULL ),
     mpNextGCFont( NULL ),
     nCos( 0x10000),
-    nSin( 0)
+    nSin( 0),
+    mpKernPairs( pKern ),
+    mpUnicodeKernPairs( pUniKern )
 {
     if( rFSD.mnOrientation != 0 )
     {
@@ -436,6 +440,65 @@ long ServerFont::Release() const
 {
     DBG_ASSERT( mnRefCount > 0, "ServerFont: RefCount underflow" );
     return --mnRefCount;
+}
+
+// -----------------------------------------------------------------------
+
+int ServerFont::GetGlyphKernValue( int left, int right ) const
+{
+    int kern = 0;
+    if( mpKernPairs )
+    {
+        std::map< int, std::map< int, int > >::const_iterator left_it =
+            mpKernPairs->find( left );
+        if( left_it != mpKernPairs->end() )
+        {
+            std::map< int, int >::const_iterator right_it = left_it->second.find( right );
+            if( right_it != left_it->second.end() )
+                kern = right_it->second;
+        }
+    }
+    return kern*(maFontSelData.mnWidth ? maFontSelData.mnWidth : maFontSelData.mnHeight)/1000;
+}
+
+// -----------------------------------------------------------------------
+
+ULONG ServerFont::GetKernPairs( struct ImplKernPairData** ppKernPairs ) const
+{
+    int nKernEntry = 0;
+    unicodeKernMap::const_iterator left_it;
+    std::map< sal_Unicode, int >::const_iterator right_it;
+    if( mpUnicodeKernPairs )
+    {
+        // count the kern entries
+        for( left_it = mpUnicodeKernPairs->begin(); left_it != mpUnicodeKernPairs->end(); ++left_it )
+        {
+            nKernEntry += left_it->second.size();
+        }
+    }
+
+    // allocate kern pair table
+    if( nKernEntry )
+    {
+        *ppKernPairs = new ImplKernPairData[ nKernEntry ];
+
+        // fill in kern pairs
+        nKernEntry = 0;
+        for( left_it = mpUnicodeKernPairs->begin(); left_it != mpUnicodeKernPairs->end(); ++left_it )
+        {
+            for( right_it = left_it->second.begin(); right_it != left_it->second.end(); ++right_it )
+            {
+                (*ppKernPairs)[ nKernEntry ].mnChar1 = (USHORT)left_it->first;
+                (*ppKernPairs)[ nKernEntry ].mnChar2 = (USHORT)right_it->first;
+                (*ppKernPairs)[ nKernEntry ].mnKern = right_it->second*(maFontSelData.mnWidth ? maFontSelData.mnWidth : maFontSelData.mnHeight)/1000;
+                nKernEntry++;
+            }
+        }
+    }
+    else
+        *ppKernPairs = NULL;
+
+    return (ULONG)nKernEntry;
 }
 
 // -----------------------------------------------------------------------
