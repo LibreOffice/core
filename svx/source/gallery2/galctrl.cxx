@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galctrl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ka $ $Date: 2001-11-12 14:32:53 $
+ *  last change: $Author: ka $ $Date: 2002-02-07 16:00:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,8 +185,42 @@ void GalleryPreview::Command(const CommandEvent& rCEvt )
 
 void GalleryPreview::KeyInput( const KeyEvent& rKEvt )
 {
-    if( mpTheme && rKEvt.GetKeyCode().GetCode() == KEY_SPACE )
-        ( (GalleryBrowser2*) GetParent() )->TogglePreview( this );
+    if( mpTheme )
+    {
+        GalleryBrowser2* pBrowser = static_cast< GalleryBrowser2* >( GetParent() );
+
+        switch( rKEvt.GetKeyCode().GetCode() )
+        {
+            case( KEY_BACKSPACE ):
+                pBrowser->TogglePreview( this );
+            break;
+
+            case( KEY_HOME ):
+                pBrowser->Travel( GALLERYBROWSERTRAVEL_FIRST );
+            break;
+
+            case( KEY_END ):
+                pBrowser->Travel( GALLERYBROWSERTRAVEL_LAST );
+            break;
+
+            case( KEY_LEFT ):
+            case( KEY_DOWN ):
+                pBrowser->Travel( GALLERYBROWSERTRAVEL_PREVIOUS );
+            break;
+
+            case( KEY_RIGHT ):
+            case( KEY_UP ):
+                pBrowser->Travel( GALLERYBROWSERTRAVEL_NEXT );
+            break;
+
+            default:
+            {
+                if( !pBrowser->KeyInput( rKEvt, this ) )
+                    Window::KeyInput( rKEvt );
+            }
+            break;
+        }
+    }
     else
         Window::KeyInput( rKEvt );
 }
@@ -231,6 +265,7 @@ void GalleryPreview::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
 
 void GalleryPreview::PreviewSound( const INetURLObject& rURL )
 {
+    aSound.Stop();
     aSound.SetSoundName( rURL.GetMainURL( INetURLObject::NO_DECODE ) );
 
     if( rURL.GetProtocol() != INET_PROT_NOT_VALID )
@@ -362,9 +397,7 @@ void GalleryIconView::Command( const CommandEvent& rCEvt )
 
 void GalleryIconView::KeyInput( const KeyEvent& rKEvt )
 {
-    if( mpTheme && rKEvt.GetKeyCode().GetCode() == KEY_SPACE )
-        ( (GalleryBrowser2*) GetParent() )->TogglePreview( this );
-    else
+    if( !mpTheme || !static_cast< GalleryBrowser2* >( GetParent() )->KeyInput( rKEvt, this ) )
         ValueSet::KeyInput( rKEvt );
 }
 
@@ -372,14 +405,14 @@ void GalleryIconView::KeyInput( const KeyEvent& rKEvt )
 
 sal_Int8 GalleryIconView::AcceptDrop( const AcceptDropEvent& rEvt )
 {
-    return( ( (GalleryBrowser2*) GetParent() )->AcceptDrop( *this, rEvt ) );
+    return( static_cast< GalleryBrowser2* >( GetParent() )->AcceptDrop( *this, rEvt ) );
 }
 
 // ------------------------------------------------------------------------
 
 sal_Int8 GalleryIconView::ExecuteDrop( const ExecuteDropEvent& rEvt )
 {
-    return( ( (GalleryBrowser2*) GetParent() )->ExecuteDrop( *this, rEvt ) );
+    return( static_cast< GalleryBrowser2* >( GetParent() )->ExecuteDrop( *this, rEvt ) );
 }
 
 // ------------------------------------------------------------------------
@@ -391,7 +424,7 @@ void GalleryIconView::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
 
     // call this to initiate dragging for ValueSet
     ValueSet::StartDrag( aEvt, aRegion );
-    ( (GalleryBrowser2*) GetParent() )->StartDrag( this );
+    static_cast< GalleryBrowser2* >( GetParent() )->StartDrag( this );
 }
 
 // -------------------
@@ -513,9 +546,7 @@ void GalleryListView::Command( const CommandEvent& rCEvt )
 
 void GalleryListView::KeyInput( const KeyEvent& rKEvt )
 {
-    if( mpTheme && rKEvt.GetKeyCode().GetCode() == KEY_SPACE )
-        ( (GalleryBrowser2*) GetParent() )->TogglePreview( this );
-    else
+    if( !mpTheme || !static_cast< GalleryBrowser2* >( GetParent() )->KeyInput( rKEvt, this ) )
         BrowseBox::KeyInput( rKEvt );
 }
 

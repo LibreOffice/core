@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galbrws.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2000-11-14 16:40:45 $
+ *  last change: $Author: ka $ $Date: 2002-02-07 16:01:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,6 +145,8 @@ public:
     Graphic                 GetGraphic() const;
     BOOL                    GetVCDrawModel( FmFormModel& rModel ) const;
     BOOL                    IsLinkage() const;
+
+    BOOL                    KeyInput( const KeyEvent& rKEvt, Window* pWindow );
 };
 
 #endif // _SVX_GALBRWS_HXX_
