@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: sj $ $Date: 2001-03-23 14:47:55 $
+ *  last change: $Author: cmc $ $Date: 2001-03-27 12:26:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2771,7 +2771,8 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, Rect
             }
         }
 
-        sal_Int32   nContrast = GetPropertyValue( DFF_Prop_pictureContrast, 65536 );
+        sal_Int32 nContrast = GetPropertyValue( DFF_Prop_pictureContrast, 0x10000 );
+#if 0
         if ( nContrast <= 0x10000 )
             nContrast = ( nContrast / 656 ) - 99;
         else if ( nContrast < 0x14835 )
@@ -2784,6 +2785,36 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, Rect
             if ( nContrast > 100 )
                 nContrast = 100;
         }
+#else
+        /*
+        0x10000 is msoffice 50%
+        < 0x10000 is in units of 1/50th of 0x10000 per 1%
+        > 0x10000 is in units where
+          a msoffice x% is stored as 50/(100-x) * 0x10000
+
+        plus, a (ui) microsoft % ranges from 0 to 100, OOO
+        from -100 to 100, so also normalize into that range
+        */
+        if ( nContrast > 0x10000 )
+        {
+            double fX = nContrast;
+            fX /= 0x10000;
+            fX /= 51;   // 50 + 1 to round
+            fX = 1/fX;
+            nContrast = static_cast<sal_Int32>(fX);
+            nContrast -= 100;
+            nContrast = -nContrast;
+            nContrast = (nContrast-50)*2;
+        }
+        else if ( nContrast == 0x10000 )
+            nContrast = 0;
+        else
+        {
+            nContrast *= 101;   //100 + 1 to round
+            nContrast /= 0x10000;
+            nContrast -= 100;
+        }
+#endif
 
         sal_Int16   nBrightness     = (sal_Int16)( (sal_Int32)GetPropertyValue( DFF_Prop_pictureBrightness, 0 ) / 327 );
         sal_Int32   nGamma          = GetPropertyValue( DFF_Prop_pictureGamma, 0x10000 );
@@ -2794,8 +2825,15 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, Rect
             case 6 : eDrawMode = GRAPHICDRAWMODE_MONO; break;
             case 0 :
             {
+#if 0
                 if ( ( GetPropertyValue( DFF_Prop_pictureContrast, 0 ) == 0x4ccd )
                     && ( GetPropertyValue( DFF_Prop_pictureBrightness, 0 ) == 0x599a ) )
+#else
+                //office considers the converted values of (in OOo) 70 to be the
+                //"watermark" values, which can vary slightly due to rounding from the
+                //above values
+                if (( nContrast == -70 ) && ( nBrightness == 70 ))
+#endif
                 {
                     nContrast = 0;
                     nBrightness = 0;
