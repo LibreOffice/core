@@ -2,9 +2,9 @@
  *
  *  $RCSfile: csvgrid.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 18:58:19 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:20:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -586,7 +586,7 @@ void ScCsvGrid::FillColumnDataSep( ScAsciiOptions& rOptions ) const
 
 void ScCsvGrid::FillColumnDataFix( ScAsciiOptions& rOptions ) const
 {
-    sal_uInt32 nCount = Min( GetColumnCount(), MAXCOL + 1UL );
+    sal_uInt32 nCount = Min( GetColumnCount(), static_cast<sal_uInt32>(MAXCOLCOUNT) );
     ScCsvExpDataVec aDataVec( nCount + 1 );
 
     for( sal_uInt32 nColIx = 0; nColIx < nCount; ++nColIx )
@@ -1167,8 +1167,8 @@ void ScCsvGrid::ImplDrawColumnBackgr( sal_uInt32 nColIndex )
 
     // cell texts
     mpEditEngine->SetDefaultItem( SvxColorItem( maTextColor, EE_CHAR_COLOR ) );
-    sal_Int32 nLineCount = Min( GetLastVisLine() - GetFirstVisLine() + 1UL, maTexts.size() );
-    for( sal_Int32 nLine = 0; nLine < nLineCount; ++nLine )
+    size_t nLineCount = ::std::min( static_cast<size_t>(GetLastVisLine() - GetFirstVisLine() + 1UL), maTexts.size() );
+    for( size_t nLine = 0; nLine < nLineCount; ++nLine )
     {
         StringVec& rStrVec = maTexts[ nLine ];
         if( nColIndex < rStrVec.size() )
