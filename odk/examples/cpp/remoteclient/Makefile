@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.6 $
+#  $Revision: 1.7 $
 #
-#  last change: $Author: hr $ $Date: 2003-06-30 15:53:19 $
+#  last change: $Author: hr $ $Date: 2004-02-02 20:08:11 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -144,10 +144,10 @@ CppOfficeClientExample : $(COMPONENT_IMPL) $(COMPOENNT_ENV_FLAG)
 	@echo -
 ifeq "$(OS)" "WIN"
 	start uno -rw $(OUT_BIN)/remoteserver.rdb -s com.sun.star.io.Pipe \
-	-u "uno:socket,host=localhost,port=8100;urp;MyPipe"
+	-u "uno:socket,host=localhost,port=2083;urp;MyPipe"
 else
 	uno -rw $(OUT_BIN)/remoteserver.rdb -s com.sun.star.io.Pipe \
-	-u "uno:socket,host=localhost,port=8100;urp;MyPipe" &
+	-u "uno:socket,host=localhost,port=2083;urp;MyPipe" &
 endif
 	@echo -
 	@echo ... remote server process runs ...
@@ -155,7 +155,7 @@ endif
 	@echo Start remote client process ...
 	@echo -
 	uno -l $(COMPONENT_IMPL) -c com.sun.star.comp.product.example.RemoteClientSample \
-	-rw $(COMPONENT_RDB) -- "uno:socket,host=localhost,port=8100;urp;MyPipe"
+	-rw $(COMPONENT_RDB) -- "uno:socket,host=localhost,port=2083;urp;MyPipe"
 	@echo -
 	@echo ... remote process returned succesful, please kill the server process.
 	@echo - Windows: activate the server shell and press ctrl-c, 
