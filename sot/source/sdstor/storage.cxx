@@ -2,9 +2,9 @@
  *
  *  $RCSfile: storage.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: mba $ $Date: 2001-08-15 15:43:15 $
+ *  last change: $Author: mba $ $Date: 2001-08-21 10:52:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -587,11 +587,16 @@ void SotStorage::CreateStorage( BOOL bForceUCBStorage, StreamMode nMode, Storage
                 {
                     if ( UCBStorage::GetLinkedFile( *pStorStm ).Len() )
                     {
+                        // detect special unpacked storages
                         pOwnStg = new UCBStorage( *pStorStm, (nStorageMode & STORAGE_TRANSACTED) ? FALSE : TRUE );
                         bDelStm = TRUE;
                     }
                     else
                     {
+                        // detect special disk spanned storages
+                        if ( UCBStorage::IsDiskSpannedFile( pStorStm ) )
+                            nMode |= STORAGE_DISKSPANNED_MODE;
+
                         // UCBStorage always works directly on the UCB content, so discard the stream first
                         DELETEZ( pStorStm );
                         pOwnStg = new UCBStorage( aName, nMode, (nStorageMode & STORAGE_TRANSACTED) ? FALSE : TRUE );

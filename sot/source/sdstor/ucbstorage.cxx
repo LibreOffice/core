@@ -59,6 +59,7 @@
 
 #include "stg.hxx"
 #include "storinfo.hxx"
+#include "storage.hxx"
 #include "exchange.hxx"
 #include "formats.hxx"
 #include "clsids.hxx"
@@ -209,6 +210,7 @@ public:
     BOOL                        m_bIsRoot;      // marks this storage as root storages that manages all oommits and reverts
     BOOL                        m_bDirty;       // ???
     BOOL                        m_bIsLinked;
+    BOOL                        m_bListCreated;
     ULONG                       m_nFormat;
     String                      m_aUserTypeName;
     SvGlobalName                m_aClassId;
@@ -224,6 +226,12 @@ public:
     BOOL                        Insert( ::ucb::Content *pContent );
     sal_Int32                   GetProps( Sequence < Sequence < PropertyValue > > *pSequence );
     sal_Int32                   GetObjectCount();
+    void                        ReadContent();
+    void                        CreateContent();
+    ::ucb::Content*             GetContent()
+                                { if ( !m_pContent ) CreateContent(); return m_pContent; }
+    UCBStorageElementList_Impl& GetChildrenList()
+                                { ReadContent(); return m_aChildrenList; }
 };
 
 SV_DECL_IMPL_REF( UCBStorage_Impl );
@@ -265,7 +273,7 @@ struct UCBStorageElement_Impl
     if ( m_xStream.Is() )
         return m_xStream->m_pContent;
     else if ( m_xStorage.Is() )
-        return m_xStorage->m_pContent;
+        return m_xStorage->GetContent();
     else
         return NULL;
 }
@@ -834,6 +842,7 @@ UCBStorage_Impl::UCBStorage_Impl( const ::ucb::Content& rContent, const String& 
     , m_bCommited( FALSE )
     , m_bDirty( FALSE )
     , m_bIsLinked( TRUE )
+    , m_bListCreated( FALSE )
     , m_aClassId( SvGlobalName() )
 {
     String aName( rName );
@@ -862,6 +871,7 @@ UCBStorage_Impl::UCBStorage_Impl( const String& rName, StreamMode nMode, UCBStor
     , m_bCommited( FALSE )
     , m_bDirty( FALSE )
     , m_bIsLinked( FALSE )
+    , m_bListCreated( FALSE )
     , m_aClassId( SvGlobalName() )
 {
     String aName( rName );
@@ -897,6 +907,7 @@ UCBStorage_Impl::UCBStorage_Impl( SvStream& rStream, UCBStorage* pStorage, BOOL 
     , m_nFormat( 0 )
     , m_bDirty( FALSE )
     , m_bIsLinked( FALSE )
+    , m_bListCreated( FALSE )
     , m_bModified( FALSE )
     , m_bCommited( FALSE )
     , m_aClassId( SvGlobalName() )
@@ -936,28 +947,18 @@ void UCBStorage_Impl::Init()
         // if the name was not already set to a temp name
         m_aName = m_aOriginalName = aObj.GetLastName();
 
-    if ( !m_pContent )
-    {
-        try
-        {
-            // create content; where to put StreamMode ?! ( already done when opening the file of the package ? )
-            m_pContent = new ::ucb::Content( m_aURL, Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
-        }
-        catch ( ContentCreationException& )
-        {
-            // content could not be created
-            m_pAntiImpl->SetError( SVSTREAM_CANNOT_MAKE );
-        }
-        catch ( RuntimeException& )
-        {
-            // any other error - not specified
-            m_pAntiImpl->SetError( SVSTREAM_CANNOT_MAKE );
-        }
-    }
+    // don't create the content for disk spanned files, avoid too early access to directory and/or manifest
+    if ( !m_pContent && !( m_nMode & STORAGE_DISKSPANNED_MODE ) )
+        CreateContent();
 
-    if ( m_pContent )
+    if ( m_nMode & STORAGE_DISKSPANNED_MODE )
     {
-        sal_Bool bIsOfficeDocument = m_bIsLinked;
+        // Hack! Avoid access to the manifest file until mediatype is not available in the first segment of a
+        // disk spanned file
+        m_aContentType = m_aOriginalContentType = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("application/vnd.sun.xml.impress") );
+    }
+    else if ( m_pContent )
+    {
         if ( m_bIsLinked )
         {
             // read the manifest.xml file
@@ -970,95 +971,125 @@ void UCBStorage_Impl::Init()
             if ( ( aAny >>= aTmp ) && aTmp.getLength() )
                 m_aContentType = m_aOriginalContentType = aTmp;
         }
+    }
 
-        if ( m_aContentType.Len() )
+    if ( m_aContentType.Len() )
+    {
+        // get the clipboard format using the content type
+        ::com::sun::star::datatransfer::DataFlavor aDataFlavor;
+        aDataFlavor.MimeType = m_aContentType;
+        m_nFormat = SotExchange::GetFormat( aDataFlavor );
+
+        // get the ClassId using the clipboard format ( internal table )
+        m_aClassId = GetClassId_Impl( m_nFormat );
+
+        // get human presentable name using the clipboard format
+        SotExchange::GetFormatDataFlavor( m_nFormat, aDataFlavor );
+        m_aUserTypeName = aDataFlavor.HumanPresentableName;
+    }
+}
+
+void UCBStorage_Impl::CreateContent()
+{
+    try
+    {
+        // create content; where to put StreamMode ?! ( already done when opening the file of the package ? )
+        m_pContent = new ::ucb::Content( m_aURL, Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
+    }
+    catch ( ContentCreationException& )
+    {
+        // content could not be created
+        if ( m_pAntiImpl )
+            m_pAntiImpl->SetError( SVSTREAM_CANNOT_MAKE );
+    }
+    catch ( RuntimeException& )
+    {
+        // any other error - not specified
+        if ( m_pAntiImpl )
+            m_pAntiImpl->SetError( SVSTREAM_CANNOT_MAKE );
+    }
+}
+
+void UCBStorage_Impl::ReadContent()
+{
+    if ( m_bListCreated )
+        return;
+
+    m_bListCreated = TRUE;
+
+    // create cursor for access to children
+    Sequence< ::rtl::OUString > aProps(4);
+    ::rtl::OUString* pProps = aProps.getArray();
+    pProps[0] = ::rtl::OUString::createFromAscii( "Title" );
+    pProps[1] = ::rtl::OUString::createFromAscii( "IsFolder" );
+    pProps[2] = ::rtl::OUString::createFromAscii( "MediaType" );
+    pProps[3] = ::rtl::OUString::createFromAscii( "Size" );
+    ::ucb::ResultSetInclude eInclude = ::ucb::INCLUDE_FOLDERS_AND_DOCUMENTS;
+    try
+    {
+        Reference< XResultSet > xResultSet = GetContent()->createCursor( aProps, eInclude );
+        Reference< XContentAccess > xContentAccess( xResultSet, UNO_QUERY );
+        Reference< XRow > xRow( xResultSet, UNO_QUERY );
+        if ( xResultSet.is() )
         {
-            // get the clipboard format using the content type
-            ::com::sun::star::datatransfer::DataFlavor aDataFlavor;
-            aDataFlavor.MimeType = m_aContentType;
-            m_nFormat = SotExchange::GetFormat( aDataFlavor );
-
-            // get the ClassId using the clipboard format ( internal table )
-            m_aClassId = GetClassId_Impl( m_nFormat );
-            bIsOfficeDocument = ( m_aClassId != SvGlobalName() );
-
-            // get human presentable name using the clipboard format
-            SotExchange::GetFormatDataFlavor( m_nFormat, aDataFlavor );
-            m_aUserTypeName = aDataFlavor.HumanPresentableName;
-        }
-
-        // create cursor for access to children
-        Sequence< ::rtl::OUString > aProps(4);
-        ::rtl::OUString* pProps = aProps.getArray();
-        pProps[0] = ::rtl::OUString::createFromAscii( "Title" );
-        pProps[1] = ::rtl::OUString::createFromAscii( "IsFolder" );
-        pProps[2] = ::rtl::OUString::createFromAscii( "MediaType" );
-        pProps[3] = ::rtl::OUString::createFromAscii( "Size" );
-        ::ucb::ResultSetInclude eInclude = ::ucb::INCLUDE_FOLDERS_AND_DOCUMENTS;
-        try
-        {
-            Reference< XResultSet > xResultSet = m_pContent->createCursor( aProps, eInclude );
-            Reference< XContentAccess > xContentAccess( xResultSet, UNO_QUERY );
-            Reference< XRow > xRow( xResultSet, UNO_QUERY );
-            if ( xResultSet.is() )
+            while ( xResultSet->next() )
             {
-                while ( xResultSet->next() )
+                // insert all into the children list
+                ::rtl::OUString aTitle( xRow->getString(1) );
+                BOOL bIsFolder( xRow->getBoolean(2) );
+                sal_Int64 nSize = xRow->getLong(4);
+                ::rtl::OUString aContentType= xRow->getString(3);
+                UCBStorageElement_Impl* pElement = new UCBStorageElement_Impl( aTitle, aContentType, bIsFolder, (ULONG) nSize );
+                m_aChildrenList.Insert( pElement, LIST_APPEND );
+
+                sal_Bool bIsOfficeDocument = m_bIsLinked || ( m_aClassId != SvGlobalName() );
+                if ( !bIsFolder && bIsOfficeDocument )
                 {
-                    // insert all into the children list
-                    ::rtl::OUString aTitle( xRow->getString(1) );
-                    BOOL bIsFolder( xRow->getBoolean(2) );
-                    sal_Int64 nSize = xRow->getLong(4);
-                    ::rtl::OUString aContentType= xRow->getString(3);
-                    UCBStorageElement_Impl* pElement = new UCBStorageElement_Impl( aTitle, aContentType, bIsFolder, (ULONG) nSize );
-                    m_aChildrenList.Insert( pElement, LIST_APPEND );
+                    // will be replaced by a detection using the MediaType
+                    String aName( m_aURL );
+                    aName += '/';
+                    aName += String( xRow->getString(1) );
+                    ::ucb::Content aContent( aName, Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
 
-                    if ( !bIsFolder && bIsOfficeDocument )
+                    ::rtl::OUString aMediaType;
+                    Any aAny = aContent.getPropertyValue( ::rtl::OUString::createFromAscii( "MediaType" ) );
+                    if ( ( aAny >>= aMediaType ) && ( aMediaType.compareToAscii("application/vnd.sun.star.oleobject") == 0 ) )
+                        pElement->m_bIsStorage = TRUE;
+                    else if ( !aMediaType.getLength() )
                     {
-                        // will be replaced by a detection using the MediaType
-                        String aName( m_aURL );
-                        aName += '/';
-                        aName += String( xRow->getString(1) );
-                        ::ucb::Content aContent( aName, Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
-
-                        ::rtl::OUString aMediaType;
-                        Any aAny = aContent.getPropertyValue( ::rtl::OUString::createFromAscii( "MediaType" ) );
-                        if ( ( aAny >>= aMediaType ) && ( aMediaType.compareToAscii("application/vnd.sun.star.oleobject") == 0 ) )
+                        BaseStorageStream* pStream = m_pAntiImpl->OpenStream( xRow->getString(1), STREAM_STD_READ, m_bDirect );
+                        if ( Storage::IsStorageFile( const_cast < SvStream* > ( pStream->GetSvStream() ) ) )
                             pElement->m_bIsStorage = TRUE;
-                        else if ( !aMediaType.getLength() )
-                        {
-                            BaseStorageStream* pStream = m_pAntiImpl->OpenStream( xRow->getString(1), STREAM_STD_READ, m_bDirect );
-                            if ( Storage::IsStorageFile( const_cast < SvStream* > ( pStream->GetSvStream() ) ) )
-                                pElement->m_bIsStorage = TRUE;
-                            delete pStream;
-                        }
+                        delete pStream;
                     }
                 }
             }
         }
-        catch ( CommandAbortedException& )
-        {
-            // any command wasn't executed successfully - not specified
-            if ( !( m_nMode & STREAM_WRITE ) )
-                // if the folder was just inserted and not already commited, this is not an error!
-                m_pAntiImpl->SetError( ERRCODE_IO_GENERAL );
-        }
-        catch ( RuntimeException& )
-        {
-            // any other error - not specified
+    }
+    catch ( CommandAbortedException& )
+    {
+        // any command wasn't executed successfully - not specified
+        if ( !( m_nMode & STREAM_WRITE ) )
+            // if the folder was just inserted and not already commited, this is not an error!
             m_pAntiImpl->SetError( ERRCODE_IO_GENERAL );
-        }
-        catch ( SQLException& )
-        {
-            // any other error - not specified
-            m_pAntiImpl->SetError( ERRCODE_IO_GENERAL );
-        }
-        catch ( Exception& )
-        {
-            // any other error - not specified
-            m_pAntiImpl->SetError( ERRCODE_IO_GENERAL );
-        }
+    }
+    catch ( RuntimeException& )
+    {
+        // any other error - not specified
+        m_pAntiImpl->SetError( ERRCODE_IO_GENERAL );
+    }
+    catch ( SQLException& )
+    {
+        // any other error - not specified
+        m_pAntiImpl->SetError( ERRCODE_IO_GENERAL );
+    }
+    catch ( Exception& )
+    {
+        // any other error - not specified
+        m_pAntiImpl->SetError( ERRCODE_IO_GENERAL );
     }
 }
+
 /*
 sal_Int32 nProps UCBStorage_Impl::GetProps( Sequence < PropertyValue > *pSequence )
 {
@@ -1279,7 +1310,7 @@ sal_Int16 UCBStorage_Impl::Commit()
             return COMMIT_RESULT_FAILURE;
         }
 
-        if ( m_bIsRoot )
+        if ( m_bIsRoot && m_pContent )
         {
             // the root storage must flush the root package content
             if ( nRet == COMMIT_RESULT_SUCCESS )
@@ -1518,7 +1549,7 @@ String UCBStorage::GetUserName()
 void UCBStorage::FillInfoList( SvStorageInfoList* pList ) const
 {
     // put information in childrenlist into StorageInfoList
-    UCBStorageElement_Impl* pElement = pImp->m_aChildrenList.First();
+    UCBStorageElement_Impl* pElement = pImp->GetChildrenList().First();
     while ( pElement )
     {
         if ( !pElement->m_bIsRemoved )
@@ -1611,7 +1642,7 @@ BOOL UCBStorage::CopyStorageElement_Impl( UCBStorageElement_Impl& rElement, Base
 UCBStorageElement_Impl* UCBStorage::FindElement_Impl( const String& rName ) const
 {
     DBG_ASSERT( rName.Len(), "Name is empty!" );
-    UCBStorageElement_Impl* pElement = pImp->m_aChildrenList.First();
+    UCBStorageElement_Impl* pElement = pImp->GetChildrenList().First();
     while ( pElement )
     {
         if ( pElement->m_aName == rName && !pElement->m_bIsRemoved )
@@ -1635,7 +1666,7 @@ BOOL UCBStorage::CopyTo( BaseStorage* pDestStg ) const
     pDestStg->SetDirty();
 
     BOOL bRet = TRUE;
-    UCBStorageElement_Impl* pElement = pImp->m_aChildrenList.First();
+    UCBStorageElement_Impl* pElement = pImp->GetChildrenList().First();
     while ( pElement && bRet )
     {
         if ( !pElement->m_bIsRemoved )
@@ -2078,6 +2109,32 @@ BOOL UCBStorage::IsStorageFile( SvStream* pFile )
     return bRet;
 }
 
+BOOL UCBStorage::IsDiskSpannedFile( SvStream* pFile )
+{
+    if ( !pFile )
+        return FALSE;
+
+    ULONG nPos = pFile->Tell();
+    pFile->Seek( STREAM_SEEK_TO_END );
+    if ( !pFile->Tell() )
+        return FALSE;
+
+    pFile->Seek(0);
+    UINT32 nBytes;
+    *pFile >> nBytes;
+
+    // disk spanned file have an additional header in front of the usual one
+    BOOL bRet = ( nBytes == 0x08074b50 );
+    if ( bRet )
+    {
+        *pFile >> nBytes;
+        bRet = ( nBytes == 0x04034b50 );
+    }
+
+    pFile->Seek( nPos );
+    return bRet;
+}
+
 String UCBStorage::GetLinkedFile( SvStream &rStream )
 {
     String aString;
@@ -2186,7 +2243,7 @@ BOOL UCBStorage::SetProperty( const String& rName, const ::com::sun::star::uno::
 
     try
     {
-        if ( pImp->m_pContent )
+        if ( pImp->GetContent() )
         {
             pImp->m_pContent->setPropertyValue( rName, rValue );
             return TRUE;
@@ -2203,7 +2260,7 @@ BOOL UCBStorage::GetProperty( const String& rName, ::com::sun::star::uno::Any& r
 {
     try
     {
-        if ( pImp->m_pContent )
+        if ( pImp->GetContent() )
         {
             rValue = pImp->m_pContent->getPropertyValue( rName );
             return TRUE;
