@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlbahdl.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:17 $
+ *  last change: $Author: rt $ $Date: 2003-11-25 10:52:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,7 +149,7 @@ sal_Bool XMLNumberPropHdl::importXML( const OUString& rStrImpValue, Any& rValue,
 {
     sal_Bool bRet = sal_False;
 
-    sal_Int32 nValue;
+    sal_Int32 nValue = 0;
     bRet = rUnitConverter.convertNumber( nValue, rStrImpValue );
     lcl_xmloff_setAny( rValue, nValue, nBytes );
 
@@ -198,10 +198,9 @@ sal_Bool XMLNumberNonePropHdl::importXML( const OUString& rStrImpValue, Any& rVa
 {
     sal_Bool bRet = sal_False;
 
-    sal_Int32 nValue;
+    sal_Int32 nValue = 0;
     if( rStrImpValue == sZeroStr )
     {
-        nValue = 0;
         bRet = sal_True;
     }
     else
@@ -253,7 +252,7 @@ sal_Bool XMLMeasurePropHdl::importXML( const OUString& rStrImpValue, Any& rValue
 {
     sal_Bool bRet = sal_False;
 
-    sal_Int32 nValue;
+    sal_Int32 nValue = 0;
     bRet = rUnitConverter.convertMeasure( nValue, rStrImpValue );
     lcl_xmloff_setAny( rValue, nValue, nBytes );
 
@@ -367,7 +366,7 @@ sal_Bool XMLPercentPropHdl::importXML( const OUString& rStrImpValue, Any& rValue
 {
     sal_Bool bRet = sal_False;
 
-    sal_Int32 nValue;
+    sal_Int32 nValue = 0;
     bRet = rUnitConverter.convertPercent( nValue, rStrImpValue );
     lcl_xmloff_setAny( rValue, nValue, nBytes );
 
@@ -405,7 +404,7 @@ sal_Bool XMLMeasurePxPropHdl::importXML( const OUString& rStrImpValue, Any& rVal
 {
     sal_Bool bRet = sal_False;
 
-    sal_Int32 nValue;
+    sal_Int32 nValue = 0;
     bRet = rUnitConverter.convertMeasurePx( nValue, rStrImpValue );
     lcl_xmloff_setAny( rValue, nValue, nBytes );
 
