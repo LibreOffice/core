@@ -2,9 +2,9 @@
  *
  *  $RCSfile: listcombopages.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-29 20:59:39 $
+ *  last change: $Author: kz $ $Date: 2001-09-26 20:33:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -358,11 +358,11 @@ TabPage RID_PAGE_LCW_FIELDLINK
     Text [ polish ] = "Po³¹czenie pól";
     Text [ portuguese_brazilian ] = "Database Field";
     Text [ japanese ] = "ï¾Œï½¨ï½°ï¾™ï¾„ï¾ã®ï¾˜ï¾ï½¸";
-    Text [ chinese_simplified ] = "è¿ç»“å­—æ®µ";
+    Text [ chinese_simplified ] = "å­—æ®µé“¾ç»“";
     Text [ chinese_traditional ] = "æ¬„ä½æ·å¾‘";
     Text [ arabic ] = "ÇÑÊÈÇØ ÇáÍŞá";
     Text [ dutch ] = "velden koppelen";
-    Text [ chinese_simplified ] = "è¿ç»“å­—æ®µ";
+    Text [ chinese_simplified ] = "å­—æ®µé“¾ç»“";
     Text [ greek ] = "Óıíäåóç ğåäßïõ";
     Text [ korean ] = "í•„ë“œ ë§í¬";
     Text [ turkish ] = "Alan bağlantısı";
@@ -515,6 +515,9 @@ String RID_STR_COMBOWIZ_DBFIELD
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.26  2001/08/29 20:59:39  kz
+ *  Merge SRC638: 29.08.01 - 22:58:39
+ *
  *  Revision 1.25  2001/08/29 09:22:33  vg
  *  Merge SRC638: 29.08.01 - 11:22:45
  *
@@ -554,6 +557,7 @@ String RID_STR_COMBOWIZ_DBFIELD
  *
  *  Revision 1.0 21.02.01 16:16:18  fs
  ************************************************************************/
+
 
 
 
