@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabletree.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-16 15:43:24 $
+ *  last change: $Author: fs $ $Date: 2001-08-14 12:13:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,21 +127,21 @@ using namespace ::comphelper;
 //========================================================================
 //= OTableTreeListBox
 //========================================================================
-OTableTreeListBox::OTableTreeListBox( Window* pParent, WinBits nWinStyle,sal_Bool _bShowFirstEntry )
+OTableTreeListBox::OTableTreeListBox( Window* pParent, WinBits nWinStyle,sal_Bool _bVirtualRoot )
     :OMarkableTreeListBox(pParent,nWinStyle)
     ,m_aTableImage(ResId(TABLE_TREE_ICON))
     ,m_aViewImage(ResId(VIEW_TREE_ICON))
-    ,m_bShowFirstEntry(_bShowFirstEntry)
+    ,m_bVirtualRoot(_bVirtualRoot)
 {
     SetDefaultExpandedEntryBmp(Image(ModuleRes(TABLEFOLDER_TREE_ICON)));
     SetDefaultCollapsedEntryBmp(Image(ModuleRes(TABLEFOLDER_TREE_ICON)));
 }
 //------------------------------------------------------------------------
-OTableTreeListBox::OTableTreeListBox( Window* pParent, const ResId& rResId ,sal_Bool _bShowFirstEntry)
+OTableTreeListBox::OTableTreeListBox( Window* pParent, const ResId& rResId ,sal_Bool _bVirtualRoot)
     :OMarkableTreeListBox(pParent,rResId)
     ,m_aTableImage(ModuleRes(TABLE_TREE_ICON))
     ,m_aViewImage(ModuleRes(VIEW_TREE_ICON))
-    ,m_bShowFirstEntry(_bShowFirstEntry)
+    ,m_bVirtualRoot(_bVirtualRoot)
 {
     SetDefaultExpandedEntryBmp(Image(ModuleRes(TABLEFOLDER_TREE_ICON)));
     SetDefaultCollapsedEntryBmp(Image(ModuleRes(TABLEFOLDER_TREE_ICON)));
@@ -198,7 +198,9 @@ void OTableTreeListBox::Command( const CommandEvent& rEvt )
 }
 
 //------------------------------------------------------------------------
-Reference< XConnection > OTableTreeListBox::UpdateTableList(const ::rtl::OUString& _rConnectionURL, const Sequence< PropertyValue > _rProperties) throw(SQLException)
+Reference< XConnection > OTableTreeListBox::UpdateTableList(
+        const ::rtl::OUString& _rConnectionURL, const Sequence< PropertyValue > _rProperties,
+        Reference< XNameAccess >& /* [out] */ _rxTables) throw(SQLException)
 {
     Reference< XDatabaseMetaData > xMetaData;
     Reference< XConnection > xConnection;
@@ -330,6 +332,8 @@ Reference< XConnection > OTableTreeListBox::UpdateTableList(const ::rtl::OUStrin
                     sTables = xTables->getElementNames();
                 if (xViews.is())
                     sViews = xViews->getElementNames();
+
+                _rxTables = xTables;
             }
         }
     }
@@ -367,7 +371,7 @@ void OTableTreeListBox::UpdateTableList(const Reference< XDatabaseMetaData >& _r
     {
         // the root entry saying "all objects"
         SvLBoxEntry* pAllObjects = NULL;
-        if(m_bShowFirstEntry)
+        if (haveVirtualRoot())
         {
             String sRootEntryText;
             if (!_rViews.getLength())
@@ -391,11 +395,6 @@ void OTableTreeListBox::UpdateTableList(const Reference< XDatabaseMetaData >& _r
         if(_rViews.getLength())
             pViews = _rViews.getConstArray();
 
-        ::rtl::OUString sCatalog, sSchema, sName;
-        SvLBoxEntry* pCat = NULL;
-        SvLBoxEntry* pSchema = NULL;
-        SvLBoxEntry* pParent = pAllObjects;
-
         // loop through both sequences  first the vies and than the tables
         const ::rtl::OUString* pSwitchSequences = (pTables && pViews) ? pViews + _rViews.getLength() - 1 : NULL;
 
@@ -411,32 +410,13 @@ void OTableTreeListBox::UpdateTableList(const Reference< XDatabaseMetaData >& _r
                     )                                                                   //  (!= NULL is to make this a boolean expression, so it should work under SUNPRO5, too)
             )
         {
-            pCat = pSchema = NULL;
-            pParent = pAllObjects;
-
-            // the image : table or view
-            Image& aImage = bIsView ? m_aViewImage : m_aTableImage;
-            // split the complete name into it's components
-            qualifiedNameComponents(_rxConnMetaData, *pCurrentTable, sCatalog, sSchema, sName);
-
-            if (sCatalog.getLength())
-            {
-                pCat = GetEntryPosByName(sCatalog);
-                if (!pCat)
-                    pCat = InsertEntry(sCatalog, pParent);
-                pParent = pCat;
-            }
-
-            if (sSchema.getLength())
-            {
-                pSchema = GetEntryPosByName(sSchema);
-                if (!pSchema)
-                    pSchema = InsertEntry(sSchema, pParent);
-                pParent = pSchema;
-            }
-
-            if(!GetEntryPosByName(sName,pParent)) // only insert a table once
-                InsertEntry(sName, aImage, aImage, pParent);
+            // add the entry
+            implAddEntry(
+                _rxConnMetaData,
+                *pCurrentTable,
+                bIsView ? m_aViewImage : m_aTableImage,
+                pAllObjects
+            );
         }
     }
     catch(RuntimeException&)
@@ -466,7 +446,7 @@ void OTableTreeListBox::checkWildcard(SvLBoxEntry* _pEntry)
 //------------------------------------------------------------------------
 SvLBoxEntry* OTableTreeListBox::getAllObjectsEntry() const
 {
-    return m_bShowFirstEntry ? First() : NULL;
+    return haveVirtualRoot() ? First() : NULL;
 }
 
 //------------------------------------------------------------------------
@@ -490,7 +470,7 @@ void OTableTreeListBox::implEmphasize(SvLBoxEntry* _pEntry, sal_Bool _bChecked, 
 
     // special emphasizing handling for the "all objects" entry
     // 89709 - 16.07.2001 - frank.schoenheit@sun.com
-    sal_Bool bAllObjectsEntryAffected = m_bShowFirstEntry && (getAllObjectsEntry() == _pEntry);
+    sal_Bool bAllObjectsEntryAffected = haveVirtualRoot() && (getAllObjectsEntry() == _pEntry);
     if  (   GetModel()->HasChilds(_pEntry)              // the entry has children
         ||  bAllObjectsEntryAffected                    // or it is the "all objects" entry
         )
@@ -537,6 +517,86 @@ void OTableTreeListBox::InitEntry(SvLBoxEntry* _pEntry, const XubString& _rStrin
     _pEntry->ReplaceItem(new OBoldListboxString(_pEntry, 0, _rString), nTextPos);
 }
 
+//------------------------------------------------------------------------
+void OTableTreeListBox::implAddEntry(
+        const Reference< XDatabaseMetaData >& _rxConnMetaData,
+        const ::rtl::OUString& _rTableName,
+        const Image& _rImage,
+        SvLBoxEntry* _pParentEntry
+    )
+{
+    // split the complete name into it's components
+    ::rtl::OUString sCatalog, sSchema, sName;
+    qualifiedNameComponents(_rxConnMetaData, _rTableName, sCatalog, sSchema, sName);
+
+    SvLBoxEntry* pCat = NULL;
+    SvLBoxEntry* pSchema = NULL;
+    if (sCatalog.getLength())
+    {
+        pCat = GetEntryPosByName(sCatalog, _pParentEntry);
+        if (!pCat)
+            pCat = InsertEntry(sCatalog, _pParentEntry);
+        _pParentEntry = pCat;
+    }
+
+    if (sSchema.getLength())
+    {
+        pSchema = GetEntryPosByName(sSchema, _pParentEntry);
+        if (!pSchema)
+            pSchema = InsertEntry(sSchema, _pParentEntry);
+        _pParentEntry = pSchema;
+    }
+
+    if (!GetEntryPosByName(sName, _pParentEntry))
+        InsertEntry(sName, _rImage, _rImage, _pParentEntry);
+}
+
+//------------------------------------------------------------------------
+void OTableTreeListBox::addedTable( const Reference< XConnection >& _rxConn, const ::rtl::OUString& _rName, const Any& _rObject )
+{
+    try
+    {
+        // get the connection meta data
+        Reference< XDatabaseMetaData > xMeta;
+        if (_rxConn.is()) xMeta = _rxConn->getMetaData();
+        if (!xMeta.is())
+        {
+            DBG_ERROR( "OTableTreeListBox::addedTable: invalid connection!" );
+            return;
+        }
+
+        // add the entry
+        implAddEntry( xMeta, _rName, m_aTableImage, getAllObjectsEntry() );
+            // TODO: the image
+    }
+    catch( const Exception& )
+    {
+        DBG_ERROR( "OTableTreeListBox::addedTable: caught an exception!" );
+    }
+}
+
+//------------------------------------------------------------------------
+void OTableTreeListBox::removedTable( const Reference< XConnection >& _rxConn, const ::rtl::OUString& _rName )
+{
+    try
+    {
+        // get the connection meta data
+        Reference< XDatabaseMetaData > xMeta;
+        if (_rxConn.is()) xMeta = _rxConn->getMetaData();
+        if (!xMeta.is())
+        {
+            DBG_ERROR( "OTableTreeListBox::removedTable: invalid connection!" );
+            return;
+        }
+
+        // TODO
+    }
+    catch( const Exception& )
+    {
+        DBG_ERROR( "OTableTreeListBox::removedTable: caught an exception!" );
+    }
+}
+
 //.........................................................................
 }   // namespace dbaui
 //.........................................................................
@@ -544,6 +604,9 @@ void OTableTreeListBox::InitEntry(SvLBoxEntry* _pEntry, const XubString& _rStrin
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.16  2001/07/16 15:43:24  fs
+ *  #89709# special emphasizing handling for the 'all objects' entry
+ *
  *  Revision 1.15  2001/06/25 09:05:56  fs
  *  #88417# insert the 'all object' entry even if there currently are no objects
  *
