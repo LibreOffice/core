@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regionsw.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: os $ $Date: 2002-07-04 07:51:46 $
+ *  last change: $Author: os $ $Date: 2002-08-05 08:40:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -442,7 +442,7 @@ BOOL SwEditRegionDlg::CheckPasswd(CheckBox* pBox)
                 String sNewPasswd( aPasswdDlg.GetPassword() );
                 UNO_NMSPC::Sequence <sal_Int8 > aNewPasswd;
                 SvPasswordHelper::GetHashPassword( aNewPasswd, sNewPasswd );
-                if(aNewPasswd == pRepr->GetPasswd())
+                if(SvPasswordHelper::CompareHashPassword(pRepr->GetPasswd(), sNewPasswd))
                 {
                     pRepr->SetTempPasswd(aNewPasswd);
                     bRet = TRUE;
