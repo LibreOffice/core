@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertysethelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-22 13:32:35 $
+ *  last change: $Author: dvo $ $Date: 2001-04-20 13:49:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,6 +181,7 @@ void SAL_CALL PropertySetHelper::setPropertyValues( const Sequence< ::rtl::OUStr
     if( nCount )
     {
         PropertyMapEntry** pEntries = new PropertyMapEntry*[nCount+1];
+        pEntries[nCount] = NULL;
         const OUString* pNames = aPropertyNames.getConstArray();
 
         sal_Bool bUnknown = sal_False;
