@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbar.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-26 22:29:39 $
+ *  last change: $Author: os $ $Date: 2002-05-07 13:55:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,7 +156,6 @@ ToolBox RID_BIB_TOOLBAR
         {
             Identifier = TBC_BT_AUTOFILTER ;
             HelpID = HID_BIB_TBX_AUTOFILTER;
-            ItemBitmap = Bitmap { File = "sc10716.bmp" ; };
             DropDown = TRUE ;
             Text = "AutoFilter" ;
             Text [ ENGLISH ] = "AutoFilter" ;
@@ -188,7 +187,6 @@ ToolBox RID_BIB_TOOLBAR
         {
             Identifier = TBC_BT_FILTERCRIT ;
             HelpID = SID_FM_FILTERCRIT ;
-            ItemBitmap = Bitmap { File = "sc10715.bmp" ; };
             Text = "Standard Filter" ;
             Text [ ENGLISH ] = "Standard Filter" ;
             Command = ".uno:Bib/standardFilter" ;
@@ -219,7 +217,6 @@ ToolBox RID_BIB_TOOLBAR
         {
             Identifier = TBC_BT_REMOVEFILTER ;
             HelpID = SID_FM_REMOVE_FILTER_SORT ;
-            ItemBitmap = Bitmap { File = "sc10711.bmp" ; };
             Text = "Filter entfernen" ;
             Text [ ENGLISH ] = "Remove Filter" ;
             Command = ".uno:Bib/removeFilter" ;
@@ -252,7 +249,6 @@ ToolBox RID_BIB_TOOLBAR
             Text = "Spaltenzuordnung" ;
             Text[ English ] = "Column assignment" ;
 //          Command = ".uno:Bib/Mapping" ;
-//            ItemBitmap = Bitmap { File = "sc10711.bmp" ; };
             Text[ english_us ] = "Column Arrangement";
             Text[ portuguese ] = "Dispor colunas";
             Text[ russian ] = "–‡ÒÔÓÎÓÊÂÌËÂ ÍÓÎÓÌÓÍ";
@@ -282,7 +278,6 @@ ToolBox RID_BIB_TOOLBAR
             Text = "Datenquelle" ;
             Text[ English ] = "Data source" ;
 //          Command = ".uno:Bib/sdbsource" ;
-//            ItemBitmap = Bitmap { File = "sc10711.bmp" ; };
             Checkable=TRUE;
             Text[ english_us ] = "Data Source";
             Text[ portuguese ] = "Fonte de dados";
@@ -306,189 +301,31 @@ ToolBox RID_BIB_TOOLBAR
             Text[ catalan ] = "Fuente de datos";
             Text[ finnish ] = "Tietol‰hde";
         };
-/*
-        ToolBoxItem
-        {
-            Type = TOOLBOXITEM_SEPARATOR ;
-        };
-
-        ToolBoxItem
-        {
-            Identifier = TBC_BT_NEWCARD ;
-            //HelpID = SID_FM_REMOVE_FILTER_SORT ;
-            Command = ".uno:Bib/newEntry" ;
-            ItemBitmap = Bitmap { File = "newcard.bmp" ; };
-            Text = "Neue Adresse" ;
-            Text [ ENGLISH ] = "New Address" ;
-            Text[ english_us ] = "New Address";
-            Text[ portuguese ] = "Novo endereÁo";
-            Text[ russian ] = "ÕÓ‚˚È ‡‰ÂÒ";
-            Text[ greek ] = "New Address";
-            Text[ dutch ] = "Nieuw adres";
-            Text[ french ] = "Nouvelle adresse";
-            Text[ spanish ] = "Nueva direcciÛn";
-            Text[ italian ] = "Nuovo indirizzo";
-            Text[ danish ] = "Ny adresse";
-            Text[ swedish ] = "Ny adress";
-            Text[ polish ] = "Nowy adres";
-            Text[ portuguese_brazilian ] = "New Address";
-            Text[ japanese ] = "êVÇµÇ¢èZèä";
-            Text[ korean ] = "New Address";
-            Text[ chinese_simplified ] = "–¬µÿ÷∑";
-            Text[ chinese_traditional ] = "∑s¶aß}";
-            Text[ arabic ] = "⁄‰Ê«‰ ÃœÌœ";
-        };
-
-        ToolBoxItem
-        {
-            Identifier = TBC_BT_EDITCARD ;
-            //HelpID = SID_FM_REMOVE_FILTER_SORT ;
-            Command = ".uno:Bib/changeEntry" ;
-            ItemBitmap = Bitmap { File = "modcard.bmp" ; };
-            Text = "Adresse bearbeiten" ;
-            Text [ ENGLISH ] = "Edit address" ;
-            Text[ english_us ] = "Edit Address";
-            Text[ portuguese ] = "Editar endereÁo";
-            Text[ russian ] = "œ‡‚Í‡ ‡‰ÂÒ‡";
-            Text[ greek ] = "Edit address";
-            Text[ dutch ] = "Adres wijzigen";
-            Text[ french ] = "…diter une adresse";
-            Text[ spanish ] = "Editar direcciÛn";
-            Text[ italian ] = "Modifica indirizzo";
-            Text[ danish ] = "Rediger adresse";
-            Text[ swedish ] = "Redigera adress";
-            Text[ polish ] = "Edytuj adres";
-            Text[ portuguese_brazilian ] = "Edit address";
-            Text[ japanese ] = "±ƒﬁ⁄ΩÇÃï“èW";
-            Text[ korean ] = "Edit address";
-            Text[ chinese_simplified ] = "±‡º≠µÿ÷∑";
-            Text[ chinese_traditional ] = "ΩsøË¶aß}";
-            Text[ arabic ] = " Õ—Ì— ⁄‰Ê«‰";
-        };
-
-        ToolBoxItem
-        {
-            Identifier = TBC_BT_REMOVECARD ;
-            //HelpID = SID_FM_REMOVE_FILTER_SORT ;
-            Command = ".uno:Bib/removeEntry" ;
-            ItemBitmap = Bitmap { File = "remcard.bmp" ; };
-            Text = "Adresse lˆschen" ;
-            Text [ ENGLISH ] = "Remove address" ;
-            Text[ english_us ] = "Remove Address";
-            Text[ portuguese ] = "Eliminar endereÁo";
-            Text[ russian ] = "”‰‡ÎËÚ¸ ‡‰ÂÒ";
-            Text[ greek ] = "ƒÈ·„Ò·ˆﬁ ‰ÈÂ˝ËıÌÛÁÚ";
-            Text[ dutch ] = "Adres wissen";
-            Text[ french ] = "Supprimer une adresse";
-            Text[ spanish ] = "Eliminar direcciÛn";
-            Text[ italian ] = "Elimina indirizzo";
-            Text[ danish ] = "Slet adresse";
-            Text[ swedish ] = "Ta bort adress";
-            Text[ polish ] = "UsuÒ adres";
-            Text[ portuguese_brazilian ] = "Remove address";
-            Text[ japanese ] = "±ƒﬁ⁄ΩÇÃçÌèú";
-            Text[ korean ] = "Remove address";
-            Text[ chinese_simplified ] = "…æ≥˝µÿ÷∑";
-            Text[ chinese_traditional ] = "ßR∞£¶aß}";
-            Text[ arabic ] = "Õ–› ⁄‰Ê«‰";
-        };
-
-        ToolBoxItem
-        {
-            Type = TOOLBOXITEM_SEPARATOR ;
-        };
-
-        ToolBoxItem
-        {
-            Identifier = TBC_BT_INSERT ;
-            HelpID = SID_SBA_BRW_INSERT ;
-            ItemBitmap = Bitmap { File = "sc12202.bmp" ; };
-            Text = "Daten in Text" ;
-            Text [ ENGLISH ] = "Insert" ;
-            Text[ english_us ] = "Data into Text";
-            Text[ portuguese ] = "Dados no texto";
-            Text[ russian ] = "ƒ‡ÌÌ˚Â ‚ ÚÂÍÒÚ";
-            Text[ greek ] = "ƒÂ‰ÔÏ›Ì· ÛÙÔ ÍÂﬂÏÂÌÔ";
-            Text[ dutch ] = "Gegevens in tekst";
-            Text[ french ] = "DonnÈes dans le texte";
-            Text[ spanish ] = "Datos en texto";
-            Text[ italian ] = "Dati nel testo";
-            Text[ danish ] = "Data i tekst";
-            Text[ swedish ] = "Data i text";
-            Text[ polish ] = "Dane w tekúcie";
-            Text[ portuguese_brazilian ] = "Insert";
-            Text[ japanese ] = "ï∂èëÇ…√ﬁ∞¿";
-            Text[ korean ] = "Insert";
-            Text[ chinese_simplified ] = "≤Â»Î ˝æ›÷¡Œƒ±æ÷–";
-            Text[ chinese_traditional ] = "º∆’u¬‡¥´¶®§Â¶r";
-            Text[ arabic ] = "»Ì«‰«  ≈·Ï ‰’";
-        };
-        ToolBoxItem
-        {
-            Identifier = TBC_BT_UPDATE ;
-            HelpID = SID_SBA_BRW_UPDATE ;
-            ItemBitmap = Bitmap { File = "sc12201.bmp" ; };
-            Text = "Daten in Felder" ;
-        };
-
-        ToolBoxItem
-        {
-            Type = TOOLBOXITEM_SEPARATOR ;
-        };
-
-        ToolBoxItem
-        {
-            Identifier = TBC_BT_MAIL ;
-            //HelpID = HID_ADDRPI_AUTOMAIL ;
-            ItemBitmap = Bitmap { File = "sc06305.bmp" ; };
-            Text = "AutoMail" ;
-            Text [ ENGLISH ] = "AutoMail" ;
-            Text[ english_us ] = "AutoMail";
-            Text[ portuguese ] = "AutoMail";
-            Text[ russian ] = "AutoMail";
-            Text[ greek ] = "AutoMail";
-            Text[ dutch ] = "AutoMail";
-            Text[ french ] = "AutoMail";
-            Text[ spanish ] = "AutoMail";
-            Text[ italian ] = "Mail automatica";
-            Text[ danish ] = "AutoPost";
-            Text[ swedish ] = "AutoMail";
-            Text[ polish ] = "AutoMail";
-            Text[ portuguese_brazilian ] = "AutoMail";
-            Text[ japanese ] = "µ∞ƒ“∞Ÿ";
-            Text[ korean ] = "AutoMail";
-            Text[ chinese_simplified ] = "◊‘∂ØµÁ◊”” º˛";
-            Text[ chinese_traditional ] = "¶€∞ πq§l∂l•Û";
-            Text[ arabic ] = "»—Ìœ ¬·Ì";
-        };
-        ToolBoxItem
-        {
-            Identifier = TBC_BT_URL ;
-            //HelpID = HID_ADDRPI_AUTOBROWSE ;
-            ItemBitmap = Bitmap { File = "sc06304.bmp" ; };
-            Text = "AutoBrowse" ;
-            Text [ ENGLISH ] = "AutoBrowse" ;
-            Text[ english_us ] = "AutoBrowse";
-            Text[ portuguese ] = "AutoBrowse";
-            Text[ russian ] = "¿‚ÚÓÔÓÒÏÓÚ";
-            Text[ greek ] = "AutoBrowse";
-            Text[ dutch ] = "AutoBrowse";
-            Text[ french ] = "AutoBrowse";
-            Text[ spanish ] = "AutoBrowse";
-            Text[ italian ] = "Browse automatico";
-            Text[ danish ] = "AutoBrowse";
-            Text[ swedish ] = "AutoBrowse";
-            Text[ polish ] = "AutoBrowse";
-            Text[ portuguese_brazilian ] = "AutoBrowse";
-            Text[ japanese ] = "µ∞ƒÃﬁ◊≥æﬁ";
-            Text[ korean ] = "AutoBrowse";
-            Text[ chinese_simplified ] = "◊‘∂Ø‰Ø¿¿";
-            Text[ chinese_traditional ] = "¶€∞ ¬sƒ˝";
-            Text[ arabic ] = "«” ⁄—«÷ ¬·Ì";
-        };*/
     };
     Scroll = TRUE ;
 };
+#define BIB_IMAGES \
+    IdList =                                \
+    {                                       \
+        SID_FM_AUTOFILTER;      /*10716*/     \
+        SID_FM_FILTERCRIT;      /*10715*/     \
+        SID_FM_REMOVE_FILTER_SORT ; /*10711*/ \
+    };                                      \
+    IdCount = { 3; };
+
+ImageList RID_TOOLBAR_IMGLIST
+{
+    ImageBitmap = Bitmap { File = "sc_bibdb.bmp" ; };
+    MaskColor = Color { Red = 0xC000; Green = 0xC000; Blue = 0xC000; };
+    BIB_IMAGES
+};
+ImageList RID_TOOLBAR_IMGLIST_HC
+{
+    ImageBitmap = Bitmap { File = "sch_bibdb.bmp" ; };
+    MaskColor = Color { Red = 0xFF00; Green = 0x0000; Blue = 0xFF00; };
+    BIB_IMAGES
+};
+
 
 
 
