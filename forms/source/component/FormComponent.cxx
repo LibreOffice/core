@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormComponent.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fs $ $Date: 2001-12-20 16:16:37 $
+ *  last change: $Author: fs $ $Date: 2002-03-04 13:59:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,11 +247,11 @@ sal_Bool SAL_CALL OControl::supportsService(const rtl::OUString& _rsServiceName)
 //------------------------------------------------------------------------------
 Sequence<rtl::OUString> SAL_CALL OControl::getSupportedServiceNames() throw(RuntimeException)
 {
-        Sequence<rtl::OUString> aSupported;
+    Sequence< rtl::OUString > aSupported;
 
     // ask our aggregate
-        Reference<com::sun::star::lang::XServiceInfo> xInfo;
-    if (query_aggregation(m_xAggregate, xInfo))
+    Reference< com::sun::star::lang::XServiceInfo > xInfo;
+    if ( query_aggregation( m_xAggregate, xInfo ) )
         aSupported = xInfo->getSupportedServiceNames();
 
     return aSupported;
@@ -562,6 +562,12 @@ void OControlModel::doSetDelegator()
 }
 
 // XChild
+//------------------------------------------------------------------------------
+InterfaceRef SAL_CALL OControlModel::getParent() throw(::com::sun::star::uno::RuntimeException)
+{
+    return m_xParent;
+}
+
 //------------------------------------------------------------------------------
 void SAL_CALL OControlModel::setParent(const InterfaceRef& _rxParent) throw(com::sun::star::lang::NoSupportException, RuntimeException)
 {
