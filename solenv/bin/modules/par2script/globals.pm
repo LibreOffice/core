@@ -2,9 +2,9 @@
 #
 #   $RCSfile: globals.pm,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: svesik $ $Date: 2004-04-20 12:35:23 $
+#   last change: $Author: obo $ $Date: 2004-07-05 13:26:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,10 +77,10 @@ BEGIN
     $parfilelist = "";
 
     @allitems = ("Installation", "ScpAction", "HelpText", "Directory", "DataCarrier", "StarRegistry", "File",
-                 "Shortcut", "Custom", "Procedure", "Module", "ConfigurationItem", "Profile", "ProfileItem",
+                 "Shortcut", "Custom", "Procedure", "Module", "Profile", "ProfileItem",
                  "Folder", "FolderItem", "RegistryItem", "StarRegistryItem");
 
-    @items_with_moduleid = ("ConfigurationItem", "Profile", "ProfileItem",
+    @items_with_moduleid = ("Profile", "ProfileItem",
                              "FolderItem", "RegistryItem", "StarRegistryItem");
 
     $logging = 0;

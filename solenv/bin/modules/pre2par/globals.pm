@@ -2,9 +2,9 @@
 #
 #   $RCSfile: globals.pm,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hjs $ $Date: 2004-06-25 16:09:38 $
+#   last change: $Author: obo $ $Date: 2004-07-05 13:26:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,7 +76,7 @@ BEGIN
     $ulffilename = "";
 
     @allitems = ("Installation", "ScpAction", "HelpText", "Directory", "DataCarrier", "StarRegistry", "File",
-                 "Shortcut", "Custom", "Procedure", "Module", "ConfigurationItem", "Profile", "ProfileItem",
+                 "Shortcut", "Custom", "Procedure", "Module", "Profile", "ProfileItem",
                  "Folder", "FolderItem", "RegistryItem", "StarRegistryItem");
 
     $logfilename = "logfile.log";   # the default logfile name for global errors
