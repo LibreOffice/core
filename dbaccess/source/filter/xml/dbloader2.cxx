@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbloader2.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-04 09:38:43 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:38:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,9 @@
 #ifndef _COM_SUN_STAR_DOCUMENT_XEVENTLISTENER_HPP_
 #include <com/sun/star/document/XEventListener.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDB_XDOCUMENTDATASOURCE_HPP_
+#include <com/sun/star/sdb/XDocumentDataSource.hpp>
+#endif
 #ifndef _COM_SUN_STAR_FRAME_XLOADEVENTLISTENER_HPP_
 #include <com/sun/star/frame/XLoadEventListener.hpp>
 #endif
@@ -121,6 +124,9 @@
 #endif
 #ifndef _COM_SUN_STAR_DOCUMENT_XFILTER_HPP_
 #include <com/sun/star/document/XFilter.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP_
+#include <com/sun/star/util/XURLTransformer.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_REGISTRY_XREGISTRYKEY_HPP_
@@ -183,12 +189,15 @@ using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::io;
+using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::registry;
+using namespace ::com::sun::star::sdb;
+namespace css = ::com::sun::star;
 using namespace ::com::sun::star::ui::dialogs;
 namespace css = ::com::sun::star;
 
@@ -377,50 +386,70 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
 {
 
     // first check if preview is true, if so return with out creating a controller. Preview is not supported
-    const PropertyValue* pIter  = rArgs.getConstArray();
-    const PropertyValue* pEnd   = pIter + rArgs.getLength();
-
-    for ( ; pIter != pEnd; ++pIter )
+    ::comphelper::SequenceAsHashMap lDescriptor(rArgs);
+    sal_Bool            bPreview = lDescriptor.getUnpackedValueOrDefault(INFO_PREVIEW          , sal_False                                 );
+    if ( bPreview )
     {
-        if ( ( 0 == pIter->Name.compareToAscii( "Preview" ) ) )
-        {
-            sal_Bool bPreview = sal_False;
-            pIter->Value >>= bPreview;
-            if ( bPreview )
-            {
-                if (rListener.is())
-                    rListener->loadCancelled(this);
-                return;
-            }
-        }
+        if (rListener.is())
+            rListener->loadCancelled(this);
+        return;
     }
+    Reference< XModel > xModel   = lDescriptor.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Model")), Reference< XModel >());
 
     m_xFrame    = rFrame;
     m_xListener = rListener;
     m_aURL      = rURL;
     m_aArgs     = rArgs;
 
-    Reference< XSingleServiceFactory > xDatabaseContext(m_xServiceFactory->createInstance(SERVICE_SDB_DATABASECONTEXT), UNO_QUERY);
-    Reference<XComponent> xComponent;
     sal_Bool bCreateNew = sal_False;
     sal_Bool bInteractive = sal_False;
-    if ( xDatabaseContext.is() )
+    Reference<XDocumentDataSource> xDocumentDataSource;
+    /* special mode: use already loaded model ...
+        In such case no filter name will be selected and no URL will be given!
+        Such informations are not neccessary. We have to create a new view only
+        and call setComponent() at the corresponding frame. */
+    if ( !xModel.is() )
     {
-        bCreateNew = rURL.match(SvtModuleOptions().GetFactoryEmptyDocumentURL(SvtModuleOptions::E_DATABASE));
-        Sequence<Any> aCreationArgs;
-        if ( !bCreateNew )
+        Reference< XSingleServiceFactory > xDatabaseContext(m_xServiceFactory->createInstance(SERVICE_SDB_DATABASECONTEXT), UNO_QUERY);
+        if ( xDatabaseContext.is() )
         {
-            aCreationArgs.realloc(1);
-            aCreationArgs[0] <<= NamedValue(INFO_POOLURL,makeAny(rURL));
+            bCreateNew = rURL.match(SvtModuleOptions().GetFactoryEmptyDocumentURL(SvtModuleOptions::E_DATABASE));
+            Sequence<Any> aCreationArgs;
+            if ( !bCreateNew )
+            {
+                aCreationArgs.realloc(1);
+                aCreationArgs[0] <<= NamedValue(INFO_POOLURL,makeAny(rURL));
+            }
+            else
+            {
+                try
+                {
+                    Reference< XURLTransformer > xTransformer(
+                        m_xServiceFactory->createInstance(
+                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ) ) ),
+                        UNO_QUERY
+                    );
+                    OSL_ENSURE( xTransformer.is(), "DBContentLoader::load: could not create an URLTransformer!" );
+                    if ( xTransformer.is() )
+                    {
+                        URL aURL;
+                        aURL.Complete = m_aURL;
+                        xTransformer->parseStrict( aURL );
+                        bInteractive = aURL.Arguments.equalsAscii( "Interactive" );
+                    }
+                }
+                catch( const Exception& )
+                {
+                    OSL_ENSURE( sal_False, "DBContentLoader::load: caught an exception while analyzing the URL!" );
+                }
+            }
+
+            xDocumentDataSource.set(xDatabaseContext->createInstanceWithArguments(aCreationArgs),UNO_QUERY_THROW);
+            xModel.set(xDocumentDataSource->getDatabaseDocument(),UNO_QUERY);
         }
-        else
-            bInteractive = rURL.match(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("?Interactive")), SvtModuleOptions().GetFactoryEmptyDocumentURL(SvtModuleOptions::E_DATABASE).getLength() );
-        xComponent.set(xDatabaseContext->createInstanceWithArguments(aCreationArgs),UNO_QUERY);
     }
 
-
     sal_Bool bSuccess = sal_True;
-    Reference<XModel> xModel(xComponent,UNO_QUERY);
     if ( !bCreateNew && xModel.is() && !xModel->getURL().getLength() )
     {
         try
@@ -524,7 +553,7 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
         }
     }
 
-    if (bSuccess && rListener.is())
+    if (bSuccess)
     {
         if ( xController.is() && rFrame.is() )
             xController->attachFrame(rFrame);
@@ -541,7 +570,8 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
         {
             OSL_ENSURE(0,"Could not add database model to global model collection and broadcast the events OnNew/OnLoad!");
         }
-        rListener->loadFinished(this);
+        if ( rListener.is() )
+            rListener->loadFinished(this);
 
         if ( bStartTableWizard )
         {
