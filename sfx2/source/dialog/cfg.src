@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-01 20:09:10 $
+ *  last change: $Author: kz $ $Date: 2001-03-21 20:14:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1715,7 +1715,7 @@ QueryBox QBX_MNUCFG_POPUP_FUNCTIONS
     Message[ russian ] = "Ρσωερςβσώς ηΰοθρθ ρ τσνκφθÿμθ, κξςξπϋε μξγσς αϋςό οπθρβξενϋ ςξλόκξ βρολϋβΰώωθμ μενώ.\n\nΒϋ βρε πΰβνξ υξςθςε οπθνÿςό ύςθ κξντθγσπΰφθθ?";
     Message[ polish ] = "IstniejΉ jeszcze wpisy, ktσre mogΉ zostaζ przypisane tylko oknom typu popup. n\nCzy chcesz mimo to zastosowaζ tκ konfiguracjκ?";
     Message[ japanese ] = "‚ά‚ΎΞί―Μί±―Μί‚Μ‚έ‚Ι„‚θ“–‚Δ‚η‚κ‚ι‹@”\\‚Μ€–Ϊ‚ª‚ ‚θ‚ά‚·B\n\n‚±‚Μέ’θ‚π“K—p‚µ‚Δ‚ΰ‚Ά‚Ά‚Ε‚·‚©?";
-    Message[ chinese_traditional ] = "ΑΩ¦s¦b¤@¨Η¥u―ΰΕύµΉ§Φ³t¥\\―ΰªν°υ¦ζªΊ¶µ¥Ψ΅C\n±zΑΩ¬O­n±µ¨ό³o­Σ°tΈm΅H";
+    Message[ chinese_traditional ] = "ΑΩ¦s¦b¤@¨Η¥u―ΰΕύµΉ§ΦΕγ¥\\―ΰªν°υ¦ζªΊ¶µ¥Ψ΅C\n±zΑΩ¬O­n±µ¨ό³o­Σ°tΈm΅H";
     Message[ arabic ] = "γΗÒΗαΚ εδΗαί ΕΟΞΗαΗΚ ΘεΗ γεΗγ αΗ νγίδ ΚΪννδεΗ ΕαΗ αήζΗΖγ ΗδΘΛΗήνΙ έήΨ.\n\nεα ΚΡνΟ ήΘζα ΗαΚίζνδ Ϊαμ ΗαΡΫγ γδ ΠαίΏ";
     Message[ greek ] = "Υπάρχουν ακόμη εγγραφές με λειτουργίες των οποίων μπορεί να γίνει μόνο αντιστοίχιση με αναδυόμενα παράθυρα.\n\nΘέλετε να αποδεχτείτε τη διαμόρφωση αυτή;";
     Message[ korean ] = "ΖΛΎχΏ΅ΈΈ ΑφΑ¤µΙ Όφ ΐΦ΄Β ±β΄Ιµιΐ» °΅Αψ ΗΧΈρµιΐΜ ΎΖΑχ ΐΦ½ΐ΄Ο΄Ω. \n\n±Χ·΅µµ ΐΜ ±ΈΌΊΐ» ΐϋΏλΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
