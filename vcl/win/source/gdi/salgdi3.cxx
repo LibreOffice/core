@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:49 $
+ *  last change: $Author: mt $ $Date: 2000-11-02 14:25:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -675,7 +675,7 @@ void SalGraphics::GetFontMetric( ImplFontMetricData* pMetric )
     if ( aSalShlData.mbWNT )
     {
         wchar_t aFaceName[LF_FACESIZE+60];
-        GetTextFaceW( maGraphicsData.mhDC, sizeof( aFaceName ), aFaceName );
+        GetTextFaceW( maGraphicsData.mhDC, sizeof( aFaceName ) / sizeof( wchar_t ), aFaceName );
         pMetric->maName = aFaceName;
 
         TEXTMETRICW aWinMetric;
@@ -768,7 +768,7 @@ static void ImplGetAllFontCharSets( SalGraphicsData* pData )
     LOGFONTA aLogFont;
     memset( &aLogFont, 0, sizeof( aLogFont ) );
     aLogFont.lfCharSet = DEFAULT_CHARSET;
-    GetTextFace( pData->mhDC, sizeof( aLogFont.lfFaceName ), aLogFont.lfFaceName );
+    GetTextFaceA( pData->mhDC, sizeof( aLogFont.lfFaceName ), aLogFont.lfFaceName );
     EnumFontFamiliesExA( pData->mhDC, &aLogFont, (FONTENUMPROCA)SalEnumCharSetsProcExA,
                          (LPARAM)(void*)pData, 0 );
 }
