@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: cmc $ $Date: 2002-04-16 13:18:18 $
+ *  last change: $Author: cmc $ $Date: 2002-04-22 09:23:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -419,6 +419,8 @@ void SwWW8ImplReader::SetDocumentGrid(SwFrmFmt &rFmt,const WW8PLCFx_SEPX* pSep)
         return;
 
     SwTextGridItem aGrid;
+    aGrid.SetDisplayGrid(FALSE);
+    aGrid.SetPrintGrid(FALSE);
     SwTextGrid eType=GRID_NONE;
     if (short nGridType = ReadULSprm( pSep, 0x5032, 0 ))
     {
