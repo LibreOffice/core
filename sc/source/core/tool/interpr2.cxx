@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr2.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 12:35:09 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:36:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1609,9 +1609,24 @@ void ScInterpreter::ScBackSolver()
 
 void ScInterpreter::ScIntersect()
 {
-    USHORT nCol11, nRow11, nTab11, nCol21, nRow21, nTab21,
-           nCol12, nRow12, nTab12, nCol22, nRow22, nTab22,
-           nCol1, nRow1, nTab1, nCol2, nRow2, nTab2;
+    SCCOL nCol11;
+    SCROW nRow11;
+    SCTAB nTab11;
+    SCCOL nCol21;
+    SCROW nRow21;
+    SCTAB nTab21;
+    SCCOL nCol12;
+    SCROW nRow12;
+    SCTAB nTab12;
+    SCCOL nCol22;
+    SCROW nRow22;
+    SCTAB nTab22;
+    SCCOL nCol1;
+    SCROW nRow1;
+    SCTAB nTab1;
+    SCCOL nCol2;
+    SCROW nRow2;
+    SCTAB nTab2;
     BYTE eStackVar = GetStackType();
     if (eStackVar == svDoubleRef)
         PopDoubleRef(nCol11, nRow11, nTab11, nCol21, nRow21, nTab21);
@@ -1842,12 +1857,11 @@ void ScInterpreter::ScDde()
             pLink->TryUpdate();     //  TryUpdate ruft Update nicht mehrfach auf
 
             // StartListening erst nach dem Update, sonst circular reference
-            pMyFormulaCell->StartListening( *pLink, TRUE );
+            pMyFormulaCell->StartListening( *pLink );
         }
         else
         {
-            if ( !pMyFormulaCell->IsListening( *pLink ) )
-                pMyFormulaCell->StartListening( *pLink, TRUE );
+            pMyFormulaCell->StartListening( *pLink );
         }
 
         //  Wenn aus dem Reschedule beim Ausfuehren des Links ein Fehler
@@ -1862,7 +1876,7 @@ void ScInterpreter::ScDde()
         const ScMatrix* pLinkMat = pLink->GetResult();
         if (pLinkMat)
         {
-            USHORT nC, nR;
+            SCSIZE nC, nR;
             pLinkMat->GetDimensions(nC, nR);
             ScMatrixRef pNewMat = GetNewMat( nC, nR);
             if (pNewMat)
