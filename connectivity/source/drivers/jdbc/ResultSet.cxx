@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ResultSet.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-17 13:38:05 $
+ *  last change: $Author: oj $ $Date: 2001-11-09 12:15:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -354,7 +354,7 @@ Sequence< sal_Int8 > SAL_CALL java_sql_ResultSet::getBytes( sal_Int32 columnInde
         } //mID
     } //t.pEnv
     // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
-    return java_sql_Date( t.pEnv, out );
+    return out ? java_sql_Date( t.pEnv, out ) : ::com::sun::star::util::Date();
 }
 // -------------------------------------------------------------------------
 
@@ -587,7 +587,7 @@ Any SAL_CALL java_sql_ResultSet::getObject( sal_Int32 columnIndex, const Referen
         } //mID
     } //t.pEnv
     // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
-        return out==0 ? Any() : Any();//new java_lang_Object( t.pEnv, out );
+    return out==0 ? Any() : Any();//new java_lang_Object( t.pEnv, out );
 }
 // -------------------------------------------------------------------------
 
@@ -655,7 +655,7 @@ sal_Int16 SAL_CALL java_sql_ResultSet::getShort( sal_Int32 columnIndex ) throw(S
         } //mID
     } //t.pEnv
     // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
-    return java_sql_Time( t.pEnv, out );
+    return out ? java_sql_Time( t.pEnv, out ) : ::com::sun::star::util::Time();
 }
 // -------------------------------------------------------------------------
 
@@ -677,7 +677,7 @@ sal_Int16 SAL_CALL java_sql_ResultSet::getShort( sal_Int32 columnIndex ) throw(S
         } //mID
     } //t.pEnv
     // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
-    return java_sql_Timestamp( t.pEnv, out );
+    return out ? java_sql_Timestamp( t.pEnv, out ) : ::com::sun::star::util::DateTime();
 }
 // -------------------------------------------------------------------------
 
