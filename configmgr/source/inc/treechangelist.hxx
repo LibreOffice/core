@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treechangelist.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:19:08 $
+ *  last change: $Author: kz $ $Date: 2004-03-23 10:26:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,9 +96,9 @@ namespace configmgr
                         const AbsolutePath& _rRootPath,
                         const SubtreeChange& _aSubtree,
                         SubtreeChange::DeepChildCopy _doDeepCopy)
-                : m_aOptions(_aOptions),
-                  m_aLocation(_rRootPath),
-                  root(_aSubtree,_doDeepCopy)
+                : root(_aSubtree,_doDeepCopy)
+                , m_aLocation(_rRootPath)
+                , m_aOptions(_aOptions)
             {}
 
         /** ctor
@@ -107,9 +107,9 @@ namespace configmgr
         TreeChangeList( const RequestOptions& _aOptions,
                         const AbsolutePath& _rRootPath,
                         const NodeAttributes& _rAttr = NodeAttributes())
-                : m_aOptions(_aOptions)
+                : root(_rRootPath.getLocalName().getName().toString(), _rAttr)
                 , m_aLocation(_rRootPath)
-                , root(_rRootPath.getLocalName().getName().toString(), _rAttr)
+                , m_aOptions(_aOptions)
         {}
 
         /** ctor
@@ -120,18 +120,18 @@ namespace configmgr
                         const Name& _rChildTemplateName,
                         const Name& _rChildTemplateModule,
                         const NodeAttributes& _rAttr = NodeAttributes())
-                : m_aOptions(_aOptions)
+                : root(_rRootPath.getLocalName().getName().toString(), _rChildTemplateName.toString(), _rChildTemplateModule.toString(), _rAttr)
                 , m_aLocation(_rRootPath)
-                , root(_rRootPath.getLocalName().getName().toString(), _rChildTemplateName.toString(), _rChildTemplateModule.toString(), _rAttr)
+                , m_aOptions(_aOptions)
         {}
 
         /** ctor
         @param      _rTreeList          list to initialize the path, no childs are copied
         */
         TreeChangeList( const TreeChangeList& _rTree, SubtreeChange::NoChildCopy _rNoCopy)
-            : m_aOptions(_rTree.m_aOptions)
+            : root(_rTree.root, _rNoCopy)
             , m_aLocation(_rTree.m_aLocation)
-            , root(_rTree.root, _rNoCopy)
+            , m_aOptions(_rTree.m_aOptions)
         {}
 
         /// is root a change for the module root
