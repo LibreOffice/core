@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen2.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-29 19:32:55 $
+ *  last change: $Author: sab $ $Date: 2001-06-14 07:10:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -367,7 +367,8 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
         pEditEngine( NULL ),
         eLinkMode(LM_UNKNOWN),
         pDPCollection( NULL ),
-        pScriptTypeData( NULL )
+        pScriptTypeData( NULL ),
+        nStandardIndexEnglishUS(-1)
 {
     eSrcSet = gsl_getSystemTextEncoding();
     nSrcVer = SC_CURRENT_VERSION;
@@ -591,6 +592,13 @@ void ScDocument::InitClipPtrs( ScDocument* pSourceDoc )
 SvNumberFormatter* ScDocument::GetFormatTable() const
 {
     return xPoolHelper->GetFormTable();
+}
+
+ULONG ScDocument::GetStandardIndexEnglishUS()
+{
+    if (nStandardIndexEnglishUS == -1)
+        nStandardIndexEnglishUS = GetFormatTable()->GetStandardIndex(LANGUAGE_ENGLISH_US);
+    return (ULONG)nStandardIndexEnglishUS;
 }
 
 SfxItemPool* ScDocument::GetEditPool() const
