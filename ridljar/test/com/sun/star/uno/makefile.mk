@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: vg $ $Date: 2003-05-22 09:34:31 $
+#   last change: $Author: rt $ $Date: 2004-03-30 16:39:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,6 +64,8 @@ PRJNAME := ridljar
 TARGET := test_com_sun_star_uno
 
 PACKAGE := com$/sun$/star$/uno
-JAVATESTFILES := Type_Test.java
+JAVATESTFILES := \
+    Type_Test.java \
+    UnoRuntime_Test.java
 
 .INCLUDE: javaunittest.mk
