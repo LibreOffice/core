@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindow.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 15:55:21 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 12:02:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,15 @@
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #endif
+#ifndef _COM_SUN_STAR_AWT_DOCKINGEVENT_HPP_
+#include <com/sun/star/awt/DockingEvent.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_ENDDOCKINGEVENT_HPP_
+#include <com/sun/star/awt/EndDockingEvent.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_ENDPOPUPMODEEVENT_HPP_
+#include <com/sun/star/awt/EndPopupModeEvent.hpp>
+#endif
 
 #ifndef _TOOLKIT_AWT_VCLXWINDOW_HXX_
 #include <toolkit/awt/vclxwindow.hxx>
@@ -135,6 +144,9 @@
 #endif
 #ifndef _TOOLS_COLOR_HXX
 #include <tools/color.hxx>
+#endif
+#ifndef _SV_DOCKWIN_HXX
+#include <vcl/dockwin.hxx>
 #endif
 
 // Mit Out-Parameter besser als Rueckgabewert, wegen Ref-Objekt...
@@ -270,6 +282,8 @@ IMPL_LINK( VCLXWindow, WindowEventListener, VclSimpleEvent*, pEvent )
 
 void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xThis( (::cppu::OWeakObject*)this );
+
     switch ( rVclWindowEvent.GetId() )
     {
         case VCLEVENT_WINDOW_PAINT:
@@ -366,6 +380,12 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         break;
         case VCLEVENT_WINDOW_CLOSE:
         {
+            if ( mxDockableWindowListener.is() )
+            {
+                ::com::sun::star::lang::EventObject aEvent;
+                aEvent.Source = (::cppu::OWeakObject*)this;
+                mxDockableWindowListener->closed( aEvent );
+            }
             if ( GetTopWindowListeners().getLength() )
             {
                 ::com::sun::star::lang::EventObject aEvent;
@@ -550,6 +570,109 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             }
         }
         break;
+        case VCLEVENT_WINDOW_STARTDOCKING:
+        {
+            if ( mxDockableWindowListener.is() )
+            {
+                DockingData *pData = (DockingData*)rVclWindowEvent.GetData();
+
+                if( pData )
+                {
+                    ::com::sun::star::awt::DockingEvent aEvent;
+                    aEvent.Source = (::cppu::OWeakObject*)this;
+                    aEvent.TrackingRectangle = AWTRectangle( pData->maTrackRect );
+                    aEvent.MousePos.X = pData->maMousePos.X();
+                    aEvent.MousePos.Y = pData->maMousePos.Y();
+                    aEvent.bLiveMode = pData->mbLivemode;
+                    aEvent.bInteractive = pData->mbInteractive;
+
+                    mxDockableWindowListener->startDocking( aEvent );
+                }
+            }
+        }
+        break;
+        case VCLEVENT_WINDOW_DOCKING:
+        {
+            if ( mxDockableWindowListener.is() )
+            {
+                DockingData *pData = (DockingData*)rVclWindowEvent.GetData();
+
+                if( pData )
+                {
+                    ::com::sun::star::awt::DockingEvent aEvent;
+                    aEvent.Source = (::cppu::OWeakObject*)this;
+                    aEvent.TrackingRectangle = AWTRectangle( pData->maTrackRect );
+                    aEvent.MousePos.X = pData->maMousePos.X();
+                    aEvent.MousePos.Y = pData->maMousePos.Y();
+                    aEvent.bLiveMode = pData->mbLivemode;
+                    aEvent.bInteractive = pData->mbInteractive;
+                    ::com::sun::star::awt::DockingData aDockingData =
+                        mxDockableWindowListener->docking( aEvent );
+                    pData->maTrackRect = VCLRectangle( aDockingData.TrackingRectangle );
+                    pData->mbFloating = aDockingData.bFloating;
+                }
+            }
+        }
+        break;
+        case VCLEVENT_WINDOW_ENDDOCKING:
+        {
+            if ( mxDockableWindowListener.is() )
+            {
+                EndDockingData *pData = (EndDockingData*)rVclWindowEvent.GetData();
+
+                if( pData )
+                {
+                    ::com::sun::star::awt::EndDockingEvent aEvent;
+                    aEvent.Source = (::cppu::OWeakObject*)this;
+                    aEvent.WindowRectangle = AWTRectangle( pData->maWindowRect );
+                    aEvent.bFloating = pData->mbFloating;
+                    aEvent.bCancelled = pData->mbCancelled;
+                    mxDockableWindowListener->endDocking( aEvent );
+                }
+            }
+        }
+        break;
+        case VCLEVENT_WINDOW_PREPARETOGGLEFLOATING:
+        {
+            if ( mxDockableWindowListener.is() )
+            {
+                BOOL *p_bFloating = (BOOL*)rVclWindowEvent.GetData();
+
+                ::com::sun::star::lang::EventObject aEvent;
+                aEvent.Source = (::cppu::OWeakObject*)this;
+                *p_bFloating = mxDockableWindowListener->prepareToggleFloatingMode( aEvent );
+            }
+        }
+        break;
+        case VCLEVENT_WINDOW_TOGGLEFLOATING:
+        {
+            if ( mxDockableWindowListener.is() )
+            {
+                ::com::sun::star::lang::EventObject aEvent;
+                aEvent.Source = (::cppu::OWeakObject*)this;
+                mxDockableWindowListener->toggleFloatingMode( aEvent );
+            }
+        }
+        break;
+        case VCLEVENT_WINDOW_ENDPOPUPMODE:
+        {
+            if ( mxDockableWindowListener.is() )
+            {
+                EndPopupModeData *pData = (EndPopupModeData*)rVclWindowEvent.GetData();
+
+                if( pData )
+                {
+                    ::com::sun::star::awt::EndPopupModeEvent aEvent;
+                    aEvent.Source = (::cppu::OWeakObject*)this;
+                    aEvent.FloatingPosition.X = pData->maFloatingPos.X();
+                    aEvent.FloatingPosition.Y = pData->maFloatingPos.Y();
+                    aEvent.bTearoff = pData->mbTearoff;
+                    mxDockableWindowListener->endPopupMode( aEvent );
+                }
+            }
+        }
+        break;
+
     }
 }
 
@@ -629,7 +752,8 @@ Size VCLXWindow::ImplCalcWindowSize( const Size& rOutSz ) const
                                         SAL_STATIC_CAST( ::com::sun::star::awt::XLayoutConstrains*, this ),
                                         SAL_STATIC_CAST( ::com::sun::star::awt::XView*, this ),
                                         SAL_STATIC_CAST( ::com::sun::star::accessibility::XAccessible*, this ),
-                                        SAL_STATIC_CAST( ::com::sun::star::lang::XEventListener*, this ) );
+                                        SAL_STATIC_CAST( ::com::sun::star::lang::XEventListener*, this ),
+                                           SAL_STATIC_CAST( ::com::sun::star::awt::XDockableWindow*, this ) );
     return (aRet.hasValue() ? aRet : VCLXDevice::queryInterface( rType ));
 }
 
@@ -646,6 +770,7 @@ IMPL_XTYPEPROVIDER_START( VCLXWindow )
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible>* ) NULL ),
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener>* ) NULL ),
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XView>* ) NULL ),
+    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDockableWindow>* ) NULL ),
     VCLXDevice::getTypes()
 IMPL_XTYPEPROVIDER_END
 
@@ -722,7 +847,12 @@ void VCLXWindow::setPosSize( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int3
     ::vos::OGuard aGuard( GetMutex() );
 
     if ( GetWindow() )
-        GetWindow()->SetPosSizePixel( X, Y, Width, Height, Flags );
+    {
+        if( Window::GetDockingManager()->IsDockable( GetWindow() ) )
+            Window::GetDockingManager()->SetPosSizePixel( GetWindow() , X, Y, Width, Height, Flags );
+        else
+            GetWindow()->SetPosSizePixel( X, Y, Width, Height, Flags );
+    }
 }
 
 ::com::sun::star::awt::Rectangle VCLXWindow::getPosSize(  ) throw(::com::sun::star::uno::RuntimeException)
@@ -731,7 +861,12 @@ void VCLXWindow::setPosSize( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int3
 
     ::com::sun::star::awt::Rectangle aBounds;
     if ( GetWindow() )
-        aBounds = AWTRectangle( Rectangle( GetWindow()->GetPosPixel(), GetWindow()->GetSizePixel() ) );
+    {
+        if( Window::GetDockingManager()->IsDockable( GetWindow() ) )
+            aBounds = AWTRectangle( Window::GetDockingManager()->GetPosSizePixel( GetWindow() ) );
+        else
+            aBounds = AWTRectangle( Rectangle( GetWindow()->GetPosPixel(), GetWindow()->GetSizePixel() ) );
+    }
 
     return aBounds;
 }
@@ -1746,4 +1881,101 @@ void SAL_CALL VCLXWindow::disposing( const ::com::sun::star::lang::EventObject& 
     }
 
     return mxAccessibleContext;
+}
+
+// ::com::sun::star::awt::XDockable
+void SAL_CALL VCLXWindow::addDockableWindowListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDockableWindowListener >& xListener ) throw (::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    if( !mxDockableWindowListener.is() )
+        mxDockableWindowListener = xListener;
+    //else
+    //    throw too_many_listeners_exception
+
+}
+
+void SAL_CALL VCLXWindow::removeDockableWindowListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDockableWindowListener >& xListener ) throw (::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    if( mxDockableWindowListener == xListener )
+        mxDockableWindowListener.clear();
+}
+
+void SAL_CALL VCLXWindow::enableDocking( sal_Bool bEnable ) throw (::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    Window* pWindow = GetWindow();
+    if ( pWindow )
+        pWindow->EnableDocking( bEnable );
+}
+
+sal_Bool SAL_CALL VCLXWindow::isFloating(  ) throw (::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    Window* pWindow = GetWindow();
+    if( pWindow )
+        return Window::GetDockingManager()->IsFloating( pWindow );
+    else
+        return FALSE;
+}
+
+void SAL_CALL VCLXWindow::setFloatingMode( sal_Bool bFloating ) throw (::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    Window* pWindow = GetWindow();
+    if( pWindow )
+        Window::GetDockingManager()->SetFloatingMode( pWindow, bFloating );
+}
+
+sal_Bool SAL_CALL VCLXWindow::isLocked(  ) throw (::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    Window* pWindow = GetWindow();
+    if( pWindow )
+        return Window::GetDockingManager()->IsLocked( pWindow );
+    else
+        return FALSE;
+}
+
+void SAL_CALL VCLXWindow::lock(  ) throw (::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    Window* pWindow = GetWindow();
+    if( pWindow && !Window::GetDockingManager()->IsFloating( pWindow ) )
+        Window::GetDockingManager()->Lock( pWindow );
+}
+
+void SAL_CALL VCLXWindow::unlock(  ) throw (::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    Window* pWindow = GetWindow();
+    if( pWindow && !Window::GetDockingManager()->IsFloating( pWindow ) )
+        Window::GetDockingManager()->Unlock( pWindow );
+}
+void SAL_CALL VCLXWindow::startPopupMode( const ::com::sun::star::awt::Rectangle& WindowRect ) throw (::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    Window* pWindow = GetWindow();
+    if( pWindow )
+        Window::GetDockingManager()->StartPopupMode( pWindow, VCLRectangle( WindowRect ) );
+}
+
+sal_Bool SAL_CALL VCLXWindow::isInPopupMode(  ) throw (::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    Window* pWindow = GetWindow();
+    if( pWindow )
+        return Window::GetDockingManager()->IsInPopupMode( pWindow );
+    else
+        return FALSE;
 }
