@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swhtml.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 16:27:18 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:38:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2550,7 +2550,7 @@ void SwHTMLParser::Show()
     // eine groessere Schrittweite
     if( pVSh )
         nParaCnt = pDoc->GetNodes()[pPam->GetPoint()->nNode]
-                       ->IsVisible(pVSh) ? 5 : 50;
+                       ->IsInVisibleArea(pVSh) ? 5 : 50;
 }
 
 void SwHTMLParser::ShowStatline()
