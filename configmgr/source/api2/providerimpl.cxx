@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerimpl.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: dg $ $Date: 2001-06-22 08:01:09 $
+ *  last change: $Author: jb $ $Date: 2001-06-22 12:42:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,6 +218,13 @@ namespace configmgr
             rtl::OUString sDefaultLocale = _rSettings.getLocale();
             m_xDefaultOptions->setDefaultLocale(sDefaultLocale);
         }
+        else
+            OSL_ASSERT(m_xDefaultOptions->getDefaultLocale().getLength() == 0);
+
+        if  (_rSettings.hasAsyncSetting())
+        {
+            m_xDefaultOptions->setLazyWrite(_rSettings.getAsyncSetting());
+        }
 
     // call the template method
         this->initFromSettings(_rSettings, rNeedProfile);
@@ -230,30 +237,33 @@ namespace configmgr
     {
         OSL_ASSERT(pProfile);
 
+        // read the default locale for the user
+        if (m_xDefaultOptions->getDefaultLocale().getLength() == 0)
+        {
 #ifdef TF_CFGDATA
-        static ::rtl::OUString ssSubGroup(RTL_CONSTASCII_USTRINGPARAM("L10N"));
-        static ::rtl::OUString ssLocale(RTL_CONSTASCII_USTRINGPARAM("ooLocale"));
+            static ::rtl::OUString ssSubGroup(RTL_CONSTASCII_USTRINGPARAM("L10N"));
+            static ::rtl::OUString ssLocale(RTL_CONSTASCII_USTRINGPARAM("ooLocale"));
 #else
-        static ::rtl::OUString ssSubGroup(RTL_CONSTASCII_USTRINGPARAM("International"));
-        static ::rtl::OUString ssLocale(RTL_CONSTASCII_USTRINGPARAM("Locale"));
+            static ::rtl::OUString ssSubGroup(RTL_CONSTASCII_USTRINGPARAM("International"));
+            static ::rtl::OUString ssLocale(RTL_CONSTASCII_USTRINGPARAM("Locale"));
 #endif
 
-        // read the default locale for the user
-        INode const* pNode = pProfile->getChild(ssSubGroup);
-        ISubtree const* pSubTree = pNode ? pNode->asISubtree() : NULL;
-        if (pSubTree)
-        {
-            pNode = pSubTree->getChild(ssLocale);
-            ValueNode const * pValueNode = pNode ? pNode->asValueNode() : NULL;
-            if (pValueNode)
+            INode const* pNode = pProfile->getChild(ssSubGroup);
+            ISubtree const* pSubTree = pNode ? pNode->asISubtree() : NULL;
+            if (pSubTree)
             {
-                rtl::OUString sDefaultLocale;
-                if (pValueNode->getValue() >>= sDefaultLocale)
+                pNode = pSubTree->getChild(ssLocale);
+                ValueNode const * pValueNode = pNode ? pNode->asValueNode() : NULL;
+                if (pValueNode)
                 {
-                    m_xDefaultOptions->setDefaultLocale(sDefaultLocale);
+                    rtl::OUString sDefaultLocale;
+                    if (pValueNode->getValue() >>= sDefaultLocale)
+                    {
+                        m_xDefaultOptions->setDefaultLocale(sDefaultLocale);
+                    }
+                    else
+                        OSL_ENSURE(false, "Could not extract locale parameter into string");
                 }
-                else
-                    OSL_ENSURE(false, "Could not extract locale parameter into string");
             }
         }
 
