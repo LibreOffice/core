@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SoundHandler.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-10-06 13:32:17 $
+ *  last change:$Date: 2003-11-18 16:28:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,7 @@ public class SoundHandler extends TestCase {
         }
 
         TestEnvironment tEnv = new TestEnvironment( oObj );
-        URL dispURL = utils.parseURL((XMultiServiceFactory) Param.getMSF(),
+        URL dispURL = utils.parseURL((XMultiServiceFactory)Param.getMSF(),
                                             utils.getFullTestURL("ok.wav"));
         System.out.println("DISPATCHURL: "+ dispURL.Complete);
 
