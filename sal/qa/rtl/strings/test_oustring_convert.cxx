@@ -2,9 +2,9 @@
  *
  *  $RCSfile: test_oustring_convert.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-08-07 14:57:29 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 14:56:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,6 +210,6 @@ void test::oustring::Convert::convertToString()
               OUSTRING_TO_OSTRING_CVTFLAGS,
               "A?B",
               "A?B" } };
-    for (int i = 0; i < sizeof aTests / sizeof aTests[0]; ++i)
+    for (unsigned int i = 0; i < sizeof aTests / sizeof aTests[0]; ++i)
         testConvertToString(aTests[i]);
 }
