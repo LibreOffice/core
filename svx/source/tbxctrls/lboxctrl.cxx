@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lboxctrl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tl $ $Date: 2001-04-10 08:25:59 $
+ *  last change: $Author: tl $ $Date: 2001-04-10 11:02:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -322,7 +322,7 @@ IMPL_LINK( SvxListBoxControl, PopupModeEndHdl, void *, EMPTYARG )
     {
         USHORT nPos = pPopupWin->GetListBox().GetSelectEntryPos();
         SfxUInt16Item aItem( GetId(), nPos + 1 );
-        GetBindings().GetDispatcher()->Execute( SID_UNDO,
+        GetBindings().GetDispatcher()->Execute( GetId(),
                 SFX_CALLMODE_SYNCHRON, &aItem, 0L );
     }
     return 0;
