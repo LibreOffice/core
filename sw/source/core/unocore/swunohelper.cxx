@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swunohelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:41:21 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:41:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,20 +253,6 @@ BOOL UCB_IsReadOnlyFileName( const String& rURL )
         bIsReadOnly = FALSE;
     }
     return bIsReadOnly;
-}
-
-BOOL UCB_IsFile( const String& rURL )
-{
-    BOOL bExists = FALSE;
-    try
-    {
-        ::ucb::Content aContent( rURL, STAR_REFERENCE( ucb::XCommandEnvironment )() );
-        bExists = aContent.isDocument();
-    }
-    catch (UNO_NMSPC::Exception &)
-    {
-    }
-    return bExists;
 }
 
 BOOL UCB_IsDirectory( const String& rURL )
