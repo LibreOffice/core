@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objectformatter.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 14:11:16 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 13:47:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,8 +138,19 @@ class SwPageNumOfAnchors
         {
             tEntry* pNewEntry = new tEntry();
             pNewEntry->mpAnchoredObj = &_rAnchoredObj;
-            pNewEntry->mnPageNumOfAnchor =
-                            _rAnchoredObj.GetPageFrmOfAnchor().GetPhyPageNum();
+            // --> OD 2004-09-23 #i33751#, #i34060# - method <GetPageFrmOfAnchor()>
+            // is replaced by method <FindPageFrmOfAnchor()>. It's return value
+            // have to be checked.
+            SwPageFrm* pPageFrmOfAnchor = _rAnchoredObj.FindPageFrmOfAnchor();
+            if ( pPageFrmOfAnchor )
+            {
+                pNewEntry->mnPageNumOfAnchor = pPageFrmOfAnchor->GetPhyPageNum();
+            }
+            else
+            {
+                pNewEntry->mnPageNumOfAnchor = 0;
+            }
+            // <--
             maObjList.push_back( pNewEntry );
         }
 
@@ -470,8 +481,13 @@ bool SwObjectFormatter::_FormatObjsAtFrm()
 
         // check, if object's anchor is on the given page frame or
         // object is registered at the given page frame.
-        if ( &pAnchoredObj->GetPageFrmOfAnchor() == &mrPageFrm ||
+        // --> OD 2004-09-23 #i33751#, #i34060# - method <GetPageFrmOfAnchor()>
+        // is replaced by method <FindPageFrmOfAnchor()>. It's return value
+        // have to be checked.
+        SwPageFrm* pPageFrmOfAnchor = pAnchoredObj->FindPageFrmOfAnchor();
+        if ( ( pPageFrmOfAnchor && pPageFrmOfAnchor == &mrPageFrm ) ||
              pAnchoredObj->GetPageFrm() == &mrPageFrm )
+        // <--
         {
             // if format of object fails, stop formatting and pass fail to
             // calling method via the return value.
