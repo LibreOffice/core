@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmodul1.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 14:20:14 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:57:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,86 +197,6 @@ using namespace ::com::sun::star::view;
 using namespace ::com::sun::star::lang;
 #define C2U(char) rtl::OUString::createFromAscii(char)
 
-/* -----------------------------05.01.00 15:14--------------------------------
-
- ---------------------------------------------------------------------------*/
-
-class SwXDispatchStatusListener : public cppu::WeakImplHelper1
-<
-    frame::XStatusListener
->
-{
-    uno::Reference< frame::XStatusListener >            xSelf;
-    util::URL                       aDispURL;
-    uno::Reference< frame::XDispatch >              xDispatch;
-
-    void            Invalidate();
-public:
-    SwXDispatchStatusListener(uno::Reference< frame::XDispatch > &  xDisp, const util::URL&     aURL);
-    ~SwXDispatchStatusListener();
-
-    //XStatusListener
-    virtual void SAL_CALL statusChanged(const frame::FeatureStateEvent& Event) throw( uno::RuntimeException );
-
-    //XEventListener
-    virtual void SAL_CALL disposing(const lang::EventObject& Source) throw( uno::RuntimeException );
-};
-/* -----------------------------05.01.00 15:18--------------------------------
-
- ---------------------------------------------------------------------------*/
-SwXDispatchStatusListener::SwXDispatchStatusListener(
-                                uno::Reference< frame::XDispatch > & xDisp, const util::URL&    aURL) :
-    xDispatch(xDisp),
-    aDispURL(aURL)
-{
-    DBG_ASSERT(xDisp.is(),  "XDispatch not set")
-    if(xDisp.is())
-        xSelf = this;
-}
-/* -----------------------------05.01.00 15:19--------------------------------
-
- ---------------------------------------------------------------------------*/
-SwXDispatchStatusListener::~SwXDispatchStatusListener()
-{
-}
-/* -----------------------------05.01.00 15:21--------------------------------
-
- ---------------------------------------------------------------------------*/
-void SwXDispatchStatusListener::disposing(const lang::EventObject& Source)
-    throw( uno::RuntimeException )
-{
-    Invalidate();
-}
-/* -----------------------------05.01.00 15:22--------------------------------
-
- ---------------------------------------------------------------------------*/
-void SwXDispatchStatusListener::statusChanged(const frame::FeatureStateEvent& rEvent)
-    throw( uno::RuntimeException )
-{
-    if(rEvent.FeatureURL.Complete == aDispURL.Complete && rEvent.IsEnabled)
-    {
-        uno::Sequence <beans::PropertyValue > aArgs(0);
-        xDispatch->dispatch(aDispURL, aArgs);
-        Invalidate();
-    }
-}
-/* -----------------------------05.01.00 15:45--------------------------------
-
- ---------------------------------------------------------------------------*/
-void    SwXDispatchStatusListener::Invalidate()
-{
-    if(xDispatch.is())
-    {
-        try
-        {
-            xDispatch->removeStatusListener(xSelf, aDispURL);
-        }
-        catch(...)
-        {
-        }
-    }
-    xSelf = 0;
-}
 /*-----------------08/28/97 08:41pm-----------------
 
 --------------------------------------------------*/
@@ -544,20 +464,6 @@ SwChapterNumRules*  SwModule::GetChapterNumRules()
     return pChapterNumRules;
 }
 
-
-/*--------------------------------------------------------------------
-    Beschreibung: Schaut nach ob's min eine View gibt
- --------------------------------------------------------------------*/
-
-void SwModule::StateIsView(SfxItemSet& rSet)
-{
-    SwView *pView = ::GetActiveView();
-
-    TypeId aType( TYPE(SwView) );
-    if( !SfxViewShell::GetFirst(&aType) )   // Ist irgendein Writer-Dok vorhanden?
-        rSet.DisableItem(FN_QRY_MERGE);
-}
-
 /*--------------------------------------------------------------------
     Beschreibung:
  --------------------------------------------------------------------*/
@@ -610,15 +516,6 @@ sal_uInt16 SwModule::GetRedlineAuthor()
 const String& SwModule::GetRedlineAuthor(sal_uInt16 nPos)
 {
     return *pAuthorNames->GetObject(nPos);
-}
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-sal_uInt16 SwModule::GetRedlineAuthorCount()
-{
-    return pAuthorNames->Count();
 }
 
 /*--------------------------------------------------------------------
@@ -728,24 +625,6 @@ void SwModule::GetDeletedAuthorAttr(sal_uInt16 nAuthor, SfxItemSet &rSet)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-const AuthorCharAttr& SwModule::GetInsertAuthorAttr() const
-{
-    return pModuleConfig->GetInsertAuthorAttr();
-}
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-const AuthorCharAttr& SwModule::GetDeletedAuthorAttr() const
-{
-    return pModuleConfig->GetDeletedAuthorAttr();
-}
-
-/*--------------------------------------------------------------------
     Beschreibung: Fuer zukuenftige Erweiterung:
  --------------------------------------------------------------------*/
 
@@ -753,12 +632,6 @@ void SwModule::GetFormatAuthorAttr( sal_uInt16 nAuthor, SfxItemSet &rSet )
 {
     lcl_FillAuthorAttr( nAuthor, rSet, pModuleConfig->GetFormatAuthorAttr() );
 }
-
-const AuthorCharAttr& SwModule::GetFormatAuthorAttr() const
-{
-    return pModuleConfig->GetFormatAuthorAttr();
-}
-
 
 /*--------------------------------------------------------------------
     Beschreibung:
