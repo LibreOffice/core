@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTableShapeImportHelper.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-28 08:19:33 $
+ *  last change: $Author: sab $ $Date: 2001-07-23 15:24:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,7 @@ class XMLTableShapeImportHelper : public XMLShapeImportHelper
 {
     ::com::sun::star::table::CellAddress aStartCell;
     sal_Bool bOnTable : 1;
+
 public:
 
     XMLTableShapeImportHelper( ScXMLImport& rImp, SvXMLImportPropertyMapper *pImpMapper=0 );

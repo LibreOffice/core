@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.125 $
+ *  $Revision: 1.126 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-19 09:38:08 $
+ *  last change: $Author: sab $ $Date: 2001-07-23 15:24:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,9 @@
 #endif
 #ifndef SC_DOCUNO_HXX
 #include "docuno.hxx"
+#endif
+#ifndef SC_CHARTLIS_HXX
+#include "chartlis.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLKYWD_HXX
@@ -433,7 +436,8 @@ ScXMLExport::ScXMLExport(const sal_uInt16 nExportFlag) :
     bHasRowHeader(sal_False),
     bRowHeaderOpen(sal_False),
     aXShapesVec(),
-    sLayerID(RTL_CONSTASCII_USTRINGPARAM( SC_LAYERID ))
+    sLayerID(RTL_CONSTASCII_USTRINGPARAM( SC_LAYERID )),
+    pChartListener(NULL)
 {
     if (getExportFlags() & EXPORT_CONTENT)
     {
@@ -496,6 +500,8 @@ ScXMLExport::~ScXMLExport()
         delete pDetectiveObjContainer;
     if (pChangeTrackingExportHelper)
         delete pChangeTrackingExportHelper;
+    if (pChartListener)
+        delete pChartListener;
 }
 
 void SAL_CALL ScXMLExport::setSourceDocument( const uno::Reference<lang::XComponent>& xComponent )
@@ -2319,12 +2325,43 @@ void ScXMLExport::ExportShape(const uno::Reference < drawing::XShape >& xShape, 
                     uno::Reference < container::XNamed > xNamed (xShape, uno::UNO_QUERY );
                     rtl::OUString sOUName ( xNamed->getName() );
                     String sName(sOUName);
-                    SchMemChart* pMemChart = pDoc->FindChartData(sName);
+                    if (!pChartListener)
+                    {
+                        String aEmptyString;
+                        ScRange aRange;
+                        pChartListener = new ScChartListener ( aEmptyString, GetDocument(), aRange );
+                    }
+                    if(pChartListener)
+                    {
+                        USHORT nIndex;
+                        pChartListener->SetString( sName );
+                        if ( GetDocument()->GetChartListenerCollection()->Search( pChartListener, nIndex ) )
+                        {
+                            const ScRangeListRef& rRangeListRef = ((ScChartListener*)
+                                (GetDocument()->GetChartListenerCollection()->
+                                At( nIndex )))->GetRangeList();
+                            if (rRangeListRef.Is())
+                            {
+                                bMemChart = sal_True;
+                                rtl::OUString sRanges;
+                                ScXMLConverter::GetStringFromRangeList(sRanges, rRangeListRef, GetDocument());
+                                if (sRanges.getLength())
+                                    AddAttribute(XML_NAMESPACE_DRAW, XML_NOTIFY_ON_UPDATE_OF_RANGES, sRanges);
+                                GetShapeExport()->exportShape(xShape, SEF_EXPORT_NO_CHART_DATA | SEF_DEFAULT, pPoint);
+                            }
+                        }
+                        else
+                            DBG_ERROR("don't get the ChartListener for this Chart");
+                    }
+/*                  SchMemChart* pMemChart = pDoc->FindChartData(sName);
                     if (pMemChart && pMemChart->GetSeriesAddresses().getLength())
                     {
                         bMemChart = sal_True;
+                        rtl::OUString sRanges(pMemChart->getXMLStringForChartRange());
+                        if (sRanges.getLength())
+                            AddAttribute(XML_NAMESPACE_DRAW, XML_NOTIFY_ON_UPDATE_OF_RANGES, sRanges);
                         GetShapeExport()->exportShape(xShape, SEF_EXPORT_NO_CHART_DATA | SEF_DEFAULT, pPoint);
-                    }
+                    }*/
                 }
             }
         }

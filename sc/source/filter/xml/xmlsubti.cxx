@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsubti.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-06 11:39:27 $
+ *  last change: $Author: sab $ $Date: 2001-07-23 15:24:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,11 +227,11 @@ ScMyTables::ScMyTables(ScXMLImport& rTempImport)
 
 ScMyTables::~ScMyTables()
 {
-    ScMyTableData* aTable;
+    ScMyTableData* pTable;
     while (nTableCount > 0)
     {
-        aTable = aTableVec[nTableCount - 1];
-        delete aTable;
+        pTable = aTableVec[nTableCount - 1];
+        delete pTable;
         aTableVec[nTableCount - 1] = NULL;
         nTableCount--;
     }
@@ -758,8 +758,9 @@ sal_Bool ScMyTables::HasXShapes()
 }
 
 void ScMyTables::AddShape(uno::Reference <drawing::XShape>& rShape,
+    const rtl::OUString& rName, const rtl::OUString& rRangeList,
     table::CellAddress& rStartAddress, table::CellAddress& rEndAddress,
     sal_Int32 nEndX, sal_Int32 nEndY)
 {
-    aResizeShapes.AddShape(rShape, rStartAddress, rEndAddress, nEndX, nEndY);
+    aResizeShapes.AddShape(rShape, rName, rRangeList, rStartAddress, rEndAddress, nEndX, nEndY);
 }

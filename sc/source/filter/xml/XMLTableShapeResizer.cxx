@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTableShapeResizer.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-06 11:24:03 $
+ *  last change: $Author: sab $ $Date: 2001-07-23 15:24:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,12 @@
 #ifndef SC_XMLIMPRT_HXX
 #include "xmlimprt.hxx"
 #endif
+#ifndef SC_CHARTLIS_HXX
+#include "chartlis.hxx"
+#endif
+#ifndef _SC_XMLCONVERTER_HXX
+#include "XMLConverter.hxx"
+#endif
 
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
@@ -90,7 +96,8 @@ using namespace ::com::sun::star;
 
 ScMyShapeResizer::ScMyShapeResizer(ScXMLImport& rTempImport)
     : aShapes(),
-    rImport(rTempImport)
+    rImport(rTempImport),
+    pCollection(NULL)
 {
 }
 
@@ -98,12 +105,43 @@ ScMyShapeResizer::~ScMyShapeResizer()
 {
 }
 
+sal_Bool ScMyShapeResizer::IsOLE(uno::Reference< drawing::XShape >& rShape) const
+{
+    return rShape->getShapeType().equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.OLE2Shape")));
+}
+
+void ScMyShapeResizer::CreateChartListener(ScDocument* pDoc,
+    const rtl::OUString& rName,
+    const rtl::OUString& rRangeList)
+{
+    if (pDoc && rRangeList.getLength())
+    {
+        if (!pCollection)
+            pCollection = pDoc->GetChartListenerCollection();//new ScChartListenerCollection(pDoc);
+        if (pCollection)
+        {
+            ScRangeListRef aRangeListRef = new ScRangeList();
+            ScXMLConverter::GetRangeListFromString(*aRangeListRef, rRangeList, pDoc);
+            if (aRangeListRef->Count())
+            {
+                ScChartListener* pCL = new ScChartListener(
+                                    rName, pDoc, aRangeListRef );
+                pCollection->Insert( pCL );
+                pCL->StartListeningTo();
+            }
+        }
+    }
+}
+
 void ScMyShapeResizer::AddShape(uno::Reference <drawing::XShape>& rShape,
+    const rtl::OUString& rName, const rtl::OUString& rRangeList,
     table::CellAddress& rStartAddress, table::CellAddress& rEndAddress,
     sal_Int32 nEndX, sal_Int32 nEndY)
 {
     ScMyToResizeShape aShape;
     aShape.xShape = rShape;
+    aShape.sName = rName;
+    aShape.sRangeList = rRangeList;
     aShape.aEndCell = rEndAddress;
     aShape.aStartCell = rStartAddress;
     aShape.nEndY = nEndY;
@@ -130,6 +168,7 @@ void ScMyShapeResizer::ResizeShapes()
             uno::Reference<container::XIndexAccess> xIndex( xSheets, uno::UNO_QUERY );
             if ( xIndex.is() )
             {
+                ScDocument* pDoc = rImport.GetDocument();
                 while (aItr != aShapes.end())
                 {
                     if ((nOldSheet != aItr->aEndCell.Sheet) || !xSheet.is())
@@ -187,8 +226,7 @@ void ScMyShapeResizer::ResizeShapes()
                                     }
                                     else
                                     {
-                                        DBG_ASSERT(aItr->xShape->getShapeType().equals(
-                                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.CaptionShape"))),
+                                        DBG_ASSERT(aItr->xShape->getShapeType().equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.CaptionShape"))),
                                             "no end address of this shape");
                                         Rectangle aRec = rImport.GetDocument()->GetMMRect(static_cast<USHORT>(aItr->aStartCell.Column), static_cast<USHORT>(aItr->aStartCell.Row),
                                             static_cast<USHORT>(aItr->aStartCell.Column), static_cast<USHORT>(aItr->aStartCell.Row), aItr->aStartCell.Sheet);
@@ -206,8 +244,12 @@ void ScMyShapeResizer::ResizeShapes()
                     }
                     else
                         DBG_ERROR("something wents wrong");
+                    if (IsOLE(aItr->xShape))
+                        CreateChartListener(pDoc, aItr->sName, aItr->sRangeList);
                     aItr = aShapes.erase(aItr);
                 }
+//              if (pCollection)
+//                  pDoc->SetChartListenerCollection(pCollection);
             }
         }
     }

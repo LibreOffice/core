@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTableShapeImportHelper.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: sab $ $Date: 2001-06-27 08:08:14 $
+ *  last change: $Author: sab $ $Date: 2001-07-23 15:24:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,9 +66,6 @@
 #ifndef SC_XMLIMPRT_HXX
 #include "xmlimprt.hxx"
 #endif
-#ifndef SC_DOCUMENT_HXX
-#include "document.hxx"
-#endif
 #ifndef _SC_XMLCONVERTER_HXX
 #include "XMLConverter.hxx"
 #endif
@@ -82,11 +79,11 @@
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include <xmloff/xmlnmspe.hxx>
 #endif
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include <xmloff/xmlkywd.hxx>
-#endif
 #ifndef _XMLOFF_XMLUCONV_HXX
 #include <xmloff/xmluconv.hxx>
+#endif
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include <xmloff/xmltoken.hxx>
 #endif
 
 #ifndef _SVX_UNOSHAPE_HXX
@@ -103,6 +100,7 @@
 #define SC_LAYERID "LayerID"
 
 using namespace ::com::sun::star;
+using namespace xmloff::token;
 
 XMLTableShapeImportHelper::XMLTableShapeImportHelper(
         ScXMLImport& rImp, SvXMLImportPropertyMapper *pImpMapper ) :
@@ -128,6 +126,8 @@ void XMLTableShapeImportHelper::finishShape(
         sal_Int32 nEndY(-1);
         sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
         table::CellAddress aEndCell;
+        rtl::OUString sRangeList;
+        rtl::OUString sOleName;
         for( sal_Int16 i=0; i < nAttrCount; i++ )
         {
             const rtl::OUString& rAttrName = xAttrList->getNameByIndex( i );
@@ -137,20 +137,27 @@ void XMLTableShapeImportHelper::finishShape(
             sal_uInt16 nPrefix =
                 static_cast<ScXMLImport&>(mrImporter).GetNamespaceMap().GetKeyByAttrName( rAttrName,
                                                                 &aLocalName );
-            if(nPrefix = XML_NAMESPACE_TABLE)
+            if(nPrefix == XML_NAMESPACE_TABLE)
             {
-                if (aLocalName.compareToAscii(sXML_end_cell_address) == 0)
+                if (IsXMLToken(aLocalName, XML_END_CELL_ADDRESS))
                 {
                     sal_Int32 nOffset(0);
                     ScXMLConverter::GetAddressFromString(aEndCell, rValue, static_cast<ScXMLImport&>(mrImporter).GetDocument(), nOffset);
                 }
-                else if (aLocalName.compareToAscii(sXML_end_x) == 0)
+                else if (IsXMLToken(aLocalName, XML_END_X))
                     static_cast<ScXMLImport&>(mrImporter).GetMM100UnitConverter().convertMeasure(nEndX, rValue);
-                else if (aLocalName.compareToAscii(sXML_end_y) == 0)
+                else if (IsXMLToken(aLocalName, XML_END_Y))
                     static_cast<ScXMLImport&>(mrImporter).GetMM100UnitConverter().convertMeasure(nEndY, rValue);
-                else if (aLocalName.compareToAscii(sXML_table_background) == 0)
-                    if (rValue.compareToAscii(sXML_true) == 0)
+                else if (IsXMLToken(aLocalName, XML_TABLE_BACKGROUND))
+                    if (IsXMLToken(rValue, XML_TRUE))
                         bBackground = sal_True;
+            }
+            else if(nPrefix == XML_NAMESPACE_DRAW)
+            {
+                if (IsXMLToken(aLocalName, XML_NOTIFY_ON_UPDATE_OF_RANGES))
+                    sRangeList = rValue;
+                else if (IsXMLToken(aLocalName, XML_NAME))
+                    sOleName = rValue;
             }
         }
         if (bBackground)
@@ -167,8 +174,8 @@ void XMLTableShapeImportHelper::finishShape(
 
         if (!bOnTable)
         {
-            static_cast<ScXMLImport&>(mrImporter).GetTables().AddShape(rShape, aStartCell, aEndCell,
-                nEndX, nEndY);
+            static_cast<ScXMLImport&>(mrImporter).GetTables().AddShape(rShape,
+                sOleName, sRangeList, aStartCell, aEndCell, nEndX, nEndY);
             SvxShape* pShapeImp = SvxShape::getImplementation(rShape);
             if (pShapeImp)
             {

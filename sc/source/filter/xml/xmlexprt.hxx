@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.hxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-19 09:38:08 $
+ *  last change: $Author: sab $ $Date: 2001-07-23 15:24:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,7 @@ class ScDocument;
 class ScMySharedData;
 class ScMyDefaultStyles;
 class XMLNumberFormatAttributesExportHelper;
+class ScChartListener;
 
 typedef std::vector< com::sun::star::uno::Reference < com::sun::star::drawing::XShapes > > ScMyXShapesVec;
 
@@ -133,6 +134,7 @@ class ScXMLExport : public SvXMLExport
     ScMyOpenCloseColumnRowGroup*        pGroupColumns;
     ScMyOpenCloseColumnRowGroup*        pGroupRows;
     ScMyDefaultStyles*                  pDefaults;
+    ScChartListener*                    pChartListener;
 
     ScMyMergedRangesContainer*  pMergedRangesContainer;
     ScMyValidationsContainer*   pValidationsContainer;

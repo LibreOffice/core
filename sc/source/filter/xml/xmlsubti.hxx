@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsubti.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: sab $ $Date: 2001-06-01 10:09:55 $
+ *  last change: $Author: sab $ $Date: 2001-07-23 15:24:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,7 @@
 #endif
 
 class ScXMLImport;
+class ScDocument;
 
 const nDefaultRowCount = 20;
 const nDefaultColCount = 20;
@@ -209,6 +210,8 @@ public:
     sal_Bool                            HasDrawPage();
     sal_Bool                            HasXShapes();
     void                                AddShape(com::sun::star::uno::Reference <com::sun::star::drawing::XShape>& rShape,
+                                                const rtl::OUString& rName,
+                                                const rtl::OUString& rRangeList,
                                                 com::sun::star::table::CellAddress& rStartAddress,
                                                 com::sun::star::table::CellAddress& rEndAddress,
                                                 sal_Int32 nEndX, sal_Int32 nEndY);
