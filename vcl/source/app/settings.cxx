@@ -2,9 +2,9 @@
  *
  *  $RCSfile: settings.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 13:21:23 $
+ *  last change: $Author: vg $ $Date: 2005-02-24 15:22:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,9 @@
 
 #ifndef _VCL_FONTCFG_HXX
 #include <fontcfg.hxx>
+#endif
+#ifndef VCL_INC_CONFIGSETTINGS_HXX
+#include <configsettings.hxx>
 #endif
 
 #include <unohelp.hxx>
