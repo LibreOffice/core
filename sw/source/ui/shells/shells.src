@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shells.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-26 21:47:53 $
+ *  last change: $Author: kz $ $Date: 2001-02-02 16:56:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -563,7 +563,7 @@ String STR_REDLINE_MSG
     Text[ spanish ] = "El AutoFormato ha concluido.\nAhora puede aceptar o rechazar todos los cambios\na la vez o uno por uno.";
     Text[ english_us ] = "AutoFormat completed.\nYou can accept or reject all changes,\nor accept or reject particular changes.";
     Text[ chinese_simplified ] = "ТСѕ­НкіЙЧФ¶ЇёсКЅЎЈ\nДъПЦФЪДЬ№»ЅУКЬ»тѕЬѕшЛщУРµДёьёДЈ¬»тХЯ\nЅУКЬ»тѕЬѕшµҐёцёьёДЎЈ";
-    Text[ russian ] = "Автоформатирование закончено.\nСейчас Вы можете принять или отклонить сразу все изменения,\nили каждое по отдельности.";
+    Text[ russian ] = "Автоформатирование закончено.\nСейчас Вы можете принять или отклонить сразу все изменения, или каждое по отдельности.";
     Text[ polish ] = "Autoformatowanie jest zakoсczone.\nMoїesz zaaakceptowaж lub odrzuciж teraz wszystkie zmiany,\nlub akceptowaж je oraz odrzucaж pojedynczo.";
     Text[ japanese ] = "µ°ДМ«°ПЇД‚ЄЏI—№‚µ‚Ь‚µ‚ЅЃB\n‚·‚Ч‚Д‚М•ПЌX‚рЋу‚Ї“ь‚к‚й‚©ЃAЊі‚Й–Я‚·‚±‚Ж‚Є‚Е‚«‚Ь‚·ЃB\n‚Ь‚Ѕ‚Н‚Р‚Ж‚В‚Р‚Ж‚В‚М•ПЌX‚Й‚В‚ў‚ДЊџ“ў‚·‚й‚±‚Ж‚а‚Е‚«‚Ь‚·ЃB";
     Text[ chinese_traditional ] = "¤wёg§№¦Ё¦Ы°К®ж¦ЎЎC\n±zІ{¦bЇа°ч±µЁь©О©Ъµґ©Т¦іЄєЕЬ§уЎA±z¤]Їа°ч\n±µЁь©О©Ъµґіж­УЄєЕЬ§уЎC";
