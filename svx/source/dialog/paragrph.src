@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: os $ $Date: 2002-04-18 12:41:56 $
+ *  last change: $Author: kz $ $Date: 2002-04-29 21:06:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Text = "Von ~links" ;
         Text [ ENGLISH ] = "From ~left" ;
         Text [ norwegian ] = "Fra ~venstre" ;
-        Text [ italian ] = "Da ~sinistra" ;
+        Text [ italian ] = "Da sinistra" ;
         Text [ portuguese_brazilian ] = "Da ~esquerda" ;
         Text [ portuguese ] = "~Esquerda" ;
         Text [ finnish ] = "~Vasemmalta" ;
@@ -111,6 +111,7 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Text[ turkish ] = "S~oldan";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "De i~zquierda";
+        Text[ thai ] = "‡∏à‡∏≤‡∏Å~‡∏ã‡πâ‡∏≤‡∏¢";
     };
     MetricField ED_LEFTINDENT
     {
@@ -134,15 +135,15 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Text = "Von ~rechts" ;
         Text [ ENGLISH ] = "From ri~ght" ;
         Text [ norwegian ] = "Fra h¯~yre" ;
-        Text [ italian ] = "Da de~stra" ;
+        Text [ italian ] = "Da destra" ;
         Text [ portuguese_brazilian ] = "Da dire~ita" ;
         Text [ portuguese ] = "~Direita" ;
         Text [ finnish ] = "~Oikealta" ;
         Text [ danish ] = "Fra h¯jre" ;
         Text [ french ] = "De droite" ;
-        Text [ swedish ] = "FrÂn ~hˆger" ;
+        Text [ swedish ] = "FrÂn hˆge~r" ;
         Text [ dutch ] = "Van ~rechts" ;
-        Text [ spanish ] = "De derec~ha" ;
+        Text [ spanish ] = "Desde la drc~ha" ;
         Text [ english_us ] = "From rig~ht" ;
         Left = TRUE ;
         Text[ chinese_simplified ] = "‰ªéÂè≥(~H)";
@@ -156,6 +157,7 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Text[ turkish ] = "Sa~dan";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "De derec~ha";
+        Text[ thai ] = "‡∏à‡∏≤‡∏Å‡∏Ç~‡∏ß‡∏≤";
     };
     MetricField ED_RIGHTINDENT
     {
@@ -187,7 +189,7 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Text [ french ] = "PremiËre ligne" ;
         Text [ swedish ] = "F~ˆrsta raden" ;
         Text [ dutch ] = "~Eerste regel" ;
-        Text [ spanish ] = "Pri~m. lÌnea" ;
+        Text [ spanish ] = "Primera lÌnea" ;
         Text [ english_us ] = "~First line" ;
         Left = TRUE ;
         Text[ chinese_simplified ] = "Á¨¨‰∏ÄË°å(~F)";
@@ -201,6 +203,7 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Text[ turkish ] = "›lk ~sat˝r";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Pri~m. lÌnea";
+        Text[ thai ] = "‡∏ö‡∏£‡∏£‡∏ó‡∏±‡∏î‡πÅ~‡∏£‡∏Å";
     };
     MetricField ED_FLINEINDENT
     {
@@ -247,6 +250,7 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Auto~m·tico";
         Text[ finnish ] = "~Automaattinen";
+        Text[ thai ] = "~‡∏≠‡∏±‡∏ï‡πÇ‡∏ô‡∏°‡∏±‡∏ï‡∏¥";
     };
     FixedLine FL_INDENT
     {
@@ -276,6 +280,7 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Text[ turkish ] = "Girinti";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "SangrÌa";
+        Text[ thai ] = "‡∏£‡∏∞‡∏¢‡∏∞‡πÄ‡∏¢‡∏∑‡πâ‡∏≠‡∏á";
     };
     FixedText FT_TOPDIST
     {
@@ -290,7 +295,7 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Text [ finnish ] = "~Yl‰osa" ;
         Text [ danish ] = "Foroven" ;
         Text [ french ] = "En haut" ;
-        Text [ swedish ] = "~÷verkant" ;
+        Text [ swedish ] = "÷v~erkant" ;
         Text [ dutch ] = "~Boven" ;
         Text [ spanish ] = "Arriba" ;
         Text [ english_us ] = "~Top" ;
@@ -306,6 +311,7 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Text[ turkish ] = "~‹st";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Arriba";
+        Text[ thai ] = "~‡∏ö‡∏ô";
     };
     MetricField ED_TOPDIST
     {
@@ -351,6 +357,7 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Text[ turkish ] = "~Alt";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "A~bajo";
+        Text[ thai ] = "~‡∏•‡πà‡∏≤‡∏á";
     };
     MetricField ED_BOTTOMDIST
     {
@@ -395,6 +402,7 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Text[ turkish ] = "Aral˝k";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Espacio";
+        Text[ thai ] = "‡∏£‡∏∞‡∏¢‡∏∞‡∏´‡πà‡∏≤‡∏á";
     };
     ListBox LB_LINEDIST
     {
@@ -619,6 +627,15 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         < "MÌnimo" ; Default ; > ;
         < "Regleta" ; Default ; > ;
     };
+    StringList [ thai ] =
+    {
+         < "‡∏ö‡∏£‡∏£‡∏ó‡∏±‡∏î‡πÄ‡∏î‡∏µ‡∏¢‡∏ß" ; Default ; > ;
+        < "1.5 ‡∏ö‡∏£‡∏£‡∏ó‡∏±‡∏î" ; Default ; > ;
+        < "‡∏ö‡∏£‡∏£‡∏ó‡∏±‡∏î‡∏Ñ‡∏π‡πà" ; Default ; > ;
+        < "‡∏ï‡∏≤‡∏°‡∏™‡∏±‡∏î‡∏™‡πà‡∏ß‡∏ô" ; Default ; > ;
+        < "‡∏ô‡πâ‡∏≠‡∏¢‡∏ó‡∏µ‡πà‡∏™‡∏∏‡∏î" ; Default ; > ;
+        < "‡∏ô‡∏≥‡∏´‡∏ô‡πâ‡∏≤" ; Default ; > ;
+    };
     };
     String ST_LINEDIST_ABS
     {
@@ -645,6 +662,7 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Fijo";
         Text[ finnish ] = "Kiinte‰";
+        Text[ thai ] = "‡∏Ñ‡∏á‡∏ó‡∏µ‡πà";
     };
     FixedText FT_LINEDIST
     {
@@ -675,6 +693,7 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~de";
         Text[ finnish ] = "-";
+        Text[ thai ] = "‡∏Ç‡∏≠‡∏á";
     };
     MetricField ED_LINEDISTPERCENT
     {
@@ -740,6 +759,7 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Text[ turkish ] = "Sat˝r aral˝˝";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Interlineado";
+        Text[ thai ] = "‡∏£‡∏∞‡∏¢‡∏∞‡∏´‡πà‡∏≤‡∏á‡∏ö‡∏£‡∏£‡∏ó‡∏±‡∏î";
     };
     Window WN_EXAMPLE
     {
@@ -775,6 +795,7 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Con~siderar";
         Text[ finnish ] = "~Aktivoi";
+        Text[ thai ] = "‡πÉ~‡∏ä‡πâ‡∏á‡∏≤‡∏ô‡∏≠‡∏¢‡∏π‡πà";
     };
     FixedLine FL_REGISTER
     {
@@ -804,6 +825,7 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Conformidad registro";
         Text[ finnish ] = "Rekisteri-tosi";
+        Text[ thai ] = "‡∏•‡∏á‡∏ó‡∏∞‡πÄ‡∏ö‡∏µ‡∏¢‡∏ô-‡∏à‡∏£‡∏¥‡∏á";
     };
     Text[ chinese_simplified ] = "Áº©ËøõÂíåÈó¥Èöî";
     Text[ russian ] = "ŒÚÒÚÛÔ˚ Ë ËÌÚÂ‚‡Î˚";
@@ -816,6 +838,7 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
     Text[ turkish ] = "Girinti ve Aral˝klar";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "SangrÌas y espacios";
+    Text[ thai ] = "‡∏£‡∏∞‡∏¢‡∏∞‡πÄ‡∏¢‡∏∑‡πâ‡∏≠‡∏á‡πÅ‡∏•‡∏∞‡∏£‡∏∞‡∏¢‡∏∞‡∏´‡πà‡∏≤‡∏á";
 };
  // RID_SVXPAGE_ALIGN_PARAGRAPH ---------------------------------------------
 TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
@@ -863,6 +886,7 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Text[ turkish ] = "SeÁenekler";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Options";
+        Text[ thai ] = "‡∏ï‡∏±‡∏ß‡πÄ‡∏•‡∏∑‡∏≠‡∏Å";
     };
     RadioButton BTN_LEFTALIGN
     {
@@ -893,6 +917,7 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Text[ turkish ] = "So~l";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "I~zquierda";
+        Text[ thai ] = "~‡∏ã‡πâ‡∏≤‡∏¢";
     };
     RadioButton BTN_RIGHTALIGN
     {
@@ -922,6 +947,7 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Text[ turkish ] = "Sa~";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Derecha";
+        Text[ thai ] = "‡∏Ç~‡∏ß‡∏≤";
     };
     RadioButton BTN_CENTERALIGN
     {
@@ -951,6 +977,7 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Text[ turkish ] = "~Ortala";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Centrado";
+        Text[ thai ] = "~‡∏ï‡∏£‡∏á‡∏Å‡∏•‡∏≤‡∏á";
     };
     RadioButton BTN_JUSTIFYALIGN
     {
@@ -980,6 +1007,7 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Text[ turkish ] = "~›ki yana yasla";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Justificado";
+        Text[ thai ] = "‡∏ä‡∏¥‡∏î‡∏Ç‡∏≠‡∏ö";
     };
     String ST_LEFTALIGN_ASIAN
     {
@@ -1019,6 +1047,7 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "⁄~ltima lÌnea";
         Text[ finnish ] = "~Viimeinen rivi";
+        Text[ thai ] = "‡∏ö‡∏£‡∏£‡∏ó‡∏±‡∏î~‡∏™‡∏∏‡∏î‡∏ó‡πâ‡∏≤‡∏¢";
     };
     ListBox LB_LASTLINE
     {
@@ -1148,10 +1177,28 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         };
         StringList [ language_user1 ] =
         {
-                < " " ; Default ; > ;
-            < " " ; Default ; > ;
-            < " " ; Default ; > ;
+                < "Links/Oben" ; Default ; > ;
+            < "Zentriert" ; Default ; > ;
+            < "Blocksatz" ; Default ; > ;
         };
+    StringList [ finnish ] =
+    {
+         < "Vasen" ; Default ; > ;
+        < "Keskitetty" ; Default ; > ;
+        < "Tasattu" ; Default ; > ;
+    };
+    StringList [ catalan ] =
+    {
+         < "Izquierda" ; Default ; > ;
+        < "Centrado" ; Default ; > ;
+        < "Justificada" ; Default ; > ;
+    };
+    StringList [ thai ] =
+    {
+         < "‡∏ã‡πâ‡∏≤‡∏¢" ; Default ; > ;
+        < "‡∏ï‡∏£‡∏á‡∏Å‡∏•‡∏≤‡∏á" ; Default ; > ;
+        < "‡∏ä‡∏¥‡∏î‡∏Ç‡∏≠‡∏ö" ; Default ; > ;
+    };
     };
     CheckBox CB_EXPAND
     {
@@ -1181,6 +1228,7 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "E~xpandir una palabra";
         Text[ finnish ] = "~Laajenna yksitt‰inen sana";
+        Text[ thai ] = "‡∏Ñ‡∏≥~‡∏Ç‡∏¢‡∏≤‡∏¢‡πÄ‡∏ä‡∏¥‡∏á‡πÄ‡∏î‡∏µ‡πà‡∏¢‡∏ß";
     };
     CheckBox CB_SNAP
     {
@@ -1189,6 +1237,27 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Hide = TRUE ;
         Text = "Am Textraster fangen (wenn aktiviert)" ;
         Text [ ENGLISH ] = "~Snap to text grid (if active)" ;
+        Text[ english_us ] = "Snap to text grid (if active)";
+        Text[ portuguese ] = "~Snap to text grid (if active)";
+        Text[ russian ] = "~Snap to text grid (if active)";
+        Text[ greek ] = "~Snap to text grid (if active)";
+        Text[ dutch ] = "~Snap to text grid (if active)";
+        Text[ french ] = "Capturer ‡ la grille du texte (si activÈe)";
+        Text[ spanish ] = "Usar cuadrÌcula (si activada)";
+        Text[ finnish ] = "~Snap to text grid (if active)";
+        Text[ italian ] = "Cattura alla griglia di testo (se attivata)";
+        Text[ danish ] = "~Snap to text grid (if active)";
+        Text[ swedish ] = "F‰st mot textraster (om det ‰r aktiverat)";
+        Text[ polish ] = "~Snap to text grid (if active)";
+        Text[ portuguese_brazilian ] = "~Snap to text grid (if active)";
+        Text[ japanese ] = "ÊñáÂ≠ó„Ç∞„É™„ÉÉ„ÉâÁ∑ö„Åß‰ΩçÁΩÆÂêà„Çè„Åõ („Ç∞„É™„ÉÉ„ÉâÁ∑öË°®Á§∫Áä∂ÊÖã„Åß)";
+        Text[ korean ] = "Î¨∏Ïûê Ïàò/Ïó¥ Ïàò Ïô∏Í≥ΩÏÑ†Ïóê Ï†ïÎ†¨ (ÌôúÏÑ±Ïãú)";
+        Text[ chinese_simplified ] = "ÂíåÊñáÂ≠óÊ†ºÂ≠êÁ∫øÂØπÈΩê(Â¶Ç‰ΩøÁî®Ê†ºÂ≠êÁ∫ø)";
+        Text[ chinese_traditional ] = "ÂíåÊñáÂ≠óÊ†ºÂ≠êÁ∑öÂ∞çÈΩä(Â¶ÇÊúâ‰ΩøÁî®Ê†ºÂ≠êÁ∑ö)";
+        Text[ turkish ] = "~Snap to text grid (if active)";
+        Text[ arabic ] = "~Snap to text grid (if active)";
+        Text[ catalan ] = "~Snap to text grid (if active)";
+        Text[ thai ] = "~Snap to text grid (if active)";
     };
     Window WN_EXAMPLE
     {
@@ -1203,6 +1272,27 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Text = "Text-an-Text" ;
         Text [ ENGLISH ] = "Text-to-text" ;
         Hide = TRUE;
+        Text[ english_us ] = "Vertical text alignment";
+        Text[ portuguese ] = "Alinhamento vertical do texto";
+        Text[ russian ] = "¬˚‡‚ÌË‚‡ÌËÂ ÚÂÍÒÚ‡ ÔÓ ‚ÂÚËÍ‡ÎË";
+        Text[ greek ] = "Vertical text alignment";
+        Text[ dutch ] = "Verticale uitlijning";
+        Text[ french ] = "Alignement vertical du texte";
+        Text[ spanish ] = "AlineaciÛn vertical del texto";
+        Text[ finnish ] = "Tekstin tasaus pystysuunnassa";
+        Text[ italian ] = "Allineamento verticale testo";
+        Text[ danish ] = "Vertical text alignment";
+        Text[ swedish ] = "Vertikal textjustering";
+        Text[ polish ] = "WyrÛwnanie tekstu w pionie";
+        Text[ portuguese_brazilian ] = "Vertical text alignment";
+        Text[ japanese ] = "Á∏¶Êõ∏„Åç";
+        Text[ korean ] = "ÌÖçÏä§Ìä∏ ÏÑ∏Î°ú ÎßûÏ∂§";
+        Text[ chinese_simplified ] = "Áõ¥ÂºèÊñáÂ≠óÊñπÂêë";
+        Text[ chinese_traditional ] = "Áõ¥ÂºèÊñáÂ≠óÂ∞çÈΩä";
+        Text[ turkish ] = "Vertical text alignment";
+        Text[ arabic ] = "Vertical text alignment";
+        Text[ catalan ] = "Vertical text alignment";
+        Text[ thai ] = "‡∏à‡∏±‡∏î‡∏Ç‡πâ‡∏≠‡∏Ñ‡∏ß‡∏≤‡∏°‡πÅ‡∏ô‡∏ß‡∏ï‡∏±‡πâ‡∏á";
     };
     FixedText FT_VERTALIGN
     {
@@ -1211,6 +1301,27 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Hide = TRUE;
         Text = "~Ausrichtung" ;
         Text [ ENGLISH ] = "~Alignment" ;
+        Text[ english_us ] = "~Alignment";
+        Text[ portuguese ] = "~Alignment";
+        Text[ russian ] = "~Alignment";
+        Text[ greek ] = "~Alignment";
+        Text[ dutch ] = "~Alignment";
+        Text[ french ] = "Alignement";
+        Text[ spanish ] = "AlineaciÛn";
+        Text[ finnish ] = "~Alignment";
+        Text[ italian ] = "Allineamento";
+        Text[ danish ] = "~Alignment";
+        Text[ swedish ] = "~Justering";
+        Text[ polish ] = "~Alignment";
+        Text[ portuguese_brazilian ] = "~Alignment";
+        Text[ japanese ] = "ÊñáÂ≠ó„ÅÆÈÖçÁΩÆ";
+        Text[ korean ] = "Ï†ïÎ†¨";
+        Text[ chinese_simplified ] = "ÂØπÈΩê";
+        Text[ chinese_traditional ] = "Â∞çÈΩä";
+        Text[ turkish ] = "~Alignment";
+        Text[ arabic ] = "~Alignment";
+        Text[ catalan ] = "~Alignment";
+        Text[ thai ] = "~Alignment";
     };
     ListBox LB_VERTALIGN
     {
@@ -1402,6 +1513,14 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         < "Keskikohta" ; > ;
         < "Alaosa" ; > ;
     };
+    StringList [ thai ] =
+    {
+         < "‡∏≠‡∏±‡∏ï‡πÇ‡∏ô‡∏°‡∏±‡∏ï‡∏¥" ; > ;
+        < "‡∏ö‡∏£‡∏£‡∏ó‡∏±‡∏î‡∏´‡∏•‡∏±‡∏Å" ; > ;
+        < "‡∏î‡πâ‡∏≤‡∏ô‡∏ö‡∏ô" ; > ;
+        < "‡∏ï‡∏£‡∏á‡∏Å‡∏•‡∏≤‡∏á" ; > ;
+        < "‡∏î‡πâ‡∏≤‡∏ô‡∏•‡πà‡∏≤‡∏á" ; > ;
+    };
     };
     Text[ chinese_simplified ] = "ÂØπÈΩê";
     Text[ russian ] = "¬˚‡‚ÌË‚‡ÌËÂ";
@@ -1415,6 +1534,7 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "AlineaciÛn";
     Text[ finnish ] = "Tasaus";
+    Text[ thai ] = "‡∏à‡∏±‡∏î‡∏ï‡∏≥‡πÅ‡∏´‡∏ô‡πà‡∏á";
 };
  // RID_SVXPAGE_EXT_PARAGRAPH ---------------------------------------------
 TabPage RID_SVXPAGE_EXT_PARAGRAPH
@@ -1443,7 +1563,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text [ dutch ] = "Auto~matisch" ;
         Text [ english_us ] = "A~utomatically" ;
         Text [ italian ] = "Auto~matico" ;
-        Text [ spanish ] = "Au~tom·tico" ;
+        Text [ spanish ] = "Autom·tico" ;
         Text [ french ] = "Automatique" ;
         Text [ swedish ] = "Auto~matisk" ;
         Text [ danish ] = "Automatisk" ;
@@ -1461,6 +1581,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Au~tom·tico";
         Text[ finnish ] = "~Automaattisesti";
+        Text[ thai ] = "‡∏≠‡∏±~‡∏ï‡πÇ‡∏ô‡∏°‡∏±‡∏ï‡∏¥";
     };
     FixedText FT_BEFORE
     {
@@ -1470,7 +1591,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text = "~ab" ;
         Text [ English ] = "~at" ;
         Text [ norwegian ] = "~pÂ" ;
-        Text [ italian ] = "~a" ;
+        Text [ italian ] = "a" ;
         Text [ portuguese_brazilian ] = "~em" ;
         Text [ portuguese ] = "~mÌn." ;
         Text [ finnish ] = "~kohteessa" ;
@@ -1491,6 +1612,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ turkish ] = "~asg.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~en";
+        Text[ thai ] = "~‡∏ó‡∏µ‡πà";
     };
     NumericField ED_HYPHENBEFORE
     {
@@ -1538,6 +1660,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ turkish ] = "sat˝rsonu karakteri";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "car·cter al final de la lÌnea";
+        Text[ thai ] = "‡∏ï‡∏±‡∏ß‡∏≠‡∏±‡∏Å‡∏Ç‡∏£‡∏∞‡∏ó‡∏µ‡πà‡∏à‡∏∏‡∏î‡∏à‡∏ö‡∏ö‡∏£‡∏£‡∏ó‡∏±‡∏î";
     };
     FixedText FT_AFTER
     {
@@ -1547,7 +1670,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text = "a~b" ;
         Text [ English ] = "a~t" ;
         Text [ norwegian ] = "p~Â" ;
-        Text [ italian ] = "a~" ;
+        Text [ italian ] = "a" ;
         Text [ portuguese_brazilian ] = "e~m" ;
         Text [ portuguese ] = "mÌ~n." ;
         Text [ finnish ] = "~kohteessa" ;
@@ -1568,6 +1691,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ turkish ] = "a~sg.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "e~n";
+        Text[ thai ] = "~‡∏ó‡∏µ‡πà";
     };
     NumericField ED_HYPHENAFTER
     {
@@ -1615,6 +1739,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ turkish ] = "sat˝rba˛˝ karakteri";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "car·cter al comienzo de la lÌnea";
+        Text[ thai ] = "‡∏ï‡∏±‡∏ß‡∏≠‡∏±‡∏Å‡∏Ç‡∏£‡∏∞‡∏ó‡∏µ‡πà‡∏à‡∏∏‡∏î‡πÄ‡∏£‡∏¥‡πà‡∏°‡∏ö‡∏£‡∏£‡∏ó‡∏±‡∏î";
     };
     FixedText FT_MAXHYPH
     {
@@ -1632,7 +1757,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text [ french ] = "Nombre maximal de coupures consÈcutives" ;
         Text [ swedish ] = "H~ˆgsta antal bindestreck efter varandra" ;
         Text [ dutch ] = "~Max. aantal opeenvolgende scheidingstekens" ;
-        Text [ spanish ] = "Cantidad m·xima de ~guiones consecutivos" ;
+        Text [ spanish ] = "Cantidad m·xima de guiones consecutivos" ;
         Text [ english_us ] = "~Maximum no. of consecutive hyphens" ;
         Text[ chinese_simplified ] = "ÊúÄÂ§öËøûÁª≠‰ΩøÁî®ÁöÑËøûÂ≠óÁ¨¶Êï∞ÁõÆ(~M)";
         Text[ russian ] = "Ã‡ÍÒËÏ‡Î¸ÌÓ ÔÓÒÎÂ‰Ó‚‡ÚÂÎ¸Ì˚Â ‡Á‰ÂÎËÚÂÎË";
@@ -1645,6 +1770,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ turkish ] = "Azami ard˝˛˝k ay˝rma i˛areti sa~y˝s˝";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Cantidad m·xima de ~guiones consecutivos";
+        Text[ thai ] = "‡∏à‡∏≥‡∏ô‡∏ß‡∏ô~‡∏°‡∏≤‡∏Å‡∏ó‡∏µ‡πà‡∏™‡∏∏‡∏î‡∏Ç‡∏≠‡∏á‡∏¢‡∏±‡∏ï‡∏¥‡∏†‡∏±‡∏á‡∏Ñ‡πå‡πÅ‡∏ö‡∏ö‡∏ï‡πà‡∏≠‡∏Å‡∏±‡∏ô";
     };
     NumericField ED_MAXHYPH
     {
@@ -1686,6 +1812,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ turkish ] = "Heceleme";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "SeparaciÛn sil·bica";
+        Text[ thai ] = "‡πÉ‡∏™‡πà‡∏¢‡∏±‡∏ï‡∏¥‡∏†‡∏±‡∏á‡∏Ñ‡πå";
     };
     TriStateBox BTN_PAGEBREAK
     {
@@ -1717,6 +1844,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ turkish ] = "~Kesme";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Salto";
+        Text[ thai ] = "‡∏ï‡∏±‡∏ß‡πÅ~‡∏ö‡πà‡∏á";
     };
     RadioButton BTN_BREAKPAGE
     {
@@ -1726,7 +1854,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text = "~Seite" ;
         Text [ ENGLISH ] = "~Page" ;
         Text [ norwegian ] = "~Page" ;
-        Text [ italian ] = "~Pagina" ;
+        Text [ italian ] = "Pagina" ;
         Text [ portuguese_brazilian ] = "~P?gina" ;
         Text [ portuguese ] = "~P·gina" ;
         Text [ finnish ] = "~Sivu" ;
@@ -1749,6 +1877,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ turkish ] = "~Sayfa";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "P·~gina";
+        Text[ thai ] = "~‡∏´‡∏ô‡πâ‡∏≤";
     };
     RadioButton BTN_BREAKCOLUMN
     {
@@ -1766,7 +1895,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text [ french ] = "Colonne" ;
         Text [ swedish ] = "~Kolumn" ;
         Text [ dutch ] = "~Kolom" ;
-        Text [ spanish ] = "~Columna" ;
+        Text [ spanish ] = "Columna" ;
         Text [ english_us ] = "Colu~mn" ;
         Text[ chinese_simplified ] = "Âàó(~M)";
         Text[ russian ] = "—ÚÓÎ·Âˆ";
@@ -1779,6 +1908,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ turkish ] = "S~¸tun";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Columna";
+        Text[ thai ] = "‡∏Ñ‡∏≠~‡∏•‡∏±‡∏°‡∏ô‡πå";
     };
     RadioButton BTN_PAGEBREAKBEFORE
     {
@@ -1788,7 +1918,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text = "~davor" ;
         Text [ ENGLISH ] = "be~fore" ;
         Text [ norwegian ] = "f~¯r" ;
-        Text [ italian ] = "~Prima" ;
+        Text [ italian ] = "Prima" ;
         Text [ portuguese_brazilian ] = "an~tes" ;
         Text [ portuguese ] = "An~tes" ;
         Text [ finnish ] = "En~nen" ;
@@ -1811,6 +1941,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ turkish ] = "~sonra";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "De~lante";
+        Text[ thai ] = "‡∏Å‡πà~‡∏≠‡∏ô";
     };
     RadioButton BTN_PAGEBREAKAFTER
     {
@@ -1820,7 +1951,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text = "da~nach" ;
         Text [ ENGLISH ] = "aft~er" ;
         Text [ norwegian ] = "ett~er" ;
-        Text [ italian ] = "D~opo" ;
+        Text [ italian ] = "Dopo" ;
         Text [ portuguese_brazilian ] = "dep~ois" ;
         Text [ portuguese ] = "Dep~ois" ;
         Text [ finnish ] = "J‰l~keen" ;
@@ -1828,7 +1959,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text [ french ] = "AprËs" ;
         Text [ swedish ] = "Eft~er" ;
         Text [ dutch ] = "~na" ;
-        Text [ spanish ] = "de~tr·s" ;
+        Text [ spanish ] = "De~tr·s" ;
         Text [ english_us ] = "Aft~er" ;
         Text[ chinese_simplified ] = "‰πãÂêé(~E)";
         Text[ russian ] = "ÔÓÒÎÂ";
@@ -1841,6 +1972,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ turkish ] = "~ˆnce";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "de~tr·s";
+        Text[ thai ] = "‡∏´‡∏•‡∏±~‡∏á‡∏à‡∏≤‡∏Å";
     };
     TriStateBox BTN_PAGECOLL
     {
@@ -1872,6 +2004,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ turkish ] = "Sayfa biÁiml~i";
         Text[ language_user1 ] = "All \"Vorlagen\" /Styles are written with a capital S.10.5.00EM";
         Text[ catalan ] = "C~on estilo de p·gina";
+        Text[ thai ] = "‡∏î‡πâ‡∏ß‡∏¢‡∏•‡∏±‡∏Å~‡∏©‡∏ì‡∏∞‡∏´‡∏ô‡πâ‡∏≤";
     };
     ListBox LB_PAGECOLL
     {
@@ -1909,6 +2042,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "N˙~mero de p·gina";
         Text[ finnish ] = "~Sivunumero";
+        Text[ thai ] = "‡πÄ~‡∏•‡∏Ç‡∏´‡∏ô‡πâ‡∏≤";
     };
     NumericField ED_PAGENUM
     {
@@ -1939,7 +2073,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text [ french ] = "~Lignes solidaires" ;
         Text [ swedish ] = "Dela inte sty~cke" ;
         Text [ dutch ] = "A~linea niet splitsen" ;
-        Text [ spanish ] = "Mantener ~lÌneas juntas" ;
+        Text [ spanish ] = "Mantener lÌneas juntas" ;
         Text [ english_us ] = "~Don't separate lines" ;
         Group = TRUE ;
         Text[ chinese_simplified ] = "ÊÆµ‰∏≠‰∏çÂàÜÈ°µ(~D)";
@@ -1953,6 +2087,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ turkish ] = "Paragraf˝ ~bˆlme";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Mantener ~lÌneas juntas";
+        Text[ thai ] = "~‡∏´‡πâ‡∏≤‡∏°‡πÅ‡∏¢‡∏Å‡∏ö‡∏£‡∏£‡∏ó‡∏±‡∏î";
     };
     TriStateBox CB_KEEPTOGETHER
     {
@@ -1982,6 +2117,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ turkish ] = "Paragra~flar˝ birlikte tut";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Mantener p·rra~fos juntos";
+        Text[ thai ] = "~‡∏ï‡∏≤‡∏°‡∏ï‡∏¥‡∏î‡∏î‡πâ‡∏ß‡∏¢‡∏¢‡πà‡∏≠‡∏´‡∏ô‡πâ‡∏≤‡∏ñ‡∏±‡∏î‡πÑ‡∏õ";
     };
     TriStateBox BTN_ORPHANS
     {
@@ -2012,6 +2148,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ arabic ] = "«· Õﬂ„ »«·√”ÿ— «·ÊÕÌœ…";
         Text[ catalan ] = "Ajuste de ~viudas";
         Text[ finnish ] = "~Orporivien esto";
+        Text[ thai ] = "‡∏Ñ‡∏ß‡∏ö‡∏Ñ‡∏∏‡∏°~‡∏ö‡∏£‡∏£‡∏ó‡∏±‡∏î‡∏™‡∏∏‡∏î‡∏ó‡πâ‡∏≤‡∏¢‡∏Ç‡∏≠‡∏á‡∏¢‡πà‡∏≠‡∏´‡∏ô‡πâ‡∏≤";
     };
     NumericField ED_ORPHANS
     {
@@ -2059,6 +2196,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ turkish ] = "Sat˝r";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "LÌneas";
+        Text[ thai ] = "‡∏ö‡∏£‡∏£‡∏ó‡∏±‡∏î";
     };
     TriStateBox BTN_WIDOWS
     {
@@ -2076,7 +2214,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ dutch ] = "~Zwevende regels: wezen";
         Text[ french ] = "Traitement des veuves";
         Text[ spanish ] = "Ajuste de ~viudas";
-        Text[ italian ] = "Controllo ~orfane";
+        Text[ italian ] = "Controllo orfane";
         Text[ danish ] = "Fransk horeunge-ordning";
         Text[ swedish ] = "Ho~rungekontroll";
         Text[ polish ] = "Kontrola bÍkartÛw";
@@ -2089,6 +2227,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ arabic ] = "«· Õﬂ„ »«·√”ÿ— «·‰«ﬁ’…";
         Text[ catalan ] = "Ajuste de ~huÈrfanas";
         Text[ finnish ] = "~Leskirivien ohjaus";
+        Text[ thai ] = "‡∏Ñ‡∏ß‡∏ö‡∏Ñ‡∏∏‡∏°‡∏ö‡∏£‡∏£‡∏ó‡∏±‡∏î‡πÅ~‡∏£‡∏Å‡∏Ç‡∏≠‡∏á‡∏¢‡πà‡∏≠‡∏´‡∏ô‡πâ‡∏≤";
     };
     NumericField ED_WIDOWS
     {
@@ -2136,6 +2275,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ turkish ] = "Sat˝r";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "LÌneas";
+        Text[ thai ] = "‡∏ö‡∏£‡∏£‡∏ó‡∏±‡∏î";
     };
     FixedLine FL_OPTIONS
     {
@@ -2166,6 +2306,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ turkish ] = "SeÁenekler";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Opciones";
+        Text[ thai ] = "‡∏ï‡∏±‡∏ß‡πÄ‡∏•‡∏∑‡∏≠‡∏Å";
     };
     Text[ chinese_simplified ] = "Êç¢Ë°åÂíåÂàÜÈ°µ";
     Text[ russian ] = "œÓÎÓÊÂÌËÂ Ì‡ ÒÚ‡ÌËˆÂ";
@@ -2178,6 +2319,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
     Text[ turkish ] = "Metin ak˝˛˝";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Flujo del texto";
+    Text[ thai ] = "‡∏Å‡∏≤‡∏£‡πÑ‡∏´‡∏•‡∏Ç‡∏≠‡∏á‡∏Ç‡πâ‡∏≠‡∏Ñ‡∏ß‡∏≤‡∏°";
 };
 /*-- 29.11.00 11:36:24---------------------------------------------------
   Asian typography
@@ -2215,6 +2357,7 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Text[ arabic ] = "ŒÌ«—« ";
         Text[ catalan ] = "Cambio de fila";
         Text[ finnish ] = "Viivan ~muutokset";
+        Text[ thai ] = "‡πÄ‡∏õ‡∏•‡∏µ‡πà‡∏¢‡∏ô‡∏ö‡∏£‡∏£‡∏ó‡∏±‡∏î";
     };
     TriStateBox CB_AS_FORBIDDEN
     {
@@ -2242,6 +2385,7 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Text[ arabic ] = " ÿ»Ìﬁ ﬁ«∆„… «·√Õ—› «·„„‰Ê⁄… ⁄·Ï »œ«Ì… «·√”ÿ— Ê‰Â«Ì Â«";
         Text[ catalan ] = "Considerar lista de caracteres no aceptables a comienzo y fin de lÌnea.";
         Text[ finnish ] = "Lis‰‰ kiellettyjen merkkien luettelo rivien alkuihin ja loppuihin";
+        Text[ thai ] = "‡πÉ‡∏ä‡πâ‡∏£‡∏≤‡∏¢‡∏Å‡∏≤‡∏£‡∏ï‡∏±‡∏ß‡∏≠‡∏±‡∏Å‡∏©‡∏£‡∏ó‡∏µ‡πà‡∏´‡πâ‡∏≤‡∏°‡∏ó‡∏µ‡πà‡∏à‡∏∏‡∏î‡πÄ‡∏£‡∏¥‡πà‡∏°‡∏ï‡πâ‡∏ô‡πÅ‡∏•‡∏∞‡∏à‡∏∏‡∏î‡∏à‡∏ö‡∏Ç‡∏≠‡∏á‡∏ö‡∏£‡∏£‡∏ó‡∏±‡∏î";
     };
     TriStateBox CB_AS_ALLOW_WORD_BREAK
     {
@@ -2269,6 +2413,7 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Text[ arabic ] = "«·”„«Õ »›«’· «·‰’ œ«Œ· «·ﬂ·„«  ›Ì «·‰’Ê’ «··« Ì‰Ì…";
         Text[ catalan ] = "Permitir salto dentro de palabras en texto con caracteres latinos.";
         Text[ finnish ] = "Salli ~sanajaot latinalaisessa tekstiss‰";
+        Text[ thai ] = "‡πÉ‡∏´‡πâ‡∏°‡∏µ~‡∏ï‡∏±‡∏ß‡∏ï‡∏±‡∏î‡∏Ñ‡∏≥‡πÉ‡∏ô‡∏Ç‡πâ‡∏≠‡∏Ñ‡∏ß‡∏≤‡∏°‡∏†‡∏≤‡∏©‡∏≤‡∏•‡∏≤‡∏ï‡∏¥‡∏ô";
     };
     TriStateBox CB_AS_HANG_PUNC
     {
@@ -2296,6 +2441,7 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Text[ arabic ] = "«·”„«Õ »⁄·«„«  «· ‰ﬁÌÿ «·„⁄·ﬁ…";
         Text[ catalan ] = "Permitir puntuaciÛn libre";
         Text[ finnish ] = "Salli riippuva v‰limerkitys";
+        Text[ thai ] = "‡πÉ‡∏´‡πâ‡∏°‡∏µ‡πÄ‡∏Ñ‡∏£‡∏∑‡πà‡∏≠‡∏á‡∏´‡∏°‡∏≤‡∏¢‡∏ß‡∏£‡∏£‡∏Ñ‡∏ï‡∏≠‡∏ô‡∏•‡∏≠‡∏¢";
     };
     FixedLine FL_AS_CHAR_DIST
     {
@@ -2323,6 +2469,7 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Text[ arabic ] = " »«⁄œ «·√Õ—›";
         Text[ catalan ] = "Espacio entre caracteres";
         Text[ finnish ] = "Merkkien v‰lit";
+        Text[ thai ] = "‡∏£‡∏∞‡∏¢‡∏∞‡∏´‡πà‡∏≤‡∏á‡∏ï‡∏±‡∏ß‡∏≠‡∏±‡∏Å‡∏Ç‡∏£‡∏∞";
     };
     TriStateBox CB_AS_PUNCTUATION
     {
@@ -2350,6 +2497,7 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Text[ arabic ] = "«·”„«Õ »⁄·«„«  «· ‰ﬁÌÿ ⁄‰œ »œ«Ì… «·”ÿ— ··÷€ÿ";
         Text[ catalan ] = "Permitir puntuaciÛn al comienzo de fila para comprimir";
         Text[ finnish ] = "Salli v‰limerkit rivin alussa";
+        Text[ thai ] = "‡πÉ‡∏´‡πâ‡∏°‡∏µ‡πÄ‡∏Ñ‡∏£‡∏∑‡πà‡∏≠‡∏á‡∏´‡∏°‡∏≤‡∏¢‡∏ß‡∏£‡∏£‡∏Ñ‡∏ï‡∏≠‡∏ô‡∏ó‡∏µ‡πà‡∏à‡∏∏‡∏î‡πÄ‡∏£‡∏¥‡πà‡∏°‡∏ö‡∏£‡∏£‡∏ó‡∏±‡∏î";
     };
     TriStateBox CB_AS_SCRIPT_SPACE
     {
@@ -2377,6 +2525,7 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Text[ arabic ] = "«” Œœ«„ „”«›… »Ì‰ «·‰’Ê’ «·¬”ÌÊÌ… Ê«··« Ì‰Ì… Ê«·„⁄ﬁœ….";
         Text[ catalan ] = "Aplicar espacio entre texto asi·tico, latino y complejo.";
         Text[ finnish ] = "K‰yt‰ v‰lej‰ aasialaisten, latinalaisten monimutkaisten tekstien v‰liss‰";
+        Text[ thai ] = "‡πÉ‡∏ä‡πâ‡∏£‡∏∞‡∏¢‡∏∞‡∏´‡πà‡∏≤‡∏á‡∏£‡∏∞‡∏´‡∏ß‡πà‡∏≤‡∏á‡∏Ç‡πâ‡∏≠‡∏Ñ‡∏ß‡∏≤‡∏°‡∏†‡∏≤‡∏©‡∏≤‡πÄ‡∏≠‡πÄ‡∏ä‡∏µ‡∏¢‡πÅ‡∏•‡∏∞‡∏†‡∏≤‡∏©‡∏≤‡∏•‡∏≤‡∏ï‡∏¥‡∏ô‡∏ó‡∏µ‡πà‡∏ã‡∏±‡∏ö‡∏ã‡πâ‡∏≠‡∏ô";
     };
     TriStateBox CB_AS_ADJUST_NUMBERS
     {
@@ -2404,6 +2553,7 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Text[ arabic ] = "„·«¡„…  ·ﬁ«∆Ì… ··„”«›… »Ì‰ «·‰’ «·¬”ÌÊÌ Ê«·√—ﬁ«„";
         Text[ catalan ] = "Ajustar autom·ticamente espacio entre texto asi·tico y n˙meros";
         Text[ finnish ] = "S‰‰d‰ automaattisesti v‰lit aasialaisen tekstin ja numeroiden v‰liss‰";
+        Text[ thai ] = "‡∏õ‡∏£‡∏±‡∏ö‡∏£‡∏∞‡∏¢‡∏∞‡∏´‡πà‡∏≤‡∏á‡∏≠‡∏±‡∏ï‡πÇ‡∏ô‡∏°‡∏±‡∏ï‡∏¥‡∏£‡∏∞‡∏´‡∏ß‡πà‡∏≤‡∏á‡∏Ç‡∏≠‡∏á‡∏Ñ‡∏ß‡∏≤‡∏°‡πÅ‡∏•‡∏∞‡∏ï‡∏±‡∏ß‡πÄ‡∏•‡∏Ç‡∏†‡∏≤‡∏©‡∏≤‡πÄ‡∏≠‡πÄ‡∏ä‡∏µ‡∏¢";
     };
     FixedText FT_TEXT_ALIGN
     {
@@ -2431,6 +2581,7 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Text[ arabic ] = "„Õ«–«… «·‰’";
         Text[ catalan ] = "AlineaciÛn de texto";
         Text[ finnish ] = "~Tekstin tasaus";
+        Text[ thai ] = "‡∏à‡∏±‡∏î‡∏ï‡∏≥‡πÅ‡∏´‡∏ô‡πà‡∏á~‡∏Ç‡πâ‡∏≠‡∏Ñ‡∏ß‡∏≤‡∏°";
     };
     ListBox LB_TEXT_ALIGN
     {
@@ -2552,6 +2703,11 @@ TabPage RID_SVXPAGE_PARA_ASIAN
             < "Automaattinen" ; Default ; > ;
         < "??Manuaalinen" ; Default ; > ;
     };
+    StringList [ thai ] =
+    {
+         < "‡∏≠‡∏±‡∏ï‡πÇ‡∏ô‡∏°‡∏±‡∏ï‡∏¥" ; Default ; > ;
+        < "??‡∏Å‡∏≥‡∏´‡∏ô‡∏î‡πÄ‡πÄ‡∏≠‡∏á" ; Default ; > ;
+    };
     };
     Text[ english_us ] = "Asian Typography";
     Text[ portuguese ] = "Tipografia asi·tica";
@@ -2573,6 +2729,7 @@ TabPage RID_SVXPAGE_PARA_ASIAN
     Text[ arabic ] = "√”·Ê» «·ÿ»«⁄… «·¬”ÌÊÌ…";
     Text[ catalan ] = "TipografÌa asi·tica";
     Text[ finnish ] = "Aasialaiset merkit";
+    Text[ thai ] = "‡∏Å‡∏≤‡∏£‡∏û‡∏¥‡∏°‡∏û‡πå‡πÅ‡∏ö‡∏ö‡πÄ‡∏≠‡πÄ‡∏ä‡∏µ‡∏¢";
 };
 
  // ********************************************************************** EOF
