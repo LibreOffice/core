@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdwindow.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cl $ $Date: 2002-04-24 07:17:33 $
+ *  last change: $Author: cl $ $Date: 2002-04-26 11:18:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,9 @@ SdWindow::SdWindow(Window* pParent) :
     SetBackground( Wallpaper( GetSettings().GetStyleSettings().GetWindowColor() ) );
 
     // adjust contrast mode initially
-    SetDrawMode( GetSettings().GetStyleSettings().GetHighContrastMode() ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR );
+    SvtAccessibilityOptions aAccOptions;
+    bool bUseContrast = aAccOptions.GetIsForDrawings() && GetSettings().GetStyleSettings().GetHighContrastMode();
+    SetDrawMode( bUseContrast ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR );
 
     // Hilfe-ID setzen
     // SetHelpId(HID_SD_WIN_DOCUMENT);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: cl $ $Date: 2002-04-24 07:15:09 $
+ *  last change: $Author: cl $ $Date: 2002-04-26 11:14:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,10 +173,6 @@ SdView::SdView(SdDrawDocument* pDrawDoc, OutputDevice* pOutDev,
     aDropErrorTimer.SetTimeout(50);
     aDropInsertFileTimer.SetTimeoutHdl( LINK(this, SdView, DropInsertFileHdl) );
     aDropInsertFileTimer.SetTimeout(50);
-
-    StartListening( maAccessibilityOptions );
-
-    onAccessibilityOptionsChange();
 }
 
 /*************************************************************************
@@ -187,8 +183,6 @@ SdView::SdView(SdDrawDocument* pDrawDoc, OutputDevice* pOutDev,
 
 SdView::~SdView()
 {
-    EndListening( maAccessibilityOptions );
-
     // release content of selection clipboard, if we own the content
     UpdateSelectionClipboard( TRUE );
 
@@ -821,18 +815,7 @@ BOOL SdView::IsVectorizeAllowed() const
     return bRet;
 }
 
-
-void SdView::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType, const SfxHint& rHint, const TypeId& rHintType)
-{
-    if( rHint.ISA( SfxSimpleHint ) && ( (SfxSimpleHint&) rHint ).GetId() == SFX_HINT_ACCESSIBILITY_CHANGED )
-    {
-        onAccessibilityOptionsChange();
-    }
-
-    FmFormView::SFX_NOTIFY(rBC, rBCType, rHint, rHintType);
-}
-
-void SdView::onAccessibilityOptionsChange()
+void SdView::onAccessibilityOptionsChanged()
 {
     if( pViewSh )
     {
@@ -843,7 +826,7 @@ void SdView::onAccessibilityOptionsChange()
 
             USHORT nOutputSlot, nPreviewSlot;
 
-            SvtAccessibilityOptions aAccOptions;
+            SvtAccessibilityOptions& aAccOptions = getAccessibilityOptions();
             if( rStyleSettings.GetHighContrastMode() && aAccOptions.GetIsForDrawings() )
             {
                 nOutputSlot = SID_OUTPUT_QUALITY_CONTRAST;

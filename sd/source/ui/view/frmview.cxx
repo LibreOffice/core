@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmview.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ka $ $Date: 2002-04-05 11:44:32 $
+ *  last change: $Author: cl $ $Date: 2002-04-26 11:13:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -244,7 +244,12 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc)
         eHandoutEditMode = EM_MASTERPAGE;
         bLayerMode = FALSE;
         SetEliminatePolyPoints(FALSE);
-        nDrawMode = Application::GetSettings().GetStyleSettings().GetHighContrastMode() ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR;
+
+        {
+            SvtAccessibilityOptions aAccOptions;
+            bool bUseContrast = aAccOptions.GetIsForDrawings() && Application::GetSettings().GetStyleSettings().GetHighContrastMode();
+            nDrawMode = bUseContrast ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR;
+        }
         nPreviewDrawMode = nDrawMode;
         bShowPreviewInPageMode = FALSE;
         bShowPreviewInMasterPageMode = TRUE;
