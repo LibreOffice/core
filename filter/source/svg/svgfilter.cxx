@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svgfilter.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2004-03-25 14:59:45 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 15:25:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,9 +59,23 @@
  *
  ************************************************************************/
 
+#include <cstdio>
+
 #include "svgfilter.hxx"
 
+#ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGE_HPP_
+#include <com/sun/star/drawing/XDrawPage.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_XDRAWVIEW_HPP_
+#include <com/sun/star/drawing/XDrawView.hpp>
+#endif
+#include <com/sun/star/frame/XDesktop.hdl>
+#include <com/sun/star/frame/XController.hdl>
+
+
 using namespace ::rtl;
+using namespace ::com::sun::star;
+
 // -------------
 // - SVGFilter -
 // -------------
@@ -72,6 +86,8 @@ SVGFilter::SVGFilter( const Reference< XMultiServiceFactory > &rxMSF ) :
     mpSVGExport( NULL ),
     mpSVGFontExport( NULL ),
     mpSVGWriter( NULL ),
+    mpDefaultSdrPage( NULL ),
+    mpSdrModel( NULL ),
     mbPresentation( sal_False )
 {
 }
@@ -94,6 +110,7 @@ sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescripto
 {
     vos::OGuard aGuard( Application::GetSolarMutex() );
     Window*     pFocusWindow = Application::GetFocusWindow();
+    sal_Int16   nCurrentPageNumber = -1;
     sal_Bool    bRet;
 
     if( pFocusWindow )
@@ -105,7 +122,48 @@ sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescripto
     else
 #endif
     if( mxSrcDoc.is() )
-        bRet = implExport( rDescriptor );
+    {
+        uno::Reference< frame::XDesktop > xDesktop( mxMSF->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.frame.Desktop" ) ),
+                                                    uno::UNO_QUERY);
+        if( xDesktop.is() )
+        {
+            uno::Reference< frame::XFrame > xFrame( xDesktop->getCurrentFrame() );
+
+            if( xFrame.is() )
+            {
+                uno::Reference< frame::XController > xController( xFrame->getController() );
+
+                if( xController.is() )
+                {
+                    uno::Reference< drawing::XDrawView > xDrawView( xController, uno::UNO_QUERY );
+
+                    if( xDrawView.is() )
+                    {
+                        uno::Reference< drawing::XDrawPage > xDrawPage( xDrawView->getCurrentPage() );
+
+                        if( xDrawPage.is() )
+                        {
+                            uno::Reference< beans::XPropertySet >( xDrawPage, uno::UNO_QUERY )->
+                                getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Number" ) ) ) >>= nCurrentPageNumber;
+                        }
+                    }
+                }
+            }
+        }
+
+        Sequence< PropertyValue > aNewDescritor( rDescriptor );
+
+        if( nCurrentPageNumber > 0 )
+        {
+            const sal_uInt32    nOldLength = rDescriptor.getLength();
+
+            aNewDescritor.realloc( nOldLength + 1 );
+            aNewDescritor[ nOldLength ].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PagePos" ) );
+            aNewDescritor[ nOldLength ].Value <<= static_cast< sal_Int16 >( nCurrentPageNumber - 1 );
+        }
+
+        bRet = implExport( aNewDescritor );
+    }
     else
         bRet = sal_False;
 
