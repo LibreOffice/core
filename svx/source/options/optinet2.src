@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optinet2.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 20:52:47 $
+ *  last change: $Author: kz $ $Date: 2001-07-17 20:24:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2207,8 +2207,8 @@ ModalDialog RID_SVXDLG_OPT_JAVASCRIPT_DISABLE
         Text[ polish ] = "NaleΏy uwzglκdniζ, Ώe po wy³Ήczeniu Javy \nywy³Ήczony zostanie rσwnieΏ JavaScript. \n\nCzy mimo to wy³Ήczyζ Javκ?";
         Text[ portuguese_brazilian ] = "Please note that with Java\nyou disable Javascript as well.\n\nDo you want to disable Java anyway?";
         Text[ japanese ] = "Java ‚Ύ‚―‚Ε‚Θ‚­\nJavaScript ‚ΰμ“®‚µ‚Θ‚­‚Θ‚ι‚±‚Ζ‚Ι’Σ‚µ‚Δ‚­‚Ύ‚³‚ΆB\n\nJava ‚πµΜ‚ΙΨ‚θ‘Φ‚¦‚ά‚·‚©B";
-        Text[ chinese_simplified ] = "ΗλΧΆÒβ£ΊΤΪΚ§»ξJava\nΚ±»αΝ¬Κ±Κ§»ξJavascript΅£\n\nΔϊ»ΉΚΗÒªΚ§»ξJava £Ώ";
-        Text[ chinese_traditional ] = "½Π±zµω·NΓφ³¬¤F Java ¤δ΄©΅A\n¤]΄N¤£―ΰ°χ¨Ο¥ΞJavascript ¥\\―ΰ΅C\n\nΑΩ¬O­nΓφ³¬ Java ΅H";
+        Text[ chinese_simplified ] = "ΗλΧΆÒβ£ΊΤΪΉΨ±Υ Java\nΚ±»αΝ¬Κ±ΉΨ±Υ Javascript ΅£\n\n»ΉΚΗÒªΉΨ±Υ Java £Ώ";
+        Text[ chinese_traditional ] = "½Πµω·N΅GΓφ³¬ Java ¤δ΄©΅A\n¤]΄N¤£―ΰ¨Ο¥ΞJavascript ¥\\―ΰ΅C\n\nΑΩ¬O­nΓφ³¬ Java ΅H";
         Text[ arabic ] = "ΗαΡΜΗΑ γαΗΝΩΙ Γδε ΘΕΫαΗήί αά Java\nΚήζγ ΘΕΫαΗή Javascript ΓνΦΗπ.\n\nεα ΚΡνΟ ΕΫαΗή Java ΘΗαΡΫγ γδ ΠαίΏ";
         Text[ greek ] = "Παρακαλώ προσέξτε ότι με την απενεργοποίηση του Java\nγίνεται και απενεργοποίηση του Javascript.\n\nΘέλετε να γίνει απενεργοποίηση του Java;";
         Text[ korean ] = "JavaΏΝ ΄υΊÒΎξ \nJavaScriptµµ »ηΏλ ΊÒ°΅΄ΙΗΨΑψ΄Ω΄Β »η½ΗΏ΅ ΐ―ΐΗΗΟ½Κ½ΓΏΐ. \n\n±Χ·΅µµ JavaΈ¦ »ηΏλ ΗΨΑ¦ΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
@@ -2260,6 +2260,7 @@ ModalDialog RID_SVXDLG_OPT_JAVASCRIPT_DISABLE
 };
 
  // ******************************************************************* EOF
+
 
 
 
