@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdobj.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: ka $ $Date: 2001-05-03 08:40:13 $
+ *  last change: $Author: aw $ $Date: 2001-05-03 11:01:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -311,6 +311,9 @@ SdrObjPlusData* SdrObjPlusData::Clone(SdrObject* pObj1) const
         pNeuPlusData->pAutoTimer=new AutoTimer;
         // Handler, etc. nicht mitkopieren!
     }
+
+    // For HTMLName: Do not clone, leave uninitialized (empty string)
+
     return pNeuPlusData;
 }
 
@@ -1465,6 +1468,31 @@ XubString SdrObject::GetName() const
     if (pPlus!=NULL) {
         return pPlus->aObjName;
     }
+    return String();
+}
+
+// support for HTMLName
+void SdrObject::SetHTMLName(const XubString& rStr)
+{
+    if(rStr.Len())
+    {
+        ImpForcePlusData();
+        pPlusData->aHTMLName = rStr;
+    }
+    else
+    {
+        if(pPlusData)
+        {
+            pPlusData->aHTMLName.Erase();
+        }
+    }
+}
+
+// support for HTMLName
+XubString SdrObject::GetHTMLName() const
+{
+    if(pPlusData)
+        return pPlusData->aHTMLName;
     return String();
 }
 
