@@ -2,9 +2,9 @@
  *
  *  $RCSfile: preload.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-05 18:50:44 $
+ *  last change: $Author: nf $ $Date: 2002-10-18 09:22:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,8 @@ ModalDialog RID_DLG_OEMWIZARD
         Text[ chinese_traditional ] = "<< 返回";
         Text[ turkish ] = "<< Back";
         Text[ arabic ] = "<< Back";
-        Text[ catalan ] = "<< Endarrere";
+        Text[ catalan ] = "<< Enrere";
+        Text[ thai ] = "<< Back";
     };
     PushButton PB_NEXT
     {
@@ -120,7 +121,8 @@ ModalDialog RID_DLG_OEMWIZARD
         Text[ chinese_traditional ] = "繼續 >>";
         Text[ turkish ] = "Next >>";
         Text[ arabic ] = "Next >>";
-        Text[ catalan ] = "Endavant >>";
+        Text[ catalan ] = "Seg�ent >>";
+        Text[ thai ] = "Next >>";
     };
     CancelButton PB_CANCEL
     {
@@ -149,7 +151,8 @@ ModalDialog RID_DLG_OEMWIZARD
         Text[ chinese_traditional ] = "接受";
         Text[ turkish ] = "Accept";
         Text[ arabic ] = "Accept";
-        Text[ catalan ] = "Accept";
+        Text[ catalan ] = "Accepta";
+        Text[ thai ] = "Accept";
     };
     String ST_FINISH
     {
@@ -174,7 +177,8 @@ ModalDialog RID_DLG_OEMWIZARD
         Text[ chinese_traditional ] = "完成";
         Text[ turkish ] = "Finish";
         Text[ arabic ] = "Finish";
-        Text[ catalan ] = "Crea";
+        Text[ catalan ] = "Finalitza";
+        Text[ thai ] = "สร้าง";
     };
     String ST_LICENSE_AGREEMENT
     {
@@ -198,7 +202,8 @@ ModalDialog RID_DLG_OEMWIZARD
         Text[ chinese_traditional ] = " - 軟體使用協定";
         Text[ turkish ] = " - Software License Agreement";
         Text[ arabic ] = " - Software License Agreement";
-        Text[ catalan ] = " - Software License Agreement";
+        Text[ catalan ] = "- Aceptaci� de la llic�ncia";
+        Text[ thai ] = " - Software License Agreement";
     };
 
     String ST_INSERT_USER_DATA
@@ -223,7 +228,8 @@ ModalDialog RID_DLG_OEMWIZARD
         Text[ chinese_traditional ] = "- 使用者資料";
         Text[ turkish ] = "- User Data";
         Text[ arabic ] = "- User Data";
-        Text[ catalan ] = "- User Data";
+        Text[ catalan ] = "- Dades d'usuari";
+        Text[ thai ] = "- User Data";
     };
 };
 TabPage RID_TP_WELCOME
@@ -254,34 +260,46 @@ TabPage RID_TP_WELCOME
     Text[ chinese_traditional ] = "歡迎";
     Text[ turkish ] = "Welcome";
     Text[ arabic ] = "Welcome";
-    Text[ catalan ] = "Welcome";
+    Text[ catalan ] = "Benvinguts";
     FixedText FT_INFO
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 248 , 174 ) ;
         WordBreak = TRUE ;
-        Text [ language_user1 ] = "LHO: Please eliminate any notion about the training in all languages except German, English, French and Japanese";
-        Text = "Herzlich willkommen zu %PRODUCTNAME %PRODUCTVERSION OEM\n\n"\
-        "Um %PRODUCTNAME %PRODUCTVERSION OEM starten zu k�nnen, geben Sie bitte auf der dem Lizenztext folgenden "\
-        "Dialogseite Ihre Benutzerdaten ein. In der Readme-Datei im %PRODUCTNAME-Produktverzeichnis finden Sie "\
-        "wichtige Hinweise zum Programm. Bitte lesen Sie diese Hinweise aufmerksam durch. "\
-        "Des weiteren finden Sie ausf�hrliche Informationen auf der Internetseite von Sun unter\n\n"\
-        "http://www.sun.com/staroffice.\n\nSupport und Schulung:\n\n"\
-        "Nutzen Sie die M�glichkeit des kostenlosen Software-Supports f�r 60 Tage ab Kaufdatum. "\
-        "Auch eine kostenlose, Web-basierte StarOffice-Schulung des Sun(tm) Web Learning Centers wartet auf Sie. "\
-        "Dieses Schulungsangebot ist 90 Tage ab Registrierung g�ltig."\
-        "Besuchen Sie folgende Webseite f�r weitere Details.\n\nhttp://www.sun.com/star/service\n\n"\
+        Text [ language_user1 ] = "EM 30 AUG 2002: DO NOT DELETE YOUR TRANSLATION!!! THE GERMAN TEXT IS MISSING BUT WILL RETURN!! ENGLISH IS CORRECT!LHO: Please eliminate any notion about the training in all languages except German, English, French and Japanese";
+        Text = "Herzlich willkommen zu %PRODUCTNAME %PRODUCTVERSION OEM\n\n"
+        "Um %PRODUCTNAME %PRODUCTVERSION OEM starten zu k�nnen, geben Sie bitte auf der dem Lizenztext folgenden "
+        "Dialogseite Ihre Benutzerdaten ein. In der Readme-Datei im %PRODUCTNAME-Produktverzeichnis finden Sie "
+        "wichtige Hinweise zum Programm. Bitte lesen Sie diese Hinweise aufmerksam durch. "
+        "Des weiteren finden Sie ausf�hrliche Informationen auf der Internetseite von Sun unter\n\n"
+        "http://www.sun.com/staroffice.\n\nSupport und Schulung:\n\n"
+        "Nutzen Sie die M�glichkeit des kostenlosen Software-Supports f�r 60 Tage ab Kaufdatum. "
+        "Auch eine kostenlose, Web-basierte StarOffice-Schulung des Sun(tm) Web Learning Centers wartet auf Sie. "
+        "Dieses Schulungsangebot ist 90 Tage ab Registrierung g�ltig."
+        "Besuchen Sie folgende Webseite f�r weitere Details.\n\nhttp://www.sun.com/star/service\n\n"
         "Wir w�nschen Ihnen viel Spa� und Erfolg mit Ihrem neuen %PRODUCTNAME.\nIhr %PRODUCTNAME Team.";
-        Text [ english_us ] = "Welcome to %PRODUCTNAME %PRODUCTVERSION OEM\n\n"\
-        "Get FREE StarOffice 6.0 software support valid for 60 days from date of purchase and FREE "\
-        "access to \"Transitioning to the %PRODUCTNAME %PRODUCTVERSION Application Suite\" (WO-1605), "\
-        "a web-based training course available through the Sun(tm) Web Learning Center "\
-        "(valid for 90 days from the date of registration)."\
-        "To take advantage of this offer, visit the website below.\n\nhttp://www.sun.com/star/service\n\n"\
-        "We hope you enjoy working with %PRODUCTNAME.";
+        Text [ english_us ] = "Welcome to %PRODUCTNAME %PRODUCTVERSION OEM\n\nTo start %PRODUCTNAME %PRODUCTVERSION OEM, please enter your personal data in the dialog following the license text. Important information is contained in the readme files which are located in the %PRODUCTNAME product directory. Please read these files carefully. You can also find detailed information on the Sun website at\n\nhttp://www.sun.com/staroffice.\n\nSupport and Training:\n\nGet FREE StarOffice 6.0 software support valid for 60 days from date of purchase and FREE access to \"Transitioning to the %PRODUCTNAME %PRODUCTVERSION Application Suite\" (WO-1605), a web-based training course available through the Sun(tm) Web Learning Center (valid for 90 days from the date of registration). To take advantage of this offer, visit the website below.\n\nhttp://www.sun.com/star/service\n\nWe hope you enjoy working with %PRODUCTNAME.";
+        Text[ portuguese ] = "Welcome to %PRODUCTNAME %PRODUCTVERSION OEM\n\nTo start %PRODUCTNAME %PRODUCTVERSION OEM, please enter your personal data in the dialog following the license text.\n\nImportant information is contained in the readme files which are located in the StarOffice product directory. Please read these files carefully.\n\nYou can also find detailed information on the Sun Internet pages at\n\nhttp://www.sun.com/staroffice.\n\nWe hope you enjoy working with StarOffice.";
+        Text[ russian ] = "Welcome to %PRODUCTNAME %PRODUCTVERSION OEM\n\nTo start %PRODUCTNAME %PRODUCTVERSION OEM, please enter your personal data in the dialog following the license text.\n\nImportant information is contained in the readme files which are located in the StarOffice product directory. Please read these files carefully.\n\nYou can also find detailed information on the Sun Internet pages at\n\nhttp://www.sun.com/staroffice.\n\nWe hope you enjoy working with StarOffice.";
+        Text[ greek ] = "Welcome to %PRODUCTNAME %PRODUCTVERSION OEM\n\nTo start %PRODUCTNAME %PRODUCTVERSION OEM, please enter your personal data in the dialog following the license text.\n\nImportant information is contained in the readme files which are located in the StarOffice product directory. Please read these files carefully.\n\nYou can also find detailed information on the Sun Internet pages at\n\nhttp://www.sun.com/staroffice.\n\nWe hope you enjoy working with StarOffice.";
+        Text[ dutch ] = "Welcome to %PRODUCTNAME %PRODUCTVERSION OEM\n\nTo start %PRODUCTNAME %PRODUCTVERSION OEM, please enter your personal data in the dialog following the license text.\n\nImportant information is contained in the readme files which are located in the StarOffice product directory. Please read these files carefully.\n\nYou can also find detailed information on the Sun Internet pages at\n\nhttp://www.sun.com/staroffice.\n\nWe hope you enjoy working with StarOffice.";
+        Text[ french ] = "%PRODUCTNAME %PRODUCTVERSION OEM - Bienvenue !\n\nAvant de pouvoir d�marrer %PRODUCTNAME %PRODUCTVERSION OEM, vous devez sp�cifier vos donn�es d'identit� sur la page suivant la licence dans la bo�te de dialogue. Le fichier Readme (plac� dans le r�pertoire de %PRODUCTNAME) contient des informations importantes sur le programme. Il est vivement conseill� d'en prendre connaissance. Vous trouverez �galement des informations d�taill�es sur le site Internet de Sun � l'adresse\n\nhttp://www.sun.com/staroffice.\n\nSupport et formation : Profitez du support logiciel gratuit durant 60 jours � compter de la date d'achat ! Une formation Web pour StarOffice vous est �galement offerte par le Sun(tm) Web Learning Center ; cette offre est valable durant 90 jours � compter de la date d'enregistrement. Pour plus de d�tails, visitez le site Web\n\nhttp://www.sun.com/star/service\n\nL'�quipe de %PRODUCTNAME esp�re que cette nouvelle version r�pondra � vos attentes et vous souhaite un agr�able travail !";
+        Text[ spanish ] = "Bienvenidos a %PRODUCTNAME %PRODUCTVERSION OEM\n\nPara iniciar %PRODUCTNAME %PRODUCTVERSION OEM, introduzca sus datos personales en el di�logo que sigue al texto de licencia. Encontrar� informaci�n importante relativa al programa en los archivos Readme, en el directorio de %PRODUCTNAME. Lea estos archivos atentamente. Tambi�n encontrar� informaci�n detallada en la p�gina de Internet de Sun\n\nhttp://www.sun.com/staroffice.\n\nnSoporte y formaci�n:\n\nAproveche la oportunidad de llamar gratuitamente al servicio de soporte. Obtenga el soporte del software de StarOffice 6.0 de manera gratuita. Esta oferta tiene una validez de 60 d�as a partir de la fecha de compra. Para aprovechar esta oferta visite la p�gina web siguiente.\n\nhttp://www.sun.com/star/service\n\nEsperamos que disfrute trabajando con %PRODUCTNAME.";
+        Text[ finnish ] = "Welcome to %PRODUCTNAME %PRODUCTVERSION OEM\n\nTo start %PRODUCTNAME %PRODUCTVERSION OEM, please enter your personal data in the dialog following the license text.\n\nImportant information is contained in the readme files which are located in the StarOffice product directory. Please read these files carefully.\n\nYou can also find detailed information on the Sun Internet pages at\n\nhttp://www.sun.com/staroffice.\n\nWe hope you enjoy working with StarOffice.";
+        Text[ italian ] = "Benvenuti a %PRODUCTNAME %PRODUCTVERSION OEM\n\nPer avviare %PRODUCTNAME %PRODUCTVERSION OEM inserite i vostri dati nel dialogo che segue il testo di licenza. Il file Readme nella cartella %PRODUCTNAME contiene informazioni importanti sul programma. Leggete il file attentamente. Troverete informazioni dettagliate alla pagina Web di Sun\nhttp://www.sun.com/staroffice.\n\nSupporto:\n\nAvete l'opportunit� di effettuare una chiamata gratuita al nostro servizio di supporto StarOffice 6.0 (offerta valida per 60 giorni a partire dalla data di acquisto). Per approfittare dell'offerta andate alla pagina\n\nhttp://www.sun.com/str/service\n\nVi auguriamo buon lavoro con %PRODUCTNAME.\n\nIl team %PRODUCTNAME.";
         Text[ danish ] = "Velkommen til %PRODUCTNAME %PRODUCTVERSION OEM\n\nFor at starte %PRODUCTNAME %PRODUCTVERSION OEM skal du indtaste dine brugerdata i det sk�rmbillede, der f�lger efter teksten vedr�rende licens. I Vigtigt-filen, der ligger i %PRODUCTNAME-produktbiblioteket, kan du finde vigtige oplysninger om programmet. L�s alle disse oplysninger grundigt igennem. Du finder desuden udf�rlige oplysninger p� Suns websted p� adressen \n\nhttp://www.sun.com/staroffice.\n\nSupport og tr�ning:\n\nBenyt dig af vores gratis support-telefon. Du kan ogs� g�re brug af et gratis, webbaseret StarOffice-kursus fra Sun Web Learning Centers. Disse tilbud er g�ldende i 60 dage efter k�bsdatoen. Bes�g denne webside for at f� yderligere oplysninger:\n\nhttp://www.sun.com/star/service\n\nVi �nsker dig god forn�jelse med %PRODUCTNAME.\nDit %PRODUCTNAME-team.";
+        Text[ swedish ] = "V�lkommen till %PRODUCTNAME %PRODUCTVERSION OEM\n\nF�r att kunna starta %PRODUCTNAME %PRODUCTVERSION OEM anger du dina anv�ndardata i dialogrutan som kommer efter licenstexten. I readmefilen i %PRODUCTNAME-produktkatalogen finns det viktig information om programmet. L�s igenom den h�r informationen noggrant. Det finns dessutom utf�rlig information p� Suns Internetsida p�\n\nhttp://www.sun.com/staroffice.\n\nVi �nskar dig mycket n�je och framg�ngsrikt arbete med %PRODUCTNAME.\nDitt %PRODUCTNAME-team.";
+        Text[ polish ] = "Welcome to %PRODUCTNAME %PRODUCTVERSION OEM\n\nTo start %PRODUCTNAME %PRODUCTVERSION OEM, please enter your personal data in the dialog following the license text.\n\nImportant information is contained in the readme files which are located in the StarOffice product directory. Please read these files carefully.\n\nYou can also find detailed information on the Sun Internet pages at\n\nhttp://www.sun.com/staroffice.\n\nWe hope you enjoy working with StarOffice.";
+        Text[ japanese ] = "%PRODUCTNAME %PRODUCTVERSION OEM へようこそ\n\n%PRODUCTNAME %PRODUCTVERSION OEM を起動するには、ライセンス許諾書の文章に続くダイアログページでユーザーデータを入力します。%PRODUCTNAME がインストールされているディレクトリの Readme ファイルでは、ご使用にあたっての注意点を述べています。ご使用になる前に、必ずお読みください。詳細情報は、Sun の webサイトまで。\n\nhttp://www.sun.com/staroffice\n\nサポートとトレーニング:\n\nソフトウェアサービスに関しては、ご購入日から60日間は無償でご利用いただけます。また Sun(tm) Web Learning Center 主催 webベースの StarSuite トレーニングについては、登録された日から90日間は有効です。ふるってご参加ください。詳細については、以下の Webページでご案内申し上げます。\n\nhttp://www.sun.com/star/service\n%PRODUCTNAME チーム一同";
+        Text[ korean ] = "%PRODUCTNAME %PRODUCTVERSION OEM 에 오신 것을 환영합니다.\n\n %PRODUCTNAME %PRODUCTVERSION OEM 을 시작하려면 라이센스 협정의 계속되는 대화 상자에서 사용자 개인 정보를 입력하십시오. \n\n %PRODUCTNAME 제품 디렉토리에 있는 Readme 파일에는 프로그램에 대한 주요 참고 사항이 수록되어 있습니다. 이 참고 사항을 주의깊게 읽으십시오.\n\n그 외의 자세한 정보는 Sun의 인터넷 사이트인 http://www.sun.com/staroffice 에서 볼 수 있습니다.\n\n지원:\n\nStarSuite 6.0은 한번의 무료 지원 전화를 제공해 드립니다 (매매일로부터 60일간 유효). 이 서비스를 이용하시려면 다음의 웹 페이지를 방문해 주십시오. http://www.sun.com/star/service\n\n%PRODUCTNAME는사용자 여러분의 더욱더 신속하고 효율적인 작업을 도울 수 있도록 최선을 다하겠습니다.\n\n %PRODUCTNAME 팀 일동.";
+        Text[ chinese_simplified ] = "欢迎安装 %PRODUCTNAME %PRODUCTVERSION OEM\n\n在启动 %PRODUCTNAME %PRODUCTVERSION OEM 之前，请在许可证文字之后的对话方框内输入您的个人数据。请仔细阅读存放在 %PRODUCTNAME 目录之内的重要的 READEME 文档。您也能够访问 Sun 网页，阅读详细的相关资料：\n\nhttp://www.sun.com/staroffice";
+        Text[ chinese_traditional ] = "歡迎安裝 %PRODUCTNAME %PRODUCTVERSION OEM\n\n在啟動 %PRODUCTNAME %PRODUCTVERSION OEM 之前，請在許可證文字之後的對話方塊內鍵入您的個人資料。請仔細閱讀存放在 %PRODUCTNAME 目錄之內的重要的 READEME 文件。您也能夠訪問 Sun 網站，閱讀詳細的說明資料：\n\nhttp://www.sun.com/staroffice";
+        Text[ turkish ] = "Welcome to %PRODUCTNAME %PRODUCTVERSION OEM\n\nTo start %PRODUCTNAME %PRODUCTVERSION OEM, please enter your personal data in the dialog following the license text.\n\nImportant information is contained in the readme files which are located in the StarOffice product directory. Please read these files carefully.\n\nYou can also find detailed information on the Sun Internet pages at\n\nhttp://www.sun.com/staroffice.\n\nWe hope you enjoy working with StarOffice.";
+        Text[ arabic ] = "Welcome to %PRODUCTNAME %PRODUCTVERSION OEM\n\nTo start %PRODUCTNAME %PRODUCTVERSION OEM, please enter your personal data in the dialog following the license text.\n\nImportant information is contained in the readme files which are located in the StarOffice product directory. Please read these files carefully.\n\nYou can also find detailed information on the Sun Internet pages at\n\nhttp://www.sun.com/staroffice.\n\nWe hope you enjoy working with StarOffice.";
         Text[ catalan ] = "Benvinguts a %PRODUCTNAME %PRODUCTVERSION OEM\n\nPer iniciar %PRODUCTNAME %PRODUCTVERSION OEM, introdu�u les dades personals en el quadre de di�leg m�s avall del text de llic�ncia.\n\nHi ha informaci� important als fitxers readme que estan ubicats en el directori de l'StarOffice. Llegiu els fitxers amb atenci�.\n\nTamb� podeu trobar informaci� detallada a la p�gina d'Internet de Sun a\n\nhttp://www.sun.com/staroffice.\n\nEsperem que gaudeixi treballant amb l'StarOffice.";
+        Text[ thai ] = "Welcome to %PRODUCTNAME %PRODUCTVERSION OEM\n\nTo start %PRODUCTNAME %PRODUCTVERSION OEM, please enter your personal data in the dialog following the license text.\n\nImportant information is contained in the readme files which are located in the StarOffice product directory. Please read these files carefully.\n\nYou can also find detailed information on the Sun Internet pages at\n\nhttp://www.sun.com/staroffice.\n\nWe hope you enjoy working with StarOffice.";
     };
+    Text[ thai ] = "Welcome";
 };
 TabPage RID_TP_LICENSE
 {
@@ -311,7 +329,7 @@ TabPage RID_TP_LICENSE
     Text[ chinese_traditional ] = "使用許可協定";
     Text[ turkish ] = "License Agreement";
     Text[ arabic ] = "License Agreement";
-    Text[ catalan ] = "License Agreement";
+    Text[ catalan ] = "Acord de llic�ncia";
     FixedText FT_INFO1
     {
         WordBreak = TRUE ;
@@ -337,8 +355,9 @@ TabPage RID_TP_LICENSE
         Text[ korean ] = "다음의 라이센스 협정을 읽어 보십시오. 스크롤 바를 사용하면 라이센스 협정의 나머지를 볼 수 있습니다.";
         Text[ turkish ] = "L�tfen a�a��daki lisans anla�mas�n� dikkatle okuyun. Sayfa kayd�rma �ubu�unu kullanarak, lisans anla�mas�n�n tamam�n� g�r�nt�leyebilirsiniz.";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Por favor lea el siguiente acuerdo de licencia. Con la barra de desplazamiento podr� ver el resto del acuerdo.";
+        Text[ catalan ] = "Llegeix el seg�ent acord de llic�ncia. Amb la barra de despla�ament podreu veure la resta de l'acord.";
         Text[ finnish ] = "Lue seuraava lisenssisopimus huolellisesti. Voit vieritt�� teksti� vierityspalkin avulla.";
+        Text[ thai ] = "อ่านข้อตกลงการอนุญาตต่อไปนี้อย่างระมัดระวัง ใช้แถบเลื่อนเพื่อดูทั้งข้อความ";
     };
     MultiLineEdit ML_LICENSE
     {
@@ -373,10 +392,30 @@ TabPage RID_TP_LICENSE
         Text[ korean ] = "라이센스 협정에 언급된 전체 조건에 동의하면 '%1' 버튼을 클릭하십시오. 조건에 동의하지 않으면 '%2'을(를) 클릭하십시오. 그러면 설치가 중단됩니다.";
         Text[ turkish ] = "Lisans anla�mas�ndaki t�m ko�ullar� kabul ediyorsan�z, '%1' d��mesini t�klay�n. Ko�ullar� kabul etmiyorsan�z, '%2' d��mesini t�klay�n. Bu durumda kurulum iptal edilecek.";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Si acepta las condiciones de este acuerdo de licencia, pulse sobre '%1'. En caso de no ser as� pulse sobre '%2' para cancelar la instalaci�n.";
+        Text[ catalan ] = "Si accepteu les condicions d'aquest acord, feu clic a '%1'. En el cas que no sigui aix�, feu clic a '%2' per cancel�lar la instal�laci�.";
         Text[ finnish ] = "Jos hyv�ksyt kaikki lisenssisopimuksen ehdot, valitse %1. Muussa tapauksessa peruuta asennus valitsemalla %2.";
+        Text[ thai ] = "If you accept all terms of the license agreement, click '%1'. Otherwise, click '%2' to cancel the installation.";
     };
+    Text[ thai ] = "License Agreement";
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
