@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glob.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2000-10-31 15:03:06 $
+ *  last change: $Author: kz $ $Date: 2000-11-09 12:45:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1243,7 +1243,7 @@ String STR_BAD_PASSWORD_OR_FILE_CORRUPTED
     Text[ arabic ] = "ίαγΙ ΗαΣΡ ΫνΡ ΥΝνΝΙ Γζ Ηαγαέ γΪΨζΘ.";
     Text[ dutch ] = "Het wachtwoord is niet correct of het bestand is beschadigd";
     Text[ chinese_simplified ] = "ΏΪΑξ΄νΞσ»ςΥίΞΔΌώÒΡΎ­Λπ»µ΅£";
-    Text[ greek ] = "Εσφαλμένος κωδικός πρόσβασης ή κατεστραμμένο αρχείο.";
+    Text[ greek ] = "Ο κωδικός πρόσβασης είναι εσφαλμένος ή το αρχείο ελαττωματικό.";
     Text[ korean ] = "ΖΠ½ΊΏφµε°΅ Ζ²Έ®°Ε³ª ΖΔΐΟΐΜ ΌΥ»σµΗΎϊ½ΐ΄Ο΄Ω.";
     Text[ turkish ] = "ήifre yanlύώ ya da dosya hasar gφrmόώ.";
     Text[ language_user1 ] = " ";
@@ -1923,21 +1923,21 @@ String STR_POWERPOINT_IMPORT
     Text = "PowerPoint Import" ;
     Text [ ENGLISH ] = "PowerPoint import" ;
     Text[ english_us ] = "PowerPoint Import";
-    Text[ portuguese ] = "PowerPoint import";
-    Text[ russian ] = "PowerPoint import";
+    Text[ portuguese ] = "Importaηγo PowerPoint";
+    Text[ russian ] = "Θμοξπς PowerPoint";
     Text[ greek ] = "Εισαγωγή του PowerPoint";
     Text[ dutch ] = "PowerPoint import";
     Text[ french ] = "Import PowerPoint";
     Text[ spanish ] = "Importaciσn PowerPoint";
-    Text[ italian ] = "PowerPoint import";
+    Text[ italian ] = "Importazione PowerPoint";
     Text[ danish ] = "PowerPoint import";
     Text[ swedish ] = "PowerPoint-import";
     Text[ polish ] = "Import PowerPoint";
     Text[ portuguese_brazilian ] = "PowerPoint import";
-    Text[ japanese ] = "PowerPoint import";
+    Text[ japanese ] = "PowerPoint ²έΞί°Δ";
     Text[ korean ] = "PowerPoint import";
     Text[ chinese_simplified ] = "PowerPoint ΚδΘλ";
-    Text[ chinese_traditional ] = "PowerPoint import";
+    Text[ chinese_traditional ] = "PowerPoint Ώι¤J";
     Text[ turkish ] = "PowerPoint import";
     Text[ arabic ] = "PowerPoint ΗΣΚνΡΗΟ";
 };
@@ -1976,11 +1976,47 @@ String STR_STAROFFICE_XML_DRAW
 {
     Text = "StarOffice XML (Draw)" ;
     Text [ ENGLISH ] = "StarOffice XML (Draw)" ;
+    Text[ english_us ] = "StarOffice XML (Draw)";
+    Text[ portuguese ] = "StarOffice XML (Draw)";
+    Text[ russian ] = "StarOffice XML (Draw)";
+    Text[ greek ] = "StarOffice XML (Draw)";
+    Text[ dutch ] = "StarOffice XML (Draw)";
+    Text[ french ] = "StarOffice XML (Draw)";
+    Text[ spanish ] = "StarOffice XML (Draw)";
+    Text[ italian ] = "StarOffice XML (Draw)";
+    Text[ danish ] = "StarOffice XML (Draw)";
+    Text[ swedish ] = "StarOffice XML (Draw)";
+    Text[ polish ] = "StarOffice XML (Draw)";
+    Text[ portuguese_brazilian ] = "StarOffice XML (Draw)";
+    Text[ japanese ] = "StarOffice XML (Draw)";
+    Text[ korean ] = "StarOffice XML (Draw)";
+    Text[ chinese_simplified ] = "StarOffice XML (Draw)";
+    Text[ chinese_traditional ] = "StarOffice XML (Draw)";
+    Text[ turkish ] = "StarOffice XML (Draw)";
+    Text[ arabic ] = "StarOffice XML (Draw)";
 };
 
 String STR_STAROFFICE_XML_IMPRESS
 {
     Text = "StarOffice XML (Impress)" ;
     Text [ ENGLISH ] = "StarOffice XML (Impress)" ;
+    Text[ english_us ] = "StarOffice XML (Impress)";
+    Text[ portuguese ] = "StarOffice XML (Impress)";
+    Text[ russian ] = "StarOffice XML (Impress)";
+    Text[ greek ] = "StarOffice XML (Impress)";
+    Text[ dutch ] = "StarOffice XML (Impress)";
+    Text[ french ] = "StarOffice XML (Impress)";
+    Text[ spanish ] = "StarOffice XML (Impress)";
+    Text[ italian ] = "StarOffice XML (Impress)";
+    Text[ danish ] = "StarOffice XML (Impress)";
+    Text[ swedish ] = "StarOffice XML (Impress)";
+    Text[ polish ] = "StarOffice XML (Impress)";
+    Text[ portuguese_brazilian ] = "StarOffice XML (Impress)";
+    Text[ japanese ] = "StarOffice XML (Impress)";
+    Text[ korean ] = "StarOffice XML (Impress)";
+    Text[ chinese_simplified ] = "StarOffice XML (Impress)";
+    Text[ chinese_traditional ] = "StarOffice XML (Impress)";
+    Text[ turkish ] = "StarOffice XML (Impress)";
+    Text[ arabic ] = "StarOffice XML (Impress)";
 };
 
