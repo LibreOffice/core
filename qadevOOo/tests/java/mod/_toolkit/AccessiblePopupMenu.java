@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePopupMenu.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2004-01-05 20:37:37 $
+ *  last change:$Date: 2004-11-02 12:15:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,7 +209,7 @@ public class AccessiblePopupMenu extends TestCase {
 
             xRoot = at.getAccessibleObject(xWindow);
 
-            at.printAccessibleTree(log, xRoot);
+        at.printAccessibleTree(log, xRoot, tParam.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
             log.println("Couldn't get Window");
         }
