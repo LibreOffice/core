@@ -1,0 +1,11 @@
+#!/bin/sh
+if [ x${SOLARENV}x = xx ]; then
+    echo No environment found, please use 'setsolar'
+exit 1
+fi
+if [ x${SOLARVER}x = xx ]; then
+    exec perl -w $SOLARVERSION/$INPATH/bin/localize.pl "$@"
+else
+    exec perl -w $SOLARVERSION/$INPATH/bin.$UPDMINOR/localize.pl "$@"
+fi
+
