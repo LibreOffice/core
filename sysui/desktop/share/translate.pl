@@ -113,35 +113,27 @@ while (<SOURCE>) {
             print OUTFILE;
         }
 
+        close(TEMPLATE);
+
         if (close(OUTFILE)) {
             system "mv -f $outfile.tmp $outfile\n";
         }
 
-        close(TEMPLATE);
-
         $_ = substr($line, 1, index($line,"]")-1);
-
-        # HACK: need to translate section strings for now
-        s/writer-math/formula/;
-        s/writer-global/master-document/;
-        s/writer/text/;
-        s/calc/spreadsheet/;
-        s/draw/drawing/;
-        s/impress/presentation/;
-
         $outfile = "$workdir/$prefix$_.$ext";
+
+        # open the template file - ignore sections for which no
+        # templates exist
+        unless(open(TEMPLATE, $outfile)) {
+            print STDERR "Warning: No template found for item $_: $outfile: $!\n";
+            next;
+        }
 
         # open output file
         unless (open(OUTFILE, "> $outfile.tmp")) {
             print STDERR "Can't create output file $outfile.tmp: $!\n";
             exit -1;
-    }
-
-        # open the template file
-        unless(open(TEMPLATE, $outfile)) {
-            print STDERR "Can't open template file $outfile: $!\n";
-            exit -1;
-    }
+        }
 
         # Pass the head of the template to the output file
 KEY:    while (<TEMPLATE>) {
