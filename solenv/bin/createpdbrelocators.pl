@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: createpdbrelocators.pl,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: vg $ $Date: 2003-07-09 10:14:01 $
+#   last change: $Author: rt $ $Date: 2004-08-23 12:16:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,7 +85,7 @@ use CreatePDBRelocators;
 ( my $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
 my $script_rev;
-my $id_str = ' $Revision: 1.2 $ ';
+my $id_str = ' $Revision: 1.3 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -93,6 +93,13 @@ print "$script_name -- version: $script_rev\n";
 
 my $inpath    = $ENV{INPATH};
 my $milestone = $ENV{UPDMINOR};
+
+if ( $ARGV[0] ) {
+    if ( $milestone && ( $milestone ne $ARGV[0] ) ) {
+        die "Error: specified milestone $ARGV[0] does not match your environment";
+    }
+    $milestone = $ARGV[0];
+}
 
 if ( !$inpath || !$milestone ) {
     print STDERR "$script_name: INAPTH or UPDMINOR not set!\n";
