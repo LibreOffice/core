@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compressedarray.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $  $Date: 2004-08-25 10:37:01 $
+ *  last change: $Author: rt $  $Date: 2004-10-22 07:57:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,10 +176,13 @@ friend class ScCompressedArrayIterator<A,D>;
 template< typename A, typename D >
 void ScCompressedArray<A,D>::Reset( const D& rValue )
 {
+    // Create a temporary copy in case we got a reference passed that points to
+    // a part of the array to be reallocated.
+    D aTmpVal( rValue);
     delete[] pData;
     nCount = nLimit = 1;
     pData = new DataEntry[1];
-    pData[0].aValue = rValue;
+    pData[0].aValue = aTmpVal;
     pData[0].nEnd = nMaxAccess;
 }
 
@@ -682,7 +685,7 @@ bool ScCoupledCompressedArrayIterator<A,D,S>::operator ++()
 template< typename A, typename D, typename S >
 A ScCoupledCompressedArrayIterator<A,D,S>::GetPos() const
 {
-    return aIter1.GetPos();
+    return aIter2.GetPos();
 }
 
 
