@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormComponent.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-19 11:52:16 $
+ *  last change: $Author: obo $ $Date: 2000-10-24 13:02:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,7 @@ namespace frm
 //=========================================================================
 DBG_NAME(frm_OControl)
 //------------------------------------------------------------------------------
-OControl::OControl(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory, const rtl::OUString& _sService)
+OControl::OControl(const com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory>& _rxFactory, const rtl::OUString& _sService)
             :OComponentHelper(m_aMutex)
             ,m_aService(_sService)
             ,m_xServiceFactory(_rxFactory)
@@ -129,14 +129,14 @@ OControl::OControl(const staruno::Reference<starlang::XMultiServiceFactory>& _rx
     // das Aggregat selbst den Refcount erhoeht
     increment(m_refCount);
     {
-        m_xAggregate = staruno::Reference<staruno::XAggregation>(
-            _rxFactory->createInstance(_sService), staruno::UNO_QUERY);
-        m_xControl = staruno::Reference<starawt::XControl>(m_xAggregate, staruno::UNO_QUERY);
+                m_xAggregate = com::sun::star::uno::Reference<com::sun::star::uno::XAggregation>(
+                        _rxFactory->createInstance(_sService), com::sun::star::uno::UNO_QUERY);
+                m_xControl = com::sun::star::uno::Reference<starawt::XControl>(m_xAggregate, com::sun::star::uno::UNO_QUERY);
     }
 
     if (m_xAggregate.is())
     {
-        m_xAggregate->setDelegator(static_cast<staruno::XWeak*>(this));
+                m_xAggregate->setDelegator(static_cast<com::sun::star::uno::XWeak*>(this));
     }
 
     // Refcount wieder bei NULL
@@ -156,9 +156,9 @@ OControl::~OControl()
 
 // UNO Anbindung
 //------------------------------------------------------------------------------
-staruno::Any SAL_CALL OControl::queryAggregation( const staruno::Type& _rType ) throw(staruno::RuntimeException)
+com::sun::star::uno::Any SAL_CALL OControl::queryAggregation( const com::sun::star::uno::Type& _rType ) throw(com::sun::star::uno::RuntimeException)
 {
-    staruno::Any aReturn;
+        com::sun::star::uno::Any aReturn;
 
     // ask the base class
     aReturn = OComponentHelper::queryAggregation(_rType);
@@ -166,8 +166,8 @@ staruno::Any SAL_CALL OControl::queryAggregation( const staruno::Type& _rType ) 
     if (!aReturn.hasValue())
         aReturn = cppu::queryInterface(_rType
             ,static_cast<starawt::XControl*>(this)
-            ,static_cast<starlang::XEventListener*>(this)
-            ,static_cast<starlang::XServiceInfo*>(this)
+                        ,static_cast<com::sun::star::lang::XEventListener*>(this)
+                        ,static_cast<com::sun::star::lang::XServiceInfo*>(this)
         );
 
     // ask our aggregate
@@ -178,16 +178,16 @@ staruno::Any SAL_CALL OControl::queryAggregation( const staruno::Type& _rType ) 
 }
 
 //------------------------------------------------------------------------------
-staruno::Sequence<sal_Int8> SAL_CALL OControl::getImplementationId() throw(staruno::RuntimeException)
+com::sun::star::uno::Sequence<sal_Int8> SAL_CALL OControl::getImplementationId() throw(com::sun::star::uno::RuntimeException)
 {
     return OImplementationIds::getImplementationId(getTypes());
 }
 
 //------------------------------------------------------------------------------
-staruno::Sequence<staruno::Type> SAL_CALL OControl::getTypes() throw(staruno::RuntimeException)
+com::sun::star::uno::Sequence<com::sun::star::uno::Type> SAL_CALL OControl::getTypes() throw(com::sun::star::uno::RuntimeException)
 {
-    staruno::Sequence<staruno::Type> aOwnTypes = _getTypes();
-    staruno::Reference<starlang::XTypeProvider> xProv;
+        com::sun::star::uno::Sequence<com::sun::star::uno::Type> aOwnTypes = _getTypes();
+        com::sun::star::uno::Reference<com::sun::star::lang::XTypeProvider> xProv;
 
     if (query_aggregation(m_xAggregate, xProv))
         return concatSequences(aOwnTypes, xProv->getTypes());
@@ -196,19 +196,19 @@ staruno::Sequence<staruno::Type> SAL_CALL OControl::getTypes() throw(staruno::Ru
 }
 
 //------------------------------------------------------------------------------
-staruno::Sequence<staruno::Type> OControl::_getTypes()
+com::sun::star::uno::Sequence<com::sun::star::uno::Type> OControl::_getTypes()
 {
-    static staruno::Sequence<staruno::Type> aTypes;
+        static com::sun::star::uno::Sequence<com::sun::star::uno::Type> aTypes;
     if (!aTypes.getLength())
     {
         // my base class types
-        staruno::Sequence<staruno::Type> aBaseTypes = OComponentHelper::getTypes();
+                com::sun::star::uno::Sequence<com::sun::star::uno::Type> aBaseTypes = OComponentHelper::getTypes();
 
-        staruno::Sequence<staruno::Type> aOwnTypes(3);
-        staruno::Type* pOwnTypes = aOwnTypes.getArray();
-        pOwnTypes[0] = getCppuType((staruno::Reference<starawt::XControl>*)NULL);
-        pOwnTypes[1] = getCppuType((staruno::Reference<starlang::XEventListener>*)NULL);
-        pOwnTypes[2] = getCppuType((staruno::Reference<starlang::XServiceInfo>*)NULL);
+                com::sun::star::uno::Sequence<com::sun::star::uno::Type> aOwnTypes(3);
+                com::sun::star::uno::Type* pOwnTypes = aOwnTypes.getArray();
+                pOwnTypes[0] = getCppuType((com::sun::star::uno::Reference<starawt::XControl>*)NULL);
+                pOwnTypes[1] = getCppuType((com::sun::star::uno::Reference<com::sun::star::lang::XEventListener>*)NULL);
+                pOwnTypes[2] = getCppuType((com::sun::star::uno::Reference<com::sun::star::lang::XServiceInfo>*)NULL);
 
         aTypes = concatSequences(aTypes, aOwnTypes);
     }
@@ -221,7 +221,7 @@ void OControl::disposing()
 {
     OComponentHelper::disposing();
 
-    staruno::Reference<starlang::XComponent> xComp;
+        com::sun::star::uno::Reference<com::sun::star::lang::XComponent> xComp;
     if (query_aggregation(m_xAggregate, xComp))
         xComp->dispose();
 }
@@ -230,7 +230,7 @@ void OControl::disposing()
 //------------------------------------------------------------------------------
 sal_Bool SAL_CALL OControl::supportsService(const rtl::OUString& _rsServiceName)
 {
-    staruno::Sequence<rtl::OUString> aSupported = getSupportedServiceNames();
+        com::sun::star::uno::Sequence<rtl::OUString> aSupported = getSupportedServiceNames();
     const rtl::OUString* pSupported = aSupported.getConstArray();
     for (sal_Int32 i=0; i<aSupported.getLength(); ++i, ++pSupported)
         if (pSupported->equals(_rsServiceName))
@@ -239,12 +239,12 @@ sal_Bool SAL_CALL OControl::supportsService(const rtl::OUString& _rsServiceName)
 }
 
 //------------------------------------------------------------------------------
-staruno::Sequence<rtl::OUString> SAL_CALL OControl::getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException)
+com::sun::star::uno::Sequence<rtl::OUString> SAL_CALL OControl::getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException)
 {
-    staruno::Sequence<rtl::OUString> aSupported;
+        com::sun::star::uno::Sequence<rtl::OUString> aSupported;
 
     // ask our aggregate
-    staruno::Reference<starlang::XServiceInfo> xInfo;
+        com::sun::star::uno::Reference<com::sun::star::lang::XServiceInfo> xInfo;
     if (query_aggregation(m_xAggregate, xInfo))
         aSupported = xInfo->getSupportedServiceNames();
 
@@ -253,15 +253,15 @@ staruno::Sequence<rtl::OUString> SAL_CALL OControl::getSupportedServiceNames() t
 
 // XEventListener
 //------------------------------------------------------------------------------
-void SAL_CALL OControl::disposing(const starlang::EventObject& _rEvent) throw (staruno::RuntimeException)
+void SAL_CALL OControl::disposing(const com::sun::star::lang::EventObject& _rEvent) throw (com::sun::star::uno::RuntimeException)
 {
     InterfaceRef xAggAsIface;
     query_aggregation(m_xAggregate, xAggAsIface);
 
     // does the disposing come from the aggregate ?
-    if (xAggAsIface != InterfaceRef(_rEvent.Source, staruno::UNO_QUERY))
+        if (xAggAsIface != InterfaceRef(_rEvent.Source, com::sun::star::uno::UNO_QUERY))
     {   // no -> forward it
-        staruno::Reference<starlang::XEventListener> xListener;
+                com::sun::star::uno::Reference<com::sun::star::lang::XEventListener> xListener;
         if (query_aggregation(m_xAggregate, xListener))
             xListener->disposing(_rEvent);
     }
@@ -269,47 +269,47 @@ void SAL_CALL OControl::disposing(const starlang::EventObject& _rEvent) throw (s
 
 // XControl
 //------------------------------------------------------------------------------
-void SAL_CALL OControl::setContext(const InterfaceRef& Context) throw (staruno::RuntimeException)
+void SAL_CALL OControl::setContext(const InterfaceRef& Context) throw (com::sun::star::uno::RuntimeException)
 {
     if (m_xControl.is())
         m_xControl->setContext(Context);
 }
 
 //------------------------------------------------------------------------------
-InterfaceRef SAL_CALL OControl::getContext() throw (staruno::RuntimeException)
+InterfaceRef SAL_CALL OControl::getContext() throw (com::sun::star::uno::RuntimeException)
 {
     return m_xControl.is() ? m_xControl->getContext() : InterfaceRef();
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL OControl::createPeer(const staruno::Reference<starawt::XToolkit>& Toolkit, const staruno::Reference<starawt::XWindowPeer>& Parent) throw (staruno::RuntimeException)
+void SAL_CALL OControl::createPeer(const com::sun::star::uno::Reference<starawt::XToolkit>& Toolkit, const com::sun::star::uno::Reference<starawt::XWindowPeer>& Parent) throw (com::sun::star::uno::RuntimeException)
 {
     if (m_xControl.is())
         m_xControl->createPeer(Toolkit, Parent);
 }
 
 //------------------------------------------------------------------------------
-staruno::Reference<starawt::XWindowPeer> SAL_CALL OControl::getPeer()
+com::sun::star::uno::Reference<starawt::XWindowPeer> SAL_CALL OControl::getPeer()
 {
-    return m_xControl.is() ? m_xControl->getPeer() : staruno::Reference<starawt::XWindowPeer>();
+        return m_xControl.is() ? m_xControl->getPeer() : com::sun::star::uno::Reference<starawt::XWindowPeer>();
 }
 
 //------------------------------------------------------------------------------
-sal_Bool SAL_CALL OControl::setModel(const staruno::Reference<starawt::XControlModel>& Model)
+sal_Bool SAL_CALL OControl::setModel(const com::sun::star::uno::Reference<starawt::XControlModel>& Model)
 {
     return m_xControl.is() ? m_xControl->setModel( Model ) : sal_False;
 }
 
 //------------------------------------------------------------------------------
-staruno::Reference<starawt::XControlModel> SAL_CALL OControl::getModel()
+com::sun::star::uno::Reference<starawt::XControlModel> SAL_CALL OControl::getModel()
 {
-    return m_xControl.is() ? m_xControl->getModel() : staruno::Reference<starawt::XControlModel>();
+        return m_xControl.is() ? m_xControl->getModel() : com::sun::star::uno::Reference<starawt::XControlModel>();
 }
 
 //------------------------------------------------------------------------------
-staruno::Reference<starawt::XView> SAL_CALL OControl::getView()
+com::sun::star::uno::Reference<starawt::XView> SAL_CALL OControl::getView()
 {
-    return m_xControl.is() ? m_xControl->getView() : staruno::Reference<starawt::XView>();
+        return m_xControl.is() ? m_xControl->getView() : com::sun::star::uno::Reference<starawt::XView>();
 }
 
 //------------------------------------------------------------------------------
@@ -336,7 +336,7 @@ sal_Bool SAL_CALL OControl::isTransparent()
 //==================================================================
 DBG_NAME(frm_OBoundControl);
 //------------------------------------------------------------------
-OBoundControl::OBoundControl(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory, const ::rtl::OUString& _sService)
+OBoundControl::OBoundControl(const com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory>& _rxFactory, const ::rtl::OUString& _sService)
         :OControl(_rxFactory, _sService)
         ,m_bLocked(sal_False)
 {
@@ -350,9 +350,9 @@ OBoundControl::~OBoundControl()
 }
 
 //------------------------------------------------------------------
-staruno::Any SAL_CALL OBoundControl::queryAggregation(const staruno::Type& _rType) throw(staruno::RuntimeException)
+com::sun::star::uno::Any SAL_CALL OBoundControl::queryAggregation(const com::sun::star::uno::Type& _rType) throw(com::sun::star::uno::RuntimeException)
 {
-    staruno::Any aReturn;
+        com::sun::star::uno::Any aReturn;
 
     // ask the base class
     aReturn = OControl::queryAggregation(_rType);
@@ -364,13 +364,13 @@ staruno::Any SAL_CALL OBoundControl::queryAggregation(const staruno::Type& _rTyp
 }
 
 //------------------------------------------------------------------
-sal_Bool SAL_CALL OBoundControl::getLock() throw(staruno::RuntimeException)
+sal_Bool SAL_CALL OBoundControl::getLock() throw(com::sun::star::uno::RuntimeException)
 {
     return m_bLocked;
 }
 
 //------------------------------------------------------------------
-void SAL_CALL OBoundControl::setLock(sal_Bool _bLock) throw(staruno::RuntimeException)
+void SAL_CALL OBoundControl::setLock(sal_Bool _bLock) throw(com::sun::star::uno::RuntimeException)
 {
     if (m_bLocked == _bLock)
         return;
@@ -384,15 +384,15 @@ void SAL_CALL OBoundControl::setLock(sal_Bool _bLock) throw(staruno::RuntimeExce
 void OBoundControl::_setLock(sal_Bool _bLock)
 {
     // try to set the text component to readonly
-    staruno::Reference<starawt::XWindowPeer> xPeer = getPeer();
-    staruno::Reference<com::sun::star::awt::XTextComponent> xText(xPeer, staruno::UNO_QUERY);
+        com::sun::star::uno::Reference<starawt::XWindowPeer> xPeer = getPeer();
+        com::sun::star::uno::Reference<com::sun::star::awt::XTextComponent> xText(xPeer, com::sun::star::uno::UNO_QUERY);
 
     if (xText.is())
         xText->setEditable(!_bLock);
     else
     {
         // disable the window
-        staruno::Reference<starawt::XWindow> xComp(xPeer, staruno::UNO_QUERY);
+                com::sun::star::uno::Reference<starawt::XWindow> xComp(xPeer, com::sun::star::uno::UNO_QUERY);
         if (xComp.is())
             xComp->setEnable(!_bLock);
     }
@@ -404,16 +404,16 @@ void OBoundControl::_setLock(sal_Bool _bLock)
 ConcretInfoService OControlModel::s_aPropInfos;
 DBG_NAME(OControlModel)
 //------------------------------------------------------------------
-staruno::Sequence<sal_Int8> SAL_CALL OControlModel::getImplementationId() throw(staruno::RuntimeException)
+com::sun::star::uno::Sequence<sal_Int8> SAL_CALL OControlModel::getImplementationId() throw(com::sun::star::uno::RuntimeException)
 {
     return OImplementationIds::getImplementationId(getTypes());
 }
 
 //------------------------------------------------------------------
-staruno::Sequence<staruno::Type> SAL_CALL OControlModel::getTypes() throw(staruno::RuntimeException)
+com::sun::star::uno::Sequence<com::sun::star::uno::Type> SAL_CALL OControlModel::getTypes() throw(com::sun::star::uno::RuntimeException)
 {
-    staruno::Sequence<staruno::Type> aOwnTypes = _getTypes();
-    staruno::Reference<starlang::XTypeProvider> xProv;
+        com::sun::star::uno::Sequence<com::sun::star::uno::Type> aOwnTypes = _getTypes();
+        com::sun::star::uno::Reference<com::sun::star::lang::XTypeProvider> xProv;
 
     if (query_aggregation(m_xAggregate, xProv))
         return concatSequences(aOwnTypes, xProv->getTypes());
@@ -422,21 +422,21 @@ staruno::Sequence<staruno::Type> SAL_CALL OControlModel::getTypes() throw(starun
 }
 
 //------------------------------------------------------------------------------
-staruno::Sequence<staruno::Type> OControlModel::_getTypes()
+com::sun::star::uno::Sequence<com::sun::star::uno::Type> OControlModel::_getTypes()
 {
-    static staruno::Sequence<staruno::Type> aTypes;
+        static com::sun::star::uno::Sequence<com::sun::star::uno::Type> aTypes;
     if (!aTypes.getLength())
     {
         // my two base classes
-        staruno::Sequence<staruno::Type> aComponentTypes = OComponentHelper::getTypes();
-        staruno::Sequence<staruno::Type> aPropertyTypes = OPropertySetAggregationHelper::getTypes();
+                com::sun::star::uno::Sequence<com::sun::star::uno::Type> aComponentTypes = OComponentHelper::getTypes();
+                com::sun::star::uno::Sequence<com::sun::star::uno::Type> aPropertyTypes = OPropertySetAggregationHelper::getTypes();
 
-        staruno::Sequence<staruno::Type> aOwnTypes(4);
-        staruno::Type* pOwnTypes = aOwnTypes.getArray();
-        pOwnTypes[0] = getCppuType((staruno::Reference<starform::XFormComponent>*)NULL);
-        pOwnTypes[1] = getCppuType((staruno::Reference<stario::XPersistObject>*)NULL);
-        pOwnTypes[1] = getCppuType((staruno::Reference<starcontainer::XNamed>*)NULL);
-        pOwnTypes[3] = getCppuType((staruno::Reference<starlang::XServiceInfo>*)NULL);
+                com::sun::star::uno::Sequence<com::sun::star::uno::Type> aOwnTypes(4);
+                com::sun::star::uno::Type* pOwnTypes = aOwnTypes.getArray();
+                pOwnTypes[0] = getCppuType((com::sun::star::uno::Reference<starform::XFormComponent>*)NULL);
+                pOwnTypes[1] = getCppuType((com::sun::star::uno::Reference<stario::XPersistObject>*)NULL);
+                pOwnTypes[1] = getCppuType((com::sun::star::uno::Reference<starcontainer::XNamed>*)NULL);
+                pOwnTypes[3] = getCppuType((com::sun::star::uno::Reference<com::sun::star::lang::XServiceInfo>*)NULL);
 
         aTypes = concatSequences(aComponentTypes, aPropertyTypes, aOwnTypes);
     }
@@ -444,9 +444,9 @@ staruno::Sequence<staruno::Type> OControlModel::_getTypes()
 }
 
 //------------------------------------------------------------------
-staruno::Any SAL_CALL OControlModel::queryAggregation(const staruno::Type& _rType) throw (staruno::RuntimeException)
+com::sun::star::uno::Any SAL_CALL OControlModel::queryAggregation(const com::sun::star::uno::Type& _rType) throw (com::sun::star::uno::RuntimeException)
 {
-    staruno::Any aReturn;
+        com::sun::star::uno::Any aReturn;
 
     // base class 1
     aReturn = OComponentHelper::queryAggregation(_rType);
@@ -462,7 +462,7 @@ staruno::Any SAL_CALL OControlModel::queryAggregation(const staruno::Type& _rTyp
             ,static_cast<starcontainer::XChild*>(this)
             ,static_cast<stario::XPersistObject*>(this)
             ,static_cast<starcontainer::XNamed*>(this)
-            ,static_cast<starlang::XServiceInfo*>(this)
+                        ,static_cast<com::sun::star::lang::XServiceInfo*>(this)
         );
 
     // our aggregate
@@ -473,7 +473,7 @@ staruno::Any SAL_CALL OControlModel::queryAggregation(const staruno::Type& _rTyp
 
 //------------------------------------------------------------------
 OControlModel::OControlModel(
-            const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory,
+                        const com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory>& _rxFactory,
             const ::rtl::OUString& _rUnoControlModelTypeName,
             const ::rtl::OUString& rDefault)
     :OComponentHelper(m_aMutex)
@@ -491,16 +491,16 @@ OControlModel::OControlModel(
         // Muss im eigenen Block,
         // da xAgg vor dem delegator setzen wieder freigesetzt sein muﬂ!
         {
-            m_xAggregate = staruno::Reference<staruno::XAggregation>(_rxFactory->createInstance(_rUnoControlModelTypeName), staruno::UNO_QUERY);
+                        m_xAggregate = com::sun::star::uno::Reference<com::sun::star::uno::XAggregation>(_rxFactory->createInstance(_rUnoControlModelTypeName), com::sun::star::uno::UNO_QUERY);
             setAggregation(m_xAggregate);
 
             if (m_xAggregateSet.is() && rDefault.len())
-                m_xAggregateSet->setPropertyValue(PROPERTY_DEFAULTCONTROL, staruno::makeAny(rDefault));
+                                m_xAggregateSet->setPropertyValue(PROPERTY_DEFAULTCONTROL, com::sun::star::uno::makeAny(rDefault));
         }
 
         if (m_xAggregate.is())
         {
-            m_xAggregate->setDelegator(static_cast<staruno::XWeak*>(this));
+                        m_xAggregate->setDelegator(static_cast<com::sun::star::uno::XWeak*>(this));
         }
 
         // Refcount wieder bei NULL
@@ -519,23 +519,23 @@ OControlModel::~OControlModel()
 
 // XChild
 //------------------------------------------------------------------------------
-void SAL_CALL OControlModel::setParent(const InterfaceRef& _rxParent) throw(starlang::NoSupportException, staruno::RuntimeException)
+void SAL_CALL OControlModel::setParent(const InterfaceRef& _rxParent) throw(com::sun::star::lang::NoSupportException, com::sun::star::uno::RuntimeException)
 {
     osl::MutexGuard aGuard(m_aMutex);
 
-    staruno::Reference<starlang::XComponent> xComp(m_xParent, staruno::UNO_QUERY);
+        com::sun::star::uno::Reference<com::sun::star::lang::XComponent> xComp(m_xParent, com::sun::star::uno::UNO_QUERY);
     if (xComp.is())
-        xComp->removeEventListener(static_cast<starbeans::XPropertiesChangeListener*>(this));
+                xComp->removeEventListener(static_cast<com::sun::star::beans::XPropertiesChangeListener*>(this));
 
-    xComp = staruno::Reference<starlang::XComponent>(_rxParent, staruno::UNO_QUERY);
+        xComp = com::sun::star::uno::Reference<com::sun::star::lang::XComponent>(_rxParent, com::sun::star::uno::UNO_QUERY);
     if (xComp.is())
-        xComp->addEventListener(static_cast<starbeans::XPropertiesChangeListener*>(this));
+                xComp->addEventListener(static_cast<com::sun::star::beans::XPropertiesChangeListener*>(this));
     m_xParent = _rxParent;
 }
 
 // XNamed
 //------------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OControlModel::getName() throw(staruno::RuntimeException)
+::rtl::OUString SAL_CALL OControlModel::getName() throw(com::sun::star::uno::RuntimeException)
 {
     ::rtl::OUString aReturn;
     OPropertySetHelper::getFastPropertyValue(PROPERTY_ID_NAME) >>= aReturn;
@@ -543,16 +543,16 @@ void SAL_CALL OControlModel::setParent(const InterfaceRef& _rxParent) throw(star
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL OControlModel::setName(const ::rtl::OUString& _rName) throw(staruno::RuntimeException)
+void SAL_CALL OControlModel::setName(const ::rtl::OUString& _rName) throw(com::sun::star::uno::RuntimeException)
 {
-    setFastPropertyValue(PROPERTY_ID_NAME, staruno::makeAny(_rName));
+        setFastPropertyValue(PROPERTY_ID_NAME, com::sun::star::uno::makeAny(_rName));
 }
 
 // XServiceInfo
 //------------------------------------------------------------------------------
 sal_Bool SAL_CALL OControlModel::supportsService(const rtl::OUString& _rServiceName)
 {
-    staruno::Sequence<rtl::OUString> aSupported = getSupportedServiceNames();
+        com::sun::star::uno::Sequence<rtl::OUString> aSupported = getSupportedServiceNames();
     const rtl::OUString* pSupported = aSupported.getConstArray();
     for (sal_Int32 i=0; i<aSupported.getLength(); ++i, ++pSupported)
         if (pSupported->equals(_rServiceName))
@@ -561,12 +561,12 @@ sal_Bool SAL_CALL OControlModel::supportsService(const rtl::OUString& _rServiceN
 }
 
 //------------------------------------------------------------------------------
-staruno::Sequence<rtl::OUString> SAL_CALL OControlModel::getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException)
+com::sun::star::uno::Sequence<rtl::OUString> SAL_CALL OControlModel::getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException)
 {
-    staruno::Sequence<rtl::OUString> aSupported;
+        com::sun::star::uno::Sequence<rtl::OUString> aSupported;
 
     // ask our aggregate
-    staruno::Reference<starlang::XServiceInfo> xInfo;
+        com::sun::star::uno::Reference<com::sun::star::lang::XServiceInfo> xInfo;
     if (query_aggregation(m_xAggregate, xInfo))
         aSupported = xInfo->getSupportedServiceNames();
 
@@ -580,7 +580,7 @@ staruno::Sequence<rtl::OUString> SAL_CALL OControlModel::getSupportedServiceName
 
 // XEventListener
 //------------------------------------------------------------------------------
-void SAL_CALL OControlModel::disposing(const starlang::EventObject& _rSource) throw (staruno::RuntimeException)
+void SAL_CALL OControlModel::disposing(const com::sun::star::lang::EventObject& _rSource) throw (com::sun::star::uno::RuntimeException)
 {
     // release the parent
     if (_rSource.Source == m_xParent)
@@ -590,7 +590,7 @@ void SAL_CALL OControlModel::disposing(const starlang::EventObject& _rSource) th
     }
     else
     {
-        staruno::Reference<starlang::XEventListener> xEvtLst;
+                com::sun::star::uno::Reference<com::sun::star::lang::XEventListener> xEvtLst;
         if (query_aggregation(m_xAggregate, xEvtLst))
         {
             osl::MutexGuard aGuard(m_aMutex);
@@ -605,27 +605,27 @@ void OControlModel::disposing()
 {
     OPropertySetAggregationHelper::disposing();
 
-    staruno::Reference<starlang::XComponent> xComp;
+        com::sun::star::uno::Reference<com::sun::star::lang::XComponent> xComp;
     if (query_aggregation(m_xAggregate, xComp))
         xComp->dispose();
 
-    setParent(staruno::Reference<starform::XFormComponent>());
+        setParent(com::sun::star::uno::Reference<starform::XFormComponent>());
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL OControlModel::write(const staruno::Reference<stario::XObjectOutputStream>& _rxOutStream)
-            throw(stario::IOException, staruno::RuntimeException)
+void SAL_CALL OControlModel::write(const com::sun::star::uno::Reference<stario::XObjectOutputStream>& _rxOutStream)
+                        throw(stario::IOException, com::sun::star::uno::RuntimeException)
 {
     osl::MutexGuard aGuard(m_aMutex);
 
     // 1. Schreiben des UnoControls
-    staruno::Reference<stario::XMarkableStream> xMark(_rxOutStream, staruno::UNO_QUERY);
+        com::sun::star::uno::Reference<stario::XMarkableStream> xMark(_rxOutStream, com::sun::star::uno::UNO_QUERY);
     sal_Int32 nMark = xMark->createMark();
     sal_Int32 nLen = 0;
 
     _rxOutStream->writeLong(nLen);
 
-    staruno::Reference<stario::XPersistObject> xPersist;
+        com::sun::star::uno::Reference<stario::XPersistObject> xPersist;
     if (query_aggregation(m_xAggregate, xPersist))
         xPersist->write(_rxOutStream);
 
@@ -653,7 +653,7 @@ void SAL_CALL OControlModel::write(const staruno::Reference<stario::XObjectOutpu
 }
 
 //------------------------------------------------------------------------------
-void OControlModel::read(const staruno::Reference<stario::XObjectInputStream>& InStream) throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
+void OControlModel::read(const com::sun::star::uno::Reference<stario::XObjectInputStream>& InStream) throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
 {
     osl::MutexGuard aGuard(m_aMutex);
 
@@ -661,10 +661,10 @@ void OControlModel::read(const staruno::Reference<stario::XObjectInputStream>& I
     sal_Int32 nLen = InStream->readLong();
     if (nLen)
     {
-        staruno::Reference<stario::XMarkableStream> xMark(InStream, staruno::UNO_QUERY);
+                com::sun::star::uno::Reference<stario::XMarkableStream> xMark(InStream, com::sun::star::uno::UNO_QUERY);
         sal_Int32 nMark = xMark->createMark();
 
-        staruno::Reference<stario::XPersistObject> xPersist;
+                com::sun::star::uno::Reference<stario::XPersistObject> xPersist;
         if (query_aggregation(m_xAggregate, xPersist))
             xPersist->read(InStream);
 
@@ -693,7 +693,7 @@ void OControlModel::read(const staruno::Reference<stario::XObjectInputStream>& I
 }
 
 //------------------------------------------------------------------------------
-void OControlModel::getFastPropertyValue( staruno::Any& rValue, sal_Int32 nHandle ) const
+void OControlModel::getFastPropertyValue( com::sun::star::uno::Any& rValue, sal_Int32 nHandle ) const
 {
     switch (nHandle)
     {
@@ -719,8 +719,8 @@ void OControlModel::getFastPropertyValue( staruno::Any& rValue, sal_Int32 nHandl
 
 //------------------------------------------------------------------------------
 sal_Bool OControlModel::convertFastPropertyValue(
-            staruno::Any& _rConvertedValue, staruno::Any& _rOldValue, sal_Int32 _nHandle, const staruno::Any& _rValue)
-            throw (starlang::IllegalArgumentException)
+                        com::sun::star::uno::Any& _rConvertedValue, com::sun::star::uno::Any& _rOldValue, sal_Int32 _nHandle, const com::sun::star::uno::Any& _rValue)
+                        throw (com::sun::star::lang::IllegalArgumentException)
 {
     sal_Bool bModified(sal_False);
     switch (_nHandle)
@@ -742,8 +742,8 @@ sal_Bool OControlModel::convertFastPropertyValue(
 }
 
 //------------------------------------------------------------------------------
-void OControlModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const staruno::Any& _rValue)
-            throw (staruno::Exception)
+void OControlModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const com::sun::star::uno::Any& _rValue)
+                        throw (com::sun::star::uno::Exception)
 {
     switch (_nHandle)
     {
@@ -775,17 +775,17 @@ void OControlModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const s
 //==================================================================
 DBG_NAME(frm_OBoundControlModel);
 //------------------------------------------------------------------
-staruno::Any SAL_CALL OBoundControlModel::queryAggregation( const staruno::Type& _rType ) throw (staruno::RuntimeException)
+com::sun::star::uno::Any SAL_CALL OBoundControlModel::queryAggregation( const com::sun::star::uno::Type& _rType ) throw (com::sun::star::uno::RuntimeException)
 {
-    staruno::Any aReturn;
+        com::sun::star::uno::Any aReturn;
 
     aReturn = OControlModel::queryAggregation(_rType);
     if (!aReturn.hasValue())
         aReturn = cppu::queryInterface(_rType
-            ,static_cast<starbeans::XPropertyChangeListener*>(this)
+                        ,static_cast<com::sun::star::beans::XPropertyChangeListener*>(this)
             ,static_cast<starform::XReset*>(this)
             ,static_cast<starform::XLoadListener*>(this)
-            ,static_cast<starlang::XEventListener*>(static_cast<starform::XLoadListener*>(this))
+                        ,static_cast<com::sun::star::lang::XEventListener*>(static_cast<starform::XLoadListener*>(this))
         );
 
     if (!aReturn.hasValue() && m_bCommitable)
@@ -799,7 +799,7 @@ staruno::Any SAL_CALL OBoundControlModel::queryAggregation( const staruno::Type&
 
 //------------------------------------------------------------------
 OBoundControlModel::OBoundControlModel(
-                const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory,
+                                const com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory>& _rxFactory,
                 const ::rtl::OUString& _rUnoControlModelTypeName,
                 const ::rtl::OUString& _rDefault,
                 sal_Bool _bCommitable)
@@ -823,18 +823,18 @@ OBoundControlModel::~OBoundControlModel()
 }
 
 //-----------------------------------------------------------------------------
-staruno::Sequence<staruno::Type> OBoundControlModel::_getTypes()
+com::sun::star::uno::Sequence<com::sun::star::uno::Type> OBoundControlModel::_getTypes()
 {
-    staruno::Sequence<staruno::Type> aReturn = OControlModel::_getTypes();
+        com::sun::star::uno::Sequence<com::sun::star::uno::Type> aReturn = OControlModel::_getTypes();
 
     sal_Int32 nBaseLen = aReturn.getLength();
     aReturn.realloc(nBaseLen + (m_bCommitable ? 4 : 3));
-    staruno::Type* pReturn = aReturn.getArray() + nBaseLen;
-    pReturn[0] = ::getCppuType((staruno::Reference<starform::XLoadListener>*)NULL);
-    pReturn[1] = ::getCppuType((staruno::Reference<starform::XReset>*)NULL);
-    pReturn[2] = ::getCppuType((staruno::Reference<starbeans::XPropertyChangeListener>*)NULL);
+        com::sun::star::uno::Type* pReturn = aReturn.getArray() + nBaseLen;
+        pReturn[0] = ::getCppuType((com::sun::star::uno::Reference<starform::XLoadListener>*)NULL);
+        pReturn[1] = ::getCppuType((com::sun::star::uno::Reference<starform::XReset>*)NULL);
+        pReturn[2] = ::getCppuType((com::sun::star::uno::Reference<com::sun::star::beans::XPropertyChangeListener>*)NULL);
     if (m_bCommitable)
-        pReturn[3] = ::getCppuType((staruno::Reference<starform::XBoundComponent>*)NULL);
+                pReturn[3] = ::getCppuType((com::sun::star::uno::Reference<starform::XBoundComponent>*)NULL);
 
     return aReturn;
 }
@@ -846,7 +846,7 @@ void OBoundControlModel::disposing()
     OControlModel::disposing();
 
     osl::MutexGuard aGuard(m_aMutex);
-    starlang::EventObject aEvt(static_cast<staruno::XWeak*>(this));
+        com::sun::star::lang::EventObject aEvt(static_cast<com::sun::star::uno::XWeak*>(this));
     m_aResetListeners.disposeAndClear(aEvt);
     m_aUpdateListeners.disposeAndClear(aEvt);
 
@@ -857,24 +857,24 @@ void OBoundControlModel::disposing()
     }
     m_xCursor = NULL;
 
-    staruno::Reference<starlang::XComponent> xComp(m_xLabelControl, staruno::UNO_QUERY);
+        com::sun::star::uno::Reference<com::sun::star::lang::XComponent> xComp(m_xLabelControl, com::sun::star::uno::UNO_QUERY);
     if (xComp.is())
-        xComp->removeEventListener(static_cast<starlang::XEventListener*>(static_cast<starbeans::XPropertyChangeListener*>(this)));
+                xComp->removeEventListener(static_cast<com::sun::star::lang::XEventListener*>(static_cast<com::sun::star::beans::XPropertyChangeListener*>(this)));
 }
 
 // XChild
 //------------------------------------------------------------------------------
-void SAL_CALL OBoundControlModel::setParent(const staruno::Reference<staruno::XInterface>& _rxParent) throw(starlang::NoSupportException, staruno::RuntimeException)
+void SAL_CALL OBoundControlModel::setParent(const com::sun::star::uno::Reference<com::sun::star::uno::XInterface>& _rxParent) throw(com::sun::star::lang::NoSupportException, com::sun::star::uno::RuntimeException)
 {
     osl::MutexGuard aGuard(m_aMutex);
 
     // log off old listeners
-    staruno::Reference<starform::XLoadable> xLoadable(m_xParent, staruno::UNO_QUERY);
+        com::sun::star::uno::Reference<starform::XLoadable> xLoadable(m_xParent, com::sun::star::uno::UNO_QUERY);
     if (xLoadable.is())
         xLoadable->removeLoadListener(this);
 
     // log on new listeners
-    xLoadable = staruno::Reference<starform::XLoadable>(_rxParent, staruno::UNO_QUERY);
+        xLoadable = com::sun::star::uno::Reference<starform::XLoadable>(_rxParent, com::sun::star::uno::UNO_QUERY);
     if (xLoadable.is())
         xLoadable->addLoadListener(this);
 
@@ -883,7 +883,7 @@ void SAL_CALL OBoundControlModel::setParent(const staruno::Reference<staruno::XI
 
 // XEventListener
 //------------------------------------------------------------------------------
-void SAL_CALL OBoundControlModel::disposing(const starlang::EventObject& _rEvent) throw (staruno::RuntimeException)
+void SAL_CALL OBoundControlModel::disposing(const com::sun::star::lang::EventObject& _rEvent) throw (com::sun::star::uno::RuntimeException)
 {
     osl::MutexGuard aGuard(m_aMutex);
     if (m_xField == _rEvent.Source)
@@ -892,12 +892,12 @@ void SAL_CALL OBoundControlModel::disposing(const starlang::EventObject& _rEvent
     }
     else if (m_xLabelControl == _rEvent.Source)
     {
-        staruno::Reference<starbeans::XPropertySet> xOldValue = m_xLabelControl;
+                com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> xOldValue = m_xLabelControl;
         m_xLabelControl = NULL;
 
         // fire a property change event
-        staruno::Any aOldValue; aOldValue <<= xOldValue;
-        staruno::Any aNewValue; aNewValue <<= m_xLabelControl;
+                com::sun::star::uno::Any aOldValue; aOldValue <<= xOldValue;
+                com::sun::star::uno::Any aNewValue; aNewValue <<= m_xLabelControl;
         sal_Int32 nHandle = PROPERTY_ID_CONTROLLABEL;
         OPropertySetHelper::fire(&nHandle, &aNewValue, &aOldValue, 1, sal_False);
     }
@@ -907,7 +907,7 @@ void SAL_CALL OBoundControlModel::disposing(const starlang::EventObject& _rEvent
 
 // XServiceInfo
 //------------------------------------------------------------------------------
-StringSequence SAL_CALL OBoundControlModel::getSupportedServiceNames() throw(staruno::RuntimeException)
+StringSequence SAL_CALL OBoundControlModel::getSupportedServiceNames() throw(com::sun::star::uno::RuntimeException)
 {
     StringSequence aSupported = OControlModel::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 1);
@@ -920,7 +920,7 @@ StringSequence SAL_CALL OBoundControlModel::getSupportedServiceNames() throw(sta
 
 // XPersist
 //------------------------------------------------------------------------------
-void SAL_CALL OBoundControlModel::write( const staruno::Reference<stario::XObjectOutputStream>& _rxOutStream ) throw(stario::IOException, staruno::RuntimeException)
+void SAL_CALL OBoundControlModel::write( const com::sun::star::uno::Reference<stario::XObjectOutputStream>& _rxOutStream ) throw(stario::IOException, com::sun::star::uno::RuntimeException)
 {
     OControlModel::write(_rxOutStream);
 
@@ -945,31 +945,31 @@ void SAL_CALL OBoundControlModel::write( const staruno::Reference<stario::XObjec
 //------------------------------------------------------------------------------
 void OBoundControlModel::defaultCommonProperties()
 {
-    staruno::Reference<starlang::XComponent> xComp(m_xLabelControl, staruno::UNO_QUERY);
+        com::sun::star::uno::Reference<com::sun::star::lang::XComponent> xComp(m_xLabelControl, com::sun::star::uno::UNO_QUERY);
     if (xComp.is())
-        xComp->removeEventListener(static_cast<starlang::XEventListener*>(static_cast<starbeans::XPropertyChangeListener*>(this)));
+                xComp->removeEventListener(static_cast<com::sun::star::lang::XEventListener*>(static_cast<com::sun::star::beans::XPropertyChangeListener*>(this)));
     m_xLabelControl = NULL;
 }
 
 //------------------------------------------------------------------------------
-void OBoundControlModel::readCommonProperties(const staruno::Reference<stario::XObjectInputStream>& _rxInStream)
+void OBoundControlModel::readCommonProperties(const com::sun::star::uno::Reference<stario::XObjectInputStream>& _rxInStream)
 {
     sal_Int32 nLen = _rxInStream->readLong();
 
-    staruno::Reference<stario::XMarkableStream> xMark(_rxInStream, staruno::UNO_QUERY);
+        com::sun::star::uno::Reference<stario::XMarkableStream> xMark(_rxInStream, com::sun::star::uno::UNO_QUERY);
     DBG_ASSERT(xMark.is(), "OBoundControlModel::readCommonProperties : can only work with markable streams !");
     sal_Int32 nMark = xMark->createMark();
 
     // read the reference to the label control
-    staruno::Reference<stario::XPersistObject> xPersist;
+        com::sun::star::uno::Reference<stario::XPersistObject> xPersist;
     sal_Int32 nUsedFlag;
     nUsedFlag = _rxInStream->readLong();
     if (nUsedFlag)
         xPersist = _rxInStream->readObject();
-    m_xLabelControl = staruno::Reference<starbeans::XPropertySet>(xPersist, staruno::UNO_QUERY);
-    staruno::Reference<starlang::XComponent> xComp(m_xLabelControl, staruno::UNO_QUERY);
+        m_xLabelControl = com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>(xPersist, com::sun::star::uno::UNO_QUERY);
+        com::sun::star::uno::Reference<com::sun::star::lang::XComponent> xComp(m_xLabelControl, com::sun::star::uno::UNO_QUERY);
     if (xComp.is())
-        xComp->addEventListener(static_cast<starlang::XEventListener*>(static_cast<starbeans::XPropertyChangeListener*>(this)));
+                xComp->addEventListener(static_cast<com::sun::star::lang::XEventListener*>(static_cast<com::sun::star::beans::XPropertyChangeListener*>(this)));
 
     // read any other new common properties here
 
@@ -980,9 +980,9 @@ void OBoundControlModel::readCommonProperties(const staruno::Reference<stario::X
 }
 
 //------------------------------------------------------------------------------
-void OBoundControlModel::writeCommonProperties(const staruno::Reference<stario::XObjectOutputStream>& _rxOutStream)
+void OBoundControlModel::writeCommonProperties(const com::sun::star::uno::Reference<stario::XObjectOutputStream>& _rxOutStream)
 {
-    staruno::Reference<stario::XMarkableStream> xMark(_rxOutStream, staruno::UNO_QUERY);
+        com::sun::star::uno::Reference<stario::XMarkableStream> xMark(_rxOutStream, com::sun::star::uno::UNO_QUERY);
     DBG_ASSERT(xMark.is(), "OBoundControlModel::writeCommonProperties : can only work with markable streams !");
     sal_Int32 nMark = xMark->createMark();
 
@@ -991,7 +991,7 @@ void OBoundControlModel::writeCommonProperties(const staruno::Reference<stario::
     _rxOutStream->writeLong(nLen);
 
     // write the reference to the label control
-    staruno::Reference<stario::XPersistObject> xPersist(m_xLabelControl, staruno::UNO_QUERY);
+        com::sun::star::uno::Reference<stario::XPersistObject> xPersist(m_xLabelControl, com::sun::star::uno::UNO_QUERY);
     sal_Int32 nUsedFlag = 0;
     if (xPersist.is())
         nUsedFlag = 1;
@@ -1010,7 +1010,7 @@ void OBoundControlModel::writeCommonProperties(const staruno::Reference<stario::
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL OBoundControlModel::read( const staruno::Reference< stario::XObjectInputStream >& _rxInStream ) throw(stario::IOException, staruno::RuntimeException)
+void SAL_CALL OBoundControlModel::read( const com::sun::star::uno::Reference< stario::XObjectInputStream >& _rxInStream ) throw(stario::IOException, com::sun::star::uno::RuntimeException)
 {
     OControlModel::read(_rxInStream);
 
@@ -1020,7 +1020,7 @@ void SAL_CALL OBoundControlModel::read( const staruno::Reference< stario::XObjec
 }
 
 //------------------------------------------------------------------------------
-void OBoundControlModel::getFastPropertyValue(staruno::Any& rValue, sal_Int32 nHandle) const
+void OBoundControlModel::getFastPropertyValue(com::sun::star::uno::Any& rValue, sal_Int32 nHandle) const
 {
     switch (nHandle)
     {
@@ -1046,10 +1046,10 @@ void OBoundControlModel::getFastPropertyValue(staruno::Any& rValue, sal_Int32 nH
 
 //------------------------------------------------------------------------------
 sal_Bool OBoundControlModel::convertFastPropertyValue(
-                staruno::Any& _rConvertedValue, staruno::Any& _rOldValue,
+                                com::sun::star::uno::Any& _rConvertedValue, com::sun::star::uno::Any& _rOldValue,
                 sal_Int32 _nHandle,
-                const staruno::Any& _rValue)
-        throw (starlang::IllegalArgumentException)
+                                const com::sun::star::uno::Any& _rValue)
+                throw (com::sun::star::lang::IllegalArgumentException)
 {
     sal_Bool bModified(sal_False);
     switch (_nHandle)
@@ -1063,7 +1063,7 @@ sal_Bool OBoundControlModel::convertFastPropertyValue(
         case PROPERTY_ID_CONTROLLABEL:
             if (!_rValue.hasValue())
             {   // property set to void
-                _rConvertedValue = staruno::Any();
+                                _rConvertedValue = com::sun::star::uno::Any();
                 getFastPropertyValue(_rOldValue, _nHandle);
                 bModified = m_xLabelControl.is();
             }
@@ -1077,81 +1077,81 @@ sal_Bool OBoundControlModel::convertFastPropertyValue(
 }
 
 //------------------------------------------------------------------------------
-void OBoundControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const staruno::Any& rValue ) throw (com::sun::star::uno::Exception)
+void OBoundControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const com::sun::star::uno::Any& rValue ) throw (com::sun::star::uno::Exception)
 {
     switch (nHandle)
     {
         case PROPERTY_ID_CONTROLSOURCE:
-            DBG_ASSERT(rValue.getValueType().getTypeClass() == staruno::TypeClass_STRING, "invalid type" );
+                        DBG_ASSERT(rValue.getValueType().getTypeClass() == com::sun::star::uno::TypeClass_STRING, "invalid type" );
             rValue >>= m_aControlSource;
             break;
         case PROPERTY_ID_BOUNDFIELD:
             DBG_ERROR("OBoundControlModel::setFastPropertyValue_NoBroadcast : BoundField should be a read-only property !");
-            throw starlang::IllegalArgumentException();
+                        throw com::sun::star::lang::IllegalArgumentException();
             break;
         case PROPERTY_ID_CONTROLLABEL:
         {
-            DBG_ASSERT(!rValue.hasValue() || (rValue.getValueType().getTypeClass() == staruno::TypeClass_INTERFACE),
+                        DBG_ASSERT(!rValue.hasValue() || (rValue.getValueType().getTypeClass() == com::sun::star::uno::TypeClass_INTERFACE),
                 "OBoundControlModel::setFastPropertyValue_NoBroadcast : invalid argument !");
             if (!rValue.hasValue())
             {   // set property to "void"
-                staruno::Reference<starlang::XComponent> xComp(m_xLabelControl, staruno::UNO_QUERY);
+                                com::sun::star::uno::Reference<com::sun::star::lang::XComponent> xComp(m_xLabelControl, com::sun::star::uno::UNO_QUERY);
                 if (xComp.is())
-                    xComp->removeEventListener(static_cast<starlang::XEventListener*>(static_cast<starbeans::XPropertyChangeListener*>(this)));
+                                        xComp->removeEventListener(static_cast<com::sun::star::lang::XEventListener*>(static_cast<com::sun::star::beans::XPropertyChangeListener*>(this)));
                 m_xLabelControl = NULL;
                 break;
             }
 
             InterfaceRef xNewValue = *(InterfaceRef*)rValue.getValue();
 
-            staruno::Reference<starawt::XControlModel> xAsModel(xNewValue, staruno::UNO_QUERY);
-            staruno::Reference<starlang::XServiceInfo> xAsServiceInfo(xNewValue, staruno::UNO_QUERY);
-            staruno::Reference<starbeans::XPropertySet> xAsPropSet(xNewValue, staruno::UNO_QUERY);
-            staruno::Reference<starcontainer::XChild> xAsChild(xNewValue, staruno::UNO_QUERY);
+                        com::sun::star::uno::Reference<starawt::XControlModel> xAsModel(xNewValue, com::sun::star::uno::UNO_QUERY);
+                        com::sun::star::uno::Reference<com::sun::star::lang::XServiceInfo> xAsServiceInfo(xNewValue, com::sun::star::uno::UNO_QUERY);
+                        com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> xAsPropSet(xNewValue, com::sun::star::uno::UNO_QUERY);
+                        com::sun::star::uno::Reference<starcontainer::XChild> xAsChild(xNewValue, com::sun::star::uno::UNO_QUERY);
             if (!xAsModel.is() || !xAsServiceInfo.is() || !xAsPropSet.is() || !xAsChild.is())
             {
-                throw starlang::IllegalArgumentException();
+                                throw com::sun::star::lang::IllegalArgumentException();
             }
 
             if (!xAsServiceInfo->supportsService(m_aLabelServiceName))
             {
-                throw starlang::IllegalArgumentException();
+                                throw com::sun::star::lang::IllegalArgumentException();
             }
 
             // check if weself and the given model have a common anchestor (up to the forms collection)
-            staruno::Reference<starcontainer::XChild> xCont;
-            query_interface(static_cast<staruno::XWeak*>(this), xCont);
+                        com::sun::star::uno::Reference<starcontainer::XChild> xCont;
+                        query_interface(static_cast<com::sun::star::uno::XWeak*>(this), xCont);
             InterfaceRef xMyTopLevel = xCont->getParent();
             while (xMyTopLevel.is())
             {
-                staruno::Reference<starform::XForm> xAsForm(xMyTopLevel, staruno::UNO_QUERY);
+                                com::sun::star::uno::Reference<starform::XForm> xAsForm(xMyTopLevel, com::sun::star::uno::UNO_QUERY);
                 if (!xAsForm.is())
                     // found my root
                     break;
 
-                staruno::Reference<starcontainer::XChild> xAsChild(xMyTopLevel, staruno::UNO_QUERY);
+                                com::sun::star::uno::Reference<starcontainer::XChild> xAsChild(xMyTopLevel, com::sun::star::uno::UNO_QUERY);
                 xMyTopLevel = xAsChild.is() ? xAsChild->getParent() : InterfaceRef();
             }
             InterfaceRef xNewTopLevel = xAsChild->getParent();
             while (xNewTopLevel.is())
             {
-                staruno::Reference<starform::XForm> xAsForm(xNewTopLevel, staruno::UNO_QUERY);
+                                com::sun::star::uno::Reference<starform::XForm> xAsForm(xNewTopLevel, com::sun::star::uno::UNO_QUERY);
                 if (!xAsForm.is())
                     break;
 
-                staruno::Reference<starcontainer::XChild> xAsChild(xNewTopLevel, staruno::UNO_QUERY);
+                                com::sun::star::uno::Reference<starcontainer::XChild> xAsChild(xNewTopLevel, com::sun::star::uno::UNO_QUERY);
                 xNewTopLevel = xAsChild.is() ? xAsChild->getParent() : InterfaceRef();
             }
             if (xNewTopLevel != xMyTopLevel)
             {
                 // the both objects don't belong to the same forms collection -> not acceptable
-                throw starlang::IllegalArgumentException();
+                                throw com::sun::star::lang::IllegalArgumentException();
             }
 
             m_xLabelControl = xAsPropSet;
-            staruno::Reference<starlang::XComponent> xComp(m_xLabelControl, staruno::UNO_QUERY);
+                        com::sun::star::uno::Reference<com::sun::star::lang::XComponent> xComp(m_xLabelControl, com::sun::star::uno::UNO_QUERY);
             if (xComp.is())
-                xComp->addEventListener(static_cast<starlang::XEventListener*>(static_cast<starbeans::XPropertyChangeListener*>(this)));
+                                xComp->addEventListener(static_cast<com::sun::star::lang::XEventListener*>(static_cast<com::sun::star::beans::XPropertyChangeListener*>(this)));
         }
         break;
         default:
@@ -1161,7 +1161,7 @@ void OBoundControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, co
 
 // XPropertyChangeListener
 //------------------------------------------------------------------------------
-void SAL_CALL OBoundControlModel::propertyChange( const starbeans::PropertyChangeEvent& evt ) throw(staruno::RuntimeException)
+void SAL_CALL OBoundControlModel::propertyChange( const com::sun::star::beans::PropertyChangeEvent& evt ) throw(com::sun::star::uno::RuntimeException)
 {
     // Bei Wertaenderung neu initialisieren
     if (evt.PropertyName.equals(PROPERTY_VALUE))
@@ -1174,19 +1174,19 @@ void SAL_CALL OBoundControlModel::propertyChange( const starbeans::PropertyChang
 
 // XBoundComponent
 //------------------------------------------------------------------------------
-void SAL_CALL OBoundControlModel::addUpdateListener(const staruno::Reference<starform::XUpdateListener>& _rxListener) throw(staruno::RuntimeException)
+void SAL_CALL OBoundControlModel::addUpdateListener(const com::sun::star::uno::Reference<starform::XUpdateListener>& _rxListener) throw(com::sun::star::uno::RuntimeException)
 {
     m_aUpdateListeners.addInterface(_rxListener);
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL OBoundControlModel::removeUpdateListener(const staruno::Reference< starform::XUpdateListener>& _rxListener) throw(staruno::RuntimeException)
+void SAL_CALL OBoundControlModel::removeUpdateListener(const com::sun::star::uno::Reference< starform::XUpdateListener>& _rxListener) throw(com::sun::star::uno::RuntimeException)
 {
     m_aUpdateListeners.removeInterface(_rxListener);
 }
 
 //------------------------------------------------------------------------------
-sal_Bool SAL_CALL OBoundControlModel::commit() throw(staruno::RuntimeException)
+sal_Bool SAL_CALL OBoundControlModel::commit() throw(com::sun::star::uno::RuntimeException)
 {
     DBG_ASSERT(m_bCommitable, "OBoundControlModel::commit : invalid call (I'm not commitable !) ");
     {
@@ -1196,8 +1196,8 @@ sal_Bool SAL_CALL OBoundControlModel::commit() throw(staruno::RuntimeException)
     }
 
     cppu::OInterfaceIteratorHelper aIter(m_aUpdateListeners);
-    starlang::EventObject aEvt;
-    aEvt.Source = static_cast<staruno::XWeak*>(this);
+        com::sun::star::lang::EventObject aEvt;
+        aEvt.Source = static_cast<com::sun::star::uno::XWeak*>(this);
     sal_Bool bSucceed = sal_True;
     while (aIter.hasMoreElements() && bSucceed)
         bSucceed = ((starform::XUpdateListener*)aIter.next())->approveUpdate(aEvt);
@@ -1226,26 +1226,26 @@ sal_Bool SAL_CALL OBoundControlModel::commit() throw(staruno::RuntimeException)
 }
 
 //------------------------------------------------------------------------------
-sal_Bool OBoundControlModel::connectToField(const staruno::Reference<starsdbc::XRowSet>& rForm)
+sal_Bool OBoundControlModel::connectToField(const com::sun::star::uno::Reference<starsdbc::XRowSet>& rForm)
 {
     // wenn eine Verbindung zur Datenbank existiert
     if (rForm.is() && getConnection(rForm).is())
     {
         // Feld bestimmen und PropertyChangeListener
         m_xCursor = rForm;
-        staruno::Reference<starbeans::XPropertySet> xFieldCandidate;
+                com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> xFieldCandidate;
 
         if (m_xCursor.is())
         {
-            staruno::Reference<starsdbcx::XColumnsSupplier> xColumnsSupplier(m_xCursor, staruno::UNO_QUERY);
+                        com::sun::star::uno::Reference<starsdbcx::XColumnsSupplier> xColumnsSupplier(m_xCursor, com::sun::star::uno::UNO_QUERY);
             DBG_ASSERT(xColumnsSupplier.is(), "OBoundControlModel::connectToField : the row set should support the com::sun::star::sdb::ResultSet service !");
             if (xColumnsSupplier.is())
             {
-                staruno::Reference<starcontainer::XNameAccess> xColumns(xColumnsSupplier->getColumns(), staruno::UNO_QUERY);
+                                com::sun::star::uno::Reference<starcontainer::XNameAccess> xColumns(xColumnsSupplier->getColumns(), com::sun::star::uno::UNO_QUERY);
                 if (xColumns.is() && xColumns->hasByName(m_aControlSource))
                 {
-                    staruno::Any aElement(xColumns->getByName(m_aControlSource));
-                    DBG_ASSERT(xColumns->getElementType().equals(::getCppuType(reinterpret_cast<staruno::Reference<starbeans::XPropertySet>*>(NULL))),
+                                        com::sun::star::uno::Any aElement(xColumns->getByName(m_aControlSource));
+                                        DBG_ASSERT(xColumns->getElementType().equals(::getCppuType(reinterpret_cast<com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>*>(NULL))),
                         "OBoundControlModel::connectToField : the columns container should contain XPropertySets !");
                     // if this assertion fails we probably should do a queryInterface ....
                     aElement >>= xFieldCandidate;
@@ -1270,8 +1270,8 @@ sal_Bool OBoundControlModel::connectToField(const staruno::Reference<starsdbc::X
             {
                 // an wertaenderungen horchen
                 m_xField->addPropertyChangeListener(PROPERTY_VALUE, this);
-                m_xColumnUpdate = staruno::Reference<starsdb::XColumnUpdate>(m_xField, staruno::UNO_QUERY);
-                m_xColumn = staruno::Reference<starsdb::XColumn>(m_xField, staruno::UNO_QUERY);
+                                m_xColumnUpdate = com::sun::star::uno::Reference<starsdb::XColumnUpdate>(m_xField, com::sun::star::uno::UNO_QUERY);
+                                m_xColumn = com::sun::star::uno::Reference<starsdb::XColumn>(m_xField, com::sun::star::uno::UNO_QUERY);
                 INT32 nNullableFlag; m_xField->getPropertyValue(PROPERTY_ISNULLABLE) >>= nNullableFlag;
                 m_bRequired = (starsdbc::ColumnValue::NO_NULLS == nNullableFlag);
                     // we're optimistic : in case of ColumnValue_NULLABLE_UNKNOWN we assume nullability ....
@@ -1302,10 +1302,10 @@ sal_Bool OBoundControlModel::_approve(sal_Int32 _nColumnType)
 
 // XLoadListener
 //------------------------------------------------------------------------------
-void SAL_CALL OBoundControlModel::loaded(const starlang::EventObject& _rEvent) throw(staruno::RuntimeException)
+void SAL_CALL OBoundControlModel::loaded(const com::sun::star::lang::EventObject& _rEvent) throw(com::sun::star::uno::RuntimeException)
 {
     osl::MutexGuard aGuard(m_aMutex);
-    staruno::Reference<starsdbc::XRowSet> xForm(_rEvent.Source, staruno::UNO_QUERY);
+        com::sun::star::uno::Reference<starsdbc::XRowSet> xForm(_rEvent.Source, com::sun::star::uno::UNO_QUERY);
     connectToField(xForm);
 
     m_bLoaded = sal_True;
@@ -1317,19 +1317,19 @@ void SAL_CALL OBoundControlModel::loaded(const starlang::EventObject& _rEvent) t
 
 
 //------------------------------------------------------------------------------
-void SAL_CALL OBoundControlModel::unloaded( const starlang::EventObject& aEvent ) throw(staruno::RuntimeException)
+void SAL_CALL OBoundControlModel::unloaded( const com::sun::star::lang::EventObject& aEvent ) throw(com::sun::star::uno::RuntimeException)
 {
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL OBoundControlModel::reloading( const starlang::EventObject& aEvent ) throw(staruno::RuntimeException)
+void SAL_CALL OBoundControlModel::reloading( const com::sun::star::lang::EventObject& aEvent ) throw(com::sun::star::uno::RuntimeException)
 {
     osl::MutexGuard aGuard(m_aMutex);
     m_bForwardValueChanges = sal_False;
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL OBoundControlModel::unloading(const starlang::EventObject& aEvent) throw(staruno::RuntimeException)
+void SAL_CALL OBoundControlModel::unloading(const com::sun::star::lang::EventObject& aEvent) throw(com::sun::star::uno::RuntimeException)
 {
     osl::MutexGuard aGuard(m_aMutex);
     _unloaded();
@@ -1344,13 +1344,13 @@ void SAL_CALL OBoundControlModel::unloading(const starlang::EventObject& aEvent)
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL OBoundControlModel::reloaded(const starlang::EventObject& aEvent) throw(staruno::RuntimeException)
+void SAL_CALL OBoundControlModel::reloaded(const com::sun::star::lang::EventObject& aEvent) throw(com::sun::star::uno::RuntimeException)
 {
     osl::MutexGuard aGuard(m_aMutex);
     // did we lost the connection to the field because there was a new created?
     if (!m_xField.is())
     {
-        staruno::Reference<starsdbc::XRowSet> xForm(aEvent.Source, staruno::UNO_QUERY);
+                com::sun::star::uno::Reference<starsdbc::XRowSet> xForm(aEvent.Source, com::sun::star::uno::UNO_QUERY);
         connectToField(xForm);
     }
 
@@ -1362,7 +1362,7 @@ void SAL_CALL OBoundControlModel::reloaded(const starlang::EventObject& aEvent) 
 }
 
 //------------------------------------------------------------------------------
-void OBoundControlModel::_loaded(const starlang::EventObject& rEvent)
+void OBoundControlModel::_loaded(const com::sun::star::lang::EventObject& rEvent)
 {
 }
 
@@ -1378,13 +1378,13 @@ void OBoundControlModel::_reset()
 }
 
 //-----------------------------------------------------------------------------
-void OBoundControlModel::addResetListener(const staruno::Reference<starform::XResetListener>& l) throw (com::sun::star::uno::RuntimeException)
+void OBoundControlModel::addResetListener(const com::sun::star::uno::Reference<starform::XResetListener>& l) throw (com::sun::star::uno::RuntimeException)
 {
     m_aResetListeners.addInterface(l);
 }
 
 //-----------------------------------------------------------------------------
-void OBoundControlModel::removeResetListener(const staruno::Reference<starform::XResetListener>& l) throw (com::sun::star::uno::RuntimeException)
+void OBoundControlModel::removeResetListener(const com::sun::star::uno::Reference<starform::XResetListener>& l) throw (com::sun::star::uno::RuntimeException)
 {
     m_aResetListeners.removeInterface(l);
 }
@@ -1393,7 +1393,7 @@ void OBoundControlModel::removeResetListener(const staruno::Reference<starform::
 void OBoundControlModel::reset() throw (com::sun::star::uno::RuntimeException)
 {
     cppu::OInterfaceIteratorHelper aIter(m_aResetListeners);
-    starlang::EventObject aResetEvent(static_cast<staruno::XWeak*>(this));
+        com::sun::star::lang::EventObject aResetEvent(static_cast<com::sun::star::uno::XWeak*>(this));
     sal_Bool bContinue = sal_True;
     while (aIter.hasMoreElements() && bContinue)
         bContinue = reinterpret_cast<starform::XResetListener*>(aIter.next())->approveReset(aResetEvent);
@@ -1427,7 +1427,7 @@ void OBoundControlModel::reset() throw (com::sun::star::uno::RuntimeException)
 
         if (bIsNull)
         {
-            staruno::Reference<starbeans::XPropertySet> xSet(m_xCursor, staruno::UNO_QUERY);
+                        com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> xSet(m_xCursor, com::sun::star::uno::UNO_QUERY);
             sal_Bool bIsNewRecord = sal_False;
             if (xSet.is())
                 xSet->getPropertyValue(PROPERTY_ISNEW) >>= bIsNewRecord;

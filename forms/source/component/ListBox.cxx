@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ListBox.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-24 10:29:44 $
+ *  last change: $Author: obo $ $Date: 2000-10-24 13:02:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,7 +148,7 @@ namespace frm
 //==================================================================
 sal_Int32 OListBoxModel::nSelectHandle = -1;
 //------------------------------------------------------------------
-InterfaceRef SAL_CALL OListBoxModel_CreateInstance(const ::com::sun::star::uno::Reference<starlang::XMultiServiceFactory>& _rxFactory) throw (::com::sun::star::uno::RuntimeException)
+InterfaceRef SAL_CALL OListBoxModel_CreateInstance(const ::com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory>& _rxFactory) throw (::com::sun::star::uno::RuntimeException)
 {
     return *(new OListBoxModel(_rxFactory));
 }
@@ -175,7 +175,7 @@ InterfaceRef SAL_CALL OListBoxModel_CreateInstance(const ::com::sun::star::uno::
 
 DBG_NAME(OListBoxModel);
 //------------------------------------------------------------------
-OListBoxModel::OListBoxModel(const ::com::sun::star::uno::Reference<starlang::XMultiServiceFactory>& _rxFactory)
+OListBoxModel::OListBoxModel(const ::com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory>& _rxFactory)
     :OBoundControlModel(_rxFactory, VCL_CONTROLMODEL_LISTBOX, FRM_CONTROL_LISTBOX)
                                     // use the old control name for compytibility reasons
     ,m_aRefreshListeners(m_aMutex)
@@ -237,7 +237,7 @@ StringSequence SAL_CALL OListBoxModel::getSupportedServiceNames() throw(::com::s
 //------------------------------------------------------------------------------
 void OListBoxModel::disposing()
 {
-    starlang::EventObject aEvt(static_cast< ::com::sun::star::uno::XWeak*>(this));
+        com::sun::star::lang::EventObject aEvt(static_cast< ::com::sun::star::uno::XWeak*>(this));
     m_aRefreshListeners.disposeAndClear(aEvt);
     OBoundControlModel::disposing();
 }
@@ -270,7 +270,7 @@ void SAL_CALL OListBoxModel::refresh() throw(::com::sun::star::uno::RuntimeExcep
         }
     }
 
-    starlang::EventObject aEvt(static_cast< ::com::sun::star::uno::XWeak*>(this));
+        com::sun::star::lang::EventObject aEvt(static_cast< ::com::sun::star::uno::XWeak*>(this));
     NOTIFY_LISTENERS(m_aRefreshListeners, starutil::XRefreshListener, refreshed, aEvt);
 }
 
@@ -367,7 +367,7 @@ void OListBoxModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const :
 //------------------------------------------------------------------------------
 sal_Bool OListBoxModel::convertFastPropertyValue(
             ::com::sun::star::uno::Any& _rConvertedValue, ::com::sun::star::uno::Any& _rOldValue, sal_Int32 _nHandle, const ::com::sun::star::uno::Any& _rValue)
-            throw (starlang::IllegalArgumentException)
+                        throw (com::sun::star::lang::IllegalArgumentException)
 {
     sal_Bool bModified(sal_False);
     switch (_nHandle)
@@ -399,9 +399,9 @@ sal_Bool OListBoxModel::convertFastPropertyValue(
 }
 
 //------------------------------------------------------------------------------
-::com::sun::star::uno::Reference<starbeans::XPropertySetInfo> SAL_CALL OListBoxModel::getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException)
+::com::sun::star::uno::Reference<com::sun::star::beans::XPropertySetInfo> SAL_CALL OListBoxModel::getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::com::sun::star::uno::Reference<starbeans::XPropertySetInfo> xInfo( createPropertySetInfo( getInfoHelper() ) );
+        ::com::sun::star::uno::Reference<com::sun::star::beans::XPropertySetInfo> xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
 }
 
@@ -413,12 +413,12 @@ cppu::IPropertyArrayHelper& OListBoxModel::getInfoHelper()
 
 //------------------------------------------------------------------------------
 void OListBoxModel::fillProperties(
-        ::com::sun::star::uno::Sequence< starbeans::Property >& _rProps,
-        ::com::sun::star::uno::Sequence< starbeans::Property >& _rAggregateProps ) const
+                ::com::sun::star::uno::Sequence< com::sun::star::beans::Property >& _rProps,
+                ::com::sun::star::uno::Sequence< com::sun::star::beans::Property >& _rAggregateProps ) const
 {
     FRM_BEGIN_PROP_HELPER(14)
         // die SelectSequence-Property soll transient sein ....
-        ModifyPropertyAttributes(_rAggregateProps, PROPERTY_SELECT_SEQ, starbeans::PropertyAttribute::TRANSIENT, 0);
+                ModifyPropertyAttributes(_rAggregateProps, PROPERTY_SELECT_SEQ, com::sun::star::beans::PropertyAttribute::TRANSIENT, 0);
 
         DECL_PROP2(CLASSID,             sal_Int16,                      READONLY, TRANSIENT);
         DECL_PROP1(NAME,                ::rtl::OUString,                BOUND);
@@ -431,8 +431,8 @@ void OListBoxModel::fillProperties(
         DECL_PROP1(DEFAULT_SELECT_SEQ,  ::com::sun::star::uno::Sequence<sal_Int16>, BOUND);
         DECL_PROP1(CONTROLSOURCE,       ::rtl::OUString,                BOUND);
         DECL_PROP1(HELPTEXT,            ::rtl::OUString,                BOUND);
-        DECL_IFACE_PROP2(BOUNDFIELD,    starbeans::XPropertySet,        READONLY, TRANSIENT);
-        DECL_IFACE_PROP2(CONTROLLABEL,  starbeans::XPropertySet,        BOUND, MAYBEVOID);
+                DECL_IFACE_PROP2(BOUNDFIELD,    com::sun::star::beans::XPropertySet,                READONLY, TRANSIENT);
+                DECL_IFACE_PROP2(CONTROLLABEL,  com::sun::star::beans::XPropertySet,                BOUND, MAYBEVOID);
         DECL_PROP2(CONTROLSOURCEPROPERTY,   rtl::OUString,  READONLY, TRANSIENT);
     FRM_END_PROP_HELPER();
 }
@@ -588,7 +588,7 @@ void OListBoxModel::loadData()
         return;
 
     // we need a com::sun::star::sdb::Connection for some of the code below ...
-    ::com::sun::star::uno::Reference<starlang::XServiceInfo> xServiceInfo(xConnection, ::com::sun::star::uno::UNO_QUERY);
+        ::com::sun::star::uno::Reference<com::sun::star::lang::XServiceInfo> xServiceInfo(xConnection, ::com::sun::star::uno::UNO_QUERY);
     if (!xServiceInfo.is() || !xServiceInfo->supportsService(SRV_SDB_CONNECTION))
     {
         DBG_ERROR("OListBoxModel::loadData : invalid connection !");
@@ -633,7 +633,7 @@ void OListBoxModel::loadData()
                     if (xFieldsByIndex->getCount() <= nBoundColumn)
                         break;
 
-                    ::com::sun::star::uno::Reference<starbeans::XPropertySet> xFieldAsSet;
+                                        ::com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> xFieldAsSet;
                     xFieldsByIndex->getByIndex(nBoundColumn) >>= xFieldAsSet;
                     xFieldAsSet->getPropertyValue(PROPERTY_NAME) >>= aBoundFieldName;
                     nBoundColumn = 1;
@@ -655,7 +655,7 @@ void OListBoxModel::loadData()
                         ::com::sun::star::uno::Reference<starsdb::XSQLQueryComposer> xComposer = xFactory->createQueryComposer();
                         try
                         {
-                            ::com::sun::star::uno::Reference<starbeans::XPropertySet> xFormAsSet(xForm, ::com::sun::star::uno::UNO_QUERY);
+                                                        ::com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> xFormAsSet(xForm, ::com::sun::star::uno::UNO_QUERY);
                             ::rtl::OUString aStatement;
                             xFormAsSet->getPropertyValue(PROPERTY_ACTIVECOMMAND) >>= aStatement;
                             xComposer->setQuery(aStatement);
@@ -673,7 +673,7 @@ void OListBoxModel::loadData()
                         ::com::sun::star::uno::Reference<starcontainer::XNameAccess> xFieldNames = xSupplyFields->getColumns();
                         if (xFieldNames->hasByName(m_aControlSource))
                         {
-                            ::com::sun::star::uno::Reference<starbeans::XPropertySet> xComposerFieldAsSet;
+                                                        ::com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> xComposerFieldAsSet;
                             xFieldNames->getByName(m_aControlSource) >>= xComposerFieldAsSet;
                             if (hasProperty(PROPERTY_FIELDSOURCE, xComposerFieldAsSet))
                                 xComposerFieldAsSet->getPropertyValue(PROPERTY_FIELDSOURCE) >>= aFieldName;
@@ -705,9 +705,9 @@ void OListBoxModel::loadData()
             case starform::ListSourceType_QUERY:
             {
                 ::com::sun::star::uno::Reference<starsdb::XQueriesSupplier> xSupplyQueries(xConnection, ::com::sun::star::uno::UNO_QUERY);
-                ::com::sun::star::uno::Reference<starbeans::XPropertySet> xQuery(*(InterfaceRef*)xSupplyQueries->getQueries()->getByName(sListSource).getValue(), ::com::sun::star::uno::UNO_QUERY);
+                                ::com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> xQuery(*(InterfaceRef*)xSupplyQueries->getQueries()->getByName(sListSource).getValue(), ::com::sun::star::uno::UNO_QUERY);
                 ::com::sun::star::uno::Reference<starsdbc::XStatement> xStmt = xConnection->createStatement();
-                ::com::sun::star::uno::Reference<starbeans::XPropertySet>(xStmt, ::com::sun::star::uno::UNO_QUERY)->setPropertyValue(PROPERTY_ESCAPE_PROCESSING, xQuery->getPropertyValue(PROPERTY_ESCAPE_PROCESSING));
+                                ::com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>(xStmt, ::com::sun::star::uno::UNO_QUERY)->setPropertyValue(PROPERTY_ESCAPE_PROCESSING, xQuery->getPropertyValue(PROPERTY_ESCAPE_PROCESSING));
 
                 ::rtl::OUString sCommand;
                 xQuery->getPropertyValue(PROPERTY_COMMAND) >>= sCommand;
@@ -718,7 +718,7 @@ void OListBoxModel::loadData()
                 ::com::sun::star::uno::Reference<starsdbc::XStatement> xStmt = xConnection->createStatement();
                 if (starform::ListSourceType_SQLPASSTHROUGH == m_eListSourceType)
                 {
-                    ::com::sun::star::uno::Reference<starbeans::XPropertySet> xStatementProps(xStmt, ::com::sun::star::uno::UNO_QUERY);
+                                        ::com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> xStatementProps(xStmt, ::com::sun::star::uno::UNO_QUERY);
                     xStatementProps->setPropertyValue(PROPERTY_ESCAPE_PROCESSING, ::com::sun::star::uno::makeAny(sal_Bool(sal_False)));
                 }
                 xListCursor = xStmt->executeQuery(sListSource);
@@ -780,7 +780,7 @@ void OListBoxModel::loadData()
                 sal_Int16 nKeyType   = starutil::NumberFormat::UNDEFINED;
                 try
                 {
-                    ::com::sun::star::uno::Reference<starbeans::XPropertySet> xFieldAsSet(xDataField, ::com::sun::star::uno::UNO_QUERY);
+                                        ::com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> xFieldAsSet(xDataField, ::com::sun::star::uno::UNO_QUERY);
                     xFieldAsSet->getPropertyValue(PROPERTY_FIELDTYPE) >>= nFieldType;
                     xFieldAsSet->getPropertyValue(PROPERTY_FORMATKEY) >>= nFormatKey;
                 }
@@ -900,7 +900,7 @@ void OListBoxModel::loadData()
 }
 
 //------------------------------------------------------------------------------
-void OListBoxModel::_loaded(const starlang::EventObject& rEvent)
+void OListBoxModel::_loaded(const com::sun::star::lang::EventObject& rEvent)
 {
     // an Felder gebundene Listboxen haben keine Multiselektion
     if (m_xField.is())
@@ -1128,7 +1128,7 @@ void OListBoxModel::onError(starsdbc::SQLException& _rException, const ::rtl::OU
 //==================================================================
 
 //------------------------------------------------------------------
-InterfaceRef SAL_CALL OListBoxControl_CreateInstance(const ::com::sun::star::uno::Reference<starlang::XMultiServiceFactory>& _rxFactory) throw (::com::sun::star::uno::RuntimeException)
+InterfaceRef SAL_CALL OListBoxControl_CreateInstance(const ::com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory>& _rxFactory) throw (::com::sun::star::uno::RuntimeException)
 {
     return *(new OListBoxControl(_rxFactory));
 }
@@ -1169,7 +1169,7 @@ InterfaceRef SAL_CALL OListBoxControl_CreateInstance(const ::com::sun::star::uno
 
 DBG_NAME(OListBoxControl);
 //------------------------------------------------------------------------------
-OListBoxControl::OListBoxControl(const ::com::sun::star::uno::Reference<starlang::XMultiServiceFactory>& _rxFactory)
+OListBoxControl::OListBoxControl(const ::com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory>& _rxFactory)
                   :OBoundControl(_rxFactory, VCL_CONTROL_LISTBOX)
                   ,m_aChangeListeners(m_aMutex)
 {
@@ -1225,7 +1225,7 @@ void SAL_CALL OListBoxControl::focusGained(const starawt::FocusEvent& _rEvent) t
     ::osl::ClearableMutexGuard aGuard(m_aMutex);
     if (m_aChangeListeners.getLength()) // only if there are listeners
     {
-        ::com::sun::star::uno::Reference<starbeans::XPropertySet> xSet(getModel(), ::com::sun::star::uno::UNO_QUERY);
+                ::com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> xSet(getModel(), ::com::sun::star::uno::UNO_QUERY);
         if (xSet.is())
         {
             // memorize the current selection for posting the change event
@@ -1248,7 +1248,7 @@ void SAL_CALL OListBoxControl::itemStateChanged(const starawt::ItemEvent& _rEven
    ::osl::ClearableMutexGuard aGuard(m_aMutex);
    if (m_aChangeTimer.IsActive())
    {
-       ::com::sun::star::uno::Reference<starbeans::XPropertySet> xSet(getModel(), ::com::sun::star::uno::UNO_QUERY);
+           ::com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> xSet(getModel(), ::com::sun::star::uno::UNO_QUERY);
        m_aCurrentSelection = xSet->getPropertyValue(PROPERTY_SELECT_SEQ);
 
        m_aChangeTimer.Stop();
@@ -1258,7 +1258,7 @@ void SAL_CALL OListBoxControl::itemStateChanged(const starawt::ItemEvent& _rEven
    {
        if (m_aChangeListeners.getLength() && m_aCurrentSelection.hasValue())
        {
-            ::com::sun::star::uno::Reference<starbeans::XPropertySet> xSet(getModel(), ::com::sun::star::uno::UNO_QUERY);
+                        ::com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> xSet(getModel(), ::com::sun::star::uno::UNO_QUERY);
             if (xSet.is())
             {
                 // Has the selection been changed?
@@ -1293,7 +1293,7 @@ void SAL_CALL OListBoxControl::itemStateChanged(const starawt::ItemEvent& _rEven
 
 // XEventListener
 //------------------------------------------------------------------------------
-void SAL_CALL OListBoxControl::disposing(const starlang::EventObject& _rSource) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL OListBoxControl::disposing(const com::sun::star::lang::EventObject& _rSource) throw (::com::sun::star::uno::RuntimeException)
 {
     OBoundControl::disposing(_rSource);
 }
@@ -1318,7 +1318,7 @@ void OListBoxControl::disposing()
     if (m_aChangeTimer.IsActive())
         m_aChangeTimer.Stop();
 
-    starlang::EventObject aEvt(static_cast< ::com::sun::star::uno::XWeak*>(this));
+        com::sun::star::lang::EventObject aEvt(static_cast< ::com::sun::star::uno::XWeak*>(this));
     m_aChangeListeners.disposeAndClear(aEvt);
 
     OBoundControl::disposing();
@@ -1327,7 +1327,7 @@ void OListBoxControl::disposing()
 //------------------------------------------------------------------------------
 IMPL_LINK(OListBoxControl, OnTimeout, void*, EMPTYTAG)
 {
-    starlang::EventObject aEvt(static_cast< ::com::sun::star::uno::XWeak*>(this));
+        com::sun::star::lang::EventObject aEvt(static_cast< ::com::sun::star::uno::XWeak*>(this));
     NOTIFY_LISTENERS(m_aChangeListeners, starform::XChangeListener, changed, aEvt);
     return 1;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: property.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2000-10-24 11:09:03 $
+ *  last change: $Author: obo $ $Date: 2000-10-24 13:07:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,11 +202,11 @@ pProps[nPos++] = com::sun::star::beans::Property(PROPERTY_##varname, PROPERTY_ID
 
 //------------------------------------------------------------------------------
 #define DECL_PROP3(varname, type, attrib1, attrib2, attrib3)    \
-        DECL_PROP_IMPL(varname, type) starbeans::PropertyAttribute::attrib1 | starbeans::PropertyAttribute::attrib2 | starbeans::PropertyAttribute::attrib3)
+        DECL_PROP_IMPL(varname, type) com::sun::star::beans::PropertyAttribute::attrib1 | com::sun::star::beans::PropertyAttribute::attrib2 | com::sun::star::beans::PropertyAttribute::attrib3)
 
 //------------------------------------------------------------------------------
 #define DECL_PROP4(varname, type, attrib1, attrib2, attrib3, attrib4)   \
-        DECL_PROP_IMPL(varname, type) starbeans::PropertyAttribute::attrib1 | starbeans::PropertyAttribute::attrib2 | starbeans::PropertyAttribute::attrib3 | starbeans::PropertyAttribute::attrib4)
+        DECL_PROP_IMPL(varname, type) com::sun::star::beans::PropertyAttribute::attrib1 | com::sun::star::beans::PropertyAttribute::attrib2 | com::sun::star::beans::PropertyAttribute::attrib3 | com::sun::star::beans::PropertyAttribute::attrib4)
 
 // === some property types require special handling
 // === such as interfaces
