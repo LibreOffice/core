@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OfficeSettingsBeanInfo.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: toconnor $ $Date: 2002-11-13 17:44:38 $
+ *  last change: $Author: toconnor $ $Date: 2003-02-24 12:53:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,11 +62,17 @@
 package org.openoffice.netbeans.modules.office.options;
 
 import java.awt.Image;
+import java.awt.Component;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.ChangeEvent;
 import java.beans.*;
 
 import org.openide.ErrorManager;
 import org.openide.util.NbBundle;
 import org.openide.util.Utilities;
+
+import org.openoffice.idesupport.OfficeInstallation;
+import org.openoffice.netbeans.modules.office.wizard.SelectPathPanel;
 
 /** Description of {@link OfficeSettings}.
  *
@@ -99,6 +105,7 @@ public class OfficeSettingsBeanInfo extends SimpleBeanInfo {
                 OfficeSettingsBeanInfo.class, "PROP_OfficeDirectory"));
             props[0].setShortDescription(NbBundle.getMessage(
                 OfficeSettingsBeanInfo.class, "HINT_OfficeDirectory"));
+            props[0].setPropertyEditorClass(OfficeDirectoryEditor.class);
 
             props[1].setDisplayName(NbBundle.getMessage(
                 OfficeSettingsBeanInfo.class, "PROP_WarnBeforeDocDeploy"));
@@ -131,6 +138,40 @@ public class OfficeSettingsBeanInfo extends SimpleBeanInfo {
             return Utilities.loadImage("/org/openoffice/netbeans/modules/office/options/OfficeSettingsIcon.gif");
         } else {
             return Utilities.loadImage("/org/openoffice/netbeans/modules/office/options/OfficeSettingsIcon32.gif");
+        }
+    }
+
+    public static class OfficeDirectoryEditor extends PropertyEditorSupport
+        implements ChangeListener {
+
+        private SelectPathPanel panel;
+
+        public String getAsText () {
+            return ((OfficeInstallation)getValue()).getPath();
+        }
+
+        public void setAsText (String path) {
+            OfficeInstallation oi = new OfficeInstallation(path);
+
+            if (!oi.supportsFramework())
+                throw new IllegalArgumentException(path +
+                    " is not a valid Office install");
+            else
+                setValue (oi);
+        }
+
+        public Component getCustomEditor() {
+            panel = new SelectPathPanel();
+            panel.addChangeListener(this);
+            return panel.getComponent();
+        }
+
+        public boolean supportsCustomEditor() {
+            return true;
+        }
+
+        public void stateChanged(ChangeEvent evt) {
+            setValue(panel.getSelectedPath());
         }
     }
 }

@@ -15,6 +15,7 @@ import javax.swing.JFileChooser;
 import org.openide.util.NbBundle;
 import org.openoffice.idesupport.SVersionRCFile;
 import org.openoffice.idesupport.OfficeInstallation;
+import org.openoffice.netbeans.modules.office.options.OfficeSettings;
 
 /** A single panel for a wizard - the GUI portion.
  *
@@ -32,6 +33,7 @@ public class SelectPathVisualPanel extends javax.swing.JPanel {
     public SelectPathVisualPanel(SelectPathPanel panel) {
         this.panel = panel;
         initComponents();
+        OfficeInstallation orig = OfficeSettings.getDefault().getOfficeDirectory();
 
         try {
             Enumeration enum = SVersionRCFile.createInstance().getVersions();
@@ -43,6 +45,10 @@ public class SelectPathVisualPanel extends javax.swing.JPanel {
         }
         catch (IOException ioe) {
             installationsComboBox.addItem("<empty>");
+        }
+
+        if (orig != null) {
+            installationsComboBox.setSelectedItem(orig);
         }
 
         // Provide a name in the title bar.

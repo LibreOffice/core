@@ -64,9 +64,9 @@ public class SelectPathPanel implements WizardDescriptor.Panel /* .FinishPanel *
         // and uncomment the complicated stuff below.
     }
 
-    public final void addChangeListener(ChangeListener l) {}
-    public final void removeChangeListener(ChangeListener l) {}
-    /*
+    // public final void addChangeListener(ChangeListener l) {}
+    // public final void removeChangeListener(ChangeListener l) {}
+
     private final Set listeners = new HashSet(1); // Set<ChangeListener>
     public final void addChangeListener(ChangeListener l) {
         synchronized (listeners) {
@@ -88,12 +88,16 @@ public class SelectPathPanel implements WizardDescriptor.Panel /* .FinishPanel *
             ((ChangeListener)it.next()).stateChanged(ev);
         }
     }
-     */
 
     private OfficeInstallation office;
 
     public void setSelectedPath(OfficeInstallation oi) {
         this.office = oi;
+        fireChangeEvent();
+    }
+
+    public OfficeInstallation getSelectedPath() {
+        return office;
     }
 
     // You can use a settings object to keep track of state.
