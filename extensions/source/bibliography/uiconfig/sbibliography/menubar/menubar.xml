@@ -60,6 +60,11 @@
                     <menu:menuitem menu:id=".uno:MacroDialog" menu:helpid="5959" menu:label="" />
                 </menu:menupopup>
             </menu:menu>
+
+            <menu:menuseparator/>
+            <menu:menuitem menu:id="service:com.sun.star.deployment.ui.PackageManagerDialog"/>
+            <menu:menuseparator/>
+
             <menu:menuitem menu:id=".uno:OptionsTreeDialog" menu:helpid="31630" menu:label="" />
         </menu:menupopup>
     </menu:menu>
