@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: os $ $Date: 2001-05-10 08:41:58 $
+ *  last change: $Author: ama $ $Date: 2001-05-11 08:41:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,6 +224,7 @@ class SdrView;
 class SdrMarkList;
 class SwAuthEntry;
 class SwUnoCallBack;
+class SwLayoutCache;
 struct SwCallMouseEvent;
 struct SwDocStat;
 struct SwHash;
@@ -375,6 +376,8 @@ class SwDoc
 
     SwLayouter      *pLayouter;     // ::com::sun::star::frame::Controller for complex layout formatting
                                     // like footnote/endnote in sections
+    SwLayoutCache   *pLayoutCache;  // Layout cache to read and save with the
+                                    // document for a faster formatting
 
     SwUnoCallBack   *pUnoCallBack;
 
@@ -1812,6 +1815,10 @@ public:
     {
         if( bNew ) n8Dummy1 |= DUMMY_TAB_COMPAT; else n8Dummy1 &= ~DUMMY_TAB_COMPAT;
     }
+
+    void ReadLayoutCache( SvStream& rStream );
+    void WriteLayoutCache( SvStream& rStream );
+    SwLayoutCache* GetLayoutCache() const { return pLayoutCache; }
 
     void SetULongDummy1( sal_uInt32 n ) { n32Dummy1 = n; }
     void SetULongDummy2( sal_uInt32 n ) { n32Dummy2 = n; }

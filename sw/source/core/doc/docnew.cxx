@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnew.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2001-05-10 08:42:14 $
+ *  last change: $Author: ama $ $Date: 2001-05-11 08:40:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -294,6 +294,7 @@ SwDoc::SwDoc() :
     pUndos( new SwUndos( 0, 20 ) ),
     pExtInputRing( 0 ),
     pLayouter( 0 ),
+    pLayoutCache( 0 ),
     nLockExpFld( 0 ),
     pDocShell( 0 ),
     pDrawModel( 0 ),
