@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ReportWizard.java,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 15:04:03 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 16:05:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,7 @@ import com.sun.star.awt.AdjustmentEvent;
 import com.sun.star.awt.XActionListener;
 import com.sun.star.awt.XItemListener;
 import com.sun.star.awt.XMouseListener;
+import com.sun.star.awt.XFocusListener;
 import com.sun.star.awt.XTextComponent;
 import com.sun.star.awt.XAdjustmentListener;
 
@@ -269,6 +270,7 @@ public class ReportWizard {
     int iOldContentPos;
     int iOldLayoutPos;
     int ScrollBarValue;
+    int CurSortItemIndex;
     String[] OriginalList = new String[]{""};
     static XDesktop xDesktop;
     ReportDocument CurReportDocument;
@@ -357,7 +359,10 @@ public class ReportWizard {
         short DBIndex = xDBListBox.getSelectedItemPos();
         if (DBIndex > -1){
         CurReportDocument.CurDBMetaData.DataSourceName = CurReportDocument.CurDBMetaData.DataSourceNames[DBIndex];
-        bGetConnection = CurReportDocument.CurDBMetaData.getConnection(sMsgNoConnection, sMsgConnectionImpossible);
+        if (CurReportDocument.CurDBMetaData.bConnectionOvergiven != true)
+            bGetConnection = CurReportDocument.CurDBMetaData.getConnection(sMsgNoConnection, sMsgConnectionImpossible);
+        else
+            bGetConnection = true;
         bCommandIsSelected[0] = false;
         fillupCommandListBox(CurReportDocument.CurDBMetaData, false);
         }
@@ -435,6 +440,8 @@ public class ReportWizard {
         if (SelIndex > -1){
             SelIndex = SelIndex ;
             if (xTableListBox.getItem((short) SelIndex).equals(slstTablesDefaultText)== false){
+            if ((xTableListBox.getItem((short) 0).equals(slstTablesDefaultText) == true) && (SelIndex > 0))
+                SelIndex = SelIndex -1;
             if (bgetCommandType == true){
                 CurCommandType = CurDBMetaData.CommandTypes[SelIndex];
                 if (CurCommandType == com.sun.star.sdb.CommandType.QUERY){
@@ -490,6 +497,8 @@ public class ReportWizard {
             case SOTXTTITLE:
             String TitleName = xTitleTextBox.getText();
             CurReportDocument.updateReportTitle(xTitleTextBox);
+            break;
+            default:
             break;
         }
         }
@@ -550,7 +559,7 @@ public class ReportWizard {
             break;
 
         case SOTBLLST:
-                if (bCommandIsSelected[0] == true)
+                   if (bCommandIsSelected[0] == true)
             CurUNODialog.deletefirstListboxEntry("lstTables", slstTablesDefaultText, bCommandIsSelected);
             fillUpFieldsListbox(CurReportDocument.CurDBMetaData, true);
             bCommandIsSelected[0] = true;
@@ -573,6 +582,22 @@ public class ReportWizard {
             toggleRemoveGroupButton();
             break;
 
+        case SOFIRSTSORTLST:
+            enableNextSortListBox(0);
+            break;
+
+        case SOSECSORTLST:
+            enableNextSortListBox(1);
+            break;
+
+        case SOTHIRDSORTLST:
+            enableNextSortListBox(2);
+            break;
+
+        case SOFOURTHSORTLST:
+            enableNextSortListBox(3);
+            break;
+
         case SOCONTENTLST:
             iPos = xContentListBox.getSelectedItemPos();
             if (iPos != iOldContentPos){
@@ -589,21 +614,6 @@ public class ReportWizard {
             }
             break;
 
-        case SOFIRSTSORTLST:
-            enableNextSortListBox(0);
-            break;
-
-        case SOSECSORTLST:
-            enableNextSortListBox(1);
-            break;
-
-        case SOTHIRDSORTLST:
-            enableNextSortListBox(2);
-            break;
-
-        case SOFOURTHSORTLST:
-            enableNextSortListBox(3);
-            break;
         default:
             break;
         }
@@ -675,7 +685,7 @@ public class ReportWizard {
             break;
 
             case SOGROUPLST:
-            bGoOn = CurReportDocument.addGroupNametoDocument(xGroupListBox, xSelGroupListBox, GroupFieldVector, CurReportPaths.ReportPath);
+            CurReportDocument.addGroupNametoDocument(xGroupListBox, xSelGroupListBox, GroupFieldVector, CurReportPaths.ReportPath);
             break;
 
             case SOSELGROUPLST:
@@ -737,7 +747,7 @@ public class ReportWizard {
 
     public void gotoNextStep(){
     try{
-        boolean bSetTitle = true;
+        boolean bgoon = true;
         int PageCount = 6;
         int iPage = AnyConverter.toInt(Tools.getUNOPropertyValue(CurUNODialog.xDialogModel, "Step"));
         switch (iPage){
@@ -752,14 +762,17 @@ public class ReportWizard {
             updateFourthStep(CurReportDocument.CurDBMetaData);
             break;
         case SOSORTPAGE:
-            setupSortList();
+            bgoon = setupSortcriteria();
+            if (bgoon){
             CurReportDocument.CurDBMetaData.RecordFieldNames = CurReportDocument.CurDBMetaData.setRecordFieldNames();
             CurReportDocument.CurDBMetaData.combineSelectStatement(CurReportDocument.CurDBMetaData.MainCommandName);
             //TODO: A message box should pop up when a single sorting criteria has been selected more than once
             CurReportDocument.xTextDocument.lockControllers();
             CurReportDocument.setupRecordSection(CurReportPaths.ReportPath + "/cnt-default.stw");
             updateFifthStep();
+            }
             break;
+
         case SOTEMPLATEPAGE:
             CurUNODialog.assignPropertyToDialogControl("cmdGoOn", "Label", scmdReady);
             CurUNODialog.setFocus("optCreateReportTemplate");
@@ -783,7 +796,7 @@ public class ReportWizard {
             else{
                 bcreateLink = ((Short) CurUNODialog.getPropertyOfDialogControl("chkcreateLink", "State")).shortValue() == (short) 1;
             }
-            bSetTitle = false;
+            bgoon = false;
             bCloseDocument = false;
             CurUNODialog.xDialog.endExecute();
             }
@@ -798,7 +811,7 @@ public class ReportWizard {
             break;
         }
         CurReportDocument.unlockallControllers();
-        if (bSetTitle == true){
+        if (bgoon == true){
         if (iPage < PageCount){
             Tools.setUNOPropertyValues(CurUNODialog.xDialogModel, new String[]{"Step", "Title"}, new Object[]{ new Integer(iPage + 1), WizardTitle[iPage]});
             CurUNODialog.assignPropertyToDialogControl("lblDialogHeader", "Label", WizardHeaderText[iPage]);
@@ -860,7 +873,7 @@ public class ReportWizard {
     }}
 
 
-    public void setupSortList(){
+/*    public void setupSortList(){
     String CurFieldName;
     String CurFieldTitle;
     short iCurState;
@@ -879,76 +892,80 @@ public class ReportWizard {
         a +=1;
         }
     }
-    }
+    }*/
 
+
+    public int getMaxSortIndex(){
+        int LocMaxSortIndex = -1;
+        for (int i = 0; i < 4; i++){
+        if (xSortListBox[i].getSelectedItemPos() > 0)
+            LocMaxSortIndex += 1;
+        else
+            break;
+    }
+    return LocMaxSortIndex;
+    }
 
 
     public void enableNextSortListBox(int CurIndex){
     try{
-        boolean bupdateOldSortValue = true;
-        short iCurState = 0;
-        String CurFieldName;
-        String CurFieldTitle;
-        short NewItemPos = xSortListBox[CurIndex].getSelectedItemPos();
-        if (NewItemPos == bOldSortValues[CurIndex])
-        return;
-        MaxSortIndex = -1;
-        for (int i = 0; i < 4; i++){
-        if (xSortListBox[i].getSelectedItemPos() > 0)
-            MaxSortIndex += 1;
-        else
-            break;
-        }
-        CurReportDocument.CurDBMetaData.SortFieldNames = new String[MaxSortIndex+1][2];
-        short iNextItemPos;
-        boolean bDoEnable = (NewItemPos > 0);       // the first Item is for "undefined"
-        if (bDoEnable == true){
-        if (CurIndex > MaxSortIndex)
-            MaxSortIndex = CurIndex;
-        }
-        if (bDoEnable == false){
+    MaxSortIndex = getMaxSortIndex();
+    boolean bDoEnable = (xSortListBox[CurIndex].getSelectedItemPos() != 0);
+    if (!bDoEnable)
         disableListBoxesfromIndex(CurIndex);
-        }
-        else{
-        toggleSortListBox(CurIndex+1, true);
-
-        for (int i = 0; i <= MaxSortIndex; i++){
-            CurFieldTitle = xSortListBox[i].getSelectedItem();
-            CurFieldName = CurReportDocument.CurDBMetaData.getFieldName(CurFieldTitle);
-            if (Tools.FieldInTable(CurReportDocument.CurDBMetaData.SortFieldNames, CurFieldName) == -1){
-            CurReportDocument.CurDBMetaData.SortFieldNames[i][0] = CurFieldName;
-            }
-            else{
-            String NewFieldName = xSortListBox[i].getSelectedItem();
-            String sLocSortCriteriaisduplicate = Tools.replaceSubString(sSortCriteriaisduplicate, NewFieldName, "<FIELDNAME>");
-            UNODialogs.showMessageBox(xMSF, "WarningBox", com.sun.star.awt.VclWindowPeerAttribute.OK, sLocSortCriteriaisduplicate);
-            xSortListBox[CurIndex].selectItemPos(bOldSortValues[CurIndex], true);
-            if (bOldSortValues[CurIndex] == 0){
-                disableListBoxesfromIndex(CurIndex);
-                MaxSortIndex = CurIndex -1;
-            }
-            bupdateOldSortValue = false;
-            }
-        }
-        }
-        if (bupdateOldSortValue == true)
-        bOldSortValues[CurIndex] = NewItemPos;
+    else
+        toggleSortListBox(CurIndex + 1, true);
     }
     catch(Exception exception){
-        exception.printStackTrace(System.out);
+    exception.printStackTrace(System.out);
+    }}
+
+
+    public boolean setupSortcriteria(){
+    try{
+    short iCurState;
+    String CurFieldName;
+    String CurFieldTitle;
+    MaxSortIndex = getMaxSortIndex();
+    CurReportDocument.CurDBMetaData.SortFieldNames = new String[MaxSortIndex+1][2];
+    for (int i = 0; i <= MaxSortIndex; i++){
+        CurFieldTitle = xSortListBox[i].getSelectedItem();
+        CurFieldName = CurReportDocument.CurDBMetaData.getFieldName(CurFieldTitle);
+        if (Tools.FieldInTable(CurReportDocument.CurDBMetaData.SortFieldNames, CurFieldName) == -1){
+        CurReportDocument.CurDBMetaData.SortFieldNames[i][0] = CurFieldName;
+        iCurState = ((Short) CurUNODialog.getPropertyOfDialogControl("optAscend" + new Integer(i+1).toString(), "State")).shortValue();
+        CurReportDocument.CurDBMetaData.SortFieldNames[i][0] = CurFieldName;
+        if (iCurState == 1)
+            CurReportDocument.CurDBMetaData.SortFieldNames[i][1] = "ASC";
+        else
+            CurReportDocument.CurDBMetaData.SortFieldNames[i][1] = "DESC";
+        }
+        else{
+        String sLocSortCriteriaisduplicate = Tools.replaceSubString(sSortCriteriaisduplicate, CurFieldTitle, "<FIELDNAME>");
+        UNODialogs.showMessageBox(xMSF, "WarningBox", com.sun.star.awt.VclWindowPeerAttribute.OK, sLocSortCriteriaisduplicate);
+        xSortListBox[i].selectItemPos((short) 0, true);
+//      disableListBoxesfromIndex(i);
+        return false;
+        }
+    }
+    return true;
+    }
+    catch(Exception exception){
+    exception.printStackTrace(System.out);
+    return false;
     }}
 
 
     public void disableListBoxesfromIndex(int CurIndex){
-        if (CurIndex < MAXSORTCRITERIA){
+    if (CurIndex < MAXSORTCRITERIA){
         for (int i = CurIndex + 1; i <= MAXSORTCRITERIA; i++){
-            toggleSortListBox(i, (false));
-            if (i < MaxSortIndex)
-                xSortListBox[i+1].selectItemPos((short)0, true);
+        toggleSortListBox(i, (false));
+        if (i < MaxSortIndex)
+            xSortListBox[i+1].selectItemPos((short)0, true);
         }
+        CurReportDocument.CurUNODialog.setFocus("lblSort" + new Integer(CurIndex+1));
         MaxSortIndex = CurIndex-1;
-
-        }
+    }
     }
 
 
@@ -1284,11 +1301,12 @@ public class ReportWizard {
 
     public void fillFourthStep(){
     try{
-        boolean bDoEnable;
-        String HIDString;
-        int YPos = 40;
-        int BaseHelpID = 34345;
-        for (int i = 0; i<4; i++){
+    XWindow[] xListBoxWindow = new XWindow[4];
+    boolean bDoEnable;
+    String HIDString;
+    int YPos = 40;
+    int BaseHelpID = 34345;
+    for (int i = 0; i<4; i++){
         bDoEnable = (i < 2);
         CurUNODialog.insertControlModel("com.sun.star.awt.UnoControlFixedLineModel", "lblSort" + new Integer(i+1),
         new String[] {"Enabled", "Height", "Label", "Orientation", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
@@ -1310,10 +1328,10 @@ public class ReportWizard {
         new Object[] {new Boolean(bDoEnable), new Integer(10), HIDString, sSortDescend[i], new Integer(186), new Integer(YPos+24), new Short((short) 0), new Integer(SOSORTPAGE), new Short(CurTabIndex++), new String("DESC"), new Integer(65)});      //, new Short((short) (19+i*4))
         YPos = YPos + 36;
         BaseHelpID += 3;
-        }
+    }
     }
     catch(Exception exception){
-        exception.printStackTrace(System.out);
+    exception.printStackTrace(System.out);
     }}
 
 
@@ -1584,7 +1602,8 @@ public class ReportWizard {
 
         CurDBMetaData.DataSourceName = (String) Tools.getPropertyValuefromAny(CurPropertyValue, "DataSourceName");
         CurDBMetaData.DBConnection =  (com.sun.star.sdbc.XConnection) Tools.getPropertyValuefromAny(CurPropertyValue, "ActiveConnection", com.sun.star.sdbc.XConnection.class);
-        if (CurDBMetaData.DBConnection != null){
+        CurDBMetaData.bConnectionOvergiven = (CurDBMetaData.DBConnection != null);
+        if (CurDBMetaData.bConnectionOvergiven){
         XNameAccess xNameAccess = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, CurDBMetaData.xDatabaseContext);
         CurDBMetaData.DataSource = xNameAccess.getByName(CurDBMetaData.DataSourceName);
         CurDBMetaData.xComponent = (XComponent) UnoRuntime.queryInterface(XComponent.class, CurDBMetaData.DBConnection);
@@ -1636,9 +1655,14 @@ public class ReportWizard {
     try {
         XMultiServiceFactory xLocMSF = Tools.connect(ConnectStr);
         ReportWizard CurReportWizard = new ReportWizard();
+//      String MyOfficePath = Tools.getOfficePath(xLocMSF, "Template", "share");
+//      String URLPath = java.net.URLDecoder.decode(MyOfficePath,"UTF-8");
+//      Tools.addOfficePath(xLocMSF, "Template", Tools.converttoURLNotation("d:\trash bl abla"));
         if(xLocMSF != null)
         System.out.println("Connected to "+ ConnectStr);
         CurReportWizard.startReportWizard(xLocMSF, null);
+//  }
+//  catch(com.sun.star.wizards.common.Tools.NoValidPathException exception){
     }
     catch(Exception exception){
         exception.printStackTrace(System.out);
@@ -1739,15 +1763,16 @@ public class ReportWizard {
 
         public void run(){
         try{
-            if (CurReportDocument.CurDBMetaData.executeCommand(sMsgQueryCreationImpossible + (char) 13 + sMsgEndAutopilot)){
+            if (CurReportDocument.CurDBMetaData.executeCommand(sMsgQueryCreationImpossible + (char) 13 + sMsgEndAutopilot))
             CurDataimport.insertDatabaseDatatoReportDocument(xMSF);
-            }
             if (bcreateTemplate == false){
             boolean bDocisStored = Tools.storeDocument(xMSF, CurReportDocument.xComponent, StorePath, "StarOffice XML (Writer)",
             false, sMsgSavingImpossible + (char)13 + sMsgLinkCreationImpossible);
             if (bcreateLink && bDocisStored)
                 CurReportDocument.CurDBMetaData.createDBLink(CurReportDocument.CurDBMetaData.DataSource, StorePath);
             }
+        }
+        catch (Tools.InvalidQueryException queryexception){
         }
         catch (ThreadDeath td){
             System.out.println("could not stop thread");
