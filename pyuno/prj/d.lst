@@ -1,17 +1,20 @@
+mkdir: %_DEST%\bin%_EXT%\pyuno
+mkdir: %_DEST%\lib%_EXT%\pyuno
+
 ..\%__SRC%\lib\libpyuno.so %_DEST%\lib%_EXT%\libpyuno.so
 ..\%__SRC%\lib\libpyuno.dylib %_DEST%\lib%_EXT%\libpyuno.dylib
 ..\%__SRC%\lib\pyuno.so %_DEST%\lib%_EXT%\pyuno.so
 ..\%__SRC%\lib\pyuno.dylib %_DEST%\lib%_EXT%\pyuno.dylib
 ..\%__SRC%\lib\pythonloader.uno.so %_DEST%\lib%_EXT%\pythonloader.uno.so
 ..\%__SRC%\lib\pythonloader.uno.dylib %_DEST%\lib%_EXT%\pythonloader.uno.dylib
-..\%__SRC%\lib\unohelper.py %_DEST%\lib%_EXT%\unohelper.py
-..\%__SRC%\lib\pythonloader.py %_DEST%\lib%_EXT%\pythonloader.py
-..\%__SRC%\lib\uno.py %_DEST%\lib%_EXT%\uno.py
+..\%__SRC%\lib\unohelper.py %_DEST%\lib%_EXT%\pyuno\unohelper.py
+..\%__SRC%\lib\pythonloader.py %_DEST%\lib%_EXT%\pyuno\pythonloader.py
+..\%__SRC%\lib\uno.py %_DEST%\lib%_EXT%\pyuno\uno.py
 ..\%__SRC%\lib\pyuno_services.rdb %_DEST%\bin%_EXT%\pyuno_services.rdb
 
-..\%__SRC%\bin\unohelper.py %_DEST%\bin%_EXT%\unohelper.py
-..\%__SRC%\bin\pythonloader.py %_DEST%\bin%_EXT%\pythonloader.py
-..\%__SRC%\bin\uno.py %_DEST%\bin%_EXT%\uno.py
+..\%__SRC%\bin\unohelper.py %_DEST%\bin%_EXT%\pyuno\unohelper.py
+..\%__SRC%\bin\pythonloader.py %_DEST%\bin%_EXT%\pyuno\pythonloader.py
+..\%__SRC%\bin\uno.py %_DEST%\bin%_EXT%\pyuno\uno.py
 ..\%__SRC%\bin\pyuno_services.rdb %_DEST%\bin%_EXT%\pyuno_services.rdb
 ..\%__SRC%\bin\pyuno.dll %_DEST%\bin%_EXT%\pyuno.dll
 ..\%__SRC%\bin\pythonloader.uno.dll %_DEST%\bin%_EXT%\pythonloader.uno.dll
