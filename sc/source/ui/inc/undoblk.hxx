@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undoblk.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-27 08:47:00 $
+ *  last change: $Author: dr $ $Date: 2001-04-05 10:49:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -729,7 +729,8 @@ public:
                     ScUndoInsertAreaLink( ScDocShell* pShell,
                                           const String& rDoc,
                                           const String& rFlt, const String& rOpt,
-                                          const String& rArea, const ScRange& rDestRange );
+                                          const String& rArea, const ScRange& rDestRange,
+                                          ULONG nRefreshDelay );
     virtual         ~ScUndoInsertAreaLink();
 
     virtual void    Undo();
@@ -745,6 +746,7 @@ private:
     String          aOptions;
     String          aAreaName;
     ScRange         aRange;
+    ULONG           nRefreshDelay;
 };
 
 
@@ -755,7 +757,8 @@ public:
                     ScUndoRemoveAreaLink( ScDocShell* pShell,
                                           const String& rDoc,
                                           const String& rFlt, const String& rOpt,
-                                          const String& rArea, const ScRange& rDestRange );
+                                          const String& rArea, const ScRange& rDestRange,
+                                          ULONG nRefreshDelay );
     virtual         ~ScUndoRemoveAreaLink();
 
     virtual void    Undo();
@@ -771,6 +774,7 @@ private:
     String          aOptions;
     String          aAreaName;
     ScRange         aRange;
+    ULONG           nRefreshDelay;
 };
 
 
@@ -782,9 +786,11 @@ public:
                                           const String& rOldD,
                                           const String& rOldF, const String& rOldO,
                                           const String& rOldA, const ScRange& rOldR,
+                                          ULONG nOldRD,
                                           const String& rNewD,
                                           const String& rNewF, const String& rNewO,
                                           const String& rNewA, const ScRange& rNewR,
+                                          ULONG nNewRD,
                                           ScDocument* pUndo, ScDocument* pRedo,
                                           BOOL bDoInsert );
     virtual         ~ScUndoUpdateAreaLink();
@@ -809,6 +815,8 @@ private:
     ScRange         aNewRange;
     ScDocument*     pUndoDoc;
     ScDocument*     pRedoDoc;
+    ULONG           nOldRefresh;
+    ULONG           nNewRefresh;
     BOOL            bWithInsert;
 
     void            DoChange( const BOOL bUndo ) const;

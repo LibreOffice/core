@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen8.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-27 13:48:15 $
+ *  last change: $Author: dr $ $Date: 2001-04-05 10:46:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1463,7 +1463,7 @@ void ScDocument::LoadAreaLinks(SvStream& rStream)
         aHdr.EndEntry();
 
         ScAreaLink* pLink = new ScAreaLink( pShell, aFile, aFilter, aOptions,
-                                            aSource, aDestArea.aStart );
+                                            aSource, aDestArea.aStart, 0 );
         pLink->SetInCreate( TRUE );
         pLink->SetDestArea( aDestArea );
         pLinkManager->InsertFileLink( *pLink, OBJECT_CLIENT_FILE, aFile, &aFilter, &aSource );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: arealink.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-08 20:45:14 $
+ *  last change: $Author: dr $ $Date: 2001-04-05 10:42:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,7 @@ private:
     String      aOptions;
     String      aSourceArea;
     ScRange     aDestArea;
+    ULONG       nRefreshDelay;  // refresh delay in seconds; 0 = off
     BOOL        bAddUndo;
     BOOL        bInCreate;
     BOOL        bDoInsert;      // wird fuer das erste Update auf FALSE gesetzt
@@ -90,7 +91,7 @@ public:
     TYPEINFO();
     ScAreaLink( SfxObjectShell* pShell, const String& rFile,
                     const String& rFilter, const String& rOpt,
-                    const String& rArea, const ScRange& rDest );
+                    const String& rArea, const ScRange& rDest, ULONG nRefresh );
     virtual ~ScAreaLink();
 
     virtual void Closed();
@@ -99,22 +100,25 @@ public:
 
     virtual BOOL Edit(Window* pParent);
 
-    BOOL    Refresh( const String& rNewFile, const String& rNewFilter, const String& rNewArea );
+    BOOL    Refresh( const String& rNewFile, const String& rNewFilter,
+                    const String& rNewArea, ULONG nNewRefresh );
 
     void    SetInCreate(BOOL bSet)                  { bInCreate = bSet; }
     void    SetDoInsert(BOOL bSet)                  { bDoInsert = bSet; }
     void    SetDestArea(const ScRange& rNew);
+    void    SetRefreshDelay(ULONG nRefresh)         { nRefreshDelay = nRefresh; }
     void    SetSource(const String& rDoc, const String& rFlt, const String& rOpt,
                         const String& rArea);
 
     BOOL    IsEqual( const String& rFile, const String& rFilter, const String& rOpt,
                         const String& rSource, const ScRange& rDest ) const;
 
-    const String&   GetFile() const     { return aFileName;   }
-    const String&   GetFilter() const   { return aFilterName; }
-    const String&   GetOptions() const  { return aOptions;    }
-    const String&   GetSource() const   { return aSourceArea; }
-    const ScRange&  GetDestArea() const { return aDestArea;   }
+    const String&   GetFile() const         { return aFileName;     }
+    const String&   GetFilter() const       { return aFilterName;   }
+    const String&   GetOptions() const      { return aOptions;      }
+    const String&   GetSource() const       { return aSourceArea;   }
+    const ScRange&  GetDestArea() const     { return aDestArea;     }
+    ULONG           GetRefreshDelay() const { return nRefreshDelay; }
 };
 
 

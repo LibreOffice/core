@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-29 10:49:18 $
+ *  last change: $Author: dr $ $Date: 2001-04-05 10:48:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,6 +170,7 @@ static const sal_Char __FAR_DATA pFilterDBase[]     = "dBase";
 static const sal_Char __FAR_DATA pFilterDif[]       = "DIF";
 static const sal_Char __FAR_DATA pFilterSylk[]      = "SYLK";
 static const sal_Char __FAR_DATA pFilterHtml[]      = "HTML (StarCalc)";
+static const sal_Char __FAR_DATA pFilterHtmlWebQ[]  = "calc_HTML_WebQuery";
 static const sal_Char __FAR_DATA pFilterRtf[]       = "Rich Text Format (StarCalc)";
 
 //----------------------------------------------------------------------
@@ -1225,9 +1226,10 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
             if ( eError != eERR_OK && !GetError() )
                 SetError(eError);
         }
-        else if (aFltName.EqualsAscii(pFilterHtml))
+        else if (aFltName.EqualsAscii(pFilterHtml) || aFltName.EqualsAscii(pFilterHtmlWebQ))
         {
             FltError eError = SCERR_IMPORT_UNKNOWN;
+            BOOL bWebQuery = aFltName.EqualsAscii(pFilterHtmlWebQ);
             if( !rMedium.IsStorage() )
             {
                 SvStream* pInStream = rMedium.GetInStream();
@@ -1238,7 +1240,7 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
                     // HTML macht eigenes ColWidth/RowHeight
                     CalcOutputFactor();
                     eError = ScImportHTML( *pInStream, &aDocument, aRange,
-                                            GetOutputFactor() );
+                                            GetOutputFactor(), !bWebQuery );
                     if (eError != eERR_OK)
                     {
                         if (!GetError())

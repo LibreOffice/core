@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfunc.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-26 19:21:58 $
+ *  last change: $Author: dr $ $Date: 2001-04-05 10:49:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,7 +190,8 @@ public:
 
     BOOL            InsertAreaLink( const String& rFile, const String& rFilter,
                                     const String& rOptions, const String& rSource,
-                                    const ScRange& rDestRange, BOOL bFitBlock, BOOL bApi );
+                                    const ScRange& rDestRange, ULONG nRefresh,
+                                    BOOL bFitBlock, BOOL bApi );
 };
 
 

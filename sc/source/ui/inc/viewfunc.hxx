@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfunc.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-30 19:12:07 $
+ *  last change: $Author: dr $ $Date: 2001-04-05 10:49:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -306,7 +306,7 @@ public:
                                         const String& rTabName );
     void            InsertAreaLink( const String& rFile,
                                         const String& rFilter, const String& rOptions,
-                                        const String& rSource );
+                                        const String& rSource, ULONG nRefresh );
 
     void            ShowTable( const String& rName );
     void            HideTable( USHORT nTabNr );

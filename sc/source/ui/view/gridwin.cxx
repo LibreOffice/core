@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: nn $ $Date: 2001-04-03 17:42:35 $
+ *  last change: $Author: dr $ $Date: 2001-04-05 10:52:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2960,7 +2960,7 @@ sal_Int8 ScGridWindow::ExecuteDrop( const ExecuteDropEvent& rEvt )
                 pView->MoveCursorAbs( nPosX, nPosY, SC_FOLLOW_NONE, FALSE, FALSE );
 
                 pView->InsertAreaLink( rData.aLinkDoc, EMPTY_STRING, EMPTY_STRING,
-                                        rData.aLinkArea );
+                                        rData.aLinkArea, 0 );
             }
             else
             {

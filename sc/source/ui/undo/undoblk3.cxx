@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undoblk3.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-08 20:51:30 $
+ *  last change: $Author: dr $ $Date: 2001-04-05 10:50:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1729,15 +1729,17 @@ ScAreaLink* lcl_FindAreaLink( SvxLinkManager* pLinkManager, const String& rDoc,
 ScUndoInsertAreaLink::ScUndoInsertAreaLink( ScDocShell* pShell,
                             const String& rDoc,
                             const String& rFlt, const String& rOpt,
-                            const String& rArea, const ScRange& rDestRange )
+                            const String& rArea, const ScRange& rDestRange,
+                            ULONG nRefresh )
         //
-    :   ScSimpleUndo( pShell ),
+    :   ScSimpleUndo    ( pShell ),
         //
-        aDocName    ( rDoc ),
-        aFltName    ( rFlt ),
-        aOptions    ( rOpt ),
-        aAreaName   ( rArea ),
-        aRange      ( rDestRange )
+        aDocName        ( rDoc ),
+        aFltName        ( rFlt ),
+        aOptions        ( rOpt ),
+        aAreaName       ( rArea ),
+        aRange          ( rDestRange ),
+        nRefreshDelay   ( nRefresh )
 {
 }
 
@@ -1781,7 +1783,7 @@ void __EXPORT ScUndoInsertAreaLink::Redo()
     SvxLinkManager* pLinkManager = pDoc->GetLinkManager();
 
     ScAreaLink* pLink = new ScAreaLink( pDocShell, aDocName, aFltName, aOptions,
-                                            aAreaName, aRange.aStart );
+                                            aAreaName, aRange.aStart, nRefreshDelay );
     pLink->SetInCreate( TRUE );
     pLink->SetDestArea( aRange );
     pLinkManager->InsertFileLink( *pLink, OBJECT_CLIENT_FILE, aDocName, &aFltName, &aAreaName );
@@ -1817,15 +1819,17 @@ BOOL __EXPORT ScUndoInsertAreaLink::CanRepeat(SfxRepeatTarget& rTarget) const
 
 ScUndoRemoveAreaLink::ScUndoRemoveAreaLink( ScDocShell* pShell,
                             const String& rDoc, const String& rFlt, const String& rOpt,
-                            const String& rArea, const ScRange& rDestRange )
+                            const String& rArea, const ScRange& rDestRange,
+                            ULONG nRefresh )
         //
-    :   ScSimpleUndo( pShell ),
+    :   ScSimpleUndo    ( pShell ),
         //
-        aDocName    ( rDoc ),
-        aFltName    ( rFlt ),
-        aOptions    ( rOpt ),
-        aAreaName   ( rArea ),
-        aRange      ( rDestRange )
+        aDocName        ( rDoc ),
+        aFltName        ( rFlt ),
+        aOptions        ( rOpt ),
+        aAreaName       ( rArea ),
+        aRange          ( rDestRange ),
+        nRefreshDelay   ( nRefresh )
 {
 }
 
@@ -1853,7 +1857,7 @@ void __EXPORT ScUndoRemoveAreaLink::Undo()
     SvxLinkManager* pLinkManager = pDoc->GetLinkManager();
 
     ScAreaLink* pLink = new ScAreaLink( pDocShell, aDocName, aFltName, aOptions,
-                                        aAreaName, aRange.aStart );
+                                        aAreaName, aRange.aStart, nRefreshDelay );
     pLink->SetInCreate( TRUE );
     pLink->SetDestArea( aRange );
     pLinkManager->InsertFileLink( *pLink, OBJECT_CLIENT_FILE, aDocName, &aFltName, &aAreaName );
@@ -1905,9 +1909,9 @@ BOOL __EXPORT ScUndoRemoveAreaLink::CanRepeat(SfxRepeatTarget& rTarget) const
 
 ScUndoUpdateAreaLink::ScUndoUpdateAreaLink( ScDocShell* pShell,
                             const String& rOldD, const String& rOldF, const String& rOldO,
-                            const String& rOldA, const ScRange& rOldR,
+                            const String& rOldA, const ScRange& rOldR, ULONG nOldRD,
                             const String& rNewD, const String& rNewF, const String& rNewO,
-                            const String& rNewA, const ScRange& rNewR,
+                            const String& rNewA, const ScRange& rNewR, ULONG nNewRD,
                             ScDocument* pUndo, ScDocument* pRedo, BOOL bDoInsert )
         //
     :   ScSimpleUndo( pShell ),
@@ -1924,6 +1928,8 @@ ScUndoUpdateAreaLink::ScUndoUpdateAreaLink( ScDocShell* pShell,
         aNewRange   ( rNewR ),
         pUndoDoc    ( pUndo ),
         pRedoDoc    ( pRedo ),
+        nOldRefresh ( nOldRD ),
+        nNewRefresh ( nNewRD ),
         bWithInsert ( bDoInsert )
 {
     DBG_ASSERT( aOldRange.aStart == aNewRange.aStart, "AreaLink verschoben ??!??" );
@@ -2011,6 +2017,7 @@ void __EXPORT ScUndoUpdateAreaLink::Undo()
     {
         pLink->SetSource( aOldDoc, aOldFlt, aOldOpt, aOldArea );        // alte Werte im Link
         pLink->SetDestArea( aOldRange );
+        pLink->SetRefreshDelay( nOldRefresh );
     }
 
     DoChange(TRUE);
@@ -2029,6 +2036,7 @@ void __EXPORT ScUndoUpdateAreaLink::Redo()
     {
         pLink->SetSource( aNewDoc, aNewFlt, aNewOpt, aNewArea );        // neue Werte im Link
         pLink->SetDestArea( aNewRange );
+        pLink->SetRefreshDelay( nNewRefresh );
     }
 
     DoChange(FALSE);

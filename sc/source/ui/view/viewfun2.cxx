@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun2.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-26 19:24:33 $
+ *  last change: $Author: dr $ $Date: 2001-04-05 10:52:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1803,7 +1803,7 @@ BOOL ScViewFunc::RenameTable( const String& rName, USHORT nTab )
 
 void ScViewFunc::InsertAreaLink( const String& rFile,
                                     const String& rFilter, const String& rOptions,
-                                    const String& rSource )
+                                    const String& rSource, ULONG nRefresh )
 {
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     ScDocument* pDoc = pDocSh->GetDocument();
@@ -1820,7 +1820,7 @@ void ScViewFunc::InsertAreaLink( const String& rFile,
 
     SvxLinkManager* pLinkManager = pDoc->GetLinkManager();
 
-    ScAreaLink* pLink = new ScAreaLink( pDocSh, rFile, aFilterName, aNewOptions, rSource, aPos );
+    ScAreaLink* pLink = new ScAreaLink( pDocSh, rFile, aFilterName, aNewOptions, rSource, aPos, nRefresh );
     pLinkManager->InsertFileLink( *pLink, OBJECT_CLIENT_FILE, rFile, &aFilterName, &rSource );
 
     //  Undo fuer den leeren Link
@@ -1829,7 +1829,7 @@ void ScViewFunc::InsertAreaLink( const String& rFile,
     {
         pDocSh->GetUndoManager()->AddUndoAction( new ScUndoInsertAreaLink( pDocSh,
                                                     rFile, aFilterName, aNewOptions,
-                                                    rSource, ScRange(aPos) ) );
+                                                    rSource, ScRange(aPos), nRefresh ) );
     }
 
     //  Update hat sein eigenes Undo

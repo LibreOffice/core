@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfunc.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-27 08:48:22 $
+ *  last change: $Author: dr $ $Date: 2001-04-05 10:48:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3721,7 +3721,8 @@ BOOL ScDocFunc::ResizeMatrix( const ScRange& rOldRange, const ScAddress& rNewEnd
 
 BOOL ScDocFunc::InsertAreaLink( const String& rFile, const String& rFilter,
                                 const String& rOptions, const String& rSource,
-                                const ScRange& rDestRange, BOOL bFitBlock, BOOL bApi )
+                                const ScRange& rDestRange, ULONG nRefresh,
+                                BOOL bFitBlock, BOOL bApi )
 {
     //! auch fuer ScViewFunc::InsertAreaLink benutzen!
 
@@ -3740,7 +3741,7 @@ BOOL ScDocFunc::InsertAreaLink( const String& rFile, const String& rFilter,
     SvxLinkManager* pLinkManager = pDoc->GetLinkManager();
 
     ScAreaLink* pLink = new ScAreaLink( &rDocShell, rFile, aFilterName,
-                                        aNewOptions, rSource, rDestRange );
+                                        aNewOptions, rSource, rDestRange, nRefresh );
     pLinkManager->InsertFileLink( *pLink, OBJECT_CLIENT_FILE, rFile, &aFilterName, &rSource );
 
     //  Undo fuer den leeren Link
@@ -3748,7 +3749,7 @@ BOOL ScDocFunc::InsertAreaLink( const String& rFile, const String& rFilter,
     if (bUndo)
         rDocShell.GetUndoManager()->AddUndoAction( new ScUndoInsertAreaLink( &rDocShell,
                                                     rFile, aFilterName, aNewOptions,
-                                                    rSource, rDestRange ) );
+                                                    rSource, rDestRange, nRefresh ) );
 
     //  Update hat sein eigenes Undo
 
