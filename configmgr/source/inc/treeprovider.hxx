@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeprovider.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: lla $ $Date: 2001-03-23 09:37:42 $
+ *  last change: $Author: jb $ $Date: 2001-06-11 09:22:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,14 +198,17 @@ namespace configmgr
     //==========================================================================
     //= ITreeProvider
     //==========================================================================
-    class ITreeProvider : public ISynchronizedData
+    class ITreeProvider
     {
     public:
         enum { ALL_LEVELS = -1  };
 
-        virtual ISubtree * requestSubtree(OUString const& aSubtreePath,
-                                          const vos::ORef < OOptions >& _xOptions,
-                                          sal_Int16 nMinLevels = ALL_LEVELS) throw (uno::Exception) = 0;
+        /// load the tree named by a path using certain options and requiring a specific loading depth - return it yielding ownership
+        virtual std::auto_ptr<ISubtree> loadSubtree(OUString const& aSubtreePath,
+                                                      const vos::ORef < OOptions >& _xOptions,
+                                                      sal_Int16 nMinLevels = ALL_LEVELS) throw (uno::Exception) = 0;
+
+        /// update the stored data according to a changes list
         virtual void updateTree(TreeChangeList& aChanges) throw (uno::Exception) = 0;
 
     };
@@ -215,9 +218,30 @@ namespace configmgr
     //==========================================================================
     // a ITreeProvider which can notify changes that were done, and manages the lifetime of subtrees
 
-    class ITreeManager : public ITreeProvider
+    class ITreeManager : public ISynchronizedData
     {
     public:
+         enum { ALL_LEVELS = ITreeProvider::ALL_LEVELS  };
+
+       /** request that the tree named by a path is added to the collection of managed trees
+            respecting certain options and requiring a specific loading depth.
+            Return a reference to that managed tree.
+            The reference must later be released by calling releaseSubtree with the same path and options.
+        */
+        virtual ISubtree * requestSubtree(OUString const& aSubtreePath,
+                                          const vos::ORef < OOptions >& _xOptions,
+                                          sal_Int16 nMinLevels = ALL_LEVELS) throw (uno::Exception) = 0;
+
+        /** request that the tree named by a path is added to the collection of managed trees
+            respecting certain options and requiring a specific loading depth.
+        */
+        virtual void fetchSubtree(OUString const& aSubtreePath,
+                                  const vos::ORef < OOptions >& _xOptions,
+                                  sal_Int16 nMinLevels = ALL_LEVELS) throw() = 0;
+
+        /// update the managed data according to a changes list - update the changes list accordingly with old values
+        virtual void updateTree(TreeChangeList& aChanges) throw (uno::Exception) = 0;
+
         // notification
         virtual void notifyUpdate(TreeChangeList const& aChanges ) throw (uno::RuntimeException) = 0;
 
@@ -232,10 +256,6 @@ namespace configmgr
         virtual void disposeData(const vos::ORef < OOptions >& _xOptions) throw () = 0;
 
 
-        /** initiates the fetch of a Subtree */
-        virtual void fetchSubtree(OUString const& aSubtreePath,
-                                  const vos::ORef < OOptions >& _xOptions,
-                                  sal_Int16 nMinLevels = ALL_LEVELS) throw() = 0;
     };
 
 
