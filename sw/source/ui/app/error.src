@@ -2,9 +2,9 @@
  *
  *  $RCSfile: error.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 11:48:21 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 15:59:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -524,7 +524,7 @@ Resource RID_SW_ERRHDL
         TEXT[ japanese ] = "Ini γƒ•γ‚΅γ‚¤γƒ«γ®ζΏε…¥η―„ε›²γε¤§γγ™γγΎγ™γ€‚";
         TEXT[ chinese_traditional ] = "Ini ζª”ζ΅ζ’ε…¥ε€εε¤ªε¤§";
         TEXT[ arabic ] = "δΨΗή ΗαΕΟΞΗα έν Ηαγαέ Ini ίΘνΡ ΜΟΗπ";
-        TEXT[ greek ] = "Η περιοχή εισαγωγής στο αρχείο ini είναι πολύ μεγάλη";
+        TEXT[ greek ] = "Η ενότητα εισαγωγής στο αρχείο ini είναι πολύ μεγάλη";
         TEXT[ korean ] = "ini νμΌμ— μ‚½μ…λ κµ¬μ—­μ΄ λ„λ¬΄ ν½λ‹λ‹¤.";
         TEXT[ turkish ] = "Ini dosyasύ ekleme bφlόmό ηok bόyόk";
         TEXT[ language_user1 ] = " ";
@@ -709,7 +709,7 @@ Resource RID_SW_ERRHDL
         Text[ japanese ] = "ε…¥ε›ζ”―ζ΄γƒ‰γ‚­γƒ¥γƒ΅γƒ³γƒγ®γƒγƒΌγ‚Έγƒ§γƒ³γι•γ„γΎγ™";
         Text[ chinese_traditional ] = "ι€™ε€‹θ‡ªε‹•ε–ζ–‡ι›†ζ–‡δ»¶η‰ζ¬η„΅ζ•";
         Text[ arabic ] = "ΕΥΟΗΡ ΞΗΨΖ αγΣΚδΟ ΗαδΥ ΗαΚαήΗΖν";
-        Text[ greek ] = "Λάθος έκδοση του εγγράφου ΑυτοΚειμένου";
+        Text[ greek ] = "Λάθος έκδοση του εγγράφου αυτόματου κειμένου";
         Text[ korean ] = "μλª»λ μλ™ ν…μ¤νΈ λ¬Έμ„ λ²„μ „";
         Text[ turkish ] = "Otomatik metin belgesi sόrόmό yanlύώ";
         Text[ language_user1 ] = " ";
@@ -1336,7 +1336,7 @@ Resource RID_SW_ERRHDL
         Text [ swedish ] = "Det gick inte att ladda nεgra teckningar" ;
         Text [ danish ] = "Det var ikke muligt at indlζse nogen tegninger" ;
         Text [ portuguese ] = "Foi impossνvel carregar desenhos" ;
-        Text [ portuguese_brazilian ] = "Nγo foi possνver ler os desenhos" ;
+        Text [ portuguese_brazilian ] = "Nγo foi possνvel ler os desenhos" ;
         Text[ chinese_simplified ] = "ζ— ζ³•θ£…ε…¥ε›Ύεƒ";
         Text[ russian ] = "Νεβξημξζνξ οπξχερςό πθρσνκθ";
         Text[ polish ] = "Nie uda³o siκ wczytaζ Ώadnego rysunku";
@@ -1703,6 +1703,8 @@ Resource RID_SW_ERRHDL
         TEXT[ slovak ] = "V zvolenej znakovej sade nemoΕΎno zobraziΕ¥ nasledujΓΊce znaky: $(ARG1)";
     };
 };
+
+
 
 
 
