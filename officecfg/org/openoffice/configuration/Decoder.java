@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Decoder.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dg $ $Date: 2001-07-05 11:51:31 $
+ *  last change: $Author: jb $ $Date: 2001-07-06 08:42:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,7 +215,7 @@ public class Decoder extends Object
     }
 
     // return null, if the string was invalid
-    public static String decode(String sSource)
+    public static String decodeValid(String sSource)
     {
         StringBuffer aTarget = new StringBuffer();
 
@@ -261,6 +261,14 @@ public class Decoder extends Object
             // System.out.println("Decoded string:" + aTarget.toString());
             return aTarget.toString();
         }
+    }
+
+    // return the original value, if the string was invalid
+    public static String decode(String sSource)
+    {
+        String sResult = decodeValid(sSource);
+
+        return sResult != null ? sResult : sSource;
     }
 
     public static void main(String args[])
