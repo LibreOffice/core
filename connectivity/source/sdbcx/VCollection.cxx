@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VCollection.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-02 07:58:25 $
+ *  last change: $Author: oj $ $Date: 2001-08-02 14:24:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -282,9 +282,6 @@ void SAL_CALL OCollection::dropByName( const ::rtl::OUString& elementName ) thro
 
             m_aElements.erase(m_aElements.begin()+i);
             m_aNameMap.erase(aIter);
-            // swap the containers to save some space here
-            ::std::vector< ObjectIter >(m_aElements).swap(m_aElements);
-            ObjectMap(m_aNameMap).swap(m_aNameMap);
             break; // no duplicates possible
         }
     }
@@ -307,9 +304,6 @@ void SAL_CALL OCollection::dropByIndex( sal_Int32 index ) throw(SQLException, In
     m_aNameMap.erase(m_aElements[index]);
     m_aElements.erase(m_aElements.begin()+index);
 
-    // swap the containers to save some space here
-    ::std::vector< ObjectIter >(m_aElements).swap(m_aElements);
-    ObjectMap(m_aNameMap).swap(m_aNameMap);
     // notify our container listeners
     ContainerEvent aEvent(static_cast<XContainer*>(this), makeAny(elementName), Any(), Any());
         // note that xExistent may be empty, in case somebody removed the data source while it is not alive at this moment
