@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartLine.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:17:12 $
+ *  last change:$Date: 2003-02-10 11:34:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,9 @@ import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
 import util.SOfficeFactory;
+
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
 
 /**
 * Test for object which is represented by service
@@ -137,8 +140,9 @@ public class ChartLine extends TestCase {
         try {
             log.println( "getting Line" );
             XPropertySet RowProps = oDiagram.getDataRowProperties(1);
-            oObj = (XPropertySet)
-                 RowProps.getPropertyValue("DataMeanValueProperties");
+            oObj = (XPropertySet) AnyConverter.toObject(
+                new Type(XPropertySet.class),
+                    RowProps.getPropertyValue("DataMeanValueProperties"));
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
             // Some exception occures.FAILED
             e.printStackTrace( log );
@@ -148,6 +152,10 @@ public class ChartLine extends TestCase {
             e.printStackTrace( log );
             throw new StatusException( "Couldn't get Line", e );
         } catch (com.sun.star.beans.UnknownPropertyException e) {
+            // Some exception occures.FAILED
+            e.printStackTrace( log );
+            throw new StatusException( "Couldn't get Line", e );
+        } catch (com.sun.star.lang.IllegalArgumentException e) {
             // Some exception occures.FAILED
             e.printStackTrace( log );
             throw new StatusException( "Couldn't get Line", e );
