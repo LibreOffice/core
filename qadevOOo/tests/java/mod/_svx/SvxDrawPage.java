@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SvxDrawPage.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2003-09-08 12:36:50 $
+ *  last change:$Date: 2004-01-05 19:46:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,7 +155,7 @@ public class SvxDrawPage extends TestCase {
      */
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xSheetDoc " );
-        ((XComponent) UnoRuntime.queryInterface(XComponent.class,xDoc)).dispose();
+        util.DesktopTools.closeDoc(xDoc);;
     }
 
 
