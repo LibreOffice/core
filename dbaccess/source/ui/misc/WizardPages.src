@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WizardPages.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 20:43:46 $
+ *  last change: $Author: kz $ $Date: 2001-07-24 20:25:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,8 +175,8 @@ String STR_WIZ_TYPE_SELECT_TITEL
     Text[ portuguese_brazilian ] = "Undo";
     Text[ japanese ] = "À²Ìß‚Ì‘®İ’è";
     Text[ korean ] = "Å¸ÀÔ Æ÷¸ËÆÃ";
-    Text[ chinese_simplified ] = "¸ñÊ½»¯ÀàĞÍ";
-    Text[ chinese_traditional ] = "Ãş«¬®æ¦¡";
+    Text[ chinese_simplified ] = "ÀàĞÍ¸ñÊ½»¯";
+    Text[ chinese_traditional ] = "Ãş«¬®æ¦¡¤Æ";
     Text[ arabic ] = "ÊäÓíŞÇÊ ÇáäæÚ";
     Text[ turkish ] = "Tip formatlaması";
     Text[ catalan ] = "Formateado de tipos";
@@ -1341,6 +1341,7 @@ String STR_ERR_DUPL_TABLENAME
     Text[ catalan ] = "El nombre de tabla \'$name$\' ya existe.\nPuede escribir otro nombre\no adjuntar los datos a la tabla existente.";
     Text[ finnish ] = "Der Tabellenname \'$name$\' existiert bereits.\nSie können einen neuen Namen angeben\noder die Daten an die existierende Tabelle anhängen.";
 };
+
 
 
 
