@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageFolder.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-21 10:43:06 $
+ *  last change: $Author: mtg $ $Date: 2000-11-21 12:08:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,10 +263,9 @@ void ZipPackageFolder::saveContents(rtl::OUString &rPath)
 
         if (bIsFolder)
         {
+            time_t nTime = 0;
             pFolder->aEntry.sName = rPath + pFolder->getName() + L"/";
-            Time aTime;
-            aTime = Time();
-            pFolder->aEntry.nTime = aTime.GetTime();
+            pFolder->aEntry.nTime = ZipOutputStream::tmDateToDosDate ( *localtime(&nTime));
             rZipOut.putNextEntry(pFolder->aEntry);
             rZipOut.closeEntry();
             pFolder->saveContents(pFolder->aEntry.sName);

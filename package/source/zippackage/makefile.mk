@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: mtg $ $Date: 2000-11-21 10:49:09 $
+#   last change: $Author: mtg $ $Date: 2000-11-21 12:08:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,7 +82,7 @@ SLOFILES= \
         $(SLO)$/ZipPackageFolder.obj	\
         $(SLO)$/ZipPackageFolderEnumeration.obj	\
         $(SLO)$/ZipPackageSink.obj	\
-        $(SLO)$/ZipPackageStream.obj	\
+        $(SLO)$/ZipPackageStream.obj
 
 # --- UNO stuff ---------------------------------------------------
 
@@ -105,7 +105,7 @@ UNOTYPES=\
     com.sun.star.container.XNamed \
     com.sun.star.container.XNameContainer \
     com.sun.star.container.XEnumerationAccess \
-    com.sun.star.io.XActiveDataSink \
+    com.sun.star.io.XActiveDataSink 
 
 # --- Targets ------------------------------------------------------
 

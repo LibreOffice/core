@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-21 10:41:57 $
+ *  last change: $Author: mtg $ $Date: 2000-11-21 12:08:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -369,7 +369,7 @@ extern "C" sal_Bool SAL_CALL component_writeInfo( void* pServiceManager, void* p
         }
         catch ( InvalidRegistryException& )
         {
-            DBG_ERROR( "InvalidRegistryException detected\n");
+            VOS_DEBUG_ONLY( "InvalidRegistryException detected\n");
             return sal_False;
         }
 
