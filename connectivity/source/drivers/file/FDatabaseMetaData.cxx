@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-01 11:35:14 $
+ *  last change: $Author: oj $ $Date: 2002-11-29 12:50:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -338,6 +338,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
 
     sal_Bool bKnowCaseSensivity = sal_False;
     sal_Bool bCaseSensitiveDir = sal_True;
+    sal_Bool bCheckEnabled = m_pConnection->isCheckEnabled();
 
     while(xResultSet->next())
     {
@@ -383,7 +384,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
             {
                 aName = aName.replaceAt(aName.getLength()-(aFilenameExtension.Len()+1),aFilenameExtension.Len()+1,::rtl::OUString());
                 sal_Unicode nChar = aName.toChar();
-                if(match(tableNamePattern,aName.getStr(),'\0') && (nChar < '0' || nChar > '9'))
+                if ( match(tableNamePattern,aName.getStr(),'\0') && ( !bCheckEnabled || ( bCheckEnabled && ((nChar < '0' || nChar > '9')))) )
                 {
                     aRow.push_back(new ORowSetValueDecorator(aName));
                     bNewRow = sal_True;
@@ -398,7 +399,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
                 if (!aURL.getExtension().Len())
                 {
                     sal_Unicode nChar = aURL.getBase().GetChar(0);
-                    if(match(tableNamePattern,aURL.getBase().GetBuffer(),'\0') && (nChar < '0' || nChar > '9'))
+                    if(match(tableNamePattern,aURL.getBase().GetBuffer(),'\0') && ( !bCheckEnabled || ( bCheckEnabled && ((nChar < '0' || nChar > '9')))) )
                     {
                         aRow.push_back(new ORowSetValueDecorator(::rtl::OUString(aURL.getBase())));
                         bNewRow = sal_True;

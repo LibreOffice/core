@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FConnection.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-25 09:15:22 $
+ *  last change: $Author: oj $ $Date: 2002-11-29 12:50:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,6 +144,7 @@ OConnection::OConnection(OFileDriver*   _pDriver)
                          ,m_xMetaData(NULL)
                          ,m_bShowDeleted(sal_False)
                          ,m_bCaseSensitiveExtension( sal_True )
+                         ,m_bCheckSQL92(sal_False)
 {
     ModuleContext::AddRef();
 }
@@ -222,11 +223,14 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
         {
             pBegin->Value >>= m_bShowDeleted;
         }
+        else if (0 == pBegin->Name.compareToAscii("EnableSQL92Check"))
+        {
+            pBegin->Value >>= m_bCheckSQL92;
+        }
     }
 
-    if(aExt.getLength())
+    if ( aExt.getLength() )
         m_aFilenameExtension = aExt;
-
 
     try
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FConnection.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-25 09:05:41 $
+ *  last change: $Author: oj $ $Date: 2002-11-29 12:50:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,6 +140,7 @@ namespace connectivity
             sal_Bool                    m_bReadOnly;
             sal_Bool                    m_bShowDeleted;
             sal_Bool                    m_bCaseSensitiveExtension;
+            sal_Bool                    m_bCheckSQL92;
 
 
             void throwUrlNotValid(const ::rtl::OUString & _rsUrl,const ::rtl::OUString & _rsMessage);
@@ -195,12 +196,13 @@ namespace connectivity
             // create a catalog or return the catalog already created
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XTablesSupplier > createCatalog();
 
+            sal_Bool                matchesExtension( const String& _rExt ) const;
 
-            const String&   getExtension()              const { return m_aFilenameExtension; }
-            sal_Bool        isCaseSensitveExtension()   const { return m_bCaseSensitiveExtension; }
-            sal_Bool        matchesExtension( const String& _rExt ) const;
-            OFileDriver*    getDriver()                 const { return m_pDriver; }
-            sal_Bool        showDeleted()               const { return m_bShowDeleted; }
+            inline const String&    getExtension()              const { return m_aFilenameExtension; }
+            inline sal_Bool         isCaseSensitveExtension()   const { return m_bCaseSensitiveExtension; }
+            inline OFileDriver*     getDriver()                 const { return m_pDriver; }
+            inline sal_Bool         showDeleted()               const { return m_bShowDeleted; }
+            inline sal_Bool         isCheckEnabled()            const { return m_bCheckSQL92; }
 
         public:
             struct GrantAccess

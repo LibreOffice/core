@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-05 07:59:49 $
+ *  last change: $Author: oj $ $Date: 2002-11-29 12:50:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,9 @@
 #endif
 #ifndef _CONNECTIVITY_SDBCX_COLUMN_HXX_
 #include "connectivity/PColumn.hxx"
+#endif
+#ifndef _CONNECTIVITY_DBTOOLS_HXX_
+#include "connectivity/dbtools.hxx"
 #endif
 
 #include <algorithm>
@@ -812,6 +815,14 @@ void ODbaseTable::FileClose()
 BOOL ODbaseTable::CreateImpl()
 {
     OSL_ENSURE(!m_pFileStream, "SequenceError");
+
+    if ( m_pConnection->isCheckEnabled() && ::dbtools::convertName2SQLName(m_Name,::rtl::OUString()) != m_Name )
+    {
+        ::rtl::OUString sError(RTL_CONSTASCII_USTRINGPARAM("The Name '"));
+        sError += m_Name;
+        sError += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("' doesn't match SQL naming constraints."));
+        ::dbtools::throwGenericSQLException(sError,*this);
+    }
 
     INetURLObject aURL;
     aURL.SetSmartProtocol(INET_PROT_FILE);
