@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wall.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:39 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 13:57:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,6 @@
  *
  ************************************************************************/
 
-#define _SV_WALL_CXX
-
 #ifndef _STREAM_HXX
 #include <tools/stream.hxx>
 #endif
@@ -79,8 +77,10 @@
 #ifndef _SV_WALL_HXX
 #include <wall.hxx>
 #endif
+#ifndef _SV_WALL2_HXX
+#include <wall2.hxx>
+#endif
 
-// =======================================================================
 
 DBG_NAME( Wallpaper );
 
@@ -259,11 +259,7 @@ Wallpaper::Wallpaper()
 {
     DBG_CTOR( Wallpaper, NULL );
 
-#ifdef WIN
-    static ImplWallpaper _near aStaticImplWallpaper;
-#else
     static ImplWallpaper aStaticImplWallpaper;
-#endif
 
     aStaticImplWallpaper.mnRefCount = 0;
     mpImplWallpaper = &aStaticImplWallpaper;
@@ -349,12 +345,30 @@ void Wallpaper::SetColor( const Color& rColor )
 
 // -----------------------------------------------------------------------
 
+const Color& Wallpaper::GetColor() const
+{
+    DBG_CHKTHIS( Wallpaper, NULL );
+
+    return mpImplWallpaper->maColor;
+}
+
+// -----------------------------------------------------------------------
+
 void Wallpaper::SetStyle( WallpaperStyle eStyle )
 {
     DBG_CHKTHIS( Wallpaper, NULL );
 
     ImplMakeUnique( FALSE );
     mpImplWallpaper->meStyle = eStyle;
+}
+
+// -----------------------------------------------------------------------
+
+WallpaperStyle Wallpaper::GetStyle() const
+{
+    DBG_CHKTHIS( Wallpaper, NULL );
+
+    return mpImplWallpaper->meStyle;
 }
 
 // -----------------------------------------------------------------------
@@ -416,6 +430,16 @@ BitmapEx Wallpaper::GetBitmap() const
 
 // -----------------------------------------------------------------------
 
+BOOL Wallpaper::IsBitmap() const
+{
+    DBG_CHKTHIS( Wallpaper, NULL );
+
+    return (mpImplWallpaper->mpBitmap != 0);
+}
+
+
+// -----------------------------------------------------------------------
+
 void Wallpaper::SetGradient( const Gradient& rGradient )
 {
     DBG_CHKTHIS( Wallpaper, NULL );
@@ -459,6 +483,16 @@ Gradient Wallpaper::GetGradient() const
         return aGradient;
     }
 }
+
+// -----------------------------------------------------------------------
+
+BOOL Wallpaper::IsGradient() const
+{
+    DBG_CHKTHIS( Wallpaper, NULL );
+
+    return (mpImplWallpaper->mpGradient != 0);
+}
+
 
 // -----------------------------------------------------------------------
 
@@ -513,6 +547,16 @@ Rectangle Wallpaper::GetRect() const
         return aRect;
     }
 }
+
+// -----------------------------------------------------------------------
+
+BOOL Wallpaper::IsRect() const
+{
+    DBG_CHKTHIS( Wallpaper, NULL );
+
+    return (mpImplWallpaper->mpRect != 0);
+}
+
 
 // -----------------------------------------------------------------------
 
