@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SocketPermission.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 16:55:09 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 16:05:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,7 @@ SocketPermission("localhost:1024-", "accept,connect,listen");
     confidential data among parties who may not otherwise have access to the data.
     </p>
 
-    @since OOo1.1.2
+    @since OOo 1.1.2
 */
 published struct SocketPermission
 {
