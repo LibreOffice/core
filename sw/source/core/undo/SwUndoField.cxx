@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwUndoField.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-26 07:54:03 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:41:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,31 +81,6 @@ SwUndoField::~SwUndoField()
 {
 }
 
-void SwUndoField::RestoreFieldType(SwField * pField,
-                                   SwFieldType * pNewType)
-{
-    SwFieldType * pOldType = pField->GetTyp();
-    printf("SwUndoField::RestoreFieldType: %d\n", pField->Which());
-
-    if (RES_DBFLD == pField->Which() && pOldType != pNewType)
-    {
-        SwClientIter aIter( *pOldType );
-        SwDBField * pDBField = (SwDBField *) pField;
-
-        for( SwFmtFld* pFmtFld = (SwFmtFld*)aIter.First( TYPE(SwFmtFld) );
-             pFmtFld; pFmtFld = (SwFmtFld*)aIter.Next() )
-        {
-            if( pFmtFld->GetFld() == pDBField)
-            {
-                pNewType->Add(pFmtFld);
-                pDBField->ChgTyp(pNewType);
-
-                break;
-            }
-        }
-    }
-}
-
 SwPosition SwUndoField::GetPosition()
 {
     SwNode * pNode = pDoc->GetNodes()[nNodeIndex];
@@ -114,28 +89,6 @@ SwPosition SwUndoField::GetPosition()
     SwPosition aResult(aNodeIndex, aIndex);
 
     return aResult;
-}
-
-static void lcl_AddDBFieldTypeRef(SwField * pField)
-{
-    if (TYP_DBFLD == pField->Which())
-    {
-        SwDBFieldType * pFieldType =
-            (SwDBFieldType *) ((SwDBField *) pField)->GetTyp();
-
-        pFieldType->AddRef();
-    }
-}
-
-static void lcl_ReleaseDBFieldTypeRef(SwField * pField)
-{
-    if (TYP_DBFLD == pField->Which())
-    {
-        SwDBFieldType * pFieldType =
-            (SwDBFieldType *) ((SwDBField *) pField)->GetTyp();
-
-        pFieldType->ReleaseRef();
-    }
 }
 
 SwUndoFieldFromDoc::SwUndoFieldFromDoc(const SwPosition & rPos,
