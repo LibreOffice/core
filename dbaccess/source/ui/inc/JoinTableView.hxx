@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinTableView.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-25 11:03:29 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 09:44:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,7 +202,7 @@ namespace dbaui
         virtual ::std::vector<OTableConnection*>::const_iterator RemoveConnection(OTableConnection* _pConnection,sal_Bool _bDelete);
 
         /** allows to add new connections to join table view, it implies an invalidation of the features
-            ID_BROWSER_ADDTABLE and ID_RELATION_ADD_RELATION also the modified flag will be set to true
+            ID_BROWSER_ADDTABLE and SID_RELATION_ADD_RELATION also the modified flag will be set to true
             @param  _pConnection
                     the connection which should be added
             @param  _bAddData
