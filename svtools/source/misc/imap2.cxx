@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imap2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-12-13 12:44:22 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:11:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,7 @@
 #include <sot/formats.hxx>
 #endif
 
+#include "urihelper.hxx"
 #include "imap.hxx"
 #include "imap.hxx"
 #include "imapobj.hxx"
@@ -136,11 +137,9 @@ void IMapObject::AppendNCSACoords( const Point& rPoint100, ByteString& rStr ) co
 |*
 \******************************************************************************/
 
-void IMapObject::AppendCERNURL( ByteString& rStr ) const
+void IMapObject::AppendCERNURL( ByteString& rStr, const String& rBaseURL ) const
 {
-    rStr += ByteString( String(INetURLObject::AbsToRel( aURL,
-                                                 INetURLObject::WAS_ENCODED,
-                                                 INetURLObject::DECODE_UNAMBIGUOUS )), gsl_getSystemTextEncoding() );
+    rStr += ByteString( String(URIHelper::simpleNormalizedMakeRelative( rBaseURL, aURL )), gsl_getSystemTextEncoding() );
 }
 
 
@@ -150,11 +149,9 @@ void IMapObject::AppendCERNURL( ByteString& rStr ) const
 |*
 \******************************************************************************/
 
-void IMapObject::AppendNCSAURL( ByteString& rStr ) const
+void IMapObject::AppendNCSAURL( ByteString& rStr, const String& rBaseURL ) const
 {
-    rStr += ByteString( String(INetURLObject::AbsToRel( aURL,
-                                                 INetURLObject::WAS_ENCODED,
-                                                 INetURLObject::DECODE_UNAMBIGUOUS )), gsl_getSystemTextEncoding() );
+    rStr += ByteString( String(URIHelper::simpleNormalizedMakeRelative( rBaseURL, aURL )), gsl_getSystemTextEncoding() );
     rStr += ' ';
 }
 
@@ -169,13 +166,13 @@ void IMapObject::AppendNCSAURL( ByteString& rStr ) const
 |*
 \******************************************************************************/
 
-void IMapRectangleObject::WriteCERN( SvStream& rOStm ) const
+void IMapRectangleObject::WriteCERN( SvStream& rOStm, const String& rBaseURL ) const
 {
     ByteString aStr( "rectangle " );
 
     AppendCERNCoords( aRect.TopLeft(), aStr );
     AppendCERNCoords( aRect.BottomRight(), aStr );
-    AppendCERNURL( aStr );
+    AppendCERNURL( aStr, rBaseURL );
 
     rOStm.WriteLine( aStr );
 }
@@ -187,11 +184,11 @@ void IMapRectangleObject::WriteCERN( SvStream& rOStm ) const
 |*
 \******************************************************************************/
 
-void IMapRectangleObject::WriteNCSA( SvStream& rOStm ) const
+void IMapRectangleObject::WriteNCSA( SvStream& rOStm, const String& rBaseURL ) const
 {
     ByteString aStr( "rect " );
 
-    AppendNCSAURL( aStr );
+    AppendNCSAURL( aStr, rBaseURL );
     AppendNCSACoords( aRect.TopLeft(), aStr );
     AppendNCSACoords( aRect.BottomRight(), aStr );
 
@@ -209,14 +206,14 @@ void IMapRectangleObject::WriteNCSA( SvStream& rOStm ) const
 |*
 \******************************************************************************/
 
-void IMapCircleObject::WriteCERN( SvStream& rOStm ) const
+void IMapCircleObject::WriteCERN( SvStream& rOStm, const String& rBaseURL ) const
 {
     ByteString aStr( "circle " );
 
     AppendCERNCoords( aCenter, aStr );
     aStr += ByteString::CreateFromInt32(nRadius);
     aStr += ' ';
-    AppendCERNURL( aStr );
+    AppendCERNURL( aStr, rBaseURL );
 
     rOStm.WriteLine( aStr );
 }
@@ -228,11 +225,11 @@ void IMapCircleObject::WriteCERN( SvStream& rOStm ) const
 |*
 \******************************************************************************/
 
-void IMapCircleObject::WriteNCSA( SvStream& rOStm ) const
+void IMapCircleObject::WriteNCSA( SvStream& rOStm, const String& rBaseURL ) const
 {
     ByteString aStr( "circle " );
 
-    AppendNCSAURL( aStr );
+    AppendNCSAURL( aStr, rBaseURL );
     AppendNCSACoords( aCenter, aStr );
     AppendNCSACoords( aCenter + Point( nRadius, 0 ), aStr );
 
@@ -250,7 +247,7 @@ void IMapCircleObject::WriteNCSA( SvStream& rOStm ) const
 |*
 \******************************************************************************/
 
-void IMapPolygonObject::WriteCERN( SvStream& rOStm ) const
+void IMapPolygonObject::WriteCERN( SvStream& rOStm, const String& rBaseURL  ) const
 {
     ByteString      aStr( "polygon " );
     const USHORT    nCount = aPoly.GetSize();
@@ -258,7 +255,7 @@ void IMapPolygonObject::WriteCERN( SvStream& rOStm ) const
     for ( USHORT i = 0; i < nCount; i++ )
         AppendCERNCoords( aPoly[ i ], aStr );
 
-    AppendCERNURL( aStr );
+    AppendCERNURL( aStr, rBaseURL );
 
     rOStm.WriteLine( aStr );
 }
@@ -270,12 +267,12 @@ void IMapPolygonObject::WriteCERN( SvStream& rOStm ) const
 |*
 \******************************************************************************/
 
-void IMapPolygonObject::WriteNCSA( SvStream& rOStm ) const
+void IMapPolygonObject::WriteNCSA( SvStream& rOStm, const String& rBaseURL  ) const
 {
     ByteString      aStr( "poly " );
     const USHORT    nCount = Min( aPoly.GetSize(), (USHORT) 100 );
 
-    AppendNCSAURL( aStr );
+    AppendNCSAURL( aStr, rBaseURL );
 
     for ( USHORT i = 0; i < nCount; i++ )
         AppendNCSACoords( aPoly[ i ], aStr );
@@ -294,13 +291,13 @@ void IMapPolygonObject::WriteNCSA( SvStream& rOStm ) const
 |*
 \******************************************************************************/
 
-void ImageMap::Write( SvStream& rOStm, ULONG nFormat ) const
+void ImageMap::Write( SvStream& rOStm, ULONG nFormat, const String& rBaseURL ) const
 {
     switch( nFormat )
     {
-        case( IMAP_FORMAT_BIN ) : rOStm << *this; break;
-        case( IMAP_FORMAT_CERN ) : ImpWriteCERN( rOStm ); break;
-        case( IMAP_FORMAT_NCSA ) : ImpWriteNCSA( rOStm ); break;
+        case( IMAP_FORMAT_BIN ) : Write( rOStm, rBaseURL );
+        case( IMAP_FORMAT_CERN ) : ImpWriteCERN( rOStm, rBaseURL ); break;
+        case( IMAP_FORMAT_NCSA ) : ImpWriteNCSA( rOStm, rBaseURL ); break;
 
         default:
         break;
@@ -314,7 +311,7 @@ void ImageMap::Write( SvStream& rOStm, ULONG nFormat ) const
 |*
 \******************************************************************************/
 
-void ImageMap::ImpWriteCERN( SvStream& rOStm ) const
+void ImageMap::ImpWriteCERN( SvStream& rOStm, const String& rBaseURL ) const
 {
     IMapObject* pObj;
     USHORT      nCount = (USHORT) maList.Count();
@@ -326,15 +323,15 @@ void ImageMap::ImpWriteCERN( SvStream& rOStm ) const
         switch( pObj->GetType() )
         {
             case( IMAP_OBJ_RECTANGLE ):
-                ( (IMapRectangleObject*) pObj )->WriteCERN( rOStm );
+                ( (IMapRectangleObject*) pObj )->WriteCERN( rOStm, rBaseURL );
             break;
 
             case( IMAP_OBJ_CIRCLE ):
-                ( (IMapCircleObject*) pObj )->WriteCERN( rOStm );
+                ( (IMapCircleObject*) pObj )->WriteCERN( rOStm, rBaseURL );
             break;
 
             case( IMAP_OBJ_POLYGON ):
-                ( (IMapPolygonObject*) pObj )->WriteCERN( rOStm);
+                ( (IMapPolygonObject*) pObj )->WriteCERN( rOStm, rBaseURL );
             break;
 
             default:
@@ -350,7 +347,7 @@ void ImageMap::ImpWriteCERN( SvStream& rOStm ) const
 |*
 \******************************************************************************/
 
-void ImageMap::ImpWriteNCSA( SvStream& rOStm ) const
+void ImageMap::ImpWriteNCSA( SvStream& rOStm, const String& rBaseURL  ) const
 {
     IMapObject* pObj;
     USHORT      nCount = (USHORT) maList.Count();
@@ -362,15 +359,15 @@ void ImageMap::ImpWriteNCSA( SvStream& rOStm ) const
             switch( pObj->GetType() )
         {
             case( IMAP_OBJ_RECTANGLE ):
-                ( (IMapRectangleObject*) pObj )->WriteNCSA( rOStm );
+                ( (IMapRectangleObject*) pObj )->WriteNCSA( rOStm, rBaseURL );
             break;
 
             case( IMAP_OBJ_CIRCLE ):
-                ( (IMapCircleObject*) pObj )->WriteNCSA( rOStm );
+                ( (IMapCircleObject*) pObj )->WriteNCSA( rOStm, rBaseURL );
             break;
 
             case( IMAP_OBJ_POLYGON ):
-                ( (IMapPolygonObject*) pObj )->WriteNCSA( rOStm);
+                ( (IMapPolygonObject*) pObj )->WriteNCSA( rOStm, rBaseURL );
             break;
 
             default:
@@ -386,7 +383,7 @@ void ImageMap::ImpWriteNCSA( SvStream& rOStm ) const
 |*
 \******************************************************************************/
 
-ULONG ImageMap::Read( SvStream& rIStm, ULONG nFormat )
+ULONG ImageMap::Read( SvStream& rIStm, ULONG nFormat, const String& rBaseURL  )
 {
     ULONG nRet = IMAP_ERR_FORMAT;
 
@@ -395,9 +392,9 @@ ULONG ImageMap::Read( SvStream& rIStm, ULONG nFormat )
 
     switch ( nFormat )
     {
-        case ( IMAP_FORMAT_BIN )    : rIStm >> *this; break;
-        case ( IMAP_FORMAT_CERN )   : nRet = ImpReadCERN( rIStm ); break;
-        case ( IMAP_FORMAT_NCSA )   : nRet = ImpReadNCSA( rIStm ); break;
+        case ( IMAP_FORMAT_BIN )    : Read( rIStm, rBaseURL ); break;
+        case ( IMAP_FORMAT_CERN )   : nRet = ImpReadCERN( rIStm, rBaseURL ); break;
+        case ( IMAP_FORMAT_NCSA )   : nRet = ImpReadNCSA( rIStm, rBaseURL ); break;
 
         default:
         break;
@@ -416,7 +413,7 @@ ULONG ImageMap::Read( SvStream& rIStm, ULONG nFormat )
 |*
 \******************************************************************************/
 
-ULONG ImageMap::ImpReadCERN( SvStream& rIStm )
+ULONG ImageMap::ImpReadCERN( SvStream& rIStm, const String& rBaseURL )
 {
     ByteString aStr;
 
@@ -424,7 +421,7 @@ ULONG ImageMap::ImpReadCERN( SvStream& rIStm )
     ClearImageMap();
 
     while ( rIStm.ReadLine( aStr ) )
-        ImpReadCERNLine( aStr );
+        ImpReadCERNLine( aStr, rBaseURL );
 
     return IMAP_ERR_OK;
 }
@@ -436,7 +433,7 @@ ULONG ImageMap::ImpReadCERN( SvStream& rIStm )
 |*
 \******************************************************************************/
 
-void ImageMap::ImpReadCERNLine( const ByteString& rLine )
+void ImageMap::ImpReadCERNLine( const ByteString& rLine, const String& rBaseURL  )
 {
     ByteString  aStr( rLine );
     ByteString  aToken;
@@ -462,7 +459,7 @@ void ImageMap::ImpReadCERNLine( const ByteString& rLine )
         {
             const Point     aTopLeft( ImpReadCERNCoords( &pStr ) );
             const Point     aBottomRight( ImpReadCERNCoords( &pStr ) );
-            const String    aURL( ImpReadCERNURL( &pStr ) );
+            const String    aURL( ImpReadCERNURL( &pStr, rBaseURL ) );
             const Rectangle aRect( aTopLeft, aBottomRight );
 
             IMapRectangleObject* pObj = new IMapRectangleObject( aRect, aURL, String() );
@@ -472,7 +469,7 @@ void ImageMap::ImpReadCERNLine( const ByteString& rLine )
         {
             const Point     aCenter( ImpReadCERNCoords( &pStr ) );
             const long      nRadius = ImpReadCERNRadius( &pStr );
-            const String    aURL( ImpReadCERNURL( &pStr ) );
+            const String    aURL( ImpReadCERNURL( &pStr, rBaseURL ) );
 
             IMapCircleObject* pObj = new IMapCircleObject( aCenter, nRadius, aURL, String() );
             maList.Insert( pObj, LIST_APPEND );
@@ -486,7 +483,7 @@ void ImageMap::ImpReadCERNLine( const ByteString& rLine )
             for ( USHORT i = 0; i < nCount; i++ )
                 aPoly[ i ] = ImpReadCERNCoords( &pStr );
 
-            aURL = ImpReadCERNURL( &pStr );
+            aURL = ImpReadCERNURL( &pStr, rBaseURL );
 
             IMapPolygonObject* pObj = new IMapPolygonObject( aPoly, aURL, String() );
             maList.Insert( pObj, LIST_APPEND );
@@ -575,7 +572,7 @@ long ImageMap::ImpReadCERNRadius( const char** ppStr )
 |*
 \******************************************************************************/
 
-String ImageMap::ImpReadCERNURL( const char** ppStr )
+String ImageMap::ImpReadCERNURL( const char** ppStr, const String& rBaseURL )
 {
     String  aStr( String::CreateFromAscii( *ppStr ) );
 
@@ -584,7 +581,7 @@ String ImageMap::ImpReadCERNURL( const char** ppStr )
     aStr.EraseTrailingChars( ' ' );
     aStr.EraseTrailingChars( '\t' );
 
-    return INetURLObject::RelToAbs( aStr );
+    return INetURLObject::GetAbsURL( rBaseURL, aStr );
 }
 
 
@@ -594,7 +591,7 @@ String ImageMap::ImpReadCERNURL( const char** ppStr )
 |*
 \******************************************************************************/
 
-ULONG ImageMap::ImpReadNCSA( SvStream& rIStm )
+ULONG ImageMap::ImpReadNCSA( SvStream& rIStm, const String& rBaseURL )
 {
     ByteString aStr;
 
@@ -602,7 +599,7 @@ ULONG ImageMap::ImpReadNCSA( SvStream& rIStm )
     ClearImageMap();
 
     while ( rIStm.ReadLine( aStr ) )
-        ImpReadNCSALine( aStr );
+        ImpReadNCSALine( aStr, rBaseURL );
 
     return IMAP_ERR_OK;
 }
@@ -614,7 +611,7 @@ ULONG ImageMap::ImpReadNCSA( SvStream& rIStm )
 |*
 \******************************************************************************/
 
-void ImageMap::ImpReadNCSALine( const ByteString& rLine )
+void ImageMap::ImpReadNCSALine( const ByteString& rLine, const String& rBaseURL )
 {
     ByteString  aStr( rLine );
     ByteString  aToken;
@@ -638,7 +635,7 @@ void ImageMap::ImpReadNCSALine( const ByteString& rLine )
     {
         if ( aToken == "rect" )
         {
-            const String    aURL( ImpReadNCSAURL( &pStr ) );
+            const String    aURL( ImpReadNCSAURL( &pStr, rBaseURL ) );
             const Point     aTopLeft( ImpReadNCSACoords( &pStr ) );
             const Point     aBottomRight( ImpReadNCSACoords( &pStr ) );
             const Rectangle aRect( aTopLeft, aBottomRight );
@@ -648,7 +645,7 @@ void ImageMap::ImpReadNCSALine( const ByteString& rLine )
         }
         else if ( aToken == "circle" )
         {
-            const String    aURL( ImpReadNCSAURL( &pStr ) );
+            const String    aURL( ImpReadNCSAURL( &pStr, rBaseURL ) );
             const Point     aCenter( ImpReadNCSACoords( &pStr ) );
             const Point     aDX( aCenter - ImpReadNCSACoords( &pStr ) );
             long            nRadius = (long) sqrt( (double) aDX.X() * aDX.X() +
@@ -660,7 +657,7 @@ void ImageMap::ImpReadNCSALine( const ByteString& rLine )
         else if ( aToken == "poly" )
         {
             const USHORT    nCount = aStr.GetTokenCount( ',' ) - 1;
-            const String    aURL( ImpReadNCSAURL( &pStr ) );
+            const String    aURL( ImpReadNCSAURL( &pStr, rBaseURL ) );
             Polygon         aPoly( nCount );
 
             for ( USHORT i = 0; i < nCount; i++ )
@@ -679,7 +676,7 @@ void ImageMap::ImpReadNCSALine( const ByteString& rLine )
 |*
 \******************************************************************************/
 
-String ImageMap::ImpReadNCSAURL( const char** ppStr )
+String ImageMap::ImpReadNCSAURL( const char** ppStr, const String& rBaseURL )
 {
     String  aStr;
     char    cChar = *(*ppStr)++;
@@ -696,7 +693,7 @@ String ImageMap::ImpReadNCSAURL( const char** ppStr )
         }
     }
 
-    return INetURLObject::RelToAbs( aStr );
+    return INetURLObject::GetAbsURL( rBaseURL, aStr );
 }
 
 
