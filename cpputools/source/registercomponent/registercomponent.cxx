@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registercomponent.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-08-17 13:00:29 $
+ *  last change: $Author: jbu $ $Date: 2002-03-07 13:07:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,16 +59,22 @@
  *
  ************************************************************************/
 
+#include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 
 #include <vector>
+#
+#include <rtl/strbuf.hxx>
 
 #include <cppuhelper/servicefactory.hxx>
+#include <cppuhelper/shlib.hxx>
 
+#include <com/sun/star/container/XSet.hpp>
 #include <com/sun/star/registry/XImplementationRegistration.hpp>
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
+
 #include <algorithm>
 
 #ifndef _OSL_PROCESS_H_
@@ -92,6 +98,13 @@
 
 using namespace ::rtl;
 using namespace ::osl;
+using namespace ::cppu;
+using namespace ::std;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::registry;
+using com::sun::star::container::XSet;
+
 
 sal_Bool isFileUrl(const OUString& fileName)
 {
@@ -123,7 +136,7 @@ OUString convertToFileUrl(const OUString& fileName)
 
 static void usingRegisterImpl()
 {
-    fprintf(stderr, "\nusing: regcomp -register|revoke -r registryfile -c locationUrl [-br registryfile] [-l componentLoaderUrl]\n");
+    fprintf(stderr, "usage: regcomp -register|revoke -r registryfile -c locationUrl [-br registryfile] [-l componentLoaderUrl] [-s]\n");
     fprintf(stderr, " Parameters:\n");
     fprintf(stderr, "      -register              = register a new extern component.\n");
     fprintf(stderr, "      -revoke                = revoke an extern component.\n\n");
@@ -136,17 +149,9 @@ static void usingRegisterImpl()
                     "                               components must all need the same loader (quoting is possible with \\ or \"\").\n");
     fprintf(stderr, "      -l componentLoaderUrl  = the name of the needed loader, if no loader is specified\n"
                     "                               the 'com.sun.star.loader.SharedLibrary' is used.\n"
-                    "                               loaders: com.sun.star.loader.SharedLibrary | com.sun.star.loader.Java2\n\n");
+                    "                               loaders: com.sun.star.loader.SharedLibrary | com.sun.star.loader.Java2\n"
+                    "      -s                     = silent, no output on success\n" );
 }
-
-
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::registry;
-
-using namespace cppu;
-using namespace rtl;
-using namespace std;
 
 class IllegalArgument
 {
@@ -163,11 +168,12 @@ struct Options
     Options()
         : bRegister(sal_False)
         , bRevoke(sal_False)
-        , sLoaderName( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.loader.SharedLibrary") )
+        , bSilent( sal_False )
         {}
 
     sal_Bool bRegister;
     sal_Bool bRevoke;
+    sal_Bool bSilent;
     OUString sProgramName;
     OUString sBootRegName;
     OUString sRegName;
@@ -180,6 +186,7 @@ sal_Bool parseOptions(int ac, char* av[], Options& rOptions, sal_Bool bCmdFile)
 {
     sal_Bool    ret = sal_True;
     sal_uInt16  i=0;
+    sal_Bool bLoaderExplicitlyGiven = sal_False;
 
     rOptions.sProgramName = OUString::createFromAscii(av[i++]);
 
@@ -297,6 +304,7 @@ sal_Bool parseOptions(int ac, char* av[], Options& rOptions, sal_Bool bCmdFile)
                         {
                             i++;
                             rOptions.sLoaderName = OUString::createFromAscii(av[i]);
+                            bLoaderExplicitlyGiven = sal_True;
                         } else
                         {
                             OString tmp("'-l', please check");
@@ -308,9 +316,31 @@ sal_Bool parseOptions(int ac, char* av[], Options& rOptions, sal_Bool bCmdFile)
                         }
                     } else
                     {
+                        bLoaderExplicitlyGiven = sal_True;
                         rOptions.sLoaderName = OUString::createFromAscii(av[i]+2);
                     }
                     break;
+                }
+                case 's':
+                {
+                    if( av[i][2] == 0 )
+                    {
+                        rOptions.bSilent = sal_True;
+                    }
+                    else
+                    {
+                        rtl::OStringBuffer buf;
+                        buf.append( "Unknown error " );
+                        buf.append( av[i] );
+                        throw IllegalArgument( av[i] );
+                    }
+                    break;
+                }
+                default:
+                {
+                    OString tmp( "unknown option " );
+                    tmp += av[i];
+                    throw IllegalArgument( tmp );
                 }
             }
         } else
@@ -324,29 +354,89 @@ sal_Bool parseOptions(int ac, char* av[], Options& rOptions, sal_Bool bCmdFile)
                     ret = sal_False;
                 } else
                 {
-                    int rargc=0;
-                    char* rargv[512];
-                    char  buffer[512];
+                    fseek( cmdFile , 0 , SEEK_END );
+                    sal_Int32 nLen = ftell( cmdFile);
+                    fseek( cmdFile, 0, SEEK_SET );
 
+                    // 2 chars per string is a upper limit for the number of
+                    // substrings ( at least one separator char needed for fscanf).
+                    char ** rargv = (char **)rtl_allocateMemory( nLen * sizeof( char* ) /2);
+                    if( ! rargv )
+                    {
+                        OStringBuffer buf;
+                        buf.append( "Not enough memory for reading command file " );
+                        buf.append( av[i] +1 );
+                        buf.append( " with length " );
+                        buf.append( nLen );
+                        buf.append( "." );
+                        throw IllegalArgument( buf.makeStringAndClear() );
+                    }
+                    char *buffer = ( char * )rtl_allocateMemory( nLen +1 );
+                    if( ! buffer )
+                    {
+                        OStringBuffer buf;
+                        buf.append( "Not enough memory for reading command file " );
+                        buf.append( av[i] +1 );
+                        buf.append( " with length " );
+                        buf.append( nLen );
+                        buf.append( "." );
+                        throw IllegalArgument( buf.makeStringAndClear() );
+                    }
+
+                    // we start at one to omit argv[0]
+                    sal_Int32 rargc = 1;
+                    rargv[0] = av[0];
                     while ( fscanf(cmdFile, "%s", buffer) != EOF )
                     {
-                        rargv[rargc]= strdup(buffer);
+                        rargv[rargc]= (char * )rtl_allocateMemory( strlen( buffer ) +1 );
+                        if( ! rargv[rargc] )
+                        {
+                            OStringBuffer buf;
+                            buf.append( "Not enough memory for reading command file " );
+                            buf.append( av[i] +1 );
+                            buf.append( " with length " );
+                            buf.append( nLen );
+                            buf.append( "." );
+                            throw IllegalArgument( buf.makeStringAndClear() );
+                        }
+                        strcpy( rargv[rargc] , buffer );
                         rargc++;
                     }
                     fclose(cmdFile);
 
                     parseOptions(rargc, rargv, rOptions, bCmdFile);
 
-                    for (long i=0; i < rargc; i++)
+                    for (long i=1; i < rargc; i++)
                     {
-                        free(rargv[i]);
+                        rtl_freeMemory(rargv[i]);
                     }
+                    rtl_freeMemory( buffer );
+                    rtl_freeMemory( rargv );
                 }
             } else
             {
                 usingRegisterImpl();
                 ret = sal_False;
             }
+        }
+    }
+
+    if( ! bLoaderExplicitlyGiven && rOptions.sComponentUrls.getLength() > 4 )
+    {
+        if ( rOptions.sComponentUrls.matchAsciiL(
+            ".jar" , 4 , rOptions.sComponentUrls.getLength() - 4 ) )
+        {
+            if( ! rOptions.bSilent )
+            {
+                printf( "using loader com.sun.star.loader.Java2\n" );
+            }
+            rOptions.sLoaderName = OUString(
+                RTL_CONSTASCII_USTRINGPARAM("com.sun.star.loader.Java2"));
+        }
+        else
+        {
+            rOptions.sLoaderName = OUString(
+                RTL_CONSTASCII_USTRINGPARAM("com.sun.star.loader.SharedLibrary") );
         }
     }
 
@@ -358,6 +448,7 @@ struct DoIt
 {
     sal_Bool                               _bRegister;
     sal_Bool                               _bRevoke;
+    sal_Bool                               _bSilent;
     OString                                _sRegName;
     OUString                               _sLoaderName;
     Reference<XImplementationRegistration> _xImplRegistration;
@@ -366,6 +457,7 @@ struct DoIt
 
     DoIt(sal_Bool bRegister,
          sal_Bool bRevoke,
+         sal_Bool bSilent,
          const Reference<XSimpleRegistry> & xReg,
          const OString & sRegName,
          const Reference<XImplementationRegistration> & xImplRegistration,
@@ -378,6 +470,7 @@ struct DoIt
 
 DoIt::DoIt(sal_Bool bRegister,
            sal_Bool bRevoke,
+           sal_Bool bSilent,
            const Reference<XSimpleRegistry> & xReg,
            const OString & sRegName,
            const Reference<XImplementationRegistration> & xImplRegistration,
@@ -385,6 +478,7 @@ DoIt::DoIt(sal_Bool bRegister,
            sal_uInt32 * exitCode) throw()
     : _bRegister(bRegister),
       _bRevoke(bRevoke),
+      _bSilent( bSilent ),
       _xReg(xReg),
       _sRegName(sRegName),
       _xImplRegistration(xImplRegistration),
@@ -398,45 +492,58 @@ void DoIt::operator() (const OUString & url) throw()
 
     if (_bRegister)
     {
-        OSL_TRACE("regcomp - registering: %s in %s", sUrl.getStr(), _sRegName.getStr());
         try
         {
             _xImplRegistration->registerImplementation(_sLoaderName, url, _xReg);
 
-            fprintf(stderr, "\nregister component \"%s\" in registry \"%s\" succesful!\n", sUrl.getStr(), _sRegName.getStr());
+            if ( ! _bSilent )
+            {
+                fprintf(stderr, "register component '%s' in registry '%s' succesful!\n", sUrl.getStr(), _sRegName.getStr());
+            }
         }
         catch(CannotRegisterImplementationException & cannotRegisterImplementationException) {
             OString aMessage(OUStringToOString(cannotRegisterImplementationException.Message, RTL_TEXTENCODING_ASCII_US));
-            fprintf(stderr, "\nregister component \"%s\" in registry \"%s\" failed!\n", sUrl.getStr(), _sRegName.getStr());
-            fprintf(stderr, "\nERROR: %s\n", aMessage.getStr());
+            fprintf(stderr, "register component '%s' in registry '%s' failed!\n", sUrl.getStr(), _sRegName.getStr());
+            fprintf(stderr, "CannotRegisterImplementationException: %s\n", aMessage.getStr());
+
+            ++ (*_exitCode);
+        }
+        catch( RuntimeException & e )
+        {
+            OString aMessage(OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US));
+            fprintf(stderr, "register component '%s' in registry '%s' failed!\n", sUrl.getStr(), _sRegName.getStr());
+            fprintf(stderr, "RuntimeException: %s\n", aMessage.getStr());
 
             ++ (*_exitCode);
         }
     }
     else if(_bRevoke)
     {
-        OSL_TRACE("regcomp - revoking: %s from %s", sUrl.getStr(), _sRegName.getStr());
-
         try
         {
             sal_Bool bRet = _xImplRegistration->revokeImplementation(url, _xReg);
 
             if (bRet)
-                fprintf(stderr, "\nrevoke component \"%s\" from registry \"%s\" succesful!\n", sUrl.getStr(), _sRegName.getStr());
+            {
+                if ( ! _bSilent )
+                    fprintf(stderr, "revoke component '%s' from registry '%s' succesful!\n", sUrl.getStr(), _sRegName.getStr());
+            }
             else
             {
-                fprintf(stderr, "\nrevoke component \"%s\" from registry \"%s\" failed!\n", sUrl.getStr(), _sRegName.getStr());
+                fprintf(stderr, "revoke component '%s' from registry '%s' failed!\n", sUrl.getStr(), _sRegName.getStr());
 
-                  ++ (*_exitCode);
+                ++ (*_exitCode);
             }
         }
-        catch( CannotRegisterImplementationException& e )
+        catch( RuntimeException & e )
         {
-            OString aMessage( OUStringToOString(e.Message, osl_getThreadTextEncoding()) );
-            fprintf(stderr, "\nrevoke component \"%s\" from registry \"%s\" failed!\n", sUrl.getStr(), _sRegName.getStr());
-            fprintf(stderr, "\nERROR: %s\n", aMessage.getStr() );
-
-              ++ (*_exitCode);
+            OString aMessage(OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US));
+            fprintf( stderr,
+                     "revoke component '%s' from registry '%s' failed!\n",
+                     sUrl.getStr(),
+                     _sRegName.getStr() );
+            fprintf( stderr, "RuntimeException: %s\n" , aMessage.getStr());
+            ++ (*_exitCode);
         }
     }
 }
@@ -475,6 +582,29 @@ void _cdecl main( int argc, char * argv[] )
         } else
           {
             xSMgr = createServiceFactory();
+
+            // this may be added in future, when the javavm can get its initial settings
+            // from the uno context, now it is quite useless
+//              if( ! aOptions.sLoaderName.compareToAscii( "com.sun.star.loader.Java2" ) )
+//              {
+//                  // we know our java loader, so in order to make it a little easier ...
+//                  Reference< XInterface > r = loadSharedLibComponentFactory(
+//                      OUString::createFromAscii( "jen" ), OUString(),
+//                      OUString::createFromAscii( "com.sun.star.comp.stoc.JavaVirtualMachine" ),
+//                      xSMgr,
+//                      Reference< XRegistryKey > () );
+//                  Reference< XInterface > r2 = loadSharedLibComponentFactory(
+//                      OUString::createFromAscii( "javaloader" ), OUString(),
+//                      OUString::createFromAscii(( "com.sun.star.comp.stoc.JavaComponentLoader" ) ),
+//                      xSMgr,
+//                      Reference< XRegistryKey > () );
+//                  Reference <XSet> xSet( xSMgr, UNO_QUERY );
+//                  if( r.is() && r2.is() && xSet.is() )
+//                  {
+//                      xSet->insert( makeAny( r ) );
+//                      xSet->insert( makeAny( r2 ) );
+//                  }
+//              }
         }
     }
     catch( Exception& e )
@@ -482,7 +612,8 @@ void _cdecl main( int argc, char * argv[] )
         fprintf(stderr, "ERROR: create ServiceManager failed!\n");
         if ( e.Message.getLength() )
         {
-            fprintf(stderr, "ERROR description: %s\n", OUStringToOString(e.Message, osl_getThreadTextEncoding()).getStr());
+            fprintf(stderr, "ERROR description: %s\n",
+                    OUStringToOString(e.Message, osl_getThreadTextEncoding()).getStr());
         }
         exit(1);
     }
@@ -498,8 +629,6 @@ void _cdecl main( int argc, char * argv[] )
 
 
     OString tmp = OUStringToOString(aOptions.sComponentUrls, osl_getThreadTextEncoding());
-    OSL_TRACE("regcomp - aOptions.sComponentUrls: %s", tmp.getStr());
-
 
     if ( aOptions.sComponentUrls.getLength() == 0 )
     {
@@ -518,13 +647,17 @@ void _cdecl main( int argc, char * argv[] )
                 xReg->open( convertToFileUrl(aOptions.sRegName), sal_False, sal_True);
                 if (!xReg->isValid())
                 {
-                    fprintf(stderr, "ERROR: open|create registry \"%s\" failed!\n", sRegName.getStr());
+                    fprintf(stderr, "ERROR: open|create registry '%s' failed!\n", sRegName.getStr());
                     exit(1);
                 }
             }
-            catch( InvalidRegistryException&)
+            catch( InvalidRegistryException & e)
             {
-                fprintf(stderr, "ERROR: create registry \"%s\" failed!\n", sRegName.getStr());
+                OString o = OUStringToOString( e.Message , RTL_TEXTENCODING_ASCII_US );
+                fprintf(stderr,
+                        "ERROR: create registry '%s' failed!\n"
+                        "InvalidRegistryException: %s\n",
+                         sRegName.getStr(), o.getStr() );
                 exit(1);
             }
         }
@@ -583,7 +716,9 @@ void _cdecl main( int argc, char * argv[] )
             urls.push_back(tmp_url);
 
         if(aOptions.bRegister || aOptions.bRevoke)
-            for_each(urls.begin(), urls.end(), DoIt(aOptions.bRegister, aOptions.bRevoke, xReg, sRegName, xImplRegistration, aOptions.sLoaderName, &exitCode));
+            for_each(urls.begin(), urls.end(),
+                     DoIt(aOptions.bRegister, aOptions.bRevoke, aOptions.bSilent,
+                          xReg, sRegName, xImplRegistration, aOptions.sLoaderName, &exitCode));
 
         else
         {
@@ -593,7 +728,7 @@ void _cdecl main( int argc, char * argv[] )
     }
     else
     {
-        fprintf(stderr, "\nComponent registration service could not be loaded!\n");
+        fprintf(stderr, "Component registration service could not be loaded!\n");
         exitCode++;
     }
 
