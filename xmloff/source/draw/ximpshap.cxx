@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.100 $
+ *  $Revision: 1.101 $
  *
- *  last change: $Author: rt $ $Date: 2005-02-07 14:10:39 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 16:36:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2794,6 +2794,9 @@ void SdXMLAppletShapeContext::EndElement()
             aAny <<= maAppletCode;
             xProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "AppletCode" ) ), aAny );
         }
+
+        aAny <<= ::rtl::OUString( GetImport().GetDocumentBase() );
+        xProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "AppletDocBase" ) ), aAny );
 
         SetThumbnail();
     }
