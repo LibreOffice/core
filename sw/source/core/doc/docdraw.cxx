@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docdraw.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 13:32:00 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:46:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -312,8 +312,8 @@ SwDrawContact* SwDoc::GroupSelection( SdrView& rDrawView )
     // the corresponding 'master' drawing objects.
     SwDrawView::ReplaceMarkedDrawVirtObjs( rDrawView );
 
-    const SdrMarkList &rMrkList = rDrawView.GetMarkList();
-    SwDrawFrmFmt *pFmt(0);
+    const SdrMarkList &rMrkList = rDrawView.GetMarkedObjectList();
+    SwDrawFrmFmt *pFmt = 0L;
     SdrObject *pObj = rMrkList.GetMark( 0 )->GetObj();
     BOOL bNoGroup = ( 0 == pObj->GetUpGroup() );
     SwDrawContact* pNewContact = 0;
@@ -387,7 +387,7 @@ void SwDoc::UnGroupSelection( SdrView& rDrawView )
     // the corresponding 'master' drawing objects.
     SwDrawView::ReplaceMarkedDrawVirtObjs( rDrawView );
 
-    const SdrMarkList &rMrkList = rDrawView.GetMarkList();
+    const SdrMarkList &rMrkList = rDrawView.GetMarkedObjectList();
     if( rMrkList.GetMarkCount() )
     {
         SdrObject *pObj = rMrkList.GetMark( 0 )->GetObj();
@@ -445,7 +445,7 @@ void SwDoc::UnGroupSelection( SdrView& rDrawView )
 BOOL SwDoc::DeleteSelection( SwDrawView& rDrawView )
 {
     BOOL bCallBase = FALSE;
-    const SdrMarkList &rMrkList = rDrawView.GetMarkList();
+    const SdrMarkList &rMrkList = rDrawView.GetMarkedObjectList();
     if( rMrkList.GetMarkCount() )
     {
         StartUndo();
