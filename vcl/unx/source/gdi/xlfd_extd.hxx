@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlfd_extd.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cp $ $Date: 2000-12-13 20:36:59 $
+ *  last change: $Author: hjs $ $Date: 2000-12-14 13:07:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,11 +133,19 @@ class ExtendedXlfd {
 
         AttributeProvider*  mpFactory;
 
+    #ifdef GCC
+    public:
+    #endif
+
         unsigned short      mnFoundry;
         unsigned short      mnFamily;
         unsigned short      mnWeight;
         unsigned short      mnSlant;
         unsigned short      mnSetwidth;
+
+    #ifdef GCC
+    protected:
+    #endif
 
         unsigned short      mnEncodings;
         struct EncodingInfo {
@@ -303,6 +311,7 @@ class VirtualXlfd : public ExtendedXlfd
     protected:
 
         struct ExtEncodingInfo {
+
             unsigned short      mnFoundry;
             unsigned short      mnFamily;
             unsigned short      mnWeight;
