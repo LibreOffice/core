@@ -2,9 +2,9 @@
  *
  *  $RCSfile: signal.c,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mfe $ $Date: 2001-03-02 09:52:26 $
+ *  last change: $Author: hro $ $Date: 2001-03-30 13:31:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,14 +92,18 @@ static struct SignalAction
     { SIGHUP,    ACT_IGNORE, NULL },    /* hangup */
     { SIGINT,    ACT_EXIT,   NULL },    /* interrupt (rubout) */
     { SIGQUIT,   ACT_ABORT,  NULL },    /* quit (ASCII FS) */
-    { SIGILL,    ACT_ABORT,  NULL },    /* illegal instruction (not reset when caught) */
+    { SIGILL,    ACT_SYSTEM,  NULL },    /* illegal instruction (not reset when caught) */
+/* changed from ACT_ABOUT to ACT_SYSTEM to try and get collector to run*/
     { SIGTRAP,   ACT_ABORT,  NULL },    /* trace trap (not reset when caught) */
 #if ( SIGIOT != SIGABRT )
     { SIGIOT,    ACT_ABORT,  NULL },    /* IOT instruction */
 #endif
     { SIGABRT,   ACT_ABORT,  NULL },    /* used by abort, replace SIGIOT in the future */
 #ifdef SIGEMT
-    { SIGEMT,    ACT_ABORT,  NULL },    /* EMT instruction */
+    { SIGEMT,    ACT_SYSTEM,  NULL },    /* EMT instruction */
+/* changed from ACT_ABORT to ACT_SYSTEM to remove handler*/
+/* SIGEMT may also be used by the profiler - so it is probably not a good
+plan to have the new handler use this signal*/
 #endif
     { SIGFPE,    ACT_ABORT,  NULL },    /* floating point exception */
     { SIGKILL,   ACT_SYSTEM, NULL },    /* kill (cannot be caught or ignored) */
@@ -128,7 +132,11 @@ static struct SignalAction
     { SIGTTIN,   ACT_SYSTEM, NULL },    /* background tty read attempted */
     { SIGTTOU,   ACT_SYSTEM, NULL },    /* background tty write attempted */
     { SIGVTALRM, ACT_EXIT,   NULL },    /* virtual timer expired */
-    { SIGPROF,   ACT_EXIT,   NULL },    /* profiling timer expired */
+    { SIGPROF,   ACT_SYSTEM,   NULL },    /* profiling timer expired */
+/*Change from ACT_EXIT to ACT_SYSTEM for SIGPROF is so that profiling signals do
+not get taken by the new handler - the new handler does not pass on context
+information which causes 'collect' to crash. This is a way of avoiding
+what looks like a bug in the new handler*/
     { SIGXCPU,   ACT_ABORT,  NULL },    /* exceeded cpu limit */
     { SIGXFSZ,   ACT_ABORT,  NULL }     /* exceeded file size limit */
 };
