@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawsh2.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sab $ $Date: 2002-11-11 13:59:36 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 16:31:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -274,39 +274,47 @@ void ScDrawShell::GetDrawAttrState( SfxItemSet& rSet )
     else
         rSet.Put( pDrView->GetDefaultAttr() );
 
-    // Position- und Groesse-Items
-    if ( pDrView->IsAction() )
+    //  Items for position and size (see ScGridWindow::UpdateStatusPosSize, #108137#)
+
+    //  SvxPosSizeStatusBarControl needs a SvxSizeItem also in SID_TABLE_CELL (in conflict
+    //  with the sdi definition), because an invalid item state or unknown item type would
+    //  enable date/time display, and a SfxStringItem would show the text!
+
+    BOOL bActionItem = FALSE;
+    if ( pDrView->IsAction() )              // action rectangle
     {
         Rectangle aRect;
         pDrView->TakeActionRect( aRect );
-
-        if ( aRect.IsEmpty() )
-            rSet.Put( SfxPointItem(SID_ATTR_POSITION, aPos) );
-        else
+        if ( !aRect.IsEmpty() )
         {
             pDrView->GetPageViewPvNum(0)->LogicToPagePos(aRect);
             rSet.Put( SfxPointItem( SID_ATTR_POSITION, aRect.TopLeft() ) );
-            rSet.Put( SvxSizeItem( SID_ATTR_SIZE,
-                    Size( aRect.Right() - aRect.Left(),
-                          aRect.Bottom() - aRect.Top() ) ) );
+            Size aSize( aRect.Right() - aRect.Left(), aRect.Bottom() - aRect.Top() );
+            rSet.Put( SvxSizeItem( SID_ATTR_SIZE, aSize ) );
+            rSet.Put( SvxSizeItem( SID_TABLE_CELL, aSize ) );
+            bActionItem = TRUE;
         }
     }
-    else
+    if ( !bActionItem )
     {
-        rSet.Put( SfxPointItem(SID_ATTR_POSITION, aPos) );
-
-        if ( bHasMarked )
+        if ( pDrView->HasMarkedObj() )      // selected objects
         {
             Rectangle aRect = pDrView->GetAllMarkedRect();
             pDrView->GetPageViewPvNum(0)->LogicToPagePos(aRect);
-            rSet.Put( SvxSizeItem( SID_ATTR_SIZE,
-                                   Size( aRect.Right() - aRect.Left(),
-                                         aRect.Bottom() - aRect.Top()) ) );
+            rSet.Put( SfxPointItem( SID_ATTR_POSITION, aRect.TopLeft() ) );
+            Size aSize( aRect.Right() - aRect.Left(), aRect.Bottom() - aRect.Top() );
+            rSet.Put( SvxSizeItem( SID_ATTR_SIZE, aSize ) );
+            rSet.Put( SvxSizeItem( SID_TABLE_CELL, aSize ) );
         }
-        else
+        else                                // mouse position
+        {
+            // aPos is initialized above
+            pDrView->GetPageViewPvNum(0)->LogicToPagePos(aPos);
+            rSet.Put( SfxPointItem( SID_ATTR_POSITION, aPos ) );
             rSet.Put( SvxSizeItem( SID_ATTR_SIZE, Size( 0, 0 ) ) );
+            rSet.Put( SvxSizeItem( SID_TABLE_CELL, Size( 0, 0 ) ) );
+        }
     }
-
 }
 
 void ScDrawShell::GetAttrFuncState(SfxItemSet &rSet)
