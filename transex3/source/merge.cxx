@@ -2,9 +2,9 @@
  *
  *  $RCSfile: merge.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nf $ $Date: 2001-04-05 09:22:28 $
+ *  last change: $Author: nf $ $Date: 2001-04-25 10:17:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 #include <stdio.h>
 #include <tools/fsys.hxx>
 #include "export.hxx"
+#include "utf8conv.hxx"
 
 //
 // class PFormEntrys
@@ -154,7 +155,7 @@ BOOL MergeData::operator==( ResData *pData )
 
 /*****************************************************************************/
 MergeDataFile::MergeDataFile( const ByteString &rFileName, BOOL bErrLog,
-                            CharSet aCharSet )
+                            CharSet aCharSet, BOOL bUTF8 )
 /*****************************************************************************/
                 : bErrorLog( bErrLog )
 {
@@ -211,6 +212,10 @@ MergeDataFile::MergeDataFile( const ByteString &rFileName, BOOL bErrLog,
             sPFO = sLine.GetToken( 4, '\t' );
                 sPFO = sPFO.Copy( 1 ); sPFO.Erase( sPFO.Len() - 1 );
             nLANG = sLine.GetToken( 5, '\t' ).ToInt32();
+
+            if ( bUTF8 )
+                sLine = UTF8Converter::ConvertFromUTF8( sLine, Export::GetCharSet( nLANG ));
+
             sTEXT = sLine.GetToken( 6, '\t' );
                 sTEXT = sTEXT.Copy( 1 ); sTEXT.Erase( sTEXT.Len() - 1 );
             sQHTEXT = sLine.GetToken( 8, '\t' );

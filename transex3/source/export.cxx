@@ -2,9 +2,9 @@
  *
  *  $RCSfile: export.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nf $ $Date: 2001-04-05 09:22:28 $
+ *  last change: $Author: nf $ $Date: 2001-04-25 10:17:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,7 @@
 #include "export.hxx"
 #include "wrdtrans.hxx"
 #include "tokens.h"
+#include "utf8conv.hxx"
 
 extern "C" { yyerror( char * ); }
 extern "C" { YYWarning( char * ); }
@@ -81,6 +82,7 @@ Export *pExport = 0L;
 #define STATE_ERRORLOG  0x0007
 #define STATE_BREAKHELP 0x0008
 #define STATE_UNMERGE   0x0009
+#define STATE_UTF8      0x000A
 
 // set of global variables
 DECLARE_LIST( FileList, ByteString * );
@@ -90,6 +92,7 @@ BOOL bMergeMode;
 BOOL bErrorLog;
 BOOL bBreakWhenHelpText;
 BOOL bUnmerge;
+BOOL bUTF8;
 ByteString sPrj;
 ByteString sPrjRoot;
 ByteString sActFileName;
@@ -109,6 +112,7 @@ extern char *GetOutputFile( int argc, char* argv[])
     bErrorLog = TRUE;
     bBreakWhenHelpText = FALSE;
     bUnmerge = FALSE;
+    bUTF8 = FALSE;
     sPrj = "";
     sPrjRoot = "";
     sActFileName = "";
@@ -145,6 +149,10 @@ extern char *GetOutputFile( int argc, char* argv[])
             nState = STATE_UNMERGE;
             bUnmerge = TRUE;
             bMergeMode = TRUE;
+        }
+        else if ( ByteString( argv[ i ]).ToUpperAscii() == "-UTF8" ) {
+            nState = STATE_UTF8;
+            bUTF8 = TRUE;
         }
         else {
             switch ( nState ) {
@@ -450,7 +458,7 @@ Export::~Export()
 
     if ( bMergeMode && !bUnmerge ) {
         if ( !pMergeDataFile )
-            pMergeDataFile = new MergeDataFile( sMergeSrc, bErrorLog, aCharSet );
+            pMergeDataFile = new MergeDataFile( sMergeSrc, bErrorLog, aCharSet, bUTF8 );
 
         pMergeDataFile->WriteErrorLog( sActFileName );
         delete pMergeDataFile;
@@ -1322,6 +1330,9 @@ BOOL Export::WriteData( ResData *pResData, BOOL bCreateNew )
                     sOutput += sXTitle; sOutput += "\t";
                     sOutput += sTimeStamp;
 
+                    if ( bUTF8 )
+                        sOutput = UTF8Converter::ConvertToUTF8( sOutput, GetCharSet( LangId[ i ] ));
+
                     aOutput.WriteLine( sOutput );
                 }
 
@@ -1411,6 +1422,9 @@ BOOL Export::WriteExportList( ResData *pResData, ExportList *pExportList,
                         sOutput += ByteString::CreateFromInt64( LangId[ j ] ); sOutput += "\t";
                         sOutput += sText; sOutput += "\t\t\t\t";
                         sOutput += sTimeStamp;
+
+                        if ( bUTF8 )
+                            sOutput = UTF8Converter::ConvertToUTF8( sOutput, GetCharSet( LangId[ i ] ));
 
                         aOutput.WriteLine( sOutput );
                     }
@@ -1831,7 +1845,7 @@ BOOL Export::PrepareTextToMerge( ByteString &rText, USHORT nTyp,
 
     // search for merge data
     if ( !pMergeDataFile )
-        pMergeDataFile = new MergeDataFile( sMergeSrc, bErrorLog, aCharSet );
+        pMergeDataFile = new MergeDataFile( sMergeSrc, bErrorLog, aCharSet, bUTF8 );
 
     PFormEntrys *pEntrys = pMergeDataFile->GetPFormEntrys( pResData );
     pResData->sId = sOldId;
@@ -2106,7 +2120,7 @@ void Export::MergeRest( ResData *pResData, USHORT nMode )
     }
 
     if ( !pMergeDataFile )
-        pMergeDataFile = new MergeDataFile( sMergeSrc, bErrorLog, aCharSet );
+        pMergeDataFile = new MergeDataFile( sMergeSrc, bErrorLog, aCharSet, bUTF8 );
 
     switch ( nMode ) {
         case MERGE_MODE_NORMAL : {

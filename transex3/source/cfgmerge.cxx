@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgmerge.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: nf $ $Date: 2001-02-02 15:40:54 $
+ *  last change: $Author: nf $ $Date: 2001-04-25 10:17:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,11 +79,13 @@ extern "C" { YYWarning( char * ); }
 #define STATE_ROOT      0x0005
 #define STATE_MERGESRC  0x0006
 #define STATE_ERRORLOG  0x0007
+#define STATE_UTF8      0x0008
 
 // set of global variables
 BOOL bEnableExport;
 BOOL bMergeMode;
 BOOL bErrorLog;
+BOOL bUTF8;
 ByteString sPrj;
 ByteString sPrjRoot;
 ByteString sInputFileName;
@@ -103,6 +105,7 @@ extern char *GetOutputFile( int argc, char* argv[])
     bEnableExport = FALSE;
     bMergeMode = FALSE;
     bErrorLog = TRUE;
+    bUTF8 = FALSE;
     sPrj = "";
     sPrjRoot = "";
     sInputFileName = "";
@@ -131,6 +134,10 @@ extern char *GetOutputFile( int argc, char* argv[])
         else if ( ByteString( argv[ i ] ).ToUpperAscii() == "-E" ) {
             nState = STATE_ERRORLOG;
             bErrorLog = FALSE;
+        }
+        else if ( ByteString( argv[ i ] ).ToUpperAscii() == "-UTF8" ) {
+            nState = STATE_UTF8;
+            bUTF8 = FALSE;
         }
         else {
             switch ( nState ) {
@@ -615,6 +622,9 @@ void CfgExport::WorkOnRessourceEnd()
                     sOutput += sText; sOutput += "\t\t\t\t";
                     sOutput += sTimeStamp;
 
+                    if ( bUTF8 )
+                        sOutput = UTF8Converter::ConvertToUTF8( sOutput, Export::GetCharSet( Export::LangId[ i ] ));
+
                     pOutputStream->WriteLine( sOutput );
                 }
             }
@@ -652,7 +662,7 @@ CfgMerge::CfgMerge(
 {
     if ( rMergeSource.Len())
         pMergeDataFile = new MergeDataFile(
-            rMergeSource, bErrorLog, RTL_TEXTENCODING_MS_1252 );
+            rMergeSource, bErrorLog, RTL_TEXTENCODING_MS_1252, bUTF8 );
 }
 
 /*****************************************************************************/

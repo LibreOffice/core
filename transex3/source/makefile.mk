@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: nf $ $Date: 2001-03-30 09:27:32 $
+#   last change: $Author: nf $ $Date: 2001-04-25 10:17:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,9 +86,10 @@ OBJFILES=   			\
     $(OBJ)$/wtratree.obj	\
     $(OBJ)$/wtranode.obj
 
+# extractor and merger for *.src and *.hrc
 APP1TARGET=	$(TARGET)
 APP1STACK=	16000
-APP1OBJS=   $(OBJ)$/src_yy.obj
+APP1OBJS=   $(OBJ)$/src_yy.obj $(OBJ)$/utf8conv.obj
 APP1STDLIBS+=$(STATIC_LIBS) $(BTSTRPLIB)
 APP1LIBS+=	$(LB)$/$(TARGET).lib
 APP1DEPN=   $(OBJ)$/src_yy.obj $(LB)$/$(TARGET).lib
@@ -98,26 +99,31 @@ APP1DEPN=   $(OBJ)$/src_yy.obj $(LB)$/$(TARGET).lib
 #APP2OBJS=   $(OBJ)$/termino.obj
 #APP2STDLIBS=$(STATIC_LIBS) $(L)$/bootstrp.lib
 
+# extractor and merger for *.lng and *.lng
 APP3TARGET= lngex
 APP3STACK=  16000
-APP3OBJS=   $(OBJ)$/lngmerge.obj $(OBJ)$/merge.obj $(OBJ)$/export2.obj $(OBJ)$/lngex.obj
+APP3OBJS=   $(OBJ)$/lngmerge.obj $(OBJ)$/merge.obj $(OBJ)$/export2.obj $(OBJ)$/lngex.obj $(OBJ)$/utf8conv.obj
 APP3STDLIBS=$(STATIC_LIBS)
 
+# encoding converter for *.gsi
 APP4TARGET= gsiconv
 APP4STACK=  16000
 APP4OBJS=   $(OBJ)$/utf8conv.obj $(OBJ)$/gsiconv.obj
 APP4STDLIBS=$(STATIC_LIBS)
 
+# tag checker for *.gsi
 APP5TARGET= gsicheck
 APP5STACK=  16000
 APP5OBJS=   $(OBJ)$/gsicheck.obj $(OBJ)$/tagtest.obj
 APP5STDLIBS=$(STATIC_LIBS)
 
+# extractor and merger for *.xxl and *.xrb
 APP6TARGET= xmlex
 APP6STACK=  16000
 APP6OBJS=   $(OBJ)$/xmlmerge.obj $(OBJ)$/xml_yy.obj $(OBJ)$/merge.obj $(OBJ)$/export2.obj $(OBJ)$/utf8conv.obj
 APP6STDLIBS=$(STATIC_LIBS)
 
+# extractor and merger for *.cfg
 APP7TARGET= cfgex
 APP7STACK=  16000
 APP7OBJS=   $(OBJ)$/cfgmerge.obj $(OBJ)$/cfg_yy.obj $(OBJ)$/merge.obj $(OBJ)$/export2.obj $(OBJ)$/utf8conv.obj

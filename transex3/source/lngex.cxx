@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lngex.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:03:26 $
+ *  last change: $Author: nf $ $Date: 2001-04-25 10:17:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,12 +73,14 @@
 #define STATE_ERRORLOG  0x0007
 #define STATE_BREAKHELP 0x0008
 #define STATE_UNMERGE   0x0009
+#define STATE_UTF8      0x000A
 
 // set of global variables
 ByteString sInputFile;
 BOOL bEnableExport;
 BOOL bMergeMode;
 BOOL bErrorLog;
+BOOL bUTF8;
 ByteString sPrj;
 ByteString sPrjRoot;
 ByteString sOutputFile;
@@ -91,6 +93,7 @@ BOOL ParseCommandLine( int argc, char* argv[])
     bEnableExport = FALSE;
     bMergeMode = FALSE;
     bErrorLog = TRUE;
+    bUTF8 = FALSE;
     sPrj = "";
     sPrjRoot = "";
 
@@ -117,6 +120,10 @@ BOOL ParseCommandLine( int argc, char* argv[])
         else if (( ByteString( argv[ i ]) == "-e" ) || ( argv[ i ] == "-E" )) {
             nState = STATE_ERRORLOG;
             bErrorLog = FALSE;
+        }
+        else if ( ByteString( argv[ i ]).ToUpperAscii() == "-UTF8" ) {
+            nState = STATE_UTF8;
+            bUTF8 = TRUE;
         }
         else {
             switch ( nState ) {
@@ -196,7 +203,7 @@ int _cdecl main( int argc, char *argv[] )
     fprintf( stdout, "\nProcessing File %s ...\n", sInputFile.GetBuffer());
 
     if ( sOutputFile.Len()) {
-        LngParser aParser( sInputFile );
+        LngParser aParser( sInputFile, bUTF8 );
         if ( bMergeMode )
             aParser.Merge( sMergeSrc, sOutputFile );
         else

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lngmerge.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:03:26 $
+ *  last change: $Author: nf $ $Date: 2001-04-25 10:17:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,17 +62,19 @@
 
 // local includes
 #include "lngmerge.hxx"
+#include "utf8conv.hxx"
 
 //
 // class LngParser
 //
 
 /*****************************************************************************/
-LngParser::LngParser( const ByteString &rLngFile )
+LngParser::LngParser( const ByteString &rLngFile, BOOL bUTF8 )
 /*****************************************************************************/
                 : sSource( rLngFile ),
                 nError( LNG_OK ),
-                pLines( NULL )
+                pLines( NULL ),
+                bDBIsUTF8( bUTF8 )
 {
     pLines = new LngLineList( 100, 100 );
 
@@ -209,6 +211,9 @@ BOOL LngParser::CreateSDF(
                     sOutput += sAct; sOutput += "\t\t\t\t";
                     sOutput += sTimeStamp;
 
+                    if ( bDBIsUTF8 )
+                        sOutput = UTF8Converter::ConvertToUTF8( sOutput, Export::GetCharSet( Export::LangId[ i ] ));
+
                     aSDFStream.WriteLine( sOutput );
                 }
             }
@@ -231,7 +236,7 @@ BOOL LngParser::Merge(
     }
     nError = LNG_OK;
 
-    MergeDataFile aMergeDataFile( rSDFFile, FALSE, RTL_TEXTENCODING_MS_1252 );
+    MergeDataFile aMergeDataFile( rSDFFile, FALSE, RTL_TEXTENCODING_MS_1252, bDBIsUTF8 );
 
     ULONG nPos = 0;
     BOOL bGroup = FALSE;
