@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docbasic.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-16 09:35:21 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:15:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,7 @@
 using namespace ::com::sun::star::uno;
 using namespace ::rtl;
 
-Sequence<Any> *lcl_docbasic_convertArgs( SbxArray& rArgs )
+static Sequence<Any> *lcl_docbasic_convertArgs( SbxArray& rArgs )
 {
     Sequence<Any> *pRet = 0;
 
