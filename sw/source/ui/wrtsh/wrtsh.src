@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-17 08:31:22 $
+ *  last change: $Author: kz $ $Date: 2001-05-30 20:16:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -491,7 +491,7 @@ String STR_SORT_TBL
     TEXT[ dutch ] = "Tabel sorteren";
     TEXT[ chinese_simplified ] = "ÅÅĞò±í¸ñ";
     TEXT[ greek ] = "Ôáîéíüìçóç ğßíáêá";
-    TEXT[ korean ] = "Ç¥¡¡Á¤·Ä";
+    TEXT[ korean ] = "Å×ÀÌºí Á¤·Ä";
     TEXT[ turkish ] = "Tabloyu sırala";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Ordenar tabla";
@@ -549,7 +549,7 @@ String STR_INSTABLE_UNDO
     TEXT[ dutch ] = "Tabel invoegen";
     TEXT[ chinese_simplified ] = "²åÈë±í¸ñ";
     TEXT[ greek ] = "ÅéóáãùãŞ ğßíáêá";
-    TEXT[ korean ] = "Ç¥¡¡»ğÀÔ";
+    TEXT[ korean ] = "Å×ÀÌºí »ğÀÔ";
     TEXT[ turkish ] = "Tablo ekle";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Insertar tabla";
@@ -607,7 +607,7 @@ String STR_TABLETOTEXT_UNDO
     TEXT[ dutch ] = "Tabel naar tekst converteren";
     TEXT[ chinese_simplified ] = "±í¸ñ×ª»»³ÉÎÄ×Ö";
     TEXT[ greek ] = "ÌåôáôñïğŞ Ğßíáêáò -> Êåßìåíï";
-    TEXT[ korean ] = "Ç¥ -> ÅØ½ºÆ® º¯È¯";
+    TEXT[ korean ] = "Å×ÀÌºí -> ÅØ½ºÆ® º¯È¯";
     TEXT[ turkish ] = "Tabloyu metne dönüştür";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Convertir tabla en texto";
@@ -1175,7 +1175,7 @@ String STR_CHANGEDEFATTR
     TEXT [ english_us ] = "Modify default values" ;
     TEXT[ chinese_simplified ] = "¸ü¸Ä±ê×¼Öµ";
     TEXT[ russian ] = "Èçìåíèòü ñòàíäàğòíûå çíà÷åíèÿ";
-    TEXT[ polish ] = "Zmieñ warto?ci domy?lne";
+    TEXT[ polish ] = "Zmieñ wartoœci domyœlne";
     TEXT[ japanese ] = "•W€’l‚Ì•ÏX";
     TEXT[ chinese_traditional ] = "ÅÜ§ó¼Ğ·Ç­È";
     TEXT[ arabic ] = "ÊÚÏíá ÇáŞíã ÇáÇİÊÑÇÖíÉ";
@@ -2002,7 +2002,7 @@ String STR_TABLE_AUTOFMT
     Text[ dutch ] = "AutoOpmaak tabel";
     Text[ chinese_simplified ] = "×Ô¶¯¸ñÊ½ ±í¸ñ";
     Text[ greek ] = "ÁõôïÌïñöŞ Ğßíáêáò";
-    Text[ korean ] = "ÀÚµ¿¼­½Ä Ç¥";
+    Text[ korean ] = "ÀÚµ¿¼­½Ä Å×ÀÌºí";
     Text[ turkish ] = "Otomatik formatlama Tablo";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "AutoFormato tabla";
@@ -2258,7 +2258,7 @@ String STR_TABLE_TBLCPYTBL
     Text[ dutch ] = "Tabel kopiëren";
     Text[ chinese_simplified ] = "¸´ÖÆ±í¸ñ";
     Text[ greek ] = "ÁíôéãñáöŞ ğßíáêá";
-    Text[ korean ] = "Ç¥ º¹»ç";
+    Text[ korean ] = "Å×ÀÌºí º¹»ç";
     Text[ turkish ] = "Tabloyu kopyala";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Copiar tabla";
@@ -2502,7 +2502,7 @@ String STR_UNDO_SETRUBYATTR
     Text[ italian ] = "Applica testo ruby";
     Text[ danish ] = "Set phonetic Symbols";
     Text[ swedish ] = "Sätt fonetiska symboler";
-    Text[ polish ] = "Osad? znaki diakrytyczne";
+    Text[ polish ] = "OsadŸ znaki diakrytyczne";
     Text[ portuguese_brazilian ] = "Set phonetic Symbols";
     Text[ japanese ] = "ÙËŞİ’è";
     Text[ korean ] = "·çºñ";
@@ -2611,7 +2611,7 @@ String STR_DELETE_INVISIBLECNTNT
     Text[ russian ] = "óäàëèòü íåâèäèìîå ñîäåğæèìîå";
     Text[ italian ] = "Rimuovi contenuto nascosto";
     Text[ danish ] = "fjern usynlige indhold";
-    Text[ polish ] = "usuñ niewidoczn¹ zawarto?æ";
+    Text[ polish ] = "usuñ niewidoczn¹ zawartoœæ";
     Text[ portuguese_brazilian ] = "remove invisible content";
     Text[ japanese ] = "•\\¦‚Å‚«‚È‚¢“à—e‚ğíœ‚·‚é";
     Text[ korean ] = "º¸ÀÌÁö ¾Ê´Â ³»¿ë Á¦°Å";
