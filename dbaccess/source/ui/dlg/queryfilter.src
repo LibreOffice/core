@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryfilter.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-26 17:31:37 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:15:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@ ModalDialog DLG_FILTERCRIT
     Size = MAP_APPFONT ( 303 , 76 ) ;
     /* These strings are equal to the toolbox bubble helptext from MID_SBA_QRY_FILTERCRIT in toolbox.hrc */
     Text [ de ] ="Standardfilter" ;
-    Text [ en-US ] ="Default Filter";
+    Text [ en-US ] ="Standard Filter";
 
     Moveable = TRUE ;
     Closeable = TRUE ;
