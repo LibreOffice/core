@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: er $ $Date: 2002-03-06 18:34:18 $
+#   last change: $Author: er $ $Date: 2002-03-08 15:22:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,7 +79,7 @@ IDLFILES=\
     CalendarDisplayIndex.idl \
     CalendarFieldIndex.idl \
     CalendarItem.idl \
-        ChapterCollator.idl \
+    ChapterCollator.idl \
     CharacterClassification.idl \
     CJKBreakIterator.idl \
     Collator.idl \
@@ -87,6 +87,7 @@ IDLFILES=\
     IndexEntrySupplier.idl \
     JAJPBreakIterator.idl \
     LanguageCountryInfo.idl \
+    LocaleCalendar.idl \
     LocaleData.idl \
     LocaleItem.idl \
     Months.idl \
