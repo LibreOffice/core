@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atrfrm.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: os $ $Date: 2001-03-29 08:47:41 $
+ *  last change: $Author: mib $ $Date: 2001-04-12 13:00:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1760,12 +1760,30 @@ BOOL SwFmtAnchor::PutValue( const uno::Any& rVal, BYTE nMemberId )
             catch(...) {}
             switch(eVal)
             {
-                case  text::TextContentAnchorType_AS_CHARACTER: eAnchor = FLY_IN_CNTNT; break;
-                case  text::TextContentAnchorType_AT_PAGE      : eAnchor = FLY_PAGE;        break;
-                case  text::TextContentAnchorType_AT_FRAME    : eAnchor = FLY_AT_FLY;       break;
-                case  text::TextContentAnchorType_AT_CHARACTER: eAnchor = FLY_AUTO_CNTNT;   break;
+                case  text::TextContentAnchorType_AS_CHARACTER:
+                    eAnchor = FLY_IN_CNTNT;
+                    break;
+                case  text::TextContentAnchorType_AT_PAGE:
+                    eAnchor = FLY_PAGE;
+                    if( GetPageNum() > 0 && pCntntAnchor )
+                    {
+                        // If the anchor type is page and a valid page number
+                        // has been set, the content position isn't required
+                        // any longer.
+                        delete pCntntAnchor;
+                        pCntntAnchor = 0;
+                    }
+                    break;
+                case  text::TextContentAnchorType_AT_FRAME:
+                    eAnchor = FLY_AT_FLY;
+                    break;
+                case  text::TextContentAnchorType_AT_CHARACTER:
+                    eAnchor = FLY_AUTO_CNTNT;
+                    break;
                 //case  text::TextContentAnchorType_AT_PARAGRAPH:
-                default: eAnchor = FLY_AT_CNTNT;
+                default:
+                    eAnchor = FLY_AT_CNTNT;
+                    break;
             }
             SetType( eAnchor );
         }
@@ -1774,7 +1792,19 @@ BOOL SwFmtAnchor::PutValue( const uno::Any& rVal, BYTE nMemberId )
         {
             sal_Int16 nVal = *(sal_Int16*)rVal.getValue();
             if(nVal > 0)
+            {
                 SetPageNum( nVal );
+                if( FLY_PAGE == GetAnchorId() && pCntntAnchor )
+                {
+                    // If the anchor type is page and a valid page number
+                    // is set, the content paoition has to be deleted to not
+                    // confuse the layout (frmtool.cxx). However, if the
+                    // anchor type is not page, any content position will
+                    // be kept.
+                    delete pCntntAnchor;
+                    pCntntAnchor = 0;
+                }
+            }
             else
                 bRet = sal_False;
         }
