@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: vg $ $Date: 2004-01-06 14:00:38 $
+#   last change: $Author: rt $ $Date: 2004-07-13 09:31:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,6 @@ SLOFILES=\
         $(SLO)$/glyphcache.obj		\
         $(SLO)$/gcach_rbmp.obj		\
         $(SLO)$/gcach_layout.obj	\
-        $(SLO)$/gcach_vdev.obj		\
         $(SLO)$/gcach_ftyp.obj
 .ENDIF
 
