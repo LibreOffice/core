@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataOutputStream.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:17:52 $
+ *  last change:$Date: 2003-05-27 13:29:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,7 @@ public class DataOutputStream extends TestCase {
         XMultiServiceFactory xMSF = null ;
 
         try {
-            xMSF = Param.getMSF();
+            xMSF = (XMultiServiceFactory)Param.getMSF();
             oInterface = xMSF.createInstance
                 ("com.sun.star.io.DataOutputStream");
             oPipe = (XInterface)xMSF.createInstance("com.sun.star.io.Pipe");

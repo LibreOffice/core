@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataInputStream.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:17:53 $
+ *  last change:$Date: 2003-05-27 13:29:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,7 +125,7 @@ public class DataInputStream extends TestCase {
 
         Object oInterface = null;
 
-        XMultiServiceFactory xMSF = Param.getMSF();;
+        XMultiServiceFactory xMSF = (XMultiServiceFactory)Param.getMSF();;
         try {
             oInterface = xMSF.createInstance("com.sun.star.io.DataInputStream");
         } catch(com.sun.star.uno.Exception e) {
