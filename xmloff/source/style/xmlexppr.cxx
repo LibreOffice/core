@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexppr.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-10 17:11:28 $
+ *  last change: $Author: dvo $ $Date: 2001-07-25 15:31:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,10 @@
 
 #ifndef _XMLOFF_PROPERTYSETMAPPER_HXX
 #include "xmlprmap.hxx"
+#endif
+
+#ifndef _COMPHELPER_STLTYPES_HXX_
+#include <comphelper/stl_types.hxx>
 #endif
 
 #ifndef _SVSTDARR_USHORTS
@@ -370,66 +374,74 @@ FilterPropertiesInfo_Impl::~FilterPropertiesInfo_Impl()
 void FilterPropertiesInfo_Impl::AddProperty(
         const rtl::OUString& rApiName, const sal_uInt32 nIndex)
 {
-    FilterPropertyInfoList_Impl::iterator aItr = aPropInfos.begin();
-    sal_Bool bInserted(sal_False);
-    // TODO: to much comparisons
-    if (nCount)
-    {
-        sal_Int32 nCompResult(aLastItr->GetApiName().compareTo(rApiName));
-        if (nCompResult == 0)
-            aItr = aLastItr;
-        else if (nCompResult < 0)
-            aItr = ++aLastItr;
-    }
-    do
-    {
-        if (aItr == aPropInfos.end())
-        {
-            aLastItr = aPropInfos.insert(aPropInfos.end(),
-                                FilterPropertyInfo_Impl(rApiName, nIndex));
-            bInserted = sal_True;
-            nCount++;
-        }
-        else
-        {
-            sal_Int32 nCompare = aItr->GetApiName().compareTo(rApiName);
-            if (nCompare > 0)
-            {
-                aLastItr = aPropInfos.insert(aItr,
-                                FilterPropertyInfo_Impl(rApiName, nIndex));
-                bInserted = sal_True;
-                nCount++;
-            }
-            else if (nCompare == 0)
-            {
-                aItr->AddIndex( nIndex );
-                bInserted = sal_True;
-                aLastItr = aItr;
-            }
-            // else: we need to iterate further
-        }
-    }
-    while(!bInserted && (aItr++ != aPropInfos.end()));
+    aPropInfos.push_back(FilterPropertyInfo_Impl(rApiName, nIndex));
+    nCount++;
 
     OSL_ENSURE( !pApiNames, "perfomance warning: API names already retrieved" );
     if( pApiNames )
     {
         delete pApiNames;
-        pApiNames = 0;
+        pApiNames = NULL;
     }
 }
+
+struct lcl_FilterPropertyInfo_Less
+{
+    bool operator() ( const FilterPropertyInfo_Impl& aInfo1,
+                      const FilterPropertyInfo_Impl& aInfo2 )
+    {
+        return aInfo1.GetApiName() < aInfo2.GetApiName() ? true : false;
+    }
+};
 
 const uno::Sequence<OUString>& FilterPropertiesInfo_Impl::GetApiNames()
 {
     OSL_ENSURE(nCount == aPropInfos.size(), "wrong property count");
     if( !pApiNames )
     {
+        // we have to do three things:
+        // 1) sort API names,
+        // 2) merge duplicates,
+        // 3) construct sequence
+
+        // sort names
+        aPropInfos.sort( lcl_FilterPropertyInfo_Less() );
+
+        // merge duplicates
+        if ( nCount > 1 )
+        {
+            FilterPropertyInfoList_Impl::iterator aOld = aPropInfos.begin();
+            FilterPropertyInfoList_Impl::iterator aEnd = aPropInfos.end();
+            FilterPropertyInfoList_Impl::iterator aCurrent = aOld;
+            aCurrent++;
+
+            while ( aCurrent != aEnd )
+            {
+                // equal to next element?
+                if ( aOld->GetApiName().equals( aCurrent->GetApiName() ) )
+                {
+                    // if equal: merge index lists
+                    aOld->GetIndexes().merge( aCurrent->GetIndexes() );
+                    // erase element, and continue with next
+                    aCurrent = aPropInfos.erase( aCurrent );
+                    nCount--;
+                }
+                else
+                {
+                    // remember old element and continue with next
+                    aOld = aCurrent;
+                    aCurrent++;
+                }
+            }
+        }
+
+        // construct sequence
         pApiNames = new Sequence < OUString >( nCount );
         OUString *pNames = pApiNames->getArray();
         FilterPropertyInfoList_Impl::iterator aItr = aPropInfos.begin();
-
-        for (sal_uInt32 i = 0; i < nCount; i++, aItr++)
-            *pNames++ = aItr->GetApiName();
+        FilterPropertyInfoList_Impl::iterator aEnd = aPropInfos.end();
+        for ( ; aItr != aEnd; aItr++, pNames++)
+            *pNames = aItr->GetApiName();
     }
 
     return *pApiNames;
