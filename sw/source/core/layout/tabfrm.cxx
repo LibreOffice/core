@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ama $ $Date: 2001-05-18 09:26:14 $
+ *  last change: $Author: ama $ $Date: 2001-06-29 13:23:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2402,8 +2402,9 @@ BOOL lcl_ArrangeLowers( SwLayoutFrm *pLay, long lYStart, BOOL bInva )
                 }
             }
         }
-        if( !pFrm->IsColumnFrm() ) // Spalten in Bereichen sind nebeneinander,
-            lYStart += pFrm->Frm().Height();  // nicht untereinander!
+        // Columns and cells are ordered horizontal, not vertical
+        if( !pFrm->IsColumnFrm() && !pFrm->IsCellFrm() )
+            lYStart += pFrm->Frm().Height();
         pFrm = pFrm->GetNext();
     }
     return bRet;
