@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZConnectionPool.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-28 10:31:43 $
+ *  last change: $Author: oj $ $Date: 2001-07-24 06:03:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,8 +82,11 @@
 #ifndef CONNECTIVITY_POOLEDCONNECTION_HXX
 #include "ZPooledConnection.hxx"
 #endif
-#ifndef _CONNECTIVITY_CPOOL_ZDRIVERWRAPPER_HXX_
-#include "ZDriverWrapper.hxx"
+#ifndef CONNECTIVITY_POOLCOLLECTION_HXX
+#include "ZPoolCollection.hxx"
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
 #endif
 
 using namespace ::com::sun::star::uno;
@@ -91,12 +94,9 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
-using namespace ::com::sun::star::reflection;
 using namespace ::osl;
 using namespace connectivity;
 
-#define CONNECTION_TIMEOUT  10
-// the connection will be expiared when 10 minutes are gone
 //==========================================================================
 //= OPoolTimer
 //==========================================================================
@@ -104,72 +104,88 @@ void SAL_CALL OPoolTimer::onShot()
 {
     m_pPool->invalidatePooledConnections();
 }
+//--------------------------------------------------------------------
+static const ::rtl::OUString& getTimeoutNodeName()
+{
+    static ::rtl::OUString s_sNodeName = ::rtl::OUString::createFromAscii("Timeout");
+    return s_sNodeName;
+}
 //==========================================================================
 //= OConnectionPool
 //==========================================================================
 //--------------------------------------------------------------------------
-OConnectionPool::OConnectionPool(const Reference< XMultiServiceFactory >&   _rxFactory)
-    :m_xServiceFactory(_rxFactory)
+OConnectionPool::OConnectionPool(const Reference< XDriver >& _xDriver,
+                                 const Reference< XInterface >& _xDriverNode)
+    :m_xDriver(_xDriver)
+    ,m_xDriverNode(_xDriverNode)
+    ,m_nTimeOut(10)
+    ,m_nALiveCount(10)
 {
-    // bootstrap all objects supporting the .sdb.Driver service
-    m_xManager = Reference< XDriverManager >(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.sdbc.DriverManager") ), UNO_QUERY);
-    m_xDriverAccess = Reference< XDriverAccess >(m_xManager, UNO_QUERY);
+    OSL_ENSURE(m_xDriverNode.is(),"NO valid Driver node set!");
+    Reference< XComponent >  xComponent(m_xDriverNode, UNO_QUERY);
+    if (xComponent.is())
+        xComponent->addEventListener(this);
 
-    OSL_ENSURE(m_xDriverAccess.is(), "OConnectionPool::OConnectionPool: have no (or an invalid) driver manager!");
+    Reference<XPropertySet> xProp(m_xDriverNode,UNO_QUERY);
+    if(xProp.is())
+        xProp->addPropertyChangeListener(getTimeoutNodeName(),this);
 
-    m_xTimer = new OPoolTimer(this,::vos::TTimeValue(10,0));
+    OPoolCollection::getNodeValue(getTimeoutNodeName(),m_xDriverNode) >>= m_nALiveCount;
+    sal_Int32 nError = 10;
+    if(m_nALiveCount < 100)
+        nError = 20;
+
+    m_nTimeOut      = m_nALiveCount / nError;
+    m_nALiveCount   = m_nALiveCount / m_nTimeOut;
+    m_xTimer = new OPoolTimer(this,::vos::TTimeValue(m_nTimeOut,0));
     m_xTimer->start();
-
-    m_xProxyFactory = Reference< XProxyFactory >(
-        m_xServiceFactory->createInstance(
-            ::rtl::OUString::createFromAscii("com.sun.star.reflection.ProxyFactory")),
-        UNO_QUERY);
-    OSL_ENSURE(m_xProxyFactory.is(), "OConnectionPool::OConnectionPool: could not create a proxy factory!");
 }
 // -----------------------------------------------------------------------------
 OConnectionPool::~OConnectionPool()
 {
-    {
-        MutexGuard aGuard(m_aMutex);
-        if(m_xTimer->isTicking())
-            m_xTimer->stop();
-    }
-}
-//--------------------------------------------------------------------------
-void SAL_CALL OConnectionPool::acquire() throw(RuntimeException)
-{
-    osl_incrementInterlockedCount(&m_refCount);
+    clear();
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OConnectionPool::release() throw(RuntimeException)
-{
-    osl_decrementInterlockedCount(&m_refCount);
-}
-
-//--------------------------------------------------------------------------
-Reference< XConnection > SAL_CALL OConnectionPool::getConnection( const ::rtl::OUString& _rURL ) throw(SQLException, RuntimeException)
+void OConnectionPool::clear()
 {
     MutexGuard aGuard(m_aMutex);
 
-    Reference<XConnection> xConnection;
-    pair<TConnectionMap::iterator, TConnectionMap::iterator> aThisURLConns = m_aPool.equal_range(_rURL);
-    TConnectionMap::iterator aIter = aThisURLConns.first;
+    if(m_xTimer->isTicking())
+        m_xTimer->stop();
 
-    if (aIter != aThisURLConns.second)
-    {// we know the url so we have to check if we found one without properties
-        do
+    TConnectionMap::iterator aIter = m_aPool.begin();
+    for(;aIter != m_aPool.end();++aIter)
+    {
+        TPooledConnections::iterator aIter2 = aIter->second.aConnections.begin();
+        for(;aIter2 != aIter->second.aConnections.end();++aIter2)
         {
-            if(!aIter->second.aProps.size())
-                xConnection = getPooledConnection(aIter);
+            Reference< XComponent >  xComponent(*aIter2, UNO_QUERY);
+            if (xComponent.is())
+            {
+                xComponent->removeEventListener(this);
+                ::comphelper::disposeComponent(xComponent);
+            }
         }
-        while ((++aIter != aThisURLConns.second) && !xConnection.is());
+        aIter->second.aConnections.clear();
     }
-    if(!xConnection.is())
-        xConnection = createNewConnection(_rURL,Sequence< PropertyValue >());
+    m_aPool.clear();
 
-    return xConnection;
+    TActiveConnectionMap::iterator aIter3 = m_aActiveConnections.begin();
+    for(;aIter3 != m_aActiveConnections.end();++aIter3)
+    {
+        Reference< XComponent >  xComponent(aIter3->first, UNO_QUERY);
+        if (xComponent.is())
+            xComponent->removeEventListener(this);
+    }
+    m_aActiveConnections.clear();
+
+    Reference< XComponent >  xComponent(m_xDriverNode, UNO_QUERY);
+    if (xComponent.is())
+        xComponent->removeEventListener(this);
+
+    m_xDriverNode   = NULL;
+    m_xDriver       = NULL;
 }
-
 //--------------------------------------------------------------------------
 Reference< XConnection > SAL_CALL OConnectionPool::getConnectionWithInfo( const ::rtl::OUString& _rURL, const Sequence< PropertyValue >& _rInfo ) throw(SQLException, RuntimeException)
 {
@@ -198,96 +214,6 @@ Reference< XConnection > SAL_CALL OConnectionPool::getConnectionWithInfo( const 
     return xConnection;
 }
 //--------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OConnectionPool::getImplementationName(  ) throw(RuntimeException)
-{
-    MutexGuard aGuard(m_aMutex);
-    return getImplementationName_Static();
-}
-
-//--------------------------------------------------------------------------
-sal_Bool SAL_CALL OConnectionPool::supportsService( const ::rtl::OUString& _rServiceName ) throw(RuntimeException)
-{
-    Sequence< ::rtl::OUString > aSupported(getSupportedServiceNames());
-    const ::rtl::OUString* pSupported = aSupported.getConstArray();
-    const ::rtl::OUString* pEnd = pSupported + aSupported.getLength();
-    for (;pSupported != pEnd && !pSupported->equals(_rServiceName); ++pSupported)
-        ;
-
-    return pSupported != pEnd;
-}
-
-//--------------------------------------------------------------------------
-Sequence< ::rtl::OUString > SAL_CALL OConnectionPool::getSupportedServiceNames(  ) throw(RuntimeException)
-{
-    return getSupportedServiceNames_Static();
-}
-
-//--------------------------------------------------------------------------
-Reference< XInterface > SAL_CALL OConnectionPool::CreateInstance(const Reference< XMultiServiceFactory >& _rxFactory)
-{
-    return static_cast<XDriverManager*>(new OConnectionPool(_rxFactory));
-}
-
-//--------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OConnectionPool::getImplementationName_Static(  ) throw(RuntimeException)
-{
-    return ::rtl::OUString::createFromAscii("com.sun.star.sdbc.OConnectionPool");
-}
-
-//--------------------------------------------------------------------------
-Sequence< ::rtl::OUString > SAL_CALL OConnectionPool::getSupportedServiceNames_Static(  ) throw(RuntimeException)
-{
-    Sequence< ::rtl::OUString > aSupported(1);
-    aSupported[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdbc.ConnectionPool");
-    return aSupported;
-}
-//--------------------------------------------------------------------------
-Reference< XDriver > SAL_CALL OConnectionPool::getDriverByURL( const ::rtl::OUString& _rURL ) throw(RuntimeException)
-{
-    Reference< XDriver > xDriver;
-    if (m_xDriverAccess.is())
-    {
-        xDriver = m_xDriverAccess->getDriverByURL(_rURL);
-        if (xDriver.is())
-        {
-            Reference< XDriver > xExistentProxy;
-            // look if we already have a proxy for this driver
-            for (   ConstMapDriver2DriverRefIterator aLookup = m_aDriverProxies.begin();
-                    aLookup != m_aDriverProxies.end();
-                    ++aLookup
-                )
-            {
-                // hold the proxy alive as long as we're in this loop round
-                xExistentProxy = aLookup->second;
-
-                if (xExistentProxy.is() && (aLookup->first.get() == xDriver.get()))
-                    // already created a proxy for this
-                    break;
-            }
-            if (xExistentProxy.is())
-            {
-                xDriver = xExistentProxy;
-            }
-            else
-            {   // create a new proxy for the driver
-                // this allows us to control the connections created by it
-                if (m_xProxyFactory.is())
-                {
-                    Reference< XAggregation > xDriverProxy = m_xProxyFactory->createProxy(xDriver.get());
-                    OSL_ENSURE(xDriverProxy.is(), "OConnectionPool::getDriverByURL: invalid proxy returned by the proxy factory!");
-
-                    xDriver = new ODriverWrapper(xDriverProxy, this);
-                }
-                else
-                    OSL_ENSURE(sal_False, "OConnectionPool::getDriverByURL: could not instantiate a proxy factory!");
-            }
-        }
-    }
-
-    return xDriver;
-}
-
-//--------------------------------------------------------------------------
 void SAL_CALL OConnectionPool::disposing( const ::com::sun::star::lang::EventObject& Source ) throw (RuntimeException)
 {
     Reference<XConnection> xConnection(Source.Source,UNO_QUERY);
@@ -298,10 +224,13 @@ void SAL_CALL OConnectionPool::disposing( const ::com::sun::star::lang::EventObj
         OSL_ENSURE(aIter != m_aActiveConnections.end(),"OConnectionPool::disposing: Conenction wasn't in pool");
         if(aIter != m_aActiveConnections.end())
         { // move the pooled connection back to the pool
-            aIter->second.aPos->second.nALiveCount = CONNECTION_TIMEOUT;
+            aIter->second.aPos->second.nALiveCount = m_nALiveCount;
             aIter->second.aPos->second.aConnections.push_back(aIter->second.xPooledConnection);
             m_aActiveConnections.erase(aIter);
         }
+    }
+    else
+    {
     }
 }
 // -----------------------------------------------------------------------------
@@ -319,20 +248,10 @@ sal_Bool OConnectionPool::checkSequences(const PropertyMap& _rLh,const PropertyM
     return bRet;
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OConnectionPool::setLoginTimeout( sal_Int32 seconds ) throw(RuntimeException)
-{
-    m_xManager->setLoginTimeout(seconds);
-}
-// -----------------------------------------------------------------------------
-sal_Int32 SAL_CALL OConnectionPool::getLoginTimeout(  ) throw(RuntimeException)
-{
-    return m_xManager->getLoginTimeout();
-}
-// -----------------------------------------------------------------------------
 Reference< XConnection> OConnectionPool::createNewConnection(const ::rtl::OUString& _rURL,const Sequence< PropertyValue >& _rInfo)
 {
     // create new pooled conenction
-    Reference< XPooledConnection > xPooledConnection = new ::connectivity::OPooledConnection(m_xManager->getConnectionWithInfo(_rURL,_rInfo));
+    Reference< XPooledConnection > xPooledConnection = new ::connectivity::OPooledConnection(m_xDriver->connect(_rURL,_rInfo));
     // get the new connection from the pooled connection
     Reference<XConnection> xConnection = xPooledConnection->getConnection();
     if(xConnection.is())
@@ -347,7 +266,7 @@ Reference< XConnection> OConnectionPool::createNewConnection(const ::rtl::OUStri
         createPropertyMap(_rInfo,aMap); // by ref to avoid copying
         TConnectionPool aPack;
         aPack.aProps        = aMap;
-        aPack.nALiveCount   = CONNECTION_TIMEOUT;
+        aPack.nALiveCount   = m_nALiveCount;
         TActiveConnectionInfo aActiveInfo;
         aActiveInfo.aPos = m_aPool.insert(TConnectionMap::value_type(_rURL,aPack));
         aActiveInfo.xPooledConnection = xPooledConnection;
@@ -428,5 +347,15 @@ Reference< XConnection> OConnectionPool::getPooledConnection(TConnectionMap::ite
         m_aActiveConnections[xConnection] = aActiveInfo;
     }
     return xConnection;
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL OConnectionPool::propertyChange( const ::com::sun::star::beans::PropertyChangeEvent& evt ) throw (::com::sun::star::uno::RuntimeException)
+{
+    evt.NewValue >>= m_nALiveCount;
+    sal_Int32 nError = 10;
+    if(m_nALiveCount < 100)
+        nError = 20;
+    m_nTimeOut      = m_nALiveCount / nError;
+    m_nALiveCount   = m_nALiveCount / m_nTimeOut;
 }
 // -----------------------------------------------------------------------------
