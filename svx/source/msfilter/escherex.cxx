@@ -2,9 +2,9 @@
  *
  *  $RCSfile: escherex.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:28:12 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 18:13:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4069,10 +4069,10 @@ void EscherSolverContainer::AddConnector( const ::com::sun::star::uno::Reference
     maConnectorList.Insert( new EscherConnectorListEntry( rConnector, rPA, rConA, rPB, rConB ), LIST_APPEND );
 }
 
-sal_uInt32 EscherSolverContainer::ImplGetId( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rXShape )
+sal_uInt32 EscherSolverContainer::GetShapeId( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rXShape ) const
 {
-    for ( EscherShapeListEntry* pPtr = (EscherShapeListEntry*)maShapeList.First();
-            pPtr; pPtr = (EscherShapeListEntry*)maShapeList.Next() )
+    for ( EscherShapeListEntry* pPtr = (EscherShapeListEntry*)((List&)maShapeList).First();
+            pPtr; pPtr = (EscherShapeListEntry*)((List&)maShapeList).Next() )
     {
         if ( rXShape == pPtr->aXShape )
             return ( pPtr->n_EscherId );
@@ -4098,9 +4098,9 @@ void EscherSolverContainer::WriteSolver( SvStream& rStrm )
                 pPtr; pPtr = (EscherConnectorListEntry*)maConnectorList.Next() )
         {
             aConnectorRule.ncptiA = aConnectorRule.ncptiB = 0xffffffff;
-            aConnectorRule.nShapeC = ImplGetId( pPtr->mXConnector );
-            aConnectorRule.nShapeA = ImplGetId( pPtr->mXConnectToA );
-            aConnectorRule.nShapeB = ImplGetId( pPtr->mXConnectToB );
+            aConnectorRule.nShapeC = GetShapeId( pPtr->mXConnector );
+            aConnectorRule.nShapeA = GetShapeId( pPtr->mXConnectToA );
+            aConnectorRule.nShapeB = GetShapeId( pPtr->mXConnectToB );
 
             if ( aConnectorRule.nShapeC )
             {
