@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews7.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-08 11:23:24 $
+ *  last change: $Author: ka $ $Date: 2001-03-16 17:37:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -512,10 +512,14 @@ void __EXPORT SdDrawViewShell::GetMenuState( SfxItemSet &rSet )
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_CONTEXT ) )
         rSet.Put( SfxStringItem( SID_CONTEXT, pDrView->GetStatusText() ) );
 
-    if( Clipboard::GetFormatCount() == 0 )
+    if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_PASTE ) ||
+        SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_PASTE2 ) )
     {
-        rSet.DisableItem( SID_PASTE );
-        rSet.DisableItem( SID_PASTE2 );
+        if( !TransferableDataHelper::CreateFromSystemClipboard().GetFormatCount() )
+        {
+            rSet.DisableItem( SID_PASTE );
+            rSet.DisableItem( SID_PASTE2 );
+        }
     }
 
     if ( !bConvertToPathPossible )

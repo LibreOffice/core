@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvsh.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dl $ $Date: 2001-03-12 07:54:14 $
+ *  last change: $Author: ka $ $Date: 2001-03-16 17:37:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1119,12 +1119,17 @@ void SdOutlineViewShell::GetMenuState( SfxItemSet &rSet )
         aSlideBtn.Enable();
     }
 
-    if (Clipboard::GetFormatCount() == 0 ||
-        (!Clipboard::HasFormat(FORMAT_STRING) &&
-         !Clipboard::HasFormat(FORMAT_RTF)    &&
-         !Clipboard::HasFormat(SOT_FORMATSTR_ID_HTML)))
+    if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_PASTE ) )
     {
-        rSet.DisableItem(SID_PASTE);
+        TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard() );
+
+        if( !aDataHelper.GetFormatCount() ||
+            ( !aDataHelper.HasFormat( FORMAT_STRING ) &&
+              !aDataHelper.HasFormat( FORMAT_RTF )    &&
+              !aDataHelper.HasFormat( SOT_FORMATSTR_ID_HTML ) ) )
+        {
+            rSet.DisableItem( SID_PASTE );
+        }
     }
 
     if (!pOlView->GetViewByWindow(pWindow)->HasSelection())

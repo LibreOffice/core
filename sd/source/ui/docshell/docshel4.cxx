@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel4.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: sj $ $Date: 2001-03-16 13:44:56 $
+ *  last change: $Author: ka $ $Date: 2001-03-16 17:38:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -443,6 +443,7 @@ BOOL SdDrawDocShell::LoadFrom(SvStorage* pStor)
     // Pool und StyleSheet Pool laden
     SvStorageStreamRef aPoolStm = pStor->OpenStream(pSfxStyleSheets);
     aPoolStm->SetVersion(pStor->GetVersion());
+    aPoolStm->SetKey(pStor->GetKey());
     bRet2 = aPoolStm->GetError() == 0;
     if (bRet2)
     {

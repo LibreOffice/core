@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview3.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-16 13:30:49 $
+ *  last change: $Author: ka $ $Date: 2001-03-16 17:37:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -588,7 +588,7 @@ BOOL SdView::InsertData( const Reference< XTransferable >& rxTransferable,
         TransferableObjectDescriptor    aObjDesc;
 
         if( aDataHelper.GetTransferableObjectDescriptor( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR, aObjDesc ) &&
-            ( aDataHelper.GetSotStorageStream( SOT_FORMATSTR_ID_EMBED_SOURCE, xStm ) ||
+            ( aDataHelper.GetSotStorageStream( nFormat ? nFormat : SOT_FORMATSTR_ID_EMBED_SOURCE, xStm ) ||
               aDataHelper.GetSotStorageStream( SOT_FORMATSTR_ID_EMBEDDED_OBJ, xStm ) ||
               aDataHelper.GetSotStorageStream( SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE, xStm ) ||
               aDataHelper.GetSotStorageStream( SOT_FORMATSTR_ID_EMBED_SOURCE_OLE, xStm ) ) )
@@ -797,7 +797,8 @@ BOOL SdView::InsertData( const Reference< XTransferable >& rxTransferable,
     {
         SotStorageStreamRef xStm;
 
-        if( aDataHelper.GetSotStorageStream( nFormat, xStm ) )
+        if( aDataHelper.GetSotStorageStream( nFormat ? nFormat : FORMAT_RTF, xStm ) ||
+            aDataHelper.GetSotStorageStream( nEditEngineFormat, xStm ) )
         {
             EETextFormat nFmt = EE_FORMAT_RTF;
 

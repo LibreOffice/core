@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpptwrp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sj $ $Date: 2001-03-16 13:33:37 $
+ *  last change: $Author: ka $ $Date: 2001-03-16 17:41:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,9 @@ sal_Bool SdPPTFilter::Import()
 
         if( pDocStream )
         {
+            pDocStream->SetVersion( pStorage->GetVersion() );
+            pDocStream->SetKey( pStorage->GetKey() );
+
             SdPPTImport* pImport = new SdPPTImport( &mrDocument, *pDocStream, *pStorage, mrMedium );
 
             if ( !( bRet = pImport->Import() ) )
@@ -150,8 +153,8 @@ sal_Bool SdPPTFilter::Export()
             if( PPTExport && ( xStorRef = mrMedium.GetOutputStorage() ).Is() )
             {
                 sal_uInt32          nCnvrtFlags = 0;
-
                 OfficeApplication*  pApplication = OFF_APP();
+
                 if( pApplication )
                 {
                     OfaFilterOptions* pFilterOptions = pApplication->GetFilterOptions();

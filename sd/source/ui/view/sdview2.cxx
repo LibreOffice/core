@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview2.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-14 12:58:28 $
+ *  last change: $Author: ka $ $Date: 2001-03-16 17:37:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -721,11 +721,12 @@ sal_Int8 SdView::ExecuteDrop( const ExecuteDropEvent& rEvt, SdWindow* pWin, USHO
             //!!!DND if( !( bReturn = FmFormView::Drop(rMEvt, pWin) ) ) )
             if( !InsertData( rEvt.maDropEvent.Transferable, aPos, nDropAction, TRUE, 0, nPage, nLayer ) && pViewSh )
             {
-                String              aTmpString1, aTmpString2;
-                INetBookmark        aINetBookmark( aTmpString1, aTmpString2 );
-                const USHORT        nCount = DragServer::GetItemCount();
-                SdNavigatorWin*     pNavWin = NULL;
-                NavigatorDragType   eDragType = NAVIGATOR_DRAGTYPE_NONE;
+                TransferableDataHelper  aDataHelper( rEvt.maDropEvent.Transferable );
+                String                  aTmpString1, aTmpString2;
+                INetBookmark            aINetBookmark( aTmpString1, aTmpString2 );
+                const ULONG             nCount = aDataHelper.GetFormatCount();
+                SdNavigatorWin*         pNavWin = NULL;
+                NavigatorDragType       eDragType = NAVIGATOR_DRAGTYPE_NONE;
 
                 if( pViewSh->GetViewFrame()->HasChildWindow( SID_NAVIGATOR ) )
                     pNavWin = (SdNavigatorWin*)(pViewSh->GetViewFrame()->GetChildWindow( SID_NAVIGATOR )->GetContextWindow( SD_MOD() ) );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlwrp.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-14 09:22:28 $
+ *  last change: $Author: ka $ $Date: 2001-03-16 17:35:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -289,6 +289,8 @@ sal_Bool SdXMLFilter::Import()
 
                     if( xIStm.Is() )
                     {
+                        xIStm->SetVersion( pStorage->GetVersion() );
+                        xIStm->SetKey( pStorage->GetKey() );
                         xIStm->SetBufferSize( 16 * 1024 );
                         aParserInput.aInputStream = new utl::OInputStreamWrapper( *xIStm );
                     }
@@ -482,6 +484,8 @@ sal_Bool SdXMLFilter::Export()
                 {
                     const OUString sDocName( OUString::createFromAscii( pServices->mpStream ) );
                     xDocStream = pStorage->OpenStream( sDocName, STREAM_WRITE | STREAM_SHARE_DENYWRITE );
+                    xDocStream->SetVersion( pStorage->GetVersion() );
+                    xDocStream->SetKey( pStorage->GetKey() );
                     xDocStream->SetBufferSize( 16*1024 );
                     xDocOut = new utl::OOutputStreamWrapper( *xDocStream );
 

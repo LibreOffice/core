@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuinsert.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-08 20:58:40 $
+ *  last change: $Author: ka $ $Date: 2001-03-16 17:36:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,9 @@
 #endif
 #ifndef _SFXECODE_HXX //autogen
 #include <svtools/sfxecode.hxx>
+#endif
+#ifndef _TRANSFER_HXX //autogen
+#include <svtools/transfer.hxx>
 #endif
 #ifndef _INSDLG_HXX //autogen
 #include <so3/insdlg.hxx>
@@ -274,36 +277,30 @@ FuInsertClipboard::FuInsertClipboard(SdViewShell* pViewSh, SdWindow* pWin, SdVie
                  SdDrawDocument* pDoc, SfxRequest& rReq)
        : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
 {
-    // !!!Clipboard: SvPasteObjectDialog() has to be redesigned
-    SvDataObjectRef         aDataObj( SvDataObject::PasteClipboard() );
-    const String            aEmptyStr;
-    SvPasteObjectDialog*    pDlg = new SvPasteObjectDialog();
+    TransferableDataHelper                      aDataHelper( TransferableDataHelper::CreateFromSystemClipboard() );
+    SvPasteObjectDialog*                        pDlg = new SvPasteObjectDialog();
+    ::com::sun::star::datatransfer::DataFlavor  aFlavor;
 
-    pDlg->Insert(SOT_FORMATSTR_ID_EMBED_SOURCE, aEmptyStr );
-    pDlg->Insert(SOT_FORMATSTR_ID_LINK_SOURCE, aEmptyStr );
-    pDlg->Insert( SOT_FORMATSTR_ID_DRAWING, Clipboard::GetFormatName(SOT_FORMATSTR_ID_DRAWING));
-    pDlg->Insert( SOT_FORMATSTR_ID_SVXB, Clipboard::GetFormatName(SOT_FORMATSTR_ID_SVXB));
-    pDlg->Insert( FORMAT_GDIMETAFILE, Clipboard::GetFormatName(FORMAT_GDIMETAFILE) );
-    pDlg->Insert( FORMAT_BITMAP, Clipboard::GetFormatName(FORMAT_BITMAP)  );
-    pDlg->Insert( FORMAT_STRING, String( SdResId(STR_FORMAT_STRING) ) );
-    pDlg->Insert( SOT_FORMATSTR_ID_HTML, Clipboard::GetFormatName(SOT_FORMATSTR_ID_HTML) );
-    pDlg->Insert( FORMAT_RTF, String( SdResId(STR_FORMAT_RTF) ) );
+    pDlg->Insert( SOT_FORMATSTR_ID_EMBED_SOURCE, String() );
+    pDlg->Insert( SOT_FORMATSTR_ID_LINK_SOURCE, String() );
+    pDlg->Insert( SOT_FORMATSTR_ID_DRAWING, ( SotExchange::GetFormatDataFlavor( SOT_FORMATSTR_ID_DRAWING, aFlavor ), aFlavor.HumanPresentableName ) );
+    pDlg->Insert( SOT_FORMATSTR_ID_SVXB, ( SotExchange::GetFormatDataFlavor( SOT_FORMATSTR_ID_SVXB, aFlavor ), aFlavor.HumanPresentableName ) );
+    pDlg->Insert( FORMAT_GDIMETAFILE, ( SotExchange::GetFormatDataFlavor( FORMAT_GDIMETAFILE, aFlavor ), aFlavor.HumanPresentableName ) );
+    pDlg->Insert( FORMAT_BITMAP, ( SotExchange::GetFormatDataFlavor( FORMAT_BITMAP, aFlavor ), aFlavor.HumanPresentableName ) );
+    pDlg->Insert( FORMAT_STRING, ( SotExchange::GetFormatDataFlavor( FORMAT_STRING, aFlavor ), aFlavor.HumanPresentableName ) );
+    pDlg->Insert( SOT_FORMATSTR_ID_HTML, ( SotExchange::GetFormatDataFlavor( SOT_FORMATSTR_ID_HTML, aFlavor ), aFlavor.HumanPresentableName ) );
+    pDlg->Insert( FORMAT_RTF, ( SotExchange::GetFormatDataFlavor( FORMAT_RTF, aFlavor ), aFlavor.HumanPresentableName ) );
     pDlg->Insert( EditEngine::RegisterClipboardFormatName(), String() );
 
-    const ULONG nFormatId = pDlg->Execute(pWindow, aDataObj);
+    const ULONG nFormatId = pDlg->Execute( pWindow, aDataHelper.GetTransferable() );
 
-    if( nFormatId )
+    if( nFormatId && aDataHelper.GetTransferable().is() )
     {
-        TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard() );
+        sal_Int8 nAction = DND_ACTION_COPY;
 
-        if( aDataHelper.GetTransferable().is() )
-        {
-            sal_Int8 nAction = DND_ACTION_COPY;
-
-            pView->InsertData( aDataHelper.GetTransferable(),
-                               pWindow->PixelToLogic( Rectangle( Point(), pWindow->GetOutputSizePixel() ).Center() ),
-                               nAction, FALSE, nFormatId );
-        }
+        pView->InsertData( aDataHelper.GetTransferable(),
+                           pWindow->PixelToLogic( Rectangle( Point(), pWindow->GetOutputSizePixel() ).Center() ),
+                           nAction, FALSE, nFormatId );
     }
 
     delete pDlg;
