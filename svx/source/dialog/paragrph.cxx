@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: os $ $Date: 2002-08-02 14:41:56 $
+ *  last change: $Author: gt $ $Date: 2002-08-06 14:13:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1050,20 +1050,24 @@ void    SvxStdParagraphTabPage::EnableAbsLineDist(long nMinTwip)
 --------------------------------------------------*/
 SvxParaAlignTabPage::SvxParaAlignTabPage( Window* pParent, const SfxItemSet& rSet )
     : SfxTabPage(pParent, ResId( RID_SVXPAGE_ALIGN_PARAGRAPH, DIALOG_MGR() ),rSet),
-    aLeft                   ( this, ResId( BTN_LEFTALIGN ) ),
-    aRight                  ( this, ResId( BTN_RIGHTALIGN ) ),
-    aCenter                 ( this, ResId( BTN_CENTERALIGN ) ),
-    aJustify                ( this, ResId( BTN_JUSTIFYALIGN ) ),
-    aAlignFrm               ( this, ResId( FL_ALIGN ) ),
-    aLastLineFT             ( this, ResId( FT_LASTLINE ) ),
-    aLastLineLB             ( this, ResId( LB_LASTLINE ) ),
-    aExpandCB               ( this, ResId( CB_EXPAND ) ),
-    aSnapToGridCB           ( this, ResId( CB_SNAP ) ),
-    aExampleWin             ( this, ResId( WN_EXAMPLE ) ),
+    aLeft               ( this, ResId( BTN_LEFTALIGN ) ),
+    aRight              ( this, ResId( BTN_RIGHTALIGN ) ),
+    aCenter             ( this, ResId( BTN_CENTERALIGN ) ),
+    aJustify            ( this, ResId( BTN_JUSTIFYALIGN ) ),
+    aAlignFrm           ( this, ResId( FL_ALIGN ) ),
+    aLastLineFT         ( this, ResId( FT_LASTLINE ) ),
+    aLastLineLB         ( this, ResId( LB_LASTLINE ) ),
+    aExpandCB           ( this, ResId( CB_EXPAND ) ),
+    aSnapToGridCB       ( this, ResId( CB_SNAP ) ),
+    aExampleWin         ( this, ResId( WN_EXAMPLE ) ),
 
-    aVertAlignFL            ( this, ResId( FL_VERTALIGN ) ),
-    aVertAlignFT            ( this, ResId( FT_VERTALIGN ) ),
-    aVertAlignLB            ( this, ResId( LB_VERTALIGN ) )
+    aVertAlignFL        ( this, ResId( FL_VERTALIGN ) ),
+    aVertAlignFT        ( this, ResId( FT_VERTALIGN ) ),
+    aVertAlignLB        ( this, ResId( LB_VERTALIGN ) ),
+
+    aPropertiesFL       ( this, ResId( FL_PROPERTIES    )),
+    aTextDirectionFT    ( this, ResId( FT_TEXTDIRECTION )),
+    aTextDirectionLB    ( this, ResId( LB_TEXTDIRECTION ))
 {
     SvtLanguageOptions aCJKOptions;
     if(aCJKOptions.IsAsianTypographyEnabled())
@@ -1082,6 +1086,17 @@ SvxParaAlignTabPage::SvxParaAlignTabPage( Window* pParent, const SfxItemSet& rSe
     aCenter.SetClickHdl( aLink );
     aJustify.SetClickHdl( aLink );
     aLastLineLB.SetSelectHdl( LINK( this, SvxParaAlignTabPage, LastLineHdl_Impl ) );
+
+    if( ( GetHtmlMode_Impl( rSet ) & HTMLMODE_ON ) == 0 )
+    {
+        SvtLanguageOptions  aLangOptions;
+        if( aLangOptions.IsCTLFontEnabled() )
+        {
+            aPropertiesFL.Show();
+            aTextDirectionFT.Show();
+            aTextDirectionLB.Show();
+        }
+    }
 }
 
 /*-----------------16.01.97 19.33-------------------
@@ -1201,6 +1216,18 @@ BOOL SvxParaAlignTabPage::FillItemSet( SfxItemSet& rOutSet )
         bModified = TRUE;
     }
 
+    if( aTextDirectionLB.IsVisible() )
+    {
+        USHORT          nPos = aTextDirectionLB.GetSelectEntryPos();
+        if( nPos != aTextDirectionLB.GetSavedValue() )
+        {
+            USHORT      nWhich = GetWhich( SID_ATTR_FRAMEDIRECTION );
+            sal_uInt32  nDirection = sal_uInt32( aTextDirectionLB.GetEntryData( nPos ) );
+            rOutSet.Put( SvxFrameDirectionItem( SvxFrameDirection( nDirection ), nWhich ) );
+            bModified = TRUE;
+        }
+    }
+
     return bModified;
 }
 
@@ -1281,6 +1308,17 @@ void SvxParaAlignTabPage::Reset( const SfxItemSet& rSet )
 
         const SvxParaVertAlignItem& rAlign = (const SvxParaVertAlignItem&)rSet.Get( nWhich );
         aVertAlignLB.SelectEntryPos(rAlign.GetValue());
+    }
+
+    nWhich = GetWhich( SID_ATTR_FRAMEDIRECTION );
+    //text direction
+    if( SFX_ITEM_AVAILABLE <= rSet.GetItemState( nWhich ) )
+    {
+        const SvxFrameDirectionItem&    rFrameDirItem = ( const SvxFrameDirectionItem& ) rSet.Get( nWhich );
+        sal_uInt32                      nVal  = rFrameDirItem.GetValue();
+        USHORT                          nPos = aTextDirectionLB.GetEntryPos( ( void* ) nVal );
+        aTextDirectionLB.SelectEntryPos( nPos );
+        aTextDirectionLB.SaveValue();
     }
 
     aSnapToGridCB.SaveValue();
@@ -1564,7 +1602,7 @@ BOOL SvxExtParagraphTabPage::FillItemSet( SfxItemSet& rOutSet )
             bModified |= TRUE;
         }
     }
-    nWhich = GetWhich( SID_ATTR_FRAMEDIRECTION );
+/*    nWhich = GetWhich( SID_ATTR_FRAMEDIRECTION );
     USHORT nPos;
     if( aTextDirectionLB.IsVisible() &&
         ( nPos = aTextDirectionLB.GetSelectEntryPos() ) !=
@@ -1573,7 +1611,7 @@ BOOL SvxExtParagraphTabPage::FillItemSet( SfxItemSet& rOutSet )
         sal_uInt32 nDirection = (sal_uInt32)aTextDirectionLB.GetEntryData( nPos );
         rOutSet.Put( SvxFrameDirectionItem( (SvxFrameDirection)nDirection, nWhich));
         bModified = TRUE;
-    }
+    }*/
 
     return bModified;
 }
@@ -1845,7 +1883,7 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet& rSet )
     OrphanHdl_Impl( 0 );
 
 
-    nWhich = GetWhich( SID_ATTR_FRAMEDIRECTION );
+/*    nWhich = GetWhich( SID_ATTR_FRAMEDIRECTION );
     //text direction
     if( SFX_ITEM_AVAILABLE <= rSet.GetItemState( nWhich ) )
     {
@@ -1855,7 +1893,7 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet& rSet )
         USHORT nPos = aTextDirectionLB.GetEntryPos( (void*) nVal );
         aTextDirectionLB.SelectEntryPos( nPos );
         aTextDirectionLB.SaveValue();
-    }
+    }*/
 
     aHyphenBox.SaveValue();
     aExtHyphenBeforeBox.SaveValue();
@@ -1935,9 +1973,9 @@ SvxExtParagraphTabPage::SvxExtParagraphTabPage( Window* pParent, const SfxItemSe
     aWidowRowLabel      ( this, ResId( FT_WIDOWS ) ),
     aExtendFL           ( this, ResId( FL_OPTIONS ) ),
     aBreaksFL           ( this, ResId( FL_BREAKS ) ),
-    aPropertiesFL       ( this, ResId( FL_PROPERTIES    )),
-    aTextDirectionFT    ( this, ResId( FT_TEXTDIRECTION )),
-    aTextDirectionLB    ( this, ResId( LB_TEXTDIRECTION )),
+//  aPropertiesFL       ( this, ResId( FL_PROPERTIES    )),
+//  aTextDirectionFT    ( this, ResId( FT_TEXTDIRECTION )),
+//  aTextDirectionLB    ( this, ResId( LB_TEXTDIRECTION )),
     bHtmlMode   ( FALSE ),
     bPageBreak  ( TRUE ),
     nStdPos     ( 0 )
@@ -1995,7 +2033,7 @@ SvxExtParagraphTabPage::SvxExtParagraphTabPage( Window* pParent, const SfxItemSe
         // no column break in HTML
         aBreakTypeLB.RemoveEntry(1);
     }
-    else
+/*    else
     {
         SvtLanguageOptions aLangOptions;
         sal_Bool bCTL = aLangOptions.IsCTLFontEnabled();
@@ -2005,7 +2043,7 @@ SvxExtParagraphTabPage::SvxExtParagraphTabPage( Window* pParent, const SfxItemSe
             aTextDirectionFT.Show();
             aTextDirectionLB.Show();
         }
-    }
+    }*/
 }
 
 // -----------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.src,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-05 21:09:31 $
+ *  last change: $Author: gt $ $Date: 2002-08-06 14:13:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1304,7 +1304,7 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
     };
     FixedLine FL_VERTALIGN
     {
-        Pos = MAP_APPFONT ( 6 , 146 ) ;
+        Pos = MAP_APPFONT ( 6 , 122 ) ;
         Size = MAP_APPFONT ( 173 , 8 ) ;
         Text = "Text-an-Text" ;
         Text [ ENGLISH ] = "Text-to-text" ;
@@ -1333,7 +1333,7 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
     };
     FixedText FT_VERTALIGN
     {
-        Pos = MAP_APPFONT ( 12 , 159 ) ;
+        Pos = MAP_APPFONT ( 12 , 135 ) ;
         Size = MAP_APPFONT ( 90 , 8 ) ;
         Hide = TRUE;
         Text = "~Ausrichtung" ;
@@ -1362,7 +1362,7 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
     };
     ListBox LB_VERTALIGN
     {
-        Pos = MAP_APPFONT ( 105 , 157 ) ;
+        Pos = MAP_APPFONT ( 105 , 133 ) ;
         Size = MAP_APPFONT ( 70 , 50 ) ;
         DropDown = TRUE ;
         Hide = TRUE ;
@@ -1382,182 +1382,182 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
             < "Center" ; > ;
             < "Bottom" ; > ;
         };
-    StringList [ language_user1 ] =
-    {
+        StringList [ language_user1 ] =
+        {
             < "Automatisch" ; > ;
-        < "Grundlinie" ; > ;
-        < "Oben" ; > ;
-        < "Zentriert" ; > ;
-        < "Unten" ; > ;
-    };
-    StringList [ english_us ] =
-    {
+            < "Grundlinie" ; > ;
+            < "Oben" ; > ;
+            < "Zentriert" ; > ;
+            < "Unten" ; > ;
+        };
+        StringList [ english_us ] =
+        {
             < "Automatic" ; > ;
-        < "Base line" ; > ;
-        < "Top" ; > ;
-        < "Middle" ; > ;
-        < "Bottom" ; > ;
-    };
-    StringList [ portuguese ] =
-    {
+            < "Base line" ; > ;
+            < "Top" ; > ;
+            < "Middle" ; > ;
+            < "Bottom" ; > ;
+        };
+        StringList [ portuguese ] =
+        {
             < "Autom·tico" ; > ;
-        < "Linha de base" ; > ;
-        < "Topo" ; > ;
-        < "Centrado" ; > ;
-        < "Base" ; > ;
-    };
-    StringList [ russian ] =
-    {
+            < "Linha de base" ; > ;
+            < "Topo" ; > ;
+            < "Centrado" ; > ;
+            < "Base" ; > ;
+        };
+        StringList [ russian ] =
+        {
             < "¿‚ÚÓÏ‡ÚË˜ÂÒÍË" ; > ;
-        < "ŒÒÌÓ‚Ì‡ˇ ÎËÌËˇ" ; > ;
-        < "—‚ÂıÛ" ; > ;
-        < "œÓ ˆÂÌÚÛ" ; > ;
-        < "—ÌËÁÛ" ; > ;
-    };
-    StringList [ greek ] =
-    {
+            < "ŒÒÌÓ‚Ì‡ˇ ÎËÌËˇ" ; > ;
+            < "—‚ÂıÛ" ; > ;
+            < "œÓ ˆÂÌÚÛ" ; > ;
+            < "—ÌËÁÛ" ; > ;
+        };
+        StringList [ greek ] =
+        {
             < "¡ıÙ¸Ï·Ù·" ; > ;
-        < "¬·ÛÈÍﬁ „Ò·ÏÏﬁ" ; > ;
-        < "–‹Ì˘" ; > ;
-        < " ÂÌÙÒ·ÒÈÛÏ›Ì·" ; > ;
-        < " ‹Ù˘" ; > ;
-    };
-    StringList [ dutch ] =
-    {
+            < "¬·ÛÈÍﬁ „Ò·ÏÏﬁ" ; > ;
+            < "–‹Ì˘" ; > ;
+            < " ÂÌÙÒ·ÒÈÛÏ›Ì·" ; > ;
+            < " ‹Ù˘" ; > ;
+        };
+        StringList [ dutch ] =
+        {
             < "Automatisch" ; > ;
-        < "Basislijn" ; > ;
-        < "Boven" ; > ;
-        < "Gecentreerd" ; > ;
-        < "Beneden" ; > ;
-    };
-    StringList [ french ] =
-    {
+            < "Basislijn" ; > ;
+            < "Boven" ; > ;
+            < "Gecentreerd" ; > ;
+            < "Beneden" ; > ;
+        };
+        StringList [ french ] =
+        {
             < "Automatique" ; > ;
-        < "Ligne de base" ; > ;
-        < "En haut" ; > ;
-        < "CentrÈ" ; > ;
-        < "En bas" ; > ;
-    };
-    StringList [ spanish ] =
-    {
+            < "Ligne de base" ; > ;
+            < "En haut" ; > ;
+            < "CentrÈ" ; > ;
+            < "En bas" ; > ;
+        };
+        StringList [ spanish ] =
+        {
             < "Autom·tico" ; > ;
-        < "LÌnea de base" ; > ;
-        < "Arriba" ; > ;
-        < "Centrado" ; > ;
-        < "Abajo" ; > ;
-    };
-    StringList [ italian ] =
-    {
+            < "LÌnea de base" ; > ;
+            < "Arriba" ; > ;
+            < "Centrado" ; > ;
+            < "Abajo" ; > ;
+        };
+        StringList [ italian ] =
+        {
             < "Automatico" ; > ;
-        < "Linea di base" ; > ;
-        < "In alto" ; > ;
-        < "Al centro" ; > ;
-        < "In basso" ; > ;
-    };
-    StringList [ danish ] =
-    {
+            < "Linea di base" ; > ;
+            < "In alto" ; > ;
+            < "Al centro" ; > ;
+            < "In basso" ; > ;
+        };
+        StringList [ danish ] =
+        {
             < "Automatisk" ; > ;
-        < "Basislinje" ; > ;
-        < "Top" ; > ;
-        < "Centreret" ; > ;
-        < "Bund" ; > ;
-    };
-    StringList [ swedish ] =
-    {
+            < "Basislinje" ; > ;
+            < "Top" ; > ;
+            < "Centreret" ; > ;
+            < "Bund" ; > ;
+        };
+        StringList [ swedish ] =
+        {
             < "Automatiskt" ; > ;
-        < "Baslinje" ; > ;
-        < "Uppe" ; > ;
-        < "Centrerat" ; > ;
-        < "Nere" ; > ;
-    };
-    StringList [ polish ] =
-    {
+            < "Baslinje" ; > ;
+            < "Uppe" ; > ;
+            < "Centrerat" ; > ;
+            < "Nere" ; > ;
+        };
+        StringList [ polish ] =
+        {
             < "Automatycznie" ; > ;
-        < "Do linii podstawowej" ; > ;
-        < "Do gÛry" ; > ;
-        < "Do úrodka" ; > ;
-        < "Do do≥u" ; > ;
-    };
-    StringList [ portuguese_brazilian ] =
-    {
+            < "Do linii podstawowej" ; > ;
+            < "Do gÛry" ; > ;
+            < "Do úrodka" ; > ;
+            < "Do do≥u" ; > ;
+        };
+        StringList [ portuguese_brazilian ] =
+        {
             < "Automatisch" ; > ;
-        < "Grundlinie" ; > ;
-        < "Oben" ; > ;
-        < "Zentriert" ; > ;
-        < "Unten" ; > ;
-    };
-    StringList [ japanese ] =
-    {
+            < "Grundlinie" ; > ;
+            < "Oben" ; > ;
+            < "Zentriert" ; > ;
+            < "Unten" ; > ;
+        };
+        StringList [ japanese ] =
+        {
             < "Ëá™Âãï" ; > ;
-        < "Âü∫Á∑ö" ; > ;
-        < "‰∏äÊèÉ„Åà" ; > ;
-        < "‰∏≠Â§ÆÊèÉ„Åà" ; > ;
-        < "‰∏ãÊèÉ„Åà" ; > ;
-    };
-    StringList [ korean ] =
-    {
+            < "Âü∫Á∑ö" ; > ;
+            < "‰∏äÊèÉ„Åà" ; > ;
+            < "‰∏≠Â§ÆÊèÉ„Åà" ; > ;
+            < "‰∏ãÊèÉ„Åà" ; > ;
+        };
+        StringList [ korean ] =
+        {
             < "ÏûêÎèô" ; > ;
-        < "Í∏∞Ï§ÄÏÑ†" ; > ;
-        < "ÏúÑ" ; > ;
-        < "Í∞ÄÏö¥Îç∞" ; > ;
-        < "ÏïÑÎûò" ; > ;
-    };
-    StringList [ chinese_simplified ] =
-    {
+            < "Í∏∞Ï§ÄÏÑ†" ; > ;
+            < "ÏúÑ" ; > ;
+            < "Í∞ÄÏö¥Îç∞" ; > ;
+            < "ÏïÑÎûò" ; > ;
+        };
+        StringList [ chinese_simplified ] =
+        {
             < "Ëá™Âä®" ; > ;
-        < "Âü∫Á∫ø" ; > ;
-        < "‰∏ä" ; > ;
-        < "Â±Ö‰∏≠" ; > ;
-        < "‰∏ã" ; > ;
-    };
-    StringList [ chinese_traditional ] =
-    {
+            < "Âü∫Á∫ø" ; > ;
+            < "‰∏ä" ; > ;
+            < "Â±Ö‰∏≠" ; > ;
+            < "‰∏ã" ; > ;
+        };
+        StringList [ chinese_traditional ] =
+        {
             < "Ëá™Âãï" ; > ;
-        < "Âü∫Á∑ö" ; > ;
-        < "Âêë‰∏ä" ; > ;
-        < "ÁΩÆ‰∏≠" ; > ;
-        < "Âêë‰∏ã" ; > ;
-    };
-    StringList [ turkish ] =
-    {
+            < "Âü∫Á∑ö" ; > ;
+            < "Âêë‰∏ä" ; > ;
+            < "ÁΩÆ‰∏≠" ; > ;
+            < "Âêë‰∏ã" ; > ;
+        };
+        StringList [ turkish ] =
+        {
             < "Otomatik" ; > ;
-        < "Taban Áizgisi" ; > ;
-        < "¸stte" ; > ;
-        < "Ortala" ; > ;
-        < "A˛a˝" ; > ;
-    };
-    StringList [ arabic ] =
-    {
+            < "Taban Áizgisi" ; > ;
+            < "¸stte" ; > ;
+            < "Ortala" ; > ;
+            < "A˛a˝" ; > ;
+        };
+        StringList [ arabic ] =
+        {
             < " ·ﬁ«∆Ì" ; > ;
-        < "«·Œÿ «·√”«”Ì" ; > ;
-        < "√⁄·Ï" ; > ;
-        < "„ Ê”ÿ" ; > ;
-        < "√”›·" ; > ;
-    };
-    StringList [ catalan ] =
-    {
+            < "«·Œÿ «·√”«”Ì" ; > ;
+            < "√⁄·Ï" ; > ;
+            < "„ Ê”ÿ" ; > ;
+            < "√”›·" ; > ;
+        };
+        StringList [ catalan ] =
+        {
             < "Autom‡tic" ; > ;
-        < "LÌnia base" ; > ;
-        < "Superior" ; > ;
-        < "Mitjana" ; > ;
-        < "Part inferior" ; > ;
-    };
-    StringList [ finnish ] =
-    {
+            < "LÌnia base" ; > ;
+            < "Superior" ; > ;
+            < "Mitjana" ; > ;
+            < "Part inferior" ; > ;
+        };
+        StringList [ finnish ] =
+        {
             < "Automaattinen" ; > ;
-        < "Perusviiva" ; > ;
-        < "Yl‰osa" ; > ;
-        < "Keskikohta" ; > ;
-        < "Alaosa" ; > ;
-    };
-    StringList [ thai ] =
-    {
-         < "‡∏≠‡∏±‡∏ï‡πÇ‡∏ô‡∏°‡∏±‡∏ï‡∏¥" ; > ;
-        < "‡∏ö‡∏£‡∏£‡∏ó‡∏±‡∏î‡∏´‡∏•‡∏±‡∏Å" ; > ;
-        < "‡∏î‡πâ‡∏≤‡∏ô‡∏ö‡∏ô" ; > ;
-        < "‡∏ï‡∏£‡∏á‡∏Å‡∏•‡∏≤‡∏á" ; > ;
-        < "‡∏î‡πâ‡∏≤‡∏ô‡∏•‡πà‡∏≤‡∏á" ; > ;
-    };
+            < "Perusviiva" ; > ;
+            < "Yl‰osa" ; > ;
+            < "Keskikohta" ; > ;
+            < "Alaosa" ; > ;
+        };
+        StringList [ thai ] =
+        {
+            < "‡∏≠‡∏±‡∏ï‡πÇ‡∏ô‡∏°‡∏±‡∏ï‡∏¥" ; > ;
+            < "‡∏ö‡∏£‡∏£‡∏ó‡∏±‡∏î‡∏´‡∏•‡∏±‡∏Å" ; > ;
+            < "‡∏î‡πâ‡∏≤‡∏ô‡∏ö‡∏ô" ; > ;
+            < "‡∏ï‡∏£‡∏á‡∏Å‡∏•‡∏≤‡∏á" ; > ;
+            < "‡∏î‡πâ‡∏≤‡∏ô‡∏•‡πà‡∏≤‡∏á" ; > ;
+        };
     };
     Text[ chinese_simplified ] = "ÂØπÈΩê";
     Text[ russian ] = "¬˚‡‚ÌË‚‡ÌËÂ";
@@ -2450,97 +2450,6 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ catalan ] = "LÌnies";
         Text[ thai ] = "‡∏ö‡∏£‡∏£‡∏ó‡∏±‡∏î";
     };
-    FixedLine   FL_PROPERTIES
-    {
-        Pos = MAP_APPFONT ( 6 , 154 ) ;
-        Size = MAP_APPFONT ( 248 , 8 ) ;
-        Hide = TRUE ;
-        Text = "Eigenschaften" ;
-        Text [ ENGLISH ] = "Properties" ;
-        Text[ english_us ] = "Properties";
-        Text[ portuguese ] = "Properties";
-        Text[ russian ] = "Properties";
-        Text[ greek ] = "Properties";
-        Text[ dutch ] = "Properties";
-        Text[ french ] = "Properties";
-        Text[ spanish ] = "Properties";
-        Text[ finnish ] = "Properties";
-        Text[ italian ] = "Properties";
-        Text[ danish ] = "Properties";
-        Text[ swedish ] = "Properties";
-        Text[ polish ] = "Properties";
-        Text[ japanese ] = "Â±ûÊÄß";
-        Text[ korean ] = "Properties";
-        Text[ chinese_simplified ] = "Properties";
-        Text[ chinese_traditional ] = "Properties";
-        Text[ turkish ] = "Properties";
-        Text[ arabic ] = "Properties";
-        Text[ catalan ] = "Opcions";
-        Text[ thai ] = "‡∏Ñ‡∏∏‡∏ì‡∏™‡∏°‡∏ö‡∏±‡∏ï‡∏¥";
-    };
-    FixedText   FT_TEXTDIRECTION
-    {
-        Pos = MAP_APPFONT ( 12 , 167 ) ;
-        Size = MAP_APPFONT ( 60 , 8 ) ;
-        Hide = TRUE ;
-        Text = "~Textfluss" ;
-        Text [ ENGLISH ] = "Text ~direction" ;
-        Text[ english_us ] = "Text ~direction";
-        Text[ portuguese ] = "Text ~direction";
-        Text[ russian ] = "Text ~direction";
-        Text[ greek ] = "Text ~direction";
-        Text[ dutch ] = "Text ~direction";
-        Text[ french ] = "Text ~direction";
-        Text[ spanish ] = "Text ~direction";
-        Text[ finnish ] = "Text ~direction";
-        Text[ italian ] = "Text ~direction";
-        Text[ danish ] = "Text ~direction";
-        Text[ swedish ] = "Text ~direction";
-        Text[ polish ] = "Text ~direction";
-        Text[ japanese ] = "ÊñáÂ≠óÊñπÂêë";
-        Text[ korean ] = "Text ~direction";
-        Text[ chinese_simplified ] = "Text ~direction";
-        Text[ chinese_traditional ] = "Text ~direction";
-        Text[ turkish ] = "Text ~direction";
-        Text[ arabic ] = "Text ~direction";
-    };
-    ListBox     LB_TEXTDIRECTION
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 75 , 165 ) ;
-        Size = MAP_APPFONT ( 176 , 50 ) ;
-        DropDown = TRUE ;
-        Hide = TRUE ;
-        StringList =
-        {
-            < "Links nach rechts" ; 0; > ;
-            < "Rechts nach links" ; 1; > ;
-            < "Einstellungen des ¸bergeordneten Objektes verwenden" ; 4; > ;
-        };
-        StringList [ ENGLISH ] =
-        {
-            < "Left-to-right" ; 0; > ;
-            < "Right-to-left" ; 1; > ;
-            < "Use superordinate settings" ; 4; > ;
-        };
-    StringList [ language_user1 ] =
-    {
-         < "Links nach rechts" ; 0; > ;
-        < "Rechts nach links" ; 1; > ;
-        < "Einstellungen des ¸bergeordneten Objektes verwenden" ; 4; > ;
-    };
-    StringList [ japanese ] =
-    {
-         < "Â∑¶„Åã„ÇâÂè≥„Å∏" ; 0; > ;
-        < "Âè≥„Åã„ÇâÂ∑¶„Å∏" ; 1; > ;
-        < "Âë®„Çä„ÅÆ„ÉÜ„Ç≠„Çπ„Éà„ÅÆÊñáÂ≠óÊñπÂêë„Å´Âêà„Çè„Åõ„Çã" ; 4; > ;
-    };
-    StringList [ english_us ] =
-    {
-         < "Left-to-right" ; 0; > ;
-        < "Right-to-left" ; 1; > ;
-    };
-    };
     Text[ chinese_simplified ] = "Êç¢Ë°åÂíåÂàÜÈ°µ";
     Text[ russian ] = "œÓÎÓÊÂÌËÂ Ì‡ ÒÚ‡ÌËˆÂ";
     Text[ polish ] = "Tekst";
@@ -2831,116 +2740,207 @@ TabPage RID_SVXPAGE_PARA_ASIAN
             < "Automatic" ; Default ; > ;
             < "??Manual" ; Default ; > ;
         };
-    StringList [ language_user1 ] =
-    {
+        StringList [ language_user1 ] =
+        {
             < "Automatisch" ; Default ; > ;
-        < "??Manuell" ; Default ; > ;
-    };
-    StringList [ english_us ] =
-    {
+            < "??Manuell" ; Default ; > ;
+        };
+        StringList [ english_us ] =
+        {
             < "Automatic" ; Default ; > ;
-        < "??Manual" ; Default ; > ;
-    };
-    StringList [ portuguese ] =
-    {
+            < "??Manual" ; Default ; > ;
+        };
+        StringList [ portuguese ] =
+        {
             < "Autom·tico" ; Default ; > ;
-        < "??Manual" ; Default ; > ;
-    };
-    StringList [ russian ] =
-    {
+            < "??Manual" ; Default ; > ;
+        };
+        StringList [ russian ] =
+        {
             < "¿‚ÚÓÏ‡ÚË˜ÂÒÍË" ; Default ; > ;
-        < "¬Û˜ÌÛ˛" ; Default ; > ;
-    };
-    StringList [ greek ] =
-    {
+            < "¬Û˜ÌÛ˛" ; Default ; > ;
+        };
+        StringList [ greek ] =
+        {
             < "¡ıÙ¸Ï·Ù·" ; Default ; > ;
-        < "??Manuell" ; Default ; > ;
-    };
-    StringList [ dutch ] =
-    {
+            < "??Manuell" ; Default ; > ;
+        };
+        StringList [ dutch ] =
+        {
             < "Automatisch" ; Default ; > ;
-        < "??Handmatig" ; Default ; > ;
-    };
-    StringList [ french ] =
-    {
+            < "??Handmatig" ; Default ; > ;
+        };
+        StringList [ french ] =
+        {
             < "Automatique" ; Default ; > ;
-        < "Manuel" ; Default ; > ;
-    };
-    StringList [ spanish ] =
-    {
+            < "Manuel" ; Default ; > ;
+        };
+        StringList [ spanish ] =
+        {
             < "Autom·tico" ; Default ; > ;
-        < "??Manualmente" ; Default ; > ;
-    };
-    StringList [ italian ] =
-    {
+            < "??Manualmente" ; Default ; > ;
+        };
+        StringList [ italian ] =
+        {
             < "Automatico" ; Default ; > ;
-        < "??Manuale" ; Default ; > ;
-    };
-    StringList [ danish ] =
-    {
+            < "??Manuale" ; Default ; > ;
+        };
+        StringList [ danish ] =
+        {
             < "Automatisk" ; Default ; > ;
-        < "??Manuel" ; Default ; > ;
-    };
-    StringList [ swedish ] =
-    {
+            < "??Manuel" ; Default ; > ;
+        };
+        StringList [ swedish ] =
+        {
             < "Automatiskt" ; Default ; > ;
-        < "Manuellt" ; Default ; > ;
-    };
-    StringList [ polish ] =
-    {
+            < "Manuellt" ; Default ; > ;
+        };
+        StringList [ polish ] =
+        {
             < "Automatycznie" ; Default ; > ;
-        < "??RÍcznie" ; Default ; > ;
-    };
-    StringList [ portuguese_brazilian ] =
-    {
+            < "??RÍcznie" ; Default ; > ;
+        };
+        StringList [ portuguese_brazilian ] =
+        {
             < "Automatisch" ; Default ; > ;
-        < "??Manuell" ; Default ; > ;
-    };
-    StringList [ japanese ] =
-    {
+            < "??Manuell" ; Default ; > ;
+        };
+        StringList [ japanese ] =
+        {
             < "Ëá™Âãï" ; Default ; > ;
-        < "ÊâãÂãï" ; Default ; > ;
-    };
-    StringList [ korean ] =
-    {
+            < "ÊâãÂãï" ; Default ; > ;
+        };
+        StringList [ korean ] =
+        {
             < "ÏûêÎèô" ; Default ; > ;
-        < "ÏàòÎèô" ; Default ; > ;
-    };
-    StringList [ chinese_simplified ] =
-    {
+            < "ÏàòÎèô" ; Default ; > ;
+        };
+        StringList [ chinese_simplified ] =
+        {
             < "Ëá™Âä®" ; Default ; > ;
-        < "ÊâãÂä®" ; Default ; > ;
-    };
-    StringList [ chinese_traditional ] =
-    {
+            < "ÊâãÂä®" ; Default ; > ;
+        };
+        StringList [ chinese_traditional ] =
+        {
             < "Ëá™Âãï" ; Default ; > ;
-        < "ÊâãÂãï" ; Default ; > ;
-    };
-    StringList [ turkish ] =
-    {
+            < "ÊâãÂãï" ; Default ; > ;
+        };
+        StringList [ turkish ] =
+        {
             < "Otomatik" ; Default ; > ;
-        < "??Manuell" ; Default ; > ;
-    };
-    StringList [ arabic ] =
-    {
+            < "??Manuell" ; Default ; > ;
+        };
+        StringList [ arabic ] =
+        {
             < " ·ﬁ«∆Ì" ; Default ; > ;
-        < "??ÌœÊÌ" ; Default ; > ;
-    };
-    StringList [ catalan ] =
-    {
+            < "??ÌœÊÌ" ; Default ; > ;
+        };
+        StringList [ catalan ] =
+        {
             < "Autom‡tic" ; Default ; > ;
-        < "Manual" ; Default ; > ;
-    };
-    StringList [ finnish ] =
-    {
+            < "Manual" ; Default ; > ;
+        };
+        StringList [ finnish ] =
+        {
             < "Automaattinen" ; Default ; > ;
-        < "??Manuaalinen" ; Default ; > ;
+            < "??Manuaalinen" ; Default ; > ;
+        };
+        StringList [ thai ] =
+        {
+            < "‡∏≠‡∏±‡∏ï‡πÇ‡∏ô‡∏°‡∏±‡∏ï‡∏¥" ; Default ; > ;
+            < "??‡∏Å‡∏≥‡∏´‡∏ô‡∏î‡πÄ‡πÄ‡∏≠‡∏á" ; Default ; > ;
+        };
     };
-    StringList [ thai ] =
+    FixedLine   FL_PROPERTIES
     {
-         < "‡∏≠‡∏±‡∏ï‡πÇ‡∏ô‡∏°‡∏±‡∏ï‡∏¥" ; Default ; > ;
-        < "??‡∏Å‡∏≥‡∏´‡∏ô‡∏î‡πÄ‡πÄ‡∏≠‡∏á" ; Default ; > ;
+        Pos = MAP_APPFONT ( 6 , 154 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Hide = TRUE ;
+        Text = "Eigenschaften" ;
+        Text [ ENGLISH ] = "Properties" ;
+        Text[ english_us ] = "Properties";
+        Text[ portuguese ] = "Properties";
+        Text[ russian ] = "Properties";
+        Text[ greek ] = "Properties";
+        Text[ dutch ] = "Properties";
+        Text[ french ] = "Properties";
+        Text[ spanish ] = "Properties";
+        Text[ finnish ] = "Properties";
+        Text[ italian ] = "Properties";
+        Text[ danish ] = "Properties";
+        Text[ swedish ] = "Properties";
+        Text[ polish ] = "Properties";
+        Text[ japanese ] = "Â±ûÊÄß";
+        Text[ korean ] = "Properties";
+        Text[ chinese_simplified ] = "Properties";
+        Text[ chinese_traditional ] = "Properties";
+        Text[ turkish ] = "Properties";
+        Text[ arabic ] = "Properties";
+        Text[ catalan ] = "Opcions";
+        Text[ thai ] = "‡∏Ñ‡∏∏‡∏ì‡∏™‡∏°‡∏ö‡∏±‡∏ï‡∏¥";
     };
+    FixedText   FT_TEXTDIRECTION
+    {
+        Pos = MAP_APPFONT ( 12 , 167 ) ;
+        Size = MAP_APPFONT ( 60 , 8 ) ;
+        Hide = TRUE ;
+        Text = "~Textfluss" ;
+        Text [ ENGLISH ] = "Text ~direction" ;
+        Text[ english_us ] = "Text ~direction";
+        Text[ portuguese ] = "Text ~direction";
+        Text[ russian ] = "Text ~direction";
+        Text[ greek ] = "Text ~direction";
+        Text[ dutch ] = "Text ~direction";
+        Text[ french ] = "Text ~direction";
+        Text[ spanish ] = "Text ~direction";
+        Text[ finnish ] = "Text ~direction";
+        Text[ italian ] = "Text ~direction";
+        Text[ danish ] = "Text ~direction";
+        Text[ swedish ] = "Text ~direction";
+        Text[ polish ] = "Text ~direction";
+        Text[ japanese ] = "ÊñáÂ≠óÊñπÂêë";
+        Text[ korean ] = "Text ~direction";
+        Text[ chinese_simplified ] = "Text ~direction";
+        Text[ chinese_traditional ] = "Text ~direction";
+        Text[ turkish ] = "Text ~direction";
+        Text[ arabic ] = "Text ~direction";
+    };
+    ListBox     LB_TEXTDIRECTION
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 105 , 165 ) ;
+        Size = MAP_APPFONT ( 146 , 50 ) ;
+        DropDown = TRUE ;
+        Hide = TRUE ;
+        StringList =
+        {
+            < "Links nach rechts" ; 0; > ;
+            < "Rechts nach links" ; 1; > ;
+            < "Einstellungen des ¸bergeordneten Objektes verwenden" ; 4; > ;
+        };
+        StringList [ ENGLISH ] =
+        {
+            < "Left-to-right" ; 0; > ;
+            < "Right-to-left" ; 1; > ;
+            < "Use superordinate settings" ; 4; > ;
+        };
+        StringList [ language_user1 ] =
+        {
+            < "Links nach rechts" ; 0; > ;
+            < "Rechts nach links" ; 1; > ;
+            < "Einstellungen des ¸bergeordneten Objektes verwenden" ; 4; > ;
+        };
+        StringList [ japanese ] =
+        {
+            < "Â∑¶„Åã„ÇâÂè≥„Å∏" ; 0; > ;
+            < "Âè≥„Åã„ÇâÂ∑¶„Å∏" ; 1; > ;
+            < "Âë®„Çä„ÅÆ„ÉÜ„Ç≠„Çπ„Éà„ÅÆÊñáÂ≠óÊñπÂêë„Å´Âêà„Çè„Åõ„Çã" ; 4; > ;
+        };
+        StringList [ english_us ] =
+        {
+            < "Left-to-right" ; 0; > ;
+            < "Right-to-left" ; 1; > ;
+        };
     };
     Text[ english_us ] = "Asian Typography";
     Text[ portuguese ] = "Tipografia asi·tica";
