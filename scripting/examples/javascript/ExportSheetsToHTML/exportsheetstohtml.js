@@ -1,3 +1,8 @@
+// When this script is run on an existing, saved, spreadsheet, 
+// eg. /home/testuser/myspreadsheet.sxc, the script will export
+// each sheet to a separate html file, 
+// eg. /home/testuser/myspreadsheet_sheet1.html, 
+// /home/testuser/myspreadsheet_sheet2.html etc
 importClass(Packages.com.sun.star.uno.UnoRuntime);
 importClass(Packages.com.sun.star.sheet.XSpreadsheetDocument);
 importClass(Packages.com.sun.star.container.XIndexAccess);

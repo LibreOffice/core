@@ -9,7 +9,7 @@
                 Saves each sheet in the current Calc document as a separate HTML file in the same directory as the original Calc document.
             </description>
         </locale>
-        <functionname value="ExportSheetsToHTML.js"/>
+        <functionname value="exportsheetstohtml.js"/>
         <logicalname value="ExportSheetsToHTML.JavaScript"/>
     </script>
 
