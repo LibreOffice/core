@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewcontainer.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 08:58:09 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:32:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,9 +166,9 @@ OViewContainer::~OViewContainer()
 //------------------------------------------------------------------------------
 IMPLEMENT_SERVICE_INFO2(OViewContainer, "com.sun.star.sdb.dbaccess.OViewContainer", SERVICE_SDBCX_CONTAINER, SERVICE_SDBCX_TABLES)
 // -----------------------------------------------------------------------------
-Reference< XNamed > OViewContainer::createObject(const ::rtl::OUString& _rName)
+ObjectType OViewContainer::createObject(const ::rtl::OUString& _rName)
 {
-    Reference< XNamed > xProp;
+    ObjectType xProp;
     if ( m_xMasterContainer.is() && m_xMasterContainer->hasByName(_rName) )
         xProp.set(m_xMasterContainer->getByName(_rName),UNO_QUERY);
 
