@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BezierPoint.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-02 15:11:53 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 18:55:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@
 
     @deprecated
  */
-struct BezierPoint
+published struct BezierPoint
 {
     // DocMerge from xml: field com::sun::star::drawing::BezierPoint::Position
     /** This is the position of this point.
