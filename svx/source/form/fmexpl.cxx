@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmexpl.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: fs $ $Date: 2002-09-25 12:40:36 $
+ *  last change: $Author: kz $ $Date: 2003-12-11 12:16:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -656,6 +656,14 @@ Image FmControlData::GetImage(const ImageList& ilNavigatorImages) const
 
     case OBJ_FM_GRID:
         aImage = ilNavigatorImages.GetImage( RID_SVXIMG_GRID );
+        break;
+
+    case OBJ_FM_SCROLLBAR:
+        aImage = ilNavigatorImages.GetImage( RID_SVXIMG_SCROLLBAR );
+        break;
+
+    case OBJ_FM_SPINBUTTON:
+        aImage = ilNavigatorImages.GetImage( RID_SVXIMG_SPINBUTTON);
         break;
     }
 
