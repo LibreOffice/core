@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipOutputStream.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: mtg $ $Date: 2001-09-18 12:53:16 $
+ *  last change: $Author: mtg $ $Date: 2001-10-02 22:08:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,6 @@ ZipOutputStream::ZipOutputStream( Reference < XOutputStream > &xOStream, sal_Boo
 , bEncryptCurrentEntry(sal_False)
 , aBuffer(n_ConstBufferSize)
 , aDeflater(DEFAULT_COMPRESSION, sal_True)
-, nCurrentDiskNumber ( 0 )
 , bSpanning ( bNewSpanning )
 {
 }
@@ -168,7 +167,8 @@ void SAL_CALL ZipOutputStream::putNextEntry( ZipEntry& rEntry,
                             xEncryptData->aInitVector.getConstArray(),
                             xEncryptData->aInitVector.getLength());
         OSL_ASSERT( aResult == rtl_Cipher_E_None );
-        aDigest = rtl_digest_createMD5();
+        aDigest = rtl_digest_createSHA1();
+        mnDigested = 0;
         rEntry.nFlag |= 1 << 4;
         xCurrentEncryptData = xEncryptData;
     }
@@ -240,10 +240,10 @@ void SAL_CALL ZipOutputStream::closeEntry(  )
             aEncryptionBuffer.realloc ( 0 );
             bEncryptCurrentEntry = sal_False;
             rtl_cipher_destroy ( aCipher );
-            xCurrentEncryptData->aDigest.realloc ( RTL_DIGEST_LENGTH_MD5 ); // 16 bytes
-            aDigestResult = rtl_digest_getMD5 ( aDigest, xCurrentEncryptData->aDigest.getArray(), RTL_DIGEST_LENGTH_MD5 );
+            xCurrentEncryptData->aDigest.realloc ( RTL_DIGEST_LENGTH_SHA1 );
+            aDigestResult = rtl_digest_getSHA1 ( aDigest, xCurrentEncryptData->aDigest.getArray(), RTL_DIGEST_LENGTH_SHA1 );
             OSL_ASSERT( aDigestResult == rtl_Digest_E_None );
-            rtl_digest_destroyMD5 ( aDigest );
+            rtl_digest_destroySHA1 ( aDigest );
         }
         pCurrentEntry = NULL;
     }
@@ -320,8 +320,14 @@ void ZipOutputStream::doDeflate()
         if (bEncryptCurrentEntry)
         {
             // Need to update our digest before encryption...
-            rtlDigestError aDigestResult;
-            aDigestResult = rtl_digest_updateMD5 ( aDigest, pTmpBuffer, nLength );
+            rtlDigestError aDigestResult = rtl_Digest_E_None;
+            sal_Int16 nDiff = n_ConstDigestLength - mnDigested;
+            if ( nDiff )
+            {
+                sal_Int16 nEat = static_cast < sal_Int16 > ( nDiff > nLength ? nLength : nDiff );
+                aDigestResult = rtl_digest_updateSHA1 ( aDigest, pTmpBuffer, nEat );
+                mnDigested += nEat;
+            }
             OSL_ASSERT( aDigestResult == rtl_Digest_E_None );
 
             aEncryptionBuffer.realloc ( nLength );
