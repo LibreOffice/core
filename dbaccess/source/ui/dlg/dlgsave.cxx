@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgsave.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-09 16:05:47 $
+ *  last change: $Author: oj $ $Date: 2001-01-11 09:21:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,7 +129,7 @@ IMPL_LINK(OSaveAsDlg, ButtonClickHdl, Button *, pButton)
             m_aTitle.GrabFocus();
             String aText(m_aExists);
             aText.SearchAndReplace(String::CreateFromAscii("'$Name: not supported by cvs2svn $'"),m_aName);
-            OMsgBox aDlg(this,String(),aText,WB_YES_NO,OMsgBox::Query);
+            OMsgBox aDlg(this,String(ModuleRes(STR_OBJECT_ALREADY_EXSISTS)),aText,WB_YES_NO,OMsgBox::Query);
             if(aDlg.Execute() == RET_NO)
                 EndDialog(RET_OK);
         }
