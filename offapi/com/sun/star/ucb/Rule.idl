@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Rule.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:57:55 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 01:24:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@ module com { module sun { module star { module ucb {
     objects to which the rule should be applied, the <type>RuleAction</type>
     which should be used on the matching objects, and a parameter.
 */
-struct Rule
+published struct Rule
 {
     //-------------------------------------------------------------------------
     /** the rule terms describing the objects to which the rule should be
