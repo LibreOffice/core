@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-30 10:03:00 $
+ *  last change: $Author: kso $ $Date: 2000-10-30 10:08:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -453,6 +453,7 @@ Sequence< Any > Content::getPropertyValues(
         for ( sal_Int32 n = 0; n < nCount; ++n )
             pValues[ n ] = xRow->getObject( n + 1, Reference< XNameAccess >() );
     }
+
     return aValues;
 }
 
@@ -1002,8 +1003,12 @@ sal_Bool Content::isFolder()
     throw( CommandAbortedException, RuntimeException, Exception )
 {
     sal_Bool bFolder = sal_False;
-    getPropertyValue( OUString::createFromAscii( "IsFolder" ) ) >>= bFolder;
-    return bFolder;
+    if ( getPropertyValue( OUString::createFromAscii( "IsFolder" ) )
+        >>= bFolder )
+        return bFolder;
+
+    VOS_ENSURE( sal_False, "Content::isFolder - Got no property value!" );
+    throw CommandAbortedException();
 }
 
 //=========================================================================
@@ -1011,8 +1016,12 @@ sal_Bool Content::isDocument()
     throw( CommandAbortedException, RuntimeException, Exception )
 {
     sal_Bool bDoc = sal_False;
-    getPropertyValue( OUString::createFromAscii( "IsDocument" ) ) >>= bDoc;
-    return bDoc;
+    if ( getPropertyValue( OUString::createFromAscii( "IsDocument" ) )
+        >>= bDoc )
+        return bDoc;
+
+    VOS_ENSURE( sal_False, "Content::isDocument - Got no property value!" );
+    throw CommandAbortedException();
 }
 
 //=========================================================================
