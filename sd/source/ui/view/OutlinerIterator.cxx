@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OutlinerIterator.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 10:52:44 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 11:55:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,6 +151,11 @@ Iterator::Iterator (void)
     mpIterator = NULL;
 }
 
+Iterator::Iterator (const Iterator& rIterator)
+{
+    mpIterator = rIterator.mpIterator->Clone();
+}
+
 Iterator::Iterator (IteratorImplBase* pObject)
 {
     mpIterator = pObject;
@@ -194,7 +199,7 @@ Iterator& Iterator::operator++ ()
 
 Iterator Iterator::operator++ (int)
 {
-    Iterator aTmp = *this;
+    Iterator aTmp (*this);
     if (mpIterator!=NULL)
         mpIterator->GotoNextObject();
     return aTmp;
