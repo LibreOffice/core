@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfx.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-01 16:31:29 $
+ *  last change: $Author: rt $ $Date: 2001-10-11 20:45:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -283,6 +283,25 @@ String STR_FILTERNAME_ALL
     Text = "Alle Dateien (*.*)" ;
     Text [ english ] = "All files (*.*)" ;
     Text [ english_us ] = "All files (*.*)" ;
+    Text[ portuguese ] = "<Todos>";
+    Text[ russian ] = "<Âñå>";
+    Text[ greek ] = "<¼ëá>";
+    Text[ dutch ] = "<Alle>";
+    Text[ french ] = "Tous les fichiers (*.*)";
+    Text[ spanish ] = "<Todos>";
+    Text[ finnish ] = "<Kaikki>";
+    Text[ italian ] = "Tutti i file (*.*)";
+    Text[ danish ] = "<Alle>";
+    Text[ swedish ] = "Alla filer (*.*)";
+    Text[ polish ] = "<Wszystkie>";
+    Text[ portuguese_brazilian ] = "<Tudo>";
+    Text[ japanese ] = "<ã™ã¹ã¦>";
+    Text[ korean ] = "<ì „ë¶€>";
+    Text[ chinese_simplified ] = "å…¨éƒ¨æ–‡ä»¶ (*.*)";
+    Text[ chinese_traditional ] = "å…¨éƒ¨çš„æª”æ¡ˆ(*.*)";
+    Text[ turkish ] = "<Tümü>";
+    Text[ arabic ] = "<Çáßá>";
+    Text[ catalan ] = "<Todos>";
 };
 
 String STR_HUMAN_APPNAME
@@ -529,6 +548,7 @@ QueryBox MSG_QUERY_LASTVERSION
     Message[ turkish ] = "Tüm deðiþiklikleri iptal et?";
     Message[ catalan ] = "¿Cancelar todos los cambios?";
 };
+
 
 
 
