@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbcontrl.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 19:11:19 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 09:29:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2847,7 +2847,10 @@ SvxColorToolBoxControl::SvxColorToolBoxControl( USHORT nSlotId, USHORT nId, Tool
 
     SfxToolBoxControl( nSlotId, nId, rTbx )
 {
-    rTbx.SetItemBits( nId, TIB_DROPDOWN | rTbx.GetItemBits( nId ) );
+    if ( nSlotId == SID_BACKGROUND_COLOR )
+        rTbx.SetItemBits( nId, TIB_DROPDOWNONLY | rTbx.GetItemBits( nId ) );
+    else
+        rTbx.SetItemBits( nId, TIB_DROPDOWN | rTbx.GetItemBits( nId ) );
     rTbx.Invalidate();
     pBtnUpdater = new SvxTbxButtonColorUpdater_Impl( nSlotId, nId, &GetToolBox() );
 }
@@ -3037,7 +3040,7 @@ SvxFrameToolBoxControl::SvxFrameToolBoxControl(
 
     :   SfxToolBoxControl( nSlotId, nId, rTbx )
 {
-    rTbx.SetItemBits( nId, TIB_DROPDOWN | rTbx.GetItemBits( nId ) );
+    rTbx.SetItemBits( nId, TIB_DROPDOWNONLY | rTbx.GetItemBits( nId ) );
 }
 
 // -----------------------------------------------------------------------
@@ -3089,7 +3092,7 @@ SvxFrameLineStyleToolBoxControl::SvxFrameLineStyleToolBoxControl(
 
     :    SfxToolBoxControl( nSlotId, nId, rTbx )
 {
-    rTbx.SetItemBits( nId, TIB_DROPDOWN | rTbx.GetItemBits( nId ) );
+    rTbx.SetItemBits( nId, TIB_DROPDOWNONLY | rTbx.GetItemBits( nId ) );
 }
 
 // -----------------------------------------------------------------------
@@ -3140,7 +3143,7 @@ SvxFrameLineColorToolBoxControl::SvxFrameLineColorToolBoxControl(
     SfxToolBoxControl( nSlotId, nId, rTbx ),
     pBtnUpdater(new SvxTbxButtonColorUpdater_Impl( nSlotId, nId, &GetToolBox() ))
 {
-    rTbx.SetItemBits( nId, TIB_DROPDOWN | rTbx.GetItemBits( nId ) );
+    rTbx.SetItemBits( nId, TIB_DROPDOWNONLY | rTbx.GetItemBits( nId ) );
 }
 
 // -----------------------------------------------------------------------
