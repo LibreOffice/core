@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nameuno.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: er $ $Date: 2002-11-28 16:16:44 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:45:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -475,7 +475,8 @@ void SAL_CALL ScNamedRangesObj::addNewByName( const rtl::OUString& aName,
     {
         ScDocument* pDoc = pDocShell->GetDocument();
         ScRangeName* pNames = pDoc->GetRangeName();
-        if (pNames)
+        USHORT nIndex = 0;
+        if (pNames && !pNames->SearchName(aNameStr, nIndex))
         {
             ScRangeName aNewRanges( *pNames );
             ScRangeData* pNew = new ScRangeData( pDoc, aNameStr, aContStr,
