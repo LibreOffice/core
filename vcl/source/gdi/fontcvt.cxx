@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontcvt.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hdu $ $Date: 2001-08-10 14:30:49 $
+ *  last change: $Author: hdu $ $Date: 2002-05-27 12:01:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -662,7 +662,7 @@ static const sal_Unicode aMonotypeSortsTab[224] =
         0xe24d,    0xe24e,    0xe24f,    0xe250,
         0xe251,    0xe252,    0xe253,    0xe254,
     // F0d0
-        0xe255,    0xe255,    0xe257,    0xe258,
+        0xe255,    0xe256,    0xe257,    0xe258,
         0xe259,    0xe25a,    0xe25b,    0xe25c,
         0xe25d,    0x2799,    0xe25e,    0x279b,
         0x279c,    0x279d,    0x279e,    0x279f,
