@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gallery.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-29 20:25:55 $
+ *  last change: $Author: kz $ $Date: 2001-09-26 20:19:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1149,7 +1149,7 @@ ModalDialog RID_SVXDLG_GALLERY_THEMEID
         Text[ ENGLISH ] = "ID";
         Text[ english_us ] = "ID";
         Text[ portuguese ] = "ID";
-        Text[ russian ] = "Идентификационный номер";
+        Text[ russian ] = "ID";
         Text[ dutch ] = "ID";
         Text[ french ] = "ID";
         Text[ spanish ] = "ID";
@@ -2701,6 +2701,7 @@ Menu RID_SVXMN_GALLERY2
         };
     };
 };
+
 
 
 
