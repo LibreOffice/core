@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclunohelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 12:31:11 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 15:12:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,7 @@ namespace com { namespace sun { namespace star { namespace uno {
 namespace com { namespace sun { namespace star { namespace awt {
     class XBitmap;
     class XWindow;
+    class XWindow2;
     class XWindowPeer;
     class XGraphics;
     class XRegion;
@@ -113,6 +114,7 @@ public:
 
     // Window
     static Window*                                                          GetWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow>& rxWindow );
+    static Window*                                                          GetWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow2>& rxWindow2 );
     static Window*                                                          GetWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer>& rxWindowPeer );
     static ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow>    GetInterface( Window* pWindow );
 
