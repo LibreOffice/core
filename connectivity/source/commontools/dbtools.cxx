@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtools.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-20 13:33:25 $
+ *  last change: $Author: oj $ $Date: 2001-04-27 10:09:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -635,7 +635,7 @@ void qualifiedNameComponents(const Reference< XDatabaseMetaData >& _rxConnMetaDa
     if (_rxConnMetaData->supportsSchemasInDataManipulation())
     {
         sal_Int32 nIndex = sName.indexOf((sal_Unicode)'.');
-        OSL_ENSURE(-1 != nIndex, "QualifiedNameComponents : no schema separator!");
+        //  OSL_ENSURE(-1 != nIndex, "QualifiedNameComponents : no schema separator!");
         _rSchema = sName.copy(0, nIndex);
         sName = sName.copy(nIndex + 1);
     }
@@ -1257,6 +1257,9 @@ void showError(const SQLExceptionInfo& _rInfo,
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.22  2001/04/20 13:33:25  oj
+ *  #85736# if catalogseparator is empty don't append catalog
+ *
  *  Revision 1.21  2001/04/17 13:56:26  fs
  *  corrected getConnection
  *
