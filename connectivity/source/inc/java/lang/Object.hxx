@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Object.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:17:08 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:44:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,9 @@
 #ifdef OS2
 #include <typedefs.h>
 #endif
-
+#ifndef _OSL_THREAD_H_
+#include <osl/thread.h>
+#endif
 #ifndef _COM_SUN_STAR_SDBC_SQLEXCEPTION_HPP_
 #include <com/sun/star/sdbc/SQLException.hpp>
 #endif
@@ -106,7 +108,7 @@ namespace connectivity
     typedef ::boost::shared_ptr< jvmaccess::VirtualMachine::AttachGuard> TGuard;
     class SDBThreadAttach
     {
-        TGuard m_aGuard;
+        jvmaccess::VirtualMachine::AttachGuard m_aGuard;
         SDBThreadAttach(SDBThreadAttach&);
     public:
         SDBThreadAttach();
