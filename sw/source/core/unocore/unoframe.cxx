@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: mtg $ $Date: 2001-10-12 13:57:26 $
+ *  last change: $Author: mtg $ $Date: 2001-10-15 10:06:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1106,8 +1106,6 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
 //              pSh->SetFrmFmt( pStyle->GetFrmFmt() );
                 UnoActionContext aAction(pFmt->GetDoc());
                 pFmt->GetDoc()->SetFrmFmtToFly( *pFmt, *pFrmFmt );
-                Any aAny = mxStyleFamily->getByName ( rPropertyName );
-                aAny >>= mxStyleData;
             }
             else
                 throw IllegalArgumentException();
@@ -1291,7 +1289,14 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
         }
     }
     else if(IsDescriptor())
+    {
         pProps->SetProperty(pCur->nWID, pCur->nMemberId, aValue);
+        if(FN_UNO_FRAME_STYLE_NAME == pCur->nWID)
+        {
+            Any aAny = mxStyleFamily->getByName ( rPropertyName );
+            aAny >>= mxStyleData;
+        }
+    }
     else
         throw RuntimeException();
 }
@@ -1448,6 +1453,8 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
     }
     else if(IsDescriptor())
     {
+        if ( ! mpDoc )
+            throw RuntimeException();
         uno::Any* pAny = 0;
         if( !pProps->GetProperty( pCur->nWID, pCur->nMemberId, pAny ) )
             pProps->GetProperty( rPropertyName, mxStyleData, aAny );
@@ -1693,7 +1700,12 @@ void    SwXFrame::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew);
     if(!GetRegisteredIn())
+    {
+        mxStyleData.clear();
+        mxStyleFamily.clear();
+        mpDoc = 0;
         aLstnrCntnr.Disposing();
+    }
 }
 
 /*-- 11.12.98 15:23:05---------------------------------------------------
@@ -1749,6 +1761,8 @@ uno::Reference< XTextRange >  SwXFrame::getAnchor(void) throw( RuntimeException 
 void SwXFrame::ResetDescriptor()
 {
     bIsDescriptor = sal_False;
+    mxStyleData.clear();
+    mxStyleFamily.clear();
     DELETEZ(pProps);
 }
 /* -----------------18.02.99 13:34-------------------
@@ -1845,7 +1859,7 @@ void SwXFrame::attachToRange(const uno::Reference< XTextRange > & xTextRange)
                     pDoc->SetFlyName((SwFlyFrmFmt&)*pFmt, sName);
             }
             //den SwXText wecken
-            ((SwXTextFrame*)this)->SetDoc(GetFrmFmt()->GetDoc());
+            ((SwXTextFrame*)this)->SetDoc( bIsDescriptor ? mpDoc : GetFrmFmt()->GetDoc() );
         }
         else if( eType == FLYCNTTYPE_GRF)
         {
