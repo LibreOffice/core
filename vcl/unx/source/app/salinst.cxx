@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-14 13:31:24 $
+ *  last change: $Author: pl $ $Date: 2001-07-26 15:45:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -389,5 +389,5 @@ void* SalInstance::GetConnectionIdentifier( ConnectionIdentifierType& rReturnedT
     static const char* pDisplay = getenv( "DISPLAY" );
     rReturnedType   = AsciiCString;
     rReturnedBytes  = pDisplay ? strlen( pDisplay )+1 : 1;
-    return pDisplay ? pDisplay : "";
+    return pDisplay ? (void*)pDisplay : (void*)"";
 }

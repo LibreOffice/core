@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-20 12:46:12 $
+ *  last change: $Author: pl $ $Date: 2001-07-26 15:45:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,7 +154,7 @@ extern "C" srv_vendor_t sal_GetServerVendor( Display *p_display );
 enum SalWM { olwm,      // Open Look
              mwm,       // Motif
              kwm,       // KDE Desktop Environment
-             _4Dwm,     // SGI
+             FourDwm,   // SGI
              vuewm,     // HP
              dtwm,      // CDE
              winmgr,    // Oracle NC

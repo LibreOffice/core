@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: cp $ $Date: 2001-07-18 10:21:49 $
+ *  last change: $Author: pl $ $Date: 2001-07-26 15:45:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -978,7 +978,7 @@ void SalDisplay::Init( Colormap hXColmap, const XVisualInfo* pXVI )
         if( pWM )
             sscanf( pWM, "%li", &eWindowManager_ );
         else if( XInternAtom( pDisp_, "_SGI_TELL_WM", True ) )
-            eWindowManager_ = _4Dwm;
+            eWindowManager_ = FourDwm;
         else if( XInternAtom( pDisp_, "KWM_RUNNING", True ) )
             eWindowManager_ = mwm; // naja, eigentlich kwm ...
         else if( XInternAtom( pDisp_, "_OL_WIN_ATTR", True ) )
@@ -1081,7 +1081,7 @@ void SalDisplay::Init( Colormap hXColmap, const XVisualInfo* pXVI )
                     nProperties_ |= PROPERTY_BUG_XCopyArea_GXxor;
                 nProperties_ |= PROPERTY_SUPPORT_XSetClipMask;
 
-                if( otherwm == eWindowManager_ ) eWindowManager_ = _4Dwm;
+                if( otherwm == eWindowManager_ ) eWindowManager_ = FourDwm;
             }
             else
             if( GetServerVendor() == vendor_hp )
