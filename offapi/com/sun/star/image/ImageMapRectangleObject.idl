@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImageMapRectangleObject.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-15 15:43:20 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 20:49:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@
     @see ImageMap
     @see ImageMapObject
 */
-service ImageMapRectangleObject
+published service ImageMapRectangleObject
 {
     /** The basic service for all image map objects. */
     service ImageMapObject;
