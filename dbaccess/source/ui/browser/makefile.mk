@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: oj $ $Date: 2001-01-09 15:45:44 $
+#   last change: $Author: fs $ $Date: 2001-01-30 08:32:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,7 +82,6 @@ SLOFILES =\
             $(SLO)$/genericcontroller.obj		\
             $(SLO)$/dbexchange.obj				\
             $(SLO)$/dbloader.obj				\
-            $(SLO)$/dbtreemodel.obj				\
             $(SLO)$/dbtreelistbox.obj			\
             $(SLO)$/dbtreeview.obj				\
             $(SLO)$/sbagrid.obj					\
