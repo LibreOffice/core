@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 14:38:07 $
+#   last change: $Author: rt $ $Date: 2003-11-24 16:36:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -68,16 +68,22 @@ TARGET=engine3d
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
-.INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 # --- Files --------------------------------------------------------
 
-SRS1NAME=engine3d
-SRC1FILES=\
-        string3d.src	\
-        float3d.src
-
 SLOFILES= \
+        $(SLO)$/obj3d.obj 		\
+        $(SLO)$/pntobj3d.obj     \
+        $(SLO)$/label3d.obj		\
+        $(SLO)$/light3d.obj 		\
+        $(SLO)$/polyob3d.obj		\
+        $(SLO)$/scene3d.obj		\
+        $(SLO)$/polysc3d.obj		\
+        $(SLO)$/cube3d.obj		\
+        $(SLO)$/sphere3d.obj		\
+        $(SLO)$/extrud3d.obj     \
+        $(SLO)$/lathe3d.obj		\
+        $(SLO)$/polygn3d.obj 		\
         $(SLO)$/svx3ditems.obj	\
         $(SLO)$/deflt3d.obj		\
         $(SLO)$/class3d.obj		\
@@ -86,56 +92,24 @@ SLOFILES= \
         $(SLO)$/viewpt3d.obj		\
         $(SLO)$/camera3d.obj		\
         $(SLO)$/poly3d.obj 		\
-        $(SLO)$/polygn3d.obj 		\
         $(SLO)$/volmrk3d.obj 	\
         $(SLO)$/objfac3d.obj 	\
-        $(SLO)$/obj3d.obj 		\
-        $(SLO)$/light3d.obj 		\
         $(SLO)$/dlight3d.obj 	\
         $(SLO)$/plight3d.obj 	\
-        $(SLO)$/pntobj3d.obj     \
-        $(SLO)$/polyob3d.obj		\
-        $(SLO)$/scene3d.obj		\
-        $(SLO)$/polysc3d.obj		\
-        $(SLO)$/cube3d.obj		\
-        $(SLO)$/sphere3d.obj		\
-        $(SLO)$/extrud3d.obj     \
-        $(SLO)$/lathe3d.obj		\
-        $(SLO)$/label3d.obj		\
         $(SLO)$/dragmt3d.obj		\
         $(SLO)$/view3d.obj		\
         $(SLO)$/view3d1.obj       \
         $(SLO)$/e3dcmpt.obj       \
         $(SLO)$/float3d.obj
 
- SVXLIGHTOBJFILES= \
-        $(OBJ)$/svx3ditems.obj		\
-        $(OBJ)$/deflt3d.obj		\
-        $(OBJ)$/class3d.obj		\
-        $(OBJ)$/volume3d.obj		\
-        $(OBJ)$/viewpt3d.obj		\
-        $(OBJ)$/camera3d.obj		\
-        $(OBJ)$/poly3d.obj 		\
-        $(OBJ)$/polygn3d.obj 		\
-        $(OBJ)$/volmrk3d.obj 	\
-        $(OBJ)$/objfac3d.obj 	\
-        $(OBJ)$/obj3d.obj 		\
-        $(OBJ)$/light3d.obj 		\
-        $(OBJ)$/dlight3d.obj 	\
-        $(OBJ)$/plight3d.obj 	\
-        $(OBJ)$/pntobj3d.obj     \
-        $(OBJ)$/polyob3d.obj		\
-        $(OBJ)$/scene3d.obj		\
-        $(OBJ)$/polysc3d.obj		\
-        $(OBJ)$/cube3d.obj		\
-        $(OBJ)$/sphere3d.obj		\
-        $(OBJ)$/extrud3d.obj     \
-        $(OBJ)$/lathe3d.obj		\
-        $(OBJ)$/label3d.obj		\
-        $(OBJ)$/view3d.obj		\
-        $(OBJ)$/view3d1.obj       \
-        $(OBJ)$/e3dcmpt.obj
+.IF "$(COM)"=="ICC"
+NOOPTFILES=\
+        $(SLO)$/class3d.obj
+.ENDIF
 
+SRS1NAME=engine3d
+SRC1FILES=\
+        string3d.src	\
+        float3d.src
 
 .INCLUDE :  target.mk
-
