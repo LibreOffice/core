@@ -2,9 +2,9 @@
  *
  *  $RCSfile: float3d.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: thb $ $Date: 2001-07-09 13:21:44 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 20:34:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -825,14 +825,14 @@ DockingWindow RID_SVXFLOAT_3D
         Text [ french ] = "Angle final" ;
         Text [ dutch ] = "Eindhoek" ;
         Text [ portuguese ] = "Ângulo de rotação" ;
-        Text[ chinese_simplified ] = "Ğı×ª½Ç¶È";
+        Text[ chinese_simplified ] = "×îÖÕ½Ç¶È";
         Text[ russian ] = "Êîíå÷íûé óãîë ïîâîğîòà";
         Text[ polish ] = "K¹t koñcowy";
         Text[ japanese ] = "‰ñ“]Šp“x";
-        Text[ chinese_traditional ] = "±ÛÂà¨¤«×";
+        Text[ chinese_traditional ] = "³Ì²×¨¤«×";
         Text[ arabic ] = "ÒÇæíÉ ÇáäåÇíÉ";
         Text[ dutch ] = "Eindhoek";
-        Text[ chinese_simplified ] = "Ğı×ª½Ç¶È";
+        Text[ chinese_simplified ] = "×îÖÕ½Ç¶È";
         Text[ greek ] = "ÔåëéêŞ ãùíßá";
         Text[ korean ] = "ÃÖÁ¾°¢";
         Text[ turkish ] = "Dönüş açısı";
@@ -2883,7 +2883,7 @@ DockingWindow RID_SVXFLOAT_3D
     };
     StringList [ polish ] =
     {
-            < "Zdef. przez u¿ytk." ; > ;
+            < "Ustawienia indywidualne" ; > ;
         < "Metal" ; > ;
         < "Z³oto" ; > ;
         < "Chrom" ; > ;
@@ -3525,6 +3525,7 @@ String RID_SVXFLOAT3D_FIX_G
     Text[ arabic ] = "G:";
     Text[ catalan ] = "V:";
     Text[ finnish ] = "G:";
+    Text[ language_user1 ] = "BLG 27.07.00 : \"G\" vom RGB-Farbmodel";
 };
 String RID_SVXFLOAT3D_FIX_B
 {
@@ -3551,6 +3552,7 @@ String RID_SVXFLOAT3D_FIX_B
     Text[ catalan ] = "A:";
     Text[ finnish ] = "B:";
 };
+
 
 
 
