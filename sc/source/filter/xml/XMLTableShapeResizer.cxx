@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTableShapeResizer.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: sab $ $Date: 2001-12-10 17:37:31 $
+ *  last change: $Author: sab $ $Date: 2001-12-20 12:23:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,10 +211,12 @@ void ScMyShapeResizer::ResizeShapes()
                                 sal_Int32 nHeight;
                                 if (aAny >>= nHeight)
                                 {
+                                    Rectangle aRec = pDoc->GetMMRect(static_cast<USHORT>(aItr->aStartCell.Column), static_cast<USHORT>(aItr->aStartCell.Row),
+                                        static_cast<USHORT>(aItr->aStartCell.Column), static_cast<USHORT>(aItr->aStartCell.Row), aItr->aStartCell.Sheet);
+                                    awt::Point aPoint(aItr->xShape->getPosition());
+                                    awt::Size aSize(aItr->xShape->getSize());
                                     if (aItr->nEndY >= 0 && aItr->nEndX >= 0)
                                     {
-                                        Rectangle aRec = pDoc->GetMMRect(static_cast<USHORT>(aItr->aStartCell.Column), static_cast<USHORT>(aItr->aStartCell.Row),
-                                            static_cast<USHORT>(aItr->aStartCell.Column), static_cast<USHORT>(aItr->aStartCell.Row), aItr->aStartCell.Sheet);
                                         awt::Point aRefPoint;
                                         aRefPoint.X = aRec.Left();
                                         aRefPoint.Y = aRec.Top();
@@ -223,9 +225,7 @@ void ScMyShapeResizer::ResizeShapes()
                                             static_cast<USHORT>(aItr->aEndCell.Column), static_cast<USHORT>(aItr->aEndCell.Row), aItr->aEndCell.Sheet ));
                                         aItr->nEndX += pRect->Left();
                                         aItr->nEndY += pRect->Top();
-                                        awt::Point aPoint = aItr->xShape->getPosition();
-                                        awt::Size aOldSize = aItr->xShape->getSize();
-                                        awt::Size aSize(aOldSize);
+                                        awt::Size aOldSize(aSize);
                                         aPoint.X += aRefPoint.X;
                                         if (aPoint.X > aRec.Right())
                                             aPoint.X = aRec.Right() - 2; // decrement by 2 100th_mm because the cellheight is internal in twips
@@ -242,36 +242,58 @@ void ScMyShapeResizer::ResizeShapes()
                                     }
                                     else
                                     {
-                                        DBG_ASSERT(aItr->xShape->getShapeType().equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.CaptionShape"))),
-                                            "no end address of this shape");
-                                        Rectangle aRec = pDoc->GetMMRect(static_cast<USHORT>(aItr->aStartCell.Column), static_cast<USHORT>(aItr->aStartCell.Row),
-                                            static_cast<USHORT>(aItr->aStartCell.Column), static_cast<USHORT>(aItr->aStartCell.Row), aItr->aStartCell.Sheet);
-                                        awt::Point aPoint(aItr->xShape->getPosition());
-                                        awt::Size aSize(aItr->xShape->getSize());
-                                        Rectangle aRectangle(aPoint.X, aPoint.Y, aPoint.X + aSize.Width, aPoint.Y + aSize.Height);
+                                        if (aItr->xShape->getShapeType().equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.CaptionShape"))))
+                                        {
+                                            Rectangle aRectangle(aPoint.X, aPoint.Y, aPoint.X + aSize.Width, aPoint.Y + aSize.Height);
 
-                                        awt::Point aCaptionPoint;
-                                        uno::Reference< beans::XPropertySet > xShapeProps(aItr->xShape, uno::UNO_QUERY);
-                                        if (xShapeProps.is())
-                                            xShapeProps->getPropertyValue( sCaptionPoint ) >>= aCaptionPoint;
-                                        Point aCorePoint(aPoint.X, aPoint.Y);
-                                        Point aCoreCaptionPoint(aCaptionPoint.X, aCaptionPoint.Y);
-                                        aCoreCaptionPoint += aCorePoint;
-                                        aRectangle.Union(Rectangle(aCoreCaptionPoint, aCoreCaptionPoint));
+                                            awt::Point aCaptionPoint;
+                                            uno::Reference< beans::XPropertySet > xShapeProps(aItr->xShape, uno::UNO_QUERY);
+                                            if (xShapeProps.is())
+                                            {
+                                                try
+                                                {
+                                                    xShapeProps->getPropertyValue( sCaptionPoint ) >>= aCaptionPoint;
+                                                }
+                                                catch ( uno::Exception& )
+                                                {
+                                                    DBG_ERROR("This Captionshape has no CaptionPoint property.");
+                                                }
+                                            }
+                                            Point aCorePoint(aPoint.X, aPoint.Y);
+                                            Point aCoreCaptionPoint(aCaptionPoint.X, aCaptionPoint.Y);
+                                            aCoreCaptionPoint += aCorePoint;
+                                            aRectangle.Union(Rectangle(aCoreCaptionPoint, aCoreCaptionPoint));
 
-                                        Point aBeforeRightBottomPoint(aRectangle.BottomRight());
+                                            Point aBeforeRightBottomPoint(aRectangle.BottomRight());
 
-                                        aRectangle += aRec.TopLeft();
-                                        if (aRectangle.Left() > aRec.Right())
-                                            aRectangle -= (Point(aRectangle.Left() - aRec.Right() + 2, 0));
-                                        if (aRectangle.Top() > aRec.Bottom())
-                                            aRectangle -= (Point(0, aRectangle.Top() - aRec.Bottom() + 2));
+                                            aRectangle += aRec.TopLeft();
+                                            if (aRectangle.Left() > aRec.Right())
+                                                aRectangle -= (Point(aRectangle.Left() - aRec.Right() + 2, 0));
+                                            if (aRectangle.Top() > aRec.Bottom())
+                                                aRectangle -= (Point(0, aRectangle.Top() - aRec.Bottom() + 2));
 
-                                        Point aDifferencePoint(aRectangle.BottomRight() - aBeforeRightBottomPoint);
-                                        aPoint.X += aDifferencePoint.X();
-                                        aPoint.Y += aDifferencePoint.Y();
+                                            Point aDifferencePoint(aRectangle.BottomRight() - aBeforeRightBottomPoint);
+                                            aPoint.X += aDifferencePoint.X();
+                                            aPoint.Y += aDifferencePoint.Y();
 
-                                        aItr->xShape->setPosition(aPoint);
+                                            aItr->xShape->setPosition(aPoint);
+                                        }
+                                        else
+                                        {
+                                            // #96159# it is possible, that shapes have a negative position
+                                            // this is now handled here
+                                            DBG_ERROR("no or negative end address of this shape");
+                                            awt::Point aRefPoint;
+                                            aRefPoint.X = aRec.Left();
+                                            aRefPoint.Y = aRec.Top();
+                                            aPoint.X += aRefPoint.X;
+                                            if (aPoint.X > aRec.Right())
+                                                aPoint.X = aRec.Right() - 2; // decrement by 2 100th_mm because the cellheight is internal in twips
+                                            aPoint.Y += aRefPoint.Y;
+                                            if (aPoint.Y > aRec.Bottom())
+                                                aPoint.Y = aRec.Bottom() - 2; // decrement by 2 100th_mm because the cellheight is internal in twips
+                                            aItr->xShape->setPosition(aPoint);
+                                        }
                                     }
                                 }
                             }
