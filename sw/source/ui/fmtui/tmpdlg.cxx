@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tmpdlg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:37 $
+ *  last change: $Author: jp $ $Date: 2000-11-27 08:58:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,10 +233,14 @@ SwTemplateDlg::SwTemplateDlg(Window*            pParent,
         // Zeichenvorlagen
         case SFX_STYLE_FAMILY_CHAR:
         {
-            AddTabPage(TP_CHAR_STD,     SvxCharStdPage::Create,
-                                        SvxCharStdPage::GetRanges );
-            AddTabPage(TP_CHAR_EXT,     SvxCharExtPage::Create,
-                                        SvxCharExtPage::GetRanges );
+            AddTabPage(TP_CHAR_STD,     SvxCharNamePage::Create,
+                                        SvxCharNamePage::GetRanges );
+            AddTabPage(TP_CHAR_EXT,     SvxCharEffectsPage::Create,
+                                        SvxCharEffectsPage::GetRanges );
+            AddTabPage(TP_CHAR_POS,     SvxCharPositionPage::Create,
+                                        SvxCharPositionPage::GetRanges );
+            AddTabPage(TP_CHAR_TWOLN,   SvxCharTwoLinesPage::Create,
+                                        SvxCharTwoLinesPage::GetRanges );
             AddTabPage(TP_BACKGROUND,   SvxBackgroundTabPage::Create,
                                         SvxBackgroundTabPage::GetRanges );
             break;
@@ -252,10 +256,14 @@ SwTemplateDlg::SwTemplateDlg(Window*            pParent,
             AddTabPage(TP_PARA_EXT,     SvxExtParagraphTabPage::Create,
                                         SvxExtParagraphTabPage::GetRanges );
 
-            AddTabPage(TP_CHAR_STD,     SvxCharStdPage::Create,
-                                        SvxCharStdPage::GetRanges );
-            AddTabPage(TP_CHAR_EXT,     SvxCharExtPage::Create,
-                                        SvxCharExtPage::GetRanges );
+            AddTabPage(TP_CHAR_STD,     SvxCharNamePage::Create,
+                                        SvxCharNamePage::GetRanges );
+            AddTabPage(TP_CHAR_EXT,     SvxCharEffectsPage::Create,
+                                        SvxCharEffectsPage::GetRanges );
+            AddTabPage(TP_CHAR_POS,     SvxCharPositionPage::Create,
+                                        SvxCharPositionPage::GetRanges );
+            AddTabPage(TP_CHAR_TWOLN,   SvxCharTwoLinesPage::Create,
+                                        SvxCharTwoLinesPage::GetRanges );
 
             AddTabPage(TP_TABULATOR,    SvxTabulatorTabPage::Create,
                                         SvxTabulatorTabPage::GetRanges );
@@ -283,6 +291,7 @@ SwTemplateDlg::SwTemplateDlg(Window*            pParent,
                     RemoveTabPage(TP_PARA_EXT);
                 RemoveTabPage(TP_TABULATOR);
                 RemoveTabPage(TP_NUMPARA);
+                RemoveTabPage(TP_CHAR_TWOLN);
                 if(!(nHtmlMode & HTMLMODE_FULL_STYLES))
                 {
                     RemoveTabPage(TP_BACKGROUND);
@@ -452,15 +461,15 @@ void SwTemplateDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
                 SvxFontListItem aFontListItem( *( (SvxFontListItem*)::GetActiveView()->
                     GetDocShell()->GetItem( SID_ATTR_CHAR_FONTLIST ) ) );
 
-                ((SvxCharStdPage&)rPage).SetFontList(aFontListItem);
+                ((SvxCharNamePage&)rPage).SetFontList(aFontListItem);
 
                 if(rPage.GetItemSet().GetParent() && 0 == (nHtmlMode & HTMLMODE_ON ))
-                    ((SvxCharStdPage&)rPage).EnableRelativeMode();
+                    ((SvxCharNamePage&)rPage).EnableRelativeMode();
             }
             break;
 
         case TP_CHAR_EXT:
-            ((SvxCharExtPage&)rPage).EnableFlash();
+            ((SvxCharEffectsPage&)rPage).EnableFlash();
             break;
 
         case TP_PARA_STD:
@@ -586,6 +595,9 @@ void SwTemplateDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 17:14:37  hr
+    initial import
+
     Revision 1.88  2000/09/18 16:05:31  willem.vandorp
     OpenOffice header added.
 

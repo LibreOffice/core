@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globals.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:26 $
+ *  last change: $Author: jp $ $Date: 2000-11-27 08:59:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -300,6 +300,9 @@
 #define TP_PRIVATE_DATA             (RC_GLOBALS_BEGIN +  95)
 #define TP_BUSINESS_DATA            (RC_GLOBALS_BEGIN +  96)
 #define TP_SECTION_FTNENDNOTES      (RC_GLOBALS_BEGIN +  97)
+
+#define TP_CHAR_POS                 (RC_GLOBALS_BEGIN +  98)
+#define TP_CHAR_TWOLN               (RC_GLOBALS_BEGIN +  99)
 
 // Kontext-Menues (Format-Menue) --------------------------------------------
 
