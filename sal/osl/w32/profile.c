@@ -2,9 +2,9 @@
  *
  *  $RCSfile: profile.c,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obr $ $Date: 2001-06-11 11:18:06 $
+ *  last change: $Author: jl $ $Date: 2001-08-13 10:52:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -661,7 +661,7 @@ sal_Bool SAL_CALL osl_writeProfileString(oslProfile Profile,
     sal_Bool bRet = sal_False;
     sal_uInt32    NoEntry;
     const sal_Char* pStr;
-    sal_Char        Line[1024];
+    sal_Char        Line[4096];
     osl_TProfileSection* pSec;
     osl_TProfileImpl*    pProfile = 0;
 
