@@ -2,9 +2,9 @@
  *
  *  $RCSfile: authfld.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:04:05 $
+ *  last change: $Author: vg $ $Date: 2003-06-25 10:34:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -529,7 +529,7 @@ USHORT  SwAuthorityFieldType::GetSequencePos(long nHandle)
         {
             SwAuthorityField* pAFld = (SwAuthorityField*)pFmtFld->GetFld();
             const SwTxtFld* pTxtFld = pFmtFld->GetTxtFld();
-            if(!pTxtFld)
+            if(!pTxtFld || !pTxtFld->GetpTxtNode())
             {
 #ifdef DBG_UTIL
                 if(nHandle == pAFld->GetHandle())
