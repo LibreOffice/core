@@ -2,9 +2,9 @@
  *
  *  $RCSfile: methods.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2000-10-05 10:22:54 $
+ *  last change: $Author: ab $ $Date: 2000-10-12 14:45:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1983,6 +1983,45 @@ RTLFUNC(Dir)
                         sal_Bool bIncludeFolders = ((nFlags & Sb_ATTR_DIRECTORY) != 0);
                         pRTLData->aDirSeq = xSFI->getFolderContents( aDirURLStr, bIncludeFolders );
                         pRTLData->nCurDirPos = 0;
+
+                        // #78651 Add "." and ".." directories for VB compatibility
+                        if( bIncludeFolders )
+                        {
+                            INetURLObject aDirURLObj( aDirURLStr );
+                            BOOL bRoot = FALSE;
+
+                            // Check if it's a root directory
+                            sal_Int32 nCount = aDirURLObj.getSegmentCount();
+
+                            // No segment means Unix root directory "file:///"
+                            if( nCount == 0 )
+                            {
+                                bRoot = TRUE;
+                            }
+                            // Exactly one segment needs further checking, because it
+                            // can be Unix "file:///foo/" -> no root
+                            // or Windows  "file:///c:/"  -> root
+                            else if( nCount == 1 )
+                            {
+                                OUString aSeg1 = aDirURLObj.getName( 0, TRUE,
+                                    INetURLObject::DECODE_WITH_CHARSET );
+                                if( aSeg1.getStr()[1] == (sal_Unicode)':' )
+                                {
+                                    bRoot = TRUE;
+                                }
+                            }
+                            // More than one segments can never be root
+                            // so bRoot remains FALSE
+
+                            // If it's no root directory we flag the need for
+                            // the "." and ".." directories by the value -2
+                            // for the actual position. Later for -2 will be
+                            // returned "." and for -1 ".."
+                            if( !bRoot )
+                            {
+                                pRTLData->nCurDirPos = -2;
+                            }
+                        }
                     }
                     catch( Exception & )
                     {
@@ -1996,7 +2035,20 @@ RTLFUNC(Dir)
                     sal_Bool bOnlyFolders = ((pRTLData->nDirFlags & Sb_ATTR_DIRECTORY) != 0);
                     for( ;; )
                     {
-                        if( pRTLData->nCurDirPos >= pRTLData->aDirSeq.getLength() )
+                        if( pRTLData->nCurDirPos < 0 )
+                        {
+                            if( pRTLData->nCurDirPos == -2 )
+                            {
+                                aPath = OUString::createFromAscii( "." );
+                            }
+                            else if( pRTLData->nCurDirPos == -1 )
+                            {
+                                aPath = OUString::createFromAscii( ".." );
+                            }
+                            pRTLData->nCurDirPos++;
+                            break;
+                        }
+                        else if( pRTLData->nCurDirPos >= pRTLData->aDirSeq.getLength() )
                         {
                             pRTLData->aDirSeq.realloc( 0 );
                             aPath.Erase();
@@ -2017,7 +2069,7 @@ RTLFUNC(Dir)
                             }
 
                             INetURLObject aURL( aFile );
-                            aPath = aURL.getName( INetURLObject::LAST_SEGMENT, true,
+                            aPath = aURL.getName( INetURLObject::LAST_SEGMENT, TRUE,
                                 INetURLObject::DECODE_WITH_CHARSET );
                             break;
                         }
