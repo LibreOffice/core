@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocumentPagePreview.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sab $ $Date: 2002-05-24 15:23:22 $
+ *  last change: $Author: sab $ $Date: 2002-05-28 14:25:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -317,7 +317,6 @@ uno::Reference<XAccessible> ScNotesChilds::GetChild(sal_Int32 nIndex) const
     {
         if (nIndex < static_cast<sal_Int32>(maMarks.size()))
         {
-#ifndef PRODUCT
             ScAccNotes::iterator aEndItr = maMarks.end();
             ScParaFound aParaFound(nIndex);
             ScAccNotes::iterator aItr = std::find_if(maMarks.begin(), aEndItr, aParaFound);
@@ -327,7 +326,6 @@ uno::Reference<XAccessible> ScNotesChilds::GetChild(sal_Int32 nIndex) const
             }
             else
                 DBG_ERRORFILE("wrong note found");
-#endif
             if (!aItr->mpTextHelper)
                 aItr->mpTextHelper = CreateTextHelper(maMarks[nIndex].maNoteText, maMarks[nIndex].maRect, maMarks[nIndex].maNoteCell, maMarks[nIndex].mbMarkNote, nIndex + mnOffset); // the marks are the first and every mark has only one paragraph
             xAccessible = aItr->mpTextHelper->GetChild(aParaFound.mnIndex);
