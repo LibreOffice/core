@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin3.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-11-30 12:53:31 $
+ *  last change: $Author: os $ $Date: 2002-03-08 14:38:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,9 +171,9 @@ void FrameNotify( ViewShell* pVwSh, FlyMode eMode )
 
 BOOL SwEditWin::RulerClook( SwView& rView , const MouseEvent& rMEvt)
 {
-    return (!rView.GetHLineal()->StartDocDrag( rMEvt, RULER_TYPE_BORDER ) &&
-            !rView.GetHLineal()->StartDocDrag( rMEvt, RULER_TYPE_MARGIN1) &&
-            !rView.GetHLineal()->StartDocDrag( rMEvt, RULER_TYPE_MARGIN2));
+    return (!rView.GetHLineal().StartDocDrag( rMEvt, RULER_TYPE_BORDER ) &&
+            !rView.GetHLineal().StartDocDrag( rMEvt, RULER_TYPE_MARGIN1) &&
+            !rView.GetHLineal().StartDocDrag( rMEvt, RULER_TYPE_MARGIN2));
 }
 
 
