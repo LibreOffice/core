@@ -2,9 +2,9 @@
  *
  *  $RCSfile: securityenvironment_nssimpl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mmi $ $Date: 2004-08-02 04:46:58 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 18:12:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,8 @@
 #include "certdb.h"
 #include "list"
 
+#include "xmlsec/xmlsec.h"
+
 class SecurityEnvironment_NssImpl : public ::cppu::WeakImplHelper4<
     ::com::sun::star::xml::crypto::XSecurityEnvironment ,
     ::com::sun::star::lang::XInitialization ,
@@ -130,6 +132,7 @@ class SecurityEnvironment_NssImpl : public ::cppu::WeakImplHelper4<
     ::com::sun::star::lang::XUnoTunnel >
 {
     private :
+
         PK11SlotInfo*                       m_pSlot ;
         CERTCertDBHandle*                   m_pHandler ;
         std::list< PK11SymKey* >            m_tSymKeyList ;
@@ -171,6 +174,7 @@ class SecurityEnvironment_NssImpl : public ::cppu::WeakImplHelper4<
 
         virtual ::sal_Int32 SAL_CALL getCertificateCharacters( const ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificate >& xCert ) throw (::com::sun::star::uno::SecurityException, ::com::sun::star::uno::RuntimeException) ;
 
+        virtual ::rtl::OUString SAL_CALL getSecurityEnvironmentInfo(  ) throw (::com::sun::star::uno::RuntimeException);
 
         //Methods from XUnoTunnel
         virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier )
@@ -217,6 +221,11 @@ class SecurityEnvironment_NssImpl : public ::cppu::WeakImplHelper4<
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificate > SAL_CALL createCertificateFromRaw( const ::com::sun::star::uno::Sequence< sal_Int8 >& rawCertificate ) throw( ::com::sun::star::uno::SecurityException , ::com::sun::star::uno::RuntimeException ) ;
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificate > SAL_CALL createCertificateFromAscii( const ::rtl::OUString& asciiCertificate ) throw( ::com::sun::star::uno::SecurityException , ::com::sun::star::uno::RuntimeException ) ;
+
+
+        //Native mehtods
+        virtual xmlSecKeysMngrPtr createKeysManager() throw( ::com::sun::star::uno::Exception , ::com::sun::star::uno::RuntimeException ) ;
+        virtual void destroyKeysManager(xmlSecKeysMngrPtr pKeysMngr) throw( ::com::sun::star::uno::Exception , ::com::sun::star::uno::RuntimeException ) ;
 } ;
 
 #endif  // _XSECURITYENVIRONMENT_NSSIMPL_HXX_
