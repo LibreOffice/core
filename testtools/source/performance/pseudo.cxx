@@ -1,7 +1,7 @@
 /**************************************************************************
 #*
-#*    last change   $Author: kr $ $Date: 2001-05-04 07:05:18 $
-#*    $Revision: 1.1 $
+#*    last change   $Author: vg $ $Date: 2003-04-15 16:42:32 $
+#*    $Revision: 1.2 $
 #*
 #*    $Logfile: $
 #*
@@ -95,7 +95,7 @@ static void SAL_CALL pseudo_unoInterfaceProxy_free( uno_ExtEnvironment * pEnv, v
     typelib_typedescription_release( (typelib_TypeDescription *)pThis->pTypeDescr );
     (*pThis->pPseudoMapping->release)( pThis->pPseudoMapping );
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     *(int *)pProxy = 0xdeadbabe;
 #endif
     delete pThis;
@@ -275,6 +275,12 @@ extern "C" SAL_DLLEXPORT void SAL_CALL uno_ext_getMapping(
 
 /**************************************************************************
     $Log: not supported by cvs2svn $
+    Revision 1.1.46.1  2003/04/10 09:20:16  kso
+    #108413# - debug macro unification.
+
+    Revision 1.1  2001/05/04 07:05:18  kr
+    moved from grande to openoffice
+
     Revision 1.3  2001/03/12 16:22:44  jl
     OSL_ENSHURE replaced by OSL_ENSURE
 
