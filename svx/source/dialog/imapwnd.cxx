@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imapwnd.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2001-08-09 15:03:37 $
+ *  last change: $Author: ka $ $Date: 2002-01-08 12:02:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -753,7 +753,7 @@ void IMapWindow::Command(const CommandEvent& rCEvt)
         }
 
         aMenu.SetSelectHdl( LINK( this, IMapWindow, MenuSelectHdl ) );
-        aMenu.Execute( this, OutputToScreenPixel( rCEvt.GetMousePosPixel() ) );
+        aMenu.Execute( this, rCEvt.GetMousePosPixel() );
     }
     else
         Window::Command(rCEvt);
