@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-16 15:55:40 $
+ *  last change: $Author: jp $ $Date: 2000-11-29 12:07:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,9 @@
 #endif
 #ifndef _CACHESTR_HXX
 #include <tools/cachestr.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_ADDXMLTOSTORAGEOPTIONS_HXX
+#include <svtools/addxmltostorageoptions.hxx>
 #endif
 
 #include <svtools/saveopt.hxx>
@@ -1971,20 +1974,25 @@ sal_Bool SfxObjectShell::SaveAsOwnFormat( SfxMedium& rMedium )
 void SfxObjectShell::AddXMLAsZipToTheStorage( SvStorage& rRoot )
 {
     static struct _ObjExpType {
-        const char* pModuleNm;
+        sal_Bool (SvtAddXMLToStorageOptions:: *fnIsAdd)() const;
+        const sal_Char* pModuleNm;
         // GlobalNameId
         UINT32 n1;
         USHORT n2, n3;
         BYTE b8, b9, b10, b11, b12, b13, b14, b15;
     } aArr[] = {
-        { "Writer",     SO3_SW_CLASSID_50 },
-        { "Calc",       SO3_SC_CLASSID_50 },
-        { "Impress",    SO3_SIMPRESS_CLASSID_50 },
-        { "Draw",       SO3_SDRAW_CLASSID_50 },
+        { &SvtAddXMLToStorageOptions::IsWriter_Add_XML_to_Storage,
+            "Writer", SO3_SW_CLASSID_50 },
+        { &SvtAddXMLToStorageOptions::IsCalc_Add_XML_to_Storage,
+            "Calc", SO3_SC_CLASSID_50 },
+        { &SvtAddXMLToStorageOptions::IsImpress_Add_XML_to_Storage,
+            "Impress", SO3_SIMPRESS_CLASSID_50 },
+        { &SvtAddXMLToStorageOptions::IsDraw_Add_XML_to_Storage,
+            "Draw", SO3_SDRAW_CLASSID_50 },
         { 0 }
     };
 
-    for( const _ObjExpType* pArr = aArr; pArr->pModuleNm; ++pArr )
+    for( const _ObjExpType* pArr = aArr; pArr->fnIsAdd; ++pArr )
     {
         SvGlobalName aGlbNm( pArr->n1, pArr->n2, pArr->n3,
                             pArr->b8, pArr->b9, pArr->b10, pArr->b11,
@@ -1992,17 +2000,11 @@ void SfxObjectShell::AddXMLAsZipToTheStorage( SvStorage& rRoot )
         if( *GetSvFactory() == aGlbNm )
         {
             // 1. check if the option is set and unequal 0 or is not set
-            String sStr( String::CreateFromAscii( "Add_XML_to_Storage_" ));
-            sStr.AppendAscii( pArr->pModuleNm );
-#if SUPD<613//MUSTINI
-            String sCfgEntry( SFX_APP()->GetIniManager()->Get(
-                                        SFX_GROUP_WORKINGSET_IMPL, sStr ));
-#else
-            String sCfgEntry;
-#endif
-            if( sCfgEntry.Len() && 0 != sCfgEntry.ToInt32() )
+            SvtAddXMLToStorageOptions aOpt;
+            if( (aOpt.*pArr->fnIsAdd)() )
             {
                 // the flag is set
+                String sStr;
                 sStr.AssignAscii( "StarOffice XML (" );
                 sStr.AppendAscii( pArr->pModuleNm );
                 sStr += ')';
@@ -2023,7 +2025,7 @@ void SfxObjectShell::AddXMLAsZipToTheStorage( SvStorage& rRoot )
                         // 4. zip the XML and put it into the root storage.
                         //      The name of the stream is XMLFormat
                         SvStorageStreamRef xStrm( rRoot.OpenStream(
-                                    String::CreateFromAscii( "XMLFormat" ) ));
+                                    String::CreateFromAscii( "XMLFormat2" ) ));
                         SvStream* pOutStrm = aMed.GetOutStream();
                         pOutStrm->Seek( 0 );
 
