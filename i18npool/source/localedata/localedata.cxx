@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localedata.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: bustamam $ $Date: 2002-03-15 19:09:54 $
+ *  last change: $Author: bustamam $ $Date: 2002-03-15 20:09:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,6 +163,7 @@ static const struct {
     { "ar_EG",  lcl_DATA_OTHERS, "ar" },
     { "ar_SA",  lcl_DATA_OTHERS, NULL },
     { "he_IL",  lcl_DATA_OTHERS, "he" },
+    { "hi_IN",  lcl_DATA_OTHERS, "hi" },
     { "th_TH",  lcl_DATA_OTHERS, "th" },
 
     { "af_ZA",  lcl_DATA_OTHERS, "af" },

@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.2 $
+#*  $Revision: 1.3 $
 #*
-#*  last change: $Author: bustamam $ $Date: 2002-03-15 19:08:57 $
+#*  last change: $Author: bustamam $ $Date: 2002-03-15 20:09:33 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -198,7 +198,8 @@ SHL4OBJS= \
     $(SLO)$/localedata_zh_HK.obj \
     $(SLO)$/localedata_zh_MO.obj \
     $(SLO)$/localedata_zh_SG.obj \
-    $(SLO)$/localedata_zh_TW.obj
+    $(SLO)$/localedata_zh_TW.obj \
+    $(SLO)$/localedata_hi_IN.obj
 
 LIB4TARGET=	$(SLB)$/$(SHL4TARGET).lib
 LIB4OBJFILES=$(SHL4OBJS)
