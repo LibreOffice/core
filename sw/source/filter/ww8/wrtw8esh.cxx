@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cmc $ $Date: 2001-01-18 10:59:22 $
+ *  last change: $Author: jp $ $Date: 2001-02-07 17:28:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1253,8 +1253,8 @@ void SwEscherEx::WriteFrmExtraData( const SwFrmFmt& rFmt )
             nHIndex = 0x00000000;
             nVIndex = 0x10000000;
             // match eHRel ?
-            if(      REL_PG_PRTAREA == eHRel ) eHRel = PRTAREA;
-            else if( REL_PG_FRAME   == eHRel ) eHRel = FRAME;
+            if(      PRTAREA == eHRel ) eHRel = REL_PG_PRTAREA;
+            else if( FRAME   == eHRel ) eHRel = REL_PG_FRAME;
             // match eVRel ?
             if(      REL_PG_PRTAREA == eVRel ) eVRel = PRTAREA;
             else
@@ -2316,11 +2316,14 @@ BOOL SwMSConvertControls::ExportControl(Writer &rWrt, const SdrObject *pObj)
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtw8esh.cxx,v 1.8 2001-01-18 10:59:22 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtw8esh.cxx,v 1.9 2001-02-07 17:28:25 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.8  2001/01/18 10:59:22  cmc
+      #82587# Slightly Bizarre word late binding problem solved
+
       Revision 1.7  2001/01/16 13:01:59  obo
       #65293# parse error linux compiler
 
