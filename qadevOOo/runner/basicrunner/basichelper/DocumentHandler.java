@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DocumentHandler.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 16:27:28 $
+ *  last change:$Date: 2003-11-18 16:13:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -336,7 +336,7 @@ class DocumentHandlerImpl extends XMLTools.XMLChecker
      */
     public Object getByName(String name) throws NoSuchElementException{
         if (name.equals("XMLIsCorrect"))
-            return new Boolean(this.check());
+            return Boolean.valueOf(this.check());
         else if (name.equals("XMLCode")) {
             return writer.getBuffer().toString();
         } else
