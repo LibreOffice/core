@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2005-01-27 10:20:30 $
+#   last change: $Author: rt $ $Date: 2005-03-30 08:43:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -99,8 +99,9 @@ SHL1STDLIBS = \
         $(UNOTOOLSLIB) \
         $(XMLSCRIPTLIB) \
         $(BERKELEYLIB) \
-        $(BERKELEYCPPLIB) \
         $(SVLLIB)
+#        $(BERKELEYCPPLIB) \
+
 
 SHL1DEPN =
 SHL1IMPLIB = i$(TARGET)
