@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: jp $ $Date: 2002-03-14 14:20:24 $
+ *  last change: $Author: cd $ $Date: 2002-08-01 13:45:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -231,7 +231,7 @@ public:
                         USHORT nIdx2 = INDEX_IGNORE,
                         USHORT nIdx3 = INDEX_IGNORE);
 
-    virtual Bitmap      GetStyleFamilyBitmap( SfxStyleFamily eFamily );
+    virtual Bitmap      GetStyleFamilyBitmap( SfxStyleFamily eFamily, BmpColorMode eColorMode );
 
     // View setzen fuer Aktionen ueber Shell
     void          SetView(SwView* pVw);
