@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntcache.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:39:51 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 09:00:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -569,7 +569,20 @@ static sal_Char __READONLY_DATA sStandardString[] = "Dies ist der Teststring";
                     BYTE nNeg = 0;
                     if ( nSWidth<0 ) { nSWidth *= -2; nNeg = 1; }
                     if ( nPWidth<0 ) { nPWidth *= -2; nNeg |= 2; }
-                    if ( nSWidth <= nPWidth )
+
+                    // nSWidth = Difference between string width on reference device
+                    //           and string width on output device with user font set.
+                    // nPWidth = Difference between string width on reference device
+                    //           and string width on output device with metric obtained
+                    //           from reference device.
+                    // We prefer to take the font with the smaller deviation,
+                    // exception: keep the original font unless the deviation
+                    // is really bad (at least 3%)
+            // Since the test string is neither localized nor has a high resemblance
+            // of the "real text for this font" a higher deviation is reasonable
+
+                    if ( (nSWidth <= nPWidth)
+                    ||   (nSWidth * 32 <= nOWidth ) )
                     {
                         // No adjustment, we take the same font for the output
                         // device like for the reference device
