@@ -44,6 +44,7 @@ mkdir: %_DEST%\inc%_EXT%\mozilla\layout
 mkdir: %_DEST%\inc%_EXT%\mozilla\layout_xul
 mkdir: %_DEST%\inc%_EXT%\mozilla\ldap
 mkdir: %_DEST%\inc%_EXT%\mozilla\ldap\ldap
+mkdir: %_DEST%\inc%_EXT%\mozilla\ldap-nspr
 mkdir: %_DEST%\inc%_EXT%\mozilla\locale
 mkdir: %_DEST%\inc%_EXT%\mozilla\lwbrk
 mkdir: %_DEST%\inc%_EXT%\mozilla\mailnews
@@ -72,6 +73,7 @@ mkdir: %_DEST%\inc%_EXT%\mozilla\nspr\obsolete
 mkdir: %_DEST%\inc%_EXT%\mozilla\nspr\private
 mkdir: %_DEST%\inc%_EXT%\mozilla\nsprefm
 mkdir: %_DEST%\inc%_EXT%\mozilla\oji
+mkdir: %_DEST%\inc%_EXT%\mozilla\obsolete
 mkdir: %_DEST%\inc%_EXT%\mozilla\plugin
 mkdir: %_DEST%\inc%_EXT%\mozilla\png
 mkdir: %_DEST%\inc%_EXT%\mozilla\pref
@@ -159,6 +161,7 @@ mkdir: %_DEST%\inc%_EXT%\mozilla\zlib
 ..\%__SRC%\inc\layout_xul\* %_DEST%\inc%_EXT%\mozilla\layout_xul
 ..\%__SRC%\inc\ldap\* %_DEST%\inc%_EXT%\mozilla\ldap
 ..\%__SRC%\inc\ldap\ldap\* %_DEST%\inc%_EXT%\mozilla\ldap\ldap
+..\%__SRC%\inc\ldap-nspr\* %_DEST%\inc%_EXT%\mozilla\ldap-nspr
 ..\%__SRC%\inc\locale\* %_DEST%\inc%_EXT%\mozilla\locale
 ..\%__SRC%\inc\lwbrk\* %_DEST%\inc%_EXT%\mozilla\lwbrk
 ..\%__SRC%\inc\mailnews\* %_DEST%\inc%_EXT%\mozilla\mailnews
@@ -187,6 +190,7 @@ mkdir: %_DEST%\inc%_EXT%\mozilla\zlib
 ..\%__SRC%\inc\nspr\private\* %_DEST%\inc%_EXT%\mozilla\nspr\private
 ..\%__SRC%\inc\nsprefm\* %_DEST%\inc%_EXT%\mozilla\nsprefm
 ..\%__SRC%\inc\oji\* %_DEST%\inc%_EXT%\mozilla\oji
+..\%__SRC%\inc\obsolete\* %_DEST%\inc%_EXT%\mozilla\obsolete
 ..\%__SRC%\inc\plugin\* %_DEST%\inc%_EXT%\mozilla\plugin
 ..\%__SRC%\inc\png\* %_DEST%\inc%_EXT%\mozilla\png
 ..\%__SRC%\inc\pref\* %_DEST%\inc%_EXT%\mozilla\pref
