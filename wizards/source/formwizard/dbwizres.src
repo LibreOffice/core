@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbwizres.src,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 11:27:07 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 16:30:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1692,8 +1692,6 @@ String RID_DB_REPORT_WIZARD_START + 79
 };
 
 
-
-
 // ============================================================================
 
 String RID_DB_TABLE_WIZARD_START + 1
@@ -1890,7 +1888,7 @@ String RID_DB_TABLE_WIZARD_START + 34
 String RID_DB_TABLE_WIZARD_START + 35
 {
     Text [ de ] = "Herzlichen Glückwunsch! Sie haben alle Informationen zum Erstellen Ihrer Tabelle eingegeben.";
-    Text [ en-US] = "Congratulations. You have entered all the information needed to create your table";
+    Text [ en-US] = "Congratulations. You have entered all the information needed to create your table.";
 };
 
 
