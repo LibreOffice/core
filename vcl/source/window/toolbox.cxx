@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: ssa $ $Date: 2002-03-21 18:33:54 $
+ *  last change: $Author: ssa $ $Date: 2002-03-22 13:04:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4646,16 +4646,26 @@ void ToolBox::KeyInput( const KeyEvent& rKEvt )
     {
         case KEY_UP:
         {
-            if( !IsHorizontal() )
-                ImplChangeHighlightUpDn( TRUE );
+            // Ctrl-Left/Ctrl-Up activates next toolbox, indicated by a blue arrow pointing to the left/up
+            if( !IsHorizontal() && aKeyCode.IsMod1() && !maNextToolRect.IsEmpty() )
+            {
+                ImplDrawNext( TRUE );
+                ImplDrawNext( FALSE );
+                NextToolBox();
+            }
             else
-                ImplOpenItem( aKeyCode );
+            {
+                if( !IsHorizontal() )
+                    ImplChangeHighlightUpDn( TRUE );
+                else
+                    ImplOpenItem( aKeyCode );
+            }
         }
         break;
         case KEY_LEFT:
         {
-            // Ctrl-Left activates next toolbox, indicated by a blue arrow pointing to the left
-            if( aKeyCode.IsMod1() && !maNextToolRect.IsEmpty() )
+            // Ctrl-Left/Ctrl-Up activates next toolbox, indicated by a blue arrow pointing to the left/up
+            if( IsHorizontal() && aKeyCode.IsMod1() && !maNextToolRect.IsEmpty() )
             {
                 ImplDrawNext( TRUE );
                 ImplDrawNext( FALSE );
