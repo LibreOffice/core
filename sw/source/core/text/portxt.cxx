@@ -2,9 +2,9 @@
  *
  *  $RCSfile: portxt.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: fme $ $Date: 2002-04-10 06:12:06 $
+ *  last change: $Author: fme $ $Date: 2002-04-10 06:45:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,7 +172,7 @@ USHORT lcl_AddSpace( const SwTxtSizeInfo &rInf, const XubString* pStr,
     }
 
 #ifdef BIDI
-    // Now we look for kashidas
+    // Now we look for kashidas, in Arabic portions we do not consider blanks
     if ( nEnd > nPos && pSI &&
          ::com::sun::star::i18n::ScriptType::COMPLEX == nScript &&
          ( LANGUAGE_HEBREW !=
