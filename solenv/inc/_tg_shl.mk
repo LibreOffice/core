@@ -121,12 +121,12 @@ $(SHL1TARGETN) : \
         @+echo '#define _RSCREVISION "$(RSCREVISION)"' >> $(INCCOM)$/_version.h
         @+echo "#define" _INPATH \"$(INPATH)\"	>> $(INCCOM)$/_version.h
 .ELSE
-        @+echo "#define" _BUILD "$(BUILD)"	> $(INCCOM)$/_version.h
-        @+echo "#define" _UPD "$(UPD)"		>> $(INCCOM)$/_version.h
-        @+echo "#define" _LAST_MINOR '$(LAST_MINOR)'	>> $(INCCOM)$/_version.h
-        @+echo "#define" _DLL_POSTFIX "$(DLL_POSTFIX)">> $(INCCOM)$/_version.h
-        @+echo "#define" _RSCREVISION "$(RSCREVISION)">> $(INCCOM)$/_version.h
-        @+echo "#define" _INPATH "$(INPATH)"	>> $(INCCOM)$/_version.h
+        @+echo #define _BUILD "$(BUILD)"	> $(INCCOM)$/_version.h
+        @+echo #define _UPD "$(UPD)"		>> $(INCCOM)$/_version.h
+        @+echo #define _LAST_MINOR '$(LAST_MINOR)'	>> $(INCCOM)$/_version.h
+        @+echo #define _DLL_POSTFIX "$(DLL_POSTFIX)">> $(INCCOM)$/_version.h
+        @+echo #define _RSCREVISION "$(RSCREVISION)">> $(INCCOM)$/_version.h
+        @+echo #define _INPATH "$(INPATH)"	>> $(INCCOM)$/_version.h
 .ENDIF
         @-+$(RM) $(SLO)$/_version.obj 
 .ENDIF
@@ -180,10 +180,10 @@ $(SHL1TARGETN) : \
     @-+echo 1 ICON $(SHL1ICON) >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
 .ENDIF
 .IF "$(use_shl_versions)" != ""
-    @-+echo "#define" VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
-    @-+echo "#define" ORG_NAME	$(SHL1TARGET)$(DLLPOST) >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
-    @-+echo "#define" INTERNAL_NAME $(SHL1TARGET:b) >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
-     @-+echo "#include"  "shlinfo.rc" >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
+    @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
+    @-+echo #define ORG_NAME	$(SHL1TARGET)$(DLLPOST) >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
+    @-+echo #define INTERNAL_NAME $(SHL1TARGET:b) >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
+     @-+echo #include "shlinfo.rc" >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
     $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL1DEFAULTRES:b).rc
 .ENDIF			# "$(SHL1DEFAULTRES)"!=""
@@ -521,12 +521,12 @@ $(SHL2TARGETN) : \
         @+echo '#define _RSCREVISION "$(RSCREVISION)"' >> $(INCCOM)$/_version.h
         @+echo "#define" _INPATH \"$(INPATH)\"	>> $(INCCOM)$/_version.h
 .ELSE
-        @+echo "#define" _BUILD "$(BUILD)"	> $(INCCOM)$/_version.h
-        @+echo "#define" _UPD "$(UPD)"		>> $(INCCOM)$/_version.h
-        @+echo "#define" _LAST_MINOR '$(LAST_MINOR)'	>> $(INCCOM)$/_version.h
-        @+echo "#define" _DLL_POSTFIX "$(DLL_POSTFIX)">> $(INCCOM)$/_version.h
-        @+echo "#define" _RSCREVISION "$(RSCREVISION)">> $(INCCOM)$/_version.h
-        @+echo "#define" _INPATH "$(INPATH)"	>> $(INCCOM)$/_version.h
+        @+echo #define _BUILD "$(BUILD)"	> $(INCCOM)$/_version.h
+        @+echo #define _UPD "$(UPD)"		>> $(INCCOM)$/_version.h
+        @+echo #define _LAST_MINOR '$(LAST_MINOR)'	>> $(INCCOM)$/_version.h
+        @+echo #define _DLL_POSTFIX "$(DLL_POSTFIX)">> $(INCCOM)$/_version.h
+        @+echo #define _RSCREVISION "$(RSCREVISION)">> $(INCCOM)$/_version.h
+        @+echo #define _INPATH "$(INPATH)"	>> $(INCCOM)$/_version.h
 .ENDIF
         @-+$(RM) $(SLO)$/_version.obj 
 .ENDIF
@@ -580,10 +580,10 @@ $(SHL2TARGETN) : \
     @-+echo 1 ICON $(SHL2ICON) >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
 .ENDIF
 .IF "$(use_shl_versions)" != ""
-    @-+echo "#define" VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
-    @-+echo "#define" ORG_NAME	$(SHL2TARGET)$(DLLPOST) >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
-    @-+echo "#define" INTERNAL_NAME $(SHL2TARGET:b) >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
-     @-+echo "#include"  "shlinfo.rc" >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
+    @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
+    @-+echo #define ORG_NAME	$(SHL2TARGET)$(DLLPOST) >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
+    @-+echo #define INTERNAL_NAME $(SHL2TARGET:b) >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
+     @-+echo #include "shlinfo.rc" >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
     $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL2DEFAULTRES:b).rc
 .ENDIF			# "$(SHL2DEFAULTRES)"!=""
@@ -921,12 +921,12 @@ $(SHL3TARGETN) : \
         @+echo '#define _RSCREVISION "$(RSCREVISION)"' >> $(INCCOM)$/_version.h
         @+echo "#define" _INPATH \"$(INPATH)\"	>> $(INCCOM)$/_version.h
 .ELSE
-        @+echo "#define" _BUILD "$(BUILD)"	> $(INCCOM)$/_version.h
-        @+echo "#define" _UPD "$(UPD)"		>> $(INCCOM)$/_version.h
-        @+echo "#define" _LAST_MINOR '$(LAST_MINOR)'	>> $(INCCOM)$/_version.h
-        @+echo "#define" _DLL_POSTFIX "$(DLL_POSTFIX)">> $(INCCOM)$/_version.h
-        @+echo "#define" _RSCREVISION "$(RSCREVISION)">> $(INCCOM)$/_version.h
-        @+echo "#define" _INPATH "$(INPATH)"	>> $(INCCOM)$/_version.h
+        @+echo #define _BUILD "$(BUILD)"	> $(INCCOM)$/_version.h
+        @+echo #define _UPD "$(UPD)"		>> $(INCCOM)$/_version.h
+        @+echo #define _LAST_MINOR '$(LAST_MINOR)'	>> $(INCCOM)$/_version.h
+        @+echo #define _DLL_POSTFIX "$(DLL_POSTFIX)">> $(INCCOM)$/_version.h
+        @+echo #define _RSCREVISION "$(RSCREVISION)">> $(INCCOM)$/_version.h
+        @+echo #define _INPATH "$(INPATH)"	>> $(INCCOM)$/_version.h
 .ENDIF
         @-+$(RM) $(SLO)$/_version.obj 
 .ENDIF
@@ -980,10 +980,10 @@ $(SHL3TARGETN) : \
     @-+echo 1 ICON $(SHL3ICON) >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
 .ENDIF
 .IF "$(use_shl_versions)" != ""
-    @-+echo "#define" VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
-    @-+echo "#define" ORG_NAME	$(SHL3TARGET)$(DLLPOST) >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
-    @-+echo "#define" INTERNAL_NAME $(SHL3TARGET:b) >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
-     @-+echo "#include"  "shlinfo.rc" >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
+    @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
+    @-+echo #define ORG_NAME	$(SHL3TARGET)$(DLLPOST) >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
+    @-+echo #define INTERNAL_NAME $(SHL3TARGET:b) >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
+     @-+echo #include "shlinfo.rc" >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
     $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL3DEFAULTRES:b).rc
 .ENDIF			# "$(SHL3DEFAULTRES)"!=""
@@ -1321,12 +1321,12 @@ $(SHL4TARGETN) : \
         @+echo '#define _RSCREVISION "$(RSCREVISION)"' >> $(INCCOM)$/_version.h
         @+echo "#define" _INPATH \"$(INPATH)\"	>> $(INCCOM)$/_version.h
 .ELSE
-        @+echo "#define" _BUILD "$(BUILD)"	> $(INCCOM)$/_version.h
-        @+echo "#define" _UPD "$(UPD)"		>> $(INCCOM)$/_version.h
-        @+echo "#define" _LAST_MINOR '$(LAST_MINOR)'	>> $(INCCOM)$/_version.h
-        @+echo "#define" _DLL_POSTFIX "$(DLL_POSTFIX)">> $(INCCOM)$/_version.h
-        @+echo "#define" _RSCREVISION "$(RSCREVISION)">> $(INCCOM)$/_version.h
-        @+echo "#define" _INPATH "$(INPATH)"	>> $(INCCOM)$/_version.h
+        @+echo #define _BUILD "$(BUILD)"	> $(INCCOM)$/_version.h
+        @+echo #define _UPD "$(UPD)"		>> $(INCCOM)$/_version.h
+        @+echo #define _LAST_MINOR '$(LAST_MINOR)'	>> $(INCCOM)$/_version.h
+        @+echo #define _DLL_POSTFIX "$(DLL_POSTFIX)">> $(INCCOM)$/_version.h
+        @+echo #define _RSCREVISION "$(RSCREVISION)">> $(INCCOM)$/_version.h
+        @+echo #define _INPATH "$(INPATH)"	>> $(INCCOM)$/_version.h
 .ENDIF
         @-+$(RM) $(SLO)$/_version.obj 
 .ENDIF
@@ -1380,10 +1380,10 @@ $(SHL4TARGETN) : \
     @-+echo 1 ICON $(SHL4ICON) >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
 .ENDIF
 .IF "$(use_shl_versions)" != ""
-    @-+echo "#define" VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
-    @-+echo "#define" ORG_NAME	$(SHL4TARGET)$(DLLPOST) >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
-    @-+echo "#define" INTERNAL_NAME $(SHL4TARGET:b) >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
-     @-+echo "#include"  "shlinfo.rc" >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
+    @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
+    @-+echo #define ORG_NAME	$(SHL4TARGET)$(DLLPOST) >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
+    @-+echo #define INTERNAL_NAME $(SHL4TARGET:b) >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
+     @-+echo #include "shlinfo.rc" >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
     $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL4DEFAULTRES:b).rc
 .ENDIF			# "$(SHL4DEFAULTRES)"!=""
@@ -1721,12 +1721,12 @@ $(SHL5TARGETN) : \
         @+echo '#define _RSCREVISION "$(RSCREVISION)"' >> $(INCCOM)$/_version.h
         @+echo "#define" _INPATH \"$(INPATH)\"	>> $(INCCOM)$/_version.h
 .ELSE
-        @+echo "#define" _BUILD "$(BUILD)"	> $(INCCOM)$/_version.h
-        @+echo "#define" _UPD "$(UPD)"		>> $(INCCOM)$/_version.h
-        @+echo "#define" _LAST_MINOR '$(LAST_MINOR)'	>> $(INCCOM)$/_version.h
-        @+echo "#define" _DLL_POSTFIX "$(DLL_POSTFIX)">> $(INCCOM)$/_version.h
-        @+echo "#define" _RSCREVISION "$(RSCREVISION)">> $(INCCOM)$/_version.h
-        @+echo "#define" _INPATH "$(INPATH)"	>> $(INCCOM)$/_version.h
+        @+echo #define _BUILD "$(BUILD)"	> $(INCCOM)$/_version.h
+        @+echo #define _UPD "$(UPD)"		>> $(INCCOM)$/_version.h
+        @+echo #define _LAST_MINOR '$(LAST_MINOR)'	>> $(INCCOM)$/_version.h
+        @+echo #define _DLL_POSTFIX "$(DLL_POSTFIX)">> $(INCCOM)$/_version.h
+        @+echo #define _RSCREVISION "$(RSCREVISION)">> $(INCCOM)$/_version.h
+        @+echo #define _INPATH "$(INPATH)"	>> $(INCCOM)$/_version.h
 .ENDIF
         @-+$(RM) $(SLO)$/_version.obj 
 .ENDIF
@@ -1780,10 +1780,10 @@ $(SHL5TARGETN) : \
     @-+echo 1 ICON $(SHL5ICON) >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
 .ENDIF
 .IF "$(use_shl_versions)" != ""
-    @-+echo "#define" VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
-    @-+echo "#define" ORG_NAME	$(SHL5TARGET)$(DLLPOST) >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
-    @-+echo "#define" INTERNAL_NAME $(SHL5TARGET:b) >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
-     @-+echo "#include"  "shlinfo.rc" >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
+    @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
+    @-+echo #define ORG_NAME	$(SHL5TARGET)$(DLLPOST) >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
+    @-+echo #define INTERNAL_NAME $(SHL5TARGET:b) >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
+     @-+echo #include "shlinfo.rc" >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
     $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL5DEFAULTRES:b).rc
 .ENDIF			# "$(SHL5DEFAULTRES)"!=""
@@ -2121,12 +2121,12 @@ $(SHL6TARGETN) : \
         @+echo '#define _RSCREVISION "$(RSCREVISION)"' >> $(INCCOM)$/_version.h
         @+echo "#define" _INPATH \"$(INPATH)\"	>> $(INCCOM)$/_version.h
 .ELSE
-        @+echo "#define" _BUILD "$(BUILD)"	> $(INCCOM)$/_version.h
-        @+echo "#define" _UPD "$(UPD)"		>> $(INCCOM)$/_version.h
-        @+echo "#define" _LAST_MINOR '$(LAST_MINOR)'	>> $(INCCOM)$/_version.h
-        @+echo "#define" _DLL_POSTFIX "$(DLL_POSTFIX)">> $(INCCOM)$/_version.h
-        @+echo "#define" _RSCREVISION "$(RSCREVISION)">> $(INCCOM)$/_version.h
-        @+echo "#define" _INPATH "$(INPATH)"	>> $(INCCOM)$/_version.h
+        @+echo #define _BUILD "$(BUILD)"	> $(INCCOM)$/_version.h
+        @+echo #define _UPD "$(UPD)"		>> $(INCCOM)$/_version.h
+        @+echo #define _LAST_MINOR '$(LAST_MINOR)'	>> $(INCCOM)$/_version.h
+        @+echo #define _DLL_POSTFIX "$(DLL_POSTFIX)">> $(INCCOM)$/_version.h
+        @+echo #define _RSCREVISION "$(RSCREVISION)">> $(INCCOM)$/_version.h
+        @+echo #define _INPATH "$(INPATH)"	>> $(INCCOM)$/_version.h
 .ENDIF
         @-+$(RM) $(SLO)$/_version.obj 
 .ENDIF
@@ -2180,10 +2180,10 @@ $(SHL6TARGETN) : \
     @-+echo 1 ICON $(SHL6ICON) >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
 .ENDIF
 .IF "$(use_shl_versions)" != ""
-    @-+echo "#define" VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
-    @-+echo "#define" ORG_NAME	$(SHL6TARGET)$(DLLPOST) >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
-    @-+echo "#define" INTERNAL_NAME $(SHL6TARGET:b) >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
-     @-+echo "#include"  "shlinfo.rc" >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
+    @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
+    @-+echo #define ORG_NAME	$(SHL6TARGET)$(DLLPOST) >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
+    @-+echo #define INTERNAL_NAME $(SHL6TARGET:b) >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
+     @-+echo #include "shlinfo.rc" >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
     $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL6DEFAULTRES:b).rc
 .ENDIF			# "$(SHL6DEFAULTRES)"!=""
@@ -2521,12 +2521,12 @@ $(SHL7TARGETN) : \
         @+echo '#define _RSCREVISION "$(RSCREVISION)"' >> $(INCCOM)$/_version.h
         @+echo "#define" _INPATH \"$(INPATH)\"	>> $(INCCOM)$/_version.h
 .ELSE
-        @+echo "#define" _BUILD "$(BUILD)"	> $(INCCOM)$/_version.h
-        @+echo "#define" _UPD "$(UPD)"		>> $(INCCOM)$/_version.h
-        @+echo "#define" _LAST_MINOR '$(LAST_MINOR)'	>> $(INCCOM)$/_version.h
-        @+echo "#define" _DLL_POSTFIX "$(DLL_POSTFIX)">> $(INCCOM)$/_version.h
-        @+echo "#define" _RSCREVISION "$(RSCREVISION)">> $(INCCOM)$/_version.h
-        @+echo "#define" _INPATH "$(INPATH)"	>> $(INCCOM)$/_version.h
+        @+echo #define _BUILD "$(BUILD)"	> $(INCCOM)$/_version.h
+        @+echo #define _UPD "$(UPD)"		>> $(INCCOM)$/_version.h
+        @+echo #define _LAST_MINOR '$(LAST_MINOR)'	>> $(INCCOM)$/_version.h
+        @+echo #define _DLL_POSTFIX "$(DLL_POSTFIX)">> $(INCCOM)$/_version.h
+        @+echo #define _RSCREVISION "$(RSCREVISION)">> $(INCCOM)$/_version.h
+        @+echo #define _INPATH "$(INPATH)"	>> $(INCCOM)$/_version.h
 .ENDIF
         @-+$(RM) $(SLO)$/_version.obj 
 .ENDIF
@@ -2580,10 +2580,10 @@ $(SHL7TARGETN) : \
     @-+echo 1 ICON $(SHL7ICON) >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
 .ENDIF
 .IF "$(use_shl_versions)" != ""
-    @-+echo "#define" VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
-    @-+echo "#define" ORG_NAME	$(SHL7TARGET)$(DLLPOST) >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
-    @-+echo "#define" INTERNAL_NAME $(SHL7TARGET:b) >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
-     @-+echo "#include"  "shlinfo.rc" >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
+    @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
+    @-+echo #define ORG_NAME	$(SHL7TARGET)$(DLLPOST) >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
+    @-+echo #define INTERNAL_NAME $(SHL7TARGET:b) >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
+     @-+echo #include "shlinfo.rc" >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
     $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL7DEFAULTRES:b).rc
 .ENDIF			# "$(SHL7DEFAULTRES)"!=""
@@ -2921,12 +2921,12 @@ $(SHL8TARGETN) : \
         @+echo '#define _RSCREVISION "$(RSCREVISION)"' >> $(INCCOM)$/_version.h
         @+echo "#define" _INPATH \"$(INPATH)\"	>> $(INCCOM)$/_version.h
 .ELSE
-        @+echo "#define" _BUILD "$(BUILD)"	> $(INCCOM)$/_version.h
-        @+echo "#define" _UPD "$(UPD)"		>> $(INCCOM)$/_version.h
-        @+echo "#define" _LAST_MINOR '$(LAST_MINOR)'	>> $(INCCOM)$/_version.h
-        @+echo "#define" _DLL_POSTFIX "$(DLL_POSTFIX)">> $(INCCOM)$/_version.h
-        @+echo "#define" _RSCREVISION "$(RSCREVISION)">> $(INCCOM)$/_version.h
-        @+echo "#define" _INPATH "$(INPATH)"	>> $(INCCOM)$/_version.h
+        @+echo #define _BUILD "$(BUILD)"	> $(INCCOM)$/_version.h
+        @+echo #define _UPD "$(UPD)"		>> $(INCCOM)$/_version.h
+        @+echo #define _LAST_MINOR '$(LAST_MINOR)'	>> $(INCCOM)$/_version.h
+        @+echo #define _DLL_POSTFIX "$(DLL_POSTFIX)">> $(INCCOM)$/_version.h
+        @+echo #define _RSCREVISION "$(RSCREVISION)">> $(INCCOM)$/_version.h
+        @+echo #define _INPATH "$(INPATH)"	>> $(INCCOM)$/_version.h
 .ENDIF
         @-+$(RM) $(SLO)$/_version.obj 
 .ENDIF
@@ -2980,10 +2980,10 @@ $(SHL8TARGETN) : \
     @-+echo 1 ICON $(SHL8ICON) >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
 .ENDIF
 .IF "$(use_shl_versions)" != ""
-    @-+echo "#define" VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
-    @-+echo "#define" ORG_NAME	$(SHL8TARGET)$(DLLPOST) >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
-    @-+echo "#define" INTERNAL_NAME $(SHL8TARGET:b) >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
-     @-+echo "#include"  "shlinfo.rc" >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
+    @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
+    @-+echo #define ORG_NAME	$(SHL8TARGET)$(DLLPOST) >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
+    @-+echo #define INTERNAL_NAME $(SHL8TARGET:b) >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
+     @-+echo #include "shlinfo.rc" >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
     $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL8DEFAULTRES:b).rc
 .ENDIF			# "$(SHL8DEFAULTRES)"!=""
@@ -3321,12 +3321,12 @@ $(SHL9TARGETN) : \
         @+echo '#define _RSCREVISION "$(RSCREVISION)"' >> $(INCCOM)$/_version.h
         @+echo "#define" _INPATH \"$(INPATH)\"	>> $(INCCOM)$/_version.h
 .ELSE
-        @+echo "#define" _BUILD "$(BUILD)"	> $(INCCOM)$/_version.h
-        @+echo "#define" _UPD "$(UPD)"		>> $(INCCOM)$/_version.h
-        @+echo "#define" _LAST_MINOR '$(LAST_MINOR)'	>> $(INCCOM)$/_version.h
-        @+echo "#define" _DLL_POSTFIX "$(DLL_POSTFIX)">> $(INCCOM)$/_version.h
-        @+echo "#define" _RSCREVISION "$(RSCREVISION)">> $(INCCOM)$/_version.h
-        @+echo "#define" _INPATH "$(INPATH)"	>> $(INCCOM)$/_version.h
+        @+echo #define _BUILD "$(BUILD)"	> $(INCCOM)$/_version.h
+        @+echo #define _UPD "$(UPD)"		>> $(INCCOM)$/_version.h
+        @+echo #define _LAST_MINOR '$(LAST_MINOR)'	>> $(INCCOM)$/_version.h
+        @+echo #define _DLL_POSTFIX "$(DLL_POSTFIX)">> $(INCCOM)$/_version.h
+        @+echo #define _RSCREVISION "$(RSCREVISION)">> $(INCCOM)$/_version.h
+        @+echo #define _INPATH "$(INPATH)"	>> $(INCCOM)$/_version.h
 .ENDIF
         @-+$(RM) $(SLO)$/_version.obj 
 .ENDIF
@@ -3380,10 +3380,10 @@ $(SHL9TARGETN) : \
     @-+echo 1 ICON $(SHL9ICON) >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
 .ENDIF
 .IF "$(use_shl_versions)" != ""
-    @-+echo "#define" VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
-    @-+echo "#define" ORG_NAME	$(SHL9TARGET)$(DLLPOST) >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
-    @-+echo "#define" INTERNAL_NAME $(SHL9TARGET:b) >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
-     @-+echo "#include"  "shlinfo.rc" >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
+    @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
+    @-+echo #define ORG_NAME	$(SHL9TARGET)$(DLLPOST) >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
+    @-+echo #define INTERNAL_NAME $(SHL9TARGET:b) >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
+     @-+echo #include "shlinfo.rc" >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
     $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL9DEFAULTRES:b).rc
 .ENDIF			# "$(SHL9DEFAULTRES)"!=""
@@ -3721,12 +3721,12 @@ $(SHL10TARGETN) : \
         @+echo '#define _RSCREVISION "$(RSCREVISION)"' >> $(INCCOM)$/_version.h
         @+echo "#define" _INPATH \"$(INPATH)\"	>> $(INCCOM)$/_version.h
 .ELSE
-        @+echo "#define" _BUILD "$(BUILD)"	> $(INCCOM)$/_version.h
-        @+echo "#define" _UPD "$(UPD)"		>> $(INCCOM)$/_version.h
-        @+echo "#define" _LAST_MINOR '$(LAST_MINOR)'	>> $(INCCOM)$/_version.h
-        @+echo "#define" _DLL_POSTFIX "$(DLL_POSTFIX)">> $(INCCOM)$/_version.h
-        @+echo "#define" _RSCREVISION "$(RSCREVISION)">> $(INCCOM)$/_version.h
-        @+echo "#define" _INPATH "$(INPATH)"	>> $(INCCOM)$/_version.h
+        @+echo #define _BUILD "$(BUILD)"	> $(INCCOM)$/_version.h
+        @+echo #define _UPD "$(UPD)"		>> $(INCCOM)$/_version.h
+        @+echo #define _LAST_MINOR '$(LAST_MINOR)'	>> $(INCCOM)$/_version.h
+        @+echo #define _DLL_POSTFIX "$(DLL_POSTFIX)">> $(INCCOM)$/_version.h
+        @+echo #define _RSCREVISION "$(RSCREVISION)">> $(INCCOM)$/_version.h
+        @+echo #define _INPATH "$(INPATH)"	>> $(INCCOM)$/_version.h
 .ENDIF
         @-+$(RM) $(SLO)$/_version.obj 
 .ENDIF
@@ -3780,10 +3780,10 @@ $(SHL10TARGETN) : \
     @-+echo 1 ICON $(SHL10ICON) >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
 .ENDIF
 .IF "$(use_shl_versions)" != ""
-    @-+echo "#define" VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
-    @-+echo "#define" ORG_NAME	$(SHL10TARGET)$(DLLPOST) >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
-    @-+echo "#define" INTERNAL_NAME $(SHL10TARGET:b) >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
-     @-+echo "#include"  "shlinfo.rc" >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
+    @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
+    @-+echo #define ORG_NAME	$(SHL10TARGET)$(DLLPOST) >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
+    @-+echo #define INTERNAL_NAME $(SHL10TARGET:b) >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
+     @-+echo #include "shlinfo.rc" >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
     $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL10DEFAULTRES:b).rc
 .ENDIF			# "$(SHL10DEFAULTRES)"!=""

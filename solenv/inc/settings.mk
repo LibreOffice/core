@@ -7,8 +7,8 @@
 #*                      Entwicklungtools-Definitionen
 #*
 #*    Ersterstellung    TH 28.03.94
-#*    Letzte Aenderung  $Author: hr $ $Date: 2000-10-09 14:44:44 $
-#*    $Revision: 1.7 $
+#*    Letzte Aenderung  $Author: hjs $ $Date: 2000-10-09 16:16:04 $
+#*    $Revision: 1.8 $
 #*
 #*    $Logfile:   T:/solar/inc/settings.mkv  $
 #*
@@ -577,10 +577,18 @@ common_build_sign_jar=true
 
 %world.mk :
     @+_mkout $(OUT)
+.IF "$(GUI)"=="UNX"
     @+echo \# > $(OUT)$/inc$/myworld.mk
+.ELSE			# "$(GUI)"=="UNX"
+    @+echo # > $(OUT)$/inc$/myworld.mk
+.ENDIF			# "$(GUI)"=="UNX"
 .IF "$(common_build)"!=""
     @+_mkout $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(OUT))
+.IF "$(GUI)"=="UNX"
     @+echo \# > {$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(OUT))}$/inc$/myworld.mk
+.ELSE			# "$(GUI)"=="UNX"
+    @+echo # > {$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(OUT))}$/inc$/myworld.mk
+.ENDIF			# "$(GUI)"=="UNX"
 .ENDIF			# "$(common_build)"!=""
 
 .INCLUDE .IGNORE : $(OUT)$/inc$/myworld.mk

@@ -3,8 +3,8 @@
 #*    $Workfile:   tg_shl.mk  $
 #*
 #*    Ersterstellung    MH 01.09.97
-#*    Letzte Aenderung  $Author: pluby $ $Date: 2000-10-09 03:02:03 $
-#*    $Revision: 1.3 $
+#*    Letzte Aenderung  $Author: hjs $ $Date: 2000-10-09 16:16:04 $
+#*    $Revision: 1.4 $
 #*
 #*    $Logfile:   T:/solar/inc/tg_shl.mkv  $
 #*
@@ -173,12 +173,12 @@ $(SHL$(TNR)TARGETN) : \
         @+echo '#define _RSCREVISION "$(RSCREVISION)"' >> $(INCCOM)$/_version.h
         @+echo "#define" _INPATH \"$(INPATH)\"	>> $(INCCOM)$/_version.h
 .ELSE
-        @+echo "#define" _BUILD "$(BUILD)"	> $(INCCOM)$/_version.h
-        @+echo "#define" _UPD "$(UPD)"		>> $(INCCOM)$/_version.h
-        @+echo "#define" _LAST_MINOR '$(LAST_MINOR)'	>> $(INCCOM)$/_version.h
-        @+echo "#define" _DLL_POSTFIX "$(DLL_POSTFIX)">> $(INCCOM)$/_version.h
-        @+echo "#define" _RSCREVISION "$(RSCREVISION)">> $(INCCOM)$/_version.h
-        @+echo "#define" _INPATH "$(INPATH)"	>> $(INCCOM)$/_version.h
+        @+echo #define _BUILD "$(BUILD)"	> $(INCCOM)$/_version.h
+        @+echo #define _UPD "$(UPD)"		>> $(INCCOM)$/_version.h
+        @+echo #define _LAST_MINOR '$(LAST_MINOR)'	>> $(INCCOM)$/_version.h
+        @+echo #define _DLL_POSTFIX "$(DLL_POSTFIX)">> $(INCCOM)$/_version.h
+        @+echo #define _RSCREVISION "$(RSCREVISION)">> $(INCCOM)$/_version.h
+        @+echo #define _INPATH "$(INPATH)"	>> $(INCCOM)$/_version.h
 .ENDIF
         @-+$(RM) $(SLO)$/_version.obj 
 .ENDIF
@@ -232,10 +232,10 @@ $(SHL$(TNR)TARGETN) : \
     @-+echo 1 ICON $(SHL$(TNR)ICON) >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
 .ENDIF
 .IF "$(use_shl_versions)" != ""
-    @-+echo "#define" VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
-    @-+echo "#define" ORG_NAME	$(SHL$(TNR)TARGET)$(DLLPOST) >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
-    @-+echo "#define" INTERNAL_NAME $(SHL$(TNR)TARGET:b) >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
-     @-+echo "#include"  "shlinfo.rc" >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
+    @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
+    @-+echo #define ORG_NAME	$(SHL$(TNR)TARGET)$(DLLPOST) >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
+    @-+echo #define INTERNAL_NAME $(SHL$(TNR)TARGET:b) >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
+     @-+echo #include "shlinfo.rc" >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
     $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
 .ENDIF			# "$(SHL$(TNR)DEFAULTRES)"!=""
