@@ -2,9 +2,9 @@
  *
  *  $RCSfile: profile.c,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-13 12:28:24 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:29:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1216,6 +1216,7 @@ sal_Bool SAL_CALL osl_getProfileName(rtl_uString* ustrPath, rtl_uString* ustrNam
     if( bRet )
     {
         rtl_string2UString( &ustrTmp, buffer, strlen( buffer ), osl_getThreadTextEncoding(), OUSTRING_TO_OSTRING_CVTFLAGS );
+        OSL_ASSERT(ustrTmp != NULL);
         osl_getFileURLFromSystemPath( ustrTmp, pustrProfileName );
         rtl_uString_release( ustrTmp );
     }
