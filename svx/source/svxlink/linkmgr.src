@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkmgr.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:04:55 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:45:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,9 @@ String RID_SVXSTR_FILELINK
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Document";
     Text[ thai ] = "เอกสาร";
+    Text[ czech ] = "Dokument";
+    Text[ hebrew ] = "‮מסמך‬";
+    Text[ hindi ] = "लेखपत्र";
 };
 String RID_SVXSTR_GRAFIKLINK
 {
@@ -96,7 +99,7 @@ String RID_SVXSTR_GRAFIKLINK
     Text [ ENGLISH ] = "Graphic" ;
     Text [ norwegian ] = "Graphic" ;
     Text [ italian ] = "Immagine" ;
-    Text [ portuguese_brazilian ] = "Gr?fico" ;
+    Text [ portuguese_brazilian ] = "Figura" ;
     Text [ portuguese ] = "Imagem" ;
     Text [ finnish ] = "Grafiikka" ;
     Text [ danish ] = "Grafik" ;
@@ -119,6 +122,9 @@ String RID_SVXSTR_GRAFIKLINK
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Imatge";
     Text[ thai ] = "กราฟิค";
+    Text[ czech ] = "Obrázek";
+    Text[ hebrew ] = "‮גרפיקה‬";
+    Text[ hindi ] = "सुचित्र";
 };
 String RID_SVXSTR_EDITGRFLINK
 {
@@ -128,7 +134,7 @@ String RID_SVXSTR_EDITGRFLINK
     Text [ ENGLISH ] = "Link to Graphic" ;
     Text [ norwegian ] = "Koble til Grafikk" ;
     Text [ italian ] = "Collega immagine" ;
-    Text [ portuguese_brazilian ] = "Ligar a Gr?fico" ;
+    Text [ portuguese_brazilian ] = "Vincular Figuras" ;
     Text [ portuguese ] = "Ligar imagem" ;
     Text [ finnish ] = "Linkit� kuvat" ;
     Text [ danish ] = "K�d grafik" ;
@@ -139,7 +145,7 @@ String RID_SVXSTR_EDITGRFLINK
     Text [ english_us ] = "Link graphics" ;
     Text[ chinese_simplified ] = "链接图形";
     Text[ russian ] = "������������ �����";
-    Text[ polish ] = "Po��cz grafik�";
+    Text[ polish ] = "Do��cz grafik�";
     Text[ japanese ] = "図をリンクする";
     Text[ chinese_traditional ] = "連結圖形";
     Text[ arabic ] = "��� ��������";
@@ -151,6 +157,9 @@ String RID_SVXSTR_EDITGRFLINK
     Text[ turkish ] = "Grafik ba�lant�s� olu�tur";
     Text[ catalan ] = "Enlla�a la imatge";
     Text[ thai ] = "เชื่อมโยงกราฟิค";
+    Text[ czech ] = "Propojit obrázky";
+    Text[ hebrew ] = "‮קישור גרפיקה‬";
+    Text[ hindi ] = "सुचित्र को लिंक करो";
 };
 String RID_SVXSTR_GRFLINKPROGRESS
 {
@@ -164,10 +173,10 @@ String RID_SVXSTR_GRFLINKPROGRESS
     Text [ swedish ] = "Importerar grafik..." ;
     Text [ danish ] = "Importerer grafik..." ;
     Text [ portuguese ] = "A importar imagem..." ;
-    Text [ portuguese_brazilian ] = "Importiere Grafik..." ;
+    Text [ portuguese_brazilian ] = "Importando figuras..." ;
     Text[ chinese_simplified ] = "输入图形...";
     Text[ russian ] = "������ ������������ �������...";
-    Text[ polish ] = "Importuj grafik�...";
+    Text[ polish ] = "Importowanie grafiki...";
     Text[ japanese ] = "図のインポート...";
     Text[ chinese_traditional ] = "匯入圖形...";
     Text[ arabic ] = "������� ������...";
@@ -180,11 +189,23 @@ String RID_SVXSTR_GRFLINKPROGRESS
     Text[ catalan ] = "S'est� important la imatge...";
     Text[ finnish ] = "Tuodaan grafiikkaa...";
     Text[ thai ] = "กำลังนำเข้ากราฟิค...";
+    Text[ czech ] = "Importuje se obrázek...";
+    Text[ hebrew ] = "‮יבוא גרפיקה‬";
+    Text[ hindi ] = "सुचित्र को आयात कर रहा है...";
 };
 Bitmap RID_SVXGRF_GRAPHICLOAD
 {
     File = "grfload.bmp" ;
 };
+
+
+
+
+
+
+
+
+
 
 
 
