@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-15 13:55:47 $
+#   last change: $Author: vg $ $Date: 2003-04-24 12:57:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,7 +62,7 @@
 PRJ=..$/..
 PRJINC=..$/inc
 
-PRJNAME=preload
+PRJNAME=extensions
 TARGET=preload
 ENABLE_EXCEPTIONS=TRUE
 USE_DEFFILE=TRUE
