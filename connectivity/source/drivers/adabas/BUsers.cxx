@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BUsers.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-12 11:39:41 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 08:42:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,7 +161,7 @@ void OUsers::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
                 if(xRow->getString(1) == sDbaUser)
                 {
                     ::comphelper::disposeComponent(xStmt);
-                    ::dbtools::throwGenericSQLException(::rtl::OUString::createFromAscii("This user couldn't be deleted. Otherwise the database stays in a inconsistent state."),*this);
+                    ::dbtools::throwGenericSQLException(::rtl::OUString::createFromAscii("This user couldn't be deleted. Otherwise the database stays in a inconsistent state."),static_cast<XTypeProvider*>(this));
                 }
             }
             ::comphelper::disposeComponent(xStmt);
