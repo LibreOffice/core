@@ -31,7 +31,7 @@
 "SvxDrawPage";"com::sun::star::drawing::GenericDrawPage";"BorderTop#optional"
 "SvxDrawPage";"com::sun::star::drawing::GenericDrawPage";"Height#optional"
 "SvxDrawPage";"com::sun::star::drawing::GenericDrawPage";"Width#optional"
-"SvxDrawPage";"com::sun::star::drawing::GenericDrawPage";"Number"
+"SvxDrawPage";"com::sun::star::drawing::GenericDrawPage";"Number#optional"
 "SvxDrawPage";"com::sun::star::drawing::GenericDrawPage";"Orientation#optional"
 "SvxDrawPage";"com::sun::star::drawing::GenericDrawPage";"UserDefinedAttributes#optional"
 "SvxDrawPage";"com::sun::star::drawing::GenericDrawPage";"IsBackgroundDark#optional"
