@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-01 10:10:28 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:05:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,9 @@
 #ifndef _COM_SUN_STAR_SDBC_XRESULTSETMETADATASUPPLIER_HPP_
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
 #endif
+#ifndef DBA_CONTAINERMEDIATOR_HXX
+#include "ContainerMediator.hxx"
+#endif
 
 using namespace dbaccess;
 using namespace connectivity;
@@ -145,7 +148,6 @@ using namespace ::com::sun::star::container;
 using namespace ::osl;
 using namespace ::comphelper;
 using namespace ::cppu;
-using namespace ::utl;
 
 typedef ::std::map <sal_Int32, OTableColumn*, std::less <sal_Int32> > OColMap;
 
@@ -154,54 +156,33 @@ typedef ::std::map <sal_Int32, OTableColumn*, std::less <sal_Int32> > OColMap;
 //==========================================================================
 DBG_NAME(ODBTable)
 //--------------------------------------------------------------------------
-ODBTable::ODBTable(connectivity::sdbcx::OCollection* _pTables,const OConfigurationNode& _rTableConfig,
-        const Reference< XConnection >& _rxConn,
-        const ::rtl::OUString& _rCatalog,
-        const ::rtl::OUString& _rSchema,
-        const ::rtl::OUString& _rName,
-        const ::rtl::OUString& _rType,
-        const ::rtl::OUString& _rDesc) throw(SQLException)
+ODBTable::ODBTable(connectivity::sdbcx::OCollection* _pTables
+        ,const Reference< XConnection >& _rxConn
+        ,const ::rtl::OUString& _rCatalog
+        ,const ::rtl::OUString& _rSchema
+        ,const ::rtl::OUString& _rName
+        ,const ::rtl::OUString& _rType
+        ,const ::rtl::OUString& _rDesc
+        ,const Reference< XNameAccess >& _xColumnDefinitions) throw(SQLException)
     :OTable_Base(_pTables,_rxConn,_rxConn->getMetaData().is() && _rxConn->getMetaData()->storesMixedCaseQuotedIdentifiers(), _rName, _rType, _rDesc, _rSchema, _rCatalog )
-    ,OConfigurationFlushable(m_aMutex,_rTableConfig.isValid() ? _rTableConfig.cloneAsRoot() : OConfigurationTreeRoot())
     ,m_nPrivileges(0)
+    ,m_xColumnDefinitions(_xColumnDefinitions)
 {
     DBG_CTOR(ODBTable, NULL);
-    osl_incrementInterlockedCount( &m_refCount );
-    try
-    {
-        DBG_ASSERT(getMetaData().is(), "ODBTable::ODBTable : invalid conn !");
-        DBG_ASSERT(_rName.getLength(), "ODBTable::ODBTable : name !");
-        // register our properties
-        construct();
-        refreshColumns();
-
-        // load the settings from the configuration
-        if(m_aConfigurationNode.isValid())
-            // our own settings
-            loadFrom(m_aConfigurationNode.openNode(CONFIGKEY_SETTINGS));
-
-        // we don't collect the privileges here, this is potentially expensive. Instead we determine them on request.
-        // (see getFastPropertyValue)
-        m_nPrivileges = -1;
-    }
-    catch(Exception&)
-    {
-    }
-    osl_decrementInterlockedCount( &m_refCount );
-
+    DBG_ASSERT(getMetaData().is(), "ODBTable::ODBTable : invalid conn !");
+    DBG_ASSERT(_rName.getLength(), "ODBTable::ODBTable : name !");
     // TODO : think about collecting the privileges here, as we can't ensure that in getFastPropertyValue, where
     // we do this at the moment, the statement needed can be supplied by the connection (for example the SQL-Server
     // ODBC driver does not allow more than one statement per connection, and in getFastPropertyValue it's more
     // likely that it's already used up than it's here.)
 }
 // -----------------------------------------------------------------------------
-ODBTable::ODBTable(connectivity::sdbcx::OCollection* _pTables,  const Reference< XConnection >& _rxConn )
+ODBTable::ODBTable(connectivity::sdbcx::OCollection* _pTables
+                   ,const Reference< XConnection >& _rxConn)
                 throw(SQLException)
     :OTable_Base(_pTables,_rxConn, _rxConn->getMetaData().is() && _rxConn->getMetaData()->storesMixedCaseQuotedIdentifiers())
-    ,OConfigurationFlushable(m_aMutex)
     ,m_nPrivileges(-1)
 {
-    construct();
 }
 // -------------------------------------------------------------------------
 ODBTable::~ODBTable()
@@ -216,23 +197,33 @@ OColumn* ODBTable::createColumn(const ::rtl::OUString& _rName) const
 {
     OColumn* pReturn = NULL;
 
-    Reference< XNamed > xRet = NULL;
+    Reference<XPropertySet> xProp;
     if ( m_xDriverColumns.is() && m_xDriverColumns->hasByName(_rName) )
     {
-        Reference<XPropertySet> xProp;
-        m_xDriverColumns->getByName(_rName) >>= xProp;
-
-        pReturn = new OTableColumnWrapper(xProp);
+        xProp.set(m_xDriverColumns->getByName(_rName),UNO_QUERY);
     }
     else
     {
         OColumns* pColumns = static_cast<OColumns*>(m_pColumns);
-        Reference<XPropertySet> xProp(pColumns->createBaseObject(_rName),UNO_QUERY);
-        pReturn = new OTableColumnWrapper( xProp );
+        xProp.set(pColumns->createBaseObject(_rName),UNO_QUERY);
     }
+
+    Reference<XPropertySet> xColumnDefintion;
+    if ( m_xColumnDefinitions.is() && m_xColumnDefinitions->hasByName(_rName) )
+        xColumnDefintion.set(m_xColumnDefinitions->getByName(_rName),UNO_QUERY);
+    pReturn = new OTableColumnWrapper(xProp,xColumnDefintion);
+
     return pReturn;
 }
-
+// -----------------------------------------------------------------------------
+void ODBTable::columnDropped(const ::rtl::OUString& _sName)
+{
+    Reference<XDrop> xDrop(m_xColumnDefinitions,UNO_QUERY);
+    if ( xDrop.is() && m_xColumnDefinitions->hasByName(_sName) )
+    {
+        xDrop->dropByName(_sName);
+    }
+}
 //--------------------------------------------------------------------------
 Sequence< sal_Int8 > ODBTable::getImplementationId() throw (RuntimeException)
 {
@@ -253,8 +244,11 @@ Sequence< sal_Int8 > ODBTable::getImplementationId() throw (RuntimeException)
 //------------------------------------------------------------------------------
 void SAL_CALL ODBTable::disposing()
 {
+    OPropertySetHelper::disposing();
     OTable_Base::disposing();
-    OConfigurationFlushable::disposing();
+    m_xColumnDefinitions = NULL;
+    m_xDriverColumns = NULL;
+    m_xColumnMediator = NULL;
 }
 
 //------------------------------------------------------------------------------
@@ -270,6 +264,12 @@ void ODBTable::getFastPropertyValue(Any& _rValue, sal_Int32 _nHandle) const
 // -------------------------------------------------------------------------
 void ODBTable::construct()
 {
+    ::osl::MutexGuard aGuard(m_aMutex);
+
+    // we don't collect the privileges here, this is potentially expensive. Instead we determine them on request.
+    // (see getFastPropertyValue)
+    m_nPrivileges = -1;
+
     OTable_Base::construct();
 
     registerProperty(PROPERTY_FILTER, PROPERTY_ID_FILTER, PropertyAttribute::BOUND,
@@ -301,6 +301,25 @@ void ODBTable::construct()
 
     registerProperty(PROPERTY_TEXTRELIEF, PROPERTY_ID_TEXTRELIEF, PropertyAttribute::BOUND,
                     &m_nFontRelief, ::getCppuType(&m_nFontRelief));
+
+    registerProperty(PROPERTY_FONTNAME,         PROPERTY_ID_FONTNAME,        PropertyAttribute::BOUND,&m_aFont.Name,            ::getCppuType(&m_aFont.Name));
+    registerProperty(PROPERTY_FONTHEIGHT,       PROPERTY_ID_FONTHEIGHT,      PropertyAttribute::BOUND,&m_aFont.Height,          ::getCppuType(&m_aFont.Height));
+    registerProperty(PROPERTY_FONTWIDTH,        PROPERTY_ID_FONTWIDTH,       PropertyAttribute::BOUND,&m_aFont.Width,           ::getCppuType(&m_aFont.Width));
+    registerProperty(PROPERTY_FONTSTYLENAME,    PROPERTY_ID_FONTSTYLENAME,   PropertyAttribute::BOUND,&m_aFont.StyleName,       ::getCppuType(&m_aFont.StyleName));
+    registerProperty(PROPERTY_FONTFAMILY,       PROPERTY_ID_FONTFAMILY,      PropertyAttribute::BOUND,&m_aFont.Family,          ::getCppuType(&m_aFont.Family));
+    registerProperty(PROPERTY_FONTCHARSET,      PROPERTY_ID_FONTCHARSET,     PropertyAttribute::BOUND,&m_aFont.CharSet,         ::getCppuType(&m_aFont.CharSet));
+    registerProperty(PROPERTY_FONTPITCH,        PROPERTY_ID_FONTPITCH,       PropertyAttribute::BOUND,&m_aFont.Pitch,           ::getCppuType(&m_aFont.Pitch));
+    registerProperty(PROPERTY_FONTCHARWIDTH,    PROPERTY_ID_FONTCHARWIDTH,   PropertyAttribute::BOUND,&m_aFont.CharacterWidth,  ::getCppuType(&m_aFont.CharacterWidth));
+    registerProperty(PROPERTY_FONTWEIGHT,       PROPERTY_ID_FONTWEIGHT,      PropertyAttribute::BOUND,&m_aFont.Weight,          ::getCppuType(&m_aFont.Weight));
+    registerProperty(PROPERTY_FONTSLANT,        PROPERTY_ID_FONTSLANT,       PropertyAttribute::BOUND,&m_aFont.Slant,           ::getCppuType(&m_aFont.Slant));
+    registerProperty(PROPERTY_FONTUNDERLINE,    PROPERTY_ID_FONTUNDERLINE,   PropertyAttribute::BOUND,&m_aFont.Underline,       ::getCppuType(&m_aFont.Underline));
+    registerProperty(PROPERTY_FONTSTRIKEOUT,    PROPERTY_ID_FONTSTRIKEOUT,   PropertyAttribute::BOUND,&m_aFont.Strikeout,       ::getCppuType(&m_aFont.Strikeout));
+    registerProperty(PROPERTY_FONTORIENTATION,  PROPERTY_ID_FONTORIENTATION, PropertyAttribute::BOUND,&m_aFont.Orientation,     ::getCppuType(&m_aFont.Orientation));
+    registerProperty(PROPERTY_FONTKERNING,      PROPERTY_ID_FONTKERNING,     PropertyAttribute::BOUND,&m_aFont.Kerning,         ::getCppuType(&m_aFont.Kerning));
+    registerProperty(PROPERTY_FONTWORDLINEMODE, PROPERTY_ID_FONTWORDLINEMODE,PropertyAttribute::BOUND,&m_aFont.WordLineMode,    ::getCppuType(&m_aFont.WordLineMode));
+    registerProperty(PROPERTY_FONTTYPE,         PROPERTY_ID_FONTTYPE,        PropertyAttribute::BOUND,&m_aFont.Type,            ::getCppuType(&m_aFont.Type));
+
+    refreshColumns();
 }
 // -----------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper* ODBTable::createArrayHelper( sal_Int32 _nId) const
@@ -344,9 +363,6 @@ Any SAL_CALL ODBTable::queryInterface( const Type & rType ) throw(RuntimeExcepti
         return Any();
     aRet = OTable_Base::queryInterface( rType);
 
-    if(!aRet.hasValue())
-        aRet = OConfigurationFlushable::queryInterface( rType);
-
     return aRet;
 }
 // -------------------------------------------------------------------------
@@ -366,23 +382,8 @@ Sequence< Type > SAL_CALL ODBTable::getTypes(  ) throw(RuntimeException)
         if(*pBegin != aRenameType && *pBegin != aAlterType)
             aOwnTypes.push_back(*pBegin);
     }
-    Sequence< Type > aRet(aOwnTypes.begin(),aOwnTypes.size());
-    return ::comphelper::concatSequences(aRet,OConfigurationFlushable::getTypes());
-}
-// -----------------------------------------------------------------------------
-void ODBTable::flush_NoBroadcast_NoCommit()
-{
-    if(m_aConfigurationNode.isValid())
-    {
-        storeTo(m_aConfigurationNode.openNode(CONFIGKEY_SETTINGS));
 
-        OColumns* pColumns = static_cast<OColumns*>(m_pColumns);
-        if ( pColumns )
-        {
-            Reference<XConnection> xCon = getConnection();
-            pColumns->storeSettings( m_aConfigurationNode.openNode(CONFIGKEY_QRYDESCR_COLUMNS), getDataSourceNumberFormats( xCon ) );
-        };
-    }
+    return Sequence< Type >(aOwnTypes.begin(),aOwnTypes.size());
 }
 // XRename,
 //------------------------------------------------------------------------------
@@ -450,14 +451,6 @@ void SAL_CALL ODBTable::alterColumnByName( const ::rtl::OUString& _rName, const 
 void ODBTable::refreshColumns()
 {
     OTable_Base::refreshColumns();
-    // our column's settings
-    if ( m_aConfigurationNode.isValid() )
-    {
-        OColumns* pColumns = static_cast<OColumns*>(m_pColumns);
-        Reference<XConnection> xCon = getConnection();
-        pColumns->loadSettings( m_aConfigurationNode.openNode(CONFIGKEY_QRYDESCR_COLUMNS), getDataSourceNumberFormats( xCon ) );
-    }
-
 }
 // -----------------------------------------------------------------------------
 sal_Int64 SAL_CALL ODBTable::getSomething( const Sequence< sal_Int8 >& rId ) throw(RuntimeException)
@@ -466,11 +459,8 @@ sal_Int64 SAL_CALL ODBTable::getSomething( const Sequence< sal_Int8 >& rId ) thr
     if (rId.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
         nRet = (sal_Int64)this;
     else
-    {
         nRet = OTable_Base::getSomething(rId);
-        if(!nRet)
-            nRet = OConfigurationFlushable::getSomething(rId);
-    }
+
     return nRet;
 }
 // -----------------------------------------------------------------------------
@@ -500,7 +490,10 @@ sdbcx::OCollection* ODBTable::createColumns(const TStringVector& _rNames)
     OColumns* pCol = new OColumns(*this, m_aMutex, NULL, isCaseSensitive(), _rNames, this,this,
                                     xMeta.is() && xMeta->supportsAlterTableWithAddColumn(),
                                     xMeta.is() && xMeta->supportsAlterTableWithDropColumn());
-    pCol->setParent(this);
+    static_cast<OColumnsHelper*>(pCol)->setParent(this);
+    OContainerMediator* pMediator = new OContainerMediator(pCol,m_xColumnDefinitions,sal_False);
+    m_xColumnMediator = pMediator;
+    pCol->setMediator(pMediator);
     return pCol;
 }
 // -----------------------------------------------------------------------------
