@@ -2,9 +2,9 @@
  *
  *  $RCSfile: string.c,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2000-11-21 15:30:56 $
+ *  last change: $Author: jl $ $Date: 2001-03-12 14:03:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -718,7 +718,7 @@ void SAL_CALL rtl_string_release( rtl_String * value )
 {
     if( 0 == osl_decrementInterlockedCount(&value->refCount) )
     {
-        OSL_ENSHURE( value != &aEmpty_rtl_String, "static empty string: refCount==0");
+        OSL_ENSURE( value != &aEmpty_rtl_String, "static empty string: refCount==0");
         rtl_freeMemory(value);
     }
 }

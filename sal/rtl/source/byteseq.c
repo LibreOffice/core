@@ -2,9 +2,9 @@
  *
  *  $RCSfile: byteseq.c,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:24 $
+ *  last change: $Author: jl $ $Date: 2001-03-12 14:03:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ void SAL_CALL rtl_byte_sequence_reference2One(
     sal_Sequence * pSequence, * pNew;
     sal_Int32 nElements;
 
-    OSL_ENSHURE( ppSequence, "### null ptr!" );
+    OSL_ENSURE( ppSequence, "### null ptr!" );
     pSequence = *ppSequence;
 
     if (pSequence->nRefCount > 1)
@@ -116,7 +116,7 @@ void SAL_CALL rtl_byte_sequence_realloc(
     sal_Sequence * pSequence, * pNew;
     sal_Int32 nElements;
 
-    OSL_ENSHURE( ppSequence, "### null ptr!" );
+    OSL_ENSURE( ppSequence, "### null ptr!" );
     pSequence = *ppSequence;
     nElements = pSequence->nElements;
 

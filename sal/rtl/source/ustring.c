@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ustring.c,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: th $ $Date: 2000-11-28 13:59:57 $
+ *  last change: $Author: jl $ $Date: 2001-03-12 14:03:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -286,13 +286,13 @@ sal_Int32 SAL_CALL rtl_ustr_ascii_shortenedCompare_WithLength( const sal_Unicode
         && (0 == (nResult = (sal_Int32)*first++ - (sal_Int32)*second++ ) ) )
     {
         /* Check ASCII range */
-        OSL_ENSHURE( (*(second-1) & 0x80) == 0, "Found ASCII char > 127");
+        OSL_ENSURE( (*(second-1) & 0x80) == 0, "Found ASCII char > 127");
     }
     if( !nResult && (shortenedLength != -1) )
     {
         if( *second )
         {
-            OSL_ENSHURE( first == firstEnd, "first == firstEnd failed" );
+            OSL_ENSURE( first == firstEnd, "first == firstEnd failed" );
             // first is a substring of the second string => less (negative value)
             nResult = -1;
         }
@@ -1145,7 +1145,7 @@ void SAL_CALL rtl_uString_release( rtl_uString * value )
 {
     if( 0 == osl_decrementInterlockedCount(&value->refCount) )
     {
-        OSL_ENSHURE( value != &aEmpty_rtl_wString, "static empty string: refCount==0");
+        OSL_ENSURE( value != &aEmpty_rtl_wString, "static empty string: refCount==0");
         rtl_freeMemory(value);
     }
 }
@@ -1380,7 +1380,7 @@ void SAL_CALL rtl_uString_newFromAscii( rtl_uString ** newStr, const sal_Char * 
         while ( length )
         {
             /* Check ASCII range */
-            OSL_ENSHURE( (*value & 0x80) == 0, "Found ASCII char > 127");
+            OSL_ENSURE( (*value & 0x80) == 0, "Found ASCII char > 127");
 
             *p = (sal_Unicode)(*value);
             p++;

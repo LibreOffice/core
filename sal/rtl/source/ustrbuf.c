@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ustrbuf.c,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:24 $
+ *  last change: $Author: jl $ $Date: 2001-03-12 14:03:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,7 +221,7 @@ void SAL_CALL rtl_uStringbuffer_insert_ascii(   /*inout*/rtl_uString ** This,
         for( n = 0; n < len; n++ )
         {
             /* Check ASCII range */
-            OSL_ENSHURE( (*str & 0x80) == 0, "Found ASCII char > 127");
+            OSL_ENSURE( (*str & 0x80) == 0, "Found ASCII char > 127");
 
             pBuf[offset + n] = (sal_Unicode)*(str++);
         }
