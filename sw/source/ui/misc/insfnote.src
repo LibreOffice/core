@@ -2,9 +2,9 @@
  *
  *  $RCSfile: insfnote.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:43:59 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:21:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ ModalDialog DLG_INS_FOOTNOTE
     Text [ ENGLISH ] = "Insert footnote" ;
     Text [ norwegian ] = "Sette inn fotnote" ;
     Text [ italian ] = "Inserisci nota a pi� pagina" ;
-    Text [ portuguese_brazilian ] = "Inserir nota de rodap?" ;
+    Text [ portuguese_brazilian ] = "Inserir Nota de Rodap�" ;
     Text [ portuguese ] = "Inserir nota de rodap�" ;
     Text [ finnish ] = "Lis�� alaviite" ;
     Text [ danish ] = "Inds�t fodnote" ;
@@ -139,7 +139,7 @@ ModalDialog DLG_INS_FOOTNOTE
         Text [ ENGLISH ] = "~Auto" ;
         Text [ norwegian ] = "~Auto" ;
         Text [ italian ] = "Automatico" ;
-        Text [ portuguese_brazilian ] = "~Auto" ;
+        Text [ portuguese_brazilian ] = "~Autom�tico" ;
         Text [ portuguese ] = "~Autom�tico" ;
         Text [ finnish ] = "~Automaattinen" ;
         Text [ danish ] = "Automatisk" ;
@@ -163,6 +163,9 @@ ModalDialog DLG_INS_FOOTNOTE
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Autom�tic";
         Text[ thai ] = "~อัตโนมัติ";
+        Text[ czech ] = "Automaticky";
+        Text[ hebrew ] = "‮אוטומטי‬";
+        Text[ hindi ] = "~स्वचालित";
     };
     RadioButton RB_NUMBER_CHAR
     {
@@ -183,7 +186,7 @@ ModalDialog DLG_INS_FOOTNOTE
         Text [ english_us ] = "~Character" ;
         Text[ chinese_simplified ] = "字符(~C)";
         Text[ russian ] = "��~����";
-        Text[ polish ] = "Znak";
+        Text[ polish ] = "~Znak";
         Text[ japanese ] = "文字(~C)";
         Text[ chinese_traditional ] = "字元(~C)";
         Text[ arabic ] = "����";
@@ -193,6 +196,9 @@ ModalDialog DLG_INS_FOOTNOTE
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Car�cters";
         Text[ thai ] = "~ตัวอักขระ";
+        Text[ czech ] = "Znak";
+        Text[ hebrew ] = "~Zeichen";
+        Text[ hindi ] = "~अक्षर";
     };
     FixedLine FL_NUMBER
     {
@@ -202,7 +208,7 @@ ModalDialog DLG_INS_FOOTNOTE
         Text [ ENGLISH ] = "Numbering" ;
         Text [ norwegian ] = "Nummering" ;
         Text [ italian ] = "Numerazione" ;
-        Text [ portuguese_brazilian ] = "Numera??o" ;
+        Text [ portuguese_brazilian ] = "Numera��o" ;
         Text [ portuguese ] = "Numera��o" ;
         Text [ finnish ] = "Numerointi" ;
         Text [ danish ] = "Nummerering" ;
@@ -223,6 +229,9 @@ ModalDialog DLG_INS_FOOTNOTE
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Numeraci�";
         Text[ thai ] = "ลำดับตัวเลข";
+        Text[ czech ] = "Číslování";
+        Text[ hebrew ] = "‮מיספור‬";
+        Text[ hindi ] = "संख्या देना";
     };
     PushButton BT_NUMBER_CHAR
     {
@@ -241,7 +250,7 @@ ModalDialog DLG_INS_FOOTNOTE
         Check = TRUE ;
         Text [ portuguese ] = "~Nota de rodap�" ;
         Text [ english_us ] = "~Footnote" ;
-        Text [ portuguese_brazilian ] = "~Fu?note" ;
+        Text [ portuguese_brazilian ] = "~Nota de Rodap�" ;
         Text [ swedish ] = "~Fotnot" ;
         Text [ danish ] = "Fodnote" ;
         Text [ italian ] = "Nota a pi� pagina" ;
@@ -261,6 +270,9 @@ ModalDialog DLG_INS_FOOTNOTE
         Text[ catalan ] = "~Nota al peu";
         Text[ finnish ] = "Alaviite";
         Text[ thai ] = "เ~ชิงอรรถ";
+        Text[ czech ] = "Poznámka pod čarou";
+        Text[ hebrew ] = "‮הערת שוליים‬";
+        Text[ hindi ] = "पृष्ठ के ~नीचे की टीका";
     };
     RadioButton RB_TYPE_ENDNOTE
     {
@@ -270,7 +282,7 @@ ModalDialog DLG_INS_FOOTNOTE
         Text [ ENGLISH ] = "~Endnote" ;
         Text [ portuguese ] = "~Nota final" ;
         Text [ english_us ] = "~Endnote" ;
-        Text [ portuguese_brazilian ] = "~Endnote" ;
+        Text [ portuguese_brazilian ] = "~Nota de Fim" ;
         Text [ swedish ] = "~Slutnot" ;
         Text [ danish ] = "Slutnote" ;
         Text [ italian ] = "Nota di chiusura" ;
@@ -279,7 +291,7 @@ ModalDialog DLG_INS_FOOTNOTE
         Text [ dutch ] = "~Eindnoot" ;
         Text[ chinese_simplified ] = "尾注(~E)";
         Text[ russian ] = "�������� ������";
-        Text[ polish ] = "P~rzypis ko�cowy";
+        Text[ polish ] = "Przypis ~ko�cowy";
         Text[ japanese ] = "文末脚注(~E)";
         Text[ chinese_traditional ] = "尾註(~E)";
         Text[ arabic ] = "����� �����";
@@ -290,6 +302,9 @@ ModalDialog DLG_INS_FOOTNOTE
         Text[ catalan ] = "Nota ~final";
         Text[ finnish ] = "~Loppuviite";
         Text[ thai ] = "~อ้างอิงท้ายเรื่อง";
+        Text[ czech ] = "Vysvětlivka";
+        Text[ hebrew ] = "~Endnote";
+        Text[ hindi ] = "अंतिम टीका";
     };
     FixedLine FL_TYPE
     {
@@ -298,7 +313,7 @@ ModalDialog DLG_INS_FOOTNOTE
         Text = "Art" ;
         Text [ ENGLISH ] = "Type" ;
         Text [ english_us ] = "Type" ;
-        Text [ portuguese_brazilian ] = "Art" ;
+        Text [ portuguese_brazilian ] = "Tipo" ;
         Text [ swedish ] = "Typ" ;
         Text [ danish ] = "Type" ;
         Text [ italian ] = "Tipo" ;
@@ -314,11 +329,14 @@ ModalDialog DLG_INS_FOOTNOTE
         Text[ arabic ] = "�����";
         Text[ greek ] = "�����";
         Text[ korean ] = "종류";
-        Text[ turkish ] = "T�r";
+        Text[ turkish ] = "Tip";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Tipus";
         Text[ finnish ] = "Tyyppi";
         Text[ thai ] = "ชนิด";
+        Text[ czech ] = "Typ";
+        Text[ hebrew ] = "‮סוג‬";
+        Text[ hindi ] = "वर्ग";
     };
     Text[ chinese_simplified ] = "插入注脚";
     Text[ russian ] = "�������� ������";
@@ -332,7 +350,19 @@ ModalDialog DLG_INS_FOOTNOTE
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Insereix una nota al peu";
     Text[ thai ] = "แทรกเชิงอรรถ";
+    Text[ czech ] = "Vložit poznámku pod čarou";
+    Text[ hebrew ] = "‮הוספת הערת שוליים‬";
+    Text[ hindi ] = "पृष्ठ के नीचे की टीका जोड़ो";
 };
+
+
+
+
+
+
+
+
+
 
 
 
