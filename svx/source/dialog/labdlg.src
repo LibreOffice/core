@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labdlg.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:09 $
+ *  last change: $Author: kz $ $Date: 2001-01-12 21:28:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,9 +183,9 @@ TabPage RID_SVXPAGE_CAPTION
         {
             < "Free" ; 1 ; > ;
             < "30 Degrees" ; 3000 ; > ;
-            < "45 degrees" ; 4500 ; > ;
+            < "45 Degrees" ; 4500 ; > ;
             < "60 Degrees" ; 6000 ; > ;
-            < "90 degrees" ; 9000 ; > ;
+            < "90 Degrees" ; 9000 ; > ;
         };
         stringlist [ italian ] =
         {
