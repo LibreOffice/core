@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_singl.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:15:39 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:42:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@
 // NOT FULLY DEFINED SERVICES
 #include <ary/idl/i_gate.hxx>
 #include <ary/idl/i_singleton.hxx>
+#include <ary/idl/i_sisingleton.hxx>
 #include <ary/idl/ip_ce.hxx>
 #include <ary_i/codeinf2.hxx>
 #include <s2_luidl/pe_type2.hxx>
@@ -112,10 +113,11 @@ PE_Singleton::PE_Singleton()
         sData_Name(),
         bIsPreDeclaration(false),
         pCurSingleton(0),
+        pCurSiSingleton(0),
         pPE_Type(0),
-        nCurParsed_Service(0)
+        nCurParsed_Type(0)
 {
-    pPE_Type        = new PE_Type(nCurParsed_Service);
+    pPE_Type        = new PE_Type(nCurParsed_Type);
 }
 
 void
@@ -214,6 +216,17 @@ PE_Singleton::Process_Punctuation( const TokPunctuation & i_rToken )
                                     On_Default();
                     }   // end switch
                     break;
+        case TokPunctuation::Colon:
+                    switch (eState)
+                    {
+                       case need_curlbr_open:
+                                    SetResult(done, push_sure, pPE_Type.Ptr());
+                                    eState = in_base_interface;
+                                    break;
+                       default:
+                                    On_Default();
+                    }   // end switch
+                    break;
         default:
                     On_Default();
     }   // end switch
@@ -239,7 +252,8 @@ PE_Singleton::InitData()
     sData_Name.clear();
     bIsPreDeclaration = false;
     pCurSingleton = 0;
-    nCurParsed_Service = 0;
+    pCurSiSingleton = 0;
+    nCurParsed_Type = 0;
 }
 
 void
@@ -248,7 +262,7 @@ PE_Singleton::TransferData()
     if (NOT bIsPreDeclaration)
     {
         csv_assert(sData_Name.size() > 0);
-        csv_assert(pCurSingleton != 0);
+        csv_assert( (pCurSingleton != 0) != (pCurSiSingleton != 0) );
     }
 
     eState = e_none;
@@ -257,9 +271,25 @@ PE_Singleton::TransferData()
 void
 PE_Singleton::ReceiveData()
 {
-    pCurSingleton->Set_Service(nCurParsed_Service);
-    nCurParsed_Service = 0;
-    eState = e_std;
+    switch (eState)
+    {
+        case in_service:
+                    pCurSingleton->Set_Service(nCurParsed_Type);
+                    nCurParsed_Type = 0;
+                    eState = e_std;
+                    break;
+        case in_base_interface:
+                    pCurSiSingleton = &Gate().Ces().Store_SglIfcSingleton(
+                                                    CurNamespace().CeId(),
+                                                    sData_Name,
+                                                    nCurParsed_Type );
+                    PassDocuAt(*pCurSiSingleton);
+                    nCurParsed_Type = 0;
+                    eState = need_finish;
+                    break;
+        default:
+            csv_assert(false);
+    }   // end switch
 }
 
 UnoIDL_PE &
