@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbabrw.src,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-28 13:28:50 $
+ *  last change: $Author: vg $ $Date: 2002-06-11 12:33:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,11 @@
 
 
 #define IL_TOOL \
+    MaskColor   = Color {\
+    Red   = 0xC000;\
+    Green = 0xC000;\
+    Blue  = 0xC000;\
+    };\
 \
     IdList = {\
         ID_BROWSER_EXPLORER;\
@@ -121,22 +126,15 @@
         ID_RELATION_ADD_RELATION;\
         SID_INDEXDESIGN; \
         ID_BROWSER_DOCUMENT_DATASOURCE;\
-        ID_BROWSER_SAVERECORD; \
-        ID_BROWSER_UNDORECORD; \
     };\
     IdCount = {\
-    43;\
+    41;\
     }
 
  // Default Image-Liste ----------------------------------------------------------------
 
 ImageList RID_DEFAULTIMAGELIST_SC
 {
-    MaskColor   = Color {
-        Red   = 0xC000;
-        Green = 0xC000;
-        Blue  = 0xC000;
-    };
     ImageBitmap = Bitmap
     {
         File = "sc_qrtl.bmp";
@@ -146,11 +144,6 @@ ImageList RID_DEFAULTIMAGELIST_SC
 
 ImageList RID_DEFAULTIMAGELIST_LC
 {
-    MaskColor   = Color {
-        Red   = 0xC000;
-        Green = 0xC000;
-        Blue  = 0xC000;
-    };
     ImageBitmap = Bitmap
     {
         File = "lc_qrtl.bmp" ;
@@ -160,11 +153,6 @@ ImageList RID_DEFAULTIMAGELIST_LC
 
 ImageList RID_DEFAULTIMAGELIST_SCH
 {
-    MaskColor   = Color {
-            Red   = 0xffff;
-            Green = 0x0000;
-            Blue  = 0xffff;
-    };
     ImageBitmap = Bitmap
     {
         File = "sch_qrtl.bmp";
@@ -174,11 +162,6 @@ ImageList RID_DEFAULTIMAGELIST_SCH
 
 ImageList RID_DEFAULTIMAGELIST_LCH
 {
-    MaskColor   = Color {
-            Red   = 0xffff;
-            Green = 0x0000;
-            Blue  = 0xffff;
-    };
     ImageBitmap = Bitmap
     {
         File = "lch_qrtl.bmp" ;
@@ -268,32 +251,29 @@ ToolBox RID_BRW_QRY_TOOLBOX
     };
     CUR_ITEM
     {
-        MID_SAVE_RECORD
-        HelpId = ID_BROWSER_SAVERECORD ;
+        MID_SBA_QRY_SAVE
+        HelpID = ID_BROWSER_SAVEDOC ;
     };
     CUR_ITEM
     {
-        MID_UNDO_RECORD
-        HelpID = ID_BROWSER_UNDORECORD ;
+        MID_SBA_QRY_UNDO
+        HelpId = SID_UNDO ;
     };
     CUR_SEPARATOR ;
     CUR_ITEM
     {
         MID_SBA_QRY_CUT
         HelpId = SID_CUT ;
-        Hide = TRUE;
     };
     CUR_ITEM
     {
         MID_SBA_QRY_COPY
         HelpId = SID_COPY ;
-        Hide = TRUE;
     };
     CUR_ITEM
     {
         MID_SBA_QRY_PASTE
         HelpId = SID_PASTE ;
-        Hide = TRUE;
     };
     CUR_SEPARATOR ;
     CUR_ITEM
