@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hdu $ $Date: 2002-02-18 17:54:10 $
+#   last change: $Author: pl $ $Date: 2002-07-08 14:18:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -132,7 +132,9 @@ SLOFILES=	$(SLO)$/salmisc.obj 	\
             $(SLO)$/virdev.obj		\
             $(SLO)$/wall.obj		\
             $(SLO)$/opengl.obj		\
-            $(SLO)$/fontcfg.obj
+            $(SLO)$/fontcfg.obj		\
+            $(SLO)$/pdfwriter.obj	\
+            $(SLO)$/pdfwriter_impl.obj
 
 
 .IF "$(ENABLE_CTL)"!=""

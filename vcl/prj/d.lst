@@ -185,7 +185,7 @@ hedabu: ..\inc\unohelp.hxx %_DEST%\inc%_EXT%\vcl\unohelp.hxx
 hedabu: ..\inc\unohelp2.hxx %_DEST%\inc%_EXT%\vcl\unohelp2.hxx
 hedabu: ..\inc\i18nhelp.hxx %_DEST%\inc%_EXT%\vcl\i18nhelp.hxx
 hedabu: ..\inc\dndhelp.hxx %_DEST%\inc%_EXT%\vcl\dndhelp.hxx
-hedabu: ..\unx\inc\salconfig.hxx %_DEST%\inc%_EXT%\vcl\unx\salconfig.hxx
+hedabu: ..\inc\pdfwriter.hxx %_DEST%\inc%_EXT%\vcl\pdfwriter.hxx
 
 ..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
 ..\%__SRC%\misc\*staticdatamembers.cxx %_DEST%\inc%_EXT%\*staticdatamembers.cxx
