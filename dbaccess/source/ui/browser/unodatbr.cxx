@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.118 $
+ *  $Revision: 1.119 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-15 11:41:08 $
+ *  last change: $Author: oj $ $Date: 2001-12-03 13:36:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -762,8 +762,8 @@ sal_Bool SbaTableQueryBrowser::InitializeGridModel(const Reference< ::com::sun::
                 // default value
                 if (nType == DataType::BIT)
                 {
-                    if(bDefault)
-                        aDefault <<= (comphelper::getString(xColumn->getPropertyValue(PROPERTY_CONTROLDEFAULT)).toInt32() == 0) ? (sal_Int16)STATE_NOCHECK : (sal_Int16)STATE_CHECK;
+                    if(bDefault && aDefault.hasValue())
+                        aDefault <<= (comphelper::getString(aDefault).toInt32() == 0) ? (sal_Int16)STATE_NOCHECK : (sal_Int16)STATE_CHECK;
                     else
                         aDefault <<= ((sal_Int16)STATE_DONTKNOW);
 

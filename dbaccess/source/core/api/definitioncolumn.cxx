@@ -2,9 +2,9 @@
  *
  *  $RCSfile: definitioncolumn.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-19 14:15:28 $
+ *  last change: $Author: oj $ $Date: 2001-12-03 13:36:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,12 +139,12 @@ Sequence< ::rtl::OUString > OTableColumnDescriptor::getSupportedServiceNames(  )
 {
     BEGIN_PROPERTY_HELPER(19)
         DECL_PROP1(ALIGN,               sal_Int32,          MAYBEVOID);
-        DECL_PROP0(CONTROLDEFAULT,          ::rtl::OUString     );
+        DECL_PROP1(CONTROLDEFAULT,          ::rtl::OUString,    MAYBEVOID);
         DECL_PROP0_IFACE(CONTROLMODEL,  XPropertySet        );
         DECL_PROP0(DEFAULTVALUE,            ::rtl::OUString     );
         DECL_PROP0(DESCRIPTION,         ::rtl::OUString     );
         DECL_PROP1(NUMBERFORMAT,        sal_Int32           ,MAYBEVOID);
-        DECL_PROP0(HELPTEXT,            ::rtl::OUString     );
+        DECL_PROP1(HELPTEXT,            ::rtl::OUString,    MAYBEVOID);
         DECL_PROP0_BOOL(HIDDEN                              );
         DECL_PROP0_BOOL(ISAUTOINCREMENT                     );
         DECL_PROP0_BOOL(ISCURRENCY                      );
@@ -409,12 +409,12 @@ Sequence< ::rtl::OUString > OTableColumn::getSupportedServiceNames(  ) throw (Ru
 {
     BEGIN_PROPERTY_HELPER(19)
         DECL_PROP2(ALIGN,               sal_Int32,          BOUND, MAYBEVOID);
-        DECL_PROP0(CONTROLDEFAULT,      ::rtl::OUString     );
+        DECL_PROP1(CONTROLDEFAULT,          ::rtl::OUString,    MAYBEVOID);
         DECL_PROP1_IFACE(CONTROLMODEL,  XPropertySet ,      BOUND);
         DECL_PROP1(DEFAULTVALUE,        ::rtl::OUString,    READONLY);
         DECL_PROP1(DESCRIPTION,         ::rtl::OUString,    READONLY);
         DECL_PROP2(NUMBERFORMAT,        sal_Int32,          BOUND, MAYBEVOID);
-        DECL_PROP0(HELPTEXT,            ::rtl::OUString     );
+        DECL_PROP1(HELPTEXT,            ::rtl::OUString,    MAYBEVOID);
         DECL_PROP1_BOOL(HIDDEN,                             BOUND);
         DECL_PROP1_BOOL(ISAUTOINCREMENT,                    READONLY);
         DECL_PROP1_BOOL(ISCURRENCY,                 READONLY);
@@ -585,7 +585,7 @@ Sequence< ::rtl::OUString > OTableColumnDescriptorWrapper::getSupportedServiceNa
 
     //      Description, Defaultvalue, IsRowVersion
         DECL_PROP1(ALIGN,               sal_Int32,          MAYBEVOID);
-        DECL_PROP0(CONTROLDEFAULT,      ::rtl::OUString     );
+        DECL_PROP1(CONTROLDEFAULT,      ::rtl::OUString,    MAYBEVOID);
         DECL_PROP0_IFACE(CONTROLMODEL,  XPropertySet        );
         if (nId & HAS_DEFAULTVALUE)
         {
@@ -598,7 +598,7 @@ Sequence< ::rtl::OUString > OTableColumnDescriptorWrapper::getSupportedServiceNa
         }
 
         DECL_PROP1(NUMBERFORMAT,        sal_Int32,          MAYBEVOID);
-        DECL_PROP0(HELPTEXT,            ::rtl::OUString     );
+        DECL_PROP1(HELPTEXT,            ::rtl::OUString,    MAYBEVOID);
         DECL_PROP0_BOOL(HIDDEN                              );
         DECL_PROP0_BOOL(ISAUTOINCREMENT                     );
         DECL_PROP0_BOOL(ISCURRENCY                          );
@@ -769,7 +769,7 @@ Sequence< ::rtl::OUString > OTableColumnWrapper::getSupportedServiceNames(  ) th
 
     //      Description, Defaultvalue, IsRowVersion
         DECL_PROP2(ALIGN,               sal_Int32,          BOUND, MAYBEVOID);
-        DECL_PROP0(CONTROLDEFAULT,      ::rtl::OUString     );
+        DECL_PROP1(CONTROLDEFAULT,      ::rtl::OUString,    MAYBEVOID);
         DECL_PROP1_IFACE(CONTROLMODEL,  XPropertySet ,      BOUND);
         if (nId & HAS_DEFAULTVALUE)
         {
@@ -782,7 +782,7 @@ Sequence< ::rtl::OUString > OTableColumnWrapper::getSupportedServiceNames(  ) th
         }
 
         DECL_PROP2(NUMBERFORMAT,        sal_Int32,          BOUND, MAYBEVOID);
-        DECL_PROP0(HELPTEXT,                ::rtl::OUString     );
+        DECL_PROP1(HELPTEXT,            ::rtl::OUString,    MAYBEVOID);
         DECL_PROP1_BOOL(HIDDEN,                             BOUND);
         DECL_PROP1_BOOL(ISAUTOINCREMENT,                    READONLY);
         DECL_PROP1_BOOL(ISCURRENCY,                         READONLY);
