@@ -2,9 +2,9 @@
  *
  *  $RCSfile: KeyColumnDescriptor.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:55:48 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 22:10:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@
     foreign keys.
     @see com::sun::star::sdbcx::KeyColumn
  */
-service KeyColumnDescriptor
+published service KeyColumnDescriptor
 {
     // DocMerge: empty anyway
     service Descriptor;
