@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xiescher.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 13:46:21 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 16:26:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,13 +58,6 @@
  *
  *
  ************************************************************************/
-
-#ifdef PCH
-#include "filt_pch.hxx"
-#endif
-#pragma hdrstop
-
-// ============================================================================
 
 #ifndef SC_XIESCHER_HXX
 #include "xiescher.hxx"
@@ -193,116 +186,112 @@ using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::lang::XComponent;
 using ::com::sun::star::beans::XPropertySet;
 
-
 // Escher stream consumer =====================================================
 
 XclImpStreamConsumer::XclImpStreamConsumer() :
-    aStrm(),
-    aHd(),
-    pNode( NULL ),
-    nBytesLeft( 0 )
+    mpNode( 0 ),
+    mnBytesLeft( 0 )
 {
 }
 
 XclImpStreamConsumer::~XclImpStreamConsumer()
 {
-    while( pNode )
+    while( mpNode )
         RemoveNode();
 }
 
 void XclImpStreamConsumer::UpdateNode( const DffRecordHeader& rHd )
 {
-    while( pNode && ((pNode->nPos + pNode->nSize) <= rHd.nFilePos) )
+    while( mpNode && ((mpNode->mnPos + mpNode->mnSize) <= rHd.nFilePos) )
         RemoveNode();
-    XclImpStreamNode* pTemp = pNode;
-    pNode = new XclImpStreamNode;
-    pNode->nPos = rHd.nFilePos;
-    pNode->nSize = rHd.nRecLen + 8;
-    pNode->pPrev = pTemp;
+    XclImpStreamNode* pTemp = mpNode;
+    mpNode = new XclImpStreamNode;
+    mpNode->mnPos = rHd.nFilePos;
+    mpNode->mnSize = rHd.nRecLen + 8;
+    mpNode->mpPrev = pTemp;
 }
 
 void XclImpStreamConsumer::RemoveNode()
 {
-    XclImpStreamNode* pTemp = pNode;
-    pNode = pNode->pPrev;
+    XclImpStreamNode* pTemp = mpNode;
+    mpNode = mpNode->mpPrev;
     delete pTemp;
 }
 
 const DffRecordHeader* XclImpStreamConsumer::ConsumeRecord( XclImpStream& rSrcStrm )
 {
-    sal_uInt32 nEntry = aStrm.Tell();
-    sal_uInt32 nSrcSize = rSrcStrm.GetRecSize();
+    ULONG nEntry = maStrm.Tell();
+    ULONG nSrcSize = rSrcStrm.GetRecSize();
     if( !nSrcSize )
-        return NULL;
+        return 0;
 
     rSrcStrm.Seek( EXC_REC_SEEK_TO_BEGIN );
     sal_Char* pBuf = new sal_Char[ nSrcSize ];
     rSrcStrm.Read( pBuf, nSrcSize );
-    aStrm.Write( pBuf, nSrcSize );
+    maStrm.Write( pBuf, nSrcSize );
     delete[] pBuf;
 
-    sal_uInt32 nPos = aStrm.Tell();
-    aStrm.Seek( nEntry );
-    if( nBytesLeft )
+    ULONG nPos = maStrm.Tell();
+    maStrm.Seek( nEntry );
+    if( mnBytesLeft )
     {
-        if( nSrcSize < nBytesLeft )
+        if( nSrcSize < mnBytesLeft )
         {
-            aStrm.SeekRel( nSrcSize );
-            nBytesLeft -= nSrcSize;
+            maStrm.SeekRel( nSrcSize );
+            mnBytesLeft -= nSrcSize;
         }
         else
         {
-            aStrm.SeekRel( nBytesLeft );
-            nBytesLeft = 0;
+            maStrm.SeekRel( mnBytesLeft );
+            mnBytesLeft = 0;
         }
     }
-    while( aStrm.Tell() < nPos )
+    while( maStrm.Tell() < nPos )
     {
-        aStrm >> aHd;
-        if(aHd.nRecType == DFF_msofbtSolverContainer )
+        maStrm >> maHd;
+        if( maHd.nRecType == DFF_msofbtSolverContainer )
         {
-            aStrm.Seek( nEntry );
-            return &aHd;
+            maStrm.Seek( nEntry );
+            return &maHd;
         }
-        else if( aHd.IsContainer() )
-            UpdateNode( aHd );
-        else if( (aStrm.Tell() + aHd.nRecLen) <= nPos )
-            aStrm.SeekRel( aHd.nRecLen );
+        else if( maHd.IsContainer() )
+            UpdateNode( maHd );
+        else if( (maStrm.Tell() + maHd.nRecLen) <= nPos )
+            maStrm.SeekRel( maHd.nRecLen );
         else
         {
-            nBytesLeft = aStrm.Tell() + aHd.nRecLen - nPos;
-            aStrm.Seek( nPos );
+            mnBytesLeft = maStrm.Tell() + maHd.nRecLen - nPos;
+            maStrm.Seek( nPos );
         }
     }
-    aStrm.Seek( nPos );
+    maStrm.Seek( nPos );
 
-    return nBytesLeft ? NULL : &aHd;
+    return mnBytesLeft ? 0 : &maHd;
 }
 
-bool XclImpStreamConsumer::AppendData( sal_Char* pBuf, sal_uInt32 nLen )
+bool XclImpStreamConsumer::AppendData( sal_Char* pBuf, ULONG nLen )
 {
-    if ( (aHd.nRecType != 0) && !aHd.IsContainer() && (nBytesLeft == 0) )
+    if ( (maHd.nRecType != 0) && !maHd.IsContainer() && (mnBytesLeft == 0) )
     {
-        while( pNode && ((pNode->nPos + pNode->nSize) <= aHd.nFilePos) )
+        while( mpNode && ((mpNode->mnPos + mpNode->mnSize) <= maHd.nFilePos) )
             RemoveNode();
-        XclImpStreamNode* pTemp = pNode;
+        XclImpStreamNode* pTemp = mpNode;
         while( pTemp )
         {
-            pTemp->nSize += nLen;               // updating container sizes
-            aStrm.Seek( pTemp->nPos + 4 );
-            aStrm << pTemp->nSize - 8;
-            pTemp = pTemp->pPrev;
+            pTemp->mnSize += nLen;               // updating container sizes
+            maStrm.Seek( pTemp->mnPos + 4 );
+            maStrm << pTemp->mnSize - 8;
+            pTemp = pTemp->mpPrev;
         }
-        aHd.nRecLen += nLen;
-        aStrm.Seek( aHd.nFilePos + 4 );        // updating atom size
-        aStrm << aHd.nRecLen;
-        aStrm.Seek( STREAM_SEEK_TO_END );
-        aStrm.Write( pBuf, nLen );
+        maHd.nRecLen += nLen;
+        maStrm.Seek( maHd.nFilePos + 4 );        // updating atom size
+        maStrm << maHd.nRecLen;
+        maStrm.Seek( STREAM_SEEK_TO_END );
+        maStrm.Write( pBuf, nLen );
         return true;
     }
     return false;
 }
-
 
 // Escher objects =============================================================
 
@@ -314,19 +303,19 @@ XclImpEscherObj::XclImpEscherObj( const XclImpRoot& rRoot ) :
     mnStrmEnd( 0 ),
     mnScTab( rRoot.GetCurrScTab() ),
     mnObjId( EXC_OBJ_INVALID_ID ),
+    mbAreaObj( false ),
     mbSkip( false ),
     mbPrintable( true )
 {
 }
 
-XclImpEscherObj::XclImpEscherObj(
-        const XclImpRoot& rRoot,
-        sal_uInt32 nStrmBegin, sal_uInt32 nStrmEnd ) :
+XclImpEscherObj::XclImpEscherObj( const XclImpRoot& rRoot, ULONG nStrmBegin, ULONG nStrmEnd ) :
     XclImpRoot( rRoot ),
     mnStrmBegin( nStrmBegin ),
     mnStrmEnd( nStrmEnd ),
     mnScTab( rRoot.GetCurrScTab() ),
     mnObjId( EXC_OBJ_INVALID_ID ),
+    mbAreaObj( false ),
     mbSkip( false ),
     mbPrintable( true )
 {
@@ -335,11 +324,12 @@ XclImpEscherObj::XclImpEscherObj(
 XclImpEscherObj::XclImpEscherObj( XclImpEscherObj& rSrcObj ) :
     XclImpRoot( rSrcObj.GetRoot() ),
     maAnchorRect( rSrcObj.maAnchorRect ),
-    mpSdrObj( rSrcObj.mpSdrObj ),          // rSrc.mpSdrObj releases the object
+    mxSdrObj( rSrcObj.mxSdrObj ),          // rSrc.mxSdrObj releases the object
     mnStrmBegin( rSrcObj.mnStrmBegin ),
     mnStrmEnd( rSrcObj.mnStrmEnd ),
     mnScTab( rSrcObj.mnScTab ),
     mnObjId( rSrcObj.mnObjId ),
+    mbAreaObj( rSrcObj.mbAreaObj ),
     mbSkip( rSrcObj.mbSkip ),
     mbPrintable( rSrcObj.mbPrintable )
 {
@@ -349,54 +339,69 @@ XclImpEscherObj::~XclImpEscherObj()
 {
 }
 
-bool XclImpEscherObj::IsVisibleArea() const
+bool XclImpEscherObj::IsValidSize( const Rectangle& rRect ) const
 {
-    return !mbSkip && (maAnchorRect.GetWidth() > 1) && (maAnchorRect.GetHeight() > 1);
+    // XclEscherAnchor rounds up the width, width of 3 is the result of an Excel width of 0
+    return mbAreaObj ?
+        ((rRect.GetWidth() > 3) && (rRect.GetHeight() > 1)) :
+        ((rRect.GetWidth() > 3) || (rRect.GetHeight() > 1));
+}
+
+bool XclImpEscherObj::IsValidSize() const
+{
+    return IsValidSize( maAnchorRect );
 }
 
 bool XclImpEscherObj::IsValid() const
 {
-    return !mbSkip && mpSdrObj.get() && !maAnchorRect.IsEmpty();
+    return !mbSkip && mxSdrObj.get() && IsValidSize();
 }
 
 void XclImpEscherObj::SetSdrObj( SdrObject* pSdrObj )
 {
-    mpSdrObj.reset( pSdrObj );
+    mxSdrObj.reset( pSdrObj );
 }
 
-void XclImpEscherObj::InitProgress( ScfProgressBar& rProgress )
+sal_uInt32 XclImpEscherObj::GetProgressSize() const
 {
+    return 1;
 }
 
 void XclImpEscherObj::Apply( ScfProgressBar& rProgress )
 {
     if( IsValid() )
     {
-        if( SdrPage* pPage = GetDoc().GetDrawLayer()->GetPage( static_cast<sal_uInt16>(mnScTab) ) )
-            pPage->InsertObject( mpSdrObj.release() );
+        if( SdrPage* pPage = GetSdrPage( mnScTab ) )
+            pPage->InsertObject( mxSdrObj.release() );
         // Trace if object is not printable.
-        if(!GetPrintable())
-            GetTracer().TraceObjectNotPrintable();
+        if( !GetPrintable() && !ISA( XclImpEscherTbxCtrl ) )
+        {
+            bool bOcxCtrl = false;
+            if( XclImpEscherOle* pOleObj = PTR_CAST( XclImpEscherOle, this ) )
+                bOcxCtrl = pOleObj->IsControl();
+            if( !bOcxCtrl )
+                GetTracer().TraceObjectNotPrintable();
+        }
     }
+    rProgress.Progress();
 }
-
 
 // ----------------------------------------------------------------------------
 
 TYPEINIT1( XclImpEscherDrawing, XclImpEscherObj );
 
-XclImpEscherDrawing::XclImpEscherDrawing( XclImpEscherObj& rSrcObj ) :
+XclImpEscherDrawing::XclImpEscherDrawing( XclImpEscherObj& rSrcObj, bool bAreaObj ) :
     XclImpEscherObj( rSrcObj )
 {
+    SetAreaObj( bAreaObj );
 }
-
 
 // ----------------------------------------------------------------------------
 
 TYPEINIT1( XclImpEscherTxo, XclImpEscherDrawing );
 
 XclImpEscherTxo::XclImpEscherTxo( XclImpEscherObj& rSrcObj ) :
-    XclImpEscherDrawing( rSrcObj ),
+    XclImpEscherDrawing( rSrcObj, true ),
     meHorAlign( xlTxoHAlign_Default ),
     meVerAlign( xlTxoVAlign_Default )
 {
@@ -412,13 +417,13 @@ void XclImpEscherTxo::ApplyTextOnSdrObj( SdrObject& rSdrObj ) const
 {
     if( SdrTextObj* pTextObj = PTR_CAST( SdrTextObj, &rSdrObj ) )
     {
-        if( mpString.get() )
+        if( mxString.get() )
         {
-            if( mpString->IsRich() )
+            if( mxString->IsRich() )
             {
                 // rich text
                 ::std::auto_ptr< EditTextObject > pEditObj(
-                    XclImpStringHelper::CreateTextObject( GetRoot(), *mpString ) );
+                    XclImpStringHelper::CreateTextObject( GetRoot(), *mxString ) );
                 OutlinerParaObject* pOPO = new OutlinerParaObject( *pEditObj );
                 pOPO->SetOutlinerMode( OUTLINERMODE_TEXTOBJECT );
                 pTextObj->NbcSetOutlinerParaObject( pOPO );
@@ -426,7 +431,7 @@ void XclImpEscherTxo::ApplyTextOnSdrObj( SdrObject& rSdrObj ) const
             else
             {
                 // plain text
-                pTextObj->SetText( mpString->GetText() );
+                pTextObj->SetText( mxString->GetText() );
             }
         }
 
@@ -460,7 +465,6 @@ void XclImpEscherTxo::SetSdrObj( SdrObject* pNewSdrObj )
 {
     XclImpEscherDrawing::SetSdrObj( pNewSdrObj );
 }
-
 
 // ----------------------------------------------------------------------------
 
@@ -504,6 +508,7 @@ void XclImpEscherNote::Apply( ScfProgressBar& rProgress )
             }
         }
     }
+    rProgress.Progress();
 }
 
 // ----------------------------------------------------------------------------
@@ -522,9 +527,9 @@ void XclImpCtrlLinkHelper::ReadCellLinkFormula( XclImpStream& rStrm )
     if( rStrm.GetRoot().GetFmlaConverter().GetAbsRefs( aRangeList, nFmlaSize ) )
     {
         // Use first cell of first range
-        ::std::auto_ptr< ScRange > pRange( aRangeList.Remove( static_cast< sal_uInt32 >( 0 ) ) );
+        ::std::auto_ptr< ScRange > pRange( aRangeList.Remove( 0UL ) );
         if( pRange.get() )
-            mpCellLink.reset( new ScAddress( pRange->aStart ) );
+            mxCellLink.reset( new ScAddress( pRange->aStart ) );
     }
 }
 
@@ -536,9 +541,8 @@ void XclImpCtrlLinkHelper::ReadSrcRangeFormula( XclImpStream& rStrm )
     ScRangeList aRangeList;
     if( rStrm.GetRoot().GetFmlaConverter().GetAbsRefs( aRangeList, nFmlaSize ) )
         // Use first range
-        mpSrcRange.reset( aRangeList.Remove( static_cast< sal_uInt32 >( 0 ) ) );
+        mxSrcRange.reset( aRangeList.Remove( 0UL ) );
 }
-
 
 // ----------------------------------------------------------------------------
 
@@ -547,7 +551,6 @@ TYPEINIT1( XclImpEscherTbxCtrl, XclImpEscherTxo );
 XclImpEscherTbxCtrl::XclImpEscherTbxCtrl( XclImpEscherObj& rSrcObj, sal_uInt16 nCtrlType ) :
     XclImpEscherTxo( rSrcObj ),
     XclImpCtrlLinkHelper( xlBindPosition ),
-    mnProgressSeg( SCF_INV_SEGMENT ),
     mnCtrlType( nCtrlType ),
     mnState( EXC_OBJ_CBLS_STATE_UNCHECK ),
     mnSelEntry( 0 ),
@@ -650,6 +653,8 @@ OUString XclImpEscherTbxCtrl::GetServiceName() const
 
 void XclImpEscherTbxCtrl::SetProperties( Reference< XPropertySet >& rxPropSet ) const
 {
+    ::setPropBool( rxPropSet, CREATE_OUSTRING( "Printable" ), GetPrintable() );
+
     namespace AwtScrollOrient = ::com::sun::star::awt::ScrollBarOrientation;
 
     // control name -----------------------------------------------------------
@@ -681,7 +686,7 @@ void XclImpEscherTbxCtrl::SetProperties( Reference< XPropertySet >& rxPropSet ) 
         if( !pString->GetFormats().empty() )
         {
             const XclFormatRun& rFormatRun = pString->GetFormats().front();
-            if( const XclImpFont* pFont = GetFontBuffer().GetFont( rFormatRun.mnFontIx ) )
+            if( const XclImpFont* pFont = GetFontBuffer().GetFont( rFormatRun.mnXclFont ) )
             {
                 const XclFontData& rFontData = pFont->GetFontData();
                 ::setPropString( rxPropSet, CREATE_OUSTRING( "FontName" ), rFontData.maName );
@@ -812,19 +817,17 @@ void XclImpEscherTbxCtrl::SetProperties( Reference< XPropertySet >& rxPropSet ) 
     }
 }
 
-void XclImpEscherTbxCtrl::InitProgress( ScfProgressBar& rProgress )
-{
-    mnProgressSeg = rProgress.AddSegment( 1 );
-}
-
 void XclImpEscherTbxCtrl::Apply( ScfProgressBar& rProgress )
 {
-    if( IsVisibleArea() )
+    // do not use IsValid() - the SdrObject is still missing
+    if( !GetIsSkip() && IsValidSize() )
     {
         if( GetObjectManager().CreateSdrObj( *this ) )
         {
             // form controls: set bound rect explicitely
-            mpSdrObj->NbcSetSnapRect( maAnchorRect );
+            mxSdrObj->NbcSetSnapRect( maAnchorRect );
+            // #i30543# insert into control layer
+            mxSdrObj->NbcSetLayer( SC_LAYER_CONTROLS );
             // insert the SdrObj into the draw page
             XclImpEscherObj::Apply( rProgress );
         }
@@ -834,10 +837,9 @@ void XclImpEscherTbxCtrl::Apply( ScfProgressBar& rProgress )
             XclImpEscherTxo::Apply( rProgress );
         }
     }
-    rProgress.ActivateSegment( mnProgressSeg );
-    rProgress.Progress();
+    else
+        rProgress.Progress();   // invalid objects are included in progress bar
 }
-
 
 // ----------------------------------------------------------------------------
 
@@ -848,11 +850,11 @@ XclImpEscherOle::XclImpEscherOle( XclImpEscherObj& rSrcObj ):
     XclImpCtrlLinkHelper( xlBindContent ),
     mnCtrlStrmPos( 0 ),
     mnBlipId( 0 ),
-    mnProgressSeg( SCF_INV_SEGMENT ),
     mbAsSymbol( false ),
     mbLinked( false ),
     mbControl( false )
 {
+    SetAreaObj( true );
 }
 
 void XclImpEscherOle::ReadPioGrbit( XclImpStream& rStrm )
@@ -975,17 +977,18 @@ void XclImpEscherOle::ReadPictFmla( XclImpStream& rStrm, sal_uInt16 nRecSize )
     }
 }
 
-void XclImpEscherOle::InitProgress( ScfProgressBar& rProgress )
+void XclImpEscherOle::SetProperties( Reference< XPropertySet >& rxPropSet ) const
 {
-    mnProgressSeg = rProgress.AddSegment( 1 );
+    ::setPropBool( rxPropSet, CREATE_OUSTRING( "Printable" ), GetPrintable() );
 }
 
 void XclImpEscherOle::Apply( ScfProgressBar& rProgress )
 {
-    if( IsVisibleArea() && GetObjectManager().CreateSdrObj( *this ) )
+    // do not use IsValid() - the SdrObject is still missing
+    if( !GetIsSkip() && IsValidSize() && GetObjectManager().CreateSdrObj( *this ) )
     {
         SfxObjectShell* pDocShell = GetDocShell();
-        SdrOle2Obj* pOleSdrObj = PTR_CAST( SdrOle2Obj, mpSdrObj.get() );
+        SdrOle2Obj* pOleSdrObj = PTR_CAST( SdrOle2Obj, mxSdrObj.get() );
         if( pOleSdrObj && pDocShell )
         {
             SvInfoObject* pInfoObj = pDocShell->InsertObject( pOleSdrObj->GetObjRef(), EMPTY_STRING );
@@ -994,18 +997,16 @@ void XclImpEscherOle::Apply( ScfProgressBar& rProgress )
                 // #95381# SetPersistName, not SetName
                 pOleSdrObj->SetPersistName( pInfoObj->GetObjName() );
         }
-        else if( mpSdrObj->ISA( SdrUnoObj ) )
+        else if( mxSdrObj->ISA( SdrUnoObj ) )
         {
             // form controls: set bound rect explicitely
-            mpSdrObj->NbcSetSnapRect( maAnchorRect );
+            mxSdrObj->NbcSetSnapRect( maAnchorRect );
+            // #i30543# insert into control layer
+            mxSdrObj->NbcSetLayer( SC_LAYER_CONTROLS );
         }
     }
     XclImpEscherObj::Apply( rProgress );
-
-    rProgress.ActivateSegment( mnProgressSeg );
-    rProgress.Progress();
 }
-
 
 // ----------------------------------------------------------------------------
 
@@ -1014,35 +1015,36 @@ TYPEINIT1( XclImpEscherChart, XclImpEscherObj );
 XclImpEscherChart::XclImpEscherChart( XclImpEscherObj& rSrcObj ) :
     XclImpEscherObj( rSrcObj )
 {
-    mpChart.reset( new XclImpChart( *mpRD ) );
-    mpChart->nBaseTab = static_cast<sal_uInt16>(GetScTab());
+    SetAreaObj( true );
+    mxChart.reset( new XclImpChart( *mpRD ) );
+    mxChart->nBaseTab = static_cast<sal_uInt16>(GetScTab());
 }
 
 void XclImpEscherChart::SetChartData( XclImpChart* pChart )
 {
-    mpChart.reset( pChart );
+    mxChart.reset( pChart );
 }
 
-void XclImpEscherChart::InitProgress( ScfProgressBar& rProgress )
+sal_uInt32 XclImpEscherChart::GetProgressSize() const
 {
-    if( mpChart.get() )
-        mpChart->InitProgress( rProgress );
+    return mxChart.get() ? mxChart->GetProgressSize() : 0;
 }
 
 void XclImpEscherChart::Apply( ScfProgressBar& rProgress )
 {
-    if( !mpChart.get() || !IsVisibleArea() )
+    // do not use IsValid() - the SdrObject is still missing
+    if( !mxChart.get() || GetIsSkip() || !IsValidSize() )
         return;
 
-    const XclImpChart_LinkedData* pLinkData = mpChart->GetSourceData();
+    const XclImpChart_LinkedData* pLinkData = mxChart->GetSourceData();
     if( !pLinkData ) return;
 
-    mpChart->CloseSourceData();
+    mxChart->CloseSourceData();
 
     if(GetTracer().IsEnabled())
     {
         // Trace unsupported chart types.
-        if(mpChart->GetChartType() == ctUnknown)
+        if(mxChart->GetChartType() == ctUnknown)
             GetTracer().TraceChartUnKnownType();
 
         // Trace if chart range is not symmetrical.
@@ -1051,11 +1053,11 @@ void XclImpEscherChart::Apply( ScfProgressBar& rProgress )
 
         // Trace if the axis intervals are automatically generated. In this
         // case we may not get the same result. Ignore charts with no axis.
-        if(mpChart->GetChartType() != ctUnknown &&
-            mpChart->GetChartType() != ctPie &&
-              mpChart->GetChartType() != ctDonut)
+        if(mxChart->GetChartType() != ctUnknown &&
+            mxChart->GetChartType() != ctPie &&
+              mxChart->GetChartType() != ctDonut)
         {
-            if(const XclImpChart_ValueRange* pPrimaryAxis = mpChart->GetPrimaryAxisValueRange())
+            if(const XclImpChart_ValueRange* pPrimaryAxis = mxChart->GetPrimaryAxisValueRange())
             {
                 if(pPrimaryAxis->bAutoMin && pPrimaryAxis->bAutoMax &&
                   pPrimaryAxis->bAutoMinor && pPrimaryAxis->bAutoMajor)
@@ -1100,15 +1102,16 @@ void XclImpEscherChart::Apply( ScfProgressBar& rProgress )
         }
 
         SdrOle2Obj* pSdrObj = new SdrOle2Obj( xIPObj, aName, maAnchorRect );
-        pSdrObj->SetLayer( SC_LAYER_FRONT );
-        GetDoc().GetDrawLayer()->GetPage( mpChart->nBaseTab )->InsertObject( pSdrObj );
+        pSdrObj->NbcSetLayer( SC_LAYER_FRONT );
+        if( SdrPage* pPage = GetSdrPage( mxChart->nBaseTab ) )
+            pPage->InsertObject( pSdrObj );
         pSdrObj->NbcSetLogicRect( maAnchorRect );
 
         ScChartArray aChartObj( GetDocPtr(), pLinkData->GetRangeList(), aName );
 
         bool bSwap = pLinkData && pLinkData->GetDir();
-        bool bColHdr = bSwap ? mpChart->bHasSeriesNames : mpChart->bHasCategoryNames;
-        bool bRowHdr = bSwap ? mpChart->bHasCategoryNames : mpChart->bHasSeriesNames;
+        bool bColHdr = bSwap ? mxChart->bHasSeriesNames : mxChart->bHasCategoryNames;
+        bool bRowHdr = bSwap ? mxChart->bHasCategoryNames : mxChart->bHasSeriesNames;
         aChartObj.SetHeaders( bColHdr, bRowHdr );
 
         SchMemChart* pMemChart = aChartObj.CreateMemChart();
@@ -1122,7 +1125,7 @@ void XclImpEscherChart::Apply( ScfProgressBar& rProgress )
             {
                 Reference< XComponent > xComp = pObjSh->GetModel().get();
                 if( xComp.is() )
-                    mpChart->Apply( xComp, maAnchorRect, rProgress );
+                    mxChart->Apply( xComp, maAnchorRect, rProgress );
             }
         }
 
@@ -1136,12 +1139,11 @@ void XclImpEscherChart::Apply( ScfProgressBar& rProgress )
     }
 }
 
-
 // Escher object data =========================================================
 
 XclImpEscherAnchor::XclImpEscherAnchor( SCTAB nScTab )
 {
-    memset( this, 0x00, sizeof( XclImpEscherAnchor ) );
+    memset( this, 0, sizeof( XclImpEscherAnchor ) );
     mnScTab = nScTab;
 }
 
@@ -1154,7 +1156,6 @@ SvStream& operator>>( SvStream& rStrm, XclImpEscherAnchor& rAnchor )
         >> rAnchor.mnBRow >> rAnchor.mnBY;
 }
 
-
 // ----------------------------------------------------------------------------
 
 XclImpObjData::XclImpObjData( XclImpEscherObj* pEscherObj ) :
@@ -1165,13 +1166,13 @@ XclImpObjData::XclImpObjData( XclImpEscherObj* pEscherObj ) :
 
 void XclImpObjData::SetObj( XclImpEscherObj* pEscherObj )
 {
-    mpEscherObj.reset( pEscherObj );
+    mxEscherObj.reset( pEscherObj );
     maAnchor.mnScTab = pEscherObj ? pEscherObj->GetScTab() : 0;
 }
 
-bool XclImpObjData::ContainsStrmPos( sal_uInt32 nStrmPos ) const
+bool XclImpObjData::ContainsStrmPos( ULONG nStrmPos ) const
 {
-    return mpEscherObj.get() && (mpEscherObj->GetStrmBegin() <= nStrmPos) && (nStrmPos < mpEscherObj->GetStrmEnd());
+    return mxEscherObj.get() && (mxEscherObj->GetStrmBegin() <= nStrmPos) && (nStrmPos < mxEscherObj->GetStrmEnd());
 }
 
 // ----------------------------------------------------------------------------
@@ -1205,52 +1206,57 @@ void XclImpEscherObjList::ReplaceLastObj( XclImpEscherObj* pEscherObj )
 
 XclImpEscherObj* XclImpEscherObjList::GetObj( SCTAB nScTab, sal_uInt16 nObjId ) const
 {
-    if( nObjId != EXC_OBJ_INVALID_ID )
+    if( (nObjId != EXC_OBJ_INVALID_ID) && (nScTab >= 0) )
     {
         // objects are ordered by sheet index
-        sal_uInt32 nCacheSize = maObjCache.size();
-        if( nScTab < nCacheSize )
+        size_t nCacheSize = maObjCache.size();
+        size_t nCacheIdx = static_cast< size_t >( nScTab );
+        if( nCacheIdx < nCacheSize )
         {
-            sal_uInt32 nEnd = (nScTab + 1UL < nCacheSize) ? maObjCache[ nScTab + 1 ].mnListIndex : maObjDataList.Count();
-            for( sal_uInt32 nIndex = maObjCache[ nScTab ].mnListIndex; nIndex < nEnd; ++nIndex )
-                if( XclImpEscherObj* pEscherObj = maObjDataList.GetObject( nIndex )->GetObj() )
+            ULONG nEnd = (nCacheIdx + 1 < nCacheSize) ? maObjCache[ nCacheIdx + 1 ].mnListIdx : maObjDataList.Count();
+            for( ULONG nListIdx = maObjCache[ nCacheIdx ].mnListIdx; nListIdx < nEnd; ++nListIdx )
+                if( XclImpEscherObj* pEscherObj = maObjDataList.GetObject( nListIdx )->GetObj() )
                     if( (pEscherObj->GetScTab() == nScTab) && (pEscherObj->GetObjId() == nObjId) )
                         return pEscherObj;
         }
     }
-    return NULL;
+    return 0;
 }
 
 XclImpEscherObj* XclImpEscherObjList::GetLastObj() const
 {
     if( XclImpObjData* pObjData = maObjDataList.Last() )
         return pObjData->GetObj();
-    return NULL;
+    return 0;
 }
 
-XclImpEscherObj* XclImpEscherObjList::GetObj( sal_uInt32 nStrmPos ) const
+XclImpEscherObj* XclImpEscherObjList::GetObj( ULONG nStrmPos ) const
 {
     XclImpObjData* pObjData = FindObjData( nStrmPos );
-    return pObjData ? pObjData->GetObj() : NULL;
+    return pObjData ? pObjData->GetObj() : 0;
 }
 
-XclEscherAnchor* XclImpEscherObjList::GetAnchor( sal_uInt32 nStrmPos ) const
+XclEscherAnchor* XclImpEscherObjList::GetAnchor( ULONG nStrmPos ) const
 {
     XclImpObjData* pObjData = FindObjData( nStrmPos );
-    return pObjData ? &pObjData->GetAnchor() : NULL;
-}
-
-void XclImpEscherObjList::InitProgress( ScfProgressBar& rProgress )
-{
-    DBG_ASSERT( !rProgress.IsStarted(), "XclImpEscherObjList::InitProgress - progress already started" );
-    for( XclImpObjData* pData = maObjDataList.First(); pData; pData = maObjDataList.Next() )
-        if( XclImpEscherObj* pEscherObj = pData->GetObj() )
-            pEscherObj->InitProgress( rProgress );
+    return pObjData ? &pObjData->GetAnchor() : 0;
 }
 
 void XclImpEscherObjList::Apply( ScfProgressBar& rProgress )
 {
-    for( XclImpObjData* pData = maObjDataList.First(); pData; pData = maObjDataList.Next() )
+    DBG_ASSERT( !rProgress.IsStarted(), "XclImpEscherObjList::InitProgress - progress already started" );
+    XclImpObjData* pData = 0;
+
+    // initialize progress bar
+    sal_uInt32 nSegSize = 0;
+    for( pData = maObjDataList.First(); pData; pData = maObjDataList.Next() )
+        if( const XclImpEscherObj* pEscherObj = pData->GetObj() )
+            nSegSize += pEscherObj->GetProgressSize();
+
+    // insert the objects into the drawing layer
+    sal_Int32 nSeg = rProgress.AddSegment( std::max< sal_uInt32 >( nSegSize, 1 ) );
+    rProgress.ActivateSegment( nSeg );
+    for( pData = maObjDataList.First(); pData; pData = maObjDataList.Next() )
         if( XclImpEscherObj* pEscherObj = pData->GetObj() )
             pEscherObj->Apply( rProgress );
 }
@@ -1260,56 +1266,56 @@ void XclImpEscherObjList::UpdateCache()
     if( const XclImpEscherObj* pEscherObj = GetLastObj() )
     {
         SCTAB nScTab = pEscherObj->GetScTab();
-        sal_uInt32 nStrmPos = pEscherObj->GetStrmBegin();
+        ULONG nStrmPos = pEscherObj->GetStrmBegin();
 
         // #110252# ignore faked objects without corresponding Escher data (i.e. sheet-charts)
-        if( nStrmPos != 0 )
+        if( (nScTab >= 0) && (nStrmPos != 0) )
         {
-            if( nScTab >= maObjCache.size() )
-                maObjCache.resize( nScTab + 1, XclCacheEntry( GetObjCount() - 1, nStrmPos ) );
-            else if( maObjCache[ nScTab ].mnStrmPos > nStrmPos )
-                maObjCache[ nScTab ].mnStrmPos = nStrmPos;
-            DBG_ASSERT( !nScTab || (maObjCache[ nScTab - 1 ].mnStrmPos <= nStrmPos), "XclImpEscherObjList::UpdateCache - cache corrupted" );
+            size_t nCacheIdx = static_cast< size_t >( nScTab );
+            if( nCacheIdx >= maObjCache.size() )
+                maObjCache.resize( nCacheIdx + 1, XclCacheEntry( GetObjCount() - 1, nStrmPos ) );
+            else if( maObjCache[ nCacheIdx ].mnStrmPos > nStrmPos )
+                maObjCache[ nCacheIdx ].mnStrmPos = nStrmPos;
+            DBG_ASSERT( (nCacheIdx == 0) || (maObjCache[ nCacheIdx - 1 ].mnStrmPos <= nStrmPos), "XclImpEscherObjList::UpdateCache - cache corrupted" );
         }
     }
 }
 
-XclImpObjData* XclImpEscherObjList::FindObjData( sal_uInt32 nStrmPos ) const
+XclImpObjData* XclImpEscherObjList::FindObjData( ULONG nStrmPos ) const
 {
-    sal_uInt32 nCacheSize = maObjCache.size();
-    sal_uInt32 nFoundIx;
+    size_t nCacheSize = maObjCache.size();
+    size_t nFoundIdx = 0;
     bool bFound = false;
 
     // find the correct cache entry
-    for( sal_uInt32 nCacheIx = 0; !bFound && (nCacheIx < nCacheSize); ++nCacheIx )
+    for( size_t nCacheIdx = 0; !bFound && (nCacheIdx < nCacheSize); ++nCacheIdx )
     {
-        sal_uInt32 nStrmEnd = (nCacheIx + 1 < nCacheSize) ? maObjCache[ nCacheIx + 1 ].mnStrmPos : ~0UL;
-        bFound = (maObjCache[ nCacheIx ].mnStrmPos <= nStrmPos) && (nStrmPos < nStrmEnd);
+        ULONG nStrmEnd = (nCacheIdx + 1 < nCacheSize) ? maObjCache[ nCacheIdx + 1 ].mnStrmPos : STREAM_SEEK_TO_END;
+        bFound = (maObjCache[ nCacheIdx ].mnStrmPos <= nStrmPos) && (nStrmPos < nStrmEnd);
         if( bFound )
-            nFoundIx = nCacheIx;
+            nFoundIdx = nCacheIdx;
     }
 
     // find the object in the found list range
     if( bFound )
     {
-        sal_uInt32 nListEnd = (nFoundIx + 1 < nCacheSize) ? maObjCache[ nFoundIx + 1 ].mnListIndex : maObjDataList.Count();
-        for( sal_uInt32 nListIx = maObjCache[ nFoundIx ].mnListIndex; nListIx < nListEnd; ++nListIx )
+        ULONG nListEnd = (nFoundIdx + 1 < nCacheSize) ? maObjCache[ nFoundIdx + 1 ].mnListIdx : maObjDataList.Count();
+        for( ULONG nListIdx = maObjCache[ nFoundIdx ].mnListIdx; nListIdx < nListEnd; ++nListIdx )
         {
-            XclImpObjData* pObjData = maObjDataList.GetObject( nListIx );
+            XclImpObjData* pObjData = maObjDataList.GetObject( nListIdx );
             if( pObjData->ContainsStrmPos( nStrmPos ) )
                 return pObjData;
         }
     }
-    return NULL;
+    return 0;
 }
-
 
 // Escher stream conversion ===================================================
 
 XclImpDffManager::XclImpDffManager(
         const XclImpRoot& rRoot, XclImpObjectManager& rObjManager,
-        sal_Int32 nOffsDgg, SvStream* pStData, SdrModel* pSdrModel, sal_Int32 nApplicationScale ) :
-    SvxMSDffManager( rObjManager.GetEscherStream(), nOffsDgg, pStData, pSdrModel, nApplicationScale, COL_DEFAULT, 24, NULL, &rRoot.GetTracer().GetBaseTracer() ),
+        long nOffsDgg, SvStream* pStData, SdrModel* pSdrModel, long nApplicationScale ) :
+    SvxMSDffManager( rObjManager.GetEscherStream(), nOffsDgg, pStData, pSdrModel, nApplicationScale, COL_DEFAULT, 24, 0, &rRoot.GetTracer().GetBaseTracer() ),
     XclImpRoot( rRoot ),
     mrObjManager( rObjManager ),
     mnOleImpFlags( 0 )
@@ -1327,9 +1333,9 @@ XclImpDffManager::XclImpDffManager(
     }
 }
 
-void XclImpDffManager::SetSdrObject( XclImpEscherObj* pEscherObj, sal_uInt32 nId, SvxMSDffImportData& rData )
+void XclImpDffManager::SetSdrObject( XclImpEscherObj* pEscherObj, ULONG nId, SvxMSDffImportData& rData )
 {
-    SdrObject* pSdrObj = NULL;
+    SdrObject* pSdrObj = 0;
     bool bRet = GetShape( nId, pSdrObj, rData );
     if( bRet )
         pEscherObj->SetSdrObj( pSdrObj );
@@ -1352,7 +1358,7 @@ bool XclImpDffManager::CreateSdrOleObj( XclImpEscherOle& rOleObj )
             SvStorageRef xDst( pDocShell->GetStorage() );
 
             if( SdrOle2Obj* pOleSdrObj = CreateSdrOLEFromStorage(
-                    rStorageName, xSrc, xDst, aGraph, rAnchor, NULL, mnOleImpFlags ) )
+                    rStorageName, xSrc, xDst, aGraph, rAnchor, 0, mnOleImpFlags ) )
             {
                 rOleObj.SetSdrObj( pOleSdrObj );
                 return true;
@@ -1366,7 +1372,7 @@ void XclImpDffManager::ProcessClientAnchor2( SvStream& rStrm, DffRecordHeader& r
 {
     rHeader.SeekToContent( rStrm );
     rStrm.SeekRel( 2 );
-    sal_uInt32 nFilePos = rStrm.Tell();
+    ULONG nFilePos = rStrm.Tell();
 
     if( XclEscherAnchor* pAnchor = mrObjManager.GetEscherAnchorAcc( nFilePos ) )
     {
@@ -1390,41 +1396,50 @@ SdrObject* XclImpDffManager::ProcessObj(
         (it has the flag SP_FPATRIARCH set). */
     if( pRetSdrObj && !::get_flag< sal_uInt32 >( rObjData.nSpFlags, SP_FPATRIARCH ) )
     {
-        // maybe if there is no color, we could do this in ApplyAttributes (writer?, calc?)
-        if( GetPropertyBool( DFF_Prop_fFilled ) && !IsProperty( DFF_Prop_fillColor ) )
-            pRetSdrObj->SetMergedItem( XFillColorItem( EMPTY_STRING, Color( COL_WHITE ) ) );
+        // #i30816# objects in groups need manual check for valid size
+        if( rObjData.nCalledByGroup > 0 )
+            if( const XclImpEscherObj* pEscherObj = mrObjManager.GetEscherObj( rObjData.rSpHd.nFilePos ) )
+                if( !pEscherObj->IsValidSize( rObjData.aChildAnchor ) )
+                    DELETEZ( pRetSdrObj );
 
-        // automatic margin is handled by host
-        if( GetPropertyBool( DFF_Prop_AutoTextMargin ) )
+        if( pRetSdrObj )
         {
-            long nMargin = EXC_ESCHER_AUTOMARGIN;
-            ScaleEmu( nMargin );
-            pRetSdrObj->SetMergedItem( SdrTextLeftDistItem( nMargin ) );
-            pRetSdrObj->SetMergedItem( SdrTextRightDistItem( nMargin ) );
-            pRetSdrObj->SetMergedItem( SdrTextUpperDistItem( nMargin ) );
-            pRetSdrObj->SetMergedItem( SdrTextLowerDistItem( nMargin ) );
+            // maybe if there is no color, we could do this in ApplyAttributes (writer?, calc?)
+            if( GetPropertyBool( DFF_Prop_fFilled ) && !IsProperty( DFF_Prop_fillColor ) )
+                pRetSdrObj->SetMergedItem( XFillColorItem( EMPTY_STRING, Color( COL_WHITE ) ) );
+
+            // automatic margin is handled by host
+            if( GetPropertyBool( DFF_Prop_AutoTextMargin ) )
+            {
+                long nMargin = EXC_ESCHER_AUTOMARGIN;
+                ScaleEmu( nMargin );
+                pRetSdrObj->SetMergedItem( SdrTextLeftDistItem( nMargin ) );
+                pRetSdrObj->SetMergedItem( SdrTextRightDistItem( nMargin ) );
+                pRetSdrObj->SetMergedItem( SdrTextUpperDistItem( nMargin ) );
+                pRetSdrObj->SetMergedItem( SdrTextLowerDistItem( nMargin ) );
+            }
+
+            // text data and text alignment properties
+            // #98132# don't ask for a text-ID, Escher export doesn't set one
+            if( const XclImpEscherTxo* pTxoObj = mrObjManager.GetEscherTxo( rObjData.rSpHd.nFilePos ) )
+                pTxoObj->ApplyTextOnSdrObj( *pRetSdrObj );
+
+            // connector rules
+            mrObjManager.UpdateConnectorRules( rObjData, *pRetSdrObj );
         }
-
-        // text data and text alignment properties
-        // #98132# don't ask for a text-ID, Escher export doesn't set one
-        if( const XclImpEscherTxo* pTxoObj = mrObjManager.GetEscherTxo( rObjData.rSpHd.nFilePos ) )
-            pTxoObj->ApplyTextOnSdrObj( *pRetSdrObj );
-
-        // connector rules
-        mrObjManager.UpdateConnectorRules( rObjData, *pRetSdrObj );
     }
 
     return pRetSdrObj;
 }
 
-sal_uInt32 XclImpDffManager::Calc_nBLIPPos( sal_uInt32 nOrgVal, sal_uInt32 nStreamPos ) const
+ULONG XclImpDffManager::Calc_nBLIPPos( ULONG nOrgVal, ULONG nStreamPos ) const
 {
     return nStreamPos + 4;
 }
 
-FASTBOOL XclImpDffManager::GetColorFromPalette( sal_uInt16 nIndex, Color& rColor ) const
+FASTBOOL XclImpDffManager::GetColorFromPalette( USHORT nIndex, Color& rColor ) const
 {
-    ColorData nColor = GetPalette().GetColorData( nIndex );
+    ColorData nColor = GetPalette().GetColorData( static_cast< sal_uInt16 >( nIndex ) );
 
     if( nColor == COL_AUTO )
         return FALSE;
@@ -1433,12 +1448,11 @@ FASTBOOL XclImpDffManager::GetColorFromPalette( sal_uInt16 nIndex, Color& rColor
     return TRUE;
 }
 
-sal_Bool XclImpDffManager::ShapeHasText( sal_uInt32 nShapeId, sal_uInt32 nFilePos ) const
+sal_Bool XclImpDffManager::ShapeHasText( ULONG nShapeId, ULONG nFilePos ) const
 {
     const XclImpEscherTxo* pTxoObj = mrObjManager.GetEscherTxo( nFilePos );
     return pTxoObj && pTxoObj->GetString();
 }
-
 
 // The object manager =========================================================
 
@@ -1462,12 +1476,12 @@ XclImpEscherObj* XclImpObjectManager::GetEscherObjAcc( SCTAB nScTab, sal_uInt16 
     return maEscherObjList.GetObj( nScTab, nObjId );
 }
 
-const XclImpEscherObj* XclImpObjectManager::GetEscherObj( sal_uInt32 nStrmPos ) const
+const XclImpEscherObj* XclImpObjectManager::GetEscherObj( ULONG nStrmPos ) const
 {
     return maEscherObjList.GetObj( nStrmPos );
 }
 
-XclImpEscherObj* XclImpObjectManager::GetEscherObjAcc( sal_uInt32 nStrmPos )
+XclImpEscherObj* XclImpObjectManager::GetEscherObjAcc( ULONG nStrmPos )
 {
     return maEscherObjList.GetObj( nStrmPos );
 }
@@ -1482,26 +1496,25 @@ XclImpEscherObj* XclImpObjectManager::GetLastEscherObjAcc()
     return maEscherObjList.GetLastObj();
 }
 
-const XclEscherAnchor* XclImpObjectManager::GetEscherAnchor( sal_uInt32 nStrmPos ) const
+const XclEscherAnchor* XclImpObjectManager::GetEscherAnchor( ULONG nStrmPos ) const
 {
     return maEscherObjList.GetAnchor( nStrmPos );
 }
 
-XclEscherAnchor* XclImpObjectManager::GetEscherAnchorAcc( sal_uInt32 nStrmPos )
+XclEscherAnchor* XclImpObjectManager::GetEscherAnchorAcc( ULONG nStrmPos )
 {
     return maEscherObjList.GetAnchor( nStrmPos );
 }
-
 
 // *** Text boxes *** ---------------------------------------------------------
 
-const XclImpEscherTxo* XclImpObjectManager::GetEscherTxo( sal_uInt32 nStrmPos ) const
+const XclImpEscherTxo* XclImpObjectManager::GetEscherTxo( ULONG nStrmPos ) const
 {
     const XclImpEscherObj* pEscherObj = GetEscherObj( nStrmPos );
     return PTR_CAST( XclImpEscherTxo, pEscherObj );
 }
 
-XclImpEscherTxo* XclImpObjectManager::GetEscherTxoAcc( sal_uInt32 nStrmPos )
+XclImpEscherTxo* XclImpObjectManager::GetEscherTxoAcc( ULONG nStrmPos )
 {
     return const_cast< XclImpEscherTxo* >( GetEscherTxo( nStrmPos ) );
 }
@@ -1512,36 +1525,35 @@ const XclImpEscherNote* XclImpObjectManager::GetEscherNote( SCTAB nScTab, sal_uI
     return PTR_CAST( XclImpEscherNote, pEscherObj );
 }
 
-
 // *** Chart *** --------------------------------------------------------------
 
 bool XclImpObjectManager::IsCurrObjChart() const
 {
-    return PTR_CAST( XclImpEscherChart, GetLastEscherObj() ) != NULL;
+    return PTR_CAST( XclImpEscherChart, GetLastEscherObj() ) != 0;
 }
 
 XclImpChart* XclImpObjectManager::GetCurrChartData()
 {
     if( XclImpEscherChart* pChartObj = PTR_CAST( XclImpEscherChart, GetLastEscherObj() ) )
         return pChartObj->GetChartData();
-    return NULL;
+    return 0;
 }
 
 XclImpChart* XclImpObjectManager::ReplaceChartData( XclImpStream& rStrm, XclChartType eNewType )
 {
     XclImpEscherChart* pChartObj = PTR_CAST( XclImpEscherChart, GetLastEscherObj() );
-    XclImpChart* pChart = pChartObj ? pChartObj->GetChartData() : NULL;
+    XclImpChart* pChart = pChartObj ? pChartObj->GetChartData() : 0;
 
     DBG_ASSERT( pChart, "XclImpObjectManager::ReplaceChartData - no chart data found" );
     if( !pChart )
-        return NULL;
+        return 0;
 
     // #92909# create line chart if no X values present
     // #94149# of course only for XY charts!
     if( (eNewType == ctScatter) && !pChart->HasXValues() )
         eNewType = ctLine;
 
-    XclImpChart* pNewChart = NULL;
+    XclImpChart* pNewChart = 0;
     switch( eNewType )
     {
         case ctLine:
@@ -1579,7 +1591,6 @@ void XclImpObjectManager::StartNewChartObj()
     AppendEscherObj( new XclImpEscherChart( aTmp ) );
 }
 
-
 // *** OLE / controls *** -----------------------------------------------------
 
 bool XclImpObjectManager::CreateSdrObj( XclImpEscherOle& rOleObj )
@@ -1593,7 +1604,6 @@ bool XclImpObjectManager::CreateSdrObj( XclImpEscherTbxCtrl& rCtrlObj )
 {
     return GetOcxConverter().CreateSdrUnoObj( rCtrlObj );
 }
-
 
 // *** Read Excel records *** -------------------------------------------------
 
@@ -1610,7 +1620,7 @@ void XclImpObjectManager::ReadMsodrawing( XclImpStream& rStrm )
         return;
 
     sal_uInt32 nRecSize = rStrm.GetRecSize();
-    sal_uInt32 nStrmPos = maStreamConsumer.Tell();
+    ULONG nStrmPos = maStreamConsumer.Tell();
     bool bClientTextBox = false;
 
     static sal_Char aBuf[ 0x0200 ];
@@ -1747,14 +1757,13 @@ void XclImpObjectManager::ReadTxo( XclImpStream& rStrm )
     }
 }
 
-
 // *** Misc *** ---------------------------------------------------------------
 
 XclImpDffManager& XclImpObjectManager::GetDffManager()
 {
-    if( !mpDffManager.get() )
-        mpDffManager.reset( new XclImpDffManager( GetRoot(), *this, 0, NULL, GetDoc().GetDrawLayer(), 1440 ) );
-    return *mpDffManager;
+    if( !mxDffManager.get() )
+        mxDffManager.reset( new XclImpDffManager( GetRoot(), *this, 0, 0, GetDoc().GetDrawLayer(), 1440 ) );
+    return *mxDffManager;
 }
 
 void XclImpObjectManager::UpdateConnectorRules( const DffObjData& rObjData, SdrObject& rSdrObj )
@@ -1767,12 +1776,16 @@ void XclImpObjectManager::UpdateConnectorRules( const DffObjData& rObjData, SdrO
         }
         else
         {
-            if ( rObjData.nShapeId == pRule->nShapeA )
+            /*  #i12638# Strictly speaking the test '!pRule->pAObj' should not
+                be necessary. But for connectors to hierarchial organization
+                charts it does prevent overwriting the connector data. This is
+                also true for pBObj below. */
+            if( !pRule->pAObj && (rObjData.nShapeId == pRule->nShapeA) )
             {
                 pRule->pAObj = &rSdrObj;
                 pRule->nSpFlagsA = rObjData.nSpFlags;
             }
-            if ( rObjData.nShapeId == pRule->nShapeB )
+            if( !pRule->pBObj && (rObjData.nShapeId == pRule->nShapeB) )
             {
                 pRule->pBObj = &rSdrObj;
                 pRule->nSpFlagsB = rObjData.nSpFlags;
@@ -1786,7 +1799,7 @@ void XclImpObjectManager::SetSkipObj( SCTAB nScTab, sal_uInt16 nObjId )
     maSkipObjVec.push_back( XclSkipObj( nScTab, nObjId ) );
 }
 
-void XclImpObjectManager::Apply()
+void XclImpObjectManager::Apply( ScfProgressBar& rProgress )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "sc", "dr104026", "XclImpObjectManager::Apply" );
 
@@ -1795,16 +1808,12 @@ void XclImpObjectManager::Apply()
         if( XclImpEscherObj* pEscherObj = maEscherObjList.GetObj( aIt->mnScTab, aIt->mnObjId ) )
             pEscherObj->SetSkip();
 
-    // progress bar
-    ScfProgressBar aProgress( GetDocShell(), STR_PROGRESS_CALCULATING );
-    maEscherObjList.InitProgress( aProgress );
-
     // insert the objects into the drawing layer
-    maEscherObjList.Apply( aProgress );
+    maEscherObjList.Apply( rProgress );
 
     // connector rules
-    if( mpSolverContainer.get() )
-        GetDffManager().SolveSolver( *mpSolverContainer );
+    if( mxSolverContainer.get() )
+        GetDffManager().SolveSolver( *mxSolverContainer );
 }
 
 // private --------------------------------------------------------------------
@@ -1840,12 +1849,14 @@ void XclImpObjectManager::ReadObjFtCmo( XclImpStream& rStrm )
     {
         case EXC_OBJ_CMO_GROUP:
         case EXC_OBJ_CMO_LINE:
+        case EXC_OBJ_CMO_ARC:
+            ReplaceEscherObj( new XclImpEscherDrawing( *pEscherObj, false ) );
+        break;
         case EXC_OBJ_CMO_RECTANGLE:
         case EXC_OBJ_CMO_ELLIPSE:
-        case EXC_OBJ_CMO_ARC:
         case EXC_OBJ_CMO_POLYGON:
         case EXC_OBJ_CMO_DRAWING:
-            ReplaceEscherObj( new XclImpEscherDrawing( *pEscherObj ) );
+            ReplaceEscherObj( new XclImpEscherDrawing( *pEscherObj, true ) );
         break;
         case EXC_OBJ_CMO_TEXT:
             ReplaceEscherObj( new XclImpEscherTxo( *pEscherObj ) );
@@ -1876,7 +1887,7 @@ void XclImpObjectManager::ReadObjFtCmo( XclImpStream& rStrm )
         break;
         default:
             DBG_ERROR1( "XclImpObjectManager::ReadObjFtCmo - unknown object type 0x%04hX", nObjType );
-            ReplaceEscherObj( new XclImpEscherDrawing( *pEscherObj ) );
+            ReplaceEscherObj( new XclImpEscherDrawing( *pEscherObj, true ) );
     }
 }
 
@@ -1915,27 +1926,27 @@ void XclImpObjectManager::ReadObjTbxSubRec( XclImpStream& rStrm, sal_uInt16 nSub
 
 XclImpOcxConverter& XclImpObjectManager::GetOcxConverter()
 {
-    if( !mpOcxConverter.get() )
-        mpOcxConverter.reset( new XclImpOcxConverter( GetRoot() ) );
-    return *mpOcxConverter;
+    if( !mxOcxConverter.get() )
+        mxOcxConverter.reset( new XclImpOcxConverter( GetRoot() ) );
+    return *mxOcxConverter;
 }
 
 SvxMSDffSolverContainer& XclImpObjectManager::GetSolverContainer()
 {
-    if( !mpSolverContainer.get() )
-        mpSolverContainer.reset( new SvxMSDffSolverContainer );
-    return *mpSolverContainer;
+    if( !mxSolverContainer.get() )
+        mxSolverContainer.reset( new SvxMSDffSolverContainer );
+    return *mxSolverContainer;
 }
 
 SvxMSDffConnectorRule* XclImpObjectManager::GetFirstConnectorRule()
 {
-    void* pRule = mpSolverContainer.get() ? mpSolverContainer->aCList.First() : 0;
+    void* pRule = mxSolverContainer.get() ? mxSolverContainer->aCList.First() : 0;
     return static_cast< SvxMSDffConnectorRule* >( pRule );
 }
 
 SvxMSDffConnectorRule* XclImpObjectManager::GetNextConnectorRule()
 {
-    void* pRule = mpSolverContainer.get() ? mpSolverContainer->aCList.Next() : 0;
+    void* pRule = mxSolverContainer.get() ? mxSolverContainer->aCList.Next() : 0;
     return static_cast< SvxMSDffConnectorRule* >( pRule );
 }
 
@@ -1955,10 +1966,10 @@ void XclImpEscherPropSet::Read( XclImpStream& rStrm )
     rStrm >> nPropSetSize;
     rStrm.PopPosition();
 
-    mpMemStrm.reset( new SvMemoryStream );
-    rStrm.CopyToStream( *mpMemStrm, 8 + nPropSetSize );
-    mpMemStrm->Seek( STREAM_SEEK_TO_BEGIN );
-    maPropReader.ReadPropSet( *mpMemStrm, NULL );
+    mxMemStrm.reset( new SvMemoryStream );
+    rStrm.CopyToStream( *mxMemStrm, 8 + nPropSetSize );
+    mxMemStrm->Seek( STREAM_SEEK_TO_BEGIN );
+    maPropReader.ReadPropSet( *mxMemStrm, 0 );
 }
 
 sal_uInt32 XclImpEscherPropSet::GetPropertyValue( sal_uInt16 nPropId, sal_uInt32 nDefault ) const
@@ -1968,8 +1979,8 @@ sal_uInt32 XclImpEscherPropSet::GetPropertyValue( sal_uInt16 nPropId, sal_uInt32
 
 void XclImpEscherPropSet::FillToItemSet( SfxItemSet& rItemSet ) const
 {
-    if( mpMemStrm.get() )
-        maPropReader.ApplyAttributes( *mpMemStrm, rItemSet );
+    if( mxMemStrm.get() )
+        maPropReader.ApplyAttributes( *mxMemStrm, rItemSet );
 }
 
 XclImpStream& operator>>( XclImpStream& rStrm, XclImpEscherPropSet& rPropSet )
@@ -1977,7 +1988,6 @@ XclImpStream& operator>>( XclImpStream& rStrm, XclImpEscherPropSet& rPropSet )
     rPropSet.Read( rStrm );
     return rStrm;
 }
-
 
 // ============================================================================
 
