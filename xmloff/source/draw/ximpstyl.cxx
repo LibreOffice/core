@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpstyl.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 15:00:19 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:27:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,7 +204,8 @@ SdXMLDrawingPagePropertySetContext::SdXMLDrawingPagePropertySetContext(
                  const uno::Reference< xml::sax::XAttributeList > & xAttrList,
                  ::std::vector< XMLPropertyState > &rProps,
                  const UniReference < SvXMLImportPropertyMapper > &rMap ) :
-    SvXMLPropertySetContext( rImport, nPrfx, rLName, xAttrList, rProps, rMap )
+    SvXMLPropertySetContext( rImport, nPrfx, rLName, xAttrList,
+                             XML_TYPE_PROP_DRAWING_PAGE, rProps, rMap )
 {
 }
 
@@ -300,7 +301,7 @@ SvXMLImportContext *SdXMLDrawingPageStyleContext::CreateChildContext(
     SvXMLImportContext *pContext = 0;
 
     if( XML_NAMESPACE_STYLE == nPrefix &&
-        IsXMLToken( rLocalName, XML_PROPERTIES ) )
+        IsXMLToken( rLocalName, XML_DRAWING_PAGE_PROPERTIES ) )
     {
         UniReference < SvXMLImportPropertyMapper > xImpPrMap =
             GetStyles()->GetImportPropertyMapper( GetFamily() );
@@ -494,7 +495,7 @@ SvXMLImportContext *SdXMLPageMasterContext::CreateChildContext(
 {
     SvXMLImportContext* pContext = 0;
 
-    if(nPrefix == XML_NAMESPACE_STYLE && IsXMLToken( rLocalName, XML_PROPERTIES) )
+    if(nPrefix == XML_NAMESPACE_STYLE && IsXMLToken( rLocalName, XML_PAGE_LAYOUT_PROPERTIES) )
     {
         pContext = new SdXMLPageMasterStyleContext(GetSdImport(), nPrefix, rLocalName, xAttrList);
 
@@ -1276,16 +1277,24 @@ void SdXMLStylesContext::ImpSetGraphicStyles() const
 {
     if(GetSdImport().GetLocalDocStyleFamilies().is())
     {
-        const OUString sGraphicStyleName(OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_SD_GRAPHICS_NAME)));
-        uno::Any aAny(GetSdImport().GetLocalDocStyleFamilies()->getByName(sGraphicStyleName));
         uno::Reference< container::XNameAccess > xGraphicPageStyles;
-        aAny >>= xGraphicPageStyles;
-
-        if(xGraphicPageStyles.is())
+        try
         {
-            UniString aPrefix;
-            ImpSetGraphicStyles(xGraphicPageStyles, XML_STYLE_FAMILY_SD_GRAPHICS_ID, aPrefix);
+            const OUString sGraphicStyleName(OUString(RTL_CONSTASCII_USTRINGPARAM("graphics")));
+            GetSdImport().GetLocalDocStyleFamilies()->getByName(sGraphicStyleName) >>= xGraphicPageStyles;
+
+            if(xGraphicPageStyles.is())
+            {
+                UniString aPrefix;
+                ImpSetGraphicStyles(xGraphicPageStyles, XML_STYLE_FAMILY_SD_GRAPHICS_ID, aPrefix);
+            }
         }
+        catch( uno::Exception& e )
+        {
+            (void)e;
+        }
+
+        DBG_ASSERT( xGraphicPageStyles.is(), "xmloff::SdXMLStylesContext::ImpSetGraphicStyles(), no graphic style" );
     }
 }
 
@@ -1319,11 +1328,14 @@ void SdXMLStylesContext::ImpSetGraphicStyles(
         try
         {
             const SvXMLStyleContext* pStyle = GetStyle(a);
-
             if(nFamily == pStyle->GetFamily() && !pStyle->IsDefaultStyle())
             {
-                const UniString aStyleName(pStyle->GetName(), (sal_uInt16)pStyle->GetName().getLength());
+                const UniString aStyleName(pStyle->GetDisplayName(), (sal_uInt16)pStyle->GetDisplayName().getLength());
                 sal_uInt16 nStylePrefLen = aStyleName.SearchBackward( sal_Unicode('-') ) + 1;
+
+                uno::Reference< style::XStyle > xStyle;
+                const OUString aPureStyleName = nPrefLen ?
+                    pStyle->GetDisplayName().copy((sal_Int32)nPrefLen) : pStyle->GetDisplayName();
 
                 if(!nPrefLen || ((nPrefLen == nStylePrefLen) && aStyleName.Equals(rPrefix, 0, nPrefLen)))
                 {
@@ -1387,6 +1399,7 @@ void SdXMLStylesContext::ImpSetGraphicStyles(
                                 {
                                     aAny <<= xStyle;
                                     xInsertContainer->insertByName(aPureStyleName, aAny);
+                                    const_cast< SvXMLImport&>( GetImport() ).AddStyleDisplayName( XML_STYLE_FAMILY_SD_GRAPHICS_ID, pStyle->GetName(), aPureStyleName );
                                 }
                             }
                         }
