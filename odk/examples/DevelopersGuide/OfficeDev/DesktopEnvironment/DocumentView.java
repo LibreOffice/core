@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DocumentView.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:33:56 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 16:37:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -38,41 +38,18 @@
  *
  *************************************************************************/
 
-package OfficeDev.samples.DesktopEnvironment;
-
 // __________ Imports __________
 
-// interfaces
-import com.sun.star.awt.Rectangle;
-import com.sun.star.awt.WindowAttribute;
-import com.sun.star.awt.WindowClass;
-import com.sun.star.awt.WindowDescriptor;
-import com.sun.star.awt.XToolkit;
-import com.sun.star.awt.XWindow;
-import com.sun.star.awt.XWindowPeer;
-import com.sun.star.frame.XDispatchResultListener;
-import com.sun.star.frame.XFrame;
-import com.sun.star.frame.XFrames;
-import com.sun.star.frame.XFramesSupplier;
-import com.sun.star.frame.XNotifyingDispatch;
-
-// helper
 import com.sun.star.uno.UnoRuntime;
 
-// UI classes
 import java.awt.*;
 import java.awt.event.*;
+import java.lang.*;
 import java.net.*;
 import javax.swing.*;
 import javax.swing.border.*;
-
-// events
-import com.sun.star.lang.EventObject;
 import java.awt.AWTEvent;
 import java.awt.event.WindowEvent;
-
-// base classes
-import java.lang.*;
 
 // __________ Implementation __________
 
