@@ -2,9 +2,9 @@
  *
  *  $RCSfile: contdlg.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 19:57:34 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 06:00:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text[ turkish ] = "Uygula";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Asignar";
+                Text[ finnish ] = "Käytä";
             };
             ToolBoxItem
             {
@@ -153,6 +154,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text[ turkish ] = "Çalýþma alaný";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Área de trabajo";
+                Text[ finnish ] = "Työtila";
             };
             ToolBoxItem
             {
@@ -192,6 +194,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text[ turkish ] = "Seçim";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Selección";
+                Text[ finnish ] = "Valitse";
             };
             ToolBoxItem
             {
@@ -226,6 +229,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text[ turkish ] = "Dikdörtgen";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Rectángulo";
+                Text[ finnish ] = "Suorakulmio";
             };
             ToolBoxItem
             {
@@ -260,6 +264,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text[ turkish ] = "Elips";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Elipse";
+                Text[ finnish ] = "Ellipsi";
             };
             ToolBoxItem
             {
@@ -294,6 +299,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text[ turkish ] = "Çokgen";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Polígono";
+                Text[ finnish ] = "Polygoni";
             };
             /*
             ToolBoxItem
@@ -360,7 +366,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text [ italian ] = "Sposta punti" ;
                 Text [ portuguese_brazilian ] = "Editar Pontos" ;
                 Text [ portuguese ] = "Mover pontos" ;
-                Text [ finnish ] = "Muokkaa pisteitä" ;
+                Text [ finnish ] = "Siirrä pisteitä" ;
                 Text [ danish ] = "Flyt punkter" ;
                 Text [ french ] = "Déplacer des points" ;
                 Text [ swedish ] = "Flytta punkter" ;
@@ -398,7 +404,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text [ italian ] = "Inserisci punti" ;
                 Text [ portuguese_brazilian ] = "Inserir Pontos" ;
                 Text [ portuguese ] = "Inserir pontos" ;
-                Text [ finnish ] = "Lisää pisteitä" ;
+                Text [ finnish ] = "Lisää pisteet" ;
                 Text [ danish ] = "Indsæt punkter" ;
                 Text [ french ] = "Insérer des points" ;
                 Text [ swedish ] = "Infoga punkter" ;
@@ -437,7 +443,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text [ italian ] = "Elimina punti" ;
                 Text [ portuguese_brazilian ] = "Apagar Pontos" ;
                 Text [ portuguese ] = "Eliminar pontos" ;
-                Text [ finnish ] = "Poista pisteitä" ;
+                Text [ finnish ] = "Poista pisteet" ;
                 Text [ danish ] = "Slet punkter" ;
                 Text [ french ] = "Supprimer des points" ;
                 Text [ swedish ] = "Radera punkter" ;
@@ -499,6 +505,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text[ turkish ] = "Otomatik kontur";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Contorno automático";
+                Text[ finnish ] = "Automaattinen ääriviiva";
             };
             ToolBoxItem
             {
@@ -521,7 +528,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text [ italian ] = "Annulla  " ;
                 Text [ portuguese_brazilian ] = "Widerrufen" ;
                 Text [ portuguese ] = "Anular  " ;
-                Text [ finnish ] = "Kumoa " ;
+                Text [ finnish ] = "Peruuta" ;
                 Text [ danish ] = "Fortryd " ;
                 Text [ french ] = "Annuler " ;
                 Text [ swedish ] = "Ångra  " ;
@@ -573,6 +580,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text[ turkish ] = "Yinele ";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Restaurar  ";
+                Text[ finnish ] = "Toista ";
             };
             ToolBoxItem
             {
@@ -606,6 +614,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text[ turkish ] = "Renk örneði al";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Pipeta";
+                Text[ finnish ] = "Värivalitsin";
             };
         };
     };
@@ -663,6 +672,8 @@ FloatingWindow RID_SVXDLG_CONTOUR
         QuickHelpText[ turkish ] = "Farbtoleranz";
         CustomUnitText[ catalan ] = "%";
         QuickHelpText[ catalan ] = "Tolerancia del color";
+        CustomUnitText[ finnish ] = "%";
+        QuickHelpText[ finnish ] = "Väritoleranssi!";
     };
     Control CTL_CONTOUR
     {
@@ -690,6 +701,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
     Text[ turkish ] = "Kontur editörü";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Editor de contornos";
+    Text[ finnish ] = "Ääriviivaeditori";
 };
 /******************************************************************************/
 String STR_CONTOURDLG_MODIFY
@@ -718,6 +730,7 @@ String STR_CONTOURDLG_MODIFY
     Text[ turkish ] = "Kontur deðiþtirildi.\nDeðiþiklikler kaydedilsin mi?";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Se ha modificado el contorno de la imagen.\n¿Desea guardar las modificaciones?";
+    Text[ finnish ] = "Ääriviivaa on muokattu.\nTallennetaanko muutokset?";
 };
 String STR_CONTOURDLG_NEWPIPETTE
 {
@@ -745,6 +758,7 @@ String STR_CONTOURDLG_NEWPIPETTE
     Text[ turkish ] = "Yeni bir kontur oluþturmak istiyor musunuz?";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "¿Desea crear un contorno nuevo?";
+    Text[ finnish ] = "Luodaanko uusi ääriviiva?";
 };
 String STR_CONTOURDLG_WORKPLACE
 {
@@ -772,6 +786,7 @@ String STR_CONTOURDLG_WORKPLACE
     Text[ turkish ] = "Yeni bir çalýþma alaný belirlenmesi durumunda\nkontur silinecek.\nDevam etmek istiyor musunuz?";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Al establecer una nueva área de trabajo\nse eliminará el contorno.\n¿Desea realmente continuar?";
+    Text[ finnish ] = "Uuden työtilan määrittäminen\npoistaa ääriviivan.\nHaluatko jatkaa?";
 };
 String STR_CONTOURDLG_LINKED
 {
@@ -784,7 +799,7 @@ String STR_CONTOURDLG_LINKED
     Text [ portuguese_brazilian ] = "This is a linked graphic. Do you want to unlink the graphic in order to edit the graphic?" ;
     Text [ portuguese ] = "Esta imagem está ligada ao documento. Deseja remover a ligação para poder editar a imagem?" ;
     Text [ english_us ] = "This graphic object is linked to the document. Do you want to unlink the graphics in order to edit it?" ;
-    Text [ finnish ] = "This is a linked graphic. Do you want to unlink the graphic in order to edit the graphic?" ;
+    Text [ finnish ] = "Tämä grafiikkaobjekti on linkitetty asiakirjaan. Haluatko poistaa grafiikan linkin ja muokata grafiikkaa?" ;
     Text [ danish ] = "Denne grafik er kædet til dokumentet. Vil du ophæve kæden for at redigere denne grafik?" ;
     Text [ french ] = "Cette image est liée à un document. Désirez-vous supprimer le lien pour pouvoir éditer l'image ?" ;
     Text [ swedish ] = "Det här grafikobjektet är länkat till dokumentet. Vill du upphäva länken för att kunna redigera grafikobjektet?" ;
