@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TokenWriter.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 17:53:07 $
+ *  last change: $Author: vg $ $Date: 2003-05-19 12:55:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,8 +205,9 @@ ODatabaseImportExport::ODatabaseImportExport(const ODataAccessDescriptor& _aData
     if ( _aDataDescriptor.has( daBookmarkSelection ) )
     {
         _aDataDescriptor[ daBookmarkSelection ] >>= bBookmarkSelection;
+        DBG_ASSERT( !bBookmarkSelection, "ODatabaseImportExport::ODatabaseImportExport: bookmarked selection not yet supported!" );
     }
-    DBG_ASSERT( !bBookmarkSelection, "ODatabaseImportExport::ODatabaseImportExport: bookmarked selection not yet supported!" );
+
 
     if(_aDataDescriptor.has(daCursor))
         _aDataDescriptor[daCursor]  >>= m_xResultSet;
