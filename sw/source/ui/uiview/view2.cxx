@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view2.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: os $ $Date: 2002-10-07 14:22:22 $
+ *  last change: $Author: gt $ $Date: 2002-10-16 09:41:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -288,6 +288,7 @@
 #ifndef _FMTCLDS_HXX //autogen
 #include <fmtclds.hxx>
 #endif
+#include <helpid.h>
 
 //Damit die Seitenanzeige in der Statusleiste nicht unnoetig erfolgt.
 static String sLstPg;
@@ -1364,7 +1365,7 @@ long SwView::InsertDoc( USHORT nSlotId, const String& rFileName,
     }
     else
     {
-        pMed = SFX_APP()->InsertDocumentDialog(0, pDocSh->GetFactory());
+        pMed = SFX_APP()->InsertDocumentDialog(0, pDocSh->GetFactory(), HID_INSERT_FILE );
     }
     if( !pMed )
         return -1;
