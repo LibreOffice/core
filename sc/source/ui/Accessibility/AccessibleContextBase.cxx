@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleContextBase.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-14 15:37:25 $
+ *  last change: $Author: sab $ $Date: 2002-03-21 06:44:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,20 +101,33 @@ using namespace ::drafts::com::sun::star::accessibility;
 
 //=====  internal  ============================================================
 
+DBG_NAME(ScAccessibleContextBase)
+
 ScAccessibleContextBase::ScAccessibleContextBase(
                                                  const uno::Reference<XAccessible>& rxParent,
                                                  const sal_Int16 aRole)
                                                  :
+    ScAccessibleContextBaseWeakImpl(m_aMutex),
     maRole(aRole),
     mxParent(rxParent),
     mpEventListeners(NULL),
     mpFocusListeners(NULL)
 {
+    DBG_CTOR(ScAccessibleContextBase, NULL);
 }
 
 
 ScAccessibleContextBase::~ScAccessibleContextBase(void)
 {
+    DBG_DTOR(ScAccessibleContextBase, NULL);
+
+    if (!IsDefunc() && !rBHelper.bInDispose)
+    {
+        // increment refcount to prevent double call off dtor
+        osl_incrementInterlockedCount( &m_refCount );
+        // call dispose to inform object wich have a weak reference to this object
+        dispose();
+    }
 }
 
 void ScAccessibleContextBase::Init()
@@ -132,7 +145,7 @@ void ScAccessibleContextBase::Init()
     msDescription = createAccessibleDescription();
 }
 
-void ScAccessibleContextBase::SetDefunc()
+void SAL_CALL ScAccessibleContextBase::disposing()
 {
     CommitDefunc();
 
@@ -258,9 +271,12 @@ void SAL_CALL ScAccessibleContextBase::addFocusListener(
     if (xListener.is())
     {
         ScUnoGuard aGuard;
-        if (!mpFocusListeners)
-            mpFocusListeners = new cppu::OInterfaceContainerHelper(maListenerMutex);
-        mpFocusListeners->addInterface(xListener);
+        if (!IsDefunc())
+        {
+            if (!mpFocusListeners)
+                mpFocusListeners = new cppu::OInterfaceContainerHelper(m_aMutex);
+            mpFocusListeners->addInterface(xListener);
+        }
     }
 }
 
@@ -268,9 +284,12 @@ void SAL_CALL ScAccessibleContextBase::removeFocusListener(
     const uno::Reference< awt::XFocusListener >& xListener )
         throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
-    if (xListener.is() && mpFocusListeners)
-        mpFocusListeners->removeInterface(xListener);
+    if (xListener.is())
+    {
+        ScUnoGuard aGuard;
+        if (!IsDefunc() && mpFocusListeners)
+            mpFocusListeners->removeInterface(xListener);
+    }
 }
 
 void SAL_CALL ScAccessibleContextBase::grabFocus(  )
@@ -329,7 +348,7 @@ sal_Int32 SAL_CALL
         if (xParentContext.is())
         {
             sal_Int32 nChildCount = xParentContext->getAccessibleChildCount();
-            for (sal_Int32 i=0; i<nChildCount; i++)
+            for (sal_Int32 i=0; i<nChildCount; ++i)
             {
                 uno::Reference<XAccessible> xChild (xParentContext->getAccessibleChild (i));
                 if (xChild.is())
@@ -440,9 +459,12 @@ void SAL_CALL
     if (xListener.is())
     {
         ScUnoGuard aGuard;
-        if (!mpEventListeners)
-            mpEventListeners = new cppu::OInterfaceContainerHelper(maListenerMutex);
-        mpEventListeners->addInterface(xListener);
+        if (!IsDefunc())
+        {
+            if (!mpEventListeners)
+                mpEventListeners = new cppu::OInterfaceContainerHelper(m_aMutex);
+            mpEventListeners->addInterface(xListener);
+        }
     }
 }
 
@@ -451,9 +473,12 @@ void SAL_CALL
         const uno::Reference<XAccessibleEventListener>& xListener)
     throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
-    if (xListener.is() && mpEventListeners)
-        mpEventListeners->removeInterface(xListener);
+    if (xListener.is())
+    {
+        ScUnoGuard aGuard;
+        if (!IsDefunc() && mpEventListeners)
+            mpEventListeners->removeInterface(xListener);
+    }
 }
 
     //=====  XAccessibleEventListener  ========================================
@@ -463,7 +488,7 @@ void SAL_CALL ScAccessibleContextBase::disposing(
         throw (uno::RuntimeException)
 {
     if (rSource.Source == mxParent)
-        SetDefunc();
+        dispose();
 }
 
 void SAL_CALL ScAccessibleContextBase::notifyEvent(
@@ -489,8 +514,10 @@ sal_Bool SAL_CALL
     //  matches the given name.
     uno::Sequence< ::rtl::OUString> aSupportedServices (
         getSupportedServiceNames ());
-    for (int i=0; i<aSupportedServices.getLength(); i++)
-        if (sServiceName == aSupportedServices[i])
+    sal_Int32 nLength(aSupportedServices.getLength());
+    const OUString* pServiceNames = aSupportedServices.getConstArray();
+    for (int i=0; i<nLength; ++i, ++pServiceNames)
+        if (sServiceName == *pServiceNames)
             return sal_True;
     return sal_False;
 }
@@ -512,31 +539,6 @@ uno::Sequence< ::rtl::OUString> SAL_CALL
 
 //=====  XTypeProvider  =======================================================
 
-uno::Sequence< ::com::sun::star::uno::Type>
-    ScAccessibleContextBase::getTypes(void)
-    throw (uno::RuntimeException)
-{
-    const ::com::sun::star::uno::Type aTypeList[] = {
-        ::getCppuType((const uno::Reference<
-            XAccessible>*)0),
-        ::getCppuType((const uno::Reference<
-            XAccessibleComponent>*)0),
-        ::getCppuType((const uno::Reference<
-            XAccessibleContext>*)0),
-        ::getCppuType((const uno::Reference<
-            XAccessibleEventBroadcaster>*)0),
-        ::getCppuType((const uno::Reference<
-            XAccessibleEventListener>*)0),
-        ::getCppuType((const uno::Reference<
-            lang::XServiceInfo>*)0),
-        ::getCppuType((const uno::Reference<
-            lang::XTypeProvider>*)0)
-        };
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type>
-        aTypeSequence (aTypeList, 6);
-    return aTypeSequence;
-}
-
 uno::Sequence<sal_Int8> SAL_CALL
     ScAccessibleContextBase::getImplementationId(void)
     throw (uno::RuntimeException)
@@ -546,7 +548,7 @@ uno::Sequence<sal_Int8> SAL_CALL
     if (aId.getLength() == 0)
     {
         aId.realloc (16);
-        rtl_createUuid ((sal_uInt8 *)aId.getArray(), 0, sal_True);
+        rtl_createUuid (reinterpret_cast<sal_uInt8 *>(aId.getArray()), 0, sal_True);
     }
     return aId;
 }
@@ -581,19 +583,23 @@ void ScAccessibleContextBase::CommitChange(const AccessibleEventObject& rEvent)
             const uno::Reference< uno::XInterface >* pInterfaces = aListeners.getConstArray();
             if (pInterfaces)
             {
-                for (sal_uInt32 i = 0; i < nLength; ++i, ++pInterfaces)
+                sal_uInt32 i(0);
+                while (i < nLength)
                 {
-                    uno::Reference<XAccessibleEventListener> xListener = static_cast< XAccessibleEventListener* >(pInterfaces->get());
-                    if (xListener.is())
+                    try
                     {
-                        try
+                        while(i < nLength)
                         {
-                            xListener->notifyEvent(rEvent);
+                            static_cast< XAccessibleEventListener* >(pInterfaces->get())->notifyEvent(rEvent);
+                            ++pInterfaces;
+                            ++i;
                         }
-                        catch (uno::RuntimeException)
-                        {
-                            DBG_ERROR("a object is gone without to remove from Broadcaster");
-                        }
+                    }
+                    catch(uno::RuntimeException&)
+                    {
+                        DBG_ERROR("a object is gone without to remove from Broadcaster");
+                        ++pInterfaces;
+                        ++i;
                     }
                 }
             }
@@ -623,11 +629,24 @@ void ScAccessibleContextBase::CommitFocusGained(const awt::FocusEvent& rFocusEve
             const uno::Reference< uno::XInterface >* pInterfaces = aListeners.getConstArray();
             if (pInterfaces)
             {
-                for (sal_uInt32 i = 0; i < nLength; i++)
+                sal_uInt32 i(0);
+                while (i < nLength)
                 {
-                    uno::Reference<awt::XFocusListener> xListener(pInterfaces[i], uno::UNO_QUERY);
-                    if (xListener.is())
-                        xListener->focusGained(rFocusEvent);
+                    try
+                    {
+                        while(i < nLength)
+                        {
+                            static_cast< awt::XFocusListener* >(pInterfaces->get())->focusGained(rFocusEvent);
+                            ++pInterfaces;
+                            ++i;
+                        }
+                    }
+                    catch(uno::RuntimeException&)
+                    {
+                        DBG_ERROR("a object is gone without to remove from Broadcaster");
+                        ++pInterfaces;
+                        ++i;
+                    }
                 }
             }
         }
@@ -646,11 +665,24 @@ void ScAccessibleContextBase::CommitFocusLost(const awt::FocusEvent& rFocusEvent
             const uno::Reference< uno::XInterface >* pInterfaces = aListeners.getConstArray();
             if (pInterfaces)
             {
-                for (sal_uInt32 i = 0; i < nLength; i++)
+                sal_uInt32 i(0);
+                while (i < nLength)
                 {
-                    uno::Reference<awt::XFocusListener> xListener(pInterfaces[i], uno::UNO_QUERY);
-                    if (xListener.is())
-                        xListener->focusLost(rFocusEvent);
+                    try
+                    {
+                        while(i < nLength)
+                        {
+                            static_cast< awt::XFocusListener* >(pInterfaces->get())->focusLost(rFocusEvent);
+                            ++pInterfaces;
+                            ++i;
+                        }
+                    }
+                    catch(uno::RuntimeException&)
+                    {
+                        DBG_ERROR("a object is gone without to remove from Broadcaster");
+                        ++pInterfaces;
+                        ++i;
+                    }
                 }
             }
         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleContextBase.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-12 09:18:32 $
+ *  last change: $Author: sab $ $Date: 2002-03-21 06:43:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,8 +108,9 @@
 #ifndef _SFXLSTNER_HXX //autogen
 #include <svtools/lstner.hxx>
 #endif
-#include <cppuhelper/implbase6.hxx>
+#include <cppuhelper/compbase6.hxx>
 #include <unotools/servicehelper.hxx>
+#include <comphelper/broadcasthelper.hxx>
 
 class Rectangle;
 
@@ -117,27 +118,30 @@ class Rectangle;
         This base class provides an implementation of the
         <code>AccessibleContext</code> service.
 */
-class ScAccessibleContextBase
-    :   public cppu::WeakImplHelper6<
+
+typedef cppu::WeakAggComponentImplHelper6<
                 ::drafts::com::sun::star::accessibility::XAccessible,
                 ::drafts::com::sun::star::accessibility::XAccessibleComponent,
                 ::drafts::com::sun::star::accessibility::XAccessibleContext,
                 ::drafts::com::sun::star::accessibility::XAccessibleEventBroadcaster,
                 ::drafts::com::sun::star::accessibility::XAccessibleEventListener,
                 ::com::sun::star::lang::XServiceInfo
-                >,
+                > ScAccessibleContextBaseWeakImpl;
+
+class ScAccessibleContextBase
+    :   public comphelper::OBaseMutex,
+        public ScAccessibleContextBaseWeakImpl,
         public SfxListener
 {
 public:
     //=====  internal  ========================================================
-    ScAccessibleContextBase(const sal_Int16 aRole);
     ScAccessibleContextBase(
         const ::com::sun::star::uno::Reference<
         ::drafts::com::sun::star::accessibility::XAccessible>& rxParent,
         const sal_Int16 aRole);
 
     virtual void Init();
-    virtual void SetDefunc();
+    virtual void SAL_CALL disposing();
 protected:
     virtual ~ScAccessibleContextBase(void);
 public:
@@ -200,12 +204,12 @@ public:
     ///=====  XAccessibleContext  ==============================================
 
     /// Return the number of currently visible children.
-    virtual long SAL_CALL
+    virtual sal_Int32 SAL_CALL
         getAccessibleChildCount(void) throw (::com::sun::star::uno::RuntimeException);
 
     /// Return the specified child or NULL if index is invalid.
     virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible> SAL_CALL
-        getAccessibleChild(long nIndex)
+        getAccessibleChild(sal_Int32 nIndex)
         throw (::com::sun::star::uno::RuntimeException,
                 ::com::sun::star::lang::IndexOutOfBoundsException);
 
@@ -306,12 +310,6 @@ public:
 
     ///=====  XTypeProvider  ===================================================
 
-    /** Returns a sequence of all supported interfaces.
-    */
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> SAL_CALL
-        getTypes(void)
-        throw (::com::sun::star::uno::RuntimeException);
-
     /** Returns a implementation id.
     */
     virtual ::com::sun::star::uno::Sequence<sal_Int8> SAL_CALL
@@ -350,6 +348,8 @@ protected:
     /// Calls all FocusListener to tell they that the focus is lost.
     void CommitFocusLost(const com::sun::star::awt::FocusEvent& rFocusEvent);
 
+    sal_Bool IsDefunc() { return rBHelper.bDisposed; }
+
 private:
     /// Reference to the parent object.
     ::com::sun::star::uno::Reference<
@@ -365,9 +365,6 @@ private:
         display mode.
     */
     ::rtl::OUString msName;
-
-    /// Mutex guarding the Listener container.
-    ::osl::Mutex maListenerMutex;
 
     /// List of property change listeners.
     cppu::OInterfaceContainerHelper* mpEventListeners;
