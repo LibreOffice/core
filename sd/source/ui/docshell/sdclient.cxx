@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdclient.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:31:06 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 16:17:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,9 +188,11 @@ void Client::ViewChanged()
         ::sd::View* pView = pViewShell->GetView();
         if (pView)
         {
+            // TODO/LEAN: maybe we can do this without requesting the VisualArea?
+            // working with the visual area might need running state
+            svt::EmbeddedObjectRef::TryRunningState( GetObject() );
             MapMode             aMap100( MAP_100TH_MM );
             MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( GetObject()->getMapUnit( GetAspect() ) );
-            //TODO/LATER: is VisAreaSize enough?
             Rectangle           aVisArea;
             awt::Size aSz = GetObject()->getVisualAreaSize( GetAspect() );
             aVisArea.SetSize( Size( aSz.Width, aSz.Height ) );
