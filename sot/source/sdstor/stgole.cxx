@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stgole.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-20 12:58:35 $
+ *  last change: $Author: mba $ $Date: 2000-12-01 11:39:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,14 +70,13 @@
 ///////////////////////// class StgInternalStream ////////////////////////
 
 StgInternalStream::StgInternalStream
-    ( Storage& rStg, const String& rName, BOOL bWr )
+    ( BaseStorage& rStg, const String& rName, BOOL bWr )
 {
     bIsWritable = TRUE;
     USHORT nMode = bWr
                  ? STREAM_WRITE | STREAM_SHARE_DENYALL
                  : STREAM_READ | STREAM_SHARE_DENYWRITE | STREAM_NOCREATE;
-    pStrm = PTR_CAST( StorageStream, rStg.OpenStream( rName, nMode ) );
-    DBG_ASSERT( pStrm, "No StorageStream!" );
+    pStrm = rStg.OpenStream( rName, nMode );
 
     // set the error code right here in the stream
     SetError( rStg.GetError() );
@@ -135,7 +134,7 @@ void StgInternalStream::Commit()
 
 ///////////////////////// class StgCompObjStream /////////////////////////
 
-StgCompObjStream::StgCompObjStream( Storage& rStg, BOOL bWr )
+StgCompObjStream::StgCompObjStream( BaseStorage& rStg, BOOL bWr )
             : StgInternalStream( rStg, String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "\1CompObj" ) ), bWr )
 {
     memset( &aClsId, 0, sizeof( ClsId ) );
@@ -226,7 +225,7 @@ BOOL StgCompObjStream::Store()
 
 /////////////////////////// class StgOleStream ///////////////////////////
 
-StgOleStream::StgOleStream( Storage& rStg, BOOL bWr )
+StgOleStream::StgOleStream( BaseStorage& rStg, BOOL bWr )
             : StgInternalStream( rStg, String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "\1Ole" ) ), bWr )
 {
     nFlags = 0;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stgole.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:56:52 $
+ *  last change: $Author: mba $ $Date: 2000-12-01 11:39:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,13 +69,13 @@
 
 class StgInternalStream : public SvStream
 {
-    StorageStream* pStrm;
+    BaseStorageStream* pStrm;
     virtual ULONG GetData( void* pData, ULONG nSize );
     virtual ULONG PutData( const void* pData, ULONG nSize );
     virtual ULONG SeekPos( ULONG nPos );
     virtual void  FlushData();
 public:
-    StgInternalStream( Storage&, const String&, BOOL );
+    StgInternalStream( BaseStorage&, const String&, BOOL );
    ~StgInternalStream();
     void Commit();
 };
@@ -88,7 +88,7 @@ class StgCompObjStream : public StgInternalStream
     String aUserName;
     ULONG  nCbFormat;
 public:
-    StgCompObjStream( Storage&, BOOL );
+    StgCompObjStream( BaseStorage&, BOOL );
     ClsId&  GetClsId()    { return aClsId;    }
     String& GetUserName() { return aUserName; }
     ULONG&  GetCbFormat() { return nCbFormat; }
@@ -102,7 +102,7 @@ class StgOleStream : public StgInternalStream
 {
     ULONG nFlags;
 public:
-    StgOleStream( Storage&, BOOL );
+    StgOleStream( BaseStorage&, BOOL );
     ULONG& GetFlags() { return nFlags; }
     BOOL Load();
     BOOL Store();
