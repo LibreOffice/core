@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChapterFormat.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:56:42 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 23:58:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@
 /** These constants define the display format of the chapter number in a
         chapter text field.
  */
-constants ChapterFormat
+published constants ChapterFormat
 {
     //-------------------------------------------------------------------------
 
