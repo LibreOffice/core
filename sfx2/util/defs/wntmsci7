@@ -8313,3 +8313,5 @@ _TI3?AVWrappedTargetRuntimeException@lang@star@sun@com@@
 ??1ExecuteDropEvent@@QAE@XZ
 ?queryInterface@cppu@@YA?AVAny@uno@star@sun@com@@ABVType@3456@PAVXTypeProvider@lang@456@PAVXComponent@9456@PAVXController@frame@456@PAVXStatusIndicatorSupplier@task@456@PAVXDispatchInformationProvider@frame@456drafts@@PAVXContextMenuInterception@ui@456@PAVXDispatchProvider@frame@456@@Z
 ??0SvPersistRef@@QAE@PAVSvPersist@@@Z
+??1?$Reference@VXStatusIndicatorFactory@task@star@sun@com@@@uno@star@sun@com@@QAE@XZ
+?s_pType_com_sun_star_task_XStatusIndicatorFactory@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXStatusIndicatorFactory@task@star@sun@com@@@3456@@Z@4PAU_typelib_TypeDescriptionReference@@A
