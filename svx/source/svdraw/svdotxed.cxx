@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotxed.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: thb $ $Date: 2002-02-28 10:05:49 $
+ *  last change: $Author: thb $ $Date: 2002-06-12 14:20:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,11 +168,6 @@ FASTBOOL SdrTextObj::BegTextEdit(SdrOutliner& rOutl)
     rOutl.UpdateFields();
     rOutl.ClearModifyFlag();
 
-    // send HINT_BEGEDIT
-    SdrHint aHint(*this);
-    aHint.SetKind(HINT_BEGEDIT);
-    pModel->Broadcast(aHint);
-
     return TRUE;
 }
 
@@ -299,11 +294,6 @@ void SdrTextObj::EndTextEdit(SdrOutliner& rOutl)
     UINT32 nStat = rOutl.GetControlWord();
     nStat &= ~EE_CNTRL_AUTOPAGESIZE;
     rOutl.SetControlWord(nStat);
-
-    // send HINT_ENDEDIT
-    SdrHint aHint(*this);
-    aHint.SetKind(HINT_ENDEDIT);
-    pModel->Broadcast(aHint);
 }
 
 SdrObject* SdrTextObj::CheckTextEditHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const
