@@ -1,0 +1,353 @@
+/*************************************************************************
+ *
+ *  $RCSfile: commonlingui.src,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: hr $ $Date: 2003-04-04 18:00:44 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+ // include ---------------------------------------------------------------
+#include "dialogs.hrc"
+#include "helpid.hrc"
+#include "spldlg.hrc"
+
+Window RID_SVX_WND_COMMON_LINGU
+{
+    DialogControl = TRUE;   // we want to tab out of this
+    Hide = TRUE;
+
+    FixedText FT_WORD
+    {
+        Pos = MAP_APPFONT( 6,  9 );
+        Size = MAP_APPFONT( 42, 10 );
+        Text = "~Original" ;
+        Text[ italian ] = "Originale";
+        Text[ portuguese_brazilian ] = "Palavra";
+        Text[ portuguese ] = "~Original";
+        Text[ danish ] = "Oprindelig";
+        Text[ french ] = "Original";
+        Text[ swedish ] = "~Original";
+        Text[ dutch ] = "~Origineel";
+        Text[ spanish ] = "Original";
+        Text[ english_us ] = "Origi~nal";
+        Text[ chinese_simplified ] = "ÂéüÊù•ÁöÑ(~N)";
+        Text[ russian ] = "ŒË„ËÌ‡Î";
+        Text[ polish ] = "Orygina≥";
+        Text[ japanese ] = "Ë°®Ë®ò(~N)";
+        Text[ chinese_traditional ] = "Âéü‰æÜÁöÑ(~N)";
+        Text[ arabic ] = "«·√’·";
+        Text[ greek ] = "¡Ò˜ÈÍ¸";
+        Text[ korean ] = "ÏõêÎûòÎåÄÎ°ú(~N)";
+        Text[ turkish ] = "Sˆzc¸k";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Origi~nal";
+        Text[ finnish ] = "Alkuper‰inen";
+        Text[ thai ] = "‡∏ï‡πâ‡∏ô~‡∏â‡∏ö‡∏±‡∏ö";
+    };
+    Control FT_AKTWORD
+    {
+        HelpId=HID_SPELLDLG_SETWORD;
+        Pos = MAP_APPFONT( 51, 9 );
+        Size = MAP_APPFONT( 149, 10 );
+        Border =FALSE;
+        TabStop = TRUE;
+    };
+
+    FixedText FT_NEWWORD
+    {
+        Pos = MAP_APPFONT(  6, 25 );
+        Size = MAP_APPFONT( 42, 10 );
+        Text = "~Wort" ;
+        Text [ ENGLISH ] = "~Word" ;
+        Text [ norwegian ] = "Word" ;
+        Text [ italian ] = "Parola" ;
+        Text [ portuguese_brazilian ] = "~Sugerir." ;
+        Text [ portuguese ] = "~Palavra" ;
+        Text [ finnish ] = "Sa~na" ;
+        Text [ danish ] = "Ord" ;
+        Text [ french ] = "Mot" ;
+        Text [ swedish ] = "Or~d" ;
+        Text [ dutch ] = "~Woord" ;
+        Text [ spanish ] = "~Palabra" ;
+        Text [ english_us ] = "~Word" ;
+        Text[ chinese_simplified ] = "Â≠ó(~W)";
+        Text[ russian ] = "—ÎÓ‚Ó";
+        Text[ polish ] = "S≥owo";
+        Text[ japanese ] = "ÂçòË™û(~W)";
+        Text[ chinese_traditional ] = "Â≠ó(~W)";
+        Text[ arabic ] = "«·ﬂ·„…";
+        Text[ greek ] = "À›ÓÁ";
+        Text[ korean ] = "Îã®Ïñ¥(~W)";
+        Text[ turkish ] = "Sˆzc¸k";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Paraula";
+        Text[ thai ] = "~‡∏Ñ‡∏≥";
+    };
+
+    Edit ED_NEWWORD
+    {
+        Pos = MAP_APPFONT( 51, 24 );
+        Size = MAP_APPFONT( 122, 12 );
+        Border = TRUE;
+    };
+
+    FixedText FT_SUGGESTION
+    {
+        Pos = MAP_APPFONT( 6, 48 );
+        Size = MAP_APPFONT( 42, 10 );
+        Text = "~Vorschl‰ge" ;
+        Text [ ENGLISH ] = "~Suggestions" ;
+        Text [ english_us ] = "~Suggestions" ;
+        Text [ portuguese_brazilian ] = "~Vorschl?ge" ;
+        Text [ swedish ] = "~Fˆrslag" ;
+        Text [ danish ] = "Forslag" ;
+        Text [ italian ] = "~Proposte" ;
+        Text [ spanish ] = "S~ugerencias" ;
+        Text [ french ] = "Suggestions" ;
+        Text [ dutch ] = "Voo~rstellen" ;
+        Text [ portuguese ] = "~Sugestıes" ;
+        Text[ chinese_simplified ] = "Âª∫ËÆÆ(~S)";
+        Text[ russian ] = "¬‡Ë‡ÌÚ˚";
+        Text[ polish ] = "Propozycje";
+        Text[ japanese ] = "ÂÄôË£ú(~S)";
+        Text[ chinese_traditional ] = "Âª∫Ë≠∞(~S)";
+        Text[ arabic ] = "«ﬁ —«Õ« ";
+        Text[ greek ] = "~–ÒÔÙ‹ÛÂÈÚ";
+        Text[ korean ] = "Ï†úÏïà(~S)";
+        Text[ turkish ] = "÷neriler";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Suggeriments";
+        Text[ finnish ] = "Eh~dotukset";
+        Text[ thai ] = "~‡∏Ñ‡∏≥‡πÅ‡∏ô‡∏∞‡∏ô‡∏≥";
+    };
+
+    PushButton BTN_IGNORE
+    {
+        Pos = MAP_APPFONT( 209, 6 );
+        Size = MAP_APPFONT( 55, 14 );
+        Text = "~Ignorieren" ;
+        Text [ ENGLISH ] = "~Ignore" ;
+        Text [ norwegian ] = "~Ignorer" ;
+        Text [ italian ] = "~Ignora" ;
+        Text [ portuguese_brazilian ] = "~Ignorar" ;
+        Text [ portuguese ] = "~Ignorar" ;
+        Text [ finnish ] = "Oh~ita" ;
+        Text [ danish ] = "Ignorer" ;
+        Text [ french ] = "~Ignorer" ;
+        Text [ swedish ] = "~Ignorera" ;
+        Text [ dutch ] = "~Negeren" ;
+        Text [ spanish ] = "Ignorar" ;
+        Text [ english_us ] = "~Ignore" ;
+        Text[ chinese_simplified ] = "ÂøΩÁï•(~I)";
+        Text[ russian ] = "œÓÔÛÒÚËÚ¸";
+        Text[ polish ] = "Ignoruj";
+        Text[ japanese ] = "ÁÑ°Ë¶ñ„Åô„Çã(~I)";
+        Text[ chinese_traditional ] = "ÂøΩÁï•(~I)";
+        Text[ arabic ] = " Ã«Â·";
+        Text[ greek ] = "–·Ò‹‚ÎÂ¯Á";
+        Text[ korean ] = "Î¨¥Ïãú(~I)";
+        Text[ turkish ] = "Yok say";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Ignora";
+        Text[ thai ] = "‡πÄ~‡∏û‡∏¥‡∏Å‡πÄ‡∏â‡∏¢";
+    };
+
+    PushButton BTN_IGNOREALL
+    {
+        Pos = MAP_APPFONT( 209, 22 );
+        Size = MAP_APPFONT( 55, 14 );
+        Text = "Immer i~gnorieren" ;
+        Text [ ENGLISH ] = "I~gnore all" ;
+        Text [ norwegian ] = "I~gnorer alle" ;
+        Text [ italian ] = "I~gnora tutto" ;
+        Text [ portuguese_brazilian ] = "I~gnorar tudo" ;
+        Text [ portuguese ] = "I~gnorar sempre" ;
+        Text [ finnish ] = "O~hita kaikki" ;
+        Text [ danish ] = "Ignorer alle" ;
+        Text [ french ] = "Toujours ignorer" ;
+        Text [ swedish ] = "I~gnorera alltid" ;
+        Text [ dutch ] = "Alti~jd negeren" ;
+        Text [ spanish ] = "Ig~norar siempre" ;
+        Text [ english_us ] = "Always I~gnore" ;
+        Text[ chinese_simplified ] = "Ëá™Âä®ÂøΩÁï•(~G)";
+        Text[ russian ] = "œÓÔÛÒÍ‡Ú¸ ‚ÒÂ„‰‡";
+        Text[ polish ] = "Zawsze ignoruj";
+        Text[ japanese ] = "Â∏∏„Å´ÁÑ°Ë¶ñ„Åô„Çã(~G)";
+        Text[ chinese_traditional ] = "Ëá™ÂãïÂøΩÁï•(~G)";
+        Text[ arabic ] = " Ã«Â· «·ﬂ·";
+        Text[ greek ] = "–‹ÌÙ· ·Ò‹‚ÎÂ¯Á";
+        Text[ korean ] = "Î™®Îëê Î¨¥Ïãú(~G)";
+        Text[ turkish ] = "Her zaman yok say";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "I~gnora-ho tot";
+        Text[ thai ] = "‡πÄ‡∏û‡∏¥~‡∏Å‡πÄ‡∏â‡∏¢‡∏ó‡∏±‡πâ‡∏á‡∏´‡∏°‡∏î";
+    };
+
+    PushButton BTN_CHANGE
+    {
+        Pos = MAP_APPFONT( 209, 40 );
+        Size = MAP_APPFONT( 55, 14 );
+        Text = "~Ersetzen" ;
+        Text [ ENGLISH ] = "~Replace" ;
+        Text [ norwegian ] = "~Erstatte" ;
+        Text [ italian ] = "Sostituisci" ;
+        Text [ portuguese_brazilian ] = "~Substituir" ;
+        Text [ portuguese ] = "~Substituir" ;
+        Text [ finnish ] = "Ko~rvaa" ;
+        Text [ danish ] = "Erstat" ;
+        Text [ french ] = "Remplacer" ;
+        Text [ swedish ] = "~Ers‰tt" ;
+        Text [ dutch ] = "~Vervangen" ;
+        Text [ spanish ] = "~Reemplazar" ;
+        Text [ english_us ] = "~Replace" ;
+        DefButton = TRUE ;
+        Text[ chinese_simplified ] = "ÊõøÊç¢(~R)";
+        Text[ russian ] = "«‡ÏÂÌËÚ¸";
+        Text[ polish ] = "ZamieÒ";
+        Text[ japanese ] = "ÁΩÆÊèõ(~R)";
+        Text[ chinese_traditional ] = "‰ª£Êõø(~R)";
+        Text[ arabic ] = " €ÌÌ—";
+        Text[ greek ] = "¡ÌÙÈÍ·Ù‹ÛÙ·ÛÁ";
+        Text[ korean ] = "Î∞îÍæ∏Í∏∞(~R)";
+        Text[ turkish ] = "Dei˛tir";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~ReemplaÁa";
+        Text[ thai ] = "‡πÅ~‡∏ó‡∏ô‡∏ó‡∏µ‡πà";
+    };
+
+    PushButton BTN_CHANGEALL
+    {
+        Pos = MAP_APPFONT( 209, 56 );
+        Size = MAP_APPFONT( 55, 14 );
+        Text = "I~mmer ersetzen" ;
+        Text [ ENGLISH ] = "Rep~lace all" ;
+        Text [ norwegian ] = "Ers~tatt alle" ;
+        Text [ italian ] = "S~ostituisci tutto" ;
+        Text [ portuguese_brazilian ] = "Substi~tui tudo" ;
+        Text [ portuguese ] = "Substi~tuir sempre" ;
+        Text [ finnish ] = "Kor~vaa aina" ;
+        Text [ danish ] = "Erstat alle" ;
+        Text [ french ] = "Toujours remplacer" ;
+        Text [ swedish ] = "Ers~‰tt alltid" ;
+        Text [ dutch ] = "~Altijd vervangen" ;
+        Text [ spanish ] = "Reemplazar siempre" ;
+        Text [ english_us ] = "Always R~eplace" ;
+        Text[ chinese_simplified ] = "Ëá™Âä®ÊõøÊç¢(~E)";
+        Text[ russian ] = "«‡ÏÂÌˇÚ¸ ‚ÒÂ„‰‡";
+        Text[ polish ] = "ZamieÒ wszyst.";
+        Text[ japanese ] = "Â∏∏„Å´ÁΩÆÊèõ„Åô„Çã(~E)";
+        Text[ chinese_traditional ] = "Ëá™Âãï‰ª£Êõø(~E)";
+        Text[ arabic ] = " €ÌÌ— «·ﬂ·";
+        Text[ greek ] = "–‹ÌÙ· ·ÌÙÈÍ·Ù‹ÛÙ·ÛÁ";
+        Text[ korean ] = "Ìï≠ÏÉÅ Î∞îÍæ∏Í∏∞(~E)";
+        Text[ turkish ] = "Her zaman dei˛tir";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "ReemplaÁa ~sempre";
+        Text[ thai ] = "‡πÅ‡∏ó~‡∏ô‡∏ó‡∏µ‡πà‡∏ó‡∏∏‡∏Å‡∏Ñ‡∏£‡∏±‡πâ‡∏á";
+    };
+
+    FixedText FT_STATUS
+    {
+        Pos = MAP_APPFONT(  6, 155 );
+        Size = MAP_APPFONT( 130, 10 );
+    };
+
+    GroupBox GB_AUDIT
+    {
+        Pos = MAP_APPFONT( 1, 1 );
+        Size = MAP_APPFONT( 268, 148 );
+        Hide=TRUE;
+    };
+
+    HelpButton BTN_SPL_HELP
+    {
+        Pos = MAP_APPFONT( 145, 153 );
+        Size = MAP_APPFONT( 55, 14 );
+    };
+
+    CancelButton BTN_SPL_CANCEL
+    {
+        Pos = MAP_APPFONT ( 209 , 153 ) ;
+        Size = MAP_APPFONT ( 55 , 14 ) ;
+        TabStop = TRUE ;
+        Text = "S~chlieﬂen" ;
+        Text [ ENGLISH ] = "~Close" ;
+        Text [ norwegian ] = "~Lukk" ;
+        Text [ italian ] = "~Chiudi" ;
+        Text [ portuguese_brazilian ] = "~Fechar" ;
+        Text [ portuguese ] = "~Fechar" ;
+        Text [ finnish ] = "~Sulje" ;
+        Text [ danish ] = "~Luk" ;
+        Text [ french ] = "Fermer" ;
+        Text [ swedish ] = "St‰~ng" ;
+        Text [ dutch ] = "~Sluiten" ;
+        Text [ spanish ] = "~Cerrar" ;
+        Text [ english_us ] = "~Close" ;
+        Text[ chinese_simplified ] = "ÂÖ≥Èó≠(~C)";
+        Text[ russian ] = "~«‡Í˚Ú¸";
+        Text[ polish ] = "Zamknij";
+        Text[ japanese ] = "Èñâ„Åò„Çã(~C)";
+        Text[ chinese_traditional ] = "ÈóúÈñâ(~C)";
+        Text[ arabic ] = "≈€·«ﬁ";
+        Text[ greek ] = " ÎÂﬂÛÈÏÔ";
+        Text[ korean ] = "Îã´Í∏∞(~C)";
+        Text[ turkish ] = "Kapat";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Tanca";
+        Text[ thai ] = "~‡∏õ‡∏¥‡∏î";
+    };
+};
+
