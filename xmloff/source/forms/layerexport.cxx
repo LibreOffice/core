@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerexport.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-07 15:59:52 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:13:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,8 +186,7 @@ namespace xmloff
 
         // our style family
         m_rContext.GetAutoStylePool()->AddFamily(
-            XML_STYLE_FAMILY_CONTROL_ID,
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( XML_STYLE_FAMILY_CONTROL_NAME ) ),
+            XML_STYLE_FAMILY_CONTROL_ID, token::GetXMLToken(token::XML_PARAGRAPH),
             m_xExportMapper.getBodyPtr(),
             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( XML_STYLE_FAMILY_CONTROL_PREFIX) )
         );
