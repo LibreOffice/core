@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: cmc $ $Date: 2001-07-16 09:28:11 $
+ *  last change: $Author: cmc $ $Date: 2001-07-17 13:00:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -284,10 +284,106 @@ public:
     void SetNumRuleName( const String& rName );
 };
 
+// TestApo() ist die aus ProcessSpecial() herausgeloeste Apo-Abfrage.
+// sie wird auch beim Aufbau der Tabellen-Struktur (ww8par6.cxx)
+// verwendet.
+// Die Parameter rbStartApo, rbStopApo und rbNowStyleApo sind reine
+// Rueckgabeparameter
+const BYTE* SwWW8ImplReader::TestApo( BOOL& rbStartApo, BOOL& rbStopApo,
+                                BOOL& rbNowStyleApo,
+                                BOOL  bInTable,   BOOL bTableRowEnd,
+                                BOOL  bStillInTable )
+{
+    const BYTE* pSprm37;
+    const BYTE* pSprm29;
+    rbNowStyleApo = (0 != pCollA[nAktColl].pWWFly); // Apo in StyleDef
 
+#if 1
+    /*
+    ##1140##
+    If I have a table and apply a style to one of its frames that should cause
+    a paragraph that its applied to it to only exist as a seperate floating
+    frame, then the behavour depends on which cell that it has been applied
+    to. If its the first cell of a row then the whole table row jumps into the
+    new frame, if its not then then the paragraph attributes are applied
+    "except" for the floating frame stuff. i.e. its ignored. So if theres a
+    table, and we're not in the first cell then we ignore the fact that the
+    paragraph style wants to be in a different frame.
 
+    This sort of mindbending inconsistency is surely why frames are deprecated
+    in word 97 onwards and hidden away from the user
+    */
 
+    if( bInTable && rbNowStyleApo && (!(pTableDesc && pTableDesc->GetAktCol())))
+    {
+        pSprm37       = 0;
+        pSprm29       = 0;
+        rbNowStyleApo = FALSE;
+    }
+#else
+    if( bInTable && rbNowStyleApo )
+    {
+        pSprm37       = 0;
+        pSprm29       = 0;
+        rbNowStyleApo = FALSE;
+    }
+#endif
+    else
+    {
+        pSprm37 = pPlcxMan->HasParaSprm( bVer67 ? 37 : 0x2423 );
+        pSprm29 = pPlcxMan->HasParaSprm( bVer67 ? 29 : 0x261B );
+    }
 
+    // here Apo
+    BOOL bNowApo = rbNowStyleApo || pSprm29 || pSprm37;
+
+    rbStartApo = bNowApo && !bApo && !bTableRowEnd; // normal APO-start
+    rbStopApo  = bApo && !bNowApo && !bTableRowEnd; // normal APO-end
+
+#if 0
+    /*
+    ##777##
+    I'm very suspicious of this use of bApoContinuedInTabCell2ndParagraph, if
+    we are at the end of a table but another table is anchored after it with
+    completely different absolute positioning location so as to be in a
+    different place entirely then if we use this test the two tables are all
+    made into one single table. If there is something that this wants to fix
+    then this is the wrong place. The test to determine if they are the same
+    floating frame in TestSameApo should be sufficient.
+    */
+    if( bApo && bNowApo && !bTableRowEnd
+        && !bApoContinuedInTabCell2ndParagraph
+        && !TestSameApo( pSprm29, rbNowStyleApo ) )
+    {
+        rbStopApo = rbStartApo = TRUE;              // aneinandergrenzende APOs
+    };
+#else
+#if 1
+    if( bApo && bNowApo && !bTableRowEnd)
+    {
+        //If it happens that we are in a table, then if its not the first cell
+        //then any attributes that might otherwise cause the contents to jump
+        //into another frame don't matter, a table row sticks together as one
+        //unit no matter what else happens
+        if (!(bInTable && pTableDesc && pTableDesc->GetAktCol()))
+            if (!TestSameApo( pSprm29, rbNowStyleApo ))
+        {
+            // two bordering eachother
+            rbStopApo = rbStartApo = TRUE;
+        }
+
+    }
+#else
+    if( bApo && bNowApo && !bTableRowEnd &&
+        !TestSameApo( pSprm29, rbNowStyleApo ) )
+    {
+        rbStopApo = rbStartApo = TRUE;              // two bordering eachother
+    }
+#endif
+#endif
+
+    return pSprm29;
+}
 
 //---------------------------------------------------------------------
 //   Hilfroutinen fuer Kapitelnummerierung und Aufzaehlung / Gliederung
@@ -3140,11 +3236,14 @@ void SwWW8ImplReader::ReadDocInfo()
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par2.cxx,v 1.15 2001-07-16 09:28:11 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par2.cxx,v 1.16 2001-07-17 13:00:33 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.15  2001/07/16 09:28:11  cmc
+      #89590# If an end of table row does not line up and theres space for a table cell to balance it then insert one. Duplicates words behaviour
+
       Revision 1.14  2001/07/10 13:05:39  cmc
       #88976# Western defaults after Eastern to make western charset conversion the default
 

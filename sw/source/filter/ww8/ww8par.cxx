@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: cmc $ $Date: 2001-06-12 09:24:43 $
+ *  last change: $Author: cmc $ $Date: 2001-07-17 13:00:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1361,75 +1361,6 @@ void SwWW8ImplReader::UpdatePageDescs( USHORT nPageDescOffset )
         const SwPageDesc* pPD = &rDoc.GetPageDesc( i );
         rDoc.ChgPageDesc( i, *pPD );
     }
-}
-
-//-----------------------------------------
-//              Text
-//-----------------------------------------
-
-// TestApo() ist die aus ProcessSpecial() herausgeloeste Apo-Abfrage.
-// sie wird auch beim Aufbau der Tabellen-Struktur (ww8par6.cxx)
-// verwendet.
-// Die Parameter rbStartApo, rbStopApo und rbNowStyleApo sind reine
-// Rueckgabeparameter
-const BYTE* SwWW8ImplReader::TestApo( BOOL& rbStartApo, BOOL& rbStopApo,
-                                BOOL& rbNowStyleApo,
-                                BOOL  bInTable,   BOOL bTableRowEnd,
-                                BOOL  bStillInTable )
-{
-    const BYTE* pSprm37;
-    const BYTE* pSprm29;
-    rbNowStyleApo = (0 != pCollA[nAktColl].pWWFly); // Apo in StyleDef
-
-    if( bInTable && rbNowStyleApo )
-    {
-        pSprm37       = 0;
-        pSprm29       = 0;
-        rbNowStyleApo = FALSE;
-    }
-    else
-    {
-        pSprm37 = pPlcxMan->HasParaSprm( bVer67 ? 37 : 0x2423 );
-        pSprm29 = pPlcxMan->HasParaSprm( bVer67 ? 29 : 0x261B );
-    }
-
-    // here Apo
-    BOOL bNowApo = rbNowStyleApo || pSprm29 || pSprm37;
-#if 0
-    BOOL bApoContinuedInTabCell2ndParagraph
-            = (bApo && bTableInApo && bStillInTable) && !bNowApo;
-    bNowApo |= bApoContinuedInTabCell2ndParagraph;
-#endif
-
-    rbStartApo = bNowApo && !bApo && !bTableRowEnd; // normal APO-start
-    rbStopApo  = bApo && !bNowApo && !bTableRowEnd; // normal APO-end
-
-#if 0
-    /*
-    ##777##
-    I'm very suspicious of this use of bApoContinuedInTabCell2ndParagraph, if
-    we are at the end of a table but another table is anchored after it with
-    completely different absolute positioning location so as to be in a
-    different place entirely then if we use this test the two tables are all
-    made into one single table. If there is something that this wants to fix
-    then this is the wrong place. The test to determine if they are the same
-    floating frame in TestSameApo should be sufficient.
-    */
-    if( bApo && bNowApo && !bTableRowEnd
-        && !bApoContinuedInTabCell2ndParagraph
-        && !TestSameApo( pSprm29, rbNowStyleApo ) )
-    {
-        rbStopApo = rbStartApo = TRUE;              // aneinandergrenzende APOs
-    };
-#else
-    if( bApo && bNowApo && !bTableRowEnd &&
-        !TestSameApo( pSprm29, rbNowStyleApo ) )
-    {
-        rbStopApo = rbStartApo = TRUE;              // two bordering eachother
-    }
-#endif
-
-    return pSprm29;
 }
 
 BOOL SwWW8ImplReader::ProcessSpecial( BOOL bAllEnd, BOOL* pbReSync, WW8_CP nStartCp )   // Apo / Table / Anl
@@ -3150,11 +3081,14 @@ void SwMSDffManager::ProcessClientAnchor2( SvStream& rSt, DffRecordHeader& rHd, 
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.cxx,v 1.24 2001-06-12 09:24:43 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.cxx,v 1.25 2001-07-17 13:00:33 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.24  2001/06/12 09:24:43  cmc
+      #87558# #87591# ##976## ##980## Implement draw textbox attributes by using normal writer import and mapping to draw attributes using slotids
+
       Revision 1.23  2001/06/06 12:46:32  cmc
       #76673# ##1005## Fastsave table Insert/Delete Cell implementation, const reworking required
 
