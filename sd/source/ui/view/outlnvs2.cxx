@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvs2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sj $ $Date: 2001-06-12 14:02:08 $
+ *  last change: $Author: sj $ $Date: 2001-06-12 14:31:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -443,7 +443,10 @@ void SdOutlineViewShell::FuTemporary(SfxRequest &rReq)
                                                   SVXURLFORMAT_REPR));
                 ESelection aSel( pOutlinerView->GetSelection() );
                 pOutlinerView->InsertField(aURLItem);
-                aSel.nEndPos = aSel.nStartPos + 1;
+                if ( aSel.nStartPos <= aSel.nEndPos )
+                    aSel.nEndPos = aSel.nStartPos + 1;
+                else
+                    aSel.nStartPos = aSel.nEndPos + 1;
                 pOutlinerView->SetSelection( aSel );
             }
 
