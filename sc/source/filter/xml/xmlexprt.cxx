@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.148 $
+ *  $Revision: 1.149 $
  *
- *  last change: $Author: sab $ $Date: 2001-11-16 13:52:03 $
+ *  last change: $Author: sab $ $Date: 2001-11-26 08:08:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2273,14 +2273,9 @@ void ScXMLExport::WriteCell (ScMyCell& aCell)
                 }
                 else
                 {
-                    //AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE_TYPE, XML_STRING);
                     if (GetCellText(aCell))
-                    {
-                        rtl::OUString sStringValue;
-                        SvXMLUnitConverter::clearUndefinedChars(sStringValue, aCell.sStringValue);
-                        if (sStringValue.getLength())
-                            AddAttribute(XML_NAMESPACE_TABLE, XML_STRING_VALUE, sStringValue);
-                    }
+                        if (aCell.sStringValue.getLength())
+                            AddAttribute(XML_NAMESPACE_TABLE, XML_STRING_VALUE, aCell.sStringValue);
                 }
             }
         }
