@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: ssa $ $Date: 2002-08-29 16:41:16 $
+ *  last change: $Author: mba $ $Date: 2002-10-24 12:23:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -914,6 +914,7 @@ SfxViewShell::SfxViewShell
     pImp->bHasPrintOptions =
         SFX_VIEW_HAS_PRINTOPTIONS == (nFlags & SFX_VIEW_HAS_PRINTOPTIONS);
     pImp->bPlugInsActive = TRUE;
+    pImp->bGotOwnerShip = FALSE;
     if ( pFrame->GetParentViewFrame() )
         pImp->bPlugInsActive = pFrame->GetParentViewFrame()->GetViewShell()->pImp->bPlugInsActive;
     pImp->eScroll = SCROLLING_DEFAULT;
@@ -998,6 +999,9 @@ USHORT SfxViewShell::PrepareClose
 
         return FALSE;
     }
+
+    if( GetViewFrame()->IsInModalMode() )
+        return FALSE;
 
     ModelessDialogPtrArr_Impl& rArr = pImp->aDialogArr;
     for ( USHORT nPos=0; rArr.Count(); )
@@ -1945,4 +1949,16 @@ BOOL SfxViewShell::TryContextMenuInterception( Menu& rIn, Menu*& rpOut, ::com::s
     }
 
     return TRUE;
+}
+
+void SfxViewShell::TakeOwnerShip_Impl()
+{
+    // currently there is only one reason to take OwnerShip: a hidden frame is printed
+    // so the ViewShell will check this on EndPrint (->prnmon.cxx)
+    pImp->bGotOwnerShip = TRUE;
+}
+
+BOOL SfxViewShell::GotOwnerShip_Impl()
+{
+    return pImp->bGotOwnerShip;
 }

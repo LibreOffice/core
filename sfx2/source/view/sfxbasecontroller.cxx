@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasecontroller.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: mba $ $Date: 2002-09-18 16:10:39 $
+ *  last change: $Author: mba $ $Date: 2002-10-24 12:22:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,22 @@
 //________________________________________________________________________________________________________
 //  include of other projects
 //________________________________________________________________________________________________________
+
+#ifndef _COM_SUN_STAR_UTIL_XCLOSEABLE_HPP_
+#include <com/sun/star/util/XCloseable.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_UTIL_XCLOSEBROADCASTER_HPP_
+#include <com/sun/star/util/XCloseBroadcaster.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_UTIL_XCLOSELISTENER_HPP_
+#include <com/sun/star/util/XCloseListener.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_UTIL_CLOSEVETOEXCEPTION_HPP_
+#include <com/sun/star/util/CloseVetoException.hpp>
+#endif
 
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
@@ -146,6 +162,7 @@
 #define OMULTITYPEINTERFACECONTAINERHELPER      ::cppu::OMultiTypeInterfaceContainerHelper
 #define OINTERFACECONTAINERHELPER               ::cppu::OInterfaceContainerHelper
 #define XFRAMEACTIONLISTENER                    ::com::sun::star::frame::XFrameActionListener
+#define XCLOSELISTENER                          ::com::sun::star::util::XCloseListener
 #define FRAMEACTIONEVENT                        ::com::sun::star::frame::FrameActionEvent
 #define EVENTOBJECT                             ::com::sun::star::lang::EventObject
 #define OTYPECOLLECTION                         ::cppu::OTypeCollection
@@ -328,6 +345,57 @@ private:
 
 } ; // class IMPL_SfxBaseController_ListenerContainer
 
+class IMPL_SfxBaseController_CloseListenerHelper : public ::cppu::WeakImplHelper1< ::com::sun::star::util::XCloseListener >
+{
+public:
+    IMPL_SfxBaseController_CloseListenerHelper( MUTEX&              aMutex      ,
+                                            SfxBaseController*  pController ) ;
+    virtual ~IMPL_SfxBaseController_CloseListenerHelper() ;
+    virtual void SAL_CALL queryClosing( const EVENTOBJECT& aEvent, sal_Bool bDeliverOwnership ) throw (RUNTIMEEXCEPTION) ;
+    virtual void SAL_CALL notifyClosing( const EVENTOBJECT& aEvent ) throw (RUNTIMEEXCEPTION) ;
+    virtual void SAL_CALL disposing( const EVENTOBJECT& aEvent ) throw (RUNTIMEEXCEPTION) ;
+
+private:
+
+    MUTEX&                  m_aMutex;
+    SfxBaseController*      m_pController;
+
+} ; // class IMPL_SfxBaseController_ListenerContainer
+
+IMPL_SfxBaseController_CloseListenerHelper::IMPL_SfxBaseController_CloseListenerHelper( MUTEX&              aMutex      ,
+                                                                                SfxBaseController*  pController )
+        : m_aMutex      ( aMutex        )
+        , m_pController ( pController   )
+{
+}
+
+IMPL_SfxBaseController_CloseListenerHelper::~IMPL_SfxBaseController_CloseListenerHelper()
+{
+}
+
+void SAL_CALL IMPL_SfxBaseController_CloseListenerHelper::disposing( const EVENTOBJECT& aEvent ) throw( ::com::sun::star::uno::RuntimeException )
+{
+}
+
+void SAL_CALL IMPL_SfxBaseController_CloseListenerHelper::queryClosing( const EVENTOBJECT& aEvent, sal_Bool bDeliverOwnership ) throw (RUNTIMEEXCEPTION)
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+    if  ( m_pController !=  NULL )
+    {
+        BOOL bCanClose = m_pController->GetViewShell_Impl()->PrepareClose( FALSE );
+        if ( !bCanClose )
+        {
+            if ( bDeliverOwnership )
+                m_pController->TakeOwnerShip_Impl();
+            throw com::sun::star::util::CloseVetoException(::rtl::OUString::createFromAscii("Controller disagree ..."),static_cast< ::cppu::OWeakObject*>(this));
+        }
+    }
+}
+
+void SAL_CALL IMPL_SfxBaseController_CloseListenerHelper::notifyClosing( const EVENTOBJECT& aEvent ) throw (RUNTIMEEXCEPTION)
+{
+}
+
 //________________________________________________________________________________________________________
 //  declaration IMPL_SfxBaseController_DataContainer
 //________________________________________________________________________________________________________
@@ -336,22 +404,26 @@ struct IMPL_SfxBaseController_DataContainer
 {
     REFERENCE < XFRAME >    m_xFrame;
     REFERENCE < XFRAMEACTIONLISTENER >      m_xListener       ;
+    REFERENCE < XCLOSELISTENER >      m_xCloseListener       ;
     OMULTITYPEINTERFACECONTAINERHELPER      m_aListenerContainer    ;
     OINTERFACECONTAINERHELPER               m_aInterceptorContainer    ;
     REFERENCE < ::com::sun::star::task::XStatusIndicator > m_xIndicator;
     SfxViewShell*                           m_pViewShell            ;
     SfxBaseController*                      m_pController           ;
     sal_Bool                                m_bDisposing            ;
+    sal_Bool                                m_bGotOwnerShip;
 
     IMPL_SfxBaseController_DataContainer(   MUTEX&              aMutex      ,
                                             SfxViewShell*       pViewShell  ,
                                             SfxBaseController*  pController )
             :   m_xListener       ( new IMPL_SfxBaseController_ListenerHelper( aMutex, pController ) )
+            ,   m_xCloseListener       ( new IMPL_SfxBaseController_CloseListenerHelper( aMutex, pController ) )
             ,   m_aListenerContainer    ( aMutex                                                )
             ,   m_aInterceptorContainer ( aMutex                                                )
             ,   m_pViewShell            ( pViewShell                                            )
             ,   m_pController           ( pController                                           )
             ,   m_bDisposing            ( sal_False                                             )
+            ,   m_bGotOwnerShip         ( sal_False                                             )
     {
     }
 
@@ -561,10 +633,14 @@ void SAL_CALL SfxBaseController::attachFrame( const REFERENCE< XFRAME >& xFrame 
 
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( xTemp.is() )
+    {
         xTemp->removeFrameActionListener( m_pData->m_xListener ) ;
+        REFERENCE < ::com::sun::star::util::XCloseBroadcaster > xCloseable( xTemp, com::sun::star::uno::UNO_QUERY );
+        if ( xCloseable.is() )
+            xCloseable->addCloseListener( m_pData->m_xCloseListener );
+    }
 
     m_pData->m_xFrame = xFrame;
-
     if ( xFrame.is() )
         xFrame->addFrameActionListener( m_pData->m_xListener ) ;
 }
@@ -575,7 +651,10 @@ void SAL_CALL SfxBaseController::attachFrame( const REFERENCE< XFRAME >& xFrame 
 
 sal_Bool SAL_CALL SfxBaseController::attachModel( const REFERENCE< XMODEL >& xModel ) throw( ::com::sun::star::uno::RuntimeException )
 {
-    return sal_False ;
+    REFERENCE < ::com::sun::star::util::XCloseBroadcaster > xCloseable( xModel, com::sun::star::uno::UNO_QUERY );
+    if ( xCloseable.is() )
+        xCloseable->addCloseListener( m_pData->m_xCloseListener );
+    return sal_True;
 }
 
 //________________________________________________________________________________________________________
@@ -800,21 +879,35 @@ void SAL_CALL SfxBaseController::dispose() throw( ::com::sun::star::uno::Runtime
             ::vos::OGuard aGuard( Application::GetSolarMutex() );
             SfxObjectShell* pDoc = pFrame->GetObjectShell() ;
             REFERENCE< XMODEL > xModel = pDoc->GetModel();
+            REFERENCE < ::com::sun::star::util::XCloseable > xCloseable( xModel, com::sun::star::uno::UNO_QUERY );
             if ( xModel.is() )
+            {
                 xModel->disconnectController( this );
+                if ( xCloseable.is() )
+                    xCloseable->removeCloseListener( m_pData->m_xCloseListener );
+            }
+
+            REFERENCE < XFRAME > aXFrame;
+            attachFrame( aXFrame );
 
             m_pData->m_xListener->disposing( aObject );
             SfxViewShell *pShell = m_pData->m_pViewShell;
             m_pData->m_pViewShell = NULL;
             if ( pFrame->GetViewShell() == pShell )
             {
-                REFERENCE < XFRAME > aXFrame;
                 pFrame->GetBindings().ENTERREGISTRATIONS();
                 pFrame->GetFrame()->SetFrameInterface_Impl(  aXFrame );
                 pFrame->GetFrame()->DoClose_Impl();
             }
         }
     }
+}
+
+void SfxBaseController::TakeOwnerShip_Impl()
+{
+    if ( m_pData->m_pViewShell && ( !m_pData->m_pViewShell->GetWindow() || !m_pData->m_pViewShell->GetWindow()->IsReallyVisible() ) )
+        // ignore OwnerShip for model in case of visible frame
+        m_pData->m_pViewShell->TakeOwnerShip_Impl();
 }
 
 //________________________________________________________________________________________________________

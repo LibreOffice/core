@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewimp.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2001-12-07 14:48:17 $
+ *  last change: $Author: mba $ $Date: 2002-10-24 12:23:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,7 @@ struct SfxViewShell_Impl
     BOOL                        bIsShowView;
     BOOL                        bFrameSetImpl;
     BOOL                        bOwnsMenu;
+    BOOL                        bGotOwnerShip;
     SfxScrollingMode            eScroll;
     ResId*                      pMenuBarResId;
     SfxMenuBarManager*          pMenu;
