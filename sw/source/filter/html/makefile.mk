@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: mtg $ $Date: 2001-02-22 16:14:33 $
+#   last change: $Author: obo $ $Date: 2002-10-10 14:04:54 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -106,6 +106,9 @@ SLOFILES =  \
         $(SLO)$/swhtml.obj \
         $(SLO)$/wrthtml.obj \
         $(SLO)$/SwAppletImpl.obj \
+
+EXCEPTIONSFILES = \
+        $(SLO)$/htmlsect.obj
 
 # --- Tagets -------------------------------------------------------
 
