@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shutdownicon.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-11 17:58:25 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:34:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,9 +168,9 @@ ShutdownIcon* ShutdownIcon::pShutdownIcon = 0;
 
 ShutdownIcon::ShutdownIcon( Reference< XMultiServiceFactory > aSMgr ) :
     ShutdownIconServiceBase( m_aMutex ),
-    m_xServiceManager( aSMgr ),
+    m_bVeto ( false ),
     m_pResMgr( 0 ),
-    m_bVeto ( false )
+    m_xServiceManager( aSMgr )
 {
 }
 
