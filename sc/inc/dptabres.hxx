@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dptabres.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:49 $
+ *  last change: $Author: nn $ $Date: 2001-03-07 17:43:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,6 +185,7 @@ private:
     ScDPDataMember*         pDataRoot;
     BOOL                    bHasElements;
     BOOL                    bForceSubTotal;
+    BOOL                    bInitialized;
 
 public:
                         ScDPResultMember( ScDPResultData* pData, ScDPDimension* pDim,
@@ -193,6 +194,7 @@ public:
                         ~ScDPResultMember();
 
     void                InitFrom( ScDPDimension** ppDim, ScDPLevel** ppLev );
+    void                LateInitFrom( ScDPDimension** ppDim, ScDPLevel** ppLev, ScDPItemData* pItemData );
 
     String              GetName() const;
     BOOL                IsValid() const;
@@ -290,6 +292,7 @@ public:
 
                         //  allocates new members
     void                InitFrom( ScDPDimension** ppDim, ScDPLevel** ppLev );
+    void                LateInitFrom( ScDPDimension** ppDim, ScDPLevel** ppLev, ScDPItemData* pItemData );
 
     long                GetSize(long nMeasure) const;
 

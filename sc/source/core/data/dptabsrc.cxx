@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dptabsrc.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2001-02-02 12:57:35 $
+ *  last change: $Author: nn $ $Date: 2001-03-07 17:45:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -640,6 +640,9 @@ void ScDPSource::CreateRes_Impl()
         pData->ResetIterator();
         while ( pData->GetNextRow( aIterPar ) )
         {
+            pColResRoot->LateInitFrom( ppColDim, ppColLevel, aColData );
+            pRowResRoot->LateInitFrom( ppRowDim, ppRowLevel, aRowData );
+
             //  test for filtered entries
             //! test child dimensions for null !!!
             if ( ( !pColResRoot->GetChildDimension() || pColResRoot->GetChildDimension()->IsValidEntry( aColData ) ) &&

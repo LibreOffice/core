@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dptabres.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:15 $
+ *  last change: $Author: nn $ $Date: 2001-03-07 17:45:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,8 @@ static ScSubTotalFunc eRowForce = SUBTOTAL_FUNC_NONE;
 
 static long nColSubTotalFunc = -1;
 static long nRowSubTotalFunc = -1;
+
+static BOOL bLateInit = TRUE;
 
 // -----------------------------------------------------------------------
 
@@ -432,7 +434,8 @@ ScDPResultMember::ScDPResultMember( ScDPResultData* pData, ScDPDimension* pDim,
     pChildDimension( NULL ),
     pDataRoot( NULL ),
     bHasElements( FALSE ),
-    bForceSubTotal( bForceSub )
+    bForceSubTotal( bForceSub ),
+    bInitialized( FALSE )
 {
     // pParentLevel/pMemberDesc is 0 for root members
 }
@@ -462,6 +465,12 @@ BOOL ScDPResultMember::IsNamedItem( const ScDPItemData& r ) const
 
 void ScDPResultMember::InitFrom( ScDPDimension** ppDim, ScDPLevel** ppLev )
 {
+    //  with bLateInit, initialize only those members that have data
+    if ( bLateInit )
+        return;
+
+    bInitialized = TRUE;
+
     //  skip child dimension if details are not shown
     if ( pMemberDesc && !pMemberDesc->getShowDetails() )
         return;
@@ -470,6 +479,27 @@ void ScDPResultMember::InitFrom( ScDPDimension** ppDim, ScDPLevel** ppLev )
     {
         pChildDimension = new ScDPResultDimension( pResultData );
         pChildDimension->InitFrom( ppDim, ppLev );
+    }
+}
+
+void ScDPResultMember::LateInitFrom( ScDPDimension** ppDim, ScDPLevel** ppLev, ScDPItemData* pItemData )
+{
+    //  without bLateInit, everything has already been initialized
+    if ( !bLateInit )
+        return;
+
+    bInitialized = TRUE;
+
+    //  skip child dimension if details are not shown
+    if ( pMemberDesc && !pMemberDesc->getShowDetails() )
+        return;
+
+    if ( *ppDim )
+    {
+        //  LateInitFrom is called several times...
+        if ( !pChildDimension )
+            pChildDimension = new ScDPResultDimension( pResultData );
+        pChildDimension->LateInitFrom( ppDim, ppLev, pItemData );
     }
 }
 
@@ -502,8 +532,10 @@ long ScDPResultMember::GetSize(long nMeasure) const
 
 BOOL ScDPResultMember::IsVisible() const
 {
-//  return bHasElements && IsValid();
-    return ( bHasElements || ( pParentLevel && pParentLevel->getShowEmpty() ) ) && IsValid();
+    //  not initialized -> shouldn't be there at all
+    //  (allocated only to preserve ordering)
+
+    return ( bHasElements || ( pParentLevel && pParentLevel->getShowEmpty() ) ) && IsValid() && bInitialized;
 }
 
 BOOL ScDPResultMember::IsValid() const
@@ -1047,6 +1079,51 @@ void ScDPResultDimension::InitFrom( ScDPDimension** ppDim, ScDPLevel** ppLev )
             aMembers.Insert( pNew, aMembers.Count() );
 
             pNew->InitFrom( ppChildDim, ppChildLev );
+        }
+    }
+}
+
+void ScDPResultDimension::LateInitFrom( ScDPDimension** ppDim, ScDPLevel** ppLev, ScDPItemData* pItemData )
+{
+    ScDPDimension* pThisDim = *ppDim;
+    ScDPLevel* pThisLevel = *ppLev;
+    ScDPItemData& rThisData = *pItemData;
+    if (pThisDim && pThisLevel)
+    {
+        ScDPDimension** ppChildDim = ppDim + 1;
+        ScDPLevel** ppChildLev = ppLev + 1;
+        ScDPItemData* pChildData = pItemData + 1;
+
+        if ( aMembers.Count() == 0 )
+        {
+            //  create all members at the first call (preserve order)
+
+            bIsDataLayout = pThisDim->getIsDataLayoutDimension();
+
+            ScDPMembers* pMembers = pThisLevel->GetMembersObject();
+            long nMembCount = pMembers->getCount();
+            for ( long i=0; i<nMembCount; i++ )
+            {
+                ScDPMember* pMember = pMembers->getByIndex(i);
+                ScDPResultMember* pNew = new ScDPResultMember( pResultData, pThisDim,
+                                                pThisLevel, pMember, FALSE );
+                aMembers.Insert( pNew, aMembers.Count() );
+            }
+        }
+
+        //  initialize only specific member (or all if "show empty" flag is set)
+
+        BOOL bShowEmpty = pThisLevel->getShowEmpty();
+        long nCount = aMembers.Count();
+        for (long i=0; i<nCount; i++)
+        {
+            ScDPResultMember* pResultMember = aMembers[(USHORT)i];
+            if ( bIsDataLayout || bShowEmpty || pResultMember->IsNamedItem( rThisData ) )
+            {
+                pResultMember->LateInitFrom( ppChildDim, ppChildLev, pChildData );
+                if ( !bIsDataLayout && !bShowEmpty )
+                    break;
+            }
         }
     }
 }
