@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-27 18:13:15 $
+#   last change: $Author: vg $ $Date: 2003-12-17 20:20:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,6 +64,14 @@ PRJ=.
 
 PRJNAME=zlib
 TARGET=zlib
+
+.IF "$(GUI)" == "UNX"
+.IF "$(SYSTEM_ZLIB)" == "YES"
+all:
+    @echo "An already available installation of zlib should exist on your system."
+    @echo "Therefore the version provided here does not need to be built in addition."
+.ENDIF
+.ENDIF
 
 # --- Settings -----------------------------------------------------
 
