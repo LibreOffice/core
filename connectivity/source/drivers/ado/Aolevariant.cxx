@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Aolevariant.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-30 11:40:50 $
+ *  last change: $Author: oj $ $Date: 2001-10-08 06:07:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,13 +169,13 @@ OLEVariant::OLEVariant(const ::com::sun::star::util::Date& x )
 OLEVariant::OLEVariant(const ::com::sun::star::util::Time& x )
 {
     VariantInit(this);
-    vt      = VT_R8;
+    vt      = VT_DATE;
     dblVal  = ::dbtools::DBTypeConversion::toDouble(x);
 }
 OLEVariant::OLEVariant(const ::com::sun::star::util::DateTime& x )
 {
     VariantInit(this);
-    vt      = VT_R8;
+    vt      = VT_DATE;
     dblVal  = ::dbtools::DBTypeConversion::toDouble(x,::com::sun::star::util::Date(30,12,1899));
 }
 OLEVariant::OLEVariant(const float &x)
