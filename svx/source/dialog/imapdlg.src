@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imapdlg.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-05 11:50:52 $
+ *  last change: $Author: kz $ $Date: 2002-11-04 18:13:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -711,7 +711,7 @@ ModelessDialog RID_SVXDLG_IMAP
         Left = TRUE ;
     };
     Text [ english_us ] = "ImageMap Editor" ;
-    Text [ portuguese_brazilian ] = "ImageMap-Editor" ;
+    Text [ portuguese_brazilian ] = "Editor de mapa de imagens" ;
     Text [ swedish ] = "Image map-redigerare" ;
     Text [ danish ] = "ImageMap-redigering" ;
     Text [ italian ] = "Editor ImageMap" ;
@@ -952,7 +952,7 @@ Menu RID_SVXMN_IMAP
                         Text [ french ] = "V~ers l'avant" ;
                         Text [ swedish ] = "Längre fra~m" ;
                         Text [ dutch ] = "Naar v~oren" ;
-                        Text [ spanish ] = "Traer ~más adelante" ;
+                        Text [ spanish ] = "Traer ~adelante" ;
                         Text [ english_us ] = "Bring ~Forward" ;
                         Text[ chinese_simplified ] = "ä¸Šç§»ä¸€å±‚(~F)";
                         Text[ russian ] = "Ïåðåìåñòèòü ~âïåðåä";
@@ -981,7 +981,7 @@ Menu RID_SVXMN_IMAP
                         Text [ french ] = "~Vers l'arrière" ;
                         Text [ swedish ] = "Längre ba~k" ;
                         Text [ dutch ] = "Naar a~chteren" ;
-                        Text [ spanish ] = "Enviar hacia a~trás" ;
+                        Text [ spanish ] = "Enviar a~trás" ;
                         Text [ english_us ] = "Send Back~ward" ;
                         Text[ chinese_simplified ] = "ä¸‹ç§»ä¸€å±‚(~W)";
                         Text[ russian ] = "Ïåðåìåñòèòü ~íàçàä";
