@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Chart.xcs,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dg $ $Date: 2002-05-19 23:04:14 $
+ *  last change: $Author: bm $ $Date: 2002-07-01 16:13:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,9 @@
   <import oor:component="org.openoffice.Office.Common"/>
   <component>
     <group oor:name="DefaultColor">
+      <info>
+        <desc xml:lang="en-US">Comprises settings for colors being used when creating new charts.</desc>
+      </info>
       <prop oor:name="Series" oor:type="oor:long-list">
         <!-- OldPath: Chart/Default_Colors -->
         <!-- OldLocation: Soffice.cfg -->
@@ -71,9 +74,14 @@
         <!-- UIHints: Tools - Options  Chart  Default colors  [Section] Chart colors -->
         <value>0x9999ff 0x993366 0xffffcc 0xccffff 
 0x660066 0xff8080 0x0066cc 0xccccff 0x000080 0xff00ff 0x00ffff 0xffff00
-				</value>
+        </value>
         <info>
-          <desc xml:lang="en-US">Default colors for data columns (currently saved as ULONG count (12) and corresponding number of ColorData (UINT32) values)</desc>
+          <desc xml:lang="en-US">Specifies a list of color values to be used for
+		  the first n series, where n is size of the list.  Fo i > n the color
+		  used is equal to entry number i modulo n in the list.  You should keep
+		  the size of the list at 12.  Also note, that the values are
+		  interpreted as unsigned 32bit values, although you might get negative
+		  (signed) numbers in this list when being displayed in decimal.</desc>
           <label xml:lang="en-US">Chart colors</label>
         </info>
       </prop>
