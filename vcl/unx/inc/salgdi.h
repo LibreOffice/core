@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.h,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2004-02-20 08:55:46 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:54:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,7 @@ class X11SalGraphics : public SalGraphics
 {
     friend class            X11FontLayout;
     friend class            ServerFontLayout;
-
+protected:
     SalFrame*               m_pFrame; // the SalFrame which created this Graphics or NULL
     X11SalVirtualDevice*    m_pVDev;  // the SalVirtualDevice which created this Graphics or NULL
 
@@ -116,6 +116,9 @@ class X11SalGraphics : public SalGraphics
 
     XLIB_Region     pPaintRegion_;
     XLIB_Region     pClipRegion_;
+
+    int             numClipRects_;
+    Rectangle       boundingClipRect_;
 
     GC              pPenGC_;        // Pen attributes
     SalColor        nPenColor_;
@@ -232,6 +235,10 @@ public:
     inline  SalColormap    &GetColormap() const { return *m_pColormap; }
     inline  Pixel           GetPixel( SalColor nSalColor ) const;
 
+    inline  int            GetNumCliprects() const { return numClipRects_; }
+    inline  const Rectangle& GetBoundingCliprect() const { return boundingClipRect_; }
+
+
     // overload all pure virtual methods
     virtual void            GetResolution( long& rDPIX, long& rDPIY );
     virtual void            GetScreenFontResolution( long& rDPIX, long& rDPIY );
@@ -326,6 +333,15 @@ public:
     virtual void            invert( ULONG nPoints, const SalPoint* pPtAry, SalInvert nFlags );
 
     virtual BOOL            drawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, ULONG nSize );
+
+    /*  use to handle GraphicsExpose/NoExpose after XCopyArea & friends
+     *  if pFrame is not NULL, corresponding Paint events are generated
+     *  and dispatched to pFrame
+     *
+     *  it is imperative to eat up graphics exposes even in case you don't need
+     *  them because the next one using XCopyArea can depend on them
+     */
+    static void YieldGraphicsExpose( Display* pDisplay, SalFrame* pFrame, Drawable aDrawable );
 };
 
 
