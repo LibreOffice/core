@@ -2,9 +2,9 @@
  *
  *  $RCSfile: abspilot.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:33:40 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 18:14:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ ModalDialog RID_DLG_ADDRESSBOOKSOURCEPILOT
     Text[ spanish ] = "Piloto autom�tico de fuente de datos de la libreta de direcciones";
     Text[ finnish ] = "Ohjattu yhteystietojen tuominen";
     Text[ italian ] = "Pilota automatico della sorgente dati della Rubrica";
-    Text[ danish ] = "AutoPilot for adressedatakilde";
+    Text[ danish ] = "AutoPilot adressedatakilde";
     Text[ swedish ] = "AutoPilot f�r adressdatak�llor";
     Text[ polish ] = "AutoPilot �r�d�a danych adresowych";
     Text[ portuguese_brazilian ] = "Assistente da Fonte de Dados de Endere�os";
@@ -101,6 +101,8 @@ ModalDialog RID_DLG_ADDRESSBOOKSOURCEPILOT
     Text[ hebrew ] = "‮\"טייס אוטומטי\" ספר כתובות‬";
     Text[ hindi ] = "पता ड़ॉटा मूल ओटोपैलट्";
     Text[ slovak ] = "Sprievodca zdrojom dát adries";
+    Text[ hungarian ] = "Címtártündér";
+    Text[ slovenian ] = "Avtopilot vira podatkov adresarja";
 };
 
 //........................................................................
@@ -129,12 +131,12 @@ TabPage RID_PAGE_SELECTABTYPE
         Text[ portuguese ] = "O %PRODUCTNAME permite-lhe o acesso a dados de endere�os j� dispon�veis no seu sistema.\nPara isso � criada uma fonte de dados %PRODUCTNAME que permite o acesso aos seus livros de endere�o na forma de tabelas.\n\nEste AutoPiloto ajuda-o a configurar essa fonte de dados.";
         Text[ russian ] = "%PRODUCTNAME ������������� ����������� ������� � ������������ � ������� �������� ������.\n��� ����� ����� ������� ��������� ������ %PRODUCTNAME, � ������� ���� �������� ����� ����� �������� � ���� ������.\n\n������ ������� ��� �������� ����� ���������� ������.";
         Text[ greek ] = "�� %PRODUCTNAME ��� ��������� �� ������������ �������� ����������� ��� ���������� ��� ��� ������� ���. ��� �� ����� ����, �� ������������ ��� ��������� ��������� ��� �� %PRODUCTNAME ���� ���� ����� �� ����� ��������� �� �������� ����������� �� ����� ������.\n\n����� � ��������� ������� ��� ����� �� ������������� ��� ��������� ���������.";
-        Text[ dutch ] = "Met %PRODUCTNAME heeft u toegang tot adresgegevens die reeds op uw systeem beschikbaar zijn. Daartoe wordt er een %PRODUCTNAME-gegevensbron gemaakt via welke u toegang heeft tot uw adresboeken als tabellen.\n\nDeze AutoPiloot ondersteunt u bij het inrichten van deze gegevensbron.";
+        Text[ dutch ] = "Met %PRODUCTNAME heeft u toegang tot adresgegevens die reeds op uw systeem beschikbaar zijn. Daartoe wordt er een %PRODUCTNAME-gegevensbron aangemaakt via welke u toegang heeft tot uw adresboeken als tabellen.\n\nDeze AutoPiloot ondersteunt u bij het inrichten van deze gegevensbron.";
         Text[ french ] = "%PRODUCTNAME permet l'acc�s aux donn�es des adresses pr�sentes dans votre syst�me. Cette fonction n�cessite la cr�ation d'une source de donn�es %PRODUCTNAME dans laquelle vos carnets d'adresses existeront sous forme de tables.\n\nCet AutoPilote vous assite lors du param�trage de cette source de donn�es.";
         Text[ spanish ] = "%PRODUCTNAME le permite acceder a las direcciones que se encuentren en su sistema.\nPara ello se crear� una fuente de datos %PRODUCTNAME en la que las libretas de direcciones estar�n disponibles en tablas.\n\nEl Piloto autom�tico le apoya durante la creaci�n de esta fuente de datos.";
         Text[ finnish ] = "%PRODUCTNAME antaa sinun k�ytt�� osoitetietoja, jotka ovat jo j�rjestelm�ss�. T�t� varten luodaan %PRODUCTNAMEn tietol�hde, jossa osoitetietosi ovat taulukkomuodossa.\n\nT�ll� ohjatulla toiminnolla voit luoda tietol�hteen.";
         Text[ italian ] = "%PRODUCTNAME vi permette di accedere a dati della Rubrica gi� presenti nel vostro sistema.\nA questo scopo viene creata una sorgente dati %PRODUCTNAME con la quale avrete accesso alle Rubriche sotto forma di tabelle.\n\nQuesto Pilota automatico vi aiuter� ad impostare la sorgente dati.";
-        Text[ danish ] = "%PRODUCTNAME giver dig adgang til adressedata, som allerede findes p� computeren. Dette g�r du ved at oprette en %PRODUCTNAME-datakilde, hvor du har adgang til dine adressekartoteker som tabeller.\n\nDenne AutoPilot hj�lper dig med konfigurationen af denne datakilde.";
+        Text[ danish ] = "%PRODUCTNAME giver dig adgang til adressedata, som allerede findes p� computeren. Dette g�r du ved at oprette en %PRODUCTNAME-datakilde, hvor du har adgang til dine adressekartoteker som tabeller.\n\nDenne AutoPilot hj�lper dig med at oprette datakilden.";
         Text[ swedish ] = "%PRODUCTNAME ger dig m�jlighet att ha tillg�ng till adressdata som redan finns i ditt system. F�r att du ska kunna g�ra detta skapas en %PRODUCTNAME-datak�lla d�r dina adressb�cker �r tillg�ngliga som tabeller.\n\nDenna AutoPilot hj�lper dig att skapa datak�llan.";
         Text[ polish ] = "%PRODUCTNAME umo�liwia dost�p do danych adresowych zapisanych ju� w systemie. Utworzone zostanie w tym celu �r�d�o danych programu %PRODUCTNAME, udost�pniaj�ce ksi��ki adresowe u�ytkownika, wy�wietlane w postaci tabel.\n\nW tworzeniu �r�d�a danych pomocny b�dzie niniejszy AutoPilot.";
         Text[ portuguese_brazilian ] = "O %PRODUCTNAME permite acessar dados de endere�os j� dispon�veis no seu sistema.\nPara isso, � criada uma fonte de dados %PRODUCTNAME que permite o acesso aos seus livros de endere�o na forma de tabelas.\n\nEste Assistente permite configurar essa fonte de dados.";
@@ -150,6 +152,8 @@ TabPage RID_PAGE_SELECTABTYPE
         Text[ hebrew ] = "‮מאפשר גישה לספרי כתובות קיימים במערכת. כדי לעשות זאת ימיר ה\"טייס האוטומטי\" את הנתונים למבנה טבלאי נגיש‬ %PRODUCTNAME";
         Text[ hindi ] = "%PRODUCTNAME द्वारा आप पहिले से ही सिस्टम में रहनेवाला पता ड़ॉटा को प्रवेश कर सकते है । यह करने केलिए, %PRODUCTNAME ड़ॉटा मूल को उत्पन्न किया जायेगा जहाँ पर आपका पता ड़ॉटा सारणीबद्ध प्रकार में उपलब्ध है ।\n\nइस ओटोपैलट आपको ड़ॉटा मूल उत्पन्न करने केलिए सहायता करेगा ।";
         Text[ slovak ] = "%PRODUCTNAME Vám umožňuje pristupovať k adresám nachádzajúcim sa vo vašom systéme. Aby ste toto mohli využívať bude vytvorený zdroj dát v ktorom budú vaše adresy k dispozícii v tabuľkovej forme.\n\nTento sprievodca vám pomôže vytvoriť spomínaný zdroj dát.";
+        Text[ hungarian ] = "Az %PRODUCTNAME révén a már meglévő adataihoz is hozzáférhet. Ehhez egy %PRODUCTNAME adatforrás létrehozása szükséges. \n\nA Tündér segít az adatforrás létrehozásában.";
+        Text[ slovenian ] = "%PRODUCTNAME vam omogoča dostop do podatkov adresarja, ki že obstajajo v sistemu. Za to bo ustvarjen vir podatkov %PRODUCTNAME, v katerem bodo podatki na voljo v obliki tabele.\n\nAvtopilot vam pomaga pri izdelavi vira podatkov.";
     };
 
     FixedLine FL_TYPE
@@ -184,6 +188,8 @@ TabPage RID_PAGE_SELECTABTYPE
         Text[ hebrew ] = "‮בחירת סוג ספר הכתובות הרצוי‬";
         Text[ hindi ] = "कृपया आपका बाहरी पता पुस्तक का वर्ग को चुनिए :";
         Text[ slovak ] = "Prosím vyberte typ vášho externého adresára:";
+        Text[ hungarian ] = "Válassza ki a külső címjegyzék típusát:";
+        Text[ slovenian ] = "Izberite vrsto zunanjega adresarja:";
     };
 
     RadioButton RB_MORK
@@ -219,6 +225,8 @@ TabPage RID_PAGE_SELECTABTYPE
         Text[ thai ] = "Mozilla / Netscape";
         Text[ hindi ] = "Mozilla / Netscape 6.x";
         Text[ slovak ] = "Mozilla / Netscape 6.x";
+        Text[ hungarian ] = "Mozilla / Netscape";
+        Text[ slovenian ] = "Mozilla / Netscape";
     };
     RadioButton RB_EVOLUTION
      {
@@ -252,6 +260,8 @@ TabPage RID_PAGE_SELECTABTYPE
         Text[ hebrew ] = "Evolution";
         Text[ thai ] = "Evolution";
         Text[ hindi ] = "Evolution";
+        Text[ hungarian ] = "Evolution";
+        Text[ slovenian ] = "Evolution";
     };
     RadioButton RB_LDAP
     {
@@ -285,6 +295,8 @@ TabPage RID_PAGE_SELECTABTYPE
         Text[ hebrew ] = "LDAP‮ספר כתובות ‬";
         Text[ hindi ] = "LDAP पता ड़ॉटा";
         Text[ slovak ] = "LDAP adresár";
+        Text[ hungarian ] = "LDAP-címtár";
+        Text[ slovenian ] = "LDAP-adresar";
     };
     RadioButton RB_OUTLOOK
     {
@@ -318,6 +330,8 @@ TabPage RID_PAGE_SELECTABTYPE
         Text[ hebrew ] = "Outlook‮ספר כתובות ‬";
         Text[ hindi ] = "औटलुक पता पुस्तक";
         Text[ slovak ] = "Outlook adresár";
+        Text[ hungarian ] = "Outlook-címjegyzék";
+        Text[ slovenian ] = "Adresar programa Outlook";
     };
     RadioButton RB_OUTLOOKEXPRESS
     {
@@ -351,6 +365,8 @@ TabPage RID_PAGE_SELECTABTYPE
         Text[ hebrew ] = "Windows System‮ספר כתובות ‬";
         Text[ hindi ] = "Windows सिस्टम पता पुस्तक";
         Text[ slovak ] = "Windows system adresár";
+        Text[ hungarian ] = "Windows-rendszercímjegyzék";
+        Text[ slovenian ] = "Adresar sistema Windows";
     };
     RadioButton RB_OTHER
     {
@@ -384,6 +400,8 @@ TabPage RID_PAGE_SELECTABTYPE
         Text[ hebrew ] = "‮סוגים אחרים של מקורות חיצוניים לספר הכתובות‬";
         Text[ hindi ] = "अन्य बाहरी ड़ॉटा मूल";
         Text[ slovak ] = "Ostatné externé zdroje dát";
+        Text[ hungarian ] = "Egyéb külső adatforrás";
+        Text[ slovenian ] = "Drug zunanji vir podatkov";
     };
     Text[ portuguese ] = "Bem-vindo ao AutoPiloto da fonte de dados dos endere�os!";
     Text[ russian ] = "����� ���������� � ������ ���������� ������ �������!";
@@ -393,7 +411,7 @@ TabPage RID_PAGE_SELECTABTYPE
     Text[ spanish ] = "Bienvenido al Piloto autom�tico de fuentes de datos de direcciones";
     Text[ finnish ] = "T�m� on ohjattu yhteystietojen tuominen";
     Text[ italian ] = "Benvenuti nel Pilota automatico per impostare la sorgente dati della Rubrica";
-    Text[ danish ] = "Velkommen til AutoPilot til konfiguration af adressedatakilder.";
+    Text[ danish ] = "Velkommen til AutoPilot for adressedatakilder.";
     Text[ swedish ] = "V�lkommen till AutoPiloten f�r att skapa adressdatak�llor";
     Text[ polish ] = "Witamy w AutoPilocie �r�de� danych adresowych.";
     Text[ portuguese_brazilian ] = "Bem-vindo ao Assistente da Fonte de Dados de Endere�os";
@@ -409,6 +427,8 @@ TabPage RID_PAGE_SELECTABTYPE
     Text[ hebrew ] = "‮בריכים הבאים ל\"טייס האוטומטי\" לספרי כתובות‬";
     Text[ hindi ] = "पता ड़ॉटा मूल ओटोपैलट् में स्वागत है";
     Text[ slovak ] = "Vitajte v sprievodcovi zdrojom dát adries";
+    Text[ hungarian ] = "Üdvözli a Címtártündér";
+    Text[ slovenian ] = "Dobrodošli v Avtopilotu vira podatkov adresarja";
 };
 
 //........................................................................
@@ -457,6 +477,8 @@ TabPage RID_PAGE_ADMININVOKATION
         Text[ hebrew ] = "Zur Einrichtung der neuen Datenquelle sind noch weiter gehende Angaben notwendig.\n\nDie folgende Schaltfläche öffnet einen weiteren Dialog, in dem Sie die fehlenden Einstellungen vornehmen können.";
         Text[ hindi ] = "नया ड़ॉटा मूल को सेटप करने केलिए, अतिरिक्त जानकारी की आवश्यकता है ।\n\nनिम्नलिखित बटन को क्लिक करने से दूसरा डयलॉग खुल जायेगा जहाँ पर आवश्यक जानकारियों को आप प्रविष्ट कर सकते है ।";
         Text[ slovak ] = "Aby bolo možné nastaviť zdroj dát, sú potrebné ďalšie informácie.\n\nKliknutím na nasledujúce tlačítko otvoríte ďalšie okno, v ktorom zadáte potrebné informácie.";
+        Text[ hungarian ] = "Új adatforrás beállításához további részletek szükségesek.\n\nA szükséges adatok beviteléhez kattintson a Beállítások gombra.";
+        Text[ slovenian ] = "Za nov vir podatkov so potrebne dodatne informacije.\n\nKliknite na gumb, da se odpre pogovorno okno, in vnesite potrebne podatke.";
     };
 
     PushButton PB_INVOKE_ADMIN_DIALOG
@@ -491,6 +513,8 @@ TabPage RID_PAGE_ADMININVOKATION
         Text[ hebrew ] = "‮הגדרות‬";
         Text[ hindi ] = "निर्धारण";
         Text[ slovak ] = "Nastavenia";
+        Text[ hungarian ] = "Beállítások";
+        Text[ slovenian ] = "Nastavitve";
     };
 
     FixedText FT_ERROR
@@ -514,7 +538,7 @@ TabPage RID_PAGE_ADMININVOKATION
         Text[ spanish ] = "No se pudo efectuar la conexi�n a la fuente de datos.\nAntes de continuar, compruebe la configuraci�n realizada o elija (en la ficha anterior) otro tipo para la fuente de datos de direcciones.";
         Text[ finnish ] = "Yhteytt� tietol�hteeseen ei saatu.\nTarkista tehdyt asetukset ennen jatkamista tai valitse edelliselt� sivulta toinen osoitetietol�hteen tyyppi.";
         Text[ italian ] = "Impossibile realizzare il collegamento alla sorgente dati.\nPrima di proseguire vi consigliamo di verificare le impostazioni appena fatte oppure selezionate un altro tipo di sorgente dati per la Rubrica nella pagina precedente.";
-        Text[ danish ] = "Der kunne ikke oprettes forbindelse til datakilden.\nKontroller de foretagne indstillinger, f�r du forts�tter, eller v�lg (p� forrige side) en anden type til dit adressekartotek.";
+        Text[ danish ] = "Der kunne ikke oprettes forbindelse til datakilden.\nKontroller venligst de foretagne indstillinger, f�r du forts�tter, eller v�lg (p� forrige side) en anden type til dit adressekartotek.";
         Text[ swedish ] = "Det gick inte att koppla till datak�llan.\nKontrollera de gjorda inst�llningarna innan du forts�tter eller v�lj en annan typ f�r din adressdatak�lla (p� f�reg�ende sida).";
         Text[ polish ] = "Nie uda�o si� nawi�za� po��czenia ze �r�d�em danych.\nZanim przejdziesz dalej, sprawd� przyj�te ustawienia lub wybierz (na poprzedniej stronie) inny typ �r�d�a danych adresowych.";
         Text[ portuguese_brazilian ] = "N�o foi poss�vel estabelecer a conex�o com a fonte de dados.\nAntes de continuar, verifique as defini��es ou selecione outro tipo para a fonte de dados dos endere�os (na p�gina anterior).";
@@ -530,6 +554,8 @@ TabPage RID_PAGE_ADMININVOKATION
         Text[ hebrew ] = "Die Verbindung zur Datenquelle konnte nicht hergestellt werden.\nBitte überprüfen Sie, bevor Sie fortfahren, die gemachten Einstellungen, oder wählen Sie (auf der vorigen Seite) einen anderen Typ für Ihre  Adress-Datenquelle.";
         Text[ hindi ] = "ड़ॉटा मूल को कनेक्शन स्थापित नहीं कर सकते है ।\nजारी रखने से पहिले, की हुयी निर्धारणों का जाँच कीजिए, अथवा (पिछला पृष्ठ में) दूसरा पते का ड़ॉटा मूल वर्ग को चुनिए । ";
         Text[ slovak ] = "Nepodarilo sa nadviazať spojenie so zdrojom dát.\nPredtým ako budete pokračovať, skontrolujte prosím nastavenia, alebo (na predchádzajúcej stránke) vyberte iný typ zdroja dát adresy.";
+        Text[ hungarian ] = "Nem lehet az adatforráshoz kapcsolódni.\nEllenőrizze a beállításokat, vagy válasszon másik adatforrást az előző lapon.";
+        Text[ slovenian ] = "Ni mogoče vzpostaviti povezave z virom podatkov.\nPreden nadaljujete, preverite nastavitve ali pa na prejšnji strani izberite drug vir podatkov.";
     };
     Text[ portuguese ] = "Defini��es adicionais";
     Text[ russian ] = "�������������� ���������";
@@ -555,6 +581,8 @@ TabPage RID_PAGE_ADMININVOKATION
     Text[ hebrew ] = "Zusätzliche Einstellungen";
     Text[ hindi ] = "अतिरिक्त निर्धारण";
     Text[ slovak ] = "Ďalšie nastavenia";
+    Text[ hungarian ] = "További beállítások";
+    Text[ slovenian ] = "Dodatne nastavitve";
 };
 
 //........................................................................
@@ -602,6 +630,8 @@ TabPage RID_PAGE_TABLESELECTION
         Text[ hebrew ] = "Die von Ihnen gewählte externe Datenquelle enthält mehrere Adress-Bestände.\nBitte wählen Sie denjenigen aus, mit dem Sie hauptsächlich arbeiten wollen:";
         Text[ hindi ] = "आपके चुने हुए बाहरी ड़ॉटा मूल में एक से अधिक पता पुस्तक सम्मिलित है ।\nकृपया का एक मुख्य पता पुस्तक को चुनो जिसके साथ आप काम करना चाहते है :";
         Text[ slovak ] = "Externý zdroj dát, ktorý ste vybrali obsahuje viac ako jednu knihu adries.\nVyberte si prosím jednu, s ktorou chcete pracovať.";
+        Text[ hungarian ] = "A választott külső adatforrás több címjegyzéket tartalmaz.\nVálassza ki közülük azt, amellyel dolgozni kíván.";
+        Text[ slovenian ] = "Izbrani zunanji vir podatkov vsebuje več adresarjev.\nIzberite tistega, ki ga boste najpogosteje rabili:";
     };
 
     ListBox LB_TABLELIST
@@ -638,6 +668,8 @@ TabPage RID_PAGE_TABLESELECTION
     Text[ hebrew ] = "‮בחירת טבלה‬";
     Text[ hindi ] = "सारणी चुनो";
     Text[ slovak ] = "Vybrať tabuľku";
+    Text[ hungarian ] = "Tábla kiválasztása";
+    Text[ slovenian ] = "Izberi tabelo";
 };
 
 //........................................................................
@@ -675,7 +707,7 @@ TabPage RID_PAGE_FIELDMAPPING
         Text[ spanish ] = "Para poder incorporar los datos de las direcciones en las plantillas, %PRODUCTNAME debe saber qu� campos contienen qu� datos.\n\nPor ejemplo, usted puede haber guardado las direcciones electr�nicas en un campo con el nombre \"correo-e\", Correo e\", \"email\" o con un nombre completamente distinto.\n\nSi pulsa el bot�n que se encuentra m�s abajo, se abrir� otro di�logo en el que podr� configurar la fuente de datos.";
         Text[ finnish ] = "Jotta osoitetietojen yhdist�minen malleihin onnistuisi, %PRODUCTNAMEn on tiedett�v�, miss� kentiss� on mit�kin tietoa.\n\nS�hk�postiosoitteet voivat olla esimerkiksi kent�ss� \"s�hk�posti\", \"s-posti\" tai \"email\" tms.\n\nAvaa alla olevaa painiketta napsauttamalla toinen valintaikkuna, johon voit sy�tt�� tietol�hteen asetukset.";
         Text[ italian ] = "Per poter utilizzare i dati della Rubrica nei vostri modelli � necessario che %PRODUCTNAME riconosca i campi contenenti dati concreti.\n\nSupponiamo che abbiate salvato i vostri indirizzi eMail in un campo chiamato \"E-Mail\", \"eMail\", \"EM\" o un qualsiasi altro nome.\n\nPremendo il pulsante in basso si aprir� un altro dialogo in cui potrete impostare la sorgente dati.";
-        Text[ danish ] = "\"For at kunne bruge adressedataene i dine skabelondokumenter skal %PRODUCTNAME vide, hvilke felter der indeholder hvilke konkrete data.\n\nFor eksempel kunne du have gemt e-mail-adresserne i et felt ved navn \"\"E-mail\"\", \"\"Email\"\" eller \"\"EM\"\" � eller under et helt andet navn.\n\nS� snart du trykker p� knappen nedenfor, �bnes en yderligere dialog, hvor du kan foretage indstillingerne for din datakilde.\"";
+        Text[ danish ] = "For at kunne bruge adressedataene i dine skabelondokumenter skal %PRODUCTNAME vide, hvilke felter der indeholder hvilke konkrete data.\n\nFor eksempel kunne du have gemt e-mail-adresserne i et felt ved navn \"E-post\", \"Email\" eller \"EM\" � eller under et helt andet navn.\n\nS� snart du trykker p� knappen nedenfor, �bnes en yderligere dialog, hvor du kan foretage indstillingerne for din datakilde.";
         Text[ swedish ] = "F�r att adressdata i dina malldokument ska kunna anv�ndas m�ste %PRODUCTNAME veta vilka f�lt som inneh�ller vilka konkreta data.\n\nDu kan till exempel ha sparat e-postadresser i ett f�lt som kallas \"E-Mail\" eller \"Email\" eller \"EM\" - eller n�got helt annat.\n\nOm du klickar p� kommandoknappen nedan �ppnas en ytterligare dialogruta d�r du kan g�ra de h�r inst�llningarna f�r din datak�lla.";
         Text[ polish ] = "Aby mo�na by�o zastosowa� dane adresowe w szablonach, program %PRODUCTNAME musi wiedzie�, w kt�rych polach znajduj� si� okre�lone dane.\n\nMo�na np. zapisa� adresy poczty elektronicznej w polu \"e-mail\" lub w polu o innej nazwie.\n\nGdy klikniesz przycisk poni�ej, pojawi si� nowe okno dialogowe, w kt�rym mo�esz poda� ustawienia dla �r�d�a danych.";
         Text[ portuguese_brazilian ] = "Para poder utilizar os dados dos endere�os nos seus modelos de documentos, o %PRODUCTNAME tem que saber quais dados cada campo cont�m.\n\nExemplo: os endere�os de e-mail podem estar guardados num campo com o nome \"e-mail\", \"email\" ou \"EM\" - ou algo completamente diferente.\n\nUtilize o bot�o abaixo para abrir outra caixa de di�logo que lhe permite definir estes par�metros para a fonte de dados.";
@@ -691,6 +723,8 @@ TabPage RID_PAGE_FIELDMAPPING
         Text[ hebrew ] = "Um die Adress-Daten in Ihren Vorlagen-Dokumenten benutzen zu können, muss %PRODUCTNAME wissen, welche Felder welche konkreten Daten enthalten.\n\nZum Beispiel könnten Sie die E-Mail-Adressen in einem Feld namens \"E-Mail\" oder \"Email\" oder \"EM\" - oder unter völlig anderem Namen - gespeichert haben.\n\nSobald Sie die unten befindliche Schaltfläche betätigen, wird ein weiterer Dialog geöffnet, in dem sie diese Einstellungen für Ihre Datenquelle vornehmen können.";
         Text[ hindi ] = "आपके नमूनों में पता ड़ॉटा को संयुक्त करने केलिए, %PRODUCTNAME को यह पता होना चाहिए कि हरेक क्षेत्र क्या मूल्य है ।\n\nअभी केलिए, आपने इ-मेइल पता को \"ईमेइल\", अथवा \"इ-मेइल\" अथवा \"EM\" - अथवा कुछ संपूर्ण भिन्न नाम का क्षेत्र में संग्रह किया होगा ।\n\nनीचे का बटन को दबाने पर एक डयलॉग बॉक्स खुल जायेगा जहाँ पर आप अपना ड़ॉटा मूल केलिए निर्धारणों को प्रविष्ट कर सकते है ।";
         Text[ slovak ] = "Aby ste mohli pripojiť adresy k Vašim šablónam, %PRODUCTNAME musí vedieť, aké dáta obsahujú jednotlivé polia.\n\nNapríklad, môžete mať uložené e-mailové adresy v poli nazvanom \"email\", alebo \"E-mail\", alebo \"EM\" - alebo hociako inak.\n\nKliknite na tlačidlo dole a otvorte ďalšie okno, kde môžete zadať nastavenie pre Váš zdroj dát.";
+        Text[ hungarian ] = "A cím sablonban történő használatához meg kell adnia, hogy az egyes mezők milyen adatokat tartalmaznak.\n\nPéldául az e-mail címet tartalmazhatja akár egy 'email', egy 'E-mail' vagy egy 'EM' nevű mező.\n\nKattintson az alábbi gombra a mezők megadásához.";
+        Text[ slovenian ] = "Za vnašanje podatkov iz adresarja v predloge mora %PRODUCTNAME vedeti, katere podatke vsebujejo posamezna polja.\n\nPoštne naslove ste morda shranili v polje z imenom \"e-mail\" ali \"e-pošta\" ali v polje s kakšnim drugim imenom.\n\nKliknite na spodnji gumb, da se odpre novo pogovorno okno, v katero lahko vnesete nastavitve vira podatkov.";
     };
 
     PushButton PB_INVOKE_FIELDS_DIALOG
@@ -725,6 +759,8 @@ TabPage RID_PAGE_FIELDMAPPING
         Text[ hebrew ] = "‮השמת ערכים לשדות‬";
         Text[ hindi ] = "Field Assignment";
         Text[ slovak ] = "Priradenie poľa";
+        Text[ hungarian ] = "Mező hozzárendelése";
+        Text[ slovenian ] = "Dodelitev polja";
     };
 
     FixedText FT_ASSIGNEDFIELDS
@@ -757,6 +793,8 @@ TabPage RID_PAGE_FIELDMAPPING
     Text[ hebrew ] = "‮השצת ערכים לשדות‬";
     Text[ hindi ] = "क्षेत्र निर्दिष्ट करना";
     Text[ slovak ] = "Priradenie poľa";
+    Text[ hungarian ] = "Mező hozzárendelése";
+    Text[ slovenian ] = "Dodelitev polja";
 };
 
 //........................................................................
@@ -804,6 +842,8 @@ TabPage RID_PAGE_FINAL
         Text[ hebrew ] = "Das waren alle Angaben, die zur Integration Ihrer Adress-Daten in %PRODUCTNAME benötigt werden.\n\nGeben Sie jetzt noch den Namen an, unter dem die Datenquelle in %PRODUCTNAME registriert werden soll.";
         Text[ hindi ] = "आपका पता ड़ॉटा को %PRODUCTNAME में संयुक्त करने केलिए इन सभी जानकारी का आवश्यकता था ।";
         Text[ slovak ] = "To boli všetky informácie potrebné na integráciu vašich adries do %PRODUCTNAME.\n\nTeraz iba zadajte meno, pod ktorým chcete zaregistrovať zdroj dát v %PRODUCTNAME.";
+        Text[ hungarian ] = "Az összes információ rendelkezésre áll, hogy címjegyzékét az %PRODUCTNAME-ban használhassa.\n\nAz %PRODUCTNAME egy adatforrást fog rendelni a címjegyzékhez. Kérem, adja meg az adatforrás nevét.";
+        Text[ slovenian ] = "To so bile vse potrebne informacije za integriranje vašega adresarja v %PRODUCTNAME.\n\nVnesite ime, s katerim bi radi registrirali ta vir podatkov v programu %PRODUCTNAME.";
     };
 
     FixedText FT_NAME_EXPL
@@ -839,6 +879,8 @@ Text[ japanese ] = "タイトル";
         Text[ hebrew ] = "Titel";
         Text[ hindi ] = "नाम्";
         Text[ slovak ] = "Názov";
+        Text[ hungarian ] = "Név";
+        Text[ slovenian ] = "Ime";
     };
 
     Edit ET_DATASOURCENAME
@@ -884,6 +926,8 @@ Text[ japanese ] = "タイトル";
         Text[ hebrew ] = "Es existiert schon eine andere Datenquelle mit diesem Namen. Da Datenquellennamen global eindeutig sind, müssen sie einen anderen wählen.";
         Text[ hindi ] = "इस नाम का अन्य ड़ॉटा मूल पहिले से है । ड़ॉटा मूल को ग्लोबली अनोखा नाम रहने के कारण, कृपया अन्य नाम को चुनिए ।";
         Text[ slovak ] = "Toto meno už bolo pridelené inému zdroju dát. Vzhľadom na to, že zdroje dát musia mať unikátne mená, vyberte iné.";
+        Text[ hungarian ] = "Egy másik adatforrás már használja ezt a nevet. Az adatforrások nevének egyedinek kell lennie. Válaszon egy másik - nem használt - nevet.";
+        Text[ slovenian ] = "Drug vir podatkov že uporablja to ime. Izberite drugo ime, ker morajo imeti viri podatkov edinstvena imena.";
     };
     Text[ portuguese ] = "T�tulo da fonte de dados";
     Text[ russian ] = "��� ��������� ������";
@@ -909,6 +953,8 @@ Text[ japanese ] = "タイトル";
     Text[ hebrew ] = "Datenquellen Titel";
     Text[ hindi ] = "ड़ॉटा मूल नाम";
     Text[ slovak ] = "Názov zdroja dát";
+    Text[ hungarian ] = "Adatforrás neve";
+    Text[ slovenian ] = "Ime vira podatkov";
 };
 
 //........................................................................
@@ -943,6 +989,8 @@ ErrorBox RID_ERR_NEEDTYPESELECTION
     Message[ hebrew ] = "Bitte wählen sie einen Adressbuch-Typ aus";
     Message[ hindi ] = "कृपया एक पता पुस्तक वर्ग को चुनो ।";
     Message[ slovak ] = "Vyberte typ knihy adries prosím.";
+    Message[ hungarian ] = "Válassza ki a címjegyzék típusát.";
+    Message[ slovenian ] = "Izberite vrsto adresarja.";
 };
 
 //........................................................................
@@ -980,6 +1028,8 @@ QueryBox RID_QRY_NOTABLES
     Message[ hebrew ] = "Die Datenquelle enthält keine Tabelle.\nWollen Sie sie trotzdem als Adress-Datenquelle einrichten?";
     Message[ hindi ] = "ड़ॉटा मूल में कोई सारणियाँ नहीं है ।\nआप किसी तरह उसको एक पते का ड़ॉटा मूल जैसे सेट्ट करना चाहते है ?";
     Message[ slovak ] = "Zdroj dát neobsahuje žiadne tabuľky.\nChcete to nastaviť ako zdroj dát adries aj napriek tomu?";
+    Message[ hungarian ] = "Az adatforrás egyetlen táblát sem tartalmaz.\nKívánja ezt az adatforrást alkalmazni?";
+    Message[ slovenian ] = "Vir podatkov ne vsebuje tabel.\nAli ga vseeno želite uporabiti kot vir podatkov za adresar?";
 };
 
 //........................................................................
@@ -1012,6 +1062,8 @@ String RID_STR_DEFAULT_NAME
     Text[ hebrew ] = "Adressen";
     Text[ hindi ] = "पता";
     Text[ slovak ] = "Adresy";
+    Text[ hungarian ] = "Címek";
+    Text[ slovenian ] = "Naslovi";
 };
 
 String RID_STR_ADMINDIALOGTITLE
@@ -1043,6 +1095,8 @@ String RID_STR_ADMINDIALOGTITLE
     Text[ hebrew ] = "Adress Datenquelle anlegen";
     Text[ hindi ] = "पता ड़ॉटा मूल को उत्पन्न करो";
     Text[ slovak ] = "Vytvoriť zdroj dát pre adresy";
+    Text[ hungarian ] = "Címjegyzék-adatforrás létrehozása";
+    Text[ slovenian ] = "Ustvari vir podatkov adresarja";
 };
 
 String RID_STR_NOCONNECTION
@@ -1074,6 +1128,8 @@ String RID_STR_NOCONNECTION
     Text[ hebrew ] = "Die Verbindung konnte nicht hergestellt werden.";
     Text[ hindi ] = "कनेक्शन को स्थापित नहीं कर सकते है ।";
     Text[ slovak ] = "Spojenie sa nepodarilo nadviazať.";
+    Text[ hungarian ] = "A kapcsolatot nem sikerült létrehozni.";
+    Text[ slovenian ] = "Ni mogoče vzpostaviti povezave.";
 };
 
 String RID_STR_PLEASECHECKSETTINGS
@@ -1089,7 +1145,7 @@ String RID_STR_PLEASECHECKSETTINGS
     Text[ spanish ] = "Compruebe la configuraci�n para la fuente de datos.";
     Text[ finnish ] = "Tarkista tietol�hteen asetukset.";
     Text[ italian ] = "Verificate le impostazioni della sorgente dati.";
-    Text[ danish ] = "Kontroller indstillingerne for datakilden.";
+    Text[ danish ] = "Kontroller venligst indstillingerne for datakilden.";
     Text[ swedish ] = "Kontrollera inst�llningarna f�r datak�llan.";
     Text[ polish ] = "Sprawd� ustawienia �r�d�a danych.";
     Text[ portuguese_brazilian ] = "Verifique as defini��es da fonte de dados.";
@@ -1105,6 +1161,8 @@ String RID_STR_PLEASECHECKSETTINGS
     Text[ hebrew ] = "Bitte überprüfen Sie die Einstellungen für die Datenquelle.";
     Text[ hindi ] = "कृपया ड़ॉटा मूल केलिए की हुयी निर्धारणों का जाँच कीजिए ।";
     Text[ slovak ] = "Skontrolujte nastavenia zdroja dát prosím.";
+    Text[ hungarian ] = "Ellenőrizze az adatforrás beállításait.";
+    Text[ slovenian ] = "Preverite nastavitve vira podatkov.";
 };
 
 String RID_STR_FIELDDIALOGTITLE
@@ -1136,6 +1194,8 @@ String RID_STR_FIELDDIALOGTITLE
     Text[ hebrew ] = "Adress Daten - Feldzuordnung";
     Text[ hindi ] = "पता ड़ॉटा - क्षेत्र निर्दिष्ट करना";
     Text[ slovak ] = "Údaje adries - priradenie polí";
+    Text[ hungarian ] = "Címadatok - mező-hozzárendelés";
+    Text[ slovenian ] = "Podatki adresarja - dodelitev polj";
 };
 
 String RID_STR_NOFIELDSASSIGNED
@@ -1156,7 +1216,7 @@ String RID_STR_NOFIELDSASSIGNED
     Text[ spanish ] = "Actualmente no existen campos asignados.\nSi no puede llevar a cabo de momento ninguna asignaci�n, lo puede hacer posteriormente en cualquier momento:\nMen� \"Archivo - Plantillas - Fuente de libreta de direcciones...\"";
     Text[ finnish ] = "T�ll� hetkell� ei ole m��ritettyj� kentti�.\nVoit m��ritt�� ne nyt tai my�hemmin valitsemalla ensin\n\"Tiedosto - Malli - Osoitekirjan l�hde\"";
     Text[ italian ] = "Al momento non � assegnato alcun campo.\nSe preferite non fare assegnazioni al momento, potete farlo in un secondo momento:\nMenu \"File - Modelli di documenti - Sorgente Rubrica...\"";
-    Text[ danish ] = "I �jblikket er der ikke tildelt nogen felter.\nHvis du i �jeblikket ikke �nsker at foretage en tildeling, kan du til enhver tid g�re dette senere:\nMenuen \"Filer - Dokumentskabelon - Adressekartotekskilde...\"";
+    Text[ danish ] = "I �jeblikket er der ikke tildelt nogen felter.\nHvis du i �jeblikket ikke �nsker at foretage en tildeling, kan du g�re dette senere under \"Filer - Skabelon - Adressekartotekskilde...\"";
     Text[ swedish ] = "F�r n�rvarande �r inga f�lt tilldelade.\nDu kan g�ra tilldelningen nu eller senare om du v�ljer:\n\"Arkiv - Dokumentmall - Adressboksk�lla ...\"";
     Text[ polish ] = "Brak przypisanych p�l.\nPola mo�na przypisa� teraz lub p�niej,\nwybieraj�c sekwencj� \"Plik - Szablon - �r�d�o danych adresowych...\"";
     Text[ portuguese_brazilian ] = "N�o h� campos atribu�dos.\nSe voc� n�o pretender atribuir os campos agora, poder� faz�-lo mais tarde em:\nmenu \"Arquivo - Modelos - Origem do livro de endere�os...\"";
@@ -1172,6 +1232,8 @@ String RID_STR_NOFIELDSASSIGNED
     Text[ hebrew ] = "Im Augenblick sind keine Felder zugeordnet.\nWenn Sie im Augenblick keine Zuordnung treffen wollen, können Sie dies später jederzeit nachholen:\nMenü \"Datei - Dokumentvorlage - Adressbuch Quelle ...\"";
     Text[ hindi ] = "इस समय निर्दिष्ट की हुयी कोई क्षेत्र नहीं है ।\n\"फाइल - नमूना - पता पुस्तक मूल...\"\n को चुनके आप अभी अथवा बाद में क्षेत्रों को निर्दिष्ट कर सकते है";
     Text[ slovak ] = "Momentálne nie sú priradené žiadne polia.\nMôžete ich priradiť teraz, ale tak urobiť neskôr v::\n\"Súbor - Šablóny - Zdroj knihy adries...\"";
+    Text[ hungarian ] = "Jelenleg nincsenek mező-hozzárendelések.\nMegadhatja most a mezőket, de későbbre is halaszthatja.\nKésőbb a 'Fájl - Sablonok - Címjegyzék-adatforrás...' menüpont segítségével végezheti el a mezők hozzárendelését. ";
+    Text[ slovenian ] = "Trenutno ni dodeljenih polj.\nLahko jih dodelite zdaj ali pozneje, tako da izberete:\n\"Datoteka - Predloga - Vir podatkov adresarja...\"";
 };
 
 String RID_STR_ABP_SUCCESS
@@ -1203,6 +1265,8 @@ String RID_STR_ABP_SUCCESS
     Text[ hebrew ] = "Ab jetzt können Sie Ihre Adressdaten von %PRODUCTNAME aus erreichen. So öffnen Sie z.B. mit der F4-Taste die Datenquellenansicht, um mit den Adressdaten zu arbeiten.";
     Text[ hindi ] = "%PRODUCTNAME में आपका बाहरी पता पुस्तक को सफलता से पंजीयन किया है ।\nअभी आप पता पुस्तक को अन्य किसी ड़ॉटा मूल जैसे उपयोग कर सकते है ।";
     Text[ slovak ] = "Vaša externá kniha adries bola úspešne zaregistrovaná v %PRODUCTNAME.\nTeraz môžete používať vaše adresy ako iné zdroje dát.";
+    Text[ hungarian ] = "A címeket mostantól elérheti az %PRODUCTNAME alkalmazásból. Az F4 billentyű lenyomásával például megnyithatja az adatforrás nézetet, ahol a címekkel dolgozhat.";
+    Text[ slovenian ] = "Sedaj boste imeli dostop do naslovov iz programa %PRODUCTNAME.\nS pritiskom na F4 boste odprli pogled vira podatkov, v katerem boste lahko urejali podatke adresarja.";
 };
 
 //........................................................................
@@ -1210,6 +1274,22 @@ Bitmap BMP_HEADERIMAGE
 {
     file = "addresspilot.bmp";
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
