@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prnsetup.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 19:16:28 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 05:14:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,7 @@ String STR_SVT_PRNDLG_READY
     Text[ turkish ] = "Hazýr";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Preparado";
+    Text[ finnish ] = "Valmis";
 };
 String STR_SVT_PRNDLG_PAUSED
 {
@@ -110,6 +111,7 @@ String STR_SVT_PRNDLG_PAUSED
     Text[ turkish ] = "Durduruldu";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Detenido";
+    Text[ finnish ] = "Keskeytetty";
 };
 String STR_SVT_PRNDLG_PENDING
 {
@@ -135,6 +137,7 @@ String STR_SVT_PRNDLG_PENDING
     Text[ turkish ] = "Silinmek üzere";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Eliminación pendiente";
+    Text[ finnish ] = "Odotetaan poistamista";
 };
 String STR_SVT_PRNDLG_BUSY
 {
@@ -160,6 +163,7 @@ String STR_SVT_PRNDLG_BUSY
     Text[ turkish ] = "Meþgul";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Ocupado";
+    Text[ finnish ] = "Varattu";
 };
 String STR_SVT_PRNDLG_INITIALIZING
 {
@@ -185,6 +189,7 @@ String STR_SVT_PRNDLG_INITIALIZING
     Text[ turkish ] = "Baþlat";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Inicializar";
+    Text[ finnish ] = "Alustetaan";
 };
 String STR_SVT_PRNDLG_WAITING
 {
@@ -210,6 +215,7 @@ String STR_SVT_PRNDLG_WAITING
     Text[ turkish ] = "Beklemede";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "En espera";
+    Text[ finnish ] = "Odotetaan";
 };
 String STR_SVT_PRNDLG_WARMING_UP
 {
@@ -235,6 +241,7 @@ String STR_SVT_PRNDLG_WARMING_UP
     Text[ korean ] = "ÁØºñÁß";
     Text[ turkish ] = "Isýnýyor";
     Text[ catalan ] = "Arranque";
+    Text[ finnish ] = "Lämpenee";
 };
 String STR_SVT_PRNDLG_PROCESSING
 {
@@ -260,6 +267,7 @@ String STR_SVT_PRNDLG_PROCESSING
     Text[ turkish ] = "Ýþleniyor";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Procesar";
+    Text[ finnish ] = "Käsitellään";
 };
 String STR_SVT_PRNDLG_PRINTING
 {
@@ -285,6 +293,7 @@ String STR_SVT_PRNDLG_PRINTING
     Text[ turkish ] = "Yazdýr";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Imprimir";
+    Text[ finnish ] = "Tulostetaan";
 };
 String STR_SVT_PRNDLG_OFFLINE
 {
@@ -310,6 +319,7 @@ String STR_SVT_PRNDLG_OFFLINE
     Text[ turkish ] = "Çevrimdýþý";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Desconectado";
+    Text[ finnish ] = "Offline";
 };
 String STR_SVT_PRNDLG_ERROR
 {
@@ -335,6 +345,7 @@ String STR_SVT_PRNDLG_ERROR
     Text[ turkish ] = "Hata";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Error";
+    Text[ finnish ] = "Virhe";
 };
 String STR_SVT_PRNDLG_SERVER_UNKNOWN
 {
@@ -360,6 +371,7 @@ String STR_SVT_PRNDLG_SERVER_UNKNOWN
     Text[ turkish ] = "Bilinmeyen sunucu";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Servidor desconocido";
+    Text[ finnish ] = "Tuntematon palvelin";
 };
 String STR_SVT_PRNDLG_PAPER_JAM
 {
@@ -385,6 +397,7 @@ String STR_SVT_PRNDLG_PAPER_JAM
     Text[ turkish ] = "Kaðýt sýkýþmasý";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Bloqueo de papel";
+    Text[ finnish ] = "Paperitukos";
 };
 String STR_SVT_PRNDLG_PAPER_OUT
 {
@@ -410,6 +423,7 @@ String STR_SVT_PRNDLG_PAPER_OUT
     Text[ turkish ] = "Yeterli miktarda kaðýt yok";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Falta de papel";
+    Text[ finnish ] = "Ei tarpeeksi paperia";
 };
 String STR_SVT_PRNDLG_MANUAL_FEED
 {
@@ -435,6 +449,7 @@ String STR_SVT_PRNDLG_MANUAL_FEED
     Text[ turkish ] = "El ile besleme";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Alimentación manual";
+    Text[ finnish ] = "Manuaalinen syöttö";
 };
 String STR_SVT_PRNDLG_PAPER_PROBLEM
 {
@@ -460,6 +475,7 @@ String STR_SVT_PRNDLG_PAPER_PROBLEM
     Text[ turkish ] = "Kaðýt sorunu";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Problema de papel";
+    Text[ finnish ] = "Paperiongelma";
 };
 String STR_SVT_PRNDLG_IO_ACTIVE
 {
@@ -485,6 +501,7 @@ String STR_SVT_PRNDLG_IO_ACTIVE
     Text[ turkish ] = "G/Ç aktif";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "I/O activos";
+    Text[ finnish ] = "Keskeytys käytössä";
 };
 String STR_SVT_PRNDLG_OUTPUT_BIN_FULL
 {
@@ -510,6 +527,7 @@ String STR_SVT_PRNDLG_OUTPUT_BIN_FULL
     Text[ turkish ] = "Çýktý çekmecesi doldu";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "La papelera de salida está llena";
+    Text[ finnish ] = "Tulostuslokero täynnä";
 };
 String STR_SVT_PRNDLG_TONER_LOW
 {
@@ -535,6 +553,7 @@ String STR_SVT_PRNDLG_TONER_LOW
     Text[ turkish ] = "Toner azaldý";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Tóner bajo";
+    Text[ finnish ] = "Väriaine vähissä";
 };
 String STR_SVT_PRNDLG_NO_TONER
 {
@@ -560,6 +579,7 @@ String STR_SVT_PRNDLG_NO_TONER
     Text[ korean ] = "Åä³Ê°¡ ¾ø½À´Ï´Ù.";
     Text[ turkish ] = "Toner bitti";
     Text[ catalan ] = "No hay tóner";
+    Text[ finnish ] = "Väri lopussa";
 };
 String STR_SVT_PRNDLG_PAGE_PUNT
 {
@@ -585,6 +605,7 @@ String STR_SVT_PRNDLG_PAGE_PUNT
     Text[ turkish ] = "Sayfayý sil";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Eliminar página";
+    Text[ finnish ] = "Poista sivu";
 };
 String STR_SVT_PRNDLG_USER_INTERVENTION
 {
@@ -610,6 +631,7 @@ String STR_SVT_PRNDLG_USER_INTERVENTION
     Text[ turkish ] = "Kullanýcý müdahalesi gerekiyor";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Intervención necesaria del usuario ";
+    Text[ finnish ] = "Käyttäjän toimia tarvitaan";
 };
 String STR_SVT_PRNDLG_OUT_OF_MEMORY
 {
@@ -635,6 +657,7 @@ String STR_SVT_PRNDLG_OUT_OF_MEMORY
     Text[ turkish ] = "Bellek yeterli deðil";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Memoria insuficiente";
+    Text[ finnish ] = "Muisti ei riitä";
 };
 String STR_SVT_PRNDLG_DOOR_OPEN
 {
@@ -660,6 +683,7 @@ String STR_SVT_PRNDLG_DOOR_OPEN
     Text[ turkish ] = "Kapak açýk";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Abrir cubierta";
+    Text[ finnish ] = "Avoin kansi";
 };
 String STR_SVT_PRNDLG_POWER_SAVE
 {
@@ -685,6 +709,7 @@ String STR_SVT_PRNDLG_POWER_SAVE
     Text[ turkish ] = "Enerji tasarruf kipi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Modo de ahorro energético";
+    Text[ finnish ] = "Virransäästötila";
 };
 String STR_SVT_PRNDLG_DEFPRINTER
 {
@@ -710,6 +735,7 @@ String STR_SVT_PRNDLG_DEFPRINTER
     Text[ turkish ] = "Standart yazýcý";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Predeterminada";
+    Text[ finnish ] = "Oletustulostin";
 };
 String STR_SVT_PRNDLG_JOBCOUNT
 {
@@ -735,6 +761,7 @@ String STR_SVT_PRNDLG_JOBCOUNT
     Text[ turkish ] = "%d belge";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "%d documentos";
+    Text[ finnish ] = "%d asiakirjaa";
 };
 
 ModalDialog DLG_SVT_PRNDLG_PRNSETUPDLG
@@ -780,6 +807,7 @@ ModalDialog DLG_SVT_PRNDLG_PRNSETUPDLG
         Text[ turkish ] = "Yazýcý";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Impresora";
+        Text[ finnish ] = "Tulostin ";
     };
     FixedText FT_NAME
     {
@@ -807,6 +835,7 @@ ModalDialog DLG_SVT_PRNDLG_PRNSETUPDLG
         Text[ turkish ] = "~Ad";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Nombre";
+        Text[ finnish ] = "~Nimi";
     };
     ListBox LB_NAMES
     {
@@ -842,6 +871,7 @@ ModalDialog DLG_SVT_PRNDLG_PRNSETUPDLG
         Text[ turkish ] = "~Özellikler...";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Propiedades...";
+        Text[ finnish ] = "~Ominaisuudet";
     };
     FixedText FT_STATUS
     {
@@ -869,6 +899,7 @@ ModalDialog DLG_SVT_PRNDLG_PRNSETUPDLG
         Text[ turkish ] = "Durum";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Estado";
+        Text[ finnish ] = "Tila";
     };
     FixedText FI_STATUS
     {
@@ -901,6 +932,7 @@ ModalDialog DLG_SVT_PRNDLG_PRNSETUPDLG
         Text[ turkish ] = "Tip";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Tipo";
+        Text[ finnish ] = "Tyyppi";
     };
     FixedText FI_TYPE
     {
@@ -933,6 +965,7 @@ ModalDialog DLG_SVT_PRNDLG_PRNSETUPDLG
         Text[ turkish ] = "Yer";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Ubicación";
+        Text[ finnish ] = "Sijainti";
     };
     FixedText FI_LOCATION
     {
@@ -965,6 +998,7 @@ ModalDialog DLG_SVT_PRNDLG_PRNSETUPDLG
         Text[ turkish ] = "Açýklama";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Comentario";
+        Text[ finnish ] = "Kommentti";
     };
     FixedText FI_COMMENT
     {
@@ -998,4 +1032,5 @@ ModalDialog DLG_SVT_PRNDLG_PRNSETUPDLG
     Text[ korean ] = "ÇÁ¸°ÅÍ ¼³Á¤";
     Text[ turkish ] = "Yazýcý ayarlarý";
     Text[ catalan ] = "Configurar impresora";
+    Text[ finnish ] = "Tulostimen asetukset";
 };
