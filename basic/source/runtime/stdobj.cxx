@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stdobj.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-13 18:48:46 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 16:09:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -290,6 +290,9 @@ static Methods aMethods[] = {
 { "Format",         SbxSTRING,    2 | _FUNCTION, RTLNAME(Format)            },
   { "expression",   SbxVARIANT },
   { "format",       SbxSTRING,        _OPT },
+{ "FormatDateTime", SbxSTRING,    2 | _FUNCTION | _COMPTMASK, RTLNAME(FormatDateTime)   },
+  { "Date",         SbxDATE },
+  { "NamedFormat",  SbxINTEGER,        _OPT },
 
 { "FRAMEANCHORCHAR",        SbxINTEGER,       _CPROP,    RTLNAME(FRAMEANCHORCHAR)       },
 { "FRAMEANCHORPAGE",        SbxINTEGER,       _CPROP,    RTLNAME(FRAMEANCHORPAGE)       },
