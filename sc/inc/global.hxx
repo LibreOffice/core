@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: er $ $Date: 2003-12-16 13:41:50 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:11:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -319,6 +319,7 @@ inline BOOL ValidColRowTab(USHORT nCol, USHORT nRow, USHORT nTab)
 #define HASATTR_ROTATE          1024
 #define HASATTR_NOTOVERLAPPED   2048
 #define HASATTR_RTL             4096
+#define HASATTR_RIGHTORCENTER   8192    // right or centered logical alignment
 
 #define HASATTR_PAINTEXT        ( HASATTR_LINES | HASATTR_SHADOW | HASATTR_CONDITIONAL )
 
@@ -700,6 +701,7 @@ public:
     /// a "ReadOnly" formatter for UNO/XML export
     static  SvNumberFormatter*  GetEnglishFormatter();
 
+    static BOOL IsSystemRTL();                      // depending on system language
     static LanguageType GetEditDefaultLanguage();   // for EditEngine::SetDefaultLanguage
     static BYTE GetDefaultScriptType();             // for all WEAK characters
     /** Map ATTR_((CJK|CTL)_)?FONT_... to proper WhichIDs.
