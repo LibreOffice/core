@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unnum.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:39:24 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:07:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -400,34 +400,45 @@ void SwUndoNumUpDown::Repeat( SwUndoIter& rUndoIter )
 
 /*  */
 
-
-SwUndoNumOrNoNum::SwUndoNumOrNoNum( const SwNodeIndex& rIdx, BOOL bDelete,
-                                    BOOL bOutln )
-    : SwUndo( UNDO_NUMORNONUM ), nIdx( rIdx.GetIndex() ), bDel( bDelete ),
-    bOutline( bOutln )
+// #115901#
+SwUndoNumOrNoNum::SwUndoNumOrNoNum( const SwNodeIndex& rIdx,
+                                    const SwNodeNum & rOldNum,
+                                    const SwNodeNum & rNewNum)
+    : SwUndo( UNDO_NUMORNONUM ), nIdx( rIdx.GetIndex() ), mNewNum(rNewNum),
+      mOldNum(rOldNum)
 {
 }
 
-
+// #115901#
 void SwUndoNumOrNoNum::Undo( SwUndoIter& rUndoIter )
 {
     SwNodeIndex aIdx( rUndoIter.GetDoc().GetNodes(), nIdx );
-    rUndoIter.GetDoc().NumOrNoNum( aIdx, !bDel, bOutline );
+    SwTxtNode * pTxtNd = aIdx.GetNode().GetTxtNode();
+
+    if (NULL != pTxtNd)
+        pTxtNd->UpdateNum(mOldNum);
 }
 
-
+// #115901#
 void SwUndoNumOrNoNum::Redo( SwUndoIter& rUndoIter )
 {
-    SwDoc& rDoc = rUndoIter.GetDoc();
-    SwNodeIndex aIdx( rDoc.GetNodes(), nIdx );
-    rDoc.NumOrNoNum( aIdx, bDel, bOutline );
+    SwNodeIndex aIdx( rUndoIter.GetDoc().GetNodes(), nIdx );
+    SwTxtNode * pTxtNd = aIdx.GetNode().GetTxtNode();
+
+    if (NULL != pTxtNd)
+        pTxtNd->UpdateNum(mNewNum);
 }
 
-
+// #115901#
 void SwUndoNumOrNoNum::Repeat( SwUndoIter& rUndoIter )
 {
-    rUndoIter.GetDoc().NumOrNoNum( rUndoIter.pAktPam->GetPoint()->nNode,
-                                    bDel, bOutline );
+
+    if (mOldNum.IsNum() && ! mNewNum.IsNum())
+        rUndoIter.GetDoc().NumOrNoNum( rUndoIter.pAktPam->GetPoint()->nNode,
+                                       TRUE);
+    else if ( ! mOldNum.IsNum() && mNewNum.IsNum())
+        rUndoIter.GetDoc().NumOrNoNum( rUndoIter.pAktPam->GetPoint()->nNode,
+                                       FALSE);
 }
 
 /*  */
