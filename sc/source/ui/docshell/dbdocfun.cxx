@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbdocfun.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-18 16:29:19 $
+ *  last change: $Author: nn $ $Date: 2001-01-25 19:38:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,8 @@
 #include "rangenam.hxx"
 #include "olinetab.hxx"
 #include "dpobject.hxx"
+#include "dociter.hxx"      // for lcl_EmptyExcept
+#include "cell.hxx"         // for lcl_EmptyExcept
 
 // -----------------------------------------------------------------
 
@@ -1081,6 +1083,23 @@ BOOL lcl_BlockEditable( ScDocument* pDoc, const ScRange& rRange )
                                   rRange.aEnd.Col(), rRange.aEnd.Row() );
 }
 
+BOOL lcl_EmptyExcept( ScDocument* pDoc, const ScRange& rRange, const ScRange& rExcept )
+{
+    ScCellIterator aIter( pDoc, rRange );
+    ScBaseCell* pCell = aIter.GetFirst();
+    while (pCell)
+    {
+        if ( pCell->GetCellType() != CELLTYPE_NOTE || pCell->GetNotePtr() )     // real content?
+        {
+            if ( !rExcept.In( ScAddress( aIter.GetCol(), aIter.GetRow(), aIter.GetTab() ) ) )
+                return FALSE;       // cell found
+        }
+        pCell = aIter.GetNext();
+    }
+
+    return TRUE;        // nothing found - empty
+}
+
 BOOL ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewObj,
                                         BOOL bRecord, BOOL bApi )
 {
@@ -1219,6 +1238,30 @@ BOOL ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
                     nErrId = STR_PROTECTIONERR;
                 }
 
+                //  test if new output area is empty except for old area
+                if ( !bApi )
+                {
+                    BOOL bEmpty;
+                    if ( pOldObj )  // OutRange of pOldObj (pDestObj) is still old area
+                        bEmpty = lcl_EmptyExcept( pDoc, aNewOut, pOldObj->GetOutRange() );
+                    else
+                        bEmpty = pDoc->IsBlockEmpty( aNewOut.aStart.Tab(),
+                                            aNewOut.aStart.Col(), aNewOut.aStart.Row(),
+                                            aNewOut.aEnd.Col(), aNewOut.aEnd.Row() );
+
+                    if ( !bEmpty )
+                    {
+                        QueryBox aBox( rDocShell.GetDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
+                                         ScGlobal::GetRscString(STR_PIVOT_NOTEMPTY) );
+                        if (aBox.Execute() == RET_NO)
+                        {
+                            //! like above (not editable), use undo to reverse everything
+                            DBG_ASSERT( bRecord, "DataPilotUpdate: can't undo" );
+                            bUndoSelf = TRUE;
+                        }
+                    }
+                }
+
                 if ( bRecord )
                 {
                     USHORT nTab = aNewOut.aStart.Tab();
@@ -1228,8 +1271,6 @@ BOOL ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
                 }
 
                 //! test for overlap with other data pilot tables
-
-                //! test if output area is empty and query before overwriting
 
                 pDestObj->Output();
 
