@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DocumentSettings.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2004-03-23 11:30:15 $
+ *  last change: $Author: rt $ $Date: 2004-03-31 15:13:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,6 +195,26 @@ service DocumentSettings
 
     */
     [optional, property] boolean AddParaSpacingToTableCells;
+    // ------------------------------------------------------------
+    /** specifies if the former (till OpenOffice.org 1.1) or the new
+        object positioning is applied.
+
+        @since #i11860#
+
+        <p>This property controls how floating screen objects (Writer
+        fly frames and drawing objects are positioned.
+        If <TRUE\>, the object positioning till OpenOffice.org 1.1 is
+        applied. This means, that the top of a paragraph, at which a
+        floating screen object orients its vertical position, includes
+        the lower spacing and the line spacing of the previous paragraph.
+        If <FALSE\> (default for documents since OpenOffice.org 2.0),
+        the top of a paragraph, at which a floating screen object orients
+        its vertical position, doesn't include the lower spacing and the
+        line spacing of the previous paragraph.</p>
+
+    */
+    [optional, property] boolean UseFormerObjectPositioning;
+
 };
 
 //=============================================================================
