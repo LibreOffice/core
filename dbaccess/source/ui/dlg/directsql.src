@@ -2,9 +2,9 @@
  *
  *  $RCSfile: directsql.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-19 07:47:21 $
+ *  last change: $Author: kz $ $Date: 2002-09-05 13:59:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,19 +93,20 @@ ModalDialog DLG_DIRECTSQL
         Text[ dutch ] = "SQL commando";
         Text[ french ] = "Instruction SQL";
         Text[ spanish ] = "Comando SQL";
-        Text[ finnish ] = "SQL command";
+        Text[ finnish ] = "SQL-k�sky";
         Text[ italian ] = "SQL command";
-        Text[ danish ] = "SQL command";
+        Text[ danish ] = "SQL-kommando";
         Text[ swedish ] = "SQL-kommando";
         Text[ polish ] = "Polecenie SQL";
         Text[ portuguese_brazilian ] = "SQL command";
-        Text[ japanese ] = "SQL ｺﾏﾝﾄﾞ";
+        Text[ japanese ] = "SQL コマンド";
         Text[ korean ] = "SQL 명령";
         Text[ chinese_simplified ] = "SQL 命令";
         Text[ chinese_traditional ] = "SQL 指令";
         Text[ turkish ] = "SQL command";
         Text[ arabic ] = "SQL command";
-        Text[ catalan ] = "SQL command";
+        Text[ catalan ] = "Comanda SQL";
+        Text[ thai ] = "คำสั่ง SQL ";
     };
     FixedText FT_SQL
     {
@@ -120,19 +121,20 @@ ModalDialog DLG_DIRECTSQL
         Text[ dutch ] = "uit te voeren commando";
         Text[ french ] = "Instruction � ex�cuter";
         Text[ spanish ] = "comando a ejecutar";
-        Text[ finnish ] = "Command to execute";
+        Text[ finnish ] = "Suoritettava k�sky";
         Text[ italian ] = "Comando da eseguire";
-        Text[ danish ] = "Command to execute";
+        Text[ danish ] = "Kommando, der skal eksekveres";
         Text[ swedish ] = "Kommando att utf�ra";
         Text[ polish ] = "Polecenie do wykonania";
         Text[ portuguese_brazilian ] = "Command to execute";
-        Text[ japanese ] = "実行ｺﾏﾝﾄﾞ";
+        Text[ japanese ] = "実行コマンド";
         Text[ korean ] = "실행할 명령";
         Text[ chinese_simplified ] = "要执行的命令";
         Text[ chinese_traditional ] = "要執行的指令";
         Text[ turkish ] = "Command to execute";
         Text[ arabic ] = "Command to execute";
-        Text[ catalan ] = "Command to execute";
+        Text[ catalan ] = "Comanda per executar";
+        Text[ thai ] = "คำสั่งในการปฏิบัติการ";
     };
     MultiLineEdit ME_SQL
     {
@@ -157,9 +159,9 @@ ModalDialog DLG_DIRECTSQL
         Text[ dutch ] = "Uitvoeren";
         Text[ french ] = "Ex�cuter";
         Text[ spanish ] = "Ejecutar";
-        Text[ finnish ] = "Execute";
+        Text[ finnish ] = "Suorita";
         Text[ italian ] = "Esegui";
-        Text[ danish ] = "Execute";
+        Text[ danish ] = "Udf�r";
         Text[ swedish ] = "Utf�r";
         Text[ polish ] = "Wykonaj";
         Text[ portuguese_brazilian ] = "Execute";
@@ -169,7 +171,8 @@ ModalDialog DLG_DIRECTSQL
         Text[ chinese_traditional ] = "執行";
         Text[ turkish ] = "Execute";
         Text[ arabic ] = "Execute";
-        Text[ catalan ] = "Execute";
+        Text[ catalan ] = "Executa";
+        Text[ thai ] = "ปฏิบัติการ";
     };
     FixedText FT_HISTORY
     {
@@ -184,19 +187,20 @@ ModalDialog DLG_DIRECTSQL
         Text[ dutch ] = "Vorige commando's";
         Text[ french ] = "Instructions pr�c�dentes";
         Text[ spanish ] = "Comandos anteriores";
-        Text[ finnish ] = "Previous commands";
+        Text[ finnish ] = "Edelliset k�skyt";
         Text[ italian ] = "Comando precedente";
-        Text[ danish ] = "Previous commands";
-        Text[ swedish ] = "F�reg�ende kommando";
+        Text[ danish ] = "Forrige kommandoer";
+        Text[ swedish ] = "F�reg�ende kommandon";
         Text[ polish ] = "Poprzednie polecenie";
         Text[ portuguese_brazilian ] = "Previous commands";
-        Text[ japanese ] = "前のｺﾏﾝﾄﾞ";
+        Text[ japanese ] = "前のコマンド";
         Text[ korean ] = "이전 명령";
         Text[ chinese_simplified ] = "前一个命令";
         Text[ chinese_traditional ] = "前一個指令";
         Text[ turkish ] = "Previous commands";
         Text[ arabic ] = "Previous commands";
-        Text[ catalan ] = "Previous commands";
+        Text[ catalan ] = "Comandes anteriors";
+        Text[ thai ] = "คำสั่งก่อน";
     };
     ListBox LB_HISTORY
     {
@@ -225,13 +229,14 @@ ModalDialog DLG_DIRECTSQL
         Text[ swedish ] = "Status";
         Text[ polish ] = "Stan";
         Text[ portuguese_brazilian ] = "Status";
-        Text[ japanese ] = "ｽﾃｰﾀｽ";
+        Text[ japanese ] = "ステータス";
         Text[ korean ] = "상태";
         Text[ chinese_simplified ] = "状态";
         Text[ chinese_traditional ] = "狀態";
         Text[ turkish ] = "Durum";
         Text[ arabic ] = "������";
-        Text[ catalan ] = "Status";
+        Text[ catalan ] = "Estat";
+        Text[ thai ] = "สถานะ";
     };
     MultiLineEdit ME_STATUS
     {
@@ -264,9 +269,9 @@ ModalDialog DLG_DIRECTSQL
         Text[ dutch ] = "Sluiten";
         Text[ french ] = "Fermer";
         Text[ spanish ] = "Cerrar";
-        Text[ finnish ] = "Close";
+        Text[ finnish ] = "Sulje";
         Text[ italian ] = "Chiudi";
-        Text[ danish ] = "Close";
+        Text[ danish ] = "Luk";
         Text[ swedish ] = "St�ng";
         Text[ polish ] = "Zamknij";
         Text[ portuguese_brazilian ] = "Close";
@@ -276,7 +281,8 @@ ModalDialog DLG_DIRECTSQL
         Text[ chinese_traditional ] = "關閉";
         Text[ turkish ] = "Close";
         Text[ arabic ] = "Close";
-        Text[ catalan ] = "Close";
+        Text[ catalan ] = "Tanca";
+        Text[ thai ] = "ปิด";
     };
 
     Text                = "SQL Statement ausf�hren" ;
@@ -289,19 +295,20 @@ ModalDialog DLG_DIRECTSQL
     Text[ dutch ] = "SQL statement uitvoeren";
     Text[ french ] = "Ex�cuter l'instruction SQL";
     Text[ spanish ] = "Ejecutar comando SQL";
-    Text[ finnish ] = "Excecute SQL statement";
-    Text[ italian ] = "Esegui SQL Statement";
-    Text[ danish ] = "Excecute SQL statement";
+    Text[ finnish ] = "Suorita SQL-lauseke";
+    Text[ italian ] = "Esegui il comando SQL";
+    Text[ danish ] = "Udf�r SQL-s�tning";
     Text[ swedish ] = "Utf�r SQL-sats";
     Text[ polish ] = "Wykonaj polecenie SQL";
     Text[ portuguese_brazilian ] = "Excecute SQL statement";
-    Text[ japanese ] = "SQL ｽﾃｰﾄﾒﾝﾄの実行";
+    Text[ japanese ] = "SQL ステートメントの実行";
     Text[ korean ] = "SQL 문 실행";
     Text[ chinese_simplified ] = "直接执行 SQL 命令";
     Text[ chinese_traditional ] = "直接執行 SQL 指令";
     Text[ turkish ] = "Excecute SQL statement";
     Text[ arabic ] = "Excecute SQL statement";
-    Text[ catalan ] = "Excecute SQL statement";
+    Text[ catalan ] = "Executa una instrucci� SQL";
+    Text[ thai ] = "ปฏิบัติการประโยค SQL ";
 };
 
 String STR_COMMAND_EXECUTED_SUCCESSFULLY
@@ -312,7 +319,7 @@ String STR_COMMAND_EXECUTED_SUCCESSFULLY
     Text [ english_us ] = "Command successfully executed." ;
     Text [ portuguese_brazilian ] = "Befehl erfolgreich ausgef�hrt." ;
     Text [ swedish ] = "Kommando utf�rt." ;
-    Text [ danish ] = "Kommando fuldf�rt." ;
+    Text [ danish ] = "Kommando gennemf�rt." ;
     Text [ italian ] = "Comando eseguito con successo." ;
     Text [ spanish ] = "Comando ejecutado satisfactoriamente." ;
     Text [ french ] = "Commande ex�cut�e avec succ�s" ;
@@ -320,14 +327,15 @@ String STR_COMMAND_EXECUTED_SUCCESSFULLY
     Text[ chinese_simplified ] = "执行命令已经成功。";
     Text[ russian ] = "������� ��������� �������.";
     Text[ polish ] = "Polecenie wykonano pomy�lnie.";
-    Text[ japanese ] = "ｺﾏﾝﾄﾞは正常に実行されました。";
+    Text[ japanese ] = "コマンドは正常に実行されました。";
     Text[ chinese_traditional ] = "執行指令已經成功。";
     Text[ arabic ] = "�� ����� ����� �����.";
     Text[ greek ] = "� ������ ����������� ��������.";
     Text[ korean ] = "명령을 성공적으로 실행하였습니다.";
-    Text[ finnish ] = "Command successfully executed.";
+    Text[ finnish ] = "K�skyn suoritus onnistui.";
     Text[ turkish ] = "Command successfully executed.";
-    Text[ catalan ] = "Command successfully executed.";
+    Text[ catalan ] = "Comanda executada amb �xit.";
+    Text[ thai ] = "ปฏิบัติการคำสั่งสำเร็จ";
 };
 
 String STR_DIRECTSQL_CONNECTIONLOST
@@ -341,24 +349,28 @@ String STR_DIRECTSQL_CONNECTIONLOST
     Text[ dutch ] = "Er bestaat geen verbinding met de database. Deze dialoog wordt gesloten.";
     Text[ french ] = "La connexion � la base de donn�es a �t� annul�e. Fermeture de la bo�te de dialogue.";
     Text[ spanish ] = "Se perdi� la conexi�n a la base de datos. Este di�logo se cerrar�.";
-    Text[ finnish ] = "The connection to the database has been lost. This dialog will be closed.";
+    Text[ finnish ] = "Tietokantayhteys katkesi. T�m� valintaikkuna suljetaan.";
     Text[ italian ] = "Il collegamento al database � stato eliminato. Questo dialogo verr� chiuso.";
-    Text[ danish ] = "The connection to the database has been lost. This dialog will be closed.";
+    Text[ danish ] = "Forbindelsen til databasen blev slettet. Denne dialog lukkes.";
     Text[ swedish ] = "F�rbindelsen till databasen har raderats. Den h�r dialogrutan kommer att st�ngas.";
     Text[ polish ] = "Po��czenie z baz� danych przerwano. Okno dialogowe zostanie zamkni�te.";
     Text[ portuguese_brazilian ] = "The connection to the database has been lost. This dialog will be closed.";
-    Text[ japanese ] = "ﾃﾞｰﾀﾍﾞｰｽへの接続は削除されています。このﾀﾞｲｱﾛｸﾞを閉じます。";
+    Text[ japanese ] = "データベースへの接続は削除されています。このダイアログを閉じます。";
     Text[ korean ] = "데이터베이스와의 연결이 해제되었습니다. 이 대화상자가 닫힐 것입니다.";
     Text[ chinese_simplified ] = "已经结束和数据库的连接。现在关闭这个对话框。";
     Text[ chinese_traditional ] = "已經結束與資料庫的連線。現在關閉這個對話方塊。";
     Text[ turkish ] = "The connection to the database has been lost. This dialog will be closed.";
     Text[ arabic ] = "The connection to the database has been lost. This dialog will be closed.";
-    Text[ catalan ] = "The connection to the database has been lost. This dialog will be closed.";
+    Text[ catalan ] = "S'ha perdut la connexi� amb la base de dades. Aquest quadre de di�leg es tancar�.";
+    Text[ thai ] = "การเชื่อมต่อกับฐานข้อมูลขาดหาย ไดอะล็อกนี้จะถูกปิดลง";
 };
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.12  2002/08/19 07:47:21  oj
+ *  #99473# change string resource files
+ *
  *  Revision 1.11  2001/11/16 22:42:48  kz
  *  Merge SRC638: 16.11.01 - 22:41:18
  *
