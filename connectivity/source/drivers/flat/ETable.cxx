@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ETable.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-10 19:30:10 $
+ *  last change: $Author: oj $ $Date: 2000-12-12 10:44:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -395,7 +395,13 @@ void OFlatTable::fillColumns()
                 // jetzt könnte es noch ein Datumsfeld sein
                 if (!bNumeric)
                 {
-                    nIndex = m_xNumberFormatter->detectNumberFormat(::com::sun::star::util::NumberFormat::ALL,String(aField,pConnection->getTextEncoding()));
+                    try
+                    {
+                        nIndex = m_xNumberFormatter->detectNumberFormat(::com::sun::star::util::NumberFormat::ALL,String(aField,pConnection->getTextEncoding()));
+                    }
+                    catch(Exception&)
+                    {
+                    }
                 }
             }
         }
@@ -888,7 +894,7 @@ sal_Bool OFlatTable::fetchRow(file::OValueRow _rRow,const OSQLColumns & _rCols,s
                             (*_rRow)[i] = ::dbtools::DBTypeConversion::toDouble(DateConversion::toTime(nRes));
                     }
                 }
-                catch(...)
+                catch(Exception&)
                 {
                     (*_rRow)[i].setNull();
                 }
