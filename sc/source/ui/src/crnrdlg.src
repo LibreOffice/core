@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crnrdlg.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-30 21:21:19 $
+ *  last change: $Author: obo $ $Date: 2001-11-07 10:04:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,7 +138,7 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
         QuickHelpText[ chinese_traditional ] = "ηΈ®ε°";
         QuickHelpText[ arabic ] = "ΚΥΫνΡ";
         QuickHelpText[ greek ] = "Σμίκρυνση";
-        QuickHelpText[ korean ] = "μ¶•μ†!";
+        QuickHelpText[ korean ] = "μ¶•μ†";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern";
         QuickHelpText[ catalan ] = "Reducir";
@@ -169,7 +169,7 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
         Text[ chinese_traditional ] = "ε…ε«ζ¬„ζ¨™ι΅(~C)";
         Text[ arabic ] = "νΚΦγδ ΡΔζΣ ΓΪγΟΙ";
         Text[ greek ] = "περιέχει κεφαλίδες στηλών";
-        Text[ korean ] = "μ—΄ λ¨Έλ¦¬κΈ€ ν¬ν•¨(C)";
+        Text[ korean ] = "μ—΄ λ¨Έλ¦¬κΈ€ ν¬ν•¨(~C)";
         Text[ turkish ] = "Sόtun baώlύklarύ ~iηeriyor";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Contiene tνtulos de ~columnas";
@@ -197,7 +197,7 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
         Text[ chinese_traditional ] = "ε…ε«ε—ζ¨™ι΅(~R)";
         Text[ arabic ] = "νΚΦγδ ΡΔζΣ Υέζέ";
         Text[ greek ] = "περιέχει κεφαλίδες γραμμών";
-        Text[ korean ] = "ν–‰ λ¨Έλ¦¬κΈ€ ν¬ν•¨(R)";
+        Text[ korean ] = "ν–‰ λ¨Έλ¦¬κΈ€ ν¬ν•¨(~R)";
         Text[ turkish ] = "Satύr baώlύklarύ  i~ηeriyor";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "contiene tνtulos de ~filas";
@@ -225,7 +225,7 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
         Text[ chinese_traditional ] = "η”¨ζ–Όθ³‡ζ–™ε€ε(~D)";
         Text[ arabic ] = "αδΨΗή ΗαΘνΗδΗΚ";
         Text[ greek ] = "για περιοχή ~δεδομένων";
-        Text[ korean ] = "λ°μ΄ν„° μμ—­μΌλ΅(D)";
+        Text[ korean ] = "λ°μ΄ν„° λ²”μ„λ΅(~D)";
         Text[ turkish ] = "Veri aralύπύ";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "para el αrea de datos";
@@ -261,7 +261,7 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
         QuickHelpText[ chinese_traditional ] = "ηΈ®ε°";
         QuickHelpText[ arabic ] = "ΚΥΫνΡ";
         QuickHelpText[ greek ] = "Σμίκρυνση";
-        QuickHelpText[ korean ] = "μ¶•μ†!";
+        QuickHelpText[ korean ] = "μ¶•μ†";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern";
         QuickHelpText[ catalan ] = "Reducir";
@@ -305,7 +305,7 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
         Text[ chinese_traditional ] = "ζ–°εΆ(~A)";
         Text[ arabic ] = "ΕΦΗέΙ";
         Text[ greek ] = "Προσθήκη";
-        Text[ korean ] = "μ¶”κ°€(A)";
+        Text[ korean ] = "μ¶”κ°€(~A)";
         Text[ turkish ] = "~Ekle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Aρadir";
@@ -335,7 +335,7 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
         Text[ chinese_traditional ] = "εªι™¤(~D)";
         Text[ arabic ] = "ΝΠέ";
         Text[ greek ] = "Διαγραφή";
-        Text[ korean ] = "μ‚­μ (D)";
+        Text[ korean ] = "μ‚­μ (~D)";
         Text[ turkish ] = "~Sil";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Eliminar";
@@ -362,12 +362,13 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
     Text[ chinese_traditional ] = "ε®ηΎ©ζ¨™ι΅ε€ε";
     Text[ arabic ] = "ΚΪΡνέ δΨΗή ΗαΪδζδΙ";
     Text[ greek ] = "Ορισμός περιοχής επιγραφής";
-    Text[ korean ] = "λΌλ²¨ μμ—­ μ •μ";
+    Text[ korean ] = "λΌλ²¨ λ²”μ„ μ •μ";
     Text[ turkish ] = "Baώlύk aralύπύnύ belirle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Definir αrea de etiqueta";
     Text[ finnish ] = "M??rit? nimi?lue";
 };
+
 
 
 
