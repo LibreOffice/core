@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2000-11-15 21:39:36 $
+ *  last change: $Author: kz $ $Date: 2000-12-08 18:15:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,7 +159,7 @@ String STR_PATH_NOT_FOUND1
     Text[ chinese_simplified ] = "Õâ¸öÄ¿Â¼ '";
     Text[ russian ] = "Äèğåêòîğèÿ '";
     Text[ polish ] = "Katalog";
-    Text[ japanese ] = "ÃŞ¨Ú¸ÄØ'";
+    Text[ japanese ] = "ÃŞ¨Ú¸ÄØu";
     Text[ language_user1 ] = " ";
     Text[ chinese_traditional ] = "³o­Ó¥Ø¿ı '";
     Text[ arabic ] = "ÇáÏáíá '";
@@ -187,7 +187,7 @@ String STR_PATH_NOT_FOUND2
     Text[ chinese_simplified ] = "' ²»´æÔÚ¡£";
     Text[ russian ] = "' íå ñóùåñòâóåò.";
     Text[ polish ] = "nie istnieje.";
-    Text[ japanese ] = "'‚Í‘¶İ‚µ‚Ä‚¢‚Ü‚¹‚ñB";
+    Text[ japanese ] = "v‚Í‘¶İ‚µ‚Ä‚¢‚Ü‚¹‚ñB";
     Text[ chinese_traditional ] = "' ¤£¦s¦b¡C";
     Text[ arabic ] = "' ÛíÑ ãæÌæÏ.";
     Text[ greek ] = "' äåí õğÜñ÷åé.";
