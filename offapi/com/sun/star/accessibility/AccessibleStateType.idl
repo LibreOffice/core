@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleStateType.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 16:45:29 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 15:23:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@ module com { module sun { module star { module accessibility {
     include future extensions to the set of roles we have to use constants
     here.</p>
 
-    @since #107627#
+    @since OOo 1.1.2
 */
 published constants AccessibleStateType
 {
