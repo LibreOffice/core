@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_ic.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: svesik $ $Date: 2001-05-02 00:48:45 $
+ *  last change: $Author: cp $ $Date: 2001-05-28 17:21:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -391,11 +391,14 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame,
         // deserves, because inappropriate attributes
         // let XCreateIC fail on Solaris (eg. for C locale)
 
+        maDestroyCallback.callback    = (XIMProc)IC_IMDestroyCallback;
+        maDestroyCallback.client_data = (XPointer)this;
         mpAttributes = XVaCreateNestedList(
                 0,
                 XNFocusWindow,       aFocusWindow,
                 XNClientWindow,      aClientWindow,
                 XNInputStyle,        mnPreeditStyle | mnStatusStyle,
+                XNDestroyCallback,  &maDestroyCallback,
                 0 );
 
         #ifdef SOLARIS
@@ -491,6 +494,20 @@ SalI18N_InputContext::Map( SalFrame *pFrame )
                     NULL );
         SetICFocus();
     }
+}
+
+// --------------------------------------------------------------------------
+//
+// Handle DestroyCallbacks
+// in fact this is a callback called from the XNDestroyCallback
+//
+// --------------------------------------------------------------------------
+
+void
+SalI18N_InputContext::HandleDestroyIM()
+{
+    maContext = 0;      // noli me tangere
+    mbUseable = False;
 }
 
 // ---------------------------------------------------------------------------

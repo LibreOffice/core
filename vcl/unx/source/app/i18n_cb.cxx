@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_cb.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cp $ $Date: 2001-03-02 07:50:44 $
+ *  last change: $Author: cp $ $Date: 2001-05-28 17:21:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,12 @@
 
 #ifndef _SAL_I18N_CALLBACK_HXX
 #include "i18n_cb.hxx"
+#endif
+#ifndef _SAL_I18N_INPUTCONTEXT_HXX
+#include "i18n_ic.hxx"
+#endif
+#ifndef _SAL_I18N_INPUTMETHOD_HXX
+#include "i18n_im.hxx"
 #endif
 #ifndef _SV_SALFRAME_HXX
 #include <salframe.hxx>
@@ -640,4 +646,26 @@ void
 StatusDrawCallback (XIC ic, XPointer client_data, XIMStatusDrawCallbackStruct *call_data)
 {
     return;
+}
+
+// ----------------------------------------------------------------------------------
+//
+// vii. destroy callbacks: internally disable all IC/IM calls
+//
+// ----------------------------------------------------------------------------------
+
+void
+IC_IMDestroyCallback (XIM im, XPointer client_data, XPointer call_data )
+{
+    SalI18N_InputContext *pContext = (SalI18N_InputContext*)client_data;
+    if (pContext != NULL)
+        pContext->HandleDestroyIM();
+}
+
+void
+IM_IMDestroyCallback (XIM im, XPointer client_data, XPointer call_data )
+{
+    SalI18N_InputMethod *pMethod = (SalI18N_InputMethod*)client_data;
+    if (pMethod != NULL)
+        pMethod->HandleDestroyIM();
 }

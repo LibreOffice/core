@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_im.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2001-03-08 17:06:35 $
+ *  last change: $Author: cp $ $Date: 2001-05-28 17:21:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 
 #ifndef _SAL_I18N_INPUTMETHOD_HXX
 #include "i18n_im.hxx"
+#endif
+#ifndef _SAL_I18N_CALLBACK_HXX
+#include "i18n_cb.hxx"
 #endif
 
 // -------------------------------------------------------------------------
@@ -325,6 +328,11 @@ SalI18N_InputMethod::CreateMethod ( Display *pDisplay )
         fprintf(stderr, "input method creation failed\n");
     #endif
 
+    maDestroyCallback.callback    = (XIMProc)IM_IMDestroyCallback;
+    maDestroyCallback.client_data = (XPointer)this;
+    if (mbUseable && maMethod != NULL)
+        XSetIMValues(maMethod, XNDestroyCallback, &maDestroyCallback, NULL);
+
     return mbUseable;
 }
 
@@ -336,6 +344,14 @@ Bool
 SalI18N_InputMethod::FilterEvent( XEvent *pEvent, XLIB_Window window    )
 {
     return mbUseable && (Bool)XFilterEvent( pEvent, window );
+}
+
+void
+SalI18N_InputMethod::HandleDestroyIM()
+{
+    mbUseable       = False;
+    mbMultiLingual  = False;
+    maMethod        = NULL;
 }
 
 // ------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_ic.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cp $ $Date: 2001-03-02 07:51:31 $
+ *  last change: $Author: cp $ $Date: 2001-05-28 17:22:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,7 @@ private:
     XIMCallback maPreeditDrawCallback;
     XIMCallback maPreeditCaretCallback;
     XIMCallback maCommitStringCallback;
+    XIMCallback maDestroyCallback;
 
     XVaNestedList mpAttributes;
     XVaNestedList mpStatusAttributes;
@@ -113,6 +114,7 @@ public:
     void ExtendEventMask(  XLIB_Window aFocusWindow );
     void SetICFocus();
     void UnsetICFocus();
+    void HandleDestroyIM();
     int  HandleKeyEvent( XKeyEvent *pEvent, SalFrame *pFrame ); // unused
     void EndExtTextInput( USHORT nFlags );                      // unused
     int  CommitStringCallback( sal_Unicode* pText, sal_Size nLength );

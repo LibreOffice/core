@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_im.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cp $ $Date: 2001-03-07 18:50:20 $
+ *  last change: $Author: cp $ $Date: 2001-05-28 17:22:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,7 @@ class SalI18N_InputMethod
                             // and preedit style ?
     Bool        mbMultiLingual; // system supports iiimp
     XIM         maMethod;
+    XIMCallback maDestroyCallback;
     XIMStyles  *mpStyles;
 
 public:
@@ -84,6 +85,7 @@ public:
     Bool        IsMultiLingual()        { return mbMultiLingual;    }
     Bool        UseMethod()             { return mbUseable; }
     XIM         GetMethod()             { return maMethod;  }
+    void        HandleDestroyIM();
     Bool        CreateMethod( Display *pDisplay );
     XIMStyles  *GetSupportedStyles()    { return mpStyles;  }
     Bool        SetLocale( const char* pLocale = "" );
