@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localedatawrapper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2000-10-29 17:15:02 $
+ *  last change: $Author: er $ $Date: 2000-10-30 18:55:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,10 @@ class LocaleDataWrapper
     // cached items
     String                      aLocaleItem[::com::sun::star::i18n::LocaleItem_LocaleItemTotalCount];
     String                      aReservedWord[::com::sun::star::i18n::reservedWords::COUNT];
+    String                      aCurrSymbol;
+    String                      aCurrBankSymbol;
+    USHORT                      nCurrPositiveFormat;
+    USHORT                      nCurrNegativeFormat;
     BOOL                        bLocaleDataItemValid;
     BOOL                        bReservedWordValid;
 
@@ -111,6 +115,9 @@ class LocaleDataWrapper
 
             void                getOneReservedWordImpl( sal_Int16 nWord );
             const String&       getOneReservedWord( sal_Int16 nWord ) const;
+
+            void                getCurrSymbolsImpl();
+            void                getCurrFormatsImpl();
 
 public:
                                 LocaleDataWrapper(
@@ -175,6 +182,11 @@ public:
                                     { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem_TimeAM ); }
     inline  const String&       getTimePM() const
                                     { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem_TimePM ); }
+
+            const String&       getCurrSymbol() const;
+            const String&       getCurrBankSymbol() const;
+            USHORT              getCurrPositiveFormat() const;
+            USHORT              getCurrNegativeFormat() const;
 
 
     // reserved words
