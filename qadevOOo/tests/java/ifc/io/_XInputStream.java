@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XInputStream.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:10:46 $
+ *  last change:$Date: 2003-09-08 10:43:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,12 +61,13 @@
 
 package ifc.io;
 
+import lib.MultiMethodTest;
+import lib.Status;
+
 import com.sun.star.io.XInputStream;
 import com.sun.star.io.XOutputStream;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
-import lib.MultiMethodTest;
-import lib.Status;
 
 /**
 * Testing <code>com.sun.star.io.XInputStream</code>

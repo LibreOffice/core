@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XObjectInputStream.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:10:45 $
+ *  last change:$Date: 2003-09-08 10:43:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,15 +61,16 @@
 
 package ifc.io;
 
+import lib.MultiMethodTest;
+import lib.Status;
+import util.ValueComparer;
+
 import com.sun.star.beans.Property;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.io.XObjectInputStream;
 import com.sun.star.io.XObjectOutputStream;
 import com.sun.star.io.XPersistObject;
 import com.sun.star.uno.UnoRuntime;
-import lib.MultiMethodTest;
-import lib.Status;
-import util.ValueComparer;
 
 /**
 * Testing <code>com.sun.star.io.XObjectInputStream</code>
@@ -106,7 +107,7 @@ public class _XObjectInputStream extends MultiMethodTest {
             tRes.tested("readObject()", false) ;
             return ;
         }
-        XPersistObject xPO;
+
         // write the object
         try {
             XObjectOutputStream oStream = (XObjectOutputStream)
