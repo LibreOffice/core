@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: hr $ $Date: 2001-08-10 15:59:45 $
+ *  last change: $Author: pl $ $Date: 2001-08-13 15:02:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@
 #include <prex.h>
 #include <X11/Xatom.h>
 #include <X11/keysym.h>
-
+#include <FWS.hxx>
 #include <postx.h>
 
 #include <salunx.h>
@@ -1271,6 +1271,12 @@ void SalFrame::ShowFullScreen( BOOL bFullScreen )
     if( maFrameData.aRestoreFullScreen_.IsEmpty() == !bFullScreen )
         return;
     maFrameData.pDisplay_->getWMAdaptor()->maximizeFrame( this, bFullScreen, bFullScreen );
+    if( maFrameData.IsOverrideRedirect()
+        && WMSupportsFWS( maFrameData.GetXDisplay(), maFrameData.GetDisplay()->GetRootWindow()) )
+    {
+        AddFwsProtocols( maFrameData.GetXDisplay(), maFrameData.GetShellWindow() );
+        RegisterFwsWindow( maFrameData.GetXDisplay(), maFrameData.GetShellWindow() );
+    }
 }
 
 /* ---------------------------------------------------------------------

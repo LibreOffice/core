@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmadaptor.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2001-08-10 12:04:41 $
+ *  last change: $Author: pl $ $Date: 2001-08-13 15:02:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,14 +257,6 @@ WMAdaptor::WMAdaptor( SalDisplay* pDisplay ) :
             m_pSalDisplay->GetXLib()->SetIgnoreXErrors( bIgnore );
         }
     }
-#ifdef DEBUG
-    fprintf( stderr, "WM %s NET_WM\n", m_bNetWM ? "supports" : "does not support" );
-    if( m_bNetWM )
-    {
-        fprintf( stderr, "Window Manager's name is \"%s\"\n",
-                 ByteString( m_aWMName, RTL_TEXTENCODING_ISO_8859_1 ).GetBuffer() );
-    }
-#endif
     if( m_bNetWM
         && XGetWindowProperty( m_pDisplay,
                                m_pSalDisplay->GetRootWindow(),
@@ -401,8 +393,22 @@ WMAdaptor::WMAdaptor( SalDisplay* pDisplay ) :
                 }
             }
         }
-
+        // some necessary sanity checks; there are WMs out there
+        // which implement some of the WM hints spec without
+        // real functionality
+        if( m_aWMAtoms[ NET_WM_WINDOW_TYPE_NORMAL ] == 0
+            || m_aWMAtoms[ NET_WM_WINDOW_TYPE_DIALOG ] == 0
+            )
+            m_bNetWM = false;
     }
+#ifdef DEBUG
+    fprintf( stderr, "WM %s NET_WM\n", m_bNetWM ? "supports" : "does not support" );
+    if( m_bNetWM )
+    {
+        fprintf( stderr, "Window Manager's name is \"%s\"\n",
+                 ByteString( m_aWMName, RTL_TEXTENCODING_ISO_8859_1 ).GetBuffer() );
+    }
+#endif
 }
 
 /*
