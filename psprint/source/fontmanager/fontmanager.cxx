@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontmanager.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-16 17:57:23 $
+ *  last change: $Author: pl $ $Date: 2001-11-09 15:44:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1421,6 +1421,46 @@ static void normPath( ByteString& rPath )
         rPath.Erase( rPath.Len()-1 );
 }
 
+void PrintFontManager::getServerDirectories()
+{
+    static const char* pCommands[] = {
+        "/usr/sbin/chkfontpath", "chkfontpath"
+    };
+    ::std::list< ByteString > aLines;
+
+    for( int i = 0; i < sizeof(pCommands)/sizeof(pCommands[0]); i++ )
+    {
+        FILE* pPipe = popen( pCommands[i], "r" );
+        aLines.clear();
+        if( pPipe )
+        {
+            char line[1024];
+            char* pSearch;
+            while( fgets( line, sizeof(line), pPipe ) )
+            {
+                int nLen = strlen( line );
+                if( line[nLen-1] == '\n' )
+                    line[nLen-1] = 0;
+                pSearch = strstr( line, ": " );
+                if( pSearch )
+                    aLines.push_back( pSearch+2 );
+            }
+            if( ! pclose( pPipe ) )
+                break;
+        }
+    }
+
+    for( ::std::list< ByteString >::iterator it = aLines.begin(); it != aLines.end(); ++it )
+    {
+        if( ! access( it->GetBuffer(), F_OK ) )
+        {
+            m_aFontDirectories.push_back( *it );
+#ifdef DEBUG
+            fprintf( stderr, "adding fs dir %s\n", it->GetBuffer() );
+#endif
+        }
+    }
+}
 
 void PrintFontManager::initialize( void* pInitDisplay )
 {
@@ -1477,11 +1517,24 @@ void PrintFontManager::initialize( void* pInitDisplay )
     int nPaths = 0, i;
     char** pPaths = XGetFontPath( pDisplay, &nPaths );
 
+    int nPos = 0;
+    int nPort = 0;
+    bool bServerDirs = false;
     for( i = 0; i < nPaths; i++ )
     {
         ByteString aPath( pPaths[i] );
-        normPath( aPath );
-        m_aFontDirectories.push_back( aPath );
+        if( ! bServerDirs
+            && ( nPos = aPath.Search( ':' ) ) != STRING_NOTFOUND
+            && ( nPort = aPath.Copy( nPos+1 ).ToInt32() ) > 0 )
+        {
+            bServerDirs = true;
+            getServerDirectories();
+        }
+        else
+        {
+            normPath( aPath );
+            m_aFontDirectories.push_back( aPath );
+        }
     }
 
     if( nPaths )
