@@ -2,9 +2,9 @@
  *
  *  $RCSfile: predicateinput.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2002-09-27 11:15:47 $
+ *  last change: $Author: oj $ $Date: 2002-12-04 11:23:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -350,8 +350,20 @@ namespace dbtools
                 // again : as normalizePredicateString always did a conversion on the value text,
                 // bValidQuotedText == sal_True implies that we have a text field, as no other field
                 // values will be formatted with the quote characters
-            if (bValidQuotedText)
+            if ( bValidQuotedText )
+            {
                 sValue = sValue.copy( 1, sValue.getLength() - 2 );
+                static const ::rtl::OUString sSingleQuote( RTL_CONSTASCII_USTRINGPARAM( "'" ) );
+                static const ::rtl::OUString sDoubleQuote( RTL_CONSTASCII_USTRINGPARAM( "''" ) );
+
+                sal_Int32 nIndex = -1;
+                sal_Int32 nTemp = 0;
+                while ( -1 != ( nIndex = sValue.indexOf( sDoubleQuote,nTemp ) ) )
+                {
+                    sValue = sValue.replaceAt( nIndex, 2, sSingleQuote );
+                    nTemp = nIndex+2;
+                }
+            }
 
             // The following is mostly stolen from the former implementation in the parameter dialog
             // (dbaccess/source/ui/dlg/paramdialog.cxx). I do not fully understand this .....
@@ -424,6 +436,9 @@ namespace dbtools
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2002/09/27 11:15:47  oj
+ *  #97230# new interface for ParseContext
+ *
  *  Revision 1.2  2002/09/26 07:59:42  oj
  *  #103685# correct index of replaceAt call
  *

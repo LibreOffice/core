@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DateConversion.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-20 12:51:56 $
+ *  last change: $Author: oj $ $Date: 2002-12-04 11:22:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,6 +141,17 @@ using namespace ::com::sun::star::util;
                     {
                         ::rtl::OUString aTemp;
                         _rxTypeConverter->convertToSimpleType(_rVal, TypeClass_STRING) >>= aTemp;
+                        sal_Int32 nIndex = (sal_Int32)-1;
+                        ::rtl::OUString sQuot(RTL_CONSTASCII_USTRINGPARAM("\'"));
+                        ::rtl::OUString sQuotToReplace(RTL_CONSTASCII_USTRINGPARAM("\'\'"));
+                        do
+                        {
+                            nIndex += 2;
+                            nIndex = aTemp.indexOf(sQuot,nIndex);
+                            if(nIndex != -1)
+                                aTemp = aTemp.replaceAt(nIndex,sQuot.getLength(),sQuotToReplace);
+                        } while (nIndex != -1);
+
                         aRet += aTemp;
                     }
                     if (bQuote)
