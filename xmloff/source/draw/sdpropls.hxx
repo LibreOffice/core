@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 10:32:54 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 19:32:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,12 +178,20 @@ extern const XMLPropertyMapEntry aXMLSDPresPageProps_onlyHeadersFooter[];
 #define XML_SD_TYPE_DATETIME_FORMAT                 (XML_SD_TYPES_START + 71 )
 
 //////////////////////////////////////////////////////////////////////////////
+
 // new types for merged style:protect attribute
 #define XML_SD_TYPE_MOVE_PROTECT                    (XML_SD_TYPES_START + 72 )
 #define XML_SD_TYPE_SIZE_PROTECT                    (XML_SD_TYPES_START + 73 )
 
 // new type for style:mirror attribute
 #define XML_TYPE_SD_MIRROR                          (XML_SD_TYPES_START + 74 )
+
+//////////////////////////////////////////////////////////////////////////////
+
+// new smil transition types for pages
+#define XML_SD_TYPE_TRANSITION_TYPE                 (XML_SD_TYPES_START + 75 )
+#define XML_SD_TYPE_TRANSTIION_SUBTYPE              (XML_SD_TYPES_START + 76 )
+#define XML_SD_TYPE_TRANSTIION_DIRECTION            (XML_SD_TYPES_START + 77 )
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -195,7 +203,6 @@ extern const XMLPropertyMapEntry aXMLSDPresPageProps_onlyHeadersFooter[];
 #define CTF_PAGE_SOUND_URL          1005
 #define CTF_PAGE_VISIBLE            1006
 #define CTF_PAGE_TRANS_TYPE         1007
-#define CTF_PAGE_TRANS_STYLE        1008
 #define CTF_PAGE_TRANS_SPEED        1009
 #define CTF_PAGE_TRANS_DURATION     1010
 #define CTF_PAGE_BACKSIZE           1011
@@ -208,6 +215,11 @@ extern const XMLPropertyMapEntry aXMLSDPresPageProps_onlyHeadersFooter[];
 #define CTF_FILLTRANSNAME           1018
 #define CTF_TEXTANIMATION_BLINKING  1019
 #define CTF_TEXTANIMATION_KIND      1020
+
+#define CTF_PAGE_TRANSITION_TYPE        1021
+#define CTF_PAGE_TRANSITION_SUBTYPE     1022
+#define CTF_PAGE_TRANSITION_DIRECTION   1023
+#define CTF_PAGE_TRANSITION_FADECOLOR   1024
 
 //////////////////////////////////////////////////////////////////////////////
 // #FontWork#
