@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impgraph.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-24 07:32:48 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 13:43:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,6 @@
  *
  *
  ************************************************************************/
-
-#define _SV_IMPGRAPH_CXX
 
 #ifndef _VCOMPAT_HXX
 #include <tools/vcompat.hxx>
@@ -166,8 +164,8 @@ ImpGraphic::ImpGraphic() :
 // ------------------------------------------------------------------------
 
 ImpGraphic::ImpGraphic( const ImpGraphic& rImpGraphic ) :
-        maEx            ( rImpGraphic.maEx ),
         maMetaFile      ( rImpGraphic.maMetaFile ),
+        maEx            ( rImpGraphic.maEx ),
         mpContext       ( NULL ),
         mpSwapFile      ( rImpGraphic.mpSwapFile ),
         meType          ( rImpGraphic.meType ),
@@ -1147,7 +1145,6 @@ BOOL ImpGraphic::ImplWriteEmbedded( SvStream& rOStm )
         const MapMode   aMapMode( ImplGetPrefMapMode() );
         const Size      aSize( ImplGetPrefSize() );
         const USHORT    nOldFormat = rOStm.GetNumberFormatInt();
-        const ULONG     nStmPos1 = rOStm.Tell();
         ULONG           nDataFieldPos;
 
         rOStm.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
