@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ContentCreationError.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-11-29 14:03:57 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 11:56:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,12 +77,12 @@ enum ContentCreationError
     UNKNOWN,
 
     //-------------------------------------------------------------------------
-    /** No UCB available.
+    /** @deprecated
     */
     NO_CONTENT_BROKER,
 
     //-------------------------------------------------------------------------
-    /** No factory for content identifier available.
+    /** @deprecated
     */
     NO_IDENTIFIER_FACTORY,
 
@@ -92,7 +92,7 @@ enum ContentCreationError
     IDENTIFIER_CREATION_FAILED,
 
     //-------------------------------------------------------------------------
-    /** No Content Provider available.
+    /** No Content Provider for given content identifier available.
     */
     NO_CONTENT_PROVIDER,
 
