@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Views.xcs,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 17:57:36 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 13:40:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,454 +62,76 @@
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
 <oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Views" oor:package="org.openoffice.Office" xml:lang="en-US"> <info>
 		<author>AS</author>
-		<desc xml:lang="en-US">Contains persistent information about opened dialogs, windows, tab pages, and so on.</desc>
+		<desc >Contains persistent information about opened dialogs, windows, tab pages, and so on.</desc>
 	</info>
 	<templates>
 		<group oor:name="DialogType">
 			<info>
-				<desc xml:lang="en-US">Contains the persistent data for a general office dialog.</desc>
-				<desc xml:lang="el">Contains the persistent data for a general office dialog.</desc>
-				<desc xml:lang="nl">Contains the persistent data for a general office dialog.</desc>
-				<desc xml:lang="fr">Contains the persistent data for a general office dialog.</desc>
-				<desc xml:lang="fi">Contains the persistent data for a general office dialog.</desc>
-				<desc xml:lang="cs">Contains the persistent data for a general office dialog.</desc>
-				<desc xml:lang="da">Contains the persistent data for a general office dialog.</desc>
-				<desc xml:lang="zh-CN">含有 Office 常规对话框的永久数据。</desc>
-				<desc xml:lang="zh-TW">Contains the persistent data for a general office dialog.</desc>
-				<desc xml:lang="ar">Contains the persistent data for a general office dialog.</desc>
-				<desc xml:lang="he">Contains the persistent data for a general office dialog.</desc>
-				<desc xml:lang="ca">Contains the persistent data for a general office dialog.</desc>
-				<desc xml:lang="pt">Contains the persistent data for a general office dialog.</desc>
-				<desc xml:lang="ru">Contains the persistent data for a general office dialog.</desc>
-				<desc xml:lang="es">Contains the persistent data for a general office dialog.</desc>
-				<desc xml:lang="it">Contains the persistent data for a general office dialog.</desc>
-				<desc xml:lang="sv">Contains the persistent data for a general office dialog.</desc>
-				<desc xml:lang="pl">Contains the persistent data for a general office dialog.</desc>
-				<desc xml:lang="pt-BR">Contains the persistent data for a general office dialog.</desc>
-				<desc xml:lang="ja">全般的なオフィスダイアログの持続データが含まれます。</desc>
-				<desc xml:lang="ko">Contains the persistent data for a general office dialog.</desc>
-				<desc xml:lang="tr">Contains the persistent data for a general office dialog.</desc>
-				<desc xml:lang="th">Contains the persistent data for a general office dialog.</desc>
-				<desc xml:lang="hi-IN">Contains the persistent data for a general office dialog.</desc>
-				<desc xml:lang="x-comment">Contains the persistent data for a general office dialog.</desc>
-				<desc xml:lang="hu">Contains the persistent data for a general office dialog.</desc>
-				<desc xml:lang="sk">Contains the persistent data for a general office dialog.</desc>
-				<desc xml:lang="sl">Contains the persistent data for a general office dialog.</desc>
+				<desc>Contains the persistent data for a general office dialog.</desc>
 			</info>
 			<prop oor:name="WindowState" oor:type="xs:string">
 				<info>
-					<desc xml:lang="en-US">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="el">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="nl">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="fr">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="fi">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="cs">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="da">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="zh-CN">包括已使用的 vcl 视窗的信息 (位置、大小和状态)。</desc>
-					<desc xml:lang="zh-TW">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="ar">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="he">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="ca">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="pt">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="ru">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="es">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="it">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="sv">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="pl">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="pt-BR">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="ja">使用中の vcl ウィンドウに関する情報 (位置、サイズ、および状態) が含まれます。</desc>
-					<desc xml:lang="ko">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="tr">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="th">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="hi-IN">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="x-comment">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="hu">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="sk">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="sl">Includes information (position,size, and states) about the used vcl window.</desc>
+					<desc>Includes information (position,size, and states) about the used vcl window.</desc>
 				</info>
 			</prop>
 			<group oor:name="UserData" oor:extensible="true">
 				<info>
-					<desc xml:lang="en-US">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="el">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="nl">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="fr">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="fi">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="cs">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="da">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="zh-CN">表示任意数据的附加字段。此字段没有相关的具体语义。具体应用由使用者确定。</desc>
-					<desc xml:lang="zh-TW">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="ar">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="he">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="ca">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="pt">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="ru">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="es">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="it">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="sv">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="pl">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="pt-BR">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="ja">任意のデータに対するその他のフィールドが表示されます。このフィールドに関連する特殊なセマンティックは存在しません。アプリケーションはユーザーによって決定されます。</desc>
-					<desc xml:lang="ko">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="tr">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="th">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="hi-IN">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="x-comment">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="hu">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="sk">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="sl">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
+					<desc>Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
 				</info>
 			</group>
 		</group>
 		<group oor:name="TabDialogType">
 			<info>
-				<desc xml:lang="en-US">Contains the persistent data for a special tab dialog.</desc>
-				<desc xml:lang="el">Contains the persistent data for a special tab dialog.</desc>
-				<desc xml:lang="nl">Contains the persistent data for a special tab dialog.</desc>
-				<desc xml:lang="fr">Contains the persistent data for a special tab dialog.</desc>
-				<desc xml:lang="fi">Contains the persistent data for a special tab dialog.</desc>
-				<desc xml:lang="cs">Contains the persistent data for a special tab dialog.</desc>
-				<desc xml:lang="da">Contains the persistent data for a special tab dialog.</desc>
-				<desc xml:lang="zh-CN">含有特殊选项卡对话框的永久数据。</desc>
-				<desc xml:lang="zh-TW">Contains the persistent data for a special tab dialog.</desc>
-				<desc xml:lang="ar">Contains the persistent data for a special tab dialog.</desc>
-				<desc xml:lang="he">Contains the persistent data for a special tab dialog.</desc>
-				<desc xml:lang="ca">Contains the persistent data for a special tab dialog.</desc>
-				<desc xml:lang="pt">Contains the persistent data for a special tab dialog.</desc>
-				<desc xml:lang="ru">Contains the persistent data for a special tab dialog.</desc>
-				<desc xml:lang="es">Contains the persistent data for a special tab dialog.</desc>
-				<desc xml:lang="it">Contains the persistent data for a special tab dialog.</desc>
-				<desc xml:lang="sv">Contains the persistent data for a special tab dialog.</desc>
-				<desc xml:lang="pl">Contains the persistent data for a special tab dialog.</desc>
-				<desc xml:lang="pt-BR">Contains the persistent data for a special tab dialog.</desc>
-				<desc xml:lang="ja">特殊なタブダイアログの持続データが含まれます。</desc>
-				<desc xml:lang="ko">Contains the persistent data for a special tab dialog.</desc>
-				<desc xml:lang="tr">Contains the persistent data for a special tab dialog.</desc>
-				<desc xml:lang="th">Contains the persistent data for a special tab dialog.</desc>
-				<desc xml:lang="hi-IN">Contains the persistent data for a special tab dialog.</desc>
-				<desc xml:lang="x-comment">Contains the persistent data for a special tab dialog.</desc>
-				<desc xml:lang="hu">Contains the persistent data for a special tab dialog.</desc>
-				<desc xml:lang="sk">Contains the persistent data for a special tab dialog.</desc>
-				<desc xml:lang="sl">Contains the persistent data for a special tab dialog.</desc>
+				<desc>Contains the persistent data for a special tab dialog.</desc>
 			</info>
 			<prop oor:name="WindowState" oor:type="xs:string">
 				<info>
-					<desc xml:lang="en-US">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="el">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="nl">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="fr">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="fi">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="cs">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="da">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="zh-CN">包括已使用的 vcl 视窗的信息 (位置、大小和状态)。</desc>
-					<desc xml:lang="zh-TW">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="ar">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="he">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="ca">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="pt">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="ru">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="es">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="it">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="sv">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="pl">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="pt-BR">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="ja">使用中の vcl ウィンドウに関する情報 (位置、サイズ、および状態) が含まれます。</desc>
-					<desc xml:lang="ko">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="tr">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="th">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="hi-IN">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="x-comment">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="hu">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="sk">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="sl">Includes information (position,size, and states) about the used vcl window.</desc>
+					<desc>Includes information (position,size, and states) about the used vcl window.</desc>
 				</info>
 			</prop>
 			<prop oor:name="PageID" oor:type="xs:int">
 				<info>
-					<desc xml:lang="en-US">Represents the number of an active tab page inside a dialog.</desc>
-					<desc xml:lang="el">Represents the number of an active tab page inside a dialog.</desc>
-					<desc xml:lang="nl">Represents the number of an active tab page inside a dialog.</desc>
-					<desc xml:lang="fr">Represents the number of an active tab page inside a dialog.</desc>
-					<desc xml:lang="fi">Represents the number of an active tab page inside a dialog.</desc>
-					<desc xml:lang="cs">Represents the number of an active tab page inside a dialog.</desc>
-					<desc xml:lang="da">Represents the number of an active tab page inside a dialog.</desc>
-					<desc xml:lang="zh-CN">表示对话框中使用的选项卡页面的编号。</desc>
-					<desc xml:lang="zh-TW">Represents the number of an active tab page inside a dialog.</desc>
-					<desc xml:lang="ar">Represents the number of an active tab page inside a dialog.</desc>
-					<desc xml:lang="he">Represents the number of an active tab page inside a dialog.</desc>
-					<desc xml:lang="ca">Represents the number of an active tab page inside a dialog.</desc>
-					<desc xml:lang="pt">Represents the number of an active tab page inside a dialog.</desc>
-					<desc xml:lang="ru">Represents the number of an active tab page inside a dialog.</desc>
-					<desc xml:lang="es">Represents the number of an active tab page inside a dialog.</desc>
-					<desc xml:lang="it">Represents the number of an active tab page inside a dialog.</desc>
-					<desc xml:lang="sv">Represents the number of an active tab page inside a dialog.</desc>
-					<desc xml:lang="pl">Represents the number of an active tab page inside a dialog.</desc>
-					<desc xml:lang="pt-BR">Represents the number of an active tab page inside a dialog.</desc>
-					<desc xml:lang="ja">ダイアログ内部のアクティブなタブページの数を示します。</desc>
-					<desc xml:lang="ko">Represents the number of an active tab page inside a dialog.</desc>
-					<desc xml:lang="tr">Represents the number of an active tab page inside a dialog.</desc>
-					<desc xml:lang="th">Represents the number of an active tab page inside a dialog.</desc>
-					<desc xml:lang="hi-IN">Represents the number of an active tab page inside a dialog.</desc>
-					<desc xml:lang="x-comment">Represents the number of an active tab page inside a dialog.</desc>
-					<desc xml:lang="hu">Represents the number of an active tab page inside a dialog.</desc>
-					<desc xml:lang="sk">Represents the number of an active tab page inside a dialog.</desc>
-					<desc xml:lang="sl">Represents the number of an active tab page inside a dialog.</desc>
+					<desc>Represents the number of an active tab page inside a dialog.</desc>
 				</info>
 			</prop>
 			<group oor:name="UserData" oor:extensible="true">
 				<info>
-					<desc xml:lang="en-US">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="el">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="nl">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="fr">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="fi">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="cs">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="da">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="zh-CN">表示任意数据的附加字段。此字段没有相关的具体语义。具体应用由使用者确定。</desc>
-					<desc xml:lang="zh-TW">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="ar">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="he">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="ca">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="pt">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="ru">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="es">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="it">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="sv">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="pl">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="pt-BR">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="ja">任意のデータに対するその他のフィールドが表示されます。このフィールドに関連する特殊なセマンティックは存在しません。アプリケーションはユーザーによって決定されます。</desc>
-					<desc xml:lang="ko">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="tr">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="th">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="hi-IN">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="x-comment">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="hu">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="sk">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="sl">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
+					<desc>Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
 				</info>
 			</group>
 		</group>
 		<group oor:name="TabPageType">
 			<info>
-				<desc xml:lang="en-US">Contains the persistent data for a tab page.</desc>
-				<desc xml:lang="el">Contains the persistent data for a tab page.</desc>
-				<desc xml:lang="nl">Contains the persistent data for a tab page.</desc>
-				<desc xml:lang="fr">Contains the persistent data for a tab page.</desc>
-				<desc xml:lang="fi">Contains the persistent data for a tab page.</desc>
-				<desc xml:lang="cs">Contains the persistent data for a tab page.</desc>
-				<desc xml:lang="da">Contains the persistent data for a tab page.</desc>
-				<desc xml:lang="zh-CN">含有选项卡页面的永久数据。</desc>
-				<desc xml:lang="zh-TW">Contains the persistent data for a tab page.</desc>
-				<desc xml:lang="ar">Contains the persistent data for a tab page.</desc>
-				<desc xml:lang="he">Contains the persistent data for a tab page.</desc>
-				<desc xml:lang="ca">Contains the persistent data for a tab page.</desc>
-				<desc xml:lang="pt">Contains the persistent data for a tab page.</desc>
-				<desc xml:lang="ru">Contains the persistent data for a tab page.</desc>
-				<desc xml:lang="es">Contains the persistent data for a tab page.</desc>
-				<desc xml:lang="it">Contains the persistent data for a tab page.</desc>
-				<desc xml:lang="sv">Contains the persistent data for a tab page.</desc>
-				<desc xml:lang="pl">Contains the persistent data for a tab page.</desc>
-				<desc xml:lang="pt-BR">Contains the persistent data for a tab page.</desc>
-				<desc xml:lang="ja">タブページの持続データが含まれます。</desc>
-				<desc xml:lang="ko">Contains the persistent data for a tab page.</desc>
-				<desc xml:lang="tr">Contains the persistent data for a tab page.</desc>
-				<desc xml:lang="th">Contains the persistent data for a tab page.</desc>
-				<desc xml:lang="hi-IN">Contains the persistent data for a tab page.</desc>
-				<desc xml:lang="x-comment">Contains the persistent data for a tab page.</desc>
-				<desc xml:lang="hu">Contains the persistent data for a tab page.</desc>
-				<desc xml:lang="sk">Contains the persistent data for a tab page.</desc>
-				<desc xml:lang="sl">Contains the persistent data for a tab page.</desc>
+				<desc>Contains the persistent data for a tab page.</desc>
 			</info>
 			<prop oor:name="WindowState" oor:type="xs:string">
 				<info>
-					<desc xml:lang="en-US">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="el">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="nl">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="fr">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="fi">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="cs">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="da">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="zh-CN">包括已使用的 vcl 视窗的信息 (位置、大小和状态)。</desc>
-					<desc xml:lang="zh-TW">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="ar">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="he">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="ca">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="pt">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="ru">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="es">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="it">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="sv">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="pl">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="pt-BR">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="ja">使用中の vcl ウィンドウに関する情報 (位置、サイズ、および状態) が含まれます。</desc>
-					<desc xml:lang="ko">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="tr">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="th">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="hi-IN">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="x-comment">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="hu">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="sk">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="sl">Includes information (position,size, and states) about the used vcl window.</desc>
+					<desc>Includes information (position,size, and states) about the used vcl window.</desc>
 				</info>
 			</prop>
 			<group oor:name="UserData" oor:extensible="true">
 				<info>
-					<desc xml:lang="en-US">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="el">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="nl">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="fr">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="fi">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="cs">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="da">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="zh-CN">表示任意数据的附加字段。此字段没有相关的具体语义。具体应用由使用者确定。</desc>
-					<desc xml:lang="zh-TW">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="ar">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="he">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="ca">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="pt">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="ru">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="es">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="it">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="sv">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="pl">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="pt-BR">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="ja">任意のデータに対するその他のフィールドが表示されます。このフィールドに関連する特殊なセマンティックは存在しません。アプリケーションはユーザーによって決定されます。</desc>
-					<desc xml:lang="ko">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="tr">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="th">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="hi-IN">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="x-comment">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="hu">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="sk">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="sl">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
+					<desc>Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
 				</info>
 			</group>
 		</group>
 		<group oor:name="WindowType">
 			<info>
-				<desc xml:lang="en-US">Contains the persistent data for a general office window.</desc>
-				<desc xml:lang="el">Contains the persistent data for a general office window.</desc>
-				<desc xml:lang="nl">Contains the persistent data for a general office window.</desc>
-				<desc xml:lang="fr">Contains the persistent data for a general office window.</desc>
-				<desc xml:lang="fi">Contains the persistent data for a general office window.</desc>
-				<desc xml:lang="cs">Contains the persistent data for a general office window.</desc>
-				<desc xml:lang="da">Contains the persistent data for a general office window.</desc>
-				<desc xml:lang="zh-CN">含有 Office 常规视窗的永久数据。</desc>
-				<desc xml:lang="zh-TW">Contains the persistent data for a general office window.</desc>
-				<desc xml:lang="ar">Contains the persistent data for a general office window.</desc>
-				<desc xml:lang="he">Contains the persistent data for a general office window.</desc>
-				<desc xml:lang="ca">Contains the persistent data for a general office window.</desc>
-				<desc xml:lang="pt">Contains the persistent data for a general office window.</desc>
-				<desc xml:lang="ru">Contains the persistent data for a general office window.</desc>
-				<desc xml:lang="es">Contains the persistent data for a general office window.</desc>
-				<desc xml:lang="it">Contains the persistent data for a general office window.</desc>
-				<desc xml:lang="sv">Contains the persistent data for a general office window.</desc>
-				<desc xml:lang="pl">Contains the persistent data for a general office window.</desc>
-				<desc xml:lang="pt-BR">Contains the persistent data for a general office window.</desc>
-				<desc xml:lang="ja">全般的なオフィスウィンドウの持続データが含まれます。</desc>
-				<desc xml:lang="ko">Contains the persistent data for a general office window.</desc>
-				<desc xml:lang="tr">Contains the persistent data for a general office window.</desc>
-				<desc xml:lang="th">Contains the persistent data for a general office window.</desc>
-				<desc xml:lang="hi-IN">Contains the persistent data for a general office window.</desc>
-				<desc xml:lang="x-comment">Contains the persistent data for a general office window.</desc>
-				<desc xml:lang="hu">Contains the persistent data for a general office window.</desc>
-				<desc xml:lang="sk">Contains the persistent data for a general office window.</desc>
-				<desc xml:lang="sl">Contains the persistent data for a general office window.</desc>
+				<desc>Contains the persistent data for a general office window.</desc>
 			</info>
 			<prop oor:name="WindowState" oor:type="xs:string">
 				<info>
-					<desc xml:lang="en-US">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="el">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="nl">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="fr">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="fi">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="cs">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="da">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="zh-CN">包括已使用的 vcl 视窗的信息 (位置、大小和状态)。</desc>
-					<desc xml:lang="zh-TW">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="ar">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="he">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="ca">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="pt">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="ru">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="es">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="it">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="sv">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="pl">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="pt-BR">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="ja">使用中の vcl ウィンドウに関する情報 (位置、サイズ、および状態) が含まれます。</desc>
-					<desc xml:lang="ko">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="tr">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="th">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="hi-IN">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="x-comment">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="hu">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="sk">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="sl">Includes information (position,size, and states) about the used vcl window.</desc>
+					<desc>Includes information (position,size, and states) about the used vcl window.</desc>
 				</info>
 			</prop>
 			<prop oor:name="Visible" oor:type="xs:boolean">
 				<info>
-					<desc xml:lang="en-US">Makes window visible.</desc>
-					<desc xml:lang="el">Makes window visible.</desc>
-					<desc xml:lang="nl">Makes window visible.</desc>
-					<desc xml:lang="fr">Makes window visible.</desc>
-					<desc xml:lang="fi">Makes window visible.</desc>
-					<desc xml:lang="cs">Makes window visible.</desc>
-					<desc xml:lang="da">Makes window visible.</desc>
-					<desc xml:lang="zh-CN">显示视窗。</desc>
-					<desc xml:lang="zh-TW">Makes window visible.</desc>
-					<desc xml:lang="ar">Makes window visible.</desc>
-					<desc xml:lang="he">Makes window visible.</desc>
-					<desc xml:lang="ca">Makes window visible.</desc>
-					<desc xml:lang="pt">Makes window visible.</desc>
-					<desc xml:lang="ru">Makes window visible.</desc>
-					<desc xml:lang="es">Makes window visible.</desc>
-					<desc xml:lang="it">Makes window visible.</desc>
-					<desc xml:lang="sv">Makes window visible.</desc>
-					<desc xml:lang="pl">Makes window visible.</desc>
-					<desc xml:lang="pt-BR">Makes window visible.</desc>
-					<desc xml:lang="ja">ウィンドウを表示可能にします。</desc>
-					<desc xml:lang="ko">Makes window visible.</desc>
-					<desc xml:lang="tr">Makes window visible.</desc>
-					<desc xml:lang="th">Makes window visible.</desc>
-					<desc xml:lang="hi-IN">Makes window visible.</desc>
-					<desc xml:lang="x-comment">Makes window visible.</desc>
-					<desc xml:lang="hu">Makes window visible.</desc>
-					<desc xml:lang="sk">Makes window visible.</desc>
-					<desc xml:lang="sl">Makes window visible.</desc>
+					<desc>Makes window visible.</desc>
 				</info>
 			</prop>
 			<group oor:name="UserData" oor:extensible="true">
 				<info>
-					<desc xml:lang="en-US">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="el">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="nl">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="fr">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="fi">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="cs">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="da">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="zh-CN">表示任意数据的附加字段。此字段没有相关的具体语义。具体应用由使用者确定。</desc>
-					<desc xml:lang="zh-TW">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="ar">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="he">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="ca">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="pt">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="ru">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="es">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="it">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="sv">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="pl">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="pt-BR">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="ja">任意のデータに対するその他のフィールドが表示されます。このフィールドに関連する特殊なセマンティックは存在しません。アプリケーションはユーザーによって決定されます。</desc>
-					<desc xml:lang="ko">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="tr">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="th">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="hi-IN">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="x-comment">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="hu">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="sk">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="sl">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
+					<desc>Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
 				</info>
 			</group>
 		</group>
@@ -517,130 +139,22 @@
 	<component>
 		<set oor:name="Dialogs" oor:node-type="DialogType">
 			<info>
-				<desc xml:lang="en-US">Lists persistent dialog states.</desc>
-				<desc xml:lang="el">Lists persistent dialog states.</desc>
-				<desc xml:lang="nl">Lists persistent dialog states.</desc>
-				<desc xml:lang="fr">Lists persistent dialog states.</desc>
-				<desc xml:lang="fi">Lists persistent dialog states.</desc>
-				<desc xml:lang="cs">Lists persistent dialog states.</desc>
-				<desc xml:lang="da">Lists persistent dialog states.</desc>
-				<desc xml:lang="zh-CN">列出永久对话框的状态。</desc>
-				<desc xml:lang="zh-TW">Lists persistent dialog states.</desc>
-				<desc xml:lang="ar">Lists persistent dialog states.</desc>
-				<desc xml:lang="he">Lists persistent dialog states.</desc>
-				<desc xml:lang="ca">Lists persistent dialog states.</desc>
-				<desc xml:lang="pt">Lists persistent dialog states.</desc>
-				<desc xml:lang="ru">Lists persistent dialog states.</desc>
-				<desc xml:lang="es">Lists persistent dialog states.</desc>
-				<desc xml:lang="it">Lists persistent dialog states.</desc>
-				<desc xml:lang="sv">Lists persistent dialog states.</desc>
-				<desc xml:lang="pl">Lists persistent dialog states.</desc>
-				<desc xml:lang="pt-BR">Lists persistent dialog states.</desc>
-				<desc xml:lang="ja">ダイアログの持続状態のリストを表示します。</desc>
-				<desc xml:lang="ko">Lists persistent dialog states.</desc>
-				<desc xml:lang="tr">Lists persistent dialog states.</desc>
-				<desc xml:lang="th">Lists persistent dialog states.</desc>
-				<desc xml:lang="hi-IN">Lists persistent dialog states.</desc>
-				<desc xml:lang="x-comment">Lists persistent dialog states.</desc>
-				<desc xml:lang="hu">Lists persistent dialog states.</desc>
-				<desc xml:lang="sk">Lists persistent dialog states.</desc>
-				<desc xml:lang="sl">Lists persistent dialog states.</desc>
+				<desc>Lists persistent dialog states.</desc>
 			</info>
 		</set>
 		<set oor:name="TabDialogs" oor:node-type="TabDialogType">
 			<info>
-				<desc xml:lang="en-US">Lists persistent tab dialog states.</desc>
-				<desc xml:lang="el">Lists persistent tab dialog states.</desc>
-				<desc xml:lang="nl">Lists persistent tab dialog states.</desc>
-				<desc xml:lang="fr">Lists persistent tab dialog states.</desc>
-				<desc xml:lang="fi">Lists persistent tab dialog states.</desc>
-				<desc xml:lang="cs">Lists persistent tab dialog states.</desc>
-				<desc xml:lang="da">Lists persistent tab dialog states.</desc>
-				<desc xml:lang="zh-CN">列出永久选项卡对话框的状态。</desc>
-				<desc xml:lang="zh-TW">Lists persistent tab dialog states.</desc>
-				<desc xml:lang="ar">Lists persistent tab dialog states.</desc>
-				<desc xml:lang="he">Lists persistent tab dialog states.</desc>
-				<desc xml:lang="ca">Lists persistent tab dialog states.</desc>
-				<desc xml:lang="pt">Lists persistent tab dialog states.</desc>
-				<desc xml:lang="ru">Lists persistent tab dialog states.</desc>
-				<desc xml:lang="es">Lists persistent tab dialog states.</desc>
-				<desc xml:lang="it">Lists persistent tab dialog states.</desc>
-				<desc xml:lang="sv">Lists persistent tab dialog states.</desc>
-				<desc xml:lang="pl">Lists persistent tab dialog states.</desc>
-				<desc xml:lang="pt-BR">Lists persistent tab dialog states.</desc>
-				<desc xml:lang="ja">タブダイアログの持続状態のリストを表示します。</desc>
-				<desc xml:lang="ko">Lists persistent tab dialog states.</desc>
-				<desc xml:lang="tr">Lists persistent tab dialog states.</desc>
-				<desc xml:lang="th">Lists persistent tab dialog states.</desc>
-				<desc xml:lang="hi-IN">Lists persistent tab dialog states.</desc>
-				<desc xml:lang="x-comment">Lists persistent tab dialog states.</desc>
-				<desc xml:lang="hu">Lists persistent tab dialog states.</desc>
-				<desc xml:lang="sk">Lists persistent tab dialog states.</desc>
-				<desc xml:lang="sl">Lists persistent tab dialog states.</desc>
+				<desc>Lists persistent tab dialog states.</desc>
 			</info>
 		</set>
 		<set oor:name="TabPages" oor:node-type="TabPageType">
 			<info>
-				<desc xml:lang="en-US">Lists persistent tab page states.</desc>
-				<desc xml:lang="el">Lists persistent tab page states.</desc>
-				<desc xml:lang="nl">Lists persistent tab page states.</desc>
-				<desc xml:lang="fr">Lists persistent tab page states.</desc>
-				<desc xml:lang="fi">Lists persistent tab page states.</desc>
-				<desc xml:lang="cs">Lists persistent tab page states.</desc>
-				<desc xml:lang="da">Lists persistent tab page states.</desc>
-				<desc xml:lang="zh-CN">列出永久选项卡页面的状态。</desc>
-				<desc xml:lang="zh-TW">Lists persistent tab page states.</desc>
-				<desc xml:lang="ar">Lists persistent tab page states.</desc>
-				<desc xml:lang="he">Lists persistent tab page states.</desc>
-				<desc xml:lang="ca">Lists persistent tab page states.</desc>
-				<desc xml:lang="pt">Lists persistent tab page states.</desc>
-				<desc xml:lang="ru">Lists persistent tab page states.</desc>
-				<desc xml:lang="es">Lists persistent tab page states.</desc>
-				<desc xml:lang="it">Lists persistent tab page states.</desc>
-				<desc xml:lang="sv">Lists persistent tab page states.</desc>
-				<desc xml:lang="pl">Lists persistent tab page states.</desc>
-				<desc xml:lang="pt-BR">Lists persistent tab page states.</desc>
-				<desc xml:lang="ja">タブページの持続状態のリストを表示します。</desc>
-				<desc xml:lang="ko">Lists persistent tab page states.</desc>
-				<desc xml:lang="tr">Lists persistent tab page states.</desc>
-				<desc xml:lang="th">Lists persistent tab page states.</desc>
-				<desc xml:lang="hi-IN">Lists persistent tab page states.</desc>
-				<desc xml:lang="x-comment">Lists persistent tab page states.</desc>
-				<desc xml:lang="hu">Lists persistent tab page states.</desc>
-				<desc xml:lang="sk">Lists persistent tab page states.</desc>
-				<desc xml:lang="sl">Lists persistent tab page states.</desc>
+				<desc>Lists persistent tab page states.</desc>
 			</info>
 		</set>
 		<set oor:name="Windows" oor:node-type="WindowType">
 			<info>
-				<desc xml:lang="en-US">Lists persistent window states.</desc>
-				<desc xml:lang="el">Lists persistent window states.</desc>
-				<desc xml:lang="nl">Lists persistent window states.</desc>
-				<desc xml:lang="fr">Lists persistent window states.</desc>
-				<desc xml:lang="fi">Lists persistent window states.</desc>
-				<desc xml:lang="cs">Lists persistent window states.</desc>
-				<desc xml:lang="da">Lists persistent window states.</desc>
-				<desc xml:lang="zh-CN">列出永久视窗的状态。</desc>
-				<desc xml:lang="zh-TW">Lists persistent window states.</desc>
-				<desc xml:lang="ar">Lists persistent window states.</desc>
-				<desc xml:lang="he">Lists persistent window states.</desc>
-				<desc xml:lang="ca">Lists persistent window states.</desc>
-				<desc xml:lang="pt">Lists persistent window states.</desc>
-				<desc xml:lang="ru">Lists persistent window states.</desc>
-				<desc xml:lang="es">Lists persistent window states.</desc>
-				<desc xml:lang="it">Lists persistent window states.</desc>
-				<desc xml:lang="sv">Lists persistent window states.</desc>
-				<desc xml:lang="pl">Lists persistent window states.</desc>
-				<desc xml:lang="pt-BR">Lists persistent window states.</desc>
-				<desc xml:lang="ja">ウィンドウの持続状態のリストを表示します。</desc>
-				<desc xml:lang="ko">Lists persistent window states.</desc>
-				<desc xml:lang="tr">Lists persistent window states.</desc>
-				<desc xml:lang="th">Lists persistent window states.</desc>
-				<desc xml:lang="hi-IN">Lists persistent window states.</desc>
-				<desc xml:lang="x-comment">Lists persistent window states.</desc>
-				<desc xml:lang="hu">Lists persistent window states.</desc>
-				<desc xml:lang="sk">Lists persistent window states.</desc>
-				<desc xml:lang="sl">Lists persistent window states.</desc>
+				<desc>Lists persistent window states.</desc>
 			</info>
 		</set>
 	</component>
