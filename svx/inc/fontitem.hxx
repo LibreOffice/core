@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontitem.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mt $ $Date: 2002-11-05 15:40:35 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 14:35:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,10 @@
 #include <vcl/font.hxx>
 #endif
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 class SvXMLUnitConverter;
 #ifdef _USE_NAMESPACE
 namespace rtl
@@ -90,7 +94,7 @@ namespace rtl
     Dieses Item beschreibt einen Font.
 */
 
-class SvxFontItem : public SfxPoolItem
+class SVX_DLLPUBLIC SvxFontItem : public SfxPoolItem
 {
     String  aFamilyName;
     String  aStyleName;
@@ -153,7 +157,7 @@ public:
 
 };
 
-void GetDefaultFonts( SvxFontItem& rLatin, SvxFontItem& rAsian,
+SVX_DLLPUBLIC void GetDefaultFonts( SvxFontItem& rLatin, SvxFontItem& rAsian,
                         SvxFontItem& rComplex );
 
 #endif // #ifndef _SVX_FONTITEM_HXX
