@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adtabdlg.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-08 13:44:30 $
+ *  last change: $Author: oj $ $Date: 2002-12-03 12:28:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,6 +143,7 @@ OAddTableDlg::OAddTableDlg( Window* pParent,OJoinTableView* _pTableView)
     aAddButton.SetClickHdl( LINK(this,OAddTableDlg, AddClickHdl) );
     aCloseButton.SetClickHdl( LINK(this,OAddTableDlg, CloseClickHdl) );
     aTableList.SetDoubleClickHdl( LINK(this,OAddTableDlg, TableListDoubleClickHdl) );
+    aTableList.SetSelectHdl( LINK(this,OAddTableDlg, TableListSelectHdl) );
 
     aTableList.EnableInplaceEditing( FALSE );
     aTableList.SetWindowBits(WB_BORDER | WB_HASLINES |WB_HASBUTTONS | WB_HASBUTTONSATROOT | WB_HASLINESATROOT | WB_SORT | WB_HSCROLL );
@@ -232,7 +233,13 @@ IMPL_LINK( OAddTableDlg, TableListDoubleClickHdl, ListBox *, EMPTY_ARG )
 
     return 0;
 }
-
+//------------------------------------------------------------------------------
+IMPL_LINK( OAddTableDlg, TableListSelectHdl, ListBox *, EMPTY_ARG )
+{
+    SvLBoxEntry* pEntry = aTableList.FirstSelected();
+    aAddButton.Enable( pEntry && !aTableList.GetModel()->HasChilds(pEntry) );
+    return 0;
+}
 //------------------------------------------------------------------------------
 IMPL_LINK( OAddTableDlg, CloseClickHdl, Button*, pButton )
 {
@@ -293,6 +300,14 @@ void OAddTableDlg::UpdateTableList(BOOL bViewsAllowed)
     }
 
     aTableList.UpdateTableList(Reference< XConnection>(xTableSupp,UNO_QUERY)->getMetaData(),sTables,sViews);
+    SvLBoxEntry* pEntry = aTableList.First();
+    while( pEntry && aTableList.GetModel()->HasChilds(pEntry))
+    {
+        aTableList.Expand(pEntry);
+        pEntry = aTableList.Next(pEntry);
+    }
+    if ( pEntry )
+        aTableList.Select(pEntry);
 }
 // -----------------------------------------------------------------------------
 
