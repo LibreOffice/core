@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctredlin.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-30 19:53:10 $
+ *  last change: $Author: dr $ $Date: 2001-05-31 13:06:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,9 +64,9 @@
  // (C) 1998 StarDivision GmbH, Hamburg, Germany
  //
  // $Workfile:   ctredlin.src  $
- //   $Author: rt $
- //     $Date: 2001-05-30 19:53:10 $
- // $Revision: 1.16 $
+ //   $Author: dr $
+ //     $Date: 2001-05-31 13:06:32 $
+ // $Revision: 1.17 $
  //  $Logfile:   T:/svx/source/dialog/ctredlin.srv  $
  //---------------------------------------------------------------------------
 
@@ -110,7 +110,7 @@ TabPage SID_REDLIN_FILTER_PAGE
     Hide = TRUE ;
     CheckBox CB_DATE
     {
-        Pos = MAP_APPFONT ( 12 , 11 ) ;
+        Pos = MAP_APPFONT ( 6 , 8 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
         Text = "~Datum" ;
         Text [ ENGLISH ] = "~Date" ;
@@ -143,7 +143,7 @@ TabPage SID_REDLIN_FILTER_PAGE
         HelpId = HID_REDLINING_FILTER_LB_DATE ;
         Border = TRUE ;
         Disable = TRUE ;
-        Pos = MAP_APPFONT ( 63 , 9 ) ;
+        Pos = MAP_APPFONT ( 60 , 6 ) ;
         Size = MAP_APPFONT ( 78 , 99 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -360,8 +360,8 @@ TabPage SID_REDLIN_FILTER_PAGE
         HelpId = HID_REDLINING_FILTER_DF_DATE ;
         Disable = TRUE ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 144 , 9 ) ;
-        Size = MAP_APPFONT ( 55 , 12 ) ;
+        Pos = MAP_APPFONT ( 144 , 6 ) ;
+        Size = MAP_APPFONT ( 57 , 12 ) ;
         TabStop = TRUE ;
         Spin = TRUE ;
         Repeat = TRUE ;
@@ -388,7 +388,7 @@ TabPage SID_REDLIN_FILTER_PAGE
         HelpId = HID_REDLINING_FILTER_TF_DATE ;
         Disable = TRUE ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 201 , 9 ) ;
+        Pos = MAP_APPFONT ( 203 , 6 ) ;
         Size = MAP_APPFONT ( 35 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
@@ -398,7 +398,7 @@ TabPage SID_REDLIN_FILTER_PAGE
     {
         HelpId = HID_REDLINING_FILTER_IB_CLOCK ;
         Disable = TRUE ;
-        Pos = MAP_APPFONT ( 239 , 9 ) ;
+        Pos = MAP_APPFONT ( 240 , 6 ) ;
         Size = MAP_APPFONT ( 12 , 12 ) ;
         TabStop = TRUE ;
         ButtonImage = Image
@@ -433,8 +433,9 @@ TabPage SID_REDLIN_FILTER_PAGE
     };
     FixedText FT_DATE2
     {
-        Pos = MAP_APPFONT ( 112 , 26 ) ;
-        Size = MAP_APPFONT ( 32 , 12 ) ;
+        Pos = MAP_APPFONT ( 60 , 24 ) ;
+        Size = MAP_APPFONT ( 78 , 8 ) ;
+        Right = TRUE ;
         Disable = TRUE ;
         Text = "~und dem" ;
         Text [ ENGLISH ] = "and" ;
@@ -465,8 +466,8 @@ TabPage SID_REDLIN_FILTER_PAGE
         HelpId = HID_REDLINING_FILTER_DF_DATE2 ;
         Border = TRUE ;
         Disable = TRUE ;
-        Pos = MAP_APPFONT ( 144 , 24 ) ;
-        Size = MAP_APPFONT ( 55 , 12 ) ;
+        Pos = MAP_APPFONT ( 144 , 22 ) ;
+        Size = MAP_APPFONT ( 57 , 12 ) ;
         TabStop = TRUE ;
         Spin = TRUE ;
         Repeat = TRUE ;
@@ -493,7 +494,7 @@ TabPage SID_REDLIN_FILTER_PAGE
         HelpId = HID_REDLINING_FILTER_TF_DATE2 ;
         Border = TRUE ;
         Disable = TRUE ;
-        Pos = MAP_APPFONT ( 201 , 24 ) ;
+        Pos = MAP_APPFONT ( 203 , 22 ) ;
         Size = MAP_APPFONT ( 35 , 12 ) ;
         TabStop = TRUE ;
         Spin = TRUE ;
@@ -503,7 +504,7 @@ TabPage SID_REDLIN_FILTER_PAGE
     {
         HelpId = HID_REDLINING_FILTER_IB_CLOCK2 ;
         Disable = TRUE ;
-        Pos = MAP_APPFONT ( 239 , 24 ) ;
+        Pos = MAP_APPFONT ( 240 , 22 ) ;
         Size = MAP_APPFONT ( 12 , 12 ) ;
         TabStop = TRUE ;
         ButtonImage = Image
@@ -539,8 +540,8 @@ TabPage SID_REDLIN_FILTER_PAGE
     CheckBox CB_AUTOR
     {
         HelpId = HID_REDLINING_FILTER_CB_AUTOR ;
-        Pos = MAP_APPFONT ( 12 , 46 ) ;
-        Size = MAP_APPFONT ( 50 , 12 ) ;
+        Pos = MAP_APPFONT ( 6 , 40 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
         Text = "~Autor" ;
         Text [ ENGLISH ] = "~Author" ;
         TabStop = TRUE ;
@@ -570,8 +571,8 @@ TabPage SID_REDLIN_FILTER_PAGE
     {
         HelpId = HID_REDLINING_FILTER_LB_AUTOR ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 63 , 44 ) ;
-        Size = MAP_APPFONT ( 173 , 100 ) ;
+        Pos = MAP_APPFONT ( 60 , 38 ) ;
+        Size = MAP_APPFONT ( 178 , 100 ) ;
         TabStop = TRUE ;
         Disable = TRUE ;
         DropDown = TRUE ;
@@ -579,7 +580,7 @@ TabPage SID_REDLIN_FILTER_PAGE
     CheckBox CB_RANGE
     {
         HelpId = HID_REDLINING_FILTER_CB_RANGE ;
-        Pos = MAP_APPFONT ( 12 , 67 ) ;
+        Pos = MAP_APPFONT ( 6 , 56 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
         Text = "~Bereich" ;
         Text [ ENGLISH ] = "~Range" ;
@@ -611,8 +612,8 @@ TabPage SID_REDLIN_FILTER_PAGE
         HelpId = HID_REDLINING_FILTER_ED_RANGE ;
         Disable = TRUE ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 63 , 65 ) ;
-        Size = MAP_APPFONT ( 173 , 12 ) ;
+        Pos = MAP_APPFONT ( 60 , 54 ) ;
+        Size = MAP_APPFONT ( 178 , 12 ) ;
         TabStop = TRUE ;
     };
     String STR_ACTION
@@ -647,15 +648,15 @@ TabPage SID_REDLIN_FILTER_PAGE
         Border = TRUE ;
         Hide = TRUE ;
         Disable = TRUE ;
-        Pos = MAP_APPFONT ( 63 , 65 ) ;
-        Size = MAP_APPFONT ( 173 , 100 ) ;
+        Pos = MAP_APPFONT ( 60 , 54 ) ;
+        Size = MAP_APPFONT ( 178 , 100 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
     PushButton BTN_REF
     {
         HelpId = HID_REDLINING_FILTER_BTN_REF ;
-        Pos = MAP_APPFONT ( 239 , 65 ) ;
+        Pos = MAP_APPFONT ( 240 , 54 ) ;
         Size = MAP_APPFONT ( 12 , 12 ) ;
         Disable = TRUE ;
         TabStop = TRUE ;
@@ -707,7 +708,7 @@ TabPage SID_REDLIN_FILTER_PAGE
     CheckBox CB_COMMENT
     {
         HelpId = HID_REDLINING_FILTER_CB_COMMENT ;
-        Pos = MAP_APPFONT ( 12 , 88 ) ;
+        Pos = MAP_APPFONT ( 6 , 72 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
         Text = "Be~schreibung" ;
         Text [ ENGLISH ] = "~Comment" ;
@@ -739,15 +740,9 @@ TabPage SID_REDLIN_FILTER_PAGE
         HelpId = HID_REDLINING_FILTER_ED_COMMENT ;
         Disable = TRUE ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 63 , 86 ) ;
-        Size = MAP_APPFONT ( 173 , 12 ) ;
+        Pos = MAP_APPFONT ( 60 , 70 ) ;
+        Size = MAP_APPFONT ( 178 , 12 ) ;
         TabStop = TRUE ;
-    };
-
-    GroupBox GB_FILTER
-    {
-        Pos = MAP_APPFONT ( 3 , 1 ) ;
-        Size = MAP_APPFONT ( 257 , 103) ;
     };
 };
 TabPage SID_REDLIN_VIEW_PAGE

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctredlin.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-20 09:29:04 $
+ *  last change: $Author: dr $ $Date: 2001-05-31 13:06:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -864,7 +864,6 @@ SvxTPFilter::SvxTPFilter( Window * pParent)
     aEdRange    ( this, ResId( ED_RANGE ) ),
     aBtnRange   ( this, ResId( BTN_REF ) ),
     aLbAction   ( this, ResId( LB_ACTION ) ),
-    aGbFilter   ( this, ResId( GB_FILTER ) ),
     aCbComment  ( this, ResId( CB_COMMENT) ),
     aEdComment  ( this, ResId( ED_COMMENT) ),
     aStrMyName  (       ResId( STR_FILTER) ),
@@ -922,11 +921,6 @@ void SvxTPFilter::SetRedlinTable(SvxRedlinTable* pTable)
 String SvxTPFilter::GetMyName() const
 {
     return aStrMyName;
-}
-
-void SvxTPFilter::HideGroupBox( BOOL bFlag)
-{
-    aGbFilter.Show(!bFlag);
 }
 
 void SvxTPFilter::DisableRange(BOOL bFlag)
