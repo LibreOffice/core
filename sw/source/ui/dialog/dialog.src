@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 20:40:55 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 06:26:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,7 +152,7 @@ String STR_PATH_NOT_FOUND1
     Text [ italian ] = "La cartella" ;
     Text [ portuguese_brazilian ] = "O diretório" ;
     Text [ portuguese ] = "O directório '" ;
-    Text [ finnish ] = "Hakemistoa '" ;
+    Text [ finnish ] = "Hakemisto '" ;
     Text [ danish ] = "Biblioteket '" ;
     Text [ french ] = "Le répertoire'" ;
     Text [ swedish ] = "Katalogen '" ;
@@ -181,7 +181,7 @@ String STR_PATH_NOT_FOUND2
     Text [ italian ] = "' non esiste." ;
     Text [ portuguese_brazilian ] = "' não existe." ;
     Text [ portuguese ] = "' não existe." ;
-    Text [ finnish ] = "' ei ole." ;
+    Text [ finnish ] = "Kohdetta ' ei ole." ;
     Text [ danish ] = "' eksisterer ikke." ;
     Text [ french ] = "' n'existe pas." ;
     Text [ swedish ] = "' finns inte." ;

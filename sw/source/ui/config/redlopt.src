@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlopt.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hjs $ $Date: 2001-05-04 20:37:01 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 06:26:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,7 @@ TabPage TP_REDLINE_OPT
         Text[ turkish ] = "Metin görünümü";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Ver texto";
+        Text[ finnish ] = "Textdarstellung";
     };
     FixedText FT_INS_ATTR
     {
@@ -131,6 +132,7 @@ TabPage TP_REDLINE_OPT
         Text[ turkish ] = "Attributes";
         Text[ arabic ] = "ÇáÓãÇÊ";
         Text[ catalan ] = "Attributes";
+        Text[ finnish ] = "A~ttribute";
     };
     ListBox LB_INS_ATTR
     {
@@ -304,7 +306,7 @@ TabPage TP_REDLINE_OPT
         < "Kapitæler" ; > ;
         < "Titelskrift" ; > ;
         < "Baggrundsfarve" ; > ;
-        < "Hintergrundfarbe" ; > ;
+        < "Baggrundsfarve" ; > ;
     };
     StringList [ swedish ] =
     {
@@ -374,7 +376,7 @@ TabPage TP_REDLINE_OPT
         < "½º¸ôÄ¸" ; > ;
         < "Á¦¸ñ ±Û²Ã" ; > ;
         < "¹è°æ»ö" ; > ;
-        < "Hintergrundfarbe" ; > ;
+        < "¹è°æ»ö" ; > ;
     };
     StringList [ chinese_simplified ] =
     {
@@ -416,7 +418,7 @@ TabPage TP_REDLINE_OPT
         < "Küçük büyük harf" ; > ;
         < "Baþlýk yazýtipi" ; > ;
         < "Artalan rengi" ; > ;
-        < "Hintergrundfarbe" ; > ;
+        < "Artalan rengi" ; > ;
     };
     StringList [ arabic ] =
     {
@@ -430,7 +432,7 @@ TabPage TP_REDLINE_OPT
         < "ÍÑÝ ÈÏÇíÉ ÃßÈÑ" ; > ;
         < "ÎØ ÇáÚäæÇä" ; > ;
         < "áæä ÇáÎáÝíÉ" ; > ;
-        < "Hintergrundfarbe" ; > ;
+        < "áæä ÇáÎáÝíÉ" ; > ;
     };
     StringList [ catalan ] =
     {
@@ -444,6 +446,20 @@ TabPage TP_REDLINE_OPT
         < "Versalitas" ; > ;
         < "Caracteres del título" ; > ;
         < "Color de fondo" ; > ;
+        < "Hintergrundfarbe" ; > ;
+    };
+    StringList [ finnish ] =
+    {
+            < "[Keine]" ; > ;
+        < "Fett" ; > ;
+        < "Kursiv" ; > ;
+        < "Unterstrichen" ; > ;
+        < "Doppelt unterstrichen" ; > ;
+        < "Durchstreichen" ; > ;
+        < "Versalien" ; > ;
+        < "Gemeine" ; > ;
+        < "Kapitälchen" ; > ;
+        < "Titelschrift" ; > ;
         < "Hintergrundfarbe" ; > ;
     };
     };
@@ -473,6 +489,7 @@ TabPage TP_REDLINE_OPT
         Text[ turkish ] = "~Renk";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Color";
+        Text[ finnish ] = "~Farbe";
     };
     ListBox LB_INS_COL
     {
@@ -507,6 +524,7 @@ TabPage TP_REDLINE_OPT
         Text[ turkish ] = "Insert";
         Text[ arabic ] = "ÅÏÑÇÌ";
         Text[ catalan ] = "Insert";
+        Text[ finnish ] = "Einfügen";
     };
     FixedText FT_DEL_ATTR
     {
@@ -533,6 +551,7 @@ TabPage TP_REDLINE_OPT
         Text[ turkish ] = "Attributes";
         Text[ arabic ] = "ÇáÓãÇÊ";
         Text[ catalan ] = "Attributes";
+        Text[ finnish ] = "A~ttribute";
     };
     ListBox LB_DEL_ATTR
     {
@@ -566,6 +585,7 @@ TabPage TP_REDLINE_OPT
         Text[ turkish ] = "Color";
         Text[ arabic ] = "Çááæä";
         Text[ catalan ] = "Color";
+        Text[ finnish ] = "~Farbe";
     };
     ListBox LB_DEL_COL
     {
@@ -600,6 +620,7 @@ TabPage TP_REDLINE_OPT
         Text[ turkish ] = "Delete";
         Text[ arabic ] = "ÍÐÝ";
         Text[ catalan ] = "Delete";
+        Text[ finnish ] = "Löschen";
     };
     FixedText FT_CHG_ATTR
     {
@@ -626,6 +647,7 @@ TabPage TP_REDLINE_OPT
         Text[ turkish ] = "Attributes";
         Text[ arabic ] = "ÇáÓãÇÊ";
         Text[ catalan ] = "Attributes";
+        Text[ finnish ] = "A~ttribute";
     };
     ListBox LB_CHG_ATTR
     {
@@ -659,6 +681,7 @@ TabPage TP_REDLINE_OPT
         Text[ turkish ] = "Color";
         Text[ arabic ] = "Çááæä";
         Text[ catalan ] = "Color";
+        Text[ finnish ] = "~Farbe";
     };
     ListBox LB_CHG_COL
     {
@@ -693,6 +716,7 @@ TabPage TP_REDLINE_OPT
         Text[ turkish ] = "Attributes";
         Text[ arabic ] = "ÇáÓãÇÊ";
         Text[ catalan ] = "Attributes";
+        Text[ finnish ] = "Attribute";
     };
     FixedLine GB_LC
     {
@@ -720,6 +744,7 @@ TabPage TP_REDLINE_OPT
         Text[ turkish ] = "Deðiþtirilen satýrlar";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Líneas modificadas";
+        Text[ finnish ] = "Geänderte Zeilen";
     };
     FixedText FT_MARKPOS
     {
@@ -747,6 +772,7 @@ TabPage TP_REDLINE_OPT
         Text[ turkish ] = "Ýþaret";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Marca";
+        Text[ finnish ] = "Mark";
     };
     ListBox LB_MARKPOS
     {
@@ -930,6 +956,14 @@ TabPage TP_REDLINE_OPT
         < "Margen exterior" ; > ;
         < "Margen interior" ; > ;
     };
+    StringList [ finnish ] =
+    {
+            < "[Ei mitään]" ; > ;
+        < "Vasen marginaali" ; > ;
+        < "Oikea marginaali" ; > ;
+        < "Ulkomarginaali" ; > ;
+        < "Sisämarginaali" ; > ;
+    };
     };
     FixedText FT_LC_COL
     {
@@ -957,6 +991,7 @@ TabPage TP_REDLINE_OPT
         Text[ turkish ] = "Renk";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Color";
+        Text[ finnish ] = "Color";
     };
     ListBox LB_LC_COL
     {
@@ -994,6 +1029,7 @@ TabPage TP_REDLINE_OPT
         Text[ turkish ] = "Yazana göre";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Según autor";
+        Text[ finnish ] = "Laatijan mukaan";
     };
     String STR_NOTHING
     {
@@ -1018,5 +1054,6 @@ TabPage TP_REDLINE_OPT
         Text[ arabic ] = "[ÈÏæä]";
         Text[ turkish ] = "[Yok]";
         Text[ catalan ] = "[Ningún]";
+        Text[ finnish ] = "[Ei mitään]";
     };
 };
