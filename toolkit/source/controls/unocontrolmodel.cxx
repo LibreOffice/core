@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrolmodel.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mt $ $Date: 2001-02-05 10:54:01 $
+ *  last change: $Author: fs $ $Date: 2001-03-13 15:57:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,8 @@
 #include <tools/intn.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
 
 struct ImplControlProperty
 {
@@ -984,7 +986,20 @@ sal_Bool UnoControlModel::supportsService( const ::rtl::OUString& rServiceName )
     return *(::cppu::IPropertyArrayHelper*) NULL;
 }
 
-sal_Bool UnoControlModel::convertFastPropertyValue( ::com::sun::star::uno::Any & rConvertedValue, ::com::sun::star::uno::Any & rOldValue, sal_Int32 nPropId, const ::com::sun::star::uno::Any& rValue ) throw (::com::sun::star::lang::IllegalArgumentException)
+// ------------------------------------------------------------------
+template <class TYPE>
+sal_Bool convertType(Any& _rConvertedValue, const Any& _rNewValueTest, const TYPE* /* _pTypeDisambiguation */)
+{
+    TYPE tValue;
+    if (_rNewValueTest >>= tValue)
+    {
+        _rConvertedValue <<= tValue;
+        return sal_True;
+    }
+}
+
+// ..................................................................
+sal_Bool UnoControlModel::convertFastPropertyValue( Any & rConvertedValue, Any & rOldValue, sal_Int32 nPropId, const Any& rValue ) throw (IllegalArgumentException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -996,7 +1011,7 @@ sal_Bool UnoControlModel::convertFastPropertyValue( ::com::sun::star::uno::Any &
     else
     {
         const ::com::sun::star::uno::Type* pDestType = GetPropertyType( nPropId );
-        if ( pDestType->getTypeClass() == ::com::sun::star::uno::TypeClass_ANY )
+        if ( pDestType->getTypeClass() == TypeClass_ANY )
         {
             rConvertedValue = rValue;
         }
@@ -1007,17 +1022,43 @@ sal_Bool UnoControlModel::convertFastPropertyValue( ::com::sun::star::uno::Any &
                 // This will crash as soon as somebody tries to set a property value (rValue) which's type
                 // is far enough from the destination type which it is 'c-style cast' to with the line above.
 
-            if (!pDestType->equals(rValue.getValueType()))
-                throw ::com::sun::star::lang::IllegalArgumentException(
-                            ::rtl::OUString::createFromAscii("Unable to convert the given value for the property ")
-                        +=  GetPropertyName(nPropId),
-                    static_cast< ::com::sun::star::beans::XPropertySet* >(this),
-                    1);
+
+            sal_Bool bConvertible = pDestType->equals(rValue.getValueType());
+            if (!bConvertible)
+            {
+                // okay, try to be somewhat more tolerant, after all, this method here's called "convert...."
+                // 13.03.2001 - 84923 - frank.schoenheit@germany.sun.com
+                switch (pDestType->getTypeClass())
+                {
+                    case TypeClass_SHORT:
+                        bConvertible = convertType(rConvertedValue, rValue, static_cast< const sal_Int16* >(NULL));
+                        break;
+                    case TypeClass_UNSIGNED_SHORT:
+                        bConvertible = convertType(rConvertedValue, rValue, static_cast< const sal_uInt16* >(NULL));
+                        break;
+                    case TypeClass_LONG:
+                        bConvertible = convertType(rConvertedValue, rValue, static_cast< const sal_Int32* >(NULL));
+                        break;
+                    case TypeClass_UNSIGNED_LONG:
+                        bConvertible = convertType(rConvertedValue, rValue, static_cast< const sal_uInt32* >(NULL));
+                        break;
+                    // TODO: perhaps we should allow us some more tolerance for enum types, too ....
+                }
+
+                if (!bConvertible)
+                    throw ::com::sun::star::lang::IllegalArgumentException(
+                                ::rtl::OUString::createFromAscii("Unable to convert the given value for the property ")
+                            +=  GetPropertyName(nPropId),
+                        static_cast< ::com::sun::star::beans::XPropertySet* >(this),
+                        1);
+            }
 
             // no we're allow to do this
             rConvertedValue.setValue( rValue.getValue(), *pDestType );
         }
     }
+
+    // the current value
     getFastPropertyValue( rOldValue, nPropId );
     return !CompareProperties( rConvertedValue, rOldValue );
 }
