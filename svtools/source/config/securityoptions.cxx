@@ -2,9 +2,9 @@
  *
  *  $RCSfile: securityoptions.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:52:19 $
+ *  last change: $Author: kz $ $Date: 2004-06-10 13:38:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -291,13 +291,10 @@ SvtSecurityOptions_Impl::SvtSecurityOptions_Impl()
     sal_Int32 nPropertyCount = seqValues.getLength();
     for( sal_Int32 nProperty=0; nProperty<nPropertyCount; ++nProperty )
     {
-        // Safe impossible cases.
-        // Check any for valid value.
-        DBG_ASSERT( !(seqValues[nProperty].hasValue()==sal_False), "SvtSecurityOptions_Impl::SvtSecurityOptions_Impl()\nInvalid property value detected!\n" );
         switch( nProperty )
         {
             case PROPERTYHANDLE_SECUREURL       :   {
-                                                        DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_SEQUENCE), "SvtSecurityOptions_Impl::SvtSecurityOptions_Impl()\nWho has changed the value type of \"Security\\SecureURL\"?" );
+                                                        m_seqSecureURLs.realloc(0);
                                                         seqValues[nProperty] >>= m_seqSecureURLs;
                                                         SvtPathOptions aOpt;
                                                         sal_uInt32 nCount = m_seqSecureURLs.getLength();
@@ -308,8 +305,7 @@ SvtSecurityOptions_Impl::SvtSecurityOptions_Impl()
                                                     break;
 
             case PROPERTYHANDLE_STAROFFICEBASIC :   {
-                                                        DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_LONG), "SvtSecurityOptions_Impl::SvtSecurityOptions_Impl()\nWho has changed the value type of \"Security\\OfficeBasic\"?" );
-                                                        sal_Int32 nMode;
+                                                        sal_Int32 nMode = DEFAULT_STAROFFICEBASIC;
                                                         seqValues[nProperty] >>= nMode;
                                                         m_eBasicMode = (EBasicSecurityMode)nMode;
                                                         m_bROBasicMode = seqRO[nProperty];
@@ -317,20 +313,18 @@ SvtSecurityOptions_Impl::SvtSecurityOptions_Impl()
                                                     break;
 
             case PROPERTYHANDLE_EXECUTEPLUGINS  :   {
-                                                        if ( !( seqValues[nProperty] >>= m_bExecutePlugins ) )
-                                                            DBG_ERROR("Wrong type for ExecutePlugins!");
+                                                        seqValues[nProperty] >>= m_bExecutePlugins;
                                                         m_bROExecutePlugins = seqRO[nProperty];
                                                     }
                                                     break;
             case PROPERTYHANDLE_WARNINGENABLED  :   {
-                                                        if ( !( seqValues[nProperty] >>= m_bWarning ) )
-                                                            DBG_ERROR("Wrong type for Warning!");
+                                                        seqValues[nProperty] >>= m_bWarning;
                                                         m_bROWarning = seqRO[nProperty];
                                                     }
                                                     break;
-            case PROPERTYHANDLE_CONFIRMATIONENABLED :   {
-                                                        if ( !( seqValues[nProperty] >>= m_bConfirmation ) )
-                                                            DBG_ERROR("Wrong type for Confirmation!");
+            case PROPERTYHANDLE_CONFIRMATIONENABLED :
+                                                    {
+                                                        seqValues[nProperty] >>= m_bConfirmation;
                                                         m_bROConfirmation = seqRO[nProperty];
                                                     }
                                                     break;
@@ -371,7 +365,7 @@ void SvtSecurityOptions_Impl::Notify( const Sequence< OUString >& seqPropertyNam
     {
         if( seqPropertyNames[nProperty] == PROPERTYNAME_SECUREURL )
         {
-            DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_SEQUENCE), "SvtSecurityOptions_Impl::Notify()\nWho has changed the value type of \"Security\\SecureURL\"?" );
+            m_seqSecureURLs.realloc(0);
             seqValues[nProperty] >>= m_seqSecureURLs;
             SvtPathOptions aOpt;
             sal_uInt32 nCount = m_seqSecureURLs.getLength();
@@ -381,28 +375,24 @@ void SvtSecurityOptions_Impl::Notify( const Sequence< OUString >& seqPropertyNam
         }
         else if( seqPropertyNames[nProperty] == PROPERTYNAME_STAROFFICEBASIC )
         {
-            DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_LONG), "SvtSecurityOptions_Impl::Notify()\nWho has changed the value type of \"Security\\OfficeBasic\"?" );
-            sal_Int32 nMode;
+            sal_Int32 nMode = DEFAULT_STAROFFICEBASIC;
             seqValues[nProperty] >>= nMode;
             m_eBasicMode = (EBasicSecurityMode)nMode;
             m_bROBasicMode = seqRO[nProperty];
         }
         else if( seqPropertyNames[nProperty] == PROPERTYNAME_EXECUTEPLUGINS )
         {
-            if ( !( seqValues[nProperty] >>= m_bExecutePlugins ) )
-                DBG_ERROR("Wrong type for ExecutePlugins!");
+            seqValues[nProperty] >>= m_bExecutePlugins;
             m_bROExecutePlugins = seqRO[nProperty];
         }
         else if( seqPropertyNames[nProperty] == PROPERTYNAME_WARNINGENABLED )
         {
-            if ( !( seqValues[nProperty] >>= m_bWarning ) )
-                DBG_ERROR("Wrong type for ExecutePlugins!");
+            seqValues[nProperty] >>= m_bWarning;
             m_bROWarning = seqRO[nProperty];
         }
         else if( seqPropertyNames[nProperty] == PROPERTYNAME_CONFIRMATIONENABLED )
         {
-            if ( !( seqValues[nProperty] >>= m_bConfirmation ) )
-                DBG_ERROR("Wrong type for ExecutePlugins!");
+            seqValues[nProperty] >>= m_bConfirmation;
             m_bROConfirmation = seqRO[nProperty];
         }
         #if OSL_DEBUG_LEVEL > 1
