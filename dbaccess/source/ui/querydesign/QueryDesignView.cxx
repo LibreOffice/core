@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryDesignView.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:03:54 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 16:00:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,32 +224,28 @@ namespace
     {
         SqlParseError eErrorCode = eOk;
         sal_uInt32 nCount = pTableRefList->count();
-
-        if ( nCount > 1 )
+        sal_Bool bError = sal_False;
+        for (sal_uInt32 i=0; !bError && i < nCount; ++i)
         {
-            sal_Bool bError = sal_False;
-            for (sal_uInt32 i=0; !bError && i < nCount; i++)
+            const ::connectivity::OSQLParseNode* pParseNode = pTableRefList->getChild(i);
+            const ::connectivity::OSQLParseNode* pJoinNode = NULL;
+
+            if ( SQL_ISRULEOR2(pParseNode , qualified_join,joined_table) || SQL_ISRULE(pParseNode ,cross_union) )
+                pJoinNode = pParseNode;
+            else if(    pParseNode->count() == 4
+                    &&  SQL_ISPUNCTUATION(pParseNode->getChild(0),"{")
+                    &&  SQL_ISRULE(pParseNode,table_ref))
+                pJoinNode = pParseNode->getChild(2);
+
+            if ( pJoinNode )
             {
-                const ::connectivity::OSQLParseNode* pParseNode = pTableRefList->getChild(i);
-                const ::connectivity::OSQLParseNode* pJoinNode = NULL;
-
-                if (SQL_ISRULEOR2(pParseNode , qualified_join,joined_table) )
-                    pJoinNode = pParseNode;
-                else if(    pParseNode->count() == 4
-                        &&  SQL_ISPUNCTUATION(pParseNode->getChild(0),"{")
-                        &&  SQL_ISRULE(pParseNode,table_ref))
-                    pJoinNode = pParseNode->getChild(2);
-
-                if ( pJoinNode && !InsertJoin(_pView,pJoinNode))
+                if ( !InsertJoin(_pView,pJoinNode) )
                     bError = sal_True;
             }
-            // check if error occured
-            if ( bError )
-            {
-                eErrorCode = eIllegalJoin;
-
-            }
         }
+        // check if error occured
+        if ( bError )
+            eErrorCode = eIllegalJoin;
 
         return eErrorCode;
     }
