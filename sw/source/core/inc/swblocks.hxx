@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swblocks.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:08:08 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:19:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,7 @@ protected:
     String aName;                       // logischer Name der Datei
     String aCur;                        // aktueller Text
     String aShort, aLong;               // Kurz- und Langname (PutDoc)
+    String sBaseURL;                    // base URL - has to be set at the Readers and Writers
     SwBlockNames aNames;                // Liste aller Bausteine
     Date aDateModified;                 // fuers abgleichen bei den Aktionen
     Time aTimeModified;
@@ -149,6 +150,9 @@ public:
         { aName = rName; bInfoChanged = TRUE; }
     const String & GetName( void )
         { return aName; }
+
+    const String&       GetBaseURL() const { return sBaseURL;}
+    void                SetBaseURL( const String& rURL ) { sBaseURL = rURL; }
 
     virtual ULONG Delete( USHORT ) = 0;
     virtual ULONG Rename( USHORT, const String&, const String& ) = 0;
