@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptNameResolverImpl.hxx,v $
 *
-*  $Revision: 1.2 $
+*  $Revision: 1.3 $
 *
-*  last change: $Author: jmrice $ $Date: 2002-09-27 12:16:26 $
+*  last change: $Author: jmrice $ $Date: 2002-09-30 12:56:40 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -126,7 +126,7 @@ public:
 private:
     ::com::sun::star::uno::Reference <
     ::drafts::com::sun::star::script::framework::scripturi::XScriptURI >
-    resolveURIFromStorageID( sal_Int16 sid,
+    resolveURIFromStorageID( sal_uInt16 sid,
         const ::com::sun::star::uno::Reference <
         ::drafts::com::sun::star::script::framework::scripturi::XScriptURI > &
         nameToResolve )

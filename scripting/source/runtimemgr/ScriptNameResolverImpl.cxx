@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptNameResolverImpl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jmrice $ $Date: 2002-09-27 12:16:26 $
+ *  last change: $Author: jmrice $ $Date: 2002-09-30 12:56:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ Sequence< OUString > nrs_serviceNames = Sequence< OUString >( &nrs_serviceName, 
 extern ::rtl_StandardModuleCount s_moduleCount;
 
 // define storages to search
-static ::std::vector< int >* m_pSearchIDs = NULL;
+static ::std::vector< sal_uInt16 >* m_pSearchIDs = NULL;
 
 //*************************************************************************
 ScriptNameResolverImpl::ScriptNameResolverImpl(
@@ -100,7 +100,7 @@ ScriptNameResolverImpl::ScriptNameResolverImpl(
         osl::Guard< osl::Mutex > aGuard( m_mutex );
         if(!m_pSearchIDs)
         {
-            m_pSearchIDs = new ::std::vector< int >();
+            m_pSearchIDs = new ::std::vector< sal_uInt16 >();
             m_pSearchIDs->push_back( ::scripting_constants::DOC_STORAGE_ID_NOT_SET );
             m_pSearchIDs->push_back( ::scripting_constants::USER_STORAGE_ID );
             m_pSearchIDs->push_back( ::scripting_constants::SHARED_STORAGE_ID );
@@ -136,7 +136,7 @@ throw ( lang::IllegalArgumentException, script::CannotConvertException, RuntimeE
 
     Any any;
     OUString docUri;
-    sal_Int16 docSid;
+    sal_uInt16 docSid;
     try
     {
         any = xPropSetScriptingContext->getPropertyValue( scripting_constants::DOC_URI );
@@ -182,10 +182,10 @@ throw ( lang::IllegalArgumentException, script::CannotConvertException, RuntimeE
 
 
     OSL_TRACE( "ScriptNameResolverImpl::resolve Starting..." );
-    ::std::vector< int >& m_vSearchIDs = *m_pSearchIDs;
+    ::std::vector< sal_uInt16 >& m_vSearchIDs = *m_pSearchIDs;
     m_vSearchIDs[ 0 ] = docSid;
-    ::std::vector< int >::const_iterator iter;
-    ::std::vector< int >::const_iterator iterEnd = m_vSearchIDs.end();
+    ::std::vector< sal_uInt16 >::const_iterator iter;
+    ::std::vector< sal_uInt16 >::const_iterator iterEnd = m_vSearchIDs.end();
 
     for ( iter = m_vSearchIDs.begin() ; iter != iterEnd; ++iter )
     {
@@ -249,7 +249,7 @@ throw( RuntimeException )
 
 Reference< scripturi::XScriptURI >
 ScriptNameResolverImpl::resolveURIFromStorageID
-( sal_Int16 sid, const Reference< scripturi::XScriptURI >& scriptURI )
+( sal_uInt16 sid, const Reference< scripturi::XScriptURI >& scriptURI )
 SAL_THROW ( ( lang::IllegalArgumentException, RuntimeException ) )
 {
 
@@ -272,6 +272,7 @@ SAL_THROW ( ( lang::IllegalArgumentException, RuntimeException ) )
     Reference< scripturi::XScriptURI > resolvedName;
     if ( sid == ::scripting_constants::DOC_STORAGE_ID_NOT_SET )
     {
+        OSL_TRACE( "@@@@ **** ScriptNameResolverImpl::resolve DOC_STORAGE_ID_NOT_SET" );
         return resolvedName;
     }
     try

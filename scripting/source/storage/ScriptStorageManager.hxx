@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptStorageManager.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dfoster $ $Date: 2002-09-27 14:14:14 $
+ *  last change: $Author: jmrice $ $Date: 2002-09-30 12:57:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ namespace scripting_impl
 
 // Define a hash_map used to store the ScriptingStorages key;d by ID
 typedef ::std::hash_map <
-    sal_Int16,
+    sal_uInt16,
     ::com::sun::star::uno::Reference < ::com::sun::star::uno::XInterface > >
     ScriptStorage_hash;
 
@@ -191,7 +191,7 @@ private:
         ::com::sun::star::lang::XMultiComponentFactory > m_xMgr;
     ::osl::Mutex     m_mutex;
     ScriptStorage_hash m_ScriptStorageHash;
-    sal_Int16  m_count;
+    sal_uInt16  m_count;
 
     void setupAppStorage(
         const ::com::sun::star::uno::Reference<

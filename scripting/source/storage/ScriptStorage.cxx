@@ -2,8 +2,8 @@
 *
 *  $RCSfile: ScriptStorage.cxx,v $
 *
-*  $Revision: 1.5 $
-*  last change: $Author: jmrice $ $Date: 2002-09-30 10:59:39 $
+*  $Revision: 1.6 $
+*  last change: $Author: jmrice $ $Date: 2002-09-30 12:57:02 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -186,7 +186,7 @@ throw ( RuntimeException, Exception )
 
         Reference< io::XInputStream > xInput;
         sal_Int32 languageDirsLength = languageDirs.getLength();
-        for ( int i = 0; i < languageDirsLength ; ++i )
+        for ( sal_Int32 i = 0; i < languageDirsLength ; ++i )
         {
 #ifdef _DEBUG
             fprintf( stderr, "contains: %s\n", ::rtl::OUStringToOString( languageDirs[ i ],
@@ -204,7 +204,7 @@ throw ( RuntimeException, Exception )
                 m_xSimpleFileAccess->getFolderContents( languageDirs[ i ], true );
 
             sal_Int32 parcelDirsLength = parcelDirs.getLength();
-            for ( int j = 0; j < parcelDirsLength ; ++j )
+            for ( sal_Int32 j = 0; j < parcelDirsLength ; ++j )
             {
 #ifdef _DEBUG
                 fprintf( stderr, "contains: %s\n",
@@ -468,9 +468,17 @@ throw ( RuntimeException )
 {
     ::osl::Guard< osl::Mutex > aGuard( m_mutex );
 
+    Sequence< Reference< storage::XScriptInfo > > sr_xScriptInfo;
+
     //Get iterator over the hash_map
     ScriptInfo_hash::const_iterator h_iter = mh_implementations.find( name );
-    Sequence< Reference< storage::XScriptInfo > > sr_xScriptInfo( h_iter->second.size() );
+
+    if ( h_iter == mh_implementations.end() )
+    {
+        OSL_TRACE("ScriptStorage::getScriptInfoService: EMPTY STORAGE");
+        return sr_xScriptInfo;
+    }
+    sr_xScriptInfo.realloc( h_iter->second.size() );
 
     try
     {
@@ -706,7 +714,7 @@ throw ( RuntimeException )
         OUString new_dest;
         sal_Int32 idx;
         sal_Int32 len = seq.getLength();
-        for ( int i = 0; i < len; i++ )
+        for ( sal_Int32 i = 0; i < len; i++ )
         {
             new_dest = dest;
             idx = seq[ i ].lastIndexOf( '/' );
