@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtercache.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-10 13:41:54 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 11:11:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,10 @@
 
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_DOCUMENT_CORRUPTEDFILTERCONFIGURATIONEXCEPTION_HPP_
+#include <com/sun/star/document/CorruptedFilterConfigurationException.hpp>
 #endif
 
 #ifndef _COMPHELPER_SEQUENCEASVECTOR_HXX_
@@ -272,10 +276,6 @@ void FilterCache::load(EFillState eRequired,
                        sal_Bool   bByThread)
     throw(css::uno::Exception)
 {
-/*
-    static sal_Bool bIsThreadFirst = bByThread;
-    OSL_ENSURE(bIsThreadFirst && bByThread, "Who disturb our \"fill cache on demand\" feature and force it hardly during office startup? Please optimize your code, so a full filled filter cache is not realy neccessary!");
-*/
     // SAFE -> ----------------------------------
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
@@ -283,6 +283,17 @@ void FilterCache::load(EFillState eRequired,
     // There is nothing to do then.
     if ((m_eFillState & eRequired) == eRequired)
         return;
+
+#if OSL_DEBUG_LEVEL > 1
+    if (
+        (!bByThread                                              ) &&
+        ((eRequired & E_CONTAINS_STANDARD) != E_CONTAINS_STANDARD) &&
+        ((eRequired & E_CONTAINS_TYPES   ) != E_CONTAINS_TYPES   )    // TYPES are STANDARD + "some small updates" => OK .. but dont accept e.g. the complete list of FILTERs here!
+       )
+    {
+        OSL_ENSURE(sal_False, "Who disturb our \"fill cache on demand\" feature and force loading of ALL data during office startup? Please optimize your code, so a full filled filter cache is not realy needed here!");
+    }
+#endif
 
     // Otherwhise load the missing items.
 
@@ -362,7 +373,7 @@ OUStringList FilterCache::getMatchingItemsByProps(      EItemType  eType  ,
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
     // search for right list
-    // An exception is thrown íf "eType" is unknown.
+    // An exception is thrown ï¿½f "eType" is unknown.
     // => rList will be valid everytimes next line is reached.
     CacheItemList& rList = impl_getItemList(eType);
 
@@ -399,7 +410,7 @@ sal_Bool FilterCache::hasItems(EItemType eType) const
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
     // search for right list
-    // An exception is thrown íf "eType" is unknown.
+    // An exception is thrown ï¿½f "eType" is unknown.
     // => rList will be valid everytimes next line is reached.
     CacheItemList& rList = impl_getItemList(eType);
 
@@ -417,7 +428,7 @@ OUStringList FilterCache::getItemNames(EItemType eType) const
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
     // search for right list
-    // An exception is thrown íf "eType" is unknown.
+    // An exception is thrown ï¿½f "eType" is unknown.
     // => rList will be valid everytimes next line is reached.
     CacheItemList& rList = impl_getItemList(eType);
 
@@ -443,7 +454,7 @@ sal_Bool FilterCache::hasItem(      EItemType        eType,
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
     // search for right list
-    // An exception is thrown íf "eType" is unknown.
+    // An exception is thrown ï¿½f "eType" is unknown.
     // => rList will be valid everytimes next line is reached.
     CacheItemList& rList = impl_getItemList(eType);
 
@@ -478,7 +489,7 @@ CacheItem FilterCache::getItem(      EItemType        eType,
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
     // search for right list
-    // An exception is thrown íf "eType" is unknown.
+    // An exception is thrown ï¿½f "eType" is unknown.
     // => rList will be valid everytimes next line is reached.
     CacheItemList& rList = impl_getItemList(eType);
 
@@ -507,7 +518,7 @@ void FilterCache::removeItem(      EItemType        eType,
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
     // search for right list
-    // An exception is thrown íf "eType" is unknown.
+    // An exception is thrown ï¿½f "eType" is unknown.
     // => rList will be valid everytimes next line is reached.
     CacheItemList& rList = impl_getItemList(eType);
 
@@ -531,7 +542,7 @@ void FilterCache::setItem(      EItemType        eType ,
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
     // search for right list
-    // An exception is thrown íf "eType" is unknown.
+    // An exception is thrown ï¿½f "eType" is unknown.
     // => rList will be valid everytimes next line is reached.
     CacheItemList& rList = impl_getItemList(eType);
 
@@ -1037,21 +1048,48 @@ css::uno::Reference< css::uno::XInterface > FilterCache::impl_createConfigAccess
 void FilterCache::impl_validateAndOptimize()
     throw(css::uno::Exception)
 {
+    // Error message in case filter config seems to be corrupted.
+    // Note: Dont tell user something about "setup -repair"!
+    // Its no longer supported by using native installers ...
+    static ::rtl::OUString MESSAGE_CORRUPTED_FILTERCONFIG = ::rtl::OUString::createFromAscii("The filter configuration appears to be defective. Please install the office suite again.");
+
     // SAFE ->
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
     RTL_LOGFILE_CONTEXT( aLog, "framework (as96863) ::FilterCache::impl_validateAndOptimize");
 
-    // Special mode for debug versions only
+    // First check if any filter or type could be readed
+    // from the underlying configuration!
+    sal_Bool bSomeTypesShouldExist   = ((m_eFillState & E_CONTAINS_STANDARD       ) == E_CONTAINS_STANDARD       );
+    sal_Bool bAllTypesShouldExist    = ((m_eFillState & E_CONTAINS_TYPES          ) == E_CONTAINS_TYPES          );
+    sal_Bool bAllFiltersShouldExist  = ((m_eFillState & E_CONTAINS_FILTERS        ) == E_CONTAINS_FILTERS        );
+    sal_Bool bAllLoadersShouldExist  = ((m_eFillState & E_CONTAINS_FRAMELOADERS   ) == E_CONTAINS_FRAMELOADERS   );
+    sal_Bool bAllHandlersShouldExist = ((m_eFillState & E_CONTAINS_CONTENTHANDLERS) == E_CONTAINS_CONTENTHANDLERS);
+
+    if (
+        (
+            (bSomeTypesShouldExist) &&
+            (m_lTypes.size() < 1  )
+        ) ||
+        (
+            (bAllFiltersShouldExist) &&
+            (m_lFilters.size() < 1 )
+        )
+       )
+    {
+        throw css::document::CorruptedFilterConfigurationException(
+                MESSAGE_CORRUPTED_FILTERCONFIG,
+                css::uno::Reference< css::uno::XInterface >(),
+                ::rtl::OUString::createFromAscii("The list of types or filters is empty."));
+    }
+
     // Create a log for all detected problems, which
     // occure in the next feew lines.
     // If there are some real errors throw a RuntimException!
     // If there are some warnings only, show an assertion.
-    #if OSL_DEBUG_LEVEL > 1
     sal_Int32             nErrors   = 0;
     sal_Int32             nWarnings = 0;
     ::rtl::OUStringBuffer sLog(256);
-    #endif
 
     CacheItemList::iterator pIt;
 
@@ -1080,19 +1118,17 @@ void FilterCache::impl_validateAndOptimize()
         sal_Int32 ce = lExtensions.getLength();
         sal_Int32 cu = lURLPattern.getLength();
 
+#if OSL_DEBUG_LEVEL > 1
         if (!ce && !cu)
         {
-            #if OSL_DEBUG_LEVEL > 1
-            sLog.appendAscii("error\t:\t"                                               );
-            sLog.appendAscii("The type \""                                              );
-            sLog.append     (sType                                                      );
+            sLog.appendAscii("Warning\t:\t");
+            sLog.appendAscii("The type \"" );
+            sLog.append     (sType         );
             sLog.appendAscii("\" does not contain any URL pattern nor any extensions.\n");
-            ++nErrors;
-            #endif
-
-            m_lTypes.erase(pIt);
+            ++nWarnings;
             continue;
         }
+#endif
 
         // create an optimized registration for this type to
         // its set list of extensions/url pattern. If its a "normal" type
@@ -1135,58 +1171,88 @@ void FilterCache::impl_validateAndOptimize()
                 lTypesForURLPattern.push_back(sType);
         }
 
-        /* TODO think about checking of cross reference if multiple container
-                instances are used ...
+#if OSL_DEBUG_LEVEL > 1
 
-        #if OSL_DEBUG_LEVEL > 1
-        // check some other properties too ...
-        // especialy cross references to other cache items.
+        // Dont check cross references between types and filters, if
+        // not all filters read from disk!
+        // OK - this cache can read single filters on demand too ...
+        // but then the fill state of this cache shouldnt be set to E_CONTAINS_FILTERS!
+        if (!bAllFiltersShouldExist)
+            continue;
+
         ::rtl::OUString sPrefFilter;
         aType[PROPNAME_PREFERREDFILTER] >>= sPrefFilter;
         if (!sPrefFilter.getLength())
         {
-            sLog.appendAscii("error\t:\t"                                                    );
-            sLog.appendAscii("The type \""                                                   );
-            sLog.append     (sType                                                           );
-            sLog.appendAscii("\" does not contain a valid reference to a preferred filter.\n");
-            ++nErrors;
-            // make no sense to work with this type any longer ...
-            continue;
+            // OK - there is no filter for this type. But thats not an error.
+            // May be it can be handled by a ContentHandler ...
+            // But at this time its not guaranteed that there is any ContentHandler
+            // or FrameLoader inside this cache ... but on disk ...
+            sal_Bool bReferencedByLoader  = sal_True;
+            sal_Bool bReferencedByHandler = sal_True;
+            if (bAllLoadersShouldExist)
+                bReferencedByLoader = (impl_searchFrameLoaderForType(sType).getLength()!=0);
+
+            if (bAllHandlersShouldExist)
+                bReferencedByHandler = (impl_searchContentHandlerForType(sType).getLength()!=0);
+
+            if (
+                (!bReferencedByLoader ) &&
+                (!bReferencedByHandler)
+               )
+            {
+                sLog.appendAscii("Error\t:\t"                                              );
+                sLog.appendAscii("The type \""                                             );
+                sLog.append     (sType                                                     );
+                sLog.appendAscii("\" isnt used by any filter, loader or content handler.\n");
+                ++nErrors;
+                continue;
+            }
         }
 
-        CacheItemList::const_iterator pIt = m_lFilters.find(sPrefFilter);
-        if (pIt == m_lFilters.end())
+        if (sPrefFilter.getLength())
         {
-            sLog.appendAscii("error\t:\t"                       );
-            sLog.appendAscii("The type \""                      );
-            sLog.append     (sType                              );
-            sLog.appendAscii("\" points to an unknown filter \"");
-            sLog.append     (sPrefFilter                        );
-            sLog.appendAscii("\" as preferred one.\n"           );
-            ++nErrors;
-            // make no sense to work with this type any longer ...
-            continue;
-        }
+            CacheItemList::const_iterator pIt = m_lFilters.find(sPrefFilter);
+            if (pIt == m_lFilters.end())
+            {
+                if (bAllFiltersShouldExist)
+                {
+                    ++nErrors;
+                    sLog.appendAscii("error\t:\t");
+                }
+                else
+                {
+                    ++nWarnings;
+                    sLog.appendAscii("warning\t:\t");
+                }
 
-        CacheItem       aPrefFilter   = pIt->second;
-        ::rtl::OUString sFilterTypeReg;
-        aPrefFilter[PROPNAME_TYPE] >>= sFilterTypeReg;
-        if (sFilterTypeReg != sType)
-        {
-            sLog.appendAscii("error\t:\t"                       );
-            sLog.appendAscii("The preferred filter \""          );
-            sLog.append     (sPrefFilter                        );
-            sLog.appendAscii("\" of type \""                    );
-            sLog.append     (sType                              );
-            sLog.appendAscii("is registered for another type \"");
-            sLog.append     (sFilterTypeReg                     );
-            sLog.appendAscii("\".\n"                            );
-            ++nErrors;
-            // make no sense to work with this type any longer ...
-            continue;
+                sLog.appendAscii("The type \""                      );
+                sLog.append     (sType                              );
+                sLog.appendAscii("\" points to an invalid filter \"");
+                sLog.append     (sPrefFilter                        );
+                sLog.appendAscii("\".\n"                            );
+
+                continue;
+            }
+
+            CacheItem       aPrefFilter   = pIt->second;
+            ::rtl::OUString sFilterTypeReg;
+            aPrefFilter[PROPNAME_TYPE] >>= sFilterTypeReg;
+            if (sFilterTypeReg != sType)
+            {
+                sLog.appendAscii("error\t:\t"                       );
+                sLog.appendAscii("The preferred filter \""          );
+                sLog.append     (sPrefFilter                        );
+                sLog.appendAscii("\" of type \""                    );
+                sLog.append     (sType                              );
+                sLog.appendAscii("is registered for another type \"");
+                sLog.append     (sFilterTypeReg                     );
+                sLog.appendAscii("\".\n"                            );
+                ++nErrors;
+                continue;
+            }
         }
-        #endif
-        */
+#endif
     }
 
     // create dependencies between the global default frame loader
@@ -1200,8 +1266,9 @@ void FilterCache::impl_validateAndOptimize()
         (!sDefaultFrameLoader.getLength()       )
        )
     {
-        throw css::uno::Exception(_FILTER_CONFIG_FROM_ASCII_("There is no valid default loader!?"),
-                                  css::uno::Reference< css::uno::XInterface >()                  );
+        sLog.appendAscii("error\t:\t"                                );
+        sLog.appendAscii("There is no valid default frame loader!?\n");
+        ++nErrors;
     }
 
     // a) get list of all well known types
@@ -1238,6 +1305,15 @@ void FilterCache::impl_validateAndOptimize()
     CacheItem& rDefaultLoader = m_lFrameLoaders[sDefaultFrameLoader];
     rDefaultLoader[PROPNAME_NAME ] <<= sDefaultFrameLoader;
     rDefaultLoader[PROPNAME_TYPES] <<= lTypes.getAsConstList();
+
+    ::rtl::OUString sLogOut = sLog.makeStringAndClear();
+    OSL_ENSURE(!nErrors, ::rtl::OUStringToOString(sLogOut,RTL_TEXTENCODING_UTF8).getStr());
+    if (nErrors>0)
+        throw css::document::CorruptedFilterConfigurationException(
+                MESSAGE_CORRUPTED_FILTERCONFIG,
+                css::uno::Reference< css::uno::XInterface >(),
+                sLogOut);
+    OSL_ENSURE(!nWarnings, ::rtl::OUStringToOString(sLogOut,RTL_TEXTENCODING_UTF8).getStr());
 
     // <- SAFE
 }
@@ -2282,6 +2358,44 @@ OUStringList FilterCache::impl_tokenizeString(const ::rtl::OUString& sData     ,
     }
     while(nToken >= 0);
     return lData;
+}
+
+/*-----------------------------------------------*/
+::rtl::OUString FilterCache::impl_searchFrameLoaderForType(const ::rtl::OUString& sType) const
+{
+    CacheItemList::const_iterator pIt;
+    for (  pIt  = m_lFrameLoaders.begin();
+           pIt != m_lFrameLoaders.end()  ;
+         ++pIt                           )
+    {
+        const ::rtl::OUString& sItem = pIt->first;
+        ::comphelper::SequenceAsHashMap lProps(pIt->second);
+        OUStringList                    lTypes(lProps[PROPNAME_TYPES]);
+
+        if (::std::find(lTypes.begin(), lTypes.end(), sType) != lTypes.end())
+            return sItem;
+    }
+
+    return ::rtl::OUString();
+}
+
+/*-----------------------------------------------*/
+::rtl::OUString FilterCache::impl_searchContentHandlerForType(const ::rtl::OUString& sType) const
+{
+    CacheItemList::const_iterator pIt;
+    for (  pIt  = m_lContentHandlers.begin();
+           pIt != m_lContentHandlers.end()  ;
+         ++pIt                              )
+    {
+        const ::rtl::OUString& sItem = pIt->first;
+        ::comphelper::SequenceAsHashMap lProps(pIt->second);
+        OUStringList                    lTypes(lProps[PROPNAME_TYPES]);
+
+        if (::std::find(lTypes.begin(), lTypes.end(), sType) != lTypes.end())
+            return sItem;
+    }
+
+    return ::rtl::OUString();
 }
 
     } // namespace config
