@@ -2,9 +2,9 @@
  *
  *  $RCSfile: runtime.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ab $ $Date: 2001-05-30 10:57:28 $
+ *  last change: $Author: ab $ $Date: 2001-06-15 13:10:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,7 +153,8 @@ public:
     short   nCurDirPos;
 
     // #80200 HACK to provide minimum wildcard functionality
-    sal_Bool bNameCheck;
+    sal_Bool bDoCheck;
+    sal_Bool bNeedsDot;
     String sExtension;
     String sPreWildcard;
     String sFullNameToBeChecked;
