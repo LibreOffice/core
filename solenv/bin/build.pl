@@ -11,7 +11,7 @@ use Cwd;
 #                       #
 #########################
 $QuantityToBuild = 0;
-%DependenciesHash = ();
+%LocalDepsHash = ();
 %DepsArchive = ();
 %BuildQueue = ();
 %PathHash = ();
@@ -28,16 +28,15 @@ $BuildAllParents = HowToBuild();
 $dmake = GetDmakeCommando();
 BuildAll();
 @TotenEltern = keys %DeadParents;
-if (($BuildAllParents) && ($#TotenEltern != -1)) {
+if ($#TotenEltern != -1) {
     my ($DeadPrj);
     print "\nWARNING! Project(s):\n\n";
     foreach $DeadPrj (@TotenEltern) {
         print "$DeadPrj\n";
     };
-    print "\nnot found and couldn't be built. Correct the build.lst.\n";
+    print "\nnot found and couldn't be built. Correct build.lsts.\n";
 };
-#GetPrjDeps();
-#BuildDependent();
+
 
 #########################
 #                       #
@@ -45,30 +44,9 @@ if (($BuildAllParents) && ($#TotenEltern != -1)) {
 #                       #
 #########################
 
-#
-# Remove project to build ahead from dependencies and make an array
-# of all from given project dependent projects
-#
-sub BuryDeadParent {
-    #my ($ExclPrj, $i, $Prj, $DependenciesHash);
-    #$ExclPrj = $_[0];
-    #$DependenciesHash = $_[1];
-    #foreach $Prj (keys $DependenciesHash) {
-    #   PrjDepsLoop:
-    #   foreach $i (0 .. $#{$DependenciesHash{$Prj}}) {
-    #       #print $Prj, " $i ", ${$DependenciesHash{$Prj}}[$i], "\n";
-    #       if (${$DependenciesHash{$Prj}}[$i] eq $ExclPrj) {
-    #           splice (@{$DependenciesHash{$Prj}}, $i, 1);
-    #           $i = 0;
-    #           last PrjDepsLoop;
-    #       };
-    #   };
-    #};
-};
-
 
 #
-# Get dependencies of current and all parent projects
+# Get dependencies hash of the current and all parent projects
 #
 sub GetParentDeps {
     my ($ParentsString, @DepsArray, $Prj, $Parent, @TotenEltern);
@@ -95,7 +73,7 @@ sub GetParentDeps {
     print "\n";
     @TotenEltern = keys %DeadParents;
     foreach $Parent (@TotenEltern) {
-        BuryDeadParent($Parent, %ParentDepsHash);
+        RemoveFromDependencies($Parent, %ParentDepsHash);
     };
 };
 
@@ -105,10 +83,22 @@ sub GetParentDeps {
 #
 sub BuildAll {
     if ($BuildAllParents) {
+        my ($Prj, $PrjDir, $DeadPrj, @TotenEltern);
         GetParentDeps();
+        @TotenEltern = keys %DeadParents;
+        foreach $DeadPrj (@TotenEltern) {
+            delete $ParentDepsHash{$DeadPrj};
+            RemoveFromDependencies($DeadPrj, \%ParentDepsHash);
+        };
+        while ($Prj = PickPrjToBuild(\%ParentDepsHash)) {
+            print "\nBuild project $Prj\n";
+            $PrjDir = CorrectPath($StandDir.$Prj);
+            BuildPrj($PrjDir);
+            RemoveFromDependencies($Prj, \%ParentDepsHash);
+        };
+    } else {
+        BuildPrj(".");
     };
-    GetPrjDeps(".");
-    BuildDependent();
 };
 
 
@@ -127,7 +117,7 @@ sub MakeDir {
     cwd();
     $error = system ("$dmake");
     if (!$error) {
-        RemoveFromDependencies($DirToBuild);
+        RemoveFromDependencies($DirToBuild, \%LocalDepsHash);
     } else {
         print "Error $error occurred while making $BuildDir\n";
         exit();
@@ -169,8 +159,15 @@ sub HowToBuild {
 # Getting hashes of all internal dependencies and additional
 # infos for given project
 #
-sub GetPrjDeps {
-    my ($dummy);
+sub BuildPrj {
+    my ($dummy, $PrjToBuild);
+    $PrjToBuild = $_[0];
+    if ($ENV{GUI} eq "UNX") {
+        use Cwd 'chdir';
+    };
+    chdir $PrjToBuild;
+    cwd();
+
     open (PrjBuildFile, "prj/build.lst");
     BuildLstLoop:
     while (<PrjBuildFile>) {
@@ -196,15 +193,15 @@ sub GetPrjDeps {
             $PlatformHash{$DirAlias} = 1;
             $Dependencies = $';
             @Array = GetDependenciesArray($Dependencies);
-            $DependenciesHash{$DirAlias} = [@Array];
+            $LocalDepsHash{$DirAlias} = [@Array];
             $BuildQueue{$DirAlias} = 1;
             $PathHash{$DirAlias} = $Dir;
         };
     };
-    %DepsArchive = %DependenciesHash;
+    %DepsArchive = %LocalDepsHash;
     foreach $Dir (keys %DeadDependencies) {
         if (!IsHashNative($Dir)) {
-            RemoveFromDependencies($Dir);
+            RemoveFromDependencies($Dir, \%LocalDepsHash);
             delete $DeadDependencies{$Dir};
         };
     };
@@ -222,7 +219,7 @@ sub CorrectPath {
         s/\\/\//g;
     } elsif (   ($ENV{GUI} eq "WNT") ||
                 ($ENV{GUI} eq "WIN") ||
-                ($ENV{GUI} eq "MAC") ||
+                ($ENV{GUI} eq "MACOSX") ||
                 ($ENV{GUI} eq "OS2")) {
         s/\//\\/g;
     } else {
@@ -270,11 +267,12 @@ sub GetQuantityToBuild {
 sub IsRootDir {
     my ($Dir);
     $Dir = $_[0];
-    if (($ENV{GUI} eq "UNX") && ($Dir == "\/")) {
+    if (($ENV{GUI} eq "UNX") ||
+                ($ENV{GUI} eq "MACOSX") ||
+                ($Dir eq "\/")) {
         return 1;
     } elsif (   ($ENV{GUI} eq "WNT") ||
                 ($ENV{GUI} eq "WIN") ||
-                ($ENV{GUI} eq "MAC") ||
                 ($ENV{GUI} eq "OS2") &&
                 ($Dir =~ /\S:\/$/)) {
         return 1;
@@ -310,10 +308,10 @@ DirLoop:
 # Build the entire project according to queue of dependencies
 #
 sub BuildDependent {
-    my ($Prj);
-    while ($Prj = PickPrjToBuild()) {
-    MakeDir($Prj);
-    $Prj = "";
+    my ($Dir);
+    while ($Dir = PickPrjToBuild(\%LocalDepsHash)) {
+        MakeDir($Dir);
+        $Dir = "";
     };
 };
 
@@ -322,9 +320,11 @@ sub BuildDependent {
 # Picks project which can be build now from hash and deletes it from hash
 #
 sub PickPrjToBuild {
-    my ($Prj);
-    $Prj = FindUndepPrj();
-    delete $DependenciesHash{$Prj};
+    my ($Prj, $DepsHash);
+    $DepsHash = $_[0];
+    $Prj = FindIndepPrj($DepsHash);
+    delete $$DepsHash{$Prj};
+    #print "$Prj\n";
     return $Prj;
 };
 
@@ -354,18 +354,41 @@ sub CheckPlatform {
 
 
 #
+# Remove project to build ahead from dependencies and make an array
+# of all from given project dependent projects
+#
+sub RemoveFromDependencies {
+    my ($ExclPrj, $i, $Prj, $Dependencies);
+    $ExclPrj = $_[0];
+    $Dependencies = $_[1];
+    foreach $Prj (keys %$Dependencies) {
+        PrjDepsLoop:
+        foreach $i (0 .. $#{$$Dependencies{$Prj}}) {
+            #print $Prj, " $i ", ${$$Dependencies{$Prj}}[$i], "\n";
+            if (${$$Dependencies{$Prj}}[$i] eq $ExclPrj) {
+                splice (@{$$Dependencies{$Prj}}, $i, 1);
+                $i = 0;
+                last PrjDepsLoop;
+            };
+        };
+    };
+};
+
+
+#
 # Find undependent project
 #
-sub FindUndepPrj {
-    my ($Prj, @Prjs, @PrjDeps, $i);
-    @Prjs = keys %DependenciesHash;
+sub FindIndepPrj {
+    my ($Prj, @Prjs, @PrjDeps, $Dependencies, $i);
+    $Dependencies = $_[0];
+    @Prjs = keys %$Dependencies;
     if ($#Prjs != -1) {
         PrjLoop:
         foreach $Prj (@Prjs) {
             if (IsHashNative($Prj)) {
                 next PrjLoop;
             };
-            @PrjDeps = @{$DependenciesHash{$Prj}};
+            @PrjDeps = @{$$Dependencies{$Prj}};
             if ($#PrjDeps == -1) {
                 return $Prj;
             };
@@ -373,14 +396,14 @@ sub FindUndepPrj {
         # If there are only dependent projects in hash - generate error
         print "\nError: projects";
         DeadPrjLoop:
-        foreach $Prj (keys %DependenciesHash) {
+        foreach $Prj (keys %$Dependencies) {
             if (IsHashNative($Prj)) {
                 next DeadPrjLoop;
             };
             $i = 0;
             print "\n", $Prj, " depends on:";
-            foreach $i (0 .. $#{$DependenciesHash{$Prj}}) {
-                print " ", ${$DependenciesHash{$Prj}}[$i];
+            foreach $i (0 .. $#{$$Dependencies{$Prj}}) {
+                print " ", ${$$Dependencies{$Prj}}[$i];
             };
         };
         print "\nhave dead or circular dependencies\n\n";
@@ -400,28 +423,6 @@ sub IsHashNative {
         return 1;
     } else {
         return 0;
-    };
-};
-
-
-#
-# Remove project to build ahead from dependencies and make an array
-# of all from given project dependent projects
-#
-sub RemoveFromDependencies {
-    my ($ExclPrj, $i, $Prj, $Dependencies);
-    $ExclPrj = $_[0];
-    $Dependencies = $_[1];
-    foreach $Prj (keys %DependenciesHash) {
-        PrjDepsLoop:
-        foreach $i (0 .. $#{$DependenciesHash{$Prj}}) {
-            #print $Prj, " $i ", ${$DependenciesHash{$Prj}}[$i], "\n";
-            if (${$DependenciesHash{$Prj}}[$i] eq $ExclPrj) {
-                splice (@{$DependenciesHash{$Prj}}, $i, 1);
-                $i = 0;
-                last PrjDepsLoop;
-            };
-        };
     };
 };
 
