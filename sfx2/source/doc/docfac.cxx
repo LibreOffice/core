@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfac.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 07:59:49 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 16:26:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,9 @@
 #include <so3/embobj.hxx>
 #endif
 
-#include <vcl/config.hxx>
+#ifndef _CONFIG_HXX
+#include <tools/config.hxx>
+#endif
 #include <svtools/pathoptions.hxx>
 #include <svtools/moduleoptions.hxx>
 #include <tools/urlobj.hxx>
