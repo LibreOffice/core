@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 11:57:36 $
+ *  last change: $Author: kz $ $Date: 2004-06-10 11:38:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1613,7 +1613,8 @@ IMPL_LINK( ImplRenderPaintProc, _ImplRenderPaintProc, SdrPaintProcRec*, pRecord 
 
     if( IsVisible( pObj ) && IsPrintable( pObj ) )
     {
-        pObj->SingleObjectPainter( pRecord->rOut, pRecord->rInfoRec ); // #110094#-17
+        // #i29486# use DoPaintObject instead of SingleObjectPainter in PaintProc recalls
+        pObj->DoPaintObject( pRecord->rOut, pRecord->rInfoRec ); // #110094#-17
     }
     return 0;
 }
