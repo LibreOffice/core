@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: abi $ $Date: 2001-12-18 12:57:06 $
+ *  last change: $Author: abi $ $Date: 2001-12-18 13:09:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1138,17 +1138,17 @@ shell::move( sal_Int32 CommandId,
             osl::DirectoryItem::get(dstUnqPath,aItem);
             aItem.getFileStatus(aStatus);
 
-            if( aStatus.isValid(FileStatusMask_Type) && aStatus.isValid(FileStatusMask_LinkTargetURL) )
-            {
-                if( aStatus.getFileType() == osl::FileStatus::Link )
-                    targetPath = aStatus.getLinkTargetURL();
-            }
-            else
-            {
-                installError( CommandId,
-                              TASKHANDLING_OVERWRITE_FOR_MOVE );
-                return;
-            }
+            if( aStatus.isValid(FileStatusMask_Type)          &&
+                aStatus.isValid(FileStatusMask_LinkTargetURL) &&
+                aStatus.getFileType() == osl::FileStatus::Link )
+                targetPath = aStatus.getLinkTargetURL();
+
+//              else
+//              {
+//                  installError( CommandId,
+//                                TASKHANDLING_OVERWRITE_FOR_MOVE );
+//                  return;
+//              }
             // Will do nothing if file does not exist.
             osl::File::remove( targetPath );
 //  #endif
