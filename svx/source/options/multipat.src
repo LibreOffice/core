@@ -2,9 +2,9 @@
  *
  *  $RCSfile: multipat.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 19:35:36 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 05:33:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,7 @@ ModalDialog RID_SVXDLG_MULTIPATH
         Text[ turkish ] = "Ekle...";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Añadir...";
+        Text[ finnish ] = "~Lisää";
     };
     PushButton BTN_DEL_MULTIPATH
     {
@@ -153,6 +154,7 @@ ModalDialog RID_SVXDLG_MULTIPATH
         Text[ turkish ] = "Sil";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Eliminar";
+        Text[ finnish ] = "~Poista";
     };
     FixedLine GB_MULTIPATH
     {
@@ -182,6 +184,7 @@ ModalDialog RID_SVXDLG_MULTIPATH
         Text[ turkish ] = "Veri yollarý";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Rutas";
+        Text[ finnish ] = "Pfade";
     };
     OKButton BTN_MULTIPATH_OK
     {
@@ -211,6 +214,7 @@ ModalDialog RID_SVXDLG_MULTIPATH
     Text[ turkish ] = "Veri yollarýný seç";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Seleccionar rutas";
+    Text[ finnish ] = "Valitse polut";
 };
 String RID_MULTIPATH_DBL_ERR
 {
@@ -238,6 +242,7 @@ String RID_MULTIPATH_DBL_ERR
     Text[ turkish ] = "Veri yolu %1 mevcut durumda";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "La ruta %1 ya existe.";
+    Text[ finnish ] = "Polku %1 on jo olemassa.";
 };
 String RID_SVXSTR_MULTIFILE_DBL_ERR
 {
@@ -265,6 +270,7 @@ String RID_SVXSTR_MULTIFILE_DBL_ERR
     Text[ turkish ] = "Dosya %1 mevcut durumda.";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "El archivo %1 ya existe.";
+    Text[ finnish ] = "Tiedosto %1 on jo olemassa.";
 };
 String RID_SVXSTR_FILE_TITLE
 {
@@ -292,6 +298,7 @@ String RID_SVXSTR_FILE_TITLE
     Text[ turkish ] = "Dosyalarý seç";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Seleccionar archivos";
+    Text[ finnish ] = "Valitse tiedostot";
 };
 String RID_SVXSTR_FILE_GB
 {
@@ -319,5 +326,6 @@ String RID_SVXSTR_FILE_GB
     Text[ turkish ] = "Dosyalar";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Archivos";
+    Text[ finnish ] = "Tiedostot";
 };
  // ******************************************************************* EOF
