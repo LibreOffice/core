@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cuifmsearch.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:31:30 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:55:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -231,7 +231,7 @@ void FmSearchDialog::initCommon( const Reference< XResultSet >& _rxCursor )
     SvtCJKOptions aCJKOptions;
     if (!aCJKOptions.IsJapaneseFindEnabled())
     {
-        sal_Int32 nUpper = m_pbApproxSettings.GetPosPixel().Y();
+        sal_Int32 nUpper = m_cbApprox.GetPosPixel().Y();
         sal_Int32 nDifference = m_aSoundsLikeCJKSettings.GetPosPixel().Y() - nUpper;
 
         // hide the options for the japanese search
@@ -509,23 +509,22 @@ IMPL_LINK(FmSearchDialog, OnClickedSpecialSettings, Button*, pButton )
 {
     if (&m_pbApproxSettings == pButton)
     {
-        //CHINA001 SvxSearchSimilarityDialog dlgLevSettings(this, m_pSearchEngine->GetLevRelaxed(), m_pSearchEngine->GetLevOther(),
-        //CHINA001  m_pSearchEngine->GetLevShorter(), m_pSearchEngine->GetLevLonger());
+        AbstractSvxSearchSimilarityDialog* pDlg = NULL;
+
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        if(pFact)
+        if ( pFact )
+            pDlg = pFact->CreateSvxSearchSimilarityDialog( this, m_pSearchEngine->GetLevRelaxed(), m_pSearchEngine->GetLevOther(),
+                        m_pSearchEngine->GetLevShorter(), m_pSearchEngine->GetLevLonger() );
+        DBG_ASSERT( pDlg, "FmSearchDialog, OnClickedSpecialSettings: could not load the dialog!" );
+
+        if ( pDlg && pDlg->Execute() == RET_OK )
         {
-            AbstractSvxSearchSimilarityDialog* dlgLevSettings = pFact->CreateSvxSearchSimilarityDialog( this, m_pSearchEngine->GetLevRelaxed(), m_pSearchEngine->GetLevOther(),
-                            m_pSearchEngine->GetLevShorter(), m_pSearchEngine->GetLevLonger(), ResId(RID_SVXDLG_SEARCHATTR) );
-            DBG_ASSERT(dlgLevSettings, "Dialogdiet fail!");//CHINA001
-            if (dlgLevSettings->Execute() == RET_OK) //CHINA001 if (dlgLevSettings.Execute() == RET_OK)
-            {
-                m_pSearchEngine->SetLevRelaxed(dlgLevSettings->IsRelaxed()); //CHINA001 m_pSearchEngine->SetLevRelaxed(dlgLevSettings.IsRelaxed());
-                m_pSearchEngine->SetLevOther(dlgLevSettings->GetOther()); //CHINA001 m_pSearchEngine->SetLevOther(dlgLevSettings.GetOther());
-                m_pSearchEngine->SetLevShorter(dlgLevSettings->GetShorter()); //CHINA001 m_pSearchEngine->SetLevShorter(dlgLevSettings.GetShorter());
-                m_pSearchEngine->SetLevLonger(dlgLevSettings->GetLonger()); //CHINA001 m_pSearchEngine->SetLevLonger(dlgLevSettings.GetLonger());
-            }
-            delete dlgLevSettings; //add by CHINA001
+            m_pSearchEngine->SetLevRelaxed( pDlg->IsRelaxed() );
+            m_pSearchEngine->SetLevOther( pDlg->GetOther() );
+            m_pSearchEngine->SetLevShorter(pDlg->GetShorter() );
+            m_pSearchEngine->SetLevLonger( pDlg->GetLonger() );
         }
+        delete pDlg;
     }
     else if (&m_aSoundsLikeCJKSettings == pButton)
     {
