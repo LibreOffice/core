@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thread.c,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: mhu $ $Date: 2001-08-23 19:21:42 $
+ *  last change: $Author: mh $ $Date: 2002-08-13 11:39:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,7 +143,7 @@ static oslSignalAction oslSigAlarmHandler(void* pData, oslSignalInfo* pInfo)
 /* ID management */
 /*****************************************************************************/
 
-#define HASHID(x)   ((int)PTHREAD_VALUE(x) % HashSize)
+#define HASHID(x)   ((unsigned int)PTHREAD_VALUE(x) % HashSize)
 
 typedef struct _HashEntry
 {
