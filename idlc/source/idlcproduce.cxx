@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idlcproduce.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-10 13:07:49 $
+ *  last change: $Author: pl $ $Date: 2001-05-10 19:50:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,12 +107,14 @@ static sal_Bool checkOutputPath(const OString& completeName)
         buffer.append(token);
         buffer.append(SEPARATOR);
     }
+    else
+        nIndex = 0;
 
     do
     {
         buffer.append(completeName.getToken(0, SEPARATOR, nIndex));
 
-        if ( buffer.getLength() > 0 )
+        if ( buffer.getLength() > 0 && nIndex != -1 )
         {
 #ifdef SAL_UNX
             if (mkdir((char*)buffer.getStr(), 0777) == -1)
@@ -133,8 +135,7 @@ static sal_Bool checkOutputPath(const OString& completeName)
                 pCreatedDirectories->push_front(buffer.getStr());
             }
         }
-        if ( nIndex != -1 )
-            buffer.append(SEPARATOR);
+        buffer.append(SEPARATOR);
     } while( nIndex != -1 );
     return sal_True;
 }
@@ -166,12 +167,7 @@ static sal_Bool cleanPath()
 
 void SAL_CALL removeIfExists(const OString& fileName)
 {
-    FILE* pDest = fopen(fileName.getStr(), "r");
-    if ( pDest )
-    {
-        fclose(pDest);
-        unlink(fileName.getStr());
-    }
+    unlink(fileName.getStr());
 }
 
 sal_Int32 SAL_CALL produceFile(const OString& fileName)
