@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shutdownicon.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cd $ $Date: 2001-07-16 12:40:49 $
+ *  last change: $Author: rt $ $Date: 2001-07-18 08:02:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,8 @@ ShutdownIcon::ShutdownIcon( Reference< XMultiServiceFactory > aSMgr ) :
 {
     m_pResMgr = SFX_APP()->GetSfxResManager();
 
-    ::sfx2::CommandLineArgs aCommandLineArgs( ::vos::OExtCommandLine() );
+    ::vos::OExtCommandLine aExtCmdLine;
+    ::sfx2::CommandLineArgs aCommandLineArgs( aExtCmdLine );
 
     if( Application::IsRemoteServer() || ( !aCommandLineArgs.IsQuickstart() && !GetAutostart() ) )
         return;
