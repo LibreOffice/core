@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.116 $
+ *  $Revision: 1.117 $
  *
- *  last change: $Author: pl $ $Date: 2002-01-16 12:55:58 $
+ *  last change: $Author: pl $ $Date: 2002-01-18 10:03:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -921,7 +921,7 @@ void SalFrame::Show( BOOL bVisible )
              *  name being Sawfish.
              */
             nVisibleFloats++;
-            if( nVisibleFloats == 1 )
+            if( nVisibleFloats == 1 && ! _GetDisplay()->GetCaptureFrame() )
             {
                 XGrabPointer( _GetXDisplay(),
                               maFrameData.GetWindow(),
@@ -973,7 +973,7 @@ void SalFrame::Show( BOOL bVisible )
             && maFrameData.nStyle_ & SAL_FRAME_STYLE_FLOAT )
         {
             nVisibleFloats--;
-            if( nVisibleFloats == 0 )
+            if( nVisibleFloats == 0  && ! _GetDisplay()->GetCaptureFrame() )
                 XUngrabPointer( _GetXDisplay(),
                                 CurrentTime );
         }

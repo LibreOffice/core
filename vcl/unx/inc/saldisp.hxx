@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cp $ $Date: 2001-12-07 11:46:19 $
+ *  last change: $Author: pl $ $Date: 2002-01-18 10:03:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -475,6 +475,8 @@ public:
 
     BOOL            MouseCaptured( const SalFrameData *pFrameData ) const
     { return pCapture_ == pFrameData; }
+    SalFrameData*   GetCaptureFrame() const
+    { return pCapture_; }
     SalXLib*         GetXLib() { return pXLib_; }
 
     SalI18N_InputMethod*            GetInputMethod()  { return mpInputMethod;  }
