@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wizardmachine.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 14:16:03 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 14:37:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,7 @@ namespace svt
     }
 
     //---------------------------------------------------------------------
-    void OWizardPage::enableHeader( const Bitmap& _rBitmap, sal_Int32 _nPixelHeight, GrantAccess )
+    void OWizardPage::enableHeader( const Bitmap& _rBitmap, sal_Int32 _nPixelHeight, IWizardPage::GrantAccess )
     {
         //.................................................................
         // create the header control
@@ -206,7 +206,7 @@ namespace svt
     }
 
     //---------------------------------------------------------------------
-    sal_Bool OWizardPage::commitPage( COMMIT_REASON _eReason )
+    sal_Bool OWizardPage::commitPage(IWizardPage::COMMIT_REASON _eReason)
     {
         return sal_True;
     }
@@ -227,6 +227,7 @@ namespace svt
             // not possible to add pages in a non-linear order), so we need some own maintainance data
 
         sal_Bool                        bUsingHeaders;      // do we use page headers?
+        sal_Bool                        m_bCheckButtonStates;
 
         WizardMachineImplData()
             :nFirstUnknownPage( 0 )
@@ -239,7 +240,7 @@ namespace svt
     //= OWizardMachine
     //=====================================================================
     //---------------------------------------------------------------------
-    OWizardMachine::OWizardMachine( Window* _pParent, const ResId& _rRes, sal_uInt32 _nButtonFlags )
+    OWizardMachine::OWizardMachine(Window* _pParent, const ResId& _rRes, sal_uInt32 _nButtonFlags,sal_Bool _bCheckButtonStates)
         :WizardDialog(_pParent, _rRes)
         ,m_pFinish(NULL)
         ,m_pCancel(NULL)
@@ -249,6 +250,7 @@ namespace svt
         ,m_pImpl( new WizardMachineImplData )
     {
         m_pImpl->sTitleBase = GetText();
+        m_pImpl->m_bCheckButtonStates = _bCheckButtonStates;
 
         // create the buttons according to the wizard button flags
         // the help button
@@ -336,7 +338,7 @@ namespace svt
         if ( !m_pImpl->bUsingHeaders )
         {   // append the page title only if we're not using headers - in this case, the title
             // would be part of the header
-            OWizardPage* pCurrentPage = getPage(getCurrentState());
+            TabPage* pCurrentPage = GetPage(getCurrentState());
             if ( pCurrentPage && pCurrentPage->GetText().Len() )
             {
                 sCompleteTitle += String::CreateFromAscii(" - ");
@@ -393,12 +395,16 @@ namespace svt
         WizardState nCurrentLevel = GetCurLevel();
         if (NULL == GetPage(nCurrentLevel))
         {
-            OWizardPage* pNewPage = createPage(nCurrentLevel);
+            TabPage* pNewPage = createPage(nCurrentLevel);
             DBG_ASSERT(pNewPage, "OWizardMachine::ActivatePage: invalid new page (NULL)!");
 
             // announce our header bitmap to the page
             if ( m_pImpl->bUsingHeaders )
-                pNewPage->enableHeader( m_pImpl->aHeaderBitmap, m_pImpl->nHeaderHeight, OWizardPage::GrantAccess() );
+            {
+                IWizardPage* pHeader = getWizardPage(pNewPage);
+                if ( pHeader )
+                    pHeader->enableHeader( m_pImpl->aHeaderBitmap, m_pImpl->nHeaderHeight, IWizardPage::GrantAccess() );
+            }
 
             // fill up the page sequence of our base class (with dummies)
             while (m_pImpl->nFirstUnknownPage < nCurrentLevel)
@@ -522,9 +528,13 @@ namespace svt
     void OWizardMachine::enterState(WizardState _nState)
     {
         // tell the page
-        OWizardPage* pCurrentPage = getPage(_nState);
-        if (pCurrentPage)
+        IWizardPage* pCurrentPage = getWizardPage(GetPage(_nState));
+        if ( pCurrentPage )
             pCurrentPage->initializePage();
+
+        if ( m_pImpl->m_bCheckButtonStates )
+            enableButtons(WZB_NEXT,WZS_INVALID_STATE != determineNextState(_nState) );
+        enableButtons(WZB_PREVIOUS,!m_pImpl->aStateHistory.empty());
 
         // set the new title - it depends on the current page (i.e. state)
         implUpdateTitle();
@@ -564,9 +574,9 @@ namespace svt
     //---------------------------------------------------------------------
     sal_Bool OWizardMachine::prepareLeaveCurrentState( CommitPageReason _eReason )
     {
-        OWizardPage* pCurrentPage = getPage( getCurrentState() );
+        IWizardPage* pCurrentPage = getWizardPage(GetPage(getCurrentState()));
         if ( pCurrentPage )
-            return pCurrentPage->commitPage( ( OWizardPage::COMMIT_REASON )_eReason );
+            return pCurrentPage->commitPage( ( IWizardPage::COMMIT_REASON )_eReason );
         return sal_True;
     }
 
@@ -688,11 +698,15 @@ namespace svt
         if (WZS_INVALID_STATE == nNextState)
             return sal_False;
 
-        if (!ShowPage(nNextState))
-            return sal_False;
-
+        // the state history is used by the enterState method
         // all fine
         m_pImpl->aStateHistory.push(nCurrentState);
+        if (!ShowPage(nNextState))
+        {
+            m_pImpl->aStateHistory.pop();
+            return sal_False;
+        }
+
         return sal_True;
     }
 
@@ -708,12 +722,16 @@ namespace svt
         // the next state to switch to
         WizardState nPreviousState = m_pImpl->aStateHistory.top();
 
+        // the state history is used by the enterState method
+        m_pImpl->aStateHistory.pop();
         // show this page
         if (!ShowPage(nPreviousState))
+        {
+            m_pImpl->aStateHistory.push(nPreviousState);
             return sal_False;
+        }
 
         // all fine
-        m_pImpl->aStateHistory.pop();
         return sal_True;
     }
 
@@ -728,9 +746,14 @@ namespace svt
     {
         return travelNext();
     }
+    //---------------------------------------------------------------------
+    IWizardPage* OWizardMachine::getWizardPage(TabPage* _pCurrentPage) const
+    {
+        OWizardPage* pPage = static_cast<OWizardPage*>(_pCurrentPage);
+        return pPage;
+    }
 
 //.........................................................................
 }   // namespace svt
 //.........................................................................
-
 
