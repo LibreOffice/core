@@ -2,9 +2,9 @@
  *
  *  $RCSfile: token.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-08 11:28:51 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:29:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -418,6 +418,7 @@ public:
                                     ScToken( ocPush, svJumpMatrix ), pJumpMatrix( p ) {}
                                 ScJumpMatrixToken( const ScJumpMatrixToken& r ) :
                                     ScToken( r ), pJumpMatrix( r.pJumpMatrix ) {}
+    virtual                     ~ScJumpMatrixToken();
     virtual ScJumpMatrix*       GetJumpMatrix() const;
     virtual BOOL                operator==( const ScToken& rToken ) const;
 };
