@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fesh.hxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 11:37:35 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 13:54:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -326,10 +326,12 @@ public:
     //          negative vertical positions for fly frames anchored
     //          to paragraph or to character.
     // OD 02.10.2003 #i18732# - adjustments for new option 'FollowTextFlow'
+    // OD 12.11.2003 #i22341# - adjustments for new vertical alignment at top of line
     void CalcBoundRect( SwRect& _orRect,
                         const RndStdIds _nAnchorId,
                         const SwRelationOrient _eHoriRelOrient = FRAME,
                         const SwRelationOrient _eVertRelOrient = FRAME,
+                        const SwPosition* _pToCharCntntPos = NULL,
                         const bool _bFollowTextFlow = false,
                         bool _bMirror = false,
                         Point* _opRef = NULL,
