@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: mib $ $Date: 2000-12-18 13:23:25 $
+ *  last change: $Author: fs $ $Date: 2000-12-18 15:09:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -601,6 +601,7 @@ XML_CONSTASCII_ACTION( sXML_focal_length, "focal-length");
 XML_CONSTASCII_ACTION( sXML_font_charset, "font-charset" );
 XML_CONSTASCII_ACTION( sXML_font_charset_asian, "font-charset-asian" );
 XML_CONSTASCII_ACTION( sXML_font_charset_complex, "font-charset-complex" );
+XML_CONSTASCII_ACTION( sXML_font_char_width, "font-char-width" );
 XML_CONSTASCII_ACTION( sXML_font_color, "font-color" );
 XML_CONSTASCII_ACTION( sXML_font_decl, "font-decl" );
 XML_CONSTASCII_ACTION( sXML_font_decls, "font-decls" );
@@ -610,6 +611,7 @@ XML_CONSTASCII_ACTION( sXML_font_family_complex, "font-family-complex" );
 XML_CONSTASCII_ACTION( sXML_font_family_generic, "font-family-generic" );
 XML_CONSTASCII_ACTION( sXML_font_family_generic_asian, "font-family-generic-asian" );
 XML_CONSTASCII_ACTION( sXML_font_family_generic_complex, "font-family-generic-complex" );
+XML_CONSTASCII_ACTION( sXML_font_kerning, "font-kerning" );
 XML_CONSTASCII_ACTION( sXML_font_name, "font-name" );
 XML_CONSTASCII_ACTION( sXML_font_name_asian, "font-name-asian" );
 XML_CONSTASCII_ACTION( sXML_font_name_complex, "font-name-complex" );
@@ -632,6 +634,8 @@ XML_CONSTASCII_ACTION( sXML_font_variant, "font-variant" );
 XML_CONSTASCII_ACTION( sXML_font_weight, "font-weight" );
 XML_CONSTASCII_ACTION( sXML_font_weight_asian, "font-weight-asian" );
 XML_CONSTASCII_ACTION( sXML_font_weight_complex, "font-weight-complex" );
+XML_CONSTASCII_ACTION( sXML_font_width, "font-width" );
+XML_CONSTASCII_ACTION( sXML_font_word_line_mode, "font-word-line-mode" );
 XML_CONSTASCII_ACTION( sXML_fontfamily, "fontfamily" );
 XML_CONSTASCII_ACTION( sXML_fontsize, "fontsize" );
 XML_CONSTASCII_ACTION( sXML_fontstyle, "fontstyle" );
