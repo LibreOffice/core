@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VCollection.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-30 14:01:49 $
+ *  last change: $Author: oj $ $Date: 2001-04-23 10:05:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #include <stdio.h>
 
 #ifndef _CONNECTIVITY_SDBCX_COLLECTION_HXX_
@@ -202,6 +201,13 @@ void SAL_CALL OCollection::refresh(  ) throw(RuntimeException)
     impl_refresh();
     EventObject aEvt(static_cast<XWeak*>(this));
     NOTIFY_LISTENERS(m_aRefreshListeners, XRefreshListener, refreshed, aEvt);
+}
+// -----------------------------------------------------------------------------
+void OCollection::reFill(const ::std::vector< ::rtl::OUString> &_rVector)
+{
+    OSL_ENSURE(m_aNameMap.size(),"OCollection::reFill: collection isn't empty");
+    for(::std::vector< ::rtl::OUString>::const_iterator i=_rVector.begin(); i != _rVector.end();++i)
+        m_aElements.push_back(m_aNameMap.insert(m_aNameMap.begin(), ObjectMap::value_type(*i,::com::sun::star::uno::WeakReference< ::com::sun::star::container::XNamed >())));
 }
 // -------------------------------------------------------------------------
 // XDataDescriptorFactory

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VCollection.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-23 14:55:00 $
+ *  last change: $Author: oj $ $Date: 2001-04-23 10:05:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,6 +179,7 @@ namespace connectivity
 
             DECLARE_SERVICE_INFO();
 
+            void reFill(const ::std::vector< ::rtl::OUString> &_rVector);
             sal_Bool isCaseSensitive() const { return m_aNameMap.key_comp().isCaseSensitive(); }
 
             // only the name is identical to ::cppu::OComponentHelper
