@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helper.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: pb $ $Date: 2001-08-22 09:54:45 $
+ *  last change: $Author: hro $ $Date: 2001-09-26 10:14:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -965,21 +965,12 @@ sal_Bool SfxContentHelper::Find( const String& rFolder, const String& rName, Str
 {
     sal_Bool bRet = sal_False;
     rtl::OUString aFile;
-#ifdef TF_FILEURL
+
     if ( FileBase::searchFileURL( rName, rFolder, aFile ) == FileBase::E_None )
     {
         rFile = aFile;
         bRet = sal_True;
     }
-#else
-    if ( FileBase::searchNormalizedPath( rName, rFolder, aFile ) == FileBase::E_None )
-    {
-        rtl::OUString aResult;
-        FileBase::getFileURLFromNormalizedPath( aFile, aResult );
-        rFile = aResult;
-        bRet = sal_True;
-    }
-#endif
 
     return bRet;
 }
