@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpid.hrc,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-07 16:21:14 $
+ *  last change: $Author: rt $ $Date: 2004-05-19 08:49:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -712,6 +712,9 @@
 #define HID_MENU_EXTRUSION_LIGHTING             (HID_SVX_EXT0_START + 116)
 #define HID_VALUESET_EXTRUSION_LIGHTING         (HID_SVX_EXT0_START + 117)
 #define HID_MENU_EXTRUSION_SURFACE              (HID_SVX_EXT0_START + 118)
+#define HID_SCRIPTSBOX                          (HID_SVX_EXT0_START + 119)
+#define HID_SELECTOR_CATEGORIES                 (HID_SVX_EXT0_START + 120)
+#define HID_SELECTOR_COMMANDS                   (HID_SVX_EXT0_START + 121)
 
 // Hangul Hanja extensions
 #define HID_HANGULHANJA_OPT_DLG                     (HID_SVX_EXT0_START + 119)
