@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpre.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:16 $
+ *  last change: $Author: nn $ $Date: 2001-01-05 18:24:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,6 +154,13 @@ enum ScIterFunc {
 
 class ScInterpreter
 {
+    // distibution function objects need the GetxxxDist methods
+    friend class ScGammaDistFunction;
+    friend class ScBetaDistFunction;
+    friend class ScTDistFunction;
+    friend class ScFDistFunction;
+    friend class ScChiDistFunction;
+
 public:
     DECL_FIXEDMEMPOOL_NEWDEL( ScInterpreter )
 #if SOMA_FPSIGNAL_JUMP
