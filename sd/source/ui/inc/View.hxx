@@ -2,9 +2,9 @@
  *
  *  $RCSfile: View.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:14:32 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 09:16:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,7 @@
 class SdDrawDocument;
 class SdrOle2Obj;
 class SdrGrafObj;
+class SdrMediaObj;
 class OutputDevice;
 class VirtualDevice;
 class ImageMap;
@@ -181,6 +182,8 @@ public:
     SdrGrafObj*             InsertGraphic( const Graphic& rGraphic,
                                            sal_Int8& rAction, const Point& rPos,
                                            SdrObject* pSelectedObj, ImageMap* pImageMap );
+    SdrMediaObj*            InsertMediaURL( const rtl::OUString& rMediaURL, sal_Int8& rAction,
+                                            const Point& rPos, const Size& rSize );
 
     BOOL                    IsPresObjSelected(BOOL bOnPage=TRUE, BOOL bOnMasterPage=TRUE, BOOL bCheckPresObjListOnly=FALSE, BOOL bCheckLayoutOnly=FALSE) const;
 
