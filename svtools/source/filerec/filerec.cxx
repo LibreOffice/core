@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filerec.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2002-05-17 07:53:08 $
+ *  last change: $Author: mhu $ $Date: 2002-06-28 17:48:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -988,7 +988,7 @@ SfxMultiRecordReader::SfxMultiRecordReader( SvStream *pStream, UINT16 nTag )
 
 SfxMultiRecordReader::~SfxMultiRecordReader()
 {
-    delete _pContentOfs;
+    delete[] _pContentOfs;
 }
 
 //-------------------------------------------------------------------------
