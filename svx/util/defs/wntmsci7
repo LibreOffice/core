@@ -23689,3 +23689,17 @@ _TI2?AVPropertyVetoException@beans@star@sun@com@@
 ?__destroy@_STL@@YAXPAPAVSdrMark@@00@Z
 ?__uninitialized_fill_n_aux@_STL@@YAPAV?$vector@PAVSdrMark@@V?$allocator@PAVSdrMark@@@_STL@@@1@PAV21@IABV21@U__false_type@@@Z
 ?value_type@_STL@@YAPAPAVSdrMark@@PBQAV2@@Z
+?FormatChanged@SvxNumberFormatShell@@QAEXGAAVString@@AAPAVColor@@@Z
+?GetInitSettings@SvxNumberFormatShell@@QAEXAAG00AAVSvStrings@@AAVString@@AAPAVColor@@@Z
+?MakePrevStringFromVal@SvxNumberFormatShell@@QAEXABVString@@AAV2@AAPAVColor@@N@Z
+?MakePreviewString@SvxNumberFormatShell@@QAEXABVString@@AAV2@AAPAVColor@@@Z
+?IsRightToLeft@EditEngine@@QBEEG@Z
+?IsTextPos@Outliner@@QAEEABVPoint@@GPAE@Z
+??0SvLBoxFontString@@QAE@PAVSvLBoxEntry@@GABVString@@ABVFont@@PBVColor@@@Z
+?GetSelectEntry@SvxFontListBox@@QBE?AVString@@XZ
+?GetSelectEntryPos@SvxFontListBox@@QBEKXZ
+?InsertFontEntry@SvxFontListBox@@QAEXABVString@@ABVFont@@PBVColor@@@Z
+?SelectEntryPos@SvxFontListBox@@QAEXG_N@Z
+?ChangePreviewText@SvxNumberFormatTabPage@@AAEXG@Z
+?GetExpColorString@SvxNumberFormatTabPage@@AAE?AVString@@AAPAVColor@@ABV2@F@Z
+?MakePreviewText@SvxNumberFormatTabPage@@AAEXABVString@@@Z
