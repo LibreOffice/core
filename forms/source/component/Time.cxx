@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Time.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-18 14:46:18 $
+ *  last change: $Author: fs $ $Date: 2001-05-23 15:12:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,7 +214,7 @@ void OTimeModel::fillProperties(
         DECL_IFACE_PROP2(CONTROLLABEL,      XPropertySet,           BOUND, MAYBEVOID);
         DECL_PROP2(CONTROLSOURCEPROPERTY,   ::rtl::OUString,        READONLY, TRANSIENT);
         DECL_PROP1(FORMATKEY,               sal_Int32,              TRANSIENT);
-        DECL_IFACE_PROP1(FORMATSSUPPLIER,   XNumberFormatsSupplier, READONLY);
+        DECL_IFACE_PROP2(FORMATSSUPPLIER,   XNumberFormatsSupplier, READONLY, TRANSIENT);
     FRM_END_PROP_HELPER();
 }
 
