@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svapp.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-20 10:03:56 $
+ *  last change: $Author: th $ $Date: 2001-03-20 10:30:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -385,7 +385,7 @@ void Application::DeInit()
 
 USHORT Application::GetCommandLineParamCount()
 {
-    NAMESPACE_VOS( OStartupInfo ) aStartInfo;
+    vos::OStartupInfo aStartInfo;
     return (USHORT)aStartInfo.getCommandArgCount();
 }
 
@@ -393,8 +393,8 @@ USHORT Application::GetCommandLineParamCount()
 
 XubString Application::GetCommandLineParam( USHORT nParam )
 {
-    NAMESPACE_VOS( OStartupInfo )   aStartInfo;
-    ::rtl::OUString     aParam;
+    vos::OStartupInfo   aStartInfo;
+    rtl::OUString       aParam;
     aStartInfo.getCommandArg( nParam, aParam );
     return XubString( aParam );
 }
@@ -465,20 +465,20 @@ void Application::Abort( const XubString& rErrorText )
 ImplRemoteYieldMutex::ImplRemoteYieldMutex()
 {
     mnCount         = 0;
-    mnMainThreadId  = NAMESPACE_VOS(OThread)::getCurrentIdentifier();
+    mnMainThreadId  = vos::OThread::getCurrentIdentifier();
     mnThreadId      = 0;
 }
 
 void SAL_CALL ImplRemoteYieldMutex::acquire()
 {
     OMutex::acquire();
-    mnThreadId = NAMESPACE_VOS(OThread)::getCurrentIdentifier();
+    mnThreadId = vos::OThread::getCurrentIdentifier();
     mnCount++;
 }
 
 void SAL_CALL ImplRemoteYieldMutex::release()
 {
-    if ( mnThreadId == NAMESPACE_VOS(OThread)::getCurrentIdentifier() )
+    if ( mnThreadId == vos::OThread::getCurrentIdentifier() )
     {
         if ( mnCount == 1 )
             mnThreadId = 0;
@@ -491,7 +491,7 @@ sal_Bool SAL_CALL ImplRemoteYieldMutex::tryToAcquire()
 {
     if ( OMutex::tryToAcquire() )
     {
-        mnThreadId = NAMESPACE_VOS(OThread)::getCurrentIdentifier();
+        mnThreadId = vos::OThread::getCurrentIdentifier();
         mnCount++;
         return True;
     }
@@ -507,10 +507,10 @@ void ImplDbgTestSolarMutex()
 {
     ImplSVData* pSVData = ImplGetSVData();
     if ( pSVData->maAppData.mpSolarMutex->GetMainThreadId() !=
-         NAMESPACE_VOS(OThread)::getCurrentIdentifier() )
+         vos::OThread::getCurrentIdentifier() )
     {
         if ( pSVData->maAppData.mpSolarMutex->GetThreadId() !=
-             NAMESPACE_VOS(OThread)::getCurrentIdentifier() )
+             vos::OThread::getCurrentIdentifier() )
         {
             DBG_ERROR( "SolarMutex not locked, and not thread save code in VCL is called from outside of the main thread" );
         }
@@ -518,7 +518,7 @@ void ImplDbgTestSolarMutex()
     else
     {
         if ( pSVData->maAppData.mpSolarMutex->GetThreadId() !=
-             NAMESPACE_VOS(OThread)::getCurrentIdentifier() )
+             vos::OThread::getCurrentIdentifier() )
         {
             DBG_ERROR( "SolarMutex not locked in the main thread" );
         }
@@ -528,7 +528,7 @@ void ImplDbgTestSolarMutex()
 #endif
 
 
-NAMESPACE_VOS(OThreadData)* getThreadLocalEnvironment();
+vos::OThreadData* getThreadLocalEnvironment();
 
 static void ImplRemoteDispatch( BOOL bWait )
 {
@@ -586,9 +586,7 @@ RVPSync::RVPSync( const REF( NMSP_CLIENT::XRmSync )& xRVPSync ) :
 
 void RVPSync::CheckForRVPSync( const char* )
 {
-
-    NAMESPACE_VOS(OThread)::TThreadIdentifier aThreadId =
-        NAMESPACE_VOS(OThread)::getCurrentIdentifier();
+    vos::OThread::TThreadIdentifier aThreadId = vos::OThread::getCurrentIdentifier();
 
     if ( mnLastThreadId != aThreadId )
     {
@@ -689,11 +687,7 @@ void Application::Quit()
 
 // -----------------------------------------------------------------------
 
-#ifdef _VOS_NO_NAMESPACE
-IMutex& Application::GetSolarMutex()
-#else
 vos::IMutex& Application::GetSolarMutex()
-#endif
 {
 #ifndef REMOTE_APPSERVER
     ImplSVData* pSVData = ImplGetSVData();
@@ -705,11 +699,7 @@ vos::IMutex& Application::GetSolarMutex()
 
 // -----------------------------------------------------------------------
 
-#ifdef _VOS_NO_NAMESPACE
-OThread::TThreadIdentifier Application::GetMainThreadIdentifier()
-#else
 vos::OThread::TThreadIdentifier Application::GetMainThreadIdentifier()
-#endif
 {
     return ImplGetSVData()->mnMainThreadId;
 }
@@ -726,7 +716,7 @@ ULONG Application::ReleaseSolarMutex()
 
     // Wenn wir gelockt haben, dann freigeben
     if ( pSVData->maAppData.mpSolarMutex->GetThreadId() ==
-         NAMESPACE_VOS(OThread)::getCurrentIdentifier() )
+         vos::OThread::getCurrentIdentifier() )
     {
         ULONG nCount = pSVData->maAppData.mpSolarMutex->GetAcquireCount();
         ULONG n = nCount;

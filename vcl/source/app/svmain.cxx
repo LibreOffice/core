@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svmain.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-20 10:03:56 $
+ *  last change: $Author: th $ $Date: 2001-03-20 10:32:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,14 +251,14 @@ public:
             bIn = FALSE;
 
 #ifndef REMOTE_APPSERVER
-            return NAMESPACE_VOS(OSignalHandler)::TAction_CallNextHandler;
+            return vos::OSignalHandler::TAction_CallNextHandler;
 #else
-            return NAMESPACE_VOS(OSignalHandler)::TAction_KillApplication;
+            return vos::OSignalHandler::TAction_KillApplication;
 #endif
         }
     }
 
-    return NAMESPACE_VOS(OSignalHandler)::TAction_CallNextHandler;
+    return vos::OSignalHandler::TAction_CallNextHandler;
 }
 
 // =======================================================================
@@ -337,12 +337,12 @@ BOOL InitVCL( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XM
     // Main-Thread-Id merken
     pSVData->mnMainThreadId = ::vos::OThread::getCurrentIdentifier();
 
-    NAMESPACE_VOS( OStartupInfo )   aStartInfo;
-    ::rtl::OUString     aExeFileName;
+    vos::OStartupInfo   aStartInfo;
+    rtl::OUString       aExeFileName;
 
 #ifdef REMOTE_APPSERVER
     // create condition now to avoid race
-    pSVData->mpStartUpCond = new NAMESPACE_VOS(OCondition);
+    pSVData->mpStartUpCond = new vos::OCondition;
 
     pSVData->mpUserInfo = new UserOnPrintServer;
 
@@ -360,7 +360,7 @@ BOOL InitVCL( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XM
 
     pSVData->mpRmEventQueue = new RmEventQueue;
     pSVData->mpRemotePrinterList = new RemotePrinterList( rSMgr );
-    pSVData->mpWindowObjectMutex = new VOS_NAMESPACE(OMutex,vos);
+    pSVData->mpWindowObjectMutex = new vos::OMutex;
     pSVData->maAppData.mpSolarMutex = new ImplRemoteYieldMutex;
 
     pSVData->maGDIData.mpScreenFontList   = new ImplDevFontList;
@@ -598,7 +598,7 @@ void DeInitVCL()
     {
         try
         {
-             CHECK_FOR_RVPSYNC_NORMAL()
+            CHECK_FOR_RVPSYNC_NORMAL()
 
             delete pSVData->mpRVPNormalSync;
             delete pSVData->mpRVPSoundSync;
@@ -607,9 +607,9 @@ void DeInitVCL()
             pSVData->mxStatus->Quit();
             pSVData->mxStatus = Reference < ::com::sun::star::portal::client::XRmStatus >();
         }
-         catch(::com::sun::star::uno::Exception&)
-         {
-         }
+        catch(::com::sun::star::uno::Exception&)
+        {
+        }
     }
 
     if( pSVData->mpApp )

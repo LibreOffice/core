@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mt $ $Date: 2001-03-15 11:33:03 $
+ *  last change: $Author: th $ $Date: 2001-03-20 10:36:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4067,7 +4067,7 @@ Window::~Window()
 #ifdef REMOTE_APPSERVER
     {
     // Events als ungueltig markieren...
-    VOS_NAMESPACE(OGuard,vos) aGuard( pSVData->mpWindowObjectMutex );
+    vos::OGuard aGuard( pSVData->mpWindowObjectMutex );
     if ( mpRmEvents )
     {
         ExtRmEvent* p = mpRmEvents;
