@@ -2,9 +2,9 @@
  *
  *  $RCSfile: except.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dbo $ $Date: 2001-05-15 08:41:40 $
+ *  last change: $Author: dbo $ $Date: 2001-08-01 10:09:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,19 +90,19 @@
 
 #pragma pack(push, 8)
 
-using namespace com::sun::star::uno;
-using namespace std;
-using namespace osl;
-using namespace rtl;
+using namespace ::com::sun::star::uno;
+using namespace ::std;
+using namespace ::osl;
+using namespace ::rtl;
 
 namespace CPPU_CURRENT_NAMESPACE
 {
 
 //==================================================================================================
-static inline OString toUNOname( const OString & rRTTIname ) throw ()
+static inline OUString toUNOname( OUString const & rRTTIname ) throw ()
 {
-    OStringBuffer aRet( 64 );
-    OString aStr( rRTTIname.copy( 4, rRTTIname.getLength()-4-2 ) ); // filter .?AUzzz@yyy@xxx@@
+    OUStringBuffer aRet( 64 );
+    OUString aStr( rRTTIname.copy( 4, rRTTIname.getLength()-4-2 ) ); // filter .?AUzzz@yyy@xxx@@
     sal_Int32 nPos = aStr.getLength();
     while (nPos > 0)
     {
@@ -110,26 +110,26 @@ static inline OString toUNOname( const OString & rRTTIname ) throw ()
         aRet.append( aStr.copy( n +1, nPos -n -1 ) );
         if (n >= 0)
         {
-            aRet.append( '.' );
+            aRet.append( (sal_Unicode)'.' );
         }
         nPos = n;
     }
     return aRet.makeStringAndClear();
 }
 //==================================================================================================
-static inline OString toRTTIname( const OString & rUNOname ) throw ()
+static inline OUString toRTTIname( OUString const & rUNOname ) throw ()
 {
-    OStringBuffer aRet( 64 );
-    aRet.append( RTL_CONSTASCII_STRINGPARAM(".?AV") ); // class ".?AV"; struct ".?AU"
+    OUStringBuffer aRet( 64 );
+    aRet.appendAscii( RTL_CONSTASCII_STRINGPARAM(".?AV") ); // class ".?AV"; struct ".?AU"
     sal_Int32 nPos = rUNOname.getLength();
     while (nPos > 0)
     {
         sal_Int32 n = rUNOname.lastIndexOf( '.', nPos );
         aRet.append( rUNOname.copy( n +1, nPos -n -1 ) );
-        aRet.append( '@' );
+        aRet.append( (sal_Unicode)'@' );
         nPos = n;
     }
-    aRet.append( '@' );
+    aRet.append( (sal_Unicode)'@' );
     return aRet.makeStringAndClear();
 }
 
@@ -139,13 +139,7 @@ static inline OString toRTTIname( const OString & rUNOname ) throw ()
 //##################################################################################################
 
 
-//==================================================================================================
-struct FctOStringHash : public unary_function< const OString &, size_t >
-{
-    size_t operator()( const OString & rStr ) const throw ()
-        { return rStr.hashCode(); }
-};
-typedef hash_map< OString, void *, FctOStringHash, equal_to< OString > > t_string2PtrMap;
+typedef hash_map< OUString, void *, OUStringHash, equal_to< OUString > > t_string2PtrMap;
 
 //==================================================================================================
 class RTTInfos
@@ -153,9 +147,9 @@ class RTTInfos
     Mutex               _aMutex;
     t_string2PtrMap     _allRTTI;
 
-    static OString toRawName( const OString & rUNOname ) throw ();
+    static OUString toRawName( OUString const & rUNOname ) throw ();
 public:
-    type_info * getRTTI( const OString & rUNOname ) throw ();
+    type_info * getRTTI( OUString const & rUNOname ) throw ();
 
     RTTInfos();
     ~RTTInfos();
@@ -164,15 +158,15 @@ public:
 //==================================================================================================
 class __type_info
 {
-    friend type_info * RTTInfos::getRTTI( const OString & ) throw ();
+    friend type_info * RTTInfos::getRTTI( OUString const & ) throw ();
     friend sal_Int32 msci_filterCppException( LPEXCEPTION_POINTERS, uno_Any *, uno_Mapping * );
 
 public:
     virtual ~__type_info() throw ();
 
-    __type_info( void * m_data, const char * m_d_name ) throw ()
+    inline __type_info( void * m_data, const char * m_d_name ) throw ()
         : _m_data( m_data )
-    { ::strcpy( _m_d_name, m_d_name ); }
+        { ::strcpy( _m_d_name, m_d_name ); }
 
 private:
     void * _m_data;
@@ -183,29 +177,32 @@ __type_info::~__type_info() throw ()
 {
 }
 //__________________________________________________________________________________________________
-type_info * RTTInfos::getRTTI( const OString & rUNOname ) throw ()
+type_info * RTTInfos::getRTTI( OUString const & rUNOname ) throw ()
 {
     // a must be
     OSL_ENSURE( sizeof(__type_info) == sizeof(type_info), "### type info structure size differ!" );
 
     MutexGuard aGuard( _aMutex );
-    const t_string2PtrMap::const_iterator iFind( _allRTTI.find( rUNOname ) );
+    t_string2PtrMap::const_iterator const iFind( _allRTTI.find( rUNOname ) );
 
     // check if type is already available
     if (iFind == _allRTTI.end())
     {
         // insert new type_info
-        OString aRawName( toRTTIname( rUNOname ) );
-        __type_info * pRTTI = new(rtl_allocateMemory( sizeof(__type_info) + aRawName.getLength() ))
-                              __type_info( NULL, aRawName.getStr() );
+        OString aRawName( OUStringToOString( toRTTIname( rUNOname ), RTL_TEXTENCODING_ASCII_US ) );
+        __type_info * pRTTI = new( ::rtl_allocateMemory( sizeof(__type_info) + aRawName.getLength() ) )
+            __type_info( NULL, aRawName.getStr() );
+
         // put into map
-        _allRTTI[rUNOname] = pRTTI;
+        pair< t_string2PtrMap::iterator, bool > insertion(
+            _allRTTI.insert( t_string2PtrMap::value_type( rUNOname, pRTTI ) ) );
+        OSL_ENSURE( insertion.second, "### rtti insertion failed?!" );
 
         return (type_info *)pRTTI;
     }
     else
     {
-        return (type_info *)(*iFind).second;
+        return (type_info *)iFind->second;
     }
 }
 //__________________________________________________________________________________________________
@@ -218,12 +215,11 @@ RTTInfos::~RTTInfos() throw ()
     TRACE( "> freeing generated RTTI infos... <\n" );
 
     MutexGuard aGuard( _aMutex );
-    for ( t_string2PtrMap::const_iterator iPos( _allRTTI.begin() );
-          iPos != _allRTTI.end(); ++iPos )
+    for ( t_string2PtrMap::const_iterator iPos( _allRTTI.begin() ); iPos != _allRTTI.end(); ++iPos )
     {
-        __type_info * pType = (__type_info *)(*iPos).second;
+        __type_info * pType = (__type_info *)iPos->second;
         pType->~__type_info(); // obsolete, but good style...
-        rtl_freeMemory( pType );
+        ::rtl_freeMemory( pType );
     }
 }
 
@@ -246,7 +242,7 @@ struct ObjectFunction
 ObjectFunction::ObjectFunction( typelib_TypeDescription * pTypeDescr, void * fpFunc ) throw ()
     : _pTypeDescr( pTypeDescr )
 {
-    typelib_typedescription_acquire( _pTypeDescr );
+    ::typelib_typedescription_acquire( _pTypeDescr );
 
     unsigned char * pCode = (unsigned char *)somecode;
     // a must be!
@@ -263,21 +259,21 @@ ObjectFunction::ObjectFunction( typelib_TypeDescription * pTypeDescr, void * fpF
 //__________________________________________________________________________________________________
 ObjectFunction::~ObjectFunction() throw ()
 {
-    typelib_typedescription_release( _pTypeDescr );
+    ::typelib_typedescription_release( _pTypeDescr );
 }
 
 //==================================================================================================
 static void * __cdecl __copyConstruct( void * pExcThis, void * pSource, ObjectFunction * pThis )
     throw ()
 {
-    uno_copyData( pExcThis, pSource, pThis->_pTypeDescr, cpp_acquire );
+    ::uno_copyData( pExcThis, pSource, pThis->_pTypeDescr, cpp_acquire );
     return pExcThis;
 }
 //==================================================================================================
 static void * __cdecl __destruct( void * pExcThis, ObjectFunction * pThis )
     throw ()
 {
-    uno_destructData( pExcThis, pThis->_pTypeDescr, cpp_release );
+    ::uno_destructData( pExcThis, pThis->_pTypeDescr, cpp_release );
     return pExcThis;
 }
 
@@ -318,7 +314,7 @@ struct ExceptionType
     ObjectFunction *    _pCopyCtor;
     sal_Int32           _n5;
 
-    ExceptionType( typelib_TypeDescription * pTypeDescr ) throw ()
+    inline ExceptionType( typelib_TypeDescription * pTypeDescr ) throw ()
         : _n0( 0 )
         , _n1( 0 )
         , _n2( -1 )
@@ -326,8 +322,8 @@ struct ExceptionType
         , _n4( pTypeDescr->nSize )
         , _pCopyCtor( new ObjectFunction( pTypeDescr, copyConstruct ) )
         , _n5( 0 )
-        { _pTypeInfo = msci_getRTTI( OUStringToOString( pTypeDescr->pTypeName, RTL_TEXTENCODING_ASCII_US ) ); }
-    ~ExceptionType() throw ()
+        { _pTypeInfo = msci_getRTTI( pTypeDescr->pTypeName ); }
+    inline ~ExceptionType() throw ()
         { delete _pCopyCtor; }
 };
 //==================================================================================================
@@ -364,7 +360,7 @@ RaiseInfo::RaiseInfo( typelib_TypeDescription * pTypeDescr ) throw ()
     }
 
     // info count accompanied by type info ptrs: type, base type, base base type, ...
-    _types = rtl_allocateMemory( sizeof(sal_Int32) + (sizeof(ExceptionType *) * nLen) );
+    _types = ::rtl_allocateMemory( sizeof(sal_Int32) + (sizeof(ExceptionType *) * nLen) );
     *(sal_Int32 *)_types = nLen;
 
     ExceptionType ** ppTypes = (ExceptionType **)((sal_Int32 *)_types + 1);
@@ -381,8 +377,10 @@ RaiseInfo::~RaiseInfo() throw ()
 {
     ExceptionType ** ppTypes = (ExceptionType **)((sal_Int32 *)_types + 1);
     for ( sal_Int32 nTypes = *(sal_Int32 *)_types; nTypes--; )
+    {
         delete ppTypes[nTypes];
-    rtl_freeMemory( _types );
+    }
+    ::rtl_freeMemory( _types );
 
     delete _pDtor;
 }
@@ -392,8 +390,9 @@ class ExceptionInfos
 {
     Mutex           _aMutex;
     t_string2PtrMap _allRaiseInfos;
+
 public:
-    void raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp );
+    static void * getRaiseInfo( typelib_TypeDescription * pTypeDescr ) throw ();
 
     ExceptionInfos() throw ();
     ~ExceptionInfos() throw ();
@@ -411,52 +410,52 @@ ExceptionInfos::~ExceptionInfos() throw ()
     for ( t_string2PtrMap::const_iterator iPos( _allRaiseInfos.begin() );
           iPos != _allRaiseInfos.end(); ++iPos )
     {
-        delete (RaiseInfo *)(*iPos).second;
+        delete (RaiseInfo *)iPos->second;
     }
 }
 //__________________________________________________________________________________________________
-void ExceptionInfos::raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
+void * ExceptionInfos::getRaiseInfo( typelib_TypeDescription * pTypeDescr ) throw ()
 {
-    // construct cpp exception object
-    typelib_TypeDescription * pTypeDescr = 0;
-    TYPELIB_DANGER_GET( &pTypeDescr, pUnoExc->pType );
-
-    OSL_ENSURE( pTypeDescr && (pTypeDescr->eTypeClass == typelib_TypeClass_STRUCT ||
-                                pTypeDescr->eTypeClass == typelib_TypeClass_EXCEPTION),
-                 "### can only throw types of class exception/ structs" );
-
-    void * pCppExc = alloca( pTypeDescr->nSize );
-    uno_copyAndConvertData( pCppExc, pUnoExc->pData, pTypeDescr, pUno2Cpp );
-
-    // concatenate all types of exception for key
-    OUStringBuffer aKeyBuf;
-    typelib_CompoundTypeDescription * pCompTypeDescr;
-    for ( pCompTypeDescr = (typelib_CompoundTypeDescription *)pTypeDescr;
-          pCompTypeDescr; pCompTypeDescr = pCompTypeDescr->pBaseTypeDescription )
+    static ExceptionInfos * s_pInfos = 0;
+    if (! s_pInfos)
     {
-        aKeyBuf.append( ((typelib_TypeDescription *)pCompTypeDescr)->pTypeName );
+        MutexGuard aGuard( Mutex::getGlobalMutex() );
+        if (! s_pInfos)
+        {
+#ifdef LEAK_STATIC_DATA
+            s_pInfos = new ExceptionInfos();
+#else
+            static ExceptionInfos s_allExceptionInfos;
+            s_pInfos = &s_allExceptionInfos;
+#endif
+        }
     }
-    OString aKey( OUStringToOString( aKeyBuf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US ) );
 
-    MutexGuard aGuard( _aMutex );
-    const t_string2PtrMap::const_iterator iFind( _allRaiseInfos.find( aKey ) );
+    OSL_ASSERT( pTypeDescr &&
+                (pTypeDescr->eTypeClass == typelib_TypeClass_STRUCT ||
+                 pTypeDescr->eTypeClass == typelib_TypeClass_EXCEPTION) );
 
-    // a must be
-    OSL_ENSURE( sizeof(sal_Int32) == sizeof(void *), "### pointer size differs from sal_Int32!" );
-    DWORD arFilterArgs[3];
-    arFilterArgs[0] = 0x19930520L;
-    arFilterArgs[1] = (DWORD)pCppExc;
-    arFilterArgs[2] = (DWORD)(iFind != _allRaiseInfos.end()
-                              ? (*iFind).second // reuse existing info
-                              : _allRaiseInfos[aKey] = new RaiseInfo( pTypeDescr )); // put into map
+    void * pRaiseInfo;
 
-    // this is the last chance to release anything not affected by stack unwinding:
-    // destruct uno exception
-    uno_any_destruct( pUnoExc, 0 );
+    OUString const & rTypeName = *reinterpret_cast< OUString * >( &pTypeDescr->pTypeName );
+    MutexGuard aGuard( s_pInfos->_aMutex );
+    t_string2PtrMap::const_iterator const iFind(
+        s_pInfos->_allRaiseInfos.find( rTypeName ) );
+    if (iFind == s_pInfos->_allRaiseInfos.end())
+    {
+        pRaiseInfo = new RaiseInfo( pTypeDescr );
+        // put into map
+        pair< t_string2PtrMap::iterator, bool > insertion(
+            s_pInfos->_allRaiseInfos.insert( t_string2PtrMap::value_type( rTypeName, pRaiseInfo ) ) );
+        OSL_ENSURE( insertion.second, "### raise info insertion failed?!" );
+    }
+    else
+    {
+        // reuse existing info
+        pRaiseInfo = iFind->second;
+    }
 
-    TYPELIB_DANGER_RELEASE( pTypeDescr );
-
-    RaiseException( MSVC_ExceptionCode, EXCEPTION_NONCONTINUABLE, 3, arFilterArgs );
+    return pRaiseInfo;
 }
 
 
@@ -466,7 +465,7 @@ void ExceptionInfos::raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
 
 
 //##################################################################################################
-type_info * msci_getRTTI( const OString & rUNOname ) throw ()
+type_info * msci_getRTTI( OUString const & rUNOname ) throw ()
 {
     static RTTInfos * s_pRTTIs = 0;
     if (! s_pRTTIs)
@@ -488,21 +487,30 @@ type_info * msci_getRTTI( const OString & rUNOname ) throw ()
 //##################################################################################################
 void msci_raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
 {
-    static ExceptionInfos * s_pInfos = 0;
-    if (! s_pInfos)
-    {
-        MutexGuard aGuard( Mutex::getGlobalMutex() );
-        if (! s_pInfos)
-        {
-#ifdef LEAK_STATIC_DATA
-            s_pInfos = new ExceptionInfos();
-#else
-            static ExceptionInfos s_allExceptionInfos;
-            s_pInfos = &s_allExceptionInfos;
-#endif
-        }
-    }
-    s_pInfos->raiseException( pUnoExc, pUno2Cpp );
+    // no ctor/dtor in here: this leads to dtors called twice upon RaiseException()!
+    // thus this obj file will be compiled without opt, so no inling of
+    // ExceptionInfos::getRaiseInfo()
+
+    // construct cpp exception object
+    typelib_TypeDescription * pTypeDescr = 0;
+    TYPELIB_DANGER_GET( &pTypeDescr, pUnoExc->pType );
+
+    void * pCppExc = alloca( pTypeDescr->nSize );
+    ::uno_copyAndConvertData( pCppExc, pUnoExc->pData, pTypeDescr, pUno2Cpp );
+
+    // a must be
+    OSL_ENSURE( sizeof(sal_Int32) == sizeof(void *), "### pointer size differs from sal_Int32!" );
+    DWORD arFilterArgs[3];
+    arFilterArgs[0] = 0x19930520L;
+    arFilterArgs[1] = (DWORD)pCppExc;
+    arFilterArgs[2] = (DWORD)ExceptionInfos::getRaiseInfo( pTypeDescr );
+
+    // destruct uno exception
+    ::uno_any_destruct( pUnoExc, 0 );
+    TYPELIB_DANGER_RELEASE( pTypeDescr );
+
+    // last point to release anything not affected by stack unwinding
+    RaiseException( MSVC_ExceptionCode, EXCEPTION_NONCONTINUABLE, 3, arFilterArgs );
 }
 
 //##################################################################################################
@@ -523,29 +531,30 @@ sal_Int32 msci_filterCppException(
             ExceptionType * pType = *(ExceptionType **)((sal_Int32 *)types +1);
             if (pType && pType->_pTypeInfo)
             {
-                OUString aUNOname( OStringToOUString( toUNOname(
-                    ((__type_info *)pType->_pTypeInfo)->_m_d_name ), RTL_TEXTENCODING_ASCII_US ) );
+                OUString aRTTIname( OStringToOUString(
+                    ((__type_info *)pType->_pTypeInfo)->_m_d_name, RTL_TEXTENCODING_ASCII_US ) );
+                OUString aUNOname( toUNOname( aRTTIname ) );
                 typelib_TypeDescription * pExcTypeDescr = 0;
-                typelib_typedescription_getByName( &pExcTypeDescr, aUNOname.pData );
+                ::typelib_typedescription_getByName( &pExcTypeDescr, aUNOname.pData );
 
                 if (pExcTypeDescr)
                 {
                     // construct uno exception any
-                    uno_any_constructAndConvert(
+                    ::uno_any_constructAndConvert(
                         pUnoExc, (void *)pRecord->ExceptionInformation[1],
                         pExcTypeDescr, pCpp2Uno );
-                    uno_destructData(
+                    ::uno_destructData(
                         (void *)pRecord->ExceptionInformation[1],
                         pExcTypeDescr, cpp_release );
-                    typelib_typedescription_release( pExcTypeDescr );
+                    ::typelib_typedescription_release( pExcTypeDescr );
                 }
                 else // type not found!
                 {
                     RuntimeException aRE(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM("exception type not found: ") ) +
-                        aUNOname, Reference< XInterface >() );
-                    const Type & rType = ::getCppuType( &aRE );
-                    uno_type_any_constructAndConvert(
+                        OUString( RTL_CONSTASCII_USTRINGPARAM("exception type not found: ") ) + aUNOname,
+                        Reference< XInterface >() );
+                    Type const & rType = ::getCppuType( &aRE );
+                    ::uno_type_any_constructAndConvert(
                         pUnoExc, &aRE, rType.getTypeLibType(), pCpp2Uno );
 #ifdef _DEBUG
                     OString aStr( OUStringToOString( aUNOname, RTL_TEXTENCODING_ASCII_US ) );

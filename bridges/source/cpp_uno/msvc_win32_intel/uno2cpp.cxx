@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uno2cpp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dbo $ $Date: 2001-07-03 16:11:14 $
+ *  last change: $Author: dbo $ $Date: 2001-08-01 10:09:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,9 +64,6 @@
 #ifndef _RTL_ALLOC_H_
 #include <rtl/alloc.h>
 #endif
-#ifndef _RTL_STRING_HXX_
-#include <rtl/string.hxx>
-#endif
 
 #ifndef _UNO_DATA_H_
 #include <uno/data.h>
@@ -80,8 +77,8 @@
 
 #include "msci.hxx"
 
-using namespace rtl;
-using namespace com::sun::star::uno;
+using namespace ::rtl;
+using namespace ::com::sun::star::uno;
 
 namespace CPPU_CURRENT_NAMESPACE
 {
@@ -241,8 +238,9 @@ inline static void cpp_call(
 
         if (!rParam.bOut && cppu_isSimpleType( pParamTypeDescr ))
         {
-            uno_copyAndConvertData( pCppArgs[nPos] = pCppStack, pUnoArgs[nPos], pParamTypeDescr,
-                                    &pThis->pBridge->aUno2Cpp );
+            ::uno_copyAndConvertData(
+                pCppArgs[nPos] = pCppStack, pUnoArgs[nPos], pParamTypeDescr,
+                &pThis->pBridge->aUno2Cpp );
 
             switch (pParamTypeDescr->eTypeClass)
             {
@@ -259,7 +257,7 @@ inline static void cpp_call(
             if (! rParam.bIn) // is pure out
             {
                 // cpp out is constructed mem, uno out is not!
-                uno_constructData(
+                ::uno_constructData(
                     *(void **)pCppStack = pCppArgs[nPos] = alloca( pParamTypeDescr->nSize ),
                     pParamTypeDescr );
                 pTempIndizes[nTempIndizes] = nPos; // default constructed for cpp call
@@ -269,7 +267,7 @@ inline static void cpp_call(
             // is in/inout
             else if (cppu_relatesToInterface( pParamTypeDescr ))
             {
-                uno_copyAndConvertData(
+                ::uno_copyAndConvertData(
                     *(void **)pCppStack = pCppArgs[nPos] = alloca( pParamTypeDescr->nSize ),
                     pUnoArgs[nPos], pParamTypeDescr,
                     &pThis->pBridge->aUno2Cpp );
@@ -312,27 +310,33 @@ inline static void cpp_call(
                 {
                     if (pParams[nIndex].bOut) // inout
                     {
-                        uno_destructData( pUnoArgs[nIndex], pParamTypeDescr, 0 ); // destroy uno value
-                        uno_copyAndConvertData( pUnoArgs[nIndex], pCppArgs[nIndex], pParamTypeDescr,
-                                                &pThis->pBridge->aCpp2Uno );
+                        ::uno_destructData(
+                            pUnoArgs[nIndex], pParamTypeDescr, 0 ); // destroy uno value
+                        ::uno_copyAndConvertData(
+                            pUnoArgs[nIndex], pCppArgs[nIndex], pParamTypeDescr,
+                            &pThis->pBridge->aCpp2Uno );
                     }
                 }
                 else // pure out
                 {
-                    uno_copyAndConvertData( pUnoArgs[nIndex], pCppArgs[nIndex], pParamTypeDescr,
-                                            &pThis->pBridge->aCpp2Uno );
+                    ::uno_copyAndConvertData(
+                        pUnoArgs[nIndex], pCppArgs[nIndex], pParamTypeDescr,
+                        &pThis->pBridge->aCpp2Uno );
                 }
                 // destroy temp cpp param => cpp: every param was constructed
-                uno_destructData( pCppArgs[nIndex], pParamTypeDescr, cpp_release );
+                ::uno_destructData(
+                    pCppArgs[nIndex], pParamTypeDescr, cpp_release );
 
                 TYPELIB_DANGER_RELEASE( pParamTypeDescr );
             }
             // return value
             if (pCppReturn && pUnoReturn != pCppReturn)
             {
-                uno_copyAndConvertData( pUnoReturn, pCppReturn, pReturnTypeDescr,
-                                        &pThis->pBridge->aCpp2Uno );
-                uno_destructData( pCppReturn, pReturnTypeDescr, cpp_release );
+                ::uno_copyAndConvertData(
+                    pUnoReturn, pCppReturn, pReturnTypeDescr,
+                    &pThis->pBridge->aCpp2Uno );
+                ::uno_destructData(
+                    pCppReturn, pReturnTypeDescr, cpp_release );
             }
         }
         __except (msci_filterCppException( GetExceptionInformation(),
@@ -355,13 +359,16 @@ inline static void cpp_call(
             {
                 sal_Int32 nIndex = pTempIndizes[nTempIndizes];
                 // destroy temp cpp param => cpp: every param was constructed
-                uno_destructData( pCppArgs[nIndex], ppTempParamTypeDescr[nTempIndizes], cpp_release );
+                ::uno_destructData(
+                    pCppArgs[nIndex], ppTempParamTypeDescr[nTempIndizes], cpp_release );
                 TYPELIB_DANGER_RELEASE( ppTempParamTypeDescr[nTempIndizes] );
             }
         }
         // return type
         if (pReturnTypeDescr)
+        {
             TYPELIB_DANGER_RELEASE( pReturnTypeDescr );
+        }
     }
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpp2uno.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dbo $ $Date: 2001-07-03 16:11:14 $
+ *  last change: $Author: dbo $ $Date: 2001-08-01 10:09:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,9 +65,6 @@
 #ifndef _RTL_ALLOC_H_
 #include <rtl/alloc.h>
 #endif
-#ifndef _RTL_STRING_HXX_
-#include <rtl/string.hxx>
-#endif
 
 #ifndef _TYPELIB_TYPEDESCRIPTION_HXX_
 #include <typelib/typedescription.hxx>
@@ -90,11 +87,10 @@
 #define TRACE(x)
 #endif
 
-using namespace std;
-using namespace rtl;
-using namespace osl;
-using namespace com::sun::star::uno;
-
+using namespace ::std;
+using namespace ::rtl;
+using namespace ::osl;
+using namespace ::com::sun::star::uno;
 
 namespace CPPU_CURRENT_NAMESPACE
 {
@@ -117,7 +113,9 @@ static inline typelib_TypeClass cpp2uno_call(
     // return
     typelib_TypeDescription * pReturnTypeDescr = 0;
     if (pReturnTypeRef)
+    {
         TYPELIB_DANGER_GET( &pReturnTypeDescr, pReturnTypeRef );
+    }
 
     void * pUnoReturn = 0;
     void * pCppReturn = 0; // complex return ptr: if != 0 && != pUnoReturn, reconversion need
@@ -186,9 +184,10 @@ static inline typelib_TypeClass cpp2uno_call(
             // is in/inout
             else if (cppu_relatesToInterface( pParamTypeDescr ))
             {
-                uno_copyAndConvertData( pUnoArgs[nPos] = alloca( pParamTypeDescr->nSize ),
-                                        *(void **)pCppStack, pParamTypeDescr,
-                                        &pThis->pBridge->aCpp2Uno );
+                ::uno_copyAndConvertData(
+                    pUnoArgs[nPos] = alloca( pParamTypeDescr->nSize ),
+                    *(void **)pCppStack, pParamTypeDescr,
+                    &pThis->pBridge->aCpp2Uno );
                 pTempIndizes[nTempIndizes] = nPos; // has to be reconverted
                 // will be released at reconversion
                 ppTempParamTypeDescr[nTempIndizes++] = pParamTypeDescr;
@@ -219,11 +218,15 @@ static inline typelib_TypeClass cpp2uno_call(
             sal_Int32 nIndex = pTempIndizes[nTempIndizes];
 
             if (pParams[nIndex].bIn) // is in/inout => was constructed
-                uno_destructData( pUnoArgs[nIndex], ppTempParamTypeDescr[nTempIndizes], 0 );
+            {
+                ::uno_destructData( pUnoArgs[nIndex], ppTempParamTypeDescr[nTempIndizes], 0 );
+            }
             TYPELIB_DANGER_RELEASE( ppTempParamTypeDescr[nTempIndizes] );
         }
         if (pReturnTypeDescr)
+        {
             TYPELIB_DANGER_RELEASE( pReturnTypeDescr );
+        }
 
         msci_raiseException( &aUnoExc, &pThis->pBridge->aUno2Cpp ); // has to destruct the any
         // is here for dummy
@@ -240,12 +243,14 @@ static inline typelib_TypeClass cpp2uno_call(
             if (pParams[nIndex].bOut) // inout/out
             {
                 // convert and assign
-                uno_destructData( pCppArgs[nIndex], pParamTypeDescr, cpp_release );
-                uno_copyAndConvertData( pCppArgs[nIndex], pUnoArgs[nIndex], pParamTypeDescr,
-                                        &pThis->pBridge->aUno2Cpp );
+                ::uno_destructData(
+                    pCppArgs[nIndex], pParamTypeDescr, cpp_release );
+                ::uno_copyAndConvertData(
+                    pCppArgs[nIndex], pUnoArgs[nIndex], pParamTypeDescr,
+                    &pThis->pBridge->aUno2Cpp );
             }
             // destroy temp uno param
-            uno_destructData( pUnoArgs[nIndex], pParamTypeDescr, 0 );
+            ::uno_destructData( pUnoArgs[nIndex], pParamTypeDescr, 0 );
 
             TYPELIB_DANGER_RELEASE( pParamTypeDescr );
         }
@@ -254,10 +259,12 @@ static inline typelib_TypeClass cpp2uno_call(
         {
             if (pUnoReturn != pCppReturn) // needs reconversion
             {
-                uno_copyAndConvertData( pCppReturn, pUnoReturn, pReturnTypeDescr,
-                                        &pThis->pBridge->aUno2Cpp );
+                ::uno_copyAndConvertData(
+                    pCppReturn, pUnoReturn, pReturnTypeDescr,
+                    &pThis->pBridge->aUno2Cpp );
                 // destroy temp uno return
-                uno_destructData( pUnoReturn, pReturnTypeDescr, 0 );
+                ::uno_destructData(
+                    pUnoReturn, pReturnTypeDescr, 0 );
             }
             // complex return ptr is set to eax
             *(void **)pRegisterReturn = pCppReturn;
@@ -402,11 +409,14 @@ class MediateVtables
         sal_Int32   _n0, _n1, _n2;
         type_info * _pRTTI;
 
-        DefaultRTTIEntry() throw ()
+        inline DefaultRTTIEntry() throw ()
             : _n0( 0 )
             , _n1( 0 )
             , _n2( 0 )
-            { _pRTTI = msci_getRTTI( "com.sun.star.uno.XInterface" ); }
+        {
+            _pRTTI = msci_getRTTI(
+                OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uno.XInterface") ) );
+        }
     };
 
     typedef list<void * > t_pSpacesList;

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: dbo $ $Date: 2001-07-26 11:46:55 $
+#   last change: $Author: dbo $ $Date: 2001-08-01 10:09:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,6 +76,9 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files --------------------------------------------------------
 .IF "$(COM)" == "MSC"
 
+# cant CFLAGS += /Ox here, because NOOPTFILES wont work then
+# product build does this anyway
+
 .IF "$(debug)" != ""
 CFLAGS += /Ob0
 .ENDIF
@@ -114,7 +117,7 @@ $(MISC)$/$(SHL1TARGET).def: makefile.mk
     @echo ------------------------------
     @echo Making: $@
     @echo LIBRARY     $(SHL1TARGET)                                  >$@
-    @echo DESCRIPTION 'MS Visual C++ bridge to UNO'                 >>$@
+    @echo DESCRIPTION 'MS Visual C++ bridge for UNO'                >>$@
     @echo DATA        READ WRITE NONSHARED                          >>$@
     @echo EXPORTS                                                   >>$@
     @echo uno_initEnvironment @3                                    >>$@

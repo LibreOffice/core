@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msci.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2000-12-21 14:46:05 $
+ *  last change: $Author: dbo $ $Date: 2001-08-01 10:09:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,8 @@
 
 #include <windows.h>
 
-#ifndef _RTL_STRING_HXX_
-#include <rtl/string.hxx>
+#ifndef _RTL_USTRING_HXX_
+#include <rtl/ustring.hxx>
 #endif
 
 #define MSVC_ExceptionCode 0xe06d7363
@@ -76,7 +76,7 @@ namespace CPPU_CURRENT_NAMESPACE
 
 //==================================================================================================
 type_info * msci_getRTTI(
-    const ::rtl::OString & rUNOname ) throw ();
+    ::rtl::OUString const & rUNOname ) throw ();
 
 //==================================================================================================
 sal_Int32 msci_filterCppException(
