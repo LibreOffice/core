@@ -1818,7 +1818,7 @@
                     <value xml:lang="he">‮לתא הלא מוגן הבא‬</value>
                     <value xml:lang="it">Alla cella non protetta successiva</value>
                     <value xml:lang="ja">次の保護されていないセルへ</value>
-                    <value xml:lang="ko">다음 보호되지 않은  셀로</value>
+                    <value xml:lang="ko">다음 보호되지 않은 셀로</value>
                     <value xml:lang="nl">Naar volgende onbeveiligde cel</value>
                     <value xml:lang="pl">Do następnej niechronionej komórki</value>
                     <value xml:lang="pt-BR">Para a Próxima Célula Desprotegida</value>
@@ -2262,7 +2262,7 @@
                     <value xml:lang="th">Bis zum n�chsten Tabellenblatt ausw�hlen</value>
                     <value xml:lang="tr">Bis zum nächsten Tabellenblatt auswählen</value>
                     <value xml:lang="hi">Bis zum n�chsten Tabellenblatt ausw�hlen</value>
-                    <value xml:lang="zh-CN">Bis zum n�chsten Tabellenblatt ausw�hlen</value>
+                    <value xml:lang="zh-CN">选择下一个表格</value>
                     <value xml:lang="pt">Bis zum nächsten Tabellenblatt auswählen</value>
                 </prop>
             </node>
@@ -2293,7 +2293,7 @@
                     <value xml:lang="th">Bis zum vorherigen Tabellenblatt ausw�hlen</value>
                     <value xml:lang="tr">Bis zum vorherigen Tabellenblatt auswählen</value>
                     <value xml:lang="hi">Bis zum vorherigen Tabellenblatt ausw�hlen</value>
-                    <value xml:lang="zh-CN">Bis zum vorherigen Tabellenblatt ausw�hlen</value>
+                    <value xml:lang="zh-CN">选择上一个表格</value>
                     <value xml:lang="pt">Bis zum vorherigen Tabellenblatt auswählen</value>
                 </prop>
             </node>
@@ -6261,7 +6261,7 @@
                     <value xml:lang="th">Sheet right-to-left</value>
                     <value xml:lang="tr">Sheet right-to-left</value>
                     <value xml:lang="hi">Tabelle rechts-nach-links</value>
-                    <value xml:lang="zh-CN">Tabelle rechts-nach-links</value>
+                    <value xml:lang="zh-CN">表格从右至左</value>
                     <value xml:lang="pt">Tabelle rechts-nach-links</value>
                 </prop>
             </node>
