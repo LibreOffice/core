@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dview.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-04 13:20:03 $
+ *  last change: $Author: rt $ $Date: 2003-10-27 13:20:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -619,11 +619,13 @@ Rectangle *SwDrawView::IsAnchorAtPos( const Point &rPt ) const
         {
             B2dIAObject* pIAO = pHdl->GetIAOGroup().GetIAObject(0);
 
-            if(pIAO && pIAO->ISA(B2dIAOBitmapExReference))
+            // #i21114#
+            // B2dIAOBitmapExReference is no longer used, change to B2dIAOBitmapEx
+            if(pIAO && pIAO->ISA(B2dIAOBitmapEx))
             {
                 Rectangle aRect(
                     pIAO->GetBasePosition(),
-                    pOut->PixelToLogic(((B2dIAOBitmapExReference*)pIAO)->GetBitmapEx()->GetSizePixel()));
+                    pOut->PixelToLogic(((B2dIAOBitmapEx*)pIAO)->GetBitmapEx().GetSizePixel()));
                 return new Rectangle(aRect);
             }
         }
