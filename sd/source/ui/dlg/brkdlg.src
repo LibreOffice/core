@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brkdlg.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:42:12 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:38:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ ModalDialog DLG_BREAK
         Text[ dutch ] = "Processing metafile:";
         Text[ french ] = "Traitement du m�tafichier :";
         Text[ finnish ] = "Processing metafile:";
-        Text[ danish ] = "Processing metafile:";
+        Text[ danish ] = "Behandler metafil:";
         Text[ chinese_simplified ] = "处理图元文件:";
         Text[ chinese_traditional ] = "處理元檔案：";
         Text[ arabic ] = "Processing metafile:";
@@ -101,6 +101,8 @@ ModalDialog DLG_BREAK
         Text[ hebrew ] = "Bearbeitetes Metafile:";
         Text[ hindi ] = "Processing metafile:";
         Text[ slovak ] = "Spracovávam metasúbor:";
+        Text[ hungarian ] = "Metafájl feldolgozása:";
+        Text[ slovenian ] = "Obdelava metadatoteke:";
     };
     FixedText FT_ACT_INFO
     {
@@ -125,7 +127,7 @@ ModalDialog DLG_BREAK
         Text[ dutch ] = "Brokened down metaobjects:";
         Text[ french ] = "M�ta-objets fractionn�s :";
         Text[ finnish ] = "Brokened down metaobjects:";
-        Text[ danish ] = "Brokened down metaobjects:";
+        Text[ danish ] = "Nedbrudte metaobjekter:";
         Text[ chinese_simplified ] = "拆开的图元对象：";
         Text[ chinese_traditional ] = "分開元物件：";
         Text[ arabic ] = "Brokened down metaobjects:";
@@ -134,6 +136,8 @@ ModalDialog DLG_BREAK
         Text[ hebrew ] = "Metaobjekte aufgebrochen:";
         Text[ hindi ] = "Broken down metaobjects:";
         Text[ slovak ] = "Zlomené meta objekty:";
+        Text[ hungarian ] = "Hibás metaobjektumok:";
+        Text[ slovenian ] = "Razdelani metapredmeti:";
     };
     FixedText FT_INS_INFO
     {
@@ -158,7 +162,7 @@ ModalDialog DLG_BREAK
         Text[ dutch ] = "Inserted drawing objects:";
         Text[ french ] = "Objets de dessin ins�r�s :";
         Text[ finnish ] = "Inserted drawing objects:";
-        Text[ danish ] = "Inserted drawing objects:";
+        Text[ danish ] = "Indsatte tegningsobjekter:";
         Text[ chinese_simplified ] = "插入的绘图对象：";
         Text[ chinese_traditional ] = "插入繪圖物件：";
         Text[ arabic ] = "Inserted drawing objects:";
@@ -167,6 +171,8 @@ ModalDialog DLG_BREAK
         Text[ hebrew ] = "Zeichenobjekte eingefügt:";
         Text[ hindi ] = "Inserted drawing objects:";
         Text[ slovak ] = "Vložené kresby:";
+        Text[ hungarian ] = "Beszúrt rajzobjektumok:";
+        Text[ slovenian ] = "Vstavljeni risani predmeti:";
     };
     FixedText FI_OBJ_INFO
     {
@@ -215,7 +221,10 @@ ModalDialog DLG_BREAK
     Text[ hebrew ] = "Aufbrechen";
     Text[ hindi ] = "खण्डन";
     Text[ slovak ] = "Zalomenie";
+    Text[ hungarian ] = "Szétválasztás";
+    Text[ slovenian ] = "Prelomi";
 };
+
 
 
 
