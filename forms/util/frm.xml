@@ -125,6 +125,11 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="final"/>
+        <supported-service>com.sun.star.form.binding.BindableControlModel</supported-service>
+        <supported-service>com.sun.star.form.binding.BindableDataAwareControlModel</supported-service>
+        <supported-service>com.sun.star.form.validation.ValidatableControlModel</supported-service>
+        <supported-service>com.sun.star.form.validation.ValidatableBindableControlModel</supported-service>
+        <supported-service>com.sun.star.form.binding.BindableDatabaseRadioButton</supported-service>
         <supported-service>com.sun.star.form.component.DatabaseRadioButton</supported-service>
         <supported-service>com.sun.star.form.component.RadioButton</supported-service>
         <supported-service>com.sun.star.form.DataAwareControlModel</supported-service>
@@ -140,6 +145,11 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="final"/>
+        <supported-service>com.sun.star.form.binding.BindableControlModel</supported-service>
+        <supported-service>com.sun.star.form.binding.BindableDataAwareControlModel</supported-service>
+        <supported-service>com.sun.star.form.validation.ValidatableControlModel</supported-service>
+        <supported-service>com.sun.star.form.validation.ValidatableBindableControlModel</supported-service>
+        <supported-service>com.sun.star.form.binding.BindableDatabaseCheckBox</supported-service>
         <supported-service>com.sun.star.form.component.DatabaseCheckBox</supported-service>
         <supported-service>com.sun.star.form.component.CheckBox</supported-service>
         <supported-service>com.sun.star.form.DataAwareControlModel</supported-service>
@@ -155,6 +165,11 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="final"/>
+        <supported-service>com.sun.star.form.binding.BindableControlModel</supported-service>
+        <supported-service>com.sun.star.form.binding.BindableDataAwareControlModel</supported-service>
+        <supported-service>com.sun.star.form.validation.ValidatableControlModel</supported-service>
+        <supported-service>com.sun.star.form.validation.ValidatableBindableControlModel</supported-service>
+        <supported-service>com.sun.star.form.binding.BindableDatabaseComboBox</supported-service>
         <supported-service>com.sun.star.form.component.DatabaseComboBox</supported-service>
         <supported-service>com.sun.star.form.component.ComboBox</supported-service>
         <supported-service>com.sun.star.form.DataAwareControlModel</supported-service>
@@ -171,6 +186,11 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="final"/>
+        <supported-service>com.sun.star.form.binding.BindableControlModel</supported-service>
+        <supported-service>com.sun.star.form.binding.BindableDataAwareControlModel</supported-service>
+        <supported-service>com.sun.star.form.validation.ValidatableControlModel</supported-service>
+        <supported-service>com.sun.star.form.validation.ValidatableBindableControlModel</supported-service>
+        <supported-service>com.sun.star.form.binding.BindableDatabaseListBox</supported-service>
         <supported-service>com.sun.star.form.component.DatabaseListBox</supported-service>
         <supported-service>com.sun.star.form.component.ListBox</supported-service>
         <supported-service>com.sun.star.form.DataAwareControlModel</supported-service>
@@ -187,6 +207,11 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="final"/>
+        <supported-service>com.sun.star.form.binding.BindableControlModel</supported-service>
+        <supported-service>com.sun.star.form.binding.BindableDataAwareControlModel</supported-service>
+        <supported-service>com.sun.star.form.validation.ValidatableControlModel</supported-service>
+        <supported-service>com.sun.star.form.validation.ValidatableBindableControlModel</supported-service>
+        <supported-service>com.sun.star.form.binding.BindableDatabaseTextField</supported-service>
         <supported-service>com.sun.star.form.component.DatabaseTextField</supported-service>
         <supported-service>com.sun.star.form.component.TextField</supported-service>
         <supported-service>com.sun.star.form.DataAwareControlModel</supported-service>
@@ -203,6 +228,7 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="final"/>
+        <supported-service>com.sun.star.form.validation.ValidatableControlModel</supported-service>
         <supported-service>com.sun.star.form.component.DatabaseDateField</supported-service>
         <supported-service>com.sun.star.form.component.DateField</supported-service>
         <supported-service>com.sun.star.form.DataAwareControlModel</supported-service>
@@ -218,6 +244,7 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="final"/>
+        <supported-service>com.sun.star.form.validation.ValidatableControlModel</supported-service>
         <supported-service>com.sun.star.form.component.DatabaseTimeField</supported-service>
         <supported-service>com.sun.star.form.component.TimeField</supported-service>
         <supported-service>com.sun.star.form.DataAwareControlModel</supported-service>
@@ -233,6 +260,11 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="final"/>
+        <supported-service>com.sun.star.form.binding.BindableControlModel</supported-service>
+        <supported-service>com.sun.star.form.binding.BindableDataAwareControlModel</supported-service>
+        <supported-service>com.sun.star.form.validation.ValidatableControlModel</supported-service>
+        <supported-service>com.sun.star.form.validation.ValidatableBindableControlModel</supported-service>
+        <supported-service>com.sun.star.form.binding.BindableDatabaseNumericField</supported-service>
         <supported-service>com.sun.star.form.component.DatabaseNumericField</supported-service>
         <supported-service>com.sun.star.form.component.NumericField</supported-service>
         <supported-service>com.sun.star.form.DataAwareControlModel</supported-service>
@@ -248,6 +280,7 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="final"/>
+        <supported-service>com.sun.star.form.validation.ValidatableControlModel</supported-service>
         <supported-service>com.sun.star.form.component.DatabaseCurrencyField</supported-service>
         <supported-service>com.sun.star.form.component.CurrencyField</supported-service>
         <supported-service>com.sun.star.form.DataAwareControlModel</supported-service>
@@ -292,6 +325,11 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="final"/>
+        <supported-service>com.sun.star.form.binding.BindableControlModel</supported-service>
+        <supported-service>com.sun.star.form.binding.BindableDataAwareControlModel</supported-service>
+        <supported-service>com.sun.star.form.validation.ValidatableControlModel</supported-service>
+        <supported-service>com.sun.star.form.validation.ValidatableBindableControlModel</supported-service>
+        <supported-service>com.sun.star.form.binding.BindableDatabaseFormattedField</supported-service>
         <supported-service>com.sun.star.form.component.DatabaseFormattedField</supported-service>
         <supported-service>com.sun.star.form.component.FormattedField</supported-service>
         <supported-service>com.sun.star.form.DataAwareControlModel</supported-service>
