@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connection.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-16 12:41:31 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:08:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,14 +140,15 @@ protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XTablesSupplier >
                             m_xMasterTables; // just to avoid the recreation of the catalog
     OWeakRefArray           m_aStatements;
-    OQueryContainer         m_aQueries;
+    OQueryContainer*        m_pQueries;
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >        m_xQueries;
     OWeakRefArray           m_aComposers;
 
     // the filter as set on the parent data link at construction of the connection
     ::com::sun::star::uno::Sequence< ::rtl::OUString >  m_aTableFilter;
     ::com::sun::star::uno::Sequence< ::rtl::OUString >  m_aTableTypeFilter;
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xORB;
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >          m_xMasterConnection;
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xORB;
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >             m_xMasterConnection;
 
     OTableContainer*            m_pTables;
     OViewContainer*             m_pViews;
@@ -157,10 +158,9 @@ protected:
 protected:
     virtual ~OConnection();
 public:
-    OConnection(
-        ODatabaseSource& _rDB,  const ::utl::OConfigurationNode& _rTablesConfig,const ::utl::OConfigurationTreeRoot& _rCommitLocation,
-                                ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxMaster,
-                                const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB);
+    OConnection(ODatabaseSource& _rDB
+                ,::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxMaster
+                ,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB);
 
 // com::sun::star::lang::XTypeProvider
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException);
@@ -195,9 +195,6 @@ public:
 // ::com::sun::star::sdbc::XWarningsSupplier
     virtual ::com::sun::star::uno::Any SAL_CALL getWarnings(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL clearWarnings(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-    // XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw (::com::sun::star::uno::RuntimeException);
-    static ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
 
 // ::com::sun::star::lang::XServiceInfo
     virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -231,11 +228,6 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstance( const ::rtl::OUString& aServiceSpecifier ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstanceWithArguments( const ::rtl::OUString& ServiceSpecifier, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& Arguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getAvailableServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
-
-    // flush the tables and queries
-    void flushMembers();
-    // set the confignode this happens when the datasource was reinserted
-    void setNewConfigNode(const ::utl::OConfigurationTreeRoot& _aConfigTreeNode);
 
     // IRefreshListener
     virtual void refresh(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rToBeRefreshed);
