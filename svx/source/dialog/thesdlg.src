@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thesdlg.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-28 13:33:53 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 21:38:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,7 @@ ModalDialog RID_SVXDLG_THESAURUS
         Text[ korean ] = "Ã£¾Æ º¸±â(~S)";
         Text[ turkish ] = "A~ra";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Buscar";
     };
     PushButton BTN_LANGUAGE
     {
@@ -150,6 +151,7 @@ ModalDialog RID_SVXDLG_THESAURUS
         Text[ korean ] = "¾ð¾î(~L)...";
         Text[ turkish ] = "D~il...";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Idioma...";
     };
     HelpButton BTN_THES_HELP
     {
@@ -184,6 +186,7 @@ ModalDialog RID_SVXDLG_THESAURUS
         Text[ korean ] = "´Ü¾î(~W)";
         Text[ turkish ] = "~Sözcük";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Palabra";
     };
     ListBox LB_WORD
     {
@@ -219,6 +222,7 @@ ModalDialog RID_SVXDLG_THESAURUS
         Text[ korean ] = "ÀÇ¹Ì (~M)";
         Text[ turkish ] = "~Anlamý ";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Significado  ";
     };
     ListBox LB_MEAN
     {
@@ -255,6 +259,7 @@ ModalDialog RID_SVXDLG_THESAURUS
         Text[ korean ] = "µ¿ÀÇ¾î(~N)";
         Text[ turkish ] = "~Eþanlamlý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Si~nónimo";
     };
     ListBox LB_SYNON
     {
@@ -291,6 +296,7 @@ ModalDialog RID_SVXDLG_THESAURUS
         Text[ korean ] = "´ëÃ¼(~R)";
         Text[ turkish ] = "~Deðiþtir";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Reemplazar";
     };
     Edit ED_REPL
     {
@@ -326,6 +332,7 @@ ModalDialog RID_SVXDLG_THESAURUS
         Text[ korean ] = "º¯Çü";
         Text[ turkish ] = "Varyasyonlar";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Variaciones";
     };
     String STR_ERR_WORDNOTFOUND
     {
@@ -352,6 +359,7 @@ ModalDialog RID_SVXDLG_THESAURUS
         Text[ korean ] = "µ¿ÀÇ¾î »çÀü¿¡ ¾ø´Â ´Ü¾îÀÓ";
         Text[ turkish ] = "Sözcük, sözlükte bulunamadý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Palabra no figura en el dic. de sinónimos";
     };
     Text[ chinese_simplified ] = "´Êµä";
     Text[ russian ] = "Òåçàóðóñ";
@@ -363,6 +371,7 @@ ModalDialog RID_SVXDLG_THESAURUS
     Text[ korean ] = "µ¿ÀÇ¾î »çÀü";
     Text[ turkish ] = "Eþanlamlýlar sözlüðü";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Diccionario de sinónimos";
 };
  // RID_SVXDLG_THES_LANGUAGE ----------------------------------------------
 ModalDialog RID_SVXDLG_THES_LANGUAGE
@@ -417,6 +426,7 @@ ModalDialog RID_SVXDLG_THES_LANGUAGE
         Text[ korean ] = "¼±ÅÃ";
         Text[ turkish ] = "Seçim";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Selección";
     };
     OKButton BTN_LANG_OK
     {
@@ -444,5 +454,6 @@ ModalDialog RID_SVXDLG_THES_LANGUAGE
     Text[ korean ] = "¾ð¾î ¼±ÅÃ";
     Text[ turkish ] = "Dil seçimi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Seleccionar idioma";
 };
  // ********************************************************************** EOF
