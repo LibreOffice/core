@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_ic.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-02 13:40:36 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 14:40:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,11 +88,23 @@
 #endif
 
 #ifndef _SV_SALFRAME_HXX
-#include <salframe.hxx>
+#include <salframe.h>
+#endif
+
+#ifndef _SV_SYSDATA_HXX
+#include <sysdata.hxx>
+#endif
+
+#ifndef _SV_SALDATA_HXX
+#include <saldata.hxx>
 #endif
 
 #ifndef _SV_SALDISP_HXX
 #include <saldisp.hxx>
+#endif
+
+#ifndef _OSL_THREAD_H
+#include <osl/thread.h>
 #endif
 
 using namespace vcl;
@@ -210,7 +222,7 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
     maClientData.aText.pCharStyle     = NULL;
 
     SalI18N_InputMethod *pInputMethod;
-    pInputMethod = pFrame->maFrameData.GetDisplay()->GetInputMethod();
+    pInputMethod = GetSalData()->GetDefDisp()->GetInputMethod();
     mbMultiLingual = pInputMethod->IsMultiLingual();
 
     mnSupportedPreeditStyle =   XIMPreeditCallbacks | XIMPreeditPosition
@@ -218,8 +230,9 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
     if (pInputMethod->UseMethod()
         && SupportInputMethodStyle( pInputMethod->GetSupportedStyles() ) )
     {
-        XLIB_Window  aClientWindow = pFrame->maFrameData.GetShellWindow();
-        XLIB_Window  aFocusWindow  = pFrame->maFrameData.GetWindow();
+        const SystemEnvData* pEnv = pFrame->GetSystemData();
+        XLIB_Window  aClientWindow = pEnv->aShellWindow;
+        XLIB_Window  aFocusWindow  = pEnv->aWindow;
 
         // for status callbacks and commit string callbacks
 #define PREEDIT_BUFSZ 16
@@ -309,7 +322,7 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
             {
                 // spot location
                 SalExtTextInputPosEvent aPosEvent;
-                pFrame->maFrameData.Call(SALEVENT_EXTTEXTINPUTPOS, (void*)&aPosEvent);
+                pFrame->CallCallback(SALEVENT_EXTTEXTINPUTPOS, (void*)&aPosEvent);
 
                 static XPoint aSpot;
                 aSpot.x = aPosEvent.mnX + aPosEvent.mnWidth;
@@ -324,7 +337,7 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
                 // XCreateIC() fails on Redflag Linux 2.0 if there is no
                 // fontset though the data itself is not evaluated nor is
                 // it required according to the X specs.
-                Display* pDisplay = pFrame->maFrameData.GetDisplay()->GetDisplay();
+                Display* pDisplay = GetSalData()->GetDefDisp()->GetDisplay();
                 XFontSet pFontSet = get_font_set(pDisplay);
 
                 if (pFontSet != NULL)
@@ -476,7 +489,7 @@ SalI18N_InputContext::Map( SalFrame *pFrame )
             if ( maContext == NULL )
             {
                 SalI18N_InputMethod *pInputMethod;
-                pInputMethod = pFrame->maFrameData.GetDisplay()->GetInputMethod();
+                pInputMethod = GetSalData()->GetDefDisp()->GetInputMethod();
 
                 maContext = XCreateIC( pInputMethod->GetMethod(),
                                        XNVaNestedList, mpAttributes,
@@ -660,8 +673,8 @@ SalI18N_InputContext::CommitKeyEvent(sal_Unicode* pText, sal_Size nLength)
         aTextEvent.mnDeltaStart  = 0;
         aTextEvent.mbOnlyCursor  = False;
 
-        maClientData.pFrame->maFrameData.Call (SALEVENT_EXTTEXTINPUT,    (void*)&aTextEvent);
-        maClientData.pFrame->maFrameData.Call (SALEVENT_ENDEXTTEXTINPUT, (void*)NULL);
+        maClientData.pFrame->CallCallback(SALEVENT_EXTTEXTINPUT,    (void*)&aTextEvent);
+        maClientData.pFrame->CallCallback(SALEVENT_ENDEXTTEXTINPUT, (void*)NULL);
     }
 #if OSL_DEBUG_LEVEL > 1
     else
@@ -678,7 +691,7 @@ SalI18N_InputContext::UpdateSpotLocation()
         return -1;
 
     SalExtTextInputPosEvent aPosEvent;
-    maClientData.pFrame->maFrameData.Call(SALEVENT_EXTTEXTINPUTPOS, (void*)&aPosEvent);
+    maClientData.pFrame->CallCallback(SALEVENT_EXTTEXTINPUTPOS, (void*)&aPosEvent);
 
     XPoint aSpot;
     aSpot.x = aPosEvent.mnX + aPosEvent.mnWidth;
@@ -710,14 +723,16 @@ SalI18N_InputContext::SetICFocus( SalFrame* pFocusFrame )
         if( mpFocusFrame )
         {
             mpFocusFrame->EndExtTextInput( SAL_FRAME_ENDEXTTEXTINPUT_COMPLETE );
-            mpFocusFrame->maFrameData.getInputContext()->UnsetICFocus( mpFocusFrame );
+            // FIXME: remove cast to X11SalFrame
+            static_cast<X11SalFrame*>(mpFocusFrame)->getInputContext()->UnsetICFocus( mpFocusFrame );
         }
 
         mpFocusFrame = pFocusFrame;
         maClientData.pFrame = pFocusFrame;
 
-        XLIB_Window  aClientWindow= pFocusFrame->maFrameData.GetShellWindow();
-        XLIB_Window  aFocusWindow= pFocusFrame->maFrameData.GetWindow();
+        const SystemEnvData* pEnv   = pFocusFrame->GetSystemData();
+        XLIB_Window  aClientWindow  = pEnv->aShellWindow;
+        XLIB_Window  aFocusWindow   = pEnv->aWindow;
 
         XSetICValues( maContext,
                       XNFocusWindow,       aFocusWindow,
