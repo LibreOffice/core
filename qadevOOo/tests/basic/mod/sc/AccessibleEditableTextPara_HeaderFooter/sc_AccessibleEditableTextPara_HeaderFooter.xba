@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="sc_AccessibleEditableTextPara_HeaderFooter" script:language="StarBasic">
+
+'*************************************************************************
+'*
+'*  $RCSfile: sc_AccessibleEditableTextPara_HeaderFooter.xba,v $ 
+'*
+'*  $Revision: 1.2 $ 
+'*
+'*  last change:$Date: 2003-08-07 15:05:55 $ 
+'*
+'*  The Contents of this file are made available subject to the terms of
+'*  either of the following licenses
+'*
+'*         - GNU Lesser General Public License Version 2.1
+'*         - Sun Industry Standards Source License Version 1.1
+'*
+'*  Sun Microsystems Inc., October, 2000
+'*
+'*  GNU Lesser General Public License Version 2.1
+'*  =============================================
+'*  Copyright 2000 by Sun Microsystems, Inc.
+'*  901 San Antonio Road, Palo Alto, CA 94303, USA
+'*
+'*  This library is free software; you can redistribute it and/or
+'*  modify it under the terms of the GNU Lesser General Public
+'*  License version 2.1, as published by the Free Software Foundation.
+'*
+'*  This library is distributed in the hope that it will be useful,
+'*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+'*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+'*  Lesser General Public License for more details.
+'*
+'*  You should have received a copy of the GNU Lesser General Public
+'*  License along with this library; if not, write to the Free Software
+'*  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+'*  MA  02111-1307  USA
+'*
+'*
+'*  Sun Industry Standards Source License Version 1.1
+'*  =================================================
+'*  The contents of this file are subject to the Sun Industry Standards
+'*  Source License Version 1.1 (the "License"); You may not use this file
+'*  except in compliance with the License. You may obtain a copy of the
+'*  License at http://www.openoffice.org/license.html.
+'*
+'*  Software provided under this License is provided on an "AS IS" basis,
+'*  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+'*  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+'*  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+'*  See the License for the specific provisions governing your rights and
+'*  obligations concerning the Software.
+'*
+'*  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+'*
+'*  Copyright: 2000 by Sun Microsystems, Inc.
+'*
+'*  All Rights Reserved.
+'*
+'*  Contributor(s): _______________________________________
+'*
+'*
+'*************************************************************************
+'*************************************************************************
+
+' Be sure that all variables are dimensioned:
+option explicit
+
+
+' REQUIRED VARIABLES for interface/service tests:
+
+' "com::sun::star::accessibility::XAccessibleEditableText#optional"
+ ' needs the following Global variables:
+global hasChangeableAttrs as boolean
+
+' "com::sun::star::accessibility::XAccessibleSelection#optional"
+ ' needs the following Global variables:
+'	Global multiSelection As Boolean
+
+' "com::sun::star::accessibility::XAccessibleText"
+ ' needs the following Global variables:
+global accText as String
+Global readOnly as Boolean
+
+Global accButton as Object
+
+Sub CreateObj()
+
+'*************************************************************************
+' COMPONENT: 
+' com.sun.star.sc.AccessibleEditableTextPara_HeaderFooter
+'*************************************************************************
+On Error Goto ErrHndl
+    Dim oMSF As Object, oWin As Object
+    Dim thRunner As Object, xRoot As Object
+    Dim tk As Object
+
+    oDoc = utils.createDocument("scalc", cObjectName)
+    oMSF = getProcessServiceManager()
+    thRunner = oMSF.createInstance("basichelper.ThreadRunner")
+    tk = createUNOService("com.sun.star.awt.Toolkit")
+    wait(1000)
+    thRunner.initialize(Array("OpenToolkitDialog",".uno:EditHeaderAndFooter",oDoc))
+    wait(1000)
+    oWin = tk.getActiveTopWindow()
+    xRoot = utils.at_getAccessibleObject(oWin)
+'    utils.at_printAccessibleTree(xRoot)
+    oObj = utils.at_getAccessibleObjectForRole(xRoot, _
+             com.sun.star.accessibility.AccessibleRole.PARAGRAPH,"Paragraph 0")
+    accButton = utils.at_getAccessibleObjectForRole(xRoot, _
+             com.sun.star.accessibility.AccessibleRole.PUSH_BUTTON,"Cancel")             
+    accText = "My AccessibleEditableTextPara_HeaderFooter text"
+    oObj.setText(accText)
+    readOnly = false
+    
+    hasChangeableAttrs = false
+    
+Exit Sub
+ErrHndl:
+    Test.Exception()
+End Sub
+
+Sub fireEvent()
+    Dim myText as String
+    myText = oObj.getText()
+    oObj.setText(myText + "dummy")
+    wait(1000)
+    oObj.setText(myText)
+    wait(1000)
+    accButton.grabFocus()
+End Sub
+
+</script:module>
