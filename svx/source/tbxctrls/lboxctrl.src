@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lboxctrl.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:04:58 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:45:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,16 +104,19 @@ String RID_SVXSTR_NUM_UNDO_ACTIONS
     Text[ italian ] = "Annulla $(ARG1) operazione/i";
     Text[ danish ] = "Fortryd $(ARG1) handling(er)";
     Text[ swedish ] = "�ngra $(ARG1) �tg�rd(er)";
-    Text[ polish ] = "Cofnij $(ARG1) akcj�(e)";
-    Text[ portuguese_brazilian ] = "Undo $(ARG1) action";
+    Text[ polish ] = "Cofnij akcje w liczbie $(ARG1)";
+    Text[ portuguese_brazilian ] = "Desfazer $(ARG1) A��o(�es)";
     Text[ japanese ] = "$(ARG1) アクションを元に戻す";
     Text[ korean ] = "$(ARG1) 작동 실행 취소";
     Text[ chinese_simplified ] = "撤消命令 $(ARG1) 操作";
     Text[ chinese_traditional ] = "復原 $(ARG1) 指令";
-    Text[ turkish ] = "Undo $(ARG1) action";
+    Text[ turkish ] = "$(ARG1) yap�lanlar� geri al";
     Text[ arabic ] = "Undo $(ARG1) action";
     Text[ catalan ] = "Desf�s $(ARG1) acci�/ns";
     Text[ thai ] = "เลิกทำการกระทำ $(ARG1) ";
+    Text[ czech ] = "Vrátit akce $(ARG1)";
+    Text[ hebrew ] = "‮ביטול פעולות $(ARG1)‬";
+    Text[ hindi ] = "$(ARG1) कार्यों को अनावृत्ति करो";
 };
 
 String RID_SVXSTR_NUM_REDO_ACTIONS
@@ -131,17 +134,29 @@ String RID_SVXSTR_NUM_REDO_ACTIONS
     Text[ italian ] = "Ripeti $(ARG1) operazione/i";
     Text[ danish ] = "Gendan $(ARG1) handling(er)";
     Text[ swedish ] = "�terst�ll $(ARG1) �tg�rd(er)";
-    Text[ polish ] = "Odtw�rz $(ARG1) akcj�(e)";
-    Text[ portuguese_brazilian ] = "Redo $(ARG1) action";
+    Text[ polish ] = "Pon�w akcje: $(ARG1)";
+    Text[ portuguese_brazilian ] = "Refazer $(ARG1) A��o(�es)";
     Text[ japanese ] = "$(ARG1) アクションのやり直し";
     Text[ korean ] = "$(ARG1) 작동 다시 실행";
     Text[ chinese_simplified ] = "恢复撤消命令 $(ARG1) 操作";
     Text[ chinese_traditional ] = "恢復撤消 $(ARG1) 指令";
-    Text[ turkish ] = "Redo $(ARG1) action";
+    Text[ turkish ] = "$(ARG1) yap�lanlar� yinele";
     Text[ arabic ] = "Redo $(ARG1) action";
     Text[ catalan ] = "Ref�s $(ARG1) acci�/ns";
     Text[ thai ] = "ทำการกระทำ $(ARG1) ซ้ำ";
+    Text[ czech ] = "Znovu akce $(ARG1)";
+    Text[ hebrew ] = "‮חזרה על פעולות $(ARG1)‬";
+    Text[ hindi ] = "$(ARG1) कार्यों को फिर से करो";
 };
+
+
+
+
+
+
+
+
+
 
 
 
