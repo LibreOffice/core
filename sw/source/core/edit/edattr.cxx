@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edattr.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: fme $ $Date: 2002-04-25 10:17:22 $
+ *  last change: $Author: fme $ $Date: 2002-04-25 14:32:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -516,11 +516,11 @@ BOOL lcl_IsNoEndTxtAttrAtPos( const SwTxtNode& rTNd, xub_StrLen nPos,
 }
 
 
-SwScriptInfo* lcl_GetScriptInfo( const SwTxtNode& rTNd )
+const SwScriptInfo* lcl_GetScriptInfo( const SwTxtNode& rTNd )
 {
     SwClientIter aClientIter( (SwTxtNode&)rTNd );
     SwClient* pLast = aClientIter.GoStart();
-    SwScriptInfo* pScriptInfo = 0;
+    const SwScriptInfo* pScriptInfo = 0;
 
     while( pLast )
     {
@@ -559,7 +559,7 @@ USHORT SwEditShell::GetScriptType( USHORT nFlags ) const
                 if( pTNd )
                 {
                     // try to get SwScriptInfo
-                    SwScriptInfo* pScriptInfo = lcl_GetScriptInfo( *pTNd );
+                    const SwScriptInfo* pScriptInfo = lcl_GetScriptInfo( *pTNd );
 
                     xub_StrLen nPos = pStt->nContent.GetIndex();
                     //Task 90448: we need the scripttype of the previous
@@ -591,7 +591,7 @@ USHORT SwEditShell::GetScriptType( USHORT nFlags ) const
                         const String& rTxt = pTNd->GetTxt();
 
                         // try to get SwScriptInfo
-                        SwScriptInfo* pScriptInfo = lcl_GetScriptInfo( *pTNd );
+                        const SwScriptInfo* pScriptInfo = lcl_GetScriptInfo( *pTNd );
 
                         xub_StrLen nChg = aIdx == pStt->nNode
                                                 ? pStt->nContent.GetIndex()

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: fme $ $Date: 2002-04-25 14:04:20 $
+ *  last change: $Author: fme $ $Date: 2002-04-25 14:31:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -480,7 +480,7 @@ public:
     void VisitPortions( SwPortionHandler& rPH ) const;
 
     // returns the script info stored at the paraportion
-    SwScriptInfo* GetScriptInfo();
+    const SwScriptInfo* GetScriptInfo() const;
 
 #ifdef VERTICAL_LAYOUT
     // Swaps width and height of the text frame

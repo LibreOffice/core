@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawfont.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fme $ $Date: 2002-04-10 07:07:45 $
+ *  last change: $Author: fme $ $Date: 2002-04-25 14:31:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,7 +162,7 @@ public:
 
     // set/get position from which data is invalid
     inline void SetInvalidity( const xub_StrLen nPos );
-    inline xub_StrLen GetInvalidity() { return nInvalidityPos; };
+    inline xub_StrLen GetInvalidity() const { return nInvalidityPos; };
 
     // array operations, nCnt refers to array position
     inline USHORT CountScriptChg() const;
@@ -212,9 +212,9 @@ public:
     @descr  Add some extra space for kashida justification to the
             positions in the kerning array.
     @param  pKernArray
-                The printers kerning array.
+                The printers kerning array. Optional.
     @param  pScrArray
-                The screen kerning array.
+                The screen kerning array. Optional.
     @param  nIdx
                 Start referring to the paragraph.
     @param  nLen
@@ -226,6 +226,28 @@ public:
     USHORT KashidaJustify( long* pKernArray ,long* pScrArray,
                            xub_StrLen nIdx, xub_StrLen nLen,
                            const USHORT nSpace = 0 ) const;
+
+/** Performes a thai justification on the kerning array
+
+    @descr  Add some extra space for thai justification to the
+            positions in the kerning array.
+    @param  rTxt
+                The String
+    @param  pKernArray
+                The printers kerning array. Optional.
+    @param  pScrArray
+                The screen kerning array. Optional.
+    @param  nIdx
+                Start referring to the paragraph.
+    @param  nLen
+                The number of characters to be considered.
+    @param  nSpace
+                The value which has to be added to a kashida opportunity.
+    @return The number of extra spaces in the given range
+*/
+    static USHORT ThaiJustify( const XubString& rTxt, long* pKernArray,
+                               long* pScrArray, xub_StrLen nIdx,
+                               xub_StrLen nLen, const USHORT nSpace = 0 );
 #endif
 };
 
