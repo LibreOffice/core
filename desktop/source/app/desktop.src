@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: cd $ $Date: 2001-12-17 08:59:37 $
+ *  last change: $Author: kz $ $Date: 2001-12-21 21:13:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -490,4 +490,25 @@ String STR_ASK_START_SETUP_MANUALLY
 {
     Text = "Um Ihre Installation zu reparieren starten Sie die Setup-Applikation von CD aus, oder aus dem Verzeichnis in dem sich die Installationspakete befinden." ;
     Text [ ENGLISH ] = "Start setup application to repair the installation from CD, or the folder containing the installation packages. " ;
+    Text[ english_us ] = "Start setup application to repair the installation from CD, or the folder containing the installation packages. ";
+    Text[ portuguese ] = "Start setup application to repair the installation from CD, or the folder containing the installation packages. ";
+    Text[ russian ] = "Start setup application to repair the installation from CD, or the folder containing the installation packages. ";
+    Text[ greek ] = "Start setup application to repair the installation from CD, or the folder containing the installation packages. ";
+    Text[ dutch ] = "Start setup application to repair the installation from CD, or the folder containing the installation packages. ";
+    Text[ french ] = "Pour r�parer l'installation, lancez l'application Setup � partir du CD-ROM ou depuis le r�pertoire contenant le paquetage d'installation.";
+    Text[ spanish ] = "Start setup application to repair the installation from CD, or the folder containing the installation packages. ";
+    Text[ finnish ] = "Start setup application to repair the installation from CD, or the folder containing the installation packages. ";
+    Text[ italian ] = "Start setup application to repair the installation from CD, or the folder containing the installation packages. ";
+    Text[ danish ] = "Start setup application to repair the installation from CD, or the folder containing the installation packages. ";
+    Text[ swedish ] = "Start setup application to repair the installation from CD, or the folder containing the installation packages. ";
+    Text[ polish ] = "Start setup application to repair the installation from CD, or the folder containing the installation packages. ";
+    Text[ portuguese_brazilian ] = "Start setup application to repair the installation from CD, or the folder containing the installation packages. ";
+    Text[ japanese ] = "インストールの修復を行なうには、CD のセットアップアプリケーションから、あるいはインストールセットが格納されているディレクトリから開始します。";
+    Text[ korean ] = "Start setup application to repair the installation from CD, or the folder containing the installation packages. ";
+    Text[ chinese_simplified ] = "要修复您的程序，请您从光盘启动安装程序或从存有安装数据的目录直接启动安装程序。";
+    Text[ chinese_traditional ] = "要修復您的程式，請您從光碟啟動安裝程式或從存有安裝檔案的目錄直接啟動安裝程式。 ";
+    Text[ turkish ] = "Start setup application to repair the installation from CD, or the folder containing the installation packages. ";
+    Text[ arabic ] = "Start setup application to repair the installation from CD, or the folder containing the installation packages. ";
+    Text[ catalan ] = "Start setup application to repair the installation from CD, or the folder containing the installation packages. ";
 };
+
