@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 22:41:15 $
+ *  last change: $Author: kz $ $Date: 2001-07-03 22:27:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -309,7 +309,7 @@ Menu RID_MAIN_MENU
                         Text[ polish ] = "Filtruj...";
                         Text[ portuguese_brazilian ] = "Filter...";
                         Text[ japanese ] = "Ã®Ÿ¿(~F)...";
-                        Text[ korean ] = "« ≈Õ(~F)...";
+                        Text[ korean ] = "« ≈Õ∏µ...";
                         Text[ chinese_simplified ] = "…∏—°...";
                         Text[ chinese_traditional ] = "øzøÔ...";
                         Text[ arabic ] = " ’›Ì…...";
@@ -345,6 +345,7 @@ Menu RID_MAIN_MENU
     ITEM_HELP_MENU
     };
 };
+
 
 
 
