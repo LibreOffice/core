@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoatxt.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dvo $ $Date: 2001-04-25 14:50:24 $
+ *  last change: $Author: mtg $ $Date: 2001-05-03 14:27:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,10 +112,21 @@
 #ifndef _SVTOOLS_UNOEVENT_HXX_
 #include <svtools/unoevent.hxx>
 #endif
-
 class SwTextBlocks;
 class SwGlossaries;
 class SwDoc;
+class SwDocShell;
+class SwXBodyText;
+
+#ifndef SW_DECL_SWDOCSHELL_DEFINED
+#define SW_DECL_SWDOCSHELL_DEFINED
+#ifndef _REF_HXX
+#include <tools/ref.hxx>
+#endif
+SV_DECL_REF( SwDocShell )
+#endif
+
+
 /******************************************************************************
  *
  ******************************************************************************/
@@ -243,6 +254,10 @@ class SwXAutoTextEntry : public cppu::WeakImplHelper5
     SwGlossaries*   pGlossaries;
     String          sGroupName;
     String          sEntryName;
+    SwDocShellRef   xDocSh;
+    SwXBodyText*    pBodyText;
+    sal_Bool        bIsModified;
+    com::sun::star::uno::Reference < com::sun::star::lang::XServiceInfo> xBodyText;
 
 public:
     SwXAutoTextEntry(SwGlossaries* , const String& rGroupName, const String& rEntryName);
