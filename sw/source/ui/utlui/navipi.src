@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 21:41:40 $
+ *  last change: $Author: obo $ $Date: 2000-10-27 18:00:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -291,7 +291,7 @@ Window DLG_NAVIGATION_PI
                 Text [ danish ] = "Trζkmodus" ;
                 Text [ portuguese_brazilian ] = "Dragmodus" ;
                 Text [ portuguese ] = "Modo Arrastar" ;
-                Text[ chinese_simplified ] = "ΝΟ¶―Δ£Κ½";
+                Text[ chinese_simplified ] = "ΝΟÒ·Δ£Κ½";
                 Text[ russian ] = "Πεζθμ οεπεςΰρκθβΰνθÿ";
                 Text[ polish ] = "Tryb przeciΉgania";
                 Text[ japanese ] = "ΔήΧ―ΈήΣ°Δή";
@@ -912,7 +912,7 @@ Window DLG_NAVIGATION_PI
         Text [ danish ] = "Trζkmodus" ;
         Text [ portuguese_brazilian ] = "Dragmodus" ;
         Text [ portuguese ] = "Modo Arrastar" ;
-        Text[ chinese_simplified ] = "ΝΟ¶―Δ£Κ½";
+        Text[ chinese_simplified ] = "ΝΟÒ·Δ£Κ½";
         Text[ russian ] = "Πεζθμ οεπεςΰρκθβΰνθÿ";
         Text[ polish ] = "Tryb przeciΉgania";
         Text[ japanese ] = "ΔήΧ―Έή Σ°Δή";
@@ -942,7 +942,7 @@ Window DLG_NAVIGATION_PI
         Text[ japanese ] = "Κ²Κί°ΨέΈ‚Ζ‚µ‚Δ‘}“ό";
         Text[ chinese_traditional ] = "·ν§@¶W³sµ²΄΅¤J";
         Text[ arabic ] = "ΕΟΡΗΜ ίΗΡΚΘΗΨ ΚΤΪΘν";
-        Text[ greek ] = "Προσθήκη ως υπερ-σύνδεση";
+        Text[ greek ] = "Εισαγωγή ως υπερ-σύνδεση";
         Text[ korean ] = "ΗΟΐΜΖΫΈµΕ©·Ξ »πΐΤ";
         Text[ turkish ] = "Hyperlink olarak ekle";
     };
@@ -966,7 +966,7 @@ Window DLG_NAVIGATION_PI
         Text[ japanese ] = "ΨέΈ‚Ζ‚µ‚Δ‘}“ό";
         Text[ chinese_traditional ] = "·ν§@³sµ²΄΅¤J";
         Text[ arabic ] = "ΕΟΡΗΜ ίΗΡΚΘΗΨ";
-        Text[ greek ] = "Προσθήκη ως σύνδεση";
+        Text[ greek ] = "Εισαγωγή ως σύνδεση";
         Text[ korean ] = "Ώ¬°α·Ξ »πΐΤ";
         Text[ turkish ] = "Baπlantύ olarak ekle";
     };
@@ -990,7 +990,7 @@ Window DLG_NAVIGATION_PI
         Text[ japanese ] = "ΊΛί°‚Ζ‚µ‚Δ‘}“ό";
         Text[ chinese_traditional ] = "·ν§@΄_¥σ΄΅¤J";
         Text[ arabic ] = "ΕΟΡΗΜ ίδΣΞΙ";
-        Text[ greek ] = "Προσθήκη ως αντίγραφο";
+        Text[ greek ] = "Εισαγωγή ως αντίγραφο";
         Text[ korean ] = "ΊΉ»η·Ξ »πΐΤ";
         Text[ turkish ] = "Kopya olarak ekle";
     };
