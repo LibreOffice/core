@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgfield.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-05 07:11:26 $
+ *  last change: $Author: kz $ $Date: 2002-11-27 17:06:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,7 @@ ModalDialog DLG_FIELD_MODIFY
         Text [ french ] = "~fixe" ;
         Text [ dutch ] = "~vast" ;
         Text[ chinese_simplified ] = "е›єе®љ(~F)";
-        Text[ russian ] = "~фикс.";
+        Text[ russian ] = "~Фиксированное";
         Text[ polish ] = "Staіy";
         Text[ japanese ] = "е›єе®љ(~F)";
         Text[ chinese_traditional ] = "е›єе®љ(~F)";
@@ -145,7 +145,7 @@ ModalDialog DLG_FIELD_MODIFY
         Text [ french ] = "~variable" ;
         Text [ dutch ] = "~variabel" ;
         Text[ chinese_simplified ] = "еЏЇеЏ(~V)";
-        Text[ russian ] = "~изменяем.";
+        Text[ russian ] = "~Изменяемое";
         Text[ polish ] = "Zmienny";
         Text[ japanese ] = "и‡Єе‹•ж›ґж–°(~V)";
         Text[ chinese_traditional ] = "еЏЇи®Љ(~V)";
@@ -229,7 +229,7 @@ ModalDialog DLG_FIELD_MODIFY
         Text[ turkish ] = "Format";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "F~ormat";
-        Text[ finnish ] = "~Muotoile";
+        Text[ finnish ] = "Muotoil~e";
         Text[ thai ] = "аёЈаё№~аё›а№Ѓаёљаёљ";
     };
     OKButton BTN_OK
