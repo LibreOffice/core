@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CustomAnimationList.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 19:54:45 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 18:18:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -671,84 +671,92 @@ void stl_append_effect_func::operator()(CustomAnimationEffectPtr pEffect)
 
 void CustomAnimationList::update()
 {
-    // save selection and expand states
-    CustomAnimationEffectPtr pFirstVisibleEffect;
-
-    CustomAnimationListEntry* pEntry = static_cast<CustomAnimationListEntry*>(FirstVisible());
-    if( pEntry )
-        pFirstVisibleEffect = pEntry->getEffect();
+    CustomAnimationListEntry* pEntry = 0;
 
     std::list< CustomAnimationEffectPtr > aExpanded;
     std::list< CustomAnimationEffectPtr > aSelected;
 
-    pEntry = static_cast<CustomAnimationListEntry*>(First());
+    CustomAnimationEffectPtr pFirstVisibleEffect;
 
-    while( pEntry )
+    if( mpMainSequence.get() )
     {
-        CustomAnimationEffectPtr pEffect( pEntry->getEffect() );
-        if( pEffect.get() )
+        // save selection and expand states
+        pEntry = static_cast<CustomAnimationListEntry*>(FirstVisible());
+        if( pEntry )
+            pFirstVisibleEffect = pEntry->getEffect();
+
+        pEntry = static_cast<CustomAnimationListEntry*>(First());
+
+        while( pEntry )
         {
-            if( IsExpanded( pEntry ) )
-                aExpanded.push_back( pEffect );
+            CustomAnimationEffectPtr pEffect( pEntry->getEffect() );
+            if( pEffect.get() )
+            {
+                if( IsExpanded( pEntry ) )
+                    aExpanded.push_back( pEffect );
 
-            if( IsSelected( pEntry ) )
-                aSelected.push_back( pEffect );
+                if( IsSelected( pEntry ) )
+                    aSelected.push_back( pEffect );
+            }
+
+            pEntry = static_cast<CustomAnimationListEntry*>(Next( pEntry ));
         }
-
-        pEntry = static_cast<CustomAnimationListEntry*>(Next( pEntry ));
     }
 
     // rebuild list
     clear();
-    std::for_each( mpMainSequence->getBegin(), mpMainSequence->getEnd(), stl_append_effect_func( *this ) );
-    mpLastParentEntry = 0;
-
-    const InteractiveSequenceList& rISL = mpMainSequence->getInteractiveSequenceList();
-
-    InteractiveSequenceList::const_iterator aIter( rISL.begin() );
-    const InteractiveSequenceList::const_iterator aEnd( rISL.end() );
-    while( aIter != aEnd )
+    if( mpMainSequence.get() )
     {
-        InteractiveSequencePtr pIS( (*aIter++) );
+        std::for_each( mpMainSequence->getBegin(), mpMainSequence->getEnd(), stl_append_effect_func( *this ) );
+        mpLastParentEntry = 0;
 
-        Reference< XShape > xShape( pIS->getTriggerShape() );
-        if( xShape.is() )
+        const InteractiveSequenceList& rISL = mpMainSequence->getInteractiveSequenceList();
+
+        InteractiveSequenceList::const_iterator aIter( rISL.begin() );
+        const InteractiveSequenceList::const_iterator aEnd( rISL.end() );
+        while( aIter != aEnd )
         {
-            SvLBoxEntry* pLBoxEntry = new CustomAnimationListEntry;
-            pLBoxEntry->AddItem( new SvLBoxContextBmp( pLBoxEntry, 0, Image(), Image(), 0));
-            OUString aDescription( SdResId( STR_CUSTOMANIMATION_TRIGGER ) );
-            aDescription += OUString( RTL_CONSTASCII_USTRINGPARAM(": ") );
-            aDescription += getShapeDescription( xShape, false );
-            pLBoxEntry->AddItem( new CustomAnimationTriggerEntryItem( pLBoxEntry, 0, aDescription, this ) );
-            Insert( pLBoxEntry );
-            SvViewData* pViewData = GetViewData( pLBoxEntry );
-            if( pViewData )
-                pViewData->SetSelectable(false);
+            InteractiveSequencePtr pIS( (*aIter++) );
 
-            std::for_each( pIS->getBegin(), pIS->getEnd(), stl_append_effect_func( *this ) );
-            mpLastParentEntry = 0;
-        }
-    }
+            Reference< XShape > xShape( pIS->getTriggerShape() );
+            if( xShape.is() )
+            {
+                SvLBoxEntry* pLBoxEntry = new CustomAnimationListEntry;
+                pLBoxEntry->AddItem( new SvLBoxContextBmp( pLBoxEntry, 0, Image(), Image(), 0));
+                OUString aDescription( SdResId( STR_CUSTOMANIMATION_TRIGGER ) );
+                aDescription += OUString( RTL_CONSTASCII_USTRINGPARAM(": ") );
+                aDescription += getShapeDescription( xShape, false );
+                pLBoxEntry->AddItem( new CustomAnimationTriggerEntryItem( pLBoxEntry, 0, aDescription, this ) );
+                Insert( pLBoxEntry );
+                SvViewData* pViewData = GetViewData( pLBoxEntry );
+                if( pViewData )
+                    pViewData->SetSelectable(false);
 
-    // restore selection and expand states
-    pEntry = static_cast<CustomAnimationListEntry*>(First());
-
-    while( pEntry )
-    {
-        CustomAnimationEffectPtr pEffect( pEntry->getEffect() );
-        if( pEffect.get() )
-        {
-            if( std::find( aExpanded.begin(), aExpanded.end(), pEffect ) != aExpanded.end() )
-                Expand( pEntry );
-
-            if( std::find( aSelected.begin(), aSelected.end(), pEffect ) != aSelected.end() )
-                Select( pEntry );
-
-            if( pFirstVisibleEffect == pEffect )
-                MakeVisible( pEntry );
+                std::for_each( pIS->getBegin(), pIS->getEnd(), stl_append_effect_func( *this ) );
+                mpLastParentEntry = 0;
+            }
         }
 
-        pEntry = static_cast<CustomAnimationListEntry*>(Next( pEntry ));
+        // restore selection and expand states
+        pEntry = static_cast<CustomAnimationListEntry*>(First());
+
+        while( pEntry )
+        {
+            CustomAnimationEffectPtr pEffect( pEntry->getEffect() );
+            if( pEffect.get() )
+            {
+                if( std::find( aExpanded.begin(), aExpanded.end(), pEffect ) != aExpanded.end() )
+                    Expand( pEntry );
+
+                if( std::find( aSelected.begin(), aSelected.end(), pEffect ) != aSelected.end() )
+                    Select( pEntry );
+
+                if( pFirstVisibleEffect == pEffect )
+                    MakeVisible( pEntry );
+            }
+
+            pEntry = static_cast<CustomAnimationListEntry*>(Next( pEntry ));
+        }
     }
 
     Invalidate();
