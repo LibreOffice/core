@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridcell.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-14 12:13:29 $
+ *  last change: $Author: fs $ $Date: 2001-06-11 11:45:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -544,17 +544,31 @@ void DbCellControl::ImplInitSettings(Window* pParent, sal_Bool bFont, sal_Bool b
     if (bFont || bForeground)
     {
         Color aTextColor( pParent->IsControlForeground() ? pParent->GetControlForeground() : pParent->GetTextColor() );
+
+        sal_Bool bTextLineColor = pParent->IsTextLineColor();
+        Color aTextLineColor( pParent->GetTextLineColor() );
+
         if (m_pPainter)
         {
             m_pPainter->SetTextColor(aTextColor);
             if (pParent->IsControlForeground())
                 m_pPainter->SetControlForeground(aTextColor);
+
+            if (bTextLineColor)
+                m_pPainter->SetTextLineColor();
+            else
+                m_pPainter->SetTextLineColor(aTextLineColor);
         }
         if (m_pWindow)
         {
             m_pWindow->SetTextColor(aTextColor);
             if (pParent->IsControlForeground())
                 m_pWindow->SetControlForeground(aTextColor);
+
+            if (bTextLineColor)
+                m_pWindow->SetTextLineColor();
+            else
+                m_pWindow->SetTextLineColor(aTextLineColor);
         }
     }
 
@@ -615,6 +629,24 @@ void DbCellControl::Init(Window* pParent, const ::com::sun::star::uno::Reference
     ImplInitSettings(pParent, sal_True ,sal_True, sal_True);
     if (IsAlignedController() && m_pWindow)
         AlignControl(m_rColumn.GetAlignment());
+}
+
+//------------------------------------------------------------------------------
+void DbCellControl::SetTextLineColor()
+{
+    if (m_pWindow)
+        m_pWindow->SetTextLineColor();
+    if (m_pPainter)
+        m_pPainter->SetTextLineColor();
+}
+
+//------------------------------------------------------------------------------
+void DbCellControl::SetTextLineColor(const Color& _rColor)
+{
+    if (m_pWindow)
+        m_pWindow->SetTextLineColor(_rColor);
+    if (m_pPainter)
+        m_pPainter->SetTextLineColor(_rColor);
 }
 
 //------------------------------------------------------------------------------
@@ -2422,6 +2454,20 @@ FmXGridCell::~FmXGridCell()
     }
 
     DBG_DTOR(FmXGridCell,NULL);
+}
+
+//------------------------------------------------------------------
+void FmXGridCell::SetTextLineColor()
+{
+    if (m_pCellControl)
+        m_pCellControl->SetTextLineColor();
+}
+
+//------------------------------------------------------------------
+void FmXGridCell::SetTextLineColor(const Color& _rColor)
+{
+    if (m_pCellControl)
+        m_pCellControl->SetTextLineColor(_rColor);
 }
 
 // XTypeProvider

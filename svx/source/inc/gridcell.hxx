@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridcell.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-14 12:08:04 $
+ *  last change: $Author: fs $ $Date: 2001-06-11 11:44:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -279,6 +279,9 @@ public:
     virtual ~DbCellControl();
     Window* GetControl() const {return m_pWindow;}
 
+    void SetTextLineColor();
+    void SetTextLineColor(const Color& _rColor);
+
     sal_Bool IsAlignedController() const { return m_bAlignedController; }
     void AlignControl(sal_Int16 nAlignment);
 
@@ -525,6 +528,9 @@ public:
 
     DECLARE_UNO3_AGG_DEFAULTS(FmXGridCell, OComponentHelper);
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& _rType ) throw(::com::sun::star::uno::RuntimeException);
+
+    void SetTextLineColor();
+    void SetTextLineColor(const Color& _rColor);
 
 // XTypeProvider
     virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
