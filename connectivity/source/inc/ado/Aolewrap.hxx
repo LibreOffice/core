@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Aolewrap.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2002-01-18 16:23:14 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:39:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,7 +225,7 @@ namespace connectivity
                 T* pT = NULL;
                 if (FAILED(pInterface->get_Item(OLEVariant(sStr), &pT)))
                 {
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
                     ::rtl::OString sTemp("Unknown Item: ");
                     sTemp += ::rtl::OString(sStr.getStr(),sStr.getLength(),osl_getThreadTextEncoding());
                     OSL_ENSURE(0,sTemp);
