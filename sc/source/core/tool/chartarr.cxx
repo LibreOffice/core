@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chartarr.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: er $ $Date: 2001-05-18 12:09:07 $
+ *  last change: $Author: dr $ $Date: 2001-06-26 13:04:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -752,14 +752,16 @@ SchMemChart* ScChartArray::CreateMemChartSingle()
 
         for (nCol=0; nCol<nColCount; nCol++)
         {
-            String aString;
+            String aString, aColStr;
             if (bColHeaders)
                 pDocument->GetString( pCols[nCol], nStrRow, nTab1, aString );
             if ( !aString.Len() )
             {
                 aString = ScGlobal::GetRscString(STR_COLUMN);
                 aString += ' ';
-                aString += String::CreateFromInt32( pCols[nCol]+1 );
+//                aString += String::CreateFromInt32( pCols[nCol]+1 );
+                ScAddress( pCols[ nCol ], 0, 0 ).Format( aColStr, SCA_VALID_COL, NULL );
+                aString += aColStr;
             }
             pMemChart->SetColText(nCol, aString);
 
@@ -889,7 +891,7 @@ SchMemChart* ScChartArray::CreateMemChartMulti()
         USHORT nPosCol = 0;
         for ( nCol = 0; nCol < nColCount; nCol++ )
         {
-            String aString;
+            String aString, aColStr;
             const ScAddress* pPos = pPositionMap->GetColHeaderPosition( nCol );
             if ( bColHeaders && pPos )
                 pDocument->GetString(
@@ -902,7 +904,9 @@ SchMemChart* ScChartArray::CreateMemChartMulti()
                     nPosCol = pPos->Col() + 1;
                 else
                     nPosCol++;
-                aString += String::CreateFromInt32( nPosCol );
+                ScAddress( nPosCol - 1, 0, 0 ).Format( aColStr, SCA_VALID_COL, NULL );
+//                aString += String::CreateFromInt32( nPosCol );
+                aString += aColStr;
             }
             pMemChart->SetColText(nCol, aString);
 
