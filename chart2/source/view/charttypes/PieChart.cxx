@@ -46,7 +46,7 @@ public:
     double              getInnerRadius( double fCategoryX, bool& bIsVisible ) const;
     double              getOuterRadius( double fCategoryX ) const;
 
-    DataPointGeometry   transformLogicGeom( const DataPointGeometry& rGeom, sal_Int32 nDim  );
+    DataPointGeometry   transformLogicGeom( const DataPointGeometry& rGeom, sal_Int32 nDim  ) const;
 
     sal_Int32           getStartCategoryIndex() const {
                             //first category (index 0) matches with real number 1.0
@@ -140,7 +140,7 @@ uno::Reference< XTransformation > PiePositionHelper::getTransformationLogicToSce
     return m_xTransformationLogicToScene;
 }
 
-DataPointGeometry PiePositionHelper::transformLogicGeom( const DataPointGeometry& rGeom, sal_Int32 nDim  )
+DataPointGeometry PiePositionHelper::transformLogicGeom( const DataPointGeometry& rGeom, sal_Int32 nDim  ) const
 {
     uno::Reference< XTransformation > xTransformation = getTransformationLogicToScene( nDim );
     DataPointGeometry aTransformedGeom( rGeom );
@@ -232,6 +232,51 @@ APPHELPER_XSERVICEINFO_IMPL(PieChart,CHART2_VIEW_PIECHART_SERVICE_IMPLEMENTATION
 }
 */
 
+bool PieChart::isSingleRingChart() const
+{
+    return m_pPosHelper->getEndCategoryIndex()==1 ;
+}
+
+awt::Point PieChart::getLabelScreenPositionAndAlignment( LabelAlignment& rAlignment, bool bOutsidePosition
+        , double fAngleDegree, double fOuterRadius, double fInnerRadius, double fLogicZ) const
+{
+    //outer positions only for pure pie chart(one ring only)
+
+    double fAnglePi = fAngleDegree*F_PI/180.0;
+    double fRadius = 0.0;
+    if( bOutsidePosition )
+    {
+        fRadius = fOuterRadius + 0.1*fOuterRadius;
+        if(fAngleDegree<=22.5)
+            rAlignment = LABEL_ALIGN_RIGHT;
+        else if(fAngleDegree<67.5)
+            rAlignment = LABEL_ALIGN_RIGHT_TOP;
+        else if(fAngleDegree<112.5)
+            rAlignment = LABEL_ALIGN_TOP;
+        else if(fAngleDegree<=157.5)
+            rAlignment = LABEL_ALIGN_LEFT_TOP;
+        else if(fAngleDegree<=202.5)
+            rAlignment = LABEL_ALIGN_LEFT;
+        else if(fAngleDegree<247.5)
+            rAlignment = LABEL_ALIGN_LEFT_BOTTOM;
+        else if(fAngleDegree<292.5)
+            rAlignment = LABEL_ALIGN_BOTTOM;
+        else if(fAngleDegree<337.5)
+            rAlignment = LABEL_ALIGN_RIGHT_BOTTOM;
+        else
+            rAlignment = LABEL_ALIGN_RIGHT;
+    }
+    else
+    {
+        fRadius = fInnerRadius + (fOuterRadius-fInnerRadius)/2.0 ;
+        rAlignment = LABEL_ALIGN_CENTER;
+    }
+    drawing::Position3D aLogicPos(fRadius*cos(fAnglePi),fRadius*sin(fAnglePi),fLogicZ);
+
+    uno::Reference< XTransformation > xTransformation = m_pPosHelper->getTransformationLogicToScene( m_nDimension );
+    drawing::Position3D aScreenPosition3D( SequenceToPosition3D( xTransformation->transform( Position3DToSequence(aLogicPos) ) ) );
+    return awt::Point( aScreenPosition3D.PositionX, aScreenPosition3D.PositionY );
+}
 
 uno::Reference< drawing::XShape > PieChart::createDataPoint2D(
           const uno::Reference< drawing::XShapes >& xTarget
@@ -267,6 +312,14 @@ void PieChart::createShapes()
     DBG_ASSERT(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is(),"PieChart is not proper initialized");
     if(!(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is()))
         return;
+
+    //the text labels should be always on top of the other series shapes
+    //therefore create an own group for the texts to move them to front
+    //(because the text group is created after the series group the texts are displayed on top)
+    uno::Reference< drawing::XShapes > xSeriesTarget(
+        createGroupShape( m_xLogicTarget,rtl::OUString() ));
+    uno::Reference< drawing::XShapes > xTextTarget(
+        createGroupShape( m_xLogicTarget,rtl::OUString() ));
 
     //---------------------------------------------
     //check necessary here that different Y axis can not be stacked in the same group? ... hm?
@@ -323,7 +376,7 @@ void PieChart::createShapes()
             //iterate through all series in this x slot (in this ring)
             for( ; aSeriesIter != aSeriesEnd; aSeriesIter++ )
             {
-                uno::Reference< drawing::XShapes > xSeriesGroupShape_Shapes = getSeriesGroupShape(*aSeriesIter, m_xLogicTarget);
+                uno::Reference< drawing::XShapes > xSeriesGroupShape_Shapes = getSeriesGroupShape(*aSeriesIter, xSeriesTarget);
                 //collect data point information (logic coordinates, style ):
                 double fLogicYValue = fabs((*aSeriesIter)->getY( nCatIndex ));
                 if( ::rtl::math::isNan(fLogicYValue) )
@@ -378,6 +431,12 @@ void PieChart::createShapes()
                             , aTransformedGeom
                             ,(*aSeriesIter)->getPropertiesOfPoint( nCatIndex ));
                     }
+                    //create data point label
+                    LabelAlignment eAlignment(LABEL_ALIGN_CENTER);
+                    awt::Point aScreenPosition2D( this->getLabelScreenPositionAndAlignment(eAlignment, this->isSingleRingChart()
+                        , fStartAngleDegree + fWidthAngleDegree/2.0, fOuterXRadius, fInnerXRadius, fLogicZ ));
+                    this->createDataLabel( xTextTarget, **aSeriesIter, nCatIndex
+                                    , fLogicYValue, fLogicYSum, aScreenPosition2D, eAlignment );
                 }
 
                 //remove PointGroupShape if empty

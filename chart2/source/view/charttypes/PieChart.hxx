@@ -55,6 +55,13 @@ private: //methods
                         , const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::beans::XPropertySet >& xObjectProperties );
 
+    ::com::sun::star::awt::Point PieChart::getLabelScreenPositionAndAlignment(
+                        LabelAlignment& rAlignment, bool bCenteredPosition
+                        , double fAngleDegree, double fOuterRadius, double fInnerRadius
+                        , double fLogicZ) const;
+
+    bool                isSingleRingChart() const;
+
 private: //member
     PiePositionHelper*                m_pPosHelper;
 };
