@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wsfrm.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: ama $ $Date: 2002-06-27 10:51:10 $
+ *  last change: $Author: fme $ $Date: 2002-07-02 09:32:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3010,6 +3010,7 @@ void SwLayoutFrm::ChgLowersProp( const Size& rOldSize )
 
     BOOL bInvaCntnt = TRUE; //Einmal die Seite benachrichtigen.
     SwFrm *pFrm = Lower();
+
     const BOOL bHeightChgd = rOldSize.Height() != Prt().Height();
     const BOOL bWidthChgd  = rOldSize.Width()  != Prt().Width();
 
@@ -3259,6 +3260,29 @@ void SwLayoutFrm::ChgLowersProp( const Size& rOldSize )
         }
         pFrm = pFrm->GetNext();
     }
+
+    // finally adjust the columns if width is set to auto
+
+    const SwFmtCol* pColAttr = NULL;
+
+    if ( ( bVert && bHeightChgd || ! bVert && bWidthChgd ) &&
+           Lower()->IsColumnFrm() )
+    {
+        // get column attribute
+        if ( IsPageBodyFrm() )
+        {
+            ASSERT( GetUpper()->IsPageFrm(), "Upper is not page frame" )
+            pColAttr = &GetUpper()->GetFmt()->GetCol();
+        }
+        else
+        {
+            ASSERT( IsFlyFrm() || IsSctFrm(), "Columns not in fly or section" )
+            pColAttr = &GetFmt()->GetCol();
+        }
+    }
+
+    if ( pColAttr && pColAttr->IsOrtho() && pColAttr->GetNumCols() > 1 )
+        AdjustColumns( pColAttr, sal_False, sal_True );
 }
 
 /*************************************************************************

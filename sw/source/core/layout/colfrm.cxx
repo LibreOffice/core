@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colfrm.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ama $ $Date: 2002-06-27 11:25:03 $
+ *  last change: $Author: fme $ $Date: 2002-07-02 09:32:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -369,7 +369,8 @@ void SwLayoutFrm::ChgColumns( const SwFmtCol &rOld, const SwFmtCol &rNew,
 |*
 |*************************************************************************/
 
-void SwLayoutFrm::AdjustColumns( const SwFmtCol *pAttr, BOOL bAdjustAttributes )
+void SwLayoutFrm::AdjustColumns( const SwFmtCol *pAttr, BOOL bAdjustAttributes,
+                                 BOOL bAutoWidth )
 {
     if( !Lower()->GetNext() )
     {
@@ -412,8 +413,8 @@ void SwLayoutFrm::AdjustColumns( const SwFmtCol *pAttr, BOOL bAdjustAttributes )
         while( pCol->GetNext() )
             pCol = pCol->GetNext();
     long nGutter = 0;
-    BOOL bOrtho = pAttr->IsOrtho() && bAdjustAttributes &&
-                  pAttr->GetNumCols() > 0;
+    BOOL bOrtho = bAutoWidth || ( pAttr->IsOrtho() && bAdjustAttributes &&
+                                  pAttr->GetNumCols() > 0 );
     for ( USHORT i = 0; i < pAttr->GetNumCols();
             pCol = bR2L ? pCol->GetPrev() : pCol->GetNext(), ++i )
     {
@@ -434,7 +435,8 @@ void SwLayoutFrm::AdjustColumns( const SwFmtCol *pAttr, BOOL bAdjustAttributes )
 
             nAvail -= nWidth;
         }
-        if ( bAdjustAttributes )
+
+        if ( bAutoWidth || bAdjustAttributes )
         {
             SwColumn *pC = pAttr->GetColumns()[i];
             SwAttrSet* pSet = pCol->GetAttrSet();
@@ -480,8 +482,13 @@ void SwLayoutFrm::AdjustColumns( const SwFmtCol *pAttr, BOOL bAdjustAttributes )
                 aUL.SetUpper( pC->GetUpper());
                 aUL.SetLower( pC->GetLower());
             }
-            ((SwLayoutFrm*)pCol)->GetFmt()->SetAttr( aLR );
-            ((SwLayoutFrm*)pCol)->GetFmt()->SetAttr( aUL );
+
+            if ( bAdjustAttributes )
+            {
+                ((SwLayoutFrm*)pCol)->GetFmt()->SetAttr( aLR );
+                ((SwLayoutFrm*)pCol)->GetFmt()->SetAttr( aUL );
+            }
+
             nGutter += aLR.GetLeft() + aLR.GetRight();
         }
     }
