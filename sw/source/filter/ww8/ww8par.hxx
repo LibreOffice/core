@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: cmc $ $Date: 2002-04-29 13:56:03 $
+ *  last change: $Author: cmc $ $Date: 2002-05-09 12:32:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,7 +155,6 @@ class Graphic;
 class SwFieldType;
 class SvStorage;
 // alt: class SvStorageRef;
-class SwFlyFrmFmt;
 class SwAttrSet;
 class GDIMetaFile;
 struct ESelection;
@@ -165,6 +164,7 @@ struct WW8PLCFxDesc;
 class SdrAttrObj;
 struct WW8ULSpaceData;
 class _ReadFieldParams;
+class wwZOrderer;
 
 namespace com{namespace sun {namespace star{
     namespace beans{ class XPropertySet;}
@@ -551,7 +551,7 @@ public:
     static INT32 GetEscherLineMatch(MSO_LineStyle eStyle, MSO_SPT eShapeType,
         INT32 &rThick);
     SwMSDffManager( SwWW8ImplReader& rRdr );
-    SwFrmFmt *GetLastOCXShapeFrm() const;
+    SwFrmFmt *GetLastOCXShapeFrm() const;       //I hate this ugly thing
     void DisableFallbackStream();
     void EnableFallbackStream();
 private:
@@ -583,7 +583,6 @@ public:
 class SwWW8ImplReader
 {
 private:
-
 friend class WW8RStyle;
 friend class WW8TabDesc;
 friend class WW8ReaderSave;
@@ -672,9 +671,8 @@ friend class WW8FormulaControl;
     SwDrawFrmFmt *pDrawFmt;     // wie FlyFrmFmt
     SdrModel* pDrawModel;
     SdrPage* pDrawPg;
-    SdrObjList* pDrawGroup;
-    SvShorts* pDrawHeight;      // Welches Objekt ueberdeckt welches ?
     EditEngine* pDrawEditEngine;
+    wwZOrderer *pWWZOrder;
 
     SwFieldType* pNumFldType;   // fuer Nummernkreis
 
@@ -755,7 +753,7 @@ friend class WW8FormulaControl;
 
     BYTE nSwNumLevel;           // LevelNummer fuer Outline / Nummerierung
     BYTE nWwNumType;            // Gliederung / Nummerg / Aufzaehlg
-    BYTE nDrawHeaven, nDrawHell;
+    sal_Int8 nDrawHeaven, nDrawHell;
     BYTE nListLevel;
 
     BYTE nNfcPgn;               // Formatting of PageNum
@@ -945,16 +943,17 @@ friend class WW8FormulaControl;
     void ReplaceObjWithGraphicLink(const SdrObject &rReplaceTextObj,
         const String& rFileName);
 
-    SwFrmFmt* MakeGrafNotInCntnt(const WW8PicDesc& rPD, const Graphic* pGraph,
-        const String& rFileName, const SfxItemSet& rGrfSet);
+    SwFlyFrmFmt* MakeGrafNotInCntnt(const WW8PicDesc& rPD,
+        const Graphic* pGraph, const String& rFileName,
+        const SfxItemSet& rGrfSet);
 
-    SwFrmFmt* MakeGrafInCntnt(const WW8_PIC& rPic, const WW8PicDesc& rPD,
+    SwFlyFrmFmt* MakeGrafInCntnt(const WW8_PIC& rPic, const WW8PicDesc& rPD,
         const Graphic* pGraph, const String& rFileName,
         const SfxItemSet& rGrfSet);
 
     SwFrmFmt *AddAutoAnchor(SwFrmFmt *pFmt);
     void RemoveAutoAnchor(const SwFrmFmt *pFmt);
-    SwFrmFmt* ImportGraf1( WW8_PIC& rPic, SvStream* pSt, ULONG nFilePos );
+    SwFlyFrmFmt* ImportGraf1( WW8_PIC& rPic, SvStream* pSt, ULONG nFilePos );
     SwFrmFmt* ImportGraf(  SdrTextObj* pTextObj = 0, SwFrmFmt* pFlyFmt = 0,
         BOOL bSetToBackground = FALSE );
     BOOL ImportURL(String &sURL,String &sMark,WW8_CP nStart);
@@ -962,8 +961,8 @@ friend class WW8FormulaControl;
     SdrObject* ImportOleBase( Graphic& rGraph, BOOL bTstOCXControls=FALSE,
         const Graphic* pGrf=0, const SfxItemSet* pFlySet=0 );
 
-    SwFrmFmt* ImportOle( const Graphic* = 0, const SfxItemSet* pFlySet = 0 );
-    SwFrmFmt* InsertOle(SdrOle2Obj &rObject, const SfxItemSet &rFlySet);
+    SwFlyFrmFmt* ImportOle( const Graphic* = 0, const SfxItemSet* pFlySet = 0 );
+    SwFlyFrmFmt* InsertOle(SdrOle2Obj &rObject, const SfxItemSet &rFlySet);
 
     BOOL ImportFormulaControl(WW8FormulaControl &rBox,WW8_CP nStart,
         SwWw8ControlType nWhich);
@@ -1006,7 +1005,6 @@ friend class WW8FormulaControl;
 
     BOOL ReadGrafStart( void* pData, short nDataSiz, WW8_DPHEAD* pHd,
                         WW8_DO* pDo );
-    void InsertObj( SdrObject* pObj, short nWwHeight );
     void ReadLine( WW8_DPHEAD* pHd, WW8_DO* pDo );
     void ReadRect( WW8_DPHEAD* pHd, WW8_DO* pDo );
     void ReadElipse( WW8_DPHEAD* pHd, WW8_DO* pDo );
@@ -1044,10 +1042,10 @@ friend class WW8FormulaControl;
     void ProcessEscherAlign( SvxMSDffImportRec* pRecord, WW8_FSPA *pFSPA,
         SfxItemSet &rFlySet, BOOL bOrgObjectWasReplace );
     SwFrmFmt* Read_GrafLayer( long nGrafAnchorCp );
-    SwFrmFmt* ImportReplaceableDrawables( SdrObject* &rpObject,
+    SwFlyFrmFmt* ImportReplaceableDrawables( SdrObject* &rpObject,
         SdrObject* &rpOurNewObject, SvxMSDffImportRec* pRecord, WW8_FSPA *pF,
         SfxItemSet &rFlySet );
-    SwFrmFmt *ConvertDrawTextToFly( SdrObject* &rpObject,
+    SwFlyFrmFmt *ConvertDrawTextToFly( SdrObject* &rpObject,
         SdrObject* &rpOurNewObject, SvxMSDffImportRec* pRecord,
         RndStdIds eAnchor, WW8_FSPA *pF, SfxItemSet &rFlySet );
     void MungeTextIntoDrawBox(SdrObject* pTrueObject,

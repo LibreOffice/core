@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: cmc $ $Date: 2002-04-29 12:11:17 $
+ *  last change: $Author: cmc $ $Date: 2002-05-09 12:32:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2360,11 +2360,10 @@ SwWW8ImplReader::SwWW8ImplReader( BYTE nVersionPara, SvStorage* pStorage,
     pDrawFmt = 0;
     pDrawModel = 0;
     pDrawPg = 0;
-    pDrawGroup = 0;
-    pDrawHeight = 0;
     pFontSrcCharSets = new SvUShorts;
     nDrawTxbx = 0;
     pDrawEditEngine = 0;
+    pWWZOrder = 0;
     pFormImpl = 0;
     nLeftParaMgn = 0;
     nTxtFirstLineOfst = 0;
@@ -2770,40 +2769,22 @@ ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
                 delete[] pCollA;
             }
 
-            if( pDrawPg && pMSDffManager && pMSDffManager->GetShapeOrders() )
+            if (pDrawPg && pMSDffManager && pMSDffManager->GetShapeOrders())
             {
-                // Hilfsarray zum Verketten der (statt SdrTxtObj) eingefuegten Rahmen
+                // Hilfsarray zum Verketten der (statt SdrTxtObj) eingefuegten
+                // Rahmen
                 SvxMSDffShapeTxBxSort aTxBxSort;
 
                 // korrekte Z-Order der eingelesen Escher-Objekte sicherstellen
                 USHORT nShapeCount = pMSDffManager->GetShapeOrders()->Count();
-                USHORT nNewObjNum = 0;
+
                 for (USHORT nShapeNum=0; nShapeNum < nShapeCount; nShapeNum++)
                 {
-                    SvxMSDffShapeOrder& rOrder = *(SvxMSDffShapeOrder*)
-                        (pMSDffManager->GetShapeOrders()->GetObject( nShapeNum ));
-                    /*
-                    #96375#
-                    If we have a pFly we can use that to get the SdrObject
-                    instead of the stored one. This is useful for frames
-                    anchored as paragraphs in header/footers where the
-                    header/footer has been copied. Under that condition
-                    the contact object has become invalid. Working from
-                    the pFly avoid the use of an invalid contact object
-                    */
-                    if( rOrder.pFly )
-                        rOrder.pObj = CreateContactObject( rOrder.pFly );
-                    if( rOrder.pObj )
-                    {
-                        ULONG nOldObjNum = rOrder.pObj->GetOrdNum();
-                        if(    (nOldObjNum != nNewObjNum )
-                            && (pDrawPg->GetObj( nOldObjNum )) )
-                            pDrawPg->NbcSetObjectOrdNum( nOldObjNum, nNewObjNum );
-                        ++nNewObjNum;
-                    }
+                    SvxMSDffShapeOrder *pOrder =
+                        pMSDffManager->GetShapeOrders()->GetObject(nShapeNum);
                     // Pointer in neues Sort-Array einfuegen
-                    if( rOrder.nTxBxComp && rOrder.pFly )
-                        aTxBxSort.Insert( &rOrder );
+                    if (pOrder->nTxBxComp && pOrder->pFly)
+                        aTxBxSort.Insert(pOrder);
                 }
                 // zu verkettende Rahmen jetzt verketten
                 USHORT nTxBxCount = aTxBxSort.Count();
@@ -2812,34 +2793,34 @@ ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
                     SwFmtChain aChain;
                     for (USHORT nTxBxNum=0; nTxBxNum < nTxBxCount; nTxBxNum++)
                     {
-                        SvxMSDffShapeOrder& rOrder =
-                            *(SvxMSDffShapeOrder*)(aTxBxSort.GetObject( nTxBxNum ));
+                        SvxMSDffShapeOrder *pOrder =
+                            aTxBxSort.GetObject(nTxBxNum);
 
                         // Fly-Frame-Formate initialisieren
-                        SwFlyFrmFmt* pFlyFmt     = rOrder.pFly;
+                        SwFlyFrmFmt* pFlyFmt     = pOrder->pFly;
                         SwFlyFrmFmt* pNextFlyFmt = 0;
                         SwFlyFrmFmt* pPrevFlyFmt = 0;
                         // ggfs. Nachfolger ermitteln
                         if( 1+nTxBxNum < nTxBxCount )
                         {
-                            SvxMSDffShapeOrder& rNextOrder =
-                                *(SvxMSDffShapeOrder*)(aTxBxSort.GetObject( nTxBxNum+1 ));
-                            if(       (0xFFFF0000 &     rOrder.nTxBxComp)
-                                   == (0xFFFF0000 & rNextOrder.nTxBxComp)
-                                &&    rOrder.nHdFtSection
-                                   == rNextOrder.nHdFtSection  )
-                                pNextFlyFmt = rNextOrder.pFly;
+                            SvxMSDffShapeOrder *pNextOrder =
+                                aTxBxSort.GetObject(nTxBxNum+1);
+                            if(       (0xFFFF0000 &     pOrder->nTxBxComp)
+                                   == (0xFFFF0000 & pNextOrder->nTxBxComp)
+                                &&    pOrder->nHdFtSection
+                                   == pNextOrder->nHdFtSection  )
+                                pNextFlyFmt = pNextOrder->pFly;
                         }
                         // ggfs. Vorgaenger ermitteln
                         if( nTxBxNum )
                         {
-                            SvxMSDffShapeOrder& rPrevOrder =
-                                *(SvxMSDffShapeOrder*)(aTxBxSort.GetObject( nTxBxNum-1 ));
-                            if(       (0xFFFF0000 &     rOrder.nTxBxComp)
-                                   == (0xFFFF0000 & rPrevOrder.nTxBxComp)
-                                &&    rOrder.nHdFtSection
-                                   == rPrevOrder.nHdFtSection  )
-                                pPrevFlyFmt = rPrevOrder.pFly;
+                            SvxMSDffShapeOrder *pPrevOrder =
+                                aTxBxSort.GetObject(nTxBxNum-1);
+                            if(       (0xFFFF0000 &     pOrder->nTxBxComp)
+                                   == (0xFFFF0000 & pPrevOrder->nTxBxComp)
+                                &&    pOrder->nHdFtSection
+                                   == pPrevOrder->nHdFtSection  )
+                                pPrevFlyFmt = pPrevOrder->pFly;
                         }
                         // Falls Nachfolger oder Vorgaenger vorhanden,
                         // die Verkettung am Fly-Frame-Format eintragen

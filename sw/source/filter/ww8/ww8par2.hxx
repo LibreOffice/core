@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: cmc $ $Date: 2002-04-29 12:46:49 $
+ *  last change: $Author: cmc $ $Date: 2002-05-09 12:32:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,7 @@ struct WW8FlyPara
 
 struct WW8SwFlyPara
 {
-    SwFrmFmt* pFlyFmt;
+    SwFlyFrmFmt* pFlyFmt;
 
                 // 1. Teil: daraus abgeleitete Sw-Attribute
     INT16 nXPos, nYPos;         // Position

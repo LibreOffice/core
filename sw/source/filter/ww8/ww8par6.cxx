@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: cmc $ $Date: 2002-04-29 12:46:49 $
+ *  last change: $Author: cmc $ $Date: 2002-05-09 12:32:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -280,6 +280,10 @@
 #ifndef _WW8PAR2_HXX
 #include "ww8par2.hxx"          // class WW8RStyle, class WwAnchorPara
 #endif
+#ifndef _WW8GRAF_HXX
+#include "ww8graf.hxx"
+#endif
+
 
 static ColorData __FAR_DATA eSwWW8ColA[] = {
         COL_AUTO, COL_BLACK, COL_LIGHTBLUE,
@@ -2914,6 +2918,15 @@ BOOL SwWW8ImplReader::StartApo( const BYTE* pSprm29, BOOL bNowStyleApo,
 
         pSFlyPara->pFlyFmt = rDoc.MakeFlySection( pSFlyPara->eAnchor,
             pPaM->GetPoint(), &aFlySet );
+
+        if (pSFlyPara->pFlyFmt)
+        {
+            if (!pDrawModel)
+                GrafikCtor();
+
+            SdrObject* pOurNewObject = CreateContactObject(pSFlyPara->pFlyFmt);
+            pWWZOrder->InsertTextLayerObject(pOurNewObject);
+        }
 
         if (FLY_IN_CNTNT != pSFlyPara->eAnchor)
             pAnchorStck->AddAnchor(*pPaM->GetPoint(),pSFlyPara->pFlyFmt);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par4.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: cmc $ $Date: 2002-04-29 12:46:49 $
+ *  last change: $Author: cmc $ $Date: 2002-05-09 12:32:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -292,7 +292,7 @@ static BOOL SwWw6ReadMacPICTStream( Graphic& rGraph, SvStorageRef& rSrc1 )
     return SwWW8ImplReader::GetPictGrafFromStream( rGraph, *pStp );
 }
 
-SwFrmFmt* SwWW8ImplReader::InsertOle(SdrOle2Obj &rObject,
+SwFlyFrmFmt* SwWW8ImplReader::InsertOle(SdrOle2Obj &rObject,
     const SfxItemSet &rFlySet)
 {
     if( !pOleMap)
@@ -311,7 +311,7 @@ SwFrmFmt* SwWW8ImplReader::InsertOle(SdrOle2Obj &rObject,
     else if( 0 == pOleMap->Insert( pMap) )
         delete pMap;
 
-    SwFrmFmt *pFmt = rDoc.Insert(*pPaM, pEntry->pWriterRef, &rFlySet);
+    SwFlyFrmFmt *pFmt = rDoc.Insert(*pPaM, pEntry->pWriterRef, &rFlySet);
 
     //JP 10.4.2001: Bug 85614 - don't remove in DTOR the object
     //from  our persist
@@ -321,10 +321,10 @@ SwFrmFmt* SwWW8ImplReader::InsertOle(SdrOle2Obj &rObject,
     return pFmt;
 }
 
-SwFrmFmt* SwWW8ImplReader::ImportOle(const Graphic* pGrf,
+SwFlyFrmFmt* SwWW8ImplReader::ImportOle(const Graphic* pGrf,
     const SfxItemSet* pFlySet)
 {
-    SwFrmFmt* pFmt = 0;
+    SwFlyFrmFmt* pFmt = 0;
     if( !(nIniFlags & WW8FL_NO_OLE ))
     {
         Graphic aGraph;
@@ -372,8 +372,8 @@ SwFrmFmt* SwWW8ImplReader::ImportOle(const Graphic* pGrf,
             }
             else
             {
-                // any OCX Control
-                pFmt = FindFrmFmt( pRet );
+                // any OCX Control, fix this.
+                pFmt = (SwFlyFrmFmt *)(FindFrmFmt( pRet ));
             }
         }
         else if (

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf2.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: cmc $ $Date: 2002-04-29 13:56:03 $
+ *  last change: $Author: cmc $ $Date: 2002-05-09 12:32:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,6 @@
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
 #endif
-
 
 #ifndef _UNOTOOLS_TEMPFILE_HXX
 #include <unotools/tempfile.hxx>
@@ -167,6 +166,119 @@
 #include <tools/fsys.hxx>
 #endif
 
+wwZOrderer::wwZOrderer(SdrPage* pDrawPg,
+    const SvxMSDffShapeOrders *pShapeOrders, sal_Int8 nHeaven, sal_Int8 nHell)
+    : mnInlines(0), mpDrawPg(pDrawPg), mpShapeOrders(pShapeOrders),
+    mnHeaven(nHeaven), mnHell(nHell)
+{
+    mnNoInitialObjects = mpDrawPg->GetObjCount();
+    ASSERT(mpDrawPg,"Missing draw page impossible!");
+}
+
+void wwZOrderer::InsertEscherObject(SdrObject* pObject, ULONG nSpId)
+{
+    USHORT nInsertPos = GetEscherObjectPos(nSpId);
+    mpDrawPg->InsertObject(pObject,nInsertPos + mnNoInitialObjects + mnInlines);
+}
+
+USHORT wwZOrderer::GetEscherObjectPos(ULONG nSpId)
+{
+    /*
+    #97824# EscherObjects have their own ordering which needs to be matched to
+    the actual ordering that should be used when inserting them into the
+    document.
+    */
+
+    USHORT nFound=0;
+    USHORT nShapeCount = mpShapeOrders ? mpShapeOrders->Count() : 0;
+
+    // First, find out what position this shape is in in the Escher order.
+    for (USHORT nShapePos=0; nShapePos < nShapeCount; nShapePos++)
+    {
+        const SvxMSDffShapeOrder *pOrder = mpShapeOrders->GetObject(nShapePos);
+        if (pOrder->nShapeId == nSpId)
+        {
+            nFound=nShapePos;
+            break;
+        }
+    }
+
+    // Match the ordering position from the ShapeOrders to the ordering of all
+    // objects in the document.
+    USHORT nInsertPos, nMax;
+    nInsertPos = nMax = maEscherLayer.Count();
+    for (USHORT i=0; i < nMax; ++i)
+    {
+        if (maEscherLayer.GetObject(i) > nFound)
+        {
+            nInsertPos = i;
+            break;
+        }
+    }
+
+    maEscherLayer.Insert(nFound, nInsertPos);
+
+    return nInsertPos;
+}
+
+// InsertObj() fuegt das Objekt in die Sw-Page ein und merkt sich die Z-Pos in
+// einem VarArr
+void wwZOrderer::InsertDrawingObject(SdrObject* pObj, SwDrawFrmFmt *pDrawFmt,
+    short nWwHeight)
+{
+    /*
+    cmc: Note, This use of pDrawFmt seems odd to me. It works but I'm not
+    altogether happy with it.
+    */
+    if (!maGroupStack.empty())
+    {
+        SdrObjList *pDrawGroup = maGroupStack.top();
+        pDrawGroup->InsertObject(pObj, 0);      // Group: Vorne einfuegen
+    }
+    else
+    {
+        SwDrawContact* pContact = new SwDrawContact(pDrawFmt, pObj);
+        USHORT nPos = GetDrawingObjectPos(nWwHeight);
+        if (nWwHeight & 0x2000)                 // Heaven ?
+            pObj->SetLayer(mnHeaven);
+        else
+        {
+            pObj->SetLayer(mnHell);
+            pDrawFmt->SetAttr(SvxOpaqueItem(RES_OPAQUE, FALSE));
+        }
+        pDrawFmt->SetAttr(SwFmtSurround(SURROUND_THROUGHT));
+
+        mpDrawPg->InsertObject(pObj, nPos + mnNoInitialObjects + mnInlines);
+        maDrawHeight.Insert(nWwHeight, nPos);   // Pflege WW-Height-Array mit
+
+        pObj->NbcSetAnchorPos( Point( USHRT_MAX, USHRT_MAX ) );
+        pContact->ConnectToLayout( &pDrawFmt->GetAnchor() );
+    }
+}
+
+void wwZOrderer::InsertTextLayerObject(SdrObject* pObject)
+{
+    mpDrawPg->InsertObject(pObject, mnNoInitialObjects + mnInlines);
+    ++mnInlines;
+}
+
+// Parallel zu dem Obj-Array im Dokument baue ich ein Array auf,
+// dass die Ww-Height ( -> Wer ueberdeckt wen ) beinhaltet.
+// Anhand dieses VARARR wird die Einfuegeposition ermittelt.
+// Der Offset bei Datei in bestehendes Dokument mit Grafiklayer einfuegen
+// muss der Aufrufer den Index um mnNoInitialObjects erhoeht werden, damit die
+// neuen Objekte am Ende landen ( Einfuegen ist dann schneller )
+USHORT wwZOrderer::GetDrawingObjectPos(short nWwHeight)
+{
+    USHORT nMax = maDrawHeight.Count();
+    // lineare Suche: langsam
+    for (USHORT i=0; i < nMax; i++)
+    {
+        if ( (maDrawHeight.GetObject(i) & 0x1fff) > (nWwHeight & 0x1fff) )
+            return i;           // vor i-tem Objekt einfuegen
+    }
+    return nMax;                // am Ende anhaengen
+}
 
 #ifdef __WW8_NEEDS_COPY
 extern void WW8PicShadowToReal(  WW8_PIC_SHADOW*  pPicS,  WW8_PIC*  pPic );
@@ -391,7 +503,7 @@ void SwWW8ImplReader::ReplaceObjWithGraphicLink(const SdrObject &rReplaceObj,
 
 // MakeGrafNotInCntnt setzt eine nicht-Zeichengebundene Grafik
 // ( bGrafApo == TRUE )
-SwFrmFmt* SwWW8ImplReader::MakeGrafNotInCntnt(const WW8PicDesc& rPD,
+SwFlyFrmFmt* SwWW8ImplReader::MakeGrafNotInCntnt(const WW8PicDesc& rPD,
     const Graphic* pGraph, const String& rFileName, const SfxItemSet& rGrfSet)
 {
 
@@ -426,13 +538,13 @@ SwFrmFmt* SwWW8ImplReader::MakeGrafNotInCntnt(const WW8PicDesc& rPD,
 
 
 // MakeGrafInCntnt fuegt zeichengebundene Grafiken ein
-SwFrmFmt* SwWW8ImplReader::MakeGrafInCntnt(const WW8_PIC& rPic,
+SwFlyFrmFmt* SwWW8ImplReader::MakeGrafInCntnt(const WW8_PIC& rPic,
     const WW8PicDesc& rPD, const Graphic* pGraph, const String& rFileName,
     const SfxItemSet& rGrfSet)
 {
     WW8FlySet aFlySet(*this, pPaM, rPic, rPD.nWidth, rPD.nHeight);
 
-    SwFrmFmt* pFlyFmt = 0;
+    SwFlyFrmFmt* pFlyFmt = 0;
 
     if (!rFileName.Len() && nObjLocFc)      // dann sollte ists ein OLE-Object
         pFlyFmt = ImportOle( pGraph, &aFlySet );
@@ -451,10 +563,10 @@ SwFrmFmt* SwWW8ImplReader::MakeGrafInCntnt(const WW8_PIC& rPic,
     return pFlyFmt;
 }
 
-SwFrmFmt* SwWW8ImplReader::ImportGraf1(WW8_PIC& rPic, SvStream* pSt,
+SwFlyFrmFmt* SwWW8ImplReader::ImportGraf1(WW8_PIC& rPic, SvStream* pSt,
     ULONG nFilePos )
 {
-    SwFrmFmt* pRet = 0;
+    SwFlyFrmFmt* pRet = 0;
     if( pSt->IsEof() || rPic.fError || rPic.MFP.mm == 99 )
         return 0;
 
@@ -634,7 +746,7 @@ BOOL SwWW8ImplReader::ImportURL(String &sURL,String &sMark,WW8_CP nStart)
 SwFrmFmt* SwWW8ImplReader::ImportGraf( SdrTextObj* pTextObj,
     SwFrmFmt* pOldFlyFmt, BOOL bSetToBackground )
 {
-    SwFrmFmt* pRet = 0;
+    SwFlyFrmFmt* pRet = 0;
     if (
         ((pStrm == pDataStream ) && !nPicLocFc) ||
         (nIniFlags & WW8FL_NO_GRAF)
@@ -644,6 +756,9 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf( SdrTextObj* pTextObj,
     }
 
     ::SetProgressState( nProgress, rDoc.GetDocShell() );         // Update
+
+    if (!pDrawModel)    // 1. GrafikObjekt des Docs
+        GrafikCtor();
 
     /*
         kleiner Spass von Microsoft: manchmal existiert ein Stream Namens DATA
@@ -690,8 +805,6 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf( SdrTextObj* pTextObj,
             SdrObject* pObject = 0;
             WW8PicDesc aPD( aPic );
             String aGrName;
-            if( !pDrawModel )
-                GrafikCtor();
             if (!pMSDffManager)
                 pMSDffManager = new SwMSDffManager(*this);
             /*
@@ -765,7 +878,6 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf( SdrTextObj* pTextObj,
                     aGrSet.Put( aCrop );
                 }
 
-                SwFrmFmt* pNewFlyFmt = 0;
                 BOOL bTextObjWasGrouped = FALSE;
 
                 // ggfs. altes AttrSet uebernehmen und
@@ -783,7 +895,7 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf( SdrTextObj* pTextObj,
 
                 String aObjectName(pObject->GetName());
                 if (UINT16(OBJ_OLE2) == pObject->GetObjIdentifier())
-                    pNewFlyFmt = InsertOle(*((SdrOle2Obj*)pObject),aAttrSet);
+                    pRet = InsertOle(*((SdrOle2Obj*)pObject),aAttrSet);
                 else
                 {
                     SdrGrafObj* pGraphObject = 0;
@@ -813,68 +925,49 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf( SdrTextObj* pTextObj,
                                     */
                                     ReplaceObjWithGraphicLink(*pTextObj,
                                         aGrName);
-                                    pNewFlyFmt= 0;
                                 }
                                 else
                                 {
-                                    pNewFlyFmt= rDoc.Insert(*pPaM,
-                                        aGrName, aEmptyStr, 0 /* Graphic */,
-                                        &aAttrSet /* SfxItemSet* Rahmen*/,
-                                        &aGrSet /* SfxItemSet* Grafik*/ );
+                                    pRet = rDoc.Insert(*pPaM, aGrName,
+                                        aEmptyStr, 0, &aAttrSet, &aGrSet);
                                 }
                                 bDone = TRUE;
                             }
                         }
 
-                        if( !bDone )
+                        if (!bDone)
                         {
-                            if( nObjLocFc )  // is it a OLE-Object?
-                                bDone = 0 != ( pNewFlyFmt = ImportOle(
-                                                        &rGraph, &aAttrSet ));
+                            if (nObjLocFc)  // is it a OLE-Object?
+                                pRet = ImportOle(&rGraph, &aAttrSet);
 
-                            if( !bDone )
-                                pNewFlyFmt= rDoc.Insert(*pPaM, aEmptyStr,
-                                    aEmptyStr, &rGraph, &aAttrSet, &aGrSet );
+                            if (!pRet)
+                            {
+                                pRet = rDoc.Insert(*pPaM, aEmptyStr, aEmptyStr,
+                                    &rGraph, &aAttrSet, &aGrSet );
+                            }
                         }
-
                     }
                 }
                 // also nur, wenn wir ein *Insert* gemacht haben
-                if( pNewFlyFmt )
+                if (pRet)
                 {
-                    pRet = pNewFlyFmt;
                     if (pRecord)
                         SetAttributesAtGrfNode(pRecord,pRet,0);
                     // mehrfaches Auftreten gleicher Grafik-Namen vermeiden
-                    aGrfNameGenerator.SetUniqueGraphName(pNewFlyFmt,aObjectName);
+                    aGrfNameGenerator.SetUniqueGraphName(pRet,aObjectName);
 
-                    // Zeiger auf neues Objekt ermitteln und
-                    // Z-Order-Liste entsprechend korrigieren
-                    // (oder Eintrag loeschen)
-                    SdrObject* pOurNewObject = pNewFlyFmt->FindSdrObject();
-                    if( !pOurNewObject )
-                    {
-                        if( !pDrawModel )   // 1. GrafikObjekt des Docs
-                            GrafikCtor();
-
-                        SwFlyDrawContact* pContactObject
-                            = new SwFlyDrawContact( (SwFlyFrmFmt*)pNewFlyFmt,
-                                                    pDrawModel );
-                        pOurNewObject = pContactObject->GetMaster();
-                    }
-                    if( pOurNewObject )
+                    // Zeiger auf neues Objekt ermitteln und Z-Order-Liste
+                    // entsprechend korrigieren (oder Eintrag loeschen)
+                    SdrObject* pOurNewObject = CreateContactObject(pRet);
+                    if (pOurNewObject)
                     {
                         pMSDffManager->ExchangeInShapeOrder( pObject, 0, 0,
                             pOurNewObject );
 
-                        // Das Kontakt-Objekt MUSS in die Draw-Page gesetzt
-                        // werden, damit in SwWW8ImplReader::LoadDoc1() die
-                        // Z-Order festgelegt werden kann !!!
-                        pDrawPg->InsertObject( pOurNewObject );
-
                         // altes SdrGrafObj aus der Page loeschen und
                         // zerstoeren
-                        pDrawPg->RemoveObject( pObject->GetOrdNum() );
+                        if (pObject->GetPage())
+                            pDrawPg->RemoveObject(pObject->GetOrdNum());
                         delete pObject;
                     }
                     else
@@ -883,9 +976,8 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf( SdrTextObj* pTextObj,
                 else
                     pMSDffManager->RemoveFromShapeOrder( pObject );
 
-                // auch das ggfs.
-                // Page loeschen, falls nicht gruppiert,
-                if( pTextObj && !bTextObjWasGrouped )
+                // auch das ggfs.  Page loeschen, falls nicht gruppiert,
+                if (pTextObj && !bTextObjWasGrouped && pTextObj->GetPage())
                     pDrawPg->RemoveObject( pTextObj->GetOrdNum() );
             }
         pMSDffManager->EnableFallbackStream();
@@ -894,6 +986,12 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf( SdrTextObj* pTextObj,
             pRet = ImportGraf1( aPic, pDataStream, nPicLocFc );
     }
     pDataStream->Seek( nOldPos );
+
+    if (pRet)
+    {
+        SdrObject* pOurNewObject = CreateContactObject(pRet);
+        pWWZOrder->InsertTextLayerObject(pOurNewObject);
+    }
 
     return AddAutoAnchor(pRet);
 }
