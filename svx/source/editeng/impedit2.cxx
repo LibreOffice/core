@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: mt $ $Date: 2002-08-26 17:20:18 $
+ *  last change: $Author: mt $ $Date: 2002-08-28 11:36:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1319,11 +1319,32 @@ void ImpEditEngine::InitScriptTypes( USHORT nPara )
             rTypes[rTypes.Count()-1].nEndPos = (USHORT)nPos;
 
             nScriptType = xBI->getScriptType( aOUText, nPos );
-            if ( nScriptType == i18n::ScriptType::WEAK )
-                nScriptType = rTypes[rTypes.Count()-1].nScriptType;
+            long nEndPos = xBI->endOfScript( aOUText, nPos, nScriptType );
 
-            rTypes.Insert( ScriptTypePosInfo( nScriptType, (USHORT)nPos, nTextLen ), rTypes.Count() );
-            nPos = xBI->endOfScript( aOUText, nPos, nScriptType );
+            // #96850# Handle blanks as weak, remove if BreakIterator returns WEAK for spaces.
+            if ( ( nScriptType == i18n::ScriptType::LATIN ) && ( aOUText.getStr()[ nPos ] == 0x20 ) )
+            {
+                BOOL bOnlySpaces = TRUE;
+                for ( USHORT n = nPos+1; ( n < nEndPos ) && bOnlySpaces; n++ )
+                {
+                    if ( aOUText.getStr()[ n ] != 0x20 )
+                        bOnlySpaces = FALSE;
+                }
+                if ( bOnlySpaces )
+                    nScriptType = i18n::ScriptType::WEAK;
+            }
+
+            if ( ( nScriptType == i18n::ScriptType::WEAK ) || ( nScriptType == rTypes[rTypes.Count()-1].nScriptType ) )
+            {
+                // Expand last ScriptTypePosInfo, don't create weak or unecessary portions
+                rTypes[rTypes.Count()-1].nEndPos = (USHORT)nEndPos;
+            }
+            else
+            {
+                rTypes.Insert( ScriptTypePosInfo( nScriptType, (USHORT)nPos, nTextLen ), rTypes.Count() );
+            }
+
+            nPos = nEndPos;
         }
 
         if ( rTypes[0].nScriptType == i18n::ScriptType::WEAK )
