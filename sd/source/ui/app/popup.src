@@ -2,9 +2,9 @@
  *
  *  $RCSfile: popup.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 20:40:32 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 06:29:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -277,7 +277,7 @@ Menu RID_LAYERTAB_POPUP
             Text [ spanish ] = "~Insertar capa..." ;
             Text [ danish ] = "Indsжt niveau..." ;
             Text [ swedish ] = "~Infoga nivе..." ;
-            Text [ finnish ] = "~Insert layer..." ;
+            Text [ finnish ] = "~Lisдд kerros" ;
             Text [ english_us ] = "Insert La~yer..." ;
             Text[ chinese_simplified ] = "ІеИл·ЦІг(~Y)...";
                     Text[ russian ] = "Вставить слой...";
@@ -307,7 +307,7 @@ Menu RID_LAYERTAB_POPUP
             Text [ spanish ] = "~Modificar capa..." ;
             Text [ danish ] = "Rediger niveau..." ;
             Text [ swedish ] = "~Дndra nivе..." ;
-            Text [ finnish ] = "~Modify layer..." ;
+            Text [ finnish ] = "~Muokkaa kerrosta" ;
             Text [ english_us ] = "Modify La~yer..." ;
             Text[ chinese_simplified ] = "РЮёД·ЦІг(~Y)...";
                     Text[ russian ] = "Изменить слой...";
@@ -337,7 +337,7 @@ Menu RID_LAYERTAB_POPUP
             Text [ spanish ] = "~Eliminar capa..." ;
             Text [ danish ] = "Slet niveau..." ;
             Text [ swedish ] = "Radera ~nivе..." ;
-            Text [ finnish ] = "~Delete layer..." ;
+            Text [ finnish ] = "~Poista kerros" ;
             Text [ english_us ] = "Delete ~Layer..." ;
             Text[ chinese_simplified ] = "Йѕіэ·ЦІг(~L)...";
                     Text[ russian ] = "Удалить слой...";
