@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrtxt.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fme $ $Date: 2002-01-31 14:29:52 $
+ *  last change: $Author: fme $ $Date: 2002-02-01 08:08:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,11 @@ void SwTxtIter::CtorInit( SwTxtFrm *pNewFrm, SwTxtInfo *pNewInf )
     pFrm = pNewFrm;
     pInf = pNewInf;
     aLineInf.CtorInit( pNode->GetSwAttrSet() );
+#ifdef VERTICAL_LAYOUT
+    nFrameStart = pFrm->Frm().Pos().Y() + pFrm->Prt().Pos().Y();
+#else
     aTopLeft = pFrm->Frm().Pos() + pFrm->Prt().Pos();
+#endif
     SwTxtIter::Init();
     if( pNode->GetSwAttrSet().GetRegister().GetValue() )
         bRegisterOn = pFrm->FillRegister( nRegStart, nRegDiff );
@@ -137,7 +141,11 @@ void SwTxtIter::Init()
 {
     pCurr = pInf->GetParaPortion();
     nStart = pInf->GetTxtStart();
+#ifdef VERTICAL_LAYOUT
+    nY = nFrameStart;
+#else
     nY = aTopLeft.Y();
+#endif
     bPrev = sal_True;
     pPrev = 0;
     nLineNr = 1;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmform.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: ama $ $Date: 2001-12-13 16:01:13 $
+ *  last change: $Author: fme $ $Date: 2002-02-01 08:09:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1382,8 +1382,13 @@ sal_Bool SwTxtFrm::FormatLine( SwTxtFormatter &rLine, const sal_Bool bPrev )
 
     const xub_StrLen nNewStart = rLine.FormatLine( rLine.GetStart() );
 
+#ifdef VERTICAL_LAYOUT
+    ASSERT( Frm().Pos().Y() + Prt().Pos().Y() == rLine.GetFirstPos(),
+            "SwTxtFrm::FormatLine: frame leaves orbit." );
+#else
     ASSERT( Frm().Pos() + Prt().Pos() == rLine.GetFirstPos(),
             "SwTxtFrm::FormatLine: frame leaves orbit." );
+#endif
     ASSERT( rLine.GetCurr()->Height(),
             "SwTxtFrm::FormatLine: line height is zero" );
 
@@ -2353,33 +2358,19 @@ sal_Bool SwTxtFrm::FormatQuick()
         return sal_False;
 
 #ifdef VERTICAL_LAYOUT
-    SWAP_IF_NOT_SWAPPED( this )
+    SwFrmSwapper aSwapper( this, sal_True );
 #endif
 
     SwTxtFrmLocker aLock(this);
     SwTxtFormatInfo aInf( this, sal_False, sal_True );
     if( 0 != aInf.MaxHyph() )   // 27483: MaxHyphen beachten!
-#ifdef VERTICAL_LAYOUT
-    {
-        UNDO_SWAP( this )
         return sal_False;
-    }
-#else
-        return sal_False;
-#endif
 
     SwTxtFormatter  aLine( this, &aInf );
 
     // DropCaps sind zu kompliziert...
     if( aLine.GetDropFmt() )
-#ifdef VERTICAL_LAYOUT
-    {
-        UNDO_SWAP( this )
         return sal_False;
-    }
-#else
-        return sal_False;
-#endif
 
     xub_StrLen nStart = GetOfst();
     const xub_StrLen nEnd = GetFollow()
@@ -2404,21 +2395,11 @@ sal_Bool SwTxtFrm::FormatQuick()
 #endif
         xub_StrLen nStrt = GetOfst();
         _InvalidateRange( SwCharRange( nStrt, nEnd - nStrt) );
-#ifdef VERTICAL_LAYOUT
-        UNDO_SWAP( this )
-#endif
         return sal_False;
     }
 
     if( pFollow && nStart != ((SwTxtFrm*)pFollow)->GetOfst() )
-#ifdef VERTICAL_LAYOUT
-    {
-        UNDO_SWAP( this )
         return sal_False; // kann z.B. durch Orphans auftreten (35083,35081)
-    }
-#else
-        return sal_False; // kann z.B. durch Orphans auftreten (35083,35081)
-#endif
 
     // Geschafft, wir sind durch ...
 
@@ -2430,9 +2411,6 @@ sal_Bool SwTxtFrm::FormatQuick()
     *(pPara->GetReformat()) = SwCharRange();
     *(pPara->GetDelta()) = 0;
 
-#ifdef VERTICAL_LAYOUT
-    UNDO_SWAP( this )
-#endif
     return sal_True;
 }
 

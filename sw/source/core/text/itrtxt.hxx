@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrtxt.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fme $ $Date: 2002-01-24 13:37:05 $
+ *  last change: $Author: fme $ $Date: 2002-02-01 08:08:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,11 +79,16 @@ class SwTxtIter : public SwAttrIter
 {
 protected:
     SwLineInfo aLineInf;
+#ifndef VERTICAL_LAYOUT
     Point aTopLeft;         // erste Ausgabeposition
+#endif
     SwTxtFrm  *pFrm;
     SwTxtInfo *pInf;
     SwLineLayout *pCurr;
     SwLineLayout *pPrev;
+#ifdef VERTICAL_LAYOUT
+    SwTwips nFrameStart;
+#endif
     SwTwips nY;
     SwTwips nRegStart;          // Anfangsposition (Y) des Registers
     xub_StrLen nStart;          // Start im Textstring, Ende = pCurr->GetLen()
@@ -156,7 +161,11 @@ public:
         { return pCurr == pInf->GetParaPortion(); }
 
     const SwLineInfo &GetLineInfo() const { return aLineInf; }
+#ifdef VERTICAL_LAYOUT
+    inline SwTwips GetFirstPos() const { return nFrameStart; }
+#else
     inline const Point &GetFirstPos() const { return aTopLeft; }
+#endif
 
     inline sal_Bool SeekAndChg( SwTxtSizeInfo &rInf );
     inline sal_Bool SeekAndChgBefore( SwTxtSizeInfo &rInf );
