@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpurl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: abi $ $Date: 2002-10-15 13:04:04 $
+ *  last change: $Author: abi $ $Date: 2002-10-17 16:28:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -363,6 +363,12 @@ rtl::OUString FTPURL::parent() const
 }
 
 
+void FTPURL::child(const rtl::OUString& title)
+{
+    m_aPathSegmentVec.push_back(title);
+}
+
+
 /** Listing of a directory.
  */
 
@@ -628,7 +634,12 @@ FTPDirentry FTPURL::direntry() const
     FTPDirentry aDirentry;
 
     aDirentry.m_aName = nettitle;                 // init aDirentry
-    aDirentry.m_nMode = INETCOREFTP_FILEMODE_ISDIR;
+    if(nettitle.equalsAscii("/") ||
+       nettitle.equalsAscii(".."))
+        aDirentry.m_nMode = INETCOREFTP_FILEMODE_ISDIR;
+    else
+        aDirentry.m_nMode = INETCOREFTP_FILEMODE_UNKNOWN;
+
     aDirentry.m_nSize = 0;
 
     if(!nettitle.equalsAscii("/")) {
@@ -650,25 +661,38 @@ FTPDirentry FTPURL::direntry() const
 
 extern "C" {
 
-    size_t memory_read(void *ptr,size_t size,size_t nmemb, void  *stream)
+    size_t memory_read(void *ptr,size_t size,size_t nmemb,void *stream)
     {
-        return 0;
+        sal_Int32 nRequested = sal_Int32(size*nmemb);
+        CurlInput *curlInput = static_cast<CurlInput*>(stream);
+        if(curlInput)
+            return size_t(curlInput->read(((sal_Int8*)ptr),nRequested));
+        else
+            return 0;
     }
 
 }
 
 
-void FTPURL::insert(bool replaceExisting) const
+void FTPURL::insert(bool replaceExisting,void* stream) const
     throw(curl_exception)
 {
     CURL *curl = m_pFCP->handle();
 
     SET_CONTROL_CONTAINER;
-    curl_easy_setopt(curl,CURLOPT_NOBODY,TRUE);       // no data => no transfer
+    curl_easy_setopt(curl,CURLOPT_NOBODY,FALSE);    // no data => no transfer
+    curl_easy_setopt(curl,CURLOPT_POSTQUOTE,0);
+    curl_easy_setopt(curl,CURLOPT_QUOTE,0);
+    curl_easy_setopt(curl,CURLOPT_READFUNCTION,memory_read);
+    curl_easy_setopt(curl,CURLOPT_READDATA,stream);
+    curl_easy_setopt(curl, CURLOPT_UPLOAD,1);
 
     rtl::OUString url(ident(false,true));
     SET_URL(url);
-    curl_easy_setopt(curl,CURLOPT_POSTQUOTE,0);
 
-    CURLcode err;
+    CURLcode err = curl_easy_perform(curl);
+    curl_easy_setopt(curl, CURLOPT_UPLOAD,FALSE);
+
+    if(err != CURLE_OK)
+        throw curl_exception(err);
 }

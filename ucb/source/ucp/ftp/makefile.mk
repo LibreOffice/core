@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: abi $ $Date: 2002-10-15 09:21:18 $
+#   last change: $Author: abi $ $Date: 2002-10-17 16:28:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -129,59 +129,5 @@ DEF1NAME=$(SHL1TARGET)
 DEF1EXPORTFILE=	$(TARGET).dxp
 DEF1DES=UCB Ftp Content Provider
 
-# --- Targets ----------------------------------------------------------
-
-APP1TARGET=ftptest
-APP1OBJS=\
-    $(OBJ)$/test.obj \
-    $(OBJ)$/test_activedatasink.obj \
-    $(OBJ)$/test_ftpurl.obj \
-    $(OBJ)$/test_multiservicefac.obj \
-    $(OBJ)$/ftpservices.obj  \
-    $(OBJ)$/ftpcontentprovider.obj  \
-    $(OBJ)$/ftpcontent.obj   \
-    $(OBJ)$/ftpcontentidentifier.obj   \
-    $(OBJ)$/ftpcontentcaps.obj \
-    $(OBJ)$/ftpdynresultset.obj  \
-    $(OBJ)$/ftpresultsetbase.obj \
-    $(OBJ)$/ftpresultsetI.obj \
-    $(OBJ)$/ftploaderthread.obj  \
-    $(OBJ)$/ftpinpstr.obj	\
-    $(OBJ)$/ftpdirp.obj     \
-    $(OBJ)$/ftpcfunc.obj     \
-    $(OBJ)$/ftpurl.obj     \
-    $(OBJ)$/debughelper.obj
-
-
-.IF "$(COMPHELPERLIB)"==""
-.IF "$(GUI)" == "UNX"
-COMPHELPERLIB=-licomphelp2
-.ENDIF # unx
-.IF "$(GUI)"=="WNT"
-COMPHELPERLIB=icomphelp2.lib
-.ENDIF # wnt
-.ENDIF
-
-APP1STDLIBS=\
-    $(CPPULIB) \
-    $(CPPUHELPERLIB) \
-    $(SALLIB) \
-    $(VOSLIB) \
-    $(COMPHELPERLIB) \
-    $(UCBHELPERLIB) \
-    $(CURLLIB)
 
 .INCLUDE: target.mk
-
-
-
-
-
-
-
-
-
-
-
-
-

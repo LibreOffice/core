@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpcontent.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2002-10-17 09:03:31 $
+ *  last change: $Author: abi $ $Date: 2002-10-17 16:28:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,7 @@
 #include <vos/ref.hxx>
 #include <ucbhelper/contenthelper.hxx>
 #include <com/sun/star/ucb/InsertCommandArgument.hpp>
+#include <com/sun/star/ucb/XContentCreator.hpp>
 #include "ftpurl.hxx"
 
 
@@ -106,7 +107,8 @@ namespace ftp
 //=========================================================================
 
     class FTPContent
-        : public ::ucb::ContentImplHelper
+        : public ::ucb::ContentImplHelper,
+          public com::sun::star::ucb::XContentCreator
     {
     public:
 
@@ -115,6 +117,13 @@ namespace ftp
                     FTPContentProvider* pProvider,
                     const ::com::sun::star::uno::Reference<
                     ::com::sun::star::ucb::XContentIdentifier >& Identifier);
+
+        FTPContent( const ::com::sun::star::uno::Reference<
+                    ::com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
+                    FTPContentProvider* pProvider,
+                    const ::com::sun::star::uno::Reference<
+                    ::com::sun::star::ucb::XContentIdentifier >& Identifier,
+                    const com::sun::star::ucb::ContentInfo& aInfo);
 
 
         virtual ~FTPContent();
@@ -147,6 +156,16 @@ namespace ftp
         abort(sal_Int32 CommandId)
             throw( com::sun::star::uno::RuntimeException);
 
+        // XContentCreator
+        virtual com::sun::star::uno::Sequence<
+        com::sun::star::ucb::ContentInfo > SAL_CALL
+        queryCreatableContentsInfo(  )
+            throw (com::sun::star::uno::RuntimeException);
+
+        virtual com::sun::star::uno::Reference<
+        com::sun::star::ucb::XContent > SAL_CALL
+        createNewContent( const com::sun::star::ucb::ContentInfo& Info )
+            throw (com::sun::star::uno::RuntimeException);
 
         // XChild
 
@@ -166,6 +185,9 @@ namespace ftp
 
         FTPContentProvider *m_pFCP;
         FTPURL              m_aFTPURL;
+        bool                m_bInserted;
+        bool                m_bTitleSet;
+        com::sun::star::ucb::ContentInfo m_aInfo;
 
         virtual com::sun::star::uno::Sequence< com::sun::star::beans::Property >
         getProperties( const com::sun::star::uno::Reference<

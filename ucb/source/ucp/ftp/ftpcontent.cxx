@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpcontent.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: abi $ $Date: 2002-10-15 16:19:28 $
+ *  last change: $Author: abi $ $Date: 2002-10-17 16:28:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,6 @@
 
  *************************************************************************/
 
-#include <memory>
-#include <vector>
 #include "ftpdynresultset.hxx"
 #include "ftpresultsetfactory.hxx"
 #include "ftpresultsetI.hxx"
@@ -79,6 +77,9 @@
 #include "ftpcfunc.hxx"
 #include "ftpstrcont.hxx"
 
+#include <memory>
+#include <vector>
+#include <rtl/memory.h>
 #include <curl/curl.h>
 #include <curl/easy.h>
 #include <ucbhelper/cancelcommandexecution.hxx>
@@ -87,10 +88,12 @@
 #include <ucbhelper/cancelcommandexecution.hxx>
 #include <ucbhelper/simpleauthenticationrequest.hxx>
 #include <com/sun/star/lang/IllegalAccessException.hpp>
+#include <com/sun/star/ucb/ContentInfoAttribute.hpp>
 #include <com/sun/star/beans/UnknownPropertyException.hpp>
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/ucb/XCommandInfo.hpp>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/io/XActiveDataSink.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XActiveDataStreamer.hpp>
@@ -128,9 +131,28 @@ FTPContent::FTPContent( const Reference< XMultiServiceFactory >& rxSMgr,
     : ContentImplHelper(rxSMgr,pProvider,Identifier),
       m_pFCP(pProvider),
       m_aFTPURL(Identifier->getContentIdentifier(),
-                pProvider)
+                pProvider),
+      m_bInserted(false),
+      m_bTitleSet(false)
 {
 }
+
+
+FTPContent::FTPContent( const Reference< XMultiServiceFactory >& rxSMgr,
+                        FTPContentProvider* pProvider,
+                        const Reference< XContentIdentifier >& Identifier,
+                        const ContentInfo& Info)
+    : ContentImplHelper(rxSMgr,pProvider,Identifier),
+      m_pFCP(pProvider),
+      m_aFTPURL(Identifier->getContentIdentifier(),
+                pProvider),
+      m_bInserted(true),
+      m_bTitleSet(false),
+      m_aInfo(Info)
+{
+}
+
+
 
 //=========================================================================
 
@@ -145,11 +167,12 @@ FTPContent::~FTPContent()
 //
 //=========================================================================
 
-XINTERFACE_IMPL_5( FTPContent,
+XINTERFACE_IMPL_6( FTPContent,
                    XTypeProvider,
                    XServiceInfo,
                    XContent,
                    XCommandProcessor,
+                   XContentCreator,
                    XChild);
 
 //=========================================================================
@@ -158,11 +181,12 @@ XINTERFACE_IMPL_5( FTPContent,
 //
 //=========================================================================
 
-XTYPEPROVIDER_IMPL_5( FTPContent,
+XTYPEPROVIDER_IMPL_6( FTPContent,
                          XTypeProvider,
                          XServiceInfo,
                          XContent,
                       XCommandProcessor,
+                      XContentCreator,
                       XChild);
 
 //=========================================================================
@@ -481,8 +505,10 @@ Any SAL_CALL FTPContent::execute(
                     ucbhelper::cancelCommandExecution(aRet,Environment);
                 }
             }
-            else
-                throw CommandAbortedException();
+            else {
+                aRet <<= UnsupportedCommandException();
+                ucbhelper::cancelCommandExecution(aRet,Environment);
+            }
 
             return aRet;
         } catch(const curl_exception& e) {
@@ -502,6 +528,59 @@ Any SAL_CALL FTPContent::execute(
 
     return aRet;
 }
+
+#define FTP_FILE rtl::OUString::createFromAscii(     \
+                                   "application/"    \
+                                   "vnd.sun.staroffice.ftp-file")
+
+#define FTP_FOLDER rtl::OUString::createFromAscii(     \
+                                   "application/"    \
+                                   "vnd.sun.staroffice.ftp-folder")
+
+Sequence<ContentInfo > SAL_CALL
+FTPContent::queryCreatableContentsInfo(  )
+    throw (RuntimeException)
+{
+    Sequence< ContentInfo > seq(2);
+
+    seq[0].Type = FTP_FILE;
+    seq[0].Attributes = ContentInfoAttribute::INSERT_WITH_INPUTSTREAM
+        | ContentInfoAttribute::KIND_DOCUMENT;
+
+    Sequence< Property > props( 1 );
+    props[0] = Property(
+        rtl::OUString::createFromAscii( "Title" ),
+        -1,
+        getCppuType( static_cast< rtl::OUString* >( 0 ) ),
+        PropertyAttribute::MAYBEVOID
+        | PropertyAttribute::BOUND );
+    seq[0].Properties = props;
+
+    // folder
+    seq[1].Type       = FTP_FOLDER;
+    seq[1].Attributes = ContentInfoAttribute::KIND_FOLDER;
+    seq[1].Properties = props;
+
+    return seq;
+}
+
+
+Reference<XContent > SAL_CALL
+FTPContent::createNewContent( const ContentInfo& Info )
+    throw (RuntimeException)
+{
+    if(Info.Type.equalsAscii("application/"
+                             "vnd.sun.staroffice.ftp-file") ||
+       Info.Type.equalsAscii("application/"
+                             "vnd.sun.staroffice.ftp-folder"))
+        return new FTPContent(m_xSMgr,
+                              m_pFCP,
+                              m_xIdentifier,Info);
+    else
+        return Reference<XContent>(0);
+}
+
+
 
 
 Reference<XInterface > SAL_CALL
@@ -531,11 +610,52 @@ rtl::OUString FTPContent::getParentURL()
 }
 
 
+class InsertData
+    : public CurlInput {
+
+public:
+
+    InsertData(const Reference<XInputStream>& xInputStream)
+        : m_xInputStream(xInputStream) { }
+
+    // returns the number of bytes actually read
+    virtual sal_Int32 read(sal_Int8 *dest,sal_Int32 nBytesRequested);
+
+private:
+
+    Reference<XInputStream> m_xInputStream;
+};
+
+
+
+sal_Int32 InsertData::read(sal_Int8 *dest,sal_Int32 nBytesRequested)
+{
+    sal_Int32 m = 0;
+
+    if(m_xInputStream.is()) {
+           Sequence<sal_Int8> seq(nBytesRequested);
+        m = m_xInputStream->readBytes(seq,nBytesRequested);
+        rtl_copyMemory(dest,seq.getConstArray(),m);
+    }
+    return m;
+}
+
 
 void FTPContent::insert(const InsertCommandArgument& aInsertCommand)
 {
-//      m_aFTPURL.insert(bool(aInsertCommand.ReplaceExisting),
-//                       aInsertCommand.Data);
+    if(!m_bInserted || (m_aInfo.Type == FTP_FILE && m_bTitleSet)) {
+        InsertData data(aInsertCommand.Data);
+        m_aFTPURL.insert(bool(aInsertCommand.ReplaceExisting),&data);
+        osl::MutexGuard aGuard(m_aMutex);
+        m_bInserted = false;
+    } else if(m_bInserted && m_aInfo.Type == FTP_FOLDER && m_bTitleSet ) {
+        // todo
+        //      create a folder
+        osl::MutexGuard aGuard(m_aMutex);
+        m_bInserted = false;
+    } else {
+
+    }
 }
 
 
@@ -552,31 +672,37 @@ Reference< XRow > FTPContent::getPropertyValues(
 
     for(sal_Int32 i = 0; i < seqProp.getLength(); ++i) {
         const rtl::OUString& Name = seqProp[i].Name;
-        if(Name.compareToAscii("ContentType") == 0)
-            xRow->appendString(seqProp[i],
-                               rtl::OUString::createFromAscii(
-                                   "application/ftp"));
-        else if(Name.compareToAscii("Title") == 0)
+        if(Name.compareToAscii("Title") == 0)
             xRow->appendString(seqProp[i],aDirEntry.m_aName);
-        else if(Name.compareToAscii("IsReadOnly") == 0)
-            xRow->appendBoolean(seqProp[i],
-                                ! sal_Bool(aDirEntry.m_nMode &
-                                           INETCOREFTP_FILEMODE_WRITE));
-        else if(Name.compareToAscii("IsDocument") == 0)
-            xRow->appendBoolean(seqProp[i],
-                                ! sal_Bool(aDirEntry.m_nMode &
-                                           INETCOREFTP_FILEMODE_ISDIR));
-        else if(Name.compareToAscii("IsFolder") == 0)
-            xRow->appendBoolean(seqProp[i],
-                                sal_Bool(aDirEntry.m_nMode &
-                                         INETCOREFTP_FILEMODE_ISDIR));
-        else if(Name.compareToAscii("Size") == 0)
-            xRow->appendLong(seqProp[i],
-                             aDirEntry.m_nSize);
-        else if(Name.compareToAscii("DateCreated") == 0)
-            xRow->appendTimestamp(seqProp[i],
-                                  aDirEntry.m_aDate);
-        else
+        else if(aDirEntry.m_nMode != INETCOREFTP_FILEMODE_UNKNOWN) {
+            if(Name.compareToAscii("ContentType") == 0)
+                xRow->appendString(seqProp[i],
+                                   aDirEntry.m_nMode&INETCOREFTP_FILEMODE_ISDIR
+                                   ? FTP_FOLDER
+                                   : FTP_FILE );
+            else if(Name.compareToAscii("IsReadOnly") == 0)
+                xRow->appendBoolean(seqProp[i],
+                                    aDirEntry.m_nMode
+                                    & INETCOREFTP_FILEMODE_WRITE
+                                    ? 0
+                                    : 1 );
+            else if(Name.compareToAscii("IsDocument") == 0)
+                xRow->appendBoolean(seqProp[i],
+                                    ! sal_Bool(aDirEntry.m_nMode &
+                                               INETCOREFTP_FILEMODE_ISDIR));
+            else if(Name.compareToAscii("IsFolder") == 0)
+                xRow->appendBoolean(seqProp[i],
+                                    sal_Bool(aDirEntry.m_nMode &
+                                             INETCOREFTP_FILEMODE_ISDIR));
+            else if(Name.compareToAscii("Size") == 0)
+                xRow->appendLong(seqProp[i],
+                                 aDirEntry.m_nSize);
+            else if(Name.compareToAscii("DateCreated") == 0)
+                xRow->appendTimestamp(seqProp[i],
+                                      aDirEntry.m_aDate);
+            else
+                xRow->appendVoid(seqProp[i]);
+        } else
             xRow->appendVoid(seqProp[i]);
     }
 
@@ -592,13 +718,23 @@ Sequence<Any> FTPContent::setPropertyValues(
         getProperties(Reference<XCommandEnvironment>(0));
 
     Sequence<Any> ret(seqPropVal.getLength());
+
+    osl::MutexGuard aGuard(m_aMutex);
     for(sal_Int32 i = 0; i < ret.getLength(); ++i) {
-        ret[i] <<= UnknownPropertyException();
-        for(sal_Int32 j = 0; j < props.getLength(); ++j)
-            if(props[j].Name == seqPropVal[i].Name) {
-                ret[i] <<= IllegalAccessException();
-                break;
-            }
+        if(m_bInserted && seqPropVal[i].Name.equalsAscii("Title")) {
+            rtl::OUString Title;
+            seqPropVal[i].Value >>= Title;
+            m_aFTPURL.child(Title);
+            m_bTitleSet = true;
+        } else {
+            // either not unknown or illegal
+            ret[i] <<= UnknownPropertyException();
+            for(sal_Int32 j = 0; j < props.getLength(); ++j)
+                if(props[j].Name == seqPropVal[i].Name) {
+                    ret[i] <<= IllegalAccessException();
+                    break;
+                }
+        }
     }
 
     return ret;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpdirp.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: abi $ $Date: 2002-07-31 15:13:08 $
+ *  last change: $Author: abi $ $Date: 2002-10-17 16:28:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -894,11 +894,18 @@ sal_Bool FTPDirectoryParser::parseUNIX (
     // 1st column: FileMode.
     if (*p1 == 'd')
         rEntry.m_nMode |= INETCOREFTP_FILEMODE_ISDIR;
+
     if (*p1 == 'l')
         rEntry.m_nMode |= INETCOREFTP_FILEMODE_ISLINK;
 
-    // Skip to end of column.
-    while (*p1 && !ascii_isWhitespace(*p1)) p1++;
+    // Skip to end of column and set rights by the way
+    while (*p1 && !ascii_isWhitespace(*p1)) {
+        if(*p1 == 'r')
+            rEntry.m_nMode |= INETCOREFTP_FILEMODE_READ;
+        else if(*p1 == 'w')
+            rEntry.m_nMode |= INETCOREFTP_FILEMODE_WRITE;
+        p1++;
+    }
 
     /*
      * Scan for the sequence of size and date fields:

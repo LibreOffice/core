@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpcontentcaps.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: abi $ $Date: 2002-10-15 09:21:16 $
+ *  last change: $Author: abi $ $Date: 2002-10-17 16:28:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,7 @@ Sequence< Property > FTPContent::getProperties(
             OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) ),
             -1,
             getCppuType( static_cast< const OUString * >( 0 ) ),
-            PropertyAttribute::BOUND  | PropertyAttribute::READONLY );
+            PropertyAttribute::BOUND );//  | PropertyAttribute::READONLY );
 
     props[4] =
         Property(

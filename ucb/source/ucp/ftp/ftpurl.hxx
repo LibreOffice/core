@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpurl.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: abi $ $Date: 2002-10-15 13:04:04 $
+ *  last change: $Author: abi $ $Date: 2002-10-17 16:28:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,14 @@ namespace ftp {
         sal_Int32 n_err;
     };
 
+    class CurlInput {
+
+    public:
+
+        // returns the number of bytes actually read
+        virtual sal_Int32 read(sal_Int8 *dest,sal_Int32 nBytesRequested) = 0;
+    };
+
 
     class FTPURL
     {
@@ -145,6 +153,7 @@ namespace ftp {
 
         rtl::OUString parent() const;
 
+        void child(const rtl::OUString& title);
 
         std::vector<FTPDirentry> list(sal_Int16 nMode) const
             throw(curl_exception);
@@ -155,7 +164,8 @@ namespace ftp {
 
         FTPDirentry direntry() const throw(curl_exception);
 
-        void insert(bool ReplaceExisting) const throw(curl_exception);
+        void insert(bool ReplaceExisting,void* stream) const
+            throw(curl_exception);
 
 
     private:
