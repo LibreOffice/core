@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmundo.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 17:02:54 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 12:20:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1003,39 +1003,34 @@ FmUndoContainerAction::FmUndoContainerAction(FmFormModel& rMod,
                                              const Reference< XInterface > & xElem,
                                              sal_Int32 nIdx)
                       :SdrUndoAction(rMod)
-                      ,eAction(_eAction)
-                      ,xContainer(xCont)
-                      ,nIndex(nIdx)
+                      ,m_eAction( _eAction )
+                      ,m_xContainer( xCont )
+                      ,m_nIndex( nIdx )
 {
-    DBG_CTOR(FmUndoContainerAction,NULL);
-    if (xCont.is() && xElem.is())
-    {
-        // den Richtigen IFacePointer
-        ::comphelper::query_interface(xElem, xElement);
-        if (eAction == Removed)
-        {
-            if (nIndex < 0)
-            {
-                // Feststellen an welcher Position sich das Kind befunden hat
-                Reference< XIndexAccess >  xInd(xContainer,UNO_QUERY);
-                nIndex = getElementPos(xInd, xElement);
-            }
+    OSL_ENSURE( nIdx >= 0, "FmUndoContainerAction::FmUndoContainerAction: invalid index!" );
+        // some old code suggested this could be a valid argument. However, this code was
+        // buggy, and it *seemed* that nobody used it - so it was removed.
 
-            if (nIndex >= 0)
+    DBG_CTOR(FmUndoContainerAction,NULL);
+    if ( xCont.is() && xElem.is() )
+    {
+        // normalize
+        m_xElement = m_xElement.query( xElem );
+        switch ( m_eAction )
+        {
+        case Removed:
+            if (m_nIndex >= 0)
             {
-                Reference< XEventAttacherManager >  xManager(xCont, UNO_QUERY);
-                if (xManager.is())
-                    aEvts = xManager->getScriptEvents(nIndex);
+                Reference< XEventAttacherManager >  xManager( xCont, UNO_QUERY );
+                if ( xManager.is() )
+                    m_aEvents = xManager->getScriptEvents(m_nIndex);
             }
             else
-                xElement = NULL;
+                m_xElement = NULL;
 
-            xOwnElement = xElement;
-        }
-        else
-        {
-            if (nIndex < 0)
-                nIndex = xContainer->getCount();
+            // we now own the element
+            m_xOwnElement = m_xElement;
+            break;
         }
     }
 }
@@ -1043,64 +1038,100 @@ FmUndoContainerAction::FmUndoContainerAction(FmFormModel& rMod,
 //------------------------------------------------------------------------------
 FmUndoContainerAction::~FmUndoContainerAction()
 {
-    Reference< XComponent >  xComp(xOwnElement, UNO_QUERY);
-    if (xComp.is())
+    // if we own the object ....
+    Reference< XComponent > xComp( m_xOwnElement, UNO_QUERY );
+    if ( xComp.is() )
     {
-        Reference< XChild >  xChild(xOwnElement, UNO_QUERY);
-        // nur wenn das Objekt frei schwebt
-        if (xChild.is() && !xChild->getParent().is())
+        // and the object does not have a parent
+        Reference< XChild >  xChild( m_xOwnElement, UNO_QUERY );
+        if ( xChild.is() && !xChild->getParent().is() )
+            // -> dispose it
             xComp->dispose();
     }
     DBG_DTOR(FmUndoContainerAction,NULL);
 }
 
 //------------------------------------------------------------------------------
+void FmUndoContainerAction::implReInsert( ) SAL_THROW( ( Exception ) )
+{
+    if ( m_xContainer->getCount() >= m_nIndex )
+    {
+        // insert the element
+        Any aVal;
+        if ( m_xContainer->getElementType() == ::getCppuType( static_cast< const Reference< XFormComponent >* >( NULL ) ) )
+        {
+            aVal <<= Reference< XFormComponent >( m_xElement, UNO_QUERY );
+        }
+        else
+        {
+            aVal <<= Reference< XForm >( m_xElement, UNO_QUERY );
+        }
+        m_xContainer->insertByIndex( m_nIndex, aVal );
+
+        OSL_ENSURE( getElementPos( m_xContainer.get(), m_xElement ) == m_nIndex, "FmUndoContainerAction::implReInsert: insertion did not work!" );
+
+        // register the events
+        Reference< XEventAttacherManager >  xManager( m_xContainer, UNO_QUERY );
+        if ( xManager.is() )
+            xManager->registerScriptEvents( m_nIndex, m_aEvents );
+
+        // we don't own the object anymore
+        m_xOwnElement = NULL;
+    }
+}
+
+//------------------------------------------------------------------------------
+void FmUndoContainerAction::implReRemove( ) SAL_THROW( ( Exception ) )
+{
+    Reference< XInterface > xElement;
+    if ( ( m_nIndex >= 0 ) && ( m_nIndex < m_xContainer->getCount() ) )
+        m_xContainer->getByIndex( m_nIndex ) >>= xElement;
+
+    if ( xElement != m_xElement )
+    {
+        // the indexes in the container changed. Okay, so go the long way and
+        // manually determine the index
+        m_nIndex = getElementPos( m_xContainer.get(), m_xElement );
+        if ( m_nIndex != -1 )
+            xElement = m_xElement;
+    }
+
+    OSL_ENSURE( xElement == m_xElement, "FmUndoContainerAction::implReRemove: cannot find the element which I'm responsible for!" );
+    if ( xElement == m_xElement )
+    {
+        Reference< XEventAttacherManager >  xManager( m_xContainer, UNO_QUERY );
+        if ( xManager.is() )
+            m_aEvents = xManager->getScriptEvents( m_nIndex );
+        m_xContainer->removeByIndex( m_nIndex );
+        // from now on, we own this object
+        m_xOwnElement = m_xElement;
+    }
+}
+
+//------------------------------------------------------------------------------
 void FmUndoContainerAction::Undo()
 {
-    FmXUndoEnvironment& rEnv = ((FmFormModel&)rMod).GetUndoEnv();
-    if (xContainer.is() && !rEnv.IsLocked() && xElement.is())
+    FmXUndoEnvironment& rEnv = static_cast< FmFormModel& >( rMod ).GetUndoEnv();
+
+    if ( m_xContainer.is() && !rEnv.IsLocked() && m_xElement.is() )
     {
         rEnv.Lock();
-        switch (eAction)
+        try
         {
-            case Inserted:
+            switch ( m_eAction )
             {
-                Reference< XInterface >  xObj,xIface;;
-                xContainer->getByIndex(nIndex) >>= xObj;
+            case Inserted:
+                implReRemove();
+                break;
 
-
-                ::comphelper::query_interface(xObj, xIface);
-                if ((XInterface *)xElement.get() == (XInterface *)xIface.get())
-                {
-                    Reference< XEventAttacherManager >  xManager(xContainer, UNO_QUERY);
-                    if (xManager.is())
-                        aEvts = xManager->getScriptEvents(nIndex);
-                    xContainer->removeByIndex(nIndex);
-                    xOwnElement = xElement;
-                }
-            }   break;
             case Removed:
-                if (xContainer->getCount() >= nIndex)
-                {
-                    Any aVal;
-                    if (xContainer->getElementType() == ::getCppuType((const Reference< XFormComponent>*)0))
-
-                    {
-                        Reference< XFormComponent >  xFmcomp(xElement, UNO_QUERY);
-                        aVal <<= xFmcomp;
-                    }
-                    else
-                    {
-                        Reference< XForm >  xForm(xElement, UNO_QUERY);
-                        aVal <<= xForm;
-                    }
-
-                    xContainer->insertByIndex(nIndex, aVal);
-                    Reference< XEventAttacherManager >  xManager(xContainer, UNO_QUERY);
-                    if (xManager.is())
-                        xManager->registerScriptEvents(nIndex, aEvts);
-                    xOwnElement = NULL;
-                }   break;
+                implReInsert();
+                break;
+            }
+        }
+        catch( const Exception& )
+        {
+            OSL_ENSURE( sal_False, "FmUndoContainerAction::Undo: caught an exception!" );
         }
         rEnv.UnLock();
     }
@@ -1109,51 +1140,26 @@ void FmUndoContainerAction::Undo()
 //------------------------------------------------------------------------------
 void FmUndoContainerAction::Redo()
 {
-    FmXUndoEnvironment& rEnv = ((FmFormModel&)rMod).GetUndoEnv();
-    if (xContainer.is() && !rEnv.IsLocked() && xElement.is())
+    FmXUndoEnvironment& rEnv = static_cast< FmFormModel& >( rMod ).GetUndoEnv();
+    if ( m_xContainer.is() && !rEnv.IsLocked() && m_xElement.is() )
     {
         rEnv.Lock();
-        switch (eAction)
+        try
         {
+            switch ( m_eAction )
+            {
             case Inserted:
-            {
-                if (xContainer->getCount() >= nIndex)
-                {
-                    Any aVal;
-                    if (xContainer->getElementType() ==
-                        ::getCppuType((const Reference< XFormComponent>*)0))
+                implReInsert();
+                break;
 
-                    {
-                        Reference< XFormComponent >  xFmcomp(xElement, UNO_QUERY);
-                        aVal <<= xFmcomp;
-                    }
-                    else
-                    {
-                        Reference< XForm >  xForm(xElement, UNO_QUERY);
-                        aVal <<= xForm;
-                    }
-
-                    xContainer->insertByIndex(nIndex, aVal);
-
-                    Reference< XEventAttacherManager >  xManager(xContainer, UNO_QUERY);
-                    if (xManager.is())
-                        xManager->registerScriptEvents(nIndex, aEvts);
-                    xOwnElement = NULL;
-                }
-            }   break;
             case Removed:
-            {
-                Reference< XInterface >  xObj;
-                xContainer->getByIndex(nIndex) >>= xObj;
-                if ((XInterface *)xElement.get() == (XInterface *)xObj.get())
-                {
-                    Reference< XEventAttacherManager >  xManager(xContainer, UNO_QUERY);
-                    if (xManager.is())
-                        aEvts = xManager->getScriptEvents(nIndex);
-                    xContainer->removeByIndex(nIndex);
-                    xOwnElement = xElement;
-                }
-            }   break;
+                implReRemove();
+                break;
+            }
+        }
+        catch( const Exception& )
+        {
+            OSL_ENSURE( sal_False, "FmUndoContainerAction::Redo: caught an exception!" );
         }
         rEnv.UnLock();
     }
