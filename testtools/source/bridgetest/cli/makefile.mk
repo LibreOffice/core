@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: obo $ $Date: 2003-12-16 14:52:02 $
+#   last change: $Author: rt $ $Date: 2004-03-03 15:15:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,10 +71,8 @@ LIBTARGET=NO
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
 DLLPRE =
-.INCLUDE :  sv.mk
 
 .IF "$(COM)$(COMEX)" == "MSC8" || "$(COM)$(COMEX)"=="MSC10"
 
@@ -125,11 +123,10 @@ DEF1NAME = $(SHL1TARGET)
 
 
 # --- Targets ------------------------------------------------------
-ALL : \
-        ALLTAR \
-        $(DESTDIR)$/cli_bridgetest_inprocess.exe
 
 .INCLUDE :	target.mk
+
+ALLTAR : $(DESTDIR)$/cli_bridgetest_inprocess.exe
 
 #################################################################
 
@@ -223,9 +220,9 @@ $(DESTDIR)$/cli_bridgetest_inprocess.exe : \
         -reference:$(DESTDIR)$/cli_cpp_bridgetest.uno.dll \
         cli_bridgetest_inprocess.cs
     $(GNUCOPY) -p cli_bridgetest_inprocess.ini $(DESTDIR)
-    $(GNUCOPY) -p $(CLI_CPPUHELPER) $(DESTDIR)
-    $(GNUCOPY) -p $(CLI_TYPES) $(DESTDIR)
-    $(GNUCOPY) -p $(CLI_URE) $(DESTDIR)
+    $(GNUCOPY) -p $(CLI_CPPUHELPER) $(DESTDIR)$/$(CLI_CPPUHELPER:f)
+    $(GNUCOPY) -p $(CLI_TYPES) $(DESTDIR)$/$(CLI_TYPES:f)
+    $(GNUCOPY) -p $(CLI_URE) $(DESTDIR)$/$(CLI_URE:f)
 
 .ENDIF
 
