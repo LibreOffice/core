@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Text.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-21 08:35:21 $
+ *  last change: $Author: os $ $Date: 2001-03-02 12:22:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,9 +119,8 @@ service Text
     // DocMerge from xml: service com::sun::star::text::Text: interface com::sun::star::text::XTextRangeMover
     /** makes it possible to change the position of paragraphs.
 
-        @optional
      */
-    interface XTextRangeMover;
+    [optional] interface XTextRangeMover;
 
     // DocMerge from xml: service com::sun::star::text::Text: interface com::sun::star::text::XRelativeTextContentInsert
     /** makes it possible to insert a new text content before or
@@ -140,6 +139,9 @@ service Text
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2000/12/21 08:35:21  mi
+    @see interface/service/... ident -> @see ident - for new docu generator
+
     Revision 1.4  2000/12/20 16:49:39  cl
     #81061# made some interfaces optional
 
