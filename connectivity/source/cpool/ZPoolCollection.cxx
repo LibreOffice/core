@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZPoolCollection.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:38:17 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 10:48:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -526,8 +526,7 @@ void SAL_CALL OPoolCollection::queryTermination( const EventObject& Event ) thro
 // -----------------------------------------------------------------------------
 void SAL_CALL OPoolCollection::notifyTermination( const EventObject& Event ) throw (RuntimeException)
 {
-    clearConnectionPools(sal_True);
-    m_xDesktop = NULL;
+    clearDesktop();
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL OPoolCollection::disposing( const EventObject& Source ) throw (RuntimeException)
@@ -535,20 +534,26 @@ void SAL_CALL OPoolCollection::disposing( const EventObject& Source ) throw (Run
     MutexGuard aGuard(m_aMutex);
     if ( m_xDesktop == Source.Source )
     {
-        clearConnectionPools(sal_True);
-        m_xDesktop = NULL;
+        clearDesktop();
     }
     else
     {
-        Reference<XPropertySet> xProp(Source.Source,UNO_QUERY);
-        if(Source.Source == m_xConfigNode)
+        try
         {
-            if ( xProp.is() )
-                xProp->removePropertyChangeListener(getEnablePoolingNodeName(),this);
-            m_xConfigNode = NULL;
+            Reference<XPropertySet> xProp(Source.Source,UNO_QUERY);
+            if(Source.Source == m_xConfigNode)
+            {
+                if ( xProp.is() )
+                    xProp->removePropertyChangeListener(getEnablePoolingNodeName(),this);
+                m_xConfigNode = NULL;
+            }
+            else if ( xProp.is() )
+                xProp->removePropertyChangeListener(getEnableNodeName(),this);
         }
-        else if ( xProp.is() )
-            xProp->removePropertyChangeListener(getEnableNodeName(),this);
+        catch(const Exception&)
+        {
+            OSL_ENSURE(0,"Exception caught");
+        }
     }
 }
 // -----------------------------------------------------------------------------
@@ -605,6 +610,13 @@ void SAL_CALL OPoolCollection::propertyChange( const ::com::sun::star::beans::Pr
     }
 }
 // -----------------------------------------------------------------------------
-
+void OPoolCollection::clearDesktop()
+{
+    clearConnectionPools(sal_True);
+    if ( m_xDesktop.is() )
+        m_xDesktop->removeTerminateListener(this);
+    m_xDesktop = NULL;
+}
+// -----------------------------------------------------------------------------
 
 
