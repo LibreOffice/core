@@ -2,9 +2,9 @@
  *
  *  $RCSfile: callbacks.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-17 19:01:13 $
+ *  last change: $Author: fs $ $Date: 2000-12-12 12:00:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,11 +65,17 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XINDEXACCESS_HPP_
 #include <com/sun/star/container/XIndexAccess.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
 
+class SvXMLImport;
 //.........................................................................
 namespace xmloff
 {
 //.........................................................................
+
+    class OAttribute2Property;
 
     //=====================================================================
     //= IExportImplementation
@@ -83,6 +89,48 @@ namespace xmloff
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& _rxCollection) = 0;
     };
 
+    //=====================================================================
+    //= IControlIdMap
+    //=====================================================================
+    class IControlIdMap
+    {
+    public:
+        /** register a control id
+        */
+        virtual void    registerControlId(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControl,
+            const ::rtl::OUString& _rId) = 0;
+
+        /** register references to a control.
+
+            <p>In the XML representation, the control which is refered by others stores the ids of these other
+            controls, but in "real life" :) the referring controls store the referred one as property.</p>
+
+            <p>This method allows a referred control to announce to ids of the referring ones.</p>
+
+            @param _rxControl
+                the referred control
+            @param _rReferringControls
+                a (comma separated) list of control ids of referring controls
+        */
+        virtual void    registerControlReferences(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControl,
+            const ::rtl::OUString& _rReferringControls) = 0;
+    };
+
+    //=====================================================================
+    //= IFormsImportContext
+    //=====================================================================
+    class IFormsImportContext
+    {
+    public:
+        virtual IControlIdMap&          getControlIdMap() = 0;
+        virtual OAttribute2Property&    getAttributeMap() = 0;
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
+                                        getServiceFactory() = 0;
+        virtual SvXMLImport&            getGlobalContext() = 0;
+    };
+
 //.........................................................................
 }   // namespace xmloff
 //.........................................................................
@@ -92,6 +140,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2000/11/17 19:01:13  fs
+ *  initial checkin - export and/or import the applications form layer
+ *
  *
  *  Revision 1.0 17.11.00 18:42:07  fs
  ************************************************************************/
