@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porfly.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fme $ $Date: 2001-10-29 11:17:17 $
+ *  last change: $Author: jp $ $Date: 2002-01-31 13:08:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,8 @@
 class SwDrawContact;
 class SwFrmFmt;
 class SwFlyInCntFrm;
+class SwTxtFrm;
+struct SwCrsrMoveState;
 
 /*************************************************************************
  *                class SwFlyPortion
