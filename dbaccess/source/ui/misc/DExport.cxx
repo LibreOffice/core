@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DExport.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2002-04-19 08:30:07 $
+ *  last change: $Author: oj $ $Date: 2002-05-23 11:30:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,7 +173,7 @@ using namespace ::com::sun::star::awt;
 // ==========================================================================
 DBG_NAME(ODatabaseExport);
 ODatabaseExport::ODatabaseExport(sal_Int32 nRows,
-                                 const ::std::vector<sal_Int32> &_rColumnPositions,
+                                 const TPositions &_rColumnPositions,
                                  const Reference< XNumberFormatter >& _rxNumberF,
                                  const Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM,
                                  const TColumnVector* pList,
@@ -202,7 +202,7 @@ ODatabaseExport::ODatabaseExport(sal_Int32 nRows,
     m_nRows += nRows;
     sal_Int32 nCount = 0;
     for(sal_Int32 j=0;j < (sal_Int32)m_vColumns.size();++j)
-        if(m_vColumns[j] != CONTAINER_ENTRY_NOTFOUND)
+        if(m_vColumns[j].first != CONTAINER_ENTRY_NOTFOUND)
             ++nCount;
 
     m_vColumnSize.resize(nCount);
@@ -332,7 +332,7 @@ void ODatabaseExport::insertValueIntoColumn()
         OFieldDescription* pField = m_vDestVector[m_nColumnPos]->second;
         if(pField)
         {
-            sal_Int32 nPos = m_vColumns[m_bIsAutoIncrement ? m_nColumnPos+1 : m_nColumnPos];
+            sal_Int32 nPos = m_vColumns[m_bIsAutoIncrement ? m_nColumnPos+1 : m_nColumnPos].first;
             if(nPos != CONTAINER_ENTRY_NOTFOUND)
             {
 //                  if(m_nDefToken != LANGUAGE_DONTKNOW) // falls Sprache anders als Systemsprache
@@ -413,7 +413,7 @@ sal_Int32 ODatabaseExport::CheckString(const String& aCheckToken, sal_Int32 _nOl
         fOutNumber = m_xFormatter->convertStringToNumber(nFormat,aCheckToken);
 
         {
-            m_vFormatKey[m_vColumns[m_nColumnPos]] = nFormat; // wird sp"ater f"ur die Column gebraucht
+            m_vFormatKey[m_vColumns[m_nColumnPos].first] = nFormat; // wird sp"ater f"ur die Column gebraucht
             switch(nType)
             {
                 case NumberFormat::ALL:
@@ -514,7 +514,7 @@ sal_Int32 ODatabaseExport::CheckString(const String& aCheckToken, sal_Int32 _nOl
     }
     catch(Exception&)
     {
-        m_vFormatKey[m_vColumns[m_nColumnPos]] =    100;
+        m_vFormatKey[m_vColumns[m_nColumnPos].first] =  100;
         nFormat = NumberFormat::TEXT; // Text "uberschreibt alles
     }
 
