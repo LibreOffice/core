@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox2.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-03 17:43:01 $
+ *  last change: $Author: rt $ $Date: 2005-01-07 09:23:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1325,8 +1325,10 @@ void ToolBox::SetItemBits( USHORT nItemId, ToolBoxItemBits nBits )
         mpData->m_aItems[nPos].mnBits = nBits;
         nBits &= TIB_LEFT | TIB_AUTOSIZE | TIB_DROPDOWN;
         nOldBits &= TIB_LEFT | TIB_AUTOSIZE | TIB_DROPDOWN;
+        // trigger reformat when the item width has changed (dropdown arrow)
+        BOOL bFormat = (nBits & TIB_DROPDOWN) != (nOldBits & TIB_DROPDOWN);
         if ( nBits != nOldBits )
-            ImplInvalidate( TRUE );
+            ImplInvalidate( TRUE, bFormat );
     }
 }
 
