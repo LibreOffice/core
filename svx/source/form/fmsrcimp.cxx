@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmsrcimp.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-18 07:44:08 $
+ *  last change: $Author: th $ $Date: 2001-05-11 16:02:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -634,8 +634,9 @@ INLINE_METHOD FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchWildcard(const
 
         if (!GetCaseSensitive())
         {// normieren, wenn kein Gross/Klein
-            Locale aAppLocale = buildApplicationLocale();
-            sCurrentCheck.toLowerCase(::rtl::OLocale::registerLocale(aAppLocale.Language, aAppLocale.Country));
+//            Locale aAppLocale = buildApplicationLocale();
+//            sCurrentCheck.toLowerCase(::rtl::OLocale::registerLocale(aAppLocale.Language, aAppLocale.Country));
+            sCurrentCheck.toAsciiLowerCase();
         }
 
         // jetzt ist der Test einfach ...
@@ -1031,8 +1032,9 @@ void FmSearchEngine::SearchNextImpl()
     ::rtl::OUString strSearchExpression(m_strSearchExpression); // brauche ich non-const
     if (!GetCaseSensitive())
     {// normieren, wenn kein Gross/Klein
-        Locale aAppLocale = buildApplicationLocale();
-        strSearchExpression.toLowerCase(::rtl::OLocale::registerLocale(aAppLocale.Language, aAppLocale.Country));
+//        Locale aAppLocale = buildApplicationLocale();
+//        strSearchExpression.toLowerCase(::rtl::OLocale::registerLocale(aAppLocale.Language, aAppLocale.Country));
+        strSearchExpression.toAsciiLowerCase();
     }
 
     if (!m_bRegular && !m_bLevenshtein)
