@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: tbe $ $Date: 2002-05-27 16:49:54 $
+#   last change: $Author: pb $ $Date: 2002-05-30 13:18:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -91,6 +91,8 @@ SLOFILES=   \
             $(SLO)$/vclxaccessibleradiobutton.obj		\
             $(SLO)$/vclxaccessiblescrollbar.obj			\
             $(SLO)$/vclxaccessibletextcomponent.obj		\
+            $(SLO)$/vclxaccessibletoolbox.obj			\
+            $(SLO)$/vclxaccessibletoolboxitem.obj		\
             $(SLO)$/vclxbitmap.obj 						\
             $(SLO)$/vclxcontainer.obj 					\
             $(SLO)$/vclxdevice.obj 						\
@@ -106,7 +108,8 @@ SLOFILES=   \
             $(SLO)$/vclxwindow.obj 						\
             $(SLO)$/vclxwindows.obj
 
-SRCFILES=	accessiblestrings.src
+SRCFILES=\
+            accessiblestrings.src
 
 # --- Targets ------------------------------------------------------
 
