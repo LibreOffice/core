@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConfigHelper.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 17:32:10 $
+ *  last change: $Author: kz $ $Date: 2005-03-21 13:24:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,6 +208,14 @@ public class ConfigHelper extends java.util.Properties
         java.lang.String sValue = getProperty(sProp);
         if (sValue == null)
             throw new java.util.NoSuchElementException("The requested config value \""+sProp+"\" does not exists!");
+        return new java.lang.Boolean(sValue).booleanValue();
+    }
+
+    public synchronized boolean getBoolean(java.lang.String sProp   ,
+                                           boolean          bDefault)
+    {
+        java.lang.String sDefault = java.lang.String.valueOf(bDefault);
+        java.lang.String sValue   = getProperty(sProp, sDefault);
         return new java.lang.Boolean(sValue).booleanValue();
     }
 
