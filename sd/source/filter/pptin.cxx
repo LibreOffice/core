@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pptin.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 14:56:48 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 10:31:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -714,6 +714,18 @@ sal_Bool ImplSdPPTImport::Import()
                             aParagraph.ApplyTo( rItemSet, (SdrPowerPointImport&)*this, 0xffffffff, NULL );
                             aPortion.ApplyTo( rItemSet, (SdrPowerPointImport&)*this, 0xffffffff );
                         }
+                    }
+
+                    // PSEUDO
+                    pSheet = (SfxStyleSheet*)pDoc->GetStyleSheetPool()->Find( String(SdResId( STR_PSEUDOSHEET_BACKGROUNDOBJECTS )), SFX_STYLE_FAMILY_PSEUDO );
+                    if ( pSheet )
+                    {
+                        SfxItemSet& rItemSet = pSheet->GetItemSet();
+                        PPTParagraphObj aParagraph( *pPPTStyleSheet, TSS_TYPE_TEXT_IN_SHAPE, 0 );
+                        PPTPortionObj aPortion( *pPPTStyleSheet, TSS_TYPE_TEXT_IN_SHAPE, 0 );
+                        aParagraph.AppendPortion( aPortion );
+                        aParagraph.ApplyTo( rItemSet, (SdrPowerPointImport&)*this, 0xffffffff, NULL );
+                        aPortion.ApplyTo( rItemSet, (SdrPowerPointImport&)*this, 0xffffffff );
                     }
 
                     ///////////////////////////////////////////////////////////
@@ -2464,7 +2476,19 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
         break;
         case TSS_TYPE_UNUSED :
         case TSS_TYPE_TEXT_IN_SHAPE :
-            pSheet = (SfxStyleSheet*)pDoc->GetStyleSheetPool()->Find( String(SdResId( STR_STANDARD_STYLESHEET_NAME )), SFX_STYLE_FAMILY_PARA );
+        {
+            switch( ePresKind )
+            {
+                case PRESOBJ_DATETIME :
+                case PRESOBJ_SLIDENUMBER :
+                case PRESOBJ_FOOTER :
+                case PRESOBJ_HEADER :
+                    pSheet = (SfxStyleSheet*)pDoc->GetStyleSheetPool()->Find( String(SdResId( STR_PSEUDOSHEET_BACKGROUNDOBJECTS )), SFX_STYLE_FAMILY_PSEUDO );
+                break;
+                default :
+                    pSheet = (SfxStyleSheet*)pDoc->GetStyleSheetPool()->Find( String(SdResId( STR_STANDARD_STYLESHEET_NAME )), SFX_STYLE_FAMILY_PARA );
+            }
+        }
         break;
     }
     pText = (SdrTextObj*)SdrPowerPointImport::ApplyTextObj( pTextObj, pText, pPage, pSheet, ppStyleSheetAry );
