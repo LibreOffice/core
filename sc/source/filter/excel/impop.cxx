@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impop.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: obo $ $Date: 2004-10-18 15:13:42 $
+ *  last change: $Author: rt $ $Date: 2004-11-02 14:40:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1687,14 +1687,17 @@ void ImportExcel::PostDocLoad( void )
 }
 
 OutlineDataBuffer::OutlineDataBuffer(RootData& rRootData, SCTAB nTabNo) :
-    nTab (nTabNo)
+    nTab (nTabNo),
+    pColOutlineBuff( new OutlineBuffer (MAXCOLCOUNT) ),
+    pRowOutlineBuff( new OutlineBuffer (MAXROWCOUNT) ),
+    pColRowBuff( new ColRowSettings( rRootData ) )
 {
-    pColOutlineBuff = new OutlineBuffer (MAXCOLCOUNT);
-    pRowOutlineBuff = new OutlineBuffer (MAXROWCOUNT);
-    pColRowBuff = new ColRowSettings( rRootData );
-
     pColRowBuff->SetDefWidth( STD_COL_WIDTH );
     pColRowBuff->SetDefHeight( ( UINT16 ) STD_ROW_HEIGHT );
+}
+
+OutlineDataBuffer::~OutlineDataBuffer()
+{
 }
 
 void OutlineDataBuffer::Apply(ScDocument* pD)
