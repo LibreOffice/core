@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2004-12-13 12:16:35 $
+dnl * Date: $Date: 2005-01-05 10:41:55 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.80 $ )
+AC_REVISION( $Revision: 1.81 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -217,9 +217,9 @@ AC_ARG_WITH(cl-home,
 ],,)
 AC_ARG_WITH(mspdb-path,
 [  --with-mspdb-path       For Microsoft C/C++ compiler users, please supply the path
-                          pointing to the mspdb60.dll (MSVC 6) or mspdb7x.dll (.NET). 
+                          pointing to the mspdb71.dll (.NET 2003). 
  
-                          Usage: --with-mspdb-path=<absolute path to mspdb60.dll/mspdb7x.dll>
+                          Usage: --with-mspdb-path=<absolute path to mspdb71.dll>
 ],,)
 AC_ARG_WITH(midl-path,
 [  --with-midl-path        For Microsoft C/C++ .NET compiler users, please supply the path
@@ -272,18 +272,6 @@ AC_ARG_WITH(extra-dotnet-files,
                           extra files.)
  
                           Usage: --with-extra-dotnet-files=<absolute path to extra files>
-],,)
-AC_ARG_WITH(2003-psdk,
-[  --with-2003-psdk        Deprecated: Now has no effect.
-],,)
-AC_ARG_WITH(old-psdk,
-[  --with-old-psdk         For Windows users, and compatibility reasons. Please
-                          use this option for the October 2002 version of the
-						  Microsoft Platform SDK.
-
-                          This is a temporary workaround! 
- 
-                          Usage: --with-old-psdk
 ],,)
 AC_ARG_WITH(local-solenv,
 [  --with-local-solenv     If you have solenv in a location other than ../solenv,
@@ -882,54 +870,27 @@ if test "$_os" = "WINNT"; then
 	if test "$WITH_MINGWIN" != "yes"; then
 		AC_MSG_CHECKING([the Microsoft C/C++ Compiler])
 		dnl ===========================================================
-		dnl  Check for mspdb??.dll
+		dnl  Check for mspdb71.dll
 		dnl ===========================================================
-		dnl  .NET Compiler?
-		AC_PATH_PROG(MSPDB_PATH, mspdb70.dll)
+		dnl  .NET 2003 Compiler
+		AC_PATH_PROG(MSPDB_PATH, mspdb71.dll)
 		if test -n "$MSPDB_PATH";then
 			MSPDB_PATH=`dirname "$MSPDB_PATH"`
 		fi
-   		if test -e "$with_mspdb_path/mspdb70.dll"; then
+		if test -e "$with_mspdb_path/mspdb71.dll"; then
 			MSPDB_PATH="$with_mspdb_path"
 		fi
-		if test -z "$MSPDB_PATH" -a -e "$with_cl_home/../Common7/IDE/mspdb70.dll"; then
+		dnl .NET case
+		if test -z "$MSPDB_PATH" -a -e "$with_cl_home/../Common7/IDE/mspdb71.dll"; then
 			MSPDB_PATH="$with_cl_home/../Common7/IDE"
 		fi
-		if test -z "$MSPDB_PATH"; then
-		dnl  MSVC 6 Compiler?
-			AC_PATH_PROG(MSPDB_PATH, mspdb60.dll)
-			if test -n "$MSPDB_PATH";then
-				MSPDB_PATH=`dirname "$MSPDB_PATH"`
-			fi
-   			if test -e "$with_mspdb_path/mspdb60.dll"; then
-				MSPDB_PATH="$with_mspdb_path"
-            fi
-        if test -z "$MSPDB_PATH" -o -n "$ENABLE_VCTK"; then
-        dnl  Check for .Net 2003 Compiler. Override MSPDB_PATH when MS VC toolkit is requested
-            MSPDB_PATH=""
-            AC_PATH_PROG(MSPDB_PATH, mspdb71.dll)
-			if test -n "$MSPDB_PATH";then
-				MSPDB_PATH=`dirname "$MSPDB_PATH"`
-			fi
-   			if test -e "$with_mspdb_path/mspdb71.dll"; then
-				MSPDB_PATH="$with_mspdb_path"
-            fi
-            dnl .NET case
-			if test -z "$MSPDB_PATH" -a -e "$with_cl_home/../Common7/IDE/mspdb71.dll"; then
-				MSPDB_PATH="$with_cl_home/../Common7/IDE"
-			fi
-            dnl VCTK case
-            if test -z "$MSPDB_PATH" -a -e "$with_cl_home/bin/mspdb71.dll"; then
-                MSPDB_PATH="$with_cl_home/bin"
-            fi
+		dnl VCTK case
+		if test -z "$MSPDB_PATH" -a -e "$with_cl_home/bin/mspdb71.dll"; then
+			MSPDB_PATH="$with_cl_home/bin"
 		fi
 
-			if test -z "$MSPDB_PATH" -a -e "$with_cl_home/../Common/msdev98/mspdb60.dll"; then
-				MSPDB_PATH="$with_cl_home/../Common/msdev98"
-			fi
-		fi
 		if test -z "$MSPDB_PATH"; then
-			AC_MSG_ERROR([You need a mspdb?0.dll, make sure it's in the path or use --with-mspdb-path])
+			AC_MSG_ERROR([You need a mspdb71.dll, make sure it's in the path or use --with-mspdb-path])
 		fi
 		MSPDB_PATH=`cygpath -d "$MSPDB_PATH"`
 		MSPDB_PATH=`cygpath -u "$MSPDB_PATH"`
@@ -962,11 +923,7 @@ dnl      The following find microsoft, matches nn.nn.nnnn then pulls numbers out
 			if test "$CCNUMVER" -ge "001300100000"; then
 				COMEX=10
 			else
-				if test "$CCNUMVER" -ge "001300000000"; then
-					COMEX=8
-				else
-					AC_MSG_ERROR([Compiler too old. Use Microsoft C/C++ .NET 2002 compiler.])
-				fi
+				AC_MSG_ERROR([Compiler too old. Use Microsoft C/C++ .NET 2003 compiler.])
 			fi
 		else
 			AC_MSG_ERROR([Microsoft C/C++ Compiler not found. Use --with-cl-home or set path to cl.exe.])
@@ -1723,11 +1680,13 @@ fi
 AC_SUBST(BUILD_DMAKE)
 
 dnl ===================================================================
-dnl Check for epm
+dnl Check for epm - not needed for windows
 dnl ===================================================================
+if test "$_os" != "WINNT"; then
 AC_PATH_PROG(EPM, epm, no)
 if test "$EPM" = "no"; then
    AC_MSG_ERROR([epm is needed for native installers. install epm])
+fi
 fi
 
 dnl ===================================================================
