@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ShadowProperties.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 10:39:33 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 19:19:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@
 
 /** This is a set of properties to describe the style for rendering a shadow.
  */
-service ShadowProperties
+published service ShadowProperties
 {
     //-------------------------------------------------------------------------
 
