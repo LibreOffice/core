@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipOutputStream.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: mtg $ $Date: 2001-02-07 09:15:43 $
+ *  last change: $Author: mtg $ $Date: 2001-03-07 16:09:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,9 @@
 #include "ZipOutputStream.hxx"
 #endif
 
+#include <time.h>
+#include <utime.h>
+
 using namespace rtl;
 using namespace com::sun::star;
 using namespace com::sun::star::package::ZipConstants;
@@ -105,10 +108,7 @@ void SAL_CALL ZipOutputStream::putNextEntry( const package::ZipEntry& rEntry )
     if (pCurrentEntry != NULL)
         closeEntry();
     if (pNonConstEntry->nTime == -1)
-    {
-        time_t nTime = time (NULL);
-        pNonConstEntry->nTime = tmDateToDosDate(*localtime(&nTime));
-    }
+        pNonConstEntry->nTime = getCurrentDosTime();
     if (pNonConstEntry->nMethod == -1)
     {
         pNonConstEntry->nMethod = nMethod;
@@ -435,21 +435,31 @@ void ZipOutputStream::writeLOC( const package::ZipEntry &rEntry )
     if (rEntry.extra.getLength() != 0)
         aChucker.writeBytes( rEntry.extra );
 }
-sal_uInt32 ZipOutputStream::tmDateToDosDate ( tm &rTime)
+sal_uInt32 ZipOutputStream::getCurrentDosTime( )
 {
-    sal_uInt32 nYear = static_cast <sal_uInt32> (rTime.tm_year);
+    time_t nTime = time (NULL);
+    // pTime is a static internal to the time library and shouldn't be deleted
+    struct tm *pTime = localtime ( &nTime);
+
+    sal_uInt32 nYear = static_cast <sal_uInt32> (pTime->tm_year);
 
     if (nYear>1980)
         nYear-=1980;
     else if (nYear>80)
         nYear-=80;
-    return static_cast < sal_uInt32>( ( ( ( rTime.tm_mday) +
-                                          ( 32 * (rTime.tm_mon+1)) +
+    sal_uInt32 nResult = static_cast < sal_uInt32>( ( ( ( pTime->tm_mday) +
+                                          ( 32 * (pTime->tm_mon+1)) +
                                           ( 512 * nYear ) ) << 16) |
-                                        ( ( rTime.tm_sec/2) +
-                                            ( 32 * rTime.tm_min) +
-                                          ( 2048 * static_cast <sal_uInt32 > (rTime.tm_hour) ) ) );
+                                        ( ( pTime->tm_sec/2) +
+                                            ( 32 * pTime->tm_min) +
+                                          ( 2048 * static_cast <sal_uInt32 > (pTime->tm_hour) ) ) );
+    return nResult;
 }
+/*
+
+   This is actually never used, so I removed it, but thought that the
+   implementation details may be useful in the future...mtg 20010307
+
 void ZipOutputStream::dosDateToTMDate ( tm &rTime, sal_uInt32 nDosDate)
 {
     sal_uInt32 nDate = static_cast < sal_uInt32 > (nDosDate >> 16);
@@ -461,4 +471,5 @@ void ZipOutputStream::dosDateToTMDate ( tm &rTime, sal_uInt32 nDosDate)
     rTime.tm_min  = static_cast < sal_uInt32 > ( (nDosDate & 0x7E0)/0x20);
     rTime.tm_sec  = static_cast < sal_uInt32 > ( 2 * (nDosDate & 0x1F) );
 }
+*/
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageFolder.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: mtg $ $Date: 2001-02-26 13:21:05 $
+ *  last change: $Author: mtg $ $Date: 2001-03-07 16:09:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -326,7 +326,6 @@ void ZipPackageFolder::saveContents(rtl::OUString &rPath, std::vector < Manifest
                 // store the ZipEntry data in the ManifestEntry struct and then update the
                 // ZipEntry data in the ZipPackageFolder later
 
-                time_t nTime = time(NULL);
                 ManifestEntry *pMan = new ManifestEntry;
                 pMan->sShortName = (*aCI).first;
 
@@ -334,7 +333,7 @@ void ZipPackageFolder::saveContents(rtl::OUString &rPath, std::vector < Manifest
                 ZipPackageFolder::copyZipEntry(pMan->aEntry, pFolder->aEntry);
 
                 pMan->aEntry.sName = rPath + pMan->sShortName + OUString( RTL_CONSTASCII_USTRINGPARAM ( "/" ) );
-                pMan->aEntry.nTime = ZipOutputStream::tmDateToDosDate ( *localtime(&nTime));
+                pMan->aEntry.nTime = ZipOutputStream::getCurrentDosTime();
                 pMan->aEntry.nCrc = 0;
                 pMan->aEntry.nSize = 0;
                 pMan->aEntry.nCompressedSize = 0;

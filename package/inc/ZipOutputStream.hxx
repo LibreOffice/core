@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipOutputStream.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-05 09:24:26 $
+ *  last change: $Author: mtg $ $Date: 2001-03-07 16:09:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,8 +97,6 @@
 #include <vos/diagnose.hxx>
 #endif
 
-#include <time.h>
-#include <utime.h>
 
 class ZipOutputStream : public cppu::WeakImplHelper1< com::sun::star::package::XZipOutputStream >
 {
@@ -141,8 +139,11 @@ public:
         throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL close(  )
         throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
-    static sal_uInt32 tmDateToDosDate ( tm &rTime);
+    static sal_uInt32 getCurrentDosTime ( );
+    /*
+    static sal_uInt32 tmDateToDosDate ( tm *pTime);
     static void dosDateToTMDate ( tm &rTime, sal_uInt32 nDosDate);
+    */
 private:
     void doDeflate();
     void writeEND(sal_uInt32 nOffset, sal_uInt32 nLength)

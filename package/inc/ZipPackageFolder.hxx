@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageFolder.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mtg $ $Date: 2001-01-10 11:35:59 $
+ *  last change: $Author: mtg $ $Date: 2001-03-07 16:09:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,8 +98,6 @@
 #endif
 
 #include <hash_map>
-#include <time.h>
-#include <utime.h>
 
 struct eqFunc
 {
