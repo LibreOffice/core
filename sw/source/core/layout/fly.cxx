@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fly.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ama $ $Date: 2001-06-29 07:57:40 $
+ *  last change: $Author: ama $ $Date: 2001-08-21 15:17:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2207,6 +2207,10 @@ BOOL SwFlyFrm::GetContour( PolyPolygon & rPoly ) const
             ((SwNoTxtFrm*)Lower())->GetGrfArea( aClip, &aOrig, FALSE );
             SvxContourDlg::ScaleContour( rPoly, aGrf, MAP_TWIP, aOrig.SSize() );
             rPoly.Move( aOrig.Left(), aOrig.Top() );
+            if( !aClip.Width() )
+                aClip.Width( 1 );
+            if( !aClip.Height() )
+                aClip.Height( 1 );
             rPoly.Clip( aClip.SVRect() );
             bRet = TRUE;
         }
