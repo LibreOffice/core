@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-13 17:30:15 $
+ *  last change: $Author: jp $ $Date: 2000-11-20 14:12:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,7 +183,12 @@
 #ifndef _SECTION_HXX
 #include <section.hxx>
 #endif
-#include "poolfmt.hxx"          // RES_POOLCOLL_STANDARD
+#ifndef _POOLFMT_HXX
+#include <poolfmt.hxx>          // RES_POOLCOLL_STANDARD
+#endif
+#ifndef _SWFLTOPT_HXX
+#include <swfltopt.hxx>
+#endif
 
 #ifndef _MDIEXP_HXX
 #include <mdiexp.hxx>           // Progress
@@ -1705,7 +1710,12 @@ void SwWW8Writer::StoreDoc1()
 
 ULONG SwWW8Writer::StoreDoc()
 {
-    nIniFlags = ReadFilterFlags( "WWWR" );
+    {
+        static const sal_Char* aNames[ 1 ] = { "WinWord/WWWR" };
+        sal_uInt32 aVal[ 1 ];
+        SwFilterOptions aOpt( 1, aNames, aVal );
+        nIniFlags = aVal[ 0 ];
+    }
     nCharFmtStart = ANZ_DEFAULT_STYLES;
     nFmtCollStart = nCharFmtStart + pDoc->GetCharFmts()->Count() - 1;
 
@@ -2056,11 +2066,14 @@ void GetWW8Writer( const String& rFltName, WriterRef& xRet )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtww8.cxx,v 1.3 2000-11-13 17:30:15 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtww8.cxx,v 1.4 2000-11-20 14:12:26 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.3  2000/11/13 17:30:15  jp
+      new method PutCJKandCTLFontsInAttrPool
+
       Revision 1.2  2000/10/10 16:54:06  cmc
       MSOffice 97/2000 Controls {Im|Ex}port
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: w1par.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:58 $
+ *  last change: $Author: jp $ $Date: 2000-11-20 14:13:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,9 @@
 #ifndef _W1PAR_HXX
 #include <w1par.hxx>
 #endif
+#ifndef _SWFLTOPT_HXX
+#include <swfltopt.hxx>
+#endif
 
 #ifndef _MDIEXP_HXX
 #include <mdiexp.hxx>           // StatLine...()
@@ -98,7 +101,11 @@
 static ULONG WW1_Read_FieldIniFlags()
 {
 //  USHORT i;
-    ULONG nFieldFlags = ReadFilterFlags( "WW1F" );
+    static const sal_Char* aNames[ 1 ] = { "WinWord/WW1F" };
+    sal_uInt32 aVal[ 1 ];
+    SwFilterOptions aOpt( 1, aNames, aVal );
+    ULONG nFieldFlags = aVal[ 0 ];
+
     if ( SwFltGetFlag( nFieldFlags, SwFltControlStack::HYPO ) )
     {
         SwFltSetFlag( nFieldFlags, SwFltControlStack::BOOK_TO_VAR_REF );
@@ -188,11 +195,14 @@ Ww1Shell::Ww1Shell( SwDoc& rD, SwPaM& rPam, BOOL bNew, ULONG nFieldFlags)
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww1/w1par.cxx,v 1.1.1.1 2000-09-18 17:14:58 hr Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww1/w1par.cxx,v 1.2 2000-11-20 14:13:10 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 17:14:58  hr
+      initial import
+
       Revision 1.20  2000/09/18 16:04:57  willem.vandorp
       OpenOffice header added.
 

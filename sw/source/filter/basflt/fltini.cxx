@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltini.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-13 10:46:09 $
+ *  last change: $Author: jp $ $Date: 2000-11-20 14:17:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,12 @@
 #ifndef _SVX_TSPTITEM_HXX //autogen
 #include <svx/tstpitem.hxx>
 #endif
+#ifndef _COM_SUN_STAR_UNO_ANY_HXX_
+#include <com/sun/star/uno/Any.hxx>
+#endif
+#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
+#include <com/sun/star/uno/Sequence.hxx>
+#endif
 
 #ifndef _DOC_HXX
 #include <doc.hxx>
@@ -169,18 +175,23 @@
 #ifndef _FRMFMT_HXX
 #include <frmfmt.hxx>
 #endif
-
 #ifndef _NUMRULE_HXX
 #include <numrule.hxx>
 #endif
 #ifndef _NDTXT_HXX
 #include <ndtxt.hxx>
 #endif
+#ifndef _SWFLTOPT_HXX
+#include <swfltopt.hxx>
+#endif
 
 #ifndef _SWSWERROR_H
 #include <swerror.h>
 #endif
 
+using namespace utl;
+using namespace rtl;
+using namespace com::sun::star::uno;
 
 SwRead ReadRtf = 0, ReadAscii = 0, ReadSwg = 0, ReadSw3 = 0,
         ReadHTML = 0, ReadXML = 0;
@@ -498,49 +509,67 @@ BOOL SwReader::CheckPasswd( const String& rPasswd, const Reader& rOptions )
 
 /*  */
 
-//-----------------------------------------
-//            IniFlags lesen
-//-----------------------------------------
-// ReadFilterFlags wird von WW / W4W / EXCEL / LOTUS benutzt.
+//-----------------------------------------------------------------------
+// Filter Flags lesen, wird von WW8 / W4W / EXCEL / LOTUS benutzt.
+//-----------------------------------------------------------------------
 
-ULONG ReadFilterFlags( const sal_Char* pName, const sal_Char* pAltName )
+/*
+<FilterFlags>
+        <Excel_Lotus>
+                <MinRow cfg:type="long">0</MinRow>
+                <MaxRow cfg:type="long">0</MaxRow>
+                <MinCol cfg:type="long">0</MinCol>
+                <MaxCol cfg:type="long">0</MaxCol>
+        </Excel_Lotus>
+        <W4W>
+                <W4WHD cfg:type="long">0</W4WHD>
+                <W4WFT cfg:type="long">0</W4WFT>
+                <W4W000 cfg:type="long">0</W4W000>
+        </W4W>
+        <WinWord>
+                <WW1F cfg:type="long">0</WW1F>
+                <WW cfg:type="long">0</WW>
+                <WW8 cfg:type="long">0</WW8>
+                <WWF cfg:type="long">0</WWF>
+                <WWFA0 cfg:type="long">0</WWFA0>
+                <WWFA1 cfg:type="long">0</WWFA1>
+                <WWFA2 cfg:type="long">0</WWFA2>
+                <WWFB0 cfg:type="long">0</WWFB0>
+                <WWFB1 cfg:type="long">0</WWFB1>
+                <WWFB2 cfg:type="long">0</WWFB2>
+                <WWFLX cfg:type="long">0</WWFLX>
+                <WWFLY cfg:type="long">0</WWFLY>
+                <WWFT cfg:type="long">0</WWFT>
+                <WWWR cfg:type="long">0</WWWR>
+        </WinWord>
+        <Writer>
+                <SW3Imp cfg:type="long">0</SW3Imp>
+        </Writer>
+</FilterFlags>
+*/
+
+SwFilterOptions::SwFilterOptions( sal_uInt16 nCnt, const sal_Char** ppNames,
+                                                      sal_uInt32* pValues )
+    : ConfigItem( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM(
+                                "Office.Writer/FilterFlags" ) ))
 {
-return 0;
+    Sequence<OUString> aNames( nCnt );
+    OUString* pNames = aNames.getArray();
+    for( USHORT n = 0; n < nCnt; ++n )
+        pNames[ n ] = OUString::createFromAscii( ppNames[ n ] );
+    Sequence<Any> aValues = GetProperties( aNames );
 
-#if 0
-// must be changed to the new configiguration
-    String sName( String::CreateFromAscii( pName ));
-    String aStr( SFX_APP()->GetIniManager()->Get( SFX_GROUP_USER, sName ));   // aName suchen
-
-    if( !aStr.Len() && pAltName && *pAltName  )
-        aStr = SFX_APP()->GetIniManager()->Get( SFX_GROUP_USER,
-                                            sName.AssignAscii( pAltName ));
-
-    ULONG nVal = 0;
-    if( aStr.Len() )
+    if( nCnt == aValues.getLength() )
     {
-        xub_StrLen nPos = aStr.SearchAscii( "0x" );
-        if( STRING_NOTFOUND != nPos )
-        {
-            sal_Unicode nNibble;
-            for( nPos += 2; nPos < aStr.Len(); ++nPos  )
-            {
-                if( ((nNibble = aStr.GetChar(nPos)) >= '0') && ( nNibble <= '9') )
-                    nNibble -= '0';
-                else if( (nNibble >= 'A') && (nNibble <= 'F') )
-                    nNibble -= 'A' - 10;
-                else if( (nVal >= 'a') && (nNibble <= 'f') )
-                    nNibble -= 'a' - 10;
-                else
-                    break;
-                ( nVal <<= 4 ) += nNibble;
-            }
-        }
-        else
-            nVal = aStr.ToInt32();
+        const Any* pAnyValues = aValues.getConstArray();
+        for( n = 0; n < nCnt; ++n )
+            pValues[ n ] = pAnyValues[ n ].hasValue()
+                            ? *(sal_uInt32*)pAnyValues[ n ].getValue()
+                            : 0;
     }
-    return nVal;
-#endif
+    else
+        for( n = 0; n < nCnt; ++n )
+            pValues[ n ] = 0;
 }
 
 /*  */
@@ -1516,6 +1545,9 @@ Color ConvertBrushStyle(const Color& rCol, const Color& rFillCol, BYTE nStyle)
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.3  2000/11/13 10:46:09  jp
+      remove IniManager
+
       Revision 1.2  2000/10/06 13:08:02  jp
       should changes: don't use IniManager
 
