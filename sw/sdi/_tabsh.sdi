@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _tabsh.sdi,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2002-10-18 09:26:37 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 12:27:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,18 @@ interface BaseTextTable : Selection
         ExecMethod = Execute ;
         StateMethod = NoState ;
     ]
-
+    SID_ATTR_BRUSH
+    [
+        ExecMethod = Execute ;
+    ]
+    SID_ATTR_BRUSH_ROW
+    [
+        ExecMethod = Execute ;
+    ]
+    SID_ATTR_BRUSH_TABLE
+    [
+        ExecMethod = Execute ;
+    ]
     FN_NUM_FORMAT_TABLE_DLG   // status(final|play)
     [
         ExecMethod = Execute ;
