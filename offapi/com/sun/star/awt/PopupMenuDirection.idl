@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PopupMenuDirection.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:52:38 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 08:50:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,59 +68,51 @@
 
 //=============================================================================
 
-// DocMerge from idl: constants com::sun::star::awt::PopupMenuDirection
 /** These values are used to specify the direction in which
-        a popup menu will grow.
+    a popup menu will grow.
 
-        <p>They may be expanded in future versions.
+    <p>They may be expanded in future versions.</p>
  */
 constants PopupMenuDirection
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::awt::PopupMenuDirection::DEFAULT
     /** @deprecated
      */
     const short DEFAULT = 0;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::awt::PopupMenuDirection::DOWN
     /** @deprecated
      */
     const short DOWN = 1;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::awt::PopupMenuDirection::EXECUTE_DEFAULT
     /** opens on execute in a default direction.
      */
     const short EXECUTE_DEFAULT = 0;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::awt::PopupMenuDirection::EXECUTE_DOWN
     /** opens on execute downwards.
      */
     const short EXECUTE_DOWN = 1;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::awt::PopupMenuDirection::EXECUTE_UP
     /** opens on execute upwards.
      */
     const short EXECUTE_UP = 2;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::awt::PopupMenuDirection::EXECUTE_LEFT
     /** opens on execute to the left.
      */
     const short EXECUTE_LEFT = 4;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::awt::PopupMenuDirection::EXECUTE_RIGHT
     /** opens on execute to the right.
      */
     const short EXECUTE_RIGHT = 8;
