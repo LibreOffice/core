@@ -2,9 +2,9 @@
  *
  *  $RCSfile: topfrm.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-16 11:37:29 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:03:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,6 @@
 #include "dispatch.hxx"
 #include "request.hxx"
 #include "sfxdir.hxx"
-#include "fsetobsh.hxx"
 #include "objitem.hxx"
 #include "objface.hxx"
 #include "msg.hxx"
@@ -799,12 +798,7 @@ sal_Bool SfxTopFrame::InsertDocument( SfxObjectShell* pDoc )
         UpdateDescriptor( pDoc );
     }
 
-    SfxFrameSetObjectShell *pFDoc = PTR_CAST( SfxFrameSetObjectShell, pDoc );
-    if ( pFDoc )
-        SetFrameType_Impl( GetFrameType() | SFXFRAME_FRAMESET );
-    else
-        SetFrameType_Impl( GetFrameType() & ~SFXFRAME_FRAMESET );
-
+    SetFrameType_Impl( GetFrameType() & ~SFXFRAME_FRAMESET );
     sal_Bool bBrowsing = sal_True;
     BOOL bSetFocus = GetWindow().HasChildPathFocus( TRUE );
     SfxViewFrame *pFrame = GetCurrentViewFrame();
@@ -986,8 +980,6 @@ String SfxTopViewFrame::UpdateTitle()
             pImp->aFactoryName += String::CreateFromInt32( (sal_Int32) nSlotId );
         }
     }
-    else
-        pImp->aFactoryName = String::CreateFromAscii( SfxObjectFactory::GetDefaultFactory().GetShortName() );
 
     String aTitle = SfxViewFrame::UpdateTitle();
     aTitle += String::CreateFromAscii( " - " );
