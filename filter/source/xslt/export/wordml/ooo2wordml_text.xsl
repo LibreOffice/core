@@ -51,7 +51,7 @@
    Contributor(s): _______________________________________
    
  -->
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:w="http://schemas.microsoft.com/office/word/2003/wordml" xmlns:wx="http://schemas.microsoft.com/office/word/2003/auxHint" xmlns:w10="urn:schemas-microsoft-com:office:word" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:aml="http://schemas.microsoft.com/aml/2001/core" xmlns:dt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:svg="http://www.w3.org/2000/svg" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dom="http://www.w3.org/2001/xml-events" exclude-result-prefixes="office table style text draw svg   dc config xlink meta oooc dom ooo chart math dr3d form script ooow draw">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:w="http://schemas.microsoft.com/office/word/2003/wordml" xmlns:wx="http://schemas.microsoft.com/office/word/2003/auxHint" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:aml="http://schemas.microsoft.com/aml/2001/core" xmlns:dt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:w10="urn:schemas-microsoft-com:office:word" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:svg="http://www.w3.org/2000/svg" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dom="http://www.w3.org/2001/xml-events" exclude-result-prefixes="office table style text draw svg   dc config xlink meta oooc dom ooo chart math dr3d form script ooow draw">
     <xsl:template match="style:paragraph-properties" mode="paragraph">
         <w:pPr>
             <w:adjustRightInd w:val="off"/>
@@ -111,27 +111,17 @@
                         <xsl:choose>
                             <xsl:when test="contains(@fo:line-height, '%')">
                                 <xsl:attribute name="w:line-rule">auto</xsl:attribute>
-                                <xsl:attribute name="w:line">
-                                    <xsl:value-of select="round(substring-before(@fo:line-height, '%') div 100 * 240)"/>
-                                </xsl:attribute>
+                                <xsl:attribute name="w:line"><xsl:value-of select="round(substring-before(@fo:line-height, '%') div 100 * 240)"/></xsl:attribute>
                             </xsl:when>
                             <xsl:otherwise>
                                 <xsl:attribute name="w:line-rule">exact</xsl:attribute>
-                                <xsl:attribute name="w:line">
-                                    <xsl:call-template name="convert2twip">
-                                        <xsl:with-param name="value" select="@fo:line-height"/>
-                                    </xsl:call-template>
-                                </xsl:attribute>
+                                <xsl:attribute name="w:line"><xsl:call-template name="convert2twip"><xsl:with-param name="value" select="@fo:line-height"/></xsl:call-template></xsl:attribute>
                             </xsl:otherwise>
                         </xsl:choose>
                     </xsl:when>
                     <xsl:when test="@style:line-height-at-least">
                         <xsl:attribute name="w:line-rule">at-least</xsl:attribute>
-                        <xsl:attribute name="w:line">
-                            <xsl:call-template name="convert2twip">
-                                <xsl:with-param name="value" select="@style:line-height-at-least"/>
-                            </xsl:call-template>
-                        </xsl:attribute>
+                        <xsl:attribute name="w:line"><xsl:call-template name="convert2twip"><xsl:with-param name="value" select="@style:line-height-at-least"/></xsl:call-template></xsl:attribute>
                     </xsl:when>
                     <xsl:when test="@style:line-spacing">
                         <xsl:attribute name="w:line-rule">auto</xsl:attribute>
@@ -140,9 +130,7 @@
                                 <xsl:with-param name="value" select="@style:line-spacing"/>
                             </xsl:call-template>
                         </xsl:variable>
-                        <xsl:attribute name="w:line">
-                            <xsl:value-of select="round($spacing div 0.567)"/>
-                        </xsl:attribute>
+                        <xsl:attribute name="w:line"><xsl:value-of select="round($spacing div 0.567)"/></xsl:attribute>
                     </xsl:when>
                 </xsl:choose>
                 <xsl:if test="@fo:margin-top">
@@ -157,17 +145,11 @@
                                         <xsl:with-param name="value" select="$parent-size"/>
                                     </xsl:call-template>
                                 </xsl:variable>
-                                <xsl:attribute name="w:before">
-                                    <xsl:value-of select="round($w-number div 100 * substring-before(@fo:margin-top, '%'))"/>
-                                </xsl:attribute>
+                                <xsl:attribute name="w:before"><xsl:value-of select="round($w-number div 100 * substring-before(@fo:margin-top, '%'))"/></xsl:attribute>
                             </xsl:if>
                         </xsl:when>
                         <xsl:otherwise>
-                            <xsl:attribute name="w:before">
-                                <xsl:call-template name="convert2twip">
-                                    <xsl:with-param name="value" select="@fo:margin-top"/>
-                                </xsl:call-template>
-                            </xsl:attribute>
+                            <xsl:attribute name="w:before"><xsl:call-template name="convert2twip"><xsl:with-param name="value" select="@fo:margin-top"/></xsl:call-template></xsl:attribute>
                         </xsl:otherwise>
                     </xsl:choose>
                 </xsl:if>
@@ -183,17 +165,11 @@
                                         <xsl:with-param name="value" select="$parent-size"/>
                                     </xsl:call-template>
                                 </xsl:variable>
-                                <xsl:attribute name="w:after">
-                                    <xsl:value-of select="round($w-number div 100 * substring-before(@fo:margin-bottom, '%'))"/>
-                                </xsl:attribute>
+                                <xsl:attribute name="w:after"><xsl:value-of select="round($w-number div 100 * substring-before(@fo:margin-bottom, '%'))"/></xsl:attribute>
                             </xsl:if>
                         </xsl:when>
                         <xsl:otherwise>
-                            <xsl:attribute name="w:after">
-                                <xsl:call-template name="convert2twip">
-                                    <xsl:with-param name="value" select="@fo:margin-bottom"/>
-                                </xsl:call-template>
-                            </xsl:attribute>
+                            <xsl:attribute name="w:after"><xsl:call-template name="convert2twip"><xsl:with-param name="value" select="@fo:margin-bottom"/></xsl:call-template></xsl:attribute>
                         </xsl:otherwise>
                     </xsl:choose>
                 </xsl:if>
@@ -211,17 +187,11 @@
                                         <xsl:with-param name="value" select="$parent-size"/>
                                     </xsl:call-template>
                                 </xsl:variable>
-                                <xsl:attribute name="w:left">
-                                    <xsl:value-of select="round($w-number div 100 * substring-before(@fo:margin-left, '%'))"/>
-                                </xsl:attribute>
+                                <xsl:attribute name="w:left"><xsl:value-of select="round($w-number div 100 * substring-before(@fo:margin-left, '%'))"/></xsl:attribute>
                             </xsl:if>
                         </xsl:when>
                         <xsl:otherwise>
-                            <xsl:attribute name="w:left">
-                                <xsl:call-template name="convert2twip">
-                                    <xsl:with-param name="value" select="@fo:margin-left"/>
-                                </xsl:call-template>
-                            </xsl:attribute>
+                            <xsl:attribute name="w:left"><xsl:call-template name="convert2twip"><xsl:with-param name="value" select="@fo:margin-left"/></xsl:call-template></xsl:attribute>
                         </xsl:otherwise>
                     </xsl:choose>
                 </xsl:if>
@@ -237,17 +207,11 @@
                                         <xsl:with-param name="value" select="$parent-size"/>
                                     </xsl:call-template>
                                 </xsl:variable>
-                                <xsl:attribute name="w:right">
-                                    <xsl:value-of select="round($w-number div 100 * substring-before(@fo:margin-right, '%'))"/>
-                                </xsl:attribute>
+                                <xsl:attribute name="w:right"><xsl:value-of select="round($w-number div 100 * substring-before(@fo:margin-right, '%'))"/></xsl:attribute>
                             </xsl:if>
                         </xsl:when>
                         <xsl:otherwise>
-                            <xsl:attribute name="w:right">
-                                <xsl:call-template name="convert2twip">
-                                    <xsl:with-param name="value" select="@fo:margin-right"/>
-                                </xsl:call-template>
-                            </xsl:attribute>
+                            <xsl:attribute name="w:right"><xsl:call-template name="convert2twip"><xsl:with-param name="value" select="@fo:margin-right"/></xsl:call-template></xsl:attribute>
                         </xsl:otherwise>
                     </xsl:choose>
                 </xsl:if>
@@ -269,31 +233,19 @@
                                 </xsl:variable>
                                 <xsl:choose>
                                     <xsl:when test="$w-number &lt; 0">
-                                        <xsl:attribute name="w:hanging">
-                                            <xsl:value-of select="round($w-number div -100 * substring-before(@fo:text-indent, '%'))"/>
-                                        </xsl:attribute>
+                                        <xsl:attribute name="w:hanging"><xsl:value-of select="round($w-number div -100 * substring-before(@fo:text-indent, '%'))"/></xsl:attribute>
                                     </xsl:when>
                                     <xsl:otherwise>
-                                        <xsl:attribute name="w:first-line">
-                                            <xsl:value-of select="round($w-number div 100 * substring-before(@fo:text-indent, '%'))"/>
-                                        </xsl:attribute>
+                                        <xsl:attribute name="w:first-line"><xsl:value-of select="round($w-number div 100 * substring-before(@fo:text-indent, '%'))"/></xsl:attribute>
                                     </xsl:otherwise>
                                 </xsl:choose>
                             </xsl:if>
                         </xsl:when>
                         <xsl:when test="starts-with(@fo:text-indent,'-')">
-                            <xsl:attribute name="w:hanging">
-                                <xsl:call-template name="convert2twip">
-                                    <xsl:with-param name="value" select="substring-after(@fo:text-indent,'-')"/>
-                                </xsl:call-template>
-                            </xsl:attribute>
+                            <xsl:attribute name="w:hanging"><xsl:call-template name="convert2twip"><xsl:with-param name="value" select="substring-after(@fo:text-indent,'-')"/></xsl:call-template></xsl:attribute>
                         </xsl:when>
                         <xsl:otherwise>
-                            <xsl:attribute name="w:first-line">
-                                <xsl:call-template name="convert2twip">
-                                    <xsl:with-param name="value" select="@fo:text-indent"/>
-                                </xsl:call-template>
-                            </xsl:attribute>
+                            <xsl:attribute name="w:first-line"><xsl:call-template name="convert2twip"><xsl:with-param name="value" select="@fo:text-indent"/></xsl:call-template></xsl:attribute>
                         </xsl:otherwise>
                     </xsl:choose>
                 </xsl:if>
@@ -330,9 +282,7 @@
                                     <xsl:attribute name="w:val">decimal</xsl:attribute>
                                 </xsl:when>
                                 <xsl:when test="@style:type">
-                                    <xsl:attribute name="w:val">
-                                        <xsl:value-of select="@style:type"/>
-                                    </xsl:attribute>
+                                    <xsl:attribute name="w:val"><xsl:value-of select="@style:type"/></xsl:attribute>
                                 </xsl:when>
                                 <xsl:otherwise>
                                     <xsl:attribute name="w:val">left</xsl:attribute>
@@ -355,11 +305,7 @@
                                 </xsl:choose>
                             </xsl:if>
                             <xsl:if test="@style:position">
-                                <xsl:attribute name="w:pos">
-                                    <xsl:call-template name="convert2twip">
-                                        <xsl:with-param name="value" select="@style:position"/>
-                                    </xsl:call-template>
-                                </xsl:attribute>
+                                <xsl:attribute name="w:pos"><xsl:call-template name="convert2twip"><xsl:with-param name="value" select="@style:position"/></xsl:call-template></xsl:attribute>
                             </xsl:if>
                         </w:tab>
                     </xsl:for-each>
@@ -382,9 +328,7 @@
                             <xsl:attribute name="w:val">center</xsl:attribute>
                         </xsl:when>
                         <xsl:otherwise>
-                            <xsl:attribute name="w:val">
-                                <xsl:value-of select="@style:vertical-align"/>
-                            </xsl:attribute>
+                            <xsl:attribute name="w:val"><xsl:value-of select="@style:vertical-align"/></xsl:attribute>
                         </xsl:otherwise>
                     </xsl:choose>
                 </xsl:element>
@@ -412,11 +356,7 @@
                             <xsl:with-param name="so-border-line-width" select="$border-line-width-top"/>
                             <xsl:with-param name="so-border-position" select=" 'top' "/>
                         </xsl:call-template>
-                        <xsl:attribute name="w:space">
-                            <xsl:call-template name="convert2pt">
-                                <xsl:with-param name="value" select="$padding-top"/>
-                            </xsl:call-template>
-                        </xsl:attribute>
+                        <xsl:attribute name="w:space"><xsl:call-template name="convert2pt"><xsl:with-param name="value" select="$padding-top"/></xsl:call-template></xsl:attribute>
                         <xsl:if test="@style:shadow!='none'">
                             <xsl:attribute name="w:shadow">on</xsl:attribute>
                         </xsl:if>
@@ -429,11 +369,7 @@
                             <xsl:with-param name="so-border-line-width" select="$border-line-width-bottom"/>
                             <xsl:with-param name="so-border-position" select=" 'bottom' "/>
                         </xsl:call-template>
-                        <xsl:attribute name="w:space">
-                            <xsl:call-template name="convert2pt">
-                                <xsl:with-param name="value" select="$padding-bottom"/>
-                            </xsl:call-template>
-                        </xsl:attribute>
+                        <xsl:attribute name="w:space"><xsl:call-template name="convert2pt"><xsl:with-param name="value" select="$padding-bottom"/></xsl:call-template></xsl:attribute>
                         <xsl:if test="@style:shadow!='none'">
                             <xsl:attribute name="w:shadow">on</xsl:attribute>
                         </xsl:if>
@@ -446,11 +382,7 @@
                             <xsl:with-param name="so-border-line-width" select="$border-line-width-left"/>
                             <xsl:with-param name="so-border-position" select=" 'left' "/>
                         </xsl:call-template>
-                        <xsl:attribute name="w:space">
-                            <xsl:call-template name="convert2pt">
-                                <xsl:with-param name="value" select="$padding-left"/>
-                            </xsl:call-template>
-                        </xsl:attribute>
+                        <xsl:attribute name="w:space"><xsl:call-template name="convert2pt"><xsl:with-param name="value" select="$padding-left"/></xsl:call-template></xsl:attribute>
                         <xsl:if test="@style:shadow!='none'">
                             <xsl:attribute name="w:shadow">on</xsl:attribute>
                         </xsl:if>
@@ -463,11 +395,7 @@
                             <xsl:with-param name="so-border-line-width" select="$border-line-width-right"/>
                             <xsl:with-param name="so-border-position" select=" 'right' "/>
                         </xsl:call-template>
-                        <xsl:attribute name="w:space">
-                            <xsl:call-template name="convert2pt">
-                                <xsl:with-param name="value" select="$padding-right"/>
-                            </xsl:call-template>
-                        </xsl:attribute>
+                        <xsl:attribute name="w:space"><xsl:call-template name="convert2pt"><xsl:with-param name="value" select="$padding-right"/></xsl:call-template></xsl:attribute>
                         <xsl:if test="@style:shadow!='none'">
                             <xsl:attribute name="w:shadow">on</xsl:attribute>
                         </xsl:if>
@@ -482,15 +410,7 @@
                                 <xsl:with-param name="value" select="substring-after(substring-after(@style:shadow, ' '), ' ')"/>
                             </xsl:call-template>
                         </xsl:variable>
-                        <xsl:attribute name="w:sz">
-                            <xsl:choose>
-                                <xsl:when test="$shadow-size &lt;= 0.08">12</xsl:when>
-                                <xsl:when test="$shadow-size &lt;= 0.14">18</xsl:when>
-                                <xsl:when test="$shadow-size &lt;= 0.20">24</xsl:when>
-                                <xsl:when test="$shadow-size &lt;= 0.25">36</xsl:when>
-                                <xsl:otherwise>48</xsl:otherwise>
-                            </xsl:choose>
-                        </xsl:attribute>
+                        <xsl:attribute name="w:sz"><xsl:choose><xsl:when test="$shadow-size &lt;= 0.08">12</xsl:when><xsl:when test="$shadow-size &lt;= 0.14">18</xsl:when><xsl:when test="$shadow-size &lt;= 0.20">24</xsl:when><xsl:when test="$shadow-size &lt;= 0.25">36</xsl:when><xsl:otherwise>48</xsl:otherwise></xsl:choose></xsl:attribute>
                     </xsl:element>
                     <xsl:element name="w:bottom">
                         <xsl:attribute name="w:shadow">on</xsl:attribute>
@@ -500,32 +420,16 @@
                                 <xsl:with-param name="value" select="substring-after(substring-after(@style:shadow, ' '), ' ')"/>
                             </xsl:call-template>
                         </xsl:variable>
-                        <xsl:attribute name="w:sz">
-                            <xsl:choose>
-                                <xsl:when test="$shadow-size &lt;= 0.08">12</xsl:when>
-                                <xsl:when test="$shadow-size &lt;= 0.14">18</xsl:when>
-                                <xsl:when test="$shadow-size &lt;= 0.20">24</xsl:when>
-                                <xsl:when test="$shadow-size &lt;= 0.25">36</xsl:when>
-                                <xsl:otherwise>48</xsl:otherwise>
-                            </xsl:choose>
-                        </xsl:attribute>
+                        <xsl:attribute name="w:sz"><xsl:choose><xsl:when test="$shadow-size &lt;= 0.08">12</xsl:when><xsl:when test="$shadow-size &lt;= 0.14">18</xsl:when><xsl:when test="$shadow-size &lt;= 0.20">24</xsl:when><xsl:when test="$shadow-size &lt;= 0.25">36</xsl:when><xsl:otherwise>48</xsl:otherwise></xsl:choose></xsl:attribute>
                     </xsl:element>
                 </xsl:if>
             </w:pBdr>
             <w:ind>
                 <xsl:if test="$padding-left!=''">
-                    <xsl:attribute name="w:left">
-                        <xsl:call-template name="convert2twip">
-                            <xsl:with-param name="value" select="$padding-left"/>
-                        </xsl:call-template>
-                    </xsl:attribute>
+                    <xsl:attribute name="w:left"><xsl:call-template name="convert2twip"><xsl:with-param name="value" select="$padding-left"/></xsl:call-template></xsl:attribute>
                 </xsl:if>
                 <xsl:if test="$padding-right!='' ">
-                    <xsl:attribute name="w:right">
-                        <xsl:call-template name="convert2twip">
-                            <xsl:with-param name="value" select="$padding-right"/>
-                        </xsl:call-template>
-                    </xsl:attribute>
+                    <xsl:attribute name="w:right"><xsl:call-template name="convert2twip"><xsl:with-param name="value" select="$padding-right"/></xsl:call-template></xsl:attribute>
                 </xsl:if>
             </w:ind>
             <xsl:variable name="stylename">
@@ -562,22 +466,14 @@
                         </xsl:choose>
                     </xsl:variable>
                     <xsl:if test="string-length($fontname)!=0">
-                        <xsl:attribute name="w:ascii">
-                            <xsl:value-of select="$fontname"/>
-                        </xsl:attribute>
-                        <xsl:attribute name="w:h-ansi">
-                            <xsl:value-of select="$fontname"/>
-                        </xsl:attribute>
+                        <xsl:attribute name="w:ascii"><xsl:value-of select="$fontname"/></xsl:attribute>
+                        <xsl:attribute name="w:h-ansi"><xsl:value-of select="$fontname"/></xsl:attribute>
                     </xsl:if>
                     <xsl:if test="@style:font-name-asian">
-                        <xsl:attribute name="w:fareast">
-                            <xsl:value-of select="@style:font-name-asian"/>
-                        </xsl:attribute>
+                        <xsl:attribute name="w:fareast"><xsl:value-of select="@style:font-name-asian"/></xsl:attribute>
                     </xsl:if>
                     <xsl:if test="@style:font-name-complex">
-                        <xsl:attribute name="w:cs">
-                            <xsl:value-of select="@style:font-name-complex"/>
-                        </xsl:attribute>
+                        <xsl:attribute name="w:cs"><xsl:value-of select="@style:font-name-complex"/></xsl:attribute>
                     </xsl:if>
                 </w:rFonts>
             </xsl:if>
@@ -658,13 +554,9 @@
                             </xsl:otherwise>
                         </xsl:choose>
                     </xsl:variable>
-                    <xsl:attribute name="w:val">
-                        <xsl:value-of select="$w-u"/>
-                    </xsl:attribute>
+                    <xsl:attribute name="w:val"><xsl:value-of select="$w-u"/></xsl:attribute>
                     <xsl:if test="contains(@style:text-underline-color,'#')">
-                        <xsl:attribute name="w:color">
-                            <xsl:value-of select="substring-after(@style:text-underline-color,'#')"/>
-                        </xsl:attribute>
+                        <xsl:attribute name="w:color"><xsl:value-of select="substring-after(@style:text-underline-color,'#')"/></xsl:attribute>
                     </xsl:if>
                 </w:u>
             </xsl:if>
@@ -688,9 +580,7 @@
                 <w:color>
                     <xsl:choose>
                         <xsl:when test="@fo:color != '#000000'">
-                            <xsl:attribute name="w:val">
-                                <xsl:value-of select="substring-after(@fo:color,'#')"/>
-                            </xsl:attribute>
+                            <xsl:attribute name="w:val"><xsl:value-of select="substring-after(@fo:color,'#')"/></xsl:attribute>
                         </xsl:when>
                         <xsl:otherwise>
                             <xsl:attribute name="w:val">auto</xsl:attribute>
@@ -742,11 +632,7 @@
             </xsl:if>
             <xsl:if test="@fo:letter-spacing != 'normal'">
                 <w:spacing>
-                    <xsl:attribute name="w:val">
-                        <xsl:call-template name="convert2twip">
-                            <xsl:with-param name="value" select="@fo:letter-spacing"/>
-                        </xsl:call-template>
-                    </xsl:attribute>
+                    <xsl:attribute name="w:val"><xsl:call-template name="convert2twip"><xsl:with-param name="value" select="@fo:letter-spacing"/></xsl:call-template></xsl:attribute>
                 </w:spacing>
             </xsl:if>
             <xsl:if test="@style:text-blinking = 'true'">
@@ -755,19 +641,13 @@
             <xsl:if test="@fo:language | @fo:language-asian | @fo:language-complex">
                 <w:lang>
                     <xsl:if test="@fo:language and @fo:country">
-                        <xsl:attribute name="w:val">
-                            <xsl:value-of select="concat(@fo:language, '-', @fo:country)"/>
-                        </xsl:attribute>
+                        <xsl:attribute name="w:val"><xsl:value-of select="concat(@fo:language, '-', @fo:country)"/></xsl:attribute>
                     </xsl:if>
                     <xsl:if test="@fo:language-asian and @fo:country-asian">
-                        <xsl:attribute name="w:fareast">
-                            <xsl:value-of select="concat(@fo:language-asian, '-', @fo:country-asian)"/>
-                        </xsl:attribute>
+                        <xsl:attribute name="w:fareast"><xsl:value-of select="concat(@fo:language-asian, '-', @fo:country-asian)"/></xsl:attribute>
                     </xsl:if>
                     <xsl:if test="@fo:language-complex and @fo:language-complex">
-                        <xsl:attribute name="w:bidi">
-                            <xsl:value-of select="concat(@fo:language-complex, '-', @fo:language-complex)"/>
-                        </xsl:attribute>
+                        <xsl:attribute name="w:bidi"><xsl:value-of select="concat(@fo:language-complex, '-', @fo:language-complex)"/></xsl:attribute>
                     </xsl:if>
                 </w:lang>
             </xsl:if>
@@ -785,20 +665,11 @@
                     </xsl:choose>
                 </xsl:variable>
                 <w:vertAlign>
-                    <xsl:attribute name="w:val">
-                        <xsl:value-of select="substring-before($position,'_')"/>
-                    </xsl:attribute>
+                    <xsl:attribute name="w:val"><xsl:value-of select="substring-before($position,'_')"/></xsl:attribute>
                 </w:vertAlign>
                 <!-- Raised/Lowed position is difficult to map to MSWord w:position, Writer use %, but Word use half-point(not relative position). Since it's difficult to get font-size, use 12pt as default font-size -->
                 <w:position>
-                    <xsl:attribute name="w:val">
-                        <xsl:choose>
-                            <xsl:when test="substring-after($position, '_') = 0">0</xsl:when>
-                            <xsl:otherwise>
-                                <xsl:value-of select="round(substring-after($position, '_') div 6)"/>
-                            </xsl:otherwise>
-                        </xsl:choose>
-                    </xsl:attribute>
+                    <xsl:attribute name="w:val"><xsl:choose><xsl:when test="substring-after($position, '_') = 0">0</xsl:when><xsl:otherwise><xsl:value-of select="round(substring-after($position, '_') div 6)"/></xsl:otherwise></xsl:choose></xsl:attribute>
                 </w:position>
             </xsl:if>
             <xsl:if test="@text:display = 'true'">
@@ -851,14 +722,14 @@
                                     </xsl:apply-templates>
                                 </xsl:if>
                                 <xsl:if test="key( 'slave-style', @*[name()='text:style-name' or name()='table:style-name'])/style:paragraph-properties/@style:page-number">
-                                <!-- in M$ word the header and footer associate with the w:sectPr, but in StarOffice writer the header and footer associate with the style:master-page -->
-                        <xsl:variable name="pagenumber_start">
-                            <xsl:value-of select=" key( 'slave-style', @*[name()='text:style-name' or name()='table:style-name'])/style:paragraph-properties/@style:page-number"/>
-                        </xsl:variable>
-                        <xsl:if test=" number($pagenumber_start)  &gt; 0 ">
-                            <w:pgNumType w:start= "{$pagenumber_start}"/>
-                        </xsl:if>
-                        <!-- comment out the below line to enable the header and footer display normally when style:page-number =0  --> 
+                                    <!-- in M$ word the header and footer associate with the w:sectPr, but in StarOffice writer the header and footer associate with the style:master-page -->
+                                    <xsl:variable name="pagenumber_start">
+                                        <xsl:value-of select=" key( 'slave-style', @*[name()='text:style-name' or name()='table:style-name'])/style:paragraph-properties/@style:page-number"/>
+                                    </xsl:variable>
+                                    <xsl:if test=" number($pagenumber_start)  &gt; 0 ">
+                                        <w:pgNumType w:start="{$pagenumber_start}"/>
+                                    </xsl:if>
+                                    <!-- comment out the below line to enable the header and footer display normally when style:page-number =0  -->
                                     <!--w:pgNumType w:start="{key( 'slave-style', @*[name()='text:style-name' or name()='table:style-name'])/style:paragraph-properties/@style:page-number}"/ -->
                                 </xsl:if>
                             </xsl:when>
@@ -954,7 +825,7 @@
                     <w:br w:type="column"/>
                 </w:r>
             </xsl:if>
-            <xsl:if test="not(ancestor::text:p) and not(preceding::text:p)">
+            <xsl:if test="parent::office:text and not(preceding-sibling::text:p)">
                 <xsl:call-template name="PageLevelGraphic"/>
             </xsl:if>
             <xsl:if test="parent::text:footnote-body and not(preceding-sibling::*)">
@@ -997,9 +868,11 @@
                     <w:tab/>
                 </w:r>
             </xsl:if>
-              <!-- newly added the endnote , footnote templates -->
+            <!-- newly added the endnote , footnote templates -->
             <xsl:if test="../../@text:note-class='endnote'  and not(preceding-sibling::*)">
-            <xsl:message> <xsl:value-of select=" 'enter into ext:note-class= endnote' "/></xsl:message>
+                <xsl:message>
+                    <xsl:value-of select=" 'enter into ext:note-class= endnote' "/>
+                </xsl:message>
                 <w:r>
                     <w:rPr>
                         <w:rStyle w:val="Endnote_20_Symbol"/>
@@ -1020,7 +893,9 @@
                 </w:r>
             </xsl:if>
             <xsl:if test="../../@text:note-class='footnote'  and not(preceding-sibling::*)">
-            <xsl:message> <xsl:value-of select=" 'enter into ext:note-class= footnote' "/></xsl:message>
+                <xsl:message>
+                    <xsl:value-of select=" 'enter into ext:note-class= footnote' "/>
+                </xsl:message>
                 <w:r>
                     <w:rPr>
                         <w:rStyle w:val="Footnote_20_Symbol"/>
@@ -1061,8 +936,7 @@
              | text:measure | text:dde-connection | text:sheet-name | text:bibliography-mark | text:script
              | text:page-continuation | office:annotation | text:bookmark-start | text:bookmark-end | text:bookmark
  "/>
- <!-- comment out the following line to replace the text:footnote , text:endnote with text:note in OASIS format -->
- 
+            <!-- comment out the following line to replace the text:footnote , text:endnote with text:note in OASIS format -->
             <!--xsl:apply-templates select="text:a | text:span | text() | text:hidden-text | text:line-break | text:tab-stop 
              | text:s | text:footnote | text:endnote | draw:*
              | text:page-number | text:page-count | text:subject | text:initial-creator | text:title | text:date | text:time 
@@ -1112,9 +986,8 @@
              | text:measure | text:dde-connection | text:sheet-name | text:bibliography-mark | text:script 
              | text:page-continuation | office:annotation | text:bookmark-start | text:bookmark-end | text:bookmark
 "/>
-<!-- comment out the following line to replace the text:footnote , text:endnote with text:note in OASIS format -->
- 
-<!-- xsl:apply-templates select="text:a | text() | text:hidden-text | text:line-break | text:tab-stop | text:s
+        <!-- comment out the following line to replace the text:footnote , text:endnote with text:note in OASIS format -->
+        <!-- xsl:apply-templates select="text:a | text() | text:hidden-text | text:line-break | text:tab-stop | text:s
              | text:footnote | text:endnote
              | text:page-number | text:page-count | text:subject | text:initial-creator | text:title | text:date | text:time 
              | text:author-name | text:author-initials | text:chapter | text:file-name | text:sender-company 
@@ -1261,50 +1134,43 @@
     </xsl:template>
     <!-- newly added the endnote , footnote templates -->
     <xsl:template match="text:note">
-    
-    <xsl:choose>
-        <xsl:when test="@text:note-class = 'endnote' ">
-            <w:r>
-                <w:rPr>
-                    <w:rStyle w:val="Endnote"/>
-                </w:rPr>
-                <xsl:apply-templates select="text:note-body"/>
+        <xsl:choose>
+            <xsl:when test="@text:note-class = 'endnote' ">
+                <w:r>
+                    <w:rPr>
+                        <w:rStyle w:val="Endnote"/>
+                    </w:rPr>
+                    <xsl:apply-templates select="text:note-body"/>
                 </w:r>
-        </xsl:when>
-        <xsl:when test="@text:note-class = 'footnote' ">
-             <w:r>
-            <w:rPr>
-                <w:rStyle w:val="Footnote"/>
-            </w:rPr>
-            <xsl:apply-templates select="text:note-body"/>
-        </w:r>
-        </xsl:when>
-    </xsl:choose>
-        
+            </xsl:when>
+            <xsl:when test="@text:note-class = 'footnote' ">
+                <w:r>
+                    <w:rPr>
+                        <w:rStyle w:val="Footnote"/>
+                    </w:rPr>
+                    <xsl:apply-templates select="text:note-body"/>
+                </w:r>
+            </xsl:when>
+        </xsl:choose>
     </xsl:template>
-    
-    
     <xsl:template match="text:note-body">
-    
         <xsl:choose>
             <xsl:when test="../@text:note-class='endnote' ">
-       
-            <w:endnote>
-                <xsl:if test="../text:note-citation/@text:label">
-                    <xsl:attribute name="w:suppressRef">on</xsl:attribute>
-                </xsl:if>
-                <xsl:apply-templates select="text:h | text:p | text:ordered-list | text:unordered-list | text:list"/>
-            </w:endnote>
-        </xsl:when>
-        <xsl:when test="../@text:note-class='footnote' ">
-       
-            <w:footnote>
-                <xsl:if test="../text:note-citation/@text:label">
-                    <xsl:attribute name="w:suppressRef">on</xsl:attribute>
-                </xsl:if>
-                <xsl:apply-templates select="text:h | text:p | text:ordered-list | text:unordered-list | text:list"/>
-            </w:footnote>
-        </xsl:when>
-         </xsl:choose>
-         </xsl:template >
+                <w:endnote>
+                    <xsl:if test="../text:note-citation/@text:label">
+                        <xsl:attribute name="w:suppressRef">on</xsl:attribute>
+                    </xsl:if>
+                    <xsl:apply-templates select="text:h | text:p | text:ordered-list | text:unordered-list | text:list"/>
+                </w:endnote>
+            </xsl:when>
+            <xsl:when test="../@text:note-class='footnote' ">
+                <w:footnote>
+                    <xsl:if test="../text:note-citation/@text:label">
+                        <xsl:attribute name="w:suppressRef">on</xsl:attribute>
+                    </xsl:if>
+                    <xsl:apply-templates select="text:h | text:p | text:ordered-list | text:unordered-list | text:list"/>
+                </w:footnote>
+            </xsl:when>
+        </xsl:choose>
+    </xsl:template>
 </xsl:stylesheet>
