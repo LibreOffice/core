@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2003-04-17 08:34:22 $
+#   last change: $Author: vg $ $Date: 2003-05-27 14:18:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,7 +78,7 @@ SHL1OBJS=  \
 SHL1TARGET= File
 SHL1STDLIBS=\
     $(SALLIB) 
-    
+
 .IF "$(GUI)" == "WNT"
 SHL1STDLIBS+=	$(SOLARLIBDIR)$/cppunit.lib
 .ENDIF
@@ -92,6 +92,10 @@ SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
 DEF1NAME    =$(SHL1TARGET)
 DEF1EXPORTFILE= export.exp
 # END --------------------------------------------------------------
+
+#------------------------------- All object files -------------------------------
+# do this here, so we get right dependencies
+SLOFILES=$(SHL1OBJS)
 
 # --- Targets ------------------------------------------------------
 
