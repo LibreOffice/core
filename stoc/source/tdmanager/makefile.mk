@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: kso $ $Date: 2002-11-11 08:33:38 $
+#   last change: $Author: rt $ $Date: 2003-04-23 16:13:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,16 +62,16 @@
 PRJ=..$/..
 
 PRJNAME=	stoc
-TARGET=		tdmgr
-USE_DEFFILE=	TRUE
-NO_BSYMBOLIC=	TRUE
+TARGET = typemgr.uno
 ENABLE_EXCEPTIONS=TRUE
+NO_BSYMBOLIC = TRUE
 BOOTSTRAP_SERVICE=TRUE
-COMP1TYPELIST=$(TARGET)
+COMP1TYPELIST = tdmgr
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
+DLLPRE =
 
 # ------------------------------------------------------------------
 
@@ -87,7 +87,7 @@ SHL1STDLIBS= \
         $(CPPULIB)		\
         $(CPPUHELPERLIB)	\
         $(SALLIB)
-SHL1VERSIONMAP=$(TARGET).map
+SHL1VERSIONMAP = tdmgr.map
 
 SHL1DEPN=
 SHL1IMPLIB=	i$(TARGET)
