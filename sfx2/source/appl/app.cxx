@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mba $ $Date: 2000-12-04 12:34:12 $
+ *  last change: $Author: mba $ $Date: 2000-12-05 14:29:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -290,7 +290,7 @@ SfxApplication::SfxApplication()
     pImp->pAutoSaveTimer = 0;
     International aOldInter( Application::GetAppInternational() );
     String sLanguage = SvtPathOptions().SubstituteVariable(String::CreateFromAscii("$(langid)"));
-    LanguageType eLanguage = sLanguage.ToInt32();
+    LanguageType eLanguage = (LanguageType) sLanguage.ToInt32();
     Application::SetAppInternational( International( eLanguage, aOldInter.GetFormatLanguage() ) );
 
     pAppData_Impl = new SfxAppData_Impl( this );
@@ -543,17 +543,17 @@ void SfxApplication::HandleAppEvent( const ApplicationEvent& rAppEvent )
 #ifdef WNT
             FATToVFat_Impl( aName );
 #endif
-            SfxStringItem aFileName( SID_FILE_NAME, aName );
+
+            // if the filename is a physical name, it is the client file system, not the file system
+            // of the machine where the office is running ( if this are different machines )
+            // the file system of the client is addressed through the "file:" protocol
+            INetURLObject aURL( aName, INET_PROT_FILE );
+            sal_Bool bIsFileURL = INET_PROT_FILE == aURL.GetProtocol();
+            SfxStringItem aFileName( SID_FILE_NAME, aURL.GetMainURL() );
 
 #ifdef APPEVENT_DBG
             aStream << "Open: " << (const char *)aFileName.GetValue();
 #endif
-            // if the filename is a physical name, it is the client file system, not the file system
-            // of the machine where the office is running ( if this are different machines )
-            // the file system of the client is addressed through the "file:" protocol
-            INetURLObject aURL( aFileName.GetValue(), INET_PROT_FILE );
-            sal_Bool bIsFileURL = INET_PROT_FILE == aURL.GetProtocol();
-
             // ist ein oeffnen grundsaetzlich moeglich
             if ( TRUE ) // (pb)
             {
