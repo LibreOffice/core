@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotext.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: aw $ $Date: 2001-08-20 14:51:05 $
+ *  last change: $Author: dl $ $Date: 2001-08-20 15:58:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -268,6 +268,7 @@ void SdrTextObj::FitFrameToTextSize()
 void SdrTextObj::NbcSetText(const XubString& rStr)
 {
     SdrOutliner& rOutliner=ImpGetDrawOutliner();
+    rOutliner.SetStyleSheet( 0, GetStyleSheet());
     OutputDevice* pRef1=rOutliner.GetRefDevice();
     rOutliner.SetUpdateMode(TRUE);
     rOutliner.SetText(rStr,rOutliner.GetParagraph( 0 ));
@@ -295,6 +296,7 @@ void SdrTextObj::SetText(const XubString& rStr)
 void SdrTextObj::NbcSetText(SvStream& rInput, USHORT eFormat)
 {
     SdrOutliner& rOutliner=ImpGetDrawOutliner();
+    rOutliner.SetStyleSheet( 0, GetStyleSheet());
     rOutliner.Read(rInput,eFormat);
     OutlinerParaObject* pNewText=rOutliner.CreateParaObject();
     rOutliner.SetUpdateMode(TRUE);
