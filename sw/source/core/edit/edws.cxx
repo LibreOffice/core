@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edws.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 14:03:33 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:24:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,26 +155,6 @@ void SwEditShell::SetUndoNoResetModified()
     GetDoc()->SetUndoNoResetModified();
 }
 
-#ifdef USED
-/******************************************************************************
- *                    void SwEditShell::StartAction()
- ******************************************************************************/
-
-
-void SwEditShell::StartAction() // OPT: ganz wech
-{
-    SwCrsrShell::StartAction();
-}
-/******************************************************************************
- *                    void SwEditShell::EndAction()
- ******************************************************************************/
-
-
-void SwEditShell::EndAction()
-{
-    SwCrsrShell::EndAction();
-}
-#endif
 /******************************************************************************
  *                 void SwEditShell::StartAllAction()
  ******************************************************************************/
