@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-26 07:31:30 $
+ *  last change: $Author: oj $ $Date: 2000-10-26 15:02:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,8 +101,8 @@
 #ifndef _COM_SUN_STAR_UTIL_XFLUSHABLE_HPP_
 #include <com/sun/star/util/XFlushable.hpp>
 #endif
-#ifndef _DBASHARED_STRINGCONSTANTS_HRC_
-#include "stringconstants.hrc"
+#ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
+#include "dbustrings.hrc"
 #endif
 #ifndef _CPPUHELPER_EXTRACT_HXX_
 #include <cppuhelper/extract.hxx>
@@ -131,7 +131,6 @@ namespace dbaui
 {
 //.........................................................................
 
-using namespace dbaccess;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::util;
@@ -1813,10 +1812,10 @@ sal_Int32 ODatasourceSelector::getImageId(DatasourceState _eState)
 {
     switch (_eState)
     {
-        case CLEAN: return BMP_DATABASE;
-        case MODIFIED:  return BMP_DATABASE_MODIFIED;
-        case NEW:       return BMP_DATABASE_NEW;
-        case DELETED:   return BMP_DATABASE_DELETED;
+        case CLEAN: return IMG_DATABASE;
+        case MODIFIED:  return IMG_DATABASE_MODIFIED;
+        case NEW:       return IMG_DATABASE_NEW;
+        case DELETED:   return IMG_DATABASE_DELETED;
     }
     DBG_ERROR("ODatasourceSelector::getImage: invalid state");
     return 0;
@@ -2142,6 +2141,9 @@ IMPL_LINK(ODatasourceSelector, OnButtonPressed, Button*, EMPTYARG)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.9  2000/10/26 07:31:30  fs
+ *  introduced fillDatasourceInfo, with this now getCurrentSettings collects _all_ relevant properties
+ *
  *  Revision 1.8  2000/10/24 12:12:26  fs
  *  ODatasourceMap::update takes a non-constant set (to reset the ORIGINALNAME item)
  *
