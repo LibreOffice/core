@@ -768,7 +768,7 @@ void UCBStorage_Impl::Init()
             m_aContentType = m_aOriginalContentType = aTmp;
             m_nFormat = SotExchange::RegisterFormatName( m_aContentType );
             m_aClassId = (const ClsId& ) GetClassId_Impl( m_nFormat ).GetCLSID();
-            DBG_ASSERT( !(m_aClassId == SvGlobalName ), "Unknown UCB storage format!" );
+            DBG_ASSERT( !(m_aClassId == SvGlobalName() ), "Unknown UCB storage format!" );
 //            m_aUserTypeName = rUserTypeName;
         }
 
