@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: lla $ $Date: 2003-01-20 11:34:16 $
+#   last change: $Author: rt $ $Date: 2004-07-23 14:41:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -68,7 +68,7 @@ TARGET  = TestShl2Runner
 # --- Settings -----------------------------------------------------
 .INCLUDE: settings.mk
 
-# JARFILES        = sandbox.jar ridl.jar unoil.jar jurt.jar juh.jar
+# JARFILES        = ridl.jar unoil.jar jurt.jar juh.jar
 # Tip:
 # why 'grep java$$' the $$ is for a real $ and this is for regexp and stays for line end,
 # so we prevent us for compiling *.java~
