@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpaint.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fme $ $Date: 2001-08-31 06:19:23 $
+ *  last change: $Author: ama $ $Date: 2001-09-24 09:16:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -352,11 +352,14 @@ void SwTxtFrm::PaintExtraData( const SwRect &rRect ) const
     if( Frm().Top() > rRect.Bottom() || Frm().Bottom() < rRect.Top() )
         return;
     const SwTxtNode& rTxtNode = *GetTxtNode();
-    const SwLineNumberInfo &rLineInf = rTxtNode.GetDoc()->GetLineNumberInfo();
+    const SwDoc* pDoc = rTxtNode.GetDoc();
+    const SwLineNumberInfo &rLineInf = pDoc->GetLineNumberInfo();
     const SwFmtLineNumber &rLineNum = GetAttrSet()->GetLineNumber();
     sal_Bool bLineNum = !IsInTab() && rLineInf.IsPaintLineNumbers() &&
                ( !IsInFly() || rLineInf.IsCountInFlys() ) && rLineNum.IsCount();
     SwHoriOrient eHor = (SwHoriOrient)SW_MOD()->GetRedlineMarkPos();
+    if( eHor != HORI_NONE && !::IsShowChanges( pDoc->GetRedlineMode() ) )
+        eHor = HORI_NONE;
     sal_Bool bRedLine = eHor != HORI_NONE;
     if ( bLineNum || bRedLine )
     {
@@ -434,7 +437,7 @@ void SwTxtFrm::PaintExtraData( const SwRect &rRect ) const
         }
         else
         {
-            bRedLine &= (MSHRT_MAX!=rTxtNode.GetDoc()->GetRedlinePos(rTxtNode));
+            bRedLine &= ( MSHRT_MAX!=pDoc->GetRedlinePos(rTxtNode) );
 
             if( bLineNum && rLineInf.IsCountBlankLines() &&
                 ( aExtra.HasNumber() || aExtra.HasDivider() ) )
