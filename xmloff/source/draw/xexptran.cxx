@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xexptran.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: aw $ $Date: 2001-03-16 12:41:39 $
+ *  last change: $Author: aw $ $Date: 2001-05-25 14:58:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1473,15 +1473,30 @@ void SdXMLImExSvgDElement::AddPolygon(
         || rObjectSize.Height != mrViewBox.GetHeight());
     sal_Bool bTranslate(mrViewBox.GetX() != 0L || mrViewBox.GetY() != 0L);
 
-    // last point same? Ignore it, but ONLY when there are NO control
-    // points. In that case the last point might be double, but this
-    // is necessary. nCnt might NOT be changed to guarantee ring access
-    // to single points!
+    // #87202# rework of point reduction:
+    // Test for Last point same -> closed, ignore last point. Take
+    // some more circumstances in account when looking at curve segments.
     drawing::PolygonFlags* pFlagArray = (pFlags) ? pFlags->getArray() : 0L;
-    if(!pFlags
-        && (pPointArray->X == (pPointArray + (nCnt - 1))->X)
-        && (pPointArray->Y == (pPointArray + (nCnt - 1))->Y))
-        nCnt--;
+    if((pPointArray->X == (pPointArray + (nCnt - 1))->X) && (pPointArray->Y == (pPointArray + (nCnt - 1))->Y))
+    {
+        if(pFlags)
+        {
+            // point needs to be ignored if point before it is
+            // NO control point. Else the last point is needed
+            // for exporting the last segment of the curve. That means
+            // that the last and the first point will be saved double,
+            // but SVG does not support a better solution here.
+            if(nCnt >= 2 && drawing::PolygonFlags_CONTROL != *(pFlagArray + (nCnt - 2)))
+            {
+                nCnt--;
+            }
+        }
+        else
+        {
+            // no curve, ignore last point
+            nCnt--;
+        }
+    }
 
     // bezier poly, handle curves
     BOOL bDidWriteStart(FALSE);
@@ -2337,6 +2352,88 @@ SdXMLImExSvgDElement::SdXMLImExSvgDElement(const OUString& rNew,
                     break;
                 }
                 // more cases...
+            }
+        }
+
+        // #87202# If it's a curve and it's closed the last point maybe too much
+        // and just exported since SVG does not allow special handling of same
+        // start and end point, remove this last point.
+        if(IsCurve() && IsClosed())
+        {
+            // make one more loop over the PolyPolygon
+            pOuterSequence = maPoly.getArray();
+            pOuterFlags = maFlag.getArray();
+            sal_Int32 nOuterCnt(maPoly.getLength());
+
+            for(sal_Int32 a(0); a < nOuterCnt; a++)
+            {
+                // get Polygon pointers
+                awt::Point* pInnerSequence = pOuterSequence->getArray();
+                drawing::PolygonFlags* pInnerFlags = pOuterFlags->getArray();
+                sal_Int32 nInnerCnt(pOuterSequence->getLength());
+
+                while( nInnerCnt >= 2
+                    && ((pInnerSequence + (nInnerCnt - 2))->X == (pInnerSequence + (nInnerCnt - 1))->X)
+                    && ((pInnerSequence + (nInnerCnt - 2))->Y == (pInnerSequence + (nInnerCnt - 1))->Y)
+                    && drawing::PolygonFlags_CONTROL != *(pInnerFlags + (nInnerCnt - 2)))
+                {
+                    // remove last point from array
+                    pOuterSequence->realloc(nInnerCnt - 1);
+                    pOuterFlags->realloc(nInnerCnt - 1);
+
+                    // get new pointers
+                    pInnerSequence = pOuterSequence->getArray();
+                    pInnerFlags = pOuterFlags->getArray();
+                    nInnerCnt = pOuterSequence->getLength();
+                }
+
+                // now evtl. correct the last curve flags
+                if(nInnerCnt >= 4)
+                {
+                    if( pInnerSequence->X == (pInnerSequence + (nInnerCnt - 1))->X
+                        && pInnerSequence->Y == (pInnerSequence + (nInnerCnt - 1))->Y
+                        && drawing::PolygonFlags_CONTROL == *(pInnerFlags + 1)
+                        && drawing::PolygonFlags_CONTROL == *(pInnerFlags + (nInnerCnt - 2)))
+                    {
+                        awt::Point aPrev = *(pInnerSequence + (nInnerCnt - 2));
+                        awt::Point aCurr = *pInnerSequence;
+                        awt::Point aNext = *(pInnerSequence + 1);
+                        Vector2D aVec1(aPrev.X - aCurr.X, aPrev.Y - aCurr.Y);
+                        Vector2D aVec2(aNext.X - aCurr.X, aNext.Y - aCurr.Y);
+                        sal_Bool bSameLength(FALSE);
+                        sal_Bool bSameDirection(FALSE);
+
+                        // get vector values
+                        Imp_CalcVectorValues(aVec1, aVec2, bSameLength, bSameDirection);
+
+                        // set correct flag value
+                        if(bSameDirection)
+                        {
+                            if(bSameLength)
+                            {
+                                // set to PolygonFlags_SYMMETRIC
+                                *pInnerFlags = drawing::PolygonFlags_SYMMETRIC;
+                                *(pInnerFlags + (nInnerCnt - 1)) = drawing::PolygonFlags_SYMMETRIC;
+                            }
+                            else
+                            {
+                                // set to PolygonFlags_SMOOTH
+                                *pInnerFlags = drawing::PolygonFlags_SMOOTH;
+                                *(pInnerFlags + (nInnerCnt - 1)) = drawing::PolygonFlags_SMOOTH;
+                            }
+                        }
+                        else
+                        {
+                            // set to PolygonFlags_NORMAL
+                            *pInnerFlags = drawing::PolygonFlags_NORMAL;
+                            *(pInnerFlags + (nInnerCnt - 1)) = drawing::PolygonFlags_NORMAL;
+                        }
+                    }
+                }
+
+                // switch to next Polygon
+                pOuterSequence++;
+                pOuterFlags++;
             }
         }
     }
