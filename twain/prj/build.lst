@@ -1,3 +1,3 @@
 tw	twain	:	solenv NULL
-tw	twain							usr1	-	all	md_mkout NULL
-tw	twain\prj						get		-	all	md_prj NULL
+tw	twain							usr1	-	all	tw_mkout NULL
+tw	twain\prj						get		-	all	tw_prj NULL
