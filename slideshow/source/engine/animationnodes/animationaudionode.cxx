@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animationaudionode.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 13:49:39 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 17:10:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,10 @@ namespace presentation
             if( !mpPlayer.get() )
                 return false;
 
+            AnimationEventHandlerSharedPtr aHandler( ::boost::dynamic_pointer_cast<AnimationEventHandler>( getSelf() ) );
+            OSL_ENSURE( aHandler.get(), "AnimationAudioNode::activate(): could not cas self to AnimationEventHandler?" );
+            getContext().mrEventMultiplexer.addCommandStopAudioHandler( aHandler );
+
             return mpPlayer->startPlayback();
         }
 
@@ -141,6 +145,10 @@ namespace presentation
 
         void AnimationAudioNode::deactivate()
         {
+            AnimationEventHandlerSharedPtr aHandler( ::boost::dynamic_pointer_cast<AnimationEventHandler>( getSelf() ) );
+            OSL_ENSURE( aHandler.get(), "AnimationAudioNode::deactivate(): could not cas self to AnimationEventHandler?" );
+            getContext().mrEventMultiplexer.removeCommandStopAudioHandler( aHandler );
+
             // force-end sound
             if( mpPlayer.get() )
                 mpPlayer->stopPlayback();
@@ -198,5 +206,13 @@ namespace presentation
             // not be played).
             return true;
         }
+
+        bool AnimationAudioNode::handleAnimationEvent( const AnimationNodeSharedPtr& rNode )
+        {
+            // TODO: for now we support only STOPAUDIO events.
+            deactivate();
+            return true;
+        }
+
     }
 }
