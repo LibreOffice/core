@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridcell.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-25 13:57:12 $
+ *  last change: $Author: fs $ $Date: 2001-08-22 14:59:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,6 +169,7 @@ using namespace ::connectivity;
 using namespace ::connectivity::simple;
 using namespace ::svxform;
 using namespace ::svt;
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdbc;
 
@@ -1199,9 +1200,8 @@ void DbCheckBox::Paint(OutputDevice& rDev, const Rectangle& rRect,
 //------------------------------------------------------------------------------
 sal_Bool DbCheckBox::Commit()
 {
-    Any aVal;
-    aVal <<= (sal_Int16) (((CheckBoxControl*)m_pWindow)->GetBox().GetState());
-    m_rColumn.getModel()->setPropertyValue(FM_PROP_STATE, aVal);
+    Any aVal = makeAny( (sal_Int16)( static_cast< CheckBoxControl* >( m_pWindow )->GetBox().GetState() ) );
+    m_rColumn.getModel()->setPropertyValue( FM_PROP_STATE, aVal );
     return sal_True;
 }
 
@@ -2451,7 +2451,7 @@ void FmXGridCell::SetTextLineColor(const Color& _rColor)
 //------------------------------------------------------------------
 Sequence< sal_Int8 > SAL_CALL FmXGridCell::getImplementationId() throw(RuntimeException)
 {
-    return form::OImplementationIds::getImplementationId(getTypes());
+    return ::form::OImplementationIds::getImplementationId(getTypes());
 }
 
 // OComponentHelper
@@ -2905,6 +2905,12 @@ IMPL_LINK( FmXCheckBoxCell, OnClick, void*, EMPTYARG )
 {
     if (m_pBox)
     {
+        // check boxes are to be committed immediately (this holds for ordinary check box controls in
+        // documents, and this must hold for check boxes in grid columns, too
+        // 91210 - 22.08.2001 - frank.schoenheit@sun.com
+        m_pCellControl->Commit();
+
+        // notify our listeners
         ::cppu::OInterfaceIteratorHelper aIt( m_aItemListeners );
 
         ::com::sun::star::awt::ItemEvent aEvent;
@@ -2912,8 +2918,8 @@ IMPL_LINK( FmXCheckBoxCell, OnClick, void*, EMPTYARG )
         aEvent.Highlighted = sal_False;
         aEvent.Selected = m_pBox->GetState();
 
-        while( aIt.hasMoreElements() )
-            ((::com::sun::star::awt::XItemListener *)aIt.next())->itemStateChanged( aEvent );
+        while ( aIt.hasMoreElements() )
+            static_cast< awt::XItemListener* >( aIt.next() )->itemStateChanged( aEvent );
     }
     return 1;
 }
