@@ -2,9 +2,9 @@
 %
 %   $RCSfile: psheader.ps,v $
 %
-%   $Revision: 1.4 $
+%   $Revision: 1.5 $
 %
-%   last change: $Author: hr $ $Date: 2003-03-26 14:24:09 $
+%   last change: $Author: kz $ $Date: 2003-08-25 13:59:25 $
 %
 %   The Contents of this file are made available subject to the terms of
 %   either of the following licenses
@@ -339,3 +339,65 @@ if
     /psp_reencodedfont exch definefont
 } def
 
+% bshow shows a text in artificial bold
+% this is achieved by first showing the text
+% then stroking its outline over it with
+% the linewidth set to the second parameter
+% usage: (string) num bshow
+
+/bshow {
+  currentlinewidth		% save current linewidth
+  3 1 roll				% move it to the last stack position
+  currentpoint			% save the current point
+  3 index				% copy the string to show
+  show					% show it
+  moveto				% move to the original coordinates again
+  setlinewidth			% set the linewidth
+  false charpath		% create the outline path of the shown string
+  stroke				% and stroke it
+  setlinewidth			% reset the stored linewidth
+} def
+
+% bxshow shows a text with a delta array in artificial bold
+% that is it does what bshow does for show
+% usage: (string) [deltaarray] num bxshow
+
+/bxshow {
+  currentlinewidth		% save linewidth
+  4 1 roll				% move it to the last stack position
+  setlinewidth			% set the new linewidth
+  exch					% exchange string and delta array
+  dup
+  length				% get length of string
+  1 sub					% prepare parameters for {} for
+  0 1
+  3 -1 roll
+  {
+    1 string			% create a string object length 1
+    2 index				% get the text
+    2 index				% get charpos (for index variable)
+    get					% have char value at charpos
+    1 index				% prepare string for put
+    exch
+    0
+    exch
+    put					% put into string of length 1
+    dup					% duplicate the it
+    currentpoint		% save current position
+    3 -1 roll			% prepare show
+    show				% show the character
+    moveto				% move back to beginning
+    currentpoint		% save current position
+    3 -1 roll			% prepare outline path of character
+    false charpath
+    stroke				% stroke it
+    moveto				% move back
+    % now move to next point
+    2 index				% get advance array
+    exch				% get charpos
+    get					% get advance element
+    0 rmoveto			% advance current position
+  } for
+  pop pop				% remove string and delta array
+  setlinewidth			% restore linewidth
+} def
