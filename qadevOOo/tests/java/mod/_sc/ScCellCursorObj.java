@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScCellCursorObj.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:16:41 $
+ *  last change:$Date: 2003-01-31 14:48:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,8 @@ import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
 import util.SOfficeFactory;
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
 
 /**
 * Test for object which is represented by service
@@ -196,8 +198,8 @@ public class ScCellCursorObj extends TestCase {
                     UnoRuntime.queryInterface(
                         XSpreadsheetDocument.class, xSheetDoc)).getSheets();
         try {
-            oSheet = (XSpreadsheet)
-                oSpreadsheets.getByName(oSpreadsheets.getElementNames()[0]) ;
+            oSheet = (XSpreadsheet) AnyConverter.toObject(new Type(XSpreadsheet.class),
+                oSpreadsheets.getByName(oSpreadsheets.getElementNames()[0]) );
 
             XCellRange testRange = oSheet.getCellRangeByName("$A$1:$D$4") ;
             XSheetCellRange testSheetRange = (XSheetCellRange)
@@ -214,6 +216,10 @@ public class ScCellCursorObj extends TestCase {
             e.printStackTrace(log) ;
             throw new StatusException("Couldn't create test object", e);
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
+            log.println("Exception occured while creating test object:") ;
+            e.printStackTrace(log) ;
+            throw new StatusException("Couldn't create test object", e);
+        } catch (com.sun.star.lang.IllegalArgumentException e) {
             log.println("Exception occured while creating test object:") ;
             e.printStackTrace(log) ;
             throw new StatusException("Couldn't create test object", e);

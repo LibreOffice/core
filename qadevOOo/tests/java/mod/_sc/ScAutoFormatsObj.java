@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScAutoFormatsObj.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:16:41 $
+ *  last change:$Date: 2003-01-31 14:44:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,8 @@ import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
 import util.SOfficeFactory;
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
 
 /**
 * Test for object which is represented by service
@@ -157,8 +159,9 @@ public class ScAutoFormatsObj extends TestCase{
             // get AutoFormats
             XComponent xComp = (XComponent)UnoRuntime.queryInterface
                 (XComponent.class, xSheetDoc);
-            oObj = (XInterface)Param.getMSF().createInstance
-                ("com.sun.star.sheet.TableAutoFormats");
+            oObj = (XInterface) AnyConverter.toObject(
+                new Type(XInterface.class),Param.getMSF().createInstance
+                                    ("com.sun.star.sheet.TableAutoFormats"));
             Object secondInstance = SOF.createInstance
                 (xComp, "com.sun.star.sheet.TableAutoFormat");
 
@@ -169,7 +172,10 @@ public class ScAutoFormatsObj extends TestCase{
 
             // INSTANCEn : _XNameContainer; _XNameReplace
             log.println( "adding INSTANCEn as mod relation to environment" );
-            int THRCNT = Integer.parseInt((String)Param.get("THRCNT"));
+            int THRCNT = 1;
+            if ((String)Param.get("THRCNT") != null) {
+                Integer.parseInt((String)Param.get("THRCNT"));
+            }
             for (int n = 1; n < (THRCNT+1) ;n++ ) {
                 log.println( "adding INSTANCE" + n
                     +" as mod relation to environment" );
