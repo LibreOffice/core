@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valueconverter.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jb $ $Date: 2001-05-22 16:44:03 $
+ *  last change: $Author: hr $ $Date: 2001-09-12 11:04:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -310,11 +310,11 @@ bool OValueConverter::convertScalarToAny(OUString const& aContent, uno::Any& rVa
 }
 
 // -----------------------------------------------------------------------------
-template <class Type>
-bool convertListToSequence(StringList const& aStringList, uno::Sequence< Type >& rSequence, OValueConverter const& rConverter)
+template <class T>
+bool convertListToSequence(StringList const& aStringList, uno::Sequence< T >& rSequence, OValueConverter const& rConverter)
         CFG_THROW( ( script::CannotConvertException, uno::RuntimeException ) )
 {
-    uno::TypeClass const aElementTypeClass = ::getCppuType(static_cast<Type const*>(0)).getTypeClass();
+    uno::TypeClass const aElementTypeClass = ::getCppuType(static_cast<T const*>(0)).getTypeClass();
 
     rSequence.realloc(aStringList.size());
 
