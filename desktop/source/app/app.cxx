@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2000-12-08 08:45:22 $
+ *  last change: $Author: mba $ $Date: 2000-12-08 13:32:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,15 @@ void Desktop::Main()
 {
     ResMgr::SetReadStringHook( ReplaceStringHookProc );
     SetAppName( DEFINE_CONST_UNICODE("soffice") );
+
+    Date aDate;
+    Date aFinalDate( 30, 4, 2001 );
+    if ( aFinalDate < aDate )
+    {
+        String aMsg;
+        aMsg += DEFINE_CONST_UNICODE("This Early Access Version has expired!\n");
+        Application::Abort( aMsg );
+    }
 
     Installer* pInstaller = new Installer;
     pInstaller->InitializeInstallation( Application::GetAppFileName() );
