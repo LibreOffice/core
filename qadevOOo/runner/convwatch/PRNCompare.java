@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PRNCompare.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Date: 2004-11-02 11:21:47 $
+ *  last change: $Date: 2004-12-10 16:59:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,7 @@ import convwatch.StatusHelper;
 import convwatch.OSHelper;
 import convwatch.StringHelper;
 import java.util.ArrayList;
+import util.utils;
 
 // -----------------------------------------------------------------------------
 // --------------------------------- PRNCompare ---------------------------------
@@ -265,18 +266,36 @@ public class PRNCompare
                 sGS = "gswin32c.exe";
             }
 
-            sCommand = sGS + " -dNOPROMPT -dBATCH -sDEVICE=jpeg -r" + String.valueOf(_nResolutionInDPI) + " -dNOPAUSE -sOutputFile=" + sJPGFilename + " " + sOriginalFile;
+            sCommand = sGS + " -dNOPROMPT -dBATCH -sDEVICE=jpeg -r" + String.valueOf(_nResolutionInDPI) + " -dNOPAUSE -sOutputFile=" + StringHelper.doubleQuoteIfNeed(sJPGFilename) + " " + StringHelper.doubleQuoteIfNeed(sOriginalFile);
+            String[] sCommandArray =
+                {
+                    sGS,
+                    "-dNOPROMPT",
+                    "-dBATCH",
+                    "-sDEVICE=jpeg",
+                    "-r" + String.valueOf(_nResolutionInDPI),
+                    "-dNOPAUSE",
+                    "-sOutputFile=" + sJPGFilename,
+                    sOriginalFile
+                };
+            // System.out.println("Start Command array");
+            // try
+            // {
+            //     Runtime.getRuntime().exec(sCommandArray);
+            // } catch (Exception e) {
+            //     System.out.println("FAILED");
+            // }
+            // System.out.println("done");
 
-//            System.out.println(sCommand);
-            ProcessHandler aHandler = new ProcessHandler(sCommand);
+            ProcessHandler aHandler = new ProcessHandler(sCommandArray);
             boolean bBackValue = aHandler.executeSynchronously();
 
- // TODO: return a real filename, due to the fact we don't know how much files are created, maybe better to return a list
+            // TODO: return a real filename, due to the fact we don't know how much files are created, maybe better to return a list
 
             ArrayList m_aFileList = new ArrayList();
             for (int i=1;i<9999;i++)
             {
-                String sNewJPEGFilename = sJPGFilename.replaceAll(sGS_PageOutput, StringHelper.createValueString(i, 4));
+                String sNewJPEGFilename = utils.replaceAll13(sJPGFilename, sGS_PageOutput, StringHelper.createValueString(i, 4));
                 if (FileHelper.exists(sNewJPEGFilename))
                 {
                     m_aFileList.add(sNewJPEGFilename); // as long as the files exist, fill the array
@@ -544,14 +563,33 @@ public class PRNCompare
 
     public static String compareJPEGs(String _sOldGfx, String _sNewGfx, String _sDiffGfx)
         {
-            String sCommand = "composite -compose difference " +
-                _sOldGfx + " " +
-                _sNewGfx + " " +
-                _sDiffGfx;
-            // System.out.println(sCommand);
-            // executeSynchronously(sCommand);
-            ProcessHandler aHandler = new ProcessHandler(sCommand);
+            String sComposite = "composite";
+            if (OSHelper.isWindows())
+            {
+                sComposite = "composite.exe";
+            }
+
+            // String sCommand = sComposite + " -compose difference " +
+            //     StringHelper.doubleQuoteIfNeed(_sOldGfx) + " " +
+            //     StringHelper.doubleQuoteIfNeed(_sNewGfx) + " " +
+            //     StringHelper.doubleQuoteIfNeed(_sDiffGfx);
+
+            String[] sCommandArray =
+                {
+                    sComposite,
+                    "-compose",
+                    "difference",
+                    _sOldGfx,
+                    _sNewGfx,
+                    _sDiffGfx
+                };
+
+            ProcessHandler aHandler = new ProcessHandler(sCommandArray);
             boolean bBackValue = aHandler.executeSynchronously();
+
+            String sBack = aHandler.getOutputText();
+            System.out.println("'" + sBack + "'");
+
             // return aHandler.getExitCode();
             if (FileHelper.exists(_sDiffGfx))
             {
@@ -569,15 +607,28 @@ public class PRNCompare
         {
             int nResult = 0;
             // would like to know what the meaning of %k is for ImageMagick's 'identify'
-            String sIM_Format = "-format %k";
+            String sIM_Format = "%k";
             // if (OSHelper.isWindows())
             // {
-            //     sIM_Format = "-format %%k";
+            //     sIM_Format = "%%k";
             // }
 
-            String sCommand = "identify " + sIM_Format + " " + _sDiffGfx;
+            String sIdentify = "identify";
+            if (OSHelper.isWindows())
+            {
+                sIdentify = "identify.exe";
+            }
 
-            ProcessHandler aHandler = new ProcessHandler(sCommand);
+            // String sCommand = sIdentify + " " + sIM_Format + " " + StringHelper.doubleQuoteIfNeed(_sDiffGfx);
+
+            String[] sCommandArray =
+                {
+                    sIdentify,
+                    "-format",
+                    sIM_Format,
+                    _sDiffGfx
+                };
+            ProcessHandler aHandler = new ProcessHandler(sCommandArray);
             boolean bBackValue = aHandler.executeSynchronously();
             String sBack = aHandler.getOutputText();
             System.out.println("'" + sBack + "'");
@@ -618,14 +669,24 @@ public class PRNCompare
 
             StatusHelper aCurrentStatus = new StatusHelper(sOldGfx, sNewGfx, sDiffGfx);
 
-            String sCommand = "composite -compose difference " +
-                sOldGfx + " " +
-                sNewGfx + " " +
-                sDiffGfx;
-            // System.out.println(sCommand);
-            // executeSynchronously(sCommand);
-            ProcessHandler aHandler = new ProcessHandler(sCommand);
-            boolean bBackValue = aHandler.executeSynchronously();
+            // String sComposite = "composite";
+            // if (OSHelper.isWindows())
+            // {
+            //     sComposite = "composite.exe";
+            // }
+            //
+            // String sCommand = sComposite  +" -compose difference " +
+            //     StringHelper.doubleQuoteIfNeed(sOldGfx) + " " +
+            //     StringHelper.doubleQuoteIfNeed(sNewGfx) + " " +
+            //     StringHelper.doubleQuoteIfNeed(sDiffGfx);
+            //
+            //
+            // // System.out.println(sCommand);
+            // // executeSynchronously(sCommand);
+            // ProcessHandler aHandler = new ProcessHandler(sCommand);
+            // boolean bBackValue = aHandler.executeSynchronously();
+
+            compareJPEGs(sOldGfx, sNewGfx, sDiffGfx);
 
             if (FileHelper.exists(sDiffGfx))
             {
@@ -689,6 +750,16 @@ public class PRNCompare
             int nNotBlackCount_DiffGraphic = PixelCounter.countNotBlackPixelsFromImage(_sDiffGfx);
 
             int nMinNotWhiteCount = Math.min(nNotWhiteCount_NewGraphic, nNotWhiteCount_OldGraphic);
+
+            // check if not zero
+            if (nMinNotWhiteCount == 0)
+            {
+                nMinNotWhiteCount = Math.max(nNotWhiteCount_NewGraphic, nNotWhiteCount_OldGraphic);
+                if (nMinNotWhiteCount == 0)
+                {
+                    nMinNotWhiteCount = 1;
+                }
+            }
 
             int nPercent = Math.abs(nNotBlackCount_DiffGraphic * 100 / nMinNotWhiteCount);
             System.out.println( "Graphics check, pixel based:" + String.valueOf(nPercent) + "% pixel differ ");
