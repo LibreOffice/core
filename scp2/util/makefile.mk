@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: hr $ $Date: 2004-12-20 09:36:12 $
+#   last change: $Author: kz $ $Date: 2005-01-18 14:38:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,6 +81,7 @@ SCP1FILES  = installation_ooo.par          \
              directory_ooo.par             \
              datacarrier_ooo.par           \
              file_ooo.par                  \
+             file_images_ooo.par           \
              file_extra_ooo.par            \
              file_font_ooo.par             \
              file_library_ooo.par          \
