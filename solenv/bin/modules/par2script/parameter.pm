@@ -2,9 +2,9 @@
 #
 #   $RCSfile: parameter.pm,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kz $ $Date: 2004-01-29 11:44:54 $
+#   last change: $Author: svesik $ $Date: 2004-04-20 12:35:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,7 +75,7 @@ use par2script::systemactions;
 ###############################################################################
 # Usage:
 # perl par2script.pl -i ..\wntmsci8.pro\par,o:\SRX645\wntmsci8.pro\par.m24
-#                   @C:\DOCUMEN~1\is\LOCALS~1\Temp\mk6pd
+#                   @@C:\DOCUMEN~1\is\LOCALS~1\Temp\mk6pd
 #                   -o ..\wntmsci8.pro\bin\osl\setup_osl.inf
 ###############################################################################
 
@@ -89,11 +89,11 @@ The following parameter are needed:
 -i: include pathes, comma separated list
 -o: setup script file name
 -v: writing logfile.txt (optional)
-\@list: list of all par files
+\@\@list: list of all par files
 
 Example:
  perl par2script.pl -i ..\\wntmsci8\\par\,o\:\\SRX645\\wntmsci8\\par.m24
-         \@C\:\\DOCUMEN\~1\\is\\LOCALS\~1\\Temp\\mk6pd
+         \@\@C\:\\DOCUMEN\~1\\is\\LOCALS\~1\\Temp\\mk6pd
          -o ..\\wntmsci8.pro\\bin\\osl\\setup_osl.inf \[-v\]
 
 --------------------------------------------------------------
@@ -113,7 +113,7 @@ sub getparameter
 
         if ($param eq "-o") { $par2script::globals::scriptname = shift(@ARGV); }
         elsif ($param eq "-v") { $par2script::globals::logging = 1; }
-        elsif ($param =~ /\@/) { $par2script::globals::parfilelistorig = $param; }
+        elsif ($param =~ /\@\@/) { $par2script::globals::parfilelistorig = $param; }
         elsif ($param eq "-i") { $par2script::globals::includepathlist = shift(@ARGV); }
         elsif (($param =~ /\//) || ($param =~ /\\/))    # another include parameter!
         {
@@ -167,7 +167,7 @@ sub control_parameter
     # The par file list has to exist
 
     $par2script::globals::parfilelist = $par2script::globals::parfilelistorig;
-    $par2script::globals::parfilelist =~ s/\@//;
+    $par2script::globals::parfilelist =~ s/\@\@//;
     par2script::files::check_file($par2script::globals::parfilelist);
 }
 
