@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UserDefinedIndex.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:10:06 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 00:24:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ module com {  module sun {  module star {  module text {
 
 /** specifies service of user defined indexes within a document.@see com::sun::star::text::BaseIndex
  */
-service UserDefinedIndex
+published service UserDefinedIndex
 {
     service  com::sun::star::text::BaseIndex;
 
