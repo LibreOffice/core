@@ -6,6 +6,8 @@ mkdir: %_DEST%\bin%_EXT%\so
 ..\%__SRC%\misc\*.gif %_DEST%\res%_EXT%\icons\*.gif
 ..\%__SRC%\bin\*.zip %_DEST%\pck%_EXT%\*.zip
 ..\%__SRC%\bin\lngconv* %_DEST%\bin%_EXT%\lngconv*
+..\%__SRC%\bin\noarch\*.rpm %_DEST%\bin%_EXT%\*.rpm
+..\%__SRC%\bin\*.tar.gz %_DEST%\bin%_EXT%\*.tar.gz
 ..\%__SRC%\misc\dtint.sh %_DEST%\bin%_EXT%\dtint
 ..\%__SRC%\misc\dtappintegrate.sh %_DEST%\bin%_EXT%\dtappintegrate
 
@@ -13,13 +15,16 @@ mkdir: %_DEST%\bin%_EXT%\so
 ..\%__SRC%\bin\gnomeint.sh %_DEST%\bin%_EXT%\gnomeint
 ..\%__SRC%\bin\viewdoc.sh %_DEST%\bin%_EXT%\viewdoc
 ..\%__SRC%\bin\functions.sh %_DEST%\bin%_EXT%\functions
+..\%__SRC%\bin\update-mime-data.sh %_DEST%\bin%_EXT%\update-mime-data
 ..\%__SRC%\bin\update-user-mime-data.sh %_DEST%\bin%_EXT%\update-user-mime-data
 ..\%__SRC%\bin\update-user-menus.sh %_DEST%\bin%_EXT%\update-user-menus
 ..\%__SRC%\bin\update-redhat-user-menus.sh %_DEST%\bin%_EXT%\update-redhat-user-menus
 ..\%__SRC%\bin\update-suse-user-menus.sh %_DEST%\bin%_EXT%\update-suse-user-menus
 ..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*.dll
 ..\%__SRC%\bin\01\quickstart.exe %_DEST%\bin%_EXT%\quickstart.exe
+..\%__SRC%\bin\01\quickstart.exe %_DEST%\bin%_EXT%\install_quickstart.exe
 ..\%__SRC%\bin\01\soquickstart.exe %_DEST%\bin%_EXT%\so\quickstart.exe
+..\%__SRC%\bin\01\soquickstart.exe %_DEST%\bin%_EXT%\so\install_quickstart.exe
 
 ..\win32\office\icons\001_star_butterfly.ico %_DEST%\res%_EXT%\icons\001_star_butterfly.ico
 
