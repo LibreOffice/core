@@ -2,9 +2,9 @@
  *
  *  $RCSfile: collator_unicode.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2002-03-26 17:02:11 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 15:47:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 
 #include <collator_unicode.hxx>
 #include <com/sun/star/i18n/CollatorOptions.hpp>
-#include <transliteration_caseignore.hxx>
+#include <casefolding.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
@@ -76,13 +76,10 @@ Collator_Unicode::Collator_Unicode()
 {
     implementationName = "com.sun.star.i18n.Collator_Unicode";
     tranModules = TransliterationModules_END_OF_MODULE;
-    ignore = NULL;
 }
 
 Collator_Unicode::~Collator_Unicode()
 {
-    if (ignore)
-        delete ignore;
 }
 
 sal_Int32 SAL_CALL
@@ -99,8 +96,8 @@ Collator_Unicode::compareSubstring( const OUString& str1, sal_Int32 off1, sal_In
     idx1 = idx2 = 0;
     while (idx1 < len1 && idx2 < len2) {
         if (tranModules != TransliterationModules_END_OF_MODULE) {
-        c1 = ((Transliteration_caseignore*)ignore)->getNextChar(uniStr1, idx1, len1, e1);
-        c2 = ((Transliteration_caseignore*)ignore)->getNextChar(uniStr2, idx2, len2, e2);
+        c1 = casefolding::getNextChar(uniStr1, idx1, len1, e1, aLocale, MappingTypeFullFolding, tranModules);
+        c2 = casefolding::getNextChar(uniStr2, idx2, len2, e2, aLocale, MappingTypeFullFolding, tranModules);
         } else {
         c1 = uniStr1[idx1++];
         c2 = uniStr1[idx2++];
@@ -122,6 +119,8 @@ sal_Int32 SAL_CALL
 Collator_Unicode::loadCollatorAlgorithm(const OUString& rAlgorithm, const lang::Locale& rLocale, sal_Int32 options)
     throw(RuntimeException)
 {
+    aLocale = rLocale;
+
     tranModules = TransliterationModules_END_OF_MODULE;
     if (options & CollatorOptions::CollatorOptions_IGNORE_CASE)
         tranModules = (TransliterationModules)(tranModules | TransliterationModules_IGNORE_CASE);
@@ -129,12 +128,6 @@ Collator_Unicode::loadCollatorAlgorithm(const OUString& rAlgorithm, const lang::
         tranModules = (TransliterationModules) (tranModules | TransliterationModules_IGNORE_KANA);
     if (options & CollatorOptions::CollatorOptions_IGNORE_WIDTH)
         tranModules = (TransliterationModules) (tranModules | TransliterationModules_IGNORE_WIDTH);
-
-    if (tranModules != TransliterationModules_END_OF_MODULE) {
-        if (ignore == NULL)
-        ignore = new Transliteration_caseignore();
-        ignore->loadModule(tranModules, rLocale);
-    }
 
     return(0);
 }
