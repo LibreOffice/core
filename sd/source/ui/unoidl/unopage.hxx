@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 18:20:23 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 09:46:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@
 #include <svtools/itemprop.hxx>
 #endif
 
-#ifndef _SVX_UNOWPAGE_HXX
+#ifndef _SVX_UNOPAGE_HXX
 #include <svx/unopage.hxx>
 #endif
 #ifndef _SVX_FMDPAGE_HXX
