@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formcontroller.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: fs $ $Date: 2002-12-02 13:16:38 $
+ *  last change: $Author: fs $ $Date: 2002-12-10 17:51:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2416,7 +2416,13 @@ namespace pcr
             if (PROPERTY_ID_TARGET_URL == nPropId)
             {
                 ::sfx2::FileDialogHelper aFileDlg(WB_3DLOOK);
-                aFileDlg.SetDisplayDirectory(aVal);
+
+                INetURLObject aParser( aVal );
+                if ( INET_PROT_FILE == aParser.GetProtocol() )
+                    // set the initial directory only for file-URLs. Everything else
+                    // is considered to be potentially expensive
+                    // 106126 - 2002/12/10 - fs@openoffice.org
+                    aFileDlg.SetDisplayDirectory( aVal );
 
                 if (0 == aFileDlg.Execute())
                 {
@@ -2741,6 +2747,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.52  2002/12/02 13:16:38  fs
+ *  #105726# properly EnableEmptyFieldValue (broken in 1.44)
+ *
  *  Revision 1.51  2002/10/25 12:49:51  fs
  *  #104512# fixed some controls leaking
  *
