@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: lla $ $Date: 2000-11-03 11:56:30 $
+#   last change: $Author: lla $ $Date: 2000-11-29 13:59:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,7 +65,7 @@ PRJINC=$(PRJ)$/source
 
 PRJNAME=configmgr
 
-TARGET=cfglocal
+TARGET=cfgfile
 TARGETTYPE=CUI
 LIBTARGET=NO
 
@@ -99,7 +99,7 @@ APP1STDLIBS+=$(LIBCIMT)
 .ENDIF
 
 
-APP1TARGET= cfgfile
+APP1TARGET= $(TARGET)
 
 APP1OBJS=	\
     $(SLO)$/cfgfile.obj \
@@ -109,12 +109,12 @@ APP1OBJS=	\
     $(SLO)$/filehelper.obj \
     $(SLO)$/simpletest.obj \
     $(SLO)$/strimpl.obj \
+    $(SLO)$/confname.obj \
 
 # 	  $(SLO)$/xmltreebuilder.obj \
 # 	  $(SLO)$/cmtree.obj \
 # 	  $(SLO)$/cmtreemodel.obj \
 # 	  $(SLO)$/typeconverter.obj \
-# 	  $(SLO)$/confname.obj \
 # 	  $(SLO)$/changes.obj \
 # 	  $(SLO)$/xmlformater.obj \
 # 	  $(SLO)$/attributes.obj \
@@ -122,34 +122,34 @@ APP1OBJS=	\
 
 
 # ... common for all test executables ..............................
-APP2STDLIBS = $(APPSTDLIBS)
-
-APP2STDLIBS+=$(STDLIBCPP)
-
-.IF "$(GUI)"=="WNT"
-APP2STDLIBS+=$(LIBCIMT)
-.ENDIF
-
-APP2TARGET= $(TARGET)
-APP2OBJS=	\
-    $(SLO)$/cfglocal.obj	\
-    $(SLO)$/receivethread.obj	\
-    $(SLO)$/redirector.obj	\
-    $(SLO)$/socketstream.obj	\
-    $(SLO)$/attributes.obj	\
-    $(SLO)$/localsession.obj \
-    $(SLO)$/saxtools.obj \
-    $(SLO)$/mergeupdates.obj \
-    $(SLO)$/oslstream.obj \
-    $(SLO)$/configsession.obj \
-    $(SLO)$/confname.obj \
-    $(SLO)$/sessionstream.obj \
-    $(SLO)$/filehelper.obj \
-    $(SLO)$/tracer.obj \
-    $(SLO)$/updatedom.obj \
-    $(SLO)$/strconverter.obj \
-    $(SLO)$/strimpl.obj \
-
+# APP2STDLIBS = $(APPSTDLIBS)
+# 
+# APP2STDLIBS+=$(STDLIBCPP)
+# 
+# .IF "$(GUI)"=="WNT"
+# APP2STDLIBS+=$(LIBCIMT)
+# .ENDIF
+# 
+# APP2TARGET= cfglocal
+# APP2OBJS=	\
+# 	  $(SLO)$/cfglocal.obj	\
+# 	  $(SLO)$/receivethread.obj	\
+# 	  $(SLO)$/redirector.obj	\
+# 	  $(SLO)$/socketstream.obj	\
+# 	  $(SLO)$/attributes.obj	\
+# 	  $(SLO)$/localsession.obj \
+# 	  $(SLO)$/saxtools.obj \
+# 	  $(SLO)$/mergeupdates.obj \
+# 	  $(SLO)$/oslstream.obj \
+# 	  $(SLO)$/configsession.obj \
+# 	  $(SLO)$/confname.obj \
+# 	  $(SLO)$/sessionstream.obj \
+# 	  $(SLO)$/filehelper.obj \
+# 	  $(SLO)$/tracer.obj \
+# 	  $(SLO)$/updatedom.obj \
+# 	  $(SLO)$/strconverter.obj \
+# 	  $(SLO)$/strimpl.obj \
+# 
 
 .INCLUDE :  target.mk
 

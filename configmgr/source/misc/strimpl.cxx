@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strimpl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dg $ $Date: 2000-11-23 11:59:25 $
+ *  last change: $Author: lla $ $Date: 2000-11-29 13:59:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,7 @@ namespace configmgr
     IMPLEMENT_CONSTASCII_USTRING(ATTR_SEPARATOR, "cfg:separator");
     IMPLEMENT_CONSTASCII_USTRING(ATTR_NULL,      "xsi:null");
     IMPLEMENT_CONSTASCII_USTRING(ATTR_NULLABLE,  "cfg:nullable");
+    IMPLEMENT_CONSTASCII_USTRING(ATTR_VALUE_DEFAULT,   "default");
 
     // boolean constants
     IMPLEMENT_CONSTASCII_USTRING(ATTR_VALUE_TRUE,"true");

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strdecl.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dg $ $Date: 2000-11-23 12:22:09 $
+ *  last change: $Author: lla $ $Date: 2000-11-29 13:59:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,7 @@ namespace configmgr
     DECLARE_CONSTASCII_USTRING(ATTR_NULLABLE);
     DECLARE_CONSTASCII_USTRING(ATTR_STATE);
     DECLARE_CONSTASCII_USTRING(ATTR_WRITABLE);
+    DECLARE_CONSTASCII_USTRING(ATTR_VALUE_DEFAULT);
 
     DECLARE_CONSTASCII_USTRING(ATTR_VALUE_TRUE);
     DECLARE_CONSTASCII_USTRING(ATTR_VALUE_FALSE);

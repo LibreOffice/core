@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgfile.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: lla $ $Date: 2000-11-13 13:15:42 $
+ *  last change: $Author: lla $ $Date: 2000-11-29 13:59:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,7 @@ namespace configmgr
     void classTest();
     void hash_test();
     void testRefs();
+    void ConfigName();
 }
 
 
@@ -111,7 +112,8 @@ int main( int argc, char * argv[] )
 
 //  configmgr::hash_test();
 
-    configmgr::testRefs();
+    // configmgr::testRefs();
+    configmgr::ConfigName();
     return 0;
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgadmin.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dg $ $Date: 2000-11-17 08:30:26 $
+ *  last change: $Author: lla $ $Date: 2000-11-29 13:59:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -475,7 +475,7 @@ int _cdecl main( int argc, char * argv[] )
             );
         if (!xORB.is())
         {
-            flush(cout);
+            ::flush(cout);
             cerr << "Could not create the service factory !\n\n";
             return 1;
         }
@@ -491,7 +491,7 @@ int _cdecl main( int argc, char * argv[] )
 
         if (!xCfgProvider.is())
         {
-            flush(cout);
+            ::flush(cout);
             cerr << "Could not create the configuration provider !\n\n";
             return 3;
         }
@@ -541,7 +541,7 @@ int _cdecl main( int argc, char * argv[] )
     }
     catch (Exception& e)
     {
-        flush(cout);
+        ::flush(cout);
         cerr << "Caught exception: " << e.Message << endl;
         return 1;
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeactions.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dg $ $Date: 2000-11-23 12:03:33 $
+ *  last change: $Author: lla $ $Date: 2000-11-29 13:59:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -297,6 +297,99 @@ void OCreateSubtreeAction::handle(AddNode& _rChange)
     m_pTree->addChild(aNewNode);
 }
 
+    // --------------------------------- updateTree ---------------------------------
+    void TreeUpdate::handle(ValueChange& aValueNode)
+    {
+        // Change a Value
+        OSL_ENSURE(m_pCurrentSubtree,"Cannot apply ValueChange without subtree");
+
+        INode* pBaseNode = m_pCurrentSubtree ? m_pCurrentSubtree->getChild(aValueNode.getNodeName()) : 0;
+        OSL_ENSURE(pBaseNode,"Cannot apply Change: No node to change");
+
+        ValueNode* pValue = pBaseNode ? pBaseNode->asValueNode() : 0;
+        OSL_ENSURE(pValue,"Cannot apply ValueChange: Node is not a value");
+
+        if (pValue)
+            aValueNode.applyTo(*pValue);
+#ifdef DBUG
+        else
+        {
+            ::rtl::OString aStr("TreeUpdate: Can't find value with name:=");
+            aStr += rtl::OUStringToOString(aValueNode.getNodeName(),RTL_TEXTENCODING_ASCII_US);
+            OSL_ENSHURE(pValue, aStr.getStr());
+            aLog.push_back(aStr);
+        }
+#endif
+    }
+
+    void TreeUpdate::handle(AddNode& aAddNode)
+    {
+        // Add a new Value
+        if (m_pCurrentSubtree)
+        {
+            if (aAddNode.isReplacing())
+            {
+                std::auto_ptr<INode> aOldNode = m_pCurrentSubtree->removeChild(aAddNode.getNodeName());
+
+#ifdef DBUG
+                OSL_ENSHURE(aOldNode.get(), "TreeUpdate:AddNode: can't recover node being replaced");
+                if (aOldNode.get() == NULL)
+                    aLog.push_back(OString("TreeUpdate: can't recover node being replaced (for AddNode)"));
+#endif
+
+                aAddNode.takeReplacedNode( aOldNode );
+            }
+
+            m_pCurrentSubtree->addChild(aAddNode.releaseAddedNode());
+        }
+#ifdef DBUG
+        else
+            aLog.push_back(OString("TreeUpdate: no CurrentSubtree for AddNode"));
+#endif
+
+    }
+
+    void TreeUpdate::handle(RemoveNode& aRemoveNode)
+    {
+        // remove a Value
+        if (m_pCurrentSubtree)
+        {
+            std::auto_ptr<INode> aOldNode = m_pCurrentSubtree->removeChild(aRemoveNode.getNodeName());
+
+            sal_Bool bOk = (NULL != aOldNode.get());
+            aRemoveNode.takeRemovedNode( aOldNode );
+
+#ifdef DBUG
+            if (!bOk)
+            {
+                ::rtl::OString aStr("TreeUpdate: Can't remove child with name:=");
+                aStr += rtl::OUStringToOString(aRemoveNode.getNodeName(),RTL_TEXTENCODING_ASCII_US);
+                OSL_ENSHURE(bOk, aStr.getStr());
+                aLog.push_back(aStr);
+            }
+#endif
+        }
+    }
+
+
+    void TreeUpdate::handle(SubtreeChange& aSubtree)
+    {
+        // handle traversion
+        ISubtree *pOldSubtree = m_pCurrentSubtree;
+        OSL_ENSHURE(m_pCurrentSubtree->getChild(aSubtree.getNodeName()), "TreeUpdate::handle : invalid subtree change ... this will crash !");
+        m_pCurrentSubtree = m_pCurrentSubtree->getChild(aSubtree.getNodeName())->asISubtree();
+
+#if DBUG
+        ::rtl::OString aStr("TreeUpdate: there is no Subtree for name:=");
+        aStr += rtl::OUStringToOString(aSubtree.getNodeName(),RTL_TEXTENCODING_ASCII_US);
+        OSL_ENSHURE(m_pCurrentSubtree, aStr.getStr());
+        if (!m_pCurrentSubtree)
+            aLog.push_back(aStr);
+#endif
+
+        aSubtree.forEachChange(*this);
+        m_pCurrentSubtree = pOldSubtree;
+    }
 
 //..........................................................................
 }   // namespace configmgr

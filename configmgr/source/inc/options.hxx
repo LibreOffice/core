@@ -2,9 +2,9 @@
  *
  *  $RCSfile: options.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: lla $ $Date: 2000-11-13 13:14:07 $
+ *  last change: $Author: lla $ $Date: 2000-11-29 13:59:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,10 @@
 #include <com/sun/star/uno/Any.hxx>
 #include "hashhelper.hxx"
 
+#ifndef CONFIGMGR_TYPECONVERTER_HXX
+#include "typeconverter.hxx"
+#endif
+
 #ifndef ASCII
 #define ASCII(x) OUString::createFromAscii(x)
 #endif
@@ -76,6 +80,7 @@ namespace configmgr
 {
     namespace css  = ::com::sun::star;
     namespace uno  = css::uno;
+    namespace script = css::script;
 
     class OptionValue {
         rtl::OUString m_aName;
@@ -106,8 +111,14 @@ namespace configmgr
     class OOptions : public vos::OReference
     {
         HashMapAny m_aHashMap;
+#ifdef LLA_PRIVAT_DEBUG
+        rtl::OUString m_aLocale;
+#endif
+        uno::Reference<script::XTypeConverter> m_aTypeConverter;
+        sal_Bool m_bIsSetupMode;
     public:
         OOptions()
+                :m_bIsSetupMode(false)
             {}
 
         void add(const rtl::OUString &_aName, const uno::Any& _aValue)
@@ -125,6 +136,12 @@ namespace configmgr
                 uno::Any aAny;
                 aAny <<= _aValueAsString;
                 m_aHashMap[ASCII(_pChar)] = aAny;
+#ifdef LLA_PRIVAT_DEBUG
+                if (stricmp(_pChar, "Locale"))
+                {
+                    m_aLocale = _aValueAsString;
+                }
+#endif
             }
 
         rtl::OUString getLocale()
@@ -137,6 +154,25 @@ namespace configmgr
                     return aLocalStr;
                 }
                 return ASCII("en-US"); // Fallback Language
+            }
+
+        void setTypeConverter(const uno::Reference<script::XTypeConverter> &_aConverter)
+            {
+                m_aTypeConverter = _aConverter;
+            }
+        uno::Reference<script::XTypeConverter> getTypeConverter()
+            {
+                OSL_ENSHURE(m_aTypeConverter.is(), "Warning, no TypeConverter set in the options.");
+                return m_aTypeConverter;
+            }
+
+        sal_Bool isSetupMode()
+            {
+                return m_bIsSetupMode;
+            }
+        void setSetupMode(sal_Bool _bMode)
+            {
+                m_bIsSetupMode = _bMode;
             }
 
         // vos::OReference implements acquire and release

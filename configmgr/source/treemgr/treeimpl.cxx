@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeimpl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-20 03:11:02 $
+ *  last change: $Author: lla $ $Date: 2000-11-29 13:59:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -311,7 +311,8 @@ void TreeImpl::build(NodeFactory& rFactory, INode& rCacheNode, TreeDepth nDepth,
 {
     OSL_ASSERT(m_aNodes.empty());
     m_nDepth = nDepth;
-    TreeImplBuilder(aTemplateProvider, rFactory,*this).applyToNode(rCacheNode);
+    TreeImplBuilder a(aTemplateProvider, rFactory,*this);
+    a.applyToNode(rCacheNode);
 }
 //-----------------------------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerimpl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-20 01:30:48 $
+ *  last change: $Author: lla $ $Date: 2000-11-29 13:59:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -392,6 +392,7 @@ namespace configmgr
     rtl::OUString OProviderImpl::FactoryArguments::sNodePath(ASCII("nodepath"));
     rtl::OUString OProviderImpl::FactoryArguments::sDepth(ASCII("depth"));
     rtl::OUString OProviderImpl::FactoryArguments::sLocale(ASCII("locale"));
+    rtl::OUString OProviderImpl::FactoryArguments::sSetupMode(ASCII("setupmode"));
 
 #ifdef DBG_UTIL
     //-----------------------------------------------------------------------------
@@ -405,6 +406,7 @@ namespace configmgr
             aArgs.insert(OProviderImpl::FactoryArguments::sNodePath);
             aArgs.insert(OProviderImpl::FactoryArguments::sDepth);
             aArgs.insert(OProviderImpl::FactoryArguments::sLocale);
+            aArgs.insert(OProviderImpl::FactoryArguments::sSetupMode);
         }
 
         HashSet::const_iterator it = aArgs.find(rName);
@@ -447,10 +449,11 @@ namespace configmgr
 
     //-----------------------------------------------------------------------------------
     void OProviderImpl::FactoryArguments::extractArgs(const uno::Sequence<uno::Any>& _rArgs,
-                                                  OUString& /* [out] */ _rNodeAccessor,
-                                                  OUString& /* [out] */ _rUser,
-                                                  OUString& /* [out] */ _rLocale,
-                                                  sal_Int32& /* [out] */ _nLevels)
+                                                      OUString& /* [out] */ _rNodeAccessor,
+                                                      OUString& /* [out] */ _rUser,
+                                                      OUString& /* [out] */ _rLocale,
+                                                      sal_Int32& /* [out] */ _nLevels,
+                                                      sal_Bool& /* [out] */ _bIsSetupMode)
         throw (lang::IllegalArgumentException)
     {
 
@@ -458,6 +461,7 @@ namespace configmgr
         checkArgs(_rArgs);
 #endif
         ::rtl::OUString sUser, sPath, sLocale;
+        sal_Bool bSetupMode;
         sal_Int32 nLevelDepth = ITreeProvider::ALL_LEVELS;
 
         // the args have to be a sequence of property values, currently three property names are recognized
@@ -477,6 +481,8 @@ namespace configmgr
                     bExtractSuccess = (aCurrent.Value >>= nLevelDepth);
                 else if (aCurrent.Name.equalsIgnoreCase(OProviderImpl::FactoryArguments::sLocale))
                     bExtractSuccess = (aCurrent.Value >>= sLocale);
+                else if (aCurrent.Name.equalsIgnoreCase(OProviderImpl::FactoryArguments::sSetupMode))
+                    bExtractSuccess = (aCurrent.Value >>= bSetupMode);
 /*
 #ifdef DBG_UTIL
                 else
@@ -525,6 +531,7 @@ namespace configmgr
         _nLevels = nLevelDepth;
         _rLocale = sLocale;
         _rUser = sUser;
+        _bIsSetupMode = bSetupMode;
     }
 
 } // namespace configmgr

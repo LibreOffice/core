@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeactions.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dg $ $Date: 2000-11-23 13:00:05 $
+ *  last change: $Author: lla $ $Date: 2000-11-29 13:59:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,6 +163,24 @@ public:
     }
 private:
     NameList aList;
+};
+
+// --------------------------------- TreeUpdate ---------------------------------
+
+class TreeUpdate : public ChangeTreeModification
+{
+    ISubtree* m_pCurrentSubtree;
+#if DBUG
+    std::vector<OString> aLog;
+#endif
+
+public:
+    TreeUpdate(ISubtree* pSubtree):m_pCurrentSubtree(pSubtree){}
+
+    void handle(ValueChange& aValueNode);
+    void handle(AddNode& aAddNode);
+    void handle(RemoveNode& aRemoveNode);
+    void handle(SubtreeChange& aSubtree);
 };
 
 //..........................................................................

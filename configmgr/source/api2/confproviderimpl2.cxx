@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confproviderimpl2.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dg $ $Date: 2000-11-13 16:02:38 $
+ *  last change: $Author: lla $ $Date: 2000-11-29 13:59:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,11 +114,14 @@ namespace configmgr
         // extract the args
         ::rtl::OUString sUser, sPath, sLocale;
         sal_Int32 nLevels;
-        OProviderImpl::FactoryArguments::extractArgs(aArgs, sPath, sUser, sLocale, nLevels);
+        sal_Bool bIsSetupMode = false;
+
+        OProviderImpl::FactoryArguments::extractArgs(aArgs, sPath, sUser, sLocale, nLevels, bIsSetupMode);
         ::rtl::OUString sNodeAccessor = IConfigSession::composeNodeAccessor(sPath, sUser);
 
         // m_pConfiguration->setOptions(getOptions());
         getOptions()->add("Locale", sLocale);
+        getOptions()->setSetupMode(bIsSetupMode);
 
         CFG_TRACE_INFO_NI("config provider: node accessor extracted from the args is %s", OUSTRING2ASCII(sNodeAccessor));
         CFG_TRACE_INFO_NI("config provider: level depth extracted from the args is %i", nLevels);
@@ -149,7 +152,9 @@ namespace configmgr
         // extract the args
         sal_Int32 nLevels;
         ::rtl::OUString sUser, sPath, sLocale;
-        OProviderImpl::FactoryArguments::extractArgs(aArgs, sPath, sUser, sLocale, nLevels);
+        sal_Bool bIsSetupMode = false;
+
+        OProviderImpl::FactoryArguments::extractArgs(aArgs, sPath, sUser, sLocale, nLevels, bIsSetupMode);
         ::rtl::OUString sNodeAccessor = IConfigSession::composeNodeAccessor(sPath, sUser);
 
         CFG_TRACE_INFO_NI("config provider: node accessor extracted from the args is %s", OUSTRING2ASCII(sNodeAccessor));
@@ -157,6 +162,7 @@ namespace configmgr
 
         // m_pConfiguration->setOptions(getOptions());
         getOptions()->add("Locale", sLocale);
+        getOptions()->setSetupMode(bIsSetupMode);
 
         // create the access object
         uno::Reference< uno::XInterface > xReturn;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: simpletest.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: lla $ $Date: 2000-11-13 13:15:42 $
+ *  last change: $Author: lla $ $Date: 2000-11-29 13:59:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,6 +171,8 @@
 #ifndef _CONFIGMGR_STRDECL_HXX_
 #include "strdecl.hxx"
 #endif
+
+#include "confname.hxx"
 
 // -----------------------------------------------------------------------------
 // --------------------------------- namespaces ---------------------------------
@@ -717,5 +719,48 @@ void testRefs()
     cout << "Options from a : " << a.getOptions()->getValue() << endl;
     cout << "Options from b : " << b.getOptions()->getValue() << endl;
 }
+
+
+
+void ConfigName()
+{
+    // OUString aSubtreePath = ASCII("/org.openoffice.office.common/path/blah/blub");
+    OUString aSubtreePath = ASCII("/org.openoffice.office.common");
+    ConfigurationName aName(aSubtreePath);
+    OUString a = aName.localName();
+    OUString b = aName.fullName();
+    OUString c = aName.moduleName();
+    ConfigurationName aParentName(aName.getParentName());
+    OUString d = aParentName.fullName();
+
+
+    {
+        ConfigurationName aName( ASCII("/" ));
+
+        std::stack< rtl::OUString, std::vector<rtl::OUString> > m_aStringStack;
+
+        if (aName.localName().getLength() != 0)
+        {
+            for (ConfigurationName::Iterator it = aName.begin();
+                 it != aName.end();
+                 ++it)
+            {
+                rtl::OUString aName = *it;
+                m_aStringStack.push(aName);
+                // m_xHandler->startElement(*it, rList);
+                volatile int dummy = 0;
+            }
+        }
+
+        // bBack = writeChanges();
+
+        while(!m_aStringStack.empty())
+        {
+            OUString aName = m_aStringStack.top();
+            m_aStringStack.pop();
+        }
+    }
+}
+
 
 } // namespace configmgr
