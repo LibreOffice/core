@@ -88,6 +88,15 @@ mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\ui
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\ui\dialogs
 mkdir: %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\ui
 
+#i20156 - add xmlsecurity module related
+mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\security
+mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\xml
+mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\xml\crypto
+mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\xml\crypto\sax
+mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\xml\csax
+mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\xml\wrapper
+#i20156 - end
+
 ..\%__SRC%\misc\offapi.autodoc %_DEST%\idl%_EXT%\offapi.autodoc
 ..\%__SRC%\ucr\offapi.db %_DEST%\bin%_EXT%\offapi.rdb
 ..\%__SRC%\ucrdoc\offapi_doc.db %_DEST%\bin%_EXT%\offapi_doc.rdb
@@ -177,5 +186,13 @@ mkdir: %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\ui
 ..\drafts\com\sun\star\script\provider\*.idl %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\script\provider
 ..\drafts\com\sun\star\chart\*.idl %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\chart
 ..\drafts\com\sun\star\form\*.idl %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\form
+
+#i20156 - add xmlsecurity module related
+..\com\sun\star\security\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\security
+..\com\sun\star\xml\crypto\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\xml\crypto
+..\com\sun\star\xml\crypto\sax\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\xml\crypto\sax
+..\com\sun\star\xml\csax\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\xml\csax
+..\com\sun\star\xml\wrapper\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\xml\wrapper
+#i20156 - end
 
 dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
