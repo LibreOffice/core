@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porrst.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: fme $ $Date: 2002-03-27 08:30:48 $
+ *  last change: $Author: fme $ $Date: 2002-04-24 11:23:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -524,9 +524,13 @@ sal_Bool SwTxtFrm::FormatEmpty()
             SwTwips nHeight = EmptyHeight();
 
 #ifdef VERTICAL_LAYOUT
-            GETGRID( FindPageFrm() )
-            if ( pGrid && GetTxtNode()->GetSwAttrSet().GetParaGrid().GetValue() )
-                nHeight = pGrid->GetBaseHeight() + pGrid->GetRubyHeight();
+            if ( GetTxtNode()->GetSwAttrSet().GetParaGrid().GetValue() &&
+                 IsInDocBody() )
+            {
+                GETGRID( FindPageFrm() )
+                if ( pGrid )
+                    nHeight = pGrid->GetBaseHeight() + pGrid->GetRubyHeight();
+            }
 
             SWRECTFN( this )
             const SwTwips nChg = nHeight - (Prt().*fnRect->fnGetHeight)();

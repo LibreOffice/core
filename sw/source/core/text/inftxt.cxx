@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: ama $ $Date: 2002-04-24 08:49:09 $
+ *  last change: $Author: fme $ $Date: 2002-04-24 11:23:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -367,7 +367,7 @@ void SwTxtSizeInfo::CtorInit( SwTxtFrm *pFrame, SwFont *pNewFnt,
 
 #ifdef BIDI
     // Set default layout mode ( LTR or RTL ). pOut should be the window.
-    if ( pFrm && pFrm->IsRightToLeft() )
+    if ( pFrm->IsRightToLeft() )
     {
         pOut->SetLayoutMode( TEXT_LAYOUT_BIDI_STRONG | TEXT_LAYOUT_BIDI_RTL );
         nDirection = DIR_RIGHT2LEFT;
@@ -390,7 +390,8 @@ void SwTxtSizeInfo::CtorInit( SwTxtFrm *pFrame, SwFont *pNewFnt,
         && (pOut && OUTDEV_PRINTER != pOut->GetOutDevType());
 
 #ifdef VERTICAL_LAYOUT
-    SetSnapToGrid( pNd->GetSwAttrSet().GetParaGrid().GetValue() );
+    SetSnapToGrid( pNd->GetSwAttrSet().GetParaGrid().GetValue() &&
+                   pFrm->IsInDocBody() );
 #endif
 
     pFnt = pNewFnt;
