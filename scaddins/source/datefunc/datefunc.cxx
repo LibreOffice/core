@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datefunc.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dr $ $Date: 2001-10-02 13:38:09 $
+ *  last change: $Author: dr $ $Date: 2001-10-08 12:52:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -764,8 +764,8 @@ void DaysToDate( sal_Int32 nDays,
  *
  */
 
-sal_Int32 GetNullDate( const uno::Reference<beans::XPropertySet>& xOptions )
-                        throw(uno::RuntimeException)
+sal_Int32 GetNullDate( const uno::Reference< beans::XPropertySet >& xOptions )
+        throw( uno::RuntimeException )
 {
     if (xOptions.is())
     {
@@ -841,9 +841,9 @@ sal_Int32 GetNullDate( const uno::Reference<beans::XPropertySet>& xOptions )
  */
 
 sal_Int32 SAL_CALL ScaDateAddIn::getDiffWeeks(
-                        const uno::Reference<beans::XPropertySet>& xOptions,
-                        sal_Int32 nStartDate, sal_Int32 nEndDate, sal_Int32 nMode )
-                    throw(uno::RuntimeException)
+        const uno::Reference< beans::XPropertySet >& xOptions,
+        sal_Int32 nStartDate, sal_Int32 nEndDate,
+        sal_Int32 nMode ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     sal_Int32 nNullDate = GetNullDate( xOptions );
 
@@ -879,9 +879,9 @@ sal_Int32 SAL_CALL ScaDateAddIn::getDiffWeeks(
  */
 
 sal_Int32 SAL_CALL ScaDateAddIn::getDiffMonths(
-                        const uno::Reference<beans::XPropertySet>& xOptions,
-                        sal_Int32 nStartDate, sal_Int32 nEndDate, sal_Int32 nMode )
-                    throw(uno::RuntimeException)
+        const uno::Reference< beans::XPropertySet >& xOptions,
+        sal_Int32 nStartDate, sal_Int32 nEndDate,
+        sal_Int32 nMode ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     sal_Int32 nNullDate = GetNullDate( xOptions );
 
@@ -925,9 +925,9 @@ sal_Int32 SAL_CALL ScaDateAddIn::getDiffMonths(
  */
 
 sal_Int32 SAL_CALL ScaDateAddIn::getDiffYears(
-                        const uno::Reference<beans::XPropertySet>& xOptions,
-                        sal_Int32 nStartDate, sal_Int32 nEndDate, sal_Int32 nMode )
-                    throw(uno::RuntimeException)
+        const uno::Reference< beans::XPropertySet >& xOptions,
+        sal_Int32 nStartDate, sal_Int32 nEndDate,
+        sal_Int32 nMode ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     if ( nMode != 1 )
         return getDiffMonths( xOptions, nStartDate, nEndDate, nMode ) / 12;
@@ -950,9 +950,8 @@ sal_Int32 SAL_CALL ScaDateAddIn::getDiffYears(
  */
 
 sal_Int32 SAL_CALL ScaDateAddIn::getIsLeapYear(
-                        const uno::Reference<beans::XPropertySet>& xOptions,
-                        sal_Int32 nDate )
-                    throw(uno::RuntimeException)
+        const uno::Reference< beans::XPropertySet >& xOptions,
+        sal_Int32 nDate ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     sal_Int32 nNullDate = GetNullDate( xOptions );
     sal_Int32 nDays = nDate + nNullDate;
@@ -968,9 +967,8 @@ sal_Int32 SAL_CALL ScaDateAddIn::getIsLeapYear(
  */
 
 sal_Int32 SAL_CALL ScaDateAddIn::getDaysInMonth(
-                        const uno::Reference<beans::XPropertySet>& xOptions,
-                        sal_Int32 nDate )
-                    throw(uno::RuntimeException)
+        const uno::Reference<beans::XPropertySet>& xOptions,
+        sal_Int32 nDate ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     sal_Int32 nNullDate = GetNullDate( xOptions );
     sal_Int32 nDays = nDate + nNullDate;
@@ -986,9 +984,8 @@ sal_Int32 SAL_CALL ScaDateAddIn::getDaysInMonth(
  */
 
 sal_Int32 SAL_CALL ScaDateAddIn::getDaysInYear(
-                        const uno::Reference<beans::XPropertySet>& xOptions,
-                        sal_Int32 nDate )
-                    throw(uno::RuntimeException)
+        const uno::Reference< beans::XPropertySet >& xOptions,
+        sal_Int32 nDate ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     sal_Int32 nNullDate = GetNullDate( xOptions );
     sal_Int32 nDays = nDate + nNullDate;
@@ -1016,9 +1013,8 @@ sal_Int32 SAL_CALL ScaDateAddIn::getDaysInYear(
  */
 
 sal_Int32 SAL_CALL ScaDateAddIn::getWeeksInYear(
-                        const uno::Reference<beans::XPropertySet>& xOptions,
-                        sal_Int32 nDate )
-                    throw(uno::RuntimeException)
+        const uno::Reference< beans::XPropertySet >& xOptions,
+        sal_Int32 nDate ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     sal_Int32 nNullDate = GetNullDate( xOptions );
     sal_Int32 nDays = nDate + nNullDate;
@@ -1046,7 +1042,7 @@ sal_Int32 SAL_CALL ScaDateAddIn::getWeeksInYear(
  * Only the characters 'a' ... 'z' and 'A' ... 'Z' are modified.
  */
 
-OUString SAL_CALL ScaDateAddIn::getRot13( const OUString& aSrcString ) throw( uno::RuntimeException )
+OUString SAL_CALL ScaDateAddIn::getRot13( const OUString& aSrcString ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     OUStringBuffer aBuffer( aSrcString );
     for( sal_Int32 nIndex = 0; nIndex < aBuffer.getLength(); nIndex++ )
