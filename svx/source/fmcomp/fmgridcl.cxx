@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmgridcl.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2004-02-11 16:38:11 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 13:13:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1203,6 +1203,7 @@ FmGridControl::FmGridControl(
         ,m_bSelecting(sal_False)
         ,m_nCurrentSelectedColumn(-1)
 {
+    EnableInteractiveRowHeight( );
 }
 
 //------------------------------------------------------------------------------
@@ -1651,6 +1652,36 @@ void FmGridControl::markColumn(sal_uInt16 nId)
 sal_Bool FmGridControl::isColumnMarked(sal_uInt16 nId) const
 {
     return m_nMarkedColumnId == nId;
+}
+
+//------------------------------------------------------------------------------
+long FmGridControl::QueryMinimumRowHeight()
+{
+    long nMinimalLogicHeight = 20; // 0.2 cm
+    long nMinimalPixelHeight = LogicToPixel( Point( 0, nMinimalLogicHeight ), MAP_10TH_MM ).Y();
+    return CalcZoom( nMinimalPixelHeight );
+}
+
+//------------------------------------------------------------------------------
+void FmGridControl::RowHeightChanged()
+{
+    DbGridControl::RowHeightChanged();
+
+    Reference< XPropertySet > xModel( GetPeer()->getColumns(), UNO_QUERY );
+    DBG_ASSERT( xModel.is(), "FmGridControl::RowHeightChanged: no model!" );
+    if ( xModel.is() )
+    {
+        try
+        {
+            sal_Int32 nUnzoomedPixelHeight = CalcReverseZoom( GetDataRowHeight() );
+            Any aProperty = makeAny( (sal_Int32)PixelToLogic( Point( 0, nUnzoomedPixelHeight ), MAP_10TH_MM ).Y() );
+            xModel->setPropertyValue( FM_PROP_ROWHEIGHT, aProperty );
+        }
+        catch( const Exception& )
+        {
+            OSL_ENSURE( sal_False, "FmGridControl::RowHeightChanged: caught an exception!" );
+        }
+    }
 }
 
 //------------------------------------------------------------------------------
