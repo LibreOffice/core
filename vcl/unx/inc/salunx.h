@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salunx.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:41 $
+ *  last change: $Author: svesik $ $Date: 2001-02-16 01:01:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 //                                                                            //
 // (C) 1997 Star Division GmbH, Hamburg, Germany                              //
 //                                                                            //
-// $Revision: 1.1.1.1 $  $Author: hr $  $Date: 2000-09-18 17:05:41 $    //
+// $Revision: 1.2 $  $Author: svesik $  $Date: 2001-02-16 01:01:48 $    //
 //                                                                            //
 // $Workfile:   salunx.h  $                                                   //
 //  $Modtime:   14 Aug 1997 13:51:48  $                                       //
@@ -73,10 +73,8 @@
 #define _SALUNX_H
 
 // -=-= #includes =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#if defined SCO || defined LINUX || defined HPUX || defined FREEBSD
+#if defined SCO || defined LINUX || defined HPUX || defined FREEBSD || defined NETBSD
 #include <sys/time.h>
-#elif defined NETBSD
-#include <unistd.h>
 #elif defined AIX
 #include <time.h>
 #include <sys/time.h>
