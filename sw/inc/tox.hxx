@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tox.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-17 16:11:16 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 14:38:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -507,9 +507,6 @@ enum SwTOOElements
 
 class SwTOXBase : public SwClient
 {
-    // not implemented
-    SwTOXBase&          operator=(const SwTOXBase& rSource);
-
     SwForm      aForm;              // description of the lines
     String      aName;              // unique name
     String      aTitle;             // title
@@ -629,6 +626,7 @@ public:
     void            SetSortAlgorithm(const String& rSet) {sSortAlgorithm = rSet;}
     // #i21237#
     void AdjustTabStops(SwDoc & rDoc, BOOL bDefaultRightTabStop);
+    SwTOXBase&          operator=(const SwTOXBase& rSource);
 };
 
 
@@ -808,9 +806,6 @@ inline void SwTOXBase::AdjustTabStops(SwDoc & rDoc, BOOL bDefaultRightTabStop)
 
 inline void SwTOXBase::SetCreate(USHORT nCreate)
     { nCreateType = nCreate; }
-
-inline void SwTOXBase::SetTitle(const String& rTitle)
-    {   aTitle = rTitle; }
 
 inline void SwTOXBase::SetTOXForm(const SwForm& rForm)
     {  aForm = rForm; }
