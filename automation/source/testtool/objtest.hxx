@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objtest.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 11:41:22 $
+ *  last change: $Author: hr $ $Date: 2004-06-23 12:26:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,8 @@
 #ifndef _BASIC_TESTTOOL_HXX_
 #include <basic/testtool.hxx>
 #endif
+
+#include <map>
 
 //  #define ID_BeginBlock   1
 //  #define ID_EndBlock     2
@@ -276,7 +278,7 @@ private:
 };
 SV_DECL_IMPL_REF(Controls);
 
-typedef Environment;
+typedef std::map< String, String > Environment;
 
 class ImplTestToolObj
 {
