@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Button.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2001-09-12 11:00:55 $
+ *  last change: $Author: fs $ $Date: 2002-02-21 08:52:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -328,7 +328,24 @@ IMPL_LINK( OButtonControl, OnClick, void*, EMPTYARG )
             ActionEvent aEvt(static_cast<XWeak*>(this), m_aActionCommand);
             while(aIter.hasMoreElements() )
             {
-                ((XActionListener*)aIter.next())->actionPerformed(aEvt);
+                // catch exceptions
+                // and catch them on a per-listener basis - if one listener fails, the others still need
+                // to get notified
+                // 97676 - 21.02.2002 - fs@openoffice.org
+                try
+                {
+                    static_cast< XActionListener* >( aIter.next() )->actionPerformed(aEvt);
+                }
+#ifdef DBG_UTIL
+                catch( const RuntimeException& )
+                {
+                    // silent this
+                }
+#endif
+                catch( const Exception& )
+                {
+                    DBG_ERROR( "OButtonControl::OnClick: caught a exception other than RuntimeException!" );
+                }
             }
         }
         else
