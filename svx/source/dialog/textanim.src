@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textanim.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:24:13 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 14:16:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
     Text [ spanish ] = "Animaci�n" ;
     Text [ french ] = "Animation de texte" ;
     Text [ swedish ] = "Textanimation" ;
-    Text [ danish ] = "Tekstanimation" ;
+    Text [ danish ] = "Animation" ;
     Text [ portuguese ] = "Anima��o de texto" ;
     Text [ portuguese_brazilian ] = "Anima��o" ;
     Text[ chinese_simplified ] = "活动文字";
@@ -140,7 +140,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text[ portuguese ] = "Efeitos de anima��o de texto";
         Text[ russian ] = "������� �������� ������";
         Text[ greek ] = "��� ������� ��������";
-        Text[ dutch ] = "Tekstanimatie effecten";
+        Text[ dutch ] = "Tekstanimatie-effecten";
         Text[ french ] = "Effets d'animation de texte";
         Text[ spanish ] = "Efectos de animaci�n de texto";
         Text[ finnish ] = "Tekstin animaatiotehosteet";
@@ -161,6 +161,8 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text[ hebrew ] = "Lauftext Effekte";
         Text[ hindi ] = "टेक्स्ट् हुलास प्रभाव";
         Text[ slovak ] = "Efekty animácie textu";
+        Text[ hungarian ] = "Szöveganimációs hatások";
+        Text[ slovenian ] = "Učinki animacije besedila";
     };
 #define MA_CURR_Y       RSC_SP_TBPG_INNERBORDER_TOP + RSC_CD_FIXEDLINE_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP + MA_BUTTON_HEIGHT
     FixedText FT_EFFECTS
@@ -195,6 +197,8 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text[ hebrew ] = "E~ffekt";
         Text[ hindi ] = "प्र~भाव";
         Text[ slovak ] = "E~fekt";
+        Text[ hungarian ] = "~Hatás";
+        Text[ slovenian ] = "U~činek";
     };
     ListBox LB_EFFECT
     {
@@ -256,7 +260,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
             < "Ingen effekt" ; Default ; > ;
             < "Blink" ; Default ; > ;
             < "Glid igennem" ; Default ; > ;
-            < "Glid frem- og tilbage" ; Default ; > ;
+            < "Glid frem og tilbage" ; Default ; > ;
             < "Glid ind" ; Default ; > ;
         };
         stringlist [ italian ] =
@@ -427,6 +431,22 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         < "Rolovať tam a späť" ; Default ; > ;
         < "Jeden priebeh" ; Default ; > ;
     };
+    StringList [ hungarian ] =
+    {
+         < "Nincs hatás" ; Default ; > ;
+        < "Villogás" ; Default ; > ;
+        < "Átúsztatás" ; Default ; > ;
+        < "Oda-vissza görgetés" ; Default ; > ;
+        < "Beúszás" ; Default ; > ;
+    };
+    StringList [ slovenian ] =
+    {
+         < "Brez učinka" ; Default ; > ;
+        < "Utripanje" ; Default ; > ;
+        < "Drsenje" ; Default ; > ;
+        < "Drsenje naprej in nazaj" ; Default ; > ;
+        < "Drsenje navznoter" ; Default ; > ;
+    };
     };
     FixedText FT_DIRECTION
     {
@@ -463,6 +483,8 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text[ hebrew ] = "Laufrichtung";
         Text[ hindi ] = "दिशा";
         Text[ slovak ] = "Smer";
+        Text[ hungarian ] = "Irány";
+        Text[ slovenian ] = "Smer";
     };
     ImageButton BTN_UP
     {
@@ -499,6 +521,8 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         QuickHelpText[ hebrew ] = "Nach Oben";
         QuickHelpText[ hindi ] = "ऊपर तक";
         QuickHelpText[ slovak ] = "Nahor";
+        QuickHelpText[ hungarian ] = "A tetejére";
+        QuickHelpText[ slovenian ] = "Na vrh";
     };
     ImageButton BTN_LEFT
     {
@@ -535,6 +559,8 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         QuickHelpText[ hebrew ] = "Nach Links";
         QuickHelpText[ hindi ] = "बायाँ ओर";
         QuickHelpText[ slovak ] = "Doľava";
+        QuickHelpText[ hungarian ] = "Balra";
+        QuickHelpText[ slovenian ] = "Na levo";
     };
     ImageButton BTN_RIGHT
     {
@@ -571,6 +597,8 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         QuickHelpText[ hebrew ] = "Nach Rechts";
         QuickHelpText[ hindi ] = "दाहिनी ओर";
         QuickHelpText[ slovak ] = "Doprava";
+        QuickHelpText[ hungarian ] = "Jobbra";
+        QuickHelpText[ slovenian ] = "Na desno";
     };
     ImageButton BTN_DOWN
     {
@@ -607,6 +635,8 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         QuickHelpText[ hebrew ] = "Nach Unten";
         QuickHelpText[ hindi ] = "नीचे तक";
         QuickHelpText[ slovak ] = "Nadol";
+        QuickHelpText[ hungarian ] = "Alulra";
+        QuickHelpText[ slovenian ] = "Na dno";
     };
 
     FixedLine FL_PROPERTIES
@@ -640,6 +670,8 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text[ hebrew ] = "‮מאפינים‬";
         Text[ hindi ] = "विशेषतायें";
         Text[ slovak ] = "Vlastnosti";
+        Text[ hungarian ] = "Tulajdonságok";
+        Text[ slovenian ] = "Lastnosti";
     };
 #define MA_CURR_Y2      RSC_SP_TBPG_INNERBORDER_TOP + MA_EFFECTSGROUP_HEIGHT + RSC_CD_FIXEDLINE_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP
     TriStateBox TSB_START_INSIDE
@@ -675,6 +707,8 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text[ hebrew ] = "Text sichtbar beim ~Starten";
         Text[ hindi ] = "भीतरी भाग प्रा~रंभ करो";
         Text[ slovak ] = "Spus~tiť vo vnútri";
+        Text[ hungarian ] = "~Indítás belül";
+        Text[ slovenian ] = "Zač~ni znotraj";
     };
 #define MA_CURR_Y3      MA_CURR_Y2 + RSC_CD_CHECKBOX_HEIGHT + RSC_SP_CTRL_GROUP_Y
     TriStateBox TSB_STOP_INSIDE
@@ -690,7 +724,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text [ spanish ] = "Texto visible al ~finalizar" ;
         Text [ french ] = "Texte visible � l'arr�t" ;
         Text [ swedish ] = "Text synlig vid a~vslutning" ;
-        Text [ danish ] = "Tekst s~ynlig ved afslutning" ;
+        Text [ danish ] = "Tekst synlig ved afslutning" ;
         Text [ portuguese ] = "Texto vis�vel ao ~finalizar" ;
         Text [ portuguese_brazilian ] = "Texto vis�vel ao sair" ;
         Text[ chinese_simplified ] = "在结束时显示文字";
@@ -710,6 +744,8 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text[ hebrew ] = "Text sichtbar beim ~Beenden";
         Text[ hindi ] = "निर्गम करने के समय टेक्स्ट् दृष्टिगोचर";
         Text[ slovak ] = "Viditeľný text pri ukončení";
+        Text[ hungarian ] = "Kilépéskor látható a szöveg";
+        Text[ slovenian ] = "Besedilo vidno ob izhodu";
     };
 #define MA_CURR_Y4      MA_CURR_Y3 + RSC_CD_CHECKBOX_HEIGHT + RSC_SP_CTRL_GROUP_Y
     FixedText FT_COUNT
@@ -745,6 +781,8 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text[ hebrew ] = "Animationsdurchläufe";
         Text[ hindi ] = "हुलास सइकल";
         Text[ slovak ] = "Cykly animácie";
+        Text[ hungarian ] = "Animációs körforgás";
+        Text[ slovenian ] = "Kroženje animacij";
     };
 #define MA_CURR_Y5      MA_CURR_Y4 + RSC_CD_FIXEDTEXT_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP
     TriStateBox TSB_ENDLESS
@@ -760,7 +798,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text [ spanish ] = "~Continuo" ;
         Text [ french ] = "Continu" ;
         Text [ swedish ] = "~Kontinuerligt" ;
-        Text [ danish ] = "Endel�s" ;
+        Text [ danish ] = "~Gennemg�ende" ;
         Text [ portuguese ] = "~Cont�nuo" ;
         Text [ portuguese_brazilian ] = "~Cont�nuo" ;
         Text[ chinese_simplified ] = "不间断(~C)";
@@ -780,6 +818,8 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text[ hebrew ] = "‮רציף‬";
         Text[ hindi ] = "~निरन्तर";
         Text[ slovak ] = "~Spojito";
+        Text[ hungarian ] = "~Folyamatos";
+        Text[ slovenian ] = "~Zvezno";
     };
     NumericField NUM_FLD_COUNT
     {
@@ -827,6 +867,8 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text[ hebrew ] = "Schrittweite";
         Text[ hindi ] = "बढती";
         Text[ slovak ] = "Prírastok";
+        Text[ hungarian ] = "Növelés";
+        Text[ slovenian ] = "Prirastek";
     };
 #define MA_CURR_Y7      MA_CURR_Y6 + RSC_CD_FIXEDTEXT_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP
     TriStateBox TSB_PIXEL
@@ -842,7 +884,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text [ spanish ] = "P�~xel" ;
         Text [ french ] = "~Pixels" ;
         Text [ swedish ] = "~Pixel" ;
-        Text [ danish ] = "Pixel" ;
+        Text [ danish ] = "~Pixler" ;
         Text [ portuguese ] = "~Pixel" ;
         Text [ portuguese_brazilian ] = "~Pixels" ;
         Text[ chinese_simplified ] = "像素(~P)";
@@ -862,6 +904,8 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text[ hebrew ] = "~Pixel";
         Text[ hindi ] = "~पिक्सल्स";
         Text[ slovak ] = "~Body";
+        Text[ hungarian ] = "~Képpont";
+        Text[ slovenian ] = "Slikovne ~pike";
     };
     MetricField MTR_FLD_AMOUNT
     {
@@ -914,6 +958,8 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text[ hebrew ] = "Schrittverzögerung";
         Text[ hindi ] = "विलम्ब";
         Text[ slovak ] = "Pozdržať";
+        Text[ hungarian ] = "Késleltetés";
+        Text[ slovenian ] = "Zakasnitev";
     };
 #define MA_CURR_Y9      MA_CURR_Y8 + RSC_CD_FIXEDTEXT_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP
     TriStateBox TSB_AUTO
@@ -929,7 +975,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text [ spanish ] = "~Autom�tico" ;
         Text [ french ] = "Automatique" ;
         Text [ swedish ] = "~Automatisk" ;
-        Text [ danish ] = "Automatisk" ;
+        Text [ danish ] = "~Automatisk" ;
         Text [ portuguese ] = "~Automaticamente" ;
         Text [ portuguese_brazilian ] = "~Autom�tico" ;
         Text[ chinese_simplified ] = "自动(~A)";
@@ -949,6 +995,8 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text[ hebrew ] = "‮אוטומטי‬";
         Text[ hindi ] = "स्व~चालित";
         Text[ slovak ] = "~Automaticky";
+        Text[ hungarian ] = "~Automatikus";
+        Text[ slovenian ] = "S~amodejno";
     };
     MetricField MTR_FLD_DELAY
     {
@@ -971,6 +1019,8 @@ TabPage RID_SVXPAGE_TEXTANIMATION
     Text[ hebrew ] = "Textanimation";
     Text[ hindi ] = "हुलास";
     Text[ slovak ] = "Animácia";
+    Text[ hungarian ] = "Animáció";
+    Text[ slovenian ] = "Animacija";
 };
  // RID_SVXDLG_TEXT -------------------------------------------------------
 TabDialog RID_SVXDLG_TEXT
@@ -1041,6 +1091,8 @@ TabDialog RID_SVXDLG_TEXT
                 Text[ hebrew ] = "‮טקסט‬";
                 Text[ hindi ] = "टेक्स्ट्";
                 Text[ slovak ] = "Text";
+                Text[ hungarian ] = "Szöveg";
+                Text[ slovenian ] = "Besedilo";
             };
             PageItem
             {
@@ -1054,7 +1106,7 @@ TabDialog RID_SVXDLG_TEXT
                 Text [ french ] = "Animation de texte" ;
                 Text [ dutch ] = "Tekstanimatie" ;
                 Text [ swedish ] = "Animerad text" ;
-                Text [ danish ] = "Animeret tekst" ;
+                Text [ danish ] = "Tekstanimation" ;
                 Text [ portuguese_brazilian ] = "Anima��o do Texto" ;
                 Text [ portuguese ] = "Texto animado" ;
                 Text[ chinese_simplified ] = "活动文字";
@@ -1074,6 +1126,8 @@ TabDialog RID_SVXDLG_TEXT
                 Text[ hebrew ] = "Lauftext";
                 Text[ hindi ] = "टेक्स्ट् हुलास";
                 Text[ slovak ] = "Animácia textu";
+                Text[ hungarian ] = "Szöveg animálása";
+                Text[ slovenian ] = "Animacija besedila";
             };
         };
     };
@@ -1082,8 +1136,12 @@ TabDialog RID_SVXDLG_TEXT
     Text[ hebrew ] = "‮טקסט‬";
     Text[ hindi ] = "टेक्स्ट्";
     Text[ slovak ] = "Text";
+    Text[ hungarian ] = "Szöveg";
+    Text[ slovenian ] = "Besedilo";
 };
  // ******************************************************************* EOF
+
+
 
 
 
