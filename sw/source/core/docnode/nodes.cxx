@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodes.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-01 07:42:14 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:21:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,31 +203,6 @@ SwNodes::~SwNodes()
     // jetzt muessen alle SwNodeIndizies abgemeldet sein!!!
     delete pEndOfContent;
 }
-
-
-// Sortier-Funktion fuer das Resort der OutlineNodes-Indizies. Wenn innerhalb
-// des Nodes-Arrays Elemente verschoben werden, dann muessen die Indizies
-// im Outline-Array wieder in die richtige Reihenfolge sortiert werden.
-
-int
-#if defined( WNT )
- __cdecl
-#endif
-#if defined( ICC )
- _Optlink
-#endif
-    lcl_nodes_CmpFuncIdx( const void* pLower, const void* pUpper )
-{
-    int nRet;
-    if( *(SwNode**)pLower == *(SwNode**)pUpper )
-        nRet = 0;
-    else if( (*(SwNode**)pLower)->GetIndex() < (*(SwNode**)pUpper)->GetIndex() )
-        nRet = -1;
-    else
-        nRet = 1;
-    return nRet;
-}
-
 
 void SwNodes::ChgNode( SwNodeIndex& rDelPos, ULONG nSize,
                         SwNodeIndex& rInsPos, BOOL bNewFrms )
@@ -1585,7 +1560,7 @@ SwNode* SwNodes::GoPreviousWithFrm(SwNodeIndex *pIdx) const
         return 0;
 
     SwNodeIndex aTmp( *pIdx, -1 );
-    SwNode* pNd;
+    SwNode* pNd(0);
     while( aTmp.GetIndex() )
     {
         pNd = &aTmp.GetNode();
@@ -2498,12 +2473,6 @@ SwNode* SwNodes::FindPrvNxtFrmNode( SwNodeIndex& rFrmIdx,
         }
     }
     return pFrmNd;
-}
-
-SwCntntFrm* SwNodes::MakeFrm( const SwNodeIndex &rIndex )
-{
-    SwCntntNode *pNode = rIndex.GetNode().GetCntntNode();
-    return pNode ? pNode->MakeFrm() : 0;
 }
 
 void SwNodes::ForEach( const SwNodeIndex& rStart, const SwNodeIndex& rEnd,
