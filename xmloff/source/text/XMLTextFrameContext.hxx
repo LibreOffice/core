@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextFrameContext.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:36:48 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 10:48:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,10 @@ public:
 
     ::com::sun::star::uno::Reference <
         ::com::sun::star::text::XTextContent > GetTextContent() const;
+    // --> OD 2004-08-24 #i33242#
+    ::com::sun::star::uno::Reference <
+        ::com::sun::star::drawing::XShape > GetShape() const;
+    // <--
 };
 
 
