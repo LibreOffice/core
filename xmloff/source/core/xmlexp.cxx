@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: cl $ $Date: 2001-04-20 14:01:07 $
+ *  last change: $Author: mib $ $Date: 2001-04-24 15:34:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -753,6 +753,20 @@ sal_uInt32 SvXMLExport::exportDoc( const sal_Char *pClass )
         {
             // the god'ol one4all element
             pRootService = sXML_document;
+        }
+
+        if( xExtHandler.is() )
+        {
+            OUStringBuffer aDocType(
+                sizeof(sXML_xml_doctype_prefix) +
+                sizeof(sXML_xml_doctype_suffix) + 30 );
+
+            aDocType.appendAscii( sXML_xml_doctype_prefix );
+            OUString sLName( OUString::createFromAscii(pRootService) );
+            aDocType.append( GetNamespaceMap().GetQNameByKey(
+                                XML_NAMESPACE_OFFICE, sLName ) );
+            aDocType.appendAscii( sXML_xml_doctype_suffix );
+            xExtHandler->unknown( aDocType.makeStringAndClear() );
         }
 
         SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE, pRootService, sal_True, sal_True );
