@@ -2635,7 +2635,7 @@ SfxBoolItem FunctionBox FID_FUNCTION_BOX
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
-    Container = FALSE,
+    Container = TRUE,
     RecordAbsolute = FALSE,
     RecordPerSet;
     Synchron;
