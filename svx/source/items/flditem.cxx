@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flditem.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: thb $ $Date: 2001-09-20 07:48:16 $
+ *  last change: $Author: thb $ $Date: 2001-11-16 13:51:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -770,7 +770,7 @@ String SvxExtTimeField::GetFormatted( SvNumberFormatter& rFormatter, LanguageTyp
         break;
         case SVXTIMEFORMAT_12_HMSH:
         {   // no builtin format available, try to insert or reuse
-            String aFormatCode( RTL_CONSTASCII_USTRINGPARAM( "HH:MM:SS,00 AM/PM" ) );
+            String aFormatCode( RTL_CONSTASCII_USTRINGPARAM( "HH:MM:SS.00 AM/PM" ) );
             xub_StrLen nCheckPos;
             short nType;
             BOOL bInserted = rFormatter.PutandConvertEntry( aFormatCode,
