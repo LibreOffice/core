@@ -2,9 +2,9 @@
  *
  *  $RCSfile: portox.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2002-04-25 13:57:38 $
+ *  last change: $Author: os $ $Date: 2002-06-20 09:28:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,8 @@ KSHORT SwIsoToxPortion::GetViewWidth( const SwTxtSizeInfo &rInf ) const
     SwIsoToxPortion* pThis = (SwIsoToxPortion*)this;
     // nViewWidth muss errechnet werden.
     if( !Width() && rInf.OnWin() &&
-        !rInf.GetOpt().IsPagePreview() && SwViewOption::IsFieldShadings()   )
+        !rInf.GetOpt().IsPagePreview() &&
+            !rInf.GetOpt().IsReadonly() && SwViewOption::IsFieldShadings()   )
     {
         if( !nViewWidth )
             pThis->nViewWidth = rInf.GetTxtSize( ' ' ).Width();

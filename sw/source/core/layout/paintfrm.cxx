@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: ama $ $Date: 2002-05-30 11:09:32 $
+ *  last change: $Author: os $ $Date: 2002-06-20 09:27:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,12 +213,19 @@
 #define IS_SUBS_TABLE \
     (pGlobalShell->GetViewOptions()->IsTable() && \
     !pGlobalShell->GetViewOptions()->IsPagePreview()&&\
+    !pGlobalShell->GetViewOptions()->IsReadonly()&&\
      SwViewOption::IsTableBoundaries())
 //sonstige Hilfslinien an?
-#define IS_SUBS (!pGlobalShell->GetViewOptions()->IsPagePreview() && SwViewOption::IsDocBoundaries())
+#define IS_SUBS (!pGlobalShell->GetViewOptions()->IsPagePreview() && \
+        !pGlobalShell->GetViewOptions()->IsReadonly() && \
+        SwViewOption::IsDocBoundaries())
 //Hilfslinien fuer Bereiche
-#define IS_SUBS_SECTION (!pGlobalShell->GetViewOptions()->IsPagePreview() && SwViewOption::IsSectionBoundaries())
-#define IS_SUBS_FLYS (!pGlobalShell->GetViewOptions()->IsPagePreview() && SwViewOption::IsObjectBoundaries())
+#define IS_SUBS_SECTION (!pGlobalShell->GetViewOptions()->IsPagePreview() && \
+                            !pGlobalShell->GetViewOptions()->IsReadonly()&&\
+                            SwViewOption::IsSectionBoundaries())
+#define IS_SUBS_FLYS (!pGlobalShell->GetViewOptions()->IsPagePreview() && \
+                            !pGlobalShell->GetViewOptions()->IsReadonly()&&\
+                                SwViewOption::IsObjectBoundaries())
 
 #define SW_MAXBORDERCACHE 20
 
@@ -4087,7 +4094,7 @@ BOOL SwFrm::GetBackgroundBrush( const SvxBrushItem* & rpBrush,
                 TOX_CONTENT_SECTION == pSection->GetType() ) &&
                 rBack.GetColor().GetTransparency() &&
                 rBack.GetGraphicPos() == GPOS_NONE &&
-                !pOpt->IsPagePreview() && SwViewOption::IsIndexShadings() &&
+                !pOpt->IsPagePreview() && !pOpt->IsReadonly() && SwViewOption::IsIndexShadings() &&
                 pSh->GetOut()->GetOutDevType() != OUTDEV_PRINTER )
                 rpCol = &SwViewOption::GetIndexShadingsColor();
         }

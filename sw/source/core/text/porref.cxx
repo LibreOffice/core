@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porref.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2002-04-25 13:57:38 $
+ *  last change: $Author: os $ $Date: 2002-06-20 09:28:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,8 @@ KSHORT SwIsoRefPortion::GetViewWidth( const SwTxtSizeInfo &rInf ) const
     // Wir stehen zwar im const, aber nViewWidth sollte erst im letzten
     // Moment errechnet werden:
     SwIsoRefPortion* pThis = (SwIsoRefPortion*)this;
-    if( !Width() && rInf.OnWin() && SwViewOption::IsFieldShadings() && !rInf.GetOpt().IsPagePreview() )
+    if( !Width() && rInf.OnWin() && SwViewOption::IsFieldShadings() &&
+            !rInf.GetOpt().IsReadonly() && !rInf.GetOpt().IsPagePreview() )
     {
         if( !nViewWidth )
             pThis->nViewWidth = rInf.GetTxtSize( ' ' ).Width();

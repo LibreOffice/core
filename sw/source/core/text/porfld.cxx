@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porfld.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: fme $ $Date: 2002-05-30 12:44:25 $
+ *  last change: $Author: os $ $Date: 2002-06-20 09:28:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,7 +199,8 @@ KSHORT SwFldPortion::GetViewWidth( const SwTxtSizeInfo &rInf ) const
     // Wir stehen zwar im const, aber nViewWidth sollte erst im letzten
     // Moment errechnet werden:
     SwFldPortion* pThis = (SwFldPortion*)this;
-    if( !Width() && rInf.OnWin() && !rInf.GetOpt().IsPagePreview() && SwViewOption::IsFieldShadings() )
+    if( !Width() && rInf.OnWin() && !rInf.GetOpt().IsPagePreview() &&
+            !rInf.GetOpt().IsReadonly() && SwViewOption::IsFieldShadings() )
     {
         if( !nViewWidth )
             pThis->nViewWidth = rInf.GetTxtSize( ' ' ).Width();
@@ -488,7 +489,8 @@ sal_Bool SwFldPortion::GetExpTxt( const SwTxtSizeInfo &rInf, XubString &rTxt ) c
 {
     rTxt = aExpand;
     if( !rTxt.Len() && rInf.OnWin() &&
-        !rInf.GetOpt().IsPagePreview() && SwViewOption::IsFieldShadings() &&
+        !rInf.GetOpt().IsPagePreview() && !rInf.GetOpt().IsReadonly() &&
+            SwViewOption::IsFieldShadings() &&
             !HasFollow() )
         rTxt = ' ';
     return sal_True;
