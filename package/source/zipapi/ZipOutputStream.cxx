@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipOutputStream.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-04 14:56:24 $
+ *  last change: $Author: mtg $ $Date: 2001-08-08 18:24:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -332,7 +332,6 @@ void ZipOutputStream::doDeflate()
 void ZipOutputStream::writeEND(sal_uInt32 nOffset, sal_uInt32 nLength)
     throw(IOException, RuntimeException)
 {
-    aChucker.setSpannable ( sal_False );
     sal_Int16 nCommentLength = static_cast < sal_Int16 > (sComment.getLength());
     Sequence < sal_Int8 > aSequence (nCommentLength);
     sal_Int8 *pArray = aSequence.getArray();
@@ -353,12 +352,10 @@ void ZipOutputStream::writeEND(sal_uInt32 nOffset, sal_uInt32 nLength)
     aChucker << nCommentLength;
     if (nCommentLength)
         aChucker.writeBytes( aSequence, nCommentLength, pArray );
-    aChucker.setSpannable ( sal_True );
 }
 void ZipOutputStream::writeCEN( const ZipEntry &rEntry )
     throw(IOException, RuntimeException)
 {
-    aChucker.setSpannable ( sal_False );
     sal_Int16 nNameLength       = static_cast < sal_Int16 > ( rEntry.sName.getLength() ) ,
               nCommentLength    = static_cast < sal_Int16 > ( rEntry.sComment.getLength() ) ,
               nExtraLength      = static_cast < sal_Int16 > ( rEntry.extra.getLength() );
@@ -386,7 +383,7 @@ void ZipOutputStream::writeCEN( const ZipEntry &rEntry )
     aChucker << nNameLength;
     aChucker << nExtraLength;
     aChucker << nCommentLength;
-    aChucker << static_cast < sal_Int16> ( rEntry.nDiskNumber );
+    aChucker << static_cast < sal_Int16> (0);
     aChucker << static_cast < sal_Int16> (0);
     aChucker << static_cast < sal_Int32> (0);
     aChucker << rEntry.nOffset;
@@ -418,23 +415,19 @@ void ZipOutputStream::writeCEN( const ZipEntry &rEntry )
         }
         aChucker.writeBytes( aSequence, nCommentLength, pArray );
     }
-    aChucker.setSpannable ( sal_True );
 }
 void ZipOutputStream::writeEXT( const ZipEntry &rEntry )
     throw(IOException, RuntimeException)
 {
-    aChucker.setSpannable ( sal_False );
     aChucker << EXTSIG;
     aChucker << static_cast < sal_uInt32> ( rEntry.nCrc );
     aChucker << rEntry.nCompressedSize;
     aChucker << rEntry.nSize;
-    aChucker.setSpannable ( sal_True );
 }
 
 sal_Int32 ZipOutputStream::writeLOC( const ZipEntry &rEntry )
     throw(IOException, RuntimeException)
 {
-    aChucker.setSpannable ( sal_False );
     sal_Int16 nNameLength = static_cast < sal_Int16 > (rEntry.sName.getLength()),
               nExtraLength = static_cast < sal_Int16 > (rEntry.extra.getLength());
     Sequence < sal_Int8 > aSequence(nNameLength);
@@ -482,7 +475,6 @@ sal_Int32 ZipOutputStream::writeLOC( const ZipEntry &rEntry )
     aChucker.writeBytes( aSequence, nNameLength, pArray );
     if ( nExtraLength )
         aChucker.writeBytes( rEntry.extra );
-    aChucker.setSpannable ( sal_True );
     return LOCHDR + nNameLength + nExtraLength;
 }
 sal_uInt32 ZipOutputStream::getCurrentDosTime( )
