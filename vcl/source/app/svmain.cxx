@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svmain.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cd $ $Date: 2000-11-06 08:55:14 $
+ *  last change: $Author: cd $ $Date: 2000-11-13 09:41:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -297,6 +297,7 @@ BOOL SVMain()
 
     if( pSVData->mxClientFactory.is() )
     {
+/*
         pSVData->mpRVPNormalSync = new RVPSync(
             Reference< ::com::sun::star::portal::client::XRmSync >(
                 pSVData->mxClientFactory->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "RVPSync_Normal.stardiv.de" ) ) ), UNO_QUERY ));
@@ -314,11 +315,13 @@ BOOL SVMain()
 
         pSVData->mxStatus = Reference < ::com::sun::star::portal::client::XRmStatus > ( rX , UNO_QUERY );
         CHECK_FOR_RVPSYNC_NORMAL()
-        if( pSVData->mxStatus->GetRemoteVersion() != REMOTE_VCLVERSION )
+*/
+        if ( pSVData->mnRemoteVersion != REMOTE_VCLVERSION )
+//      if( pSVData->mxStatus->GetRemoteVersion() != REMOTE_VCLVERSION )
         {
-            CHECK_FOR_RVPSYNC_NORMAL()
-            pSVData->mxStatus->ShowError(
-                OUString( RTL_CONSTASCII_USTRINGPARAM("Wrong Office-Version")), 0 );
+//          CHECK_FOR_RVPSYNC_NORMAL()
+//          pSVData->mxStatus->ShowError(
+//              OUString( RTL_CONSTASCII_USTRINGPARAM("Wrong Office-Version")), 0 );
             CHECK_FOR_RVPSYNC_NORMAL()
             pSVData->mxStatus->Quit();
             return sal_False;
