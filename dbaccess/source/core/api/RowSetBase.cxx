@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetBase.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 15:47:43 $
+ *  last change: $Author: vg $ $Date: 2003-06-25 11:02:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -720,14 +720,12 @@ void SAL_CALL ORowSetBase::beforeFirst(  ) throw(SQLException, RuntimeException)
             m_aCurrentRow   = m_pCache->getEnd();
             m_aCurrentRow.setBookmark(m_aBookmark);
             m_bBeforeFirst  = !(m_bAfterLast = sal_False);
+
+            // notification order
+            // - column values
+            // - cursorMoved
+            setCurrentRow(sal_True,aOldValues,aGuard);
         }
-
-        // notification order
-        // - column values
-        firePropertyChange(aOldValues);
-
-        // - cursorMoved
-        notifyAllListenersCursorMoved(aGuard);
 
         // - IsModified
         // - IsNew
@@ -1018,7 +1016,7 @@ void ORowSetBase::setCurrentRow(sal_Bool _bMoved,const ORowSetRow& _rOldValues,:
         sal_Int32 nOldRow = m_pCache->getRow();
         positionCache();
         sal_Int32 nNewRow = m_pCache->getRow();
-        OSL_ENSURE(nOldRow == nNewRow,"Old position is not eual to new postion");
+        OSL_ENSURE(nOldRow == nNewRow,"Old position is not equal to new postion");
         m_aCurrentRow   = m_pCache->m_aMatrixIter;
         OSL_ENSURE(m_aCurrentRow,"CurrentRow is nul after positionCache!");
     }
