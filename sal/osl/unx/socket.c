@@ -2,9 +2,9 @@
  *
  *  $RCSfile: socket.c,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:43:36 $
+ *  last change: $Author: vg $ $Date: 2003-06-12 09:46:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,12 +82,12 @@
 #undef HAVE_POLL_H
 #endif
 
-#if defined(LINUX) || defined (IRIX) || defined(NETBSD)
+#if defined(LINUX) || defined (IRIX) || defined(NETBSD) || defined ( FREEBSD )
 #include <sys/poll.h>
 #define HAVE_POLL_H
 #endif /* HAVE_POLL_H */
 
-#if defined(SOLARIS) || defined ( FREEBSD )
+#if defined(SOLARIS)
 #include <poll.h>
 #define HAVE_POLL_H
 #endif /* SOLARIS */
@@ -1965,7 +1965,7 @@ void SAL_CALL osl_closeSocket(oslSocket pSocket)
 /*****************************************************************************/
 oslSocketAddr SAL_CALL osl_getLocalAddrOfSocket(oslSocket pSocket)
 {
-#ifdef LINUX
+#ifdef LINUX || defined(FREEBSD)
     socklen_t AddrLen;
 #else
     /* mfe: Solaris 'cc +w' means Addrlen should be signed! */
