@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tp_TitleRotation.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: bm $ $Date: 2004-01-26 09:11:58 $
+ *  last change: $Author: dr $ $Date: 2004-08-04 14:14:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,8 +73,8 @@
 #include <sfx2/tabdlg.hxx>
 #endif
 // header for SvxWinOrientation
-#ifndef WORIENT_HXX //autogen
-#include <svx/worient.hxx>
+#ifndef SVX_ORIENTHELPER_HXX //autogen
+#include <svx/orienthelper.hxx>
 #endif
 /*
 // header for class ValueSet
@@ -107,7 +107,9 @@ private:
 
 
     //Seit 4/1998 koennen Texte frei gedreht werden: SID_ATTR_ALIGN_DEGREES
-    SvxWinOrientation   aWinOrient;
+#if 0 // DR: TODO new control types
+    svx::OrientationHelper  aWinOrient;
+#endif
 
 //  CheckBox    aCbxTextOverlap;
 

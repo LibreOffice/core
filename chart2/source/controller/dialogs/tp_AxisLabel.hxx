@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tp_AxisLabel.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2004-01-26 09:11:53 $
+ *  last change: $Author: dr $ $Date: 2004-08-04 14:14:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,8 +69,8 @@
 #include <vcl/button.hxx>
 #endif
 // header for SvxWinOrientation
-#ifndef WORIENT_HXX
-#include <svx/worient.hxx>
+#ifndef SVX_ORIENTHELPER_HXX
+#include <svx/orienthelper.hxx>
 #endif
 
 //#include "attrib.hxx"
@@ -88,9 +88,9 @@ class SchAxisLabelTabPage : public SfxTabPage
 {
 private:
     CheckBox            aCbShowDescription;
-
-    SvxWinOrientation   aWOAngle;
-
+#if 0 // DR: TODO new control types
+    svx::OrientationHelper  aWOAngle;
+#endif
     FixedLine           aFlTextFlow;
     CheckBox            aCbTextOverlap;
     CheckBox            aCbTextBreak;
