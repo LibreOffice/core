@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomod.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mtg $ $Date: 2001-09-13 11:48:25 $
+ *  last change: $Author: mtg $ $Date: 2001-11-26 16:17:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,9 @@
 #ifndef _CPPUHELPER_IMPLBASE2_HXX_
 #include <cppuhelper/implbase2.hxx> // helper for implementations
 #endif
+#ifndef _CPPUHELPER_IMPLBASE3_HXX_
+#include <cppuhelper/implbase3.hxx> // helper for implementations
+#endif
 #ifndef _CPPUHELPER_IMPLBASE4_HXX_
 #include <cppuhelper/implbase4.hxx> // helper for implementations
 #endif
@@ -142,9 +145,73 @@ enum SwXPrintSettingsType
     PRINT_SETTINGS_WEB,
     PRINT_SETTINGS_DOCUMENT
 };
-class SwXPrintSettings :public comphelper::ChainablePropertySet,
-                        public cppu::OWeakObject,
-                        public com::sun::star::lang::XServiceInfo
+typedef  cppu::WeakImplHelper3
+<
+    ::com::sun::star::beans::XPropertySet,
+    ::com::sun::star::beans::XMultiPropertySet,
+    ::com::sun::star::lang::XServiceInfo
+>
+SwXSettingsVeryBaseClass;
+
+class SwXSettingsBaseClass : public SwXSettingsVeryBaseClass, public comphelper::ChainablePropertySet
+{
+public:
+    SwXSettingsBaseClass ( comphelper::ChainablePropertySetInfo* pInfo, vos::IMutex *pMutex = NULL )
+    : comphelper::ChainablePropertySet ( pInfo, pMutex )
+    {
+    }
+    virtual ~SwXSettingsBaseClass () {}
+
+    // XInterface
+    com::sun::star::uno::Any SAL_CALL queryInterface( const com::sun::star::uno::Type& aType ) throw (com::sun::star::uno::RuntimeException)
+    { return SwXSettingsVeryBaseClass::queryInterface( aType ); }
+    void SAL_CALL acquire(  ) throw ()
+    { SwXSettingsVeryBaseClass::acquire( ); }
+    void SAL_CALL release(  ) throw ()
+    { SwXSettingsVeryBaseClass::release( ); }
+
+    // XPropertySet
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  )
+        throw(::com::sun::star::uno::RuntimeException)
+    { return ChainablePropertySet::getPropertySetInfo(); }
+    virtual void SAL_CALL setPropertyValue( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue )
+        throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+    { ChainablePropertySet::setPropertyValue ( aPropertyName, aValue ); }
+    virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue( const ::rtl::OUString& PropertyName )
+        throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+    { return ChainablePropertySet::getPropertyValue ( PropertyName ); }
+    virtual void SAL_CALL addPropertyChangeListener( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener )
+        throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+    { ChainablePropertySet::addPropertyChangeListener ( aPropertyName, xListener ); }
+    virtual void SAL_CALL removePropertyChangeListener( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& aListener )
+        throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+    { ChainablePropertySet::removePropertyChangeListener ( aPropertyName, aListener ); }
+    virtual void SAL_CALL addVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener )
+        throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+    { ChainablePropertySet::addVetoableChangeListener ( PropertyName, aListener ); }
+    virtual void SAL_CALL removeVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener )
+        throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+    { ChainablePropertySet::removeVetoableChangeListener ( PropertyName, aListener ); }
+
+    // XMultiPropertySet
+    virtual void SAL_CALL setPropertyValues( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aValues )
+        throw(::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+    { ChainablePropertySet::setPropertyValues ( aPropertyNames, aValues ); }
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > SAL_CALL getPropertyValues( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames )
+        throw(::com::sun::star::uno::RuntimeException)
+    { return ChainablePropertySet::getPropertyValues ( aPropertyNames ); }
+    virtual void SAL_CALL addPropertiesChangeListener( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertiesChangeListener >& xListener )
+        throw(::com::sun::star::uno::RuntimeException)
+    { ChainablePropertySet::addPropertiesChangeListener ( aPropertyNames, xListener ); }
+    virtual void SAL_CALL removePropertiesChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertiesChangeListener >& xListener )
+        throw(::com::sun::star::uno::RuntimeException)
+    { ChainablePropertySet::removePropertiesChangeListener ( xListener ); }
+    virtual void SAL_CALL firePropertiesChangeEvent( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertiesChangeListener >& xListener )
+        throw(::com::sun::star::uno::RuntimeException)
+    { ChainablePropertySet::firePropertiesChangeEvent ( aPropertyNames, xListener ); }
+};
+
+class SwXPrintSettings : public SwXSettingsBaseClass
 {
     friend class SwXDocumentSettings;
 protected:
@@ -170,14 +237,6 @@ public:
     virtual ~SwXPrintSettings()
         throw();
 
-    // XInterface
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType )
-        throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL acquire(  )
-        throw ();
-    virtual void SAL_CALL release(  )
-        throw ();
-
     //XServiceInfo
     virtual rtl::OUString SAL_CALL getImplementationName(void)
         throw( ::com::sun::star::uno::RuntimeException );
@@ -189,9 +248,7 @@ public:
 /*-----------------15.03.98 13:21-------------------
 
 --------------------------------------------------*/
-class SwXViewSettings : public comphelper::ChainablePropertySet,
-                        public cppu::OWeakObject,
-                        public com::sun::star::lang::XServiceInfo
+class SwXViewSettings : public SwXSettingsBaseClass
 {
     friend class SwXDocumentSettings;
 protected:
@@ -216,14 +273,6 @@ public:
     SwXViewSettings(sal_Bool bWeb, SwView*  pView);
     virtual ~SwXViewSettings()
         throw();
-
-    // XInterface
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType )
-        throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL acquire(  )
-        throw ();
-    virtual void SAL_CALL release(  )
-        throw ();
 
     //XServiceInfo
     virtual rtl::OUString SAL_CALL getImplementationName(void) throw( ::com::sun::star::uno::RuntimeException );
