@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flyfrm.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: od $ $Date: 2002-08-28 11:54:54 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 09:51:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,7 +234,10 @@ public:
 
     SwRect AddSpacesToFrm() const;
 
-    BOOL GetContour( PolyPolygon & rPoly ) const;
+    // OD 16.04.2003 #i13147# - add parameter <_bForPaint> to avoid load of
+    // the graphic during paint. Default value: sal_False
+    BOOL GetContour( PolyPolygon&   rContour,
+                     const sal_Bool _bForPaint = sal_False ) const;
 
     BOOL ConvertHoriTo40( SwHoriOrient &rHori, SwRelationOrient &rRel, SwTwips &rPos ) const;
 
