@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmitems.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-29 14:39:01 $
+ *  last change: $Author: mib $ $Date: 2000-11-30 11:17:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4565,7 +4565,7 @@ sal_Bool SvxBrushItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
                 if( 0 == sLink.compareToAscii( UNO_NAME_GRAPHOBJ_URLPKGPREFIX,
                                   sizeof(UNO_NAME_GRAPHOBJ_URLPKGPREFIX)-1 ) )
                 {
-                    // TODO
+                    DBG_ERROR( "package urls aren't implemented" );
                 }
                 else if( 0 == sLink.compareToAscii( UNO_NAME_GRAPHOBJ_URLPREFIX,
                                    sizeof(UNO_NAME_GRAPHOBJ_URLPREFIX)-1 ) )
@@ -4722,7 +4722,7 @@ sal_Bool SvxBrushItem::importXML( const OUString& rValue,
             SvxGraphicPosition eOldGraphicPos = eGraphicPos;
             uno::Any aAny;
             aAny <<= rValue;
-            PutValue( aAny, MID_GRAPHIC_LINK );
+            PutValue( aAny, MID_GRAPHIC_URL );
             if( GPOS_NONE == eOldGraphicPos &&
                 GPOS_NONE != eGraphicPos )
                 eGraphicPos = GPOS_TILED;
@@ -4865,7 +4865,7 @@ sal_Bool SvxBrushItem::exportXML( OUString& rValue, sal_uInt16 nMemberId, const 
         if( eGraphicPos != GPOS_NONE )
         {
             uno::Any aAny;
-            QueryValue( aAny, MID_GRAPHIC_LINK );
+            QueryValue( aAny, MID_GRAPHIC_URL );
             OUString sTmp;
             aAny >>= sTmp;
             aOut.append( sTmp );
