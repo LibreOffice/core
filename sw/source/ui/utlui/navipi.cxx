@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-29 08:12:14 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 11:34:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,6 +185,9 @@ static const sal_Unicode cPrefix = '_';
 #define NAVI_VERSION2   2 // bIsGlobalActive
 
 #define NAVI_CONFIG_VERSION NAVI_VERSION2
+
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::frame;
 
 SFX_IMPL_CHILDWINDOW_CONTEXT( SwNavigationChild, SID_NAVIGATOR, SwView )
 
@@ -601,18 +604,20 @@ void SwNavHelpToolBox::MouseButtonDown(const MouseEvent &rEvt)
  ---------------------------------------------------------------------------*/
 void SwNavigationPI::CreateNavigationTool(const Rectangle& rRect, BOOL bSetFocus)
 {
-    SfxBindings& rBind = GetCreateView()->GetViewFrame()->GetBindings();
-    rBind.ENTERREGISTRATIONS();
+//    SfxBindings& rBind = GetCreateView()->GetViewFrame()->GetBindings();
+//    rBind.ENTERREGISTRATIONS();
+    Reference< XFrame > xFrame = GetCreateView()->GetViewFrame()->GetFrame()->GetFrameInterface();
     SwScrollNaviPopup* pPopup = new
         SwScrollNaviPopup(FN_SCROLL_NAVIGATION,
-                        rBind);
-    rBind.LEAVEREGISTRATIONS();
+                          xFrame );
+//    rBind.LEAVEREGISTRATIONS();
 
     Rectangle aRect(rRect);
     Point aT1 = aRect.TopLeft();
-    aT1 = pPopup->GetParent()->AbsoluteScreenToOutputPixel(aContentToolBox.OutputToAbsoluteScreenPixel(aT1));
+    aT1 = pPopup->GetParent()->OutputToScreenPixel(pPopup->GetParent()->AbsoluteScreenToOutputPixel(aContentToolBox.OutputToAbsoluteScreenPixel(aT1)));
     aRect.SetPos(aT1);
     pPopup->StartPopupMode(aRect, FLOATWIN_POPUPMODE_RIGHT|FLOATWIN_POPUPMODE_ALLOWTEAROFF);
+    SetPopupWindow( pPopup );
     if(bSetFocus)
     {
         pPopup->EndPopupMode(FLOATWIN_POPUPMODEEND_TEAROFF);
@@ -890,7 +895,9 @@ SwNavigationPI::SwNavigationPI( SfxBindings* pBindings,
     pContextWin(pCw),
     nWishWidth(0),
     pConfig(SW_MOD()->GetNavigationConfig()),
-    pCreateView(0)
+    pCreateView(0),
+    pPopupWindow(0),
+    pFloatingWindow(0)
 {
     GetCreateView();
     InitImageList();
@@ -1038,8 +1045,60 @@ SwNavigationPI::~SwNavigationPI()
             (*pxObjectShell)->DoClose();
         delete pxObjectShell;
     }
+    delete pPopupWindow;
+    delete pFloatingWindow;
 
 }
+
+/*------------------------------------------------------------------------
+ Beschreibung:
+------------------------------------------------------------------------*/
+
+void SwNavigationPI::SetPopupWindow( SfxPopupWindow* pWindow )
+{
+    pPopupWindow = pWindow;
+    pPopupWindow->SetPopupModeEndHdl( LINK( this, SwNavigationPI, PopupModeEndHdl ));
+    pPopupWindow->SetDeleteLink_Impl( LINK( this, SwNavigationPI, ClosePopupWindow ));
+}
+
+/*------------------------------------------------------------------------
+ Beschreibung:
+------------------------------------------------------------------------*/
+
+IMPL_LINK( SwNavigationPI, PopupModeEndHdl, void *, EMPTYARG )
+{
+    if ( pPopupWindow->IsVisible() )
+    {
+        // Replace floating window with popup window and destroy
+        // floating window instance.
+        delete pFloatingWindow;
+        pFloatingWindow = pPopupWindow;
+        pPopupWindow    = 0;
+    }
+    else
+    {
+        // Popup window has been closed by the user. No replacement, instance
+        // will destroy itself.
+        pPopupWindow = 0;
+    }
+
+    return 1;
+}
+
+/*------------------------------------------------------------------------
+ Beschreibung:
+------------------------------------------------------------------------*/
+
+IMPL_LINK( SwNavigationPI, ClosePopupWindow, SfxPopupWindow *, pWindow )
+{
+    if ( pWindow == pFloatingWindow )
+        pFloatingWindow = 0;
+    else
+        pPopupWindow = 0;
+
+    return 1;
+}
+
 /*------------------------------------------------------------------------
  Beschreibung:
 ------------------------------------------------------------------------*/
