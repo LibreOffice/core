@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter2.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-16 10:16:50 $
+ *  last change: $Author: hr $ $Date: 2004-12-13 12:43:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ GraphicDescriptor::GraphicDescriptor( const String* pPath ) :
     if ( pPath )
     {
         INetURLObject aURL( *pPath, INET_PROT_FILE );
-        aPathExt = aURL.GetFileExtension().ToLowerAscii();
+        aPathExt = aURL.GetFileExtension().toAsciiLowerCase();
     }
     bLinked = TRUE;
     bLinkChanged = FALSE;
@@ -108,7 +108,7 @@ GraphicDescriptor::GraphicDescriptor( const String* pPath ) :
 
 GraphicDescriptor::GraphicDescriptor( const INetURLObject& rPath ) :
     pFileStm( ::utl::UcbStreamHelper::CreateStream( rPath.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ ) ),
-    aPathExt( rPath.GetFileExtension().ToLowerAscii() )
+    aPathExt( rPath.GetFileExtension().toAsciiLowerCase() )
 {
     if ( pFileStm )
     {
@@ -137,7 +137,7 @@ GraphicDescriptor::GraphicDescriptor( SvStream& rInStream, const String* pPath) 
     if ( pPath )
     {
         INetURLObject aURL( *pPath );
-        aPathExt = aURL.GetFileExtension().ToLowerAscii();
+        aPathExt = aURL.GetFileExtension().toAsciiLowerCase();
     }
     nStmPos = rInStream.Tell();
     pBaseStm = &rInStream;
