@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocumentViewBase.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: af $ $Date: 2002-08-05 11:34:14 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 17:04:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,8 +93,8 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYCHANGELISTENER_HPP_
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
-#include <drafts/com/sun/star/accessibility/XAccessible.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
+#include <com/sun/star/accessibility/XAccessible.hpp>
 #endif
 
 #ifndef _LINK_HXX
@@ -169,7 +169,7 @@ public:
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::frame::XController>& rxController,
         const ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::accessibility::XAccessible>& rxParent);
+            ::com::sun::star::accessibility::XAccessible>& rxParent);
 
     virtual ~AccessibleDocumentViewBase (void);
 
@@ -197,7 +197,7 @@ public:
     //=====  XAccessibleContext  ==============================================
 
     virtual ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::accessibility::XAccessible> SAL_CALL
+        ::com::sun::star::accessibility::XAccessible> SAL_CALL
         getAccessibleParent (void)
         throw (::com::sun::star::uno::RuntimeException);
 
@@ -212,7 +212,7 @@ public:
         if it exists and the given index is 0 or throws an exception.
     */
     virtual ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::accessibility::XAccessible> SAL_CALL
+        ::com::sun::star::accessibility::XAccessible> SAL_CALL
         getAccessibleChild (long nIndex)
         throw (::com::sun::star::uno::RuntimeException);
 
@@ -220,8 +220,8 @@ public:
     //=====  XAccessibleComponent  ============================================
 
     virtual ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::accessibility::XAccessible > SAL_CALL
-        getAccessibleAt (const ::com::sun::star::awt::Point& aPoint)
+        ::com::sun::star::accessibility::XAccessible > SAL_CALL
+        getAccessibleAtPoint (const ::com::sun::star::awt::Point& aPoint)
         throw (::com::sun::star::uno::RuntimeException);
 
     virtual ::com::sun::star::awt::Rectangle SAL_CALL getBounds (void)
@@ -322,7 +322,7 @@ protected:
         implGetMutex();
 
     // return ourself as context in default case
-    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext >
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
         implGetAccessibleContext()
         throw ( ::com::sun::star::uno::RuntimeException );
 
@@ -362,7 +362,7 @@ protected:
         <member>SetAccessibleOLEObject</member> method.
     */
     ::com::sun::star::uno::Reference <
-        ::drafts::com::sun::star::accessibility::XAccessible>
+        ::com::sun::star::accessibility::XAccessible>
         mxAccessibleOLEObject;
 
     // This method is called from the component helper base class while
@@ -414,7 +414,7 @@ protected:
     */
     virtual void SetAccessibleOLEObject (
         const ::com::sun::star::uno::Reference <
-        ::drafts::com::sun::star::accessibility::XAccessible>& xOLEObject);
+        ::com::sun::star::accessibility::XAccessible>& xOLEObject);
 };
 
 } // end of namespace accessibility
