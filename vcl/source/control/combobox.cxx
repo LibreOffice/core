@@ -2,9 +2,9 @@
  *
  *  $RCSfile: combobox.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:57:52 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 17:28:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1386,6 +1386,13 @@ USHORT ComboBox::GetTopEntry() const
 Rectangle ComboBox::GetDropDownPosSizePixel() const
 {
     return mpFloatWin ? mpFloatWin->GetWindowExtentsRelative( const_cast<ComboBox*>(this) ) : Rectangle();
+}
+
+// -----------------------------------------------------------------------
+
+Rectangle ComboBox::GetListPosSizePixel() const
+{
+    return mpFloatWin ? Rectangle() : mpImplLB->GetMainWindow()->GetWindowExtentsRelative( const_cast<ComboBox*>(this) );
 }
 
 // -----------------------------------------------------------------------
