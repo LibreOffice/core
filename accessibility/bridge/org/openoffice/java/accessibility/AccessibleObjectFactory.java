@@ -405,7 +405,7 @@ public class AccessibleObjectFactory {
                 break;
             case AccessibleRole.PARAGRAPH:
             case AccessibleRole.HEADING:
-                c = new Paragraph(xAccessible, xAccessibleContext, xAccessibleStateSet);
+                c = new Paragraph(xAccessible, xAccessibleContext);
                 break;
             case AccessibleRole.PANEL:
                 c = new Container(javax.accessibility.AccessibleRole.PANEL,
@@ -422,24 +422,14 @@ public class AccessibleObjectFactory {
                     xAccessible, xAccessibleContext);
                 break;
             case AccessibleRole.SCROLL_BAR:
-                if (xAccessibleStateSet.contains(AccessibleStateType.VERTICAL)) {
-                    c = new ScrollBar(xAccessible, xAccessibleContext,
-                        javax.swing.SwingConstants.VERTICAL);
-                } else {
-                    c = new ScrollBar(xAccessible, xAccessibleContext);
-                }
+                c = new ScrollBar(xAccessible, xAccessibleContext);
                 break;
             case AccessibleRole.SCROLL_PANE:
                 c = new Container(javax.accessibility.AccessibleRole.SCROLL_PANE,
                     xAccessible, xAccessibleContext);
                 break;
             case AccessibleRole.SEPARATOR:
-                if (xAccessibleStateSet.contains(AccessibleStateType.VERTICAL)) {
-                    c = new Separator(xAccessible, xAccessibleContext,
-                        javax.swing.SwingConstants.VERTICAL);
-                } else {
-                    c = new Separator(xAccessible, xAccessibleContext);
-                }
+                c = new Separator(xAccessible, xAccessibleContext);
                 break;
             case AccessibleRole.SHAPE:
                 c = new Container(javax.accessibility.AccessibleRole.CANVAS,
@@ -468,7 +458,7 @@ public class AccessibleObjectFactory {
                     xAccessible, xAccessibleContext);
                 break;
             case AccessibleRole.TEXT:
-                c = new TextComponent(xAccessible, xAccessibleContext, xAccessibleStateSet);
+                c = new TextComponent(xAccessible, xAccessibleContext);
                 break;
             case AccessibleRole.TEXT_FRAME:
                 c = new Container(javax.accessibility.AccessibleRole.PANEL,
