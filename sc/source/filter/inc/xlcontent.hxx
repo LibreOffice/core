@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlcontent.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-16 08:20:23 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 13:42:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,14 +70,6 @@
 
 
 // Constants ==================================================================
-
-// (0x00E9) BITMAP ------------------------------------------------------------
-
-const sal_uInt16 EXC_ID_BITMAP              = 0x00E9;
-const sal_uInt32 EXC_BITMAP_UNKNOWNID       = 0x00010009;
-const sal_uInt32 EXC_BITMAP_MAXREC          = 0x201C;
-const sal_uInt32 EXC_BITMAP_MAXCONT         = 0x2014;
-
 
 // (0x00FC, 0x00FF) SST, EXTSST -----------------------------------------------
 
