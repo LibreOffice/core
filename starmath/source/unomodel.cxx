@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-04 13:36:53 $
+ *  last change: $Author: mtg $ $Date: 2001-05-16 12:00:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,20 +88,33 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYSTATE_HPP_
 #include <com/sun/star/beans/PropertyState.hpp>
 #endif
+#ifndef _COM_SUN_STAR_FORMULA_SYMBOLDESCRIPTOR_HPP_
+#include <com/sun/star/formula/SymbolDescriptor.hpp>
+#endif
 #ifndef _XMLOFF_XMLUCONV_HXX
 #include <xmloff/xmluconv.hxx>
 #endif
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
 #endif
+#ifndef _COMPHELPER_PROPERTSETINFO_HXX_
+#include <comphelper/propertysetinfo.hxx>
+#endif
+#ifndef SYMBOL_HXX
+#include <symbol.hxx>
+#endif
 
 
-using namespace vos;
-using namespace rtl;
+using namespace ::vos;
+using namespace ::rtl;
+using namespace ::cppu;
+using namespace ::std;
+using namespace ::comphelper;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::formula;
 
 #define TWIP_TO_MM100(TWIP)     ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
 #define MM100_TO_TWIP(MM100)    ((MM100) >= 0 ? (((MM100)*72L+63L)/127L) : (((MM100)*72L-63L)/127L))
@@ -113,198 +126,139 @@ using namespace ::com::sun::star::lang;
 // class SmModel
 //
 #define PROPERTY_NONE 0
-
-#define FID_FORMULA                                 0
-#define FID_FONT_NAME_VARIABLES                     1
-#define FID_FONT_NAME_FUNCTIONS                     2
-#define FID_FONT_NAME_NUMBERS                       3
-#define FID_FONT_NAME_TEXT                          4
-#define FID_CUSTOM_FONT_NAME_SERIF                  5
-#define FID_CUSTOM_FONT_NAME_SANS                   6
-#define FID_CUSTOM_FONT_NAME_FIXED                  7
-#define FID_CUSTOM_FONT_FIXED_POSTURE               8
-#define FID_CUSTOM_FONT_FIXED_WEIGHT                9
-#define FID_CUSTOM_FONT_SANS_POSTURE                10
-#define FID_CUSTOM_FONT_SANS_WEIGHT                 11
-#define FID_CUSTOM_FONT_SERIF_POSTURE               12
-#define FID_CUSTOM_FONT_SERIF_WEIGHT                13
-#define FID_FONT_VARIABLES_POSTURE                  14
-#define FID_FONT_VARIABLES_WEIGHT                   15
-#define FID_FONT_FUNCTIONS_POSTURE                  16
-#define FID_FONT_FUNCTIONS_WEIGHT                   17
-#define FID_FONT_NUMBERS_POSTURE                    18
-#define FID_FONT_NUMBERS_WEIGHT                     19
-#define FID_FONT_TEXT_POSTURE                       20
-#define FID_FONT_TEXT_WEIGHT                        21
-#define FID_BASE_FONT_HEIGHT                        22
-#define FID_RELATIVE_FONT_HEIGHT_TEXT               23
-#define FID_RELATIVE_FONT_HEIGHT_INDICES            24
-#define FID_RELATIVE_FONT_HEIGHT_FUNCTIONS          25
-#define FID_RELATIVE_FONT_HEIGHT_OPERATORS          26
-#define FID_RELATIVE_FONT_HEIGHT_LIMITS             27
-#define FID_IS_TEXT_MODE                            28
-#define FID_ALIGNMENT                               29
-#define FID_RELATIVE_SPACING                        30
-#define FID_RELATIVE_LINE_SPACING                   31
-#define FID_RELATIVE_ROOT_SPACING                   32
-#define FID_RELATIVE_INDEX_SUPERSCRIPT              33
-#define FID_RELATIVE_INDEX_SUBSCRIPT                34
-#define FID_RELATIVE_FRACTION_NUMERATOR_HEIGHT      35
-#define FID_RELATIVE_FRACTION_DENOMINATOR_DEPTH     36
-#define FID_RELATIVE_FRACTION_BAR_EXCESS_LENGTH     37
-#define FID_RELATIVE_FRACTION_BAR_LINE_WEIGHT       38
-#define FID_RELATIVE_UPPER_LIMIT_DISTANCE           39
-#define FID_RELATIVE_LOWER_LIMIT_DISTANCE           40
-#define FID_RELATIVE_BRACKET_EXCESS_SIZE            41
-#define FID_RELATIVE_BRACKET_DISTANCE               42
-#define FID_IS_SCALE_ALL_BRACKETS                   43
-#define FID_RELATIVE_SCALE_BRACKET_EXCESS_SIZE      44
-#define FID_RELATIVE_MATRIX_LINE_SPACING            45
-#define FID_RELATIVE_MATRIX_COLUMN_SPACING          46
-#define FID_RELATIVE_SYMBOL_PRIMARY_HEIGHT          47
-#define FID_RELATIVE_SYMBOL_MINIMUM_HEIGHT          48
-#define FID_RELATIVE_OPERATOR_EXCESS_SIZE           49
-#define FID_RELATIVE_OPERATOR_SPACING               50
-#define FID_LEFT_MARGIN                             51
-#define FID_RIGHT_MARGIN                            52
-#define FID_TOP_MARGIN                              53
-#define FID_BOTTOM_MARGIN                           54
-#define FID_PRINTER_NAME                            55
-#define FID_PRINTER_SETUP                           56
-
-#define UNO_NAME_FORMULA                                "Formula"
-#define UNO_NAME_FONT_NAME_VARIABLES                    "FontNameVariables"
-#define UNO_NAME_CUSTOM_FONT_VARIABLES_IS_ITALIC        "FontVariablesIsItalic"
-#define UNO_NAME_CUSTOM_FONT_VARIABLES_IS_BOLD          "FontVariablesIsBold"
-#define UNO_NAME_FONT_NAME_FUNCTIONS                    "FontNameFunctions"
-#define UNO_NAME_CUSTOM_FONT_FUNCTIONS_IS_ITALIC        "FontFunctionsIsItalic"
-#define UNO_NAME_CUSTOM_FONT_FUNCTIONS_IS_BOLD          "FontFunctionsIsBold"
-#define UNO_NAME_FONT_NAME_NUMBERS                      "FontNameNumbers"
-#define UNO_NAME_CUSTOM_FONT_NUMBERS_IS_ITALIC          "FontNumbersIsItalic"
-#define UNO_NAME_CUSTOM_FONT_NUMBERS_IS_BOLD            "FontNumbersIsBold"
-#define UNO_NAME_FONT_NAME_TEXT                         "FontNameText"
-#define UNO_NAME_CUSTOM_FONT_TEXT_IS_ITALIC             "FontTextIsItalic"
-#define UNO_NAME_CUSTOM_FONT_TEXT_IS_BOLD               "FontTextIsBold"
-#define UNO_NAME_CUSTOM_FONT_NAME_SERIF                 "CustomFontNameSerif"
-#define UNO_NAME_CUSTOM_FONT_SERIF_IS_ITALIC            "FontSerifIsItalic"
-#define UNO_NAME_CUSTOM_FONT_SERIF_IS_BOLD              "FontSerifIsBold"
-#define UNO_NAME_CUSTOM_FONT_NAME_SANS                  "CustomFontNameSans"
-#define UNO_NAME_CUSTOM_FONT_SANS_IS_ITALIC             "FontSansIsItalic"
-#define UNO_NAME_CUSTOM_FONT_SANS_IS_BOLD               "FontSansIsBold"
-#define UNO_NAME_CUSTOM_FONT_NAME_FIXED                 "CustomFontNameFixed"
-#define UNO_NAME_CUSTOM_FONT_FIXED_IS_ITALIC            "FontFixedIsItalic"
-#define UNO_NAME_CUSTOM_FONT_FIXED_IS_BOLD              "FontFixedIsBold"
-#define UNO_NAME_BASE_FONT_HEIGHT                       "BaseFontHeight"
-#define UNO_NAME_RELATIVE_FONT_HEIGHT_TEXT              "RelativeFontHeightText"
-#define UNO_NAME_RELATIVE_FONT_HEIGHT_INDICES           "RelativeFontHeightIndices"
-#define UNO_NAME_RELATIVE_FONT_HEIGHT_FUNCTIONS         "RelativeFontHeightFunctions"
-#define UNO_NAME_RELATIVE_FONT_HEIGHT_OPERATORS         "RelativeFontHeightOperators"
-#define UNO_NAME_RELATIVE_FONT_HEIGHT_LIMITS            "RelativeFontHeightLimits"
-#define UNO_NAME_IS_TEXT_MODE                           "IsTextMode"
-#define UNO_NAME_ALIGNMENT                              "Alignment"
-#define UNO_NAME_RELATIVE_SPACING                       "RelativeSpacing"
-#define UNO_NAME_RELATIVE_LINE_SPACING                  "RelativeLineSpacing"
-#define UNO_NAME_RELATIVE_ROOT_SPACING                  "RelativeRootSpacing"
-#define UNO_NAME_RELATIVE_INDEX_SUPERSCRIPT             "RelativeIndexSuperscript"
-#define UNO_NAME_RELATIVE_INDEX_SUBSCRIPT               "RelativeIndexSubscript"
-#define UNO_NAME_RELATIVE_FRACTION_NUMERATOR_HEIGHT     "RelativeFractionNumeratorHeight"
-#define UNO_NAME_RELATIVE_FRACTION_DENOMINATOR_DEPTH    "RelativeFractionDenominatorDepth"
-#define UNO_NAME_RELATIVE_FRACTION_BAR_EXCESS_LENGTH    "RelativeFractionBarExcessLength"
-#define UNO_NAME_RELATIVE_FRACTION_BAR_LINE_WEIGHT      "RelativeFractionBarLineWeight"
-#define UNO_NAME_RELATIVE_UPPER_LIMIT_DISTANCE          "RelativeUpperLimitDistance"
-#define UNO_NAME_RELATIVE_LOWER_LIMIT_DISTANCE          "RelativeLowerLimitDistance"
-#define UNO_NAME_RELATIVE_BRACKET_EXCESS_SIZE           "RelativeBracketExcessSize"
-#define UNO_NAME_RELATIVE_BRACKET_DISTANCE              "RelativeBracketDistance"
-#define UNO_NAME_IS_SCALE_ALL_BRACKETS                  "IsScaleAllBrackets"
-#define UNO_NAME_RELATIVE_SCALE_BRACKET_EXCESS_SIZE     "RelativeScaleBracketExcessSize"
-#define UNO_NAME_RELATIVE_MATRIX_LINE_SPACING           "RelativeMatrixLineSpacing"
-#define UNO_NAME_RELATIVE_MATRIX_COLUMN_SPACING         "RelativeMatrixColumnSpacing"
-#define UNO_NAME_RELATIVE_SYMBOL_PRIMARY_HEIGHT         "RelativeSymbolPrimaryHeight"
-#define UNO_NAME_RELATIVE_SYMBOL_MINIMUM_HEIGHT         "RelativeSymbolMinimumHeight"
-#define UNO_NAME_RELATIVE_OPERATOR_EXCESS_SIZE          "RelativeOperatorExcessSize"
-#define UNO_NAME_RELATIVE_OPERATOR_SPACING              "RelativeOperatorSpacing"
-#define UNO_NAME_LEFT_MARGIN                            "LeftMargin"
-#define UNO_NAME_RIGHT_MARGIN                           "RightMargin"
-#define UNO_NAME_TOP_MARGIN                             "TopMargin"
-#define UNO_NAME_BOTTOM_MARGIN                          "BottomMargin"
-#define UNO_NAME_PRINTER_NAME                           "PrinterName"
-#define UNO_NAME_PRINTER_SETUP                          "PrinterSetup"
-
-
-//must be sorted by names!
-SfxItemPropertyMap aMathModelMap_Impl[] =
+enum SmModelPropertyHandles
 {
-    { MAP_CHAR_LEN(UNO_NAME_ALIGNMENT                          ), FID_ALIGNMENT                          ,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, 0},
-    { MAP_CHAR_LEN(UNO_NAME_BASE_FONT_HEIGHT                   ), FID_BASE_FONT_HEIGHT                   ,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, 0},
-    { MAP_CHAR_LEN(UNO_NAME_BOTTOM_MARGIN                     ), FID_BOTTOM_MARGIN                         ,        &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_BOTTOMSPACE             },
-
-    { MAP_CHAR_LEN(UNO_NAME_CUSTOM_FONT_NAME_FIXED             ), FID_CUSTOM_FONT_NAME_FIXED             ,      &::getCppuType((const OUString*)0),     PROPERTY_NONE, FNT_FIXED          },
-    { MAP_CHAR_LEN(UNO_NAME_CUSTOM_FONT_FIXED_IS_ITALIC), FID_CUSTOM_FONT_FIXED_POSTURE   ,  &::getBooleanCppuType(),  PROPERTY_NONE, FNT_FIXED},
-    { MAP_CHAR_LEN(UNO_NAME_CUSTOM_FONT_FIXED_IS_BOLD),   FID_CUSTOM_FONT_FIXED_WEIGHT    ,  &::getBooleanCppuType(),  PROPERTY_NONE, FNT_FIXED},
-
-    { MAP_CHAR_LEN(UNO_NAME_CUSTOM_FONT_NAME_SANS              ), FID_CUSTOM_FONT_NAME_SANS              ,      &::getCppuType((const OUString*)0),     PROPERTY_NONE, FNT_SANS        },
-    { MAP_CHAR_LEN(UNO_NAME_CUSTOM_FONT_SANS_IS_ITALIC),   FID_CUSTOM_FONT_SANS_POSTURE   ,  &::getBooleanCppuType(),  PROPERTY_NONE, FNT_SANS},
-    { MAP_CHAR_LEN(UNO_NAME_CUSTOM_FONT_SANS_IS_BOLD),   FID_CUSTOM_FONT_SANS_WEIGHT    ,  &::getBooleanCppuType(),             PROPERTY_NONE, FNT_SANS},
-
-    { MAP_CHAR_LEN(UNO_NAME_CUSTOM_FONT_NAME_SERIF             ), FID_CUSTOM_FONT_NAME_SERIF             ,      &::getCppuType((const OUString*)0),     PROPERTY_NONE, FNT_SERIF          },
-    { MAP_CHAR_LEN(UNO_NAME_CUSTOM_FONT_SERIF_IS_ITALIC),   FID_CUSTOM_FONT_SERIF_POSTURE   ,  &::getBooleanCppuType(),  PROPERTY_NONE, FNT_SERIF},
-    { MAP_CHAR_LEN(UNO_NAME_CUSTOM_FONT_SERIF_IS_BOLD),  FID_CUSTOM_FONT_SERIF_WEIGHT    ,  &::getBooleanCppuType(),            PROPERTY_NONE,  FNT_SERIF},
-
-    { MAP_CHAR_LEN(UNO_NAME_FONT_NAME_FUNCTIONS                ), FID_FONT_NAME_FUNCTIONS                ,      &::getCppuType((const OUString*)0),     PROPERTY_NONE, FNT_FUNCTION },
-    { MAP_CHAR_LEN(UNO_NAME_CUSTOM_FONT_FUNCTIONS_IS_ITALIC),   FID_FONT_FUNCTIONS_POSTURE   ,  &::getBooleanCppuType(),  PROPERTY_NONE, FNT_FUNCTION},
-    { MAP_CHAR_LEN(UNO_NAME_CUSTOM_FONT_FUNCTIONS_IS_BOLD),  FID_FONT_FUNCTIONS_WEIGHT    ,  &::getBooleanCppuType(),           PROPERTY_NONE, FNT_FUNCTION},
-
-    { MAP_CHAR_LEN(UNO_NAME_FONT_NAME_NUMBERS                  ), FID_FONT_NAME_NUMBERS                  ,      &::getCppuType((const OUString*)0),     PROPERTY_NONE, FNT_NUMBER        },
-    { MAP_CHAR_LEN(UNO_NAME_CUSTOM_FONT_NUMBERS_IS_ITALIC),   FID_FONT_NUMBERS_POSTURE   ,  &::getBooleanCppuType(),  PROPERTY_NONE, FNT_NUMBER},
-    { MAP_CHAR_LEN(UNO_NAME_CUSTOM_FONT_NUMBERS_IS_BOLD),    FID_FONT_NUMBERS_WEIGHT    ,  &::getBooleanCppuType(),             PROPERTY_NONE, FNT_NUMBER},
-
-    { MAP_CHAR_LEN(UNO_NAME_FONT_NAME_TEXT                     ), FID_FONT_NAME_TEXT                     ,      &::getCppuType((const OUString*)0),     PROPERTY_NONE, FNT_TEXT        },
-    { MAP_CHAR_LEN(UNO_NAME_CUSTOM_FONT_TEXT_IS_ITALIC),   FID_FONT_TEXT_POSTURE   ,  &::getBooleanCppuType(),  PROPERTY_NONE, },
-    { MAP_CHAR_LEN(UNO_NAME_CUSTOM_FONT_TEXT_IS_BOLD),   FID_FONT_TEXT_WEIGHT    ,  &::getBooleanCppuType(),            PROPERTY_NONE, },
-
-    { MAP_CHAR_LEN(UNO_NAME_FONT_NAME_VARIABLES                ), FID_FONT_NAME_VARIABLES                ,      &::getCppuType((const OUString*)0),     PROPERTY_NONE, FNT_VARIABLE },
-    { MAP_CHAR_LEN(UNO_NAME_CUSTOM_FONT_VARIABLES_IS_ITALIC),   FID_FONT_VARIABLES_POSTURE,  &::getBooleanCppuType(),  PROPERTY_NONE, },
-    { MAP_CHAR_LEN(UNO_NAME_CUSTOM_FONT_VARIABLES_IS_BOLD),  FID_FONT_VARIABLES_WEIGHT    ,  &::getBooleanCppuType(),           PROPERTY_NONE, },
-
-    { MAP_CHAR_LEN(UNO_NAME_FORMULA                           ),    FID_FORMULA                            ,        &::getCppuType((const OUString*)0),     PROPERTY_NONE, 0},
-    { MAP_CHAR_LEN(UNO_NAME_IS_SCALE_ALL_BRACKETS              ), FID_IS_SCALE_ALL_BRACKETS              ,      &::getBooleanCppuType(),    PROPERTY_NONE, 0},
-    { MAP_CHAR_LEN(UNO_NAME_IS_TEXT_MODE                       ), FID_IS_TEXT_MODE                       ,      &::getBooleanCppuType(),    PROPERTY_NONE, 0},
-    { MAP_CHAR_LEN(UNO_NAME_LEFT_MARGIN                       ), FID_LEFT_MARGIN                           ,        &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_LEFTSPACE                 },
-    { MAP_CHAR_LEN(UNO_NAME_PRINTER_NAME                       ), FID_PRINTER_NAME                       ,      &::getCppuType((const OUString*)0),     PROPERTY_NONE, 0                  },
-    { MAP_CHAR_LEN(UNO_NAME_PRINTER_SETUP                      ), FID_PRINTER_SETUP                      ,      &::getCppuType((const Sequence < sal_Int8 >*)0),    PROPERTY_NONE, 0                  },
-    { MAP_CHAR_LEN(UNO_NAME_RELATIVE_BRACKET_DISTANCE          ), FID_RELATIVE_BRACKET_DISTANCE          ,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_BRACKETSPACE },
-    { MAP_CHAR_LEN(UNO_NAME_RELATIVE_BRACKET_EXCESS_SIZE       ), FID_RELATIVE_BRACKET_EXCESS_SIZE       ,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_BRACKETSIZE  },
-    { MAP_CHAR_LEN(UNO_NAME_RELATIVE_FONT_HEIGHT_FUNCTIONS     ), FID_RELATIVE_FONT_HEIGHT_FUNCTIONS     ,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, SIZ_FUNCTION},
-    { MAP_CHAR_LEN(UNO_NAME_RELATIVE_FONT_HEIGHT_INDICES       ), FID_RELATIVE_FONT_HEIGHT_INDICES       ,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, SIZ_INDEX      },
-    { MAP_CHAR_LEN(UNO_NAME_RELATIVE_FONT_HEIGHT_LIMITS        ), FID_RELATIVE_FONT_HEIGHT_LIMITS        ,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, SIZ_LIMITS    },
-    { MAP_CHAR_LEN(UNO_NAME_RELATIVE_FONT_HEIGHT_OPERATORS     ), FID_RELATIVE_FONT_HEIGHT_OPERATORS     ,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, SIZ_OPERATOR},
-    { MAP_CHAR_LEN(UNO_NAME_RELATIVE_FONT_HEIGHT_TEXT             ), FID_RELATIVE_FONT_HEIGHT_TEXT          ,       &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, SIZ_TEXT   },
-    { MAP_CHAR_LEN(UNO_NAME_RELATIVE_FRACTION_BAR_EXCESS_LENGTH), FID_RELATIVE_FRACTION_BAR_EXCESS_LENGTH,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_FRACTION        },
-    { MAP_CHAR_LEN(UNO_NAME_RELATIVE_FRACTION_BAR_LINE_WEIGHT  ), FID_RELATIVE_FRACTION_BAR_LINE_WEIGHT  ,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_STROKEWIDTH  },
-    { MAP_CHAR_LEN(UNO_NAME_RELATIVE_FRACTION_DENOMINATOR_DEPTH), FID_RELATIVE_FRACTION_DENOMINATOR_DEPTH,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_DENOMINATOR  },
-    { MAP_CHAR_LEN(UNO_NAME_RELATIVE_FRACTION_NUMERATOR_HEIGHT ), FID_RELATIVE_FRACTION_NUMERATOR_HEIGHT ,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_NUMERATOR          },
-    { MAP_CHAR_LEN(UNO_NAME_RELATIVE_INDEX_SUBSCRIPT           ), FID_RELATIVE_INDEX_SUBSCRIPT           ,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_SUBSCRIPT          },
-    { MAP_CHAR_LEN(UNO_NAME_RELATIVE_INDEX_SUPERSCRIPT         ), FID_RELATIVE_INDEX_SUPERSCRIPT         ,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_SUPERSCRIPT  },
-    { MAP_CHAR_LEN(UNO_NAME_RELATIVE_LINE_SPACING              ), FID_RELATIVE_LINE_SPACING              ,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_VERTICAL        },
-    { MAP_CHAR_LEN(UNO_NAME_RELATIVE_LOWER_LIMIT_DISTANCE      ), FID_RELATIVE_LOWER_LIMIT_DISTANCE      ,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_LOWERLIMIT        },
-    { MAP_CHAR_LEN(UNO_NAME_RELATIVE_MATRIX_COLUMN_SPACING     ), FID_RELATIVE_MATRIX_COLUMN_SPACING     ,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_MATRIXCOL},
-    { MAP_CHAR_LEN(UNO_NAME_RELATIVE_MATRIX_LINE_SPACING       ), FID_RELATIVE_MATRIX_LINE_SPACING       ,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_MATRIXROW},
-    { MAP_CHAR_LEN(UNO_NAME_RELATIVE_OPERATOR_EXCESS_SIZE      ), FID_RELATIVE_OPERATOR_EXCESS_SIZE      ,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_OPERATORSIZE        },
-    { MAP_CHAR_LEN(UNO_NAME_RELATIVE_OPERATOR_SPACING          ), FID_RELATIVE_OPERATOR_SPACING          ,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_OPERATORSPACE},
-    { MAP_CHAR_LEN(UNO_NAME_RELATIVE_ROOT_SPACING              ), FID_RELATIVE_ROOT_SPACING              ,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_ROOT               },
-    { MAP_CHAR_LEN(UNO_NAME_RELATIVE_SCALE_BRACKET_EXCESS_SIZE ), FID_RELATIVE_SCALE_BRACKET_EXCESS_SIZE ,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_NORMALBRACKETSIZE},
-    { MAP_CHAR_LEN(UNO_NAME_RELATIVE_SPACING                   ), FID_RELATIVE_SPACING                   ,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_HORIZONTAL        },
-    { MAP_CHAR_LEN(UNO_NAME_RELATIVE_SYMBOL_MINIMUM_HEIGHT     ), FID_RELATIVE_SYMBOL_MINIMUM_HEIGHT     ,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_ORNAMENTSPACE         },
-    { MAP_CHAR_LEN(UNO_NAME_RELATIVE_SYMBOL_PRIMARY_HEIGHT     ), FID_RELATIVE_SYMBOL_PRIMARY_HEIGHT     ,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_ORNAMENTSIZE        },
-    { MAP_CHAR_LEN(UNO_NAME_RELATIVE_UPPER_LIMIT_DISTANCE      ), FID_RELATIVE_UPPER_LIMIT_DISTANCE      ,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_UPPERLIMIT        },
-    { MAP_CHAR_LEN(UNO_NAME_RIGHT_MARGIN                      ), FID_RIGHT_MARGIN                      ,        &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_RIGHTSPACE               },
-    { MAP_CHAR_LEN(UNO_NAME_TOP_MARGIN                        ), FID_TOP_MARGIN                        ,        &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_TOPSPACE               },
-    {0,0,0,0}
+    HANDLE_FORMULA,
+    HANDLE_FONT_NAME_VARIABLES,
+    HANDLE_FONT_NAME_FUNCTIONS,
+    HANDLE_FONT_NAME_NUMBERS,
+    HANDLE_FONT_NAME_TEXT,
+    HANDLE_CUSTOM_FONT_NAME_SERIF,
+    HANDLE_CUSTOM_FONT_NAME_SANS,
+    HANDLE_CUSTOM_FONT_NAME_FIXED,
+    HANDLE_CUSTOM_FONT_FIXED_POSTURE,
+    HANDLE_CUSTOM_FONT_FIXED_WEIGHT,
+    HANDLE_CUSTOM_FONT_SANS_POSTURE,
+    HANDLE_CUSTOM_FONT_SANS_WEIGHT,
+    HANDLE_CUSTOM_FONT_SERIF_POSTURE,
+    HANDLE_CUSTOM_FONT_SERIF_WEIGHT,
+    HANDLE_FONT_VARIABLES_POSTURE,
+    HANDLE_FONT_VARIABLES_WEIGHT,
+    HANDLE_FONT_FUNCTIONS_POSTURE,
+    HANDLE_FONT_FUNCTIONS_WEIGHT,
+    HANDLE_FONT_NUMBERS_POSTURE,
+    HANDLE_FONT_NUMBERS_WEIGHT,
+    HANDLE_FONT_TEXT_POSTURE,
+    HANDLE_FONT_TEXT_WEIGHT,
+    HANDLE_BASE_FONT_HEIGHT,
+    HANDLE_RELATIVE_FONT_HEIGHT_TEXT,
+    HANDLE_RELATIVE_FONT_HEIGHT_INDICES,
+    HANDLE_RELATIVE_FONT_HEIGHT_FUNCTIONS,
+    HANDLE_RELATIVE_FONT_HEIGHT_OPERATORS,
+    HANDLE_RELATIVE_FONT_HEIGHT_LIMITS,
+    HANDLE_IS_TEXT_MODE,
+    HANDLE_ALIGNMENT,
+    HANDLE_RELATIVE_SPACING,
+    HANDLE_RELATIVE_LINE_SPACING,
+    HANDLE_RELATIVE_ROOT_SPACING,
+    HANDLE_RELATIVE_INDEX_SUPERSCRIPT,
+    HANDLE_RELATIVE_INDEX_SUBSCRIPT,
+    HANDLE_RELATIVE_FRACTION_NUMERATOR_HEIGHT,
+    HANDLE_RELATIVE_FRACTION_DENOMINATOR_DEPTH,
+    HANDLE_RELATIVE_FRACTION_BAR_EXCESS_LENGTH,
+    HANDLE_RELATIVE_FRACTION_BAR_LINE_WEIGHT,
+    HANDLE_RELATIVE_UPPER_LIMIT_DISTANCE,
+    HANDLE_RELATIVE_LOWER_LIMIT_DISTANCE,
+    HANDLE_RELATIVE_BRACKET_EXCESS_SIZE,
+    HANDLE_RELATIVE_BRACKET_DISTANCE,
+    HANDLE_IS_SCALE_ALL_BRACKETS,
+    HANDLE_RELATIVE_SCALE_BRACKET_EXCESS_SIZE,
+    HANDLE_RELATIVE_MATRIX_LINE_SPACING,
+    HANDLE_RELATIVE_MATRIX_COLUMN_SPACING,
+    HANDLE_RELATIVE_SYMBOL_PRIMARY_HEIGHT,
+    HANDLE_RELATIVE_SYMBOL_MINIMUM_HEIGHT,
+    HANDLE_RELATIVE_OPERATOR_EXCESS_SIZE,
+    HANDLE_RELATIVE_OPERATOR_SPACING,
+    HANDLE_LEFT_MARGIN,
+    HANDLE_RIGHT_MARGIN,
+    HANDLE_TOP_MARGIN,
+    HANDLE_BOTTOM_MARGIN,
+    HANDLE_PRINTER_NAME,
+    HANDLE_PRINTER_SETUP,
+    HANDLE_SYMBOLS
 };
+
+PropertySetInfo * lcl_createModelPropertyInfo ()
+{
+    static PropertyMapEntry aModelPropertyInfoMap[] =
+    {
+        { RTL_CONSTASCII_STRINGPARAM( "Alignment"                          ), HANDLE_ALIGNMENT                          ,       &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, 0},
+        { RTL_CONSTASCII_STRINGPARAM( "BaseFontHeight"                  ), HANDLE_BASE_FONT_HEIGHT                   ,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, 0},
+        { RTL_CONSTASCII_STRINGPARAM( "BottomMargin"                      ), HANDLE_BOTTOM_MARGIN                      ,        &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_BOTTOMSPACE             },
+        { RTL_CONSTASCII_STRINGPARAM( "CustomFontNameFixed"            ), HANDLE_CUSTOM_FONT_NAME_FIXED             ,       &::getCppuType((const OUString*)0),     PROPERTY_NONE, FNT_FIXED          },
+        { RTL_CONSTASCII_STRINGPARAM( "CustomFontNameSans"              ), HANDLE_CUSTOM_FONT_NAME_SANS              ,      &::getCppuType((const OUString*)0),     PROPERTY_NONE, FNT_SANS        },
+        { RTL_CONSTASCII_STRINGPARAM( "CustomFontNameSerif"             ), HANDLE_CUSTOM_FONT_NAME_SERIF             ,      &::getCppuType((const OUString*)0),     PROPERTY_NONE, FNT_SERIF          },
+        { RTL_CONSTASCII_STRINGPARAM( "FontFixedIsBold"),     HANDLE_CUSTOM_FONT_FIXED_WEIGHT    ,  &::getBooleanCppuType(),  PROPERTY_NONE, FNT_FIXED},
+        { RTL_CONSTASCII_STRINGPARAM( "FontFixedIsItalic"), HANDLE_CUSTOM_FONT_FIXED_POSTURE   ,  &::getBooleanCppuType(),  PROPERTY_NONE, FNT_FIXED},
+        { RTL_CONSTASCII_STRINGPARAM( "FontFunctionsIsBold"),    HANDLE_FONT_FUNCTIONS_WEIGHT    ,  &::getBooleanCppuType(),            PROPERTY_NONE, FNT_FUNCTION},
+        { RTL_CONSTASCII_STRINGPARAM( "FontFunctionsIsItalic"),   HANDLE_FONT_FUNCTIONS_POSTURE   ,  &::getBooleanCppuType(),  PROPERTY_NONE, FNT_FUNCTION},
+        { RTL_CONSTASCII_STRINGPARAM( "FontNameFunctions"                ), HANDLE_FONT_NAME_FUNCTIONS                ,         &::getCppuType((const OUString*)0),     PROPERTY_NONE, FNT_FUNCTION },
+        { RTL_CONSTASCII_STRINGPARAM( "FontNameNumbers"                  ), HANDLE_FONT_NAME_NUMBERS                  ,         &::getCppuType((const OUString*)0),     PROPERTY_NONE, FNT_NUMBER        },
+        { RTL_CONSTASCII_STRINGPARAM( "FontNameText"                     ), HANDLE_FONT_NAME_TEXT                     ,         &::getCppuType((const OUString*)0),     PROPERTY_NONE, FNT_TEXT        },
+        { RTL_CONSTASCII_STRINGPARAM( "FontNameVariables"                ), HANDLE_FONT_NAME_VARIABLES                ,         &::getCppuType((const OUString*)0),     PROPERTY_NONE, FNT_VARIABLE },
+        { RTL_CONSTASCII_STRINGPARAM( "FontNumbersIsBold"),  HANDLE_FONT_NUMBERS_WEIGHT    ,  &::getBooleanCppuType(),              PROPERTY_NONE, FNT_NUMBER},
+        { RTL_CONSTASCII_STRINGPARAM( "FontNumbersIsItalic"),   HANDLE_FONT_NUMBERS_POSTURE   ,  &::getBooleanCppuType(),  PROPERTY_NONE, FNT_NUMBER},
+        { RTL_CONSTASCII_STRINGPARAM( "FontSansIsBold"),     HANDLE_CUSTOM_FONT_SANS_WEIGHT    ,  &::getBooleanCppuType(),              PROPERTY_NONE, FNT_SANS},
+        { RTL_CONSTASCII_STRINGPARAM( "FontSansIsItalic"),   HANDLE_CUSTOM_FONT_SANS_POSTURE   ,  &::getBooleanCppuType(),  PROPERTY_NONE, FNT_SANS},
+        { RTL_CONSTASCII_STRINGPARAM( "FontSerifIsBold"),    HANDLE_CUSTOM_FONT_SERIF_WEIGHT    ,  &::getBooleanCppuType(),             PROPERTY_NONE,  FNT_SERIF},
+        { RTL_CONSTASCII_STRINGPARAM( "FontSerifIsItalic"),   HANDLE_CUSTOM_FONT_SERIF_POSTURE   ,  &::getBooleanCppuType(),  PROPERTY_NONE, FNT_SERIF},
+        { RTL_CONSTASCII_STRINGPARAM( "FontTextIsBold"),     HANDLE_FONT_TEXT_WEIGHT    ,  &::getBooleanCppuType(),             PROPERTY_NONE, },
+        { RTL_CONSTASCII_STRINGPARAM( "FontTextIsItalic"),   HANDLE_FONT_TEXT_POSTURE   ,  &::getBooleanCppuType(),  PROPERTY_NONE, },
+        { RTL_CONSTASCII_STRINGPARAM( "FontVariablesIsBold"),    HANDLE_FONT_VARIABLES_WEIGHT    ,  &::getBooleanCppuType(),            PROPERTY_NONE, },
+        { RTL_CONSTASCII_STRINGPARAM( "FontVariablesIsItalic"),   HANDLE_FONT_VARIABLES_POSTURE,  &::getBooleanCppuType(),  PROPERTY_NONE, },
+        { RTL_CONSTASCII_STRINGPARAM( "Formula"                           ),    HANDLE_FORMULA                             ,        &::getCppuType((const OUString*)0),     PROPERTY_NONE, 0},
+        { RTL_CONSTASCII_STRINGPARAM( "IsScaleAllBrackets"              ), HANDLE_IS_SCALE_ALL_BRACKETS              ,      &::getBooleanCppuType(),    PROPERTY_NONE, 0},
+        { RTL_CONSTASCII_STRINGPARAM( "IsTextMode"                       ), HANDLE_IS_TEXT_MODE                       ,         &::getBooleanCppuType(),    PROPERTY_NONE, 0},
+        { RTL_CONSTASCII_STRINGPARAM( "LeftMargin"                        ), HANDLE_LEFT_MARGIN                        ,        &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_LEFTSPACE                 },
+        { RTL_CONSTASCII_STRINGPARAM( "PrinterName"                    ), HANDLE_PRINTER_NAME                        ,      &::getCppuType((const OUString*)0),     PROPERTY_NONE, 0                  },
+        { RTL_CONSTASCII_STRINGPARAM( "PrinterSetup"                       ), HANDLE_PRINTER_SETUP                       ,      &::getCppuType((const Sequence < sal_Int8 >*)0),    PROPERTY_NONE, 0                  },
+        { RTL_CONSTASCII_STRINGPARAM( "RelativeBracketDistance"          ), HANDLE_RELATIVE_BRACKET_DISTANCE          ,         &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_BRACKETSPACE },
+        { RTL_CONSTASCII_STRINGPARAM( "RelativeBracketExcessSize"       ), HANDLE_RELATIVE_BRACKET_EXCESS_SIZE       ,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_BRACKETSIZE  },
+        { RTL_CONSTASCII_STRINGPARAM( "RelativeFontHeightFunctions"     ), HANDLE_RELATIVE_FONT_HEIGHT_FUNCTIONS     ,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, SIZ_FUNCTION},
+        { RTL_CONSTASCII_STRINGPARAM( "RelativeFontHeightIndices"       ), HANDLE_RELATIVE_FONT_HEIGHT_INDICES       ,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, SIZ_INDEX      },
+        { RTL_CONSTASCII_STRINGPARAM( "RelativeFontHeightLimits"        ), HANDLE_RELATIVE_FONT_HEIGHT_LIMITS        ,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, SIZ_LIMITS    },
+        { RTL_CONSTASCII_STRINGPARAM( "RelativeFontHeightOperators"     ), HANDLE_RELATIVE_FONT_HEIGHT_OPERATORS     ,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, SIZ_OPERATOR},
+        { RTL_CONSTASCII_STRINGPARAM( "RelativeFontHeightText"            ), HANDLE_RELATIVE_FONT_HEIGHT_TEXT          ,        &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, SIZ_TEXT   },
+        { RTL_CONSTASCII_STRINGPARAM( "RelativeFractionBarExcessLength"), HANDLE_RELATIVE_FRACTION_BAR_EXCESS_LENGTH,       &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_FRACTION        },
+        { RTL_CONSTASCII_STRINGPARAM( "RelativeFractionBarLineWeight"  ), HANDLE_RELATIVE_FRACTION_BAR_LINE_WEIGHT  ,       &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_STROKEWIDTH  },
+        { RTL_CONSTASCII_STRINGPARAM( "RelativeFractionDenominatorDepth"), HANDLE_RELATIVE_FRACTION_DENOMINATOR_DEPTH,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_DENOMINATOR  },
+        { RTL_CONSTASCII_STRINGPARAM( "RelativeFractionNumeratorHeight" ), HANDLE_RELATIVE_FRACTION_NUMERATOR_HEIGHT ,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_NUMERATOR          },
+        { RTL_CONSTASCII_STRINGPARAM( "RelativeIndexSubscript"           ), HANDLE_RELATIVE_INDEX_SUBSCRIPT           ,         &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_SUBSCRIPT          },
+        { RTL_CONSTASCII_STRINGPARAM( "RelativeIndexSuperscript"         ), HANDLE_RELATIVE_INDEX_SUPERSCRIPT         ,         &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_SUPERSCRIPT  },
+        { RTL_CONSTASCII_STRINGPARAM( "RelativeLineSpacing"              ), HANDLE_RELATIVE_LINE_SPACING              ,         &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_VERTICAL        },
+        { RTL_CONSTASCII_STRINGPARAM( "RelativeLowerLimitDistance"      ), HANDLE_RELATIVE_LOWER_LIMIT_DISTANCE      ,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_LOWERLIMIT        },
+        { RTL_CONSTASCII_STRINGPARAM( "RelativeMatrixColumnSpacing"     ), HANDLE_RELATIVE_MATRIX_COLUMN_SPACING     ,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_MATRIXCOL},
+        { RTL_CONSTASCII_STRINGPARAM( "RelativeMatrixLineSpacing"       ), HANDLE_RELATIVE_MATRIX_LINE_SPACING       ,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_MATRIXROW},
+        { RTL_CONSTASCII_STRINGPARAM( "RelativeOperatorExcessSize"      ), HANDLE_RELATIVE_OPERATOR_EXCESS_SIZE      ,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_OPERATORSIZE        },
+        { RTL_CONSTASCII_STRINGPARAM( "RelativeOperatorSpacing"          ), HANDLE_RELATIVE_OPERATOR_SPACING          ,         &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_OPERATORSPACE},
+        { RTL_CONSTASCII_STRINGPARAM( "RelativeRootSpacing"              ), HANDLE_RELATIVE_ROOT_SPACING              ,         &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_ROOT               },
+        { RTL_CONSTASCII_STRINGPARAM( "RelativeScaleBracketExcessSize" ), HANDLE_RELATIVE_SCALE_BRACKET_EXCESS_SIZE ,       &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_NORMALBRACKETSIZE},
+        { RTL_CONSTASCII_STRINGPARAM( "RelativeSpacing"                   ), HANDLE_RELATIVE_SPACING                   ,        &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_HORIZONTAL        },
+        { RTL_CONSTASCII_STRINGPARAM( "RelativeSymbolMinimumHeight"     ), HANDLE_RELATIVE_SYMBOL_MINIMUM_HEIGHT     ,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_ORNAMENTSPACE         },
+        { RTL_CONSTASCII_STRINGPARAM( "RelativeSymbolPrimaryHeight"     ), HANDLE_RELATIVE_SYMBOL_PRIMARY_HEIGHT     ,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_ORNAMENTSIZE        },
+        { RTL_CONSTASCII_STRINGPARAM( "RelativeUpperLimitDistance"      ),  HANDLE_RELATIVE_UPPER_LIMIT_DISTANCE     ,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_UPPERLIMIT        },
+        { RTL_CONSTASCII_STRINGPARAM( "RightMargin"                       ),    HANDLE_RIGHT_MARGIN                  ,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_RIGHTSPACE               },
+        { RTL_CONSTASCII_STRINGPARAM( "Symbols"                       ),        HANDLE_SYMBOLS                       ,      &::getCppuType((const Sequence < SymbolDescriptor > *)0),   PROPERTY_NONE, 0  },
+        { RTL_CONSTASCII_STRINGPARAM( "TopMargin"                         ),    HANDLE_TOP_MARGIN                    ,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_TOPSPACE               },
+        { NULL, 0, 0, NULL, 0, 0 }
+    };
+    PropertySetInfo *pInfo = new PropertySetInfo ( aModelPropertyInfoMap );
+    return pInfo;
+}
 //-----------------------------------------------------------------------
-SmModel::SmModel( SfxObjectShell *pObjSh ) :
-    SfxBaseModel(pObjSh),
-    _pMap(aMathModelMap_Impl)
+SmModel::SmModel( SfxObjectShell *pObjSh )
+: SfxBaseModel(pObjSh)
+, PropertySetHelper ( lcl_createModelPropertyInfo () )
 {
 }
 //-----------------------------------------------------------------------
@@ -316,11 +270,19 @@ SmModel::~SmModel()
   -----------------------------------------------------------------------*/
 uno::Any SAL_CALL SmModel::queryInterface( const uno::Type& rType ) throw(uno::RuntimeException)
 {
-    uno::Any aRet = SmModelBaseClass::queryInterface(rType);
-    if(!aRet.hasValue())
-    {
-        aRet = SfxBaseModel::queryInterface(rType);
-    }
+    uno::Any aRet =  ::cppu::queryInterface ( rType                                     ,
+                                    // OWeakObject interfaces
+                                    reinterpret_cast< XInterface*       > ( this )  ,
+                                    static_cast< XWeak*         > ( this )  ,
+                                    // PropertySetHelper interfaces
+                                    static_cast< XPropertySet*      > ( this )  ,
+                                    static_cast< XMultiPropertySet*     > ( this )  ,
+                                    static_cast< XPropertyState*        > ( this )  ,
+                                    // my own interfaces
+                                    static_cast< XUnoTunnel*        > ( this )  ,
+                                    static_cast< XServiceInfo*  > ( this ) );
+    if (!aRet.hasValue())
+        aRet = SfxBaseModel::queryInterface ( rType );
     return aRet;
 }
 /*-- 28.03.00 14:18:18---------------------------------------------------
@@ -329,7 +291,7 @@ uno::Any SAL_CALL SmModel::queryInterface( const uno::Type& rType ) throw(uno::R
 void SAL_CALL SmModel::acquire() throw(uno::RuntimeException)
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
-    SmModelBaseClass::acquire();
+    OWeakObject::acquire();
 }
 /*-- 28.03.00 14:18:18---------------------------------------------------
 
@@ -337,7 +299,7 @@ void SAL_CALL SmModel::acquire() throw(uno::RuntimeException)
 void SAL_CALL SmModel::release() throw(uno::RuntimeException)
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
-    SmModelBaseClass::release();
+    OWeakObject::release();
 }
 /*-- 28.03.00 14:18:19---------------------------------------------------
 
@@ -345,16 +307,7 @@ void SAL_CALL SmModel::release() throw(uno::RuntimeException)
 uno::Sequence< uno::Type > SAL_CALL SmModel::getTypes(  ) throw(uno::RuntimeException)
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
-
-    uno::Sequence< uno::Type > aBaseTypes = SmModelBaseClass::getTypes();
-    uno::Sequence< uno::Type > aSfxTypes = SfxBaseModel::getTypes();
-    long nIndex = aBaseTypes.getLength();
-    aBaseTypes.realloc(aBaseTypes.getLength() + aSfxTypes.getLength());
-    uno::Type* pBaseTypes = aBaseTypes.getArray();
-    const uno::Type* pSfxTypes = aSfxTypes.getConstArray();
-    for(long nSfx = 0; nSfx < aSfxTypes.getLength(); nSfx++)
-        pBaseTypes[nIndex++] = pSfxTypes[nSfx];
-    return aBaseTypes;
+    return SfxBaseModel::getTypes();
 }
 /* -----------------------------28.03.00 14:23--------------------------------
 
@@ -371,8 +324,7 @@ const uno::Sequence< sal_Int8 > & SmModel::getUnoTunnelId()
         rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True );
     }
     return aSeq;
-}
-/* -----------------------------28.03.00 14:23--------------------------------
+} /* -----------------------------28.03.00 14:23--------------------------------
 
  ---------------------------------------------------------------------------*/
 sal_Int64 SAL_CALL SmModel::getSomething( const uno::Sequence< sal_Int8 >& rId )
@@ -386,17 +338,9 @@ sal_Int64 SAL_CALL SmModel::getSomething( const uno::Sequence< sal_Int8 >& rId )
     }
     return 0;
 }
-
 /*-- 07.01.00 16:32:59---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-uno::Reference< beans::XPropertySetInfo >  SAL_CALL SmModel::getPropertySetInfo(void) throw( uno::RuntimeException )
-{
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
-
-    static uno::Reference< beans::XPropertySetInfo >  xRet = new SfxItemPropertySetInfo( _pMap );
-    return xRet;
-}
 /*-- 07.01.00 16:33:00---------------------------------------------------
 
   -----------------------------------------------------------------------*/
@@ -414,429 +358,7 @@ sal_Int16 lcl_AnyToINT16(const uno::Any& rAny)
     return nRet;
 }
 //-----------------------------------------------------------------------------
-void SmModel::_setPropertyValue(const uno::Any& aValue,
-        SfxObjectShell* pObjShell, SmFormat &aFormat, const SfxItemPropertyMap* pMap)
-    throw( beans::UnknownPropertyException, beans::PropertyVetoException,
-         lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
-{
-    switch(pMap->nWID)
-    {
-        case  FID_FORMULA:
-        {
-            OUString aText;
-            aValue >>= aText;
-            ((SmDocShell*)pObjShell)->SetText(aText);
-        }
-        break;
-        case FID_FONT_NAME_VARIABLES                :
-        case FID_FONT_NAME_FUNCTIONS                :
-        case FID_FONT_NAME_NUMBERS                  :
-        case FID_FONT_NAME_TEXT                     :
-        case FID_CUSTOM_FONT_NAME_SERIF             :
-        case FID_CUSTOM_FONT_NAME_SANS              :
-        case FID_CUSTOM_FONT_NAME_FIXED             :
-        {
-            OUString aText;
-            aValue >>= aText;
-            String sFontName = aText;
-            if(!sFontName.Len())
-                throw lang::IllegalArgumentException();
-            if(aFormat.GetFont(pMap->nMemberId).GetName() != sFontName)
-            {
-                OutputDevice *pDev = ((SmDocShell*)pObjShell)->GetPrinter();
-                if (!pDev || pDev->GetDevFontCount() == 0)
-                    pDev = (OutputDevice *) GetpApp()->GetDefaultDevice();
 
-                FontList aFontList(pDev);
-
-                sal_uInt16  nCount = aFontList.GetFontNameCount();
-                sal_Bool bSet = sal_False;
-                for (sal_uInt16 i = 0;  i < nCount;  i++)
-                {
-                    const FontInfo& rInfo = aFontList.GetFontName( i );
-                    if(rInfo.GetName() == sFontName)
-                    {
-                        SmFace aSet(rInfo);
-                        const SmFace rOld = aFormat.GetFont(pMap->nMemberId);
-                        aSet.SetBorderWidth(rOld.GetBorderWidth());
-                        aSet.SetSize(rOld.GetSize());
-                        aSet.SetAlign(ALIGN_BASELINE);
-                        aFormat.SetFont(pMap->nMemberId, aSet);
-                        bSet = sal_True;
-                        break;
-                    }
-                }
-                if(!bSet)
-                    throw lang::IllegalArgumentException();
-            }
-        }
-        break;
-        case FID_CUSTOM_FONT_FIXED_POSTURE:
-        case FID_CUSTOM_FONT_SANS_POSTURE :
-        case FID_CUSTOM_FONT_SERIF_POSTURE:
-        case FID_FONT_VARIABLES_POSTURE   :
-        case FID_FONT_FUNCTIONS_POSTURE   :
-        case FID_FONT_NUMBERS_POSTURE     :
-        case FID_FONT_TEXT_POSTURE        :
-        {
-            if(aValue.getValueType() != ::getBooleanCppuType())
-                throw lang::IllegalArgumentException();
-            BOOL bVal = *(sal_Bool*)aValue.getValue();
-            Font aNewFont(aFormat.GetFont(pMap->nMemberId));
-            aNewFont.SetItalic((bVal) ? ITALIC_NORMAL : ITALIC_NONE);
-            aFormat.SetFont(pMap->nMemberId, aNewFont);
-        }
-        break;
-        case FID_CUSTOM_FONT_FIXED_WEIGHT :
-        case FID_CUSTOM_FONT_SANS_WEIGHT  :
-        case FID_CUSTOM_FONT_SERIF_WEIGHT :
-        case FID_FONT_VARIABLES_WEIGHT    :
-        case FID_FONT_FUNCTIONS_WEIGHT    :
-        case FID_FONT_NUMBERS_WEIGHT      :
-        case FID_FONT_TEXT_WEIGHT         :
-        {
-            if(aValue.getValueType() != ::getBooleanCppuType())
-                throw lang::IllegalArgumentException();
-            BOOL bVal = *(sal_Bool*)aValue.getValue();
-            Font aNewFont(aFormat.GetFont(pMap->nMemberId));
-            aNewFont.SetWeight((bVal) ? WEIGHT_BOLD : WEIGHT_NORMAL);
-            aFormat.SetFont(pMap->nMemberId, aNewFont);
-        }
-        break;
-        case FID_BASE_FONT_HEIGHT                   :
-        {
-            // Point!
-            sal_Int16 nVal = lcl_AnyToINT16(aValue);
-            if(nVal < 1)
-                throw lang::IllegalArgumentException();
-            Size aSize = aFormat.GetBaseSize();
-            nVal *= 20;
-            nVal = static_cast < sal_Int16 > ( TWIP_TO_MM100(nVal) );
-            aSize.Height() = nVal;
-            aFormat.SetBaseSize(aSize);
-        }
-        break;
-        case FID_RELATIVE_FONT_HEIGHT_TEXT          :
-        case FID_RELATIVE_FONT_HEIGHT_INDICES       :
-        case FID_RELATIVE_FONT_HEIGHT_FUNCTIONS     :
-        case FID_RELATIVE_FONT_HEIGHT_OPERATORS     :
-        case FID_RELATIVE_FONT_HEIGHT_LIMITS        :
-        {
-            sal_Int16 nVal;
-            aValue >>= nVal;
-            if(nVal < 1)
-                throw lang::IllegalArgumentException();
-            aFormat.SetRelSize(pMap->nMemberId, nVal);
-        }
-        break;
-
-        case FID_IS_TEXT_MODE                       :
-        {
-            aFormat.SetTextmode(*(sal_Bool*)aValue.getValue());
-        }
-        break;
-
-        case FID_ALIGNMENT                          :
-        {
-            // SmHorAlign uses the same values as HorizontalAlignment
-            sal_Int16 nVal;
-            aValue >>= nVal;
-            if(nVal < 0 || nVal > 2)
-                throw lang::IllegalArgumentException();
-            aFormat.SetHorAlign((SmHorAlign)nVal);
-        }
-        break;
-
-        case FID_RELATIVE_SPACING                   :
-        case FID_RELATIVE_LINE_SPACING              :
-        case FID_RELATIVE_ROOT_SPACING              :
-        case FID_RELATIVE_INDEX_SUPERSCRIPT         :
-        case FID_RELATIVE_INDEX_SUBSCRIPT           :
-        case FID_RELATIVE_FRACTION_NUMERATOR_HEIGHT :
-        case FID_RELATIVE_FRACTION_DENOMINATOR_DEPTH:
-        case FID_RELATIVE_FRACTION_BAR_EXCESS_LENGTH:
-        case FID_RELATIVE_FRACTION_BAR_LINE_WEIGHT  :
-        case FID_RELATIVE_UPPER_LIMIT_DISTANCE      :
-        case FID_RELATIVE_LOWER_LIMIT_DISTANCE      :
-        case FID_RELATIVE_BRACKET_EXCESS_SIZE       :
-        case FID_RELATIVE_BRACKET_DISTANCE          :
-        case FID_RELATIVE_SCALE_BRACKET_EXCESS_SIZE :
-        case FID_RELATIVE_MATRIX_LINE_SPACING       :
-        case FID_RELATIVE_MATRIX_COLUMN_SPACING     :
-        case FID_RELATIVE_SYMBOL_PRIMARY_HEIGHT     :
-        case FID_RELATIVE_SYMBOL_MINIMUM_HEIGHT     :
-        case FID_RELATIVE_OPERATOR_EXCESS_SIZE      :
-        case FID_RELATIVE_OPERATOR_SPACING          :
-        case FID_LEFT_MARGIN               :
-        case FID_RIGHT_MARGIN              :
-        case FID_TOP_MARGIN                :
-        case FID_BOTTOM_MARGIN             :
-        {
-            sal_Int16 nVal;
-            aValue >>= nVal;
-            if(nVal < 0)
-                throw lang::IllegalArgumentException();
-            aFormat.SetDistance(pMap->nMemberId, nVal);
-        }
-        break;
-        case FID_IS_SCALE_ALL_BRACKETS              :
-            aFormat.SetScaleNormalBrackets(*(sal_Bool*)aValue.getValue());
-        break;
-        case FID_PRINTER_NAME:
-        {
-            SfxPrinter *pPrinter = static_cast < SmDocShell * > (pObjShell)->GetPrinter ( );
-            if (pPrinter)
-            {
-                OUString sPrinterName;
-                if (aValue >>= sPrinterName )
-                {
-                    SfxPrinter *pNewPrinter = new SfxPrinter ( pPrinter->GetOptions().Clone(), sPrinterName );
-                    if (pNewPrinter->IsKnown())
-                        static_cast < SmDocShell * > ( pObjShell )->SetPrinter ( pNewPrinter );
-                    else
-                        delete pNewPrinter;
-                }
-                else
-                    throw lang::IllegalArgumentException();
-            }
-        }
-        break;
-        case FID_PRINTER_SETUP:
-        {
-            Sequence < sal_Int8 > aSequence;
-            if ( aValue >>= aSequence )
-            {
-                SmDocShell * pDoc = static_cast < SmDocShell * > (pObjShell);
-                sal_uInt32 nSize = aSequence.getLength();
-                SvMemoryStream aStream;
-                aStream.Write ( aSequence.getArray(), nSize );
-                aStream.Flush();
-                aStream.Seek ( STREAM_SEEK_TO_BEGIN );
-                static sal_uInt16 __READONLY_DATA nRange[] =
-                {
-                    SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
-                    SID_PRINTER_CHANGESTODOC, SID_PRINTER_CHANGESTODOC,
-                    0
-                };
-                SfxItemSet *pItemSet = new SfxItemSet( pDoc->GetPool(), nRange );
-                SfxPrinter *pPrinter = SfxPrinter::Create ( aStream, pItemSet );
-
-                pDoc->SetPrinter( pPrinter );
-            }
-            else
-                throw IllegalArgumentException();
-        }
-        break;
-    }
-}
-void SmModel::setPropertyValue(const OUString& rPropertyName, const uno::Any& aValue)
-    throw( beans::UnknownPropertyException, beans::PropertyVetoException,
-         lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
-{
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
-    SfxObjectShell* pObjShell = GetObjectShell();
-    if(!pObjShell)
-        throw uno::RuntimeException();
-    const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
-                                                        _pMap, rPropertyName);
-    if(pMap)
-    {
-        SmFormat& aFormat = ((SmDocShell*)pObjShell)->GetFormat();
-        _setPropertyValue ( aValue, pObjShell, aFormat, pMap );
-        ((SmDocShell*)pObjShell)->SetFormat(aFormat);
-        aFormat.RequestApplyChanges();
-    }
-    else
-        throw beans::UnknownPropertyException();
-}
-/*-- 07.01.00 16:33:00---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-void SmModel::_getPropertyValue(Any & rValue,  SfxObjectShell *pObjShell,
-                                const SmFormat &rFormat, const SfxItemPropertyMap *pMap)
-    throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
-{
-    switch(pMap->nWID)
-    {
-        case  FID_FORMULA:
-            rValue <<= OUString(((SmDocShell*)pObjShell)->GetText());
-        break;
-        case FID_FONT_NAME_VARIABLES                :
-        case FID_FONT_NAME_FUNCTIONS                :
-        case FID_FONT_NAME_NUMBERS                  :
-        case FID_FONT_NAME_TEXT                     :
-        case FID_CUSTOM_FONT_NAME_SERIF             :
-        case FID_CUSTOM_FONT_NAME_SANS              :
-        case FID_CUSTOM_FONT_NAME_FIXED             :
-        {
-            const SmFace &  rFace = rFormat.GetFont(pMap->nMemberId);
-            rValue <<= OUString(rFace.GetName());
-        }
-        break;
-        case FID_CUSTOM_FONT_FIXED_POSTURE:
-        case FID_CUSTOM_FONT_SANS_POSTURE :
-        case FID_CUSTOM_FONT_SERIF_POSTURE:
-        case FID_FONT_VARIABLES_POSTURE   :
-        case FID_FONT_FUNCTIONS_POSTURE   :
-        case FID_FONT_NUMBERS_POSTURE     :
-        case FID_FONT_TEXT_POSTURE        :
-        {
-            const SmFace &  rFace = rFormat.GetFont(pMap->nMemberId);
-            BOOL bVal = (rFace.GetItalic() != ITALIC_NONE);
-            rValue.setValue(&bVal, *pMap->pType);
-        }
-        break;
-        case FID_CUSTOM_FONT_FIXED_WEIGHT :
-        case FID_CUSTOM_FONT_SANS_WEIGHT  :
-        case FID_CUSTOM_FONT_SERIF_WEIGHT :
-        case FID_FONT_VARIABLES_WEIGHT    :
-        case FID_FONT_FUNCTIONS_WEIGHT    :
-        case FID_FONT_NUMBERS_WEIGHT      :
-        case FID_FONT_TEXT_WEIGHT         :
-        {
-            const SmFace &  rFace = rFormat.GetFont(pMap->nMemberId);
-            BOOL bVal = (rFace.GetWeight() == WEIGHT_BOLD);
-            rValue.setValue(&bVal, *pMap->pType);
-        }
-        break;
-        case FID_BASE_FONT_HEIGHT                   :
-        {
-            // Point!
-            sal_Int16 nVal = static_cast < sal_Int16 > (rFormat.GetBaseSize().Height());
-            nVal = static_cast < sal_Int16 > (MM100_TO_TWIP(nVal));
-            nVal = (nVal + 10) / 20;
-            rValue <<= nVal;
-        }
-        break;
-        case FID_RELATIVE_FONT_HEIGHT_TEXT          :
-        case FID_RELATIVE_FONT_HEIGHT_INDICES       :
-        case FID_RELATIVE_FONT_HEIGHT_FUNCTIONS     :
-        case FID_RELATIVE_FONT_HEIGHT_OPERATORS     :
-        case FID_RELATIVE_FONT_HEIGHT_LIMITS        :
-            rValue <<= (sal_Int16) rFormat.GetRelSize(pMap->nMemberId);
-        break;
-
-        case FID_IS_TEXT_MODE                       :
-        {
-            sal_Bool bVal = rFormat.IsTextmode();
-            rValue.setValue(&bVal, ::getBooleanCppuType());
-        }
-        break;
-
-        case FID_ALIGNMENT                          :
-            // SmHorAlign uses the same values as HorizontalAlignment
-            rValue <<= (sal_Int16)rFormat.GetHorAlign();
-        break;
-
-        case FID_RELATIVE_SPACING                   :
-        case FID_RELATIVE_LINE_SPACING              :
-        case FID_RELATIVE_ROOT_SPACING              :
-        case FID_RELATIVE_INDEX_SUPERSCRIPT         :
-        case FID_RELATIVE_INDEX_SUBSCRIPT           :
-        case FID_RELATIVE_FRACTION_NUMERATOR_HEIGHT :
-        case FID_RELATIVE_FRACTION_DENOMINATOR_DEPTH:
-        case FID_RELATIVE_FRACTION_BAR_EXCESS_LENGTH:
-        case FID_RELATIVE_FRACTION_BAR_LINE_WEIGHT  :
-        case FID_RELATIVE_UPPER_LIMIT_DISTANCE      :
-        case FID_RELATIVE_LOWER_LIMIT_DISTANCE      :
-        case FID_RELATIVE_BRACKET_EXCESS_SIZE       :
-        case FID_RELATIVE_BRACKET_DISTANCE          :
-        case FID_RELATIVE_SCALE_BRACKET_EXCESS_SIZE :
-        case FID_RELATIVE_MATRIX_LINE_SPACING       :
-        case FID_RELATIVE_MATRIX_COLUMN_SPACING     :
-        case FID_RELATIVE_SYMBOL_PRIMARY_HEIGHT     :
-        case FID_RELATIVE_SYMBOL_MINIMUM_HEIGHT     :
-        case FID_RELATIVE_OPERATOR_EXCESS_SIZE      :
-        case FID_RELATIVE_OPERATOR_SPACING          :
-        case FID_LEFT_MARGIN               :
-        case FID_RIGHT_MARGIN              :
-        case FID_TOP_MARGIN                :
-        case FID_BOTTOM_MARGIN             :
-            rValue <<= (sal_Int16)rFormat.GetDistance(pMap->nMemberId);
-        break;
-        case FID_IS_SCALE_ALL_BRACKETS              :
-        {
-            sal_Bool bVal = rFormat.IsScaleNormalBrackets();
-            rValue.setValue(&bVal, ::getBooleanCppuType());
-        }
-        break;
-        case FID_PRINTER_NAME:
-        {
-            SfxPrinter *pPrinter = static_cast < SmDocShell * > (pObjShell)->GetPrinter ( );
-            rValue <<= pPrinter ? OUString ( pPrinter->GetName()) : OUString();
-        }
-        break;
-        case FID_PRINTER_SETUP:
-        {
-            SfxPrinter *pPrinter = static_cast < SmDocShell * > (pObjShell)->GetPrinter ();
-            if (pPrinter)
-            {
-                SvMemoryStream aStream;
-                pPrinter->Store( aStream );
-                sal_uInt32 nSize = aStream.GetSize();
-                Sequence < sal_Int8 > aSequence ( nSize );
-                memcpy ( aSequence.getArray(), aStream.GetData(), nSize );
-                rValue <<= aSequence;
-            }
-        }
-        break;
-    }
-}
-uno::Any SmModel::getPropertyValue(const OUString& rPropertyName)
-    throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
-{
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
-
-    uno::Any aRet;
-    SfxObjectShell* pObjShell = GetObjectShell();
-    if(!pObjShell)
-        throw uno::RuntimeException();
-    const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
-                                                        _pMap, rPropertyName);
-    SmFormat& aFormat = ((SmDocShell*)pObjShell)->GetFormat();
-    if(pMap)
-    {
-        _getPropertyValue ( aRet, pObjShell, aFormat, pMap );
-    }
-    else
-        throw beans::UnknownPropertyException();
-    return aRet;
-}
-/*-- 07.01.00 16:33:00---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-void SmModel::addPropertyChangeListener(const OUString& PropertyName,
-    const uno::Reference< beans::XPropertyChangeListener > & aListener)
-    throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
-{
-}
-/*-- 07.01.00 16:33:01---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-void SmModel::removePropertyChangeListener(const OUString& PropertyName,
-    const uno::Reference< beans::XPropertyChangeListener > & aListener)
-    throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
-{
-}
-/*-- 07.01.00 16:33:01---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-void SmModel::addVetoableChangeListener(const OUString& PropertyName,
-    const uno::Reference< beans::XVetoableChangeListener > & aListener)
-    throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
-{
-}
-/*-- 07.01.00 16:33:01---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-void SmModel::removeVetoableChangeListener(const OUString& PropertyName,
-    const uno::Reference< beans::XVetoableChangeListener > & aListener)
-    throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
-{
-}
-/*-- 07.02.00 13:24:08---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 OUString SmModel::getImplementationName(void) throw( uno::RuntimeException )
 {
     return C2U("SmModel");
@@ -860,295 +382,432 @@ uno::Sequence< OUString > SmModel::getSupportedServiceNames(void) throw( uno::Ru
     pArray[0] = C2U("com.sun.star.formula.FormulaProperties");
     return aRet;
 }
-/* -----------------------------20.06.00 10:47--------------------------------
 
- ---------------------------------------------------------------------------*/
-void * SAL_CALL SmModel::operator new( size_t t ) throw()
+void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* pValues)
+    throw( UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException)
 {
-    return SmModelBaseClass::operator new( t );
-}
-/* -----------------------------20.06.00 10:47--------------------------------
+    SmDocShell *pDocSh = static_cast < SmDocShell * > (GetObjectShell());
 
- ---------------------------------------------------------------------------*/
-void SAL_CALL SmModel::operator delete( void * p ) throw()
-{
-    SmModelBaseClass::operator delete( p );
-}
+    if ( NULL == pDocSh )
+        throw UnknownPropertyException();
 
-//XMultiPropertySet
-void SAL_CALL SmModel::setPropertyValues( const Sequence< OUString >& aPropertyNames, const Sequence< Any >& aValues )
-    throw (PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
-{
-    const OUString *pString = aPropertyNames.getConstArray();
-    const Any *pAny = aValues.getConstArray();
-    SfxObjectShell* pObjShell = GetObjectShell();
-    if(!pObjShell)
-        throw uno::RuntimeException();
-    SmFormat& aFormat = ((SmDocShell*)pObjShell)->GetFormat();
+    SmFormat & aFormat = pDocSh->GetFormat();
 
-    for (sal_Int32 i = 0, nLength = aValues.getLength(); i < nLength; i++, pString++, pAny++)
+    for (; *ppEntries; ppEntries++, pValues++ )
     {
-        const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName( _pMap, *pString);
-        if (pMap)
-            _setPropertyValue ( *pAny, pObjShell, aFormat, pMap );
-    }
-    ((SmDocShell*)pObjShell)->SetFormat(aFormat);
-    aFormat.RequestApplyChanges();
-}
-
-Sequence< Any > SAL_CALL SmModel::getPropertyValues( const Sequence< OUString >& aPropertyNames )
-    throw (RuntimeException)
-{
-    sal_Int32 nLength = aPropertyNames.getLength();
-    Sequence < Any > aValues ( nLength );
-    Any *pAny = aValues.getArray();
-    const OUString *pString = aPropertyNames.getConstArray();
-    SfxObjectShell* pObjShell = GetObjectShell();
-    SmFormat& aFormat = ((SmDocShell*)pObjShell)->GetFormat();
-    for (sal_Int32 i = 0; i < nLength; i++, pAny++, pString++ )
-    {
-        const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName( _pMap, *pString);
-        if (pMap)
-            _getPropertyValue ( *pAny, pObjShell, aFormat, pMap);
-    }
-    return aValues;
-}
-void SAL_CALL SmModel::addPropertiesChangeListener( const Sequence< OUString >& aPropertyNames, const Reference< XPropertiesChangeListener >& xListener )
-    throw (RuntimeException)
-{
-}
-void SAL_CALL SmModel::removePropertiesChangeListener( const Reference< XPropertiesChangeListener >& xListener )
-    throw (RuntimeException)
-{
-}
-void SAL_CALL SmModel::firePropertiesChangeEvent( const Sequence< OUString >& aPropertyNames, const Reference< XPropertiesChangeListener >& xListener )
-    throw (RuntimeException)
-{
-}
-
-PropertyState SAL_CALL SmModel::getPropertyState( const OUString& PropertyName )
-        throw (UnknownPropertyException, RuntimeException)
-{
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
-    PropertyState aPropertyState = PropertyState_DIRECT_VALUE;
-
-    SfxObjectShell* pObjShell = GetObjectShell();
-    if(!pObjShell)
-        throw uno::RuntimeException();
-    const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName( _pMap, PropertyName);
-    SmFormat& aFormat = ((SmDocShell*)pObjShell)->GetFormat();
-    if(pMap)
-    {
-        Any aDefault, aValue;
-        _getPropertyDefault ( aDefault, pObjShell, aFormat, pMap );
-        _getPropertyValue ( aValue, pObjShell, aFormat, pMap );
-        if (aDefault == aValue )
-            aPropertyState = PropertyState_DEFAULT_VALUE;
-    }
-    else
-        throw beans::UnknownPropertyException();
-    return aPropertyState;
-}
-Sequence < PropertyValue > SAL_CALL SmModel::getPropertyValueSequence ( const Sequence < OUString > & rPropertyNames)
-{
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
-    sal_Int32 nLength = rPropertyNames.getLength();
-    Sequence < PropertyValue > aPropValues ( nLength );
-
-    const OUString *pString = rPropertyNames.getConstArray();
-    PropertyValue *pValue = aPropValues.getArray();
-
-    SfxObjectShell* pObjShell = GetObjectShell();
-    if(!pObjShell)
-        throw uno::RuntimeException();
-    SmFormat& aFormat = ((SmDocShell*)pObjShell)->GetFormat();
-    for (sal_Int32 i = 0 ; i < nLength; i++, pString++, pValue++)
-    {
-        const SfxItemPropertyMap* pMap = SfxItemPropertyMap::GetByName( _pMap, *pString);
-        if(pMap)
+        switch ( (*ppEntries)->mnHandle )
         {
-            Any aDefault, aValue;
-            _getPropertyDefault ( aDefault, pObjShell, aFormat, pMap );
-            _getPropertyValue ( pValue->Value, pObjShell, aFormat, pMap );
-            if (aDefault == pValue->Value )
-                pValue->State = PropertyState_DEFAULT_VALUE;
-            else
-                pValue->State = PropertyState_DIRECT_VALUE;
-            pValue->Name = *pString;
+            case HANDLE_FORMULA:
+            {
+                OUString aText;
+                *pValues >>= aText;
+                pDocSh->SetText(aText);
+            }
+            break;
+            case HANDLE_FONT_NAME_VARIABLES                :
+            case HANDLE_FONT_NAME_FUNCTIONS                :
+            case HANDLE_FONT_NAME_NUMBERS                  :
+            case HANDLE_FONT_NAME_TEXT                     :
+            case HANDLE_CUSTOM_FONT_NAME_SERIF             :
+            case HANDLE_CUSTOM_FONT_NAME_SANS              :
+            case HANDLE_CUSTOM_FONT_NAME_FIXED             :
+            {
+                OUString aText;
+                *pValues >>= aText;
+                String sFontName = aText;
+                if(!sFontName.Len())
+                    throw IllegalArgumentException();
+                if(aFormat.GetFont((*ppEntries)->mnMemberId).GetName() != sFontName)
+                {
+                    OutputDevice *pDev = pDocSh->GetPrinter();
+                    if (!pDev || pDev->GetDevFontCount() == 0)
+                        pDev = (OutputDevice *) GetpApp()->GetDefaultDevice();
+
+                    FontList aFontList(pDev);
+
+                    sal_uInt16  nCount = aFontList.GetFontNameCount();
+                    sal_Bool bSet = sal_False;
+                    for (sal_uInt16 i = 0;  i < nCount;  i++)
+                    {
+                        const FontInfo& rInfo = aFontList.GetFontName( i );
+                        if(rInfo.GetName() == sFontName)
+                        {
+                            SmFace aSet(rInfo);
+                            const SmFace rOld = aFormat.GetFont((*ppEntries)->mnMemberId);
+                            aSet.SetBorderWidth(rOld.GetBorderWidth());
+                            aSet.SetSize(rOld.GetSize());
+                            aSet.SetAlign(ALIGN_BASELINE);
+                            aFormat.SetFont((*ppEntries)->mnMemberId, aSet);
+                            bSet = sal_True;
+                            break;
+                        }
+                    }
+                    if(!bSet)
+                        throw IllegalArgumentException();
+                }
+            }
+            break;
+            case HANDLE_CUSTOM_FONT_FIXED_POSTURE:
+            case HANDLE_CUSTOM_FONT_SANS_POSTURE :
+            case HANDLE_CUSTOM_FONT_SERIF_POSTURE:
+            case HANDLE_FONT_VARIABLES_POSTURE   :
+            case HANDLE_FONT_FUNCTIONS_POSTURE   :
+            case HANDLE_FONT_NUMBERS_POSTURE     :
+            case HANDLE_FONT_TEXT_POSTURE        :
+            {
+                if((*pValues).getValueType() != ::getBooleanCppuType())
+                    throw IllegalArgumentException();
+                BOOL bVal = *(sal_Bool*)(*pValues).getValue();
+                Font aNewFont(aFormat.GetFont((*ppEntries)->mnMemberId));
+                aNewFont.SetItalic((bVal) ? ITALIC_NORMAL : ITALIC_NONE);
+                aFormat.SetFont((*ppEntries)->mnMemberId, aNewFont);
+            }
+            break;
+            case HANDLE_CUSTOM_FONT_FIXED_WEIGHT :
+            case HANDLE_CUSTOM_FONT_SANS_WEIGHT  :
+            case HANDLE_CUSTOM_FONT_SERIF_WEIGHT :
+            case HANDLE_FONT_VARIABLES_WEIGHT    :
+            case HANDLE_FONT_FUNCTIONS_WEIGHT    :
+            case HANDLE_FONT_NUMBERS_WEIGHT      :
+            case HANDLE_FONT_TEXT_WEIGHT         :
+            {
+                if((*pValues).getValueType() != ::getBooleanCppuType())
+                    throw IllegalArgumentException();
+                BOOL bVal = *(sal_Bool*)(*pValues).getValue();
+                Font aNewFont(aFormat.GetFont((*ppEntries)->mnMemberId));
+                aNewFont.SetWeight((bVal) ? WEIGHT_BOLD : WEIGHT_NORMAL);
+                aFormat.SetFont((*ppEntries)->mnMemberId, aNewFont);
+            }
+            break;
+            case HANDLE_BASE_FONT_HEIGHT                   :
+            {
+                // Point!
+                sal_Int16 nVal = lcl_AnyToINT16(*pValues);
+                if(nVal < 1)
+                    throw IllegalArgumentException();
+                Size aSize = aFormat.GetBaseSize();
+                nVal *= 20;
+                nVal = static_cast < sal_Int16 > ( TWIP_TO_MM100(nVal) );
+                aSize.Height() = nVal;
+                aFormat.SetBaseSize(aSize);
+            }
+            break;
+            case HANDLE_RELATIVE_FONT_HEIGHT_TEXT           :
+            case HANDLE_RELATIVE_FONT_HEIGHT_INDICES       :
+            case HANDLE_RELATIVE_FONT_HEIGHT_FUNCTIONS     :
+            case HANDLE_RELATIVE_FONT_HEIGHT_OPERATORS     :
+            case HANDLE_RELATIVE_FONT_HEIGHT_LIMITS        :
+            {
+                sal_Int16 nVal;
+                *pValues >>= nVal;
+                if(nVal < 1)
+                    throw IllegalArgumentException();
+                aFormat.SetRelSize((*ppEntries)->mnMemberId, nVal);
+            }
+            break;
+
+            case HANDLE_IS_TEXT_MODE                       :
+            {
+                aFormat.SetTextmode(*(sal_Bool*)(*pValues).getValue());
+            }
+            break;
+
+            case HANDLE_ALIGNMENT                          :
+            {
+                // SmHorAlign uses the same values as HorizontalAlignment
+                sal_Int16 nVal;
+                *pValues >>= nVal;
+                if(nVal < 0 || nVal > 2)
+                    throw IllegalArgumentException();
+                aFormat.SetHorAlign((SmHorAlign)nVal);
+            }
+            break;
+
+            case HANDLE_RELATIVE_SPACING                   :
+            case HANDLE_RELATIVE_LINE_SPACING              :
+            case HANDLE_RELATIVE_ROOT_SPACING              :
+            case HANDLE_RELATIVE_INDEX_SUPERSCRIPT         :
+            case HANDLE_RELATIVE_INDEX_SUBSCRIPT           :
+            case HANDLE_RELATIVE_FRACTION_NUMERATOR_HEIGHT :
+            case HANDLE_RELATIVE_FRACTION_DENOMINATOR_DEPTH:
+            case HANDLE_RELATIVE_FRACTION_BAR_EXCESS_LENGTH:
+            case HANDLE_RELATIVE_FRACTION_BAR_LINE_WEIGHT  :
+            case HANDLE_RELATIVE_UPPER_LIMIT_DISTANCE      :
+            case HANDLE_RELATIVE_LOWER_LIMIT_DISTANCE      :
+            case HANDLE_RELATIVE_BRACKET_EXCESS_SIZE       :
+            case HANDLE_RELATIVE_BRACKET_DISTANCE          :
+            case HANDLE_RELATIVE_SCALE_BRACKET_EXCESS_SIZE :
+            case HANDLE_RELATIVE_MATRIX_LINE_SPACING       :
+            case HANDLE_RELATIVE_MATRIX_COLUMN_SPACING     :
+            case HANDLE_RELATIVE_SYMBOL_PRIMARY_HEIGHT     :
+            case HANDLE_RELATIVE_SYMBOL_MINIMUM_HEIGHT     :
+            case HANDLE_RELATIVE_OPERATOR_EXCESS_SIZE      :
+            case HANDLE_RELATIVE_OPERATOR_SPACING          :
+            case HANDLE_LEFT_MARGIN               :
+            case HANDLE_RIGHT_MARGIN              :
+            case HANDLE_TOP_MARGIN                :
+            case HANDLE_BOTTOM_MARGIN             :
+            {
+                sal_Int16 nVal;
+                *pValues >>= nVal;
+                if(nVal < 0)
+                    throw IllegalArgumentException();
+                aFormat.SetDistance((*ppEntries)->mnMemberId, nVal);
+            }
+            break;
+            case HANDLE_IS_SCALE_ALL_BRACKETS              :
+                aFormat.SetScaleNormalBrackets(*(sal_Bool*)(*pValues).getValue());
+            break;
+            case HANDLE_PRINTER_NAME:
+            {
+                SfxPrinter *pPrinter = pDocSh->GetPrinter ( );
+                if (pPrinter)
+                {
+                    OUString sPrinterName;
+                    if (*pValues >>= sPrinterName )
+                    {
+                        SfxPrinter *pNewPrinter = new SfxPrinter ( pPrinter->GetOptions().Clone(), sPrinterName );
+                        if (pNewPrinter->IsKnown())
+                            pDocSh->SetPrinter ( pNewPrinter );
+                        else
+                            delete pNewPrinter;
+                    }
+                    else
+                        throw IllegalArgumentException();
+                }
+            }
+            break;
+            case HANDLE_PRINTER_SETUP:
+            {
+                Sequence < sal_Int8 > aSequence;
+                if ( *pValues >>= aSequence )
+                {
+                    sal_uInt32 nSize = aSequence.getLength();
+                    SvMemoryStream aStream ( aSequence.getArray(), nSize, STREAM_READ );
+                    aStream.Seek ( STREAM_SEEK_TO_BEGIN );
+                    static sal_uInt16 __READONLY_DATA nRange[] =
+                    {
+                        SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
+                        SID_PRINTER_CHANGESTODOC, SID_PRINTER_CHANGESTODOC,
+                        0
+                    };
+                    SfxItemSet *pItemSet = new SfxItemSet( pDocSh->GetPool(), nRange );
+                    SfxPrinter *pPrinter = SfxPrinter::Create ( aStream, pItemSet );
+
+                    pDocSh->SetPrinter( pPrinter );
+                }
+                else
+                    throw IllegalArgumentException();
+            }
+            break;
+            case HANDLE_SYMBOLS:
+            {
+                // this is set
+                Sequence < SymbolDescriptor > aSequence;
+                if ( *pValues >>= aSequence )
+                {
+                    sal_uInt32 nSize = aSequence.getLength();
+                    SmSymSetManager &rManager = pDocSh->GetSymSetManager();
+                    SymbolDescriptor *pDescriptor = aSequence.getArray();
+                    for (sal_uInt32 i = 0; i < nSize ; i++, pDescriptor++)
+                    {
+                        Font aFont;
+                        aFont.SetName ( pDescriptor->sFontName );
+                        aFont.SetCharSet ( static_cast < rtl_TextEncoding > (pDescriptor->nCharSet) );
+                        aFont.SetFamily ( static_cast < FontFamily > (pDescriptor->nFamily ) );
+                        aFont.SetPitch  ( static_cast < FontPitch >  (pDescriptor->nPitch ) );
+                        aFont.SetWeight ( static_cast < FontWeight > (pDescriptor->nWeight ) );
+                        aFont.SetItalic ( static_cast < FontItalic > (pDescriptor->nItalic ) );
+                        SmSym aSymbol ( pDescriptor->sName, aFont, static_cast < sal_Unicode > (pDescriptor->nCharacter),
+                                        pDescriptor->sSymbolSet );
+                        aSymbol.SetExportName ( pDescriptor->sExportName );
+                        rManager.AddReplaceSymbol ( aSymbol );
+                    }
+                }
+                else
+                    throw IllegalArgumentException();
+            }
+            break;
         }
     }
-    return aPropValues;
 }
-Sequence< PropertyState > SAL_CALL SmModel::getPropertyStates( const Sequence< OUString >& aPropertyName )
-        throw (UnknownPropertyException, RuntimeException)
+
+void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValue )
+    throw( UnknownPropertyException, WrappedTargetException )
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
-    sal_Int32 nLength = aPropertyName.getLength();
-    Sequence < PropertyState > aPropStates ( nLength );
+    SmDocShell *pDocSh = static_cast < SmDocShell * > (GetObjectShell());
 
-    const OUString *pString = aPropertyName.getConstArray();
-    PropertyState *pState = aPropStates.getArray();
+    if ( NULL == pDocSh )
+        throw UnknownPropertyException();
 
-    SfxObjectShell* pObjShell = GetObjectShell();
-    if(!pObjShell)
-        throw uno::RuntimeException();
-    SmFormat& aFormat = ((SmDocShell*)pObjShell)->GetFormat();
-    for (sal_Int32 i = 0 ; i < nLength; i++, pString++, pState++)
+    SmFormat & aFormat = pDocSh->GetFormat();
+
+    for (; *ppEntries; ppEntries++, pValue++ )
     {
-        const SfxItemPropertyMap* pMap = SfxItemPropertyMap::GetByName( _pMap, *pString);
-        if(pMap)
+        switch ( (*ppEntries)->mnHandle )
         {
-            Any aDefault, aValue;
-            _getPropertyDefault ( aDefault, pObjShell, aFormat, pMap );
-            _getPropertyValue ( aValue, pObjShell, aFormat, pMap );
-            if (aDefault == aValue )
-                *pState = PropertyState_DEFAULT_VALUE;
-            else
-                *pState = PropertyState_DIRECT_VALUE;
-        }
-    }
-    return aPropStates;
-}
-void SAL_CALL SmModel::setPropertyToDefault( const OUString& PropertyName )
-        throw (UnknownPropertyException, RuntimeException)
-{
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+            case HANDLE_FORMULA:
+                *pValue <<= OUString(pDocSh->GetText());
+            break;
+            case HANDLE_FONT_NAME_VARIABLES                :
+            case HANDLE_FONT_NAME_FUNCTIONS                :
+            case HANDLE_FONT_NAME_NUMBERS                  :
+            case HANDLE_FONT_NAME_TEXT                     :
+            case HANDLE_CUSTOM_FONT_NAME_SERIF             :
+            case HANDLE_CUSTOM_FONT_NAME_SANS              :
+            case HANDLE_CUSTOM_FONT_NAME_FIXED             :
+            {
+                const SmFace &  rFace = aFormat.GetFont((*ppEntries)->mnMemberId);
+                *pValue <<= OUString(rFace.GetName());
+            }
+            break;
+            case HANDLE_CUSTOM_FONT_FIXED_POSTURE:
+            case HANDLE_CUSTOM_FONT_SANS_POSTURE :
+            case HANDLE_CUSTOM_FONT_SERIF_POSTURE:
+            case HANDLE_FONT_VARIABLES_POSTURE   :
+            case HANDLE_FONT_FUNCTIONS_POSTURE   :
+            case HANDLE_FONT_NUMBERS_POSTURE     :
+            case HANDLE_FONT_TEXT_POSTURE        :
+            {
+                const SmFace &  rFace = aFormat.GetFont((*ppEntries)->mnMemberId);
+                BOOL bVal = (rFace.GetItalic() != ITALIC_NONE);
+                (*pValue).setValue(&bVal, *(*ppEntries)->mpType);
+            }
+            break;
+            case HANDLE_CUSTOM_FONT_FIXED_WEIGHT :
+            case HANDLE_CUSTOM_FONT_SANS_WEIGHT  :
+            case HANDLE_CUSTOM_FONT_SERIF_WEIGHT :
+            case HANDLE_FONT_VARIABLES_WEIGHT    :
+            case HANDLE_FONT_FUNCTIONS_WEIGHT    :
+            case HANDLE_FONT_NUMBERS_WEIGHT      :
+            case HANDLE_FONT_TEXT_WEIGHT         :
+            {
+                const SmFace &  rFace = aFormat.GetFont((*ppEntries)->mnMemberId);
+                BOOL bVal = (rFace.GetWeight() == WEIGHT_BOLD);
+                (*pValue).setValue(&bVal, *(*ppEntries)->mpType);
+            }
+            break;
+            case HANDLE_BASE_FONT_HEIGHT                   :
+            {
+                // Point!
+                sal_Int16 nVal = static_cast < sal_Int16 > (aFormat.GetBaseSize().Height());
+                nVal = static_cast < sal_Int16 > (MM100_TO_TWIP(nVal));
+                nVal = (nVal + 10) / 20;
+                *pValue <<= nVal;
+            }
+            break;
+            case HANDLE_RELATIVE_FONT_HEIGHT_TEXT           :
+            case HANDLE_RELATIVE_FONT_HEIGHT_INDICES       :
+            case HANDLE_RELATIVE_FONT_HEIGHT_FUNCTIONS     :
+            case HANDLE_RELATIVE_FONT_HEIGHT_OPERATORS     :
+            case HANDLE_RELATIVE_FONT_HEIGHT_LIMITS        :
+                *pValue <<= (sal_Int16) aFormat.GetRelSize((*ppEntries)->mnMemberId);
+            break;
 
-    uno::Any aRet;
-    SfxObjectShell* pObjShell = GetObjectShell();
-    if(!pObjShell)
-        throw uno::RuntimeException();
-    const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName( _pMap, PropertyName);
-    SmFormat& aFormat = ((SmDocShell*)pObjShell)->GetFormat();
-    if(pMap)
-    {
-        _getPropertyDefault ( aRet, pObjShell, aFormat, pMap );
-        _setPropertyValue ( aRet, pObjShell, aFormat, pMap );
-        ((SmDocShell*)pObjShell)->SetFormat(aFormat);
-        aFormat.RequestApplyChanges();
-    }
-    else
-        throw beans::UnknownPropertyException();
-}
-Any SAL_CALL SmModel::getPropertyDefault( const OUString& aPropertyName )
-        throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
-{
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+            case HANDLE_IS_TEXT_MODE                       :
+            {
+                sal_Bool bVal = aFormat.IsTextmode();
+                (*pValue).setValue(&bVal, ::getBooleanCppuType());
+            }
+            break;
 
-    uno::Any aRet;
-    SfxObjectShell* pObjShell = GetObjectShell();
-    if(!pObjShell)
-        throw uno::RuntimeException();
-    const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName( _pMap, aPropertyName);
-    SmFormat& aFormat = ((SmDocShell*)pObjShell)->GetFormat();
-    if(pMap)
-    {
-        _getPropertyDefault ( aRet, pObjShell, aFormat, pMap );
-    }
-    else
-        throw beans::UnknownPropertyException();
-    return aRet;
-}
-void SmModel::_getPropertyDefault(Any & rValue,  SfxObjectShell *pObjShell,
-                                const SmFormat &rFormat, const SfxItemPropertyMap *pMap)
-        throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
-{
-    switch(pMap->nWID)
-    {
-        case FID_FORMULA:
-        case FID_PRINTER_NAME:
+            case HANDLE_ALIGNMENT                          :
+                // SmHorAlign uses the same values as HorizontalAlignment
+                *pValue <<= (sal_Int16)aFormat.GetHorAlign();
             break;
-        case FID_CUSTOM_FONT_NAME_SANS              :
-            rValue <<= OUString(RTL_CONSTASCII_USTRINGPARAM ( FNTNAME_HELV ) );
+
+            case HANDLE_RELATIVE_SPACING                   :
+            case HANDLE_RELATIVE_LINE_SPACING              :
+            case HANDLE_RELATIVE_ROOT_SPACING              :
+            case HANDLE_RELATIVE_INDEX_SUPERSCRIPT         :
+            case HANDLE_RELATIVE_INDEX_SUBSCRIPT           :
+            case HANDLE_RELATIVE_FRACTION_NUMERATOR_HEIGHT :
+            case HANDLE_RELATIVE_FRACTION_DENOMINATOR_DEPTH:
+            case HANDLE_RELATIVE_FRACTION_BAR_EXCESS_LENGTH:
+            case HANDLE_RELATIVE_FRACTION_BAR_LINE_WEIGHT  :
+            case HANDLE_RELATIVE_UPPER_LIMIT_DISTANCE      :
+            case HANDLE_RELATIVE_LOWER_LIMIT_DISTANCE      :
+            case HANDLE_RELATIVE_BRACKET_EXCESS_SIZE       :
+            case HANDLE_RELATIVE_BRACKET_DISTANCE          :
+            case HANDLE_RELATIVE_SCALE_BRACKET_EXCESS_SIZE :
+            case HANDLE_RELATIVE_MATRIX_LINE_SPACING       :
+            case HANDLE_RELATIVE_MATRIX_COLUMN_SPACING     :
+            case HANDLE_RELATIVE_SYMBOL_PRIMARY_HEIGHT     :
+            case HANDLE_RELATIVE_SYMBOL_MINIMUM_HEIGHT     :
+            case HANDLE_RELATIVE_OPERATOR_EXCESS_SIZE      :
+            case HANDLE_RELATIVE_OPERATOR_SPACING          :
+            case HANDLE_LEFT_MARGIN               :
+            case HANDLE_RIGHT_MARGIN              :
+            case HANDLE_TOP_MARGIN                :
+            case HANDLE_BOTTOM_MARGIN             :
+                *pValue <<= (sal_Int16)aFormat.GetDistance((*ppEntries)->mnMemberId);
             break;
-        case FID_CUSTOM_FONT_NAME_FIXED             :
-            rValue <<= OUString(RTL_CONSTASCII_USTRINGPARAM ( FNTNAME_COUR ) );
+            case HANDLE_IS_SCALE_ALL_BRACKETS              :
+            {
+                sal_Bool bVal = aFormat.IsScaleNormalBrackets();
+                (*pValue).setValue(&bVal, ::getBooleanCppuType());
+            }
             break;
-        case FID_FONT_NAME_VARIABLES                :
-        case FID_FONT_NAME_FUNCTIONS                :
-        case FID_FONT_NAME_NUMBERS                  :
-        case FID_FONT_NAME_TEXT                     :
-        case FID_CUSTOM_FONT_NAME_SERIF             :
-            rValue <<= OUString(RTL_CONSTASCII_USTRINGPARAM ( FNTNAME_TIMES ) );
+            case HANDLE_PRINTER_NAME:
+            {
+                SfxPrinter *pPrinter = pDocSh->GetPrinter ( );
+                *pValue <<= pPrinter ? OUString ( pPrinter->GetName()) : OUString();
+            }
             break;
-        case FID_FONT_VARIABLES_POSTURE   :
-        case FID_FONT_TEXT_POSTURE        :
-        {
-            sal_Bool bVal = sal_False;
-            rValue.setValue ( &bVal, ::getBooleanCppuType());
+            case HANDLE_PRINTER_SETUP:
+            {
+                SfxPrinter *pPrinter = pDocSh->GetPrinter ();
+                if (pPrinter)
+                {
+                    SvMemoryStream aStream;
+                    pPrinter->Store( aStream );
+                    aStream.Seek ( STREAM_SEEK_TO_END );
+                    sal_uInt32 nSize = aStream.Tell();
+                    aStream.Seek ( STREAM_SEEK_TO_BEGIN );
+                    Sequence < sal_Int8 > aSequence ( nSize );
+                    aStream.Read ( aSequence.getArray(), nSize );
+                    *pValue <<= aSequence;
+                }
+            }
+            break;
+            case HANDLE_SYMBOLS:
+            {
+                // this is get
+                SmSymSetManager &rManager = pDocSh->GetSymSetManager();
+                vector < const SmSym * > aVector;
+
+                USHORT nCount = 0;
+                for (USHORT i = 0, nEnd = rManager.GetSymbolCount(); i < nEnd; i++)
+                {
+                    const SmSym * pSymbol = rManager.GetSymbol ( i );
+                    if (!pSymbol->IsPredefined () )
+                    {
+                        aVector.push_back ( pSymbol );
+                        nCount++;
+                    }
+                }
+                Sequence < SymbolDescriptor > aSequence ( nCount );
+                SymbolDescriptor * pDescriptor = aSequence.getArray();
+
+                vector <const SmSym * >::const_iterator aIter = aVector.begin(), aEnd = aVector.end();
+                for(; aIter != aEnd; pDescriptor++, aIter++)
+                {
+                    pDescriptor->sName = (*aIter)->GetName();
+                    pDescriptor->sExportName = (*aIter)->GetExportName();
+                    pDescriptor->sSymbolSet = (*aIter)->GetSetName();
+                    pDescriptor->nCharacter = static_cast < sal_Int32 > ((*aIter)->GetCharacter());
+
+                    Font rFont = (*aIter)->GetFace();
+                    pDescriptor->sFontName = rFont.GetName();
+                    pDescriptor->nCharSet  = rFont.GetCharSet();
+                    pDescriptor->nFamily   = rFont.GetFamily();
+                    pDescriptor->nPitch    = rFont.GetPitch();
+                    pDescriptor->nWeight   = rFont.GetWeight();
+                    pDescriptor->nItalic   = rFont.GetItalic();
+                }
+                *pValue <<= aSequence;
+            }
+            break;
         }
-        break;
-        case FID_FONT_FUNCTIONS_POSTURE   :
-        case FID_FONT_NUMBERS_POSTURE     :
-        case FID_FONT_VARIABLES_WEIGHT    :
-        case FID_FONT_FUNCTIONS_WEIGHT    :
-        case FID_FONT_NUMBERS_WEIGHT      :
-        case FID_FONT_TEXT_WEIGHT         :
-        case FID_IS_TEXT_MODE                       :
-        case FID_IS_SCALE_ALL_BRACKETS              :
-        case FID_CUSTOM_FONT_FIXED_POSTURE:
-        case FID_CUSTOM_FONT_SANS_POSTURE :
-        case FID_CUSTOM_FONT_SERIF_POSTURE:
-        case FID_CUSTOM_FONT_FIXED_WEIGHT :
-        case FID_CUSTOM_FONT_SANS_WEIGHT  :
-        case FID_CUSTOM_FONT_SERIF_WEIGHT :
-        {
-            sal_Bool bVal = sal_False;
-            rValue.setValue ( &bVal, ::getBooleanCppuType());
-        }
-        break;
-        case FID_RELATIVE_FONT_HEIGHT_TEXT          :
-        case FID_RELATIVE_FONT_HEIGHT_FUNCTIONS     :
-        case FID_RELATIVE_FONT_HEIGHT_OPERATORS     :
-        case FID_LEFT_MARGIN               :
-        case FID_RIGHT_MARGIN              :
-            rValue <<= static_cast < sal_Int16 > ( 100 );
-        break;
-        case FID_RELATIVE_FONT_HEIGHT_INDICES       :
-        case FID_RELATIVE_FONT_HEIGHT_LIMITS        :
-            rValue <<= static_cast < sal_Int16 > ( 60 );
-        break;
-        case FID_ALIGNMENT                          :
-            rValue <<= static_cast < sal_Int16 > ( AlignCenter );
-        break;
-        case FID_RELATIVE_SPACING                   :
-        case FID_RELATIVE_FRACTION_BAR_EXCESS_LENGTH:
-            rValue <<= static_cast < sal_Int16 > ( 10 );
-        break;
-        case FID_RELATIVE_LINE_SPACING              :
-        case FID_RELATIVE_FRACTION_BAR_LINE_WEIGHT  :
-        case FID_RELATIVE_BRACKET_EXCESS_SIZE       :
-        case FID_RELATIVE_BRACKET_DISTANCE          :
-            rValue <<= static_cast < sal_Int16 > ( 5 );
-        break;
-        case FID_RELATIVE_ROOT_SPACING              :
-        case FID_RELATIVE_FRACTION_NUMERATOR_HEIGHT :
-        case FID_RELATIVE_FRACTION_DENOMINATOR_DEPTH:
-        case FID_RELATIVE_UPPER_LIMIT_DISTANCE      :
-        case FID_RELATIVE_LOWER_LIMIT_DISTANCE      :
-        case FID_RELATIVE_SCALE_BRACKET_EXCESS_SIZE :
-        case FID_RELATIVE_SYMBOL_PRIMARY_HEIGHT     :
-        case FID_RELATIVE_SYMBOL_MINIMUM_HEIGHT     :
-        case FID_TOP_MARGIN                :
-        case FID_BOTTOM_MARGIN             :
-            rValue <<= static_cast < sal_Int16 > ( 0 );
-        break;
-        case FID_RELATIVE_INDEX_SUPERSCRIPT         :
-        case FID_RELATIVE_INDEX_SUBSCRIPT           :
-        case FID_RELATIVE_OPERATOR_SPACING          :
-            rValue <<= static_cast < sal_Int16 > ( 20 );
-        break;
-        case FID_RELATIVE_MATRIX_LINE_SPACING       :
-            rValue <<= static_cast < sal_Int16 > ( 3 );
-        break;
-        case FID_RELATIVE_MATRIX_COLUMN_SPACING     :
-            rValue <<= static_cast < sal_Int16 > ( 30 );
-        break;
-        case FID_RELATIVE_OPERATOR_EXCESS_SIZE      :
-            rValue <<= static_cast < sal_Int16 > ( 50 );
-        break;
-        case FID_BASE_FONT_HEIGHT                   :
-            rValue <<= static_cast < sal_Int16 > ( 12 );
-        break;
     }
 }
