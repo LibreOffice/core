@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: cd $ $Date: 2002-08-01 13:45:27 $
+ *  last change: $Author: os $ $Date: 2002-09-26 13:31:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,7 @@ class SwDocShell: public SfxObjectShell, public SfxInPlaceObject,
                                             // dann ist Doc voll. geladen
 
     SvPersistRef            xOLEChildList;  // fuers RemoveOLEObjects
+    sal_Int16               nUpdateDocMode; // contains the com::sun::star::document::UpdateDocMode
 
     // Methoden fuer den Zugriff aufs Doc
     void                    AddLink();
@@ -282,6 +283,7 @@ public:
 
     // embedded alle lokalen Links (Bereiche/Grafiken)
     BOOL EmbedAllLinks();
+    sal_Int16   GetUpdateDocMode() const {return nUpdateDocMode;}
 
     //Activate wait cursor for all windows of this document
     //Optionally all dispatcher could be Locked
