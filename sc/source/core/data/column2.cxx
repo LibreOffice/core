@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column2.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: nn $ $Date: 2002-03-11 14:01:15 $
+ *  last change: $Author: sab $ $Date: 2002-03-20 09:27:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -866,7 +866,7 @@ long ScColumn::GetNeededSize( USHORT nRow, OutputDevice* pDev,
             {
                 const EditTextObject* pData;
                 ((ScEditCell*)pCell)->GetData(pData);
-                pEngine->SetTextNewDefaults(*pData, *pSet);
+                pEngine->SetTextNewDefaults(*pData, pSet);
             }
             else
             {
@@ -878,7 +878,7 @@ long ScColumn::GetNeededSize( USHORT nRow, OutputDevice* pDev,
                                             *pFormatter,
                                             TRUE, rOptions.bFormula, ftCheck );
                 if (aString.Len())
-                    pEngine->SetTextNewDefaults(aString, *pSet);
+                    pEngine->SetTextNewDefaults(aString, pSet);
                 else
                     pEngine->SetDefaults(pSet);
             }
