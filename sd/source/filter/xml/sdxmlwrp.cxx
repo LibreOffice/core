@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlwrp.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: cl $ $Date: 2001-08-24 13:05:27 $
+ *  last change: $Author: ka $ $Date: 2001-09-10 16:14:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -570,9 +570,14 @@ sal_Bool SdXMLFilter::Import()
     }
     else
     {
+        // KA=>CL: seems to be a strange kind of code?!
         SvStream* pStrm = mrMedium.GetInStream();
-        pStrm->SetBufferSize( 16*1024 );
-        xInputStream = new utl::OInputStreamWrapper( *pStrm );
+
+        if( pStrm )
+        {
+            pStrm->SetBufferSize( 16*1024 );
+            xInputStream = new utl::OInputStreamWrapper( *pStrm );
+        }
     }
 
     if( 0 == nRet )
