@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxlngppc4.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: hr $ $Date: 2005-02-11 15:29:50 $
+#   last change: $Author: hr $ $Date: 2005-02-11 17:56:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,6 +73,11 @@ JAVAFLAGSDEBUG=-g
 
 # _PTHREADS is needed for the stl
 CDEFS+=-DGLIBC=2 -D_PTHREADS -D_REENTRANT -DNEW_SOLAR -D_USE_NAMESPACE=1 -DSTLPORT_VERSION=400 -DPOWERPC -DPPC
+
+# enable visibility define in "sal/types.h"
+.IF "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
+CDEFS += -DHAVE_GCC_VISIBILITY_FEATURE
+.ENDIF # "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
 
 # this is a platform with JAVA support
 .IF "$(SOLAR_JAVA)"!=""
