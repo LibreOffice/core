@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XMultiServiceFactory.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:10:56 $
+ *  last change:$Date: 2003-09-08 10:45:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,12 +58,12 @@
  *
  *
  ************************************************************************/
-
 package ifc.lang;
 
-import com.sun.star.lang.XMultiServiceFactory;
 import lib.MultiMethodTest;
-import lib.Status;
+
+import com.sun.star.lang.XMultiServiceFactory;
+
 
 /**
 * Testing <code>com.sun.star.lang.XMultiServiceFactory</code>
@@ -104,7 +104,6 @@ import lib.Status;
 * @see com.sun.star.lang.XMultiServiceFactory
 */
 public class _XMultiServiceFactory extends MultiMethodTest {
-
     public XMultiServiceFactory oObj = null;
     public String[] services = null;
 
@@ -114,7 +113,12 @@ public class _XMultiServiceFactory extends MultiMethodTest {
     */
     public void _getAvailableServiceNames() {
         services = oObj.getAvailableServiceNames();
-        tRes.tested("getAvailableServiceNames()",services != null);
+
+        for (int i = 0; i < services.length; i++) {
+            log.println("Service" + i + ": " + services[i]);
+        }
+
+        tRes.tested("getAvailableServiceNames()", services != null);
     }
 
     /**
@@ -135,22 +139,41 @@ public class _XMultiServiceFactory extends MultiMethodTest {
 
         if (services.length == 0) {
             services = (String[]) tEnv.getObjRelation("XMSF.serviceNames");
+
             if (services == null) {
-                log.println("No service to create.") ;
+                log.println("No service to create.");
                 tRes.tested("createInstance()", true);
+
                 return;
             }
         }
 
-        try {
-            log.println("Creating Instance: " + services[0]);
-            Object Inst = oObj.createInstance(services[0]);
-            tRes.tested("createInstance()",Inst != null);
-        } catch (com.sun.star.uno.Exception ex) {
-            log.println("Exception occured during createInstance()");
-            ex.printStackTrace(log);
-            tRes.tested("createInstance()",false);
+        String needArgs = (String) tEnv.getObjRelation("needArgs");
+
+        if (needArgs != null) {
+            log.println("The " + needArgs +
+                        " doesn't support createInstance without arguments");
+            tRes.tested("createInstance()", true);
+
+            return;
         }
+
+        boolean res = true;
+
+        for (int k = 0; k < services.length; k++) {
+            try {
+                log.println("Creating Instance: " + services[k]);
+
+                Object Inst = oObj.createInstance(services[k]);
+                res = (Inst != null);
+            } catch (com.sun.star.uno.Exception ex) {
+                log.println("Exception occured during createInstance()");
+                ex.printStackTrace(log);
+                res = false;
+            }
+        }
+
+        tRes.tested("createInstance()", res);
     }
 
     /**
@@ -170,30 +193,39 @@ public class _XMultiServiceFactory extends MultiMethodTest {
     public void _createInstanceWithArguments() {
         requiredMethod("getAvailableServiceNames()");
 
-        Object[][] args = (Object[][])
-            tEnv.getObjRelation("XMSF.Args");
-        String[] sNames = (String[])
-            tEnv.getObjRelation("XMSF.serviceNamesWithArgs");
+        Object[][] args = (Object[][]) tEnv.getObjRelation("XMSF.Args");
+        String[] sNames = (String[]) tEnv.getObjRelation(
+                                    "XMSF.serviceNamesWithArgs");
 
         if (args == null) {
             log.println("Relation 'XMSF.serviceNamesWithArgs' not found");
             log.println("The component assumed not support " +
-                "createInstanceWithArguments()");
-            tRes.tested("createInstanceWithArguments()",true);
+                        "createInstanceWithArguments()");
+            tRes.tested("createInstanceWithArguments()", true);
         } else {
-            if (sNames == null) sNames = services;
-            log.println("Creating service '" + sNames[0] + "' with arguments");
-            try {
-                Object Inst = oObj.createInstanceWithArguments
-                    (sNames[0], args[0]);
-                tRes.tested("createInstanceWithArguments()",Inst != null);
-            } catch (com.sun.star.uno.Exception ex) {
-                log.println("Exception occured during createInstanceWithArguments()");
-                ex.printStackTrace(log);
-                tRes.tested("createInstanceWithArguments()",false);
+            if (sNames == null) {
+                sNames = services;
             }
+
+            boolean res = true;
+
+            for (int k = 0; k < sNames.length; k++) {
+                log.println("Creating service '" + sNames[k] +
+                            "' with arguments");
+
+                try {
+                    Object Inst = oObj.createInstanceWithArguments(sNames[k],
+                                                                   args[k]);
+                    res &= (Inst != null);
+                } catch (com.sun.star.uno.Exception ex) {
+                    log.println(
+                            "Exception occured during createInstanceWithArguments()");
+                    ex.printStackTrace(log);
+                    res = false;
+                }
+            }
+
+            tRes.tested("createInstanceWithArguments()", res);
         }
     }
-}  // finish class _XMultiServiceFactory
-
-
+} // finish class _XMultiServiceFactory

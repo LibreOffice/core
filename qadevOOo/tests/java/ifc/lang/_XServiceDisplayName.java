@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XServiceDisplayName.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:10:56 $
+ *  last change:$Date: 2003-09-08 10:45:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,10 @@
 
 package ifc.lang;
 
+import lib.MultiMethodTest;
+
 import com.sun.star.lang.Locale;
 import com.sun.star.lang.XServiceDisplayName;
-import lib.MultiMethodTest;
 
 /**
 * Testing <code>com.sun.star.lang.XServiceDisplayName</code>
