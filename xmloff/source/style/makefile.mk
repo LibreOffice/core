@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.28 $
+#   $Revision: 1.29 $
 #
-#   last change: $Author: obo $ $Date: 2004-11-29 13:02:53 $
+#   last change: $Author: rt $ $Date: 2005-01-11 14:28:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,6 +73,7 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
 .INCLUDE :  sv.mk
+.INCLUDE: $(PRJ)$/util$/makefile.pmk
 CDEFS += -DCONV_STAR_FONTS
 
 # --- Files --------------------------------------------------------
