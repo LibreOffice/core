@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DrawPage.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:09:18 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 21:24:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@
 
     @see PresentationDocument
  */
-service DrawPage
+published service DrawPage
 {
     service com::sun::star::drawing::DrawPage;
 
