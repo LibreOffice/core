@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thread.c,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-14 09:50:26 $
+ *  last change: $Author: obr $ $Date: 2001-04-11 11:25:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,9 @@ static HRESULT WINAPI osl_CoInitializeEx(LPVOID pvReserved, DWORD dwCoInit);
 typedef HRESULT (WINAPI *CoInitializeEx_PROC)(LPVOID pvReserved, DWORD dwCoInit);
 
 CoInitializeEx_PROC _CoInitializeEx = osl_CoInitializeEx;
+
+/* implemented in localenc.c */
+rtl_TextEncoding GetTextEncodingFromCodePage( UINT );
 
 /*****************************************************************************/
 /* oslWorkerWrapperFunction */
@@ -748,58 +751,7 @@ rtl_TextEncoding SAL_CALL osl_getThreadTextEncoding()
 
     if ( !gotACP )
     {
-        switch ( GetACP() )
-        {
-            case 1200:
-                _encoding = RTL_TEXTENCODING_UNICODE;
-                break;
-            case 1252:
-                _encoding = RTL_TEXTENCODING_MS_1252;
-                break;
-            case 1250:
-                _encoding = RTL_TEXTENCODING_MS_1250;
-                break;
-            case 1251:
-                _encoding = RTL_TEXTENCODING_MS_1251;
-                break;
-            case 1253:
-                _encoding = RTL_TEXTENCODING_MS_1253;
-                break;
-            case 1254:
-                _encoding = RTL_TEXTENCODING_MS_1254;
-                break;
-            case 1255:
-                _encoding = RTL_TEXTENCODING_MS_1255;
-                break;
-            case 1256:
-                _encoding = RTL_TEXTENCODING_MS_1256;
-                break;
-            case 1257:
-                _encoding = RTL_TEXTENCODING_MS_1257;
-                break;
-            case 1258:
-                _encoding = RTL_TEXTENCODING_MS_1258;
-                break;
-            case 874:
-                _encoding = RTL_TEXTENCODING_MS_874;
-                break;
-            case 932:
-                _encoding = RTL_TEXTENCODING_MS_932;
-                break;
-            case 936:
-                _encoding = RTL_TEXTENCODING_MS_936;
-                break;
-            case 949:
-                _encoding = RTL_TEXTENCODING_MS_949;
-                break;
-            case 950:
-                _encoding = RTL_TEXTENCODING_MS_950;
-                break;
-            default:
-                _encoding = RTL_TEXTENCODING_DONTKNOW;
-                break;
-        }
-
+        _encoding = GetTextEncodingFromCodePage( GetACP() );
         TlsSetValue( g_dwTLSTextEncodingIndex, (LPVOID)MAKELONG( _encoding, TRUE ) );
     }
 
