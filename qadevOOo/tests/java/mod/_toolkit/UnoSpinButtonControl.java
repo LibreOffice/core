@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoSpinButtonControl.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-12-11 12:47:19 $
+ *  last change:$Date: 2004-01-05 21:00:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,15 +100,7 @@ public class UnoSpinButtonControl extends TestCase {
     protected void cleanup(TestParameters tParam, PrintWriter log) {
         log.println("    disposing xTextDoc ");
 
-        try {
-            XCloseable closer = (XCloseable) UnoRuntime.queryInterface(
-                                        XCloseable.class, xTextDoc);
-            closer.close(true);
-        } catch (com.sun.star.util.CloseVetoException e) {
-            log.println("couldn't close document");
-        } catch (com.sun.star.lang.DisposedException e) {
-            log.println("couldn't close document");
-        }
+        util.DesktopTools.closeDoc(xTextDoc);
     }
 
     protected TestEnvironment createTestEnvironment(TestParameters Param,
