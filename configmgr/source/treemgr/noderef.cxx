@@ -2,9 +2,9 @@
  *
  *  $RCSfile: noderef.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-16 18:01:09 $
+ *  last change: $Author: fs $ $Date: 2000-11-29 12:49:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -246,7 +246,10 @@ bool NodeRef::isValid() const
 bool NodeRef::hasChildren() const
 {
     OSL_PRECOND( isValid(), "ERROR: Configuration: NodeRef operation requires valid node" );
-    if (m_nDepth == 0) CFG_TRACE_WARNING( "WARNING: Configuration: Querying node beyond available depth" );
+    if (m_nDepth == 0)
+    {
+        CFG_TRACE_WARNING( "configuration: Querying node beyond available depth" );
+    }
 
     return m_pImpl && m_pImpl->isSetNode() &&
             !m_pImpl->setImpl().isEmpty();
@@ -256,7 +259,10 @@ bool NodeRef::hasChildren() const
 bool NodeRef::hasChild(Name const& aName) const
 {
     OSL_PRECOND( isValid(), "ERROR: Configuration: NodeRef operation requires valid node" );
-    if (m_nDepth == 0) CFG_TRACE_WARNING( "WARNING: Configuration: Querying node beyond available depth" );
+    if (m_nDepth == 0)
+    {
+        CFG_TRACE_WARNING( "configuration: Querying node beyond available depth" );
+    }
 
     return  m_pImpl && m_pImpl->isSetNode() &&
             m_pImpl->setImpl().findElement(aName).isValid();
@@ -266,7 +272,10 @@ bool NodeRef::hasChild(Name const& aName) const
 NodeRef NodeRef::getChild(Name const& aName, Tree& rTree) const
 {
     OSL_PRECOND( isValid(), "ERROR: Configuration: NodeRef operation requires valid node" );
-    if (m_nDepth == 0) CFG_TRACE_WARNING( "WARNING: Configuration: Requesting node beyond available depth" );
+    if (m_nDepth == 0)
+    {
+        CFG_TRACE_WARNING( "configuration: Requesting node beyond available depth" );
+    }
 
     if (m_pImpl && m_pImpl->isSetNode())
     {
@@ -401,7 +410,10 @@ bool Tree::hasChildren(NodeRef const& aNode) const
 {
     OSL_PRECOND( m_pImpl, "ERROR: Configuration: Tree operation requires a valid Tree");
     OSL_PRECOND( isValidNode(aNode), "ERROR: Configuration: NodeRef does not match Tree");
-    if (aNode.m_nDepth == 0) CFG_TRACE_WARNING( "WARNING: Configuration: Querying node beyond available depth" );
+    if (aNode.m_nDepth == 0)
+    {
+        CFG_TRACE_WARNING( "configuration: Querying node beyond available depth" );
+    }
 
     if (this->isEmpty()) return false;
     if (!aNode.isValid()) return false;
@@ -414,7 +426,10 @@ bool Tree::hasChild(NodeRef const& aNode, Name const& aName) const
 {
     OSL_PRECOND( m_pImpl, "ERROR: Configuration: Tree operation requires a valid Tree");
     OSL_PRECOND( isValidNode(aNode), "ERROR: Configuration: NodeRef does not match Tree");
-    if (aNode.m_nDepth == 0) CFG_TRACE_WARNING( "WARNING: Configuration: Querying node beyond available depth" );
+    if (aNode.m_nDepth == 0)
+    {
+        CFG_TRACE_WARNING( "configuration: Querying node beyond available depth" );
+    }
 
     if (this->isEmpty()) return false;
     if (!aNode.isValid()) return false;
@@ -428,7 +443,10 @@ NodeRef Tree::getChild(NodeRef const& aNode, Name const& aName) const
     OSL_PRECOND( !isEmpty(), "ERROR: Configuration: Tree operation requires a valid Tree");
     OSL_PRECOND( isValidNode(aNode), "ERROR: Configuration: NodeRef does not match Tree");
     // OSL_PRECOND(this->hasChild(aNode,aName),"ERROR: Configuration: Invalid node request.");
-    if (aNode.m_nDepth == 0) CFG_TRACE_WARNING( "WARNING: Configuration: Requesting node beyond available depth" );
+    if (aNode.m_nDepth == 0)
+    {
+        CFG_TRACE_WARNING( "configuration: Requesting node beyond available depth" );
+    }
 
     NodeOffset nOffset  = m_pImpl ? m_pImpl->findChild(aNode.m_nPos, aName) : 0;
 
@@ -615,7 +633,10 @@ NodeVisitor::Result Tree::dispatchToChildren(NodeRef const& aNode, NodeVisitor& 
 {
     OSL_PRECOND( !isEmpty(), "ERROR: Configuration: Tree operation requires a valid Tree");
     OSL_PRECOND(  isValidNode(aNode), "ERROR: Configuration: NodeRef does not match Tree");
-    if (aNode.m_nDepth == 0) CFG_TRACE_WARNING("WARNING: Configuration: Dispatching Visitor to node beyond available depth" );
+    if (aNode.m_nDepth == 0)
+    {
+        CFG_TRACE_WARNING("configuration: Dispatching Visitor to node beyond available depth" );
+    }
 
     typedef NodeVisitor::Result Result;
     Result aRet = NodeVisitor::CONTINUE;
