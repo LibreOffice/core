@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rubydialog.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2001-06-01 10:08:58 $
+ *  last change: $Author: os $ $Date: 2001-06-19 10:32:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -358,6 +358,8 @@ void SvxRubyDialog::SetText(sal_Int32 nPos, Edit& rLeft, Edit& rRight)
                 pProps[nProp].Value >>= sRight;
         }
     }
+    else if(!nPos)
+        bEnable = TRUE;
     rLeft.Enable(bEnable);
     rRight.Enable(bEnable);
     rLeft.SetText(sLeft);
@@ -439,6 +441,12 @@ void SvxRubyDialog::Update()
             }
         }
     }
+    if(!nLen)
+    {
+        //enable selection if the ruby list is empty
+        nAdjust = 0;
+        nPosition = 0;
+    }
     if(nAdjust > -1)
         aAdjustLB.SelectEntryPos(nAdjust);
     else
@@ -496,6 +504,13 @@ IMPL_LINK(SvxRubyDialog, ScrollHdl_Impl, ScrollBar*, pScroll)
  ---------------------------------------------------------------------------*/
 IMPL_LINK(SvxRubyDialog, ApplyHdl_Impl, PushButton*, EMPTYARG)
 {
+    if(!pImpl->aRubyValues.getLength())
+    {
+        AssertOneEntry();
+        PositionHdl_Impl(&aPositionLB);
+        AdjustHdl_Impl(&aAdjustLB);
+        CharStyleHdl_Impl(&aCharStyleLB);
+    }
     GetText();
     if(IsModified() && pImpl->xSelection.is())
         pImpl->xSelection->setRubyList(pImpl->aRubyValues, aAutoDetectionCB.IsChecked());
@@ -541,6 +556,7 @@ IMPL_LINK(SvxRubyDialog, AutomaticHdl_Impl, CheckBox*, pBox)
  ---------------------------------------------------------------------------*/
 IMPL_LINK(SvxRubyDialog, AdjustHdl_Impl, ListBox*, pBox)
 {
+    AssertOneEntry();
     sal_Int16 nAdjust = pBox->GetSelectEntryPos();
     for(sal_Int32 nRuby = 0; nRuby < pImpl->aRubyValues.getLength(); nRuby++)
     {
@@ -561,6 +577,7 @@ IMPL_LINK(SvxRubyDialog, AdjustHdl_Impl, ListBox*, pBox)
  ---------------------------------------------------------------------------*/
 IMPL_LINK(SvxRubyDialog, PositionHdl_Impl, ListBox*, pBox)
 {
+    AssertOneEntry();
     sal_Bool bAbove = !pBox->GetSelectEntryPos();
     const Type& rType = ::getBooleanCppuType();
     for(sal_Int32 nRuby = 0; nRuby < pImpl->aRubyValues.getLength(); nRuby++)
@@ -582,8 +599,9 @@ IMPL_LINK(SvxRubyDialog, PositionHdl_Impl, ListBox*, pBox)
  ---------------------------------------------------------------------------*/
 IMPL_LINK(SvxRubyDialog, CharStyleHdl_Impl, ListBox*, pBox)
 {
+    AssertOneEntry();
     OUString sStyleName;
-    if(aCharStyleLB.GetSelectEntryPos())
+    if(LISTBOX_ENTRY_NOTFOUND != aCharStyleLB.GetSelectEntryPos())
         sStyleName = *(OUString*) aCharStyleLB.GetEntryData(aCharStyleLB.GetSelectEntryPos());
     for(sal_Int32 nRuby = 0; nRuby < pImpl->aRubyValues.getLength(); nRuby++)
     {
@@ -616,7 +634,25 @@ IMPL_LINK(SvxRubyDialog, EditModifyHdl_Impl, Edit*, pEdit)
     aPreviewWin.Invalidate();
     return 0;
 }
+/* -----------------------------19.06.01 11:33--------------------------------
 
+ ---------------------------------------------------------------------------*/
+void SvxRubyDialog::AssertOneEntry()
+{
+    //create one entry
+    if(!pImpl->aRubyValues.getLength())
+    {
+        pImpl->aRubyValues.realloc(1);
+        Sequence<PropertyValue>& rValues = pImpl->aRubyValues.getArray()[0];
+        rValues.realloc(5);
+        PropertyValue* pValues = rValues.getArray();
+        pValues[0].Name = C2U(cRubyBaseText);
+        pValues[1].Name = C2U(cRubyText);
+        pValues[2].Name = C2U(cRubyAdjust);
+        pValues[3].Name = C2U(cRubyIsAbove);
+        pValues[4].Name = C2U(cRubyCharStyleName);
+    }
+}
 /* -----------------------------29.01.01 15:44--------------------------------
 
  ---------------------------------------------------------------------------*/

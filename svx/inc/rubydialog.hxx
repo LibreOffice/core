@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rubydialog.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-06-01 10:10:39 $
+ *  last change: $Author: os $ $Date: 2001-06-19 10:30:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,6 +175,7 @@ class SvxRubyDialog : public SfxModelessDialog
     void                SetText(sal_Int32 nPos, Edit& rLeft, Edit& rRight);
     void                GetText();
     void                ClearCharStyleList();
+    void                AssertOneEntry();
 
     void                Update();
     virtual BOOL        Close();
