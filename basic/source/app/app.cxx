@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: gh $ $Date: 2002-03-18 15:01:56 $
+ *  last change: $Author: gh $ $Date: 2002-03-18 15:15:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -605,11 +605,13 @@ TYPEINIT1(TTExecutionStatusHint, SfxSimpleHint);
 
 BasicFrame::BasicFrame() : WorkWindow( NULL,
     WinBits( WB_APP | WB_MOVEABLE | WB_SIZEABLE | WB_CLOSEABLE ) )
-, bIsAutoRun ( FALSE )
+, bIsAutoRun( FALSE )
 , pDisplayHidDlg( NULL )
 , pBasic( NULL )
 , pWork( NULL )
 , pExecutionStatus( NULL )
+, bAutoReload( FALSE )
+, bAutoSave( TRUE )
 {
 
     Application::SetDefDialogParent( this );
@@ -734,8 +736,11 @@ void BasicFrame::LoadIniFile()
     Config aConf(Config::GetConfigName( Config::GetDefDirectory(), CUniString("testtool") ));
     aConf.SetGroup("Misc");
 
-    ByteString aTemp = aConf.ReadKey( "AutoReload", "0" );
+    ByteString aTemp;
+    aTemp = aConf.ReadKey( "AutoReload", "0" );
     bAutoReload = ( aTemp.CompareTo("1") == COMPARE_EQUAL );
+    aTemp = aConf.ReadKey( "AutoSave", "0" );
+    bAutoSave = ( aTemp.CompareTo("1") == COMPARE_EQUAL );
 
     if ( pBasic )
         pBasic->LoadIniFile();
@@ -1395,7 +1400,7 @@ long BasicFrame::Command( short nID, BOOL bChecked )
                     bInBreak = FALSE;
                 else
                 {
-                    if( !SaveAll() ) break;
+                    if( IsAutoSave() && !SaveAll() ) break;
                     if( !CompileAll() ) break;
                     String aString;
                     pStatus->Message( aString );

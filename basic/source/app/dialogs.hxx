@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialogs.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tbe $ $Date: 2001-07-31 15:12:49 $
+ *  last change: $Author: gh $ $Date: 2002-03-18 15:15:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,6 +181,7 @@ class SpecialOptions : public TabPage
     FixedText aTimeoutText;
     TimeField aServerTimeout;
     CheckBox aAutoReload;
+    CheckBox aAutoSave;
 
 public:
     SpecialOptions( Window* );

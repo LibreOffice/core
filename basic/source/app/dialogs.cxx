@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialogs.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: gh $ $Date: 2001-10-15 08:19:59 $
+ *  last change: $Author: gh $ $Date: 2002-03-18 15:15:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -317,6 +317,7 @@ SpecialOptions::SpecialOptions( Window* pParent )
 , aTimeoutText( this, ResId(TIMEOUT_TEXT) )
 , aServerTimeout( this, ResId(SERVER_TIMEOUT) )
 , aAutoReload( this, ResId(CB_AUTORELOAD) )
+, aAutoSave( this, ResId(CB_AUTOSAVE) )
 {
     FreeResource();
 
@@ -327,6 +328,8 @@ SpecialOptions::SpecialOptions( Window* pParent )
 
     aTemp = aConf.ReadKey( "AutoReload", "0" );
     aAutoReload.Check( aTemp.CompareTo("1") == COMPARE_EQUAL );
+    aTemp = aConf.ReadKey( "AutoSave", "0" );
+    aAutoSave.Check( aTemp.CompareTo("1") == COMPARE_EQUAL );
 }
 
 
@@ -340,7 +343,9 @@ void SpecialOptions::Save()
     aConf.SetGroup("Misc");
     aConf.WriteKey( "ServerTimeout", ByteString::CreateFromInt32( aServerTimeout.GetTime().GetTime() ) );
     aConf.WriteKey( "AutoReload", aAutoReload.IsChecked()?"1":"0" );
+    aConf.WriteKey( "AutoSave", aAutoSave.IsChecked()?"1":"0" );
 
+    aConf.Flush();
     ((BasicApp*)GetpApp())->LoadIniFile();
 }
 

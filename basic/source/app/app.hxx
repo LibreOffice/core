@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: gh $ $Date: 2002-03-18 15:01:56 $
+ *  last change: $Author: gh $ $Date: 2002-03-18 15:15:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,6 +149,7 @@ virtual void Move();
 
     Timer aCheckFiles;      // Prüfen der Dateien auf Änderungen
     BOOL bAutoReload;
+    BOOL bAutoSave;
     DECL_LINK( CheckAllFiles, Timer* );
 
     MyBasicRef  pBasic;             // BASIC-Engine
@@ -211,6 +212,7 @@ public:
     void SetEditVar( SbxVariable *pVar ){ pEditVar = pVar;}
     SbxVariable* GetEditVar(){ return pEditVar;}
     BOOL IsAutoReload() { return bAutoReload; }
+    BOOL IsAutoSave() { return bAutoSave; }
     void LoadIniFile();
 
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
