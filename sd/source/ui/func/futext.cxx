@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futext.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:08:34 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 13:49:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,10 +254,8 @@ FuText::FuText (
 
 FuText::~FuText()
 {
-    if (pView->EndTextEdit() == SDRENDTEXTEDIT_DELETED)
-    {
+    if(pView->EndTextEdit(FALSE,this) == SDRENDTEXTEDIT_DELETED)
         pTextObj = NULL;
-    }
 
     // die RequestHandler der benutzten Outliner zuruecksetzen auf den
     // Handler am Dokument
