@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inetmime.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:04:27 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 18:03:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -900,7 +900,8 @@ bool INetMIME::scanUnsigned(const sal_Char *& rBegin, const sal_Char * pEnd,
                             bool bLeadingZeroes, sal_uInt32 & rValue)
 {
     sal_uInt64 nTheValue = 0;
-    for (const sal_Char * p = rBegin; p != pEnd; ++p)
+    const sal_Char * p = rBegin;
+    for ( ; p != pEnd; ++p)
     {
         int nWeight = getWeight(*p);
         if (nWeight < 0)
@@ -923,7 +924,8 @@ bool INetMIME::scanUnsigned(const sal_Unicode *& rBegin,
                             sal_uInt32 & rValue)
 {
     sal_uInt64 nTheValue = 0;
-    for (const sal_Unicode * p = rBegin; p != pEnd; ++p)
+    const sal_Unicode * p = rBegin;
+    for ( ; p != pEnd; ++p)
     {
         int nWeight = getWeight(*p);
         if (nWeight < 0)
@@ -946,7 +948,8 @@ bool INetMIME::scanUnsignedHex(const sal_Char *& rBegin,
                                sal_uInt32 & rValue)
 {
     sal_uInt64 nTheValue = 0;
-    for (const sal_Char * p = rBegin; p != pEnd; ++p)
+    const sal_Char * p = rBegin;
+    for ( p = rBegin; p != pEnd; ++p)
     {
         int nWeight = getHexWeight(*p);
         if (nWeight < 0)
@@ -969,7 +972,8 @@ bool INetMIME::scanUnsignedHex(const sal_Unicode *& rBegin,
                                sal_uInt32 & rValue)
 {
     sal_uInt64 nTheValue = 0;
-    for (const sal_Unicode * p = rBegin; p != pEnd; ++p)
+    const sal_Unicode * p = rBegin;
+    for ( ; p != pEnd; ++p)
     {
         int nWeight = getHexWeight(*p);
         if (nWeight < 0)
