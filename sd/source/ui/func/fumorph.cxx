@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fumorph.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:04:01 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 08:56:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -301,7 +301,7 @@ void FuMorph::ImpInsertPolygons(List& rPolyPolyList3D, BOOL bAttributeFade,
     long                nStartLineWidth;
     long                nEndLineWidth;
     SdrPageView*        pPageView = pView->GetPageViewPvNum( 0 );
-    SfxItemPool*        pPool = pObj1->GetItemPool();
+    SfxItemPool*        pPool = pObj1->GetObjectItemPool();
     SfxItemSet          aSet1( *pPool,SDRATTR_START,SDRATTR_NOTPERSIST_FIRST-1,EE_ITEMS_START,EE_ITEMS_END,0 );
     SfxItemSet          aSet2( aSet1 );
     BOOL                bLineColor = FALSE;
