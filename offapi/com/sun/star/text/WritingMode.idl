@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WritingMode.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-07 19:36:52 $
+ *  last change: $Author: cl $ $Date: 2000-12-08 17:49:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,31 +68,34 @@
 
 //=============================================================================
 
-/** this enum covers the different writting directions
+/** this enum covers the different writing directions
  */
 enum WritingMode
 {
     //-------------------------------------------------------------------------
 
     /** text within lines is written left-to-right. lines and blocks are placed
-        top-to-bottom. Typically, this is the writing mode for normal
-        "alphabetic" text.
+        top-to-bottom.
+        <p>
+        Typically, this is the writing mode for normal "alphabetic" text.
      */
     LR_TB,
 
     //-------------------------------------------------------------------------
 
     /** text within a line are written right-to-left. Lines and blocks are
-        placed top-to-bottom. Typically, this writing mode is used in Arabic
-        and Hebrew text.
+        placed top-to-bottom.
+        <p>
+        Typically, this writing mode is used in Arabic and Hebrew text.
      */
     RL_TB,
 
     //-------------------------------------------------------------------------
 
     /** text within a line is written top-to-bottom. Lines and blocks are
-        placed right-to-left. Typically, this writing mode is used in Chinese
-        and Japanese text.
+        placed right-to-left.
+        <p>
+        Typically, this writing mode is used in Chinese and Japanese text.
      */
     TB_RL
 
