@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-26 07:55:37 $
+ *  last change: $Author: fs $ $Date: 2001-10-29 15:14:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1024,9 +1024,7 @@ void SbaXDataBrowserController::propertyChange(const PropertyChangeEvent& evt) t
         &&  (::comphelper::getBOOL(evt.NewValue) == sal_False)
         )
     {   // -> the current field isn't modified anymore, too
-        m_bCurrentlyModified = sal_False;
-        InvalidateFeature(::rtl::OUString::createFromAscii(".uno:FormSlots/saveRecord"));
-        InvalidateFeature(ID_BROWSER_UNDO);
+        setCurrentModified( sal_False );
     }
 
     // switching to a new record ?
@@ -1079,10 +1077,7 @@ void SbaXDataBrowserController::propertyChange(const PropertyChangeEvent& evt) t
 //------------------------------------------------------------------------
 void SbaXDataBrowserController::modified(const ::com::sun::star::lang::EventObject& aEvent) throw( RuntimeException )
 {
-    m_bCurrentlyModified = sal_True;
-    // das muss vom ::com::sun::star::form::GridControl kommen
-    InvalidateFeature(::rtl::OUString::createFromAscii(".uno:FormSlots/saveRecord"));
-    InvalidateFeature(ID_BROWSER_UNDO);
+    setCurrentModified( sal_True );
 }
 
 // -----------------------------------------------------------------------
@@ -1407,7 +1402,7 @@ sal_Bool SbaXDataBrowserController::approveReset(const ::com::sun::star::lang::E
 void SbaXDataBrowserController::resetted(const ::com::sun::star::lang::EventObject& rEvent) throw( RuntimeException )
 {
     DBG_ASSERT(rEvent.Source == getControlModel(), "SbaXDataBrowserController::resetted : where did this come from ?");
-    m_bCurrentlyModified = sal_False;
+    setCurrentModified( sal_False );
 }
 
 //------------------------------------------------------------------------------
@@ -1994,10 +1989,9 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId)
             break;
 
         case ID_BROWSER_SAVEDOC:
-        {
-            SaveModified(sal_True);
-        }
-        break;
+            if ( SaveModified( sal_True ) )
+                setCurrentModified( sal_False );
+            break;
 
         case ID_BROWSER_UNDO:
         {
@@ -2029,9 +2023,7 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId)
             {
             }
 
-            m_bCurrentlyModified = sal_False;
-            InvalidateFeature(::rtl::OUString::createFromAscii(".uno:FormSlots/saveRecord"));
-            InvalidateFeature(ID_BROWSER_UNDO);
+            setCurrentModified( sal_False );
         }
     }
 }
@@ -2090,6 +2082,21 @@ sal_Bool SbaXDataBrowserController::CommitCurrent()
     }
     return sal_True;
 }
+
+//------------------------------------------------------------------------------
+void SbaXDataBrowserController::setCurrentModified( sal_Bool _bSet )
+{
+    m_bCurrentlyModified = _bSet;
+    InvalidateFeature( ID_BROWSER_SAVEDOC );
+    InvalidateFeature( ID_BROWSER_UNDORECORD );
+}
+
+//------------------------------------------------------------------------------
+void SbaXDataBrowserController::RowChanged()
+{
+    setCurrentModified( sal_False );
+}
+
 //------------------------------------------------------------------------------
 void SbaXDataBrowserController::ColumnChanged()
 {
@@ -2099,6 +2106,8 @@ void SbaXDataBrowserController::ColumnChanged()
     InvalidateFeature(ID_BROWSER_FILTERCRIT);
     InvalidateFeature(ID_BROWSER_AUTOFILTER);
     InvalidateFeature(ID_BROWSER_REMOVEFILTER);
+
+    setCurrentModified( sal_False );
 }
 
 //------------------------------------------------------------------------------
