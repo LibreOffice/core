@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpaint.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fme $ $Date: 2001-07-23 15:20:02 $
+ *  last change: $Author: fme $ $Date: 2001-08-14 06:43:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -293,13 +293,17 @@ void SwExtraPainter::PaintExtra( SwTwips nY, long nAsc, long nMax, sal_Bool bRed
     else
         pTmpFnt = GetFont();
     Point aTmpPos( nX, nY );
+    aTmpPos.Y() += nAsc;
     sal_Bool bPaint = sal_True;
     if( !IsClipChg() )
     {
         Size aSize = pTmpFnt->_GetTxtSize( aDrawInf );
         if( bGoLeft )
             aTmpPos.X() -= aSize.Width();
-        SwRect aRct( aTmpPos, aSize );
+        // calculate rectangle containing the line number
+        SwRect aRct( Point( aTmpPos.X(),
+                         aTmpPos.Y() - pTmpFnt->GetAscent( pSh, pSh->GetOut() )
+                          ), aSize );
         if( !aRect.IsInside( aRct ) )
         {
             if( aRct.Intersection( aRect ).IsEmpty() )
@@ -310,7 +314,6 @@ void SwExtraPainter::PaintExtra( SwTwips nY, long nAsc, long nMax, sal_Bool bRed
     }
     else if( bGoLeft )
         aTmpPos.X() -= pTmpFnt->_GetTxtSize( aDrawInf ).Width();
-    aTmpPos.Y() += nAsc;
     aDrawInf.SetPos( aTmpPos );
     if( bPaint )
         pTmpFnt->_DrawText( aDrawInf );
