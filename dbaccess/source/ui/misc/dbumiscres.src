@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbumiscres.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: oj $ $Date: 2002-03-04 11:04:47 $
+ *  last change: $Author: oj $ $Date: 2002-04-29 08:01:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,16 @@ Bitmap BMP_PLUSBUTTON
 Bitmap BMP_MINUSBUTTON
 {
     File = "minus.bmp";
+};
+
+Bitmap BMP_PLUSBUTTON_SCH
+{
+    File = "plus_sch.bmp";
+};
+
+Bitmap BMP_MINUSBUTTON_SCH
+{
+    File = "minus_sch.bmp";
 };
 
 //-------------------------------------------------------------------------
@@ -578,6 +588,9 @@ String STR_BUTTON_TEXT_ALL
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.41  2002/03/04 11:04:47  oj
+ *  #97788# new character set Big5-HKSCS
+ *
  *  Revision 1.40  2001/10/31 21:41:44  kz
  *  Merge SRC641: 31.10.01 - 22:41:50
  *
