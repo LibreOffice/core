@@ -2,9 +2,9 @@
  *
  *  $RCSfile: conrect.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2000-10-30 12:08:27 $
+ *  last change: $Author: jp $ $Date: 2001-03-16 14:46:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,13 +96,27 @@
 #include <sfx2/viewfrm.hxx>
 #endif
 
-#include "cmdid.h"
-#include "view.hxx"
-#include "edtwin.hxx"
-#include "wrtsh.hxx"
-#include "viewopt.hxx"
-#include "drawbase.hxx"
-#include "conrect.hxx"
+#ifndef _CMDID_H
+#include <cmdid.h>
+#endif
+#ifndef _VIEW_HXX
+#include <view.hxx>
+#endif
+#ifndef _EDTWIN_HXX
+#include <edtwin.hxx>
+#endif
+#ifndef _WRTSH_HXX
+#include <wrtsh.hxx>
+#endif
+#ifndef _VIEWOPT_HXX
+#include <viewopt.hxx>
+#endif
+#ifndef _DRAWBASE_HXX
+#include <drawbase.hxx>
+#endif
+#ifndef _CONRECT_HXX
+#include <conrect.hxx>
+#endif
 
 
 /*************************************************************************
@@ -111,11 +125,10 @@
 |*
 \************************************************************************/
 
-
-
-ConstRectangle::ConstRectangle(SwWrtShell* pWrtShell, SwEditWin* pEditWin, SwView* pSwView) :
-                SwDrawBase(pWrtShell, pEditWin, pSwView),
-                bMarquee(FALSE)
+ConstRectangle::ConstRectangle( SwWrtShell* pWrtShell, SwEditWin* pEditWin,
+                                SwView* pSwView )
+    : SwDrawBase( pWrtShell, pEditWin, pSwView ),
+    bMarquee(FALSE)
 {
 }
 
@@ -124,8 +137,6 @@ ConstRectangle::ConstRectangle(SwWrtShell* pWrtShell, SwEditWin* pEditWin, SwVie
 |* MouseButtonDown-event
 |*
 \************************************************************************/
-
-
 
 BOOL ConstRectangle::MouseButtonDown(const MouseEvent& rMEvt)
 {
@@ -149,8 +160,6 @@ BOOL ConstRectangle::MouseButtonDown(const MouseEvent& rMEvt)
 |* MouseButtonUp-event
 |*
 \************************************************************************/
-
-
 
 BOOL ConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
 {
@@ -189,18 +198,16 @@ BOOL ConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
             }
         }
 
-        pView->LeaveDrawCreate();   // In Selektionsmode wechseln
-
-        pSh->GetView().GetViewFrame()->GetBindings().Invalidate(SID_INSERT_DRAW);
-
-        SdrPageView* pPV = pSdrView->GetPageViewPvNum(0);
         const SdrMarkList& rMarkList = pSdrView->GetMarkList();
         if (rMarkList.GetMark(0))
         {
             SdrObject* pObj = rMarkList.GetMark(0)->GetObj();
-
-            pView->BeginTextEdit(pObj, pPV, pWin, TRUE);
+            SdrPageView* pPV = pSdrView->GetPageViewPvNum(0);
+            pView->BeginTextEdit( pObj, pPV, pWin, TRUE );
         }
+
+        pView->LeaveDrawCreate();   // In Selektionsmode wechseln
+        pSh->GetView().GetViewFrame()->GetBindings().Invalidate(SID_INSERT_DRAW);
     }
     return bRet;
 }
@@ -211,35 +218,40 @@ BOOL ConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-
-
 void ConstRectangle::Activate(const USHORT nSlotId)
 {
     bMarquee = FALSE;
 
     switch (nSlotId)
     {
-        case SID_DRAW_LINE:
-            pWin->SetDrawMode(OBJ_LINE);
-            break;
-        case SID_DRAW_RECT:
-            pWin->SetDrawMode(OBJ_RECT);
-            break;
-        case SID_DRAW_ELLIPSE:
-            pWin->SetDrawMode(OBJ_CIRC);
-            break;
-        case SID_DRAW_TEXT_MARQUEE:
-            bMarquee = TRUE;
-        case SID_DRAW_TEXT:
-            pWin->SetDrawMode(OBJ_TEXT);
-            break;
+    case SID_DRAW_LINE:
+        pWin->SetDrawMode(OBJ_LINE);
+        break;
 
-        case SID_DRAW_CAPTION:
-            pWin->SetDrawMode(OBJ_CAPTION);
-            break;
-        default:
-            pWin->SetDrawMode(OBJ_NONE);
-            break;
+    case SID_DRAW_RECT:
+        pWin->SetDrawMode(OBJ_RECT);
+        break;
+
+    case SID_DRAW_ELLIPSE:
+        pWin->SetDrawMode(OBJ_CIRC);
+        break;
+
+    case SID_DRAW_TEXT_MARQUEE:
+        bMarquee = TRUE;
+        // no break
+    case SID_DRAW_TEXT:
+    case SID_DRAW_TEXT_VERTICAL:
+        pWin->SetDrawMode(OBJ_TEXT);
+        break;
+
+    case SID_DRAW_CAPTION:
+    case SID_DRAW_CAPTION_VERTICAL:
+        pWin->SetDrawMode(OBJ_CAPTION);
+        break;
+
+    default:
+        pWin->SetDrawMode(OBJ_NONE);
+        break;
     }
 
     SwDrawBase::Activate(nSlotId);
@@ -250,6 +262,11 @@ void ConstRectangle::Activate(const USHORT nSlotId)
       Source Code Control System - History
 
       $Log: not supported by cvs2svn $
+      Revision 1.2  2000/10/30 12:08:27  aw
+      change SdrObjects to use SfxItemSet instead of SfxSetItems.
+      Removed TakeAttributes() and SetAttributes(), new ItemSet
+      modification methods (GetItem[Set], SetItem[Set], ClearItem,...)
+
       Revision 1.1.1.1  2000/09/18 17:14:46  hr
       initial import
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwtxtex.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-26 14:35:49 $
+ *  last change: $Author: jp $ $Date: 2001-03-16 14:44:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,6 +223,9 @@
 #ifndef _INITUI_HXX
 #include <initui.hxx>               // fuer SpellPointer
 #endif
+#ifndef _EDTWIN_HXX
+#include <edtwin.hxx>
+#endif
 
 #ifndef _CMDID_H
 #include <cmdid.h>
@@ -245,7 +248,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
     SwWrtShell &rSh = GetShell();
 
     SfxItemSet aEditAttr(pOLV->GetAttribs());
-    SfxItemSet aNewAttr(*(aEditAttr.GetPool()), aEditAttr.GetRanges());
+    SfxItemSet aNewAttr(*aEditAttr.GetPool(), aEditAttr.GetRanges());
 
     sal_uInt16 nSlot = rReq.GetSlot();
     sal_uInt16 nWhich = GetPool().GetWhich(nSlot);
@@ -425,11 +428,12 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
         case SID_AUTOSPELL_MARKOFF:
         case SID_AUTOSPELL_CHECK:
         {
-            pSdrView = rSh.GetDrawView();
-            pOutliner = pSdrView->GetTextEditOutliner();
+//!! JP 16.03.2001: why??           pSdrView = rSh.GetDrawView();
+//!! JP 16.03.2001: why??           pOutliner = pSdrView->GetTextEditOutliner();
             sal_uInt32 nCtrl = pOutliner->GetControlWord();
 
-            sal_Bool bSet = ((const SfxBoolItem&)rReq.GetArgs()->Get(nSlot)).GetValue();
+            sal_Bool bSet = ((const SfxBoolItem&)rReq.GetArgs()->Get(
+                                                    nSlot)).GetValue();
             if(nSlot == SID_AUTOSPELL_MARKOFF)
             {
                 if(bSet)
@@ -474,6 +478,30 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
             }
         }
         break;
+
+        case SID_TEXTDIRECTION_LEFT_TO_RIGHT:
+        case SID_TEXTDIRECTION_TOP_TO_BOTTOM:
+            // Shellwechsel!
+            {
+                SdrObject* pTmpObj = pSdrView->GetMarkList().GetMark(0)->GetObj();
+                SdrPageView* pTmpPV = pSdrView->GetPageViewPvNum(0);
+                SdrView* pTmpView = pSdrView;
+
+                rSh.EndTextEdit();
+
+                SfxItemSet aAttr( *aNewAttr.GetPool(),
+                            SDRATTR_TEXTDIRECTION_LEFT_TO_RIGHT,
+                            SDRATTR_TEXTDIRECTION_LEFT_TO_RIGHT );
+                aAttr.Put( SfxBoolItem( SDRATTR_TEXTDIRECTION_LEFT_TO_RIGHT,
+                        BOOL( nSlot == SID_TEXTDIRECTION_LEFT_TO_RIGHT ) ) );
+                pTmpView->SetAttributes( aAttr );
+
+                rSh.GetView().BeginTextEdit( pTmpObj, pTmpPV,
+                                    &rSh.GetView().GetEditWin(), FALSE );
+                rSh.GetView().AttrChangedNotify( &rSh );
+            }
+            return;
+
 
         default:
             ASSERT(!this, falscher Dispatcher);
@@ -574,6 +602,17 @@ ASK_ESCAPE:
                     rSet.DisableItem( FN_THESAURUS_DLG );
                 nSlotId = 0;
             }
+            break;
+
+        case SID_TEXTDIRECTION_LEFT_TO_RIGHT:
+        case SID_TEXTDIRECTION_TOP_TO_BOTTOM:
+            if( pOutliner )
+                bFlag = pOutliner->IsVertical() ==
+                        (SID_TEXTDIRECTION_TOP_TO_BOTTOM == nSlotId);
+            else
+                bFlag = (SID_TEXTDIRECTION_LEFT_TO_RIGHT == nSlotId) ==
+                        ((SfxBoolItem&)aEditAttr.Get(
+                            SDRATTR_TEXTDIRECTION_LEFT_TO_RIGHT )).GetValue();
             break;
 
         default:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shells.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-01 21:41:30 $
+ *  last change: $Author: jp $ $Date: 2001-03-16 14:44:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1711,6 +1711,21 @@ ToolBox RID_DRAW_TEXT_TOOLBOX
             ITEM_TOOLBAR_ATTR_CHAR_COLOR
             Hide = TRUE;
         };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_TEXTDIRECTION_LEFT_TO_RIGHT ;
+            HelpID = SID_TEXTDIRECTION_LEFT_TO_RIGHT ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_TEXTDIRECTION_TOP_TO_BOTTOM ;
+            HelpID = SID_TEXTDIRECTION_TOP_TO_BOTTOM ;
+        };
+
         MN_TEXT_DIALOGS(FALSE)
     };
     Scroll = TRUE ;
