@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdwindow.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-04 11:05:26 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:20:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -876,7 +876,8 @@ void SdWindow::DataChanged( const DataChangedEvent& rDCEvt )
                 {
                     SetDrawMode( nOutputMode );
                     pViewShell->GetFrameView()->SetDrawMode( nOutputMode );
-                    pViewShell->GetView()->ReleaseMasterPagePaintCache();
+// #110094#-7
+//                  pViewShell->GetView()->ReleaseMasterPagePaintCache();
                     Invalidate();
                 }
 
