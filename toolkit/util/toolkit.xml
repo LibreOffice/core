@@ -403,15 +403,4 @@
         <status value="final"/>
         <supported-service>com.sun.star.awt.UnoControlFormattedFieldModel</supported-service>
     </component-description>
-
-    <component-description>
-        <author>Malte Timmermann</author>
-        <name>com.sun.star.awt.PrinterServer</name>
-        <description>PrinterServer...</description>
-        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
-        <language>c++</language>
-        <status value="final"/>
-        <supported-service>com.sun.star.awt.PrinterServer</supported-service>
-    </component-description>
-
 </module-description>
