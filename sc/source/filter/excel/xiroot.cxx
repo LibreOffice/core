@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xiroot.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:38:13 $
+ *  last change: $Author: obo $ $Date: 2004-10-18 15:16:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,8 +94,9 @@
 
 // Global data ================================================================
 
-XclImpRootData::XclImpRootData( XclBiff eBiff, SfxMedium& rMedium, ScDocument& rDocument, CharSet eCharSet ) :
-    XclRootData( eBiff, rMedium, rDocument, eCharSet, false )
+XclImpRootData::XclImpRootData( XclBiff eBiff, SfxMedium& rMedium,
+        SotStorageRef xRootStrg, SvStream& rBookStrm, ScDocument& rDoc, CharSet eCharSet ) :
+    XclRootData( eBiff, rMedium, xRootStrg, rBookStrm, rDoc, eCharSet, false )
 {
 }
 
