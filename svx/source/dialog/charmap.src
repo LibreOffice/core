@@ -2,8 +2,8 @@
  *
  *  $RCSfile: charmap.src,v $
  *
- *  $Revision: 1.48 $
- *  last change: $Author: hr $ $Date: 2003-07-03 16:32:40 $
+ *  $Revision: 1.49 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 11:15:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -633,7 +633,7 @@ String RID_SUBSETSTR_CYRILLIC_SUPPL
         Text[ greek ] = "Cyrillic Supplementary";
         Text[ dutch ] = "Cyrillic Supplementary";
         Text[ finnish ] = "Cyrillic Supplementary";
-        Text[ czech ] = "Cyrillic Supplementary";
+        Text[ czech ] = "Azbuka (doplňující)";
         Text[ danish ] = "Cyrillic Supplementary";
         Text[ polish ] = "Cyrillic Supplementary";
         Text[ portuguese_brazilian ] = "Suplemento Cir�lico";
@@ -643,6 +643,7 @@ String RID_SUBSETSTR_CYRILLIC_SUPPL
         Text[ catalan ] = "Cyrillic Supplementary";
         Text[ thai ] = "Cyrillic Supplementary";
         Text[ slovak ] = "Doplnená Azbuka";
+        Text[ hindi ] = "Cyrillic Supplementary";
     };
 String RID_SUBSETSTR_ARMENIAN
 {
@@ -699,9 +700,9 @@ String RID_SUBSETSTR_BASIC_HEBREW
         Text[ catalan ] = "Hebreu ampliat";
         Text[ finnish ] = "heprea (laajennettu)";
         Text[ thai ] = "ขยายภาษาฮิบรู";
-        Text[ czech ] = "Hebrejsky (rozšířené)";
+        Text[ czech ] = "Hebrejsky (základní)";
         Text[ hebrew ] = "‮עברית מורחבת‬";
-        Text[ hindi ] = "मूलभूत हिब्रू";
+        Text[ hindi ] = "हिब्रू विस्तृत";
         Text[ slovak ] = "Hebrejsky (rozšírené)";
     };
 String RID_SUBSETSTR_HEBREW_EXTENDED
@@ -729,9 +730,9 @@ String RID_SUBSETSTR_HEBREW_EXTENDED
         Text[ catalan ] = "Hebreu b�sic";
         Text[ finnish ] = "heprea (perusteet)";
         Text[ thai ] = "ภาษาฮิบรูพื้นฐาน";
-        Text[ czech ] = "Hebrejsky (základní)";
+        Text[ czech ] = "Hebrejsky (rozšířené)";
         Text[ hebrew ] = "‮עברית בסיסית‬";
-        Text[ hindi ] = "हिब्रू विस्तृत";
+        Text[ hindi ] = "मूलभूत हिब्रू";
         Text[ slovak ] = "Hebrejsky (základné)";
     };
 String RID_SUBSETSTR_BASIC_ARABIC
@@ -1796,7 +1797,7 @@ String RID_SUBSETSTR_CJK_SYMS_PUNCTUATION
     Text[ english_us ] = "CJK Symbols And Punctuation";
         Text[ portuguese ] = "S�mbolos e pontua��o CJK";
         Text[ russian ] = "�JK-������� � ����������";
-        Text[ greek ] = "CJK ������� ��� �����";
+        Text[ greek ] = "CJK ������� ��� �����";
         Text[ dutch ] = "CJK tekens en interpunctie";
         Text[ french ] = "Ponctuation et symboles CJC";
         Text[ spanish ] = "S�mbolos y puntuaci�n CJK";
@@ -3251,7 +3252,7 @@ String RID_SUBSETSTR_MISC_MATH_SYMS_A
         Text[ greek ] = "Miscellaneous Mathematical Symbols-A";
         Text[ dutch ] = "Miscellaneous Mathematical Symbols-A";
         Text[ finnish ] = "Miscellaneous Mathematical Symbols-A";
-        Text[ czech ] = "Miscellaneous Mathematical Symbols-A";
+        Text[ czech ] = "Různé matematické symboly - A";
         Text[ danish ] = "Miscellaneous Mathematical Symbols-A";
         Text[ polish ] = "Miscellaneous Mathematical Symbols-A";
         Text[ portuguese_brazilian ] = "S�mbolos matem�ticos - A";
@@ -3261,6 +3262,7 @@ String RID_SUBSETSTR_MISC_MATH_SYMS_A
         Text[ catalan ] = "Miscellaneous Mathematical Symbols-A";
         Text[ thai ] = "Miscellaneous Mathematical Symbols-A";
         Text[ slovak ] = "Rôzne matematické symboly-A";
+        Text[ hindi ] = "Miscellaneous Mathematical Symbols-A";
     };
 
 String RID_SUBSETSTR_SUPPL_ARROWS_A
@@ -3281,7 +3283,7 @@ String RID_SUBSETSTR_SUPPL_ARROWS_A
         Text[ greek ] = "Supplemental Arrows-A";
         Text[ dutch ] = "Supplemental Arrows-A";
         Text[ finnish ] = "Supplemental Arrows-A";
-        Text[ czech ] = "Supplemental Arrows-A";
+        Text[ czech ] = "Další šipky - A";
         Text[ danish ] = "Supplemental Arrows-A";
         Text[ polish ] = "Supplemental Arrows-A";
         Text[ portuguese_brazilian ] = "Setas suplementares - A";
@@ -3291,6 +3293,7 @@ String RID_SUBSETSTR_SUPPL_ARROWS_A
         Text[ catalan ] = "Supplemental Arrows-A";
         Text[ thai ] = "Supplemental Arrows-A";
         Text[ slovak ] = "Doplňujúce šípky-A";
+        Text[ hindi ] = "Supplemental Arrows-A";
     };
 
 String RID_SUBSETSTR_BRAILLE_PATTERNS
@@ -3311,7 +3314,7 @@ String RID_SUBSETSTR_BRAILLE_PATTERNS
         Text[ greek ] = "Braille Patterns";
         Text[ dutch ] = "Braille Patterns";
         Text[ finnish ] = "Braille Patterns";
-        Text[ czech ] = "Braille Patterns";
+        Text[ czech ] = "Brailleovy vzory";
         Text[ danish ] = "Braille Patterns";
         Text[ polish ] = "Braille Patterns";
         Text[ portuguese_brazilian ] = "Padr�es Braille";
@@ -3321,6 +3324,7 @@ String RID_SUBSETSTR_BRAILLE_PATTERNS
         Text[ catalan ] = "Braille Patterns";
         Text[ thai ] = "Braille Patterns";
         Text[ slovak ] = "Braille vzory";
+        Text[ hindi ] = "Braille Patterns";
     };
 
 String RID_SUBSETSTR_SUPPL_ARROWS_B
@@ -3341,7 +3345,7 @@ String RID_SUBSETSTR_SUPPL_ARROWS_B
         Text[ greek ] = "Supplemental Arrows-B";
         Text[ dutch ] = "Supplemental Arrows-B";
         Text[ finnish ] = "Supplemental Arrows-B";
-        Text[ czech ] = "Supplemental Arrows-B";
+        Text[ czech ] = "Další šipky - B";
         Text[ danish ] = "Supplemental Arrows-B";
         Text[ polish ] = "Supplemental Arrows-B";
         Text[ portuguese_brazilian ] = "Setas suplementares - B";
@@ -3351,6 +3355,7 @@ String RID_SUBSETSTR_SUPPL_ARROWS_B
         Text[ catalan ] = "Supplemental Arrows-B";
         Text[ thai ] = "Supplemental Arrows-B";
         Text[ slovak ] = "Doplňujúce šípky-B";
+        Text[ hindi ] = "Supplemental Arrows-B";
     };
 
 String RID_SUBSETSTR_MISC_MATH_SYMS_B
@@ -3371,7 +3376,7 @@ String RID_SUBSETSTR_MISC_MATH_SYMS_B
         Text[ greek ] = "Miscellaneous Mathematical Symbols-B";
         Text[ dutch ] = "Miscellaneous Mathematical Symbols-B";
         Text[ finnish ] = "Miscellaneous Mathematical Symbols-B";
-        Text[ czech ] = "Miscellaneous Mathematical Symbols-B";
+        Text[ czech ] = "Různé matematické symboly - B";
         Text[ danish ] = "Miscellaneous Mathematical Symbols-B";
         Text[ polish ] = "Miscellaneous Mathematical Symbols-B";
         Text[ portuguese_brazilian ] = "S�mbolos matem�ticos - B";
@@ -3381,6 +3386,7 @@ String RID_SUBSETSTR_MISC_MATH_SYMS_B
         Text[ catalan ] = "Miscellaneous Mathematical Symbols-B";
         Text[ thai ] = "Miscellaneous Mathematical Symbols-B";
         Text[ slovak ] = "Rôzne matematické symboly-B";
+        Text[ hindi ] = "Miscellaneous Mathematical Symbols-B";
     };
 
 String RID_SUBSETSTR_CJK_RADICAL_SUPPL
@@ -3401,7 +3407,7 @@ String RID_SUBSETSTR_CJK_RADICAL_SUPPL
         Text[ greek ] = "CJK Radical Supplement";
         Text[ dutch ] = "CJK Radical Supplement";
         Text[ finnish ] = "CJK Radical Supplement";
-        Text[ czech ] = "CJK Radical Supplement";
+        Text[ czech ] = "Doplněk CJK Radical";
         Text[ danish ] = "CJK Radical Supplement";
         Text[ polish ] = "CJK Radical Supplement";
         Text[ portuguese_brazilian ] = "Formas suplementares de radicais CJK";
@@ -3411,6 +3417,7 @@ String RID_SUBSETSTR_CJK_RADICAL_SUPPL
         Text[ catalan ] = "CJK Radical Supplement";
         Text[ thai ] = "CJK Radical Supplement";
         Text[ slovak ] = "CJK Radical doplnky";
+        Text[ hindi ] = "CJK Radical Supplement";
     };
 
 String RID_SUBSETSTR_KANXI_RADICALS
@@ -3441,6 +3448,7 @@ String RID_SUBSETSTR_KANXI_RADICALS
         Text[ catalan ] = "Kanxi Radicals";
         Text[ thai ] = "Kanxi Radicals";
         Text[ slovak ] = "Kanxi Radicals";
+        Text[ hindi ] = "Kanxi Radicals";
     };
 
 String RID_SUBSETSTR_IDEO_DESC_CHARS
@@ -3461,7 +3469,7 @@ String RID_SUBSETSTR_IDEO_DESC_CHARS
         Text[ greek ] = "Ideographic Description Characters";
         Text[ dutch ] = "Ideographic Description Characters";
         Text[ finnish ] = "Ideographic Description Characters";
-        Text[ czech ] = "Ideographic Description Characters";
+        Text[ czech ] = "Ideografické popisné znaky";
         Text[ danish ] = "Ideographic Description Characters";
         Text[ polish ] = "Ideographic Description Characters";
         Text[ portuguese_brazilian ] = "Caracteres de descri��o ideogr�ficas";
@@ -3471,6 +3479,7 @@ String RID_SUBSETSTR_IDEO_DESC_CHARS
         Text[ catalan ] = "Ideographic Description Characters";
         Text[ thai ] = "Ideographic Description Characters";
         Text[ slovak ] = "Znaky opisujúce ideografy";
+        Text[ hindi ] = "Ideographic Description Characters";
     };
 
 String RID_SUBSETSTR_TAGALOG
@@ -3501,6 +3510,7 @@ String RID_SUBSETSTR_TAGALOG
         Text[ catalan ] = "Tagalog";
         Text[ thai ] = "Tagalog";
         Text[ slovak ] = "Tagalog";
+        Text[ hindi ] = "Tagalog";
     };
 
 String RID_SUBSETSTR_HANUNOO
@@ -3531,6 +3541,7 @@ String RID_SUBSETSTR_HANUNOO
         Text[ catalan ] = "Hanunoo";
         Text[ thai ] = "Hanunoo";
         Text[ slovak ] = "Hanunoo";
+        Text[ hindi ] = "Hanunoo";
     };
 
 String RID_SUBSETSTR_TAGBANWA
@@ -3561,6 +3572,7 @@ String RID_SUBSETSTR_TAGBANWA
         Text[ catalan ] = "Tagbanwa";
         Text[ thai ] = "Tagbanwa";
         Text[ slovak ] = "Tagbanwa";
+        Text[ hindi ] = "Tagbanwa";
     };
 
 String RID_SUBSETSTR_BUHID
@@ -3591,6 +3603,7 @@ String RID_SUBSETSTR_BUHID
         Text[ catalan ] = "Buhid";
         Text[ thai ] = "Buhid";
         Text[ slovak ] = "Buhid";
+        Text[ hindi ] = "Buhid";
     };
 
 String RID_SUBSETSTR_KANBUN
@@ -3621,6 +3634,7 @@ String RID_SUBSETSTR_KANBUN
         Text[ catalan ] = "Kanbun";
         Text[ thai ] = "Kanbun";
         Text[ slovak ] = "Kanbun";
+        Text[ hindi ] = "Kanbun";
     };
 
 String RID_SUBSETSTR_BOPOMOFO_EXTENDED
@@ -3641,7 +3655,7 @@ String RID_SUBSETSTR_BOPOMOFO_EXTENDED
         Text[ greek ] = "Bopomofo Extended";
         Text[ dutch ] = "Bopomofo Extended";
         Text[ finnish ] = "Bopomofo Extended";
-        Text[ czech ] = "Bopomofo Extended";
+        Text[ czech ] = "Bopomofo (rozšířené)";
         Text[ danish ] = "Bopomofo Extended";
         Text[ polish ] = "Bopomofo Extended";
         Text[ portuguese_brazilian ] = "Bopomofo Estendido";
@@ -3651,6 +3665,7 @@ String RID_SUBSETSTR_BOPOMOFO_EXTENDED
         Text[ catalan ] = "Bopomofo Extended";
         Text[ thai ] = "Bopomofo Extended";
         Text[ slovak ] = "Bopomofo rozšírené";
+        Text[ hindi ] = "Bopomofo Extended";
     };
 
 String RID_SUBSETSTR_KATAKANA_PHONETIC
@@ -3671,7 +3686,7 @@ String RID_SUBSETSTR_KATAKANA_PHONETIC
         Text[ greek ] = "Katakana Phonetics";
         Text[ dutch ] = "Katakana Phonetics";
         Text[ finnish ] = "Katakana Phonetics";
-        Text[ czech ] = "Katakana Phonetics";
+        Text[ czech ] = "Hláskosloví Katakana";
         Text[ danish ] = "Katakana Phonetics";
         Text[ polish ] = "Katakana Phonetics";
         Text[ portuguese_brazilian ] = "Fon�tica Katakana";
@@ -3681,10 +3696,15 @@ String RID_SUBSETSTR_KATAKANA_PHONETIC
         Text[ catalan ] = "Katakana Phonetics";
         Text[ thai ] = "Katakana Phonetics";
         Text[ slovak ] = "Katakana fonetické";
+        Text[ hindi ] = "Katakana Phonetics";
     };
 };
 
 // ********************************************************************** EOF
+
+
+
+
 
 
 
