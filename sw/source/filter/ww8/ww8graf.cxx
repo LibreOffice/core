@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.118 $
+ *  $Revision: 1.119 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 13:48:57 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:47:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2406,59 +2406,7 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
     //ideally we will be able to remove this special check.
     bool bDrawingHacks = (!bOrgObjectWasReplace && !pRecord->bReplaceByFly);
 
-// OD 14.10.2003 #i18732# - changes made on behalf of CMC and with CMC's advice.
-//#define OLD_ANCHORING
-#ifdef OLD_ANCHORING
-    RndStdIds eAnchor = 3 == nXRelTo  ?  FLY_AUTO_CNTNT
-        :  2 <= nYRelTo  ?  FLY_AT_CNTNT :  FLY_PAGE;
-
-    // Make adjustments for absolute positoning
-    // When anchored vertically to line and horizontally to either
-    // page, margin or column with absolute positioning in Word, we
-    // should anchor to Character in Writer
-    if ((nXAlign == 0) && (nYAlign == 0))
-    {
-        if ((nXRelTo <= 2) && (nYRelTo == 3))
-        {
-            eAnchor = FLY_AUTO_CNTNT;
-        }
-        else if ((nXRelTo == 3) && (nYRelTo == 3))
-        {
-            eAnchor = FLY_AUTO_CNTNT;
-            //nYAlign = 3;
-        }
-    }
-
-    if (bDrawingHacks)
-    {
-        if (eAnchor == FLY_AUTO_CNTNT)
-        {
-            //Drawing layer stuff cannot be "to character", fudge as "to
-            //paragraph". #109069#, we want to be able to do this in the
-            //future
-            eAnchor = FLY_AT_CNTNT;
-            if (nXRelTo == 3)
-                nXRelTo = 2;
-        }
-    }
-// OD 14.10.2003 #i18732#
-#else
     RndStdIds eAnchor = FLY_AUTO_CNTNT;
-
-    if (bDrawingHacks)
-    {
-        //Drawing layer stuff cannot be "to character", fudge as "to
-        //paragraph". #109069#, we want to be able to do this in the
-        //future
-        eAnchor = FLY_AT_CNTNT;
-        if (nXRelTo == 3)
-        {
-            ASSERT( false, "SwWW8ImplReader::ProcessEscherAlign(..) - DEBUG OD");
-            nXRelTo = 2;
-        }
-    }
-#endif
-
     SwFmtAnchor aAnchor( eAnchor );
     aAnchor.SetAnchor( pPaM->GetPoint() );
     rFlySet.Put( aAnchor );
@@ -2527,11 +2475,6 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
         eHoriOri = aHoriOriTab[ nXAlign ];
         SwRelationOrient eHoriRel;
         eHoriRel = aHoriRelOriTab[  nXRelTo ];
-// OD 14.10.2003 #i18732#
-#ifdef OLD_ANCHORING
-        if ((eHoriRel == FRAME) && (eAnchor == FLY_PAGE))
-            eHoriRel = PRTAREA;
-#endif
 
         //#111875#
         if ((eHoriRel == REL_PG_FRAME) && (eHoriOri == HORI_RIGHT))
@@ -2553,53 +2496,6 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
                 pFSPA->nXaRight = pFSPA->nXaLeft + nWidth;
             }
         }
-
-// OD 14.10.2003 #i18732#
-#ifdef OLD_ANCHORING
-        /*
-         Absolute positions in winword for graphics are broken when the
-         graphic is in a table, all absolute positions now become relative
-         to the top left corner of that cell.  We really cannot import
-         that feature correctly as we have not the same functionality
-         (yet). This normalizes the absolute position by the left of the
-         table, which at least puts it close, theres nothing we can do
-         about the vertical either.
-        */
-        if (nInTable && eAnchor == FLY_PAGE)
-        {
-            pFSPA->nXaLeft -= GetTableLeft();
-            pFSPA->nXaRight -= GetTableLeft();
-        }
-
-        /*
-        ##640##
-        If we are inside another frame we have to adjust our x and y
-        offsets correspondingly by the offsets of the parent
-        */
-        if (pSFlyPara && pSFlyPara->pFlyFmt && !pRecord->bReplaceByFly)
-        {
-            SwFlyFrmFmt *pFmt = pSFlyPara->pFlyFmt;
-            const SvxBoxItem &rParentBox = pFmt->GetBox();
-            pFSPA->nYaTop -= rParentBox.GetDistance();
-            pFSPA->nYaBottom -= rParentBox.GetDistance();
-
-            if (eHoriRel == FRAME)
-            {
-                const SwFmtHoriOrient &rParentHori = pFmt->GetHoriOrient();
-                pFSPA->nXaLeft += rParentHori.GetPos();
-                pFSPA->nXaLeft += rParentBox.GetDistance();
-
-                pFSPA->nXaRight += rParentHori.GetPos();
-                pFSPA->nXaRight += rParentBox.GetDistance();
-
-                if (rParentHori.GetRelationOrient() == REL_PG_FRAME)
-                {
-                    pFSPA->nXaLeft -= maSectionManager.GetPageLeft();
-                    pFSPA->nXaRight -= maSectionManager.GetPageLeft();
-                }
-            }
-        }
-#endif
 
         SwFmtHoriOrient aHoriOri(MakeSafePositioningValue(pFSPA->nXaLeft),
             eHoriOri, eHoriRel);
@@ -2627,20 +2523,6 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
         {
             eVertOri = aVertOriTab[ nYAlign ];
         }
-
-// OD 14.10.2003 #i18732#
-#ifdef OLD_ANCHORING
-        // Make an adjustment for the special case where we want to align
-        // vertically to page when horizontally aligned centre to character
-        if (((pRecord->nXAlign == 1) ||
-                    (pRecord->nXAlign == 2)) && (pRecord->nXRelTo == 3)
-            && (pRecord->nYAlign == 2) && (pRecord->nYRelTo ==1))
-        {
-            eVertRel = REL_PG_PRTAREA;
-        }
-        if ((eAnchor == FLY_AT_CNTNT) && (eVertRel == REL_VERT_LINE))
-            eVertRel = PRTAREA;
-#endif
 
         //Below line in word is a positive value, while in writer its
         //negative
@@ -2916,24 +2798,25 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
             else
                 aSetLayer.SendObjectToHeaven(*pObject);
 
-            //#106167# Annoying problems with drawing objects
-            if (nInTable)
-            {
-                const SwFmtHoriOrient *pHori =
-                    (const SwFmtHoriOrient *)aFlySet.GetItem(RES_HORI_ORIENT);
-                if (
-                    pHori && pHori->GetRelationOrient() == FRAME &&
-                    pHori->GetHoriOrient() == HORI_NONE
-                   )
-                {
-                    SwFmtHoriOrient aHori(*pHori);
-                    Point aPoint(pObject->GetAnchorPos());
-                    aPoint.X() = aHori.GetPos();
-                    aHori.SetPos(0);
-                    aFlySet.ClearItem(RES_HORI_ORIENT);
-                    pObject->SetAnchorPos(aPoint);
-                }
-            }
+            // OD 2004-04-01 #i26791# - no longer needed
+//            //#106167# Annoying problems with drawing objects
+//            if (nInTable)
+//            {
+//                const SwFmtHoriOrient *pHori =
+//                    (const SwFmtHoriOrient *)aFlySet.GetItem(RES_HORI_ORIENT);
+//                if (
+//                    pHori && pHori->GetRelationOrient() == FRAME &&
+//                    pHori->GetHoriOrient() == HORI_NONE
+//                   )
+//                {
+//                    SwFmtHoriOrient aHori(*pHori);
+//                    Point aPoint(pObject->GetAnchorPos());
+//                    aPoint.X() = aHori.GetPos();
+//                    aHori.SetPos(0);
+//                    aFlySet.ClearItem(RES_HORI_ORIENT);
+//                    pObject->SetAnchorPos(aPoint);
+//                }
+//            }
 
             if (!IsInlineEscherHack())
             {
@@ -2945,11 +2828,6 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
             }
             else
             {
-                /*
-                #i17086#  SHAPE field contents are anchored as character
-                */
-                aFlySet.Put(WW8FlySet(*this, pPaM));
-                eAnchor = FLY_IN_CNTNT;
                 pWWZOrder->InsertTextLayerObject(pObject);
             }
 
