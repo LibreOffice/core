@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pubdlg.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2002-05-16 14:39:02 $
+ *  last change: $Author: kz $ $Date: 2002-05-23 20:17:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,7 @@ ModalDialog DLG_PUBLISHING
         Text[ finnish ] = "Liit‰ rakenne";
         Text[ italian ] = "Assegna disegno";
         Text[ danish ] = "Assign design:";
-        Text[ swedish ] = "Tilldela design:";
+        Text[ swedish ] = "Tilldela design";
         Text[ polish ] = "Przypisz projekt";
         Text[ portuguese_brazilian ] = "Assign design:";
         Text[ japanese ] = "„Éá„Ç∂„Ç§„É≥„ÅÆÂâ≤„ÇäÂΩì„Å¶";
@@ -132,7 +132,7 @@ ModalDialog DLG_PUBLISHING
         Text[ portuguese ] = "~Nova configuraÁ„o";
         Text[ danish ] = "Nyt design";
         Text[ french ] = "~Nouveau design";
-        Text[ swedish ] = "~Ny design";
+        Text[ swedish ] = "Ny ~design";
         Text[ dutch ] = "~Nieuw design";
         Text[ spanish ] = "~Nuevo diseÒo";
         Text[ english_us ] = "New design";
@@ -500,7 +500,7 @@ ModalDialog DLG_PUBLISHING
         Text[ portuguese ] = "~Criar p·gina sum·rio";
         Text[ danish ] = "Opret titelblad";
         Text[ french ] = "Page de ~garde";
-        Text[ swedish ] = "Skapa ~titelsida";
+        Text[ swedish ] = "Skapa titel~sida";
         Text[ dutch ] = "Titel~pagina maken";
         Text[ spanish ] = "Crear ~portada";
         Text[ english_us ] = "Create title page";
@@ -635,7 +635,7 @@ ModalDialog DLG_PUBLISHING
         Text[ spanish ] = "~Autom·tico";
         Text[ italian ] = "~Automatico";
         Text[ danish ] = "Automatisk";
-        Text[ swedish ] = "Automatisk";
+        Text[ swedish ] = "A~utomatisk";
         Text[ polish ] = "~Automatycznie";
         Text[ portuguese_brazilian ] = "~Automatic";
         Text[ japanese ] = "Ëá™Âãï(~A)";
@@ -712,7 +712,7 @@ ModalDialog DLG_PUBLISHING
         QuickHelpText[ spanish ] = "~DuraciÛn de p·gina";
         QuickHelpText[ italian ] = "~Durata";
         QuickHelpText[ danish ] = "Sidevisningstid";
-        QuickHelpText[ swedish ] = "~Tid per sida";
+        QuickHelpText[ swedish ] = "Tid ~per sida";
         QuickHelpText[ polish ] = "~Duration of page";
         QuickHelpText[ portuguese_brazilian ] = "~Duration of page";
         QuickHelpText[ japanese ] = "Á∂ôÁ∂öÊôÇÈñì";
@@ -1280,7 +1280,7 @@ ModalDialog DLG_PUBLISHING
         Text[ spanish ] = "~Exportar sonidos al cambiar p·ginas";
         Text[ italian ] = "Esporta suoni al cambio di pagina";
         Text[ danish ] = "Eksporter lyde ved sideovergang";
-        Text[ swedish ] = "Exportera ljud vid sidv‰xling";
+        Text[ swedish ] = "E~xportera ljud vid sidv‰xling";
         Text[ polish ] = "~Eksportuj düwiÍki przy zmianie strony";
         Text[ portuguese_brazilian ] = "~Export advance slide sounds";
         Text[ japanese ] = "ÁîªÈù¢Âàá„ÇäÊõø„ÅàÊôÇ„Å´„Çµ„Ç¶„É≥„Éâ„ÅÆ„Ç®„ÇØ„Çπ„Éù„Éº„Éà(~E)";
@@ -1428,7 +1428,7 @@ ModalDialog DLG_PUBLISHING
         Text[ finnish ] = "~Kotisivusi";
         Text[ italian ] = "La vostra ~homepage";
         Text[ danish ] = "Din hjemmeside:";
-        Text[ swedish ] = "Din ~hemsida:";
+        Text[ swedish ] = "Din h~emsida:";
         Text[ polish ] = "Twoja strona macierzysta:";
         Text[ portuguese_brazilian ] = "Your ~homepage:";
         Text[ japanese ] = "„ÅÇ„Å™„Åü„ÅÆ„Éõ„Éº„É†„Éö„Éº„Ç∏(~E)";
@@ -1602,7 +1602,7 @@ ModalDialog DLG_PUBLISHING
         Text[ portuguese ] = "~SÛ texto";
         Text[ danish ] = "Kun tekst";
         Text[ french ] = "~Uniquement du texte";
-        Text[ swedish ] = "Bara ~text";
+        Text[ swedish ] = "Bara t~ext";
         Text[ dutch ] = "~Alleen tekst";
         Text[ spanish ] = "Solo ~texto";
         Text[ english_us ] = "~Text only";
@@ -1770,7 +1770,7 @@ ModalDialog DLG_PUBLISHING
         Text[ portuguese ] = "~Texto";
         Text[ danish ] = "Tekst";
         Text[ french ] = "~Texte";
-        Text[ swedish ] = "T~ext";
+        Text[ swedish ] = "Te~xt";
         Text[ dutch ] = "~Tekst";
         Text[ spanish ] = "~Texto";
         Text[ english_us ] = "Text";
@@ -1935,7 +1935,7 @@ ModalDialog DLG_PUBLISHING
         Text [ spanish ] = "<< ~Regresar" ;
         Text [ french ] = "<< ~PrÈcÈdent" ;
         Text [ dutch ] = "<< Vor~ige" ;
-        Text [ swedish ] = "<< T~illbaka" ;
+        Text [ swedish ] = "<< ~Tillbaka" ;
         Text [ danish ] = "<< Tilbage" ;
         Text [ portuguese_brazilian ] = "<< ~Zur?k" ;
         Text [ portuguese ] = "<< ~Anterior" ;
@@ -2147,7 +2147,7 @@ ModalDialog DLG_DESIGNNAME
     Text[ japanese ] = "HTML„Éá„Ç∂„Ç§„É≥Âêç";
     Text[ greek ] = "ºÌÔÏ· „È· Û˜Â‰È·ÛÏ¸ HTML";
     Text[ korean ] = "HTML ÎîîÏûêÏù∏ Ïù¥Î¶Ñ";
-    Text[ chinese_traditional ] = "HTMLË®≠Ë®àÁöÑÂêçÁ®±";
+    Text[ chinese_traditional ] = "HTML Ë®≠Ë®àÁöÑÂêçÁ®±";
     Text[ arabic ] = "«”„  ’„Ì„ HTML";
     Text[ turkish ] = "HTML tasar˝m˝ iÁin ad";
     Text[ language_user1 ] = " ";
