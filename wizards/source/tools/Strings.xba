@@ -393,63 +393,48 @@ End Function
 
 
 Function BubbleSortList(ByVal SortList(),optional sort2ndValue as Boolean)
+&apos;This function bubble sorts an array of maximum 2 dimensions.
+&apos;The default sorting order is the first dimension
+&apos;Only if sort2ndValue is True the second dimension is the relevant for the sorting order
 	Dim s as Integer
 	Dim t as Integer
-	Dim i,k as Integer
-	Dim bJustOneDim, bSort2nd as Boolean
+	Dim i as Integer
+	Dim k as Integer
+	Dim dimensions as Integer
+	Dim sortvalue as Integer
 	Dim DisplayDummy
-	bJustOneDim = false
-	bSort2nd = false
-On Local Error Goto No2ndDim
-    k = Ubound(SortList(),2)
+	dimensions = 2
+	
+On Local Error Goto No2ndDim	
+	k = Ubound(SortList(),2)
 	No2ndDim:
-	bJustOneDim = Err &lt;&gt; 0
+	If Err &lt;&gt; 0 Then dimensions = 1
+	
 	i = Ubound(SortList(),1)
 	If ismissing(sort2ndValue) then
-		bSort2nd = false
+		sortvalue = 0
 	else
-		bSort2nd = sort2ndValue
+		sortvalue = 1
 	end if
 	
 	For s = 1 to i - 1
 		For t = 0 to i-s
-			If bJustOneDim Then
+			Select Case dimensions
+			Case 1
 				If SortList(t) &gt; SortList(t+1) Then                             
 					DisplayDummy = SortList(t)
 					SortList(t) = SortList(t+1)
 					SortList(t+1) = DisplayDummy    
 				End If
-			Else
-				If bSort2nd Then
-					If SortList(t,1) &gt; SortList(t+1,1) Then                         
-						DisplayDummy = SortList(t,0)
-						SortList(t,0) = SortList(t+1,0)
-						SortList(t+1,0) = DisplayDummy
-						
-						DisplayDummy = SortList(t,1)
-						SortList(t,1) = SortList(t+1,1)
-						SortList(t+1,1) = DisplayDummy 
-						
-						DisplayDummy = SortList(t,2)
-						SortList(t,2) = SortList(t+1,2)
-						SortList(t+1,2) = DisplayDummy
-					End If
-				Else
-					If SortList(t,0) &gt; SortList(t+1,0) Then                         
-						DisplayDummy = SortList(t,0)
-						SortList(t,0) = SortList(t+1,0)
-						SortList(t+1,0) = DisplayDummy
-						
-						DisplayDummy = SortList(t,1)
-						SortList(t,1) = SortList(t+1,1)
-						SortList(t+1,1) = DisplayDummy  
-						
-						DisplayDummy = SortList(t,2)
-						SortList(t,2) = SortList(t+1,2)
-						SortList(t+1,2) = DisplayDummy
-					End If
+			Case 2
+				If SortList(t,sortvalue) &gt; SortList(t+1,sortvalue) Then 
+					For k = 0 to UBound(SortList(),2)                        
+							DisplayDummy = SortList(t,k)
+							SortList(t,k) = SortList(t+1,k)
+							SortList(t+1,k) = DisplayDummy 
+					Next k
 				End If
-			End If
+			End Select
 		Next t
 	Next s 
 	BubbleSortList = SortList()             
