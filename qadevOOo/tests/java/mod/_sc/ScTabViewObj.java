@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScTabViewObj.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change:$Date: 2004-01-05 19:25:59 $
+ *  last change:$Date: 2005-02-24 17:53:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,7 @@ public class ScTabViewObj extends TestCase {
         SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF());
 
         try {
-            log.println("creating a spreadsheetdocument");
+            log.println("creating two spreadsheet documents");
             xSpreadsheetDoc = SOF.createCalcDoc(null);
             try {
                 Thread.sleep(1000);
