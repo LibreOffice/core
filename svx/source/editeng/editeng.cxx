@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: mt $ $Date: 2001-06-22 10:58:43 $
+ *  last change: $Author: mt $ $Date: 2001-07-16 15:20:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -897,8 +897,8 @@ sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditVie
             default:
             {
                 #if defined( DBG_UTIL ) || defined( DEBUG )
-                    if ( ( nCode == KEY_C ) && rKeyEvent.GetKeyCode().IsMod1() && rKeyEvent.GetKeyCode().IsMod2() )
-                        SetAsianCompressionMode( GetAsianCompressionMode() ? EE_ASIANCOMPRESSION_NONE : EE_ASIANCOMPRESSION_PUNCTIONANDKANA );
+//                    if ( ( nCode == KEY_C ) && rKeyEvent.GetKeyCode().IsMod1() && rKeyEvent.GetKeyCode().IsMod2() )
+//                      SetAsianCompressionMode( GetAsianCompressionMode() ? EE_ASIANCOMPRESSION_NONE : EE_ASIANCOMPRESSION_PUNCTIONANDKANA );
                 #endif
                 if ( !bReadOnly && IsSimpleCharInput( rKeyEvent ) )
                 {
