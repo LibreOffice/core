@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuinsfil.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: thb $ $Date: 2002-11-19 18:02:27 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:17:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,15 +193,16 @@ FuInsertFile::FuInsertFile(SdViewShell*    pViewSh,
         sfx2::FileDialogHelper      aFileDialog( WB_OPEN | SFXWB_INSERT | WB_STDMODAL );
         Reference< XFilePicker >    xFilePicker( aFileDialog.GetFilePicker(), UNO_QUERY );
         Reference< XFilterManager > xFilterManager( xFilePicker, UNO_QUERY );
-        SfxFilterContainer*         pCont = NULL;
+        String aCont;
         const SfxFilter*            pFilter = NULL;
 
         aFileDialog.SetTitle( String( SdResId(STR_DLG_INSERT_PAGES_FROM_FILE ) ) );
 
         if( pDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS )
-            pCont = rMatcher.GetContainer( String( RTL_CONSTASCII_USTRINGPARAM( "simpress" ) ) );
+            aCont = String( RTL_CONSTASCII_USTRINGPARAM( "simpress" ) );
         else
-            pCont = rMatcher.GetContainer( String( RTL_CONSTASCII_USTRINGPARAM( "sdraw" ) ) );
+            aCont = String( RTL_CONSTASCII_USTRINGPARAM( "sdraw" ) ) ;
+        SfxFilterMatcher aMatch( aCont );
 
         if( xFilterManager.is() )
         {
@@ -215,7 +216,7 @@ FuInsertFile::FuInsertFile(SdViewShell*    pViewSh,
                 xFilterManager->setCurrentFilter( aAllSpec ); // set default-filter (<All>)
 
                 // Get main filter
-                pFilter = pCont->GetFilter( 0 );
+                pFilter = SfxFilter::GetDefaultFilterFromFactory( aCont );
                 if( pFilter )
                     xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
 
@@ -225,40 +226,40 @@ FuInsertFile::FuInsertFile(SdViewShell*    pViewSh,
                 else
                     aExt = UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( ".sxi" ) );
 
-                pFilter = pCont->GetFilter4Extension( aExt );
+                pFilter = aMatch.GetFilter4Extension( aExt );
                 if( pFilter )
                     xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
 
                 // Get other filters
-                pFilter = pCont->GetFilter4ClipBoardId( SOT_FORMATSTR_ID_STARIMPRESS_50 );
+                pFilter = aMatch.GetFilter4ClipBoardId( SOT_FORMATSTR_ID_STARIMPRESS_50 );
                 if( pFilter )
                     xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
 
-                pFilter = pCont->GetFilter4ClipBoardId( SOT_FORMATSTR_ID_STARIMPRESS_50, SFX_FILTER_TEMPLATEPATH );
+                pFilter = aMatch.GetFilter4ClipBoardId( SOT_FORMATSTR_ID_STARIMPRESS_50, SFX_FILTER_TEMPLATEPATH );
                 if( pFilter )
                     xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
 
-                pFilter = pCont->GetFilter4ClipBoardId( SOT_FORMATSTR_ID_STARDRAW_50 );
+                pFilter = aMatch.GetFilter4ClipBoardId( SOT_FORMATSTR_ID_STARDRAW_50 );
                 if( pFilter )
                     xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
 
-                pFilter = pCont->GetFilter4ClipBoardId( SOT_FORMATSTR_ID_STARDRAW_50, SFX_FILTER_TEMPLATEPATH  );
+                pFilter = aMatch.GetFilter4ClipBoardId( SOT_FORMATSTR_ID_STARDRAW_50, SFX_FILTER_TEMPLATEPATH  );
                 if( pFilter )
                     xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
 
-                pFilter = pCont->GetFilter4ClipBoardId( SOT_FORMATSTR_ID_STARDRAW_40 );
+                pFilter = aMatch.GetFilter4ClipBoardId( SOT_FORMATSTR_ID_STARDRAW_40 );
                 if( pFilter )
                     xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
 
-                pFilter = pCont->GetFilter4ClipBoardId( SOT_FORMATSTR_ID_STARDRAW_40, SFX_FILTER_TEMPLATEPATH  );
+                pFilter = aMatch.GetFilter4ClipBoardId( SOT_FORMATSTR_ID_STARDRAW_40, SFX_FILTER_TEMPLATEPATH  );
                 if( pFilter )
                     xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
 
-                pFilter = pCont->GetFilter4ClipBoardId( SOT_FORMATSTR_ID_STARDRAW );
+                pFilter = aMatch.GetFilter4ClipBoardId( SOT_FORMATSTR_ID_STARDRAW );
                 if( pFilter )
                     xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
 
-                pFilter = pCont->GetFilter4ClipBoardId( SOT_FORMATSTR_ID_STARDRAW, SFX_FILTER_TEMPLATEPATH  );
+                pFilter = aMatch.GetFilter4ClipBoardId( SOT_FORMATSTR_ID_STARDRAW, SFX_FILTER_TEMPLATEPATH  );
                 if( pFilter )
                     xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
 
