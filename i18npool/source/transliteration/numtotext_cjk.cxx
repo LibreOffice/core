@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numtotext_cjk.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: khong $ $Date: 2002-05-31 07:01:08 $
+ *  last change: $Author: khong $ $Date: 2002-08-07 00:21:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -275,6 +275,10 @@ TRANSLITERATION_NUMTOTEXT( AIUHalfWidth_ja_JP )
 TRANSLITERATION_NUMTOTEXT( IROHAFullWidth_ja_JP )
 TRANSLITERATION_NUMTOTEXT( IROHAHalfWidth_ja_JP )
 TRANSLITERATION_NUMTOTEXT( CircledNumber )
+TRANSLITERATION_NUMTOTEXT( HangulJamo_ko )
+TRANSLITERATION_NUMTOTEXT( HangulSyllable_ko )
+TRANSLITERATION_NUMTOTEXT( HangulCircledJamo_ko )
+TRANSLITERATION_NUMTOTEXT( HangulCircledSyllable_ko )
 #undef TRANSLITERATION_NUMTOTEXT
 
 } } } }

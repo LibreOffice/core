@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE Locale SYSTEM 'locale.dtd'>
 <Locale  version="1.2">
-
 <LC_INFO>
 <Language>
 <LangID>ko</LangID>
@@ -12,7 +11,6 @@
 <DefaultName>Korea</DefaultName>
 </Country>
 </LC_INFO>
-
 <LC_CTYPE unoid="generic">
 <Separators>
 <DateSeparator>-</DateSeparator>
@@ -36,7 +34,6 @@
 <TimePM>오후</TimePM>
 <MeasurementSystem>metric</MeasurementSystem>
 </LC_CTYPE>
-
 <LC_FORMAT>
 <!-- Formats for number, code range is from 0 to 5, compatible with en_US.xml -->
 <FormatElement msgid="NumberFormatskey1" default="true" type="medium" usage="FIXED_NUMBER" formatindex="0">
@@ -183,7 +180,7 @@
 <FormatCode>[H]:M:S.00</FormatCode>
 </FormatElement>
 
-<!-- Datetime format. Format index range is from 46 to 50 -->
+<!-- Datetime format. Format index range is from 46 to 47. -->
 <FormatElement msgid="DateTimeFormatskey1" default="false" type="medium" usage="DATE_TIME" formatindex="46">
 <FormatCode>YY"년" M"월" D"일" H"시" M"분"</FormatCode>
 </FormatElement>
@@ -267,7 +264,7 @@
 <FormatCode>AM/PM H:M</FormatCode>
 </FormatElement>
 
-<!-- The following is Korean extensive DateTime formats. Index range is from 73 to 76. -->
+<!-- The following is Korean extensive DateTime formats. Index range is from 73 to 77. -->
 <FormatElement msgid="DateTimeFormatskey4" default="false" type="medium" usage="DATE_TIME" formatindex="73">
 <FormatCode>YY"年" M"月" D"日" H"時" M"分" S"秒"</FormatCode>
 </FormatElement>
@@ -612,40 +609,36 @@
 <quarter4Word>4</quarter4Word>
 <aboveWord>위</aboveWord>
 <belowWord>아래</belowWord>
-<quarter1Abbreviation>1</quarter1Abbreviation>
-<quarter2Abbreviation>2</quarter2Abbreviation>
-<quarter3Abbreviation>3</quarter3Abbreviation>
-<quarter4Abbreviation>4</quarter4Abbreviation>
 </ReservedWords>
 </LC_MISC>
 
 <LC_NumberingLevel>
-<NumberingLevel Prefix=" " NumType="11" Suffix=")" />
+<NumberingLevel Prefix=" " NumType="11" Suffix="." Transliteration="NumToTextHangulSyllable_ko" />
+<NumberingLevel Prefix=" " NumType="11" Suffix="." Transliteration="NumToTextHangulJamo_ko" />
+<NumberingLevel Prefix=" " NumType="11" Suffix=" " Transliteration="NumToTextCircledNumber" />
 <NumberingLevel Prefix=" " NumType="4" Suffix="." />
-<NumberingLevel Prefix="(" NumType="4" Suffix="." />
+<NumberingLevel Prefix=" " NumType="0" Suffix="." />
+<NumberingLevel Prefix=" " NumType="1" Suffix="." />
 <NumberingLevel Prefix=" " NumType="2" Suffix="." />
-<NumberingLevel Prefix=" " NumType="0" Suffix=")" />
-<NumberingLevel Prefix=" " NumType="1" Suffix=")" />
-<NumberingLevel Prefix="(" NumType="1" Suffix=")" />
 <NumberingLevel Prefix=" " NumType="3" Suffix="." />
 </LC_NumberingLevel>
 
 <LC_OutLineNumberingLevel>
 
 <OutlineStyle>
-<OutLineNumberingLevel Prefix=" " NumType="11" Suffix=" " BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0"/>
-<OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="1" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="1" Suffix=")" BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="11" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="1" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0" Transliteration="NumToTextHangulSyllable_ko" />
+<OutLineNumberingLevel Prefix=" " NumType="11" Suffix=" " BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0" Transliteration="NumToTextCircledHangulSyllable_ko"/>
 <OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="2022"  BulletFontName="StarSymbol"  ParentNumbering="0" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="2022"  BulletFontName="StarSymbol"  ParentNumbering="0" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="2043"  BulletFontName="StarSymbol"  ParentNumbering="0" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" />
 </OutlineStyle>
 
 <OutlineStyle>
-<OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="1" Suffix=")" BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="2022"  BulletFontName="StarSymbol"  ParentNumbering="0" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="2022"  BulletFontName="StarSymbol"  ParentNumbering="0" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="2022"  BulletFontName="StarSymbol"  ParentNumbering="0" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix="(" NumType="4" Suffix=")" BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix="(" NumType="11" Suffix=")" BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0" Transliteration="NumToTextHangulSyllable_ko" />
+<OutLineNumberingLevel Prefix="(" NumType="1" Suffix=")" BulletChar="0020"  BulletFontName=""  ParentNumbering="0" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="4" Suffix=")" BulletChar="0020"  BulletFontName=""  ParentNumbering="0" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="11" Suffix=")" BulletChar="0020"  BulletFontName=""  ParentNumbering="0" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" Transliteration="NumToTextHangulSyllable_ko"/>
 </OutlineStyle>
 
 <OutlineStyle>
@@ -653,14 +646,14 @@
 <OutLineNumberingLevel Prefix="(" NumType="1" Suffix=")" BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0" />
 <OutLineNumberingLevel Prefix=" " NumType="3" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0" />
 <OutLineNumberingLevel Prefix=" " NumType="0" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="6" Suffix="." BulletChar="2022"  BulletFontName="StarSymbol"  ParentNumbering="0" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="2022"  BulletFontName="StarSymbol"  ParentNumbering="0" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" />
 </OutlineStyle>
 
 <OutlineStyle>
 <OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="11" Suffix=" " BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0" Transliteration="NumToTextCircledHangulSyllable_ko" />
+<OutLineNumberingLevel Prefix=" " NumType="4" Suffix=")" BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="11" Suffix=" " BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0" Transliteration="NumToTextCircledHangulJamo_ko" />
 <OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" />
 </OutlineStyle>
 

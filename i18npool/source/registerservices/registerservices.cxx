@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: khong $ $Date: 2002-07-25 04:45:45 $
+ *  last change: $Author: khong $ $Date: 2002-08-07 00:20:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -338,6 +338,10 @@ IMPL_CREATEINSTANCE( NumToTextAIUHalfWidth_ja_JP )
 IMPL_CREATEINSTANCE( NumToTextIROHAFullWidth_ja_JP )
 IMPL_CREATEINSTANCE( NumToTextIROHAHalfWidth_ja_JP )
 IMPL_CREATEINSTANCE( NumToTextCircledNumber )
+IMPL_CREATEINSTANCE( NumToTextHangulJamo_ko )
+IMPL_CREATEINSTANCE( NumToTextHangulSyllable_ko )
+IMPL_CREATEINSTANCE( NumToTextHangulCircledJamo_ko )
+IMPL_CREATEINSTANCE( NumToTextHangulCircledSyllable_ko )
 
 static const struct InstancesArray {
         const sal_Char* pServiceNm;
@@ -664,6 +668,10 @@ static const struct InstancesArray {
     IMPL_TRANSLITERATION_ITEM (NumToTextIROHAFullWidth_ja_JP),
     IMPL_TRANSLITERATION_ITEM (NumToTextIROHAHalfWidth_ja_JP),
     IMPL_TRANSLITERATION_ITEM (NumToTextCircledNumber),
+    IMPL_TRANSLITERATION_ITEM (NumToTextHangulJamo_ko),
+    IMPL_TRANSLITERATION_ITEM (NumToTextHangulSyllable_ko),
+    IMPL_TRANSLITERATION_ITEM (NumToTextHangulCircledJamo_ko),
+    IMPL_TRANSLITERATION_ITEM (NumToTextHangulCircledSyllable_ko),
 
 // add here new services !!
     { 0, 0, 0 }
