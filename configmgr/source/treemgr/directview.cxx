@@ -2,9 +2,9 @@
  *
  *  $RCSfile: directview.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2002-03-28 08:14:40 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 13:40:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,8 +107,10 @@ void DirectViewStrategy::doMarkChanged(Node const& )
 node::Attributes DirectViewStrategy::doAdjustAttributes(node::Attributes const& _aAttributes) const
 {
     node::Attributes aAttributes = _aAttributes;
-    aAttributes.bFinalized |= !aAttributes.bWritable;
-    aAttributes.bWritable = true;
+
+    if (aAttributes.isReadonly())
+        aAttributes.setAccess(node::accessFinal);
+
     return aAttributes;
 }
 //-----------------------------------------------------------------------------
