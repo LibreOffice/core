@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statemnt.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 17:24:17 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 16:52:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,14 +137,15 @@ class EditWindow;
 
 void SAL_CALL osl_TestToolDebugPrint( const sal_Char *pString );
 
+#define IsVisible IsReallyVisible
+#define GET_REAL_PARENT() GetWindow( WINDOW_REALPARENT )
+
+
 typedef USHORT SearchFlags;
 #define SEARCH_NOOVERLAP            ((SearchFlags) 0x0001)
 #define SEARCH_NO_TOPLEVEL_WIN      ((SearchFlags) 0x0002)
 #define SEARCH_FOCUS_FIRST          ((SearchFlags) 0x0004)
 #define SEARCH_FIND_DISABLED        ((SearchFlags) 0x0008)
-
-#define IsVisible IsReallyVisible
-#define GET_REAL_PARENT() GetWindow( WINDOW_REALPARENT )
 
 class Search
 {
@@ -175,6 +176,28 @@ public:
 //  static BOOL IsValid( SafePointer *pThis ) { return pThis == pThis->pSelf; }
 // virtual      operator -> (); { DBG_ASSERT(pMyself == this,"-> von Nicht existierendem Objekt aufgerufen"); }
 };
+
+
+class DisplayHidWin;
+class StatementCommand;
+class TranslateWin;
+
+struct TTSettings
+{
+    // DisplayHID
+       StatementCommand *pDisplayInstance;
+    DisplayHidWin *pDisplayHidWin;
+    Window *Old;
+    Window *Act;
+    String aOriginalCaption;
+
+    // Translate
+    TranslateWin *pTranslateWin;
+    BOOL bToTop;
+};
+
+
+TTSettings* GetTTSettings();
 
 
 #define MAX_RETRIES 9
@@ -450,12 +473,14 @@ private:
 class SearchUID : public Search
 {
     Window *pMaybeResult;
+    Window *pAlternateResult;
     SmartId aUId;
     BOOL bSearchButtonOnToolbox;
 public:
-    SearchUID( SmartId aUIdP, BOOL bSearchButtonOnToolboxP ): Search( SEARCH_FOCUS_FIRST ), pMaybeResult(NULL), aUId(aUIdP), bSearchButtonOnToolbox(bSearchButtonOnToolboxP) {}
+    SearchUID( SmartId aUIdP, BOOL bSearchButtonOnToolboxP ): Search( SEARCH_FOCUS_FIRST ), pMaybeResult(NULL), pAlternateResult(NULL), aUId(aUIdP), bSearchButtonOnToolbox(bSearchButtonOnToolboxP) {}
     virtual BOOL IsWinOK( Window *pWin );
     Window* GetMaybeWin() { return pMaybeResult; }
+    Window* GetAlternateResultWin() { return pAlternateResult; }
 };
 class SearchActive : public Search
 {
