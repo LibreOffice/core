@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlpivot.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-03 11:34:02 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 09:48:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,8 @@ class XclExpStream;
 // Constants and Enumerations =================================================
 
 // misc -----------------------------------------------------------------------
+
+#define EXC_STORAGE_PTCACHE         CREATE_STRING( "_SX_DB_CUR" )
 
 // strings
 const sal_uInt16 EXC_PT_NOSTRING            = 0xFFFF;
