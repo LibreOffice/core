@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcu,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-17 10:17:26 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 10:53:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -591,5 +591,10 @@
         <node oor:name="ExecutionArguments"/>
       </node>
     </node>
+  </node>
+  <node oor:name="Misc">
+    <prop oor:name="UseSystemFileDialog"  install:module="UseOOoFileDialogs">
+      <value>false</value>
+    </prop>
   </node>
 </oor:component-data>
