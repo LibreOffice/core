@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tblsel.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 16:34:25 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:40:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,10 @@
 #include <swrect.hxx>
 #endif
 
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
+
 class SwCrsrShell;
 class SwCursor;
 class SwTableCursor;
@@ -106,7 +110,7 @@ enum SwTblSearchType
     TBLSEARCH_NO_UNION_CORRECT  = 0x10      // die zusammenges. Union nicht korrigieren
 };
 
-void GetTblSel( const SwCrsrShell& rShell, SwSelBoxes& rBoxes,
+SW_DLLPUBLIC void GetTblSel( const SwCrsrShell& rShell, SwSelBoxes& rBoxes,
                 const SwTblSearchType = TBLSEARCH_NONE );
 
 void GetTblSel( const SwCursor& rCrsr, SwSelBoxes& rBoxes,
@@ -265,7 +269,7 @@ struct _FndPara
 };
 
 BOOL _FndBoxCopyCol( const SwTableBox*& rpBox, void* pPara );
-BOOL _FndLineCopyCol( const SwTableLine*& rpLine, void* pPara );
+SW_DLLPUBLIC BOOL _FndLineCopyCol( const SwTableLine*& rpLine, void* pPara );
 
 
 #endif  //  _TBLSEL_HXX
