@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementimport.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: mh $ $Date: 2001-10-18 13:19:57 $
+ *  last change: $Author: fs $ $Date: 2001-11-02 12:34:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,8 @@
 #ifndef _COM_SUN_STAR_FORM_FORMCOMPONENTTYPE_HPP_
 #include <com/sun/star/form/FormComponentType.hpp>
 #endif
+
+#include <algorithm>
 
 //.........................................................................
 namespace xmloff
@@ -775,8 +777,9 @@ namespace xmloff
             const Reference< XNameContainer >& _rxParentContainer,
             OControlElement::ElementType _eType)
         :OControlImport(_rImport, _rEventManager, _nPrefix, _rName, _rxParentContainer, _eType)
-        ,m_nEmptyListItems(0)
-        ,m_nEmptyValueItems(sal_False)
+        ,m_nEmptyListItems( 0 )
+        ,m_nEmptyValueItems( 0 )
+        ,m_bEncounteredLSAttrib( sal_False )
     {
         if (OControlElement::COMBOBOX == m_eElementType)
             enableTrackAttributes();
@@ -832,11 +835,14 @@ namespace xmloff
 
         if (OControlElement::LISTBOX == m_eElementType)
         {
-            // the value sequence
-            PropertyValue aValueList;
-            aValueList.Name = PROPERTY_LISTSOURCE;
-            aValueList.Value <<= m_aValueList;
-            implPushBackPropertyValue(aValueList);
+            if ( !m_bEncounteredLSAttrib )
+            {
+                // the value sequence
+                PropertyValue aValueList;
+                aValueList.Name = PROPERTY_LISTSOURCE;
+                aValueList.Value <<= m_aValueList;
+                implPushBackPropertyValue(aValueList);
+            }
 
             // the select sequence
             PropertyValue aSelected;
@@ -860,12 +866,26 @@ namespace xmloff
         static const ::rtl::OUString s_sListSourceAttributeName = ::rtl::OUString::createFromAscii(getDatabaseAttributeName(DA_LIST_SOURCE));
         if (s_sListSourceAttributeName == _rLocalName)
         {
-            // it's the ListSource attribute
-            OSL_ENSURE(0 == m_aListSource.getLength(), "OListAndComboImport::handleAttribute: already have a value for the ListSource property!");
             PropertyValue aListSource;
             aListSource.Name = PROPERTY_LISTSOURCE;
-            aListSource.Value <<= _rValue;
-            implPushBackPropertyValue(aListSource);
+
+            // it's the ListSource attribute
+            m_bEncounteredLSAttrib = sal_True;
+            if ( OControlElement::COMBOBOX == m_eElementType )
+            {
+                aListSource.Value <<= _rValue;
+            }
+            else
+            {
+                // a listbox which has a list-source attribute must have a list-source-type of something
+                // not equal to ValueList.
+                // In this case, the list-source value is simply the one and only element of the ListSource property.
+                Sequence< ::rtl::OUString > aListSourcePropValue( 1 );
+                aListSourcePropValue[0] = _rValue;
+                aListSource.Value <<= aListSourcePropValue;
+            }
+
+            implPushBackPropertyValue( aListSource );
         }
         else
             OControlImport::handleAttribute(_nNamespaceKey, _rLocalName, _rValue);
@@ -884,7 +904,15 @@ namespace xmloff
     {
         OSL_ENSURE(!m_nEmptyValueItems, "OListAndComboImport::implPushBackValue: value list is already done!");
         if (!m_nEmptyValueItems)
-            pushBackSequenceElement(m_aValueList, _rValue);
+        {
+            OSL_ENSURE( !m_bEncounteredLSAttrib, "OListAndComboImport::implPushBackValue: invalid structure! Did you save this document with a version prior SRC641 m?" );
+                // We already had the list-source attribute, which means that the ListSourceType is
+                // not ValueList, which means that the ListSource should contain only one string in
+                // the first element of the sequence
+                // All other values in the file are invalid
+
+            pushBackSequenceElement( m_aValueList, _rValue );
+        }
     }
 
     //---------------------------------------------------------------------
@@ -958,7 +986,7 @@ namespace xmloff
         sValue = _rxAttrList->getValueByName(sValueAttribute);
         bNonexistentAttribute = sal_False;
         if (!sValue.getLength())
-            if (0 == _rxAttrList->getTypeByName(sLabelAttribute).getLength())
+            if (0 == _rxAttrList->getTypeByName(sValueAttribute).getLength())
                 // this attribute does not really exist
                 bNonexistentAttribute = sal_True;
 
@@ -1280,6 +1308,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.25  2001/10/18 13:19:57  mh
+ *  add: include
+ *
  *  Revision 1.24  2001/07/10 17:06:23  mtg
  *  updated namespace handling
  *
