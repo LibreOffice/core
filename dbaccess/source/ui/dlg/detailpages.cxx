@@ -2,9 +2,9 @@
  *
  *  $RCSfile: detailpages.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-26 08:53:54 $
+ *  last change: $Author: oj $ $Date: 2002-08-30 06:05:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,11 +199,6 @@ namespace dbaui
         {
             m_pIsSQL92Check = new CheckBox(this, ResId(CB_SQL92CHECK));
             m_pIsSQL92Check->SetClickHdl(getControlModifiedLink());
-            if ( !m_pAutoRetrievingEnabled )
-            {
-                CheckBox aTemp(this, ResId(CB_RETRIEVE_AUTO));
-                m_pIsSQL92Check->SetPosPixel(aTemp.GetPosPixel());
-            }
         }
     }
 
@@ -905,6 +900,12 @@ namespace dbaui
         aPos = m_pCharset->GetPosPixel();
         m_pCharset->SetPosPixel(Point(aPos.X(), aPos.Y() - aMovesize.Height()));
 
+        if ( !m_pAutoRetrievingEnabled && m_pIsSQL92Check )
+        {
+            CheckBox aTemp(this, ResId(CB_RETRIEVE_AUTO));
+            m_pIsSQL92Check->SetPosPixel(aTemp.GetPosPixel());
+        }
+
         FreeResource();
 
         // don't use the ODBC help ids
@@ -1350,6 +1351,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.17  2002/08/26 08:53:54  oj
+ *  #102576# move chweckbox to fixedline
+ *
  *  Revision 1.16  2002/08/19 07:40:35  oj
  *  #99473# change string resource files
  *
