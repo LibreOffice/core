@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DescriptionGenerator.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: af $ $Date: 2002-03-06 15:59:26 $
+ *  last change: $Author: af $ $Date: 2002-03-08 12:34:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,7 +151,7 @@ DescriptionGenerator::~DescriptionGenerator (void)
 
 
 
-DescriptionGenerator::initialize (::rtl::OUString sPrefix)
+void DescriptionGenerator::initialize (::rtl::OUString sPrefix)
 {
     msDescription = sPrefix;
     if (mxSet.is())

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DescriptionGenerator.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: af $ $Date: 2002-03-06 15:48:04 $
+ *  last change: $Author: af $ $Date: 2002-03-08 12:32:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,7 @@ public:
             An introductory description of the shape that is made more
             specific by later calls to <member>addProperty</member>.
     */
-    DescriptionGenerator::initialize (::rtl::OUString sPrefix);
+    void initialize (::rtl::OUString sPrefix);
 
     /**  Returns the description string and then resets it.  Usually called
          as last method before destroying the object.
