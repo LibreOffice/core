@@ -11,7 +11,7 @@
             Kai Sommerfeld
         </author>
         <name>
-            UniversalContentBroker
+            com.sun.star.comp.ucb.UniversalContentBroker
         </name>
         <description>
         This component provides access to a set of Contents via Content Providers.
@@ -36,7 +36,7 @@
             Kai Sommerfeld
         </author>
         <name>
-            UcbStore
+            com.sun.star.comp.ucb.UcbStore
         </name>
         <description>
         This component is a factory for components managing persistent data.
@@ -67,7 +67,7 @@
             Kai Sommerfeld
         </author>
         <name>
-            UcbPropertiesManager
+            com.sun.star.comp.ucb.UcbPropertiesManager
         </name>
         <description>
         This component provides access to the meta data of the properties
@@ -89,7 +89,7 @@
             Kai Sommerfeld
         </author>
         <name>
-            UcbContentProviderProxyFactory
+            com.sun.star.comp.ucb.UcbContentProviderProxyFactory
         </name>
         <description>
         This component is a factory for proxy objects for Content Providers.

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbstore.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kso $ $Date: 2001-03-21 09:04:18 $
+ *  last change: $Author: kso $ $Date: 2001-04-05 09:49:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,8 +254,10 @@ XTYPEPROVIDER_IMPL_4( UcbStore,
 //=========================================================================
 
 XSERVICEINFO_IMPL_1( UcbStore,
-                     OUString::createFromAscii( "UcbStore" ),
-                     OUString::createFromAscii( STORE_SERVICE_NAME ) );
+                     OUString::createFromAscii(
+                         "com.sun.star.comp.ucb.UcbStore" ),
+                     OUString::createFromAscii(
+                         STORE_SERVICE_NAME ) );
 
 //=========================================================================
 //
@@ -414,9 +416,9 @@ XTYPEPROVIDER_IMPL_4( PropertySetRegistry,
 
 XSERVICEINFO_NOFACTORY_IMPL_1( PropertySetRegistry,
                                 OUString::createFromAscii(
-                                               "PropertySetRegistry" ),
+                                   "com.sun.star.comp.ucb.PropertySetRegistry" ),
                                 OUString::createFromAscii(
-                                               PROPSET_REG_SERVICE_NAME ) );
+                                   PROPSET_REG_SERVICE_NAME ) );
 
 //=========================================================================
 //
@@ -1578,9 +1580,9 @@ XTYPEPROVIDER_IMPL_8( PersistentPropertySet,
 
 XSERVICEINFO_NOFACTORY_IMPL_1( PersistentPropertySet,
                                 OUString::createFromAscii(
-                                               "PersistentPropertySet" ),
+                                   "com.sun.star.comp.ucb.PersistentPropertySet" ),
                                 OUString::createFromAscii(
-                                               PERS_PROPSET_SERVICE_NAME ) );
+                                   PERS_PROPSET_SERVICE_NAME ) );
 
 //=========================================================================
 //

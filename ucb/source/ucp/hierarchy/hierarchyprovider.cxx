@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchyprovider.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2000-12-21 09:31:52 $
+ *  last change: $Author: kso $ $Date: 2001-04-05 09:48:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,9 +143,9 @@ XTYPEPROVIDER_IMPL_4( HierarchyContentProvider,
 
 XSERVICEINFO_IMPL_1( HierarchyContentProvider,
                      OUString::createFromAscii(
-                             "HierarchyContentProvider" ),
+                         "com.sun.star.comp.ucb.HierarchyContentProvider" ),
                      OUString::createFromAscii(
-                             HIERARCHY_CONTENT_PROVIDER_SERVICE_NAME ) );
+                         HIERARCHY_CONTENT_PROVIDER_SERVICE_NAME ) );
 
 //=========================================================================
 //

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cacheddynamicresultset.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-17 10:44:57 $
+ *  last change: $Author: kso $ $Date: 2001-04-05 09:50:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,8 +160,10 @@ XTYPEPROVIDER_IMPL_4( CachedDynamicResultSet
 //--------------------------------------------------------------------------
 
 XSERVICEINFO_NOFACTORY_IMPL_1( CachedDynamicResultSet,
-                    OUString::createFromAscii( "CachedDynamicResultSet" ),
-                    OUString::createFromAscii( CACHED_DRS_SERVICE_NAME ) );
+                            OUString::createFromAscii(
+                            "com.sun.star.comp.ucb.CachedDynamicResultSet" ),
+                            OUString::createFromAscii(
+                            CACHED_DRS_SERVICE_NAME ) );
 
 //--------------------------------------------------------------------------
 // own methds. ( inherited )
@@ -214,8 +216,10 @@ XTYPEPROVIDER_IMPL_3( CachedDynamicResultSetFactory,
 //--------------------------------------------------------------------------
 
 XSERVICEINFO_IMPL_1( CachedDynamicResultSetFactory,
-                OUString::createFromAscii( "CachedDynamicResultSetFactory" ),
-                OUString::createFromAscii( CACHED_DRS_FACTORY_NAME ) );
+                         OUString::createFromAscii(
+                         "com.sun.star.comp.ucb.CachedDynamicResultSetFactory" ),
+                         OUString::createFromAscii(
+                         CACHED_DRS_FACTORY_NAME ) );
 
 //--------------------------------------------------------------------------
 // Service factory implementation.

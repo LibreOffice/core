@@ -2,9 +2,9 @@
  *
  *  $RCSfile: provprox.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-16 14:52:48 $
+ *  last change: $Author: kso $ $Date: 2001-04-05 09:49:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,9 +121,9 @@ XTYPEPROVIDER_IMPL_3( UcbContentProviderProxyFactory,
 
 XSERVICEINFO_IMPL_1( UcbContentProviderProxyFactory,
                      OUString::createFromAscii(
-                                     "UcbContentProviderProxyFactory" ),
+                         "com.sun.star.comp.ucb.UcbContentProviderProxyFactory" ),
                      OUString::createFromAscii(
-                                     PROVIDER_FACTORY_SERVICE_NAME ) );
+                         PROVIDER_FACTORY_SERVICE_NAME ) );
 
 //=========================================================================
 //
@@ -229,10 +229,10 @@ XTYPEPROVIDER_IMPL_5( UcbContentProviderProxy,
 //=========================================================================
 
 XSERVICEINFO_NOFACTORY_IMPL_1( UcbContentProviderProxy,
-                                OUString::createFromAscii(
-                                                "UcbContentProviderProxy" ),
-                                OUString::createFromAscii(
-                                             PROVIDER_PROXY_SERVICE_NAME ) );
+                            OUString::createFromAscii(
+                                "com.sun.star.comp.ucb.UcbContentProviderProxy" ),
+                            OUString::createFromAscii(
+                             PROVIDER_PROXY_SERVICE_NAME ) );
 
 //=========================================================================
 //

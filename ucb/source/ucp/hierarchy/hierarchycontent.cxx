@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchycontent.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kso $ $Date: 2001-03-27 14:08:50 $
+ *  last change: $Author: kso $ $Date: 2001-04-05 09:48:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -343,7 +343,8 @@ Sequence< Type > SAL_CALL HierarchyContent::getTypes()
 OUString SAL_CALL HierarchyContent::getImplementationName()
     throw( RuntimeException )
 {
-    return OUString::createFromAscii( "HierarchyContent" );
+    return
+        OUString::createFromAscii( "com.sun.star.comp.ucb.HierarchyContent" );
 }
 
 //=========================================================================

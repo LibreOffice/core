@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgprovider.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kso $ $Date: 2001-03-19 08:37:07 $
+ *  last change: $Author: kso $ $Date: 2001-04-05 09:48:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -235,9 +235,9 @@ XTYPEPROVIDER_IMPL_3( ContentProvider,
 
 XSERVICEINFO_IMPL_1( ContentProvider,
                      OUString::createFromAscii(
-                             "PackageContentProvider" ),
+                         "com.sun.star.comp.ucb.PackageContentProvider" ),
                      OUString::createFromAscii(
-                             PACKAGE_CONTENT_PROVIDER_SERVICE_NAME ) );
+                         PACKAGE_CONTENT_PROVIDER_SERVICE_NAME ) );
 
 //=========================================================================
 //

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sortresult.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-22 13:56:08 $
+ *  last change: $Author: kso $ $Date: 2001-04-05 09:49:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -295,8 +295,10 @@ XTYPEPROVIDER_IMPL_9( SortedResultSet,
 //--------------------------------------------------------------------------
 
 XSERVICEINFO_NOFACTORY_IMPL_1( SortedResultSet,
-                    OUString::createFromAscii( "SortedResultSet" ),
-                    OUString::createFromAscii( RESULTSET_SERVICE_NAME ) );
+                                   OUString::createFromAscii(
+                                   "com.sun.star.comp.ucb.SortedResultSet" ),
+                                   OUString::createFromAscii(
+                                   RESULTSET_SERVICE_NAME ) );
 
 //--------------------------------------------------------------------------
 // XComponent methods.

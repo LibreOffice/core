@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iahndl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sb $ $Date: 2000-11-10 10:53:54 $
+ *  last change: $Author: kso $ $Date: 2001-04-05 09:52:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,7 +205,7 @@ void executeCookieDialog(CntHTTPCookieRequest & rRequest);
 
 // static
 sal_Char const UUIInteractionHandler::m_aImplementationName[]
-    = "UUIInteractionHandler";
+    = "com.sun.star.comp.uui.UUIInteractionHandler";
 
 //============================================================================
 // virtual

@@ -11,7 +11,7 @@
         Stephan Bergmann
         </author>
         <name>
-            UUIInteractionHandler
+            com.sun.star.comp.uui.UUIInteractionHandler
         </name>
         <description>
         This component implements an Interaction Handler for the UCB.

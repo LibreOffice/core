@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sortdynres.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kso $ $Date: 2001-03-01 08:03:26 $
+ *  last change: $Author: kso $ $Date: 2001-04-05 09:49:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,9 +179,10 @@ XTYPEPROVIDER_IMPL_3( SortedDynamicResultSet,
 //--------------------------------------------------------------------------
 
 XSERVICEINFO_NOFACTORY_IMPL_1( SortedDynamicResultSet,
-                OUString::createFromAscii( "SortedDynamicResultSet" ),
-                OUString::createFromAscii( DYNAMIC_RESULTSET_SERVICE_NAME ) );
-
+                                   OUString::createFromAscii(
+                                   "com.sun.star.comp.ucb.SortedDynamicResultSet" ),
+                                   OUString::createFromAscii(
+                                   DYNAMIC_RESULTSET_SERVICE_NAME ) );
 
 //--------------------------------------------------------------------------
 // XComponent methods.
@@ -554,9 +555,10 @@ XTYPEPROVIDER_IMPL_3( SortedDynamicResultSetFactory,
 //--------------------------------------------------------------------------
 
 XSERVICEINFO_IMPL_1( SortedDynamicResultSetFactory,
-                OUString::createFromAscii( "SortedDynamicResultSetFactory" ),
-                OUString::createFromAscii( DYNAMIC_RESULTSET_FACTORY_NAME ) );
-
+                         OUString::createFromAscii(
+                        "com.sun.star.comp.ucb.SortedDynamicResultSetFactory" ),
+                         OUString::createFromAscii(
+                         DYNAMIC_RESULTSET_FACTORY_NAME ) );
 
 //--------------------------------------------------------------------------
 // Service factory implementation.

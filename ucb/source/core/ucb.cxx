@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucb.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-02 08:21:39 $
+ *  last change: $Author: kso $ $Date: 2001-04-05 09:49:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,8 +216,10 @@ void SAL_CALL UniversalContentBroker::removeEventListener(
 //=========================================================================
 
 XSERVICEINFO_IMPL_1( UniversalContentBroker,
-                     OUString::createFromAscii( "UniversalContentBroker" ),
-                     OUString::createFromAscii( UCB_SERVICE_NAME ) );
+                     OUString::createFromAscii(
+                         "com.sun.star.comp.ucb.UniversalContentBroker" ),
+                     OUString::createFromAscii(
+                         UCB_SERVICE_NAME ) );
 
 //=========================================================================
 //

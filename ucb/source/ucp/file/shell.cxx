@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hro $ $Date: 2001-04-03 12:27:16 $
+ *  last change: $Author: kso $ $Date: 2001-04-05 09:49:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2890,7 +2890,7 @@ shell::getScheme( rtl::OUString& Scheme )
 rtl::OUString SAL_CALL
 shell::getImplementationName_static( void )
 {
-  return rtl::OUString::createFromAscii( "FileProvider" );
+  return rtl::OUString::createFromAscii( "com.sun.star.comp.ucb.FileProvider" );
 }
 
 

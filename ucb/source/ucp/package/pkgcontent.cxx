@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgcontent.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kso $ $Date: 2001-03-27 14:08:51 $
+ *  last change: $Author: kso $ $Date: 2001-04-05 09:48:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -422,7 +422,7 @@ Sequence< Type > SAL_CALL Content::getTypes()
 OUString SAL_CALL Content::getImplementationName()
     throw( RuntimeException )
 {
-    return OUString::createFromAscii( "PackageContent" );
+    return OUString::createFromAscii( "com.sun.star.comp.ucb.PackageContent" );
 }
 
 //=========================================================================

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sortmain.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-16 14:53:23 $
+ *  last change: $Author: kso $ $Date: 2001-04-05 09:49:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,6 +156,12 @@ extern "C" void * SAL_CALL component_getFactory(
     if ( SortedDynamicResultSetFactory::getImplementationName_Static().
                 compareToAscii( pImplName ) == 0 )
     {
+        xFactory = SortedDynamicResultSetFactory::createServiceFactory( xSMgr );
+    }
+    else if ( rtl_str_compare( pImplName, "SortedDynamicResultSetFactory" )
+                == 0 )
+    {
+        // Backward compatibility... :-/
         xFactory = SortedDynamicResultSetFactory::createServiceFactory( xSMgr );
     }
 

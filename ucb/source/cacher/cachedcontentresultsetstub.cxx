@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cachedcontentresultsetstub.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: iha $ $Date: 2001-03-23 11:00:45 $
+ *  last change: $Author: kso $ $Date: 2001-04-05 09:50:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,8 +212,10 @@ Sequence< Type > SAL_CALL CachedContentResultSetStub
 //--------------------------------------------------------------------------
 
 XSERVICEINFO_NOFACTORY_IMPL_1( CachedContentResultSetStub,
-                    OUString::createFromAscii( "CachedContentResultSetStub" ),
-                    OUString::createFromAscii( CACHED_CRS_STUB_SERVICE_NAME ) );
+                        OUString::createFromAscii(
+                        "com.sun.star.comp.ucb.CachedContentResultSetStub" ),
+                        OUString::createFromAscii(
+                        CACHED_CRS_STUB_SERVICE_NAME ) );
 
 //-----------------------------------------------------------------
 // XFetchProvider methods.
@@ -569,8 +571,10 @@ XTYPEPROVIDER_IMPL_3( CachedContentResultSetStubFactory,
 //--------------------------------------------------------------------------
 
 XSERVICEINFO_IMPL_1( CachedContentResultSetStubFactory,
-                OUString::createFromAscii( "CachedContentResultSetStubFactory" ),
-                OUString::createFromAscii( CACHED_CRS_STUB_FACTORY_NAME ) );
+                     OUString::createFromAscii(
+                     "com.sun.star.comp.ucb.CachedContentResultSetStubFactory" ),
+                     OUString::createFromAscii(
+                     CACHED_CRS_STUB_FACTORY_NAME ) );
 
 //--------------------------------------------------------------------------
 // Service factory implementation.

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prov.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hro $ $Date: 2001-03-15 12:54:03 $
+ *  last change: $Author: kso $ $Date: 2001-04-05 09:49:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,6 +183,11 @@ extern "C" void * SAL_CALL component_getFactory(
     if ( fileaccess::shell::getImplementationName_static().
             compareToAscii( pImplName ) == 0 )
     {
+        xFactory = FileProvider::createServiceFactory( xSMgr );
+    }
+    else if ( rtl_str_compare( pImplName, "FileProvider" ) == 0 )
+    {
+        // Backward compatibility... :-/
         xFactory = FileProvider::createServiceFactory( xSMgr );
     }
 
@@ -498,11 +503,7 @@ FileProvider::createServiceFactory(
         fileaccess::shell::getSupportedServiceNames_static() ) );
 }
 
-#if SUPD > 583
 uno::Reference< uno::XInterface > SAL_CALL
-#else
-uno::Reference< uno::XInterface >
-#endif
 FileProvider::CreateInstance(
     const uno::Reference< lang::XMultiServiceFactory >& xMultiServiceFactory )
 {

@@ -11,7 +11,7 @@
             Kai Sommerfeld
         </author>
         <name>
-            HierarchyContentProvider
+            com.sun.star.comp.ucb.HierarchyContentProvider
         </name>
         <description>
         This component implements a Content Provider for the Universal

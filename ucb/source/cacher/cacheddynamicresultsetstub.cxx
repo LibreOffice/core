@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cacheddynamicresultsetstub.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kso $ $Date: 2001-03-01 08:03:25 $
+ *  last change: $Author: kso $ $Date: 2001-04-05 09:50:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,8 +168,10 @@ XTYPEPROVIDER_IMPL_5( CachedDynamicResultSetStub
 //--------------------------------------------------------------------------
 
 XSERVICEINFO_NOFACTORY_IMPL_1( CachedDynamicResultSetStub,
-                    OUString::createFromAscii( "CachedDynamicResultSetStub" ),
-                    OUString::createFromAscii( CACHED_DRS_STUB_SERVICE_NAME ) );
+                        OUString::createFromAscii(
+                        "com.sun.star.comp.ucb.CachedDynamicResultSetStub" ),
+                        OUString::createFromAscii(
+                        CACHED_DRS_STUB_SERVICE_NAME ) );
 
 //--------------------------------------------------------------------------
 //--------------------------------------------------------------------------
@@ -210,8 +212,10 @@ XTYPEPROVIDER_IMPL_3( CachedDynamicResultSetStubFactory,
 //--------------------------------------------------------------------------
 
 XSERVICEINFO_IMPL_1( CachedDynamicResultSetStubFactory,
-                OUString::createFromAscii( "CachedDynamicResultSetStubFactory" ),
-                OUString::createFromAscii( CACHED_DRS_STUB_FACTORY_NAME ) );
+                     OUString::createFromAscii(
+                     "com.sun.star.comp.ucb.CachedDynamicResultSetStubFactory" ),
+                     OUString::createFromAscii(
+                     CACHED_DRS_STUB_FACTORY_NAME ) );
 
 //--------------------------------------------------------------------------
 // Service factory implementation.

@@ -11,7 +11,7 @@
             Kai Sommerfeld
         </author>
         <name>
-            PackageContentProvider
+            com.sun.star.comp.ucb.PackageContentProvider
         </name>
         <description>
         This component implements a Content Provider for the Universal

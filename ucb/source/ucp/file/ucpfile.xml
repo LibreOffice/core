@@ -11,7 +11,7 @@
         Andreas Bille
         </author>
         <name>
-            FileProvider
+            com.sun.star.comp.ucb.FileProvider
         </name>
         <description>
         This component implements a Content Provider for the Universal

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbprops.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-16 14:52:48 $
+ *  last change: $Author: kso $ $Date: 2001-04-05 09:49:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -420,9 +420,10 @@ XTYPEPROVIDER_IMPL_3( UcbPropertiesManager,
 //=========================================================================
 
 XSERVICEINFO_IMPL_1( UcbPropertiesManager,
-                     OUString::createFromAscii( "UcbPropertiesManager" ),
                      OUString::createFromAscii(
-                                     PROPERTIES_MANAGER_SERVICE_NAME ) );
+                         "com.sun.star.comp.ucb.UcbPropertiesManager" ),
+                     OUString::createFromAscii(
+                         PROPERTIES_MANAGER_SERVICE_NAME ) );
 
 //=========================================================================
 //

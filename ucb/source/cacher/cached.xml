@@ -11,7 +11,7 @@
         Ingrid Halama
         </author>
         <name>
-            CachedContentResultSetFactory
+            com.sun.star.comp.ucb.CachedContentResultSetFactory
         </name>
         <description>
         This component implements a factory for locally cached resultsets.
@@ -32,7 +32,7 @@
         Ingrid Halama
         </author>
         <name>
-            CachedContentResultSetStubFactory
+            com.sun.star.comp.ucb.CachedContentResultSetStubFactory
         </name>
         <description>
         This component implements a factory for stubs for locally cached
@@ -54,7 +54,7 @@
         Ingrid Halama
         </author>
         <name>
-            CachedDynamicResultSetFactory
+            com.sun.star.comp.ucb.CachedDynamicResultSetFactory
         </name>
         <description>
         This component implements a factory for locally cached dynamic
@@ -76,7 +76,7 @@
         Ingrid Halama
         </author>
         <name>
-            CachedDynamicResultSetStubFactory
+            com.sun.star.comp.ucb.CachedDynamicResultSetStubFactory
         </name>
         <description>
         This component implements a factory for stubs for locally cached

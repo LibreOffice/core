@@ -11,7 +11,7 @@
         Dirk Voelzke
         </author>
         <name>
-            SortedDynamicResultSetFactory
+            com.sun.star.comp.ucb.SortedDynamicResultSetFactory
         </name>
         <description>
         This component implements a factory for sorted Content Resultsets.

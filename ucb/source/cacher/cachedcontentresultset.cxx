@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cachedcontentresultset.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: iha $ $Date: 2001-02-26 15:47:50 $
+ *  last change: $Author: kso $ $Date: 2001-04-05 09:50:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1010,8 +1010,10 @@ XTYPEPROVIDER_IMPL_11( CachedContentResultSet
 //--------------------------------------------------------------------------
 
 XSERVICEINFO_NOFACTORY_IMPL_1( CachedContentResultSet,
-                    OUString::createFromAscii( "CachedContentResultSet" ),
-                    OUString::createFromAscii( CACHED_CONTENT_RESULTSET_SERVICE_NAME ) );
+                               OUString::createFromAscii(
+                            "com.sun.star.comp.ucb.CachedContentResultSet" ),
+                            OUString::createFromAscii(
+                            CACHED_CONTENT_RESULTSET_SERVICE_NAME ) );
 
 //--------------------------------------------------------------------------
 // XPropertySet methods. ( inherited )
@@ -2214,8 +2216,10 @@ XTYPEPROVIDER_IMPL_3( CachedContentResultSetFactory,
 //--------------------------------------------------------------------------
 
 XSERVICEINFO_IMPL_1( CachedContentResultSetFactory,
-                OUString::createFromAscii( "CachedContentResultSetFactory" ),
-                OUString::createFromAscii( CACHED_CONTENT_RESULTSET_FACTORY_NAME ) );
+                     OUString::createFromAscii(
+                           "com.sun.star.comp.ucb.CachedContentResultSetFactory" ),
+                         OUString::createFromAscii(
+                         CACHED_CONTENT_RESULTSET_FACTORY_NAME ) );
 
 //--------------------------------------------------------------------------
 // Service factory implementation.

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bc.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hro $ $Date: 2001-04-03 12:06:25 $
+ *  last change: $Author: kso $ $Date: 2001-04-05 09:49:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -302,13 +302,15 @@ BaseContent::dispose()
 
 
 
-
+//////////////////////////////////////////////////////////////////////////////////////////
+//  XServiceInfo
+//////////////////////////////////////////////////////////////////////////////////////////
 
 rtl::OUString SAL_CALL
 BaseContent::getImplementationName()
     throw( uno::RuntimeException)
 {
-    return rtl::OUString::createFromAscii( "FileContent" );
+    return rtl::OUString::createFromAscii( "com.sun.star.comp.ucb.FileContent" );
 }
 
 
