@@ -1,0 +1,911 @@
+/*************************************************************************
+ *
+ *  $RCSfile: mailmergehelper.cxx,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:13:22 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#pragma hdrstop
+
+#ifndef _SWTYPES_HXX
+#include <swtypes.hxx>
+#endif
+#ifndef _MAILMERGEHELPER_HXX
+#include <mailmergehelper.hxx>
+#endif
+#ifndef _STDCTRL_HXX
+#include <svtools/stdctrl.hxx>
+#endif
+#ifndef _MMCONFIGITEM_HXX
+#include <mmconfigitem.hxx>
+#endif
+#ifndef _DOCSH_HXX
+#include <docsh.hxx>
+#endif
+#ifndef _FILEDLGHELPER_HXX
+#include <sfx2/filedlghelper.hxx>
+#endif
+#ifndef _SFXDOCFILE_HXX
+#include <sfx2/docfile.hxx>
+#endif
+#ifndef _SFXAPP_HXX
+#include <sfx2/app.hxx>
+#endif
+#ifndef _SFX_FCONTNR_HXX
+#include <sfx2/fcontnr.hxx>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
+#include <com/sun/star/container/XNameAccess.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBCX_XCOLUMNSSUPPLIER_HPP_
+#include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDB_XCOLUMN_HPP_
+#include <com/sun/star/sdb/XColumn.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include "com/sun/star/lang/XMultiServiceFactory.hpp"
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
+#include <com/sun/star/uno/XComponentContext.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UI_DIALOGS_XFILEPICKER_HPP_
+#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
+#endif
+#ifndef _SV_MSGBOX_HXX
+#include <vcl/msgbox.hxx>
+#endif
+#ifndef _PASSWD_HXX
+#include <sfx2/passwd.hxx>
+#endif
+
+#include <dbui.hrc>
+
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::sdb;
+using namespace ::com::sun::star::sdbc;
+using namespace ::com::sun::star::sdbcx;
+using namespace ::rtl;
+
+namespace SwMailMergeHelper
+{
+
+/*-- 14.06.2004 12:29:19---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+String  CallSaveAsDialog(String& rFilter)
+{
+    ErrCode nRet;
+    String sFactory(String::CreateFromAscii(SwDocShell::Factory().GetShortName()));
+    ::sfx2::FileDialogHelper aDialog( sfx2::FILESAVE_AUTOEXTENSION,
+                0,
+                sFactory );
+    String& rLastSaveDir = (String&)SFX_APP()->GetLastSaveDirectory();
+
+    SvStringsDtor* pURLList = NULL;
+    SfxItemSet* pSet=0;
+    String sRet;
+    nRet = aDialog.Execute();
+    if(ERRCODE_NONE == nRet)
+    {
+        uno::Reference < ui::dialogs::XFilePicker > xFP = aDialog.GetFilePicker();
+        sRet = xFP->getFiles().getConstArray()[0];
+        rFilter = aDialog.GetCurrentFilter();
+        SfxFilterMatcher aMatcher( sFactory );
+        const SfxFilter* p1 = aMatcher.GetFilter4FilterName( rFilter );
+        const SfxFilter* p2 = aMatcher.GetFilter4UIName( rFilter );
+        if(p2)
+            rFilter = p2->GetFilterName();
+    }
+    return sRet;
+}
+/*-- 20.08.2004 09:39:18---------------------------------------------------
+    simple address check: check for '@'
+                            for at least one '.' after the '@'
+                            and for at least to characters before and after the dot
+  -----------------------------------------------------------------------*/
+bool CheckMailAddress( const ::rtl::OUString& rMailAddress )
+{
+    String sAddress(rMailAddress);
+    if(!(sAddress.GetTokenCount('@') == 2))
+        return false;
+    sAddress = sAddress.GetToken(1, '@');
+    if(sAddress.GetTokenCount('.') < 2)
+        return false;
+    if(sAddress.GetToken( 0, '.').Len() < 2 || sAddress.GetToken( 1, '.').Len() < 2)
+        return false;
+    return true;
+}
+} //namespace
+
+/*-- 06.04.2004 10:31:27---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+SwBoldFixedInfo::SwBoldFixedInfo(Window* pParent, const ResId& rResId) :
+    FixedInfo(pParent, rResId)
+{
+    Font aFont = GetFont();
+    aFont.SetWeight( WEIGHT_BOLD );
+    SetFont( aFont );
+}
+/*-- 06.04.2004 10:31:27---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+SwBoldFixedInfo::~SwBoldFixedInfo()
+{
+}
+struct  SwAddressPreview_Impl
+{
+    ::std::vector< ::rtl::OUString >    aAdresses;
+    sal_uInt16                          nRows;
+    sal_uInt16                          nColumns;
+    sal_uInt16                          nSelectedAddress;
+    bool                                bEnableScrollBar;
+
+    SwAddressPreview_Impl() :
+        nRows(1),
+        nColumns(1),
+        nSelectedAddress(0),
+        bEnableScrollBar(false)
+    {
+    }
+};
+/*-- 27.04.2004 14:01:22---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+SwAddressPreview::SwAddressPreview(Window* pParent, const ResId rResId) :
+    Window( pParent, rResId ),
+    aVScrollBar(this, WB_VSCROLL),
+    pImpl(new SwAddressPreview_Impl())
+{
+    aVScrollBar.SetScrollHdl(LINK(this, SwAddressPreview, ScrollHdl));
+    Size aSize(GetOutputSizePixel());
+    Size aScrollSize(aVScrollBar.GetSizePixel());
+    aScrollSize.Height() = aSize.Height();
+    aVScrollBar.SetSizePixel(aScrollSize);
+    Point aSrollPos(aSize.Width() - aScrollSize.Width(), 0);
+    aVScrollBar.SetPosPixel(aSrollPos);
+    Show();
+}
+/*-- 27.04.2004 14:01:22---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+SwAddressPreview::~SwAddressPreview()
+{
+}
+/*-- 25.06.2004 11:50:55---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+IMPL_LINK(SwAddressPreview, ScrollHdl, ScrollBar*, EMPTYARG)
+{
+    Invalidate();
+    return 0;
+}
+/*-- 27.04.2004 14:01:22---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwAddressPreview::AddAddress(const ::rtl::OUString& rAddress)
+{
+    pImpl->aAdresses.push_back(rAddress);
+    UpdateScrollBar();
+}
+/*-- 27.04.2004 14:01:23---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwAddressPreview::SetAddress(const ::rtl::OUString& rAddress)
+{
+    pImpl->aAdresses.clear();
+    pImpl->aAdresses.push_back(rAddress);
+    aVScrollBar.Show(FALSE);
+    Invalidate();
+}
+/*-- 27.04.2004 14:01:23---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+sal_uInt16   SwAddressPreview::GetSelectedAddress()const
+{
+    DBG_ASSERT(pImpl->nSelectedAddress < pImpl->aAdresses.size(), "selection invalid")
+    return pImpl->nSelectedAddress;
+}
+/*-- 25.06.2004 10:32:48---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwAddressPreview::SelectAddress(sal_uInt16 nSelect)
+{
+    DBG_ASSERT(pImpl->nSelectedAddress < pImpl->aAdresses.size(), "selection invalid")
+    pImpl->nSelectedAddress = nSelect;
+}
+/*-- 25.06.2004 11:00:40---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwAddressPreview::Clear()
+{
+    pImpl->aAdresses.clear();
+    pImpl->nSelectedAddress = 0;
+    UpdateScrollBar();
+}
+/*-- 28.04.2004 12:05:50---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwAddressPreview::ReplaceSelectedAddress(const ::rtl::OUString& rNew)
+{
+    pImpl->aAdresses[pImpl->nSelectedAddress] = rNew;
+    Invalidate();
+}
+/*-- 25.06.2004 11:30:41---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwAddressPreview::RemoveSelectedAddress()
+{
+    pImpl->aAdresses.erase(pImpl->aAdresses.begin() + pImpl->nSelectedAddress);
+    if(pImpl->nSelectedAddress)
+        --pImpl->nSelectedAddress;
+    UpdateScrollBar();
+    Invalidate();
+}
+/*-- 27.04.2004 14:01:23---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwAddressPreview::SetLayout(sal_uInt16 nRows, sal_uInt16 nColumns)
+{
+    pImpl->nRows = nRows;
+    pImpl->nColumns = nColumns;
+    UpdateScrollBar();
+}
+/*-- 25.06.2004 13:54:03---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwAddressPreview::EnableScrollBar(bool bEnable)
+{
+    pImpl->bEnableScrollBar = bEnable;
+}
+/*-- 25.06.2004 11:55:52---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwAddressPreview::UpdateScrollBar()
+{
+    if(pImpl->nColumns)
+    {
+        aVScrollBar.SetVisibleSize(pImpl->nRows);
+        sal_uInt16 nResultingRows = (sal_uInt16)(pImpl->aAdresses.size() + pImpl->nColumns - 1) / pImpl->nColumns;
+        ++nResultingRows;
+        aVScrollBar.Show(pImpl->bEnableScrollBar && nResultingRows > pImpl->nRows);
+        aVScrollBar.SetRange(Range(0, nResultingRows));
+        if(aVScrollBar.GetThumbPos() > nResultingRows)
+            aVScrollBar.SetThumbPos(nResultingRows);
+    }
+}
+/*-- 27.04.2004 14:01:23---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwAddressPreview::Paint(const Rectangle&)
+{
+    const StyleSettings& rSettings = GetSettings().GetStyleSettings();
+    SetFillColor(rSettings.GetWindowColor());
+    SetLineColor( Color(COL_TRANSPARENT) );
+    DrawRect( Rectangle(Point(0, 0), GetOutputSizePixel()) );
+    Color aPaintColor(IsEnabled() ? rSettings.GetWindowTextColor() : rSettings.GetDisableColor());
+    SetLineColor(aPaintColor);
+    Font aFont(GetFont());
+    aFont.SetColor(aPaintColor);
+    SetFont(aFont);
+
+    sal_uInt16 nAddresses = pImpl->nRows * pImpl->nColumns;
+    Size aSize = GetOutputSizePixel();
+    sal_uInt16 nStartRow = 0;
+    if(aVScrollBar.IsVisible())
+    {
+        aSize.Width() -= aVScrollBar.GetSizePixel().Width();
+        nStartRow = (sal_uInt16)aVScrollBar.GetThumbPos();
+    }
+    Size aPartSize( aSize.Width()/pImpl->nColumns, aSize.Height()/pImpl->nRows );
+
+    sal_uInt16 nAddress = nStartRow * pImpl->nColumns;
+    for(sal_uInt16 nRow = 0; nRow < pImpl->nRows ; ++nRow)
+    {
+        for(sal_uInt16 nCol = 0; nCol < pImpl->nColumns; ++nCol)
+        {
+            if(nAddress >= pImpl->aAdresses.size())
+                break;
+            Point aPos(nCol * aPartSize.Width(), (nRow) * aPartSize.Height());
+            DrawText_Impl( pImpl->aAdresses[nAddress], aPos, aPartSize, nAddress == pImpl->nSelectedAddress);
+            ++nAddress;
+        }
+    }
+    SetClipRegion();
+}
+
+/*-- 07.06.2004 15:44:15---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void  SwAddressPreview::MouseButtonDown( const MouseEvent& rMEvt )
+{
+    Window::MouseButtonDown(rMEvt);
+    if(rMEvt.IsLeft() && ( pImpl->nRows || pImpl->nColumns))
+    {
+        //determine the selected address
+        const Point& rMousePos = rMEvt.GetPosPixel();
+        Size aSize(GetOutputSizePixel());
+        Size aPartSize( aSize.Width()/pImpl->nColumns, aSize.Height()/pImpl->nRows );
+        sal_uInt32 nRow = rMousePos.Y() / aPartSize.Height() ;
+        if(aVScrollBar.IsVisible())
+        {
+            nRow += (sal_uInt16)aVScrollBar.GetThumbPos();
+        }
+        sal_uInt32 nCol = rMousePos.X() / aPartSize.Width();
+        sal_uInt32 nSelect = nRow * pImpl->nColumns + nCol;
+
+        if( nSelect < pImpl->aAdresses.size() &&
+                pImpl->nSelectedAddress != (sal_uInt16)nSelect)
+        {
+            pImpl->nSelectedAddress = (sal_uInt16)nSelect;
+            m_aSelectHdl.Call(this);
+        }
+        Invalidate();
+    }
+}
+/*-- 01.07.2004 12:33:59---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void  SwAddressPreview::KeyInput( const KeyEvent& rKEvt )
+{
+    USHORT nKey = rKEvt.GetKeyCode().GetCode();
+    if(pImpl->nRows || pImpl->nColumns)
+    {
+        sal_uInt32 nSelectedRow =    (pImpl->nSelectedAddress + 1)/ pImpl->nColumns;
+        sal_uInt32 nSelectedColumn = pImpl->nSelectedAddress % nSelectedRow;
+        switch(nKey)
+        {
+            case KEY_UP:
+                if(nSelectedRow)
+                    --nSelectedRow;
+            break;
+            case KEY_DOWN:
+                if(pImpl->aAdresses.size() > sal_uInt32(pImpl->nSelectedAddress + pImpl->nColumns))
+                    ++nSelectedRow;
+            break;
+            case KEY_LEFT:
+                if(nSelectedColumn)
+                    --nSelectedColumn;
+            break;
+            case KEY_RIGHT:
+                if(nSelectedColumn < sal_uInt32(pImpl->nColumns - 1) &&
+                       pImpl->aAdresses.size() - 1 > pImpl->nSelectedAddress )
+                    ++nSelectedColumn;
+            break;
+        }
+        sal_uInt32 nSelect = nSelectedRow * pImpl->nColumns + nSelectedColumn;
+        if( nSelect < pImpl->aAdresses.size() &&
+                pImpl->nSelectedAddress != (sal_uInt16)nSelect)
+        {
+            pImpl->nSelectedAddress = (sal_uInt16)nSelect;
+            m_aSelectHdl.Call(this);
+            Invalidate();
+        }
+    }
+    else
+        Window::KeyInput(rKEvt);
+}
+/*-- 05.07.2004 12:02:28---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwAddressPreview::StateChanged( StateChangedType nStateChange )
+{
+    if(nStateChange == STATE_CHANGE_ENABLE)
+        Invalidate();
+    Window::StateChanged(nStateChange);
+}
+/*-- 27.04.2004 14:01:23---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwAddressPreview::DrawText_Impl(
+        const ::rtl::OUString& rAddress, const Point& rTopLeft, const Size& rSize, bool bIsSelected)
+{
+    SetClipRegion( Region( Rectangle(rTopLeft, rSize)) );
+    if(bIsSelected)
+    {
+        //selection rectangle
+        SetFillColor(Color(COL_TRANSPARENT));
+        DrawRect(Rectangle(rTopLeft, rSize));
+    }
+    sal_Int32 nHeight = GetTextHeight();
+    String sAddress(rAddress);
+    sal_uInt16 nTokens = sAddress.GetTokenCount('\n');
+    Point aStart = rTopLeft;
+    //put it away from the border
+    aStart.Move( 2, 2);
+    for(sal_uInt16 nToken = 0; nToken < nTokens; nToken++)
+    {
+        DrawText( aStart, sAddress.GetToken(nToken, '\n') );
+        aStart.Y() += nHeight;
+    }
+}
+/*-- 29.04.2004 11:24:47---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+String SwAddressPreview::FillData(
+        const ::rtl::OUString& rAddress,
+        SwMailMergeConfigItem& rConfigItem,
+        const Sequence< ::rtl::OUString>* pAssignments)
+{
+    //find the column names in the address string (with name assignment!) and
+    //exchange the placeholder (like <Firstname>) with the database content
+    //unassigned columns are expanded to <not assigned>
+    Reference< XColumnsSupplier > xColsSupp( rConfigItem.GetResultSet(), UNO_QUERY);
+    Reference <XNameAccess> xColAccess = xColsSupp.is() ? xColsSupp->getColumns() : 0;
+    Sequence< ::rtl::OUString> aAssignment = pAssignments ?
+                    *pAssignments :
+                    rConfigItem.GetColumnAssignment(
+                                                rConfigItem.GetCurrentDBData() );
+    const ::rtl::OUString* pAssignment = aAssignment.getConstArray();
+    const ResStringArray& rDefHeaders = rConfigItem.GetDefaultAddressHeaders();
+    String sAddress(rAddress);
+    xub_StrLen nIndex = 0;
+    String sNotAssigned(SW_RES(STR_NOTASSIGNED));
+    sNotAssigned.Insert('<', 0);
+    sNotAssigned += '>';
+
+    SwAddressIterator aIter(sAddress);
+    sAddress.Erase();
+    while(aIter.HasMore())
+    {
+        SwMergeAddressItem aItem = aIter.Next();
+        if(aItem.bIsColumn)
+        {
+            //get the default column name
+
+            //find the appropriate assignment
+            String sConvertedColumn = aItem.sText;
+            for(USHORT nColumn = 0;
+                    nColumn < rDefHeaders.Count() && nColumn < aAssignment.getLength();
+                                                                                ++nColumn)
+            {
+                if(rDefHeaders.GetString(nColumn) == aItem.sText &&
+                    pAssignment[nColumn].getLength())
+                {
+                    sConvertedColumn = pAssignment[nColumn];
+                    break;
+                }
+            }
+            if(sConvertedColumn.Len() &&
+                    xColAccess.is() &&
+                    xColAccess->hasByName(sConvertedColumn))
+            {
+                //get the content and exchange it in the address string
+                Any aCol = xColAccess->getByName(sConvertedColumn);
+                Reference< XColumn > xColumn;
+                aCol >>= xColumn;
+                if(xColumn.is())
+                {
+                    ::rtl::OUString sReplace = xColumn->getString();
+                    aItem.sText = sReplace;
+                }
+            }
+            else
+            {
+                aItem.sText = sNotAssigned;
+            }
+
+        }
+        sAddress += aItem.sText;
+    }
+    return sAddress;
+}
+
+/*-- 11.05.2004 15:42:08---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+SwMergeAddressItem   SwAddressIterator::Next()
+{
+    //currently the string may either start with a '<' then it's a column
+    //otherwise it's simple text maybe containing a return
+    SwMergeAddressItem   aRet;
+    if(sAddress.Len())
+    {
+        if(sAddress.GetChar(0) == '<')
+        {
+            aRet.bIsColumn = true;
+            xub_StrLen nClose = sAddress.Search('>');
+            DBG_ASSERT(nClose != STRING_NOTFOUND, "closing '>' not found")
+            aRet.sText = sAddress.Copy(1, nClose - 1);
+            sAddress.Erase(0, nClose + 1);
+        }
+        else
+        {
+            xub_StrLen nOpen = sAddress.Search('<');
+            xub_StrLen nReturn = sAddress.Search('\n');
+            if(nReturn == 0)
+            {
+                aRet.bIsReturn = true;
+                aRet.sText = '\n';
+                sAddress.Erase(0, 1);
+            }
+            else if(STRING_NOTFOUND == nOpen && STRING_NOTFOUND == nReturn)
+            {
+                nOpen = sAddress.Len();
+                aRet.sText = sAddress;
+                sAddress.Erase();
+            }
+            else
+            {
+                xub_StrLen nTarget = ::std::min(nOpen, nReturn);
+                aRet.sText = sAddress.Copy(0, nTarget);
+                sAddress.Erase(0, nTarget);
+            }
+        }
+    }
+    return aRet;
+
+}
+/*-- 21.05.2004 10:36:20---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+SwAuthenticator::~SwAuthenticator()
+{
+}
+/*-- 21.05.2004 10:36:20---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+OUString SwAuthenticator::getUserName( ) throw (RuntimeException)
+{
+    return m_aUserName;
+}
+/*-- 21.05.2004 10:36:20---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+OUString SwAuthenticator::getPassword(  ) throw (RuntimeException)
+{
+    if(m_aUserName.getLength() && !m_aPassword.getLength())
+    {
+       SfxPasswordDialog* pPasswdDlg =
+                new SfxPasswordDialog( m_pParentWindow );
+       pPasswdDlg->SetMinLen( 0 );
+       if(RET_OK == pPasswdDlg->Execute())
+            m_aPassword = pPasswdDlg->GetPassword();
+    }
+    return m_aPassword;
+}
+/*-- 25.08.2004 12:53:03---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+SwConnectionContext::SwConnectionContext(
+        const ::rtl::OUString& rMailServer, sal_Int16 nPort,
+        const ::rtl::OUString& rConnectionType) :
+    m_sMailServer(rMailServer),
+    m_nPort(nPort),
+    m_sConnectionType(rConnectionType)
+{
+}
+/*-- 25.08.2004 12:53:03---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+SwConnectionContext::~SwConnectionContext()
+{
+}
+/*-- 25.08.2004 12:53:03---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+uno::Any SwConnectionContext::getValueByName( const ::rtl::OUString& rName )
+                                                throw (uno::RuntimeException)
+{
+    uno::Any aRet;
+    if( !rName.compareToAscii( "ServerName" ))
+        aRet <<= m_sMailServer;
+    else if( !rName.compareToAscii( "Port" ))
+        aRet <<= (sal_Int32) m_nPort;
+    else if( !rName.compareToAscii( "ConnectionType" ))
+        aRet <<= m_sConnectionType;
+    return aRet;
+}
+/*-- 21.05.2004 10:45:33---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+SwConnectionListener::~SwConnectionListener()
+{
+}
+/*-- 21.05.2004 10:45:33---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwConnectionListener::connected(const ::com::sun::star::lang::EventObject& aEvent)
+    throw (::com::sun::star::uno::RuntimeException)
+{
+    //OSL_ENSURE(false, "Connection opened");
+}
+/*-- 21.05.2004 10:45:33---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwConnectionListener::disconnected(const ::com::sun::star::lang::EventObject& aEvent)
+    throw (::com::sun::star::uno::RuntimeException)
+{
+    //OSL_ENSURE(false, "Connection closed");
+}
+/*-- 21.05.2004 10:45:33---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwConnectionListener::disposing(const com::sun::star::lang::EventObject& aEvent)
+    throw(com::sun::star::uno::RuntimeException)
+{
+}
+/*-- 21.05.2004 10:17:22---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+uno::Reference< uno::XComponentContext> getCurrentCmpCtx(
+                        uno::Reference<lang::XMultiServiceFactory> rSrvMgr)
+{
+    uno::Reference< beans::XPropertySet > xPropSet =
+                uno::Reference< beans::XPropertySet>(rSrvMgr, uno::UNO_QUERY);
+    Any aAny = xPropSet->getPropertyValue( ::rtl::OUString::createFromAscii("DefaultContext"));
+    uno::Reference< uno::XComponentContext> rCmpCtx;
+    aAny >>= rCmpCtx;
+    return rCmpCtx;
+}
+/*-- 13.07.2004 09:07:01---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+SwMailTransferable::SwMailTransferable(const String& rBody, const String& rMimeType) :
+    cppu::WeakComponentImplHelper1< datatransfer::XTransferable >(m_aMutex),
+    m_aMimeType( rMimeType ),
+    m_sBody( rBody ),
+    m_bIsBody( true )
+{
+}
+/*-- 13.07.2004 09:07:01---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+SwMailTransferable::SwMailTransferable(const String& rURL,
+                const String& rName, const String& rMimeType) :
+    cppu::WeakComponentImplHelper1< datatransfer::XTransferable >(m_aMutex),
+    m_aMimeType( rMimeType ),
+    m_aURL(rURL),
+    m_aName( rName ),
+    m_bIsBody( false )
+{
+}
+/*-- 13.07.2004 09:07:08---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+SwMailTransferable::~SwMailTransferable()
+{
+}
+/*-- 13.07.2004 09:07:08---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+uno::Any SwMailTransferable::getTransferData( const ::com::sun::star::datatransfer::DataFlavor& aFlavor )
+                            throw (datatransfer::UnsupportedFlavorException,
+                            io::IOException, uno::RuntimeException)
+{
+    uno::Any aRet;
+    if( m_bIsBody )
+        aRet <<= ::rtl::OUString(m_sBody);
+    else
+    {
+        Sequence<sal_Int8> aData;
+        SfxMedium aMedium( m_aURL, STREAM_STD_READ, FALSE );
+        SvStream* pStream = aMedium.GetInStream();
+        if ( aMedium.GetErrorCode() == ERRCODE_NONE && pStream)
+        {
+            pStream->Seek(STREAM_SEEK_TO_END);
+            aData.realloc(pStream->Tell());
+            pStream->Seek(0);
+            sal_Int8 * pData = aData.getArray();
+            pStream->Read( pData, aData.getLength() );
+        }
+        aRet <<= aData;
+    }
+    return aRet;
+}
+/*-- 13.07.2004 09:07:08---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+uno::Sequence< datatransfer::DataFlavor > SwMailTransferable::getTransferDataFlavors(  )
+                            throw (uno::RuntimeException)
+{
+    uno::Sequence< datatransfer::DataFlavor > aRet(1);
+    aRet[0].MimeType = m_aMimeType;
+    if( m_bIsBody )
+    {
+        aRet[0].DataType = getCppuType((::rtl::OUString*)0);
+    }
+    else
+    {
+        aRet[0].HumanPresentableName = m_aName;
+        aRet[0].DataType = getCppuType((uno::Sequence<sal_Int8>*)0);
+    }
+    return aRet;
+}
+/*-- 13.07.2004 09:07:08---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+sal_Bool SwMailTransferable::isDataFlavorSupported(
+            const datatransfer::DataFlavor& aFlavor )
+                            throw (uno::RuntimeException)
+{
+    return (aFlavor.MimeType == ::rtl::OUString(m_aMimeType));
+}
+/*-- 22.06.2004 16:46:05---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+SwMailMessage::SwMailMessage() :
+        cppu::WeakComponentImplHelper1< mail::XMailMessage>(m_aMutex)
+{
+}
+/*-- 22.06.2004 16:46:06---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+SwMailMessage::~SwMailMessage()
+{
+}
+/*-- 22.06.2004 16:46:06---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+::rtl::OUString SwMailMessage::getSenderAddress() throw (uno::RuntimeException)
+{
+    return m_sSenderAddress;
+}
+/*-- 22.06.2004 16:46:06---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+::rtl::OUString SwMailMessage::getReplyToAddress() throw (uno::RuntimeException)
+{
+    return m_sReplyToAddress;
+}
+/*-- 22.06.2004 16:46:07---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwMailMessage::setReplyToAddress( const ::rtl::OUString& _replytoaddress ) throw (uno::RuntimeException)
+{
+    m_sReplyToAddress = _replytoaddress;
+}
+/*-- 22.06.2004 16:46:07---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+::rtl::OUString SwMailMessage::getSubject() throw (uno::RuntimeException)
+{
+    return m_sSubject;
+}
+/*-- 22.06.2004 16:46:07---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwMailMessage::setSubject( const ::rtl::OUString& _subject ) throw (uno::RuntimeException)
+{
+    m_sSubject = _subject;
+}
+/*-- 13.07.2004 09:57:18---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+uno::Reference< datatransfer::XTransferable > SwMailMessage::getBody() throw (uno::RuntimeException)
+{
+    return m_xBody;
+}
+/*-- 13.07.2004 09:57:18---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwMailMessage::setBody(
+        const uno::Reference< datatransfer::XTransferable >& rBody )
+                                                throw (uno::RuntimeException)
+{
+    m_xBody = rBody;
+}
+/*-- 22.06.2004 16:46:08---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void  SwMailMessage::addRecipient( const ::rtl::OUString& rRecipientAddress )
+        throw (uno::RuntimeException)
+{
+    m_aRecipients.realloc(m_aRecipients.getLength() + 1);
+    m_aRecipients[m_aRecipients.getLength() - 1] = rRecipientAddress;
+}
+/*-- 22.06.2004 16:46:09---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void  SwMailMessage::addCcRecipient( const ::rtl::OUString& rRecipientAddress )
+        throw (uno::RuntimeException)
+{
+    m_aCcRecipients.realloc(m_aCcRecipients.getLength() + 1);
+    m_aCcRecipients[m_aCcRecipients.getLength() - 1] = rRecipientAddress;
+
+}
+/*-- 22.06.2004 16:46:09---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void  SwMailMessage::addBccRecipient( const ::rtl::OUString& rRecipientAddress ) throw (uno::RuntimeException)
+{
+    m_aBccRecipients.realloc(m_aBccRecipients.getLength() + 1);
+    m_aBccRecipients[m_aBccRecipients.getLength() - 1] = rRecipientAddress;
+}
+/*-- 22.06.2004 16:46:09---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+uno::Sequence< ::rtl::OUString > SwMailMessage::getRecipients(  ) throw (uno::RuntimeException)
+{
+    return m_aRecipients;
+}
+/*-- 22.06.2004 16:46:10---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+uno::Sequence< ::rtl::OUString > SwMailMessage::getCcRecipients(  ) throw (uno::RuntimeException)
+{
+    return m_aCcRecipients;
+}
+/*-- 22.06.2004 16:46:10---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+uno::Sequence< ::rtl::OUString > SwMailMessage::getBccRecipients(  ) throw (uno::RuntimeException)
+{
+    return m_aBccRecipients;
+}
+/*-- 13.07.2004 09:59:48---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwMailMessage::addAttachment( const mail::MailAttachment& rMailAttachment )
+            throw (uno::RuntimeException)
+{
+    m_aAttachments.realloc(m_aAttachments.getLength() + 1);
+    m_aAttachments[m_aAttachments.getLength() - 1] = rMailAttachment;
+}
+/*-- 13.07.2004 09:59:48---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+uno::Sequence< mail::MailAttachment > SwMailMessage::getAttachments(  )
+                                            throw (uno::RuntimeException)
+{
+    return m_aAttachments;
+}
