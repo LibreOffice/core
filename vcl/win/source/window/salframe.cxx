@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: ssa $ $Date: 2001-10-24 08:53:13 $
+ *  last change: $Author: ssa $ $Date: 2001-10-30 10:47:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3141,21 +3141,33 @@ static void UpdateFrameGeometry( HWND hWnd, SalFrame* pFrame )
 
     RECT aRect;
     GetWindowRect( hWnd, &aRect );
-    /// calc coordinates of client area, ie without border
+    memset(&pFrame->maGeometry, 0, sizeof(SalFrame::Geometry) );
+    int cx=0;
+    int cy=0;
+    /// calc coordinates of client area and border
     if ( GetWindowStyle( hWnd ) & WS_CAPTION )
     {
-        aRect.top += GetSystemMetrics(SM_CYCAPTION);
+        pFrame->maGeometry.nTopDecoration += GetSystemMetrics(SM_CYCAPTION);
+        aRect.top += pFrame->maGeometry.nTopDecoration;
     }
     if ( GetWindowStyle( hWnd ) & WS_BORDER )
     {
-        aRect.left += GetSystemMetrics(SM_CXBORDER);
-        aRect.top  += GetSystemMetrics(SM_CYBORDER);
+        cx += GetSystemMetrics(SM_CXBORDER);
+        cy += GetSystemMetrics(SM_CYBORDER);
     }
     if ( GetWindowStyle( hWnd ) & WS_THICKFRAME )
     {
-        aRect.left += GetSystemMetrics(SM_CXEDGE);
-        aRect.top  += GetSystemMetrics(SM_CYEDGE);
+        cx += GetSystemMetrics(SM_CXEDGE);
+        cy += GetSystemMetrics(SM_CYEDGE);
     }
+    aRect.left += cx;
+    aRect.top  += cy;
+
+    pFrame->maGeometry.nLeftDecoration += cx;
+    pFrame->maGeometry.nRightDecoration += cx;
+    pFrame->maGeometry.nTopDecoration += cy;
+    pFrame->maGeometry.nBottomDecoration += cy;
+
     pFrame->maGeometry.nX = aRect.left;
     pFrame->maGeometry.nY = aRect.top;
 
