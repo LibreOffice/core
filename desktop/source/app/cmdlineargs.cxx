@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdlineargs.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cd $ $Date: 2002-09-23 12:44:00 $
+ *  last change: $Author: cd $ $Date: 2002-10-15 08:12:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,7 +254,9 @@ sal_Bool CommandLineArgs::InterpretCommandLineParameter( const ::rtl::OUString& 
     }
     else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-headless" )) == sal_True )
     {
+        // Headless means also invisibile, so set this parameter to true!
         SetBoolParam_Impl( CMD_BOOLPARAM_HEADLESS, sal_True );
+        SetBoolParam_Impl( CMD_BOOLPARAM_INVISIBLE, sal_True );
         return sal_True;
     }
     else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-quickstart" )) == sal_True )
@@ -322,6 +324,8 @@ void CommandLineArgs::ResetParamValues()
 {
     for ( int i = 0; i < CMD_BOOLPARAM_COUNT; i++ )
         m_aBoolParams[i] = sal_False;
+    for ( i = 0; i < CMD_STRINGPARAM_COUNT; i++ )
+        m_aStrSetParams[i] = sal_False;
 }
 
 sal_Bool CommandLineArgs::GetBoolParam( BoolParam eParam ) const
