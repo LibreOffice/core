@@ -5,9 +5,9 @@ eval 'exec perl -S $0 ${1+"$@"}'
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.81 $
+#   $Revision: 1.82 $
 #
-#   last change: $Author: vg $ $Date: 2003-03-28 13:53:20 $
+#   last change: $Author: vg $ $Date: 2003-04-22 17:10:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,7 +84,7 @@ if (defined $ENV{CWS_WORK_STAMP}) {
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.81 $ ';
+$id_str = ' $Revision: 1.82 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -331,7 +331,10 @@ sub dmake_dir {
         $modified_path =~ s/^([^\\\/]+)/$1\.lnk/;
         $BuildDir = &CorrectPath($StandDir . $modified_path);
     };
-    &print_error("\n$OldBuildDir ($BuildDir) not found!!\n") if (!(-d $BuildDir));
+    my $missing_dir;
+    $missing_dir = $OldBuildDir if ($OldBuildDir);
+    $missing_dir = $BuildDir if (!$missing_dir);
+    &print_error("$missing_dir not found!!\n") if (!(-d $BuildDir));
     if (!(-d $BuildDir)) {
         $new_BuildDir = $BuildDir;
         $new_BuildDir =~ s/_simple//g;
