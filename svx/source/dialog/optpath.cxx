@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optpath.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:40:37 $
+ *  last change: $Author: hr $ $Date: 2004-12-13 12:16:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,9 +184,9 @@ String Convert_Impl( const String& rValue )
         String aValue = rValue.GetToken( i, cDelim );
         INetURLObject aObj( aValue );
         if ( aObj.GetProtocol() == INET_PROT_FILE )
-            aReturn += aObj.PathToFileName();
+            aReturn += String(aObj.PathToFileName());
         else if ( ::utl::LocalFileHelper::IsFileContent( aValue ) )
-            aReturn += aObj.GetURLPath( INetURLObject::DECODE_WITH_CHARSET );
+            aReturn += String(aObj.GetURLPath( INetURLObject::DECODE_WITH_CHARSET ));
         if ( i+1 < nCount)
             aReturn += MULTIPATH_DELIMITER;
     }
@@ -537,7 +537,7 @@ IMPL_LINK( SvxPathTabPage, PathHdl_Impl, PushButton *, EMPTYARG )
             // old path is an URL?
             INetURLObject aObj( aPathName );
             FASTBOOL bURL = ( aObj.GetProtocol() != INET_PROT_NOT_VALID );
-            String aPathStr = xFolderPicker->getDirectory();
+            rtl::OUString aPathStr = xFolderPicker->getDirectory();
             INetURLObject aNewObj( aPathStr );
             aNewObj.removeFinalSlash();
 
