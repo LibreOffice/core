@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.29 $
+#*  $Revision: 1.30 $
 #*
-#*  last change: $Author: mh $ $Date: 2001-12-06 14:47:37 $
+#*  last change: $Author: kz $ $Date: 2002-01-07 10:44:41 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -312,11 +312,13 @@ ALL: $(SLB)$/svl.lib \
 
 .INCLUDE :	target.mk
 
+$(MISC)$/$(PRJNAME).hid : $(SRS)$/hidother.hid
+
 $(SRS)$/hidother.hid: hidother.src
 .IF "$(GUI)$(CPU)"=="WNTI"
 .IF "$(BUILD_SOSL)"==""
     @+echo no hids
-    @+-mhids hidother.src ..\$(INPATH)$/srs sfx2 hidother
+    @+-mhids hidother.src $(SRS) $(PRJNAME)
 .ENDIF
 .ELSE
     @echo nix
