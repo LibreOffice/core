@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: mi $ $Date: 2001-03-12 12:56:25 $
+#   last change: $Author: cl $ $Date: 2001-03-14 17:35:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -123,7 +123,8 @@ UNOIDLDBFILES= \
     $(UCR)$/csssync.db \
     $(UCR)$/cssxml.db \
     $(UCR)$/csssetup.db \
-    $(UCR)$/cssui.db
+    $(UCR)$/cssui.db \
+    $(UCR)$/cssimage.db
 
 # --- Targets ------------------------------------------------------
 
