@@ -2,9 +2,9 @@
  *
  *  $RCSfile: canvasbitmap.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 13:17:25 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 08:21:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@ VclCanvasBitmap::VclCanvasBitmap( const BitmapEx& rBitmap ) :
     {
         m_aLayout.ScanLines         = aSz.Height();
         m_aLayout.ScanLineBytes     = aSz.Width()*4;
-        m_aLayout.ScanLineStride    = 0;
+        m_aLayout.ScanLineStride    = aSz.Width()*4;
         m_aLayout.PlaneStride       = 0;
         m_aLayout.NumComponents     = 4;
         m_aLayout.ComponentMasks.realloc( 4 );
@@ -106,171 +106,188 @@ VclCanvasBitmap::VclCanvasBitmap( const BitmapEx& rBitmap ) :
     {
         Bitmap aBmp = m_pBitmap->GetBitmap();
         BitmapReadAccess* pAcc = aBmp.AcquireReadAccess();
-        m_aLayout.ScanLines         = pAcc->Height();
-        m_aLayout.ScanLineBytes     = pAcc->GetScanlineSize();
-        m_aLayout.ScanLineStride    = m_aLayout.ScanLineBytes - pAcc->Width()*pAcc->GetBitCount()/8;
-        m_aLayout.PlaneStride       = 0;
-        switch( pAcc->GetScanlineFormat() )
-        {
-            case BMP_FORMAT_1BIT_MSB_PAL:
-                m_aLayout.NumComponents     = 1;
-                m_aLayout.ComponentMasks.realloc( 1 );
-                m_aLayout.ComponentMasks.getArray()[0] = 0x1LL;
-                m_aLayout.Endianness        = Endianness::BIG;
-                m_aLayout.Format            = IntegerBitmapFormat::CHUNKY_1BIT;
-                m_aLayout.IsPseudoColor     = sal_True;
-                break;
-            case BMP_FORMAT_1BIT_LSB_PAL:
-                m_aLayout.NumComponents     = 1;
-                m_aLayout.ComponentMasks.realloc( 1 );
-                m_aLayout.ComponentMasks.getArray()[0] = 1LL;
-                m_aLayout.Endianness        = Endianness::LITTLE;
-                m_aLayout.Format            = IntegerBitmapFormat::CHUNKY_1BIT;
-                m_aLayout.IsPseudoColor     = sal_True;
-                break;
-            case BMP_FORMAT_4BIT_MSN_PAL:
-                m_aLayout.NumComponents     = 1;
-                m_aLayout.ComponentMasks.realloc( 1 );
-                m_aLayout.ComponentMasks.getArray()[0] = 0x0fLL;
-                m_aLayout.Endianness        = Endianness::BIG;
-                m_aLayout.Format            = IntegerBitmapFormat::CHUNKY_4BIT;
-                m_aLayout.IsPseudoColor     = sal_True;
-                break;
-            case BMP_FORMAT_4BIT_LSN_PAL:
-                m_aLayout.NumComponents     = 1;
-                m_aLayout.ComponentMasks.realloc( 1 );
-                m_aLayout.ComponentMasks.getArray()[0] = 0x0fLL;
-                m_aLayout.Endianness        = Endianness::LITTLE;
-                m_aLayout.Format            = IntegerBitmapFormat::CHUNKY_4BIT;
-                m_aLayout.IsPseudoColor     = sal_True;
-                break;
-            case BMP_FORMAT_8BIT_PAL:
-                m_aLayout.NumComponents     = 1;
-                m_aLayout.ComponentMasks.realloc( 1 );
-                m_aLayout.ComponentMasks.getArray()[0] = 0xffLL;
-                m_aLayout.Endianness        = Endianness::BIG;
-                m_aLayout.Format            = IntegerBitmapFormat::CHUNKY_8BIT;
-                m_aLayout.IsPseudoColor     = sal_True;
-                break;
 
-            case BMP_FORMAT_8BIT_TC_MASK:
-                m_aLayout.NumComponents     = 3;
-                m_aLayout.ComponentMasks.realloc( 3 );
-                m_aLayout.ComponentMasks.getArray()[0] = pAcc->GetColorMask().GetRedMask();
-                m_aLayout.ComponentMasks.getArray()[1] = pAcc->GetColorMask().GetGreenMask();
-                m_aLayout.ComponentMasks.getArray()[2] = pAcc->GetColorMask().GetBlueMask();
-                m_aLayout.Endianness        = Endianness::BIG;
-                m_aLayout.Format            = IntegerBitmapFormat::CHUNKY_8BIT;
-                m_aLayout.IsPseudoColor     = sal_False;
-                break;
-            case BMP_FORMAT_16BIT_TC_MSB_MASK:
-                m_aLayout.NumComponents     = 3;
-                m_aLayout.ComponentMasks.realloc( 3 );
-                m_aLayout.ComponentMasks.getArray()[0] = pAcc->GetColorMask().GetRedMask();
-                m_aLayout.ComponentMasks.getArray()[1] = pAcc->GetColorMask().GetGreenMask();
-                m_aLayout.ComponentMasks.getArray()[2] = pAcc->GetColorMask().GetBlueMask();
-                m_aLayout.Endianness        = Endianness::BIG;
-                m_aLayout.Format            = IntegerBitmapFormat::CHUNKY_16BIT;
-                m_aLayout.IsPseudoColor     = sal_False;
-                break;
-            case BMP_FORMAT_16BIT_TC_LSB_MASK:
-                m_aLayout.NumComponents     = 3;
-                m_aLayout.ComponentMasks.realloc( 3 );
-                m_aLayout.ComponentMasks.getArray()[0] = pAcc->GetColorMask().GetRedMask();
-                m_aLayout.ComponentMasks.getArray()[1] = pAcc->GetColorMask().GetGreenMask();
-                m_aLayout.ComponentMasks.getArray()[2] = pAcc->GetColorMask().GetBlueMask();
-                m_aLayout.Endianness        = Endianness::LITTLE;
-                m_aLayout.Format            = IntegerBitmapFormat::CHUNKY_16BIT;
-                m_aLayout.IsPseudoColor     = sal_False;
-                break;
-            case BMP_FORMAT_24BIT_TC_BGR:
-                m_aLayout.NumComponents     = 3;
-                m_aLayout.ComponentMasks.realloc( 3 );
-                m_aLayout.ComponentMasks.getArray()[0] = 0x0000ffLL;
-                m_aLayout.ComponentMasks.getArray()[1] = 0x00ff00LL;
-                m_aLayout.ComponentMasks.getArray()[2] = 0xff0000LL;
-                m_aLayout.Endianness        = Endianness::BIG;
-                m_aLayout.Format            = IntegerBitmapFormat::CHUNKY_24BIT;
-                m_aLayout.IsPseudoColor     = sal_False;
-                break;
-            case BMP_FORMAT_24BIT_TC_RGB:
-                m_aLayout.NumComponents     = 3;
-                m_aLayout.ComponentMasks.realloc( 3 );
-                m_aLayout.ComponentMasks.getArray()[0] = 0xff0000LL;
-                m_aLayout.ComponentMasks.getArray()[1] = 0x00ff00LL;
-                m_aLayout.ComponentMasks.getArray()[2] = 0x0000ffLL;
-                m_aLayout.Endianness        = Endianness::BIG;
-                m_aLayout.Format            = IntegerBitmapFormat::CHUNKY_24BIT;
-                m_aLayout.IsPseudoColor     = sal_False;
-                break;
-            case BMP_FORMAT_24BIT_TC_MASK:
-                m_aLayout.NumComponents     = 3;
-                m_aLayout.ComponentMasks.realloc( 3 );
-                m_aLayout.ComponentMasks.getArray()[0] = pAcc->GetColorMask().GetRedMask();
-                m_aLayout.ComponentMasks.getArray()[1] = pAcc->GetColorMask().GetGreenMask();
-                m_aLayout.ComponentMasks.getArray()[2] = pAcc->GetColorMask().GetBlueMask();
-                m_aLayout.Endianness        = Endianness::LITTLE;
-                m_aLayout.Format            = IntegerBitmapFormat::CHUNKY_24BIT;
-                m_aLayout.IsPseudoColor     = sal_False;
-                break;
-            case BMP_FORMAT_32BIT_TC_ABGR:
-                m_aLayout.NumComponents     = 4;
-                m_aLayout.ComponentMasks.realloc( 4 );
-                m_aLayout.ComponentMasks.getArray()[0] = 0x000000ffLL;
-                m_aLayout.ComponentMasks.getArray()[1] = 0x0000ff00LL;
-                m_aLayout.ComponentMasks.getArray()[2] = 0x00ff0000LL;
-                m_aLayout.ComponentMasks.getArray()[3] = 0xff000000LL;
-                m_aLayout.Endianness        = Endianness::BIG;
-                m_aLayout.Format            = IntegerBitmapFormat::CHUNKY_32BIT;
-                m_aLayout.IsPseudoColor     = sal_False;
-                break;
-            case BMP_FORMAT_32BIT_TC_ARGB:
-                m_aLayout.NumComponents     = 4;
-                m_aLayout.ComponentMasks.realloc( 4 );
-                m_aLayout.ComponentMasks.getArray()[0] = 0x00ff0000LL;
-                m_aLayout.ComponentMasks.getArray()[1] = 0x0000ff00LL;
-                m_aLayout.ComponentMasks.getArray()[2] = 0x000000ffLL;
-                m_aLayout.ComponentMasks.getArray()[3] = 0xff000000LL;
-                m_aLayout.Endianness        = Endianness::BIG;
-                m_aLayout.Format            = IntegerBitmapFormat::CHUNKY_32BIT;
-                m_aLayout.IsPseudoColor     = sal_False;
-                break;
-            case BMP_FORMAT_32BIT_TC_BGRA:
-                m_aLayout.NumComponents     = 4;
-                m_aLayout.ComponentMasks.realloc( 4 );
-                m_aLayout.ComponentMasks.getArray()[0] = 0x0000ff00LL;
-                m_aLayout.ComponentMasks.getArray()[1] = 0x00ff0000LL;
-                m_aLayout.ComponentMasks.getArray()[2] = 0xff000000LL;
-                m_aLayout.ComponentMasks.getArray()[3] = 0x000000ffLL;
-                m_aLayout.Endianness        = Endianness::BIG;
-                m_aLayout.Format            = IntegerBitmapFormat::CHUNKY_32BIT;
-                m_aLayout.IsPseudoColor     = sal_False;
-                break;
-            case BMP_FORMAT_32BIT_TC_RGBA:
-                m_aLayout.NumComponents     = 4;
-                m_aLayout.ComponentMasks.realloc( 4 );
-                m_aLayout.ComponentMasks.getArray()[0] = 0xff000000LL;
-                m_aLayout.ComponentMasks.getArray()[1] = 0x00ff0000LL;
-                m_aLayout.ComponentMasks.getArray()[2] = 0x0000ff00LL;
-                m_aLayout.ComponentMasks.getArray()[3] = 0x000000ffLL;
-                m_aLayout.Endianness        = Endianness::BIG;
-                m_aLayout.Format            = IntegerBitmapFormat::CHUNKY_32BIT;
-                m_aLayout.IsPseudoColor     = sal_False;
-                break;
-            case BMP_FORMAT_32BIT_TC_MASK:
-                m_aLayout.NumComponents     = 3;
-                m_aLayout.ComponentMasks.realloc( 3 );
-                m_aLayout.ComponentMasks.getArray()[0] = pAcc->GetColorMask().GetRedMask();
-                m_aLayout.ComponentMasks.getArray()[1] = pAcc->GetColorMask().GetGreenMask();
-                m_aLayout.ComponentMasks.getArray()[2] = pAcc->GetColorMask().GetBlueMask();
-                m_aLayout.Endianness        = Endianness::LITTLE;
-                m_aLayout.Format            = IntegerBitmapFormat::CHUNKY_32BIT;
-                m_aLayout.IsPseudoColor     = sal_False;
-                break;
-            default:
-                DBG_ERROR( "unsupported bitmap format" );
-                break;
+        if( !pAcc )
+        {
+            // bitmap is dysfunctional, fill out dummy MemLayout
+            m_aLayout.ScanLines         = 0;
+            m_aLayout.ScanLineBytes     = 0;
+            m_aLayout.ScanLineStride    = 0;
+            m_aLayout.PlaneStride       = 0;
+            m_aLayout.NumComponents     = 0;
+            m_aLayout.Endianness        = Endianness::BIG;
+            m_aLayout.Format            = IntegerBitmapFormat::CHUNKY_32BIT;
+            m_aLayout.IsPseudoColor     = sal_False;
         }
+        else
+        {
+            m_aLayout.ScanLines         = pAcc->Height();
+            m_aLayout.ScanLineBytes     =
+            m_aLayout.ScanLineStride    = pAcc->GetScanlineSize();
+            m_aLayout.PlaneStride       = 0;
+            switch( pAcc->GetScanlineFormat() )
+            {
+                case BMP_FORMAT_1BIT_MSB_PAL:
+                    m_aLayout.NumComponents     = 1;
+                    m_aLayout.ComponentMasks.realloc( 1 );
+                    m_aLayout.ComponentMasks.getArray()[0] = 0x1LL;
+                    m_aLayout.Endianness        = Endianness::BIG;
+                    m_aLayout.Format            = IntegerBitmapFormat::CHUNKY_1BIT;
+                    m_aLayout.IsPseudoColor     = sal_True;
+                    break;
+                case BMP_FORMAT_1BIT_LSB_PAL:
+                    m_aLayout.NumComponents     = 1;
+                    m_aLayout.ComponentMasks.realloc( 1 );
+                    m_aLayout.ComponentMasks.getArray()[0] = 1LL;
+                    m_aLayout.Endianness        = Endianness::LITTLE;
+                    m_aLayout.Format            = IntegerBitmapFormat::CHUNKY_1BIT;
+                    m_aLayout.IsPseudoColor     = sal_True;
+                    break;
+                case BMP_FORMAT_4BIT_MSN_PAL:
+                    m_aLayout.NumComponents     = 1;
+                    m_aLayout.ComponentMasks.realloc( 1 );
+                    m_aLayout.ComponentMasks.getArray()[0] = 0x0fLL;
+                    m_aLayout.Endianness        = Endianness::BIG;
+                    m_aLayout.Format            = IntegerBitmapFormat::CHUNKY_4BIT;
+                    m_aLayout.IsPseudoColor     = sal_True;
+                    break;
+                case BMP_FORMAT_4BIT_LSN_PAL:
+                    m_aLayout.NumComponents     = 1;
+                    m_aLayout.ComponentMasks.realloc( 1 );
+                    m_aLayout.ComponentMasks.getArray()[0] = 0x0fLL;
+                    m_aLayout.Endianness        = Endianness::LITTLE;
+                    m_aLayout.Format            = IntegerBitmapFormat::CHUNKY_4BIT;
+                    m_aLayout.IsPseudoColor     = sal_True;
+                    break;
+                case BMP_FORMAT_8BIT_PAL:
+                    m_aLayout.NumComponents     = 1;
+                    m_aLayout.ComponentMasks.realloc( 1 );
+                    m_aLayout.ComponentMasks.getArray()[0] = 0xffLL;
+                    m_aLayout.Endianness        = Endianness::BIG;
+                    m_aLayout.Format            = IntegerBitmapFormat::CHUNKY_8BIT;
+                    m_aLayout.IsPseudoColor     = sal_True;
+                    break;
+
+                case BMP_FORMAT_8BIT_TC_MASK:
+                    m_aLayout.NumComponents     = 3;
+                    m_aLayout.ComponentMasks.realloc( 3 );
+                    m_aLayout.ComponentMasks.getArray()[0] = pAcc->GetColorMask().GetRedMask();
+                    m_aLayout.ComponentMasks.getArray()[1] = pAcc->GetColorMask().GetGreenMask();
+                    m_aLayout.ComponentMasks.getArray()[2] = pAcc->GetColorMask().GetBlueMask();
+                    m_aLayout.Endianness        = Endianness::BIG;
+                    m_aLayout.Format            = IntegerBitmapFormat::CHUNKY_8BIT;
+                    m_aLayout.IsPseudoColor     = sal_False;
+                    break;
+                case BMP_FORMAT_16BIT_TC_MSB_MASK:
+                    m_aLayout.NumComponents     = 3;
+                    m_aLayout.ComponentMasks.realloc( 3 );
+                    m_aLayout.ComponentMasks.getArray()[0] = pAcc->GetColorMask().GetRedMask();
+                    m_aLayout.ComponentMasks.getArray()[1] = pAcc->GetColorMask().GetGreenMask();
+                    m_aLayout.ComponentMasks.getArray()[2] = pAcc->GetColorMask().GetBlueMask();
+                    m_aLayout.Endianness        = Endianness::BIG;
+                    m_aLayout.Format            = IntegerBitmapFormat::CHUNKY_16BIT;
+                    m_aLayout.IsPseudoColor     = sal_False;
+                    break;
+                case BMP_FORMAT_16BIT_TC_LSB_MASK:
+                    m_aLayout.NumComponents     = 3;
+                    m_aLayout.ComponentMasks.realloc( 3 );
+                    m_aLayout.ComponentMasks.getArray()[0] = pAcc->GetColorMask().GetRedMask();
+                    m_aLayout.ComponentMasks.getArray()[1] = pAcc->GetColorMask().GetGreenMask();
+                    m_aLayout.ComponentMasks.getArray()[2] = pAcc->GetColorMask().GetBlueMask();
+                    m_aLayout.Endianness        = Endianness::LITTLE;
+                    m_aLayout.Format            = IntegerBitmapFormat::CHUNKY_16BIT;
+                    m_aLayout.IsPseudoColor     = sal_False;
+                    break;
+                case BMP_FORMAT_24BIT_TC_BGR:
+                    m_aLayout.NumComponents     = 3;
+                    m_aLayout.ComponentMasks.realloc( 3 );
+                    m_aLayout.ComponentMasks.getArray()[0] = 0x0000ffLL;
+                    m_aLayout.ComponentMasks.getArray()[1] = 0x00ff00LL;
+                    m_aLayout.ComponentMasks.getArray()[2] = 0xff0000LL;
+                    m_aLayout.Endianness        = Endianness::BIG;
+                    m_aLayout.Format            = IntegerBitmapFormat::CHUNKY_24BIT;
+                    m_aLayout.IsPseudoColor     = sal_False;
+                    break;
+                case BMP_FORMAT_24BIT_TC_RGB:
+                    m_aLayout.NumComponents     = 3;
+                    m_aLayout.ComponentMasks.realloc( 3 );
+                    m_aLayout.ComponentMasks.getArray()[0] = 0xff0000LL;
+                    m_aLayout.ComponentMasks.getArray()[1] = 0x00ff00LL;
+                    m_aLayout.ComponentMasks.getArray()[2] = 0x0000ffLL;
+                    m_aLayout.Endianness        = Endianness::BIG;
+                    m_aLayout.Format            = IntegerBitmapFormat::CHUNKY_24BIT;
+                    m_aLayout.IsPseudoColor     = sal_False;
+                    break;
+                case BMP_FORMAT_24BIT_TC_MASK:
+                    m_aLayout.NumComponents     = 3;
+                    m_aLayout.ComponentMasks.realloc( 3 );
+                    m_aLayout.ComponentMasks.getArray()[0] = pAcc->GetColorMask().GetRedMask();
+                    m_aLayout.ComponentMasks.getArray()[1] = pAcc->GetColorMask().GetGreenMask();
+                    m_aLayout.ComponentMasks.getArray()[2] = pAcc->GetColorMask().GetBlueMask();
+                    m_aLayout.Endianness        = Endianness::LITTLE;
+                    m_aLayout.Format            = IntegerBitmapFormat::CHUNKY_24BIT;
+                    m_aLayout.IsPseudoColor     = sal_False;
+                    break;
+                case BMP_FORMAT_32BIT_TC_ABGR:
+                    m_aLayout.NumComponents     = 4;
+                    m_aLayout.ComponentMasks.realloc( 4 );
+                    m_aLayout.ComponentMasks.getArray()[0] = 0x000000ffLL;
+                    m_aLayout.ComponentMasks.getArray()[1] = 0x0000ff00LL;
+                    m_aLayout.ComponentMasks.getArray()[2] = 0x00ff0000LL;
+                    m_aLayout.ComponentMasks.getArray()[3] = 0xff000000LL;
+                    m_aLayout.Endianness        = Endianness::BIG;
+                    m_aLayout.Format            = IntegerBitmapFormat::CHUNKY_32BIT;
+                    m_aLayout.IsPseudoColor     = sal_False;
+                    break;
+                case BMP_FORMAT_32BIT_TC_ARGB:
+                    m_aLayout.NumComponents     = 4;
+                    m_aLayout.ComponentMasks.realloc( 4 );
+                    m_aLayout.ComponentMasks.getArray()[0] = 0x00ff0000LL;
+                    m_aLayout.ComponentMasks.getArray()[1] = 0x0000ff00LL;
+                    m_aLayout.ComponentMasks.getArray()[2] = 0x000000ffLL;
+                    m_aLayout.ComponentMasks.getArray()[3] = 0xff000000LL;
+                    m_aLayout.Endianness        = Endianness::BIG;
+                    m_aLayout.Format            = IntegerBitmapFormat::CHUNKY_32BIT;
+                    m_aLayout.IsPseudoColor     = sal_False;
+                    break;
+                case BMP_FORMAT_32BIT_TC_BGRA:
+                    m_aLayout.NumComponents     = 4;
+                    m_aLayout.ComponentMasks.realloc( 4 );
+                    m_aLayout.ComponentMasks.getArray()[0] = 0x0000ff00LL;
+                    m_aLayout.ComponentMasks.getArray()[1] = 0x00ff0000LL;
+                    m_aLayout.ComponentMasks.getArray()[2] = 0xff000000LL;
+                    m_aLayout.ComponentMasks.getArray()[3] = 0x000000ffLL;
+                    m_aLayout.Endianness        = Endianness::BIG;
+                    m_aLayout.Format            = IntegerBitmapFormat::CHUNKY_32BIT;
+                    m_aLayout.IsPseudoColor     = sal_False;
+                    break;
+                case BMP_FORMAT_32BIT_TC_RGBA:
+                    m_aLayout.NumComponents     = 4;
+                    m_aLayout.ComponentMasks.realloc( 4 );
+                    m_aLayout.ComponentMasks.getArray()[0] = 0xff000000LL;
+                    m_aLayout.ComponentMasks.getArray()[1] = 0x00ff0000LL;
+                    m_aLayout.ComponentMasks.getArray()[2] = 0x0000ff00LL;
+                    m_aLayout.ComponentMasks.getArray()[3] = 0x000000ffLL;
+                    m_aLayout.Endianness        = Endianness::BIG;
+                    m_aLayout.Format            = IntegerBitmapFormat::CHUNKY_32BIT;
+                    m_aLayout.IsPseudoColor     = sal_False;
+                    break;
+                case BMP_FORMAT_32BIT_TC_MASK:
+                    m_aLayout.NumComponents     = 3;
+                    m_aLayout.ComponentMasks.realloc( 3 );
+                    m_aLayout.ComponentMasks.getArray()[0] = pAcc->GetColorMask().GetRedMask();
+                    m_aLayout.ComponentMasks.getArray()[1] = pAcc->GetColorMask().GetGreenMask();
+                    m_aLayout.ComponentMasks.getArray()[2] = pAcc->GetColorMask().GetBlueMask();
+                    m_aLayout.Endianness        = Endianness::LITTLE;
+                    m_aLayout.Format            = IntegerBitmapFormat::CHUNKY_32BIT;
+                    m_aLayout.IsPseudoColor     = sal_False;
+                    break;
+                default:
+                    DBG_ERROR( "unsupported bitmap format" );
+                    break;
+            }
+        }
+
         aBmp.ReleaseAccess( pAcc );
     }
 }
@@ -310,6 +327,11 @@ Sequence< sal_Int8 > SAL_CALL VclCanvasBitmap::getData( const IntegerRectangle2D
 
     Bitmap aBmp = m_pBitmap->GetBitmap();
     BitmapReadAccess* pAcc = aBmp.AcquireReadAccess();
+
+    // Invalid/empty bitmap: no data available
+    if( !pAcc )
+        return Sequence< sal_Int8 >();
+
     Sequence< sal_Int8 > aRet;
     if( m_pBitmap->IsTransparent() )
     {
@@ -331,13 +353,18 @@ Sequence< sal_Int8 > SAL_CALL VclCanvasBitmap::getData( const IntegerRectangle2D
         {
             AlphaMask aAlpha = m_pBitmap->GetAlpha();
             BitmapReadAccess* pAlphaAcc = aAlpha.AcquireReadAccess();
-            for( int y = 0; y < h; y++ )
+
+            // Invalid/empty alpha mask: keep alpha bytes to 0
+            if( pAlphaAcc )
             {
-                Scanline pLine = pAlphaAcc->GetScanline( y );
-                for( int x = 0; x < w; x++ )
+                for( int y = 0; y < h; y++ )
                 {
-                    *pContent = *pLine++;
-                    pContent += 4;
+                    Scanline pLine = pAlphaAcc->GetScanline( y );
+                    for( int x = 0; x < w; x++ )
+                    {
+                        *pContent = *pLine++;
+                        pContent += 4;
+                    }
                 }
             }
             aAlpha.ReleaseAccess( pAlphaAcc );
@@ -346,16 +373,21 @@ Sequence< sal_Int8 > SAL_CALL VclCanvasBitmap::getData( const IntegerRectangle2D
         {
             Bitmap aMask = m_pBitmap->GetMask();
             BitmapReadAccess* pMaskAcc = aMask.AcquireReadAccess();
-            BitmapColor aZeroCol = pMaskAcc->GetPaletteColor( 0 );
-            sal_Int8 nIndexZeroAlpha = 0xff;
-            if( !aZeroCol.GetRed() && ! aZeroCol.GetGreen() && ! aZeroCol.GetBlue() )
-                nIndexZeroAlpha = 0;
-            sal_Int8 nIndexOneAlpha = ~nIndexZeroAlpha;
-            for( int y = 0; y < h; y++ )
-                for( int x = 0; x < w; x++ )
+
+            // Invalid/empty mask: keep alpha bytes to 0
+            if( pMaskAcc )
             {
-                *pContent = pMaskAcc->GetPixel(x,y).GetIndex() ? nIndexOneAlpha : nIndexZeroAlpha;
-                pContent += 4;
+                BitmapColor aZeroCol = pMaskAcc->GetPaletteColor( 0 );
+                sal_uInt8 nIndexZeroAlpha = 0xff;
+                if( !aZeroCol.GetRed() && ! aZeroCol.GetGreen() && ! aZeroCol.GetBlue() )
+                    nIndexZeroAlpha = 0;
+                sal_uInt8 nIndexOneAlpha = ~nIndexZeroAlpha;
+                for( int y = 0; y < h; y++ )
+                    for( int x = 0; x < w; x++ )
+                    {
+                        *pContent = pMaskAcc->GetPixel(x,y).GetIndex() ? nIndexOneAlpha : nIndexZeroAlpha;
+                        pContent += 4;
+                    }
             }
             aMask.ReleaseAccess( pMaskAcc );
         }
@@ -417,6 +449,11 @@ Sequence< sal_Int8 > SAL_CALL VclCanvasBitmap::getPixel( const IntegerPoint2D& p
 
     Bitmap aBmp = m_pBitmap->GetBitmap();
     BitmapReadAccess* pAcc = aBmp.AcquireReadAccess();
+
+    // Invalid/empty bitmap: no data available
+    if( !pAcc )
+        return Sequence< sal_Int8 >();
+
     if( aPos.X() >= pAcc->Width() || aPos.Y() >= pAcc->Height() )
     {
         aBmp.ReleaseAccess( pAcc );
@@ -427,13 +464,18 @@ Sequence< sal_Int8 > SAL_CALL VclCanvasBitmap::getPixel( const IntegerPoint2D& p
     if( m_pBitmap->IsTransparent() )
     {
         BitmapColor aCol = pAcc->GetColor( aPos.X(), aPos.Y() );
-        sal_Int8 nAlpha = 0;
+        sal_uInt8 nAlpha = 0;
         if( m_pBitmap->IsAlpha() )
         {
             AlphaMask aMask = m_pBitmap->GetAlpha();
             BitmapReadAccess* pAlphaAcc = aMask.AcquireReadAccess();
-            BitmapColor aAlphaCol = pAlphaAcc->GetPixel( aPos.X(), aPos.Y() );
-            nAlpha = aAlphaCol.GetIndex();
+
+            // Invalid/empty alpha mask: keep alpha value to 0
+            if( pAlphaAcc )
+            {
+                BitmapColor aAlphaCol = pAlphaAcc->GetPixel( aPos.X(), aPos.Y() );
+                nAlpha = aAlphaCol.GetIndex();
+            }
             aMask.ReleaseAccess( pAlphaAcc );
         }
         else if( m_pBitmap->GetTransparentType() == TRANSPARENT_COLOR )
@@ -448,9 +490,14 @@ Sequence< sal_Int8 > SAL_CALL VclCanvasBitmap::getPixel( const IntegerPoint2D& p
         {
             Bitmap aMask = m_pBitmap->GetMask();
             BitmapReadAccess* pMaskAcc = aMask.AcquireReadAccess();
-            BitmapColor aMaskColor = pMaskAcc->GetColor( aPos.X(), aPos.Y() );
-            if( aMaskColor.GetRed() || aMaskColor.GetGreen() || aMaskColor.GetBlue() )
-                nAlpha = 0xff;
+
+            // Invalid/empty mask: keep alpha value to 0
+            if( pMaskAcc )
+            {
+                BitmapColor aMaskColor = pMaskAcc->GetColor( aPos.X(), aPos.Y() );
+                if( aMaskColor.GetRed() || aMaskColor.GetGreen() || aMaskColor.GetBlue() )
+                    nAlpha = 0xff;
+            }
             aMask.ReleaseAccess( pMaskAcc );
         }
         else
@@ -503,6 +550,10 @@ sal_Int32 SAL_CALL VclCanvasBitmap::getNumberOfEntries() throw (RuntimeException
     vos::OGuard aGuard( Application::GetSolarMutex() );
     Bitmap aBmp = m_pBitmap->GetBitmap();
     BitmapReadAccess* pAcc = aBmp.AcquireReadAccess();
+
+    if( !pAcc )
+        return 0;
+
     sal_Int32 nEntries = pAcc->HasPalette() ? pAcc->GetPaletteEntryCount() : 0 ;
     aBmp.ReleaseAccess( pAcc );
 
@@ -517,9 +568,15 @@ Sequence< double > SAL_CALL VclCanvasBitmap::getPaletteIndex( sal_Int32 nIndex )
     double* pContents = aRet.getArray();
     Bitmap aBmp = m_pBitmap->GetBitmap();
     BitmapReadAccess* pAcc = aBmp.AcquireReadAccess();
+
+    if( !pAcc )
+        return Sequence< double >();
+
     if( nIndex >= 0 && nIndex < pAcc->GetPaletteEntryCount() )
     {
-        const BitmapColor& rColor = pAcc->GetPaletteColor( nIndex );
+        // range already checked above
+        const BitmapColor& rColor = pAcc->GetPaletteColor(
+            static_cast<USHORT>(nIndex) );
         *pContents++ = double(rColor.GetRed()) / 255.0;
         *pContents++ = double(rColor.GetGreen()) / 255.0;
         *pContents++ = double(rColor.GetBlue()) / 255.0;
