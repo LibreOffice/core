@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shutdowniconw32.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hro $ $Date: 2001-11-01 08:55:00 $
+ *  last change: $Author: hro $ $Date: 2001-11-01 13:18:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,10 @@
 //
 // the systray icon is only available on windows
 //
+
+#ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
+#include <svtools/moduleoptions.hxx>
+#endif
 
 #include <shutdownicon.hxx>
 #include <app.hrc>
@@ -274,6 +278,8 @@ static void addMenuItem( HMENU hMenu, UINT id, UINT iconId, OUString& text, int&
 
 static HMENU createSystrayMenu( )
 {
+    SvtModuleOptions    aModuleOptions;
+
     HMENU hMenu = CreatePopupMenu();
     int pos=0;
 
@@ -283,14 +289,18 @@ static HMENU createSystrayMenu( )
     if( !pShutdownIcon )
         return NULL;
 
-    addMenuItem( hMenu, IDM_WRITER, ICON_TEXT_DOCUMENT,
-        pShutdownIcon->GetUrlDescription( OUString( RTL_CONSTASCII_USTRINGPARAM ( WRITER_URL ) ) ), pos, true );
-    addMenuItem( hMenu, IDM_CALC, ICON_SPREADSHEET_DOCUMENT,
-        pShutdownIcon->GetUrlDescription( OUString( RTL_CONSTASCII_USTRINGPARAM ( CALC_URL ) ) ), pos, true );
-    addMenuItem( hMenu, IDM_IMPRESS, ICON_PRESENTATION_DOCUMENT,
-        pShutdownIcon->GetUrlDescription( OUString( RTL_CONSTASCII_USTRINGPARAM ( IMPRESS_URL ) ) ), pos, true );
-    addMenuItem( hMenu, IDM_DRAW, ICON_DRAWING_DOCUMENT,
-        pShutdownIcon->GetUrlDescription( OUString( RTL_CONSTASCII_USTRINGPARAM ( DRAW_URL ) ) ), pos, true );
+    if ( aModuleOptions.IsWriter() )
+        addMenuItem( hMenu, IDM_WRITER, ICON_TEXT_DOCUMENT,
+            pShutdownIcon->GetUrlDescription( OUString( RTL_CONSTASCII_USTRINGPARAM ( WRITER_URL ) ) ), pos, true );
+    if ( aModuleOptions.IsCalc() )
+        addMenuItem( hMenu, IDM_CALC, ICON_SPREADSHEET_DOCUMENT,
+            pShutdownIcon->GetUrlDescription( OUString( RTL_CONSTASCII_USTRINGPARAM ( CALC_URL ) ) ), pos, true );
+    if ( aModuleOptions.IsImpress() )
+        addMenuItem( hMenu, IDM_IMPRESS, ICON_PRESENTATION_DOCUMENT,
+            pShutdownIcon->GetUrlDescription( OUString( RTL_CONSTASCII_USTRINGPARAM ( IMPRESS_URL ) ) ), pos, true );
+    if ( aModuleOptions.IsDraw() )
+        addMenuItem( hMenu, IDM_DRAW, ICON_DRAWING_DOCUMENT,
+            pShutdownIcon->GetUrlDescription( OUString( RTL_CONSTASCII_USTRINGPARAM ( DRAW_URL ) ) ), pos, true );
     addMenuItem( hMenu, IDM_TEMPLATE, ICON_TEMPLATE,
         pShutdownIcon->GetResString( STR_QUICKSTART_FROMTEMPLATE ), pos, true);
     addMenuItem( hMenu, -1,         0, OUString(), pos, false );
