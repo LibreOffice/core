@@ -2,9 +2,9 @@
  *
  *  $RCSfile: astexpression.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 12:47:16 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 13:33:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,8 +110,7 @@ enum ExprType
     ET_any,         // Expression value is any of above
     ET_void,        // Expression value is void (absent)
     ET_type,        // Expression value is type
-    ET_none,        // Expression value is missing
-    ET_pseudo       // Expression value is pseudo (for keywords)
+    ET_none         // Expression value is missing
 };
 
 // Structure to describe value of constant expression and its type
@@ -129,8 +128,6 @@ struct AstExprValue
         sal_Bool        bval;       // Contains boolean expression value
         float           fval;       // Contains 32-bit float expr value
         double          dval;       // Contains 64-bit float expr value
-        sal_Char        cval;       // Contains char expression value
-        ::rtl::OString* strval;     // Contains String * expr value
         sal_uInt32      eval;       // Contains enumeration value
     } u;
     ExprType et;
@@ -154,8 +151,7 @@ public:
     AstExpression(sal_uInt64        uh);
     AstExpression(float             f);
     AstExpression(double            d);
-    AstExpression(sal_Char          c);
-    AstExpression(::rtl::OString* s, sal_Bool bIsScopedName = sal_False);
+    AstExpression(::rtl::OString* scopedName);
 
     virtual ~AstExpression();
 
