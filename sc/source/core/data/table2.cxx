@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table2.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: nn $ $Date: 2002-10-10 16:56:12 $
+ *  last change: $Author: nn $ $Date: 2002-11-07 13:06:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -258,14 +258,21 @@ void ScTable::InsertCol( USHORT nStartCol, USHORT nStartRow, USHORT nEndRow, USH
             aCol[MAXCOL - nSize - i].MoveTo(nStartRow, nEndRow, aCol[MAXCOL - i]);
     }
 
-    if (nStartCol>0)                        // alte Attribute kopieren
+    if (nStartCol>0)                        // copy old attributes
+    {
+        USHORT nWhichArray[2];
+        nWhichArray[0] = ATTR_MERGE;
+        nWhichArray[1] = 0;
+
         for (i=0; i<nSize; i++)
         {
             aCol[nStartCol-1].CopyToColumn( nStartRow, nEndRow, IDF_ATTRIB,
                                                 FALSE, aCol[nStartCol+i] );
             aCol[nStartCol+i].RemoveFlags( nStartRow, nEndRow,
                                                 SC_MF_HOR | SC_MF_VER | SC_MF_AUTO );
+            aCol[nStartCol+i].ClearItems( nStartRow, nEndRow, nWhichArray );
         }
+    }
     if( !--nRecalcLvl )
         SetDrawPageSize();
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: er $ $Date: 2002-10-01 17:18:22 $
+ *  last change: $Author: nn $ $Date: 2002-11-07 13:06:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -628,6 +628,12 @@ BOOL ScColumn::ApplyFlags( USHORT nStartRow, USHORT nEndRow, INT16 nFlags )
 BOOL ScColumn::RemoveFlags( USHORT nStartRow, USHORT nEndRow, INT16 nFlags )
 {
     return pAttrArray->RemoveFlags( nStartRow, nEndRow, nFlags );
+}
+
+
+void ScColumn::ClearItems( USHORT nStartRow, USHORT nEndRow, const USHORT* pWhich )
+{
+    pAttrArray->ClearItems( nStartRow, nEndRow, pWhich );
 }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2002-10-10 16:55:05 $
+ *  last change: $Author: nn $ $Date: 2002-11-07 13:06:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -365,6 +365,7 @@ public:
 
     BOOL        ApplyFlags( USHORT nStartRow, USHORT nEndRow, INT16 nFlags );
     BOOL        RemoveFlags( USHORT nStartRow, USHORT nEndRow, INT16 nFlags );
+    void        ClearItems( USHORT nStartRow, USHORT nEndRow, const USHORT* pWhich );
 
     void        RemoveProtected( USHORT nStartRow, USHORT nEndRow );
 
