@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: khz $ $Date: 2000-11-13 10:11:28 $
+ *  last change: $Author: sj $ $Date: 2000-12-11 14:31:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -956,8 +956,8 @@ class SwEscherEx : public  EscherEx
     void WriteGrfFlyFrame( const SwFrmFmt& rFmt, UINT32 nShapeId );
     void WriteOLEFlyFrame( const SwFrmFmt& rFmt, UINT32 nShapeId );
     void WriteOCXControl( const SwFrmFmt& rFmt, UINT32 nShapeId );
-    void WriteFlyFrameAttr( const SwFrmFmt& rFmt );
-    void WriteGrfAttr( const SwNoTxtNode& rNd );
+    void WriteFlyFrameAttr( const SwFrmFmt& rFmt, EscherPropertyContainer& rPropOpt );
+    void WriteGrfAttr( const SwNoTxtNode& rNd, EscherPropertyContainer& rPropOpt );
 
     UINT32 WriteFlyFrm( const SwFrmFmt& rFmt );
 
@@ -1021,12 +1021,16 @@ SwEscherEx::SwEscherEx( SvStream* pStrm, SwWW8Writer& rWW8Wrt )
 {
     Init();
     OpenContainer( ESCHER_DggContainer );
-        BeginCount();
-        AddColor( 0x08000004 );
-        AddColor( 0x08000001 );
-        AddColor( 0x08000002 );
-        AddColor( 0x100000f7 );
-        EndCount( ESCHER_SplitMenuColors );
+
+    sal_uInt16 nColorCount = 4;
+    *pStrm  << (sal_uInt16)( nColorCount << 4 )     // instance
+            << (sal_uInt16)ESCHER_SplitMenuColors   // record type
+            << (sal_uInt32)( nColorCount * 4 )      // size
+            << (sal_uInt32)0x08000004
+            << (sal_uInt32)0x08000001
+            << (sal_uInt32)0x08000002
+            << (sal_uInt32)0x100000f7;
+
     CloseContainer();   // ESCHER_DggContainer
 
     BYTE i = 2;     // for header/footer and the other
@@ -1096,25 +1100,25 @@ SwEscherEx::SwEscherEx( SvStream* pStrm, SwWW8Writer& rWW8Wrt )
 
                     AddShape( ESCHER_ShpInst_Rectangle, 0xe00, nSecondShapeId );
 
-                    BeginCount();
+                    EscherPropertyContainer aPropOpt;
                     // default Fuellfarbe ist das StarOffice blau7
                     // ----> von DrawingLayer besorgen !!
-                    AddOpt( ESCHER_Prop_fillColor, 0xffb800 );
-                    AddOpt( ESCHER_Prop_fillBackColor, 0 );
-                    AddOpt( ESCHER_Prop_fNoFillHitTest, 0x00100010 );
-                    AddOpt( ESCHER_Prop_lineColor, 0x8000001 );
-                    AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x00080008 );
-                    AddOpt( ESCHER_Prop_shadowColor, 0x8000002 );
-                    AddOpt( ESCHER_Prop_lineWidth, 0 );
+                    aPropOpt.AddOpt( ESCHER_Prop_fillColor, 0xffb800 );
+                    aPropOpt.AddOpt( ESCHER_Prop_fillBackColor, 0 );
+                    aPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x00100010 );
+                    aPropOpt.AddOpt( ESCHER_Prop_lineColor, 0x8000001 );
+                    aPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x00080008 );
+                    aPropOpt.AddOpt( ESCHER_Prop_shadowColor, 0x8000002 );
+                    aPropOpt.AddOpt( ESCHER_Prop_lineWidth, 0 );
 
 // winword defaults!
-//                  AddOpt( ESCHER_Prop_fNoFillHitTest, 0x100000 );
-//                  AddOpt( ESCHER_Prop_lineWidth, 0 );
-//                  AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x80000 );
-//                  AddOpt( ESCHER_Prop_bWMode, 0x9 );
-//                  AddOpt( ESCHER_Prop_fBackground, 0x10001 );
+//                  aPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x100000 );
+//                  aPropOpt.AddOpt( ESCHER_Prop_lineWidth, 0 );
+//                  aPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x80000 );
+//                  aPropOpt.AddOpt( ESCHER_Prop_bWMode, 0x9 );
+//                  aPropOpt.AddOpt( ESCHER_Prop_fBackground, 0x10001 );
 
-                    EndCount( ESCHER_OPT, 3 );
+                    aPropOpt.Commit( *pStrm );
 
                     AddAtom( 4, ESCHER_ClientData );
                     GetStream() << 1L;
@@ -1746,22 +1750,17 @@ void SwEscherEx::WriteTxtFlyFrame( const SwFrmFmt& rFmt, UINT32 nShapeId,
     OpenContainer( ESCHER_SpContainer );
 
     AddShape( ESCHER_ShpInst_TextBox, 0xa00, nShapeId );
-
-    BeginCount();
-
-    AddOpt( ESCHER_Prop_lTxid, nTxtBox );
-
+    EscherPropertyContainer aPropOpt;
+    aPropOpt.AddOpt( ESCHER_Prop_lTxid, nTxtBox );
     const VoidPtr pNext = rFmt.GetChain().GetNext();
     if( pNext )
     {
         USHORT nPos = aSortFmts.GetPos( pNext );
         if( USHRT_MAX != nPos && aFollowShpIds[ nPos ] )
-            AddOpt( ESCHER_Prop_hspNext, aFollowShpIds[ nPos ] );
+            aPropOpt.AddOpt( ESCHER_Prop_hspNext, aFollowShpIds[ nPos ] );
     }
-
-    WriteFlyFrameAttr( rFmt );
-
-    EndCount( ESCHER_OPT, 3 );
+    WriteFlyFrameAttr( rFmt, aPropOpt );
+    aPropOpt.Commit( GetStream() );
 
     // store anchor attribute
     WriteFrmExtraData( rFmt );
@@ -1779,7 +1778,7 @@ void SwEscherEx::WriteGrfFlyFrame( const SwFrmFmt& rFmt, UINT32 nShapeId )
 
     AddShape( ESCHER_ShpInst_PictureFrame, 0xa00, nShapeId );
 
-    BeginCount();
+    EscherPropertyContainer aPropOpt;
 
     UINT32 nFlags = ESCHER_BlipFlagDefault;
     SwNodeIndex aIdx( *rFmt.GetCntnt().GetCntntIdx(), 1 );
@@ -1797,22 +1796,20 @@ void SwEscherEx::WriteGrfFlyFrame( const SwFrmFmt& rFmt, UINT32 nShapeId )
         BYTE* pArr = new BYTE[ nArrLen ];
         memcpy( pArr, aBuf.GetData(), nArrLen );
 
-        AddOpt( ESCHER_Prop_pibName, TRUE, nArrLen, pArr, nArrLen );
+        aPropOpt.AddOpt( ESCHER_Prop_pibName, TRUE, nArrLen, pArr, nArrLen );
         nFlags = ESCHER_BlipFlagLinkToFile | ESCHER_BlipFlagURL |
                     ESCHER_BlipFlagDoNotSave;
     }
     else
     {
         rGrfNd.SwapIn( TRUE );
-        AddOpt( ESCHER_Prop_pib, AddGraphic( *QueryPicStream(),
+        aPropOpt.AddOpt( ESCHER_Prop_pib, AddGraphic( *QueryPicStream(),
                                             rGrfNd.GetGrf() ), TRUE );
     }
-    AddOpt( ESCHER_Prop_pibFlags, nFlags );
-
-    WriteFlyFrameAttr( rFmt );
-    WriteGrfAttr( rGrfNd );
-
-    EndCount( ESCHER_OPT, 3 );
+    aPropOpt.AddOpt( ESCHER_Prop_pibFlags, nFlags );
+    WriteFlyFrameAttr( rFmt, aPropOpt );
+    WriteGrfAttr( rGrfNd, aPropOpt );
+    aPropOpt.Commit( GetStream() );
 
     // store anchor attribute
     WriteFrmExtraData( rFmt );
@@ -1833,8 +1830,7 @@ void SwEscherEx::WriteOCXControl( const SwFrmFmt& rFmt, UINT32 nShapeId )
 
         AddShape( ESCHER_ShpInst_PictureFrame, 0xa10, nShapeId );
 
-        BeginCount();
-
+        EscherPropertyContainer aPropOpt;
         Size aSz( pSdrObj->GetLogicRect().GetSize() );
         aSz.Width() = DrawModelToEmu( aSz.Width() );
         aSz.Height() = DrawModelToEmu( aSz.Height() );
@@ -1843,12 +1839,10 @@ void SwEscherEx::WriteOCXControl( const SwFrmFmt& rFmt, UINT32 nShapeId )
         pTxtBxs->Append( *pSdrObj, nShapeId );
         UINT32 nPicId = pTxtBxs->Count();
         nPicId *= 0x10000;
-        AddOpt( ESCHER_Prop_pictureId, nPicId );
-        AddOpt( ESCHER_Prop_pictureActive, 0x10000 );
-
-        WriteFlyFrameAttr( rFmt );
-
-        EndCount( ESCHER_OPT, 3 );
+        aPropOpt.AddOpt( ESCHER_Prop_pictureId, nPicId );
+        aPropOpt.AddOpt( ESCHER_Prop_pictureActive, 0x10000 );
+        WriteFlyFrameAttr( rFmt, aPropOpt );
+        aPropOpt.Commit( GetStream() );
 
         // store anchor attribute
         WriteFrmExtraData( rFmt );
@@ -1875,9 +1869,7 @@ void SwEscherEx::WriteOLEFlyFrame( const SwFrmFmt& rFmt, UINT32 nShapeId )
         OpenContainer( ESCHER_SpContainer );
 
         AddShape( ESCHER_ShpInst_PictureFrame, 0xa10, nShapeId );
-
-        BeginCount();
-
+        EscherPropertyContainer aPropOpt;
         {
             SvMemoryStream aGrfStrm;
             WriteWindowMetafile( aGrfStrm, *pMtf );
@@ -1887,19 +1879,17 @@ void SwEscherEx::WriteOLEFlyFrame( const SwFrmFmt& rFmt, UINT32 nShapeId )
             aSz.Width() = DrawModelToEmu( aSz.Width() );
             aSz.Height() = DrawModelToEmu( aSz.Height() );
             Rectangle aRect( Point(0,0), aSz );
-            AddOpt( ESCHER_Prop_pib, AddWMF( *QueryPicStream(),
+            aPropOpt.AddOpt( ESCHER_Prop_pib, AddWMF( *QueryPicStream(),
                                     pMem + 22, nLen - 22, aRect ), TRUE );
         }
         pTxtBxs->Append( *pSdrObj, nShapeId );
         UINT32 nPicId = pTxtBxs->Count();
         nPicId *= 0x10000;
-        AddOpt( ESCHER_Prop_pictureId, nPicId );
-        AddOpt( ESCHER_Prop_pictureActive, 0x10000 );
-
-        WriteFlyFrameAttr( rFmt );
-        WriteGrfAttr( rOLENd );
-
-        EndCount( ESCHER_OPT, 3 );
+        aPropOpt.AddOpt( ESCHER_Prop_pictureId, nPicId );
+        aPropOpt.AddOpt( ESCHER_Prop_pictureActive, 0x10000 );
+        WriteFlyFrameAttr( rFmt, aPropOpt );
+        WriteGrfAttr( rOLENd, aPropOpt );
+        aPropOpt.Commit( GetStream() );
 
         // store anchor attribute
         WriteFrmExtraData( rFmt );
@@ -1912,7 +1902,7 @@ void SwEscherEx::WriteOLEFlyFrame( const SwFrmFmt& rFmt, UINT32 nShapeId )
 }
 
 
-void SwEscherEx::WriteGrfAttr( const SwNoTxtNode& rNd )
+void SwEscherEx::WriteGrfAttr( const SwNoTxtNode& rNd, EscherPropertyContainer& rPropOpt )
 {
     const SfxPoolItem* pItem;
     if( SFX_ITEM_SET == rNd.GetSwAttrSet().GetItemState( RES_GRFATR_CROPGRF,
@@ -1921,18 +1911,18 @@ void SwEscherEx::WriteGrfAttr( const SwNoTxtNode& rNd )
         const Size aSz( rNd.GetTwipSize() );
         INT32 nVal;
         if( 0 != ( nVal = ((SwCropGrf*)pItem )->GetLeft() ) )
-            AddOpt( ESCHER_Prop_cropFromLeft, ToFract16( nVal, aSz.Width()) );
+            rPropOpt.AddOpt( ESCHER_Prop_cropFromLeft, ToFract16( nVal, aSz.Width()) );
         if( 0 != ( nVal = ((SwCropGrf*)pItem )->GetRight() ) )
-            AddOpt( ESCHER_Prop_cropFromRight, ToFract16( nVal, aSz.Width()));
+            rPropOpt.AddOpt( ESCHER_Prop_cropFromRight, ToFract16( nVal, aSz.Width()));
         if( 0 != ( nVal = ((SwCropGrf*)pItem )->GetTop() ) )
-            AddOpt( ESCHER_Prop_cropFromTop, ToFract16( nVal, aSz.Height()));
+            rPropOpt.AddOpt( ESCHER_Prop_cropFromTop, ToFract16( nVal, aSz.Height()));
         if( 0 != ( nVal = ((SwCropGrf*)pItem )->GetBottom() ) )
-            AddOpt( ESCHER_Prop_cropFromBottom, ToFract16( nVal, aSz.Height()));
+            rPropOpt.AddOpt( ESCHER_Prop_cropFromBottom, ToFract16( nVal, aSz.Height()));
     }
     // mirror ??
 }
 
-void SwEscherEx::WriteFlyFrameAttr( const SwFrmFmt& rFmt )
+void SwEscherEx::WriteFlyFrameAttr( const SwFrmFmt& rFmt, EscherPropertyContainer& rPropOpt )
 {
     const SfxPoolItem* pItem;
     BOOL bFirstLine = TRUE;
@@ -1950,8 +1940,8 @@ void SwEscherEx::WriteFlyFrameAttr( const SwFrmFmt& rFmt )
                 if( bFirstLine )
                 {
                     UINT32 nLineColor = GetColor( pLine->GetColor(), FALSE );
-                    AddOpt( ESCHER_Prop_lineColor, nLineColor );
-                    AddOpt( ESCHER_Prop_lineBackColor, nLineColor ^ 0xffffff );
+                    rPropOpt.AddOpt( ESCHER_Prop_lineColor, nLineColor );
+                    rPropOpt.AddOpt( ESCHER_Prop_lineBackColor, nLineColor ^ 0xffffff );
 
                     UINT32 nLineWidth;
                     ESCHER_LineStyle eStyle;
@@ -1975,23 +1965,22 @@ void SwEscherEx::WriteFlyFrameAttr( const SwFrmFmt& rFmt )
                         nLineWidth = pLine->GetOutWidth();
                     }
 
-                    AddOpt( ESCHER_Prop_lineStyle, eStyle );
-                    AddOpt( ESCHER_Prop_lineWidth, DrawModelToEmu( nLineWidth ));
+                    rPropOpt.AddOpt( ESCHER_Prop_lineStyle, eStyle );
+                    rPropOpt.AddOpt( ESCHER_Prop_lineWidth, DrawModelToEmu( nLineWidth ));
 
                     bFirstLine = FALSE;
                 }
-
-                AddOpt( aExhperProp[ n ], DrawModelToEmu(
-                                ((SvxBoxItem*)pItem)->GetDistance( n ) ));
+                rPropOpt.AddOpt( aExhperProp[ n ], DrawModelToEmu(
+                                    ((SvxBoxItem*)pItem)->GetDistance( n ) ));
             }
     }
     if( bFirstLine )                // no valid line found
     {
-        AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x80000 );
-        AddOpt( ESCHER_Prop_dyTextTop, 0 );
-        AddOpt( ESCHER_Prop_dyTextBottom, 0 );
-        AddOpt( ESCHER_Prop_dxTextLeft, 0 );
-        AddOpt( ESCHER_Prop_dxTextRight, 0 );
+        rPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x80000 );
+        rPropOpt.AddOpt( ESCHER_Prop_dyTextTop, 0 );
+        rPropOpt.AddOpt( ESCHER_Prop_dyTextBottom, 0 );
+        rPropOpt.AddOpt( ESCHER_Prop_dxTextLeft, 0 );
+        rPropOpt.AddOpt( ESCHER_Prop_dxTextRight, 0 );
     }
 
     // write shadow
@@ -2040,46 +2029,46 @@ void SwEscherEx::WriteFlyFrameAttr( const SwFrmFmt& rFmt )
             else
 */
             {
-                AddOpt( ESCHER_Prop_fillBlip, AddGraphic( *QueryPicStream(),
+                rPropOpt.AddOpt( ESCHER_Prop_fillBlip, AddGraphic( *QueryPicStream(),
                                     *((SvxBrushItem*)pItem)->GetGraphic() ),
                                     TRUE );
             }
-            AddOpt( ESCHER_Prop_fillType, ESCHER_FillPicture );
-            AddOpt( ESCHER_Prop_fNoFillHitTest, 0x140014 );
-            AddOpt( ESCHER_Prop_fillBackColor, 0 );
+            rPropOpt.AddOpt( ESCHER_Prop_fillType, ESCHER_FillPicture );
+            rPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x140014 );
+            rPropOpt.AddOpt( ESCHER_Prop_fillBackColor, 0 );
         }
         else if( !((SvxBrushItem*)pItem)->GetColor().GetTransparency() )
         {
             UINT32 nFillColor = GetColor( ((SvxBrushItem*)pItem)->
                                                     GetColor(), FALSE );
-            AddOpt( ESCHER_Prop_fillColor, nFillColor );
-            AddOpt( ESCHER_Prop_fillBackColor, nFillColor ^ 0xffffff );
-            AddOpt( ESCHER_Prop_fNoFillHitTest, 0x100010 );
+            rPropOpt.AddOpt( ESCHER_Prop_fillColor, nFillColor );
+            rPropOpt.AddOpt( ESCHER_Prop_fillBackColor, nFillColor ^ 0xffffff );
+            rPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x100010 );
         }
         else
         {
-            AddOpt( ESCHER_Prop_fNoFillHitTest, 0x100000 );
+            rPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x100000 );
         }
     }
 
     if( SFX_ITEM_SET == rFmt.GetItemState( RES_LR_SPACE, TRUE, &pItem ))
     {
-        AddOpt( ESCHER_Prop_dxWrapDistLeft,
+        rPropOpt.AddOpt( ESCHER_Prop_dxWrapDistLeft,
                 DrawModelToEmu( ((SvxLRSpaceItem*)pItem)->GetLeft() ) );
-        AddOpt( ESCHER_Prop_dxWrapDistRight,
+        rPropOpt.AddOpt( ESCHER_Prop_dxWrapDistRight,
                 DrawModelToEmu( ((SvxLRSpaceItem*)pItem)->GetRight() ) );
     }
     if( SFX_ITEM_SET == rFmt.GetItemState( RES_UL_SPACE, TRUE, &pItem ))
     {
-        AddOpt( ESCHER_Prop_dyWrapDistTop,
+        rPropOpt.AddOpt( ESCHER_Prop_dyWrapDistTop,
                 DrawModelToEmu( ((SvxULSpaceItem*)pItem)->GetUpper() ) );
-        AddOpt( ESCHER_Prop_dyWrapDistBottom,
+        rPropOpt.AddOpt( ESCHER_Prop_dyWrapDistBottom,
                 DrawModelToEmu( ((SvxULSpaceItem*)pItem)->GetLower() ) );
     }
 
     const SdrObject* pObj = rFmt.FindRealSdrObject();
     if( pObj && pObj->GetLayer() == GetHellLayerId() )
-        AddOpt( ESCHER_Prop_fPrint, 0x200020 );
+        rPropOpt.AddOpt( ESCHER_Prop_fPrint, 0x200020 );
 }
 
 void SwEscherEx::MakeZOrderArrAndFollowIds( const SvPtrarr& rSrcArr )
@@ -2239,11 +2228,14 @@ BOOL SwMSConvertControls::ExportControl(Writer &rWrt, const SdrObject *pObj)
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtw8esh.cxx,v 1.4 2000-11-13 10:11:28 khz Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtw8esh.cxx,v 1.5 2000-12-11 14:31:03 sj Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.4  2000/11/13 10:11:28  khz
+      export extended WW9-Frame-Alignment (write Escher record 0xF122)
+
       Revision 1.3  2000/10/10 16:54:06  cmc
       MSOffice 97/2000 Controls {Im|Ex}port
 
