@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextInputStream.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 20:22:48 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 16:11:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -245,7 +245,7 @@ OUString OTextInputStream::implReadString( const Sequence< sal_Unicode >& Delimi
     sal_Int32 nCopyLen = 0;
     sal_Bool bFound = sal_False;
     sal_Bool bFoundFirstLineEndChar = sal_False;
-    sal_Unicode cFirstLineEndChar;
+    sal_Unicode cFirstLineEndChar = 0;
     const sal_Unicode* pDelims = Delimiters.getConstArray();
     const sal_Int32 nDelimCount = Delimiters.getLength();
     while( !bFound )
