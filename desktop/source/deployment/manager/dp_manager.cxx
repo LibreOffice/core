@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_manager.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:11:40 $
+ *  last change: $Author: rt $ $Date: 2005-02-04 11:31:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -619,7 +619,7 @@ Reference<deployment::XPackage> PackageManagerImpl::addPackage(
             if (m_activePackagesDB->has( title ))
             {
                 // package already deployed, interact --force:
-                Any nameClashResolveRequest(
+                Any nameClashResolveRequest = Any(
                     NameClashResolveRequest(
                         getResourceString(
                             RID_STR_PACKAGE_ALREADY_ADDED ) + title,
