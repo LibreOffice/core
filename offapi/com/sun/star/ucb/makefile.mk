@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: iha $ $Date: 2001-04-27 15:04:06 $
+#   last change: $Author: mav $ $Date: 2001-04-27 16:17:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -239,6 +239,7 @@ IDLFILES=\
     XInteractionHandlerSupplier.idl\
     XInteractionSupplyAuthentication.idl\
     XParameterizedContentProvider.idl\
+    XPasswordContainer.idl\
     XPersistentPropertySet.idl\
     XProgressHandler.idl\
     XPropertyMatcher.idl\
