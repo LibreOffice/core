@@ -3,9 +3,9 @@
  *
  *  $RCSfile: DbQueryWindowState.xcs,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 11:57:50 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:29:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 <oor:component-schema oor:name="DbQueryWindowState" oor:package="org.openoffice.Office.UI" xml:lang="en-US" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <info>
 		<author>CD</author>
-		<desc xml:lang="en-US">Contains state information of all dockable user interface elements based on a Window class which belongs to the database query module.</desc>
+		<desc>Contains state information of all dockable user interface elements based on a Window class which belongs to the database query module.</desc>
 	</info>
 	<import oor:component="org.openoffice.Office.UI.WindowState"/>
 	<uses oor:component="org.openoffice.Office.UI.WindowState"/>
@@ -71,11 +71,11 @@
 	<component>
 		<group oor:name="UIElements">
 		    <info>
-		        <desc xml:lang="en-US">Contains user interface element state data specific for the database query module."</desc>
+		        <desc>Contains user interface element state data specific for the database query module."</desc>
 		    </info>
 			<set oor:name="States" oor:node-type="WindowStateType" oor:component="org.openoffice.Office.UI.WindowState">
 		        <info>
-		            <desc xml:lang="en-US">Contains states of all known dockable user interface elements of the database query module."</desc>
+		            <desc>Contains states of all known dockable user interface elements of the database query module."</desc>
 		        </info>
 			</set>
 		</group>
