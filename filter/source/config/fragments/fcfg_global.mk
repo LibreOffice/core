@@ -33,7 +33,21 @@ F4_GLOBAL = \
     writerglobal8 \
     writerglobal8_writer
 
-
+# -----------------------------------------------
+# count = 12
+F4_UI_GLOBAL = \
+    MS_Excel_2003_XML_ui \
+    MS_Word_2003_XML_ui \
+    StarWriter_3_0__StarWriter_GlobalDocument__ui \
+    StarWriter_4_0__StarWriter_GlobalDocument__ui \
+    StarWriter_4_0_GlobalDocument_ui \
+    StarWriter_5_0__StarWriter_GlobalDocument__ui \
+    StarWriter_5_0_GlobalDocument_ui \
+    Text__encoded___StarWriter_GlobalDocument__ui \
+    writer_globaldocument_StarOffice_XML_Writer_ui \
+    writer_globaldocument_StarOffice_XML_Writer_GlobalDocument_ui \
+    writerglobal8_ui \
+    writerglobal8_writer_ui
 
 # -----------------------------------------------
 # count = 0
@@ -44,15 +58,22 @@ L4_GLOBAL =
 C4_GLOBAL =
 
 # -----------------------------------------------
-TYPES_4fcfg_global           = $(foreach,i,$(T4_GLOBAL) types$/$i.xcu          )
-FILTERS_4fcfg_global         = $(foreach,i,$(F4_GLOBAL) filters$/$i.xcu        )
-FRAMELOADERS_4fcfg_global    = $(foreach,i,$(L4_GLOBAL) frameloaders$/$i.xcu   )
-CONTENTHANDLERS_4fcfg_global = $(foreach,i,$(C4_GLOBAL) contenthandlers$/$i.xcu)
+TYPES_4fcfg_global           = $(foreach,i,$(T4_GLOBAL)    types$/$i.xcu                     )
+FILTERS_4fcfg_global         = $(foreach,i,$(F4_GLOBAL)    filters$/$i.xcu                   )
+UI_FILTERS_4fcfg_global      = $(foreach,i,$(F4_UI_GLOBAL) $(DIR_LOCFRAG)$/filters$/$i.xcu   )
+FRAMELOADERS_4fcfg_global    = $(foreach,i,$(L4_GLOBAL)    frameloaders$/$i.xcu              )
+CONTENTHANDLERS_4fcfg_global = $(foreach,i,$(C4_GLOBAL)    contenthandlers$/$i.xcu           )
 
 # -----------------------------------------------
 # needed to get dependencies inside global makefile work!
 ALL_4fcfg_global = \
     $(TYPES_4fcfg_global) \
-    $(foreach,i,$(FILTERS_4fcfg_base) $(MISC)$/$i) \
+    $(FILTERS_4fcfg_global) \
+    $(UI_FILTERS_4fcfg_global) \
     $(FRAMELOADERS_4fcfg_global) \
     $(CONTENTHANDLERS_4fcfg_global)
+    
+ALL_UI_FILTERS+=$(UI_FILTERS_4fcfg_global)
+    
+ALL_PACKAGES+=global
+
