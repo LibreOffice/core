@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilePicker.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:15:23 $
+ *  last change:$Date: 2003-05-27 12:46:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,7 @@ public class FilePicker extends TestCase {
                                                     throws StatusException {
         XInterface oObj = null;
         Object oInterface = null;
-        XMultiServiceFactory xMSF = Param.getMSF();
+        XMultiServiceFactory xMSF = (XMultiServiceFactory)Param.getMSF();
         Object relationContainer = null ;
 
         Object[] iniArgs = new Object[] { new Short
