@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrolcontainermodel.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mt $ $Date: 2001-10-25 10:34:24 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 15:56:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@ UnoControlContainerModel::UnoControlContainerModel()
 {
     ImplRegisterProperty( BASEPROPERTY_BACKGROUNDCOLOR );
     ImplRegisterProperty( BASEPROPERTY_BORDER );
+    ImplRegisterProperty( BASEPROPERTY_BORDERCOLOR );
     ImplRegisterProperty( BASEPROPERTY_DEFAULTCONTROL );
     ImplRegisterProperty( BASEPROPERTY_ENABLED );
     ImplRegisterProperty( BASEPROPERTY_HELPTEXT );
