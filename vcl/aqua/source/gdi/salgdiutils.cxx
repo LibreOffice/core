@@ -2,8 +2,8 @@
  *
  *  $RCSfile: salgdiutils.cxx,v $
  *
- *  $Revision: 1.1 $
- *  last change: $Author: bmahbod $ $Date: 2001-02-14 19:39:49 $
+ *  $Revision: 1.2 $
+ *  last change: $Author: pluby $ $Date: 2001-02-20 05:52:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -440,6 +440,7 @@ BOOL EndGraphics ( SalGraphicsDataPtr rSalGraphicsData )
                           );
 
             rSalGraphicsData->mnOSStatus = QDErr();
+            rSalGraphicsData->mbGWorldPixelsLocked = FALSE;
         } // if
 
         // Reset the port to its original attributes
