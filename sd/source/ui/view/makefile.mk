@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: rt $ $Date: 2005-01-27 14:22:38 $
+#   last change: $Author: obo $ $Date: 2005-03-15 11:21:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,7 +84,11 @@ EXCEPTIONSFILES=				\
         $(SLO)$/drviewsa.obj \
         $(SLO)$/outlnvsh.obj \
         $(SLO)$/presvish.obj \
+        $(SLO)$/sdview.obj	\
+        $(SLO)$/sdview3.obj  \
+        $(SLO)$/sdview4.obj  \
         $(SLO)$/slidvish.obj \
+        $(SLO)$/viewshe2.obj \
         $(SLO)$/ObjectBarManager.obj
 
 EXCEPTIONSNOOPTFILES=\
