@@ -14355,3 +14355,7 @@ WriteJPEG
 ?ImplActivatePage@TabBar@@QAEXXZ
 ?ImplDeactivatePage@TabBar@@QAEJXZ
 ?ImplSelect@TabBar@@QAEXXZ
+??0?$_STL_alloc_proxy@PAV?$Reference@VXAccessible@accessibility@star@sun@com@drafts@@@uno@star@sun@com@@V12345@V?$allocator@V?$Reference@VXAccessible@accessibility@star@sun@com@drafts@@@uno@star@sun@com@@@_STL@@@_STL@@QAE@ABV?$allocator@V?$Reference@VXAccessible@accessibility@star@sun@com@drafts@@@uno@star@sun@com@@@1@PAV?$Reference@VXAccessible@accessibility@star@sun@com@drafts@@@uno@star@sun@com@@@Z
+??0?$_Vector_base@V?$Reference@VXAccessible@accessibility@star@sun@com@drafts@@@uno@star@sun@com@@V?$allocator@V?$Reference@VXAccessible@accessibility@star@sun@com@drafts@@@uno@star@sun@com@@@_STL@@@_STL@@QAE@IABV?$allocator@V?$Reference@VXAccessible@accessibility@star@sun@com@drafts@@@uno@star@sun@com@@@1@@Z
+?_M_fill_assign@?$vector@V?$Reference@VXAccessible@accessibility@star@sun@com@drafts@@@uno@star@sun@com@@V?$allocator@V?$Reference@VXAccessible@accessibility@star@sun@com@drafts@@@uno@star@sun@com@@@_STL@@@_STL@@QAEXIABV?$Reference@VXAccessible@accessibility@star@sun@com@drafts@@@uno@star@sun@com@@@Z
+?deallocate@?$_STL_alloc_proxy@PAV?$Reference@VXAccessible@accessibility@star@sun@com@drafts@@@uno@star@sun@com@@V12345@V?$allocator@V?$Reference@VXAccessible@accessibility@star@sun@com@drafts@@@uno@star@sun@com@@@_STL@@@_STL@@QAEXPAV?$Reference@VXAccessible@accessibility@star@sun@com@drafts@@@uno@star@sun@com@@I@Z
