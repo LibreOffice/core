@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hdu $ $Date: 2002-05-23 17:29:54 $
+ *  last change: $Author: hdu $ $Date: 2002-05-28 11:54:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,8 +234,16 @@ void SimpleWinLayout::Draw() const
     if( mnGlyphCount <= 0 )
         return;
 
-    Point aPos = GetDrawPosition();
-    ::ExtTextOutW( mhDC, aPos.X(), aPos.Y(), ETO_GLYPH_INDEX, NULL,
+    // #99019# don't use glyph indices for non-TT fonts
+    // TODO: use a cached value
+    UINT nOptions = 0;
+    TEXTMETRICW aTextMetricW;
+    GetTextMetricsW( mhDC, &aTextMetricW );
+    if( aTextMetricW.tmPitchAndFamily & TMPF_TRUETYPE )
+        nOptions = ETO_GLYPH_INDEX;
+
+    const Point aPos = GetDrawPosition();
+    ::ExtTextOutW( mhDC, aPos.X(), aPos.Y(), nOptions, NULL,
         mpOutGlyphs, mnGlyphCount, mpGlyphAdvances );
 }
 
@@ -333,10 +341,12 @@ Point SimpleWinLayout::GetCharPosition( int nCharIndex, bool bRTL ) const
 
 void SimpleWinLayout::Justify( long nNewWidth )
 {
+    long nOldWidth = mnWidth;
+    mnWidth = nNewWidth;
+
     if( mnGlyphCount <= 0 )
         return;
 
-    long nOldWidth = mnWidth;
     if( nNewWidth == nOldWidth )
         return;
 
