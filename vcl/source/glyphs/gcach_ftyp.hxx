@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_ftyp.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hdu $ $Date: 2002-09-04 17:36:34 $
+ *  last change: $Author: hdu $ $Date: 2002-11-12 11:35:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,6 +148,7 @@ private:
     typedef ::std::hash_map<int,FtFontInfo*> FontList;
     FontList            maFontList;
 
+    int                 mnMaxFontId;
     int                 mnNextFontId;
 };
 
