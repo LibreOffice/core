@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: tra $ $Date: 2002-03-21 07:37:44 $
+#   last change: $Author: hjs $ $Date: 2002-06-11 18:29:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,7 @@ COMPRDB=$(SOLARBINDIR)$/applicat.rdb
 
 .INCLUDE : ..$/..$/cppumaker.mk
 
-CFLAGS+=/GX /GR /D_WIN32_WINNT=0x0500
+CFLAGS+=-GX -GR -D_WIN32_WINNT=0x0500
 
 # --- Resources ----------------------------------------------------
 
