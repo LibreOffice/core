@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swhtml.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:59:26 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 14:57:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,9 +60,6 @@
  ************************************************************************/
 
 
-#ifdef PRECOMPILED
-#include "filt_pch.hxx"
-#endif
 
 #pragma hdrstop
 
