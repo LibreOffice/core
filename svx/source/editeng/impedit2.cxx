@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: mt $ $Date: 2002-07-12 10:31:20 $
+ *  last change: $Author: mt $ $Date: 2002-07-12 13:00:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3038,7 +3038,7 @@ Range ImpEditEngine::GetInvalidYOffsets( ParaPortion* pPortion )
         }
 
         // MT 07/00 SBL kann jetzt kleiner 100% sein => ggf. die Zeile davor neu ausgeben.
-        if( ( rLSItem.GetInterLineSpaceRule() == SVX_INTER_LINE_SPACE_PROP ) &&
+        if( ( rLSItem.GetInterLineSpaceRule() == SVX_INTER_LINE_SPACE_PROP ) && rLSItem.GetPropLineSpace() &&
             ( rLSItem.GetPropLineSpace() < 100 ) )
         {
             EditLine* pL = pPortion->GetLines().GetObject( nFirstInvalid );
@@ -3300,8 +3300,9 @@ long ImpEditEngine::GetXPos( ParaPortion* pParaPortion, EditLine* pLine, USHORT 
     long nX = GetPortionXOffset( pParaPortion, pLine, nTextPortion );
 
     // calc text width, portion size may include CJK/CTL spacing...
+    // But the array migh not be init yet, if using text ranger this method is called within CreateLines()...
     long nPortionTextWidth = pPortion->GetSize().Width();
-    if ( ( pPortion->GetKind() == PORTIONKIND_TEXT ) && pPortion->GetLen() )
+    if ( ( pPortion->GetKind() == PORTIONKIND_TEXT ) && pPortion->GetLen() && !GetTextRanger() )
         nPortionTextWidth = pLine->GetCharPosArray().GetObject( nTextPortionStart + pPortion->GetLen() - 1 - pLine->GetStart() );
 
     if ( nTextPortionStart != nIndex )
