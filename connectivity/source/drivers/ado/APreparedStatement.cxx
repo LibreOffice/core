@@ -2,9 +2,9 @@
  *
  *  $RCSfile: APreparedStatement.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:36:21 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 10:49:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,8 +247,14 @@ sal_Int32 SAL_CALL OPreparedStatement::executeUpdate(  ) throw(SQLException, Run
 
     ADORecordset* pSet=NULL;
     CHECK_RETURN(m_Command.Execute(m_RecordsAffected,m_Parameters,adCmdUnknown,&pSet))
+    if ( VT_ERROR == m_RecordsAffected.getType() )
+    {
+        ADOS::ThrowException(*m_pConnection->getConnection(),*this);
+        // to be sure that we get the error really thrown
+        throw SQLException();
+    }
     m_RecordSet = WpADORecordset(pSet);
-    return m_RecordsAffected;
+    return  static_cast<sal_Int32>(m_RecordsAffected);
 }
 
 // -------------------------------------------------------------------------
@@ -278,8 +284,23 @@ void OPreparedStatement::setParameter(sal_Int32 parameterIndex, const DataTypeEn
         {
 #if OSL_DEBUG_LEVEL > 0
             ::rtl::OUString sParam = aParam.GetName();
+
 #endif // OSL_DEBUG_LEVEL
-            CHECK_RETURN(aParam.PutValue(_Val));
+
+            DataTypeEnum eType = aParam.GetADOType();
+            if ( _eType != eType )
+            {
+                aParam.put_Type(_eType);
+                aParam.put_Size(_nSize);
+            }
+
+
+            if ( adVarBinary == _eType && aParam.GetAttributes() == adParamLong )
+            {
+                aParam.AppendChunk(_Val);
+            }
+            else
+                CHECK_RETURN(aParam.PutValue(_Val));
         }
     }
     ADOS::ThrowException(*m_pConnection->getConnection(),*this);
