@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmctrler.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 12:20:25 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:56:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -479,7 +479,7 @@ FmXFormController::~FmXFormController()
     if ( m_aFeatureInvalidationTimer.IsActive() )
         m_aFeatureInvalidationTimer.Stop();
 
-    m_aControllerFeatures.dispose( );
+    disposeAllFeaturesAndDispatchers();
 
     // Freigeben der Aggregation
     if ( m_xAggregate.is() )
@@ -866,6 +866,27 @@ void SAL_CALL FmXFormController::disposing(const EventObject& e) throw( RuntimeE
 
 // OComponentHelper
 //-----------------------------------------------------------------------------
+void FmXFormController::disposeAllFeaturesAndDispatchers() SAL_THROW(())
+{
+    for ( DispatcherContainer::iterator aDispatcher = m_aFeatureDispatchers.begin();
+          aDispatcher != m_aFeatureDispatchers.end();
+          ++aDispatcher
+        )
+    {
+        try
+        {
+            ::comphelper::disposeComponent( aDispatcher->second );
+        }
+        catch( const Exception& )
+        {
+            OSL_ENSURE( sal_False, "FmXFormController::disposeAllFeaturesAndDispatchers: caught an exception while disposing a dispatcher!" );
+        }
+    }
+    m_aFeatureDispatchers.clear();
+    m_aControllerFeatures.dispose();
+}
+
+//-----------------------------------------------------------------------------
 void FmXFormController::disposing(void)
 {
     EventObject aEvt(static_cast< XFormController* >(this));
@@ -918,7 +939,7 @@ void FmXFormController::disposing(void)
     }
     m_aChilds.clear();
 
-    m_aControllerFeatures.dispose();
+    disposeAllFeaturesAndDispatchers();
 
     if (m_bDBConnection)
         unload();
@@ -1497,7 +1518,7 @@ void FmXFormController::setModel(const Reference< XTabControllerModel > & Model)
                 xParamBroadcaster->removeParameterListener(this);
         }
 
-        m_aControllerFeatures.dispose();
+        disposeAllFeaturesAndDispatchers();
 
         // set the new model wait for the load event
         if (m_xTabController.is())
