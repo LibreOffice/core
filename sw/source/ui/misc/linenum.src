@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linenum.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-01 11:04:53 $
+ *  last change: $Author: kz $ $Date: 2001-06-08 23:07:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -310,7 +310,7 @@ TabPage TP_LINENUMBERING
     {
             < "Z lewej" ; > ;
         < "Z prawej" ; > ;
-        < "W ?rodku" ; > ;
+        < "W œrodku" ; > ;
         < "Na zewn¹trz" ; > ;
     };
     StringList [ japanese ] =
@@ -510,7 +510,7 @@ TabPage TP_LINENUMBERING
         Text [ portuguese ] = "Vista" ;
         Text[ chinese_simplified ] = "ÏÔÊ¾";
         Text[ russian ] = "Ïîêàç";
-        Text[ polish ] = "Wy?wietlenie";
+        Text[ polish ] = "Wyœwietlenie";
         Text[ japanese ] = "•\\¦";
         Text[ chinese_traditional ] = "Åã¥Ü";
         Text[ arabic ] = "ÇáÚÑÖ";
@@ -637,7 +637,7 @@ TabPage TP_LINENUMBERING
         Text [ English ] = "Divisor" ;
         Text [ english_us ] = "Separator" ;
         Text [ portuguese_brazilian ] = "Teiler" ;
-        Text [ swedish ] = "Delare" ;
+        Text [ swedish ] = "Skiljetecken" ;
         Text [ danish ] = "Separator" ;
         Text [ italian ] = "Separatore" ;
         Text [ spanish ] = "Separador" ;
@@ -650,7 +650,7 @@ TabPage TP_LINENUMBERING
         Text[ japanese ] = "dØ‚è";
         Text[ chinese_traditional ] = "¤À¹j²Å";
         Text[ arabic ] = "ÇáİÇÕá";
-        Text[ greek ] = "Äéá÷ùñéóôéêü";
+        Text[ greek ] = "Äéáéñİôçò";
         Text[ korean ] = "±¸ºĞÀÚ";
         Text[ turkish ] = "Ayırma işareti";
         Text[ language_user1 ] = " ";
@@ -760,7 +760,7 @@ TabPage TP_LINENUMBERING
         Text [ portuguese ] = "Contar" ;
         Text[ chinese_simplified ] = "¼ÆÊı";
         Text[ russian ] = "Ó÷èòûâàòü";
-        Text[ polish ] = "Licz";
+        Text[ polish ] = "Policz";
         Text[ japanese ] = "”‚¦‚é";
         Text[ chinese_traditional ] = "­p¼Æ";
         Text[ arabic ] = "ÚÏ";
@@ -793,3 +793,4 @@ TabPage TP_LINENUMBERING
     Text[ catalan ] = "Numeración de líneas";
     Text[ finnish ] = "Rivien numerointi";
 };
+
