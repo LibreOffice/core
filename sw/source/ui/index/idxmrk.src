@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idxmrk.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:58:44 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:07:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@ Text[ english_us ] = "Phonetic reading";    \
     Text[ spanish ] = "Lectura fon�tica";   \
     Text[ finnish ] = "Phonetic reading";   \
     Text[ italian ] = "Lettura fonetica";   \
-    Text[ danish ] = "Phonetic reading";    \
+    Text[ danish ] = "Fonetisk l�sning";    \
     Text[ swedish ] = "Fonetiskt uttal";    \
     Text[ polish ] = "Phonetic reading";    \
     Text[ portuguese_brazilian ] = "Leitura fon�tica";  \
@@ -92,7 +92,9 @@ Text[ english_us ] = "Phonetic reading";    \
     Text[ czech ] = "Fonetické čtení";   \
     Text[ hebrew ] = "Phonetische Lesart";  \
     Text[ hindi ] = "Phonetic reading"; \
-    Text[ slovak ] = "Fonetické čítanie";
+    Text[ slovak ] = "Fonetické čítanie"; \
+    Text[ hungarian ] = "Fonetikus átirat"; \
+    Text[ slovenian ] = "Fonetična transkripcija";
 
 #define IDX_DIALOG_WINDOW \
     Window WIN_DLG                                                  \
@@ -133,6 +135,8 @@ Text[ english_us ] = "Phonetic reading";    \
             Text[ hebrew ] = "‮הוספה‬";\
             Text[ hindi ] = "जोड़ो";\
             Text[ slovak ] = "Vložiť";\
+            Text[ hungarian ] = "Beszúrás";\
+            Text[ slovenian ] = "Vstavi";\
         };                                                          \
         CancelButton BT_CANCEL                                      \
         {                                                           \
@@ -166,6 +170,8 @@ Text[ english_us ] = "Phonetic reading";    \
             Text[ hebrew ] = "‮סגירה‬";\
             Text[ hindi ] = "बन्द करो";\
             Text[ slovak ] = "Zavrieť";\
+            Text[ hungarian ] = "Bezárás";\
+            Text[ slovenian ] = "Zapri";\
         };                                                          \
         HelpButton BT_HELP                                          \
         {                                                           \
@@ -183,7 +189,7 @@ Text[ english_us ] = "Phonetic reading";    \
             Text [ portuguese_brazilian ] = "E~xcluir" ;             \
             Text [ portuguese ] = "E~liminar" ;                     \
             Text [ finnish ] = "~Poista" ;                          \
-            Text [ danish ] = "Slet" ;                              \
+            Text [ danish ] = "~Slet" ;                              \
             Text [ french ] = "Supprimer" ;                        \
             Text [ swedish ] = "~Radera" ;                         \
             Text [ dutch ] = "~Wissen" ;                            \
@@ -206,6 +212,8 @@ Text[ english_us ] = "Phonetic reading";    \
             Text[ hebrew ] = "‮מחיקה‬";\
             Text[ hindi ] = "~मिटाओ";\
             Text[ slovak ] = "Z~mazať";\
+            Text[ hungarian ] = "~Törlés";\
+            Text[ slovenian ] = "~Izbriši";\
         };                                                          \
         ListBox DCB_INDEX                                           \
         {                                                           \
@@ -245,6 +253,8 @@ Text[ english_us ] = "Phonetic reading";    \
             QuickHelpText[ hebrew ] = "Neues benutzerdefiniertes Verzeichnis";\
             QuickHelpText[ hindi ] = "नया उपभोक्ता से परिभाषित अनुक्रमणी";\
             QuickHelpText[ slovak ] = "Nový register (vytvorený užívateľom) ";\
+            QuickHelpText[ hungarian ] = "Új egyéni jegyzék";\
+            QuickHelpText[ slovenian ] = "Novo uporabniško določeno kazalo";\
         };                                                          \
         ImageButton BT_PREVSAME                                     \
         {                                                           \
@@ -311,6 +321,8 @@ Text[ english_us ] = "Phonetic reading";    \
             Text[ hebrew ] = "‮מבחר‬";\
             Text[ hindi ] = "चुनाव";\
             Text[ slovak ] = "Výber";\
+            Text[ hungarian ] = "Kijelölés";\
+            Text[ slovenian ] = "Izbor";\
         };                                                          \
         FixedText LBL_INDEX                                         \
         {                                                           \
@@ -346,6 +358,8 @@ Text[ english_us ] = "Phonetic reading";    \
             Text[ hebrew ] = "~Verzeichnis";\
             Text[ hindi ] = "~अनक्रमणी";\
             Text[ slovak ] = "Re~gister";\
+            Text[ hungarian ] = "~Jegyzék";\
+            Text[ slovenian ] = "~Kazalo";\
         };                                                          \
         Edit SL_ENTRY                                               \
         {                                                           \
@@ -389,6 +403,8 @@ Text[ english_us ] = "Phonetic reading";    \
             Text[ hebrew ] = "‮שורה‬";\
             Text[ hindi ] = "~प्रविष्टि";\
             Text[ slovak ] = "Po~ložka";\
+            Text[ hungarian ] = "~Bejegyzés";\
+            Text[ slovenian ] = "~Vnos";\
         };                                                          \
         FixedText LBL_KEY                                           \
         {                                                           \
@@ -425,6 +441,8 @@ Text[ english_us ] = "Phonetic reading";    \
             Text[ hebrew ] = "~1. Schlüssel";\
             Text[ hindi ] = "~1st चाबी";\
             Text[ slovak ] = "~Prvý kľúč";\
+            Text[ hungarian ] = "~1. kulcs";\
+            Text[ slovenian ] = "~1. ključ";\
         };                                                          \
         ComboBox DCB_KEY                                            \
         {                                                           \
@@ -469,6 +487,8 @@ Text[ english_us ] = "Phonetic reading";    \
             Text[ hebrew ] = "~2. Schlüssel";\
             Text[ hindi ] = "~2nd चाबी";\
             Text[ slovak ] = "~Druhý kľúč";\
+            Text[ hungarian ] = "~2. kulcs";\
+            Text[ slovenian ] = "~2. ključ";\
         };                                                          \
         ComboBox DCB_KEY2                                           \
         {                                                           \
@@ -537,7 +557,7 @@ Text[ english_us ] = "Phonetic reading";    \
             Text [ portuguese_brazilian ] = "~N�vel" ;              \
             Text [ portuguese ] = "~N�vel" ;                        \
             Text [ finnish ] = "~Taso" ;                            \
-            Text [ danish ] = "Niveau" ;                             \
+            Text [ danish ] = "~Niveau" ;                             \
             Text [ french ] = "~Niveau" ;                           \
             Text [ swedish ] = "Ni~v�" ;                            \
             Text [ dutch ] = "~Niveau" ;                            \
@@ -560,6 +580,8 @@ Text[ english_us ] = "Phonetic reading";    \
             Text[ hebrew ] = "St~ufe";\
             Text[ hindi ] = "~स्तर";\
             Text[ slovak ] = "Ú~roveň";\
+            Text[ hungarian ] = "S~zint";\
+            Text[ slovenian ] = "~Raven";\
         };                                                          \
         NumericField SL_LEVEL                                       \
         {                                                           \
@@ -608,6 +630,8 @@ Text[ english_us ] = "Phonetic reading";    \
             Text[ hebrew ] = "Ha~upteintrag";\
             Text[ hindi ] = "~प्रधान प्रविष्टि";\
             Text[ slovak ] = "~Hlavná položka";\
+            Text[ hungarian ] = "Főb~ejegyzés";\
+            Text[ slovenian ] = "~Glavni vnos";\
         };                                                                      \
         CheckBox CB_APPLY_TO_ALL                                                \
         {                                                                       \
@@ -642,6 +666,8 @@ Text[ english_us ] = "Phonetic reading";    \
             Text[ hebrew ] = "~Auf alle gleichen Texte anwenden.";\
             Text[ hindi ] = "~सब समान टेक्स्टों केलिए लागू करो ।";\
             Text[ slovak ] = "~Použiť na všetky podobné texty.";\
+            Text[ hungarian ] = "~Alkalmazás minden hasonló szövegre.";\
+            Text[ slovenian ] = "~Uporabi v vseh podobnih besedilih.";\
         };                                                                      \
         CheckBox CB_CASESENSITIVE                                                \
         {                                                                       \
@@ -658,7 +684,7 @@ Text[ english_us ] = "Phonetic reading";    \
             Text[ french ] = "Respecter la casse";\
             Text[ spanish ] = "Coincidencia e~xacta";\
             Text[ italian ] = "Ricerca esatta";\
-            Text[ danish ] = "~S�g eksakt";\
+            Text[ danish ] = "~STORE og sm� bogstaver";\
             Text[ swedish ] = "E~xakt s�kning";\
             Text[ polish ] = "Uwzgl�dni~aj wielko�� liter";\
             Text[ portuguese_brazilian ] = "~Diferenciar Mai�sculas/Min�sculas";\
@@ -675,6 +701,8 @@ Text[ english_us ] = "Phonetic reading";    \
             Text[ hebrew ] = "E~xakte Suche";\
             Text[ hindi ] = "के~स तुलना";\
             Text[ slovak ] = "~Rozlišovať veľkosť";\
+            Text[ hungarian ] = "~Kis- és nagybetűk egyeztetése";\
+            Text[ slovenian ] = "Ra~zlikuj velike in male črke";\
         };                                                                      \
         CheckBox CB_WORDONLY                                                \
         {                                                                       \
@@ -708,6 +736,8 @@ Text[ english_us ] = "Phonetic reading";    \
             Text[ hebrew ] = "‮מלים שלמים בלבד‬";\
             Text[ hindi ] = "~केवल पूर्ण शब्द";\
             Text[ slovak ] = "Len ~celé slova";\
+            Text[ hungarian ] = "Csak ~teljes szavak";\
+            Text[ slovenian ] = "~Samo cele besede";\
         };                                                                      \
     };
 
@@ -835,7 +865,7 @@ ModalDialog DLG_NEW_USER_IDX
         Text[ french ] = "Nouvel index personnalis�";
         Text[ spanish ] = "Nuevo �ndice de usuario";
         Text[ italian ] = "Nuovo indice personalizzato";
-        Text[ danish ] = "Nyt brugerbibliotek";
+        Text[ danish ] = "Nyt brugerindeks";
         Text[ swedish ] = "Ny anv�ndarf�rteckning";
         Text[ polish ] = "Nowy indeks u�ytkownika";
         Text[ portuguese_brazilian ] = "Novo �ndice de usu�rio";
@@ -853,6 +883,8 @@ ModalDialog DLG_NEW_USER_IDX
         Text[ hebrew ] = "Neues Benutzerverzeichnis";
         Text[ hindi ] = "नया उपभोक्ता अनुक्रमणी";
         Text[ slovak ] = "Nový užívateľský index";
+        Text[ hungarian ] = "Új egyéni jegyzék";
+        Text[ slovenian ] = "Novo uporabniško kazalo";
     };
     FixedText FT_NAME
     {
@@ -869,7 +901,7 @@ ModalDialog DLG_NEW_USER_IDX
         Text[ french ] = "Nom";
         Text[ spanish ] = "~Nombre";
         Text[ italian ] = "~Nome";
-        Text[ danish ] = "Navn";
+        Text[ danish ] = "~Navn";
         Text[ swedish ] = "~Namn";
         Text[ polish ] = "~Nazwa";
         Text[ portuguese_brazilian ] = "~Nome";
@@ -887,6 +919,8 @@ ModalDialog DLG_NEW_USER_IDX
         Text[ hebrew ] = "~Name";
         Text[ hindi ] = "~नाम";
         Text[ slovak ] = "~Názov";
+        Text[ hungarian ] = "~Név";
+        Text[ slovenian ] = "~Ime";
     };
     Edit ED_NAME
     {
@@ -922,6 +956,8 @@ ModalDialog DLG_NEW_USER_IDX
     Text[ hebrew ] = "Neues benutzerdefiniertes  Verzeichnis anlegen";
     Text[ hindi ] = "नया उपभोक्ता से परिभाषित अनुक्रमणी को उत्पन्न करो";
     Text[ slovak ] = "Vytvoriť nový index (vytvorený užívateľom)";
+    Text[ hungarian ] = "Új egyéni jegyzék létrehozása";
+    Text[ slovenian ] = "Ustvari novo uporabniško določeno kazalo";
 };
 
 String STR_IDXMRK_EDIT
@@ -955,6 +991,8 @@ String STR_IDXMRK_EDIT
     Text[ hebrew ] = "Verzeichniseintrag bearbeiten";
     Text[ hindi ] = "अनुक्रमणिका प्रविष्टि संपादन";
     Text[ slovak ] = "Upraviť položku registra";
+    Text[ hungarian ] = "Jegyzékbejegyzés szerkesztése";
+    Text[ slovenian ] = "Uredi vnos v kazalu";
 };
 String STR_IDXMRK_INSERT
 {
@@ -988,6 +1026,8 @@ String STR_IDXMRK_INSERT
     Text[ hebrew ] = "Verzeichniseintrag einfügen";
     Text[ hindi ] = "अनुक्रमणिका प्रविष्टि जोड़ो";
     Text[ slovak ] = "Vložiť položku obsahu";
+    Text[ hungarian ] = "Bejegyzés beszúrása";
+    Text[ slovenian ] = "Vstavi vnos v kazalo";
 };
 
 #define     AUTH_DIALOG_WINDOW  \
@@ -1009,7 +1049,7 @@ String STR_IDXMRK_INSERT
             Text[ french ] = "� partir de la ~base de donn�es bibliographique";\
             Text[ spanish ] = "De la base de datos ~bibliogr�fica";\
             Text[ italian ] = "Dal ~database bibliografico";\
-            Text[ danish ] = "fra l~itteraturdatabasen";\
+            Text[ danish ] = "Fra l~itteraturdatabase";\
             Text[ swedish ] = "Fr�n litteratur~databas";\
             Text[ polish ] = "Z bibliograficznej ~bazy danych";\
             Text[ portuguese_brazilian ] = "A partir do banco de ~dados de bibliografia";\
@@ -1026,6 +1066,8 @@ String STR_IDXMRK_INSERT
             Text[ hebrew ] = "Aus Literatur~datenbank";\
             Text[ hindi ] = "ग्रन्थ-सूची ~लेखासंचय से";\
             Text[ slovak ] = "Zo ~zoznamu literatúry";\
+            Text[ hungarian ] = "~Irodalomjegyzék-adatbázisból";\
+            Text[ slovenian ] = "Iz bibliografske zbirke pod~atkov";\
         };                                                          \
         RadioButton RB_FROMDOCCONTENT                               \
         {                                                           \
@@ -1041,7 +1083,7 @@ String STR_IDXMRK_INSERT
             Text[ french ] = "� partir du contenu du document";\
             Text[ spanish ] = "~Del contenido del documento";\
             Text[ italian ] = "Dal contenuto del documento";\
-            Text[ danish ] = "fra ~dokumentindholdet";\
+            Text[ danish ] = "Fra ~dokumentindhold";\
             Text[ swedish ] = "~Fr�n dokumentinneh�ll";\
             Text[ polish ] = "N~a podstawie zawarto�ci dokumentu";\
             Text[ portuguese_brazilian ] = "A partir do ~conte�do do documento";\
@@ -1058,6 +1100,8 @@ String STR_IDXMRK_INSERT
             Text[ hebrew ] = "~Aus Dokumentinhalt";\
             Text[ hindi ] = "ले~खपत्र विषय से";\
             Text[ slovak ] = "Z o~bsahu dokumentu";\
+            Text[ hungarian ] = "~Dokumentum tartalmából";\
+            Text[ slovenian ] = "Iz ~vsebine dokumenta";\
         };                                                          \
         FixedText FT_AUTHOR                             \
         {                                               \
@@ -1091,6 +1135,8 @@ String STR_IDXMRK_INSERT
             Text[ hebrew ] = "‮מחבר‬";\
             Text[ hindi ] = "लेखक";\
             Text[ slovak ] = "Autor";\
+            Text[ hungarian ] = "Szerző";\
+            Text[ slovenian ] = "Avtor";\
         };                                              \
         FixedText   FI_AUTHOR                           \
         {                                               \
@@ -1130,6 +1176,8 @@ String STR_IDXMRK_INSERT
             Text[ hebrew ] = "‮כותרת‬";\
             Text[ hindi ] = "शीर्षक";\
             Text[ slovak ] = "Titul";\
+            Text[ hungarian ] = "Cím";\
+            Text[ slovenian ] = "Naslov";\
         };                                              \
         FixedText   FI_TITLE                            \
         {                                               \
@@ -1169,6 +1217,8 @@ String STR_IDXMRK_INSERT
             Text[ hebrew ] = "~Kurzbezeichnung";\
             Text[ hindi ] = "छोटा ~नाम";\
             Text[ slovak ] = "Krátky ~názov";\
+            Text[ hungarian ] = "Rövid ~név";\
+            Text[ slovenian ] = "Kratko ~ime";\
         };                                              \
         Edit ED_ENTRY                                   \
         {                                               \
@@ -1218,6 +1268,8 @@ String STR_IDXMRK_INSERT
             Text[ hebrew ] = "‮שורה‬";\
             Text[ hindi ] = "प्रविष्टि";\
             Text[ slovak ] = "Položka";\
+            Text[ hungarian ] = "Bejegyzés";\
+            Text[ slovenian ] = "Vnos";\
         };                                              \
         OKButton PB_OK                                  \
         {                                               \
@@ -1253,6 +1305,8 @@ String STR_IDXMRK_INSERT
             Text[ hebrew ] = "‮הוספה‬";\
             Text[ hindi ] = "जोड़ो";\
             Text[ slovak ] = "Vložiť";\
+            Text[ hungarian ] = "Beszúrás";\
+            Text[ slovenian ] = "Vstavi";\
         };                                              \
         CancelButton PB_CANCEL                          \
         {                                               \
@@ -1286,6 +1340,8 @@ String STR_IDXMRK_INSERT
             Text[ hebrew ] = "‮סגירה‬";\
             Text[ hindi ] = "बन्द करो";\
             Text[ slovak ] = "Zavrieť";\
+            Text[ hungarian ] = "Bezárás";\
+            Text[ slovenian ] = "Zapri";\
         };                                              \
         HelpButton PB_HELP                              \
         {                                               \
@@ -1306,7 +1362,7 @@ String STR_IDXMRK_INSERT
             Text[ french ] = "~Nouveau";\
             Text[ spanish ] = "N~uevo";\
             Text[ italian ] = "Nuovo";\
-            Text[ danish ] = "~Ny";\
+            Text[ danish ] = "~Ny(t)";\
             Text[ swedish ] = "N~y";\
             Text[ polish ] = "~Nowy";\
             Text[ portuguese_brazilian ] = "~Novo";\
@@ -1324,6 +1380,8 @@ String STR_IDXMRK_INSERT
             Text[ hebrew ] = "‮חדש‬";\
             Text[ hindi ] = "~नया";\
             Text[ slovak ] = "~Nový";\
+            Text[ hungarian ] = "Ú~j";\
+            Text[ slovenian ] = "~Nov";\
         };                                              \
         PushButton PB_EDITENTRY                       \
         {                                               \
@@ -1339,7 +1397,7 @@ String STR_IDXMRK_INSERT
             Text[ french ] = "�diter";\
             Text[ spanish ] = "Editar";\
             Text[ italian ] = "~Modifica";\
-            Text[ danish ] = "~Rediger";\
+            Text[ danish ] = "Rediger";\
             Text[ swedish ] = "~Redigera";\
             Text[ polish ] = "Edytuj";\
             Text[ portuguese_brazilian ] = "Editar";\
@@ -1356,6 +1414,8 @@ String STR_IDXMRK_INSERT
             Text[ hebrew ] = "‮עריכה‬";\
             Text[ hindi ] = "संपादन";\
             Text[ slovak ] = "Upraviť";\
+            Text[ hungarian ] = "Szerkesztés";\
+            Text[ slovenian ] = "Uredi";\
         };                                              \
         String ST_CHANGE                                \
         {                                               \
@@ -1387,6 +1447,8 @@ String STR_IDXMRK_INSERT
             Text[ hebrew ] = "‮שינוי‬";\
             Text[ hindi ] = "सुधारो";\
             Text[ slovak ] = "Upraviť";\
+            Text[ hungarian ] = "Módosítás";\
+            Text[ slovenian ] = "Spremeni";\
         };                                              \
     };
 
@@ -1474,6 +1536,8 @@ ModalDialog DLG_CREATE_AUTH_ENTRY
         Text[ hebrew ] = "Eintragsdaten";
         Text[ hindi ] = "प्रविष्टि ड़ॉटा";
         Text[ slovak ] = "Dáta položky";
+        Text[ hungarian ] = "Bejegyzés-adat";
+        Text[ slovenian ] = "Podatki o vnosu";
     };
     Text[ english_us ] = "Define Bibliography Entry";
     Text[ portuguese ] = "Definir entrada bibliogr�fica";
@@ -1500,6 +1564,8 @@ ModalDialog DLG_CREATE_AUTH_ENTRY
     Text[ hebrew ] = "Literatureintrag definieren";
     Text[ hindi ] = "ग्रन्थ-सूची प्रविष्टि को परिभाषा दो";
     Text[ slovak ] = "Definovať položku použitej literatúry";
+    Text[ hungarian ] = "Irodalomjegyzék-bejegyzés megadása";
+    Text[ slovenian ] = "Določi bibliografski vnos";
 };
 String STR_AUTHMRK_EDIT
 {
@@ -1532,6 +1598,8 @@ String STR_AUTHMRK_EDIT
     Text[ hebrew ] = "Literaturverzeichniseintrag bearbeiten";
     Text[ hindi ] = "ग्रन्थ-सूची प्रविष्टि संपादन";
     Text[ slovak ] = "Upraviť položku použitej literatúry";
+    Text[ hungarian ] = "Irodalomjegyzék-bejegyzés szerkesztése";
+    Text[ slovenian ] = "Uredi bibliografski vnos";
 };
 String STR_AUTHMRK_INSERT
 {
@@ -1564,6 +1632,8 @@ String STR_AUTHMRK_INSERT
     Text[ hebrew ] = "Literaturverzeichniseintrag einfügen";
     Text[ hindi ] = "ग्रन्थ-सूची प्रविष्टि जोड़ो";
     Text[ slovak ] = "Vložiť položku použitej literatúry";
+    Text[ hungarian ] = "Irodalomjegyzék-bejegyzés beszúrása";
+    Text[ slovenian ] = "Vstavi bibliografski vnos";
 };
 QueryBox DLG_CHANGE_AUTH_ENTRY
 {
@@ -1579,7 +1649,7 @@ QueryBox DLG_CHANGE_AUTH_ENTRY
     MESSAGE[ french ] = "L'entr�e de bibliographie existe d�j� en relation avec des donn�es diff�rentes dans le document. Voulez-vous ajuster les entr�es existantes ?";
     MESSAGE[ spanish ] = "La entrada bibliogr�fica existe ya con datos diferentes en el documento. �Desea ajustar las entradas ya existentes?";
     MESSAGE[ italian ] = "La voce bibliografica � gi� presente nel documento con dati diversi. Volete adattare le voci gi� contenute?";
-    MESSAGE[ danish ] = "Bibliografielementet findes allerede i dokumentet med afvigende data. Vil du tilpasse de aktuelle elementer i dokumentet?";
+    MESSAGE[ danish ] = "Bibliografielementet findes allerede i dokumentet med afvigende data. Vil du tilpasse de eksisterende elementer i dokumentet?";
     MESSAGE[ swedish ] = "Bibliografiposten finns redan med avvikande data i dokumentet. Vill du anpassa posterna som redan finns d�r?";
     MESSAGE[ polish ] = "Dokument zawiera ju� pozycj� bibliograficzn�, ale z innymi danymi. Dopasowa� istniej�ce wpisy?";
     MESSAGE[ portuguese_brazilian ] = "A entrada de bibliografia j� existe no documento mas com dados diferentes. Deseja ajustar as entradas existentes?";
@@ -1596,7 +1666,10 @@ QueryBox DLG_CHANGE_AUTH_ENTRY
     MESSAGE[ hebrew ] = "Der Bibliographie-Eintrag ist bereits mit abweichenden Daten im Dokument enthalten. Möchten sie die bereits enthaltenen Einträge anpassen?";
     MESSAGE[ hindi ] = "लेखपत्र में पहिले से ही ग्रन्थ-सूची प्रविष्टि है, लेकिन अलग ड़ॉटा है । आप अस्तित्व में रहनेवाले प्रविष्टियों को व्यवस्था करना चाहते है?";
     MESSAGE[ slovak ] = "Dokument už obsahuje záznam zoznamu použitej literatúry, ale s inými údajmi. Chcete upraviť existujúce záznamy?";
+    MESSAGE[ hungarian ] = "A dokumentum már tartalmaz ilyen irodalomjegyzék-bejegyzést, de más adattartalommal. Módosítja a már létező bejegyzéseket?";
+    MESSAGE[ slovenian ] = "Dokument že vsebuje bibliografski vnos z drugačnimi podatki. Ali želite prilagoditi obstoječe vnose?";
 };
+
 
 
 
