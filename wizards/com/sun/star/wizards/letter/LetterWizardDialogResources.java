@@ -17,7 +17,7 @@ public class LetterWizardDialogResources extends Resource {
     protected String[] RoadmapLabels = new String[7];
     protected String[] SalutationLabels = new String[3];
     protected String[] GreetingLabels = new String[3];
-    protected String[] LanguageLabels = new String[2];
+    protected String[] LanguageLabels = new String[11];
 
     String resOverwriteWarning;
     String resTemplateDescription;
@@ -173,7 +173,7 @@ public class LetterWizardDialogResources extends Resource {
     }
 
     private void loadLanguageResources() {
-        for (int i = 1; i < 3; i++) {
+        for (int i = 1; i < 12; i++) {
             LanguageLabels[i-1] = getResText(RID_LETTERWIZARDLANGUAGE_START + i);
         }
 
