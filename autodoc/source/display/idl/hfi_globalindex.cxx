@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hfi_globalindex.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 11:33:05 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 15:27:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -280,7 +280,7 @@ HF_IdlGlobalIndex::write_OwnerOfEntry( Xml::Element &               o_destinatio
     else
     {
         uintt nOwnerIx = rOwner.ClassId() - C_nNamesArrayOffset;
-        csv_assert(csv::in_range(0,nOwnerIx,C_nNumberOfIdlTypes));
+        csv_assert(0 <= nOwnerIx && nOwnerIx < C_nNumberOfIdlTypes);
         o_destination << C_sTypeNames[nOwnerIx];
     }
     i_typeLinkWriter.Produce_IndexOwnerLink(o_destination, rOwner);
