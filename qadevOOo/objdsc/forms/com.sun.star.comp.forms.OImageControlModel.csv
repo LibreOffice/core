@@ -10,6 +10,7 @@
 "OImageControlModel";"com::sun::star::awt::UnoControlDialogElement#optional";"Width"
 "OImageControlModel";"com::sun::star::awt::UnoControlImageControlModel";"BackgroundColor"
 "OImageControlModel";"com::sun::star::awt::UnoControlImageControlModel";"Border"
+"OImageControlModel";"com::sun::star::awt::UnoControlImageControlModel";"BorderColor#optional"
 "OImageControlModel";"com::sun::star::awt::UnoControlImageControlModel";"Enabled"
 "OImageControlModel";"com::sun::star::awt::UnoControlImageControlModel";"HelpText"
 "OImageControlModel";"com::sun::star::awt::UnoControlImageControlModel";"HelpURL"
