@@ -2,9 +2,9 @@
  *
  *  $RCSfile: settings.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: th $ $Date: 2001-07-06 15:53:53 $
+ *  last change: $Author: th $ $Date: 2001-07-09 12:10:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,11 @@
 #endif
 #ifndef _SV_SETTINGS_HXX
 #include <settings.hxx>
+#endif
+
+#include <unohelp.hxx>
+#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
+#include <unotools/localedatawrapper.hxx>
 #endif
 
 #pragma hdrstop
@@ -1424,6 +1429,8 @@ ImplAllSettingsData::ImplAllSettingsData()
     mnWindowUpdate              = SETTINGS_ALLSETTINGS;
     meLanguage                  = LANGUAGE_SYSTEM;
     meUILanguage                = LANGUAGE_SYSTEM;
+    mpLocaleDataWrapper         = NULL;
+    mpUILocaleDataWrapper       = NULL;
 }
 
 // -----------------------------------------------------------------------
@@ -1446,6 +1453,18 @@ ImplAllSettingsData::ImplAllSettingsData( const ImplAllSettingsData& rData ) :
     mnWindowUpdate              = rData.mnWindowUpdate;
     meLanguage                  = rData.meLanguage;
     meUILanguage                = rData.meUILanguage;
+    mpLocaleDataWrapper         = rData.mpLocaleDataWrapper;
+    mpUILocaleDataWrapper       = rData.mpUILocaleDataWrapper;
+}
+
+// -----------------------------------------------------------------------
+
+ImplAllSettingsData::~ImplAllSettingsData()
+{
+    if ( mpLocaleDataWrapper )
+        delete mpLocaleDataWrapper;
+    if ( mpUILocaleDataWrapper )
+        delete mpUILocaleDataWrapper;
 }
 
 // -----------------------------------------------------------------------
@@ -1619,6 +1638,16 @@ ULONG AllSettings::Update( ULONG nFlags, const AllSettings& rSet )
             mpData->maLocale = ::com::sun::star::lang::Locale();
             mpData->maUILocale = ::com::sun::star::lang::Locale();
             nChangeFlags |= SETTINGS_INTERNATIONAL;
+            if ( mpData->mpLocaleDataWrapper )
+            {
+                delete mpData->mpLocaleDataWrapper;
+                mpData->mpLocaleDataWrapper = NULL;
+            }
+            if ( mpData->mpUILocaleDataWrapper )
+            {
+                delete mpData->mpUILocaleDataWrapper;
+                mpData->mpUILocaleDataWrapper = NULL;
+            }
         }
     }
 
@@ -1735,6 +1764,11 @@ void AllSettings::SetLocale( const ::com::sun::star::lang::Locale& rLocale )
     else
         mpData->meLanguage = ConvertIsoNamesToLanguage( rLocale.Language, rLocale.Country );
     mpData->maInternational = International( mpData->meUILanguage, mpData->meLanguage );
+    if ( mpData->mpLocaleDataWrapper )
+    {
+        delete mpData->mpLocaleDataWrapper;
+        mpData->mpLocaleDataWrapper = NULL;
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -1750,6 +1784,11 @@ void AllSettings::SetUILocale( const ::com::sun::star::lang::Locale& rLocale )
     else
         mpData->meUILanguage = ConvertIsoNamesToLanguage( rLocale.Language, rLocale.Country );
     mpData->maInternational = International( mpData->meUILanguage, mpData->meLanguage );
+    if ( mpData->mpUILocaleDataWrapper )
+    {
+        delete mpData->mpUILocaleDataWrapper;
+        mpData->mpUILocaleDataWrapper = NULL;
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -1763,6 +1802,11 @@ void AllSettings::SetLanguage( LanguageType eLang )
     // Will be calculated in GetLocale()
     mpData->maLocale = ::com::sun::star::lang::Locale();
     mpData->maInternational = International( mpData->meUILanguage, mpData->meLanguage );
+    if ( mpData->mpLocaleDataWrapper )
+    {
+        delete mpData->mpLocaleDataWrapper;
+        mpData->mpLocaleDataWrapper = NULL;
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -1776,6 +1820,11 @@ void AllSettings::SetUILanguage( LanguageType eLang  )
     // Will be calculated in GetUILocale()
     mpData->maUILocale = ::com::sun::star::lang::Locale();
     mpData->maInternational = International( mpData->meUILanguage, mpData->meLanguage );
+    if ( mpData->mpUILocaleDataWrapper )
+    {
+        delete mpData->mpUILocaleDataWrapper;
+        mpData->mpUILocaleDataWrapper = NULL;
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -1828,4 +1877,22 @@ LanguageType AllSettings::GetUILanguage() const
         return GetSystemLanguage();
 
     return mpData->meUILanguage;
+}
+
+// -----------------------------------------------------------------------
+
+const LocaleDataWrapper& AllSettings::GetLocaleDataWrapper() const
+{
+    if ( !mpData->mpLocaleDataWrapper )
+        ((AllSettings*)this)->mpData->mpLocaleDataWrapper = new LocaleDataWrapper( vcl::unohelper::GetMultiServiceFactory(), GetLocale() );
+    return *mpData->mpLocaleDataWrapper;
+}
+
+// -----------------------------------------------------------------------
+
+const LocaleDataWrapper& AllSettings::GetUILocaleDataWrapper() const
+{
+    if ( !mpData->mpUILocaleDataWrapper )
+        ((AllSettings*)this)->mpData->mpUILocaleDataWrapper = new LocaleDataWrapper( vcl::unohelper::GetMultiServiceFactory(), GetUILocale() );
+    return *mpData->mpUILocaleDataWrapper;
 }
