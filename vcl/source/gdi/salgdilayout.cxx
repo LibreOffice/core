@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdilayout.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ssa $ $Date: 2002-08-29 15:35:34 $
+ *  last change: $Author: hdu $ $Date: 2002-09-04 17:23:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,43 +211,6 @@ BOOL    SalGraphicsLayout::UnionClipRegion( long nX, long nY, long nWidth, long 
         mirror( nX, nWidth );
     return SalGraphics::UnionClipRegion( nX, nY, nWidth, nHeight, NULL );
 }
-
-BOOL SalGraphicsLayout::GetGlyphBoundRect( long nIndex, bool bIsGI, Rectangle& rRect, const OutputDevice *pOutDev )
-{
-    return SalGraphics::GetGlyphBoundRect( nIndex, bIsGI, rRect, NULL );
-}
-BOOL SalGraphicsLayout::GetGlyphOutline( long nIndex, bool bIsGI, PolyPolygon& rPolyPoly, const OutputDevice *pOutDev)
-{
-    return SalGraphics::GetGlyphOutline( nIndex, bIsGI, rPolyPoly, NULL );
-}
-SalLayout* SalGraphicsLayout::LayoutText( const ImplLayoutArgs& rLayoutArgs, const OutputDevice *pOutDev )
-{
-    if( (mnLayout & SAL_LAYOUT_BIDI_RTL) && IS_RTL_ENABLED() )
-    {
-        ImplLayoutArgs tmpArgs( rLayoutArgs );
-        mirror( tmpArgs.maDrawPosition.X() );
-        return SalGraphics::LayoutText( tmpArgs, NULL );
-    }
-    else
-        return SalGraphics::LayoutText( rLayoutArgs, NULL );
-}
-void SalGraphicsLayout::DrawSalLayout( const SalLayout& rLayout, const OutputDevice *pOutDev)
-{
-    // according to HDU, no mirroring required here, mirroring in LayoutText is sufficient
-    /*
-    if( (mnLayout & SAL_LAYOUT_BIDI_RTL) && IS_RTL_ENABLED() )
-    {
-        Point aPos = rLayout.GetDrawPosition();
-        // TODO: check what should be done, with mirroring the pos seems
-        // to be mirrored twice...
-        mirror( aPos.X() );
-        ((SalLayout&) rLayout).SetDrawPosition( aPos );
-    }
-    */
-    SalGraphics::DrawSalLayout( rLayout, NULL );
-}
-
-
 void    SalGraphicsLayout::DrawPixel( long nX, long nY, const OutputDevice *pOutDev )
 {
     if( (mnLayout & SAL_LAYOUT_BIDI_RTL) && IS_RTL_ENABLED() )
