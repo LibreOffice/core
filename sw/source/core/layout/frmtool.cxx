@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 10:34:41 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 11:11:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3055,9 +3055,13 @@ void Notify_Background( const SdrObject* pObj,
         if ( pCnt->IsInTab() )
         {
             SwLayoutFrm* pCell = pCnt->GetUpper();
-            if( pCell->IsCellFrm() &&
-                ( (pCell->Frm().IsOver( pObj->GetCurrentBoundRect() ) ||
-                    pCell->Frm().IsOver( rRect )) ) )
+            // --> OD 2005-01-14 #i40606# - use <GetLastBoundRect()>
+            // instead of <GetCurrentBoundRect()>, because a recalculation
+            // of the bounding rectangle isn't intended here.
+            if ( pCell->IsCellFrm() &&
+                 ( pCell->Frm().IsOver( pObj->GetLastBoundRect() ) ||
+                   pCell->Frm().IsOver( rRect ) ) )
+            // <--
             {
                 const SwFmtVertOrient &rOri = pCell->GetFmt()->GetVertOrient();
                 if ( VERT_NONE != rOri.GetVertOrient() )
@@ -3067,8 +3071,12 @@ void Notify_Background( const SdrObject* pObj,
             if ( pTab != pLastTab )
             {
                 pLastTab = pTab;
-                if ( pTab->Frm().IsOver( pObj->GetCurrentBoundRect() ) ||
-                        pTab->Frm().IsOver( rRect ) )
+                // --> OD 2005-01-14 #i40606# - use <GetLastBoundRect()>
+                // instead of <GetCurrentBoundRect()>, because a recalculation
+                // of the bounding rectangle isn't intended here.
+                if ( pTab->Frm().IsOver( pObj->GetLastBoundRect() ) ||
+                     pTab->Frm().IsOver( rRect ) )
+                // <--
                 {
                     if ( !pFlyFrm || !pFlyFrm->IsLowerOf( pTab ) )
                         pTab->InvalidatePrt();
