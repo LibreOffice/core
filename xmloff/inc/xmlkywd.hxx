@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: bm $ $Date: 2000-11-24 09:44:19 $
+ *  last change: $Author: aw $ $Date: 2000-11-24 16:48:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,8 @@ XML_CONSTASCII_ACTION( sXML_n_table, "http://openoffice.org/2000/table" );
 XML_CONSTASCII_ACTION( sXML_n_table_old, "http://sun.com/xmlns/staroffice/table" );
 XML_CONSTASCII_ACTION( sXML_np_draw, "draw" );
 XML_CONSTASCII_ACTION( sXML_n_draw, "http://openoffice.org/2000/drawing" );
+XML_CONSTASCII_ACTION( sXML_np_dr3d, "dr3d" );
+XML_CONSTASCII_ACTION( sXML_n_dr3d, "http://openoffice.org/2000/dr3d" );
 XML_CONSTASCII_ACTION( sXML_n_draw_old, "http://sun.com/xmlns/staroffice/draw" );
 XML_CONSTASCII_ACTION( sXML_np_presentation, "presentation" );
 XML_CONSTASCII_ACTION( sXML_n_presentation, "http://openoffice.org/2000/presentation" );
@@ -1476,5 +1478,48 @@ XML_CONSTASCII_ACTION( sXML_year, "year" );
 XML_CONSTASCII_ACTION( sXML_zindex, "z-index" );
 XML_CONSTASCII_ACTION( sXML_zero_values, "zero-values" );
 
+XML_CONSTASCII_ACTION( sXML_horizontal_segments, "horizontal-segments" );
+XML_CONSTASCII_ACTION( sXML_vertical_segments, "vertical-segments" );
+XML_CONSTASCII_ACTION( sXML_edge_rounding, "edge-rounding" );
+XML_CONSTASCII_ACTION( sXML_back_scale, "back-scale" );
+XML_CONSTASCII_ACTION( sXML_end_angle, "end-angle" );
+XML_CONSTASCII_ACTION( sXML_depth, "depth" );
+XML_CONSTASCII_ACTION( sXML_backface_culling, "backface-culling" );
+XML_CONSTASCII_ACTION( sXML_normals_kind, "normals-kind" );
+XML_CONSTASCII_ACTION( sXML_normals_direction, "normals-direction" );
+XML_CONSTASCII_ACTION( sXML_tex_generation_mode_x, "texture-generation-mode-x" );
+XML_CONSTASCII_ACTION( sXML_tex_generation_mode_y, "texture-generation-mode-y" );
+XML_CONSTASCII_ACTION( sXML_tex_kind, "texture-kind" );
+XML_CONSTASCII_ACTION( sXML_tex_filter, "texture-filter" );
+XML_CONSTASCII_ACTION( sXML_tex_mode, "texture-mode" );
+XML_CONSTASCII_ACTION( sXML_emissive_color, "emissive-color" );
+XML_CONSTASCII_ACTION( sXML_specular_color, "specular-color" );
+XML_CONSTASCII_ACTION( sXML_diffuse_color, "diffuse-color" );
+XML_CONSTASCII_ACTION( sXML_shininess, "shininess" );
+XML_CONSTASCII_ACTION( sXML_flat, "flat" );
+XML_CONSTASCII_ACTION( sXML_sphere, "sphere" );
+XML_CONSTASCII_ACTION( sXML_intensity, "intensity" );
+XML_CONSTASCII_ACTION( sXML_modulate, "modulate" );
+XML_CONSTASCII_ACTION( sXML_blend, "blend" );
+XML_CONSTASCII_ACTION( sXML_enabled, "enabled" );
+XML_CONSTASCII_ACTION( sXML_disabled, "disabled" );
+XML_CONSTASCII_ACTION( sXML_double_sided, "double-sided" );
+XML_CONSTASCII_ACTION( sXML_normal, "normal" );
+XML_CONSTASCII_ACTION( sXML_inverse, "inverse" );
+XML_CONSTASCII_ACTION( sXML_attractive, "attractive");
+XML_CONSTASCII_ACTION( sXML_correct, "correct");
+
+XML_CONSTASCII_ACTION( sXML_perspective, "perspective");
+XML_CONSTASCII_ACTION( sXML_projection, "projection");
+XML_CONSTASCII_ACTION( sXML_focal_length, "focal-length");
+XML_CONSTASCII_ACTION( sXML_shadow_slant, "shadow-slant");
+XML_CONSTASCII_ACTION( sXML_phong, "phong");
+XML_CONSTASCII_ACTION( sXML_gouraud, "gouraud");
+XML_CONSTASCII_ACTION( sXML_draft, "draft");
+XML_CONSTASCII_ACTION( sXML_shade_mode, "shade-mode");
+XML_CONSTASCII_ACTION( sXML_ambient_color, "ambient-color");
+XML_CONSTASCII_ACTION( sXML_lighting_mode, "lighting-mode");
+XML_CONSTASCII_ACTION( sXML_specular, "specular");
+XML_CONSTASCII_ACTION( sXML_light, "light");
 
 #endif

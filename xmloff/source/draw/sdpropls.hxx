@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pw $ $Date: 2000-10-26 14:32:06 $
+ *  last change: $Author: aw $ $Date: 2000-11-24 17:00:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,14 @@ extern const XMLPropertyMapEntry aXMLSDPresPageProps[];
 #define XML_SD_TYPE_COLORMODE                       (XML_SD_TYPES_START + 15 )
 #define XML_SD_TYPE_TEXT_CROSSEDOUT                 (XML_SD_TYPES_START + 16 )
 
+// 3D property types
+#define XML_SD_TYPE_BACKFACE_CULLING                (XML_SD_TYPES_START + 17 )
+#define XML_SD_TYPE_NORMALS_KIND                    (XML_SD_TYPES_START + 18 )
+#define XML_SD_TYPE_NORMALS_DIRECTION               (XML_SD_TYPES_START + 19 )
+#define XML_SD_TYPE_TEX_GENERATION_MODE_X           (XML_SD_TYPES_START + 20 )
+#define XML_SD_TYPE_TEX_GENERATION_MODE_Y           (XML_SD_TYPES_START + 21 )
+#define XML_SD_TYPE_TEX_KIND                        (XML_SD_TYPES_START + 22 )
+#define XML_SD_TYPE_TEX_MODE                        (XML_SD_TYPES_START + 23 )
 
 //////////////////////////////////////////////////////////////////////////////
 // factory for own graphic properties

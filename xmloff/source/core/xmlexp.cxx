@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-20 11:09:30 $
+ *  last change: $Author: aw $ $Date: 2000-11-24 16:55:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,6 +165,8 @@ void SvXMLExport::_InitCtor()
                                sXML_n_text, XML_NAMESPACE_TEXT );
     pNamespaceMap->AddAtIndex( XML_NAMESPACE_DRAW, sXML_np_draw,
                                sXML_n_draw, XML_NAMESPACE_DRAW );
+    pNamespaceMap->AddAtIndex( XML_NAMESPACE_DR3D, sXML_np_dr3d,
+                               sXML_n_dr3d, XML_NAMESPACE_DR3D );
     pNamespaceMap->AddAtIndex( XML_NAMESPACE_SVG, sXML_np_svg,
                                sXML_n_svg, XML_NAMESPACE_SVG );
     pNamespaceMap->AddAtIndex( XML_NAMESPACE_CHART, sXML_np_chart,

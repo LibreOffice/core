@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-23 19:25:32 $
+ *  last change: $Author: aw $ $Date: 2000-11-24 16:59:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,22 @@
 
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include <xmlnmspe.hxx>
+#endif
+
+#ifndef _COM_SUN_STAR_DRAWING_NORMALSKIND_HPP_
+#include <com/sun/star/drawing/NormalsKind.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_DRAWING_TEXTUREPROJECTIONMODE_HPP_
+#include <com/sun/star/drawing/TextureProjectionMode.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_DRAWING_TEXTUREKIND_HPP_
+#include <com/sun/star/drawing/TextureKind.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_DRAWING_TEXTUREMODE_HPP_
+#include <com/sun/star/drawing/TextureMode.hpp>
 #endif
 
 using namespace ::rtl;
@@ -216,6 +232,36 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
 // ??   { "ParaTopMarginRelative",  XML_NAMESPACE_FO,   sXML_margin_top,            XML_TYPE_PERCENT, CTF_PARATOPMARGIN_REL },
     { "ParaBottomMargin",       XML_NAMESPACE_FO,   sXML_margin_bottom,     XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, CTF_PARABOTTOMMARGIN },
 // ??   { "ParaBottomMarginRelative",XML_NAMESPACE_FO,  sXML_margin_bottom,     XML_TYPE_PERCENT, CTF_PARABOTTOMMARGIN_REL },
+
+    // 3D geometry attributes
+    { "D3DHorizontalSegments",          XML_NAMESPACE_DR3D, sXML_horizontal_segments,   XML_TYPE_NUMBER, 0 },
+    { "D3DVerticalSegments",            XML_NAMESPACE_DR3D, sXML_vertical_segments,     XML_TYPE_NUMBER, 0 },
+    { "D3DPercentDiagonal",             XML_NAMESPACE_DR3D, sXML_edge_rounding,         XML_TYPE_PERCENT, 0 },
+    { "D3DBackscale",                   XML_NAMESPACE_DR3D, sXML_back_scale,            XML_TYPE_PERCENT, 0 },
+    { "D3DEndAngle",                    XML_NAMESPACE_DR3D, sXML_end_angle,             XML_TYPE_NUMBER, 0 },
+    { "D3DDepth",                       XML_NAMESPACE_DR3D, sXML_depth,                 XML_TYPE_MEASURE, 0 },
+    { "D3DDoubleSided",                 XML_NAMESPACE_DR3D, sXML_backface_culling,      XML_SD_TYPE_BACKFACE_CULLING, 0 },
+
+    // 3D lighting attributes
+    { "D3DNormalsKind",                 XML_NAMESPACE_DR3D, sXML_normals_kind,          XML_SD_TYPE_NORMALS_KIND, 0 },
+    { "D3DNormalsInvert",               XML_NAMESPACE_DR3D, sXML_normals_direction,     XML_SD_TYPE_NORMALS_DIRECTION, 0 },
+
+    // 3D texture attributes
+    { "D3DTextureProjectionX",          XML_NAMESPACE_DR3D, sXML_tex_generation_mode_x, XML_SD_TYPE_TEX_GENERATION_MODE_X, 0 },
+    { "D3DTextureProjectionY",          XML_NAMESPACE_DR3D, sXML_tex_generation_mode_y, XML_SD_TYPE_TEX_GENERATION_MODE_Y, 0 },
+    { "D3DTextureKind",                 XML_NAMESPACE_DR3D, sXML_tex_kind,              XML_SD_TYPE_TEX_KIND, 0 },
+    { "D3DTextureMode",                 XML_NAMESPACE_DR3D, sXML_tex_mode,              XML_SD_TYPE_TEX_MODE, 0 },
+    { "D3DTextureFilter",               XML_NAMESPACE_DR3D, sXML_tex_filter,            XML_TYPE_BOOL, 0 },
+
+    // 3D material attributes
+    { "D3DMaterialColor",               XML_NAMESPACE_DR3D, sXML_diffuse_color,         XML_TYPE_COLOR, 0 },
+    { "D3DMaterialEmission",            XML_NAMESPACE_DR3D, sXML_emissive_color,        XML_TYPE_COLOR, 0 },
+    { "D3DMaterialSpecular",            XML_NAMESPACE_DR3D, sXML_specular_color,        XML_TYPE_COLOR, 0 },
+    { "D3DMaterialSpecularIntensity",   XML_NAMESPACE_DR3D, sXML_shininess,             XML_TYPE_PERCENT, 0 },
+
+    // 3D shadow attributes
+    { "D3DShadow3D",                    XML_NAMESPACE_DR3D, sXML_shadow,                XML_TYPE_BOOL, 0 },
+
     { 0L }
 };
 
@@ -346,6 +392,51 @@ SvXMLEnumMapEntry aXML_FadeEffect_EnumMap[] =
     { NULL, 0 }
 };
 
+//////////////////////////////////////////////////////////////////////////////
+// 3D EnumMaps
+
+SvXMLEnumMapEntry  aXML_NormalsKind_EnumMap[] =
+{
+    { sXML_object,      drawing::NormalsKind_SPECIFIC },
+    { sXML_flat,        drawing::NormalsKind_FLAT },
+    { sXML_sphere,      drawing::NormalsKind_SPHERE },
+    { NULL, 0 }
+};
+
+SvXMLEnumMapEntry  aXML_TexGenerationX_EnumMap[] =
+{
+    { sXML_object,      drawing::TextureProjectionMode_OBJECTSPECIFIC },
+    { sXML_parallel,    drawing::TextureProjectionMode_PARALLEL },
+    { sXML_sphere,      drawing::TextureProjectionMode_SPHERE },
+    { NULL, 0 }
+};
+
+SvXMLEnumMapEntry  aXML_TexGenerationY_EnumMap[] =
+{
+    { sXML_object,      drawing::TextureProjectionMode_OBJECTSPECIFIC },
+    { sXML_parallel,    drawing::TextureProjectionMode_PARALLEL },
+    { sXML_sphere,      drawing::TextureProjectionMode_SPHERE },
+    { NULL, 0 }
+};
+
+SvXMLEnumMapEntry  aXML_TexKind_EnumMap[] =
+{
+    { sXML_luminance,   drawing::TextureKind_LUMINANCE },
+//    { sXML_intensity, drawing::TextureKind_INTENSITY },
+    { sXML_color,       drawing::TextureKind_COLOR },
+    { NULL, 0 }
+};
+
+SvXMLEnumMapEntry  aXML_TexMode_EnumMap[] =
+{
+    { sXML_replace,     drawing::TextureMode_REPLACE },
+    { sXML_modulate,    drawing::TextureMode_MODULATE },
+    { sXML_blend,       drawing::TextureMode_BLEND },
+    { NULL, 0 }
+};
+
+//////////////////////////////////////////////////////////////////////////////
+
 XMLSdPropHdlFactory::~XMLSdPropHdlFactory()
 {
 }
@@ -430,6 +521,50 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
 //          {
 //              break;
 //          }
+
+            //////////////////////////////////////////////////////////////////
+            // 3D Properties
+
+            case XML_SD_TYPE_BACKFACE_CULLING:
+            {
+                const OUString aTrueStr( OUString::createFromAscii(sXML_enabled) );
+                const OUString aFalseStr( OUString::createFromAscii(sXML_disabled) );
+                pHdl = new XMLNamedBoolPropertyHdl( aTrueStr, aFalseStr );
+                break;
+            }
+
+            case XML_SD_TYPE_NORMALS_KIND:
+            {
+                pHdl = new XMLEnumPropertyHdl( aXML_NormalsKind_EnumMap, ::getCppuType((const drawing::NormalsKind*)0) );
+                break;
+            }
+            case XML_SD_TYPE_NORMALS_DIRECTION:
+            {
+                const OUString aTrueStr( OUString::createFromAscii(sXML_normal) );
+                const OUString aFalseStr( OUString::createFromAscii(sXML_inverse) );
+                pHdl = new XMLNamedBoolPropertyHdl( aTrueStr, aFalseStr );
+                break;
+            }
+            case XML_SD_TYPE_TEX_GENERATION_MODE_X:
+            {
+                pHdl = new XMLEnumPropertyHdl( aXML_TexGenerationX_EnumMap, ::getCppuType((const drawing::TextureProjectionMode*)0) );
+                break;
+            }
+            case XML_SD_TYPE_TEX_GENERATION_MODE_Y:
+            {
+                pHdl = new XMLEnumPropertyHdl( aXML_TexGenerationY_EnumMap, ::getCppuType((const drawing::TextureProjectionMode*)0) );
+                break;
+            }
+            case XML_SD_TYPE_TEX_KIND:
+            {
+                pHdl = new XMLEnumPropertyHdl( aXML_TexKind_EnumMap, ::getCppuType((const drawing::TextureKind*)0) );
+                break;
+            }
+            case XML_SD_TYPE_TEX_MODE:
+            {
+                pHdl = new XMLEnumPropertyHdl( aXML_TexMode_EnumMap, ::getCppuType((const drawing::TextureMode*)0) );
+                break;
+            }
         }
 
         if(pHdl)

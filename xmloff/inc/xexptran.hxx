@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xexptran.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:01 $
+ *  last change: $Author: aw $ $Date: 2000-11-24 16:46:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,29 +90,38 @@
 #include <com/sun/star/drawing/FlagSequence.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_DRAWING_HOMOGENMATRIX_HPP_
+#include <com/sun/star/drawing/HomogenMatrix.hpp>
+#endif
+
 //////////////////////////////////////////////////////////////////////////////
 
-struct ImpSdXMLExpTransObjBase;
+struct ImpSdXMLExpTransObj2DBase;
+struct ImpSdXMLExpTransObj3DBase;
 class SvXMLUnitConverter;
+class Vector3D;
+class Matrix3D;
+class Matrix4D;
 
 //////////////////////////////////////////////////////////////////////////////
 
-DECLARE_LIST(ImpSdXMLExpTransObjBaseList, ImpSdXMLExpTransObjBase*);
+DECLARE_LIST(ImpSdXMLExpTransObj2DBaseList, ImpSdXMLExpTransObj2DBase*);
+DECLARE_LIST(ImpSdXMLExpTransObj3DBaseList, ImpSdXMLExpTransObj3DBase*);
 
 //////////////////////////////////////////////////////////////////////////////
 
-class SdXMLImExTransform
+class SdXMLImExTransform2D
 {
-    ImpSdXMLExpTransObjBaseList maList;
-    rtl::OUString               msString;
+    ImpSdXMLExpTransObj2DBaseList   maList;
+    rtl::OUString                   msString;
 
     void EmptyList();
-    ImpSdXMLExpTransObjBase* FindObject(sal_uInt16 nType, sal_uInt32 nInd = 0L);
+    ImpSdXMLExpTransObj2DBase* FindObject(sal_uInt16 nType, sal_uInt32 nInd = 0L);
 
 public:
-    SdXMLImExTransform() {}
-    SdXMLImExTransform(const rtl::OUString& rNew, const SvXMLUnitConverter& rConv);
-    ~SdXMLImExTransform() { EmptyList(); }
+    SdXMLImExTransform2D() {}
+    SdXMLImExTransform2D(const rtl::OUString& rNew, const SvXMLUnitConverter& rConv);
+    ~SdXMLImExTransform2D() { EmptyList(); }
 
     void AddRotate(double fNew);
     void AddScale(const Vector2D& rNew);
@@ -125,6 +134,35 @@ public:
 
     sal_Bool NeedsAction() const { return (sal_Bool)(maList.Count() > 0L); }
 
+    const rtl::OUString& GetExportString(const SvXMLUnitConverter& rConv);
+};
+
+//////////////////////////////////////////////////////////////////////////////
+
+class SdXMLImExTransform3D
+{
+    ImpSdXMLExpTransObj3DBaseList   maList;
+    rtl::OUString                   msString;
+
+    void EmptyList();
+
+public:
+    SdXMLImExTransform3D() {}
+    SdXMLImExTransform3D(const rtl::OUString& rNew, const SvXMLUnitConverter& rConv);
+    ~SdXMLImExTransform3D() { EmptyList(); }
+
+    void AddRotateX(double fNew);
+    void AddRotateY(double fNew);
+    void AddRotateZ(double fNew);
+    void AddScale(const Vector3D& rNew);
+    void AddTranslate(const Vector3D& rNew);
+    void AddMatrix(const Matrix3D& rNew);
+
+    void AddHomogenMatrix(const com::sun::star::drawing::HomogenMatrix& xHomMat);
+
+    sal_Bool NeedsAction() const { return (sal_Bool)(maList.Count() > 0L); }
+    void GetFullTransform(Matrix4D& rFullTrans);
+    BOOL GetFullHomogenTransform(com::sun::star::drawing::HomogenMatrix& xHomMat);
     const rtl::OUString& GetExportString(const SvXMLUnitConverter& rConv);
 };
 

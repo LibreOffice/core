@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmluconv.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-12 15:57:00 $
+ *  last change: $Author: aw $ $Date: 2000-11-24 16:57:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,10 @@
 
 #ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATSSUPPLIER_HPP_
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
+#endif
+
+#ifndef _SVX_VECTOR3D_HXX
+#include <goodies/vector3d.hxx>
 #endif
 
 using namespace rtl;
@@ -1282,5 +1286,68 @@ sal_Bool SvXMLTokenEnumerator::getNextToken( OUString& rToken )
     }
 
     return sal_True;
+}
+
+// ---
+
+/** convert string to vector3D */
+sal_Bool SvXMLUnitConverter::convertVector3D( Vector3D& rVector,
+    const OUString& rValue )
+{
+    if(!rValue.getLength() || rValue[0] != '(')
+        return sal_False;
+
+    sal_Int32 nPos(1L);
+    sal_Int32 nFound = rValue.indexOf(sal_Unicode(' '), nPos);
+
+    if(nFound == -1 || nFound <= nPos)
+        return sal_False;
+
+    OUString aContentX = rValue.copy(nPos, nFound - nPos);
+
+    nPos = nFound + 1;
+    nFound = rValue.indexOf(sal_Unicode(' '), nPos);
+
+    if(nFound == -1 || nFound <= nPos)
+        return sal_False;
+
+    OUString aContentY = rValue.copy(nPos, nFound - nPos);
+
+    nPos = nFound + 1;
+    nFound = rValue.indexOf(sal_Unicode(')'), nPos);
+
+    if(nFound == -1 || nFound <= nPos)
+        return sal_False;
+
+    OUString aContentZ = rValue.copy(nPos, nFound - nPos);
+
+    int nErr;
+
+    rVector.X() = SolarMath::StringToDouble(aContentX, sal_Unicode(','), sal_Unicode('.'),nErr);
+
+    if(nErr)
+        return sal_False;
+
+    rVector.Y() = SolarMath::StringToDouble(aContentY, sal_Unicode(','), sal_Unicode('.'),nErr);
+
+    if(nErr)
+        return sal_False;
+
+    rVector.Z() = SolarMath::StringToDouble(aContentZ, sal_Unicode(','), sal_Unicode('.'),nErr);
+
+    return (nErr == 0L);
+}
+
+/** convert vector3D to string */
+void SvXMLUnitConverter::convertVector3D( OUStringBuffer &rBuffer,
+    const Vector3D& rVector )
+{
+    rBuffer.append(sal_Unicode('('));
+    convertNumber(rBuffer, rVector.X());
+    rBuffer.append(sal_Unicode(' '));
+    convertNumber(rBuffer, rVector.Y());
+    rBuffer.append(sal_Unicode(' '));
+    convertNumber(rBuffer, rVector.Z());
+    rBuffer.append(sal_Unicode(')'));
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-16 18:16:04 $
+ *  last change: $Author: aw $ $Date: 2000-11-24 16:56:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,7 @@ sal_Char __READONLY_DATA sXML_np__style[] = "_style";
 sal_Char __READONLY_DATA sXML_np__text[] = "_text";
 sal_Char __READONLY_DATA sXML_np__table[] = "_table";
 sal_Char __READONLY_DATA sXML_np__draw[] = "_draw";
+sal_Char __READONLY_DATA sXML_np__dr3d[] = "_dr3d";
 sal_Char __READONLY_DATA sXML_np__fo[] = "_fo";
 sal_Char __READONLY_DATA sXML_np__xlink[] = "_xlink";
 sal_Char __READONLY_DATA sXML_np__dc[] = "_dc";
@@ -160,6 +161,8 @@ void SvXMLImport::_InitCtor()
                                sXML_n_table, XML_NAMESPACE_TABLE );
     pNamespaceMap->AddAtIndex( XML_NAMESPACE_DRAW_IDX, sXML_np__draw,
                                sXML_n_draw, XML_NAMESPACE_DRAW );
+    pNamespaceMap->AddAtIndex( XML_NAMESPACE_DR3D_IDX, sXML_np__dr3d,
+                               sXML_n_dr3d, XML_NAMESPACE_DR3D );
     pNamespaceMap->AddAtIndex( XML_NAMESPACE_FO_IDX, sXML_np__fo,
                                sXML_n_fo, XML_NAMESPACE_FO );
     pNamespaceMap->AddAtIndex( XML_NAMESPACE_XLINK_IDX, sXML_np__xlink,

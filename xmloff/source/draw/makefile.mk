@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 17:07:03 $
+#   last change: $Author: aw $ $Date: 2000-11-24 16:58:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,6 +81,8 @@ SLOFILES =	\
         $(SLO)$/ximpbody.obj \
         $(SLO)$/ximpshap.obj \
         $(SLO)$/ximpgrp.obj \
+        $(SLO)$/ximp3dscene.obj \
+        $(SLO)$/ximp3dobject.obj \
         $(SLO)$/ximpnote.obj \
         $(SLO)$/sdpropls.obj \
         $(SLO)$/propimp0.obj \
