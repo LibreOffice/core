@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.src,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: gt $ $Date: 2002-09-02 06:54:54 $
+ *  last change: $Author: kz $ $Date: 2002-09-05 11:26:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -875,17 +875,17 @@ String STR_HELP_MENU_TEXT_SELECTION_MODE
     Text[ russian ] = "Select Text";
     Text[ greek ] = "Select Text";
     Text[ dutch ] = "Select Text";
-    Text[ french ] = "Select Text";
-    Text[ spanish ] = "Select Text";
+    Text[ french ] = "S�lectionner le texte";
+    Text[ spanish ] = "Seleccionar texto";
     Text[ finnish ] = "Select Text";
     Text[ italian ] = "Seleziona testo";
     Text[ danish ] = "Select Text";
-    Text[ swedish ] = "Select Text";
+    Text[ swedish ] = "Markera text";
     Text[ polish ] = "Select Text";
     Text[ portuguese_brazilian ] = "Select Text";
     Text[ japanese ] = "テキストの選択";
     Text[ korean ] = "텍스트 선택";
-    Text[ chinese_simplified ] = "Select Text";
+    Text[ chinese_simplified ] = "选择文字";
     Text[ chinese_traditional ] = "選取文字";
     Text[ turkish ] = "Select Text";
     Text[ arabic ] = "Select Text";
