@@ -1,0 +1,884 @@
+/*************************************************************************
+ *
+ *  $RCSfile: intro_tmpl.hrc,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: kz $ $Date: 2005-01-13 18:58:26 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "svxids.hrc"
+
+#define RID_IMGLIST_TREEOPT             (RID_OFA_START + 174)
+#define RID_IMGLIST_TREEOPT_HC          (RID_OFA_START + 175)
+
+#define OOO_CONTRIBUTOR_LIST \
+ItemList = \
+{ \
+    < "" ; > ; \
+    < "Christian Ahrenkiel" ; > ; \
+    < "Kai Ahrens" ; > ; \
+    < "Ahmet Altin" ; > ; \
+    < "Jesus Bravo Alvarez" ; > ; \
+    < "Michal Ambroz" ; > ; \
+    < "Aryan Ameri" ; > ; \
+    < "Brian M. Ames" ; > ; \
+    < "Jost Ammon" ; > ; \
+    < "Abdullah Anar" ; > ; \
+    < "Christian Andersen" ; > ; \
+    < "Frank J. Andersen" ; > ; \
+    < "Jan Moller Andersen" ; > ; \
+    < "Jorn Skifter Andersen" ; > ; \
+    < "Joost Andrae" ; > ; \
+    < "Magosanhi Ardho" ; > ; \
+    < "Magosanyi Arpad" ; > ; \
+    < "Peter Arnold" ; > ; \
+    < "Kosa Attila" ; > ; \
+    < "Ativiras Kodas Lietuvai (Open Source for Lithuania)" ; > ; \
+    < "Monica Badia" ; > ; \
+    < "Dwayne Bailey" ; > ; \
+    < "Danial Ferreira Balieiro" ; > ; \
+    < "Athur Barret" ; > ; \
+    < "Joerg Barfurth" ; > ; \
+    < "David Bartlett" ; > ; \
+    < "Sascha Ballach" ; > ; \
+    < "Stefan Baltzer" ; > ; \
+    < "Claudio Bandaloukas" ; > ; \
+    < "Mathias Bauer" ; > ; \
+    < "Gwenole Beauchesne" ; > ; \
+    < "Juraj Bednar" ; > ; \
+    < "Thorsten Behrens" ; > ; \
+    < "Andero Belov" ; > ; \
+    < "Michael Bemmer" ; > ; \
+    < "Thomas Benisch" ; > ; \
+    < "Stephan Bergmann" ; > ; \
+    < "Josh Berkus" ; > ; \
+    < "beunited.org Littleton, USA" ; > ; \
+    < "Zaheda Bhorat" ; > ; \
+    < "Andreas Bille" ; > ; \
+    < "Masrissa Bishop" ; > ; \
+    < "Martin Blapp" ; > ; \
+    < "Nick Blievers" ; > ; \
+    < "Daniel Boelzle" ; > ; \
+    < "Marco Boerries" ; > ; \
+    < "Oliver Bolte" ; > ; \
+    < "Alexander Bootman" ; > ; \
+    < "Csaba Borbola" ; > ; \
+    < "Gregor Bornemann" ; > ; \
+    < "Thorsten Bosbach" ; > ; \
+    < "Daniel Boss" ; > ; \
+    < "David Boswell" ; > ; \
+    < "J.David Boyd" ; > ; \
+    < "Oisin Boydell" ; > ; \
+    < "Rafaella Braconi" ; > ; \
+    < "Michael Brauer" ; > ; \
+    < "Oliver Braun" ; > ; \
+    < "Andreas Bregas" ; > ; \
+    < "Matthias Breuer" ; > ; \
+    < "Henning Brinkmann" ; > ; \
+    < "Simon Brouwer" ; > ; \
+    < "Andrew Brown" ; > ; \
+    < "Joerg Brunsmann" ; > ; \
+    < "Joerg Budischewski" ; > ; \
+    < "Edwin Burdak" ; > ; \
+    < "Hans-Peter Burow" ; > ; \
+    < "Aidan Butler" ; > ; \
+    < "Richard Bywater" ; > ; \
+    < "Josef Cacek" ; > ; \
+    < "Guy Capra" ; > ; \
+    < "Brian Cameron" ; > ; \
+    < "Scott Carr" ; > ; \
+    < "Christina L. Carr" ; > ; \
+    < "Daniel Carrera" ; > ; \
+    < "Centre for Development of Advanced Computing" ; > ; \
+    < "Goerkem Cetin" ; > ; \
+    < "Peter Chabada" ; > ; \
+    < "Tak-Shing Chan of Aleph One Limited" ; > ; \
+    < "Colin Charles" ; > ; \
+    < "Kimmy Chen" ; > ; \
+    < "Henrik R. Clausen" ; > ; \
+    < "James Cleere" ; > ; \
+    < "Justin Clift" ; > ; \
+    < "David Cobb" ; > ; \
+    < "Oliver Craemer" ; > ; \
+    < "Vicky Chan" ; > ; \
+    < "Michael J. Cole" ; > ; \
+    < "Compaq Computer Corperation" ; > ; \
+    < "Confucian Pro. Technology" ; > ; \
+    < "Danese Cooper" ; > ; \
+    < "Lee Corbin" ; > ; \
+    < "Dietmar Cordes" ; > ; \
+     < "Jesús Corrius" ; > ; \
+     < "Joszef Csongradi" ; > ; \
+    < "Johannes Czerwinski" ; > ; \
+    < "Dimitrios Dalossis" ; > ; \
+    < "Martin Damboldt" ; > ; \
+    < "Akshay Dayal" ; > ; \
+    < "Simon Dean" ; > ; \
+    < "Denice C. Deatrich" ; > ; \
+    < "Martijn Dekkers" ; > ; \
+    < "Helge Delfs" ; > ; \
+    < "Scott Dietrich" ; > ; \
+    < "Willem van Dorp" ; > ; \
+    < "Davide Dozza" ; > ; \
+    < "Carsten Driesner" ; > ; \
+    < "Christian Driga" ; > ; \
+    < "Herbert Duerr" ; > ; \
+    < "Oliver-Rainer Duesterhoeft" ; > ; \
+    < "Marc Durdin" ; > ; \
+    < "Craig Eddy" ; > ; \
+    < "Florian Effenberger" ; > ; \
+    < "Aleksander Ehrlich" ; > ; \
+    < "Rene Engelhard" ; > ; \
+    < "Peter Eriksen" ; > ; \
+    < "Charles Anthony Fannan" ; > ; \
+    < "Ralf-Michael Fehr" ; > ; \
+    < "Zoltan Fekete" ; > ; \
+    < "Olaf Felka" ; > ; \
+    < "Carlos Fernando" ; > ; \
+    < "Claudio Ferreira" ; > ; \
+    < "Andre Fischer" ; > ; \
+    < "Helga Fischer" ; > ; \
+    < "Kenneth Foskey" ; > ; \
+    < "Gary Frederick" ; > ; \
+    < "Nils Fuhrmann" ; > ; \
+    < "Jan Funken" ; > ; \
+    < "Wolfram Garten" ; > ; \
+    < "Martin Gallwey" ; > ; \
+    < "Sophie Gautier" ; > ; \
+    < "Kathy Gavin" ; > ; \
+    < "Alexander Gelfenbain" ; > ; \
+    < "Radim Gelner" ; > ; \
+    < "Berthold Gerdes" ; > ; \
+    < "Adriana Geurts" ; > ; \
+    < "Serkan Girgin" ; > ; \
+    < "Vladimir Glazonouv" ; > ; \
+    < "Laurent Godard" ; > ; \
+    < "Angelika Goeszler" ; > ; \
+    < "Xabier Arrieta Goiri" ; > ; \
+    < "Ajey Y. Gore" ; > ; \
+    < "Adam Gould" ; > ; \
+    < "Brigitte Le Grand" ; > ; \
+    < "Dirk Grobler" ; > ; \
+    < "Steffen Grund" ; > ; \
+    < "Christian Guenther" ; > ; \
+    < "Brant Langer Gurganus" ; > ; \
+    < "Szabo Gyoergi" ; > ; \
+    < "Bettina Haberer" ; > ; \
+    < "Ingrid Halama" ; > ; \
+    < "Chris Halls" ; > ; \
+    < "Arne Christian Harseth" ; > ; \
+    < "Jeff Hanson" ; > ; \
+    < "Paul Eugene Hanson" ; > ; \
+    < "Christian Hardy" ; > ; \
+    < "Taska Harnischfeger" ; > ; \
+    < "Gregor Hartmann" ; > ; \
+    < "Andreas Hausmann" ; > ; \
+    < "Bustamam Harun" ; > ; \
+    < "Andreas Hausmann" ; > ; \
+    < "Mike Hayes" ; > ; \
+    < "John Heard" ; > ; \
+    < "Joerg Heilig" ; > ; \
+    < "Bill Heiser" ; > ; \
+    < "Frank Heitbrock" ; > ; \
+    < "Brian Hemstedt" ; > ; \
+    < "Kevin B. Hendricks" ; > ; \
+    < "C.P. Hennessy" ; > ; \
+    < "Chris Herrnberger" ; > ; \
+    < "Uwe Heth" ; > ; \
+    < "Kazunari Hirano" ; > ; \
+    < "Samual W. Hiser" ; > ; \
+    < "Ivo Hinkelmann" ; > ; \
+    < "Eric Hoch" ; > ; \
+    < "Lutz Hoeger" ; > ; \
+    < "Michael Hoennig" ; > ; \
+    < "Ralf Hofmann" ; > ; \
+    < "Janos Holanyi" ; > ; \
+    < "Martin Hollmichel" ; > ; \
+    < "Richard Holt" ; > ; \
+    < "Sei Honda" ; > ; \
+    < "Karl Hong" ; > ; \
+    < "Horst" ; > ; \
+    < "Thomas Hosemann" ; > ; \
+    < "Radovan Hrabak" ; > ; \
+    < "Stanislav Huba" ; > ; \
+    < "Ralf Hueskes" ; > ; \
+    < "Matthias Huetsch" ; > ; \
+    < "Marco Huggenberger" ; > ; \
+    < "Jason Hunter" ; > ; \
+    < "Scott Hutinger" ; > ; \
+    < "Hungarian Linux Users, Association of" ; > ; \
+    < "Hasan Ilter" ; > ; \
+    < "Intersol SRL" ; > ; \
+    < "Pavel Janik" ; > ; \
+    < "Sven Jacobi" ; > ; \
+    < "Joerg Jahnke" ; > ; \
+    < "Ocke Janssen" ; > ; \
+    < "Dewi Jones" ; > ; \
+    < "Anders Colding Jorgesen" ; > ; \
+    < "Peter Junge" ; > ; \
+    < "Henrik Just" ; > ; \
+    < "Christian Kaas" ; > ; \
+    < "Yukata Kachi" ; > ; \
+    < "Natsu Kadoya" ; > ; \
+    < "Tim Kampa" ; > ; \
+    < "Petr Kania" ; > ; \
+    < "Tim Kampa" ; > ; \
+    < "Mick Kappenburg" ; > ; \
+    < "Yosuke Kato" ; > ; \
+    < "Juergen Keil" ; > ; \
+    < "Lina Kemmel" ; > ; \
+    < "Darren Kenny" ; > ; \
+    < "Ilja Ketris" ; > ; \
+    < "Hermann Kienlein" ; > ; \
+    < "Bevis Robert Wearing King" ; > ; \
+    < "Bo Kiersgaard" ; > ; \
+    < "Branislav Klocok" ; > ; \
+    < "Magdy Samuel Abdel Koddous" ; > ; \
+    < "Charles Peter Koerner" ; > ; \
+    < "Peter Kosmalla" ; > ; \
+    < "Nobuhiro Koura" ; > ; \
+    < "Oliver Krapp" ; > ; \
+    < "Andrey Krutak" ; > ; \
+    < "Andreas Krause" ; > ; \
+    < "Andre Kuemmel" ; > ; \
+    < "Thorsten Koerner" ; > ; \
+    < "Ralf Kuhnert" ; > ; \
+    < "Gaute Hvoslef Kvalnes" ; > ; \
+    < "William Rikard Lachance" ; > ; \
+    < "Anti Lampinen/Kongo Group" ; > ; \
+    < "Massimo Lanfranconi" ; > ; \
+    < "Peter Lange" ; > ; \
+    < "Thomas Lange" ; > ; \
+    < "Lars Langhans" ; > ; \
+    < "Thorsten Laux" ; > ; \
+    < "Anti Lampinen" ; > ; \
+    < "Hans-Joachim Lankenau (Ause)" ; > ; \
+    < "Ely Levy" ; > ; \
+    < "Christian Lippka" ; > ; \
+    < "Joachim Lingner" ; > ; \
+    < "ALT Linux Russia" ; > ; \
+    < "Jonathan S. Lister" ; > ; \
+    < "Frank Loehmann" ; > ; \
+    < "Dieter Loeschky" ; > ; \
+    < "Philipp Lohmann" ; > ; \
+    < "Christian Lohmaier" ; > ; \
+    < "Riccardo Losselli" ; > ; \
+    < "Patrick Luby" ; > ; \
+    < "Christoph Lukasiak" ; > ; \
+    < "Robert Ludvik" ; > ; \
+    < "Uwe Luebbers" ; > ; \
+    < "Zaoliang Luo" ; > ; \
+    < "Thomas J.L. MacDermott" ; > ; \
+    < "Ove Madsen" ; > ; \
+    < "Martin Maher" ; > ; \
+    < "Libor Maly" ; > ; \
+    < "Andreas Mantke" ; > ; \
+    < "John Marmion" ; > ; \
+    < "Elizabeth Matthis" ; > ; \
+    < "Andreas Martens" ; > ; \
+    < "Thorsten Martens" ; > ; \
+    < "Bartosz Maruszewski" ; > ; \
+    < "Jordi Mas" ; > ; \
+    < "Nishida Masanori" ; > ; \
+    < "Yoshiyuki Masutomi" ; > ; \
+    < "Michael Maurier, Publishing Power, Inc." ; > ; \
+    < "Izumi Mazur" ; > ; \
+    < "Caolan McNamara" ; > ; \
+    < "Jacqueline Mcnally" ; > ; \
+    < "Aaron R. Meck" ; > ; \
+    < "Michael Meeks" ; > ; \
+    < "Frank Meies" ; > ; \
+    < "Andreas Meyer" ; > ; \
+    < "Markus Meyer" ; > ; \
+    < "Rolf Meyer" ; > ; \
+    < "Boris Michelsz" ; > ; \
+    < "Bjoern Milcke" ; > ; \
+    < "Michelle Milledge" ; > ; \
+    < "Filip Molcan" ; > ; \
+    < "Tadeusz Mollun" ; > ; \
+    < "Carl De Monbrun" ; > ; \
+    < "Takayuki Morisawa" ; > ; \
+    < "Tim Morley" ; > ; \
+    < "Tomas Mraz" ; > ; \
+    < "Cyrille Moureaux" ; > ; \
+    < "S. Muguntharaj" ; > ; \
+    < "Matthias Mueller-Prove" ; > ; \
+    < "Inaki Larranaga Murgoitio" ; > ; \
+    < "Mark Murnane" ; > ; \
+    < "Steven Michael Murphy" ; > ; \
+    < "Kris Nackaerts" ; > ; \
+    < "Takashi Nakamoto" ; > ; \
+    < "Maho Nakata" ; > ; \
+    < "National Centre for Software Technology, India" ; > ; \
+    < "Takamichi Nara" ; > ; \
+    < "Ales Nehyba" ; > ; \
+    < "Christoph Neumann" ; > ; \
+    < "Marc Neumann" ; > ; \
+    < "Niklas Nebel" ; > ; \
+    < "Dhiraj Nilange" ; > ; \
+    < "Sofia Nilsson" ; > ; \
+    < "Jes Drost Nissen" ; > ; \
+    < "Bertram Nolte" ; > ; \
+    < "Niels Nordmann" ; > ; \
+    < "Peter Novodvorsky" ; > ; \
+    < "Eivind Odegard" ; > ; \
+    < "Dan Ohnesorg" ; > ; \
+    < "Lars Oppermann" ; > ; \
+    < "Dana Oliver" ; > ; \
+    < "Shane Owenby" ; > ; \
+    < "Marcin Orowski" ; > ; \
+    < "Jan-Hendrick Palic" ; > ; \
+    < "Assis Paniago" ; > ; \
+    < "Carlos F.A. Paniago" ; > ; \
+    < "Subiaco Paola" ; > ; \
+    < "Damien Persohn" ; > ; \
+    < "Edward Peterlin" ; > ; \
+    < "Frank Peters" ; > ; \
+    < "John Pfersich" ; > ; \
+    < "Thomas Pfohe" ; > ; \
+    < "Nusorn Photpipat" ; > ; \
+    < "Juergen Pingel" ; > ; \
+    < "Christof Pintaske" ; > ; \
+    < "Rastislav Poruban" ; > ; \
+    < "Nikolai Pretzell" ; > ; \
+    < "Rhoslyn Prys" ; > ; \
+    < "Volker Quetschke" ; > ; \
+    < "Tino Rachui" ; > ; \
+    < "Radostin Radnev" ; > ; \
+    < "Adam Rambousek" ; > ; \
+    < "Kay Ramme" ; > ; \
+    < "Samphan Raruenrom" ; > ; \
+    < "Eike Rathke" ; > ; \
+    < "Michael Rauch" ; > ; \
+    < "Jens-Heiner Rechtien" ; > ; \
+    < "Itzchack Rehberg" ; > ; \
+    < "Manfred Reiter" ; > ; \
+    < "Eric Renaud" ; > ; \
+    < "Daniel Rentz" ; > ; \
+    < "Nicholas Richards" ; > ; \
+    < "Jozef Riha" ; > ; \
+    < "Hennes Rohling" ; > ; \
+    < "Dimitri Roschowski" ; > ; \
+    < "Werner Roth" ; > ; \
+    < "Bill Roth" ; > ; \
+    < "Klaus Ruehl" ; > ; \
+    < "Michael Ruess" ; > ; \
+    < "Peeter Russak" ; > ; \
+    < "Frederick K. Saalbach" ; > ; \
+    < "Tobias Sager" ; > ; \
+    < "Janus Sandsgaard" ; > ; \
+    < "Pablo Sarataga" ; > ; \
+    < "Eric Savary" ; > ; \
+    < "Stephan Schaefer" ; > ; \
+    < "Kathryn L. Schenk" ; > ; \
+    < "Harald Schilly" ; > ; \
+    < "Andreas Schluens" ; > ; \
+    < "Ingo Schmidt" ; > ; \
+    < "Juergen Schmidt" ; > ; \
+    < "Andre Schnabel" ; > ; \
+    < "Frank Schoenheit" ; > ; \
+    < "Timon Schroeter" ; > ; \
+    < "Maik Schroeder" ; > ; \
+    < "Svante Schubert" ; > ; \
+    < "Friedemann Schuetz" ; > ; \
+    < "Dietrich Schulten" ; > ; \
+    < "Thorsten Schulz" ; > ; \
+    < "Marcella Semboli" ; > ; \
+    < "Shanmugam Senthil" ; > ; \
+    < "Charles Sharp" ; > ; \
+    < "Bernhard Siaud" ; > ; \
+    < "Joerg Sievers" ; > ; \
+    < "Silicon Graphic, Inc." ; > ; \
+    < "Maria Augusta Marques da Silva" ; > ; \
+    < "Manoranjan Kr. Singh" ; > ; \
+    < "Joerg Skottke" ; > ; \
+    < "Colm Smyth" ; > ; \
+    < "Kai Sommerfeld" ; > ; \
+    < "Claus Soerensen" ; > ; \
+    < "Sbarnea Sorin" ; > ; \
+    < "Oliver Specht" ; > ; \
+    < "Laure Spilker-Four" ; > ; \
+    < "Joseph James John Stanford" ; > ; \
+    < "Frank Stecher" ; > ; \
+    < "Jason Stewart" ; > ; \
+    < "Arthit Suriyawongkul" ; > ; \
+    < "Erik William Strack" ; > ; \
+    < "Daniel Strome" ; > ; \
+    < "Ulf Stroehler" ; > ; \
+    < "Louis Suarez-Potts" ; > ; \
+    < "Matthias Suess" ; > ; \
+    < "Tae Hoon Suk of Intellikorea Ca., Ltd." ; > ; \
+    < "Arthit Suriyawongkul" ; > ; \
+    < "SuSE CR, s.r.o" ; > ; \
+    < "Kaupo Suviste" ; > ; \
+    < "E. A. Tacao" ; > ; \
+    < "Hidetoshi Tajima" ; > ; \
+    < "Makoto Takizawa" ; > ; \
+    < "Stefan Taxhet" ; > ; \
+    < "Techmaprojekt Sp. z.o.o." ; > ; \
+    < "Erwin Tenhumberg" ; > ; \
+    < "William Terry" ; > ; \
+    < "Pietro Emilio Teofilatto" ; > ; \
+    < "Falko Tesch" ; > ; \
+    < "Armin Theissen" ; > ; \
+    < "Holger Thon" ; > ; \
+    < "Alexander Thurgood" ; > ; \
+    < "Lukas Tinkl" ; > ; \
+    < "Gerhard Tonn" ; > ; \
+    < "Istvan Torda" ; > ; \
+    < "Robert J. Townley" ; > ; \
+    < "Christian Treldal" ; > ; \
+    < "James Treleaven" ; > ; \
+    < "Tim Tretyak" ; > ; \
+    < "Andreas Treumann" ; > ; \
+    < "Claus Dieter Thoele" ; > ; \
+    < "Gianluca Turconi" ; > ; \
+    < "Gunnar Timm" ; > ; \
+    < "Ruediger Timm" ; > ; \
+    < "Malte Timmermann" ; > ; \
+    < "Ralf Unger" ; > ; \
+    < "Iulian Ursache" ; > ; \
+    < "Tom Verbeek" ; > ; \
+    < "Sven Vermeulen" ; > ; \
+    < "John Vandenberg" ; > ; \
+    < "Sander Vesik" ; > ; \
+    < "Aridane Vilardaga-Viera" ; > ; \
+    < "Dirk Voelzke" ; > ; \
+    < "Robert Vojta" ; > ; \
+    < "Daniel Vogelheim" ; > ; \
+    < "Mikhail Voitenko" ; > ; \
+    < "Vladimir Vuksan" ; > ; \
+    < "Radek Vybiral" ; > ; \
+    < "Yi Wang" ; > ; \
+    < "Joerg Wartenberg" ; > ; \
+    < "Jean Hollis Weber" ; > ; \
+    < "Martin Webermann" ; > ; \
+    < "Armin Weiss" ; > ; \
+    < "Donata Wegener" ; > ; \
+    < "Franz Wieser" ; > ; \
+    < "Dan Williams" ; > ; \
+    < "Deirdre Williams" ; > ; \
+    < "Miljenko Williams" ; > ; \
+    < "David Noel Wilson" ; > ; \
+    < "Jennifer Winger" ; > ; \
+    < "Franz Wieser" ; > ; \
+    < "Hans Witvliet" ; > ; \
+    < "Goetz Wohlberg" ; > ; \
+    < "Stephan Wunderlich" ; > ; \
+    < "Deltasoft Yu" ; > ; \
+    < "Christian Zagrodnick" ; > ; \
+    < "George Zahopulos" ; > ; \
+    < "Kurt Zenker" ; > ; \
+    < "Thorsten Ziehm" ; > ; \
+    < "Stefan Zimmermann" ; > ; \
+};
+
+#define DEVELOPER_LIST \
+ItemList = \
+{ \
+    < "" ; > ; \
+    < "This product is based on the OpenOffice.org project." ; > ; \
+    < "" ; > ; \
+    < "" ; > ; \
+    < "G e n e r a l  M a n a g e m e n t" ; 8 ; > ; \
+    < "" ; > ; \
+    < "Michael Bemmer" ; > ; \
+    < "" ; > ; \
+    < "Functional Staff" ; 8 ; > ; \
+    < "" ; > ; \
+    < "Sabine Schroeder" ; > ; \
+    < "Volker Seubert" ; > ; \
+    < "" ; > ; \
+    < "OpenOffice.org Coordination" ; 8 ; > ; \
+    < "" ; > ; \
+    < "Stefan Taxhet" ; > ; \
+    < "" ; > ; \
+    < "Technical Architect" ; 8 ; > ; \
+    < "" ; > ; \
+    < "Matthias Huetsch" ; > ; \
+    < "Kay Ramme" ; > ; \
+    < "" ; > ; \
+    < "Sun Sigma Black Belt" ; 8 ; > ; \
+    < "" ; > ; \
+    < "Stefan Zimmermann" ; > ; \
+    < "" ; > ; \
+    < "" ; > ; \
+    < "U s e r  E x p e r i e n c e" ; 8 ; > ; \
+    < "" ; > ; \
+    < "Lutz Hoeger" ; > ; \
+    < "" ; > ; \
+    < "Bettina Haberer" ; > ; \
+    < "Christian Jansen" ; > ; \
+    < "Frank Loehmann" ; > ; \
+    < "Elizabeth Matthis" ; > ; \
+    < "Matthias Mueller-Prove" ; > ; \
+    < "Colm Smyth" ; > ; \
+    < "Falko Tesch" ; > ; \
+    < "" ; > ; \
+    < "" ; > ; \
+    < "Q u a l i t y  A s s u r a n c e   &   C o o r d i n a t i o n" ; 8 ; > ; \
+    < "" ; > ; \
+    < "Nils Fuhrmann" ; > ; \
+    < "" ; > ; \
+    < "Program Management" ; 8 ; > ; \
+    < "" ; > ; \
+    < "Joost Andrae" ; > ; \
+    < "Martin Damboldt" ; > ; \
+    < "Martin Hollmichel" ; > ; \
+    < "Andre Kuemmel" ; > ; \
+    < "" ; > ; \
+    < "Release Engineering & Development Tools" ; 8 ; > ; \
+    < "" ; > ; \
+    < "Joerg Jahnke" ; > ; \
+    < "" ; > ; \
+    < "Release Engineering " ; 8 ; > ; \
+    < "" ; > ; \
+    < "Oliver Bolte" ; > ; \
+    < "Vladimir Glazounov" ; > ; \
+    < "Hans-Joachim Lankenau" ; > ; \
+    < "Jens-Heiner Rechtien" ; > ; \
+    < "Ruediger Timm" ; > ; \
+    < "Kurt Zenker" ; > ; \
+    < "" ; > ; \
+    < "Development Tools" ; 8 ; > ; \
+    < "" ; > ; \
+    < "Bernd Eilers" ; > ; \
+    < "Gregor Hartmann" ; > ; \
+    < "Ivo Hinkelmann" ; > ; \
+    < "Frank Mau" ; > ; \
+    < "Nikolai Pretzell" ; > ; \
+    < "" ; > ; \
+    < "Quality Assurance" ; 8 ; > ; \
+    < "" ; > ; \
+    < "Thorsten Ziehm" ; > ; \
+    < "" ; > ; \
+    < "QA %PRODUCTNAME Automation" ; 8 ; > ; \
+    < "" ; > ; \
+    < "Thorsten Bosbach" ; > ; \
+    < "Helge Delfs" ; > ; \
+    < "Joerg Sievers" ; > ; \
+    < "" ; > ; \
+    < "QA %PRODUCTNAME Writer" ; 8 ; > ; \
+    < "" ; > ; \
+    < "Stefan Baltzer" ; > ; \
+    < "Hasan Ilter" ; > ; \
+    < "Michael Ruess" ; > ; \
+    < "Eric Savary" ; > ; \
+    < "Ulf Stroehler" ; > ; \
+    < "" ; > ; \
+    < "QA %PRODUCTNAME Calc" ; 8 ; > ; \
+    < "" ; > ; \
+    < "Oliver Craemer" ; > ; \
+    < "Peter Junge" ; > ; \
+    < "Thomas Klarhoefer" ; > ; \
+    < "Frank Stecher" ; > ; \
+    < "" ; > ; \
+    < "QA %PRODUCTNAME Impress & Base" ; 8 ; > ; \
+    < "" ; > ; \
+    < "Christoph Lukasiak" ; > ; \
+    < "Marc Neumann" ; > ; \
+    < "Wolfram Garten" ; > ; \
+    < "Christian Guenther" ; > ; \
+    < "Fredrik Haegg" ; > ; \
+    < "" ; > ; \
+    < "QA %PRODUCTNAME Framework" ; 8 ; > ; \
+    < "" ; > ; \
+    < "Olaf Felka" ; > ; \
+    < "Uwe Luebbers" ; > ; \
+    < "Thorsten Martens" ; > ; \
+    < "Joerg W. Skottke" ; > ; \
+    < "Andreas Treumann" ; > ; \
+    < "Ralf Unger" ; > ; \
+    < "" ; > ; \
+    < "Information Technology" ; 8 ; > ; \
+    < "" ; > ; \
+    < "Dirk Marquardt" ; > ; \
+    < "" ; > ; \
+    < "" ; > ; \
+    < "%PRODUCTNAME  D e v e l o p m e n t" ; 8 ; > ; \
+    < "" ; > ; \
+    < "Dieter Loeschky" ; > ; \
+    < "" ; > ; \
+    < "Technical Architect" ; 8 ; > ; \
+    < "" ; > ; \
+    < "Michael Brauer" ; > ; \
+    < "Malte Timmermann" ; > ; \
+    < "Armin Le Grand" ; > ; \
+    < "" ; > ; \
+    < "%PRODUCTNAME Writer" ; 8 ; > ; \
+    < "" ; > ; \
+    < "Andreas Martens" ; > ; \
+    < "" ; > ; \
+    < "Henning Brinkmann" ; > ; \
+    < "Michael Buettner" ; > ; \
+    < "Hans-Peter Burow" ; > ; \
+    < "Oliver-Rainer Duesterhoeft" ; > ; \
+    < "Thomas Lange" ; > ; \
+    < "Martin Maher" ; > ; \
+    < "Frank Meies" ; > ; \
+    < "Florian Reuter" ; > ; \
+    < "Oliver Specht" ; > ; \
+    < "Gunnar Timm" ; > ; \
+    < "Daniel Vogelheim" ; > ; \
+    < "" ; > ; \
+    < "%PRODUCTNAME Calc & Impress & Base" ; 8 ; > ; \
+    < "" ; > ; \
+    < "Kai Ahrens" ; > ; \
+    < "" ; > ; \
+    < "Sascha Ballach" ; > ; \
+    < "Thorsten Behrens" ; > ; \
+    < "Andre Fischer" ; > ; \
+    < "Ingrid Halama" ; > ; \
+    < "Sven Jacobi" ; > ; \
+    < "Ocke Janssen" ; > ; \
+    < "Christian Lippka" ; > ; \
+    < "Bjoern Milcke" ; > ; \
+    < "Niklas Nebel" ; > ; \
+    < "Eike Rathke" ; > ; \
+    < "Daniel Rentz" ; > ; \
+    < "Frank Schoenheit" ; > ; \
+    < "" ; > ; \
+    < "%PRODUCTNAME Framework" ; 8 ; > ; \
+    < "" ; > ; \
+    < "Mathias Bauer" ; > ; \
+    < "" ; > ; \
+    < "Stephan Bergmann" ; > ; \
+    < "Andreas Bille" ; > ; \
+    < "Daniel Boelzle" ; > ; \
+    < "Carsten Driesner" ; > ; \
+    < "Michael Hoennig" ; > ; \
+    < "Joachim Lingner" ; > ; \
+    < "Lars Oppermann" ; > ; \
+    < "Andreas Schluens" ; > ; \
+    < "Juergen Schmidt" ; > ; \
+    < "Kai Sommerfeld" ; > ; \
+    < "Mikhail Voitenko" ; > ; \
+    < "" ; > ; \
+    < "%PRODUCTNAME Extras" ; 8 ; > ; \
+    < "" ; > ; \
+    < "Volker Ahrendt" ; > ; \
+    < "Mustafa Cakar" ; > ; \
+    < "Berend Cornelius" ; > ; \
+    < "Ilko Hoepping" ; > ; \
+    < "Stella Schulze" ; > ; \
+    < "Thomas Verbeek" ; > ; \
+    < "" ; > ; \
+    < "Platform Technology" ; 8 ; > ; \
+    < "" ; > ; \
+    < "Christof Pintaske" ; > ; \
+    < "" ; > ; \
+    < "Thomas Benisch" ; > ; \
+    < "Oliver Braun" ; > ; \
+    < "Andreas Bregas" ; > ; \
+    < "Herbert Duerr" ; > ; \
+    < "Philipp Lohmann" ; > ; \
+    < "Tino Rachui" ; > ; \
+    < "Hennes Rohling" ; > ; \
+    < "Stephan Schaefer" ; > ; \
+    < "Ingo Schmidt" ; > ; \
+    < "Dirk Voelzke" ; > ; \
+    < "" ; > ; \
+    < "Programmability" ; 8 ; > ; \
+    < "" ; > ; \
+    < "James Cleere" ; > ; \
+    < "" ; > ; \
+    < "Michael Bohn" ; > ; \
+    < "Duncan Foster" ; > ; \
+    < "Steffen Grund" ; > ; \
+    < "Mike Hayes" ; > ; \
+    < "Gary Johnston" ; > ; \
+    < "Darren Kenny" ; > ; \
+    < "Lars Langhans" ; > ; \
+    < "Christoph Neumann" ; > ; \
+    < "Tomas O'Connor" ; > ; \
+    < "Noel Power" ; > ; \
+    < "Svante Schubert" ; > ; \
+    < "Stephan Wunderlich" ; > ; \
+    < "" ; > ; \
+    < "%PRODUCTNAME China Team" ; 8 ; > ; \
+    < "" ; > ; \
+    < "William Wan" ; > ; \
+    < "" ; > ; \
+    < "Robert Chen" ; > ; \
+    < "Andrew Fan" ; > ; \
+    < "Wind Li" ; > ; \
+    < "Gordon Lin" ; > ; \
+    < "Gavin Lu" ; > ; \
+    < "James Meng" ; > ; \
+    < "Michael Mi" ; > ; \
+    < "Minna Wu" ; > ; \
+    < "Gary Yang" ; > ; \
+    < "" ; > ; \
+    < "Hercule Li" ; > ; \
+    < "Mindy Liu" ; > ; \
+    < "" ; > ; \
+    < "Tom Chen" ; > ; \
+    < "Wilson Guo" ; > ; \
+    < "" ; > ; \
+    < "" ; > ; \
+    < "A P O C" ; 8 ; > ; \
+    < "" ; > ; \
+    < "Dirk Grobler" ; > ; \
+    < "" ; > ; \
+    < "Joerg Barfurth" ; > ; \
+    < "Lucy Brophy" ; > ; \
+    < "Mary Dwyer" ; > ; \
+    < "Katell Galard" ; > ; \
+    < "Geoff Higgins" ; > ; \
+    < "Stephen Lewis" ; > ; \
+    < "Cyrille Moureaux" ; > ; \
+    < "Thomas Pfohe" ; > ; \
+    < "Klaus Ruehl" ; > ; \
+    < "" ; > ; \
+    < "" ; > ; \
+    < "M a n u a l s  &  O n l i n e  H e l p" ; 8 ; > ; \
+    < "" ; > ; \
+    < "Frank Peters" ; > ; \
+    < "" ; > ; \
+    < "Derek Dreger" ; > ; \
+    < "Uwe Fischer" ; > ; \
+    < "Yvonne Jacoby" ; > ; \
+    < "Martina Waller" ; > ; \
+    < "" ; > ; \
+    < "" ; > ; \
+    < "G l o b a l i z a t i o n   M a n a g e m e n t" ; 8 ; > ; \
+    < "" ; > ; \
+    < "Susan Andersson" ; > ; \
+    < "Bing Hong" ; > ; \
+    < "Akira Ohsone" ; > ; \
+    < "Kazutoshi Nimura" ; > ; \
+    < "Ramesh Krishnamagaru" ; > ; \
+    < "Shinobu Matsuzuka" ; > ; \
+    < "Shripad Patki" ; > ; \
+    < "Tom Garland" ; > ; \
+    < "" ; > ; \
+    < "Engineering" ; 8 ; > ; \
+    < "" ; > ; \
+    < "Ian McDonnell" ; > ; \
+    < "Kane Zeng " ; > ; \
+    < "Karl Hong " ; > ; \
+    < "Martin Cizler" ; > ; \
+    < "Naoyuki Ishimura" ; > ; \
+    < "Phill Zhang " ; > ; \
+    < "Vincent Park" ; > ; \
+    < "" ; > ; \
+    < "Program Management" ; 8 ; > ; \
+    < "" ; > ; \
+    < "Young Joo Song" ; > ; \
+    < "" ; > ; \
+    < "Translation" ; 8 ; > ; \
+    < "" ; > ; \
+    < "Brigitte Le Grand" ; > ; \
+    < "Magdy Samuel Abdel Koddous" ; > ; \
+    < "Monica Badia" ; > ; \
+    < "Natsu Kadoya" ; > ; \
+    < "Serena Xiao" ; > ; \
+    < "Sofia Nilsson" ; > ; \
+    < "Zaoliang Luo" ; > ; \
+    < "" ; > ; \
+    < "Documentation" ; 8 ; > ; \
+    < "" ; > ; \
+    < "Hiroko Matano" ; > ; \
+    < "Michael Ryan" ; > ; \
+    < "Tina Dwyer" ; > ; \
+    < "" ; > ; \
+    < "" ; > ; \
+    < "M a r k e t i n g   &   O p e r a t i o n s" ; 8 ; > ; \
+    < "" ; > ; \
+    < "Product & Program Managment" ; 8 ; > ; \
+    < "" ; > ; \
+    < "Susan Jefferies" ; > ; \
+    < "Jeff McMeekin" ; > ; \
+    < "Goetz Wohlberg" ; > ; \
+    < "" ; > ; \
+    < "Marketing" ; 8 ; > ; \
+    < "" ; > ; \
+    < "Alexei Koudriachov" ; > ; \
+    < "Ashish Mukharji" ; > ; \
+    < "Manish Punjabi" ; > ; \
+    < "Erwin Tenhumberg" ; > ; \
+    < "Iyer Venkatesan" ; > ; \
+    < "Jennifer Winger" ; > ; \
+    < "" ; > ; \
+    < "Operations" ; 8 ; > ; \
+    < "" ; > ; \
+    < "Scott Citta" ; > ; \
+    < "Jane Cooley" ; > ; \
+    < "Lisa Medlin" ; > ; \
+    < "" ; > ; \
+    < "Technical Training, Market & Business Development" ; 8 ; > ; \
+    < "" ; > ; \
+    < "Matthew Baier" ; > ; \
+    < "Herve Bernard" ; > ; \
+    < "Kay Koll" ; > ; \
+    < "Ted Tudor" ; > ; \
+    < "Jane Worden" ; > ; \
+    < "Sophia Zheng " ; > ; \
+    < "" ; > ; \
+    < "Additional Functions" ; 8 ; > ; \
+    < "" ; > ; \
+    < "Douglas Lenser" ; > ; \
+    < "Frank Psotka" ; > ; \
+    < "" ; > ; \
+};\
+
+#define TEXT_DEFAULTABOUT \
+    Text [ x-comment ] = "PB: ; PB: only %PRODUCTNAME"; \
+    Text [ de ] = "Über %PRODUCTNAME" ; \
+    Text [ en-US ] = "About %PRODUCTNAME" ; \
+
+// ******************************************************************* EOF
+
