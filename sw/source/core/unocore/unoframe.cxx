@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2000-10-24 14:26:56 $
+ *  last change: $Author: mib $ $Date: 2000-10-27 13:52:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -831,10 +831,10 @@ sal_Bool    SwGraphicProperties_Impl::AnyToItemSet(
         rGrSet.Put(aMirror);
     }
     uno::Any* pCrop;
-    if(GetProperty(C2S(UNO_NAME_GRAPHIC_CROP), pCrop))
+    if(GetProperty(C2S(UNO_NAME_GRAPHIC_CROP), pCrop ))
     {
         SwCropGrf aCrop;
-        bRet &= ((SfxPoolItem&)aCrop).PutValue(*pCrop);
+        bRet &= ((SfxPoolItem&)aCrop).PutValue(*pCrop, CONVERT_TWIPS);
         rGrSet.Put(aCrop);
     }
     return bRet;
@@ -2625,6 +2625,9 @@ sal_uInt16 SwXOLEListener::FindEntry( const EventObject& rEvent,SwOLENode** ppNd
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2000/10/24 14:26:56  os
+    #79738# new graphic property: ContourPolyPolygon
+
     Revision 1.4  2000/10/24 10:11:48  os
     graphic mirror properties changed
 
