@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindow.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:03:10 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 17:06:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,9 @@
 #endif
 #ifndef _COM_SUN_STAR_AWT_STYLE_HPP_
 #include <com/sun/star/awt/Style.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
+#include <drafts/com/sun/star/accessibility/AccessibleRole.hpp>
 #endif
 
 #ifndef _TOOLKIT_AWT_VCLXWINDOW_HXX_
@@ -540,22 +543,32 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
     Window* pWindow = GetWindow();
     if ( pWindow )
     {
-        switch ( pWindow->GetType() )
+        WindowType nType = pWindow->GetType();
+
+        if ( nType == WINDOW_MENUBARWINDOW || pWindow->IsMenuFloatingWindow() )
         {
-            case WINDOW_STATUSBAR:
+            ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > xAcc( pWindow->GetAccessible() );
+            if ( xAcc.is() )
             {
-                xContext = (::drafts::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleStatusBar( this );
+                ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > xCont( xAcc->getAccessibleContext() );
+                if ( pWindow->GetType() == WINDOW_MENUBARWINDOW
+                     || ( xCont.is() && xCont->getAccessibleRole() == ::drafts::com::sun::star::accessibility::AccessibleRole::POPUPMENU ) )
+                {
+                    xContext = xCont;
+                }
             }
-            break;
-            case WINDOW_TABCONTROL:
-            {
-                xContext = (::drafts::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleTabControl( this );
-            }
-            break;
-            default:
-            {
-                xContext = (::drafts::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleComponent( this );
-            }
+        }
+        else if ( nType == WINDOW_STATUSBAR )
+        {
+            xContext = (::drafts::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleStatusBar( this );
+        }
+        else if ( nType == WINDOW_TABCONTROL )
+        {
+            xContext = (::drafts::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleTabControl( this );
+        }
+        else
+        {
+            xContext = (::drafts::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleComponent( this );
         }
     }
 
