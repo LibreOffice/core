@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paraprev.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2002-05-31 09:49:41 $
+ *  last change: $Author: vg $ $Date: 2003-06-20 09:47:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,12 +219,12 @@ void SvxParaPrevWindow::DrawParagraph( BOOL bAll )
                             aPnt.X() += ( aSiz.Width() - nLW ) / 2;
                             break;
                         case SVX_ADJUST_BLOCK:
-                            nLW = aLineSiz.Width();
+                            nLW = aSiz.Width();
                             break;
                     }
                 }
                 else
-                    nLW = aLineSiz.Width();
+                    nLW = aSiz.Width();
             }
             aSiz.Width() = nLW;
         }
