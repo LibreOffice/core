@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:22 $
+ *  last change: $Author: mib $ $Date: 2001-07-09 12:34:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1234,7 +1234,7 @@ enum eParagraphPropertyNamesEnum
     TEXT_SECTION = 3
 };
 
-void XMLTextParagraphExport::exportTextContentEnumeration(
+sal_Bool XMLTextParagraphExport::exportTextContentEnumeration(
         const Reference < XEnumeration > & rContEnum,
         sal_Bool bAutoStyles,
         const Reference < XTextSection > & rBaseSection,
@@ -1244,7 +1244,7 @@ void XMLTextParagraphExport::exportTextContentEnumeration(
 {
     sal_Bool bHasMoreElements = rContEnum->hasMoreElements();
     if( !bHasMoreElements )
-        return;
+        return sal_False;
 
     XMLTextNumRuleInfo aPrevNumInfo;
     XMLTextNumRuleInfo aNextNumInfo;
@@ -1361,6 +1361,8 @@ void XMLTextParagraphExport::exportTextContentEnumeration(
                                     aPrevNumInfo, aNextNumInfo,
                                     bAutoStyles );
     }
+
+    return sal_True;
 }
 
 void XMLTextParagraphExport::exportParagraph(
@@ -1465,21 +1467,26 @@ void XMLTextParagraphExport::exportParagraph(
 
     if( bAutoStyles )
     {
+        sal_Bool bPrevCharIsSpace = sal_True;
         if( xContentEnum.is() )
-            exportTextContentEnumeration( xContentEnum, bAutoStyles, xSection,
-                                          bProgress );
+            bPrevCharIsSpace = !exportTextContentEnumeration(
+                                    xContentEnum, bAutoStyles, xSection,
+                                    bProgress );
         exportTextRangeEnumeration( xTextEnum, bAutoStyles, bProgress );
     }
     else
     {
+        sal_Bool bPrevCharIsSpace = sal_True;
         enum XMLTokenEnum eElem =
             -1 == nOutlineLevel ? XML_P : XML_H;
         SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_TEXT, eElem,
                                   sal_True, sal_False );
         if( xContentEnum.is() )
-            exportTextContentEnumeration( xContentEnum, bAutoStyles, xSection,
-                                          bProgress );
-        exportTextRangeEnumeration( xTextEnum, bAutoStyles, bProgress );
+            bPrevCharIsSpace = !exportTextContentEnumeration(
+                                    xContentEnum, bAutoStyles, xSection,
+                                    bProgress );
+        exportTextRangeEnumeration( xTextEnum, bAutoStyles, bProgress,
+                                     bPrevCharIsSpace );
     }
 }
 
@@ -1489,14 +1496,15 @@ void XMLTextParagraphExport::exportParagraph(
 static const enum XMLTokenEnum lcl_XmlReferenceElements[] = {
     XML_REFERENCE_MARK, XML_REFERENCE_MARK_START, XML_REFERENCE_MARK_END };
 static const enum XMLTokenEnum lcl_XmlBookmarkElements[] = {
-    XML_BOOKMARK, XML_BOOKMARK_START, XML_BOOKMARK_END };
+    XML_BOOKMARK, XML_BO OKMARK_START, XML_BOOKMARK_END };
 
 
 void XMLTextParagraphExport::exportTextRangeEnumeration(
         const Reference < XEnumeration > & rTextEnum,
-        sal_Bool bAutoStyles, sal_Bool bProgress )
+        sal_Bool bAutoStyles, sal_Bool bProgress,
+        sal_Bool bPrvChrIsSpc )
 {
-    sal_Bool bPrevCharIsSpace = sal_True;
+    sal_Bool bPrevCharIsSpace = bPrvChrIsSpc;
 
     Any aAny;
     while( rTextEnum->hasMoreElements() )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparai.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: mib $ $Date: 2001-07-04 13:53:56 $
+ *  last change: $Author: mib $ $Date: 2001-07-09 12:34:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1749,12 +1749,7 @@ SvXMLImportContext *XMLImpSpanContext_Impl::CreateChildContext(
             XMLTextFieldImportContext::CreateTextFieldImportContext(
                 rImport, *rImport.GetTextImport().get(), nPrefix, rLocalName,
                 nToken);
-        if( pContext )
-        {
-            // text field found: white space!
-            rIgnoreLeadingSpace = sal_False;
-        }
-        else if( !rImport.GetTextImport()->IsInHeaderFooter() )
+        if( !pContext && !rImport.GetTextImport()->IsInHeaderFooter() )
         {
             Reference < XShapes > xShapes;
             pContext = rImport.GetShapeImport()->CreateGroupChildContext(
@@ -1766,6 +1761,8 @@ SvXMLImportContext *XMLImpSpanContext_Impl::CreateChildContext(
             pContext =
                 new SvXMLImportContext( rImport, nPrefix, rLocalName );
         }
+        // Behind fields, shapes and any unknown content blanks aren't ignored
+        rIgnoreLeadingSpace = sal_False;
     }
 
     if( bInsertTextFrame )
