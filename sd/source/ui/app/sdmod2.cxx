@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod2.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-05 16:55:04 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 15:47:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,10 @@
 
 #pragma hdrstop
 
+#ifndef _SDR_CONTACT_DISPLAYINFO_HXX
+#include <svx/sdr/contact/displayinfo.hxx>
+#endif
+
 #define _SD_DLL                 // fuer SD_MOD()
 #include "sdmod.hxx"
 #include "sddll.hxx"
@@ -166,7 +170,88 @@
 |*
 \************************************************************************/
 
+/** retrieves the page that is currently painted. This will only be the master page
+    if the current drawn view only shows the master page*/
+static SdPage* GetCurrentPage( sd::ViewShell* pViewSh, EditFieldInfo* pInfo, bool& bMasterView )
+{
+    bMasterView = false;
+    SdPage* pPage = NULL;
 
+    // first try to check if we are inside the outline view
+    sd::OutlineView* pSdView = NULL;
+    if( pViewSh && pViewSh->ISA(sd::OutlineViewShell))
+        pSdView = static_cast<sd::OutlineView*> (static_cast<sd::OutlineViewShell*>(pViewSh)->GetView());
+
+    if (pSdView != NULL && (pInfo->GetOutliner() ==  pSdView->GetOutliner()))
+    {
+        // outline mode
+        int nPgNum = 0;
+        Outliner* pOutl = pSdView->GetOutliner();
+        long nPos = pInfo->GetPara();
+        ULONG nParaPos = 0;
+
+        for( Paragraph* pPara = pOutl->GetParagraph( 0 ); pPara && nPos >= 0; pPara = pOutl->GetParagraph( ++nParaPos ), nPos-- )
+        {
+            if( pOutl->GetDepth( (USHORT) nParaPos ) == 0 )
+                nPgNum++;
+        }
+
+        pPage = pViewSh->GetDoc()->GetSdPage( nPgNum, PK_STANDARD );
+    }
+    else
+    {
+        // if not, get the current drawn page from the page view
+
+        // draw mode, slide mode and preview
+        const SdrPageView* pPV = NULL;
+
+        // first, we try to geht the current page view from the SdrPaintInfoRec
+        if( pInfo && ((SdrOutliner*)pInfo->GetOutliner())->GetPaintInfoRec() )
+        {
+            const SdrPaintInfoRec* pRec = ((SdrOutliner*)pInfo->GetOutliner())->GetPaintInfoRec();
+
+            if( ((SdrOutliner*)pInfo->GetOutliner())->GetTextObj() )
+            {
+                SdrPage* pPage = ((SdrOutliner*)pInfo->GetOutliner())->GetTextObj()->GetPage();
+                bMasterView = ((pPage == NULL) || pPage->IsMasterPage()) && (pRec->nPaintMode & SDRPAINTMODE_MASTERPAGE) == 0;
+            }
+
+            pPV = pRec->pPV;
+        }
+
+        // if this failed, we use the viewshell
+        if( (pPV == 0) && pViewSh )
+            pPV = pViewSh->GetDoc()->GetPaintingPageView();
+
+        if(pPV)
+        {
+            // get the current page from the current painting display info
+            if( pPV->GetCurrentPaintingDisplayInfo() )
+            {
+                pPage = (SdPage*)pPV->GetCurrentPaintingDisplayInfo()->GetProcessedPage();
+            }
+            else
+            {
+                // if this is not available, get the current page from the page view
+                pPage = (SdPage*) pPV->GetPage();
+            }
+
+            // if all else failed, geht the current page from the object that is
+            // currently formated from the document
+            if( pPage == 0 )
+            {
+                const SdrTextObj* pTextObj = pViewSh ? pViewSh->GetDoc()->GetFormattingTextObj() : NULL;
+
+                if( pTextObj )
+                    pPage = (SdPage*)pTextObj->GetPage();
+            }
+
+            bMasterView = pPage && pPage->IsMasterPage();
+        }
+    }
+
+    return pPage;
+}
 
 /*************************************************************************
 |*
@@ -245,8 +330,7 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo)
             else
             {
                 SvxAddressItem aAdrItem;
-                SvxAuthorField aAuthorField( aAdrItem, pAuthorField->GetType(),
-                                                pAuthorField->GetFormat() );
+                SvxAuthorField aAuthorField( aAdrItem, pAuthorField->GetType(), pAuthorField->GetFormat() );
 
                 // #92496# Set new content also for living field
                 *(const_cast< SvxAuthorField* >(pAuthorField)) = aAuthorField;
@@ -260,86 +344,34 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo)
             /******************************************************************
             * Page-Field
             ******************************************************************/
-            USHORT nPgNum = 1;
             String aRepresentation;
             aRepresentation += sal_Unicode( ' ' );
 
             ::sd::ViewShell* pViewSh = pDocShell ? pDocShell->GetViewShell() : NULL;
-
             if( !pViewSh )
                 pViewSh = PTR_CAST( ::sd::ViewShell, SfxViewShell::Current() );
 
-            if( pViewSh )
-            {
-                // #110023#
-                // since the view from the SdOutlineViewShell can be zero during SdOutlineViewShell c'tor
-                // we have to check this here
-                ::sd::OutlineView* pSdView = NULL;
-                if (pViewSh->ISA (::sd::OutlineViewShell))
-                    pSdView = static_cast< ::sd::OutlineView*> (static_cast< ::sd::OutlineViewShell*>(pViewSh)->GetView());
-                if (pSdView != NULL
-                    && (pInfo->GetOutliner() ==  pSdView->GetOutliner()))
-                {
-                    // outline mode
-                    nPgNum = 0;
-                    Outliner* pOutl = pSdView->GetOutliner();
-                    long nPos = pInfo->GetPara();
-                    ULONG nParaPos = 0;
+            bool bMasterView;
+            SdPage* pPage = GetCurrentPage( pViewSh, pInfo, bMasterView );
 
-                    for( Paragraph* pPara = pOutl->GetParagraph( 0 ); pPara && nPos >= 0; pPara = pOutl->GetParagraph( ++nParaPos ), nPos-- )
-                    {
-                        if( pOutl->GetDepth( (USHORT) nParaPos ) == 0 )
-                            nPgNum++;
-                    }
+            if( pPage && pViewSh && !bMasterView )
+            {
+                int nPgNum;
+
+                if( pPage->GetPageKind() == PK_HANDOUT )
+                {
+                    nPgNum = pViewSh->GetPrintedHandoutPageNum();
                 }
                 else
                 {
-                    // draw mode, slide mode and preview
-                    const SdPage* pPage = 0L;
-                    const SdrPageView* pPV = pViewSh->GetDoc()->GetPaintingPageView();
-
-                    if (pPV)
-                        pPage = (const SdPage*) pPV->GetPage();
-
-                    if ( pPage )
-                    {
-                        if ( pPage->GetPageKind() != PK_HANDOUT )
-                        {
-                            // Keine Handzettelseite
-                            nPgNum = (pPage->GetPageNum() + 1) / 2;
-                        }
-                        else
-                        {
-                            // Handzettelseite
-                            const SdrTextObj* pTextObj = pViewSh->GetDoc()->GetFormattingTextObj();
-
-                            if (pTextObj && pTextObj->GetPage())
-                            {
-                                if (((SdPage*) pTextObj->GetPage())->GetPageKind() == PK_HANDOUT)
-                                {
-                                    // Handzettelseite
-                                    nPgNum = pViewSh->GetPrintedHandoutPageNum();
-                                }
-                                //else if ( pPV && pPV->GetPaintingPageObj() )
-                                //{
-                                //    // Textobjekt innerhalb eines Seitendarstellungsobjekts
-                                //  SdrPage* pPage = pPV->GetPaintingPageObj()->GetReferencedPage();
-                                //
-                                //  if(pPage)
-                                //  {
-                                //      nPgNum = (pPage->GetPageNum() - 1) / 2 + 1;
-                                //  }
-                                //}
-                                else
-                                {
-                                    // Textobjekt innerhalb eines Seitendarstellungsobjekts
-                                    nPgNum = (pTextObj->GetPage()->GetPageNum() - 1) / 2 + 1;
-                                }
-                            }
-                        }
-                    }
+                    nPgNum = (pPage->GetPageNum() - 1) / 2 + 1;
                 }
                 aRepresentation = pViewSh->GetDoc()->CreatePageNumValue(nPgNum);
+            }
+            else
+            {
+                static String aNumberText( SdResId( STR_FIELD_PLACEHOLDER_NUMBER ) );
+                aRepresentation = aNumberText;
             }
 
             pInfo->SetRepresentation( aRepresentation );
@@ -381,6 +413,72 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo)
             * Measure-Field
             ******************************************************************/
             pInfo->ClearFldColor();
+        }
+        else if( pField && (pField->ISA(SvxHeaderField) || pField->ISA(SvxFooterField) || pField && pField->ISA(SvxDateTimeField) ) )
+        {
+            String aRepresentation;
+
+            sd::ViewShell* pViewSh = pDocShell ? pDocShell->GetViewShell() : NULL;
+            if( !pViewSh )
+                pViewSh = PTR_CAST( sd::ViewShell, SfxViewShell::Current() );
+
+            bool bMasterView = false;
+
+            SdPage* pPage = GetCurrentPage( pViewSh, pInfo, bMasterView );
+
+            if( (pPage == NULL) || bMasterView )
+            {
+                if( pField->ISA(SvxHeaderField) )
+                {
+                    static String aHeaderStr( SdResId( STR_FIELD_PLACEHOLDER_HEADER ) );
+                    aRepresentation = aHeaderStr;
+                }
+                else if (pField && pField->ISA(SvxFooterField) )
+                {
+                    static String aFooterStr( SdResId( STR_FIELD_PLACEHOLDER_FOOTER ) );
+                    aRepresentation = aFooterStr;
+                }
+                else if (pField && pField->ISA(SvxDateTimeField) )
+                {
+                    static String aDateTimeStr( SdResId( STR_FIELD_PLACEHOLDER_DATETIME ) );
+                    aRepresentation = aDateTimeStr;
+                }
+            }
+            else
+            {
+                const sd::HeaderFooterSettings &rSettings = pPage->getHeaderFooterSettings();
+
+                if( pField->ISA(SvxHeaderField) )
+                {
+                    aRepresentation = rSettings.maHeaderText;
+                    if( aRepresentation.Len() == 0 )                // TODO: Edit engine doesn't handle empty fields?
+                        aRepresentation += sal_Unicode( ' ' );
+                }
+                else if (pField && pField->ISA(SvxFooterField) )
+                {
+                    aRepresentation = rSettings.maFooterText;
+                    if( aRepresentation.Len() == 0 )                // TODO: Edit engine doesn't handle empty fields?
+                        aRepresentation += sal_Unicode( ' ' );
+                }
+                else if (pField && pField->ISA(SvxDateTimeField) )
+                {
+                    if( rSettings.mbDateTimeIsFixed )
+                    {
+                        aRepresentation = rSettings.maDateTimeText;
+                        if( aRepresentation.Len() == 0 )                // TODO: Edit engine doesn't handle empty fields?
+                            aRepresentation += sal_Unicode( ' ' );
+                    }
+                    else
+                    {
+                        Date aDate;
+                        Time aTime;
+                        LanguageType eLang = pInfo->GetOutliner()->GetLanguage( pInfo->GetPara(), pInfo->GetPos() );
+                        aRepresentation = SvxDateTimeField::GetFormatted( aDate, aTime, (SvxDateFormat)rSettings.meDateTimeFormat, *GetNumberFormatter(), eLang );
+                    }
+                }
+            }
+
+            pInfo->SetRepresentation( aRepresentation );
         }
         else
         {
