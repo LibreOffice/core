@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macropg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-13 13:26:09 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 14:37:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -523,6 +523,7 @@ void _SvxMacroTabPage::DisplayAppEvents( bool appEvents)
         else
         {
             //no UI name => do not add
+            OSL_TRACE("no UI name do not add");
             continue;
         }
         sTmp += '\t';
@@ -535,7 +536,9 @@ void _SvxMacroTabPage::DisplayAppEvents( bool appEvents)
         rListBox.Select( pE );
         rListBox.MakeVisible( pE );
     }
-    rListBox.Select( rListBox.GetEntry(0) );
+    pE = rListBox.GetEntry(0);
+    if( pE )
+        rListBox.Select( pE );
     rListBox.SetUpdateMode( TRUE );
     EnableButtons( String() );
 }
@@ -765,11 +768,15 @@ SvxMacroTabPage::SvxMacroTabPage( Window* pParent, const ResId& rResId, const Sf
 
     FreeResource();
 
+    // must be done after FreeResource is called
+    InitResources();
+
     InitAndSetHandler( xNameReplace, Reference< container::XNameReplace>(0), Reference< util::XModifiable >(0));
     DisplayAppEvents(true);
     SvHeaderTabListBox& rListBox = mpImpl->pEventLB->GetListBox();
     SvLBoxEntry* pE = rListBox.GetEntry( (ULONG)nSelectedIndex );
-    rListBox.Select(pE);
+    if( pE )
+        rListBox.Select(pE);
 }
 
 SvxMacroTabPage::~SvxMacroTabPage()
