@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flowfrm.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ama $ $Date: 2002-09-13 12:13:06 $
+ *  last change: $Author: od $ $Date: 2002-11-01 11:43:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,13 +108,11 @@
 #ifndef _FMTFTN_HXX //autogen
 #include <fmtftn.hxx>
 #endif
-#ifdef VERTICAL_LAYOUT
 #ifndef _SVX_PGRDITEM_HXX
 #include <svx/pgrditem.hxx>
 #endif
 #ifndef _PARATR_HXX
 #include <paratr.hxx>
-#endif
 #endif
 
 #include "ftnfrm.hxx"
@@ -512,16 +510,12 @@ BOOL SwFlowFrm::PasteTree( SwFrm *pStart, SwLayoutFrm *pParent, SwFrm *pSibling,
     }
     SwFrm *pFloat = pStart;
     SwFrm *pLst;
-#ifdef VERTICAL_LAYOUT
     SWRECTFN( pParent )
-#endif
     SwTwips nGrowVal = 0;
     do
     {   pFloat->pUpper = pParent;
         pFloat->_InvalidateAll();
-#ifdef VERTICAL_LAYOUT
         pFloat->CheckDirChange();
-#endif
 
         //Ich bin Freund des TxtFrm und darf deshalb so einiges. Das mit
         //dem CacheIdx scheint etwas riskant!
@@ -533,11 +527,7 @@ BOOL SwFlowFrm::PasteTree( SwFrm *pStart, SwLayoutFrm *pParent, SwFrm *pSibling,
         else
             bRet = TRUE;
 
-#ifdef VERTICAL_LAYOUT
         nGrowVal += (pFloat->Frm().*fnRect->fnGetHeight)();
-#else
-        nGrowVal += pFloat->Frm().Height();
-#endif
         if ( pFloat->GetNext() )
             pFloat = pFloat->GetNext();
         else
@@ -1373,7 +1363,6 @@ SwTwips SwFlowFrm::CalcUpperSpace( const SwBorderAttrs *pAttrs,
 
     nUpper += pAttrs->GetTopLine( &rThis );
 
-#ifdef VERTICAL_LAYOUT
     if( rThis.IsInDocBody() && rThis.GetAttrSet()->GetParaGrid().GetValue() )
     {
         const SwPageFrm* pPg = rThis.FindPageFrm();
@@ -1406,7 +1395,6 @@ SwTwips SwFlowFrm::CalcUpperSpace( const SwBorderAttrs *pAttrs,
             }
         }
     }
-#endif
 
     delete pAccess;
     return nUpper;
@@ -1594,14 +1582,9 @@ BOOL SwFlowFrm::MoveFwd( BOOL bMakePage, BOOL bPageBreak, BOOL bMoveAlways )
             bSamePage = pNewPage == pOldPage;
             //Damit die Fussnoten nicht auf dumme Gedanken kommen
             //setzen wir hier die Deadline.
-#ifdef VERTICAL_LAYOUT
             SWRECTFN( pOldBoss )
             SwSaveFtnHeight aHeight( pOldBoss,
                 (pOldBoss->Frm().*fnRect->fnGetBottom)() );
-#else
-            SwSaveFtnHeight aHeight( pOldBoss,
-                pOldBoss->Frm().Top() + pOldBoss->Frm().Height() );
-#endif
             SwCntntFrm* pStart = rThis.IsCntntFrm() ?
                 (SwCntntFrm*)&rThis : ((SwLayoutFrm&)rThis).ContainsCntnt();
             ASSERT( pStart, "MoveFwd: Missing Content" );
@@ -1636,13 +1619,17 @@ BOOL SwFlowFrm::MoveFwd( BOOL bMakePage, BOOL bPageBreak, BOOL bMoveAlways )
                 }
             }
         }
-        //Bei Sections kann es passieren, das wir gleich  in den Follow geflutscht
-        //sind. Dadurch wird nicht vom GetLeaf fuer die richtige Seite gesorgt.
-        //Das muessen wir fuer diesen Fall pruefen.
-        if ( !bSamePage && pNewUpper->IsInSct() &&
-             ( rThis.GetAttrSet()->GetPageDesc().GetPageDesc() ||
-               pOldPage->GetPageDesc()->GetFollow() != pNewPage->GetPageDesc() ) )
-            SwFrm::CheckPageDescs( pNewPage, FALSE );
+        // OD 30.10.2002 #97265# - no <CheckPageDesc(..)> in online layout
+        if ( !pNewPage->GetFmt()->GetDoc()->IsBrowseMode() )
+        {
+            //Bei Sections kann es passieren, das wir gleich  in den Follow geflutscht
+            //sind. Dadurch wird nicht vom GetLeaf fuer die richtige Seite gesorgt.
+            //Das muessen wir fuer diesen Fall pruefen.
+            if ( !bSamePage && pNewUpper->IsInSct() &&
+                 ( rThis.GetAttrSet()->GetPageDesc().GetPageDesc() ||
+                   pOldPage->GetPageDesc()->GetFollow() != pNewPage->GetPageDesc() ) )
+                SwFrm::CheckPageDescs( pNewPage, FALSE );
+        }
     }
     return bSamePage;
 }
@@ -1857,9 +1844,7 @@ BOOL SwFlowFrm::MoveBwd( BOOL &rbReformat )
                 {
                     pSct = new SwSectionFrm( *pSct, TRUE );
                     pSct->Paste( pNewUpper );
-#ifdef VERTICAL_LAYOUT
                     pSct->Init();
-#endif
                     pNewUpper = pSct;
                     pSct->SimpleFormat();
                 }
@@ -1896,12 +1881,16 @@ BOOL SwFlowFrm::MoveBwd( BOOL &rbReformat )
                 pSh->GetDoc()->SetNewFldLst();  //Wird von CalcLayout() hinterher eledigt!
             pNewPage->InvalidateSpelling();
             pNewPage->InvalidateAutoCompleteWords();
-            if ( bCheckPageDescs && pNewPage->GetNext() )
-                SwFrm::CheckPageDescs( (SwPageFrm*)pNewPage->GetNext(), FALSE);
-            else if ( rThis.GetAttrSet()->GetPageDesc().GetPageDesc() )
+            // OD 30.10.2002 #97265# - no <CheckPageDesc(..)> in online layout
+            if ( !pNewPage->GetFmt()->GetDoc()->IsBrowseMode() )
             {
-                //Erste Seite wird etwa durch Ausblenden eines Bereiches leer
-                SwFrm::CheckPageDescs( (SwPageFrm*)pNewPage, FALSE);
+                if ( bCheckPageDescs && pNewPage->GetNext() )
+                    SwFrm::CheckPageDescs( (SwPageFrm*)pNewPage->GetNext(), FALSE);
+                else if ( rThis.GetAttrSet()->GetPageDesc().GetPageDesc() )
+                {
+                    //Erste Seite wird etwa durch Ausblenden eines Bereiches leer
+                    SwFrm::CheckPageDescs( (SwPageFrm*)pNewPage, FALSE);
+                }
             }
         }
     }
