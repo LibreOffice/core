@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: kz $ $Date: 2004-03-25 14:49:42 $
+#   last change: $Author: kz $ $Date: 2005-01-13 18:58:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,7 +73,7 @@ TARGET7=testconv
 TARGET8=testproxyfac
 TARGET9=testsmgr2
 TARGETTYPE=CUI
-LIBTARGET=NO
+#LIBTARGET=NO
 ENABLE_EXCEPTIONS=TRUE
 NO_BSYMBOLIC=TRUE
 
@@ -82,6 +82,24 @@ NO_BSYMBOLIC=TRUE
 .INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
 .INCLUDE :  sv.mk
+
+# --- smgr component -----------------------------------------------
+SHL1OBJS= \
+    $(OBJ)$/testsmgr_cpnt.obj
+
+SHL1STDLIBS= \
+    $(CPPULIB) \
+    $(CPPUHELPERLIB) \
+    $(SALHELPERLIB) \
+    $(SALLIB)
+
+SHL1TARGET=testsmgr_component
+SHL1DEPN=
+SHL1IMPLIB=i$(SHL1TARGET)
+#SHL1LIBS=$(SLB)$/$(SHL1TARGET).lib
+SHL1DEF=$(MISC)$/$(SHL1TARGET).def
+DEF1NAME=$(SHL1TARGET)
+SHL1VERSIONMAP=testsmgr_cpnt.map
 
 # --- Application 1 ------------------------------------------------
 APP1TARGET= $(TARGET1)
@@ -100,7 +118,7 @@ APP1STDLIBS+=
 
 # --- Application 2 ------------------------------------------------
 APP2TARGET= $(TARGET2)
-APP2OBJS=   $(OBJ)$/testregistry.obj $(OBJ)$/mergekeys.obj
+APP2OBJS=   $(OBJ)$/testregistry.obj $(OBJ)$/mergekeys_.obj
 
 APP2STDLIBS= \
         $(CPPULIB)	\
@@ -124,11 +142,11 @@ APP3STDLIBS= \
         $(SALLIB) 	
 
 .IF "$(GUI)"=="UNX"
-APP3STDLIBS+= -lat
+APP3STDLIBS+= -l$(SHL1TARGET)
 .ENDIF
 .IF "$(GUI)"=="WNT"
 APP3STDLIBS+=	$(LIBCIMT) \
-        iat.lib
+        i$(SHL1TARGET).lib
 .ENDIF
 
 # --- Application 4 - testcorefl main ------------------------------------
@@ -245,8 +263,8 @@ TESTCONV:=com.sun.star.script.XTypeConverter
 TESTPROXYFAC:=com.sun.star.reflection.XProxyFactory
 TESTSECURITY:=com.sun.star.security.AllPermission;com.sun.star.security.XPolicy;com.sun.star.security.XAccessController;com.sun.star.io.FilePermission;com.sun.star.connection.SocketPermission;com.sun.star.uno.XCurrentContext
 
-$(BIN)$/test1.rdb:
-    +cd $(BIN) && regcomp -register -r test1.rdb -c at
+$(BIN)$/test1.rdb: $(SHL1TARGETN)
+    +cd $(BIN) && regcomp -register -r test1.rdb -c $(SHL1TARGET)
 
 $(BIN)$/test2.rdb:
     +cd $(BIN) && regcomp -register -r test2.rdb -c remotebridge.uno$(DLLPOST)
