@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview3.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-10 16:53:19 $
+ *  last change: $Author: ka $ $Date: 2001-01-12 14:49:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,11 +230,11 @@ BOOL SdView::InsertData(SvDataObjectRef pDataObject, const Point& rPos,
     SdDataObject* pOwnData = NULL;
     if( ( SvDataObject*) pDataObject == SD_MOD()->pDragData )
     {
-        pOwnData = SD_MOD()->pDragData;
+        pOwnData = (SdDataObject*) SD_MOD()->pDragData;
     }
     else if( ( SvDataObject*) pDataObject == SD_MOD()->pClipboardData )
     {
-        pOwnData = SD_MOD()->pClipboardData;
+        pOwnData = (SdDataObject*) SD_MOD()->pClipboardData;
     }
 
     // ggf. holen wir uns erst einmal die ImageMap

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview2.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:44 $
+ *  last change: $Author: ka $ $Date: 2001-01-12 14:49:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,10 +266,10 @@ void __EXPORT SdView::DoPaste(Window* pWindow)
         BOOL bPagesInserted = FALSE;
         SvDataObjectRef aDataObj = SD_MOD()->pClipboardData;
 
-        if ( aDataObj.Is() && SD_MOD()->pClipboardData->aDocShellRef )
+        if ( aDataObj.Is() && ( (SdDataObject*) SD_MOD()->pClipboardData )->aDocShellRef )
         {
             // Eigenes Format: Ganze Seiten einfuegen?
-            SvEmbeddedObject* pObj = SD_MOD()->pClipboardData->aDocShellRef;
+            SvEmbeddedObject* pObj = ( (SdDataObject*) SD_MOD()->pClipboardData )->aDocShellRef;
             SdDrawDocShell* pDataDocSh = (SdDrawDocShell*) pObj;
             SdDrawDocument* pDataDoc = pDataDocSh->GetDoc();
 
@@ -292,7 +292,7 @@ void __EXPORT SdView::DoPaste(Window* pWindow)
                 }
 
                 BOOL bMergeMasterPages = TRUE;
-                if( SD_MOD()->pClipboardData->GetSourceDoc() == pDoc )
+                if( ( (SdDataObject*) SD_MOD()->pClipboardData )->GetSourceDoc() == pDoc )
                     bMergeMasterPages = FALSE;
 
                 pDoc->InsertBookmarkAsPage(NULL, NULL, FALSE, FALSE, nInsertPos,

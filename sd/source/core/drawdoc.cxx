@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: dl $ $Date: 2000-12-14 11:58:36 $
+ *  last change: $Author: ka $ $Date: 2001-01-12 14:46:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -599,8 +599,8 @@ SdrModel* __EXPORT SdDrawDocument::AllocModel() const
 
         SvEmbeddedObject* pObj = NULL;
         SdDrawDocShell* pNewDocSh = NULL;
-        SdDataObject* pClipboardData = SD_MOD()->pClipboardData;
-        SdDataObject* pDragData = SD_MOD()->pDragData;
+        SdDataObject* pClipboardData = (SdDataObject*) SD_MOD()->pClipboardData;
+        SdDataObject* pDragData = (SdDataObject*) SD_MOD()->pDragData;
 
         if (pDragData)
         {

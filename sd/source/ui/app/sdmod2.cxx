@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod2.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-13 09:58:07 $
+ *  last change: $Author: ka $ $Date: 2001-01-12 14:50:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -374,7 +374,7 @@ BOOL SdModule::QueryUnload()
         * Sind viele Daten im Clipboard?
         **********************************************************************/
         BOOL bQuery = FALSE;
-        SdDrawDocument* pDrDoc = pClipboardData->pSdDrawDocument;
+        SdDrawDocument* pDrDoc = ( (SdDataObject*) pClipboardData )->pSdDrawDocument;
         USHORT nPageCount = pDrDoc->GetPageCount();
         SdrPage* pPage = pDrDoc->GetPage(0);
         SdrObject* pObj = NULL;
