@@ -2,9 +2,9 @@
  *
  *  $RCSfile: updatedispatch.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2002-07-14 16:49:31 $
+ *  last change: $Author: jb $ $Date: 2002-10-16 07:57:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,7 @@ UpdateDispatcher::UpdateDispatcher(UpdateHandler const & _xUpdateHandler, OUStri
 : m_xUpdateHandler(_xUpdateHandler)
 , m_aLocale(_aLocale)
 , m_aElementName()
+, m_bInValueSet(false)
 , m_bInLocalizedValues(false)
 {
 }
@@ -135,6 +136,7 @@ void UpdateDispatcher::startUpdate(configuration::AbsolutePath const & _aContext
 //    OUString sContext = _aContextPath.isRoot() ? OUString() : _aContextPath.toString();
     OUString sContext = _aContextPath.toString();
     m_xUpdateHandler->startUpdate(sContext);
+    m_bInValueSet = false;
     m_bInLocalizedValues = false;
     m_aElementName = OUString();
 }
@@ -176,6 +178,7 @@ void UpdateDispatcher::handle(ValueChange const& aValueNode)
     case ValueChange::wasDefault:
         if (aValueNode.isReplacedValue())
         {
+            OSL_ENSURE(m_bInValueSet, "UpdateDispatcher: Cannot add/replace a value in a nonextensible node");
             OSL_ENSURE(!aValueNode.isLocalizedValue(), "UpdateDispatcher: Cannot add a localized value in a layer");
 
             sal_Int16 nAttr = getUpdateAttributes(aValueNode.getAttributes(),true);
@@ -239,6 +242,9 @@ void UpdateDispatcher::handle(AddNode const& aAddNode)
 
     OSL_ENSURE(aAddedTree.is(), "AddNode has no new data -> cannot add anything");
 
+    OSL_ENSURE( !aAddedTree.is() || (m_bInValueSet == aAddedTree.getSegmentRootNode()->isValue()),
+                "Found added subtree in value set (extensible group)\n" );
+
     this->visitTree( aAddedTree.getTreeAccess() );
 }
 // -----------------------------------------------------------------------------
@@ -249,9 +255,10 @@ void UpdateDispatcher::handle(RemoveNode const& aRemoveNode)
 
     data::TreeSegment aRemovedTree = aRemoveNode.getRemovedTree();
 
-    OSL_ENSURE(aRemovedTree.is(), "UpdateDispatcher: RemoveNode has no old data -> cannot distinguish Property from Node");
+    OSL_ENSURE( !aRemovedTree.is() || (m_bInValueSet == aRemovedTree.getSegmentRootNode()->isValue()),
+                "Found removed subtree in value set (extensible group)\n" );
 
-    if (aRemovedTree.is() && aRemovedTree.getSegmentRootNode()->isValue())
+    if (m_bInValueSet)
         m_xUpdateHandler->removeProperty( aRemoveNode.getNodeName() );
 
     else
@@ -262,6 +269,7 @@ void UpdateDispatcher::handle(RemoveNode const& aRemoveNode)
 void UpdateDispatcher::handle(SubtreeChange const& aSubtree)
 {
     OSL_ENSURE( !m_bInLocalizedValues, "UpdateDispatcher: A localized value cannot be a complete subtree");
+    OSL_ENSURE( !m_bInValueSet, "UpdateDispatcher: A dynamic property cannot be a complete subtree");
 
     sal_Int16 nAttr     = getUpdateAttributes(aSubtree.getAttributes(),false);
     sal_Int16 nAttrMask = getUpdateAttributeMask(aSubtree.getAttributes());
@@ -284,11 +292,12 @@ void UpdateDispatcher::handle(SubtreeChange const& aSubtree)
                                        nAttr, nAttrMask,
                                       aSubtree.isToDefault() );
 
+        m_bInValueSet = isValueSet(aSubtree);
         this->applyToChildren(aSubtree);
+        m_bInValueSet = false;
 
         m_xUpdateHandler->endNode();
     }
-
 }
 // -----------------------------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: updatedispatch.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2002-07-14 16:49:33 $
+ *  last change: $Author: jb $ $Date: 2002-10-16 07:57:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,7 @@ namespace configmgr
             UpdateHandler   m_xUpdateHandler;
             OUString        m_aLocale;
             OUString        m_aElementName;
+            bool    m_bInValueSet;
             bool    m_bInLocalizedValues;
         };
 // -----------------------------------------------------------------------------
