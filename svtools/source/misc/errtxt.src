@@ -2,9 +2,9 @@
  *
  *  $RCSfile: errtxt.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2000-12-06 14:05:19 $
+ *  last change: $Author: kz $ $Date: 2000-12-08 17:38:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -775,7 +775,7 @@ Resource RID_ERRHDL
         Text[ dutch ] = "Algemene fout";
         Text[ chinese_simplified ] = "Ò»°γ΄νΞσ";
         Text[ greek ] = "Γενικό σφάλμα";
-        Text[ korean ] = "ΐΟΉέΐϋ Ώΐ·ω";
+        Text[ korean ] = "ΐΟΉέ Ώΐ·ω";
         Text[ turkish ] = "Genel hata";
         Text[ language_user1 ] = " ";
     };
@@ -926,7 +926,7 @@ Resource RID_ERRHDL
         Text[ dutch ] = "Algemene fout";
         Text[ chinese_simplified ] = "Ò»°γ΄νΞσ";
         Text[ greek ] = "Γενικό σφάλμα";
-        Text[ korean ] = "ΐΟΉέΐϋ Ώΐ·ω";
+        Text[ korean ] = "ΐΟΉέ Ώΐ·ω";
         Text[ turkish ] = "Genel hata";
         Text[ language_user1 ] = " ";
     };
@@ -2036,7 +2036,7 @@ Resource RID_ERRHDL
         Text[ dutch ] = "Geen filter gevonden";
         Text[ chinese_simplified ] = "Γ»ΣΠΥÒµ½ΉύΒΛΖχ";
         Text[ greek ] = "Δεν βρέθηκε κάποιο φίλτρο";
-        Text[ korean ] = "ΗΚΕΝ°΅ Ήί°ίµΗΑφ ΎΚ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "ΗΚΕΝΈ¦ Γ£Αφ ΈψΗί½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Bir filtre bulunamadύ";
         Text[ language_user1 ] = " ";
     };
@@ -2442,7 +2442,7 @@ Resource RID_ERRHDL
         Text[ dutch ] = "Bestandsnaam te lang voor het doel-bestandssysteem.";
         Text[ chinese_simplified ] = "ΥβΈφΞΔΌώΓϋµΔ³¤¶Θ²»ΚΚΣΪΔΏ±κΞΔΌώΟµΝ³΅£";
         Text[ greek ] = "Το όνομα είναι υπερβολικά μεγάλο για το σύστημα προέλευσης αρχείων.";
-        Text[ korean ] = "ΖΔΐΟΈνΐΜ ΄λ»σ ΖΔΐΟ ½Γ½ΊΕΫΏ΅ ³ΚΉ« ±ι΄Ο΄Ω.";
+        Text[ korean ] = "ΖΔΐΟ ΐΜΈ§ΐΜ ΄λ»σ ΖΔΐΟ ½Γ½ΊΕΫΏ΅ ΄λΗΨ ³ΚΉ« ±ι΄Ο΄Ω.";
         Text[ turkish ] = "Dosya adύ, hedef dosya sistemi iηin fazla uzun.";
     };
     String ERRCODE_SFX_CONSULTUSER
