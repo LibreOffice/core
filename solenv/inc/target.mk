@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.37 $
+#   $Revision: 1.38 $
 #
-#   last change: $Author: hjs $ $Date: 2001-02-19 14:36:13 $
+#   last change: $Author: hjs $ $Date: 2001-02-20 19:07:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -2126,9 +2126,6 @@ $(UNOUCRTARGET) : $(UNOUCRDEP)
 .ENDIF			# "$(SINGLE_SHOT)" == ""
 .ENDIF			# "$(UNOTYPES)" != ""
 
-last_target:
-    @+echo -------------
-
 .ELSE
 
 ALLTAR: $(OBJFILES) $(SLOFILES)
@@ -2433,6 +2430,13 @@ $(MISC)$/$(TARGET)_xxl_%.done : %.xxl
 .ENDIF
 .ENDIF
 
+.IF "$(LAZY_DEPS)"!=""
+LAZY_DEPS_WARNING=warn_lazy_deps
+.ENDIF			# "$(LAZY_DEPS)"!=""
+
+last_target: $(LAZY_DEPS_WARNING)
+    @+echo -------------
+
 $(MISC)$/$(TARGET)genjava.mk: 	$(IDLFILES)
 
 .IF "$(IDLFILES)"!=""
@@ -2615,6 +2619,17 @@ $(EXCEPTIONSNOOPTFILES):
 
 .ENDIF
 .ENDIF
+
+.IF "$(LAZY_DEPS)"!=""
+warn_lazy_deps:
+    @+echo -
+    @+echo -----------------------------------------------
+    @+echo -
+    @+echo - You have used LAZY_DEPS. Your dependencies
+    @+echo - will not be updated anymore!
+    @+echo -
+    @+echo -----------------------------------------------
+.ENDIF			# "$(LAZY_DEPS)"!=""
 
 # ----------------------------------
 # - ADDOPT - files ohne optimierung -
