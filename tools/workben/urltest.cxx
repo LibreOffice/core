@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urltest.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sb $ $Date: 2001-11-23 15:00:21 $
+ *  last change: $Author: sb $ $Date: 2001-12-03 15:09:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,15 @@
 #include "urlobj.hxx"
 #endif
 
+#ifndef _COM_SUN_STAR_UTIL_XSTRINGWIDTH_HPP_
+#include "com/sun/star/util/XStringWidth.hpp"
+#endif
+#ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
+#include "com/sun/star/uno/Reference.hxx"
+#endif
+#ifndef _CPPUHELPER_IMPLBASE1_HXX_
+#include "cppuhelper/implbase1.hxx"
+#endif
 #ifndef _RTL_STRING_H_
 #include "rtl/string.h"
 #endif
@@ -82,18 +91,11 @@
 #include "rtl/ustring.hxx"
 #endif
 
-#ifndef INCLUDED_CSTDDEF
 #include <cstddef>
-#define INCLUDED_CSTDDEF
-#endif
-#ifndef INCLUDED_CSTDLIB
 #include <cstdlib>
-#define INCLUDED_CSTDLIB
-#endif
-#ifndef INCLUDED_STDIO_H
 #include <stdio.h>
-#define INCLUDED_STDIO_H
-#endif
+
+using namespace com::sun;
 
 //============================================================================
 //
@@ -232,14 +234,27 @@ bool testSetFSys(SetFSysTest const * pTest, std::size_t nSize)
 
 namespace {
 
+class StringWidth: public cppu::WeakImplHelper1< star::util::XStringWidth >
+{
+public:
+    virtual sal_Int32 SAL_CALL queryStringWidth(rtl::OUString const & rString)
+        throw (star::uno::RuntimeException)
+    {
+        return rString.getLength();
+    }
+};
+
 void abbreviate(INetURLObject aObj)
 {
+    star::uno::Reference< star::util::XStringWidth > xWidth(new StringWidth);
     sal_Int32 nMax = aObj.GetMainURL(INetURLObject::NO_DECODE).Len() + 10;
     for (sal_Int32 i = -10; i <= nMax; ++i)
     {
         rtl::OString
             aAbbreviated(rtl::OUStringToOString(
-                             aObj.getAbbreviated(i, INetURLObject::NO_DECODE),
+                             aObj.getAbbreviated(xWidth,
+                                                 i,
+                                                 INetURLObject::NO_DECODE),
                              RTL_TEXTENCODING_UTF8));
         printf(
             "%4ld: <%s", static_cast< long int >(i), aAbbreviated.getStr());
@@ -888,7 +903,7 @@ main()
         }
     }
 
-    if (false)
+    if (true)
     {
         abbreviate(INetURLObject(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                                                    "file:///"))));
@@ -912,6 +927,28 @@ main()
                                                    "file:///abcdef/de"))));
         abbreviate(INetURLObject(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                                                    "file:///abcdef/def"))));
+        abbreviate(INetURLObject(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                                   "file://some.host/"))));
+        abbreviate(INetURLObject(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                                   "file://some.host/a"))));
+        abbreviate(INetURLObject(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                                   "file://some.host/a/def/"))));
+        abbreviate(INetURLObject(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                                   "file://some.host/ab/def/"))));
+        abbreviate(INetURLObject(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                                   "file://some.host/abc/def/"))));
+        abbreviate(INetURLObject(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                                   "file://some.host/a/def"))));
+        abbreviate(INetURLObject(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                                   "file://some.host/ab/def"))));
+        abbreviate(INetURLObject(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                                   "file://some.host/abc/def"))));
+        abbreviate(INetURLObject(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                                   "file://some.host/abcdef/d"))));
+        abbreviate(INetURLObject(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                                   "file://some.host/abcdef/de"))));
+        abbreviate(INetURLObject(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                                   "file://some.host/abcdef/def"))));
     }
 
     if (true)
