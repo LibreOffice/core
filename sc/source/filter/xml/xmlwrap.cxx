@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlwrap.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ka $ $Date: 2000-12-03 16:14:38 $
+ *  last change: $Author: nn $ $Date: 2000-12-06 08:37:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,7 @@ sal_Bool ScXMLImportWrapper::Import()
     SvStorage *pStorage = rMedium.GetStorage();
     if( pStorage )
     {
-        OUString sDocName( RTL_CONSTASCII_USTRINGPARAM( "Content" ) );
+        OUString sDocName( RTL_CONSTASCII_USTRINGPARAM( "Content.xml" ) );
         xDocStream = pStorage->OpenStream( sDocName,
                                   STREAM_READ | STREAM_NOCREATE );
         xDocStream->SetBufferSize( 16*1024 );
@@ -267,7 +267,7 @@ sal_Bool ScXMLImportWrapper::Export()
     SvStorage *pStorage = rMedium.GetOutputStorage( sal_True );
     if( pStorage )
     {
-        OUString sDocName( RTL_CONSTASCII_USTRINGPARAM( "Content" ) );
+        OUString sDocName( RTL_CONSTASCII_USTRINGPARAM( "Content.xml" ) );
         xDocStream = pStorage->OpenStream( sDocName,
                                   STREAM_WRITE | STREAM_SHARE_DENYWRITE );
         xDocStream->SetBufferSize( 16*1024 );
