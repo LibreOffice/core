@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimppr.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:27:03 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 14:16:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -341,9 +341,6 @@ void SvXMLImportPropertyMapper::importXML(
                             nIndex = maPropMapper->FindEntryIndex( "ParaUserDefinedAttributes", XML_NAMESPACE_TEXT, GetXMLToken(XML_XMLNS) );
                         if( -1 == nIndex )
                             nIndex = maPropMapper->FindEntryIndex( "TextUserDefinedAttributes", XML_NAMESPACE_TEXT, GetXMLToken(XML_XMLNS) );
-
-                        OSL_ENSURE( nIndex != -1,
-                                    "not able to store alien attribute");
 
                         // #106963#; use userdefined attribute only if it is in the specified property range
                         if( nIndex != -1 && nIndex >= nStartIdx && nIndex < nEndIdx)
