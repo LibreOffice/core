@@ -2,9 +2,9 @@
  *
  *  $RCSfile: notxtfrm.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ama $ $Date: 2002-05-08 10:44:43 $
+ *  last change: $Author: fme $ $Date: 2002-09-18 09:43:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -558,6 +558,37 @@ void SwNoTxtFrm::Paint( const SwRect &rRect ) const
     SfxProgress::LeaveLock();
 }
 
+/*************************************************************************
+|*
+|*    void lcl_CalcRect( Point & aPt, Size & aDim,
+|*                   USHORT nMirror )
+|*
+|*    Beschreibung      Errechne die Position und die Groesse der Grafik im
+|*                      Frame, entsprechen der aktuellen Grafik-Attribute
+|*
+|*    Parameter         Point&  die Position im Frame  ( auch Return-Wert )
+|*                      Size&   die Groesse der Grafik ( auch Return-Wert )
+|*                      MirrorGrf   akt. Spiegelungs-Attribut
+|*    Ersterstellung    JP 04.03.91
+|*    Letzte Aenderung  JP 31.08.94
+|*
+*************************************************************************/
+
+
+void lcl_CalcRect( Point& rPt, Size& rDim, USHORT nMirror )
+{
+    if( nMirror == RES_MIRROR_GRF_VERT || nMirror == RES_MIRROR_GRF_BOTH )
+    {
+        rPt.X() += rDim.Width() -1;
+        rDim.Width() = -rDim.Width();
+    }
+
+    if( nMirror == RES_MIRROR_GRF_HOR || nMirror == RES_MIRROR_GRF_BOTH )
+    {
+        rPt.Y() += rDim.Height() -1;
+        rDim.Height() = -rDim.Height();
+    }
+}
 
 /*************************************************************************
 |*
@@ -574,7 +605,8 @@ void SwNoTxtFrm::Paint( const SwRect &rRect ) const
 void SwNoTxtFrm::GetGrfArea( SwRect &rRect, SwRect* pOrigRect,
                              BOOL ) const
 {
-    // JP 23.01.2001: currently only used for scaling the contour of graphics!
+    // JP 23.01.2001: currently only used for scaling, cropping and mirroring
+    // the contour of graphics!
     //                  all other is handled by the GraphicObject
 
     //In rRect wird das sichbare Rechteck der Grafik gesteckt.
@@ -582,6 +614,21 @@ void SwNoTxtFrm::GetGrfArea( SwRect &rRect, SwRect* pOrigRect,
 
     const SwAttrSet& rAttrSet = GetNode()->GetSwAttrSet();
     const SwCropGrf& rCrop = rAttrSet.GetCropGrf();
+    USHORT nMirror = rAttrSet.GetMirrorGrf().GetValue();
+
+    if( rAttrSet.GetMirrorGrf().IsGrfToggle() )
+    {
+        if( !(FindPageFrm()->GetVirtPageNum() % 2) )
+        {
+            switch ( nMirror )
+            {
+                case RES_DONT_MIRROR_GRF: nMirror = RES_MIRROR_GRF_VERT; break;
+                case RES_MIRROR_GRF_VERT: nMirror = RES_DONT_MIRROR_GRF; break;
+                case RES_MIRROR_GRF_HOR: nMirror = RES_MIRROR_GRF_BOTH; break;
+                default: nMirror = RES_MIRROR_GRF_HOR; break;
+            }
+        }
+    }
 
     //Grafik wird vom Node eingelesen falls notwendig. Kann aber schiefgehen.
     long nLeftCrop, nRightCrop, nTopCrop, nBottomCrop;
@@ -601,6 +648,14 @@ void SwNoTxtFrm::GetGrfArea( SwRect &rRect, SwRect* pOrigRect,
         nRightCrop = long(nScale * -rCrop.GetRight() );
     }
 
+    // crop values have to be mirrored too
+    if( nMirror == RES_MIRROR_GRF_VERT || nMirror == RES_MIRROR_GRF_BOTH )
+    {
+        long nTmpCrop = nLeftCrop;
+        nLeftCrop = nRightCrop;
+        nRightCrop= nTmpCrop;
+    }
+
     if( !aOrigSz.Height() )
     {
         aOrigSz.Height() = Prt().Height();
@@ -613,6 +668,14 @@ void SwNoTxtFrm::GetGrfArea( SwRect &rRect, SwRect* pOrigRect,
         const double nScale = double(Prt().Height()) / double(nTopCrop);
         nTopCrop   = long(nScale * -rCrop.GetTop() );
         nBottomCrop= long(nScale * -rCrop.GetBottom() );
+    }
+
+    // crop values have to be mirrored too
+    if( nMirror == RES_MIRROR_GRF_HOR || nMirror == RES_MIRROR_GRF_BOTH )
+    {
+        long nTmpCrop = nTopCrop;
+        nTopCrop   = nBottomCrop;
+        nBottomCrop= nTmpCrop;
     }
 
     Size  aVisSz( Prt().SSize() );
@@ -647,6 +710,9 @@ void SwNoTxtFrm::GetGrfArea( SwRect &rRect, SwRect* pOrigRect,
         aTmpSz.Width() -= nLeftCrop + nRightCrop;
         aGrfPt.Y()      += nTopCrop;
         aTmpSz.Height()-= nTopCrop + nBottomCrop;
+
+        if( RES_DONT_MIRROR_GRF != nMirror )
+            lcl_CalcRect( aGrfPt, aTmpSz, nMirror );
 
         pOrigRect->Pos  ( aGrfPt );
         pOrigRect->SSize( aTmpSz );
