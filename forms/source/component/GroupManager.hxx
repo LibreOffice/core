@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GroupManager.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-05 18:00:35 $
+ *  last change: $Author: fs $ $Date: 2001-04-27 12:08:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,6 +214,9 @@ class OGroup
 
 public:
     OGroup( const ::rtl::OUString& rGroupName );
+#ifdef DBG_UTIL
+    OGroup( const OGroup& _rSource );   // just to ensure the DBG_CTOR call
+#endif
     virtual ~OGroup();
 
     sal_Bool operator==( const OGroup& rGroup ) const;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GroupManager.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-10 08:47:52 $
+ *  last change: $Author: fs $ $Date: 2001-04-27 12:08:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,6 +201,18 @@ OGroup::OGroup( const ::rtl::OUString& rGroupName )
 {
     DBG_CTOR(OGroup,NULL);
 }
+
+#ifdef DBG_UTIL
+//------------------------------------------------------------------
+OGroup::OGroup( const OGroup& _rSource )
+    :m_aGroupName(_rSource.m_aGroupName)
+    ,m_nInsertPos(_rSource.m_nInsertPos)
+    ,m_aCompArray(_rSource.m_aCompArray)
+    ,m_aCompAccArray(_rSource.m_aCompAccArray)
+{
+    DBG_CTOR(OGroup,NULL);
+}
+#endif
 
 //------------------------------------------------------------------
 OGroup::~OGroup()
