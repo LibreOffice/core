@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-19 21:06:45 $
+ *  last change: $Author: kz $ $Date: 2002-02-20 11:54:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2824,7 +2824,7 @@ Menu RID_NEW_FORM
             Text[ polish ] = "~Arkusz kalkulacyjny";
             Text[ portuguese_brazilian ] = "~Spreadsheet";
             Text[ japanese ] = "表計算ドキュメント(~S)";
-            Text[ korean ] = "스프레드시트 문서(~S)";
+            Text[ korean ] = "스프레드시트(~S)";
             Text[ chinese_simplified ] = "工作表文档(~S)";
             Text[ chinese_traditional ] = "工作表文件(~S)";
             Text[ turkish ] = "~Spreadsheet";
@@ -3387,6 +3387,9 @@ String STR_HINT_CONNECTION_NOT_CAPABLE
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.91  2002/02/19 21:06:45  kz
+ *  Merge SRC641: 19.02.02 - 22:06:19
+ *
  *  Revision 1.90  2002/02/08 21:08:26  kz
  *  Merge SRC641: 08.02.02 - 22:07:54
  *
