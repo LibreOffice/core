@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crnrdlg.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: dr $ $Date: 2002-10-29 11:46:46 $
+ *  last change: $Author: kz $ $Date: 2002-11-04 18:02:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,7 +163,7 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
         Text [ swedish ] = "innehåller ~kolumnhuvuden" ;
         Text [ dutch ] = "~bevat kolomkoppen" ;
         Text [ spanish ] = "Contiene títulos de ~columnas" ;
-        Text [ english_us ] = "Contains ~column headers" ;
+        Text [ english_us ] = "Contains ~column labels" ;
         Text[ chinese_simplified ] = "åŒ…å«åˆ—æ ‡é¢˜(~C)";
         Text[ russian ] = "Ñîäåğæèò çàãîëîâêè ñòîëáöîâ";
         Text[ polish ] = "zawiera nag³ówki kolumn";
@@ -184,7 +184,7 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
         TabStop = TRUE ;
         Text = "enthält ~Zeilenbeschriftungen" ;
         Text [ ENGLISH ] = "contains row headers" ;
-        Text [ english_us ] = "Contains ~row headers" ;
+        Text [ english_us ] = "Contains ~row labels" ;
         Text [ dutch ] = "~bevat rijkoppen" ;
         Text [ swedish ] = "innehåller r~adhuvuden" ;
         Text [ danish ] = "indeholder rækkeoverskrifter" ;
