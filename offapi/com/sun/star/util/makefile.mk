@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: cp $ $Date: 2000-11-20 10:15:53 $
+#   last change: $Author: cl $ $Date: 2001-02-21 12:53:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,6 +73,7 @@ PACKAGE=com$/sun$/star$/util
 # ------------------------------------------------------------------------
 
 IDLFILES=\
+    MeasureUnit.idl\
     AliasProgrammaticPair.idl \
     CellProtection.idl\
     ChangesEvent.idl\
