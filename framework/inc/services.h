@@ -2,9 +2,9 @@
  *
  *  $RCSfile: services.h,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 17:33:08 $
+ *  last change: $Author: rt $ $Date: 2004-05-19 08:04:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,6 +165,7 @@ namespace framework{
 #define IMPLEMENTATIONNAME_DETECTORFACTORY                      DECLARE_ASCII("com.sun.star.comp.framework.DetectorFactory"         )
 #define IMPLEMENTATIONNAME_LAYOUTMANAGER                        DECLARE_ASCII("com.sun.star.comp.framework.LayoutManager"           )
 #define IMPLEMENTATIONNAME_POPUPMENUCONTROLLERFACTORY           DECLARE_ASCII("com.sun.star.comp.framework.PopupMenuControllerFactory" )
+#define IMPLEMENTATIONNAME_MACROSMENUCONTROLLER                   DECLARE_ASCII("com.sun.star.comp.framework.MacrosMenuController"      )
 #define IMPLEMENTATIONNAME_FONTMENUCONTROLLER                   DECLARE_ASCII("com.sun.star.comp.framework.FontMenuController"      )
 #define IMPLEMENTATIONNAME_FONTSIZEMENUCONTROLLER               DECLARE_ASCII("com.sun.star.comp.framework.FontSizeMenuController"  )
 #define IMPLEMENTATIONNAME_FORMATMENUCONTROLLER                 DECLARE_ASCII("com.sun.star.comp.framework.FormatMenuController"    )
