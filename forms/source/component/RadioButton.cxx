@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RadioButton.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:51:03 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:30:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -437,7 +437,7 @@ Any ORadioButtonModel::translateDbColumnToControlValue()
 }
 
 //------------------------------------------------------------------------------
-Any ORadioButtonModel::translateExternalValueToControlValue( )
+Any ORadioButtonModel::translateExternalValueToControlValue( ) const
 {
     Any aControlValue = OReferenceValueComponent::translateExternalValueToControlValue();
     sal_Int16 nState = STATE_NOCHECK;
