@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brkdlg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 12:39:07 $
+ *  last change: $Author: kz $ $Date: 2004-07-23 12:04:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,6 @@ BreakPointDialog::BreakPointDialog( Window* pParent, BreakPointList& rBrkPntList
         aCancelButton(  this, IDEResId( RID_PB_CANCEL ) ),
         aNewButton(     this, IDEResId( RID_PB_NEW ) ),
         aDelButton(     this, IDEResId( RID_PB_DEL ) ),
-//      aShowButton(    this, IDEResId( RID_PB_SHOW ) ),
         aCheckBox(      this, IDEResId( RID_CHKB_ACTIVE ) ),
         aBrkText(       this, IDEResId( RID_FT_BRKPOINTS ) ),
         aPassText(      this, IDEResId( RID_FT_PASS ) ),
