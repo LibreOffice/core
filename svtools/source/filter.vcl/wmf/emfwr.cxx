@@ -2,9 +2,9 @@
  *
  *  $RCSfile: emfwr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2001-01-31 13:47:15 $
+ *  last change: $Author: sj $ $Date: 2002-04-12 13:29:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1198,13 +1198,14 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
             case( META_TEXTLINE_ACTION ):
             case( META_COMMENT_ACTION ):
             case( META_GRADIENTEX_ACTION ):
+            case( META_LAYOUTMODE_ACTION ):
             {
                 // !!! >>> we don't want to support these actions
             }
             break;
 
             default:
-                DBG_ERROR( ( ByteString( "SVGActionWriter::ImplWriteActions: unsupported MetaAction #" ) += ByteString( nType ) ).GetBuffer() );
+                DBG_ERROR( ( ByteString( "EMFWriter::ImplWriteActions: unsupported MetaAction #" ) += ByteString( nType ) ).GetBuffer() );
             break;
         }
     }
