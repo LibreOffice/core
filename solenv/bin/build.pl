@@ -1,13 +1,13 @@
-:
-eval 'exec perl -S $0 ${1+"$@"}'
-    if 0;
+    :
+    eval 'exec perl -S $0 ${1+"$@"}'
+        if 0;
 #*************************************************************************
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.92 $
+#   $Revision: 1.93 $
 #
-#   last change: $Author: vg $ $Date: 2003-10-14 16:19:25 $
+#   last change: $Author: vg $ $Date: 2003-10-24 10:06:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,28 +67,28 @@ eval 'exec perl -S $0 ${1+"$@"}'
 # build - build entire project
 #
 
-use Config;
-use POSIX;
-use Cwd;
-use File::Path;
+    use Config;
+    use POSIX;
+    use Cwd;
+    use File::Path;
 #use Thread 'yield';    # Should be uncommented if you have Thread.pm (untested)
 
-if (defined $ENV{CWS_WORK_STAMP}) {
-    require lib; import lib ("$ENV{SOLARENV}/bin/modules", "$ENV{COMMON_ENV_TOOLS}/modules");
-    require Cws; import Cws;
-    require CvsModule; import CvsModule;
-    require GenInfoParser; import GenInfoParser;
-};
+    if (defined $ENV{CWS_WORK_STAMP}) {
+        require lib; import lib ("$ENV{SOLARENV}/bin/modules", "$ENV{COMMON_ENV_TOOLS}/modules");
+        require Cws; import Cws;
+        require CvsModule; import CvsModule;
+        require GenInfoParser; import GenInfoParser;
+    };
 
 #### script id #####
 
-( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
+    ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.92 $ ';
-$id_str =~ /Revision:\s+(\S+)\s+\$/
-  ? ($script_rev = $1) : ($script_rev = "-");
+    $id_str = ' $Revision: 1.93 $ ';
+    $id_str =~ /Revision:\s+(\S+)\s+\$/
+      ? ($script_rev = $1) : ($script_rev = "-");
 
-print "$script_name -- version: $script_rev\n";
+    print "$script_name -- version: $script_rev\n";
 
 #########################
 #                       #
@@ -96,140 +96,142 @@ print "$script_name -- version: $script_rev\n";
 #                       #
 #########################
 
-$perl = "";
-$remove_commando = "";
-if ( $^O eq 'MSWin32' ) {
-    $perl = "$ENV{COMSPEC} -c perl5";
-    $remove_commando = "rmdir /S /Q";
-    $nul = '> NULL';
-} else {
-    use Cwd 'chdir';
-    $perl = 'perl';
-    $remove_commando = 'rm -rf';
-    $nul = '> /dev/null';
-};
+    $perl = "";
+    $remove_commando = "";
+    if ( $^O eq 'MSWin32' ) {
+        $perl = "$ENV{COMSPEC} -c perl5";
+        $remove_commando = "rmdir /S /Q";
+        $nul = '> NULL';
+    } else {
+        use Cwd 'chdir';
+        $perl = 'perl';
+        $remove_commando = 'rm -rf';
+        $nul = '> /dev/null';
+    };
 
-$QuantityToBuild = 0;
+    $QuantityToBuild = 0;
 # delete $pid when not needed
-%projects_deps_hash = ();   # hash of undependent projects,
-                            # that could be built now
-%broken_build = ();         # hash of hashes of the modules,
-                            # where build was broken (error occurred)
-%folders_hashes = ();
-%running_children = ();
-$dependencies_hash = 0;
-$cmd_file = '';
-$BuildAllParents = 0;
-$show = 0;
-$deliver = 0;
-%LocalDepsHash = ();
-%BuildQueue = ();
-%PathHash = ();
-%PlatformHash = ();
-%AliveDependencies = ();
-%ParentDepsHash = (); # hash of dependencies of the current project
-@UnresolvedParents = ();
-@dmake_args = ();
-%DeadParents = ();
-$CurrentPrj = '';
-$no_projects = 0;
-$only_dependent = 0;
-$build_from = '';
-$build_from_opt = '';
-$build_since = '';
-$dlv_switch = '';
-$child = 0;
-%processes_hash = ();
-%module_annonced = ();
-$locked = 0; # lock for signal handler
-$prepare = ''; # prepare for following incompartible build
-$ignore = '';
-@ignored_errors = ();
-%incompartibles = ();
-%force_deliver = ();
-$only_platform = ''; # the only platform to prepare
-$only_common = ''; # the only common output tree to delete when preparing
-%build_modes = ();
+    %projects_deps_hash = ();   # hash of undependent projects,
+                                # that could be built now
+    %broken_build = ();         # hash of hashes of the modules,
+                                # where build was broken (error occurred)
+    %folders_hashes = ();
+    %running_children = ();
+    $dependencies_hash = 0;
+    $cmd_file = '';
+    $BuildAllParents = 0;
+    $show = 0;
+    $deliver = 0;
+    %LocalDepsHash = ();
+    %BuildQueue = ();
+    %PathHash = ();
+    %PlatformHash = ();
+    %AliveDependencies = ();
+    %global_deps_hash = (); # hash of dependencies of the all modules
+    %broken_modules_hashes = ();   # hash of modules hashes, which cannot be built further
+    @broken_modules_names = ();   # array of modules, which cannot be built further
+    @UnresolvedParents = ();
+    @dmake_args = ();
+    %DeadParents = ();
+    $CurrentPrj = '';
+    $no_projects = 0;
+    $only_dependent = 0;
+    $build_from = '';
+    $build_from_opt = '';
+    $build_since = '';
+    $dlv_switch = '';
+    $child = 0;
+    %processes_hash = ();
+    %module_annonced = ();
+    $prepare = ''; # prepare for following incompartible build
+    $ignore = '';
+    @ignored_errors = ();
+    %incompartibles = ();
+    %force_deliver = ();
+    $only_platform = ''; # the only platform to prepare
+    $only_common = ''; # the only common output tree to delete when preparing
+    %build_modes = ();
+    $maximal_processes = 0; # the max number of the processes run
 
 ### main ###
 
-&get_options;
-&get_build_modes;
-%deliver_env = ();
-if ($prepare) {
-    %platforms = &get_platforms;
-    @modules_built = ();
+    &get_options;
+    &get_build_modes;
+    %deliver_env = ();
+    if ($prepare) {
+        %platforms = &get_platforms;
+        @modules_built = ();
 
-    $deliver_env{'BUILD_SOSL'}++;
-    $deliver_env{'COMMON_OUTDIR'}++;
-    $deliver_env{'DLLSUFFIX'}++;
-    $deliver_env{'GUI'}++;
-    $deliver_env{'INPATH'}++;
-    $deliver_env{'OFFENV_PATH'}++;
-    $deliver_env{'OUTPATH'}++;
-    $deliver_env{'L10N_framework'}++;
-};
+        $deliver_env{'BUILD_SOSL'}++;
+        $deliver_env{'COMMON_OUTDIR'}++;
+        $deliver_env{'DLLSUFFIX'}++;
+        $deliver_env{'GUI'}++;
+        $deliver_env{'INPATH'}++;
+        $deliver_env{'OFFENV_PATH'}++;
+        $deliver_env{'OUTPATH'}++;
+        $deliver_env{'L10N_framework'}++;
+    };
 
-$StandDir = &get_stand_dir();
-&provide_consistency if (defined $ENV{CWS_WORK_STAMP});
+    $StandDir = &get_stand_dir();
+    &provide_consistency if (defined $ENV{CWS_WORK_STAMP});
 
-$deliver_commando = $ENV{DELIVER};
-$deliver_commando .= ' '. $dlv_switch if ($dlv_switch);
-$ENV{mk_tmp}++;
-%prj_platform = ();
-$check_error_string = '';
-$dmake = '';
-$echo = '';
-$new_line = "\n";
+    $deliver_commando = $ENV{DELIVER};
+    $deliver_commando .= ' '. $dlv_switch if ($dlv_switch);
+    $ENV{mk_tmp}++;
+    %prj_platform = ();
+    $check_error_string = '';
+    $dmake = '';
+    $echo = '';
+    $new_line = "\n";
 #### main ####
 
-&get_commands();
-unlink ($cmd_file);
-if ($cmd_file) {
-    if (open (CMD_FILE, ">>$cmd_file")) {
-        select CMD_FILE;
-        $echo = 'echo ';
-        $new_line = $echo."\"\"\n";
-        print "\@$echo off\npushd\n" if ($ENV{GUI} ne 'UNX');
-    } else {
-        &print_error ("Cannot open file $cmd_file");
+    &get_commands();
+    unlink ($cmd_file);
+    if ($cmd_file) {
+        if (open (CMD_FILE, ">>$cmd_file")) {
+            select CMD_FILE;
+            $echo = 'echo ';
+            $new_line = $echo."\"\"\n";
+            print "\@$echo off\npushd\n" if ($ENV{GUI} ne 'UNX');
+        } else {
+            &print_error ("Cannot open file $cmd_file");
+        };
+    } elsif ($show) {
+        select STDERR;
     };
-} elsif ($show) {
-    select STDERR;
-};
 
-print $new_line;
+    print $new_line;
 
-&BuildAll();
-&cancel_build if (scalar keys %broken_build);
-@TotenEltern = keys %DeadParents;
-if ($#TotenEltern != -1) {
-    my ($DeadPrj);
-    print $new_line.$new_line;
-    print $echo."WARNING! Project(s):\n";
-    foreach $DeadPrj (@TotenEltern) {
-        print $echo."$DeadPrj\n";
+    &BuildAll();
+    &cancel_build if (scalar keys %broken_build);
+    @TotenEltern = keys %DeadParents;
+    if ($#TotenEltern != -1) {
+        my ($DeadPrj);
+        print $new_line.$new_line;
+        print $echo."WARNING! Project(s):\n";
+        foreach $DeadPrj (@TotenEltern) {
+            print $echo."$DeadPrj\n";
+        };
+        print $new_line;
+        print $echo."not found and couldn't be built. Correct build.lsts.\n";
+        print $new_line;
     };
-    print $new_line;
-    print $echo."not found and couldn't be built. Correct build.lsts.\n";
-    print $new_line;
-};
-if (($ENV{GUI} ne 'UNX') && $cmd_file) {
-    print "popd\n";
-};
-$ENV{mk_tmp} = '';
-if ($cmd_file) {
-    close CMD_FILE;
-    print STDOUT "Script $cmd_file generated\n";
-};
-exit(0) if (!$ignore);
-exit(0) if (!scalar @ignored_errors);
-print STDERR "\nERROR: next directories could not be built:\n";
-foreach (@ignored_errors) {
-    print STDERR "\t$_\n";
-};
-print STDERR "\nERROR: please check these directories and build the correspondent module(s) anew!!\n\n";
-exit(1);
+    if (($ENV{GUI} ne 'UNX') && $cmd_file) {
+        print "popd\n";
+    };
+    $ENV{mk_tmp} = '';
+    if ($cmd_file) {
+        close CMD_FILE;
+        print STDOUT "Script $cmd_file generated\n";
+    };
+    exit(0) if (!$ignore);
+    exit(0) if (!scalar @ignored_errors);
+    print STDERR "\nERROR: next directories could not be built:\n";
+    foreach (@ignored_errors) {
+        print STDERR "\t$_\n";
+    };
+    print STDERR "\nERROR: please check these directories and build the correspondent module(s) anew!!\n\n";
+    exit(1);
 
 
 #########################
@@ -241,73 +243,73 @@ exit(1);
 #
 # Get dependencies hash of the current and all parent projects
 #
-sub GetParentDeps {
-    my ($ParentsString, @DepsArray, $Prj, $parent, $prj_link);
-    my $prj_dir = shift;
-    my $deps_hash = shift;
-    $ParentsString = &GetParentsString($prj_dir);
-    @DepsArray = &GetDependenciesArray($ParentsString);
-    @UnresolvedParents = @DepsArray;
-    $$deps_hash{$prj_dir} = [@DepsArray];
-    while ($Prj = pop(@UnresolvedParents)) {
-        $prj_link = $Prj . '.lnk';
-        if (!-d $StandDir.$Prj) {
-            if (-e $StandDir.$prj_link) {
-                $Prj = $prj_link;
-            } elsif (-l $StandDir.$prj_link) {
-                &print_error("There is no target for link $StandDir$prj_link");
+    sub GetParentDeps {
+        my ($ParentsString, @DepsArray, $Prj, $parent, $prj_link);
+        my $prj_dir = shift;
+        my $deps_hash = shift;
+        $ParentsString = &GetParentsString($prj_dir);
+        @DepsArray = &GetDependenciesArray($ParentsString);
+        @UnresolvedParents = @DepsArray;
+        $$deps_hash{$prj_dir} = [@DepsArray];
+        while ($Prj = pop(@UnresolvedParents)) {
+            $prj_link = $Prj . '.lnk';
+            if (!-d $StandDir.$Prj) {
+                if (-e $StandDir.$prj_link) {
+                    $Prj = $prj_link;
+                } elsif (-l $StandDir.$prj_link) {
+                    &print_error("There is no target for link $StandDir$prj_link");
+                } elsif (defined $ENV{CWS_WORK_STAMP}) {
+                    &checkout_module($Prj, 'image');
+                };
             } elsif (defined $ENV{CWS_WORK_STAMP}) {
-                &checkout_module($Prj, 'image');
+                &check_module_consistency($Prj);
             };
-        } elsif (defined $ENV{CWS_WORK_STAMP}) {
-            &check_module_consistency($Prj);
-        };
-        my @DepsArray;
-        if (!($ParentsString = &GetParentsString($StandDir.$Prj))) {
-            $DeadParents{$Prj}++;
-            $$deps_hash{$Prj} = [];
-            next;
-        };
-        @DepsArray = &GetDependenciesArray($ParentsString, $Prj);
-        $$deps_hash{$Prj} = [@DepsArray];
-        foreach $Parent (@DepsArray) {
-            if ((!defined($$deps_hash{$Parent})) && (!defined($$deps_hash{$Parent . '.lnk'}))) {
-                push (@UnresolvedParents, $Parent);
+            my @DepsArray;
+            if (!($ParentsString = &GetParentsString($StandDir.$Prj))) {
+                $DeadParents{$Prj}++;
+                $$deps_hash{$Prj} = [];
+                next;
+            };
+            @DepsArray = &GetDependenciesArray($ParentsString, $Prj);
+            $$deps_hash{$Prj} = [@DepsArray];
+            foreach $Parent (@DepsArray) {
+                if ((!defined($$deps_hash{$Parent})) && (!defined($$deps_hash{$Parent . '.lnk'}))) {
+                    push (@UnresolvedParents, $Parent);
+                };
             };
         };
+        foreach $parent (keys %DeadParents) {
+            delete $global_deps_hash{$parent};
+            &RemoveFromDependencies($parent, $deps_hash);
+        };
     };
-    foreach $parent (keys %DeadParents) {
-        delete $ParentDepsHash{$parent};
-        &RemoveFromDependencies($parent, $deps_hash);
-    };
-};
 
 #
 # Build everything that should be built
 #
-sub BuildAll {
-    if ($BuildAllParents) {
-        my ($Prj, $PrjDir, $orig_prj);
-        &GetParentDeps( $CurrentPrj, \%ParentDepsHash);
-        &prepare_build_from(\%ParentDepsHash) if ($build_from);
-        &prepare_incompartible_build(\%ParentDepsHash) if ($incompartible);
-        if ($build_from_opt || $build_since) {
-            &prepare_build_from_opt(\%ParentDepsHash);
-        };
-        if ($QuantityToBuild) {
-            &build_multiprocessing;
-            return;
-        };
-        while ($Prj = &PickPrjToBuild(\%ParentDepsHash)) {
-            print $new_line;
-            my $module_type = &module_classify($Prj);
+    sub BuildAll {
+        if ($BuildAllParents) {
+            my ($Prj, $PrjDir, $orig_prj);
+            &GetParentDeps( $CurrentPrj, \%global_deps_hash);
+            &prepare_build_from(\%global_deps_hash) if ($build_from);
+            &prepare_incompartible_build(\%global_deps_hash) if ($incompartible);
+            if ($build_from_opt || $build_since) {
+                &prepare_build_from_opt(\%global_deps_hash);
+            };
+            if ($QuantityToBuild) {
+                &build_multiprocessing;
+                return;
+            };
+            while ($Prj = &PickPrjToBuild(\%global_deps_hash)) {
+                print $new_line;
+                my $module_type = &module_classify($Prj);
 
-            &print_annonce($Prj) if ($module_type eq 'lnk');
+                &print_annonce($Prj) if ($module_type eq 'lnk');
             &print_annonce($Prj . '.incomp') if ($module_type eq 'img');
             if ($module_type eq 'mod') {
                 if (scalar keys %broken_build) {
                     print $echo.    "Skipping project $Prj because of error(s)\n";
-                    &RemoveFromDependencies($Prj, \%ParentDepsHash);
+                    &RemoveFromDependencies($Prj, \%global_deps_hash);
                     next;
                 };
                 &print_annonce($Prj);
@@ -323,7 +325,7 @@ sub BuildAll {
                  };
                  print $check_error_string;
             };
-            &RemoveFromDependencies($Prj, \%ParentDepsHash);
+            &RemoveFromDependencies($Prj, \%global_deps_hash);
             $no_projects = 0;
         };
     } else {
@@ -372,7 +374,7 @@ sub dmake_dir {
     if (!$cmd_file && !$show) {
         chdir $BuildDir;
         cwd();
-        $error_code = system ("$dmake") if (!scalar keys %broken_build);
+        $error_code = system ("$dmake");
         if ($error_code && $ignore) {
             push(@ignored_errors, &CorrectPath($StandDir . $PathHash{$folder_nick}));
             $error_code = 0;
@@ -458,7 +460,7 @@ sub get_deps_hash {
     open (BUILD_LST, 'prj/build.lst');
     &get_prj_platform;
     while (<BUILD_LST>) {
-        if ($_ =~ /#/) {
+        if ($_ =~ /#/o) {
             if ($`) {
                 $_ = $`;
             } else {
@@ -466,19 +468,19 @@ sub get_deps_hash {
             };
         };
         s/\r\n//;
-        if ($_ =~ /nmake/) {
+        if ($_ =~ /nmake/o) {
             my ($Platform, $Dependencies, $Dir, $DirAlias, @Array);
             $Dependencies = $';
             $dummy = $`;
-            $dummy =~ /(\S+)\s+(\S+)/;
+            $dummy =~ /(\S+)\s+(\S+)/o;
             $Dir = $2;
-            $Dependencies =~ /(\w+)/;
+            $Dependencies =~ /(\w+)/o;
             $Platform = $1;
             $Dependencies = $';
-            while ($Dependencies =~ /,(\w+)/) {
+            while ($Dependencies =~ /,(\w+)/o) {
                 $Dependencies = $';
             };
-            $Dependencies =~ /\s+(\S+)\s+/;
+            $Dependencies =~ /\s+(\S+)\s+/o;
             $DirAlias = $1;
             if (!&CheckPlatform($Platform)) {
                 $DeadDependencies{$DirAlias}++;
@@ -486,6 +488,7 @@ sub get_deps_hash {
             };
             $PlatformHash{$DirAlias}++;
             $Dependencies = $';
+            &print_error("$PrjToBuild/prj/build.lst has wrong written dependencies string:\n$_\n") if (!$Dependencies);
             @Array = &GetDependenciesArray($Dependencies);
             $$dependencies_hash{$DirAlias} = [@Array];
             $BuildQueue{$DirAlias}++;
@@ -612,8 +615,9 @@ sub get_stand_dir {
 sub PickPrjToBuild {
     my ($Prj, $DepsHash);
     $DepsHash = shift;
+    &handle_dead_children if ($QuantityToBuild);
     $Prj = &FindIndepPrj($DepsHash);
-    delete $$DepsHash{$Prj};# if (defined $$DepsHash{$Prj});
+    delete $$DepsHash{$Prj};
     return $Prj;
 };
 
@@ -711,12 +715,12 @@ sub GetDependenciesArray {
     $DepString = shift;
     $string = $DepString;
     $prj = shift;
-    while (!($DepString =~ /^NULL/)) {
+    while ($DepString !~ /^NULL/o) {
         &print_error("Project $prj has wrong written dependencies string:\n $string") if (!$DepString);
-        $DepString =~ /(\S+)\s*/;
+        $DepString =~ /(\S+)\s*/o;
         $ParentPrj = $1;
         $DepString = $';
-        if ($ParentPrj =~ /\.(\w+)$/) {
+        if ($ParentPrj =~ /\.(\w+)$/o) {
             $ParentPrj = $`;
             if (($prj_platform{$ParentPrj} ne $1) &&
                 ($prj_platform{$ParentPrj} ne 'all')) {
@@ -895,11 +899,23 @@ sub get_switch_options {
 # cancel build when one of children has error exit code
 #
 sub cancel_build {
-    print STDERR "\n";
-    foreach (keys %broken_build) {
-        print STDERR "ERROR: error $_ occurred while making ", $broken_build{$_}, "\n";
+    if ($BuildAllParents) {
+        print STDERR "\n";
+        print STDERR scalar @broken_modules_names;
+        print STDERR " module(s): ";
+        foreach (@broken_modules_names) {
+            print STDERR "\n\t$_";
+            &RemoveFromDependencies($_, \%global_deps_hash);
+        };
+        print STDERR "\nneed(s) to be rebuilt\n\nReason(s):\n\n";
+        foreach (keys %broken_build) {
+            print STDERR "ERROR: error " . $broken_build{$_} . " occurred while making $_\n";
+        };
+        print STDERR "\nAttention: if you build and deliver the above module(s) you may prolongue your build from module " . &PickPrjToBuild(\%global_deps_hash) . "\n";
+    } else {
+        kill 9 => -$$;
     };
-    kill 9 => -$$ if (!$BuildAllParents);
+    print STDERR "\n";
     exit(1);
 };
 
@@ -909,22 +925,23 @@ sub cancel_build {
 sub store_error {
     my ($pid, $error_code) = @_;
     my $child_nick = $processes_hash{$pid};
-    $broken_build {$error_code} = &CorrectPath($StandDir . $PathHash{$child_nick});
+    $broken_modules_hashes{$folders_hashes{$child_nick}}++;
+    $broken_build{&CorrectPath($StandDir . $PathHash{$child_nick})} = $error_code;
     &cancel_build if (!$BuildAllParents);
 };
 
 #
 # child handler (clears (or stores info about) the terminated child)
 #
-sub handle_dead_child {
-    lock $locked;
-#    yield;      # Should be uncommented if you have Thread.pm (untested)
+sub handle_dead_children {
     my $pid = 0;
-    foreach (keys %processes_hash) {
-        if (($pid = waitpid($_, &WNOHANG)) > 0) {
-            &store_error($pid, $?) if ($?);
-            &clear_from_child($pid);
-        };
+    if (($pid = waitpid( -1, &WNOHANG)) > 0) {
+        &store_error($pid, $?) if ($?);
+        &clear_from_child($pid);
+    };
+    while(&children_number() >= $QuantityToBuild) {
+        sleep 1;
+        &handle_dead_children;
     };
 };
 
@@ -939,39 +956,31 @@ sub clear_from_child {
 };
 
 #
-# Register signal handler & unblock SIGALRM
-#
-sub register_signal_handler {
-    $sigaction = POSIX::SigAction->new('main::handle_dead_child');
-    sigaction(SIGCHLD, $sigaction);
-};
-
-#
 # Build the entire project according to queue of dependencies
 #
 sub BuildDependent {
     $dependencies_hash = shift;
     my $pid = 0;
     my $child_nick = '';
+    $running_children{$dependencies_hash} = 0 if (!defined $running_children{$dependencies_hash});
     while ($child_nick = &PickPrjToBuild($dependencies_hash)) {
-        if (($QuantityToBuild) ) { # multyprocessing not for $BuildAllParents (-all etc)!!
+        if (($QuantityToBuild)) { # multyprocessing not for $BuildAllParents (-all etc)!!
             do {
+                &handle_dead_children;
+                return if (defined $broken_modules_hashes{$dependencies_hash});
                 # start current child & all
                 # that could be started now
                 &start_child($child_nick) if ($child_nick);
-                sleep if (&children_number() >= $QuantityToBuild);
                 $child_nick = &PickPrjToBuild($dependencies_hash);
                 while ($only_dependent) {
                     return if ($BuildAllParents);
-                    sleep;
+                    sleep 1;
                     $child_nick = &PickPrjToBuild($dependencies_hash);
                 };
             } while (!$no_projects);
             return if ($BuildAllParents);
-            while (&children_number()) {
-                sleep(5);
-            };
-            print STDERR "Multiprocessing build is finished\n";
+            &handle_dead_children while (&children_number());
+            &mp_success_exit;
         } else {
             &dmake_dir($child_nick);
         };
@@ -980,21 +989,29 @@ sub BuildDependent {
 };
 
 sub children_number {
-    return scalar (keys %processes_hash);
+    return scalar keys %processes_hash;
 };
 
 sub start_child {
     my $child_nick = shift;
     my $pid;
+    my $children_running;
+    my $oldfh = select STDOUT;
+    $| = 1;
     if ($pid = fork) { # parent
+        select $oldfh;
         $processes_hash{$pid} = $child_nick;
-        print 'Running processes: ', &children_number(), "\n";
+        $children_running = &children_number;
+        print 'Running processes: ', $children_running, "\n";
+        $maximal_processes = $children_running if ($children_running > $maximal_processes);
         $folders_hashes{$child_nick} = $dependencies_hash;
         $running_children{$dependencies_hash}++;
-        sleep(1) if ($BuildAllParents);
+#       sleep(1) if ($BuildAllParents);
     } elsif (defined $pid) { # child
+        select $oldfh;
         $child = 1;
         &dmake_dir($child_nick);
+        exit(1);
     };
 };
 
@@ -1005,33 +1022,45 @@ sub build_multiprocessing {
     my $Prj;
     my @build_queue = ();       # array, containing queue of projects
                                 # to build
-    &register_signal_handler;
     do {
-        while ($Prj = &PickPrjToBuild(\%ParentDepsHash)) {
+        while ($Prj = &PickPrjToBuild(\%global_deps_hash)) {
             my $module_type = &module_classify($Prj);
 
             if ($module_type eq 'lnk') {
                 &print_annonce($Prj);
-                &RemoveFromDependencies($Prj, \%ParentDepsHash);
+                &RemoveFromDependencies($Prj, \%global_deps_hash);
                 next;
             };
 
             if ($module_type eq 'img') {
                 &print_annonce($Prj . '.incomp');
-                &RemoveFromDependencies($Prj, \%ParentDepsHash);
+                &RemoveFromDependencies($Prj, \%global_deps_hash);
                 next;
             }
+            &mark_force_deliver($Prj, &CorrectPath($StandDir.$Prj)) if (defined $ENV{CWS_WORK_STAMP});
             push @build_queue, $Prj;
             $projects_deps_hash{$Prj} = {};
             &get_deps_hash(&CorrectPath($StandDir.$Prj), $projects_deps_hash{$Prj});
         };
         sleep(1) if (!$Prj);
         &build_actual_queue(\@build_queue);
-    } while (scalar (keys %ParentDepsHash));
+        if (scalar keys %broken_modules_hashes) {
+            do {
+                sleep(1);
+                &handle_dead_children;
+                &build_actual_queue(\@build_queue);
+            } while (&children_number());
+            &cancel_build;
+        };
+    } while (scalar (keys %global_deps_hash));
     # Let all children finish their work
-    sleep(1) while (&children_number());
     &cancel_build if (scalar keys %broken_build);
-    print STDERR "Multiprocessing build is finished\n";
+    &mp_success_exit;
+};
+
+sub mp_success_exit {
+    print STDERR "\nMultiprocessing build is finished\n";
+    print STDERR "Maximal number of processes run: $maximal_processes\n";
     exit(0);
 };
 
@@ -1044,19 +1073,27 @@ sub build_actual_queue {
     do {
         while ($i <= (scalar(@$build_queue) - 1)) {
             $Prj = $$build_queue[$i];
+            if (defined $broken_modules_hashes{$projects_deps_hash{$Prj}}) {
+                push (@broken_modules_names, $Prj);
+                splice (@$build_queue, $i, 1);
+                next;
+            };
             &annonce_module($Prj) if (!(defined $module_annonced{$Prj}));
             $only_dependent = 0;
             $no_projects = 0;
             &BuildDependent($projects_deps_hash{$Prj});
-            if ($no_projects && ($running_children{$projects_deps_hash{$Prj}} == 0)) {
+            if ($no_projects &&
+                !$running_children{$projects_deps_hash{$Prj}} &&
+                !defined $broken_modules_hashes{$projects_deps_hash{$Prj}})
+            {
                 chdir(&CorrectPath($StandDir.$Prj));
                 system (&get_deliver_commando($Prj)) if (!$show && ($Prj ne $CurrentPrj));
-                delete $projects_deps_hash{$Prj};
-                &RemoveFromDependencies($Prj, \%ParentDepsHash);
+                &RemoveFromDependencies($Prj, \%global_deps_hash);
                 splice (@$build_queue, $i, 1);
                 next;
             };
             $i++;
+            &handle_dead_children;
         };
         $i = 0;
     } while (!&are_all_dependent($build_queue));
@@ -1501,10 +1538,10 @@ sub get_incomp_projects {
                 $option = $`;
                 &print_error("-from switch collision") if ($build_from_opt);
                 $build_from_opt = $';
-            } else {last;};
+            };
+            $incompartibles{$option}++;
         };
     };
-    $incompartibles{$option}++;
 };
 
 sub get_platforms {
@@ -1669,13 +1706,13 @@ sub check_dir {
 
 sub mark_force_deliver {
     my ($module_name, $module_path) = @_;
-    my $cws_tag_string = 'Tcws_' . lc($ENV{WORK_STAMP}.'_'.$ENV{CWS_WORK_STAMP});
+#   my $cws_tag_string = 'Tcws_' . lc($ENV{WORK_STAMP}.'_'.$ENV{CWS_WORK_STAMP});
     my $cvs_tag_file = $module_path . '/CVS/Tag';
     return if (!open CVSTAG, "<$cvs_tag_file");
     my @tag = <CVSTAG>;
     close CVSTAG;
     $tag[0] =~ /^(\S+)/o;
-    $force_deliver{$module_name}++ if ($1 eq $cws_tag_string);
+    $force_deliver{$module_name}++ if ($1 =~ /^Tcws_/o);
 };
 
 sub get_deliver_commando {
