@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Recovery.xcs,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:16:02 $
+ *  last change: $Author: kz $ $Date: 2004-11-28 15:53:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,46 +62,46 @@
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
 <oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Recovery" oor:package="org.openoffice.Office" xml:lang="en-US">
     <info>
-        <desc xml:lang="en-US">TODO</desc>
+        <desc>TODO</desc>
     </info>
 	<templates>
 		<group oor:name="RecoveryEntry">
             <info>
-                <desc xml:lang="en-US">TODO</desc>
+                <desc>TODO</desc>
             </info>
 			<prop oor:name="TempURL" oor:type="xs:string">
                 <info>
-                    <desc xml:lang="en-US">TODO</desc>
+                    <desc>TODO</desc>
                 </info>
     		</prop>
 			<prop oor:name="OriginalURL" oor:type="xs:string">
                 <info>
-                    <desc xml:lang="en-US">TODO</desc>
+                    <desc>TODO</desc>
                 </info>
 			</prop>
 			<prop oor:name="TemplateURL" oor:type="xs:string">
                 <info>
-                    <desc xml:lang="en-US">TODO</desc>
+                    <desc>TODO</desc>
                 </info>
 			</prop>
 			<prop oor:name="Module" oor:type="xs:string">
                 <info>
-                    <desc xml:lang="en-US">TODO</desc>
+                    <desc>TODO</desc>
                 </info>
 			</prop>
 			<prop oor:name="DocumentState" oor:type="xs:int">
                 <info>
-                    <desc xml:lang="en-US">TODO</desc>
+                    <desc>TODO</desc>
                 </info>
 			</prop>
 			<prop oor:name="Filter" oor:type="xs:string">
                 <info>
-                    <desc xml:lang="en-US">TODO</desc>
+                    <desc>TODO</desc>
                 </info>
 			</prop>
 			<prop oor:name="Title" oor:type="xs:string">
                 <info>
-                    <desc xml:lang="en-US">TODO</desc>
+                    <desc>TODO</desc>
                 </info>
 			</prop>
 		</group>
@@ -109,39 +109,39 @@
 	<component>
 		<set oor:name="RecoveryList" oor:node-type="RecoveryEntry">
             <info>
-                <desc xml:lang="en-US">TODO</desc>
+                <desc>TODO</desc>
             </info>
         </set>
         <group oor:name="RecoveryInfo">
             <info>
-                <desc xml:lang="en-US">TODO</desc>
+                <desc>TODO</desc>
             </info>
             <prop oor:name="Crashed" oor:type="xs:boolean">
                 <info>
-                    <desc xml:lang="en-US">TODO</desc>
+                    <desc>TODO</desc>
                 </info>
                 <value>false</value>
             </prop>
             <prop oor:name="ExistsRecoveryData" oor:type="xs:boolean">
                 <info>
-                    <desc xml:lang="en-US">TODO</desc>
+                    <desc>TODO</desc>
                 </info>
                 <value>false</value>
             </prop>
         </group>
         <group oor:name="AutoSave">
             <info>
-                <desc xml:lang="en-US">TODO</desc>
+                <desc>TODO</desc>
             </info>
             <prop oor:name="Enabled" oor:type="xs:boolean">
                 <info>
-                    <desc xml:lang="en-US">TODO</desc>
+                    <desc>TODO</desc>
                 </info>
                 <value>true</value>
             </prop>
             <prop oor:name="TimeIntervall" oor:type="xs:int">
                 <info>
-                    <desc xml:lang="en-US">TODO</desc>
+                    <desc>TODO</desc>
                 </info>
                 <value>15</value>
             </prop>
