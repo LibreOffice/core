@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: mav $ $Date: 2001-12-19 12:06:42 $
+#   last change: $Author: vg $ $Date: 2005-02-21 12:38:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,7 +85,15 @@ IDLFILES=\
     XPluginInstanceSyncPeer.idl \
     XPluginWindowPeer.idl \
     XCloseSessionListener.idl \
-    XRemoteServiceManagerProvider.idl
+    XRemoteServiceManagerProvider.idl	\
+    MozillaBootstrap.idl \
+    MozillaProductType.idl	\
+    XMozillaBootstrap.idl \
+    XProfileDiscover.idl	\
+    XProfileManager.idl	\
+    XProxyRunner.idl	\
+    XCodeProxy.idl
+
 
 
 # ------------------------------------------------------------------
