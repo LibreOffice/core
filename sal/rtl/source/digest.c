@@ -2,9 +2,9 @@
  *
  *  $RCSfile: digest.c,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mhu $ $Date: 2000-12-17 23:51:44 $
+ *  last change: $Author: jl $ $Date: 2001-03-14 09:03:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,14 +59,18 @@
  *
  ************************************************************************/
 
-#define _RTL_DIGEST_C_ "$Revision: 1.2 $"
+#define _RTL_DIGEST_C_ "$Revision: 1.3 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
 #endif
 
-#ifndef _OSL_TYPES_H_
-#include <osl/types.h>
+//#ifndef _OSL_TYPES_H_
+//#include <osl/types.h>
+//#endif
+
+#ifndef _OSL_ENDIAN_H_
+#include <osl/endian.h>
 #endif
 
 #ifndef _RTL_ALLOC_H_
