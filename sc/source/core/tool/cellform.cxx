@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellform.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 11:46:53 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 11:30:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,13 +58,6 @@
  *
  *
  ************************************************************************/
-
-#ifdef PCH
-#include "core_pch.hxx"
-#endif
-
-#pragma hdrstop
-
 // INCLUDE ---------------------------------------------------------------
 
 #include <sfx2/objsh.hxx>
@@ -159,30 +152,6 @@ void ScCellFormat::GetString( ScBaseCell* pCell, ULONG nFormat, String& rString,
                     else
                     {
                         USHORT nErrCode = pFCell->GetErrCode();
-                        if ( nErrCode == errInterpOverflow )
-                        {   // maxrecursion ausbuegeln, Err527 Workaround
-                            ScDocument* pDoc = pFCell->GetDocument();
-                            // z.B. nach Import von Fremdformaten FormulaTree
-                            // aufbauen
-                            if ( !pDoc->IsInFormulaTree( pFCell ) )
-                                pFCell->SetDirty();
-                            if ( pDoc->GetAutoCalc()
-                              && !pDoc->GetHardRecalcState()
-                              && pLastFormulaTreeTop != pDoc->GetFormulaTree() )
-                            {
-                                pLastFormulaTreeTop = pDoc->GetFormulaTree();
-                                // ohne ProgressBar falls fehlendes Repaint:
-                                // pDoc->CalcFormulaTree( FALSE, TRUE );
-                                //! austesten
-                                pDoc->CalcFormulaTree( FALSE, FALSE );
-                                nErrCode = pFCell->GetErrCode();
-                                if ( nErrCode != errInterpOverflow )
-                                {   // von hinten durch die Brust ins Auge ...
-                                    pDoc->GetDocumentShell()->Broadcast( SfxSimpleHint( FID_DATACHANGED ) );
-                                    pDoc->ResetChanged( ScRange(0,0,0,MAXCOL,MAXROW,MAXTAB) );
-                                }
-                            }
-                        }
 
                         // erst nach dem Interpretieren (GetErrCode) das Zahlformat holen:
                         if ( (nFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0 )
