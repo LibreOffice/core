@@ -2,9 +2,9 @@
  *
  *  $RCSfile: findfrm.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ama $ $Date: 2001-09-19 08:45:10 $
+ *  last change: $Author: ama $ $Date: 2001-10-05 12:35:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1112,7 +1112,11 @@ void SwFrm::SetDirFlags( BOOL bVert )
         {
             SwFrm* pAsk = IsFlyFrm() ?
                           ((SwFlyFrm*)this)->GetAnchor() : GetUpper();
-            bVertical = pAsk && pAsk->IsVertical() ? 1 : 0;
+            if( pAsk )
+            {
+                bVertical = pAsk->IsVertical() ? 1 : 0;
+                bReverse  = pAsk->IsReverse()  ? 1 : 0;
+            }
         }
         else
             CheckDirection( bVert );

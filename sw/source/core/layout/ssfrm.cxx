@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ssfrm.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ama $ $Date: 2001-09-19 08:42:02 $
+ *  last change: $Author: ama $ $Date: 2001-10-05 12:33:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,10 @@ long SwFrm::GetPrtLeft() const
     { return Frm().Left() + Prt().Left(); }
 long SwFrm::GetPrtBottom() const
     { return Frm().Top() + Prt().Height() + Prt().Top(); }
+long SwFrm::GetPrtRight() const
+    { return Frm().Left() + Prt().Width() + Prt().Left(); }
+long SwFrm::GetPrtTop() const
+    { return Frm().Top() + Prt().Top(); }
 
 BOOL SwFrm::SetMinLeft( long nDeadline )
 {
@@ -131,6 +135,30 @@ BOOL SwFrm::SetMaxBottom( long nDeadline )
     return FALSE;
 }
 
+BOOL SwFrm::SetMinTop( long nDeadline )
+{
+    SwTwips nDiff = nDeadline - Frm().Top();
+    if( nDiff > 0 )
+    {
+        Frm().Top( nDeadline );
+        Prt().Height( Prt().Height() - nDiff );
+        return TRUE;
+    }
+    return FALSE;
+}
+
+BOOL SwFrm::SetMaxRight( long nDeadline )
+{
+    SwTwips nDiff = Frm().Left() + Frm().Width() - nDeadline;
+    if( nDiff > 0 )
+    {
+        Frm().Width( Frm().Width() - nDiff );
+        Prt().Width( Prt().Width() - nDiff );
+        return TRUE;
+    }
+    return FALSE;
+}
+
 /*-----------------11.9.2001 11:11------------------
  * SwFrm::CheckDirChange(..)
  * checks the layout direction and
@@ -140,11 +168,13 @@ BOOL SwFrm::SetMaxBottom( long nDeadline )
 void SwFrm::CheckDirChange()
 {
     BOOL bOldVert = GetVerticalFlag();
+    BOOL bOldRev = IsReverse();
     BOOL bOldR2L = GetRightToLeftFlag();
     SetInvalidVert( TRUE );
     SetInvalidR2L( TRUE );
     BOOL bChg = bOldR2L != IsRightToLeft();
-    if( ( ( IsVertical() != bOldVert ) || bChg ) && IsLayoutFrm() )
+    if( ( ( IsVertical() != bOldVert ) || bChg || IsReverse() != bOldRev )
+        && IsLayoutFrm() )
     {
         InvalidateAll();
         SwFrm* pFrm = ((SwLayoutFrm*)this)->Lower();

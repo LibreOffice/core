@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ama $ $Date: 2001-09-19 08:38:28 $
+ *  last change: $Author: ama $ $Date: 2001-10-05 12:30:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,10 +225,20 @@ struct SwRectFnCollection
 };
 
 typedef SwRectFnCollection* SwRectFn;
-extern SwRectFn fnRectHori, fnRectVert;
+extern SwRectFn fnRectHori, fnRectVert, fnRectB2T, fnRectVL2R;
+
+#define SWRECTFN( pFrm )    sal_Bool bVert = pFrm->IsVertical(); \
+                            sal_Bool bRev = pFrm->IsReverse(); \
+                            SwRectFn fnRect = bVert ? \
+                                ( bRev ? fnRectVL2R : fnRectVert ): \
+                                ( bRev ? fnRectB2T : fnRectHori );
+#define POS_DIFF( aFrm1, aFrm2 ) \
+            ( (aFrm1.*fnRect->fnGetTop)() != (aFrm2.*fnRect->fnGetTop)() || \
+            (aFrm1.*fnRect->fnGetLeft)() != (aFrm2.*fnRect->fnGetLeft)() )
 
 #else
 
+#define SWRECTFN
 #define V_WIDTH SSize().*pWidth
 #define V_HEIGHT SSize().*pHeight
 #define V_X Pos().*pX
@@ -390,7 +400,8 @@ protected:
     USHORT bFlag03:         1;
     USHORT bFlag04:         1;
     USHORT bFlag05:         1;
-    USHORT bFlag06:         1;
+    USHORT bReverse:        1; // Next line above/at the right side instead
+                               // under/at the left side of the previous line.
     USHORT bInvalidR2L:     1;
     USHORT bDerivedR2L:     1;
     USHORT bRightToLeft:    1;
@@ -543,6 +554,8 @@ public:
     inline BOOL IsInFly() const;
     inline BOOL IsInSct() const;
 #ifdef VERTICAL_LAYOUT
+    inline BOOL IsReverse() const { return bReverse; }
+    inline void SetReverse( BOOL bNew ){ bReverse = bNew ? 1 : 0; }
     inline BOOL IsVertical() const;
     inline BOOL GetVerticalFlag() const;
     inline void SetVertical( BOOL bNew ){ bVertical = bNew ? 1 : 0; }
@@ -755,8 +768,12 @@ public:
     long GetRightMargin() const;
     long GetPrtLeft() const;
     long GetPrtBottom() const;
+    long GetPrtRight() const;
+    long GetPrtTop() const;
     BOOL SetMinLeft( long );
     BOOL SetMaxBottom( long );
+    BOOL SetMaxRight( long );
+    BOOL SetMinTop( long );
     inline BOOL SwFrm::IsNeighbourFrm() const
         { return GetType() & FRM_NEIGHBOUR ? TRUE : FALSE; }
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flowfrm.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ama $ $Date: 2001-08-17 12:22:33 $
+ *  last change: $Author: ama $ $Date: 2001-10-05 12:36:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -480,6 +480,9 @@ BOOL SwFlowFrm::PasteTree( SwFrm *pStart, SwLayoutFrm *pParent, SwFrm *pSibling,
     }
     SwFrm *pFloat = pStart;
     SwFrm *pLst;
+#ifdef VERTICAL_LAYOUT
+    SWRECTFN( pParent )
+#endif
     SwTwips nGrowVal = 0;
     do
     {   pFloat->pUpper = pParent;
@@ -495,7 +498,11 @@ BOOL SwFlowFrm::PasteTree( SwFrm *pStart, SwLayoutFrm *pParent, SwFrm *pSibling,
         else
             bRet = TRUE;
 
+#ifdef VERTICAL_LAYOUT
+        nGrowVal += (pFloat->Frm().*fnRect->fnGetHeight)();
+#else
         nGrowVal += pFloat->Frm().Height();
+#endif
         if ( pFloat->GetNext() )
             pFloat = pFloat->GetNext();
         else
@@ -1508,8 +1515,14 @@ BOOL SwFlowFrm::MoveFwd( BOOL bMakePage, BOOL bPageBreak, BOOL bMoveAlways )
             bSamePage = pNewPage == pOldPage;
             //Damit die Fussnoten nicht auf dumme Gedanken kommen
             //setzen wir hier die Deadline.
+#ifdef VERTICAL_LAYOUT
+            SWRECTFN( pOldBoss )
+            SwSaveFtnHeight aHeight( pOldBoss,
+                (pOldBoss->Frm().*fnRect->fnGetBottom)() );
+#else
             SwSaveFtnHeight aHeight( pOldBoss,
                 pOldBoss->Frm().Top() + pOldBoss->Frm().Height() );
+#endif
             SwCntntFrm* pStart = rThis.IsCntntFrm() ?
                 (SwCntntFrm*)&rThis : ((SwLayoutFrm&)rThis).ContainsCntnt();
             ASSERT( pStart, "MoveFwd: Missing Content" );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swrect.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ama $ $Date: 2001-09-19 08:37:13 $
+ *  last change: $Author: ama $ $Date: 2001-10-05 12:28:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,6 +178,10 @@ public:
     void SetPosY(   const long nNew );
     const Point _Pos()  const;
     const Size  _Size() const;
+    const Point TopLeft()  const;
+    const Point TopRight()  const;
+    const Point BottomLeft()  const;
+    const Point BottomRight()  const;
     const Point SwappedPos()  const;
     const Size  SwappedSize() const;
     long GetLeftDistance( long ) const;
@@ -186,6 +190,8 @@ public:
     long GetTopDistance( long ) const;
     BOOL OverStepLeft( long ) const;
     BOOL OverStepBottom( long ) const;
+    BOOL OverStepTop( long ) const;
+    BOOL OverStepRight( long ) const;
 #endif
 };
 

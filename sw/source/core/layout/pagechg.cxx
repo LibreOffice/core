@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagechg.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ama $ $Date: 2001-09-19 08:44:45 $
+ *  last change: $Author: ama $ $Date: 2001-10-05 12:32:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,7 +177,7 @@ void SwBodyFrm::Format( const SwBorderAttrs *pAttrs )
             nHeight = 0;
         Frm().Height( nHeight );
 #ifdef VERTICAL_LAYOUT
-        if( IsVertical() && nWidth != Frm().Width() )
+        if( IsVertical() && !IsReverse() && nWidth != Frm().Width() )
             Frm().Pos().X() += Frm().Width() - nWidth;
 #endif
         Frm().Width( nWidth );
@@ -315,6 +315,10 @@ void SwPageFrm::CheckDirection( BOOL bVert )
             bVertical = 0;
         else
             bVertical = 1;
+        if( pDesc && pDesc->GetName().GetChar(0)=='x')
+            bReverse = 1;
+        else
+            bReverse = 0;
         bInvalidVert = 0;
     }
     else

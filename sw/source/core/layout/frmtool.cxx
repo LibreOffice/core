@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ama $ $Date: 2001-07-23 10:57:59 $
+ *  last change: $Author: ama $ $Date: 2001-10-05 12:35:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,8 +206,16 @@ SwFrmNotify::SwFrmNotify( SwFrm *pF ) :
 
 SwFrmNotify::~SwFrmNotify()
 {
+#ifdef VERTICAL_LAYOUT
+    SWRECTFN( pFrm )
+    const FASTBOOL bAbsP = POS_DIFF( aFrm, pFrm->Frm() );
+    const FASTBOOL bChgWidth =
+            (aFrm.*fnRect->fnGetWidth)() != (pFrm->Frm().*fnRect->fnGetWidth)();
+    const FASTBOOL bChgHeight =
+            (aFrm.*fnRect->fnGetHeight)()!=(pFrm->Frm().*fnRect->fnGetHeight)();
+#else
     const FASTBOOL bAbsP = aFrm.Pos() != pFrm->Frm().Pos();
-
+#endif
     if ( pFrm->IsFlowFrm() && !pFrm->IsInFtn() )
     {
         SwFlowFrm *pFlow = SwFlowFrm::CastFlowFrm( pFrm );
@@ -226,10 +234,20 @@ SwFrmNotify::~SwFrmNotify()
                         pPre->InvalidatePos();
                 }
             }
+#ifdef VERTICAL_LAYOUT
+            else if ( !pFlow->HasFollow() )
+            {
+                long nOldHeight = (aFrm.*fnRect->fnGetHeight)();
+                long nNewHeight = (pFrm->Frm().*fnRect->fnGetHeight)();
+                if( (nOldHeight > nNewHeight) || (!nOldHeight && nNewHeight) )
+                    pFlow->CheckKeep();
+            }
+#else
             else if ( !pFlow->HasFollow() &&
                       (aFrm.Height() > pFrm->Frm().Height() ||
                        (!aFrm.Height() && pFrm->Frm().Height()) ) )
                 pFlow->CheckKeep();
+#endif
         }
     }
 
@@ -243,7 +261,12 @@ SwFrmNotify::~SwFrmNotify()
             pNxt->InvalidatePos();
         else
         {
+#ifdef VERTICAL_LAYOUT
+            if( pFrm->IsRetoucheFrm() &&
+                (aFrm.*fnRect->fnGetTop)() > (pFrm->Frm().*fnRect->fnGetTop)() )
+#else
             if( pFrm->IsRetoucheFrm() && aFrm.Pos().Y() > pFrm->Frm().Pos().Y() )
+#endif
                 pFrm->SetRetouche();
 
             //Wenn ein TxtFrm gerade einen Follow erzeugt hat, so ist dieser
@@ -255,8 +278,16 @@ SwFrmNotify::~SwFrmNotify()
     }
 
     //Fuer Hintergrundgrafiken muss bei Groessenaenderungen ein Repaint her.
+#ifdef VERTICAL_LAYOUT
+    const FASTBOOL bPrtWidth =
+            (aPrt.*fnRect->fnGetWidth)() != (pFrm->Prt().*fnRect->fnGetWidth)();
+    const FASTBOOL bPrtHeight =
+            (aPrt.*fnRect->fnGetHeight)()!=(pFrm->Prt().*fnRect->fnGetHeight)();
+    if ( bPrtWidth || bPrtHeight )
+#else
     const FASTBOOL bPrtS = aPrt.SSize()!= pFrm->Prt().SSize();
     if ( bPrtS )
+#endif
     {
         const SvxGraphicPosition ePos = pFrm->GetAttrSet()->GetBackground().GetGraphicPos();
         if ( GPOS_NONE != ePos && GPOS_TILED != ePos )
@@ -267,10 +298,15 @@ SwFrmNotify::~SwFrmNotify()
     //FlyInCnts brauchen hier nicht benachrichtigt werden.
     if ( pFrm->GetDrawObjs() )
     {
+#ifdef VERTICAL_LAYOUT
+        const FASTBOOL bPrtP = POS_DIFF( aPrt, pFrm->Prt() );
+        if ( bAbsP || bPrtP || bChgWidth || bChgHeight ||
+             bPrtWidth || bPrtHeight )
+#else
         const FASTBOOL bPrtP = aPrt.Pos() != pFrm->Prt().Pos();
         const FASTBOOL bFrmS = aFrm.SSize()!= pFrm->Frm().SSize();
-
         if ( bAbsP || bPrtP || bFrmS || bPrtS )
+#endif
         {
             const SwDrawObjs &rObjs = *pFrm->GetDrawObjs();
             SwPageFrm *pPage = 0;
@@ -323,20 +359,32 @@ SwFrmNotify::~SwFrmNotify()
                             if ( (rVert.GetVertOrient()    == VERT_CENTER  ||
                                   rVert.GetVertOrient()    == VERT_BOTTOM  ||
                                   rVert.GetRelationOrient()== PRTAREA)  &&
+#ifdef VERTICAL_LAYOUT
+                                 ( bChgHeight || bPrtHeight ) )
+#else
                                  (aFrm.Height() != pFrm->Frm().Height() ||
                                   aPrt.Height() != pFrm->Prt().Height()) )
+#endif
                             {
                                 bNotify = TRUE;
                             }
                             if ( rHori.GetHoriOrient() != HORI_NONE &&
+#ifdef VERTICAL_LAYOUT
+                                 ( bChgWidth || bPrtWidth ) )
+#else
                                  (aFrm.Width() != pFrm->Frm().Width() ||
                                   aPrt.Width() != pFrm->Prt().Width()) )
+#endif
                             {
                                 bNotify = TRUE;
                             }
                         }
                     }
+#ifdef VERTICAL_LAYOUT
+                    else if( bPrtWidth )
+#else
                     else if ( aPrt.Width() != pFrm->Prt().Width() )
+#endif
                     {
                         bNotify = TRUE;
                         bNotifySize = TRUE;
@@ -453,6 +501,9 @@ void MA_FASTCALL lcl_MoveLowerFlys( SwLayoutFrm *pLay, const Point &rDiff,
 SwLayNotify::~SwLayNotify()
 {
     SwLayoutFrm *pLay = GetLay();
+#ifdef VERTICAL_LAYOUT
+    SWRECTFN( pLay )
+#endif
     FASTBOOL bNotify = FALSE;
     if ( pLay->Prt().SSize() != aPrt.SSize() )
     {
@@ -463,9 +514,17 @@ SwLayNotify::~SwLayNotify()
             if ( pLay->IsRowFrm() )
             {
                 bInvaPercent = TRUE;
+#ifdef VERTICAL_LAYOUT
+                long nNew = (pLay->Prt().*fnRect->fnGetHeight)();
+                if( nNew != (aPrt.*fnRect->fnGetHeight)() )
+                     ((SwRowFrm*)pLay)->AdjustCells( nNew, TRUE);
+                if( (pLay->Prt().*fnRect->fnGetWidth)()
+                    != (aPrt.*fnRect->fnGetWidth)() )
+#else
                 if ( pLay->Prt().Height() != aPrt.Height() )
                      ((SwRowFrm*)pLay)->AdjustCells( pLay->Prt().Height(),TRUE);
                 if ( pLay->Prt().Width() != aPrt.Width() )
+#endif
                      ((SwRowFrm*)pLay)->AdjustCells( 0, FALSE );
             }
             else
@@ -482,7 +541,12 @@ SwLayNotify::~SwLayNotify()
                     if ( pLay->Lower() )
                     {
                         bLow = !pLay->Lower()->IsColumnFrm() ||
+#ifdef VERTICAL_LAYOUT
+                            (pLay->Lower()->Frm().*fnRect->fnGetHeight)()
+                             != (pLay->Prt().*fnRect->fnGetHeight)();
+#else
                             pLay->Lower()->Frm().Height() != pLay->Prt().Height();
+#endif
                     }
                     else
                         bLow = FALSE;
@@ -552,8 +616,13 @@ SwLayNotify::~SwLayNotify()
 
     }
     //Lower benachrichtigen wenn sich die Position veraendert hat.
+#ifdef VERTICAL_LAYOUT
+    const BOOL bPrtPos = POS_DIFF( aPrt, pLay->Prt() );
+    const BOOL bPos = bPrtPos || POS_DIFF( aFrm, pLay->Frm() );
+#else
     const BOOL bPrtPos = pLay->Prt().Pos() != aPrt.Pos();
     const BOOL bPos = bPrtPos || pLay->Frm().Pos() != aFrm.Pos();
+#endif
     const BOOL bSize = pLay->Frm().SSize() != aFrm.SSize();
 
     if ( bPos && pLay->Lower() && !IsLowersComplete() )
@@ -584,8 +653,13 @@ SwLayNotify::~SwLayNotify()
     }
     if ( bPos && pLay->IsFtnFrm() && pLay->Lower() )
     {
+#ifdef VERTICAL_LAYOUT
+        Point aDiff( (pLay->Frm().*fnRect->fnGetPos)() );
+        aDiff -= (aFrm.*fnRect->fnGetPos)();
+#else
         Point aDiff( pLay->Frm().Pos() );
         aDiff -= aFrm.Pos();
+#endif
         lcl_MoveLowerFlys( pLay, aDiff, pLay->FindPageFrm() );
     }
     if( ( bPos || bSize ) && pLay->IsFlyFrm() && ((SwFlyFrm*)pLay)->GetAnchor()
@@ -636,7 +710,12 @@ SwFlyNotify::~SwFlyNotify()
 
     //Haben sich Groesse oder Position geaendert, so sollte die View
     //das wissen.
+#ifdef VERTICAL_LAYOUT
+    SWRECTFN( pFly )
+    const BOOL bPosChgd = POS_DIFF( aFrm, pFly->Frm() );
+#else
     const FASTBOOL bPosChgd = pFly->Frm().Pos() != aFrm.Pos();
+#endif
     if ( bPosChgd || pFly->Frm().SSize() != aFrm.SSize() )
     {
         pFly->NotifyDrawObj();
@@ -649,8 +728,13 @@ SwFlyNotify::~SwFlyNotify()
         if ( pFly->Lower() &&
              (!pFly->IsFlyInCntFrm() || !pFly->Lower()->IsColumnFrm()) )
         {
+#ifdef VERTICAL_LAYOUT
+            Point aDiff( (pFly->Frm().*fnRect->fnGetPos)() );
+            aDiff -= (aFrm.*fnRect->fnGetPos)();
+#else
             Point aDiff( pFly->Frm().Pos() );
             aDiff -= aFrm.Pos();
+#endif
             lcl_MoveLowerFlys( pFly, aDiff, pFly->FindPageFrm() );
         }
 
@@ -705,7 +789,12 @@ SwCntntNotify::~SwCntntNotify()
         pCnt->GetNext()->InvalidateSize();
     }
 */
+#ifdef VERTICAL_LAYOUT
+    SWRECTFN( pCnt )
+    if ( pCnt->IsInTab() && ( POS_DIFF( pCnt->Frm(), aFrm ) ||
+#else
     if ( pCnt->IsInTab() && (pCnt->Frm().Pos() != aFrm.Pos() ||
+#endif
                              pCnt->Frm().SSize() != aFrm.SSize()))
     {
         SwLayoutFrm* pCell = pCnt->GetUpper();
@@ -716,7 +805,11 @@ SwCntntNotify::~SwCntntNotify()
             pCell->InvalidatePrt(); //fuer vertikale Ausrichtung.
     }
 
+#ifdef VERTICAL_LAYOUT
+    FASTBOOL bFirst = (aFrm.*fnRect->fnGetWidth)() == 0;
+#else
     FASTBOOL bFirst = aFrm.Width() == 0;
+#endif
 
     if ( pCnt->IsNoTxtFrm() )
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newfrm.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ama $ $Date: 2001-09-19 08:43:05 $
+ *  last change: $Author: ama $ $Date: 2001-10-05 12:31:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,7 +152,7 @@ static SwRectFnCollection aHorizontal = {
     &SwRect::_Right,
     &SwRect::_Width,
     &SwRect::_Height,
-    &SwRect::_Pos,
+    &SwRect::TopLeft,
     &SwRect::_Size,
     /* fnRectSet      */
     &SwRect::_Top,
@@ -190,7 +190,7 @@ static SwRectFnCollection aVertical = {
     &SwRect::_Bottom,
     &SwRect::_Height,
     &SwRect::_Width,
-    &SwRect::SwappedPos,
+    &SwRect::TopRight,
     &SwRect::SwappedSize,
     /* fnRectSet      */
     &SwRect::_Right,
@@ -220,8 +220,86 @@ static SwRectFnCollection aVertical = {
     &SwRect::OverStepLeft
 };
 
+static SwRectFnCollection aBottomToTop = {
+    /* fnRectGet      */
+    &SwRect::_Bottom,
+    &SwRect::_Top,
+    &SwRect::_Left,
+    &SwRect::_Right,
+    &SwRect::_Width,
+    &SwRect::_Height,
+    &SwRect::BottomLeft,
+    &SwRect::_Size,
+    /* fnRectSet      */
+    &SwRect::_Bottom,
+    &SwRect::_Top,
+    &SwRect::_Left,
+    &SwRect::_Right,
+    &SwRect::_Width,
+    &SwRect::_Height,
+
+    &SwRect::AddBottom,
+    &SwRect::SubTop,
+    &SwRect::SubLeft,
+    &SwRect::AddRight,
+    &SwRect::AddWidth,
+    &SwRect::AddHeight,
+
+    &SwRect::SetPosX,
+    &SwRect::SetPosY,
+
+    &SwFrm::GetBottomMargin,
+    &SwFrm::GetTopMargin,
+    &SwFrm::GetLeftMargin,
+    &SwFrm::GetRightMargin,
+    &SwFrm::GetPrtTop,
+    &SwFrm::SetMinTop,
+    &SwRect::GetTopDistance,
+    &SwRect::OverStepTop
+};
+
+static SwRectFnCollection aVerticalRightToLeft = {
+    /* fnRectGet      */
+    &SwRect::_Left,
+    &SwRect::_Right,
+    &SwRect::_Top,
+    &SwRect::_Bottom,
+    &SwRect::_Height,
+    &SwRect::_Width,
+    &SwRect::BottomRight,
+    &SwRect::SwappedSize,
+    /* fnRectSet      */
+    &SwRect::_Left,
+    &SwRect::_Right,
+    &SwRect::_Top,
+    &SwRect::_Bottom,
+    &SwRect::_Height,
+    &SwRect::_Width,
+
+    &SwRect::SubLeft,
+    &SwRect::AddRight,
+    &SwRect::SubTop,
+    &SwRect::AddBottom,
+    &SwRect::AddHeight,
+    &SwRect::AddWidth,
+
+    &SwRect::SetPosY,
+    &SwRect::SetPosX,
+
+    &SwFrm::GetLeftMargin,
+    &SwFrm::GetRightMargin,
+    &SwFrm::GetTopMargin,
+    &SwFrm::GetBottomMargin,
+    &SwFrm::GetPrtRight,
+    &SwFrm::SetMaxRight,
+    &SwRect::GetRightDistance,
+    &SwRect::OverStepRight
+};
+
 SwRectFn fnRectHori = &aHorizontal;
 SwRectFn fnRectVert = &aVertical;
+SwRectFn fnRectB2T = &aBottomToTop;
+SwRectFn fnRectVL2R = &aVerticalRightToLeft;
 
 #endif
 

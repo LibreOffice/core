@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calcmove.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ama $ $Date: 2001-09-19 08:44:06 $
+ *  last change: $Author: ama $ $Date: 2001-10-05 12:34:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,8 +167,7 @@ BOOL SwCntntFrm::ShouldBwdMoved( SwLayoutFrm *pNewUpper, BOOL, BOOL & )
             }
         }
 #ifdef VERTICAL_LAYOUT
-        BOOL bVert = IsVertical();
-        SwRectFn fnRect = bVert ? fnRectVert : fnRectHori;
+        SWRECTFN( this )
         if( Abs( (pNewUpper->Prt().*fnRect->fnGetWidth)() -
                  (GetUpper()->Prt().*fnRect->fnGetWidth)() ) > 1 )
 #else
@@ -530,7 +529,7 @@ void SwFrm::MakePos()
         pPrv = lcl_Prev( this, FALSE );
 #ifdef VERTICAL_LAYOUT
         USHORT nMyType = GetType();
-        BOOL bVert = IsVertical();
+        SWRECTFN( this )
 #endif
         if ( !bUseUpper && pPrv )
         {   aFrm.Pos( pPrv->Frm().Pos() );
@@ -538,15 +537,20 @@ void SwFrm::MakePos()
             if( FRM_NEIGHBOUR & nMyType )
             {
                 BOOL bR2L = IsRightToLeft();
-                if( bVert )
-                    aFrm.Pos().Y() += bR2L ? -Frm().Height()
-                                           : pPrv->Frm().Height();
+                if( bR2L )
+                    (aFrm.*fnRect->fnSetPosX)( (aFrm.*fnRect->fnGetLeft)() -
+                                               (aFrm.*fnRect->fnGetWidth)() );
                 else
-                    aFrm.Pos().X() += bR2L ? -Frm().Width()
-                                           : pPrv->Frm().Width();
+                    (aFrm.*fnRect->fnSetPosX)( (aFrm.*fnRect->fnGetLeft)() +
+                                          (pPrv->Frm().*fnRect->fnGetWidth)() );
             }
             else if( bVert && FRM_NOTE_VERT & nMyType )
-                aFrm.Pos().X() -= aFrm.Width();
+            {
+                if( bReverse )
+                    aFrm.Pos().X() += pPrv->Frm().Width();
+                else
+                    aFrm.Pos().X() -= aFrm.Width();
+            }
             else
                 aFrm.Pos().Y() += pPrv->Frm().Height();
 #else
@@ -568,15 +572,20 @@ void SwFrm::MakePos()
                 if( FRM_NEIGHBOUR & nMyType )
                 {
                     BOOL bR2L = IsRightToLeft();
-                    if( bVert )
-                        aFrm.Pos().Y() += bR2L ? -Frm().Height()
-                                               : pPrv->Frm().Height();
+                    if( bR2L )
+                        (aFrm.*fnRect->fnSetPosX)( (aFrm.*fnRect->fnGetLeft)() -
+                                                 (aFrm.*fnRect->fnGetWidth)() );
                     else
-                        aFrm.Pos().X() += bR2L ? -Frm().Width()
-                                               : pPrv->Frm().Width();
+                        (aFrm.*fnRect->fnSetPosX)( (aFrm.*fnRect->fnGetLeft)() +
+                                          (pPrv->Frm().*fnRect->fnGetWidth)() );
                 }
                 else if( bVert && FRM_NOTE_VERT & nMyType )
-                    aFrm.Pos().X() -= aFrm.Width();
+                {
+                    if( bReverse )
+                        aFrm.Pos().X() += pPrv->Frm().Width();
+                    else
+                        aFrm.Pos().X() -= aFrm.Width();
+                }
                 else
                     aFrm.Pos().Y() += pPrv->Frm().Height();
 #else
@@ -597,7 +606,7 @@ void SwFrm::MakePos()
                         aFrm.Pos().X() += GetUpper()->Prt().Width()
                                           - aFrm.Width();
                 }
-                else if( bVert && FRM_NOTE_VERT & nMyType )
+                else if( bVert && FRM_NOTE_VERT & nMyType && !bReverse )
                     aFrm.Pos().X() -= aFrm.Width() - GetUpper()->Prt().Width();
 #endif
             }
@@ -605,7 +614,7 @@ void SwFrm::MakePos()
         else
             aFrm.Pos().X() = aFrm.Pos().Y() = 0;
 #ifdef VERTICAL_LAYOUT
-        if( IsBodyFrm() && bVert && GetUpper() )
+        if( IsBodyFrm() && bVert && !bReverse && GetUpper() )
             aFrm.Pos().X() += GetUpper()->Prt().Width() - aFrm.Width();
 #endif
         bValidPos = TRUE;
@@ -626,9 +635,6 @@ void lcl_CheckObjects( SwSortDrawObjs* pSortedObjs, SwFrm* pFrm, long& rBot )
     //Und dann kann es natuerlich noch Absatzgebundene
     //Rahmen geben, die unterhalb ihres Absatzes stehen.
     long nMax = 0;
-#ifdef VERTICAL_LAYOUT
-    SwRectFn fnRect = pFrm->IsVertical() ? fnRectVert : fnRectHori;
-#endif
     for ( USHORT i = 0; i < pSortedObjs->Count(); ++i )
     {
         SdrObject *pObj = (*pSortedObjs)[i];
@@ -642,18 +648,6 @@ void lcl_CheckObjects( SwSortDrawObjs* pSortedObjs, SwFrm* pFrm, long& rBot )
                     ( pFrm->IsBodyFrm() ? pFly->GetAnchor()->IsInDocBody() :
                                           pFly->GetAnchor()->IsInFtn() ) ) ) )
             {
-#ifdef VERTICAL_LAYOUT
-                nTmp = (pFly->Frm().*fnRect->fnGetBottom)();
-            }
-        }
-        else
-        {
-            SwRect aTmpRect( pObj->GetBoundRect() );
-            nTmp = (aTmpRect.*fnRect->fnGetBottom)();
-        }
-        nMax = Max( nTmp, nMax );
-    }
-#else
                 nTmp = pFly->Frm().Bottom();
             }
         }
@@ -662,7 +656,6 @@ void lcl_CheckObjects( SwSortDrawObjs* pSortedObjs, SwFrm* pFrm, long& rBot )
         nMax = Max( nTmp, nMax );
     }
     ++nMax; //Unterkante vs. Hoehe!
-#endif
     rBot = Max( rBot, nMax );
 }
 
@@ -897,8 +890,7 @@ BOOL SwCntntFrm::MakePrtArea( const SwBorderAttrs &rAttrs )
         bValidPrtArea = TRUE;
 
 #ifdef VERTICAL_LAYOUT
-        BOOL bVert = IsVertical();
-        SwRectFn fnRect = bVert ? fnRectVert : fnRectHori;
+        SWRECTFN( this )
         const FASTBOOL bTxtFrm = IsTxtFrm();
         SwTwips nUpper = 0;
         if ( bTxtFrm && ((SwTxtFrm*)this)->IsHiddenNow() )
@@ -1188,8 +1180,7 @@ void SwCntntFrm::MakeAll()
     Point aOldPrtPos;               //letzten Pos verglichen und geprueft
                                     //werden kann, ob ein Prepare sinnvoll ist.
 #ifdef VERTICAL_LAYOUT
-    const FASTBOOL bVert = IsVertical();
-    SwRectFn fnRect = bVert ? fnRectVert : fnRectHori;
+    SWRECTFN( this )
     long nKeepBottom = (Frm().*fnRect->fnGetBottom)();
 #else
     long  nKeepBottom = Frm().Bottom(); //Um beim Keep den naechsten sinnvoll
