@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: jp $ $Date: 2001-08-27 11:41:23 $
+ *  last change: $Author: jp $ $Date: 2001-08-31 14:09:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1672,7 +1672,7 @@ ULONG SwDocShell::LoadStylesFromFile( const String& rURL,
 
     // Create a URL from filename
     INetURLObject aURLObj( rURL );
-    String sURL( aURLObj.GetMainURL() );
+    String sURL( aURLObj.GetMainURL( INetURLObject::NO_DECODE ) );
 
     String sBaseURL( INetURLObject::GetBaseURL() );
     INetURLObject::SetBaseURL( sURL );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: jp $ $Date: 2001-08-16 07:51:28 $
+ *  last change: $Author: jp $ $Date: 2001-08-31 14:10:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -367,10 +367,10 @@ SwTransferable::SwTransferable( SwWrtShell& rSh )
         if( pDShell->GetMedium() )
         {
             const INetURLObject& rURLObj = pDShell->GetMedium()->GetURLObject();
-            aObjDesc.maDisplayName =
-                    URIHelper::removePassword( rURLObj.GetMainURL(),
-                                        INetURLObject::WAS_ENCODED,
-                                           INetURLObject::DECODE_UNAMBIGUOUS );
+            aObjDesc.maDisplayName = URIHelper::removePassword(
+                                rURLObj.GetMainURL( INetURLObject::NO_DECODE ),
+                                INetURLObject::WAS_ENCODED,
+                                   INetURLObject::DECODE_UNAMBIGUOUS );
         }
     }
 }
@@ -398,10 +398,10 @@ SwTransferable::SwTransferable( SwDoc& rDoc )
     if( pDShell && pDShell->GetMedium() )
     {
         const INetURLObject& rURLObj = pDShell->GetMedium()->GetURLObject();
-        aObjDesc.maDisplayName =
-                    URIHelper::removePassword( rURLObj.GetMainURL(),
-                                        INetURLObject::WAS_ENCODED,
-                                           INetURLObject::DECODE_UNAMBIGUOUS );
+        aObjDesc.maDisplayName = URIHelper::removePassword(
+                                rURLObj.GetMainURL( INetURLObject::NO_DECODE ),
+                                INetURLObject::WAS_ENCODED,
+                                   INetURLObject::DECODE_UNAMBIGUOUS );
     }
 
     SvStorageRef aStg( new SvStorage( aEmptyStr ));
@@ -2302,7 +2302,7 @@ int SwTransferable::_PasteAsHyperlink( TransferableDataHelper& rData,
         INetURLObject aURL;
         aURL.SetSmartProtocol( INET_PROT_FILE );
         aURL.SetSmartURL( sFile );
-        sFile = aURL.GetMainURL();
+        sFile = aURL.GetMainURL( INetURLObject::NO_DECODE );
 
         switch( rSh.GetObjCntTypeOfSelection() )
         {
@@ -2401,7 +2401,7 @@ JP 02.07.98: warum nur fuer die Formate ??
                 INetURLObject aURL;
                 aURL.SetSmartProtocol( INET_PROT_FILE );
                 aURL.SetSmartURL( sFile );
-                sFile = aURL.GetMainURL();
+                sFile = aURL.GetMainURL( INetURLObject::NO_DECODE );
 
                 switch( rSh.GetObjCntTypeOfSelection() )
                 {

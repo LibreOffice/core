@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: os $ $Date: 2001-08-30 13:56:10 $
+ *  last change: $Author: jp $ $Date: 2001-08-31 14:07:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -972,9 +972,9 @@ BOOL SwNewDBMgr::MergeMailing(SwWrtShell* pSh)
 
             {
                 SfxMedium* pOrig = pSh->GetView().GetDocShell()->GetMedium();
-                pSfxFlt = SwIoSystem::GetFileFilter(
-                        pOrig->GetURLObject().GetMainURL(),
-                                                        ::aEmptyStr );
+                String sMainURL( pOrig->GetURLObject().GetMainURL(
+                                            INetURLObject::NO_DECODE ));
+                pSfxFlt = SwIoSystem::GetFileFilter( sMainURL, ::aEmptyStr );
 
                 sTmpName = utl::TempFile::CreateTempName(0);
                 sTmpName = URIHelper::SmartRelToAbs(sTmpName);
@@ -990,7 +990,7 @@ BOOL SwNewDBMgr::MergeMailing(SwWrtShell* pSh)
                     TransferInfo aInfo;
                     aInfo.NameClash = NameClash::ERROR;
                     aInfo.NewTitle = INetURLObject(sTmpName).GetName();
-                    aInfo.SourceURL = pOrig->GetURLObject().GetMainURL();
+                    aInfo.SourceURL = sMainURL;
                     aInfo.MoveData  = FALSE;
                     aAny <<= aInfo;
                     aNewContent.executeCommand( C2U( "transfer" ), aAny);
@@ -1133,7 +1133,7 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSh)
         {
             // Beim Speichern wurde kein Abbruch gedrueckt
             SfxMedium* pOrig = pSh->GetView().GetDocShell()->GetMedium();
-            String sOldName(pOrig->GetURLObject().GetMainURL());
+            String sOldName(pOrig->GetURLObject().GetMainURL( INetURLObject::NO_DECODE ));
             const SfxFilter* pSfxFlt = SwIoSystem::GetFileFilter(
                                                     sOldName, ::aEmptyStr );
             String sAddress;
@@ -1178,7 +1178,7 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSh)
                     INetURLObject aEntry(sPath);
                     String sLeading(aEntry.GetBase());
                     aEntry.removeSegment();
-                    sPath = aEntry.GetMainURL();
+                    sPath = aEntry.GetMainURL( INetURLObject::NO_DECODE );
                     utl::TempFile aTemp(sLeading,&sExt,&sPath );
 
                     if( !aTemp.IsValid() )
@@ -1215,7 +1215,9 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSh)
                             // alle versteckten Felder/Bereiche entfernen
                             pDoc->RemoveInvisibleContent();
 
-                            SfxMedium* pDstMed = new SfxMedium( aTempFile.GetMainURL(), STREAM_STD_READWRITE, TRUE );
+                            SfxMedium* pDstMed = new SfxMedium(
+                                aTempFile.GetMainURL( INetURLObject::NO_DECODE ),
+                                STREAM_STD_READWRITE, TRUE );
                             pDstMed->SetFilter( pSfxFlt );
 
                             xDocSh->DoSaveAs(*pDstMed);
