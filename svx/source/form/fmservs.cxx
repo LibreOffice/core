@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmservs.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-19 12:51:17 $
+ *  last change: $Author: kz $ $Date: 2003-12-11 12:18:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,8 @@ namespace svxform
     IMPLEMENT_CONSTASCII_USTRING(FM_SUN_COMPONENT_HIDDENCONTROL,"com.sun.star.form.component.HiddenControl");
     IMPLEMENT_CONSTASCII_USTRING(FM_SUN_COMPONENT_IMAGECONTROL,"com.sun.star.form.component.DatabaseImageControl");
     IMPLEMENT_CONSTASCII_USTRING(FM_SUN_COMPONENT_FORMATTEDFIELD,"com.sun.star.form.component.FormattedField");
+    IMPLEMENT_CONSTASCII_USTRING( FM_SUN_COMPONENT_SCROLLBAR,    "com.sun.star.form.component.ScrollBar" );
+    IMPLEMENT_CONSTASCII_USTRING( FM_SUN_COMPONENT_SPINBUTTON,   "com.sun.star.form.component.SpinButton" );
 
     IMPLEMENT_CONSTASCII_USTRING(FM_SUN_CONTROL_GRIDCONTROL,"com.sun.star.form.control.GridControl");
 
