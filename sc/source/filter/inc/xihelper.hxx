@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xihelper.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:59:37 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 16:22:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,54 +181,82 @@ struct XclFontData;
  */
 class XclImpHFConverter : protected XclImpRoot, ScfNoCopy
 {
-private:
-    typedef ::std::auto_ptr< EditTextObject >   EditTextObjectPtr;
-    typedef ::std::auto_ptr< XclFontData >      XclFontDataPtr;
-
-    EditEngine&                 mrEE;           /// The header/footer edit engine.
-    EditTextObjectPtr           mppObjs[ 3 ];   /// Edit engine text objects for all portions.
-    ESelection                  mpSels[ 3 ];    /// Edit engine selections for all portions.
-    String                      maCurrText;     /// Current text to insert into edit engine.
-    XclFontDataPtr              mpFontData;     /// Font data of current text.
-    sal_uInt16                  mnCurrObj;      /// The current portion.
-
 public:
-    explicit                    XclImpHFConverter( const XclImpRoot& rRoot );
-                                ~XclImpHFConverter();
+    explicit            XclImpHFConverter( const XclImpRoot& rRoot );
+                        ~XclImpHFConverter();
 
     /** Parses the passed string and creates three new edit engine text objects. */
-    void                        ParseString( const String& rHFString );
+    void                ParseString( const String& rHFString );
 
     /** Creates a ScPageHFItem and inserts it into the passed item set. */
-    void                        FillToItemSet( SfxItemSet& rItemSet, sal_uInt16 nWhichId );
+    void                FillToItemSet( SfxItemSet& rItemSet, sal_uInt16 nWhichId ) const;
+    /** Returns the total height of the converted header or footer in twips. */
+    sal_Int32           GetTotalHeight() const;
+
+private:    // types
+    typedef ::std::auto_ptr< XclFontData > XclFontDataPtr;
+
+    /** Enumerates the supported header/footer portions. */
+    enum XclImpHFPortion { EXC_HF_LEFT, EXC_HF_CENTER, EXC_HF_RIGHT, EXC_HF_PORTION_COUNT };
+
+    /** Contains all information about a header/footer portion. */
+    struct XclImpHFPortionInfo
+    {
+        typedef ::boost::shared_ptr< EditTextObject > EditTextObjectRef;
+        EditTextObjectRef   mxObj;          /// Edit engine text object.
+        ESelection          maSel;          /// Edit engine selection.
+        sal_Int32           mnHeight;       /// Height of previous lines in twips.
+        sal_uInt16          mnMaxLineHt;    /// Maximum font height for the current text line.
+        explicit            XclImpHFPortionInfo();
+    };
+    typedef ::std::vector< XclImpHFPortionInfo > XclImpHFPortionInfoVec;
 
 private:
     /** Returns the current edit engine text object. */
-    inline EditTextObjectPtr&   GetCurrObj() { return mppObjs[ mnCurrObj ]; }
+    inline XclImpHFPortionInfo& GetCurrInfo() { return maInfos[ meCurrObj ]; }
+    /** Returns the current edit engine text object. */
+    inline XclImpHFPortionInfo::EditTextObjectRef& GetCurrObj() { return GetCurrInfo().mxObj; }
     /** Returns the current selection. */
-    inline ESelection&          GetCurrSel() { return mpSels[ mnCurrObj ]; }
+    inline ESelection&  GetCurrSel() { return GetCurrInfo().maSel; }
+
+    /** Returns the maximum line height of the specified portion. */
+    sal_uInt16          GetMaxLineHeight( XclImpHFPortion ePortion ) const;
+    /** Returns the current maximum line height. */
+    sal_uInt16          GetCurrMaxLineHeight() const;
+
+    /** Updates the maximum line height of the specified portion, using the current font size. */
+    void                UpdateMaxLineHeight( XclImpHFPortion ePortion );
+    /** Updates the current maximum line height, using the current font size. */
+    void                UpdateCurrMaxLineHeight();
 
     /** Sets the font attributes at the current selection.
         @descr  After that, the start position of the current selection object is
         adjusted to the end of the selection. */
-    void                        SetAttribs();
+    void                SetAttribs();
     /** Resets font data to application default font. */
-    void                        ResetFontData();
+    void                ResetFontData();
 
     /** Inserts maCurrText into edit engine and adjusts the current selection object.
         @descr  The text shall not contain a newline character.
         The text will be cleared after insertion. */
-    void                        InsertText();
-    /** Inserts a line break and adjusts the current selection object. */
-    void                        InsertLineBreak();
+    void                InsertText();
     /** Inserts the passed text field and adjusts the current selection object. */
-    void                        InsertField( const SvxFieldItem& rFieldItem );
+    void                InsertField( const SvxFieldItem& rFieldItem );
+    /** Inserts a line break and adjusts the current selection object. */
+    void                InsertLineBreak();
 
     /** Creates the edit engine text object of current portion from edit engine. */
-    void                        CreateCurrObject();
+    void                CreateCurrObject();
     /** Changes current header/footer portion to eNew.
         @descr  Creates text object of current portion and reinitializes edit engine. */
-    void                        SetNewPortion( sal_uInt16 nNew );
+    void                SetNewPortion( XclImpHFPortion eNew );
+
+private:
+    EditEngine&         mrEE;               /// The header/footer edit engine.
+    XclImpHFPortionInfoVec maInfos;         /// Edit engine text objects for all portions.
+    String              maCurrText;         /// Current text to insert into edit engine.
+    XclFontDataPtr      mxFontData;         /// Font data of current text.
+    XclImpHFPortion     meCurrObj;          /// The current portion.
 };
 
 
