@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XTransliteration.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-09-08 10:41:56 $
+ *  last change:$Date: 2004-07-23 10:45:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -418,12 +418,12 @@ public class _XTransliteration extends MultiMethodTest {
         result &= testString("", "", 0) ;
         result &= testString("a", "", 1) ;
         result &= testString("a", "a", 0) ;
-        result &= testString("A", "a", 1) ;
+        result &= testString("A", "a", 0) ;
         result &= testString("b", "a", 1) ;
         result &= testString("\n", "\n", 0) ;
         result &= testString("\n", "\t", 1) ;
         result &= testString("aaa", "aaa", 0) ;
-        result &= testString("aaA", "aaa", 1) ;
+        result &= testString("aaA", "aaa", 0) ;
         result &= testString("aaa", "aa", 1) ;
         result &= testString("ab", "aaa", 1) ;
         result &= testString("aba", "aa", 1) ;
@@ -486,6 +486,5 @@ public class _XTransliteration extends MultiMethodTest {
 
         return ret ;
     }
-
 }
 
