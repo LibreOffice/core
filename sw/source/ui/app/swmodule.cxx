@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmodule.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:45:54 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 09:44:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -360,6 +360,7 @@
 #endif
 
 #include <app.hrc>
+#include <svx/xmlsecctrl.hxx>
 
 ResMgr *pSwResMgr = 0;
 sal_Bool    bNoInterrupt    = sal_False;
@@ -596,8 +597,9 @@ void SwDLL::RegisterControls()
     SwPreviewZoomControl::RegisterControl(FN_PREVIEW_ZOOM, pMod);
     SwHyperlinkControl::RegisterControl(FN_STAT_HYPERLINKS, pMod );
     SvxPosSizeStatusBarControl::RegisterControl(0, pMod );
-    SvxInsertStatusBarControl::RegisterControl(0, pMod );
+    SvxInsertStatusBarControl::RegisterControl(SID_ATTR_INSERT, pMod );
     SvxSelectionModeControl::RegisterControl(FN_STAT_SELMODE, pMod );
+    XmlSecStatusBarControl::RegisterControl( SID_SIGNATURE, pMod );
 
     SwBookmarkControl::RegisterControl(FN_STAT_PAGE, pMod );
     SwTemplateControl::RegisterControl(FN_STAT_TEMPLATE, pMod );
