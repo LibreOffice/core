@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tgrditem.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2002-02-07 15:13:30 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:40:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,10 @@
 #ifndef _SFXPOOLITEM_HXX //autogen
 #include <svtools/poolitem.hxx>
 #endif
+
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
 #endif
@@ -76,7 +80,7 @@ class IntlWrapper;
 
 enum SwTextGrid { GRID_NONE, GRID_LINES_ONLY, GRID_LINES_CHARS };
 
-class SwTextGridItem : public SfxPoolItem
+class SW_DLLPUBLIC SwTextGridItem : public SfxPoolItem
 {
     Color aColor;
     sal_uInt16 nLines;
