@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbwizres.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: bc $ $Date: 2002-08-15 14:57:47 $
+ *  last change: $Author: kz $ $Date: 2002-08-20 20:15:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -517,11 +517,11 @@ String RID_DB_COMMON_START + 21
     Text[ russian ] = "����";
     Text[ greek ] = "~�������";
     Text[ finnish ] = "~Seis";
-    Text[ swedish ] = "S~topp";
+    Text[ swedish ] = "~Stopp";
     Text[ polish ] = "Zatrzymaj";
     Text[ japanese ] = "中止(~S)";
     Text[ korean ] = "정지(~S)";
-    Text[ chinese_simplified ] = "中止(~S)";
+    Text[ chinese_simplified ] = "暂停(~S)";
     Text[ chinese_traditional ] = "暫停(~S)";
     Text[ turkish ] = "Dur";
     Text[ arabic ] = "�����";
@@ -544,12 +544,12 @@ String RID_DB_COMMON_START + 30
     Text[ finnish ] = "The document could not be stored.";
     Text[ italian ] = "The document could not be stored.";
     Text[ danish ] = "The document could not be stored.";
-    Text[ swedish ] = "The document could not be stored.";
+    Text[ swedish ] = "Det gick inte att spara dokumentet.";
     Text[ polish ] = "The document could not be stored.";
     Text[ japanese ] = "The document could not be stored.";
     Text[ korean ] = "The document could not be stored.";
-    Text[ chinese_simplified ] = "The document could not be stored.";
-    Text[ chinese_traditional ] = "The document could not be stored.";
+    Text[ chinese_simplified ] = "无法存盘这个文档。";
+    Text[ chinese_traditional ] = "無法儲存這個文件。";
     Text[ turkish ] = "The document could not be stored.";
     Text[ arabic ] = "The document could not be stored.";
 };
@@ -569,12 +569,12 @@ String RID_DB_COMMON_START + 31
     Text[ finnish ] = "A link to the datasource could not be created.";
     Text[ italian ] = "A link to the datasource could not be created.";
     Text[ danish ] = "A link to the datasource could not be created.";
-    Text[ swedish ] = "A link to the datasource could not be created.";
+    Text[ swedish ] = "Det gick inte att skapa en l�nk till datak�llan.";
     Text[ polish ] = "A link to the datasource could not be created.";
     Text[ japanese ] = "A link to the datasource could not be created.";
     Text[ korean ] = "A link to the datasource could not be created.";
-    Text[ chinese_simplified ] = "A link to the datasource could not be created.";
-    Text[ chinese_traditional ] = "A link to the datasource could not be created.";
+    Text[ chinese_simplified ] = "无法建立数据源的链接。";
+    Text[ chinese_traditional ] = "無法建立資料源的捷徑。";
     Text[ turkish ] = "A link to the datasource could not be created.";
     Text[ arabic ] = "A link to the datasource could not be created.";
 };
@@ -593,12 +593,12 @@ String RID_DB_COMMON_START + 32
     Text[ finnish ] = "A link to the datasource will be created automatically.";
     Text[ italian ] = "A link to the datasource will be created automatically.";
     Text[ danish ] = "A link to the datasource will be created automatically.";
-    Text[ swedish ] = "A link to the datasource will be created automatically.";
+    Text[ swedish ] = "En l�nk till datak�llan skapas automatiskt.";
     Text[ polish ] = "A link to the datasource will be created automatically.";
     Text[ japanese ] = "A link to the datasource will be created automatically.";
     Text[ korean ] = "A link to the datasource will be created automatically.";
-    Text[ chinese_simplified ] = "A link to the datasource will be created automatically.";
-    Text[ chinese_traditional ] = "A link to the datasource will be created automatically.";
+    Text[ chinese_simplified ] = "将会自动建立一个数据源的链接。";
+    Text[ chinese_traditional ] = "將會自動建立一個資料源的捷徑。";
     Text[ turkish ] = "A link to the datasource will be created automatically.";
     Text[ arabic ] = "A link to the datasource will be created automatically.";
 };
@@ -618,12 +618,12 @@ String RID_DB_COMMON_START + 33
     Text[ finnish ] = "The AutoPilot will be terminated!";
     Text[ italian ] = "The AutoPilot will be terminated!";
     Text[ danish ] = "The AutoPilot will be terminated!";
-    Text[ swedish ] = "The AutoPilot will be terminated!";
+    Text[ swedish ] = "AutoPiloten avslutas!";
     Text[ polish ] = "The AutoPilot will be terminated!";
     Text[ japanese ] = "The AutoPilot will be terminated!";
     Text[ korean ] = "The AutoPilot will be terminated!";
-    Text[ chinese_simplified ] = "The AutoPilot will be terminated!";
-    Text[ chinese_traditional ] = "The AutoPilot will be terminated!";
+    Text[ chinese_simplified ] = "将要关闭自动文件助理！";
+    Text[ chinese_traditional ] = "將要關閉自動檔案助理！";
     Text[ turkish ] = "The AutoPilot will be terminated!";
     Text[ arabic ] = "The AutoPilot will be terminated!";
 };
@@ -642,12 +642,12 @@ String RID_DB_COMMON_START + 34
     Text[ finnish ] = "Connection to the Datasource will be established...";
     Text[ italian ] = "Connection to the Datasource will be established...";
     Text[ danish ] = "Connection to the Datasource will be established...";
-    Text[ swedish ] = "Connection to the Datasource will be established...";
+    Text[ swedish ] = "Kopplar till datak�llan...";
     Text[ polish ] = "Connection to the Datasource will be established...";
     Text[ japanese ] = "Connection to the Datasource will be established...";
     Text[ korean ] = "Connection to the Datasource will be established...";
-    Text[ chinese_simplified ] = "Connection to the Datasource will be established...";
-    Text[ chinese_traditional ] = "Connection to the Datasource will be established...";
+    Text[ chinese_simplified ] = "正在连接数据源...";
+    Text[ chinese_traditional ] = "正在連線到資料源...";
     Text[ turkish ] = "Connection to the Datasource will be established...";
     Text[ arabic ] = "Connection to the Datasource will be established...";
 };
@@ -666,12 +666,12 @@ String RID_DB_COMMON_START + 35
     Text[ finnish ] = "The connection to the Datasource could not be established";
     Text[ italian ] = "The connection to the Datasource could not be established";
     Text[ danish ] = "The connection to the Datasource could not be established";
-    Text[ swedish ] = "The connection to the Datasource could not be established";
+    Text[ swedish ] = "Det gick inte att koppla till datak�llan";
     Text[ polish ] = "The connection to the Datasource could not be established";
     Text[ japanese ] = "The connection to the Datasource could not be established";
     Text[ korean ] = "The connection to the Datasource could not be established";
-    Text[ chinese_simplified ] = "The connection to the Datasource could not be established";
-    Text[ chinese_traditional ] = "The connection to the Datasource could not be established";
+    Text[ chinese_simplified ] = "无法和数据源连接！";
+    Text[ chinese_traditional ] = "無法連線到資料源！";
     Text[ turkish ] = "The connection to the Datasource could not be established";
     Text[ arabic ] = "The connection to the Datasource could not be established";
 };
@@ -1738,7 +1738,7 @@ String RID_DB_FORM_WIZARD_START + 12
 String RID_DB_FORM_WIZARD_START + 13
 {
     Text = "~Felder im Formular";
-    Text [ english_us ] = "Fields in report";
+    Text [ english_us ] = "Fields in form";
     Text[ portuguese ] = "Campos no ~formul�rio";
     Text[ russian ] = "���� � ~���������";
     Text[ dutch ] = "Velden in ~formulier";
@@ -2841,7 +2841,7 @@ String RID_DB_FORM_WIZARD_START + 66
     Text[ finnish ] = "Valintaikkuna suurennetaan";
     Text[ italian ] = "La finestra di dialogo verr� ingrandita";
     Text[ danish ] = "Dialogen forst�rres";
-    Text[ swedish ] = "Dialog f�rstoras";
+    Text[ swedish ] = "Dialogruta f�rstoras";
     Text[ polish ] = "Powi�kszenie okna dialogowego";
     Text[ portuguese_brazilian ] = "Dialog will be enlarged";
     Text[ japanese ] = "ダイアログを拡大";
@@ -5160,12 +5160,12 @@ String RID_DB_REPORT_WIZARD_START + 60
     Text[ finnish ] = "Binary Fields cannot be displayed in the report";
     Text[ italian ] = "Binary Fields cannot be displayed in the report";
     Text[ danish ] = "Binary Fields cannot be displayed in the report";
-    Text[ swedish ] = "Binary Fields cannot be displayed in the report";
+    Text[ swedish ] = "Det g�r inte att visa bin�ra f�lt i rapporten.";
     Text[ polish ] = "Binary Fields cannot be displayed in the report";
     Text[ japanese ] = "Binary Fields cannot be displayed in the report";
     Text[ korean ] = "Binary Fields cannot be displayed in the report";
-    Text[ chinese_simplified ] = "Binary Fields cannot be displayed in the report";
-    Text[ chinese_traditional ] = "Binary Fields cannot be displayed in the report";
+    Text[ chinese_simplified ] = "无法在报表之中显示二进制字段";
+    Text[ chinese_traditional ] = "無法在報表之中顯示二元欄位";
     Text[ turkish ] = "Binary Fields cannot be displayed in the report";
     Text[ arabic ] = "Binary Fields cannot be displayed in the report";
 };
@@ -5184,12 +5184,12 @@ String RID_DB_REPORT_WIZARD_START + 61
     Text[ finnish ] = "The TextTable '<TABLENAME>' does not exist.";
     Text[ italian ] = "The TextTable '<TABLENAME>' does not exist.";
     Text[ danish ] = "The TextTable '<TABLENAME>' does not exist.";
-    Text[ swedish ] = "The TextTable '<TABLENAME>' does not exist.";
+    Text[ swedish ] = "Tabellen '<TABLENAME>' finns inte.";
     Text[ polish ] = "The TextTable '<TABLENAME>' does not exist.";
     Text[ japanese ] = "The TextTable '<TABLENAME>' does not exist.";
     Text[ korean ] = "The TextTable '<TABLENAME>' does not exist.";
-    Text[ chinese_simplified ] = "The TextTable '<TABLENAME>' does not exist.";
-    Text[ chinese_traditional ] = "The TextTable '<TABLENAME>' does not exist.";
+    Text[ chinese_simplified ] = "表格 '<TABLENAME>' 不存在。";
+    Text[ chinese_traditional ] = "表格 '<TABLENAME>' 不存在。";
     Text[ turkish ] = "The TextTable '<TABLENAME>' does not exist.";
     Text[ arabic ] = "The TextTable '<TABLENAME>' does not exist.";
 };
@@ -5207,12 +5207,12 @@ String RID_DB_REPORT_WIZARD_START + 62
     Text[ finnish ] = "Report is created...";
     Text[ italian ] = "Report is created...";
     Text[ danish ] = "Report is created...";
-    Text[ swedish ] = "Report is created...";
+    Text[ swedish ] = "Rapport skapas...";
     Text[ polish ] = "Report is created...";
     Text[ japanese ] = "Report is created...";
     Text[ korean ] = "Report is created...";
-    Text[ chinese_simplified ] = "Report is created...";
-    Text[ chinese_traditional ] = "Report is created...";
+    Text[ chinese_simplified ] = "正在建立报表...";
+    Text[ chinese_traditional ] = "正在建立報表...";
     Text[ turkish ] = "Report is created...";
     Text[ arabic ] = "Report is created...";
 };
@@ -5230,12 +5230,12 @@ String RID_DB_REPORT_WIZARD_START + 63
     Text[ finnish ] = "Number of inserted Records: <COUNT>";
     Text[ italian ] = "Number of inserted Records: <COUNT>";
     Text[ danish ] = "Number of inserted Records: <COUNT>";
-    Text[ swedish ] = "Number of inserted Records: <COUNT>";
+    Text[ swedish ] = "Antal dataposter som har infogats: <COUNT>";
     Text[ polish ] = "Number of inserted Records: <COUNT>";
     Text[ japanese ] = "Number of inserted Records: <COUNT>";
     Text[ korean ] = "Number of inserted Records: <COUNT>";
-    Text[ chinese_simplified ] = "Number of inserted Records: <COUNT>";
-    Text[ chinese_traditional ] = "Number of inserted Records: <COUNT>";
+    Text[ chinese_simplified ] = "插入数据条目的数目：<COUNT>";
+    Text[ chinese_traditional ] = "插入項目的數目：<COUNT>";
     Text[ turkish ] = "Number of inserted Records: <COUNT>";
     Text[ arabic ] = "Number of inserted Records: <COUNT>";
 };
@@ -5253,12 +5253,12 @@ String RID_DB_REPORT_WIZARD_START + 64
     Text[ finnish ] = "The form '<REPORTFORM>'Number of inserted Records";
     Text[ italian ] = "The form '<REPORTFORM>'Number of inserted Records";
     Text[ danish ] = "The form '<REPORTFORM>'Number of inserted Records";
-    Text[ swedish ] = "The form '<REPORTFORM>'Number of inserted Records";
+    Text[ swedish ] = "Formul�ret '<REPORTFORM>' existerar inte.";
     Text[ polish ] = "The form '<REPORTFORM>'Number of inserted Records";
     Text[ japanese ] = "The form '<REPORTFORM>'Number of inserted Records";
     Text[ korean ] = "The form '<REPORTFORM>'Number of inserted Records";
-    Text[ chinese_simplified ] = "The form '<REPORTFORM>'Number of inserted Records";
-    Text[ chinese_traditional ] = "The form '<REPORTFORM>'Number of inserted Records";
+    Text[ chinese_simplified ] = "表单 '<REPORTFORM>' 不存在。";
+    Text[ chinese_traditional ] = "表單 '<REPORTFORM>' 不存在。";
     Text[ turkish ] = "The form '<REPORTFORM>'Number of inserted Records";
     Text[ arabic ] = "The form '<REPORTFORM>'Number of inserted Records";
 };
@@ -5276,12 +5276,12 @@ String RID_DB_REPORT_WIZARD_START + 65
     Text[ finnish ] = "The query with the statement<BR>'<STATEMENT>' <BR> could not be executed. <BR> Verify your Datasource.";
     Text[ italian ] = "The query with the statement<BR>'<STATEMENT>' <BR> could not be executed. <BR> Verify your Datasource.";
     Text[ danish ] = "The query with the statement<BR>'<STATEMENT>' <BR> could not be executed. <BR> Verify your Datasource.";
-    Text[ swedish ] = "The query with the statement<BR>'<STATEMENT>' <BR> could not be executed. <BR> Verify your Datasource.";
+    Text[ swedish ] = "Det gick inte att utf�ra s�kningen med uttrycket <BR>'<STATEMENT>' <BR>. <BR> Kontrollera din datak�lla.";
     Text[ polish ] = "The query with the statement<BR>'<STATEMENT>' <BR> could not be executed. <BR> Verify your Datasource.";
     Text[ japanese ] = "The query with the statement<BR>'<STATEMENT>' <BR> could not be executed. <BR> Verify your Datasource.";
     Text[ korean ] = "The query with the statement<BR>'<STATEMENT>' <BR> could not be executed. <BR> Verify your Datasource.";
-    Text[ chinese_simplified ] = "The query with the statement<BR>'<STATEMENT>' <BR> could not be executed. <BR> Verify your Datasource.";
-    Text[ chinese_traditional ] = "The query with the statement<BR>'<STATEMENT>' <BR> could not be executed. <BR> Verify your Datasource.";
+    Text[ chinese_simplified ] = "无法执行含有陈述<BR>'<STATEMENT>' <BR>的查询命令。<BR>请检查所使用的数据源。";
+    Text[ chinese_traditional ] = "無法執行含有陳述<BR>'<STATEMENT>' <BR> 的查詢指令。<BR>請檢查所使用的資料源。";
     Text[ turkish ] = "The query with the statement<BR>'<STATEMENT>' <BR> could not be executed. <BR> Verify your Datasource.";
     Text[ arabic ] = "The query with the statement<BR>'<STATEMENT>' <BR> could not be executed. <BR> Verify your Datasource.";
 };
@@ -5303,8 +5303,8 @@ String RID_DB_REPORT_WIZARD_START + 66
     Text[ polish ] = "The following hidden control in the form '<FORMNAME>' could not be read: '<CONTROLNAME>'.";
     Text[ japanese ] = "The following hidden control in the form '<FORMNAME>' could not be read: '<CONTROLNAME>'.";
     Text[ korean ] = "The following hidden control in the form '<FORMNAME>' could not be read: '<CONTROLNAME>'.";
-    Text[ chinese_simplified ] = "The following hidden control in the form '<FORMNAME>' could not be read: '<CONTROLNAME>'.";
-    Text[ chinese_traditional ] = "The following hidden control in the form '<FORMNAME>' could not be read: '<CONTROLNAME>'.";
+    Text[ chinese_simplified ] = "无法读取以下隐藏在表单 '<FORMNAME>' 之内的控制项：'<CONTROLNAME>'";
+    Text[ chinese_traditional ] = "無法存取下列隱藏在表單 '<FORMNAME>' 之内的控制：'<CONTROLNAME>' 。";
     Text[ turkish ] = "The following hidden control in the form '<FORMNAME>' could not be read: '<CONTROLNAME>'.";
     Text[ arabic ] = "The following hidden control in the form '<FORMNAME>' could not be read: '<CONTROLNAME>'.";
 };
@@ -5322,12 +5322,12 @@ String RID_DB_REPORT_WIZARD_START + 67
     Text[ finnish ] = "All the data is imported...";
     Text[ italian ] = "All the data is imported...";
     Text[ danish ] = "All the data is imported...";
-    Text[ swedish ] = "All the data is imported...";
+    Text[ swedish ] = "Data importeras...";
     Text[ polish ] = "All the data is imported...";
     Text[ japanese ] = "All the data is imported...";
     Text[ korean ] = "All the data is imported...";
-    Text[ chinese_simplified ] = "All the data is imported...";
-    Text[ chinese_traditional ] = "All the data is imported...";
+    Text[ chinese_simplified ] = "正在输入数据...";
+    Text[ chinese_traditional ] = "正在匯入資料...";
     Text[ turkish ] = "All the data is imported...";
     Text[ arabic ] = "All the data is imported...";
 };
