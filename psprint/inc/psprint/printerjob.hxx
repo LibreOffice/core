@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printerjob.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:53:32 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 10:48:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,8 +87,8 @@ private:            // private data
 
     rtl::OUString           maSpoolDirName;
     rtl::OUString           maFileName; // empty: spool to command, else spool to named file
+    rtl::OUString           maJobTitle;
     int                     mnFileMode;
-    rtl::OUString           maJobName;
 
     osl::File*              mpJobHeader;
     osl::File*              mpJobTrailer;
