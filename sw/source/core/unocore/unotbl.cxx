@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: mtg $ $Date: 2001-10-23 17:41:37 $
+ *  last change: $Author: mtg $ $Date: 2001-10-24 17:47:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1092,6 +1092,10 @@ uno::Any SwXCell::getPropertyValue(const OUString& rPropertyName)
                                 SwXTextSections::GetObject( *rSect.GetFmt() );
                 aRet <<= xSect;
             }
+        }
+        else if(rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_CELL_NAME)))
+        {
+            aRet <<= OUString ( pBox->GetName() );
         }
         else
         {
