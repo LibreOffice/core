@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appenv.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:10:21 $
+ *  last change: $Author: vg $ $Date: 2003-07-28 12:32:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -356,6 +356,11 @@ static USHORT nTitleNo = 0;
         if ( pBoolItem && pBoolItem->GetValue() )
             nMode = ENV_NEWDOC;
     }
+
+    /*TODO #111050# call public made method of sfx (which was protected before!)
+      to force missing event OnNew ... */
+    if (nMode == ENV_NEWDOC)
+        xDocSh->Stamp_SetActivateEvent(SFX_EVENT_CREATEDOC);
 
     if (nMode == ENV_NEWDOC || nMode == ENV_INSERT)
     {
