@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: vg $ $Date: 2003-07-02 14:21:12 $
+#   last change: $Author: hr $ $Date: 2003-07-16 17:15:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,6 +73,10 @@ TARGET=gen
 
 .IF "$(WITH_GPC)"!="NO"
 CDEFS+=-DHAVE_GPC_H
+.ENDIF
+.IF "$(WITH_LIBART)"!="NO"
+CDEFS+=-DHAVE_LIBART_H
+CFLAGS+=$(LIBART_CFLAGS)
 .ENDIF
 
 # --- Files --------------------------------------------------------
