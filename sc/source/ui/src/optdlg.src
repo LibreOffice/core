@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 21:02:43 $
+ *  last change: $Author: rt $ $Date: 2001-03-21 21:06:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -509,11 +509,11 @@ TabPage RID_SCPAGE_CALC
         Text [ dutch ] = "S~tappen" ;
         Text [ spanish ] = "~Pasos" ;
         Text [ ENGLISH_US ] = "~Steps" ;
-        Text[ chinese_simplified ] = "µü´ú²½Êı(~S)";
+        Text[ chinese_simplified ] = "µü´ú²½Êı";
         Text[ russian ] = "Øàãè";
         Text[ polish ] = "Kroki";
         Text[ japanese ] = "‰ñ”(~S)";
-        Text[ chinese_traditional ] = "­¡¥N¨B¼Æ(~S)";
+        Text[ chinese_traditional ] = "­¡¥N¨B¼Æ";
         Text[ arabic ] = "ÇáÎØæÇÊ";
         Text[ greek ] = "ÂŞìáôá";
         Text[ korean ] = "´Ü°è(~S)";
@@ -774,7 +774,7 @@ TabPage RID_SCPAGE_CALC
         Text [ finnish ] = "~Tarkkuus" ;
         Text [ danish ] = "Antal decimaler" ;
         Text [ french ] = "~Décimales" ;
-        Text [ swedish ] = "~Decimalpositioner" ;
+        Text [ swedish ] = "De~cimalpositioner" ;
         Text [ dutch ] = "~Aantal decimalen" ;
         Text [ spanish ] = "~Decimales" ;
         Text [ ENGLISH_US ] = "~Decimal places" ;
@@ -1379,17 +1379,17 @@ TabPage RID_SCPAGE_CONTENT
         Text [ finnish ] = "Huomautus~merkit" ;
         Text [ danish ] = "Noteindikator" ;
         Text [ french ] = "Indicateur de ~notes" ;
-        Text [ swedish ] = "Antecknings~markör" ;
+        Text [ swedish ] = "Anteckn~ingsmarkör" ;
         Text [ dutch ] = "Aant~ekeningenwijzer" ;
         Text [ spanish ] = "I~ndicador de notas" ;
-        Text [ english_us ] = "~Note tags" ;
-        Text[ chinese_simplified ] = "±¸×¢±ê¼Ç(~N)";
+        Text [ english_us ] = "~Note indicator" ;
+        Text[ chinese_simplified ] = "±¸×¢±ê¼Ç";
         Text[ russian ] = "Ìåòêà ïğèìå÷àíèÿ";
         Text[ polish ] = "Zna~cznik notatek";
-        Text[ japanese ] = "ºÒİÄ‚Ì“à—e(~N)";
-        Text[ chinese_traditional ] = "³Æµù¼Ğ°O(~N)";
+        Text[ japanese ] = "ºÒİÄ‚Ì•\\¦(~N)";
+        Text[ chinese_traditional ] = "³Æµù¼Ğ°O";
         Text[ arabic ] = "ãõÈóíøöä ÇáãáÇÍÙÇÊ";
-        Text[ greek ] = "Äåßêôçò óçìåéşóåùí";
+        Text[ greek ] = "Äåßêôçò óçìå~éşóåùí";
         Text[ korean ] = "ÁÖ  Ç¥½Ã(~N)";
         Text[ turkish ] = "Not ~etiketi";
         Text[ language_user1 ] = " ";
@@ -1440,7 +1440,7 @@ TabPage RID_SCPAGE_CONTENT
         Text[ chinese_simplified ] = "±ê¼Ç(~A)";
         Text[ russian ] = "Ïğèâÿçêà";
         Text[ polish ] = "Kotwica";
-        Text[ japanese ] = "±İ¶°(~A)";
+        Text[ japanese ] = "±İ¶°‹L†(~A)";
         Text[ chinese_traditional ] = "¼Ğ¸¹(~A)";
         Text[ arabic ] = "ãÑÓÇÉ";
         Text[ greek ] = "Áãêıñùóç";
@@ -1997,18 +1997,18 @@ TabPage RID_SCPAGE_LAYOUT
         Text [ portuguese ] = "Unidades métricas" ;
         Text [ finnish ] = "Metriset yksiköt" ;
         Text [ danish ] = "Måleenhed" ;
-        Text [ french ] = "Unité de mesure" ;
-        Text [ swedish ] = "Måttenhet" ;
+        Text [ french ] = "Unité de ~mesure" ;
+        Text [ swedish ] = "~Måttenhet" ;
         Text [ dutch ] = "Maateenheid" ;
         Text [ spanish ] = "Unidad de medida" ;
-        Text [ english_us ] = "Measurement unit" ;
+        Text [ english_us ] = "Measurement un~it" ;
         Text[ chinese_simplified ] = "¶ÈÁ¿µ¥Î»";
         Text[ russian ] = "Åäèíèöà èçìåğåíèÿ";
         Text[ polish ] = "Jednostka miary";
         Text[ japanese ] = "’PˆÊ";
         Text[ chinese_traditional ] = "«×¶q³æ¦ì";
         Text[ arabic ] = "æÍÏÉ ÇáŞíÇÓ";
-        Text[ greek ] = "ÌïíÜäåò ìİôñçóçò";
+        Text[ greek ] = "~ÌïíÜäá ìİôñçóçò";
         Text[ korean ] = "ÃøÁ¤ ´ÜÀ§";
         Text[ turkish ] = "Ölçü birimi";
         Text[ language_user1 ] = " ";
@@ -2312,19 +2312,19 @@ TabPage RID_SCPAGE_LAYOUT
         Text [ portuguese ] = "Intervalo entre tabulações" ;
         Text [ finnish ] = "Default Tab distance" ;
         Text [ danish ] = "Tabulatorafstand" ;
-        Text [ french ] = "Tabulations" ;
-        Text [ swedish ] = "Tabulatoravstånd" ;
-        Text [ dutch ] = "Tabstops" ;
+        Text [ french ] = "~Tabulations" ;
+        Text [ swedish ] = "~Tabulatoravstånd" ;
+        Text [ dutch ] = "~ Afstand tabstops" ;
         Text [ spanish ] = "Distancia entre tabulaciones" ;
-        Text [ english_us ] = "Tab stops" ;
+        Text [ english_us ] = "Ta~b stops" ;
         Group = TRUE ;
         Text[ chinese_simplified ] = "ÖÆ±í·û¼ä¸ô";
         Text[ russian ] = "Øàã òàáóëÿöèè";
         Text[ polish ] = "Odstêpy miêdzy tabulatorami";
         Text[ japanese ] = "ÀÌŞŠÔŠu";
         Text[ chinese_traditional ] = "»sªí²Å¶¡¹j";
-        Text[ arabic ] = "ÚáÇãÇÊ ÇáÌÏæáÉ";
-        Text[ greek ] = "Áğüóôáóç óôçëïèåôşí";
+        Text[ arabic ] = "ÊÈÇÚÏ ÚáÇãÇÊ ÇáÌÏæáÉ";
+        Text[ greek ] = "Áğüó~ôáóç óôçëïèåôşí";
         Text[ korean ] = "ÅÇ °£°İ";
         Text[ turkish ] = "Sekme mesafesi";
         Text[ language_user1 ] = " ";
