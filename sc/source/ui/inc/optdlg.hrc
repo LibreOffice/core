@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.hrc,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: er $ $Date: 2001-05-16 10:50:04 $
+ *  last change: $Author: nn $ $Date: 2001-05-29 19:38:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,10 +149,10 @@
 #define STR_COPYERR         9
 
 // TP_PRINT:
-#define BTN_WARNPAPERBIN            1
-#define BTN_WARNPAPERSIZE           2
-#define BTN_WARNPRINTERNOTFOUND     3
-#define GB_WARNINGS                 4
+#define FL_PAGES            1
+#define BTN_SKIPEMPTYPAGES  2
+#define FL_SHEETS           2
+#define BTN_SELECTEDSHEETS  4
 
 // TP_LCONTENT
 

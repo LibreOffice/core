@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printopt.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:18 $
+ *  last change: $Author: nn $ $Date: 2001-05-29 19:33:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,233 +65,188 @@
 
 #pragma hdrstop
 
-#include <segmentc.hxx>
+#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
 
-#include <tlstream.hxx>
-#include "cfgids.hxx"
 #include "printopt.hxx"
-#include "scresid.hxx"
-#include "sc.hrc"
+#include "miscuno.hxx"
 
-// STATIC DATA -----------------------------------------------------------
+using namespace utl;
+using namespace rtl;
+using namespace com::sun::star::uno;
 
-#define SC_VERSION ((USHORT)251)
+// -----------------------------------------------------------------------
 
 TYPEINIT1(ScTpPrintItem, SfxPoolItem);
 
-SEG_EOFGLOBALS()
-
-//========================================================================
-//      ScPrintOptions - Dokument-Optionen
-//========================================================================
-#pragma SEG_FUNCDEF(printopt_01)
+// -----------------------------------------------------------------------
 
 ScPrintOptions::ScPrintOptions()
 {
     SetDefaults();
 }
 
-//------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(printopt_02)
-
-ScPrintOptions::ScPrintOptions( const ScPrintOptions& rCpy )
-        :   bWarnPrinterNotFound( rCpy.bWarnPrinterNotFound ),
-            bWarnPageSize( rCpy.bWarnPageSize ),
-            bWarnOrientation( rCpy.bWarnOrientation )
+ScPrintOptions::ScPrintOptions( const ScPrintOptions& rCpy ) :
+    bSkipEmpty( rCpy.bSkipEmpty ),
+    bAllSheets( rCpy.bAllSheets )
 {
 }
 
-//------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(printopt_03)
-
-__EXPORT ScPrintOptions::~ScPrintOptions()
+ScPrintOptions::~ScPrintOptions()
 {
 }
-
-//------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(printopt_04)
-
-SvStream& operator>>( SvStream& rStream, ScPrintOptions& rOpt )
-{
-    rStream >> rOpt.bWarnPrinterNotFound;
-    rStream >> rOpt.bWarnPageSize;
-    rStream >> rOpt.bWarnOrientation;
-
-    return rStream;
-}
-
-//------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(printopt_05)
-
-SvStream& operator<<( SvStream& rStream, const ScPrintOptions& rOpt )
-{
-    rStream << rOpt.bWarnPrinterNotFound;
-    rStream << rOpt.bWarnPageSize;
-    rStream << rOpt.bWarnOrientation;
-
-    return rStream;
-}
-
-//------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(printopt_06)
 
 void ScPrintOptions::SetDefaults()
 {
-    bWarnPrinterNotFound = TRUE;
-    bWarnPageSize        = FALSE;
-    bWarnOrientation     = FALSE;
+    bSkipEmpty = FALSE;
+    bAllSheets = TRUE;
 }
 
-//========================================================================
-//      ScTpPrintItem - Daten fuer die PrintOptions-TabPage
-//========================================================================
-#pragma SEG_FUNCDEF(printopt_07)
+const ScPrintOptions& ScPrintOptions::operator=( const ScPrintOptions& rCpy )
+{
+    bSkipEmpty = rCpy.bSkipEmpty;
+    bAllSheets = rCpy.bAllSheets;
+    return *this;
+}
+
+inline int ScPrintOptions::operator==( const ScPrintOptions& rOpt ) const
+{
+    return bSkipEmpty == rOpt.bSkipEmpty
+        && bAllSheets == rOpt.bAllSheets;
+}
+
+inline int ScPrintOptions::operator!=( const ScPrintOptions& rOpt ) const
+{
+    return !(operator==(rOpt));
+}
+
+// -----------------------------------------------------------------------
 
 ScTpPrintItem::ScTpPrintItem( USHORT nWhich ) : SfxPoolItem( nWhich )
 {
 }
 
-//------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(printopt_08)
-
-ScTpPrintItem::ScTpPrintItem( USHORT nWhich, const ScPrintOptions& rOpt )
-    :   SfxPoolItem ( nWhich ),
-        theOptions  ( rOpt )
+ScTpPrintItem::ScTpPrintItem( USHORT nWhich, const ScPrintOptions& rOpt ) :
+    SfxPoolItem ( nWhich ),
+    theOptions  ( rOpt )
 {
 }
 
-//------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(printopt_09)
-
-ScTpPrintItem::ScTpPrintItem( const ScTpPrintItem& rItem )
-    :   SfxPoolItem ( rItem ),
-        theOptions  ( rItem.theOptions )
+ScTpPrintItem::ScTpPrintItem( const ScTpPrintItem& rItem ) :
+    SfxPoolItem ( rItem ),
+    theOptions  ( rItem.theOptions )
 {
 }
 
-//------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(printopt_0a)
-
-__EXPORT ScTpPrintItem::~ScTpPrintItem()
+ScTpPrintItem::~ScTpPrintItem()
 {
 }
 
-//------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(printopt_0b)
-
-String __EXPORT ScTpPrintItem::GetValueText() const
+String ScTpPrintItem::GetValueText() const
 {
-    return "ScTpPrintItem";
+    return String::CreateFromAscii( "ScTpPrintItem" );
 }
 
-//------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(printopt_0c)
-
-int __EXPORT ScTpPrintItem::operator==( const SfxPoolItem& rItem ) const
+int ScTpPrintItem::operator==( const SfxPoolItem& rItem ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
 
     const ScTpPrintItem& rPItem = (const ScTpPrintItem&)rItem;
-
     return ( theOptions == rPItem.theOptions );
 }
 
-//------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(printopt_0d)
-
-SfxPoolItem* __EXPORT ScTpPrintItem::Clone( SfxItemPool * ) const
+SfxPoolItem* ScTpPrintItem::Clone( SfxItemPool * ) const
 {
     return new ScTpPrintItem( *this );
 }
 
-//==================================================================
-// CfgItem fuer Print-Optionen
-//==================================================================
-#pragma SEG_FUNCDEF(printopt_12)
+// -----------------------------------------------------------------------
 
-ScPrintCfg::ScPrintCfg() : SfxConfigItem( SCCFG_PRINT )
+#define CFGPATH_PRINT           "Office.Calc/Print"
+
+#define SCPRINTOPT_EMPTYPAGES       0
+#define SCPRINTOPT_ALLSHEETS        1
+#define SCPRINTOPT_COUNT            2
+
+Sequence<OUString> ScPrintCfg::GetPropertyNames()
 {
+    static const char* aPropNames[] =
+    {
+        "Page/EmptyPages",          // SCPRINTOPT_EMPTYPAGES
+        "Other/AllSheets"           // SCPRINTOPT_ALLSHEETS
+    };
+    Sequence<OUString> aNames(SCPRINTOPT_COUNT);
+    OUString* pNames = aNames.getArray();
+    for(int i = 0; i < SCPRINTOPT_COUNT; i++)
+        pNames[i] = OUString::createFromAscii(aPropNames[i]);
+
+    return aNames;
 }
 
-//------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(printopt_0e)
-
-int __EXPORT ScPrintCfg::Load( SvStream& rStream )
+ScPrintCfg::ScPrintCfg() :
+    ConfigItem( OUString::createFromAscii( CFGPATH_PRINT ) )
 {
-    USHORT  nVersion;
-
-    rStream >> nVersion;
-    rStream >> (ScPrintOptions&)*this;
-
-    SetDefault( FALSE );
-
-    return ( nVersion == SC_VERSION )
-                ? SfxConfigItem::ERR_OK
-                : SfxConfigItem::WARNING_VERSION;
+    Sequence<OUString> aNames = GetPropertyNames();
+    Sequence<Any> aValues = GetProperties(aNames);
+//  EnableNotification(aNames);
+    const Any* pValues = aValues.getConstArray();
+    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed")
+    if(aValues.getLength() == aNames.getLength())
+    {
+        for(int nProp = 0; nProp < aNames.getLength(); nProp++)
+        {
+            DBG_ASSERT(pValues[nProp].hasValue(), "property value missing")
+            if(pValues[nProp].hasValue())
+            {
+                switch(nProp)
+                {
+                    case SCPRINTOPT_EMPTYPAGES:
+                        // reversed
+                        SetSkipEmpty( !ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
+                        break;
+                    case SCPRINTOPT_ALLSHEETS:
+                        SetAllSheets( ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
+                        break;
+                }
+            }
+        }
+    }
 }
 
-//------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(printopt_11)
 
-BOOL SEXPORT ScPrintCfg::Store( SvStream& rStream)
+void ScPrintCfg::Commit()
 {
-    rStream << SC_VERSION;
-    rStream << *this;
+    Sequence<OUString> aNames = GetPropertyNames();
+    OUString* pNames = aNames.getArray();
+    Sequence<Any> aValues(aNames.getLength());
+    Any* pValues = aValues.getArray();
 
-    SetDefault( FALSE );
-
-    return SfxConfigItem::ERR_OK;
+    const Type& rType = ::getBooleanCppuType();
+    for(int nProp = 0; nProp < aNames.getLength(); nProp++)
+    {
+        switch(nProp)
+        {
+            case SCPRINTOPT_EMPTYPAGES:
+                // reversed
+                ScUnoHelpFunctions::SetBoolInAny( pValues[nProp], !GetSkipEmpty() );
+                break;
+            case SCPRINTOPT_ALLSHEETS:
+                ScUnoHelpFunctions::SetBoolInAny( pValues[nProp], GetAllSheets() );
+                break;
+        }
+    }
+    PutProperties(aNames, aValues);
 }
 
-//------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(printopt_0f)
-
-void __EXPORT ScPrintCfg::UseDefault()
+void ScPrintCfg::SetOptions( const ScPrintOptions& rNew )
 {
-    SetDefaults();
-    SetDefault( TRUE );
+    *(ScPrintOptions*)this = rNew;
+    SetModified();
 }
 
-//------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(printopt_10)
-
-String __EXPORT ScPrintCfg::GetName() const
+void ScPrintCfg::OptionsChanged()
 {
-    return String( ScResId( SCSTR_CFG_PRINT ) );
+    SetModified();
 }
 
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.8  2000/09/17 14:08:42  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.7  2000/08/31 16:38:03  willem.vandorp
-    Header and footer replaced
-
-    Revision 1.6  1997/11/13 20:05:36  NN
-    ifndef PCH raus
-
-
-      Rev 1.5   13 Nov 1997 21:05:36   NN
-   ifndef PCH raus
-
-      Rev 1.4   06 Nov 1996 09:48:56   TRI
-   includes
-
-      Rev 1.3   17 Nov 1995 14:49:44   MO
-   SetModified entfernt
-
-      Rev 1.2   16 Nov 1995 20:41:44   MO
-   SetDefault()/SetModified im Load/Save
-
-      Rev 1.1   09 Oct 1995 11:49:02   MO
-   ResId -> ScResId
-
-      Rev 1.0   18 Sep 1995 17:04:30   MO
-   Initial revision.
-
-------------------------------------------------------------------------*/
-
-#pragma SEG_EOFMODULE
 

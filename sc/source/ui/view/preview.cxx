@@ -2,9 +2,9 @@
  *
  *  $RCSfile: preview.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 18:37:37 $
+ *  last change: $Author: nn $ $Date: 2001-05-29 19:46:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,8 +80,10 @@
 #include "prevwsh.hxx"
 #include "docsh.hxx"
 #include "printfun.hxx"
+#include "printopt.hxx"
 #include "stlpool.hxx"
 #include "drwlayer.hxx"
+#include "scmod.hxx"
 #include "globstr.hrc"
 #include "sc.hrc"           // fuer ShellInvalidate
 
@@ -197,9 +199,10 @@ void ScPreview::TestLastPage()
             nTab = 0;
             nPageNo = nTabPage = nTabStart = nDisplayStart = 0;
             aState.nPrintTab = aState.nStartCol = aState.nStartRow =
-            aState.nEndCol = aState.nEndRow = aState.nZoom = 0;
-            aState.nPagesX = aState.nPagesY = aState.nTabPages =
-            aState.nTotalPages = aState.nPageStart = aState.nDocPages = 0;
+            aState.nEndCol = aState.nEndRow = aState.nZoom =
+            aState.nPagesX = aState.nPagesY = 0;
+            aState.nTabPages = aState.nTotalPages =
+            aState.nPageStart = aState.nDocPages = 0;
         }
     }
 }
@@ -222,12 +225,16 @@ void ScPreview::CalcPages( USHORT nToWhichTab )
         nTabsTested = 0;
     }
 
+    //  PrintOptions is passed to PrintFunc for SkipEmpty flag,
+    //  but always all sheets are used (there is no selected sheet)
+    ScPrintOptions aOptions = SC_MOD()->GetPrintOptions();
+
     for (i=nStart; i<nAnz; i++)
     {
         long nAttrPage = i ? nFirstAttr[i-1] : 1;
 
         long nThisStart = nTotalPages;
-        ScPrintFunc aPrintFunc( pDocShell, this, i, nAttrPage );
+        ScPrintFunc aPrintFunc( pDocShell, this, i, nAttrPage, 0, NULL, &aOptions );
         long nThisTab = aPrintFunc.GetTotalPages();
         nPages[i] = nThisTab;
         nTotalPages += nThisTab;
@@ -324,11 +331,13 @@ void __EXPORT ScPreview::Paint( const Rectangle& rRect )
     Size aPageSize;
     if ( nPageNo < nTotalPages )
     {
+        ScPrintOptions aOptions = SC_MOD()->GetPrintOptions();
+
         ScPrintFunc* pPrintFunc;
         if (bStateValid)
-            pPrintFunc = new ScPrintFunc( pDocShell, this, aState );
+            pPrintFunc = new ScPrintFunc( pDocShell, this, aState, &aOptions );
         else
-            pPrintFunc = new ScPrintFunc( pDocShell, this, nTab, nFirstAttr[nTab], nTotalPages );
+            pPrintFunc = new ScPrintFunc( pDocShell, this, nTab, nFirstAttr[nTab], nTotalPages, NULL, &aOptions );
 
         pPrintFunc->SetOffset(aOffset);
         pPrintFunc->SetManualZoom(nZoom);

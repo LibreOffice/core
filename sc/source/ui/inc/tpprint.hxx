@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpprint.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:01 $
+ *  last change: $Author: nn $ $Date: 2001-05-29 19:38:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,46 +62,33 @@
 #ifndef SC_TPPRINT_HXX
 #define SC_TPPRINT_HXX
 
-#ifndef _SFXTABDLG_HXX //autogen
+#ifndef _SFXTABDLG_HXX
 #include <sfx2/tabdlg.hxx>
 #endif
 
-#ifndef _SV_GROUP_HXX //autogen
-#include <vcl/group.hxx>
+#ifndef _SV_FIXED_HXX
+#include <vcl/fixed.hxx>
 #endif
 
 //===================================================================
 
-class ScDocOptions;
-
 class ScTpPrintOptions : public SfxTabPage
 {
+    FixedLine       aPagesFL;
+    CheckBox        aSkipEmptyPagesCB;
+    FixedLine       aSheetsFL;
+    CheckBox        aSelectedSheetsCB;
+
+            ScTpPrintOptions( Window* pParent, const SfxItemSet& rCoreSet );
+            ~ScTpPrintOptions();
+
 public:
-    static  SfxTabPage* Create          ( Window*               pParent,
-                                          const SfxItemSet&     rCoreSet );
-    static  USHORT*     GetRanges       ();
-    virtual BOOL        FillItemSet     ( SfxItemSet& rCoreSet );
-    virtual void        Reset           ( const SfxItemSet& rCoreSet );
-    virtual int         DeactivatePage  ( SfxItemSet* pSet = NULL );
-
-private:
-                ScTpPrintOptions( Window*           pParent,
-                                  const SfxItemSet& rCoreSet );
-                ~ScTpPrintOptions();
-
-private:
-    CheckBox        aBtnPrinterNotFound;
-    CheckBox        aBtnPageSize;
-    CheckBox        aBtnOrientation;
-    GroupBox        aGbWarnings;
-
-    const USHORT    nWhichPrint;
-
-#ifdef _TPPRINT_CXX
-#endif
+    static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rCoreSet );
+    static USHORT*      GetRanges();
+    virtual BOOL        FillItemSet( SfxItemSet& rCoreSet );
+    virtual void        Reset( const SfxItemSet& rCoreSet );
+    virtual int         DeactivatePage( SfxItemSet* pSet = NULL );
 };
 
-
 #endif
-
 

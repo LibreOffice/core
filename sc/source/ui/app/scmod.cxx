@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scmod.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: er $ $Date: 2001-05-16 10:59:32 $
+ *  last change: $Author: nn $ $Date: 2001-05-29 19:34:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,7 @@
 #include "docoptio.hxx"
 #include "appoptio.hxx"
 #include "inputopt.hxx"
+#include "printopt.hxx"
 #include "navicfg.hxx"
 #include "tabvwsh.hxx"
 #include "docsh.hxx"
@@ -122,6 +123,7 @@
 #include "tpview.hxx"
 #include "tpusrlst.hxx"
 #include "tpcalc.hxx"
+#include "tpprint.hxx"
 #include "opredlin.hxx"
 #include "transobj.hxx"
 
@@ -156,6 +158,7 @@ ScModule::ScModule( SfxObjectFactory* pFact ) :
     pDocCfg( NULL ),
     pAppCfg( NULL ),
     pInputCfg( NULL ),
+    pPrintCfg( NULL ),
     pNavipiCfg( NULL ),
     pTeamDlg( NULL ),
     nCurRefDlgId( 0 ),
@@ -231,6 +234,7 @@ void ScModule::DeleteCfg()
     DELETEZ( pDocCfg );
     DELETEZ( pAppCfg );
     DELETEZ( pInputCfg );
+    DELETEZ( pPrintCfg );
     DELETEZ( pNavipiCfg );
 }
 
@@ -786,6 +790,22 @@ const ScInputOptions& ScModule::GetInputOptions()
     return *pInputCfg;
 }
 
+void ScModule::SetPrintOptions( const ScPrintOptions& rOpt )
+{
+    if ( !pPrintCfg )
+        pPrintCfg = new ScPrintCfg;
+
+    pPrintCfg->SetOptions( rOpt );
+}
+
+const ScPrintOptions& ScModule::GetPrintOptions()
+{
+    if ( !pPrintCfg )
+        pPrintCfg = new ScPrintCfg;
+
+    return *pPrintCfg;
+}
+
 ScNavipiCfg& ScModule::GetNavipiCfg()
 {
     if ( !pNavipiCfg )
@@ -1105,6 +1125,19 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
             bSaveInputOptions = TRUE;
             bUpdateRefDev = TRUE;
         }
+    }
+
+    //============================================
+    // PrintOptions
+    //============================================
+
+    if ( IS_AVAILABLE(SID_SCPRINTOPTIONS,pItem) )
+    {
+        const ScPrintOptions& rNewOpt = ((const ScTpPrintItem*)pItem)->GetPrintOptions();
+        SetPrintOptions( rNewOpt );
+
+        //  broadcast causes all previews to recalc page numbers
+        SFX_APP()->Broadcast( SfxSimpleHint( SID_SCPRINTOPTIONS ) );
     }
 
     //----------------------------------------------------------
@@ -1826,6 +1859,9 @@ SfxItemSet*  ScModule::CreateItemSet( USHORT nId )
         pRet->Put( SfxBoolItem( SID_SC_INPUT_TEXTWYSIWYG,
                     rInpOpt.GetTextWysiwyg() ) );
 
+        // RID_SC_TP_PRINT
+        pRet->Put( ScTpPrintItem( SID_SCPRINTOPTIONS, GetPrintOptions() ) );
+
         // TP_GRID
         SvxGridItem* pSvxGridItem = aViewOpt.CreateGridItem();
         pRet->Put( *pSvxGridItem );
@@ -1859,6 +1895,7 @@ SfxTabPage*  ScModule::CreateTabPage( USHORT nId, Window* pParent, const SfxItem
         case SID_SC_TP_USERLISTS:   pRet = ScTpUserLists::Create(pParent, rSet); break;
         case SID_SC_TP_CALC:        pRet = ScTpCalcOptions::Create(pParent, rSet); break;
         case SID_SC_TP_CHANGES:     pRet = ScRedlineOptionsTabPage::Create(pParent, rSet); break;
+        case RID_SC_TP_PRINT:       pRet = ScTpPrintOptions::Create(pParent, rSet); break;
     }
     DBG_ASSERT(pRet, "Id unbekannt")
     return pRet;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printfun.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-08 19:22:44 $
+ *  last change: $Author: nn $ $Date: 2001-05-29 19:46:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,7 @@
 #include "scresid.hxx"
 #include "sc.hrc"
 #include "pagedata.hxx"
+#include "printopt.hxx"
 
 #define _PRINTFUN_CXX
 #include "printfun.hxx"
@@ -224,7 +225,7 @@ long lcl_LineTotal(const SvxBorderLine* pLine)
     return pLine ? ( pLine->GetOutWidth() + pLine->GetInWidth() + pLine->GetDistance() ) : 0;
 }
 
-void ScPrintFunc::Construct()
+void ScPrintFunc::Construct( const ScPrintOptions* pOptions )
 {
     pDoc = pDocShell->GetDocument();
 
@@ -263,13 +264,14 @@ void ScPrintFunc::Construct()
     nManualZoom = 100;
     bClearWin = FALSE;
 
-    InitParam();
+    InitParam(pOptions);
 
     pPageData = NULL;       // wird nur zur Initialisierung gebraucht
 }
 
 ScPrintFunc::ScPrintFunc( ScDocShell* pShell, SfxPrinter* pNewPrinter, USHORT nTab,
                             long nPage, long nDocP, const ScRange* pArea,
+                            const ScPrintOptions* pOptions,
                             ScPageBreakData* pData )
     :   pDocShell           ( pShell ),
         pPrinter            ( pNewPrinter ),
@@ -287,11 +289,12 @@ ScPrintFunc::ScPrintFunc( ScDocShell* pShell, SfxPrinter* pNewPrinter, USHORT nT
 {
     pDev = pPrinter;
     aSrcOffset = pPrinter->PixelToLogic( pPrinter->GetPageOffsetPixel(), MAP_100TH_MM );
-    Construct();
+    Construct( pOptions );
 }
 
 ScPrintFunc::ScPrintFunc( ScDocShell* pShell, Window* pWindow, USHORT nTab,
-                            long nPage, long nDocP, const ScRange* pArea )
+                            long nPage, long nDocP, const ScRange* pArea,
+                            const ScPrintOptions* pOptions )
     :   pDocShell           ( pShell ),
         pPrinter            ( NULL ),
         pDrawView           ( NULL ),
@@ -307,11 +310,11 @@ ScPrintFunc::ScPrintFunc( ScDocShell* pShell, Window* pWindow, USHORT nTab,
         bMultiArea          ( FALSE )
 {
     pDev = pWindow;
-    Construct();
+    Construct( pOptions );
 }
 
 ScPrintFunc::ScPrintFunc( ScDocShell* pShell, Window* pWindow,
-                                 const ScPrintState& rState )
+                             const ScPrintState& rState, const ScPrintOptions* pOptions )
     :   pDocShell           ( pShell ),
         pPrinter            ( NULL ),
         pDrawView           ( NULL ),
@@ -336,7 +339,7 @@ ScPrintFunc::ScPrintFunc( ScDocShell* pShell, Window* pWindow,
     nDocPages   = rState.nDocPages;
     bState      = TRUE;
 
-    Construct();
+    Construct( pOptions );
 }
 
 void ScPrintFunc::GetPrintState( ScPrintState& rState )
@@ -787,7 +790,7 @@ void ScPrintFunc::UpdateHFHeight( ScPrintHFParam& rParam )
     }
 }
 
-void ScPrintFunc::InitParam()
+void ScPrintFunc::InitParam( const ScPrintOptions* pOptions )
 {
     if (!pParamSet)
         return;
@@ -913,8 +916,8 @@ void ScPrintFunc::InitParam()
         aTableParam.nScalePageNum   = 0;
     }
 
-    aTableParam.bSkipEmpty = FALSE;     //! aus Seitenvorlage !!!!!!!!
-//  aTableParam.bSkipEmpty = TRUE;      //! Test !!!!!!!!!!!!!!!!
+    //  skip empty pages only if options with that flag are passed
+    aTableParam.bSkipEmpty = pOptions && pOptions->GetSkipEmpty();
     if ( pPageData )
         aTableParam.bSkipEmpty = FALSE;
     // Wenn pPageData gesetzt ist, interessieren fuer die Umbruch-Vorschau

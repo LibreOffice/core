@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printfun.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:00 $
+ *  last change: $Author: nn $ $Date: 2001-05-29 19:38:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,7 @@ class EditTextObject;
 class MultiSelection;
 class ScHeaderEditEngine;
 class ScPageBreakData;
+class ScPrintOptions;
 class SvxBoxItem;
 class SvxBrushItem;
 class SvxShadowItem;
@@ -268,14 +269,17 @@ public:
                     ScPrintFunc( ScDocShell* pShell, SfxPrinter* pNewPrinter, USHORT nTab,
                                  long nPage = 0, long nDocP = 0,
                                  const ScRange* pArea = NULL,
+                                 const ScPrintOptions* pOptions = NULL,
                                  ScPageBreakData* pData = NULL );
 
                     ScPrintFunc( ScDocShell* pShell, Window* pWindow, USHORT nTab,
                                  long nPage = 0, long nDocP = 0,
-                                 const ScRange* pArea = NULL );
+                                 const ScRange* pArea = NULL,
+                                 const ScPrintOptions* pOptions = NULL );
 
                     ScPrintFunc( ScDocShell* pShell, Window* pWindow,
-                                 const ScPrintState& rState );
+                                 const ScPrintState& rState,
+                                 const ScPrintOptions* pOptions );
 
                     ~ScPrintFunc();
 
@@ -317,8 +321,8 @@ public:
 
 #ifdef _PRINTFUN_CXX
 private:
-    void            Construct();
-    void            InitParam();
+    void            Construct( const ScPrintOptions* pOptions );
+    void            InitParam( const ScPrintOptions* pOptions );
     void            CalcZoom( USHORT nRangeNo );
     void            CalcPages();
     long            CountPages();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen8.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: dr $ $Date: 2001-04-05 10:46:04 $
+ *  last change: $Author: nn $ $Date: 2001-05-29 19:32:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,6 +205,7 @@ SfxPrinter* ScDocument::GetPrinter()
             new SfxItemSet( *xPoolHelper->GetDocPool(),
                             SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
                             SID_PRINTER_CHANGESTODOC,  SID_PRINTER_CHANGESTODOC,
+                            SID_SCPRINTOPTIONS,        SID_SCPRINTOPTIONS,
                             NULL );
 
         SfxMiscCfg* pOffCfg = SFX_APP()->GetMiscConfig();

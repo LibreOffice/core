@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prevwsh2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 18:37:37 $
+ *  last change: $Author: nn $ $Date: 2001-05-29 19:46:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -355,6 +355,7 @@ void __EXPORT ScPreviewShell::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBC
         switch ( nSlot )
         {
             case FID_DATACHANGED:
+            case SID_SCPRINTOPTIONS:
                 bDataChanged = TRUE;
                 break;
             case SC_HINT_DRWLAYER_NEW:

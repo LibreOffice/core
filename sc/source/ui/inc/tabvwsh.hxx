@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2001-04-20 18:51:06 $
+ *  last change: $Author: nn $ $Date: 2001-05-29 19:38:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -381,6 +381,7 @@ public:
                                           USHORT nDiffFlags = SFX_PRINTER_ALL );
 
     virtual PrintDialog*    CreatePrintDialog( Window* pParent );
+    virtual SfxTabPage*     CreatePrintOptionsPage( Window *pParent, const SfxItemSet &rOptions );
     virtual void            PreparePrint( PrintDialog* pPrintDialog = NULL );
     virtual ErrCode         DoPrint( SfxPrinter *pPrinter,
                                          PrintDialog *pPrintDialog,

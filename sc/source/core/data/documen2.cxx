@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen2.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: er $ $Date: 2001-04-21 20:30:51 $
+ *  last change: $Author: nn $ $Date: 2001-05-29 19:32:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -855,6 +855,7 @@ BOOL ScDocument::Load( SvStream& rStream, ScProgress* pProgress )
                         SfxItemSet* pSet = new SfxItemSet( *xPoolHelper->GetDocPool(),
                                 SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
                                 SID_PRINTER_CHANGESTODOC,  SID_PRINTER_CHANGESTODOC,
+                                SID_SCPRINTOPTIONS,        SID_SCPRINTOPTIONS,
                                 NULL );
                         SetPrinter( SfxPrinter::Create( rStream, pSet ) );
                     }

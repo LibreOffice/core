@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpprint.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:03 $
+ *  last change: $Author: nn $ $Date: 2001-05-29 19:40:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,28 +65,14 @@
 
 #pragma hdrstop
 
-#ifndef PCH
-#include "scitems.hxx"
-#include <sv.hxx>
-#include <svtool.hxx>
-#include <tools.hxx>
-#include <sfx.hxx>
-#include <segmentc.hxx>
-#endif
-
+#include "tpprint.hxx"
 #include "printopt.hxx"
-#include "uiitems.hxx"
+#include "scmod.hxx"
 #include "scresid.hxx"
-
-#include "sc.hrc"       // -> Slot-IDs
+#include "sc.hrc"
 #include "optdlg.hrc"
 
-#define _TPPRINT_CXX
-#include "tpprint.hxx"
-#undef _TPPRINT_CXX
-
-
-// STATIC DATA -----------------------------------------------------------
+// -----------------------------------------------------------------------
 
 static USHORT pPrintOptRanges[] =
 {
@@ -95,52 +81,36 @@ static USHORT pPrintOptRanges[] =
     0
 };
 
-SEG_EOFGLOBALS()
-
-//========================================================================
-#pragma SEG_FUNCDEF(tpprint_01)
+// -----------------------------------------------------------------------
 
 ScTpPrintOptions::ScTpPrintOptions( Window*           pParent,
                                     const SfxItemSet& rCoreAttrs )
     :   SfxTabPage      ( pParent,
                           ScResId( RID_SCPAGE_PRINT ),
                           rCoreAttrs ),
-        aBtnPrinterNotFound ( this, ScResId( BTN_WARNPRINTERNOTFOUND ) ),
-        aBtnPageSize        ( this, ScResId( BTN_WARNPAPERSIZE ) ),
-        aBtnOrientation     ( this, ScResId( BTN_WARNPAPERBIN ) ),
-        aGbWarnings         ( this, ScResId( GB_WARNINGS ) ),
-        nWhichPrint         ( GetWhich( SID_SCPRINTOPTIONS ) )
+        aPagesFL         ( this, ResId( FL_PAGES ) ),
+        aSkipEmptyPagesCB( this, ResId( BTN_SKIPEMPTYPAGES ) ),
+        aSheetsFL        ( this, ResId( FL_SHEETS ) ),
+        aSelectedSheetsCB( this, ResId( BTN_SELECTEDSHEETS ) )
 {
     FreeResource();
 }
 
-//-----------------------------------------------------------------------
-#pragma SEG_FUNCDEF(tpprint_02)
-
-__EXPORT ScTpPrintOptions::~ScTpPrintOptions()
+ScTpPrintOptions::~ScTpPrintOptions()
 {
 }
 
-//-----------------------------------------------------------------------
-#pragma SEG_FUNCDEF(tpprint_03)
-
-USHORT* __EXPORT ScTpPrintOptions::GetRanges()
+USHORT* ScTpPrintOptions::GetRanges()
 {
     return pPrintOptRanges;
 }
 
-//-----------------------------------------------------------------------
-#pragma SEG_FUNCDEF(tpprint_04)
-
-SfxTabPage* __EXPORT ScTpPrintOptions::Create( Window* pParent, const SfxItemSet& rAttrSet )
+SfxTabPage* ScTpPrintOptions::Create( Window* pParent, const SfxItemSet& rAttrSet )
 {
-    return ( new ScTpPrintOptions( pParent, rAttrSet ) );
+    return new ScTpPrintOptions( pParent, rAttrSet );
 }
 
-//------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(tpprint_06)
-
-int __EXPORT ScTpPrintOptions::DeactivatePage( SfxItemSet* pSet )
+int ScTpPrintOptions::DeactivatePage( SfxItemSet* pSet )
 {
     if ( pSet )
         FillItemSet( *pSet );
@@ -148,69 +118,44 @@ int __EXPORT ScTpPrintOptions::DeactivatePage( SfxItemSet* pSet )
     return LEAVE_PAGE;
 }
 
-//-----------------------------------------------------------------------
-#pragma SEG_FUNCDEF(tpprint_07)
+// -----------------------------------------------------------------------
 
-void __EXPORT ScTpPrintOptions::Reset( const SfxItemSet& rCoreAttrs )
+void ScTpPrintOptions::Reset( const SfxItemSet& rCoreSet )
 {
-    const ScPrintOptions& rOpt = ((const ScTpPrintItem&)rCoreAttrs.Get(nWhichPrint)).
-                                        GetPrintOptions();
+    ScPrintOptions aOptions;
 
-    aBtnPrinterNotFound .Check( rOpt.GetWarnPrinterNotFound() );
-    aBtnPageSize        .Check( rOpt.GetWarnPageSize() );
-    aBtnOrientation     .Check( rOpt.GetWarnOrientation() );
-    aBtnPrinterNotFound .SaveValue();
-    aBtnPageSize        .SaveValue();
-    aBtnOrientation     .SaveValue();
+    const SfxPoolItem* pItem;
+    if(SFX_ITEM_SET == rCoreSet.GetItemState(SID_SCPRINTOPTIONS, FALSE , &pItem))
+        aOptions = ((const ScTpPrintItem*)pItem)->GetPrintOptions();
+    else
+    {
+        // when called from print dialog and no options set, use configuration
+        aOptions = SC_MOD()->GetPrintOptions();
+    }
+
+    aSkipEmptyPagesCB.Check( aOptions.GetSkipEmpty() );
+    aSelectedSheetsCB.Check( !aOptions.GetAllSheets() );
+    aSkipEmptyPagesCB.SaveValue();
+    aSelectedSheetsCB.SaveValue();
 }
 
-//-----------------------------------------------------------------------
-#pragma SEG_FUNCDEF(tpprint_08)
+// -----------------------------------------------------------------------
 
-BOOL __EXPORT ScTpPrintOptions::FillItemSet( SfxItemSet& rCoreAttrs )
+BOOL ScTpPrintOptions::FillItemSet( SfxItemSet& rCoreAttrs )
 {
-    if (   aBtnPrinterNotFound.GetSavedValue() != aBtnPrinterNotFound.IsChecked()
-        || aBtnPageSize       .GetSavedValue() != aBtnPageSize.IsChecked()
-        || aBtnOrientation    .GetSavedValue() != aBtnOrientation.IsChecked() )
+    if (   aSkipEmptyPagesCB.GetSavedValue() != aSkipEmptyPagesCB.IsChecked()
+        || aSelectedSheetsCB.GetSavedValue() != aSelectedSheetsCB.IsChecked() )
     {
         ScPrintOptions aOpt;
 
-        aOpt.SetWarnPrinterNotFound ( aBtnPrinterNotFound.IsChecked() );
-        aOpt.SetWarnPageSize        ( aBtnPageSize.IsChecked() );
-        aOpt.SetWarnOrientation     ( aBtnOrientation.IsChecked() );
+        aOpt.SetSkipEmpty( aSkipEmptyPagesCB.IsChecked() );
+        aOpt.SetAllSheets( !aSelectedSheetsCB.IsChecked() );
 
-        rCoreAttrs.Put( ScTpPrintItem( nWhichPrint, aOpt ) );
-
+        rCoreAttrs.Put( ScTpPrintItem( SID_SCPRINTOPTIONS, aOpt ) );
         return TRUE;
     }
     else
         return FALSE;
 }
 
-
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.5  2000/09/17 14:09:16  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.4  2000/08/31 16:38:38  willem.vandorp
-    Header and footer replaced
-
-    Revision 1.3  1996/10/29 13:07:20  NN
-    ueberall ScResId statt ResId
-
-
-      Rev 1.2   29 Oct 1996 14:07:20   NN
-   ueberall ScResId statt ResId
-
-      Rev 1.1   28 Nov 1995 19:03:02   MO
-   303a: HasExchangeSupport entfernt
-
-      Rev 1.0   18 Sep 1995 17:10:18   MO
-   Initial revision.
-
-------------------------------------------------------------------------*/
-
-#pragma SEG_EOFMODULE
 

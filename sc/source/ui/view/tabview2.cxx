@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-28 14:58:13 $
+ *  last change: $Author: nn $ $Date: 2001-05-29 19:46:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -801,7 +801,7 @@ void ScTabView::UpdatePageBreakData( BOOL bForcePaint )
             nCount = 1;
         pNewData = new ScPageBreakData(nCount);
 
-        ScPrintFunc aPrintFunc( pDocSh, pDocSh->GetPrinter(), nTab, 0,0,NULL, pNewData );
+        ScPrintFunc aPrintFunc( pDocSh, pDocSh->GetPrinter(), nTab, 0,0,NULL, NULL, pNewData );
         //  ScPrintFunc fuellt im ctor die PageBreakData
         if ( nCount > 1 )
         {

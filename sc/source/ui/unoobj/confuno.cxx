@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confuno.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-11 18:58:43 $
+ *  last change: $Author: nn $ $Date: 2001-05-29 19:43:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,7 @@
 #ifndef SC_SCDOCPOL_HXX
 #include "docpool.hxx"
 #endif
+#include "sc.hrc"
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
@@ -239,6 +240,7 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
                     SfxItemSet* pSet = new SfxItemSet( *pDoc->GetPool(),
                             SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
                             SID_PRINTER_CHANGESTODOC,  SID_PRINTER_CHANGESTODOC,
+                            SID_SCPRINTOPTIONS,        SID_SCPRINTOPTIONS,
                             NULL );
                     pDoc->SetPrinter( SfxPrinter::Create( aStream, pSet ) );
                 }

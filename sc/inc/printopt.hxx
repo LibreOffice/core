@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printopt.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:49 $
+ *  last change: $Author: nn $ $Date: 2001-05-29 19:31:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,78 @@
 #ifndef SC_PRINTOPT_HXX
 #define SC_PRINTOPT_HXX
 
-#error printopt.hxx nicht mehr verwenden!
+#ifndef _SFXPOOLITEM_HXX
+#include <svtools/poolitem.hxx>
+#endif
 
+#ifndef _UTL_CONFIGITEM_HXX_
+#include <unotools/configitem.hxx>
+#endif
+
+
+class ScPrintOptions
+{
+private:
+    BOOL    bSkipEmpty;
+    BOOL    bAllSheets;
+
+public:
+                ScPrintOptions();
+                ScPrintOptions( const ScPrintOptions& rCpy );
+                ~ScPrintOptions();
+
+    BOOL    GetSkipEmpty() const            { return bSkipEmpty; }
+    void    SetSkipEmpty( BOOL bVal )       { bSkipEmpty = bVal; }
+    BOOL    GetAllSheets() const            { return bAllSheets; }
+    void    SetAllSheets( BOOL bVal )       { bAllSheets = bVal; }
+
+    void    SetDefaults();
+
+    const ScPrintOptions&   operator=  ( const ScPrintOptions& rCpy );
+    int                     operator== ( const ScPrintOptions& rOpt ) const;
+    int                     operator!= ( const ScPrintOptions& rOpt ) const;
+};
+
+//==================================================================
+// item for the dialog / options page
+//==================================================================
+
+class ScTpPrintItem : public SfxPoolItem
+{
+public:
+                TYPEINFO();
+                ScTpPrintItem( USHORT nWhich );
+                ScTpPrintItem( USHORT nWhich,
+                               const ScPrintOptions& rOpt );
+                ScTpPrintItem( const ScTpPrintItem& rItem );
+                ~ScTpPrintItem();
+
+    virtual String          GetValueText() const;
+    virtual int             operator==( const SfxPoolItem& ) const;
+    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
+
+    const ScPrintOptions&   GetPrintOptions() const { return theOptions; }
+
+private:
+    ScPrintOptions theOptions;
+};
+
+//==================================================================
+// config item
+//==================================================================
+
+class ScPrintCfg : public ScPrintOptions, public utl::ConfigItem
+{
+    com::sun::star::uno::Sequence<rtl::OUString> GetPropertyNames();
+
+public:
+            ScPrintCfg();
+
+    void            SetOptions( const ScPrintOptions& rNew );
+    void            OptionsChanged();   // after direct access to ScPrintOptions base class
+
+    virtual void    Commit();
+};
 
 #endif
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh4.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-14 10:06:55 $
+ *  last change: $Author: nn $ $Date: 2001-05-29 19:36:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,6 +143,7 @@
 #include "undostyl.hxx"
 #include "rangeseq.hxx"
 #include "chgtrack.hxx"
+#include "printopt.hxx"
 
 //------------------------------------------------------------------
 
@@ -1560,6 +1561,16 @@ void ScDocShell::PreparePrint( PrintDialog* pPrintDialog, ScMarkData* pMarkData 
     //! Selection etc. mit Print() zusammenfassen !!!
     //! Seiten nur einmal zaehlen
 
+    //  get settings from print options sub-dialog
+    ScPrintOptions aOptions;
+    const SfxItemSet& rOptionSet = pPrinter->GetOptions();
+    const SfxPoolItem* pItem;
+    BOOL bHasOptions = ( rOptionSet.GetItemState(SID_SCPRINTOPTIONS, FALSE, &pItem) == SFX_ITEM_SET );
+    if (bHasOptions)
+        aOptions = ((const ScTpPrintItem*)pItem)->GetPrintOptions();
+    else
+        aOptions = SC_MOD()->GetPrintOptions();     // use configuration
+
     BOOL bAllTabs = TRUE;
     USHORT nTabCount = aDocument.GetTableCount();
     USHORT nTab;
@@ -1567,7 +1578,7 @@ void ScDocShell::PreparePrint( PrintDialog* pPrintDialog, ScMarkData* pMarkData 
     long aPageArr[MAXTAB+1];                    // Seiten pro Tabelle
     for ( nTab=0; nTab<nTabCount; nTab++ )      // nPages und nTotalPages ermitteln
     {
-        ScPrintFunc aPrintFunc( this, pPrinter, nTab );
+        ScPrintFunc aPrintFunc( this, pPrinter, nTab, 0,0,NULL, &aOptions );
         long nThisTab = aPrintFunc.GetTotalPages();
         aPageArr[nTab] = nThisTab;
         nTotalPages += nThisTab;
@@ -1589,13 +1600,17 @@ void ScDocShell::PreparePrint( PrintDialog* pPrintDialog, ScMarkData* pMarkData 
             break;
     }
 
+    if ( !aOptions.GetAllSheets() )      // option "only selected sheets" - also for ALL and RANGE
+        bAllTabs = FALSE;
+
     if (!bAllTabs)          // Gesamt-Seitenzahl bei Selektion
     {
         nTotalPages = 0;
         for (nTab=0; nTab<nTabCount; nTab++)
             if ( !pMarkData || pMarkData->GetTableSelect(nTab) )
                 nTotalPages += aPageArr[nTab];
-        aPageRanges.Select( Range(1,nTotalPages) );
+        if ( eDlgOption != PRINTDIALOG_RANGE )
+            aPageRanges.Select( Range(1,nTotalPages) );
     }
 
     BOOL bFound = FALSE;        // erste Seite gefunden
@@ -1604,8 +1619,6 @@ void ScDocShell::PreparePrint( PrintDialog* pPrintDialog, ScMarkData* pMarkData 
     {
         if ( bAllTabs || !pMarkData || pMarkData->GetTableSelect( nTab ) )
         {
-            ScPrintFunc aPrintFunc( this, pPrinter, nTab );
-
             long nNext = nTabStart + aPageArr[nTab];
             BOOL bSelected = FALSE;
             for (long nP=nTabStart+1; nP<=nNext; nP++)  // 1-basiert
@@ -1614,6 +1627,8 @@ void ScDocShell::PreparePrint( PrintDialog* pPrintDialog, ScMarkData* pMarkData 
 
             if (bSelected)
             {
+                ScPrintFunc aPrintFunc( this, pPrinter, nTab );
+
                 aPrintFunc.ApplyPrintSettings();        // dann Settings fuer diese Tabelle
                 bFound = TRUE;
             }
@@ -1673,6 +1688,16 @@ void ScDocShell::Print( SfxProgress& rProgress, PrintDialog* pPrintDialog,
 
     ScRange* pMarkedRange = NULL;
 
+    //  get settings from print options sub-dialog
+    ScPrintOptions aOptions;
+    const SfxItemSet& rOptionSet = pPrinter->GetOptions();
+    const SfxPoolItem* pItem;
+    BOOL bHasOptions = ( rOptionSet.GetItemState(SID_SCPRINTOPTIONS, FALSE, &pItem) == SFX_ITEM_SET );
+    if (bHasOptions)
+        aOptions = ((const ScTpPrintItem*)pItem)->GetPrintOptions();
+    else
+        aOptions = SC_MOD()->GetPrintOptions();     // use configuration
+
     BOOL bAllTabs = TRUE;
     USHORT nTabCount = aDocument.GetTableCount();
     USHORT nTab;
@@ -1680,7 +1705,7 @@ void ScDocShell::Print( SfxProgress& rProgress, PrintDialog* pPrintDialog,
     long aPageArr[MAXTAB+1];                    // Seiten pro Tabelle
     for ( nTab=0; nTab<nTabCount; nTab++ )      // nPages und nTotalPages ermitteln
     {
-        ScPrintFunc aPrintFunc( this, pPrinter, nTab );
+        ScPrintFunc aPrintFunc( this, pPrinter, nTab, 0,0,NULL, &aOptions );
         long nThisTab = aPrintFunc.GetTotalPages();
         aPageArr[nTab] = nThisTab;
         nTotalPages += nThisTab;
@@ -1712,13 +1737,17 @@ void ScDocShell::Print( SfxProgress& rProgress, PrintDialog* pPrintDialog,
         //default:
     }
 
+    if ( !aOptions.GetAllSheets() )      // option "only selected sheets" - also for ALL and RANGE
+        bAllTabs = FALSE;
+
     if (!bAllTabs)          // Gesamt-Seitenzahl bei Selektion
     {
         nTotalPages = 0;
         for (nTab=0; nTab<nTabCount; nTab++)
             if ( !pMarkData || pMarkData->GetTableSelect(nTab) )
                 nTotalPages += aPageArr[nTab];
-        aPageRanges.Select( Range(1,nTotalPages) );
+        if ( eDlgOption != PRINTDIALOG_RANGE )
+            aPageRanges.Select( Range(1,nTotalPages) );
     }
 
     USHORT nCollateCopies = 1;
@@ -1783,7 +1812,7 @@ void ScDocShell::Print( SfxProgress& rProgress, PrintDialog* pPrintDialog,
                         pDrawView->SetPrintPreview( TRUE );
                     }
 
-                    ScPrintFunc aPrintFunc( this, pPrinter, nTab, nAttrPage, nTotalPages, pMarkedRange );
+                    ScPrintFunc aPrintFunc( this, pPrinter, nTab, nAttrPage, nTotalPages, pMarkedRange, &aOptions );
                     aPrintFunc.SetDrawView( pDrawView );
                     aPrintFunc.DoPrint( aPageRanges, nTabStart, nDisplayStart, &rProgress );
 
@@ -1816,6 +1845,16 @@ void ScDocShell::Print( SfxProgress& rProgress, PrintDialog* pPrintDialog,
 
         delete pOldJobSetup;
         pOldJobSetup = NULL;
+    }
+
+    if ( bHasOptions )
+    {
+        //  remove PrintOptions from printer ItemSet,
+        //  so next time the options from the configuration are used
+
+        SfxItemSet aSet( pPrinter->GetOptions() );
+        aSet.ClearItem( SID_SCPRINTOPTIONS );
+        pPrinter->SetOptions( aSet );
     }
 
     PostPaintGridAll();                 //! nur wenn geaendert

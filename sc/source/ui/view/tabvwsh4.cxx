@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh4.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-14 10:06:05 $
+ *  last change: $Author: nn $ $Date: 2001-05-29 19:46:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,7 @@
 #include "pgbrksh.hxx"
 #include "dpobject.hxx"
 #include "prevwsh.hxx"
+#include "tpprint.hxx"
 
 
 void ActivateOlk( ScViewData* pViewData );
@@ -1070,6 +1071,11 @@ PrintDialog* __EXPORT ScTabViewShell::CreatePrintDialog( Window *pParent )
     return pDlg;
 }
 
+SfxTabPage* ScTabViewShell::CreatePrintOptionsPage( Window *pParent, const SfxItemSet &rOptions )
+{
+    return ScTpPrintOptions::Create( pParent, rOptions );
+}
+
 void __EXPORT ScTabViewShell::PreparePrint( PrintDialog* pPrintDialog )
 {
     ScDocShell* pDocShell = GetViewData()->GetDocShell();
@@ -1438,7 +1444,7 @@ FASTBOOL __EXPORT ScTabViewShell::KeyInput( const KeyEvent &rKeyEvent )
 //  SfxViewShell( pViewFrame, SFX_VIEW_MAXIMIZE_FIRST | SFX_VIEW_DISABLE_ACCELS ),
 
 #define __INIT_ScTabViewShell \
-    SfxViewShell( pViewFrame, SFX_VIEW_MAXIMIZE_FIRST | SFX_VIEW_CAN_PRINT ), \
+    SfxViewShell( pViewFrame, SFX_VIEW_MAXIMIZE_FIRST | SFX_VIEW_CAN_PRINT | SFX_VIEW_HAS_PRINTOPTIONS ), \
     nDrawSfxId(0),              \
     nCtrlSfxId(USHRT_MAX),      \
     eCurOST(OST_NONE),          \

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: os $ $Date: 2001-03-28 13:27:35 $
+#   last change: $Author: nn $ $Date: 2001-05-29 19:40:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,12 +85,14 @@ CXXFILES = \
         tpusrlst.cxx    \
         tpview.cxx      \
         tpcalc.cxx      \
+        tpprint.cxx     \
         opredlin.cxx
 
 SLOFILES =  \
         $(SLO)$/tpusrlst.obj \
         $(SLO)$/tpview.obj   \
         $(SLO)$/tpcalc.obj	\
+        $(SLO)$/tpprint.obj	\
         $(SLO)$/opredlin.obj
 
 # --- Tagets -------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prevwsh.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-14 10:06:05 $
+ *  last change: $Author: nn $ $Date: 2001-05-29 19:46:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,7 @@
 #ifndef _SC_VIEWSETTINGSSEQUENCEDEFINES_HXX
 #include "ViewSettingsSequenceDefines.hxx"
 #endif
+#include "tpprint.hxx"
 
 #ifndef _XMLOFF_XMLUCONV_HXX
 #include <xmloff/xmluconv.hxx>
@@ -165,7 +166,7 @@ void ScPreviewShell::Construct( Window* pParent )
 
 ScPreviewShell::ScPreviewShell( SfxViewFrame* pViewFrame,
                                 const ScPreviewShell& rWin ) :
-    SfxViewShell( pViewFrame, SFX_VIEW_MAXIMIZE_FIRST | SFX_VIEW_CAN_PRINT ),
+    SfxViewShell( pViewFrame, SFX_VIEW_MAXIMIZE_FIRST | SFX_VIEW_CAN_PRINT | SFX_VIEW_HAS_PRINTOPTIONS ),
     pDocShell( rWin.pDocShell ),
     aSourceData( rWin.aSourceData )
 {
@@ -174,7 +175,7 @@ ScPreviewShell::ScPreviewShell( SfxViewFrame* pViewFrame,
 
 ScPreviewShell::ScPreviewShell( SfxViewFrame* pViewFrame,
                                 Window *pParent ) :
-    SfxViewShell( pViewFrame, SFX_VIEW_MAXIMIZE_FIRST | SFX_VIEW_CAN_PRINT ),
+    SfxViewShell( pViewFrame, SFX_VIEW_MAXIMIZE_FIRST | SFX_VIEW_CAN_PRINT | SFX_VIEW_HAS_PRINTOPTIONS ),
     pDocShell( (ScDocShell*)pViewFrame->GetObjectShell() )
 {
     Construct( pParent );
@@ -182,7 +183,7 @@ ScPreviewShell::ScPreviewShell( SfxViewFrame* pViewFrame,
 
 ScPreviewShell::ScPreviewShell( SfxViewFrame* pViewFrame,
                                 SfxViewShell* pOldSh ) :
-    SfxViewShell( pViewFrame, SFX_VIEW_MAXIMIZE_FIRST | SFX_VIEW_CAN_PRINT ),
+    SfxViewShell( pViewFrame, SFX_VIEW_MAXIMIZE_FIRST | SFX_VIEW_CAN_PRINT | SFX_VIEW_HAS_PRINTOPTIONS ),
     pDocShell( (ScDocShell*)pViewFrame->GetObjectShell() )
 {
     Construct( &pViewFrame->GetWindow() );
@@ -447,6 +448,11 @@ PrintDialog* __EXPORT ScPreviewShell::CreatePrintDialog( Window* pParent )
     // Selektion hier nicht
 
     return pDlg;
+}
+
+SfxTabPage* ScPreviewShell::CreatePrintOptionsPage( Window *pParent, const SfxItemSet &rOptions )
+{
+    return ScTpPrintOptions::Create( pParent, rOptions );
 }
 
 void __EXPORT ScPreviewShell::PreparePrint( PrintDialog* pPrintDialog )

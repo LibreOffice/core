@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-28 14:09:50 $
+ *  last change: $Author: nn $ $Date: 2001-05-29 19:41:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2765,4 +2765,46 @@ TabPage RID_SCPAGE_LAYOUT
     };
 };
 
+/**************************************************************************/
+/*                                                                        */
+/*                                                                        */
+/*                                                                        */
+/**************************************************************************/
+
+TabPage RID_SCPAGE_PRINT
+{
+    HelpId = HID_SCPAGE_PRINT ;
+    SVLook = TRUE ;
+    Hide = TRUE ;
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+    FixedLine FL_PAGES
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text = "Seiten" ;
+        Text [ ENGLISH ] = "Pages" ;
+    };
+    CheckBox BTN_SKIPEMPTYPAGES
+    {
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 239 , 10 ) ;
+        Text = "~Ausgabe leerer Seiten unterdrücken" ;
+        Text [ ENGLISH ] = "~Suppress output of empty pages" ;
+    };
+    FixedLine FL_SHEETS
+    {
+        Pos = MAP_APPFONT ( 6 , 30 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text = "Tabellen" ;
+        Text [ ENGLISH ] = "Sheets" ;
+    };
+    CheckBox BTN_SELECTEDSHEETS
+    {
+        Pos = MAP_APPFONT ( 12 , 41 ) ;
+        Size = MAP_APPFONT ( 239 , 10 ) ;
+        Text = "~Nur ausgewählte Tabellen drucken" ;
+        Text [ ENGLISH ] = "~Print only selected sheets" ;
+    };
+};
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scmod.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-04 15:38:13 $
+ *  last change: $Author: nn $ $Date: 2001-05-29 19:31:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,10 +99,12 @@ class ScViewCfg;
 class ScDocCfg;
 class ScAppCfg;
 class ScInputCfg;
+class ScPrintCfg;
 class ScViewOptions;
 class ScDocOptions;
 class ScAppOptions;
 class ScInputOptions;
+class ScPrintOptions;
 class ScInputHandler;
 class ScInputWindow;
 class ScTabViewShell;
@@ -160,6 +162,7 @@ class ScModule: public ScModuleDummy, public SfxListener
     ScDocCfg*           pDocCfg;
     ScAppCfg*           pAppCfg;
     ScInputCfg*         pInputCfg;
+    ScPrintCfg*         pPrintCfg;
     ScNavipiCfg*        pNavipiCfg;
     SfxErrorHandler*    pErrorHdl;
     SvxErrorHandler*    pSvxErrorHdl;
@@ -218,10 +221,12 @@ public:
     const ScDocOptions&     GetDocOptions   ();
     const ScAppOptions&     GetAppOptions   ();
     const ScInputOptions&   GetInputOptions ();
+    const ScPrintOptions&   GetPrintOptions ();
     void                    SetViewOptions  ( const ScViewOptions& rOpt );
     void                    SetDocOptions   ( const ScDocOptions& rOpt );
     void                    SetAppOptions   ( const ScAppOptions& rOpt );
     void                    SetInputOptions ( const ScInputOptions& rOpt );
+    void                    SetPrintOptions ( const ScPrintOptions& rOpt );
     void                    InsertEntryToLRUList(USHORT nFIndex);
     void                    RecentFunctionsChanged();
 
