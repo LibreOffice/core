@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objface.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:49:36 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 16:08:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,16 +75,10 @@
 #include "module.hxx"
 #include "objface.hxx"
 #include "msg.hxx"
+#include "app.hxx"
 #include "msgpool.hxx"
-#include "cfgitem.hxx"
 #include "sfxresid.hxx"
 #include "minarray.hxx"
-#include "cfgmgr.hxx"
-#include "tbxmgr.hxx"
-#ifdef _PROXYSHELL_VERWENDEN
-#include "bindings.hxx" // fuer ProxyInterface
-#include "dispatch.hxx" // fuer ProxyInterface
-#endif
 
 DBG_NAME(SfxInterface);
 
@@ -207,28 +201,6 @@ void SfxIFConfig_Impl::RegisterObjectBar( USHORT nPos, const ResId& rResId, ULON
     SfxObjectUI_Impl* pUI = CreateObjectBarUI_Impl( nPos, rResId, nFeature, pStr, SFX_INTERFACE_OFA_START );
     if ( pUI )
         pObjectBars->Append(pUI);
-}
-
-USHORT SfxIFConfig_Impl::GetType()
-{
-    return SFX_ITEMTYPE_INTERFACE_START + SFX_INTERFACE_OFA_START;
-}
-
-BOOL SfxIFConfig_Impl::Store(SvStream& rStream)
-{
-    rStream << (USHORT) nVersion;
-    rStream << (USHORT) pObjectBars->Count();
-    for (USHORT i=0; i<pObjectBars->Count(); i++)
-    {
-        rStream << (USHORT) ((*pObjectBars)[i]->nPos)
-                << (USHORT) (*pObjectBars)[i]->aResId.GetId()
-                << (USHORT) (*pObjectBars)[i]->nInterfaceId
-                << (USHORT) (*pObjectBars)[i]->bVisible;
-        rStream.WriteByteString(*(*pObjectBars)[i]->pName, RTL_TEXTENCODING_UTF8 );
-        rStream << (ULONG) (*pObjectBars)[i]->nFeature;
-    }
-
-    return TRUE;
 }
 
 //====================================================================
@@ -1055,172 +1027,9 @@ void SfxInterface::SetObjectBarVisible(BOOL bVis, USHORT nId)
     }
 }
 
-USHORT SfxInterface::GetConfigId() const
-{
-    return SFX_ITEMTYPE_INTERFACE_START + nClassId;
-}
-
-
 SfxObjectUIArr_Impl* SfxInterface::GetObjectBarArr_Impl() const
 {
     return pImpData->pObjectBars;
-}
-
-
-USHORT SfxInterface::RegisterUserDefToolBox(USHORT nId, const String *pName,
-                SfxConfigManager *pCfgMgr)
-{
-    // Zuerst "uber den Namen die ToolBox suchen
-    SfxInterface *pIFace;
-    for (pIFace = SFX_SLOTPOOL().FirstInterface(); pIFace != 0;
-            pIFace = SFX_SLOTPOOL().NextInterface())
-    {
-        // Nur Interfaces mit Namen d"urfen welche bekommen
-        if (pIFace->HasName())
-        {
-            // Zugriff auf ObjectBars
-            SfxObjectUIArr_Impl *pArr = pIFace->GetObjectBarArr_Impl();
-            for (USHORT nNo=0; nNo<pArr->Count(); nNo++)
-            {
-                if ( *pName == *(*pArr)[nNo]->pName)
-                    return (*pArr)[nNo]->aResId.GetId();
-            }
-        }
-    }
-
-    // Ansonsten n"achste freie Id besorgen
-    USHORT nFreeId = SfxToolBoxManager::GetUserDefToolBoxId_Impl();
-
-    // Alle Interfaces durchprobieren, ob sie noch eine UserDefToolBox
-    // aufnehmen k"onnen
-    USHORT nPos = 0;
-    for (pIFace = SFX_SLOTPOOL().FirstInterface(); pIFace != 0;
-            pIFace = SFX_SLOTPOOL().NextInterface())
-    {
-        BOOL bFound = FALSE;
-
-        // Nur Interfaces mit Namen d"urfen welche bekommen
-        if (pIFace->HasName())
-        {
-            // Zugriff auf ObjectBars
-            SfxObjectUIArr_Impl *pArr = pIFace->GetObjectBarArr_Impl();
-
-            for ( nPos=SFX_OBJECTBAR_USERDEF1; nPos<=SFX_OBJECTBAR_USERDEF3; nPos++ )
-            {
-                // Nach freier Position suchen
-                bFound = TRUE;
-                for (USHORT nNo=0; nNo<pArr->Count(); nNo++)
-                {
-                    if ( nPos == (*pArr)[nNo]->nPos)
-                    {
-                        // Diese Position ist schon besetzt, n"achste versuchen
-                        bFound = FALSE;
-                        break;
-                    }
-                }
-
-                // Wurde eine noch freie Position gefunden ?
-                if ( bFound )
-                    break;
-            }
-        }
-
-        // Wurde am Interface etwas gefunden ?
-        if ( bFound )
-            break;
-    }
-
-    if ( pIFace )
-    {
-        // Am gefundenen Interface mu\s die Konfiguration ver"andert werden
-        //SfxConfigItem *pCfgItem = pIFace->GetConfig_Impl();
-        //SfxConfigManager *pOldCfgMgr = pCfgItem->GetConfigManager();
-/* //!MBA
-        if ( pOldCfgMgr != pCfgMgr )
-        {
-            // Wenn das Interface bisher von einem anderen ConfigManager
-            // bedient wird, wird dessen Config gesichert
-            pCfgItem->StoreConfig();
-
-            // Der Ziel-Configmanager mu\s die Konfiguration aufnehmen k"onnen
-            if ( !pCfgMgr->HasConfigItem(pIFace->GetConfigId()) )
-                pCfgMgr->InsertConfigItem(pIFace->GetConfigId());
-
-            // Verbindung mit dem ConfigItem herstellen und Config "ubernehmen
-            pCfgMgr->AddConfigItem(pCfgItem);
-            pCfgItem->Initialize();
-        }
-*/
-        // Jetzt wird das Interface umkonfiguriert
-        pIFace->RegisterObjectBar(nPos, nFreeId, pName);
-        pIFace->SetObjectBarVisible(TRUE, nFreeId);
-
-/* //!MBA
-        // Konfiguration sichern und aktuellen Stand der Config restaurieren
-        if ( pCfgMgr != pOldCfgMgr && pCfgMgr != SFX_CFGMANAGER() )
-        {
-            pCfgItem->StoreConfig();
-            pCfgMgr->RemoveConfigItem(pCfgItem);
-            pCfgItem->Connect(pOldCfgMgr);
-            pCfgItem->Initialize();
-        }
- */
-    }
-
-    return nFreeId;
-}
-
-
-void SfxInterface::ReleaseUserDefToolBox(USHORT nId, SfxConfigManager *pCfgMgr)
-
-{
-    BOOL bDone = FALSE;
-
-    // Alle Interfaces durchprobieren, ob sie diese UserDefToolBox haben
-    for (SfxInterface *pIFace = SFX_SLOTPOOL().FirstInterface(); pIFace != 0;
-            pIFace = SFX_SLOTPOOL().NextInterface())
-    {
-        // Nur Interfaces mit Namen k"onnen welche haben
-        if (pIFace->HasName())
-        {
-            // Die Konfiguration vom "ubergebenen Manager interessiert
-            //SfxConfigItem *pCfgItem = pIFace->GetConfig_Impl();
-            //SfxConfigManager *pOldCfgMgr = pCfgItem->GetConfigManager();
-/* //!MBA
-            if ( pOldCfgMgr != pCfgMgr )
-            {
-                // Wenn das Interface bisher von einem anderen ConfigManager
-                // bedient wird, wird dessen Config gesichert
-                pCfgItem->StoreConfig();
-
-                // Verbindung mit dem ConfigItem herstellen und Config "ubernehmen
-                pCfgMgr->AddConfigItem(pCfgItem);
-                pCfgItem->Initialize();
-            }
-*/
-            if ( pIFace->HasObjectBar(nId) )
-            {
-                pIFace->ReleaseObjectBar(nId);
-                bDone = TRUE;
-            }
-
-/* //!MBA
-            // Konfiguration sichern und aktuellen Stand der Config restaurieren
-            if ( pCfgMgr != pOldCfgMgr )
-            {
-                pCfgItem->StoreConfig();
-                pCfgMgr->RemoveConfigItem(pCfgItem);
-                pCfgItem->Connect(pOldCfgMgr);
-                pCfgItem->Initialize();
-            }
- */
-        }
-
-        if ( bDone )
-        {
-            break;
-        }
-    }
 }
 
 
