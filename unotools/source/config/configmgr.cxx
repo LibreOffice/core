@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configmgr.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: jb $ $Date: 2002-12-03 12:30:45 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 16:12:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -295,19 +295,15 @@ Reference< XHierarchicalNameAccess> ConfigManager::AcquireTree(utl::ConfigItem& 
     // Initialize item with support for reading/writing more then one locales at same time!
     // It's neccessary for creation of a complete configuration entry without changing office locale
     // at runtime.
-    if(rCfgItem.GetMode()&CONFIG_MODE_ALL_LOCALES)
+    if((rCfgItem.GetMode() & CONFIG_MODE_ALL_LOCALES) == CONFIG_MODE_ALL_LOCALES)
     {
-        aArgs.realloc(4);
-        pArgs = aArgs.getArray();
-        PropertyValue aProperty;
+        sal_Int32 nCount = aArgs.getLength();
+        aArgs.realloc(nCount+1);
 
-        aProperty.Name  =   C2U("lazywrite");
-        aProperty.Value <<= sal_True        ;
-        pArgs[2] <<= aProperty;
-
-        aProperty.Name  =   C2U("locale");
-        aProperty.Value <<= C2U("*"     );
-        pArgs[3] <<= aProperty;
+        PropertyValue aAllLocale;
+        aAllLocale.Name  =   C2U("locale");
+        aAllLocale.Value <<= C2U("*"     );
+        aArgs[nCount]    <<= aAllLocale;
     }
 
     Reference< XMultiServiceFactory > xCfgProvider = GetConfigurationProvider();
