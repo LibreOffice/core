@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framectr.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:16:44 $
+ *  last change: $Author: os $ $Date: 2001-06-18 11:11:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,6 +153,8 @@ friend class BibFrameCtrl_Impl;
     BibDataManager*             pDatMan;
     BibFieldWin*                pFieldWin;
     HdlBibModul                 pBibMod;
+
+    DECL_STATIC_LINK( BibFrameController_Impl, DisposeHdl, void* );
 
 public:
                                 BibFrameController_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > & xComponent);

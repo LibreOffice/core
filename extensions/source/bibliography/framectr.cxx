@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framectr.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2001-06-12 07:24:35 $
+ *  last change: $Author: os $ $Date: 2001-06-18 11:11:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,9 @@
 #endif
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx> // helper for implementations
+#endif
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
 #endif
 
 using namespace osl;
@@ -296,7 +299,8 @@ uno::Reference< frame::XDispatch >  BibFrameController_Impl::queryDispatch( cons
         String aCommand( aURL.Path );
         if (    aCommand.EqualsAscii("Undo") || aCommand.EqualsAscii("Cut") ||
                 aCommand.EqualsAscii("Copy") || aCommand.EqualsAscii("Paste") ||
-                aCommand.EqualsAscii("SelectAll") || aCommand.Copy(0,4).EqualsAscii("Bib/"))
+                aCommand.EqualsAscii("SelectAll") || aCommand.Copy(0,4).EqualsAscii("Bib/")||
+                aURL.Complete.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("slot:5503")))
 
             return (frame::XDispatch*) this;
     }
@@ -400,8 +404,20 @@ void BibFrameController_Impl::dispatch(const util::URL& aURL, const uno::Sequenc
         {
             RemoveFilter();
         }
+        else if(aURL.Complete.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("slot:5503")))
+        {
+            Application::PostUserEvent( STATIC_LINK( this, BibFrameController_Impl,
+                                        DisposeHdl ), 0 );
+
+        }
     }
 }
+IMPL_STATIC_LINK( BibFrameController_Impl, DisposeHdl, void*, EMPTYARG )
+{
+    pThis->xFrame->dispose();
+    return 0;
+};
+
 //-----------------------------------------------------------------------------
 void BibFrameController_Impl::addStatusListener(
     const uno::Reference< frame::XStatusListener > & aListener,
