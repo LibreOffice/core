@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableWindow.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 17:22:49 $
+ *  last change: $Author: vg $ $Date: 2003-06-25 11:04:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -739,7 +739,7 @@ void OTableWindow::_disposing( const ::com::sun::star::lang::EventObject& _rSour
 // -----------------------------------------------------------------------------
 Reference< XAccessible > OTableWindow::CreateAccessible()
 {
-    OTableWindowAccess* pAccessible = new OTableWindowAccess(getTableView()->GetAccessible(),this);
+    OTableWindowAccess* pAccessible = new OTableWindowAccess(this);
     m_pAccessible = pAccessible;
     return pAccessible;
 }
