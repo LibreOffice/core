@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh4.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 14:06:18 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 11:30:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -321,6 +321,10 @@ void ScTabViewShell::SetActive()
 
 USHORT __EXPORT ScTabViewShell::PrepareClose(BOOL bUI, BOOL bForBrowsing)
 {
+    // #110797#
+    if ( GetDrawView() )
+        GetDrawView()->EndTextEdit();
+
     if ( pFormShell )
     {
         USHORT nRet = pFormShell->PrepareClose(bUI, bForBrowsing);
