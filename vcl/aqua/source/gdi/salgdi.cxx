@@ -2,8 +2,8 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.50 $
- *  last change: $Author: bmahbod $ $Date: 2001-02-14 19:39:49 $
+ *  $Revision: 1.51 $
+ *  last change: $Author: pluby $ $Date: 2001-02-21 01:18:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1250,11 +1250,23 @@ long SalGraphics::GetCharWidth( sal_Unicode  nChar1,
                                 long*        pWidthAry
                               )
 {
+    // Stub code
+
+    sal_Unicode nCharCount = nChar2 - nChar1 + 1;
+    sal_Unicode i = 0;
+
+    // Put a stub width in the pWidthAry that is passed to this method for
+    // both of the two Unicode characters and all characters between them.
+    // The width of nChar1 is put in element 0 of pWidthAry and the width
+    // of nChar2 is put in element nChar2 - nChar1 of pWidthAry
+    for ( i = 0 ; i < nCharCount ; i++ )
+        pWidthAry[i] = 10;
+
     fprintf( stderr,
              "<<WARNING>> SalGraphics::GetCharWidth not yet implemented!\n"
            );
 
-    return 10;
+    return 1;
 } // SalGraphics::GetCharWidth
 
 // -----------------------------------------------------------------------
@@ -1262,10 +1274,6 @@ long SalGraphics::GetCharWidth( sal_Unicode  nChar1,
 void SalGraphics::GetFontMetric( ImplFontMetricData* pMetric )
 {
     // Stub Code
-
-    FMetricRec aFMetric;
-
-    FontMetrics( &aFMetric );
 
     pMetric->mnAscent = 10;
     pMetric->mnDescent = 10;
