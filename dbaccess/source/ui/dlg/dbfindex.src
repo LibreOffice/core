@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbfindex.src,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-05 10:05:48 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 15:17:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@ ModalDialog DLG_DBASE_INDEXES
     Text [ italian ] = "Indici" ;
     Text [ portuguese ] = "Índices" ;
     Text [ french ] = "Index" ;
-    Text [ dutch ] = "Indices" ;
+    Text [ dutch ] = "Indices " ;
     Text [ spanish ] = "Índices" ;
     Text [ english_us ] = "Indexes" ;
     Moveable = TRUE ;
@@ -112,7 +112,7 @@ ModalDialog DLG_DBASE_INDEXES
         Text [ spanish ] = "~Tabla:" ;
         Text [ french ] = "~Table :" ;
         Text [ italian ] = "Tabella:" ;
-        Text [ dutch ] = "~Tabel:" ;
+        Text [ dutch ] = "~Tabel: " ;
         Text [ portuguese ] = "~Tabela:" ;
         Text [ portuguese_brazilian ] = "Tabelle:" ;
         Text [ danish ] = "Tabel:" ;
@@ -123,7 +123,7 @@ ModalDialog DLG_DBASE_INDEXES
         Text[ japanese ] = "Ã°ÌŞÙ(~T):";
         Text[ chinese_traditional ] = "ªí®æ(~T)¡G";
         Text[ arabic ] = "ÌÏæá:";
-        Text[ greek ] = "~Ğßíáêáò:";
+        Text[ greek ] = "Ğßíáêáò:";
         Text[ korean ] = "Ç¥:(~T)";
         Text[ turkish ] = "Tablo:";
     };
@@ -144,10 +144,10 @@ ModalDialog DLG_DBASE_INDEXES
         Text [ english ] = "Assignment" ;
         Text [ english_us ] = "Assignment" ;
         Text[ portuguese ] = "Atribuição";
-        Text[ russian ] = "Ïğèìåíåíèå";
+        Text[ russian ] = "Íàçíà÷åíèå";
         Text[ greek ] = "Áíôéóôïß÷éóç";
-        Text[ dutch ] = "Toewijzing";
-        Text[ french ] = "Assignement";
+        Text[ dutch ] = "Toewijzing ";
+        Text[ french ] = "Assignation";
         Text[ spanish ] = "Asignación";
         Text[ italian ] = "Assegnazione";
         Text[ danish ] = "Tildeling";
@@ -171,7 +171,7 @@ ModalDialog DLG_DBASE_INDEXES
         Text [ spanish ] = "Índices de ta~bla:" ;
         Text [ french ] = "~Index de table :" ;
         Text [ italian ] = "Indici t~abella:" ;
-        Text [ dutch ] = "Tabel~indices:" ;
+        Text [ dutch ] = "Tabel~indices: " ;
         Text [ portuguese ] = "~Índices de tabelas:" ;
         Text [ portuguese_brazilian ] = "Tabellenindizes:" ;
         Text [ swedish ] = "T~abellindex:" ;
@@ -179,7 +179,7 @@ ModalDialog DLG_DBASE_INDEXES
         Text[ chinese_simplified ] = "±í¸ñ±êÖ¾(~A)£º";
         Text[ russian ] = "Èíäåêñû òàáëèöû:";
         Text[ polish ] = "Indeksy tabeli:";
-        Text[ japanese ] = "Ã°ÌŞÙ‚Ì²İÃŞ¯¸½:";
+        Text[ japanese ] = "Ã°ÌŞÙ‚Ì²İÃŞ¯¸½(~A):";
         Text[ chinese_traditional ] = "ªí®æ¼Ğ»x¡G";
         Text[ arabic ] = "İåÇÑÓ ÌÏæá:";
         Text[ greek ] = "ÅõñåôŞñé~á ğéíÜêùí:";
@@ -202,17 +202,17 @@ ModalDialog DLG_DBASE_INDEXES
         Text [ english ] = "Free Indexes:" ;
         Text [ english_us ] = "~Free indexes:" ;
         Text [ spanish ] = "Índices lib~res:" ;
-        Text [ french ] = "Index ~libres" ;
+        Text [ french ] = "Index ~libres :" ;
         Text [ italian ] = "Indici liberi:" ;
-        Text [ dutch ] = "~Vrije indices" ;
-        Text [ portuguese ] = "Índices ~livres" ;
+        Text [ dutch ] = "~Vrije indices: " ;
+        Text [ portuguese ] = "Índices ~livres:" ;
         Text [ portuguese_brazilian ] = "Freie Indizes" ;
         Text [ swedish ] = "~Fria index:" ;
         Text [ danish ] = "Frie indeks:" ;
         Text[ chinese_simplified ] = "×ÔÓÉ±êÖ¾(~F)£º";
-        Text[ russian ] = "Ñâîáîäíûå èíäåêñû";
-        Text[ polish ] = "Wolne indeksy";
-        Text[ japanese ] = "ÌØ° ²İÃŞ¯¸½";
+        Text[ russian ] = "Ñâîáîäíûå èíäåêñû:";
+        Text[ polish ] = "Wolne indeksy:";
+        Text[ japanese ] = "ÌØ°²İÃŞ¯¸½(~F)";
         Text[ chinese_traditional ] = "¦Û¥Ñ¼Ğ»x(~F)¡G";
         Text[ arabic ] = "İåÇÑÓ ÍÑÉ:";
         Text[ greek ] = "Åëåı~èåñá åõñåôŞñéá";
@@ -273,6 +273,9 @@ ModalDialog DLG_DBASE_INDEXES
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2000/10/05 10:05:48  fs
+ *  initial checkin
+ *
  *
  *  Revision 1.0 26.09.00 17:03:30  fs
  ************************************************************************/
