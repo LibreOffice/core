@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 15:11:02 $
+ *  last change: $Author: vg $ $Date: 2003-05-19 12:28:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,7 +214,6 @@
 #include "ww8par2.hxx"
 #endif
 
-#define WWF_INVISIBLE 86            // Bit-Nummer fuer Invisible ( IniFlags )
 #define MAX_FIELDLEN 64000
 
 #define WW8_TOX_LEVEL_DELIM     ':'
@@ -231,7 +230,6 @@ public:
     xub_StrLen GoToTokenParam();
     long SkipToNextToken();
     xub_StrLen GetTokenSttPtr() const   { return nFnd;  }
-    void SetNextPtr( xub_StrLen _nNext ) { nNext = _nNext; }
 
     xub_StrLen FindNextStringPiece( xub_StrLen _nStart = STRING_NOTFOUND );
     bool GetTokenSttFromTo(xub_StrLen* _pFrom, xub_StrLen* _pTo,
@@ -1163,15 +1161,6 @@ long SwWW8ImplReader::Read_F_Tag( WW8FieldDesc* pF )
 //-----------------------------------------
 //        normale Felder
 //-----------------------------------------
-
-// Read_F_Nul() dient dazu, Felder, die ein belegtes ResultatFeld haben, dieses
-// aber trotzdem keinen Text darstellt, sondern z.B. Variablen-Werte, komplett
-// zu ignorieren.
-// Noetig z.B. fuer Feld 6 "Set" == "Bestimmen".
-eF_ResT SwWW8ImplReader::Read_F_Nul( WW8FieldDesc*, String& )
-{
-    return FLD_OK;
-}
 
 eF_ResT SwWW8ImplReader::Read_F_Input( WW8FieldDesc* pF, String& rStr )
 {
@@ -2873,6 +2862,8 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
                         eOptions |= TOI_ALPHA_DELIMITTER;
                     }
                     break;
+#if 0
+                //#109413# Doesn't work the way you think it does.
                 case 'r':
                     {
                         SwForm aForm( pBase->GetTOXForm() );
@@ -2880,6 +2871,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
                         pBase->SetTOXForm( aForm );
                     }
                     break;
+#endif
                 /*
                 // the following switches are not (yet) supported
                 // by good old StarWriter:
