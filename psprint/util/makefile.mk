@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: vg $ $Date: 2003-12-17 20:23:25 $
+#   last change: $Author: hr $ $Date: 2004-02-02 18:57:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,6 +71,13 @@ TARGET=psp
 
 # --- Allgemein ----------------------------------------------------------
 
+.IF "$(GUIBASE)"=="aqua"
+
+dummy:
+    @echo "Nothing to build for GUIBASE $(GUIBASE)"
+
+.ELSE		# "$(GUIBASE)"=="aqua"
+
 .IF "$(OS)"=="WNT"
 LIB1TARGET= $(SLB)$/a$(TARGET).lib
 LIB1FILES=	$(SLB)$/fontsubset.lib
@@ -104,6 +111,8 @@ SHL1STDLIBS+=$(JVMACCESSLIB)
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 
 .ENDIF      # "$(OS)"=="WNT"
+
+.ENDIF # GUIBASE = aqua
 
 # --- Targets ------------------------------------------------------------
 
