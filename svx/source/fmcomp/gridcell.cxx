@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridcell.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 10:56:16 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 13:13:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,9 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMED_HPP_
 #include <com/sun/star/container/XNamed.hpp>
 #endif
+#ifndef _COM_SUN_STAR_AWT_LINEENDFORMAT_HPP_
+#include <com/sun/star/awt/LineEndFormat.hpp>
+#endif
 
 #ifndef _FMTFIELD_HXX_
 #include <svtools/fmtfield.hxx>
@@ -161,6 +164,9 @@
 
 #include <math.h>
 
+#ifndef _SVEDIT_HXX
+#include <svtools/svmedit.hxx>
+#endif
 
 using namespace ::connectivity;
 using namespace ::connectivity::simple;
@@ -175,6 +181,43 @@ using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::form;
 
+//==================================================================
+//= helper
+//==================================================================
+namespace
+{
+    static LineEnd getModelLineEndSetting( const Reference< XPropertySet >& _rxModel )
+    {
+        LineEnd eFormat = LINEEND_LF;
+
+        try
+        {
+            sal_Int16 nLineEndFormat = awt::LineEndFormat::LINE_FEED;
+
+            OSL_ENSURE( _rxModel.is(), "getModelLineEndSetting: invalid column model!" );
+            if ( _rxModel.is() )
+                OSL_VERIFY( _rxModel->getPropertyValue( FM_PROP_LINEENDFORMAT ) >>= nLineEndFormat );
+
+            switch ( nLineEndFormat )
+            {
+            case awt::LineEndFormat::CARRIAGE_RETURN:            eFormat = LINEEND_CR; break;
+            case awt::LineEndFormat::LINE_FEED:                  eFormat = LINEEND_LF; break;
+            case awt::LineEndFormat::CARRIAGE_RETURN_LINE_FEED:  eFormat = LINEEND_CRLF; break;
+            default:
+                OSL_ENSURE( sal_False, "getModelLineEndSetting: what's this?" );
+            }
+        }
+        catch( const Exception& )
+        {
+            OSL_ENSURE( sal_False, "getModelLineEndSetting: caught an exception!" );
+        }
+        return eFormat;
+    }
+}
+
+//==================================================================
+//= DbGridColumn
+//==================================================================
 //------------------------------------------------------------------------------
 CellControllerRef DbGridColumn::s_xEmptyController;
 
@@ -510,8 +553,8 @@ void DbGridColumn::Paint(OutputDevice& rDev,
             rDev.DrawText(rRect, OBJECTTEXT, nStyle);
         }
     }
-    else if (m_pCell->ISA(FmXFilterCell))
-        ((FmXFilterCell*)m_pCell)->Paint(rDev, rRect);
+    else if ( m_pCell->ISA( FmXFilterCell ) )
+        static_cast< FmXFilterCell* >( m_pCell )->Paint( rDev, rRect );
 }
 
 //------------------------------------------------------------------------------
@@ -520,6 +563,24 @@ void DbGridColumn::ImplInitSettings(Window* pParent, sal_Bool bFont, sal_Bool bF
     if (m_pCell)
         m_pCell->ImplInitSettings(pParent, bFont, bForeground, bBackground);
 }
+
+//==============================================================================
+//= cell controls
+//==============================================================================
+TYPEINIT0( DbCellControl )
+TYPEINIT1( DbLimitedLengthField, DbCellControl )
+TYPEINIT1( DbTextField, DbLimitedLengthField )
+TYPEINIT1( DbFormattedField, DbLimitedLengthField )
+TYPEINIT1( DbCheckBox, DbCellControl )
+TYPEINIT1( DbComboBox, DbCellControl )
+TYPEINIT1( DbListBox, DbCellControl )
+TYPEINIT1( DbPatternField, DbCellControl )
+TYPEINIT1( DbSpinField, DbCellControl )
+TYPEINIT1( DbDateField, DbSpinField )
+TYPEINIT1( DbTimeField, DbSpinField )
+TYPEINIT1( DbCurrencyField, DbSpinField )
+TYPEINIT1( DbNumericField, DbSpinField )
+TYPEINIT1( DbFilterField, DbCellControl )
 
 //------------------------------------------------------------------------------
 DbCellControl::DbCellControl( DbGridColumn& _rColumn, sal_Bool _bText )
@@ -830,46 +891,80 @@ void DbCellControl::SetTextLineColor(const Color& _rColor)
         m_pPainter->SetTextLineColor(_rColor);
 }
 
+namespace
+{
+    static void lcl_implAlign( Window* _pWindow, WinBits _nAlignmentBit )
+    {
+        WinBits nStyle = _pWindow->GetStyle();
+        nStyle &= ~(WB_LEFT | WB_RIGHT | WB_CENTER);
+        _pWindow->SetStyle( nStyle | _nAlignmentBit );
+    }
+}
+
 //------------------------------------------------------------------------------
 void DbCellControl::AlignControl(sal_Int16 nAlignment)
 {
-    WinBits nStyle = m_pWindow->GetStyle();
-    nStyle &= ~(WB_LEFT | WB_RIGHT | WB_CENTER);
+    WinBits nAlignmentBit = 0;
     switch (nAlignment)
     {
         case ::com::sun::star::awt::TextAlign::RIGHT:
-            nStyle |= WB_RIGHT;
+            nAlignmentBit = WB_RIGHT;
             break;
         case ::com::sun::star::awt::TextAlign::CENTER:
-            nStyle |= WB_CENTER;
+            nAlignmentBit = WB_CENTER;
             break;
         default:
-            nStyle |= WB_LEFT;
+            nAlignmentBit = WB_LEFT;
             break;
     }
-    m_pWindow->SetStyle(nStyle);
+    lcl_implAlign( m_pWindow, nAlignmentBit );
+    if ( m_pPainter )
+        lcl_implAlign( m_pPainter, nAlignmentBit );
 }
 
 //------------------------------------------------------------------------------
-void DbCellControl::Paint(OutputDevice& rDev, const Rectangle& rRect)
+void DbCellControl::Paint( OutputDevice& _rDev, const Rectangle& _rRect )
 {
-    m_pPainter->SetPosSizePixel(rRect.TopLeft(), rRect.GetSize());
-    m_pPainter->Show();
-    m_pPainter->Update();
-    m_pPainter->SetParentUpdateMode( sal_False );
-    m_pPainter->Hide();
-    m_pPainter->SetParentUpdateMode( sal_True );
+    if ( m_pPainter->GetParent() == &_rDev )
+    {
+        m_pPainter->SetPaintTransparent( sal_True );
+        m_pPainter->SetBackground( );
+        m_pPainter->SetControlBackground( _rDev.GetFillColor() );
+        m_pPainter->SetControlForeground( _rDev.GetTextColor() );
+        m_pPainter->SetTextColor( _rDev.GetTextColor() );
+        m_pPainter->SetTextFillColor( _rDev.GetTextColor() );
+
+        Font aFont( _rDev.GetFont() );
+        aFont.SetTransparent( TRUE );
+        m_pPainter->SetFont( aFont );
+
+        m_pPainter->SetPosSizePixel( _rRect.TopLeft(), _rRect.GetSize() );
+        m_pPainter->Show();
+        m_pPainter->Update();
+        m_pPainter->SetParentUpdateMode( sal_False );
+        m_pPainter->Hide();
+        m_pPainter->SetParentUpdateMode( sal_True );
+    }
+    else
+        m_pPainter->Draw( &_rDev, _rRect.TopLeft(), _rRect.GetSize(), 0 );
 }
 
 //------------------------------------------------------------------------------
-double DbCellControl::GetValue(const Reference< ::com::sun::star::sdb::XColumn >& _xVariant, const Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter) const
+void DbCellControl::Paint( OutputDevice& _rDev, const Rectangle& _rRect, const Reference< XColumn >& _rxField, const Reference< XNumberFormatter >& _rxFormatter )
+{
+    m_pPainter->SetText( GetFormatText( _rxField, _rxFormatter ) );
+    Paint( _rDev, _rRect );
+}
+
+//------------------------------------------------------------------------------
+double DbCellControl::GetValue(const Reference< ::com::sun::star::sdb::XColumn >& _rxField, const Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter) const
 {
     double fValue = 0;
     if (m_rColumn.IsNumeric())
     {
         try
         {
-            fValue = _xVariant->getDouble();
+            fValue = _rxField->getDouble();
         }
         catch(const Exception&) { }
     }
@@ -878,7 +973,7 @@ double DbCellControl::GetValue(const Reference< ::com::sun::star::sdb::XColumn >
         sal_Bool bSuccess = sal_False;
         try
         {
-            fValue = _xVariant->getDouble();
+            fValue = _rxField->getDouble();
             bSuccess = sal_True;
         }
         catch(const Exception&) { }
@@ -886,7 +981,7 @@ double DbCellControl::GetValue(const Reference< ::com::sun::star::sdb::XColumn >
         {
             try
             {
-                fValue = xFormatter->convertStringToNumber(m_rColumn.GetKey(), _xVariant->getString());
+                fValue = xFormatter->convertStringToNumber(m_rColumn.GetKey(), _rxField->getString());
             }
             catch(const Exception&) { }
         }
@@ -933,10 +1028,19 @@ void DbLimitedLengthField::implAdjustGenericFieldSetting( const Reference< XProp
 //==============================================================================
 //= DbTextField
 //==============================================================================
+//------------------------------------------------------------------------------
 DbTextField::DbTextField(DbGridColumn& _rColumn)
             :DbLimitedLengthField(_rColumn)
             ,m_nKeyType(::com::sun::star::util::NumberFormat::TEXT)
+            ,m_pEdit( NULL )
 {
+}
+
+//------------------------------------------------------------------------------
+DbTextField::~DbTextField( )
+{
+    DELETEZ( m_pPainterImplementation );
+    DELETEZ( m_pEdit );
 }
 
 //------------------------------------------------------------------------------
@@ -944,27 +1048,60 @@ void DbTextField::Init(Window* pParent, const Reference< XRowSet >& xCursor)
 {
     sal_Int16 nAlignment = m_rColumn.SetAlignmentFromModel(-1);
 
-    Reference< ::com::sun::star::beans::XPropertySet >  xModel(m_rColumn.getModel());
+    Reference< XPropertySet > xModel( m_rColumn.getModel() );
+
+    WinBits nStyle = WB_LEFT;
     switch (nAlignment)
     {
-        case ::com::sun::star::awt::TextAlign::RIGHT:
-            m_pWindow  = new Edit(pParent, WB_RIGHT);
-            break;
+    case awt::TextAlign::RIGHT:
+        nStyle = WB_RIGHT;
+        break;
 
-        case ::com::sun::star::awt::TextAlign::CENTER:
-            m_pWindow  = new Edit(pParent, WB_CENTER);
-            break;
+    case awt::TextAlign::CENTER:
+        nStyle = WB_CENTER;
+        break;
+    }
 
-        default:
-            m_pWindow  = new Edit(pParent, WB_LEFT);
+    // is this a multi-line field?
+    sal_Bool bIsMultiLine = sal_False;
+    try
+    {
+        if ( xModel.is() )
+        {
+            OSL_VERIFY( xModel->getPropertyValue( FM_PROP_MULTILINE ) >>= bIsMultiLine );
+        }
+    }
+    catch( const Exception& )
+    {
+        OSL_ENSURE( sal_False, "DbTextField::Init: caught an exception while determining the multi-line capabilities!" );
+    }
 
-            // Alles nur damit die Selektion bei Focuserhalt von rechts nach links geht
-            AllSettings aSettings = m_pWindow->GetSettings();
-            StyleSettings aStyleSettings = aSettings.GetStyleSettings();
-            aStyleSettings.SetSelectionOptions(
-                aStyleSettings.GetSelectionOptions() | SELECTION_OPTION_SHOWFIRST);
-            aSettings.SetStyleSettings(aStyleSettings);
-            m_pWindow->SetSettings(aSettings);
+    if ( bIsMultiLine )
+    {
+        m_pWindow = new MultiLineTextCell( pParent, nStyle );
+        m_pEdit = new MultiLineEditImplementation( *static_cast< MultiLineTextCell* >( m_pWindow ) );
+
+        m_pPainter = new MultiLineTextCell( pParent, nStyle );
+        m_pPainterImplementation = new MultiLineEditImplementation( *static_cast< MultiLineTextCell* >( m_pPainter ) );
+    }
+    else
+    {
+        m_pWindow = new Edit( pParent, nStyle );
+        m_pEdit = new EditImplementation( *static_cast< Edit* >( m_pWindow ) );
+
+        m_pPainter = new Edit( pParent, nStyle );
+        m_pPainterImplementation = new EditImplementation( *static_cast< Edit* >( m_pPainter ) );
+    }
+
+    if ( WB_LEFT == nStyle )
+    {
+        // this is so that when getting the focus, the selection is oriented left-to-right
+        AllSettings aSettings = m_pWindow->GetSettings();
+        StyleSettings aStyleSettings = aSettings.GetStyleSettings();
+        aStyleSettings.SetSelectionOptions(
+            aStyleSettings.GetSelectionOptions() | SELECTION_OPTION_SHOWFIRST);
+        aSettings.SetStyleSettings(aStyleSettings);
+        m_pWindow->SetSettings(aSettings);
     }
 
     implAdjustGenericFieldSetting( xModel );
@@ -978,23 +1115,36 @@ void DbTextField::Init(Window* pParent, const Reference< XRowSet >& xCursor)
 //------------------------------------------------------------------------------
 CellControllerRef DbTextField::CreateController() const
 {
-    return new EditCellController((Edit*)m_pWindow);
+    return new EditCellController( m_pEdit );
 }
 
 //------------------------------------------------------------------------------
-String DbTextField::GetFormatText(const Reference< ::com::sun::star::sdb::XColumn >& _xVariant, const Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter, Color** ppColor)
+void DbTextField::Paint( OutputDevice& _rDev, const Rectangle& _rRect, const Reference< XColumn >& _rxField, const Reference< XNumberFormatter >& _rxFormatter )
+{
+    if ( m_pPainterImplementation )
+        m_pPainterImplementation->SetText( GetFormatText( _rxField, _rxFormatter, NULL ) );
+
+    if ( m_pPainter->GetParent() != &_rDev )
+        m_pPainter->Draw( &_rDev, _rRect.TopLeft(), _rRect.GetSize(), 0 );
+    else
+        DbLimitedLengthField::Paint( _rDev, _rRect, _rxField, _rxFormatter );
+}
+
+//------------------------------------------------------------------------------
+String DbTextField::GetFormatText(const Reference< XColumn >& _rxField, const Reference< XNumberFormatter >& xFormatter, Color** ppColor)
 {
     ::rtl::OUString aString;
-    if ( _xVariant.is() )
-        aString = getValue( _xVariant, xFormatter, m_rColumn.GetParent().getNullDate(), m_rColumn.GetKey(), m_nKeyType);
+    if ( _rxField.is() )
+        aString = getValue( _rxField, xFormatter, m_rColumn.GetParent().getNullDate(), m_rColumn.GetKey(), m_nKeyType);
+
     return aString;
 }
 
 //------------------------------------------------------------------------------
-void DbTextField::UpdateFromField(const Reference< ::com::sun::star::sdb::XColumn >& _xVariant, const Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter)
+void DbTextField::UpdateFromField(const Reference< ::com::sun::star::sdb::XColumn >& _rxField, const Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter)
 {
-    static_cast< Edit* >( m_pWindow )->SetText( GetFormatText( _xVariant, xFormatter ) );
-    static_cast< Edit* >( m_pWindow )->SetSelection( Selection( SELECTION_MAX, SELECTION_MIN ) );
+    m_pEdit->SetText( GetFormatText( _rxField, xFormatter ) );
+    m_pEdit->SetSelection( Selection( SELECTION_MAX, SELECTION_MIN ) );
 }
 
 //------------------------------------------------------------------------------
@@ -1004,9 +1154,8 @@ void DbTextField::updateFromModel( Reference< XPropertySet > _rxModel )
 
     ::rtl::OUString sText;
     _rxModel->getPropertyValue( FM_PROP_TEXT ) >>= sText;
-    Edit* pEdit = static_cast< Edit* >( m_pWindow );
 
-    xub_StrLen nMaxTextLen = pEdit->GetMaxTextLen();
+    xub_StrLen nMaxTextLen = m_pEdit->GetMaxTextLen();
     if ( EDIT_NOLIMIT != nMaxTextLen && sText.getLength() > nMaxTextLen )
     {
         sal_Int32 nDiff = sText.getLength() - nMaxTextLen;
@@ -1014,17 +1163,16 @@ void DbTextField::updateFromModel( Reference< XPropertySet > _rxModel )
     }
 
 
-    pEdit->SetText( sText );
-    pEdit->SetSelection( Selection( SELECTION_MAX, SELECTION_MIN ) );
+    m_pEdit->SetText( sText );
+    m_pEdit->SetSelection( Selection( SELECTION_MAX, SELECTION_MIN ) );
 }
 
 //------------------------------------------------------------------------------
 sal_Bool DbTextField::commitControl()
 {
-    Edit* pEdit = static_cast< Edit* >( m_pWindow );
-    ::rtl::OUString aText( pEdit->GetText() );
+    ::rtl::OUString aText( m_pEdit->GetText( getModelLineEndSetting( m_rColumn.getModel() ) ) );
     // we have to check if the length before we can decide if the value was modified
-    xub_StrLen nMaxTextLen = pEdit->GetMaxTextLen();
+    xub_StrLen nMaxTextLen = m_pEdit->GetMaxTextLen();
     if ( EDIT_NOLIMIT != nMaxTextLen )
     {
         ::rtl::OUString sOldValue;
@@ -1292,14 +1440,14 @@ void DbFormattedField::_propertyChanged( const PropertyChangeEvent& _rEvent ) th
 }
 
 //------------------------------------------------------------------------------
-String DbFormattedField::GetFormatText(const Reference< ::com::sun::star::sdb::XColumn >& _xVariant, const Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter, Color** ppColor)
+String DbFormattedField::GetFormatText(const Reference< ::com::sun::star::sdb::XColumn >& _rxField, const Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter, Color** ppColor)
 {
     // defaultmaessig keine Farb-Angabe
     if (ppColor != NULL)
         *ppColor = NULL;
 
     // NULL-Wert -> leerer Text
-    if (!_xVariant.is())
+    if (!_rxField.is())
         return String();
 
     String aText;
@@ -1310,8 +1458,8 @@ String DbFormattedField::GetFormatText(const Reference< ::com::sun::star::sdb::X
         // ein double-Feld bindet und als Text formatiert, liefert m_rColumn.IsNumeric() sal_True. Das heisst
         // also einfach, dass ich den Inhalt der Variant mittels getDouble abfragen kann, und dann kann
         // ich den Rest (die Formatierung) dem FormattedField ueberlassen.
-        double dValue = getValue(_xVariant, m_rColumn.GetParent().getNullDate(), m_nKeyType);
-        if (_xVariant->wasNull())
+        double dValue = getValue(_rxField, m_rColumn.GetParent().getNullDate(), m_nKeyType);
+        if (_rxField->wasNull())
             return aText;
         ((FormattedField*)m_pPainter)->SetValue(dValue);
     }
@@ -1319,8 +1467,8 @@ String DbFormattedField::GetFormatText(const Reference< ::com::sun::star::sdb::X
     {
         // Hier kann ich nicht mit einem double arbeiten, da das Feld mir keines liefern kann.
         // Also einfach den Text vom ::com::sun::star::util::NumberFormatter in die richtige ::com::sun::star::form::component::Form brinden lassen.
-        aText = (const sal_Unicode*)_xVariant->getString();
-        if (_xVariant->wasNull())
+        aText = (const sal_Unicode*)_rxField->getString();
+        if (_rxField->wasNull())
             return aText;
         ((FormattedField*)m_pPainter)->SetTextFormatted(aText);
     }
@@ -1333,10 +1481,10 @@ String DbFormattedField::GetFormatText(const Reference< ::com::sun::star::sdb::X
 }
 
 //------------------------------------------------------------------------------
-void DbFormattedField::UpdateFromField(const Reference< ::com::sun::star::sdb::XColumn >& _xVariant, const Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter)
+void DbFormattedField::UpdateFromField(const Reference< ::com::sun::star::sdb::XColumn >& _rxField, const Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter)
 {
     FormattedField* pFormattedWindow = static_cast<FormattedField*>(m_pWindow);
-    if (!_xVariant.is())
+    if (!_rxField.is())
     {   // NULL-Wert -> leerer Text
         m_pWindow->SetText(String());
     }
@@ -1347,8 +1495,8 @@ void DbFormattedField::UpdateFromField(const Reference< ::com::sun::star::sdb::X
         // ein double-Feld bindet und als Text formatiert, liefert m_rColumn.IsNumeric() sal_True. Das heisst
         // also einfach, dass ich den Inhalt der Variant mittels getDouble abfragen kann, und dann kann
         // ich den Rest (die Formatierung) dem FormattedField ueberlassen.
-        double dValue = getValue(_xVariant, m_rColumn.GetParent().getNullDate(), m_nKeyType);
-        if (_xVariant->wasNull())
+        double dValue = getValue(_rxField, m_rColumn.GetParent().getNullDate(), m_nKeyType);
+        if (_rxField->wasNull())
             m_pWindow->SetText(String());
         else
             pFormattedWindow->SetValue(dValue);
@@ -1357,7 +1505,7 @@ void DbFormattedField::UpdateFromField(const Reference< ::com::sun::star::sdb::X
     {
         // Hier kann ich nicht mit einem double arbeiten, da das Feld mir keines liefern kann.
         // Also einfach den Text vom ::com::sun::star::util::NumberFormatter in die richtige ::com::sun::star::form::component::Form brinden lassen.
-        String sText( _xVariant->getString());
+        String sText( _rxField->getString());
 
         pFormattedWindow->SetTextFormatted( sText );
         pFormattedWindow->SetSelection( Selection( SELECTION_MAX, SELECTION_MIN ) );
@@ -1437,35 +1585,32 @@ CellControllerRef DbCheckBox::CreateController() const
     return new CheckBoxCellController((CheckBoxControl*)m_pWindow);
 }
 //------------------------------------------------------------------------------
-static void lcl_setCheckBoxState(   const Reference< ::com::sun::star::sdb::XColumn >& _xVariant,
+static void lcl_setCheckBoxState(   const Reference< ::com::sun::star::sdb::XColumn >& _rxField,
                         CheckBoxControl* _pCheckBoxControl )
 {
     TriState eState = STATE_DONTKNOW;
-    if (_xVariant.is())
+    if (_rxField.is())
     {
-        sal_Bool bValue = _xVariant->getBoolean();
-        if (!_xVariant->wasNull())
+        sal_Bool bValue = _rxField->getBoolean();
+        if (!_rxField->wasNull())
             eState = bValue ? STATE_CHECK : STATE_NOCHECK;
     }
     _pCheckBoxControl->GetBox().SetState(eState);
 }
 
 //------------------------------------------------------------------------------
-void DbCheckBox::UpdateFromField(const Reference< ::com::sun::star::sdb::XColumn >& _xVariant, const Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter)
+void DbCheckBox::UpdateFromField(const Reference< ::com::sun::star::sdb::XColumn >& _rxField, const Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter)
 {
-    lcl_setCheckBoxState( _xVariant, static_cast<CheckBoxControl*>(m_pWindow) );
+    lcl_setCheckBoxState( _rxField, static_cast<CheckBoxControl*>(m_pWindow) );
 }
 
 //------------------------------------------------------------------------------
 void DbCheckBox::Paint(OutputDevice& rDev, const Rectangle& rRect,
-                          const Reference< ::com::sun::star::sdb::XColumn >& _xVariant,
+                          const Reference< ::com::sun::star::sdb::XColumn >& _rxField,
                           const Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter)
 {
-    lcl_setCheckBoxState( _xVariant, static_cast<CheckBoxControl*>(m_pPainter) );
-    if ( m_pPainter->GetParent() != &rDev )
-        m_pPainter->Draw(&rDev,rRect.TopLeft(), rRect.GetSize(),0);
-    else
-        DbCellControl::Paint(rDev, rRect);
+    lcl_setCheckBoxState( _rxField, static_cast<CheckBoxControl*>(m_pPainter) );
+    DbCellControl::Paint( rDev, rRect, _rxField, xFormatter );
 }
 
 //------------------------------------------------------------------------------
@@ -1546,21 +1691,21 @@ CellControllerRef DbPatternField::CreateController() const
 }
 
 //------------------------------------------------------------------------------
-String DbPatternField::GetFormatText(const Reference< ::com::sun::star::sdb::XColumn >& _xVariant, const Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter, Color** ppColor)
+String DbPatternField::GetFormatText(const Reference< ::com::sun::star::sdb::XColumn >& _rxField, const Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter, Color** ppColor)
 {
     ::rtl::OUString aString;
-    if (_xVariant.is())
-        aString = _xVariant->getString();
+    if (_rxField.is())
+        aString = _rxField->getString();
 
     m_pPainter->SetText(aString);
     return m_pPainter->GetText();
 }
 
 //------------------------------------------------------------------------------
-void DbPatternField::UpdateFromField(const Reference< ::com::sun::star::sdb::XColumn >& _xVariant, const Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter)
+void DbPatternField::UpdateFromField(const Reference< ::com::sun::star::sdb::XColumn >& _rxField, const Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter)
 {
     Edit* pEdit = (Edit*)m_pWindow;
-    pEdit->SetText(GetFormatText(_xVariant, xFormatter));
+    pEdit->SetText(GetFormatText(_rxField, xFormatter));
     pEdit->SetSelection(Selection(SELECTION_MAX,SELECTION_MIN));
 }
 
@@ -1585,7 +1730,7 @@ sal_Bool DbPatternField::commitControl()
 }
 
 //==============================================================================
-//= DbNumericField
+//= DbSpinField
 //==============================================================================
 //------------------------------------------------------------------------------
 DbSpinField::DbSpinField( DbGridColumn& _rColumn, sal_Int16 _nStandardAlign )
@@ -1700,14 +1845,14 @@ SpinField* DbNumericField::createField( Window* _pParent, WinBits _nFieldStyle, 
 }
 
 //------------------------------------------------------------------------------
-String DbNumericField::GetFormatText(const Reference< ::com::sun::star::sdb::XColumn >& _xVariant, const Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter, Color** ppColor)
+String DbNumericField::GetFormatText(const Reference< ::com::sun::star::sdb::XColumn >& _rxField, const Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter, Color** ppColor)
 {
-    if (!_xVariant.is())
+    if (!_rxField.is())
         return String();
     else
     {
-        double fValue = GetValue(_xVariant, xFormatter);
-        if (_xVariant->wasNull())
+        double fValue = GetValue(_rxField, xFormatter);
+        if (_rxField->wasNull())
             return String();
         else
         {
@@ -1718,14 +1863,14 @@ String DbNumericField::GetFormatText(const Reference< ::com::sun::star::sdb::XCo
 }
 
 //------------------------------------------------------------------------------
-void DbNumericField::UpdateFromField(const Reference< ::com::sun::star::sdb::XColumn >& _xVariant, const Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter)
+void DbNumericField::UpdateFromField(const Reference< ::com::sun::star::sdb::XColumn >& _rxField, const Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter)
 {
-    if (!_xVariant.is())
+    if (!_rxField.is())
         m_pWindow->SetText(String());
     else
     {
-        double fValue = GetValue(_xVariant, xFormatter);
-        if (_xVariant->wasNull())
+        double fValue = GetValue(_rxField, xFormatter);
+        if (_rxField->wasNull())
             m_pWindow->SetText(String());
         else
             ((DoubleNumericField*)m_pWindow)->SetValue(fValue);
@@ -1819,23 +1964,23 @@ SpinField* DbCurrencyField::createField( Window* _pParent, WinBits _nFieldStyle,
 }
 
 //------------------------------------------------------------------------------
-double DbCurrencyField::GetCurrency(const Reference< ::com::sun::star::sdb::XColumn >& _xVariant, const Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter) const
+double DbCurrencyField::GetCurrency(const Reference< ::com::sun::star::sdb::XColumn >& _rxField, const Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter) const
 {
-    double fValue = GetValue(_xVariant, xFormatter);
+    double fValue = GetValue(_rxField, xFormatter);
     if (m_nScale)
         fValue *= pow(10.0, double(m_nScale));
     return fValue;
 }
 
 //------------------------------------------------------------------------------
-String DbCurrencyField::GetFormatText(const Reference< ::com::sun::star::sdb::XColumn >& _xVariant, const Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter, Color** ppColor)
+String DbCurrencyField::GetFormatText(const Reference< ::com::sun::star::sdb::XColumn >& _rxField, const Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter, Color** ppColor)
 {
-    if (!_xVariant.is())
+    if (!_rxField.is())
         return String();
     else
     {
-        double fValue = GetCurrency(_xVariant, xFormatter);
-        if (_xVariant->wasNull())
+        double fValue = GetCurrency(_rxField, xFormatter);
+        if (_rxField->wasNull())
             return String();
         else
         {
@@ -1846,14 +1991,14 @@ String DbCurrencyField::GetFormatText(const Reference< ::com::sun::star::sdb::XC
 }
 
 //------------------------------------------------------------------------------
-void DbCurrencyField::UpdateFromField(const Reference< ::com::sun::star::sdb::XColumn >& _xVariant, const Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter)
+void DbCurrencyField::UpdateFromField(const Reference< ::com::sun::star::sdb::XColumn >& _rxField, const Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter)
 {
-    if (!_xVariant.is())
+    if (!_rxField.is())
         m_pWindow->SetText(String());
     else
     {
-         double fValue = GetCurrency(_xVariant, xFormatter);
-         if (_xVariant->wasNull())
+         double fValue = GetCurrency(_rxField, xFormatter);
+         if (_rxField->wasNull())
              m_pWindow->SetText(String());
          else
             ((LongCurrencyField*)m_pWindow)->SetValue(fValue);
@@ -1958,14 +2103,14 @@ void DbDateField::implAdjustGenericFieldSetting( const Reference< XPropertySet >
 }
 
 //------------------------------------------------------------------------------
-String DbDateField::GetFormatText(const Reference< ::com::sun::star::sdb::XColumn >& _xVariant, const Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter, Color** ppColor)
+String DbDateField::GetFormatText(const Reference< ::com::sun::star::sdb::XColumn >& _rxField, const Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter, Color** ppColor)
 {
-    if (!_xVariant.is())
+    if (!_rxField.is())
         return String();
     else
     {
-        ::com::sun::star::util::Date aValue = _xVariant->getDate();
-        if (_xVariant->wasNull())
+        ::com::sun::star::util::Date aValue = _rxField->getDate();
+        if (_rxField->wasNull())
             return String();
         else
         {
@@ -1976,14 +2121,14 @@ String DbDateField::GetFormatText(const Reference< ::com::sun::star::sdb::XColum
 }
 
 //------------------------------------------------------------------------------
-void DbDateField::UpdateFromField(const Reference< ::com::sun::star::sdb::XColumn >& _xVariant, const Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter)
+void DbDateField::UpdateFromField(const Reference< ::com::sun::star::sdb::XColumn >& _rxField, const Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter)
 {
-    if (!_xVariant.is())
+    if (!_rxField.is())
         m_pWindow->SetText(String());
     else
     {
-        ::com::sun::star::util::Date aValue = _xVariant->getDate();
-        if (_xVariant->wasNull())
+        ::com::sun::star::util::Date aValue = _rxField->getDate();
+        if (_rxField->wasNull())
             m_pWindow->SetText(String());
         else
         {
@@ -2062,14 +2207,14 @@ void DbTimeField::implAdjustGenericFieldSetting( const Reference< XPropertySet >
 }
 
 //------------------------------------------------------------------------------
-String DbTimeField::GetFormatText(const Reference< ::com::sun::star::sdb::XColumn >& _xVariant, const Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter, Color** ppColor)
+String DbTimeField::GetFormatText(const Reference< ::com::sun::star::sdb::XColumn >& _rxField, const Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter, Color** ppColor)
 {
-    if (!_xVariant.is())
+    if (!_rxField.is())
         return String();
     else
     {
-        ::com::sun::star::util::Time aValue = _xVariant->getTime();
-        if (_xVariant->wasNull())
+        ::com::sun::star::util::Time aValue = _rxField->getTime();
+        if (_rxField->wasNull())
             return String();
         else
         {
@@ -2080,14 +2225,14 @@ String DbTimeField::GetFormatText(const Reference< ::com::sun::star::sdb::XColum
 }
 
 //------------------------------------------------------------------------------
-void DbTimeField::UpdateFromField(const Reference< ::com::sun::star::sdb::XColumn >& _xVariant, const Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter)
+void DbTimeField::UpdateFromField(const Reference< ::com::sun::star::sdb::XColumn >& _rxField, const Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter)
 {
-    if (!_xVariant.is())
+    if (!_rxField.is())
         m_pWindow->SetText(String());
     else
     {
-        ::com::sun::star::util::Time aValue = _xVariant->getTime();
-        if (_xVariant->wasNull())
+        ::com::sun::star::util::Time aValue = _rxField->getTime();
+        if (_rxField->wasNull())
             m_pWindow->SetText(String());
         else
         {
@@ -2186,6 +2331,7 @@ void DbComboBox::Init(Window* pParent, const Reference< XRowSet >& xCursor)
     m_rColumn.SetAlignmentFromModel(::com::sun::star::awt::TextAlign::LEFT);
 
     m_pWindow = new ComboBoxControl(pParent);
+    m_pPainter = new Edit( pParent, WB_NOBORDER );
 
     // selection von rechts nach links
     AllSettings     aSettings = m_pWindow->GetSettings();
@@ -2213,18 +2359,18 @@ CellControllerRef DbComboBox::CreateController() const
 }
 
 //------------------------------------------------------------------------------
-String DbComboBox::GetFormatText(const Reference< ::com::sun::star::sdb::XColumn >& _xVariant, const Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter, Color** ppColor)
+String DbComboBox::GetFormatText(const Reference< ::com::sun::star::sdb::XColumn >& _rxField, const Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter, Color** ppColor)
 {
     ::rtl::OUString aString;
-    if (_xVariant.is())
-        aString = getValue( _xVariant, xFormatter, m_rColumn.GetParent().getNullDate(), m_rColumn.GetKey(), m_nKeyType );
+    if (_rxField.is())
+        aString = getValue( _rxField, xFormatter, m_rColumn.GetParent().getNullDate(), m_rColumn.GetKey(), m_nKeyType );
     return aString;
 }
 
 //------------------------------------------------------------------------------
-void DbComboBox::UpdateFromField(const Reference< ::com::sun::star::sdb::XColumn >& _xVariant, const Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter)
+void DbComboBox::UpdateFromField(const Reference< ::com::sun::star::sdb::XColumn >& _rxField, const Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter)
 {
-    m_pWindow->SetText(GetFormatText(_xVariant, xFormatter));
+    m_pWindow->SetText(GetFormatText(_rxField, xFormatter));
 }
 
 //------------------------------------------------------------------------------
@@ -2332,29 +2478,29 @@ CellControllerRef DbListBox::CreateController() const
 }
 
 //------------------------------------------------------------------------------
-String DbListBox::GetFormatText(const Reference< ::com::sun::star::sdb::XColumn >& _xVariant, const Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter, Color** ppColor)
+String DbListBox::GetFormatText(const Reference< ::com::sun::star::sdb::XColumn >& _rxField, const Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter, Color** ppColor)
 {
-    if (!_xVariant.is())
+    if (!_rxField.is())
         return String();
     else
     {
         String aText;
         if (m_bBound)
         {
-            Sequence<sal_Int16> aPosSeq = ::comphelper::findValue(m_aValueList, _xVariant->getString(), sal_True);
+            Sequence<sal_Int16> aPosSeq = ::comphelper::findValue(m_aValueList, _rxField->getString(), sal_True);
             if (aPosSeq.getLength())
                 aText = static_cast<ListBox*>(m_pWindow)->GetEntry(aPosSeq.getConstArray()[0]);
         }
         else
-            aText = (const sal_Unicode*)_xVariant->getString();
+            aText = (const sal_Unicode*)_rxField->getString();
         return aText;
     }
 }
 
 //------------------------------------------------------------------------------
-void DbListBox::UpdateFromField(const Reference< ::com::sun::star::sdb::XColumn >& _xVariant, const Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter)
+void DbListBox::UpdateFromField(const Reference< ::com::sun::star::sdb::XColumn >& _rxField, const Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter)
 {
-    static_cast<ListBox*>(m_pWindow)->SelectEntry(GetFormatText(_xVariant, xFormatter));
+    static_cast<ListBox*>(m_pWindow)->SelectEntry(GetFormatText(_rxField, xFormatter));
 }
 
 //------------------------------------------------------------------------------
@@ -2423,10 +2569,10 @@ void DbFilterField::Paint(OutputDevice& rDev, const Rectangle& rRect)
     static sal_uInt16 nStyle = TEXT_DRAW_CLIP | TEXT_DRAW_VCENTER | TEXT_DRAW_LEFT;
     switch (m_nControlClass)
     {
-        case ::com::sun::star::form::FormComponentType::CHECKBOX:
-            DbCellControl::Paint(rDev, rRect);
+        case FormComponentType::CHECKBOX:
+            DbCellControl::Paint( rDev, rRect );
             break;
-        case ::com::sun::star::form::FormComponentType::LISTBOX:
+        case FormComponentType::LISTBOX:
             rDev.DrawText(rRect, static_cast<ListBox*>(m_pWindow)->GetSelectEntry(), nStyle);
             break;
         default:
@@ -2991,13 +3137,10 @@ void FmXGridCell::setLock(sal_Bool _bLock) throw( RuntimeException )
 TYPEINIT1(FmXDataCell, FmXGridCell);
 //------------------------------------------------------------------------------
 void FmXDataCell::Paint(OutputDevice& rDev, const Rectangle& rRect,
-                        const Reference< ::com::sun::star::sdb::XColumn >& _xVariant,
+                        const Reference< ::com::sun::star::sdb::XColumn >& _rxField,
                         const Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter)
 {
-    m_pCellControl->Paint(rDev,
-                          rRect,
-                          _xVariant,
-                          xFormatter);
+    m_pCellControl->Paint( rDev, rRect, _rxField, xFormatter );
 }
 
 //------------------------------------------------------------------------------
@@ -3014,7 +3157,7 @@ TYPEINIT1(FmXTextCell, FmXDataCell);
 //------------------------------------------------------------------------------
 void FmXTextCell::Paint(OutputDevice& rDev,
                         const Rectangle& rRect,
-                        const Reference< ::com::sun::star::sdb::XColumn >& _xVariant,
+                        const Reference< ::com::sun::star::sdb::XColumn >& _rxField,
                         const Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter)
 {
     sal_uInt16 nStyle = TEXT_DRAW_CLIP | TEXT_DRAW_VCENTER;
@@ -3034,7 +3177,7 @@ void FmXTextCell::Paint(OutputDevice& rDev,
     }
 
     Color* pColor = NULL;
-    String aText = GetText(_xVariant, xFormatter, &pColor);
+    String aText = GetText(_rxField, xFormatter, &pColor);
     if (pColor != NULL)
     {
         Font aFont = rDev.GetFont();
@@ -3050,21 +3193,34 @@ void FmXTextCell::Paint(OutputDevice& rDev,
 
 
 /*************************************************************************/
-//SMART_UNO_IMPLEMENTATION(FmXEditCell, FmXTextCell);
-
 
 DBG_NAME(FmXEditCell);
 //------------------------------------------------------------------------------
 FmXEditCell::FmXEditCell(DbGridColumn* pColumn, DbCellControl* pControl)
             :FmXTextCell(pColumn, pControl)
             ,m_aTextListeners(m_aMutex)
-            ,m_pEdit((Edit*)pControl->GetControl())
+            ,m_pEditImplementation( NULL )
+            ,m_bOwnEditImplementation( false )
 {
     DBG_CTOR(FmXEditCell,NULL);
 
-    // all Textfields must be drived from an Edit-Class, as we use a
-    // direct cast on Edit
-    m_pEdit->SetModifyHdl( LINK( this, FmXEditCell, OnTextChanged ) );
+    if ( pControl->ISA( DbTextField ) )
+    {
+        m_pEditImplementation = PTR_CAST( DbTextField, pControl )->GetEditImplementation();
+    }
+    else
+    {
+        m_pEditImplementation = new EditImplementation( *static_cast< Edit* >( pControl->GetControl() ) );
+        m_bOwnEditImplementation = true;
+    }
+
+    m_pEditImplementation->SetModifyHdl( LINK( this, FmXEditCell, OnTextChanged ) );
+}
+
+//------------------------------------------------------------------
+void FmXEditCell::Paint( OutputDevice& _rDev, const Rectangle& _rRect, const Reference< XColumn >& _rxField, const Reference< XNumberFormatter >& _rxFormatter )
+{
+    m_pCellControl->Paint( _rDev, _rRect, _rxField, _rxFormatter );
 }
 
 //------------------------------------------------------------------
@@ -3076,6 +3232,7 @@ FmXEditCell::~FmXEditCell()
         dispose();
     }
 
+
     DBG_DTOR(FmXEditCell,NULL);
 }
 
@@ -3086,8 +3243,10 @@ void FmXEditCell::disposing()
     ::com::sun::star::lang::EventObject aEvt(*this);
     m_aTextListeners.disposeAndClear(aEvt);
 
-    m_pEdit->SetModifyHdl( Link() );
-    m_pEdit = NULL;
+    m_pEditImplementation->SetModifyHdl( Link() );
+    if ( m_bOwnEditImplementation )
+        delete m_pEditImplementation;
+    m_pEditImplementation = NULL;
 
     FmXDataCell::disposing();
 }
@@ -3134,9 +3293,9 @@ void SAL_CALL FmXEditCell::setText( const ::rtl::OUString& aText ) throw( Runtim
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    if (m_pEdit)
+    if ( m_pEditImplementation )
     {
-        m_pEdit->SetText(aText);
+        m_pEditImplementation->SetText( aText );
 
         // In JAVA wird auch ein textChanged ausgeloest, in VCL nicht.
         // ::com::sun::star::awt::Toolkit soll JAVA-komform sein...
@@ -3149,10 +3308,10 @@ void SAL_CALL FmXEditCell::insertText(const ::com::sun::star::awt::Selection& rS
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    if (m_pEdit)
+    if ( m_pEditImplementation )
     {
-        m_pEdit->SetSelection( Selection(rSel.Min, rSel.Max) );
-        m_pEdit->ReplaceSelected( aText );
+        m_pEditImplementation->SetSelection( Selection( rSel.Min, rSel.Max ) );
+        m_pEditImplementation->ReplaceSelected( aText );
     }
 }
 
@@ -3162,11 +3321,14 @@ void SAL_CALL FmXEditCell::insertText(const ::com::sun::star::awt::Selection& rS
     ::osl::MutexGuard aGuard( m_aMutex );
 
     ::rtl::OUString aText;
-    if (m_pEdit)
+    if ( m_pEditImplementation )
     {
-        if (m_pEdit->IsVisible() && m_pColumn->GetParent().getDisplaySynchron())
+        if ( m_pEditImplementation->GetControl().IsVisible() && m_pColumn->GetParent().getDisplaySynchron())
+        {
             // if the display isn't sync with the cursor we can't ask the edit field
-            aText = m_pEdit->GetText();
+            LineEnd eLineEndFormat = m_pColumn ? getModelLineEndSetting( m_pColumn->getModel() ) : LINEEND_LF;
+            aText = m_pEditImplementation->GetText( eLineEndFormat );
+        }
         else
         {
             Reference< ::com::sun::star::sdb::XColumn >  xField(m_pColumn->GetCurrentFieldValue());
@@ -3183,8 +3345,11 @@ void SAL_CALL FmXEditCell::insertText(const ::com::sun::star::awt::Selection& rS
     ::osl::MutexGuard aGuard( m_aMutex );
 
     ::rtl::OUString aText;
-    if (m_pEdit)
-        aText = m_pEdit->GetSelected();
+    if ( m_pEditImplementation )
+    {
+        LineEnd eLineEndFormat = m_pColumn ? getModelLineEndSetting( m_pColumn->getModel() ) : LINEEND_LF;
+        aText = m_pEditImplementation->GetSelected( eLineEndFormat );
+    }
     return aText;
 }
 
@@ -3193,8 +3358,8 @@ void SAL_CALL FmXEditCell::setSelection( const ::com::sun::star::awt::Selection&
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    if (m_pEdit)
-        m_pEdit->SetSelection( Selection(aSelection.Min, aSelection.Max) );
+    if ( m_pEditImplementation )
+        m_pEditImplementation->SetSelection( Selection( aSelection.Min, aSelection.Max ) );
 }
 
 //------------------------------------------------------------------------------
@@ -3203,8 +3368,8 @@ void SAL_CALL FmXEditCell::setSelection( const ::com::sun::star::awt::Selection&
     ::osl::MutexGuard aGuard( m_aMutex );
 
     Selection aSel;
-    if (m_pEdit)
-        aSel = m_pEdit->GetSelection();
+    if ( m_pEditImplementation )
+        aSel = m_pEditImplementation->GetSelection();
 
     return ::com::sun::star::awt::Selection(aSel.Min(), aSel.Max());
 }
@@ -3214,7 +3379,7 @@ sal_Bool SAL_CALL FmXEditCell::isEditable( void ) throw( RuntimeException )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    return ( m_pEdit && !m_pEdit->IsReadOnly() && m_pEdit->IsEnabled() ) ? sal_True : sal_False;
+    return ( m_pEditImplementation && !m_pEditImplementation->IsReadOnly() && m_pEditImplementation->GetControl().IsEnabled() ) ? sal_True : sal_False;
 }
 
 //------------------------------------------------------------------------------
@@ -3222,8 +3387,8 @@ void SAL_CALL FmXEditCell::setEditable( sal_Bool bEditable ) throw( RuntimeExcep
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    if (m_pEdit)
-        m_pEdit->SetReadOnly( !bEditable );
+    if ( m_pEditImplementation )
+        m_pEditImplementation->SetReadOnly( !bEditable );
 }
 
 //------------------------------------------------------------------------------
@@ -3231,7 +3396,7 @@ sal_Int16 SAL_CALL FmXEditCell::getMaxTextLen() throw( RuntimeException )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    return m_pEdit ? m_pEdit->GetMaxTextLen() : 0;
+    return m_pEditImplementation ? m_pEditImplementation->GetMaxTextLen() : 0;
 }
 
 //------------------------------------------------------------------------------
@@ -3239,14 +3404,14 @@ void SAL_CALL FmXEditCell::setMaxTextLen( sal_Int16 nLen ) throw( RuntimeExcepti
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    if (m_pEdit)
-        m_pEdit->SetMaxTextLen( nLen );
+    if ( m_pEditImplementation )
+        m_pEditImplementation->SetMaxTextLen( nLen );
 }
 
 //------------------------------------------------------------------------------
 IMPL_LINK( FmXEditCell, OnTextChanged, void*, EMPTYARG )
 {
-    if (m_pEdit)
+    if ( m_pEditImplementation )
     {
         ::cppu::OInterfaceIteratorHelper aIt( m_aTextListeners );
         ::com::sun::star::awt::TextEvent aEvt;
@@ -3404,8 +3569,6 @@ IMPL_LINK( FmXCheckBoxCell, OnClick, void*, EMPTYARG )
 }
 
 /*************************************************************************/
-// SMART_UNO_IMPLEMENTATION(FmXListBoxCell, FmXTextCell);
-
 
 DBG_NAME(FmXListBoxCell);
 //------------------------------------------------------------------------------
@@ -3766,7 +3929,8 @@ FmXFilterCell::FmXFilterCell(DbGridColumn* pColumn, DbCellControl* pControl)
 {
     DBG_CTOR(FmXFilterCell,NULL);
 
-    ((DbFilterField*)m_pCellControl)->SetCommitHdl(LINK( this, FmXFilterCell, OnCommit ) );
+    DBG_ASSERT( m_pCellControl->ISA( DbFilterField ), "FmXFilterCell::FmXFilterCell: invalid cell control!" );
+    static_cast< DbFilterField* >( m_pCellControl )->SetCommitHdl( LINK( this, FmXFilterCell, OnCommit ) );
 }
 
 //------------------------------------------------------------------
@@ -3825,10 +3989,9 @@ FmXFilterCell* FmXFilterCell::getImplementation(const Reference< ::com::sun::sta
 }
 
 //------------------------------------------------------------------------------
-void FmXFilterCell::Paint(OutputDevice& rDev,
-                          const Rectangle& rRect)
+void FmXFilterCell::Paint( OutputDevice& rDev, const Rectangle& rRect )
 {
-    m_pCellControl->Paint(rDev, rRect);
+    static_cast< DbFilterField* >( m_pCellControl )->Paint( rDev, rRect );
 }
 
 // OComponentHelper
