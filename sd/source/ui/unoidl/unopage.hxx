@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cl $ $Date: 2001-12-17 15:48:21 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 14:37:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,6 @@
 #ifndef _SD_UNOPAGE_HXX
 #define _SD_UNOPAGE_HXX
 
-#ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
-#include <com/sun/star/lang/XComponent.hpp>
-#endif
 #ifndef _COM_SUN_STAR_DOCUMENT_XLINKTARGETSUPPLIER_HPP_
 #include <com/sun/star/document/XLinkTargetSupplier.hpp>
 #endif
@@ -80,9 +77,7 @@
 #include <com/sun/star/presentation/XPresentationPage.hpp>
 #endif
 
-#ifndef _CPPUHELPER_INTERFACECONTAINER_HXX_
-#include <cppuhelper/interfacecontainer.hxx>
-#endif
+
 
 #ifndef _SFX_ITEMPROP_HXX
 #include <svtools/itemprop.hxx>
@@ -111,12 +106,6 @@ struct SfxItemPropertyMap;
 #define SvxFmDrawPage SvxDrawPage
 #endif
 
-class SdGenericDrawPageMutex
-{
-protected:
-    ::osl::Mutex maMutex;
-};
-
 /***********************************************************************
 *                                                                      *
 ***********************************************************************/
@@ -126,9 +115,7 @@ class SdGenericDrawPage : public SvxFmDrawPage,
                           public ::com::sun::star::drawing::XShapeBinder,
                           public ::com::sun::star::container::XNamed,
                           public ::com::sun::star::beans::XPropertySet,
-                          public ::com::sun::star::document::XLinkTargetSupplier,
-                          public ::com::sun::star::lang::XComponent,
-                          public SdGenericDrawPageMutex
+                          public ::com::sun::star::document::XLinkTargetSupplier
 {
 protected:
     friend class SdXImpressDocument;
@@ -152,8 +139,6 @@ protected:
     void SetHeight( sal_Int32 nHeight );
 
     sal_Bool mbHasBackgroundObject;
-
-    cppu::OBroadcastHelper mrBHelper;
 
     virtual void disposing() throw();
 
@@ -179,11 +164,6 @@ public:
     // XInterface
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL release() throw();
-
-    // XComponent
-    virtual void SAL_CALL dispose() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw(::com::sun::star::uno::RuntimeException);
 
     // XShapeCombiner
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > SAL_CALL combine( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xShapes ) throw(::com::sun::star::uno::RuntimeException);
