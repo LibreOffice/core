@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSelectionSupplier.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:11:13 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 02:21:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@ module com {  module sun {  module star {  module view {
 
     @see OfficeDocumentView
  */
-interface XSelectionSupplier: com::sun::star::uno::XInterface
+published interface XSelectionSupplier: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
     /** selects the object represented by <var>xSelection</var> if it is
