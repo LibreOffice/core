@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdstr.src,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 09:13:17 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 11:05:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,18 +99,18 @@ String STR_ObjNamePluralGRUPEMPTY
     Text [ en-US ] = "Blank group objects" ;
     Text [ x-comment ] = " ";
 };
-String STR_ObjNameSingulGRUPLNK
-{
-    Text [ de ] = "verknüpftes Gruppenobjekt" ;
-    Text [ en-US ] = "Linked group object" ;
-    Text [ x-comment ] = " ";
-};
-String STR_ObjNamePluralGRUPLNK
-{
-    Text [ de ] = "verknüpfte Gruppenobjekte" ;
-    Text [ en-US ] = "Linked group objects" ;
-    Text [ x-comment ] = " ";
-};
+//BFS01String STR_ObjNameSingulGRUPLNK
+//BFS01{
+//BFS01 Text [ de ] = "verknüpftes Gruppenobjekt" ;
+//BFS01 Text [ en-US ] = "Linked group object" ;
+//BFS01 Text [ x-comment ] = " ";
+//BFS01};
+//BFS01String STR_ObjNamePluralGRUPLNK
+//BFS01{
+//BFS01 Text [ de ] = "verknüpfte Gruppenobjekte" ;
+//BFS01 Text [ en-US ] = "Linked group objects" ;
+//BFS01 Text [ x-comment ] = " ";
+//BFS01};
  ////////////////////////////////////////////////////////////////////////////////////////////////////
 String STR_ObjNameSingulLINE
 {
@@ -936,12 +936,12 @@ String STR_ObjNamePluralObj3d
     Text [ x-comment ] = " ";
 };
 
-String STR_ObjNameSingulPoly3d
-{
-    Text [ de ] = "3D Polygon" ;
-    Text [ en-US ] = "3D polygon";
-    Text [ x-comment ] = " ";
-};
+//BFS01String STR_ObjNameSingulPoly3d
+//BFS01{
+//BFS01 Text [ de ] = "3D Polygon" ;
+//BFS01 Text [ en-US ] = "3D polygon";
+//BFS01 Text [ x-comment ] = " ";
+//BFS01};
 
 String STR_ObjNamePluralPoly3d
 {
@@ -2127,17 +2127,17 @@ String STR_ItemNam_SHADOWPERSP
     Text [ en-US ] = "Perspective shadow" ;
     Text [ x-comment ] = " ";
 };
-String STR_ItemNam_SHADOWRESERVE1 { Text = "" ; };
-String STR_ItemNam_SHADOWRESERVE2 { Text = "" ; };
-String STR_ItemNam_SHADOWRESERVE3 { Text = "" ; };
-String STR_ItemNam_SHADOWRESERVE4 { Text = "" ; };
-String STR_ItemNam_SHADOWRESERVE5 { Text = "" ; };
-String STR_ItemNamSET_SHADOW
-{
-    Text [ de ] = "Schattenattribute" ;
-    Text [ en-US ] = "Shadow attributes" ;
-    Text [ x-comment ] = " ";
-};
+//BFS01String STR_ItemNam_SHADOWRESERVE1 { Text = "" ; };
+//BFS01String STR_ItemNam_SHADOWRESERVE2 { Text = "" ; };
+//BFS01String STR_ItemNam_SHADOWRESERVE3 { Text = "" ; };
+//BFS01String STR_ItemNam_SHADOWRESERVE4 { Text = "" ; };
+//BFS01String STR_ItemNam_SHADOWRESERVE5 { Text = "" ; };
+//BFS01String STR_ItemNamSET_SHADOW
+//BFS01{
+//BFS01 Text [ de ] = "Schattenattribute" ;
+//BFS01 Text [ en-US ] = "Shadow attributes" ;
+//BFS01 Text [ x-comment ] = " ";
+//BFS01};
 String STR_ItemNam_CAPTIONTYPE
 {
     Text [ de ] = "Legendentyp" ;
@@ -2202,23 +2202,23 @@ String STR_ItemNam_CAPTIONFITLINELEN
     Text [ en-US ] = "Auto line length" ;
     Text [ x-comment ] = " ";
 };
-String STR_ItemNam_CAPTIONRESERVE1 { Text = "" ; };
-String STR_ItemNam_CAPTIONRESERVE2 { Text = "" ; };
-String STR_ItemNam_CAPTIONRESERVE3 { Text = "" ; };
-String STR_ItemNam_CAPTIONRESERVE4 { Text = "" ; };
-String STR_ItemNam_CAPTIONRESERVE5 { Text = "" ; };
-String STR_ItemNamSET_CAPTION
-{
-    Text [ de ] = "Legendenattribute" ;
-    Text [ en-US ] = "Callout attributes" ;
-    Text [ x-comment ] = " ";
-};
-String STR_ItemNamSET_OUTLINER
-{
-    Text [ de ] = "Textattribute" ;
-    Text [ en-US ] = "Text attributes" ;
-    Text [ x-comment ] = " ";
-};
+//BFS01String STR_ItemNam_CAPTIONRESERVE1 { Text = "" ; };
+//BFS01String STR_ItemNam_CAPTIONRESERVE2 { Text = "" ; };
+//BFS01String STR_ItemNam_CAPTIONRESERVE3 { Text = "" ; };
+//BFS01String STR_ItemNam_CAPTIONRESERVE4 { Text = "" ; };
+//BFS01String STR_ItemNam_CAPTIONRESERVE5 { Text = "" ; };
+//BFS01String STR_ItemNamSET_CAPTION
+//BFS01{
+//BFS01 Text [ de ] = "Legendenattribute" ;
+//BFS01 Text [ en-US ] = "Callout attributes" ;
+//BFS01 Text [ x-comment ] = " ";
+//BFS01};
+//BFS01String STR_ItemNamSET_OUTLINER
+//BFS01{
+//BFS01 Text [ de ] = "Textattribute" ;
+//BFS01 Text [ en-US ] = "Text attributes" ;
+//BFS01 Text [ x-comment ] = " ";
+//BFS01};
 String STR_ItemNam_ECKENRADIUS
 {
     Text [ de ] = "Eckenradius" ;
@@ -2883,12 +2883,12 @@ String SIP_XA_FTRESERVED_LAST
     Text [ en-US ] = "Fontwork reserved for 6";
 };
 
-String SIP_XATTRSET_TEXT
-{
-    Text [ de ] = "Fontworkattribute";
-    Text [ en-US ] = "Fontwork attributes";
-    Text [ x-comment ] = " ";
-};
+//BFS01String SIP_XATTRSET_TEXT
+//BFS01{
+//BFS01 Text [ de ] = "Fontworkattribute";
+//BFS01 Text [ en-US ] = "Fontwork attributes";
+//BFS01 Text [ x-comment ] = " ";
+//BFS01};
 
 String SIP_SA_SHADOW
 {
@@ -2934,41 +2934,41 @@ String SIP_SA_SHADOWPERSP
     Text [ en-US ] = "Perspective shadow";
 };
 
-String SIP_SA_SHADOWRESERVE1
-{
-    Text [ de ] = "Schatten Reserve 1";
-    Text [ en-US ] = "Shadow reserved for 1";
-};
+//BFS01String SIP_SA_SHADOWRESERVE1
+//BFS01{
+//BFS01 Text [ de ] = "Schatten Reserve 1";
+//BFS01 Text [ en-US ] = "Shadow reserved for 1";
+//BFS01};
 
-String SIP_SA_SHADOWRESERVE2
-{
-    Text [ de ] = "Schatten Reserve 2";
-    Text [ en-US ] = "Shadow reserved for 2";
-};
+//BFS01String SIP_SA_SHADOWRESERVE2
+//BFS01{
+//BFS01 Text [ de ] = "Schatten Reserve 2";
+//BFS01 Text [ en-US ] = "Shadow reserved for 2";
+//BFS01};
 
-String SIP_SA_SHADOWRESERVE3
-{
-    Text [ de ] = "Schatten Reserve 3";
-    Text [ en-US ] = "Shadow reserved for 3";
-};
+//BFS01String SIP_SA_SHADOWRESERVE3
+//BFS01{
+//BFS01 Text [ de ] = "Schatten Reserve 3";
+//BFS01 Text [ en-US ] = "Shadow reserved for 3";
+//BFS01};
 
-String SIP_SA_SHADOWRESERVE4
-{
-    Text [ de ] = "Schatten Reserve 4";
-    Text [ en-US ] = "Shadow reserved for 4";
-};
+//BFS01String SIP_SA_SHADOWRESERVE4
+//BFS01{
+//BFS01 Text [ de ] = "Schatten Reserve 4";
+//BFS01 Text [ en-US ] = "Shadow reserved for 4";
+//BFS01};
 
-String SIP_SA_SHADOWRESERVE5
-{
-    Text [ de ] = "Schatten Reserve 5";
-    Text [ en-US ] = "Shadow reserved for 5";
-};
+//BFS01String SIP_SA_SHADOWRESERVE5
+//BFS01{
+//BFS01 Text [ de ] = "Schatten Reserve 5";
+//BFS01 Text [ en-US ] = "Shadow reserved for 5";
+//BFS01};
 
-String SIP_SDRATTRSET_SHADOW
-{
-    Text [ de ] = "Schattenattribute";
-    Text [ en-US ] = "Shadow attributes";
-};
+//BFS01String SIP_SDRATTRSET_SHADOW
+//BFS01{
+//BFS01 Text [ de ] = "Schattenattribute";
+//BFS01 Text [ en-US ] = "Shadow attributes";
+//BFS01};
 
 String SIP_SA_CAPTIONTYPE
 {
@@ -3032,48 +3032,48 @@ String SIP_SA_CAPTIONFITLINELEN
     Text [ en-US ] = "AutoLength of legend lines";
 };
 
-String SIP_SA_CAPTIONRESERVE1
-{
-    Text [ de ] = "Legende Reserve 1";
-    Text [ en-US ] = "Legend reserved for 1";
-};
+//BFS01String SIP_SA_CAPTIONRESERVE1
+//BFS01{
+//BFS01 Text [ de ] = "Legende Reserve 1";
+//BFS01 Text [ en-US ] = "Legend reserved for 1";
+//BFS01};
 
-String SIP_SA_CAPTIONRESERVE2
-{
-    Text [ de ] = "Legende Reserve 2";
-    Text [ en-US ] = "Legend reserved for 2";
-};
+//BFS01String SIP_SA_CAPTIONRESERVE2
+//BFS01{
+//BFS01 Text [ de ] = "Legende Reserve 2";
+//BFS01 Text [ en-US ] = "Legend reserved for 2";
+//BFS01};
 
-String SIP_SA_CAPTIONRESERVE3
-{
-    Text [ de ] = "Legende Reserve 3";
-    Text [ en-US ] = "Legend reserved for 3";
-};
+//BFS01String SIP_SA_CAPTIONRESERVE3
+//BFS01{
+//BFS01 Text [ de ] = "Legende Reserve 3";
+//BFS01 Text [ en-US ] = "Legend reserved for 3";
+//BFS01};
 
-String SIP_SA_CAPTIONRESERVE4
-{
-    Text [ de ] = "Legende Reserve 4";
-    Text [ en-US ] = "Legend reserved for 4";
-};
+//BFS01String SIP_SA_CAPTIONRESERVE4
+//BFS01{
+//BFS01 Text [ de ] = "Legende Reserve 4";
+//BFS01 Text [ en-US ] = "Legend reserved for 4";
+//BFS01};
 
-String SIP_SA_CAPTIONRESERVE5
-{
-    Text [ de ] = "Legende Reserve 5";
-    Text [ en-US ] = "Legend reserved 5";
-};
+//BFS01String SIP_SA_CAPTIONRESERVE5
+//BFS01{
+//BFS01 Text [ de ] = "Legende Reserve 5";
+//BFS01 Text [ en-US ] = "Legend reserved 5";
+//BFS01};
 
-String SIP_SDRATTRSET_CAPTION
-{
-    Text [ de ] = "Legendenattribute";
-    Text [ en-US ] = "Legend attributes";
-};
+//BFS01String SIP_SDRATTRSET_CAPTION
+//BFS01{
+//BFS01 Text [ de ] = "Legendenattribute";
+//BFS01 Text [ en-US ] = "Legend attributes";
+//BFS01};
 
-String SIP_SDRATTRSET_OUTLINER
-{
-    Text [ de ] = "Textattribute";
-    Text [ en-US ] = "Text attributes";
-    Text [ x-comment ] = " ";
-};
+//BFS01String SIP_SDRATTRSET_OUTLINER
+//BFS01{
+//BFS01 Text [ de ] = "Textattribute";
+//BFS01 Text [ en-US ] = "Text attributes";
+//BFS01 Text [ x-comment ] = " ";
+//BFS01};
 
 String SIP_SA_ECKENRADIUS
 {
@@ -3255,11 +3255,11 @@ String SIP_SA_RESERVE19
     Text [ en-US ] = "SvDraw reserved for 19";
 };
 
-String SIP_SDRATTRSET_MISC
-{
-    Text [ de ] = "Diverse Attribute";
-    Text [ en-US ] = "Various attributes";
-};
+//BFS01String SIP_SDRATTRSET_MISC
+//BFS01{
+//BFS01 Text [ de ] = "Diverse Attribute";
+//BFS01 Text [ en-US ] = "Various attributes";
+//BFS01};
 
 String SIP_SA_EDGEKIND
 {
@@ -3328,59 +3328,59 @@ String SIP_SA_EDGELINE3DELTA
     Text [ en-US ] = "Offset line 3";
 };
 
-String SIP_SA_EDGERESERVE02
-{
-    Text [ de ] = "Verbinder Reserve 2";
-    Text [ en-US ] = "Connector reserved 2";
-};
+//BFS01String SIP_SA_EDGERESERVE02
+//BFS01{
+//BFS01 Text [ de ] = "Verbinder Reserve 2";
+//BFS01 Text [ en-US ] = "Connector reserved 2";
+//BFS01};
 
-String SIP_SA_EDGERESERVE03
-{
-    Text [ de ] = "Verbinder Reserve 3";
-    Text [ en-US ] = "Connector reserved 3";
-};
+//BFS01String SIP_SA_EDGERESERVE03
+//BFS01{
+//BFS01 Text [ de ] = "Verbinder Reserve 3";
+//BFS01 Text [ en-US ] = "Connector reserved 3";
+//BFS01};
 
-String SIP_SA_EDGERESERVE04
-{
-    Text [ de ] = "Verbinder Reserve 4";
-    Text [ en-US ] = "Connector reserved 4";
-};
+//BFS01String SIP_SA_EDGERESERVE04
+//BFS01{
+//BFS01 Text [ de ] = "Verbinder Reserve 4";
+//BFS01 Text [ en-US ] = "Connector reserved 4";
+//BFS01};
 
-String SIP_SA_EDGERESERVE05
-{
-    Text [ de ] = "Verbinder Reserve 5";
-    Text [ en-US ] = "Connector reserved 5";
-};
+//BFS01String SIP_SA_EDGERESERVE05
+//BFS01{
+//BFS01 Text [ de ] = "Verbinder Reserve 5";
+//BFS01 Text [ en-US ] = "Connector reserved 5";
+//BFS01};
 
-String SIP_SA_EDGERESERVE06
-{
-    Text [ de ] = "Verbinder Reserve 6";
-    Text [ en-US ] = "Connector reserved 6";
-};
+//BFS01String SIP_SA_EDGERESERVE06
+//BFS01{
+//BFS01 Text [ de ] = "Verbinder Reserve 6";
+//BFS01 Text [ en-US ] = "Connector reserved 6";
+//BFS01};
 
-String SIP_SA_EDGERESERVE07
-{
-    Text [ de ] = "Verbinder Reserve 7";
-    Text [ en-US ] = "Connector reserved 7";
-};
+//BFS01String SIP_SA_EDGERESERVE07
+//BFS01{
+//BFS01 Text [ de ] = "Verbinder Reserve 7";
+//BFS01 Text [ en-US ] = "Connector reserved 7";
+//BFS01};
 
-String SIP_SA_EDGERESERVE08
-{
-    Text [ de ] = "Verbinder Reserve 8";
-    Text [ en-US ] = "Connector reserved 8";
-};
+//BFS01String SIP_SA_EDGERESERVE08
+//BFS01{
+//BFS01 Text [ de ] = "Verbinder Reserve 8";
+//BFS01 Text [ en-US ] = "Connector reserved 8";
+//BFS01};
 
-String SIP_SA_EDGERESERVE09
-{
-    Text [ de ] = "Verbinder Reserve 9";
-    Text [ en-US ] = "Connector reserved 9";
-};
+//BFS01String SIP_SA_EDGERESERVE09
+//BFS01{
+//BFS01 Text [ de ] = "Verbinder Reserve 9";
+//BFS01 Text [ en-US ] = "Connector reserved 9";
+//BFS01};
 
-String SIP_SDRATTRSET_EDGE
-{
-    Text [ de ] = "Verbinderattribute";
-    Text [ en-US ] = "Connector attributes";
-};
+//BFS01String SIP_SDRATTRSET_EDGE
+//BFS01{
+//BFS01 Text [ de ] = "Verbinderattribute";
+//BFS01 Text [ en-US ] = "Connector attributes";
+//BFS01};
 
 String SIP_SA_MEASUREKIND
 {
@@ -3530,11 +3530,11 @@ String SIP_SA_MEASURERESERVE07
     Text [ en-US ] = "Dimensioning reserved for 7";
 };
 
-String SIP_SDRATTRSET_MEASURE
-{
-    Text [ de ] = "Bemassungsattribute";
-    Text [ en-US ] = "Dimensioning attributes";
-};
+//BFS01String SIP_SDRATTRSET_MEASURE
+//BFS01{
+//BFS01 Text [ de ] = "Bemassungsattribute";
+//BFS01 Text [ en-US ] = "Dimensioning attributes";
+//BFS01};
 
 String SIP_SA_CIRCKIND
 {
@@ -3580,11 +3580,11 @@ String SIP_SA_CIRCRESERVE3
     Text [ en-US ] = "Circle reserved for 3";
 };
 
-String SIP_SDRATTRSET_CIRC
-{
-    Text [ de ] = "Kreisattribute";
-    Text [ en-US ] = "Circle attributes";
-};
+//BFS01String SIP_SDRATTRSET_CIRC
+//BFS01{
+//BFS01 Text [ de ] = "Kreisattribute";
+//BFS01 Text [ en-US ] = "Circle attributes";
+//BFS01};
 
 String SIP_SA_OBJMOVEPROTECT
 {
@@ -4044,11 +4044,11 @@ String SIP_SA_GRAFRESERVE3 { Text = "" ; };
 String SIP_SA_GRAFRESERVE4 { Text = "" ; };
 String SIP_SA_GRAFRESERVE5 { Text = "" ; };
 String SIP_SA_GRAFRESERVE6 { Text = "" ; };
-String SIP_SDRATTRSET_GRAF
-{
-    Text [ de ] = "Grafikattribute";
-    Text [ en-US ] = "Graphics attributes";
-};
+//BFS01String SIP_SDRATTRSET_GRAF
+//BFS01{
+//BFS01 Text [ de ] = "Grafikattribute";
+//BFS01 Text [ en-US ] = "Graphics attributes";
+//BFS01};
 
 Bitmap SIP_SA_MARKERS
 {
