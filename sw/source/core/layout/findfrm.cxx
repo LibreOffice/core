@@ -2,9 +2,9 @@
  *
  *  $RCSfile: findfrm.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 12:48:39 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:46:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1452,31 +1452,31 @@ SwCellFrm* SwCellFrm::GetPreviousCell() const
     while( !pRow->IsRowFrm() || !pRow->GetUpper()->IsTabFrm() )
         pRow = pRow->GetUpper();
 
-    SwFrm* pTmpTab = (SwTabFrm*)pRow->GetUpper();
+    ASSERT( pRow->GetUpper() && pRow->GetUpper()->IsTabFrm(), "GetPreviousCell without Table" );
 
-    ASSERT( pTmpTab && pTmpTab->IsTabFrm(), "GetPreviousCell without Table" );
-    SwTabFrm* pTab = (SwTabFrm*)pTmpTab;
+    SwTabFrm* pTab = (SwTabFrm*)pRow->GetUpper();
 
-    const SwFrm* pPrev = pRow->GetPrev();
-    const bool bRepeat = pTab->GetTable()->IsHeadlineRepeat();
-    const bool bIsInFirstLine = bRepeat ?
-                                pPrev && !pPrev->GetPrev() :
-                               !pPrev;
-
-    if ( bIsInFirstLine && pTab->IsFollow() )
+    if ( pTab->IsFollow() )
     {
-        SwTabFrm *pMaster = (SwTabFrm*)pTab->FindMaster();
-        if ( pMaster && pMaster->HasFollowFlowLine() )
-        {
-            SwRowFrm* pMasterRow = (SwRowFrm*)pMaster->Lower();
-            while ( pMasterRow->GetNext() )
-            {
-                pMasterRow = (SwRowFrm*)pMasterRow->GetNext();
-            }
+        const SwFrm* pTmp = pTab->GetFirstNonHeadlineRow();
+        const bool bIsInFirstLine = ( pTmp == pRow );
 
-            pRet = lcl_FindCorrespondingCellFrm( *((SwRowFrm*)pRow), *this, *pMasterRow, false );
+        if ( bIsInFirstLine )
+        {
+            SwTabFrm *pMaster = (SwTabFrm*)pTab->FindMaster();
+            if ( pMaster && pMaster->HasFollowFlowLine() )
+            {
+                SwRowFrm* pMasterRow = (SwRowFrm*)pMaster->Lower();
+                while ( pMasterRow->GetNext() )
+                {
+                    pMasterRow = (SwRowFrm*)pMasterRow->GetNext();
+                }
+
+                pRet = lcl_FindCorrespondingCellFrm( *((SwRowFrm*)pRow), *this, *pMasterRow, false );
+            }
         }
     }
+
     return pRet;
 }
 
@@ -1500,13 +1500,10 @@ const SwRowFrm* SwFrm::IsInSplitTableRow() const
         !pTab->GetFollow() )
         return NULL;
 
-    SwRowFrm* pFollowRow = (SwRowFrm*)pTab->GetFollow()->Lower();
+    // skip headline
+    const SwRowFrm* pFollowRow = pTab->GetFollow()->GetFirstNonHeadlineRow();
 
     ASSERT( pFollowRow, "SwFrm::IsInSplitTableRow() does not work" )
-
-    // skip headline
-    if ( pTab->GetTable()->IsHeadlineRepeat() )
-        pFollowRow = (SwRowFrm*)pFollowRow->GetNext();
 
     return pFollowRow;
 }
@@ -1525,13 +1522,16 @@ const SwRowFrm* SwFrm::IsInFollowFlowRow() const
     ASSERT( pRow->GetUpper()->IsTabFrm(), "Confusion in table layout" )
 
     const SwTabFrm* pTab = (SwTabFrm*)pRow->GetUpper();
+
     const SwTabFrm* pMaster = pTab->IsFollow() ? pTab->FindMaster() : 0;
 
-    const bool bIsInFirstLine = pTab->GetTable()->IsHeadlineRepeat() ?
-                                pRow->GetPrev() && !pRow->GetPrev()->GetPrev() :
-                               !pRow->GetPrev();
+    if ( !pMaster || !pMaster->HasFollowFlowLine() )
+        return NULL;
 
-    if ( !pMaster || !pMaster->HasFollowFlowLine() || !bIsInFirstLine )
+    const SwFrm* pTmp = pTab->GetFirstNonHeadlineRow();
+    const bool bIsInFirstLine = ( pTmp == pRow );
+
+    if ( !bIsInFirstLine )
         return NULL;
 
     SwRowFrm* pMasterRow = (SwRowFrm*)pMaster->Lower();
