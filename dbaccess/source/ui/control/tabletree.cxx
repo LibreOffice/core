@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabletree.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-22 06:31:30 $
+ *  last change: $Author: fs $ $Date: 2001-06-05 12:39:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -259,15 +259,18 @@ Reference< XConnection > OTableTreeListBox::UpdateTableList(const ::rtl::OUStrin
                 Reference< XResultSet > xTables;
 
                 static const ::rtl::OUString s_sTableTypeView(RTL_CONSTASCII_USTRINGPARAM("VIEW"));
+                static const ::rtl::OUString s_sTableTypeTable(RTL_CONSTASCII_USTRINGPARAM("TABLE"));
 
                 if (xMetaData.is())
                 {
                     // we want all catalogues, all schemas, all tables
-                    Sequence< ::rtl::OUString > sTableTypes(1);
-                    const ::rtl::OUString sAll = ::rtl::OUString::createFromAscii("%");
-                    sTableTypes[0] = sAll;
+                    Sequence< ::rtl::OUString > sTableTypes(3);
+                    static const ::rtl::OUString sWildcard = ::rtl::OUString::createFromAscii("%");
+                    sTableTypes[0] = s_sTableTypeView;
+                    sTableTypes[1] = s_sTableTypeTable;
+                    sTableTypes[2] = sWildcard; // just to be sure to include anything else ....
 
-                    xTables = xMetaData->getTables(Any(), sAll, sAll, sTableTypes);
+                    xTables = xMetaData->getTables(Any(), sWildcard, sWildcard, sTableTypes);
                 }
                 Reference< XRow > xCurrentRow(xTables, UNO_QUERY);
                 if (xCurrentRow.is())
@@ -481,7 +484,7 @@ void OTableTreeListBox::checkedButton_noBroadcast(SvLBoxEntry* _pEntry)
 }
 
 //------------------------------------------------------------------------
-void OTableTreeListBox::implEmphasize(SvLBoxEntry* _pEntry, sal_Bool _bChecked, sal_Bool _bUpdateRelatives)
+void OTableTreeListBox::implEmphasize(SvLBoxEntry* _pEntry, sal_Bool _bChecked, sal_Bool _bUpdateDescendants, sal_Bool _bUpdateAncestors)
 {
     DBG_ASSERT(_pEntry, "OTableTreeListBox::implEmphasize: invalid entry (NULL)!");
     if (GetModel()->HasChilds(_pEntry))
@@ -490,19 +493,24 @@ void OTableTreeListBox::implEmphasize(SvLBoxEntry* _pEntry, sal_Bool _bChecked, 
         if (pTextItem)
             pTextItem->emphasize(_bChecked);
     }
-    if (_bUpdateRelatives)
+
+    if (_bUpdateDescendants)
     {
         // remove the mark for all children of the checked entry
         SvLBoxEntry* pChildLoop = FirstChild(_pEntry);
         while (pChildLoop)
         {
             if (GetModel()->HasChilds(pChildLoop))
-                implEmphasize(pChildLoop, sal_False, sal_False);
+                implEmphasize(pChildLoop, sal_False, sal_True, sal_False);
             pChildLoop = NextSibling(pChildLoop);
         }
+    }
+
+    if (_bUpdateAncestors)
+    {
         // remove the mark for all ancestors of the entry
         if (GetModel()->HasParent(_pEntry))
-            implEmphasize(GetParent(_pEntry), sal_False, sal_False);
+            implEmphasize(GetParent(_pEntry), sal_False, sal_False, sal_True);
     }
 }
 
@@ -527,6 +535,9 @@ void OTableTreeListBox::InitEntry(SvLBoxEntry* _pEntry, const XubString& _rStrin
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.13  2001/05/22 06:31:30  oj
+ *  #87081# show all tabletypes
+ *
  *  Revision 1.12  2001/05/15 11:25:48  fs
  *  #86996# use the connection pool instead of the driver manager
  *
