@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatch.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 15:33:16 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 16:07:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,22 +115,18 @@
 #include "hintpost.hxx"
 #include "slotserv.hxx"
 #include "ipclient.hxx"
-//#include "interno.hxx"
 #include "sfxtypes.hxx"
 #include "macrconf.hxx"
-#include "virtmenu.hxx"
 #include "viewfrm.hxx"
 #include "viewsh.hxx"
-#include "mnumgr.hxx"
 #include "childwin.hxx"
 #include "docfac.hxx"
 #include "msgpool.hxx"
 #include "module.hxx"
-#include "tbxconf.hxx"
 #include "topfrm.hxx"
 #include "sfxuno.hxx"
-#include "cfgmgr.hxx"
 #include "docfile.hxx"
+#include "mnumgr.hxx"
 #include "workwin.hxx"
 
 //==================================================================
@@ -1218,6 +1214,14 @@ sal_uInt16 SfxDispatcher::ExecuteFunction( sal_uInt16 nSlot, const SfxItemSet& r
 
 sal_uInt16 SfxDispatcher::GetSlotId( const String& rCommand )
 {
+    const SfxSlot *pSlot = GetSlot( rCommand );
+    if ( pSlot )
+        return pSlot->GetSlotId();
+    return 0;
+}
+
+const SfxSlot* SfxDispatcher::GetSlot( const String& rCommand )
+{
     // Anzahl der Shells auf den verkettenten Dispatchern z"ahlen
     Flush();
     sal_uInt16 nTotCount = pImp->aStack.Count();
@@ -1239,7 +1243,7 @@ sal_uInt16 SfxDispatcher::GetSlotId( const String& rCommand )
         SfxInterface *pIFace = pObjShell->GetInterface();
         pSlot = pIFace->GetSlot( rCommand );
         if ( pSlot )
-            return pSlot->GetSlotId();
+            return pSlot;
     }
 
     return 0;
@@ -1694,7 +1698,6 @@ long SfxDispatcher::Update_Impl( sal_Bool bForce )
 
     SfxTopViewFrame* pTop = pImp->pFrame ? PTR_CAST( SfxTopViewFrame, pImp->pFrame->GetTopViewFrame() ) : NULL;
     sal_Bool bUIActive = pTop && pTop->GetBindings().GetDispatcher() == this;
-    SfxMenuBarManager* pAppMenu = NULL;
 
     if ( !bUIActive && pTop && GetBindings() == &pTop->GetBindings() )
         // Eigene Tools nur intern festhalten und da"fur sorgen, da\s der
@@ -1779,11 +1782,11 @@ long SfxDispatcher::Update_Impl( sal_Bool bForce )
         pActDispat = pActDispat->pImp->pParent;
     }
 
-    if ( !bIsIPActive && !IsAppDispatcher() && bIsActive )
-        CollectTools_Impl( pWorkWin );
+    //if ( !bIsIPActive && !IsAppDispatcher() && bIsActive )
+    //    CollectTools_Impl( pWorkWin );
 
     // Jetzt rekursiv die Dispatcher abklappern
-    _Update_Impl( bUIActive, !bIsIPActive, bIsIPActive, pAppMenu, pTaskWin );
+    _Update_Impl( bUIActive, !bIsIPActive, bIsIPActive, NULL, pTaskWin );
     if ( bUIActive || bIsActive )
     {
         pWorkWin->UpdateObjectBars_Impl();
@@ -1812,7 +1815,7 @@ long SfxDispatcher::Update_Impl( sal_Bool bForce )
     return 1;
 }
 
-
+/*
 void SfxDispatcher::CollectTools_Impl( SfxWorkWindow* pWorkWin )
 {
     // Innerhalb eines ToolSpace werden auch die Tools von nicht aktiven Frames
@@ -1883,10 +1886,10 @@ void SfxDispatcher::CollectTools_Impl( SfxWorkWindow* pWorkWin )
         }
     }
 }
-
+*/
 
 sal_uInt32 SfxDispatcher::_Update_Impl( sal_Bool bUIActive, sal_Bool bIsMDIApp,
-            sal_Bool bIsIPOwner, SfxMenuBarManager *pAppMenu, SfxWorkWindow *pTaskWin )
+            sal_Bool bIsIPOwner, SfxMenuBarManager *, SfxWorkWindow *pTaskWin )
 {
     sal_uInt32 nHelpId = 0L;
     SFX_APP();
@@ -2098,25 +2101,6 @@ sal_uInt32 SfxDispatcher::_Update_Impl( sal_Bool bUIActive, sal_Bool bIsMDIApp,
     }
 
     return nHelpId;
-}
-
-//--------------------------------------------------------------------
-long SfxDispatcher::UpdateObjectMenus_Impl( SfxMenuBarManager *pMenuMgr )
-
-/*  [Beschreibung]
-
-    Hilfsmethode zum Updaten der <Object-Menus>.
-*/
-
-{
-    SFX_STACK(SfxDispatcher::UpdateObjecteMenus_Impl);
-
-    Flush();
-    SfxBindings* pBindings = GetBindings();
-    pBindings->Invalidate( SID_FORMATMENUSTATE );
-    pBindings->Update( SID_FORMATMENUSTATE );
-
-    return 0;
 }
 
 //--------------------------------------------------------------------
@@ -2585,17 +2569,6 @@ sal_Bool SfxDispatcher::_FindServer
             // Shell geh"ort zum Container?
             // AppDispatcher oder kein IPFrameDispatcher
             FASTBOOL bIsContainerShell = !pImp->pFrame || !bIsInPlace;
-#ifdef MBA
-            if ( !bIsContainerShell )
-            {
-                // Bei internem InPlace auch den AppDispatcher zug"angig machen
-                if ( pImp->pFrame && pImp->pFrame->GetParentViewFrame_Impl() )
-                {
-                    if ( i == nTotCount - 1 )
-                        bIsContainerShell = sal_True;
-                }
-            }
-#endif
             // Shell und Slot passen zusammen
             if ( !( ( bIsContainerSlot && bIsContainerShell ) ||
                     ( !bIsContainerSlot && bIsServerShell ) ) )
@@ -2637,6 +2610,102 @@ sal_Bool SfxDispatcher::_FindServer
 #endif
     return sal_False;
 }
+
+sal_Bool SfxDispatcher::HasSlot_Impl( sal_uInt16 nSlot )
+{
+    Flush();
+    sal_uInt16 nTotCount = pImp->aStack.Count();
+
+    if ( pImp->pParent && !pImp->pParent->pImp->pFrame )
+    {
+        // the last frame also uses the AppDispatcher
+        nTotCount += pImp->aStack.Count();
+    }
+
+    if ( SfxMacroConfig::IsMacroSlot( nSlot ) )
+        // Makro-Slot?
+        return sal_True;
+    else if (nSlot >= SID_VERB_START && nSlot <= SID_VERB_END)
+    {
+        // Verb-Slot?
+        SfxShell *pSh;
+        for ( sal_uInt16 nShell = 0; (pSh = GetShell(nShell)); ++nShell )
+        {
+            if ( pSh->ISA(SfxViewShell) )
+                return sal_True;
+        }
+
+        return sal_False;
+    }
+
+    // SID gegen gesetzten Filter pr"ufen
+    sal_uInt16 nSlotEnableMode=0;
+    if ( pImp->pFrame )
+    {
+        nSlotEnableMode = IsSlotEnabledByFilter_Impl( nSlot );
+        if ( 0 == nSlotEnableMode )
+            return sal_False;
+    }
+
+    // im Quiet-Mode nur Parent-Dispatcher
+    if ( pImp->bQuiet )
+        return sal_False;
+
+    sal_Bool bReadOnly = ( 2 != nSlotEnableMode && pImp->bReadOnly );
+//              ( pImp->pFrame && pImp->pFrame->GetObjectShell());
+//                pImp->pFrame->GetObjectShell()->IsLoading() );
+
+    for ( sal_uInt16 i=0 ; i < nTotCount; ++i )
+    {
+        SfxShell *pObjShell = GetShell(i);
+        SfxInterface *pIFace = pObjShell->GetInterface();
+        const SfxSlot *pSlot = pIFace->GetSlot(nSlot);
+        if ( pSlot && pSlot->nDisableFlags && ( pSlot->nDisableFlags & pObjShell->GetDisableFlags() ) != 0 )
+            return sal_False;
+
+        if ( pSlot && !( pSlot->nFlags & SFX_SLOT_READONLYDOC ) && bReadOnly )
+            return sal_False;
+
+        if ( pSlot )
+        {
+            // Slot geh"ort zum Container?
+            FASTBOOL bIsContainerSlot = pSlot->IsMode(SFX_SLOT_CONTAINER);
+            FASTBOOL bIsInPlace = pImp->pFrame && pImp->pFrame->GetObjectShell()->IsInPlaceActive();
+
+            // Shell geh"ort zum Server?
+            // AppDispatcher oder IPFrame-Dispatcher
+            FASTBOOL bIsServerShell = !pImp->pFrame || bIsInPlace;
+
+            // Nat"urlich sind ServerShell-Slots auch ausf"uhrbar, wenn sie auf
+            // einem Container-Dispatcher ohne IPClient ausgef"uhrt werden sollen.
+            if ( !bIsServerShell )
+            {
+                SfxViewShell *pViewSh = pImp->pFrame->GetViewShell();
+                bIsServerShell = !pViewSh || !pViewSh->GetUIActiveClient();
+            }
+
+            // Shell geh"ort zum Container?
+            // AppDispatcher oder kein IPFrameDispatcher
+            FASTBOOL bIsContainerShell = !pImp->pFrame || !bIsInPlace;
+
+            // Shell und Slot passen zusammen
+            if ( !( ( bIsContainerSlot && bIsContainerShell ) ||
+                    ( !bIsContainerSlot && bIsServerShell ) ) )
+                pSlot = 0;
+        }
+
+        if ( pSlot && !IsAllowed( nSlot ) )
+            pSlot = NULL;
+
+        if ( pSlot )
+            return sal_True;
+    }
+
+    return sal_False;
+}
+
+
+
 //--------------------------------------------------------------------
 sal_Bool SfxDispatcher::_FillState
 (
@@ -2871,117 +2940,6 @@ void SfxDispatcher::Lock( sal_Bool bLock )
             pImp->xPoster->Post( pImp->aReqArr[i] );
         pImp->aReqArr.Remove( 0, nCount );
     }
-}
-
-//--------------------------------------------------------------------
-void SfxDispatcher::ShowObjectBar(sal_uInt16 nId, SfxShell *pShell) const
-
-/*  [Beschreibung]
-
-    Mit dieser Methode kann auf einer Objektleistenposition gezielt eine
-    bestimmte Objektleiste eingeblendet werden.
-*/
-
-{
-    ResId aResId(nId);
-    sal_uInt16 nPos = USHRT_MAX;
-    sal_uInt16 nNo = 0;
-    SfxInterface *pIFace = 0;
-
-    if ( pShell )
-    {
-        // Nur in der Shell suchen
-        pIFace = pShell->GetInterface();
-        for ( nNo=0; nNo<pIFace->GetObjectBarCount(); nNo++ )
-        {
-            if (pIFace->GetObjectBarResId(nNo).GetId() == nId)
-            {
-                nPos = pIFace->GetObjectBarPos(nNo);
-                break;
-            }
-        }
-    }
-    else
-    {
-        // Alle Shells absuchen
-        for ( sal_uInt16 nIdx=0; (pShell=GetShell(nIdx)); nIdx++ )
-        {
-            pIFace = pShell->GetInterface();
-            for ( nNo=0; nNo<pIFace->GetObjectBarCount(); nNo++ )
-            {
-                if (pIFace->GetObjectBarResId(nNo).GetId() == nId)
-                {
-                    nPos = pIFace->GetObjectBarPos(nNo);
-                    break;
-                }
-            }
-
-            if ( nPos != USHRT_MAX )
-                break;
-        }
-    }
-
-    if ( nPos != USHRT_MAX )
-    {
-        // Auf jeden Fall eintragen, auch wenn unsichtbar. Dann kann
-        // WorkWindow anbieten, wieder anzuschalten
-        SfxObjectBars_Impl& rBar = pImp->aObjBars[nPos & SFX_POSITION_MASK];
-        SfxObjectBars_Impl& rFixed = pImp->aFixedObjBars[nPos & SFX_POSITION_MASK];
-
-        sal_uInt16 nOldId = rBar.aResId.GetId();
-
-        if ( pImp->bReadOnly && !( nPos & SFX_VISIBILITY_READONLYDOC ) )
-            return;
-
-        sal_uInt32 nFeature = pIFace->GetObjectBarFeature(nNo);
-        if ( nFeature && !pShell->HasUIFeature( nFeature ) )
-            return;
-
-        // check for toolboxes that are exclusively for a viewer
-        if ( pImp->pFrame)
-        {
-            BOOL bViewerTbx = SFX_VISIBILITY_VIEWER == ( nPos & SFX_VISIBILITY_VIEWER );
-            SfxObjectShell* pSh = pImp->pFrame->GetObjectShell();
-            SFX_ITEMSET_ARG( pSh->GetMedium()->GetItemSet(), pItem, SfxBoolItem, SID_VIEWONLY, sal_False );
-            BOOL bIsViewer = pItem && pItem->GetValue();
-            if ( bIsViewer != bViewerTbx )
-                return;
-        }
-
-        sal_Bool bVisible = pIFace->IsObjectBarVisible(nNo);
-        if ( !bVisible )
-            // Alle Sichtbarkeitsflags ausschalten
-            nPos &= SFX_POSITION_MASK;
-
-        aResId.SetResMgr( pIFace->GetObjectBarResId(nNo).GetResMgr() );
-        rBar.aResId = aResId;
-        rBar.nMode = nPos;
-        const String *pName = pIFace->GetObjectBarName(nNo);
-        if ( pName )
-            rBar.aName = *pName;
-        else
-            rBar.aName.Erase();
-        rBar.pIFace = pIFace;
-
-        rFixed = rBar;
-
-        if ( nOldId != aResId.GetId() && pImp->bUpdated )
-        {
-            SfxWorkWindow *pWorkWin = pImp->pFrame->GetFrame()->GetWorkWindow_Impl();
-            pWorkWin->SetObjectBar_Impl( nPos, aResId, pIFace, pName );
-            pWorkWin->UpdateObjectBars_Impl();
-        }
-
-        if ( !bVisible )
-        {
-            rBar.aResId = ResId( 0,0 );
-            rFixed.aResId = ResId( 0,0 );
-        }
-
-        return;
-    }
-
-//  DBG_ERROR("Objektleiste nicht bekannt!");
 }
 
 sal_uInt16 SfxDispatcher::GetObjectBarId( sal_uInt16 nPos ) const
@@ -3312,98 +3270,6 @@ void SfxDispatcher::InvalidateBindings_Impl( sal_Bool bModify )
     }
 }
 
-sal_uInt16 SfxDispatcher::GetNextToolBox_Impl( sal_uInt16 nPos, sal_uInt16 nType, String *pStr )
-{
-    SfxShell *pShell;
-    sal_Bool bReadOnly = sal_False;
-    SfxViewFrame *pFrame = pImp->pFrame;
-    if ( pFrame )
-    {
-        SfxObjectShell *pObj = pFrame->GetObjectShell();
-        bReadOnly =  !pObj || pObj->IsReadOnly();
-    }
-
-    sal_Bool bFound = sal_False;
-    SfxWorkWindow *pWorkWin = GetBindings()->GetWorkWindow_Impl();
-
-    // Wenn die aktuelle Toolbox die letzte ist, mu\s die erste zur"uckgegeben
-    // werden
-    sal_uInt16 nNext = 0;
-
-    if ( nPos != 0xFFFF )
-    {
-        SfxDispatcher *pDispat = this;
-        while ( pDispat )
-        {
-            SfxBindings* pBindings = pDispat->GetBindings();
-            if ( !pBindings || pBindings->GetWorkWindow_Impl() != pWorkWin )
-                break;
-
-            sal_uInt16 nCount = pDispat->pImp->aStack.Count();
-            // Alle interfaces auf dem Dispatcher-Stack durchsuchen
-            for ( sal_uInt16 nIdx=0; nIdx<nCount; nIdx++ )
-            {
-                pShell = pDispat->pImp->aStack.Top(nIdx);
-                const SfxInterface *pInterFace = pShell->GetInterface();
-                for ( sal_uInt16 nNo = 0; pInterFace && nNo<pInterFace->GetObjectBarCount(); ++nNo )
-                {
-                    // Ist die Objectbar an der richtigen Position und sichtbar ?
-                    sal_uInt16 nP = pInterFace->GetObjectBarPos(nNo);
-
-                    if ( (nP & SFX_POSITION_MASK) == (nPos & SFX_POSITION_MASK) &&
-                            pInterFace->IsObjectBarVisible(nNo) &&
-                        ( !bReadOnly || ( nP & SFX_VISIBILITY_READONLYDOC ) ) )
-                    {
-                        sal_uInt16 nId = pInterFace->GetObjectBarResId(nNo).GetId();
-                        if ( nId != nType )
-                        {
-                            // Es ist eine andere Toolbox
-                            // Ist sie aktivierbar ?
-                            sal_uInt32 nFeature = pInterFace->GetObjectBarFeature( nNo );
-                            if ( nFeature && !pShell->HasUIFeature( nFeature ) )
-                                continue;
-
-                            // check for toolboxes that are exclusively for a viewer
-                            if ( pImp->pFrame)
-                            {
-                                BOOL bViewerTbx = SFX_VISIBILITY_VIEWER == ( nP & SFX_VISIBILITY_VIEWER );
-                                SfxObjectShell* pSh = pImp->pFrame->GetObjectShell();
-                                SFX_ITEMSET_ARG( pSh->GetMedium()->GetItemSet(), pItem, SfxBoolItem, SID_VIEWONLY, sal_False );
-                                BOOL bIsViewer = pItem && pItem->GetValue();
-                                if ( bIsViewer != bViewerTbx )
-                                    continue;
-                            }
-
-                            // Kommt sie nach der aktuellen ?
-                            if ( bFound )
-                            {
-                                // Ja, also ist sie die n"achste
-                                if ( pStr )
-                                    *pStr = *pInterFace->GetObjectBarName( nNo );
-                                return nId;
-                            }
-                            else if ( !nNext )
-                            {
-                                // Nein, aber vielleicht ist es die erste ?
-                                nNext = nId;
-                                if ( pStr )
-                                    *pStr = *pInterFace->GetObjectBarName( nNo );
-                            }
-                        }
-                        else
-                            // das ist die aktuelle!
-                            bFound = sal_True;
-                    }
-                }
-            }
-
-            pDispat = pDispat->pImp->pParent;
-        }
-    }
-
-    return nNext;
-}
-
 sal_Bool SfxDispatcher::IsUpdated_Impl() const
 {
     return pImp->bUpdated;
@@ -3420,98 +3286,4 @@ sal_uInt32 SfxDispatcher::GetDisableFlags() const
 {
     return pImp->nDisableFlags;
 }
-
-sal_Bool SfxDispatcher::HasSlot_Impl( sal_uInt16 nSlot )
-{
-    Flush();
-    sal_uInt16 nTotCount = pImp->aStack.Count();
-
-    if ( pImp->pParent && !pImp->pParent->pImp->pFrame )
-    {
-        // the last frame also uses the AppDispatcher
-        nTotCount += pImp->aStack.Count();
-    }
-
-    if ( SfxMacroConfig::IsMacroSlot( nSlot ) )
-        // Makro-Slot?
-        return sal_True;
-    else if (nSlot >= SID_VERB_START && nSlot <= SID_VERB_END)
-    {
-        // Verb-Slot?
-        SfxShell *pSh;
-        for ( sal_uInt16 nShell = 0; (pSh = GetShell(nShell)); ++nShell )
-        {
-            if ( pSh->ISA(SfxViewShell) )
-                return sal_True;
-        }
-
-        return sal_False;
-    }
-
-    // SID gegen gesetzten Filter pr"ufen
-    sal_uInt16 nSlotEnableMode=0;
-    if ( pImp->pFrame )
-    {
-        nSlotEnableMode = IsSlotEnabledByFilter_Impl( nSlot );
-        if ( 0 == nSlotEnableMode )
-            return sal_False;
-    }
-
-    // im Quiet-Mode nur Parent-Dispatcher
-    if ( pImp->bQuiet )
-        return sal_False;
-
-    sal_Bool bReadOnly = ( 2 != nSlotEnableMode && pImp->bReadOnly );
-//              ( pImp->pFrame && pImp->pFrame->GetObjectShell());
-//                pImp->pFrame->GetObjectShell()->IsLoading() );
-
-    for ( sal_uInt16 i=0 ; i < nTotCount; ++i )
-    {
-        SfxShell *pObjShell = GetShell(i);
-        SfxInterface *pIFace = pObjShell->GetInterface();
-        const SfxSlot *pSlot = pIFace->GetSlot(nSlot);
-        if ( pSlot && pSlot->nDisableFlags && ( pSlot->nDisableFlags & pObjShell->GetDisableFlags() ) != 0 )
-            return sal_False;
-
-        if ( pSlot && !( pSlot->nFlags & SFX_SLOT_READONLYDOC ) && bReadOnly )
-            return sal_False;
-
-        if ( pSlot )
-        {
-            // Slot geh"ort zum Container?
-            FASTBOOL bIsContainerSlot = pSlot->IsMode(SFX_SLOT_CONTAINER);
-            FASTBOOL bIsInPlace = pImp->pFrame && pImp->pFrame->GetObjectShell()->IsInPlaceActive();
-
-            // Shell geh"ort zum Server?
-            // AppDispatcher oder IPFrame-Dispatcher
-            FASTBOOL bIsServerShell = !pImp->pFrame || bIsInPlace;
-
-            // Nat"urlich sind ServerShell-Slots auch ausf"uhrbar, wenn sie auf
-            // einem Container-Dispatcher ohne IPClient ausgef"uhrt werden sollen.
-            if ( !bIsServerShell )
-            {
-                SfxViewShell *pViewSh = pImp->pFrame->GetViewShell();
-                bIsServerShell = !pViewSh || !pViewSh->GetUIActiveClient();
-            }
-
-            // Shell geh"ort zum Container?
-            // AppDispatcher oder kein IPFrameDispatcher
-            FASTBOOL bIsContainerShell = !pImp->pFrame || !bIsInPlace;
-
-            // Shell und Slot passen zusammen
-            if ( !( ( bIsContainerSlot && bIsContainerShell ) ||
-                    ( !bIsContainerSlot && bIsServerShell ) ) )
-                pSlot = 0;
-        }
-
-        if ( pSlot && !IsAllowed( nSlot ) )
-            pSlot = NULL;
-
-        if ( pSlot )
-            return sal_True;
-    }
-
-    return sal_False;
-}
-
 
