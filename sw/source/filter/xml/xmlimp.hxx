@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mib $ $Date: 2001-05-14 14:20:33 $
+ *  last change: $Author: mib $ $Date: 2001-05-30 09:33:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,7 @@ class SwXMLImport: public SvXMLImport
 
     void                    _InitItemImport();
     void                    _FinitItemImport();
+    void                    UpdateTxtCollConditions( SwDoc *pDoc );
 
 protected:
 

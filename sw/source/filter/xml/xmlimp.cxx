@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: mib $ $Date: 2001-05-14 14:20:33 $
+ *  last change: $Author: mib $ $Date: 2001-05-30 09:33:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -522,6 +522,7 @@ void SwXMLImport::startDocument( void )
 void SwXMLImport::endDocument( void )
     throw( xml::sax::SAXException, uno::RuntimeException )
 {
+    SwDoc *pDoc = 0;
     if( (getImportFlags() & IMPORT_CONTENT) != 0 && !IsStylesOnlyMode() )
     {
         Reference<XUnoTunnel> xCrsrTunnel( GetTextImport()->GetCursor(),
@@ -595,7 +596,7 @@ void SwXMLImport::endDocument( void )
         {
             SwTxtNode* pCurrNd;
             sal_uInt32 nNodeIdx = pPos->nNode.GetIndex();
-            SwDoc *pDoc = pPaM->GetDoc();
+            pDoc = pPaM->GetDoc();
 
             DBG_ASSERT( pPos->nNode.GetNode().IsCntntNode(),
                         "insert position is not a content node" );
@@ -680,6 +681,14 @@ void SwXMLImport::endDocument( void )
             }
         }
 #endif
+    }
+
+    if( (getImportFlags() & IMPORT_CONTENT) != 0 ||
+        ((getImportFlags() & IMPORT_MASTERSTYLES) != 0 && IsStylesOnlyMode()) )
+    {
+        // pDoc might be 0. In this case UpdateTxtCollCondition is looking
+        // for it itself.
+        UpdateTxtCollConditions( pDoc );
     }
 
     GetTextImport()->ResetCursor();

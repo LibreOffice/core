@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfmt.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: dvo $ $Date: 2001-05-04 15:44:57 $
+ *  last change: $Author: mib $ $Date: 2001-05-30 09:33:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -277,26 +277,26 @@ SwXMLConditionParser_Impl::SwXMLConditionParser_Impl( const OUString& rInp ) :
         switch( sFunc[0] )
         {
         case 'e':
-            if( sFunc.compareToAscii( sXML_endnote ) == 0 && !bHasSub )
+            if( sFunc.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sXML_endnote) ) && !bHasSub )
                 nCondition = PARA_IN_ENDNOTE;
             break;
 
         case 'f':
-            if( sFunc.compareToAscii( sXML_footer ) == 0 && !bHasSub )
+            if( sFunc.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sXML_footer) ) && !bHasSub )
                 nCondition = PARA_IN_FOOTER;
-            else if( sFunc.compareToAscii( sXML_table_header ) == 0 &&
+            else if( sFunc.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sXML_footnote) ) &&
                      !bHasSub )
                 nCondition = PARA_IN_FOOTENOTE;
             break;
 
         case 'h':
-            if( sFunc.compareToAscii( sXML_header ) == 0 && !bHasSub )
+            if( sFunc.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sXML_header) ) && !bHasSub )
                 nCondition = PARA_IN_HEADER;
             break;
 
         case 'l':
-            if( sFunc.compareToAscii( sXML_list_level ) == 0 &&
-                nSub >=1 && nSub < MAXLEVEL )
+            if( sFunc.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sXML_list_level) ) &&
+                nSub >=1 && nSub <= MAXLEVEL )
             {
                 nCondition = PARA_IN_LIST;
                 nSubCondition = nSub-1;
@@ -304,8 +304,8 @@ SwXMLConditionParser_Impl::SwXMLConditionParser_Impl( const OUString& rInp ) :
             break;
 
         case 'o':
-            if( sFunc.compareToAscii( sXML_outline_level ) == 0 &&
-                nSub >=1 && nSub < MAXLEVEL )
+            if( sFunc.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sXML_outline_level) ) &&
+                nSub >=1 && nSub <= MAXLEVEL )
             {
                 nCondition = PARA_IN_OUTLINE;
                 nSubCondition = nSub-1;
@@ -313,23 +313,23 @@ SwXMLConditionParser_Impl::SwXMLConditionParser_Impl( const OUString& rInp ) :
             break;
 
         case 's':
-            if( sFunc.compareToAscii( sXML_section ) == 0 && !bHasSub )
+            if( sFunc.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sXML_section) ) && !bHasSub )
             {
                 nCondition = PARA_IN_SECTION;
             }
             break;
 
         case 't':
-            if( sFunc.compareToAscii( sXML_table ) == 0 && !bHasSub )
+            if( sFunc.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sXML_table) ) && !bHasSub )
             {
                 nCondition = PARA_IN_TABLEBODY;
             }
-            else if( sFunc.compareToAscii( sXML_table_header ) == 0 &&
+            else if( sFunc.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sXML_table_header) ) &&
                      !bHasSub )
             {
                 nCondition = PARA_IN_TABLEHEAD;
             }
-            else if( sFunc.compareToAscii( sXML_text_box ) == 0 && !bHasSub )
+            else if( sFunc.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sXML_text_box) ) && !bHasSub )
             {
                 nCondition = PARA_IN_FRAME;
             }
@@ -385,7 +385,7 @@ SwXMLConditionContext_Impl::SwXMLConditionContext_Impl(
         // TODO: use a map here
         if( XML_NAMESPACE_STYLE == nPrefix )
         {
-            if( aLocalName.compareToAscii( sXML_condition ) == 0 )
+            if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sXML_condition) ) )
             {
                 SwXMLConditionParser_Impl aCondParser( rValue );
                 if( aCondParser.IsValid() )
@@ -394,7 +394,7 @@ SwXMLConditionContext_Impl::SwXMLConditionContext_Impl(
                     nSubCondition = aCondParser.GetSubCondition();
                 }
             }
-            else if( aLocalName.compareToAscii( sXML_apply_style_name ) == 0 )
+            else if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sXML_apply_style_name) ) )
             {
                 sApplyStyle = rValue;
             }
@@ -498,7 +498,7 @@ SvXMLImportContext *SwXMLTextStyleContext_Impl::CreateChildContext(
     SvXMLImportContext *pContext = 0;
 
     if( XML_NAMESPACE_STYLE == nPrefix &&
-        rLocalName.compareToAscii( sXML_map ) == 0 )
+        rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sXML_map) ) )
     {
         SwXMLConditionContext_Impl *pCond =
             new SwXMLConditionContext_Impl( GetImport(), nPrefix,
@@ -632,7 +632,7 @@ void SwXMLItemSetStyleContext_Impl::SetAttribute( sal_uInt16 nPrefixKey,
 {
     if( XML_NAMESPACE_STYLE == nPrefixKey )
     {
-        if (rLocalName.compareToAscii( sXML_master_page_name ) == 0)
+        if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sXML_master_page_name) ))
         {
             sMasterPageName = rValue;
             bHasMasterPageName = sal_True;
@@ -735,7 +735,7 @@ SvXMLImportContext *SwXMLItemSetStyleContext_Impl::CreateChildContext(
 
     if( XML_NAMESPACE_STYLE == nPrefix )
     {
-        if( rLocalName.compareToAscii( sXML_properties ) == 0 )
+        if( rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sXML_properties) ) )
         {
             pContext = CreateItemSetContext( nPrefix, rLocalName, xAttrList );
         }
@@ -1150,6 +1150,54 @@ void SwXMLImport::FinishStyles()
 {
     if( GetStyles() )
         GetStyles()->FinishStyles( !IsInsertMode() );
+}
+
+void SwXMLImport::UpdateTxtCollConditions( SwDoc *pDoc )
+{
+    if( !pDoc )
+    {
+        Reference<XUnoTunnel> xCrsrTunnel( GetTextImport()->GetCursor(),
+                                              UNO_QUERY);
+        ASSERT( xCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );
+        SwXTextCursor *pTxtCrsr =
+                (SwXTextCursor*)xCrsrTunnel->getSomething(
+                                            SwXTextCursor::getUnoTunnelId() );
+        ASSERT( pTxtCrsr, "SwXTextCursor missing" );
+        pDoc = pTxtCrsr->GetDoc();
+
+        ASSERT( pDoc, "document missing" );
+    }
+
+    const SwTxtFmtColls& rColls = *pDoc->GetTxtFmtColls();
+    sal_uInt16 nCount = rColls.Count();
+    for( sal_uInt16 i=0; i < nCount; i++ )
+    {
+        SwTxtFmtColl *pColl = rColls[i];
+        if( pColl && RES_CONDTXTFMTCOLL == pColl->Which() )
+        {
+            const SwFmtCollConditions& rConditions =
+                ((const SwConditionTxtFmtColl *)pColl)->GetCondColls();
+            sal_Bool bSendModify = sal_False;
+            for( sal_uInt16 j=0; j < rConditions.Count() && !bSendModify; j++ )
+            {
+                const SwCollCondition& rCond = *rConditions[j];
+                switch( rCond.GetCondition() )
+                {
+                case PARA_IN_TABLEHEAD:
+                case PARA_IN_TABLEBODY:
+                case PARA_IN_FOOTER:
+                case PARA_IN_HEADER:
+                    bSendModify = sal_True;
+                    break;
+                }
+            }
+            if( bSendModify )
+            {
+                SwCondCollCondChg aMsg( pColl );
+                pColl->Modify( &aMsg, &aMsg );
+            }
+        }
+    }
 }
 
 sal_Bool SwXMLImport::FindAutomaticStyle(
