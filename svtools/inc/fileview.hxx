@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pb $ $Date: 2001-05-07 10:28:03 $
+ *  last change: $Author: pb $ $Date: 2001-05-11 07:51:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 #ifndef _SVT_FILEVIEW_HXX
 #define _SVT_FILEVIEW_HXX
 
+#ifndef _COM_SUN_STAR_UNO_SEQUENCE_H_
+#include <com/sun/star/uno/Sequence.h>
+#endif
+
 #include <vcl/ctrl.hxx>
 #include <vcl/image.hxx>
 
@@ -81,7 +85,7 @@ private:
     Image                   maFolderImage;
     Link                    maOpenDoneLink;
 
-    void                    OpenFolder();
+    void                    OpenFolder( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aContents );
 
 public:
     SvtFileView( Window* pParent, const ResId& rResId, sal_Bool bOnlyFolder, sal_Bool bMultiSelection );
@@ -99,6 +103,9 @@ public:
     void                    SetSizePixel( const Size& rNewSize );
     void                    SetPosSizePixel( const Point& rNewPos, const Size& rNewSize );
     void                    Initialize( const String& rURL, const String& rFilter );
+    void                    Initialize( const String& rURL,
+                                        const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aContents );
+
     void                    ExecuteFilter( const String& rFilter );
     void                    SetNoSelection();
     void                    SetFocusInView();
