@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-04 10:33:15 $
+ *  last change: $Author: mba $ $Date: 2001-09-06 07:47:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1069,24 +1069,30 @@ sal_Bool SfxObjectShell::DoSaveCompleted( SfxMedium * pNewMed )
                 INetURLObject::SetBaseURL( aBase );
             Broadcast( SfxSimpleHint(SFX_HINT_NAMECHANGED) );
         }
+
+        SvStorage *pStorage=NULL;
         if ( !pFilter || pFilter->IsOwnFormat())
         {
-            SvStorage* pStorage = pMedium->GetStorage();
+            pStorage = pMedium->GetStorage();
             bOk = SaveCompleted( pStorage );
-
-            // Set storage in document library containers
-            SfxDialogLibraryContainer* pDialogCont = pImp->pDialogLibContainer;
-            if( pDialogCont )
-                pDialogCont->setStorage( pStorage );
-
-            SfxScriptLibraryContainer* pBasicCont = pImp->pBasicLibContainer;
-            if( pBasicCont )
-                pBasicCont->setStorage( pStorage );
         }
-        else if( pFilter->UsesStorage() )
-            pMedium->GetStorage();
-        else if( pMedium->GetOpenMode() & STREAM_WRITE )
-            pMedium->GetInStream();
+        else
+        {
+            pStorage = GetStorage();
+            if( pFilter->UsesStorage() )
+                pMedium->GetStorage();
+            else if( pMedium->GetOpenMode() & STREAM_WRITE )
+                pMedium->GetInStream();
+        }
+
+        // Set storage in document library containers
+        SfxDialogLibraryContainer* pDialogCont = pImp->pDialogLibContainer;
+        if( pDialogCont )
+            pDialogCont->setStorage( pStorage );
+
+        SfxScriptLibraryContainer* pBasicCont = pImp->pBasicLibContainer;
+        if( pBasicCont )
+            pBasicCont->setStorage( pStorage );
     }
     else
     {
@@ -2012,6 +2018,38 @@ sal_Bool SfxObjectShell::SaveAsOwnFormat( SfxMedium& rMedium )
             SfxScriptLibraryContainer* pBasicCont = pImp->pBasicLibContainer;
             if( pBasicCont )
                 pBasicCont->storeLibrariesToStorage( (SotStorage*)(SvStorage*)xStor );
+
+            // Konfiguration schreiben
+            if ( GetConfigManager() )
+            {
+/* //!MBA
+                if ( rDocInfo.HasTemplateConfig() )
+                {
+                    const String aTemplFileName( rDocInfo.GetTemplateFileName() );
+                    if ( aTemplFileName.Len() )
+                    {
+                        INetURLObject aURL( aTemplFileName );
+                        DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "Illegal URL !" );
+
+                        SvStorageRef aStor = new SvStorage( aURL.GetMainURL() );
+                        if ( SVSTREAM_OK == aStor->GetError() )
+                        {
+                            GetConfigManager()->StoreConfiguration(aStor);
+                            if (aRef->IsStream(SfxConfigManager::GetStreamName()))
+                                aRef->Remove(SfxConfigManager::GetStreamName());
+                        }
+                    }
+                }
+                else
+ */
+                {
+//! MBA                    GetConfigManager()->SetModified( TRUE );
+                    SotStorageRef xCfgStor = pImp->pCfgMgr->GetConfigurationStorage( xStor );
+                    if ( pImp->pCfgMgr->StoreConfiguration( xCfgStor ) )
+                        xCfgStor->Commit();
+                }
+            }
+
         }
 
         const SfxFilter* pFilter = rMedium.GetFilter();
