@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControlFormattedFieldModel.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 10:34:52 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 17:24:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@
 
 /** specifies the standard model of an <type>UnoControlFormattedField </type>.
  */
-service UnoControlFormattedFieldModel
+published service UnoControlFormattedFieldModel
 {
     service com::sun::star::awt::UnoControlModel;
 
