@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dicimp.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tl $ $Date: 2001-03-19 14:51:06 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 16:07:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,7 +135,6 @@ class DictionaryNeo :
     BOOL                    addEntry_Impl(const ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XDictionaryEntry > xDicEntry,
                                           BOOL bIsLoadEntries = FALSE);
-    BOOL                    isReadonly_Impl();
 
 public:
     DictionaryNeo();
