@@ -2,9 +2,9 @@
  *
  *  $RCSfile: refdata.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2001-02-21 18:33:53 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:39:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -237,8 +237,10 @@ BOOL SingleRefData::operator==( const SingleRefData& r ) const
 // wird in refupdat.cxx mit MoveRelWrap verwendet
 void ComplRefData::PutInOrder()
 {
-    register short n1, n2;
-    register BOOL bTmp;
+    SCCOL nCol1, nCol2;
+    SCROW nRow1, nRow2;
+    SCTAB nTab1, nTab2;
+    BOOL bTmp;
     BYTE nRelState1, nRelState2;
     if ( Ref1.Flags.bRelName )
         nRelState1 =
@@ -254,13 +256,13 @@ void ComplRefData::PutInOrder()
             | ((Ref2.Flags.bColRel & 0x01));
     else
         nRelState2 = 0;
-    if ( (n1 = Ref1.nCol) > (n2 = Ref2.nCol) )
+    if ( (nCol1 = Ref1.nCol) > (nCol2 = Ref2.nCol) )
     {
-        Ref1.nCol = n2;
-        Ref2.nCol = n1;
-        n1 = Ref1.nRelCol;
+        Ref1.nCol = nCol2;
+        Ref2.nCol = nCol1;
+        nCol1 = Ref1.nRelCol;
         Ref1.nRelCol = Ref2.nRelCol;
-        Ref2.nRelCol = n1;
+        Ref2.nRelCol = nCol1;
         if ( Ref1.Flags.bRelName && Ref1.Flags.bColRel )
             nRelState2 |= 1;
         else
@@ -276,13 +278,13 @@ void ComplRefData::PutInOrder()
         Ref1.Flags.bColDeleted = Ref2.Flags.bColDeleted;
         Ref2.Flags.bColDeleted = bTmp;
     }
-    if ( (n1 = Ref1.nRow) > (n2 = Ref2.nRow) )
+    if ( (nRow1 = Ref1.nRow) > (nRow2 = Ref2.nRow) )
     {
-        Ref1.nRow = n2;
-        Ref2.nRow = n1;
-        n1 = Ref1.nRelRow;
+        Ref1.nRow = nRow2;
+        Ref2.nRow = nRow1;
+        nRow1 = Ref1.nRelRow;
         Ref1.nRelRow = Ref2.nRelRow;
-        Ref2.nRelRow = n1;
+        Ref2.nRelRow = nRow1;
         if ( Ref1.Flags.bRelName && Ref1.Flags.bRowRel )
             nRelState2 |= 2;
         else
@@ -298,13 +300,13 @@ void ComplRefData::PutInOrder()
         Ref1.Flags.bRowDeleted = Ref2.Flags.bRowDeleted;
         Ref2.Flags.bRowDeleted = bTmp;
     }
-    if ( (n1 = Ref1.nTab) > (n2 = Ref2.nTab) )
+    if ( (nTab1 = Ref1.nTab) > (nTab2 = Ref2.nTab) )
     {
-        Ref1.nTab = n2;
-        Ref2.nTab = n1;
-        n1 = Ref1.nRelTab;
+        Ref1.nTab = nTab2;
+        Ref2.nTab = nTab1;
+        nTab1 = Ref1.nRelTab;
         Ref1.nRelTab = Ref2.nRelTab;
-        Ref2.nRelTab = n1;
+        Ref2.nRelTab = nTab1;
         if ( Ref1.Flags.bRelName && Ref1.Flags.bTabRel )
             nRelState2 |= 4;
         else
