@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imgmgr.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 10:46:36 $
+ *  last change: $Author: kz $ $Date: 2004-05-20 19:23:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,6 @@ public:
     USHORT            GetType() const;
 
     Size            GetImageSize() const;
-    Color           GetMaskColor() const;
 
                     // get images from resources
     Image           GetImage(USHORT nId, SfxModule* pMod = 0 ) const;
@@ -129,7 +128,7 @@ public:
     Image           GetDefaultImage(USHORT nId, SfxModule* pMod, BOOL bBig, BOOL bHiContrast ) const;
 
                     // add images to configurable user list
-    void            ReplaceImage(USHORT nId, Bitmap* pBmp=0);
+    void            ReplaceImage(USHORT nId, BitmapEx* pBmp=0);
     void            AddImage(USHORT nId, const Image& rImage);
 
                     // reconfigure user list
@@ -147,7 +146,7 @@ public:
 
 #if _SOLAR__PRIVATE
     BOOL            IsUserDef_Impl(USHORT nId) const;
-    const Bitmap&   GetUserDefBitmap_Impl(USHORT nId) const;
+    const BitmapEx& GetUserDefBitmapEx_Impl(USHORT nId) const;
     Image           GetAndLockImage_Impl(USHORT nId, SfxModule* pMod = 0 );
     Image           GetAndLockImage_Impl(USHORT nId, BOOL bHiContrast, SfxModule* pMod = 0 );
     Image           GetImageFromModule_Impl( USHORT nId, SfxModule *pMod );
