@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuins2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-05 16:50:17 $
+ *  last change: $Author: hr $ $Date: 2000-11-14 16:26:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,7 @@
 #ifndef SVTOOLS_URIHELPER_HXX
 #include <svtools/urihelper.hxx>
 #endif
+#include <svtools/moduleoptions.hxx>
 
 #include "fuinsert.hxx"
 #include "tabvwsh.hxx"
@@ -253,7 +254,7 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, SdrView* pView,
     }
     else if (nSlot == SID_INSERT_SMATH)
     {
-        if ( SFX_APP()->HasFeature(SFX_FEATURE_SMATH) )
+        if ( SvtModuleOptions().IsMath() )
             aIPObj = &((SvFactory*)SvInPlaceObject::ClassFactory())->CreateAndInit(
 //                                      *OFF_APP()->GetSmDLL()->pSmDocShellFactory,
                                         *SM_MOD()->pSmDocShellFactory,
@@ -351,7 +352,7 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, SdrView* pView,
 
             //  Chart initialisieren ?
 
-            if ( SFX_APP()->HasFeature(SFX_FEATURE_SCHART) &&
+            if ( SvtModuleOptions().IsChart() &&
                     aIPObj->GetClassName() == *SCH_MOD()->pSchChartDocShellFactory )
                 lcl_ChartInit( aIPObj, pViewSh->GetViewData(), pWin );
 
@@ -447,7 +448,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, SdrView* pVi
 
     SvStorageRef aStor = new SvStorage( String() );
     SvInPlaceObjectRef aIPObj;
-    if ( SFX_APP()->HasFeature(SFX_FEATURE_SCHART) )
+    if ( SvtModuleOptions().IsChart() )
         aIPObj = &((SvFactory*)SvInPlaceObject::ClassFactory())->CreateAndInit(
                                         *SCH_MOD()->pSchChartDocShellFactory,
                                         aStor );
