@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TypeInfo.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-14 14:37:28 $
+ *  last change: $Author: oj $ $Date: 2001-03-02 15:42:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,7 @@ const sal_uInt16 TYPE_ARRAY     = 26;
 const sal_uInt16 TYPE_BLOB      = 27;
 const sal_uInt16 TYPE_CLOB      = 28;
 const sal_uInt16 TYPE_REF       = 29;
+const sal_uInt16 TYPE_OTHER     = 30;
 
     class OTypeInfo
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-02 14:39:09 $
+ *  last change: $Author: oj $ $Date: 2001-03-02 15:42:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -794,6 +794,9 @@ void OTableController::fillTypeInfo()
                 break;
             case DataType::REF:
                 aName = m_sTypeNames.GetToken(TYPE_REF);
+                break;
+            case DataType::OTHER:
+                aName = m_sTypeNames.GetToken(TYPE_OTHER);
                 break;
             default:
                 OSL_ENSURE(0,"Unknown type");

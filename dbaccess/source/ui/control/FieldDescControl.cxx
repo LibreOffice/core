@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FieldDescControl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-23 15:16:49 $
+ *  last change: $Author: oj $ $Date: 2001-03-02 15:42:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,6 +155,9 @@
 #endif
 #ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include <connectivity/dbtools.hxx>
+#endif
+#ifndef _COMPHELPER_NUMBERS_HXX_
+#include <comphelper/numbers.hxx>
 #endif
 
 using namespace dbaui;
@@ -1738,6 +1741,7 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
             case DataType::BLOB:
             case DataType::CLOB:
             case DataType::REF:
+            case DataType::OTHER:
                 DeactivateAggregate( tpFormat );
                 DeactivateAggregate( tpTextLen );
                 DeactivateAggregate( tpBoolDefault );
@@ -2036,7 +2040,7 @@ void OFieldDescControl::UpdateFormatSample(OFieldDescription* pFieldDescr)
         }
 
         String sDefault = pFieldDescr->GetDefaultValue();
-        sal_Int32 nNumberFormat = xNumberTypes->getFormatIndex(nFormatKey,GetLocale());
+        sal_Int32 nNumberFormat = ::comphelper::getNumberFormatType(GetFormatter(),nFormatKey);
         if(nNumberFormat == NumberFormat::TEXT)
             pFormatSample->SetText(sDefault);
         else if(sDefault.Len())

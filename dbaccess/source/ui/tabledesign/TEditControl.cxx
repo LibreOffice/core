@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TEditControl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-28 17:33:58 $
+ *  last change: $Author: oj $ $Date: 2001-03-02 15:42:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -767,7 +767,10 @@ void OTableEditorCtrl::CellModified( long nRow, sal_uInt16 nColId )
     GetUndoManager()->EnterListAction(String::CreateFromAscii("TODO"), String());
     if (!pActFieldDescr)
     {
-        pActRow->SetFieldType( GetView()->getController()->getTypeInfoByType(DataType::VARCHAR) );
+        OTypeInfoMap::const_iterator aTypeIter = GetView()->getController()->getTypeInfo()->find(DataType::VARCHAR);
+        if(aTypeIter == GetView()->getController()->getTypeInfo()->end())
+            aTypeIter = GetView()->getController()->getTypeInfo()->begin();
+        pActRow->SetFieldType( aTypeIter->second );
         nInvalidateTypeEvent = Application::PostUserEvent( LINK(this, OTableEditorCtrl, InvalidateFieldType) );
         pActFieldDescr = pActRow->GetActFieldDescr();
         pDescrWin->DisplayData( pActFieldDescr );

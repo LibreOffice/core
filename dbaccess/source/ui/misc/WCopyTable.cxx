@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WCopyTable.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-23 15:07:28 $
+ *  last change: $Author: oj $ $Date: 2001-03-02 15:42:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -589,6 +589,9 @@ void OCopyTableWizard::fillTypeInfo()
                 break;
             case DataType::REF:
                 aName = m_sTypeNames.GetToken(TYPE_REF);
+                break;
+            case DataType::OTHER:
+                aName = m_sTypeNames.GetToken(TYPE_OTHER);
                 break;
             default:
                 OSL_ENSURE(0,"Unknown type");
