@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colrdlg.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-26 20:10:21 $
+ *  last change: $Author: kz $ $Date: 2001-03-28 12:00:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,7 @@ ModalDialog DLG_COLOR
         Text[ dutch ] = "~Rood";
         Text[ chinese_simplified ] = "ºìÉ«(~R)";
         Text[ greek ] = "Êüêêéíï";
-        Text[ korean ] = "Àû»ö";
+        Text[ korean ] = "Àû»ö(~R)";
         Text[ turkish ] = "~Kýrmýzý";
         Text[ language_user1 ] = " ";
     };
@@ -158,7 +158,7 @@ ModalDialog DLG_COLOR
         Text[ dutch ] = "~Groen";
         Text[ chinese_simplified ] = "ÂÌÉ«(~G)";
         Text[ greek ] = "ÐñÜóéíï";
-        Text[ korean ] = "³ì»ö";
+        Text[ korean ] = "³ì»ö(~G)";
         Text[ turkish ] = "~Yeþil";
         Text[ language_user1 ] = " ";
     };
@@ -186,7 +186,7 @@ ModalDialog DLG_COLOR
         Text[ dutch ] = "~Blauw";
         Text[ chinese_simplified ] = "À¶É«(~B)";
         Text[ greek ] = "Ìðëå";
-        Text[ korean ] = "Ã»»ö";
+        Text[ korean ] = "Ã»»ö(~B)";
         Text[ turkish ] = "~Mavi";
         Text[ language_user1 ] = " ";
     };
@@ -275,7 +275,7 @@ ModalDialog DLG_COLOR
         Text[ dutch ] = "~Magenta";
         Text[ chinese_simplified ] = "×ÏºìÉ«(~M)";
         Text[ greek ] = "ÌáôæÝíôá";
-        Text[ korean ] = "¼±È«»ö";
+        Text[ korean ] = "¼±È«»ö(~M)";
         Text[ turkish ] = "M~or";
         Text[ language_user1 ] = " ";
     };
@@ -303,7 +303,7 @@ ModalDialog DLG_COLOR
         Text[ dutch ] = "~Yellow";
         Text[ chinese_simplified ] = "»ÆÉ«(~Y)";
         Text[ greek ] = "Êßôñéíï";
-        Text[ korean ] = "È²»ö";
+        Text[ korean ] = "È²»ö(~Y)";
         Text[ turkish ] = "~Sarý";
         Text[ language_user1 ] = " ";
     };
@@ -503,14 +503,14 @@ ModalDialog DLG_COLOR
         Text [ french ] = "~Luminosité" ;
         Text [ dutch ] = "Hel~derheid" ;
         Text [ portuguese ] = "~Brilho" ;
-        Text[ chinese_simplified ] = "ÁÁ¶È(~L)";
+        Text[ chinese_simplified ] = "ÁÁ¶È(~N)";
         Text[ russian ] = "ßðêîñòü";
         Text[ polish ] = "Jasnoœæ";
-        Text[ japanese ] = "–¾“x(~L)";
-        Text[ chinese_traditional ] = "«G«×(~L)";
+        Text[ japanese ] = "–¾“x(~N)";
+        Text[ chinese_traditional ] = "«G«×(~N)";
         Text[ arabic ] = "ÇáÅÖÇÁÉ";
         Text[ dutch ] = "Hel~derheid";
-        Text[ chinese_simplified ] = "ÁÁ¶È(~L)";
+        Text[ chinese_simplified ] = "ÁÁ¶È(~N)";
         Text[ greek ] = "Öùôåéíüôçôá";
         Text[ korean ] = "¹à±â(~N)";
         Text[ turkish ] = "Par~laklýk";
