@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ttmsg.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-08 17:38:17 $
+ *  last change: $Author: kz $ $Date: 2000-12-11 22:40:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -628,11 +628,11 @@ String S_UNPACKING_STORAGE_FAILED
     Text = "Entpacken der Storage \"($Arg1)\" nach \"($Arg2)\" ist fehlgeschlagen";
     Text[ english_us ] = "Unpacking storage \"($Arg1)\" to \"($Arg2)\" failed";
     Text[ portuguese ] = "Unpacking Storage \"($Arg1)\" to \"($Arg2)\" failed";
-    Text[ russian ] = "Unpacking Storage \"($Arg1)\" to \"($Arg2)\" failed";
+    Text[ russian ] = "Распаковать накопитель \"($Arg1)\" в \"($Arg2)\" не удалось.";
     Text[ greek ] = "Unpacking Storage \"($Arg1)\" to \"($Arg2)\" failed";
     Text[ dutch ] = "Unpacking Storage \"($Arg1)\" to \"($Arg2)\" failed";
     Text[ french ] = "La dйcompression du stockage \"($Arg1)\" vers \"($Arg2)\" a йchouй.";
-    Text[ spanish ] = "Unpacking Storage \"($Arg1)\" to \"($Arg2)\" failed";
+    Text[ spanish ] = "No se pudo descomprimir storage \"($Arg1)\" a \"($Arg2)\"";
     Text[ italian ] = "Unpacking Storage \"($Arg1)\" to \"($Arg2)\" failed";
     Text[ danish ] = "Unpacking Storage \"($Arg1)\" to \"($Arg2)\" failed";
     Text[ swedish ] = "Unpacking Storage \"($Arg1)\" to \"($Arg2)\" failed";
