@@ -1,4 +1,4 @@
-/* RCS  $Id: rulparse.c,v 1.1.1.1 2000-09-22 15:33:25 hr Exp $
+/* RCS  $Id: rulparse.c,v 1.2 2002-04-10 15:40:39 hjs Exp $
 --
 -- SYNOPSIS
 --      Perform semantic analysis on input
@@ -609,7 +609,7 @@ int     *state;
         else
            fil = Openfile( name, FALSE, FALSE );
 
-        if( fil == NIL(FILE) ) { /*if true ==> not found in current dir*/
+        if( fil == NIL(FILE) && !If_root_path( name ) ) { /*if true ==> not found in current dir*/
 
            /* Now we must scan the list of prerequisites for .INCLUDEDIRS
             * looking for the file in each of the specified directories.
