@@ -682,6 +682,7 @@ class Paragraph implements PocketWordConstants {
 
         // Line Descriptor info should be eliminated each time
         lineDescriptors = new Vector(1, 1);
+        lines = 0;
 
         for (int i = 0; i < textSegments.size(); i++) {
             ParagraphTextSegment pts = (ParagraphTextSegment)textSegments.elementAt(i);
