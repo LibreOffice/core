@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textanim.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-30 20:57:01 $
+ *  last change: $Author: thb $ $Date: 2001-05-31 17:57:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -645,7 +645,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
     TriStateBox TSB_ENDLESS
     {
         TabStop = TRUE ;
-        Pos = MAP_APPFONT ( RSC_SP_TBPG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT, MA_CURR_Y5 ) ;
+        Pos = MAP_APPFONT ( RSC_SP_TBPG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT, MA_CURR_Y5 + 1 ) ;
         Size = MAP_APPFONT ( 60 , RSC_CD_CHECKBOX_HEIGHT ) ;
         Text = "~Endlos" ;
         Text [ ENGLISH ] = "~Endless" ;
@@ -717,7 +717,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
     TriStateBox TSB_PIXEL
     {
         TabStop = TRUE ;
-        Pos = MAP_APPFONT ( RSC_SP_TBPG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT, MA_CURR_Y7 ) ;
+        Pos = MAP_APPFONT ( RSC_SP_TBPG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT, MA_CURR_Y7 + 1 ) ;
         Size = MAP_APPFONT ( 60 , RSC_CD_CHECKBOX_HEIGHT ) ;
         Text = "~Pixel" ;
         Text [ ENGLISH ] = "~Pixel" ;
@@ -795,7 +795,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
 #define MA_CURR_Y9      MA_CURR_Y8 + RSC_CD_FIXEDTEXT_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP
     TriStateBox TSB_AUTO
     {
-        Pos = MAP_APPFONT ( RSC_SP_TBPG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT, MA_CURR_Y9 ) ;
+        Pos = MAP_APPFONT ( RSC_SP_TBPG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT, MA_CURR_Y9 + 1 ) ;
         Size = MAP_APPFONT ( 60 , RSC_CD_CHECKBOX_HEIGHT ) ;
         Text = "~Automatisch" ;
         Text [ ENGLISH ] = "~Automatic" ;
