@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCache.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: oj $ $Date: 2001-12-07 09:27:32 $
+ *  last change: $Author: oj $ $Date: 2001-12-07 09:58:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1656,7 +1656,7 @@ sal_Bool ORowSetCache::checkJoin(const Reference< XConnection>& _xConnection,
                                  const Reference< XSQLQueryComposer >& _xComposer,
                                  const ::rtl::OUString& _sUpdateTableName )
 {
-    sal_Bool bOk = sal_True;
+    sal_Bool bOk = sal_False;
     ::rtl::OUString sSql = _xComposer->getQuery();
     ::rtl::OUString sErrorMsg;
     ::connectivity::OSQLParser aSqlParser(m_xServiceFactory);
@@ -1684,7 +1684,6 @@ sal_Bool ORowSetCache::checkJoin(const Reference< XConnection>& _xConnection,
                 { // found outer join
                     bLeftSide = SQL_ISTOKEN(pOuterType->getChild(0),LEFT);
                     bCheck = bLeftSide || SQL_ISTOKEN(pOuterType->getChild(0),RIGHT);
-                    bOk = sal_False;
                 }
 
                 if(bCheck)
