@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flycnt.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 11:11:12 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:53:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -451,12 +451,16 @@ void SwFlyAtCntFrm::MakeAll()
 
             SwOszControl aOszCntrl( this );
 
-            const sal_Bool bLockedAnchor =
-                static_cast<const SwTxtFrm*>( GetAnchorFrm() )->IsAnyJoinLocked();
+            // --> OD 2005-02-22 #i43255#
+            const bool bFormatAnchor =
+                    !static_cast<const SwTxtFrm*>( GetAnchorFrm() )->IsAnyJoinLocked() &&
+                    !ConsiderObjWrapInfluenceOnObjPos() &&
+                    !ConsiderObjWrapInfluenceOfOtherObjs();
+            // <--
 
             // OD 2004-05-12 #i28701# - no format of anchor frame, if
             // wrapping style influence is considered on object positioning
-            if ( !ConsiderObjWrapInfluenceOnObjPos() && !bLockedAnchor )
+            if ( bFormatAnchor )
             {
                 // If the anchor is located inside a section, we better calculate
                 // the section first:
@@ -504,8 +508,7 @@ void SwFlyAtCntFrm::MakeAll()
                 // <--
                 // OD 2004-05-12 #i28701# - no format of anchor frame, if
                 // wrapping style influence is considered on object positioning
-                if ( !ConsiderObjWrapInfluenceOnObjPos() &&
-                     !bLockedAnchor )
+                if ( bFormatAnchor )
                 {
                     // If the anchor is located inside a section, we better calculate
                     // the section first:
