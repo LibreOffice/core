@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCache.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 12:41:52 $
+ *  last change: $Author: obo $ $Date: 2004-06-01 10:09:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,12 @@
 
 #ifndef _CONNECTIVITY_COMMONTOOLS_HXX_
 #include "RowSetCache.hxx"
+#endif
+#ifndef _DBA_CORE_RESOURCE_HXX_
+#include "core_resource.hxx"
+#endif
+#ifndef _DBA_CORE_RESOURCE_HRC_
+#include "core_resource.hrc"
 #endif
 #ifndef _COMPHELPER_SEQSTREAM_HXX
 #include <comphelper/seqstream.hxx>
@@ -1230,7 +1236,7 @@ sal_Bool ORowSetCache::absolute( sal_Int32 row )
     ::osl::MutexGuard aGuard( m_aRowCountMutex );
 
     if(!row )
-        throw SQLException();
+        throw SQLException(DBACORE_RESSTRING(RID_STR_NO_ABS_ZERO),NULL,SQLSTATE_GENERAL,1000,Any() );
 
     if(row < 0)
     {
@@ -1288,7 +1294,7 @@ sal_Bool ORowSetCache::relative( sal_Int32 rows )
     if(rows)
     {
         if(m_bBeforeFirst || (m_bRowCountFinal && m_bAfterLast))
-            throw SQLException();
+            throw SQLException(DBACORE_RESSTRING(RID_STR_NO_RELATIVE),NULL,SQLSTATE_GENERAL,1000,Any() );
 
         if(m_nPosition + rows)
         {
@@ -1340,7 +1346,7 @@ void ORowSetCache::refreshRow(  )
     ::osl::MutexGuard aGuard( m_aRowCountMutex );
 
     if(isAfterLast())
-        throw SQLException();
+        throw SQLException(DBACORE_RESSTRING(RID_STR_NO_REFESH_AFTERLAST),NULL,SQLSTATE_GENERAL,1000,Any() );
     OSL_ENSURE(m_aMatrixIter != m_pMatrix->end(),"refreshRow() called for invalid row!");
     m_pCacheSet->refreshRow();
     m_pCacheSet->fillValueRow(*m_aMatrixIter,m_nPosition);
@@ -1378,7 +1384,7 @@ sal_Bool ORowSetCache::insertRow(  )
     ::osl::MutexGuard aGuard( m_aRowCountMutex );
 
     if ( !m_bInserted || !m_aInsertRow->isValid() )
-        throw SQLException();
+        throw SQLException(DBACORE_RESSTRING(RID_STR_NO_MOVETOINSERTROW_CALLED),NULL,SQLSTATE_GENERAL,1000,Any() );
 
     sal_Bool bRet;
     m_pCacheSet->insertRow(*m_aInsertRow,m_aUpdateTable);
@@ -1429,7 +1435,7 @@ void ORowSetCache::updateRow(  )
     ::osl::MutexGuard aGuard( m_aRowCountMutex );
 
     if(isAfterLast() || isBeforeFirst())
-        throw SQLException();
+        throw SQLException(DBACORE_RESSTRING(RID_STR_NO_UPDATEROW),NULL,SQLSTATE_GENERAL,1000,Any() );
 
     m_pCacheSet->updateRow(*m_aInsertRow,*m_aMatrixIter,m_aUpdateTable);
 
@@ -1445,7 +1451,7 @@ void ORowSetCache::updateRow( ORowSetMatrix::iterator& _rUpdateRow )
     ::osl::MutexGuard aGuard( m_aRowCountMutex );
 
     if(isAfterLast() || isBeforeFirst())
-        throw SQLException();
+        throw SQLException(DBACORE_RESSTRING(RID_STR_NO_UPDATEROW),NULL,SQLSTATE_GENERAL,1000,Any() );
 
     Any aBookmark = (*(*_rUpdateRow))[0].makeAny();
     OSL_ENSURE(aBookmark.hasValue(),"Bookmark must have a value!");
@@ -1470,7 +1476,7 @@ void ORowSetCache::deleteRow(  )
     ::osl::MutexGuard aGuard( m_aRowCountMutex );
 
     if(isAfterLast() || isBeforeFirst())
-        throw SQLException();
+        throw SQLException(DBACORE_RESSTRING(RID_STR_NO_DELETEROW),NULL,SQLSTATE_GENERAL,1000,Any() );
 
     //  m_pCacheSet->absolute(m_nPosition);
     m_pCacheSet->deleteRow(*m_aMatrixIter,m_aUpdateTable);
