@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbabrw.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-21 20:19:34 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 05:46:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -645,9 +645,9 @@ Menu MENU_BROWSERTREE_CONTEXT
             Text[ polish ] = "Administruj Ÿród³a danych...";
             Text[ portuguese_brazilian ] = "administrate ~data sources ...";
             Text[ japanese ] = "ÃŞ°À¿°½‚ÌŠÇ—(~D)...";
-            Text[ korean ] = "administrate ~data sources ...";
-            Text[ chinese_simplified ] = "¹ÜÀíÊı¾İÔ´...";
-            Text[ chinese_traditional ] = "ºŞ²z¸ê®Æ·½...";
+            Text[ korean ] = "a~dministrate data sources ...";
+            Text[ chinese_simplified ] = "¹ÜÀíÊı¾İÔ´(~D)...";
+            Text[ chinese_traditional ] = "ºŞ²z¸ê®Æ·½(~D)...";
             Text[ turkish ] = "administrate ~data sources ...";
             Text[ arabic ] = "ÅÏÇÑÉ ãÕÇÏÑ ÇáÈíÇäÇÊ...";
         };
@@ -659,8 +659,8 @@ Menu MENU_BROWSERTREE_CONTEXT
             Text [ english ] = "~close connection" ;
             Text [ english_us ] = "Disco~nnect" ;
             Text[ portuguese ] = "~Desligar";
-            Text[ russian ] = "~Çàêğûòü ïîäêëş÷åíèå";
-            Text[ greek ] = "Êëåßóéìï óıíäåóçò";
+            Text[ russian ] = "Îòñîåäèíèòüñÿ";
+            Text[ greek ] = "Êëåßóéìï óıíäåóç~ò";
             Text[ dutch ] = "~Verbinding verbreken";
             Text[ french ] = "Dé~connecter";
             Text[ spanish ] = "Cerrar conexión";
@@ -669,10 +669,10 @@ Menu MENU_BROWSERTREE_CONTEXT
             Text[ swedish ] = "Stän~g förbindelse";
             Text[ polish ] = "Roz³¹cz";
             Text[ portuguese_brazilian ] = "~close connection";
-            Text[ japanese ] = "Ú‘±‚ğ•Â‚¶‚é";
-            Text[ korean ] = "~close connection";
-            Text[ chinese_simplified ] = "½áÊøÁ¬½Ó";
-            Text[ chinese_traditional ] = "µ²§ô³s½u";
+            Text[ japanese ] = "Ú‘±‚ğ•Â‚¶‚é(~N)";
+            Text[ korean ] = "close co~nnection";
+            Text[ chinese_simplified ] = "½áÊøÁ¬½Ó(~N)";
+            Text[ chinese_traditional ] = "µ²§ô³s½u(~N)";
             Text[ turkish ] = "~close connection";
             Text[ arabic ] = "ŞØÚ ÇáÇÊÕÇá";
         };
@@ -696,8 +696,8 @@ Menu MENU_BROWSERTREE_CONTEXT
             Text[ portuguese_brazilian ] = "~refresh connection";
             Text[ japanese ] = "Ú‘±‚ğXV(~R)";
             Text[ korean ] = "~refresh connection";
-            Text[ chinese_simplified ] = "ÖØĞÂÁ¬½Ó";
-            Text[ chinese_traditional ] = "­«·s³s½u";
+            Text[ chinese_simplified ] = "ÖØĞÂÁ¬½Ó(~R)";
+            Text[ chinese_traditional ] = "­«·s³s½u(~R)";
             Text[ turkish ] = "~refresh connection";
             Text[ arabic ] = "ÊÍÏíË ÇáÇÊÕÇá";
         };
@@ -725,8 +725,8 @@ Menu MENU_BROWSERTREE_CONTEXT
             Text[ portuguese_brazilian ] = "new ~querydesign";
             Text[ japanese ] = "V‚µ‚¢¸´Ø°ÃŞ»Ş²İ(~Q)";
             Text[ korean ] = "new ~querydesign";
-            Text[ chinese_simplified ] = "ĞÂµÄ²éÑ¯Éè¼Æ";
-            Text[ chinese_traditional ] = "·sªº¬d¸ß³]­p";
+            Text[ chinese_simplified ] = "ĞÂµÄ²éÑ¯Éè¼Æ(~Q)";
+            Text[ chinese_traditional ] = "·sªº¬d¸ß³]­p(~Q)";
             Text[ turkish ] = "new ~querydesign";
             Text[ arabic ] = "ÊÕãíã ÌÏíÏ ááÇÓÊİÓÇÑ";
         };
@@ -775,8 +775,8 @@ Menu MENU_BROWSERTREE_CONTEXT
             Text[ portuguese_brazilian ] = "~edit query";
             Text[ japanese ] = "¸´Ø°‚Ì•ÒW(~E)";
             Text[ korean ] = "~edit query";
-            Text[ chinese_simplified ] = "±à¼­²éÑ¯";
-            Text[ chinese_traditional ] = "½s¿è¬d¸ß";
+            Text[ chinese_simplified ] = "±à¼­²éÑ¯(~E)";
+            Text[ chinese_traditional ] = "½s¿è¬d¸ß(~E)";
             Text[ turkish ] = "~edit query";
             Text[ arabic ] = "ÊÍÑíÑ ÇáÇÓÊİÓÇÑ";
         };
@@ -804,8 +804,8 @@ Menu MENU_BROWSERTREE_CONTEXT
             Text[ portuguese_brazilian ] = "de~lete query";
             Text[ japanese ] = "¸´Ø°‚Ìíœ(~L)";
             Text[ korean ] = "de~lete query";
-            Text[ chinese_simplified ] = "É¾³ı²éÑ¯";
-            Text[ chinese_traditional ] = "§R°£¬d¸ß";
+            Text[ chinese_simplified ] = "É¾³ı²éÑ¯(~L)";
+            Text[ chinese_traditional ] = "§R°£¬d¸ß(~L)";
             Text[ turkish ] = "de~lete query";
             Text[ arabic ] = "ÍĞİ ÇáÇÓÊİÓÇÑ";
         };
@@ -829,8 +829,8 @@ Menu MENU_BROWSERTREE_CONTEXT
             Text[ portuguese_brazilian ] = "c~opy query";
             Text[ japanese ] = "¸´Ø°‚ÌºËß°(~O)";
             Text[ korean ] = "c~opy query";
-            Text[ chinese_simplified ] = "¸´ÖÆ²éÑ¯";
-            Text[ chinese_traditional ] = "½Æ»s¬d¸ß";
+            Text[ chinese_simplified ] = "¸´ÖÆ²éÑ¯(~O)";
+            Text[ chinese_traditional ] = "½Æ»s¬d¸ß(~O)";
             Text[ turkish ] = "c~opy query";
             Text[ arabic ] = "äÓÎ ÇáÇÓÊİÓÇÑ";
         };
@@ -858,8 +858,8 @@ Menu MENU_BROWSERTREE_CONTEXT
             Text[ portuguese_brazilian ] = "new ~tabledesign";
             Text[ japanese ] = "V‚µ‚¢•\\‚ÌÃŞ»Ş²İ(~T)";
             Text[ korean ] = "new ~tabledesign";
-            Text[ chinese_simplified ] = "ĞÂµÄ±í¸ñÉè¼Æ";
-            Text[ chinese_traditional ] = "·sªºªí®æ³]­p";
+            Text[ chinese_simplified ] = "ĞÂµÄ±í¸ñÉè¼Æ(~T)";
+            Text[ chinese_traditional ] = "·sªºªí®æ³]­p(~T)";
             Text[ turkish ] = "new ~tabledesign";
             Text[ arabic ] = "ÊÕãíã ÌÏíÏ ááÌÏæá";
         };
@@ -883,8 +883,8 @@ Menu MENU_BROWSERTREE_CONTEXT
             Text[ portuguese_brazilian ] = "edit ta~ble";
             Text[ japanese ] = "•\\‚Ì•ÒW(~B)";
             Text[ korean ] = "edit ta~ble";
-            Text[ chinese_simplified ] = "±à¼­±í¸ñ";
-            Text[ chinese_traditional ] = "½s¿èªí®æ";
+            Text[ chinese_simplified ] = "±à¼­±í¸ñ(~B)";
+            Text[ chinese_traditional ] = "½s¿èªí®æ(~B)";
             Text[ turkish ] = "edit ta~ble";
             Text[ arabic ] = "ÊÍÑíÑ ÌÏæá";
         };
@@ -912,8 +912,8 @@ Menu MENU_BROWSERTREE_CONTEXT
             Text[ portuguese_brazilian ] = "de~lete table";
             Text[ japanese ] = "•\\‚Ìíœ(~L)";
             Text[ korean ] = "de~lete table";
-            Text[ chinese_simplified ] = "É¾³ı±í¸ñ";
-            Text[ chinese_traditional ] = "§R°£ªí®æ";
+            Text[ chinese_simplified ] = "É¾³ı±í¸ñ(~L)";
+            Text[ chinese_traditional ] = "§R°£ªí®æ(~L)";
             Text[ turkish ] = "de~lete table";
             Text[ arabic ] = "ÍĞİ ÌÏæá";
         };
@@ -937,8 +937,8 @@ Menu MENU_BROWSERTREE_CONTEXT
             Text[ portuguese_brazilian ] = "c~opy table";
             Text[ japanese ] = "Ã°ÌŞÙ‚ÌºËß°(~O)";
             Text[ korean ] = "c~opy table";
-            Text[ chinese_simplified ] = "¸´ÖÆ±í¸ñ";
-            Text[ chinese_traditional ] = "½Æ»sªí³æ";
+            Text[ chinese_simplified ] = "¸´ÖÆ±í¸ñ(~O)";
+            Text[ chinese_traditional ] = "½Æ»sªí³æ(~O)";
             Text[ turkish ] = "c~opy table";
             Text[ arabic ] = "äÓÎ ÇáÌÏæá";
         };
@@ -962,8 +962,8 @@ Menu MENU_BROWSERTREE_CONTEXT
             Text[ portuguese_brazilian ] = "~insert table";
             Text[ japanese ] = "Ã°ÌŞÙ‚Ì‘}“ü(~I)";
             Text[ korean ] = "~insert table";
-            Text[ chinese_simplified ] = "²åÈë±í¸ñ";
-            Text[ chinese_traditional ] = "¥[¤Jªí³æ";
+            Text[ chinese_simplified ] = "²åÈë±í¸ñ(~I)";
+            Text[ chinese_traditional ] = "¥[¤Jªí³æ(~I)";
             Text[ turkish ] = "~insert table";
             Text[ arabic ] = "ÅÏÑÇÌ ÌÏæá";
         };
@@ -979,7 +979,7 @@ Menu MENU_BROWSERTREE_CONTEXT
             Text [ english ] = "relatio~n design" ;
             Text [ english_us ] = "Rel~ation Design" ;
             Text[ portuguese ] = "Es~boçar relação";
-            Text[ russian ] = "Ïğîåêò îòíîøåíèé";
+            Text[ russian ] = "Ïğîåêò ñâÿçåé";
             Text[ greek ] = "Ó÷åäéáóìüò åîÜñôçóçò";
             Text[ dutch ] = "~ontwerp voor verbinding";
             Text[ french ] = "Ébauche de relatio~n";
@@ -989,10 +989,10 @@ Menu MENU_BROWSERTREE_CONTEXT
             Text[ swedish ] = "Relatio~nsutkast";
             Text[ polish ] = "Projekt relacji";
             Text[ portuguese_brazilian ] = "relatio~n design";
-            Text[ japanese ] = "ØÚ°¼®İ‚ÌÃŞ»Ş²İ(~N)";
-            Text[ korean ] = "relatio~n design";
-            Text[ chinese_simplified ] = "¹ØÁªÉè¼Æ";
-            Text[ chinese_traditional ] = "ÃöÁp³]­p";
+            Text[ japanese ] = "ØÚ°¼®İ‚ÌÃŞ»Ş²İ(~A)";
+            Text[ korean ] = "rel~ation design";
+            Text[ chinese_simplified ] = "¹ØÁªÉè¼Æ(~A)";
+            Text[ chinese_traditional ] = "ÃöÁp³]­p(~A)";
             Text[ turkish ] = "relatio~n design";
             Text[ arabic ] = "ÊÕãíã ÚáÇŞÇÊ";
         };
@@ -1150,7 +1150,7 @@ String STR_OPENTABLES_WARNINGS_DETAILS
     Text [ english ] = "While retrieving the tables, warnings were provided by the connection.";
     Text [ english_us ] = "While retrieving the tables, warnings were reported by the database connection.";
     Text[ portuguese ] = "Durante a localização das tabelas, a ligação da base de dados registou algumas advertências.";
-    Text[ russian ] = "Âî âğåìÿ îïğåäåëåíèÿ òàáëèö èç ñîåäèíåíèÿ áàçû äàííûõ âîçíèêëè ïğåäóïğåæäåíèÿ.";
+    Text[ russian ] = "Âî âğåìÿ îïğåäåëåíèÿ òàáëèö èç ñîåäèíåíèÿ áàçû äàííûõ ïîÿâèëèñü ïğåäóïğåæäåíèÿ.";
     Text[ greek ] = "ÊáôÜ ôçí äéáäéêáóßá áíåıñåóçò ôùí ğéíÜêùí äå÷ôŞêáìå ğñïåéäïğïéŞóåéò áğü ôçí óıíäåóç ôçò âÜóçò äåäïìİíùí.";
     Text[ dutch ] = "Bij het openen van de tabellen werden waarschuwingen opgeroepen door de databaseverbinding.";
     Text[ french ] = "Avertissements en provenance de la connexion (BD) durant le processus de récupération des tables.";
@@ -1158,7 +1158,7 @@ String STR_OPENTABLES_WARNINGS_DETAILS
     Text[ italian ] = "Il collegamento al database ha inviato avvertenze durante il rilevamento delle tabelle.";
     Text[ danish ] = "While retrieving the tables, warnings were provided by the connection.";
     Text[ swedish ] = "Databasförbindelsen gav varningar medan tabellerna bestämdes.";
-    Text[ polish ] = "W trakcie okreœlania tabel po³¹czenie bazy danych wysy³a³o ostrze¿enia.";
+    Text[ polish ] = "W trakcie ustalania tabel, po³¹czenie z baz¹ danych wys³a³o ostrze¿enia.";
     Text[ portuguese_brazilian ] = "While retrieving the tables, warnings were provided by the connection.";
     Text[ japanese ] = "Ã°ÌŞÙ‚Ì“]‘—’†‚ÉAÃŞ°ÀÍŞ°½‚ÌÚ‘±‚©‚çŒx‚ª‚ ‚è‚Ü‚µ‚½B";
     Text[ korean ] = "While retrieving the tables, warnings were provided by the connection.";
