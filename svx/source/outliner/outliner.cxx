@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outliner.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mt $ $Date: 2000-10-11 10:45:44 $
+ *  last change: $Author: mt $ $Date: 2000-10-11 11:58:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1668,10 +1668,12 @@ Rectangle Outliner::ImpCalcBulletArea( USHORT nPara, BOOL bAdjust )
         ParagraphInfos aInfos = pEditEngine->GetParagraphInfos( nPara );
         if ( aInfos.bValid )
         {
-            aTopLeft.Y() = aInfos.nFirstLineOffset + aInfos.nFirstLineHeight - aInfos.nFirstLineTextHeight +
-                ( aInfos.nFirstLineTextHeight - aBulletSize.Height() ) / 2;
+            aTopLeft.Y() = aInfos.nFirstLineOffset
+                            + aInfos.nFirstLineHeight - aInfos.nFirstLineTextHeight
+                            + aInfos.nFirstLineTextHeight / 2
+                            - aBulletSize.Height() / 2;
             // ggf. lieber auf der Baseline ausgeben...
-            if( pFmt->GetNumType() != SVX_NUM_BITMAP )
+            if( ( pFmt->GetNumType() != SVX_NUM_BITMAP ) && ( pFmt->GetNumType() != SVX_NUM_CHAR_SPECIAL ) )
             {
                 Font aBulletFont( ImpCalcBulletFont( nPara ) );
                 if ( aBulletFont.GetCharSet() != RTL_TEXTENCODING_SYMBOL )
