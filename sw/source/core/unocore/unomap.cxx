@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.114 $
+ *  $Revision: 1.115 $
  *
- *  last change: $Author: dvo $ $Date: 2001-10-25 11:45:15 $
+ *  last change: $Author: jp $ $Date: 2001-10-26 10:42:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,9 +220,7 @@ void SwUnoPropertyMapProvider::Sort( sal_uInt16 nId )
         p->pName = rPropNm.pName;
         p->nNameLen = rPropNm.nNameLen;
         // get the cppu type from the comphelper
-#ifdef DBG_UTIL
         sal_uInt16 nTyp = (sal_uInt16) (long) p->pType;
-#endif
         GenerateCppuType( nTyp, p->pType );
         DBG_ASSERT( nTyp != (sal_uInt16) (long) p->pType, "unknown type" );
     }
