@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RecentMasterPagesSelector.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:47:21 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:01:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,13 +62,13 @@
 #ifndef SD_TOOLPANEL_CONTROLS_RECENT_MASTER_PAGES_SELECTOR_HXX
 #define SD_TOOLPANEL_CONTROLS_RECENT_MASTER_PAGES_SELECTOR_HXX
 
-#include "MasterPagesSelector.hxx"
+#include "MasterPagesContainerSelector.hxx"
 
 namespace sd { namespace toolpanel { namespace controls {
 
 
 class RecentMasterPagesSelector
-    : public MasterPagesSelector
+    : public MasterPagesContainerSelector
 {
 public:
     RecentMasterPagesSelector (
