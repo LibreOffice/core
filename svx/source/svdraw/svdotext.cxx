@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotext.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: dl $ $Date: 2001-10-19 07:33:04 $
+ *  last change: $Author: aw $ $Date: 2001-10-22 13:04:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -705,11 +705,29 @@ void SdrTextObj::ImpSetContourPolygon( SdrOutliner& rOutliner, Rectangle& rAncho
         // Strichstaerke beruecksichtigen
         // Beim Hittest muss das unterbleiben (Performance!)
         pContourXPP = new XPolyPolygon();
-        TakeContour(*pContourXPP);
+
+        // #86258# test if shadow needs to be avoided for TakeContour()
+        const SfxItemSet& rSet = GetItemSet();
+        sal_Bool bShadowOn = ((SdrShadowItem&)(rSet.Get(SDRATTR_SHADOW))).GetValue();
+
+        if(bShadowOn)
+        {
+            // #86258# force shadow off
+            SdrObject* pCopy = Clone();
+            pCopy->SetItem(SdrShadowItem(FALSE));
+            pCopy->TakeContour(*pContourXPP);
+            delete pCopy;
+        }
+        else
+        {
+            TakeContour(*pContourXPP);
+        }
+
         if (aGeo.nDrehWink!=0)  // Unrotate!
             RotateXPoly(*pContourXPP,rAnchorRect.TopLeft(),-aGeo.nSin,aGeo.nCos);
         pContourXPP->Move(-aRef.X(),-aRef.Y());
     }
+
     rOutliner.SetPolygon(aXorXPP, pContourXPP);
 }
 
