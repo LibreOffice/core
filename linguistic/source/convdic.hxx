@@ -2,9 +2,9 @@
  *
  *  $RCSfile: convdic.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-09 07:30:11 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 14:04:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 #ifndef _COM_SUN_STAR_LINGUISTIC2_XCONVERSIONDICTIONARY_HPP_
 #include <com/sun/star/linguistic2/XConversionDictionary.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LINGUISTIC2_XCONVERSIONPROPERTYTYPE_HPP_
+#include <com/sun/star/linguistic2/XConversionPropertyType.hpp>
+#endif
 #ifndef _COM_SUN_STAR_UTIL_XFLUSHABLE_HPP_
 #include <com/sun/star/util/XFlushable.hpp>
 #endif
@@ -72,8 +75,8 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
 
-#ifndef _CPPUHELPER_IMPLBASE3_HXX_
-#include <cppuhelper/implbase3.hxx>
+#ifndef _CPPUHELPER_IMPLBASE4_HXX_
+#include <cppuhelper/implbase4.hxx>
 #endif
 #ifndef _CPPUHELPER_INTERFACECONTAINER_H_
 #include <cppuhelper/interfacecontainer.h>
@@ -85,6 +88,7 @@
 
 #include <hash_map>
 #include <set>
+#include <memory>
 
 #ifndef _LINGUISTIC_MISC_HXX_
 #include "misc.hxx"
@@ -129,12 +133,16 @@ typedef std::hash_multimap< const rtl::OUString, const rtl::OUString,
 
 typedef std::set< rtl::OUString, StrLT > ConvMapKeySet;
 
+typedef std::hash_multimap< const rtl::OUString, sal_Int16,
+                       std::hash< const rtl::OUString >, StrEQ > PropTypeMap;
+
 ///////////////////////////////////////////////////////////////////////////
 
 class ConvDic :
-    public ::cppu::WeakImplHelper3
+    public ::cppu::WeakImplHelper4
     <
         ::com::sun::star::linguistic2::XConversionDictionary,
+        ::com::sun::star::linguistic2::XConversionPropertyType,
         ::com::sun::star::util::XFlushable,
         ::com::sun::star::lang::XServiceInfo
     >
@@ -145,8 +153,10 @@ protected:
 
     ::cppu::OInterfaceContainerHelper       aFlushListeners;
 
-    ConvMap         aFromLeft;
-    ConvMap         aFromRight;
+    ConvMap                         aFromLeft;
+    std::auto_ptr< ConvMap >        pFromRight;     // only available for bidirectional conversion dictionaries
+
+    std::auto_ptr< PropTypeMap >    pConvPropType;
 
     String          aMainURL;   // URL to file
     rtl::OUString   aName;
@@ -172,7 +182,8 @@ public:
     ConvDic( const String &rName,
              INT16 nLanguage,
              sal_Int16 nConversionType,
-             const String &rMainURL );
+             BOOL bBiDirectional,
+             const String &rMainURL);
     virtual ~ConvDic();
 
     // XConversionDictionary
@@ -187,6 +198,10 @@ public:
     virtual void SAL_CALL addEntry( const ::rtl::OUString& aLeftText, const ::rtl::OUString& aRightText ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeEntry( const ::rtl::OUString& aLeftText, const ::rtl::OUString& aRightText ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException);
     virtual sal_Int16 SAL_CALL getMaxCharCount( ::com::sun::star::linguistic2::ConversionDirection eDirection ) throw (::com::sun::star::uno::RuntimeException);
+
+    // XConversionPropertyType
+    virtual void SAL_CALL setPropertyType( const ::rtl::OUString& aLeftText, const ::rtl::OUString& aRightText, ::sal_Int16 nPropertyType ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Int16 SAL_CALL getPropertyType( const ::rtl::OUString& aLeftText, const ::rtl::OUString& aRightText ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException);
 
     // XFlushable
     virtual void SAL_CALL flush(  ) throw (::com::sun::star::uno::RuntimeException);
