@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlg2.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-03 21:40:04 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 20:11:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -311,7 +311,7 @@ String STR_FILEDLG_GOUP
     Text[ russian ] = "Íà îäèí óğîâåíü ââåğõ";
     Text[ polish ] = "Jeden poziom wy¿ej";
     Text[ japanese ] = "‚P‚Âã‚ÌÌ«ÙÀŞ‚Ö";
-    Text[ chinese_traditional ] = "¦V¤Wª@¤@¯Å";
+    Text[ chinese_traditional ] = "¦V¤W¤@¯Å";
     Text[ arabic ] = "ãÓÊæì æÇÍÏ ááÃÚáì";
     Text[ greek ] = "¸íá åğßğåäï ğéï øçëÜ";
     Text[ korean ] = "ÇÑ ¼öÁØ À§·Î";
@@ -450,6 +450,7 @@ String STR_FILEDLG_ASKNEWDIR
     Text[ catalan ] = "¿Desea crear el directorio %s?";
     Text[ finnish ] = "Haluatko luoda hakemiston %s?";
 };
+
 
 
 
