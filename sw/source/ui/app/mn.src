@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mn.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 11:48:31 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:00:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,7 +250,7 @@ String MN_FRM_POPUPMENU
     Text[ japanese ] = "æ ";
     Text[ chinese_traditional ] = "æ¡†";
     Text[ arabic ] = "ßÇÏÑ";
-    Text[ greek ] = "Ğåñßãñáììá";
+    Text[ greek ] = "Ğëáßóéï";
     Text[ korean ] = "í”„ë ˆì„";
     Text[ turkish ] = "Çerçeve";
     Text[ catalan ] = "Marc";
@@ -649,7 +649,7 @@ Menu MN_PPREVIEW_POPUPMENU
             Text[ japanese ] = "å°åˆ·ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼";
             Text[ chinese_traditional ] = "åˆ—å°é é¢æª¢è¦–";
             Text[ arabic ] = "ÇáØÈÇÚÉ ÍÓÈ ÇáãÚÇíäÉ";
-            Text[ language_user1 ] = "ßí; ßí?ÓÊÚÑ?Ãí?ØÈÇÚ?\\æÃíä ãÚÇíäÉ ÇáÕİÍÉ ŞÈ?ØÈÇÚÊå?¿¿¿¿";
+            Text[ language_user1 ] = "; ßí; ßí?ÓÊÚÑ?Ãí?ØÈÇÚ?\\æÃíä ãÚÇíäÉ ÇáÕİÍÉ ŞÈ?ØÈÇÚÊå?¿¿¿¿";
             Text[ greek ] = "Åêôığùóç ğñïåğéóêüğçóçò";
             Text[ korean ] = "ì¸ì‡„";
             Text[ turkish ] = "Yazdır";
@@ -711,7 +711,7 @@ Menu MN_PPREVIEW_POPUPMENU
             Text[ danish ] = "Close Preview";
             Text[ swedish ] = "Stäng förhandsgranskning";
             Text[ polish ] = "Close Preview";
-            Text[ portuguese_brazilian ] = "Close Preview";
+            Text[ portuguese_brazilian ] = "Fechar visualização";
             Text[ japanese ] = "ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ã‚’é–‰ã˜ã‚‹";
             Text[ korean ] = "ë¯¸ë¦¬ ë³´ê¸° ë‹«ê¸°";
             Text[ chinese_simplified ] = "å…³é—­é¡µé¢é¢„è§ˆ";
@@ -727,6 +727,7 @@ Menu MN_PPREVIEW_POPUPMENU
         };
     };
 };
+
 
 
 
