@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_shl.mk,v $
 #
-#   $Revision: 1.46 $
+#   $Revision: 1.47 $
 #
-#   last change: $Author: hjs $ $Date: 2001-10-25 16:17:43 $
+#   last change: $Author: hjs $ $Date: 2001-10-25 18:03:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -144,7 +144,7 @@ SHL$(TNR)DESCRIPTIONOBJ*=$(SLO)$/$(LOCAL$(TNR)DESC:b)$($(WINVERSIONNAMES)_MAJOR)
 .IF "$(VERSIONOBJ)"!=""
 .IF "$(UPDATER)"=="YES"
 SHL$(TNR)VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL$(TNR)TARGET))}$(VERSIONOBJ:f)
-SHL$(TNR)VERSIONH:=$(INCCOM)$/_version.h
+USE_VERSIONH:=$(INCCOM)$/_version.h
 .ELSE			# "$(UPDATER)"=="YES"
 SHL$(TNR)VERSIONOBJ:=$(VERSIONOBJ)
 .ENDIF			# "$(UPDATER)"=="YES"

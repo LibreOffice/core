@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.79 $
+#   $Revision: 1.80 $
 #
-#   last change: $Author: hjs $ $Date: 2001-10-23 15:07:29 $
+#   last change: $Author: hjs $ $Date: 2001-10-25 18:03:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -2368,6 +2368,9 @@ $(MISC)$/$(TARGET)_xxl_%.done : %.xxl
 .INCLUDE : tg_shl.mk
 .ENDIF
 
+.IF "$(USE_VERSIONH)"!=""
+.INIT .SEQUENTIAL : $(USE_VERSIONH) $(NULLPRQ)
+.ENDIF          # "$(USE_VERSIONH)"!=""
 
 # -------
 # - HXX -
