@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltbli.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: dvo $ $Date: 2001-05-03 16:41:15 $
+ *  last change: $Author: mib $ $Date: 2001-05-07 08:59:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2047,12 +2047,14 @@ void SwXMLTableContext::_MakeTable( SwTableBox *pBox )
             }
         }
 
-        ASSERT( nWidth, "No relative width? That's no good idea!" );
         if( !nWidth )
         {
-            // If no width has been specified by now, we use USHRT_MAX,
-            // because this is a value that works!
-            nWidth = USHRT_MAX;
+            // This happens only for percentage values for the table itself.
+            // In this case, the columns get the correct width even if the
+            // the sum of the relative withs is smaller than the available
+            // width in TWIP. Therfore, we can use the relative width.
+            //
+            nWidth = nRelWidth > USHRT_MAX ? USHRT_MAX : nRelWidth;
         }
         if( nRelWidth != nWidth )
         {
