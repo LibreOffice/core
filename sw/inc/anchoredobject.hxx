@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anchoredobject.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 13:42:09 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 15:36:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,15 +133,20 @@ class SwAnchoredObject
 
         // --> OD 2004-06-29 #i28701# - Booleans needed for the layout process.
         // Values only of relevance for to-paragraph and to-character anchored
-        // floating screen object, which aren't in the 'hell' layer and have
-        // a wrapping style different from 'SURROUND_TRHOUGH', if document
-        // compatibility option 'Consider wrapping style on object positioning' is ON.
+        // floating screen object, for whose the 'straight-forward positioning
+        // process are applied
         // Otherwise value of <mbConsiderForTextWrap> is treated as <true>,
         // value of <mbPositionLocked> is treated as <false> and
         // value of <mbRestartLayoutProcess> is treated as <false>.
+        // --> OD 2004-10-22 #i35911# - add boolean <mbClearEnvironment>
+        // Indicates that due to its position and wrapping style its layout
+        // environment is cleared - all content is moved forward.
+        // Treated as <false>, if not the 'straight-forward positioning process"
+        // is applied.
         bool mbConsiderForTextWrap;
         bool mbPositionLocked;
         bool mbRestartLayoutProcess;
+        bool mbClearedEnvironment;
         // <--
 
         // --> OD 2004-08-25 #i3317# - boolean, indicating that temporarly
@@ -243,6 +248,17 @@ class SwAnchoredObject
         const SwFrm* GetAnchorFrm() const;
         SwFrm* AnchorFrm();
         void ChgAnchorFrm( SwFrm* _pNewAnchorFrm );
+        /** determine anchor frame containing the anchor position
+
+            OD 2004-10-08 #i26945#
+            the anchor frame, which is determined, is <mpAnchorFrm>
+            for an at-page, at-frame or at-paragraph anchored object
+            and the anchor character frame for an at-character and as-character
+            anchored object.
+
+            @author OD
+        */
+        SwFrm* GetAnchorFrmContainingAnchPos();
 
         // --> OD 2004-06-30 #i28701# - accessors to member <mpPageFrm>
         SwPageFrm* GetPageFrm();
@@ -270,6 +286,19 @@ class SwAnchoredObject
             page frame, the 'anchor' of the given anchored object is on
         */
         SwPageFrm* FindPageFrmOfAnchor();
+
+        /** get frame, which contains the anchor character, if the object
+            is anchored at-character or as-character.
+
+            OD 2004-10-04 #i26945#
+
+            @author OD
+
+            @return SwTxtFrm*
+            text frame containing the anchor character. It's NULL, if the object
+            isn't anchored at-character resp. as-character.
+        */
+        SwTxtFrm* FindAnchorCharFrm();
 
         // accessors to data of position calculation:
         // frame vertical position is orient at
@@ -413,7 +442,19 @@ class SwAnchoredObject
         void UnlockPosition();
         bool RestartLayoutProcess() const;
         void SetRestartLayoutProcess( const bool _bRestartLayoutProcess );
+        // --> OD 2004-10-22 #i35911# - accessors for <mbClearedEnvironment>
+        bool ClearedEnvironment() const;
+        void SetClearedEnvironment( const bool _bClearedEnvironment );
         // <--
+
+        /** method to determine, if due to anchored object size and wrapping
+            style, its layout environment is cleared.
+
+            OD 2004-10-22 #i35911#
+
+            @author OD
+        */
+        bool HasClearedEnvironment() const;
 
         /** method to update anchored object in the <SwSortedObjs> lists
 
