@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbxmod.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:12:10 $
+ *  last change: $Author: ab $ $Date: 2000-10-10 14:38:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1198,7 +1198,7 @@ BOOL SimpleTokenizer_Impl::getNextToken( /*out*/TokenTypes& reType,
         || ((!bStarScriptMode) && (c == '\'')) )
     {
         // Kommentar ?
-        if ( (( c == '/' ) || bLineHasCommentBegin) || ((!bStarScriptMode) && (c == '\'')) )
+        if ( (( c == '/' && bStarScriptMode ) || bLineHasCommentBegin) || ((!bStarScriptMode) && (c == '\'')) )
         {
             char cNext = peekChar();
             if ( cNext == '/' || ( bStarScriptMode && (cNext == '*' || bLineHasCommentBegin))
@@ -1284,7 +1284,7 @@ BOOL SimpleTokenizer_Impl::getNextToken( /*out*/TokenTypes& reType,
             }
         }
         // HTML-Kommentar
-        else if( c == '<' )
+        else if( c == '<' && bStarScriptMode )
         {
             char cNext = peekChar();
             if( cNext == '!' )
