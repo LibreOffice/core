@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtsecte.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-19 19:19:50 $
+ *  last change: $Author: dvo $ $Date: 2001-01-25 11:33:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -285,16 +285,18 @@ void XMLTextParagraphExport::exportListAndSectionChange(
                 while ((aOldForward != aOldStack.end()) &&
                        (*aOldForward != *aOld))
                 {
-                    pRedlineExport->ExportStartOrEndRedline(*aOldForward,
-                                                            sal_False);
+                    if (NULL != pRedlineExport)
+                        pRedlineExport->ExportStartOrEndRedline(*aOldForward,
+                                                                sal_False);
                     pSectionExport->ExportSectionEnd(*aOldForward,
                                                      bAutoStyles);
                     aOldForward++;
                 }
                 if (aOldForward != aOldStack.end())
                 {
-                    pRedlineExport->ExportStartOrEndRedline(*aOldForward,
-                                                            sal_False);
+                    if (NULL != pRedlineExport)
+                        pRedlineExport->ExportStartOrEndRedline(*aOldForward,
+                                                                sal_False);
                     pSectionExport->ExportSectionEnd(*aOldForward,
                                                      bAutoStyles);
                 }
@@ -304,7 +306,8 @@ void XMLTextParagraphExport::exportListAndSectionChange(
             // (order: oldest to newest)
             while (aNew != aNewStack.rend())
             {
-                pRedlineExport->ExportStartOrEndRedline(*aNew, sal_True);
+                if (NULL != pRedlineExport)
+                    pRedlineExport->ExportStartOrEndRedline(*aNew, sal_True);
                 pSectionExport->ExportSectionStart(*aNew, bAutoStyles);
                 aNew++;
             }

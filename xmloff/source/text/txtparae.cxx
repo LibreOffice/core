@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-19 19:19:50 $
+ *  last change: $Author: dvo $ $Date: 2001-01-25 11:33:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -751,7 +751,7 @@ XMLTextParagraphExport::XMLTextParagraphExport(
     pFieldExport = new XMLTextFieldExport( rExp );
     pSectionExport = new XMLSectionExport( rExp, *this );
     pIndexMarkExport = new XMLIndexMarkExport( rExp, *this );
-    pRedlineExport = new XMLRedlineExport( rExp );
+    pRedlineExport = IsBlockMode() ? NULL : new XMLRedlineExport( rExp );
 }
 
 XMLTextParagraphExport::~XMLTextParagraphExport()
@@ -1056,12 +1056,12 @@ void XMLTextParagraphExport::exportTextContentEnumeration(
                                         bAutoStyles );
 
             // export start + end redlines (for wholly redlined tables)
-            if (! bAutoStyles)
+            if ((! bAutoStyles) && (NULL != pRedlineExport))
                 pRedlineExport->ExportStartOrEndRedline(xTxtCntnt, sal_True);
 
             exportTable( xTxtCntnt, bAutoStyles, bProgress  );
 
-            if (! bAutoStyles)
+            if ((! bAutoStyles) && (NULL != pRedlineExport))
                 pRedlineExport->ExportStartOrEndRedline(xTxtCntnt, sal_False);
 
             bHasContent = sal_True;
@@ -1292,7 +1292,8 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
             }
             else if (sType.equals(sRedline))
             {
-                pRedlineExport->ExportChange(xPropSet, bAutoStyles);
+                if (NULL != pRedlineExport)
+                    pRedlineExport->ExportChange(xPropSet, bAutoStyles);
             }
             else
                 DBG_ERROR("unknown text portion type");
@@ -2298,7 +2299,8 @@ void XMLTextParagraphExport::exportTextDeclarations()
 
 void XMLTextParagraphExport::exportTrackedChanges(sal_Bool bAutoStyles)
 {
-    pRedlineExport->ExportChangesList( bAutoStyles );
+    if (NULL != pRedlineExport)
+        pRedlineExport->ExportChangesList( bAutoStyles );
 }
 
 void XMLTextParagraphExport::exportTextAutoStyles()
