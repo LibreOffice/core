@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtffly.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:59:40 $
+ *  last change: $Author: vg $ $Date: 2003-05-19 12:24:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -334,7 +334,6 @@ void lcl_CpyBreakAttrs( SwCntntNode* pSrcNd, SwCntntNode* pDstNd,
     }
 }
 
-
 void SwRTFParser::SetFlysInDoc()
 {
     // !! von Oben abarbeiten, CntntPos ist kein Index !
@@ -404,9 +403,9 @@ void SwRTFParser::SetFlysInDoc()
 
         // verschiebe den Inhalt von diesem Anchor in den Auto-TextBereich
         // und erzeuge dadurch den richtigen SwG-Rahmen
-        SwNodeRange aRg( pFlySave->nSttNd, 0, pFlySave->nEndNd,
-                        (pFlySave->nEndCnt ? 1 : 0) );
-        BOOL bMakeEmptySection = aRg.aStart < aRg.aEnd;
+        SwNodeRange aRg(pFlySave->nSttNd, 0, pFlySave->nEndNd, 0);
+        //Make a new section, unless there is no content at all
+        bool bMakeEmptySection = aRg.aStart < aRg.aEnd || ((aRg.aStart == aRg.aEnd) && pFlySave->nEndCnt);
 
         {
             // Nur TextNodes koennen in Tabellen stehen !!
@@ -425,38 +424,16 @@ void SwRTFParser::SetFlysInDoc()
             else
             {
                 // TabelleNodes beachten
-                BOOL bMoveFromCell = FALSE;
                 pNd = pNd->FindTableNode();
                 if( pNd )   // am Anfang eine Tabelle, -> Bereich auf TabStart
-                {
-                    if( pFlySave->nSttNd.GetNode().FindStartNode() ==
-                        pFlySave->nEndNd.GetNode().FindStartNode() )
-                    {
-                        // dann nur den Node verschieben
-                        SwNodeIndex& rIdx = pFlySave->nSttNd;
-                        if( rIdx.GetNode().EndOfSectionIndex() -
-                            rIdx.GetNode().FindStartNode()->GetIndex() ==
-                            aRg.aEnd.GetIndex() - aRg.aStart.GetIndex() + 1 )
-                        {
-                            // dann bliebe kein Node mehr stehen, also
-                            // erzeuge eine leere Text Section!
-                            bMakeEmptySection = FALSE;
-                        }
-                        bMoveFromCell = TRUE;
-                    }
-                    else
-                        aRg.aStart = *pNd;
-                }
+                    aRg.aStart = *pNd;
 
                 if( bMakeEmptySection )
                 {
                     pNd = &aRg.aEnd.GetNode();
-                    ULONG nSectEnd = pNd->EndOfSectionIndex();
-                    if( !pFlySave->nEndCnt )
-                        ++nSectEnd;
+                    ULONG nSectEnd = pNd->EndOfSectionIndex()+1;
 
-                    if( !bMoveFromCell && !pNd->IsTableNode() &&
-                        0 != (pNd = pNd->FindTableNode() ) )
+                    if (!pNd->IsTableNode() && (pNd = pNd->FindTableNode()))
                     {
                         const SwNode* pTblBxNd;
                         // Ende der Tabelle ist hinter dieser Box ??
@@ -537,7 +514,6 @@ void SwRTFParser::SetFlysInDoc()
 
         SwFlyFrmFmt* pFmt = pDoc->MakeFlyFrmFmt( aEmptyStr, pParent );
         pFmt->SetAttr( pFlySave->aFlySet );
-
         const SwFmtAnchor& rAnchor = pFmt->GetAnchor();
         if( FLY_IN_CNTNT != rAnchor.GetAnchorId() )
         {
@@ -623,6 +599,7 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
 
     // RTF-Defaults setzen:
     SwFmtAnchor aAnchor(FLY_PAGE);
+
     SwFmtHoriOrient aHori( 0, HORI_LEFT, /*FRAME*/REL_PG_PRTAREA );
     SwFmtVertOrient aVert( 0, VERT_TOP, REL_PG_PRTAREA );
     SvxFrameDirectionItem aFrmDir( FRMDIR_HORI_LEFT_TOP );
@@ -1005,6 +982,7 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
             nToken = GetNextToken();
     } while( bWeiter && IsParserWorking() );
 
+#if 0
     if( !bReadSwFly && ( FRAME == aVert.GetRelationOrient() ||
         //JP 21.07.99: for Bug 67630 - it read into Header od Footer, set
         //              never the anchor to Page. Because it is then only
@@ -1014,6 +992,7 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
           ( pPam->GetNode()->FindHeaderStartNode() ||
             pPam->GetNode()->FindFooterStartNode() )) ))
         aAnchor.SetType( FLY_AT_CNTNT );
+#endif
 
     pSet->Put( aAnchor );
     pSet->Put( aHori );
