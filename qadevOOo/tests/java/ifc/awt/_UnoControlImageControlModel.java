@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _UnoControlImageControlModel.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-09-08 10:08:35 $
+ *  last change:$Date: 2004-11-16 12:47:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,18 @@ public class _UnoControlImageControlModel extends MultiPropertyTest {
             protected Object getNewValue(String propName, Object oldValue) {
                 return utils.isVoid(oldValue) ? new Integer(8945) :
                     super.getNewValue(propName, oldValue) ;
+            }
+        }) ;
+    }
+
+   /**
+    * This property can be VOID, and in case if it is so new
+    * value must defined.
+    */
+    public void _BorderColor() {
+        testProperty("BorderColor", new PropertyTester() {
+            protected Object getNewValue(String p, Object old) {
+                return utils.isVoid(old) ? new Integer(1234) : null ;
             }
         }) ;
     }
