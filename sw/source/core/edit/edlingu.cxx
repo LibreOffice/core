@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edlingu.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-25 10:33:56 $
+ *  last change: $Author: hr $ $Date: 2003-09-29 15:05:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,9 @@
 #endif
 #ifndef _CHARATR_HXX
 #include <charatr.hxx>
+#endif
+#ifndef _HINTIDS_HXX
+#include <hintids.hxx>
 #endif
 #ifndef _EDITSH_HXX
 #include <editsh.hxx>
@@ -1077,7 +1080,8 @@ uno::Reference< XSpellAlternatives >
         xub_StrLen nLen = 1;
         if( pWrong->InWrongWord(nBegin,nLen) && !pNode->IsSymbol(nBegin) )
         {
-            String aWord( pNode->GetTxt().Copy( nBegin, nLen ) );
+            String aText( pNode->GetTxt().Copy( nBegin, nLen ) );
+            String aWord( aText );
             aWord.EraseAllChars( CH_TXTATR_BREAKWORD ).EraseAllChars( CH_TXTATR_INWORD );
 
             sal_Bool bSpell = sal_True;
@@ -1098,10 +1102,24 @@ uno::Reference< XSpellAlternatives >
                 pNode->GetWrong()->Invalidate( 0, STRING_LEN );
                 pNode->SetWrongDirty( sal_True );
 #endif
-                aPos.nContent = nBegin;
+                // make sure the selection build later from the
+                // data below does not include footnotes and other
+                // "in word" character to the left and right in order
+                // to preserve those. Therefore count those "in words"
+                // in order to modify the selection accordingly.
+                const sal_Unicode* pChar = aText.GetBuffer();
+                xub_StrLen nLeft = 0;
+                while (pChar && *pChar++ == CH_TXTATR_INWORD)
+                    ++nLeft;
+                pChar = aText.Len() ? aText.GetBuffer() + aText.Len() - 1 : 0;
+                xub_StrLen nRight = 0;
+                while (pChar && *pChar-- == CH_TXTATR_INWORD)
+                    ++nRight;
+
+                aPos.nContent = nBegin + nLeft;
                 *pCrsr->GetPoint() = aPos;
                 pCrsr->SetMark();
-                ExtendSelection( sal_True, nLen );
+                ExtendSelection( sal_True, nLen - nLeft - nRight );
             }
         }
     }
