@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pivot2.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:27:28 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 13:58:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,7 @@
 #include "stlpool.hxx"
 #include "stlsheet.hxx"
 
+using ::com::sun::star::sheet::DataPilotFieldReference;
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -519,6 +520,32 @@ DataObject* ScPivotCollection::Clone() const
     return new ScPivotCollection(*this);
 }
 
+// ============================================================================
 
+LabelData::LabelData( const String& rName, short nCol, bool bIsValue ) :
+    maName( rName ),
+    mnCol( nCol ),
+    mnFuncMask( PIVOT_FUNC_NONE ),
+    mnUsedHier( 0 ),
+    mbShowAll( false ),
+    mbIsValue( bIsValue )
+{
+}
 
+// ============================================================================
+
+ScDPFuncData::ScDPFuncData( short nCol, USHORT nFuncMask ) :
+    mnCol( nCol ),
+    mnFuncMask( nFuncMask )
+{
+}
+
+ScDPFuncData::ScDPFuncData( short nCol, USHORT nFuncMask, const DataPilotFieldReference& rFieldRef ) :
+    mnCol( nCol ),
+    mnFuncMask( nFuncMask ),
+    maFieldRef( rFieldRef )
+{
+}
+
+// ============================================================================
 
