@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.153 $
+ *  $Revision: 1.154 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-02 13:39:22 $
+ *  last change: $Author: vg $ $Date: 2003-07-09 10:54:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -6611,6 +6611,11 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const XubString& rStr,
     if( !ImplGetServerGraphics() )
         return;
 #endif
+
+    if( nIndex >= rStr.Len() )
+        return;
+    if( (ULONG)nIndex+nLen >= rStr.Len() )
+        nLen = rStr.Len() - nIndex;
 
     XubString   aStr = rStr;
     xub_StrLen  nMnemonicPos = STRING_NOTFOUND;
