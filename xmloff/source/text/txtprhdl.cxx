@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprhdl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:07 $
+ *  last change: $Author: bm $ $Date: 2000-09-27 15:16:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,8 +103,8 @@
 #ifndef _XMLOFF_XMLANCHORTYPEPROPHDL_HXX
 #include "XMLAnchorTypePropHdl.hxx"
 #endif
-#ifndef _XMLOFF_XMLENUMPROPERTYHANDLER_HXX
-#include "XMLEnumPropertyHandler.hxx"
+#ifndef _XMLOFF_XMLCONSTANTSPROPERTYHANDLER_HXX
+#include "XMLConstantsPropertyHandler.hxx"
 #endif
 #ifndef _XMLOFF_XMLCLIPPROPERTYHANDLER_HXX
 #include "XMLClipPropertyHandler.hxx"
@@ -946,34 +946,34 @@ const XMLPropertyHandler *XMLTextPropertyHandlerFactory_Impl::GetPropertyHandler
         pHdl = new XMLTextColumnsPropHdl_Impl;
         break;
     case XML_TYPE_TEXT_HORIZONTAL_POS:
-        pHdl = new XMLEnumPropertyHandler( pXML_HoriPos_Enum, 0 );
+        pHdl = new XMLConstantsPropertyHandler( pXML_HoriPos_Enum, 0 );
         break;
     case XML_TYPE_TEXT_HORIZONTAL_POS_MIRRORED:
-        pHdl = new XMLEnumPropertyHandler( pXML_HoriPosMirrored_Enum, 0 );
+        pHdl = new XMLConstantsPropertyHandler( pXML_HoriPosMirrored_Enum, 0 );
         break;
     case XML_TYPE_TEXT_HORIZONTAL_REL:
-        pHdl = new XMLEnumPropertyHandler( pXML_HoriRel_Enum, 0 );
+        pHdl = new XMLConstantsPropertyHandler( pXML_HoriRel_Enum, 0 );
         break;
     case XML_TYPE_TEXT_HORIZONTAL_REL_FRAME:
-        pHdl = new XMLEnumPropertyHandler( pXML_HoriRelFrame_Enum, 0 );
+        pHdl = new XMLConstantsPropertyHandler( pXML_HoriRelFrame_Enum, 0 );
         break;
     case XML_TYPE_TEXT_HORIZONTAL_MIRROR:
         pHdl = new XMLHoriMirrorPropHdl_Impl;
         break;
     case XML_TYPE_TEXT_VERTICAL_POS:
-        pHdl = new XMLEnumPropertyHandler( pXML_VertPos_Enum, 0 );
+        pHdl = new XMLConstantsPropertyHandler( pXML_VertPos_Enum, 0 );
         break;
     case XML_TYPE_TEXT_VERTICAL_REL:
-        pHdl = new XMLEnumPropertyHandler( pXML_VertRel_Enum, 0 );
+        pHdl = new XMLConstantsPropertyHandler( pXML_VertRel_Enum, 0 );
         break;
     case XML_TYPE_TEXT_VERTICAL_REL_PAGE:
-        pHdl = new XMLEnumPropertyHandler( pXML_VertRelPage_Enum, 0 );
+        pHdl = new XMLConstantsPropertyHandler( pXML_VertRelPage_Enum, 0 );
         break;
     case XML_TYPE_TEXT_VERTICAL_REL_FRAME:
-        pHdl = new XMLEnumPropertyHandler( pXML_VertRelFrame_Enum, 0 );
+        pHdl = new XMLConstantsPropertyHandler( pXML_VertRelFrame_Enum, 0 );
         break;
     case XML_TYPE_TEXT_VERTICAL_REL_AS_CHAR:
-        pHdl = new XMLEnumPropertyHandler( pXML_VertRelAsChar_Enum, 0 );
+        pHdl = new XMLConstantsPropertyHandler( pXML_VertRelAsChar_Enum, 0 );
         break;
     case XML_TYPE_TEXT_MIRROR_VERTICAL:
         pHdl = new XMLGrfMirrorPropHdl_Impl( sXML_vertical, sal_False );
