@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel3.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 13:24:14 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 14:25:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,9 +131,6 @@
 #include "drawdoc.hxx"
 #include "sdpage.hxx"
 #include "sdattr.hxx"
-#ifndef SD_FU_SPELL_HXX
-#include "fuspell.hxx"
-#endif
 #ifndef SD_FU_SEARCH_HXX
 #include "fusearch.hxx"
 #endif
@@ -182,33 +179,6 @@ void DrawDocShell::Execute( SfxRequest& rReq )
 
     switch ( rReq.GetSlot() )
     {
-        case SID_SPELLING:
-        {
-            if ( pViewShell )
-            {
-                SfxErrorContext aContext(ERRCTX_SVX_LINGU_SPELLING, String(),
-                    GetWindow(), RID_SVXERRCTX, DIALOG_MGR() );
-
-                {
-                    ::sd::View* pView = pViewShell->GetView();
-
-                    if ( pView->IsTextEdit() )
-                    {
-                        pView->EndTextEdit();
-                    }
-
-                    delete pFuActual;
-                    pFuActual = new FuSpell( pViewShell,
-                    pViewShell->GetActiveWindow(), pView, pDoc, rReq );
-                    ( (FuSpell*) pFuActual)->StartSpelling();
-                    delete pFuActual;
-                    pFuActual = NULL;
-                }
-            }
-            rReq.Done();
-        }
-        break;
-
         case SID_SEARCH_ITEM:
         {
             const SfxItemSet* pReqArgs = rReq.GetArgs();
