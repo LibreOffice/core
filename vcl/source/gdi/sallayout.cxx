@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sallayout.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hdu $ $Date: 2002-06-06 14:46:43 $
+ *  last change: $Author: hdu $ $Date: 2002-06-11 16:35:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -315,20 +315,22 @@ bool GenericSalLayout::GetCharWidths( long* pCharWidths ) const
         if( n < 0 || n >= nCharCapacity )
             continue;
 
-        // maximum left extent of character
+        // minimum is left extent of cluster
         long nXPos = pG->maLinearPos.X();
         if( pMinPos[n] > nXPos )
             pMinPos[n] = nXPos;
 
-        // maximum right extent of character
-        // either right edge of glyph or left edge of next glyph
-        nXPos = (i==0) ? (nXPos + pG->mnWidth) : pG[1].maLinearPos.X();
+        // maximum is right extent of cluster
+        if( i > 0 )
+            nXPos = pG[1].maLinearPos.X();  // left edge of next glyph
+        else if( pG->mnWidth > 0 )
+            nXPos += pG->mnWidth;           // right edge of last glyph
         if( pMaxPos[n] < nXPos )
             pMaxPos[n] = nXPos;
 
         // special case for zero width glyphs in cluster, e.g. in Thai
         // => they are aligned to cluster start
-        if( !pG->mnWidth )
+        if( pG->mnWidth <= 0 )
         {
             int m = nClusterIndex - mnFirstCharIndex;
             if( n != m )
@@ -337,29 +339,32 @@ bool GenericSalLayout::GetCharWidths( long* pCharWidths ) const
     }
 
     // set char width array
-    for( i = 0; i < nCharCapacity; )
+    long nCharWidth = 0;
+    for( i = 0; i < nCharCapacity; ++i )
     {
-        // assume clusterwidth 0 for untouched chars e.g. in Indic scripts
-        long nClusterWidth = (pMaxPos[i] >= 0) ? pMaxPos[i] - pMinPos[i] : 0;
-
-        // ligature glyphs correspond to more than one sal_Unicode, so
-        // some character widths are still uninitialized. This is solved
-        // by distributing the cluster width to the involved characters
-        int j = i;
-        while( ++j<nCharCapacity && pMaxPos[j]<0 );
-        int nClusterSize = j - i;
-        if( nClusterSize > 1 )
+        if( pMaxPos[i] < 0 )
         {
-            int nCharWidth = (nClusterWidth + (nClusterSize/2)) / nClusterSize;
-            while( --j > i )
-            {
-                pCharWidths[j] = nCharWidth;
-                nClusterWidth -= nCharWidth;
-            }
+            // untouched chars of cluster get their share
+            pCharWidths[i] = nCharWidth;
         }
+        else
+        {
+            long nClusterWidth = pMaxPos[i] - pMinPos[i];
 
-        pCharWidths[i] = nClusterWidth;
-        i += nClusterSize;
+            // ligature glyphs correspond to more than one sal_Unicode, so
+            // some character widths are still uninitialized. This is solved
+            // by distributing the cluster width to the involved characters
+            int j = i;
+            while( ++j<nCharCapacity && pMaxPos[j]<0 );
+            int nClusterSize = j - i;
+            if( nClusterSize > 1 )
+            {
+                nCharWidth = (nClusterWidth + (nClusterSize/2)) / nClusterSize;
+                nClusterWidth -= (nClusterSize - 1) * nCharWidth;
+            }
+
+            pCharWidths[i] = nClusterWidth;
+        }
     }
 
     return true;
@@ -460,14 +465,13 @@ void GenericSalLayout::Justify( long nNewWidth )
     const long nBasePos = maBasePoint.X();
     for( int i = mnGlyphCount; --i >= 0; ++pG )
     {
-        if( (pG->mnCharIndex >= mnFirstCharIndex)
-        &&  (pG->mnCharIndex < mnEndCharIndex) )
-        {
-            long nOldPos = pG->maLinearPos.X();
-            long nNewPos = nBasePos + (long)(fFactor * (nOldPos - nBasePos) + 0.5);
-            if( nNewPos != nOldPos )
-                pG->maLinearPos += Point( nNewPos-nOldPos, 0 );
-        }
+        int n = pG->mnCharIndex;
+        if( n < mnFirstCharIndex || n >= mnEndCharIndex )
+            continue;
+        long nOldPos = pG->maLinearPos.X();
+        long nNewPos = nBasePos + (long)(fFactor * (nOldPos - nBasePos) + 0.5);
+        if( nNewPos != nOldPos )
+            pG->maLinearPos.X() += nNewPos - nOldPos;
     }
 }
 
@@ -516,9 +520,6 @@ int GenericSalLayout::GetNextGlyphs( int nLen, long* pGlyphs, Point& rPos,
 
     // calculate absolute position in pixel units
     Point aRelativePos = pG->maLinearPos - maBasePoint;
-    aRelativePos.X() /= mnUnitsPerPixel;
-    aRelativePos.Y() /= mnUnitsPerPixel;
-    rPos = GetDrawPosition( aRelativePos );
 
     // find more glyphs which can be merged into one drawing instruction
     int nCount = 0;
@@ -526,7 +527,7 @@ int GenericSalLayout::GetNextGlyphs( int nLen, long* pGlyphs, Point& rPos,
     {
         *(pGlyphs++) = pG->mnGlyphIndex;
         if( pXOffset )
-            *(pXOffset++) = pG->maLinearPos.X();
+            *(pXOffset++) = pG->maLinearPos.X() - aRelativePos.X();
         ++nCount;
 
         if( ++nStart >= mnGlyphCount )
@@ -550,6 +551,10 @@ int GenericSalLayout::GetNextGlyphs( int nLen, long* pGlyphs, Point& rPos,
             if( aOldPos.X() + nOldWidth != pG->maLinearPos.X() )
                 break;
     }
+
+    aRelativePos.X() /= mnUnitsPerPixel;
+    aRelativePos.Y() /= mnUnitsPerPixel;
+    rPos = GetDrawPosition( aRelativePos );
 
     return nCount;
 }
