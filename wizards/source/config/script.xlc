@@ -6,12 +6,10 @@
  <library:library library:name="FormWizard" library:link="true"/>
  <library:library library:name="Template" library:link="true"/>
  <library:library library:name="Tools" library:link="true"/>
- <library:library library:name="WebWizard" library:link="true"/>
  <library:library library:name="Schedule" library:link="true"/>
  <library:library library:name="Gimmicks" library:link="true"/>
  <library:library library:name="ImportWizard" library:link="true"/>
  <library:library library:name="Euro" library:link="true"/>
  <library:library library:name="Depot" library:link="true"/>
- <library:library library:name="Tutorials" library:link="true"/>
  <library:library library:name="ScriptBindingLibrary" library:link="true"/>
 </library:libraries>
