@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabwin.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fs $ $Date: 2002-04-15 15:39:35 $
+ *  last change: $Author: fs $ $Date: 2002-05-06 10:35:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,6 +162,12 @@
 #ifndef _COMPHELPER_PROPERTY_HXX_
 #include <comphelper/property.hxx>
 #endif
+#ifndef _SFXFRAME_HXX
+#include <sfx2/frame.hxx>
+#endif
+#ifndef _SVX_DATACCESSDESCRIPTOR_HXX_
+#include <svx/dataaccessdescriptor.hxx>
+#endif
 
 const long STD_WIN_POS_X = 50;
 const long STD_WIN_POS_Y = 50;
@@ -191,6 +197,8 @@ FmFieldWinListBox::FmFieldWinListBox( FmFieldWin* pParent )
 {
     DBG_CTOR(FmFieldWinListBox,NULL);
     SetHelpId( HID_FIELD_SEL );
+
+    SetHighlightRange( );
 }
 
 //------------------------------------------------------------------------------
@@ -209,6 +217,15 @@ sal_Int8 FmFieldWinListBox::AcceptDrop( const AcceptDropEvent& rEvt )
 sal_Int8 FmFieldWinListBox::ExecuteDrop( const ExecuteDropEvent& rEvt )
 {
     return DND_ACTION_NONE;
+}
+
+//------------------------------------------------------------------------------
+BOOL FmFieldWinListBox::DoubleClickHdl()
+{
+    if ( pTabWin->createSelectionControls() )
+        return sal_True;
+
+    return SvTreeListBox::DoubleClickHdl();
 }
 
 //------------------------------------------------------------------------------
@@ -294,6 +311,49 @@ void FmFieldWin::GetFocus()
         pListBox->GrabFocus();
     else
         SfxFloatingWindow::GetFocus();
+}
+
+//-----------------------------------------------------------------------
+sal_Bool FmFieldWin::createSelectionControls( )
+{
+    SvLBoxEntry* pSelected = pListBox->FirstSelected();
+    if ( pSelected )
+    {
+        // build a descriptor for the currently selected field
+        ODataAccessDescriptor aDescr;
+        aDescr[ daDataSource ]  <<= GetDatabaseName();
+        aDescr[ daCommand ]     <<= GetObjectName();
+        aDescr[ daCommandType ] <<= GetObjectType();
+        aDescr[ daColumnName ]  <<= ::rtl::OUString( pListBox->GetEntryText( pSelected) );
+
+        // transfer this to the SFX world
+        SfxUnoAnyItem aDescriptorItem( SID_FM_DATACCESS_DESCRIPTOR, makeAny( aDescr.createPropertyValueSequence() ) );
+        const SfxPoolItem* pArgs[] =
+        {
+            &aDescriptorItem, NULL
+        };
+
+        // execute the create slot
+        GetBindings().Execute( SID_FM_CREATE_FIELDCONTROL, pArgs );
+    }
+
+    return NULL != pSelected;
+}
+
+//-----------------------------------------------------------------------
+long FmFieldWin::PreNotify( NotifyEvent& _rNEvt )
+{
+    if ( EVENT_KEYINPUT == _rNEvt.GetType() )
+    {
+        const KeyCode& rKeyCode = _rNEvt.GetKeyEvent()->GetKeyCode();
+        if ( ( 0 == rKeyCode.GetModifier() ) && ( KEY_RETURN == rKeyCode.GetCode() ) )
+        {
+            if ( createSelectionControls() )
+                return 1;
+        }
+    }
+
+    return SfxFloatingWindow::PreNotify( _rNEvt );
 }
 
 //-----------------------------------------------------------------------

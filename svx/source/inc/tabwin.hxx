@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabwin.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2002-04-15 15:39:51 $
+ *  last change: $Author: fs $ $Date: 2002-05-06 10:34:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,9 @@ public:
 protected:
     // DragSourceHelper
     virtual void StartDrag( sal_Int8 nAction, const Point& rPosPixel );
+
+    // SvLBox
+    virtual BOOL DoubleClickHdl();
 };
 
 //========================================================================
@@ -149,6 +152,7 @@ public:
     virtual void Resize();
     virtual sal_Bool Close();
     virtual void GetFocus();
+    virtual long PreNotify( NotifyEvent& _rNEvt );
     virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState,
                               const SfxPoolItem* pState);
 
@@ -162,9 +166,15 @@ public:
     const ::rtl::OUString&  GetObjectName() const { return m_aObjectName; }
     sal_Int32               GetObjectType() const { return m_nObjectType; }
 
+    sal_Bool    createSelectionControls( );
+
 protected:
     // FmXChangeListener
     virtual void _propertyChanged(const ::com::sun::star::beans::PropertyChangeEvent& evt) throw( ::com::sun::star::uno::RuntimeException );
+
+protected:
+    inline          SfxBindings&    GetBindings()       { return SfxControllerItem::GetBindings(); }
+    inline  const   SfxBindings&    GetBindings() const { return SfxControllerItem::GetBindings(); }
 };
 
 //========================================================================
