@@ -2,9 +2,9 @@
  *
  *  $RCSfile: query.src,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-24 08:55:47 $
+ *  last change: $Author: oj $ $Date: 2002-10-31 07:32:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1524,8 +1524,6 @@ ToolBox RID_BRW_QUERYDESIGN_TOOLBOX
         {
             Identifier = ID_EDIT_QUERY_SQL ;
             Text = "Show Parse Tree" ;
-            Text [ ENGLISH ] = "Show Parse Tree" ;
-            Text[ english_us ] = "Show Parse Tree";
         };
 #endif
 /*      ToolBoxItem
