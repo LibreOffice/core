@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mtftools.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2004-03-18 10:41:05 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:55:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,8 @@
  *
  ************************************************************************/
 
-#include "mtftools.hxx"
-#include "outdevstate.hxx"
+#include <mtftools.hxx>
+#include <outdevstate.hxx>
 
 #ifndef _DRAFTS_COM_SUN_STAR_RENDERING_RENDERSTATE_HPP__
 #include <drafts/com/sun/star/rendering/RenderState.hpp>
