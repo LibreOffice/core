@@ -7287,3 +7287,4 @@ _TI2?AVSAXException@sax@xml@star@sun@com@@
 ??1?$_STL_alloc_proxy@IU?$_Hashtable_node@U?$pair@$$CBVOUString@rtl@@PAX@_STL@@@_STL@@V?$allocator@U?$pair@$$CBVOUString@rtl@@PAX@_STL@@@2@@_STL@@QAE@XZ
 ?deallocate@?$allocator@U?$_Hashtable_node@U?$pair@$$CBVOUString@rtl@@PAX@_STL@@@_STL@@@_STL@@QBEXPAU?$_Hashtable_node@U?$pair@$$CBVOUString@rtl@@PAX@_STL@@@2@I@Z
 ?$S20@?1??impl_getStaticIdentifier@SfxOfficeDispatch@@SAABV?$Sequence@C@uno@star@sun@com@@XZ@4EA
+?GetEncodingByHttpHeader@SfxHTMLParser@@SAGPAVSvKeyValueIterator@@@Z
