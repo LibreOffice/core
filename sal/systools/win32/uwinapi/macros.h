@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macros.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hro $ $Date: 2002-08-26 13:43:22 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 15:53:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,3 +167,25 @@ EXTERN_C _declspec( naked ) rettype calltype func params \
     _asm    jmp [module##_##func##_Ptr] \
 } \
 EXTERN_C _declspec( dllexport ) FARPROC module##_##func##_Ptr = (FARPROC)func##_Thunk;
+
+
+
+#define DEFINE_DEFAULT_THUNK( module, resolve, rettype, calltype, func, params ) \
+EXTERN_C _declspec( dllexport ) FARPROC module##_##func##_Ptr; \
+static rettype calltype func##_##Failure params; \
+static _declspec ( naked ) func##_Thunk() \
+{ \
+    ResolveThunk_##resolve( &module##_##func##_Ptr, #module ".dll", #func, NULL, (FARPROC)func##_##Failure ); \
+    _asm    jmp [module##_##func##_Ptr] \
+} \
+EXTERN_C _declspec( naked ) rettype calltype func params \
+{ \
+    _asm    jmp [module##_##func##_Ptr] \
+} \
+EXTERN_C _declspec( dllexport ) FARPROC module##_##func##_Ptr = (FARPROC)func##_Thunk; \
+static rettype calltype func##_##Failure params \
+{ \
+    SetLastError( ERROR_CALL_NOT_IMPLEMENTED ); \
+    return (rettype)0; \
+}
+
