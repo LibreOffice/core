@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2004-09-09 08:10:36 $
+#   last change: $Author: obo $ $Date: 2004-10-18 14:43:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -88,6 +88,10 @@ SCPDEFS+=-DENABLE_GTK
 
 .IF "$(ENABLE_DIRECTX)" != ""
 SCPDEFS+=-DENABLE_DIRECTX
+.ENDIF
+
+.IF "$(ENABLE_GNOMEVFS)" != ""
+SCPDEFS+=-DENABLE_GNOMEVFS
 .ENDIF
 
 .IF "$(SYSTEM_FREETYPE)" == "YES"
