@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfiltdlg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 14:26:59 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:21:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -356,7 +356,7 @@ IMPL_LINK( ScSpecialFilterDlg, EndDlgHdl, Button*, pBtn )
         ScAddress       theAdrCopy;
         BOOL            bEditInputOk    = TRUE;
         BOOL            bQueryOk        = FALSE;
-        USHORT          nCurTab         = pViewData->GetTabNo();
+        SCTAB           nCurTab         = pViewData->GetTabNo();
         ScRange         theFilterArea;
 
         if ( aBtnCopyResult.IsChecked() )
@@ -416,8 +416,8 @@ IMPL_LINK( ScSpecialFilterDlg, EndDlgHdl, Button*, pBtn )
                 else
                 {
                     theOutParam.bInplace    = TRUE;
-                    theOutParam.nDestTab    =
-                    theOutParam.nDestCol    =
+                    theOutParam.nDestTab    = 0;
+                    theOutParam.nDestCol    = 0;
                     theOutParam.nDestRow    = 0;
                 }
 
