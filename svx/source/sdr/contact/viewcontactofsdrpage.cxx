@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewcontactofsdrpage.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 14:54:26 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 10:08:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,10 @@
 #include <svdview.hxx>
 #endif
 
+#ifndef _SDR_CONTACT_VIEWCONTACTPAINTHELPER_HXX
+#include <svx/sdr/contact/viewcontactpainthelper.hxx>
+#endif
+
 //////////////////////////////////////////////////////////////////////////////
 
 #define PAPER_SHADOW(SIZE) (SIZE >> 8)
@@ -93,25 +97,6 @@ namespace sdr
 {
     namespace contact
     {
-        // method to create a AnimationInfo. Needs to give a result if
-        // SupportsAnimation() is overloaded and returns sal_True.
-        sdr::animation::AnimationInfo* ViewContactOfSdrPage::CreateAnimationInfo()
-        {
-            // This call can only be an error ATM.
-            DBG_ERROR("ViewContactOfSdrPage::CreateAnimationInfo(): Page does not support animation (!)");
-            return 0L;
-        }
-
-        // Create a Object-Specific ViewObjectContact, set ViewContact and
-        // ObjectContact. Always needs to return something.
-        ViewObjectContact& ViewContactOfSdrPage::CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact)
-        {
-            ViewObjectContact* pRetval = new ViewObjectContact(rObjectContact, *this);
-            DBG_ASSERT(pRetval, "ViewContactOfSdrPage::CreateObjectSpecificViewObjectContact() failed (!)");
-
-            return *pRetval;
-        }
-
         // method to recalculate the PaintRectangle if the validity flag shows that
         // it is invalid. The flag is set from GetPaintRectangle, thus the implementation
         // only needs to refresh maPaintRectangle itself.
@@ -126,17 +111,6 @@ namespace sdr
 
             // Combine with all contained object's rectangles
             maPaintRectangle.Union(GetSdrPage().GetAllObjBoundRect());
-        }
-
-        // Because of old correction hacks there may be MasterPages (better:
-        // MasterPageDescriptors) set at the page, but actually no MasterPages
-        // exist at the model. To correctly handle that cases it is necessary to
-        // not only get the MasterPageCount() form the page, but also to correct
-        // that number if the model does not have any MasterPages.
-        sal_uInt32 ViewContactOfSdrPage::ImpGetCorrectedMasterPageCount() const
-        {
-            sal_uInt32 nRetval(GetSdrPage().TRG_HasMasterPage() ? 1L : 0L);
-            return nRetval;
         }
 
         ViewContactOfSdrPage::ViewContactOfSdrPage(SdrPage& rPage)
@@ -163,7 +137,12 @@ namespace sdr
             // Instead of simply returning sal_True, look for the state
             // of PagePainting which is per default disabled for the applications
             // which do not need let the page be painted (but do it themselves).
-            return rDisplayInfo.GetPagePainting();
+            if(!rDisplayInfo.GetPagePainting())
+            {
+                return sal_False;
+            }
+
+            return sal_True;
         }
 
         // Paint this object. This is before evtl. SubObjects get painted. It needs to return
@@ -180,12 +159,14 @@ namespace sdr
         // Pre- and Post-Paint this object. Is used e.g. for page background/foreground painting.
         void ViewContactOfSdrPage::PrePaintObject(DisplayInfo& rDisplayInfo, const ViewObjectContact& rAssociatedVOC)
         {
-            // Make processed page accessible from SdrPageView via DisplayInfo
-            rDisplayInfo.SetProcessedPage(&GetSdrPage());
-
             // test for page painting
-            if(!rDisplayInfo.GetControlLayerPainting() && rDisplayInfo.GetPagePainting())
+            if(!rDisplayInfo.GetMasterPagePainting()
+                && !rDisplayInfo.GetControlLayerPainting()
+                && rDisplayInfo.GetPagePainting())
             {
+                // Make processed page accessible from SdrPageView via DisplayInfo
+                rDisplayInfo.SetProcessedPage(&GetSdrPage());
+
                 // Test for printer output
                 if(!rDisplayInfo.OutputToPrinter())
                 {
@@ -195,6 +176,13 @@ namespace sdr
 
                         if(pPageView)
                         {
+                            // #i31599# do not paint page context itself ghosted.
+                            const sal_Bool bGhostedWasActive(rDisplayInfo.IsGhostedDrawModeActive());
+                            if(bGhostedWasActive)
+                            {
+                                rDisplayInfo.ClearGhostedDrawMode();
+                            }
+
                             // Paint (erase) the background.  That was
                             // formerly done in DrawPaper() but has to be
                             // done even when the paper (the page) is not
@@ -209,7 +197,7 @@ namespace sdr
 
                             if(rView.IsPageVisible())
                             {
-                                DrawPaper(rDisplayInfo);
+                                DrawPaper(rDisplayInfo, rAssociatedVOC);
 
                                 if(rView.IsPageBorderVisible())
                                 {
@@ -254,6 +242,12 @@ namespace sdr
                             {
                                 DrawHelplines(rDisplayInfo);
                             }
+
+                            // #i31599# restore remembered ghosted setting
+                            if(bGhostedWasActive)
+                            {
+                                rDisplayInfo.SetGhostedDrawMode();
+                            }
                         }
                     }
                 }
@@ -264,7 +258,9 @@ namespace sdr
         void ViewContactOfSdrPage::PostPaintObject(DisplayInfo& rDisplayInfo, const ViewObjectContact& rAssociatedVOC)
         {
             // test for page painting
-            if(!rDisplayInfo.GetControlLayerPainting() && rDisplayInfo.GetPagePainting())
+            if(!rDisplayInfo.GetMasterPagePainting()
+                && !rDisplayInfo.GetControlLayerPainting()
+                && rDisplayInfo.GetPagePainting())
             {
                 // Test for printer output
                 if(!rDisplayInfo.OutputToPrinter())
@@ -275,6 +271,13 @@ namespace sdr
 
                         if(pPageView)
                         {
+                            // #i31599# do not paint page context itself ghosted.
+                            const sal_Bool bGhostedWasActive(rDisplayInfo.IsGhostedDrawModeActive());
+                            if(bGhostedWasActive)
+                            {
+                                rDisplayInfo.ClearGhostedDrawMode();
+                            }
+
                             const SdrView& rView = pPageView->GetView();
 
                             if(rView.IsGridVisible() && rView.IsGridFront())
@@ -286,16 +289,22 @@ namespace sdr
                             {
                                 DrawHelplines(rDisplayInfo);
                             }
+
+                            // #i31599# restore remembered ghosted setting
+                            if(bGhostedWasActive)
+                            {
+                                rDisplayInfo.SetGhostedDrawMode();
+                            }
                         }
                     }
                 }
-            }
 
-            // Reset processed page at DisplayInfo and DisplayInfo at SdrPageView
-            rDisplayInfo.SetProcessedPage(0L);
+                // Reset processed page at DisplayInfo and DisplayInfo at SdrPageView
+                rDisplayInfo.SetProcessedPage(0L);
+            }
         }
 
-        void ViewContactOfSdrPage::DrawPaper(DisplayInfo& rDisplayInfo)
+        void ViewContactOfSdrPage::DrawPaper(DisplayInfo& rDisplayInfo, const ViewObjectContact& rAssociatedVOC)
         {
             const SdrPageView* pPageView = rDisplayInfo.GetPageView();
 
@@ -305,40 +314,70 @@ namespace sdr
                 // No line drawing
                 pOut->SetLineColor();
 
-                // Set page color
-                if(pPageView->GetApplicationDocumentColor() != COL_AUTO)
-                {
-                    pOut->SetFillColor(pPageView->GetApplicationDocumentColor());
-                }
-                else
-                {
-                    pOut->SetFillColor(rDisplayInfo.GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor);
-                }
-
-                // prepare rectangles in logic coordinates
-                Rectangle aPaperRect(
+                // prepare rectangle
+                const Rectangle aPaperRectLogic(
                     0L,
                     0L,
                     GetSdrPage().GetWdt(),
                     GetSdrPage().GetHgt());
-                Rectangle aShadowRect(aPaperRect);
+
+                // prepare ShadowRectangle
+                Rectangle aShadowRectLogic(aPaperRectLogic);
+                aShadowRectLogic.Move(PAPER_SHADOW(GetSdrPage().GetWdt()), PAPER_SHADOW(GetSdrPage().GetHgt()));
+
+                // get some flags
                 const sal_Bool bOutputToMetaFile(rDisplayInfo.OutputToRecordingMetaFile());
                 const sal_Bool bWasEnabled(pOut->IsMapModeEnabled());
 
-                aShadowRect.Move(PAPER_SHADOW(GetSdrPage().GetWdt()), PAPER_SHADOW(GetSdrPage().GetHgt()));
+                // #i34682#
+                // look if the MasterPageBackgroundObject needs to be painted, else
+                // paint page as normal
+                sal_Bool bPaintMasterObject(sal_False);
+                SdrObject* pMasterPageObjectCandidate = 0L;
 
-                if(bOutputToMetaFile)
+                if(GetSdrPage().IsMasterPage())
                 {
-                    // draw page rectangle
-                    pOut->DrawRect(aPaperRect);
+                    pMasterPageObjectCandidate = GetSdrPage().GetObj(0L);
+
+                    if(pMasterPageObjectCandidate
+                        && pMasterPageObjectCandidate->IsMasterPageBackgroundObject()
+                        && pMasterPageObjectCandidate->HasFillStyle())
+                    {
+                        bPaintMasterObject = sal_True;
+                    }
+                }
+
+                if(bPaintMasterObject)
+                {
+                    // draw a MasterPage background for a MasterPage in MasterPage View
+                    Rectangle aRectangle;
+                    PaintBackgroundObject(*this, *pMasterPageObjectCandidate, rDisplayInfo, aRectangle, rAssociatedVOC);
                 }
                 else
                 {
-                    // draw page rectangle in pixel
-                    aPaperRect = pOut->LogicToPixel(aPaperRect);
-                    pOut->EnableMapMode(sal_False);
-                    pOut->DrawRect(aPaperRect);
-                    pOut->EnableMapMode(bWasEnabled);
+                    // Set page color for Paper painting
+                    if(pPageView->GetApplicationDocumentColor() != COL_AUTO)
+                    {
+                        pOut->SetFillColor(pPageView->GetApplicationDocumentColor());
+                    }
+                    else
+                    {
+                        pOut->SetFillColor(rDisplayInfo.GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor);
+                    }
+
+                    if(bOutputToMetaFile)
+                    {
+                        // draw page rectangle
+                        pOut->DrawRect(aPaperRectLogic);
+                    }
+                    else
+                    {
+                        // draw page rectangle in pixel
+                        const Rectangle aPaperRectPixel(pOut->LogicToPixel(aPaperRectLogic));
+                        pOut->EnableMapMode(sal_False);
+                        pOut->DrawRect(aPaperRectPixel);
+                        pOut->EnableMapMode(bWasEnabled);
+                    }
                 }
 
                 // set page shadow color
@@ -349,34 +388,35 @@ namespace sdr
                 {
                     // draw shadow rectangles
                     pOut->DrawRect(Rectangle(
-                        aPaperRect.Right(),
-                        aShadowRect.Top(),
-                        aShadowRect.Right(),
-                        aShadowRect.Bottom()));
+                        aPaperRectLogic.Right(),
+                        aShadowRectLogic.Top(),
+                        aShadowRectLogic.Right(),
+                        aShadowRectLogic.Bottom()));
 
                     pOut->DrawRect(Rectangle(
-                        aShadowRect.Left(),
-                        aPaperRect.Bottom(),
-                        aPaperRect.Right(),
-                        aShadowRect.Bottom()));
+                        aShadowRectLogic.Left(),
+                        aPaperRectLogic.Bottom(),
+                        aPaperRectLogic.Right(),
+                        aShadowRectLogic.Bottom()));
                 }
                 else
                 {
                     // draw shadow rectangles in pixels
-                    aShadowRect = pOut->LogicToPixel(aShadowRect);
+                    const Rectangle aShadowRectPixel(pOut->LogicToPixel(aShadowRectLogic));
+                    const Rectangle aPaperRectPixel(pOut->LogicToPixel(aPaperRectLogic));
                     pOut->EnableMapMode(sal_False);
 
                     pOut->DrawRect(Rectangle(
-                        aPaperRect.Right() + 1L,
-                        aShadowRect.Top(),
-                        aShadowRect.Right(),
-                        aShadowRect.Bottom()));
+                        aPaperRectPixel.Right() + 1L,
+                        aShadowRectPixel.Top(),
+                        aShadowRectPixel.Right(),
+                        aShadowRectPixel.Bottom()));
 
                     pOut->DrawRect(Rectangle(
-                        aShadowRect.Left(),
-                        aPaperRect.Bottom() + 1L,
-                        aPaperRect.Right(),
-                        aShadowRect.Bottom()));
+                        aShadowRectPixel.Left(),
+                        aPaperRectPixel.Bottom() + 1L,
+                        aPaperRectPixel.Right(),
+                        aShadowRectPixel.Bottom()));
 
                     // restore MapMode
                     pOut->EnableMapMode(bWasEnabled);
@@ -459,48 +499,51 @@ namespace sdr
         // Access to possible sub-hierarchy
         sal_uInt32 ViewContactOfSdrPage::GetObjectCount() const
         {
-            // Handle the MasterPages added to this Page as objects on that page,
-            // before the normal draw objects. This leads to a correct draw
-            // hierarchy which will handle the MasterPages correctly.
-            return ImpGetCorrectedMasterPageCount() + GetSdrPage().GetObjCount();
+            sal_uInt32 nRetval(0L);
+            const sal_uInt32 nMasterPageCount((GetSdrPage().TRG_HasMasterPage()) ? 1L : 0L);
+            sal_uInt32 nSubObjectCount(GetSdrPage().GetObjCount());
+
+            // correct nSubObjectCount from MasterPageBackgroundObject
+            if(nSubObjectCount && GetSdrPage().GetObj(0L)->IsMasterPageBackgroundObject())
+            {
+                nSubObjectCount--;
+            }
+
+            // add MasterPageDescriptor if used
+            nRetval += nMasterPageCount;
+
+            // add page sub-objects
+            nRetval += nSubObjectCount;
+
+            return nRetval;
         }
 
         ViewContact& ViewContactOfSdrPage::GetViewContact(sal_uInt32 nIndex) const
         {
-            const sal_uInt32 nMasterPageCount(ImpGetCorrectedMasterPageCount());
+            // this is only called if GetObjectCount() returned != 0L, so there is a
+            // MasterPageDescriptor. Get it!
+            const sal_uInt32 nMasterPageCount((GetSdrPage().TRG_HasMasterPage()) ? 1L : 0L);
 
             if(nIndex < nMasterPageCount)
             {
-                // return the added MasterPage as sub-hierarchy of the draw page
-                SdrPage& rMasterPage = GetSdrPage().TRG_GetMasterPage();
-                ViewContact& rViewContactOfMasterPage = rMasterPage.GetViewContact();
-
-                // set visible layers from MasterPage Layer info
-                SetOfByte aMasterPageVisibleLayers = GetSdrPage().TRG_GetMasterPageVisibleLayers();
-                rViewContactOfMasterPage.SetVisibleLayers(aMasterPageVisibleLayers);
-
-                return rViewContactOfMasterPage;
+                return GetSdrPage().TRG_GetMasterPageDescriptorViewContact();
             }
             else
             {
                 // return the (nIndex - nMasterPageCount)'th object
-                SdrObject* pObj = GetSdrPage().GetObj(nIndex - nMasterPageCount);
+                sal_uInt32 nObjectIndex(nIndex - nMasterPageCount);
+
+                // correct if first object is MasterPageBackgroundObject
+                if(GetSdrPage().GetObjCount() && GetSdrPage().GetObj(0L)->IsMasterPageBackgroundObject())
+                {
+                    nObjectIndex++;
+                }
+
+                SdrObject* pObj = GetSdrPage().GetObj(nObjectIndex);
                 DBG_ASSERT(pObj, "ViewContactOfMasterPage::GetViewContact: Corrupt SdrObjList (!)");
+
                 return pObj->GetViewContact();
             }
-        }
-
-        sal_Bool ViewContactOfSdrPage::GetParentContacts(ViewContactVector& rVContacts) const
-        {
-            // a page has no parent, it's the top of the hierarchy
-            return sal_False;
-        }
-
-        // Does this ViewContact support animation?
-        sal_Bool ViewContactOfSdrPage::SupportsAnimation() const
-        {
-            // No.
-            return sal_False;
         }
 
         // overload for acessing the SdrPage
