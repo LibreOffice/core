@@ -327,17 +327,17 @@
 <Eras>
 <Era>
 <EraID>bc</EraID>
-<DefaultAbbrvName>BC</DefaultAbbrvName>
+<DefaultAbbrvName>v.Chr.</DefaultAbbrvName>
 <DefaultFullName>BC</DefaultFullName>
 </Era>
 <Era>
 <EraID>ad</EraID>
-<DefaultAbbrvName>AD</DefaultAbbrvName>
+<DefaultAbbrvName>n.Chr.</DefaultAbbrvName>
 <DefaultFullName>AD</DefaultFullName>
 </Era>
 </Eras>
 <StartDayOfWeek>
-<DayID>mon</DayID>
+<DayID>sun</DayID>
 </StartDayOfWeek>
 <MinimalDaysInFirstWeek>4</MinimalDaysInFirstWeek>
 </Calendar>
@@ -347,7 +347,7 @@
 <CurrencyID>fl</CurrencyID>
 <CurrencySymbol>fl</CurrencySymbol>
 <BankSymbol>NLG</BankSymbol>
-<CurrencyName>Guilder</CurrencyName>
+<CurrencyName>Nederlandse gulden</CurrencyName>
 <DecimalPlaces>2</DecimalPlaces>
 </Currency>
 <Currency default="true" usedInCompatibleFormatCodes="false">
