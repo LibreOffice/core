@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: dvo $ $Date: 2001-02-21 20:32:24 $
+ *  last change: $Author: mtg $ $Date: 2001-02-23 14:41:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1875,6 +1875,8 @@ void XMLTextParagraphExport::_exportTextGraphic(
     GetExport().GetEventExport().Export(xEventsSupp);
 
     // svg:desc
+    exportAlternativeText( rPropSet, rPropSetInfo );
+    /*
     OUString sAltText;
     aAny = rPropSet->getPropertyValue( sAlternativeText );
     aAny >>= sAltText;
@@ -1884,6 +1886,7 @@ void XMLTextParagraphExport::_exportTextGraphic(
                                   sXML_desc, sal_True, sal_False );
         GetExport().GetDocHandler()->characters( sAltText );
     }
+    */
 
     // draw:contour
     exportContour( rPropSet, rPropSetInfo );
@@ -1941,6 +1944,7 @@ void XMLTextParagraphExport::_exportTextEmbedded(
 {
     OUString sStyle;
     Any aAny;
+
     if( rPropSetInfo->hasPropertyByName( sFrameStyleName ) )
     {
         aAny = rPropSet->getPropertyValue( sFrameStyleName );
@@ -1976,15 +1980,28 @@ void XMLTextParagraphExport::_exportTextEmbedded(
     SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_DRAW,
                               pElem, sal_False, sal_True );
 
+    exportEvents( rPropSet );
+    exportAlternativeText( rPropSet, rPropSetInfo );
+    // draw:contour
+    exportContour( rPropSet, rPropSetInfo );
+
+}
+
+void XMLTextParagraphExport::exportEvents( const Reference < XPropertySet > & rPropSet )
+{
     // script:events
     Reference<XEventsSupplier> xEventsSupp( rPropSet, UNO_QUERY );
     GetExport().GetEventExport().Export(xEventsSupp);
-
+}
+void XMLTextParagraphExport::exportAlternativeText(
+        const Reference < XPropertySet > & rPropSet,
+        const Reference < XPropertySetInfo > & rPropSetInfo )
+{
     // svg:desc
     if( rPropSetInfo->hasPropertyByName( sAlternativeText  ) )
     {
         OUString sAltText;
-        aAny = rPropSet->getPropertyValue( sAlternativeText );
+        Any aAny = rPropSet->getPropertyValue( sAlternativeText );
         aAny >>= sAltText;
         if( sAltText.getLength() )
         {
@@ -1993,11 +2010,7 @@ void XMLTextParagraphExport::_exportTextEmbedded(
             GetExport().GetDocHandler()->characters( sAltText );
         }
     }
-
-    // draw:contour
-    exportContour( rPropSet, rPropSetInfo );
 }
-
 void XMLTextParagraphExport::exportTextEmbedded(
         const Reference < XTextContent > & rTextContent,
         sal_Bool bAutoStyles )
