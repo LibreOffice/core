@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 09:06:35 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:22:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -456,7 +456,7 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
     SvXMLEmbeddedObjectHelper *pEmbeddedResolver = 0;
     if( !GetEmbeddedResolver().is() )
     {
-        SvPersist *pPersist = pDoc->GetPersist();
+        SfxObjectShell *pPersist = pDoc->GetPersist();
         if( pPersist )
         {
             pEmbeddedResolver = SvXMLEmbeddedObjectHelper::Create(
@@ -604,8 +604,8 @@ void SwXMLExport::GetViewSettings(Sequence<PropertyValue>& aProps)
 
     SwDoc *pDoc = pText->GetDoc();
     const Rectangle rRect =
-        pDoc->GetDocShell()->SfxInPlaceObject::GetVisArea();
-    sal_Bool bTwip = pDoc->GetDocShell()->SfxInPlaceObject::GetMapUnit ( ) == MAP_TWIP;
+        pDoc->GetDocShell()->GetVisArea( ASPECT_CONTENT );
+    sal_Bool bTwip = pDoc->GetDocShell()->GetMapUnit ( ) == MAP_TWIP;
 
     ASSERT ( bTwip, "Map unit for visible area is not in TWIPS!" );
 
