@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fesh.hxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:02:02 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 10:56:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
 #ifndef _FESH_HXX
 #define _FESH_HXX
 
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
 #ifndef _EDITSH_HXX
 #include <editsh.hxx>
 #endif
@@ -76,7 +79,10 @@
 #include <svx/svdtypes.hxx>
 #endif
 
+#ifndef INCLUDED_VECTOR
 #include <vector>
+#define INCLUDED_VECTOR
+#endif
 
 class SwFlyFrm;
 class SvEmbeddedObject;
@@ -207,46 +213,46 @@ struct SwGetCurColNumPara
 #define SW_TABROW_HORI  3
 #define SW_TABROW_VERT  4
 
-class SwFEShell : public SwEditShell
+class SW_DLLPUBLIC SwFEShell : public SwEditShell
 {
     SdrViewUserMarker *pChainFrom,
                       *pChainTo;
     BOOL bCheckForOLEInCaption;
 
-    SwFlyFrm *FindFlyFrm() const;
-    SwFlyFrm *FindFlyFrm( const SvEmbeddedObject *pObj ) const;
+    SW_DLLPRIVATE SwFlyFrm *FindFlyFrm() const;
+    SW_DLLPRIVATE SwFlyFrm *FindFlyFrm( const SvEmbeddedObject *pObj ) const;
 
     //Actions fuer alle Shells beenden und ChangeLink rufen.
-    void EndAllActionAndCall();
+    SW_DLLPRIVATE void EndAllActionAndCall();
 
-    void Scroll( const Point &rPt );
+    SW_DLLPRIVATE void Scroll( const Point &rPt );
 
     // OD 25.06.2003 #108784# - correct type of 1st parameter
-    void ChangeOpaque( SdrLayerID nLayerId );
+    SW_DLLPRIVATE void ChangeOpaque( SdrLayerID nLayerId );
 
-    const SwFrm *GetBox( const Point &rPt, bool* pbRow = 0 ) const;
+    SW_DLLPRIVATE const SwFrm *GetBox( const Point &rPt, bool* pbRow = 0 ) const;
 
     //0 == in keiner Spalte
-    USHORT _GetCurColNum( const SwFrm *pFrm,
+    SW_DLLPRIVATE USHORT _GetCurColNum( const SwFrm *pFrm,
                           SwGetCurColNumPara* pPara ) const;
 
-    void _GetTabCols( SwTabCols &rToFill, const SwFrm *pBox ) const;
-    void _GetTabRows( SwTabCols &rToFill, const SwFrm *pBox ) const;
+    SW_DLLPRIVATE void _GetTabCols( SwTabCols &rToFill, const SwFrm *pBox ) const;
+    SW_DLLPRIVATE void _GetTabRows( SwTabCols &rToFill, const SwFrm *pBox ) const;
 
-    BOOL ImpEndCreate();
+    SW_DLLPRIVATE BOOL ImpEndCreate();
 
-    ObjCntType GetObjCntType( const SdrObject& rObj ) const;
+    SW_DLLPRIVATE ObjCntType GetObjCntType( const SdrObject& rObj ) const;
 
     // Methoden fuers kopieren von DrawObjecten
-    BOOL CopyDrawSel( SwFEShell* pDestShell, const Point& rSttPt,
+    SW_DLLPRIVATE BOOL CopyDrawSel( SwFEShell* pDestShell, const Point& rSttPt,
                                 const Point& rInsPt, BOOL bIsMove,
                                 BOOL bSelectInsert );
 
     // get list of marked SdrObjects;
     // helper method for GetSelFrmType, IsSelContainsControl
-    const SdrMarkList* _GetMarkList() const;
+    SW_DLLPRIVATE const SdrMarkList* _GetMarkList() const;
 
-    BOOL CheckHeadline( bool bRepeat ) const;
+    SW_DLLPRIVATE BOOL CheckHeadline( bool bRepeat ) const;
 
 public:
     TYPEINFO();
