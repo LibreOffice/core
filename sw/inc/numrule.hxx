@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numrule.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-06-01 06:59:17 $
+ *  last change: $Author: os $ $Date: 2001-07-02 14:25:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,7 @@ class SwNumFmt : public SvxNumberFormat, public SwClient
     SwFmtVertOrient* pVertOrient;
 
     void UpdateNumNodes( SwDoc* pDoc );
+    virtual void NotifyGraphicArrived();
 public:
     SwNumFmt();
     SwNumFmt( const SwNumFmt& );

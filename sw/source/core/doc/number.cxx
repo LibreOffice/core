@@ -2,9 +2,9 @@
  *
  *  $RCSfile: number.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-06-01 07:00:09 $
+ *  last change: $Author: os $ $Date: 2001-07-02 14:25:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,6 +205,14 @@ SwNumFmt::SwNumFmt(const SvxNumberFormat& rNumFmt, SwDoc* pDoc) :
 SwNumFmt::~SwNumFmt()
 {
     delete pVertOrient;
+}
+/* -----------------------------02.07.01 15:37--------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SwNumFmt::NotifyGraphicArrived()
+{
+    if( GetCharFmt() )
+        UpdateNumNodes( (SwDoc*)GetCharFmt()->GetDoc() );
 }
 /* -----------------------------23.02.01 09:28--------------------------------
 
