@@ -2,9 +2,9 @@
  *
  *  $RCSfile: export2.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 12:41:02 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 13:51:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -353,7 +353,7 @@ ByteString Export::GetTimeStamp()
     char buf[20];
     Time aTime;
 
-    snprintf(buf, sizeof(buf), "%8d %02d:%02d:%02d\n", Date().GetDate(),
+    snprintf(buf, sizeof(buf), "%8d %02d:%02d:%02d", Date().GetDate(),
         aTime.GetHour(), aTime.GetMin(), aTime.GetSec());
     return ByteString(buf);
 }
