@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdtreelb.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ka $ $Date: 2002-12-11 14:54:57 $
+ *  last change: $Author: vg $ $Date: 2003-06-04 11:02:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,11 +212,11 @@ SdPageObjsTLB::SdPageObjsTLB( Window* pParentWin, const SdResId& rSdResId,
     pBookmarkDoc        ( NULL ),
     pMedium             ( NULL ),
     pOwnMedium          ( NULL ),
-    aColor              ( COL_WHITE ),
-    aImgOle             ( Bitmap( SdResId( BMP_OLE ) ), aColor ),
-    aImgGraphic         ( Bitmap( SdResId( BMP_GRAPHIC ) ), aColor ),
-    aImgOleH            ( Bitmap( SdResId( BMP_OLE_H ) ), Color( COL_BLACK ) ),
-    aImgGraphicH        ( Bitmap( SdResId( BMP_GRAPHIC_H ) ), Color( COL_BLACK ) ),
+    aTransparencyColor  ( RGB_COLORDATA (0xff,0,0xff) ),
+    aImgOle             ( Bitmap( SdResId( BMP_OLE ) ), aTransparencyColor ),
+    aImgGraphic         ( Bitmap( SdResId( BMP_GRAPHIC ) ), aTransparencyColor ),
+    aImgOleH            ( Bitmap( SdResId( BMP_OLE_H ) ), aTransparencyColor),
+    aImgGraphicH        ( Bitmap( SdResId( BMP_GRAPHIC_H ) ), aTransparencyColor),
     pDropNavWin         ( NULL ),
     bLinkableSelected   ( FALSE )
 {
@@ -352,26 +352,26 @@ void SdPageObjsTLB::Fill( const SdDrawDocument* pInDoc, BOOL bAllPages,
     SvLBoxEntry* pEntry = NULL;
 
     Bitmap aBmpPage( SdResId( BMP_PAGE ) );
-    Image aImgPage( aBmpPage, aColor );
+    Image aImgPage( aBmpPage, aTransparencyColor );
     Bitmap aBmpPageExcl( SdResId( BMP_PAGE_EXCLUDED ) );
-    Image aImgPageExcl( aBmpPageExcl, aColor );
+    Image aImgPageExcl( aBmpPageExcl, aTransparencyColor );
     Bitmap aBmpPageObjsExcl( SdResId( BMP_PAGEOBJS_EXCLUDED ) );
-    Image aImgPageObjsExcl( aBmpPageObjsExcl, aColor );
+    Image aImgPageObjsExcl( aBmpPageObjsExcl, aTransparencyColor );
     Bitmap aBmpPageObjs( SdResId( BMP_PAGEOBJS ) );
-    Image aImgPageObjs( aBmpPageObjs, aColor );
+    Image aImgPageObjs( aBmpPageObjs, aTransparencyColor );
     Bitmap aBmpObjects( SdResId( BMP_OBJECTS ) );
-    Image aImgObjects( aBmpObjects, aColor );
+    Image aImgObjects( aBmpObjects, aTransparencyColor );
 
     Bitmap aBmpPageH( SdResId( BMP_PAGE_H ) );
-    Image aImgPageH( aBmpPageH , Color( COL_BLACK ) );
+    Image aImgPageH( aBmpPageH , aTransparencyColor );
     Bitmap aBmpPageExclH( SdResId( BMP_PAGE_EXCLUDED_H ) );
-    Image aImgPageExclH( aBmpPageExclH, Color( COL_BLACK ) );
+    Image aImgPageExclH( aBmpPageExclH, aTransparencyColor );
     Bitmap aBmpPageObjExclH( SdResId( BMP_PAGEOBJS_EXCLUDED_H ) );
-    Image aImgPageObjsExclH( aBmpPageObjExclH, Color( COL_BLACK ) );
+    Image aImgPageObjsExclH( aBmpPageObjExclH, aTransparencyColor );
     Bitmap aBmpPageObjsH( SdResId( BMP_PAGEOBJS_H ) );
-    Image aImgPageObjsH( aBmpPageObjsH, Color( COL_BLACK ) );
+    Image aImgPageObjsH( aBmpPageObjsH, aTransparencyColor );
     Bitmap aBmpObjectsH( SdResId( BMP_OBJECTS_H ) );
-    Image aImgObjectsH( aBmpObjectsH, Color( COL_BLACK ) );
+    Image aImgObjectsH( aBmpObjectsH, aTransparencyColor );
 
     // Zuerst alle Pages incl. Objekte einfuegen
     USHORT nPage = 0;
@@ -525,13 +525,13 @@ void SdPageObjsTLB::Fill( const SdDrawDocument* pInDoc, SfxMedium* pInMedium,
     SvLBoxEntry* pPageEntry = NULL;
 
     Bitmap aBmpDocOpen( SdResId( BMP_DOC_OPEN ) );
-    Image aImgDocOpen( aBmpDocOpen, aColor );
+    Image aImgDocOpen( aBmpDocOpen, aTransparencyColor );
     Bitmap aBmpDocClosed( SdResId( BMP_DOC_CLOSED ) );
-    Image aImgDocClosed( aBmpDocClosed, aColor );
+    Image aImgDocClosed( aBmpDocClosed, aTransparencyColor );
     Bitmap aBmpDocOpenH( SdResId( BMP_DOC_OPEN_H ) );
-    Image aImgDocOpenH( aBmpDocOpenH, Color( COL_BLACK ) );
+    Image aImgDocOpenH( aBmpDocOpenH, aTransparencyColor );
     Bitmap aBmpDocClosedH( SdResId( BMP_DOC_CLOSED_H ) );
-    Image aImgDocClosedH( aBmpDocClosedH, Color( COL_BLACK ) );
+    Image aImgDocClosedH( aBmpDocClosedH, aTransparencyColor );
 
     // Dokumentnamen einfuegen
     pFileEntry = InsertEntry( aDocName,
@@ -728,17 +728,17 @@ void SdPageObjsTLB::RequestingChilds( SvLBoxEntry* pFileEntry )
             SvLBoxEntry* pPageEntry = NULL;
 
             Bitmap aBmpPage( SdResId( BMP_PAGE ) );
-            Image aImgPage( aBmpPage, aColor );
+            Image aImgPage( aBmpPage, aTransparencyColor );
             Bitmap aBmpPageObjs( SdResId( BMP_PAGEOBJS ) );
-            Image aImgPageObjs( aBmpPageObjs, aColor );
+            Image aImgPageObjs( aBmpPageObjs, aTransparencyColor );
             Bitmap aBmpObjects( SdResId( BMP_OBJECTS ) );
-            Image aImgObjects( aBmpObjects, aColor );
+            Image aImgObjects( aBmpObjects, aTransparencyColor );
             Bitmap aBmpPageH( SdResId( BMP_PAGE_H ) );
-            Image aImgPageH( aBmpPageH, Color( COL_BLACK ) );
+            Image aImgPageH( aBmpPageH, aTransparencyColor );
             Bitmap aBmpPageObjsH( SdResId( BMP_PAGEOBJS_H ) );
-            Image aImgPageObjsH( aBmpPageObjsH, Color( COL_BLACK ) );
+            Image aImgPageObjsH( aBmpPageObjsH, aTransparencyColor );
             Bitmap aBmpImgObjectsH( SdResId( BMP_OBJECTS_H ) );
-            Image aImgObjectsH( aBmpImgObjectsH, Color( COL_BLACK ) );
+            Image aImgObjectsH( aBmpImgObjectsH, aTransparencyColor );
 
             // Dokumentname ist schon eingefuegt
 
