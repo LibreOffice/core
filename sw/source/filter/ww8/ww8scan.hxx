@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.hxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 11:59:43 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 09:13:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1061,8 +1061,8 @@ public:
 
 
     UINT16 nFibBack;    // 0xc
-    INT16 lKey1;            // 0xe  file encrypted key, only valid if fEncrypted.
-    INT16 lKey2;            // 0x10  key in 2 Portionen wg. Misalignment
+    UINT16 nHash;       // 0xe  file encrypted hash
+    UINT16 nKey;        // 0x10  file encrypted key
     UINT8 envr;         // 0x12 environment in which file was created
                                     //      0 created by Win Word / 1 created by Mac Word
     BYTE fMac              :1;          // 0x13 when 1, this file was last saved in the Mac environment
