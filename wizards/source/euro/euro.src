@@ -2,9 +2,9 @@
  *
  *  $RCSfile: euro.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: obo $ $Date: 2001-09-27 21:06:25 $
+ *  last change: $Author: kz $ $Date: 2001-10-02 21:18:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,7 +207,7 @@ Text[ english_us ] = "First, unprotect all sheets.";
     Text[ dutch ] = "Hef eerst de beveiliging van alle werkbladen op!";
     Text[ french ] = "Désactivez la protection des feuilles au préalable !";
     Text[ spanish ] = "¡Desprotega primero todas las tablas!";
-    Text[ italian ] = "Eliminate la protezione dalle tabelle!";
+    Text[ italian ] = "Eliminate la protezione dalle tabelle.";
     Text[ danish ] = "Ophæv forinden beskyttelsen for alle ark!";
     Text[ swedish ] = "Upphäv först skyddet för alla tabeller";
     Text[ polish ] = "Odbezpiecz najpierw wszystkie tabele!";
@@ -1570,7 +1570,7 @@ String MESSAGES + 22
     Text[ french ] = "Le fichier '<1>' existe déjà.<CR>Voulez-vous l'écraser ?";
     Text[ spanish ] = "Ya existe el archivo '<1>'.<CR>¿Desea sobrescribirlo?";
     Text[ finnish ] = "The '<1>' file already exists.<CR>Do you want to overwrite it?";
-    Text[ italian ] = "The '<1>' file already exists.<CR>Do you want to overwrite it?";
+    Text[ italian ] = "Il file '<1>' esiste già. <CR>Volete sovrascriverlo?";
     Text[ danish ] = "The '<1>' file already exists.<CR>Do you want to overwrite it?";
     Text[ swedish ] = "Filen '<1>' finns redan.<CR>Vill du skriva över den?";
     Text[ polish ] = "Plik '<1>' ju¿ istnieje.<CR>Skasowaæ go przez zapisanie?";
@@ -2132,6 +2132,7 @@ Text[ english_us ] = "Sheet is always unprotected";
     Text[ finnish ] = "Lomake on aina suojaamaton";
     Text[ catalan ] = "Anular siempre la protección de hoja";
 };
+
 
 
 
