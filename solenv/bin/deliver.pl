@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.48 $
+#   $Revision: 1.49 $
 #
-#   last change: $Author: rt $ $Date: 2003-06-13 09:12:15 $
+#   last change: $Author: vg $ $Date: 2003-07-02 13:42:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,7 @@ use File::Path;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.48 $ ';
+$id_str = ' $Revision: 1.49 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -126,6 +126,8 @@ $opt_force          = 0;            # option force copy
 $opt_minor          = 0;            # option deliver in minor
 $opt_check          = 0;            # do actually execute any action
 $opt_zip            = 0;            # create an additional zip file
+$opt_link           = 0;            # hard link files into the solver to save disk space
+$opt_deloutput      = 0;            # delete the output tree for the project once successfully delivered
 
 # zip is default for RE
 $opt_zip = 1 if ( defined($ENV{UPDATER}) && $ENV{UPDATER} eq 'YES' && !defined($ENV{BUILD_SOSL}) );
@@ -149,6 +151,7 @@ parse_dlst();
 walk_action_data();
 walk_hedabu_list();
 zip_files() if $opt_zip;
+delete_output() if $opt_deloutput;
 print_stats();
 
 exit(0);
@@ -386,6 +389,8 @@ sub parse_options
         $arg =~ /^-check$/  and $opt_check  = 1 and next;
         $arg =~ /^-zip$/    and $opt_zip    = 1 and next;
         $arg =~ /^-delete$/ and $opt_delete = 1 and next;
+        $arg =~ /^-link$/ and $ENV{GUI} ne 'WNT' and $opt_link = 1 and next;
+        $arg =~ /^-deloutput$/ and $opt_deloutput = 1 and next;
         print_error("invalid option $arg") if ( $arg =~ /-/ );
         if ( $arg =~ /-/ || $#ARGV > -1 ) {
             usage();
@@ -664,63 +669,60 @@ sub copy_if_newer
 
     if ( $opt_delete ) {
         print "REMOVE: $to\n";
+        return 1 if $opt_check;
+        my $rc = unlink($to);
+        return 1 if $rc;
+        return 0;
+    }
+
+    if( !$opt_check && $opt_link ) {
+        # hard link if possible
+        if( link($from, $to) ){
+            print "LINK: $from -> $to\n";
+            return 1;
+        }
+    }
+
+    if( $touch ) {
+       print "TOUCH: $from -> $to\n";
     }
     else {
-        if ( $touch ) {
-            print "TOUCH: $from -> $to\n";
+       print "COPY: $from -> $to\n";
+    }
+
+    return 1 if( $opt_check );
+
+    #
+    # copy to temporary file first and rename later
+    # to minimize the possibility for race conditions
+    local $temp_file = sprintf('%s.%d-%d', $to, $$, time());
+    my $rc = copy($from, $temp_file);
+    if ( $rc) {
+        $rc = utime($$from_stat_ref[9], $$from_stat_ref[9], $temp_file);
+        if ( !$rc ) {
+            print_error("can't update temporary file modification time '$temp_file': $!",0);
+        }
+        fix_file_permissions($$from_stat_ref[2], $temp_file);
+        $rc = rename($temp_file, $to);
+        if ( $rc ) {
+            # handle special packaging of *.dylib files for Mac OS X
+            if ( $^O eq 'darwin' )
+            {
+                system("create-bundle", $to) if ( $to =~ /\.dylib/ );
+                system("create-bundle", "$to=$from.app") if ( -d "$from.app" );
+                system("ranlib", "$to" ) if ( $to =~ /\.a/ );
+            }
+            return 1;
         }
         else {
-            print "COPY: $from -> $to\n";
+            print_error("can't rename temporary file to $to: $!",0);
         }
-    }
-    if ( $opt_check ) {
-        return 1;
     }
     else {
-        if ( $opt_delete ) {
-            my $rc = unlink($to);
-            return 1 if $rc;
-            return 0;
-        }
-        else {
-            if ( -l $from ) {
-                print "$from is a link, don't copy.\n";
-                return 0;
-            }
-            else {
-                # copy to temporary file first and rename later
-                # to minimize the possibility for race conditions
-                local $temp_file = sprintf('%s.%d-%d', $to, $$, time());
-                my $rc = copy($from, $temp_file);
-                if ( $rc) {
-                    $rc = utime($$from_stat_ref[9], $$from_stat_ref[9], $temp_file);
-                    if ( !$rc ) {
-                        print_error("can't update temporary file modification time '$temp_file': $!",0);
-                    }
-                    fix_file_permissions($$from_stat_ref[2], $temp_file);
-                    $rc = rename($temp_file, $to);
-                    if ( $rc ) {
-                        # handle special packaging of *.dylib files for Mac OS X
-                        if ( $^O eq 'darwin' )
-                        {
-                            system("create-bundle", $to) if ( $to =~ /\.dylib/ );
-                            system("create-bundle", "$to=$from.app") if ( -d "$from.app" );
-                            system("ranlib", "$to" ) if ( $to =~ /\.a/ );
-                        }
-                        return 1;
-                    }
-                    else {
-                        print_error("can't rename temporary file to $to: $!",0);
-                    }
-                }
-                else {
-                    print_error("can't copy $from: $!",0);
-                }
-                unlink($temp_file);
-                return 0;
-            }
-        }
+        print_error("can't copy $from: $!",0);
     }
+    unlink($temp_file);
+    return 0;
 }
 
 sub is_newer
@@ -1005,6 +1007,22 @@ sub zip_files
     }
 }
 
+sub delete_output
+{
+    my $output_path = expand_macros("../%__SRC%");
+    if ( "$output_path" ne "../" ) {
+        if ( rmtree([$output_path], 0, 1) ) {
+            print "Deleted output tree.\n";
+        }
+        else {
+            print_error("Error deleting output tree $output_path: $!",0);
+        }
+    }
+    else {
+        print_error("Output not deleted - INPATH is not set");
+    }
+}
+
 sub print_error
 {
     my $message = shift;
@@ -1051,6 +1069,10 @@ sub usage
     print STDERR "  -check\tjust print what would happen, no actual copying of files\n";
     print STDERR "  -zip  \tcreate additional zip files of delivered content\n";
     print STDERR "  -delete\tdelete files, use with care\n";
+    if ( !defined($ENV{GUI}) || $ENV{GUI} ne 'WNT' ) {
+        print STDERR "  -link  \thard link files into the solver to save disk space\n";
+    }
+    print STDERR "  -deloutput\tremove the output tree\n";
     print STDERR "The option -zip and a destination-path are mutually exclusive\n";
 }
 
