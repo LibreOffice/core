@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: pb $ $Date: 2001-08-10 08:54:44 $
+#   last change: $Author: kz $ $Date: 2001-08-15 09:09:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,39 +62,26 @@
 
 PRJ=..
 
-# ---- LDump2 laeuft auf tlx Rechner nicht
-USE_LDUMP2=TRUE
-
 ENABLE_EXCEPTIONS=TRUE
 PRJNAME=sfx2
 TARGET=sfx
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 AUTOSEG=true
 #sfx.hid generieren
-.IF "$(header)" == ""
 GEN_HID=TRUE
-.ENDIF
 
 COMP1TYPELIST=		sfx
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 # --- Allgemein ----------------------------------------------------
-
-.IF "$(COM)"=="ICC"
-LINKFLAGS+=/SEGMENTS:512 /PACKD:32768
-.ENDIF
 
 .IF "$(header)" == ""
 CXXFILES =         $(PROJECTPCHSOURCE).cxx
 .ENDIF
 
-
-.IF "$(header)" == ""
 
 LIB1TARGET= $(SLB)$/$(TARGET).lib
 LIB1FILES=  $(SLB)$/appl.lib		\
@@ -125,10 +112,6 @@ LIB2FILES=  $(LB)$/appl.lib       \
 SHL1TARGET= sfx$(UPD)$(DLLPOSTFIX)
 SHL1IMPLIB= isfx
 
-#		$(ONELIB) \
-#		$(UNOLIB) \
-
-
 SHL1STDLIBS+=\
                 $(FWELIB) \
         $(BASICLIB) \
@@ -156,15 +139,6 @@ SHL1STDLIBS+=\
         $(COMPHELPERLIB) \
         $(XMLOFFLIB) \
         $(XMLSCRIPTLIB)
-
-.IF "$(TF_UCB)" == ""
-SHL1STDLIBS+=\
-        $(CHAOSLIB)
-.ELSE
-SHL1STDLIBS+=\
-        $(CPPULIB)	\
-        $(CPPUHELPERLIB)
-.ENDIF
 
 .IF "$(SOLAR_JAVA)" != ""
 SHL1STDLIBS+=\
@@ -215,32 +189,31 @@ DEF1DES		=Sfx
 .IF "$(GUI)"=="WNT"
 DEF1EXPORT6 = component_writeInfo
 DEF1EXPORT7 = component_getFactory
-.ELSE
-.IF "$(GUI)"=="OS2"
-.IF "$(COM)"=="ICC"
-DEF1EXPORT6 = component_writeInfo
-DEF1EXPORT7 = component_getFactory
-.ELSE
-.IF "$(COM)"=="WTC"
-DEF1EXPORT6 = component_writeInfo
-DEF1EXPORT7 = component_getFactory
-.ELSE
-DEF1EXPORT6 = _component_writeInfo
-DEF1EXPORT7 = _component_getFactory
 .ENDIF
-.ENDIF
-.ENDIF
-.ENDIF
+
+SFXSRSLIST=\
+        $(SRS)$/accel.srs \
+        $(SRS)$/appl.srs \
+        $(SRS)$/doc.srs \
+        $(SRS)$/view.srs \
+        $(SRS)$/config.srs \
+        $(SRS)$/menu.srs \
+        $(SRS)$/statbar.srs \
+        $(SRS)$/toolbox.srs \
+        $(SRS)$/dialog.srs \
+        $(SRS)$/bastyp.srs \
+        $(SRS)$/explorer.srs
+
+RESLIB1NAME=$(TARGET)
+RESLIB1SRSFILES=$(SFXSRSLIST)
 
 # --- Targets ------------------------------------------------------
 
-.IF "$(depend)" == ""
+.INCLUDE :  target.mk
 
-ALL:\
-    $(LIB1TARGET) \
+ALLTAR:\
     $(MISC)$/linkinc.ls		\
-    $(SRS)$/hidother.hid \
-    ALLTAR
+    $(SRS)$/hidother.hid
 
 # --- SFX-Filter-Datei ---
 
@@ -414,7 +387,7 @@ $(MISC)$/$(SHL1TARGET).flt:
     @echo CntStore >> $@
     @echo CntFldr >> $@
 .ENDIF
-.ENDIF
+.ENDIF          # "$(OLD_CHAOS)" != ""
 .IF "$(GUI)"=="WNT" || "$(GUI)"=="WIN"
     @echo WEP>>$@
 .ENDIF
@@ -443,39 +416,9 @@ $(MISC)$/$(SHL1TARGET).flt:
     @echo ::Exception>>$@
     @echo NoSuchElementException>>$@
     @echo __CT>>$@
-.ENDIF
+.ENDIF         # "$(COM)"=="MSC" 
 .IF "$(GUI)"=="WNT"
     @echo ?CreateType@>>$@
-.ENDIF
-.IF "$(COM)"=="ICC"
-    @echo __dt__14SfxApplicationFv>>$@
-    @echo __dt__14MDIApplicationFv>>$@
-    @echo __dt__11ApplicationFv>>$@
-    @echo __dt__17PlugInApplicationFv>>$@
-    @echo __ct__4ORefXT7OSpeech_FP7OSpeech>>$@
-    @echo __ct__4ORefXT7OSpeech_FRC4ORefXT7OSpeech_>>$@
-    @echo m_pLoader__>>$@
-.ENDIF
-
-SFXSRSLIST=\
-        $(SRS)$/accel.srs \
-        $(SRS)$/appl.srs \
-        $(SRS)$/doc.srs \
-        $(SRS)$/view.srs \
-        $(SRS)$/config.srs \
-        $(SRS)$/menu.srs \
-        $(SRS)$/statbar.srs \
-        $(SRS)$/toolbox.srs \
-        $(SRS)$/dialog.srs \
-        $(SRS)$/bastyp.srs \
-        $(SRS)$/explorer.srs
-
-.IF "$(GUI)"=="WIN"
-RESLIBSPLIT1NAME=$(TARGET)
-RESLIBSPLIT1SRSFILES=$(SFXSRSLIST)
-.ELSE
-RESLIB1NAME=$(TARGET)
-RESLIB1SRSFILES=$(SFXSRSLIST)
 .ENDIF
 
 $(SRS)$/hidother.hid: hidother.src
@@ -486,10 +429,5 @@ $(SRS)$/hidother.hid: hidother.src
 .ENDIF
 .ELSE
     @echo nix
-.ENDIF
-
-.ENDIF
-.ENDIF
-
-.INCLUDE :  target.mk
+.ENDIF          # "$(GUI)$(CPU)"=="WNTI"
 
