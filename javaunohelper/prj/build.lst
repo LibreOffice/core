@@ -1,7 +1,8 @@
-jh	javaunohelper	:	bridges cppuhelper NULL
+jh  javaunohelper : bridges cppuhelper jurt ridljar NULL
 jh	javaunohelper								usr1	-	all	jh_mkout NULL
 jh	javaunohelper\com\sun\star\comp\helper		nmake	-	all	jh_helper NULL
 jh	javaunohelper\com\sun\star\lib\uno\adapter	nmake	-	all	jh_adapter NULL
 jh	javaunohelper\com\sun\star\lib\uno\helper	nmake	-	all	jh_libhelp NULL
+jh  javaunohelper\com\sun\star\lib\uno\helper\draft nmake - all jh_libhelp_draft jh_libhelp NULL
 jh	javaunohelper\source						nmake	-	all	jh_source NULL
-jh	javaunohelper\util							nmake	-	all	jh_util jh_helper jh_source jh_adapter jh_libhelp NULL
+jh	javaunohelper\util							nmake	-	all	jh_util jh_helper jh_source jh_adapter jh_libhelp jh_libhelp_draft NULL
