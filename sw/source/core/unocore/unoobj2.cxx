@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj2.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-01 07:45:06 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 14:18:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -336,6 +336,12 @@
 #ifndef _CRSSKIP_HXX
 #include <crsskip.hxx>
 #endif
+// OD 2004-05-07 #i28701#
+#include <vector>
+// OD 2004-05-24 #i28701#
+#ifndef _SORTEDOBJS_HXX
+#include <sortedobjs.hxx>
+#endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -351,62 +357,49 @@ using namespace ::rtl;
 //collectn.cxx
 BOOL lcl_IsNumeric(const String&);
 
+// OD 2004-05-07 #i28701# - adjust 4th parameter
 void CollectFrameAtNode( SwClient& rClnt, const SwNodeIndex& rIdx,
-                            SwDependArr& rFrameArr, BOOL bSort )
+                         SwDependArr& rFrameArr,
+                         const bool _bAtCharAnchoredObjs )
 {
-    // bSortFlag says: TRUE - search AutoContent Flys,
-    //                 else search AtContent Flys
+    // _bAtCharAnchoredObjs:
+    // <TRUE>: at-character anchored objects are collected
+    // <FALSE>: at-paragraph anchored objects are collected
 
     // alle Rahmen, Grafiken und OLEs suchen, die an diesem Absatz
     // gebunden sind
-    SvXub_StrLens aSortArr( 8, 8 );
     SwDoc* pDoc = rIdx.GetNode().GetDoc();
 
-    USHORT nChkType = bSort ? FLY_AUTO_CNTNT : FLY_AT_CNTNT;
+    USHORT nChkType = _bAtCharAnchoredObjs ? FLY_AUTO_CNTNT : FLY_AT_CNTNT;
     const SwCntntFrm* pCFrm;
     const SwCntntNode* pCNd;
     if( pDoc->GetRootFrm() &&
         0 != (pCNd = rIdx.GetNode().GetCntntNode()) &&
         0 != (pCFrm = pCNd->GetFrm()) )
     {
-        const SwDrawObjs *pObjs = pCFrm->GetDrawObjs();
+        const SwSortedObjs *pObjs = pCFrm->GetDrawObjs();
         if( pObjs )
             for( USHORT i = 0; i < pObjs->Count(); ++i )
             {
-                const SdrObject *pO = (*pObjs)[ i ];
-                const SwFlyFrm *pFly;
-                SwFrmFmt* pFmt;
-
-                if( pO->ISA(SwVirtFlyDrawObj)
-                    ? ( (pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm())
-                                ->IsFlyAtCntFrm() &&
-                        (bSort ? pFly->IsAutoPos() : !pFly->IsAutoPos() ) &&
-                        0 != ( pFmt = (SwFrmFmt*)pFly->GetFmt()) )
-                    : ( 0 != (pFmt=((SwDrawContact*)GetUserCall(pO))->GetFmt())
-                        && pFmt->GetAnchor().GetAnchorId() == nChkType )
-                    )
+                SwAnchoredObject* pAnchoredObj = (*pObjs)[i];
+                SwFrmFmt& rFmt = pAnchoredObj->GetFrmFmt();
+                if ( rFmt.GetAnchor().GetAnchorId() == nChkType )
                 {
                     //jetzt einen SwDepend anlegen und in das Array einfuegen
-                    SwDepend* pNewDepend = new SwDepend( &rClnt, pFmt );
+                    SwDepend* pNewDepend = new SwDepend( &rClnt, &rFmt );
 
-                    USHORT nInsPos = rFrameArr.Count();
-                    if( bSort )
-                    {
-                        xub_StrLen nInsertIndex = pFmt->GetAnchor().
-                                    GetCntntAnchor()->nContent.GetIndex();
-
-                        USHORT nEnd = nInsPos;
-                        for( nInsPos = 0; nInsPos < nEnd; ++nInsPos )
-                            if( aSortArr[ nInsPos ] > nInsertIndex )
-                                break;
-                        aSortArr.Insert( nInsertIndex, nInsPos );
-                    }
-                    rFrameArr.C40_INSERT( SwDepend, pNewDepend, nInsPos );
+                    // OD 2004-05-07 #i28701# - sorting no longer needed,
+                    // because list <SwSortedObjs> is already sorted.
+                    rFrameArr.C40_INSERT( SwDepend, pNewDepend, rFrameArr.Count() );
                 }
             }
     }
     else
     {
+        // OD 2004-05-07 #i28701# - helper list to get <rFrameArr> sorted
+        std::vector< std::pair< xub_StrLen, sal_uInt32 > > aSortLst;
+        typedef std::vector< std::pair< xub_StrLen, sal_uInt32 > >::iterator tSortLstIter;
+
         const SwSpzFrmFmts& rFmts = *pDoc->GetSpzFrmFmts();
         USHORT nSize = rFmts.Count();
         for ( USHORT i = 0; i < nSize; i++)
@@ -420,16 +413,31 @@ void CollectFrameAtNode( SwClient& rClnt, const SwNodeIndex& rIdx,
             {
                 //jetzt einen SwDepend anlegen und in das Array einfuegen
                 SwDepend* pNewDepend = new SwDepend( &rClnt, (SwFrmFmt*)pFmt);
-                USHORT nInsPos = rFrameArr.Count();
-                if( bSort )
-                {
-                    xub_StrLen nInsertIndex = pAnchorPos->nContent.GetIndex();
 
-                    USHORT nEnd = nInsPos;
-                    for( nInsPos = 0; nInsPos < nEnd; ++nInsPos )
-                        if( aSortArr[ nInsPos ] > nInsertIndex )
+                // OD 2004-05-07 #i28701# - determine insert position for
+                // sorted <rFrameArr>
+                USHORT nInsPos = rFrameArr.Count();
+                {
+                    xub_StrLen nCntIndex = pAnchorPos->nContent.GetIndex();
+                    sal_uInt32 nAnchorOrder = rAnchor.GetOrder();
+
+                    tSortLstIter aInsIter = aSortLst.end();
+                    for ( tSortLstIter aIter = aSortLst.begin();
+                          aIter != aSortLst.end();
+                          ++aIter )
+                    {
+                        if ( (*aIter).first > nCntIndex ||
+                             ( (*aIter).first == nCntIndex &&
+                               (*aIter).second > nAnchorOrder ) )
+                        {
+                            nInsPos = aIter - aSortLst.begin();
+                            aInsIter = aIter;
                             break;
-                    aSortArr.Insert( nInsertIndex, nInsPos );
+                        }
+                    }
+                    std::pair< xub_StrLen, sal_uInt32 > aEntry( nCntIndex,
+                                                                nAnchorOrder );
+                    aSortLst.insert( aInsIter, aEntry );
                 }
                 rFrameArr.C40_INSERT( SwDepend, pNewDepend, nInsPos );
             }
