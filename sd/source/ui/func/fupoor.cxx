@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fupoor.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: aw $ $Date: 2002-05-06 15:19:29 $
+ *  last change: $Author: ka $ $Date: 2002-07-04 15:55:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -308,11 +308,10 @@ void FuPoor::WriteStatus(const String& aStr)
 
 BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
 {
-    BOOL bReturn = FALSE;
-    BOOL bSlideShow = FALSE;
-    USHORT nCode = rKEvt.GetKeyCode().GetCode();
-
-     FuSlideShow* pFuSlideShow = pViewShell->GetSlideShow();
+    USHORT          nCode = rKEvt.GetKeyCode().GetCode();
+    BOOL            bReturn = FALSE;
+    BOOL            bSlideShow = FALSE;
+     FuSlideShow*    pFuSlideShow = pViewShell->GetSlideShow();
 
     if (pFuSlideShow)
     {
@@ -445,7 +444,7 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
 
         case KEY_ADD:
         {
-            if (!pView->IsTextEdit() && !bSlideShow)
+            if (!pView->IsTextEdit() && !bSlideShow && !pDocSh->IsUIActive())
             {
                 // Zoom vergroessern
                 pViewShell->SetZoom(pWindow->GetZoom() * 3 / 2);
@@ -460,7 +459,7 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
 
         case KEY_SUBTRACT:
         {
-            if (!pView->IsTextEdit() && !bSlideShow)
+            if (!pView->IsTextEdit() && !bSlideShow && !pDocSh->IsUIActive())
             {
                 // Zoom verringern
                 pViewShell->SetZoom(pWindow->GetZoom() * 2 / 3);
@@ -501,7 +500,7 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
         {
             ZoomList* pZoomList = pViewShell->GetZoomList();
 
-            if (!pView->IsTextEdit() && pZoomList->IsNextPossible() && !bSlideShow)
+            if (!pView->IsTextEdit() && pZoomList->IsNextPossible() && !bSlideShow && !pDocSh->IsUIActive())
             {
                 // Naechstes ZoomRect einstellen
                 pViewShell->SetZoomRect(pZoomList->GetNextZoomRect());
@@ -514,7 +513,7 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
         {
             ZoomList* pZoomList = pViewShell->GetZoomList();
 
-            if (!pView->IsTextEdit() && pZoomList->IsPreviousPossible() && !bSlideShow)
+            if (!pView->IsTextEdit() && pZoomList->IsPreviousPossible() && !bSlideShow && !pDocSh->IsUIActive())
             {
                 // Vorheriges ZoomRect einstellen
                 pViewShell->SetZoomRect(pZoomList->GetPreviousZoomRect());
