@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uivwimp.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tl $ $Date: 2002-11-11 12:58:19 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 15:32:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,13 +79,20 @@
 #ifndef _SWUNODEF_HXX
 #include <swunodef.hxx>
 #endif
+#ifndef _CPPUHELPER_WEAKREF_HXX_
+#include <cppuhelper/weakref.hxx>
+#endif
 
 class SwXTextView;
 class SfxRequest;
+class SwTransferable;
 
 namespace com{ namespace sun{ namespace star {
     namespace frame {
         class XDispatchProviderInterceptor;
+    }
+    namespace lang {
+        class XUnoTunnel;
     }
 }}}
 
@@ -143,6 +150,7 @@ class SwView_Impl
     STAR_REFERENCE( lang::XEventListener )  xClipEvtLstnr;
     STAR_REFERENCE( frame::XDispatchProviderInterceptor )   xDisProvInterceptor;
     STAR_REFERENCE( view::XSelectionSupplier )              *pxXTextView;       // UNO object
+    com::sun::star::uno::WeakReference< com::sun::star::lang::XUnoTunnel > xTransferable;
 
     // temporary document for printing text of selection / multi selection
     // in PDF export.
@@ -162,6 +170,7 @@ public:
 
     ::com::sun::star::view::XSelectionSupplier* GetUNOObject();
     SwXTextView*                    GetUNOObject_Impl();
+    void                            Invalidate();
 
     ShellModes                      GetShellMode() {return eShellMode;}
 
@@ -172,6 +181,8 @@ public:
 
     SfxObjectShellRef &             GetTmpSelectionDoc()    { return xTmpSelDocSh; }
     SvEmbeddedObjectRef &           GetEmbeddedObjRef()     { return (SvEmbeddedObjectRef&)(long&)aEmbeddedObjRef; }
+
+    void                            AddTransferable(SwTransferable& rTransferable);
 };
 #endif
 
