@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_ooo.scp,v $
 *
-*  $Revision: 1.53 $
+*  $Revision: 1.54 $
 *
-*  last change: $Author: hr $ $Date: 2004-11-26 22:22:06 $
+*  last change: $Author: obo $ $Date: 2004-11-30 12:26:47 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -711,10 +711,6 @@ File gid_File_Jar_Commonwizards
     Dir = gid_Dir_Classes;
     Styles = (PACKED,SETUPZIP);
 End
-#endif
-
-#ifdef SOLAR_JAVA
-UNO_JAR_FILE( gid_File_Jar_Tutorial, tutorial )
 #endif
 
 #ifdef SOLAR_JAVA
