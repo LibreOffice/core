@@ -102,8 +102,10 @@ case $sd_platform in
     if [ $LIBPATH ]; then
       SYSTEM_LIBPATH=$LIBPATH
       export SYSTEM_LIBPATH
+      LIBPATH="$sd_prog":$LIBPATH
+    else
+      LIBPATH="$sd_prog"
     fi
-    LIBPATH="$sd_prog":$LIBPATH
     export LIBPATH
     ;;
 
@@ -112,8 +114,10 @@ case $sd_platform in
     if [ $DYLD_LIBRARY_PATH ]; then
       SYSTEM_DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH
       export SYSTEM_DYLD_LIBRARY_PATH
+      DYLD_LIBRARY_PATH="$sd_prog":$DYLD_LIBRARY_PATH
+    else
+      DYLD_LIBRARY_PATH="$sd_prog"
     fi
-    DYLD_LIBRARY_PATH="$sd_prog":$DYLD_LIBRARY_PATH
     export DYLD_LIBRARY_PATH
     ;;
 
@@ -122,8 +126,10 @@ case $sd_platform in
     if [ $SHLIB_PATH ]; then
       SYSTEM_SHLIB_PATH=$SHLIB_PATH
       export SYSTEM_SHLIB_PATH
+      SHLIB_PATH="$sd_prog":/usr/openwin/lib:$SHLIB_PATH
+    else
+      SHLIB_PATH="$sd_prog":/usr/openwin/lib
     fi
-    SHLIB_PATH="$sd_prog":/usr/openwin/lib:$SHLIB_PATH
     export SHLIB_PATH
     ;;
 
@@ -132,8 +138,10 @@ case $sd_platform in
     if [ $LD_LIBRARYN32_PATH ]; then
        SYSTEM_LD_LIBRARYN32_PATH=$LD_LIBRARYN32_PATH
        export SYSTEM_LD_LIBRARYN32_PATH
+       LD_LIBRARYN32_PATH=:"$sd_prog":$LD_LIBRARYN32_PATH
+    else
+       LD_LIBRARYN32_PATH=:"$sd_prog"
     fi
-    LD_LIBRARYN32_PATH=:"$sd_prog":$LD_LIBRARYN32_PATH
     export LD_LIBRARYN32_PATH
     ;;
 
@@ -142,8 +150,10 @@ case $sd_platform in
     if [ $LD_LIBRARY_PATH ]; then
       SYSTEM_LD_LIBRARY_PATH=$LD_LIBRARY_PATH
       export SYSTEM_LD_LIBRARY_PATH
+      LD_LIBRARY_PATH="$sd_prog":$LD_LIBRARY_PATH
+    else
+      LD_LIBRARY_PATH="$sd_prog"
     fi
-    LD_LIBRARY_PATH="$sd_prog":$LD_LIBRARY_PATH
     export LD_LIBRARY_PATH
     ;;
 esac
@@ -214,7 +224,11 @@ sd_pagein_args="${sd_pagein_args:+${sd_pagein_args} }@pagein-common"
 "${sd_prog}"/pagein -L"${sd_prog}" ${sd_pagein_args}
 
 # set path so that other apps can be started from soffice just by name
-PATH="$sd_prog":$PATH
+if [ $PATH ]; then
+  PATH="$sd_prog":$PATH
+else
+  PATH="$sd_prog"
+fi
 export PATH
 
 # execute soffice binary
