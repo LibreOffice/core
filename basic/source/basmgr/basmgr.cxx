@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basmgr.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 13:39:16 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 12:59:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1772,7 +1772,7 @@ BOOL BasicManager::StoreLib( USHORT nLib ) const
 //      String aErrorText( BasicResId( IDS_SBERR_LIBSAVE ) );
 //      aErrorText.SearchAndReplace( "XX", "" );
         StringErrorInfo* pErrInf = new StringErrorInfo( ERRCODE_BASMGR_LIBSAVE, String(), ERRCODE_BUTTON_OK );
-        ((BasicManager*)this)->pErrorMgr->InsertError( BasicError( *pErrInf, BASERR_REASON_LIBNOTFOUND, nLib ) );
+        ((BasicManager*)this)->pErrorMgr->InsertError( BasicError( *pErrInf, BASERR_REASON_LIBNOTFOUND, String::CreateFromInt32(nLib) ) );
         return FALSE;
     }
     if ( pLibInfo->GetLib() == 0 ) // Nicht geladen...
@@ -1787,7 +1787,7 @@ BOOL BasicManager::StoreLib( USHORT nLib ) const
 //      String aErrorText( BasicResId( IDS_SBERR_LIBSAVE ) );
 //      aErrorText.SearchAndReplace( "XX", pLibInfo->GetLibName() );
         StringErrorInfo* pErrInf = new StringErrorInfo( ERRCODE_BASMGR_LIBSAVE, pLibInfo->GetLibName(), ERRCODE_BUTTON_OK );
-        ((BasicManager*)this)->pErrorMgr->InsertError( BasicError( *pErrInf, BASERR_REASON_NOSTORAGENAME, nLib ) );
+        ((BasicManager*)this)->pErrorMgr->InsertError( BasicError( *pErrInf, BASERR_REASON_NOSTORAGENAME, String::CreateFromInt32(nLib) ) );
         return FALSE;
     }
 
@@ -1798,7 +1798,7 @@ BOOL BasicManager::StoreLib( USHORT nLib ) const
 //      String aErrorText( BasicResId( IDS_SBERR_LIBSAVE ) );
 //      aErrorText.SearchAndReplace( "XX", pLibInfo->GetLibName() );
         StringErrorInfo* pErrInf = new StringErrorInfo( ERRCODE_BASMGR_LIBSAVE, pLibInfo->GetLibName(), ERRCODE_BUTTON_OK );
-        ((BasicManager*)this)->pErrorMgr->InsertError( BasicError( *pErrInf, BASERR_REASON_OPENSTORAGE, nLib ) );
+        ((BasicManager*)this)->pErrorMgr->InsertError( BasicError( *pErrInf, BASERR_REASON_OPENSTORAGE, String::CreateFromInt32(nLib) ) );
     }
     else
         return ImpStoreLibary( pLibInfo->GetLib(), *xStorage );
@@ -2190,7 +2190,7 @@ BOOL BasicManager::LoadLib( USHORT nLib )
 //      String aErrorText( BasicResId( IDS_SBERR_LIBLOAD ) );
 //      aErrorText.SearchAndReplace( "XX", "" );
         StringErrorInfo* pErrInf = new StringErrorInfo( ERRCODE_BASMGR_LIBLOAD, String(), ERRCODE_BUTTON_OK );
-        pErrorMgr->InsertError( BasicError( *pErrInf, BASERR_REASON_LIBNOTFOUND, nLib ) );
+        pErrorMgr->InsertError( BasicError( *pErrInf, BASERR_REASON_LIBNOTFOUND, String::CreateFromInt32(nLib) ) );
     }
     return bDone;
 }
@@ -2204,7 +2204,7 @@ BOOL BasicManager::UnloadLib( USHORT nLib )
     {
 //      String aErrorText( BasicResId( IDS_SBERR_UNLOADLIB ) );
         StringErrorInfo* pErrInf = new StringErrorInfo( ERRCODE_BASMGR_UNLOADLIB, String(), ERRCODE_BUTTON_OK );
-        pErrorMgr->InsertError( BasicError( *pErrInf, BASERR_REASON_STDLIB, nLib ) );
+        pErrorMgr->InsertError( BasicError( *pErrInf, BASERR_REASON_STDLIB, String::CreateFromInt32(nLib) ) );
         return FALSE;
     }
     BasicLibInfo* pLibInfo = pLibs->GetObject( nLib );
@@ -2219,7 +2219,7 @@ BOOL BasicManager::UnloadLib( USHORT nLib )
     }
 //  String aErrorText( BasicResId( IDS_SBERR_UNLOADLIB ) );
     StringErrorInfo* pErrInf = new StringErrorInfo( ERRCODE_BASMGR_UNLOADLIB ,  String(), ERRCODE_BUTTON_OK );
-    pErrorMgr->InsertError( BasicError( BASERR_ID_UNLOADLIB, BASERR_REASON_LIBNOTFOUND, nLib ) );
+    pErrorMgr->InsertError( BasicError( BASERR_ID_UNLOADLIB, BASERR_REASON_LIBNOTFOUND, String::CreateFromInt32(nLib) ) );
     return FALSE;
 }
 
