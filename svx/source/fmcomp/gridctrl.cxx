@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridctrl.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-15 08:58:26 $
+ *  last change: $Author: fs $ $Date: 2001-03-23 11:40:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -964,22 +964,23 @@ DbGridControl::DbGridControl(
                        BROWSER_HLINESFULL |
                        BROWSER_VLINESFULL |
                        BROWSER_AUTO_VSCROLL)
+            ,DragSourceHelper(this)
 #pragma warning (disable : 4355)
-              ,m_aBar(this)
+            ,m_aBar(this)
 #pragma warning (default : 4355)
-              ,m_bSynchDisplay(sal_True)
-              ,m_bForceROController(sal_False)
-              ,m_bHandle(sal_False)
-              ,m_aNullDate(DBTypeConversion::getStandardDate())
-              ,m_nAsynAdjustEvent(0)
-              ,m_pDataSourcePropMultiplexer(NULL)
-              ,m_pDataSourcePropListener(NULL)
-              ,m_pFieldListeners(NULL)
-              ,m_pCursorDisposeListener(NULL)
-              ,m_bWantDestruction(sal_False)
-              ,m_bInAdjustDataSource(sal_False)
-              ,m_bPendingAdjustRows(sal_False)
-              ,m_xServiceFactory(_rxFactory)
+            ,m_bSynchDisplay(sal_True)
+            ,m_bForceROController(sal_False)
+            ,m_bHandle(sal_False)
+            ,m_aNullDate(DBTypeConversion::getStandardDate())
+            ,m_nAsynAdjustEvent(0)
+            ,m_pDataSourcePropMultiplexer(NULL)
+            ,m_pDataSourcePropListener(NULL)
+            ,m_pFieldListeners(NULL)
+            ,m_pCursorDisposeListener(NULL)
+            ,m_bWantDestruction(sal_False)
+            ,m_bInAdjustDataSource(sal_False)
+            ,m_bPendingAdjustRows(sal_False)
+            ,m_xServiceFactory(_rxFactory)
 {
     DBG_CTOR(DbGridControl,NULL);
 
@@ -999,20 +1000,21 @@ DbGridControl::DbGridControl(
                     BROWSER_HLINESFULL |
                     BROWSER_VLINESFULL |
                     BROWSER_AUTO_VSCROLL)
+            ,DragSourceHelper(this)
 #pragma warning (disable : 4355)
-              ,m_aBar(this)
+            ,m_aBar(this)
 #pragma warning (default : 4355)
-              ,m_bSynchDisplay(sal_True)
-              ,m_bForceROController(sal_False)
-              ,m_bHandle(sal_False)
-              ,m_aNullDate(DBTypeConversion::getStandardDate())
-              ,m_pDataSourcePropMultiplexer(NULL)
-              ,m_pDataSourcePropListener(NULL)
-              ,m_pFieldListeners(NULL)
-              ,m_bWantDestruction(sal_False)
-              ,m_bInAdjustDataSource(sal_False)
-              ,m_bPendingAdjustRows(sal_False)
-              ,m_xServiceFactory(_rxFactory)
+            ,m_bSynchDisplay(sal_True)
+            ,m_bForceROController(sal_False)
+            ,m_bHandle(sal_False)
+            ,m_aNullDate(DBTypeConversion::getStandardDate())
+            ,m_pDataSourcePropMultiplexer(NULL)
+            ,m_pDataSourcePropListener(NULL)
+            ,m_pFieldListeners(NULL)
+            ,m_bWantDestruction(sal_False)
+            ,m_bInAdjustDataSource(sal_False)
+            ,m_bPendingAdjustRows(sal_False)
+            ,m_xServiceFactory(_rxFactory)
 {
     DBG_CTOR(DbGridControl,NULL);
 
@@ -2715,35 +2717,31 @@ void DbGridControl::DataSourcePropertyChanged(const ::com::sun::star::beans::Pro
 }
 
 //------------------------------------------------------------------------------
+void DbGridControl::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
+{
+    if (!m_pSeekCursor || IsResizing())
+        return;
+
+    sal_uInt16 nColId = GetColumnAtXPosPixel(rPosPixel.X());
+    long   nRow = GetRowAtYPosPixel(rPosPixel.Y());
+    if (nColId != HANDLE_ID && nRow >= 0)
+    {
+        DbGridColumn* pColumn = m_aColumns.GetObject(GetModelColumnPos(nColId));
+        DragServer::CopyString(GetCellText(pColumn));
+        // TODO DND
+
+        if (GetDataWindow().IsMouseCaptured())
+            GetDataWindow().ReleaseMouse();
+
+        StartDrag(DND_ACTION_COPY, rPosPixel);
+    }
+}
+
+//------------------------------------------------------------------------------
 void DbGridControl::Command(const CommandEvent& rEvt)
 {
     switch (rEvt.GetCommand())
     {
-        case COMMAND_STARTDRAG:
-        {
-            if (!rEvt.IsMouseEvent() || !m_pSeekCursor || IsResizing())
-            {
-                DbBrowseBox::Command(rEvt);
-                return;
-            }
-            sal_uInt16 nColId = GetColumnAtXPosPixel(rEvt.GetMousePosPixel().X());
-            long   nRow = GetRowAtYPosPixel(rEvt.GetMousePosPixel().Y());
-            if (nColId != HANDLE_ID && nRow >= 0)
-            {
-                DbGridColumn* pColumn = m_aColumns.GetObject(GetModelColumnPos(nColId));
-                DragServer::Clear();
-                DragServer::CopyString(GetCellText(pColumn));
-
-                Pointer aMovePtr(POINTER_MOVEDATA),
-                        aCopyPtr(POINTER_COPYDATA);
-
-                if (GetDataWindow().IsMouseCaptured())
-                    GetDataWindow().ReleaseMouse();
-                ExecuteDrag(aMovePtr, aCopyPtr, DRAG_COPYABLE);
-            }
-            else
-                DbBrowseBox::Command(rEvt);
-        }   break;
         case COMMAND_CONTEXTMENU:
         {
             if (!rEvt.IsMouseEvent() || !m_pSeekCursor)
