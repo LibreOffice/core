@@ -8826,3 +8826,12 @@ WideCharListToMultiByteList
 ?erase@?$_Tree@GU?$pair@$$CBGPAVSimpleResMgr@@@std@@U_Kfn@?$map@GPAVSimpleResMgr@@U?$less@G@std@@V?$allocator@PAVSimpleResMgr@@@3@@2@U?$less@G@2@V?$allocator@PAVSimpleResMgr@@@2@@std@@QAE?AViterator@12@V312@0@Z
 ?erase@?$_Tree@GU?$pair@$$CBGPAVSimpleResMgr@@@std@@U_Kfn@?$map@GPAVSimpleResMgr@@U?$less@G@std@@V?$allocator@PAVSimpleResMgr@@@3@@2@U?$less@G@2@V?$allocator@PAVSimpleResMgr@@@2@@std@@QAE?AViterator@12@V312@@Z
 ?insert@?$_Tree@GU?$pair@$$CBGPAVSimpleResMgr@@@std@@U_Kfn@?$map@GPAVSimpleResMgr@@U?$less@G@std@@V?$allocator@PAVSimpleResMgr@@@3@@2@U?$less@G@2@V?$allocator@PAVSimpleResMgr@@@2@@std@@QAE?AU?$pair@Viterator@?$_Tree@GU?$pair@$$CBGPAVSimpleResMgr@@@std@@U_Kfn@?$map@GPAVSimpleResMgr@@U?$less@G@std@@V?$allocator@PAVSimpleResMgr@@@3@@2@U?$less@G@2@V?$allocator@PAVSimpleResMgr@@@2@@std@@_N@2@ABU?$pair@$$CBGPAVSimpleResMgr@@@2@@Z
+??1?$list@UDataFlavorEx@@V?$allocator@UDataFlavorEx@@@std@@@std@@QAE@XZ
+??4DataFlavor@datatransfer@star@sun@com@@QAEAAU01234@ABU01234@@Z
+?_Construct@std@@YAXPAUDataFlavorEx@@ABU2@@Z
+?_Destroy@?$vector@UDataFlavorEx@@V?$allocator@UDataFlavorEx@@@std@@@std@@IAEXPAUDataFlavorEx@@0@Z
+?copy@std@@YAPAUDataFlavorEx@@PAU2@00@Z
+?erase@?$list@UDataFlavorEx@@V?$allocator@UDataFlavorEx@@@std@@@std@@QAE?AViterator@12@V312@@Z
+?insert@?$vector@UDataFlavorEx@@V?$allocator@UDataFlavorEx@@@std@@@std@@QAEXPAUDataFlavorEx@@IABU3@@Z
+??0TEIMEInfos@@QAE@ABVTextPaM@@ABVString@@@Z
+?GetNumForInfo@SvNumberformat@@QBEXGAAFAAEAAG2@Z
