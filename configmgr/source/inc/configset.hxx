@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configset.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dg $ $Date: 2000-11-10 22:41:30 $
+ *  last change: $Author: jb $ $Date: 2000-11-20 01:30:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,6 @@ namespace com { namespace sun { namespace star {
 
 namespace configmgr
 {
-    class IRefCountedTemplateProvider;
     class INode;
 
     namespace configuration
@@ -101,24 +100,6 @@ namespace configmgr
         class NodeChange;
         class Template;
         typedef vos::ORef<Template> TemplateHolder;
-//-----------------------------------------------------------------------------
-
-        struct TemplateProvider
-        {
-            typedef vos::ORef<IRefCountedTemplateProvider> Holder;
-            Holder m_aProvider;
-        public:
-            explicit TemplateProvider(IRefCountedTemplateProvider* pProvider);
-            explicit TemplateProvider(Holder const& aProvider);
-            TemplateProvider(TemplateProvider const& aOther);
-            ~TemplateProvider();
-
-            Holder const& get() const { return m_aProvider; }
-            IRefCountedTemplateProvider* getBodyPtr()   const { return m_aProvider.getBodyPtr(); }
-            IRefCountedTemplateProvider& getBody()      const { return m_aProvider.getBody(); }
-            IRefCountedTemplateProvider* operator->()   const { return m_aProvider.operator->(); }
-            IRefCountedTemplateProvider& operator*()    const { return m_aProvider.operator *(); }
-        };
 //-----------------------------------------------------------------------------
         /// provides information about a <type>Node</type> that is a element of a Container ("set").
         class ElementTree
@@ -162,7 +143,7 @@ namespace configmgr
             TemplateHolder  m_aTemplate;
         public:
             explicit SetElementInfo(TemplateHolder const& aTemplate);
-            explicit SetElementInfo(UnoType const& aElementType);
+            //explicit SetElementInfo(UnoType const& aElementType);
 
             TemplateHolder getTemplate() const;
 

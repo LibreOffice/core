@@ -2,9 +2,9 @@
  *
  *  $RCSfile: template.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dg $ $Date: 2000-11-10 22:45:40 $
+ *  last change: $Author: jb $ $Date: 2000-11-20 01:30:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,116 +60,42 @@
  ************************************************************************/
 
 #include "template.hxx"
+#include "templateimpl.hxx"
 
-#include <vos/refernce.hxx>
-#include <stl/map>
+#include "valuenode.hxx"
 
 namespace configmgr
 {
     namespace configuration
     {
 //-----------------------------------------------------------------------------
+// class TemplateProvider
+//-----------------------------------------------------------------------------
 
-        class Name;
-        class AbsolutePath;
-        //---------------------------------------------------------------------
-
-        typedef com::sun::star::uno::Type       UnoType;
-        typedef com::sun::star::uno::Any        UnoAny;
+TemplateProvider::TemplateProvider()
+: m_aImpl()
+{
+}
 
 //-----------------------------------------------------------------------------
-class TemplateHelper
+TemplateProvider::TemplateProvider(ITemplateProvider& rProvider)
+: m_aImpl(new TemplateProvider_Impl(&rProvider))
 {
-public:
-    //-----------------------------------------------------------------------------
-    static Name makeSimpleTypeName(UnoType const& aType)
-    {
-        OUString aTypeName = OUString(RTL_CONSTASCII_USTRINGPARAM("uno:")).concat(aType.getTypeName());
-        return Name(aTypeName, Name::NoValidate());
-    }
-    //-----------------------------------------------------------------------------
-    static Name makeSimpleTypeModuleName()
-    {
-        OUString aModuleName = OUString(RTL_CONSTASCII_USTRINGPARAM("cfg:native-types"));
-        return Name(aModuleName, Name::NoValidate());
-    }
-    //-----------------------------------------------------------------------------
+}
 
-    static UnoType getUnoInterfaceType()
-    {
-        uno::Reference<uno::XInterface> const * const p = 0;
-        return getCppuType(p);
-    }
-    //-----------------------------------------------------------------------------
-
-    struct Names
-    {
-        Name aName, aModule;
-
-        Names(UnoType const& aType)
-        : aName(makeSimpleTypeName(aType))
-        , aModule(makeSimpleTypeModuleName())
-        {}
-
-        Names(Name const& aName_)
-        : aName(aName_)
-        , aModule()
-        {}
-
-        Names(Name const& aName_, Name const& aModule_)
-        : aName(aName_)
-        , aModule(aModule_)
-        {}
-
-        Names(OUString const& sName_, OUString const& sModule_)
-        : aName(sName_, Name::NoValidate())
-        , aModule(sModule_, Name::NoValidate())
-        {}
-
-        bool operator<(Names const& aOther) const
-        {
-            return (aModule == aOther.aModule) ? (aName < aOther.aName) : (aModule < aOther.aModule);
-        }
-    };
-
-    typedef std::map<Names, TemplateHolder> Repository;
-    typedef Repository::value_type Entry;
-    //-----------------------------------------------------------------------------
-    static Repository& repository();
-
-    //-----------------------------------------------------------------------------
-    static TemplateHolder createNew(Name const& aName, Name const& aModule,UnoType const& aType)
-    {
-        return new Template(aName,aModule,aType);
-    }
-    //-----------------------------------------------------------------------------
-    static TemplateHolder createNew (Names const& aNames,UnoType const& aType)
-    {
-        return createNew(aNames.aName, aNames.aModule, aType);
-    }
-    //-----------------------------------------------------------------------------
-    static TemplateHolder findTemplate (Names const& aNames,UnoType const& aType);
-    //-----------------------------------------------------------------------------
-};
 //-----------------------------------------------------------------------------
-TemplateHolder TemplateHelper::findTemplate (Names const& aNames,UnoType const& aType)
+TemplateProvider::TemplateProvider(TemplateProvider const& aOther)
+: m_aImpl(aOther.m_aImpl)
 {
-    Repository& rep = repository();
-
-    Repository::iterator it = rep.find(aNames);
-    if (it == rep.end())
-        it = rep.insert( Entry(aNames,createNew(aNames,aType)) ).first;
-
-    OSL_ENSURE(it->second->getInstanceType() == aType, "Inconsistent type found for Template");
-    return it->second;
 }
 //-----------------------------------------------------------------------------
-
-TemplateHelper::Repository& TemplateHelper::repository()
+TemplateProvider::~TemplateProvider()
 {
-    static Repository aTheRepository;
-    return aTheRepository;
 }
+
+
+//-----------------------------------------------------------------------------
+// class Template
 //-----------------------------------------------------------------------------
 
 Template::Template(Name const& aName, Name const& aModule,UnoType const& aType)
@@ -180,10 +106,25 @@ Template::Template(Name const& aName, Name const& aModule,UnoType const& aType)
 }
 //-----------------------------------------------------------------------------
 
+bool Template::isInstanceTypeKnown() const
+{
+    OSL_ASSERT( TemplateImplHelper::getNoTypeAvailable().getTypeClass() == uno::TypeClass_VOID );
+    return m_aInstanceType.getTypeClass() != uno::TypeClass_VOID;
+}
+//-----------------------------------------------------------------------------
+
 /// checks if this is a 'value' template
 bool Template::isInstanceValue() const
 {
+    OSL_ENSURE( isInstanceTypeKnown(), "Template instance type unknown - cannot determine kind");
     return m_aInstanceType.getTypeClass() != uno::TypeClass_INTERFACE;
+}
+//-----------------------------------------------------------------------------
+
+UnoType Template::getInstanceType() const
+{
+    OSL_ENSURE( isInstanceTypeKnown(), "Template instance type unknown - returning invalid (VOID) type");
+    return m_aInstanceType;
 }
 //-----------------------------------------------------------------------------
 
@@ -197,45 +138,37 @@ RelativePath Template::getPath() const
 }
 //-----------------------------------------------------------------------------
 
-TemplateHolder Template::fromPath(OUString const& sName)
+TemplateHolder Template::fromPath(OUString const& sName, TemplateProvider const& aProvider)
 {
-    Path::Components aPath = Path::parse(sName);
-    if (aPath.empty())
-        return 0;
-
-    TemplateHelper::Names aNames( aPath.back() );
-
-    switch(aPath.size())
-    {
-    case 1: break;
-    case 2: aNames.aModule = aPath.front(); break;
-
-    case 3: if (aPath[0].isEmpty())
-            {
-                aNames.aModule = aPath[1];
-                break;
-            }
-            // fall through
-    default:
-            OSL_ENSURE(false, "Invalid template path - too many components");
-            // hack - cram it all into the module part
-            aPath.pop_back();
-            aNames.aModule = Name( PathRep(aPath).toString(), Name::NoValidate() );
-            break;
-    }
-    return TemplateHelper::findTemplate(aNames, TemplateHelper::getUnoInterfaceType() );
+    TemplateName aNames( TemplateName::parseTemplatePath(sName) );
+    return TemplateImplHelper::findTemplate(aNames, aProvider );
 }
 //-----------------------------------------------------------------------------
-TemplateHolder locate(Name const& aName, Name const& aModule)
+TemplateHolder locate(Name const& aName, Name const& aModule, TemplateProvider const& aProvider)
 {
-    return TemplateHelper::findTemplate(TemplateHelper::Names(aName,aModule),
-                                        TemplateHelper::getUnoInterfaceType() );
+    TemplateName aNames(aName,aModule);
+    return TemplateImplHelper::findTemplate(aNames, aProvider );
 }
 //-----------------------------------------------------------------------------
 
-TemplateHolder makeSimpleTemplate(UnoType const& aType)
+TemplateHolder makeSimpleTemplate(UnoType const& aType, TemplateProvider const& aProvider)
 {
-    return TemplateHelper::findTemplate( TemplateHelper::Names(aType), aType);
+    TemplateName aNames(aType);
+    return TemplateImplHelper::makeTemplate( aNames, aProvider, aType);
+}
+//-----------------------------------------------------------------------------
+
+TemplateHolder makeTreeTemplate(OUString const& sName, TemplateProvider const& aProvider)
+{
+    TemplateName aNames( TemplateName::parseTemplatePath(sName) );
+    return TemplateImplHelper::makeTemplate( aNames,aProvider, TemplateImplHelper::getUnoInterfaceType());
+}
+//-----------------------------------------------------------------------------
+
+TemplateHolder makeSetElementTemplate(ISubtree const& aSet, TemplateProvider const& aProvider)
+{
+    TemplateName aNames( TemplateName::parseTemplatePath( aSet.getChildTemplateName() ) );
+    return TemplateImplHelper::makeElementTemplateWithType(aNames, aProvider, aSet);
 }
 //-----------------------------------------------------------------------------
     }

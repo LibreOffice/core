@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerimpl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-14 10:53:36 $
+ *  last change: $Author: jb $ $Date: 2000-11-20 01:30:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,25 +94,27 @@ namespace configmgr
 
     using configapi::NodeElement;
     using configuration::RootTree;
+    using configuration::TemplateProvider;
 
     namespace configapi
     {
+
         class ApiProviderInstances
         {
-            typedef configuration::TemplateProvider TemplateProvider;
             ObjectRegistryHolder    m_aObjectRegistry;
             ReadOnlyObjectFactory   m_aReaderFactory;
             UpdateObjectFactory     m_aWriterFactory;
             ApiProvider             m_aReaderProvider;
             ApiProvider             m_aWriterProvider;
-
+            TemplateProvider        m_aTemplateProvider;
         public:
-            ApiProviderInstances(OProviderImpl& rProviderImpl)
+            ApiProviderInstances(OProviderImpl& rProviderImpl, ITemplateProvider& rTemplateProvider)
             : m_aObjectRegistry(new ObjectRegistry())
             , m_aReaderFactory(m_aReaderProvider,m_aObjectRegistry)
             , m_aWriterFactory(m_aWriterProvider,m_aObjectRegistry)
             , m_aReaderProvider(m_aReaderFactory,rProviderImpl)
             , m_aWriterProvider(m_aWriterFactory,rProviderImpl)
+            , m_aTemplateProvider(rTemplateProvider)
             {
             }
 
@@ -123,6 +125,8 @@ namespace configmgr
             ApiProvider&    getWriterProvider() { return m_aWriterProvider; }
             Factory&        getReaderFactory()  { return m_aReaderFactory; }
             Factory&        getWriterFactory()  { return m_aWriterFactory; }
+            TemplateProvider& getTemplateProvider() { return m_aTemplateProvider; }
+
         };
     }
 
@@ -134,14 +138,17 @@ namespace configmgr
                                  IConfigSession* _pSession,
                                  Module& _rModule)
                   :m_pConfiguration(new TreeManager(_pSession, _rModule.getConverter()))
+                  ,m_pNewProviders(0)
                   ,m_aNotifier(m_pConfiguration)
                   ,m_pProvider(_pProvider)
                   ,m_xConverter(_rModule.getConverter())
-                  ,m_pNewProviders(new configapi::ApiProviderInstances(*this))
                   ,m_aOptions(_rModule.getOptions())
     {
         m_pConfiguration->acquire();
         m_pConfiguration->setOptions(m_aOptions);
+
+        // put out of line to get rid of the order dependency (and to have a acquired configuration)
+        m_pNewProviders = new configapi::ApiProviderInstances(*this,*m_pConfiguration);
     }
 
     //-----------------------------------------------------------------------------
@@ -157,11 +164,12 @@ namespace configmgr
     // access to the factory for writable elements
     configapi::Factory& OProviderImpl::getWriterFactory() {return m_pNewProviders->getWriterFactory();}
 
-    // ITemplateProvider
+    // TemplateProvider access
     //-----------------------------------------------------------------------------
-    ::std::auto_ptr<INode> OProviderImpl::createInstance(const ::rtl::OUString& _rTemplateName) throw (uno::Exception)
+
+    TemplateProvider  OProviderImpl::getTemplateProvider() const
     {
-        return m_pConfiguration->createInstance(_rTemplateName);
+        return m_pNewProviders->getTemplateProvider();
     }
 
     // ITreeProvider
@@ -270,7 +278,8 @@ namespace configmgr
         ::rtl::OUString sErrorMessage;
         try
         {
-            pTree = requestSubtree(_rAccessor,nMinLevels);
+            OSL_ASSERT(sal_Int16(nMinLevels) == nMinLevels);
+            pTree = requestSubtree(_rAccessor,sal_Int16(nMinLevels));
         }
         catch(container::NoSuchElementException&e)
         {
@@ -307,7 +316,7 @@ namespace configmgr
 
         RootTree aRootTree( createReadOnlyTree(
                 AbsolutePath(getBasePath(_rAccessor), Path::NoValidate()),
-                *pTree, nDepth
+                *pTree, nDepth, getTemplateProvider()
             ));
 
         return m_pNewProviders->getReaderFactory().makeAccessRoot(aRootTree);
@@ -325,7 +334,8 @@ namespace configmgr
         ::rtl::OUString sErrorMessage;
         try
         {
-            pTree = requestSubtree(_rAccessor, nMinLevels);
+            OSL_ASSERT(sal_Int16(nMinLevels) == nMinLevels);
+            pTree = requestSubtree(_rAccessor, sal_Int16(nMinLevels));
         }
         catch(container::NoSuchElementException&e)
         {
@@ -364,7 +374,7 @@ namespace configmgr
 
         RootTree aRootTree( createUpdatableTree(
                                 AbsolutePath(getBasePath(_rAccessor),Path::NoValidate()),
-                                *pTree, nDepth
+                                *pTree, nDepth, getTemplateProvider()
                             ));
 
         #if defined(DEBUG) || defined(_DEBUG)
@@ -483,7 +493,7 @@ namespace configmgr
                     throw   lang::IllegalArgumentException(
                                     (OUString(RTL_CONSTASCII_USTRINGPARAM("The argument ")) += aCurrent.Name) += OUString(RTL_CONSTASCII_USTRINGPARAM(" could not be extracted.")),
                                     uno::Reference<uno::XInterface>(),
-                                    i
+                                    sal_Int16(i)
                             );
 
                 bAnyPropValue = sal_True;

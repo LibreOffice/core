@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: jb $ $Date: 2000-11-07 14:35:59 $
+#   last change: $Author: jb $ $Date: 2000-11-20 01:30:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -88,6 +88,7 @@ SLOFILES=	\
         $(SLO)$/roottree.obj	\
         $(SLO)$/setnodeimpl.obj	\
         $(SLO)$/template.obj	\
+        $(SLO)$/templateimpl.obj	\
         $(SLO)$/treeimpl.obj	\
 
 

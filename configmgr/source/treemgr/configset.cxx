@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configset.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2000-11-14 10:27:37 $
+ *  last change: $Author: jb $ $Date: 2000-11-20 01:30:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,9 +66,11 @@
 #include "nodechangeimpl.hxx"
 #include "treeimpl.hxx"
 #include "template.hxx"
+#include "templateimpl.hxx"
 #include "configgroup.hxx"
 
-#include "cmtreemodel.hxx" // grr, need this only for IRefCountedTemplateProvider ref counting (and the ValueNode stuff)
+#include "valuenode.hxx"
+#include <vos/refernce.hxx>
 
 namespace configmgr
 {
@@ -200,13 +202,13 @@ SetElementInfo::SetElementInfo(TemplateHolder const& aTemplate)
         throw configuration::Exception("Creating element info without template information");
 }
 //-----------------------------------------------------------------------------
-SetElementInfo::SetElementInfo(UnoType const& aElementType)
+/*SetElementInfo::SetElementInfo(UnoType const& aElementType)
 : m_aTemplate( makeSimpleTemplate(aElementType))
 {
     OSL_ENSURE(m_aTemplate.isValid(), "ERROR: Configuration: Cannot create template wrapper for simple type");
     if (!m_aTemplate.isValid())
         throw configuration::Exception("Cannot create template wrapper for simple type");
-}
+}*/
 //-----------------------------------------------------------------------------
 
 TemplateHolder SetElementInfo::getTemplate() const
@@ -256,36 +258,13 @@ TemplateHolder SetElementInfo::extractElementInfo(Tree const& aTree, NodeRef con
 }
 
 //-----------------------------------------------------------------------------
-// class TemplateProvider
-//-----------------------------------------------------------------------------
-
-TemplateProvider::TemplateProvider(IRefCountedTemplateProvider* pProvider)
-: m_aProvider(pProvider)
-{
-}
-//-----------------------------------------------------------------------------
-TemplateProvider::TemplateProvider(Holder const& aProvider)
-: m_aProvider(aProvider)
-{
-}
-//-----------------------------------------------------------------------------
-TemplateProvider::TemplateProvider(TemplateProvider const& aOther)
-: m_aProvider(aOther.m_aProvider)
-{
-}
-//-----------------------------------------------------------------------------
-TemplateProvider::~TemplateProvider()
-{
-}
-
-//-----------------------------------------------------------------------------
 // class SetElementFactory
 //-----------------------------------------------------------------------------
 
 SetElementFactory::SetElementFactory(TemplateProvider const& aProvider)
 : m_aProvider(aProvider)
 {
-    OSL_ENSURE(aProvider.get().isValid(), "WARNING: Template Instance Factory created without template provider - cannot instantiate elements");
+    OSL_ENSURE(aProvider.m_aImpl.isValid(), "WARNING: Template Instance Factory created without template provider - cannot instantiate elements");
 }
 //-----------------------------------------------------------------------------
 
@@ -309,13 +288,18 @@ SetElementFactory::~SetElementFactory()
 
 ElementTree SetElementFactory::instantiateTemplate(TemplateHolder const& aTemplate)
 {
-    OSL_ENSURE(m_aProvider.get().isValid(), "ERROR: Template Instance Factory has no template provider - cannot instantiate element");
+    OSL_ENSURE(m_aProvider.m_aImpl.isValid(), "ERROR: Template Instance Factory has no template provider - cannot instantiate element");
     OSL_ENSURE(aTemplate.isValid(), "ERROR: Template is NULL - cannot instantiate element");
 
-    if (!m_aProvider.get().isValid()) return (ElementTree) 0;
-    if (!aTemplate.isValid()) return (ElementTree) 0;
+    if (!m_aProvider.m_aImpl.isValid()) return ElementTree( 0 );
+    if (!aTemplate.isValid()) return ElementTree( 0 );
 
-    ElementTree aRet( new ElementTreeImpl( aTemplate, m_aProvider.getBodyPtr() ) );
+    std::auto_ptr<INode> aInstanceNode( m_aProvider.m_aImpl->instantiate(aTemplate) );
+    OSL_ENSURE(aInstanceNode.get(), "ERROR: Cannot create Element Instance: Provider could not instantiate template");
+
+    if (!aInstanceNode.get()) return ElementTree( 0 );
+
+    ElementTree aRet( new ElementTreeImpl( aInstanceNode, aTemplate, m_aProvider ) );
 
     return aRet;
 }
@@ -327,9 +311,9 @@ ElementTree SetElementFactory::instantiateOnDefault(std::auto_ptr<INode> aTree, 
     OSL_ENSURE(aTree.get(), "ERROR: Tree is NULL - cannot instantiate element");
     OSL_ENSURE(aDummyTemplate.isValid(), "ERROR: Template is NULL - cannot instantiate element");
 
-    if (!aTree.get()) return (ElementTree) 0;
+    if (!aTree.get()) return ElementTree( 0 );
 
-    ElementTreeImpl* pNewTree = new ElementTreeImpl( NodeType::getDeferredChangeFactory(),*aTree, ~0u, aDummyTemplate );
+    ElementTreeImpl* pNewTree = new ElementTreeImpl( NodeType::getDeferredChangeFactory(),*aTree, c_TreeDepthAll, aDummyTemplate, m_aProvider );
     pNewTree->takeNodeFrom(aTree);
 
     return ElementTree( pNewTree );
@@ -353,7 +337,7 @@ ElementTreeHolder ValueSetUpdater::makeValueElement(Name const& aName, UnoAny co
     else
         pNode.reset( new ValueNode(aName.toString(),aType) );
 
-    return new ElementTreeImpl(m_aTemplate, pNode);
+    return new ElementTreeImpl(pNode, m_aTemplate, TemplateProvider() );
 }
 //-----------------------------------------------------------------------------
 

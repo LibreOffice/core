@@ -2,9 +2,9 @@
  *
  *  $RCSfile: template.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dg $ $Date: 2000-11-10 22:41:30 $
+ *  last change: $Author: jb $ $Date: 2000-11-20 01:30:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,10 @@
 
 namespace configmgr
 {
+//-----------------------------------------------------------------------------
+    class ITemplateProvider;
+    class ISubtree;
+//-----------------------------------------------------------------------------
     namespace configuration
     {
 //-----------------------------------------------------------------------------
@@ -82,6 +86,24 @@ namespace configmgr
         typedef com::sun::star::uno::Any        UnoAny;
 
 //-----------------------------------------------------------------------------
+
+        struct TemplateProvider_Impl;
+        class TemplateProvider
+        {
+            friend class SetElementFactory;
+            friend class TemplateImplHelper;
+            vos::ORef<TemplateProvider_Impl>  m_aImpl;
+        public:
+            TemplateProvider(); // creates an empty (invalid) template provider
+            explicit
+            TemplateProvider(ITemplateProvider& pProvider);
+            TemplateProvider(TemplateProvider const& aOther);
+            ~TemplateProvider();
+
+            bool isValid() const { return !!m_aImpl.isValid(); }
+        };
+//-----------------------------------------------------------------------------
+
         class Template;
         typedef vos::ORef<Template> TemplateHolder;
 
@@ -95,11 +117,14 @@ namespace configmgr
             explicit Template(Name const& aName, Name const& aModule,UnoType const& aType);
 
         public:
-        /// checks if this is a 'value' template
+        /// checks if the type of an instance of this is known
+            bool            isInstanceTypeKnown() const;
+
+        /// checks if this is a 'value' template <p> PRE: the instance type is known </p>
             bool            isInstanceValue() const;
 
-        /// get the UNO type for instances (primarily (only ?) for 'value' templates)
-            UnoType         getInstanceType() const { return m_aInstanceType; }
+        /// get the UNO type for instances (primarily (only ?) for 'value' templates) <p> PRE: the instance type is known </p>
+            UnoType         getInstanceType() const;
 
         /// get the path where the template is located
             RelativePath    getPath() const;
@@ -110,15 +135,20 @@ namespace configmgr
         /// get the package name of the template
             Name            getPackage() const { return m_aModule; }
 
-            static TemplateHolder fromPath(OUString const& sName);
-            static TemplateHolder locate(Name const& aName, Name const& aModule);
+        /// find the template for the given path (instance type may be unknown)
+            static TemplateHolder fromPath(OUString const& sName, TemplateProvider const& aProvider);
 
-            friend class TemplateHelper;
+            friend class TemplateImplHelper;
         };
 
-        TemplateHolder makeSimpleTemplate(UnoType const& aType);
+        /// make a template instance that matches the given (simple) type
+        TemplateHolder makeSimpleTemplate(UnoType const& aType, TemplateProvider const& aProvider);
+        /// make a template instance that matches the given path. Assume that it represents a (complex) tree structure.
+        TemplateHolder makeTreeTemplate(OUString const& sPath, TemplateProvider const& aProvider);
+        /// make a template instance that matches the elements of the given set. Ensures that the element type is known
+        TemplateHolder makeSetElementTemplate(ISubtree const& aSet, TemplateProvider const& aProvider);
 //-----------------------------------------------------------------------------
     }
 }
 
-#endif // CONFIGMGR_CONFIGSET_HXX_
+#endif // CONFIGMGR_CONFIGTEMPLATE_HXX_
