@@ -2,9 +2,9 @@
 *
 *  $RCSfile: layerwriter.cxx,v $
 *
-*  $Revision: 1.8 $
+*  $Revision: 1.9 $
 *
-*  last change: $Author: hr $ $Date: 2003-03-19 16:19:58 $
+*  last change: $Author: rt $ $Date: 2003-04-17 13:35:08 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -68,6 +68,10 @@
 #ifndef CONFIGMGR_XML_VALUEFORMATTER_HXX
 #include "valueformatter.hxx"
 #endif
+
+#ifndef _COM_SUN_STAR_BEANS_ILLEGALTYPEEXCEPTION_HPP_
+#include <com/sun/star/beans/IllegalTypeException.hpp>
+#endif
 // -----------------------------------------------------------------------------
 
 namespace configmgr
@@ -125,7 +129,8 @@ namespace configmgr
         // -----------------------------------------------------------------------------
 
         void SAL_CALL LayerWriter::startLayer(  )
-            throw (backenduno::MalformedDataException, uno::RuntimeException)
+            throw (backenduno::MalformedDataException, lang::WrappedTargetException,
+                   uno::RuntimeException)
         {
             m_aFormatter.reset();
             m_bInProperty = false;
@@ -136,7 +141,8 @@ namespace configmgr
         // -----------------------------------------------------------------------------
 
         void SAL_CALL LayerWriter::endLayer(  )
-            throw (backenduno::MalformedDataException, lang::IllegalAccessException, uno::RuntimeException)
+            throw (backenduno::MalformedDataException, lang::WrappedTargetException,
+                   uno::RuntimeException)
         {
             checkInElement(false);
             if (!m_bStartedDocument)
@@ -153,8 +159,9 @@ namespace configmgr
         }
         // -----------------------------------------------------------------------------
 
-        void SAL_CALL LayerWriter::overrideNode( const OUString& aName, sal_Int16 aAttributes )
-            throw (backenduno::MalformedDataException, container::NoSuchElementException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException)
+        void SAL_CALL LayerWriter::overrideNode( const OUString& aName, sal_Int16 aAttributes, sal_Bool bClear )
+            throw (backenduno::MalformedDataException, lang::WrappedTargetException,
+                   uno::RuntimeException)
         {
 
             if (!m_bStartedDocument)
@@ -164,7 +171,7 @@ namespace configmgr
             }
             ElementInfo aInfo(aName, this->isInElement() ? ElementType::node : ElementType::layer);
             aInfo.flags = aAttributes;
-            aInfo.op = Operation::modify;
+            aInfo.op = bClear ? Operation::clear : Operation::modify;
 
             m_aFormatter.prepareElement(aInfo);
 
@@ -173,7 +180,8 @@ namespace configmgr
         // -----------------------------------------------------------------------------
 
         void SAL_CALL LayerWriter::addOrReplaceNode( const OUString& aName, sal_Int16 aAttributes )
-            throw (backenduno::MalformedDataException, container::NoSuchElementException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException)
+            throw (backenduno::MalformedDataException, lang::WrappedTargetException,
+                   uno::RuntimeException)
         {
             checkInElement(true);
 
@@ -188,7 +196,8 @@ namespace configmgr
         // -----------------------------------------------------------------------------
 
         void SAL_CALL LayerWriter::addOrReplaceNodeFromTemplate( const OUString& aName, const backenduno::TemplateIdentifier& aTemplate, sal_Int16 aAttributes )
-            throw (backenduno::MalformedDataException, container::NoSuchElementException, beans::IllegalTypeException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException)
+            throw (backenduno::MalformedDataException, lang::WrappedTargetException,
+                   uno::RuntimeException)
         {
             checkInElement(true);
 
@@ -204,7 +213,8 @@ namespace configmgr
         // -----------------------------------------------------------------------------
 
         void SAL_CALL LayerWriter::endNode(  )
-            throw (backenduno::MalformedDataException, uno::RuntimeException)
+            throw (backenduno::MalformedDataException, lang::WrappedTargetException,
+                   uno::RuntimeException)
         {
             checkInElement(true);
             this->endElement();
@@ -212,7 +222,8 @@ namespace configmgr
         // -----------------------------------------------------------------------------
 
         void SAL_CALL LayerWriter::dropNode( const OUString& aName )
-            throw (backenduno::MalformedDataException, container::NoSuchElementException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException)
+            throw (backenduno::MalformedDataException, lang::WrappedTargetException,
+                   uno::RuntimeException)
         {
             checkInElement(true);
 
@@ -228,7 +239,8 @@ namespace configmgr
         // -----------------------------------------------------------------------------
 
         void SAL_CALL LayerWriter::addProperty( const OUString& aName, sal_Int16 aAttributes, const uno::Type& aType )
-            throw (backenduno::MalformedDataException, beans::PropertyExistException, beans::IllegalTypeException, lang::IllegalArgumentException, uno::RuntimeException)
+            throw (backenduno::MalformedDataException, lang::WrappedTargetException,
+                   uno::RuntimeException)
         {
             checkInElement(true);
 
@@ -245,7 +257,8 @@ namespace configmgr
         // -----------------------------------------------------------------------------
 
         void SAL_CALL LayerWriter::addPropertyWithValue( const OUString& aName, sal_Int16 aAttributes, const uno::Any& aValue )
-            throw (backenduno::MalformedDataException, beans::PropertyExistException, beans::IllegalTypeException, lang::IllegalArgumentException, uno::RuntimeException)
+            throw (backenduno::MalformedDataException, lang::WrappedTargetException,
+                   uno::RuntimeException)
         {
             checkInElement(true);
 
@@ -261,14 +274,15 @@ namespace configmgr
         }
         // -----------------------------------------------------------------------------
 
-        void SAL_CALL LayerWriter::overrideProperty( const OUString& aName, sal_Int16 aAttributes, const uno::Type& aType )
-            throw (backenduno::MalformedDataException, beans::UnknownPropertyException, beans::IllegalTypeException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException)
+        void SAL_CALL LayerWriter::overrideProperty( const OUString& aName, sal_Int16 aAttributes, const uno::Type& aType, sal_Bool bClear )
+            throw (backenduno::MalformedDataException, lang::WrappedTargetException,
+                   uno::RuntimeException)
         {
             checkInElement(true);
 
             ElementInfo aInfo(aName, ElementType::property);
             aInfo.flags = aAttributes;
-            aInfo.op = Operation::modify;
+            aInfo.op = bClear ? Operation::modify : Operation::modify;
 
             m_aFormatter.prepareElement(aInfo);
 
@@ -277,7 +291,8 @@ namespace configmgr
         // -----------------------------------------------------------------------------
 
         void SAL_CALL LayerWriter::endProperty(  )
-            throw (backenduno::MalformedDataException, uno::RuntimeException)
+            throw (backenduno::MalformedDataException, lang::WrappedTargetException,
+                   uno::RuntimeException)
         {
             checkInElement(true,true);
             this->endElement();
@@ -285,7 +300,8 @@ namespace configmgr
         // -----------------------------------------------------------------------------
 
         void SAL_CALL LayerWriter::setPropertyValue( const uno::Any& aValue )
-            throw (backenduno::MalformedDataException, beans::IllegalTypeException, lang::IllegalArgumentException, uno::RuntimeException)
+            throw (backenduno::MalformedDataException, lang::WrappedTargetException,
+                   uno::RuntimeException)
         {
             checkInElement(true,true);
             this->writeValue(aValue);
@@ -293,7 +309,8 @@ namespace configmgr
         // -----------------------------------------------------------------------------
 
         void SAL_CALL LayerWriter::setPropertyValueForLocale( const uno::Any& aValue, const OUString& aLocale )
-            throw (backenduno::MalformedDataException, beans::IllegalTypeException, lang::IllegalArgumentException, uno::RuntimeException)
+            throw (backenduno::MalformedDataException, lang::WrappedTargetException,
+                   uno::RuntimeException)
         {
             checkInElement(true,true);
             this->writeValue(aValue,aLocale);
@@ -305,7 +322,7 @@ namespace configmgr
             OSL_ASSERT(pMsg);
             OUString sMsg = OUString::createFromAscii(pMsg);
 
-            throw backenduno::MalformedDataException( sMsg, *this );
+            throw backenduno::MalformedDataException( sMsg, *this, uno::Any() );
         }
         // -----------------------------------------------------------------------------
 
@@ -314,7 +331,8 @@ namespace configmgr
             OSL_ASSERT(pMsg);
             OUString sMsg = OUString::createFromAscii(pMsg);
 
-            throw beans::IllegalTypeException( sMsg, *this );
+            com::sun::star::beans::IllegalTypeException e( sMsg, *this );
+            throw backenduno::MalformedDataException( sMsg, *this, uno::makeAny(e) );
         }
         // -----------------------------------------------------------------------------
 
