@@ -2,9 +2,9 @@
 #
 #   $RCSfile: wnt.mk,v $
 #
-#   $Revision: 1.54 $
+#   $Revision: 1.55 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 14:48:23 $
+#   last change: $Author: hjs $ $Date: 2003-09-19 13:39:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -294,7 +294,7 @@ LINK=$(WRAPCMD) link $(NOLOGO) /MACHINE:IX86
 
 .IF "$(PRODUCT)"!="full"
 .ELSE
-LINKFLAGS=/MAP /NODEFAULTLIB /OPT:NOREF
+LINKFLAGS=/MAP /OPT:NOREF
 .ENDIF
 
 .IF "$(linkinc)" != ""
@@ -303,6 +303,8 @@ MAPFILE=
 .ELSE
 .IF "$(PRODUCT)"!="full"
 LINKFLAGS+= /NODEFAULTLIB /DEBUG:full /DEBUGTYPE:cv
+.ELSE
+LINKFLAGS+= /NODEFAULTLIB /RELEASE /DEBUG:notmapped,full
 .ENDIF
 MAPFILE=-out:$$@
 .ENDIF
