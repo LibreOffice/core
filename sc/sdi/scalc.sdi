@@ -3633,7 +3633,7 @@ SfxUInt16Item InsertCtrl SID_TBXCTL_INSERT
 
 //--------------------------------------------------------------------------
 SfxVoidItem InsertExternalDataSource SID_EXTERNAL_SOURCE
-()
+( SfxStringItem FileName SID_FILE_NAME, SfxStringItem FilterName SID_FILTER_NAME, SfxStringItem Options SID_FILE_FILTEROPTIONS, SfxStringItem Source FN_PARAM_1, SfxUInt32Item Refresh FN_PARAM_2 )
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -7129,8 +7129,8 @@ SvxVerJustifyItem VerticalAlignment SID_V_ALIGNCELL
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem ViewInputLineOnOff FID_TOGGLEINPUTLINE
-(SfxBoolItem Mode FID_TOGGLEINPUTLINE)
+SfxBoolItem InputLineVisible FID_TOGGLEINPUTLINE
+
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -7154,8 +7154,8 @@ SfxVoidItem ViewInputLineOnOff FID_TOGGLEINPUTLINE
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem ViewRowColumnHeadersOnOff FID_TOGGLEHEADERS
-(SfxBoolItem Mode FID_TOGGLEHEADERS)
+SfxBoolItem ViewRowColumnHeaders FID_TOGGLEHEADERS
+
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -7179,8 +7179,8 @@ SfxVoidItem ViewRowColumnHeadersOnOff FID_TOGGLEHEADERS
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem ViewValueHighlightingOnOff FID_TOGGLESYNTAX
-(SfxBoolItem Mode FID_TOGGLESYNTAX)
+SfxBoolItem ViewValueHighlighting FID_TOGGLESYNTAX
+
 [
     /* flags: */
     AutoUpdate = FALSE,
