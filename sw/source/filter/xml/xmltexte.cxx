@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexte.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-21 13:38:46 $
+ *  last change: $Author: mib $ $Date: 2001-04-11 14:45:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -289,6 +289,7 @@ void SwXMLTextParagraphExport::getTextEmbeddedObjectProperties(
     rURL += rOLEObj.GetName();
     SvInfoObject *pInfo =
         pOLENd->GetDoc()->GetPersist()->Find( rOLEObj.GetName() );
+    DBG_ASSERT( pInfo, "no info object for OLE object found" );
     if( pInfo )
     {
         SvGlobalName aClassName( pInfo->GetClassName() );
@@ -414,7 +415,10 @@ void SwXMLTextParagraphExport::_collectTextEmbeddedAutoStyles(
     SvPersist *pPersist = pOLENd->GetDoc()->GetPersist();
     ASSERT( pPersist, "no persist" );
     const SvInfoObject *pInfo = pPersist->Find( rOLEObj.GetName() );
-    ASSERT( pInfo, "no info" );
+    DBG_ASSERT( pInfo, "no info object for OLE object found" );
+
+    if( !pInfo )
+        return;
 
     const XMLPropertyState *aStates[6] = { 0, 0, 0, 0, 0, 0 };
     SvGlobalName aClassId( pInfo->GetClassName() );
@@ -451,7 +455,10 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
     SwOLEObj& rOLEObj = pOLENd->GetOLEObj();
     SvPersist *pPersist = pOLENd->GetDoc()->GetPersist();
     const SvInfoObject *pInfo = pPersist->Find( rOLEObj.GetName() );
-    ASSERT( pInfo, "no info" );
+    DBG_ASSERT( pInfo, "no info object for OLE object found" );
+
+    if( !pInfo )
+        return;
 
     SvGlobalName aClassId( pInfo->GetClassName() );
 
