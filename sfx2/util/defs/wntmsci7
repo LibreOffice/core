@@ -8750,7 +8750,7 @@ threadFunc
 ?reset@?$auto_ptr@VString@@@_STL@@QAEXPAVString@@@Z
 ?lcl_translateBasic2Uno@?%O:\SRX643\src\sfx2\source\doc\objmisc.cxx21276391@@YAXABVSbxVariableRef@@PAX@Z
 ?GetType@SfxImageManager@@QBEGXZ
-?lcl_translateBasIc2Uno@?%O:\SRX643\src\sfx2\source\doc\objmisc.cxx2374022638@@YAXABVSbxVariableRef@@PAX@Z
+?lcl_translateBasic2Uno@?%O:\SRX643\src\sfx2\source\doc\objmisc.cxx2374022638@@YAXABVSbxVariableRef@@PAX@Z
 ??1?$WeakImplHelper3@VXSynchronousFrameLoader@frame@star@sun@com@@VXExtendedFilterDetection@document@345@VXServiceInfo@lang@345@@cppu@@UAE@XZ
 ?acquire@?$WeakImplHelper3@VXSynchronousFrameLoader@frame@star@sun@com@@VXExtendedFilterDetection@document@345@VXServiceInfo@lang@345@@cppu@@UAAXXZ
 ?acquire@?$WeakImplHelper3@VXSynchronousFrameLoader@frame@star@sun@com@@VXExtendedFilterDetection@document@345@VXServiceInfo@lang@345@@cppu@@WBA@AAXXZ
