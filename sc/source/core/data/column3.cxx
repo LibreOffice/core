@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column3.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:20:51 $
+ *  last change: $Author: kz $ $Date: 2004-09-07 10:39:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1167,21 +1167,23 @@ void ScColumn::StartAllListeners()
 }
 
 
-void ScColumn::StartNameListeners( BOOL bOnlyRelNames )
+void ScColumn::StartNeededListeners()
 {
     if (pItems)
     {
-        USHORT nNameListening = (bOnlyRelNames ? SC_LISTENING_NAMES_REL :
-            SC_LISTENING_NAMES_REL | SC_LISTENING_NAMES_ABS);
         for (SCSIZE i = 0; i < nCount; i++)
         {
             ScBaseCell* pCell = pItems[i].pCell;
             if ( pCell->GetCellType() == CELLTYPE_FORMULA )
             {
-                SCROW nRow = pItems[i].nRow;
-                ((ScFormulaCell*)pCell)->StartListeningTo( pDocument, nNameListening );
-                if ( nRow != pItems[i].nRow )
-                    Search( nRow, i );      // Listener eingefuegt?
+                ScFormulaCell* pFCell = static_cast<ScFormulaCell*>(pCell);
+                if (pFCell->NeedsListening())
+                {
+                    SCROW nRow = pItems[i].nRow;
+                    pFCell->StartListeningTo( pDocument );
+                    if ( nRow != pItems[i].nRow )
+                        Search( nRow, i );      // Listener eingefuegt?
+                }
             }
         }
     }
