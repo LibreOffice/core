@@ -2,9 +2,9 @@
  *
  *  $RCSfile: structpg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 08:03:05 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 13:33:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,23 +177,6 @@ void ScStructPage::ClearStruct()
     aTlbStruct.SetActiveFlag(FALSE);
     aTlbStruct.Clear();
 }
-
-SvLBoxEntry* ScStructPage::InsertEntryWithError(USHORT nError,SvLBoxEntry* pParent,ULONG nPos)
-{
-
-    SvLBoxEntry* pEntry = NULL;
-    switch( nError )
-    {
-        case STRUCT_ERR_C1:
-            pEntry = InsertEntry( STR_STRUCT_ERR1, pParent, STRUCT_ERROR, nPos );
-        break;
-        case STRUCT_ERR_C2:
-            pEntry = InsertEntry( STR_STRUCT_ERR2, pParent, STRUCT_ERROR, nPos );
-        break;
-    }
-    return pEntry;
-}
-
 
 SvLBoxEntry* ScStructPage::InsertEntry( const XubString& rText, SvLBoxEntry* pParent,
                                        USHORT nFlag,ULONG nPos,ScToken* pScToken)
