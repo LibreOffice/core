@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexppr.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: dvo $ $Date: 2001-04-20 15:11:21 $
+ *  last change: $Author: sab $ $Date: 2001-06-07 09:43:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -499,9 +499,10 @@ void FilterPropertiesInfo_Impl::FillPropertyStateArray(
                 aValues = xMultiPropSet->getPropertyValues( aAPINames );
                 const Any *pValues = aValues.getConstArray();
                 pPropIter = aPropIters;
+                XMLPropertyState aNewProperty( -1 );
                 for( i = 0; i < nValueCount; i++ )
                 {
-                    XMLPropertyState aNewProperty( -1 );
+                    aNewProperty.mnIndex = -1;
                     aNewProperty.maValue = *pValues;
 
                     for( std::list<sal_uInt32>::iterator aIndexItr =
