@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menumanager.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cd $ $Date: 2001-05-03 08:06:26 $
+ *  last change: $Author: cd $ $Date: 2001-05-03 13:21:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -827,8 +827,10 @@ IMPL_LINK( MenuManager, Select, Menu *, pMenu )
         USHORT nCurItemId = pMenu->GetCurItemId();
         if ( pMenu->GetItemType( nCurItemId ) != MENUITEM_SEPARATOR )
         {
-            if ( m_aMenuItemCommand == aSpecialWindowMenu )
+            if ( nCurItemId >= START_ITEMID_WINDOWLIST &&
+                 nCurItemId <= END_ITEMID_WINDOWLIST )
             {
+                // window list menu item selected
                 UNLOCK_MUTEX( aGuard, m_aMutex )
 
                 Reference< XTasksSupplier > xDesktop( ::comphelper::getProcessServiceFactory()->createInstance(
@@ -867,8 +869,10 @@ IMPL_LINK( MenuManager, Select, Menu *, pMenu )
                     aTargetURL.Complete = pMenuItemHandler->aMenuItemURL;
                     xTrans->parseStrict( aTargetURL );
 
-                    if ( m_aMenuItemCommand == aSpecialFileMenu )
+                    if ( nCurItemId >= START_ITEMID_PICKLIST &&
+                         nCurItemId <  START_ITEMID_WINDOWLIST )
                     {
+                        // picklist menu item selected
                         Sequence<PropertyValue> aArgs;
                         CreatePicklistArguments( aArgs, pMenuItemHandler );
                         pMenuItemHandler->xMenuItemDispatch->dispatch( aTargetURL, aArgs );
