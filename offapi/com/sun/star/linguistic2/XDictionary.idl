@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDictionary.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:27 $
+ *  last change: $Author: arellano $ $Date: 2001-04-04 15:49:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,11 +95,11 @@ module com { module sun { module star { module linguistic2 {
     for that purpose.
     The entries of a active positive dictionary are words that are
     required to be recognized as correct during the spellchecking
-    process. Additionally they will be used for hyphenation.
+    process. Additionally, they will be used for hyphenation.
     Entries of a negative dictionary are required to be recognized
-    as negative words (i.e. words that should not be used) during
-    spellcheck. An entry of a negative dictionary may supply a
-    proposal for a word to be used instead of used one.</P>
+    as negative words, for example, words that should not be used, during
+    spellcheck. An entry in a negative dictionary may supply a
+    proposal for a word to be used instead of the one being used.</P>
 
     @see    com::sun::star::linguistic2::XDictionaryEvent
     @see    com::sun::star::container::XNamed
@@ -117,10 +117,10 @@ interface XDictionary : com::sun::star::container::XNamed
     com::sun::star::linguistic2::DictionaryType getDictionaryType();
 
     //-------------------------------------------------------------------------
-    /** specifies wether the dictionary should be used or not.
+    /** specifies whether the dictionary should be used or not.
 
-        @param  bAvtivate
-            <TRUE/> if the dictionary should be used, <FALSE/> else.
+        @param  bAcvtivate
+            <TRUE/> if the dictionary should be used, <FALSE/> otherwise.
     */
     void setActive( [in] boolean bActivate );
 
@@ -153,6 +153,8 @@ interface XDictionary : com::sun::star::container::XNamed
          @param aLocale
              the (new) language of the dictionary.
 
+    <!-- Dennis: Why is "new" in parens? -->
+
         @see    com::sun::star::lang::Locale
     */
     void setLocale( [in] com::sun::star::lang::Locale aLocale );
@@ -161,7 +163,7 @@ interface XDictionary : com::sun::star::container::XNamed
     /** searches for an entry that matches the given word.
 
         @returns
-            the reference to the entry found. If no entry was found
+            the reference to the entry found. If no entry was found,
             it is NULL.
 
         @param  aWord
@@ -174,17 +176,17 @@ interface XDictionary : com::sun::star::container::XNamed
     //-------------------------------------------------------------------------
     /** is used to add an entry to the dictionary.
 
-        <P>If an entry already exists the dictionary remains unchanged
+        <P>If an entry already exists, the dictionary remains unchanged
          and <FALSE/> will be returned.</P>
 
-        <P>In positive dictionaries only postiv entries
-        can be made, and in negativ ones only negativ entries.</P>
+        <P>In positive dictionaries only postive entries
+        can be made, and in negative ones only negative entries.</P>
 
         @param  xDicEntry
             the entry to be added.
 
         @returns
-            <TRUE/> if the entry was successfully added <FALSE/> else.
+            <TRUE/> if the entry was successfully added <FALSE/> otherwise.
 
          @see   add
         @see    remove
@@ -198,24 +200,24 @@ interface XDictionary : com::sun::star::container::XNamed
     //-------------------------------------------------------------------------
     /** is used to make an entry in the dictionary.
 
-        <P>If an entry already exists the dictionary remains unchanged
+        <P>If an entry already exists, the dictionary remains unchanged
          and <FALSE/> will be returned.</P>
 
-        <P>In positive dictionaries only postiv entries
-        can be made, and in negativ ones only negativ entries.</P>
+        <P>In positive dictionaries only postive entries
+        can be made, and in negative ones only negative entries.</P>
 
         @param  aWord
             the word to be added.
 
         @param  bIsNegative
-            specifies wether the entry will be a negative one or not.
+            specifies whether the entry will be a negative one or not.
 
         @param  aRplcText
-            in case of a negative entry this is the replacement text to
-            be used when replacing aWord. Otherwise it is undefined.
+            in the case of a negative entry, this is the replacement text to
+            be used when replacing aWord. Otherwise, it is undefined.
 
         @returns
-            <TRUE/> if the entry was successfully added <FALSE/> else.
+            <TRUE/> if the entry was successfully added, <FALSE/> otherwise.
 
          @see   addEntry
         @see    remove
@@ -246,7 +248,7 @@ interface XDictionary : com::sun::star::container::XNamed
     /**
         @returns
              <TRUE/> if the dictionary is full and no further
-            entry can be made, <FALSE/> else.
+            entry can be made, <FALSE/> otherwise.
 
          @see   addEntry
         @see    add
@@ -269,19 +271,21 @@ interface XDictionary : com::sun::star::container::XNamed
     void clear();
 
     //-------------------------------------------------------------------------
-    /** add an entry to the list of dictionary event listeners.
+    /** adds an entry to the list of dictionary event listeners.
 
-        <P>On dictionary events each entry in the listener list will
+        <P>On dictionary events, each entry in the listener list will
          be notified via a call to
          <member scope="com::sun::star::linguistic2">
          XDictionaryEventListener::processDictionaryEvent</member>.</P>
 
         @param  xListener
-            the entry to be made (i.e. the object that wants get notifications).
+            the entry to be made, that is, the object that wants notifications.
 
         @returns
-            <TRUE/> if the entry was successfully made, <FALSE/> else.
+            <TRUE/> if the entry was successfully made, <FALSE/> otherwise.
             If the object disposes it will always fail.
+
+      <!-- Dennis: Please reword the above sentence. Is "disposes" some kind of action? --> -->
 
         @see    removeDictionaryEventListener
          @see   com::sun::star::linguistic2::XDictionaryEventListener
@@ -290,13 +294,13 @@ interface XDictionary : com::sun::star::container::XNamed
         [in] com::sun::star::linguistic2::XDictionaryEventListener xListener );
 
     //-------------------------------------------------------------------------
-    /** remove an entry from the list of dictionary event listeners.
+    /** removes an entry from the list of dictionary event listeners.
 
         @param  xListener
             the reference to the listening object to be removed.
 
         @returns
-            <TRUE/> if the object to be removed was found (and removed),
+            <TRUE/> if the object to be removed was found and removed,
             <FALSE/> if the object was not found in the list.
 
         @see    addDictionaryEventListener
