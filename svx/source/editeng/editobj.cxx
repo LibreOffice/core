@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editobj.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mt $ $Date: 2001-03-02 16:31:50 $
+ *  last change: $Author: mt $ $Date: 2001-03-07 18:25:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1157,8 +1157,8 @@ void __EXPORT BinTextObject::StoreData( SvStream& rOStream ) const
         for ( USHORT nPara = 0; nPara < nParagraphs; nPara++ )
         {
             ContentInfo* pC = GetContents().GetObject( nPara );
-            USHORT nL = pC->GetText().Len();
-            rOStream.WriteNumber( nL );
+            ULONG nL = pC->GetText().Len();
+            rOStream << nL;
             rOStream.Write( pC->GetText().GetBuffer(), nL*sizeof(sal_Unicode) );
         }
     }
@@ -1296,8 +1296,8 @@ void __EXPORT BinTextObject::CreateData( SvStream& rIStream )
             for ( USHORT nPara = 0; nPara < nParagraphs; nPara++ )
             {
                 ContentInfo* pC = GetContents().GetObject( nPara );
-                USHORT nL;
-                rIStream.ReadNumber( nL );
+                ULONG nL;
+                rIStream >> nL;
                 pC->GetText().AllocBuffer( nL );
                 rIStream.Read( pC->GetText().GetBufferAccess(), nL*sizeof(sal_Unicode) );
                 pC->GetText().ReleaseBufferAccess( nL );
