@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: tv $ $Date: 2001-11-23 15:01:04 $
+ *  last change: $Author: va $ $Date: 2002-04-15 12:48:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,6 +242,84 @@ hidspecial HID { HelpID = HID_DLGFORM_OPTBACKGRAPHICTILED; };
 #define HID_DLGFORM_OPTBACKGRAPHICAREA  34445
 hidspecial HID { HelpID = HID_DLGFORM_OPTBACKGRAPHICAREA; };
 
+#define HID_DLGNEWSLTR_DIALOG                34500
+hidspecial HID { HelpID = HID_DLGNEWSLTR_DIALOG; };
+#define HID_DLGNEWSLTR_OPTSTANDARDLAYOUT     34501
+hidspecial HID { HelpID = HID_DLGNEWSLTR_OPTSTANDARDLAYOUT; };
+#define HID_DLGNEWSLTR_OPTPARTYLAYOUT     34502
+hidspecial HID { HelpID = HID_DLGNEWSLTR_OPTPARTYLAYOUT; };
+#define HID_DLGNEWSLTR_OPTBROCHURELAYOUT     34503
+hidspecial HID { HelpID = HID_DLGNEWSLTR_OPTBROCHURELAYOUT; };
+#define HID_DLGNEWSLTR_OPTSINGLESIDED     34504
+hidspecial HID { HelpID = HID_DLGNEWSLTR_OPTSINGLESIDED; };
+#define HID_DLGNEWSLTR_OPTDOUBLESIDED     34505
+hidspecial HID { HelpID = HID_DLGNEWSLTR_OPTDOUBLESIDED; };
+#define HID_DLGNEWSLTR_CMDGOON     34506
+hidspecial HID { HelpID = HID_DLGNEWSLTR_CMDGOON; };
+
+
+#define HID_DLGDEPOT_DIALOG_SELLBUY               34520
+hidspecial HID { HelpID = HID_DLGDEPOT_DIALOG_SELLBUY ; };
+#define HID_DLGDEPOT_0_TXTSTOCKID_SELLBUY         34521
+hidspecial HID { HelpID = HID_DLGDEPOT_0_TXTSTOCKID_SELLBUY ; };
+#define HID_DLGDEPOT_0_TXTQUANTITY                34522
+hidspecial HID { HelpID = HID_DLGDEPOT_0_TXTQUANTITY ; };
+#define HID_DLGDEPOT_0_TXTRATE                    34523
+hidspecial HID { HelpID = HID_DLGDEPOT_0_TXTRATE ; };
+#define HID_DLGDEPOT_0_TXTDATE                    34524
+hidspecial HID { HelpID = HID_DLGDEPOT_0_TXTDATE ; };
+#define HID_DLGDEPOT_0_TXTCOMMISSION              34525
+hidspecial HID { HelpID = HID_DLGDEPOT_0_TXTCOMMISSION ; };
+#define HID_DLGDEPOT_0_TXTFIX                     34526
+hidspecial HID { HelpID = HID_DLGDEPOT_0_TXTFIX ; };
+#define HID_DLGDEPOT_0_TXTMINIMUM                 34527
+hidspecial HID { HelpID = HID_DLGDEPOT_0_TXTMINIMUM ; };
+#define HID_DLGDEPOT_0_CMDCANCEL_SELLBUY          34528
+hidspecial HID { HelpID = HID_DLGDEPOT_0_CMDCANCEL_SELLBUY ; };
+#define HID_DLGDEPOT_0_CMDGOON_SELLBUY            34529
+hidspecial HID { HelpID = HID_DLGDEPOT_0_CMDGOON_SELLBUY ; };
+#define HID_DLGDEPOT_1_LSTSELLSTOCKS              34530
+hidspecial HID { HelpID = HID_DLGDEPOT_1_LSTSELLSTOCKS ; };
+#define HID_DLGDEPOT_2_LSTBUYSTOCKS               34531
+hidspecial HID { HelpID = HID_DLGDEPOT_2_LSTBUYSTOCKS ; };
+#define HID_DLGDEPOT_DIALOG_SPLIT                 34532
+hidspecial HID { HelpID = HID_DLGDEPOT_DIALOG_SPLIT ; };
+#define HID_DLGDEPOT_0_LSTSTOCKNAMES              34533
+hidspecial HID { HelpID = HID_DLGDEPOT_0_LSTSTOCKNAMES ; };
+#define HID_DLGDEPOT_0_TXTSTOCKID_SPLIT           34534
+hidspecial HID { HelpID = HID_DLGDEPOT_0_TXTSTOCKID_SPLIT ; };
+#define HID_DLGDEPOT_0_CMDCANCEL_SPLIT            34535
+hidspecial HID { HelpID = HID_DLGDEPOT_0_CMDCANCEL_SPLIT ; };
+#define HID_DLGDEPOT_0_CMDGOON_SPLIT              34536
+hidspecial HID { HelpID = HID_DLGDEPOT_0_CMDGOON_SPLIT ; };
+#define HID_DLGDEPOT_1_OPTPERSHARE                34537
+hidspecial HID { HelpID = HID_DLGDEPOT_1_OPTPERSHARE ; };
+#define HID_DLGDEPOT_1_OPTTOTAL                   34538
+hidspecial HID { HelpID = HID_DLGDEPOT_1_OPTTOTAL ; };
+#define HID_DLGDEPOT_1_TXTDIVIDEND                34539
+hidspecial HID { HelpID = HID_DLGDEPOT_1_TXTDIVIDEND ; };
+#define HID_DLGDEPOT_2_TXTOLDRATE                 34540
+hidspecial HID { HelpID = HID_DLGDEPOT_2_TXTOLDRATE ; };
+#define HID_DLGDEPOT_2_TXTNEWRATE                 34541
+hidspecial HID { HelpID = HID_DLGDEPOT_2_TXTNEWRATE ; };
+#define HID_DLGDEPOT_2_TXTDATE                    34542
+hidspecial HID { HelpID = HID_DLGDEPOT_2_TXTDATE ; };
+define HID_DLGDEPOT_3_TXTSTARTDATE                34543
+hidspecial HID { HelpID = HID_DLGDEPOT_3_TXTSTARTDATE ; };
+define HID_DLGDEPOT_3_TXTENDDATE                  34544
+hidspecial HID { HelpID = HID_DLGDEPOT_3_TXTENDDATE ; };
+define HID_DLGDEPOT_3_OPTDAILY                    34545
+hidspecial HID { HelpID = HID_DLGDEPOT_3_OPTDAILY ; };
+define HID_DLGDEPOT_3_OPTWEEKLY                   34546
+hidspecial HID { HelpID = HID_DLGDEPOT_3_OPTWEEKLY ; };
+#define HID_DLGDEPOT_DIALOG_HISTORY               34547
+hidspecial HID { HelpID = HID_DLGDEPOT_DIALOG_HISTORY ; };
+#define HID_DLGDEPOT_LSTMARKETS                   34548
+hidspecial HID { HelpID = HID_DLGDEPOT_LSTMARKETS ; };
+#define HID_DLGDEPOT_0_CMDCANCEL_HISTORY          34549
+hidspecial HID { HelpID = HID_DLGDEPOT_0_CMDCANCEL_HISTORY ; };
+#define HID_DLGDEPOT_0_CMDGOON_HISTORY            34550
+hidspecial HID { HelpID = HID_DLGDEPOT_0_CMDGOON_HISTORY ; };
 
 #define HID_DLGIMPORT_DIALOG                34570
 hidspecial HID { HelpID = HID_DLGIMPORT_DIALOG; };
@@ -302,8 +380,8 @@ hidspecial HID { HelpID = HID_DLGIMPORT_2_CMDTEMPLATEPATHSELECT2; };
 hidspecial HID { HelpID = HID_DLGIMPORT_2_CMDDOCUMENTPATHSELECT2; };
 
 
-#define HID_DLGIMPORT_0_CHWRITER        34596
-hidspecial HID { HelpID = HID_DLGIMPORT_0_CHWRITER; };
+#define HID_DLGIMPORT_0_CHKWRITER        34596
+hidspecial HID { HelpID = HID_DLGIMPORT_0_CHKWRITER; };
 #define HID_DLGIMPORT_0_CHKCALC     34597
 hidspecial HID { HelpID = HID_DLGIMPORT_0_CHKCALC; };
 #define HID_DLGIMPORT_0_CHKIMPRESS      34598
