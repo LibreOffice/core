@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basesh.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: os $ $Date: 2002-09-18 11:33:09 $
+ *  last change: $Author: os $ $Date: 2002-10-09 11:31:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1681,6 +1681,8 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                         break;
                         case FN_FRAME_WRAP_CONTOUR:
                             bDisable |= bHtmlMode;
+                            //no contour available whenn no wrap or wrap through is set
+                            bDisable |= (nSurround == SURROUND_NONE || nSurround == SURROUND_THROUGHT);
                             bSet = rWrap.IsContour();
                             if( !bDisable )
                             {
