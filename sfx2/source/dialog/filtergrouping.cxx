@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtergrouping.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 07:59:31 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 18:23:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1125,7 +1125,9 @@ namespace sfx2
         else
         {
             // Fallback solution just add both filter groups as single filters
-            for ( sal_Int32 n = 0; n < (sal_Int32)aImportantFilterGroup.size(); n++ )
+            sal_Int32 n;
+
+            for ( n = 0; n < (sal_Int32)aImportantFilterGroup.size(); n++ )
             {
                 try
                 {
