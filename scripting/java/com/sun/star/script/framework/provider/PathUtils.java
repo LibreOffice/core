@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PathUtils.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-19 08:23:04 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 14:01:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,6 @@ import com.sun.star.uno.XComponentContext;
 
 import com.sun.star.script.framework.log.LogUtils;
 
-import com.sun.star.script.framework.io.XStorageStreamHandler;
 
 import com.sun.star.util.XMacroExpander;
 import com.sun.star.uno.Type;
@@ -121,6 +120,20 @@ public class PathUtils {
         }
         return oid;
     }
+    static  public String make_url( String baseUrl, String url )
+    {
+        StringBuffer buff = new StringBuffer( baseUrl.length() + url.length() );        buff.append( baseUrl );
+        StringTokenizer t = new StringTokenizer( url, "/");
+        while ( t.hasMoreElements() )
+        {
+           if ( buff.charAt( buff.length() - 1 ) != '/' )
+           {
+               buff.append('/');
+           }
+           buff.append( java.net.URLEncoder.encode( (String)t.nextElement() ) );        }
+        return buff.toString();
+    }
+
     private PathUtils() {
     }
 }
