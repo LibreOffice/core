@@ -214,7 +214,7 @@ End Sub
 
 Sub ExecuteEditDebug()
         
-	locations = Array ( &quot;User&quot;, &quot;Share&quot; )
+	locations = Array ( &quot;User&quot;, &quot;Share&quot;, &quot;Document&quot;, &quot;Filesystem&quot; )
 	languages = Array ( &quot;BeanShell&quot;, &quot;Rhino&quot; )
 	dialogName = &quot;EditDebug&quot;
 
@@ -386,6 +386,9 @@ function GetDocumentType( bindingType as string ) as string
 	end if
 end function
 
+function lastIndexOf( targetStr as String, substr as String ) as Integer
+end function
+
 function getScriptURI( selectedScript as String ) as String
 	combo = bindingDialog.getControl( &quot;LocationCombo&quot; )
 	location = combo.text 
@@ -406,18 +409,11 @@ function getScriptURI( selectedScript as String ) as String
 		combo = bindingDialog.getControl( &quot;LanguageCombo&quot; )
 		language = combo.text
 		url = selectedscript
-		while instr( url, &quot;/&quot; ) &gt; 0
-			pos = instr( url, &quot;/&quot; )
-			locationpath = locationpath + mid( url, 1, pos )
-			url = mid( url, pos+1, len( url ) - pos )
-		wend
+		pos = lastIndexOf( url, &quot;/&quot; )
+        url = mid( url, pos+1, len( url ) - pos )
 		functionName = url
-		while instr( url, &quot;.&quot; ) &gt; 0
-			pos = instr( url, &quot;.&quot; )
-			logicalName = logicalName + mid( url, 1, pos )
-			url = mid( url, pos + 1, len( url ) - pos )
-		wend
-		logicalName = mid( logicalName, 1, len( logicalName ) - 1 )
+		pos = lastIndexOf( url, &quot;.&quot; )
+		logicalName = mid( url, 1, pos - 1 )
 		getScriptURI() = &quot;script://&quot; + logicalName + &quot;?language=&quot; _
 			+ language + &quot;&amp;amp;function=&quot; + functionName _
 			+ &quot;&amp;amp;location=filesystem:&quot; + locationPath
@@ -1045,10 +1041,8 @@ sub PopulateScriptList( lang as String, loc as String )
 		dim locnDisplayList( length ) as new com.sun.star.beans.PropertyValue
 		for index = lbound(filesysScripts()) to ubound(filesysScripts())
 			scriptextn = filesysScripts(n)
-			while instr( scriptextn, &quot;.&quot; ) &gt; 0
-				pos = instr( scriptextn, &quot;.&quot; )
-				scriptextn = mid( scriptextn, pos + 1, len( scriptextn ) - pos )
-			wend
+			pos = lastIndexOf( scriptextn, &quot;.&quot; )
+            scriptextn = mid( scriptextn, pos + 1, len( scriptextn ) - pos )
 			if ( detailedView ) and ( scriptextn = extn ) then
 				locnDisplayList( index ).Name = filesysScripts( index )
 				locnDisplayList( index ).Value = filesysScripts( index )
@@ -1061,8 +1055,12 @@ sub PopulateScriptList( lang as String, loc as String )
 		next index
 		ScriptDisplayList(0) = locnDisplayList()
 		scriptList.selectItemPos( 0, true )
+
+        REM !!!!At this point we exit the sub!!!!
 		exit sub			
+
 	endif
+
 	scriptStorageID = scriptstoragemgr.getScriptStorageID( scriptLocationURI )
 	if ( scriptStorageID &gt; -1 ) then
 		storage = scriptstoragemgr.getScriptStorage( scriptStorageID )
@@ -1571,8 +1569,6 @@ sub LangLocComboListener()
     if not (dialogName = &quot;EditDebug&quot;) then
         if scriptList.getSelectedItem() = &quot;&quot; then
             bindingDialog.Model.NewButton.enabled = false
-        else
-	    &apos;	bindingDialog.Model.NewButton.enabled = true
         end if
     end if
     
@@ -1671,25 +1667,13 @@ end sub
 
 REM ------ Event Handling Functions (Buttons) ------
 
-Sub DoNewAndEdit()
-    combo = bindingDialog.getControl( &quot;LanguageCombo&quot; ) 
-    language = combo.text
-    RunDebugger(language, &quot;&quot;, &quot;&quot;)
-    bindingDialog.endExecute()
-End Sub
-
-Sub DoBrowseAndEdit()
-    Dim oFilePicker As Object, oSimpleFileAccess As Object
-    Dim oSettings As Object, oPathSettings As Object
-    Dim sFileURL As String
-    Dim sFiles As Variant
-
-    bshfilter = &quot;BeanShell (*.bsh)&quot;
-    rhinofilter = &quot;Rhino (*.js)&quot;
-
+function getFilePicker() as Object
     REM file dialog
     oFilePicker = CreateUnoService( &quot;com.sun.star.ui.dialogs.FilePicker&quot; )
 
+    REM These need to be pulled from the registry in future
+    bshfilter = &quot;BeanShell (*.bsh)&quot;
+    rhinofilter = &quot;Rhino (*.js)&quot;
     oFilePicker.AppendFilter( bshfilter, &quot;*.bsh&quot; )
     oFilePicker.AppendFilter( rhinofilter, &quot;*.js&quot; )
 
@@ -1714,7 +1698,19 @@ Sub DoBrowseAndEdit()
     If oSimpleFileAccess.exists( sFileURL ) And oSimpleFileAccess.isFolder( sFileURL ) Then
         oFilePicker.setDisplayDirectory( sFileURL )
     End If
+    getFilePicker() = oFilePicker
+end function
 
+Sub DoBrowseAndEdit()
+    Dim oFilePicker As Object, oSimpleFileAccess As Object
+    Dim oSettings As Object, oPathSettings As Object
+    Dim sFileURL As String
+    Dim sFiles As Variant
+
+    bshfilter = &quot;BeanShell (*.bsh)&quot;
+    rhinofilter = &quot;Rhino (*.js)&quot;
+
+    oFilePicker = getFilePicker()
     REM execute file dialog
     If oFilePicker.execute() Then
         sFiles = oFilePicker.getFiles()
@@ -1848,27 +1844,7 @@ sub BrowseButton()
 	Dim sFileURL As String
 	Dim sFiles As Variant
 
-	oFilePicker = CreateUnoService( &quot;com.sun.star.ui.dialogs.FilePicker&quot; )
-	REM need a better way of seeding this
-	oFilePicker.AppendFilter( &quot;BeanShell (*.bsh)&quot;, &quot;*.bsh&quot; )
-	oFilePicker.AppendFilter( &quot;Rhino (*.js)&quot;, &quot;*.js&quot;)
-	oFilePicker.SetCurrentFilter( &quot;BeanShell (*.bsh)&quot; )
-	
-	REM if no file URL is set, get path settings from configuration
-	REM perhaps get the documents URL?
-	sFileURL = &quot;&quot;
-
-	If ( sFileURL = &quot;&quot; ) Then
-		oSettings = CreateUnoService( &quot;com.sun.star.frame.Settings&quot; )
-		oPathSettings = oSettings.getByName( &quot;PathSettings&quot; )
-		sFileURL = oPathSettings.getPropertyValue( &quot;Work&quot; )
-	End If
-
-	REM set display directory
-	oSimpleFileAccess = CreateUnoService( &quot;com.sun.star.ucb.SimpleFileAccess&quot; )
-	If oSimpleFileAccess.exists( sFileURL ) And oSimpleFileAccess.isFolder( sFileURL ) Then
-		oFilePicker.setDisplayDirectory( sFileURL )
-	End If
+	oFilePicker = getFilePicker()
 	
 	REM execute file dialog
 	If oFilePicker.execute() Then
