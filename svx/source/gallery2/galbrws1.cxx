@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galbrws1.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 19:12:36 $
+ *  last change: $Author: rt $ $Date: 2004-11-03 16:03:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,7 +177,7 @@ long GalleryThemeListBox::PreNotify( NotifyEvent& rNEvt )
 
 GalleryBrowser1::GalleryBrowser1( GalleryBrowser* pParent, const ResId& rResId, Gallery* pGallery ) :
     Control     ( pParent, rResId ),
-    maNewTheme  ( this, WB_3DLOOK | WB_BORDER ),
+    maNewTheme  ( this, WB_3DLOOK ),
     mpThemes    ( new GalleryThemeListBox( this, WB_TABSTOP | WB_3DLOOK | WB_BORDER | WB_HSCROLL | WB_VSCROLL | WB_AUTOHSCROLL | WB_SORT ) ),
     mpGallery   ( pGallery )
 {
