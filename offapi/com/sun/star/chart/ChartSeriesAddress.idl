@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartSeriesAddress.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:53:21 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 17:58:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@
     <p>The cell addresses are in the format of the application that
     contains this chart.</p>
  */
-struct ChartSeriesAddress
+published struct ChartSeriesAddress
 {
     /** contains the cell range address of the data for this series.
      */
