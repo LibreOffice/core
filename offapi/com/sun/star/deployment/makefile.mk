@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: obo $ $Date: 2004-08-12 12:02:50 $
+#   last change: $Author: hr $ $Date: 2004-11-09 13:44:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,6 +71,7 @@ PACKAGE = com$/sun$/star$/deployment
 
 IDLFILES = \
         DeploymentException.idl                                 \
+        XPackageTypeInfo.idl                                    \
         XPackage.idl                                            \
         XPackageRegistry.idl                                    \
         PackageRegistryBackend.idl                              \
