@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: th $ $Date: 2001-05-18 08:24:04 $
+ *  last change: $Author: th $ $Date: 2001-06-07 16:52:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1925,12 +1925,11 @@ inline Color ImplWinColorToSal( COLORREF nColor )
 
 // -----------------------------------------------------------------------
 
-static void ImplSalUpdateStyleFontA( const LOGFONTA& rLogFont, Font& rFont,
-                                     BOOL bOverwriteSystemCharSet )
+static void ImplSalUpdateStyleFontA( HDC hDC, const LOGFONTA& rLogFont, Font& rFont,
+                                     BOOL bReplaceFont )
 {
-    ImplSalLogFontToFontA( rLogFont, rFont );
-    if ( bOverwriteSystemCharSet && (rFont.GetCharSet() != RTL_TEXTENCODING_SYMBOL) )
-        rFont.SetCharSet( gsl_getSystemTextEncoding() );
+    ImplSalLogFontToFontA( hDC, rLogFont, rFont, bReplaceFont );
+
     // Da bei einigen Windows-Einstellungen 6 Punkt eingetragen ist,
     // obwohl im Dialog 8 Punkt angezeigt werden (da MS Sans Serif
     // nicht skalierbar ist) vergroessern wir hier das als Hack, da
@@ -1942,12 +1941,11 @@ static void ImplSalUpdateStyleFontA( const LOGFONTA& rLogFont, Font& rFont,
 
 // -----------------------------------------------------------------------
 
-static void ImplSalUpdateStyleFontW( const LOGFONTW& rLogFont, Font& rFont,
-                                     BOOL bOverwriteSystemCharSet )
+static void ImplSalUpdateStyleFontW( HDC hDC, const LOGFONTW& rLogFont, Font& rFont,
+                                     BOOL bReplaceFont )
 {
-    ImplSalLogFontToFontW( rLogFont, rFont );
-    if ( bOverwriteSystemCharSet && (rFont.GetCharSet() != RTL_TEXTENCODING_SYMBOL) )
-        rFont.SetCharSet( gsl_getSystemTextEncoding() );
+    ImplSalLogFontToFontW( hDC, rLogFont, rFont, bReplaceFont );
+
     // Da bei einigen Windows-Einstellungen 6 Punkt eingetragen ist,
     // obwohl im Dialog 8 Punkt angezeigt werden (da MS Sans Serif
     // nicht skalierbar ist) vergroessern wir hier das als Hack, da
@@ -2077,28 +2075,29 @@ void SalFrame::UpdateSettings( AllSettings& rSettings )
     }
 
     // Query Fonts
-    int bOverwriteSystemCharSet = getenv("LC_CHARSET") != 0;
-    Font aMenuFont = aStyleSettings.GetMenuFont();
-    Font aTitleFont = aStyleSettings.GetTitleFont();
-    Font aFloatTitleFont = aStyleSettings.GetFloatTitleFont();
-    Font aHelpFont = aStyleSettings.GetHelpFont();
-    Font aAppFont = aStyleSettings.GetAppFont();
-    Font aIconFont = aStyleSettings.GetIconFont();
+    Font    aMenuFont = aStyleSettings.GetMenuFont();
+    Font    aTitleFont = aStyleSettings.GetTitleFont();
+    Font    aFloatTitleFont = aStyleSettings.GetFloatTitleFont();
+    Font    aHelpFont = aStyleSettings.GetHelpFont();
+    Font    aAppFont = aStyleSettings.GetAppFont();
+    Font    aIconFont = aStyleSettings.GetIconFont();
+    HDC     hDC = GetDC( 0 );
+    BOOL    bReplaceFont = !ImplIsFontAvailable( hDC, XubString( RTL_CONSTASCII_USTRINGPARAM( "Andale Sans UI" ) ) );
     if ( aSalShlData.mbWNT )
     {
         NONCLIENTMETRICSW aNonClientMetrics;
         aNonClientMetrics.cbSize = sizeof( aNonClientMetrics );
         if ( SystemParametersInfoW( SPI_GETNONCLIENTMETRICS, sizeof( aNonClientMetrics ), &aNonClientMetrics, 0 ) )
         {
-            ImplSalUpdateStyleFontW( aNonClientMetrics.lfMenuFont, aMenuFont, bOverwriteSystemCharSet );
-            ImplSalUpdateStyleFontW( aNonClientMetrics.lfCaptionFont, aTitleFont, bOverwriteSystemCharSet );
-            ImplSalUpdateStyleFontW( aNonClientMetrics.lfSmCaptionFont, aFloatTitleFont, bOverwriteSystemCharSet );
-            ImplSalUpdateStyleFontW( aNonClientMetrics.lfStatusFont, aHelpFont, bOverwriteSystemCharSet );
-            ImplSalUpdateStyleFontW( aNonClientMetrics.lfMessageFont, aAppFont, bOverwriteSystemCharSet );
+            ImplSalUpdateStyleFontW( hDC, aNonClientMetrics.lfMenuFont, aMenuFont, bReplaceFont );
+            ImplSalUpdateStyleFontW( hDC, aNonClientMetrics.lfCaptionFont, aTitleFont, bReplaceFont );
+            ImplSalUpdateStyleFontW( hDC, aNonClientMetrics.lfSmCaptionFont, aFloatTitleFont, bReplaceFont );
+            ImplSalUpdateStyleFontW( hDC, aNonClientMetrics.lfStatusFont, aHelpFont, bReplaceFont );
+            ImplSalUpdateStyleFontW( hDC, aNonClientMetrics.lfMessageFont, aAppFont, bReplaceFont );
 
             LOGFONTW aLogFont;
             if ( SystemParametersInfoW( SPI_GETICONTITLELOGFONT, 0, &aLogFont, 0 ) )
-                ImplSalUpdateStyleFontW( aLogFont, aIconFont, bOverwriteSystemCharSet );
+                ImplSalUpdateStyleFontW( hDC, aLogFont, aIconFont, bReplaceFont );
         }
     }
     else
@@ -2107,17 +2106,18 @@ void SalFrame::UpdateSettings( AllSettings& rSettings )
         aNonClientMetrics.cbSize = sizeof( aNonClientMetrics );
         if ( SystemParametersInfoA( SPI_GETNONCLIENTMETRICS, sizeof( aNonClientMetrics ), &aNonClientMetrics, 0 ) )
         {
-            ImplSalUpdateStyleFontA( aNonClientMetrics.lfMenuFont, aMenuFont, bOverwriteSystemCharSet );
-            ImplSalUpdateStyleFontA( aNonClientMetrics.lfCaptionFont, aTitleFont, bOverwriteSystemCharSet );
-            ImplSalUpdateStyleFontA( aNonClientMetrics.lfSmCaptionFont, aFloatTitleFont, bOverwriteSystemCharSet );
-            ImplSalUpdateStyleFontA( aNonClientMetrics.lfStatusFont, aHelpFont, bOverwriteSystemCharSet );
-            ImplSalUpdateStyleFontA( aNonClientMetrics.lfMessageFont, aAppFont, bOverwriteSystemCharSet );
+            ImplSalUpdateStyleFontA( hDC, aNonClientMetrics.lfMenuFont, aMenuFont, bReplaceFont );
+            ImplSalUpdateStyleFontA( hDC, aNonClientMetrics.lfCaptionFont, aTitleFont, bReplaceFont );
+            ImplSalUpdateStyleFontA( hDC, aNonClientMetrics.lfSmCaptionFont, aFloatTitleFont, bReplaceFont );
+            ImplSalUpdateStyleFontA( hDC, aNonClientMetrics.lfStatusFont, aHelpFont, bReplaceFont );
+            ImplSalUpdateStyleFontA( hDC, aNonClientMetrics.lfMessageFont, aAppFont, bReplaceFont );
 
             LOGFONTA aLogFont;
             if ( SystemParametersInfoA( SPI_GETICONTITLELOGFONT, 0, &aLogFont, 0 ) )
-                ImplSalUpdateStyleFontA( aLogFont, aIconFont, bOverwriteSystemCharSet );
+                ImplSalUpdateStyleFontA( hDC, aLogFont, aIconFont, bReplaceFont );
         }
     }
+    ReleaseDC( 0, hDC );
     aStyleSettings.SetMenuFont( aMenuFont );
     aStyleSettings.SetTitleFont( aTitleFont );
     aStyleSettings.SetFloatTitleFont( aFloatTitleFont );
