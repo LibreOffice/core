@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CGDocument.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $  $Date: 2004-09-08 14:18:05 $
+ *  last change: $Author: kz $  $Date: 2004-11-27 09:10:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,10 @@ import java.io.FileNotFoundException;
 
 import org.w3c.dom.Node;
 
+import com.sun.star.beans.Property;
 import com.sun.star.beans.PropertyValue;
+import com.sun.star.document.MacroExecMode;
+import com.sun.star.document.UpdateDocMode;
 import com.sun.star.document.XDocumentInfoSupplier;
 import com.sun.star.document.XStandaloneDocumentInfo;
 import com.sun.star.frame.XComponentLoader;
@@ -115,13 +118,14 @@ public class CGDocument extends ConfigSetItem implements XMLProvider {
      */
     public String       localFilename = "";
     public String       urlFilename = "";
+
     public String       title = "";
     public String       description = "";
     public String       author = "";
     public DateTime     createDate;
     public DateTime     updateDate;
 
-    public int          sizeKB = -1;
+    public int          sizeBytes = -1;
     public int          pages = -1;
 
     /**
@@ -210,9 +214,10 @@ public class CGDocument extends ConfigSetItem implements XMLProvider {
 
         if (!isSODocument && isSOOpenable) { //for other documents which are openable through SO, use DocumentInfo service.
             XDesktop desktop = Desktop.getDesktop(xmsf);
-            PropertyValue[] props = new PropertyValue[] { new PropertyValue() };
-            props[0].Name="Hidden";
-            props[0].Value=Boolean.TRUE;
+            PropertyValue[] props = new PropertyValue[3];
+            props[0] = Properties.createProperty("Hidden", Boolean.TRUE);
+            props[1] = Properties.createProperty("MacroExecutionMode", new Short(MacroExecMode.NEVER_EXECUTE));
+            props[2] = Properties.createProperty("UpdateDocMode", new Short(UpdateDocMode.NO_UPDATE));
             XComponent component = ((XComponentLoader)UnoRuntime.queryInterface(XComponentLoader.class,desktop)).loadComponentFromURL(cp_URL,"_default",0,props);
             info = ((XDocumentInfoSupplier)UnoRuntime.queryInterface(XDocumentInfoSupplier.class, component)).getDocumentInfo();
         }
@@ -331,9 +336,9 @@ public class CGDocument extends ConfigSetItem implements XMLProvider {
     }
 
     private String sizeKB() {
-        if (sizeKB == -1)
+        if (sizeBytes == -1)
             return "";
-        else return getSettings().formatter.formatFileSize(sizeKB);
+        else return getSettings().formatter.formatFileSize(sizeBytes);
     }
 
     private String pages() {
