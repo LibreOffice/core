@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.171 $
+ *  $Revision: 1.172 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 12:48:38 $
+ *  last change: $Author: vg $ $Date: 2003-05-28 12:32:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -8727,7 +8727,7 @@ void Window::ImplDecModalCount()
 }
 void Window::ImplNotifyIconifiedState( BOOL bIconified )
 {
-    mpFrameWindow->ImplCallEventListeners( bIconified ? VCLEVENT_WINDOW_ICONIFIED : VCLEVENT_WINDOW_RESTORED );
+    mpFrameWindow->ImplCallEventListeners( bIconified ? VCLEVENT_WINDOW_MINIMIZE : VCLEVENT_WINDOW_NORMALIZE );
 }
 
 BOOL Window::HasActiveChildFrame()
