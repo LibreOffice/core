@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:30:08 $
+ *  last change: $Author: obo $ $Date: 2004-09-08 16:15:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2583,6 +2583,24 @@ oslFileError SAL_CALL osl_getFilePos(oslFileHandle Handle, sal_uInt64 *pPos)
 }
 
 //#############################################
+oslFileError SAL_CALL osl_getFileSize(oslFileHandle Handle, sal_uInt64 *pSize)
+{
+    HANDLE hFile = (HANDLE)Handle;
+    if ( !IsValidHandle(hFile) )
+        return osl_File_E_INVAL;
+
+    DWORD nSize = GetFileSize(hFile, NULL);
+    if (nSize == INVALID_FILE_SIZE)
+    {
+        DWORD nError = GetLastError();
+        if (nError != NO_ERROR)
+            return MapError(nError);
+    }
+
+    *pSize = (sal_uInt64)(nSize);
+    return osl_File_E_None;
+}
+
 oslFileError SAL_CALL osl_setFileSize(oslFileHandle Handle, sal_uInt64 uSize)
 {
     oslFileError    error = error = osl_setFilePos( Handle, osl_Pos_Absolut, uSize );
