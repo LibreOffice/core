@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sjapplet_impl.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:21:21 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:01:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ static void testJavaException(JNIEnv * pEnv)  throw(com::sun::star::uno::Runtime
 {
     jthrowable jtThrowable = pEnv->ExceptionOccurred();
     if(jtThrowable) { // is it a java exception ?
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         pEnv->ExceptionDescribe();
 #endif
         pEnv->ExceptionClear();
@@ -259,7 +259,7 @@ void SjApplet2_Impl::init(Window * pParentWin,
     }
 
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     OString tmp = OUStringToOString(url, RTL_TEXTENCODING_ASCII_US);
     OSL_TRACE("SjApplet2_Impl::init - mainUrl: %s\n", tmp.getStr());
 #endif
@@ -311,7 +311,7 @@ void SjApplet2_Impl::init(Window * pParentWin,
         String aCmd = rCmd.GetCommand();
         String aLoweredCmd = aCmd.ToLowerAscii();
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         OUString command = aCmd;
         OUString value = rCmd.GetArgument();
         OString cmd_tmp = OUStringToOString(command, RTL_TEXTENCODING_ASCII_US);
