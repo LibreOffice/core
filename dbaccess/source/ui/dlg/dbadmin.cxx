@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-05 14:00:08 $
+ *  last change: $Author: fs $ $Date: 2001-02-07 09:32:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,9 @@
 #endif
 #ifndef _COMPHELPER_PROPERTY_HXX_
 #include <comphelper/property.hxx>
+#endif
+#ifndef _COMPHELPER_SEQUENCE_HXX_
+#include <comphelper/sequence.hxx>
 #endif
 #ifndef _DBAUI_PROPERTYSETITEM_HXX_
 #include "propertysetitem.hxx"
@@ -645,7 +648,7 @@ ODbAdminDialog::ODbAdminDialog(Window* _pParent, SfxItemSet* _pItems, const Refe
     m_aDirectPropTranslator.insert(MapInt2String::value_type(DSID_SUPPRESSVERSIONCL, PROPERTY_SUPPRESSVERSIONCL));
 
     // implicit properties, to be found in the direct property "Info"
-    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_JDBCDRIVERCLASS, ::rtl::OUString::createFromAscii("JDBCDRV")));
+    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_JDBCDRIVERCLASS, ::rtl::OUString::createFromAscii("JavaDriverClass")));
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_TEXTFILEEXTENSION, ::rtl::OUString::createFromAscii("Extension")));
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CHARSET, ::rtl::OUString::createFromAscii("CharSet")));
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_TEXTFILEHEADER, ::rtl::OUString::createFromAscii("HeaderLine")));
@@ -1371,7 +1374,16 @@ void ODbAdminDialog::translateProperties(const Reference< XPropertySet >& _rxSou
         const PropertyValue* pAdditionalInfo = aAdditionalInfo.getConstArray();
         PropertyValueSet aInfos;
         for (sal_Int32 i=0; i<aAdditionalInfo.getLength(); ++i, ++pAdditionalInfo)
-            aInfos.insert(*pAdditionalInfo);
+        {
+            if (0 == pAdditionalInfo->Name.compareToAscii("JDBCDRV"))
+            {   // compatibility
+                PropertyValue aCompatibility(*pAdditionalInfo);
+                aCompatibility.Name = ::rtl::OUString::createFromAscii("JavaDriverClass");
+                aInfos.insert(aCompatibility);
+            }
+            else
+                aInfos.insert(*pAdditionalInfo);
+        }
 
         // go through all known translations and check if we have such a setting
         PropertyValue aSearchFor;
@@ -1520,6 +1532,7 @@ void ODbAdminDialog::fillDatasourceInfo(const SfxItemSet& _rSource, ::com::sun::
     // check the original sequence if it already contains any of these values (which have to be overwritten, then)
     PropertyValue* pInfo = _rInfo.getArray();
     PropertyValue aSearchFor;
+    sal_Int32 nObsoleteSetting = -1;
     for (sal_Int32 i=0; i<_rInfo.getLength(); ++i, ++pInfo)
     {
         aSearchFor.Name = pInfo->Name;
@@ -1529,7 +1542,14 @@ void ODbAdminDialog::fillDatasourceInfo(const SfxItemSet& _rSource, ::com::sun::
             *pInfo = *aOverwrittenSetting;
             aRelevantSettings.erase(aOverwrittenSetting);
         }
+
+        if (0 == pInfo->Name.compareToAscii("JDBCDRV"))
+        {   // this is a compatibility setting, remove it from the sequence (it's replaced by JavaDriverClass)
+            nObsoleteSetting = i;
+        }
     }
+    if (-1 != nObsoleteSetting)
+        ::comphelper::removeElementAt(_rInfo, nObsoleteSetting);
 
     // check which values are still left ('cause they were not present in the original sequence, but are to be set)
     sal_Int32 nOldLength = _rInfo.getLength();
@@ -2264,6 +2284,9 @@ IMPL_LINK(ODatasourceSelector, OnButtonPressed, Button*, EMPTYARG)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.33  2001/02/05 14:00:08  fs
+ *  #83430# applyChanges / isApplyable
+ *
  *  Revision 1.32  2001/01/29 16:16:08  nn
  *  added DST_CALC
  *
