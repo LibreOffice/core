@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xeescher.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-10-18 15:18:41 $
+ *  last change: $Author: rt $ $Date: 2004-11-09 15:07:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@
 
 // ============================================================================
 
-class ExcUPN;
+class XclExpTokenArray;
 
 /** Helper to manage controls linked to the sheet. */
 class XclExpCtrlLinkHelper : protected XclExpRoot
@@ -86,25 +86,18 @@ public:
 
 protected:
     /** Returns the Excel token array of the cell link, or 0, if no link present. */
-    inline const ExcUPN* GetCellLinkTokArr() const { return mxCellLink.get(); }
+    inline const XclExpTokenArray* GetCellLinkTokArr() const { return mxCellLink.get(); }
     /** Returns the Excel token array of the source range, or 0, if no link present. */
-    inline const ExcUPN* GetSourceRangeTokArr() const { return mxSrcRange.get(); }
+    inline const XclExpTokenArray* GetSourceRangeTokArr() const { return mxSrcRange.get(); }
     /** Returns the number of entries in the source range, or 0, if no source set. */
     inline sal_uInt16   GetSourceEntryCount() const { return mnEntryCount; }
 
     /** Writes a sheet link formula with special style only valid in OBJ records. */
-    void                WriteFormula( XclExpStream& rStrm, const ExcUPN& rTokArr ) const;
+    void                WriteFormula( XclExpStream& rStrm, const XclExpTokenArray& rTokArr ) const;
 
 private:
-    typedef ::std::auto_ptr< ExcUPN > XclExpTokArrPtr;
-
-    XclExpTokArrPtr     CreateTokenArray( const ScTokenArray& rScTokArr ) const;
-    XclExpTokArrPtr     CreateTokenArray( const ScAddress& rPos ) const;
-    XclExpTokArrPtr     CreateTokenArray( const ScRange& rRange ) const;
-
-private:
-    XclExpTokArrPtr     mxCellLink;     /// Formula for linked cell.
-    XclExpTokArrPtr     mxSrcRange;     /// Formula for source data range.
+    XclExpTokenArrayRef mxCellLink;     /// Formula for linked cell.
+    XclExpTokenArrayRef mxSrcRange;     /// Formula for source data range.
     sal_uInt16          mnEntryCount;   /// Number of entries in source range.
 };
 
