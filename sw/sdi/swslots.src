@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swslots.src,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-29 09:21:09 $
+ *  last change: $Author: kz $ $Date: 2001-08-30 20:24:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2698,7 +2698,7 @@ SfxSlotInfo FN_FRAME_WRAPTHRU
     SlotName[ portuguese ] = "Atravйs do objecto";
     SlotName[ russian ] = "Сквозное обтекание";
     SlotName[ dutch ] = "Doorloop";
-    SlotName[ french ] = "А travers";
+    SlotName[ french ] = "Continu";
     SlotName[ spanish ] = "Continuo";
     SlotName[ italian ] = "Attraverso";
     SlotName[ danish ] = "Gennemgеende";
@@ -2726,7 +2726,7 @@ SfxSlotInfo FN_FRAME_WRAPTHRU_TRANSP
     SlotName[ portuguese ] = "Ajuste contнnuo transparente";
     SlotName[ russian ] = "Прозрачное сквозное обтекание";
     SlotName[ dutch ] = "Doorloop transparant";
-    SlotName[ french ] = "А l'arriиre-plan transparent";
+    SlotName[ french ] = "Continu transparent";
     SlotName[ spanish ] = "Continuo transparente";
     SlotName[ italian ] = "Attraversa trasparente";
     SlotName[ danish ] = "Transparent gennemgеende";
@@ -9489,6 +9489,7 @@ SfxSlotInfo FN_EDIT_HYPERLINK
     SlotName[ catalan ] = "Editar hiperenlace";
     SlotName[ finnish ] = "Muokkaa hyperlinkkiд";
 };
+
 
 
 
