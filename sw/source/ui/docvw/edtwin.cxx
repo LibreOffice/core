@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.107 $
+ *  $Revision: 1.108 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 11:13:03 $
+ *  last change: $Author: vg $ $Date: 2005-02-22 08:23:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1066,6 +1066,12 @@ void SwEditWin::ChangeFly( BYTE nDir, BOOL bWeb )
  ---------------------------------------------------------------------------*/
 void SwEditWin::ChangeDrawing( BYTE nDir )
 {
+    // --> OD 2005-01-31 #i40845# - start undo action in order to get only one
+    // undo action for this change.
+    SwWrtShell &rSh = rView.GetWrtShell();
+    rSh.StartUndo();
+    // <--
+
     long nX = 0;
     long nY = 0;
     sal_Bool bOnePixel = sal_False;
@@ -1182,6 +1188,10 @@ void SwEditWin::ChangeDrawing( BYTE nDir )
         }
         rSh.EndAllAction();
     }
+
+    // --> OD 2005-01-31 #i40845# - end undo action
+    rSh.EndUndo();
+    // <--
 }
 
 /*--------------------------------------------------------------------
