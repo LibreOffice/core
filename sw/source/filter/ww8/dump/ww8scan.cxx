@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-24 14:01:34 $
+ *  last change: $Author: jp $ $Date: 2000-10-24 14:56:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5633,7 +5633,7 @@ static SprmInfo aWwSprmTab[] = {
     0xCA31, 0, L_VAR, // "sprmCIstdPermute" chp.istd;permutation vector (see below);variable length;
     0x2A32, 0, L_VAR, // "sprmCDefault" whole CHP (see below);none;variable length;
     0x2A33, 0, L_FIX, // "sprmCPlain" whole CHP (see below);none;0;
-//0x2A34, 0, L_FIX, // "sprmCKcd" ;;;
+    0x2A34, 1, L_FIX, // "sprmCKcd" ;;;
     0x0835, 1, L_FIX, // "sprmCFBold" chp.fBold;0,1, 128, or 129 (see below);byte;
     0x0836, 1, L_FIX, // "sprmCFItalic" chp.fItalic;0,1, 128, or 129 (see below);byte;
     0x0837, 1, L_FIX, // "sprmCFStrike" chp.fStrike;0,1, 128, or 129 (see below);byte;
@@ -5675,10 +5675,10 @@ static SprmInfo aWwSprmTab[] = {
 //0x085B, 0, L_FIX, // "sprmCFDiacColor" ;;;
 //0x085C, 0, L_FIX, // "sprmCFBoldBi" ;;;
 //0x085D, 0, L_FIX, // "sprmCFItalicBi" ;;;
-//0x4A5E, 0, L_FIX, // "sprmCFtcBi" ;;;
-//0x485F, 0, L_FIX, // "sprmCLidBi" ;;;
+    0x4A5E, 2, L_FIX, // "sprmCFtcBi" ;;;
+    0x485F, 2, L_FIX, // "sprmCLidBi" ;;;
 //0x4A60, 0, L_FIX, // "sprmCIcoBi" ;;;
-//0x4A61, 0, L_FIX, // "sprmCHpsBi" ;;;
+    0x4A61, 2, L_FIX, // "sprmCHpsBi" ;;;
     0xCA62, 0, L_VAR, // "sprmCDispFldRMark" chp.fDispFldRMark, chp.ibstDispFldRMark, chp.dttmDispFldRMark ;Complex (see below);variable length always recorded as 39 bytes;
     0x4863, 2, L_FIX, // "sprmCIbstRMarkDel" chp.ibstRMarkDel;index into sttbRMark;short;
     0x6864, 4, L_FIX, // "sprmCDttmRMarkDel" chp.dttmRMarkDel;DTTM;long;
@@ -5747,7 +5747,7 @@ static SprmInfo aWwSprmTab[] = {
     0x702E, 4, L_FIX, // "sprmSBrcRight" sep.brcRight;BRC;long;
     0x522F, 2, L_FIX, // "sprmSPgbProp" sep.pgbProp;;word;
     0x7030, 4, L_FIX, // "sprmSDxtCharSpace" sep.dxtCharSpace;dxt;long;
-    0x9031, 2, L_FIX, // "sprmSDyaLinePitch" sep.dyaLinePitch;dya;  WRONG:long;  RIGHT:short;  !!!
+    0x9031, 4, L_FIX, // "sprmSDyaLinePitch" sep.dyaLinePitch;dya;  WRONG:long;  RIGHT:short;  !!!
 //0x5032, 0, L_FIX, // "sprmSClm" ;;;
     0x5033, 2, L_FIX, // "sprmSTextFlow" sep.wTextFlow;complex (see below);short;
     0x5400, 2, L_FIX, // "sprmTJc" tap.jc;jc;word (low order byte is significant);
@@ -5775,8 +5775,10 @@ static SprmInfo aWwSprmTab[] = {
     0x7629, 0, L_VAR, // "sprmTTextFlow" tap.rgtc[].fVerticaltap.rgtc[].fBackwardtap.rgtc[].fRotateFont;0 or 10 or 10 or 1;word;
 //0xD62A, 0, L_FIX, // "sprmTDiagLine" ;;;
     0xD62B, 0, L_VAR, // "sprmTVertMerge" tap.rgtc[].vertMerge;complex (see below);variable length always recorded as 2 bytes;
-        0xD62C, 0, L_VAR, // "sprmTVertAlign" tap.rgtc[].vertAlign;complex (see below);variable length always recorded as 3 byte;
+    0xD62C, 0, L_VAR, // "sprmTVertAlign" tap.rgtc[].vertAlign;complex (see below);variable length always recorded as 3 byte;
 
+    0x4873, 2, L_FIX, // CJK-Unknown
+    0x4874, 2, L_FIX, // CJK-Unknown
 };
 
 
@@ -5997,11 +5999,14 @@ BYTE WW8SprmDataOfs( USHORT nId )
 /*************************************************************************
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/dump/ww8scan.cxx,v 1.2 2000-10-24 14:01:34 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/dump/ww8scan.cxx,v 1.3 2000-10-24 14:56:06 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.2  2000/10/24 14:01:34  jp
+      changes for unicode
+
       Revision 1.1.1.1  2000/09/18 17:14:59  hr
       initial import
 

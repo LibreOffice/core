@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8darr.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:59 $
+ *  last change: $Author: jp $ $Date: 2000-10-24 14:56:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -383,7 +383,7 @@ SprmDumpInfo aSprmDumpTab[] = {
     0xCA31, (FnOut)0,"sprmCIstdPermute", // chp.istd;permutation vector (see below);variable length;
     0x2A32, (FnOut)0,"sprmCDefault", // whole CHP (see below);none;variable length;
     0x2A33, (FnOut)0,"sprmCPlain", // whole CHP (see below);none; Laenge: 0;
-//0x2A34, ? ? ?, "sprmCKcd", // ;;;
+    0x2A34, OutByte, "sprmCKcd", // ;;;
     0x0835, OutByte, "sprmCFBold", // chp.fBold;0,1, 128, or 129 (see below);byte;
     0x0836, OutByte, "sprmCFItalic", // chp.fItalic;0,1, 128, or 129 (see below);byte;
     0x0837, OutByte, "sprmCFStrike", // chp.fStrike;0,1, 128, or 129 (see below);byte;
@@ -425,10 +425,10 @@ SprmDumpInfo aSprmDumpTab[] = {
 //0x085B, ? ? ?  , "sprmCFDiacColor", // ;;;
 //0x085C, ? ? ?  , "sprmCFBoldBi", // ;;;
 //0x085D, ? ? ?  , "sprmCFItalicBi", // ;;;
-//0x4A5E, ? ? ?  , "sprmCFtcBi", // ;;;
-//0x485F, ? ? ?  , "sprmCLidBi", // ;;;
+    0x4A5E, OutWord, "sprmCFtcBi", // ;;;
+    0x485F, OutWord, "sprmCLidBi", // ;;;
 //0x4A60, ? ? ?  , "sprmCIcoBi", // ;;;
-//0x4A61, ? ? ?  , "sprmCHpsBi", // ;;;
+    0x4A61, OutWord, "sprmCHpsBi", // ;;;
     0xCA62, (FnOut)0,"sprmCDispFldRMark", // chp.fDispFldRMark, chp.ibstDispFldRMark, chp.dttmDispFldRMark ;Complex (see below);variable length always recorded as 39 bytes;
     0x4863, OutShort,"sprmCIbstRMarkDel", // chp.ibstRMarkDel;index into sttbRMark;short;
     0x6864,OutLongHex,"sprmCDttmRMarkDel", // chp.dttmRMarkDel;DTTM;long;
@@ -524,6 +524,10 @@ SprmDumpInfo aSprmDumpTab[] = {
 //0xD62A, ? ? ?  , "sprmTDiagLine", // ;;;
     0xD62B, (FnOut)0,"sprmTVertMerge", // tap.rgtc[].vertMerge;complex (see below);variable length always recorded as 2 bytes;
     0xD62C, (FnOut)0,"sprmTVertAlign", // tap.rgtc[].vertAlign;complex (see below);variable length always recorded as 3 byte;
+
+    0x4873, OutWord, "sprm?? CJK ??", // CJK-Unknown
+    0x4874, OutWord, "sprm?? CJK ??", // CJK-Unknown
+
 };
 
 
@@ -576,11 +580,14 @@ SprmDumpInfo& WW8GetSprmDumpInfo( USHORT nId )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/dump/ww8darr.cxx,v 1.1.1.1 2000-09-18 17:14:59 hr Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/dump/ww8darr.cxx,v 1.2 2000-10-24 14:56:06 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 17:14:59  hr
+      initial import
+
       Revision 1.8  2000/09/18 16:05:03  willem.vandorp
       OpenOffice header added.
 
