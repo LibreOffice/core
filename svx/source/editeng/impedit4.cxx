@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit4.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 10:35:25 $
+ *  last change: $Author: kz $ $Date: 2003-10-15 09:47:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2267,6 +2267,20 @@ void ImpEditEngine::SetKernAsianPunctuation( BOOL b )
         }
     }
 }
+
+void ImpEditEngine::SetAddExtLeading( BOOL bExtLeading )
+{
+    if ( IsAddExtLeading() != bExtLeading )
+    {
+        bAddExtLeading = bExtLeading;
+        if ( ImplHasText() )
+        {
+            FormatFullDoc();
+            UpdateViews();
+        }
+    }
+};
+
 
 
 BOOL ImpEditEngine::ImplHasText() const
