@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2001-08-29 08:53:03 $
+ *  last change: $Author: rt $ $Date: 2001-11-16 22:04:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -293,6 +293,7 @@ Menu SV_RESID_MENU_EDIT
         };
     };
 };
+
 
 
 
