@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgprovider.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kso $ $Date: 2000-11-29 14:16:26 $
+ *  last change: $Author: kso $ $Date: 2000-11-29 14:41:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,8 +122,18 @@ public:
     ~Package() { m_pOwner->removePackage( m_aName ); }
 
     // XInterface
-    XINTERFACE_DECL()
+    virtual ::com::sun::star::uno::Any SAL_CALL
+    queryInterface( const ::com::sun::star::uno::Type& aType )
+        throw( ::com::sun::star::uno::RuntimeException )
+    { return m_xNA->queryInterface( aType ); }
+    virtual void SAL_CALL
+    acquire() throw()
+    { OWeakObject::acquire(); }
+    virtual void SAL_CALL
+    release() throw()
+    { OWeakObject::release(); }
 
+    // XHierarchicalNameAccess
     virtual ::com::sun::star::uno::Any SAL_CALL
     getByHierarchicalName( const ::rtl::OUString& aName )
         throw( NoSuchElementException, RuntimeException )
@@ -133,8 +143,6 @@ public:
         throw( RuntimeException )
     { return m_xNA->hasByHierarchicalName( aName ); }
 };
-
-XINTERFACE_IMPL_1( Package, XHierarchicalNameAccess );
 
 //=========================================================================
 //
