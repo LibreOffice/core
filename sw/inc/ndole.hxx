@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndole.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 16:25:39 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 14:57:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,7 @@ class SwOLENode;
 class SwOLELink;
 
 class SwOLEListener_Impl;
+class SwEmbedObjectLink;
 class SwOLEObj
 {
     friend class SwOLENode;
@@ -122,6 +123,9 @@ class SwOLENode: public SwNoTxtNode
                                 //werden (zum Beispiel kopiert). Ist nicht
                                 //Persistent.
 
+    SwEmbedObjectLink*  mpObjectLink;
+    String maLinkURL;
+
     SwOLENode(  const SwNodeIndex &rWhere,
                 const svt::EmbeddedObjectRef&,
                 SwGrfFmtColl *pGrfColl,
@@ -163,6 +167,12 @@ public:
     // OLE-Object aus dem "Speicher" entfernen
     // inline void Unload() { aOLEObj.Unload(); }
     String GetDescription() const { return aOLEObj.GetDescription(); }
+
+    sal_Bool UpdateLinkURL_Impl();
+    void BreakFileLink_Impl();
+    void DisconnectFileLink_Impl();
+
+    void CheckFileLink_Impl();
 
 #ifndef _FESHVIEW_ONLY_INLINE_NEEDED
     const String& GetChartTblName() const       { return sChartTblName; }
