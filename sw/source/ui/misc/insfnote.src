@@ -2,9 +2,9 @@
  *
  *  $RCSfile: insfnote.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-10 06:50:38 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 08:28:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ ModalDialog DLG_INS_FOOTNOTE
     Text [ ENGLISH ] = "Insert footnote" ;
     Text [ norwegian ] = "Sette inn fotnote" ;
     Text [ italian ] = "Inserisci nota a piè pagina" ;
-    Text [ portuguese_brazilian ] = "Inserir nota de rodapé" ;
+    Text [ portuguese_brazilian ] = "Inserir nota de rodap?" ;
     Text [ portuguese ] = "Inserir nota de rodapé" ;
     Text [ finnish ] = "Lisää alaviite" ;
     Text [ danish ] = "Indsæt fodnote" ;
@@ -200,7 +200,7 @@ ModalDialog DLG_INS_FOOTNOTE
         Text [ ENGLISH ] = "Numbering" ;
         Text [ norwegian ] = "Nummering" ;
         Text [ italian ] = "Numerazione" ;
-        Text [ portuguese_brazilian ] = "Numeração" ;
+        Text [ portuguese_brazilian ] = "Numera??o" ;
         Text [ portuguese ] = "Numeração" ;
         Text [ finnish ] = "Numerointi" ;
         Text [ danish ] = "Nummerering" ;
@@ -238,7 +238,7 @@ ModalDialog DLG_INS_FOOTNOTE
         Check = TRUE ;
         Text [ portuguese ] = "~Nota de rodapé" ;
         Text [ english_us ] = "~Footnote" ;
-        Text [ portuguese_brazilian ] = "~Fußnote" ;
+        Text [ portuguese_brazilian ] = "~Fu?note" ;
         Text [ swedish ] = "~Fotnot" ;
         Text [ danish ] = "Fodnote" ;
         Text [ italian ] = "~Nota a piè pagina" ;
