@@ -8302,3 +8302,13 @@ _TI3?AVWrappedTargetRuntimeException@lang@star@sun@com@@
 ?lcl_translateBasic2Uno@?%O:\SRX641\src\sfx2\source\doc\objmisc.cxx2057226100@@YAXABVSbxVariableRef@@PAX@Z
 ?Move@SfxFloatingWindow@@MAEXXZ
 ?Move@SfxModelessDialog@@MAEXXZ
+??0?$Reference@VXAnyCompareFactory@ucb@star@sun@com@@@uno@star@sun@com@@QAE@ABV01234@@Z
+?__query@?$Reference@VXAnyCompareFactory@ucb@star@sun@com@@@uno@star@sun@com@@CAPAVXAnyCompareFactory@ucb@345@PAVXInterface@2345@@Z
+?s_pType_com_sun_star_lang_Locale@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBULocale@lang@456@@Z@4PAU_typelib_TypeDescriptionReference@@A
+?s_pType_com_sun_star_ucb_XAnyCompareFactory@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXAnyCompareFactory@ucb@star@sun@com@@@3456@@Z@4PAU_typelib_TypeDescriptionReference@@A
+?set@?$Reference@VXAnyCompareFactory@ucb@star@sun@com@@@uno@star@sun@com@@QAAEPAVXAnyCompareFactory@ucb@345@@Z
+??0?$Reference@VXTransferable@datatransfer@star@sun@com@@@uno@star@sun@com@@QAE@ABV01234@@Z
+??1?$Reference@VXDropTargetDropContext@dnd@datatransfer@star@sun@com@@@uno@star@sun@com@@QAE@XZ
+??1DropTargetEvent@dnd@datatransfer@star@sun@com@@QAE@XZ
+??1ExecuteDropEvent@@QAE@XZ
+?queryInterface@cppu@@YA?AVAny@uno@star@sun@com@@ABVType@3456@PAVXTypeProvider@lang@456@PAVXComponent@9456@PAVXController@frame@456@PAVXStatusIndicatorSupplier@task@456@PAVXDispatchInformationProvider@frame@456drafts@@PAVXContextMenuInterception@ui@456@PAVXDispatchProvider@frame@456@@Z
