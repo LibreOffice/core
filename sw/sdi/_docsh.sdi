@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _docsh.sdi,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 11:29:52 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 13:03:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,6 +154,17 @@ interface BaseTextDocument : OfficeDocument
     SID_ATTR_CHAR_FONTLIST
     [
         StateMethod = GetState ;
+    ]
+
+    SID_BROWSER_MODE
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+    ]
+    FN_PRINT_LAYOUT
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
     ]
 }
 
