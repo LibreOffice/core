@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calendar.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:49 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 17:06:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -516,6 +516,9 @@ public:
 
     void                SetSelectHdl( const Link& rLink ) { maSelectHdl = rLink; }
     const Link&         GetSelectHdl() const { return maSelectHdl; }
+
+protected:
+    virtual void    StateChanged( StateChangedType nStateChange );
 };
 
 #endif  // _CALENDAR_HXX
