@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabbar.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:06:06 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:56:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2165,8 +2165,7 @@ void TabBar::SetMirrored( BOOL bMirrored )
         mbMirrored = bMirrored;
         mbSizeFormat = TRUE;
         ImplInitControls();     // for button images
-        if( IsReallyVisible() && IsUpdateMode() )
-            Resize();           // recalculates control positions
+        Resize();               // recalculates control positions
         Mirror();
     }
 }
