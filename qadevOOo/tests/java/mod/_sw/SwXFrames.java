@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXFrames.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 13:46:06 $
+ *  last change:$Date: 2003-09-08 12:46:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,14 @@
 
 package mod._sw;
 
-import com.sun.star.beans.XPropertySet;
+import java.io.PrintWriter;
+
+import lib.StatusException;
+import lib.TestCase;
+import lib.TestEnvironment;
+import lib.TestParameters;
+import util.SOfficeFactory;
+
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.text.XText;
 import com.sun.star.text.XTextCursor;
@@ -70,12 +77,6 @@ import com.sun.star.text.XTextFrame;
 import com.sun.star.text.XTextFramesSupplier;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
-import java.io.PrintWriter;
-import lib.StatusException;
-import lib.TestCase;
-import lib.TestEnvironment;
-import lib.TestParameters;
-import util.SOfficeFactory;
 
 /**
  * Object implements the following interfaces :
@@ -135,8 +136,6 @@ public class SwXFrames extends TestCase {
         XText oText = null;
         XTextCursor oCursor = null;
         XMultiServiceFactory oDocMSF = null;
-        Integer fwp = new Integer(3);
-        XPropertySet PropSet = null;
         XTextFramesSupplier oInterface = null;
 
         log.println( "creating a test environment" );
@@ -146,8 +145,6 @@ public class SwXFrames extends TestCase {
             Object oInt = oDocMSF.createInstance("com.sun.star.text.TextFrame");
             oFrame1 = (XTextFrame)
                 UnoRuntime.queryInterface( XTextFrame.class, oInt );
-            PropSet = (XPropertySet)
-                UnoRuntime.queryInterface( XPropertySet.class, oFrame1 );
         } catch ( com.sun.star.uno.Exception e ) {
             e.printStackTrace(log);
             throw new StatusException
