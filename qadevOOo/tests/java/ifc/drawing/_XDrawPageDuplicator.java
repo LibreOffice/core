@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XDrawPageDuplicator.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-02-06 09:41:06 $
+ *  last change:$Date: 2003-09-08 10:30:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,15 +61,16 @@
 
 package ifc.drawing;
 
+import lib.MultiMethodTest;
+
 import com.sun.star.drawing.XDrawPage;
 import com.sun.star.drawing.XDrawPageDuplicator;
 import com.sun.star.drawing.XDrawPages;
 import com.sun.star.drawing.XDrawPagesSupplier;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
-import lib.MultiMethodTest;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
 
 
 /**
