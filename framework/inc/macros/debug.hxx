@@ -2,9 +2,9 @@
  *
  *  $RCSfile: debug.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: as $ $Date: 2001-06-05 10:18:00 $
+ *  last change: $Author: as $ $Date: 2001-06-11 10:19:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,10 +116,10 @@
     #undef  ENABLE_ASSERTIONS
     #undef  ENABLE_WARNINGS
     #undef  ENABLE_EVENTDEBUG
-    #undef  ENABLE_MUTEXDEBUG
     #undef  ENABLE_REGISTRATIONDEBUG
     #undef  ENABLE_TARGETINGDEBUG
     #undef  ENABLE_PLUGINDEBUG
+    #undef  ENABLE_MUTEXDEBUG
     #undef  ENABLE_TIMEMEASURE
     #undef  ENABLE_MEMORYMEASURE
 
@@ -150,14 +150,6 @@
 #endif
 
 //*****************************************************************************************************************
-//  special macros to debug mutex handling
-//*****************************************************************************************************************
-
-#ifndef __FRAMEWORK_MACROS_DEBUG_MUTEX_HXX_
-#include <macros/debug/mutex.hxx>
-#endif
-
-//*****************************************************************************************************************
 //  special macros to debug service registration
 //*****************************************************************************************************************
 
@@ -179,6 +171,14 @@
 
 #ifndef __FRAMEWORK_MACROS_DEBUG_PLUGIN_HXX_
 #include <macros/debug/plugin.hxx>
+#endif
+
+//*****************************************************************************************************************
+//  special macros to debug our plugin and his asynchronous methods!
+//*****************************************************************************************************************
+
+#ifndef __FRAMEWORK_MACROS_DEBUG_MUTEX_HXX_
+#include <macros/debug/mutex.hxx>
 #endif
 
 //*****************************************************************************************************************
