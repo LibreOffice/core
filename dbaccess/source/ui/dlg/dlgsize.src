@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgsize.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: avy $ $Date: 2001-03-09 20:43:12 $
+ *  last change: $Author: nf $ $Date: 2001-03-19 09:46:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@
  // JN
  //
  // Letzte Aenderung:
- // $Author: avy $ $Date: 2001-03-09 20:43:12 $ $Revision: 1.2 $
+ // $Author: nf $ $Date: 2001-03-19 09:46:45 $ $Revision: 1.3 $
  //
  //---------------------------------------------------------------------------
 
@@ -177,7 +177,7 @@ ModalDialog DLG_ROWHEIGHT
     Text [ italian ] = "Altezza riga" ;
     Text [ spanish ] = "Altura de fila" ;
     Text [ french ] = "Hauteur de ligne" ;
-    Text [ dutch ] = "Regelhoogte" ;
+    Text [ dutch ] = "Rijhoogte" ;
     Text [ swedish ] = "Radhöjd" ;
     Text [ danish ] = "Rækkehøjde" ;
     Text [ portuguese ] = "Altura da linha" ;
