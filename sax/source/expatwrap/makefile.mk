@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: svesik $ $Date: 2001-02-02 19:09:45 $
+#   last change: $Author: pluby $ $Date: 2001-02-14 01:45:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,6 +77,11 @@ SLOFILES =\
         $(SLO)$/attrlistimpl.obj\
         $(SLO)$/sax_expat.obj \
         $(SLO)$/saxwriter.obj
+
+# Make symbol renaming match library name for Mac OS X
+.IF "$(OS)"=="MACOSX"
+SYMBOLPREFIX=sax
+.ENDIF
 
 # SCO and MACOSX: the linker does know about weak symbols, but we can't ignore multiple defined symbols
 .IF "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX"
