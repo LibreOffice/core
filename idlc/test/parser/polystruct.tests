@@ -2,9 +2,9 @@
 #
 #   $RCSfile: polystruct.tests,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: obo $ $Date: 2004-06-03 15:12:44 $
+#   last change: $Author: rt $ $Date: 2004-08-20 09:20:54 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -169,3 +169,96 @@ struct Struct2: Struct1<long> { long member2; };
 EXPECT FAILURE "polystruct.tests 24":
 struct Struct1<T> { long member1; };
 struct Struct2<T>: Struct1<long> { long member2; };
+
+
+EXPECT FAILURE "polystruct.tests 25":
+struct Struct1<T> { long member; };
+struct Struct2 { Struct1<Struct2> member; };
+
+
+EXPECT FAILURE "polystruct.tests 26":
+struct Struct1<T> { long member; };
+struct Struct2<T> { long member; };
+struct Struct3 { Struct1<Struct2<Struct3> > member; };
+
+
+EXPECT SUCCESS "polystruct.tests 27":
+struct Struct1<T> { long member; };
+struct Struct2 { Struct1<sequence<Struct2> > member; };
+
+
+EXPECT SUCCESS "polystruct.tests 28":
+struct Struct1<T> { long member; };
+struct Struct2 { Struct1<sequence<sequence<Struct2> > > member; };
+
+
+EXPECT SUCCESS "polystruct.tests 29":
+struct Struct1<T> { long member; };
+struct Struct2 { sequence<Struct1<Struct2> > member; };
+
+
+EXPECT SUCCESS "polystruct.tests 30":
+struct Struct1<T> { long member; };
+struct Struct2 { sequence<Struct1<sequence<Struct2> > > member; };
+
+
+EXPECT SUCCESS "polystruct.tests 31":
+struct Struct1<T> { long member; };
+struct Struct2 { sequence<sequence<Struct1<Struct2> > > member; };
+
+
+EXPECT FAILURE "polystruct.tests 32":
+struct Struct<T> { Struct member; };
+
+
+EXPECT FAILURE "polystruct.tests 33":
+struct Struct<T> { Struct<long> member; };
+
+
+EXPECT FAILURE "polystruct.tests 34":
+struct Struct<T> { Struct<Struct> member; };
+
+
+EXPECT FAILURE "polystruct.tests 35":
+struct Struct<T> { Struct<Struct<long> > member; };
+
+
+EXPECT FAILURE "polystruct.tests 36":
+struct Struct1<T> { long member; };
+struct Struct2<T> { Struct1<Struct2> member; };
+
+
+EXPECT FAILURE "polystruct.tests 37":
+struct Struct1<T> { long member; };
+struct Struct2<T> { long member; };
+struct Struct3<T> { Struct1<Struct2<Struct3> > member; };
+
+
+EXPECT FAILURE "polystruct.tests 38":
+struct Struct1<T> { long member; };
+struct Struct2<T> { Struct1<Struct2<long> > member; };
+
+
+EXPECT FAILURE "polystruct.tests 39":
+struct Struct1<T> { long member; };
+struct Struct2<T> { long member; };
+struct Struct3<T> { Struct1<Struct2<Struct3<long> > > member; };
+
+
+EXPECT FAILURE "polystruct.tests 40":
+struct Struct1<T> { long member; };
+struct Struct2 { Struct1<unsigned short> member; };
+
+
+EXPECT FAILURE "polystruct.tests 41":
+struct Struct1<T, U> { long member; };
+struct Struct2<T> { long member; };
+struct Struct3 { Struct2<Struct1<long, unsigned long> > member; };
+
+
+EXPECT FAILURE "polystruct.tests 42":
+module com { module sun { module star { module uno {
+    interface XInterface {};
+}; }; }; };
+struct Struct<T> { long member; };
+interface X { void f([in] Struct<unsigned hyper> p); };
