@@ -4054,7 +4054,6 @@ SfxBoolItem InsertDoc SID_INSERTDOC
 
 //--------------------------------------------------------------------------
 SfxBoolItem InsertHyperlink SID_HYPERLINK_INSERT
-()
 [
     /* flags: */
     AutoUpdate = TRUE,
