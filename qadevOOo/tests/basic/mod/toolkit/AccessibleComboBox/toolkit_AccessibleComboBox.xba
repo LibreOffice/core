@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: toolkit_AccessibleComboBox.xba,v $ 
 '*
-'*  $Revision: 1.4 $ 
+'*  $Revision: 1.5 $ 
 '*
-'*  last change:$Date: 2003-05-27 12:20:36 $ 
+'*  last change:$Date: 2003-10-06 13:27:10 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -101,7 +101,7 @@ On Error Goto ErrHndl
     tabControl = utils.at_getAccessibleObjectForRole(xRoot, com.sun.star.accessibility.AccessibleRole.PAGE_TAB_LIST)
     tabControl.selectAccessibleChild(0)
     wait(500)
-    oObj = utils.at_getAccessibleObjectForRole(xRoot, com.sun.star.accessibility.AccessibleRole.COMBO_BOX,"","AccessibleComboBox")
+    oObj = utils.at_getAccessibleObjectForRole(xRoot, com.sun.star.accessibility.AccessibleRole.PANEL,"","AccessibleComboBox")
     accButton = utils.at_getAccessibleObjectForRole(xRoot, com.sun.star.accessibility.AccessibleRole.PUSH_BUTTON,"Cancel")
     Out.Log("Implementation Name: "+oObj.getImplementationName())
 
