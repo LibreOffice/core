@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MailMerge.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 18:16:51 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 10:13:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,8 @@
 //=============================================================================
 
 /** Gives access to mail merge functionality.
+
+    @since #107627#
  */
 service MailMerge
 {
