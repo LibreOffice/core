@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysis_funcnames.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2001-08-29 08:55:52 $
+ *  last change: $Author: vg $ $Date: 2001-10-30 21:19:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1718,7 +1718,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ finnish ] = "DEC2OCT";
         Text[ italian ] = "DECIMALE.OCT";
         Text[ danish ] = "DEC2OCT";
-        Text[ swedish ] = "DEC.TILL.OCT";
+        Text[ swedish ] = "DEC.TILL.OKT";
         Text[ polish ] = "DEC2OCT";
         Text[ portuguese_brazilian ] = "DEC2OCT";
         Text[ japanese ] = "DEC2OCT";
@@ -2485,6 +2485,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
     };
 
 };
+
 
 
 
