@@ -3,8 +3,8 @@ mkdir: %COMMON_DEST%\idl%_EXT%\drafts\com
 mkdir: %COMMON_DEST%\idl%_EXT%\drafts\com\sun
 mkdir: %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star
 mkdir: %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\sync
-mkdir: %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\geometry
-mkdir: %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\rendering
+mkdir: %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\frame
+mkdir: %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\frame\status
 mkdir: %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\formula
 mkdir: %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\sheet
 mkdir: %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\table
@@ -29,7 +29,9 @@ mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\datatransfer
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\datatransfer\dnd
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\datatransfer\clipboard
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\document
+mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\geometry
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\drawing
+mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\rendering
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\embed
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\form
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\form\component
@@ -124,7 +126,9 @@ mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\xml\wrapper
 ..\com\sun\star\datatransfer\clipboard\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\datatransfer\clipboard
 ..\com\sun\star\datatransfer\dnd\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\datatransfer\dnd
 ..\com\sun\star\document\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\document
+..\com\sun\star\geometry\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\geometry
 ..\com\sun\star\drawing\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\drawing
+..\com\sun\star\rendering\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\rendering
 ..\com\sun\star\embed\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\embed
 ..\com\sun\star\form\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\form
 ..\com\sun\star\form\component\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\form\component
@@ -187,8 +191,9 @@ mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\xml\wrapper
 ..\com\sun\star\ui\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\ui
 ..\com\sun\star\ui\dialogs\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\ui\dialogs
 
-..\drafts\com\sun\star\geometry\*.idl %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\geometry
-..\drafts\com\sun\star\rendering\*.idl %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\rendering
+..\drafts\com\sun\star\frame\*.idl %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\frame
+..\drafts\com\sun\star\frame\status\*.idl %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\frame\status
+..\drafts\com\sun\star\ui\*.idl %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\ui
 ..\drafts\com\sun\star\formula\*.idl %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\formula
 ..\drafts\com\sun\star\i18n\*.idl %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\i18n
 ..\drafts\com\sun\star\sheet\*.idl %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\sheet
