@@ -29,4 +29,23 @@
         <status value="final"/>
         <supported-service>com.sun.star.linguistic2.LinguProperties</supported-service>
     </component-description>
+    <component-description>
+        <author>Thomas Lange</author>
+        <name>com.sun.star.lingu2.HHConvDic</name>
+        <description>This object implements a user-defined text conversion dictionary for Hangul/Hanja conversion.</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="beta"/>
+        <supported-service>com.sun.star.linguistic2.ConversionDictionary</supported-service>
+        <supported-service>com.sun.star.linguistic2.HangulHanjaConversionDictionary</supported-service>
+    </component-description>
+    <component-description>
+        <author>Thomas Lange</author>
+        <name>com.sun.star.lingu2.ConvDicList</name>
+        <description>This component manages access to all user-defined text conversion dictionaries.</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="a"/>
+        <supported-service>com.sun.star.linguistic2.ConversionDictionaryList</supported-service>
+    </component-description>
 </module-description>
