@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tp_TitleRotation.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-26 20:31:55 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 08:47:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,6 @@
 #include "HelpIds.hrc"
 #include "TabPages.hrc"
 
-#define MASKCOLOR MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; }
-
 TabPage TP_ALIGNMENT
 {
     Hide = TRUE ;
@@ -72,25 +70,24 @@ TabPage TP_ALIGNMENT
     Control CTR_DIAL
     {
         HelpId = HID_SCH_ALIGNMENT_CTR_DIAL ;
-        Pos = MAP_APPFONT ( 30 , 14  ) ;
-        Size = MAP_APPFONT ( 42 , 43 ) ;
-        Text  = "ABCD" ;
+        Pos = MAP_APPFONT ( 12 , 14  ) ;
+        Size = MAP_APPFONT ( 43 , 43 ) ;
+        Text = "ABCD" ;
     };
-    ImageButton BTN_TXTSTACKED
+    TriStateBox BTN_TXTSTACKED
     {
         HelpId = HID_SCH_ALIGNMENT_STACKED ;
-        Pos = MAP_APPFONT ( 12 , 14  ) ;
-        Size = MAP_APPFONT ( 12 , 43 ) ;
+        Pos = MAP_APPFONT ( 139 , 14  ) ;
+        Size = MAP_APPFONT ( 109 , 10 ) ;
         TabStop = TRUE ;
-        ButtonImage = Image
-        {
-            ImageBitmap = Bitmap { File = "txtstk.bmp" ; };
-            MASKCOLOR ;
-        };
+// DR: TODO - after OOo 2.0 - enable localized strings
+        Text = "Ve~rtically stacked";
+//        Text [ de ] = "~Senkrecht gestapelt";
+//        Text [ en-US ] = "Ve~rtically stacked";
     };
     FixedText FT_DEGREES
     {
-        Pos = MAP_APPFONT ( 110 , 32  ) ;
+        Pos = MAP_APPFONT ( 93 , 32  ) ;
         Size = MAP_APPFONT ( 32 , 8 ) ;
         Text [ de ] = "Gra~d" ;
         Text [ en-US ] = "~Degrees" ;
@@ -100,29 +97,15 @@ TabPage TP_ALIGNMENT
     {
         HelpId = HID_SCH_ALIGNMENT_DEGREES ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 78 , 30  ) ;
+        Pos = MAP_APPFONT ( 61 , 30  ) ;
         Size = MAP_APPFONT ( 28 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
         Spin = TRUE ;
         StrictFormat = TRUE ;
-    };
-    FixedText FT_DUMMY
-    {
-        //only necessary for constructor of SvxWinOrientation
-        Hide = TRUE ;
-        Pos = MAP_APPFONT ( 194 , 26  ) ;
-        Size = MAP_APPFONT ( 60 , 10 ) ;
-        Text  = "unbenutzt" ;
-        //This text is never displayed and does therefore not have to be translated!
-    };
-    Control CTR_DUMMY
-    {
-        //only necessary for constructor of SvxWinOrientation
-        Hide = TRUE ;
-        Pos = MAP_APPFONT ( 204 , 42  ) ;
-        Size = MAP_APPFONT ( 50 , 15 ) ;
-        //TabStop = TRUE ;
+        SpinSize = 5 ;
+        Minimum = 0 ;
+        Maximum = 359 ;
     };
     FixedLine FL_ALIGN
     {
