@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgegif.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:11 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 18:25:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,7 +144,7 @@ ModalDialog DLG_EXPORT_GIF
         Text[ chinese_simplified ] = "½»´í(~I)";
         Text[ russian ] = "~Ñ ÷åğåäîâàíèåì";
         Text[ polish ] = "Interlaced";
-        Text[ japanese ] = "²İÀ°Ú°½‚µ‚½(~I)";
+        Text[ japanese ] = "²İÀ°Ú°½•û®(~I)";
         Text[ chinese_traditional ] = "¥æ¿ù(~I)";
         Text[ arabic ] = "ãÊÔÇÈß";
         Text[ dutch ] = "~Interlaced";
