@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgctrl.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: cl $ $Date: 2002-06-06 15:04:47 $
+ *  last change: $Author: gt $ $Date: 2002-06-28 14:26:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,14 @@ using namespace ::drafts::com::sun::star::accessibility;
 |*
 \************************************************************************/
 
+inline Bitmap* SvxRectCtl::GetBitmap( void )
+{
+    if( !pBitmap )
+        InitBitmap();
+
+    return pBitmap;
+}
+
 SvxRectCtl::SvxRectCtl( Window* pParent, const ResId& rResId, RECT_POINT eRpt,
                         USHORT nBorder, USHORT nCircle, CTL_STYLE eStyle ) :
 
@@ -122,11 +130,9 @@ SvxRectCtl::SvxRectCtl( Window* pParent, const ResId& rResId, RECT_POINT eRpt,
     nBorderWidth( nBorder ),
     nRadius     ( nCircle),
     m_nState    ( 0 ),
-    eCS         ( eStyle )
+    eCS         ( eStyle ),
+    pBitmap     ( NULL )
 {
-
-    pBitmap = new Bitmap( SVX_RES(RID_SVXCTRL_RECTBTNS) );
-
     SetMapMode( MAP_100TH_MM );
     aSize = GetOutputSize();
 
@@ -178,11 +184,62 @@ SvxRectCtl::~SvxRectCtl()
 
 // -----------------------------------------------------------------------
 
+void SvxRectCtl::InitBitmap( void )
+{
+    if( pBitmap )
+        delete pBitmap;
+
+    const StyleSettings&    rStyles = Application::GetSettings().GetStyleSettings();
+
+    pBitmap = new Bitmap( SVX_RES( RID_SVXCTRL_RECTBTNS ) );
+
+    // set bitmap-colors
+    long    aTempAry1[(7*sizeof(Color))/sizeof(long)];
+    long    aTempAry2[(7*sizeof(Color))/sizeof(long)];
+    Color*  pColorAry1 = (Color*)aTempAry1;
+    Color*  pColorAry2 = (Color*)aTempAry2;
+    pColorAry1[0] = Color( 0xC0, 0xC0, 0xC0 );  // light-gray
+    pColorAry1[1] = Color( 0xFF, 0xFF, 0x00 );  // yellow
+    pColorAry1[2] = Color( 0xFF, 0xFF, 0xFF );  // white
+    pColorAry1[3] = Color( 0x80, 0x80, 0x80 );  // dark-gray
+    pColorAry1[4] = Color( 0x00, 0x00, 0x00 );  // black
+    pColorAry1[5] = Color( 0x00, 0xFF, 0x00 );  // green
+    pColorAry1[6] = Color( 0x00, 0x00, 0xFF );  // blue
+    pColorAry2[0] = rStyles.GetDialogColor();       // background
+    pColorAry2[1] = rStyles.GetWindowColor();
+    pColorAry2[2] = rStyles.GetLightColor();
+    pColorAry2[3] = rStyles.GetShadowColor();
+    pColorAry2[4] = rStyles.GetDarkShadowColor();
+    pColorAry2[5] = rStyles.GetWindowTextColor();
+    pColorAry2[6] = rStyles.GetDialogColor();
+
+#ifdef DBG_UTIL
+    static BOOL     bModify = FALSE;
+    BOOL&           rModify = bModify;
+    if( rModify )
+    {
+        static int      n = 0;
+        static UINT8    r = 0xFF;
+        static UINT8    g = 0x00;
+        static UINT8    b = 0xFF;
+        int&            rn = n;
+        UINT8&          rr = r;
+        UINT8&          rg = g;
+        UINT8&          rb = b;
+        pColorAry2[ rn ] = Color( rr, rg, rb );
+    }
+#endif
+
+    pBitmap->Replace( pColorAry1, pColorAry2, 7, NULL );
+}
+
+// -----------------------------------------------------------------------
+
 void SvxRectCtl::InitSettings( BOOL bForeground, BOOL bBackground )
 {
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
 
-    if ( bForeground )
+    if( bForeground )
     {
         Color aTextColor = rStyleSettings.GetWindowTextColor();
 
@@ -191,13 +248,17 @@ void SvxRectCtl::InitSettings( BOOL bForeground, BOOL bBackground )
         SetTextColor( aTextColor );
     }
 
-    if ( bBackground )
+    if( bBackground )
     {
         if ( IsControlBackground() )
             SetBackground( GetControlBackground() );
         else
             SetBackground( rStyleSettings.GetWindowColor() );
     }
+
+    delete pBitmap;
+    pBitmap = NULL;     // forces new creating of bitmap
+
     Invalidate();
 }
 
@@ -418,55 +479,23 @@ void SvxRectCtl::Paint( const Rectangle& rRect )
     BOOL bNoHorz = (m_nState & CS_NOHORZ) != 0;
     BOOL bNoVert = (m_nState & CS_NOVERT) != 0;
 
-    // set bitmap-colors
-    long    aTempAry1[(7*sizeof(Color))/sizeof(long)];
-    long    aTempAry2[(7*sizeof(Color))/sizeof(long)];
-    Color*  pColorAry1 = (Color*)aTempAry1;
-    Color*  pColorAry2 = (Color*)aTempAry2;
-    pColorAry1[0] = Color( 0xC0, 0xC0, 0xC0 );  // light-gray
-    pColorAry1[1] = Color( 0xFF, 0xFF, 0x00 );  // yellow
-    pColorAry1[2] = Color( 0xFF, 0xFF, 0xFF );  // white
-    pColorAry1[3] = Color( 0x80, 0x80, 0x80 );  // dark-gray
-    pColorAry1[4] = Color( 0x00, 0x00, 0x00 );  // black
-    pColorAry1[5] = Color( 0x00, 0xFF, 0x00 );  // green
-    pColorAry1[6] = Color( 0x00, 0x00, 0xFF );  // blue
-    pColorAry2[0] = rStyles.GetDialogColor();       // background
-    pColorAry2[1] = rStyles.GetWindowColor();
-    pColorAry2[2] = rStyles.GetLightColor();
-    pColorAry2[3] = rStyles.GetShadowColor();
-    pColorAry2[4] = rStyles.GetDarkShadowColor();
-    pColorAry2[5] = rStyles.GetWindowTextColor();
-    pColorAry2[6] = rStyles.GetDialogColor();
+    Bitmap&         rBitmap = *GetBitmap();
 
-#ifdef DBG_UTIL
-    static BOOL     bModify = FALSE;
-    if( bModify )
-    {
-        static int      n = 0;
-        static UINT8    r = 0xFF;
-        static UINT8    g = 0x00;
-        static UINT8    b = 0xFF;
-        pColorAry2[ n ] = Color( r, g, b );
-    }
-#endif
+    DrawBitmap( aPtLT - aToCenter, aDstBtnSize, (bNoHorz | bNoVert)?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap );
+    DrawBitmap( aPtMT - aToCenter, aDstBtnSize, bNoVert?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap );
+    DrawBitmap( aPtRT - aToCenter, aDstBtnSize, (bNoHorz | bNoVert)?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap );
 
-    pBitmap->Replace( pColorAry1, pColorAry2, 7, NULL );
-
-    DrawBitmap( aPtLT - aToCenter, aDstBtnSize, (bNoHorz | bNoVert)?aBtnPnt3:aBtnPnt1, aBtnSize, *pBitmap );
-    DrawBitmap( aPtMT - aToCenter, aDstBtnSize, bNoVert?aBtnPnt3:aBtnPnt1, aBtnSize, *pBitmap );
-    DrawBitmap( aPtRT - aToCenter, aDstBtnSize, (bNoHorz | bNoVert)?aBtnPnt3:aBtnPnt1, aBtnSize, *pBitmap );
-
-    DrawBitmap( aPtLM - aToCenter, aDstBtnSize, bNoHorz?aBtnPnt3:aBtnPnt1, aBtnSize, *pBitmap );
+    DrawBitmap( aPtLM - aToCenter, aDstBtnSize, bNoHorz?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap );
 
     // Mittelpunkt bei Rechteck und Linie
     if( eCS == CS_RECT || eCS == CS_LINE )
-        DrawBitmap( aPtMM - aToCenter, aDstBtnSize, aBtnPnt1, aBtnSize, *pBitmap );
+        DrawBitmap( aPtMM - aToCenter, aDstBtnSize, aBtnPnt1, aBtnSize, rBitmap );
 
-    DrawBitmap( aPtRM - aToCenter, aDstBtnSize, bNoHorz?aBtnPnt3:aBtnPnt1, aBtnSize, *pBitmap );
+    DrawBitmap( aPtRM - aToCenter, aDstBtnSize, bNoHorz?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap );
 
-    DrawBitmap( aPtLB - aToCenter, aDstBtnSize, (bNoHorz | bNoVert)?aBtnPnt3:aBtnPnt1, aBtnSize, *pBitmap );
-    DrawBitmap( aPtMB - aToCenter, aDstBtnSize, bNoVert?aBtnPnt3:aBtnPnt1, aBtnSize, *pBitmap );
-    DrawBitmap( aPtRB - aToCenter, aDstBtnSize, (bNoHorz | bNoVert)?aBtnPnt3:aBtnPnt1, aBtnSize, *pBitmap );
+    DrawBitmap( aPtLB - aToCenter, aDstBtnSize, (bNoHorz | bNoVert)?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap );
+    DrawBitmap( aPtMB - aToCenter, aDstBtnSize, bNoVert?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap );
+    DrawBitmap( aPtRB - aToCenter, aDstBtnSize, (bNoHorz | bNoVert)?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap );
 
     // draw active button, avoid center pos for angle
     if( IsEnabled() && (eCS != CS_ANGLE || aPtNew != aPtMM) )
@@ -474,7 +503,7 @@ void SvxRectCtl::Paint( const Rectangle& rRect )
         Point       aCenterPt( aPtNew );
         aCenterPt -= aToCenter;
 
-        DrawBitmap( aCenterPt, aDstBtnSize, aBtnPnt2, aBtnSize, *pBitmap );
+        DrawBitmap( aCenterPt, aDstBtnSize, aBtnPnt2, aBtnSize, rBitmap );
     }
 }
 
