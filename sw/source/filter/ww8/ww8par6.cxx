@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.114 $
+ *  $Revision: 1.115 $
  *
- *  last change: $Author: cmc $ $Date: 2002-10-11 12:51:28 $
+ *  last change: $Author: cmc $ $Date: 2002-10-11 14:16:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2485,7 +2485,7 @@ WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM, SwWW8ImplReader& rIo, WW8FlyPara& rWW,
     memset( this, 0, sizeof( WW8SwFlyPara ) );  // Initialisieren
     nNewNettoWidth = MINFLY;                    // Minimum
 
-    eSurround = ( rWW.nSp37 > 1 ) ? SURROUND_PARALLEL : SURROUND_NONE;
+    eSurround = ( rWW.nSp37 > 1 ) ? SURROUND_IDEAL : SURROUND_NONE;
 
     /*
      #95905#, #83307# seems to have gone away now, so reenable parallel
@@ -2717,12 +2717,7 @@ WW8FlySet::WW8FlySet(SwWW8ImplReader& rReader, const WW8FlyPara* pFW,
     aSur.SetAnchorOnly( true);
 #endif
 
-//  GoldCut umfliesst inzwischen nur dann auf beiden Seiten, wenn der Fly
-//  schmaler als ca. 1.5cm ist. Also entspricht normales Parallel besser
-//  dem WW-Verhalten.
-//  aSur.SetGoldCut( pFS->eSurround == SURROUND_PARALLEL );
-
-    Put( aSur );
+    Put(aSur);
 
     short aSizeArray[5]={0};
     rReader.SetFlyBordersShadow(*this,(const WW8_BRC*)pFW->brc,&aSizeArray[0]);
