@@ -2,9 +2,9 @@
  *
  *  $RCSfile: kernihdl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:05 $
+ *  last change: $Author: mib $ $Date: 2000-10-23 12:58:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,12 +99,13 @@ sal_Bool XMLKerningPropHdl::importXML( const OUString& rStrImpValue, Any& rValue
     sal_Bool bRet = sal_True;
     sal_Int32 nKerning = 0;
 
-    if( !rStrImpValue.compareToAscii( sXML_kerning_normal )  )
+    if( !rStrImpValue.equalsAsciiL( sXML_kerning_normal,
+                                    sizeof(sXML_kerning_normal) ) )
     {
         bRet = rUnitConverter.convertMeasure( nKerning, rStrImpValue );
     }
 
-    rValue <<= nKerning;
+    rValue <<= (sal_Int16)nKerning;
 
     return bRet;
 }
