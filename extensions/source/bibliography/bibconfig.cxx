@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bibconfig.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-11-14 08:43:41 $
+ *  last change: $Author: os $ $Date: 2000-11-15 11:03:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,9 +73,12 @@
 #ifndef _COM_SUN_STAR_UNO_ANY_HXX_
 #include <com/sun/star/uno/Any.hxx>
 #endif
-
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
+#include <com/sun/star/beans/PropertyValue.hpp>
+#endif
 using namespace rtl;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::beans;
 /* -----------------11.11.99 14:34-------------------
 
  --------------------------------------------------*/
@@ -84,6 +87,8 @@ SV_DECL_PTRARR_DEL(MappingArray, MappingPtr, 2, 2);
 SV_IMPL_PTRARR(MappingArray, MappingPtr);
 
 #define C2U(cChar) OUString::createFromAscii(cChar)
+
+const char* cDataSourceHistory = "DataSourceHistory";
 /* -----------------------------13.11.00 12:21--------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -159,7 +164,71 @@ BibConfig::BibConfig() :
             }
         }
     }
-
+    OUString sName(C2U("DataSourceName"));
+    OUString sTable(C2U("Command"));
+    OUString sCommandType(C2U("CommandType"));
+    Sequence< OUString > aNodeNames = GetNodeNames(C2U(cDataSourceHistory));
+    const OUString* pNodeNames = aNodeNames.getConstArray();
+    for(sal_Int32 nNode = 0; nNode < aNodeNames.getLength(); nNode++)
+    {
+        Sequence<OUString> aNames(3);
+        OUString* pNames = aNames.getArray();
+        OUString sPrefix(C2U(cDataSourceHistory));
+        sPrefix += C2U("/");
+        sPrefix += pNodeNames[nNode];
+        sPrefix += C2U("/");
+        pNames[0] = sPrefix;
+        pNames[0] += sName;
+        pNames[1] = sPrefix;
+        pNames[1] += sTable;
+        pNames[2] = sPrefix;
+        pNames[2] += sCommandType;
+        Sequence<Any> aValues = GetProperties(aNames);
+        const Any* pValues = aValues.getConstArray();
+        if(aValues.getLength() == aNames.getLength())
+        {
+            Mapping* pMapping = new Mapping;
+            sal_Int32 nColumnIndex = 0;
+            pValues[0] >>= pMapping->sURL;
+            pValues[1] >>= pMapping->sTableName;
+            pValues[2] >>= pMapping->nCommandType;
+            //field assignment is contained in another set
+            sPrefix += C2U("Fields");
+            Sequence< OUString > aAssignmentNodeNames = GetNodeNames(sPrefix);
+            const OUString* pAssignmentNodeNames = aAssignmentNodeNames.getConstArray();
+            Sequence<OUString> aAssignmentPropertyNames(aAssignmentNodeNames.getLength() * 2);
+            OUString* pAssignmentPropertyNames = aAssignmentPropertyNames.getArray();
+            sal_Int16 nFieldIdx = 0;
+            for(sal_Int16 nField = 0; nField < aAssignmentNodeNames.getLength(); nField++)
+            {
+                OUString sSubPrefix(sPrefix);
+                sSubPrefix += C2U("/");
+                sSubPrefix += pAssignmentNodeNames[nField];
+                pAssignmentPropertyNames[nFieldIdx] = sSubPrefix;
+                pAssignmentPropertyNames[nFieldIdx++] += C2U("/FieldName");
+                pAssignmentPropertyNames[nFieldIdx] = sSubPrefix;
+                pAssignmentPropertyNames[nFieldIdx++]   += C2U("/DatasourceFieldName");
+            }
+            Sequence<Any> aAssignmentValues = GetProperties(aAssignmentPropertyNames);
+            const Any* pAssignmentValues = aAssignmentValues.getConstArray();
+            OUString sTempLogical;
+            OUString sTempReal;
+            sal_Int16 nSetMapping = 0;
+            nFieldIdx = 0;
+            for(sal_Int16 nFieldVal = 0; nFieldVal < aAssignmentValues.getLength() / 2; nFieldVal++)
+            {
+                pAssignmentValues[nFieldIdx++] >>= sTempLogical;
+                pAssignmentValues[nFieldIdx++] >>= sTempReal;
+                if(sTempLogical.getLength() && sTempReal.getLength())
+                {
+                    pMapping->aColumnPairs[nSetMapping].sLogicalColumnName = sTempLogical;
+                    pMapping->aColumnPairs[nSetMapping++].sRealColumnName = sTempReal;
+                }
+            }
+            pMappingsArr->Insert(pMapping, pMappingsArr->Count());
+        }
+        pValues = aValues.getConstArray();
+    }
 }
 /* -----------------------------13.11.00 11:00--------------------------------
 
@@ -194,6 +263,15 @@ void BibConfig::SetBibliographyURL(const BibDBDescriptor& rDesc)
 /* -----------------------------13.11.00 12:20--------------------------------
 
  ---------------------------------------------------------------------------*/
+OUString lcl_GetRealNameFor(const OUString& rLogName, const Mapping& rMapping)
+{
+    for(sal_Int16 nField = 0; nField < COLUMN_COUNT; nField++)
+        if(rMapping.aColumnPairs[nField].sLogicalColumnName == rLogName)
+            return rMapping.aColumnPairs[nField].sRealColumnName;
+    return OUString();
+}
+
+//---------------------------------------------------------------------------
 void    BibConfig::Commit()
 {
     Sequence<OUString>& aNames = GetPropertyNames();
@@ -211,6 +289,56 @@ void    BibConfig::Commit()
         }
     }
     PutProperties(aNames, aValues);
+    ClearNodeSet( C2U(cDataSourceHistory));
+    OUString sEmpty;
+    Sequence< PropertyValue > aNodeValues(pMappingsArr->Count() * 3);
+    PropertyValue* pNodeValues = aNodeValues.getArray();
+
+    sal_Int32 nIndex = 0;
+    OUString sName(C2U("DataSourceName"));
+    OUString sTable(C2U("Command"));
+    OUString sCommandType(C2U("CommandType"));
+    for(sal_Int32 i = 0; i < pMappingsArr->Count(); i++)
+    {
+        const Mapping* pMapping = pMappingsArr->GetObject(i);
+        OUString sPrefix(C2U(cDataSourceHistory));
+        sPrefix += C2U("/_");
+        sPrefix += OUString::valueOf(i);
+        sPrefix += C2U("/");
+        pNodeValues[nIndex].Name    = sPrefix;
+        pNodeValues[nIndex].Name    += sName;
+        pNodeValues[nIndex++].Value <<= pMapping->sURL;
+        pNodeValues[nIndex].Name    = sPrefix;
+        pNodeValues[nIndex].Name    += sTable;
+        pNodeValues[nIndex++].Value <<= pMapping->sTableName;
+        pNodeValues[nIndex].Name    = sPrefix;
+        pNodeValues[nIndex].Name    += sCommandType;
+        pNodeValues[nIndex++].Value <<= pMapping->nCommandType;
+        SetSetProperties( C2U(cDataSourceHistory), aNodeValues);
+
+        sPrefix += C2U("Fields");
+        sal_Int32 nFieldAssignment = 0;
+        OUString sFieldName = C2U("/FieldName");
+        OUString sDatabaseFieldName = C2U("/DatasourceFieldName");
+        ClearNodeSet( sPrefix );
+
+        while(pMapping->aColumnPairs[nFieldAssignment].sLogicalColumnName.getLength())
+        {
+            OUString sSubPrefix(sPrefix);
+            sSubPrefix += C2U("/_");
+            sSubPrefix += OUString::valueOf(nFieldAssignment);
+            Sequence< PropertyValue > aAssignmentValues(2);
+            PropertyValue* pAssignmentValues = aAssignmentValues.getArray();
+            pAssignmentValues[0].Name   = sSubPrefix;
+            pAssignmentValues[0].Name   += sFieldName;
+            pAssignmentValues[0].Value <<= pMapping->aColumnPairs[nFieldAssignment].sLogicalColumnName;
+            pAssignmentValues[1].Name   = sSubPrefix;
+            pAssignmentValues[1].Name   += sDatabaseFieldName;
+            pAssignmentValues[1].Value <<= pMapping->aColumnPairs[nFieldAssignment].sRealColumnName;
+            SetSetProperties( sPrefix, aAssignmentValues );
+            nFieldAssignment++;
+        }
+    }
 }
 /* -----------------------------13.11.00 12:23--------------------------------
 

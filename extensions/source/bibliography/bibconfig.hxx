@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bibconfig.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: os $ $Date: 2000-11-13 11:38:26 $
+ *  last change: $Author: os $ $Date: 2000-11-15 11:03:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,14 +104,18 @@ class MappingArray;
 struct StringPair
 {
     rtl::OUString   sRealColumnName;
-    rtl::OUString  sLogicalColumnName;
+    rtl::OUString   sLogicalColumnName;
 };
 //-----------------------------------------------------------------------------
 struct Mapping
 {
     rtl::OUString       sTableName;
     rtl::OUString       sURL;
+    sal_Int16           nCommandType;
     StringPair          aColumnPairs[COLUMN_COUNT];
+
+    Mapping() :
+        nCommandType(0){}
 };
 //-----------------------------------------------------------------------------
 struct BibDBDescriptor
