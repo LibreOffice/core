@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsselect.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-20 18:14:20 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:47:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,14 +93,58 @@
 #ifndef _SV_SYSDATA_HXX
 #include <vcl/sysdata.hxx>
 #endif
+#ifndef _COM_SUN_STAR_SDBCX_XCREATECATALOG_HPP_
+#include <com/sun/star/sdbcx/XCreateCatalog.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSETINFO_HPP_
+#include <com/sun/star/beans/XPropertySetInfo.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UI_DIALOGS_XEXECUTABLEDIALOG_HPP_
+#include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_XWINDOW_HPP_
+#include <com/sun/star/awt/XWindow.hpp>
+#endif
+#ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
+#include "dbustrings.hrc"
+#endif
+#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
+#include <toolkit/helper/vclunohelper.hxx>
+#endif
+#ifndef _COMPHELPER_EXTRACT_HXX_
+#include <comphelper/extract.hxx>
+#endif
+#ifndef _COMPHELPER_TYPES_HXX_
+#include <comphelper/types.hxx>
+#endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+#ifndef _DBAUI_DATASOURCEITEMS_HXX_
+#include "dsitems.hxx"
+#endif
+#ifndef _SFXSTRITEM_HXX
+#include <svtools/stritem.hxx>
+#endif
+#ifndef _SFXITEMSET_HXX
+#include <svtools/itemset.hxx>
+#endif
 
 //.........................................................................
 namespace dbaui
 {
 //.........................................................................
-
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::sdbc;
+using namespace ::com::sun::star::sdbcx;
+using namespace ::com::sun::star::ui::dialogs;
+using namespace ::comphelper;
 //==================================================================
-ODatasourceSelectDialog::ODatasourceSelectDialog(Window* _pParent, const StringBag& _rDatasources, DATASOURCE_TYPE _eType)
+ODatasourceSelectDialog::ODatasourceSelectDialog(Window* _pParent, const StringBag& _rDatasources, DATASOURCE_TYPE _eType,SfxItemSet* _pOutputSet)
      :ModalDialog(_pParent, ModuleRes(DLG_DATASOURCE_SELECTION))
      ,m_aDescription        (this, ResId(FT_DESCRIPTION))
      ,m_aDatasource         (this, ResId(LB_DATASOURCE))
@@ -108,10 +152,16 @@ ODatasourceSelectDialog::ODatasourceSelectDialog(Window* _pParent, const StringB
      ,m_aCancel             (this, ResId(PB_CANCEL))
      ,m_aHelp               (this, ResId(PB_HELP))
      ,m_aManageDatasources  (this, ResId(PB_MANAGE))
+     ,m_aCreateAdabasDB     (this, ResId(PB_CREATE))
+     ,m_pOutputSet(_pOutputSet)
 {
     if (DST_ADABAS == _eType)
     {   // set a new title (indicating that we're browsing local data sources only)
         SetText(ResId(STR_LOCAL_DATASOURCES));
+        m_aDescription.SetText(ResId(STR_DESCRIPTION2));
+
+        m_aCreateAdabasDB.Show();
+        m_aCreateAdabasDB.SetClickHdl(LINK(this,ODatasourceSelectDialog,CreateDBClickHdl));
 
         // resize the dialog a little bit, 'cause Adabas data source names are usually somewhat shorter
         // than ODBC ones are
@@ -128,7 +178,7 @@ ODatasourceSelectDialog::ODatasourceSelectDialog(Window* _pParent, const StringB
         m_aDescription.SetSizePixel(Size(aOldSize.Width() - nLostPixels, aOldSize.Height()));
 
         // move the buttons
-        PushButton* pButtons[] = { &m_aOk, &m_aCancel, &m_aHelp };
+        PushButton* pButtons[] = { &m_aOk, &m_aCancel, &m_aHelp ,&m_aCreateAdabasDB};
         for (sal_Int32 i=0; i<sizeof(pButtons)/sizeof(pButtons[0]); ++i)
         {
             Point aOldPos = pButtons[i]->GetPosPixel();
@@ -161,7 +211,60 @@ IMPL_LINK( ODatasourceSelectDialog, ListDblClickHdl, ListBox *, pListBox )
         EndDialog(RET_OK);
     return 0;
 }
+// -----------------------------------------------------------------------
+IMPL_LINK( ODatasourceSelectDialog, CreateDBClickHdl, PushButton*, pButton )
+{
+    try
+    {
+        OSL_ENSURE(m_pOutputSet,"No itemset given!");
+        Reference< ::com::sun::star::lang::XMultiServiceFactory > xORB = ::comphelper::getProcessServiceFactory();
+        Reference<XCreateCatalog> xCatalog(xORB->createInstance(SERVICE_EXTENDED_ADABAS_DRIVER),UNO_QUERY);
+        if ( xCatalog.is() && m_pOutputSet )
+        {
+            Sequence< Any > aArgs(2);
+            aArgs[0] <<= PropertyValue(::rtl::OUString::createFromAscii("CreateCatalog"), 0,makeAny(xCatalog) , PropertyState_DIRECT_VALUE);
+            aArgs[1] <<= PropertyValue(PROPERTY_PARENTWINDOW, 0, makeAny(VCLUnoHelper::GetInterface(this)), PropertyState_DIRECT_VALUE);
 
+            Reference< XExecutableDialog > xDialog(
+                xORB->createInstanceWithArguments(SERVICE_SDB_ADABASCREATIONDIALOG, aArgs), UNO_QUERY);
+            if (!xDialog.is())
+            {
+                //  ShowServiceNotAvailableError(this, String(SERVICE_SDB_ADABASCREATIONDIALOG), sal_True);
+                return 0L;
+            }
+
+            if ( xDialog->execute() == RET_OK )
+            {
+                Reference<XPropertySet> xProp(xDialog,UNO_QUERY);
+                if(xProp.is())
+                {
+                    Reference<XPropertySetInfo> xPropInfo(xProp->getPropertySetInfo());
+                    if(xPropInfo->hasPropertyByName(PROPERTY_DATABASENAME))
+                    {
+                        String sDatabaseName;
+                        sDatabaseName = String(::comphelper::getString(xProp->getPropertyValue(PROPERTY_DATABASENAME)));
+                        m_aDatasource.SelectEntry(m_aDatasource.InsertEntry( sDatabaseName ));
+
+                    }
+                    if ( xPropInfo->hasPropertyByName(PROPERTY_CONTROLUSER) )
+                        m_pOutputSet->Put(SfxStringItem(DSID_CONN_CTRLUSER, ::comphelper::getString(xProp->getPropertyValue(PROPERTY_CONTROLUSER))));
+                    if ( xPropInfo->hasPropertyByName(PROPERTY_CONTROLPASSWORD) )
+                        m_pOutputSet->Put(SfxStringItem(DSID_CONN_CTRLPWD, ::comphelper::getString(xProp->getPropertyValue(PROPERTY_CONTROLPASSWORD))));
+                    if ( xPropInfo->hasPropertyByName(PROPERTY_USER) )
+                        m_pOutputSet->Put(SfxStringItem(DSID_USER, ::comphelper::getString(xProp->getPropertyValue(PROPERTY_USER))));
+                    if ( xPropInfo->hasPropertyByName(PROPERTY_PASSWORD) )
+                        m_pOutputSet->Put(SfxStringItem(DSID_PASSWORD, ::comphelper::getString(xProp->getPropertyValue(PROPERTY_PASSWORD))));
+                    if ( xPropInfo->hasPropertyByName(PROPERTY_CACHESIZE) )
+                        m_pOutputSet->Put(SfxStringItem(DSID_CONN_CACHESIZE, ::comphelper::getString(xProp->getPropertyValue(PROPERTY_CACHESIZE))));
+                }
+            }
+        }
+    }
+    catch(Exception&)
+    {
+    }
+    return 0L;
+}
 // -----------------------------------------------------------------------
 IMPL_LINK( ODatasourceSelectDialog, ManageClickHdl, PushButton*, pButton )
 {
