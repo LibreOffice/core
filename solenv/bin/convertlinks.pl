@@ -42,6 +42,12 @@ foreach $i (@files)
         {
             $relPath = "\.\.\/$relPath";
         }
+    } else
+    {
+        if($pattern eq "examples")
+        {
+            $relPath = "\.\.";
+        }
     }
 
     @lines = <FILEIN>;
@@ -49,6 +55,7 @@ foreach $i (@files)
     open( FILEOUT, ">$i->{filename}.tmp" ) || die "could not open $i->{filename} for writing";
     foreach $_ (@lines)
     {
+        # change the refenreces to the index in dependency of UDK or ODK
         if("$ARGV[1]" eq "udk_" | "$ARGV[1]" eq "odk_")
         {
             s#((\")(index.html\"))#$2$ARGV[1]$3#go;
@@ -59,6 +66,22 @@ foreach $i (@files)
         s#((http:\/\/api\.openoffice\.org\/)(common\/ref[^\"]+))#$relPath\/$3#go;
         if($pattern eq "examples")
         {
+            # change the links for the C++/Java examples in the ODK
+            s#((http:\/\/api\.openoffice\.org\/source\/browse\/api\/odk\/examples\/)(java\/*))#$3#go;
+            s#((http:\/\/api\.openoffice\.org\/source\/browse\/api\/odk\/examples\/)(cpp\/*))#$3#go;
+
+            # change link api specific stuff
+            s#((http:\/\/api\.openoffice\.org\/)(design_guide.html))#$relPath\/www\/$3#go;
+            s#(http:\/\/api\.openoffice\.org\/index.html)#$relPath\/www\/odk_index.html#go;
+
+            # change the links for the C++ examples in the UDK
+            s#((http:\/\/udk\.openoffice\.org\/source\/browse\/udk\/product\/examples\/)(cpp\/*))#$3#go;
+
+            # change the links to udk.openoffice.org to relativ links
+            s#(http:\/\/udk\.openoffice\.org\/index.html)#$relPath\/www\/udk_index.html#go;
+            s#((http:\/\/udk\.openoffice\.org)(\/*))#$relPath\/www$3#go;
+
+            # change the link to tutorial
             s#((http:\/\/api\.openoffice\.org\/)(basic\/man\/tutorial\/tutorial.pdf))#$relPath\/www\/$3#go;
         }
         print FILEOUT $_;
@@ -73,8 +96,8 @@ exit $return;
 
 sub wanted {
     %file = (
-        directory => $dir,
-        filename  => $name
-    );
+         directory => $dir,
+         filename  => $name
+         );
     push @files, {%file} if /^.*\.html\z/s;
 }
