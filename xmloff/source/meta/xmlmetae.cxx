@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlmetae.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dvo $ $Date: 2001-10-19 18:43:58 $
+ *  last change: $Author: nn $ $Date: 2001-12-11 16:48:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,6 @@
 #include "xmlmetae.hxx"
 #include "attrlist.hxx"
 #include "nmspmap.hxx"
-#include "rscrev.hxx"
 
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
@@ -78,6 +77,10 @@
 
 #ifndef _TOOLS_TIME_HXX
 #include <tools/time.hxx>
+#endif
+
+#ifndef _UTL_BOOTSTRAP_HXX
+#include <unotools/bootstrap.hxx>
 #endif
 
 #ifndef _XMLOFF_XMLNMSPE_HXX
@@ -310,8 +313,10 @@ void SfxXMLMetaExport::Export()
     //  build-id as comment
     if (rExport.GetExtDocHandler().is())
     {
-        sValue = String::CreateFromAscii( RSCUPDVER );
-        rExport.GetExtDocHandler()->comment( sValue );
+        rtl::OUString aDefault;
+        sValue = utl::Bootstrap::getBuildIdData( aDefault );
+        if ( sValue.getLength() )
+            rExport.GetExtDocHandler()->comment( sValue );
     }
 
     //  document title
