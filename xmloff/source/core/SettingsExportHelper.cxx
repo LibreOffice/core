@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SettingsExportHelper.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:05:27 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 14:12:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -567,7 +567,6 @@ void XMLSettingsExportHelper::exportSettings(
                     const rtl::OUString& rName) const
 {
     DBG_ASSERT(rName.getLength(), "no name");
-    DBG_ASSERT(aProps.getLength(), "no properties to export");
     ::rtl::OUString aQName =
         rExport.GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_OOO, rName );
     exportSequencePropertyValue(aProps, aQName);
