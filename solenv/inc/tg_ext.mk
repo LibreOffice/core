@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_ext.mk,v $
 #
-#   $Revision: 1.58 $
+#   $Revision: 1.59 $
 #
-#   last change: $Author: obo $ $Date: 2004-10-19 11:45:10 $
+#   last change: $Author: hjs $ $Date: 2004-10-21 09:56:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -103,7 +103,7 @@ P_INSTALL_TARGET_DIR=$(MISC)$/install
 NEW_PATCH_FILE_NAME:=$(TARFILE_NAME)
 .ELSE			# "$(PATCH_FILE_NAME)"=="none" ||	"$(PATCH_FILE_NAME)"==""
 NEW_PATCH_FILE_NAME:=$(PATCH_FILE_NAME)
-PATH_FILE_DEP:=$(PRJ)$/$(PATCH_FILE_DEP)
+PATCH_FILE_DEP:=$(PRJ)$/$(NEW_PATCH_FILE_NAME)
 .ENDIF			# "$(PATCH_FILE_NAME)"=="none" ||	"$(PATCH_FILE_NAME)"==""
 
 .IF "$(TAR_EXCLUDES)"!=""
