@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoparagraph.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-03-29 14:40:38 $
+ *  last change: $Author: os $ $Date: 2001-04-03 07:28:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,9 @@
 #define _SVSTDARR_USHORTSSORT
 #include <svtools/svstdarr.hxx>
 
+#ifndef _COM_SUN_STAR_BEANS_PropertyAttribute_HPP_
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+#endif
 #ifndef _COM_SUN_STAR_TEXT_WRAPTEXTMODE_HPP_
 #include <com/sun/star/text/WrapTextMode.hpp>
 #endif
@@ -247,64 +250,142 @@ Reference< XPropertySetInfo >  SwXParagraph::getPropertySetInfo(void)
 /*-- 11.12.98 08:12:49---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXParagraph::setPropertyValue(const OUString& rPropertyName, const uno::Any& aValue)
-    throw( beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException,
-        lang::WrappedTargetException, uno::RuntimeException )
+void SwXParagraph::setPropertyValue(const OUString& rPropertyName, const Any& aValue)
+    throw( UnknownPropertyException, PropertyVetoException, IllegalArgumentException,
+        WrappedTargetException, RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    uno::Any aAny;
-    SwUnoCrsr* pUnoCrsr = GetCrsr();
-    if(pUnoCrsr)
-    {
-        if(rPropertyName.equals(C2U(UNO_NAME_TEXT_WRAP)) ||
-            rPropertyName.equals(C2U(UNO_NAME_ANCHOR_TYPE)) ||
-                rPropertyName.equals(C2U(UNO_NAME_ANCHOR_TYPES)))
-        {
-            throw IllegalArgumentException();
-        }
-        SwParaSelection aParaSel(pUnoCrsr);
-        SwXTextCursor::SetPropertyValue(*pUnoCrsr, aPropSet, rPropertyName, aValue);
-    }
-    else
-        throw uno::RuntimeException();
+    Sequence<OUString> aPropertyNames(1);
+    aPropertyNames.getArray()[0] = rPropertyName;
+    Sequence<Any> aValues(1);
+    aValues.getArray()[0] = aValue;
+    setPropertyValues(aPropertyNames, aValues);
 }
 /*-- 11.12.98 08:12:49---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 uno::Any SwXParagraph::getPropertyValue(const OUString& rPropertyName)
-    throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
+    throw( UnknownPropertyException, WrappedTargetException, RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    uno::Any aAny;
-    SwUnoCrsr* pUnoCrsr = ((SwXParagraph*)this)->GetCrsr();
+    Sequence<OUString> aPropertyNames(1);
+    aPropertyNames.getArray()[0] = rPropertyName;
+    Sequence< Any > aRet = getPropertyValues(aPropertyNames );
+    return aRet.getConstArray()[0];
+}
+/* -----------------------------02.04.01 11:43--------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SwXParagraph::setPropertyValues(
+    const Sequence< OUString >& rPropertyNames,
+    const Sequence< Any >& aValues )
+        throw(PropertyVetoException, IllegalArgumentException,
+                        WrappedTargetException, RuntimeException)
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    SwUnoCrsr* pUnoCrsr = GetCrsr();
     if(pUnoCrsr)
     {
-        if(!SwXParagraph::getDefaultTextContentValue(aAny, rPropertyName))
+        const OUString* pPropertyNames = rPropertyNames.getConstArray();
+        const Any* pValues = aValues.getConstArray();
+        const SfxItemPropertyMap*   pMap = aPropSet.getPropertyMap();
+        OUString sTmp;
+        SwParaSelection aParaSel(pUnoCrsr);
+        for(sal_Int32 nProp = 0; nProp < rPropertyNames.getLength(); nProp++)
         {
-            SwParaSelection aParaSel(pUnoCrsr);
-            SwNode& rTxtNode = pUnoCrsr->GetPoint()->nNode.GetNode();
-            SwAttrSet& rAttrSet = ((SwTxtNode&)rTxtNode).GetSwAttrSet();
-
-            String aPropertyName(rPropertyName);
-            const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
-                                        aPropSet.getPropertyMap(), rPropertyName);
-            BOOL bDone = FALSE;
+            pMap = SfxItemPropertyMap::GetByName(pMap, pPropertyNames[nProp]);
             if(pMap)
             {
-                PropertyState eTemp;
-                bDone = SwUnoCursorHelper::getCrsrPropertyValue(pMap, *pUnoCrsr, rAttrSet, aAny, eTemp );
-                if(!bDone)
-                    aAny = aPropSet.getPropertyValue(*pMap, rAttrSet);
+                if(pMap->nFlags & PropertyAttribute::READONLY)
+                    throw IllegalArgumentException();
+                {
+                    IllegalArgumentException aArg;
+                    aArg.Message = pPropertyNames[nProp];
+                    throw aArg;
+                }
+                SwXTextCursor::SetPropertyValue(*pUnoCrsr, aPropSet,
+                                        sTmp, pValues[nProp], pMap);
             }
             else
-                throw UnknownPropertyException();
-//          aAny = SwXTextCursor::GetPropertyValue(*pUnoCrsr, aPropSet, rPropertyName);
+            {
+                UnknownPropertyException aExcept;
+                aExcept.Message = pPropertyNames[nProp];
+                throw aExcept;
+            }
         }
     }
     else
         throw uno::RuntimeException();
-    return aAny;
 }
+/* -----------------------------02.04.01 11:43--------------------------------
+
+ ---------------------------------------------------------------------------*/
+Sequence< Any > SwXParagraph::getPropertyValues(
+    const Sequence< OUString >& rPropertyNames )
+        throw(RuntimeException)
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    Sequence< Any > aValues(rPropertyNames.getLength());
+    SwUnoCrsr* pUnoCrsr = ((SwXParagraph*)this)->GetCrsr();
+    if(pUnoCrsr)
+    {
+        Any* pValues = aValues.getArray();
+        const OUString* pPropertyNames = rPropertyNames.getConstArray();
+        const SfxItemPropertyMap*   pMap = aPropSet.getPropertyMap();
+        for(sal_Int32 nProp = 0; nProp < rPropertyNames.getLength(); nProp++)
+        {
+            SwParaSelection aParaSel(pUnoCrsr);
+            SwNode& rTxtNode = pUnoCrsr->GetPoint()->nNode.GetNode();
+            SwAttrSet& rAttrSet = ((SwTxtNode&)rTxtNode).GetSwAttrSet();
+            pMap = SfxItemPropertyMap::GetByName(pMap, pPropertyNames[nProp]);
+            if(pMap)
+            {
+                if(!SwXParagraph::getDefaultTextContentValue(
+                    pValues[nProp], pPropertyNames[nProp], pMap->nWID))
+                {
+                    BOOL bDone = FALSE;
+                    PropertyState eTemp;
+                    bDone = SwUnoCursorHelper::getCrsrPropertyValue(
+                                pMap, *pUnoCrsr, rAttrSet, pValues[nProp], eTemp );
+                    if(!bDone)
+                        pValues[nProp] = aPropSet.getPropertyValue(*pMap, rAttrSet);
+                }
+            }
+            else
+            {
+                UnknownPropertyException aExcept;
+                aExcept.Message = pPropertyNames[nProp];
+                throw aExcept;
+            }
+        }
+    }
+    else
+        throw RuntimeException();
+    return aValues;
+}
+/* -----------------------------02.04.01 11:43--------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SwXParagraph::addPropertiesChangeListener(
+    const Sequence< OUString >& aPropertyNames,
+    const Reference< XPropertiesChangeListener >& xListener )
+        throw(RuntimeException)
+{}
+/* -----------------------------02.04.01 11:43--------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SwXParagraph::removePropertiesChangeListener(
+    const Reference< XPropertiesChangeListener >& xListener )
+        throw(RuntimeException)
+{}
+/* -----------------------------02.04.01 11:43--------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SwXParagraph::firePropertiesChangeEvent(
+    const Sequence< OUString >& aPropertyNames,
+    const Reference< XPropertiesChangeListener >& xListener )
+        throw(RuntimeException)
+{}
 /* -----------------------------12.09.00 11:09--------------------------------
 
  ---------------------------------------------------------------------------*/

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: os $ $Date: 2001-03-29 14:40:38 $
+ *  last change: $Author: os $ $Date: 2001-04-03 07:28:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1870,7 +1870,8 @@ void SwXTextCursor::setString(const OUString& aString) throw( uno::RuntimeExcept
 
  ---------------------------------------------------------------------------*/
 Any SwXTextCursor::GetPropertyValue(
-    SwPaM& rPaM, const SfxItemPropertySet& rPropSet, const OUString& rPropertyName)
+    SwPaM& rPaM, const SfxItemPropertySet& rPropSet,
+    const OUString& rPropertyName)
         throw( UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     Any aAny;
@@ -1901,14 +1902,15 @@ Any SwXTextCursor::GetPropertyValue(
 
  ---------------------------------------------------------------------------*/
 void SwXTextCursor::SetPropertyValue(
-    SwPaM& rPaM, const SfxItemPropertySet& rPropSet, const OUString& rPropertyName, const Any& aValue)
+    SwPaM& rPaM, const SfxItemPropertySet& rPropSet, const OUString& rPropertyName,
+    const Any& aValue, const SfxItemPropertyMap* _pMap)
         throw (UnknownPropertyException, PropertyVetoException,
             IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
     Any aAny;
 
     SwDoc* pDoc = rPaM.GetDoc();
-    const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
+    const SfxItemPropertyMap*   pMap = _pMap ? _pMap : SfxItemPropertyMap::GetByName(
                             rPropSet.getPropertyMap(), rPropertyName);
     if(pMap)
     {

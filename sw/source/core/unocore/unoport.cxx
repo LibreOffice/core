@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoport.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dvo $ $Date: 2001-02-21 20:48:27 $
+ *  last change: $Author: os $ $Date: 2001-04-03 07:28:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,11 +65,15 @@
 
 #pragma hdrstop
 
+#include <cmdid.h>
 #ifndef _VOS_MUTEX_HXX_ //autogen
 #include <vos/mutex.hxx>
 #endif
 #ifndef _SV_SVAPP_HXX //autogen
 #include <vcl/svapp.hxx>
+#endif
+#ifndef _UNOCRSRHELPER_HXX
+#include <unocrsrhelper.hxx>
 #endif
 #ifndef _UNOPORT_HXX
 #include <unoport.hxx>
@@ -148,7 +152,7 @@ SwFmtFld*   SwXTextPortion::GetFldFmt(sal_Bool bInit)
   -----------------------------------------------------------------------*/
 SwXTextPortion::SwXTextPortion(const SwUnoCrsr* pPortionCrsr, uno::Reference< XText >  xParent,
         SwTextPortionType eType) :
-    aPropSet(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_CURSOR)),
+    aPropSet(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_PARAGRAPH_EXTENSIONS)),
     aLstnrCntnr( (XTextRange*)this),
     pFmtFld(0),
     xParentText(xParent),
@@ -176,7 +180,7 @@ SwXTextPortion::SwXTextPortion(const SwUnoCrsr* pPortionCrsr, uno::Reference< XT
  * --------------------------------------------------*/
 SwXTextPortion::SwXTextPortion(const SwUnoCrsr* pPortionCrsr, uno::Reference< XText >  xParent,
                         SwFrmFmt& rFmt ) :
-    aPropSet(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_CURSOR)),
+    aPropSet(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_PARAGRAPH_EXTENSIONS)),
     aLstnrCntnr( (XTextRange*)this),
     pFrameFmt(&rFmt),
     xParentText(xParent),
@@ -286,18 +290,8 @@ void SwXTextPortion::setString(const OUString& aString) throw( uno::RuntimeExcep
   -----------------------------------------------------------------------*/
 uno::Reference< beans::XPropertySetInfo >  SwXTextPortion::getPropertySetInfo(void) throw( uno::RuntimeException )
 {
-    static uno::Reference< beans::XPropertySetInfo >  xRef;
-    if(!xRef.is())
-    {
-        uno::Reference< beans::XPropertySetInfo >  xInfo = aPropSet.getPropertySetInfo();
-        // PropertySetInfo verlaengern!
-        const uno::Sequence<beans::Property> aPropSeq = xInfo->getProperties();
-        xRef = new SfxExtItemPropertySetInfo(
-            aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXTPORTION_EXTENSIONS),
-            aPropSeq );
-    }
+    static uno::Reference< beans::XPropertySetInfo >  xRef = aPropSet.getPropertySetInfo();
     return xRef;
-
 }
 /*-- 11.12.98 09:56:57---------------------------------------------------
 
@@ -319,108 +313,224 @@ void SwXTextPortion::setPropertyValue(const OUString& rPropertyName,
 /*-- 11.12.98 09:56:58---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-uno::Any SwXTextPortion::getPropertyValue(const OUString& rPropertyName) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
+uno::Any SwXTextPortion::getPropertyValue(
+    const OUString& rPropertyName)
+        throw( UnknownPropertyException, WrappedTargetException, RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    uno::Any aAny;
+    Sequence<OUString> aPropertyNames(1);
+    aPropertyNames.getArray()[0] = rPropertyName;
+    Sequence< Any > aRet = getPropertyValues(aPropertyNames );
+    return aRet.getConstArray()[0];
+}
+/* -----------------------------02.04.01 11:44--------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SwXTextPortion::setPropertyValues(
+    const Sequence< OUString >& rPropertyNames,
+    const Sequence< Any >& aValues )
+        throw(PropertyVetoException, IllegalArgumentException,
+            WrappedTargetException, RuntimeException)
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
     SwUnoCrsr* pUnoCrsr = ((SwXTextPortion*)this)->GetCrsr();
     if(pUnoCrsr)
     {
-        if(COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_TEXT_PORTION_TYPE))
+        const OUString* pPropertyNames = rPropertyNames.getConstArray();
+        const Any* pValues = aValues.getConstArray();
+        const SfxItemPropertyMap*   pMap = aPropSet.getPropertyMap();
+        OUString sTmp;
+        for(sal_Int32 nProp = 0; nProp < rPropertyNames.getLength(); nProp++)
         {
-            OUString sRet;
-            switch (ePortionType)
+            pMap = SfxItemPropertyMap::GetByName(pMap, pPropertyNames[nProp]);
+            if(pMap)
             {
-                case PORTION_TEXT:          sRet = C2U("Text");break;
-                case PORTION_FIELD:         sRet = C2U("TextField");break;
-                case PORTION_FRAME:         sRet = C2U("Frame");break;
-                case PORTION_FOOTNOTE:      sRet = C2U("Footnote");break;
-                case PORTION_CONTROL_CHAR:  sRet = C2U("ControlCharacter");break;
-                case PORTION_REFMARK_START:
-                case PORTION_REFMARK_END:       sRet = C2U(UNO_NAME_REFERENCE_MARK);break;
-                case PORTION_TOXMARK_START:
-                case PORTION_TOXMARK_END:       sRet = C2U(UNO_NAME_DOCUMENT_INDEX_MARK);break;
-                case PORTION_BOOKMARK_START :
-                case PORTION_BOOKMARK_END :  sRet = C2U(UNO_NAME_BOOKMARK);break;
-                case PORTION_REDLINE_START:
-                case PORTION_REDLINE_END:   sRet = C2U("Redline");break;
-                case PORTION_RUBY_START:
-                case PORTION_RUBY_END:  sRet = C2U("Ruby");break;
-
-
+                SwXTextCursor::SetPropertyValue(
+                    *pUnoCrsr, aPropSet, sTmp, pValues[nProp], pMap);
             }
-            aAny <<= sRet;
-        }
-        else if(COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_CONTROL_CHARACTER))
-        {
-            if(PORTION_CONTROL_CHAR == ePortionType)
-                aAny <<= (sal_Int16) nControlChar;
-        }
-        else if(COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_DOCUMENT_INDEX_MARK))
-            aAny <<= xTOXMark;
-        else if(COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_REFERENCE_MARK))
-            aAny <<= xRefMark;
-        else if(COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_BOOKMARK))
-            aAny <<= xBookmark;
-        else if(COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_FOOTNOTE))
-            aAny <<= xFootnote;
-        else if(COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_IS_COLLAPSED))
-        {
-            BOOL bStart = TRUE, bPut = TRUE;
-            switch (ePortionType)
+            else
             {
-                case PORTION_REFMARK_START:
-                case PORTION_BOOKMARK_START :
-                case PORTION_TOXMARK_START:
-                case PORTION_REFMARK_END:
-                case PORTION_TOXMARK_END:
-                case PORTION_BOOKMARK_END :
-                case PORTION_REDLINE_START :
-                case PORTION_REDLINE_END :
-                case PORTION_RUBY_START:
-                case PORTION_RUBY_END:
-                    aAny.setValue(&bIsCollapsed, ::getBooleanCppuType());
-                break;
-                default:
-                    bPut = FALSE;
+                UnknownPropertyException aExcept;
+                aExcept.Message = pPropertyNames[nProp];
+                throw aExcept;
             }
         }
-        else if(COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_IS_START))
-        {
-            BOOL bStart = TRUE, bPut = TRUE;
-            switch (ePortionType)
-            {
-                case PORTION_REFMARK_START:
-                case PORTION_BOOKMARK_START:
-                case PORTION_TOXMARK_START:
-                case PORTION_REDLINE_START:
-                case PORTION_RUBY_START:
-                break;
-
-                case PORTION_REFMARK_END:
-                case PORTION_TOXMARK_END:
-                case PORTION_BOOKMARK_END:
-                case PORTION_REDLINE_END:
-                case PORTION_RUBY_END:
-                    bStart = FALSE;
-                break;
-                default:
-                    bPut = FALSE;
-            }
-            if(bPut)
-                aAny.setValue(&bStart, ::getBooleanCppuType());
-        }
-        else
-            aAny = SwXTextCursor::GetPropertyValue(*pUnoCrsr, aPropSet, rPropertyName);
     }
     else
         throw uno::RuntimeException();
-    return aAny;
 }
+/* -----------------------------02.04.01 11:44--------------------------------
+
+ ---------------------------------------------------------------------------*/
+Sequence< Any > SwXTextPortion::getPropertyValues(
+    const Sequence< OUString >& rPropertyNames )
+        throw(RuntimeException)
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    Sequence< Any > aValues(rPropertyNames.getLength());
+    SwUnoCrsr* pUnoCrsr = ((SwXTextPortion*)this)->GetCrsr();
+    if(pUnoCrsr)
+    {
+        SfxItemSet aSet(pUnoCrsr->GetDoc()->GetAttrPool(),
+            RES_CHRATR_BEGIN,   RES_PARATR_NUMRULE,
+            RES_UNKNOWNATR_CONTAINER, RES_UNKNOWNATR_CONTAINER,
+            RES_TXTATR_UNKNOWN_CONTAINER, RES_TXTATR_UNKNOWN_CONTAINER,
+            RES_FILL_ORDER,     RES_FRMATR_END -1,
+            0L);
+        SwXTextCursor::GetCrsrAttr(*pUnoCrsr, aSet);
+        Any* pValues = aValues.getArray();
+        const OUString* pPropertyNames = rPropertyNames.getConstArray();
+        const SfxItemPropertyMap*   pMap = aPropSet.getPropertyMap();
+        for(sal_Int32 nProp = 0; nProp < rPropertyNames.getLength(); nProp++)
+        {
+            pMap = SfxItemPropertyMap::GetByName(pMap, pPropertyNames[nProp]);
+            if(pMap)
+            {
+                switch(pMap->nWID)
+                {
+                    case FN_UNO_TEXT_PORTION_TYPE:
+                    {
+                        OUString sRet;
+                        switch (ePortionType)
+                        {
+                            case PORTION_TEXT:          sRet = C2U("Text");break;
+                            case PORTION_FIELD:         sRet = C2U("TextField");break;
+                            case PORTION_FRAME:         sRet = C2U("Frame");break;
+                            case PORTION_FOOTNOTE:      sRet = C2U("Footnote");break;
+                            case PORTION_CONTROL_CHAR:  sRet = C2U("ControlCharacter");break;
+                            case PORTION_REFMARK_START:
+                            case PORTION_REFMARK_END:       sRet = C2U(UNO_NAME_REFERENCE_MARK);break;
+                            case PORTION_TOXMARK_START:
+                            case PORTION_TOXMARK_END:       sRet = C2U(UNO_NAME_DOCUMENT_INDEX_MARK);break;
+                            case PORTION_BOOKMARK_START :
+                            case PORTION_BOOKMARK_END :  sRet = C2U(UNO_NAME_BOOKMARK);break;
+                            case PORTION_REDLINE_START:
+                            case PORTION_REDLINE_END:   sRet = C2U("Redline");break;
+                            case PORTION_RUBY_START:
+                            case PORTION_RUBY_END:  sRet = C2U("Ruby");break;
+
+
+                        }
+                        pValues[nProp] <<= sRet;
+                    }
+                    break;
+                    case FN_UNO_CONTROL_CHARACTER:
+                    {
+                        if(PORTION_CONTROL_CHAR == ePortionType)
+                            pValues[nProp] <<= (sal_Int16) nControlChar;
+                    }
+                    break;
+                    case FN_UNO_DOCUMENT_INDEX_MARK:
+                        pValues[nProp] <<= xTOXMark;
+                    break;
+                    case FN_UNO_REFERENCE_MARK:
+                        pValues[nProp] <<= xRefMark;
+                    break;
+                    case FN_UNO_BOOKMARK:
+                        pValues[nProp] <<= xBookmark;
+                    break;
+                    case FN_UNO_FOOTNOTE:
+                        pValues[nProp] <<= xFootnote;
+                    break;
+                    case FN_UNO_IS_COLLAPSED:
+                    {
+                        BOOL bStart = TRUE, bPut = TRUE;
+                        switch (ePortionType)
+                        {
+                            case PORTION_REFMARK_START:
+                            case PORTION_BOOKMARK_START :
+                            case PORTION_TOXMARK_START:
+                            case PORTION_REFMARK_END:
+                            case PORTION_TOXMARK_END:
+                            case PORTION_BOOKMARK_END :
+                            case PORTION_REDLINE_START :
+                            case PORTION_REDLINE_END :
+                            case PORTION_RUBY_START:
+                            case PORTION_RUBY_END:
+                                pValues[nProp].setValue(&bIsCollapsed, ::getBooleanCppuType());
+                            break;
+                            default:
+                                bPut = FALSE;
+                        }
+                    }
+                    break;
+                    case FN_UNO_IS_START:
+                    {
+                        BOOL bStart = TRUE, bPut = TRUE;
+                        switch (ePortionType)
+                        {
+                            case PORTION_REFMARK_START:
+                            case PORTION_BOOKMARK_START:
+                            case PORTION_TOXMARK_START:
+                            case PORTION_REDLINE_START:
+                            case PORTION_RUBY_START:
+                            break;
+
+                            case PORTION_REFMARK_END:
+                            case PORTION_TOXMARK_END:
+                            case PORTION_BOOKMARK_END:
+                            case PORTION_REDLINE_END:
+                            case PORTION_RUBY_END:
+                                bStart = FALSE;
+                            break;
+                            default:
+                                bPut = FALSE;
+                        }
+                        if(bPut)
+                            pValues[nProp].setValue(&bStart, ::getBooleanCppuType());
+                    }
+                    break;
+                    default:
+                        BOOL bDone = FALSE;
+                        PropertyState eTemp;
+                        bDone = SwUnoCursorHelper::getCrsrPropertyValue(
+                                            pMap, *pUnoCrsr, aSet, pValues[nProp], eTemp );
+                        if(!bDone)
+                            pValues[nProp] = aPropSet.getPropertyValue(*pMap, aSet);
+                }
+            }
+            else
+            {
+                UnknownPropertyException aExcept;
+                aExcept.Message = pPropertyNames[nProp];
+                throw aExcept;
+            }
+        }
+    }
+    else
+        throw uno::RuntimeException();
+    return aValues;
+}
+/* -----------------------------02.04.01 11:44--------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SwXTextPortion::addPropertiesChangeListener(
+    const Sequence< OUString >& aPropertyNames,
+    const Reference< XPropertiesChangeListener >& xListener )
+        throw(RuntimeException)
+{}
+/* -----------------------------02.04.01 11:44--------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SwXTextPortion::removePropertiesChangeListener(
+    const Reference< XPropertiesChangeListener >& xListener )
+        throw(RuntimeException)
+{}
+/* -----------------------------02.04.01 11:44--------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SwXTextPortion::firePropertiesChangeEvent(
+    const Sequence< OUString >& aPropertyNames,
+    const Reference< XPropertiesChangeListener >& xListener )
+        throw(RuntimeException)
+{}
 /*-- 11.12.98 09:56:58---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXTextPortion::addPropertyChangeListener(const OUString& PropertyName, const uno::Reference< beans::XPropertyChangeListener > & aListener) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
+void SwXTextPortion::addPropertyChangeListener(
+    const OUString& PropertyName,
+    const Reference< XPropertyChangeListener > & aListener)
+        throw( UnknownPropertyException, WrappedTargetException, RuntimeException )
 {
     DBG_WARNING("not implemented")
 }

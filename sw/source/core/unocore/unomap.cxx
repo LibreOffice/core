@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: mtg $ $Date: 2001-03-30 14:51:49 $
+ *  last change: $Author: os $ $Date: 2001-04-03 07:28:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -631,6 +631,23 @@ void SwUnoPropertyMapProvider::Sort(sal_uInt16 nId)
         { SW_PROP_NAME(UNO_NAME_RUBY_CHAR_STYLE_NAME),          RES_TXTATR_CJK_RUBY,    &::getCppuType((OUString*)0),   PropertyAttribute::MAYBEVOID,          MID_RUBY_CHARSTYLE },  \
         { SW_PROP_NAME(UNO_NAME_CHAR_RELIEF            ),       RES_CHRATR_RELIEF,      &::getCppuType((const sal_Int16*)0),    PropertyAttribute::MAYBEVOID,      MID_RELIEF },  \
 
+#if (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || (defined(__GNUC__) && defined(__APPLE__))
+#define TABSTOPS_MAP_ENTRY        { SW_PROP_NAME( UNO_NAME_TABSTOPS),  RES_PARATR_TABSTOP,  new uno::Type(::getCppuType((uno::Sequence<style::TabStop>*)0)),   PropertyAttribute::MAYBEVOID, CONVERT_TWIPS},
+#else
+#define TABSTOPS_MAP_ENTRY                { SW_PROP_NAME(UNO_NAME_TABSTOPS),    RES_PARATR_TABSTOP,   &::getCppuType((const uno::Sequence<style::TabStop>*)0),   PropertyAttribute::MAYBEVOID, CONVERT_TWIPS},
+#endif
+
+#define  COMPLETE_TEXT_CURSOR_MAP\
+        COMMON_CRSR_PARA_PROPERTIES\
+        { SW_PROP_NAME(UNO_NAME_DOCUMENT_INDEX_MARK),           FN_UNO_DOCUMENT_INDEX_MARK, &::getCppuType((const uno::Reference<text::XDocumentIndexMark>*)0), PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY ,0 },\
+        { SW_PROP_NAME(UNO_NAME_TEXT_FIELD),                FN_UNO_TEXT_FIELD,      &::getCppuType((const uno::Reference<text::XTextField>*)0),  PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY ,0 },\
+        { SW_PROP_NAME(UNO_NAME_REFERENCE_MARK),            FN_UNO_REFERENCE_MARK,  &::getCppuType((uno::Reference<text::XTextContent>*)0), PropertyAttribute::MAYBEVOID ,0 },\
+        { SW_PROP_NAME(UNO_NAME_FOOTNOTE),                  FN_UNO_FOOTNOTE,        &::getCppuType((uno::Reference<text::XFootnote>*)0),  PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY ,0 },\
+        { SW_PROP_NAME(UNO_NAME_ENDNOTE),                       FN_UNO_ENDNOTE,         &::getCppuType((uno::Reference<text::XFootnote>*)0),  PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY ,0 },\
+        { SW_PROP_NAME(UNO_NAME_HYPER_LINK_EVENTS ),        RES_TXTATR_INETFMT,     &::getCppuType((uno::Reference<container::XNameReplace>*)0), PropertyAttribute::MAYBEVOID, MID_URL_HYPERLINKEVENTS},\
+        TABSTOPS_MAP_ENTRY
+
+
 
 #define _BASE_INDEX_PROPERTIES_\
         { SW_PROP_NAME(UNO_NAME_TITLE), WID_IDX_TITLE,  &::getCppuType((const OUString*)0)  , PROPERTY_NONE,     0},\
@@ -726,19 +743,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
             {
                 static SfxItemPropertyMap aCharAndParaMap_Impl[] =
                 {
-                    COMMON_CRSR_PARA_PROPERTIES
-                    { SW_PROP_NAME(UNO_NAME_DOCUMENT_INDEX_MARK),           FN_UNO_DOCUMENT_INDEX_MARK, &::getCppuType((const uno::Reference<text::XDocumentIndexMark>*)0), PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY ,0 },
-                    { SW_PROP_NAME(UNO_NAME_TEXT_FIELD),                FN_UNO_TEXT_FIELD,      &::getCppuType((const uno::Reference<text::XTextField>*)0),     PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY ,0 },
-                    { SW_PROP_NAME(UNO_NAME_REFERENCE_MARK),            FN_UNO_REFERENCE_MARK,  &::getCppuType((uno::Reference<text::XTextContent>*)0), PropertyAttribute::MAYBEVOID ,0 },
-                    { SW_PROP_NAME(UNO_NAME_FOOTNOTE),                  FN_UNO_FOOTNOTE,        &::getCppuType((uno::Reference<text::XFootnote>*)0),        PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY ,0 },
-                    { SW_PROP_NAME(UNO_NAME_ENDNOTE),                       FN_UNO_ENDNOTE,         &::getCppuType((uno::Reference<text::XFootnote>*)0),        PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY ,0 },
-#if (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || (defined(__GNUC__) && defined(__APPLE__))
-                    { SW_PROP_NAME(UNO_NAME_TABSTOPS),  RES_PARATR_TABSTOP,  new uno::Type(::getCppuType((uno::Sequence<style::TabStop>*)0)),       PropertyAttribute::MAYBEVOID, CONVERT_TWIPS},
-#else
-                    { SW_PROP_NAME(UNO_NAME_TABSTOPS),                  RES_PARATR_TABSTOP,     &::getCppuType((const uno::Sequence<style::TabStop>*)0),        PropertyAttribute::MAYBEVOID, CONVERT_TWIPS},
-                    { SW_PROP_NAME(UNO_NAME_HYPER_LINK_EVENTS ),        RES_TXTATR_INETFMT,     &::getCppuType((uno::Reference<container::XNameReplace>*)0),    PropertyAttribute::MAYBEVOID, MID_URL_HYPERLINKEVENTS},
-
-#endif
+                    COMPLETE_TEXT_CURSOR_MAP
                     {0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aCharAndParaMap_Impl;
@@ -749,11 +754,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                 static SfxItemPropertyMap aParagraphMap_Impl[] =
                 {
                     COMMON_CRSR_PARA_PROPERTIES
-#if (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || (defined(__GNUC__) && defined(__APPLE__))
-                    { SW_PROP_NAME(UNO_NAME_TABSTOPS),  RES_PARATR_TABSTOP,  new uno::Type(::getCppuType((uno::Sequence<style::TabStop>*)0)),       PropertyAttribute::MAYBEVOID, CONVERT_TWIPS},
-#else
-                    { SW_PROP_NAME(UNO_NAME_TABSTOPS),                  RES_PARATR_TABSTOP,     &::getCppuType((const uno::Sequence<style::TabStop>*)0),        PropertyAttribute::MAYBEVOID, CONVERT_TWIPS},
-#endif
+                    TABSTOPS_MAP_ENTRY
                     COMMON_TEXT_CONTENT_PROPERTIES
                     {0,0,0,0}
                 };
@@ -863,11 +864,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_PARA_BOTTOM_MARGIN),            RES_UL_SPACE,           &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, MID_LO_MARGIN|CONVERT_TWIPS},
                     { SW_PROP_NAME(UNO_NAME_PARA_TOP_MARGIN_RELATIVE),    RES_UL_SPACE,         &::getCppuType((const sal_Int16*)0), PROPERTY_NONE, MID_UP_REL_MARGIN},
                     { SW_PROP_NAME(UNO_NAME_PARA_BOTTOM_MARGIN_RELATIVE), RES_UL_SPACE,         &::getCppuType((const sal_Int16*)0), PROPERTY_NONE, MID_LO_REL_MARGIN},
-#if (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || (defined(__GNUC__) && defined(__APPLE__))
-                    { SW_PROP_NAME(UNO_NAME_TABSTOPS),  RES_PARATR_TABSTOP,  new uno::Type(::getCppuType((uno::Sequence<style::TabStop>*)0)),       PropertyAttribute::MAYBEVOID, CONVERT_TWIPS},
-#else
-                    { SW_PROP_NAME(UNO_NAME_TABSTOPS),                  RES_PARATR_TABSTOP,     &::getCppuType((const uno::Sequence<style::TabStop>*)0),        PropertyAttribute::MAYBEVOID, CONVERT_TWIPS},
-#endif
+                    TABSTOPS_MAP_ENTRY
                     { SW_PROP_NAME(UNO_NAME_WORD_MODE           ),          RES_CHRATR_WORDLINEMODE,&::getBooleanCppuType()  ,          PROPERTY_NONE,     0},
                     { SW_PROP_NAME(UNO_NAME_LEFT_BORDER),               RES_BOX,                &::getCppuType((const table::BorderLine*)0),    0, LEFT_BORDER  |CONVERT_TWIPS },
                     { SW_PROP_NAME(UNO_NAME_RIGHT_BORDER),          RES_BOX,                &::getCppuType((const table::BorderLine*)0),    0, RIGHT_BORDER |CONVERT_TWIPS },
@@ -1212,11 +1209,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_PARA_LINE_NUMBER_START_VALUE),RES_LINENUMBER,       &::getCppuType((const sal_Int32*)0),            PROPERTY_NONE ,MID_LINENUMBER_STARTVALUE},
                     { SW_PROP_NAME(UNO_NAME_PARA_LINE_SPACING),             RES_PARATR_LINESPACING, &::getCppuType((const style::LineSpacing*)0),PROPERTY_NONE,     0},
                     { SW_PROP_NAME(UNO_NAME_REGISTER_MODE_ACTIVE),      RES_PARATR_REGISTER,    &::getBooleanCppuType()  ,          PROPERTY_NONE, 0},
-#if (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || (defined(__GNUC__) && defined(__APPLE__))
-                    { SW_PROP_NAME(UNO_NAME_TABSTOPS),  RES_PARATR_TABSTOP,  new uno::Type(::getCppuType((uno::Sequence<style::TabStop>*)0)),       PropertyAttribute::MAYBEVOID, CONVERT_TWIPS},
-#else
-                    { SW_PROP_NAME(UNO_NAME_TABSTOPS),                  RES_PARATR_TABSTOP,     &::getCppuType((const uno::Sequence<style::TabStop>*)0),        PropertyAttribute::MAYBEVOID, CONVERT_TWIPS},
-#endif
+                    TABSTOPS_MAP_ENTRY
                     { SW_PROP_NAME(UNO_NAME_TOP_MARGIN),                RES_UL_SPACE,           &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, MID_UP_MARGIN|CONVERT_TWIPS},
                     { SW_PROP_NAME(UNO_NAME_BOTTOM_MARGIN),             RES_UL_SPACE,           &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, MID_LO_MARGIN|CONVERT_TWIPS},
                     { SW_PROP_NAME(UNO_NAME_WORD_MODE           ),          RES_CHRATR_WORDLINEMODE,&::getBooleanCppuType()  ,          PROPERTY_NONE,     0},
@@ -1717,11 +1710,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_PARA_LINE_NUMBER_START_VALUE),RES_LINENUMBER,       &::getCppuType((const sal_Int32*)0),            PROPERTY_NONE ,MID_LINENUMBER_STARTVALUE},
                     { SW_PROP_NAME(UNO_NAME_PARA_LINE_SPACING),             RES_PARATR_LINESPACING, &::getCppuType((const style::LineSpacing*)0),PROPERTY_NONE,     0},
                     { SW_PROP_NAME(UNO_NAME_REGISTER_MODE_ACTIVE),      RES_PARATR_REGISTER,    &::getBooleanCppuType()  ,          PROPERTY_NONE, 0},
-#if (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || (defined(__GNUC__) && defined(__APPLE__))
-                    { SW_PROP_NAME(UNO_NAME_TABSTOPS),  RES_PARATR_TABSTOP,  new uno::Type(::getCppuType((uno::Sequence<style::TabStop>*)0)),       PropertyAttribute::MAYBEVOID, CONVERT_TWIPS},
-#else
-                    { SW_PROP_NAME(UNO_NAME_TABSTOPS),                  RES_PARATR_TABSTOP,     &::getCppuType((const uno::Sequence<style::TabStop>*)0),        PropertyAttribute::MAYBEVOID, CONVERT_TWIPS},
-#endif
+                    TABSTOPS_MAP_ENTRY
                     { SW_PROP_NAME(UNO_NAME_TOP_MARGIN),                RES_UL_SPACE,           &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, MID_UP_MARGIN|CONVERT_TWIPS},
                     { SW_PROP_NAME(UNO_NAME_BOTTOM_MARGIN),             RES_UL_SPACE,           &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, MID_LO_MARGIN|CONVERT_TWIPS},
                     { SW_PROP_NAME(UNO_NAME_CHAR_COLOR),                    RES_CHRATR_COLOR,       &::getCppuType((const sal_Int32*)0),            PROPERTY_NONE, 0},
@@ -1765,6 +1754,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
             {
                 static SfxItemPropertyMap aParagraphExtensionsMap_Impl[] =
                 {
+                    COMPLETE_TEXT_CURSOR_MAP
                     COMMON_TEXT_CONTENT_PROPERTIES
                     {0,0,0,0}
                 };
@@ -1907,12 +1897,12 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
             {
                 static SfxItemPropertyMap aTextPortionExtensionMap_Impl[] =
                 {
-                    {SW_PROP_NAME(UNO_NAME_BOOKMARK),           0, &::getCppuType((const Reference<XTextContent>*)0),   PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY ,0 },
-                    {SW_PROP_NAME(UNO_NAME_CONTROL_CHARACTER ), 0, &::getCppuType((const sal_Int16*)0),                 PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY, MID_HYPHEN_MIN_LEAD   },
-                    {SW_PROP_NAME(UNO_NAME_IS_COLLAPSED),       0, &::getBooleanCppuType(),                             PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY, 0 },
-                    {SW_PROP_NAME(UNO_NAME_IS_START),           0, &::getBooleanCppuType(),                             PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY, 0 },
+                    {SW_PROP_NAME(UNO_NAME_BOOKMARK),           FN_UNO_BOOKMARK, &::getCppuType((const Reference<XTextContent>*)0),   PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY ,0 },
+                    {SW_PROP_NAME(UNO_NAME_CONTROL_CHARACTER ), FN_UNO_CONTROL_CHARACTER, &::getCppuType((const sal_Int16*)0),                 PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY, MID_HYPHEN_MIN_LEAD   },
+                    {SW_PROP_NAME(UNO_NAME_IS_COLLAPSED),       FN_UNO_IS_COLLAPSED, &::getBooleanCppuType(),                             PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY, 0 },
+                    {SW_PROP_NAME(UNO_NAME_IS_START),           FN_UNO_IS_START, &::getBooleanCppuType(),                             PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY, 0 },
                     _REDLINE_PROPERTIES
-                    {SW_PROP_NAME(UNO_NAME_TEXT_PORTION_TYPE),  0, &::getCppuType((OUString*)0),                        PropertyAttribute::READONLY,    0},
+                    {SW_PROP_NAME(UNO_NAME_TEXT_PORTION_TYPE),  FN_UNO_TEXT_PORTION_TYPE, &::getCppuType((OUString*)0),                        PropertyAttribute::READONLY, 0},
                     {0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aTextPortionExtensionMap_Impl;
