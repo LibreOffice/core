@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anypair.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jb $ $Date: 2001-09-28 12:44:25 $
+ *  last change: $Author: vg $ $Date: 2001-10-11 15:09:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -662,7 +662,7 @@ namespace configmgr
     {
         if (!anypair_construct(&m_aAnyPair,&_aAny, &_aAny2))
         {
-            lang::IllegalArgumentException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AnyPair: Type mismatch in constructor.")),NULL,-1);
+            throw lang::IllegalArgumentException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AnyPair: Type mismatch in constructor.")),NULL,-1);
         }
     }
 
