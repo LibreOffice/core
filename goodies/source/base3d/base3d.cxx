@@ -2,9 +2,9 @@
  *
  *  $RCSfile: base3d.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-10 14:47:41 $
+ *  last change: $Author: rt $ $Date: 2000-11-14 10:32:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,9 +103,6 @@
 #include <vcl/poly.hxx>
 #endif
 
-#ifndef _SFXINIPROP_HXX
-#include <svtools/iniprop.hxx>
-#endif
 
 /*************************************************************************
 |*
