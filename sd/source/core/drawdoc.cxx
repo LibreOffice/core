@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: cl $ $Date: 2001-04-06 14:16:09 $
+ *  last change: $Author: sj $ $Date: 2001-04-24 13:06:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -416,8 +416,12 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh) :
     else
         nCntrl &= ~EE_CNTRL_ONLINESPELLING;
 
+#ifndef SVX_LIGHT
+    nCntrl &= ~ EE_CNTRL_ULSPACESUMMATION;
+    if ( pOptions->IsSummationOfParagraphs() )
+        nCntrl |= EE_CNTRL_ULSPACESUMMATION;
+#endif
     rOutliner.SetControlWord(nCntrl);
-
 
 
     // Dem HitTestOutliner den StyleSheetPool setzen.
@@ -460,6 +464,13 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh) :
     nCntrl2 |= EE_CNTRL_URLSFXEXECUTE;
     nCntrl2 |= EE_CNTRL_NOREDLINES;
     nCntrl2 &= ~EE_CNTRL_ONLINESPELLING;
+
+#ifndef SVX_LIGHT
+    nCntrl2 &= ~ EE_CNTRL_ULSPACESUMMATION;
+    if ( pOptions->IsSummationOfParagraphs() )
+        nCntrl2 |= EE_CNTRL_ULSPACESUMMATION;
+#endif
+
     pHitTestOutliner->SetControlWord( nCntrl2 );
 
     /**************************************************************************
