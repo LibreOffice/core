@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipOutputStream.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mtg $ $Date: 2000-12-19 21:55:35 $
+ *  last change: $Author: jp $ $Date: 2001-02-05 09:24:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@
 #endif
 
 #ifndef __SGI_STL_VECTOR
-#include <stl/vector>
+#include <vector>
 #endif
 
 #ifndef _VOS_DIAGNOSE_H_
