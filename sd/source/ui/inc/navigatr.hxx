@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navigatr.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 13:40:39 $
+ *  last change: $Author: obo $ $Date: 2004-01-23 10:50:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,7 +158,7 @@ public:
 
 protected:
     virtual void                Resize();
-    virtual long                ParentNotify(NotifyEvent& rNEvt);
+    virtual long                Notify(NotifyEvent& rNEvt);
 
 
 private:
