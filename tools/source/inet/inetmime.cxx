@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inetmime.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 13:20:21 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 11:32:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3249,7 +3249,7 @@ UniString INetMIME::decodeHeaderFieldBody(HeaderFieldType eType,
                                             break;
                                         }
                                         bFinal = true;
-                                        nCount = nShift == 6 ? 2 : 1;
+                                        nCount = nShift == 6 ? 1 : 2;
                                     }
                                 }
                                 else
