@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbloader.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2001-09-13 14:15:52 $
+ *  last change: $Author: oj $ $Date: 2002-10-08 07:26:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,9 @@
 #endif
 #ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
 #include "dbustrings.hrc"
+#endif
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
 #endif
 
 using namespace ::com::sun::star::uno;
@@ -252,6 +255,8 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
         xController = Reference< XController >(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("org.openoffice.comp.dbu.ORelationDesign")),UNO_QUERY);
     else
         OSL_ENSURE(0,"wrong dispatch url!");
+
+    ::vos::OGuard aGuard(Application::GetSolarMutex());
 
     if(bSuccess = xController.is())
     {

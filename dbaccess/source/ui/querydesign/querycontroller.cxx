@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-07 13:06:37 $
+ *  last change: $Author: oj $ $Date: 2002-10-08 07:25:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,6 +204,9 @@
 #endif
 #ifndef DBAUI_QUERYTABLEVIEW_HXX
 #include "QueryTableView.hxx"
+#endif
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
 #endif
 
 extern "C" void SAL_CALL createRegistryInfo_OQueryControl()
@@ -876,6 +879,8 @@ void OQueryController::setModified(sal_Bool _bModified)
 // -----------------------------------------------------------------------------
 void SAL_CALL OQueryController::disposing( const EventObject& Source ) throw(RuntimeException)
 {
+    ::vos::OGuard aGuard(Application::GetSolarMutex());
+
     Reference< XFrame > xSource(Source.Source, UNO_QUERY);
     if (xSource.is() && getContainer())
     {
