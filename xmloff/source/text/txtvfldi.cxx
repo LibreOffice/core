@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtvfldi.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dvo $ $Date: 2001-10-25 12:37:12 $
+ *  last change: $Author: dvo $ $Date: 2002-03-08 10:19:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -687,7 +687,7 @@ XMLExpressionFieldImportContext::XMLExpressionFieldImportContext(
                                  // formula, type, style, display formula
                                  sal_False, sal_True, sal_True,
                                  sal_False, sal_False, sal_True,
-                                 sal_True, sal_False, sal_False,
+                                 sal_True, sal_True, sal_False,
                                  sal_True),
         sPropertySubType(RTL_CONSTASCII_USTRINGPARAM(sAPI_sub_type))
 {
