@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acorrect.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 16:25:31 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:55:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -394,10 +394,8 @@ BOOL SwAutoCorrDoc::ChgAutoCorrWord( xub_StrLen & rSttPos, xub_StrLen nEndPos,
             if( !bLastCharIsPoint || !pFnd->GetLong().Len() ||
                 '.' != pFnd->GetLong().GetChar( pFnd->GetLong().Len() - 1 ) )
             {
-                // dann mal ersetzen
-                DeleteSel( aPam );
-                pDoc->DontExpandFmt( *aPam.GetPoint() );
-                pDoc->Insert( aPam, pFnd->GetLong() );
+                // replace the selection
+                pDoc->Replace( aPam, pFnd->GetLong() );
                 bRet = TRUE;
             }
         }
