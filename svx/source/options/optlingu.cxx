@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optlingu.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 11:39:40 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 20:49:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -714,14 +714,17 @@ Sequence< OUString > SvxLinguData_Impl::GetSortedImplNames( INT16 nLang, BYTE nT
             case TYPE_THES  : aImplName = pInfo->sThesImplName; break;
         }
 
-        if (aImplName.getLength()  &&  lcl_SeqGetIndex( aRes, aImplName) == -1)    // name not yet added
+        if (aImplName.getLength()  &&  (lcl_SeqGetIndex( aRes, aImplName) == -1))    // name not yet added
         {
-            DBG_ASSERT( nIdx < aRes.getLength(), "index out of range" )
-            if (nIdx < aRes.getLength())
+      DBG_ASSERT( nIdx < aRes.getLength(), "index out of range" );
+      if (nIdx < aRes.getLength())
                 pRes[ nIdx++ ] = aImplName;
         }
     }
-
+    // don't forget to put aRes back to its actual size just in case you allocated too much
+    // since all of the names may have already been added
+    // otherwise you get duplicate entries in the edit dialog
+    aRes.realloc( nIdx );
     return aRes;
 }
 
