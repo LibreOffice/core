@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppController.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 12:32:18 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:05:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,6 +168,9 @@
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <svtools/pathoptions.hxx>
 #endif
+#ifndef INCLUDED_SVTOOLS_INTERNALOPTIONS_HXX
+#include <svtools/internaloptions.hxx>
+#endif
 #ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
 #endif
@@ -200,6 +203,9 @@
 #endif
 #ifndef _STRING_HXX
 #include <tools/string.hxx>
+#endif
+#ifndef INCLUDED_SFX_MAILMODELAPI_HXX
+#include <sfx2/mailmodelapi.hxx>
 #endif
 #ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
 #include <svtools/moduleoptions.hxx>
@@ -345,6 +351,7 @@ OApplicationController::OApplicationController(const Reference< XMultiServiceFac
     ,m_bNeedToReconnect(sal_False)
     ,m_bPreviewEnabled(sal_True)
     ,m_eOldType(E_NONE)
+    ,m_aTableCopyHelper(this)
 {
     m_aTypeCollection.initUserDriverTypes(_rxORB);
 }
@@ -392,10 +399,8 @@ void OApplicationController::clearConnections()
 //--------------------------------------------------------------------
 void SAL_CALL OApplicationController::disposing()
 {
-    if ( m_xCurrentContainer.is() )
-        m_xCurrentContainer->removeContainerListener(this);
-    ::std::for_each(m_aCurrentSubContainers.begin(),m_aCurrentSubContainers.end(),XContainerFunctor(this));
-    m_aCurrentSubContainers.clear();
+    ::std::for_each(m_aCurrentContainers.begin(),m_aCurrentContainers.end(),XContainerFunctor(this));
+    m_aCurrentContainers.clear();
 
     m_aDocuments.clear();
 
@@ -411,7 +416,6 @@ void SAL_CALL OApplicationController::disposing()
     clearConnections();
     try
     {
-        m_xCurrentContainer = NULL;
         if ( m_xDataSource.is() )
         {
             Reference<XModel> xModel(m_xDataSource,UNO_QUERY);
@@ -532,11 +536,23 @@ void SAL_CALL OApplicationController::disposing(const EventObject& _rSource) thr
     else
     {
         Reference<XComponent> xComp(_rSource.Source,UNO_QUERY);
-        TDocuments::iterator aFind = ::std::find_if(m_aDocuments.begin(),m_aDocuments.end(),
-            ::std::compose1(::std::bind2nd(::std::equal_to<Reference<XComponent> >(),xComp),::std::select1st<TDocuments::value_type>()));
-        if ( aFind != m_aDocuments.end() )
+        Reference<XContainer> xContainer(_rSource.Source,UNO_QUERY);
+        if ( xComp.is() )
         {
-            m_aDocuments.erase(aFind);
+            TDocuments::iterator aFind = ::std::find_if(m_aDocuments.begin(),m_aDocuments.end(),
+                ::std::compose1(::std::bind2nd(::std::equal_to<Reference<XComponent> >(),xComp),::std::select1st<TDocuments::value_type>()));
+            if ( aFind != m_aDocuments.end() )
+            {
+                m_aDocuments.erase(aFind);
+            }
+        }
+        else if ( xContainer.is() )
+        {
+            TContainerVector::iterator aFind = ::std::find(m_aCurrentContainers.begin(),m_aCurrentContainers.end(),xContainer);
+            if ( aFind != m_aCurrentContainers.end() )
+            {
+                m_aCurrentContainers.erase(aFind);
+            }
         }
         else
             OApplicationController_CBASE::disposing( _rSource );
@@ -672,7 +688,7 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                 aReturn.bEnabled = !isDataSourceReadOnly() && !isConnectionReadOnly();
                 break;
             case ID_DIRECT_SQL:
-                aReturn.bEnabled = !isConnectionReadOnly();
+                aReturn.bEnabled = sal_True;
                 break;
             case SID_APP_NEW_FOLDER:
                 aReturn.bEnabled = !isDataSourceReadOnly() && getContainer()->getSelectionCount() <= 1;
@@ -803,7 +819,15 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
             case ID_BROWSER_UNDO:
                 aReturn.bEnabled = sal_False;
                 break;
+            case SID_MAIL_SENDDOC:
+                aReturn.bEnabled = sal_True;
+                break;
             case SID_DB_APP_SENDREPORTASMAIL:
+                {
+                    ElementType eType = getContainer()->getElementType();
+                    aReturn.bEnabled = E_REPORT == eType && getContainer()->getSelectionCount() > 0 && getContainer()->isALeafSelected();
+                }
+                break;
             case SID_DB_APP_SENDREPORTTOWRITER:
             case SID_DB_APP_DBADMIN:
                 aReturn.bEnabled = sal_False;
@@ -924,7 +948,11 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                     switch( eType )
                     {
                         case E_TABLE:
-                            pasteTable( aTransferData );
+                            {
+                                Reference<XConnection> xDestConnection;
+                                ensureConnection(xDestConnection);
+                                m_aTableCopyHelper.pasteTable( aTransferData , getDatabaseName() , xDestConnection);
+                            }
                             break;
                         case E_QUERY:
                             paste( E_QUERY,ODataAccessObjectTransferable::extractObjectDescriptor(aTransferData) );
@@ -1107,7 +1135,10 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                         default:
                             OSL_ENSURE(0,"illegal switch call!");
                     }
-                    newElement(eType,bAutoPilot,bSQLView);
+                    if ( bAutoPilot )
+                        getContainer()->PostUserEvent( LINK( this, OApplicationController, OnCreateWithPilot ), reinterpret_cast< void* >( eType ) );
+                    else
+                        newElement( eType, bSQLView );
                 }
                 break;
             case SID_APP_NEW_FOLDER:
@@ -1149,17 +1180,17 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
             case SID_DB_APP_QUERY_EDIT:
             case SID_DB_APP_FORM_EDIT:
             case SID_DB_APP_REPORT_EDIT:
-                doAction(_nId,sal_True);
+                doAction(_nId,OLinkedDocumentsAccess::OPEN_DESIGN);
                 break;
             case SID_DB_APP_OPEN:
             case SID_DB_APP_TABLE_OPEN:
             case SID_DB_APP_QUERY_OPEN:
             case SID_DB_APP_FORM_OPEN:
             case SID_DB_APP_REPORT_OPEN:
-                doAction(_nId,sal_False);
+                doAction(_nId,OLinkedDocumentsAccess::OPEN_NORMAL);
                 break;
             case SID_DB_APP_CONVERTTOVIEW:
-                doAction(_nId,sal_False);
+                doAction(_nId,OLinkedDocumentsAccess::OPEN_NORMAL);
                 break;
             case SID_SELECTALL:
                 getContainer()->selectAll();
@@ -1225,6 +1256,16 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                 m_ePreviewMode = E_DOCUMENT;
                 getContainer()->switchPreview(m_ePreviewMode);
                 break;
+            case SID_MAIL_SENDDOC:
+                {
+                    SfxMailModel aSendMail(m_xCurrentFrame);
+                    if ( aSendMail.AttachDocument(SfxMailModel::TYPE_SELF,getModel()) == SfxMailModel::SEND_MAIL_OK )
+                        aSendMail.Send();
+                }
+                break;
+            case SID_DB_APP_SENDREPORTASMAIL:
+                doAction(_nId,OLinkedDocumentsAccess::OPEN_FORMAIL);
+                break;
         }
     }
     catch(Exception& e)
@@ -1248,6 +1289,7 @@ void OApplicationController::describeSupportedFeatures()
 
     implDescribeSupportedFeature( ".uno:Save",               ID_BROWSER_SAVEDOC,        CommandGroup::DOCUMENT );
     implDescribeSupportedFeature( ".uno:SaveAs",             ID_BROWSER_SAVEASDOC,      CommandGroup::DOCUMENT );
+    implDescribeSupportedFeature( ".uno:SendMail",           SID_MAIL_SENDDOC,          CommandGroup::DOCUMENT );
     implDescribeSupportedFeature( ".uno:DBSendReportAsMail",SID_DB_APP_SENDREPORTASMAIL,
                                                                                         CommandGroup::DOCUMENT );
     implDescribeSupportedFeature( ".uno:DBSendReportToWriter",SID_DB_APP_SENDREPORTTOWRITER,
@@ -1360,8 +1402,8 @@ void SAL_CALL OApplicationController::elementInserted( const ContainerEvent& _rE
     ::vos::OGuard aSolarGuard(Application::GetSolarMutex());
     ::osl::MutexGuard aGuard(m_aMutex);
 
-    Reference< XNameAccess > xNames(_rEvent.Source, UNO_QUERY);
-    if ( xNames == m_xCurrentContainer || ::std::find(m_aCurrentSubContainers.begin(),m_aCurrentSubContainers.end(),Reference< XContainer >(xNames,UNO_QUERY)) != m_aCurrentSubContainers.end() )
+    Reference< XContainer > xContainer(_rEvent.Source, UNO_QUERY);
+    if ( ::std::find(m_aCurrentContainers.begin(),m_aCurrentContainers.end(),xContainer) != m_aCurrentContainers.end() )
     {
         OSL_ENSURE(getContainer(),"View is NULL! -> GPF");
         if ( getContainer() )
@@ -1369,7 +1411,7 @@ void SAL_CALL OApplicationController::elementInserted( const ContainerEvent& _rE
             ::rtl::OUString sName;
             _rEvent.Accessor >>= sName;
             Reference<XConnection> xConnection;
-            ElementType eType = getContainer()->getElementType();
+            ElementType eType = getElementType(xContainer);
 
             switch( eType )
             {
@@ -1379,9 +1421,9 @@ void SAL_CALL OApplicationController::elementInserted( const ContainerEvent& _rE
                 case E_FORM:
                 case E_REPORT:
                     {
-                        Reference< XContainer > xContainer(_rEvent.Element,UNO_QUERY);
-                        if ( xContainer.is() )
-                            containerFound(xContainer);
+                        Reference< XContainer > xSubContainer(_rEvent.Element,UNO_QUERY);
+                        if ( xSubContainer.is() )
+                            containerFound(xSubContainer);
                     }
                     break;
             }
@@ -1395,14 +1437,14 @@ void SAL_CALL OApplicationController::elementRemoved( const ContainerEvent& _rEv
     ::vos::OGuard aSolarGuard(Application::GetSolarMutex());
     ::osl::MutexGuard aGuard(m_aMutex);
 
-    Reference< XNameAccess > xNames(_rEvent.Source, UNO_QUERY);
-    if ( xNames == m_xCurrentContainer || ::std::find(m_aCurrentSubContainers.begin(),m_aCurrentSubContainers.end(),Reference< XContainer >(xNames,UNO_QUERY)) != m_aCurrentSubContainers.end() )
+    Reference< XContainer > xContainer(_rEvent.Source, UNO_QUERY);
+    if ( ::std::find(m_aCurrentContainers.begin(),m_aCurrentContainers.end(),xContainer) != m_aCurrentContainers.end() )
     {
         OSL_ENSURE(getContainer(),"View is NULL! -> GPF");
         ::rtl::OUString sName;
         _rEvent.Accessor >>= sName;
         Reference<XConnection> xConnection;
-        ElementType eType = getContainer()->getElementType();
+        ElementType eType = getElementType(xContainer);
         switch( eType )
         {
             case E_TABLE:
@@ -1411,7 +1453,7 @@ void SAL_CALL OApplicationController::elementRemoved( const ContainerEvent& _rEv
             case E_FORM:
             case E_REPORT:
                 {
-                    Reference<XContent> xContent(xNames,UNO_QUERY);
+                    Reference<XContent> xContent(xContainer,UNO_QUERY);
                     if ( xContent.is() )
                     {
                         sName = xContent->getIdentifier()->getContentIdentifier() + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) + sName;
@@ -1419,7 +1461,7 @@ void SAL_CALL OApplicationController::elementRemoved( const ContainerEvent& _rEv
                 }
                 break;
         }
-        getContainer()->elementRemoved(sName,xConnection);
+        getContainer()->elementRemoved(eType,sName,xConnection);
     }
 }
 // -----------------------------------------------------------------------------
@@ -1428,8 +1470,8 @@ void SAL_CALL OApplicationController::elementReplaced( const ContainerEvent& _rE
     ::vos::OGuard aSolarGuard(Application::GetSolarMutex());
     ::osl::MutexGuard aGuard(m_aMutex);
 
-    Reference< XNameAccess > xNames(_rEvent.Source, UNO_QUERY);
-    if ( xNames == m_xCurrentContainer || ::std::find(m_aCurrentSubContainers.begin(),m_aCurrentSubContainers.end(),Reference< XContainer >(xNames,UNO_QUERY)) != m_aCurrentSubContainers.end() )
+    Reference< XContainer > xContainer(_rEvent.Source, UNO_QUERY);
+    if ( ::std::find(m_aCurrentContainers.begin(),m_aCurrentContainers.end(),xContainer) != m_aCurrentContainers.end() )
     {
         OSL_ENSURE(getContainer(),"View is NULL! -> GPF");
         ::rtl::OUString sName;
@@ -1440,7 +1482,7 @@ void SAL_CALL OApplicationController::elementReplaced( const ContainerEvent& _rE
             Reference<XPropertySet> xProp(_rEvent.Element,UNO_QUERY);
             ::rtl::OUString sNewName;
 
-            ElementType eType = getContainer()->getElementType();
+            ElementType eType = getElementType(xContainer);
             switch( eType )
             {
                 case E_TABLE:
@@ -1453,7 +1495,7 @@ void SAL_CALL OApplicationController::elementReplaced( const ContainerEvent& _rE
                 case E_FORM:
                 case E_REPORT:
                     {
-                        Reference<XContent> xContent(xNames,UNO_QUERY);
+                        Reference<XContent> xContent(xContainer,UNO_QUERY);
                         if ( xContent.is() )
                         {
                             sName = xContent->getIdentifier()->getContentIdentifier() + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) + sName;
@@ -1591,10 +1633,11 @@ void OApplicationController::onEntryDoubleClick(SvTreeListBox* _pTree)
     }
 }
 // -----------------------------------------------------------------------------
-void OApplicationController::openElement(const ::rtl::OUString& _sName,ElementType _eType,sal_Bool _bOpenDesignMode)
+Reference< XComponent > OApplicationController::openElement(const ::rtl::OUString& _sName,ElementType _eType,OLinkedDocumentsAccess::EOpenMode _eOpenMode)
 {
     OSL_ENSURE(getContainer(),"View is NULL! -> GPF");
-    if ( _bOpenDesignMode )
+    Reference< XComponent > xRet;
+    if ( _eOpenMode == OLinkedDocumentsAccess::OPEN_DESIGN )
     {
         // OJ: http://www.openoffice.org/issues/show_bug.cgi?id=30382
         getContainer()->showPreview(NULL);
@@ -1606,8 +1649,8 @@ void OApplicationController::openElement(const ::rtl::OUString& _sName,ElementTy
             {
                 ::std::auto_ptr<OLinkedDocumentsAccess> aHelper = getDocumentsAccess(_eType);
                 Reference< XComponent > xDefinition;
-                Reference< XComponent > xComponent(aHelper->open(_sName, xDefinition,!_bOpenDesignMode),UNO_QUERY);
-                addDocumentListener(xComponent,xDefinition);
+                xRet.set(aHelper->open(_sName, xDefinition,_eOpenMode),UNO_QUERY);
+                addDocumentListener(xRet,xDefinition);
             }
             break;
         case E_QUERY:
@@ -1620,7 +1663,7 @@ void OApplicationController::openElement(const ::rtl::OUString& _sName,ElementTy
                 {
                     Sequence < PropertyValue > aArgs;
                     Any aDataSource;
-                    if ( _bOpenDesignMode )
+                    if ( _eOpenMode == OLinkedDocumentsAccess::OPEN_DESIGN )
                     {
                         if ( _eType == E_TABLE )
                         {
@@ -1649,115 +1692,132 @@ void OApplicationController::openElement(const ::rtl::OUString& _sName,ElementTy
             }
             break;
     }
+    return xRet;
 }
 // -----------------------------------------------------------------------------
-void OApplicationController::newElement(ElementType _eType,sal_Bool _bAutoPilot,sal_Bool _bSQLView)
+IMPL_LINK( OApplicationController, OnCreateWithPilot, void*, _pType )
+{
+    ElementType eType = (ElementType)reinterpret_cast< int >( _pType );
+    newElementWithPilot( eType );
+    return 0L;
+}
+
+// -----------------------------------------------------------------------------
+void OApplicationController::newElementWithPilot( ElementType _eType )
+{
+    OSL_ENSURE( getContainer(), "OApplicationController::newElementWithPilot: without a view?" );
+
+    switch ( _eType )
+    {
+        case E_REPORT:
+        case E_FORM:
+        {
+            ::std::auto_ptr<OLinkedDocumentsAccess> aHelper = getDocumentsAccess(_eType);
+            sal_Int32 nCommandType = ( (getContainer()->getElementType() == E_QUERY)
+                                        ? CommandType::QUERY : ( (getContainer()->getElementType() == E_TABLE) ? CommandType::TABLE : -1 ));
+            Reference<XConnection> xConnection;
+
+            ::rtl::OUString sName;
+            if ( nCommandType != -1 )
+            {
+                try
+                {
+                    Reference< XDatabaseMetaData> xMetaData;
+                    if ( CommandType::TABLE == nCommandType )
+                    {
+                        ensureConnection(xConnection,sal_False);
+
+                        if ( xConnection.is() )
+                            xMetaData = xConnection->getMetaData();
+                    }
+
+                    sName = getContainer()->getQualifiedName(NULL,xMetaData);
+                    OSL_ENSURE( sName.getLength(), "OApplicationController::newElementWithPilot: no name given!" );
+                }
+                catch(Exception)
+                {
+                    OSL_ENSURE( 0, "OApplicationController::newElementWithPilot: Exception catched!" );
+                }
+            }
+
+            try
+            {
+                ensureConnection(xConnection,sal_True);
+            }
+            catch(SQLContext& e) { showError(SQLExceptionInfo(e)); }
+            catch(SQLWarning& e) { showError(SQLExceptionInfo(e)); }
+            catch(SQLException& e) { showError(SQLExceptionInfo(e)); }
+
+            if ( xConnection.is() )
+            {
+                if ( E_REPORT == _eType )
+                    aHelper->newReportWithPilot(getDatabaseName(),nCommandType,sName,xConnection);
+                else
+                    aHelper->newFormWithPilot(getDatabaseName(),nCommandType,sName,xConnection);
+            }
+        }
+        break;
+        case E_QUERY:
+        {
+            ::std::auto_ptr<OLinkedDocumentsAccess> aHelper = getDocumentsAccess(_eType);
+            Reference<XConnection> xConnection;
+            try
+            {
+                if ( ensureConnection( xConnection, sal_True ) )
+                    aHelper->newQueryWithPilot(getDatabaseName(),-1,::rtl::OUString(),xConnection);
+            }
+            catch(SQLContext& e) { showError(SQLExceptionInfo(e)); }
+            catch(SQLWarning& e) { showError(SQLExceptionInfo(e)); }
+            catch(SQLException& e) { showError(SQLExceptionInfo(e)); }
+        }
+        break;
+        case E_TABLE:
+         {
+             ::std::auto_ptr<OLinkedDocumentsAccess> aHelper = getDocumentsAccess(_eType);
+             Reference<XConnection> xConnection;
+             try
+             {
+                 if ( ensureConnection( xConnection, sal_True ) )
+                {
+                     if ( E_QUERY == _eType )
+                         aHelper->newQueryWithPilot( getDatabaseName(), -1, ::rtl::OUString(), xConnection );
+                     else
+                         aHelper->newTableWithPilot( getDatabaseName(), xConnection );
+                }
+             }
+             catch(SQLContext& e) { showError(SQLExceptionInfo(e)); }
+             catch(SQLWarning& e) { showError(SQLExceptionInfo(e)); }
+             catch(SQLException& e) { showError(SQLExceptionInfo(e)); }
+         }
+         break;
+    }
+}
+
+// -----------------------------------------------------------------------------
+void OApplicationController::newElement( ElementType _eType, sal_Bool _bSQLView )
 {
     OSL_ENSURE(getContainer(),"View is NULL! -> GPF");
 
     switch ( _eType )
     {
-        case E_REPORT: // TODO: seperate handling of forms and reports
+        case E_REPORT:
+            OSL_ENSURE( sal_False, "OApplicationController::newElement: can't create a blank report!" );
+            break;
+
         case E_FORM:
             {
                 ::std::auto_ptr<OLinkedDocumentsAccess> aHelper = getDocumentsAccess(_eType);
                 Reference< XComponent > xComponent,xDefinition;
-                if ( _bAutoPilot )
-                {
-                    sal_Int32 nCommandType = ( (getContainer()->getElementType() == E_QUERY)
-                                                ? CommandType::QUERY : ( (getContainer()->getElementType() == E_TABLE) ? CommandType::TABLE : -1 ));
-                    Reference<XConnection> xConnection;
-
-                    ::rtl::OUString sName;
-                    if ( nCommandType != -1 )
-                    {
-                        try
-                        {
-                            Reference< XDatabaseMetaData> xMetaData;
-                            if ( CommandType::TABLE == nCommandType )
-                            {
-                                ensureConnection(xConnection,sal_False);
-
-                                if ( xConnection.is() )
-                                    xMetaData = xConnection->getMetaData();
-                            }
-
-                            sName = getContainer()->getQualifiedName(NULL,xMetaData);
-                            OSL_ENSURE(sName.getLength(),"NO name given!");
-                        }
-                        catch(Exception&)
-                        {
-                            OSL_ENSURE(0,"Exception catched!");
-                        }
-                    }
-
-                    try
-                    {
-                        ensureConnection(xConnection,sal_True);
-                    }
-                    catch(SQLContext& e) { showError(SQLExceptionInfo(e)); }
-                    catch(SQLWarning& e) { showError(SQLExceptionInfo(e)); }
-                    catch(SQLException& e) { showError(SQLExceptionInfo(e)); }
-
-                    if ( xConnection.is() )
-                    {
-                        if ( E_REPORT == _eType )
-                            aHelper->newReportWithPilot(getDatabaseName(),nCommandType,sName,xConnection);
-                        else
-                            aHelper->newFormWithPilot(getDatabaseName(),nCommandType,sName,xConnection);
-                    }
-                }
-                else if ( E_FORM == _eType )
-                    xComponent = aHelper->newForm(ID_FORM_NEW_TEXT,xDefinition);
-
+                xComponent = aHelper->newForm(ID_FORM_NEW_TEXT,xDefinition);
                 addDocumentListener(xComponent,xDefinition);
             }
             break;
         case E_QUERY:
-            {
-                if ( _bAutoPilot )
-                {
-                    ::std::auto_ptr<OLinkedDocumentsAccess> aHelper = getDocumentsAccess(_eType);
-                    Reference< XComponent > xComponent,xDefinition;
-                    Reference<XConnection> xConnection;
-                    try
-                    {
-                        ensureConnection(xConnection,sal_True);
-                        aHelper->newQueryWithPilot(getDatabaseName(),-1,::rtl::OUString(),xConnection);
-                        addDocumentListener(xComponent,xDefinition);
-                    }
-                    catch(SQLContext& e) { showError(SQLExceptionInfo(e)); }
-                    catch(SQLWarning& e) { showError(SQLExceptionInfo(e)); }
-                    catch(SQLException& e) { showError(SQLExceptionInfo(e)); }
-                    break;
-                }
-            } // run through
         case E_TABLE:
             {
-                 if ( _bAutoPilot )
-                 {
-                     ::std::auto_ptr<OLinkedDocumentsAccess> aHelper = getDocumentsAccess(_eType);
-                     Reference< XComponent > xComponent,xDefinition;
-                     Reference<XConnection> xConnection;
-                     try
-                     {
-                         ensureConnection(xConnection,sal_True);
-                         if ( E_QUERY == _eType )
-                             aHelper->newQueryWithPilot(getDatabaseName(),-1,::rtl::OUString(),xConnection);
-                         else
-                             aHelper->newTableWithPilot(getDatabaseName(),-1,::rtl::OUString(),xConnection);
-
-                         addDocumentListener(xComponent,xDefinition);
-                     }
-                     catch(SQLContext& e) { showError(SQLExceptionInfo(e)); }
-                     catch(SQLWarning& e) { showError(SQLExceptionInfo(e)); }
-                     catch(SQLException& e) { showError(SQLExceptionInfo(e)); }
-                     break;
-                 }
                 ::std::auto_ptr< ODesignAccess> pDispatcher;
                 Reference<XConnection> xConnection;
-                ensureConnection(xConnection);
-                if ( xConnection.is() )
+                if ( ensureConnection( xConnection ) )
                 {
                     if ( _eType == E_TABLE )
                     {
@@ -1775,46 +1835,20 @@ void OApplicationController::newElement(ElementType _eType,sal_Bool _bAutoPilot,
     }
 }
 // -----------------------------------------------------------------------------
-Reference< XNumberFormatter > OApplicationController::getNumberFormatter(const Reference< XConnection >& _rxConnection ) const
-{
-    // ---------------------------------------------------------------
-    // create a formatter working with the connections format supplier
-    Reference< XNumberFormatter > xFormatter;
-
-    try
-    {
-        Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xSupplier(::dbtools::getNumberFormats(_rxConnection, sal_True,getORB()));
-
-        if ( xSupplier.is() )
-        {
-            // create a new formatter
-            xFormatter = Reference< ::com::sun::star::util::XNumberFormatter > (
-                getORB()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.NumberFormatter"))), UNO_QUERY);
-            if ( xFormatter.is() )
-                xFormatter->attachNumberFormatsSupplier(xSupplier);
-        }
-    }
-    catch(Exception&)
-    {
-        OSL_ENSURE(0,"Exception catched!");
-    }
-    return xFormatter;
-}
-// -----------------------------------------------------------------------------
 void OApplicationController::addContainerListener(const Reference<XNameAccess>& _xCollection)
 {
     try
     {
         Reference< XContainer > xCont(_xCollection, UNO_QUERY);
-        if ( xCont.is() && m_xCurrentContainer != xCont )
+        if ( xCont.is() )
         {
-            if ( m_xCurrentContainer.is() )
-                m_xCurrentContainer->removeContainerListener(this);
-            ::std::for_each(m_aCurrentSubContainers.begin(),m_aCurrentSubContainers.end(),XContainerFunctor(this));
-            m_aCurrentSubContainers.clear();
             // add as listener to get notified if elements are inserted or removed
-            xCont->addContainerListener(this);
-            m_xCurrentContainer = xCont;
+            TContainerVector::iterator aFind = ::std::find(m_aCurrentContainers.begin(),m_aCurrentContainers.end(),xCont);
+            if ( aFind == m_aCurrentContainers.end() )
+            {
+                xCont->addContainerListener(this);
+                m_aCurrentContainers.push_back(xCont);
+            }
         }
     }
     catch(Exception&)
@@ -2131,35 +2165,6 @@ sal_Bool OApplicationController::requestDrag( sal_Int8 _nAction, const Point& _r
 
     return NULL != pTransfer;
 }
-/// unary_function Functor object for class DataFlavorExVector::value_type returntype is bool
-struct TAppSupportedSotFunctor : ::std::unary_function<DataFlavorExVector::value_type,bool>
-{
-    ElementType eEntryType;
-    sal_Bool    bQueryDrop;
-    TAppSupportedSotFunctor(const ElementType& _eEntryType,sal_Bool _bQueryDrop)
-        : eEntryType(_eEntryType)
-        , bQueryDrop(_bQueryDrop)
-    {
-    }
-
-    inline bool operator()(const DataFlavorExVector::value_type& _aType)
-    {
-        switch (_aType.mnSotId)
-        {
-            case SOT_FORMAT_RTF:                    // RTF data descriptions
-            case SOT_FORMATSTR_ID_HTML:             // HTML data descriptions
-            case SOT_FORMATSTR_ID_HTML_SIMPLE:      // HTML data descriptions
-            case SOT_FORMATSTR_ID_DBACCESS_TABLE:   // table descriptor
-                return (E_TABLE == eEntryType);
-                break;
-            case SOT_FORMATSTR_ID_DBACCESS_QUERY:   // query descriptor
-            case SOT_FORMATSTR_ID_DBACCESS_COMMAND: // SQL command
-                return ((E_QUERY == eEntryType) || ( !bQueryDrop && E_TABLE == eEntryType));
-                break;
-        }
-        return false;
-    }
-};
 // -----------------------------------------------------------------------------
 sal_Int8 OApplicationController::queryDrop( const AcceptDropEvent& _rEvt, const DataFlavorExVector& _rFlavors )
 {
@@ -2198,7 +2203,7 @@ sal_Int8 OApplicationController::queryDrop( const AcceptDropEvent& _rEvt, const 
                         }
                     }
                     else
-                        nAction = DND_ACTION_COPY;
+                        nAction = nActionAskedFor & DND_ACTION_COPYMOVE;
                 }
                 return nAction;
             }
@@ -2299,32 +2304,10 @@ sal_Int8 OApplicationController::executeDrop( const ExecuteDropEvent& _rEvt )
     }
     else
     {
-        sal_Bool bHtml = aDroppedData.HasFormat(SOT_FORMATSTR_ID_HTML) || aDroppedData.HasFormat(SOT_FORMATSTR_ID_HTML_SIMPLE);
-        if ( bHtml || aDroppedData.HasFormat(SOT_FORMAT_RTF))
+        Reference<XConnection> xDestConnection;  // supports the service sdb::connection
+        ensureConnection( xDestConnection);
+        if ( xDestConnection.is() && m_aTableCopyHelper.copyTagTable(aDroppedData,m_aAsyncDrop,xDestConnection) )
         {
-            if ( bHtml )
-                const_cast<TransferableDataHelper&>(aDroppedData).GetSotStorageStream(aDroppedData.HasFormat(SOT_FORMATSTR_ID_HTML) ? SOT_FORMATSTR_ID_HTML : SOT_FORMATSTR_ID_HTML_SIMPLE,m_aAsyncDrop.aHtmlRtfStorage);
-            else
-                const_cast<TransferableDataHelper&>(aDroppedData).GetSotStorageStream(SOT_FORMAT_RTF,m_aAsyncDrop.aHtmlRtfStorage);
-
-            m_aAsyncDrop.bHtml          = bHtml;
-            m_aAsyncDrop.bError         = !copyTagTable(m_aAsyncDrop,sal_True);
-
-            if ( !m_aAsyncDrop.bError && m_aAsyncDrop.aHtmlRtfStorage.Is() )
-            {
-                // now we need to copy the stream
-                ::utl::TempFile aTmp;
-                aTmp.EnableKillingFile(sal_False);
-                m_aAsyncDrop.aUrl = aTmp.GetURL();
-                SotStorageStreamRef aNew = new SotStorageStream( aTmp.GetFileName() );
-                m_aAsyncDrop.aHtmlRtfStorage->Seek(STREAM_SEEK_TO_BEGIN);
-                m_aAsyncDrop.aHtmlRtfStorage->CopyTo( aNew );
-                aNew->Commit();
-                m_aAsyncDrop.aHtmlRtfStorage = aNew;
-            }
-            else
-                m_aAsyncDrop.aHtmlRtfStorage = NULL;
-
             // asyncron because we some dialogs and we aren't allowed to show them while in D&D
             m_nAsyncDrop = Application::PostUserEvent(LINK(this, OApplicationController, OnAsyncDrop));
             return DND_ACTION_COPY;
@@ -2391,7 +2374,7 @@ void OApplicationController::containerFound( const Reference< XContainer >& _xCo
     {
         if ( _xContainer.is() )
         {
-            m_aCurrentSubContainers.push_back(_xContainer);
+            m_aCurrentContainers.push_back(_xContainer);
             _xContainer->addContainerListener(this);
         }
     }
