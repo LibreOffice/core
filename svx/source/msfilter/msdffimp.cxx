@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.109 $
+ *  $Revision: 1.110 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 14:39:44 $
+ *  last change: $Author: rt $ $Date: 2005-01-07 09:24:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4811,17 +4811,17 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                             String              aFontName;
                             MSO_GeoTextAlign    eGeoTextAlign;
 
-                            if ( SeekToContent( DFF_Prop_gtextUNICODE, rStCtrl ) )
+                            if ( SeekToContent( DFF_Prop_gtextUNICODE, rSt ) )
                             {
-                                MSDFFReadZString( rStCtrl, aObjectText, GetPropertyValue( DFF_Prop_gtextUNICODE ), TRUE );
+                                MSDFFReadZString( rSt, aObjectText, GetPropertyValue( DFF_Prop_gtextUNICODE ), TRUE );
                                 ((SdrObjCustomShape*)pRet)->SetText( aObjectText );
                             }
-                            if ( SeekToContent( DFF_Prop_gtextFont, rStCtrl ) )
+                            if ( SeekToContent( DFF_Prop_gtextFont, rSt ) )
                             {
                                 SvxFontItem aLatin, aAsian, aComplex;
                                 GetDefaultFonts( aLatin, aAsian, aComplex );
 
-                                MSDFFReadZString( rStCtrl, aFontName, GetPropertyValue( DFF_Prop_gtextFont ), TRUE );
+                                MSDFFReadZString( rSt, aFontName, GetPropertyValue( DFF_Prop_gtextFont ), TRUE );
                                 aSet.Put( SvxFontItem( aLatin.GetFamily(), aFontName, aLatin.GetStyleName() ) );
                             }
                             eGeoTextAlign = ( (MSO_GeoTextAlign)GetPropertyValue( DFF_Prop_gtextAlign, mso_alignTextCenter ) );
