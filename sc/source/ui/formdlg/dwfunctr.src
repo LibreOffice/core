@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dwfunctr.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-01 20:46:46 $
+ *  last change: $Author: kz $ $Date: 2001-03-09 20:49:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -365,7 +365,7 @@ DockingWindow FID_FUNCTION_BOX
         < "情報" ; Default ; > ;
         < "論理" ; Default ; > ;
         < "数学" ; Default ; > ;
-        < "ﾏﾄﾘｯｸｽ" ; Default ; > ;
+        < "ﾏﾄﾘｸｽ" ; Default ; > ;
         < "統計" ; Default ; > ;
         < "表\計算" ; Default ; > ;
         < "文字" ; Default ; > ;
