@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntcache.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: fme $ $Date: 2002-05-07 10:54:56 $
+ *  last change: $Author: fme $ $Date: 2002-05-13 09:02:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1412,7 +1412,6 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
                                     pPrtFont->GetSize() ).Height();
                     if( WRONG_SHOW_MIN < nHght )
                     {
-                        pKernArray[ rInf.GetLen() - 1 ] += nKernSum + nSpaceSum;
                         if ( rInf.GetOut().GetConnectMetaFile() )
                             rInf.GetOut().Push();
 
@@ -1496,7 +1495,6 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
                                                 pPrtFont->GetSize() ).Height();
                         if( WRONG_SHOW_MIN < nHght )
                         {
-                            pKernArray[ rInf.GetLen() - 1 ] += nKernSum + nSpaceSum;
                             if ( rInf.GetOut().GetConnectMetaFile() )
                                 rInf.GetOut().Push();
 
