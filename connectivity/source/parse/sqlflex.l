@@ -2,7 +2,7 @@
 
 //--------------------------------------------------------------------------
 //
-// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlflex.l,v 1.20 2003-06-06 10:51:03 vg Exp $
+// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlflex.l,v 1.21 2003-06-12 10:28:00 vg Exp $
 //
 // Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 //
@@ -10,7 +10,7 @@
 //	OJ
 //
 // Last change:
-//	$Author: vg $ $Date: 2003-06-06 10:51:03 $ $Revision: 1.20 $
+//	$Author: vg $ $Date: 2003-06-12 10:28:00 $ $Revision: 1.21 $
 //
 // Description:
 //
@@ -337,6 +337,7 @@ OSQLScanner* xxx_pGLOBAL_SQLSCAN = NULL;
 .				{YY_FATAL_ERROR("Invalid symbol"); return SQL_TOKEN_INVALIDSYMBOL;}
 
 %%
+
 // Kludge around a bug (well, Posix incompatibility) in flex 2.5.x 
 // http://bugs.debian.org/cgi-bin/bugreport.cgi?archive=no&bug=189332 
 #if YY_FLEX_MAJOR_VERSION >= 2 && YY_FLEX_MINOR_VERSION >= 5 
@@ -386,17 +387,17 @@ sal_Int32 gatherString( sal_Int32 delim, sal_Int32 nTyp)
 				{
 					case 0:
 						SQL_NEW_NODE(::rtl::OUString(Buffer,nPos,RTL_TEXTENCODING_UTF8), SQL_NODE_NAME);
-						delete [] Buffer;
+						delete Buffer;
 						Buffer = NULL;
 						return SQL_TOKEN_NAME;											
 					case 1:
 						SQL_NEW_NODE(::rtl::OUString(Buffer,nPos,RTL_TEXTENCODING_UTF8), SQL_NODE_STRING);
-						delete [] Buffer;
+						delete Buffer;
 						Buffer = NULL;
 						return SQL_TOKEN_STRING;
 					case 2:
 						SQL_NEW_NODE(::rtl::OUString(Buffer,nPos,RTL_TEXTENCODING_UTF8), SQL_NODE_ACCESS_DATE);
-						delete [] Buffer;
+						delete Buffer;
 						Buffer = NULL;
 						return SQL_TOKEN_ACCESS_DATE;
 				}				
@@ -407,7 +408,7 @@ sal_Int32 gatherString( sal_Int32 delim, sal_Int32 nTyp)
 				if (++nPos == BUFFERSIZE)
 				{
 					::rtl::OString aBuf(Buffer);
-					delete [] Buffer;
+					delete Buffer;
 					BUFFERSIZE *=2;
 					Buffer = new sal_Char[BUFFERSIZE];
 					for(sal_Int32 i=0;i<aBuf.getLength();++i,++Buffer)
@@ -425,7 +426,7 @@ sal_Int32 gatherString( sal_Int32 delim, sal_Int32 nTyp)
 			if (++nPos == BUFFERSIZE)
 			{
 				::rtl::OString aBuf(Buffer);
-				delete [] Buffer;
+				delete Buffer;
 				BUFFERSIZE *=2;
 				Buffer = new sal_Char[BUFFERSIZE];
 				for(sal_Int32 i=0;i<aBuf.getLength();++i,++Buffer)
@@ -436,7 +437,7 @@ sal_Int32 gatherString( sal_Int32 delim, sal_Int32 nTyp)
 	}
 	*s = '\0';		 		
 	YY_FATAL_ERROR("Unterminated name string"); 
-	delete [] Buffer;
+	delete Buffer;
 	Buffer = NULL;
 	return SQL_TOKEN_INVALIDSYMBOL;		
 }
@@ -614,7 +615,7 @@ void OSQLScanner::SQLyyerror(sal_Char *fmt)
 				if (++nPos == BUFFERSIZE)
 				{
 					::rtl::OString aBuf(Buffer);
-					delete [] Buffer;
+					delete Buffer;
 					BUFFERSIZE *=2;
 					Buffer = new sal_Char[BUFFERSIZE];
 					for(sal_Int32 i=0;i<aBuf.getLength();++i,++Buffer)
@@ -624,7 +625,7 @@ void OSQLScanner::SQLyyerror(sal_Char *fmt)
 			}
 		}
 		m_sErrorMessage += aError;
-		delete [] Buffer;
+		delete Buffer;
 		Buffer = NULL;
 	}
 	IN_SQLyyerror = false;
