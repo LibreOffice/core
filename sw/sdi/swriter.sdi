@@ -4739,7 +4739,11 @@ SfxVoidItem InsertPageCountField FN_INSERT_FLD_PGCOUNT
 ]
 
 //--------------------------------------------------------------------------
-SfxObjectItem InsertPageFooter FN_INSERT_PAGEFOOTER
+SfxVoidItem InsertPageFooter FN_INSERT_PAGEFOOTER
+(
+    SfxStringItem PageStyle FN_INSERT_PAGEFOOTER,
+    SfxBoolItem On  FN_PARAM_1
+)
 
 [
     /* flags: */
@@ -4755,7 +4759,8 @@ SfxObjectItem InsertPageFooter FN_INSERT_PAGEFOOTER
     RecordPerSet;
     Asynchron;
 
-    Readonly = FALSE,
+    /* status: */
+    SlotType = SfxObjectItem
 
     /* config: */
     AccelConfig = FALSE,
@@ -4766,8 +4771,11 @@ SfxObjectItem InsertPageFooter FN_INSERT_PAGEFOOTER
 ]
 
 //--------------------------------------------------------------------------
-SfxObjectItem InsertPageHeader FN_INSERT_PAGEHEADER
-
+SfxVoidItem InsertPageHeader FN_INSERT_PAGEHEADER
+(
+    SfxStringItem PageStyle FN_INSERT_PAGEHEADER,
+    SfxBoolItem On  FN_PARAM_1
+)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -4782,7 +4790,8 @@ SfxObjectItem InsertPageHeader FN_INSERT_PAGEHEADER
     RecordPerSet;
     Asynchron;
 
-    Readonly = FALSE,
+    /* status: */
+    SlotType = SfxObjectItem
 
     /* config: */
     AccelConfig = FALSE,

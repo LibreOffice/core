@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _textsh.sdi,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: os $ $Date: 2002-07-04 14:43:41 $
+ *  last change: $Author: os $ $Date: 2002-07-05 09:56:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,11 +212,13 @@ interface BaseText : Selection
     ]
     FN_INSERT_PAGEHEADER    // status(final|play|rec)
     [
+        ExecMethod = Execute ;
         StateMethod = GetState ;
         Export = FALSE;
     ]
     FN_INSERT_PAGEFOOTER    // status(final|play|rec)
     [
+        ExecMethod = Execute ;
         StateMethod = GetState ;
         Export = FALSE;
     ]

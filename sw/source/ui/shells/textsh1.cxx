@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh1.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: os $ $Date: 2002-07-04 14:55:53 $
+ *  last change: $Author: os $ $Date: 2002-07-05 09:57:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,6 +139,9 @@
 #ifndef _SVX_FONTITEM_HXX
 #include <svx/fontitem.hxx>
 #endif
+#ifndef _SVX_DIALMGR_HXX
+#include <svx/dialmgr.hxx>
+#endif
 #ifndef _FMTINFMT_HXX //autogen
 #include <fmtinfmt.hxx>
 #endif
@@ -165,6 +168,12 @@
 #endif
 #ifndef _SWEVENT_HXX
 #include <swevent.hxx>
+#endif
+#ifndef _FMTHDFT_HXX //autogen
+#include <fmthdft.hxx>
+#endif
+#ifndef _PAGEDESC_HXX
+#include <pagedesc.hxx>
 #endif
 #ifndef _TEXTSH_HXX
 #include <textsh.hxx>
@@ -1034,7 +1043,18 @@ void SwTextShell::Execute(SfxRequest &rReq)
             rReq.Ignore();
         }
         break;
-
+    case FN_INSERT_PAGEHEADER:
+    case FN_INSERT_PAGEFOOTER:
+    if(pItem)
+    {
+        String sStyleName = ((const SfxStringItem*)pItem)->GetValue();
+        BOOL bOn = TRUE;
+        if( SFX_ITEM_SET == pArgs->GetItemState(FN_PARAM_1, FALSE, &pItem))
+            bOn = ((const SfxBoolItem*)pItem)->GetValue();
+        ChangeHeaderOrFooter(sStyleName, FN_INSERT_PAGEHEADER == nSlot, bOn, !rReq.IsAPI());
+        rReq.Done();
+    }
+    break;
     default:
         ASSERT(!this, falscher Dispatcher);
         return;
@@ -1246,6 +1266,69 @@ void SwTextShell::GetState( SfxItemSet &rSet )
         nWhich = aIter.NextWhich();
     }
 }
+/* -----------------------------2002/07/05 10:31------------------------------
+    Switch on/off header of footer of a page style - if an empty name is
+    given all styles are changed
+ ---------------------------------------------------------------------------*/
+void SwTextShell::ChangeHeaderOrFooter(
+    const String& rStyleName, BOOL bHeader, BOOL bOn, BOOL bShowWarning)
+{
+    SwWrtShell& rSh = GetShell();
+    rSh.StartAllAction();
+    rSh.StartUndo( 0 );
+    BOOL bExecute = TRUE;
+    BOOL bCrsrSet = FALSE;
+    for( USHORT nFrom = 0, nTo = rSh.GetPageDescCnt();
+            nFrom < nTo; ++nFrom )
+    {
+        int bChgd = FALSE;
+        SwPageDesc aDesc( rSh.GetPageDesc( nFrom ));
+        String sTmp(aDesc.GetName());
+        if( !rStyleName.Len() || rStyleName == sTmp )
+        {
+            if( bShowWarning && !bOn && GetActiveView() && GetActiveView() == &GetView() &&
+                    (bHeader && aDesc.GetMaster().GetHeader().IsActive() ||
+                        !bHeader && aDesc.GetMaster().GetFooter().IsActive()))
+            {
+                bShowWarning = FALSE;
+                //Actions have to be closed while the dialog is showing
+                rSh.EndAllAction();
 
+                Window* pParent = &GetView().GetViewFrame()->GetWindow();
+                BOOL bRet = RET_YES == QueryBox( pParent, ResId( RID_SVXQBX_DELETE_HEADFOOT,
+                                        DIALOG_MGR() ) ).Execute();
+                bExecute = bRet;
+                rSh.StartAllAction();
+            }
+            if( bExecute )
+            {
+                bChgd = TRUE;
+                SwFrmFmt &rMaster = aDesc.GetMaster();
+                if(bHeader)
+                    rMaster.SetAttr( SwFmtHeader( bOn ));
+                else
+                    rMaster.SetAttr( SwFmtFooter( bOn ));
+                if( bOn )
+                {
+                    SvxULSpaceItem aUL(bHeader ? 0 : MM50, bHeader ? MM50 : 0 );
+                    SwFrmFmt* pFmt = bHeader ?
+                        (SwFrmFmt*)rMaster.GetHeader().GetHeaderFmt() :
+                        (SwFrmFmt*)rMaster.GetFooter().GetFooterFmt();
+                    pFmt->SetAttr( aUL );
+                }
+            }
+            if( bChgd )
+            {
+                rSh.ChgPageDesc( nFrom, aDesc );
 
+                if( !bCrsrSet && bOn )
+                    bCrsrSet = rSh.SetCrsrInHdFt(
+                            !rStyleName.Len() ? USHRT_MAX : nFrom,
+                            bHeader );
+            }
+        }
+    }
+    rSh.EndUndo( 0 );
+    rSh.EndAllAction();
+}
 
