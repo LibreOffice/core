@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlged.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 17:38:50 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 08:43:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,10 @@
 
 #ifndef _BASCTL_DLGEDDEF_HXX
 #include <dlgeddef.hxx>
+#endif
+
+#ifndef _BASCTL_PROPBRW_HXX
+#include "propbrw.hxx"
 #endif
 
 #include <basidesh.hxx>
@@ -292,12 +296,18 @@ DlgEditor::DlgEditor()
 
     aPaintTimer.SetTimeout( 1 );
     aPaintTimer.SetTimeoutHdl( LINK( this, DlgEditor, PaintTimeout ) );
+
+    aMarkTimer.SetTimeout( 100 );
+    aMarkTimer.SetTimeoutHdl( LINK( this, DlgEditor, MarkTimeout ) );
 }
 
 //----------------------------------------------------------------------------
 
 DlgEditor::~DlgEditor()
 {
+    aPaintTimer.Stop();
+    aMarkTimer.Stop();
+
     delete pObjFac;
     delete pFunc;
     delete pDlgEdView;
@@ -590,6 +600,19 @@ IMPL_LINK( DlgEditor, PaintTimeout, Timer *, EMPTYARG )
     nInPaint = FALSE;
 
     DBG_ASSERT(pWindow,"Window not set");
+    return 0;
+}
+
+//----------------------------------------------------------------------------
+
+IMPL_LINK( DlgEditor, MarkTimeout, Timer *, EMPTYARG )
+{
+    BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+    SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
+    SfxChildWindow* pChildWin = pViewFrame ? pViewFrame->GetChildWindow( SID_SHOW_PROPERTYBROWSER ) : NULL;
+    if ( pChildWin )
+        ((PropBrw*)(pChildWin->GetWindow()))->Update( pDlgEdView );
+
     return 0;
 }
 
@@ -967,6 +990,13 @@ void DlgEditor::ShowProperties()
     SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
     if ( pViewFrame && !pViewFrame->HasChildWindow( SID_SHOW_PROPERTYBROWSER ) )
         pViewFrame->ToggleChildWindow( SID_SHOW_PROPERTYBROWSER );
+}
+
+//----------------------------------------------------------------------------
+
+void DlgEditor::UpdatePropertyBrowserDelayed()
+{
+    aMarkTimer.Start();
 }
 
 //----------------------------------------------------------------------------
