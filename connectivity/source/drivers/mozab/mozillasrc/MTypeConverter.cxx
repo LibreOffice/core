@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MTypeConverter.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mmaher $ $Date: 2001-10-11 10:07:55 $
+ *  last change: $Author: mmaher $ $Date: 2001-11-07 16:55:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@ void MTypeConverter::nsStringToOUString(nsString const &nss, ::rtl::OUString &ou
     OSL_TRACE( "IN MTypeConverter::nsStringToOUString()\n" );
 
     // Get clone of buffer.
-    PRUnichar *uc = nss.ToNewUnicode();
+    PRUnichar *uc = ToNewUnicode(nss);
     sal_Int32 nssLen = nss.Length();
 
     // TODO check if this is ok.

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hjs $ $Date: 2001-10-23 11:43:42 $
+#   last change: $Author: mmaher $ $Date: 2001-11-07 16:55:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -63,7 +63,7 @@ CALL_CDECL=TRUE
 
 #mozilla specific stuff.
 MOZ_LIB=$(SOLARVERSION)$/$(INPATH)$/lib$(UPDMINOREXT)
-MOZ_INC=$(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)/$/mozilla
+MOZ_INC=$(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/mozilla
 #End of mozilla specific stuff.
 
 PRJ=..$/..$/..$/..
@@ -105,7 +105,12 @@ SLOFILES = \
 
 .IF "$(GUI)" == "WNT"
 .IF "$(DEBUG)" == ""
-INCPRE +=   . -I.. -I$(MOZ_INC)  -I$(MOZ_INC)$/nspr
+INCPRE += . -I.. -I$(MOZ_INC)  -I$(MOZ_INC)$/nspr -I$(MOZ_INC)$/xpcom \
+        -I$(MOZ_INC)$/string -I$(MOZ_INC)$/rdf -I$(MOZ_INC)$/msgbase \
+        -I$(MOZ_INC)$/addrbook -I$(MOZ_INC)$/mork -I$(MOZ_INC)$/locale \
+        -I$(MOZ_INC)$/pref -I$(MOZ_INC)$/mime -I$(MOZ_INC)$/chrome \
+        -I$(MOZ_INC)$/necko -I$(MOZ_INC)$/intl -I$(MOZ_INC)$/profile \
+        -I$(MOZ_INC)$/embed_base 
 CDEFS +=    -DWINVER=0x400 -DMOZILLA_CLIENT \
         -DNS_NET_FILE -DCookieManagement -DSingleSignon -DClientWallet \
             -DTRACING -DXP_PC -DXP_WIN -DXP_WIN32 -DHW_THREADS \
@@ -116,7 +121,12 @@ CDEFS +=    -DWINVER=0x400 -DMOZILLA_CLIENT \
         -DNETSCAPE -DMOZILLA_CLIENT -DJS_THREADSAFE -DNECKO -DINCLUDE_XUL 
 CFLAGS +=   -GR- -W3 -Gy -MD -UDEBUG
 .ELSE
-INCPRE +=   . -I.. -I$(MOZ_INC)   -I$(MOZ_INC)$/nspr
+INCPRE += . -I.. -I$(MOZ_INC)  -I$(MOZ_INC)$/nspr -I$(MOZ_INC)$/xpcom \
+        -I$(MOZ_INC)$/string -I$(MOZ_INC)$/rdf -I$(MOZ_INC)$/msgbase \
+        -I$(MOZ_INC)$/addrbook -I$(MOZ_INC)$/mork -I$(MOZ_INC)$/locale \
+        -I$(MOZ_INC)$/pref -I$(MOZ_INC)$/mime -I$(MOZ_INC)$/chrome \
+        -I$(MOZ_INC)$/necko -I$(MOZ_INC)$/intl -I$(MOZ_INC)$/profile \
+        -I$(MOZ_INC)$/embed_base 
 CDEFS +=    -DDEBUG -DWINVER=0x400 -DMOZILLA_CLIENT \
         -DNS_NET_FILE -DCookieManagement -DSingleSignon -DClientWallet \
             -DTRACING -DXP_PC -DXP_WIN -DXP_WIN32 -DHW_THREADS \
@@ -129,7 +139,12 @@ CFLAGS +=   -Zi -GR- -W3 -Gy -MDd -UNDEBUG
 .ENDIF
 .ENDIF
 .IF "$(GUI)" == "UNX"
-INCPRE +=   . -I.. -I$(MOZ_INC) -I$(MOZ_INC)$/nspr
+INCPRE += . -I.. -I$(MOZ_INC)  -I$(MOZ_INC)$/nspr -I$(MOZ_INC)$/xpcom \
+        -I$(MOZ_INC)$/string -I$(MOZ_INC)$/rdf -I$(MOZ_INC)$/msgbase \
+        -I$(MOZ_INC)$/addrbook -I$(MOZ_INC)$/mork -I$(MOZ_INC)$/locale \
+        -I$(MOZ_INC)$/pref -I$(MOZ_INC)$/mime -I$(MOZ_INC)$/chrome \
+        -I$(MOZ_INC)$/necko -I$(MOZ_INC)$/intl -I$(MOZ_INC)$/profile \
+        -I$(MOZ_INC)$/embed_base 
 CDEFS+=	    -DMOZILLA_CLIENT \
             -DOSTYPE=\"Linux2.2.14-5\" -DOJI
 .IF "$(OS)" == "LINUX"
