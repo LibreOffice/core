@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viscrs.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-30 10:17:27 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 16:33:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -639,12 +639,13 @@ void SwSelPaintRects::Show()
     if( Count() || aTmp.Count() )
     {
         SwRegionRects aReg( pCShell->VisArea() );
+        USHORT n;
 
         // suche die neu selektierten Rechtecke heraus
         aReg.Remove( 0, aReg.Count() );
         aReg.Insert( this, 0 );
 
-        for( USHORT n = 0; n < aTmp.Count(); ++n )
+        for( n = 0; n < aTmp.Count(); ++n )
             aReg -= aTmp[n];
 
         // jetzt sollten in aReg nur noch die neuen Rechtecke vorliegen
@@ -891,10 +892,11 @@ short SwShellCrsr::MaxReplaceArived()
         // alte Actions beenden; die Tabellen-Frames werden angelegt und
         // eine SSelection kann erzeugt werden
         SvUShorts aArr;
+        USHORT nActCnt;
         ViewShell *pShell = GetDoc()->GetRootFrm()->GetCurrShell(),
                   *pSh = pShell;
         do {
-            for( USHORT nActCnt = 0; pSh->ActionPend(); ++nActCnt )
+            for( nActCnt = 0; pSh->ActionPend(); ++nActCnt )
                 pSh->EndAction();
             aArr.Insert( nActCnt, aArr.Count() );
         } while( pShell != ( pSh = (ViewShell*)pSh->GetNext() ) );
