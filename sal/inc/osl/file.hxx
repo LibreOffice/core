@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file.hxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 17:07:51 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 13:13:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1595,7 +1595,42 @@ public:
     friend class Directory;
 };
 
-// -----------------------------------------------------------------------------
+//###########################################
+
+/** Base class for observers of directory creation notifications.
+
+    Clients which uses the method createDirectoryPath of the class
+    Directory may want to be informed about the directories that
+    have been created. This may be accomplished by deriving from
+    this base class and overwriting the virtual function
+    DirectoryCreated.
+
+    @see Directory::createPath
+*/
+class DirectoryCreationObserver
+{
+public:
+    virtual ~DirectoryCreationObserver() {};
+
+    /** This method will be called when a new directory has been
+        created and needs to be overwritten by derived classes.
+        You must not delete the directory that was just created
+        otherwise you will run into an endless loop.
+
+        @param aDirectoryUrl
+        [in]The absolute file URL of the directory that was just created by
+        ::osl::Directory::createPath.
+    */
+    virtual void DirectoryCreated(const rtl::OUString& aDirectoryUrl) = 0;
+};
+
+//###########################################
+// This just an internal helper function for
+// private use.
+extern "C" inline void SAL_CALL onDirectoryCreated(void* pData, rtl_uString* aDirectoryUrl)
+{
+    (static_cast<DirectoryCreationObserver*>(pData))->DirectoryCreated(aDirectoryUrl);
+}
 
 /** The directory class object provides a enumeration of DirectoryItems.
 
@@ -1853,9 +1888,71 @@ public:
     {
         return (RC) osl_removeDirectory( ustrDirectoryURL.pData );
     }
+
+    /** Create a directory path.
+
+        The osl_createDirectoryPath function creates a specified directory path.
+        All nonexisting sub directories will be created.
+        <p><strong>PLEASE NOTE:</strong> You cannot rely on getting the error code
+        E_EXIST for existing directories. Programming against this error code is
+        in general a strong indication of a wrong usage of osl_createDirectoryPath.</p>
+
+        @param aDirectoryUrl
+        [in] The absolute file URL of the directory path to create.
+        A relative file URL will not be accepted.
+
+        @param aDirectoryCreationObserver
+        [in] Pointer to an instance of type DirectoryCreationObserver that will
+        be informed about the creation of a directory. The value of this
+        parameter may be NULL, in this case notifications will not be sent.
+
+        @return
+        <dl>
+        <dt>E_None</dt>
+        <dd>On success</dd>
+        <dt>E_INVAL</dt>
+        <dd>The format of the parameters was not valid</dd>
+        <dt>E_ACCES</dt>
+        <dd>Permission denied</dd>
+        <dt>E_EXIST</dt>
+        <dd>The final node of the specified directory path already exist</dd>
+        <dt>E_NAMETOOLONG</dt>
+        <dd>The name of the specified directory path exceeds the maximum allowed length</dd>
+        <dt>E_NOTDIR</dt>
+        <dd>A component of the specified directory path already exist as file in any part of the directory path</dd>
+        <dt>E_ROFS</dt>
+        <dd>Read-only file system</dd>
+        <dt>E_NOSPC</dt>
+        <dd>No space left on device</dd>
+        <dt>E_DQUOT</dt>
+        <dd>Quota exceeded</dd>
+        <dt>E_FAULT</dt>
+        <dd>Bad address</dd>
+        <dt>E_IO</dt>
+        <dd>I/O error</dd>
+        <dt>E_LOOP</dt>
+        <dd>Too many symbolic links encountered</dd>
+        <dt>E_NOLINK</dt>
+        <dd>Link has been severed</dd>
+        <dt>E_invalidError</dt>
+        <dd>An unknown error occurred</dd>
+        </dl>
+
+        @see DirectoryCreationObserver
+        @see create
+    */
+    static RC createPath(
+        const ::rtl::OUString& aDirectoryUrl,
+        DirectoryCreationObserver* aDirectoryCreationObserver = NULL)
+    {
+        return (RC)osl_createDirectoryPath(
+            aDirectoryUrl.pData,
+            (aDirectoryCreationObserver) ? onDirectoryCreated : NULL,
+            aDirectoryCreationObserver);
+    }
 };
 
-}
+} /* namespace osl */
 
 #endif  /* __cplusplus */
 #endif  /* _OSL_FILE_HXX_ */
