@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindows.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mt $ $Date: 2001-06-01 11:21:55 $
+ *  last change: $Author: mt $ $Date: 2001-06-05 14:07:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -288,6 +288,15 @@ void VCLXButton::setProperty( const ::rtl::OUString& PropertyName, const ::com::
                         ((PushButton*)pButton)->SetState( (TriState)n );
                 }
             }
+            case BASEPROPERTY_IMAGEALIGN:
+            {
+                if ( GetWindow()->GetType() == WINDOW_PUSHBUTTON )
+                {
+                    sal_Int16 n;
+                    if ( Value >>= n )
+                        ((PushButton*)pButton)->SetImageAlign( (ImageAlign)n );
+                }
+            }
             break;
             default:
             {
@@ -318,6 +327,14 @@ void VCLXButton::setProperty( const ::rtl::OUString& PropertyName, const ::com::
                 if ( GetWindow()->GetType() == WINDOW_PUSHBUTTON )
                 {
                      aProp <<= (sal_Int16)((PushButton*)pButton)->GetState();
+                }
+            }
+            break;
+            case BASEPROPERTY_IMAGEALIGN:
+            {
+                if ( GetWindow()->GetType() == WINDOW_PUSHBUTTON )
+                {
+                     aProp <<= (sal_Int16)((PushButton*)pButton)->GetImageAlign();
                 }
             }
             break;
@@ -1754,6 +1771,21 @@ void VCLXDialog::endExecute() throw(::com::sun::star::uno::RuntimeException)
     if ( pDlg )
         pDlg->EndDialog( 0 );
 }
+
+::com::sun::star::awt::DeviceInfo VCLXDialog::getInfo() throw(::com::sun::star::uno::RuntimeException)
+{
+    ::com::sun::star::awt::DeviceInfo aInfo = VCLXDevice::getInfo();
+
+#if SUPD >= 634
+    ::vos::OGuard aGuard( GetMutex() );
+    Dialog* pDlg = (Dialog*) GetWindow();
+    if ( pDlg )
+        pDlg->GetDrawWindowBorder( aInfo.LeftInset, aInfo.TopInset, aInfo.RightInset, aInfo.BottomInset );
+#endif
+
+    return aInfo;
+}
+
 
 //  ----------------------------------------------------
 //  class VCLXFixedText
