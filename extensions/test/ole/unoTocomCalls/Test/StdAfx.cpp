@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StdAfx.cpp,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:16:55 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 10:03:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,3 +66,4 @@
 
 // TODO: reference any additional headers you need in STDAFX.H
 // and not in this file
+
