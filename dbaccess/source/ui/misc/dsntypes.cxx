@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsntypes.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-30 07:59:18 $
+ *  last change: $Author: oj $ $Date: 2000-11-21 15:02:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,10 +179,11 @@ DATASOURCE_TYPE ODsnTypeCollection::implDetermineType(const String& _rDsn)
         DBG_ERROR("ODsnTypeCollection::implDetermineType : missing the colon !");
         return DST_UNKNOWN;
     }
-
+    // find first :
     if (_rDsn.EqualsIgnoreCaseAscii("jdbc", 0, nSeparator))
         return DST_JDBC;
 
+    // find second :
     nSeparator = _rDsn.Search((sal_Unicode)':', nSeparator + 1);
     if (STRING_NOTFOUND == nSeparator)
     {
@@ -197,7 +198,10 @@ DATASOURCE_TYPE ODsnTypeCollection::implDetermineType(const String& _rDsn)
         return DST_ODBC;
     if (_rDsn.EqualsIgnoreCaseAscii("sdbc:dbase", 0, nSeparator))
         return DST_DBASE;
+    if (_rDsn.EqualsIgnoreCaseAscii("sdbc:flat:", 0, nSeparator))
+        return DST_TEXT;
 
+    // find third :
     nSeparator = _rDsn.Search((sal_Unicode)':', nSeparator + 1);
     if (STRING_NOTFOUND == nSeparator)
     {
@@ -205,8 +209,7 @@ DATASOURCE_TYPE ODsnTypeCollection::implDetermineType(const String& _rDsn)
         return DST_UNKNOWN;
     }
 
-    if (_rDsn.EqualsIgnoreCaseAscii("sdbc:flat:file", 0, nSeparator))
-        return DST_TEXT;
+
 
     DBG_ERROR("ODsnTypeCollection::implDetermineType : unrecognized data source type !");
     return DST_UNKNOWN;
@@ -372,6 +375,9 @@ SfxPoolItem* DbuTypeCollectionItem::Clone(SfxItemPool* _pPool) const
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2000/10/30 07:59:18  fs
+ *  + hasAuthentification(DATASOURCE_TYPE)
+ *
  *  Revision 1.2  2000/10/20 07:01:39  fs
  *  sdbc:text -> sdbc:flat:file
  *

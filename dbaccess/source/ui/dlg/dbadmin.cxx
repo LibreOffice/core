@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-10 17:36:53 $
+ *  last change: $Author: oj $ $Date: 2000-11-21 15:00:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1092,7 +1092,7 @@ void ODbAdminDialog::implSelectDeleted(sal_Int32 _nKey)
     resetPages(Reference< XPropertySet >(), sal_True);
 
     // disallow reset for deleted pages
-    GetResetButton().Enable(sal_False);
+    //  GetResetButton().Enable(sal_False);
 }
 
 //-------------------------------------------------------------------------
@@ -1113,7 +1113,7 @@ void ODbAdminDialog::implSelectDatasource(const ::rtl::OUString& _rRegisteredNam
     resetPages(xDatasource, sal_False);
 
     // allow reset for non-deleted pages
-    GetResetButton().Enable(sal_True);
+    //  GetResetButton().Enable(sal_True);
 }
 
 //-------------------------------------------------------------------------
@@ -1442,7 +1442,7 @@ void ODbAdminDialog::fillDatasourceInfo(const SfxItemSet& _rSource, ::com::sun::
     // collect the translated property values for the relevant items
     PropertyValueSet aRelevantSettings;
     ConstMapInt2StringIterator aTranslation;
-    while (*pRelevantItems)
+    while (pRelevantItems && *pRelevantItems)
     {
         const SfxPoolItem* pCurrent = _rSource.GetItem(*pRelevantItems);
         aTranslation = m_aIndirectPropTranslator.find(*pRelevantItems);
@@ -2191,6 +2191,9 @@ IMPL_LINK(ODatasourceSelector, OnButtonPressed, Button*, EMPTYARG)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.18  2000/11/10 17:36:53  fs
+ *  small bug fixes
+ *
  *  Revision 1.17  2000/11/10 16:28:02  fs
  *  #80185# implApplyChanges: reset some meta-data-items
  *
