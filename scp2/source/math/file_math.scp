@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file_math.scp,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 13:15:41 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 18:24:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,14 +83,14 @@ STD_RES_FILE( gid_File_Res_Sm, sm )
 
 //
 // start binfilter #110743#
-// 
+//
 
 STD_LIB_FILE( gid_File_Lib_Bf_Sm, bf_sm)
 STD_RES_FILE( gid_File_Res_Bf_Sm, bf_sm)
 
 //
 // end binfilter #110743#
-// 
+//
 
 File gid_File_Oo_Office_Filter_Math_Pkg
     TXT_FILE_BODY;
@@ -117,12 +117,14 @@ File gid_File_Exe_Smath
 End
 
 // new user interface configuration files
+/*
 File gid_File_Share_Config_Sofficecfg_Math_Menubar_Xml
     TXT_FILE_BODY;
     Styles = (PACKED);
     Dir = gid_Dir_Share_Config_Sofficecfg_Smath_Menubar;
     Name = "/uiconfig/smath/menubar/menubar.xml";
 End
+*/
 
 File gid_File_Oo_Office_Ui_Mathcommands_Xcs
     TXT_FILE_BODY;
@@ -130,7 +132,7 @@ File gid_File_Oo_Office_Ui_Mathcommands_Xcs
     Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office_Ui;
     Name = "/registry/schema/org/openoffice/Office/UI/MathCommands.xcs";
 End
-       
+
 File gid_File_Oo_Office_Ui_Mathcommands_Xcu
    TXT_FILE_BODY;
    Styles = (PACKED);
@@ -150,5 +152,19 @@ File gid_File_Registry_Spool_Oo_Setup_Math_Xcu
     Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Spool;
     Name = "/registry/spool/org.openoffice.Setup-math.xcu";
+End
+
+File gid_File_Oo_Office_Ui_Mathwindowstate_Xcs
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office_Ui;
+    Name = "/registry/schema/org/openoffice/Office/UI/MathWindowState.xcs";
+End
+
+File gid_File_Oo_Office_Ui_Mathwindowstate_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
+    Name = "/registry/data/org/openoffice/Office/UI/MathWindowState.xcu";
 End
 
