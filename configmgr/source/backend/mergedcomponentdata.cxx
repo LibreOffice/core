@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mergedcomponentdata.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:18:48 $
+ *  last change: $Author: vg $ $Date: 2003-05-26 08:05:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,12 +140,6 @@ std::auto_ptr<INode> MergedComponentData::extractTemplateNode(OUString const & _
 }
 // -----------------------------------------------------------------------------
 
-ISubtree const * MergedComponentData::getSchemaTree() const
-{
-    return m_pSchemaTree.get();
-}
-// -----------------------------------------------------------------------------
-
 ISubtree const * MergedComponentData::findTemplate(OUString const & _aTemplateName) const
 {
     INode const * pTemplateNode = m_pTemplatesTree->getChild(_aTemplateName);
@@ -183,8 +177,12 @@ ISubtree  * MergedComponentData::setSchemaRoot(std::auto_ptr<ISubtree>  _aSchema
     return m_pSchemaTree.get();
 }
 // -----------------------------------------------------------------------------
-
-
+void  MergedComponentData::setTemplatesTree(std::auto_ptr<ISubtree>  _aTemplateTree)
+{
+    OSL_PRECOND(!hasTemplates(),"ERROR: Template Tree already set");
+    m_pTemplatesTree = _aTemplateTree;
+}
+// -----------------------------------------------------------------------------
 ISubtree  * MergedComponentData::addTemplate(std::auto_ptr<ISubtree>  _aNode, TemplateIdentifier const & aTemplate)
 {
     OSL_PRECOND(_aNode.get(), "ERROR: Adding a NULL template");
