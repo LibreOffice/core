@@ -1,0 +1,320 @@
+/*************************************************************************
+ *
+ *  $RCSfile: docrecovery.hrc,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:20:01 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef _SVX_DOCRECOVERY_HRC
+#define _SVX_DOCRECOVERY_HRC
+
+#include <svtools/controldims.hrc>
+
+// general
+
+#define PROGR_HEIGHT                (RSC_CD_TEXTBOX_HEIGHT)
+
+// TabDialog
+#define TABDLG_WIDTH                260
+#define TABDLG_HEIGHT               278
+
+// TabPage CrashSave
+
+#define WIN_SAVE_TITLE              1
+#define FT_SAVE_TITLE               2
+#define FT_SAVE_DESCR               3
+#define FT_SAVE_FILELIST            4
+#define LB_SAVE_FILELIST            5
+#define CB_SAVE_LAUNCHAUTO          6
+#define FL_SAVE_BOTTOM              7
+#define BT_SAVE_OK                  8
+
+
+#define SAVE_WIDTH                  260
+#define SAVE_HEIGHT                 278
+#define SAVE_TITLEWINHEIGHT         36
+#define SAVE_DESCRHEIGHT            48
+#define SAVE_COL0                   (RSC_SP_DLG_INNERBORDER_LEFT)
+#define SAVE_COL2                   (SAVE_WIDTH-RSC_SP_DLG_INNERBORDER_RIGHT)
+#define SAVE_COL1                   (SAVE_COL2-RSC_CD_PUSHBUTTON_WIDTH)
+#define SAVE_ROW0                   ((SAVE_TITLEWINHEIGHT-RSC_CD_FIXEDTEXT_HEIGHT)/2)
+#define SAVE_ROW1                   (SAVE_TITLEWINHEIGHT)
+#define SAVE_ROW2                   (SAVE_ROW1+RSC_SP_CTRL_Y)
+#define SAVE_ROW3                   (SAVE_ROW2+3*RSC_CD_FIXEDTEXT_HEIGHT+RSC_SP_CTRL_DESC_Y)
+#define SAVE_ROW4                   (SAVE_ROW3+RSC_CD_FIXEDTEXT_HEIGHT+RSC_SP_CTRL_DESC_Y)
+#define SAVE_ROW9                   (SAVE_HEIGHT-RSC_SP_DLG_INNERBORDER_BOTTOM)
+#define SAVE_ROW8                   (SAVE_ROW9-RSC_CD_PUSHBUTTON_HEIGHT)
+#define SAVE_ROW7                   (SAVE_ROW8-RSC_SP_CTRL_GROUP_Y-RSC_CD_FIXEDLINE_HEIGHT)
+#define SAVE_ROW6                   (SAVE_ROW7-RSC_SP_CTRL_GROUP_Y-RSC_CD_CHECKBOX_HEIGHT)
+#define SAVE_ROW5                   (SAVE_ROW6-RSC_SP_CTRL_Y)
+#define SAVE_FILELISTHEIGHT         (SAVE_ROW5-SAVE_ROW4)
+#define SAVE_CONTROLWIDTH           (SAVE_COL2-SAVE_COL0)
+
+// Save Progress Dialog
+
+#define FT_SAVEPROGR_HINT           1
+#define FT_SAVEPROGR_PROGR          2
+#define WIN_SAVEPROGR_PROGR         3
+
+#define SAVEPROGR_WIDTH             240
+#define SAVEPROGR_COL0              (RSC_SP_DLG_INNERBORDER_LEFT)
+#define SAVEPROGR_COL1              (SAVEPROGR_WIDTH-RSC_SP_DLG_INNERBORDER_RIGHT)
+#define SAVEPROGR_ROW0              (RSC_SP_DLG_INNERBORDER_TOP)
+#define SAVEPROGR_ROW1              (SAVEPROGR_ROW0+2*RSC_CD_FIXEDTEXT_HEIGHT+RSC_SP_CTRL_Y)
+#define SAVEPROGR_ROW2              (SAVEPROGR_ROW1+RSC_CD_FIXEDTEXT_HEIGHT+RSC_SP_CTRL_DESC_Y)
+#define SAVEPROGR_ROW3              (SAVEPROGR_ROW2+PROGR_HEIGHT)
+#define SAVEPROGR_CONTROLWIDTH      (SAVEPROGR_COL1-SAVEPROGR_COL0)
+#define SAVEPROGR_HEIGHT            (SAVEPROGR_ROW3+RSC_SP_DLG_INNERBORDER_BOTTOM)
+
+// TabPage Recovery
+
+#define WIN_RECOV_TITLE             1
+#define FT_RECOV_TITLE              2
+#define FT_RECOV_DESCR              3
+#define FT_RECOV_PROGR              4
+#define WIN_RECOV_PROGR             5
+#define FT_RECOV_FILELIST           6
+#define LB_RECOV_FILELIST           7
+#define FL_RECOV_BOTTOM             8
+#define BTN_RECOV_PREV              9
+#define BTN_RECOV_NEXT              10
+#define BTN_RECOV_CANCEL            11
+#define STR_HEADERBAR               12
+#define IMG_GREENCHECK              13
+#define IMG_YELLOWCHECK             14
+#define IMG_REDCROSS                15
+#define IMG_GREENCHECK_HC           16
+#define IMG_YELLOWCHECK_HC          17
+#define IMG_REDCROSS_HC             18
+#define STR_SUCCESSRECOV            19
+#define STR_ORIGDOCRECOV            20
+#define STR_RECOVFAILED             21
+#define STR_RECOVINPROGR            22
+#define STR_NOTRECOVYET             23
+
+#define RECOV_WIDTH                 SAVE_WIDTH
+#define RECOV_HEIGHT                SAVE_HEIGHT
+#define RECOV_TITLEWINHEIGHT        SAVE_TITLEWINHEIGHT
+#define RECOV_DESCRHEIGHT           5*RSC_CD_FIXEDTEXT_HEIGHT
+#define RECOV_COL1                  (RSC_SP_DLG_INNERBORDER_LEFT)
+#define RECOV_COL2                  40
+#define RECOV_COL3                  (RECOV_WIDTH-RSC_SP_DLG_INNERBORDER_RIGHT)
+#define RECOV_COL_A                 (RECOV_COL1)
+#define RECOV_COL_B                 (COL_1+RSC_CD_PUSHBUTTON_WIDTH)
+#define RECOV_COL_G                 (RECOV_COL3)
+#define RECOV_COL_F                 (RECOV_COL_G-RSC_CD_PUSHBUTTON_WIDTH)
+#define RECOV_COL_E                 (RECOV_COL_F-RSC_SP_CTRL_X)
+#define RECOV_COL_D                 (RECOV_COL_E-RSC_CD_PUSHBUTTON_WIDTH)
+#define RECOV_COL_C                 (RECOV_COL_D-RSC_CD_PUSHBUTTON_WIDTH)
+#define RECOV_ROW0                  ((RECOV_TITLEWINHEIGHT-RSC_CD_FIXEDTEXT_HEIGHT)/2)
+#define RECOV_ROW1                  (RECOV_TITLEWINHEIGHT)
+#define RECOV_ROW2                  (RECOV_ROW1+RSC_SP_CTRL_Y)
+#define RECOV_ROW3                  (RECOV_ROW2+RECOV_DESCRHEIGHT+RSC_SP_CTRL_DESC_Y)
+#define RECOV_ROW4                  (RECOV_ROW3+RSC_CD_FIXEDTEXT_HEIGHT+RSC_SP_CTRL_DESC_Y)
+#define RECOV_ROW5                  (RECOV_ROW4+PROGR_HEIGHT+RSC_SP_CTRL_GROUP_Y)
+#define RECOV_ROW6                  (RECOV_ROW5+RSC_CD_FIXEDTEXT_HEIGHT+RSC_SP_CTRL_DESC_Y)
+#define RECOV_ROW10                 (RECOV_HEIGHT-RSC_SP_DLG_INNERBORDER_BOTTOM)
+#define RECOV_ROW9                  (RECOV_ROW10-RSC_CD_PUSHBUTTON_HEIGHT)
+#define RECOV_ROW8                  (RECOV_ROW9-RSC_SP_CTRL_GROUP_Y-RSC_CD_FIXEDLINE_HEIGHT)
+#define RECOV_ROW7                  (RECOV_ROW8-RSC_SP_CTRL_GROUP_Y)
+#define RECOV_FILELISTHEIGHT        (RECOV_ROW7-RECOV_ROW6)
+#define RECOV_CONTROLWIDTH          (SAVE_COL2-SAVE_COL0)
+
+// TabPage Broken Recovery
+
+#define FT_BROKEN_DESCR             1
+#define FT_BROKEN_FILELIST          2
+#define LB_BROKEN_FILELIST          3
+#define BTN_BROKEN_SAVE             4
+#define FL_BROKEN_BOTTOM            5
+#define BTN_BROKEN_OK               5
+#define BTN_BROKEN_CANCEL           6
+
+#define BROKEN_WIDTH                200
+#define BROKEN_HEIGHT               160
+#define BROKEN_COL0                 (RSC_SP_DLG_INNERBORDER_LEFT)
+#define BROKEN_COL1                 (BROKEN_COL0+RSC_CD_PUSHBUTTON_WIDTH)
+#define BROKEN_COL7                 (BROKEN_WIDTH-RSC_SP_DLG_INNERBORDER_RIGHT)
+#define BROKEN_COL6                 (BROKEN_COL7-RSC_CD_PUSHBUTTON_WIDTH)
+#define BROKEN_COL5                 (BROKEN_COL6-RSC_SP_CTRL_X)
+#define BROKEN_COL4                 (BROKEN_COL5-RSC_CD_PUSHBUTTON_WIDTH)
+#define BROKEN_COL3                 (BROKEN_COL4-RSC_SP_CTRL_X)
+#define BROKEN_COL2                 (BROKEN_COL3-RSC_CD_PUSHBUTTON_WIDTH)
+
+#define BROKEN_ROW0                 (RSC_SP_DLG_INNERBORDER_TOP)
+#define BROKEN_ROW1                 (BROKEN_ROW0+3*RSC_CD_FIXEDTEXT_HEIGHT+RSC_SP_CTRL_GROUP_Y)
+#define BROKEN_ROW2                 (BROKEN_ROW1+RSC_CD_FIXEDTEXT_HEIGHT+RSC_SP_CTRL_GROUP_Y)
+#define BROKEN_ROW8                 (BROKEN_HEIGHT-RSC_SP_DLG_INNERBORDER_BOTTOM)
+#define BROKEN_ROW7                 (BROKEN_ROW8-RSC_CD_PUSHBUTTON_HEIGHT)
+#define BROKEN_ROW6                 (BROKEN_ROW7-RSC_SP_CTRL_GROUP_Y-RSC_CD_FIXEDLINE_HEIGHT)
+#define BROKEN_ROW5                 (BROKEN_ROW6-RSC_SP_CTRL_GROUP_Y)
+#define BROKEN_ROW4                 (BROKEN_ROW5-RSC_CD_PUSHBUTTON_HEIGHT)
+#define BROKEN_ROW3                 (BROKEN_ROW4-RSC_SP_CTRL_Y)
+
+#define BROKEN_CONTROLWIDTH         (BROKEN_COL7-BROKEN_COL0)
+
+// TabPage Error Report Welcome
+// most defines equal to TabPage Recovery
+
+#define RECOV_DESCR_HEIGHT          (RECOV_ROW7-RECOV_ROW2)
+
+// TabPage Error Report Send
+// borrow basic metrics from TabPage Recovery
+
+#define FT_ERRSEND_DOCTYPE          20
+#define ED_ERRSEND_DOCTYPE          21
+#define FT_ERRSEND_USING            22
+#define ML_ERRSEND_USING            23
+#define BTN_ERRSEND_SHOWREP         24
+#define BTN_ERRSEND_OPT             25
+#define CB_ERRSEND_CONTACT          26
+#define FT_ERRSEND_EMAILADDR        27
+#define ED_ERRSEND_EMAILADDR        28
+
+#define ERRSEND_WIDTH               (RECOV_WIDTH)
+#define ERRSEND_HEIGHT              (RECOV_HEIGHT)
+#define ERRSEND_TITLEWINHEIGHT      SAVE_TITLEWINHEIGHT
+
+#define ERRSEND_COL0                (RSC_SP_DLG_INNERBORDER_LEFT)
+#define ERRSEND_COL1                (ERRSEND_COL0+RSC_SP_CHK_TEXTINDENT)
+
+#define ERRSEND_COL4                (ERRSEND_WIDTH-RSC_SP_DLG_INNERBORDER_RIGHT)
+#define ERRSEND_COL3                (ERRSEND_COL4-RSC_CD_PUSHBUTTON_WIDTH)
+#define ERRSEND_COL2                (ERRSEND_COL3-RSC_SP_CTRL_X)
+
+#define ERRSEND_COL6                (ERRSEND_COL3-RSC_SP_CTRL_GROUP_X-RSC_CD_PUSHBUTTON_WIDTH)
+#define ERRSEND_COL5                (ERRSEND_COL6-RSC_SP_CTRL_X-RSC_CD_PUSHBUTTON_WIDTH)
+
+#define ERRSEND_CONTROLWIDTH1       (ERRSEND_COL4-ERRSEND_COL0)
+#define ERRSEND_CONTROLWIDTH2       (ERRSEND_COL2-ERRSEND_COL0)
+#define ERRSEND_CONTROLWIDTH3       (ERRSEND_COL2-ERRSEND_COL1)
+
+#define ERRSEND_ROW0                ((ERRSEND_TITLEWINHEIGHT-RSC_CD_FIXEDTEXT_HEIGHT)/2)
+#define ERRSEND_ROW1                (ERRSEND_TITLEWINHEIGHT)
+#define ERRSEND_ROW2                (ERRSEND_ROW1+RSC_SP_CTRL_Y)
+#define ERRSEND_ROW3                (ERRSEND_ROW2+3*RSC_CD_FIXEDTEXT_HEIGHT)
+#define ERRSEND_ROW4                (ERRSEND_ROW3+RSC_SP_CTRL_GROUP_Y)
+#define ERRSEND_ROW5                (ERRSEND_ROW4+2*RSC_CD_FIXEDTEXT_HEIGHT+RSC_SP_CTRL_GROUP_Y)
+#define ERRSEND_ROW6                (ERRSEND_ROW5+RSC_CD_TEXTBOX_HEIGHT)
+#define ERRSEND_ROW7                (ERRSEND_ROW6+RSC_SP_CTRL_Y)
+#define ERRSEND_ROW8                (ERRSEND_ROW7+RSC_CD_FIXEDTEXT_HEIGHT+RSC_SP_CTRL_GROUP_Y)
+#define ERRSEND_ROW9                (ERRSEND_ROW8+RSC_CD_PUSHBUTTON_HEIGHT)
+#define ERRSEND_ROW10               (ERRSEND_ROW9+RSC_SP_CTRL_GROUP_Y)
+#define ERRSEND_ROW11               (ERRSEND_ROW10+RSC_CD_PUSHBUTTON_HEIGHT)
+
+#define ERRSEND_ROW16               (ERRSEND_HEIGHT-RSC_SP_DLG_INNERBORDER_RIGHT-RSC_CD_PUSHBUTTON_HEIGHT)
+#define ERRSEND_ROW15               (ERRSEND_ROW16-RSC_SP_CTRL_GROUP_Y-RSC_CD_FIXEDLINE_HEIGHT)
+#define ERRSEND_ROW14               (ERRSEND_ROW15-RSC_SP_CTRL_GROUP_Y-RSC_CD_TEXTBOX_HEIGHT)
+#define ERRSEND_ROW13               (ERRSEND_ROW14-RSC_SP_CTRL_GROUP_Y-RSC_CD_FIXEDTEXT_HEIGHT)
+#define ERRSEND_ROW12               (ERRSEND_ROW13-RSC_SP_CTRL_GROUP_Y-RSC_CD_CHECKBOX_HEIGHT)
+
+// Error Report Options Dialog
+
+#define ERROPT_WIDTH    220
+#define ERROPT_HEIGHT   180
+
+#define ERROPT_SERVER_WIDTH 150
+#define ERROPT_PORT_WIDTH   35
+
+#define FL_ERROPT_PROXY         1
+#define BTN_ERROPT_SYSTEM       2
+#define BTN_ERROPT_DIRECT       3
+#define BTN_ERROPT_MANUAL       4
+#define FT_ERROPT_PROXYSERVER   5
+#define ED_ERROPT_PROXYSERVER   6
+#define FT_ERROPT_PROXYPORT     7
+#define ED_ERROPT_PROXYPORT     8
+#define FT_ERROPT_DESCRIPTION   9
+#define FL_ERROPT_BUTTONS       10
+#define BTN_ERROPT_OK           11
+#define BTN_ERROPT_CANCEL       12
+
+#define ERROPT_COLA             (RSC_SP_DLG_INNERBORDER_LEFT)
+#define ERROPT_COLB             (ERROPT_COLA + RSC_SP_CTRL_X)
+#define ERROPT_COLC             (ERROPT_COLB + RSC_SP_CHK_TEXTINDENT)
+
+#define ERROPT_COLF             (ERROPT_WIDTH - RSC_SP_DLG_INNERBORDER_RIGHT)
+#define ERROPT_COLE             (ERROPT_COLF - RSC_CD_PUSHBUTTON_WIDTH)
+#define ERROPT_COLD             (ERROPT_COLE - RSC_SP_CTRL_DESC_X - RSC_CD_PUSHBUTTON_WIDTH)
+
+#define ERROPT_ROW0             (RSC_SP_DLG_INNERBORDER_TOP)
+#define ERROPT_ROW1             (ERROPT_ROW0 + RSC_CD_FIXEDLINE_HEIGHT + RSC_SP_CTRL_Y)
+#define ERROPT_ROW2             (ERROPT_ROW1 + RSC_CD_RADIOBUTTON_HEIGHT + RSC_SP_CTRL_GROUP_Y)
+#define ERROPT_ROW3             (ERROPT_ROW2 + RSC_CD_RADIOBUTTON_HEIGHT + RSC_SP_CTRL_GROUP_Y)
+#define ERROPT_ROW4             (ERROPT_ROW3 + RSC_CD_RADIOBUTTON_HEIGHT + RSC_SP_CTRL_GROUP_Y)
+#define ERROPT_ROW5             (ERROPT_ROW4 + RSC_CD_FIXEDTEXT_HEIGHT + RSC_SP_CTRL_DESC_Y)
+#define ERROPT_ROW6             (ERROPT_ROW5 + RSC_CD_TEXTBOX_HEIGHT + RSC_SP_CTRL_Y)
+
+#define ERROPT_ROW9             (ERROPT_HEIGHT - RSC_SP_DLG_INNERBORDER_BOTTOM - RSC_CD_PUSHBUTTON_HEIGHT)
+#define ERROPT_ROW8             (ERROPT_ROW9 - RSC_SP_CTRL_DESC_Y - RSC_CD_FIXEDLINE_HEIGHT)
+#define ERROPT_ROW7             (ERROPT_ROW8 - RSC_SP_CTRL_DESC_Y)
+
+// Error Report Preview Dialog
+
+#define ERRPREVIEW_WIDTH    220
+#define ERRPREVIEW_HEIGHT   180
+
+#define ML_ERRPREVIEW_CONTENT   1
+#define BTN_ERRPREVIEW_OK       2
+#define ERRPREVIEW_COLA         (RSC_SP_DLG_INNERBORDER_LEFT)
+#define ERRPREVIEW_COLB         (ERRPREVIEW_WIDTH - RSC_SP_DLG_INNERBORDER_RIGHT - RSC_CD_PUSHBUTTON_WIDTH)
+#define ERRPREVIEW_COLC         (ERRPREVIEW_WIDTH - RSC_SP_DLG_INNERBORDER_RIGHT)
+#define ERRPREVIEW_ROW0         (RSC_SP_DLG_INNERBORDER_TOP)
+#define ERRPREVIEW_ROW1         (ERRPREVIEW_ROW2 - RSC_SP_CTRL_Y)
+#define ERRPREVIEW_ROW2         (ERRPREVIEW_HEIGHT - RSC_SP_DLG_INNERBORDER_BOTTOM - RSC_CD_PUSHBUTTON_HEIGHT)
+
+#endif
