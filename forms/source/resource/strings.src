@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-24 21:02:05 $
+ *  last change: $Author: kz $ $Date: 2001-07-26 22:42:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -387,20 +387,21 @@ String RID_STR_NEED_NON_NULL_OBJECT
     Text[ russian ] = "Œ·˙ÂÍÚ ÌÂ ÏÓÊÂÚ ·˚Ú¸ Õ”À≈Ã.";
     Text[ greek ] = "The object must not be NULL.";
     Text[ dutch ] = "Het object mag niet NUL zijn.";
-    Text[ french ] = "The object must not be NULL.";
+    Text[ french ] = "L'objet ne pas Ítre NULL.";
     Text[ spanish ] = "El objeto no puede ser NULL.";
     Text[ finnish ] = "The object must not be NULL.";
-    Text[ italian ] = "The object must not be NULL.";
+    Text[ italian ] = "L'oggetto non deve essere NULL.";
     Text[ danish ] = "The object must not be NULL.";
     Text[ swedish ] = "Objektet fÂr inte vara NULL.";
-    Text[ polish ] = "Obiekt nie moøe byÊ ZEREM.";
+    Text[ polish ] = "Obiekt nie moøe byÊ NULL.";
     Text[ portuguese_brazilian ] = "The object must not be NULL.";
-    Text[ japanese ] = "The object must not be NULL.";
+    Text[ japanese ] = "µÃﬁºﬁ™∏ƒÇ™ NULL Ç≈ÇÕÇ¢ÇØÇ‹ÇπÇÒÅB";
     Text[ korean ] = "The object must not be NULL.";
     Text[ chinese_simplified ] = "The object must not be NULL.";
-    Text[ chinese_traditional ] = "The object must not be NULL.";
+    Text[ chinese_traditional ] = "≥o≠”™´•Û§£•i•H¨O NULL °C";
     Text[ turkish ] = "The object must not be NULL.";
     Text[ arabic ] = "The object must not be NULL.";
     Text[ catalan ] = "The object must not be NULL.";
 };
+
 
