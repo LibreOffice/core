@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeactions.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jb $ $Date: 2001-04-03 16:29:28 $
+ *  last change: $Author: lla $ $Date: 2001-04-11 11:40:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -483,6 +483,8 @@ void OCreateSubtreeAction::handle(AddNode& _rChange)
         aSubtree.forEachChange(*this);
         m_pCurrentSubtree = pOldSubtree;
     }
+
+
 
 //..........................................................................
 }   // namespace configmgr

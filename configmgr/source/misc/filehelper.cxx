@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filehelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-21 12:15:40 $
+ *  last change: $Author: lla $ $Date: 2001-04-11 11:40:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,14 +76,23 @@
 #include <osl/diagnose.h>
 #endif
 
-
 namespace configmgr
 {
-using namespace ::osl;
+    using namespace ::osl;
+    namespace io = com::sun::star::io;
 
 #define ASCII(x) rtl::OUString::createFromAscii(x)
+// -----------------------------------------------------------------------------
+    rtl::OUString FileHelper::convertFilenameToFileURL(rtl::OUString const& _sFilename)
+    {
+        rtl::OUString sURL;
+        osl::File aConvert(ASCII(""));
+        aConvert.normalizePath(_sFilename, sURL);
+        return sURL;
+    }
+
 // ---------------------------- tryToRemoveFile ----------------------------
-    sal_Int32 FileHelper::tryToRemoveFile(const rtl::OUString& _aURL)
+void FileHelper::tryToRemoveFile(const rtl::OUString& _aURL) throw (io::IOException)
     {
         {
             File aFile(_aURL);
@@ -91,7 +100,7 @@ using namespace ::osl;
             if (eError != osl_File_E_None)
             {
                 // IF not exists
-                return 0;
+                return;
             }
             aFile.close();
         }
@@ -102,31 +111,33 @@ using namespace ::osl;
             sError += FileHelper::createOSLErrorString(eError);
             sError += ASCII("\n with URL: ");
             sError += _aURL;
+#ifdef DEBUG
             rtl::OString aStr = rtl::OUStringToOString(sError,RTL_TEXTENCODING_ASCII_US);
             OSL_ENSURE(0, aStr.getStr());
-            return 1;
+#endif
+            throw io::IOException(sError, NULL);
+            // return 1;
         }
-        return 0;
     }
 
 // -----------------------------------------------------------------------------
-    sal_Int32 FileHelper::createBackupRemoveAndRename(
-        const rtl::OUString& _aFromURL, const rtl::OUString &_aToURL)
+    void FileHelper::createBackupRemoveAndRename(
+        const rtl::OUString& _aFromURL, const rtl::OUString &_aToURL) throw (io::IOException)
     {
         // remove FromURL
         // rename ToURL to FromURL
-        if (FileHelper::tryToRemoveFile(_aFromURL) != 0)
-            return 1;
+        FileHelper::tryToRemoveFile(_aFromURL);
 
         FileBase::RC eError = File::move(_aToURL, _aFromURL);
         if (eError != osl_File_E_None)
         {
             rtl::OUString sError = ASCII("createBackupAndRemove: ") + FileHelper::createOSLErrorString(eError) + ASCII("\n with URL: ") + _aFromURL;
+#ifdef DEBUG
             rtl::OString aStr = rtl::OUStringToOString(sError,RTL_TEXTENCODING_ASCII_US);
             OSL_ENSURE(0, aStr.getStr());
-            return 2;
+#endif
+            throw io::IOException(sError, NULL);
         }
-        return 0;
     }
 // ------------------ Create a string from FileBase::RC Error ------------------
     rtl::OUString FileHelper::createOSLErrorString(FileBase::RC eError)

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: jb $ $Date: 2001-04-05 14:46:29 $
+#   last change: $Author: lla $ $Date: 2001-04-11 11:40:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,8 +83,8 @@ SLOFILES=\
     $(SLO)$/changes.obj		\
     $(SLO)$/treeactions.obj		\
     $(SLO)$/cmtreemodel.obj	\
-    $(SLO)$/cmtree.obj
-    
+    $(SLO)$/cmtree.obj \
+
 # --- Targets ---
 
 .INCLUDE : target.mk

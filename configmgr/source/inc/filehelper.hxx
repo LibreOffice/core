@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filehelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: lla $ $Date: 2001-03-23 09:37:42 $
+ *  last change: $Author: lla $ $Date: 2001-04-11 11:40:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,14 +66,25 @@
 #include <osl/file.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_IO_IOEXCEPTION_HPP_
+#include <com/sun/star/io/IOException.hpp>
+#endif
+
 namespace configmgr
 {
     namespace FileHelper
     {
-        sal_Int32 createBackupRemoveAndRename(
-            const rtl::OUString& _aFromURL, const rtl::OUString &_aToURL);
+        namespace io = com::sun::star::io;
 
-        sal_Int32 tryToRemoveFile(const rtl::OUString& _aURL);
+        // convert a filename like "d:\foo\bar\file.xyz to
+        // something like file:///d|/foo/bar/file.xyz
+        rtl::OUString convertFilenameToFileURL(rtl::OUString const& _sFilename);
+
+        void createBackupRemoveAndRename(
+            const rtl::OUString& _aFromURL, const rtl::OUString &_aToURL) throw (io::IOException);
+
+
+        void tryToRemoveFile(const rtl::OUString& _aURL) throw (io::IOException);
 
         rtl::OUString createOSLErrorString(osl::FileBase::RC eError);
 

@@ -1,8 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: disposetimer.hxx,v $
+ *  $RCSfile: cachewritescheduler.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: lla $ $Date: 2001-04-11 11:40:47 $
  *
@@ -59,46 +59,43 @@
  *
  ************************************************************************/
 
-#ifndef CONFIGMGR_DISPOSETIMER_HXX
-#define CONFIGMGR_DISPOSETIMER_HXX
+#ifndef CONFIGMGR_CACHEWRITESCHEDULER_HXX
+#define CONFIGMGR_CACHEWRITESCHEDULER_HXX
 
-#ifndef _COM_SUN_STAR_LANG_WRAPPEDTARGETEXCEPTION_HPP_
-#include <com/sun/star/lang/WrappedTargetException.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_UNO_RUNTIMEEXCEPTION_HPP_
-#include <com/sun/star/uno/RuntimeException.hpp>
-#endif
-
-#include "apitypes.hxx"
-#include "timestamp.hxx"
+#ifndef CONFIGMGR_MISC_OPTIONS_HXX_
 #include "options.hxx"
-#include <osl/mutex.hxx>
+#endif
+
+#ifndef CONFIGMGR_TIMESTAMP_HXX
+#include "timestamp.hxx"
+#endif
+
+#include <set>
+
+#ifndef _VOS_TIMER_HXX_
 #include <vos/timer.hxx>
-#include <map>
+#endif
 
-namespace uno   = ::com::sun::star::uno;
-namespace lang  = ::com::sun::star::lang;
+#ifndef _OSL_MUTEX_HXX_
+#include <osl/mutex.hxx>
+#endif
 
+// -----------------------------------------------------------------------------
 namespace configmgr
 {
-    class TreeManager;
-////////////////////////////////////////////////////////////////////////////////
-/* OTreeDisposeScheduler:
-   does something special????
-*/
-
-    class OTreeDisposeScheduler
+    // Write down the Cache, much less complex than caching Nodes
+    // (better control)
+    class OCacheWriteScheduler
     {
-        typedef std::multimap< TimeStamp, vos::ORef< OOptions >, ltTimeStamp > Agenda;
+        typedef std::set< vos::ORef< OOptions >, ltOptions > CacheWriteList; // fire and forget!
 
         class Timer : public vos::OTimer
         {
             osl::Mutex  m_aMutex;
         public:
-            OTreeDisposeScheduler* pParent;
+            OCacheWriteScheduler* pParent;
 
-            Timer(OTreeDisposeScheduler& _rParent) : pParent(&_rParent) {};
+            Timer(OCacheWriteScheduler& _rParent) : pParent(&_rParent) {};
 
             // vos::OTimer
             virtual void SAL_CALL onShot();
@@ -107,95 +104,57 @@ namespace configmgr
             osl::Mutex&     getShotMutex() {return m_aMutex;}
 
             // stop the scheduling
-            void dispose() {stop(); pParent = NULL;}
+            void dispose() {
+                stop();
+                pParent = NULL;
+            }
 
         };
         friend void Timer::onShot();
-
     private:
         mutable osl::Mutex  m_aMutex;
-
-        Agenda              m_aAgenda;
-
         vos::ORef<Timer>    m_xTimer;
         TreeManager&        m_rTreeManager;
 
-        TimeInterval m_aCleanupDelay;
+        CacheWriteList      m_aWriteList;
+        // TimeInterval m_aCleanupDelay;
         TimeInterval m_aCleanupInterval;
+
     public:
     //-------- Construction and destruction -----------------------------------
         explicit
-        OTreeDisposeScheduler(TreeManager& _rTreeManager, TimeInterval const& _aCleanupDelay)
+        OCacheWriteScheduler(TreeManager& _rTreeManager, TimeInterval const& _aCleanupDelay)
             : m_rTreeManager(_rTreeManager)
-            , m_aCleanupDelay(_aCleanupDelay)
             , m_aCleanupInterval(_aCleanupDelay)
         {
             m_xTimer = new Timer(*this);
         }
-
-        explicit
-        OTreeDisposeScheduler(TreeManager& _rTreeManager, TimeInterval const& _aCleanupDelay, TimeInterval const& _aCleanupInterval)
-            : m_rTreeManager(_rTreeManager)
-            , m_aCleanupDelay(_aCleanupDelay)
-            , m_aCleanupInterval(_aCleanupInterval)
-        {
-            m_xTimer = new Timer(*this);
-        }
-
-        ~OTreeDisposeScheduler() { stopAndClearTasks(); }
+        ~OCacheWriteScheduler();
 
     //-------- Delay and Interval ---------------------------------------------
-        /// sets the initial delay to be used for cleanup in the future, does not affect an already started process
-        void setCleanupDelay(TimeInterval const& _aCleanupDelay)
-        {
-            osl::MutexGuard aGuard(m_aMutex);
-            m_aCleanupDelay = _aCleanupDelay;
-        }
-
-        /// sets the initial delay and recurrance interval to be used for cleanup in the future, does not affect an already started process
-        void setCleanupDelay(TimeInterval const& _aCleanupDelay, TimeInterval const& _aCleanupInterval)
-        {
-            osl::MutexGuard aGuard(m_aMutex);
-            m_aCleanupDelay = _aCleanupDelay;
-            m_aCleanupInterval = _aCleanupInterval;
-        }
-
-        /// sets the recurrance interval to be used for cleanup in the future, does not affect an already started process
-        void setCleanupInterval(TimeInterval const& _aCleanupInterval)
-        {
-            osl::MutexGuard aGuard(m_aMutex);
-            m_aCleanupInterval = _aCleanupInterval;
-        }
-
-        /// retrieves the initial delay used for cleanup
-        TimeInterval const& getCleanupDelay() const
-        {
-            osl::MutexGuard aGuard(m_aMutex);
-            return m_aCleanupDelay;
-        }
-
         /// retrieves the recurrance interval used for cleanup
         TimeInterval const& getCleanupInterval() const
         {
             osl::MutexGuard aGuard(m_aMutex);
             return m_aCleanupInterval;
         }
-
         /// calculate the time when to cleanup an pbject that became eligible at <var>aBaseTime</var>.
         TimeStamp getCleanupTime(TimeStamp const& aBaseTime = TimeStamp::getCurrentTime())
         {
-            return implGetCleanupTime(aBaseTime, getCleanupDelay());
+            return implGetCleanupTime(aBaseTime, getCleanupInterval());
         }
-
+        static TimeStamp implGetCleanupTime(TimeStamp const& aBaseTime, TimeInterval const& aDelay)
+        {
+            return aBaseTime + aDelay;
+        }
     //-------- Control of execution  ------------------------------------------
-        /// ensure this will execute cleanup duties for _xOptions (no later than after getCleanupDelay() has elapsed)
-        void scheduleCleanup(vos::ORef< OOptions > const& _xOptions);
+        void scheduleWrite(vos::ORef< OOptions > const& _xOptions, bool _bASync = false) throw ( lang::WrappedTargetException, uno::RuntimeException);
 
-        /// stop and discard pending activities for _xOptions
-        void clearTasks(vos::ORef< OOptions > const& _xOptions);
+        /// stop pending activities for one set of options (do not discard them)
+        bool clearTasks(vos::ORef< OOptions > const& _xOptions);
 
         /// stop and discard pending activities
-        void stopAndClearTasks();
+        void stopAndWriteCache();
 
         /// mutex for synchronisation
         osl::Mutex&     getShotMutex() {return m_xTimer->getShotMutex();}
@@ -204,19 +163,10 @@ namespace configmgr
         // vos::OTimer
         void onTimerShot();
 
-        vos::ORef< OOptions > getTask(TimeStamp const& _aActualTime, TimeStamp& _aNextTime);
-
-        TimeStamp runDisposer(TimeStamp const& _aActualTime);
-    private:
-        TimeStamp implAddTask(vos::ORef< OOptions > const& _xOptions, TimeStamp const& _aTime);
+        void runWriter();
         void implStartBefore(TimeStamp const& _aTime);
-
-        static TimeStamp implGetCleanupTime(TimeStamp const& aBaseTime, TimeInterval const& aDelay)
-        { return aBaseTime + aDelay; }
+        void writeOneTreeFoundByOption(vos::ORef< OOptions > const& _xOption) throw (lang::WrappedTargetException, uno::RuntimeException);
     };
-
-
-////////////////////////////////////////////////////////////////////////////////
 } // namespace configmgr
 
 #endif // CONFIGMGR_DISPOSETIMER_HXX

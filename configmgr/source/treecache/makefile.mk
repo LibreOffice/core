@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: dg $ $Date: 2001-02-08 11:30:10 $
+#   last change: $Author: lla $ $Date: 2001-04-11 11:40:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,7 +79,9 @@ SLOFILES=	\
         $(SLO)$/treedata.obj	\
         $(SLO)$/timestamp.obj	\
         $(SLO)$/disposetimer.obj	\
-        
+        $(SLO)$/cachewritescheduler.obj	\
+        $(SLO)$/invalidatetree.obj \
+
 
 # --- Targets ----------------------------------
 
