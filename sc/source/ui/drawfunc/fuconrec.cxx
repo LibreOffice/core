@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuconrec.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:26:24 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:28:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -355,7 +355,7 @@ BOOL __EXPORT FuConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
         {
             //  set vertical flag for caption object
 
-            const SdrMarkList& rMarkList = pView->GetMarkList();
+            const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
             if (rMarkList.GetMark(0))
             {
                 SdrObject* pObj = rMarkList.GetMark(0)->GetObj();
