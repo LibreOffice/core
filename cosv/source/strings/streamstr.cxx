@@ -2,9 +2,9 @@
  *
  *  $RCSfile: streamstr.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 13:48:52 $
+ *  last change: $Author: obo $ $Date: 2004-02-20 09:30:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -521,7 +521,7 @@ StreamStr::operator_read_line( bstream & i_src )
     char c = 0;
     intt nCount = 0;
     for ( nCount = i_src.read(&c, 1);
-          nCount == 1 AND c >= 32;
+          nCount == 1 AND c != 13 AND c != 10;
           nCount = i_src.read(&c, 1) )
     {
         operator<<(c);
@@ -534,7 +534,7 @@ StreamStr::operator_read_line( bstream & i_src )
         char oldc = c;
           if (i_src.read(&c, 1) == 1)
         {
-            if (c >= 32 OR c == oldc)
+            if (c != 13 AND c != 10 OR c == oldc)
                 i_src.seek(-1,::csv::cur);
         }
     }
