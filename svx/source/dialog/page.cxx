@@ -2,9 +2,9 @@
  *
  *  $RCSfile: page.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-03 14:17:49 $
+ *  last change: $Author: dl $ $Date: 2001-06-14 11:13:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -576,16 +576,9 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
         case SVX_PAGE_MODE_PRESENTATION:
         {
             aAdaptBox.Show();
-            String sUser = GetUserData();
-
-            if ( sUser.Len() )
-                aAdaptBox.Check( (BOOL)sUser.ToInt32() );
-            else
-            {
-                pItem = GetItem( rSet, SID_ATTR_PAGE_EXT1 );
-                aAdaptBox.Check( pItem ?
-                    ( (const SfxBoolItem*)pItem )->GetValue() : FALSE );
-            }
+            pItem = GetItem( rSet, SID_ATTR_PAGE_EXT1 );
+            aAdaptBox.Check( pItem ?
+                ( (const SfxBoolItem*)pItem )->GetValue() : FALSE );
 
             //!!! hidden, weil von StarDraw nicht implementiert
             aLayoutBox.Hide();
