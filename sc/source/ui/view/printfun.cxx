@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printfun.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 14:05:58 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:29:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -588,7 +588,13 @@ void ScPrintFunc::DrawToDev( ScDocument* pDoc, OutputDevice* pDev, double nPrint
 
     if (!bMetaFile && pViewData)
         pDev->SetMapMode(pViewData->GetLogicMode(pViewData->GetActivePart()));
-    aOutputData.DrawingLayer(SC_LAYER_BACK,SC_OBJECTS_ALL,nLogStX,nLogStY);
+
+    // #109985#
+    // Use a PaintMode which paints all SDRPAINTMODE_SC_ flags
+    sal_uInt16 nAllPaintMode(0);
+    aOutputData.DrawingLayer(SC_LAYER_BACK, nAllPaintMode, nLogStX, nLogStY);
+    //aOutputData.DrawingLayer(SC_LAYER_BACK,SC_OBJECTS_ALL,nLogStX,nLogStY);
+
     if (!bMetaFile && pViewData)
         pDev->SetMapMode(aMode);
 
@@ -631,8 +637,12 @@ void ScPrintFunc::DrawToDev( ScDocument* pDoc, OutputDevice* pDev, double nPrint
         pDev->DrawLine( Point(nScrX,nScrY), Point(nScrX+aOutputData.GetScrW()-aOne.Height(),nScrY ) );
     }
 
-    aOutputData.DrawingLayer(SC_LAYER_FRONT,SC_OBJECTS_ALL,nLogStX,nLogStY);
-    aOutputData.DrawingLayer(SC_LAYER_INTERN,SC_OBJECTS_ALL,nLogStX,nLogStY);
+    // #109985#
+    // USe a paint mode which draws all SDRPAINTMODE_SC_ flags
+    aOutputData.DrawingLayer(SC_LAYER_FRONT, nAllPaintMode, nLogStX, nLogStY);
+    aOutputData.DrawingLayer(SC_LAYER_INTERN, nAllPaintMode, nLogStX, nLogStY);
+    //aOutputData.DrawingLayer(SC_LAYER_FRONT,SC_OBJECTS_ALL,nLogStX,nLogStY);
+    //aOutputData.DrawingLayer(SC_LAYER_INTERN,SC_OBJECTS_ALL,nLogStX,nLogStY);
 
     for (i=0; i<nArrCount; i++)
         delete[] pRowInfo[i].pCellInfo;
@@ -1589,11 +1599,19 @@ void ScPrintFunc::PrintArea( USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2,
     ScOutputData aOutputData( pDev, OUTTYPE_PRINTER, pRowInfo, nArrCount, pDoc, nPrintTab,
                                 nScrX, nScrY, nX1, nY1, nX2, nY2, nScaleX, nScaleY );
 
-    if (nObjectFlags)
+    // #109985#
+    // test if all paint parts are hidden, then a paint is not necessary at all
+    //if (nObjectFlags)
+    const sal_uInt16 nPaintModeHideAll(SDRPAINTMODE_SC_HIDE_OLE|SDRPAINTMODE_SC_HIDE_CHART|SDRPAINTMODE_SC_HIDE_DRAW);
+
+    if(nPaintModeHideAll != (mnPaintMode & nPaintModeHideAll))
     {
         pDev->SetMapMode(aLogicMode);
         //  hier kein Clipping setzen (Mapmode wird verschoben)
-        aOutputData.DrawingLayer(SC_LAYER_BACK,nObjectFlags,nLogStX,nLogStY);
+
+        // #109985#
+        //aOutputData.DrawingLayer(SC_LAYER_BACK,nObjectFlags,nLogStX,nLogStY);
+        aOutputData.DrawingLayer(SC_LAYER_BACK, mnPaintMode, nLogStX, nLogStY);
     }
 
     pDev->SetMapMode(aOffsetMode);
@@ -1651,11 +1669,27 @@ void ScPrintFunc::PrintArea( USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2,
 */
 
 //  pDev->SetMapMode(aDrawMode);
-    if (nObjectFlags)
-        aOutputData.DrawingLayer(SC_LAYER_FRONT,nObjectFlags,nLogStX,nLogStY);
-    aOutputData.DrawingLayer(SC_LAYER_INTERN,SC_OBJECTS_ALL,nLogStX,nLogStY);
 
-    if ( pDrawView && (nObjectFlags & SC_OBJECTS_DRAWING) )
+    // #109985#
+    // test if all paint parts are hidden, then a paint is not necessary at all
+    //if (nObjectFlags)
+    if(nPaintModeHideAll != (mnPaintMode & nPaintModeHideAll))
+    {
+        // #109985#
+        //aOutputData.DrawingLayer(SC_LAYER_FRONT,nObjectFlags,nLogStX,nLogStY);
+        aOutputData.DrawingLayer(SC_LAYER_FRONT, mnPaintMode, nLogStX, nLogStY);
+    }
+
+    // #109985#
+    // Use a PaintMode which paints all SDRPAINTMODE_SC_ flags
+    sal_uInt16 nPaintMode(0);
+
+    //aOutputData.DrawingLayer(SC_LAYER_INTERN,SC_OBJECTS_ALL,nLogStX,nLogStY);
+    aOutputData.DrawingLayer(SC_LAYER_INTERN, nPaintMode, nLogStX, nLogStY);
+
+    //if ( pDrawView && (nObjectFlags & SC_OBJECTS_DRAWING) )
+    // #109985#
+    if(pDrawView && !(mnPaintMode & SDRPAINTMODE_SC_HIDE_DRAW))
     {
         SdrPageView* pPV = pDrawView->GetPageViewPgNum(nPrintTab);
         DBG_ASSERT(pPV, "keine PageView fuer gedruckte Tabelle");
@@ -1668,7 +1702,7 @@ void ScPrintFunc::PrintArea( USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2,
             pDev->SetMapMode( aControlMode );
             pDev->SetClipRegion( aLogicRect );      // single controls may extend beyond the page
 
-            pPV->RedrawOneLayer( SC_LAYER_CONTROLS, aLogicRect );
+            pPV->InitRedraw( SC_LAYER_CONTROLS, aLogicRect );
 
             pDev->SetClipRegion();
         }
@@ -2073,6 +2107,25 @@ void ScPrintFunc::PrintPage( long nPageNo, USHORT nX1, USHORT nY1, USHORT nX2, U
             nY1 = nRepeatEndRow + 1;
     BOOL bDoRepRow = (aAreaParam.bRepeatRow && nY1 > nRepeatEndRow);
 
+    // #109985#
+    mnPaintMode = 0;
+
+    if(!aTableParam.bDrawings)
+    {
+        mnPaintMode |= SDRPAINTMODE_SC_HIDE_DRAW;
+    }
+
+    if(!aTableParam.bObjects)
+    {
+        mnPaintMode |= SDRPAINTMODE_SC_HIDE_OLE;
+    }
+
+    if(!aTableParam.bCharts)
+    {
+        mnPaintMode |= SDRPAINTMODE_SC_HIDE_CHART;
+    }
+
+    /*
     nObjectFlags = 0;
     if ( aTableParam.bDrawings )
         nObjectFlags |= SC_OBJECTS_DRAWING;
@@ -2080,6 +2133,7 @@ void ScPrintFunc::PrintPage( long nPageNo, USHORT nX1, USHORT nY1, USHORT nX2, U
         nObjectFlags |= SC_OBJECTS_OLE;
     if ( aTableParam.bCharts )
         nObjectFlags |= SC_OBJECTS_CHARTS;
+    */
 
     USHORT i;
 
