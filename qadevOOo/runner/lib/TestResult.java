@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TestResult.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sw $ $Date: 2003-01-27 16:27:39 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-02 11:43:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,40 +66,11 @@ import java.util.Hashtable;
 /**
  * The class supports interface tests development and Status calculation.
  */
-public class TestResult extends Status {
+public class TestResult {
     /**
      * Contains methods having been tested and their results.
      */
     protected Hashtable testedMethods = new Hashtable();
-
-
-    /**
-     * Returns the string describing run state of the test, e.g. PASSED,
-     * SKIPPED, etc.
-     *
-     * @see lib.Status
-     */
-    public String getRunStateString() {
-        return null;
-    }
-
-    /**
-     * Returns the state of the test, e.g. OK, FAILED.
-     *
-     * @see lib.Status
-     */
-    public int getState() {
-        return 0;
-    }
-
-    /**
-     * Returns the run state of the test, eg.g. : PASSED, SKIPPED, etc.
-     *
-     * @see lib.Status
-     */
-    public int getRunState() {
-        return 0;
-    }
 
     /**
      * The method makes method tested with the result, i.e. it adds to its
