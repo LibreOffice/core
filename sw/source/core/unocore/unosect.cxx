@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosect.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: os $ $Date: 2001-02-16 10:27:07 $
+ *  last change: $Author: dvo $ $Date: 2001-02-16 12:48:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -375,6 +375,7 @@ void SwXTextSection::attachToRange(const uno::Reference< text::XTextRange > & xT
         SfxItemSet aSet(pDoc->GetAttrPool(),
                     RES_COL, RES_COL,
                     RES_BACKGROUND, RES_BACKGROUND,
+                    RES_FTN_AT_TXTEND, RES_END_AT_TXTEND,
                     0);
             if(pProps->pBrushItem)
                 aSet.Put(*pProps->pBrushItem);
