@@ -2,9 +2,9 @@
  *
  *  $RCSfile: userlist.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: er $ $Date: 2001-07-11 15:28:50 $
+ *  last change: $Author: er $ $Date: 2002-09-23 15:40:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #include "global.hxx"
 #include "userlist.hxx"
 
+#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
+#include <unotools/localedatawrapper.hxx>
+#endif
 #ifndef _UNOTOOLS_CALENDARWRAPPER_HXX
 #include <unotools/calendarwrapper.hxx>
 #endif
@@ -232,47 +235,60 @@ StringCompare ScUserListData::ICompare(const String& rSubStr1, const String& rSu
 ScUserList::ScUserList(USHORT nLim, USHORT nDel) :
     Collection  ( nLim, nDel )
 {
-    String  sMonthShort, sMonthLong, sDayShort, sDayLong;
+    using namespace ::com::sun::star;
+
     sal_Unicode cDelimiter = ScGlobal::cListDelimiter;
-    sal_Int32 i, nCount;
+    uno::Sequence< i18n::CalendarItem > xCal;
 
-    ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem >
-        xCal = ScGlobal::pCalendar->getMonths();
+    uno::Sequence< i18n::Calendar > xCalendars(
+            ScGlobal::pLocaleData->getAllCalendars() );
 
-    if ( xCal.getLength() )
+    for ( sal_Int32 j = 0; j < xCalendars.getLength(); ++j )
     {
-        nCount = xCal.getLength() - 1;
-        for (i = 0; i < nCount; i++)
+        xCal = xCalendars[j].Days;
+        if ( xCal.getLength() )
         {
-            sMonthShort += String( xCal[i].AbbrevName );
-            sMonthShort += cDelimiter;
-            sMonthLong  += String( xCal[i].FullName );
-            sMonthLong  += cDelimiter;
-        }
-        sMonthShort += String( xCal[i].AbbrevName );
-        sMonthLong  += String( xCal[i].FullName );
-    }
-
-    xCal = ScGlobal::pCalendar->getDays();
-
-    if ( xCal.getLength() )
-    {
-        nCount = xCal.getLength() - 1;
-        for (i = 0; i < nCount; i++)
-        {
+            String sDayShort, sDayLong;
+            sal_Int32 i;
+            sal_Int32 nCount = xCal.getLength() - 1;
+            for (i = 0; i < nCount; i++)
+            {
+                sDayShort += String( xCal[i].AbbrevName );
+                sDayShort += cDelimiter;
+                sDayLong  += String( xCal[i].FullName );
+                sDayLong  += cDelimiter;
+            }
             sDayShort += String( xCal[i].AbbrevName );
-            sDayShort += cDelimiter;
             sDayLong  += String( xCal[i].FullName );
-            sDayLong  += cDelimiter;
-        }
-        sDayShort += String( xCal[i].AbbrevName );
-        sDayLong  += String( xCal[i].FullName );
-    }
 
-    Insert( new ScUserListData( sDayShort ));
-    Insert( new ScUserListData( sDayLong ));
-    Insert( new ScUserListData( sMonthShort ));
-    Insert( new ScUserListData( sMonthLong ));
+            if ( !HasEntry( sDayShort ) )
+                Insert( new ScUserListData( sDayShort ));
+            if ( !HasEntry( sDayLong ) )
+                Insert( new ScUserListData( sDayLong ));
+        }
+
+        xCal = xCalendars[j].Months;
+        if ( xCal.getLength() )
+        {
+            String sMonthShort, sMonthLong;
+            sal_Int32 i;
+            sal_Int32 nCount = xCal.getLength() - 1;
+            for (i = 0; i < nCount; i++)
+            {
+                sMonthShort += String( xCal[i].AbbrevName );
+                sMonthShort += cDelimiter;
+                sMonthLong  += String( xCal[i].FullName );
+                sMonthLong  += cDelimiter;
+            }
+            sMonthShort += String( xCal[i].AbbrevName );
+            sMonthLong  += String( xCal[i].FullName );
+
+            if ( !HasEntry( sMonthShort ) )
+                Insert( new ScUserListData( sMonthShort ));
+            if ( !HasEntry( sMonthLong ) )
+                Insert( new ScUserListData( sMonthLong ));
+        }
+    }
 }
 
 BOOL ScUserList::Load( SvStream& rStream )
@@ -341,5 +357,14 @@ BOOL ScUserList::operator==( const ScUserList& r ) const
 }
 
 
-
+BOOL ScUserList::HasEntry( const String& rStr ) const
+{
+    for ( USHORT i=0; i<nCount; i++)
+    {
+        const ScUserListData* pMyData = (ScUserListData*) At(i);
+        if ( pMyData->aStr == rStr )
+            return TRUE;
+    }
+    return FALSE;
+}
 
