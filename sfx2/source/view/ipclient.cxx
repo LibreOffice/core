@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ipclient.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-25 09:37:03 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 20:03:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,7 +168,7 @@ public:
     virtual void SAL_CALL activatingUI() throw ( embed::WrongStateException, uno::RuntimeException );
     virtual void SAL_CALL deactivatedInplace() throw ( embed::WrongStateException, uno::RuntimeException );
     virtual void SAL_CALL deactivatedUI() throw ( embed::WrongStateException, uno::RuntimeException );
-    virtual uno::Reference< ::drafts::com::sun::star::frame::XLayoutManager > SAL_CALL getLayoutManager() throw ( embed::WrongStateException, uno::RuntimeException );
+    virtual uno::Reference< ::com::sun::star::frame::XLayoutManager > SAL_CALL getLayoutManager() throw ( embed::WrongStateException, uno::RuntimeException );
     virtual uno::Reference< frame::XDispatchProvider > SAL_CALL getInplaceDispatchProvider() throw ( embed::WrongStateException, uno::RuntimeException );
     virtual awt::Rectangle SAL_CALL getPlacement() throw ( embed::WrongStateException, uno::RuntimeException );
     virtual awt::Rectangle SAL_CALL getClipRectangle() throw ( embed::WrongStateException, uno::RuntimeException );
@@ -319,7 +319,7 @@ void SAL_CALL SfxInPlaceClient_Impl::activatingUI()
 
 #if 0
     // make LayoutManager of container invisible (currently needs SFX code)
-    uno::Reference < drafts::com::sun::star::frame::XLayoutManager > xLayoutManager = getLayoutManager();
+    uno::Reference < ::com::sun::star::frame::XLayoutManager > xLayoutManager = getLayoutManager();
     xLayoutManager->lock();
     xLayoutManager->setVisible( sal_False );
 #endif
@@ -344,7 +344,7 @@ void SAL_CALL SfxInPlaceClient_Impl::activatingUI()
         uno::Reference < beans::XPropertySet > xFrame( pFrame->GetFrame()->GetFrameInterface(), uno::UNO_QUERY );
         try
         {
-            uno::Reference< ::drafts::com::sun::star::frame::XLayoutManager > xMan;
+            uno::Reference< ::com::sun::star::frame::XLayoutManager > xMan;
             uno::Any aAny = xFrame->getPropertyValue( ::rtl::OUString::createFromAscii("LayoutManager") );
             aAny >>= xMan;
             xMan->setVisible( sal_True );
@@ -385,7 +385,7 @@ void SAL_CALL SfxInPlaceClient_Impl::deactivatedUI()
 
 #if 0
     // make LayoutManager of container visible again (currently needs SFX code)
-    uno::Reference < drafts::com::sun::star::frame::XLayoutManager > xLayoutManager = getLayoutManager();
+    uno::Reference < ::com::sun::star::frame::XLayoutManager > xLayoutManager = getLayoutManager();
     xLayoutManager->setVisible( sal_True );
     xLayoutManager->unlock();
 #endif
@@ -412,7 +412,7 @@ void SAL_CALL SfxInPlaceClient_Impl::deactivatedUI()
         uno::Reference < beans::XPropertySet > xFrame( pFrame->GetFrame()->GetFrameInterface(), uno::UNO_QUERY );
         try
         {
-            uno::Reference< ::drafts::com::sun::star::frame::XLayoutManager > xMan;
+            uno::Reference< ::com::sun::star::frame::XLayoutManager > xMan;
             uno::Any aAny = xFrame->getPropertyValue( ::rtl::OUString::createFromAscii("LayoutManager") );
             aAny >>= xMan;
             xMan->setVisible( sal_False );
@@ -433,7 +433,7 @@ void SAL_CALL SfxInPlaceClient_Impl::deactivatedUI()
 }
 
 //--------------------------------------------------------------------
-uno::Reference< ::drafts::com::sun::star::frame::XLayoutManager > SAL_CALL SfxInPlaceClient_Impl::getLayoutManager()
+uno::Reference< ::com::sun::star::frame::XLayoutManager > SAL_CALL SfxInPlaceClient_Impl::getLayoutManager()
     throw ( embed::WrongStateException,
             uno::RuntimeException )
 {
@@ -441,7 +441,7 @@ uno::Reference< ::drafts::com::sun::star::frame::XLayoutManager > SAL_CALL SfxIn
     if ( !xFrame.is() )
         throw uno::RuntimeException();
 
-    uno::Reference< ::drafts::com::sun::star::frame::XLayoutManager > xMan;
+    uno::Reference< ::com::sun::star::frame::XLayoutManager > xMan;
     try
     {
         uno::Any aAny = xFrame->getPropertyValue( ::rtl::OUString::createFromAscii("LayoutManager") );
