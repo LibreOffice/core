@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2000-11-08 09:46:34 $
+ *  last change: $Author: os $ $Date: 2000-11-13 08:25:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,9 @@
 
 #ifndef _UCBHELPER_CONTENT_HXX
 #include <ucbhelper/content.hxx>
+#endif
+#ifndef _COM_SUN_STAR_SDB_COMMANDTYPE_HPP_
+#include <com/sun/star/sdb/CommandType.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UCB_XCOMMANDENVIRONMENT_HPP_
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
@@ -158,6 +161,9 @@
 #ifndef _EDTWIN_HXX
 #include <edtwin.hxx>
 #endif
+#ifndef _DBINSDLG_HXX
+#include <dbinsdlg.hxx>
+#endif
 #ifndef _WRTSH_HXX
 #include <wrtsh.hxx>
 #endif
@@ -215,6 +221,9 @@
 #include <hintids.hxx>
 #endif
 #include <connectivity/dbconversion.hxx>
+#ifndef _CONNECTIVITY_DBTOOLS_HXX_
+#include <connectivity/dbtools.hxx>
+#endif
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
@@ -268,6 +277,15 @@
 #endif
 #ifndef _NUMUNO_HXX
 #include <svtools/numuno.hxx>
+#endif
+#include "mailmrge.hxx"
+
+
+#ifndef _SFXEVENT_HXX
+#include <sfx2/event.hxx>
+#endif
+#ifndef _SV_MSGBOX_HXX
+#include <vcl/msgbox.hxx>
 #endif
 
 using namespace rtl;
@@ -356,6 +374,127 @@ BOOL lcl_GetColumnCnt(SwDSParam* pParam,
 /*--------------------------------------------------------------------
     Beschreibung: Daten importieren
  --------------------------------------------------------------------*/
+BOOL SwNewDBMgr::MergeNew(USHORT nOpt, SwWrtShell& rSh,
+                        const Sequence<PropertyValue>& rProperties,
+                        const String *pPrinter)
+{
+
+    DBG_ASSERT(!bInMerge && !pMergeData, "merge already activated!")
+
+    OUString sDataSource, sDataTableOrQuery;
+    Reference<XResultSet>  xResSet;
+    Sequence<sal_Int32> aSelection;
+    sal_Int32 nCmdType = CommandType::TABLE;
+    const PropertyValue* pValues = rProperties.getConstArray();
+    for(sal_Int32 nPos = 0; nPos < rProperties.getLength(); nPos++)
+    {
+        if(!pValues[nPos].Name.compareToAscii("DataSourceName"))
+            pValues[nPos].Value >>= sDataSource;
+        else if(!pValues[nPos].Name.compareToAscii("Command"))
+            pValues[nPos].Value >>= sDataTableOrQuery;
+        else if(!pValues[nPos].Name.compareToAscii("Cursor"))
+            pValues[nPos].Value >>= xResSet;
+        else if(!pValues[nPos].Name.compareToAscii("Selection"))
+            pValues[nPos].Value >>= aSelection;
+        else if(!pValues[nPos].Name.compareToAscii("CommandType"))
+            pValues[nPos].Value >>= nCmdType;
+    }
+    if(!sDataSource.getLength() || !sDataTableOrQuery.getLength() || !xResSet.is())
+    {
+        return FALSE;
+    }
+    pMergeData = new SwDSParam(sDataSource, sDataTableOrQuery, SW_DB_SELECT_UNKNOWN, xResSet, aSelection);
+    //set to start position
+    pMergeData->bEndOfDB = !pMergeData->xResultSet->absolute(
+            (ULONG)pMergeData->aSelection.getConstArray()[ pMergeData->nSelectionIndex++ ] );
+    if(pMergeData->nSelectionIndex >= pMergeData->aSelection.getLength())
+        pMergeData->bEndOfDB = TRUE;
+    Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
+    Reference<XDataSource> xSource = dbtools::getDataSource(sDataSource, xMgr);
+    if( xMgr.is() )
+    {
+        Reference<XInterface> xInstance = xMgr->createInstance( C2U( "com.sun.star.util.NumberFormatter" ));
+        pMergeData->xFormatter = Reference<util::XNumberFormatter>(xInstance, UNO_QUERY) ;
+        pMergeData->nTableOrQuery = nCmdType == CommandType::TABLE ? SW_DB_SELECT_TABLE : SW_DB_SELECT_QUERY;
+    }
+
+    Reference<XPropertySet> xSourceProps(xSource, UNO_QUERY);
+    if(xSourceProps.is())
+    {
+        Any aFormats = xSourceProps->getPropertyValue(C2U("NumberFormatsSupplier"));
+        if(aFormats.hasValue())
+        {
+            Reference<XNumberFormatsSupplier> xSuppl;
+            aFormats >>= xSuppl;
+            if(xSuppl.is())
+            {
+                Reference< XPropertySet > xSettings = xSuppl->getNumberFormatSettings();
+                Any aNull = xSettings->getPropertyValue(C2U("NullDate"));
+                if(aNull.hasValue())
+                    pMergeData->aNullDate = *(util::Date*)aNull.getValue();
+            }
+        }
+    }
+
+    ChgDBName(&rSh, sDataSource, sDataTableOrQuery, aEmptyStr);
+    bInMerge = TRUE;
+
+    if (IsInitDBFields())
+    {
+        // Bei Datenbankfeldern ohne DB-Name DB-Name von Dok einsetzen
+        SvStringsDtor aDBNames(1, 1);
+        aDBNames.Insert( new String(), 0);
+        rSh.ChangeDBFields( aDBNames, rSh.GetDBName());
+        SetInitDBFields(FALSE);
+    }
+
+    BOOL bRet = TRUE;
+    switch(nOpt)
+    {
+        case DBMGR_MERGE:
+            bRet = Merge(&rSh);   // Mischen
+            break;
+
+        case DBMGR_MERGE_MAILMERGE: // Serienbrief
+            {
+            SfxDispatcher *pDis = rSh.GetView().GetViewFrame()->GetDispatcher();
+            if (pPrinter)   // Aufruf kommt aus dem Basic
+            {
+                SfxBoolItem aSilent( SID_SILENT, TRUE );
+                if (pPrinter)
+                {
+                    SfxStringItem aPrinterName(SID_PRINTER_NAME, *pPrinter);
+                    pDis->Execute( SID_PRINTDOC, SFX_CALLMODE_SYNCHRON,
+                                   &aPrinterName, &aSilent, 0L );
+                }
+                else
+                {
+                    pDis->Execute( SID_PRINTDOC, SFX_CALLMODE_SYNCHRON,
+                                   &aSilent, 0L );
+                }
+            }
+            else
+                pDis->Execute(SID_PRINTDOC, SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD);
+            }
+            break;
+
+        case DBMGR_MERGE_MAILING:
+            bRet = MergeMailing(&rSh);  // Mailing
+            break;
+
+        case DBMGR_MERGE_MAILFILES:
+            bRet = MergeMailFiles(&rSh);    // Serienbriefe als Dateien abspeichern
+            break;
+
+        default:        // Einfuegen der selektierten Eintraege
+                        // (war: InsertRecord)
+            ImportFromConnection(&rSh);
+            break;
+    }
+
+    EndMerge();
+    return bRet;
+}
 
 BOOL SwNewDBMgr::Merge( USHORT nOpt, SwWrtShell* pSh,
                         const String& rStatement,
@@ -1576,6 +1715,7 @@ void    SwNewDBMgr::EndMerge()
 {
     DBG_ASSERT(bInMerge, "merge is not active")
     bInMerge = FALSE;
+    delete pMergeData;
     pMergeData = 0;
 }
 /* -----------------------------06.07.00 14:28--------------------------------
@@ -1648,6 +1788,7 @@ BOOL SwNewDBMgr::ToNextMergeRecord()
     {
         if(pMergeData->bSelectionList)
         {
+            DBG_ERROR("remove old code")
             if(pMergeData->bScrollable)
             {
                 pMergeData->bEndOfDB = !pMergeData->xResultSet->absolute(
@@ -1680,6 +1821,13 @@ BOOL SwNewDBMgr::ToNextMergeRecord()
                 }
             }
             if(pMergeData->nSelectionIndex >= pMergeData->xSelectionList->Count())
+                pMergeData->bEndOfDB = TRUE;
+        }
+        else if(pMergeData->aSelection.getLength())
+        {
+            pMergeData->bEndOfDB = !pMergeData->xResultSet->absolute(
+                    (ULONG)pMergeData->aSelection.getConstArray()[ pMergeData->nSelectionIndex++ ] );
+            if(pMergeData->nSelectionIndex >= pMergeData->aSelection.getLength())
                 pMergeData->bEndOfDB = TRUE;
         }
         else
@@ -1758,12 +1906,6 @@ BOOL    SwNewDBMgr::ShowInBeamer(const String& rDBName, const String& rTableName
     SwView* pView = SW_MOD()->GetView();
     SfxViewFrame* pFrame = pView->GetViewFrame();
     Reference<XFrame> xFrame = pFrame->GetFrame()->GetFrameInterface();
-//  Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
-//  Reference<XInterface> xInstance;
-//  if( xMgr.is() )
-//  {
-//      xInstance = xMgr->createInstance( C2U( "com.sun.star.frame.Desktop" ));
-//  }
     Reference<XDispatchProvider> xDP(xFrame, UNO_QUERY);
      util::URL aURL;
     aURL.Complete = C2U(".component:DB/DataSourceBrowser");
@@ -1771,24 +1913,19 @@ BOOL    SwNewDBMgr::ShowInBeamer(const String& rDBName, const String& rTableName
                 C2U("_beamer"),
                  0x0C);
     if (xD.is())
-        xD->dispatch(aURL, Sequence<PropertyValue>());
+    {
+        Sequence<PropertyValue> aProperties(3);
+        PropertyValue* pProperties = aProperties.getArray();
+        pProperties[0].Name = C2U("DataSourceName");
+        pProperties[0].Value <<= OUString(rDBName);
+        pProperties[1].Name = C2U("Command");
+        pProperties[1].Value <<= OUString(rTableName);
+        pProperties[2].Name = C2U("CommandType");
+        pProperties[2].Value <<= (sal_Int32)SW_DB_SELECT_TABLE == nType ? CommandType::TABLE : CommandType::QUERY;
+        xD->dispatch(aURL, aProperties);
+    }
     else
         DBG_ERROR("SwNewDBMgr::ShowInBeamer: no dispatcher for the database URL!");
-//  Reference<XComponentLoader> xLoader(xInstance, UNO_QUERY);
-//  DBG_ASSERT(xLoader.is(), "no loader available?")
-//  if(!xLoader.is())
-//      return FALSE;
-
-//  Reference<XComponent> xRet;
-//  try
-//  {
-//      xRet = xLoader->loadComponentFromURL(
-//                  C2U(".component:DB/DataSourceBrowser"),
-//              C2U("_beamer"),
-//              0xff,
-//              Sequence<PropertyValue>() );
-//  }
-//  catch(Exception&){DBG_ERROR("Exception: loadComponentFromURL()")}
     return TRUE;
 }
 /* -----------------------------17.07.00 14:50--------------------------------
@@ -1994,7 +2131,14 @@ void    SwNewDBMgr::GetDSSelection(const String& rDBDesc, long& rSelStart, long&
  ---------------------------------------------------------------------------*/
 const String&   SwNewDBMgr::GetAddressDBName()
 {
-    DBG_ERROR("no address data base selection available")
+#ifdef DBG_UTIL
+    static BOOL bShowError = TRUE;
+    if(bShowError)
+    {
+        DBG_ERROR("SwNewDBMgr::GetAddressDBName(): no address data base selection available")
+        bShowError=FALSE;
+    }
+#endif
     return aEmptyStr;
 }
 /* -----------------------------18.07.00 13:13--------------------------------
@@ -2015,3 +2159,121 @@ Sequence<OUString> SwNewDBMgr::GetExistingDatabaseNames()
     }
     return Sequence<OUString>();
 }
+/* -----------------------------10.11.00 17:10--------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SwNewDBMgr::ExecuteFormLetter( SwWrtShell& rSh,
+                        const Sequence<PropertyValue>& rProperties)
+{
+    OUString sDataSource, sDataTableOrQuery;
+    Reference<XResultSet>  xResSet;
+    Sequence<sal_Int32> aSelection;
+    BOOL bHasSelectionProperty = FALSE;
+    sal_Int32 nSelectionPos = 0;
+    sal_Int16 nCmdType = CommandType::TABLE;
+    const PropertyValue* pValues = rProperties.getConstArray();
+    for(sal_Int32 nPos = 0; nPos < rProperties.getLength(); nPos++)
+    {
+        if(!pValues[nPos].Name.compareToAscii("DataSourceName"))
+            pValues[nPos].Value >>= sDataSource;
+        else if(!pValues[nPos].Name.compareToAscii("Command"))
+            pValues[nPos].Value >>= sDataTableOrQuery;
+        else if(!pValues[nPos].Name.compareToAscii("Cursor"))
+            pValues[nPos].Value >>= xResSet;
+        else if(!pValues[nPos].Name.compareToAscii("Selection"))
+        {
+            bHasSelectionProperty = TRUE;
+            nSelectionPos = nPos;
+            pValues[nPos].Value >>= aSelection;
+        }
+        else if(!pValues[nPos].Name.compareToAscii("CommandType"))
+            pValues[nPos].Value >>= nCmdType;
+    }
+    if(!sDataSource.getLength() || !sDataTableOrQuery.getLength() || !xResSet.is())
+    {
+        DBG_ERROR("PropertyValues missing or unset")
+        return;
+    }
+    SwMailMergeDlg* pDlg = new SwMailMergeDlg(
+                    &rSh.GetView().GetViewFrame()->GetWindow(), rSh,
+                    sDataSource,
+                    sDataTableOrQuery,
+                    nCmdType, aSelection );
+
+    if (pDlg->Execute() == RET_OK)
+    {
+        SetMergeType(  pDlg->GetMergeType() );
+
+        Sequence<PropertyValue> aNewProperties = rProperties;
+        if(!bHasSelectionProperty)
+        {
+            nSelectionPos = rProperties.getLength();
+            aNewProperties.realloc(rProperties.getLength() + 1);
+        }
+        PropertyValue* pNewValues = aNewProperties.getArray();
+        pNewValues[nSelectionPos].Value <<= pDlg->GetSelection();
+        OFF_APP()->NotifyEvent(SfxEventHint(SW_EVENT_MAIL_MERGE, rSh.GetView().GetViewFrame()->GetObjectShell()));
+        MergeNew(GetMergeType(),
+                            rSh,
+                            aNewProperties);
+        delete(pDlg);
+    }
+}
+/* -----------------------------13.11.00 08:20--------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SwNewDBMgr::InsertText(SwWrtShell& rSh,
+                        const Sequence< PropertyValue>& rProperties)
+{
+    OUString sDataSource, sDataTableOrQuery;
+    Reference<XResultSet>  xResSet;
+    Sequence<sal_Int32> aSelection;
+    BOOL bHasSelectionProperty = FALSE;
+    sal_Int32 nSelectionPos = 0;
+    sal_Int16 nCmdType = CommandType::TABLE;
+    const PropertyValue* pValues = rProperties.getConstArray();
+    for(sal_Int32 nPos = 0; nPos < rProperties.getLength(); nPos++)
+    {
+        if(!pValues[nPos].Name.compareToAscii("DataSourceName"))
+            pValues[nPos].Value >>= sDataSource;
+        else if(!pValues[nPos].Name.compareToAscii("Command"))
+            pValues[nPos].Value >>= sDataTableOrQuery;
+        else if(!pValues[nPos].Name.compareToAscii("Cursor"))
+            pValues[nPos].Value >>= xResSet;
+        else if(!pValues[nPos].Name.compareToAscii("Selection"))
+        {
+            bHasSelectionProperty = TRUE;
+            nSelectionPos = nPos;
+            pValues[nPos].Value >>= aSelection;
+        }
+        else if(!pValues[nPos].Name.compareToAscii("CommandType"))
+            pValues[nPos].Value >>= nCmdType;
+    }
+    if(!sDataSource.getLength() || !sDataTableOrQuery.getLength() || !xResSet.is())
+    {
+        DBG_ERROR("PropertyValues missing or unset")
+        return;
+    }
+    Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
+    Reference<XDataSource> xSource = dbtools::getDataSource(sDataSource, xMgr);
+    Reference< XColumnsSupplier > xColSupp( xResSet, UNO_QUERY );
+    SwInsDBData aDBData;
+    aDBData.sDataBaseName = sDataSource;
+    aDBData.sDataTableName = sDataTableOrQuery;
+
+    SwInsertDBColAutoPilot *pDlg = new SwInsertDBColAutoPilot(
+            rSh.GetView(),
+            xSource,
+            xColSupp,
+            aDBData );
+    if( RET_OK == pDlg->Execute() )
+    {
+        Reference< sdbc::XConnection> xConnection;
+        OUString sDummy;
+        xConnection = xSource->getConnection(sDummy, sDummy);
+        pDlg->DataToDoc( aSelection , xSource, xConnection, xResSet);
+    }
+    delete pDlg;
+
+}
+

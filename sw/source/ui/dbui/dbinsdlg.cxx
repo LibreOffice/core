@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinsdlg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2000-11-07 15:50:58 $
+ *  last change: $Author: os $ $Date: 2000-11-13 08:30:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1179,35 +1179,40 @@ FASTBOOL SwInsertDBColAutoPilot::SplitTextToColArr( const String& rTxt,
 /* ---------------------------------------------------------------------------
 
  ---------------------------------------------------------------------------*/
-void SwInsertDBColAutoPilot::DataToDoc( const SbaSelectionList* pSelList,
+void SwInsertDBColAutoPilot::DataToDoc( const Sequence<sal_Int32>& rSelection,
     Reference< XDataSource> xSource,
-    Reference< XConnection> xConnection )
+    Reference< XConnection> xConnection,
+    Reference< sdbc::XResultSet > xResultSet )
 {
+    const sal_Int32* pSelection = rSelection.getLength() ? rSelection.getConstArray() : 0;
     SwWrtShell& rSh = pView->GetWrtShell();
 
-       Reference< sdbc::XResultSet > xResultSet;
-    Reference< sdbc::XRow > xRow;
-    Reference< sdbc::XStatement > xStatement;
+    Reference< sdbc::XRow > xRow(xResultSet, UNO_QUERY);
     BOOL bScrollable;
-    try
+    //TODO: can be removed with the old interface (textsh2.cxx)
+    if(!xRow.is())
     {
-        bScrollable = xConnection->getMetaData()->supportsResultSetType((sal_Int32)ResultSetType::SCROLL_INSENSITIVE);
-
-        xStatement = xConnection->createStatement();
-        Reference< XPropertySet > xStatProp(xStatement, UNO_QUERY);
-        if(bScrollable)
+        try
         {
-            Any aResType;
-            aResType <<= (sal_Int32)ResultSetType::SCROLL_INSENSITIVE;
-            xStatProp->setPropertyValue(C2U("ResultSetType"), aResType);
+            Reference< sdbc::XStatement > xStatement;
+            bScrollable = xConnection->getMetaData()->supportsResultSetType((sal_Int32)ResultSetType::SCROLL_INSENSITIVE);
+
+            xStatement = xConnection->createStatement();
+            Reference< XPropertySet > xStatProp(xStatement, UNO_QUERY);
+            if(bScrollable)
+            {
+                Any aResType;
+                aResType <<= (sal_Int32)ResultSetType::SCROLL_INSENSITIVE;
+                xStatProp->setPropertyValue(C2U("ResultSetType"), aResType);
+            }
+            if(xStatement.is())
+                xResultSet = xStatement->executeQuery(aDBData.sStatement);
+            xRow = Reference< sdbc::XRow >(xResultSet, UNO_QUERY);
         }
-        if(xStatement.is())
-            xResultSet = xStatement->executeQuery(aDBData.sStatement);
-        xRow = Reference< sdbc::XRow >(xResultSet, UNO_QUERY);
-    }
-    catch(Exception aExcept)
-    {
-        DBG_ERROR("exception caught")
+        catch(Exception aExcept)
+        {
+            DBG_ERROR("exception caught")
+        }
     }
     if(!xResultSet.is() || !xRow.is())
         return;
@@ -1229,8 +1234,8 @@ void SwInsertDBColAutoPilot::DataToDoc( const SbaSelectionList* pSelList,
         if( aCbTableHeadon.IsChecked() )
             nRows++;
 
-        if( pSelList )
-            nRows += (USHORT)pSelList->Count();
+        if( pSelection )
+            nRows += (USHORT)rSelection.getLength();
         else
             ++nRows;
 
@@ -1257,10 +1262,10 @@ void SwInsertDBColAutoPilot::DataToDoc( const SbaSelectionList* pSelList,
         BOOL bHTML = 0 != (::GetHtmlMode( pView->GetDocShell() ) & HTMLMODE_ON);
         rSh.InsertTable( nRows, nCols, HORI_FULL,
                          pModOpt->GetInsTblFlags(bHTML),
-                        (pSelList ? pTAutoFmt : 0));
+                        (pSelection ? pTAutoFmt : 0));
         rSh.MoveTable( fnTablePrev, fnTableStart );
 
-        if( pSelList && pTblSet )
+        if( pSelection && pTblSet )
             SetTabSet();
 
         SfxItemSet aTblSet( rSh.GetAttrPool(), RES_BOXATR_FORMAT,
@@ -1288,15 +1293,15 @@ void SwInsertDBColAutoPilot::DataToDoc( const SbaSelectionList* pSelList,
             {
                 if(bScrollable)
                 {
-                    if(pSelList)
-                        bBreak = !xResultSet->absolute((ULONG)pSelList->GetObject( i ) );
+                    if(pSelection)
+                        bBreak = !xResultSet->absolute((ULONG)pSelection[i] );
                     else if(!i)
                         bBreak = !xResultSet->first();
                 }
-                else if(pSelList)
+                else if(pSelection)
                 {
-                    ULONG nOldPos = i ? 0 : (ULONG)pSelList->GetObject( i -1 );
-                    ULONG nPos = (ULONG)pSelList->GetObject( i );
+                    ULONG nOldPos = 0 == i ? 0 : (ULONG)pSelection[i -1];
+                    ULONG nPos = (ULONG)pSelection[i];
                     long nDiff = nPos - nOldPos;
                     while(nDiff > 0 && !bBreak)
                     {
@@ -1371,13 +1376,13 @@ void SwInsertDBColAutoPilot::DataToDoc( const SbaSelectionList* pSelList,
                 }
             }
 
-            if( !pSelList )
+            if( !pSelection )
             {
                 BOOL bNext = xResultSet->next();
                 if(!bNext)
                     break;
             }
-            else if( i+1 >= pSelList->Count() )
+            else if( i+1 >= rSelection.getLength() )
                 break;
 
             if( 10 == i )
@@ -1385,7 +1390,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const SbaSelectionList* pSelList,
         }
 
         rSh.MoveTable( fnTableCurr, fnTableStart );
-        if( !pSelList && ( pTblSet || pTAutoFmt ))
+        if( !pSelection && ( pTblSet || pTAutoFmt ))
         {
             if( pTblSet )
                 SetTabSet();
@@ -1499,15 +1504,15 @@ void SwInsertDBColAutoPilot::DataToDoc( const SbaSelectionList* pSelList,
                 {
                     if(bScrollable)
                     {
-                        if(pSelList)
-                            bBreak = !xResultSet->absolute((ULONG)pSelList->GetObject( i ) );
+                        if(pSelection)
+                            bBreak = !xResultSet->absolute((ULONG)pSelection[i] );
                         else if(!i)
                             bBreak = !xResultSet->first();
                     }
-                    else if(pSelList)
+                    else if(pSelection)
                     {
-                        ULONG nOldPos = i ? 0 : (ULONG)pSelList->GetObject( i -1 );
-                        ULONG nPos = (ULONG)pSelList->GetObject( i );
+                        ULONG nOldPos = 0 == i ? 0 : (ULONG)pSelection[i - 1];
+                        ULONG nPos = (ULONG)pSelection[i];
                         long nDiff = nPos - nOldPos;
                         while(nDiff > 0 && !bBreak)
                         {
@@ -1608,13 +1613,13 @@ void SwInsertDBColAutoPilot::DataToDoc( const SbaSelectionList* pSelList,
                     }
                 }
 
-                if( !pSelList )
+                if( !pSelection )
                 {
                     BOOL bNext = xResultSet->next();
                     if(!bNext)
                         break;
                 }
-                else if( i+1 >= pSelList->Count() )
+                else if( i+1 >= rSelection.getLength() )
                     break;
 
                 if( aRbAsField.IsChecked() )

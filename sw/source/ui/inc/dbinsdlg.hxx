@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinsdlg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-10-27 11:24:26 $
+ *  last change: $Author: os $ $Date: 2000-11-13 08:32:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,13 +93,22 @@
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
 #include <com/sun/star/uno/Reference.h>
 #endif
-namespace com{namespace sun{namespace star{namespace sdbcx{
+#ifndef _COM_SUN_STAR_UNO_SEQUENCE_H_
+#include <com/sun/star/uno/Sequence.h>
+#endif
+namespace com{namespace sun{namespace star{
+    namespace sdbcx{
     class XColumnsSupplier;
-}}}}
+    }
+    namespace sdbc{
+    class XDataSource;
+    class XConnection;
+    class XResultSet;
+    }
+}}}
 
 class SwTableAutoFmt;
 class SwView;
-class SbaSelectionList;
 class _DB_ColumnConfig;
 class SfxItemSet;
 class SwTableRep;
@@ -216,9 +225,10 @@ public:
 
     virtual ~SwInsertDBColAutoPilot();
 
-    void DataToDoc( const SbaSelectionList*,
+    void DataToDoc( const ::com::sun::star::uno::Sequence<sal_Int32>& rSelection,
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource> rxSource,
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> xConnection);
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> xConnection,
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > xResultSet);
 
 };
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2000-10-31 15:26:08 $
+ *  last change: $Author: os $ $Date: 2000-11-13 08:25:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,7 @@ namespace com{namespace sun{namespace star{
     namespace beans{
 
         class XPropertySet;
+        struct PropertyValue;
     }
     namespace sdbcx{
         class XColumnsSupplier;
@@ -149,8 +150,8 @@ struct SwDSParam
     ::com::sun::star::uno::Reference<com::sun::star::util::XNumberFormatter>    xFormatter;
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>      xConnection;
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XStatement>       xStatement;
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>           xResultSet;
-
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>       xResultSet;
+    ::com::sun::star::uno::Sequence< sal_Int32 >                                aSelection;
     SbaSelectionListRef         xSelectionList;
     BOOL bScrollable;
     BOOL bSelectionList;
@@ -166,6 +167,20 @@ struct SwDSParam
         bSelectionList(FALSE),
         bEndOfDB(FALSE),
         nSelectionIndex(0)
+        {}
+
+    SwDSParam(const String& rSource, const String& rTable, BYTE nType,
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>       xResSet,
+        ::com::sun::star::uno::Sequence< sal_Int32 >    rSelection) :
+        sDataSource(rSource),
+        sTableOrQuery(rTable),
+        nTableOrQuery(nType),
+        bScrollable(TRUE),
+        bSelectionList(FALSE),
+        bEndOfDB(FALSE),
+        nSelectionIndex(0),
+        xResultSet(xResSet),
+        aSelection(rSelection)
         {}
 };
 typedef SwDSParam* SwDSParamPtr;
@@ -221,6 +236,9 @@ public:
     inline void     SetMergeType( USHORT nTyp )     { nMergeType = nTyp; }
 
     // Mischen von Datensaetzen in Felder
+    BOOL            MergeNew(USHORT nOpt, SwWrtShell& rSh,
+                        const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& rProperties,
+                        const String *pPrinter = NULL);
     BOOL            Merge(USHORT nOpt, SwWrtShell* pSh, const String& rStatement,
                         const SbaSelectionListRef pSelectionList,
                         const String& rDataSource,
@@ -263,6 +281,12 @@ public:
 
     inline BOOL     IsInMerge() const   { return bInMerge; }
     void            EndMerge();
+
+    void            ExecuteFormLetter(SwWrtShell& rSh,
+                        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& rProperties);
+
+    void            InsertText(SwWrtShell& rSh,
+                        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& rProperties);
 
     // check if a data source is open as merge source
     BOOL            IsDataSourceOpen(const String& rDataSource, const String& rTableOrQuery)const;
