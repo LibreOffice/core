@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofored.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: thb $ $Date: 2002-09-13 14:31:57 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 16:59:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -374,9 +374,25 @@ Rectangle SvxEditEngineForwarder::GetCharBounds( USHORT nPara, USHORT nIndex ) c
     // don't rotate for vertical text.
     Size aSize( rEditEngine.CalcTextWidth(), rEditEngine.GetTextHeight() );
     ::std::swap( aSize.Width(), aSize.Height() );
-    return SvxEditSourceHelper::EEToUserSpace( rEditEngine.GetCharacterBounds( EPosition(nPara, nIndex) ),
-                                               aSize,
-                                               rEditEngine.IsVertical() == TRUE );
+
+    // #108900# Handle virtual position one-past-the end of the string
+    if( nIndex >= rEditEngine.GetTextLen(nPara) )
+    {
+        Rectangle aLast(0,0,0,0);
+
+        if( nIndex )
+            aLast = rEditEngine.GetCharacterBounds( EPosition(nPara, nIndex-1) );
+
+        aLast.Move( aLast.Right() - aLast.Left(), 0 );
+        aLast.SetSize( Size(1, rEditEngine.GetTextHeight()) );
+        return SvxEditSourceHelper::EEToUserSpace( aLast, aSize, rEditEngine.IsVertical() == TRUE );
+    }
+    else
+    {
+        return SvxEditSourceHelper::EEToUserSpace( rEditEngine.GetCharacterBounds( EPosition(nPara, nIndex) ),
+                                                   aSize,
+                                                   rEditEngine.IsVertical() == TRUE );
+    }
 }
 
 Rectangle SvxEditEngineForwarder::GetParaBounds( USHORT nPara ) const
