@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: mav $ $Date: 2001-05-07 16:31:29 $
+#   last change: $Author: mav $ $Date: 2001-06-26 13:30:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,6 +76,9 @@ IDLFILES=\
     ClassifiedInteractionRequest.idl\
     InteractionClassification.idl\
     InteractionHandler.idl\
+    NoMasterException.idl\
+    PasswordRequest.idl\
+    PasswordRequestMode.idl\
     UrlRecord.idl\
     UserRecord.idl\
     XInteractionAbort.idl\
