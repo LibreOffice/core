@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mt $ $Date: 2001-04-04 15:45:11 $
+ *  last change: $Author: dv $ $Date: 2001-06-28 11:57:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,8 @@
 #include <unoifac3.hxx>
 #include <unoiface.hxx>
 #include <imgprod.hxx>
+#include <filepicker.hxx>
+#include <folderpicker.hxx>
 
 #include <toolkit/helper/macros.hxx>
 
@@ -149,6 +151,12 @@ sal_Bool SAL_CALL component_writeInfo( void* _pServiceManager, void* _pRegistryK
 
         xNewKey = pRegistryKey->createKey( ::rtl::OUString::createFromAscii( "/com.sun.star.awt.ImageProducer/UNO/SERVICES" ) );
         xNewKey->createKey( ::rtl::OUString::createFromAscii( "com.sun.star.awt.ImageProducer" ) );
+
+        xNewKey = pRegistryKey->createKey( ::rtl::OUString::createFromAscii( "/com.sun.star.svtools.FilePicker/UNO/SERVICES" ) );
+        xNewKey->createKey( ::rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.FilePicker" ) );
+
+        xNewKey = pRegistryKey->createKey( ::rtl::OUString::createFromAscii( "/com.sun.star.svtools.FolderPicker/UNO/SERVICES" ) );
+        xNewKey->createKey( ::rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.FolderPicker" ) );
     }
 
     return sal_True;
@@ -187,6 +195,24 @@ void* SAL_CALL component_getFactory( const sal_Char* sImplementationName, void* 
             ::com::sun::star::uno::Sequence< ::rtl::OUString > aServiceNames(1);
             aServiceNames.getArray()[0] = ::rtl::OUString::createFromAscii( "com.sun.star.ui.AddressBookSourceDialog" );
             xFactory = ::cppu::createSingleFactory( pServiceManager, ::rtl::OUString::createFromAscii( sImplementationName ), svt::OAddressBookSourceDialogUno_CreateInstance, aServiceNames );
+        }
+        else if ( rtl_str_compare( sImplementationName, "com.sun.star.svtools.FilePicker") == 0 )
+        {
+            ::com::sun::star::uno::Sequence< ::rtl::OUString > aServiceNames(1);
+            aServiceNames.getArray()[0] = ::rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.FilePicker" );
+            xFactory = ::cppu::createSingleFactory( pServiceManager,
+                                                    ::rtl::OUString::createFromAscii( sImplementationName ),
+                                                    SvtFilePicker::impl_createInstance,
+                                                    aServiceNames );
+        }
+        else if ( rtl_str_compare( sImplementationName, "com.sun.star.svtools.FolderPicker") == 0 )
+        {
+            ::com::sun::star::uno::Sequence< ::rtl::OUString > aServiceNames(1);
+            aServiceNames.getArray()[0] = ::rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.FolderPicker" );
+            xFactory = ::cppu::createSingleFactory( pServiceManager,
+                                                    ::rtl::OUString::createFromAscii( sImplementationName ),
+                                                    SvtFolderPicker::impl_createInstance,
+                                                    aServiceNames );
         }
 
         if ( xFactory.is() )
