@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod2.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-29 17:03:40 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:43:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,11 +159,15 @@
 #include "OutlineView.hxx"
 #endif
 #include "sdpage.hxx"
-#include "tpoption.hxx"
-#include "prntopts.hxx"
+//CHINA001 #include "tpoption.hxx"
+//CHINA001 #include "prntopts.hxx"
 #include "sdxfer.hxx"
-
-
+#include "sdabstdlg.hxx" //CHINA001
+#include "tpoption.hrc"
+#include "prntopts.hrc"
+#ifndef _SFXINTITEM_HXX //CHINA001
+#include <svtools/intitem.hxx> //CHINA001
+#endif //CHINA001
 /*************************************************************************
 |*
 |* Options-Dialog
@@ -845,29 +849,57 @@ void SdModule::ApplyItemSet( USHORT nSlot, const SfxItemSet& rSet )
 SfxTabPage* SdModule::CreateTabPage( USHORT nId, Window* pParent, const SfxItemSet& rSet )
 {
     SfxTabPage* pRet = NULL;
+    SfxAllItemSet aSet(*(rSet.GetPool())); //CHINA001
+    SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();//CHINA001
+    DBG_ASSERT(pFact, "SdAbstractDialogFactory fail!");//CHINA001
     switch(nId)
     {
         case SID_SD_TP_CONTENTS:
         case SID_SI_TP_CONTENTS:
-            pRet = SdTpOptionsContents::Create(pParent, rSet);
+        { //add by CHINA001
+            //CHINA001 pRet = SdTpOptionsContents::Create(pParent, rSet);
+            ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( TP_OPTIONS_CONTENTS );
+            DBG_ASSERT(fnCreatePage, "SdAbstractDialogFactory fail!");//CHINA001
+            pRet = (*fnCreatePage)( pParent, rSet );
+        }
         break;
         case SID_SD_TP_SNAP:
         case SID_SI_TP_SNAP:
-            pRet = SdTpOptionsSnap::Create(pParent, rSet);
+        { //add by CHINA001
+            //CHINA001 pRet = SdTpOptionsSnap::Create(pParent, rSet);
+            ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( TP_OPTIONS_SNAP );
+            DBG_ASSERT(fnCreatePage, "SdAbstractDialogFactory fail!");//CHINA001
+            pRet = (*fnCreatePage)( pParent, rSet );
+        }
         break;
         case SID_SD_TP_PRINT:
         case SID_SI_TP_PRINT:
-            pRet = SdPrintOptions::Create(pParent, rSet);
+        { //add by CHINA001
+            //CHINA001 pRet = SdPrintOptions::Create(pParent, rSet);
+            ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( TP_PRINT_OPTIONS );
+            DBG_ASSERT(fnCreatePage, "SdAbstractDialogFactory fail!");//CHINA001
+            pRet = (*fnCreatePage)( pParent, rSet );
             if(SID_SD_TP_PRINT == nId)
-                ( (SdPrintOptions*) pRet )->SetDrawMode();
+                //CHINA001 ( (SdPrintOptions*) pRet )->SetDrawMode();
+                aSet.Put (SfxUInt32Item(SID_SDMODE_FLAG,SD_DRAW_MODE));
+            pRet->PageCreated(aSet);
+        }
         break;
         case SID_SI_TP_MISC:
         case SID_SD_TP_MISC:
-            pRet = SdTpOptionsMisc::Create(pParent, rSet);
+        { //add by CHINA001
+            //CHINA001 pRet = SdTpOptionsMisc::Create(pParent, rSet);
+            ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( TP_OPTIONS_MISC );
+            DBG_ASSERT(fnCreatePage, "SdAbstractDialogFactory fail!");//CHINA001
+            pRet = (*fnCreatePage)( pParent, rSet );
             if(SID_SD_TP_MISC == nId)
-                ( (SdTpOptionsMisc*) pRet )->SetDrawMode();
+                //CHINA001 ( (SdTpOptionsMisc*) pRet )->SetDrawMode();
+                aSet.Put (SfxUInt32Item(SID_SDMODE_FLAG,SD_DRAW_MODE));
             else
-                ( (SdTpOptionsMisc*) pRet )->SetImpressMode();
+                //CHINA001 ( (SdTpOptionsMisc*) pRet )->SetImpressMode();
+                aSet.Put (SfxUInt32Item(SID_SDMODE_FLAG,SD_IMPRESS_MODE));
+            pRet->PageCreated(aSet);
+        }
         break;
         case RID_OFA_TP_INTERNATIONAL_SD:
         case RID_OFA_TP_INTERNATIONAL_IMPR:
