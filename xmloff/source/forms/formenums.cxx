@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formenums.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-19 12:13:57 $
+ *  last change: $Author: fs $ $Date: 2001-06-07 12:25:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,12 @@
 #ifndef _COM_SUN_STAR_AWT_FONTWIDTH_HPP_
 #include <com/sun/star/awt/FontWidth.hpp>
 #endif
+#ifndef _COM_SUN_STAR_AWT_FONTEMPHASISMARK_HPP_
+#include <com/sun/star/awt/FontEmphasisMark.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_FONTRELIEF_HPP_
+#include <com/sun/star/awt/FontRelief.hpp>
+#endif
 #ifndef _SV_WINTYPES_HXX
 #include <vcl/wintypes.hxx>     // for check states
 #endif
@@ -111,6 +117,7 @@ namespace xmloff
 
     const SvXMLEnumMapEntry*    OEnumMapper::s_pEnumMap[OEnumMapper::KNOWN_ENUM_PROPERTIES] =
     {
+        NULL,
         NULL,
         NULL,
         NULL,
@@ -274,6 +281,34 @@ namespace xmloff
                     rReturn = aBorderTypeMap;
                 };
                 break;
+
+                case epFontEmphasis:
+                {
+                    static SvXMLEnumMapEntry aFontEmphasisMap[] =
+                    {
+                        { sXML_none,    FontEmphasisMark::NONE },
+                        { sXML_dot,     FontEmphasisMark::DOT },
+                        { sXML_circle,  FontEmphasisMark::CIRCLE },
+                        { sXML_disc,    FontEmphasisMark::DISC },
+                        { sXML_accent,  FontEmphasisMark::ACCENT },
+                        { 0, 0 }
+                    };
+                    rReturn = aFontEmphasisMap;
+                }
+                break;
+
+                case epFontRelief:
+                {
+                    static SvXMLEnumMapEntry aFontReliefMap[] =
+                    {
+                        { sXML_none,        FontRelief::NONE },
+                        { sXML_engraved,    FontRelief::ENGRAVED },
+                        { sXML_embossed,    FontRelief::EMBOSSED },
+                        { 0, 0 }
+                    };
+                    rReturn = aFontReliefMap;
+                }
+                break;
             }
         }
 
@@ -287,6 +322,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2000/12/19 12:13:57  fs
+ *  some changes ... now the exported styles are XSL conform
+ *
  *  Revision 1.4  2000/12/19 08:42:19  fs
  *  removed the epFontWidth
  *

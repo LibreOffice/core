@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formenums.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-19 12:13:57 $
+ *  last change: $Author: fs $ $Date: 2001-06-07 12:25:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,8 @@ namespace xmloff
             epCheckState,
             epTextAlign,
             epBorderWidth,
+            epFontEmphasis,
+            epFontRelief,
 
             KNOWN_ENUM_PROPERTIES
         };
@@ -109,6 +111,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2000/12/19 12:13:57  fs
+ *  some changes ... now the exported styles are XSL conform
+ *
  *  Revision 1.4  2000/12/19 08:42:19  fs
  *  removed the epFontWidth
  *
