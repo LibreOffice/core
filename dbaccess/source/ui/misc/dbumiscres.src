@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbumiscres.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: oj $ $Date: 2002-04-29 08:01:21 $
+ *  last change: $Author: kz $ $Date: 2002-05-03 08:36:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,15 +110,16 @@ Resource RSC_DATASOURCE_TYPES
         Text[ swedish ] = "Adabas;JDBC;ODBC;dBase;ADO;Text;Tabelldokument;Adressbok";
         Text[ polish ] = "Adabas;JDBC;ODBC;dBase;ADO;Tekst;Arkusz kalkulacyjny;Ksi��ka adresowa";
         Text[ portuguese_brazilian ] = "Adabas;JDBC;ODBC;dBase;Text";
-        Text[ japanese ] = "Adabas;JDBC;ODBC;dBase;ADO;文書;表計算ﾄﾞｷｭﾒﾝﾄ;ｱﾄﾞﾚｽ帳";
+        Text[ japanese ] = "Adabas;JDBC;ODBC;dBase;ADO;文書;表計算ドキュメント;アドレス帳";
         Text[ korean ] = "Adabas;JDBC;ODBC;dBase;ADO;텍스트;스프레드시트 문서;주소록";
         Text[ chinese_simplified ] = "Adabas;JDBC;ODBC;dBase;ADO;文字;工作表文档;通讯簿";
         Text[ chinese_traditional ] = "Adabas;JDBC;ODBC;dBase;ADO;文字;工作表文件;通訊錄";
         Text[ turkish ] = "Adabas;JDBC;ODBC;dBase;Text";
         Text[ arabic ] = "Adabas;JDBC;ODBC;dBase;ADO;��;����� �����";
         Text[ language_user1 ] = "Please be carefull with the number/ordering of (semicolon-separated) tokens in the string.";
-        Text[ finnish ] = "Adabas;JDBC;ODBC;dBase;Text";
+        Text[ finnish ] = "Adabas;JDBC;ODBC;dBase;ADO;Teksti;Laskentataulukko;Osoitteisto";
         Text[ catalan ] = "Adabas;JDBC;ODBC;dBase;ADO;Text;Spreadsheet";
+        Text[ thai ] = "Adabas;JDBC;ODBC;ดีเบส;ADO;ข้อความ;กระดาษคำนวณ;สมุดที่อยู่";
     };
 };
 
@@ -148,6 +149,7 @@ Resource RSC_CHARSETS
         Text[ turkish ] = "Ansi";
         Text[ arabic ] = "Ansi";
         Text[ catalan ] = "Ansi";
+        Text[ thai ] = "Ansi";
     };
     String 2
     {
@@ -173,6 +175,7 @@ Resource RSC_CHARSETS
         Text[ turkish ] = "Mac";
         Text[ arabic ] = "Mac";
         Text[ catalan ] = "Mac";
+        Text[ thai ] = "Mac";
     };
     String 3
     {
@@ -198,6 +201,7 @@ Resource RSC_CHARSETS
         Text[ turkish ] = "IBMPC (437)";
         Text[ arabic ] = "IBMPC (437)";
         Text[ catalan ] = "IBMPC (437)";
+        Text[ thai ] = "IBMPC (437)";
     };
     String 4
     {
@@ -223,6 +227,7 @@ Resource RSC_CHARSETS
         Text[ turkish ] = "IBMPC (850) / DOS";
         Text[ arabic ] = "IBMPC (850) / DOS";
         Text[ catalan ] = "IBMPC (850) / DOS";
+        Text[ thai ] = "IBMPC (850) / DOS";
     };
     String 5
     {
@@ -248,6 +253,7 @@ Resource RSC_CHARSETS
         Text[ turkish ] = "IBMPC (860)";
         Text[ arabic ] = "IBMPC (860)";
         Text[ catalan ] = "IBMPC (860)";
+        Text[ thai ] = "IBMPC (860)";
     };
     String 6
     {
@@ -273,6 +279,7 @@ Resource RSC_CHARSETS
         Text[ turkish ] = "IBMPC (861)";
         Text[ arabic ] = "IBMPC (861)";
         Text[ catalan ] = "IBMPC (861)";
+        Text[ thai ] = "IBMPC (861)";
     };
     String 7
     {
@@ -298,6 +305,7 @@ Resource RSC_CHARSETS
         Text[ turkish ] = "IBMPC (863)";
         Text[ arabic ] = "IBMPC (863)";
         Text[ catalan ] = "IBMPC (863)";
+        Text[ thai ] = "IBMPC (863)";
     };
     String 8
     {
@@ -323,6 +331,7 @@ Resource RSC_CHARSETS
         Text[ turkish ] = "IBMPC (865)";
         Text[ arabic ] = "IBMPC (865)";
         Text[ catalan ] = "IBMPC (865)";
+        Text[ thai ] = "IBMPC (865)";
     };
     String 9
     {
@@ -348,6 +357,7 @@ Resource RSC_CHARSETS
         Text[ turkish ] = "IBMPC (866)";
         Text[ arabic ] = "IBMPC (866)";
         Text[ catalan ] = "IBMPC (866)";
+        Text[ thai ] = "IBMPC (866)";
     };
     String 10
     {
@@ -366,13 +376,14 @@ Resource RSC_CHARSETS
         Text[ swedish ] = "System";
         Text[ polish ] = "System";
         Text[ portuguese_brazilian ] = "System";
-        Text[ japanese ] = "ｼｽﾃﾑ";
+        Text[ japanese ] = "システム";
         Text[ korean ] = "시스템";
         Text[ chinese_simplified ] = "系统";
         Text[ chinese_traditional ] = "系統";
         Text[ turkish ] = "Sistem";
         Text[ arabic ] = "������";
         Text[ catalan ] = "System";
+        Text[ thai ] = "ระบบ";
     };
     String 11
     {
@@ -398,6 +409,7 @@ Resource RSC_CHARSETS
         Text[ turkish ] = "UTF-8";
         Text[ arabic ] = "UTF-8";
         Text[ catalan ] = "UTF-8";
+        Text[ thai ] = "UTF-8";
     };
     String 12
     {
@@ -423,6 +435,7 @@ Resource RSC_CHARSETS
         Text[ turkish ] = "Big5-HKSCS";
         Text[ arabic ] = "Big5-HKSCS";
         Text[ catalan ] = "Big5-HKSCS";
+        Text[ thai ] = "Big5-HKSCS";
     };
 };
 
@@ -440,10 +453,10 @@ String STR_GENERAL_SDB_ERROR
     Text[ spanish ] = "Error durante la conexi�n con la fuente de datos";
     Text[ italian ] = "Errore durante il collegamento alla sorgente dati";
     Text[ danish ] = "Fejl under forbindelsen med datakilden";
-    Text[ swedish ] = "Fel under f�rbindelsen med datak�llan";
+    Text[ swedish ] = "Fel vid anslutningen till datak�llan";
     Text[ polish ] = "B��d w ��czeniu ze �r�d�em danych";
     Text[ portuguese_brazilian ] = "Error while connecting to the data source";
-    Text[ japanese ] = "ﾃﾞｰﾀｿｰｽへ接続時のｴﾗｰ";
+    Text[ japanese ] = "データソースへ接続時のエラー";
     Text[ korean ] = "데이터 소스에 연결시에 오류";
     Text[ chinese_simplified ] = "在和数据源连接时发生一个错误";
     Text[ chinese_traditional ] = "連線到資料源時發生一個錯誤";
@@ -451,6 +464,7 @@ String STR_GENERAL_SDB_ERROR
     Text[ arabic ] = "��� ����� ������� ����� ��������";
     Text[ finnish ] = "On ilmennyt virhe muodostettaessa yhteytt� tietol�hteeseen";
     Text[ catalan ] = "S'ha produ�t un error en connectar amb la font de dades";
+    Text[ thai ] = "ผิดพลาดขณะกำลังเชื่อมต่อกับแหล่งข้อมูล";
 };
 
 String STR_OBJECT_ALREADY_EXSISTS
@@ -469,14 +483,15 @@ String STR_OBJECT_ALREADY_EXSISTS
     Text[ swedish ] = "Fel n�r objekt skulle skapas!";
     Text[ polish ] = "B��d w trakcie tworzenia!";
     Text[ portuguese_brazilian ] = "Error while creating!";
-    Text[ japanese ] = "作成するときのｴﾗｰ。";
+    Text[ japanese ] = "作成するときのエラー。";
     Text[ korean ] = "작성 오류!";
     Text[ chinese_simplified ] = "在生成时发生一个错误！";
     Text[ chinese_traditional ] = "在建立時發生錯誤";
     Text[ turkish ] = "Error while creating!";
     Text[ arabic ] = "��� ����� �������!";
-    Text[ finnish ] = "Fehler beim Erzeugen!";
+    Text[ finnish ] = "Virhe luonnin aikana.";
     Text[ catalan ] = "S'ha produ�t un error durant el proc�s de creaci�";
+    Text[ thai ] = "ผิดพลาดในระหว่างการสร้าง!";
 };
 
 String STR_UNEXPECTED_ERROR
@@ -490,19 +505,20 @@ String STR_UNEXPECTED_ERROR
     Text[ dutch ] = "Er is een onverwachte fout opgetreden. De opdracht kan niet worden uitgevoerd.";
     Text[ french ] = "Une erreur impr�vue s'est produite : impossible d'ex�cuter l'op�ration !";
     Text[ spanish ] = "Ha ocurrido un error. No se puede ejecutar la operaci�n.";
-    Text[ finnish ] = "Ein unerwarteter Fehler ist aufgetreten. Die operation kann nicht ausgef�hrt werden.";
+    Text[ finnish ] = "On ilmennyt odottamaton virhe. Toimintoa ei voitu suorittaa";
     Text[ italian ] = "Si � verificato un errore inaspettato. Impossibile terminare l'operazione.";
     Text[ danish ] = "An unexpected error occured. The operation could not be completed.";
     Text[ swedish ] = "Ett ov�ntat fel har uppst�tt. Det g�r inte att utf�ra operationen.";
     Text[ polish ] = "Wyst�pi� nieoczekiwany b��d. Operacji nie mo�na wykona�.";
     Text[ portuguese_brazilian ] = "An unexpected error occured. The operation could not be completed.";
-    Text[ japanese ] = "予期しないｴﾗｰが発生しました。操作の実行はできません。";
+    Text[ japanese ] = "予期しないエラーが発生しました。操作の実行はできません。";
     Text[ korean ] = "예상치 못했던 오류가 발생했습니다. 작업을 실행할 수 없습니다";
     Text[ chinese_simplified ] = "发生一个意外的错误。无法执行这个操作。";
     Text[ chinese_traditional ] = "發生一個意外的錯誤。無法執行這個動作。";
     Text[ turkish ] = "An unexpected error occured. The operation could not be completed.";
     Text[ arabic ] = "An unexpected error occured. The operation could not be completed.";
     Text[ catalan ] = "S'ha produ�t un error inesperat. L'operaci� no s'ha pogut realitzar.";
+    Text[ thai ] = "เกิดข้อผิดพลาดที่ไม่คาดคิด ไม่สามารถแสดงปฏิบัติการได้";
 };
 
 String STR_COULDNOTOPEN_LINKEDDOC
@@ -516,19 +532,20 @@ String STR_COULDNOTOPEN_LINKEDDOC
     Text[ dutch ] = "Het document\n\n$file$\n\nkon niet worden geopend.";
     Text[ french ] = "Impossible d'ouvrir\n\nle document\n\n$file$ !";
     Text[ spanish ] = "No se pudo abrir el documento\n\n$file$\n\n.";
-    Text[ finnish ] = "Das Dokument\n\n$file$\n\nkonnte nicht ge�ffnet werden.";
+    Text[ finnish ] = "Asiakirjan \n\n$file$\n\navaaminen ei onnistunut.";
     Text[ italian ] = "Impossibile\naprire il documento\n\n$file$.";
     Text[ danish ] = "Th document\n\n$file$\n\ncould not be opened.";
     Text[ swedish ] = "Det gick inte att �ppna dokumentet\n\n$file$\n\n.";
     Text[ polish ] = "Otwarcie dokumentu\n\n$file$\n\nnie powiod�o si�.";
     Text[ portuguese_brazilian ] = "Th document\n\n$file$\n\ncould not be opened.";
-    Text[ japanese ] = "ﾄﾞｷｭﾒﾝﾄ\n\n$file$ は\n\n開けませんでした。";
+    Text[ japanese ] = "ドキュメント\n\n$file$ は\n\n開けませんでした。";
     Text[ korean ] = "\n\n$파일$\n\n문서를 열수 없었습니다";
     Text[ chinese_simplified ] = "这个文档\n\n$file$\n\n无法被打开。";
     Text[ chinese_traditional ] = "這個文件\n\n$file$\n\n無法開啟。";
     Text[ turkish ] = "Th document\n\n$file$\n\ncould not be opened.";
     Text[ arabic ] = "Th document\n\n$file$\n\ncould not be opened.";
     Text[ catalan ] = "No s'ha pogut obrir el document\n\n$file$.\n\n";
+    Text[ thai ] = "ไม่สามารถเปิดเอกสาร\n\n$file$\n\nได้";
 };
 
 String STR_MISSING_TABLES_XDROP
@@ -542,19 +559,20 @@ String STR_MISSING_TABLES_XDROP
     Text[ dutch ] = "De tabel kan niet worden gewist, daar deze niet wordt ondersteund door de database.";
     Text[ french ] = "Impossible de supprimer la table : elle n'est pas support�e par la connexion de BD.";
     Text[ spanish ] = "No se puede eliminar la tabla porque la conexi�n con la base de datos no apoya esta acci�n.";
-    Text[ finnish ] = "The table can't be dropped, 'cause the database connection does not support this.";
+    Text[ finnish ] = "Taulukkoa ei voi poistaa, koska tietokantayhteys ei tue poistamista.";
     Text[ italian ] = "Impossibile eliminare la tabella perch� non � supportata dal collegamento al database.";
     Text[ danish ] = "The table can't be dropped, 'cause the database connection does not support this.";
     Text[ swedish ] = "Det g�r inte att radera tabellen eftersom databasf�rbindelsen inte st�djer den.";
     Text[ polish ] = "Tabeli nie mo�na usun��, poniewa� nie jest ona os�ugiwana przez po��czenie z baz� danych.";
     Text[ portuguese_brazilian ] = "The table can't be dropped, 'cause the database connection does not support this.";
-    Text[ japanese ] = "ﾃｰﾌﾞﾙはﾃﾞｰﾀﾍﾞｰｽの接続がこれを支援しないため削除できません。";
+    Text[ japanese ] = "テーブルはデータベースの接続がこれを支援しないため削除できません。";
     Text[ korean ] = "데이터베이스 연결에서 지원되지 않기 때문에 시트을 삭제할 수 없습니다";
     Text[ chinese_simplified ] = "因为数据库的连接不支持这个功能而无法删除这个表格。";
     Text[ chinese_traditional ] = "因為資料庫連線不支援這個動作而無法刪除這個表格。";
     Text[ turkish ] = "The table can't be dropped, 'cause the database connection does not support this.";
     Text[ arabic ] = "The table can't be dropped, 'cause the database connection does not support this.";
     Text[ catalan ] = "No es pot suprimir la taula perqu� la connexi� de la base de dades no ho permet.";
+    Text[ thai ] = "ไม่สามารถลบตารางได้เนื่องจากการเชื่อมต่อฐานข้อมูลไม่สนับสนุนสิ่งนี้";
 };
 
 String STR_BUTTON_TEXT_ALL
@@ -570,7 +588,7 @@ String STR_BUTTON_TEXT_ALL
     Text[ dutch ] = "~Alle";
     Text[ french ] = "~Tout";
     Text[ spanish ] = "~Todos";
-    Text[ finnish ] = "~All";
+    Text[ finnish ] = "~Kaikki";
     Text[ italian ] = "~Tutti";
     Text[ danish ] = "~All";
     Text[ swedish ] = "~Alla";
@@ -583,11 +601,15 @@ String STR_BUTTON_TEXT_ALL
     Text[ turkish ] = "~All";
     Text[ arabic ] = "~All";
     Text[ catalan ] = "~Tots";
+    Text[ thai ] = "~ทั้งหมด";
 };
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.42  2002/04/29 08:01:21  oj
+ *  #98772# new bitmaps
+ *
  *  Revision 1.41  2002/03/04 11:04:47  oj
  *  #97788# new character set Big5-HKSCS
  *
