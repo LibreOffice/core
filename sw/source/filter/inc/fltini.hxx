@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltini.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-18 14:30:25 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:32:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,25 +166,10 @@ public:
 
 // die speziellen Writer
 
-#if 0
-WriterRef GetW4WWriter( const String& );
-WriterRef GetStgWriter( const String& );
-WriterRef GetWWWriter( const String& );
-WriterRef GetWW8Writer( const String& );
-#if !( defined(PRODUCT) || defined(MAC) || defined(PM2) )
-WriterRef GetDebugWriter( const String& );
-WriterRef GetUndoWriter( const String& );
-#endif
-#else
 void GetW4WWriter( const String&, WriterRef& );
 void GetStgWriter( const String&, WriterRef& );
 void GetWWWriter( const String&, WriterRef& );
 void GetWW8Writer( const String&, WriterRef& );
-#if !( defined(PRODUCT) || defined(MAC) || defined(PM2) )
-void GetDebugWriter( const String&, WriterRef& );
-void GetUndoWriter( const String&, WriterRef& );
-#endif
-#endif
 
 
 // JP 17.03.99 - 63049
