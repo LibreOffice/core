@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BibliographyDataType.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:56:41 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 23:56:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@
 // DocMerge from idl: constants com::sun::star::text::BibliographyDataType
 /** These values define the type of bibliographic data like book, journal, magazine, etc.
  */
-constants BibliographyDataType
+published constants BibliographyDataType
 {
     //-------------------------------------------------------------------------
 
