@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statusbarmanager.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 17:11:37 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 14:58:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,12 +225,12 @@ StatusBarManager::StatusBarManager(
     m_aResourceName( rResourceName ),
     m_pStatusBar( pStatusBar )
 {
-/*
+
     if ( m_xServiceManager.is() )
-        m_xToolbarControllerRegistration = Reference< XUIControllerRegistration >(
-                                                    m_xServiceManager->createInstance( SERVICENAME_TOOLBARCONTROLLERFACTORY ),
-                                                UNO_QUERY );
-*/
+        m_xStatusbarControllerRegistration = uno::Reference< dcss::frame::XUIControllerRegistration >(
+                                                    m_xServiceManager->createInstance( SERVICENAME_STATUSBARCONTROLLERFACTORY ),
+                                                    uno::UNO_QUERY );
+
     m_pStatusBar->SetClickHdl( LINK( this, StatusBarManager, Click ) );
     m_pStatusBar->SetDoubleClickHdl( LINK( this, StatusBarManager, DoubleClick ) );
 }
@@ -406,7 +406,7 @@ rtl::OUString StatusBarManager::RetrieveLabelFromCommand( const rtl::OUString& a
 {
     rtl::OUString aLabel;
 
-    // Retrieve popup menu labels
+    // Retrieve short bubble help
     if ( !m_bModuleIdentified )
     {
         uno::Reference< dcss::frame::XModuleManager > xModuleManager(
@@ -469,7 +469,7 @@ rtl::OUString StatusBarManager::RetrieveLabelFromCommand( const rtl::OUString& a
 
 void StatusBarManager::CreateControllers()
 {
-//    Reference< XMultiComponentFactory > xToolbarControllerFactory( m_xToolbarControllerRegistration, UNO_QUERY );
+    uno::Reference< lang::XMultiComponentFactory > xStatusbarControllerFactory( m_xStatusbarControllerRegistration, uno::UNO_QUERY );
     uno::Reference< uno::XComponentContext > xComponentContext;
     uno::Reference< beans::XPropertySet > xProps( m_xServiceManager, uno::UNO_QUERY );
     uno::Reference< awt::XWindow > xStatusbarWindow = VCLUnoHelper::GetInterface( m_pStatusBar );
@@ -488,35 +488,39 @@ void StatusBarManager::CreateControllers()
         uno::Reference< frame::XStatusListener > xController;
 
         svt::StatusbarController* pController( 0 );
-/*
-        if ( m_xToolbarControllerRegistration.is() &&
-             m_xToolbarControllerRegistration->hasController( aCommandURL, m_aModuleIdentifier ))
+
+        if ( m_xStatusbarControllerRegistration.is() &&
+             m_xStatusbarControllerRegistration->hasController( aCommandURL, m_aModuleIdentifier ))
         {
-            if ( xToolbarControllerFactory.is() )
+            if ( xStatusbarControllerFactory.is() )
             {
-                Sequence< Any > aSeq( 4 );
-                PropertyValue aPropValue;
+                uno::Sequence< uno::Any > aSeq( 5 );
+                beans::PropertyValue aPropValue;
 
                 aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ModuleName" ));
-                aPropValue.Value    = makeAny( m_aModuleIdentifier );
-                aSeq[0] = makeAny( aPropValue );
+                aPropValue.Value    = uno::makeAny( m_aModuleIdentifier );
+                aSeq[0] = uno::makeAny( aPropValue );
                 aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Frame" ));
-                aPropValue.Value    = makeAny( m_xFrame );
-                aSeq[1] = makeAny( aPropValue );
+                aPropValue.Value    = uno::makeAny( m_xFrame );
+                aSeq[1] = uno::makeAny( aPropValue );
                 aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ServiceManager" ));
-                aPropValue.Value    = makeAny( m_xServiceManager );
-                aSeq[2] = makeAny( aPropValue );
+                aPropValue.Value    = uno::makeAny( m_xServiceManager );
+                aSeq[2] = uno::makeAny( aPropValue );
                 aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ParentWindow" ));
-                aPropValue.Value    = makeAny( xStatusbarWindow );
-                aSeq[3] = makeAny( aPropValue )
+                aPropValue.Value    = uno::makeAny( xStatusbarWindow );
+                aSeq[3] = uno::makeAny( aPropValue );
+                aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Identifier" ));
+                aPropValue.Value    = uno::makeAny( nId );
+                aSeq[4] = uno::makeAny( aPropValue );
 
-                xController = Reference< XStatusListener >( xToolbarControllerFactory->createInstanceWithArgumentsAndContext(
-                                                                aCommandURL, aSeq, xComponentContext ),
-                                                            UNO_QUERY );
+                xController = uno::Reference< frame::XStatusListener >(
+                                xStatusbarControllerFactory->createInstanceWithArgumentsAndContext(
+                                    aCommandURL, aSeq, xComponentContext ),
+                                uno::UNO_QUERY );
                 bInit = sal_False; // Initialization is done through the factory service
             }
         }
-*/
+
         if ( !xController.is() )
         {
             pController = CreateStatusBarController( m_xFrame, m_pStatusBar, nId, aCommandURL );
