@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colwd.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-01 11:14:09 $
+ *  last change: $Author: kz $ $Date: 2001-06-08 22:57:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,7 +170,7 @@ ModalDialog DLG_COL_WIDTH
         Text [ english_us ] = "Width" ;
         Text[ chinese_simplified ] = "¿í";
         Text[ russian ] = "Øèğèíà";
-        Text[ polish ] = "Szer.";
+        Text[ polish ] = "Szerokoœæ";
         Text[ japanese ] = "•";
         Text[ chinese_traditional ] = "¼e";
         Text[ arabic ] = "ÇáÚÑÖ";
@@ -224,7 +224,7 @@ ModalDialog DLG_COL_WIDTH
     };
     Text[ chinese_simplified ] = "À¸¿í";
     Text[ russian ] = "Øèğèíà êîëîíêè";
-    Text[ polish ] = "Szeroko?æ kolumny";
+    Text[ polish ] = "Szerokoœæ kolumny";
     Text[ japanese ] = "—ñ•";
     Text[ chinese_traditional ] = "Äæ¼e";
     Text[ arabic ] = "ÚÑÖ ÇáÃÚãÏÉ";
@@ -234,3 +234,4 @@ ModalDialog DLG_COL_WIDTH
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Ancho de columna";
 };
+
