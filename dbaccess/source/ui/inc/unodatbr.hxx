@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-09 07:32:25 $
+ *  last change: $Author: hr $ $Date: 2000-11-09 14:44:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,7 +174,7 @@ namespace dbaui
         // check the state of the external slot given, update any UI elements if necessary
         void implCheckExternalSlot(sal_Int32 _nId);
 
-        sal_Bool    populateTree(const ::com::sun::star::uno::Reference<::com::sun::star::container::XNameAccess>& _xNameAccess, SvLBoxEntry* _pParent, const Image& _rImage);
+        sal_Bool    populateTree(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _xNameAccess, SvLBoxEntry* _pParent, const Image& _rImage);
         void        initializeTreeModel();
 
         // is called when a table or a query was selected
