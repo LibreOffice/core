@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unx.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: hjs $ $Date: 2001-04-26 11:18:43 $
+#   last change: $Author: hjs $ $Date: 2001-04-26 14:50:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -187,13 +187,13 @@ SONAME_SWITCH*=-h
 DLLPOST!:=$(DLLPOST).$($(UNIXVERSIONNAMES)_MAJOR).$($(UNIXVERSIONNAMES)_MINOR).$($(UNIXVERSIONNAMES)_MICRO)
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
 .IF "$(UDK_MAJOR)"!=""
-SCPDEFS+=-D$(UDK_MAJOR)
+SCPDEFS+=-DUDK_MAJOR=$(UDK_MAJOR)
 .ENDIF			# "$(UDK_MAJOR)"!=""
 .IF "$(UDK_MINOR)"!=""
-SCPDEFS+=-D$(UDK_MINOR)
+SCPDEFS+=-DUDK_MINOR=$(UDK_MINOR)
 .ENDIF			# "$(UDK_MINOR)"!=""
 .IF "$(UDK_MICRO)"!=""
-SCPDEFS+=-D$(UDK_MICRO)
+SCPDEFS+=-DUDK_MICRO=$(UDK_MICRO)
 .ENDIF			# "$(UDK_MICRO)"!=""
 .ENDIF			# "$(GUI)" == "UNX"
 
