@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impimage.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-21 16:23:38 $
+ *  last change: $Author: kz $ $Date: 2004-06-10 17:53:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,7 +187,9 @@ ImplImageData::~ImplImageData()
     delete mpImageBitmap;
 }
 
-// -----------------------------------------------------------------------
+// -----------------
+// - ImplImageData -
+// -----------------
 
 BOOL ImplImageData::IsEqual( const ImplImageData& rData )
 {
@@ -233,7 +235,9 @@ ImplImageBmp::ImplImageBmp() :
 {
 }
 
-// -----------------------------------------------------------------------
+// -------------
+// - ImplImage -
+// -------------
 
 ImplImageBmp::~ImplImageBmp()
 {
@@ -301,6 +305,16 @@ void ImplImageBmp::Expand( USHORT nGrowSize )
     memcpy( pNewAry, mpInfoAry, nOldSize );
     delete[] mpInfoAry;
     mpInfoAry = pNewAry;
+}
+
+// -----------------------------------------------------------------------
+
+void ImplImageBmp::Invert()
+{
+    delete mpDisplayBmp;
+    mpDisplayBmp = NULL;
+
+    maBmpEx.Invert();
 }
 
 // -----------------------------------------------------------------------
