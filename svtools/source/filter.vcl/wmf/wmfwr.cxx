@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmfwr.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 15:03:45 $
+ *  last change: $Author: vg $ $Date: 2003-06-06 10:47:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -491,25 +491,10 @@ void WMFWriter::WMFRecord_CreateFontIndirect(const Font & rFont)
     UpdateRecordHeader();
 }
 
-
-void WMFWriter::WMFRecord_CreatePenIndirect(const Color& rColor)
-{
-    WriteRecordHeader(0x00000008,W_META_CREATEPENINDIRECT);
-
-    if( rColor == Color( COL_TRANSPARENT ) )
-        *pWMF << (UINT16) W_PS_NULL;
-    else
-        *pWMF << (UINT16) W_PS_SOLID;
-
-    WriteSize( Size() );
-    WriteColor(rColor);
-}
-
 void WMFWriter::WMFRecord_CreatePenIndirect(const Color& rColor, const LineInfo& rLineInfo )
 {
     WriteRecordHeader(0x00000008,W_META_CREATEPENINDIRECT);
-
-    USHORT nStyle = W_PS_SOLID;
+    USHORT nStyle = rColor == Color( COL_TRANSPARENT ) ? W_PS_NULL : W_PS_SOLID;
     switch( rLineInfo.GetStyle() )
     {
         case LINE_DASH :
@@ -609,6 +594,7 @@ sal_Bool WMFWriter::WMFRecord_Escape_Unicode( const Point& rPoint, const String&
             {                                                                   // will store the unicode string and a polypoly replacement
                 Color aOldFillColor( aSrcFillColor );
                 Color aOldLineColor( aSrcLineColor );
+                aSrcLineInfo  = LineInfo();
                 aSrcFillColor = aSrcTextColor;
                 aSrcLineColor = Color( COL_TRANSPARENT );
                 SetLineAndFillAttr();
@@ -1012,13 +998,13 @@ void WMFWriter::FreeHandle(USHORT nObjectHandle)
 }
 
 
-void WMFWriter::CreateSelectDeletePen(const Color& rColor)
+void WMFWriter::CreateSelectDeletePen( const Color& rColor, const LineInfo& rLineInfo )
 {
     USHORT nOldHandle;
 
     nOldHandle=nDstPenHandle;
     nDstPenHandle=AllocHandle();
-    WMFRecord_CreatePenIndirect(rColor);
+    WMFRecord_CreatePenIndirect( rColor, rLineInfo );
     WMFRecord_SelectObject(nDstPenHandle);
     if (nOldHandle<MAXOBJECTHANDLES) {
         WMFRecord_DeleteObject(nOldHandle);
@@ -1064,10 +1050,11 @@ void WMFWriter::SetLineAndFillAttr()
         eDstROP2=eSrcRasterOp;
         WMFRecord_SetROP2(eDstROP2);
     }
-    if ( aDstLineColor != aSrcLineColor )
+    if ( ( aDstLineColor != aSrcLineColor ) || ( aDstLineInfo != aSrcLineInfo ) )
     {
         aDstLineColor = aSrcLineColor;
-        CreateSelectDeletePen( aDstLineColor );
+        aDstLineInfo  = aSrcLineInfo;
+        CreateSelectDeletePen( aDstLineColor, aDstLineInfo );
     }
     if ( aDstFillColor != aSrcFillColor )
     {
@@ -1134,6 +1121,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                 case META_PIXEL_ACTION:
                 {
                     const MetaPixelAction* pA = (const MetaPixelAction *) pMA;
+                    aSrcLineInfo = LineInfo();
                     SetLineAndFillAttr();
                     WMFRecord_SetPixel( pA->GetPoint(), pA->GetColor() );
                 }
@@ -1143,6 +1131,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                 {
                     const MetaPointAction*  pA = (const MetaPointAction*) pMA;
                     const Point&            rPt = pA->GetPoint();
+                    aSrcLineInfo = LineInfo();
                     SetLineAndFillAttr();
                     WMFRecord_MoveTo( rPt);
                     WMFRecord_LineTo( rPt );
@@ -1152,30 +1141,17 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                 case META_LINE_ACTION:
                 {
                     const MetaLineAction* pA = (const MetaLineAction *) pMA;
-                    const LineInfo& rLineInfo = pA->GetLineInfo();
+                    aSrcLineInfo = pA->GetLineInfo();
                     SetLineAndFillAttr();
-                    if ( rLineInfo.IsDefault() )
-                    {
-                        WMFRecord_MoveTo( pA->GetStartPoint() );
-                        WMFRecord_LineTo( pA->GetEndPoint() );
-                    }
-                    else
-                    {
-                        USHORT nCurrentHandle = AllocHandle();
-                        WMFRecord_CreatePenIndirect( aSrcLineColor, rLineInfo );
-                        WMFRecord_SelectObject(nCurrentHandle);
-                        WMFRecord_MoveTo( pA->GetStartPoint() );
-                        WMFRecord_LineTo( pA->GetEndPoint() );
-                        WMFRecord_DeleteObject(nCurrentHandle);
-                        FreeHandle(nCurrentHandle);
-                        WMFRecord_SelectObject(nDstPenHandle);
-                    }
+                    WMFRecord_MoveTo( pA->GetStartPoint() );
+                    WMFRecord_LineTo( pA->GetEndPoint() );
                 }
                 break;
 
                 case META_RECT_ACTION:
                 {
                     const MetaRectAction* pA = (const MetaRectAction*) pMA;
+                    aSrcLineInfo = LineInfo();
                     SetLineAndFillAttr();
                     WMFRecord_Rectangle( pA->GetRect() );
                 }
@@ -1184,6 +1160,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                 case META_ROUNDRECT_ACTION:
                 {
                     const MetaRoundRectAction* pA = (const MetaRoundRectAction*) pMA;
+                    aSrcLineInfo = LineInfo();
                     SetLineAndFillAttr();
                     WMFRecord_RoundRect( pA->GetRect(), pA->GetHorzRound(), pA->GetVertRound() );
                 }
@@ -1192,6 +1169,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                 case META_ELLIPSE_ACTION:
                 {
                     const MetaEllipseAction* pA = (const MetaEllipseAction*) pMA;
+                    aSrcLineInfo = LineInfo();
                     SetLineAndFillAttr();
                     WMFRecord_Ellipse( pA->GetRect() );
                 }
@@ -1200,6 +1178,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                 case META_ARC_ACTION:
                 {
                     const MetaArcAction* pA = (const MetaArcAction*) pMA;
+                    aSrcLineInfo = LineInfo();
                     SetLineAndFillAttr();
                     WMFRecord_Arc( pA->GetRect(),pA->GetStartPoint(),pA->GetEndPoint() );
                 }
@@ -1208,6 +1187,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                 case META_PIE_ACTION:
                 {
                     const MetaPieAction* pA = (const MetaPieAction*) pMA;
+                    aSrcLineInfo = LineInfo();
                     SetLineAndFillAttr();
                     WMFRecord_Pie( pA->GetRect(), pA->GetStartPoint(), pA->GetEndPoint() );
                 }
@@ -1217,6 +1197,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                 case META_CHORD_ACTION:
                 {
                     const MetaChordAction* pA = (const MetaChordAction*) pMA;
+                    aSrcLineInfo = LineInfo();
                     SetLineAndFillAttr();
                     WMFRecord_Chord( pA->GetRect(), pA->GetStartPoint(), pA->GetEndPoint() );
                 }
@@ -1225,27 +1206,16 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                 case META_POLYLINE_ACTION:
                 {
                     const MetaPolyLineAction* pA = (const MetaPolyLineAction*) pMA;
-                    const LineInfo& rLineInfo = pA->GetLineInfo();
+                    aSrcLineInfo = pA->GetLineInfo();
                     SetLineAndFillAttr();
-
-                    if ( rLineInfo.IsDefault() )
-                        WMFRecord_PolyLine( pA->GetPolygon() );
-                    else
-                    {
-                        USHORT nCurrentHandle = AllocHandle();
-                        WMFRecord_CreatePenIndirect( aSrcLineColor, rLineInfo );
-                        WMFRecord_SelectObject(nCurrentHandle);
-                        WMFRecord_PolyLine( pA->GetPolygon() );
-                        WMFRecord_DeleteObject(nCurrentHandle);
-                        FreeHandle(nCurrentHandle);
-                        WMFRecord_SelectObject(nDstPenHandle);
-                    }
+                    WMFRecord_PolyLine( pA->GetPolygon() );
                 }
                 break;
 
                 case META_POLYGON_ACTION:
                 {
                     const MetaPolygonAction* pA = (const MetaPolygonAction*) pMA;
+                    aSrcLineInfo = LineInfo();
                     SetLineAndFillAttr();
                     WMFRecord_Polygon( pA->GetPolygon() );
                 }
@@ -1254,6 +1224,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                 case META_POLYPOLYGON_ACTION:
                 {
                     const MetaPolyPolygonAction* pA = (const MetaPolyPolygonAction*) pMA;
+                    aSrcLineInfo = LineInfo();
                     SetLineAndFillAttr();
                     WMFRecord_PolyPolygon( pA->GetPolyPolygon() );
                 }
@@ -1263,6 +1234,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                 {
                     const MetaTextRectAction * pA = (const MetaTextRectAction*)pMA;
                     String aTemp( pA->GetText() );
+                    aSrcLineInfo = LineInfo();
                     SetAllAttr();
 
                     Point aPos( pA->GetRect().TopLeft() );
@@ -1275,6 +1247,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                 {
                     const MetaTextAction * pA = (const MetaTextAction*) pMA;
                     String aTemp( pA->GetText(), pA->GetIndex(), pA->GetLen() );
+                    aSrcLineInfo = LineInfo();
                     SetAllAttr();
                     if ( !WMFRecord_Escape_Unicode( pA->GetPoint(), aTemp, NULL ) )
                         WMFRecord_TextOut( pA->GetPoint(), aTemp );
@@ -1286,6 +1259,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                     const MetaTextArrayAction* pA = (const MetaTextArrayAction*) pMA;
 
                     String aTemp( pA->GetText(), pA->GetIndex(), pA->GetLen() );
+                    aSrcLineInfo = LineInfo();
                     SetAllAttr();
                     if ( !WMFRecord_Escape_Unicode( pA->GetPoint(), aTemp, pA->GetDXArray() ) )
                         WMFRecord_ExtTextOut( pA->GetPoint(), aTemp, pA->GetDXArray() );
@@ -1308,6 +1282,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                         pDXAry[ i ] = pDXAry[ i ] * (sal_Int32)pA->GetWidth() / nNormSize;
                     if ( ( nLen <= 1 ) || ( (sal_Int32)pA->GetWidth() == nNormSize ) )
                         delete pDXAry, pDXAry = NULL;
+                    aSrcLineInfo = LineInfo();
                     SetAllAttr();
                     if ( !WMFRecord_Escape_Unicode( pA->GetPoint(), aTemp, pDXAry ) )
                         WMFRecord_ExtTextOut( pA->GetPoint(), aTemp, pDXAry );
@@ -1422,6 +1397,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
 
                     aSrcLineColor = rColor;
                     aSrcFillColor = rColor;
+                    aSrcLineInfo = LineInfo();
                     SetLineAndFillAttr();
                     WMFRecord_Rectangle( pA->GetRect() );
                     aSrcLineColor = aOldLineColor;
@@ -1566,6 +1542,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                     pAt->eTextAlign=eSrcTextAlign;
                     pAt->aTextColor=aSrcTextColor;
                     pAt->aMapMode=aSrcMapMode;
+                    pAt->aLineInfo=aDstLineInfo;
                     pAt->pSucc=pAttrStack;
                     pAttrStack=pAt;
 
@@ -1581,6 +1558,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
 
                     if( pAt )
                     {
+                        aDstLineInfo = pAt->aLineInfo;
                         aDstLineColor = pAt->aLineColor;
                         if ( pAt->nFlags & PUSH_LINECOLOR )
                             aSrcLineColor = pAt->aLineColor;
@@ -1640,6 +1618,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
 
                 case META_TRANSPARENT_ACTION:
                 {
+                    aSrcLineInfo = LineInfo();
                     SetLineAndFillAttr();
                     WMFRecord_PolyPolygon( ( (MetaTransparentAction*) pMA )->GetPolyPolygon() );
                 }
@@ -1658,6 +1637,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                     const double    fScaleY = aSrcSize.Height() ? (double) aDestSize.Height() / aSrcSize.Height() : 1.0;
                     long            nMoveX, nMoveY;
 
+                    aSrcLineInfo = LineInfo();
                     SetAllAttr();
 
                     if( fScaleX != 1.0 || fScaleY != 1.0 )
@@ -1836,8 +1816,9 @@ BOOL WMFWriter::WriteWMF(const GDIMetaFile& rMTF, SvStream& rTargetStream,
     eDstROP2 = eSrcRasterOp = ROP_OVERPAINT;
     WMFRecord_SetROP2(eDstROP2);
 
+    aDstLineInfo = LineInfo();
     aDstLineColor = aSrcLineColor = Color( COL_BLACK );
-    CreateSelectDeletePen( aDstLineColor );
+    CreateSelectDeletePen( aDstLineColor, aDstLineInfo );
 
     aDstFillColor = aSrcFillColor = Color( COL_WHITE );
     CreateSelectDeleteBrush( aDstFillColor );
