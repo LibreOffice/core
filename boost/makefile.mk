@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: vg $ $Date: 2003-06-04 10:38:56 $
+#   last change: $Author: vg $ $Date: 2003-07-02 15:23:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -87,11 +87,11 @@ BUILD_FLAGS=
 
 .IF "$(GUI)"=="UNX"
 .IF "$(COMNAME)"=="sunpro5"
-.IF "$(BUILD_TOOLS)$/cc"=="$(shell +which cc)"
+.IF "$(BUILD_TOOLS)$/cc"=="$(shell +-which cc)"
 CC:=$(COMPATH)$/bin$/cc
 CXX:=$(COMPATH)$/bin$/CC
 .ENDIF          # "$(COMNAME)"=="sunpro5"
-.ENDIF          # "$(BUILD_TOOLS)$/cc"=="$(shell +which cc)"
+.ENDIF          # "$(BUILD_TOOLS)$/cc"=="$(shell +-which cc)"
 .ENDIF
 
 # --- Targets ------------------------------------------------------
