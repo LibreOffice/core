@@ -24,6 +24,7 @@ hedabu: ..\inc\toolkit\awt\vclxfont.hxx %_DEST%\inc%_EXT%\toolkit\awt\vclxfont.h
 hedabu: ..\inc\toolkit\awt\vclxtopwindow.hxx %_DEST%\inc%_EXT%\toolkit\awt\vclxtopwindow.hxx
 hedabu: ..\inc\toolkit\awt\vclxwindow.hxx %_DEST%\inc%_EXT%\toolkit\awt\vclxwindow.hxx
 hedabu: ..\inc\toolkit\awt\vclxwindows.hxx %_DEST%\inc%_EXT%\toolkit\awt\vclxwindows.hxx
+hedabu: ..\inc\toolkit\awt\vclxmenu.hxx %_DEST%\inc%_EXT%\toolkit\awt\vclxmenu.hxx
 
 hedabu: ..\inc\toolkit\controls\unocontrol.hxx %_DEST%\inc%_EXT%\toolkit\controls\unocontrol.hxx
 
