@@ -2,9 +2,9 @@
  *
  *  $RCSfile: base.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:29:33 $
+ *  last change: $Author: svesik $ $Date: 2000-11-23 01:55:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,10 +93,10 @@
 #include "lrucache.hxx"
 
 #ifdef TEST_LIST_CLASSES
-#include <stl/list>
-#include <stl/algorithm>
+#include <list>
+#include <algorithm>
 #endif
-#include <stl/hash_map>
+#include <hash_map>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
