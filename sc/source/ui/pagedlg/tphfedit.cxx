@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tphfedit.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2000-12-01 19:09:48 $
+ *  last change: $Author: dr $ $Date: 2001-05-14 09:21:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,8 +135,8 @@ ScHFEditPage::ScHFEditPage( Window*             pParent,
         aFtLeft         ( this, ScResId( FT_LEFT ) ),
         aFtCenter       ( this, ScResId( FT_CENTER ) ),
         aFtRight        ( this, ScResId( FT_RIGHT ) ),
+        aFlInfo         ( this, ScResId( FL_INFO ) ),
         aFtInfo         ( this, ScResId( FT_INFO ) ),
-        aGbInfo         ( this, ScResId( GB_INFO ) ),
         aBtnText        ( this, ScResId( BTN_TEXT ) ),
         aBtnPage        ( this, ScResId( BTN_PAGE ) ),
         aBtnLastPage    ( this, ScResId( BTN_PAGES ) ),

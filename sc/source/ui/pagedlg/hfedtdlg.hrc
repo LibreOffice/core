@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hfedtdlg.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:04 $
+ *  last change: $Author: dr $ $Date: 2001-05-14 09:21:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,5 +84,4 @@
 #define FILE_COMMAND_FILENAME   12
 #define FILE_COMMAND_PATH       13
 
-
-#define GB_INFO 1
+#define FL_INFO 14

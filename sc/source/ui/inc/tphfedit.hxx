@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tphfedit.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-12-01 19:08:14 $
+ *  last change: $Author: dr $ $Date: 2001-05-14 09:20:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,8 +200,8 @@ private:
     ImageButton     aBtnLastPage;
     ImageButton     aBtnDate;
     ImageButton     aBtnTime;
+    FixedLine       aFlInfo;
     FixedInfo       aFtInfo;
-    GroupBox        aGbInfo;
     ScPopupMenu     aPopUpFile;
 
     USHORT          nWhich;

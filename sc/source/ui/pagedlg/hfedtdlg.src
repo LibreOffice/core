@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hfedtdlg.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 06:12:06 $
+ *  last change: $Author: dr $ $Date: 2001-05-14 09:21:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1195,7 +1195,7 @@ TabPage RID_HFBASE
     FixedText FT_INFO
     {
         Pos = MAP_APPFONT ( 12 , 155 ) ;
-        Size = MAP_APPFONT ( 240 , 18 ) ;
+        Size = MAP_APPFONT ( 240 , 24 ) ;
         WordBreak = TRUE ;
         /* ### ACHTUNG: Neuer Text in Resource? Benutzen Sie die Schaltflächen, um die Schriftart zu verändern oder Feldbefehle wie Datum, Uhrzeit, etc. einzufügen. : Benutzen Sie die Schaltflõchen, um die Schriftart zu verõndern oder Feldbefehle wie Datum, Uhrzeit, etc. einzuf³gen. */
         Text = "Benutzen Sie die Schaltflächen, um die Schriftart zu verändern oder Feldbefehle wie Datum, Uhrzeit, etc. einzufügen." ;
@@ -1225,10 +1225,10 @@ TabPage RID_HFBASE
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Utilice los botones para modificar la fuente o para insertar comandos como fecha, hora, etc.";
     };
-    GroupBox GB_INFO
+    FixedLine FL_INFO
     {
         Pos = MAP_APPFONT ( 6 , 144 ) ;
-        Size = MAP_APPFONT ( 248 , 35 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Hinweis" ;
         Text [ ENGLISH ] = "Hint" ;
         Text [ norwegian ] = "Hint" ;
