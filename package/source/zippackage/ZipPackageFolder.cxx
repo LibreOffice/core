@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageFolder.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: mtg $ $Date: 2001-12-04 17:53:19 $
+ *  last change: $Author: mtg $ $Date: 2002-01-29 15:32:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -331,6 +331,11 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
             sal_Int32 nMagicalHackPos = 0, nMagicalHackSize = 0;
             {
                 xStream = pStream->getRawStream();
+                if ( !xStream.is() )
+                {
+                    VOS_ENSURE( 0, "ZipPackageStream didn't have a stream associated with it, skipping!" );
+                    continue;
+                }
 
                 Sequence < sal_Int8 > aHeader ( 4 );
                 if ( xStream->readBytes ( aHeader, 4 ) == 4 )
@@ -439,10 +444,18 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
                 ( pStream->aEntry.nMethod == DEFLATED &&  bToBeCompressed ) ||
                 ( pStream->aEntry.nMethod == STORED   && !bToBeCompressed ) ) )
             {
-                // clear previous reference and get a new one that points to the beginning
-                // of the raw stream (we can't be sure that the stream will support
-                // XSeekable)
-                xStream = pStream->getRawStream();
+                // If it's a PackageMember, then it's an unbuffered stream and we need
+                // to get a new version of it as we can't seek backwards.
+                if ( pStream->IsPackageMember() )
+                {
+                    xStream = pStream->getRawStream();
+                    if ( !xStream.is() )
+                    {
+                        // Make sure that we actually _got_ a new one !
+                        VOS_ENSURE( 0, "ZipPackageStream didn't have a stream associated with it, skipping!" );
+                        continue;
+                    }
+                }
 
                 try
                 {
@@ -473,8 +486,19 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
             }
             else
             {
-                // clear previous reference and replace it with the real stream
-                xStream = pStream->getInputStream();
+                // If it's a PackageMember, then our previous reference held a 'raw' stream
+                // so we need to re-get it, unencrypted, uncompressed and positioned at the
+                // beginning of the stream
+                if ( pStream->IsPackageMember() )
+                {
+                    xStream = pStream->getInputStream();
+                    if ( !xStream.is() )
+                    {
+                        // Make sure that we actually _got_ a new one !
+                        VOS_ENSURE( 0, "ZipPackageStream didn't have a stream associated with it, skipping!" );
+                        continue;
+                    }
+                }
 
                 // skip the magic header when generating the CRC and writing the stream
                 if ( nMagicalHackPos )
@@ -497,7 +521,12 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
                         rZipOut.write(aSeq, 0, nLength);
                     }
                     while ( nLength == n_ConstBufferSize );
-                    pStream->SetPackageMember ( sal_True );
+                    if ( !pStream->IsPackageMember() )
+                    {
+                        xStream->closeInput();
+                        pStream->SetPackageMember ( sal_True );
+                    }
+
                     rZipOut.closeEntry();
                 }
                 catch (ZipException&)
