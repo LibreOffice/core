@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbggui.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ssa $ $Date: 2001-12-13 15:33:24 $
+ *  last change: $Author: vg $ $Date: 2002-02-04 13:23:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1747,9 +1747,14 @@ void DbgDialogTest( Window* pWindow )
 }
 
 // =======================================================================
+void DbgPrintShell( const char* pLine );
 
 void DbgPrintMsgBox( const char* pLine )
 {
+#ifndef REMOTE_APPSERVER
+    DbgPrintShell( pLine );
+    return;
+#endif
     if ( Application::IsDialogCancelEnabled() )
     {
 #if defined( WNT )
