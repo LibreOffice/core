@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ama $ $Date: 2001-01-19 15:20:24 $
+ *  last change: $Author: ama $ $Date: 2001-02-14 11:27:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -545,6 +545,7 @@ SwRect lcl_CalcRect( const SwTxtPaintInfo *pInf, const SwLinePortion &rPor )
             nAdd += pInf->GetSpaceAdd();
         aSize.Width() += nAdd;
     }
+
     Point aPoint;
 
     if( pInf->IsRotated() )
@@ -624,8 +625,10 @@ void SwTxtPaintInfo::DrawLineBreak( const SwLinePortion &rPor ) const
 {
     if( OnWin() )
     {
-        const Size aSize( pOpt->GetLineBreakWidth(pWin), rPor.Height() );
+        KSHORT nOldWidth = rPor.Width();
+        ((SwLinePortion&)rPor).Width( pOpt->GetLineBreakWidth( pWin ) );
         const SwRect aRect( lcl_CalcRect( this, rPor ) );
+        ((SwLinePortion&)rPor).Width( nOldWidth );
         if( aRect.HasArea() )
              pOpt->PaintLineBreak( pWin, aRect.SVRect() );
     }
