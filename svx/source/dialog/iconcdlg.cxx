@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iconcdlg.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: gt $ $Date: 2002-05-29 11:40:12 $
+ *  last change: $Author: fs $ $Date: 2002-05-30 11:33:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -321,7 +321,7 @@ IconChoiceDialog::IconChoiceDialog ( Window* pParent, const ResId &rResId,
     //aBaseFmtBtn       ( this ),
     maIconCtrl      ( this, WB_3DLOOK | WB_ICON | WB_BORDER |
                             WB_NOCOLUMNHEADER | WB_HIGHLIGHTFRAME |
-                            WB_NOSELECTION | WB_NODRAGSELECTION | WB_TABSTOP ),
+                            /* WB_NOSELECTION | */ WB_NODRAGSELECTION | WB_TABSTOP ),
     meChoicePos     ( ePos ),
     mnCurrentPageId ( USHRT_MAX ),
     pSet            ( pItemSet ),
@@ -338,11 +338,12 @@ IconChoiceDialog::IconChoiceDialog ( Window* pParent, const ResId &rResId,
     // IconChoiceCtrl-Settings
     //maIconCtrl.SetBackground ( Wallpaper( Color (146, 146, 186) ) );
 
-    maIconCtrl.SetStyle (WB_3DLOOK | WB_ICON | WB_BORDER | WB_NOCOLUMNHEADER | WB_HIGHLIGHTFRAME | WB_NOSELECTION | WB_NODRAGSELECTION | WB_TABSTOP | WB_CLIPCHILDREN );
+    maIconCtrl.SetStyle (WB_3DLOOK | WB_ICON | WB_BORDER | WB_NOCOLUMNHEADER | WB_HIGHLIGHTFRAME | /* WB_NOSELECTION | */ WB_NODRAGSELECTION | WB_TABSTOP | WB_CLIPCHILDREN );
     SetCtrlPos ( meChoicePos );
     maIconCtrl.SetClickHdl ( LINK ( this, IconChoiceDialog , ChosePageHdl_Impl ) );
     maIconCtrl.Show();
     maIconCtrl.SetChoiceWithCursor ( TRUE );
+    maIconCtrl.SetSelectionMode( SINGLE_SELECTION );
     maIconCtrl.SetHelpId( HID_ICCDIALOG_CHOICECTRL );
 
     // ItemSet
@@ -852,6 +853,8 @@ IMPL_LINK ( IconChoiceDialog , ChosePageHdl_Impl, void *, EMPTYARG )
     ULONG nPos;
 
     SvxIconChoiceCtrlEntry *pEntry = maIconCtrl.GetSelectedEntry ( nPos );
+    if ( !pEntry )
+        pEntry = maIconCtrl.GetCursor( );
 
     USHORT *pId = (USHORT*)pEntry->GetUserData ();
 
@@ -1406,9 +1409,10 @@ void IconChoiceDialog::FocusOnIcon( USHORT nId )
         USHORT* pUserData = (USHORT*) pEntry->GetUserData();
 
         if ( pUserData && *pUserData == nId )
-            pEntry->SetFocus( TRUE );
-        else
-            pEntry->SetFocus( FALSE );
+        {
+            maIconCtrl.SetCursor( pEntry );
+            break;
+        }
     }
 }
 
