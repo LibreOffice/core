@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbcontrl.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-07 14:41:42 $
+ *  last change: $Author: obo $ $Date: 2001-08-24 20:23:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -340,6 +340,7 @@ Image RID_SVXIMG_GRAF_TRANSPARENCE
 };
 
 // ********************************************************************** EOF
+
 
 
 
