@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confprovider2.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dg $ $Date: 2000-11-30 08:38:33 $
+ *  last change: $Author: fs $ $Date: 2000-12-01 13:55:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,9 +184,9 @@ namespace configmgr
     }
 
     //-----------------------------------------------------------------------------
-    void OConfigurationProvider::connect() throw(uno::Exception)
+    void OConfigurationProvider::connect(const ConnectionSettings& _rSettings) throw(uno::Exception)
     {
-        IConfigSession* pNewSession = m_aModule.connect(m_aModule.getConnectionData(), m_aSecurityOverride);
+        IConfigSession* pNewSession = m_aModule.connect(_rSettings);
         if (!pNewSession)
             throw uno::Exception(::rtl::OUString::createFromAscii("Could not connect to the configuration registry. Please check your settings."), NULL);
         m_pImpl = new OConfigurationProviderImpl(this, pNewSession, m_aModule);
@@ -217,7 +217,6 @@ namespace configmgr
     {
         MutexGuard aGuard(m_aMutex);
 
-        ensureConnection();
         CFG_TRACE_INFO("going to create a read access instance for %s", "missing unicode conversion");
 
         if (ServiceCreationInfo const* pInfo = findCreationInfo(aServiceSpecifier))
@@ -243,7 +242,6 @@ namespace configmgr
             throw(uno::Exception, uno::RuntimeException)
     {
         MutexGuard aGuard(m_aMutex);
-        ensureConnection();
 
         if (ServiceCreationInfo const* pInfo = findCreationInfo(aServiceSpecifier))
         {
