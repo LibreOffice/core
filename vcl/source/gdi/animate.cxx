@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animate.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 13:26:57 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 12:14:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -489,7 +489,7 @@ void Animation::Draw( OutputDevice* pOut, const Point& rDestPt, const Size& rDes
 
 void Animation::ImplRestartTimer( ULONG nTimeout )
 {
-    maTimer.SetTimeout( Max( nTimeout, MIN_TIMEOUT + ( mnAnimCount - 1 ) * INC_TIMEOUT ) * 10L );
+    maTimer.SetTimeout( Max( nTimeout, (ULONG)(MIN_TIMEOUT + ( mnAnimCount - 1 ) * INC_TIMEOUT) ) * 10L );
     maTimer.Start();
 }
 
