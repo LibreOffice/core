@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.30 $
+#   $Revision: 1.31 $
 #
-#   last change: $Author: rt $ $Date: 2003-11-26 08:39:38 $
+#   last change: $Author: rt $ $Date: 2003-11-26 09:26:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -200,6 +200,11 @@ SHL2OBJS=   $(SLO)$/swdetect.obj \
         $(SLO)$/swdet2.obj \
         $(SLO)$/detreg.obj  \
             $(OUT)$/obj$/w4wflt.obj
+
+.IF "$(product)"==""
+SHL2OBJS+=  \
+        $(SLO)$/errhdl.obj
+.ENDIF
 
 SHL2DEPN+=  makefile.mk
 
