@@ -2,9 +2,9 @@
  *
  *  $RCSfile: settings.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mt $ $Date: 2001-08-03 13:52:39 $
+ *  last change: $Author: mt $ $Date: 2001-08-03 14:20:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1996,3 +1996,4 @@ const CollatorWrapper& AllSettings::GetUICollatorWrapper() const
     return *mpData->mpUICollatorWrapper;
 }
 */
+
