@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdxcgv.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 14:50:55 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 17:55:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -657,14 +657,8 @@ Graphic SdrExchangeView::GetObjGraphic( SdrModel* pModel, SdrObject* pObj )
         else if( pObj->ISA( SdrOle2Obj ) )
         {
             SdrOle2Obj* pOLEObj = static_cast< SdrOle2Obj* >( pObj );
-
-            if( pOLEObj->HasGDIMetaFile() )
-            {
-                const GDIMetaFile* pMtf = pOLEObj->GetGDIMetaFile();
-
-                if( pMtf )
-                    aRet = *pMtf;
-            }
+            if ( pOLEObj->GetGraphic() )
+                aRet = *pOLEObj->GetGraphic();
         }
 
         // if graphic could not be retrieved => go the hard way and create a MetaFile
