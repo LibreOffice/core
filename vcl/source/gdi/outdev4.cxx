@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev4.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:33:12 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 13:21:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,19 +63,11 @@
 
 #include <math.h>
 
-#ifndef REMOTE_APPSERVER
 #ifndef _SV_SVSYS_HXX
 #include <svsys.h>
 #endif
-#endif
-#ifndef REMOTE_APPSERVER
 #ifndef _SV_SALGDI_HXX
 #include <salgdi.hxx>
-#endif
-#else
-#ifndef _SV_RMOUTDEV_HXX
-#include <rmoutdev.hxx>
-#endif
 #endif
 #ifndef _DEBUG_HXX
 #include <tools/debug.hxx>
@@ -146,8 +138,6 @@ DBG_NAMEEX( OutputDevice );
 DBG_NAMEEX( Gradient );
 
 // =======================================================================
-
-#ifndef REMOTE_APPSERVER
 
 void OutputDevice::ImplDrawPolygon( const Polygon& rPoly, const PolyPolygon* pClipPolyPoly )
 {
@@ -223,8 +213,6 @@ void OutputDevice::ImplDrawPolyPolygon( const PolyPolygon& rPolyPoly, const Poly
     if( pClipPolyPoly )
         delete pPolyPoly;
 }
-
-#endif
 
 // -----------------------------------------------------------------------
 
@@ -395,10 +383,8 @@ void OutputDevice::ImplDrawLinearGradient( const Rectangle& rRect,
 
     if ( bMtf )
         mpMetaFile->AddAction( new MetaFillColorAction( Color( nRed, nGreen, nBlue ), TRUE ) );
-#ifndef REMOTE_APPSERVER
     else
         mpGraphics->SetFillColor( MAKE_SALCOLOR( nRed, nGreen, nBlue ) );
-#endif
 
     // Startpolygon erzeugen (== Borderpolygon)
     Polygon     aPoly( 4 );
@@ -415,10 +401,8 @@ void OutputDevice::ImplDrawLinearGradient( const Rectangle& rRect,
         // berechnetesPolygon ausgeben
         if ( bMtf )
             mpMetaFile->AddAction( new MetaPolygonAction( aPoly ) );
-#ifndef REMOTE_APPSERVER
         else
             ImplDrawPolygon( aPoly, pClipPolyPoly );
-#endif
 
         // neues Polygon berechnen
         aRect.Top() = (long)(fScanLine += fScanInc);
@@ -484,10 +468,8 @@ void OutputDevice::ImplDrawLinearGradient( const Rectangle& rRect,
 
         if ( bMtf )
             mpMetaFile->AddAction( new MetaFillColorAction( Color( nRed, nGreen, nBlue ), TRUE ) );
-#ifndef REMOTE_APPSERVER
         else
             mpGraphics->SetFillColor( MAKE_SALCOLOR( nRed, nGreen, nBlue ) );
-#endif
     }
 }
 
@@ -630,17 +612,14 @@ void OutputDevice::ImplDrawComplexGradient( const Rectangle& rRect,
 
     if( bMtf )
         mpMetaFile->AddAction( new MetaFillColorAction( Color( nRed, nGreen, nBlue ), TRUE ) );
-#ifndef REMOTE_APPSERVER
     else
         mpGraphics->SetFillColor( MAKE_SALCOLOR( nRed, nGreen, nBlue ) );
-#endif
 
     if( pPolyPoly )
     {
         pPolyPoly->Insert( aPoly = rRect );
         pPolyPoly->Insert( aPoly );
     }
-#ifndef REMOTE_APPSERVER
     else
     {
         // extend rect, to avoid missing bounding line
@@ -653,7 +632,6 @@ void OutputDevice::ImplDrawComplexGradient( const Rectangle& rRect,
 
         ImplDrawPolygon( aPoly = aExtRect, pClipPolyPoly );
     }
-#endif
 
     // Schleife, um nacheinander die Polygone/PolyPolygone auszugeben
     for( long i = 1; i < nSteps; i++ )
@@ -690,10 +668,8 @@ void OutputDevice::ImplDrawComplexGradient( const Rectangle& rRect,
 
             if( bMtf )
                 mpMetaFile->AddAction( new MetaPolyPolygonAction( *pPolyPoly ) );
-#ifndef REMOTE_APPSERVER
             else
                 ImplDrawPolyPolygon( *pPolyPoly, pClipPolyPoly );
-#endif
 
             // #107349# Set fill color _after_ geometry painting:
             // pPolyPoly's geometry is the band from last iteration's
@@ -707,7 +683,6 @@ void OutputDevice::ImplDrawComplexGradient( const Rectangle& rRect,
             else
                 mpGraphics->SetFillColor( MAKE_SALCOLOR( nRed, nGreen, nBlue ) );
         }
-#ifndef REMOTE_APPSERVER
         else
         {
             // #107349# Set fill color _before_ geometry painting
@@ -718,7 +693,6 @@ void OutputDevice::ImplDrawComplexGradient( const Rectangle& rRect,
 
             ImplDrawPolygon( aPoly, pClipPolyPoly );
         }
-#endif
     }
 
     // Falls PolyPolygon-Ausgabe, muessen wir noch ein letztes inneres Polygon zeichnen
@@ -743,13 +717,11 @@ void OutputDevice::ImplDrawComplexGradient( const Rectangle& rRect,
                 mpMetaFile->AddAction( new MetaFillColorAction( Color( nRed, nGreen, nBlue ), TRUE ) );
                 mpMetaFile->AddAction( new MetaPolygonAction( rPoly ) );
             }
-#ifndef REMOTE_APPSERVER
             else
             {
                 mpGraphics->SetFillColor( MAKE_SALCOLOR( nRed, nGreen, nBlue ) );
                    ImplDrawPolygon( rPoly, pClipPolyPoly );
             }
-#endif
         }
 
         delete pPolyPoly;
@@ -835,7 +807,6 @@ void OutputDevice::DrawGradient( const Rectangle& rRect,
     // Wenn Rechteck leer ist, brauchen wir nichts machen
     if ( !aRect.IsEmpty() )
     {
-#ifndef REMOTE_APPSERVER
         // Clip Region sichern
         Push( PUSH_CLIPREGION );
         IntersectClipRegion( rRect );
@@ -879,11 +850,6 @@ void OutputDevice::DrawGradient( const Rectangle& rRect,
         }
 
         Pop();
-#else
-        ImplServerGraphics* pGraphics = ImplGetServerGraphics();
-        if ( pGraphics )
-            pGraphics->DrawGradient( aRect, aGradient );
-#endif
     }
 
     if( mpAlphaVDev )
@@ -993,7 +959,6 @@ void OutputDevice::DrawGradient( const PolyPolygon& rPolyPoly,
             aGradient.SetEndColor( aEndCol );
         }
 
-#ifndef REMOTE_APPSERVER
         if( OUTDEV_PRINTER == meOutDevType )
         {
             const Rectangle aBoundRect( rPolyPoly.GetBoundRect() );
@@ -1100,11 +1065,6 @@ void OutputDevice::DrawGradient( const PolyPolygon& rPolyPoly,
                 delete pVDev;
             }
         }
-#else
-        ImplServerGraphics* pGraphics = ImplGetServerGraphics();
-        if ( pGraphics )
-            pGraphics->DrawGradient( ImplLogicToDevicePixel( rPolyPoly ), aGradient );
-#endif
     }
 
     if( mpAlphaVDev )
@@ -1200,7 +1160,6 @@ void OutputDevice::DrawHatch( const PolyPolygon& rPolyPoly, const Hatch& rHatch 
     if( !IsDeviceOutputNecessary() || ImplIsRecordLayout() )
         return;
 
-#ifndef REMOTE_APPSERVER
     if( !mpGraphics && !ImplGetGraphics() )
         return;
 
@@ -1209,11 +1168,9 @@ void OutputDevice::DrawHatch( const PolyPolygon& rPolyPoly, const Hatch& rHatch 
 
     if( mbOutputClipped )
         return;
-#endif
 
     if( rPolyPoly.Count() )
     {
-#ifndef REMOTE_APPSERVER
         PolyPolygon     aPolyPoly( LogicToPixel( rPolyPoly ) );
         GDIMetaFile*    pOldMetaFile = mpMetaFile;
         BOOL            bOldMap = mbMap;
@@ -1230,17 +1187,6 @@ void OutputDevice::DrawHatch( const PolyPolygon& rPolyPoly, const Hatch& rHatch 
         Pop();
         EnableMapMode( bOldMap );
         mpMetaFile = pOldMetaFile;
-#else
-        ImplServerGraphics* pGraphics = ImplGetServerGraphics();
-        if ( pGraphics )
-        {
-            PolyPolygon aPolyPoly( ImplLogicToDevicePixel( rPolyPoly ) );
-
-            aPolyPoly.Optimize( POLY_OPTIMIZE_NO_SAME );
-            aHatch.SetDistance( ImplLogicWidthToDevicePixel( aHatch.GetDistance() ) );
-            pGraphics->DrawHatch( aPolyPoly, aHatch );
-        }
-#endif
     }
 
     if( mpAlphaVDev )
@@ -1505,7 +1451,6 @@ void OutputDevice::ImplDrawHatchLine( const Line& rLine, const PolyPolygon& rPol
         }
         else
         {
-#ifndef REMOTE_APPSERVER
             for( long i = 0; i < nPCounter; i += 2 )
             {
                 if( mpPDFWriter )
@@ -1519,7 +1464,6 @@ void OutputDevice::ImplDrawHatchLine( const Line& rLine, const PolyPolygon& rPol
                     mpGraphics->DrawLine( aPt1.X(), aPt1.Y(), aPt2.X(), aPt2.Y(), this );
                 }
             }
-#endif
         }
     }
 }
