@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XEventListener.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mi $ $Date: 2001-01-24 13:30:25 $
+ *  last change: $Author: mi $ $Date: 2001-01-26 15:50:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,10 @@
 #include <com/sun/star/uno/XInterface.idl>
 #endif
 
+#ifndef __com_sun_star_lang_XEventListener_idl__
+#include <com/sun/star/lang/XEventListener.idl>
+#endif
+
 #ifndef __com_sun_star_document_EventObject_idl__
 #include <com/sun/star/document/EventObject.idl>
 #endif
@@ -79,7 +83,7 @@ module com {  module sun {  module star {  module document {
     a document or document content event occurs.
  */
 [ uik(781A1AD1-6A09-11d4-9FE50010-5AEF84A7), ident( "XEventListener", 1.0 ) ]
-interface XEventListener: com::sun::star::uno::XInterface
+interface XEventListener: com::sun::star::lang::XEventListener
 {
     //-------------------------------------------------------------------------
 
@@ -95,6 +99,9 @@ interface XEventListener: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.1  2001/01/24 13:30:25  mi
+    stored document events and runtime document events structurally unified
+
 
 
 =============================================================================*/
