@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdata.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-30 18:40:04 $
+ *  last change: $Author: nn $ $Date: 2001-06-06 09:14:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -921,6 +921,10 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
         aVis.Left() = aVis.Right() - nDiff;
         pEditView[eWhich]->SetVisArea(aVis);
         //
+
+        //  UpdateMode has been disabled in ScInputHandler::StartTable
+        //  must be enabled before EditGrowY (GetTextHeight)
+        pNewEngine->SetUpdateMode( TRUE );
 
         pNewEngine->SetStatusEventHdl( LINK( this, ScViewData, EditEngineHdl ) );
 
