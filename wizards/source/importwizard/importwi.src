@@ -2,9 +2,9 @@
  *
  *  $RCSfile: importwi.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-21 21:22:29 $
+ *  last change: $Author: bc $ $Date: 2002-07-05 17:46:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,7 @@
 #define sTargetDocuments         2031
 #define sCreateLogfile          2032
 #define sLogfileHelpText        2033
+#define sLogfileSummary         2034
 
 #define sSumInclusiveSubDir     3000
 #define sSumSaveDokumente       3001
@@ -1676,6 +1677,15 @@ String sCreateLogfile
     Text[ arabic ] = "Creae Logfile";
     Text[ catalan ] = "Creae Logfile";
 };
+
+
+String sLogfileSummary
+{
+    Text = "<COUNT> Dokumente konvertiert";
+    Text[English] = "<COUNT> Documents converted";
+};
+
+
 
 String sLogfileHelpText
 {
