@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brkdlg.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 10:57:39 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:57:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,27 +76,30 @@ ModalDialog DLG_BREAK
         Text = "Bearbeitetes Metafile:";
         Text [ ENGLISH ] = "Processing Metafile:";
         Text[ language_user1 ] = "EM Dec 2002: This string shows up in an error message at the time when the metafile is being worked on. To read like the answer to 'Which metafile am I processing?' \"processsing metafile: 2\"";
-        Text[ portuguese ] = "Processing Metafile:";
-        Text[ russian ] = "Processing Metafile:";
+        Text[ portuguese ] = "Processing metafile:";
+        Text[ russian ] = "Processing metafile:";
         Text[ spanish ] = "Procesando el metaarchivo:";
         Text[ italian ] = "Metafile elaborati:";
         Text[ swedish ] = "Metafil som bearbetas:";
-        Text[ polish ] = "Processing Metafile:";
-        Text[ portuguese_brazilian ] = "Processing Metafile:";
+        Text[ polish ] = "Processing metafile:";
+        Text[ portuguese_brazilian ] = "Processing metafile:";
         Text[ japanese ] = "メタファイルの処理:";
         Text[ korean ] = "처리 중인 메타 파일:";
-        Text[ turkish ] = "Processing Metafile:";
-        Text[ thai ] = "Processing Metafile:";
+        Text[ turkish ] = "��lenecek metadosyas�:";
+        Text[ thai ] = "Processing metafile:";
         Text[ english_us ] = "Processing metafile:";
-        Text[ greek ] = "Processing Metafile:";
-        Text[ dutch ] = "Processing Metafile:";
+        Text[ greek ] = "Processing metafile:";
+        Text[ dutch ] = "Processing metafile:";
         Text[ french ] = "Traitement du m�tafichier :";
-        Text[ finnish ] = "Processing Metafile:";
-        Text[ danish ] = "Processing Metafile:";
+        Text[ finnish ] = "Processing metafile:";
+        Text[ danish ] = "Processing metafile:";
         Text[ chinese_simplified ] = "处理图元文件:";
         Text[ chinese_traditional ] = "處理元檔案：";
-        Text[ arabic ] = "Processing Metafile:";
-        Text[ catalan ] = "Processing Metafile:";
+        Text[ arabic ] = "Processing metafile:";
+        Text[ catalan ] = "Processing metafile:";
+        Text[ czech ] = "Zpracování metasouboru:";
+        Text[ hebrew ] = "Bearbeitetes Metafile:";
+        Text[ hindi ] = "Processing metafile:";
     };
     FixedText FT_ACT_INFO
     {
@@ -114,7 +117,7 @@ ModalDialog DLG_BREAK
         Text[ portuguese_brazilian ] = "Brokened down metaobjects:";
         Text[ japanese ] = "詳細なメタオブジェクト:";
         Text[ korean ] = "메타 개체 분할됨:";
-        Text[ turkish ] = "Brokened down metaobjects:";
+        Text[ turkish ] = "Bozulmu� metanesneleri:";
         Text[ thai ] = "Brokened down metaobjects:";
         Text[ english_us ] = "Broken down metaobjects:";
         Text[ greek ] = "Brokened down metaobjects:";
@@ -126,6 +129,9 @@ ModalDialog DLG_BREAK
         Text[ chinese_traditional ] = "分開元物件：";
         Text[ arabic ] = "Brokened down metaobjects:";
         Text[ catalan ] = "Brokened down metaobjects:";
+        Text[ czech ] = "Rozbité metaobjekty:";
+        Text[ hebrew ] = "Metaobjekte aufgebrochen:";
+        Text[ hindi ] = "Broken down metaobjects:";
     };
     FixedText FT_INS_INFO
     {
@@ -143,7 +149,7 @@ ModalDialog DLG_BREAK
         Text[ portuguese_brazilian ] = "Inserted drawing objects:";
         Text[ japanese ] = "挿入された図形オブジェクト:";
         Text[ korean ] = "그리기 개체 삽입됨:";
-        Text[ turkish ] = "Inserted drawing objects:";
+        Text[ turkish ] = "Eklenmi� �izim nesneleri:";
         Text[ thai ] = "Inserted drawing objects:";
         Text[ english_us ] = "Inserted drawing objects:";
         Text[ greek ] = "Inserted drawing objects:";
@@ -155,6 +161,9 @@ ModalDialog DLG_BREAK
         Text[ chinese_traditional ] = "插入繪圖物件：";
         Text[ arabic ] = "Inserted drawing objects:";
         Text[ catalan ] = "Inserted drawing objects:";
+        Text[ czech ] = "Vložené kreslící objekty:";
+        Text[ hebrew ] = "Zeichenobjekte eingefügt:";
+        Text[ hindi ] = "Inserted drawing objects:";
     };
     FixedText FI_OBJ_INFO
     {
@@ -178,28 +187,40 @@ ModalDialog DLG_BREAK
         TabStop = TRUE;
     };
     Text[ language_user1 ] = "EM Dec 2002: As in \"break\" found in context menu of a selected metafile inserted into a document.";
-    Text[ portuguese ] = "Break";
-    Text[ russian ] = "Break";
+    Text[ portuguese ] = "Subdividir";
+    Text[ russian ] = "�������";
     Text[ spanish ] = "Quebrar";
     Text[ italian ] = "Suddividi";
     Text[ swedish ] = "Bryt upp";
-    Text[ polish ] = "Break";
-    Text[ portuguese_brazilian ] = "Break";
+    Text[ polish ] = "Podziel";
+    Text[ portuguese_brazilian ] = "Romper";
     Text[ japanese ] = "区切る";
     Text[ korean ] = "분할";
-    Text[ turkish ] = "Break";
-    Text[ thai ] = "Break";
+    Text[ turkish ] = "Kesme";
+    Text[ thai ] = "แบ่ง";
     Text[ english_us ] = "Break";
-    Text[ greek ] = "Break";
-    Text[ dutch ] = "Break";
+    Text[ greek ] = "��������";
+    Text[ dutch ] = "Splitsen";
     Text[ french ] = "Fractionnement";
-    Text[ finnish ] = "Break";
-    Text[ danish ] = "Break";
+    Text[ finnish ] = "Keskeytys";
+    Text[ danish ] = "Bryd";
     Text[ chinese_simplified ] = "分开";
     Text[ chinese_traditional ] = "分開";
-    Text[ arabic ] = "Break";
-    Text[ catalan ] = "Break";
+    Text[ arabic ] = "����";
+    Text[ catalan ] = "Salt";
+    Text[ czech ] = "Rozbít";
+    Text[ hebrew ] = "Aufbrechen";
+    Text[ hindi ] = "खण्डन";
 };
+
+
+
+
+
+
+
+
+
 
 
 
