@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximppage.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-18 14:49:52 $
+ *  last change: $Author: cl $ $Date: 2001-01-25 12:48:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,14 +98,20 @@ SdXMLGenericPageContext::SdXMLGenericPageContext(
 :   SvXMLImportContext( rImport, nPrfx, rLocalName ),
     mxShapes( rShapes )
 {
-    GetImport().GetShapeImport()->pushGroupForSorting( rShapes );
-    GetImport().GetFormImport()->startPage( uno::Reference< drawing::XDrawPage >::query( mxShapes ) );
 }
 
 //////////////////////////////////////////////////////////////////////////////
 
 SdXMLGenericPageContext::~SdXMLGenericPageContext()
 {
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+void SdXMLGenericPageContext::StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList )
+{
+    GetImport().GetShapeImport()->pushGroupForSorting( mxShapes );
+    GetImport().GetFormImport()->startPage( uno::Reference< drawing::XDrawPage >::query( mxShapes ) );
 }
 
 //////////////////////////////////////////////////////////////////////////////
