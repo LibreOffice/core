@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: cmc $ $Date: 2002-02-15 12:42:55 $
+ *  last change: $Author: cmc $ $Date: 2002-03-01 13:58:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2819,7 +2819,7 @@ static Writer& OutWW8_SvxFrameDirection( Writer& rWrt, const SfxPoolItem& rHt )
         switch (rItem.GetValue())
         {
             default:
-                ASSERT(0,"Unknown grid type");
+                ASSERT(0,"Unknown frame direction");
             case FRMDIR_HORI_LEFT_TOP:
                 nTextFlow = 0;
                 break;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2002-02-19 15:24:28 $
+ *  last change: $Author: cmc $ $Date: 2002-03-01 13:58:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1907,16 +1907,13 @@ INT32 SwEscherEx::WriteTxtFlyFrame(const SwFrmFmt& rFmt, UINT32 nShapeId,
     MSO_TextFlow nFlow=mso_txflHorzN;
     switch (rDirection.GetValue())
     {
-        case FRMDIR_ENVIRONMENT: //to do
+        case FRMDIR_ENVIRONMENT:
+            if (const SwNodeIndex* pNdIdx = rFmt.GetCntnt().GetCntntIdx())
             {
-                BOOL bVert=FALSE;
-#if 0           //How to find out if its really vert or horz ??
-                rFmt.FindLayoutRect(FALSE,0,FALSE,&bVert);
-#endif
-                if (bVert)
+                SwPosition aPos(*pNdIdx);
+                aPos.nNode = pNdIdx->GetIndex() + 1;
+                if (rWrt.pDoc->IsInVerticalText(aPos))
                     nFlow=mso_txflTtoBA;
-                else
-                    nFlow=mso_txflHorzN;
             }
             break;
         default:
