@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctredlin.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 22:19:54 $
+ *  last change: $Author: kz $ $Date: 2001-03-01 20:43:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,8 @@
  //
  // $Workfile:   ctredlin.src  $
  //   $Author: kz $
- //     $Date: 2001-02-09 22:19:54 $
- // $Revision: 1.9 $
+ //     $Date: 2001-03-01 20:43:45 $
+ // $Revision: 1.10 $
  //  $Logfile:   T:/svx/source/dialog/ctredlin.srv  $
  //---------------------------------------------------------------------------
 
@@ -767,7 +767,7 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text[ chinese_simplified ] = "½ΣΚά(~A)";
         Text[ russian ] = "Οπθνÿςό";
         Text[ polish ] = "Zaakceptuj";
-        Text[ japanese ] = "σ‚―“ό‚κ‚ι(~A)";
+        Text[ japanese ] = "“K—p(~A)";
         Text[ chinese_traditional ] = "±µ¨ό(~A)";
         Text[ arabic ] = "ήΘζα";
         Text[ greek ] = "~Αποδοχή";
@@ -794,7 +794,7 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text[ chinese_simplified ] = "ΎάΎψ(~R)";
         Text[ russian ] = "Ξςκλξνθςό";
         Text[ polish ] = "Odrzuζ";
-        Text[ japanese ] = "σ‚―“ό‚κ‚Θ‚Ά(~R)";
+        Text[ japanese ] = "·¬έΎΩ(~R)";
         Text[ chinese_traditional ] = "©Ϊµ΄(~R)";
         Text[ arabic ] = "ΡέΦ";
         Text[ greek ] = "Απόρριψη";
@@ -821,7 +821,7 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text[ chinese_simplified ] = "Θ«²Ώ½ΣΚά(~A)";
         Text[ russian ] = "Οπθνÿςό βρε";
         Text[ polish ] = "Akcept. wszystkie";
-        Text[ japanese ] = "‚·‚Χ‚Δσ‚―“ό‚κ‚ι(~A)";
+        Text[ japanese ] = "‚·‚Χ‚Δ“K—p(~C)";
         Text[ chinese_traditional ] = "¥ώ³΅±µ¨ό(~A)";
         Text[ arabic ] = "ήΘζα Ηαία";
         Text[ greek ] = "Αποδο~χή όλων";
@@ -848,7 +848,7 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text[ chinese_simplified ] = "Θ«²ΏΎάΎψ(~R)";
         Text[ russian ] = "Ξςκλξνθςό βρε";
         Text[ polish ] = "Odrzuζ wszystkie";
-        Text[ japanese ] = "‚·‚Χ‚Δσ‚―“ό‚κ‚Θ‚Ά(~R)";
+        Text[ japanese ] = "‚·‚Χ‚Δ·¬έΎΩ(~E)";
         Text[ chinese_traditional ] = "¥ώ³΅©Ϊµ΄(~R)";
         Text[ arabic ] = "ΡέΦ Ηαία";
         Text[ greek ] = "Απόρριψη όλων";
@@ -877,7 +877,7 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text[ chinese_simplified ] = "³·ΟϋΓόΑξ";
         Text[ russian ] = "Ξςμενθςό";
         Text[ polish ] = "Cofnij";
-        Text[ japanese ] = "³‚Ι–ί‚·";
+        Text[ japanese ] = "³‚Ι–ί‚·(~U)";
         Text[ chinese_traditional ] = "΄_­μ";
         Text[ arabic ] = "ΚΡΗΜΪ";
         Text[ greek ] = "Αναίρεση";
