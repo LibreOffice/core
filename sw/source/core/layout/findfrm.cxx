@@ -2,9 +2,9 @@
  *
  *  $RCSfile: findfrm.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-01 07:43:49 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 08:44:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1097,8 +1097,10 @@ void SwFrm::ImplInvalidateNextPos( BOOL bNoFtn )
     OD 09.01.2004 #i11859#
 
     @author OD
+
+    FME 2004-04-19 #i27145# Moved function from SwTxtFrm to SwFrm
 */
-void SwTxtFrm::InvalidateNextPrtArea()
+void SwFrm::InvalidateNextPrtArea()
 {
     // determine next frame
     SwFrm* pNextFrm = FindNext();
@@ -1123,8 +1125,7 @@ void SwTxtFrm::InvalidateNextPrtArea()
             // (1) this text frame isn't in a section OR
             // (2) found section frame isn't a follow of the section frame this
             //     text frame is in.
-            if ( !IsInSct() ||
-                 FindSctFrm()->GetFollow() != pNextFrm )
+            if ( !IsInSct() || FindSctFrm()->GetFollow() != pNextFrm )
             {
                 pNextFrm->InvalidatePrt();
             }
