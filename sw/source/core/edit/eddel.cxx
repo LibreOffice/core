@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eddel.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 13:45:20 $
+ *  last change: $Author: obo $ $Date: 2005-01-25 13:59:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -270,6 +269,9 @@ long SwEditShell::Copy( SwEditShell* pDestShell )
 
         if( !GetDoc()->Copy( *PCURCRSR, *pPos ))
             continue;
+
+        SwPaM aInsertPaM(*pPos, aSttNdIdx);
+        GetDoc()->MakeUniqueNumRules(aInsertPaM);
 
         bRet = TRUE;
     FOREACHPAM_END()
