@@ -2,9 +2,9 @@
  *
  *  $RCSfile: options.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 16:26:49 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 15:27:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,16 +88,6 @@ typedef ::std::hash_map
 > OptionMap;
 #endif
 
-class CannotDumpException
-{
-public:
-    CannotDumpException(const ::rtl::OString& msg)
-        : m_message(msg) {}
-
-    ::rtl::OString  m_message;
-};
-
-
 class IllegalArgument
 {
 public:
@@ -106,7 +96,6 @@ public:
 
     ::rtl::OString  m_message;
 };
-
 
 class Options
 {
