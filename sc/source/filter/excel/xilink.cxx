@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xilink.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 17:58:04 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 16:19:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -405,6 +405,8 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nScIndex ) :
     // get built-in name, or convert characters invalid in Calc
     bool bBuiltIn = ::get_flag( nFlags, EXC_NAME_BUILTIN );
 
+    bool bVBName = ::get_flag( nFlags, EXC_NAME_VB);
+
     // special case for BIFF5 filter range - name appears as plain text without built-in flag
     if( ((GetBiff() == xlBiff5) || (GetBiff() == xlBiff7)) &&
         (maXclName == XclTools::GetXclBuiltInDefName( EXC_BUILTIN_AUTOFILTER )) )
@@ -503,7 +505,7 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nScIndex ) :
 
     // 4) *** create a defined name in the Calc document *** ------------------
 
-    if( pTokArr && (bBuiltIn || !::get_flag( nFlags, EXC_NAME_HIDDEN )) )
+    if( pTokArr && (bBuiltIn || !::get_flag( nFlags, EXC_NAME_HIDDEN )) && !bVBName )
     {
         // create the Calc name data
         ScRangeData* pData = new ScRangeData( GetDocPtr(), maScName, *pTokArr, ScAddress(), nNameType );
@@ -543,6 +545,11 @@ const XclImpName* XclImpNameBuffer::FindName( const String& rXclName, SCTAB nScT
     return pLocalName ? pLocalName : pGlobalName;
 }
 
+const XclImpName* XclImpNameBuffer::GetNameFromIndex( sal_uInt16 nXclIndex ) const
+{
+    DBG_ASSERT( nXclIndex > 0, "XclImpNameBuffer::GetNameFromIndex - index must be > 0" );
+    return  nXclIndex <= maNameList.Count() ? maNameList.GetObject( nXclIndex - 1 ): NULL;
+}
 
 // External names =============================================================
 
