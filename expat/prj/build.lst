@@ -1,2 +1,3 @@
 ep	expat	: soltools NULL
-ep	expat			nmake	-	all	ft_mkout NULL
+ep	expat			usr1	-	all	ep_mkout NULL
+ep	expat			nmake	-	all	ep_expat NULL
