@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseForm.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-19 11:52:16 $
+ *  last change: $Author: fs $ $Date: 2000-10-31 16:03:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,9 @@
 #ifndef _COM_SUN_STAR_FORM_XDATABASEPARAMETERBROADCASTER_HPP_
 #include <com/sun/star/form/XDatabaseParameterBroadcaster.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDB_XCOMPLETEDEXECUTION_HPP_
+#include <com/sun/star/sdb/XCompletedExecution.hpp>
+#endif
 #ifndef _COM_SUN_STAR_SDBC_XROWSET_HPP_
 #include <com/sun/star/sdbc/XRowSet.hpp>
 #endif
@@ -139,6 +142,9 @@
 #endif
 #ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
 #include <com/sun/star/sdbc/XConnection.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
+#include <com/sun/star/task/XInteractionHandler.hpp>
 #endif
 
 
@@ -242,6 +248,7 @@ class ODatabaseForm :public OFormComponents
                     ,public starform::XLoadable
                     ,public starsdbc::XCloseable
                     ,public starsdbc::XRowSet
+                    ,public starsdb::XCompletedExecution
                     ,public starsdbc::XRowSetListener
                     ,public starsdb::XRowSetApproveListener
                     ,public starsdb::XRowSetApproveBroadcaster
@@ -423,6 +430,9 @@ public:
     virtual void SAL_CALL addRowSetListener(const staruno::Reference<starsdbc::XRowSetListener>& _rxListener) throw(staruno::RuntimeException);
     virtual void SAL_CALL removeRowSetListener(const staruno::Reference<starsdbc::XRowSetListener>& _rxListener) throw(staruno::RuntimeException);
 
+    // com::sun::star::sdb::XCompletedExecution
+    virtual void SAL_CALL executeWithCompletion( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& handler ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+
     // com::sun::star::sdbc::XResultSet
     virtual sal_Bool SAL_CALL next() throw(starsdbc::SQLException, staruno::RuntimeException);
     virtual sal_Bool SAL_CALL isBeforeFirst() throw(starsdbc::SQLException, staruno::RuntimeException);
@@ -492,7 +502,6 @@ public:
     virtual void SAL_CALL setArray(sal_Int32 parameterIndex, const staruno::Reference<starsdbc::XArray>& x) throw(starsdbc::SQLException, staruno::RuntimeException);
     virtual void SAL_CALL clearParameters() throw(starsdbc::SQLException, staruno::RuntimeException);
 
-
     inline void submitNBC( const staruno::Reference<starawt::XControl>& Control, const starawt::MouseEvent& MouseEvt );
 
 protected:
@@ -503,18 +512,26 @@ protected:
     virtual void _propertyChanged( const starbeans::PropertyChangeEvent& ) throw(staruno::RuntimeException);
 
 private:
-    void    executeRowSet(ReusableMutexGuard& _rClearForNotifies, sal_Bool bMoveToFirst = sal_True);
-    bool    fillParameters(ReusableMutexGuard& _rClearForNotifies);
+    void    executeRowSet(ReusableMutexGuard& _rClearForNotifies, sal_Bool bMoveToFirst = sal_True,
+                    const staruno::Reference< ::com::sun::star::task::XInteractionHandler >& _rxCompletionHandler = staruno::Reference< ::com::sun::star::task::XInteractionHandler >());
+    bool    fillParameters(ReusableMutexGuard& _rClearForNotifies,
+                    const staruno::Reference< ::com::sun::star::task::XInteractionHandler >& _rxCompletionHandler = staruno::Reference< ::com::sun::star::task::XInteractionHandler >());
     OParameterInfoImpl* createParameterInfo() const;
     bool    hasValidParent() const;
     // if there are no parameter infos we now that we have a complete new statement to execute
     bool    needStatementRebuild() const {return m_pParameterInfo == NULL;}
 
     // impl methods
-    void    load_impl(sal_Bool bCausedByParentForm, sal_Bool bMoveToFirst = sal_True) throw(staruno::RuntimeException);
-    void    reload_impl(sal_Bool bMoveToFirst) throw(staruno::RuntimeException);
+    void    load_impl(sal_Bool bCausedByParentForm, sal_Bool bMoveToFirst = sal_True,
+        const staruno::Reference< ::com::sun::star::task::XInteractionHandler >& _rxCompletionHandler = staruno::Reference< ::com::sun::star::task::XInteractionHandler >())
+        throw(staruno::RuntimeException);
+    void    reload_impl(sal_Bool bMoveToFirst,
+        const staruno::Reference< ::com::sun::star::task::XInteractionHandler >& _rxCompletionHandler = staruno::Reference< ::com::sun::star::task::XInteractionHandler >())
+        throw(staruno::RuntimeException);
     void    submit_impl(const staruno::Reference<starawt::XControl>& Control, const starawt::MouseEvent& MouseEvt, bool _bAproveByListeners);
     void    reset_impl(bool _bAproveByListeners);
+
+    sal_Bool    implEnsureConnection();
 
     // error handling
     void    onError(const starsdb::SQLErrorEvent& _rEvent);

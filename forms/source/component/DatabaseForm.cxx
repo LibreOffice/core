@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseForm.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-31 11:50:43 $
+ *  last change: $Author: fs $ $Date: 2000-10-31 16:03:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,10 +233,26 @@
 #ifndef _RTL_TENCINFO_H
 #include <rtl/tencinfo.h>
 #endif
+#ifndef _COMPHELPER_INTERACTION_HXX_
+#include <comphelper/interaction.hxx>
+#endif
+#ifndef _COM_SUN_STAR_SDB_XINTERACTIONSUPPLYPARAMETERS_HPP_
+#include <com/sun/star/sdb/XInteractionSupplyParameters.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDB_PARAMETERSREQUEST_HPP_
+#include <com/sun/star/sdb/ParametersRequest.hpp>
+#endif
 
 #define DATABASEFORM_IMPLEMENTATION_NAME    ::rtl::OUString::createFromAscii("com.sun.star.form.component.ODatabaseForm")
 
 using namespace dbtools;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::sdb;
+using namespace ::com::sun::star::sdbc;
+using namespace ::com::sun::star::sdbcx;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::task;
 
 //.........................................................................
 namespace frm
@@ -263,6 +279,28 @@ staruno::Reference< starframe::XModel> getXModel(const staruno::Reference< staru
         else
             return NULL;
     }
+}
+
+//==================================================================
+// OParameterContinuation
+//==================================================================
+class OParameterContinuation : public OInteraction< XInteractionSupplyParameters >
+{
+    Sequence< PropertyValue >       m_aValues;
+
+public:
+    OParameterContinuation() { }
+
+    Sequence< PropertyValue >   getValues() const { return m_aValues; }
+
+// XInteractionSupplyParameters
+    virtual void SAL_CALL setParameters( const Sequence< PropertyValue >& _rValues ) throw(RuntimeException);
+};
+
+//------------------------------------------------------------------
+void SAL_CALL OParameterContinuation::setParameters( const Sequence< PropertyValue >& _rValues ) throw(RuntimeException)
+{
+    m_aValues = _rValues;
 }
 
 //==================================================================
@@ -1542,13 +1580,13 @@ OParameterInfoImpl* ODatabaseForm::createParameterInfo() const
                         // parameter defined by master slave definition
                         ::cppu::extractInterface(xDetailField, xParamsAsNames->getByName(pDetailFields[i]));
 
-                        DBG_ASSERT(rParamMapping.find(pDetailFields[i]) != rParamMapping.end(), "ODatabaseForm::fillParameters : invalid starsdb::XParametersSupplier !");
+                        DBG_ASSERT(rParamMapping.find(pDetailFields[i]) != rParamMapping.end(), "ODatabaseForm::createParameterInfo: invalid starsdb::XParametersSupplier !");
                             // the mapping was build from the starsdb::XParametersSupplier interface of the composer, and the
                             // starcontainer::XNameAccess interface of the composer said hasByName(...)==sal_True ... so what ?
 
                         // delete the wrapper as the parameter is set
                         iter = find(rParams.begin(), rParams.end(), xDetailField);
-                        DBG_ASSERT(iter != rParams.end(), "ODatabaseForm::fillParameters : Parameter not found");
+                        DBG_ASSERT(iter != rParams.end(), "ODatabaseForm::createParameterInfo: Parameter not found");
                         if (iter != rParams.end())
                             rParams.erase(iter);
                     }
@@ -1615,7 +1653,7 @@ bool ODatabaseForm::hasValidParent() const
                  getBOOL(xSet->getPropertyValue(PROPERTY_ISNEW))))
                 return false;
         }
-        catch(...)
+        catch(Exception&)
         {
             // parent could be forwardonly?
             return false;
@@ -1625,7 +1663,7 @@ bool ODatabaseForm::hasValidParent() const
 }
 
 //------------------------------------------------------------------------------
-bool ODatabaseForm::fillParameters(ReusableMutexGuard& _rClearForNotifies)
+bool ODatabaseForm::fillParameters(ReusableMutexGuard& _rClearForNotifies, const Reference< XInteractionHandler >& _rxCompletionHandler)
 {
     staruno::Reference<starsdbc::XParameters>  xExecutionParams;
     if (!query_aggregation( m_xAggregate, xExecutionParams))
@@ -1698,27 +1736,80 @@ bool ODatabaseForm::fillParameters(ReusableMutexGuard& _rClearForNotifies)
 
     // now fill the remaining params
     bool bCanceled = false;
-    sal_Int32 nParamsLeft = rParams.size();
-    if (nParamsLeft)
+    if (_rxCompletionHandler.is())
     {
-        ::cppu::OInterfaceIteratorHelper aIter(m_aParameterListeners);
-        starform::DatabaseParameterEvent aEvt(static_cast<staruno::XWeak*>(this), m_pParameterInfo->pParameters);
+        // ask the handler for the missing parameters
 
-        _rClearForNotifies.clear();
-        while (aIter.hasMoreElements() && !bCanceled)
-            bCanceled = !((starform::XDatabaseParameterListener*)aIter.next())->approveParameter(aEvt);
-        _rClearForNotifies.attach(m_aMutex);
+        // ensure we're connected
+        if (!implEnsureConnection())
+            return sal_False;
+
+        // two continuations (Ok and Cancel)
+        OInteractionAbort* pAbort = new OInteractionAbort;
+        OParameterContinuation* pParams = new OParameterContinuation;
+
+        // the request
+        ParametersRequest aRequest;
+        aRequest.Parameters = m_pParameterInfo->pParameters;
+        aRequest.Connection = getConnection();
+        OInteractionRequest* pRequest = new OInteractionRequest(makeAny(aRequest));
+        Reference< XInteractionRequest > xRequest(pRequest);
+
+        // some knittings
+        pRequest->addContinuation(pAbort);
+        pRequest->addContinuation(pParams);
+
+        // execute the request
+        _rxCompletionHandler->handle(xRequest);
+
+        if (!pParams->wasSelected())
+            // canceled by the user (i.e. (s)he canceled the dialog)
+            return sal_False;
+
+        // transfer the values from the continuation object to the parameter columns
+        Sequence< PropertyValue > aFinalValues = pParams->getValues();
+        const PropertyValue* pFinalValues = aFinalValues.getConstArray();
+        for (sal_Int32 i=0; i<aFinalValues.getLength(); ++i, ++pFinalValues)
+        {
+            Reference< XPropertySet > xParamColumn;
+            ::cppu::extractInterface(xParamColumn, aRequest.Parameters->getByIndex(i));
+            if (xParamColumn.is())
+            {
+#ifdef DBG_UTIL
+                ::rtl::OUString sName;
+                xParamColumn->getPropertyValue(PROPERTY_NAME) >>= sName;
+                DBG_ASSERT(sName.equals(pFinalValues->Name), "ODatabaseForm::fillParameters: inconsistent parameter names!");
+#endif
+                xParamColumn->setPropertyValue(PROPERTY_VALUE, pFinalValues->Value);
+                    // the property sets are wrapper classes, translating the Value property into a call to
+                    // the appropriate XParameters interface
+            }
+        }
+    }
+    else
+    {
+        sal_Int32 nParamsLeft = rParams.size();
+        if (nParamsLeft)
+        {
+            ::cppu::OInterfaceIteratorHelper aIter(m_aParameterListeners);
+            starform::DatabaseParameterEvent aEvt(static_cast<staruno::XWeak*>(this), m_pParameterInfo->pParameters);
+
+            _rClearForNotifies.clear();
+            while (aIter.hasMoreElements() && !bCanceled)
+                bCanceled = !((starform::XDatabaseParameterListener*)aIter.next())->approveParameter(aEvt);
+            _rClearForNotifies.attach(m_aMutex);
+        }
     }
     return !bCanceled;
 }
 
 //------------------------------------------------------------------------------
-void ODatabaseForm::executeRowSet(ReusableMutexGuard& _rClearForNotifies, sal_Bool bMoveToFirst)
+void ODatabaseForm::executeRowSet(ReusableMutexGuard& _rClearForNotifies, sal_Bool bMoveToFirst, const Reference< XInteractionHandler >& _rxCompletionHandler)
 {
     if (!m_xAggregateAsRowSet.is())
         return;
 
-    fillParameters(_rClearForNotifies);
+    fillParameters(_rClearForNotifies, _rxCompletionHandler);
     sal_Bool bInsertOnly = sal_False;
 
     // ensure the aggregated row set has the correct properties
@@ -1847,7 +1938,7 @@ staruno::Reference< starsdbc::XConnection >  ODatabaseForm::getConnection()
     {
         ::cppu::extractInterface(xReturn, getPropertyValue(PROPERTY_ACTIVE_CONNECTION));
     }
-    catch(...)
+    catch(Exception&)
     {
     }
 
@@ -1861,7 +1952,7 @@ void ODatabaseForm::fillProperties(
         staruno::Sequence< starbeans::Property >& _rProps,
         staruno::Sequence< starbeans::Property >& _rAggregateProps ) const
 {
-    BEGIN_AGGREGATION_PROPERTY_HELPER(15, m_xAggregateSet)
+    BEGIN_AGGREGATION_PROPERTY_HELPER(14, m_xAggregateSet)
         // this property is overwritten by the form
         RemoveProperty(_rAggregateProps, PROPERTY_PRIVILEGES);
         RemoveProperty(_rAggregateProps, PROPERTY_DATASOURCE);
@@ -1877,7 +1968,6 @@ void ODatabaseForm::fillProperties(
         DECL_BOOL_PROP1(ALLOWADDITIONS,                             BOUND);
         DECL_BOOL_PROP1(ALLOWEDITS,                                 BOUND);
         DECL_BOOL_PROP1(ALLOWDELETIONS,                             BOUND);
-        DECL_BOOL_PROP2(THREADSAFE,                                 TRANSIENT, READONLY);
         DECL_PROP2(PRIVILEGES,      sal_Int32,                      TRANSIENT, READONLY);
         DECL_PROP1(TARGET_URL,      ::rtl::OUString,                BOUND);
         DECL_PROP1(TARGET_FRAME,    ::rtl::OUString,                BOUND);
@@ -1961,35 +2051,6 @@ void ODatabaseForm::getFastPropertyValue( staruno::Any& rValue, sal_Int32 nHandl
                 rValue = m_xAggregateSet->getPropertyValue(PROPERTY_DATASOURCE);
             }
             catch(staruno::Exception&) { }
-        }
-        break;
-        case PROPERTY_ID_THREADSAFE:
-        {
-            try
-            {
-                staruno::Reference< starsdbc::XConnection >  xActiveConn =
-                    calcConnection(staruno::Reference<starsdbc::XRowSet>(m_xAggregate, staruno::UNO_QUERY), m_xServiceFactory);
-                // if we're alive, our aggregate has an active connection which will be returned
-                // if we aren't and our aggregate has no active connection, the function will calculate one
-                // from the current settings and forward it to the row set
-                staruno::Reference<starbeans::XPropertySet>  xConnProps(xActiveConn, staruno::UNO_QUERY);
-                if (xConnProps.is() && hasProperty(PROPERTY_THREADSAFE, xConnProps))
-                    rValue = xConnProps->getPropertyValue(PROPERTY_THREADSAFE);
-                else
-                {
-                    staruno::Reference<starcontainer::XChild>  xConnAsChild(xActiveConn, staruno::UNO_QUERY);
-                    if (xConnAsChild.is())
-                        xConnProps = staruno::Reference<starbeans::XPropertySet> (xConnAsChild->getParent(), staruno::UNO_QUERY);
-                    if (xConnProps.is() && hasProperty(PROPERTY_THREADSAFE, xConnProps))
-                        rValue = xConnProps->getPropertyValue(PROPERTY_THREADSAFE);
-                    else
-                        rValue <<= (sal_Bool)sal_False;
-                }
-            }
-            catch(...)
-            {
-                rValue <<= (sal_Bool)sal_False;
-            }
         }
         break;
         case PROPERTY_ID_TARGET_URL:
@@ -2815,7 +2876,31 @@ void SAL_CALL ODatabaseForm::load() throw( staruno::RuntimeException )
 }
 
 //------------------------------------------------------------------------------
-void ODatabaseForm::load_impl(sal_Bool bCausedByParentForm, sal_Bool bMoveToFirst) throw( staruno::RuntimeException )
+sal_Bool ODatabaseForm::implEnsureConnection()
+{
+    try
+    {
+        if (m_xAggregateSet.is())
+        {
+            // do we have a connection in the hierarchy than take that connection
+            // this overwrites all the other connnections
+            staruno::Reference< starsdbc::XConnection >  xConnection = calcConnection(
+                staruno::Reference<starsdbc::XRowSet> (m_xAggregate, staruno::UNO_QUERY),
+                m_xServiceFactory
+            );      // will set a calculated connection implicitly
+            return xConnection.is();
+        }
+    }
+    catch(starsdbc::SQLException& eDB)
+    {
+        onError(eDB, FRM_RES_STRING(RID_STR_CONNECTERROR));
+    }
+
+    return sal_False;
+}
+
+//------------------------------------------------------------------------------
+void ODatabaseForm::load_impl(sal_Bool bCausedByParentForm, sal_Bool bMoveToFirst, const Reference< XInteractionHandler >& _rxCompletionHandler ) throw( staruno::RuntimeException )
 {
     ReusableMutexGuard aGuard(m_aMutex);
 
@@ -2827,24 +2912,7 @@ void ODatabaseForm::load_impl(sal_Bool bCausedByParentForm, sal_Bool bMoveToFirs
 
     // if we don't have a connection, we are not intended to be a database form or the aggregate was not able
     // to establish a connection
-    sal_Bool bConnected     = sal_False;
-    try
-    {
-        if (m_xAggregateSet.is())
-        {
-            // do we have a connection in the hierarchy than take that connection
-            // this overwrites all the other connnections
-            staruno::Reference< starsdbc::XConnection >  xConnection = calcConnection(
-                staruno::Reference<starsdbc::XRowSet> (m_xAggregate, staruno::UNO_QUERY),
-                m_xServiceFactory
-            );      // will set a calculated connection implicitly
-            bConnected = xConnection.is();
-        }
-    }
-    catch(starsdbc::SQLException& eDB)
-    {
-        onError(eDB, FRM_RES_STRING(RID_STR_CONNECTERROR));
-    }
+    sal_Bool bConnected = implEnsureConnection();
 
     // we don't have to execute if we do not have a command to execute
     sal_Bool bExecute = bConnected && m_xAggregateSet.is() && getString(m_xAggregateSet->getPropertyValue(PROPERTY_COMMAND)).getLength();
@@ -2862,7 +2930,7 @@ void ODatabaseForm::load_impl(sal_Bool bCausedByParentForm, sal_Bool bMoveToFirs
     if (bExecute)
     {
         m_sCurrentErrorContext = FRM_RES_STRING(RID_ERR_LOADING_FORM);
-        executeRowSet(aGuard, bMoveToFirst);
+        executeRowSet(aGuard, bMoveToFirst, _rxCompletionHandler);
     }
 
     m_bLoaded = sal_True;
@@ -2924,7 +2992,7 @@ void SAL_CALL ODatabaseForm::reload() throw( staruno::RuntimeException )
 }
 
 //------------------------------------------------------------------------------
-void ODatabaseForm::reload_impl(sal_Bool bMoveToFirst) throw( staruno::RuntimeException )
+void ODatabaseForm::reload_impl(sal_Bool bMoveToFirst, const Reference< XInteractionHandler >& _rxCompletionHandler ) throw( staruno::RuntimeException )
 {
     ReusableMutexGuard aGuard(m_aMutex);
     if (!isLoaded())
@@ -2950,7 +3018,7 @@ void ODatabaseForm::reload_impl(sal_Bool bMoveToFirst) throw( staruno::RuntimeEx
     try
     {
         m_sCurrentErrorContext = FRM_RES_STRING(RID_ERR_REFRESHING_FORM);
-        executeRowSet(aGuard, bMoveToFirst);
+        executeRowSet(aGuard, bMoveToFirst, _rxCompletionHandler);
     }
     catch(starsdbc::SQLException& e)
     {
@@ -3154,18 +3222,40 @@ void SAL_CALL ODatabaseForm::removeParameterListener(const staruno::Reference<st
 }
 
 //==============================================================================
+// com::sun::star::sdb::XCompletedExecution
+//------------------------------------------------------------------------------
+void SAL_CALL ODatabaseForm::executeWithCompletion( const Reference< XInteractionHandler >& _rxHandler ) throw(SQLException, RuntimeException)
+{
+    ReusableMutexGuard aGuard(m_aMutex);
+    // the difference between execute and load is, that we position on the first row in case of load
+    // after execute we remain before the first row
+    if (!isLoaded())
+    {
+        aGuard.clear();
+        load_impl(sal_False, sal_False, _rxHandler);
+    }
+    else
+    {
+        starlang::EventObject event(static_cast< staruno::XWeak* >(this));
+        ::cppu::OInterfaceIteratorHelper aIter(m_aRowSetApproveListeners);
+        aGuard.clear();
+
+        while (aIter.hasMoreElements())
+            if (!((starsdb::XRowSetApproveListener*)aIter.next())->approveRowSetChange(event))
+                return;
+
+        // we're loaded and somebody want's to execute ourself -> this means a reload
+        reload_impl(sal_False, _rxHandler);
+    }
+}
+
+//==============================================================================
 // com::sun::star::sdbc::XRowSet
 //------------------------------------------------------------------------------
 void SAL_CALL ODatabaseForm::execute() throw( starsdbc::SQLException, staruno::RuntimeException )
 {
     ReusableMutexGuard aGuard(m_aMutex);
-    // This methods is called only from outside, we ourself don't use our own starsdbc::XRowSet interface but the one of our
-    // aggregate when calling an execute.
-    // DBG_ASSERT(!isExecuting(), "ODatabaseForm::execute : oops ... our own erxecute ?");
-        // This thread shouldn't be within executeRowSet (as stated above) and any other thread should be blocked
-        // because of our mutex ....
-
-    // So if somebody calls an execute and we're not loaded we reroute this call to our load method.
+    // if somebody calls an execute and we're not loaded we reroute this call to our load method.
 
     // the difference between execute and load is, that we position on the first row in case of load
     // after execute we remain before the first row
