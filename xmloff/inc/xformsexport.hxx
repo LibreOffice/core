@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xformsexport.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 10:03:46 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:23:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,12 +71,12 @@ namespace rtl { class OUString; }
 
 
 /** export an XForms model. */
-void exportXForms( SvXMLExport& );
+void SAL_DLLPRIVATE exportXForms( SvXMLExport& );
 
-rtl::OUString getXFormsBindName( const com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>& xBinding );
+rtl::OUString SAL_DLLPRIVATE getXFormsBindName( const com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>& xBinding );
 
-rtl::OUString getXFormsListBindName( const com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>& xBinding );
+rtl::OUString SAL_DLLPRIVATE getXFormsListBindName( const com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>& xBinding );
 
-rtl::OUString getXFormsSubmissionName( const com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>& xBinding );
+rtl::OUString SAL_DLLPRIVATE getXFormsSubmissionName( const com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>& xBinding );
 
 #endif
