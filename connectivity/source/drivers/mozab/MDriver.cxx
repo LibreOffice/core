@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MDriver.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-23 09:08:04 $
+ *  last change: $Author: fs $ $Date: 2001-10-23 17:45:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -280,6 +280,21 @@ void MozabDriver::registerClient()
         OSL_ENSURE(NULL != s_hModule, "MozabDriver::registerClient: could not load the dbtools library!");
         if (NULL != s_hModule)
         {
+            // first, we need to announce our service factory to the lib
+            // see the documentation of setMozabServiceFactory for more details
+            const ::rtl::OUString sSetFactoryFuncName( RTL_CONSTASCII_USTRINGPARAM( "setMozabServiceFactory" ) );
+            OSetMozabServiceFactory pSetFactoryFunc =
+                reinterpret_cast< OSetMozabServiceFactory >( osl_getSymbol( s_hModule, sSetFactoryFuncName.pData ) );
+
+            OSL_ENSURE( pSetFactoryFunc, "MozabDriver::registerClient: missing an entry point!" );
+            if ( pSetFactoryFunc && m_xMSFactory.is() )
+            {
+                // for purpose of transfer safety, the interface needs to be acuired once
+                // (will be release by the callee)
+                m_xMSFactory->acquire();
+                ( *pSetFactoryFunc )( m_xMSFactory.get() );
+            }
+
             // get the symbol for the method creating the factory
             const ::rtl::OUString sFactoryCreationFunc = ::rtl::OUString::createFromAscii("OMozabConnection_CreateInstance");
             s_pCreationFunc = reinterpret_cast<OMozabConnection_CreateInstanceFunction>(osl_getSymbol(s_hModule, sFactoryCreationFunc.pData));

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MDriver.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-23 09:08:04 $
+ *  last change: $Author: fs $ $Date: 2001-10-23 17:45:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,6 @@
 #define MOZAB_OUTLOOKEXP_SCHEMA "outlookexp"
 #define MOZAB_DRIVER_IMPL_NAME "com.sun.star.comp.sdbc.MozabDriver"
 
-extern "C" void* SAL_CALL OMozabConnection_CreateInstance(void* _pDriver);
 namespace connectivity
 {
     namespace mozab
@@ -92,6 +91,7 @@ namespace connectivity
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL MozabDriver_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory) throw( ::com::sun::star::uno::Exception );
 
         typedef void* (SAL_CALL * OMozabConnection_CreateInstanceFunction)(void* _pDriver );
+        typedef void  (SAL_CALL * OSetMozabServiceFactory)( void* _pFactory );
 
 
         typedef ::cppu::WeakComponentImplHelper2<   ::com::sun::star::sdbc::XDriver,
