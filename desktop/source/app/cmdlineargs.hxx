@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdlineargs.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-27 09:42:33 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 18:05:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,7 +206,7 @@ class CommandLineArgs
 
         // no copy and operator=
         CommandLineArgs( const CommandLineArgs& );
-        operator=( const CommandLineArgs& );
+        CommandLineArgs operator=( const CommandLineArgs& );
 
         sal_Bool                InterpretCommandLineParameter( const ::rtl::OUString& );
         void                    ParseCommandLine_Impl( const ::vos::OExtCommandLine& );
