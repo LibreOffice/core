@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbwizres.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2002-06-17 16:33:05 $
+ *  last change: $Author: bc $ $Date: 2002-07-08 11:49:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -507,6 +507,52 @@ String RID_DB_COMMON_START + 20
     Text[ catalan ] = "~Help";
     Text[ thai ] = "~à¸Šà¹ˆà¸§à¸¢à¹€à¸«à¸¥à¸·à¸­";
 };
+
+String RID_DB_COMMON_START + 21
+{
+    Text = "~Stop";
+    Text [ english ] = "~Stop";
+};
+
+
+String RID_DB_COMMON_START + 30
+{
+    Text = "Das Dokument konnnte nicht gespeichert werden.";
+    Text [ english ] = "The document could not be stored.";
+};
+
+
+String RID_DB_COMMON_START + 31
+{
+    Text = " Eine Verknüpfung zur Datenquelle konnte nicht erstellt werden.";
+    Text [ english ] = "A link to the datasource could not be created.";
+};
+
+String RID_DB_COMMON_START + 32
+{
+    Text = "Es wird automatisch eine Verknüpfung zur Datenquelle angelegt.";
+    Text [ english ] = "A link to the datasource will be created automatically.";
+};
+
+
+String RID_DB_COMMON_START + 33
+{
+    Text = "Der Autopilot wird beendet!";
+    Text [ english ] = "The AutoPilot will be terminated!";
+};
+
+String RID_DB_COMMON_START + 34
+{
+    Text = "Verbindung zur Datenquelle wird hergestellt...";
+    Text [ english ] = "Connection to the Datasource will be established...";
+};
+
+String RID_DB_COMMON_START + 35
+{
+    Text = "Die Verbindung zur Datenquelle konnte nicht hergestellt werden!";
+    Text [ english ] = "The connection to the Datasource could not be established";
+};
+
 
 // ============================================================================
 
@@ -4968,6 +5014,58 @@ String RID_DB_REPORT_WIZARD_START + 58
     Text[ catalan ] = "De~scending";
     Text[ thai ] = "De~scending";
 };
+
+
+String RID_DB_REPORT_WIZARD_START + 60
+{
+    Text = "Binärfelder könnnen nicht im Bericht angezeigt werden.";
+    Text [ english_us ] = "Binary Fields cannot be displayed in the report";
+};
+
+
+String RID_DB_REPORT_WIZARD_START + 61
+{
+    Text = "Die TextTabelle '<TABLENAME>' ist nicht vorhanden.";
+    Text [ english_us ] = "The TextTable '<TABLENAME>' does not exist.";
+};
+
+String RID_DB_REPORT_WIZARD_START + 62
+{
+    Text = "Bericht wird erstellt...";
+    Text [ english_us ] = "Report is created...";
+};
+
+String RID_DB_REPORT_WIZARD_START + 63
+{
+    Text = "Anzahl der eingefügten Datensätze: <COUNT>";
+    Text [ english_us ] = "Number of inserted Records: <COUNT>";
+};
+
+String RID_DB_REPORT_WIZARD_START + 64
+{
+    Text = "Das Formular '<REPORTFORM>' existiert nicht.";
+    Text [ english_us ] = "The form '<REPORTFORM>'Number of inserted Records";
+};
+
+String RID_DB_REPORT_WIZARD_START + 65
+{
+    Text = "Die Abfrage mit dem Statement  <BR>'<STATEMENT>' <BR> konnte nicht ausgeführt werden. <BR> Überprüfen Sie ihre Datenquelle.";
+    Text [ english_us ] = "The query with the statement<BR>'<STATEMENT>' <BR> could not be executed. <BR> Verify your Datasource.";
+};
+
+String RID_DB_REPORT_WIZARD_START + 66
+{
+    Text = "Folgendes versteckte Control im Formular '<FORMNAME>' konnte nicht ausgelesen werden: '<CONTROLNAME>'.";
+    Text [ english_us ] = "The following hidden control in the form '<FORMNAME>' could not be read: '<CONTROLNAME>'.";
+};
+
+String RID_DB_REPORT_WIZARD_START + 67
+{
+    Text = "Daten werden importiert...";
+    Text [ english_us ] = "All the data is imported...";
+};
+
+
 
 
 // ============================================================================
