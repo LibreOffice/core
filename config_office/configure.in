@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2004-10-11 14:07:27 $
+dnl * Date: $Date: 2004-10-27 15:22:48 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.72 $ )
+AC_REVISION( $Revision: 1.73 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -301,11 +301,11 @@ AC_ARG_ENABLE(macos9,
 ],,)
 AC_ARG_WITH(lang,
 [  --with-lang             Use this option to build OpenOffice.org with
-                          additional language support. US English is always
+                          additional language support. English (US) is always
                           included by default. Separate multiple languages with
-                          commas. For all languages, use --with-lang=ALL.
+                          space. For all languages, use --with-lang=ALL.
 
-                          Usage: --with-lang=SPAN,SWED,TURK
+                          Usage: --with-lang="es sw tu cs sk"
 ],,)
 AC_ARG_WITH(dict,
 [  --with-dict             Use this option to build OpenOffice.org with
@@ -2645,11 +2645,7 @@ else
 fi
 AC_SUBST(LOCAL_SOLVER)
 
-if test -z "$with_lang"; then
-   WITH_LANG=,ENUS,
-else
-   WITH_LANG=","$with_lang","
-fi
+WITH_LANG="$with_lang"
 AC_SUBST(WITH_LANG)
 
 if test -z "$with_dict"; then
