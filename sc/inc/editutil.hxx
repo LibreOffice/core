@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editutil.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-07-11 18:55:42 $
+ *  last change: $Author: sab $ $Date: 2002-03-20 09:25:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,12 +185,18 @@ public:
                     /// Current defaults are not applied, new defaults are applied
     void            SetTextNewDefaults( const EditTextObject& rTextObject,
                         const SfxItemSet& rDefaults, BOOL bRememberCopy = TRUE );
+                    /// Current defaults are not applied, new defaults are applied
+    void            SetTextNewDefaults( const EditTextObject& rTextObject,
+                        SfxItemSet* pDefaults, BOOL bTakeOwnership = TRUE );
 
                     /// Overwritten method to be able to apply defaults already set
     void            SetText( const String& rText );
                     /// Current defaults are not applied, new defaults are applied
     void            SetTextNewDefaults( const String& rText,
                         const SfxItemSet& rDefaults, BOOL bRememberCopy = TRUE );
+                    /// Current defaults are not applied, new defaults are applied
+    void            SetTextNewDefaults( const String& rText,
+                        SfxItemSet* pDefaults, BOOL bTakeOwnership = TRUE );
 
                     /// Paragraph attributes that are not defaults are copied to
                     /// character attributes and all paragraph attributes reset

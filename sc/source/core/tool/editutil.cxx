@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editutil.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: nn $ $Date: 2002-03-11 14:03:25 $
+ *  last change: $Author: sab $ $Date: 2002-03-20 09:26:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -413,6 +413,18 @@ void ScEditEngineDefaulter::SetTextNewDefaults( const EditTextObject& rTextObjec
         SetUpdateMode( TRUE );
 }
 
+void ScEditEngineDefaulter::SetTextNewDefaults( const EditTextObject& rTextObject,
+            SfxItemSet* pSet, BOOL bTakeOwnership )
+{
+    BOOL bUpdateMode = GetUpdateMode();
+    if ( bUpdateMode )
+        SetUpdateMode( FALSE );
+    EditEngine::SetText( rTextObject );
+    SetDefaults( pSet, bTakeOwnership );
+    if ( bUpdateMode )
+        SetUpdateMode( TRUE );
+}
+
 
 void ScEditEngineDefaulter::SetText( const String& rText )
 {
@@ -438,6 +450,17 @@ void ScEditEngineDefaulter::SetTextNewDefaults( const String& rText,
         SetUpdateMode( TRUE );
 }
 
+void ScEditEngineDefaulter::SetTextNewDefaults( const String& rText,
+            SfxItemSet* pSet, BOOL bTakeOwnership )
+{
+    BOOL bUpdateMode = GetUpdateMode();
+    if ( bUpdateMode )
+        SetUpdateMode( FALSE );
+    EditEngine::SetText( rText );
+    SetDefaults( pSet, bTakeOwnership );
+    if ( bUpdateMode )
+        SetUpdateMode( TRUE );
+}
 
 void ScEditEngineDefaulter::RemoveParaAttribs()
 {
