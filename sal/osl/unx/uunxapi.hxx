@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uunxapi.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 16:46:06 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 13:25:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,15 @@
       {
            return lstat_u(ustrPath.pData, &buf);
       }
+
+    /***********************************
+          osl::mkdir
+          @see mkdir
+          **********************************/
+    inline int mkdir(const rtl::OUString& aPath, mode_t aMode)
+    {
+        return mkdir_u(aPath.pData, aMode);
+    }
 
  } // end namespace osl
 
