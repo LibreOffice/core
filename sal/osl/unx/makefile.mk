@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: mfe $ $Date: 2001-02-28 12:59:45 $
+#   last change: $Author: vg $ $Date: 2001-03-12 15:51:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -129,15 +129,42 @@ APP1STDLIBS+=-lC
 .INCLUDE :  target.mk
 
 .IF "$(OS)$(CPU)"=="SOLARISS"
-$(SLO)$/interlck.obj: asm/interlck_sparc.s
-        /usr/ccs/bin/as -P -q -o $(SLO)$/interlck.o asm/interlck_sparc.s ; touch $(SLO)$/interlck.obj
-$(OBJ)$/interlck.obj: asm/interlck_sparc.s
-        /usr/ccs/bin/as -P -q -o $(OBJ)$/interlck.o asm/interlck_sparc.s ; touch $(OBJ)$/interlck.obj
+$(SLO)$/interlck.obj: $(SLO)$/interlck.o
+     touch $(SLO)$/interlck.obj
+
+$(OBJ)$/interlck.obj: $(OBJ)$/interlck.o
+     touch $(OBJ)$/interlck.obj
+
+$(SLO)$/interlck.o: $(MISC)$/interlck_sparc.s
+        /usr/ccs/bin/as -P -q -o $@ $<
+
+$(OBJ)$/interlck.o: $(MISC)$/interlck_sparc.s
+        /usr/ccs/bin/as -P -q -o $@ $<
+
+$(MISC)$/interlck_sparc.s: asm/interlck_sparc.s
+    +tr -d "\015" < $< > $@
+
 .ENDIF
 
 .IF "$(OS)$(CPU)"=="SOLARISI"
-$(SLO)$/interlck.obj: asm/interlck_x86.s
-        /usr/ccs/bin/as -P -o $(SLO)$/interlck.o asm/interlck_x86.s ; touch $(SLO)$/interlck.obj
-$(OBJ)$/interlck.obj: asm/interlck_x86.s
-        /usr/ccs/bin/as -P -o $(OBJ)$/interlck.o asm/interlck_x86.s ; touch $(OBJ)$/interlck.obj
+
+$(SLO)$/interlck.obj: $(SLO)$/interlck.o
+     touch $(SLO)$/interlck.obj
+
+$(OBJ)$/interlck.obj: $(OBJ)$/interlck.o
+     touch $(OBJ)$/interlck.obj
+
+$(SLO)$/interlck.o: $(MISC)$/interlck_sparc_x86.s
+        /usr/ccs/bin/as -P -q -o $@ $<
+
+$(OBJ)$/interlck.o: $(MISC)$/interlck_sparc_x86.s
+        /usr/ccs/bin/as -P -q -o $@ $<
+
+$(MISC)$/interlck_sparc_x86.s: asm/interlck_sparc_x86.s
+    +tr -d "\015" < $< > $@
+
+#$(SLO)$/interlck.obj: asm/interlck_x86.s
+#		/usr/ccs/bin/as -P -o $(SLO)$/interlck.o asm/interlck_x86.s ; touch $(SLO)$/interlck.obj
+#$(OBJ)$/interlck.obj: asm/interlck_x86.s
+#		/usr/ccs/bin/as -P -o $(OBJ)$/interlck.o asm/interlck_x86.s ; touch $(OBJ)$/interlck.obj
 .ENDIF
