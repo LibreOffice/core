@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: dvo $ $Date: 2000-12-19 18:56:45 $
+#   last change: $Author: hjs $ $Date: 2001-06-20 16:14:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,13 +70,9 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 # --- Files --------------------------------------------------------
-
-ALL: $(INCCOM)$/rscrev.hxx ALLTAR
 
 SLOFILES =	\
         $(SLO)$/xmlscripte.obj \
@@ -92,9 +88,3 @@ SLOFILES =	\
 
 .INCLUDE :  target.mk
 
-$(INCCOM)$/rscrev.hxx: makefile.mk
-.IF "$(GUI)"=="UNX"
-    echo #define RSCUPDVER \""$(RSCREVISION)"\" > $@
-.ELSE
-    echo #define RSCUPDVER "$(RSCREVISION)" > $@
-.ENDIF

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: sab $ $Date: 2001-02-28 17:47:12 $
+#   last change: $Author: hjs $ $Date: 2001-06-20 16:12:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,13 +70,9 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 # --- Files --------------------------------------------------------
-
-ALL: $(INCCOM)$/rscrev.hxx ALLTAR
 
 SLOFILES =	\
         $(SLO)$/xmlmetae.obj \
@@ -88,9 +84,12 @@ SLOFILES =	\
 
 .INCLUDE :  target.mk
 
+$(SLO)$/xmlmetae.obj : $(INCCOM)$/rscrev.hxx ALLTAR
+
 $(INCCOM)$/rscrev.hxx: makefile.mk
 .IF "$(GUI)"=="UNX"
     echo #define RSCUPDVER \""$(RSCREVISION)"\" > $@
 .ELSE
     echo #define RSCUPDVER "$(RSCREVISION)" > $@
 .ENDIF
+
