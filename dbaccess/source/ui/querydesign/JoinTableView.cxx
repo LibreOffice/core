@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinTableView.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-28 10:18:26 $
+ *  last change: $Author: oj $ $Date: 2001-03-01 15:45:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1241,9 +1241,11 @@ BOOL OJoinTableView::IsAddAllowed()
     if (m_pView->getController()->isReadOnly())
         return FALSE;
 
+    Reference< XConnection> xConnection = m_pView->getController()->getConnection();
+    if(!xConnection.is())
+        return FALSE;
     // nicht wenn schon zuviele Tabellen
-    Reference < XDatabaseMetaData >
-        xMetaData( m_pView->getController()->getConnection()->getMetaData() );
+    Reference < XDatabaseMetaData > xMetaData( xConnection->getMetaData() );
 
     sal_Int32 nMax = xMetaData->getMaxTablesInSelect();
     if (nMax && nMax <= (sal_Int32)m_aTableMap.size())

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryDesignView.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-28 10:18:26 $
+ *  last change: $Author: oj $ $Date: 2001-03-01 15:45:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -452,8 +452,11 @@ extern ::rtl::OUString ConvertAlias(const ::rtl::OUString& rName);
 {
     ::rtl::OUString aDBName(pEntryTab->GetComposedName());
 
+    Reference< XConnection> xConnection = static_cast<OQueryController*>(getController())->getConnection();
+    if(!xConnection.is())
+        return aDBName;
 
-    Reference< XDatabaseMetaData >  xMetaData = static_cast<OQueryController*>(getController())->getConnection()->getMetaData();
+    Reference< XDatabaseMetaData >  xMetaData = xConnection->getMetaData();
     ::rtl::OUString aCatalog,aSchema,aTable,aComposedName;
     ::dbtools::qualifiedNameComponents(xMetaData,aDBName,aCatalog,aSchema,aTable);
     ::dbtools::composeTableName(xMetaData,aCatalog,aSchema,aTable,aComposedName,sal_True);
@@ -511,8 +514,12 @@ extern ::rtl::OUString ConvertAlias(const ::rtl::OUString& rName);
 ::rtl::OUString OQueryDesignView::BuildJoinCriteria(::std::vector<OConnectionLineData*>* pLineDataList,OQueryTableConnectionData* pData)
 {
     ::rtl::OUString aCondition;
+    Reference< XConnection> xConnection = static_cast<OQueryController*>(getController())->getConnection();
+    if(!xConnection.is())
+        return aCondition;
+
     ::std::vector<OConnectionLineData*>::iterator aIter = pLineDataList->begin();
-    Reference< XDatabaseMetaData >  xMetaData = static_cast<OQueryController*>(getController())->getConnection()->getMetaData();
+    Reference< XDatabaseMetaData >  xMetaData = xConnection->getMetaData();
     ::rtl::OUString aQuote = xMetaData->getIdentifierQuoteString();
 
     for(;aIter != pLineDataList->end();++aIter)
@@ -556,7 +563,11 @@ extern ::rtl::OUString ConvertAlias(const ::rtl::OUString& rName);
     if(nVis == 1)
         bAsterix = sal_False;
 
-    Reference< XDatabaseMetaData >  xMetaData = static_cast<OQueryController*>(getController())->getConnection()->getMetaData();
+    Reference< XConnection> xConnection = static_cast<OQueryController*>(getController())->getConnection();
+    if(!xConnection.is())
+        return aFieldListStr;
+
+    Reference< XDatabaseMetaData >  xMetaData = xConnection->getMetaData();
     ::rtl::OUString aQuote = xMetaData->getIdentifierQuoteString();
 
     aIter = _pFieldList->begin();
@@ -866,7 +877,11 @@ void OQueryDesignView::GetNextJoin(OQueryTableConnection* pEntryConn,::rtl::OUSt
 ::rtl::OUString OQueryDesignView::GenerateGroupBy(::std::vector<OTableFieldDesc*>* pFieldList, sal_Bool bMulti )
 {
 
-    Reference< XDatabaseMetaData >  xMetaData = static_cast<OQueryController*>(getController())->getConnection()->getMetaData();
+    Reference< XConnection> xConnection = static_cast<OQueryController*>(getController())->getConnection();
+    if(!xConnection.is())
+        return ::rtl::OUString();
+
+    Reference< XDatabaseMetaData >  xMetaData = xConnection->getMetaData();
     ::rtl::OUString aQuote = xMetaData->getIdentifierQuoteString();
 
     ::rtl::OUString aGroupByStr;
@@ -913,7 +928,10 @@ sal_Bool OQueryDesignView::GenerateCriterias(::rtl::OUString& rRetStr,::rtl::OUS
     {
         nMaxCriteria = ::std::max<sal_uInt16>(nMaxCriteria,(*aIter)->GetCriteria().size());
     }
-    Reference< XDatabaseMetaData >  xMetaData = static_cast<OQueryController*>(getController())->getConnection()->getMetaData();
+    Reference< XConnection> xConnection = static_cast<OQueryController*>(getController())->getConnection();
+    if(!xConnection.is())
+        return FALSE;
+    Reference< XDatabaseMetaData >  xMetaData = xConnection->getMetaData();
     ::rtl::OUString aQuote = xMetaData->getIdentifierQuoteString();
 
     for (sal_uInt16 i=0 ; i < nMaxCriteria ; i++)
@@ -1052,8 +1070,11 @@ sal_Bool OQueryDesignView::GenerateCriterias(::rtl::OUString& rRetStr,::rtl::OUS
 
     ::rtl::OUString aRetStr, aColumnName;
     String aWorkStr;
+    Reference< XConnection> xConnection = static_cast<OQueryController*>(getController())->getConnection();
+    if(!xConnection.is())
+        return aRetStr;
 
-    Reference< XDatabaseMetaData >  xMetaData = static_cast<OQueryController*>(getController())->getConnection()->getMetaData();
+    Reference< XDatabaseMetaData >  xMetaData = xConnection->getMetaData();
     ::rtl::OUString aQuote = xMetaData->getIdentifierQuoteString();
     // * darf keine Filter enthalten : habe ich die entsprechende Warnung schon angezeigt ?
     sal_Bool bCritsOnAsterikWarning = sal_False;        // ** TMFS **

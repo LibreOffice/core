@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryTableView.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-01 13:28:47 $
+ *  last change: $Author: oj $ $Date: 2001-03-01 15:45:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -392,8 +392,11 @@ void OQueryTableView::AddTabWin(const ::rtl::OUString& strDatabase, const ::rtl:
 
     // leider ist strTableName voll qualifiziert, das OQueryDesignView erwartet aber einen String, der
     // nur aus Schema und Tabelle besteht und keinen Katalog enthaelt.
+    Reference< XConnection> xConnection = m_pView->getController()->getConnection();
+    if(!xConnection.is())
+        return;
     ::rtl::OUString sCatalog, sSchema, sTable;
-    ::dbtools::qualifiedNameComponents(m_pView->getController()->getConnection()->getMetaData(),
+    ::dbtools::qualifiedNameComponents(xConnection->getMetaData(),
                                 strDatabase,
                                 sCatalog,
                                 sSchema,

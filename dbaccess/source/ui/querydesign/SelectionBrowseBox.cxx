@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-28 10:18:26 $
+ *  last change: $Author: oj $ $Date: 2001-03-01 15:45:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,22 +217,25 @@ OSelectionBrowseBox::~OSelectionBrowseBox()
 // -----------------------------------------------------------------------------
 void OSelectionBrowseBox::initialize()
 {
-    Reference< XDatabaseMetaData >  xMetaData = static_cast<OQueryController*>(getDesignView()->getController())->getConnection()->getMetaData();
-    // Diese Funktionen stehen nur unter CORE zur Verfügung
-    if(xMetaData->supportsCoreSQLGrammar())
+    Reference< XConnection> xConnection = static_cast<OQueryController*>(getDesignView()->getController())->getConnection();
+    if(xConnection.is())
     {
-        xub_StrLen nCount   = m_aFunctionStrings.GetTokenCount();
-        for (xub_StrLen nIdx = 0; nIdx < nCount; nIdx++)
-            m_pFunctionCell->InsertEntry(m_aFunctionStrings.GetToken(nIdx));
+        Reference< XDatabaseMetaData >  xMetaData = xConnection->getMetaData();
+        // Diese Funktionen stehen nur unter CORE zur Verfügung
+        if(xMetaData->supportsCoreSQLGrammar())
+        {
+            xub_StrLen nCount   = m_aFunctionStrings.GetTokenCount();
+            for (xub_StrLen nIdx = 0; nIdx < nCount; nIdx++)
+                m_pFunctionCell->InsertEntry(m_aFunctionStrings.GetToken(nIdx));
+        }
+        else // sonst nur COUNT(*)
+        {
+            m_pFunctionCell->InsertEntry(m_aFunctionStrings.GetToken(0));
+            m_pFunctionCell->InsertEntry(m_aFunctionStrings.GetToken(2)); // 2 -> COUNT
+        }
+        m_bOrderByUnRelated = xMetaData->supportsOrderByUnrelated();
+        m_bGroupByUnRelated = xMetaData->supportsGroupByUnrelated();
     }
-    else // sonst nur COUNT(*)
-    {
-        m_pFunctionCell->InsertEntry(m_aFunctionStrings.GetToken(0));
-        m_pFunctionCell->InsertEntry(m_aFunctionStrings.GetToken(2)); // 2 -> COUNT
-    }
-
-    m_bOrderByUnRelated = xMetaData->supportsOrderByUnrelated();
-    m_bGroupByUnRelated = xMetaData->supportsGroupByUnrelated();
 
     Init();
 }
@@ -277,9 +280,14 @@ void OSelectionBrowseBox::Init()
             m_nVisibleCount++;
     }
     RowInserted(0, m_nVisibleCount, sal_False);
-    Reference< XDatabaseMetaData >  xMetaData = static_cast<OQueryController*>(getDesignView()->getController())->getConnection()->getMetaData();
-
-    m_nMaxColumns = xMetaData->getMaxColumnsInSelect();
+    Reference< XConnection> xConnection = static_cast<OQueryController*>(getDesignView()->getController())->getConnection();
+    if(xConnection.is())
+    {
+        Reference< XDatabaseMetaData >  xMetaData = xConnection->getMetaData();
+        m_nMaxColumns = xMetaData->getMaxColumnsInSelect();
+    }
+    else
+        m_nMaxColumns = 0;
 }
 
 //------------------------------------------------------------------------------
@@ -492,7 +500,10 @@ void OSelectionBrowseBox::InitController(DbCellControllerRef& rController, long 
             break;
         case BROW_FUNCTION_ROW:
         {
-            Reference< XDatabaseMetaData >  xMetaData = static_cast<OQueryController*>(getDesignView()->getController())->getConnection()->getMetaData();
+            Reference< XConnection> xConnection = static_cast<OQueryController*>(getDesignView()->getController())->getConnection();
+            if(!xConnection.is())
+                break;
+            Reference< XDatabaseMetaData >  xMetaData = xConnection->getMetaData();
             // Diese Funktionen stehen nur unter CORE zur Verfügung
             if(xMetaData->supportsCoreSQLGrammar())
             {
@@ -678,7 +689,10 @@ sal_Bool OSelectionBrowseBox::SaveModified()
                     pEntry->SetField(aFieldName);
 
                     // Falls nur COUNT(*) erlaubt wird
-                    Reference< XDatabaseMetaData >  xMetaData = static_cast<OQueryController*>(getDesignView()->getController())->getConnection()->getMetaData();
+                    Reference< XConnection> xConnection = static_cast<OQueryController*>(getDesignView()->getController())->getConnection();
+                    if(!xConnection.is())
+                        break;
+                    Reference< XDatabaseMetaData >  xMetaData = xConnection->getMetaData();
                     if(xMetaData->supportsCoreSQLGrammar()
                         && aFieldName.GetChar(0) != '*' && pEntry->GetFunction().getLength())
                     {
@@ -829,7 +843,10 @@ sal_Bool OSelectionBrowseBox::SaveModified()
                 {
                     strOldCellContents = pEntry->GetFunction();
                     sal_uInt16 nPos = m_pFunctionCell->GetSelectEntryPos();
-                    Reference< XDatabaseMetaData >  xMetaData = static_cast<OQueryController*>(getDesignView()->getController())->getConnection()->getMetaData();
+                    Reference< XConnection> xConnection = static_cast<OQueryController*>(getDesignView()->getController())->getConnection();
+                    if(!xConnection.is())
+                        break;
+                    Reference< XDatabaseMetaData >  xMetaData = xConnection->getMetaData();
                     // Diese Funktionen stehen nur unter CORE zur Verfügung
                     sal_uInt16 nFunctionCount =
                                         xMetaData->supportsCoreSQLGrammar()
@@ -864,6 +881,9 @@ sal_Bool OSelectionBrowseBox::SaveModified()
                 break;
             default:
             {
+                Reference< XConnection> xConnection = static_cast<OQueryController*>(getDesignView()->getController())->getConnection();
+                if(!xConnection.is())
+                    break;
 
                 sal_uInt16  nIdx = nRow - BROW_CRIT1_ROW;
                 String aText = m_pTextCell->GetText();
@@ -890,7 +910,7 @@ sal_Bool OSelectionBrowseBox::SaveModified()
                     if (pParseNode)
                     {
                         pParseNode->parseNodeToPredicateStr(aCrit,
-                                                            static_cast<OQueryController*>(getDesignView()->getController())->getConnection()->getMetaData(),
+                                                            xConnection->getMetaData(),
                                                             static_cast<OQueryController*>(getDesignView()->getController())->getNumberFormatter(),
                                                             xColumn,
                                                             getDesignView()->getLocale(),
@@ -924,7 +944,7 @@ sal_Bool OSelectionBrowseBox::SaveModified()
                             if (pParseNode)
                             {
                                 pParseNode->parseNodeToPredicateStr(aCrit,
-                                                                    static_cast<OQueryController*>(getDesignView()->getController())->getConnection()->getMetaData(),
+                                                                    xConnection->getMetaData(),
                                                                     static_cast<OQueryController*>(getDesignView()->getController())->getNumberFormatter(),
                                                                     xColumn,
                                                                     getDesignView()->getLocale(),
@@ -1459,10 +1479,13 @@ void OSelectionBrowseBox::CheckFreeColumns(long& rCol)
 //------------------------------------------------------------------------------
 void OSelectionBrowseBox::AddGroupBy( const OTableFieldDesc& rInfo )
 {
+    Reference< XConnection> xConnection = static_cast<OQueryController*>(getDesignView()->getController())->getConnection();
+    if(!xConnection.is())
+        return;
     DBG_CHKTHIS(OSelectionBrowseBox,NULL);
     DBG_ASSERT(!rInfo.IsEmpty(),"AddGroupBy:: OTableFieldDesc sollte nicht Empty sein!");
     OTableFieldDesc* pEntry;
-    ::comphelper::UStringMixEqual bCase(static_cast<OQueryController*>(getDesignView()->getController())->getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers());
+    ::comphelper::UStringMixEqual bCase(xConnection->getMetaData()->storesMixedCaseQuotedIdentifiers());
     ::std::vector<OTableFieldDesc*>::iterator aIter = static_cast<OQueryController*>(getDesignView()->getController())->getTableFieldDesc()->begin();
     for(;aIter != static_cast<OQueryController*>(getDesignView()->getController())->getTableFieldDesc()->end();++aIter)
     {
@@ -1498,10 +1521,13 @@ void OSelectionBrowseBox::AddGroupBy( const OTableFieldDesc& rInfo )
 //------------------------------------------------------------------------------
 void OSelectionBrowseBox::AddCondition( const OTableFieldDesc& rInfo, const String& rValue, const sal_uInt16 nLevel, const char* pOp )
 {
+    Reference< XConnection> xConnection = static_cast<OQueryController*>(getDesignView()->getController())->getConnection();
+    if(!xConnection.is())
+        return;
     DBG_CHKTHIS(OSelectionBrowseBox,NULL);
     DBG_ASSERT(!rInfo.IsEmpty(),"AddCondition:: OTableFieldDesc sollte nicht Empty sein!");
     OTableFieldDesc* pEntry;
-    ::comphelper::UStringMixEqual bCase(static_cast<OQueryController*>(getDesignView()->getController())->getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers());
+    ::comphelper::UStringMixEqual bCase(xConnection->getMetaData()->storesMixedCaseQuotedIdentifiers());
 
     ::std::vector<OTableFieldDesc*>::iterator aIter = static_cast<OQueryController*>(getDesignView()->getController())->getTableFieldDesc()->begin();
     for(;aIter != static_cast<OQueryController*>(getDesignView()->getController())->getTableFieldDesc()->end();++aIter)
@@ -1557,12 +1583,15 @@ void OSelectionBrowseBox::AddCondition( const OTableFieldDesc& rInfo, const Stri
 //------------------------------------------------------------------------------
 void OSelectionBrowseBox::AddOrder( const OTableFieldDesc& rInfo, const EOrderDir eDir, sal_uInt16& nPos )
 {
+    Reference< XConnection> xConnection = static_cast<OQueryController*>(getDesignView()->getController())->getConnection();
+    if(!xConnection.is())
+        return;
     DBG_CHKTHIS(OSelectionBrowseBox,NULL);
     DBG_ASSERT(!rInfo.IsEmpty(),"AddOrder:: OTableFieldDesc sollte nicht Empty sein!");
     // nPos merkt sich die Spalte in die Sortierung eingetragen wird,
     // da weitere Sortierungen nur dahinter abgelegt werden duerfen
     OTableFieldDesc* pEntry;
-    ::comphelper::UStringMixEqual bCase(static_cast<OQueryController*>(getDesignView()->getController())->getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers());
+    ::comphelper::UStringMixEqual bCase(xConnection->getMetaData()->storesMixedCaseQuotedIdentifiers());
 
     ::std::vector<OTableFieldDesc*>::iterator aIter = static_cast<OQueryController*>(getDesignView()->getController())->getTableFieldDesc()->begin();
     for(;aIter != static_cast<OQueryController*>(getDesignView()->getController())->getTableFieldDesc()->end();++aIter)

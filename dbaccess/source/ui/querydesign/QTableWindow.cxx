@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QTableWindow.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-23 15:04:37 $
+ *  last change: $Author: oj $ $Date: 2001-03-01 15:45:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -344,8 +344,11 @@ void OQueryTableWindow::OnEntryDoubleClicked(SvLBoxEntry* pEntry)
 sal_Bool OQueryTableWindow::ExistsField(const ::rtl::OUString& strFieldName, OTableFieldDesc& rInfo)
 {
     DBG_ASSERT(m_pListBox != NULL, "OQueryTableWindow::ExistsField : habe keine ::com::sun::star::form::ListBox !");
+    Reference< XConnection> xConnection = getTableView()->getDesignView()->getController()->getConnection();
+    if(!xConnection.is())
+        return FALSE;
     SvLBoxEntry* pEntry = m_pListBox->First();
-    ::comphelper::UStringMixEqual bCase(getTableView()->getDesignView()->getController()->getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers());
+    ::comphelper::UStringMixEqual bCase(xConnection->getMetaData()->storesMixedCaseQuotedIdentifiers());
 
     while (pEntry)
     {
