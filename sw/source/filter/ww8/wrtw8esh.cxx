@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 17:06:49 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 11:54:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1762,6 +1762,9 @@ INT32 SwBasicEscherEx::WriteFlyFrameAttr(const SwFrmFmt& rFmt,
                 rPropOpt.AddOpt( aExhperProp[ n ], DrawModelToEmu(
                     ((SvxBoxItem*)pItem)->GetDistance( n ) ));
             }
+            else
+                // MM If there is no line the distance should be set to 0
+                rPropOpt.AddOpt( aExhperProp[ n ], DrawModelToEmu(0));
     }
     if( bFirstLine )                // no valid line found
     {
