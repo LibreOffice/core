@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: kso $ $Date: 2001-01-31 08:20:12 $
+#   last change: $Author: kso $ $Date: 2001-02-06 11:31:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,7 +85,6 @@ IDLFILES=\
     CommandInfo.idl\
     CommandInfoChange.idl\
     CommandInfoChangeEvent.idl\
-    Configuration.idl\
     ConnectionMode.idl\
     Content.idl\
     ContentAction.idl\
@@ -98,8 +97,6 @@ IDLFILES=\
     ContentProviderInfo.idl\
     ContentProviderProxy.idl\
     ContentProviderProxyFactory.idl\
-    ContentProviderServiceInfo.idl\
-    ContentProviderServiceInfo2.idl\
     ContentResultSet.idl\
     ContentResultSetCapability.idl\
     ContentTransmitter.idl\
@@ -208,11 +205,8 @@ IDLFILES=\
     XContentIdentifierFactory.idl\
     XContentIdentifierMapping.idl\
     XContentProvider.idl\
-    XContentProviderConfiguration.idl\
-    XContentProviderConfigurationManager.idl\
     XContentProviderFactory.idl\
     XContentProviderManager.idl\
-    XContentProviderServiceRegistry.idl\
     XContentProviderSupplier.idl\
     XContentTransmitter.idl\
     XDataContainer.idl\
