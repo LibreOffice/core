@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpp3.c,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pl $ $Date: 2002-11-01 12:30:59 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 15:56:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@
 int AddInclude( char *pIncStr );  /* BP, 11.09.91, Forward-Deklaration */
 #endif
 
-#if defined(DEBUG) && (HOST == SYS_VMS || HOST == SYS_UNIX)
+#if (OSL_DEBUG_LEVEL > 1) && (HOST == SYS_VMS || HOST == SYS_UNIX)
 #include        <signal.h>
 #endif
 
@@ -97,13 +97,13 @@ char            *filename;
         register FILE           *fp;
 
         if ((fp = fopen(filename, "r")) == NULL) {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
             if ( debug || !bDumpDefs )
                 perror(filename);
 #endif
             return (FALSE);
         }
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         if (debug)
             fprintf(stderr, "Reading from \"%s\"\n", filename);
 #endif
@@ -358,7 +358,7 @@ char            *argv[];
                         cwarn("\"%s\" wasn't defined", ap);
                     break;
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                 case 'X':                       /* Debug                */
                     debug = (isdigit(*ap)) ? atoi(ap) : 1;
 #if (HOST == SYS_VMS || HOST == SYS_UNIX)
@@ -368,7 +368,7 @@ char            *argv[];
                     break;
 #endif
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                 case 'P':                       /* #define's dump       */
                     bDumpDefs = 1;
                     fprintf(stderr, "Dump #define's is on\n");
@@ -384,7 +384,7 @@ char            *argv[];
   -N\t\t\tDon't predefine target-specific names\n\
   -Stext\t\tSpecify sizes for #if sizeof\n\
   -Usymbol\t\tUndefine symbol\n");
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                     fprintf(stderr, "  -Xvalue\t\tSet internal debug flag\n");
                     fprintf(stderr, "  -P\t\t\tdump #define's\n");
 #endif
@@ -392,7 +392,7 @@ char            *argv[];
                 }                       /* Switch on all options        */
             }                           /* If it's a -option            */
         }                               /* For all arguments            */
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         if ( (bDumpDefs ? j > 4 : j > 3) ) {
 #else
         if (j > 3) {
@@ -418,7 +418,7 @@ readoptions(char* filename, char*** pfargv)
         poptbuff=&optbuff[0];
         filename++;
         if ((fp = fopen(filename, "r")) == NULL) {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
             if ( debug || !bDumpDefs )
                 perror(filename);
 #endif
