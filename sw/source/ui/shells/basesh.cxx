@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basesh.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 16:11:30 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 09:54:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -554,13 +554,12 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
                     // zerstoert sein kann
                     SwView* pView = &rView;
                     ULONG nFormatId = 0;
+                    rReq.Ignore();
+                    bIgnore = sal_True;
                     int nRet = SwTransferable::PasteSpecial( rSh, aDataHelper, nFormatId );
-                    rReq.SetReturnValue( SfxInt16Item( nId, nRet ) );
                     if ( nRet && rReq.IsRecording() )
                     {
-                        rReq.Ignore();
-                        bIgnore = sal_True;
-                        SfxRequest aReq( rView.GetViewFrame(), SID_CLIPBOARD_FORMAT_ITEMS );
+                        SfxRequest aReq( pView->GetViewFrame(), SID_CLIPBOARD_FORMAT_ITEMS );
                         aReq.AppendItem( SfxUInt32Item( SID_CLIPBOARD_FORMAT_ITEMS, nFormatId ) );
                         aReq.Done();
                     }
