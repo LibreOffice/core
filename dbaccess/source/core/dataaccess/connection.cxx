@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connection.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 16:33:05 $
+ *  last change: $Author: obo $ $Date: 2005-03-18 10:05:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -360,6 +360,8 @@ OConnection::OConnection(ODatabaseSource& _rDB
             ,m_pTables(NULL)
             ,m_pViews(NULL)
             ,m_bSupportsViews(sal_False)
+            ,m_bSupportsUsers(sal_False)
+            ,m_bSupportsGroups(sal_False)
 {
     DBG_CTOR(OConnection,NULL);
     osl_incrementInterlockedCount(&m_refCount);
@@ -425,9 +427,7 @@ OConnection::OConnection(ODatabaseSource& _rDB
             // some dbs doesn't support this type so we should ask if a XViewsSupplier is supported
             if(!m_bSupportsViews)
             {
-                Reference< XViewsSupplier > xMaster;
-                m_xMasterTables = ::dbtools::getDataDefinitionByURLAndConnection(xMeta->getURL(),m_xMasterConnection,m_xORB);
-                xMaster.set(m_xMasterTables,UNO_QUERY);
+                Reference< XViewsSupplier > xMaster(getMasterTables(),UNO_QUERY);
 
                 if (xMaster.is() && xMaster->getViews().is())
                     m_bSupportsViews = sal_True;
@@ -438,6 +438,9 @@ OConnection::OConnection(ODatabaseSource& _rDB
                 m_pViews->addContainerListener(m_pTables);
                 m_pTables->addContainerListener(m_pViews);
             }
+            m_bSupportsUsers = Reference< XUsersSupplier> (getMasterTables(),UNO_QUERY).is();
+            m_bSupportsGroups = Reference< XGroupsSupplier> (getMasterTables(),UNO_QUERY).is();
+
         }
     }
     catch(Exception&)
@@ -531,7 +534,7 @@ void SAL_CALL OConnection::clearWarnings(  ) throw(SQLException, RuntimeExceptio
 //--------------------------------------------------------------------------
 Sequence< Type > OConnection::getTypes() throw (RuntimeException)
 {
-    if ( m_bSupportsViews )
+    if ( m_bSupportsViews && m_bSupportsUsers && m_bSupportsGroups )
         return concatSequences(OSubComponent::getTypes(), OConnection_Base::getTypes());
 
     // here views are supported
@@ -539,13 +542,30 @@ Sequence< Type > OConnection::getTypes() throw (RuntimeException)
     Sequence<Type> aConTypes = OConnection_Base::getTypes();
     sal_Int32 nSize = aTypes.getLength();
     aTypes.realloc(aTypes.getLength() + aConTypes.getLength() - 1);
-    Type* pBegin    = aConTypes.getArray();
-    Type* pEnd      = pBegin + aConTypes.getLength();
-    Type aTypeToHide = getCppuType( (Reference<XViewsSupplier>*)0);
-    for (; pBegin != pEnd; ++pBegin)
+    Type* pIter = aConTypes.getArray();
+    Type* pEnd  = pIter + aConTypes.getLength();
+    Type aViewToHide    = getCppuType( (Reference<XViewsSupplier>*)0);
+    Type aGroupToHide   = getCppuType( (Reference<XGroupsSupplier>*)0);
+    Type aUserToHide    = getCppuType( (Reference<XUsersSupplier>*)0);
+    for (; pIter != pEnd; ++pIter )
     {
-        if(*pBegin != aTypeToHide)
-            aTypes.getArray()[nSize++] = *pBegin;
+        if ( *pIter == aViewToHide )
+        {
+            if ( m_bSupportsViews )
+                aTypes.getArray()[nSize++] = *pIter;
+        }
+        else if ( *pIter == aGroupToHide )
+        {
+            if ( m_bSupportsGroups )
+                aTypes.getArray()[nSize++] = *pIter;
+        }
+        else if ( *pIter == aUserToHide )
+        {
+            if ( m_bSupportsUsers )
+                aTypes.getArray()[nSize++] = *pIter;
+        }
+        else
+            aTypes.getArray()[nSize++] = *pIter;
     }
     return aTypes;
 }
@@ -561,6 +581,10 @@ Sequence< sal_Int8 > OConnection::getImplementationId() throw (RuntimeException)
 Any OConnection::queryInterface( const Type & rType ) throw (RuntimeException)
 {
     if(!m_bSupportsViews && rType == getCppuType( (Reference<XViewsSupplier>*)0))
+        return Any();
+    else if(!m_bSupportsUsers && rType == getCppuType( (Reference<XUsersSupplier>*)0))
+        return Any();
+    else if(!m_bSupportsGroups && rType == getCppuType( (Reference<XGroupsSupplier>*)0))
         return Any();
     Any aReturn = OSubComponent::queryInterface( rType );
     if (!aReturn.hasValue())
@@ -661,21 +685,7 @@ void OConnection::refresh(const Reference< XNameAccess >& _rToBeRefreshed)
     {
         if (!m_pTables->isInitialized())
         {
-
-            // check if out "master connection" can supply tables
-            if(!m_xMasterTables.is())
-            {
-                try
-                {
-                    Reference<XDatabaseMetaData> xMeta = getMetaData();
-                    if ( xMeta.is() )
-                        m_xMasterTables = ::dbtools::getDataDefinitionByURLAndConnection(xMeta->getURL(),m_xMasterConnection,m_xORB);
-                }
-                catch(SQLException&)
-                {
-                }
-            }
-
+            getMasterTables();
 
             if (m_xMasterTables.is() && m_xMasterTables->getTables().is())
             {   // yes -> wrap them
@@ -692,20 +702,7 @@ void OConnection::refresh(const Reference< XNameAccess >& _rToBeRefreshed)
         if (!m_pViews->isInitialized())
         {
             // check if out "master connection" can supply tables
-            Reference< XViewsSupplier > xMaster(m_xMasterTables,UNO_QUERY);
-            if(!m_xMasterTables.is())
-            {
-                try
-                {
-                    Reference<XDatabaseMetaData> xMeta = getMetaData();
-                    if ( xMeta.is() )
-                        m_xMasterTables = ::dbtools::getDataDefinitionByURLAndConnection(xMeta->getURL(),m_xMasterConnection,m_xORB);
-                    xMaster.set(m_xMasterTables,UNO_QUERY);
-                }
-                catch(SQLException&)
-                {
-                }
-            }
+            Reference< XViewsSupplier > xMaster(getMasterTables(),UNO_QUERY);
 
             if (xMaster.is() && xMaster->getViews().is())
                 m_pViews->construct(xMaster->getViews(),m_aTableFilter, m_aTableTypeFilter);
@@ -804,6 +801,42 @@ Sequence< ::rtl::OUString > SAL_CALL OConnection::getAvailableServiceNames(  ) t
     return aRet;
 }
 // -----------------------------------------------------------------------------
+Reference< XTablesSupplier > OConnection::getMasterTables()
+{
+// check if out "master connection" can supply tables
+    if(!m_xMasterTables.is())
+    {
+        try
+        {
+            Reference<XDatabaseMetaData> xMeta = getMetaData();
+            if ( xMeta.is() )
+                m_xMasterTables = ::dbtools::getDataDefinitionByURLAndConnection(xMeta->getURL(),m_xMasterConnection,m_xORB);
+        }
+        catch(SQLException&)
+        {
+        }
+    }
+    return m_xMasterTables;
+}
+// -----------------------------------------------------------------------------
+// XUsersSupplier
+Reference< XNameAccess > SAL_CALL OConnection::getUsers(  ) throw(RuntimeException)
+{
+    MutexGuard aGuard(m_aMutex);
+    checkDisposed();
+
+    Reference<XUsersSupplier> xUsr(getMasterTables(),UNO_QUERY);
+    return xUsr.is() ? xUsr->getUsers() : Reference< XNameAccess >();
+}
+// -----------------------------------------------------------------------------
+// XGroupsSupplier
+Reference< XNameAccess > SAL_CALL OConnection::getGroups(  ) throw(RuntimeException)
+{
+    MutexGuard aGuard(m_aMutex);
+    checkDisposed();
+    Reference<XGroupsSupplier> xGrp(getMasterTables(),UNO_QUERY);
+    return xGrp.is() ? xGrp->getGroups() : Reference< XNameAccess >();
+}
 //........................................................................
 }   // namespace dbaccess
 //........................................................................
