@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabarea.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-28 13:22:56 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 06:29:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4413,7 +4413,7 @@ TabPage RID_SVXPAGE_COLOR
         Text[ english_us ] = "Color system";
         Text[ portuguese ] = "Color system";
         Text[ russian ] = "Μξδελό φβεςΰ";
-        Text[ greek ] = "Color system";
+        Text[ greek ] = "Δείγμα χρώματος";
         Text[ dutch ] = "Color system";
         Text[ french ] = "Color system";
         Text[ spanish ] = "Color system";
