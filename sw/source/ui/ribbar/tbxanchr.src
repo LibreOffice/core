@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxanchr.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:44:16 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:23:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@ Menu MN_ANCHOR_POPUP
             Text [ ENGLISH ] = "Page" ;
             Text [ portuguese ] = "P�gina" ;
             Text [ english_us ] = "Page" ;
-            Text [ portuguese_brazilian ] = "Seite" ;
+            Text [ portuguese_brazilian ] = "P�gina" ;
             Text [ swedish ] = "Sida" ;
             Text [ danish ] = "Side" ;
             Text [ italian ] = "Pagina" ;
@@ -94,6 +94,9 @@ Menu MN_ANCHOR_POPUP
             Text[ catalan ] = "P�gina";
             Text[ finnish ] = "Sivu";
             Text[ thai ] = "หน้า";
+            Text[ czech ] = "Stránka";
+            Text[ hebrew ] = "‮דף‬";
+            Text[ hindi ] = "पृष्ठ";
         };
         MenuItem
         {
@@ -104,7 +107,7 @@ Menu MN_ANCHOR_POPUP
             Text [ ENGLISH ] = "Paragraph" ;
             Text [ portuguese ] = "Par�grafo" ;
             Text [ english_us ] = "Paragraph" ;
-            Text [ portuguese_brazilian ] = "Absatz" ;
+            Text [ portuguese_brazilian ] = "Par�grafo" ;
             Text [ swedish ] = "Stycke" ;
             Text [ danish ] = "Afsnit" ;
             Text [ italian ] = "Paragrafo" ;
@@ -119,11 +122,14 @@ Menu MN_ANCHOR_POPUP
             Text[ arabic ] = "����";
             Text[ greek ] = "����������";
             Text[ korean ] = "단락";
-            Text[ turkish ] = "Paragrafa";
+            Text[ turkish ] = "Paragraf";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Par�graf";
             Text[ finnish ] = "Kappale";
             Text[ thai ] = "ย่อหน้า";
+            Text[ czech ] = "Odstavec";
+            Text[ hebrew ] = "‮פסקאות‬";
+            Text[ hindi ] = "परिच्छेद";
         };
         MenuItem
         {
@@ -133,7 +139,7 @@ Menu MN_ANCHOR_POPUP
             Text = "Am Zeichen" ;
             Text [ ENGLISH ] = "At character" ;
             Text [ english_us ] = "To Character" ;
-            Text [ portuguese_brazilian ] = "Am Zeichen" ;
+            Text [ portuguese_brazilian ] = "No caracter" ;
             Text [ swedish ] = "Vid tecken" ;
             Text [ danish ] = "Til tegn" ;
             Text [ italian ] = "Al carattere" ;
@@ -143,7 +149,7 @@ Menu MN_ANCHOR_POPUP
             Text [ portuguese ] = "No car�cter" ;
             Text[ chinese_simplified ] = "在字符上";
             Text[ russian ] = "� �������";
-            Text[ polish ] = "Przy znaku";
+            Text[ polish ] = "Do znaku";
             Text[ japanese ] = "文字に";
             Text[ chinese_traditional ] = "在字元上";
             Text[ arabic ] = "��� �����";
@@ -154,6 +160,9 @@ Menu MN_ANCHOR_POPUP
             Text[ catalan ] = "Al car�cter";
             Text[ finnish ] = "Merkkiin";
             Text[ thai ] = "ที่ตัวอักขระ";
+            Text[ czech ] = "Na znak";
+            Text[ hebrew ] = "Am Zeichen";
+            Text[ hindi ] = "अक्षर में";
         };
         MenuItem
         {
@@ -164,7 +173,7 @@ Menu MN_ANCHOR_POPUP
             Text [ ENGLISH ] = "Like a character" ;
             Text [ portuguese ] = "Como car�cter" ;
             Text [ english_us ] = "As Character" ;
-            Text [ portuguese_brazilian ] = "Zeichen" ;
+            Text [ portuguese_brazilian ] = "Como caracter" ;
             Text [ swedish ] = "Som tecken" ;
             Text [ danish ] = "Som tegn" ;
             Text [ italian ] = "Come carattere" ;
@@ -184,6 +193,9 @@ Menu MN_ANCHOR_POPUP
             Text[ catalan ] = "Com a car�cter";
             Text[ finnish ] = "Merkkin�";
             Text[ thai ] = "เป็นตัวอักขระ";
+            Text[ czech ] = "Jako znak";
+            Text[ hebrew ] = "Als Zeichen";
+            Text[ hindi ] = "अक्षर जैसे";
         };
         MenuItem
         {
@@ -194,7 +206,7 @@ Menu MN_ANCHOR_POPUP
             Text [ ENGLISH ] = "Frame" ;
             Text [ portuguese ] = "Moldura" ;
             Text [ english_us ] = "Frame" ;
-            Text [ portuguese_brazilian ] = "Rahmen" ;
+            Text [ portuguese_brazilian ] = "Moldura" ;
             Text [ swedish ] = "Ram" ;
             Text [ danish ] = "Ramme" ;
             Text [ italian ] = "Cornice" ;
@@ -214,9 +226,29 @@ Menu MN_ANCHOR_POPUP
             Text[ catalan ] = "Marc";
             Text[ finnish ] = "Kehys";
             Text[ thai ] = "กรอบ";
+            Text[ czech ] = "Rámec";
+            Text[ hebrew ] = "‮מסגרת‬";
+            Text[ hindi ] = "फ्रेम ";
         };
     };
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
