@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mgetempl.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 14:15:35 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 18:14:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,10 +166,10 @@ TabPage TP_MANAGE_STYLES
         Text[ japanese ] = "ζ¬΅γ«η¶γγ‚Ήγ‚Ώγ‚¤γƒ«(~X)";
         Text[ chinese_traditional ] = "δΈ‹δΈ€ε€‹ζ¨£εΌ(~X)";
         Text[ arabic ] = "δγΨ ΚΗαν";
-        Text[ greek ] = "Επόμενο πρότυπο";
+        Text[ greek ] = "Επόμενο πρότ~υπο";
         Text[ korean ] = "λ‹¤μ μ¤νƒ€μΌ(~X)";
         Text[ turkish ] = "So~nraki biηim";
-        Text[ language_user1 ] = "\"Vorlagen\" Styles are always capitalized no matter where they show up. EM15.5.00";
+        Text[ language_user1 ] = "; \"Vorlagen\" Styles are always capitalized no matter where they show up. EM15.5.00";
         Text[ catalan ] = "~Estil segόent";
         Text[ thai ] = "ΰΈ¥ΰΈ±ΰΈΰΈ©ΰΈ“ΰΈ°ΰΈ–ΰΈ±~ΰΈ”ΰΉ„ΰΈ›";
         Text[ czech ] = "DalΕ΅Γ­ styl";
@@ -211,7 +211,7 @@ TabPage TP_MANAGE_STYLES
         Text[ chinese_traditional ] = "ι€£ηµε°";
         Text[ arabic ] = "γΡΚΘΨ Θά";
         Text[ greek ] = "~Σύνδεση με";
-        Text[ korean ] = "μ—°κ²°(~B)";
+        Text[ korean ] = "μ—°κ²°(~L)";
         Text[ turkish ] = "~Baπlanύlan";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Basat en";
@@ -307,7 +307,7 @@ TabPage TP_MANAGE_STYLES
         Text[ japanese ] = "θª¬ζ";
         Text[ chinese_traditional ] = "ε«ζ‰";
         Text[ arabic ] = "νΝΚζν Ϊαμ";
-        Text[ greek ] = "Περιεχόμενα";
+        Text[ greek ] = "Περιέχει";
         Text[ korean ] = "ν¬ν•¨";
         Text[ turkish ] = "έηerir";
         Text[ language_user1 ] = " ";
@@ -320,6 +320,7 @@ TabPage TP_MANAGE_STYLES
     };
 };
  // ********************************************************************** EOF
+
 
 
 
