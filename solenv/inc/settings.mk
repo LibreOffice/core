@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.100 $
+#   $Revision: 1.101 $
 #
-#   last change: $Author: hjs $ $Date: 2002-03-21 18:21:53 $
+#   last change: $Author: hjs $ $Date: 2002-03-21 19:24:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -830,6 +830,7 @@ INCGUI=$(PRJ)$/$(GUIBASE)$/inc
 INCCOM=$(OUT)$/inc
 INCCOMX=$(OUT)$/inc
 INCUNOIDL=$(INCCOM)$/$(PRJNAME)
+EXT_INCLUDE:=$(INCLUDE)
 I={$(INCLUDE)}
 INCDEPN=. $(INCGUI) $(INCLOCAL) $(INC)
 .IF "$(PRJINC)"!=""
@@ -1207,7 +1208,9 @@ SVXLIBS=svxitems dialogs editeng svrtf svdraw outliner xout si basicide \
 COMID=$(COM)
 .ENDIF          # "$(DISABLE_ENHANCED_COMID)"==""
 .IF "$(SOLAR_JAVA)"=="TRUE"
+.IF "$(USE_JAVAVER)"!=""
 .INCLUDE : tg_javav.mk
+.ENDIF "$(USE_JAVAVER)"!=""
 .ENDIF			# "$(SOLAR_JAVA)"=="TRUE"
 
 # --- Neues Environment erweitern ----------------------------------
