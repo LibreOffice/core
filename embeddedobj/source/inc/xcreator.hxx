@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcreator.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 17:53:16 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:54:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,29 +71,36 @@
 #ifndef _COM_SUN_STAR_EMBED_XLINKCREATOR_HPP_
 #include <com/sun/star/embed/XLinkCreator.hpp>
 #endif
+#ifndef _COM_SUN_STAR_EMBED_XLINKFACTORY_HPP_
+#include <com/sun/star/embed/XLinkFactory.hpp>
+#endif
 
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
 
 
-#ifndef _CPPUHELPER_IMPLBASE4_HXX_
-#include <cppuhelper/implbase4.hxx>
+#ifndef _CPPUHELPER_IMPLBASE5_HXX_
+#include <cppuhelper/implbase5.hxx>
 #endif
 
+#include "confighelper.hxx"
 
-class UNOEmbeddedObjectCreator : public ::cppu::WeakImplHelper4<
+class UNOEmbeddedObjectCreator : public ::cppu::WeakImplHelper5<
                                                 ::com::sun::star::embed::XEmbedObjectCreator,
                                                 ::com::sun::star::embed::XEmbedObjectFactory,
                                                 ::com::sun::star::embed::XLinkCreator,
+                                                ::com::sun::star::embed::XLinkFactory,
                                                 ::com::sun::star::lang::XServiceInfo >
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xFactory;
 
+    ConfigurationHelper m_aConfigHelper;
 public:
     UNOEmbeddedObjectCreator(
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory )
     : m_xFactory( xFactory )
+    , m_aConfigHelper( xFactory )
     {
         OSL_ENSURE( xFactory.is(), "No service manager is provided!\n" );
     }
@@ -117,6 +124,9 @@ public:
 
     // XLinkCreator
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstanceLink( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage, const ::rtl::OUString& sEntName, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aMediaDescr, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lObjArgs ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::io::IOException, ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
+
+    // XLinkFactory
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstanceLinkUserInit( const ::com::sun::star::uno::Sequence< ::sal_Int8 >& aClassID, const ::rtl::OUString& sClassName, const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage, const ::rtl::OUString& sEntryName, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aObjectArgs ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::io::IOException, ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 
     // XServiceInfo
     virtual ::rtl::OUString SAL_CALL getImplementationName() throw (::com::sun::star::uno::RuntimeException);
