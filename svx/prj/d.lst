@@ -502,7 +502,6 @@ hedabu: ..\inc\eeitemid.hxx %_DEST%\inc%_EXT%\svx\eeitemid.hxx
 hedabu: ..\inc\eerdll.hxx %_DEST%\inc%_EXT%\svx\editdll.hxx
 hedabu: ..\inc\svxacorr.hxx %_DEST%\inc%_EXT%\svx\svxacorr.hxx
 hedabu: ..\inc\swafopt.hxx %_DEST%\inc%_EXT%\svx\swafopt.hxx
-hedabu: ..\inc\textconv.hxx %_DEST%\inc%_EXT%\svx\textconv.hxx
 hedabu: ..\inc\txtrange.hxx %_DEST%\inc%_EXT%\svx\txtrange.hxx
 hedabu: ..\inc\fmmodel.hxx %_DEST%\inc%_EXT%\svx\fmmodel.hxx
 hedabu: ..\inc\fmpage.hxx %_DEST%\inc%_EXT%\svx\fmpage.hxx
