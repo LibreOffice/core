@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews2.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: aw $ $Date: 2001-08-21 15:24:27 $
+ *  last change: $Author: aw $ $Date: 2001-09-28 12:04:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,6 +166,44 @@
 #include "fuvect.hxx"
 #include "stlpool.hxx"
 
+// #90356#
+#ifndef _SD_OPTSITEM_HXX
+#include "optsitem.hxx"
+#endif
+
+/*************************************************************************
+|*
+|* modal dialog for #90356#
+|*
+\************************************************************************/
+
+class ImpUndoDeleteWarning : public ModalDialog
+{
+private:
+    FixedImage      maImage;
+    FixedText       maWarningFT;
+    CheckBox        maDisableCB;
+    OKButton        maYesBtn;
+    CancelButton    maNoBtn;
+
+public:
+    ImpUndoDeleteWarning(Window* pParent);
+    BOOL IsWarningDisabled() const { return maDisableCB.IsChecked(); }
+};
+
+ImpUndoDeleteWarning::ImpUndoDeleteWarning(Window* pParent)
+:   ModalDialog(pParent, SdResId(RID_UNDO_DELETE_WARNING)),
+    maImage(this, SdResId(IMG_UNDO_DELETE_WARNING)),
+    maWarningFT(this, SdResId(FT_UNDO_DELETE_WARNING)),
+    maDisableCB(this, SdResId(CB_UNDO_DELETE_DISABLE)),
+    maYesBtn(this, SdResId(BTN_UNDO_DELETE_YES)),
+    maNoBtn(this, SdResId(BTN_UNDO_DELETE_NO))
+{
+    FreeResource();
+    maYesBtn.SetText(Button::GetStandardText(BUTTON_YES));
+    maNoBtn.SetText(Button::GetStandardText(BUTTON_NO));
+    maImage.SetImage(WarningBox::GetStandardImage());
+}
 
 /*************************************************************************
 |*
@@ -808,17 +846,29 @@ void SdDrawViewShell::FuTemporary(SfxRequest& rReq)
 
                 if(nActionCount)
                 {
-                    // ask user if he wants to loose UNDO stack
-                    String aString(SdResId(STR_WARN_DEL_UNDO_STACK));
-                    WarningBox aWarningBox(pWindow, WB_YES_NO, aString);
+                    // #90356# get SdOptions
+                    SdOptions* pOptions = SD_MOD()->GetSdOptions(pDoc->GetDocumentType());
+                    BOOL bShowDialog(pOptions->IsShowUndoDeleteWarning());
 
-                    if(RET_YES == aWarningBox.Execute())
+                    if(bShowDialog)
                     {
-                        pUndoManager->Clear();
-                    }
-                    else
-                    {
-                        bContinue = sal_False;
+                        // ask user if he wants to loose UNDO stack
+                        ImpUndoDeleteWarning aUndoDeleteDlg(pWindow);
+
+                        if(BUTTONID_OK == aUndoDeleteDlg.Execute())
+                        {
+                            pUndoManager->Clear();
+                        }
+                        else
+                        {
+                            bContinue = sal_False;
+                        }
+
+                        // #90356# write option flag back if change was done
+                        if(aUndoDeleteDlg.IsWarningDisabled())
+                        {
+                            pOptions->SetShowUndoDeleteWarning(FALSE);
+                        }
                     }
                 }
 
