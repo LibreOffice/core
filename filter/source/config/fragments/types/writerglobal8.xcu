@@ -1,0 +1,12 @@
+    <node oor:name="writerglobal8" oor:op="replace" oor:finalized="true" oor:mandatory="true">
+        <prop oor:name="DetectService"><value>com.sun.star.text.FormatDetector</value></prop>
+        <prop oor:name="URLPattern"><value>private:factory/swriter/GlobalDocument*</value></prop>
+        <prop oor:name="Extensions"><value>oxg</value></prop>
+        <prop oor:name="MediaType"><value>application/x-vnd.oasis.openoffice.global</value></prop>
+        <prop oor:name="Preferred"><value>false</value></prop>
+        <prop oor:name="PreferredFilter"><value>writerglobal8</value></prop>
+        <prop oor:name="UIName">
+            <value xml:lang="en-US">Writer 8 Master Document</value>
+        </prop>
+        <prop oor:name="ClipboardFormat"><value>Writer/Global 8</value></prop>
+    </node>
