@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: pb $ $Date: 2000-11-30 16:10:12 $
+ *  last change: $Author: pb $ $Date: 2000-12-01 15:13:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3700,6 +3700,75 @@ IMPL_LINK( SvxCharNamePage, ColorBoxSelectHdl_Impl, ColorListBox*, pBox )
 
 void SvxCharNamePage::ActivatePage( const SfxItemSet& rSet )
 {
+    SvxFont& rFont = m_aPreviewWin.GetFont();
+
+    // Underline
+    USHORT nWhich = GetWhich( SID_ATTR_CHAR_UNDERLINE );
+    if ( rSet.GetItemState( nWhich ) >= SFX_ITEM_DEFAULT )
+    {
+        const SvxUnderlineItem& rItem = (SvxUnderlineItem&)rSet.Get( nWhich );
+        FontUnderline eUnderline = (FontUnderline)rItem.GetValue();
+        rFont.SetUnderline( eUnderline );
+    }
+    else
+        rFont.SetUnderline( UNDERLINE_NONE );
+
+    //  Strikeout
+    nWhich = GetWhich( SID_ATTR_CHAR_STRIKEOUT );
+    if ( rSet.GetItemState( nWhich ) >= SFX_ITEM_DEFAULT )
+    {
+        const SvxCrossedOutItem& rItem = (SvxCrossedOutItem&)rSet.Get( nWhich );
+        FontStrikeout eStrikeout = (FontStrikeout)rItem.GetValue();
+        rFont.SetStrikeout( eStrikeout );
+    }
+    else
+        rFont.SetStrikeout( STRIKEOUT_NONE );
+
+    // WordLineMode
+    nWhich = GetWhich( SID_ATTR_CHAR_WORDLINEMODE );
+    if ( rSet.GetItemState( nWhich ) >= SFX_ITEM_DEFAULT )
+    {
+        const SvxWordLineModeItem& rItem = (SvxWordLineModeItem&)rSet.Get( nWhich );
+        rFont.SetWordLineMode( rItem.GetValue() );
+    }
+
+    // Emphasis
+    nWhich = GetWhich( SID_ATTR_CHAR_EMPHASISMARK );
+    if ( rSet.GetItemState( nWhich ) >= SFX_ITEM_DEFAULT )
+    {
+        const SvxEmphasisMarkItem& rItem = (SvxEmphasisMarkItem&)rSet.Get( nWhich );
+        FontEmphasisMark eMark = rItem.GetEmphasisMark();
+        rFont.SetEmphasisMark( eMark );
+    }
+
+    // Effects
+    nWhich = GetWhich( SID_ATTR_CHAR_CASEMAP );
+    SvxCaseMap eCaseMap = SVX_CASEMAP_END;
+
+    if ( rSet.GetItemState( nWhich ) >= SFX_ITEM_DEFAULT )
+    {
+        const SvxCaseMapItem& rItem = (const SvxCaseMapItem&)rSet.Get( nWhich );
+        eCaseMap = (SvxCaseMap)rItem.GetValue();
+    }
+    rFont.SetCaseMap( eCaseMap );
+
+    // Outline
+    nWhich = GetWhich( SID_ATTR_CHAR_CONTOUR );
+    if ( rSet.GetItemState( nWhich ) >= SFX_ITEM_DEFAULT )
+    {
+        const SvxContourItem& rItem = (SvxContourItem&)rSet.Get( nWhich );
+        rFont.SetOutline( rItem.GetValue() );
+    }
+
+    // Shadow
+    nWhich = GetWhich( SID_ATTR_CHAR_SHADOWED );
+    if ( rSet.GetItemState( nWhich ) >= SFX_ITEM_DEFAULT )
+    {
+        const SvxShadowedItem& rItem = (SvxShadowedItem&)rSet.Get( nWhich );
+        rFont.SetShadow( rItem.GetValue() );
+    }
+
+    m_aPreviewWin.Invalidate();
 }
 
 // -----------------------------------------------------------------------
@@ -5121,20 +5190,28 @@ void SvxCharTwoLinesPage::SelectCharacter( ListBox* pBox )
 void SvxCharTwoLinesPage::SetBracket( sal_Unicode cBracket, BOOL bStart )
 {
     ListBox* pBox = bStart ? &m_aStartBracketLB : &m_aEndBracketLB;
-    FASTBOOL bFound = FALSE;
-    for ( USHORT i = 0; i < pBox->GetEntryCount(); ++i )
+    if ( 0 == cBracket )
+        pBox->SelectEntryPos(0);
+    else
     {
-        const sal_Unicode cChar = pBox->GetEntry(i).GetChar(0);
-        if ( cChar == cBracket )
+        FASTBOOL bFound = FALSE;
+        for ( USHORT i = 1; i < pBox->GetEntryCount(); ++i )
         {
-            pBox->SelectEntryPos(i);
-            bFound = TRUE;
-            break;
+            if ( (ULONG)pBox->GetEntryData(i) != CHRDLG_ENCLOSE_SPECIAL_CHAR )
+            {
+                const sal_Unicode cChar = pBox->GetEntry(i).GetChar(0);
+                if ( cChar == cBracket )
+                {
+                    pBox->SelectEntryPos(i);
+                    bFound = TRUE;
+                    break;
+                }
+            }
         }
-    }
 
-    if ( !bFound )
-        pBox->InsertEntry( String( cBracket ) );
+        if ( !bFound )
+            pBox->SelectEntryPos( pBox->InsertEntry( String( cBracket ) ) );
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -5220,8 +5297,10 @@ BOOL SvxCharTwoLinesPage::FillItemSet( SfxItemSet& rSet )
     USHORT nWhich = GetWhich( SID_ATTR_CHAR_TWO_LINES );
     const SfxPoolItem* pOld = GetOldItem( rSet, SID_ATTR_CHAR_TWO_LINES );
     sal_Bool bOn = m_aTwoLinesBtn.IsChecked();
-    sal_Unicode cStart = bOn ? m_aStartBracketLB.GetSelectEntry().GetChar(0) : 0;
-    sal_Unicode cEnd = bOn ? m_aEndBracketLB.GetSelectEntry().GetChar(0) : 0;
+    sal_Unicode cStart = ( bOn && m_aStartBracketLB.GetSelectEntryPos() > 0 )
+        ? m_aStartBracketLB.GetSelectEntry().GetChar(0) : 0;
+    sal_Unicode cEnd = ( bOn && m_aEndBracketLB.GetSelectEntryPos() > 0 )
+        ? m_aEndBracketLB.GetSelectEntry().GetChar(0) : 0;
 
     if ( pOld )
     {
@@ -5233,7 +5312,7 @@ BOOL SvxCharTwoLinesPage::FillItemSet( SfxItemSet& rSet )
 
     if ( bChanged )
     {
-        rSet.Put( SvxTwoLinesItem( bOn, cStart, cEnd ) );
+        rSet.Put( SvxTwoLinesItem( bOn, cStart, cEnd, nWhich ) );
         bModified |= TRUE;
     }
     else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, FALSE ) )
