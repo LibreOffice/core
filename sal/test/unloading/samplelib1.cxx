@@ -32,8 +32,8 @@ using namespace ::cppu;
 
 
 // Unloading Support ----------------------------------------------
-//rtl_StandardModuleCount globalModuleCount= MODULE_COUNT_INIT;
-rtl_StandardModuleCount globalModuleCount= { {rtl_moduleCount_acquire,rtl_moduleCount_release}, rtl_moduleCount_canUnload,0,{0,0}}; //, 0, {0, 0}};
+rtl_StandardModuleCount globalModuleCount= MODULE_COUNT_INIT;
+//rtl_StandardModuleCount globalModuleCount= { {rtl_moduleCount_acquire,rtl_moduleCount_release}, rtl_moduleCount_canUnload,0,{0,0}}; //, 0, {0, 0}};
 // Services -------------------------------------------------------
 class TestService: public WeakImplHelper1<XServiceInfo>
 {
