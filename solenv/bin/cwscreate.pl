@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: cwscreate.pl,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2004-08-12 15:10:42 $
+#   last change: $Author: rt $ $Date: 2004-08-23 11:26:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -102,7 +102,7 @@ $SIG{'INT'} = 'INT_handler' if defined($log);
 ( my $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
 my $script_rev;
-my $id_str = ' $Revision: 1.3 $ ';
+my $id_str = ' $Revision: 1.4 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -231,8 +231,12 @@ sub parse_options
         }
     }
 
+    # check if milestone exists
+    if ( !$cws->is_milestone($masterws, $milestone) ) {
+        print_error("Milestone '$milestone' is not registered with master workspace '$masterws'.", 8);
+    }
+
     # set milestone
-    # TODO check validity of milestone
     $cws->milestone($milestone);
 
     # check if suggested platforms exist
@@ -393,7 +397,7 @@ sub copy_workspace
     # find location of master
     if ( "$wslocation" eq "" )
     {
-        print "No access to matser workspace.\n";
+        print "No access to master workspace.\n";
         $accessmaster = 0;
     }
     else
