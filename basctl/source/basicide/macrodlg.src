@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrodlg.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-02 21:20:18 $
+ *  last change: $Author: kz $ $Date: 2001-10-11 21:11:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,7 @@ ModalDialog RID_MACROCHOOSER
         Text[ greek ] = "Όνομα ~μακροεντολής";
         Text[ korean ] = "λ§¤ν¬λ΅ μ΄λ¦„(~M)";
         Text[ turkish ] = "Makro adύ";
-        Text[ catalan ] = "Nombre de la ~macro";
+        Text[ catalan ] = "Nom de la ~macro";
     };
     FixedText RID_TXT_MACROFROM
     {
@@ -156,7 +156,7 @@ ModalDialog RID_MACROCHOOSER
         Text[ greek ] = "Μακροεντολή από";
         Text[ korean ] = "λ§¤ν¬λ΅ μ¶μ²(~F)";
         Text[ turkish ] = "Makro kaynaπύ";
-        Text[ catalan ] = "Macro ~desde";
+        Text[ catalan ] = "Macro ~des de";
     };
     Edit RID_ED_MACRONAME
     {
@@ -192,7 +192,7 @@ ModalDialog RID_MACROCHOOSER
         Text[ greek ] = "Περιγραφή";
         Text[ korean ] = "μ„¤λª…(~S)";
         Text[ turkish ] = "Aηύklama";
-        Text[ catalan ] = "De~scripciσn";
+        Text[ catalan ] = "De~scripciσ";
     };
     PushButton RID_PB_RUN
     {
@@ -223,7 +223,7 @@ ModalDialog RID_MACROCHOOSER
         Text[ greek ] = "Εκτέλεση";
         Text[ korean ] = "μ‹¤ν–‰(~U)";
         Text[ turkish ] = "Yόrόt";
-        Text[ catalan ] = "Eje~cutar";
+        Text[ catalan ] = "Exec~uta";
     };
     CancelButton RID_PB_CLOSE
     {
@@ -232,6 +232,26 @@ ModalDialog RID_MACROCHOOSER
         TabStop = TRUE ;
         Text = "Schlieίen" ;
         Text [ ENGLISH ] = "Close" ;
+        Text[ english_us ] = "Close";
+        Text[ portuguese ] = "Fechar";
+        Text[ russian ] = "Close";
+        Text[ greek ] = "Close";
+        Text[ dutch ] = "Close";
+        Text[ french ] = "Fermer";
+        Text[ spanish ] = "Cerrar";
+        Text[ finnish ] = "Close";
+        Text[ italian ] = "Chiudi";
+        Text[ danish ] = "Close";
+        Text[ swedish ] = "Stδng";
+        Text[ polish ] = "Zamknij";
+        Text[ portuguese_brazilian ] = "Close";
+        Text[ japanese ] = "Close";
+        Text[ korean ] = "Close";
+        Text[ chinese_simplified ] = "ε…³ι—­";
+        Text[ chinese_traditional ] = "ι—ι–‰";
+        Text[ turkish ] = "Close";
+        Text[ arabic ] = "Close";
+        Text[ catalan ] = "Close";
     };
     PushButton RID_PB_ASSIGN
     {
@@ -260,7 +280,7 @@ ModalDialog RID_MACROCHOOSER
         Text[ greek ] = "Αντιστοίχιση...";
         Text[ korean ] = "λ°°μ •(~A)...";
         Text[ turkish ] = "Ata...";
-        Text[ catalan ] = "Asig~nar...";
+        Text[ catalan ] = "~Assigna...";
     };
     PushButton RID_PB_EDIT
     {
@@ -289,7 +309,7 @@ ModalDialog RID_MACROCHOOSER
         Text[ greek ] = "Επεξεργασία";
         Text[ korean ] = "νΈμ§‘(~E)";
         Text[ turkish ] = "Dόzenle";
-        Text[ catalan ] = "Edi~tar";
+        Text[ catalan ] = "~Edita";
     };
     PushButton RID_PB_DEL
     {
@@ -319,7 +339,7 @@ ModalDialog RID_MACROCHOOSER
         Text[ greek ] = "Διαγραφή";
         Text[ korean ] = "μ κ±°(~D)...";
         Text[ turkish ] = "Sil...";
-        Text[ catalan ] = "~Eliminar...";
+        Text[ catalan ] = "~Suprimeix...";
     };
     PushButton RID_PB_ORG
     {
@@ -347,7 +367,7 @@ ModalDialog RID_MACROCHOOSER
         Text[ greek ] = "Δια~χείριση...";
         Text[ korean ] = "κ΄€λ¦¬(~O)...";
         Text[ turkish ] = "Yφnet...";
-        Text[ catalan ] = "~Administrar...";
+        Text[ catalan ] = "~Organitzador...";
     };
     HelpButton RID_PB_HELP
     {
@@ -430,7 +450,7 @@ String RID_STR_BTNDEL
     Text[ greek ] = "Διαγραφή";
     Text[ korean ] = "μ κ±°(~D)...";
     Text[ turkish ] = "Sil...";
-    Text[ catalan ] = "~Eliminar...";
+    Text[ catalan ] = "~Suprimeix...";
 };
 String RID_STR_BTNNEW
 {
@@ -456,7 +476,7 @@ String RID_STR_BTNNEW
     Text[ greek ] = "Δημιουργία";
     Text[ korean ] = "μƒλ΅(~N)";
     Text[ turkish ] = "Yeni";
-    Text[ catalan ] = "~Nuevo";
+    Text[ catalan ] = "~Nou";
 };
 String RID_STR_CLOSE
 {
@@ -483,7 +503,7 @@ String RID_STR_CLOSE
     Text[ greek ] = "Κλείσιμο";
     Text[ korean ] = "λ‹«κΈ°";
     Text[ turkish ] = "Kapat";
-    Text[ catalan ] = "Cerrar";
+    Text[ catalan ] = "Tanca";
 };
 String RID_STR_CHOOSE
 {
@@ -510,7 +530,7 @@ String RID_STR_CHOOSE
     Text[ greek ] = "Επιλογή";
     Text[ korean ] = "μ„ νƒ";
     Text[ turkish ] = "Seη";
-    Text[ catalan ] = "Seleccionar";
+    Text[ catalan ] = "Trieu";
 };
 String RID_STR_RUN
 {
@@ -537,8 +557,9 @@ String RID_STR_RUN
     Text[ greek ] = "Εκτέλεση";
     Text[ korean ] = "μ‹¤ν–‰";
     Text[ turkish ] = "Yόrόt";
-    Text[ catalan ] = "Ejecutar";
+    Text[ catalan ] = "Executar";
 };
+
 
 
 
