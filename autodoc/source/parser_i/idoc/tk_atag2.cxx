@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tk_atag2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 11:35:20 $
+ *  last change: $Author: rt $ $Date: 2005-04-04 07:51:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@ Tok_AtTag::EV_TokenId ev_since(Tok_AtTag::since,"@since");
 
 namespace lux
 {
-EnumValueMap &
+template<> EnumValueMap &
 Tok_AtTag::EV_TokenId::Values_()    { return G_aTokAtTag_EV_TokenId_Values; }
 }
 
