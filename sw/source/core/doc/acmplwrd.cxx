@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acmplwrd.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2002-08-06 08:37:32 $
+ *  last change: $Author: os $ $Date: 2002-08-30 14:43:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -367,7 +367,7 @@ BOOL SwAutoCompleteWord::InsertWord( const String& rWord, SwDoc& rDoc )
                 *ppData = pNew;
 
                 aWordLst.Remove( pDel );
-                delete pDel;
+                delete (SwAutoCompleteString*)pDel;
             }
         }
         else
@@ -446,9 +446,10 @@ void SwAutoCompleteWord::SetMaxCount( USHORT nNewMax )
     if( nNewMax < nMaxCount && aLRULst.Count() > nNewMax )
     {
         // dann die unten ueberhaengenden entfernen
-        while( nNewMax >= aWordLst.Count() )
+        USHORT nLRUIndex = nNewMax-1;
+        while( nNewMax < aWordLst.Count() && nLRUIndex < aLRULst.Count())
         {
-            USHORT nPos = aWordLst.GetPos( (String*)aLRULst[ nNewMax-1 ] );
+            USHORT nPos = aWordLst.GetPos( (String*)aLRULst[ nLRUIndex++ ] );
             ASSERT( USHRT_MAX != nPos, "String nicht gefunden" );
             void * pDel = aWordLst[nPos];
             aWordLst.Remove(nPos);
