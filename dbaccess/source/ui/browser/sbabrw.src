@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbabrw.src,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-22 14:03:34 $
+ *  last change: $Author: oj $ $Date: 2002-05-28 13:28:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,11 +78,6 @@
 
 
 #define IL_TOOL \
-    MaskColor   = Color {\
-    Red   = 0xC000;\
-    Green = 0xC000;\
-    Blue  = 0xC000;\
-    };\
 \
     IdList = {\
         ID_BROWSER_EXPLORER;\
@@ -137,6 +132,11 @@
 
 ImageList RID_DEFAULTIMAGELIST_SC
 {
+    MaskColor   = Color {
+        Red   = 0xC000;
+        Green = 0xC000;
+        Blue  = 0xC000;
+    };
     ImageBitmap = Bitmap
     {
         File = "sc_qrtl.bmp";
@@ -146,6 +146,11 @@ ImageList RID_DEFAULTIMAGELIST_SC
 
 ImageList RID_DEFAULTIMAGELIST_LC
 {
+    MaskColor   = Color {
+        Red   = 0xC000;
+        Green = 0xC000;
+        Blue  = 0xC000;
+    };
     ImageBitmap = Bitmap
     {
         File = "lc_qrtl.bmp" ;
@@ -155,6 +160,11 @@ ImageList RID_DEFAULTIMAGELIST_LC
 
 ImageList RID_DEFAULTIMAGELIST_SCH
 {
+    MaskColor   = Color {
+            Red   = 0xffff;
+            Green = 0x0000;
+            Blue  = 0xffff;
+    };
     ImageBitmap = Bitmap
     {
         File = "sch_qrtl.bmp";
@@ -164,6 +174,11 @@ ImageList RID_DEFAULTIMAGELIST_SCH
 
 ImageList RID_DEFAULTIMAGELIST_LCH
 {
+    MaskColor   = Color {
+            Red   = 0xffff;
+            Green = 0x0000;
+            Blue  = 0xffff;
+    };
     ImageBitmap = Bitmap
     {
         File = "lch_qrtl.bmp" ;
