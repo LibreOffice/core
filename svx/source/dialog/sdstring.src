@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdstring.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:17:34 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:38:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,7 @@ String RID_SVXSTR_GRADIENT
     Text[ japanese ] = "γ‚°γƒ©γƒ‡γƒΌγ‚·γƒ§γƒ³";
     Text[ chinese_traditional ] = "ε½©θ‰²ε–ζ΅";
     Text[ arabic ] = "ΚΟΡΜ Ηααζδ";
-    Text[ greek ] = "Διαβάθμιση χρώματος";
+    Text[ greek ] = "~Διαβάθ. χρώματος";
     Text[ korean ] = "κ·ΈλΌλ””μ–ΈνΈ";
     Text[ turkish ] = "Gradyan";
     Text[ language_user1 ] = " ";
@@ -254,7 +254,7 @@ String RID_SVXSTR_ASK_CHANGE_GRADIENT
     Text[ japanese ] = "γ‚°γƒ©γƒ‡γƒΌγ‚·γƒ§γƒ³γε¤‰ζ›΄γ•γ‚γ¦δΏε­γ•γ‚γ¦γ„γΎγ›γ‚“γ€‚\nιΈζγ—γγ‚°γƒ©γƒ‡γƒΌγ‚·γƒ§γƒ³γ®ε¤‰ζ›΄γΎγγ―\nζ–°γ—γ„γ‚°γƒ©γƒ‡γƒΌγ‚·γƒ§γƒ³γ®θΏ½ε γγ§γγΎγ™γ€‚";
     Text[ chinese_traditional ] = "ι€™ε€‹ε½©θ‰²ε–ζ΅ε·²η¶“θ®ζ›΄οΉδ½†ζ―ε°ζªε„²ε­γ€‚\nζ‚¨θƒ½ε¤ θ®ζ›΄ιΈε–η„ε½©θ‰²ε–ζ΅\nζ–θ€…εΆε δΈ€ε€‹ζ–°η„ε½©θ‰²ε–ζ΅γ€‚";
     Text[ arabic ] = "αγ νΚγ ΝέΩ ΚΟΡΜ Ηααζδ ΘΪΟ ΚΫννΡε. \nνγίδί ΚΫννΡ ΚΟΡΜ Ηααζδ ΗαγΝΟΟ \nΓζ ΕΦΗέΙ ΚΟΡΜ αζδ ΜΟνΟ.";
-    Text[ greek ] = "Η διαβάθμιση του χρώματος τροποποιήθηκε και δεν αποθηκεύτηκε. \nΜπορείτε να αλλάξετε την επιλεγμένη διαβάθμιση χρώματος \nή να προσθέσετε μ ";
+    Text[ greek ] = "Η διαβάθμιση χρώματος τροποποιήθηκε χωρίς να αποθηκευτεί. \nΤροποποιήστε την επιλεγμένη διαβάθμιση χρώματος ή προσθέστε μια νέα διαβάθμιση.";
     Text[ korean ] = "κ·ΈλΌλ””μ–ΈνΈκ°€ μμ •λμ—μΌλ‚ μ €μ¥λμ§€ μ•μ•μµλ‹λ‹¤.\nμ„ νƒλ κ·ΈλΌλ””μ–ΈνΈλ¥Ό μμ •ν•κ±°λ‚ μƒ κ·ΈλΌλ””μ–ΈνΈλ¥Ό μ¶”κ°€ν•  μ μμµλ‹λ‹¤.";
     Text[ turkish ] = "Gradyan deπiώtirildi ancak kaydedilmedi.\nSeηili gradyanύ deπiώtirebilir ya da\nyeni bir gradyan ekleyebilirsiniz.";
     Text[ language_user1 ] = " ";
@@ -622,7 +622,7 @@ String RID_SVXSTR_ASK_CHANGE_LINESTYLE
     Text[ japanese ] = "η·γ‚Ήγ‚Ώγ‚¤γƒ«γε¤‰ζ›΄γ•γ‚γ¦δΏε­γ•γ‚γ¦γ„γΎγ›γ‚“γ€‚\nιΈζγ—γη·γ‚Ήγ‚Ώγ‚¤γƒ«γ®ε¤‰ζ›΄\nγΎγγ―ζ–°γ—γ„η·γ‚Ήγ‚Ώγ‚¤γƒ«γ®θΏ½ε γγ§γγΎγ™γ€‚";
     Text[ chinese_traditional ] = "ι€™ε€‹η·ζΆεΌζ¨£ε·²η¶“θ®ζ›΄οΉδ½†ζ―ε°ζªε„²ε­γ€‚ \nζ‚¨θƒ½ε¤ θ®ζ›΄ιΈε–η„η·ζΆεΌζ¨£\nζ–θ€…εΆε δΈ€ε€‹ζ–°η„η·ζΆεΌζ¨£γ€‚";
     Text[ arabic ] = "Κγ ΚΫννΡ δγΨ ΗαΞΨ ζαγ νΚγ ΝέΩε ΘΪΟ.\nνγίδί ΚΫννΡ δγΨ ΗαΞΨ ΗαγΝΟΟ΅\nΓζ ΕΦΗέΙ δγΨ ΞΨ ΜΟνΟ.";
-    Text[ greek ] = "Το στυλ γραμμής τροποποιήθηκε χωρίς να γίνει αποθήκευση. \nΜπορείτε να αλλάξετε το επιλεγμένο στυλ \nή να προσθέσετε ένα καινούριο στυλ γραμ ";
+    Text[ greek ] = "Το στυλ γραμμής τροποποιήθηκε χωρίς να αποθηκευτεί. \nΤροποποιήστε το επιλεγμένο στυλ γραμμής ή προσθέστε ένα νέο στυλ γραμμής.";
     Text[ korean ] = "μ„  μ¤νƒ€μΌμ΄ μμ •λμ—μ§€λ§ μ €μ¥λμ§€ μ•μ•μµλ‹λ‹¤.\nμ„ νƒν• μ„  μ¤νƒ€μΌμ„ μμ •ν•κ±°λ‚ μƒλ΅μ΄ μ„  μ¤νƒ€μΌμ„ μ¶”κ°€ν•  μ μμµλ‹λ‹¤.";
     Text[ turkish ] = "Ηizgi biηimi deπiώtirildi ancak kaydedilmedi. \nSeηili ηizgi biηimini deπiώtirebilir ya da \nyeni bir ηizgi biηimi ekleyebilirsiniz.";
     Text[ language_user1 ] = " ";
@@ -854,7 +854,7 @@ String RID_SVXSTR_ASK_CHANGE_HATCH
     Text[ japanese ] = "γƒγƒƒγƒγƒ³γ‚°γε¤‰ζ›΄γ•γ‚γ¦δΏε­γ•γ‚γ¦γ„γΎγ›γ‚“γ€‚\nιΈζγ—γγƒγƒƒγƒγƒ³γ‚°γ®ε¤‰ζ›΄γΎγγ―\nζ–°γ—γ„γƒγƒƒγƒγƒ³γ‚°γ®θΏ½ε γγ§γγΎγ™γ€‚";
     Text[ chinese_traditional ] = "ι€™ε€‹ι™°ε½±ε·²η¶“θ®ζ›΄οΉδ½†ζ―ε°ζªε„²ε­γ€‚ \nζ‚¨θƒ½ε¤ θ®ζ›΄ιΈε–η„ι™°ε½±\nζ–θ€…εΆε δΈ€ε€‹ζ–°η„ι™°ε½±γ€‚";
     Text[ arabic ] = "Κγ ΚΫννΡ ΗαδήΤ ζαγ νΚγ ΝέΩε ΘΪΟ.\nνγίδί ΚΫννΡ ΗαδήΤ ΗαγΝΟΟ΅\nΓζ ΕΦΗέΙ δήΤ ΜΟνΟ.";
-    Text[ greek ] = "Η γραμμοσκιά τροποποιήθηκε χωρίς να γίνει αποθήκευση. \nΜπορείτε να αλλάξετε την επιλεγμένη γραμμοσκιά \nή να προσθέσετε μια καινούρια γραμ ";
+    Text[ greek ] = "Ο τύπος διαγράμμισης τροποποιήθηκε αλλά δεν αποθηκεύτηκε. \nΤροποποιήστε τον επιλεγμένο τύπο διαγράμμισης ή προσθέστε ένα νέο τύπο διαγράμμισης.";
     Text[ korean ] = "ν•΄μΉ­μ΄ μμ •λμ—μΌλ‚ μ €μ¥λμ§€ μ•μ•μµλ‹λ‹¤. \nμ„ νƒλ ν•΄μΉ­μ„ μμ •ν•κ±°λ‚ μƒ ν•΄μΉ­μ„ μ¶”κ°€ν•  μ μμµλ‹λ‹¤.";
     Text[ turkish ] = "Tarama deπiώtirildi ancak kaydedilmedi.\nSeηili deseni deπiώtirebilir ya da\nyeni bir tarama ekleyebilirsiniz.";
     Text[ language_user1 ] = " ";
@@ -1237,7 +1237,7 @@ String RID_SVXSTR_LINEEND
     Text [ ENGLISH ] = "Line end" ;
     Text [ norwegian ] = "Line end" ;
     Text [ italian ] = "Estremitΰ linea" ;
-    Text [ portuguese_brazilian ] = "Pontas de Seta" ;
+    Text [ portuguese_brazilian ] = "Terminaηυes de linha" ;
     Text [ portuguese ] = "Fim de linha" ;
     Text [ finnish ] = "Nuolenkδrjet" ;
     Text [ danish ] = "Pile" ;
@@ -1271,7 +1271,7 @@ String RID_SVXSTR_DESC_LINEEND
     Text [ ENGLISH ] = "Please insert a Name for the new line end:" ;
     Text [ norwegian ] = "Please insert a Name for the new line end:" ;
     Text [ italian ] = "Digitare un nome per la nuova estremitΰ di linea:" ;
-    Text [ portuguese_brazilian ] = "Indique um nome para a nova ponta da seta:" ;
+    Text [ portuguese_brazilian ] = "Indique um nome para a nova terminaηγo de linha:" ;
     Text [ portuguese ] = "Por favor introduza um nome para o novo fim de linha:" ;
     Text [ finnish ] = "Kirjoita uuden nuolenkδrjen nimi:" ;
     Text [ danish ] = "Indtast venligst et navn til den nye piltype:" ;
@@ -1339,7 +1339,7 @@ String RID_SVXSTR_ASK_DEL_LINEEND
     Text [ ENGLISH ] = "Do you want to delete the line end?" ;
     Text [ norwegian ] = "Vil du slette linjeslutten?" ;
     Text [ italian ] = "Cancellare l'estremitΰ di linea?" ;
-    Text [ portuguese_brazilian ] = "Deseja excluir a ponta da seta?" ;
+    Text [ portuguese_brazilian ] = "Deseja excluir a terminaηγo da linha?" ;
     Text [ portuguese ] = "Deseja realmente eliminar o fim de linha?" ;
     Text [ finnish ] = "Haluatko poistaa nuolenkδrjen?" ;
     Text [ danish ] = "Er du sikker pε, at du vil slette piltypen?" ;
@@ -1379,7 +1379,7 @@ String RID_SVXSTR_ASK_CHANGE_LINEEND
     Text [ swedish ] = "Linjeslutet δndrades utan att sparas.\nVill du spara det nu?" ;
     Text [ danish ] = "Piltypen er blevet ζndret, men ikke gemt. \nDu kan ζndre den markerede pil\n eller tilfψje en ny." ;
     Text [ portuguese ] = "O fim de linha foi modificado e nγo guardado.\nGuardar agora?" ;
-    Text [ portuguese_brazilian ] = "A ponta de seta foi modificada sem ser salva.\nDeseja salvα-la agora?" ;
+    Text [ portuguese_brazilian ] = "A terminaηγo de linha foi modificada sem ser salva.\nDeseja salvα-la agora?" ;
     Text[ chinese_simplified ] = "θΏ™δΈªηΊΏζ΅η®­ε¤΄ε·²η»ζ›΄ζ”ΉοΌδ½†ζ―ζ²΅ζ‰δΏε­γ€‚\nζ‚¨θ¦η°ε¨δΏε­θΏ™δΈªηΊΏζ΅η®­ε¤΄οΌ";
     Text[ russian ] = "Πΰημεπνΰÿ ρςπελκΰ αϋλΰ θημενενΰ αεη ρξυπΰνενθÿ. \nΡξυπΰνθςό πΰημεπνσώ ρςπελκσ?";
     Text[ polish ] = "Groty zosta³y zmienione, lecz nie zapisane. \nCzy zapisaζ je teraz?";
@@ -1553,7 +1553,7 @@ String RID_SVXSTR_CYAN
     Text[ japanese ] = "ι’η·‘";
     Text[ chinese_traditional ] = "θ—η‰θ‰²";
     Text[ arabic ] = "ΚΡίζΗÒ";
-    Text[ greek ] = "Τουρκουάζ";
+    Text[ greek ] = "Τυρκουάζ";
     Text[ korean ] = "μ²­λ΅μƒ‰";
     Text[ turkish ] = "Turkuaz";
     Text[ language_user1 ] = " ";
@@ -2197,7 +2197,7 @@ String RID_SVXSTR_CENTERED
     Text[ japanese ] = "δΈ­ε¤®ζƒγ";
     Text[ chinese_traditional ] = "η½®δΈ­";
     Text[ arabic ] = "ΚζΣνΨ";
-    Text[ greek ] = "Κεντραρισμένα";
+    Text[ greek ] = "Στο κέντρο";
     Text[ korean ] = "κ°€μ΄λ°";
     Text[ turkish ] = "Ortala";
     Text[ language_user1 ] = " ";
@@ -2228,7 +2228,7 @@ String RID_SVXSTR_NOTCENTERED
     Text[ japanese ] = "δΈ­ε¤®ζƒγγ§γªγ„";
     Text[ chinese_traditional ] = "δΈη½®δΈ­";
     Text[ arabic ] = "ΫνΡ γζΣΨ";
-    Text[ greek ] = "Όχι κεντραρισμένα";
+    Text[ greek ] = "Όχι στο κέντρο";
     Text[ korean ] = "κ°€μ΄λ° λ§μ¶”μ§€ μ•μ";
     Text[ turkish ] = "Ortalanmamύώ";
     Text[ language_user1 ] = " ";
@@ -2651,7 +2651,7 @@ String RID_SVXSTR_PALE_YELLOW
     Text [ ENGLISH ] = "Pale yellow";
     Text[ portuguese ] = "Amarelo-claro";
     Text[ russian ] = "Αλεδνξ-ζελςϋι";
-    Text[ greek ] = "Ωχρό κίτρινο";
+    Text[ greek ] = "Απαλό κίτρινο";
     Text[ dutch ] = "Geel pastel";
     Text[ french ] = "Jaune pβle";
     Text[ spanish ] = "Amarillo pastel";
@@ -2682,7 +2682,7 @@ String RID_SVXSTR_PALE_GREEN
     Text [ ENGLISH ] = "Pale green";
     Text[ portuguese ] = "Verde-claro";
     Text[ russian ] = "Αλεδνξ-ηελενϋι";
-    Text[ greek ] = "Ωχρό πράσινο";
+    Text[ greek ] = "Απαλό πράσινο";
     Text[ dutch ] = "Groen pastel";
     Text[ french ] = "Vert pβle";
     Text[ spanish ] = "Verde pastel";
@@ -2744,7 +2744,7 @@ String RID_SVXSTR_SALMON
     Text [ ENGLISH ] = "Salmon";
     Text[ portuguese ] = "Salmγo";
     Text[ russian ] = "ΐλϋι";
-    Text[ greek ] = "Σολομός";
+    Text[ greek ] = "Σομόν";
     Text[ dutch ] = "Zalmkleur";
     Text[ french ] = "Saumon";
     Text[ spanish ] = "Salmσn";
@@ -3113,7 +3113,7 @@ String RID_SVXSTR_TBLAFMT_CURRENCY_TURQUOISE
     Text[ english_us ] = "Currency Turquoise";
     Text[ portuguese ] = "Moeda em turquesa";
     Text[ russian ] = "Βΰλώςΰ αθπώηξβΰÿ";
-    Text[ greek ] = "Νόμισμα τουρκουάζ";
+    Text[ greek ] = "Νόμισμα τυρκουάζ";
     Text[ dutch ] = "Valuta turkoois";
     Text[ french ] = "Monnaie turquoise";
     Text[ spanish ] = "Moneda turquesa";
@@ -3263,7 +3263,7 @@ String RID_SVXSTR_TBLAFMT_TURQUOISE
     Text[ english_us ] = "Turquoise";
     Text[ portuguese ] = "Turquesa";
     Text[ russian ] = "Αθπώηξβϋι";
-    Text[ greek ] = "Τουρκουάζ";
+    Text[ greek ] = "Τυρκουάζ";
     Text[ dutch ] = "Turkoois";
     Text[ french ] = "Turquoise";
     Text[ spanish ] = "Turquesa";
@@ -3459,7 +3459,7 @@ String RID_SVXSTR_GRFILTER_OPENERROR
     TEXT[ japanese ] = "η”»εƒγƒ•γ‚΅γ‚¤γƒ«γ―ι–‹γ‘γΎγ›γ‚“γ€‚";
     TEXT[ chinese_traditional ] = "η„΅ζ³•ι–‹ε•ε–ε½Άζª”ζ΅";
     TEXT[ arabic ] = "αΗ νγίδ έΚΝ γαέ ΗαΡΣζγΗΚ";
-    TEXT[ greek ] = "Το αρχείο γραφικού δεν είναι δυνατόν να ανοιχτεί";
+    TEXT[ greek ] = "Δεν είναι δυνατό το άνοιγμα του αρχείου γραφικών";
     TEXT[ korean ] = "κ·Έλ¦Ό νμΌμ„ μ—΄ μ μ—†μµλ‹λ‹¤.";
     TEXT[ turkish ] = "Grafik dosyasύ aηύlamύyor";
     TEXT[ language_user1 ] = " ";
@@ -3491,7 +3491,7 @@ String RID_SVXSTR_GRFILTER_IOERROR
     TEXT[ japanese ] = "η”»εƒγƒ•γ‚΅γ‚¤γƒ«γ―θª­γΏε–γ‚γΎγ›γ‚“γ€‚";
     TEXT[ chinese_traditional ] = "η„΅ζ³•θ®€ε‡Ίε–ε½Άζª”ζ΅";
     TEXT[ arabic ] = "αΗ νγίδ ήΡΗΑΙ γαέ ΗαΡΣζγΗΚ";
-    TEXT[ greek ] = "Η ανάγνωση του αρχείου γραφικού δεν είναι δυνατή";
+    TEXT[ greek ] = "Δεν είναι δυνατή η ανάγνωση του αρχείου γραφικών";
     TEXT[ korean ] = "κ·Έλ¦Ό νμΌμ„ μ½μ„ μ μ—†μµλ‹λ‹¤.";
     TEXT[ turkish ] = "Grafik dosyasύ okunamύyor";
     TEXT[ language_user1 ] = " ";
@@ -3523,7 +3523,7 @@ String RID_SVXSTR_GRFILTER_FORMATERROR
     TEXT[ japanese ] = "δΈζγªε›³γ®ζ›ΈεΌ";
     TEXT[ chinese_traditional ] = "δΈζη„ε–ε½Άζ ΌεΌ";
     TEXT[ arabic ] = "ΚδΣνή ΡΣζγΗΚ ΫνΡ γΪΡζέ";
-    TEXT[ greek ] = "Άγνωστη μορφή γραφικού";
+    TEXT[ greek ] = "Άγνωστη μορφή γραφικών";
     TEXT[ korean ] = "μ• μ μ—†λ” κ·Έλ¦Ό μ„μ‹";
     TEXT[ turkish ] = "Bilinmeyen bir grafik biηimi";
     TEXT[ language_user1 ] = " ";
@@ -3555,7 +3555,7 @@ String RID_SVXSTR_GRFILTER_VERSIONERROR
     TEXT[ japanese ] = "η”»εƒγƒ•γ‚΅γ‚¤γƒ«γ®γƒγƒΌγ‚Έγƒ§γƒ³γ―γ‚µγƒγƒΌγƒγ•γ‚γΎγ›γ‚“γ€‚";
     TEXT[ chinese_traditional ] = "δΈζ”―ζι€™ε€‹ε–ε½Άζª”ζ΅η‰ζ¬";
     TEXT[ arabic ] = "αδ νΚγ ΟΪγ ΕΥΟΗΡ γαέ ΗαΡΣζγΗΚ";
-    TEXT[ greek ] = "Δεν υποστηρίζεται η έκδοση αυτού του γραφικού αρχείου.";
+    TEXT[ greek ] = "Αυτή η έκδοση του αρχείου γραφικών δεν υποστηρίζεται";
     TEXT[ korean ] = "κ·Έλ¦Ό νμΌμ μ΄ λ²„μ „μ€ μ§€μ›λμ§€ μ•μµλ‹λ‹¤.";
     TEXT[ turkish ] = "Grafik dosyasύnύn bu sόrόmό desteklenmiyor";
     TEXT[ language_user1 ] = " ";
@@ -3832,7 +3832,7 @@ String RID_SVXSTR_GRDT0
     Text[ english_us ] = "Gradient";
     Text[ portuguese ] = "Gradaηγo";
     Text[ russian ] = "Γπΰδθενς";
-    Text[ greek ] = "Διαβάθμιση χρώματος";
+    Text[ greek ] = "~Διαβάθ. χρώματος";
     Text[ dutch ] = "Kleurovergangen";
     Text[ french ] = "Dιgradι";
     Text[ spanish ] = "Gradiente";
@@ -4314,7 +4314,7 @@ String RID_SVXSTR_HATCH4
     Text [ english_us ] = "Red crossed 45 degrees";
     Text[ portuguese ] = "Vermelho cruzado 45 graus";
     Text[ russian ] = "Κπΰρνΰÿ οεπεκπερςνΰÿ 45 γπΰδσρξβ";
-    Text[ greek ] = "Κόκκινο δίκτυο 45 μοίρες";
+    Text[ greek ] = "Σύμπτωση κόκκινου στις 45 μοίρες";
     Text[ dutch ] = "Rood gekruist 45 graden";
     Text[ french ] = "Rouge double inclinι 45 degrιs";
     Text[ spanish ] = "Rojo red 45 grados";
@@ -4344,7 +4344,7 @@ String RID_SVXSTR_HATCH5
     Text [ english_us ] = "Red crossed 0 degrees";
     Text[ portuguese ] = "Vermelho cruzado 0 graus";
     Text[ russian ] = "Κπΰρνΰÿ οεπεκπερςνΰÿ 0 γπΰδσρξβ";
-    Text[ greek ] = "Κόκκινο δίκτυο 0 μοίρες";
+    Text[ greek ] = "Σύμπτωση κόκκινου στις 0 μοίρες";
     Text[ dutch ] = "Rood gekruist 0 graden";
     Text[ french ] = "Rouge double inclinι 0 degrι";
     Text[ spanish ] = "Rojo red 0 grados";
@@ -4374,7 +4374,7 @@ String RID_SVXSTR_HATCH6
     Text [ english_us ] = "Blue crossed 45 degrees";
     Text[ portuguese ] = "Azul cruzado 45 graus";
     Text[ russian ] = "Ρθνÿÿ οεπεκπερςνΰÿ 45 γπΰδσρξβ";
-    Text[ greek ] = "Μπλε δίκτυο 45 μοίρες";
+    Text[ greek ] = "Σύμπτωση μπλε στις 45 μοίρες";
     Text[ dutch ] = "Blauw gekruist 45 graden";
     Text[ french ] = "Bleu double inclinι 45 degrιs";
     Text[ spanish ] = "Azul red 45 grados";
@@ -4404,7 +4404,7 @@ String RID_SVXSTR_HATCH7
     Text [ english_us ] = "Blue crossed 0 degrees";
     Text[ portuguese ] = "Azul cruzado 0 graus";
     Text[ russian ] = "Ρθνÿÿ οεπεκπερςνΰÿ 0 γπΰδσρξβ";
-    Text[ greek ] = "Μπλε δίκτυο 0 μοίρες";
+    Text[ greek ] = "Σύμπτωση μπλε στις 0 μοίρες";
     Text[ dutch ] = "Bauw gekruist 0 graden";
     Text[ french ] = "Bleu double inclinι 0 degrι";
     Text[ spanish ] = "Azul red 0 grados";
@@ -5214,7 +5214,7 @@ String RID_SVXSTR_BMP19
     Text [ english_us ] = "Fiery";
     Text[ portuguese ] = "Chamas";
     Text[ russian ] = "Ξγξνό";
-    Text[ greek ] = "Καυτό";
+    Text[ greek ] = "Φλεγόμενος";
     Text[ dutch ] = "Vurig";
     Text[ french ] = "Flamme";
     Text[ spanish ] = "Fogoso";
@@ -5371,7 +5371,7 @@ String RID_SVXSTR_DASH0
     Text [ english_us ] = "Ultrafine dashed";
     Text[ portuguese ] = "Tracejado ultrafino";
     Text[ russian ] = "Ρβεπυςξνκθι ψςπθυ";
-    Text[ greek ] = "Διακεκομμένο (Πολύ λεπτά)";
+    Text[ greek ] = "Διακεκομμένη (Πολύ λεπτή)";
     Text[ dutch ] = "Extra fijne streepjes";
     Text[ french ] = "Traits ultrafins";
     Text[ spanish ] = "Trazos ultrafinos";
@@ -5401,7 +5401,7 @@ String RID_SVXSTR_DASH1
     Text [ english_us ] = "Fine dashed";
     Text[ portuguese ] = "Tracejado fino";
     Text[ russian ] = "Òξνκθι ψςπθυ";
-    Text[ greek ] = "Διακεκομμένο (Λεπτά)";
+    Text[ greek ] = "Διακεκομμένη (λεπτή)";
     Text[ dutch ] = "Streepjes";
     Text[ french ] = "Traits fins";
     Text[ spanish ] = "Trazos finos";
@@ -5461,7 +5461,7 @@ String RID_SVXSTR_DASH3
     Text [ english_us ] = "Fine dotted";
     Text[ portuguese ] = "Pontilhado fino";
     Text[ russian ] = "Òξνκθι οσνκςθπ 1";
-    Text[ greek ] = "Λεπτό διάστικτο";
+    Text[ greek ] = "Λεπτή διάστικτη";
     Text[ dutch ] = "Fijn gestippeld";
     Text[ french ] = "Fine pointillιe";
     Text[ spanish ] = "Punteado fino";
@@ -5521,7 +5521,7 @@ String RID_SVXSTR_DASH5
     Text [ english_us ] = "Fine dashed (variable)";
     Text[ portuguese ] = "Tracejado fino (variαvel)";
     Text[ russian ] = "Òξνκθι οσνκςθπ 2";
-    Text[ greek ] = "Διακεκομμένο λεπτά (μεταβλητά)";
+    Text[ greek ] = "Διακεκομμένη λεπτή (μεταβλητή)";
     Text[ dutch ] = "Streepjes (variabel)";
     Text[ french ] = "Traits fins (variable)";
     Text[ spanish ] = "Trazos finos (variable)";
@@ -5551,7 +5551,7 @@ String RID_SVXSTR_DASH6
     Text [ english_us ] = "3 dashes 3 dots (variable)";
     Text[ portuguese ] = "3 traηos 3 pontos (variαvel)";
     Text[ russian ] = "3 ψςπθυΰ 3 ςξχκθ";
-    Text[ greek ] = "3 παύλες - 3 τελείες (μεταβλητά)";
+    Text[ greek ] = "3 παύλες - 3 τελείες (μεταβλητή)";
     Text[ dutch ] = "3 streepjes 3 puntjes (variabel)";
     Text[ french ] = "3 traits 3 points (variable)";
     Text[ spanish ] = "3 trazos 3 puntos (variable)";
@@ -5581,7 +5581,7 @@ String RID_SVXSTR_DASH7
     Text [ english_us ] = "Ultrafine dotted (variable)";
     Text[ portuguese ] = "Pontilhado ultrafino (variαvel)";
     Text[ russian ] = "Ρβεπυςξνκθι οσνκςθπ";
-    Text[ greek ] = "Πολύ λεπτό διάστικτο (Μεταβλητά)";
+    Text[ greek ] = "Πολύ λεπτή διάστικτη (μεταβλητή)";
     Text[ dutch ] = "Extra fijn gestippeld (variabel)";
     Text[ french ] = "Ultrafine pointillιe (variable)";
     Text[ spanish ] = "Punteado ultrafino (variable)";
@@ -5671,7 +5671,7 @@ String RID_SVXSTR_DASH10
     Text [ english_us ] = "Dashed (variable)";
     Text[ portuguese ] = "Pontilhado (variαvel)";
     Text[ russian ] = "Οσνκςθπ 2";
-    Text[ greek ] = "Διακεκομμένο (μεταβλητά)";
+    Text[ greek ] = "Διακεκομμένη (μεταβλητή)";
     Text[ dutch ] = "Streepjes (variabel)";
     Text[ french ] = "Traits (variable)";
     Text[ spanish ] = "Trazos (variable)";
@@ -5701,7 +5701,7 @@ String RID_SVXSTR_DASH11
     Text [ english_us ] = "Dashed";
     Text[ portuguese ] = "Tracejado";
     Text[ russian ] = "Οσνκςθπ 1";
-    Text[ greek ] = "Διακεκομμένο";
+    Text[ greek ] = "Διακεκομμένη";
     Text[ dutch ] = "Streepjes";
     Text[ french ] = "Traits";
     Text[ spanish ] = "Trazos";
@@ -6197,6 +6197,7 @@ String RID_SVXSTR_TRASNGR0
 };
 
  // ********************************************************************** EOF
+
 
 
 
