@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlaustp.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-20 10:15:09 $
+ *  last change: $Author: sab $ $Date: 2000-12-01 10:56:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,23 +116,26 @@ void SvXMLAutoStylePoolP::exportStyleAttributes(
     {
         for( vector< XMLPropertyState >::const_iterator pProp = rProperties.begin(); pProp != rProperties.end(); pProp++ )
         {
-            UniReference< XMLPropertySetMapper > aPropMapper = rPropExp.getPropertySetMapper();
-            sal_Int32 nIndex = pProp->mnIndex;
-            sal_Int16 nContextID = aPropMapper->GetEntryContextId( nIndex );
-            switch( nContextID )
+            if (pProp->mnIndex > -1)
             {
-                case CTF_PM_PAGEUSAGE:
+                UniReference< XMLPropertySetMapper > aPropMapper = rPropExp.getPropertySetMapper();
+                sal_Int32 nIndex = pProp->mnIndex;
+                sal_Int16 nContextID = aPropMapper->GetEntryContextId( nIndex );
+                switch( nContextID )
                 {
-                    OUString sAttrName( rNamespaceMap.GetQNameByKey(
-                        aPropMapper->GetEntryNameSpace( nIndex ), aPropMapper->GetEntryXMLName( nIndex ) ) );
-                    OUString sCDATA( RTL_CONSTASCII_USTRINGPARAM( sXML_CDATA ) );
-                    OUString sValue;
-                    const XMLPropertyHandler* pPropHdl = aPropMapper->GetPropertyHandler( nIndex );
-                    if( pPropHdl && pPropHdl->exportXML( sValue, pProp->maValue, rUnitConverter ) &&
-                        (sValue.compareToAscii( sXML_all ) != 0) )
-                        rAttrList.AddAttribute( sAttrName, sCDATA, sValue );
+                    case CTF_PM_PAGEUSAGE:
+                    {
+                        OUString sAttrName( rNamespaceMap.GetQNameByKey(
+                            aPropMapper->GetEntryNameSpace( nIndex ), aPropMapper->GetEntryXMLName( nIndex ) ) );
+                        OUString sCDATA( RTL_CONSTASCII_USTRINGPARAM( sXML_CDATA ) );
+                        OUString sValue;
+                        const XMLPropertyHandler* pPropHdl = aPropMapper->GetPropertyHandler( nIndex );
+                        if( pPropHdl && pPropHdl->exportXML( sValue, pProp->maValue, rUnitConverter ) &&
+                            (sValue.compareToAscii( sXML_all ) != 0) )
+                            rAttrList.AddAttribute( sAttrName, sCDATA, sValue );
+                    }
+                    break;
                 }
-                break;
             }
         }
     }
