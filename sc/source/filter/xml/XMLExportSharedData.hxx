@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportSharedData.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 13:49:39 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:50:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@
 struct ScMyDrawPage
 {
     com::sun::star::uno::Reference<com::sun::star::drawing::XDrawPage> xDrawPage;
-    sal_Bool bHasForms : 1;
+    sal_Bool bHasForms;
 
     ScMyDrawPage() : bHasForms(sal_False) {}
 };
