@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmllib_export.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ab $ $Date: 2001-11-07 18:21:04 $
+ *  last change: $Author: ab $ $Date: 2001-12-14 12:12:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,12 @@ SAL_CALL exportLibraryContainer(
 
         pLibElement->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_LIBRARY_PREFIX ":link") ),
                                     rLib.bLink ? aTrueStr : aFalseStr );
+
+        if( rLib.bLink )
+        {
+            pLibElement->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_LIBRARY_PREFIX ":readonly") ),
+                                        rLib.bReadOnly ? aTrueStr : aFalseStr );
+        }
 
         pLibElement->dump( xOut );
     }
