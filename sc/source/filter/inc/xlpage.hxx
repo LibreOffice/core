@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlpage.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-30 16:24:22 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:50:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,6 @@
  *
  *
  ************************************************************************/
-
-// ============================================================================
 
 #ifndef SC_XLPAGE_HXX
 #define SC_XLPAGE_HXX
@@ -141,52 +139,52 @@ struct XclPageData : ScfNoCopy
 {
     typedef ::std::auto_ptr< SvxBrushItem > SvxBrushItemPtr;
 
-    ScfUInt16Vec                maHorPageBreaks;    /// Horizontal page breaks.
-    ScfUInt16Vec                maVerPageBreaks;    /// Vertical page breaks.
-    SvxBrushItemPtr             mpBrushItem;        /// Background bitmap.
-    String                      maHeader;           /// Excel header string (empty = off).
-    String                      maFooter;           /// Excel footer string (empty = off).
-    double                      mfLeftMargin;       /// Left margin in inches.
-    double                      mfRightMargin;      /// Right margin in inches.
-    double                      mfTopMargin;        /// Top margin in inches.
-    double                      mfBottomMargin;     /// Bottom margin in inches.
-    double                      mfHeaderMargin;     /// Margin main page to header.
-    double                      mfFooterMargin;     /// Margin main page to footer.
-    double                      mfHdrLeftMargin;    /// Left margin to header.
-    double                      mfHdrRightMargin;   /// Right margin to header.
-    double                      mfFtrLeftMargin;    /// Left margin to footer.
-    double                      mfFtrRightMargin;   /// Right margin to footer.
-    sal_uInt16                  mnPaperSize;        /// Index into paper size table.
-    sal_uInt16                  mnCopies;           /// Number of copies.
-    sal_uInt16                  mnStartPage;        /// Start page number.
-    sal_uInt16                  mnScaling;          /// Scaling in percent.
-    sal_uInt16                  mnFitToWidth;       /// Fit to number of pages in width.
-    sal_uInt16                  mnFitToHeight;      /// Fit to number of pages in height.
-    sal_uInt16                  mnHorPrintRes;      /// Horizontal printing resolution.
-    sal_uInt16                  mnVerPrintRes;      /// Vertical printing resolution.
-    bool                        mbValid;            /// false = some of the values are not valid.
-    bool                        mbPortrait;         /// true = portrait; false = landscape.
-    bool                        mbPrintInRows;      /// true = in rows; false = in columns.
-    bool                        mbBlackWhite;       /// true = black/white; false = colors.
-    bool                        mbDraftQuality;     /// true = draft; false = default quality.
-    bool                        mbPrintNotes;       /// true = print notes.
-    bool                        mbManualStart;      /// true = mnStartPage valid; false = automatic.
-    bool                        mbFitToPages;       /// true = fit to pages; false = scale in percent.
-    bool                        mbHorCenter;        /// true = centered horizontally; false = left aligned.
-    bool                        mbVerCenter;        /// true = centered vertically; false = top aligned.
-    bool                        mbPrintHeadings;    /// true = print column and row headings.
-    bool                        mbPrintGrid;        /// true = print grid lines.
+    ScfUInt16Vec        maHorPageBreaks;    /// Horizontal page breaks.
+    ScfUInt16Vec        maVerPageBreaks;    /// Vertical page breaks.
+    SvxBrushItemPtr     mxBrushItem;        /// Background bitmap.
+    String              maHeader;           /// Excel header string (empty = off).
+    String              maFooter;           /// Excel footer string (empty = off).
+    double              mfLeftMargin;       /// Left margin in inches.
+    double              mfRightMargin;      /// Right margin in inches.
+    double              mfTopMargin;        /// Top margin in inches.
+    double              mfBottomMargin;     /// Bottom margin in inches.
+    double              mfHeaderMargin;     /// Margin main page to header.
+    double              mfFooterMargin;     /// Margin main page to footer.
+    double              mfHdrLeftMargin;    /// Left margin to header.
+    double              mfHdrRightMargin;   /// Right margin to header.
+    double              mfFtrLeftMargin;    /// Left margin to footer.
+    double              mfFtrRightMargin;   /// Right margin to footer.
+    sal_uInt16          mnPaperSize;        /// Index into paper size table.
+    sal_uInt16          mnCopies;           /// Number of copies.
+    sal_uInt16          mnStartPage;        /// Start page number.
+    sal_uInt16          mnScaling;          /// Scaling in percent.
+    sal_uInt16          mnFitToWidth;       /// Fit to number of pages in width.
+    sal_uInt16          mnFitToHeight;      /// Fit to number of pages in height.
+    sal_uInt16          mnHorPrintRes;      /// Horizontal printing resolution.
+    sal_uInt16          mnVerPrintRes;      /// Vertical printing resolution.
+    bool                mbValid;            /// false = some of the values are not valid.
+    bool                mbPortrait;         /// true = portrait; false = landscape.
+    bool                mbPrintInRows;      /// true = in rows; false = in columns.
+    bool                mbBlackWhite;       /// true = black/white; false = colors.
+    bool                mbDraftQuality;     /// true = draft; false = default quality.
+    bool                mbPrintNotes;       /// true = print notes.
+    bool                mbManualStart;      /// true = mnStartPage valid; false = automatic.
+    bool                mbFitToPages;       /// true = fit to pages; false = scale in percent.
+    bool                mbHorCenter;        /// true = centered horizontally; false = left aligned.
+    bool                mbVerCenter;        /// true = centered vertically; false = top aligned.
+    bool                mbPrintHeadings;    /// true = print column and row headings.
+    bool                mbPrintGrid;        /// true = print grid lines.
 
-    explicit                    XclPageData();
-                                ~XclPageData();
+    explicit            XclPageData();
+                        ~XclPageData();
 
     /** Sets Excel default page settings. */
-    void                        SetDefaults();
+    void                SetDefaults();
 
     /** Returns the real paper size (twips) from the paper size index and paper orientation. */
-    Size                        GetScPaperSize( SfxPrinter* pPrinter ) const;
+    Size                GetScPaperSize( SfxPrinter* pPrinter ) const;
     /** Sets the Excel paper size index and paper orientation from Calc paper size (twips). */
-    void                        SetScPaperSize( const Size& rSize, bool bPortrait );
+    void                SetScPaperSize( const Size& rSize, bool bPortrait );
 };
 
 // ============================================================================
