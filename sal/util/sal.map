@@ -511,13 +511,14 @@ UDK_3.1 {
 UDK_3.2 {
     global:
         osl_syncFile;
+} UDK_3.1;
+
+UDK_3.3 {
+    global:
         osl_createDirectoryPath;
         osl_getFunctionSymbol;
         osl_getModuleURLFromFunctionAddress;
-} UDK_3.1;
-
-UDK_3.3 { # OOo 2.0
-    global:
         rtl_uStringbuffer_insertUtf32;
         rtl_ustr_ascii_compareIgnoreAsciiCase_WithLengths;
 } UDK_3.2;
+
