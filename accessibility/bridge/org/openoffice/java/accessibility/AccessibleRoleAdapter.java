@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleRoleAdapter.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 15:48:17 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 18:13:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,7 @@
 
 package org.openoffice.java.accessibility;
 
-import drafts.com.sun.star.accessibility.XAccessible;
+import com.sun.star.accessibility.XAccessible;
 
 /** This class maps the AccessibleRole(s) of the UNO accessibility API
  *  to the corresponding javax.accessibility objects.
@@ -74,10 +74,10 @@ public abstract class AccessibleRoleAdapter {
     public static final javax.accessibility.AccessibleRole[] data = {
         javax.accessibility.AccessibleRole.UNKNOWN,
         javax.accessibility.AccessibleRole.ALERT,
-        javax.accessibility.AccessibleRole.AWT_COMPONENT,
         javax.accessibility.AccessibleRole.COLUMN_HEADER,
         javax.accessibility.AccessibleRole.CANVAS,
         javax.accessibility.AccessibleRole.CHECK_BOX,
+        javax.accessibility.AccessibleRole.CHECK_BOX,   // CHECK_MENU_ITEM
         javax.accessibility.AccessibleRole.COLOR_CHOOSER,
         javax.accessibility.AccessibleRole.COMBO_BOX,
         javax.accessibility.AccessibleRole.DATE_EDITOR,
@@ -85,12 +85,20 @@ public abstract class AccessibleRoleAdapter {
         javax.accessibility.AccessibleRole.DESKTOP_PANE,
         javax.accessibility.AccessibleRole.DIRECTORY_PANE,
         javax.accessibility.AccessibleRole.DIALOG,
+        javax.accessibility.AccessibleRole.CANVAS, // DOCUMENT
+        javax.accessibility.AccessibleRole.PANEL,  // EMBEDDED_OBJECT
+        javax.accessibility.AccessibleRole.PANEL,  // ENDNOTE
         javax.accessibility.AccessibleRole.FILE_CHOOSER,
         javax.accessibility.AccessibleRole.FILLER,
         javax.accessibility.AccessibleRole.FONT_CHOOSER,
+        javax.accessibility.AccessibleRole.PANEL,  // FOOTER
+        javax.accessibility.AccessibleRole.PANEL,  // FOOTNOTE
         javax.accessibility.AccessibleRole.FRAME,
         javax.accessibility.AccessibleRole.GLASS_PANE,
+        javax.accessibility.AccessibleRole.PANEL,  // GRAPHIC
         javax.accessibility.AccessibleRole.GROUP_BOX,
+        javax.accessibility.AccessibleRole.PANEL,  // HEADER
+        javax.accessibility.AccessibleRole.TEXT,   // HEADING
         javax.accessibility.AccessibleRole.HYPERLINK,
         javax.accessibility.AccessibleRole.ICON,
         javax.accessibility.AccessibleRole.INTERNAL_FRAME,
@@ -105,85 +113,33 @@ public abstract class AccessibleRoleAdapter {
         javax.accessibility.AccessibleRole.PAGE_TAB,
         javax.accessibility.AccessibleRole.PAGE_TAB_LIST,
         javax.accessibility.AccessibleRole.PANEL,
+        javax.accessibility.AccessibleRole.TEXT,   // PARAGRAPH
         javax.accessibility.AccessibleRole.PASSWORD_TEXT,
         javax.accessibility.AccessibleRole.POPUP_MENU,
         javax.accessibility.AccessibleRole.PUSH_BUTTON,
         javax.accessibility.AccessibleRole.PROGRESS_BAR,
         javax.accessibility.AccessibleRole.RADIO_BUTTON,
+        javax.accessibility.AccessibleRole.RADIO_BUTTON,  // RADIO_MENU_ITEM
         javax.accessibility.AccessibleRole.ROW_HEADER,
         javax.accessibility.AccessibleRole.ROOT_PANE,
         javax.accessibility.AccessibleRole.SCROLL_BAR,
         javax.accessibility.AccessibleRole.SCROLL_PANE,
+        javax.accessibility.AccessibleRole.CANVAS,  // SHAPE
         javax.accessibility.AccessibleRole.SEPARATOR,
         javax.accessibility.AccessibleRole.SLIDER,
         javax.accessibility.AccessibleRole.SPIN_BOX,
         javax.accessibility.AccessibleRole.SPLIT_PANE,
         javax.accessibility.AccessibleRole.STATUS_BAR,
-        javax.accessibility.AccessibleRole.SWING_COMPONENT,
         javax.accessibility.AccessibleRole.TABLE,
+        javax.accessibility.AccessibleRole.LABEL,  // TABLE_CELL - required by ZoomText
         javax.accessibility.AccessibleRole.TEXT,
+        javax.accessibility.AccessibleRole.PANEL,  // TEXT_FRAME
         javax.accessibility.AccessibleRole.TOGGLE_BUTTON,
         javax.accessibility.AccessibleRole.TOOL_BAR,
         javax.accessibility.AccessibleRole.TOOL_TIP,
         javax.accessibility.AccessibleRole.TREE,
         javax.accessibility.AccessibleRole.VIEWPORT,
-        javax.accessibility.AccessibleRole.WINDOW,
-        null, // RESERVED
-        null, // RESERVED
-        null, // RESERVED
-        null, // RESERVED
-        null, // RESERVED
-        null, // RESERVED
-        null, // RESERVED
-        null, // RESERVED
-        null, // RESERVED
-        null, // RESERVED
-        null, // RESERVED
-        null, // RESERVED
-        null, // RESERVED
-        null, // RESERVED
-        null, // RESERVED
-        null, // RESERVED
-        null, // RESERVED
-        null, // RESERVED
-        null, // RESERVED
-        null, // RESERVED
-        null, // RESERVED
-        null, // RESERVED
-        null, // RESERVED
-        null, // RESERVED
-        null, // RESERVED
-        null, // RESERVED
-        null, // RESERVED
-        null, // RESERVED
-        null, // RESERVED
-        null, // RESERVED
-        null, // RESERVED
-        null, // RESERVED
-        null, // RESERVED
-        null, // RESERVED
-        null, // RESERVED
-        null, // RESERVED
-        null, // RESERVED
-        null, // RESERVED
-        null, // RESERVED
-        null, // RESERVED
-        null, // RESERVED
-        null, // RESERVED
-        null, // RESERVED
-        null, // RESERVED
-        javax.accessibility.AccessibleRole.CANVAS, // DOCUMENT
-        javax.accessibility.AccessibleRole.PANEL,  // HEADER
-        javax.accessibility.AccessibleRole.PANEL,  // FOOTER
-        javax.accessibility.AccessibleRole.TEXT,   // PARAGRAPH
-        javax.accessibility.AccessibleRole.TEXT,   // HEADING
-        javax.accessibility.AccessibleRole.LABEL,  // TABLE_CELL - required by ZoomText
-        javax.accessibility.AccessibleRole.PANEL,  // TEXT_FRAME
-        javax.accessibility.AccessibleRole.PANEL,  // GRAPHIC
-        javax.accessibility.AccessibleRole.PANEL,  // EMBEDDED_OBJECT
-        javax.accessibility.AccessibleRole.PANEL,  // ENDNOTE
-        javax.accessibility.AccessibleRole.PANEL,  // FOOTNOTE
-        javax.accessibility.AccessibleRole.CANVAS  // SHAPE
+        javax.accessibility.AccessibleRole.WINDOW
     };
 
     public static javax.accessibility.AccessibleRole getAccessibleRole(short role) {
