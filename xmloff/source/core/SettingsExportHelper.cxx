@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SettingsExportHelper.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cl $ $Date: 2001-04-26 10:47:17 $
+ *  last change: $Author: sab $ $Date: 2001-05-04 10:57:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,6 +188,12 @@ void XMLSettingsExportHelper::CallTypeFunction(const uno::Any& rAny,
                 rAny >>= aProps;
                 exportSequencePropertyValue(aProps, rName);
             }
+            else if( aType.equals(getCppuType( (uno::Sequence<sal_Int8> *)0 ) ) )
+            {
+                uno::Sequence< sal_Int8 > aProps;
+                rAny >>= aProps;
+                exportbase64Binary(aProps, rName);
+            }
             else if (aType.equals(getCppuType( (uno::Reference<container::XNameContainer> *)0 ) ) ||
                     aType.equals(getCppuType( (uno::Reference<container::XNameAccess> *)0 ) ))
             {
@@ -288,7 +294,8 @@ void XMLSettingsExportHelper::exportString(const rtl::OUString& sValue, const rt
     rExport.AddAttribute(XML_NAMESPACE_CONFIG, sXML_name, rName);
     rExport.AddAttributeASCII(XML_NAMESPACE_CONFIG, sXML_type, sXML_string);
     SvXMLElementExport aDoubleElem(rExport, XML_NAMESPACE_CONFIG, sXML_config_item, sal_True, sal_False);
-    rExport.GetDocHandler()->characters(sValue);
+    if (sValue.getLength())
+        rExport.GetDocHandler()->characters(sValue);
 }
 
 void XMLSettingsExportHelper::exportDateTime(const util::DateTime& aValue, const rtl::OUString& rName) const
@@ -314,6 +321,23 @@ void XMLSettingsExportHelper::exportSequencePropertyValue(
         SvXMLElementExport aSequenceElem(rExport, XML_NAMESPACE_CONFIG, sXML_config_item_set, sal_True, sal_True);
         for (sal_Int32 i = 0; i < nLength; i++)
             CallTypeFunction(aProps[i].Value, aProps[i].Name);
+    }
+}
+
+void XMLSettingsExportHelper::exportbase64Binary(
+                    const uno::Sequence<sal_Int8>& aProps,
+                    const rtl::OUString& rName) const
+{
+    DBG_ASSERT(rName.getLength(), "no name");
+    sal_Int32 nLength(aProps.getLength());
+    rExport.AddAttribute(XML_NAMESPACE_CONFIG, sXML_name, rName);
+    rExport.AddAttributeASCII(XML_NAMESPACE_CONFIG, sXML_type, sXML_base64Binary);
+    SvXMLElementExport aDoubleElem(rExport, XML_NAMESPACE_CONFIG, sXML_config_item, sal_True, sal_False);
+    if(nLength)
+    {
+        rtl::OUStringBuffer sBuffer;
+        SvXMLUnitConverter::encodeBase64(sBuffer, aProps);
+        rExport.GetDocHandler()->characters(sBuffer.makeStringAndClear());
     }
 }
 
