@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoashp.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 17:09:06 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 09:08:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2044,44 +2044,78 @@ sal_Bool SdrObjCustomShape::DoPaintObject(XOutputDevice& rXOut, const SdrPaintIn
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-const SdrGluePointList* SdrObjCustomShape::GetGluePointList() const
+// #i38892#
+void SdrObjCustomShape::ImpCheckCustomGluePointsAreAdded()
 {
     const SdrObject* pSdrObject = GetSdrObjectFromCustomShape();
-    if ( pSdrObject )
-    {
-        const SdrGluePointList* pSource = pSdrObject->GetGluePointList();
-        if ( pSource )
-            ((SdrObjCustomShape*)this)->ForceGluePointList();
-    }
-    return pPlusData ? pPlusData->pGluePoints : NULL;
-}
 
-SdrGluePointList* SdrObjCustomShape::GetGluePointList()
-{
-    const SdrObject* pSdrObject = GetSdrObjectFromCustomShape();
-    if ( pSdrObject )
+    if(pSdrObject)
     {
         const SdrGluePointList* pSource = pSdrObject->GetGluePointList();
-        if ( pSource )
-            ((SdrObjCustomShape*)this)->ForceGluePointList();
-    }
-    return pPlusData ? pPlusData->pGluePoints : NULL;
-}
 
-SdrGluePointList* SdrObjCustomShape::ForceGluePointList()
-{
-    SdrGluePointList* pRet = SdrTextObj::ForceGluePointList();
-    const SdrObject* pSdrObject = GetSdrObjectFromCustomShape();
-    if ( pSdrObject )
-    {
-        const SdrGluePointList* pSource = pSdrObject->GetGluePointList();
-        if ( pSource )
+        if(pSource && pSource->GetCount())
         {
-            pRet->Clear();
-            *pRet = *pSource;
+            if(!SdrTextObj::GetGluePointList())
+            {
+                SdrTextObj::ForceGluePointList();
+            }
+
+            SdrGluePointList* pList = SdrTextObj::GetGluePointList();
+
+            if(pList)
+            {
+                SdrGluePointList aNewList;
+                sal_uInt16 a;
+
+                for(a = 0; a < pSource->GetCount(); a++)
+                {
+                    SdrGluePoint aCopy((*pSource)[a]);
+                    aCopy.SetUserDefined(FALSE);
+                    aNewList.Insert(aCopy);
+                }
+
+                for(a = 0; a < pList->GetCount(); a++)
+                {
+                    const SdrGluePoint& rCandidate = (*pList)[a];
+
+                    if(rCandidate.IsUserDefined())
+                    {
+                        aNewList.Insert(rCandidate);
+                    }
+                }
+
+                *pList = aNewList;
+            }
         }
     }
-    return pRet;
+}
+
+// #i38892#
+const SdrGluePointList* SdrObjCustomShape::GetGluePointList() const
+{
+    ((SdrObjCustomShape*)this)->ImpCheckCustomGluePointsAreAdded();
+    return SdrTextObj::GetGluePointList();
+}
+
+// #i38892#
+SdrGluePointList* SdrObjCustomShape::GetGluePointList()
+{
+    ImpCheckCustomGluePointsAreAdded();
+    return SdrTextObj::GetGluePointList();
+}
+
+// #i38892#
+SdrGluePointList* SdrObjCustomShape::ForceGluePointList()
+{
+    if(SdrTextObj::ForceGluePointList())
+    {
+        ImpCheckCustomGluePointsAreAdded();
+        return SdrTextObj::ForceGluePointList();
+    }
+    else
+    {
+        return 0L;
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
