@@ -7618,3 +7618,8 @@ _TI4?AVout_of_range@_STL@@
 ?getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXFilePickerListener@dialogs@ui@star@sun@com@@@2345@@Z
 ?s_cd@?$WeakImplHelper1@VXFilePickerListener@dialogs@ui@star@sun@com@@@cppu@@0Uclass_data1@2@A
 ?lcl_translateBasic2Uno@?%O:\SRC641\src\sfx2\source\doc\objmisc.cxx133423606@@YAXABVSbxVariableRef@@PAX@Z
+?cpp_acquire@uno@star@sun@com@@YAXPAX@Z
+?cpp_release@uno@star@sun@com@@YAXPAX@Z
+?cpp_queryInterface@uno@star@sun@com@@YAPAXPAXPAU_typelib_TypeDescriptionReference@@@Z
+?s_pType_com_sun_star_uno_XComponentContext@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXComponentContext@uno@star@sun@com@@@3456@@Z@4PAU_typelib_TypeDescriptionReference@@A
+?lcl_translateBasic2Uno@?%O:\SRC641\src\sfx2\source\doc\objmisc.cxx2230918162@@YAXABVSbxVariableRef@@PAX@Z
