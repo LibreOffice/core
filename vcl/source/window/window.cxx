@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.180 $
+ *  $Revision: 1.181 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 13:41:30 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 14:21:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,6 @@
  *
  ************************************************************************/
 
-#define _SV_WINDOW_CXX
-
 #ifndef _SV_SVSYS_HXX
 #include <svsys.h>
 #endif
@@ -86,7 +84,7 @@
 #include <tools/debug.hxx>
 #endif
 #ifndef _SV_RC_H
-#include <rc.h>
+#include <tools/rc.h>
 #endif
 #ifndef _SV_SVDATA_HXX
 #include <svdata.hxx>
@@ -96,9 +94,6 @@
 #endif
 #ifndef _SV_DBGGUI_HXX
 #include <dbggui.hxx>
-#endif
-#ifndef _SV_ACCESS_HXX
-#include <access.hxx>
 #endif
 #ifndef _SV_OUTFONT_HXX
 #include <outfont.hxx>
@@ -4525,9 +4520,6 @@ void Window::GetFocus()
 
     NotifyEvent aNEvt( EVENT_GETFOCUS, this );
     Notify( aNEvt );
-
-    if ( Application::GetAccessHdlCount() )
-        Application::AccessNotify( AccessNotification( ACCESS_EVENT_GETFOCUS, this ) );
 }
 
 // -----------------------------------------------------------------------
@@ -4540,9 +4532,6 @@ void Window::LoseFocus()
 
     NotifyEvent aNEvt( EVENT_LOSEFOCUS, this );
     Notify( aNEvt );
-
-    if ( Application::GetAccessHdlCount() )
-        Application::AccessNotify( AccessNotification( ACCESS_EVENT_LOSEFOCUS, this ) );
 }
 
 // -----------------------------------------------------------------------
@@ -6438,7 +6427,6 @@ void Window::SetPosSizePixel( long nX, long nY,
     if ( pWindow->mbFrame )
     {
         long nOldWidth  = pWindow->mnOutWidth;
-        long nOldHeight = pWindow->mnOutHeight;
 
         if ( !(nFlags & WINDOW_POSSIZE_WIDTH) )
             nWidth = pWindow->mnOutWidth;
@@ -8314,7 +8302,6 @@ void Window::DrawSelectionBackground( const Rectangle& rRect, USHORT highlight, 
     // colors used for item highlighting
     Color aSelectionBorderCol( GetSettings().GetStyleSettings().GetHighlightColor() );
     Color aSelectionFillCol( aSelectionBorderCol );
-    Color aSelectionMaskCol( aSelectionBorderCol );
 
     BOOL bDark = GetSettings().GetStyleSettings().GetFaceColor().IsDark();
     BOOL bBright = GetSettings().GetStyleSettings().GetFaceColor().IsBright();
