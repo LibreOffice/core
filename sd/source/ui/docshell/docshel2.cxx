@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel2.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cl $ $Date: 2002-04-30 10:31:45 $
+ *  last change: $Author: cl $ $Date: 2002-05-07 10:17:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -346,7 +346,7 @@ Bitmap SdDrawDocShell::GetPagePreviewBitmap(SdPage* pPage, USHORT nMaxEdgePixel)
         pView->SetGridFine( pFrameView->GetGridFine() );
         pView->SetSnapGrid( pFrameView->GetSnapGrid() );
         pView->SetSnapGridWidth(pFrameView->GetSnapGridWidthX(), pFrameView->GetSnapGridWidthY());
-//      pView->SetGridVisible( pFrameView->IsGridVisible() );
+        pView->SetGridVisible( pFrameView->IsGridVisible() );
         pView->SetGridFront( pFrameView->IsGridFront() );
         pView->SetSnapAngle( pFrameView->GetSnapAngle() );
         pView->SetGridSnap( pFrameView->IsGridSnap() );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsitem.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cl $ $Date: 2002-04-30 12:47:20 $
+ *  last change: $Author: cl $ $Date: 2002-05-07 10:15:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -546,7 +546,7 @@ public:
     UINT32  GetFldSnapY() const { Init(); return SvxOptionsGrid::GetFldSnapY(); }
     BOOL    IsUseGridSnap() const { Init(); return SvxOptionsGrid::GetUseGridSnap(); }
     BOOL    IsSynchronize() const { Init(); return SvxOptionsGrid::GetSynchronize(); }
-//  BOOL    IsGridVisible() const { Init(); return SvxOptionsGrid::GetGridVisible(); }
+    BOOL    IsGridVisible() const { Init(); return SvxOptionsGrid::GetGridVisible(); }
     BOOL    IsEqualGrid() const { Init(); return SvxOptionsGrid::GetEqualGrid(); }
 
     void    SetFldDrawX( UINT32 nSet ) { if( nSet != SvxOptionsGrid::GetFldDrawX() ) { OptionsChanged(); SvxOptionsGrid::SetFldDrawX( nSet ); } }
@@ -557,7 +557,7 @@ public:
     void    SetFldSnapY( UINT32 nSet ) { if( nSet != SvxOptionsGrid::GetFldSnapY() ) { OptionsChanged(); SvxOptionsGrid::SetFldSnapY( nSet ); } }
     void    SetUseGridSnap( BOOL bSet ) { if( bSet != SvxOptionsGrid::GetUseGridSnap() ) { OptionsChanged(); SvxOptionsGrid::SetUseGridSnap( bSet ); } }
     void    SetSynchronize( BOOL bSet ) { if( bSet != SvxOptionsGrid::GetSynchronize() ) { OptionsChanged(); SvxOptionsGrid::SetSynchronize( bSet ); } }
-//  void    SetGridVisible( BOOL bSet ) { if( bSet != SvxOptionsGrid::GetGridVisible() ) { OptionsChanged(); SvxOptionsGrid::SetGridVisible( bSet ); } }
+    void    SetGridVisible( BOOL bSet ) { if( bSet != SvxOptionsGrid::GetGridVisible() ) { OptionsChanged(); SvxOptionsGrid::SetGridVisible( bSet ); } }
     void    SetEqualGrid( BOOL bSet ) { if( bSet != SvxOptionsGrid::GetEqualGrid() ) { OptionsChanged(); SvxOptionsGrid::SetEqualGrid( bSet ); } }
 };
 
