@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndgrf.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-15 10:07:12 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:52:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -550,6 +550,7 @@ short SwGrfNode::SwapIn( BOOL bWaitForData )
                     SvStream* pStrm = utl::UcbStreamHelper::CreateStream( refStrm );
                     if( bGraphic ? aGrfObj.SwapIn( pStrm ) : ImportGraphic( *pStrm ) )
                         nRet = 1;
+                    delete pStrm;
                 }
                 catch ( uno::Exception& )
                 {
@@ -1122,6 +1123,7 @@ SwCntntNode* SwGrfNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
                 else
                     GetGrfFilter()->ImportGraphic( aTmpGrf, String(),
                                                     *pStrm );
+                delete pStrm;
             }
             catch ( uno::Exception& )
             {
