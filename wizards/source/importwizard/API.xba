@@ -75,7 +75,7 @@ Dim sPath as String
 Dim Index as Integer
 	Select Case Wizardmode
 		Case SBMICROSOFTMODE
-			Index = Application(CurOffice,SBAPPLKEY)
+			Index = Applications(CurOffice,SBAPPLKEY)
 			If GetGUIType = 1 Then &apos; Windows
 			    sPath = QueryValue(HKEY_LOCAL_MACHINE, sKeyName(Index), sValueName(Index))
 			Else
