@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlvw.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cd $ $Date: 2001-07-30 08:54:59 $
+ *  last change: $Author: mt $ $Date: 2001-08-01 10:34:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -636,6 +636,7 @@ void OutlinerView::SetAttribs( const SfxItemSet& rAttrs )
             SfxItemSet aAttribs = pEditEng->GetParaAttribs( n );
             if ( !( rLR == pEditEng->GetParaAttrib( (USHORT)n, EE_PARA_LRSPACE ) ) )
             {
+                // Use Item from Style/ParaAttribs, ImplGetNumBulletItem could return a pool default in OutlineView on Level 0
                 const SvxNumBulletItem& rNumBullet = (const SvxNumBulletItem&)pEditEng->GetParaAttrib( (USHORT)n, EE_PARA_NUMBULLET );
                 Paragraph* pPara = pOwner->pParaList->GetParagraph( n );
                 if ( rNumBullet.GetNumRule()->GetLevelCount() > pPara->GetDepth() )

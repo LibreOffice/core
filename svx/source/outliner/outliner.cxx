@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outliner.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: mt $ $Date: 2001-07-31 13:52:07 $
+ *  last change: $Author: mt $ $Date: 2001-08-01 10:34:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,10 @@
 
 #ifndef _SVX_BRSHITEM_HXX
 #include <brshitem.hxx>
+#endif
+
+#ifndef _SFXITEMPOOL_HXX
+#include <svtools/itempool.hxx>
 #endif
 
 #define DEFAULT_SCALE   75
@@ -783,7 +787,7 @@ void Outliner::ImplCheckNumBulletItem( USHORT nPara )
 
     // Wenn es ein SvxNumBulletItem gibt, ueberschreibt dieses die
     // Einstellungen von BulletItem und LRSpaceItem.
-    const SvxNumBulletItem& rNumBullet = (const SvxNumBulletItem&) pEditEngine->GetParaAttrib( nPara, EE_PARA_NUMBULLET );
+    const SvxNumBulletItem& rNumBullet = ImplGetNumBulletItem( nPara );
     if ( rNumBullet.GetNumRule()->GetLevelCount() > pPara->GetDepth() )
     {
         SvxLRSpaceItem aNewLRSpace( EE_PARA_LRSPACE );
@@ -899,6 +903,7 @@ void Outliner::SetParaAttribs( ULONG nPara, const SfxItemSet& rSet )
 
         if ( bLRSpaceChanged )
         {
+            // Use Item from Style/ParaAttribs, ImplGetNumBulletItem could return a pool default in OutlineView on Level 0
             const SvxNumBulletItem& rNumBullet = (const SvxNumBulletItem&)pEditEngine->GetParaAttrib( (USHORT)nPara, EE_PARA_NUMBULLET );
             Paragraph* pPara = pParaList->GetParagraph( nPara );
             if ( rNumBullet.GetNumRule()->GetLevelCount() > pPara->GetDepth() )
@@ -991,10 +996,7 @@ BOOL Outliner::Collapse( Paragraph* pPara )
 
 Font Outliner::ImpCalcBulletFont( USHORT nPara ) const
 {
-    const SvxNumBulletItem& rNumBullet = (const SvxNumBulletItem&) pEditEngine->GetParaAttrib( nPara, EE_PARA_NUMBULLET );
-    Paragraph* pPara = pParaList->GetParagraph( nPara );
-    const SvxNumberFormat* pFmt = rNumBullet.GetNumRule()->Get( pPara->GetDepth() );
-
+    const SvxNumberFormat* pFmt = ImplGetBullet( nPara );
     DBG_ASSERT( pFmt && ( pFmt->GetNumberingType() != SVX_NUM_BITMAP ) && ( pFmt->GetNumberingType() != SVX_NUM_NUMBER_NONE ), "ImpCalcBulletFont: Missing or BitmapBullet!" );
 
     USHORT nScale = pEditEngine->IsFlatMode() ? DEFAULT_SCALE : pFmt->GetBulletRelSize();
@@ -1033,8 +1035,7 @@ void Outliner::PaintBullet( USHORT nPara, const Point& rStartPos,
         Rectangle aBulletArea( ImpCalcBulletArea( nPara, TRUE ) );
 
         Paragraph* pPara = pParaList->GetParagraph( nPara );
-        const SvxNumBulletItem& rNumBullet = (const SvxNumBulletItem&) pEditEngine->GetParaAttrib( nPara, EE_PARA_NUMBULLET );
-        const SvxNumberFormat* pFmt = rNumBullet.GetNumRule()->Get( pPara->GetDepth() );
+        const SvxNumberFormat* pFmt = ImplGetBullet( nPara );
         if ( pFmt && ( pFmt->GetNumberingType() != SVX_NUM_NUMBER_NONE ) )
         {
             if( pFmt->GetNumberingType() != SVX_NUM_BITMAP )
@@ -1602,13 +1603,36 @@ BOOL Outliner::ImplHasBullet( USHORT nPara ) const
     }
     else if ( bBullet )
     {
-        USHORT nDepth = pParaList->GetParagraph( nPara )->GetDepth();
-        const SvxNumBulletItem& rNumBullet = (const SvxNumBulletItem&) pEditEngine->GetParaAttrib( nPara, EE_PARA_NUMBULLET );
-        const SvxNumberFormat* pFmt = rNumBullet.GetNumRule()->Get( nDepth );
+        const SvxNumberFormat* pFmt = ImplGetBullet( nPara );
         if ( !pFmt || ( pFmt->GetNumberingType() == SVX_NUM_NUMBER_NONE ) )
             bBullet = FALSE;
     }
     return bBullet;
+}
+
+const SvxNumberFormat* Outliner::ImplGetBullet( USHORT nPara ) const
+{
+    const SvxNumBulletItem& rNumBullet = ImplGetNumBulletItem( nPara );
+    USHORT nDepth = pParaList->GetParagraph( nPara )->GetDepth();
+    return rNumBullet.GetNumRule()->Get( nDepth );
+}
+
+const SvxNumBulletItem& Outliner::ImplGetNumBulletItem( USHORT nPara ) const
+{
+    // #84013# Active when DL changed the default item...
+/*
+    if ( ( pEditEngine->GetControlWord() & EE_CNTRL_OUTLINER ) && !pParaList->GetParagraph( nPara )->GetDepth() )
+    {
+        // return Pool-Default....
+        const SvxNumBulletItem& rNumBullet = (const SvxNumBulletItem&) GetEmptyItemSet().GetPool()->GetDefaultItem( EE_PARA_NUMBULLET );
+        const SvxNumberFormat* pBullet = rNumBullet.GetNumRule()->Get( 0 );
+        if ( pBullet )
+            return rNumBullet;
+
+    }
+*/
+    const SvxNumBulletItem& rNumBullet = (const SvxNumBulletItem&) pEditEngine->GetParaAttrib( nPara, EE_PARA_NUMBULLET );
+    return rNumBullet;
 }
 
 Size Outliner::ImplGetBulletSize( USHORT nPara )
@@ -1617,8 +1641,7 @@ Size Outliner::ImplGetBulletSize( USHORT nPara )
 
     if( pPara->aBulSize.Width() == -1 )
     {
-        const SvxNumBulletItem& rNumBullet = (const SvxNumBulletItem&) pEditEngine->GetParaAttrib( nPara, EE_PARA_NUMBULLET );
-        const SvxNumberFormat* pFmt = rNumBullet.GetNumRule()->Get( pPara->GetDepth() );
+        const SvxNumberFormat* pFmt = ImplGetBullet( nPara );
         DBG_ASSERT( pFmt, "ImplGetBulletSize - no Bullet!" );
 
         if ( pFmt->GetNumberingType() == SVX_NUM_NUMBER_NONE )
@@ -1746,10 +1769,7 @@ Rectangle Outliner::ImpCalcBulletArea( USHORT nPara, BOOL bAdjust )
     // Bullet-Bereich innerhalb des Absatzes...
     Rectangle aBulletArea;
 
-    const SvxNumBulletItem& rNumBullet = (const SvxNumBulletItem&) pEditEngine->GetParaAttrib( nPara, EE_PARA_NUMBULLET );
-    Paragraph* pPara = pParaList->GetParagraph( nPara );
-    const SvxNumberFormat* pFmt = rNumBullet.GetNumRule()->Get( pPara->GetDepth() );
-
+    const SvxNumberFormat* pFmt = ImplGetBullet( nPara );
     if ( pFmt )
     {
         Point aTopLeft;
@@ -1908,8 +1928,7 @@ void Outliner::ImplCalcBulletText( USHORT nPara, BOOL bRecalcLevel, BOOL bRecalc
     while ( pPara )
     {
         XubString aBulletText;
-        const SvxNumBulletItem& rNumBullet = (const SvxNumBulletItem&) pEditEngine->GetParaAttrib( nPara, EE_PARA_NUMBULLET );
-        const SvxNumberFormat* pFmt = rNumBullet.GetNumRule()->Get( pPara->GetDepth() );
+        const SvxNumberFormat* pFmt = ImplGetBullet( nPara );
         if( pFmt && ( pFmt->GetNumberingType() != SVX_NUM_BITMAP ) )
         {
             aBulletText += pFmt->GetPrefix();
