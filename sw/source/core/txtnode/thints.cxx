@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thints.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:40:44 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:06:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1277,7 +1277,7 @@ BOOL SwpHints::CalcHiddenParaField()
                 if( !((SwHiddenParaField*)rFld.GetFld())->IsHidden() )
                 {
                     SetHiddenParaField(FALSE);
-                    return !bOldHasHiddenParaField;
+                    return bOldHasHiddenParaField != bNewHasHiddenParaField;
                 }
                 else
                     bNewHasHiddenParaField = TRUE;
