@@ -2,9 +2,9 @@
  *
  *  $RCSfile: settings.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 15:41:11 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 14:01:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
