@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptMetaData.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-19 08:22:23 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 13:59:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,14 +60,17 @@
  ************************************************************************/
 
 package com.sun.star.script.framework.container;
+
 import java.net.URLEncoder;
 import java.net.URLDecoder;
-import java.net.URLDecoder;
+import java.net.URLStreamHandler;
 import java.net.URL;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 
 import java.util.Vector;
 import java.util.StringTokenizer;
-import java.net.URLStreamHandler;
 
 import java.io.File;
 import java.io.InputStream;
@@ -78,19 +81,25 @@ import com.sun.star.script.framework.log.LogUtils;
 
 import com.sun.star.script.framework.provider.PathUtils;
 
+import com.sun.star.script.framework.io.XInputStreamImpl;
+
 
 import com.sun.star.script.framework.container.ScriptEntry;
 import com.sun.star.script.framework.container.Parcel;
 
-import com.sun.star.script.framework.io.XStorageHelper;
-import com.sun.star.script.framework.io.XStorageStreamHandler;
 import com.sun.star.script.framework.io.XOutputStreamWrapper;
+import com.sun.star.script.framework.io.UCBStreamHandler;
+import com.sun.star.script.framework.io.UCBStreamHandler;
+
+import com.sun.star.io.XTruncate;
+import com.sun.star.io.XOutputStream;
+
+import com.sun.star.ucb.XSimpleFileAccess2;
 
 
-import com.sun.star.embed.XStorage;
-import com.sun.star.embed.ElementModes;
 import com.sun.star.io.XStream;
 
+import com.sun.star.uno.UnoRuntime;
 
 public class ScriptMetaData extends ScriptEntry implements Cloneable {
     private boolean hasSource = false;
@@ -98,8 +107,6 @@ public class ScriptMetaData extends ScriptEntry implements Cloneable {
     private String source;
     private Parcel parent;
 
-
-    static private String VNDPREFIX = XStorageStreamHandler.XSTORAGESCHEME + "://";
 
     public ScriptMetaData( Parcel parent, ScriptEntry entry,
                            String source )
@@ -177,7 +184,44 @@ public class ScriptMetaData extends ScriptEntry implements Cloneable {
 
     public String getLocationPlaceHolder()
     {
-        String placeHolder = parent.getParcelLocationMacro();
+        String placeHolder = "Unknown";
+        if ( parent.getPathToParcel().indexOf("vnd.sun.star.expand:${$SYSBINDIR/" + PathUtils.BOOTSTRAP_NAME + "::BaseInstallation}/share") == 0 )
+        {
+            placeHolder = "share";
+        }
+        else if ( parent.getPathToParcel().indexOf("vnd.sun.star.expand:${$SYSBINDIR/" + PathUtils.BOOTSTRAP_NAME + "::UserInstallation}/user") == 0 )
+        {
+            placeHolder = "user";
+        }
+        else if ( parent.getPathToParcel().indexOf("vnd.sun.star.tdoc:") == 0 )
+        {
+            placeHolder = "document";
+        }
+        else if ( parent.getPathToParcel().indexOf("vnd.sun.star.expand:$UNO_USER_PACKAGES_CACHE") > -1 )
+        {
+            //its a package
+            placeHolder = "user:uno_packages";
+            String unoPkg = parent.parent.getName();
+            if ( unoPkg != null )
+            {
+                placeHolder = PathUtils.make_url( placeHolder, unoPkg );
+            }
+
+        }
+        else if ( parent.getPathToParcel().indexOf("$UNO_SHARED_PACKAGES_CACHE")  > -1 )
+        {
+            //its a package
+            placeHolder = "share:uno_packages";
+            String unoPkg = parent.parent.getName();
+            if ( unoPkg != null )
+            {
+                placeHolder = PathUtils.make_url( placeHolder, unoPkg );
+            }
+        }
+        // TODO handling document packages ??? not really sure of package url
+/*        else
+        {
+        } */
         return placeHolder;
     }
 
@@ -190,17 +234,7 @@ public class ScriptMetaData extends ScriptEntry implements Cloneable {
     // return  URL string  to parcel
     public String getParcelLocation()
     {
-        String temp = parent.getPathToParcel();
-        if ( getLocationPlaceHolder().equals("document") )
-        {
-           temp = VNDPREFIX + temp;
-        }
-        else
-        {
-            temp = PathUtils.FILE_URL_PREFIX + temp;
-        }
-
-        return temp;
+        return parent.getPathToParcel();
     }
 
 
@@ -228,12 +262,15 @@ public class ScriptMetaData extends ScriptEntry implements Cloneable {
             parcelPath += "/";
         }
 
+        // replace \ with /
+        parcelPath = parcelPath.replace( '\\', '/' );
+
         Vector classPathVec =  new Vector();
         StringTokenizer stk = new StringTokenizer(classpath, ":");
         while (  stk.hasMoreElements() )
         {
             String relativeClasspath =  (String)stk.nextElement();
-            String pathToProcess  = parcelPath + relativeClasspath;
+            String pathToProcess  = PathUtils.make_url( parcelPath, relativeClasspath);
             URL url = createURL( pathToProcess );
             if ( url != null )
             {
@@ -262,47 +299,13 @@ public class ScriptMetaData extends ScriptEntry implements Cloneable {
     }
     private URL createURL( String path ) throws java.net.MalformedURLException
     {
-        SFMacroHelper expander = parent.getParent().expander;
         URL url = null;
-        boolean isDocument = getLocationPlaceHolder().equals( "document" );
-        if ( isDocument )
-        {
-            // strip document scheme from URL
-            // so it can be passed to getSystemPath
-            path = path.substring( VNDPREFIX.length() );
-        }
+        int indexOfColon = path.indexOf(":");
+        String scheme = path.substring( 0, indexOfColon );
+        UCBStreamHandler handler = new UCBStreamHandler( parent.parent.m_xCtx, scheme, parent.m_xSFA);
 
-        // fix ../../ spaces etc in path
-        else
-        {
-            LogUtils.DEBUG("expanded path: "+path);
-            path = expander.getSystemPath( path );
-            path = PathUtils.FILE_URL_PREFIX + path;
-            LogUtils.DEBUG("---->panded path: "+path);
-        }
-        // replace \ with /
-        path = path.replace( '\\', '/' );
-        // getSystemPath removes file:// add this back
-
-        if ( path.length()  > 0 )
-        {
-
-            if ( isDocument )
-            {
-                // put back scheme
-                path = VNDPREFIX + path;
-
-                // create URL
-                URLStreamHandler handler = new XStorageStreamHandler();
-                path += XStorageStreamHandler.separator;
-                url = new URL(null, path, handler);
-            }
-            else
-            {
-                // application file url
-                url = new URL( path );
-            }
-        }
+        path += UCBStreamHandler.separator;
+        url = new URL(null, path, handler);
         return url;
     }
 
@@ -312,8 +315,8 @@ public class ScriptMetaData extends ScriptEntry implements Cloneable {
     {
             try
             {
-                LogUtils.DEBUG("** In load source ");
                 URL sourceUrl = getSourceURL();
+                LogUtils.DEBUG("** In load source BUT not loading yet for " + sourceUrl );
 
                 if ( sourceUrl != null )
                 {
@@ -346,147 +349,44 @@ public class ScriptMetaData extends ScriptEntry implements Cloneable {
     protected boolean writeSourceFile()
     {
         String parcelLocation = parent.getPathToParcel();
-        String sourceFileName = getLanguageName();
+        String sourceFilePath = parent.getPathToParcel() + "/" + getLanguageName();
         boolean result = false;
-
-        boolean isDocument = getLocationPlaceHolder().equals("document");
-
-        if ( isDocument ) // its a document
+        OutputStream os = null;
+        try
         {
-            XStorageHelper helper =  null;
-            XStream parcelStream = null;
-            XStream sourceStream = null;
-            boolean commitFlag = true;
-            try
+            XSimpleFileAccess2 xSFA2 = ( XSimpleFileAccess2 )
+                UnoRuntime.queryInterface( XSimpleFileAccess2.class,
+                    parent.m_xSFA );
+            if ( xSFA2 != null )
             {
-
-                helper = new XStorageHelper( parcelLocation, ElementModes.READWRITE, true );
-                sourceStream = helper.getStorage().openStreamElement( getLanguageName(), ElementModes.READWRITE | ElementModes.TRUNCATE);
-                if ( sourceStream != null )
-                {
-                    OutputStream os = new XOutputStreamWrapper(sourceStream.getOutputStream());
-                    os.write( getSourceBytes() );
-                    os.close();
-                 }
+                ByteArrayInputStream bis = new ByteArrayInputStream( getSourceBytes() );
+                XInputStreamImpl xis = new XInputStreamImpl( bis );
+                xSFA2.writeFile( sourceFilePath, xis );
+                xis.closeInput();
                 result = true;
-            }
-            catch( Exception e )
-            {
-
-                LogUtils.DEBUG("Caught exception whild trying to writer sourceStream " + e);
-                commitFlag = false;
-            }
-
-            finally
-            {
-                if ( parcelStream != null )
-                {
-                    try
-                    {
-                        XStorageHelper.disposeObject( parcelStream );
-                    }
-                    catch( Exception ignore )
-                    {
-                    }
-                }
-                if ( sourceStream != null )
-                {
-
-                    try
-                    {
-                        XStorageHelper.disposeObject( sourceStream );
-                    }
-                    catch( Exception ignore )
-                    {
-                    }
-                }
-                if ( helper != null )
-                {
-
-                    try
-                    {
-                        helper.disposeObject( commitFlag );
-                    }
-                    catch( Exception ignore )
-                    {
-                    }
-               }
-               helper =  null;
-               sourceStream = null;
-               parcelStream = null;
             }
         }
-        else
+        // TODO re-examine exception processing should probably throw
+        // exceptions back to caller
+        catch ( Exception ignore )
+
         {
-            FileOutputStream fos = null;
-            try
-            {
-                File scriptFile = new File( parcelLocation, sourceFileName );
-                fos = new FileOutputStream( scriptFile );
-                fos.write( getSourceBytes() );
-                fos.close();
-                fos = null;
-                result = true;
-            }
-            catch( Exception ignore )
-            {
-            }
-            finally
-            {
-                if ( fos != null )
-                {
-                    try
-                    {
-                        fos.close();
-                    }
-                    catch ( Exception ignore )
-                    {
-                    }
-
-                }
-            }
-
         }
         return result;
     }
     protected boolean removeSourceFile()
     {
         String parcelLocation = parent.getPathToParcel();
-        String sourceFileName = getLanguageName();
+        String sourceFilePath = parcelLocation + "/" + getLanguageName();
         boolean result = false;
-        boolean isDocument = getLocationPlaceHolder().equals( "document" );
-        if ( isDocument ) // its a document
+        try
         {
-            XStorageHelper xParcelDirStorageHelper = null;
-            boolean commitFlag = true;
-            try
-            {
-                xParcelDirStorageHelper = new XStorageHelper( parcelLocation, ElementModes.READWRITE, false );
-                xParcelDirStorageHelper.getStorage().removeElement( sourceFileName );
-                result = true;
-            }
-            catch ( Exception e )
-            {
-                LogUtils.DEBUG("Caught exception removing script " + sourceFileName );
-            }
-            finally
-            {
-                try
-                {
-                    xParcelDirStorageHelper.disposeObject( commitFlag );
-                }
-                catch ( Exception ignore )
-                {
-
-                }
-
-            }
-
+            parent.m_xSFA.kill( sourceFilePath );
+            result = true;
         }
-        else
+        // TODO reexamine exception handling
+        catch ( Exception e )
         {
-            File scriptFile = new File( parcelLocation, sourceFileName );
-            result = scriptFile.delete();
         }
         return result;
     }
@@ -497,11 +397,8 @@ public class ScriptMetaData extends ScriptEntry implements Cloneable {
         URL scriptURL = null;
 
         sUrl = getParcelLocation();
-        if ( !sUrl.endsWith( "/" ) )
-        {
-            sUrl += "/";
-        }
-        sUrl +=  getLanguageName();
+        sUrl = PathUtils.make_url( sUrl, getLanguageName() );
+        LogUtils.DEBUG("Creating script url for " + sUrl );
         scriptURL = createURL( sUrl );
         return scriptURL;
     }
