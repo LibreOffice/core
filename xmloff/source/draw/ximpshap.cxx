@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.96 $
+ *  $Revision: 1.97 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:29:49 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 11:09:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2583,7 +2583,7 @@ void SdXMLObjectShapeContext::EndElement()
     // #100592#
     if( mxBase64Stream.is() )
     {
-        OUString aPersistName( GetImport().ResolveEmbeddedObjectURL( maHref, OUString() ) );
+        OUString aPersistName( GetImport().ResolveEmbeddedObjectURLFromBase64() );
         const OUString  sURL(RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.EmbeddedObject:" ));
 
         aPersistName = aPersistName.copy( sURL.getLength() );
@@ -2629,8 +2629,7 @@ SvXMLImportContext* SdXMLObjectShapeContext::CreateChildContext(
 
     if((XML_NAMESPACE_OFFICE == nPrefix) && IsXMLToken(rLocalName, XML_BINARY_DATA))
     {
-        maHref = OUString( RTL_CONSTASCII_USTRINGPARAM( "#Obj12345678" ) );
-        mxBase64Stream =    GetImport().ResolveEmbeddedObjectURLFromBase64( maHref );
+        mxBase64Stream = GetImport().GetStreamForEmbeddedObjectURLFromBase64();
         if( mxBase64Stream.is() )
             pContext = new XMLBase64ImportContext( GetImport(), nPrefix,
                                                 rLocalName, xAttrList,
