@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: mtg $ $Date: 2001-10-22 13:34:46 $
+ *  last change: $Author: hr $ $Date: 2001-10-26 11:21:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -740,7 +740,8 @@ void ZipPackage::writeTempFile()
     rtl_random_addBytes ( aRandomPool, &aTime, 8 );
 
     // call saveContents (it will recursively save sub-directories
-    pRootFolder->saveContents( OUString(), aManList, aZipOut, aEncryptionKey, aRandomPool );
+    OUString aEmptyString;
+    pRootFolder->saveContents( aEmptyString, aManList, aZipOut, aEncryptionKey, aRandomPool );
 
     // Clean up random pool memory
     rtl_random_destroyPool ( aRandomPool );
