@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uinums.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 13:08:59 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:03:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,10 @@
 #include <numrule.hxx>
 #endif
 
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
+
 class SfxPoolItem;
 class SwWrtShell;
 class SvStream;
@@ -79,12 +83,12 @@ typedef SfxPoolItem* SfxPoolItemPtr;
 SV_DECL_PTRARR_DEL( _SwNumFmtsAttrs, SfxPoolItemPtr, 5,0 )
 
 //------------------------------------------------------------------------
-class SwNumRulesWithName
+class SW_DLLPUBLIC SwNumRulesWithName
 {
     String aName;
     // die Formate der NumRule muessen! unabhaengig von einem Document sein
     // (Sie sollen immer vorhanden sein!)
-    class _SwNumFmtGlobal
+    class SW_DLLPRIVATE _SwNumFmtGlobal
     {
         SwNumFmt aFmt;
         String sCharFmtName;
@@ -104,6 +108,7 @@ class SwNumRulesWithName
     };
 
     _SwNumFmtGlobal* aFmts[ MAXLEVEL ];
+
 protected:
     void SetName(const String& rSet) {aName = rSet;}
 
