@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WaitUnreachable.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 08:36:20 $
+ *  last change: $Author: hr $ $Date: 2003-08-13 17:20:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,22 +67,58 @@ import java.lang.ref.ReferenceQueue;
 /**
  * Wait until an object has become unreachable.
  *
- * <p>This class will typically be used as follows:</p>
+ * <p>Instances of this class will typically be used as either:</p>
  * <pre>
- * Object o = ...;
- * ...
- * WaitUnreachable u = new WaitUnreachable(o);
- * o = null;
- * u.waitUnreachable();
+ *   SomeType o = new SomeType(...);
+ *   ... // use "o"
+ *   WaitUnreachable u = new WaitUnreachable(o);
+ *   o = null;
+ *   u.waitUnreachable();
+ * </pre>
+ * <p>or:</p>
+ * <pre>
+ *   WaitUnreachable u = new WaitUnreachable(new SomeType(...));
+ *   ... // use "(SomeType) u.get()"
+ *   u.waitUnreachable();
  * </pre>
  */
 public final class WaitUnreachable {
+    /**
+     * Creates a new waiter.
+     *
+     * @param obj the object on which to wait
+     */
     public WaitUnreachable(Object obj) {
+        this.obj = obj;
         queue = new ReferenceQueue();
         ref = new PhantomReference(obj, queue);
     }
 
+    /**
+     * Gets the object on which to wait.
+     *
+     * @return the object on which to wait, or <code>null</code> if
+     * <code>waitUnreachable</code> has already been called
+     */
+    public synchronized Object get() {
+        return obj;
+    }
+
+    /**
+     * Starts waiting for the object to become unreachable.
+     *
+     * <p>This blocks the current thread until the object has become
+     * unreachable.</p>
+     *
+     * <p>Actually, this method waits until the JVM has <em>detected</em> that
+     * the object has become unreachable.  This is not deterministic, but this
+     * methods makes a best effort to cause the JVM to eventually detect the
+     * situation.  With a typical JVM, this should suffice.</p>
+     */
     public void waitUnreachable() {
+        synchronized (this) {
+            obj = null;
+        }
         System.out.println("waiting for gc");
         while (queue.poll() == null) {
             System.gc();
@@ -91,6 +127,35 @@ public final class WaitUnreachable {
         }
     }
 
+    /**
+     * Ensures that an object will be finalized as soon as possible.
+     *
+     * <p>This does not block the current thread.  Instead, a new thread is
+     * spawned that busy waits for the given object to become unreachable.</p>
+     *
+     * <p>This method cannot guarantee that the given object is eventually
+     * finalized, but it makes a best effort.  With a typical JVM, this should
+     * suffice.</p>
+     *
+     * @param obj the object of which to ensure finalization
+     */
+    public static void ensureFinalization(final Object obj) {
+        final class WaitThread extends Thread {
+            public WaitThread(Object obj) {
+                super("ensureFinalization");
+                unreachable = new WaitUnreachable(obj);
+            }
+
+            public void run() {
+                unreachable.waitUnreachable();
+            }
+
+            private final WaitUnreachable unreachable;
+        };
+        new WaitThread(obj).start();
+    }
+
+    private Object obj;
     private final ReferenceQueue queue;
     private final PhantomReference ref;
 }
