@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sallayout.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hdu $ $Date: 2002-07-19 17:19:35 $
+ *  last change: $Author: hdu $ $Date: 2002-08-01 13:29:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,10 @@
 #include <sallayout.hxx>
 #endif // _SV_SALLAYOUT_HXX
 
+#ifndef _SV_POLY_HXX
+#include <poly.hxx>
+#endif // _SV_POLY_HXX
+
 #include <limits.h>
 
 // =======================================================================
@@ -106,8 +110,7 @@ ImplLayoutArgs::ImplLayoutArgs( const xub_Unicode* pStr, int nLength,
     mnLayoutWidth( 0 ),
     mpDXArray( NULL ),
     maDrawPosition( 0, 0 ),
-    mnOrientation( 0 ),
-    mnCharExtra( 0 )
+    mnOrientation( 0 )
 {}
 
 // =======================================================================
@@ -118,8 +121,7 @@ SalLayout::SalLayout( const ImplLayoutArgs& rArgs )
     mnEndCharIndex( rArgs.mnEndCharIndex ),
     maDrawPosition( rArgs.maDrawPosition ),
     mnUnitsPerPixel( 1 ),
-    mnOrientation( rArgs.mnOrientation ),
-    mnCharExtra( rArgs.mnCharExtra )
+    mnOrientation( rArgs.mnOrientation )
 {}
 
 // -----------------------------------------------------------------------
@@ -212,6 +214,62 @@ int SalLayout::CalcAsianKerning( sal_Unicode c, bool bLeft, bool bVertical )
     }
     return nResult;
 
+}
+
+// -----------------------------------------------------------------------
+
+bool SalLayout::GetOutline( SalGraphics& rSalGraphics, PolyPolygon& rPolyPoly ) const
+{
+    bool bRet = false;
+
+    bool bHasGlyphs = HasGlyphs();
+    for( int nStart = 0;;)
+    {
+        Point aPos;
+        long nLGlyph;
+        if( !GetNextGlyphs( 1, &nLGlyph, aPos, nStart, NULL, NULL ) )
+            break;
+
+        // get outline of individual glyph
+        PolyPolygon aGlyphOutline;
+        if( rSalGraphics.GetGlyphOutline( nLGlyph, bHasGlyphs, aGlyphOutline ) )
+            bRet = true;
+
+        // insert outline at correct position
+        aGlyphOutline.Move( aPos.X(), aPos.Y() );
+        for( int i = 0; i < aGlyphOutline.Count(); ++i )
+            rPolyPoly.Insert( aGlyphOutline[i] );
+    }
+
+    return bRet;
+}
+
+// -----------------------------------------------------------------------
+
+bool SalLayout::GetBoundRect( SalGraphics& rSalGraphics, Rectangle& rRectangle ) const
+{
+    bool bRet = false;
+    rRectangle.SetEmpty();
+
+    bool bHasGlyphs = HasGlyphs();
+    for( int nStart = 0;;)
+    {
+        Point aPos;
+        long nLGlyph;
+        if( !GetNextGlyphs( 1, &nLGlyph, aPos, nStart, NULL, NULL ) )
+            break;
+
+        // get bounding rectangle of individual glyph
+        Rectangle aRectangle;
+        if( rSalGraphics.GetGlyphBoundRect( nLGlyph, bHasGlyphs, aRectangle ) )
+            bRet = true;
+
+        // merge rectangle
+        aRectangle += aPos;
+        rRectangle.Union( aRectangle );
+    }
+
+    return bRet;
 }
 
 // =======================================================================
@@ -473,7 +531,7 @@ void GenericSalLayout::Justify( long nNewWidth )
 
 // -----------------------------------------------------------------------
 
-int GenericSalLayout::GetTextBreak( long nMaxWidth ) const
+int GenericSalLayout::GetTextBreak( long nMaxWidth, long nCharExtra ) const
 {
     int nCharCapacity = mnEndCharIndex - mnFirstCharIndex;
     long* pCharWidths = (long*)alloca( nCharCapacity * sizeof(long) );
@@ -486,6 +544,7 @@ int GenericSalLayout::GetTextBreak( long nMaxWidth ) const
         nWidth += pCharWidths[ i - mnFirstCharIndex ];
         if( nWidth >= nMaxWidth )
             return i;
+        nWidth += nCharExtra;
     }
 
     return STRING_LEN;
@@ -520,6 +579,7 @@ int GenericSalLayout::GetNextGlyphs( int nLen, long* pGlyphs, Point& rPos,
     // find more glyphs which can be merged into one drawing instruction
     int nCount = 0;
     long nYPos = pG->maLinearPos.Y();
+    long nOldFlags = pG->mnGlyphIndex;
     while( nCount < nLen )
     {
         *(pGlyphs++) = pG->mnGlyphIndex;
@@ -546,6 +606,11 @@ int GenericSalLayout::GetNextGlyphs( int nLen, long* pGlyphs, Point& rPos,
         int n = pG->mnCharIndex;
         if( (n < mnFirstCharIndex) || (n >= mnEndCharIndex) )
             break;
+
+        // stop when glyph flags change
+        if( GetGlyphFlags( nOldFlags ^ pG->mnGlyphIndex ) )
+            break;
+        nOldFlags = pG->mnGlyphIndex;
     }
 
     aRelativePos.X() /= mnUnitsPerPixel;
