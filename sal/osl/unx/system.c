@@ -2,9 +2,9 @@
  *
  *  $RCSfile: system.c,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2002-08-20 15:39:28 $
+ *  last change: $Author: hr $ $Date: 2002-08-20 15:49:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -487,7 +487,7 @@ char *asctime_r( const struct tm *tm, char *buffer )
     if ( asctimeBuffer )
         strcpy( buffer, asctimeBuffer );
     else
-        *buffer = '\0';
+        buffer = NULL;
 
     pthread_mutex_unlock(&getrtl_mutex);
     return( buffer );
