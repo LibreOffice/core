@@ -27,6 +27,7 @@ mkdir: %_DEST%\inc%_EXT%\com\sun\star\lang
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\linguistic2
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\packages
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\packages\manifest
+mkdir: %_DEST%\inc%_EXT%\com\sun\star\packages\zip
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\presentation
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\reflection
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\registry
@@ -47,6 +48,7 @@ mkdir: %_DEST%\inc%_EXT%\com\sun\star\ui
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\ui\dialogs
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\uno
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\util
+mkdir: %_DEST%\inc%_EXT%\com\sun\star\util\logging
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\view
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\linguistic2
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\xml
@@ -126,6 +128,8 @@ mkdir: %_DEST%\inc%_EXT%\drafts\com\sun\star\awt
 ..\%__SRC%\inc\com\sun\star\packages\*.hpp %_DEST%\inc%_EXT%\com\sun\star\packages\*.hpp
 ..\%__SRC%\inc\com\sun\star\packages\manifest\*.hdl %_DEST%\inc%_EXT%\com\sun\star\packages\manifest\*.hdl
 ..\%__SRC%\inc\com\sun\star\packages\manifest\*.hpp %_DEST%\inc%_EXT%\com\sun\star\packages\manifest\*.hpp
+..\%__SRC%\inc\com\sun\star\packages\zip\*.hdl %_DEST%\inc%_EXT%\com\sun\star\packages\zip\*.hdl
+..\%__SRC%\inc\com\sun\star\packages\zip\*.hpp %_DEST%\inc%_EXT%\com\sun\star\packages\zip\*.hpp
 ..\%__SRC%\inc\com\sun\star\presentation\*.hdl %_DEST%\inc%_EXT%\com\sun\star\presentation\*.hdl
 ..\%__SRC%\inc\com\sun\star\presentation\*.hpp %_DEST%\inc%_EXT%\com\sun\star\presentation\*.hpp
 ..\%__SRC%\inc\com\sun\star\reflection\*.hdl %_DEST%\inc%_EXT%\com\sun\star\reflection\*.hdl
@@ -166,6 +170,8 @@ mkdir: %_DEST%\inc%_EXT%\drafts\com\sun\star\awt
 ..\%__SRC%\inc\com\sun\star\uno\*.hpp %_DEST%\inc%_EXT%\com\sun\star\uno\*.hpp
 ..\%__SRC%\inc\com\sun\star\util\*.hdl %_DEST%\inc%_EXT%\com\sun\star\util\*.hdl
 ..\%__SRC%\inc\com\sun\star\util\*.hpp %_DEST%\inc%_EXT%\com\sun\star\util\*.hpp
+..\%__SRC%\inc\com\sun\star\util\logging\*.hdl %_DEST%\inc%_EXT%\com\sun\star\util\logging\*.hdl
+..\%__SRC%\inc\com\sun\star\util\logging\*.hpp %_DEST%\inc%_EXT%\com\sun\star\util\logging\*.hpp
 ..\%__SRC%\inc\com\sun\star\view\*.hdl %_DEST%\inc%_EXT%\com\sun\star\view\*.hdl
 ..\%__SRC%\inc\com\sun\star\view\*.hpp %_DEST%\inc%_EXT%\com\sun\star\view\*.hpp
 ..\%__SRC%\inc\com\sun\star\linguistic2\*.hdl %_DEST%\inc%_EXT%\com\sun\star\linguistic2\*.hdl
