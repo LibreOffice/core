@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2003-05-27 16:10:51 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 11:11:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,15 +215,6 @@ class SwLayNotify : public SwFrmNotify
 public:
     SwLayNotify( SwLayoutFrm *pLayFrm );
     ~SwLayNotify();
-
-    void AddHeightOfst     ( SwTwips nAdd ) { nHeightOfst += nAdd; }
-    void AddWidthOfst      ( SwTwips nAdd ) { nHeightOfst += nAdd; }
-    void SubtractHeightOfst( SwTwips nSub ) { nWidthOfst -= nSub; }
-    void SubtractWidthOfst ( SwTwips nSub ) { nWidthOfst -= nSub; }
-    SwTwips GetHeightOfst() const { return nHeightOfst; }
-    SwTwips GetWidthOfst()  const { return nWidthOfst; }
-    void    ResetHeightOfst() { nHeightOfst = 0; }
-    void    ResetWidthOfst()  { nWidthOfst = 0; }
 
     void SetLowersComplete( FASTBOOL b ) { bLowersComplete = b; }
     FASTBOOL IsLowersComplete()          { return bLowersComplete; }
