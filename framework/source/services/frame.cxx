@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 11:08:41 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 17:10:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -694,7 +694,8 @@ void SAL_CALL Frame::initialize( const css::uno::Reference< css::awt::XWindow >&
     // Initialize helper.
     if( m_xContainerWindow.is() == sal_True )
     {
-        StatusIndicatorFactory* pIndicatorFactoryHelper = new StatusIndicatorFactory( m_xFactory, m_xContainerWindow, sal_False );
+        css::uno::Reference< css::frame::XFrame > xFrame( static_cast< ::cppu::OWeakObject* >( this ), css::uno::UNO_QUERY );
+        StatusIndicatorFactory* pIndicatorFactoryHelper = new StatusIndicatorFactory( m_xFactory, xFrame, sal_False );
         m_xIndicatorFactoryHelper = css::uno::Reference< css::task::XStatusIndicatorFactory >( static_cast< ::cppu::OWeakObject* >( pIndicatorFactoryHelper ), css::uno::UNO_QUERY );
     }
 
