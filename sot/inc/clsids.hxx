@@ -2,9 +2,9 @@
  *
  *  $RCSfile: clsids.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 13:57:17 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:11:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -383,5 +383,9 @@
 #define SO3_IFRAME_CLASSID \
     0x1a8a6701, 0xde58, 0x11cf, \
     0x89, 0xca, 0x0, 0x80, 0x29, 0xe4, 0xb0, 0xb1
-#endif
 
+#define SO3_GLOBAL_CLASSID \
+     0x475198a8, 0x694c, 0x4bd8, \
+    0xb0, 0x2f, 0xd9, 0xb7, 0x6b, 0xcf, 0x31, 0x28
+
+#endif
