@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseForm.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-10 07:41:54 $
+ *  last change: $Author: fs $ $Date: 2001-01-18 16:43:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2788,16 +2788,22 @@ sal_Int32 SAL_CALL ODatabaseForm::getGroupCount() throw( RuntimeException )
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL ODatabaseForm::getGroup( sal_Int32 nGroup, Sequence<Reference<XControlModel> >& _rGroup, ::rtl::OUString& Name ) throw( RuntimeException )
+void SAL_CALL ODatabaseForm::getGroup( sal_Int32 nGroup, Sequence<Reference<XControlModel> >& _rGroup, ::rtl::OUString& _rName ) throw( RuntimeException )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    m_pGroupManager->getGroup( nGroup, _rGroup, Name );
+    _rGroup.realloc(0);
+    _rName = ::rtl::OUString();
+
+    if ((nGroup < 0) || (nGroup >= m_pGroupManager->getGroupCount()))
+        return;
+    m_pGroupManager->getGroup( nGroup, _rGroup, _rName  );
 }
 
 //------------------------------------------------------------------------------
 void SAL_CALL ODatabaseForm::getGroupByName(const ::rtl::OUString& Name, Sequence< Reference<XControlModel>  >& _rGroup) throw( RuntimeException )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
+    _rGroup.realloc(0);
     m_pGroupManager->getGroupByName( Name, _rGroup );
 }
 
