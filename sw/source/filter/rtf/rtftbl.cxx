@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtftbl.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 16:50:52 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 14:08:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -831,12 +831,7 @@ void SwRTFParser::ReadTable( int nToken )
     if( bChkExistTbl )
         nAktBox = 0;
 
-    if( pDoc->GetRootFrm() )
-    {
-        //Associate this tablenode with this after position, replace an
-        //old node association if necessary
-        maTables.insert(std::map<SwTableNode *, SwNodeIndex *>::value_type(pTableNode, &(pPam->GetPoint()->nNode)));
-    }
+    maInsertedTables.InsertTable(*pTableNode, *pPam);
 
     SwNodeIndex aOldIdx(pPam->GetPoint()->nNode);
     SwNodeIdx aOldPos(aOldIdx);
