@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mtftools.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2004-03-18 10:41:05 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:25:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,10 +66,10 @@
 #   include <sal/types.h>
 #endif
 
-namespace drafts { namespace com { namespace sun { namespace star { namespace rendering
+namespace com { namespace sun { namespace star { namespace rendering
 {
     struct RenderState;
-} } } } }
+} } } }
 
 
 namespace cppcanvas
@@ -81,7 +81,7 @@ namespace cppcanvas
 
     namespace tools
     {
-        void initRenderState( ::drafts::com::sun::star::rendering::RenderState& renderState,
+        void initRenderState( ::com::sun::star::rendering::RenderState& renderState,
                               const ::cppcanvas::internal::OutDevState&         outdevState );
     }
 }
