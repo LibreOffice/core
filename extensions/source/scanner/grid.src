@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grid.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2001-08-25 20:16:09 $
+ *  last change: $Author: kz $ $Date: 2001-08-29 09:14:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,7 @@ ModalDialog GRID_DIALOG
         Text[ arabic ] = " ⁄ÌÌ‰";
         Text[ turkish ] = "Tan˝mla";
         Text[ catalan ] = "Definir";
-        Text[ finnish ] = "M‰‰rit‰";
+        Text[ finnish ] = "M??rit?";
     };
     Bitmap GRID_DIALOG_HANDLE_BMP
     {
@@ -191,7 +191,7 @@ ModalDialog GRID_DIALOG
         Text[ arabic ] = "«·ﬁÌ„ «·√’·Ì…";
         Text[ turkish ] = "As˝l deerler";
         Text[ catalan ] = "Valores originales";
-        Text[ finnish ] = "Alkuper‰iset arvot";
+        Text[ finnish ] = "Alkuper?iset arvot";
     };
     String RESET_TYPE_EXPONENTIAL
     {
@@ -216,9 +216,10 @@ ModalDialog GRID_DIALOG
         Text[ arabic ] = " “«Ìœ √”Ì";
         Text[ turkish ] = "‹stel art˝˛";
         Text[ catalan ] = "Exponencial aumentando";
-        Text[ finnish ] = "Eksponentiaalinen lis‰ys";
+        Text[ finnish ] = "Eksponentiaalinen lis?ys";
     };
 };
+
 
 
 
