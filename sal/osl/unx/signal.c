@@ -2,9 +2,9 @@
  *
  *  $RCSfile: signal.c,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 14:26:01 $
+ *  last change: $Author: vg $ $Date: 2003-05-28 15:56:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,18 @@
 /* system headers */
 #include "system.h"
 
+#ifdef LINUX
+#include <execinfo.h>
+#define INCLUDE_BACKTRACE
+#define STACKTYPE "Linux"
+#endif
+
+#if defined( SOLARIS ) && defined( SPARC )
+#include "backtrace.h"
+#define INCLUDE_BACKTRACE
+#define STACKTYPE "Solaris_Sparc"
+#endif
+
 #include <osl/diagnose.h>
 #include <osl/mutex.h>
 #include <osl/signal.h>
@@ -74,6 +86,8 @@
 #define ACT_EXIT    3
 #define ACT_SYSTEM  4
 #define ACT_HIDE    5
+
+#define MAX_PATH_LEN    2048
 
 typedef struct _oslSignalHandlerImpl
 {
@@ -256,7 +270,7 @@ static sal_Bool DeInitSignal()
 /* Call crash reporter  */
 /*****************************************************************************/
 
-static int ReportCrash( int Signal )
+int ReportCrash( int Signal )
 {
     static sal_Bool bCrashReporterExecuted = sal_False;
 
@@ -290,12 +304,118 @@ static int ReportCrash( int Signal )
         {
             if (Signals[i].Signal == Signal && Signals[i].Action == ACT_ABORT )
             {
-                char    szShellCmd[512];
+                int  ret;
+                char szShellCmd[512];
+                char *pXMLTempName = NULL;
+                char *pStackTempName = NULL;
 
+#ifdef INCLUDE_BACKTRACE
+                char szXMLTempNameBuffer[L_tmpnam];
+                char szStackTempNameBuffer[L_tmpnam];
+                void *stackframes[1024];
+                int  iFrame;
+                int  nFrames = backtrace( stackframes, sizeof(stackframes)/sizeof(stackframes[0]));
+
+                pXMLTempName = tmpnam( szXMLTempNameBuffer );
+                pStackTempName = tmpnam( szStackTempNameBuffer );
+
+                FILE *xmlout = fopen( pXMLTempName, "w" );
+                FILE *stackout = fopen( pStackTempName, "w" );
+
+                fprintf( xmlout, "<errormail:Stack type=\"%s\">\n", STACKTYPE );
+
+                for ( iFrame = 0; iFrame < nFrames; iFrame++ )
+                {
+                    Dl_info dl_info;
+
+                    /* Don't want to use malloc here */
+                    char buffer[MAX_PATH_LEN];
+                    const char *dli_fname = NULL;
+                    const char *dli_fdir = NULL;
+
+                    memset( &dl_info, 0, sizeof(dl_info) );
+                    dladdr( stackframes[iFrame], &dl_info);
+
+                    dli_fname = strrchr(  dl_info.dli_fname, '/' );
+                    if ( dli_fname )
+                    {
+                        ++dli_fname;
+                        memcpy( buffer, dl_info.dli_fname, dli_fname - dl_info.dli_fname );
+                        buffer[dli_fname - dl_info.dli_fname] = 0;
+                        dli_fdir = buffer;
+                    }
+                    else
+                        dli_fname = dl_info.dli_fname;
+
+                    fprintf( stackout, "0x%x:",
+                        stackframes[iFrame] );
+
+                    if ( dl_info.dli_fbase && dl_info.dli_fname )
+                    {
+                        fprintf( stackout, " %s + 0x%x",
+                            dl_info.dli_fname,
+                            (char*)stackframes[iFrame] - (char*)dl_info.dli_fbase
+                            );
+                    }
+                    else
+                        fprintf( stackout, " ????????" );
+
+                    if ( dl_info.dli_sname && dl_info.dli_saddr )
+                        fprintf( stackout, " (%s + 0x%x)",
+                            dl_info.dli_sname,
+                            (char*)stackframes[iFrame] - (char*)dl_info.dli_saddr
+                            );
+
+                    fprintf( stackout, "\n" );
+
+                    fprintf( xmlout, "<errormail:StackInfo pos=\"%d\" ip=\"0x%x\"",
+                        iFrame,
+                        stackframes[iFrame]
+                        );
+
+                    if ( dl_info.dli_fbase && dl_info.dli_fname )
+                        fprintf( xmlout, " rel=\"0x%x\"", (char *)stackframes[iFrame] - (char *)dl_info.dli_fbase );
+
+                    if ( dli_fname )
+                        fprintf( xmlout, " name=\"%s\"", dli_fname );
+
+                    if ( dli_fdir )
+                        fprintf( xmlout, " path=\"%s\"", dli_fdir );
+
+                    if ( dl_info.dli_sname && dl_info.dli_saddr )
+                        fprintf( xmlout, " ordinal=\"%s+0x%x\"", dl_info.dli_sname, (char *)stackframes[iFrame] - (char *)dl_info.dli_saddr );
+
+                    fprintf( xmlout, "/>\n" );
+
+                }
+                fprintf( xmlout, "</errormail:Stack>\n" );
+
+                fclose( stackout );
+                fclose( xmlout );
+
+#if defined( LINUX )
+                snprintf( szShellCmd, sizeof(szShellCmd)/sizeof(szShellCmd[0]),
+                "crash_report -p %d -s %d -xml %s -stack %s", getpid(), Signal, pXMLTempName, pStackTempName );
+#elif defined ( SOLARIS ) && defined( SPARC )
+                snprintf( szShellCmd, sizeof(szShellCmd)/sizeof(szShellCmd[0]),
+                "crash_report -p %d -s %d -xml %s", getpid(), Signal, pXMLTempName );
+#endif
+
+#else /* defined INCLUDE BACKTRACE */
                 snprintf( szShellCmd, sizeof(szShellCmd)/sizeof(szShellCmd[0]),
                 "crash_report -p %d -s %d", getpid(), Signal );
+#endif /* defined INCLUDE BACKTRACE */
 
-                if ( -1 != system( szShellCmd ) )
+
+                ret = system( szShellCmd );
+
+                if ( pXMLTempName )
+                    unlink( pXMLTempName );
+
+                if ( pStackTempName )
+                    unlink( pStackTempName );
+
+                if ( -1 != ret )
                 {
                     bCrashReporterExecuted = sal_True;
                     return 1;
@@ -329,7 +449,7 @@ static oslSignalAction CallSignalHandler(oslSignalInfo *pInfo)
     return Action;
 }
 
-static void CallSystemHandler(int Signal)
+void CallSystemHandler(int Signal)
 {
     int i;
     struct sigaction act;
@@ -379,7 +499,7 @@ static void CallSystemHandler(int Signal)
 /*****************************************************************************/
 /* SignalHandlerFunction    */
 /*****************************************************************************/
-static void SignalHandlerFunction(int Signal)
+void SignalHandlerFunction(int Signal)
 {
     oslSignalInfo    Info;
     struct sigaction act;
