@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: svesik $ $Date: 2000-12-19 01:28:42 $
+ *  last change: $Author: mav $ $Date: 2001-01-16 13:25:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -740,6 +740,8 @@ void SalFrame::Show( BOOL bVisible )
         else
             XtUnmapWidget( maFrameData.hShell_ );
 
+        #ifdef __notdef__
+
         if( !_GetStyle() || maFrameData.hNoFullscreenShell_ )
         {
             SalFrameData *pTemp = &GetSalData()->pFirstFrame_->maFrameData;
@@ -776,6 +778,9 @@ void SalFrame::Show( BOOL bVisible )
                 pTemp = &pTemp->pNextFrame_->maFrameData;
             }
         }
+
+        #endif
+
     }
 }
 
