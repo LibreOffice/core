@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_vdev.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 13:59:45 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 15:59:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@ public:
     virtual bool                GetGlyphOutline( int nGlyphIndex, PolyPolygon& ) const;
 
 protected:
-friend class GlyphCache;
+    friend class GlyphCache;
     static long                 FetchFontList( ImplDevFontList* );
     static void                 ClearFontList();
 
