@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbumiscres.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-01 19:30:11 $
+ *  last change: $Author: kz $ $Date: 2001-06-08 22:08:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@ Resource RSC_DATASOURCE_TYPES
         Text = "Adabas;JDBC;ODBC;dBase;ADO;Text;Tabellendokument;Adressbuch" ;
         Text [ english ] = "Adabas;JDBC;ODBC;dBase;ADO;Text;Spreadsheet;Addressbook" ;
         Text [ english_us ] = "Adabas;JDBC;ODBC;dBase;ADO;Text;Spreadsheet;Addressbook" ;
-        Text[ portuguese ] = "Adabas;JDBC;ODBC;dBase;ADO;Texto;Folha de cálculo";
+        Text[ portuguese ] = "Adabas;JDBC;ODBC;dBase;ADO;Texto;FolhaCálculo;LivroEndereços";
         Text[ russian ] = "Adabas;JDBC;ODBC;dBase;ADO;Òåêñò;Äîêóìåíò ıëåêòğîííîé òàáëèöû;Àäğåñíàÿ êíèãà";
         Text[ greek ] = "Adabas;JDBC;ODBC;dBase;ADO;Êåßìåíï;¸ããñáöï ğßíáêá;Áôæİíôá äéåõèıíóåùí";
         Text[ dutch ] = "Adabas;JDBC;ODBC;dBase;ADO;Tekst;Werkbladdocument";
@@ -103,7 +103,7 @@ Resource RSC_DATASOURCE_TYPES
         Text[ japanese ] = "Adabas;JDBC;ODBC;dBase;ADO;•¶‘;•\\ŒvZÄŞ·­ÒİÄ;±ÄŞÚ½’ ";
         Text[ korean ] = "Adabas;JDBC;ODBC;dBase;ÅØ½ºÆ®;½ºÇÁ·¹µå½ÃÆ® ¹®¼­";
         Text[ chinese_simplified ] = "Adabas;JDBC;ODBC;dBase;ADO;ÎÄ×Ö;¹¤×÷±íÎÄµµ;Í¨Ñ¶²¾";
-        Text[ chinese_traditional ] = "Adabas;JDBC;ODBC;dBase;ADO;¤å¦r;¤u§@ªí¤å¥ó";
+        Text[ chinese_traditional ] = "Adabas;JDBC;ODBC;dBase;ADO;¤å¦r;¤u§@ªí¤å¥ó;³q°T¿ı";
         Text[ turkish ] = "Adabas;JDBC;ODBC;dBase;Text";
         Text[ arabic ] = "Adabas;JDBC;ODBC;dBase;ADO;äÕ;ãÓÊäÏ ÌÏÇæá";
         Text[ language_user1 ] = "Please be carefull with the number/ordering of (semicolon-separated) tokens in the string.";
@@ -305,6 +305,9 @@ String STR_BUTTON_TEXT_ALL
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.26  2001/06/01 19:30:11  kz
+ *  Merge SRC633: 01.06.01 - 21:29:38
+ *
  *  Revision 1.25  2001/05/30 19:39:05  kz
  *  Merge SRC633: 30.05.01 - 21:38:38
  *
@@ -340,4 +343,5 @@ String STR_BUTTON_TEXT_ALL
  *
  *  Revision 1.0 26.09.00 08:26:13  fs
  ************************************************************************/
+
 
