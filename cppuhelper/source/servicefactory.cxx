@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servicefactory.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: jbu $ $Date: 2001-09-27 15:34:32 $
+ *  last change: $Author: dbo $ $Date: 2001-10-11 14:40:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,8 @@
  *
  ************************************************************************/
 
+#include <vector>
+
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
@@ -71,9 +73,6 @@
 #ifndef _RTL_PROCESS_H
 #include <rtl/process.h>
 #endif
-#ifndef _RTL_BOOTSTRAP_H
-#include <rtl/bootstrap.h>
-#endif
 #ifndef _RTL_STRING_HXX_
 #include <rtl/string.hxx>
 #endif
@@ -81,24 +80,23 @@
 #include <rtl/ustrbuf.hxx>
 #endif
 
-#include <string.h>
-#include <osl/security.hxx>
-
-#include <rtl/bootstrap.hxx>
-
 #include <cppuhelper/shlib.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/component_context.hxx>
-#include <cppuhelper/bootstrap.hxx>
 #include <cppuhelper/servicefactory.hxx>
+#include <cppuhelper/bootstrap.hxx>
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <com/sun/star/container/XSet.hpp>
+#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
 #include <com/sun/star/registry/XImplementationRegistration.hpp>
+
+#define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
+
 
 using namespace ::rtl;
 using namespace ::osl;
@@ -108,9 +106,17 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::registry;
 
-
 namespace cppu
 {
+
+// private forward decl
+//--------------------------------------------------------------------------------------------------
+void addFactories(
+    char const * const * ppNames /* lib, implname, ..., 0 */,
+    OUString const & bootstrapPath,
+    Reference< lang::XMultiComponentFactory > const & xMgr,
+    Reference< registry::XRegistryKey > const & xKey )
+    SAL_THROW( (Exception) );
 
 //==================================================================================================
 static Reference< XInterface > SAL_CALL createInstance(
@@ -176,75 +182,34 @@ Reference< registry::XSimpleRegistry > SAL_CALL createNestedRegistry(
     return Reference< registry::XSimpleRegistry >();
 }
 
-// private forward decl
-Reference< XComponentContext > SAL_CALL createInitialComponentContext(
-    ContextEntry_Init const * pEntries, sal_Int32 nEntries,
-    Reference< registry::XSimpleRegistry > const & xRegistry )
-    SAL_THROW( () );
-
 //--------------------------------------------------------------------------------------------------
-static Reference< lang::XMultiComponentFactory > bootstrapInitialSF(
+Reference< lang::XMultiComponentFactory > bootstrapInitialSF(
     OUString const & rBootstrapPath )
     SAL_THROW( (Exception) )
 {
-    Reference< lang::XMultiServiceFactory > xSF( createInstance( loadSharedLibComponentFactory(
+    Reference< lang::XMultiComponentFactory > xMgr( createInstance( loadSharedLibComponentFactory(
         OUString( RTL_CONSTASCII_USTRINGPARAM("smgr") ), rBootstrapPath,
         OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.stoc.ORegistryServiceManager") ),
         Reference< lang::XMultiServiceFactory >(), Reference< registry::XRegistryKey >() ) ), UNO_QUERY );
 
     // write initial shared lib loader, simple registry, default registry, impl reg
-    Reference< container::XSet > xSet( xSF, UNO_QUERY );
+    static char const * ar[] = {
+        "cpld", "com.sun.star.comp.stoc.DLLComponentLoader",
+        "simreg", "com.sun.star.comp.stoc.SimpleRegistry",
+        "defreg", "com.sun.star.comp.stoc.NestedRegistry",
+        "tdmgr", "com.sun.star.comp.stoc.TypeDescriptionManager",
+        "impreg", "com.sun.star.comp.stoc.ImplementationRegistration",
+        0
+    };
+    addFactories(
+        ar, rBootstrapPath,
+        xMgr, Reference< registry::XRegistryKey >() );
 
-    // loader
-    {
-    Any aFac( makeAny( loadSharedLibComponentFactory(
-        OUString( RTL_CONSTASCII_USTRINGPARAM("cpld") ), rBootstrapPath,
-        OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.stoc.DLLComponentLoader") ),
-        xSF, Reference< registry::XRegistryKey >() ) ) );
-    xSet->insert( aFac );
-    OSL_ENSURE( xSet->has( aFac ), "### failed registering loader!" );
-    }
-    // simple registry
-    {
-    Any aFac( makeAny( loadSharedLibComponentFactory(
-        OUString( RTL_CONSTASCII_USTRINGPARAM("simreg") ), rBootstrapPath,
-        OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.stoc.SimpleRegistry") ),
-        xSF, Reference< registry::XRegistryKey >() ) ) );
-    xSet->insert( aFac );
-    OSL_ENSURE( xSet->has( aFac ), "### failed registering simple registry!" );
-    }
-    // nested registry
-    {
-    Any aFac( makeAny( loadSharedLibComponentFactory(
-        OUString( RTL_CONSTASCII_USTRINGPARAM("defreg") ), rBootstrapPath,
-        OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.stoc.NestedRegistry") ),
-        xSF, Reference< registry::XRegistryKey >() ) ) );
-    xSet->insert( aFac );
-    OSL_ENSURE( xSet->has( aFac ), "### failed registering default registry!" );
-    }
-    // td manager
-    {
-    Any aFac( makeAny( loadSharedLibComponentFactory(
-        OUString( RTL_CONSTASCII_USTRINGPARAM("tdmgr") ), rBootstrapPath,
-        OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.stoc.TypeDescriptionManager") ),
-        xSF, Reference< registry::XRegistryKey >() ) ) );
-    xSet->insert( aFac );
-    OSL_ENSURE( xSet->has( aFac ), "### failed registering registry td provider!" );
-    }
-    // implementation registration
-    {
-    Any aFac( makeAny( loadSharedLibComponentFactory(
-        OUString( RTL_CONSTASCII_USTRINGPARAM("impreg") ), rBootstrapPath,
-        OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.stoc.ImplementationRegistration") ),
-        xSF, Reference< registry::XRegistryKey >() ) ) );
-    xSet->insert( aFac );
-    OSL_ENSURE( xSet->has( aFac ), "### failed registering impl reg!" );
-    }
-
-    return Reference< lang::XMultiComponentFactory >( xSF, UNO_QUERY );
+    return xMgr;
 }
 //--------------------------------------------------------------------------------------------------
-static Reference< XComponentContext > initializeSF(
+// returns context with UNinitialized smgr
+Reference< XComponentContext > bootstrapInitialContext(
     Reference< lang::XMultiComponentFactory > const & xSF,
     Reference< registry::XSimpleRegistry > const & types_xRegistry,
     Reference< registry::XSimpleRegistry > const & services_xRegistry,
@@ -254,57 +219,127 @@ static Reference< XComponentContext > initializeSF(
     Reference< lang::XInitialization > xSFInit( xSF, UNO_QUERY );
     if (! xSFInit.is())
     {
-        throw Exception(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("servicemanager does not support XInitialization!") ),
+        throw RuntimeException(
+            OUSTR("servicemanager does not support XInitialization!"),
             Reference< XInterface >() );
     }
 
-    // default initial context
-    ContextEntry_Init context_values[ 4 ];
-    // smgr
-    context_values[ 0 ].bLateInitService = false;
-    context_values[ 0 ].name = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.lang.theServiceManager") );
-    context_values[ 0 ].value <<= xSF;
-    // tdmgr
-    context_values[ 1 ].bLateInitService = true;
-    context_values[ 1 ].name = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.reflection.theTypeDescriptionManager") );
-    context_values[ 1 ].value <<= OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.reflection.TypeDescriptionManager") );
-    // tdmgr: cache size
-    context_values[ 2 ].bLateInitService = false;
-    context_values[ 2 ].name = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.stoc.TypeDescriptionManager.CacheSize") );
-    context_values[ 2 ].value <<= (sal_Int32)512;
-    sal_Int32 nEntries = 3;
+    // basic context values
+    ContextEntry_Init entry;
+    ::std::vector< ContextEntry_Init > context_values;
+    context_values.reserve( 5 );
 
-    if (types_xRegistry.is())
+    // read out singleton infos from registry
+    if (services_xRegistry.is())
     {
-        // add registry td provider
-        Reference< container::XSet > xSet( xSF, UNO_QUERY );
-        Any aFac( makeAny( loadSharedLibComponentFactory(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("rdbtdp") ), rBootstrapPath,
-            OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.stoc.RegistryTypeDescriptionProvider") ),
-            Reference< lang::XMultiServiceFactory >( xSF, UNO_QUERY ), Reference< registry::XRegistryKey >() ) ) );
-        xSet->insert( aFac );
-        OSL_ENSURE( xSet->has( aFac ), "### failed registering registry td provider!" );
+        Reference< registry::XRegistryKey > xKey( services_xRegistry->getRootKey() );
+        if (xKey.is())
+        {
+            xKey = xKey->openKey( OUString( RTL_CONSTASCII_USTRINGPARAM("/SINGLETONS") ) );
+            if (xKey.is())
+            {
+                entry.bLateInitService = true;
 
-        // rdbtdp: registries to be used
-        context_values[ 3 ].bLateInitService = false;
-        context_values[ 3 ].name = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.stoc.RegistryTypeDescriptionProvider.Registries") );
-        context_values[ 3 ].value = makeAny( Sequence< Reference< registry::XSimpleRegistry > >( &types_xRegistry, 1 ) );
-        nEntries = 4;
+                Sequence< Reference< registry::XRegistryKey > > keys( xKey->openKeys() );
+                Reference< registry::XRegistryKey > const * pKeys = keys.getConstArray();
+                for ( sal_Int32 nPos = keys.getLength(); nPos--; )
+                {
+                    try
+                    {
+                        Reference< registry::XRegistryKey > const & xKey = pKeys[ nPos ];
+
+                        OUStringBuffer buf( 32 );
+                        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("/singletons/") );
+                        buf.append( xKey->getKeyName().copy( sizeof("/SINGLETONS") /* -\0 +'/' */ ) );
+                        entry.name = buf.makeStringAndClear();
+                        entry.value <<= xKey->getStringValue();
+                        context_values.push_back( entry );
+                    }
+                    catch (Exception & rExc)
+                    {
+#ifdef _DEBUG
+                        OString aStr( OUStringToOString(
+                            xKey->getKeyName().copy( 11 ), RTL_TEXTENCODING_ASCII_US ) );
+                        OString aStr2( OUStringToOString(
+                            rExc.Message, RTL_TEXTENCODING_ASCII_US ) );
+                        ::fprintf( stderr, "### failed reading singleton [%s] service name from registry: %s\n", aStr.getStr(), aStr2.getStr() );
+#endif
+                    }
+                }
+            }
+        }
     }
 
-    Reference< XComponentContext > xContext( createInitialComponentContext(
-        context_values, nEntries, services_xRegistry ) );
+    // smgr
+    entry.bLateInitService = false;
+    entry.name = OUSTR("/singletons/com.sun.star.lang.theServiceManager");
+    entry.value <<= xSF;
+    context_values.push_back( entry );
 
-    Sequence< Any > aSFInit( 2 );
-    aSFInit[ 0 ] <<= services_xRegistry;
-    aSFInit[ 1 ] <<= xContext; // default context
-    xSFInit->initialize( aSFInit );
+    // tdmgr
+    entry.bLateInitService = true;
+    entry.name = OUSTR("/singletons/com.sun.star.reflection.theTypeDescriptionManager");
+    entry.value <<= OUSTR("com.sun.star.reflection.TypeDescriptionManager");
+    context_values.push_back( entry );
 
+    // tdmgr: cache size
+    entry.bLateInitService = false;
+    entry.name = OUSTR("/implementations/com.sun.star.comp.stoc.TypeDescriptionManager/CacheSize");
+    entry.value <<= (sal_Int32)512;
+    context_values.push_back( entry );
+
+    Reference< XComponentContext > xContext;
     Reference< container::XHierarchicalNameAccess > xTDMgr;
-    if (xContext->getValueByName( OUString( RTL_CONSTASCII_USTRINGPARAM(
-        "com.sun.star.reflection.theTypeDescriptionManager") ) ) >>= xTDMgr)
+
+    // bootstrap type system
+    if (types_xRegistry.is()) // use type registry?
     {
+        // rdbtdp: registries to be used
+        entry.bLateInitService = false;
+        entry.name = OUSTR("/implementations/com.sun.star.comp.stoc.RegistryTypeDescriptionProvider/Registries");
+        entry.value <<= Sequence< Reference< registry::XSimpleRegistry > >( &types_xRegistry, 1 );
+        context_values.push_back( entry );
+
+        xContext = createComponentContext(
+            &context_values[ 0 ], context_values.size(),
+            Reference< XComponentContext >() );
+
+        if (xContext->getValueByName(
+            OUSTR("/singletons/com.sun.star.reflection.theTypeDescriptionManager") ) >>= xTDMgr)
+        {
+            // add registry td provider factory to smgr and instance to tdmgr
+            Reference< lang::XSingleComponentFactory > xFac( loadSharedLibComponentFactory(
+                OUSTR("rdbtdp"), rBootstrapPath,
+                OUSTR("com.sun.star.comp.stoc.RegistryTypeDescriptionProvider"),
+                Reference< lang::XMultiServiceFactory >( xSF, UNO_QUERY ),
+                Reference< registry::XRegistryKey >() ), UNO_QUERY );
+            OSL_ASSERT( xFac.is() );
+            // smgr
+            Reference< container::XSet > xSet( xSF, UNO_QUERY );
+            xSet->insert( makeAny( xFac ) );
+            OSL_ENSURE( xSet->has( makeAny( xFac ) ), "### failed registering registry td provider!" );
+            // tdmgr
+            xSet.set( xTDMgr, UNO_QUERY );
+            OSL_ASSERT( xSet.is() );
+            Any types_RDB( makeAny( types_xRegistry ) );
+            Any rdbtdp( makeAny( xFac->createInstanceWithArgumentsAndContext(
+                Sequence< Any >( &types_RDB, 1 ), xContext ) ) );
+            xSet->insert( rdbtdp );
+            OSL_ENSURE( xSet->has( rdbtdp ), "### failed inserting registry td provider to tdmgr!" );
+        }
+    }
+    else // no type registry
+    {
+        xContext = createComponentContext(
+            &context_values[ 0 ], context_values.size(),
+            Reference< XComponentContext >() );
+        xContext->getValueByName(
+            OUSTR("/singletons/com.sun.star.reflection.theTypeDescriptionManager") ) >>= xTDMgr;
+    }
+
+    if (xTDMgr.is())
+    {
+        // install callback
         installTypeDescriptionManager( xTDMgr );
     }
 
@@ -392,7 +427,16 @@ static Reference< lang::XMultiComponentFactory > createImplServiceFactory(
             Reference< XInterface >() );
     }
 
-    initializeSF( xSF, xRegistry, xRegistry, rBootstrapPath );
+    Reference< XComponentContext > xContext(
+        bootstrapInitialContext( xSF, xRegistry, xRegistry, rBootstrapPath ) );
+
+    // initialize sf
+    Reference< lang::XInitialization > xInit( xSF, UNO_QUERY );
+    OSL_ASSERT( xInit.is() );
+    Sequence< Any > aSFInit( 2 );
+    aSFInit[ 0 ] <<= xRegistry;
+    aSFInit[ 1 ] <<= xContext; // default context
+    xInit->initialize( aSFInit );
 
     return xSF;
 }
@@ -415,206 +459,20 @@ Reference< XComponentContext > SAL_CALL bootstrap_InitialComponentContext(
     OUString const & rBootstrapPath )
     SAL_THROW( (Exception) )
 {
-    Reference< lang::XMultiComponentFactory > xSF( bootstrapInitialSF( rBootstrapPath ) );
-    return initializeSF( xSF, xRegistry, xRegistry, rBootstrapPath );
+    Reference< lang::XMultiComponentFactory > xSF(
+        bootstrapInitialSF( rBootstrapPath ) );
+    Reference< XComponentContext > xContext(
+        bootstrapInitialContext( xSF, xRegistry, xRegistry, rBootstrapPath ) );
+
+    // initialize sf
+    Reference< lang::XInitialization > xInit( xSF, UNO_QUERY );
+    OSL_ASSERT( xInit.is() );
+    Sequence< Any > aSFInit( 2 );
+    aSFInit[ 0 ] <<= xRegistry;
+    aSFInit[ 1 ] <<= xContext; // default context
+    xInit->initialize( aSFInit );
+
+    return xContext;
 }
 
-
-
-//==================================================================================================
-
-
-static OUString findBoostrapArgument(const Bootstrap & bootstrap, const OUString & arg_name, sal_Bool * pFallenBack) SAL_THROW(()) {
-    OUString result;
-
-    OUString prefixed_arg_name = OUString(RTL_CONSTASCII_USTRINGPARAM("UNO_"));
-    prefixed_arg_name += arg_name.toAsciiUpperCase();
-
-    if(!bootstrap.getFrom(prefixed_arg_name, result)) // environment not set -> try relative to executable
-    {
-        if(pFallenBack)
-            *pFallenBack = sal_True;
-
-        OUString fileName;
-        bootstrap.getIniName(fileName);
-
-        result = fileName.copy(0, fileName.getLength() - strlen(SAL_CONFIGFILE(""))); // cut the rc extension
-        result += OUString(RTL_CONSTASCII_USTRINGPARAM("_"));
-        result += arg_name.toAsciiLowerCase();
-        result += OUString(RTL_CONSTASCII_USTRINGPARAM(".rdb"));
-
-#ifdef DEBUG
-        OString result_dbg = OUStringToOString(result, RTL_TEXTENCODING_ASCII_US);
-        OString arg_name_dbg = OUStringToOString(arg_name, RTL_TEXTENCODING_ASCII_US);
-        OSL_TRACE("cppuhelper::findBoostrapArgument - setting %s relative to executable: %s\n",
-                  arg_name_dbg.getStr(),
-                  result_dbg.getStr());
-#endif
-    }
-    else
-    {
-        if(pFallenBack)
-            *pFallenBack = sal_False;
-
-#ifdef DEBUG
-        OString prefixed_arg_name_dbg = OUStringToOString(prefixed_arg_name, RTL_TEXTENCODING_ASCII_US);
-        OString result_dbg = OUStringToOString(result, RTL_TEXTENCODING_ASCII_US);
-        OSL_TRACE("cppuhelper::findBoostrapArgument - found %s in env: %s",
-                  prefixed_arg_name_dbg.getStr(),
-                  result_dbg.getStr());
-#endif
-    }
-
-    return result;
-}
-
-
-static Reference<XSimpleRegistry> nestRegistries(const OUString baseDir,
-                                                 const Reference<XSingleServiceFactory> & xSimRegFac,
-                                                 const Reference<XSingleServiceFactory> & xNesRegFac,
-                                                 OUString csl_rdbs,
-                                                 const OUString & write_rdb,
-                                                 sal_Bool forceWrite_rdb,
-                                                 sal_Bool bFallenBack)
-    SAL_THROW((Exception))
-{
-    sal_Int32 index;
-    Reference<XSimpleRegistry> lastRegistry;
-
-    if(write_rdb.getLength()) // is there a write registry given?
-    {
-        lastRegistry = Reference<XSimpleRegistry>::query(xSimRegFac->createInstance());
-
-        try
-        {
-            OSL_TRACE("opening xxxxx");
-              lastRegistry->open(write_rdb, sal_False, forceWrite_rdb);
-            OSL_TRACE("opening yyyy");
-
-        }
-        catch (InvalidRegistryException & invalidRegistryException)
-        {
-            // be tolerant for write registries ...
-#ifdef DEBUG
-            OString rdb_name_tmp = OUStringToOString(write_rdb, RTL_TEXTENCODING_ASCII_US);
-            OString message_dbg = OUStringToOString(invalidRegistryException.Message, RTL_TEXTENCODING_ASCII_US);
-            OSL_TRACE("warning: couldn't open %s cause of %s", rdb_name_tmp.getStr(), message_dbg.getStr());
-#endif
-        }
-
-        if(!lastRegistry->isValid())
-            lastRegistry = Reference<XSimpleRegistry>();
-    }
-
-    do
-    {
-        index = csl_rdbs.indexOf((sal_Unicode)' ');
-        OUString rdb_name = (index == -1) ? csl_rdbs : csl_rdbs.copy(0, index);
-        csl_rdbs = (index == -1) ? OUString() : csl_rdbs.copy(index + 1);
-
-        Reference<XSimpleRegistry> simpleRegistry = Reference<XSimpleRegistry>::query(xSimRegFac->createInstance());
-
-        osl::FileBase::getAbsoluteFileURL(baseDir, rdb_name, rdb_name);
-
-        try
-        {
-            simpleRegistry->open(rdb_name, sal_True, sal_False);
-
-            if(lastRegistry.is())
-            {
-                Reference<XSimpleRegistry> nestedRegistry = Reference<XSimpleRegistry>::query(xNesRegFac->createInstance());
-                Reference<XInitialization> nestedRegistry_xInit(nestedRegistry, UNO_QUERY);
-
-                Sequence<Any> aArgs(2);
-                aArgs[0] = makeAny(lastRegistry);
-                aArgs[1] = makeAny(simpleRegistry);
-
-                nestedRegistry_xInit->initialize(aArgs);
-
-                lastRegistry = nestedRegistry;
-            }
-            else
-                lastRegistry = simpleRegistry;
-        }
-        catch ( InvalidRegistryException & e )
-        {
-            // if a registry was explicitly given, the exception shall fly
-            if( ! bFallenBack )
-                throw;
-
-            // otherwise just a warning in debug case is sufficient ( e.g. tools, that
-            // don't need types/services registry)
-#ifdef DEBUG
-            OString rdb_name_tmp = OUStringToOString(write_rdb, RTL_TEXTENCODING_ASCII_US);
-            OString message_dbg = OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US);
-            OSL_TRACE("warning: couldn't open %s cause of %s", rdb_name_tmp.getStr(), message_dbg.getStr());
-#endif
-        }
-    }
-    while(index != -1 && csl_rdbs.getLength()); // are there more rdbs in list?
-
-    return lastRegistry;
-}
-
-/**
- * Bootstrap an <code>InitialContext</code>, try to find the
- * neccessarey types and services rdbs.
- *
- * @return the XComponentContext
- */
-Reference<XComponentContext> SAL_CALL defaultBootstrap_InitialComponentContext(const OUString & iniFile) SAL_THROW((Exception))
-{
-    Bootstrap bootstrap(iniFile);
-
-    sal_Bool bFallenBackTypes = sal_False;
-    sal_Bool bFallenBackServices = sal_False;
-      OUString cls_uno_types = findBoostrapArgument(bootstrap, OUString(RTL_CONSTASCII_USTRINGPARAM("TYPES")), &bFallenBackTypes);
-      OUString cls_uno_services = findBoostrapArgument(bootstrap, OUString(RTL_CONSTASCII_USTRINGPARAM("SERVICES")),&bFallenBackServices);
-
-    sal_Bool fallenBackWriteRegistry;
-      OUString write_rdb = findBoostrapArgument(bootstrap, OUString(RTL_CONSTASCII_USTRINGPARAM("WRITERDB")), &fallenBackWriteRegistry);
-
-    OUString bootstrapPath;
-
-    Reference<XMultiComponentFactory> smgr_XMultiComponentFactory(bootstrapInitialSF(bootstrapPath));
-    Reference<XMultiServiceFactory> smgr_XMultiServiceFactory(smgr_XMultiComponentFactory, UNO_QUERY);
-
-    Reference<XRegistryKey> xEmptyKey;
-
-    Reference<XSingleServiceFactory> xSimRegFac(
-        loadSharedLibComponentFactory(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("simreg")),
-            bootstrapPath,
-            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.stoc.SimpleRegistry")),
-            smgr_XMultiServiceFactory,
-            xEmptyKey),
-        UNO_QUERY);
-
-    Reference<XSingleServiceFactory> xNesRegFac(
-        loadSharedLibComponentFactory(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("defreg")),
-            bootstrapPath,
-            OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.stoc.NestedRegistry")),
-            smgr_XMultiServiceFactory,
-            xEmptyKey),
-        UNO_QUERY);
-
-    OUString iniDir;
-    bootstrap.getIniName(iniDir);
-    iniDir = iniDir.copy(0, iniDir.lastIndexOf('/'));
-
-    Reference<XSimpleRegistry> types_xRegistry =
-        nestRegistries(iniDir, xSimRegFac, xNesRegFac, cls_uno_types,
-                       OUString(), sal_False , bFallenBackTypes);
-    Reference<XSimpleRegistry> services_xRegistry =
-        nestRegistries( iniDir, xSimRegFac, xNesRegFac, cls_uno_services,
-                        write_rdb, !fallenBackWriteRegistry, bFallenBackServices);
-
-    return initializeSF(smgr_XMultiComponentFactory, types_xRegistry, services_xRegistry, bootstrapPath);
-}
-
-Reference<XComponentContext> SAL_CALL defaultBootstrap_InitialComponentContext() SAL_THROW((Exception))
-{
-    return defaultBootstrap_InitialComponentContext(OUString());
-}
 }

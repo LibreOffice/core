@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: dbo $ $Date: 2001-09-04 09:03:09 $
+#   last change: $Author: dbo $ $Date: 2001-10-11 14:40:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,6 +84,7 @@ UNOTYPES= \
         com.sun.star.registry.XSimpleRegistry		\
         com.sun.star.registry.XImplementationRegistration \
         com.sun.star.container.XSet			\
+        com.sun.star.container.XNameAccess		\
         com.sun.star.uno.XWeak 				\
         com.sun.star.uno.XAggregation 			\
         com.sun.star.uno.XComponentContext		\
@@ -111,6 +112,7 @@ UNOTYPES= \
         com.sun.star.reflection.XUnionTypeDescription	\
         com.sun.star.beans.XPropertySet 		\
         com.sun.star.beans.XMultiPropertySet 		\
+        com.sun.star.beans.PropertyValue 		\
         com.sun.star.beans.XFastPropertySet 		\
         com.sun.star.beans.PropertyAttribute 		\
         com.sun.star.container.XHierarchicalNameAccess	\
@@ -130,6 +132,7 @@ SLOFILES= \
         $(SLO)$/typeprovider.obj 	\
         $(SLO)$/exc_thrower.obj 	\
         $(SLO)$/servicefactory.obj 	\
+        $(SLO)$/bootstrap.obj 		\
         $(SLO)$/implbase.obj 		\
         $(SLO)$/implbase_ex.obj 	\
         $(SLO)$/propshlp.obj 		\
@@ -151,7 +154,13 @@ SHL1STDLIBS= \
 
 SHL1DEPN=
 SHL1IMPLIB=i$(TARGET)
-SHL1LIBS=$(SLB)$/$(TARGET).lib
+SHL1LIBS= \
+        $(SLB)$/$(TARGET).lib
+
+# xxx todo: in progress when moving down cfgmgr+interfaces to udk
+# \
+# 		$(SLB)$/cfg_registry_wrapper.lib
+
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME=$(SHL1TARGET)

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: dbo $ $Date: 2001-08-31 09:12:21 $
+#   last change: $Author: dbo $ $Date: 2001-10-11 14:40:44 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -61,12 +61,12 @@
 #*************************************************************************
 PRJ=..
 
-PRJNAME=	cppuhelper
-TARGET=	 	testhelper
-LIBTARGET=	NO
-TARGETTYPE=	CUI
+PRJNAME=cppuhelper
+TARGET=testhelper
+TARGETTYPE=CUI
 ENABLE_EXCEPTIONS=TRUE
-NO_BSYMBOLIC=	TRUE
+NO_BSYMBOLIC=TRUE
+USE_DEFFILE=TRUE
 
 # --- Settings -----------------------------------------------------
 
@@ -89,8 +89,8 @@ OBJFILES=	\
         $(OBJ)$/testimplhelper.obj \
         $(OBJ)$/testcontainer.obj
 
-APP1TARGET=	$(TARGET)
-APP1OBJS=	$(OBJFILES) 
+APP1TARGET=$(TARGET)
+APP1OBJS=$(OBJFILES) 
 
 APP1STDLIBS+=	\
         $(CPPULIB)	\
@@ -99,22 +99,49 @@ APP1STDLIBS+=	\
 
 APP1DEF=	$(MISC)$/$(APP1TARGET).def
 
-ALLIDLFILES:=	helpertest.idl
+#############################################
 
 APP2OBJS = $(OBJ)$/testdefaultbootstrapping.obj
 APP2STDLIBS += $(CPPUHELPERLIB) $(CPPULIB) $(SALLIB)
 APP2TARGET = testdefaultbootstrapping
 
+#############################################
+
+SLOFILES= \
+        $(SLO)$/cfg_test.obj
+LIB1TARGET=$(SLB)$/cfg_test.lib
+LIB1OBJFILES=$(SLOFILES)
+
+SHL1TARGET=cfg_test
+SHL1STDLIBS= \
+        $(CPPUHELPERLIB)	\
+        $(CPPULIB)		\
+        $(SALLIB)
+SHL1VERSIONMAP=$(SHL1TARGET).map
+SHL1DEPN=
+SHL1IMPLIB=i$(SHL1TARGET)
+SHL1LIBS=$(SLB)$/$(SHL1TARGET).lib
+SHL1DEF=$(MISC)$/$(SHL1TARGET).def
+DEF1NAME=$(SHL1TARGET)
+
+APP3OBJS = $(OBJ)$/cfg_test.obj
+APP3STDLIBS += $(CPPUHELPERLIB) $(CPPULIB) $(SALLIB)
+APP3TARGET = test_cfg
+
+#############################################
+
+ALLIDLFILES:=	helpertest.idl
+
 # --- Targets ------------------------------------------------------
 
 .IF "$(depend)" == ""
 ALL: $(BIN)$/cpputest.rdb				\
-     unoheader 							\
-     $(BIN)$/testrc 					\
-     $(BIN)$/testdefaultbootstrapping.pl\
-     ALLTAR 							\
-     $(BIN)$/$(APP2TARGET).bin  		\
-     $(BIN)$/$(APP2TARGET).Bin  		\
+     unoheader 					\
+     $(BIN)$/testrc 				\
+     $(BIN)$/testdefaultbootstrapping.pl		\
+    ALLTAR 						\
+     $(BIN)$/$(APP2TARGET).bin  			\
+     $(BIN)$/$(APP2TARGET).Bin  			\
      $(BIN)$/$(APP2TARGET).Exe
 
 .IF "$(GUI)"=="UNX"
