@@ -2,9 +2,9 @@
  *
  *  $RCSfile: types.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-09 11:51:03 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 17:05:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,7 @@
 namespace ww
 {
     typedef std::vector<sal_uInt8> bytes;
+
     enum WordVersion {eWW6 = 6, eWW7 = 7, eWW8 = 8};
     inline bool IsSevenMinus(WordVersion eVer) { return eVer <= eWW7; }
     inline bool IsEightPlus(WordVersion eVer) { return eVer >= eWW8; }
