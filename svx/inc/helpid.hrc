@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpid.hrc,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: os $ $Date: 2002-05-21 14:41:44 $
+ *  last change: $Author: cl $ $Date: 2002-05-23 10:13:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -499,6 +499,9 @@
 #define HID_OPTIONS_ACCESSIBILITYCONFIG         (HID_SVX_START + 431)
 #define HID_OPTIONS_COLORCONFIG_COLORLIST_WIN   (HID_SVX_START + 432)
 
+#define HID_FILL_ATTR_LISTBOX                   (HID_SVX_EXT0_START + 1)
+#define HID_FILL_TYPE_LISTBOX                   (HID_SVX_EXT0_START + 2)
+
 // -----------------------------------------------------------------------
 // "Uberlaufpr"ufung -----------------------------------------------------
 // -----------------------------------------------------------------------
@@ -511,7 +514,7 @@
 
 // overrun check 2
 
-#define ACT_SVX_HID_END2 HID_OPTIONS_COLORCONFIG_COLORLIST_WIN
+#define ACT_SVX_HID_END2 HID_FILL_TYPE_LISTBOX
 
 #if ACT_SVX_HID2_END > HID_SVX_EXT0_END
 #error resource overrun in #line, #file
