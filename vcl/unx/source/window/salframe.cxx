@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.123 $
+ *  $Revision: 1.124 $
  *
- *  last change: $Author: ssa $ $Date: 2002-04-15 16:28:45 $
+ *  last change: $Author: pl $ $Date: 2002-04-15 17:06:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -915,13 +915,11 @@ void SalFrame::Show( BOOL bVisible )
         {
             /*
              *  #95453#
-             *  Sawfish can be switched to enter-exit focus behaviour. In this case
+             *  Sawfish and twm can be switched to enter-exit focus behaviour. In this case
              *  we must grab the pointer else the dumb WM will put the focus to the
              *  override-redirect float window. The application window will be deactivated
              *  which causes that the floats are destroyed, so the user can never click on
              *  a menu because it vanishes as soon as he enters it.
-             *  Since we want to grab as seldom as possible this case is bound to the WM
-             *  name being Sawfish.
              */
             nVisibleFloats++;
             if( nVisibleFloats == 1 && ! _GetDisplay()->GetCaptureFrame() )
@@ -933,7 +931,7 @@ void SalFrame::Show( BOOL bVisible )
                               GrabModeAsync,
                               GrabModeAsync,
                               None,
-                              None,
+                              maFrameData.mpParent ? maFrameData.mpParent->maFrameData.GetCursor() : None,
                               CurrentTime
                               );
             }
@@ -1737,7 +1735,7 @@ inline void SalFrameData::SetPointer( PointerStyle ePointerStyle )
     hCursor_ = pDisplay_->GetPointer( ePointerStyle );
     XDefineCursor( GetXDisplay(), GetWindow(), hCursor_ );
 
-    if( IsCaptured() )
+    if( IsCaptured() || nVisibleFloats > 0 )
         XChangeActivePointerGrab( GetXDisplay(),
                         PointerMotionMask|ButtonPressMask|ButtonReleaseMask,
                         hCursor_,
@@ -2162,6 +2160,18 @@ long SalFrameData::HandleMouseEvent( XEvent *pEvent )
         aMouseEvt.mnButton  = 0;
 
         nEvent              = SALEVENT_MOUSEMOVE;
+        if( nVisibleFloats > 0 && mpParent )
+        {
+            XLIB_Cursor aCursor = mpParent->maFrameData.GetCursor();
+            if( pEvent->xmotion.x >= 0 && pEvent->xmotion.x < pFrame_->maGeometry.nWidth &&
+                pEvent->xmotion.y >= 0 && pEvent->xmotion.y < pFrame_->maGeometry.nHeight )
+                aCursor = None;
+
+            XChangeActivePointerGrab( GetXDisplay(),
+                                      PointerMotionMask|ButtonPressMask|ButtonReleaseMask,
+                                      aCursor,
+                                      CurrentTime );
+        }
     }
     else
     {
