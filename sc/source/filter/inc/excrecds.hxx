@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dr $ $Date: 2001-03-19 13:24:08 $
+ *  last change: $Author: gt $ $Date: 2001-04-06 12:37:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,7 @@ class EditTextObject;
 class ScPageHFItem;
 class ScProgress;
 
+class ExcTable;
 class UsedAttrList;
 class ExcArray;
 class ExcArrays;
@@ -817,10 +818,11 @@ public:
 
 class ExcBlankMulblank : public ExcCell, private UINT32List
 {
-private:
+protected:
     ULONG                   nRecLen;
     UINT16                  nLastCol;
     BOOL                    bMulBlank;
+    BOOL                    bDummy;     // not saved, 'cause row contains formatting info
 
     inline UINT16           GetXF( UINT32 nEntry ) const    { return (UINT16) nEntry; }
     inline UINT16           GetCount( UINT32 nEntry ) const { return (UINT16)(nEntry >> 16); }
@@ -831,7 +833,8 @@ private:
                                 const ScAddress rPos,
                                 const ScPatternAttr* pAttr,
                                 RootData& rRootData,
-                                UINT16 nCount );
+                                UINT16 nCount,
+                                ExcTable& rExcTab );
 
     virtual void            SaveDiff( XclExpStream& rStrm );    // instead of SaveCont()
     virtual ULONG           GetDiffLen( void ) const;
@@ -841,24 +844,31 @@ public:
                                 const ScAddress rPos,
                                 const ScPatternAttr* pFirstAttr,
                                 RootData& rRootData,
-                                UINT16 nFirstCount );
+                                UINT16 nFirstCount,
+                                ExcTable& rExcTab );
 
     void                    Add(
                                 const ScAddress rPos,
                                 const ScPatternAttr* pAttr,
                                 RootData& rRootData,
-                                UINT16 nAddCount );
+                                UINT16 nAddCount,
+                                ExcTable& rExcTab );
 
     inline UINT16           GetLastCol() const  { return nLastCol; }
     virtual UINT16          GetXF() const;                      // returns last used XF
 
     virtual UINT16          GetNum() const;
+
+    virtual void            Save( XclExpStream& );              // for dummy case
 };
+
 
 inline void ExcBlankMulblank::Append( UINT16 nXF, UINT16 nCount )
 {
     UINT32List::Append( (UINT32) nXF + (((UINT32) nCount) << 16) );
 }
+
+
 
 
 //---------------------------------------------------- class ExcNameListEntry -
@@ -1012,6 +1022,8 @@ public:
 class ExcRow : public ExcRecord
 {
 private:
+    friend class DefRowXFs;
+    ExcTable&               rExcTab;
     UINT16                  nNum;
     UINT16                  nFirstCol;
     UINT16                  nLastCol;
@@ -1028,7 +1040,7 @@ private:
 protected:
 public:
                             ExcRow( UINT16 nNum, UINT16 nTab, UINT16 nFCol, UINT16 nLCol,
-                                UINT16 nXF, ScDocument& rDoc, ExcEOutline& rOutline );
+                                UINT16 nXF, ScDocument& rDoc, ExcEOutline& rOutline, ExcTable& rExcTab );
 
     inline BOOL             IsDefault();
 
@@ -1057,6 +1069,8 @@ public:
 
                             // returns new block or NULL if last block not full
     ExcRowBlock*            Append( ExcRow* pNewRow );
+
+    void                    SetDefXFs( DefRowXFs& rDefRowXFs );
 
     virtual void            Save( XclExpStream& rStrm );
 };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdoc.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dr $ $Date: 2001-02-26 06:51:25 $
+ *  last change: $Author: gt $ $Date: 2001-04-06 12:37:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,7 @@ class NameBuffer;
 class XclExpStream;
 class XclExpChangeTrack;
 
+
 //--------------------------------------------------- class ExcRecordListRefs -
 
 #ifndef MAC
@@ -140,6 +141,28 @@ public:
 };
 
 
+
+
+class DefRowXFs : protected List
+{
+protected:
+    UINT32                      nLastList;
+    UINT16                      nLastRow;
+
+    static inline void*         Set( UINT16 nRowNum, UINT16 nXF );
+    static inline void          Get( const void*, UINT16& rRowNum, UINT16& rXF );
+public:
+                                DefRowXFs( void );
+    virtual                     ~DefRowXFs();
+
+    void                        Add( UINT16 nRowNum, UINT16 nXF );
+
+    void                        ChangeXF( UINT16 nRowNum, UINT16& rXF );
+};
+
+
+
+
 //------------------------------------------------------------ class ExcTable -
 
 class ExcTable : public ExcRoot
@@ -152,6 +175,7 @@ private:
     UINT16                      nAktCol;
 
     static ExcRowBlock*         pRowBlock;  // buffer for ROW recs
+    DefRowXFs*                  pDefRowXFs;
 
     void                        Clear();
     void                        NullTab( const String* pCodename = NULL );
@@ -167,6 +191,9 @@ public:
 
     void                        FillAsHeader( ExcRecordListRefs& rBundleSheetRecList );
     void                        FillAsTable( void );
+
+    void                        SetDefRowXF( UINT16 nXF, UINT16 nRowNum );
+    void                        ModifyToDefaultRowXF( UINT16 nRowNum, UINT16& rXF );
 
     void                        Write( XclExpStream& );
 };
