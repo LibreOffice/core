@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prntopts.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-05-04 09:19:35 $
+ *  last change: $Author: dr $ $Date: 2001-06-25 13:34:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,8 +122,6 @@ SdPrintOptions::SdPrintOptions( Window* pParent, const SfxItemSet& rInAttrs ) :
         rOutAttrs               ( rInAttrs )
 {
     FreeResource();
-    aSeparator1FL.SetStyle( aSeparator1FL.GetStyle() | WB_VERT );
-    aSeparator2FL.SetStyle( aSeparator2FL.GetStyle() | WB_VERT );
 
     Link aLink = LINK( this, SdPrintOptions, ClickBookletHdl );
     aRbtDefault.SetClickHdl( aLink );

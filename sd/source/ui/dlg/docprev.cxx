@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docprev.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:32 $
+ *  last change: $Author: dr $ $Date: 2001-06-25 13:34:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,11 +123,13 @@ void SdDocPreviewWin::SetObjectShell( SfxObjectShell* pObj, USHORT nShowPage )
 SdDocPreviewWin::SdDocPreviewWin( Window* pParent, const ResId& rResId )
 : Control(pParent, rResId), pMetaFile( 0 ), bInEffect(FALSE), m_pObj(NULL)
 {
+    SetBorderStyle( WINDOW_BORDER_MONO );
 }
 
 SdDocPreviewWin::SdDocPreviewWin( Window* pParent )
 : Control(pParent, 0 ), pMetaFile( 0 ), bInEffect(FALSE), m_pObj(NULL)
 {
+    SetBorderStyle( WINDOW_BORDER_MONO );
     Resize();
     Show();
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgass.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: af $ $Date: 2001-06-19 12:48:20 $
+ *  last change: $Author: dr $ $Date: 2001-06-25 13:34:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -332,14 +332,14 @@ public:
 
     // Common
     Assistent           m_aAssistentFunc;
-    OKButton            m_aFinishButton;
-    CancelButton        m_aCancelButton;
+    CheckBox            m_aPreviewFlag;
+    CheckBox            m_aStartWithFlag;
     HelpButton          m_aHelpButton;
+    CancelButton        m_aCancelButton;
     PushButton          m_aLastPageButton;
     PushButton          m_aNextPageButton;
-    CheckBox            m_aPreviewFlag;
+    OKButton            m_aFinishButton;
     SdDocPreviewWin     m_aPreview;
-    CheckBox            m_aStartWithFlag;
 
     // Seite 1
     FixedBitmap*        m_pPage1FB;

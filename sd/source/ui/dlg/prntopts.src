@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prntopts.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: thb $ $Date: 2001-06-15 18:16:50 $
+ *  last change: $Author: dr $ $Date: 2001-06-25 13:34:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ TabPage TP_PRINT_OPTIONS
     Hide = TRUE;
     FixedLine GRP_PRINT
     {
-        Pos = MAP_APPFONT ( 6 , 3  ) ;
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 118 , 8 ) ;
         Text = "Inhalt" ;
         Text [ ENGLISH ] = "Contents" ;
@@ -115,9 +115,9 @@ TabPage TP_PRINT_OPTIONS
         Pos = MAP_APPFONT ( 12 , 14  ) ;
         Size = MAP_APPFONT ( 90 , 10 ) ;
         Text = "Ze~ichnung" ;
-        Text [ ENGLISH ] = "Drawing" ;
+        Text [ ENGLISH ] = "Drawin~g" ;
         Text [ dutch ] = "Te~kening" ;
-        Text [ english_us ] = "~Drawing" ;
+        Text [ english_us ] = "Drawin~g" ;
         Text [ italian ] = "Disegno" ;
         Text [ spanish ] = "~Dibujo" ;
         Text [ french ] = "~Dessin" ;
@@ -143,7 +143,7 @@ TabPage TP_PRINT_OPTIONS
         Pos = MAP_APPFONT ( 12 , 28  ) ;
         Size = MAP_APPFONT ( 90 , 10 ) ;
         Text = "No~tizen" ;
-        Text [ ENGLISH ] = "Notes" ;
+        Text [ ENGLISH ] = "~Notes" ;
         TabStop = TRUE ;
         Text [ english_us ] = "~Notes" ;
         Text [ italian ] = "No~te" ;
@@ -172,7 +172,7 @@ TabPage TP_PRINT_OPTIONS
         Pos = MAP_APPFONT ( 12 , 42  ) ;
         Size = MAP_APPFONT ( 90 , 10 ) ;
         Text = "Handzette~l" ;
-        Text [ ENGLISH ] = "Handouts" ;
+        Text [ ENGLISH ] = "Hando~uts" ;
         TabStop = TRUE ;
         Text [ dutch ] = "~Folder" ;
         Text [ english_us ] = "Hando~uts" ;
@@ -201,7 +201,7 @@ TabPage TP_PRINT_OPTIONS
         Pos = MAP_APPFONT ( 12 , 56  ) ;
         Size = MAP_APPFONT ( 90 , 10 ) ;
         Text = "~Gliederung" ;
-        Text [ ENGLISH ] = "Outliner" ;
+        Text [ ENGLISH ] = "Out~line" ;
         TabStop = TRUE ;
         Text [ english_us ] = "Out~line" ;
         Text [ italian ] = "~Struttura" ;
@@ -227,8 +227,9 @@ TabPage TP_PRINT_OPTIONS
     };
     FixedLine FL_SEPARATOR1
     {
-        Pos = MAP_APPFONT ( 125 , 10  ) ;
-        Size = MAP_APPFONT ( 4 , 62 ) ;
+        Pos = MAP_APPFONT ( 125 , 14 ) ;
+        Size = MAP_APPFONT ( 4 , 52 ) ;
+        Vert = TRUE ;
     };
     FixedLine GRP_OUTPUT
     {
@@ -263,8 +264,8 @@ TabPage TP_PRINT_OPTIONS
         Pos = MAP_APPFONT ( 136 , 14  ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         Text = "Standa~rd" ;
-        Text [ ENGLISH ] = "Default" ;
-        Text [ english_us ] = "Default" ;
+        Text [ ENGLISH ] = "~Default" ;
+        Text [ english_us ] = "~Default" ;
         TabStop = TRUE ;
         Text [ portuguese_brazilian ] = "Standard" ;
         Text [ swedish ] = "Standa~rd" ;
@@ -292,7 +293,7 @@ TabPage TP_PRINT_OPTIONS
         Pos = MAP_APPFONT ( 136 , 28  ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         Text = "Graustu~fen" ;
-        Text [ ENGLISH ] = "Grayscale" ;
+        Text [ ENGLISH ] = "Gra~yscale" ;
         Text [ english_us ] = "Gra~yscale" ;
         TabStop = TRUE ;
         Text [ portuguese_brazilian ] = "Graustufen" ;
@@ -321,7 +322,7 @@ TabPage TP_PRINT_OPTIONS
         Pos = MAP_APPFONT ( 136 , 42  ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         Text = "Schwarz~weiß" ;
-        Text [ ENGLISH ] = "Black & White" ;
+        Text [ ENGLISH ] = "Black & ~white" ;
         Text [ english_us ] = "Black & ~white" ;
         TabStop = TRUE ;
         Text [ portuguese_brazilian ] = "Schwarzwei?" ;
@@ -379,7 +380,7 @@ TabPage TP_PRINT_OPTIONS
         Pos = MAP_APPFONT ( 12 , 83  ) ;
         Size = MAP_APPFONT ( 90 , 10 ) ;
         Text = "Seiten~name" ;
-        Text [ ENGLISH ] = "Page~name" ;
+        Text [ ENGLISH ] = "~Page name" ;
         Text [ norwegian ] = "Side~navn" ;
         Text [ italian ] = "Nome pagina" ;
         Text [ portuguese_brazilian ] = "Nome da ~p?gina" ;
@@ -409,7 +410,7 @@ TabPage TP_PRINT_OPTIONS
         Pos = MAP_APPFONT ( 12 , 97  ) ;
         Size = MAP_APPFONT ( 90 , 10 ) ;
         Text = "Dat~um" ;
-        Text [ ENGLISH ] = "~Date" ;
+        Text [ ENGLISH ] = "D~ate" ;
         Text [ norwegian ] = "~Dato" ;
         Text [ italian ] = "Data" ;
         Text [ portuguese_brazilian ] = "~Data" ;
@@ -439,7 +440,7 @@ TabPage TP_PRINT_OPTIONS
         Pos = MAP_APPFONT ( 12 , 111  ) ;
         Size = MAP_APPFONT ( 90 , 10 ) ;
         Text = "Z~eit" ;
-        Text [ ENGLISH ] = "~Time" ;
+        Text [ ENGLISH ] = "Ti~me" ;
         Text [ norwegian ] = "~Tidspunkt" ;
         Text [ italian ] = "Orario" ;
         Text [ portuguese_brazilian ] = "~Hora" ;
@@ -496,8 +497,9 @@ TabPage TP_PRINT_OPTIONS
     };
     FixedLine FL_SEPARATOR2
     {
-        Pos = MAP_APPFONT ( 125 , 79  ) ;
-        Size = MAP_APPFONT ( 4 , 82 ) ;
+        Pos = MAP_APPFONT ( 125 , 83 ) ;
+        Size = MAP_APPFONT ( 4 , 80 ) ;
+        Vert = TRUE ;
     };
     FixedLine GRP_PAGE
     {
@@ -533,7 +535,7 @@ TabPage TP_PRINT_OPTIONS
         Pos = MAP_APPFONT ( 136 , 83  ) ;
         Size = MAP_APPFONT ( 110 , 10 ) ;
         Text = "St~andard" ;
-        Text [ ENGLISH ] = "~Default" ;
+        Text [ ENGLISH ] = "~Standard" ;
         TabStop = TRUE ;
         Text [ english_us ] = "~Standard" ;
         Text [ italian ] = "St~andard" ;
@@ -621,10 +623,10 @@ TabPage TP_PRINT_OPTIONS
         Pos = MAP_APPFONT ( 136, 125  ) ;
         Size = MAP_APPFONT ( 110 , 10 ) ;
         Text = "~Prospekt" ;
-        Text [ ENGLISH ] = "~Booklet" ;
+        Text [ ENGLISH ] = "~Brochure" ;
         TabStop = TRUE ;
         Text [ dutch ] = "~Brochure" ;
-        Text [ english_us ] = "B~rochure" ;
+        Text [ english_us ] = "~Brochure" ;
         Text [ italian ] = "Depliant" ;
         Text [ spanish ] = "~Prospecto" ;
         Text [ french ] = "~Prospectus" ;
@@ -647,10 +649,10 @@ TabPage TP_PRINT_OPTIONS
     };
     CheckBox CBX_FRONT
     {
-        Pos = MAP_APPFONT ( 144 , 139  ) ;
+        Pos = MAP_APPFONT ( 145 , 139  ) ;
         Size = MAP_APPFONT ( 53 , 10 ) ;
         Text = "~Vorderseite" ;
-        Text [ ENGLISH ] = "Front" ;
+        Text [ ENGLISH ] = "Fr~ont side" ;
         TabStop = TRUE ;
         Text [ english_us ] = "Fr~ont side" ;
         Text [ italian ] = "Davanti pagina" ;
@@ -678,8 +680,8 @@ TabPage TP_PRINT_OPTIONS
     {
         Pos = MAP_APPFONT ( 202 , 139  ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text = "Rücks~eite" ;
-        Text [ ENGLISH ] = "Back" ;
+        Text = "R~ückseite" ;
+        Text [ ENGLISH ] = "Ba~ck side" ;
         TabStop = TRUE ;
         Text [ english_us ] = "Ba~ck side" ;
         Text [ italian ] = "Retro pagina" ;
@@ -708,7 +710,7 @@ TabPage TP_PRINT_OPTIONS
         Pos = MAP_APPFONT ( 136 , 153  ) ;
         Size = MAP_APPFONT ( 118 , 10 ) ;
         Text = "Papierschacht aus ~Druckereinstellung" ;
-        Text [ ENGLISH ] = "Paperbin from ~Printer settings" ;
+        Text [ ENGLISH ] = "Paperbin from printer s~ettings" ;
         Text [ english_us ] = "Paper tray from printer s~ettings" ;
         Text [ portuguese_brazilian ] = "Aus ~Druckereinstellung" ;
         Text [ swedish ] = "Pappersfack från s~krivarinställning" ;

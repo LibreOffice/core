@@ -2,9 +2,9 @@
  *
  *  $RCSfile: copydlg.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: thb $ $Date: 2001-06-15 18:16:50 $
+ *  last change: $Author: dr $ $Date: 2001-06-25 13:34:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@ ModalDialog DLG_COPY
     HelpID = SID_COPYOBJECTS ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 204 , 175 ) ;
+    Size = MAP_APPFONT ( 204 , 177 ) ;
     Text = "Duplizieren" ;
     Text [ ENGLISH ] = "Duplicate" ;
     Text [ norwegian ] = "Duplicate" ;
@@ -103,8 +103,8 @@ ModalDialog DLG_COPY
     };
     FixedText FT_COPIES
     {
-        Pos = MAP_APPFONT ( 6 , 8  ) ;
-        Size = MAP_APPFONT ( 60 , 10 ) ;
+        Pos = MAP_APPFONT ( 6 , 9 ) ;
+        Size = MAP_APPFONT ( 60 , 8 ) ;
         Text = "Anzahl an ~Kopien" ;
         Text [ ENGLISH ] = "Number of ~Copies" ;
         Text [ norwegian ] = "Antall ~Kopier" ;
@@ -133,8 +133,8 @@ ModalDialog DLG_COPY
     NumericField NUM_FLD_COPIES
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 76 , 6  ) ;
-        Size = MAP_APPFONT ( 37 , 12 ) ;
+        Pos = MAP_APPFONT ( 76 , 7 ) ;
+        Size = MAP_APPFONT ( 35 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
         Spin = TRUE ;
@@ -147,7 +147,7 @@ ModalDialog DLG_COPY
     };
     ImageButton BTN_SET_VIEWDATA
     {
-        Pos = MAP_APPFONT ( 125 , 5  ) ;
+        Pos = MAP_APPFONT ( 122 , 6 ) ;
         Size = MAP_APPFONT ( 14 , 14 ) ;
         QuickHelpText = "Werte von Selektion aufnehmen" ;
         QuickHelpText [ ENGLISH ] = "Get values from selection" ;
@@ -166,7 +166,7 @@ ModalDialog DLG_COPY
         QuickHelpText [ french ] = "Utiliser les valeurs de la sÈlection" ;
         QuickHelpText [ dutch ] = "Waarden uit selectie overnemen" ;
         QuickHelpText [ portuguese ] = "Aplica os valores seleccionados" ;
-    QuickHelpText[ russian ] = "œËÌˇÚ¸ ÁÌ‡˜ÂÌËˇ ËÁ ÓÚ·Ó‡";
+        QuickHelpText[ russian ] = "œËÌˇÚ¸ ÁÌ‡˜ÂÌËˇ ËÁ ÓÚ·Ó‡";
         QuickHelpText[ polish ] = "Wpisz wartoúci selekcji!";
         QuickHelpText[ japanese ] = "ëIëÇµÇΩêîílÇèëÇ´Ç±Çﬁ!";
         QuickHelpText[ chinese_simplified ] = "Ω” ‹—°‘Òµƒ ˝÷µ";
@@ -211,8 +211,8 @@ ModalDialog DLG_COPY
     MetricField MTR_FLD_ANGLE
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 76 , 67  ) ;
-        Size = MAP_APPFONT ( 50 , 12 ) ;
+        Pos = MAP_APPFONT ( 76 , 69 ) ;
+        Size = MAP_APPFONT ( 45 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
         Spin = TRUE ;
@@ -247,8 +247,8 @@ ModalDialog DLG_COPY
     };
     FixedText FT_ANGLE
     {
-        Pos = MAP_APPFONT ( 12 , 69  ) ;
-        Size = MAP_APPFONT ( 60 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 71 ) ;
+        Size = MAP_APPFONT ( 60 , 8 ) ;
         Text = "~Drehwinkel" ;
         Text [ ENGLISH ] = "~Angle" ;
         Text [ norwegian ] = "~Vinkel" ;
@@ -276,8 +276,8 @@ ModalDialog DLG_COPY
     };
     FixedText FT_MOVE_X
     {
-        Pos = MAP_APPFONT ( 12 , 37  ) ;
-        Size = MAP_APPFONT ( 60 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 39 ) ;
+        Size = MAP_APPFONT ( 60 , 8 ) ;
         Text = "~X-Achse" ;
         Text [ ENGLISH ] = "~X-Axis" ;
         Text [ norwegian ] = "~X-Axis" ;
@@ -306,8 +306,8 @@ ModalDialog DLG_COPY
     MetricField MTR_FLD_MOVE_X
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 76 , 35  ) ;
-        Size = MAP_APPFONT ( 50 , 12 ) ;
+        Pos = MAP_APPFONT ( 76 , 37 ) ;
+        Size = MAP_APPFONT ( 45 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
         Spin = TRUE ;
@@ -323,8 +323,8 @@ ModalDialog DLG_COPY
     MetricField MTR_FLD_MOVE_Y
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 76 , 51  ) ;
-        Size = MAP_APPFONT ( 50 , 12 ) ;
+        Pos = MAP_APPFONT ( 76 , 53 ) ;
+        Size = MAP_APPFONT ( 45 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
         Spin = TRUE ;
@@ -340,8 +340,8 @@ ModalDialog DLG_COPY
     MetricField MTR_FLD_WIDTH
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 76 , 96  ) ;
-        Size = MAP_APPFONT ( 50 , 12 ) ;
+        Pos = MAP_APPFONT ( 76 , 98 ) ;
+        Size = MAP_APPFONT ( 45 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
         Spin = TRUE ;
@@ -357,8 +357,8 @@ ModalDialog DLG_COPY
     MetricField MTR_FLD_HEIGHT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 76 , 112  ) ;
-        Size = MAP_APPFONT ( 50 , 12 ) ;
+        Pos = MAP_APPFONT ( 76 , 114 ) ;
+        Size = MAP_APPFONT ( 45 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
         Spin = TRUE ;
@@ -373,8 +373,8 @@ ModalDialog DLG_COPY
     };
     FixedText FT_MOVE_Y
     {
-        Pos = MAP_APPFONT ( 12 , 53  ) ;
-        Size = MAP_APPFONT ( 60 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 55 ) ;
+        Size = MAP_APPFONT ( 60 , 8 ) ;
         Text = "~Y-Achse" ;
         Text [ ENGLISH ] = "~Y-Axis" ;
         Text [ norwegian ] = "~Y-Axis" ;
@@ -402,8 +402,8 @@ ModalDialog DLG_COPY
     };
     FixedText FT_WIDTH
     {
-        Pos = MAP_APPFONT ( 12 , 98  ) ;
-        Size = MAP_APPFONT ( 60 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 100 ) ;
+        Size = MAP_APPFONT ( 60 , 8 ) ;
         Text = "~Breite" ;
         Text [ ENGLISH ] = "~Width" ;
         Text [ norwegian ] = "~Bredde" ;
@@ -431,9 +431,8 @@ ModalDialog DLG_COPY
     };
     FixedText FT_HEIGHT
     {
-        Pos = MAP_APPFONT ( 12 , 114  ) ;
-        Size = MAP_APPFONT ( 60 , 10 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? ~Hˆhe : ~H˜he */
+        Pos = MAP_APPFONT ( 12 , 116 ) ;
+        Size = MAP_APPFONT ( 60 , 8 ) ;
         Text = "Hˆh~e" ;
         Text [ ENGLISH ] = "~Height" ;
         Text [ norwegian ] = "~H¯yde" ;
@@ -461,7 +460,7 @@ ModalDialog DLG_COPY
     };
     FixedLine GRP_MOVEMENT
     {
-        Pos = MAP_APPFONT ( 6 , 24  ) ;
+        Pos = MAP_APPFONT ( 6 , 26 ) ;
         Size = MAP_APPFONT ( 136 , 8 ) ;
         Text = "Verschiebung" ;
         Text [ ENGLISH ] = "Movement" ;
@@ -490,9 +489,8 @@ ModalDialog DLG_COPY
     };
     FixedLine GRP_ENLARGEMENT
     {
-        Pos = MAP_APPFONT ( 6 , 85  ) ;
+        Pos = MAP_APPFONT ( 6 , 87 ) ;
         Size = MAP_APPFONT ( 136 , 8 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? Vergrˆﬂerung : Vergr˜òerung */
         Text = "Vergrˆﬂerung" ;
         Text [ ENGLISH ] = "Enlargement" ;
         Text [ norwegian ] = "Forst¯rrelse " ;
@@ -520,10 +518,8 @@ ModalDialog DLG_COPY
     };
     FixedLine GRP_COLOR
     {
-        Pos = MAP_APPFONT ( 6 , 130  ) ;
+        Pos = MAP_APPFONT ( 6 , 132 ) ;
         Size = MAP_APPFONT ( 136 , 8 ) ;
-         //Pos = MAP_APPFONT( 6, 142 );
-         //Size = MAP_APPFONT( 168, 48 );
         Text = "Farben" ;
         Text [ ENGLISH ] = "Colors" ;
         Text [ dutch ] = "Kleuren" ;
@@ -551,20 +547,16 @@ ModalDialog DLG_COPY
     ListBox LB_START_COLOR
     {
         Border = TRUE ;
-         //Pos = MAP_APPFONT( 57, 153 );
-         //Size = MAP_APPFONT( 111, 56 );
-        Pos = MAP_APPFONT ( 76 , 141  ) ;
-        Size = MAP_APPFONT ( 50 , 90 ) ;
+        Pos = MAP_APPFONT ( 76 , 143 ) ;
+        Size = MAP_APPFONT ( 60 , 90 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         DDExtraWidth = TRUE ;
     };
     FixedText FT_START_COLOR
     {
-         //Pos = MAP_APPFONT( 12, 155 );
-         //Size = MAP_APPFONT( 40, 10 );
-        Pos = MAP_APPFONT ( 12 , 143  ) ;
-        Size = MAP_APPFONT ( 60 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 145 ) ;
+        Size = MAP_APPFONT ( 60 , 8 ) ;
         Text = "~Anfang" ;
         Text [ ENGLISH ] = "~Start" ;
         Text [ dutch ] = "~Begin" ;
@@ -592,20 +584,16 @@ ModalDialog DLG_COPY
     ListBox LB_END_COLOR
     {
         Border = TRUE ;
-         //Pos = MAP_APPFONT( 57, 171 );
-         //Size = MAP_APPFONT( 111, 56 );
-        Pos = MAP_APPFONT ( 76 , 157  ) ;
-        Size = MAP_APPFONT ( 50 , 90 ) ;
+        Pos = MAP_APPFONT ( 76 , 159 ) ;
+        Size = MAP_APPFONT ( 60 , 90 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         DDExtraWidth = TRUE ;
     };
     FixedText FT_END_COLOR
     {
-         //Pos = MAP_APPFONT( 12, 172 );
-         //Size = MAP_APPFONT( 40, 10 );
-        Pos = MAP_APPFONT ( 12 , 159  ) ;
-        Size = MAP_APPFONT ( 60 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 161 ) ;
+        Size = MAP_APPFONT ( 60 , 8 ) ;
         Text = "E~nde" ;
         Text [ ENGLISH ] = "~End" ;
         Text [ dutch ] = "~Einde" ;

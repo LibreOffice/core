@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prntopts.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-05-04 09:19:35 $
+ *  last change: $Author: dr $ $Date: 2001-06-25 13:31:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,10 @@ private:
     CheckBox            aCbxOutline;
 
     FixedLine           aSeparator1FL;
+    FixedLine           aGrpOutput;
+    RadioButton         aRbtColor;
+    RadioButton         aRbtGrayscale;
+    RadioButton         aRbtBlackWhite;
 
     FixedLine           aGrpPrintExt;
     CheckBox            aCbxPagename;
@@ -105,13 +109,7 @@ private:
     CheckBox            aCbxTime;
     CheckBox            aCbxHiddenPages;
 
-    FixedLine           aGrpOutput;
-    RadioButton         aRbtColor;
-    RadioButton         aRbtGrayscale;
-    RadioButton         aRbtBlackWhite;
-
     FixedLine           aSeparator2FL;
-
     FixedLine           aGrpPageoptions;
     RadioButton         aRbtDefault;
     RadioButton         aRbtPagesize;
