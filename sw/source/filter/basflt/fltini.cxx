@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltini.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-02 12:28:13 $
+ *  last change: $Author: hr $ $Date: 2004-11-27 11:42:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,7 +177,6 @@
 #ifndef _IODETECT_CXX
 #include <iodetect.cxx>
 #endif
-
 
 using namespace utl;
 using namespace rtl;
@@ -657,23 +656,30 @@ SwRelNumRuleSpaces::~SwRelNumRuleSpaces()
 
 void SwRelNumRuleSpaces::SetNumRelSpaces( SwDoc& rDoc )
 {
-    SwNumRuleTbl* pRuleTbl = bNewDoc ? &rDoc.GetNumRuleTbl() : pNumRuleTbl;
+    const SwNumRuleTbl* pRuleTbl = NULL;
+
     if( !bNewDoc )
     {
         // jetzt alle schon vorhanden NumRules aus dem Array entfernen,
         // damit nur die neuen angepasst werden
         SwNumRuleTbl aNumRuleTbl;
-        aNumRuleTbl.Insert( pRuleTbl, 0 );
-        pRuleTbl->Remove( 0, pRuleTbl->Count() );
+        aNumRuleTbl.Insert( pNumRuleTbl, 0 );
+        pNumRuleTbl->Remove( 0, pRuleTbl->Count() );
         const SwNumRuleTbl& rRuleTbl = rDoc.GetNumRuleTbl();
         SwNumRule* pRule;
 
         for( USHORT n = 0; n < rRuleTbl.Count(); ++n )
             if( USHRT_MAX == aNumRuleTbl.GetPos( ( pRule = rRuleTbl[ n ] )))
                 // war noch nicht vorhanden, also neu
-                pRuleTbl->Insert( pRule, pRuleTbl->Count() );
+                pNumRuleTbl->Insert( pRule, pRuleTbl->Count() );
 
         aNumRuleTbl.Remove( 0, aNumRuleTbl.Count() );
+
+        pRuleTbl = pNumRuleTbl;
+    }
+    else
+    {
+        pRuleTbl = &rDoc.GetNumRuleTbl();
     }
 
     if( pRuleTbl )
