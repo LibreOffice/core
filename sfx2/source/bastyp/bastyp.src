@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bastyp.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-08 21:50:19 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 21:53:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -307,8 +307,8 @@ String ERR_FILENAMECHECK83
     Text[ japanese ] = "w’θ‚µ‚½Μ§²Ω–Ό‚ª–³ψ‚Ε‚·B\nΜ§²Ω–Ό‚ΝΕ‚8•¶‚ά‚ΕA\nΜ§²Ωg’£q‚ΝΕ‚3•¶‚ά‚Ε‚Ζ§ΐ‚ª‚ ‚θ‚ά‚·B’Σ‚µ‚Δ‚­‚Ύ‚³‚ΆB";
     Text[ chinese_traditional ] = "Ώι¤JªΊΐΙ®Χ¦WµL®Δ΅C\n½Π±z―d·NΐΙ®Χ¦W¤£±o¶WΉL8­Σ¦r¤Έ΅C\n°ΖΐΙ¦W¤£±o¶WΉL 3 ­Σ¦r¤Έ΅C";
     Text[ arabic ] = "ΗΣγ Ηαγαέ ΗαγυΟΞα ΫνΡ ΥΗαΝ.\n ΗαΡΜΗΑ γαΗΝΩΙ Γδ ΗΣγ Ηαγαέ νΜΘ ΓαΗ νÒνΟ Ϊδ\nΛγΗδνΙ ΝΡζέ ζΗγΚΟΗΟε Ϊδ ΛαΗΛΙ.";
-    Text[ greek ] = "Το επιλεγμένο όνομα αρχείου δεν είναι έγκυρο.\nΠαρακαλώ προσέξτε ότι δεν επιτρέπεται το όνομα του αρχείου να υπερβαίνει τους 8 χαρακτήρες\n ?";
-    Text[ korean ] = "ΑφΑ¤µΘ ΖΔΐΟ ΐΜΈ§ΐΜ ΐ―ΘΏΗΟΑφ ΎΚ½ΐ΄Ο΄Ω.\nΖΔΐΟΐΗ ΐΜΈ§ΐΜ 8Ή®ΐΪΈ¦ ΓΚ°ϊΗÒ Όφ Ύψ΄Ω΄ΒΑ΅°ϊ   \n Θ®ΐεΐΪ°΅3Ή®ΐΪΈ¦ ΓΚ°ϊ ΗÒΌφ Ύψ΄Ω΄ΒΑ΅Ώ΅ ΐ―ΐΗΗΟ½Κ½ΓΏΐ.";
+    Text[ greek ] = "Το επιλεγμένο όνομα αρχείου δεν είναι έγκυρο.\nΠαρακαλώ προσέξτε ότι δεν επιτρέπεται το όνομα του αρχείου να υπερβαίνει τους 8 χαρακτήρες\n ? ";
+    Text[ korean ] = "ΑφΑ¤µΘ ΖΔΐΟ ΐΜΈ§ΐΜ ΐ―ΘΏΗΟΑφ ΎΚ½ΐ΄Ο΄Ω.\nΖΔΐΟΐΗ ΐΜΈ§ΐΜ 8Ή®ΐΪΈ¦ ΓΚ°ϊΗÒ Όφ Ύψ΄Ω΄ΒΑ΅°ϊ\nΘ®ΐεΐΪ°΅3Ή®ΐΪΈ¦ ΓΚ°ϊ ΗÒΌφ Ύψ΄Ω΄ΒΑ΅Ώ΅ ΐ―ΐΗΗΟ½Κ½ΓΏΐ.";
     Text[ turkish ] = "Girilen dosya adύ geηerli deπil.\nDosya adύ en fazla 8 ve dosyan\\uzantύsύ en fazla 3 karakter uzunluπunda olabilir.";
     Text[ catalan ] = "El nombre del archivo especificado no es vαlido.\\Tenga en cuenta que el nombre debe tener un mαximo de 8 caracteres\ny la terminaciσn 3.";
     Text[ finnish ] = "Annettu tiedostonimi on virheellinen.\nTiedostonimi voi olla korkeintaan kahdeksan merkin pituinen\nja tunniste voi olla enintδδn kolmen merkin pituinen.";
@@ -585,5 +585,6 @@ String STR_HTML_GENERATOR
     Text = "%PRODUCTNAME %PRODUCTVERSION %PRODUCTEXTENSION (%1)" ;
     Text[ language_user1 ] = "pb: no translation";
 };
+
 
 
