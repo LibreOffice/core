@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableFormula.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: os $ $Date: 2001-10-17 11:12:34 $
+ *  last change: $Author: os $ $Date: 2001-10-17 13:58:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,13 +80,14 @@ service TableFormula
     /** contains the formula.     */
     [property] string Formula;
 
-    /** the is the content of this field
-    */
-    [property] string Content;
+    /** contains the current content of the text field.
+        <p> This property is escpecially usefull for import/export purposes. </p>
+     */
+    [property] string CurrentPresentation;
 
-    /** determins whether the formula is evaluated or displayed as text.
+    /** determins whether the formula displayed as text or evaluated.
     */
-    [property] boolean IsExpression;
+    [property] boolean IsShowFormula;
     /** this is the number format for this field
         @see <type>scope="com::sun::star::util">NumberFormatter</type>
     */
