@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchdlg.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-08 23:36:13 $
+ *  last change: $Author: tl $ $Date: 2001-06-12 13:52:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -337,31 +337,9 @@ ModelessDialog RID_SVXDLG_SEARCH
     {
         Pos = MAP_APPFONT ( 102 , 103 ) ;
         Size = MAP_APPFONT ( 87 , 10 ) ;
-        Text = "E~xakte Suche" ;
-        Text [ ENGLISH ] = "Ma~tch Case" ;
-        Text [ norwegian ] = "Jam~før Tilfelle" ;
-        Text [ italian ] = "Ricerca esatta" ;
-        Text [ portuguese_brazilian ] = "Igua~lar Caixa" ;
-        Text [ portuguese ] = "Procura e~xacta" ;
-        Text [ finnish ] = "Sama kirjainkoko" ;
-        Text [ danish ] = "Søg eksakt" ;
-        Text [ french ] = "Respecter la ~casse" ;
-        Text [ swedish ] = "E~xakt sökning" ;
-        Text [ dutch ] = "E~xact dezelfde tekens" ;
-        Text [ spanish ] = "Coincidencia e~xacta" ;
-        Text [ english_us ] = "Ma~tch case" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "¾«È·ËÑÑ°(~T)";
-        Text[ russian ] = "Òî÷íûé ïîèñê";
-        Text[ polish ] = "Dok³adne wyszukiwanie";
-        Text[ japanese ] = "Š®‘S‚É“¯ˆê‚È‚à‚Ì‚ğŒŸõ(~T)";
-        Text[ chinese_traditional ] = "ºë½T·j´M(~T)";
-        Text[ arabic ] = "ÈÍË ÏŞíŞ";
-        Text[ language_user1 ] = " ";
-        Text[ greek ] = "ÁêñéâŞ~ò áíáæŞôçóç";
-        Text[ korean ] = "»ó¼¼ÇÏ°Ô Ã£±â(~T)";
-        Text[ turkish ] = "~BÜYÜK/küçük harf duyarlı";
-        Text[ catalan ] = "Coincidencia e~xacta";
+        Text = "E~xakte Suche" ;
+        Text [ ENGLISH ] = "Case sensitive" ;
     };
     CheckBox BTN_BACKWARDS
     {
