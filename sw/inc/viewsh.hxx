@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 13:17:09 $
+ *  last change: $Author: rt $ $Date: 2003-06-12 07:37:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,7 +153,11 @@ class ViewShell : public Ring
 
     Window       *pWin;              // = 0 during printing or pdf export
     OutputDevice *pOut;              // Window, Printer, VirtDev, ...
-
+    OutputDevice* mpTmpRef;           // Temporariy reference device. Is used
+                                     // during (printer depending) prospect
+                                     // and page preview printing
+                                     // (because a scaling has to be set at
+                                     // the original printer)
 
     SwViewOption *pOpt;
     SwAccessibilityOptions* pAccOptions;
