@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-25 17:57:46 $
+#   last change: $Author: vg $ $Date: 2003-04-15 14:35:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,7 +65,6 @@ PRJNAME=filter
 TARGET=flash
 
 ENABLE_EXCEPTIONS=TRUE
-USE_DEFFILE=TRUE
 GEN_HID=TRUE
 
 # --- Settings ----------------------------------
@@ -114,30 +113,33 @@ RESLIB1NAME=$(TARGET)
 RESLIB1SRSFILES= $(SRS)$/$(TARGET).srs
 
 SHL1TARGET=$(TARGET)$(UPD)$(DLLPOSTFIX)
-    
-SHL1STDLIBS=\
-    $(GOODIESLIB) \
-    $(SVTOOLLIB) \
-    $(CPPULIB)			\
-    $(CPPUHELPERLIB)	\
-    $(COMPHELPERLIB)	\
-    $(VOSLIB)			\
-    $(SALLIB)			\
-    $(TOOLSLIB)			\
-    $(VCLLIB)			\
-    $(UNOTOOLSLIB)			\
-    $(ONELIB)			\
+
+# static libraries
+SHL1STDLIBS+=\
     $(ZLIB3RDLIB)
 
-#	$(SVLLIB)			\
+# dynamic libraries
+SHL1STDLIBS+=\
+    $(SVTOOLLIB)		\
+    $(GOODIESLIB)		\
+    $(VCLLIB)			\
+    $(UNOTOOLSLIB)		\
+    $(TOOLSLIB)			\
+    $(COMPHELPERLIB)	\
+    $(CPPUHELPERLIB)	\
+    $(CPPULIB)			\
+    $(SALLIB)
+
+#	$(ONELIB)			\
+#	$(VOSLIB)			\
 
 SHL1DEPN=
 SHL1IMPLIB=	i$(SHL1TARGET)
+SHL1VERSIONMAP=exports.map
 SHL1LIBS=	$(SLB)$/$(TARGET).lib
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME=$(SHL1TARGET)
-DEF1EXPORTFILE=exports.dxp
 
 # --- Targets ----------------------------------
 
