@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imp_op.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 13:38:56 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:55:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,12 +144,14 @@ struct ExcelChartData
     String                  aLastLabel;         // letzter SERIESTEXT-Label
     SfxItemSet*             pAttrs;             // Attribute
     ExcelChartData*         pNext;              // wer weiss schon...
-    UINT16                  nRow1, nCol1, nRow2, nCol2, nTab1, nTab2;   // Quellbereich
-    UINT16                  nBaseTab;
+    SCROW                   nRow1, nRow2;
+    SCCOL                   nCol1, nCol2;
+    SCTAB                   nTab1, nTab2;   // Quellbereich
+    SCTAB                   nBaseTab;
     UINT32                  nObjNum;
 
                             ExcelChartData( ScDocument*, const Point&, const Point&,
-                                            const UINT16 nBaseTab );
+                                            const SCTAB nBaseTab );
                             ~ExcelChartData();
 };
 
@@ -159,10 +161,10 @@ private:
     OutlineBuffer*                      pColOutlineBuff;
     OutlineBuffer*                      pRowOutlineBuff;
     ColRowSettings*                     pColRowBuff;
-    UINT16 nTab;
+    SCTAB nTab;
 
 public:
-    OutlineDataBuffer(RootData& rRootData, UINT16 nTab);
+    OutlineDataBuffer(RootData& rRootData, SCTAB nScTab);
 
     inline ColRowSettings* GetColRowBuff() const { return pColRowBuff ; }
     inline OutlineBuffer* GetColOutline()  const { return pColOutlineBuff; }
@@ -198,7 +200,7 @@ protected:
 
     UINT16                  nIxfeIndex;         // merkt sich Angabe im IXFE-Record
     UINT16                  nLastXF;            // letzter XF in Formula-Record
-    UINT16                  nBdshtTab;          // Counter fuer Boundsheet
+    SCTAB                   nBdshtTab;          // Counter fuer Boundsheet
     UINT16                  nFirstVisTab;       // index of first visible tab for WINDOW2
     ScFormulaCell*          pLastFormCell;      // fuer String-Records
 
@@ -329,7 +331,7 @@ protected:
     void                    ChartValuerange( void );
 
     // ---------------------------------------------------------------
-    void                    Formula( UINT16 nCol, UINT16 nRow, UINT16 nTab,
+    void                    Formula( SCCOL nCol, SCROW nRow, SCTAB nTab,
                                 UINT16 nXF, UINT16 nFormLen, double &rCurVal,
                                 BYTE nFlag, BOOL bShrFmla );
                                             //      -> excform.cxx
