@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: mt $ $Date: 2001-07-16 15:20:46 $
+ *  last change: $Author: thb $ $Date: 2001-07-17 07:04:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,11 +200,13 @@ sal_Bool EditEngine::IsInUndo()
     return pImpEditEngine->IsInUndo();
 }
 
+#ifndef SVX_LIGHT
 SfxUndoManager& EditEngine::GetUndoManager()
 {
     DBG_CHKTHIS( EditEngine, 0 );
     return pImpEditEngine->GetUndoManager();
 }
+#endif
 
 void EditEngine::UndoActionStart( sal_uInt16 nId )
 {

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 17:01:23 $
+#   last change: $Author: thb $ $Date: 2001-07-17 07:04:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -102,7 +102,6 @@ SLOFILES=	\
             $(SLO)$/outlobj.obj
 
 SVXLIGHTOBJFILES= \
-            $(OBJ)$/outlundo.obj	\
             $(OBJ)$/outliner.obj 	\
             $(OBJ)$/outlin2.obj		\
             $(OBJ)$/paralist.obj 	\

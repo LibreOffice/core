@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewpt3d.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:15 $
+ *  last change: $Author: thb $ $Date: 2001-07-17 07:04:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -489,6 +489,7 @@ void Viewport3D::SetFarClipDist(double fNewFCD)
 
 void Viewport3D::WriteData31(SvStream& rOut) const
 {
+#ifndef SVX_LIGHT
     rOut << aVRP;
     rOut << aVPN;
     rOut << aVUV;
@@ -503,6 +504,7 @@ void Viewport3D::WriteData31(SvStream& rOut) const
     rOut << aViewWin.Y;
     rOut << aViewWin.W;
     rOut << aViewWin.H;
+#endif
 }
 
 /*************************************************************************
@@ -514,6 +516,7 @@ void Viewport3D::WriteData31(SvStream& rOut) const
 
 void Viewport3D::WriteData(SvStream& rOut) const
 {
+#ifndef SVX_LIGHT
     if (rOut.GetVersion() < 3560)
     {
         Viewport3D::WriteData31(rOut);
@@ -538,8 +541,8 @@ void Viewport3D::WriteData(SvStream& rOut) const
     rOut << aViewWin.Y;
     rOut << aViewWin.W;
     rOut << aViewWin.H;
+#endif
 }
-
 
 /*************************************************************************
 |*
@@ -633,11 +636,13 @@ void Viewport3D::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
 |*
 \************************************************************************/
 
+#ifndef SVX_LIGHT
 SvStream& operator<<(SvStream& rOStream, const Viewport3D& rViewpt)
 {
     rViewpt.WriteData31(rOStream);
     return rOStream;
 }
+#endif
 
 /*************************************************************************
 |*

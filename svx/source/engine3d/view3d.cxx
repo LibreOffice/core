@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view3d.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: aw $ $Date: 2001-07-03 14:23:11 $
+ *  last change: $Author: thb $ $Date: 2001-07-17 07:04:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1342,6 +1342,7 @@ BOOL E3dView::BegDragObj(const Point& rPnt, OutputDevice* pOut,
     SdrHdl* pHdl, short nMinMov,
     SdrDragMethod* pForcedMeth)
 {
+#ifndef SVX_LIGHT
     if (b3dCreationActive && aMark.GetMarkCount())
     {
         // bestimme alle selektierten Polygone und gebe die gespiegelte Hilfsfigur aus
@@ -1457,6 +1458,9 @@ BOOL E3dView::BegDragObj(const Point& rPnt, OutputDevice* pOut,
         }
     }
     return SdrView::BegDragObj(rPnt, pOut, pHdl, nMinMov, pForcedMeth);
+#else
+    return sal_False;
+#endif
 }
 
 /*************************************************************************

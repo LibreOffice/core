@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: mt $ $Date: 2001-03-09 18:08:55 $
+#   last change: $Author: thb $ $Date: 2001-07-17 07:04:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -127,7 +127,6 @@ SVXLIGHTOBJFILES= \
             $(OBJ)$/editeng.obj	\
             $(OBJ)$/editobj.obj	\
             $(OBJ)$/editsel.obj	\
-            $(OBJ)$/editundo.obj \
             $(OBJ)$/editview.obj  \
             $(OBJ)$/eerdll.obj	\
             $(OBJ)$/eeobj.obj	\

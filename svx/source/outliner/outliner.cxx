@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outliner.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2001-07-11 13:40:45 $
+ *  last change: $Author: thb $ $Date: 2001-07-17 07:04:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -335,7 +335,9 @@ void Outliner::Init( USHORT nMode )
 
     ImplInitDepth( 0, GetMinDepth(), FALSE );
 
+#ifndef SVX_LIGHT
     GetUndoManager().Clear();
+#endif
 }
 
 void Outliner::SetMinDepth( USHORT nDepth, BOOL bCheckParagraphs )
@@ -866,12 +868,14 @@ void Outliner::ImplInitDepth( USHORT nPara, USHORT nDepth, BOOL bCreateUndo, BOO
         ImplCheckNumBulletItem( nPara );
         ImplCalcBulletText( nPara, FALSE, FALSE );
 
+#ifndef SVX_LIGHT
         if ( bUndo )
         {
             InsertUndo( new OutlinerUndoChangeDepth( this, nPara, nOldDepth, nDepth ) );
             if ( bUndoAction )
                 UndoActionEnd( OLUNDO_DEPTH );
         }
+#endif
 
         pEditEngine->SetUpdateMode( bUpdate );
     }
@@ -923,6 +927,7 @@ BOOL Outliner::Expand( Paragraph* pPara )
     if ( pParaList->HasHiddenChilds( pPara ) )
     {
         OLUndoExpand* pUndo;
+#ifndef SVX_LIGHT
         BOOL bUndo = IsUndoEnabled() && !IsInUndo();
         if( bUndo )
         {
@@ -931,6 +936,9 @@ BOOL Outliner::Expand( Paragraph* pPara )
             pUndo->pParas = 0;
             pUndo->nCount = (USHORT)pParaList->GetAbsPos( pPara );
         }
+#else
+        BOOL bUndo = sal_False;
+#endif
         pHdlParagraph = pPara;
         bIsExpanding = TRUE;
         pParaList->Expand( pPara );
@@ -954,6 +962,7 @@ BOOL Outliner::Collapse( Paragraph* pPara )
     {
         OLUndoExpand* pUndo;
         BOOL bUndo = FALSE;
+#ifndef SVX_LIGHT
         if( !IsInUndo() && IsUndoEnabled() )
             bUndo = TRUE;
         if( bUndo )
@@ -963,6 +972,7 @@ BOOL Outliner::Collapse( Paragraph* pPara )
             pUndo->pParas = 0;
             pUndo->nCount = (USHORT)pParaList->GetAbsPos( pPara );
         }
+#endif
         pHdlParagraph = pPara;
         bIsExpanding = FALSE;
         pParaList->Collapse( pPara );
@@ -1257,12 +1267,13 @@ void Outliner::ImpFilterIndents( ULONG nFirstPara, ULONG nLastPara )
     pEditEngine->SetUpdateMode( bUpdate );
 }
 
-
+#ifndef SVX_LIGHT
 SfxUndoManager& Outliner::GetUndoManager()
 {
     DBG_CHKTHIS(Outliner,0);
     return pEditEngine->GetUndoManager();
 }
+#endif
 
 void Outliner::ImpTextPasted( ULONG nStartPara, USHORT nCount )
 {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlin2.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mt $ $Date: 2001-06-22 10:56:51 $
+ *  last change: $Author: thb $ $Date: 2001-07-17 07:04:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -400,8 +400,10 @@ void Outliner::UndoActionEnd( USHORT nId )
 
 void Outliner::InsertUndo( EditUndo* pUndo )
 {
+#ifndef SVX_LIGHT
     DBG_CHKTHIS(Outliner,0);
     pEditEngine->GetUndoManager().AddUndoAction( pUndo, FALSE );
+#endif
 }
 
 BOOL Outliner::IsInUndo()

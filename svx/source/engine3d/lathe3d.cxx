@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lathe3d.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: aw $ $Date: 2001-07-10 10:09:51 $
+ *  last change: $Author: thb $ $Date: 2001-07-17 07:04:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -539,6 +539,7 @@ void E3dLatheObj::operator=(const SdrObject& rObj)
 
 void E3dLatheObj::WriteData(SvStream& rOut) const
 {
+#ifndef SVX_LIGHT
     long nVersion = rOut.GetVersion(); // Build_Nr * 10 z.B. 3810
     if(nVersion < 3800)
     {
@@ -655,6 +656,7 @@ void E3dLatheObj::WriteData(SvStream& rOut) const
         // Geometrie neu erzeugen, um E3dPolyObj's wieder loszuwerden
         ((E3dCompoundObject*)this)->ReCreateGeometry();
     }
+#endif
 }
 
 /*************************************************************************

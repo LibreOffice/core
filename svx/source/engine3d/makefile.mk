@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: kz $ $Date: 2000-11-28 11:16:19 $
+#   last change: $Author: thb $ $Date: 2001-07-17 07:04:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -112,9 +112,8 @@ SLOFILES= \
 
  SVXLIGHTOBJFILES= \
         $(OBJ)$/svx3ditems.obj		\
-         $(OBJ)$/deflt3d.obj		\
+        $(OBJ)$/deflt3d.obj		\
         $(OBJ)$/class3d.obj		\
-        $(OBJ)$/e3dundo.obj      \
         $(OBJ)$/volume3d.obj		\
         $(OBJ)$/viewpt3d.obj		\
         $(OBJ)$/camera3d.obj		\
@@ -135,11 +134,9 @@ SLOFILES= \
         $(OBJ)$/extrud3d.obj     \
         $(OBJ)$/lathe3d.obj		\
         $(OBJ)$/label3d.obj		\
-        $(OBJ)$/dragmt3d.obj		\
         $(OBJ)$/view3d.obj		\
         $(OBJ)$/view3d1.obj       \
-        $(OBJ)$/e3dcmpt.obj       \
-        $(OBJ)$/float3d.obj
+        $(OBJ)$/e3dcmpt.obj
 
 
 .IF "$(COM)"=="ICC"

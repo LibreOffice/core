@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.hxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: mt $ $Date: 2001-06-22 10:58:43 $
+ *  last change: $Author: thb $ $Date: 2001-07-17 07:04:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -957,12 +957,14 @@ inline void ImpEditEngine::TextModified()
     bFormatted = FALSE;
 }
 
+#ifndef SVX_LIGHT
 inline EditUndoManager& ImpEditEngine::GetUndoManager()
 {
     if ( !pUndoManager )
         pUndoManager = new EditUndoManager( this );
     return *pUndoManager;
 }
+#endif
 
 inline ParaPortion* ImpEditEngine::FindParaPortion( ContentNode* pNode ) const
 {

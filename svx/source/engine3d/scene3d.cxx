@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scene3d.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: aw $ $Date: 2001-06-26 14:04:27 $
+ *  last change: $Author: thb $ $Date: 2001-07-17 07:04:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -704,6 +704,7 @@ void E3dScene::InitTransformationSet()
 
 void E3dScene::WriteData(SvStream& rOut) const
 {
+#ifndef SVX_LIGHT
     long nVersion = rOut.GetVersion(); // Build_Nr * 10 z.B. 3810
     if(nVersion < 3830)
     {
@@ -771,6 +772,7 @@ void E3dScene::WriteData(SvStream& rOut) const
     rOut << (BOOL)(nShadeMode > 2);
 
 #endif
+#endif  // #ifndef SVX_LIGHT
 }
 
 /*************************************************************************

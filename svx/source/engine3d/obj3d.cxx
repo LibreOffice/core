@@ -2,9 +2,9 @@
  *
  *  $RCSfile: obj3d.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: aw $ $Date: 2001-07-11 08:48:20 $
+ *  last change: $Author: thb $ $Date: 2001-07-17 07:04:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -563,9 +563,9 @@ void E3dObject::SetModel(SdrModel* pNewModel)
 |* (F4)
 |*
 \************************************************************************/
-
 void E3dObject::NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
 {
+#ifndef SVX_LIGHT
     // SdrAttrObj::NbcResize(rRef, xFact, yFact);
 
     // Bewegung in X,Y im Augkoordinatensystem
@@ -603,6 +603,7 @@ void E3dObject::NbcResize(const Point& rRef, const Fraction& xFact, const Fracti
         // changed
         pScene->CorrectSceneDimensions();
     }
+#endif
 }
 
 /*************************************************************************
@@ -610,9 +611,9 @@ void E3dObject::NbcResize(const Point& rRef, const Fraction& xFact, const Fracti
 |* Objekt verschieben in 2D, wird bei Cursortasten benoetigt
 |*
 \************************************************************************/
-
 void E3dObject::NbcMove(const Size& rSize)
 {
+#ifndef SVX_LIGHT
     // Bewegung in X,Y im Augkoordinatensystem
     E3dScene* pScene = GetScene();
 
@@ -655,6 +656,7 @@ void E3dObject::NbcMove(const Size& rSize)
         // changed
         pScene->CorrectSceneDimensions();
     }
+#endif
 }
 
 /*************************************************************************
@@ -1694,6 +1696,7 @@ void E3dObject::NbcSetStyleSheet(SfxStyleSheet* pNewStyleSheet,
 |*
 \************************************************************************/
 
+#ifndef SVX_LIGHT
 void E3dObject::WriteOnlyOwnMembers(SvStream& rOut) const
 {
     // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
@@ -1713,6 +1716,7 @@ void E3dObject::WriteOnlyOwnMembers(SvStream& rOut) const
     rOut << nPartOfParent;
     rOut << UINT16(eDragDetail);
 }
+#endif
 
 /*************************************************************************
 |*
@@ -1722,6 +1726,7 @@ void E3dObject::WriteOnlyOwnMembers(SvStream& rOut) const
 
 void E3dObject::WriteData(SvStream& rOut) const
 {
+#ifndef SVX_LIGHT
     long position = rOut.Tell();
     SdrAttrObj::WriteData(rOut);
     position = rOut.Tell();
@@ -1754,6 +1759,7 @@ void E3dObject::WriteData(SvStream& rOut) const
         WriteOnlyOwnMembers(rOut);
     }
     position = rOut.Tell();
+#endif
 }
 
 /*************************************************************************
@@ -2176,6 +2182,7 @@ const Volume3D& E3dCompoundObject::GetBoundVolume()
 
 void E3dCompoundObject::WriteData(SvStream& rOut) const
 {
+#ifndef SVX_LIGHT
 #ifdef E3D_STREAMING
 
     if (!aLocalBoundVol.IsValid() && aBoundVol.IsValid())
@@ -2237,6 +2244,7 @@ void E3dCompoundObject::WriteData(SvStream& rOut) const
         // neu ab 534: (hat noch gefehlt)
         rOut << BOOL(GetTextureFilter());
     }
+#endif
 }
 
 /*************************************************************************

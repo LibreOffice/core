@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit5.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mt $ $Date: 2001-06-13 10:56:49 $
+ *  last change: $Author: thb $ $Date: 2001-07-17 07:04:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,7 @@ void ImpEditEngine::SetStyleSheet( USHORT nPara, SfxStyleSheet* pStyle )
     SfxStyleSheet* pCurStyle = pNode->GetStyleSheet();
     if ( pStyle != pCurStyle )
     {
+#ifndef SVX_LIGHT
         if ( IsUndoEnabled() && !IsInUndo() && aStatus.DoUndoAttribs() )
         {
             XubString aPrevStyleName;
@@ -130,6 +131,7 @@ void ImpEditEngine::SetStyleSheet( USHORT nPara, SfxStyleSheet* pStyle )
                         pStyle->GetName(), pStyle->GetFamily(),
                         pNode->GetContentAttribs().GetItems() ) );
         }
+#endif
         if ( pCurStyle )
             EndListening( *pCurStyle, FALSE );
         pNode->SetStyleSheet( pStyle, aStatus.UseCharAttribs() );
@@ -234,6 +236,7 @@ void ImpEditEngine::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
 EditUndoSetAttribs* ImpEditEngine::CreateAttribUndo( EditSelection aSel, const SfxItemSet& rSet )
 {
+#ifndef SVX_LIGHT
     DBG_ASSERT( !aSel.DbgIsBuggy( aEditDoc ), "CreateAttribUndo: Fehlerhafte Selektion" );
     aSel.Adjust( aEditDoc );
 
@@ -276,39 +279,49 @@ EditUndoSetAttribs* ImpEditEngine::CreateAttribUndo( EditSelection aSel, const S
         }
     }
     return pUndo;
+#else
+    return 0;
+#endif
 }
 
 void ImpEditEngine::UndoActionStart( USHORT nId, const ESelection& aSel )
 {
+#ifndef SVX_LIGHT
     if ( IsUndoEnabled() && !IsInUndo() )
     {
         GetUndoManager().EnterListAction( GetEditEnginePtr()->GetUndoComment( nId ), XubString(), nId );
         DBG_ASSERT( !pUndoMarkSelection, "UndoAction SelectionMarker?" );
         pUndoMarkSelection = new ESelection( aSel );
     }
+#endif
 }
 
 void ImpEditEngine::UndoActionStart( USHORT nId )
 {
+#ifndef SVX_LIGHT
     if ( IsUndoEnabled() && !IsInUndo() )
     {
         GetUndoManager().EnterListAction( GetEditEnginePtr()->GetUndoComment( nId ), XubString(), nId );
         DBG_ASSERT( !pUndoMarkSelection, "UndoAction SelectionMarker?" );
     }
+#endif
 }
 
 void ImpEditEngine::UndoActionEnd( USHORT nId )
 {
+#ifndef SVX_LIGHT
     if ( IsUndoEnabled() && !IsInUndo() )
     {
         GetUndoManager().LeaveListAction();
         delete pUndoMarkSelection;
         pUndoMarkSelection = NULL;
     }
+#endif
 }
 
 void ImpEditEngine::InsertUndo( EditUndo* pUndo, BOOL bTryMerge )
 {
+#ifndef SVX_LIGHT
     DBG_ASSERT( !IsInUndo(), "InsertUndo im Undomodus!" );
     if ( pUndoMarkSelection )
     {
@@ -318,52 +331,63 @@ void ImpEditEngine::InsertUndo( EditUndo* pUndo, BOOL bTryMerge )
         pUndoMarkSelection = NULL;
     }
     GetUndoManager().AddUndoAction( pUndo, bTryMerge );
+#endif
 }
 
 void ImpEditEngine::ResetUndoManager()
 {
+#ifndef SVX_LIGHT
     if ( HasUndoManager() )
         GetUndoManager().Clear();
+#endif
 }
 
 void ImpEditEngine::EnableUndo( BOOL bEnable )
 {
+#ifndef SVX_LIGHT
     // Beim Umschalten des Modus Liste loeschen:
     if ( bEnable != IsUndoEnabled() )
         ResetUndoManager();
 
     bUndoEnabled = bEnable;
+#endif
 }
 
 BOOL ImpEditEngine::Undo( EditView* pView )
 {
+#ifndef SVX_LIGHT
     if ( HasUndoManager() && GetUndoManager().GetUndoActionCount() )
     {
         SetActiveView( pView );
         GetUndoManager().Undo( 1 );
         return TRUE;
     }
+#endif
     return FALSE;
 }
 
 BOOL ImpEditEngine::Redo( EditView* pView )
 {
+#ifndef SVX_LIGHT
     if ( HasUndoManager() && GetUndoManager().GetRedoActionCount() )
     {
         SetActiveView( pView );
         GetUndoManager().Redo( 0 );
         return TRUE;
     }
+#endif
     return FALSE;
 }
 
 BOOL ImpEditEngine::Repeat( EditView* /* pView */ )
 {
+#ifndef SVX_LIGHT
     if ( HasUndoManager() && GetUndoManager().GetRepeatActionCount() )
     {
         DBG_WARNING( "Repeat nicht implementiert!" );
         return TRUE;
     }
+#endif
     return FALSE;
 }
 
@@ -484,12 +508,14 @@ void ImpEditEngine::SetAttribs( EditSelection aSel, const SfxItemSet& rSet, BYTE
     USHORT nStartNode = aEditDoc.GetPos( aSel.Min().GetNode() );
     USHORT nEndNode = aEditDoc.GetPos( aSel.Max().GetNode() );
 
+#ifndef SVX_LIGHT
     if ( IsUndoEnabled() && !IsInUndo() && aStatus.DoUndoAttribs() )
     {
         EditUndoSetAttribs* pUndo = CreateAttribUndo( aSel, rSet );
         pUndo->SetSpecial( nSpecial );
         InsertUndo( pUndo );
     }
+#endif
 
     BOOL bCheckLanguage = FALSE;
     if ( GetStatus().DoOnlineSpelling() )
@@ -590,6 +616,7 @@ void ImpEditEngine::RemoveCharAttribs( EditSelection aSel, BOOL bRemoveParaAttri
 
     const SfxItemSet* pEmptyItemSet = bRemoveParaAttribs ? &GetEmptyItemSet() : 0;
 
+#ifndef SVX_LIGHT
     if ( IsUndoEnabled() && !IsInUndo() && aStatus.DoUndoAttribs() )
     {
         // Eventuel spezielles Undo, oder ItemSet*
@@ -599,6 +626,7 @@ void ImpEditEngine::RemoveCharAttribs( EditSelection aSel, BOOL bRemoveParaAttri
         pUndo->SetRemoveWhich( nWhich );
         InsertUndo( pUndo );
     }
+#endif
 
     // ueber die Absaetze iterieren...
     for ( USHORT nNode = nStartNode; nNode <= nEndNode; nNode++ )
@@ -689,6 +717,7 @@ void ImpEditEngine::SetParaAttribs( USHORT nPara, const SfxItemSet& rSet )
 
     if ( !( pNode->GetContentAttribs().GetItems() == rSet ) )
     {
+#ifndef SVX_LIGHT
         if ( IsUndoEnabled() && !IsInUndo() && aStatus.DoUndoAttribs() )
         {
             if ( rSet.GetPool() != &aEditDoc.GetItemPool() )
@@ -702,6 +731,7 @@ void ImpEditEngine::SetParaAttribs( USHORT nPara, const SfxItemSet& rSet )
                 InsertUndo( new EditUndoSetParaAttribs( this, nPara, pNode->GetContentAttribs().GetItems(), rSet ) );
             }
         }
+#endif
         pNode->GetContentAttribs().GetItems().Set( rSet );
         if ( aStatus.UseCharAttribs() )
             pNode->CreateDefFont();

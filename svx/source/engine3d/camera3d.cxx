@@ -2,9 +2,9 @@
  *
  *  $RCSfile: camera3d.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:14 $
+ *  last change: $Author: thb $ $Date: 2001-07-17 07:04:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -306,6 +306,7 @@ void Camera3D::RotateAroundLookAt(double fHAngle, double fVAngle)
 
 void Camera3D::WriteData31(SvStream& rOut) const
 {
+#ifndef SVX_LIGHT
     Viewport3D::WriteData(rOut);
 
     rOut << aResetPos;
@@ -317,6 +318,7 @@ void Camera3D::WriteData31(SvStream& rOut) const
     rOut << fFocalLength;
     rOut << fBankAngle;
     rOut << BOOL(bAutoAdjustProjection);
+#endif
 }
 
 /*************************************************************************
@@ -329,6 +331,7 @@ void Camera3D::WriteData31(SvStream& rOut) const
 
 void Camera3D::WriteData(SvStream& rOut) const
 {
+#ifndef SVX_LIGHT
 
     if (rOut.GetVersion() < 3560)  // FG: Ab der Release 356 wurde das Fileformat geaendert
     {                              //     Falls das Format der Version 31 geschrieben werden soll
@@ -351,6 +354,7 @@ void Camera3D::WriteData(SvStream& rOut) const
     rOut << fFocalLength;
     rOut << fBankAngle;
     rOut << BOOL(bAutoAdjustProjection);
+#endif
 }
 
 /*************************************************************************

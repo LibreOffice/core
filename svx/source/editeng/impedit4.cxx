@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit4.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: mt $ $Date: 2001-06-22 13:18:52 $
+ *  last change: $Author: thb $ $Date: 2001-07-17 07:04:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1285,7 +1285,9 @@ void ImpEditEngine::SetText( const EditTextObject& rTextObject )
     InsertText( rTextObject, EditSelection( aPaM, aPaM ) );
     SetVertical( rTextObject.IsVertical() );
 
+#ifndef SVX_LIGHT
     DBG_ASSERT( !HasUndoManager() || !GetUndoManager().GetUndoActionCount(), "Woher kommt das Undo in SetText ?!" );
+#endif
     SetUpdateMode( bUpdate );
     EnableUndo( bUndo );
 }
@@ -2133,6 +2135,7 @@ void ImpEditEngine::TransliterateText( const EditSelection& rSelection, sal_Int3
 
     BOOL bChanges = FALSE;
     EditUndoTransliteration* pUndo = NULL;
+#ifndef SVX_LIGHT
     if ( IsUndoEnabled() && !IsInUndo() )
     {
         ESelection aESel( CreateESel( aSel ) );
@@ -2143,6 +2146,7 @@ void ImpEditEngine::TransliterateText( const EditSelection& rSelection, sal_Int3
         else
             pUndo->SetText( CreateBinTextObject( aSel, NULL ) );
     }
+#endif
 
     EditPaM aLastPaM = aSel.Max();
 

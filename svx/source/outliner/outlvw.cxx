@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlvw.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: pb $ $Date: 2001-07-05 08:30:33 $
+ *  last change: $Author: thb $ $Date: 2001-07-17 07:04:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -746,8 +746,10 @@ void OutlinerView::SetAttribs( const SfxItemSet& rAttrs )
         pOwner->ImplCheckNumBulletItem( nPara );
         pOwner->ImplCalcBulletText( nPara, FALSE, FALSE );
 
+#ifndef SVX_LIGHT
         if( !pOwner->IsInUndo() && pOwner->IsUndoEnabled() )
             pOwner->InsertUndo( new OutlinerUndoCheckPara( pOwner, nPara ) );
+#endif
     }
 
     if( !pOwner->IsInUndo() && pOwner->IsUndoEnabled() )
@@ -920,6 +922,7 @@ BOOL OutlinerView::AdjustHeight( long nDY )
     pOwner->pEditEngine->SetUpdateMode( FALSE );
 
     OLUndoHeight* pUndo = NULL;
+#ifndef SVX_LIGHT
     if( !pOwner->IsInUndo() && pOwner->IsUndoEnabled() )
     {
         pOwner->UndoActionStart( OLUNDO_HEIGHT );
@@ -929,6 +932,7 @@ BOOL OutlinerView::AdjustHeight( long nDY )
         pUndo->pDepths = pOwner->ImpCreateDepthArray();
         pOwner->InsertUndo( pUndo );
     }
+#endif
 
     pOwner->GetBeginMovingHdl().Call( pOwner );
 
