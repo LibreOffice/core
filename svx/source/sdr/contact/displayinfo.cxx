@@ -2,9 +2,9 @@
  *
  *  $RCSfile: displayinfo.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 15:37:18 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 10:06:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,8 @@
 #ifndef _SVDPAGV_HXX
 #include <svdpagv.hxx>
 #endif
+
+#define ALL_GHOSTED_DRAWMODES (DRAWMODE_GHOSTEDLINE|DRAWMODE_GHOSTEDFILL|DRAWMODE_GHOSTEDTEXT|DRAWMODE_GHOSTEDBITMAP|DRAWMODE_GHOSTEDGRADIENT)
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -315,17 +317,15 @@ namespace sdr
             return maColorConfig;
         }
 
-        void DisplayInfo::SaveOriginalDrawMode()
-        {
-            if(mpOutputDevice)
-            {
-                mnOriginalDrawMode = mpOutputDevice->GetDrawMode();
-            }
-        }
-
         sal_uInt32 DisplayInfo::GetOriginalDrawMode() const
         {
-            return mnOriginalDrawMode;
+            // return DrawMode without ghosted stuff
+            if(mpOutputDevice)
+            {
+                return (mpOutputDevice->GetDrawMode() & ~ALL_GHOSTED_DRAWMODES);
+            }
+
+            return 0L;
         }
 
         sal_uInt32 DisplayInfo::GetCurrentDrawMode() const
@@ -335,28 +335,27 @@ namespace sdr
                 return mpOutputDevice->GetDrawMode();
             }
 
-            // fallback to OriginalDrawMode
-            return GetOriginalDrawMode();
+            return 0L;
         }
 
-        void DisplayInfo::RestoreOriginalDrawMode()
+        void DisplayInfo::ClearGhostedDrawMode()
         {
             if(mpOutputDevice)
             {
-                mpOutputDevice->SetDrawMode(mnOriginalDrawMode);
-                mbGhostedDrawModeActive = sal_False;
+                mpOutputDevice->SetDrawMode(mpOutputDevice->GetDrawMode() & ~ALL_GHOSTED_DRAWMODES);
             }
+
+            mbGhostedDrawModeActive = sal_False;
         }
 
         void DisplayInfo::SetGhostedDrawMode()
         {
             if(mpOutputDevice)
             {
-                mpOutputDevice->SetDrawMode(mnOriginalDrawMode | (
-                DRAWMODE_GHOSTEDLINE|DRAWMODE_GHOSTEDFILL|DRAWMODE_GHOSTEDTEXT|
-                DRAWMODE_GHOSTEDBITMAP|DRAWMODE_GHOSTEDGRADIENT));
-                mbGhostedDrawModeActive = sal_True;
+                mpOutputDevice->SetDrawMode(mpOutputDevice->GetDrawMode() | ALL_GHOSTED_DRAWMODES);
             }
+
+            mbGhostedDrawModeActive = sal_True;
         }
 
         sal_Bool DisplayInfo::IsGhostedDrawModeActive() const
