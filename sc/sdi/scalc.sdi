@@ -3581,7 +3581,7 @@ SfxVoidItem InsertColumns FID_INS_COLUMN
 
 //--------------------------------------------------------------------------
 SfxVoidItem InsertContents FID_INS_CELL_CONTENTS
-(SfxStringItem Flags FID_INS_CELL_CONTENTS)
+(SfxStringItem Flags FID_INS_CELL_CONTENTS, SfxUInt16Item FormulaCommand FN_PARAM_1, SfxBoolItem SkipEmptyCells FN_PARAM_2, SfxBoolItem Transpose FN_PARAM_3, SfxBoolItem AsLink FN_PARAM_4, SfxInt16Item MoveMode FN_PARAM_5)
 [
     /* flags: */
     AutoUpdate = FALSE,

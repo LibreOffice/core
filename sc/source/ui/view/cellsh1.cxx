@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh1.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: nn $ $Date: 2002-03-11 14:13:21 $
+ *  last change: $Author: mba $ $Date: 2002-07-12 12:02:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1144,6 +1144,22 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                                 case 'T': nFlags |= IDF_ATTRIB; break;
                             }
                         }
+
+                        SFX_REQUEST_ARG( rReq, pFuncItem, SfxUInt16Item, FN_PARAM_1, sal_False );
+                        SFX_REQUEST_ARG( rReq, pSkipItem, SfxBoolItem, FN_PARAM_2, sal_False );
+                        SFX_REQUEST_ARG( rReq, pTransposeItem, SfxBoolItem, FN_PARAM_3, sal_False );
+                        SFX_REQUEST_ARG( rReq, pLinkItem, SfxBoolItem, FN_PARAM_4, sal_False );
+                        SFX_REQUEST_ARG( rReq, pMoveItem, SfxInt16Item, FN_PARAM_5, sal_False );
+                        if ( pFuncItem )
+                            nFunction = pFuncItem->GetValue();
+                        if ( pSkipItem )
+                            bSkipEmpty = pSkipItem->GetValue();
+                        if ( pTransposeItem )
+                            bTranspose = pTransposeItem->GetValue();
+                        if ( pLinkItem )
+                            bAsLink = pLinkItem->GetValue();
+                        if ( pMoveItem )
+                            eMoveMode = (InsCellCmd) pMoveItem->GetValue();
                     }
                     else
                     {
@@ -1208,7 +1224,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                                     eMoveMode );
                         }
 
-                        if( ! rReq.IsAPI() )
+                        if( !pReqArgs )
                         {
                             String  aFlags;
 
@@ -1227,6 +1243,11 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                             }
 
                             rReq.AppendItem( SfxStringItem( FID_INS_CELL_CONTENTS, aFlags ) );
+                            rReq.AppendItem( SfxBoolItem( FN_PARAM_2, bSkipEmpty ) );
+                            rReq.AppendItem( SfxBoolItem( FN_PARAM_3, bTranspose ) );
+                            rReq.AppendItem( SfxBoolItem( FN_PARAM_4, bAsLink ) );
+                            rReq.AppendItem( SfxUInt16Item( FN_PARAM_1, nFunction ) );
+                            rReq.AppendItem( SfxInt16Item( FN_PARAM_5, (sal_Int16) eMoveMode ) );
                             rReq.Done();
                         }
                     }
@@ -1242,69 +1263,89 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 Window* pWin = GetViewData()->GetActiveWin();
 
                 //  Clipboard-ID als Parameter angegeben? Basic "PasteSpecial(Format)"
-                const SfxPoolItem* pItem;
+                const SfxPoolItem* pItem=NULL;
                 if ( pReqArgs &&
                      pReqArgs->GetItemState(nSlot, TRUE, &pItem) == SFX_ITEM_SET &&
                      pItem->ISA(SfxUInt32Item) )
                 {
                     ULONG nFormat = ((const SfxUInt32Item*)pItem)->GetValue();
-                    BOOL bRet;
+                    BOOL bRet=TRUE;
                     {
                         WaitObject aWait( GetViewData()->GetDialogParent() );
-                        bRet = pTabViewShell->PasteFromSystem(nFormat, TRUE);       // TRUE: keine Fehlermeldungen
-                    }
-                    rReq.SetReturnValue(SfxInt16Item(nSlot, bRet)); // 1 = Erfolg, 0 = Fehler
-                    rReq.Done();
-                }
-                else if ( ScTransferObj::GetOwnClipboard( pWin ) )  // own cell data
-                {
-                    rReq.SetSlot( FID_INS_CELL_CONTENTS );
-                    ExecuteSlot( rReq, GetInterface() );
-                    rReq.SetReturnValue(SfxInt16Item(nSlot, 1));    // 1 = Erfolg
-                }
-                else                                    // Zeichenobjekte oder fremde Daten
-                {
-                    BOOL bDraw = ( ScDrawTransferObj::GetOwnClipboard( pWin ) != NULL );
-
-                    SvxClipboardFmtItem aFormats( SID_CLIPBOARD_FORMAT_ITEMS );
-                    GetPossibleClipboardFormats( aFormats );
-
-                    USHORT nFormatCount = aFormats.Count();
-                    if ( nFormatCount )
-                    {
-                        SvPasteObjectDialog* pDlg = new SvPasteObjectDialog;
-
-                        for (USHORT i=0; i<nFormatCount; i++)
-                        {
-                            ULONG nFormatId = aFormats.GetClipbrdFormatId( i );
-                            String aName = aFormats.GetClipbrdFormatName( i );
-                            // special case for paste dialog: '*' is replaced by object type
-                            if ( nFormatId == SOT_FORMATSTR_ID_EMBED_SOURCE )
-                                aName.Assign((sal_Unicode)'*');
-                            pDlg->Insert( nFormatId, aName );
-                        }
-
-                        TransferableDataHelper aDataHelper(
-                            TransferableDataHelper::CreateFromSystemClipboard( pWin ) );
-                        ULONG nFormat = pDlg->Execute( pTabViewShell->GetDialogParent(), aDataHelper.GetTransferable() );
-                        if (nFormat > 0)
-                        {
-                            {
-                                WaitObject aWait( GetViewData()->GetDialogParent() );
-                                if ( bDraw && nFormat == SOT_FORMATSTR_ID_EMBED_SOURCE )
-                                    pTabViewShell->PasteDraw();
-                                else
-                                    pTabViewShell->PasteFromSystem(nFormat);
-                            }
-                            rReq.SetReturnValue(SfxInt16Item(nSlot, 1));    // 1 = Erfolg
-                            rReq.Done();
-                        }
+                        BOOL bDraw = ( ScDrawTransferObj::GetOwnClipboard( pWin ) != NULL );
+                        if ( bDraw && nFormat == SOT_FORMATSTR_ID_EMBED_SOURCE )
+                            pTabViewShell->PasteDraw();
                         else
-                            rReq.SetReturnValue(SfxInt16Item(nSlot, 0));    // 0 = Fehler
-                        delete pDlg;
+                            bRet = pTabViewShell->PasteFromSystem(nFormat, TRUE);       // TRUE: keine Fehlermeldungen
+                    }
+
+                    if ( bRet )
+                    {
+                        rReq.SetReturnValue(SfxInt16Item(nSlot, bRet)); // 1 = Erfolg, 0 = Fehler
+                        rReq.Done();
                     }
                     else
-                        rReq.SetReturnValue(SfxInt16Item(nSlot, 0));        // 0 = Fehler
+                        // if format is not available -> fallback to request without parameters
+                        pItem = NULL;
+                }
+
+                if ( !pItem )
+                {
+                    if ( ScTransferObj::GetOwnClipboard( pWin ) )  // own cell data
+                    {
+                        rReq.SetSlot( FID_INS_CELL_CONTENTS );
+                        ExecuteSlot( rReq, GetInterface() );
+                        rReq.SetReturnValue(SfxInt16Item(nSlot, 1));    // 1 = Erfolg
+                    }
+                    else                                    // Zeichenobjekte oder fremde Daten
+                    {
+                        BOOL bDraw = ( ScDrawTransferObj::GetOwnClipboard( pWin ) != NULL );
+
+                        SvxClipboardFmtItem aFormats( SID_CLIPBOARD_FORMAT_ITEMS );
+                        GetPossibleClipboardFormats( aFormats );
+
+                        USHORT nFormatCount = aFormats.Count();
+                        if ( nFormatCount )
+                        {
+                            SvPasteObjectDialog* pDlg = new SvPasteObjectDialog;
+
+                            for (USHORT i=0; i<nFormatCount; i++)
+                            {
+                                ULONG nFormatId = aFormats.GetClipbrdFormatId( i );
+                                String aName = aFormats.GetClipbrdFormatName( i );
+                                // special case for paste dialog: '*' is replaced by object type
+                                if ( nFormatId == SOT_FORMATSTR_ID_EMBED_SOURCE )
+                                    aName.Assign((sal_Unicode)'*');
+                                pDlg->Insert( nFormatId, aName );
+                            }
+
+                            TransferableDataHelper aDataHelper(
+                                TransferableDataHelper::CreateFromSystemClipboard( pWin ) );
+                            ULONG nFormat = pDlg->Execute( pTabViewShell->GetDialogParent(), aDataHelper.GetTransferable() );
+                            if (nFormat > 0)
+                            {
+                                {
+                                    WaitObject aWait( GetViewData()->GetDialogParent() );
+                                    if ( bDraw && nFormat == SOT_FORMATSTR_ID_EMBED_SOURCE )
+                                        pTabViewShell->PasteDraw();
+                                    else
+                                        pTabViewShell->PasteFromSystem(nFormat);
+                                }
+                                rReq.SetReturnValue(SfxInt16Item(nSlot, 1));    // 1 = Erfolg
+                                rReq.AppendItem( SfxUInt32Item( nSlot, nFormat ) );
+                                rReq.Done();
+                            }
+                            else
+                            {
+                                rReq.SetReturnValue(SfxInt16Item(nSlot, 0));    // 0 = Fehler
+                                rReq.Ignore();
+                            }
+
+                            delete pDlg;
+                        }
+                        else
+                            rReq.SetReturnValue(SfxInt16Item(nSlot, 0));        // 0 = Fehler
+                    }
                 }
             }
             pTabViewShell->CellContentChanged();        // => PasteFromSystem() ???
