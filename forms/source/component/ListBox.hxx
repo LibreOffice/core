@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ListBox.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-23 08:48:15 $
+ *  last change: $Author: fs $ $Date: 2001-08-28 14:31:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,9 +71,6 @@
 #ifndef _CPPUHELPER_INTERFACECONTAINER_HXX_
 #include <cppuhelper/interfacecontainer.hxx>
 #endif
-#ifndef _DATE_HXX
-#include <tools/date.hxx>
-#endif
 #ifndef _SV_TIMER_HXX
 #include <vcl/timer.hxx>
 #endif
@@ -99,10 +96,12 @@
 #ifndef _COM_SUN_STAR_FORM_XCHANGEBROADCASTER_HPP_
 #include <com/sun/star/form/XChangeBroadcaster.hpp>
 #endif
-#ifndef _CPPUHELPER_IMPLBASE2_HXX_
-#include <cppuhelper/implbase2.hxx>
+#ifndef _CPPUHELPER_IMPLBASE1_HXX_
+#include <cppuhelper/implbase1.hxx>
 #endif
-
+#ifndef FORMS_ERRORBROADCASTER_HXX
+#include "errorbroadcaster.hxx"
+#endif
 
 //.........................................................................
 namespace frm
@@ -113,12 +112,13 @@ const ::rtl::OUString LISTBOX_EMPTY_VALUE = ::rtl::OUString::createFromAscii("$$
 //==================================================================
 //= OListBoxModel
 //==================================================================
-typedef ::cppu::ImplHelper2<    ::com::sun::star::sdb::XSQLErrorBroadcaster,
-                                ::com::sun::star::util::XRefreshable> OListBoxModel_BASE;
+typedef ::cppu::ImplHelper1 <   ::com::sun::star::util::XRefreshable
+                            >   OListBoxModel_BASE;
 
-class OListBoxModel :   public OBoundControlModel
-                        ,public OListBoxModel_BASE
-                        ,public ::comphelper::OAggregationArrayUsageHelper< OListBoxModel >
+class OListBoxModel :public OBoundControlModel
+                    ,public OListBoxModel_BASE
+                    ,public OErrorBroadcaster
+                    ,public ::comphelper::OAggregationArrayUsageHelper< OListBoxModel >
 {
     ::com::sun::star::uno::Any                  m_aSaveValue;
 
@@ -131,7 +131,6 @@ class OListBoxModel :   public OBoundControlModel
     // </properties>
 
     ::cppu::OInterfaceContainerHelper   m_aRefreshListeners;
-    ::cppu::OInterfaceContainerHelper   m_aErrorListeners;
 
     static sal_Int32        nSelectHandle;
     // [properties]
@@ -197,10 +196,6 @@ public:
     virtual void SAL_CALL addRefreshListener(const ::com::sun::star::uno::Reference< ::com::sun::star::util::XRefreshListener>& _rxListener) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeRefreshListener(const ::com::sun::star::uno::Reference< ::com::sun::star::util::XRefreshListener>& _rxListener) throw(::com::sun::star::uno::RuntimeException);
 
-// XSQLErrorBroadcaster
-    virtual void SAL_CALL addSQLErrorListener(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLErrorListener>& _rxListener) throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL removeSQLErrorListener(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLErrorListener>& _rxListener) throw(::com::sun::star::uno::RuntimeException);
-
     // OAggregationArrayUsageHelper
     virtual void fillProperties(
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps,
@@ -210,8 +205,6 @@ public:
 
 protected:
     void loadData();
-
-    void onError(::com::sun::star::sdbc::SQLException& _rException, const ::rtl::OUString& _rContextDescription);
 };
 
 //==================================================================

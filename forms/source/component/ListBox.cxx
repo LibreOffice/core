@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ListBox.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-20 13:13:32 $
+ *  last change: $Author: fs $ $Date: 2001-08-28 14:31:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,10 +181,11 @@ InterfaceRef SAL_CALL OListBoxModel_CreateInstance(const Reference<XMultiService
 //------------------------------------------------------------------------------
 Sequence< Type> OListBoxModel::_getTypes()
 {
-    static Sequence< Type> aTypes;
-    if (!aTypes.getLength())
-        aTypes = concatSequences(OBoundControlModel::_getTypes(), OListBoxModel_BASE::getTypes());
-    return aTypes;
+    return ::comphelper::concatSequences(
+        OBoundControlModel::_getTypes(),
+        OListBoxModel_BASE::getTypes(),
+        OErrorBroadcaster::getTypes()
+    );
 }
 
 
@@ -193,10 +194,10 @@ DBG_NAME(OListBoxModel);
 OListBoxModel::OListBoxModel(const Reference<XMultiServiceFactory>& _rxFactory)
     :OBoundControlModel(_rxFactory, VCL_CONTROLMODEL_LISTBOX, FRM_CONTROL_LISTBOX)
                                     // use the old control name for compytibility reasons
+    ,OErrorBroadcaster( rBHelper )
     ,m_aRefreshListeners(m_aMutex)
     ,m_bBoundComponent(sal_False)
     ,m_nNULLPos(-1)
-    ,m_aErrorListeners(m_aMutex)
 {
     DBG_CTOR(OListBoxModel,NULL);
 
@@ -236,20 +237,23 @@ StringSequence SAL_CALL OListBoxModel::getSupportedServiceNames() throw(RuntimeE
 //------------------------------------------------------------------------------
 Any SAL_CALL OListBoxModel::queryAggregation(const Type& _rType) throw (RuntimeException)
 {
-    Any aReturn = OBoundControlModel::queryAggregation(_rType);
-    if (!aReturn.hasValue())
-        aReturn = OListBoxModel_BASE::queryInterface(_rType);
-
-    return aReturn;
+    Any aReturn = OBoundControlModel::queryAggregation( _rType );
+    return  aReturn.hasValue()
+        ?   aReturn
+        :   aReturn = ( OListBoxModel_BASE::queryInterface( _rType ) ).hasValue()
+            ?   aReturn
+            :   OErrorBroadcaster::queryInterface( _rType );
 }
 
 // OComponentHelper
 //------------------------------------------------------------------------------
 void OListBoxModel::disposing()
 {
-        EventObject aEvt(static_cast< XWeak*>(this));
+    EventObject aEvt( static_cast< XWeak* >( this ) );
     m_aRefreshListeners.disposeAndClear(aEvt);
+
     OBoundControlModel::disposing();
+    OErrorBroadcaster::disposing();
 }
 
 // XRefreshable
@@ -280,7 +284,7 @@ void SAL_CALL OListBoxModel::refresh() throw(RuntimeException)
         }
     }
 
-        EventObject aEvt(static_cast< XWeak*>(this));
+    EventObject aEvt(static_cast< XWeak*>(this));
     NOTIFY_LISTENERS(m_aRefreshListeners, XRefreshListener, refreshed, aEvt);
 }
 
@@ -1140,32 +1144,6 @@ void OListBoxModel::_reset( void )
         // FS - 72451 - 31.01.00
         MutexRelease aRelease(m_aMutex);
         m_xAggregateFastSet->setFastPropertyValue(OListBoxModel::nSelectHandle, aValue);
-    }
-}
-
-//------------------------------------------------------------------------------
-void SAL_CALL OListBoxModel::addSQLErrorListener(const Reference<XSQLErrorListener>& _rxListener) throw(RuntimeException)
-{
-    m_aErrorListeners.addInterface(_rxListener);
-}
-
-//------------------------------------------------------------------------------
-void SAL_CALL OListBoxModel::removeSQLErrorListener(const Reference<XSQLErrorListener>& _rxListener) throw(RuntimeException)
-{
-    m_aErrorListeners.removeInterface(_rxListener);
-}
-
-//------------------------------------------------------------------------------
-void OListBoxModel::onError(SQLException& _rException, const ::rtl::OUString& _rContextDescription)
-{
-    SQLContext aError = prependContextInfo(_rException, static_cast< XWeak*>(this), _rContextDescription);
-    if (m_aErrorListeners.getLength())
-    {
-        SQLErrorEvent aEvent(static_cast< XWeak*>(this), makeAny(aError));
-
-        ::cppu::OInterfaceIteratorHelper aIter(m_aErrorListeners);
-        while (aIter.hasMoreElements())
-            static_cast<XSQLErrorListener*>(aIter.next())->errorOccured(aEvent);
     }
 }
 

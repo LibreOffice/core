@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ComboBox.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-25 11:17:59 $
+ *  last change: $Author: fs $ $Date: 2001-08-28 14:31:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,9 @@
 #ifndef _COM_SUN_STAR_FORM_XCHANGEBROADCASTER_HPP_
 #include <com/sun/star/form/XChangeBroadcaster.hpp>
 #endif
+#ifndef FORMS_ERRORBROADCASTER_HXX
+#include "errorbroadcaster.hxx"
+#endif
 
 //.........................................................................
 namespace frm
@@ -106,10 +109,9 @@ namespace frm
 //==================================================================
 class OComboBoxModel
             :public OBoundControlModel
-            ,public ::com::sun::star::sdb::XSQLErrorBroadcaster
+            ,public OErrorBroadcaster
             ,public ::comphelper::OAggregationArrayUsageHelper< OComboBoxModel >
 {
-    ::cppu::OInterfaceContainerHelper       m_aErrorListeners;
     ::com::sun::star::uno::Any              m_aBoundColumn;         // obsolet
     ::rtl::OUString                         m_aListSource;          //
     ::rtl::OUString                         m_aDefaultText;         // DefaultText
@@ -123,9 +125,9 @@ class OComboBoxModel
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter> m_xFormatter;
 
     ::com::sun::star::form::ListSourceType  m_eListSourceType;      // type der list source
-    sal_Int32                               m_nFormatKey;
     ::com::sun::star::util::Date            m_aNullDate;
-    sal_Int32                               m_nFieldType;
+    sal_Int32                               m_nFormatKey;
+    sal_Int16                               m_nFieldType;
     sal_Int16                               m_nKeyType;
     sal_Bool                                m_bEmptyIsNull;         // LeerString wird als NULL interpretiert
 
@@ -182,10 +184,6 @@ public:
     // XReset
     virtual void _reset();
 
-    // XSQLErrorBroadcaster
-    virtual void SAL_CALL addSQLErrorListener(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLErrorListener>& _rxListener) throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL removeSQLErrorListener(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLErrorListener>& _rxListener) throw(::com::sun::star::uno::RuntimeException);
-
     // OAggregationArrayUsageHelper
     virtual void fillProperties(
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps,
@@ -195,8 +193,6 @@ public:
 
 protected:
     void loadData();
-
-    void onError(::com::sun::star::sdbc::SQLException& _rException, const ::rtl::OUString& _rContextDescription);
 };
 
 //==================================================================

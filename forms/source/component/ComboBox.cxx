@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ComboBox.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: th $ $Date: 2001-05-11 09:31:44 $
+ *  last change: $Author: fs $ $Date: 2001-08-28 14:31:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,19 +161,10 @@ InterfaceRef SAL_CALL OComboBoxModel_CreateInstance(const Reference<XMultiServic
 //------------------------------------------------------------------------------
 Sequence<Type> OComboBoxModel::_getTypes()
 {
-        static Sequence<Type> aTypes;
-    if (!aTypes.getLength())
-    {
-        // my two base classes
-                Sequence<Type> aBaseClassTypes = OBoundControlModel::_getTypes();
-
-                Sequence<Type> aOwnTypes(1);
-                Type* pOwnTypes = aOwnTypes.getArray();
-                pOwnTypes[0] = getCppuType((Reference<XSQLErrorBroadcaster>*)NULL);
-
-        aTypes = concatSequences(aBaseClassTypes, aOwnTypes);
-    }
-    return aTypes;
+    return ::comphelper::concatSequences(
+        OBoundControlModel::_getTypes(),
+        OErrorBroadcaster::getTypes()
+    );
 }
 
 // XServiceInfo
@@ -192,28 +183,21 @@ StringSequence SAL_CALL OComboBoxModel::getSupportedServiceNames() throw(Runtime
 //------------------------------------------------------------------------------
 Any SAL_CALL OComboBoxModel::queryAggregation(const Type& _rType) throw (RuntimeException)
 {
-        Any aReturn;
-
-    aReturn = OBoundControlModel::queryAggregation(_rType);
-    if (!aReturn.hasValue())
-        aReturn = ::cppu::queryInterface(_rType
-            ,static_cast<XSQLErrorBroadcaster*>(this)
-        );
-
-    return aReturn;
+    Any aReturn = OBoundControlModel::queryAggregation( _rType );
+    return aReturn.hasValue() ? aReturn : OErrorBroadcaster::queryInterface( _rType );
 }
 
 //------------------------------------------------------------------
 OComboBoxModel::OComboBoxModel(const Reference<XMultiServiceFactory>& _rxFactory)
-                 :OBoundControlModel(_rxFactory, VCL_CONTROLMODEL_COMBOBOX, FRM_CONTROL_COMBOBOX)
-                                    // use the old control name for compytibility reasons
-                 ,m_eListSourceType(ListSourceType_TABLE)
-                 ,m_bEmptyIsNull(sal_True)
-                 ,m_aNullDate(DBTypeConversion::getStandardDate())
-                 ,m_nKeyType(NumberFormat::UNDEFINED)
-                 ,m_nFormatKey(0)
-                 ,m_nFieldType(DataType::OTHER)
-                 ,m_aErrorListeners(m_aMutex)
+    :OBoundControlModel(_rxFactory, VCL_CONTROLMODEL_COMBOBOX, FRM_CONTROL_COMBOBOX)
+                    // use the old control name for compytibility reasons
+    ,OErrorBroadcaster( rBHelper )
+    ,m_eListSourceType(ListSourceType_TABLE)
+    ,m_bEmptyIsNull(sal_True)
+    ,m_aNullDate(DBTypeConversion::getStandardDate())
+    ,m_nKeyType(NumberFormat::UNDEFINED)
+    ,m_nFormatKey(0)
+    ,m_nFieldType(DataType::OTHER)
 {
     m_nClassId = FormComponentType::COMBOBOX;
     m_sDataFieldConnectivityProperty = PROPERTY_TEXT;
@@ -868,33 +852,6 @@ void OComboBoxModel::_reset()
         // FS - 72451 - 31.01.00
         MutexRelease aRelease(m_aMutex);
                 m_xAggregateFastSet->setFastPropertyValue(OComboBoxModel::nTextHandle, makeAny(m_aDefaultText));
-    }
-}
-
-//------------------------------------------------------------------------------
-void SAL_CALL OComboBoxModel::addSQLErrorListener(const Reference<XSQLErrorListener>& _rxListener) throw(RuntimeException)
-{
-    m_aErrorListeners.addInterface(_rxListener);
-}
-
-//------------------------------------------------------------------------------
-void SAL_CALL OComboBoxModel::removeSQLErrorListener(const Reference<XSQLErrorListener>& _rxListener) throw(RuntimeException)
-{
-    m_aErrorListeners.removeInterface(_rxListener);
-}
-
-//------------------------------------------------------------------------------
-void OComboBoxModel::onError(SQLException& _rException, const ::rtl::OUString& _rContextDescription)
-{
-        SQLContext aError = prependContextInfo(_rException, static_cast<XWeak*>(this), _rContextDescription);
-
-    if (m_aErrorListeners.getLength())
-    {
-                SQLErrorEvent aEvent(static_cast<XWeak*>(this), makeAny(aError));
-
-        ::cppu::OInterfaceIteratorHelper aIter(m_aErrorListeners);
-        while (aIter.hasMoreElements())
-            static_cast<XSQLErrorListener*>(aIter.next())->errorOccured(aEvent);
     }
 }
 
