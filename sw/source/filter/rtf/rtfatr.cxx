@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfatr.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: jp $ $Date: 2001-08-13 16:59:25 $
+ *  last change: $Author: os $ $Date: 2001-09-28 07:43:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3905,130 +3905,5 @@ SwNodeFnTab aRTFNodeFnTab = {
 /* RES_GRFNODE  */                   OutRTF_SwGrfNode,
 /* RES_OLENODE  */                   OutRTF_SwOLENode
 };
-
-/*************************************************************************
-
-      Source Code Control System - Header
-
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/rtf/rtfatr.cxx,v 1.22 2001-08-13 16:59:25 jp Exp $
-
-      Source Code Control System - Update
-
-      $Log: not supported by cvs2svn $
-      Revision 1.21  2001/07/05 12:40:10  ama
-      Chg #89181#: New data exchange methods
-
-      Revision 1.20  2001/06/01 10:42:52  jp
-      Bug #87720#: im-/export of ruby attribute and combined characters
-
-      Revision 1.19  2001/05/25 16:03:48  jp
-      Bug #82965#/#82962#: Im-/Export of NumRules
-
-      Revision 1.18  2001/05/03 11:46:10  jp
-      new: export or scriptspace/forbiddenrule/hangingpuctuation
-
-      Revision 1.17  2001/05/03 08:47:36  jp
-      new: export ParaVertAlignItem
-
-      Revision 1.16  2001/03/27 21:34:45  jp
-      export character background
-
-      Revision 1.15  2001/03/13 19:44:57  jp
-      Bug #84868#: CTOR RTFEndPosLst - start position is also needed
-
-      Revision 1.14  2001/03/12 16:18:29  jp
-      export relief item
-
-      Revision 1.13  2001/02/21 12:45:23  os
-      use database struct instead of a combined string
-
-      Revision 1.12  2001/02/16 10:27:59  jp
-      im-/export the Rotate-/ScaleWidth-Character attribut
-
-      Revision 1.11  2001/02/13 16:56:38  jp
-      export CJK Font attributes
-
-      Revision 1.10  2001/02/13 09:24:35  jp
-      Bug #83787#: export default attributes, which are different to RTF-specification
-
-      Revision 1.9  2000/12/21 16:20:36  jp
-      writegraphic optional in original format and not general as JPG
-
-      Revision 1.8  2000/12/12 14:37:48  jp
-      Bug #81815#: export rtl fonts with F instead of AF token
-
-      Revision 1.7  2000/11/20 16:40:58  jp
-      BreakIterator moved from text to i18n
-
-      Revision 1.6  2000/11/20 09:37:54  jp
-      new para attributes - expand para range
-
-      Revision 1.5  2000/11/16 09:57:35  jp
-      export CJK attributes
-
-      Revision 1.4  2000/11/13 12:27:20  jp
-      token definition changed
-
-      Revision 1.3  2000/11/01 19:25:51  jp
-      export of mail graphics removed
-
-      Revision 1.2  2000/10/20 13:43:28  jp
-      use correct INetURL-Decode enum
-
-      Revision 1.1.1.1  2000/09/18 17:14:56  hr
-      initial import
-
-      Revision 1.344  2000/09/18 16:04:50  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.343  2000/08/30 16:46:03  jp
-      use CharClass instead of international
-
-      Revision 1.342  2000/08/25 12:28:03  jp
-      Graphic Crop-Attribut exported to SVX
-
-      Revision 1.341  2000/08/18 13:02:02  jp
-      don't export escaped URLs
-
-      Revision 1.340  2000/08/04 10:48:05  jp
-      Soft-/HardHyphens & HardBlanks changed from attribute to unicode character; use rtfout functions
-
-      Revision 1.339  2000/07/31 19:24:34  jp
-      new attributes for CJK/CTL and graphic
-
-      Revision 1.338  2000/07/20 13:16:22  jp
-      change old txtatr-character to the two new characters
-
-      Revision 1.337  2000/06/26 12:53:08  os
-      INetURLObject::SmartRelToAbs removed
-
-      Revision 1.336  2000/05/09 17:22:42  jp
-      Changes for Unicode
-
-      Revision 1.335  2000/03/24 14:10:38  jp
-      Bug #74428#: LRSpace - GetLeft returns the right value for pagedescs
-
-      Revision 1.334  2000/03/15 13:50:27  jp
-      Bug #74070#: WriteTable - look for colspans
-
-      Revision 1.333  2000/03/03 15:21:02  os
-      StarView remainders removed
-
-      Revision 1.332  2000/02/24 18:33:21  jp
-      Bug #73098#: read & write list entries without number
-
-      Revision 1.331  2000/02/11 14:37:51  hr
-      #70473# changes for unicode ( patched by automated patchtool )
-
-      Revision 1.330  2000/01/25 20:11:50  jp
-      Bug #72146#: OutSwChar - write the original character code if it can not be converted
-
-      Revision 1.329  2000/01/07 12:26:49  jp
-      Task #71411#: read/write NoBalancedColumns
-
-      Revision 1.328  1999/12/08 13:51:01  jp
-      Task #70258#: textattr for XMLAttrContainer
-
-*************************************************************************/
 
 
