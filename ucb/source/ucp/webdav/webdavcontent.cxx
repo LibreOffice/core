@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavcontent.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kso $ $Date: 2001-07-11 10:06:15 $
+ *  last change: $Author: kso $ $Date: 2001-07-16 14:08:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2554,9 +2554,32 @@ uno::Any Content::MapDAVException( const DAVException & e, sal_Bool bWrite )
 {
     // Map DAVException...
     uno::Any aException;
+
+    switch ( e.getStatus() )
+    {
+        case 404: // Not Found
+        {
+            uno::Sequence< uno::Any > aArgs( 1 );
+            aArgs[ 0 ] <<= m_xIdentifier->getContentIdentifier();
+
+            aException <<=
+                star::ucb::InteractiveAugmentedIOException(
+                    rtl::OUString::createFromAscii( "Not found!" ),
+                    static_cast< cppu::OWeakObject * >( this ),
+                    task::InteractionClassification_ERROR,
+                    star::ucb::IOErrorCode_NOT_EXISTING,
+                    aArgs );
+            return aException;
+        }
+
+        default:
+            break;
+    }
+
     switch ( e.getError() )
     {
         case DAVException::DAV_HTTP_ERROR:
+        {
             if ( bWrite )
                 aException <<=
                     star::ucb::InteractiveNetworkWriteException(
@@ -2572,6 +2595,7 @@ uno::Any Content::MapDAVException( const DAVException & e, sal_Bool bWrite )
                             task::InteractionClassification_ERROR,
                             e.getData() );
             break;
+        }
 
         case DAVException::DAV_HTTP_LOOKUP:
             aException <<=
