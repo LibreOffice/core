@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableFormula.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:10:16 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 00:51:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ module com { module sun { module star { module text { module textfield {
     @deprecated
     @see com::sun::star::text::TextField
 */
-service TableFormula
+published service TableFormula
 {
     service  com::sun::star::text::TextField;
 
