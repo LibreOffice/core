@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: obo $ $Date: 2001-06-01 19:30:31 $
+ *  last change: $Author: rt $ $Date: 2001-06-08 22:04:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -862,22 +862,22 @@ TabPage PAGE_GENERAL
         Text = "Dieser Datenquellen-Typ wird auf dieser Plattform nicht unterstützt.\nSie können die Einstellungen verändern, werden aber vermutlich keine Verbindung zu der Datenbank herstellen können.";
         Text [ english ] = "This kind of data source is not supported on this platform.\nYou are allowed to change the settings, but you probably won't be able to connect to the database.";
         Text [ english_us ] = "This kind of data source is not supported on this platform.\nYou are allowed to change the settings, but you probably will not be able to connect to the database.";
-        Text[ portuguese ] = "This kind of data source is not supported on this platform.\nYou are allowed to change the settings, but you probably won't be able to connect to the database.";
+        Text[ portuguese ] = "Esta plataforma não tem suporte para este tipo de fonte de dados.\nPoderá modificar as definições, contudo a ligação à base de dados é improvável.";
         Text[ russian ] = "Òèï ıòîãî èñòî÷íèêà äàííûõ íà ıòîé ïëàòôîğìå íà ïîääåğæèâàåòñÿ.\nÂû ìîæåòå èçìåíèòü íàñòğîéêè, íî òîãäà, âåğîÿòíåå âñåãî, Âû íå ñìîæåòå ñåäèíèòüñÿ ñ ıòîé áàçîé äàííûõ.";
         Text[ greek ] = "This kind of data source is not supported on this platform.\nYou are allowed to change the settings, but you probably won't be able to connect to the database.";
         Text[ dutch ] = "This kind of data source is not supported on this platform.\nYou are allowed to change the settings, but you probably won't be able to connect to the database.";
         Text[ french ] = "Ce type de source de données n'est pas supporté par la plateforme en question.\nMême si les paramètres sont modifiables, une connexion à la BD n'est pas garantie.";
-        Text[ spanish ] = "This kind of data source is not supported on this platform.\nYou are allowed to change the settings, but you probably won't be able to connect to the database.";
+        Text[ spanish ] = "Esta plataforma no apoya este tipo de fuente de datos.\nPuede modificar los datos, pero seguramente no podrá establecer una conexión con la base de datos.";
         Text[ finnish ] = "This kind of data source is not supported on this platform.\nYou are allowed to change the settings, but you probably won't be able to connect to the database.";
         Text[ italian ] = "Questo tipo di sorgente dati non è supportata dal presente sistema.\nPotete modificare le impostazioni ma è probabile che non riusciate ad effettuare un collegamento con il database.";
         Text[ danish ] = "This kind of data source is not supported on this platform.\nYou are allowed to change the settings, but you probably won't be able to connect to the database.";
         Text[ swedish ] = "Den här typen av datakälla går inte att använda på den här plattformen.\nDu kan ändra inställningarna men kommer antagligen inte att kunna upprätta en förbindelse till databasen.";
-        Text[ polish ] = "This kind of data source is not supported on this platform.\nYou are allowed to change the settings, but you probably won't be able to connect to the database.";
+        Text[ polish ] = "Platforma ta nie obs³uguje niniejszego typu Ÿród³a danych.\nMo¿na zmodyfiowaæ ustawienia, ale wówczas po³¹czanie z baz¹ danych nie bêdzie mo¿liwe.";
         Text[ portuguese_brazilian ] = "This kind of data source is not supported on this platform.\nYou are allowed to change the settings, but you probably won't be able to connect to the database.";
         Text[ japanese ] = "‚±‚ÌÃŞ°À¿°½‚Ìí—Ş‚Í‚±‚ÌÃŞ°À¿°½‚Å‚Íx‰‡‚³‚ê‚Ü‚¹‚ñB\nİ’è‚ğ•ÏX‚µ‚Ä‚à‚©‚Ü‚¢‚Ü‚¹‚ñ‚ªAÃŞ°ÀÍŞ°½‚Ö‚ÍÚ‘±‚Å‚«‚È‚¢‚©‚à‚µ‚ê‚Ü‚¹‚ñB";
         Text[ korean ] = "This kind of data source is not supported on this platform.\nYou are allowed to change the settings, but you probably won't be able to connect to the database.";
-        Text[ chinese_simplified ] = "Õâ¸ö²Ù×÷ÏµÍ³²»ÊÜÖ§³ÖÕâ¸öÊı¾İ¿âÀàĞÍ¡£\nÄú¿ÉÒÔ¸ü¸ÄÉè¶¨£¬µ«ÊÇ²»Ì«¿ÉÄÜºÍÒ»¸öÊı¾İ¿â½¨Á¢Á¬½Ó¡£";
-        Text[ chinese_traditional ] = "This kind of data source is not supported on this platform.\nYou are allowed to change the settings, but you probably won't be able to connect to the database.";
+        Text[ chinese_simplified ] = "Õâ¸ö²Ù×÷ÏµÍ³²»Ö§³ÖÕâ¸öÊı¾İ¿âÀàĞÍ¡£\nÄú¿ÉÒÔ¸ü¸ÄÉè¶¨£¬µ«ÊÇ²»Ì«¿ÉÄÜºÍÒ»¸öÊı¾İ¿â½¨Á¢Á¬½Ó¡£";
+        Text[ chinese_traditional ] = "³o­Ó¾Ş§@¨t²Î¤£¤ä´©³o­ÓÃş«¬ªº¸ê®Æ®wÃş«¬¡C\n±z¥i¥HÅÜ§ó³o¨Ç³]©w¡A¦ı¤£¤Ó¥i¯à³s½u¨ì¤@­Ó¸ê®Æ®w¡C";
         Text[ turkish ] = "This kind of data source is not supported on this platform.\nYou are allowed to change the settings, but you probably won't be able to connect to the database.";
         Text[ arabic ] = "This kind of data source is not supported on this platform.\nYou are allowed to change the settings, but you probably won't be able to connect to the database.";
         Text[ catalan ] = "This kind of data source is not supported on this platform.\nYou are allowed to change the settings, but you probably won't be able to connect to the database.";
@@ -1496,7 +1496,7 @@ TabPage PAGE_ODBC
         Text[ japanese ] = "Ì§²Ù‚ªÍŞ°½‚ÌÃŞ°ÀÍŞ°½‚Å‚Í Catalog ‚ğg—p";
         Text[ korean ] = "Use catalog on filebased databases";
         Text[ chinese_simplified ] = "Èç¹ûÊÇÎÄ¼şÊ½Êı¾İ¿â¾Í²ÉÓÃ·ÖÀà";
-        Text[ chinese_traditional ] = "­Y¬OÀÉ®×¦¡¸ê®Æ®w´N±Ä¥Î¤ÀÃş¤è¦¡";
+        Text[ chinese_traditional ] = "­Y¬OÀÉ®×¦¡¸ê®Æ®w´N±Ä¥Î¤ÀÃş";
         Text[ turkish ] = "Use catalog on filebased databases";
         Text[ arabic ] = "Use catalog on filebased databases";
         Text[ finnish ] = "Catalog verwenden bei dateibasierten Datenbanken";
@@ -1533,7 +1533,7 @@ TabPage PAGE_LDAP
         Text [ russian ] = "Èìÿ ïîëüçîâàòåëÿ";
         Text [ polish ] = "Nazwa u¿ytkownika";
         Text [ japanese ] = "Õ°»Ş°–¼(~U)";
-        Text [ chinese_traditional ] = "¨Ï¥ÎªÌ(~U)";
+        Text [ chinese_traditional ] = "¨Ï¥ÎªÌ¦WºÙ(~U)";
         Text [ arabic ] = "ÇÓã ÇáãÓÊÎÏã";
         Text [ greek ] = "¼íïìá ÷ñŞóôç";
         Text [ korean ] = "»ç¿ëÀÚ ÀÌ¸§(~U)";
@@ -1589,22 +1589,22 @@ TabPage PAGE_LDAP
         Text = "~Rechnername" ;
         Text [ english ] = "~Hostname" ;
         Text[ english_us ] = "~Host name";
-        Text[ portuguese ] = "~Hostname";
+        Text[ portuguese ] = "~Computador";
         Text[ russian ] = "~Èìÿ óçëà";
         Text[ greek ] = "~Hostname";
         Text[ dutch ] = "~Hostname";
         Text[ french ] = "~Ordinateur";
-        Text[ spanish ] = "~Hostname";
+        Text[ spanish ] = "~Nombre del equipo";
         Text[ finnish ] = "~Hostname";
         Text[ italian ] = "~Nome computer";
         Text[ danish ] = "~Hostname";
         Text[ swedish ] = "Värddato~rnamn";
-        Text[ polish ] = "~Hostname";
+        Text[ polish ] = "~Nazwa komputera";
         Text[ portuguese_brazilian ] = "~Hostname";
         Text[ japanese ] = "Î½Ä–¼";
         Text[ korean ] = "~Hostname";
         Text[ chinese_simplified ] = "Ö÷»úÃû³Æ";
-        Text[ chinese_traditional ] = "~Hostname";
+        Text[ chinese_traditional ] = "¹q¸£¦WºÙ";
         Text[ turkish ] = "~Hostname";
         Text[ arabic ] = "~Hostname";
         Text[ catalan ] = "~Hostname";
@@ -1666,22 +1666,22 @@ TabPage PAGE_LDAP
         Text = "~Portnummer" ;
         Text [ english ] = "~Portnumber" ;
         Text[ english_us ] = "~Port number";
-        Text[ portuguese ] = "~Portnumber";
+        Text[ portuguese ] = "~Porta";
         Text[ russian ] = "~Íîìåğ ïîğòà";
         Text[ greek ] = "~Portnumber";
         Text[ dutch ] = "~Portnumber";
         Text[ french ] = "~Port";
-        Text[ spanish ] = "~Portnumber";
+        Text[ spanish ] = "~Número de puerto";
         Text[ finnish ] = "~Portnumber";
         Text[ italian ] = "~Numero porta";
         Text[ danish ] = "~Portnumber";
         Text[ swedish ] = "~Portnummer";
-        Text[ polish ] = "~Portnumber";
+        Text[ polish ] = "~Numer portu";
         Text[ portuguese_brazilian ] = "~Portnumber";
         Text[ japanese ] = "Îß°Ä”Ô†";
         Text[ korean ] = "~Portnumber";
         Text[ chinese_simplified ] = "¶Ë¿ÚºÅÂë";
-        Text[ chinese_traditional ] = "~Portnumber";
+        Text[ chinese_traditional ] = "°ğ¸¹½X(~P)";
         Text[ turkish ] = "~Portnumber";
         Text[ arabic ] = "~Portnumber";
         Text[ catalan ] = "~Portnumber";
@@ -2799,7 +2799,7 @@ Menu RID_NEW_FORM
             Text = "~AutoPilot...";
             Text [ english ] = "~AutoPilot...";
             Text [ english_us ] = "A~utoPilot...";
-            Text[ portuguese ] = "A~utoPiloto";
+            Text[ portuguese ] = "A~utoPiloto...";
             Text[ russian ] = "~Àâòîïèëîò...";
             Text[ greek ] = "~ÁõôïĞéëüôïò";
             Text[ dutch ] = "~AutoPiloot";
@@ -2809,12 +2809,12 @@ Menu RID_NEW_FORM
             Text[ italian ] = "Pilota auto~matico";
             Text[ danish ] = "A~utoPilot";
             Text[ swedish ] = "~AutoPilot";
-            Text[ polish ] = "A~utoPilot";
+            Text[ polish ] = "A~utoPilot...";
             Text[ portuguese_brazilian ] = "A~utoPilot";
             Text[ japanese ] = "µ°ÄÊß²Û¯Ä(~U)";
             Text[ korean ] = "A~utoPilot";
             Text[ chinese_simplified ] = "×Ô¶¯ÎÄ¼şÖúÀí...";
-            Text[ chinese_traditional ] = "¦Û°ÊÀÉ®×§U²z";
+            Text[ chinese_traditional ] = "¦Û°ÊÀÉ®×§U²z...";
             Text[ turkish ] = "A~utoPilot";
             Text[ arabic ] = "A~utoPilot";
             Text[ catalan ] = "A~utoPilot";
@@ -2829,7 +2829,7 @@ Menu RID_NEW_FORM
             Text = "Aus ~Vorlage...";
             Text [ english ] = "From Templ~ate...";
             Text [ english_us ] = "From Templ~ate...";
-            Text[ portuguese ] = "A partir de ~modelo";
+            Text[ portuguese ] = "A partir de ~modelo...";
             Text[ russian ] = "Èç øàáëîíîâ...";
             Text[ greek ] = "From Templ~ate";
             Text[ dutch ] = "Uit ~sjabloon";
@@ -2839,12 +2839,12 @@ Menu RID_NEW_FORM
             Text[ italian ] = "Da ~modello...";
             Text[ danish ] = "From Templ~ate";
             Text[ swedish ] = "Från ~mall";
-            Text[ polish ] = "Na podstawie ~szablonu";
+            Text[ polish ] = "Na podstawie ~szablonu...";
             Text[ portuguese_brazilian ] = "From Templ~ate";
             Text[ japanese ] = "ÃİÌßÚ°Ä‚©‚ç(~A)";
             Text[ korean ] = "From Templ~ate";
             Text[ chinese_simplified ] = "²ÉÓÃÑùÊ½(A)...";
-            Text[ chinese_traditional ] = "±Ä¥Î¼Ë¦¡";
+            Text[ chinese_traditional ] = "±Ä¥Î¼Ë¦¡...";
             Text[ turkish ] = "From Templ~ate";
             Text[ arabic ] = "From Templ~ate";
             Text[ catalan ] = "From Templ~ate";
@@ -3117,22 +3117,22 @@ String STR_ADDRESSBOOK_SYSTEM
     Text = "Windows Adressbuch";
     Text [ english ] = "Windows addressbook";
     Text[ english_us ] = "Windows address book";
-    Text[ portuguese ] = "Windows addressbook";
+    Text[ portuguese ] = "Livro de endereços Windows";
     Text[ russian ] = "Àäğåñíàÿ êíèãà Windows";
     Text[ greek ] = "Windows addressbook";
     Text[ dutch ] = "Windows addressbook";
     Text[ french ] = "Carnet d'adresses Windows";
-    Text[ spanish ] = "Windows addressbook";
+    Text[ spanish ] = "Libreta de direcciones de Windows";
     Text[ finnish ] = "Windows addressbook";
     Text[ italian ] = "Rubrica Windows";
     Text[ danish ] = "Windows addressbook";
     Text[ swedish ] = "Windows adressbok";
-    Text[ polish ] = "Windows addressbook";
+    Text[ polish ] = "Ksi¹¿ka adresowa Windows";
     Text[ portuguese_brazilian ] = "Windows addressbook";
     Text[ japanese ] = "Windows ZŠ˜^";
     Text[ korean ] = "Windows addressbook";
     Text[ chinese_simplified ] = "Windows Í¨Ñ¶²¾";
-    Text[ chinese_traditional ] = "Windows addressbook";
+    Text[ chinese_traditional ] = "Windows ³q°T¿ı";
     Text[ turkish ] = "Windows addressbook";
     Text[ arabic ] = "Windows addressbook";
     Text[ catalan ] = "Windows addressbook";
@@ -3167,22 +3167,22 @@ String STR_ADDRESSBOOK_MOZILLA
     Text = "Mozilla Adressbuch";
     Text [ english ] = "Mozilla addressbook";
     Text[ english_us ] = "Mozilla address book";
-    Text[ portuguese ] = "Mozilla addressbook";
+    Text[ portuguese ] = "Livro de endereços Mozilla";
     Text[ russian ] = "Àäğåñíàÿ êíèãà Mozilla";
     Text[ greek ] = "Mozilla addressbook";
     Text[ dutch ] = "Mozilla addressbook";
     Text[ french ] = "Carnet d'adresses Mozilla";
-    Text[ spanish ] = "Mozilla addressbook";
+    Text[ spanish ] = "Libreta de direcciones de Mozilla";
     Text[ finnish ] = "Mozilla addressbook";
     Text[ italian ] = "Rubrica Mozilla";
     Text[ danish ] = "Mozilla addressbook";
     Text[ swedish ] = "Mozilla adressbok";
-    Text[ polish ] = "Mozilla addressbook";
+    Text[ polish ] = "Ksi¹¿ka adresowa Mozilla";
     Text[ portuguese_brazilian ] = "Mozilla addressbook";
     Text[ japanese ] = "Mozilla ZŠ˜^";
     Text[ korean ] = "Mozilla addressbook";
     Text[ chinese_simplified ] = "Mozilla Í¨Ñ¶²¾";
-    Text[ chinese_traditional ] = "Mozilla addressbook";
+    Text[ chinese_traditional ] = "Mozilla ³q°T¿ı";
     Text[ turkish ] = "Mozilla addressbook";
     Text[ arabic ] = "Mozilla addressbook";
     Text[ catalan ] = "Mozilla addressbook";
@@ -3192,22 +3192,22 @@ String STR_ADDRESSBOOK_LDAP
     Text = "LDAP Adressbuch";
     Text [ english ] = "LDAP addressbook";
     Text[ english_us ] = "LDAP address book";
-    Text[ portuguese ] = "LDAP addressbook";
+    Text[ portuguese ] = "Livro de endereços LDAP";
     Text[ russian ] = "Àäğåñíàÿ êíèãà LDAP";
     Text[ greek ] = "LDAP addressbook";
     Text[ dutch ] = "LDAP addressbook";
     Text[ french ] = "Carnet d'adresses LDAP";
-    Text[ spanish ] = "LDAP addressbook";
+    Text[ spanish ] = "Libreta de direcciones LDAP";
     Text[ finnish ] = "LDAP addressbook";
     Text[ italian ] = "Rubrica LDAP";
     Text[ danish ] = "LDAP addressbook";
     Text[ swedish ] = "LDAP adressbok";
-    Text[ polish ] = "LDAP addressbook";
+    Text[ polish ] = "Ksi¹¿ka adresowa LDAP";
     Text[ portuguese_brazilian ] = "LDAP addressbook";
     Text[ japanese ] = "LDAP ZŠ˜^";
     Text[ korean ] = "LDAP addressbook";
     Text[ chinese_simplified ] = "LDAP Í¨Ñ¶²¾";
-    Text[ chinese_traditional ] = "LDAP addressbook";
+    Text[ chinese_traditional ] = "LDAP ³q°T¿ı";
     Text[ turkish ] = "LDAP addressbook";
     Text[ arabic ] = "LDAP addressbook";
     Text[ catalan ] = "LDAP addressbook";
@@ -3216,6 +3216,9 @@ String STR_ADDRESSBOOK_LDAP
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.54  2001/06/01 19:30:31  obo
+ *  Merge SRC633: 01.06.01 - 21:33:03
+ *
  *  Revision 1.53  2001/05/30 19:46:04  kz
  *  Merge SRC633: 30.05.01 - 21:45:08
  *
@@ -3266,4 +3269,5 @@ String STR_ADDRESSBOOK_LDAP
  *
  *  Revision 1.0 20.09.00 10:58:47  fs
  ************************************************************************/
+
 
