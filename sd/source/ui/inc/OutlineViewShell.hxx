@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OutlineViewShell.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 11:28:13 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 11:53:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,8 +222,6 @@ private:
 
     void Construct (DrawDocShell* pDocSh);
     DECL_LINK( ClipboardChanged, TransferableDataHelper* );
-
-    SdUnoOutlineView*   pController;
 };
 
 } // end of namespace sd
