@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: dvo $ $Date: 2001-09-25 13:08:43 $
+ *  last change: $Author: dvo $ $Date: 2001-09-25 17:03:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,6 +191,10 @@
 #endif
 #ifndef _XMLOFF_XMLEMBEDDEDOBJECTEXPORTFILTER_HXX
 #include "XMLEmbeddedObjectExportFilter.hxx"
+#endif
+
+#ifndef _VOS_MUTEX_HXX_
+#include <vos/mutex.hxx>
 #endif
 
 #ifndef _RTL_LOGFILE_HXX_
@@ -1644,6 +1648,10 @@ void SvXMLExport::SetError(
     const OUString& rExceptionMessage,
     const Reference<XLocator>& rLocator )
 {
+    // allow multi-threaded access to the cancel() method
+    static ::vos::OMutex aMutex;
+    ::vos::OGuard aGuard(aMutex);
+
     // maintain error flags
     if ( ( nId & XMLERROR_FLAG_ERROR ) != 0 )
         mnErrorFlags |= ERROR_ERROR_OCCURED;
