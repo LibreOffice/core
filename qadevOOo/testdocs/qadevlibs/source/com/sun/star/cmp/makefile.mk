@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hr $ $Date: 2004-03-09 10:18:54 $
+#   last change: $Author: rt $ $Date: 2004-07-23 13:43:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,7 +70,7 @@ PACKAGE = com$/sun$/star$/cmp
 
 #----- compile .java files -----------------------------------------
 
-JARFILES        = sandbox.jar ridl.jar unoil.jar jurt.jar juh.jar jut.jar java_uno.jar
+JARFILES        = ridl.jar unoil.jar jurt.jar juh.jar jut.jar java_uno.jar
 JAVAFILES       = MyPersistObject.java
 JAVACLASSFILES  = $(CLASSDIR)$/$(PACKAGE)$/MyPersistObject.class
 
