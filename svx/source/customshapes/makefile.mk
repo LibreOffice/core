@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2004-04-02 14:05:38 $
+#   last change: $Author: hr $ $Date: 2004-10-12 14:12:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -99,7 +99,8 @@ SLOFILES=	$(SLO)$/EnhancedCustomShapeEngine.obj	\
             $(SLO)$/EnhancedCustomShape2d.obj		\
             $(SLO)$/EnhancedCustomShape3d.obj		\
             $(SLO)$/EnhancedCustomShapeFontWork.obj	\
-            $(SLO)$/EnhancedCustomShapeHandle.obj
+            $(SLO)$/EnhancedCustomShapeHandle.obj	\
+            $(SLO)$/tbxcustomshapes.obj
 
 # --- Targets ----------------------------------
 
