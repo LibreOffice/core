@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexMarkExport.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 18:20:38 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:03:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,7 +250,7 @@ void XMLIndexMarkExport::ExportTOCMarkAttributes(
     Any aAny = rPropSet->getPropertyValue(sLevel);
     aAny >>= nLevel;
     OUStringBuffer sBuf;
-    SvXMLUnitConverter::convertNumber(sBuf, (sal_Int32)nLevel);
+    SvXMLUnitConverter::convertNumber(sBuf, (sal_Int32)nLevel + 1);
     rExport.AddAttribute(XML_NAMESPACE_TEXT, XML_OUTLINE_LEVEL,
                              sBuf.makeStringAndClear());
 }
