@@ -2,9 +2,9 @@
  *
  *  $RCSfile: changedb.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2003-06-12 07:41:55 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:45:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,7 +145,7 @@ SwChangeDBDlg::SwChangeDBDlg(SwView& rVw) :
     aUsedDBFT   (this, SW_RES(FT_USEDDB     )),
     aAvailDBFT  (this, SW_RES(FT_AVAILDB    )),
     aUsedDBTLB  (this, SW_RES(TLB_USEDDB    )),
-    aAvailDBTLB (this, SW_RES(TLB_AVAILDB   ), rVw.GetWrtShell()),
+    aAvailDBTLB (this, SW_RES(TLB_AVAILDB   ), 0),
     aDescFT     (this, SW_RES(FT_DESC       )),
     aDocDBTextFT(this, SW_RES(FT_DOCDBTEXT  )),
     aDocDBNameFT(this, SW_RES(FT_DOCDBNAME  )),
@@ -159,6 +159,7 @@ SwChangeDBDlg::SwChangeDBDlg(SwView& rVw) :
     pMgr( new SwFldMgr() ),
     pSh(rVw.GetWrtShellPtr())
 {
+    aAvailDBTLB.SetWrtShell(*pSh);
     FillDBPopup();
 
     FreeResource();
