@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bmpgui.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2002-10-30 16:27:55 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 13:41:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
 
 #include <stdio.h>
 #include <signal.h>
+
+#include <sal/main.h>
+
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <vcl/wrkwin.hxx>
@@ -434,5 +437,13 @@ IMPL_LINK( BmpApp, Select, Menu*, pMenu )
     else if( pMenu->GetCurItemId() == 2 )
         Quit();
 
+    return 0;
+}
+
+BOOL SVMain();
+
+SAL_IMPLEMENT_MAIN()
+{
+    SVMain();
     return 0;
 }
