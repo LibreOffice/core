@@ -2,9 +2,8 @@
  *
  *  $RCSfile: bindings.cxx,v $
  *
- *  $Revision: 1.21 $
- *
- *  last change: $Author: mba $ $Date: 2002-09-06 12:45:14 $
+ *  $Revision: 1.22 $
+ *  last change: $Author: mba $ $Date: 2002-09-18 16:09:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,6 +215,7 @@ public:
     sal_uInt16                  nCachedFunc2;   // index der vorletzt gerufenen
     sal_uInt16                  nMsgPos;        // Message-Position, ab der zu aktualisieren ist
     SfxPopupAction          ePopupAction;   // in DeleteFloatinWindow() abgefragt
+    sal_Bool                    bContextChanged;
     sal_Bool                    bMsgDirty;      // wurde ein MessageServer invalidiert?
     sal_Bool                    bAllMsgDirty;   // wurden die MessageServer invalidiert?
     sal_Bool                    bAllDirty;      // nach InvalidateAll
@@ -307,6 +307,7 @@ SfxBindings::SfxBindings()
 {
     pImp->nMsgPos = 0;
     pImp->bAllMsgDirty = sal_True;
+    pImp->bContextChanged = sal_False;
     pImp->bMsgDirty = sal_True;
     pImp->bAllDirty = sal_True;
     pImp->ePopupAction = SFX_POPUP_DELETE;
@@ -927,13 +928,13 @@ void SfxBindings::InvalidateAll
 
     for ( sal_uInt16 n = 0; n < pImp->pCaches->Count(); ++n )
         pImp->pCaches->GetObject(n)->Invalidate(bWithMsg);
-
+/*
     ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame > xFrame
         ( pDispatcher->GetFrame()->GetFrame()->GetFrameInterface(), UNO_QUERY );
 
     if ( bWithMsg && xFrame.is() )
         xFrame->contextChanged();
-
+*/
     pImp->nMsgPos = 0;
     if ( !nRegLevel )
     {
@@ -1716,6 +1717,20 @@ void SfxBindings::UpdateSlotServer_Impl()
     pDispatcher->Flush();
 //  pDispatcher->Update_Impl();
 
+    if ( pImp->bAllMsgDirty )
+    {
+        if ( !nRegLevel )
+        {
+            ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame > xFrame
+                ( pDispatcher->GetFrame()->GetFrame()->GetFrameInterface(), UNO_QUERY );
+            if ( xFrame.is() )
+                xFrame->contextChanged();
+            pImp->bContextChanged = FALSE;
+        }
+        else
+            pImp->bContextChanged = TRUE;
+    }
+
     const sal_uInt16 nCount = pImp->pCaches->Count();
     for(sal_uInt16 i = 0; i < nCount; ++i)
     {
@@ -2293,6 +2308,15 @@ void SfxBindings::LeaveRegistrations( sal_uInt16 nLevel, char *pFile, int nLine 
     // check if this is the outer most level
     if ( --nRegLevel == 0 && !SFX_APP()->IsDowning() )
     {
+        if ( pImp->bContextChanged )
+        {
+            ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame > xFrame
+                ( pDispatcher->GetFrame()->GetFrame()->GetFrameInterface(), UNO_QUERY );
+            if ( xFrame.is() )
+                xFrame->contextChanged();
+            pImp->bContextChanged = FALSE;
+        }
+
 #ifndef slow
         SfxViewFrame* pFrame = pDispatcher->GetFrame();
 
@@ -2846,3 +2870,10 @@ void SfxBindings::SetRecorder_Impl( com::sun::star::uno::Reference< com::sun::st
     pImp->xRecorder = rRecorder;
 }
 
+void SfxBindings::ContextChanged_Impl()
+{
+    if ( !pImp->bInUpdate && ( !pImp->bContextChanged || !pImp->bAllMsgDirty ) )
+    {
+        InvalidateAll( TRUE );
+    }
+}

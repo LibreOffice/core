@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasecontroller.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: mba $ $Date: 2002-08-29 12:29:44 $
+ *  last change: $Author: mba $ $Date: 2002-09-18 16:10:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -393,7 +393,7 @@ void SAL_CALL IMPL_SfxBaseController_ListenerHelper::frameAction( const FRAMEACT
         else if ( aEvent.Action == ::com::sun::star::frame::FrameAction_CONTEXT_CHANGED )
         {
             ::vos::OGuard aGuard( Application::GetSolarMutex() );
-            m_pController->GetViewShell_Impl()->GetViewFrame()->GetBindings().InvalidateAll( TRUE );
+            m_pController->GetViewShell_Impl()->GetViewFrame()->GetBindings().ContextChanged_Impl();
         }
     }
 }
