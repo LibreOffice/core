@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-19 17:09:29 $
+ *  last change: $Author: aw $ $Date: 2001-11-02 15:41:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,6 +197,9 @@ void ViewShell::ImplEndAction( const BOOL bIdleEnd )
         return;
     }
 
+    // #94195# remember when the handles need refresh at end of method
+    sal_Bool bRefreshMarker(sal_False);
+
     bInEndAction = TRUE;
 
     //Laeuft hiermit das EndAction der Letzten Shell im Ring?
@@ -258,7 +261,12 @@ void ViewShell::ImplEndAction( const BOOL bIdleEnd )
                 // AW 22.09.99: tell DrawView that drawing order will be rearranged
                 // to give it a chance to react with proper IAO updates
                 if (HasDrawView())
+                {
                     GetDrawView()->ForceInvalidateMarkHandles();
+
+                    // #94195# set remark
+                    bRefreshMarker = sal_True;
+                }
 
                 ResetInvalidRect();
                 bPaintsFromSystem = TRUE;
@@ -391,6 +399,11 @@ void ViewShell::ImplEndAction( const BOOL bIdleEnd )
     if ( Imp()->IsScrolled() )
         Imp()->RestartScrollTimer();
 
+    // #94195# refresh handles when they were hard removed for display change
+    if(bRefreshMarker && HasDrawView())
+    {
+        GetDrawView()->AdjustMarkHdl(FALSE);
+    }
 }
 
 /******************************************************************************
