@@ -2,9 +2,9 @@
  *
  *  $RCSfile: floatwin.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-31 19:02:48 $
+ *  last change: $Author: ssa $ $Date: 2001-10-31 19:34:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,7 @@ void FloatingWindow::ImplInit( Window* pParent, WinBits nStyle )
 {
     mbFloatWin = TRUE;
     mbInCleanUp = FALSE;
+    mbGrabFocus = FALSE;
 
     if ( !pParent )
         pParent = Application::GetAppWindow();
@@ -383,7 +384,8 @@ Point FloatingWindow::ImplCalcPos( Window* pWindow,
 FloatingWindow* FloatingWindow::ImplFloatHitTest( Window* pReference, const Point& rPos, USHORT& rHitTest )
 {
     FloatingWindow* pWin = this;
-    Point aAbsolute( pReference->OutputToAbsoluteScreenPixel( rPos ) );
+    Point aAbsolute( pReference->OutputToAbsoluteScreenPixel(
+        pReference->ScreenToOutputPixel(rPos) ) );
 
     do
     {
@@ -637,6 +639,8 @@ void FloatingWindow::StartPopupMode( const Rectangle& rRect, ULONG nFlags )
     ImplSVData* pSVData = ImplGetSVData();
     mpNextFloat = pSVData->maWinData.mpFirstFloat;
     pSVData->maWinData.mpFirstFloat = this;
+    if( nFlags & FLOATWIN_POPUPMODE_GRABFOCUS )
+        mbGrabFocus = TRUE;     // force key input even without focus (useful for menues)
     Show( TRUE, SHOW_NOACTIVATE );
 }
 

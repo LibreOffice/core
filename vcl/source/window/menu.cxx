@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ssa $ $Date: 2001-10-29 17:35:18 $
+ *  last change: $Author: ssa $ $Date: 2001-10-31 19:34:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2032,7 +2032,7 @@ USHORT PopupMenu::ImplExecute( Window* pW, const Rectangle& rRect, ULONG nPopupM
     pWin->GrabFocus();
     if ( GetItemCount() )
     {
-        pWin->StartPopupMode( aRect, nPopupModeFlags );
+        pWin->StartPopupMode( aRect, nPopupModeFlags | FLOATWIN_POPUPMODE_GRABFOCUS );
     }
     if ( bPreSelectFirst )
     {
