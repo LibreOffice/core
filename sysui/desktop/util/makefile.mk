@@ -2,10 +2,6 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
-#
-#   last change: $Author: hr $ $Date: 2003-03-27 16:22:45 $
-#
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
 #
@@ -60,42 +56,27 @@
 #
 #*************************************************************************
 
-PRJ=..$/..$/..
+PRJ=..$/..
 
 PRJNAME=sysui
-TARGET=quickstart
-LIBTARGET=NO
-ENABLE_EXCEPTIONS=TRUE
-TARGETTYPE=GUI
+TARGET=launcher
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
 
-# --- Resources ----------------------------------------------------
-
-RCFILES=OOQuickStart.rc
-
 # --- Files --------------------------------------------------------
 
-OBJFILES=$(OBJ)$/QuickStart.obj
+ZIPFLAGS= -u -r
 
-APP1OBJS=$(OBJFILES)
-APP1NOSAL=TRUE
-APP1TARGET=$(TARGET)
-APP1STDLIBS=shell32.lib\
-            ole32.lib\
-            gdi32.lib\
-            oleaut32.lib\
-            comdlg32.lib\
-            kernel32.lib\
-            comsupp.lib\
-            oleaut32.lib
+ZIP1TARGET = kdeapp
+ZIP1LIST   = * .directory
+ZIP1DIR    = $(MISC)$/kde/share/applnk/OpenOffice.org
 
-APP1NOSVRES=$(RES)$/$(TARGET).res
-
-
+ZIP2TARGET = kdemime
+ZIP2LIST   = share/mimelnk/*
+ZIP2DIR    = $(MISC)$/kde
 
 # --- Targets ------------------------------------------------------
 
-.INCLUDE :	target.mk
+.INCLUDE :  target.mk

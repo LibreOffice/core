@@ -1,29 +1,18 @@
 mkdir: %_DEST%\res%_EXT%\icons
 mkdir: %_DEST%\inc%_EXT%\icons
+mkdir: %_DEST%\bin%_EXT%\so
 
 ..\%__SRC%\misc\*.ico %_DEST%\res%_EXT%\icons\*.ico
+..\%__SRC%\misc\*.gif %_DEST%\res%_EXT%\icons\*.gif
 ..\%__SRC%\bin\*.zip %_DEST%\pck%_EXT%\*.zip
+..\%__SRC%\bin\lngconv* %_DEST%\bin%_EXT%\lngconv*
 ..\%__SRC%\misc\dtint.sh %_DEST%\bin%_EXT%\dtint
 ..\%__SRC%\misc\dtappintegrate.sh %_DEST%\bin%_EXT%\dtappintegrate
-..\%__SRC%\misc\soffice.sh %_DEST%\bin%_EXT%\soffice
-..\%__SRC%\misc\sagenda.sh %_DEST%\bin%_EXT%\sagenda
-..\%__SRC%\misc\scalc.sh %_DEST%\bin%_EXT%\scalc
-..\%__SRC%\misc\sdraw.sh %_DEST%\bin%_EXT%\sdraw
-..\%__SRC%\misc\sfax.sh %_DEST%\bin%_EXT%\sfax
-..\%__SRC%\misc\simpress.sh %_DEST%\bin%_EXT%\simpress
-..\%__SRC%\misc\slabel.sh %_DEST%\bin%_EXT%\slabel
-..\%__SRC%\misc\sletter.sh %_DEST%\bin%_EXT%\sletter
-..\%__SRC%\misc\smaster.sh %_DEST%\bin%_EXT%\smaster
-..\%__SRC%\misc\smath.sh %_DEST%\bin%_EXT%\smath
-..\%__SRC%\misc\smemo.sh %_DEST%\bin%_EXT%\smemo
-..\%__SRC%\misc\svcard.sh %_DEST%\bin%_EXT%\svcard
-..\%__SRC%\misc\sweb.sh %_DEST%\bin%_EXT%\sweb
-..\%__SRC%\misc\swriter.sh %_DEST%\bin%_EXT%\swriter
-..\%__SRC%\misc\fromTemplate.sh %_DEST%\bin%_EXT%\fromtemplate
-..\%__SRC%\misc\nswrapper.sh %_DEST%\bin%_EXT%\nswrapper
-..\oounix\office\cde\icons\*.xpm %_DEST%\inc%_EXT%\icons\*.xpm
 
 ..\%__SRC%\bin\gnomeint %_DEST%\bin%_EXT%\gnomeint
 ..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*.dll
 ..\%__SRC%\bin\01\quickstart.exe %_DEST%\bin%_EXT%\quickstart.exe
+..\%__SRC%\bin\01\soquickstart.exe %_DEST%\bin%_EXT%\so\quickstart.exe
+
+..\win32\office\icons\001_star_butterfly.ico %_DEST%\res%_EXT%\icons\001_star_butterfly.ico
 

@@ -2,7 +2,7 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.2 $
 #
 #   last change: $Author: hr $ $Date: 2003-03-27 16:22:45 $
 #
@@ -60,10 +60,10 @@
 #
 #*************************************************************************
 
-PRJ=..$/..$/..
+PRJ=..$/..$/..$/..
 
 PRJNAME=sysui
-TARGET=quickstart
+TARGET=soquickstart
 LIBTARGET=NO
 ENABLE_EXCEPTIONS=TRUE
 TARGETTYPE=GUI
@@ -74,7 +74,8 @@ TARGETTYPE=GUI
 
 # --- Resources ----------------------------------------------------
 
-RCFILES=OOQuickStart.rc
+RCFILES=QuickStart.rc
+INCPRE=..
 
 # --- Files --------------------------------------------------------
 
@@ -93,8 +94,6 @@ APP1STDLIBS=shell32.lib\
             oleaut32.lib
 
 APP1NOSVRES=$(RES)$/$(TARGET).res
-
-
 
 # --- Targets ------------------------------------------------------
 
