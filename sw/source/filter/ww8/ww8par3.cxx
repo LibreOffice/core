@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par3.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:07:45 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 14:14:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -362,10 +362,10 @@ typedef SwCharFmt* WW8aCFmt[WW8ListManager::nMaxLevel];
 
 struct WW8LST   // nur DIE Eintraege, die WIR benoetigen!
 {
-    WW8aIdSty   aIdSty;     // Style Id's for each level,
+    WW8aIdSty aIdSty;     // Style Id's for each level,
                             //   nIStDNil if no style linked
-    sal_uInt32      nIdLst;     // Unique List ID
-    sal_uInt32      nTplC;      // Unique template code - Was ist das bloss?
+    sal_uInt32 nIdLst;     // Unique List ID
+    sal_uInt32 nTplC;      // Unique template code - Was ist das bloss?
     BYTE bSimpleList:1; // Flag: Liste hat nur EINEN Level
     BYTE bRestartHdn:1; // WW6-Kompatibilitaets-Flag:
                                                         //   true if the list should start numbering over
@@ -378,8 +378,6 @@ struct WW8LFO   // nur DIE Eintraege, die WIR benoetigen!
     sal_uInt8       nLfoLvl;    // count of levels whose format is overridden
     bool bSimpleList;
 };
-
-#define nIStDNil 0x0FFF // d.h. KEIN Style ist an den Level gelinkt
 
 struct WW8LVL   // nur DIE Eintraege, die WIR benoetigen!
 {
@@ -673,7 +671,7 @@ bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
         // Reader-Style auf den Style dieses Levels setzen
         sal_uInt16 nOldColl = rReader.GetNAktColl();
         sal_uInt16 nNewColl = nLevelStyle;
-        if( nIStDNil == nNewColl )
+        if (ww::stiNil == nNewColl)
             nNewColl = 0;
         rReader.SetNAktColl( nNewColl );
 
@@ -681,9 +679,11 @@ bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
         // in WW8PAR6.CXX rufen ganz normal ihr NewAttr() oder GetFmtAttr()
         // und diese merken am besetzten Reader-ItemSet-Pointer, dass dieser
         // spezielle ItemSet relevant ist - und nicht ein Stack oder Style!
+        USHORT nOldFlags1 = rReader.GetToggleAttrFlags();
+        USHORT nOldFlags2 = rReader.GetToggleBiDiAttrFlags();
         short nLen      = aLVL.nLenGrpprlChpx;
         sal_uInt8* pSprms1  = &aGrpprlChpx[0];
-        while( 0 < nLen )
+        while (0 < nLen)
         {
             sal_uInt16 nL1 = rReader.ImportSprm( pSprms1 );
             nLen      -= nL1;
@@ -692,6 +692,8 @@ bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
         // Reader-ItemSet-Pointer und Reader-Style zuruecksetzen
         rReader.SetAktItemSet( 0 );
         rReader.SetNAktColl( nOldColl );
+        rReader.SetToggleAttrFlags(nOldFlags1);
+        rReader.SetToggleBiDiAttrFlags(nOldFlags2);
     }
     //
     // 4. den Nummerierungsstring einlesen: ergibt Prefix und Postfix
@@ -2060,8 +2062,7 @@ void WW8FormulaControl::FormulaRead(SwWw8ControlType nWhich,
                 //use defaults ?
                 break;
             case 0x1: //00000001
-                ASSERT(nChecked, "expected to see checked, report to cmc (minor)");
-                //swap to unchecked from checked ?
+                //swap to unchecked from checked (#114841)?
                 nChecked = false;
                 break;
             case 0x5: //00000101
