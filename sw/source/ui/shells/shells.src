@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shells.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-26 03:40:36 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 13:09:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,8 +109,7 @@ String STR_GRFILTER_TOOBIG
 String STR_INSERT_GRAPHIC
 {
     Text [ de ] = "Grafik einfügen" ;
-    Text [ en-US ] = "Insert Graphics" ;
-    Text [ x-comment ] = " ";
+    Text [ en-US ] = "Insert picture" ;
 };
 String STR_NO_ADDRESSBOOK
 {
@@ -1339,8 +1338,8 @@ String STR_NAME_GROUP_LABEL
 };
 String STR_NAME_GROUP_DIALOG
 {
-    Text [ de ] = "Objekt benennen" ;
-    Text [ en-US ] = "Name object";
+    Text [ de ] = "Gruppe benennen" ;
+    Text [ en-US ] = "Name group";
 };
 
 
