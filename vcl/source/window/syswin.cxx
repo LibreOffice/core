@@ -2,9 +2,9 @@
  *
  *  $RCSfile: syswin.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 14:17:23 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:09:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -778,7 +778,7 @@ void SystemWindow::SetMenuBar( MenuBar* pMenuBar )
     if ( mpMenuBar != pMenuBar )
     {
         MenuBar* pOldMenuBar = mpMenuBar;
-        Window*  pOldWindow;
+        Window*  pOldWindow = NULL;
         Window*  pNewWindow=NULL;
         mpMenuBar = pMenuBar;
 
