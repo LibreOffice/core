@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexti.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: dvo $ $Date: 2001-09-28 16:36:02 $
+ *  last change: $Author: hr $ $Date: 2001-10-18 19:28:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -772,9 +772,11 @@ void SwXMLTextImportHelper::RedlineSetCursor(
     sal_Bool bStart,
     sal_Bool bIsOutsideOfParagraph)
 {
-    if (NULL != pRedlineHelper)
-        pRedlineHelper->SetCursor(rId, bStart, GetCursor()->getStart(),
+    if (NULL != pRedlineHelper) {
+        Reference<XTextRange> xTextRange( GetCursor()->getStart() );
+        pRedlineHelper->SetCursor(rId, bStart, xTextRange,
                                   bIsOutsideOfParagraph);
+    }
     // else: ignore redline (wasn't added before, else we'd have a helper)
 }
 
@@ -784,8 +786,8 @@ void SwXMLTextImportHelper::RedlineAdjustStartNodeCursor(
     OUString& rId = GetOpenRedlineId();
     if ((NULL != pRedlineHelper) && (rId.getLength() > 0))
     {
-        pRedlineHelper->AdjustStartNodeCursor(rId, bStart,
-                                              GetCursor()->getStart());
+        Reference<XTextRange> xTextRange( GetCursor()->getStart() );
+        pRedlineHelper->AdjustStartNodeCursor(rId, bStart, xTextRange );
         ResetOpenRedlineId();
     }
     // else: ignore redline (wasn't added before, or no open redline ID
