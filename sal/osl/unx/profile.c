@@ -2,9 +2,9 @@
  *
  *  $RCSfile: profile.c,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obr $ $Date: 2002-10-11 08:12:26 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:43:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -506,7 +506,7 @@ sal_Bool SAL_CALL osl_flushProfile(oslProfile Profile)
 static sal_Bool writeProfileImpl(osl_TFile* pFile)
 {
     int BytesWritten=0;
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     unsigned int nLen=0;
 #endif
 
@@ -527,7 +527,7 @@ static sal_Bool writeProfileImpl(osl_TFile* pFile)
       pFile->m_pWriteBuf,pFile->m_nWriteBufLen,strlen(pFile->m_pWriteBuf),pFile->m_nWriteBufLen - pFile->m_nWriteBufFree);*/
 #endif
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     nLen=strlen(pFile->m_pWriteBuf);
     OSL_ASSERT(nLen == (pFile->m_nWriteBufLen - pFile->m_nWriteBufFree));
 #endif
@@ -541,7 +541,7 @@ static sal_Bool writeProfileImpl(osl_TFile* pFile)
         return (sal_False);
     }
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     OSL_ASSERT(BytesWritten == nLen);
 #endif
 
