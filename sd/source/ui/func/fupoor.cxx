@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fupoor.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: aw $ $Date: 2002-02-26 14:31:06 $
+ *  last change: $Author: aw $ $Date: 2002-03-01 10:02:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,7 +125,9 @@ FuPoor::FuPoor(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
     bScrollable (FALSE),
     bDelayActive (FALSE),
     bNoScrollUntilInside (TRUE),
-    nSlotValue(0)
+    nSlotValue(0),
+    // #95491# remember MouseButton state
+    mnCode(0)
 {
     ReceiveRequest(rReq);
 
@@ -255,7 +257,11 @@ void FuPoor::ForceScroll(const Point& aPixPos)
 IMPL_LINK_INLINE_START( FuPoor, ScrollHdl, Timer *, pTimer )
 {
     Point aPnt(pWindow->GetPointerPosPixel());
-    MouseMove(MouseEvent(aPnt));
+
+    // #95491# use remembered MouseButton state to create correct
+    // MouseEvents for this artifical MouseMove.
+    MouseMove(MouseEvent(aPnt, 1, 0, GetMouseButtonCode()));
+
     return 0;
 }
 IMPL_LINK_INLINE_END( FuPoor, ScrollHdl, Timer *, pTimer )
@@ -764,7 +770,11 @@ IMPL_LINK_INLINE_START( FuPoor, DelayHdl, Timer *, pTimer )
     bScrollable = TRUE;
 
     Point aPnt(pWindow->GetPointerPosPixel());
-    MouseMove(MouseEvent(aPnt));
+
+    // #95491# use remembered MouseButton state to create correct
+    // MouseEvents for this artifical MouseMove.
+    MouseMove(MouseEvent(aPnt, 1, 0, GetMouseButtonCode()));
+
     return 0;
 }
 IMPL_LINK_INLINE_END( FuPoor, DelayHdl, Timer *, pTimer )
@@ -777,9 +787,21 @@ IMPL_LINK_INLINE_END( FuPoor, DelayHdl, Timer *, pTimer )
 
 BOOL FuPoor::MouseButtonUp (const MouseEvent& rMEvt)
 {
+    // #95491# remember button state for creation of own MouseEvents
+    SetMouseButtonCode(rMEvt.GetButtons());
+
     aDelayToScrollTimer.Stop ();
-    return bScrollable  =
-           bDelayActive = FALSE;
+    bScrollable = bDelayActive = FALSE;
+
+    return FALSE;
+}
+
+BOOL FuPoor::MouseButtonDown(const MouseEvent& rMEvt)
+{
+    // #95491# remember button state for creation of own MouseEvents
+    SetMouseButtonCode(rMEvt.GetButtons());
+
+    return FALSE;
 }
 
 /*************************************************************************
