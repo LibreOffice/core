@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-06 11:01:19 $
+ *  last change: $Author: fs $ $Date: 2001-08-08 10:05:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -965,6 +965,7 @@ void SAL_CALL ORowSet::updateRow(  ) throw(SQLException, RuntimeException)
             m_pCache->updateRow(m_aCurrentRow.operator ->());
             m_aBookmark     = m_pCache->getBookmark();
             m_aCurrentRow   = m_pCache->m_aMatrixIter;
+            m_aOldRow       = (*m_aCurrentRow);
             notifyAllListenersRowChanged(aEvt);
 
             ORowSetBase::firePropertyChange(aOldValues);
