@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envimg.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-08 08:14:29 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:58:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,14 @@
 #include <unotools/configitem.hxx>
 #endif
 
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
+
+// MakeSender -----------------------------------------------------------------
+
+SW_DLLPUBLIC String MakeSender();
+
 // enum -----------------------------------------------------------------------
 
 enum SwEnvAlign
@@ -82,7 +90,7 @@ enum SwEnvAlign
 
 // class SwEnvItem ------------------------------------------------------------
 
-class SwEnvItem : public SfxPoolItem
+class SW_DLLPUBLIC SwEnvItem : public SfxPoolItem
 {
 public:
 
