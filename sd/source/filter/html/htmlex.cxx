@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlex.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 10:31:36 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 13:06:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2688,7 +2688,7 @@ bool HtmlExport::CreateBitmaps()
         if( GalleryExplorer::BeginLocking( GALLERY_THEME_HTMLBUTTONS ) )
         {
             Graphic aButton;
-            INT16 nButtons = m_nButtonThema * NUM_BUTTONS + 1;
+            INT16 nButtons = m_nButtonThema * NUM_BUTTONS;
             for( INT16 nButton = 0; nButton < NUM_BUTTONS && nErr == 0; nButton++ )
             {
                 if(!m_bFrames && (nButton == BTN_MORE || nButton == BTN_LESS))
