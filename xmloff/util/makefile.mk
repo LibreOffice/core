@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: dr $ $Date: 2000-10-20 16:36:49 $
+#   last change: $Author: fs $ $Date: 2000-11-17 19:03:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,7 +80,8 @@ LIB1FILES=	\
     $(SLB)$/style.lib \
     $(SLB)$/text.lib \
     $(SLB)$/draw.lib \
-    $(SLB)$/chart.lib
+    $(SLB)$/chart.lib \
+    $(SLB)$/forms.lib
 
 # --- Shared-Library -----------------------------------------------
 
