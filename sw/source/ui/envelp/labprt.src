@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labprt.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-16 21:46:36 $
+ *  last change: $Author: kz $ $Date: 2001-07-14 20:21:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ TabPage TP_LAB_PRT
         Text[ chinese_traditional ] = "¾ã­¶(~E)";
         Text[ arabic ] = "ÕİÍÉ ßÇãáÉ";
         Text[ greek ] = "Ïëüêëçñç óåëßäá";
-        Text[ korean ] = "ÀüÃ¼ ÂÊ(~E)";
+        Text[ korean ] = "ÀüÃ¼ ÆäÀÌÁö(~E)";
         Text[ turkish ] = "~Tam sayfa";
         Text[ catalan ] = "~Toda la página";
     };
@@ -328,6 +328,7 @@ TabPage TP_LAB_PRT
     };
 };
  // **************************************************************************
+
 
 
 
