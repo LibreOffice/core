@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCache.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:51:58 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:48:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,9 +82,6 @@
 #ifndef _COM_SUN_STAR_SDBC_XWARNINGSSUPPLIER_HPP_
 #include <com/sun/star/sdbc/XWarningsSupplier.hpp>
 #endif
-#ifndef _COM_SUN_STAR_SDBCX_XCOLUMNSSUPPLIER_HPP_
-#include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-#endif
 #ifndef _COM_SUN_STAR_SDB_XRESULTSETACCESS_HPP_
 #include <com/sun/star/sdb/XResultSetAccess.hpp>
 #endif
@@ -93,9 +90,6 @@
 #endif
 #ifndef _COM_SUN_STAR_SDBC_XCOLUMNLOCATE_HPP_
 #include <com/sun/star/sdbc/XColumnLocate.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XCLOSEABLE_HPP_
-#include <com/sun/star/sdbc/XCloseable.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SDBCX_XROWLOCATE_HPP_
 #include <com/sun/star/sdbcx/XRowLocate.hpp>
@@ -106,17 +100,11 @@
 #ifndef _COM_SUN_STAR_SDBC_XRESULTSETUPDATE_HPP_
 #include <com/sun/star/sdbc/XResultSetUpdate.hpp>
 #endif
-#ifndef _COM_SUN_STAR_SDBC_XROWSET_HPP_
-#include <com/sun/star/sdbc/XRowSet.hpp>
-#endif
 #ifndef _COM_SUN_STAR_SDB_XROWSETAPPROVEBROADCASTER_HPP_
 #include <com/sun/star/sdb/XRowSetApproveBroadcaster.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SDBC_RESULTSETTYPE_HPP_
 #include <com/sun/star/sdbc/ResultSetType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XCANCELLABLE_HPP_
-#include <com/sun/star/util/XCancellable.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SDBCX_XDELETEROWS_HPP_
 #include <com/sun/star/sdbcx/XDeleteRows.hpp>
@@ -244,20 +232,8 @@ namespace dbaccess
         void deregisterOldRow(const TORowSetOldRowHelperRef& _rRow);
 
 
-    // OComponentHelper
-        void disposing(void);
-
-    // ::com::sun::star::lang::XEventListener
-        void disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);
-
-    // ::com::sun::star::sdbc::XCloseable
-        void close(  );
-
     // ::com::sun::star::sdbc::XResultSetMetaDataSupplier
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData > getMetaData(  );
-
-    // ::com::sun::star::sdbcx::XColumnsSupplier
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > getColumns(  ) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::sdbc::XRow
         sal_Bool wasNull(  );
@@ -327,17 +303,8 @@ namespace dbaccess
         void moveToInsertRow(  );
         void moveToCurrentRow(  );
 
-    // ::com::sun::star::sdbc::XRowSet
-        void execute(  );
-    // ::com::sun::star::util::XCancellable
-        void cancel(  ) throw(::com::sun::star::uno::RuntimeException);
-
     // ::com::sun::star::sdbcx::XDeleteRows
         ::com::sun::star::uno::Sequence< sal_Int32 > deleteRows( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& rows );
-
-    // ::com::sun::star::sdbc::XWarningsSupplier
-        ::com::sun::star::uno::Any getWarnings(  );
-        void clearWarnings(  );
     };
 }
 #endif
