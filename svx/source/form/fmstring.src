@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmstring.src,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:40:45 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:21:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,7 @@ String RID_ERR_CONTEXT_ADDFORM
     Text[ czech ] = "Chyba při vytváření formuláře";
     Text[ hebrew ] = "‮ארעה שגיאה בעת יצירת טופס‬";
     Text[ hindi ] = "फ़ॉर्म उत्पन्न करने के समय गलती";
+    Text[ slovak ] = "Chyba pri vytváraní formulára";
 };
 String RID_ERR_FIELDREQUIRED
 {
@@ -120,6 +121,7 @@ String RID_ERR_FIELDREQUIRED
     Text[ czech ] = "Je vyžadován vstup v poli '#'. Prosím zadejte hodnotu.";
     Text[ hebrew ] = "‮נדרש ערך בשדה '#'. נא לציין ערך.‬";
     Text[ hindi ] = "क्षेत्र '#' में इनपुट की आवश्यकता है । कृपया एक मात्रा को प्रविष्ट कीजिए ।";
+    Text[ slovak ] = "Je vyžadovaný vstup v poli '#'. Prosím zadajte hodnotu.";
 };
 String RID_ERR_DUPLICATE_NAME
 {
@@ -150,6 +152,7 @@ String RID_ERR_DUPLICATE_NAME
     Text[ czech ] = "Položka již existuje.\nVyberte prosím jiné jméno.";
     Text[ hebrew ] = "‮ערך בעל שם זהה כבר קיים.\nנא לבחור שם אחר.‬";
     Text[ hindi ] = "प्रविष्टि पहिले से ही अस्तित्व में है ।\nकृपया किसी दूसरा नाम को चुनिए ।";
+    Text[ slovak ] = "Položka už existuje.\nVyberte prosím iné meno.";
 };
 String RID_STR_LABEL
 {
@@ -180,6 +183,7 @@ String RID_STR_LABEL
     Text[ czech ] = "Popisek";
     Text[ hebrew ] = "‮תווית‬";
     Text[ hindi ] = "लेबिल";
+    Text[ slovak ] = "Označenie";
 };
 String RID_STR_ALIGN
 {
@@ -210,6 +214,7 @@ String RID_STR_ALIGN
     Text[ czech ] = "Zarovnání";
     Text[ hebrew ] = "‮ישור‬";
     Text[ hindi ] = "पंक्तिकरण";
+    Text[ slovak ] = "Zarovnanie";
 };
 String RID_STR_FONT
 {
@@ -220,7 +225,7 @@ String RID_STR_FONT
     Text [ portuguese_brazilian ] = "Conjunto de caracteres" ;
     Text [ swedish ] = "Teckenupps�ttning" ;
     Text [ danish ] = "Tegns�t" ;
-    Text [ italian ] = "Tipo di carattere" ;
+    Text [ italian ] = "Set di caratteri" ;
     Text [ spanish ] = "Juego de caracteres" ;
     Text [ french ] = "Jeu de caract�res" ;
     Text [ dutch ] = "Tekenset" ;
@@ -240,6 +245,7 @@ String RID_STR_FONT
     Text[ czech ] = "Znaková sada";
     Text[ hebrew ] = "‮אוצר תוים‬";
     Text[ hindi ] = "अक्षर समूह";
+    Text[ slovak ] = "Znaková sada";
 };
 String RID_STR_BACKGROUNDCOLOR
 {
@@ -270,6 +276,7 @@ String RID_STR_BACKGROUNDCOLOR
     Text[ czech ] = "Barva pozadí";
     Text[ hebrew ] = "‮צבע רקע‬";
     Text[ hindi ] = "पृष्ठभाग का रंग";
+    Text[ slovak ] = "Farba pozadia";
 };
 String RID_STR_BORDER
 {
@@ -300,6 +307,7 @@ String RID_STR_BORDER
     Text[ czech ] = "Okraj";
     Text[ hebrew ] = "‮מסגרות‬";
     Text[ hindi ] = "किनारा";
+    Text[ slovak ] = "Okraj";
 };
 String RID_STR_DEFAULT_CONTROL
 {
@@ -330,6 +338,7 @@ String RID_STR_DEFAULT_CONTROL
     Text[ czech ] = "Původní ovládací pole";
     Text[ hebrew ] = "‮בקרת ברירת המחדל‬";
     Text[ hindi ] = "अनुपस्थिति नियंत्रण";
+    Text[ slovak ] = "Východzie kontrolné pole";
 };
 String RID_STR_HSCROLL
 {
@@ -360,6 +369,7 @@ String RID_STR_HSCROLL
     Text[ czech ] = "Vodorovný posuvník";
     Text[ hebrew ] = "‮סרגל גלילה אופקי‬";
     Text[ hindi ] = "समतल प्रकार का स्क्रॉल पट्टी";
+    Text[ slovak ] = "Vodorovný posuvník";
 };
 String RID_STR_VSCROLL
 {
@@ -390,6 +400,7 @@ String RID_STR_VSCROLL
     Text[ czech ] = "Svislý posuvník";
     Text[ hebrew ] = "‮פס גלילה אנכי‬";
     Text[ hindi ] = "लम्ब प्रकार का स्क्रॉल पट्टी";
+    Text[ slovak ] = "Zvislý posuvník";
 };
 String RID_STR_MULTILINE
 {
@@ -421,6 +432,7 @@ String RID_STR_MULTILINE
     Text[ czech ] = "Víceřádkový vstup";
     Text[ hebrew ] = "‮קלט רב קוי‬";
     Text[ hindi ] = "अनेक रेखाओं का इनपुट्";
+    Text[ slovak ] = "Viacriadkový vstup";
 };
 String RID_STR_MULTISELECTION
 {
@@ -451,6 +463,7 @@ String RID_STR_MULTISELECTION
     Text[ czech ] = "Vícenásobný výběr";
     Text[ hebrew ] = "‮בחירה מרובה‬";
     Text[ hindi ] = "बहुमुखी चुनाव";
+    Text[ slovak ] = "Viacnásobný výber";
 };
 String RID_STR_NAME
 {
@@ -481,6 +494,7 @@ String RID_STR_NAME
     Text[ czech ] = "Název";
     Text[ hebrew ] = "‮שם‬";
     Text[ hindi ] = "नाम्";
+    Text[ slovak ] = "Názov";
 };
 String RID_STR_TABSTOP
 {
@@ -511,6 +525,7 @@ String RID_STR_TABSTOP
     Text[ czech ] = "Krok tabulátoru";
     Text[ hebrew ] = "‮מיקום טאב‬";
     Text[ hindi ] = "टॉबरुकावट";
+    Text[ slovak ] = "Krok tabulátora";
 };
 String RID_STR_TEXT
 {
@@ -541,6 +556,7 @@ String RID_STR_TEXT
     Text[ czech ] = "Text";
     Text[ hebrew ] = "‮טקסט‬";
     Text[ hindi ] = "टेक्स्ट्";
+    Text[ slovak ] = "Text";
 };
 String RID_STR_CONTROLSOURCE
 {
@@ -571,6 +587,7 @@ String RID_STR_CONTROLSOURCE
     Text[ czech ] = "Datové pole";
     Text[ hebrew ] = "‮שדה נתונים‬";
     Text[ hindi ] = "डॉटा क्षेत्र";
+    Text[ slovak ] = "Dátové pole";
 };
 String RID_STR_DROPDOWN
 {
@@ -601,6 +618,7 @@ String RID_STR_DROPDOWN
     Text[ czech ] = "Rozbalit";
     Text[ hebrew ] = "‮נגלל מטה‬";
     Text[ hindi ] = "नीचे गिराओ";
+    Text[ slovak ] = "Stránkovanie dole";
 };
 String RID_STR_BOUNDCOLUMN
 {
@@ -631,6 +649,7 @@ String RID_STR_BOUNDCOLUMN
     Text[ czech ] = "Svázaný sloupec";
     Text[ hebrew ] = "‮עמודה מוגבלת‬";
     Text[ hindi ] = "बँधा हुआ स्तंभ";
+    Text[ slovak ] = "Zviazaný stĺpec";
 };
 String RID_STR_LISTSOURCE
 {
@@ -661,6 +680,7 @@ String RID_STR_LISTSOURCE
     Text[ czech ] = "Obsah seznamu";
     Text[ hebrew ] = "‮תכולת רשימה‬";
     Text[ hindi ] = "सूची का विषय";
+    Text[ slovak ] = "Obsah zoznamu";
 };
 String RID_STR_LISTSOURCETYPE
 {
@@ -691,6 +711,7 @@ String RID_STR_LISTSOURCETYPE
     Text[ czech ] = "Druh obsahu seznamu";
     Text[ hebrew ] = "‮סוג תכולת רשימה‬";
     Text[ hindi ] = "सूची का विषय वर्ग";
+    Text[ slovak ] = "Typ obsahu zoznamu";
 };
 String RID_STR_CURSORSOURCE
 {
@@ -721,6 +742,7 @@ String RID_STR_CURSORSOURCE
     Text[ czech ] = "Obsah";
     Text[ hebrew ] = "‮תכולה‬";
     Text[ hindi ] = "विषय";
+    Text[ slovak ] = "Obsah";
 };
 String RID_STR_CURSORSOURCETYPE
 {
@@ -751,6 +773,7 @@ String RID_STR_CURSORSOURCETYPE
     Text[ czech ] = "Typ obsahu";
     Text[ hebrew ] = "‮סוג תכולה‬";
     Text[ hindi ] = "विषय वर्ग";
+    Text[ slovak ] = "Typ obsahu";
 };
 String RID_STR_ALLOW_ADDITIONS
 {
@@ -781,6 +804,7 @@ String RID_STR_ALLOW_ADDITIONS
     Text[ czech ] = "Umožnit přidávání";
     Text[ hebrew ] = "‮לאפשר הוספות‬";
     Text[ hindi ] = "जोड़ना स्वीकृत";
+    Text[ slovak ] = "Povoliť pridávanie";
 };
 String RID_STR_ALLOW_DELETIONS
 {
@@ -811,6 +835,7 @@ String RID_STR_ALLOW_DELETIONS
     Text[ czech ] = "Odstranit data";
     Text[ hebrew ] = "‮מחיקת נתונים‬";
     Text[ hindi ] = "डॉटा को मिटाओ";
+    Text[ slovak ] = "Odstrániť dáta";
 };
 String RID_STR_ALLOW_EDITS
 {
@@ -841,6 +866,7 @@ String RID_STR_ALLOW_EDITS
     Text[ czech ] = "Povolit změny";
     Text[ hebrew ] = "‮לאפשר שינויים‬";
     Text[ hindi ] = "सुधार करना स्वीकृत";
+    Text[ slovak ] = "Povoliť zmeny";
 };
 String RID_STR_DATAENTRY
 {
@@ -871,6 +897,7 @@ String RID_STR_DATAENTRY
     Text[ czech ] = "Přidat pouze data ";
     Text[ hebrew ] = "‮הוספת נתונים בלבד‬";
     Text[ hindi ] = "केवल डॉटा को जोड़ो ";
+    Text[ slovak ] = "Pridať iba dáta ";
 };
 String RID_STR_DATASOURCE
 {
@@ -901,6 +928,7 @@ String RID_STR_DATASOURCE
     Text[ czech ] = "Zdroj dat";
     Text[ hebrew ] = "‮מקור הנתונים‬";
     Text[ hindi ] = "डॉटा मूल";
+    Text[ slovak ] = "Zdroj dát";
 };
 String RID_STR_MASTERFIELDS
 {
@@ -931,6 +959,7 @@ String RID_STR_MASTERFIELDS
     Text[ czech ] = "Propojit hlavní pole";
     Text[ hebrew ] = "‮קישור שדות שולטים‬";
     Text[ hindi ] = "प्रधान क्षेत्रों को लिंक करो";
+    Text[ slovak ] = "Prepojiť hlavné polia";
 };
 String RID_STR_SLAVEFIELDS
 {
@@ -961,6 +990,7 @@ String RID_STR_SLAVEFIELDS
     Text[ czech ] = "Propojit závislá pole";
     Text[ hebrew ] = "‮קישור שדות נשלטים‬";
     Text[ hindi ] = "अधीन क्षेत्रों को लिंक करो";
+    Text[ slovak ] = "Prepojiť závislé polia";
 };
 String RID_STR_FORMS
 {
@@ -991,6 +1021,7 @@ String RID_STR_FORMS
     Text[ czech ] = "Formuláře";
     Text[ hebrew ] = "‮טפסים‬";
     Text[ hindi ] = "फ़ॉर्म";
+    Text[ slovak ] = "Formuláre";
 };
 String RID_STR_NO_PROPERTIES
 {
@@ -1021,6 +1052,7 @@ String RID_STR_NO_PROPERTIES
     Text[ czech ] = "Není zvoleno žádné ovládací pole";
     Text[ hebrew ] = "‮פקד לא נבחר‬";
     Text[ hindi ] = "कोई नियंत्रण को नहीं चुना";
+    Text[ slovak ] = "Nie je zadané žiadne kontrolné pole";
 };
 String RID_STR_PROPERTIES_CONTROL
 {
@@ -1052,6 +1084,7 @@ String RID_STR_PROPERTIES_CONTROL
     Text[ czech ] = "Vlastnosti: ";
     Text[ hebrew ] = "‮מאפיינים:‬";
     Text[ hindi ] = "विशेषतायें: ";
+    Text[ slovak ] = "Vlastnosti: ";
 };
 String RID_STR_PROPERTIES_FORM
 {
@@ -1082,6 +1115,7 @@ String RID_STR_PROPERTIES_FORM
     Text[ czech ] = "Vlastnosti formuláře";
     Text[ hebrew ] = "‮מאפייני טופס‬";
     Text[ hindi ] = "फ़ॉर्म विशेषतायें";
+    Text[ slovak ] = "Vlastnosti formulára";
 };
 String RID_STR_FMEXPLORER
 {
@@ -1112,6 +1146,7 @@ String RID_STR_FMEXPLORER
     Text[ czech ] = "Navigátor formulářem";
     Text[ hebrew ] = "‮נווט טפסים‬";
     Text[ hindi ] = "फ़ॉर्म नेविगेटर";
+    Text[ slovak ] = "Navigátor formulárom";
 };
 String RID_STR_FORM
 {
@@ -1142,6 +1177,7 @@ String RID_STR_FORM
     Text[ czech ] = "Formulář";
     Text[ hebrew ] = "‮טופס‬";
     Text[ hindi ] = "फ़ॉर्म";
+    Text[ slovak ] = "Formulár";
 };
 String RID_STR_TABWIN_PREFIX
 {
@@ -1171,6 +1207,7 @@ String RID_STR_TABWIN_PREFIX
     Text[ czech ] = "Tabulka;Dotaz;SQL;SQL [Nativní]";
     Text[ hebrew ] = "‮טבלה;שאילתה;Sql;Sql [Native]‬";
     Text[ hindi ] = "सारणी;जानकारी;Sql;Sql [Native]";
+    Text[ slovak ] = "Tabuľka;Požiadavka;Sql;Sql [Natívne]";
 };
 String RID_STR_FORMSHELL
 {
@@ -1201,6 +1238,7 @@ String RID_STR_FORMSHELL
     Text[ czech ] = "Formulář";
     Text[ hebrew ] = "‮טופס‬";
     Text[ hindi ] = "फ़ॉर्म";
+    Text[ slovak ] = "Formulár";
 };
 String RID_STR_STDFORMNAME
 {
@@ -1315,6 +1353,7 @@ String RID_STR_CONTROL
     Text[ czech ] = "Ovládací prvek";
     Text[ hebrew ] = "‮פקד‬";
     Text[ hindi ] = "नियंत्रण";
+    Text[ slovak ] = "Ovládací prvok";
 };
 String RID_STR_REC_TEXT
 {
@@ -1345,6 +1384,7 @@ String RID_STR_REC_TEXT
     Text[ czech ] = "Záznam";
     Text[ hebrew ] = "‮רשומה‬";
     Text[ hindi ] = "लेखा";
+    Text[ slovak ] = "Záznam";
 };
 String RID_STR_REC_FROM_TEXT
 {
@@ -1375,6 +1415,7 @@ String RID_STR_REC_FROM_TEXT
     Text[ czech ] = "z";
     Text[ hebrew ] = "‮של‬";
     Text[ hindi ] = "का";
+    Text[ slovak ] = "z";
 };
 String RID_STR_FORM_FILTERED
 {
@@ -1405,6 +1446,7 @@ String RID_STR_FORM_FILTERED
     Text[ czech ] = "(filtrováno)";
     Text[ hebrew ] = "‮(מסונן)‬";
     Text[ hindi ] = "(फ़िल्टर किया हुआ)";
+    Text[ slovak ] = "(filtrované)";
 };
 String RID_STR_FIELDSELECTION
 {
@@ -1435,6 +1477,7 @@ String RID_STR_FIELDSELECTION
     Text[ czech ] = "Výběr polí:";
     Text[ hebrew ] = "‮הוספת שדה:‬";
     Text[ hindi ] = "क्षेत्र चुनाव:";
+    Text[ slovak ] = "Výber polí:";
 };
 String RID_STR_WRITEERROR
 {
@@ -1465,6 +1508,7 @@ String RID_STR_WRITEERROR
     Text[ czech ] = "Chyba při zápisu dat do databáze";
     Text[ hebrew ] = "‮ארעה שגיאה בעת כתיבה למסד הנתונים‬";
     Text[ hindi ] = "लेखासंचय में डॉटा को लिखने के समय गलती";
+    Text[ slovak ] = "Chyba pri zápise dát do databázy";
 };
 
 String RID_STR_SYNTAXERROR
@@ -1495,6 +1539,7 @@ String RID_STR_SYNTAXERROR
     Text[ czech ] = "Syntaktická chyba v dotazu";
     Text[ hebrew ] = "Syntax error in query expression";
     Text[ hindi ] = "जानकारी की वर्णन में सिन्टाक्स की गलती";
+    Text[ slovak ] = "Syntaktická chyba v požiadavke";
 };
 
 String RID_STR_DELETECONFIRM_RECORD
@@ -1526,6 +1571,7 @@ String RID_STR_DELETECONFIRM_RECORD
     Text[ czech ] = "Zamýšlíte smazat 1 záznam.";
     Text[ hebrew ] = "‮הכוונה היא למחוק רשומה אחת.‬";
     Text[ hindi ] = "आप 1 लेखा को मिटाने का उद्देश रखा है ।";
+    Text[ slovak ] = "Chcete zmazať 1 záznam.";
 };
 String RID_STR_DELETECONFIRM_RECORDS
 {
@@ -1556,6 +1602,7 @@ String RID_STR_DELETECONFIRM_RECORDS
     Text[ czech ] = "# záznamů bude smazáno.";
     Text[ hebrew ] = "‮# רשומות תמחקנה.‬";
     Text[ hindi ] = "# लेखाओं को मिटाया जाएगा ।";
+    Text[ slovak ] = "# záznamov bude zmazaných.";
 };
 String RID_STR_DELETECONFIRM
 {
@@ -1586,6 +1633,7 @@ String RID_STR_DELETECONFIRM
     Text[ czech ] = "Pokud zvolíte Ano, nebudete moci tuto operaci vrátit zpět.\nChcete přesto pokračovat?";
     Text[ hebrew ] = "‮לא ניתן לבטל פעולה זו!\nהאם אכן להמשיך?‬";
     Text[ hindi ] = "अगर आप हाँ को क्लिक करेंगे, तो आप इस कार्य को अनावृत्ति नहीं कर सकते है!\nआप किसी तरह जारी रखना चाहते है?";
+    Text[ slovak ] = "Pokiaľ zvolíte Áno, nebudete môcť túto operáciu vrátiť späť!\nChcete naozaj pokračovať?";
 };
 
 String RID_ERR_NO_ELEMENT
@@ -1617,6 +1665,7 @@ String RID_ERR_NO_ELEMENT
     Text[ czech ] = "Zvolte položku ze seznamu nebo zadejte text pro jednu z položek seznamu.";
     Text[ hebrew ] = "‮נא לבחור ערך מהרשימה או להקליד ערך התואם לאחד מפריטי הרשימה.‬";
     Text[ hindi ] = "सूची से एक प्रविष्टि को चुनिए अथवा किसी एक सूची का विषय के अनुरूप टेक्स्ट् को प्रविष्ट कीजिए ।";
+    Text[ slovak ] = "Zvoľte položku zo zoznamu alebo zadajte text zodpovedajúci jednej z položiek zoznamu.";
 };
 
 String RID_STR_READONLY
@@ -1648,6 +1697,7 @@ String RID_STR_READONLY
     Text[ czech ] = "Pouze pro čtení";
     Text[ hebrew ] = "‮קריאה בלבד‬";
     Text[ hindi ] = "केवल पढ़ने केलिए";
+    Text[ slovak ] = "Iba na čítanie";
 };
 String RID_STR_GROUPBOX
 {
@@ -1678,6 +1728,7 @@ String RID_STR_GROUPBOX
     Text[ czech ] = "Prvek rámce";
     Text[ hebrew ] = "‮פריט מסגרת‬";
     Text[ hindi ] = "फ़्रेम ऐलिमेन्ट्";
+    Text[ slovak ] = "Prvok rámca";
 };
 String RID_STR_TABINDEX
 {
@@ -1708,6 +1759,7 @@ String RID_STR_TABINDEX
     Text[ czech ] = "Pořadí";
     Text[ hebrew ] = "‮סדר‬";
     Text[ hindi ] = "क्रम";
+    Text[ slovak ] = "Poradie";
 };
 String RID_STR_NAVIGATION
 {
@@ -1738,6 +1790,7 @@ String RID_STR_NAVIGATION
     Text[ czech ] = "Navigace";
     Text[ hebrew ] = "‮ניווט‬";
     Text[ hindi ] = "नाविगेशन";
+    Text[ slovak ] = "Navigácia";
 };
 String RID_STR_FILTER_CRITERIA
 {
@@ -1768,6 +1821,7 @@ String RID_STR_FILTER_CRITERIA
     Text[ czech ] = "Filtr";
     Text[ hebrew ] = "‮סינון‬";
     Text[ hindi ] = "फिल्टर";
+    Text[ slovak ] = "Filter";
 };
 String RID_STR_SORT_CRITERIA
 {
@@ -1798,6 +1852,7 @@ String RID_STR_SORT_CRITERIA
     Text[ czech ] = "Seřadit";
     Text[ hebrew ] = "‮מיון‬";
     Text[ hindi ] = "सोर्ट";
+    Text[ slovak ] = "Zoradiť";
 };
 String RID_STR_NAVIGATIONBAR
 {
@@ -1828,6 +1883,7 @@ String RID_STR_NAVIGATIONBAR
     Text[ czech ] = "Navigační panel";
     Text[ hebrew ] = "‮סרגל ניווט‬";
     Text[ hindi ] = "नाविगेशन पट्टी";
+    Text[ slovak ] = "Navigačný panel";
 };
 String RID_STR_CYCLE
 {
@@ -1858,6 +1914,7 @@ String RID_STR_CYCLE
     Text[ czech ] = "Cyklus";
     Text[ hebrew ] = "‮מחזור‬";
     Text[ hindi ] = "कालचक्र";
+    Text[ slovak ] = "Cyklus";
 };
 String RID_STR_VALUE
 {
@@ -1888,6 +1945,7 @@ String RID_STR_VALUE
     Text[ czech ] = "Hodnota";
     Text[ hebrew ] = "‮ערך‬";
     Text[ hindi ] = "मूल्य";
+    Text[ slovak ] = "Hodnota";
 };
 String RID_STR_FORMATKEY
 {
@@ -1918,6 +1976,7 @@ String RID_STR_FORMATKEY
     Text[ czech ] = "Formátování";
     Text[ hebrew ] = "‮עיצוב‬";
     Text[ hindi ] = "रचना करना";
+    Text[ slovak ] = "Formátovanie";
 };
 String RID_STR_SIZE
 {
@@ -1948,6 +2007,7 @@ String RID_STR_SIZE
     Text[ czech ] = "Velikost";
     Text[ hebrew ] = "‮גודל‬";
     Text[ hindi ] = "परिमाण";
+    Text[ slovak ] = "Veľkosť";
 };
 String RID_STR_CLASSID
 {
@@ -1978,6 +2038,7 @@ String RID_STR_CLASSID
     Text[ czech ] = "ID třídy";
     Text[ hebrew ] = "‮מזהה מחלקה (ID)‬";
     Text[ hindi ] = "क्लॉस ID";
+    Text[ slovak ] = "ID skupiny";
 };
 String RID_STR_HEIGHT
 {
@@ -2008,6 +2069,7 @@ String RID_STR_HEIGHT
     Text[ czech ] = "Výška";
     Text[ hebrew ] = "‮גובה‬";
     Text[ hindi ] = "ऊँचाई";
+    Text[ slovak ] = "Výška";
 };
 String RID_STR_WIDTH
 {
@@ -2038,6 +2100,7 @@ String RID_STR_WIDTH
     Text[ czech ] = "Šířka";
     Text[ hebrew ] = "‮רוחב‬";
     Text[ hindi ] = "चौड़ाई";
+    Text[ slovak ] = "Šírka";
 };
 String RID_STR_ROWHEIGHT
 {
@@ -2068,6 +2131,7 @@ String RID_STR_ROWHEIGHT
     Text[ czech ] = "Výška řádku";
     Text[ hebrew ] = "‮גובה שורה‬";
     Text[ hindi ] = "पंक्ति का ऊँचाई";
+    Text[ slovak ] = "Výška riadku";
 };
 String RID_STR_FILLCOLOR
 {
@@ -2098,6 +2162,7 @@ String RID_STR_FILLCOLOR
     Text[ czech ] = "Barva výplně";
     Text[ hebrew ] = "‮צבע מילוי‬";
     Text[ hindi ] = "रंग भरो";
+    Text[ slovak ] = "Farba výplne";
 };
 String RID_STR_TEXTCOLOR
 {
@@ -2128,6 +2193,7 @@ String RID_STR_TEXTCOLOR
     Text[ czech ] = "Barva textu";
     Text[ hebrew ] = "‮צבע גופן‬";
     Text[ hindi ] = "टेक्स्ट् का रंग";
+    Text[ slovak ] = "Farba textu";
 };
 String RID_STR_LINECOLOR
 {
@@ -2158,6 +2224,7 @@ String RID_STR_LINECOLOR
     Text[ czech ] = "Barva čáry";
     Text[ hebrew ] = "‮צבע קו‬";
     Text[ hindi ] = "रेखा का रंग";
+    Text[ slovak ] = "Farba čiary";
 };
 String RID_STR_REFVALUE
 {
@@ -2188,6 +2255,7 @@ String RID_STR_REFVALUE
     Text[ czech ] = "Referenční hodnota";
     Text[ hebrew ] = "‮ערך יחוס‬";
     Text[ hindi ] = "रेफ़रेन्स मूल्य";
+    Text[ slovak ] = "Referenčná hodnota";
 };
 String RID_STR_STRINGITEMLIST
 {
@@ -2218,6 +2286,7 @@ String RID_STR_STRINGITEMLIST
     Text[ czech ] = "Seznam záznamů";
     Text[ hebrew ] = "‮ערכי רשימה‬";
     Text[ hindi ] = "सूची का विषयें";
+    Text[ slovak ] = "Zoznam záznamov";
 };
 String RID_STR_COLUMN
 {
@@ -2248,6 +2317,7 @@ String RID_STR_COLUMN
     Text[ czech ] = "Sloupec";
     Text[ hebrew ] = "‮עמודה‬";
     Text[ hindi ] = "स्तम्भ";
+    Text[ slovak ] = "Stl";
 };
 String RID_STR_BUTTONTYPE
 {
@@ -2279,6 +2349,7 @@ String RID_STR_BUTTONTYPE
     Text[ czech ] = "Typ tlačítka";
     Text[ hebrew ] = "‮סוג כפתור‬";
     Text[ hindi ] = "बटन वर्ग";
+    Text[ slovak ] = "Typ tlačidla";
 };
 String RID_STR_SUBMIT_ACTION
 {
@@ -2309,6 +2380,7 @@ String RID_STR_SUBMIT_ACTION
     Text[ hebrew ] = "‮URL‬";
     Text[ thai ] = "URL";
     Text[ hindi ] = "URL";
+    Text[ slovak ] = "URL";
 };
 String RID_STR_SUBMIT_METHOD
 {
@@ -2339,6 +2411,7 @@ String RID_STR_SUBMIT_METHOD
     Text[ czech ] = "Typ odeslání";
     Text[ hebrew ] = "‮סוג הגשה‬";
     Text[ hindi ] = "उपस्थापन का वर्ग";
+    Text[ slovak ] = "Typ preposlania";
 };
 String RID_STR_SUBMIT_ENCODING
 {
@@ -2369,6 +2442,7 @@ String RID_STR_SUBMIT_ENCODING
     Text[ czech ] = "Kódování pro odeslání";
     Text[ hebrew ] = "‮קידוד הגשה‬";
     Text[ hindi ] = "उपस्थापन ऐनकोडिंग";
+    Text[ slovak ] = "Kódovanie pre odoslanie";
 };
 String RID_STR_DEFAULTVALUE
 {
@@ -2399,6 +2473,7 @@ String RID_STR_DEFAULTVALUE
     Text[ czech ] = "Výchozí hodnota";
     Text[ hebrew ] = "‮ערך ברירת מחדל‬";
     Text[ hindi ] = "अनुपस्थिति मूल्य";
+    Text[ slovak ] = "Východzia hodnota";
 };
 String RID_STR_SUBMIT_TARGET
 {
@@ -2429,6 +2504,7 @@ String RID_STR_SUBMIT_TARGET
     Text[ czech ] = "Cílový rámec";
     Text[ hebrew ] = "‮מסגרת יעד‬";
     Text[ hindi ] = "लक्ष्य फ़्रेम";
+    Text[ slovak ] = "Cieľový rámec";
 };
 String RID_STR_DEFAULT_CHECKED
 {
@@ -2459,6 +2535,7 @@ String RID_STR_DEFAULT_CHECKED
     Text[ czech ] = "Výchozí stav";
     Text[ hebrew ] = "‮מצב ברירת מחדל‬";
     Text[ hindi ] = "अनुपस्थिति वस्तुस्थिति";
+    Text[ slovak ] = "Východzí stav";
 };
 String RID_STR_IMAGE_URL
 {
@@ -2489,6 +2566,7 @@ String RID_STR_IMAGE_URL
     Text[ czech ] = "Obrázek";
     Text[ hebrew ] = "‮גרפי‬";
     Text[ hindi ] = "सुचित्र";
+    Text[ slovak ] = "Obrázok";
 };
 String RID_STR_DEFAULT_SELECT_SEQ
 {
@@ -2519,6 +2597,7 @@ String RID_STR_DEFAULT_SELECT_SEQ
     Text[ czech ] = "Výchozí výběr";
     Text[ hebrew ] = "‮בחירת ברירת המחדל‬";
     Text[ hindi ] = "अनुपस्थिति चुनाव";
+    Text[ slovak ] = "Východzí výber";
 };
 String RID_STR_UNDO_PROPERTY
 {
@@ -2549,6 +2628,7 @@ String RID_STR_UNDO_PROPERTY
     Text[ czech ] = "Nastavit vlastnosti '#'";
     Text[ hebrew ] = "‮קביעת מאפין '#'‬";
     Text[ hindi ] = "'#' विशेषता सेट्ट करो";
+    Text[ slovak ] = "Nastaviť vlastnosti '#'";
 };
 String RID_STR_UNDO_CONTAINER_INSERT
 {
@@ -2579,6 +2659,7 @@ String RID_STR_UNDO_CONTAINER_INSERT
     TEXT[ czech ] = "Vložit do kontejneru";
     TEXT[ hebrew ] = "‮הכנסה למיכל‬";
     TEXT[ hindi ] = "कन्टैनर में जोड़ो";
+    TEXT[ slovak ] = "Vložiť do kontajnera";
 };
 String RID_STR_UNDO_CONTAINER_REMOVE
 {
@@ -2609,6 +2690,7 @@ String RID_STR_UNDO_CONTAINER_REMOVE
     TEXT[ czech ] = "Smazat #";
     TEXT[ hebrew ] = "‮מחיקה #‬";
     TEXT[ hindi ] = "# को मिटाओ";
+    TEXT[ slovak ] = "Zmazať #";
 };
 String RID_STR_UNDO_CONTAINER_REMOVE_MULTIPLE
 {
@@ -2639,6 +2721,7 @@ String RID_STR_UNDO_CONTAINER_REMOVE_MULTIPLE
     TEXT[ czech ] = "Odstranit # objekty";
     TEXT[ hebrew ] = "‮מחיקת # עצמים‬";
     TEXT[ hindi ] = "# वस्तुओं को मिटाओ";
+    TEXT[ slovak ] = "Odstrániť # objekty";
 };
 String RID_STR_UNDO_CONTAINER_REPLACE
 {
@@ -2669,6 +2752,7 @@ String RID_STR_UNDO_CONTAINER_REPLACE
     TEXT[ czech ] = "Nahradit část kontejneru";
     TEXT[ hebrew ] = "‮החלפת פריט במיכל‬";
     TEXT[ hindi ] = "कन्टैनर ऐलिमेन्ट् को प्रतिस्थापित करो";
+    TEXT[ slovak ] = "Nahradiť časť kontajnera";
 };
 String RID_STR_UNDO_DELETE_LOGICAL
 {
@@ -2699,6 +2783,7 @@ String RID_STR_UNDO_DELETE_LOGICAL
     TEXT[ czech ] = "Odstranit strukturu";
     TEXT[ hebrew ] = "‮מחיקת מבנה‬";
     TEXT[ hindi ] = "बनावट को मिटाओ";
+    TEXT[ slovak ] = "Odstrániť štruktúru";
 };
 String RID_STR_UNDO_TABORDER
 {
@@ -2729,6 +2814,7 @@ String RID_STR_UNDO_TABORDER
     Text[ czech ] = "Nastavit pořadí tabulace";
     Text[ hebrew ] = "‮קביעת סדר טאבים‬";
     Text[ hindi ] = "टॉब क्रम को सेट्ट करो";
+    Text[ slovak ] = "Nastaviť pozadie tabuľky";
 };
 String RID_STR_UNDO_MODEL_REPLACE
 {
@@ -2758,6 +2844,7 @@ String RID_STR_UNDO_MODEL_REPLACE
     Text[ czech ] = "Nahradit ovládací prvek";
     Text[ hebrew ] = "‮החלפת פקד‬";
     Text[ hindi ] = "नियंत्रण को प्रतिस्थापित करो";
+    Text[ slovak ] = "Nahradiť ovládacie prvky";
 };
 String RID_STR_DATE
 {
@@ -2788,6 +2875,7 @@ String RID_STR_DATE
     Text[ czech ] = "Datum";
     Text[ hebrew ] = "‮תאריך‬";
     Text[ hindi ] = "दिनांक";
+    Text[ slovak ] = "Dátum";
 };
 String RID_STR_DATEMIN
 {
@@ -2818,6 +2906,7 @@ String RID_STR_DATEMIN
     Text[ czech ] = "Min. datum";
     Text[ hebrew ] = "‮ערך מזערי לתאריך‬";
     Text[ hindi ] = "न्यूनतम दिनांक";
+    Text[ slovak ] = "Min. dátum";
 };
 String RID_STR_DATEMAX
 {
@@ -2848,6 +2937,7 @@ String RID_STR_DATEMAX
     Text[ czech ] = "Max. datum";
     Text[ hebrew ] = "‮ערך מירבי לתאריך‬";
     Text[ hindi ] = "अधिकतम दिनांक";
+    Text[ slovak ] = "Max. dátum";
 };
 String RID_STR_DATEFORMAT
 {
@@ -2878,6 +2968,7 @@ String RID_STR_DATEFORMAT
     Text[ czech ] = "Formát data";
     Text[ hebrew ] = "‮צורת תאריך‬";
     Text[ hindi ] = "दिनांक रचना";
+    Text[ slovak ] = "Formát dátumu";
 };
 String RID_STR_TIME
 {
@@ -2908,6 +2999,7 @@ String RID_STR_TIME
     Text[ czech ] = "Čas";
     Text[ hebrew ] = "‮שעה‬";
     Text[ hindi ] = "समय";
+    Text[ slovak ] = "Čas";
 };
 String RID_STR_TIMEMIN
 {
@@ -2938,6 +3030,7 @@ String RID_STR_TIMEMIN
     Text[ czech ] = "Min. čas";
     Text[ hebrew ] = "‮ערך מזערי לשעה‬";
     Text[ hindi ] = "न्यूनतम समय";
+    Text[ slovak ] = "Min. čas";
 };
 String RID_STR_TIMEMAX
 {
@@ -2968,6 +3061,7 @@ String RID_STR_TIMEMAX
     Text[ czech ] = "Max. čas";
     Text[ hebrew ] = "‮ערך מירבי לשעה‬";
     Text[ hindi ] = "अधिकतम समय";
+    Text[ slovak ] = "Max. čas";
 };
 String RID_STR_TIMEFORMAT
 {
@@ -2998,6 +3092,7 @@ String RID_STR_TIMEFORMAT
     Text[ czech ] = "Formát času";
     Text[ hebrew ] = "‮צורת זמן‬";
     Text[ hindi ] = "समय रचना";
+    Text[ slovak ] = "Formát času";
 };
 String RID_STR_VALUEMIN
 {
@@ -3028,6 +3123,7 @@ String RID_STR_VALUEMIN
     Text[ czech ] = "Min. hodnota";
     Text[ hebrew ] = "‮ערך מזערי‬";
     Text[ hindi ] = "न्यूनतम मूल्य";
+    Text[ slovak ] = "Min. hodnota";
 };
 String RID_STR_VALUEMAX
 {
@@ -3058,6 +3154,7 @@ String RID_STR_VALUEMAX
     Text[ czech ] = "Max. hodnota";
     Text[ hebrew ] = "‮ערך מירבי‬";
     Text[ hindi ] = "अधिकतम मूल्य";
+    Text[ slovak ] = "Max. hodnota";
 };
 String RID_STR_VALUESTEP
 {
@@ -3088,6 +3185,7 @@ String RID_STR_VALUESTEP
     Text[ czech ] = "Hodnotu zvýšit/snížit";
     Text[ hebrew ] = "‮ערך שלב‬";
     Text[ hindi ] = "मूल्य को बढ़ाओ/घटाओ";
+    Text[ slovak ] = "Hodnotu zvýšiť/znížiť";
 };
 String RID_STR_CURRENCYSYMBOL
 {
@@ -3118,6 +3216,7 @@ String RID_STR_CURRENCYSYMBOL
     Text[ czech ] = "Symbol měny";
     Text[ hebrew ] = "‮סימן מטבע‬";
     Text[ hindi ] = "मुद्रा की संकेत";
+    Text[ slovak ] = "Symbol meny";
 };
 String RID_STR_CURRSYM_POSITION
 {
@@ -3148,6 +3247,7 @@ String RID_STR_CURRSYM_POSITION
     Text[ czech ] = "Symbol pro předponu";
     Text[ hebrew ] = "‮סימן קידומת‬";
     Text[ hindi ] = "संकेत को आगे जोड़ो";
+    Text[ slovak ] = "Symbol pre predponu";
 };
 String RID_STR_EDITMASK
 {
@@ -3178,6 +3278,7 @@ String RID_STR_EDITMASK
     Text[ czech ] = "Upravit masku";
     Text[ hebrew ] = "‮תבנית עריכה‬";
     Text[ hindi ] = "मास्क संपादन";
+    Text[ slovak ] = "Upraviť masku";
 };
 String RID_STR_LITERALMASK
 {
@@ -3208,6 +3309,7 @@ String RID_STR_LITERALMASK
     Text[ czech ] = "Znaková maska";
     Text[ hebrew ] = "‮תבנית ערך מפורש‬";
     Text[ hindi ] = "लिटरल मास्क";
+    Text[ slovak ] = "Znaková maska";
 };
 String RID_STR_ENABLED
 {
@@ -3238,6 +3340,7 @@ String RID_STR_ENABLED
     Text[ czech ] = "Zapnuto";
     Text[ hebrew ] = "‮אפשרי‬";
     Text[ hindi ] = "सक्षम किया";
+    Text[ slovak ] = "Zapnuté";
 };
 String RID_STR_AUTOCOMPLETE
 {
@@ -3268,6 +3371,7 @@ String RID_STR_AUTOCOMPLETE
     Text[ czech ] = "Automatické vyplňování";
     Text[ hebrew ] = "‮מילוי אוטומטי‬";
     Text[ hindi ] = "स्वयं भरो";
+    Text[ slovak ] = "Automatické vyplňovanie";
 };
 String RID_STR_LINECOUNT
 {
@@ -3298,6 +3402,7 @@ String RID_STR_LINECOUNT
     Text[ czech ] = "Počet řádek";
     Text[ hebrew ] = "‮מספר שורות‬";
     Text[ hindi ] = "रेखा की गिनती";
+    Text[ slovak ] = "Počet riadkov";
 };
 String RID_STR_MAXTEXTLEN
 {
@@ -3328,6 +3433,7 @@ String RID_STR_MAXTEXTLEN
     Text[ czech ] = "Maximální délka textu";
     Text[ hebrew ] = "‮אורך מירבי לטקסט‬";
     Text[ hindi ] = "टेक्स्ट् की अधिकतम लम्बाई";
+    Text[ slovak ] = "Maximálna dĺžka textu";
 };
 String RID_STR_SPIN
 {
@@ -3358,6 +3464,7 @@ String RID_STR_SPIN
     Text[ czech ] = "Rolovací tlačítko";
     Text[ hebrew ] = "‮כפתור סביבון‬";
     Text[ hindi ] = "स्पिन बटन";
+    Text[ slovak ] = "Rolovacie tlačidlo";
 };
 String RID_STR_STRICTFORMAT
 {
@@ -3388,6 +3495,7 @@ String RID_STR_STRICTFORMAT
     Text[ czech ] = "Přesný formát";
     Text[ hebrew ] = "‮ הקפדה על צורה‬";
     Text[ hindi ] = "दृढ़ रचना";
+    Text[ slovak ] = "Presný formát";
 };
 String RID_STR_SHOWTHOUSANDSEP
 {
@@ -3418,6 +3526,7 @@ String RID_STR_SHOWTHOUSANDSEP
     Text[ czech ] = "Oddělovač tisíců";
     Text[ hebrew ] = "‮פסיקת אלפים‬";
     Text[ hindi ] = "सहस्र आलगानेवाला";
+    Text[ slovak ] = "Oddeľovač tisícok";
 };
 String RID_STR_HARDLINEBREAKS
 {
@@ -3430,7 +3539,7 @@ String RID_STR_HARDLINEBREAKS
     Text [ danish ] = "H�rdt linjeskift" ;
     Text [ italian ] = "Interruzione di riga fissa" ;
     Text [ spanish ] = "Salto de l�nea manual" ;
-    Text [ french ] = "Renvoi � la ligne direct" ;
+    Text [ french ] = "Retour � la ligne direct" ;
     Text [ dutch ] = "Vast regeleinde" ;
     Text[ chinese_simplified ] = "手动换行";
     Text[ russian ] = "������� ������";
@@ -3448,6 +3557,7 @@ String RID_STR_HARDLINEBREAKS
     Text[ czech ] = "Ruční zalomení řádku";
     Text[ hebrew ] = "‮שובר שורה ידני‬";
     Text[ hindi ] = "मान्युवल रेखा की खण्डन";
+    Text[ slovak ] = "Ručné zalomenie riadku";
 };
 String RID_STR_PRINTABLE
 {
@@ -3478,6 +3588,7 @@ String RID_STR_PRINTABLE
     Text[ czech ] = "Tisk";
     Text[ hebrew ] = "‮הדפסה‬";
     Text[ hindi ] = "छपाई";
+    Text[ slovak ] = "Tlačiť";
 };
 String RID_STR_TARGET_URL
 {
@@ -3508,6 +3619,7 @@ String RID_STR_TARGET_URL
     Text[ hebrew ] = "‮URL‬";
     Text[ thai ] = "URL";
     Text[ hindi ] = "URL";
+    Text[ slovak ] = "URL";
 };
 String RID_STR_TARGET_FRAME
 {
@@ -3538,6 +3650,7 @@ String RID_STR_TARGET_FRAME
     Text[ czech ] = "Cílový rámec";
     Text[ hebrew ] = "‮מסגרת יעד‬";
     Text[ hindi ] = "लक्ष्य फ़्रेम";
+    Text[ slovak ] = "Cieľový rámec";
 };
 String RID_STR_TAG
 {
@@ -3568,6 +3681,7 @@ String RID_STR_TAG
     Text[ czech ] = "Další informace";
     Text[ hebrew ] = "‮מידע נוסף‬";
     Text[ hindi ] = "अधिकतर जानकारी";
+    Text[ slovak ] = "Ďalšie informácie";
 };
 String RID_STR_ECHO_CHAR
 {
@@ -3598,6 +3712,7 @@ String RID_STR_ECHO_CHAR
     Text[ czech ] = "Znaky hesla";
     Text[ hebrew ] = "‮תוי סיסמה‬";
     Text[ hindi ] = "कूटशब्द अक्षरें";
+    Text[ slovak ] = "Znaky hesla";
 };
 String RID_STR_EMPTY_IS_NULL
 {
@@ -3628,6 +3743,7 @@ String RID_STR_EMPTY_IS_NULL
     Text[ czech ] = "Prázdný řetězec je NULL";
     Text[ hebrew ] = "‮מחרוזת ריקה היא NULL‬";
     Text[ hindi ] = "खाली स्ट्रिंग NULL है";
+    Text[ slovak ] = "Prázdny reťazec je NULL";
 };
 String RID_STR_DECIMAL_ACCURACY
 {
@@ -3658,6 +3774,7 @@ String RID_STR_DECIMAL_ACCURACY
     Text[ czech ] = "Desetinná přesnost";
     Text[ hebrew ] = "‮דיוק עשרוני‬";
     Text[ hindi ] = "दशांश शुद्धता";
+    Text[ slovak ] = "Desatinná presnosť";
 };
 String RID_STR_DEFAULT_BUTTON
 {
@@ -3688,6 +3805,7 @@ String RID_STR_DEFAULT_BUTTON
     Text[ czech ] = "Výchozí tlačítko";
     Text[ hebrew ] = "‮כפתור ברירת מחדל‬";
     Text[ hindi ] = "अनुपस्थिति बटन";
+    Text[ slovak ] = "Východzie tlačidlo";
 };
  // Events
 String RID_STR_PROPTITLE_PUSHBUTTON
@@ -3719,6 +3837,7 @@ String RID_STR_PROPTITLE_PUSHBUTTON
     Text[ czech ] = "Tlačítko";
     Text[ hebrew ] = "‮כפתור‬";
     Text[ hindi ] = "बटन";
+    Text[ slovak ] = "Tlačidlo";
 };
 String RID_STR_PROPTITLE_RADIOBUTTON
 {
@@ -3749,6 +3868,7 @@ String RID_STR_PROPTITLE_RADIOBUTTON
     Text[ czech ] = "Tlačítko volby";
     Text[ hebrew ] = "‮כפתור בחירה‬";
     Text[ hindi ] = "विकल्प बटन";
+    Text[ slovak ] = "Tlačidlo nastavení";
 };
 String RID_STR_PROPTITLE_CHECKBOX
 {
@@ -3779,6 +3899,7 @@ String RID_STR_PROPTITLE_CHECKBOX
     Text[ czech ] = "Zaškrtávací políčko";
     Text[ hebrew ] = "‮תיבת סימון‬";
     Text[ hindi ] = "चेक बॉक्स";
+    Text[ slovak ] = "Zaškrtávacie políčko";
 };
 String RID_STR_PROPTITLE_FIXEDTEXT
 {
@@ -3809,6 +3930,7 @@ String RID_STR_PROPTITLE_FIXEDTEXT
     Text[ czech ] = "Pole popisku";
     Text[ hebrew ] = "‮שדה תוית‬";
     Text[ hindi ] = "लेबिल क्षेत्र";
+    Text[ slovak ] = "Popisné pole";
 };
 String RID_STR_PROPTITLE_GROUPBOX
 {
@@ -3839,6 +3961,7 @@ String RID_STR_PROPTITLE_GROUPBOX
     Text[ czech ] = "Seskupení";
     Text[ hebrew ] = "‮תיבת קבוצה‬";
     Text[ hindi ] = "समूह बॉक्स";
+    Text[ slovak ] = "Zoskupenie";
 };
 String RID_STR_PROPTITLE_EDIT
 {
@@ -3869,6 +3992,7 @@ String RID_STR_PROPTITLE_EDIT
     Text[ czech ] = "Textové pole";
     Text[ hebrew ] = "‮תיבת טקסט‬";
     Text[ hindi ] = "टेक्स्ट् बॉक्स";
+    Text[ slovak ] = "Textové pole";
 };
 String RID_STR_PROPTITLE_FORMATTED
 {
@@ -3899,6 +4023,7 @@ String RID_STR_PROPTITLE_FORMATTED
     Text[ czech ] = "Formátované pole";
     Text[ hebrew ] = "‮שדה מעוצב‬";
     Text[ hindi ] = "रचना किया हुआ क्षेत्र";
+    Text[ slovak ] = "Formátované pole";
 };
 String RID_STR_MOVING_CURSOR
 {
@@ -3929,6 +4054,7 @@ String RID_STR_MOVING_CURSOR
     Text[ czech ] = "zarovnat zdrojová data";
     Text[ hebrew ] = "‮יישור מקור נתונים‬";
     Text[ hindi ] = "डॉटा मूल को क्रम में रखो";
+    Text[ slovak ] = "zarovnať zdrojové dáta";
 };
 String RID_STR_PROPTITLE_LISTBOX
 {
@@ -3959,6 +4085,7 @@ String RID_STR_PROPTITLE_LISTBOX
     Text[ czech ] = "Pole seznamu";
     Text[ hebrew ] = "‮תיבת רשימה‬";
     Text[ hindi ] = "सूची बॉक्स";
+    Text[ slovak ] = "Pole zoznamu";
 };
 String RID_STR_PROPTITLE_COMBOBOX
 {
@@ -3989,6 +4116,7 @@ String RID_STR_PROPTITLE_COMBOBOX
     Text[ czech ] = "Kombinované pole";
     Text[ hebrew ] = "‮תיבה משולבת‬";
     Text[ hindi ] = "कॉम्बो बॉक्स";
+    Text[ slovak ] = "Combo Box";
 };
 String RID_STR_PROPTITLE_IMAGEBUTTON
 {
@@ -4019,6 +4147,7 @@ String RID_STR_PROPTITLE_IMAGEBUTTON
     Text[ czech ] = "Obrázkové tlačítko";
     Text[ hebrew ] = "‮כפתור צלם‬";
     Text[ hindi ] = "सुचित्र बटन";
+    Text[ slovak ] = "Obrázkové tlačidlo";
 };
 String RID_STR_PROPTITLE_IMAGECONTROL
 {
@@ -4049,6 +4178,7 @@ String RID_STR_PROPTITLE_IMAGECONTROL
     Text[ czech ] = "Ovládací pole obrázku";
     Text[ hebrew ] = "‮בקרת צלם‬";
     Text[ hindi ] = "सुचित्र नियंत्रण";
+    Text[ slovak ] = "Ovládacie pole obrázku";
 };
 String RID_STR_PROPTITLE_FILECONTROL
 {
@@ -4079,6 +4209,7 @@ String RID_STR_PROPTITLE_FILECONTROL
     Text[ czech ] = "Výběr souboru";
     Text[ hebrew ] = "‮בחירת קובץ‬";
     Text[ hindi ] = "फाइल चुनाव";
+    Text[ slovak ] = "Výber súboru";
 };
 String RID_STR_PROPTITLE_DATEFIELD
 {
@@ -4109,6 +4240,7 @@ String RID_STR_PROPTITLE_DATEFIELD
     Text[ czech ] = "Pole pro datum";
     Text[ hebrew ] = "‮שדה תאריך‬";
     Text[ hindi ] = "दिनांक क्षेत्र";
+    Text[ slovak ] = "Dátumové pole";
 };
 String RID_STR_PROPTITLE_TIMEFIELD
 {
@@ -4139,6 +4271,7 @@ String RID_STR_PROPTITLE_TIMEFIELD
     Text[ czech ] = "Pole pro čas";
     Text[ hebrew ] = "‮שדה שעה‬";
     Text[ hindi ] = "समय क्षेत्र";
+    Text[ slovak ] = "Časové pole";
 };
 String RID_STR_PROPTITLE_NUMERICFIELD
 {
@@ -4169,6 +4302,7 @@ String RID_STR_PROPTITLE_NUMERICFIELD
     Text[ czech ] = "Číselné pole";
     Text[ hebrew ] = "‮שדה נומרי‬";
     Text[ hindi ] = "संख्या क्षेत्र";
+    Text[ slovak ] = "Číselné pole";
 };
 String RID_STR_PROPTITLE_CURRENCYFIELD
 {
@@ -4199,6 +4333,7 @@ String RID_STR_PROPTITLE_CURRENCYFIELD
     Text[ czech ] = "Měnové pole";
     Text[ hebrew ] = "‮שדה מטבע‬";
     Text[ hindi ] = "मुद्रा क्षेत्र ";
+    Text[ slovak ] = "Menové pole";
 };
 String RID_STR_PROPTITLE_PATTERNFIELD
 {
@@ -4229,6 +4364,7 @@ String RID_STR_PROPTITLE_PATTERNFIELD
     Text[ czech ] = "Pole vzorku";
     Text[ hebrew ] = "‮שדה תבנית‬";
     Text[ hindi ] = "नमूना क्षेत्र";
+    Text[ slovak ] = "Pole vzorky";
 };
 String RID_STR_PROPTITLE_DBGRID
 {
@@ -4259,6 +4395,7 @@ String RID_STR_PROPTITLE_DBGRID
     Text[ czech ] = "Prvek tabulky ";
     Text[ hebrew ] = "‮פקד בטבלה ‬";
     Text[ hindi ] = "सारणी नियंत्रण  ";
+    Text[ slovak ] = "Prvok tabuľky ";
 };
 String RID_STR_PROPTITLE_MULTISELECT
 {
@@ -4289,6 +4426,7 @@ String RID_STR_PROPTITLE_MULTISELECT
     Text[ czech ] = "Vícenásobný výběr";
     Text[ hebrew ] = "‮בחירה מרובה‬";
     Text[ hindi ] = "बहुमुखी चुनाव";
+    Text[ slovak ] = "Viacnásobný výber";
 };
 String RID_STR_TRISTATE
 {
@@ -4319,6 +4457,7 @@ String RID_STR_TRISTATE
     Text[ czech ] = "Trojstav";
     Text[ hebrew ] = "‮לוגיקה תלת מצבית‬";
     Text[ hindi ] = "ट्रैस्टेट्";
+    Text[ slovak ] = "Trojstav";
 };
 String RID_STR_NODATACONTROLS
 {
@@ -4349,6 +4488,7 @@ String RID_STR_NODATACONTROLS
     Text[ czech ] = "Žádné ovládací datové prvky v současném formuláři!";
     Text[ hebrew ] = "‮אין פקדים שקשורים לנתונים בטופס הנוכחי!‬";
     Text[ hindi ] = "वर्तमान फॉर्म में कोई डॉटा-सम्बन्धित नियंत्रण नहीं है!";
+    Text[ slovak ] = "Žiadne ovládacie dátové prvky v súčasnom formulári!";
 };
 
 String RID_STR_HELPTEXT
@@ -4380,6 +4520,7 @@ String RID_STR_HELPTEXT
     Text[ czech ] = "Pomocný text";
     Text[ hebrew ] = "‮טקסט של עזרה‬";
     Text[ hindi ] = "सहायता टेक्स्ट्";
+    Text[ slovak ] = "Pomocný text";
 };
 
 String RID_STR_HELPURL
@@ -4411,6 +4552,7 @@ String RID_STR_HELPURL
     Text[ czech ] = "URL nápovědy";
     Text[ hebrew ] = "‮URL עזרה‬";
     Text[ hindi ] = "सहायता URL";
+    Text[ slovak ] = "URL pomocníka";
 };
 
 String RID_STR_RECORDMARKER
@@ -4441,6 +4583,7 @@ String RID_STR_RECORDMARKER
     Text[ czech ] = "Značka záznamu";
     Text[ hebrew ] = "‮סמן רשומות‬";
     Text[ hindi ] = "लेखा मार्कर";
+    Text[ slovak ] = "Označenie záznamu";
 };
 
 
@@ -4473,6 +4616,7 @@ String RID_STR_DATETIME_LABELPOSTFIX
     Text[ czech ] = "(Datum); (Čas)";
     Text[ hebrew ] = "‮(תאריך); (שעה)‬";
     Text[ hindi ] = "(दिनांक); (समय)";
+    Text[ slovak ] = "(Dátum); (Čas)";
 };
 
 String RID_STR_FILTERPROPOSAL
@@ -4504,6 +4648,7 @@ String RID_STR_FILTERPROPOSAL
     Text[ czech ] = "Návrh filtru";
     Text[ hebrew ] = "‮הצעת מסנן‬";
     Text[ hindi ] = "फिल्टर प्रस्ताव";
+    Text[ slovak ] = "Návrh filtra";
 };
 
 String RID_STR_FILTER_NAVIGATOR
@@ -4535,6 +4680,7 @@ String RID_STR_FILTER_NAVIGATOR
     Text[ czech ] = "Navigátor filtrem";
     Text[ hebrew ] = "‮נווט מסננים‬";
     Text[ hindi ] = "फिल्टर नाविगेटर";
+    Text[ slovak ] = "Sprievodca filtrom";
 };
 
 String RID_STR_FILTER_FILTER_FOR
@@ -4566,6 +4712,7 @@ String RID_STR_FILTER_FILTER_FOR
     Text[ czech ] = "Filtr pro";
     Text[ hebrew ] = "‮מסנן עבור‬";
     Text[ hindi ] = "केलिए फिल्टर";
+    Text[ slovak ] = "Filter pre";
 };
 
 String RID_STR_FILTER_FILTER_OR
@@ -4596,6 +4743,7 @@ String RID_STR_FILTER_FILTER_OR
     Text[ czech ] = "Nebo";
     Text[ hebrew ] = "‮או‬";
     Text[ hindi ] = "अथवा";
+    Text[ slovak ] = "Alebo";
 };
 
 String RID_STR_NOCONTROLS_FOR_EXTERNALDISPLAY
@@ -4627,6 +4775,7 @@ String RID_STR_NOCONTROLS_FOR_EXTERNALDISPLAY
     Text[ czech ] = "Platné vázané ovládací prvky, které mohou být použity v tabulkovém pohledu, v současném formuláři neexistují.";
     Text[ hebrew ] = "‮אין בטופס הנוכחי בקרי טווח חוקיים שניתנים לשימוש במבט טבלאי.‬";
     Text[ hindi ] = "वर्तमान फ़ॉर्म में सारणी का दृश्य में उपयोग करने वाला मान्य नियंत्रण सीमा अस्तित्व में नहीं है ।";
+    Text[ slovak ] = "Platné viazané ovládacie prvky, ktoré môžu byť použité v tabuľkovom pohľade v súčasnom formulári neexistujú.";
 };
 
 String RID_STR_LABELCONTROL
@@ -4657,6 +4806,7 @@ String RID_STR_LABELCONTROL
     Text[ czech ] = "Pole popisku";
     Text[ hebrew ] = "‮שדה תוית‬";
     Text[ hindi ] = "लेबिल क्षेत्र";
+    Text[ slovak ] = "Popisné pole";
 };
 
 String RID_STR_AUTOFIELD
@@ -4687,6 +4837,7 @@ String RID_STR_AUTOFIELD
     Text[ czech ] = "<AutomatickéPole>";
     Text[ hebrew ] = "‮<שדה אוטומטי>‬";
     Text[ hindi ] = "<स्वयंक्षेत्र>";
+    Text[ slovak ] = "<AutomatickéPole>";
 };
 
 QueryBox RID_QRY_SAVEMODIFIED
@@ -4720,6 +4871,7 @@ QueryBox RID_QRY_SAVEMODIFIED
     Message[ czech ] = "Obsah aktuálního formuláře byl změněn.\nPřejete si uložit změny?";
     Message[ hebrew ] = "‮תוכן הטופס הנוכחי עודכן.\nהאם לשמור את השינוים?‬";
     Message[ hindi ] = "वर्तमान फॉर्म की विषय को सुधार किया है ।\nआप सुधारों को संचित करना चाहते है?";
+    Message[ slovak ] = "Obsah aktuálneho formulára bol zmenený.\nPrajete si uložiť zmeny?";
 };
 String RID_STR_ESCAPE_PROCESSING
 {
@@ -4749,6 +4901,7 @@ String RID_STR_ESCAPE_PROCESSING
     Text[ czech ] = "Analyzovat SQL příkaz";
     Text[ hebrew ] = "‮ניתוח פקודת SQL‬";
     Text[ hindi ] = "SQL आज्ञा को विश्लेषण करो";
+    Text[ slovak ] = "Analyzovať SQL príkaz";
 };
 String RID_STR_COULDNOTSETORDER
 {
@@ -4778,6 +4931,7 @@ String RID_STR_COULDNOTSETORDER
     Text[ czech ] = "Chybné nastavení kritérií pro řazení";
     Text[ hebrew ] = "‮שגיאה בקביעת קריטריוני המיון‬";
     Text[ hindi ] = "सोर्ट् क्रैटीरिया को सेट्ट करने के समय गलती";
+    Text[ slovak ] = "Chybné nastavenie kritérií­ pre zaradenie";
 };
 String RID_STR_COULDNOTSETFILTER
 {
@@ -4807,6 +4961,7 @@ String RID_STR_COULDNOTSETFILTER
     Text[ czech ] = "Chybné nastavení kritérií filtru";
     Text[ hebrew ] = "‮שגיאה בקביעת קריטריוני הסינון‬";
     Text[ hindi ] = "फिल्टर क्रैटीरिया को सेट्ट करने के समय गलती";
+    Text[ slovak ] = "Chybné nastavenie kritérií filtra";
 };
 String RID_STR_ERR_DELETERECORD
 {
@@ -4819,7 +4974,7 @@ String RID_STR_ERR_DELETERECORD
     Text[ dutch ] = "Fout bij wissen van huidige record";
     Text[ french ] = "Erreur lors de la suppression de l'enregistrement actif";
     Text[ spanish ] = "Error al borrar el registro actual";
-    Text[ italian ] = "Errore nel cancellare il record di dati corrente.";
+    Text[ italian ] = "Errore nel cancellare il record di dati attivo";
     Text[ danish ] = "Fejl ved sletning af den aktuelle datapost";
     Text[ swedish ] = "Fel vid radering av den aktuella dataposten";
     Text[ polish ] = "B��d usuwania bie��cego rekordu";
@@ -4836,6 +4991,7 @@ String RID_STR_ERR_DELETERECORD
     Text[ czech ] = "Chyba při odstraňování stávajícího záznamu";
     Text[ hebrew ] = "‮שגיאה במחיקת הרשומה הנוכחית‬";
     Text[ hindi ] = "वर्तमान लेखा को मिटाने के समय गलती";
+    Text[ slovak ] = "Chyba pri odstraňovaní aktuálneho záznamu";
 };
 String RID_STR_SVT_SQL_INTERNATIONAL
 {
@@ -4867,6 +5023,7 @@ String RID_STR_SVT_SQL_INTERNATIONAL
     Text[ czech ] = "LIKE;NOT;EMPTY;TRUE;FALSE;IS;BETWEEN;OR;AND;Average;Count;Maximum;Minimum;Sum";
     Text[ hebrew ] = "‮כמו;לא;ריק;אמת;שקר;;בין;או;ו;ממוצע;מספר;מירבי;מזערי;סיכום‬";
     Text[ hindi ] = "LIKE;NOT;EMPTY;TRUE;FALSE;IS;BETWEEN;OR;AND;Average;Count;Maximum;Minimum;Sum";
+    Text[ slovak ] = "LIKE;NOT;EMPTY;TRUE;FALSE;IS;BETWEEN;OR;AND;Average;Count;Maximum;Minimum;Sum";
 };
 
 String RID_STR_SVT_SQL_SYNTAX_ERROR
@@ -4900,6 +5057,7 @@ String RID_STR_SVT_SQL_SYNTAX_ERROR
     Text[ czech ] = "Syntaktická chyba v SQL příkazu";
     Text[ hebrew ] = "‮שגיאה בתחביר SQL‬";
     Text[ hindi ] = "SQL वाक्य में सिन्टॉक्स गलती";
+    Text[ slovak ] = "Syntaktická chyba v príkaze SQL";
 };
 String RID_STR_SVT_SQL_SYNTAX_ERROR_BEFORE
 {
@@ -4932,6 +5090,7 @@ String RID_STR_SVT_SQL_SYNTAX_ERROR_BEFORE
     Text[ czech ] = "před výrazem \"#\".";
     Text[ hebrew ] = "‮לפני ביטוי \"#\".‬";
     Text[ hindi ] = "before \"#\" expression.";
+    Text[ slovak ] = "pred \"#\" výrazom.";
 };
 
 String RID_STR_SVT_SQL_SYNTAX_VALUE_NO_LIKE
@@ -4962,6 +5121,7 @@ String RID_STR_SVT_SQL_SYNTAX_VALUE_NO_LIKE
     Text[ czech ] = "Hodnota #1 nemůže být použita jako LIKE!";
     Text[ hebrew ] = "‮לא ניתן להשתמש בערך #1 ביחד עם 'כמו'!‬";
     Text[ hindi ] = "The value #1 cannot be used with LIKE!";
+    Text[ slovak ] = "Hodnota #1 nemôže byť použitá s  LIKE!";
 };
 
 String RID_STR_SVT_SQL_SYNTAX_FIELD_NO_LIKE
@@ -4992,6 +5152,7 @@ String RID_STR_SVT_SQL_SYNTAX_FIELD_NO_LIKE
     Text[ czech ] = "LIKE nemůže být použito s tímto polem.";
     Text[ hebrew ] = "‮לא ניתן להשתמש ב'כמו' עם שדה זה.‬";
     Text[ hindi ] = "LIKE cannot be used with this field.";
+    Text[ slovak ] = "LIKE nemôže byť použité s týmto poľom.";
 };
 
 String RID_STR_SVT_SQL_SYNTAX_NO_NUM
@@ -5022,6 +5183,7 @@ String RID_STR_SVT_SQL_SYNTAX_NO_NUM
     Text[ czech ] = "Pole nemůže být porovnáno s řetězcem.";
     Text[ hebrew ] = "‮לא ניתן להשוות שדה זה עם מחרוזת.‬";
     Text[ hindi ] = "The field cannot be compared with a string.";
+    Text[ slovak ] = "Pole nemôže byť porovnávané s reťazcom.";
 };
 
 String RID_STR_SVT_SQL_SYNTAX_ACCESS_DAT_NO_VALID
@@ -5052,6 +5214,7 @@ String RID_STR_SVT_SQL_SYNTAX_ACCESS_DAT_NO_VALID
     Text[ czech ] = "Pole nemůže být porovnáno s datem.";
     Text[ hebrew ] = "‮לא ניתן להשוות שדה זה עם תאריך.‬";
     Text[ hindi ] = "The field cannot be compared with a date.";
+    Text[ slovak ] = "Pole nemôže byť porovnávané s dátumom.";
 };
 
 String RID_STR_SVT_SQL_SYNTAX_INT_NO_VALID
@@ -5082,6 +5245,7 @@ String RID_STR_SVT_SQL_SYNTAX_INT_NO_VALID
     Text[ czech ] = "Pole nemůže být porovnáno s celým číslem.";
     Text[ hebrew ] = "‮לא ניתן להשוות שדה זה עם מספר שלם.‬";
     Text[ hindi ] = "The field cannot be compared with an integer.";
+    Text[ slovak ] = "Pole nemôže byť porovnávané s číslom.";
 };
 String RID_STR_SVT_SQL_SYNTAX_TABLE
 {
@@ -5111,6 +5275,7 @@ String RID_STR_SVT_SQL_SYNTAX_TABLE
     Text[ czech ] = "Tabulka \"#\" není v databázi definována.";
     Text[ hebrew ] = "‮הטבלה \"#\" לא כלולה במסד הנתונים.‬";
     Text[ hindi ] = "The table \"#\" is unknown in the database.";
+    Text[ slovak ] = "Tabuľka \"#\" nie je v databáze.";
 };
 String RID_STR_SVT_SQL_SYNTAX_COLUMN
 {
@@ -5140,6 +5305,7 @@ String RID_STR_SVT_SQL_SYNTAX_COLUMN
     Text[ czech ] = "Sloupec \"#\" není v tabulce \"#\" definován!";
     Text[ hebrew ] = "‮העמודה \"#\" אינה כלולה בטבלה \"#\"!‬";
     Text[ hindi ] = "The column \"#\" is unknown in the table \"#\"!";
+    Text[ slovak ] = "Stĺpec \"#\" nie je v tabuľke \"#\"!";
 };
 String RID_STR_SVT_SQL_SYNTAX_REAL_NO_VALID
 {
@@ -5151,7 +5317,7 @@ String RID_STR_SVT_SQL_SYNTAX_REAL_NO_VALID
     Text[ dutch ] = "Het veld kan niet worden vergeleken met een drijvende-komma getal!";
     Text[ french ] = "Impossible de comparer le champ avec un nombre � virgule flottante !";
     Text[ spanish ] = "�El campo no se puede comparar con un n�mero de coma flotante!";
-    Text[ swedish ] = "F�ltet kan inte j�mf�ras med ett flytande kommatal!";
+    Text[ swedish ] = "F�ltet kan inte j�mf�ras med ett flyttal!";
     Text[ russian ] = "�������� ���� � ������ � ��������� ������� ������!";
     Text[ italian ] = "Il campo non pu� essere paragonato a un numero in virgola mobile.";
     Text[ danish ] = "Feltet kan ikke sammenlignes med et flydende tal!";
@@ -5169,6 +5335,7 @@ String RID_STR_SVT_SQL_SYNTAX_REAL_NO_VALID
     Text[ czech ] = "Pole nemůže být porovnáno s číslem v pohyblivé řádové čárce.";
     Text[ hebrew ] = "‮לא ניתן להשוות שדה זה עם מספר ריאלי.‬";
     Text[ hindi ] = "The field cannot be compared with a floating point number.";
+    Text[ slovak ] = "Pole nemôže byť porovnávané s floating point čislom.";
 };
 
 String RID_STR_SVT_SQL_SYNTAX_CRIT_NO_COMPARE
@@ -5199,7 +5366,10 @@ String RID_STR_SVT_SQL_SYNTAX_CRIT_NO_COMPARE
     Text[ czech ] = "Zadané kritérium nemůže být porovnáno s tímto polem.";
     Text[ hebrew ] = "‮לא ניתן להשוות את הקריטריונים שצוינו עם שדה זה.‬";
     Text[ hindi ] = "The entered criterion cannot be compared with this field.";
+    Text[ slovak ] = "Zadané kritérium,nemôže byť porovnávané s týmto poľom.";
 };
+
+
 
 
 
