@@ -2,9 +2,9 @@
  *
  *  $RCSfile: invalidatetree.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2001-04-18 12:33:17 $
+ *  last change: $Author: obo $ $Date: 2001-04-18 15:44:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,7 +253,7 @@ auto_ptr<TreeChangeList> createDiffs(ISubtree* _pCachedTree, ISubtree * _pLoaded
     // MyAction aAction;
     // aAction.handle(*_pLoadedSubtree);
 
-    return aNewChangeList.release();
+    return (auto_ptr<TreeChangeList>) aNewChangeList.release();
 }
 
 // -----------------------------------------------------------------------------
@@ -312,7 +312,7 @@ auto_ptr<ISubtree> TreeManager::loadNodeFromSession( IConfigSession *_pSession, 
 
     pInfo->releaseLoader(xLoader);
 
-    return pResponse.release();
+    return (auto_ptr<ISubtree>) pResponse.release();
 }
 
 // -----------------------------------------------------------------------------
