@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoforou.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2001-08-05 15:52:38 $
+ *  last change: $Author: cl $ $Date: 2001-08-08 11:08:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,36 +170,14 @@ void SvxOutlinerForwarder::GetPortions( USHORT nPara, SvUShorts& rList ) const
 
 void SvxOutlinerForwarder::QuickInsertText( const String& rText, const ESelection& rSel )
 {
-
-    // Um das Interface mit InsertControlCharacter() zu unterstuetzen, muss hier
-    // der umgekehrte Weg gegangen werden, um entspr. Aktionen auszuloesen
-    String aText( (char)13 );   // '\r' geht auf'm Mac nicht
-    aText.ConvertLineEnd( LINEEND_LF );     // Zeilenenden nur einfach zaehlen
-
     if( rText.Len() == 0 )
     {
         rOutliner.QuickDelete( rSel );
     }
-    else if( rText == aText )
-    {
-        // neuen Absatz einfuegen
-//      aText.Erase();
-        BOOL bMode = rOutliner.GetUpdateMode();
-        rOutliner.SetUpdateMode( FALSE );
-        WorkWindow aWW( NULL, 0 );
-        OutlinerView aView( &rOutliner, &aWW );
-//      ESelection aSel( nParagraph, 0 , nParagraph, 0 );
-        aView.SetSelection( rSel );
-        aView.InsertText( aText );
-//      ULONG nAbsPos = rSel.nStartPara + 1;
-//      USHORT nDepth = 1;
-//      rOutliner.Insert( aText, nAbsPos, nDepth );
-        rOutliner.SetUpdateMode( bMode );
-        aView.SetWindow( NULL );
-
-    }
     else
+    {
         rOutliner.QuickInsertText( rText, rSel );
+    }
 }
 
 void SvxOutlinerForwarder::QuickInsertLineBreak( const ESelection& rSel )
