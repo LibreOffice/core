@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msci.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2001-08-01 10:09:58 $
+ *  last change: $Author: vg $ $Date: 2003-10-06 13:15:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,12 +60,8 @@
  ************************************************************************/
 
 #include <windows.h>
+#include "rtl/ustring.hxx"
 
-#ifndef _RTL_USTRING_HXX_
-#include <rtl/ustring.hxx>
-#endif
-
-#define MSVC_ExceptionCode 0xe06d7363
 
 class type_info;
 typedef struct _uno_Any uno_Any;
@@ -74,15 +70,17 @@ typedef struct _uno_Mapping uno_Mapping;
 namespace CPPU_CURRENT_NAMESPACE
 {
 
-//==================================================================================================
-type_info * msci_getRTTI(
-    ::rtl::OUString const & rUNOname ) throw ();
+const long MSVC_ExceptionCode = 0xe06d7363;
+const long MSVC_magic_number = 0x19930520L;
 
-//==================================================================================================
-sal_Int32 msci_filterCppException(
-    LPEXCEPTION_POINTERS pPointers, uno_Any * pUnoExc, uno_Mapping * pCpp2Uno );
+//==============================================================================
+type_info * msci_getRTTI( ::rtl::OUString const & rUNOname );
 
-//==================================================================================================
+//==============================================================================
+int msci_filterCppException(
+    EXCEPTION_POINTERS * pPointers, uno_Any * pUnoExc, uno_Mapping * pCpp2Uno );
+
+//==============================================================================
 void msci_raiseException(
     uno_Any * pUnoExc, uno_Mapping * pUno2Cpp );
 
