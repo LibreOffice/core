@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datauno.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 16:15:21 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 12:32:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,9 @@
 #endif
 #ifndef SC_SCATTR_HXX
 #include "attrib.hxx"
+#endif
+#ifndef SC_DPSHTTAB_HXX
+#include "dpshttab.hxx"
 #endif
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
@@ -1458,9 +1461,9 @@ void ScDataPilotFilterDescriptor::GetData( ScQueryParam& rParam ) const
 {
     if (pParent)
     {
-        ScPivotParam aPivot;
-        ScArea aArea;
-        pParent->GetParam( aPivot, rParam, aArea );
+        ScDPObject* pDPObj = pParent->GetDPObject();
+        if (pDPObj && pDPObj->IsSheetData())
+            rParam = pDPObj->GetSheetDesc()->aQueryParam;
     }
 }
 
@@ -1468,11 +1471,16 @@ void ScDataPilotFilterDescriptor::PutData( const ScQueryParam& rParam )
 {
     if (pParent)
     {
-        ScPivotParam aPivot;
-        ScArea       aArea;
-        ScQueryParam aOldQuery;
-        pParent->GetParam( aPivot, aOldQuery, aArea );
-        pParent->SetParam( aPivot, rParam,    aArea );
+        ScDPObject* pDPObj = pParent->GetDPObject();
+        if (pDPObj)
+        {
+            ScSheetSourceDesc aSheetDesc;
+            if (pDPObj->IsSheetData())
+                aSheetDesc = *pDPObj->GetSheetDesc();
+            aSheetDesc.aQueryParam = rParam;
+            pDPObj->SetSheetDesc(aSheetDesc);
+            pParent->SetDPObject(pDPObj);
+        }
     }
 }
 
