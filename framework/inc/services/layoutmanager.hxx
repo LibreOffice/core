@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layoutmanager.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-15 09:32:58 $
+ *  last change: $Author: obo $ $Date: 2005-03-18 12:06:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -482,6 +482,7 @@ namespace framework
             void implts_createCustomToolBars( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > >& aCustomTbxSeq );
             void implts_createCustomToolBar( const rtl::OUString& aTbxResName, const rtl::OUString& aTitle );
             void implts_toggleFloatingUIElementsVisibility( sal_Bool bActive );
+            sal_Bool implts_isEmbeddedLayoutManager() const;
             sal_Int16 implts_getCurrentSymbolSet();
             ::com::sun::star::uno::Reference< com::sun::star::awt::XWindowPeer > implts_createToolkitWindow( const ::com::sun::star::uno::Reference< com::sun::star::awt::XWindowPeer >& rParent );
             ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElement > implts_createElement( const rtl::OUString& aName );
