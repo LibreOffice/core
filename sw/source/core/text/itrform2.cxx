@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ama $ $Date: 2000-10-17 10:30:03 $
+ *  last change: $Author: ama $ $Date: 2000-10-17 14:20:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -707,7 +707,7 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
                 "SwTxtFormatter::BuildPortions: bad length in info" );
         DBG_LOOP;
         BYTE nNxtActual;
-        if( pPor->InFldGrp() )
+        if( pPor->InFldGrp() && !pPor->InNumberGrp() )
         {
             ((SwFldPortion*)pPor)->CheckScript( rInf );
             const SwFont* pTmpFnt = ((SwFldPortion*)pPor)->GetFont();
