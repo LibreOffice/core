@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-26 20:24:18 $
+ *  last change: $Author: kz $ $Date: 2001-02-02 15:53:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,14 +80,14 @@ InfoBox RID_DOCALREADYLOADED_DLG
     Message [ dutch ] = "Document is reeds geladen en geactiveerd." ;
     Message [ spanish ] = "El documento ya estα cargado y activado." ;
     Message [ english_us ] = "Document already open." ;
-    Message[ chinese_simplified ] = "ÒΡΎ­Χ°ΤΨΥβΈφΞΔΌώ²Ά΄¦ΣΪΌ¤»ξΧ΄Μ¬΅£";
+    Message[ chinese_simplified ] = "ÒΡΎ­Χ°ΘλΥβΈφΞΔΌώ²Ά΄¦ΣΪΚΉΣΓΧ΄Μ¬΅£";
     Message[ russian ] = "Δξκσμενς σζε ηΰοσωεν θ ΰκςθβθπξβΰν.";
     Message[ polish ] = "Dokument zosta³ juΏ za³adowany i uaktywniony.";
     Message[ japanese ] = "Δή·­ÒέΔ‚Ν‚·‚Ε‚Ι“Η‚έ‚ά‚κ±ΈΓ¨Μή‚Ι‚Θ‚Α‚Δ‚Ά‚ά‚·B";
-    Message[ chinese_traditional ] = "¤wΈgΈΛ¤J³o­ΣΐΙ®Χ¨Γ³B©σ¨Ο¥Ξª¬ΊA΅C";
+    Message[ chinese_traditional ] = "¤wΈgΈό¤J³o­ΣΐΙ®Χ¨Γ³B©σ¨Ο¥Ξª¬ΊA΅C";
     Message[ arabic ] = "Ηαγαέ ίΗδ γΝγαΗπ ΘΗαέΪα ζΚγ ΚδΤνΨε.";
     Message[ dutch ] = "Document is reeds geladen en geactiveerd.";
-    Message[ chinese_simplified ] = "ÒΡΎ­Χ°ΤΨΥβΈφΞΔΌώ²Ά΄¦ΣΪΌ¤»ξΧ΄Μ¬΅£";
+    Message[ chinese_simplified ] = "ÒΡΎ­Χ°ΘλΥβΈφΞΔΌώ²Ά΄¦ΣΪΚΉΣΓΧ΄Μ¬΅£";
     Message[ greek ] = "Το έγγραφο είχε ήδη φορτωθεί και ενεργοποιήθηκε.";
     Message[ korean ] = "Ή®Ό­°΅ ΐΜΉΜ Ώ­·ΑΐΦ½ΐ΄Ο΄Ω.";
     Message[ turkish ] = "Belge zaten yόklό ve aηύk.";
@@ -109,14 +109,14 @@ ErrorBox RID_CANTLOADDOC_DLG
     Message [ dutch ] = "Het document kan niet worden geopend." ;
     Message [ spanish ] = "No es posible cargar el documento." ;
     Message [ english_us ] = "Cannot open document." ;
-    Message[ chinese_simplified ] = "Ξή·¨Χ°ΤΨΥβΈφΞΔµµ΅£";
+    Message[ chinese_simplified ] = "Ξή·¨Χ°ΘλΥβΈφΞΔµµ΅£";
     Message[ russian ] = "Ηΰγπσηθςό δξκσμενς νε σδΰεςρÿ.";
     Message[ polish ] = "Dokument nie moΏe byζ za³adowany.";
     Message[ japanese ] = "Δή·­ÒέΔ‚Ν“Η‚έ‚έ‚Ε‚«‚ά‚Ή‚ρB";
-    Message[ chinese_traditional ] = "µLªkΈΛΈό³o­ΣΐΙ®Χ΅C";
+    Message[ chinese_traditional ] = "µLªkΈό¤J³o­Σ¤ε¥σ΅C";
     Message[ arabic ] = "αΗ νγίδ ΚΝγνα ΗαγΣΚδΟ.";
     Message[ dutch ] = "Het document kan niet worden geopend.";
-    Message[ chinese_simplified ] = "Ξή·¨Χ°ΤΨΥβΈφΞΔµµ΅£";
+    Message[ chinese_simplified ] = "Ξή·¨Χ°ΘλΥβΈφΞΔµµ΅£";
     Message[ greek ] = "Δεν είναι δυνατόν να ανοιχθεί το έγγραφο.";
     Message[ korean ] = "Ή®Ό­Έ¦ Ώ­ Όφ Ύψ½ΐ΄Ο΄Ω.";
     Message[ turkish ] = "Belge yόklenemiyor.";
@@ -509,7 +509,7 @@ String STR_RECOVER_QUERY
     Text[ russian ] = "Βξρρςΰνξβθςό τΰιλ \"$1\"?";
     Text[ polish ] = "Odtworzyζ plik \"$1\"?";
     Text[ japanese ] = "Μ§²Ω\"$1\"‚π•³‚µ‚ά‚·‚©H";
-    Text[ chinese_traditional ] = "±z­n­Χ΄_³o­ΣΐΙ®Χ";
+    Text[ chinese_traditional ] = "±z­nΑΩ­μΐΙ®Χ $1 ?";
     Text[ arabic ] = "εα ΚΡνΟ ΗΣΚΪΗΟΙ Ηαγαέ \"$1\"Ώ";
     Text[ dutch ] = "Wilt u dat het bestand \"$1\" hersteld wordt?";
     Text[ chinese_simplified ] = "ΔϊÒªΠήΈ΄ΥβΈφΞΔΌώ \"$1\" Βπ£Ώ";
@@ -1506,7 +1506,7 @@ String STR_NOPRINTER
     Text[ arabic ] = "αΗ νγίδ ΚΤΫνα ΘΪΦ γεΗγ %PRODUCTNAME ΘΤία ΥΝνΝ ΘΟζδ ΘΡδΗγΜ ΚΤΫνα ΗαΨΗΘΪΙ.\nαεΠΗ νΡΜμ ΚΛΘνΚ ΘΡδΗγΜ ΚΤΫνα ΗαΨΗΘΪΙ.";
     Text[ dutch ] = "Enkele %PRODUCTNAME-functies kunnen zonder printerdriver niet correct werken.\nInstalleer een printerdriver.";
     Text[ chinese_simplified ] = "ÒςΞªΓ»ΣΠ°²Χ°΄ςΣ΅»ϊΗύ¶―³ΜΠς£¬Ò»Π©%PRODUCTNAMEΉ¦ΔάΏΙΔά²»»αΥύ³£ΤΛΧª΅£\nΗλΔϊ°²Χ°Ò»Έφ΄ςΣ΅»ϊΗύ¶―³ΜΠς΅£";
-    Text[ greek ] = "Μερικές από τις λειτουργίες του %PRODUCTNAME δεν θα λειτουργήσουν σωστά χωρίς το πρόγραμμα οδήγησης του εκτυπωτή.\nΠαρακαλώ να γίνει εγκατάσταση ενός προγράμματος οδήγησης εκτυπωτή.";
+    Text[ greek ] = "Ορισμένες από τις λειτουργίες του %PRODUCTNAME δεν θα λειτουργήσουν σωστά χωρίς το πρόγραμμα οδήγησης του εκτυπωτή.\nΠαρακαλώ να γίνει η εγκατάσταση ενός προγράμματος οδήγησης εκτυπωτή.";
     Text[ korean ] = "ΐΟΊΞ  %PRODUCTNAME ±β΄ΙΐΊ ΗΑΈ°ΕΝ µε¶σΐΜΉφ ΎψΐΜ΄Β  Α¤Θ®ΗΟ°Τ ΐΫµΏΗΟΑφ ΎΚ½ΐ΄Ο΄Ω.\nΗΑΈ°ΕΝ µε¶σΐΜΉφΈ¦ Ό³Δ΅ΗΟ½Κ½ΓΏΐ.";
     Text[ turkish ] = "Bazύ %PRODUCTNAME iώlevleri yazύcύ sόrόcόsό olmadan doπru ηalύώamaz.\nBir yazύcύ sόrόcόsό kurun.";
     Text[ language_user1 ] = " ";
@@ -1643,7 +1643,7 @@ String STR_RESWARNING
     TEXT[ russian ] = "Περσπρϋ ρθρςεμϋ ξγπΰνθχενϋ. Οπεζδε χεμ οπξδξλζθςό πΰαξςσ, βϋιδθςε, οξζΰλσιρςΰ, θη δπσγθυ οπθλξζενθι θλθ ηΰκπξιςε νεκξςξπϋε ξκνΰ.";
     TEXT[ polish ] = "Zasoby systemu sΉ ograniczone. Przed kontynuacjΉ pracy zakoρcz kilka aplikacji lub zamknij kilka okien.";
     TEXT[ japanese ] = "Ό½ΓΡ ΨΏ°½‚ª‚¬‚θ‚¬‚θ‚Ε‚·Bμ‹Ζ‚π‘±‚―‚ι‘O‚Ι¤‘Ό‚Μ±ΜίΨΉ°Ό®έ‚πI—Ή‚·‚ι‚© ‚Ά‚­‚Β‚©‚Μ³¨έΔή³‚π•Β‚¶‚Δ‰Ί‚³‚ΆB";
-    TEXT[ chinese_traditional ] = "¨t²ΞΈκ·½¤£¨¬΅C½ΠΓφ³¬¨δ¥¦ªΊµ{¦΅©ΞªΜΓφ³¬¤@¨Ηµψµ΅΅MµM«α­«·sΉΑΈΥ°υ¦ζ©R¥O΅C";
+    TEXT[ chinese_traditional ] = "¨t²ΞΈκ·½¤£¨¬΅C½ΠΓφ³¬¨δ¥¦ªΊµ{¦΅©ΞªΜΓφ³¬¤@¨Ηµψµ΅΅MµM«α­«·sΉΑΈΥ°υ¦ζ«ό¥O΅C";
     TEXT[ arabic ] = "γΥΗΟΡ ΗαδΥ ΚΚΦΗΑα. ΗαΡΜΗΑ ΕδεΗΑ ΚΨΘνήΗΚ ΓΞΡμ΅ Γζ ΕΫαΗή ΘΪΦ ΗαδζΗέΠ΅ ήΘα γζΗΥαΙ ΗαΪγα.";
     TEXT[ dutch ] = "Onvoldoende systeemgeheugen beschikbaar. Sluit andere toepassingen af.of sluit een aantal vensters voordat u uw werkvoortzet.";
     TEXT[ chinese_simplified ] = "ΟµΝ³ΧΚΤ΄²»Χγ΅£ΗλΔϊΉΨ±ΥΖδΛόµΔ³ΜΠς»ςΥίΉΨ±ΥÒ»Π©ΚΣ΄°£¬Θ»ΊσΦΨΠΒ³ΆΚΤΦ΄ΠΠΓόΑξ΅£";
@@ -2680,7 +2680,7 @@ String STR_EXTHELPSTATUS
     Text[ russian ] = "Βϋαεπθςε κξμΰνδσ θλθ νΰζμθςε δλÿ βϋαξπΰ ςεμϋ.";
     Text[ polish ] = "Wybierz polecenie lub kliknij, by wybraζ temat.";
     Text[ japanese ] = "ΊΟέΔή‚π‘I‚Τ‚© ‚ά‚½‚ΝΓ°Ο‚π‘I‘π‚·‚ι‚½‚ί‚ΙΈΨ―Έ‚µ‚Δ‰Ί‚³‚ΆB";
-    Text[ chinese_traditional ] = "½Π±zΏοΎά©ΞªΜ«φ¤@­Σ©R¥O΅MΏοΎά¤@­Σ¥DΓD΅C";
+    Text[ chinese_traditional ] = "½Π±zΏοΎά©ΞªΜ«φ¤@­Σ«ό¥O΅MΏοΎά¤@­Σ¥DΓD΅C";
     Text[ arabic ] = "ΗΞΚΡ ΓΝΟ ΗαΓζΗγΡ΅ Γζ ΗδήΡ΅ αΗΞΚνΗΡ ΓΝΟ ΗαγζΗΦνΪ.";
     Text[ dutch ] = "Kies een optie of klik om een onderwerp te kiezen.";
     Text[ chinese_simplified ] = "ΗλΔϊΡ΅Τρ»ςΥί°΄»χÒ»ΈφΓόΑξ£¬Ρ΅ΤρÒ»ΈφΦχΜβ΅£";
@@ -3533,7 +3533,7 @@ String STR_KEY_DATABASE_PATH
     Text [ portuguese ] = "Consultas ΰ base de dados" ;
     Text [ finnish ] = "Tietokanta" ;
     Text [ danish ] = "Databaseforespψrgsler" ;
-    Text [ french ] = "Interrogations de B.D." ;
+    Text [ french ] = "Interrogations de BD" ;
     Text [ swedish ] = "Databasfφrfrεgningar" ;
     Text [ dutch ] = "Database query's" ;
     Text [ spanish ] = "Consultas de base de datos" ;
@@ -3845,7 +3845,7 @@ String STR_KEY_STORAGE_DIR
     Text[ arabic ] = "ΝέΩ ΗαΓΞΘΗΡ";
     Text[ dutch ] = "Geheugen voor berichten";
     Text[ chinese_simplified ] = "µηΧΣΣΚΌώ/ΠΒΞΕ΄Ά΄ζΜε";
-    Text[ greek ] = "Στοιχείο αποθήκευσης μηνυμάτων";
+    Text[ greek ] = "Μνήμη μηνυμάτων";
     Text[ korean ] = "Έή½ΓΑφ  ΐϊΐεΐεΌÒ";
     Text[ turkish ] = "έleti depolama alanύ";
     Text[ language_user1 ] = " ";
@@ -3876,7 +3876,7 @@ String STR_KEY_AUTOPILOT_DIR
     Text[ arabic ] = "γΡΤΟζδ Βανζδ";
     Text[ dutch ] = "AutoPiloot";
     Text[ chinese_simplified ] = "ΧΤ¶―ΞΔΌώΦϊΐν";
-    Text[ greek ] = "AutoPilots";
+    Text[ greek ] = "ΑυτοΠιλότοι";
     Text[ korean ] = "ΐΪµΏ ΖΔΐΟ·µ";
     Text[ turkish ] = "Otopilot";
     Text[ language_user1 ] = " ";
@@ -3902,7 +3902,7 @@ String STR_KEY_PLUGINS_PATH
     Text[ arabic ] = "Οανα Plug-Ins";
     Text[ dutch ] = "Plugins directory";
     Text[ chinese_simplified ] = "Plug-In ΔΏΒΌ";
-    Text[ greek ] = "Κατάλογος συνδεόμενων υπομονάδων";
+    Text[ greek ] = "Κατάλογος συνδεόμενων υπομονάδων (Plug-Ins)";
     Text[ korean ] = "ΗΓ·―±ΧΐΞ-µπ·ΊΕδΈ®";
     Text[ turkish ] = "Plug-In dizini";
 };
