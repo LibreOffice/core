@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmexpl.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 20:40:21 $
+ *  last change: $Author: kz $ $Date: 2001-07-17 20:22:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -343,7 +343,7 @@ Menu RID_FMEXPLORER_POPUPMENU
             Text[ portuguese_brazilian ] = "Automatic control focus";
             Text[ japanese ] = "µ°ÄºİÄÛ°ÙÌ«°¶½";
             Text[ korean ] = "ÀÚµ¿ Æ÷Ä¿½º ÄÁÆ®·Ñ";
-            Text[ chinese_simplified ] = "×Ô¶¯¶Ô×¼¿ØÖÆ";
+            Text[ chinese_simplified ] = "×Ô¶¯¶Ô×¼¿ØÖÆµ¥Ôª";
             Text[ chinese_traditional ] = "¦Û°Ê¹ï­ã±±¨î¶µ";
             Text[ turkish ] = "Automatic control focus";
             Text[ arabic ] = "ÊÑßíÒ ÊáŞÇÆí áÚäÕÑ ÇáÊÍßã";
@@ -378,7 +378,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ japanese ] = "Ã·½ÄÎŞ¯¸½(~T)";
             Text[ korean ] = "ÅØ½ºÆ® »óÀÚ(~T)";
             Text[ chinese_simplified ] = "ÎÄ±¾¿ò(~T)";
-            Text[ chinese_traditional ] = "¤å¦rÄæ(~T)";
+            Text[ chinese_traditional ] = "¤å¦r¤è¶ô(~T)";
             Text[ arabic ] = "ÍŞá äÕ";
             Text[ turkish ] = "Metin alanı";
             Text[ language_user1 ] = " ";
@@ -681,7 +681,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ japanese ] = "Ì¨°ÙÄŞ(~E)";
             Text[ korean ] = "½Ã°£ ÇÊµå(~E)";
             Text[ chinese_simplified ] = "Ê±¼ä×Ö¶Î(~E)";
-            Text[ chinese_traditional ] = "®É¶¡Äæ(~E)";
+            Text[ chinese_traditional ] = "®É¶¡Äæ¦ì(~E)";
             Text[ arabic ] = "ÍŞá ÇáæŞÊ";
             Text[ turkish ] = "Zaman alanı";
             Text[ language_user1 ] = " ";
@@ -737,7 +737,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ japanese ] = "’Ê‰İÌ¨°ÙÄŞ(~U)";
             Text[ korean ] = "ÅëÈ­ ÇÊµå(~U)";
             Text[ chinese_simplified ] = "»õ±Ò×Ö¶Î(~U)";
-            Text[ chinese_traditional ] = "³f¹ôÄæ(~U)";
+            Text[ chinese_traditional ] = "³f¹ôÄæ¦ì(~U)";
             Text[ arabic ] = "ÍŞá ÇáÚãáÉ";
             Text[ turkish ] = "Para birimi alanı";
             Text[ catalan ] = "Cam~po de moneda";
@@ -981,6 +981,7 @@ DockingWindow RID_SVX_FMEXPLORER
     Text[ catalan ] = "Navegador de formulario";
     Text[ finnish ] = "Lomakkeen siirtymävalikko";
 };
+
 
 
 
