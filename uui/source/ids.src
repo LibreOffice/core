@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ids.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: sb $ $Date: 2001-08-07 13:31:50 $
+ *  last change: $Author: nf $ $Date: 2001-08-08 10:38:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 //
 //  Miscellaneous Resources
 //
-// $Author: sb $ $Date: 2001-08-07 13:31:50 $ $Revision: 1.21 $
+// $Author: nf $ $Date: 2001-08-08 10:38:25 $ $Revision: 1.22 $
 //============================================================================
 
 #define __RSC
@@ -76,9 +76,9 @@ String RID_KEEP_PASSWORD
     Text = "Passwort bis Applikationsende ~merken";
     Text[ english ] = "~Remember password until application ends";
     Text[ arabic ] = "ÊĞßøÑ ßáãÉ ÇáÓÑ ÍÊì äåÇíÉ ÌáÓÉ ÇáÚãá";
-    Text[ chinese_simplified ] = "½áÊø³ÌĞòÖ®Ç°Ò»Ö±¼Ç×¡ÃÜÂë(~R)";
-    Text[ chinese_simplified ] = "½áÊø³ÌĞòÖ®Ç°Ò»Ö±¼Ç×¡ÃÜÂë(~R)";
-    Text[ chinese_traditional ] = "µ²§ôµ{§Ç¤§«e¤@ª½°O¦í±K½X(~R)";
+    Text[ chinese_simplified ] = "ç»“æŸç¨‹åºä¹‹å‰ä¸€ç›´è®°ä½å¯†ç (~R)";
+    Text[ chinese_simplified ] = "ç»“æŸç¨‹åºä¹‹å‰ä¸€ç›´è®°ä½å¯†ç (~R)";
+    Text[ chinese_traditional ] = "çµæŸç¨‹åºä¹‹å‰ä¸€ç›´è¨˜ä½å¯†ç¢¼(~R)";
     Text[ danish ] = "Husk adgangskoden til applikationen afsluttes";
     Text[ dutch ] = "Wachtwoord o~nthouden tot aan beëindigen van het programma";
     Text[ dutch ] = "Wachtwoord o~nthouden tot aan beëindigen van het programma";
@@ -86,8 +86,8 @@ String RID_KEEP_PASSWORD
     Text[ french ] = "Se rappeler du ~mot de passe jusqu'à la fin de la session";
     Text[ greek ] = "Áğï~ìíçìüíåõóç êùäéêïı İùò ôï ôİëïò ôçò åöáñìïãŞò";
     Text[ italian ] = "An~nota password fino alla fine dell'applicazione";
-    Text[ japanese ] = "Êß½Ü°ÄŞ‚Í±ÌßØ¹°¼®İI—¹‚Ü‚Å‹L‰¯‚µ‚Ä‚¨‚­(~R)";
-    Text[ korean ] = "ÀÀ¿ëÇÁ·Î±×·¥À» Á¾·áÇÒ ¶§±îÁö ÆĞ½º¿öµå ±â¾ï(~R)";
+    Text[ japanese ] = "ï¾Šï¾Ÿï½½ï¾œï½°ï¾„ï¾ã¯ï½±ï¾Œï¾Ÿï¾˜ï½¹ï½°ï½¼ï½®ï¾çµ‚äº†æ™‚ã¾ã§è¨˜æ†¶ã—ã¦ãŠã(~R)";
+    Text[ korean ] = "ì‘ìš©í”„ë¡œê·¸ë¨ì„ ì¢…ë£Œí•  ë•Œê¹Œì§€ íŒ¨ìŠ¤ì›Œë“œ ê¸°ì–µ(~R)";
     Text[ polish ] = "Zapamiêtaj has³o do koñca aplikacji";
     Text[ portuguese ] = "~Lembrar senha até terminar a aplicação";
     Text[ portuguese_brazilian ] = "Passwort ~merken";
@@ -104,9 +104,9 @@ String RID_SAVE_PASSWORD
     Text = "Passwort dauerhaft ~speichern";
     Text[ english ] = "~Save password permanently";
     Text[ arabic ] = "ÍİÙ ÏÇÆã áßáãÉ ÇáÓÑ";
-    Text[ chinese_simplified ] = "±£´æÃÜÂë(~R)";
-    Text[ chinese_simplified ] = "±£´æÃÜÂë(~R)";
-    Text[ chinese_traditional ] = "Àx¦s±K½X(~R)";
+    Text[ chinese_simplified ] = "ä¿å­˜å¯†ç (~R)";
+    Text[ chinese_simplified ] = "ä¿å­˜å¯†ç (~R)";
+    Text[ chinese_traditional ] = "å„²å­˜å¯†ç¢¼(~R)";
     Text[ danish ] = "Gem adgangskoden permanent";
     Text[ dutch ] = "Wachtwoord ~opslaan";
     Text[ dutch ] = "Wachtwoord ~opslaan";
@@ -114,8 +114,8 @@ String RID_SAVE_PASSWORD
     Text[ french ] = "~Enregistrer le mot de passe";
     Text[ greek ] = "ÁğïèŞêåõ~óç êùäéêïı ğñüóâáóçò";
     Text[ italian ] = "Salva pa~ssword ";
-    Text[ japanese ] = "Êß½Ü°ÄŞ‚Ì’·Šú•Û‘¶(~R)";
-    Text[ korean ] = "ÆĞ½º¿öµå ¿µ±¸ ÀúÀå(~R)";
+    Text[ japanese ] = "ï¾Šï¾Ÿï½½ï¾œï½°ï¾„ï¾ã®é•·æœŸä¿å­˜(~R)";
+    Text[ korean ] = "íŒ¨ìŠ¤ì›Œë“œ ì˜êµ¬ ì €ì¥(~R)";
     Text[ polish ] = "Zapisz has³o na sta³e";
     Text[ portuguese ] = "~Guardar senha";
     Text[ portuguese_brazilian ] = "Passwort ~speichern";
@@ -132,16 +132,16 @@ String STR_ERROR_FILEIO
     Text = "Fehler beim Zugriff auf die Datei ($URL1)";
     Text[ english ] = "Error accessing file ($URL1)";
     Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ãÍÇæáÉ ÇáæÕæá Åáì Çáãáİ ($URL1)";
-    Text[ chinese_simplified ] = "ÔÚ¶ÁÈ¡ÎÄ¼ş($URL1)Ê±·¢Éú´íÎó";
-    Text[ chinese_traditional ] = "¦s¨úÀÉ®× ($URL1) µo¥Í¿ù»~";
+    Text[ chinese_simplified ] = "åœ¨è¯»å–æ–‡ä»¶($URL1)æ—¶å‘ç”Ÿé”™è¯¯";
+    Text[ chinese_traditional ] = "å­˜å–æª”æ¡ˆ ($URL1) ç™¼ç”ŸéŒ¯èª¤";
     Text[ danish ] = "Fejl ved adgang til filen ($URL1)";
     Text[ dutch ] = "Fout bij toegang tot bestand ($URL1)";
     Text[ english_us ] = "Error accessing file ($URL1)";
     Text[ french ] = "Erreur lors de l'accès au fichier ($URL1)";
     Text[ greek ] = "ÓöÜëìá êáôÜ ôçí ğñüóâáóç óôï áñ÷åßï ($URL1)";
     Text[ italian ] = "Errore di accesso al file ($URL1)";
-    Text[ japanese ] = "($URL1) Ì§²Ù‚Ö±¸¾½‚·‚éÛ‚Ì´×°";
-    Text[ korean ] = "ÆÄÀÏ ($URL1)¿¡ Á¢±Ù½Ã¿¡ ¿À·ù";
+    Text[ japanese ] = "($URL1) ï¾Œï½§ï½²ï¾™ã¸ï½±ï½¸ï½¾ï½½ã™ã‚‹éš›ã®ï½´ï¾—ï½°";
+    Text[ korean ] = "íŒŒì¼ ($URL1)ì— ì ‘ê·¼ì‹œì— ì˜¤ë¥˜";
     Text[ polish ] = "B³¹d przy dostêpie do pliku ($URL1)";
     Text[ portuguese ] = "Erro de acesso ao ficheiro ($URL1)";
     Text[ portuguese_brazilian ] = "Error accessing file ($URL1)";
@@ -158,16 +158,16 @@ String STR_ERROR_WRONGMEDIUM
     Text = "Legen Sie bitte den Datenträger $$ ein.";
     Text[ english ] = "Please insert disk $$.";
     Text[ arabic ] = "ÇáÑÌÇÁ ÅÏÎÇá ÇáŞÑÕ $$ .";
-    Text[ chinese_simplified ] = "ÇëÄú·ÅÈëÈíÅÌ $$¡£";
-    Text[ chinese_traditional ] = "½Ğ©ñ¸mºÏ¤ù $$ ¡C";
+    Text[ chinese_simplified ] = "è¯·æ‚¨æ”¾å…¥è½¯ç›˜ $$ã€‚";
+    Text[ chinese_traditional ] = "è«‹æ”¾ç½®ç£ç‰‡ $$ ã€‚";
     Text[ danish ] = "Indsæt venligst datamediet $$.";
     Text[ dutch ] = "Leg datamedium in station $$.";
     Text[ english_us ] = "Please insert data storage medium $$.";
     Text[ french ] = "Insérez le média $$.";
     Text[ greek ] = "Ğáñáêáëş åéóÜãåôå ôïí äßóêï $$.";
     Text[ italian ] = "Inserite il supporto dati $$.";
-    Text[ japanese ] = "”}‘Ì $$ ‚ğ“ü‚ê‚Ä‚­‚¾‚³‚¢B";
-    Text[ korean ] = "µ¥ÀÌÅÍ ¸ÅÃ¼ $$À»(¸¦) »ğÀÔÇÏ½Ê½Ã¿À .";
+    Text[ japanese ] = "åª’ä½“ $$ ã‚’å…¥ã‚Œã¦ãã ã•ã„ã€‚";
+    Text[ korean ] = "ë°ì´í„° ë§¤ì²´ $$ì„(ë¥¼) ì‚½ì…í•˜ì‹­ì‹œì˜¤ .";
     Text[ polish ] = "Wsuñ proszê noœnik danych $$.";
     Text[ portuguese ] = "Introduza o media $$.";
     Text[ portuguese_brazilian ] = "Please insert disk $$.";
@@ -187,7 +187,7 @@ Resource RID_UUI_ERRHDL
         Text = "Die auf $(ARG1) ausgeführte Aktion wurde abgebrochen" ;
         Text [ ENGLISH ] = "The operation executed on $(ARG1) was aborted" ;
         Text[ english_us ] = "The operation executed on $(ARG1) was aborted";
-        Text[ portuguese ] = "The operation executed on $(ARG1) was aborted";
+        Text[ portuguese ] = "A acção executada em $(ARG1) foi cancelada.";
         Text[ russian ] = "Âûïîëíÿåìàÿ íà $(ARG1) îïåğàöèÿ ïğåğâàíà";
         Text[ greek ] = "The operation executed on $(ARG1) was aborted";
         Text[ dutch ] = "De op $(ARG1) uitgevoerde activiteit werd gestopt";
@@ -199,10 +199,10 @@ Resource RID_UUI_ERRHDL
         Text[ swedish ] = "Åtgärden som utfördes på $(ARG1) avbröts";
         Text[ polish ] = "Operacja wykonywana na $(ARG1) zosta³a przerwana";
         Text[ portuguese_brazilian ] = "The operation executed on $(ARG1) was aborted";
-        Text[ japanese ] = "$(ARG1) ‚ÅÀs‚µ‚½±¸¼®İ‚Í’†~‚³‚ê‚Ü‚µ‚½B";
+        Text[ japanese ] = "$(ARG1) ã§å®Ÿè¡Œã—ãŸï½±ï½¸ï½¼ï½®ï¾ã¯ä¸­æ­¢ã•ã‚Œã¾ã—ãŸã€‚";
         Text[ korean ] = "The operation executed on $(ARG1) was aborted";
-        Text[ chinese_simplified ] = "ÒÑ¾­È¡ÏûÖ´ĞĞ $(ARG1) µÄ²Ù×÷¡£";
-        Text[ chinese_traditional ] = "¤w¸g¨ú®ø°õ¦æ°Ê§@ $(ARG1) ¡C";
+        Text[ chinese_simplified ] = "å·²ç»å–æ¶ˆæ‰§è¡Œ $(ARG1) çš„æ“ä½œã€‚";
+        Text[ chinese_traditional ] = "å·²ç¶“å–æ¶ˆåŸ·è¡Œå‹•ä½œ $(ARG1) ã€‚";
         Text[ turkish ] = "The operation executed on $(ARG1) was aborted";
         Text[ arabic ] = "The operation executed on $(ARG1) was aborted";
         Text[ catalan ] = "The operation executed on $(ARG1) was aborted";
@@ -225,10 +225,10 @@ Resource RID_UUI_ERRHDL
         Text[ swedish ] = "Åtkomst till $(ARG1) nekad";
         Text[ polish ] = "Brak dostêpu do $(ARG1)";
         Text[ portuguese_brazilian ] = "The access to $(ARG1) was denied";
-        Text[ japanese ] = "$(ARG1) ‚Ö‚Ì±¸¾½‚Í‹‘”Û‚³‚ê‚Ü‚µ‚½B";
+        Text[ japanese ] = "$(ARG1) ã¸ã®ï½±ï½¸ï½¾ï½½ã¯æ‹’å¦ã•ã‚Œã¾ã—ãŸã€‚";
         Text[ korean ] = "The access to $(ARG1) was denied";
-        Text[ chinese_simplified ] = "ÒÑ¾­¾Ü¾ø¶ÁÈ¡ $(ARG1) ¡£";
-        Text[ chinese_traditional ] = "©Úµ´¦s¨ú $(ARG1)¡C";
+        Text[ chinese_simplified ] = "å·²ç»æ‹’ç»è¯»å– $(ARG1) ã€‚";
+        Text[ chinese_traditional ] = "æ‹’çµ•å­˜å– $(ARG1)ã€‚";
         Text[ turkish ] = "The access to $(ARG1) was denied";
         Text[ arabic ] = "The access to $(ARG1) was denied";
         Text[ catalan ] = "The access to $(ARG1) was denied";
@@ -239,7 +239,7 @@ Resource RID_UUI_ERRHDL
         Text = "$(ARG1) existiert bereits" ;
         Text [ ENGLISH ] = "$(ARG1) does already exist" ;
         Text[ english_us ] = "$(ARG1) already exists";
-        Text[ portuguese ] = "$(ARG1) does already exist";
+        Text[ portuguese ] = "$(ARG1) já existe.";
         Text[ russian ] = "$(ARG1) óæå ñóùåñòâóåò";
         Text[ greek ] = "$(ARG1) does already exist";
         Text[ dutch ] = "$(ARG1) bestaat reeds";
@@ -251,10 +251,10 @@ Resource RID_UUI_ERRHDL
         Text[ swedish ] = "$(ARG1) finns redan";
         Text[ polish ] = "$(ARG1) ju¿ istnieje";
         Text[ portuguese_brazilian ] = "$(ARG1) does already exist";
-        Text[ japanese ] = "$(ARG1) ‚Í‚·‚Å‚É‚ ‚è‚Ü‚·B";
+        Text[ japanese ] = "$(ARG1) ã¯ã™ã§ã«ã‚ã‚Šã¾ã™ã€‚";
         Text[ korean ] = "$(ARG1) does already exist";
-        Text[ chinese_simplified ] = "$(ARG1) ÒÑ¾­´æÔÚ¡£";
-        Text[ chinese_traditional ] = "$(ARG1) ¤w¸g¦s¦b¡C";
+        Text[ chinese_simplified ] = "$(ARG1) å·²ç»å­˜åœ¨ã€‚";
+        Text[ chinese_traditional ] = "$(ARG1) å·²ç¶“å­˜åœ¨ã€‚";
         Text[ turkish ] = "$(ARG1) does already exist";
         Text[ arabic ] = "$(ARG1) does already exist";
         Text[ catalan ] = "$(ARG1) does already exist";
@@ -265,7 +265,7 @@ Resource RID_UUI_ERRHDL
         Text = "Die Daten von $(ARG1) haben eine inkorrekte Prüfsumme" ;
         Text [ english ] = "The data of $(ARG1) have an incorrect checksum" ;
         Text[ english_us ] = "The data from $(ARG1) has an incorrect checksum";
-        Text[ portuguese ] = "The data of $(ARG1) have an incorrect checksum";
+        Text[ portuguese ] = "A soma do controlo dos dados de $(ARG1) está incorrecta.";
         Text[ russian ] = "Äàííûå $(ARG1) ñîäåğæàò íåïğàâèëüíóş êîíòğîëüíóş ñóììó";
         Text[ greek ] = "The data of $(ARG1) have an incorrect checksum";
         Text[ dutch ] = "De testsom van de gegevens van $(ARG1) is onjuist.";
@@ -277,10 +277,10 @@ Resource RID_UUI_ERRHDL
         Text[ swedish ] = "Data från $(ARG1) har en felaktig kontrollsumma";
         Text[ polish ] = "Dane $(ARG1) maj¹ nieprawid³ow¹ sumê kontroln¹";
         Text[ portuguese_brazilian ] = "The data of $(ARG1) have an incorrect checksum";
-        Text[ japanese ] = "$(ARG1) ‚ÌÃŞ°À‚ÍÁª¯¸»Ñ‚ª³‚µ‚­‚ ‚è‚Ü‚¹‚ñB";
+        Text[ japanese ] = "$(ARG1) ã®ï¾ƒï¾ï½°ï¾€ã¯ï¾ï½ªï½¯ï½¸ï½»ï¾‘ãŒæ­£ã—ãã‚ã‚Šã¾ã›ã‚“ã€‚";
         Text[ korean ] = "The data of $(ARG1) have an incorrect checksum";
-        Text[ chinese_simplified ] = "$(ARG1) Êı¾İµÄ¼ìÑéÊıÄ¿²»ÕıÈ·¡£";
-        Text[ chinese_traditional ] = "¸ê®Æ $(ARG1) ªºÀËÅç¼Æ¥Ø¤£¥¿½T¡C";
+        Text[ chinese_simplified ] = "$(ARG1) æ•°æ®çš„æ£€éªŒæ•°ç›®ä¸æ­£ç¡®ã€‚";
+        Text[ chinese_traditional ] = "è³‡æ–™ $(ARG1) çš„æª¢é©—æ•¸ç›®ä¸æ­£ç¢ºã€‚";
         Text[ turkish ] = "The data of $(ARG1) have an incorrect checksum";
         Text[ arabic ] = "The data of $(ARG1) have an incorrect checksum";
         Text[ catalan ] = "The data of $(ARG1) have an incorrect checksum";
@@ -292,7 +292,7 @@ Resource RID_UUI_ERRHDL
         Text = "Das Objekt $(ARG1) kann im Verzeichnis $(ARG2) nicht angelegt werden" ;
         Text [ ENGLISH ] = "The object $(ARG1) could not be created in directory $(ARG2)" ;
         Text[ english_us ] = "The object $(ARG1) cannot be created in directory $(ARG2)";
-        Text[ portuguese ] = "The object $(ARG1) could not be created in directory $(ARG2)";
+        Text[ portuguese ] = "Impossível criar o objecto $(ARG1) no directório $(ARG2).";
         Text[ russian ] = "Ñîçäàòü îáúåêò $(ARG1) â ïàïêå $(ARG2) íåâîçìîæíî";
         Text[ greek ] = "The object $(ARG1) could not be created in directory $(ARG2)";
         Text[ dutch ] = "Het object $(ARG1) kan niet worden geplaatst in directory $(ARG2)";
@@ -304,10 +304,10 @@ Resource RID_UUI_ERRHDL
         Text[ swedish ] = "Det går inte att skapa objektet $(ARG1) i katalogen $(ARG2)";
         Text[ polish ] = "Utworzenie obiektu $(ARG1) w katalogu $(ARG2) nie jest mo¿liwe";
         Text[ portuguese_brazilian ] = "The object $(ARG1) could not be created in directory $(ARG2)";
-        Text[ japanese ] = "µÌŞ¼Şª¸Ä $(ARG1) ‚ÍÌ«ÙÀŞ $(ARG2) ‚ÉŠi”[‚Å‚«‚Ü‚¹‚ñB";
+        Text[ japanese ] = "ï½µï¾Œï¾ï½¼ï¾ï½ªï½¸ï¾„ $(ARG1) ã¯ï¾Œï½«ï¾™ï¾€ï¾ $(ARG2) ã«æ ¼ç´ã§ãã¾ã›ã‚“ã€‚";
         Text[ korean ] = "The object $(ARG1) could not be created in directory $(ARG2)";
-        Text[ chinese_simplified ] = "ÎŞ·¨ÔÚÄ¿Â¼ $(ARG2) ÄÚĞÂ½¨¶ÔÏó $(ARG1) ¡£";
-        Text[ chinese_traditional ] = "µLªk¦b¥Ø¿ı $(ARG2) ¤§¤U«Ø¥ßª«¥ó $(ARG1)";
+        Text[ chinese_simplified ] = "æ— æ³•åœ¨ç›®å½• $(ARG2) å†…æ–°å»ºå¯¹è±¡ $(ARG1) ã€‚";
+        Text[ chinese_traditional ] = "ç„¡æ³•åœ¨ç›®éŒ„ $(ARG2) ä¹‹ä¸‹å»ºç«‹ç‰©ä»¶ $(ARG1)";
         Text[ turkish ] = "The object $(ARG1) could not be created in directory $(ARG2)";
         Text[ arabic ] = "The object $(ARG1) could not be created in directory $(ARG2)";
         Text[ catalan ] = "The object $(ARG1) could not be created in directory $(ARG2)";
@@ -318,7 +318,7 @@ Resource RID_UUI_ERRHDL
         Text = "Daten von $(ARG1) konnten nicht gelesen werden" ;
         Text [ ENGLISH ] = "Data of $(ARG1) could not be read" ;
         Text[ english_us ] = "Data of $(ARG1) could not be read";
-        Text[ portuguese ] = "Data of $(ARG1) could not be read";
+        Text[ portuguese ] = "Foi impossível ler os dados de $(ARG1).";
         Text[ russian ] = "Ïğî÷èòàòü äàííûå $(ARG1) íåâîçìîæíî";
         Text[ greek ] = "Data of $(ARG1) could not be read";
         Text[ dutch ] = "De gegevens van $(ARG1) konden niet worden gelezen";
@@ -330,10 +330,10 @@ Resource RID_UUI_ERRHDL
         Text[ swedish ] = "Det gick inte att läsa data från $(ARG1)";
         Text[ polish ] = "Odczytanie $(ARG1) nie powiod³o siê";
         Text[ portuguese_brazilian ] = "Data of $(ARG1) could not be read";
-        Text[ japanese ] = "$(ARG1) ‚ÌÃŞ°À‚Í“Ç‚İæ‚ê‚Ü‚¹‚ñ‚Å‚µ‚½B";
+        Text[ japanese ] = "$(ARG1) ã®ï¾ƒï¾ï½°ï¾€ã¯èª­ã¿å–ã‚Œã¾ã›ã‚“ã§ã—ãŸã€‚";
         Text[ korean ] = "Data of $(ARG1) could not be read";
-        Text[ chinese_simplified ] = "ÎŞ·¨¶ÁÈ¡Êı¾İ $(ARG1) ¡£";
-        Text[ chinese_traditional ] = "µLªk¦s¨ú¸ê®Æ $(ARG1) ¡C";
+        Text[ chinese_simplified ] = "æ— æ³•è¯»å–æ•°æ® $(ARG1) ã€‚";
+        Text[ chinese_traditional ] = "ç„¡æ³•å­˜å–è³‡æ–™ $(ARG1) ã€‚";
         Text[ turkish ] = "Data of $(ARG1) could not be read";
         Text[ arabic ] = "Data of $(ARG1) could not be read";
         Text[ catalan ] = "Data of $(ARG1) could not be read";
@@ -344,7 +344,7 @@ Resource RID_UUI_ERRHDL
         Text = "Die Seek-Operation auf $(ARG1) konnte nicht ausgeführt werden" ;
         Text [ ENGLISH ] = "The seek operation on $(ARG1) could not be completed" ;
         Text[ english_us ] = "The seek operation on $(ARG1) could not be performed";
-        Text[ portuguese ] = "The seek operation on $(ARG1) could not be completed";
+        Text[ portuguese ] = "Foi impossível executar a operação seek em $(ARG1).";
         Text[ russian ] = "Âûïîëíèòü îïåğàöèş seek íà $(ARG1) íåâîçìîæíî";
         Text[ greek ] = "The seek operation on $(ARG1) could not be completed";
         Text[ dutch ] = "Het zoeken op $(ARG1) was niet mogelijk";
@@ -356,10 +356,10 @@ Resource RID_UUI_ERRHDL
         Text[ swedish ] = "Det gick inte att utföra seek-operationen $(ARG1)";
         Text[ polish ] = "Wykonanie operacji wyszukiwanie (seek) na $(ARG1) nie powiod³o siê";
         Text[ portuguese_brazilian ] = "The seek operation on $(ARG1) could not be completed";
-        Text[ japanese ] = "$(ARG1) ‚Ö‚Ì seek ‘€ì‚ÍÀs‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B";
+        Text[ japanese ] = "$(ARG1) ã¸ã® seek æ“ä½œã¯å®Ÿè¡Œã§ãã¾ã›ã‚“ã§ã—ãŸã€‚";
         Text[ korean ] = "The seek operation on $(ARG1) could not be completed";
-        Text[ chinese_simplified ] = "ÎŞ·¨Íê³ÉÖ´ĞĞ $(ARG1) µÄ seek ÃüÁî¡£";
-        Text[ chinese_traditional ] = "µLªk§¹¦¨ $(ARG1) ªº seek ¾Ş§@¡C";
+        Text[ chinese_simplified ] = "æ— æ³•å®Œæˆæ‰§è¡Œ $(ARG1) çš„ seek å‘½ä»¤ã€‚";
+        Text[ chinese_traditional ] = "ç„¡æ³•å®Œæˆ $(ARG1) çš„ seek æ“ä½œã€‚";
         Text[ turkish ] = "The seek operation on $(ARG1) could not be completed";
         Text[ arabic ] = "The seek operation on $(ARG1) could not be completed";
         Text[ catalan ] = "The seek operation on $(ARG1) could not be completed";
@@ -370,7 +370,7 @@ Resource RID_UUI_ERRHDL
         Text = "Die Tell-Operation auf $(ARG1) konnte nicht ausgeführt werden" ;
         Text [ ENGLISH ] = "The tell operation on $(ARG1) could not be completed" ;
         Text[ english_us ] = "The tell operation on $(ARG1) could not be performed";
-        Text[ portuguese ] = "The tell operation on $(ARG1) could not be completed";
+        Text[ portuguese ] = "Foi impossível executar a operação tell em $(ARG1).";
         Text[ russian ] = "Âûïîëíèòü îïåğàöèş tell íà $(ARG1) íåâîçìîæíî";
         Text[ greek ] = "The tell operation on $(ARG1) could not be completed";
         Text[ dutch ] = "De tell-actie op $(ARG1) kon niet worden uitgevoerd";
@@ -382,10 +382,10 @@ Resource RID_UUI_ERRHDL
         Text[ swedish ] = "Det gick inte att utföra tell-operationen på $(ARG1)";
         Text[ polish ] = "Wykonanie operacji tell na $(ARG1) nie powiod³o siê";
         Text[ portuguese_brazilian ] = "The tell operation on $(ARG1) could not be completed";
-        Text[ japanese ] = "$(ARG1) ‚Ö‚Ì tell ‘€ì‚ÍÀs‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B";
+        Text[ japanese ] = "$(ARG1) ã¸ã® tell æ“ä½œã¯å®Ÿè¡Œã§ãã¾ã›ã‚“ã§ã—ãŸã€‚";
         Text[ korean ] = "The tell operation on $(ARG1) could not be completed";
-        Text[ chinese_simplified ] = "ÎŞ·¨Íê³ÉÖ´ĞĞ $(ARG1) µÄ tell ÃüÁî¡£";
-        Text[ chinese_traditional ] = "µLªk§¹¦¨ $(ARG1) ªº tell ¾Ş§@¡C";
+        Text[ chinese_simplified ] = "æ— æ³•å®Œæˆæ‰§è¡Œ $(ARG1) çš„ tell å‘½ä»¤ã€‚";
+        Text[ chinese_traditional ] = "ç„¡æ³•å®Œæˆ $(ARG1) çš„ tell æ“ä½œã€‚";
         Text[ turkish ] = "The tell operation on $(ARG1) could not be completed";
         Text[ arabic ] = "The tell operation on $(ARG1) could not be completed";
         Text[ catalan ] = "The tell operation on $(ARG1) could not be completed";
@@ -396,7 +396,7 @@ Resource RID_UUI_ERRHDL
         Text = "Daten für $(ARG1) konnten nicht geschrieben werden" ;
         Text [ ENGLISH ] = "Data for $(ARG1) could not be written" ;
         Text[ english_us ] = "Data for $(ARG1) could not be written";
-        Text[ portuguese ] = "Data for $(ARG1) could not be written";
+        Text[ portuguese ] = "Foi impossível escrever os dados para $(ARG1).";
         Text[ russian ] = "Íàïèñàòü äàííûå äëÿ $(ARG1) íåâîçìîæíî";
         Text[ greek ] = "Data for $(ARG1) could not be written";
         Text[ dutch ] = "De gegevens voor $(ARG1) konden niet worden geschreven";
@@ -408,10 +408,10 @@ Resource RID_UUI_ERRHDL
         Text[ swedish ] = "Det gick inte att skriva data för $(ARG1)";
         Text[ polish ] = "Napisanie danych dla $(ARG1) nie powiod³o siê";
         Text[ portuguese_brazilian ] = "Data for $(ARG1) could not be written";
-        Text[ japanese ] = "$(ARG1) ‚ÌÃŞ°À‚Í‘‚«‚İ‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B";
+        Text[ japanese ] = "$(ARG1) ã®ï¾ƒï¾ï½°ï¾€ã¯æ›¸ãè¾¼ã¿ã§ãã¾ã›ã‚“ã§ã—ãŸã€‚";
         Text[ korean ] = "Data for $(ARG1) could not be written";
-        Text[ chinese_simplified ] = "ÎŞ·¨¸ÄĞ´ $(ARG1) µÄÊı¾İ¡£";
-        Text[ chinese_traditional ] = "µLªk¼g¤J¸ê®Æ $(ARG1) ¡C";
+        Text[ chinese_simplified ] = "æ— æ³•æ”¹å†™ $(ARG1) çš„æ•°æ®ã€‚";
+        Text[ chinese_traditional ] = "ç„¡æ³•å¯«å…¥è³‡æ–™ $(ARG1) ã€‚";
         Text[ turkish ] = "Data for $(ARG1) could not be written";
         Text[ arabic ] = "Data for $(ARG1) could not be written";
         Text[ catalan ] = "Data for $(ARG1) could not be written";
@@ -422,7 +422,7 @@ Resource RID_UUI_ERRHDL
         Text = "Aktion unmöglich: $(ARG1) ist das aktuelle Verzeichnis" ;
         Text [ english ] = "Action not allowed: $(ARG1) is the current directory" ;
         Text[ english_us ] = "Action not allowed: $(ARG1) is the current directory";
-        Text[ portuguese ] = "Action not allowed: $(ARG1) is the current directory";
+        Text[ portuguese ] = "Acção impossível: $(ARG1) é o directório activo.";
         Text[ russian ] = "Äàííàÿ îïåğàöèÿ íåâîçìîæíà: $(ARG1) ÿâëÿåòñÿ òåêóùåé ïàïêîé";
         Text[ greek ] = "Action not allowed: $(ARG1) is the current directory";
         Text[ dutch ] = "Deze opdracht kan niet worden uitgevoerd: $(ARG1) is de actuele directory";
@@ -434,10 +434,10 @@ Resource RID_UUI_ERRHDL
         Text[ swedish ] = "Åtgärd omöjlig: $(ARG1) är den aktuella katalogen";
         Text[ polish ] = "Niedozwolona operacja: $(ARG1) jest bie¿¹cym katalogiem";
         Text[ portuguese_brazilian ] = "Action not allowed: $(ARG1) is the current directory";
-        Text[ japanese ] = "±¸¼®İ‚Å‚«‚Ü‚¹‚ñ: $(ARG1) ‚ÍŒ»İ‚ÌÃŞ¨Ú¸ÄØ‚Å‚·B";
+        Text[ japanese ] = "ï½±ï½¸ï½¼ï½®ï¾ã§ãã¾ã›ã‚“: $(ARG1) ã¯ç¾åœ¨ã®ï¾ƒï¾ï½¨ï¾šï½¸ï¾„ï¾˜ã§ã™ã€‚";
         Text[ korean ] = "Action not allowed: $(ARG1) is the current directory";
-        Text[ chinese_simplified ] = "ÎŞ·¨Ö´ĞĞ£º$(ARG1) ÊÇµ±Ç°µÄÄ¿Â¼¡£";
-        Text[ chinese_traditional ] = "µLªk°õ¦æ°Ê§@¡G$(ARG1) ¬O·í«eªº¥Ø¿ı¡C";
+        Text[ chinese_simplified ] = "æ— æ³•æ‰§è¡Œï¼š$(ARG1) æ˜¯å½“å‰çš„ç›®å½•ã€‚";
+        Text[ chinese_traditional ] = "ç„¡æ³•åŸ·è¡Œå‹•ä½œï¼š$(ARG1) æ˜¯ç•¶å‰çš„ç›®éŒ„ã€‚";
         Text[ turkish ] = "Action not allowed: $(ARG1) is the current directory";
         Text[ arabic ] = "Action not allowed: $(ARG1) is the current directory";
         Text[ catalan ] = "Action not allowed: $(ARG1) is the current directory";
@@ -448,7 +448,7 @@ Resource RID_UUI_ERRHDL
         Text = "Das Gerät (Laufwerk) $(ARG1) ist nicht bereit" ;
         Text [ english ] = "The Device (drive) $(ARG1) is not ready" ;
         Text[ english_us ] = "The device (drive) $(ARG1) is not ready";
-        Text[ portuguese ] = "The Device (drive) $(ARG1) is not ready";
+        Text[ portuguese ] = "O dispositivo (unidade) $(ARG1) não está preparado.";
         Text[ russian ] = "Óñòğîéñòâî (äèñê) $(ARG1) íå ãîòîâî";
         Text[ greek ] = "The Device (drive) $(ARG1) is not ready";
         Text[ dutch ] = "Apparatuur (station) $(ARG1) is niet bereid";
@@ -460,10 +460,10 @@ Resource RID_UUI_ERRHDL
         Text[ swedish ] = "Enheten $(ARG1) är inte redo";
         Text[ polish ] = "Urz¹dzenie (napêd) $(ARG1) nie jest gotowe";
         Text[ portuguese_brazilian ] = "The Device (drive) $(ARG1) is not ready";
-        Text[ japanese ] = "ÃŞÊŞ²½(ÄŞ×²ÌŞ) $(ARG1) ‚Ì€”õ‚ª‚Å‚«‚Ä‚¢‚Ü‚¹‚ñB";
+        Text[ japanese ] = "ï¾ƒï¾ï¾Šï¾ï½²ï½½(ï¾„ï¾ï¾—ï½²ï¾Œï¾) $(ARG1) ã®æº–å‚™ãŒã§ãã¦ã„ã¾ã›ã‚“ã€‚";
         Text[ korean ] = "The Device (drive) $(ARG1) is not ready";
-        Text[ chinese_simplified ] = "Ó²ÅÌ $(ARG1) ÉĞÎ´×¼±¸¾ÍĞ÷¡£";
-        Text[ chinese_traditional ] = "³]³Æ(ºÏºĞ)$(ARG1)©|¥¼´Nºü¡C";
+        Text[ chinese_simplified ] = "ç¡¬ç›˜ $(ARG1) å°šæœªå‡†å¤‡å°±ç»ªã€‚";
+        Text[ chinese_traditional ] = "è¨­å‚™(ç£ç¢Ÿ)$(ARG1)å°šæœªå°±ç·’ã€‚";
         Text[ turkish ] = "The Device (drive) $(ARG1) is not ready";
         Text[ arabic ] = "The Device (drive) $(ARG1) is not ready";
         Text[ catalan ] = "The Device (drive) $(ARG1) is not ready";
@@ -474,7 +474,7 @@ Resource RID_UUI_ERRHDL
         Text = "Aktion unmöglich: $(ARG1) und $(ARG2) sind verschiedene Geräte (Laufwerke)" ;
         Text [ english ] = "Action not allowed: $(ARG1) and $(ARG2) are different devices (drives)" ;
         Text[ english_us ] = "Action not allowed: $(ARG1) and $(ARG2) are different devices (drives)";
-        Text[ portuguese ] = "Action not allowed: $(ARG1) and $(ARG2) are different devices (drives)";
+        Text[ portuguese ] = "Acção impossível: $(ARG1) e $(ARG2) são dispositivos diferentes (unidades).";
         Text[ russian ] = "Äàííàÿ îïåğàöèÿ íåâîçìîæíà: $(ARG1) è $(ARG2) ÿâëÿşòñÿ ğàçëè÷íûìè óñòğîéñòâàìè (äèñêàìè)";
         Text[ greek ] = "Action not allowed: $(ARG1) and $(ARG2) are different devices (drives)";
         Text[ dutch ] = "Deze opdracht kan niet worden uitgevoerd: $(ARG1) en $(ARG2) zijn verschillende apparaten (stations)";
@@ -486,10 +486,10 @@ Resource RID_UUI_ERRHDL
         Text[ swedish ] = "Åtgärd omöjlig: $(ARG1) och $(ARG2) är olika enheter";
         Text[ polish ] = "Niedozwolona operacja: $(ARG1) i $(ARG2) s¹ ró¿nymi urz¹dzeniami (napêdami)";
         Text[ portuguese_brazilian ] = "Action not allowed: $(ARG1) and $(ARG2) are different devices (drives)";
-        Text[ japanese ] = "±¸¼®İ‚Å‚«‚Ü‚¹‚ñ: $(ARG1) ‚Æ $(ARG2) ‚ÍˆÙ‚È‚Á‚½ÃŞÊŞ²½(ÄŞ×²ÌŞ)‚Å‚·B";
+        Text[ japanese ] = "ï½±ï½¸ï½¼ï½®ï¾ã§ãã¾ã›ã‚“: $(ARG1) ã¨ $(ARG2) ã¯ç•°ãªã£ãŸï¾ƒï¾ï¾Šï¾ï½²ï½½(ï¾„ï¾ï¾—ï½²ï¾Œï¾)ã§ã™ã€‚";
         Text[ korean ] = "Action not allowed: $(ARG1) and $(ARG2) are different devices (drives)";
-        Text[ chinese_simplified ] = "ÎŞ·¨Ö´ĞĞ²Ù×÷£º$(ARG1) ºÍ $(ARG2) ÊÇ²»Í¬µÄÓ²ÅÌ¡£";
-        Text[ chinese_traditional ] = "µLªk°õ¦æ°Ê§@¡G$(ARG1) ©M $(ARG2) ¬O¤£¦Pªº³]³Æ(ºÏºĞ)";
+        Text[ chinese_simplified ] = "æ— æ³•æ‰§è¡Œæ“ä½œï¼š$(ARG1) å’Œ $(ARG2) æ˜¯ä¸åŒçš„ç¡¬ç›˜ã€‚";
+        Text[ chinese_traditional ] = "ç„¡æ³•åŸ·è¡Œå‹•ä½œï¼š$(ARG1) å’Œ $(ARG2) æ˜¯ä¸åŒçš„è¨­å‚™(ç£ç¢Ÿ)";
         Text[ turkish ] = "Action not allowed: $(ARG1) and $(ARG2) are different devices (drives)";
         Text[ arabic ] = "Action not allowed: $(ARG1) and $(ARG2) are different devices (drives)";
         Text[ catalan ] = "Action not allowed: $(ARG1) and $(ARG2) are different devices (drives)";
@@ -500,7 +500,7 @@ Resource RID_UUI_ERRHDL
         Text = "Allgemeiner Ein-/Ausgabefehler beim Zugriff auf $(ARG1)" ;
         Text [ ENGLISH ] = "General input/output error while accessing $(ARG1)" ;
         Text[ english_us ] = "General input/output error while accessing $(ARG1)";
-        Text[ portuguese ] = "General input/output error while accessing $(ARG1)";
+        Text[ portuguese ] = "Erro geral de acesso/saída ao entrar em $(ARG1).";
         Text[ russian ] = "Îáùàÿ îøèáêà ââîäà/âûâîäà ïğè äîñòóïå ê $(ARG1)";
         Text[ greek ] = "General input/output error while accessing $(ARG1)";
         Text[ dutch ] = "Algemene in-/uitvoerfout bij toegang tot ($(ARG1)";
@@ -512,10 +512,10 @@ Resource RID_UUI_ERRHDL
         Text[ swedish ] = "Allmänt input/outputfel vid åtkomst till $(ARG1)";
         Text[ polish ] = "General input/output error while accessing $(ARG1)";
         Text[ portuguese_brazilian ] = "General input/output error while accessing $(ARG1)";
-        Text[ japanese ] = "$(ARG1) ‚Ö±¸¾½‚·‚éÛ‚Ìˆê”Ê“I‚È“ü—Í/o—Í‚Ì´×°B";
+        Text[ japanese ] = "$(ARG1) ã¸ï½±ï½¸ï½¾ï½½ã™ã‚‹éš›ã®ä¸€èˆ¬çš„ãªå…¥åŠ›/å‡ºåŠ›ã®ï½´ï¾—ï½°ã€‚";
         Text[ korean ] = "General input/output error while accessing $(ARG1)";
-        Text[ chinese_simplified ] = "ÔÚ¶ÁÈ¡ $(ARG1) Ê±·¢ÉúÒ»°ãµÄÊäÈë/Êä³ö´íÎó";
-        Text[ chinese_traditional ] = "Åª¨ú $(ARG1) ®Éµo¥Í¤@­Ó¤@¯ëªº¿é¤J/¿é¥X¿ù»~¡C";
+        Text[ chinese_simplified ] = "åœ¨è¯»å– $(ARG1) æ—¶å‘ç”Ÿä¸€èˆ¬çš„è¾“å…¥/è¾“å‡ºé”™è¯¯";
+        Text[ chinese_traditional ] = "è®€å– $(ARG1) æ™‚ç™¼ç”Ÿä¸€å€‹ä¸€èˆ¬çš„è¼¸å…¥/è¼¸å‡ºéŒ¯èª¤ã€‚";
         Text[ turkish ] = "General input/output error while accessing $(ARG1)";
         Text[ arabic ] = "General input/output error while accessing $(ARG1)";
         Text[ catalan ] = "General input/output error while accessing $(ARG1)";
@@ -538,10 +538,10 @@ Resource RID_UUI_ERRHDL
         Text[ swedish ] = "Ett försök gjordes att få åtkomst till $(ARG1) på ett ogiltigt sätt";
         Text[ polish ] = "Nieprawid³owa próba dostêpu do $(ARG1)";
         Text[ portuguese_brazilian ] = "An invalid attempt was made to access $(ARG1)";
-        Text[ japanese ] = "$(ARG1) ‚Ö‚Ì–³Œø‚È±¸¾½‚ª‚İ‚ç‚ê‚Ü‚µ‚½B";
+        Text[ japanese ] = "$(ARG1) ã¸ã®ç„¡åŠ¹ãªï½±ï½¸ï½¾ï½½ãŒè©¦ã¿ã‚‰ã‚Œã¾ã—ãŸã€‚";
         Text[ korean ] = "An invalid attempt was made to access $(ARG1)";
-        Text[ chinese_simplified ] = "³¢ÊÔÓÃÎŞĞ§µÄ·½Ê½¶ÁÈ¡ $(ARG1) ¡£";
-        Text[ chinese_traditional ] = "¸Õ¹Ï±Ä¥Î¤@­ÓµL®Äªº¤è¦¡¦s¨ú $(ARG1)";
+        Text[ chinese_simplified ] = "å°è¯•ç”¨æ— æ•ˆçš„æ–¹å¼è¯»å– $(ARG1) ã€‚";
+        Text[ chinese_traditional ] = "è©¦åœ–æ¡ç”¨ä¸€å€‹ç„¡æ•ˆçš„æ–¹å¼å­˜å– $(ARG1)";
         Text[ turkish ] = "An invalid attempt was made to access $(ARG1)";
         Text[ arabic ] = "An invalid attempt was made to access $(ARG1)";
         Text[ catalan ] = "An invalid attempt was made to access $(ARG1)";
@@ -564,10 +564,10 @@ Resource RID_UUI_ERRHDL
         Text[ swedish ] = "$(ARG1) innehåller otillåtna tecken";
         Text[ polish ] = "$(ARG1) zawiera niedozwolone znaki";
         Text[ portuguese_brazilian ] = "$(ARG1) contains invalid characters";
-        Text[ japanese ] = "$(ARG1) ‚É–³Œø‚È•¶š‚ªŠÜ‚Ü‚ê‚Ä‚¢‚Ü‚·B";
+        Text[ japanese ] = "$(ARG1) ã«ç„¡åŠ¹ãªæ–‡å­—ãŒå«ã¾ã‚Œã¦ã„ã¾ã™ã€‚";
         Text[ korean ] = "$(ARG1) contains invalid characters";
-        Text[ chinese_simplified ] = "$(ARG1) º¬ÓĞÎŞĞ§µÄ×Ö·û¡£";
-        Text[ chinese_traditional ] = "$(ARG1) §t¦³µL®Äªº¦r¤¸¡C";
+        Text[ chinese_simplified ] = "$(ARG1) å«æœ‰æ— æ•ˆçš„å­—ç¬¦ã€‚";
+        Text[ chinese_traditional ] = "$(ARG1) å«æœ‰ç„¡æ•ˆçš„å­—å…ƒã€‚";
         Text[ turkish ] = "$(ARG1) contains invalid characters";
         Text[ arabic ] = "$(ARG1) contains invalid characters";
         Text[ catalan ] = "$(ARG1) contains invalid characters";
@@ -590,10 +590,10 @@ Resource RID_UUI_ERRHDL
         Text[ swedish ] = "Enheten $(ARG1) är ogiltig";
         Text[ polish ] = "Nieprawid³owe urz¹dzenie (napêd) $(ARG1)";
         Text[ portuguese_brazilian ] = "The device (drive) $(ARG1) is invalid";
-        Text[ japanese ] = "ÃŞÊŞ²½(ÄŞ×²ÌŞ) $(ARG1) ‚Í–³Œø‚Å‚·B";
+        Text[ japanese ] = "ï¾ƒï¾ï¾Šï¾ï½²ï½½(ï¾„ï¾ï¾—ï½²ï¾Œï¾) $(ARG1) ã¯ç„¡åŠ¹ã§ã™ã€‚";
         Text[ korean ] = "The device (drive) $(ARG1) is invalid";
-        Text[ chinese_simplified ] = "Õâ¸öÓ²ÅÌ $(ARG1) ÎŞĞ§¡£";
-        Text[ chinese_traditional ] = "³]³Æ(ºÏºĞ) $(ARG1) µL®Ä¡C";
+        Text[ chinese_simplified ] = "è¿™ä¸ªç¡¬ç›˜ $(ARG1) æ— æ•ˆã€‚";
+        Text[ chinese_traditional ] = "è¨­å‚™(ç£ç¢Ÿ) $(ARG1) ç„¡æ•ˆã€‚";
         Text[ turkish ] = "The device (drive) $(ARG1) is invalid";
         Text[ arabic ] = "The device (drive) $(ARG1) is invalid";
         Text[ catalan ] = "The device (drive) $(ARG1) is invalid";
@@ -616,10 +616,10 @@ Resource RID_UUI_ERRHDL
         Text[ swedish ] = "Data från $(ARG1) har en ogiltig längd";
         Text[ polish ] = "Dane $(ARG1) s¹ nieprawid³owej d³ugoœci";
         Text[ portuguese_brazilian ] = "The data of $(ARG1) have an invalid length";
-        Text[ japanese ] = "$(ARG1) ‚ÌÃŞ°À‚Ì•¶š—ñ‚Ì’·‚³‚ª–³Œø‚Å‚·B";
+        Text[ japanese ] = "$(ARG1) ã®ï¾ƒï¾ï½°ï¾€ã®æ–‡å­—åˆ—ã®é•·ã•ãŒç„¡åŠ¹ã§ã™ã€‚";
         Text[ korean ] = "The data of $(ARG1) have an invalid length";
-        Text[ chinese_simplified ] = "$(ARG1) Êı¾İµÄ³¤¶ÈÎŞĞ§¡£";
-        Text[ chinese_traditional ] = "¸ê®Æ $(ARG1) ªºªø«×µL®Ä¡C";
+        Text[ chinese_simplified ] = "$(ARG1) æ•°æ®çš„é•¿åº¦æ— æ•ˆã€‚";
+        Text[ chinese_traditional ] = "è³‡æ–™ $(ARG1) çš„é•·åº¦ç„¡æ•ˆã€‚";
         Text[ turkish ] = "The data of $(ARG1) have an invalid length";
         Text[ arabic ] = "The data of $(ARG1) have an invalid length";
         Text[ catalan ] = "The data of $(ARG1) have an invalid length";
@@ -642,10 +642,10 @@ Resource RID_UUI_ERRHDL
         Text[ swedish ] = "Operationen på $(ARG1) startades med en ogiltig parameter";
         Text[ polish ] = "Operacjê na $(ARG1) rozpoczêto za pomoc¹ nieprawid³owego parametra";
         Text[ portuguese_brazilian ] = "The operation on $(ARG1) was started with an invalid parameter";
-        Text[ japanese ] = "$(ARG1) ‚Ö‚Ì‘€ìÀs‚ª–³Œø‚ÈÊß×Ò°À‚ÅŠJn‚³‚ê‚Ü‚µ‚½B";
+        Text[ japanese ] = "$(ARG1) ã¸ã®æ“ä½œå®Ÿè¡ŒãŒç„¡åŠ¹ãªï¾Šï¾Ÿï¾—ï¾’ï½°ï¾€ã§é–‹å§‹ã•ã‚Œã¾ã—ãŸã€‚";
         Text[ korean ] = "The operation on $(ARG1) was started with an invalid parameter";
-        Text[ chinese_simplified ] = "Ö´ĞĞ $(ARG1) ÃüÁîÊ±Ê¹ÓÃÁËÒ»¸öÎŞĞ§µÄ²ÎÊı¡£";
-        Text[ chinese_traditional ] = "°õ¦æ $(ARG1) °Ê§@®É¨Ï¥Î¤F¤@­ÓµL®Äªº°Ñ¼Æ¡C";
+        Text[ chinese_simplified ] = "æ‰§è¡Œ $(ARG1) å‘½ä»¤æ—¶ä½¿ç”¨äº†ä¸€ä¸ªæ— æ•ˆçš„å‚æ•°ã€‚";
+        Text[ chinese_traditional ] = "åŸ·è¡Œ $(ARG1) å‹•ä½œæ™‚ä½¿ç”¨äº†ä¸€å€‹ç„¡æ•ˆçš„åƒæ•¸ã€‚";
         Text[ turkish ] = "The operation on $(ARG1) was started with an invalid parameter";
         Text[ arabic ] = "The operation on $(ARG1) was started with an invalid parameter";
         Text[ catalan ] = "The operation on $(ARG1) was started with an invalid parameter";
@@ -668,10 +668,10 @@ Resource RID_UUI_ERRHDL
         Text[ swedish ] = "Det går inte att utföra operationen eftersom $(ARG1) innehåller jokertecken";
         Text[ polish ] = "Wykonanie operacji nie jest mo¿liwe, poniewa¿ $(ARG1) zawiera symbole wieloznaczne";
         Text[ portuguese_brazilian ] = "The operation cannot be run, because $(ARG1) contains wildcards";
-        Text[ japanese ] = "$(ARG1) ‚ÉÜ²ÙÄŞ¶°ÄŞ‚ªŠÜ‚Ü‚ê‚Ä‚¢‚é‚½‚ßA‘€ìÀs‚Í‚Å‚«‚Ü‚¹‚ñB";
+        Text[ japanese ] = "$(ARG1) ã«ï¾œï½²ï¾™ï¾„ï¾ï½¶ï½°ï¾„ï¾ãŒå«ã¾ã‚Œã¦ã„ã‚‹ãŸã‚ã€æ“ä½œå®Ÿè¡Œã¯ã§ãã¾ã›ã‚“ã€‚";
         Text[ korean ] = "The operation cannot be run, because $(ARG1) contains wildcards";
-        Text[ chinese_simplified ] = "ÎŞ·¨Ö´ĞĞÕâ¸öÃüÁî£¬ÒòÎª $(ARG1) º¬ÓĞÍ¨Åä·û¡£";
-        Text[ chinese_traditional ] = "µLªk°õ¦æ³o­Ó¾Ş§@¡A¦]? $(ARG1) §t¦³³q°t²Å¡C";
+        Text[ chinese_simplified ] = "æ— æ³•æ‰§è¡Œè¿™ä¸ªå‘½ä»¤ï¼Œå› ä¸º $(ARG1) å«æœ‰é€šé…ç¬¦ã€‚";
+        Text[ chinese_traditional ] = "ç„¡æ³•åŸ·è¡Œé€™å€‹æ“ä½œï¼Œå› çˆ² $(ARG1) å«æœ‰é€šé…ç¬¦ã€‚";
         Text[ turkish ] = "The operation cannot be run, because $(ARG1) contains wildcards";
         Text[ arabic ] = "The operation cannot be run, because $(ARG1) contains wildcards";
         Text[ catalan ] = "The operation cannot be run, because $(ARG1) contains wildcards";
@@ -694,10 +694,10 @@ Resource RID_UUI_ERRHDL
         Text[ swedish ] = "Fel vid gemensam åtkomst till $(ARG1)";
         Text[ polish ] = "B³¹d wspólnego dostêpu do $(ARG1)";
         Text[ portuguese_brazilian ] = "Sharing violation while accessing $(ARG1)";
-        Text[ japanese ] = "$(ARG1) ‚Ö‚Ì‹¤—L±¸¾½‚ÌÛ‚Ì´×°B";
+        Text[ japanese ] = "$(ARG1) ã¸ã®å…±æœ‰ï½±ï½¸ï½¾ï½½ã®éš›ã®ï½´ï¾—ï½°ã€‚";
         Text[ korean ] = "Sharing violation while accessing $(ARG1)";
-        Text[ chinese_simplified ] = "¹²Ïí $(ARG1) Ê±·¢Éú¶ÁÈ¡´íÎó¡£";
-        Text[ chinese_traditional ] = "¦b¦P®É¦s¨ú $(ARG1) ®Éµo¥Í¿ù»~";
+        Text[ chinese_simplified ] = "å…±äº« $(ARG1) æ—¶å‘ç”Ÿè¯»å–é”™è¯¯ã€‚";
+        Text[ chinese_traditional ] = "åœ¨åŒæ™‚å­˜å– $(ARG1) æ™‚ç™¼ç”ŸéŒ¯èª¤";
         Text[ turkish ] = "Sharing violation while accessing $(ARG1)";
         Text[ arabic ] = "Sharing violation while accessing $(ARG1)";
         Text[ catalan ] = "Sharing violation while accessing $(ARG1)";
@@ -720,10 +720,10 @@ Resource RID_UUI_ERRHDL
         Text[ swedish ] = "$(ARG1) innehåller tecken som har en otillåten placering";
         Text[ polish ] = "$(ARG1) zawiera znaki w niedozwolonym miejscu";
         Text[ portuguese_brazilian ] = "$(ARG1) contains misplaced characters";
-        Text[ japanese ] = "$(ARG1) ‚É‚ÍŠÔˆá‚Á‚½ˆÊ’u‚É•¶š‚ªŠÜ‚Ü‚ê‚Ä‚¢‚Ü‚·B";
+        Text[ japanese ] = "$(ARG1) ã«ã¯é–“é•ã£ãŸä½ç½®ã«æ–‡å­—ãŒå«ã¾ã‚Œã¦ã„ã¾ã™ã€‚";
         Text[ korean ] = "$(ARG1) contains misplaced characters";
-        Text[ chinese_simplified ] = "$(ARG1) º¬ÓĞÒ»Ğ©Î»ÖÃÎŞĞ§µÄ×Ö·û¡£";
-        Text[ chinese_traditional ] = "$(ARG1) §t¦³¤@¨Ç¦ì¸mµL®Äªº¦r¤¸¡C";
+        Text[ chinese_simplified ] = "$(ARG1) å«æœ‰ä¸€äº›ä½ç½®æ— æ•ˆçš„å­—ç¬¦ã€‚";
+        Text[ chinese_traditional ] = "$(ARG1) å«æœ‰ä¸€äº›ä½ç½®ç„¡æ•ˆçš„å­—å…ƒã€‚";
         Text[ turkish ] = "$(ARG1) contains misplaced characters";
         Text[ arabic ] = "$(ARG1) contains misplaced characters";
         Text[ catalan ] = "$(ARG1) contains misplaced characters";
@@ -746,10 +746,10 @@ Resource RID_UUI_ERRHDL
         Text[ swedish ] = "Namnet $(ARG1) innehåller för många tecken";
         Text[ polish ] = "Nazwa $(ARG1) zawiera za du¿o znaków";
         Text[ portuguese_brazilian ] = "The name $(ARG1) contains to many characters";
-        Text[ japanese ] = "–¼‘O $(ARG1) ‚ÉŠÜ‚Ü‚ê‚Ä‚¢‚é•¶š‚ª‘½‚·‚¬‚Ü‚·B";
+        Text[ japanese ] = "åå‰ $(ARG1) ã«å«ã¾ã‚Œã¦ã„ã‚‹æ–‡å­—ãŒå¤šã™ãã¾ã™ã€‚";
         Text[ korean ] = "The name $(ARG1) contains to many characters";
-        Text[ chinese_simplified ] = "Ãû³Æ $(ARG1) º¬ÓĞÌ«¶àµÄ×Ö·û¡£";
-        Text[ chinese_traditional ] = "¦WºÙ $(ARG1) §t¦³¤Ó¦hªº¦r¤¸¡C";
+        Text[ chinese_simplified ] = "åç§° $(ARG1) å«æœ‰å¤ªå¤šçš„å­—ç¬¦ã€‚";
+        Text[ chinese_traditional ] = "åç¨± $(ARG1) å«æœ‰å¤ªå¤šçš„å­—å…ƒã€‚";
         Text[ turkish ] = "The name $(ARG1) contains to many characters";
         Text[ arabic ] = "The name $(ARG1) contains to many characters";
         Text[ catalan ] = "The name $(ARG1) contains to many characters";
@@ -772,10 +772,10 @@ Resource RID_UUI_ERRHDL
         Text[ swedish ] = "$(ARG1) existerar inte";
         Text[ polish ] = "$(ARG1) nie istnieje";
         Text[ portuguese_brazilian ] = "$(ARG1) does not exist";
-        Text[ japanese ] = "$(ARG1) ‚Í‚ ‚è‚Ü‚¹‚ñB";
+        Text[ japanese ] = "$(ARG1) ã¯ã‚ã‚Šã¾ã›ã‚“ã€‚";
         Text[ korean ] = "$(ARG1) does not exist";
-        Text[ chinese_simplified ] = "$(ARG1) ²»´æÔÚ¡£";
-        Text[ chinese_traditional ] = "$(ARG1) ¤£¦s¦b¡C";
+        Text[ chinese_simplified ] = "$(ARG1) ä¸å­˜åœ¨ã€‚";
+        Text[ chinese_traditional ] = "$(ARG1) ä¸å­˜åœ¨ã€‚";
         Text[ turkish ] = "$(ARG1) does not exist";
         Text[ arabic ] = "$(ARG1) does not exist";
         Text[ catalan ] = "$(ARG1) does not exist";
@@ -798,10 +798,10 @@ Resource RID_UUI_ERRHDL
         Text[ swedish ] = "Sökvägen $(ARG1) existerar inte";
         Text[ polish ] = "Œcie¿ka $(ARG1) nie istnieje";
         Text[ portuguese_brazilian ] = "The path $(ARG1) does not exist";
-        Text[ japanese ] = "Êß½ $(ARG1) ‚Í‚ ‚è‚Ü‚¹‚ñB";
+        Text[ japanese ] = "ï¾Šï¾Ÿï½½ $(ARG1) ã¯ã‚ã‚Šã¾ã›ã‚“ã€‚";
         Text[ korean ] = "The path $(ARG1) does not exist";
-        Text[ chinese_simplified ] = "Â·¾¶ $(ARG1) ²»´æÔÚ¡£";
-        Text[ chinese_traditional ] = "¸ô®| $(ARG1) ¤£¦s¦b¡C";
+        Text[ chinese_simplified ] = "è·¯å¾„ $(ARG1) ä¸å­˜åœ¨ã€‚";
+        Text[ chinese_traditional ] = "è·¯å¾‘ $(ARG1) ä¸å­˜åœ¨ã€‚";
         Text[ turkish ] = "The path $(ARG1) does not exist";
         Text[ arabic ] = "The path $(ARG1) does not exist";
         Text[ catalan ] = "The path $(ARG1) does not exist";
@@ -824,10 +824,10 @@ Resource RID_UUI_ERRHDL
         Text[ swedish ] = "Operationen på $(ARG1) understöds inte på operativsystemet";
         Text[ polish ] = "Operacja $(ARG1) nie jest obs³ugiwana przez dany system operacyjny";
         Text[ portuguese_brazilian ] = "The operation on $(ARG1) is not supported on this operating system";
-        Text[ japanese ] = "$(ARG1) ‚Ö‚Ì‘€ì‚Í‚±‚ÌµÍßÚ°Ã¨İ¸Ş¼½ÃÑ‚Å‚Íx‰‡‚³‚ê‚Ü‚¹‚ñB";
+        Text[ japanese ] = "$(ARG1) ã¸ã®æ“ä½œã¯ã“ã®ï½µï¾ï¾Ÿï¾šï½°ï¾ƒï½¨ï¾ï½¸ï¾ï½¼ï½½ï¾ƒï¾‘ã§ã¯æ”¯æ´ã•ã‚Œã¾ã›ã‚“ã€‚";
         Text[ korean ] = "The operation on $(ARG1) is not supported on this operating system";
-        Text[ chinese_simplified ] = "Õâ¸ö²Ù×÷ÏµÍ³²»Ö§³ÖÓÃÓÚ $(ARG1) µÄÃüÁî ¡£";
-        Text[ chinese_traditional ] = "³o­Ó¾Ş§@¨t²Î¤£¤ä´©¥Î©ó $(ARG1) ªº¾Ş§@¡C";
+        Text[ chinese_simplified ] = "è¿™ä¸ªæ“ä½œç³»ç»Ÿä¸æ”¯æŒç”¨äº $(ARG1) çš„å‘½ä»¤ ã€‚";
+        Text[ chinese_traditional ] = "é€™å€‹æ“ä½œç³»çµ±ä¸æ”¯æ´ç”¨æ–¼ $(ARG1) çš„æ“ä½œã€‚";
         Text[ turkish ] = "The operation on $(ARG1) is not supported on this operating system";
         Text[ arabic ] = "The operation on $(ARG1) is not supported on this operating system";
         Text[ catalan ] = "The operation on $(ARG1) is not supported on this operating system";
@@ -850,10 +850,10 @@ Resource RID_UUI_ERRHDL
         Text[ swedish ] = "$(ARG1) är ingen katalog";
         Text[ polish ] = "$(ARG1) nie jest katalogiem";
         Text[ portuguese_brazilian ] = "$(ARG1) is not a directory";
-        Text[ japanese ] = "$(ARG1) ‚ÍÃŞ¨Ú¸ÄØ‚Å‚Í‚ ‚è‚Ü‚¹‚ñB";
+        Text[ japanese ] = "$(ARG1) ã¯ï¾ƒï¾ï½¨ï¾šï½¸ï¾„ï¾˜ã§ã¯ã‚ã‚Šã¾ã›ã‚“ã€‚";
         Text[ korean ] = "$(ARG1) is not a directory";
-        Text[ chinese_simplified ] = "$(ARG1) ²»ÊÇÒ»¸öÄ¿Â¼¡£";
-        Text[ chinese_traditional ] = "$(ARG1) ¤£¬O¥Ø¿ı¡C";
+        Text[ chinese_simplified ] = "$(ARG1) ä¸æ˜¯ä¸€ä¸ªç›®å½•ã€‚";
+        Text[ chinese_traditional ] = "$(ARG1) ä¸æ˜¯ç›®éŒ„ã€‚";
         Text[ turkish ] = "$(ARG1) is not a directory";
         Text[ arabic ] = "$(ARG1) is not a directory";
         Text[ catalan ] = "$(ARG1) is not a directory";
@@ -876,10 +876,10 @@ Resource RID_UUI_ERRHDL
         Text[ swedish ] = "$(ARG1) är ingen fil";
         Text[ polish ] = "$(ARG1) nie jest plikiem";
         Text[ portuguese_brazilian ] = "$(ARG1) is not a file";
-        Text[ japanese ] = "$(ARG1) ‚ÍÌ§²Ù‚Å‚Í‚ ‚è‚Ü‚¹‚ñB";
+        Text[ japanese ] = "$(ARG1) ã¯ï¾Œï½§ï½²ï¾™ã§ã¯ã‚ã‚Šã¾ã›ã‚“ã€‚";
         Text[ korean ] = "$(ARG1) is not a file";
-        Text[ chinese_simplified ] = "$(ARG1) ²»ÊÇÒ»¸öÎÄ¼ş¡£";
-        Text[ chinese_traditional ] = "$(ARG1)¤£¬OÀÉ®×";
+        Text[ chinese_simplified ] = "$(ARG1) ä¸æ˜¯ä¸€ä¸ªæ–‡ä»¶ã€‚";
+        Text[ chinese_traditional ] = "$(ARG1)ä¸æ˜¯æª”æ¡ˆ";
         Text[ turkish ] = "$(ARG1) is not a file";
         Text[ arabic ] = "$(ARG1) is not a file";
         Text[ catalan ] = "$(ARG1) is not a file";
@@ -902,10 +902,10 @@ Resource RID_UUI_ERRHDL
         Text[ swedish ] = "Det finns ingen plats kvar på enheten $(ARG1)";
         Text[ polish ] = "Nie ma ju¿ miejsca na urz¹dzeniu $(ARG1)";
         Text[ portuguese_brazilian ] = "There was no space left on device $(ARG1)";
-        Text[ japanese ] = "ÃŞÊŞ²½ $(ARG1) ‚É‚Í‹ó‚«—e—Ê‚ª‚ ‚è‚Ü‚¹‚ñB";
+        Text[ japanese ] = "ï¾ƒï¾ï¾Šï¾ï½²ï½½ $(ARG1) ã«ã¯ç©ºãå®¹é‡ãŒã‚ã‚Šã¾ã›ã‚“ã€‚";
         Text[ korean ] = "There was no space left on device $(ARG1)";
-        Text[ chinese_simplified ] = "Ó²ÅÌ $(ARG1) ÒÑÃ»ÓĞ¿ÉÓÃ¿Õ¼äÁË¡£";
-        Text[ chinese_traditional ] = "³]³Æ $(ARG1) ¤w¸g¨S¦³¥i¥ÎªÅ¶¡¤F¡C";
+        Text[ chinese_simplified ] = "ç¡¬ç›˜ $(ARG1) å·²æ²¡æœ‰å¯ç”¨ç©ºé—´äº†ã€‚";
+        Text[ chinese_traditional ] = "è¨­å‚™ $(ARG1) å·²ç¶“æ²’æœ‰å¯ç”¨ç©ºé–“äº†ã€‚";
         Text[ turkish ] = "There was no space left on device $(ARG1)";
         Text[ arabic ] = "There was no space left on device $(ARG1)";
         Text[ catalan ] = "There was no space left on device $(ARG1)";
@@ -928,10 +928,10 @@ Resource RID_UUI_ERRHDL
         Text[ swedish ] = "Det går inte att utföra operationen på $(ARG1) eftersom för många filer redan är öppna";
         Text[ polish ] = "Wykonanie operacji na $(ARG1) nie jest mo¿liwe, poniewa¿ otwarto za du¿o plików";
         Text[ portuguese_brazilian ] = "The operation on $(ARG1) can't be completed because there are too many open files";
-        Text[ japanese ] = "‚·‚Å‚É‘½‚­‚ÌÌ§²Ù‚ªŠJ‚©‚ê‚Ä‚¢‚é‚½‚ßA$(ARG1) ‚Ö‚Ì‘€ì‚ÍÀs‚Å‚«‚Ü‚¹‚ñB";
+        Text[ japanese ] = "ã™ã§ã«å¤šãã®ï¾Œï½§ï½²ï¾™ãŒé–‹ã‹ã‚Œã¦ã„ã‚‹ãŸã‚ã€$(ARG1) ã¸ã®æ“ä½œã¯å®Ÿè¡Œã§ãã¾ã›ã‚“ã€‚";
         Text[ korean ] = "The operation on $(ARG1) can't be completed because there are too many open files";
-        Text[ chinese_simplified ] = "ÒòÎªÒÑ¾­´ò¿ªÁËÌ«¶àµÄÎÄ¼ş£¬ÎŞ·¨Ö´ĞĞÓÃÓÚ $(ARG1) µÄÃüÁî ¡£";
-        Text[ chinese_traditional ] = "¦]?¤w¸g¶}?¤F¤Ó¦hªºÀÉ®×¡A¦ÓµLªk°õ¦æ³o­Ó¾Ş§@ $(ARG1) ¡C";
+        Text[ chinese_simplified ] = "å› ä¸ºå·²ç»æ‰“å¼€äº†å¤ªå¤šçš„æ–‡ä»¶ï¼Œæ— æ³•æ‰§è¡Œç”¨äº $(ARG1) çš„å‘½ä»¤ ã€‚";
+        Text[ chinese_traditional ] = "å› çˆ²å·²ç¶“é–‹å•“äº†å¤ªå¤šçš„æª”æ¡ˆï¼Œè€Œç„¡æ³•åŸ·è¡Œé€™å€‹æ“ä½œ $(ARG1) ã€‚";
         Text[ turkish ] = "The operation on $(ARG1) can't be completed because there are too many open files";
         Text[ arabic ] = "The operation on $(ARG1) can't be completed because there are too many open files";
         Text[ catalan ] = "The operation on $(ARG1) can't be completed because there are too many open files";
@@ -954,10 +954,10 @@ Resource RID_UUI_ERRHDL
         Text[ swedish ] = "Det går inte att utföra operationen på $(ARG1) eftersom inget mer minne är tillgängligt";
         Text[ polish ] = "Wykonanie operacji na $(ARG1) nie jest mo¿liwe z powodu braku pamiêci";
         Text[ portuguese_brazilian ] = "The operation on $(ARG1) can't be completed because there is no more memory available";
-        Text[ japanese ] = "ÒÓØ‹ó‚«—e—Ê‚ª‚È‚¢‚½‚ß‚ÉA$(ARG1) ‚Ö‚Ì‘€ì‚ÍÀs‚Å‚«‚Ü‚¹‚ñB";
+        Text[ japanese ] = "ï¾’ï¾“ï¾˜ç©ºãå®¹é‡ãŒãªã„ãŸã‚ã«ã€$(ARG1) ã¸ã®æ“ä½œã¯å®Ÿè¡Œã§ãã¾ã›ã‚“ã€‚";
         Text[ korean ] = "The operation on $(ARG1) can't be completed because there is no more memory available";
-        Text[ chinese_simplified ] = "ÒòÎªÄÚ´æÓÃ¾¡£¬¶øÎŞ·¨Ö´ĞĞÓÃÓÚ $(ARG1) µÄÃüÁî¡£";
-        Text[ chinese_traditional ] = "¦]?°O¾ĞÅé¥Î§¹¡AµLªk°õ¦æ¾Ş§@ $(ARG1) ¡C";
+        Text[ chinese_simplified ] = "å› ä¸ºå†…å­˜ç”¨å°½ï¼Œè€Œæ— æ³•æ‰§è¡Œç”¨äº $(ARG1) çš„å‘½ä»¤ã€‚";
+        Text[ chinese_traditional ] = "å› çˆ²è¨˜æ†¶é«”ç”¨å®Œï¼Œç„¡æ³•åŸ·è¡Œæ“ä½œ $(ARG1) ã€‚";
         Text[ turkish ] = "The operation on $(ARG1) can't be completed because there is no more memory available";
         Text[ arabic ] = "The operation on $(ARG1) can't be completed because there is no more memory available";
         Text[ catalan ] = "The operation on $(ARG1) can't be completed because there is no more memory available";
@@ -980,10 +980,10 @@ Resource RID_UUI_ERRHDL
         Text[ swedish ] = "Operation på $(ARG1) kan inte fortsätta eftersom fler data väntas";
         Text[ polish ] = "Kontynuacja operacji na $(ARG1) wymaga wprowadzenia dalszych danych";
         Text[ portuguese_brazilian ] = "The operation on $(ARG1) cannot continue, because there are pending data";
-        Text[ japanese ] = "•Û—¯ÃŞ°À‚ª‚ ‚é‚½‚ß‚ÉA$(ARG1) ‚Ö‚Ì‘€ì‚Í‘±s‚Å‚«‚Ü‚¹‚ñB";
+        Text[ japanese ] = "ä¿ç•™ï¾ƒï¾ï½°ï¾€ãŒã‚ã‚‹ãŸã‚ã«ã€$(ARG1) ã¸ã®æ“ä½œã¯ç¶šè¡Œã§ãã¾ã›ã‚“ã€‚";
         Text[ korean ] = "The operation on $(ARG1) cannot continue, because there are pending data";
-        Text[ chinese_simplified ] = "ÒòÎªÔÚµÈ´ıÆäËûµÄÊı¾İ£¬¶øÎŞ·¨Ö´ĞĞÃüÁî $(ARG1) ¡£";
-        Text[ chinese_traditional ] = "¦]?¦bµ¥«İ¨ä¥Lªº¸ê®Æ¡A¦ÓµLªk°õ¦æ¾Ş§@ $(ARG1) ¡C";
+        Text[ chinese_simplified ] = "å› ä¸ºåœ¨ç­‰å¾…å…¶ä»–çš„æ•°æ®ï¼Œè€Œæ— æ³•æ‰§è¡Œå‘½ä»¤ $(ARG1) ã€‚";
+        Text[ chinese_traditional ] = "å› çˆ²åœ¨ç­‰å¾…å…¶ä»–çš„è³‡æ–™ï¼Œè€Œç„¡æ³•åŸ·è¡Œæ“ä½œ $(ARG1) ã€‚";
         Text[ turkish ] = "The operation on $(ARG1) cannot continue, because there are pending data";
         Text[ arabic ] = "The operation on $(ARG1) cannot continue, because there are pending data";
         Text[ catalan ] = "The operation on $(ARG1) cannot continue, because there are pending data";
@@ -1006,10 +1006,10 @@ Resource RID_UUI_ERRHDL
         Text[ swedish ] = "Det går inte att kopiera $(ARG1) till sig själv";
         Text[ polish ] = "$(ARG1) nie mo¿na skopiowaæ w sobie samym";
         Text[ portuguese_brazilian ] = "$(ARG1) cannot be copied into itself";
-        Text[ japanese ] = "$(ARG1) ‚ğ‚»‚ê©‘Ì‚ÉºËß°‚·‚é‚±‚Æ‚Í‚Å‚«‚Ü‚¹‚ñB";
+        Text[ japanese ] = "$(ARG1) ã‚’ãã‚Œè‡ªä½“ã«ï½ºï¾‹ï¾Ÿï½°ã™ã‚‹ã“ã¨ã¯ã§ãã¾ã›ã‚“ã€‚";
         Text[ korean ] = "$(ARG1) cannot be copied into itself";
-        Text[ chinese_simplified ] = "$(ARG1) ÎŞ·¨×ÔÉí¸´ÖÆ¡£";
-        Text[ chinese_traditional ] = "$(ARG1) ¤£¥i¥H¦Û¨­½Æ»s¡C";
+        Text[ chinese_simplified ] = "$(ARG1) æ— æ³•è‡ªèº«å¤åˆ¶ã€‚";
+        Text[ chinese_traditional ] = "$(ARG1) ä¸å¯ä»¥è‡ªèº«è¤‡è£½ã€‚";
         Text[ turkish ] = "$(ARG1) cannot be copied into itself";
         Text[ arabic ] = "$(ARG1) cannot be copied into itself";
         Text[ catalan ] = "$(ARG1) cannot be copied into itself";
@@ -1032,10 +1032,10 @@ Resource RID_UUI_ERRHDL
         Text[ swedish ] = "Okänt input/outputfel vid åtkomst till $(ARG1)";
         Text[ polish ] = "Unknown input/output error while accessing $(ARG1)";
         Text[ portuguese_brazilian ] = "Unknown input/output error while accessing $(ARG1)";
-        Text[ japanese ] = "$(ARG1) ‚Ö±¸¾½‚·‚éÛ‚Ì•s–¾‚È“ü—Í/o—Í‚Ì´×°B";
+        Text[ japanese ] = "$(ARG1) ã¸ï½±ï½¸ï½¾ï½½ã™ã‚‹éš›ã®ä¸æ˜ãªå…¥åŠ›/å‡ºåŠ›ã®ï½´ï¾—ï½°ã€‚";
         Text[ korean ] = "Unknown input/output error while accessing $(ARG1)";
-        Text[ chinese_simplified ] = "¶ÁÈ¡ $(ARG1) Ê±·¢ÉúÒ»¸ö²»Ã÷µÄÊäÈë/Êä³ö´íÎó¡£";
-        Text[ chinese_traditional ] = "¦s¨ú $(ARG1) ®Éµo¥Í¤@­Ó¤£©úªº¿é¤J/¿é¥X¿ù»~¡C";
+        Text[ chinese_simplified ] = "è¯»å– $(ARG1) æ—¶å‘ç”Ÿä¸€ä¸ªä¸æ˜çš„è¾“å…¥/è¾“å‡ºé”™è¯¯ã€‚";
+        Text[ chinese_traditional ] = "å­˜å– $(ARG1) æ™‚ç™¼ç”Ÿä¸€å€‹ä¸æ˜çš„è¼¸å…¥/è¼¸å‡ºéŒ¯èª¤ã€‚";
         Text[ turkish ] = "Unknown input/output error while accessing $(ARG1)";
         Text[ arabic ] = "Unknown input/output error while accessing $(ARG1)";
         Text[ catalan ] = "Unknown input/output error while accessing $(ARG1)";
@@ -1058,10 +1058,10 @@ Resource RID_UUI_ERRHDL
         Text[ swedish ] = "$(ARG1) är skrivskyddad";
         Text[ polish ] = "$(ARG1) jest tylko do odczytu";
         Text[ portuguese_brazilian ] = "$(ARG1) is write protected";
-        Text[ japanese ] = "$(ARG1) ‚Í‘‚«‚İ‹Ö~‚Å‚·B";
+        Text[ japanese ] = "$(ARG1) ã¯æ›¸ãè¾¼ã¿ç¦æ­¢ã§ã™ã€‚";
         Text[ korean ] = "$(ARG1) is write protected";
-        Text[ chinese_simplified ] = "$(ARG1) ÊÇ·À¸ÄĞ´µÄ¡£";
-        Text[ chinese_traditional ] = "$(ARG1) ¬O°ßÅªªº¡C";
+        Text[ chinese_simplified ] = "$(ARG1) æ˜¯é˜²æ”¹å†™çš„ã€‚";
+        Text[ chinese_traditional ] = "$(ARG1) æ˜¯å”¯è®€çš„ã€‚";
         Text[ turkish ] = "$(ARG1) is write protected";
         Text[ arabic ] = "$(ARG1) is write protected";
         Text[ catalan ] = "$(ARG1) is write protected";
@@ -1084,10 +1084,10 @@ Resource RID_UUI_ERRHDL
         Text[ swedish ] = "$(ARG1) har ett felaktigt format";
         Text[ polish ] = "$(ARG1) ma nieprawid³owy format";
         Text[ portuguese_brazilian ] = "$(ARG1) has an incorrect format";
-        Text[ japanese ] = "$(ARG1) ‚Ì‘®‚ª³‚µ‚­‚ ‚è‚Ü‚¹‚ñB";
+        Text[ japanese ] = "$(ARG1) ã®æ›¸å¼ãŒæ­£ã—ãã‚ã‚Šã¾ã›ã‚“ã€‚";
         Text[ korean ] = "$(ARG1) has an incorrect format";
-        Text[ chinese_simplified ] = "$(ARG1) ¸ñÊ½ÓĞÎó¡£";
-        Text[ chinese_traditional ] = "$(ARG1) ªº®æ¦¡¿ù»~¡C";
+        Text[ chinese_simplified ] = "$(ARG1) æ ¼å¼æœ‰è¯¯ã€‚";
+        Text[ chinese_traditional ] = "$(ARG1) çš„æ ¼å¼éŒ¯èª¤ã€‚";
         Text[ turkish ] = "$(ARG1) has an incorrect format";
         Text[ arabic ] = "$(ARG1) has an incorrect format";
         Text[ catalan ] = "$(ARG1) has an incorrect format";
@@ -1110,10 +1110,10 @@ Resource RID_UUI_ERRHDL
         Text[ swedish ] = "$(ARG1) har en felaktig version";
         Text[ polish ] = "Wersja $(ARG1) jest nieprawid³owa";
         Text[ portuguese_brazilian ] = "$(ARG1) has an incorrect version";
-        Text[ japanese ] = "$(ARG1) ‚ÌÊŞ°¼Ş®İ‚ª³‚µ‚­‚ ‚è‚Ü‚¹‚ñB";
+        Text[ japanese ] = "$(ARG1) ã®ï¾Šï¾ï½°ï½¼ï¾ï½®ï¾ãŒæ­£ã—ãã‚ã‚Šã¾ã›ã‚“ã€‚";
         Text[ korean ] = "$(ARG1) has an incorrect version";
-        Text[ chinese_simplified ] = "$(ARG1) µÄ°æ±¾´íÎó¡£";
-        Text[ chinese_traditional ] = "$(ARG1) ªºª©¥»µL®Ä";
+        Text[ chinese_simplified ] = "$(ARG1) çš„ç‰ˆæœ¬é”™è¯¯ã€‚";
+        Text[ chinese_traditional ] = "$(ARG1) çš„ç‰ˆæœ¬ç„¡æ•ˆ";
         Text[ turkish ] = "$(ARG1) has an incorrect version";
         Text[ arabic ] = "$(ARG1) has an incorrect version";
         Text[ catalan ] = "$(ARG1) has an incorrect version";
@@ -1131,3 +1131,4 @@ Resource RID_UUI_ERRHDL
         Text [ ENGLISH ] = "Folder $(ARG1) does not exist" ;
     };
 };
+
