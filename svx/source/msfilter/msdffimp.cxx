@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: sj $ $Date: 2001-09-19 15:44:19 $
+ *  last change: $Author: sj $ $Date: 2001-09-24 10:56:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2728,8 +2728,13 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, Rect
 
             if( nCropTop || nCropBottom || nCropLeft || nCropRight )
             {
-                double fFactor;
-                Size aCropSize( Application::GetDefaultDevice()->LogicToLogic( aGraf.GetPrefSize(), aGraf.GetPrefMapMode(), MAP_100TH_MM ) );
+                double  fFactor;
+                Size aCropSize;
+                MapMode aPrefMapMode( aGraf.GetPrefMapMode() );
+                if ( aPrefMapMode == MAP_PIXEL )
+                    aCropSize = Application::GetDefaultDevice()->PixelToLogic( aGraf.GetPrefSize(), MAP_100TH_MM );
+                else
+                    aCropSize = Application::GetDefaultDevice()->LogicToLogic( aGraf.GetPrefSize(), aGraf.GetPrefMapMode(), MAP_100TH_MM );
                 UINT32 nTop( 0 ), nBottom( 0 ), nLeft( 0 ), nRight( 0 );
 
                 if ( nCropTop )
