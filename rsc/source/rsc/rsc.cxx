@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rsc.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hjs $ $Date: 2001-11-06 17:54:36 $
+ *  last change: $Author: pl $ $Date: 2001-11-07 16:51:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -895,9 +895,6 @@ ERRTYPE RscCompiler::Link()
             pTC->pEH->StdOut( "Generating .rc file\n" );
 
             // Schreibe Datei
-#ifdef DEBUG
-            fprintf( stderr, "using tmp file %s\n", pTmp );
-#endif
             pTC->ChangeLanguage( it->nLangTypeId );
             pTC->ChangeDefLanguage( International::GetNeutralLanguage( it->nLangTypeId ) );
             pTC->SetSourceCharSet( it->nSourceCharSet );
@@ -907,17 +904,11 @@ ERRTYPE RscCompiler::Link()
                 aSysSearchPath.Append( ByteString( DirEntry::GetSearchDelimiter(), RTL_TEXTENCODING_ASCII_US ) );
             aSysSearchPath.Append( pTC->GetSearchPath() );
             pTC->SetSysSearchPath( aSysSearchPath );
-#ifdef DEBUG
-            fprintf( stderr, "from path %s setting search path %s\n", it->aLangSearchPath.GetBuffer(), aSysSearchPath.GetBuffer() );
-#endif
 
             aError = pTC->WriteRc( foutput );
 
             fclose( foutput );
             fExitFile = NULL;
-#ifdef DEBUG
-            fprintf( stderr, "move %s -> %s\n", pTmp, it->aOutputRc.GetBuffer() );
-#endif
             unlink( it->aOutputRc.GetBuffer() );
             if( rename( pTmp, it->aOutputRc.GetBuffer() ) )
             {

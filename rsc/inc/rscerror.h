@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscerror.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hjs $ $Date: 2001-11-06 11:23:56 $
+ *  last change: $Author: pl $ $Date: 2001-11-07 16:51:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,6 +156,7 @@ class RscError
 
     void WriteError( const ERRTYPE& rError, const char * pMessage );
     void StdLstOut( const char * pStr );
+    void StdLstErr( const char * pStr );
     void ErrorFormat( const ERRTYPE& rError, RscTop * pClass,
                       const RscId & aId );
 public:
@@ -171,6 +172,7 @@ public:
                         return fListing;
                     };
     virtual void    StdOut( const char * );
+    virtual void    StdErr( const char * );
     virtual void    LstOut( const char * );
     virtual void    Error( const ERRTYPE& rError, RscTop* pClass, const RscId &aId,
                            const char * pMessage = NULL );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: erscerr.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hjs $ $Date: 2001-11-06 17:54:36 $
+ *  last change: $Author: pl $ $Date: 2001-11-07 16:51:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,23 @@ void RscError::StdOut( const char * pStr )
 
 /*************************************************************************
 |*
+|*    RscError::StdErr();
+|*
+|*    Beschreibung
+|*    Ersterstellung    PL 11/07/2001
+|*    Letzte Aenderung  PL 11/07/2001
+|*
+*************************************************************************/
+void RscError::StdErr( const char * pStr )
+{
+#ifndef WIN
+    if( pStr )
+        fprintf( stderr, "%s", pStr );
+#endif
+}
+
+/*************************************************************************
+|*
 |*    RscError::LstOut();
 |*
 |*    Beschreibung
@@ -149,6 +166,20 @@ void RscError::StdLstOut( const char * pStr ){
 
 /*************************************************************************
 |*
+|*    RscError::StdLstErr();
+|*
+|*    Beschreibung
+|*    Ersterstellung    PL 11/07/2001
+|*    Letzte Aenderung  PL 11/07/2001
+|*
+*************************************************************************/
+void RscError::StdLstErr( const char * pStr ){
+    StdErr( pStr );
+    LstOut( pStr );
+}
+
+/*************************************************************************
+|*
 |*    RscError::WriteError();
 |*
 |*    Beschreibung
@@ -161,55 +192,55 @@ void RscError::WriteError( const ERRTYPE& rError, const char * pMessage )
     switch( rError )
     {
         case ERR_ERROR: {
-            StdLstOut( "!! " );
+            StdLstErr( "!! " );
             if( 1 == nErrors )
-                StdLstOut( ByteString::CreateFromInt32( nErrors ).GetBuffer() );
+                StdLstErr( ByteString::CreateFromInt32( nErrors ).GetBuffer() );
             else
-                StdLstOut( ByteString::CreateFromInt32( (USHORT)(nErrors -1) ).GetBuffer() );
-            StdLstOut( " Error" );
-            StdLstOut( " found!!" );
+                StdLstErr( ByteString::CreateFromInt32( (USHORT)(nErrors -1) ).GetBuffer() );
+            StdLstErr( " Error" );
+            StdLstErr( " found!!" );
         }
         break;
 
         case ERR_UNKNOWN_METHOD:
-            StdLstOut( "The used type is not allowed." );
+            StdLstErr( "The used type is not allowed." );
         break;
 
         case ERR_OPENFILE:
-            StdLstOut( "This file <" );
-            StdLstOut( pMessage );
-            StdLstOut( "> cannot be opened." );
+            StdLstErr( "This file <" );
+            StdLstErr( pMessage );
+            StdLstErr( "> cannot be opened." );
         break;
 
         case ERR_RENAMEFILE:
-            StdLstOut( "rename <" );
-            StdLstOut( pMessage );
-            StdLstOut( "> s not possible." );
+            StdLstErr( "rename <" );
+            StdLstErr( pMessage );
+            StdLstErr( "> s not possible." );
         break;
 
         case ERR_FILESIZE:
-            StdLstOut( "Wrong file <" );
-            StdLstOut( pMessage );
-            StdLstOut( "> length." );
+            StdLstErr( "Wrong file <" );
+            StdLstErr( pMessage );
+            StdLstErr( "> length." );
         break;
 
         case ERR_FILEFORMAT:
-            StdLstOut( "Wrong file type <" );
-            StdLstOut( pMessage );
-            StdLstOut( ">." );
+            StdLstErr( "Wrong file type <" );
+            StdLstErr( pMessage );
+            StdLstErr( ">." );
         break;
 
         case ERR_NOCHAR:
-            StdLstOut( "Character: '\\xxx'; The value xxx is greater than 255.");
+            StdLstErr( "Character: '\\xxx'; The value xxx is greater than 255.");
             break;
 
         case ERR_NORSCINST:
-            StdLstOut( "Internal error, instance invalid.");
+            StdLstErr( "Internal error, instance invalid.");
             break;
 
 
         case ERR_NOINPUT:
-            StdLstOut( "Input file was not specified.\n");
+            StdLstErr( "Input file was not specified.\n");
         case ERR_USAGE:
             StdLstOut( "Copyright (C) 1990-92 STAR DIVISION GmbH\n" );
             {
@@ -254,152 +285,152 @@ void RscError::WriteError( const ERRTYPE& rError, const char * pMessage )
             break;
 
         case ERR_UNKNOWNSW:
-            StdLstOut( "Unknown switch <" );
-            StdLstOut( pMessage );
-            StdLstOut( ">." );
+            StdLstErr( "Unknown switch <" );
+            StdLstErr( pMessage );
+            StdLstErr( ">." );
             break;
 
         case ERR_REFTODEEP:
-            StdLstOut( "Too many reference levels have been used (see Switch -RefDeep)." );
+            StdLstErr( "Too many reference levels have been used (see Switch -RefDeep)." );
             break;
 
         case ERR_CONT_INVALIDPOS:
-            StdLstOut( "Internal error, Container class: invalid position." );
+            StdLstErr( "Internal error, Container class: invalid position." );
             break;
 
         case ERR_CONT_INVALIDTYPE:
-            StdLstOut( "Invalid type <" );
-            StdLstOut( pMessage );
-            StdLstOut( ">." );
+            StdLstErr( "Invalid type <" );
+            StdLstErr( pMessage );
+            StdLstErr( ">." );
             break;
 
         case ERR_ARRAY_INVALIDINDEX:
-            StdLstOut( "Internal error, Array class: invalid index." );
+            StdLstErr( "Internal error, Array class: invalid index." );
             break;
 
         case ERR_RSCINST_NOVARNAME:
-            StdLstOut( "Internal error, invalid name of variable." );
+            StdLstErr( "Internal error, invalid name of variable." );
             break;
 
         case ERR_YACC:
-            StdLstOut( pMessage );
+            StdLstErr( pMessage );
             break;
 
         case ERR_DOUBLEID:
-            StdLstOut( "Two global resources have the same identifier." );
+            StdLstErr( "Two global resources have the same identifier." );
             break;
 
         case ERR_FALSETYPE:
-            StdLstOut( "Wrong type <" );
-            StdLstOut( pMessage );
-            StdLstOut( ">." );
+            StdLstErr( "Wrong type <" );
+            StdLstErr( pMessage );
+            StdLstErr( ">." );
             break;
 
         case ERR_NOVARIABLENAME:
-            StdLstOut( "The variable <" );
-            StdLstOut( pMessage );
-            StdLstOut( "> must not be used here." );
+            StdLstErr( "The variable <" );
+            StdLstErr( pMessage );
+            StdLstErr( "> must not be used here." );
             break;
 
         case ERR_RSCRANGE_OUTDEFSET:
-            StdLstOut( "The used value is not in the expected domain." );
+            StdLstErr( "The used value is not in the expected domain." );
             break;
 
         case ERR_USHORTRANGE:
-            StdLstOut( "Value is <" );
-            StdLstOut( pMessage );
-            StdLstOut( "> the allowed domain is from 0 up to 65535." );
+            StdLstErr( "Value is <" );
+            StdLstErr( pMessage );
+            StdLstErr( "> the allowed domain is from 0 up to 65535." );
             break;
 
         case ERR_IDRANGE:
-            StdLstOut( "Value is <" );
-            StdLstOut( pMessage );
-            StdLstOut( "> the allowed domain is from 1 up to 32767." );
+            StdLstErr( "Value is <" );
+            StdLstErr( pMessage );
+            StdLstErr( "> the allowed domain is from 1 up to 32767." );
             break;
 
         case ERR_NOCOPYOBJ:
-            StdLstOut( "Default resource <" );
-            StdLstOut( pMessage );
-            StdLstOut( "> not found." );
+            StdLstErr( "Default resource <" );
+            StdLstErr( pMessage );
+            StdLstErr( "> not found." );
             break;
 
         case ERR_REFNOTALLOWED:
-            StdLstOut( "The use of a reference is not allowed." );
+            StdLstErr( "The use of a reference is not allowed." );
             break;
 
         case ERR_COPYNOTALLOWED:
-            StdLstOut( "The use of a default resource is not allowed." );
+            StdLstErr( "The use of a default resource is not allowed." );
             break;
 
         case ERR_IDEXPECTED:
-            StdLstOut( "An identifier needs to be specified." );
+            StdLstErr( "An identifier needs to be specified." );
             break;
 
         case ERR_DOUBLEDEFINE:
-            StdLstOut( "The symbol <" );
-            StdLstOut( pMessage );
-            StdLstOut( "> is defined twice." );
+            StdLstErr( "The symbol <" );
+            StdLstErr( pMessage );
+            StdLstErr( "> is defined twice." );
             break;
 
         case ERR_RSCINST_RESERVEDNAME:
-            StdLstOut( "The symbol <" );
-            StdLstOut( pMessage );
-            StdLstOut( "> is a reserved name." );
+            StdLstErr( "The symbol <" );
+            StdLstErr( pMessage );
+            StdLstErr( "> is a reserved name." );
             break;
 
         case ERR_ZERODIVISION:
-            StdLstOut( "Attempt to divide by zero." );
+            StdLstErr( "Attempt to divide by zero." );
             break;
 
         case ERR_PRAGMA:
-            StdLstOut( "Error in a #pragma statement." );
+            StdLstErr( "Error in a #pragma statement." );
             break;
 
         case ERR_DECLAREDEFINE:
-            StdLstOut( "Error in the declaration part of the macro." );
+            StdLstErr( "Error in the declaration part of the macro." );
             break;
 
         case ERR_NOTYPE:
-            StdLstOut( "type expected." );
+            StdLstErr( "type expected." );
             break;
 
 /****************** W A R N I N G S **************************************/
         case WRN_LOCALID:
-            StdLstOut( "Sub resources should have an identifier < 256." );
+            StdLstErr( "Sub resources should have an identifier < 256." );
             break;
 
         case WRN_GLOBALID:
-            StdLstOut( "Global resources should have an identifier >= 256." );
+            StdLstErr( "Global resources should have an identifier >= 256." );
             break;
 
         case WRN_SUBINMEMBER:
-            StdLstOut( "Sub resources are ignored." );
+            StdLstErr( "Sub resources are ignored." );
             break;
 
         case WRN_CONT_NOID:
-            StdLstOut( "Resources without name are ignored." );
+            StdLstErr( "Resources without name are ignored." );
             break;
 
         case WRN_CONT_DOUBLEID:
-            StdLstOut( "Two local resources have the same identifier." );
+            StdLstErr( "Two local resources have the same identifier." );
             break;
 
         case WRN_STR_REFNOTFOUND:
-            StdLstOut( "String reference <" );
-            StdLstOut( pMessage );
-            StdLstOut( " > could not be resolved." );
+            StdLstErr( "String reference <" );
+            StdLstErr( pMessage );
+            StdLstErr( " > could not be resolved." );
             break;
 
         case WRN_MGR_REFNOTFOUND:
-            StdLstOut( "Reference <" );
-            StdLstOut( pMessage );
-            StdLstOut( " > could not be resolved." );
+            StdLstErr( "Reference <" );
+            StdLstErr( pMessage );
+            StdLstErr( " > could not be resolved." );
             break;
 
         default:
             if( pMessage ){
-                StdLstOut( "\nMessage: " );
-                StdLstOut( pMessage );
+                StdLstErr( "\nMessage: " );
+                StdLstErr( pMessage );
             };
             break;
     }
@@ -422,49 +453,49 @@ void RscError::ErrorFormat( const ERRTYPE& rError, RscTop * pClass,
     if( pFI )
     {
         pFI->SetError( rError );
-        StdOut( "\n" );
-        StdOut( pFI->GetLine() );
-        StdOut( "\n" );
+        StdErr( "\n" );
+        StdErr( pFI->GetLine() );
+        StdErr( "\n" );
         // Fehlerposition anzeigen
         for( i = 0; (USHORT)(i +1) < pFI->GetScanPos(); i++ )
-            StdLstOut( " " );
+            StdLstErr( " " );
         LstOut( "     ^" ); //Zeilennummern beachten
-        StdOut( "^" );
-        StdLstOut( "\n" );
+        StdErr( "^" );
+        StdLstErr( "\n" );
     }
-    StdLstOut( "f" );
+    StdLstErr( "f" );
     sprintf( buf, "%u", (USHORT)rError );
-    StdLstOut( buf );
+    StdLstErr( buf );
 
     if( pFI && pTC ){
-        StdLstOut( ": \"" );
-        StdLstOut( pTC->aFileTab.Get( pFI->GetFileIndex() )->aFileName.GetBuffer() );
-        StdLstOut( "\", line " );
+        StdLstErr( ": \"" );
+        StdLstErr( pTC->aFileTab.Get( pFI->GetFileIndex() )->aFileName.GetBuffer() );
+        StdLstErr( "\", line " );
         sprintf( buf, "%d", pFI->GetLineNo() );
-        StdLstOut( buf );
+        StdLstErr( buf );
     }
 
     if( rError.IsError() )
-        StdLstOut( ": Error" );
+        StdLstErr( ": Error" );
     else
-        StdLstOut( ": Warning" );
+        StdLstErr( ": Warning" );
 
     if( pClass || aId.IsId() )
     {
-        StdLstOut( " in the object (" );
+        StdLstErr( " in the object (" );
         if( pClass )
         {
-            StdLstOut( "Type: " );
-            StdLstOut( pHS->Get( pClass->GetId() ) );
+            StdLstErr( "Type: " );
+            StdLstErr( pHS->Get( pClass->GetId() ) );
             if( aId.IsId() )
-                StdLstOut( ", " );
+                StdLstErr( ", " );
         }
         if( aId.IsId() )
-            StdLstOut( aId.GetName().GetBuffer() );
-        StdLstOut( "):\n" );
+            StdLstErr( aId.GetName().GetBuffer() );
+        StdLstErr( "):\n" );
     }
     else
-        StdLstOut( ": " );
+        StdLstErr( ": " );
 }
 
 /*************************************************************************
@@ -486,7 +517,7 @@ void RscError::Error( const ERRTYPE& rError, RscTop * pClass,
     if( rError.IsError() || rError.IsWarning() ){
         ErrorFormat( rError, pClass, aId );
         WriteError( rError, pMessage );
-        StdLstOut( "\n" );
+        StdLstErr( "\n" );
     };
 }
 
@@ -506,7 +537,7 @@ void RscError::FatalError( const ERRTYPE& rError, const RscId &aId,
         nErrors++;
         ErrorFormat( rError, NULL, aId );
         WriteError( rError, pMessage );
-        StdLstOut( "\nTerminating compiler\n" );
+        StdLstErr( "\nTerminating compiler\n" );
     }
     else
         WriteError( rError, pMessage );
