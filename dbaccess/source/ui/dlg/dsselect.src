@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsselect.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-02 16:21:11 $
+ *  last change: $Author: kz $ $Date: 2001-02-09 20:19:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,7 +163,7 @@ ModalDialog DLG_DATASOURCE_SELECTION
         Text [ english_us ] = "Organize..." ;
         Text [ portuguese ] = "Gerir..." ;
         Text [ portuguese_brazilian ] = "Verwalten..." ;
-        Text [ swedish ] = "Förvalta..." ;
+        Text [ swedish ] = "Administrera..." ;
         Text [ danish ] = "Administrer..." ;
         Text [ italian ] = "Gestione..." ;
         Text [ spanish ] = "Administrar..." ;
@@ -176,7 +176,7 @@ ModalDialog DLG_DATASOURCE_SELECTION
         Text[ chinese_traditional ] = "ºÞ²z...";
         Text[ arabic ] = "ÅÏÇÑÉ...";
         Text[ greek ] = "Äéá÷åßñéóç...";
-        Text[ korean ] = "Æí¼º...";
+        Text[ korean ] = "°ü¸®...";
         Text[ turkish ] = "Yönet...";
         Text[ language_user1 ] = " ";
     };
@@ -233,6 +233,9 @@ ModalDialog DLG_DATASOURCE_SELECTION
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.9  2001/02/02 16:21:11  kz
+ *  Merge SWT614: 02.02.01 - 17:20:45
+ *
  *  Revision 1.8  2001/01/26 20:49:07  kz
  *  Merge SWT614: 26.01.01 - 21:48:43
  *
