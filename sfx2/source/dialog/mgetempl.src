@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mgetempl.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2001-05-10 05:41:19 $
+ *  last change: $Author: kz $ $Date: 2001-05-16 15:24:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,7 +141,7 @@ TabPage TP_MANAGE_STYLES
         Text [ ENGLISH ] = "~Next" ;
         Text [ norwegian ] = "~Neste" ;
         Text [ italian ] = "Modello ~successivo" ;
-        Text [ portuguese_brazilian ] = "~Próximo" ;
+        Text [ portuguese_brazilian ] = "~Pr?imo" ;
         Text [ portuguese ] = "~Estilo seguinte" ;
         Text [ finnish ] = "Seu~raava tyyli" ;
         Text [ danish ] = "Næste typografi" ;
@@ -217,7 +217,7 @@ TabPage TP_MANAGE_STYLES
         Text [ ENGLISH ] = "~Region" ;
         Text [ norwegian ] = "~Område" ;
         Text [ italian ] = "~Area" ;
-        Text [ portuguese_brazilian ] = "~Região" ;
+        Text [ portuguese_brazilian ] = "~Regi?o" ;
         Text [ portuguese ] = "~Categoria" ;
         Text [ finnish ] = "~Luokka" ;
         Text [ danish ] = "Område" ;
@@ -266,7 +266,7 @@ TabPage TP_MANAGE_STYLES
         Text [ ENGLISH ] = "Contains" ;
         Text [ norwegian ] = "Inneholder" ;
         Text [ italian ] = "Contiene" ;
-        Text [ portuguese_brazilian ] = "Contém" ;
+        Text [ portuguese_brazilian ] = "Cont?m" ;
         Text [ portuguese ] = "Contém" ;
         Text [ finnish ] = "Sisältö" ;
         Text [ danish ] = "Indeholder" ;
