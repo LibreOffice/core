@@ -2,9 +2,9 @@
  *
  *  $RCSfile: any2.h,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dbo $ $Date: 2001-06-29 11:06:54 $
+ *  last change: $Author: dbo $ $Date: 2001-07-06 11:05:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,9 @@ typedef struct _uno_Any
     /** type of value
     */
     struct _typelib_TypeDescriptionReference * pType;
-    /** pointer to value
+    /** pointer to value; this may point to pReserved and thus the uno_Any is not anytime
+        mem-copyable!  You may have to correct the pData pointer to pReserved.
+        Otherwise you need not, because the data is stored in heap space.
     */
     void * pData;
     /** reserved space for storing value
