@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printdlg.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 21:05:41 $
+ *  last change: $Author: rt $ $Date: 2001-03-01 21:36:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,7 @@ ModalDialog DLG_PRINT_WARNINGS
         TabStop = TRUE ;
         Text [ portuguese_brazilian ] = "~Seite an Druckbereich anpassen" ;
         Text [ english_us ] = "~Fit page to print range" ;
-        Text [ portuguese ] = "~Adaptar à página" ;
+        Text [ portuguese ] = "~Ajustar página à área de impressão" ;
         Text [ swedish ] = "Anpassa ~sida till utskriftområde" ;
         Text [ danish ] = "Tilpas side til udskriftsområde" ;
         Text [ italian ] = "Adatta la pagina all'area di stampa" ;
