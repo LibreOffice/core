@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtbl.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 10:30:20 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 11:48:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,8 +252,7 @@
 #include <algorithm>
 
 // #i17764# delete table redlines when modifying the table structure?
-// os: 2004-11-19 redlining in tables temporary removed because of lots of exceptions
-#define DEL_TABLE_REDLINES 1
+// #define DEL_TABLE_REDLINES 1
 
 const sal_Unicode T2T_PARA = 0x0a;
 
@@ -2054,6 +2053,7 @@ USHORT SwDoc::MergeTbl( SwPaM& rPam )
     // --> FME 2004-10-08 #i33394#
     StartUndo( UNDO_TABLE_MERGE );
     // <--
+
 #ifdef DEL_TABLE_REDLINES
     if( !IsIgnoreRedline() && GetRedlineTbl().Count() )
         DeleteRedline( *pTblNd );
