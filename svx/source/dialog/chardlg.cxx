@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 18:16:49 $
+ *  last change: $Author: obo $ $Date: 2004-02-16 12:00:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,6 +234,8 @@ static USHORT pEffectsRanges[] =
 {
     SID_ATTR_CHAR_SHADOWED,
     SID_ATTR_CHAR_UNDERLINE,
+    SID_ATTR_CHAR_COLOR,
+    SID_ATTR_CHAR_COLOR,
     SID_ATTR_CHAR_CASEMAP,
     SID_ATTR_CHAR_CASEMAP,
     SID_ATTR_FLASH,
@@ -1751,15 +1753,15 @@ void SvxCharNamePage::SetFontList( const SvxFontListItem& rItem )
 // -----------------------------------------------------------------------
 namespace
 {
-    void enableRelativeMode(SvxCharNamePage* _pPage,
-                            FontSizeBox* _pFontSizeLB,
-                            USHORT _nHeightWhich)
+    void enableRelativeMode( SvxCharNamePage* _pPage, FontSizeBox* _pFontSizeLB, USHORT _nHeightWhich )
     {
         _pFontSizeLB->EnableRelativeMode( 5, 995, 5 ); // min 5%, max 995%, step 5
 
-        const SvxFontHeightItem& rHeightItem = (SvxFontHeightItem&)_pPage->GetItemSet().GetParent()->Get( _nHeightWhich );
+        const SvxFontHeightItem& rHeightItem =
+            (SvxFontHeightItem&)_pPage->GetItemSet().GetParent()->Get( _nHeightWhich );
         SfxMapUnit eUnit = _pPage->GetItemSet().GetPool()->GetMetric( _nHeightWhich );
-        short nCurHeight = CalcToPoint( rHeightItem.GetHeight(), eUnit, 1 ) * 10;
+        short nCurHeight =
+            static_cast< short >( CalcToPoint( rHeightItem.GetHeight(), eUnit, 1 ) * 10 );
 
         // ausgehend von der akt. Hoehe:
         //      - negativ bis minimal 2 pt
