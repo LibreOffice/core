@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svgaction.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 15:40:45 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 12:41:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,13 +209,13 @@ FastString& FastString::operator+=( const NMSP_RTL::OUString& rStr )
             const sal_uInt32    nNewBufLen = ( mnBufLen + ( ( ( mnCurLen + rStr.getLength() ) - mnBufLen ) / mnBufInc + 1 ) * mnBufInc );
             sal_Unicode*        pNewBuffer = new sal_Unicode[ nNewBufLen * sizeof( sal_Unicode ) ];
 
-            HMEMCPY( pNewBuffer, mpBuffer, mnBufLen * sizeof( sal_Unicode )  );
+            memcpy( pNewBuffer, mpBuffer, mnBufLen * sizeof( sal_Unicode )  );
             delete[] mpBuffer;
             mpBuffer = pNewBuffer;
             mnBufLen = nNewBufLen;
         }
 
-        HMEMCPY( mpBuffer + mnCurLen, rStr.getStr(), rStr.getLength() * sizeof( sal_Unicode ) );
+        memcpy( mpBuffer + mnCurLen, rStr.getStr(), rStr.getLength() * sizeof( sal_Unicode ) );
         mnCurLen += rStr.getLength();
 
         if( maString.getLength() )
