@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formcontroller.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-21 04:45:11 $
+ *  last change: $Author: fs $ $Date: 2001-05-25 14:10:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1393,7 +1393,7 @@ namespace pcr
                     {
                         const SvxPostureItem&       rPostureItem=
                             (const SvxPostureItem&)     pOut->Get(SID_ATTR_CHAR_POSTURE);
-                        sal_Int16 eSlant = rPostureItem.GetPosture();
+                        ::com::sun::star::awt::FontSlant eSlant = (::com::sun::star::awt::FontSlant)rPostureItem.GetPosture();
                         m_xPropValueAccess->setPropertyValue( PROPERTY_FONT_SLANT, makeAny(eSlant));
                     }
 
@@ -2807,6 +2807,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.23  2001/05/21 04:45:11  fs
+ *  #86712# UpdateUI: no 'formatting' for date 'n' time fields
+ *
  *  Revision 1.22  2001/05/17 11:15:07  fs
  *  #86859# ChangeFontProperty: translate COL_AUTO into a void Any
  *
