@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: tbe $ $Date: 2001-11-02 13:45:10 $
+#   last change: $Author: hjs $ $Date: 2002-05-24 09:16:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,9 +71,7 @@ PROJECTPCHSOURCE=ide_pch
 
 # --- Settings -----------------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 .IF "$(basicdebug)" != "" || "$(BASICDEBUG)" != ""
@@ -145,19 +143,11 @@ ALL:	\
         ALLTAR
 
 $(INCCOM)$/dllname.hxx: makefile.mk
-.IF "$(GUI)"=="OS2"
-        echo #define DLL_NAME "basctl$(UPD)$(DLLPOSTFIX)" >$@
-.ELSE
-.IF "$(GUI)"=="MAC"
-        echo "$(HASHMARK)define DLL_NAME ¶"basctl$(UPD)$(DLLPOSTFIX).dll¶"" > $@
-.ELSE
-.IF "$(GUI)"=="UNX"
+.IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
     $(RM) $@
         echo #define DLL_NAME \"libbasctl$(UPD)$(DLLPOSTFIX)$(DLLPOST)\" >$@
 .ELSE
         echo #define DLL_NAME "basctl$(UPD)$(DLLPOSTFIX)$(DLLPOST)" >$@
-.ENDIF
-.ENDIF
 .ENDIF
 
 .ENDIF
