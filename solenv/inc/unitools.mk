@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unitools.mk,v $
 #
-#   $Revision: 1.34 $
+#   $Revision: 1.35 $
 #
-#   last change: $Author: rt $ $Date: 2004-09-20 08:36:28 $
+#   last change: $Author: obo $ $Date: 2004-10-18 13:56:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,6 +66,9 @@ ULFEX*=ulfex
 XMLEX*=xmlex
 XRMEX*=xrmex
 CFGEX*=cfgex
+
+# ulf conversion tool
+ULFCONV*=ulfconv
 
 # Not 4nt means $(GUI)==UNX or $(GUI)==WNT with tcsh
 .IF "$(USE_SHELL)"!="4nt"
