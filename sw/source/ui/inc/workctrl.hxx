@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workctrl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2002-04-04 13:31:47 $
+ *  last change: $Author: os $ $Date: 2002-04-05 13:25:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,8 @@
 #include <sfx2/tbxctrl.hxx>
 #endif
 
-#ifndef _VALUESET_HXX //autogen
-#include <svtools/valueset.hxx>
+#ifndef _SV_TOOLBOX_HXX
+#include <vcl/toolbox.hxx>
 #endif
 #ifndef _STDCTRL_HXX
 #include <svtools/stdctrl.hxx>
