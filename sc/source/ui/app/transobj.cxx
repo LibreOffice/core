@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transobj.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 09:13:53 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:14:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,9 +72,12 @@
 #define ITEMID_FIELD EE_FEATURE_FIELD
 
 #include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/embed/XTransactedObject.hpp>
 
+#include <unotools/tempfile.hxx>
+#include <unotools/ucbstreamhelper.hxx>
+#include <comphelper/storagehelper.hxx>
 #include <sot/storage.hxx>
-#include <so3/svstor.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
 #include <vos/mutex.hxx>
@@ -377,7 +380,7 @@ sal_Bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor )
         else if ( nFormat == SOT_FORMAT_GDIMETAFILE )
         {
             InitDocShell();
-            SvEmbeddedObject* pEmbObj = aDocShellRef;
+            SfxObjectShell* pEmbObj = aDocShellRef;
 
             // like SvEmbeddedTransfer::GetData:
 
@@ -401,9 +404,10 @@ sal_Bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor )
         }
         else if ( nFormat == SOT_FORMATSTR_ID_EMBED_SOURCE )
         {
+            //TODO/LATER: differentiate between formats?!
             InitDocShell();         // set aDocShellRef
 
-            SvEmbeddedObject* pEmbObj = aDocShellRef;
+            SfxObjectShell* pEmbObj = aDocShellRef;
             bOK = SetObject( pEmbObj, SCTRANS_TYPE_EMBOBJ, rFlavor );
         }
     }
@@ -458,19 +462,35 @@ sal_Bool ScTransferObj::WriteObject( SotStorageStreamRef& rxOStm, void* pUserObj
 
         case SCTRANS_TYPE_EMBOBJ:
             {
-                SvEmbeddedObject* pEmbObj = (SvEmbeddedObject*)pUserObject;
-
-                SvStorageRef xWorkStore( new SvStorage( TRUE, *rxOStm ) );
-                rxOStm->SetBufferSize( 0xff00 );
+                // TODO/MBA: testing
+                SfxObjectShell*   pEmbObj = (SfxObjectShell*) pUserObject;
+                ::utl::TempFile     aTempFile;
+                aTempFile.EnableKillingFile();
+                uno::Reference< embed::XStorage > xWorkStore =
+                    ::comphelper::OStorageHelper::GetStorageFromURL( aTempFile.GetURL(), embed::ElementModes::READWRITE );
 
                 // write document storage
-                pEmbObj->SetupStorage( xWorkStore );
+                pEmbObj->SetupStorage( xWorkStore, SOFFICE_FILEFORMAT_CURRENT );
                 bRet = pEmbObj->DoSaveAs( xWorkStore );
                 pEmbObj->DoSaveCompleted();
-                xWorkStore->Commit();
-                rxOStm->Commit();
 
-                bRet = ( rxOStm->GetError() == ERRCODE_NONE );
+                uno::Reference< embed::XTransactedObject > xTransact( xWorkStore, uno::UNO_QUERY );
+                if ( xTransact.is() )
+                    xTransact->commit();
+
+                SvStream* pSrcStm = ::utl::UcbStreamHelper::CreateStream( aTempFile.GetURL(), STREAM_READ );
+                if( pSrcStm )
+                {
+                    rxOStm->SetBufferSize( 0xff00 );
+                    *rxOStm << *pSrcStm;
+                    delete pSrcStm;
+                }
+
+                bRet = TRUE;
+
+                xWorkStore->dispose();
+                xWorkStore = uno::Reference < embed::XStorage >();
+                rxOStm->Commit();
             }
             break;
 
@@ -524,7 +544,7 @@ void ScTransferObj::SetVisibleTab( SCTAB nNew )
     nVisibleTab = nNew;
 }
 
-void ScTransferObj::SetDrawPersist( const SvEmbeddedObjectRef& rRef )
+void ScTransferObj::SetDrawPersist( const SfxObjectShellRef& rRef )
 {
     aDrawPersistRef = rRef;
 }
@@ -717,7 +737,8 @@ void ScTransferObj::InitDocShell()
 //      pDocSh->SetVisAreaSize( Size(nSizeX,nSizeY) );
 
         Rectangle aNewArea( Point(nPosX,nPosY), Size(nSizeX,nSizeY) );
-        pDocSh->SvInPlaceObject::SetVisArea( aNewArea );
+        //TODO/LATER: why twice?!
+        //pDocSh->SvInPlaceObject::SetVisArea( aNewArea );
         pDocSh->SetVisArea( aNewArea );
 
         pDocSh->UpdateOle(&aViewData, TRUE);
@@ -729,7 +750,7 @@ void ScTransferObj::InitDocShell()
 }
 
 //  static
-SvPersist* ScTransferObj::SetDrawClipDoc( BOOL bAnyOle )
+SfxObjectShell* ScTransferObj::SetDrawClipDoc( BOOL bAnyOle )
 {
     // update ScGlobal::pDrawClipDocShellRef
 
